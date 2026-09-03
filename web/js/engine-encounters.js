@@ -1302,6 +1302,7 @@ const _ENC = {
   clubpickup(input) { return _clubpickup(input); },
   freegift(input) { return _freegift(input); },
   nightride(input) { return _nightRide(input); }, // the magic-mystery-tour night (engine-systems.js)
+  lockdare(input) { return _lockInDare(input); }, // the lock-in's dare (engine-play.js)
 
   // ── The district five ──────────────────────────────────────────────────
   // Nobody here is working. Offering money is the wrong verb and lands the

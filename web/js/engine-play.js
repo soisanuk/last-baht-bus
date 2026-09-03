@@ -294,6 +294,7 @@ function _lastBusWarn() {
   // she's your ride and the dread lifts (Howard, round 35: it printed between
   // stops on the back of her bike).
   if (G.rideSeq) return;
+  if (_lockedIn()) return;   // …nor from inside a bolted party that runs till dawn
   G.lastBusWarned = true;
   const mins = Math.max(5, (LAST_BUS_TURN - G.nightTurn) * 6);
   _say(_fmt("Somewhere out there the songthaew loops are thinning — the last baht bus of " +
@@ -569,7 +570,7 @@ function _closingTick() {
   if (G.offstage) return;
   // midnight. A Darkside bar with a spender bolts the door instead of shutting it.
   if (r.region === "Darkside" && r.lockIn && _barSpendTonight(G.room)) {
-    (G.soc.lockIn = G.soc.lockIn || {})[G.room] = true;
+    _lockInBegin(G.room);
     // …and the house remembers who was inside, and WHICH NIGHT. G.soc.lockIn
     // is nightly; this is the permanent one — the difference between a
     // customer who spent well once and a face the door knows (_lockInWelcome).
@@ -624,6 +625,216 @@ function _closingTick() {
     dest = next;
   }
   if (dest) { G.room = dest; _describeRoom(true); }
+}
+
+// ── THE LOCK-IN'S INTERIOR ──────────────────────────────────────────────────
+// The entry beat was superb and there was nothing behind it: "the party runs
+// while the money does" was never enforced, and a man could WAIT 15 inside a
+// bolted door and get the ordinary bar text back — "the far stools are empty
+// tonight" printed inside a music-up, aircon-cold, after-hours party (Stan,
+// round 35). This is what's behind the bolt.
+//
+// A lock-in is a wild party with a lot of sexual shenanigans in it — not the
+// off-the-clock som-tam-and-cards room, which is what the bar becomes AFTER
+// the last punter leaves (Mario). So the register is PG-13 the way film does
+// it: the cutaway, evidence not acts, sound and light, the lifer's euphemism,
+// your own part elided ("what happens after that stays inside the paint"),
+// and comedy. The narrator never looks directly. Three stages by turns inside
+// — loosening, the games, lights down — then dawn's evidence; one dare that
+// can land on YOU; a round expected while the money runs; and the coda for
+// the man still there when the room turns back into a workplace. Pooled, all
+// of it: a lock-in is a repeatable night. Explicit tier stays a pack hook.
+const _LOCKIN_LOOSEN = [
+  "Somebody turns the music up a notch and nobody turns it down. The cashier, who has counted " +
+    "every baht in this building for six years, has taken her shoes off under the till and " +
+    "is not counting anything.",
+  "The mamasan pours a round nobody ordered and doesn't write it down, which in this room is " +
+    "roughly the equivalent of a declaration of war on the calendar.",
+  "A girl comes back from the toilet in a different top. Then a different girl does. A pattern " +
+    "is forming and you are choosing not to be the man who points it out.",
+  "The regular at the end — asleep since eleven — is gently relocated to two chairs pushed together " +
+    "by two girls and a cashier, with the practised handling of people who have moved this exact regular before.",
+  "The bell rings. Nobody paid for it. The mamasan looks at the rope, looks at the girl holding " +
+    "the rope, and lets it go, which is a thing you have never once seen her do.",
+  "Phones go into a biscuit tin behind the bar, one after another, without anybody asking. " +
+    "Yours is politely held out for. The tin has a lid. The lid goes on.",
+];
+const _LOCKIN_GAMES = [
+  "The dice game at the corner table has rules nobody explains and stakes that are visibly not " +
+    "money — and, around the third round, the narrator's full attention on the grain of the bar top, " +
+    "which has a cigarette burn the shape of Thailand you had not noticed before.",
+  "A kiss is auctioned for the tip jar. The bidding is brisk, in three currencies, and won by a " +
+    "man who then loses it again in a dare within the minute. The tip jar does well out of both.",
+  "Somebody's boyfriend arrives through the back on a Wave, is handed a beer and a plate, sits " +
+    "at the bar with his back to the room, and does not turn around once. He has done this " +
+    "before. It is the wisest thing anyone in the building is doing.",
+  "A punter who has lost a bet has to sing, and the song is the one everybody knows, and by " +
+    "the chorus two of the girls are on the bar and one of the girls is on the punter, and the " +
+    "mamasan is refereeing with a wooden spoon.",
+  "\"Ah,\" says the lifer at the end, watching the far corner with the fond, unfocused eye of " +
+    "a man who has seen it. \"The Thursday thing.\" He does not elaborate. It is not Thursday.",
+  "A shirt goes over the bell rope. A second shirt goes over the first. You are fairly sure " +
+    "neither of them started the evening on the customer side of the bar.",
+];
+const _LOCKIN_DARK = [
+  "The lamp at the dark end goes off. It does not come back on. The music does not get louder, " +
+    "exactly, but it gets closer.",
+  "The room has split into the part with the light on, which is where you are, and the part " +
+    "without, which is where the laughing is coming from — a low, constant, private laughing " +
+    "that has no punchline you're going to hear.",
+  "Out the back — past the toilets, through a door you had not clocked — water runs for a long " +
+    "time, stops, starts again. Two people go through that door. One, later, comes back.",
+  "You become extremely interested in the label on your bottle. It is a good label. It has a " +
+    "lot going on. Behind you the bell rings again, and again nobody has paid for it.",
+  "The mamasan sits down next to you, the first time she has sat all night, and lights a " +
+    "cigarette, and watches the dark end of her own bar with the expression of a woman doing " +
+    "sums she has done before. \"Sabai?\" she asks you. It is not really a question.",
+];
+const _LOCKIN_DARE = [
+  n => `The dice come round the table to you. ${n} holds the cup out, one eyebrow up, and the ` +
+    `whole corner goes quiet in the specific way a corner goes quiet when it has decided you are ` +
+    `next. The stakes are whatever the last man lost. (JOIN IN · or keep your seat.)`,
+  n => `${n} arrives at your stool with a shot in each hand and the look of a woman delivering ` +
+    `a verdict. "Everybody play. You play." The room has turned to watch you decide, which is ` +
+    `its own kind of pressure. (JOIN IN · or keep your seat.)`,
+  n => `A hand on your collar from behind — ${n}'s — and a voice in your ear that does not ` +
+    `quite make the offer in words. The corner is waiting. The light at the dark end is ` +
+    `already off. (JOIN IN · or keep your seat.)`,
+];
+const _LOCKIN_JOIN = [
+  "You get up. What happens after that stays inside the paint — but the shirt on the bell rope " +
+    "is yours by the end of it, and you are not sure at which point that happened, and nobody is " +
+    "going to tell you.",
+  "You go. The narrator, who has been in this room before, becomes deeply absorbed in the label " +
+    "of a bottle that isn't even yours, for quite a while, and when the narrator looks up again " +
+    "the music is a different song and you are sitting somewhere else.",
+  "You join in. It is later, afterwards. The mamasan puts a water in front of you without a " +
+    "word, and the girl who dealt you in is back behind the bar in a different top, counting " +
+    "the tip jar with an expression of professional satisfaction.",
+  "The dice are kind to you and then extremely unkind, and the room enjoys both, and somewhere " +
+    "in the unkind part the lamp at your end goes off too. What the paint keeps, the paint keeps.",
+];
+const _LOCKIN_DECLINE = [
+  "You keep your seat. Nobody minds — this room has a long memory for men who join in and no " +
+    "memory at all for men who don't. The dice go on round without you; the party does not.",
+  "You raise your bottle an inch in a gesture that means thank you and no, and the corner " +
+    "accepts it with a cheer that is only slightly mocking. Your stool, at least, is safe.",
+  "\"Next time,\" you say, and the girl with the cup shrugs a shoulder that says there is " +
+    "always a next time and you will always say that. The game moves on. So does the night.",
+];
+const _LOCKIN_ROUND = [
+  n => `${n} looks at the till, looks at the bar in front of you — the same bottle it was ` +
+    `twenty minutes ago — and looks away again, which from a mamasan is a sentence.`,
+  n => `The temperature in your corner drops a degree. Nothing is said. ${n} sends a girl past ` +
+    `you to the next stool and the girl stays there, and the party goes on being a party ` +
+    `about a metre further away than it was.`,
+  n => `${n} wipes the bar in front of you, slowly, all the way to the edge, and puts a menu ` +
+    `down where the cloth was. She does not open it. She does not need to.`,
+];
+const _LOCKIN_WALKOUT = [
+  n => `${n} comes round the bar, takes your elbow with real warmth, and walks you to the door ` +
+    `the way she walked the others at midnight. "Goodnight, tilac. Tomorrow, na." The bolt ` +
+    `slides, the night air comes in for exactly as long as you take, and goes back across ` +
+    `behind you. The party runs while the money does. It has run out of yours.`,
+  n => `"Tilac." ${n}, at your shoulder, not unkind. "Is late for you." It is not late for ` +
+    `anybody else in the room, and both of you know that is the point. She sees you out ` +
+    `herself; the bolt goes back with the same flat sound; behind it, the music does not ` +
+    `even pause.`,
+];
+const _LOCKIN_CODA = [
+  "The last punter goes out through the front, walked by two girls to the bolt and back, and " +
+    "the room changes state without anybody announcing it: the music down, the lamp back on, " +
+    "the shirts off the bell rope and folded. The mamasan sits with her shoes off and counts. " +
+    "Somebody produces som tam in a plastic bag and four spoons. You are, it appears, still here, " +
+    "and nobody has asked you to leave, which is its own kind of admission.",
+  "It empties the way a tide goes out — one man, then two, then the boyfriend on the Wave — " +
+    "and what's left is a bar with the lights on and the staff in their own clothes, a deck of " +
+    "cards coming out of the till drawer, and a girl asleep across two stools with her feet in the " +
+    "cashier's lap. Nobody is performing anything. You are being allowed to watch.",
+  "By the time the room is only staff, it is a different room: the mamasan eating standing up, " +
+    "the cashier doing the count out loud in Isan, two of the girls sharing a cigarette on the " +
+    "step out the back with the alley door propped. One of them looks round at you, decides " +
+    "something, and goes back to the cigarette. You have been filed under furniture. It is a " +
+    "compliment.",
+  "The party is over and the night isn't: the cards are out at the corner table, real money now, " +
+    "small money, the girls' own, and the dealing is fast and merciless and in a dialect. Nobody " +
+    "deals you in. Nobody deals you out either. The mamasan puts a water in front of you and a " +
+    "plate you didn't order, and the sky outside the painted glass is not yet anything.",
+];
+// Once, when the door bolts — from midnight or from the alley. The interior
+// clock starts here; everything below is turns since.
+function _lockInBegin(room) {
+  (G.soc.lockIn = G.soc.lockIn || {})[room] = true;
+  (G.soc.lockInAt = G.soc.lockInAt || {})[room] = G.nightTurn;
+  (G.lockedInAt = G.lockedInAt || {})[room] = G.day;   // the permanent record (_lockInWelcome)
+  (G.soc.lockInCheck = G.soc.lockInCheck || {})[room] = { turn: G.nightTurn, money: G.money };
+}
+let _lockInBusy = false;   // a dare's elided time must not print vignettes into itself
+function _lockInTick() {
+  if (!_lockedIn() || G.over || G.pendingEnc || G.pendingChoice || G.game || _lockInBusy) return;
+  const room = G.room, r = _room();
+  const since = G.nightTurn - ((G.soc.lockInAt || {})[room] || G.nightTurn);
+  const mama = _npcsHere().find(n => NPC_ROLES[n] === "mamasan") ||
+    (typeof _tillKeeper === "function" && _tillKeeper(room));
+  const mname = mama ? NPCS[mama].name : "The mamasan";
+  // THE PARTY RUNS WHILE THE MONEY DOES. Every 15 turns inside: has the till
+  // seen you? First miss, the temperature drops; second, she walks you out
+  // with the same courtesy she used at midnight. Spending resets the clock.
+  const chk = (G.soc.lockInCheck = G.soc.lockInCheck || {})[room] || (G.soc.lockInCheck[room] = { turn: G.nightTurn, money: G.money });
+  if (G.money < chk.money) { chk.money = G.money; chk.turn = G.nightTurn; chk.warned = false; }
+  else if (G.nightTurn - chk.turn >= 15) {
+    if (!chk.warned) { chk.warned = true; chk.turn = G.nightTurn; _say(_pickVary(_LOCKIN_ROUND, "lockinround")(mname), "dim"); }
+    else {
+      delete G.soc.lockIn[room];
+      (G.soc.leftLockIn = G.soc.leftLockIn || {})[room] = true;
+      _say(_pickVary(_LOCKIN_WALKOUT, "lockinout")(mname), "alert");
+      const dest = r.exits && r.exits.out;
+      if (dest) { G.room = dest; _describeRoom(true); }
+      return;
+    }
+  }
+  // the coda: the last punter leaves before dawn, and the room turns back
+  // into a workplace with you still in it
+  if (G.nightTurn >= 92 && !(G.soc.lockInCoda || {})[room]) {
+    (G.soc.lockInCoda = G.soc.lockInCoda || {})[room] = true;
+    _say(_pickVary(_LOCKIN_CODA, "lockincoda"), "room");
+    return;
+  }
+  // the dare lands once, early in the games
+  if (since >= 12 && !(G.soc.lockInDare || {})[room]) {
+    const girl = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
+    if (girl) {
+      (G.soc.lockInDare = G.soc.lockInDare || {})[room] = true;
+      G.pendingEnc = "lockdare";
+      _encPrompt([_pickVary(_LOCKIN_DARE, "lockindare")(NPCS[girl].name), "alert"]);
+      return;
+    }
+  }
+  // a vignette every eight turns, from the stage the night has reached — but
+  // not once the coda has turned the room back into a workplace
+  if ((G.soc.lockInCoda || {})[room]) return;
+  const last = (G.soc.lockInLast || {})[room];
+  if (last != null && G.nightTurn - last < 8) return;
+  if (last == null && since < 4) return;
+  (G.soc.lockInLast = G.soc.lockInLast || {})[room] = G.nightTurn;
+  const pool = since < 10 ? _LOCKIN_LOOSEN : since < 22 ? _LOCKIN_GAMES : _LOCKIN_DARK;
+  const key = since < 10 ? "lockin1" : since < 22 ? "lockin2" : "lockin3";
+  _say(_pickVary(pool, key), "dim");
+}
+// The dare's resolver (G.pendingEnc = "lockdare"). JOIN IN elides time — the
+// paint keeps what it keeps — and pays as COMPANY does: non-jading สนุก and a
+// real bond with the girls in the room (_addBond, not _boughtBond: nothing was
+// bought). Keeping your seat costs nothing and is voiced.
+function _lockInDare(input) {
+  const yes = /\b(join|yes|in|go|dare|ok|okay|sure|why not|do it|play|deal me)\b/.test(input) &&
+    !/\b(no|keep|seat|stay|watch|pass|not)\b/.test(input);
+  if (!yes) { _say(_pickVary(_LOCKIN_DECLINE, "lockindecline"), "dim"); return; }
+  _lockInBusy = true;
+  try { for (let i = 0; i < 5 && !G.over; i++) _tick(); } finally { _lockInBusy = false; }
+  _say(_pickVary(_LOCKIN_JOIN, "lockinjoin"), "win");
+  (G.soc.lockInLast = G.soc.lockInLast || {})[G.room] = G.nightTurn;   // the elision IS the beat; no vignette on its heels
+  for (const id of _npcsHere()) if (NPC_ROLES[id] === "hostess") _addBond(id, 1);
+  _addHappy(3, "the party, and being in it");
 }
 
 // ─ Distractions at the board ─

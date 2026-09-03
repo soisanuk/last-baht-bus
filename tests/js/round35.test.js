@@ -358,3 +358,87 @@ test("no cashier is named where the bar has none (Stan 25)", () => {
   out = []; run("buy beer");
   assert.doesNotMatch(text(), /cashier's calculator/, "the room has no cast");
 });
+
+// ── the lock-in's interior (Stan 9 → Mario's register) ──────────────────────
+// Behind the bolt there was nothing: WAIT 15 inside a bolted door got the
+// ordinary bar text back, and "the party runs while the money does" was never
+// enforced. What's behind it now, all through the real _tick.
+
+const bolt = () => { G.room = "khao_talo_bar"; G.money = 9000; G.nightTurn = 60;
+  G.soc.bells = { khao_talo_bar: 1 }; _closingTick(); assert.ok(_lockedIn(), "premise: bolted"); };
+const nights = (from, to, each) => { for (let t = from; t <= to && !G.over; t++) { G.nightTurn = t; out = []; (each || (() => run("wait 1")))(t); } };
+
+test("the interior escalates by the stage the night has reached", () => {
+  bolt();
+  const seen = { loosen: 0, games: 0, dark: 0 };
+  nights(61, 90, t => { run("wait 1");
+    if (_LOCKIN_LOOSEN.some(l => text().includes(l.slice(0, 40)))) seen.loosen++;
+    if (_LOCKIN_GAMES.some(l => text().includes(l.slice(0, 40)))) seen.games++;
+    if (_LOCKIN_DARK.some(l => text().includes(l.slice(0, 40)))) seen.dark++;
+    if (G.pendingEnc === "lockdare") run("keep my seat");
+    if (t % 12 === 0) run("buy beer");                    // the till sees you
+  });
+  assert.ok(seen.loosen >= 1 && seen.games >= 1 && seen.dark >= 1, JSON.stringify(seen));
+  assert.ok(_lockedIn(), "spending kept you inside");
+});
+
+test("the dare lands once, JOIN IN elides time and pays as company, keeping your seat is free", () => {
+  bolt();
+  nights(61, 73, () => { if (G.pendingEnc === "lockdare") return; run("wait 1"); });   // never feed the wait INTO the dare
+  assert.equal(G.pendingEnc, "lockdare", "the dice come round to you");
+  assert.ok(Array.isArray(G.encPrompt) && /JOIN IN/.test(G.encPrompt.map(l => l[0]).join(" ")), "prompt stashed for resume");
+  // resume redraw works
+  out = []; _renderResume(); assert.match(text(), /JOIN IN/, "a reload redraws the dare");
+  const h0 = G.happy, j0 = G.jaded, t0 = G.nightTurn, b0 = G.soc.drinks.ying || 0;
+  out = []; run("join in");
+  assert.equal(G.pendingEnc, null);
+  assert.ok(_LOCKIN_JOIN.some(l => text().includes(l.slice(0, 30))), "the paint keeps what it keeps");
+  assert.ok(G.nightTurn > t0 + 3, "time was elided");
+  assert.equal(G.happy - h0, 3, "company pays"); assert.equal(G.jaded, j0, "…and never jades");
+  assert.ok((G.soc.drinks.ying || 0) > b0, "the girls in the room warm to you — earned, not bought");
+  // never twice in a night
+  nights(G.nightTurn + 1, 95, () => { run("wait 1"); assert.notEqual(G.pendingEnc, "lockdare", "one dare a night"); if (G.nightTurn % 12 === 0) run("buy beer"); });
+  // and keeping your seat is voiced and costs nothing
+  newGame(); _setFlag("act1Done"); for (const k in ENCOUNTERS) G.encDone[k] = true; bolt();
+  nights(61, 73, () => { if (G.pendingEnc !== "lockdare") run("wait 1"); });
+  const h1 = G.happy; out = []; run("keep my seat");
+  assert.ok(_LOCKIN_DECLINE.some(l => text().includes(l.slice(0, 30)))); assert.equal(G.happy, h1);
+});
+
+test("the party runs while the money does — and walks you out when it doesn't", () => {
+  bolt();
+  let warned = false, walked = false;
+  for (let t = 61; t <= 99 && !walked; t++) {                  // stop AT the walkout — ticking on to dawn resets the night
+    G.thirst = 20; G.hunger = 20; G.nightTurn = t; out = [];    // the body is not the subject here — the till is
+    run("wait 1"); if (G.pendingEnc === "lockdare") run("keep my seat");
+    if (_LOCKIN_ROUND.some(f => text().includes(f("Daeng").slice(0, 30)))) warned = true;
+    if (!_lockedIn() && G.room !== "khao_talo_bar") walked = true;
+  }
+  assert.ok(warned, "the temperature drops first");
+  assert.ok(walked, "…then she walks you out, the same courtesy as midnight");
+  assert.ok(G.soc.leftLockIn.khao_talo_bar, "and the bolt stays shut to you tonight");
+});
+
+test("the coda: the last punter leaves, and the room turns back into a workplace", () => {
+  bolt();
+  let coda = 0, after = 0;
+  nights(61, 99, t => { G.thirst = 20; G.hunger = 20; run("wait 1"); if (G.pendingEnc === "lockdare") run("keep my seat"); if (t % 10 === 0) run("buy beer");
+    if (_LOCKIN_CODA.some(l => text().includes(l.slice(0, 30)))) coda++;
+    else if (coda && (_LOCKIN_DARK.concat(_LOCKIN_GAMES).some(l => text().includes(l.slice(0, 30))))) after++; });
+  assert.equal(coda, 1, "once, near dawn");
+  assert.equal(after, 0, "and no party vignette after the party is over");
+});
+
+test("nothing prints behind an unbolted door, and the dread stays outside a bolted one", () => {
+  G.room = "khao_talo_bar"; G.nightTurn = 30; out = []; _lockInTick();
+  assert.equal(text(), "", "the interior belongs to the lock-in only");
+  bolt(); G.nightTurn = LAST_BUS_TURN - 3; G.lastBusWarned = false; out = []; _lastBusWarn();
+  assert.equal(text(), "", "no last-bus warning inside a party that runs till dawn");
+});
+
+test("the register stays PG-13 — the narrator never looks directly", () => {
+  const all = [..._LOCKIN_LOOSEN, ..._LOCKIN_GAMES, ..._LOCKIN_DARK, ..._LOCKIN_JOIN, ..._LOCKIN_CODA,
+    ..._LOCKIN_DARE.map(f => f("X")), ..._LOCKIN_DECLINE];
+  for (const l of all) assert.doesNotMatch(l, /\b(naked|nude|fuck|cock|tits|pussy|blowjob|orgasm)\b/i, l.slice(0, 50));
+  assert.ok(all.length >= 25, "deep pools — a lock-in is a repeatable night");
+});

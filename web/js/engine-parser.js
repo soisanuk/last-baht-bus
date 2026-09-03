@@ -8474,7 +8474,7 @@ function doCommand(input) {
           "cold. Nobody asks you for anything at the door — that was settled the last " +
           "time. The Darkside is closed. This is the other thing, and tonight you did " +
           "not have to buy your way into it.", "win");
-        (G.soc.lockIn = G.soc.lockIn || {})[bar] = true;
+        _lockInBegin(bar);
         // the welcome pays once per bar per night — the beat is arriving, not
         // the door (see the OUT handler for what this closes)
         const _welcomed = (G.soc.backDoorTonight = G.soc.backDoorTonight || {});

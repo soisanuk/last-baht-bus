@@ -2409,6 +2409,7 @@ function _tick() {
   _railTick();     // the hour turns and somebody drains a glass and moves on
   if (typeof _flowerTick === "function") _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
+  if (typeof _lockInTick === "function") _lockInTick(); // …and behind a bolted door, the night has an interior
   // Quiz capture was only checked on ARRIVAL, so the obvious punter move —
   // settle in early with a pint — missed the quiz entirely even after TIME
   // advertised it (Gaz playtest, 2026-08-17). If the window opens while you're
