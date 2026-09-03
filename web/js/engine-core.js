@@ -1615,7 +1615,14 @@ function _selfNamedNode(npcId, topic) {
   const n = NPCS[npcId];
   if (!n || !topic) return null;
   const st = _npcState(npcId);
-  let words = String(topic).toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length >= 4);
+  // Common words are not topics: ASK CANDY ABOUT LAST NIGHT answered with her
+  // Bee node because "night" appears in it (Malcolm, round 36). The same
+  // stop-list the grapevine uses, plus the soi's furniture nouns.
+  const _STOP = typeof _SAID_STOP !== "undefined" ? _SAID_STOP : new Set();
+  const _FURNITURE = new Set(["night", "last", "tonight", "girl", "girls", "drink", "drinks", "money",
+    "time", "here", "there", "come", "back", "good", "little", "thing", "things", "about", "some", "more"]);
+  let words = String(topic).toLowerCase().split(/[^a-z0-9']+/)
+    .filter(w => w.length >= 4 && !_STOP.has(w) && !_FURNITURE.has(w));
   // A MAN'S OWN NAME IN HIS OWN NODE IS A STAGE DIRECTION, NOT A TOPIC. Prose
   // narrates the speaker constantly — "Terry considers the ceiling", "Mort caps
   // the biro" — so without this, asking Terry about himself matched his own narration
@@ -1950,7 +1957,7 @@ function _describeRoom(full, forceFull) {
       ? _dogN("It is pitch dark. Your phone's flashlight would help — though the " +
         "growl waiting somewhere in it is a soi-dog problem, and soi-dog problems " +
         "are, these days, Sai Krok's department.")
-      : "It is pitch dark. If your phone has any battery left, its flashlight " +
+      : (_room().darkGlow ? _room().darkGlow + " " : "") + "It is pitch dark. If your phone has any battery left, its flashlight " +
         "would help. Sois this dark tend to have soi dogs in them.", "alert");
     return;
   }

@@ -2064,8 +2064,16 @@ function _act1Fail(reason) {
   _say("Dawn wipes the slate. Same beach, same day two, same empty pockets — go again.", "room");
   _say("");
   const identity = G.player;  // who you are was decided in the taxi — not re-picked each attempt
+  // …and so was the MONTH. G.season0 is seeded by the FRONTEND off the wall
+  // clock at game creation (rule 1: the engine reads no clock); newGame()
+  // below can only fall back to the November default, so a September arrival
+  // turned into November across the reset — WEATHER said "deep low" on day
+  // two and "high season proper" on the day-two-again that followed, while
+  // the paper's lottery box kept saying 2026-09 (Malcolm, round 36).
+  const season0 = G.season0;
   const dog = G.dog;          // and so was he: a companion is not part of the slate (dog-person playtest 2026-08-22)
   newGame();
+  if (season0 != null) G.season0 = season0;   // same month you arrived in
   G.act1Best = best;      // the record…
   G.act1Tries = tries;    // …and the attempt count survive the reset (unlocking HINT)
   if (dog) {
@@ -4676,6 +4684,7 @@ const _PUB_SOI_SCENES = [
   "An arm's length of pavement and a pane of glass between you and the whole circus: the leaning-out, the " +
     "sleeve-grabbing, the WHERE YOU GO landing on the window like rain. Inside, a dart thunks the board and somebody " +
     "swears amiably about the football. The calm side of the glass has a lot to recommend it.",
+  // (the late pool below answers after the shutters — this one is the show)
   "Street level, front row: the parade presses right up to the window — a price named on someone's fingers, a boy " +
     "doing the arithmetic, a mama watching her girls the way a cat watches a door. In the Vic it is just wood and " +
     "cold air and the low talk of men who found their stool and mean to keep it.",
@@ -4746,6 +4755,17 @@ function _soiSpectateHappy(msg) {
 // is the tone-setter — a vibrant, orienting wall that lays the whole soi out and
 // points you at what to do (once per game; `sawBalcony` resets with newGame).
 // Every look after that draws the varied _BALCONY_SCENES pool, so no repeated wall.
+const _WATCH_SOI_LATE = [
+  "Street level, after the show: the grilles are down along the far side, one neon left burning by mistake, " +
+    "a boy hosing the pavement with the concentration of a man who has done it a thousand nights. The parade " +
+    "has gone home; the soi is just a road again, and the window frames it like a photograph of somewhere else.",
+  "Nothing moves out there but a dog and a sweeper, and once, slowly, a motorbike with two girls on it going " +
+    "home in their own clothes. From up here you can see the whole length of the soi and every shutter on it, " +
+    "and the quiet is the loudest thing you have heard all night.",
+  "The window at this hour shows you the bones: a strip of lit doorways gone dark one at a time, a cashier's " +
+    "cage with the light still on and nobody in it, a cat where the dancer was. Two of the shutters are graffitied " +
+    "and you have never once seen them before, because they are never down when you are.",
+];
 function _doWatchSoi() {
   if (!_flag("sawBalcony")) {
     _setFlag("sawBalcony");
@@ -4768,7 +4788,7 @@ function _doWatchSoi() {
     _say("Somewhere down there is a week's worth of trouble with your name on it. (It's all just DOWN the stairs — " +
       "the pub first, then out into the soi. " + _close + ")", "dim");
   } else {
-    _say(_pickVary(_BALCONY_SCENES, "balcony"));
+    _say(_pickVary(G.nightTurn >= 60 ? _WATCH_SOI_LATE : _BALCONY_SCENES, G.nightTurn >= 60 ? "soilate" : "balcony"));
   }
   _soiSpectateHappy("(Best seat above the best free show.)");
 }
@@ -4777,7 +4797,11 @@ function _doWatchSoi() {
 // eye-level, an arm's length of pavement and a pane of glass between you and the
 // whole grabby circus, the pub's cold-aircon calm behind you. Its own pool.
 function _doWatchPubSoi() {
-  _say(_pickVary(_PUB_SOI_SCENES, "pubsoi"));
+  // after the shutters the window shows a different street (Malcolm, r36:
+  // "the parade presses right up to the window" at 01:30, beside the room's
+  // own "shutters down and its neon off")
+  if (G.nightTurn >= 60) _say(_pickVary(_WATCH_SOI_LATE, "soilate"));
+  else _say(_pickVary(_PUB_SOI_SCENES, "pubsoi"));
   _soiSpectateHappy("(A pint, and the whole circus safely behind glass.)");
 }
 
@@ -7439,7 +7463,7 @@ function _doColumn() {
       return;
     }
     _say("You pull up the Nite Owl in your inbox. Mort took it online years back, grousing the " +
-      "whole way — 'the paper died, squire, not me' — and it still lands every week, unasked, " +
+      "whole way — 'the paper died, squire, not me' — and it lands most nights now, unasked, " +
       "in the mail of anyone who ever stood him a beer:", "dim");
   }
   _say("── THE NITE OWL ── Mort's weekly hoot, still going, out of spite ──", "win");

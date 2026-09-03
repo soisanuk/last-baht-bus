@@ -232,7 +232,7 @@ const ROOMS = {
       "Two gray-and-white soi cats hold down the end of a lounger, the big one sitting slightly " +
       "in front of the small one, both watching the water. The beach road glows to the east; the " +
       "sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart " +
-      "is parked. Your face was in this sand until about a minute ago.",
+      "is parked.",
     revisit: [
       "The cats have not moved. The big one checks you, decides, and looks back at the water.",
       "Somebody's flip-flops sit neatly by a lounger, ownership unclear, hours old.",
@@ -1569,7 +1569,7 @@ const ROOMS = {
       "sight. Two bars hold the corners of the junction and stare each other down: THE STINKY " +
       "PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one " +
       "side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either " +
-      "corner you can still catch the sun going down over the bay. From about five, the police " +
+      "corner you can still catch the sun going down over the bay. From about six, the police " +
       "run a checkpoint on Beach Road just south of the junction, waving over helmetless farang " +
       "for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars " +
       "first came in off the road ducking exactly that. Blue songthaews — the baht buses — " +
@@ -1583,10 +1583,10 @@ const ROOMS = {
     },
     revisit: [
       "Back to the foot of Soi 6, the soi blazing inland east, the bay open across the road west, the Stinky Pinky and the Blue Dog eyeing each other across the junction.",
-      "The mouth of Soi 6 again — the skunk sign buzzing one corner, the Blue Dog's rail facing the water on the other, and the sun thinking about going down over the bay.",
+      "The mouth of Soi 6 again — the skunk sign buzzing one corner, the Blue Dog's rail facing the water on the other, and the bay across the traffic doing whatever the bay is doing at this hour.",
       "You're back at the junction. Soi 6's runway of light runs off east; blue songthaews rattle by on the Beach Road run, and the junction absorbs you back into its noise.",
-      "Back where the soi hits Beach Road. Two corner bars, one loud sea breeze, and the choice you keep making: into the noise east, or a quiet cold one with a sunset.",
-      "The foot of the soi, the cartoon skunk and the Blue Dog holding their corners, the bay going gold across the traffic. A baht bus slows, hopeful; you let it pass.",
+      "Back where the soi hits Beach Road. Two corner bars, one loud sea breeze, and the choice you keep making: into the noise east, or a quiet cold one facing the water.",
+      "The foot of the soi, the cartoon skunk and the Blue Dog holding their corners, the bay a dark sheet across the traffic. A baht bus slows, hopeful; you let it pass.",
       "Back to the junction, the neon fuse of Soi 6 lit and waiting east, the water and the last of the light off west past the road.",
     ],
     exits: { s: "beach_rd_klang", e: "soi6_street", n: "beach_rd_top", w: "north_beach" },
@@ -2718,7 +2718,7 @@ const ROOMS = {
     food: true,
     desc: "Six stools, a chest freezer, a laminated board of numbered dishes and a " +
       "chalked one underneath it that says WHATEVER SHE MADE TODAY. Forty baht gets " +
-      "you fed; sixty gets you fed properly. Half the men in here have been eating " +
+      "you a plate — sixty, and properly fed for it. Half the men in here have been eating " +
       "at this counter since before the branch in Jomtien existed, and they will " +
       "tell you so. The original, they say, with the particular pride of people who " +
       "found something cheap before it was famous for being cheap.",
@@ -2871,6 +2871,10 @@ const ROOMS = {
     exits: { out: "tt_lane_3" },
   },
   tt_deep: {
+    // the dark-room line says "pitch dark"; the torch reveals a big multicoloured
+    // sign at the end of the lane. Both are true only if the dark line admits the
+    // glow (Malcolm, round 36) — and the manifest's DARK_LIGHT already says so.
+    darkGlow: "One big sign burns at the far end of the lane, every letter a different colour, and lights nothing but itself.",
     name: "Tree Town (Deep Corner)",
     region: "Tree Town",
     dark: true,
@@ -4765,6 +4769,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "cashier, in the cage at Rainbow. Ploy stand there six hours hungry every night. " +
           "Feed her, and doors open.\"", sets: ["somTamAccepted"], gives: "som_tam",
         short: "\"The door into Oy's world is som tam. Give it to Ploy, her cashier at Rainbow — feed her and doors open.\"" },
+      // The game prints ASK CANDY ABOUT LAST NIGHT; it used to land on her Bee
+      // node by the word "night" (Malcolm, round 36). Her own account, literal.
+      { topic: "last night", req: ["knowWasHere"],
+        text: "\"Last night? Same as I tell you, tilac: three a.m., you leave with the big group toward " +
+          "LK Metro, singing, and Mot follow you out. Little pickpocket. Ask Lek at the Lucky Tiger " +
+          "what he did with it — she see him every night.\"",
+        short: "\"Three a.m., the big group toward LK Metro, Mot following you out. Ask Lek.\"" },
       { topic: "oy", text: "\"Madam Oy. We come up together — Crystal Palace, different lifetime. She hard like teak now but she was farm girl from Isaan same as me. Wai her properly and she remember she has a heart. Somewhere.\"" },
       { topic: "mot", req: ["knowMot"], text: "\"Mot sell everything he lift to one buyer — always the same. Ask around LK Metro who that is.\" She mimes zipping her lip and pointing at the till: lady drink territory." },
       { topic: "philosophy", text: "\"Phi-lo-so-phy.\" She says each syllable the way " +
@@ -7093,6 +7104,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "carries three pints in one hand and has never once been asked to sit down with anybody, " +
       "which is the whole difference between this room and the rest of the soi.",
     dialogue: [
+      // READ MENU said "Roast — Sundays only, till nine" on a Tuesday and Aoy
+      // answered "you ask the wrong girl" (Malcolm, round 36). She IS the girl.
+      { topic: "roast", when: (st, G) => typeof _roastDay === "function" && !_roastDay(),
+        text: "\"Roast? Sunday, tilac.\" She says it the way you'd say the sea is that way. \"Beef, " +
+          "potato, the little pudding — Sunday, till nine, and it goes. Come Sunday early. Everybody " +
+          "say they come early and everybody come at eight.\"",
+        short: "\"Sunday, till nine, and it goes. Come early — everybody says that and comes at eight.\"" },
       { topic: "kitchen", text: "\u201cKitchen?\u201d The pad comes out at the word. \u201cBasket and " +
         "chips — scampi, sausage, the pie if he made pie. ฿" + QV_BASKET + ", proper portion, " +
         "cook is Thai but the fryer is very English.\u201d A glance at the clock. \u201cTill eleven. " +
@@ -8081,6 +8099,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "Just content.\" He signals the barman again. \"The girls stand out front in " +
         "nothing all night for some kid's YouTube channel. And they can't even say no " +
         "because then they look bad on camera.\"" },
+      // After one o'clock the soi is NOT still performing — the room's own
+      // lateDesc says the shutters are down — so the regular who says it is
+      // reads from an early-evening script (Malcolm, round 36).
+      { when: (st, G) => st.dstate !== "stranger" && G.nightTurn >= 60,
+        text: "\"Back again. Good.\" Terry shifts his Chang an inch, which for Terry is throwing his arms " +
+          "wide. \"Soi's done for the night. Give it eighteen hours, it won't be. Sit — this is the " +
+          "part where you find out who actually lives here.\"",
+        short: "\"Back again. Good.\" (Soi's done for the night. This is the part where you find out who lives here.)" },
       { when: (st) => st.dstate !== "stranger",
         text: "\"Back again. Good.\" Terry shifts his Chang an inch, which for Terry is throwing his arms " +
           "wide. \"Soi's still performing — it always is. Sit, watch a minute. You're learning the rhythm of " +
@@ -10728,7 +10754,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "— that's all there is tonight.",
         short: "Phil lifts two fingers off the bar. That's all there is tonight." },
       { text: "\"Phil.\" He shakes without getting off the stool. \"Twelve years " +
-        "coming here — every March, every October, no exceptions. I've got a girl up " +
+        "coming here — twice a year, same fortnight each time, no exceptions. I've got a girl up " +
         "in Surin. Nit. Good girl. Used to work the bars, I got her sorted out of all " +
         "that — she's got a little fabric shop now. I send the rent, the bills, bit " +
         "extra every month.\" He says the amount the way men do when a number has " +
@@ -12942,6 +12968,21 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "he's counting ceiling tiles and eyeing the balcony.\" He taps the notebook. \"This " +
         "is my ceiling tiles. Five hundred words a week and a reason to leave the room. " +
         "Cheaper than a psychiatrist, and funnier.\"" },
+      // "The best-informed man on this coast" didn't know the biggest story on
+      // his own street (Malcolm, round 36). The columnist has a view, and it is
+      // the column's view: structural, nameless, about who pays whom.
+      { topic: "white dish", text: "\"White Dish.\" Mort caps the biro, which is how you know it's a real " +
+        "answer. \"A rollup, squire. Somebody with a spreadsheet buys the bars the old boys are too " +
+        "tired to run, puts the same girls in matching shirts, and calls it a group. The town's seen " +
+        "three of those. Two of them are a plaque now.\" He taps the pad. \"What the column says, " +
+        "and what it doesn't: the interesting question isn't who owns the bars. It's who they pay to " +
+        "be allowed to.\"",
+        short: "\"A rollup. Buys the tired bars, matching shirts, calls it a group. The question is who THEY pay.\"" },
+      { topic: "ryan powers", text: "\"Powers.\" A pause you could set type in. \"I've met four men like " +
+        "him and written up three. Handsome, patient, always the first round. The fourth I didn't write " +
+        "up, because he sued.\" Mort looks at the window. \"You'll form your own view. Bert's is " +
+        "worth hearing first.\"",
+        short: "\"Met four like him, wrote up three. The fourth sued. Ask Bert.\"" },
       { topic: "nineties", text: "\"Everyone tells me it was better in '98. Everyone's " +
         "wrong, and I was HERE, filing copy, so I would know. It wasn't better — the beer " +
         "was cheaper and so were they, and so, crucially, were you.\" He almost smiles. " +
@@ -13520,7 +13561,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"You again.\" The headphones come half-down. Provisional." },
       { text: "\"Angela.\" The handshake is brief and firm; the eye contact is " +
         "rationed. \"Yes, that's a Discman. No, it's not ironic.\" She turns the " +
-        "corner of a smile at the window, at Soi 6 howling away across the road. " +
+        "corner of a smile at the window, at Soi 6 across the road. " +
         "\"I sit on this side of the glass. Best nature documentary in town — " +
         "you get the whole ecosystem without getting wet.\" She slides the " +
         "headphones down to her neck, which for her is a door opening.",

@@ -496,3 +496,116 @@ test("bare WAIT in the rain reads the sky (Ray)", () => {
   G.rain = 0; out = []; run("wait");
   assert.equal(text(), "You wait. Pattaya doesn't.", "dry, the joke stands alone");
 });
+
+// ── Malcolm: the sub-editor — where the world disagreed with itself ─────────
+// A persona whose whole drive was cross-checking the game against itself: the
+// same rooms at different hours, the paper against the street, one character
+// against another, Tuesday against Friday. Nineteen contradictions.
+
+// SEVERE. WEATHER said "September: the deep low" on day two and "November:
+// high season proper" on the day-two-again after the Act One reset, while the
+// paper's lottery box kept saying 2026-09. The frontend seeds G.season0 off
+// the wall clock; the reset's newGame() can only fall back to November.
+test("the month survives the Act One reset (Malcolm F1)", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.season0 = 8; G.stage = "act1"; G.nightTurn = 99;
+  _act1Fail("dawn");
+  assert.equal(G.season0, 8, "you fail the night in the month you arrived in");
+  assert.equal(_seasonTier(), "deeplow");
+});
+
+// The foot of Soi 6 says in its own prose you can catch the sunset from either
+// corner and watch the checkpoint just south of the junction; both verbs
+// refused it on the spot while working from inside either bar.
+test("the junction can see the junction (Malcolm F3)", () => {
+  G.room = "beach_rd_n"; G.nightTurn = 5;
+  out = []; run("watch sunset");
+  assert.doesNotMatch(text(), /No sea view from here/, "the sunset the prose promises");
+  G.nightTurn = 2; out = []; run("watch police");
+  assert.doesNotMatch(text(), /No checkpoint from here/, "the checkpoint the prose promises");
+});
+
+// After one o'clock the pub's window said "shutters down and its neon off";
+// WATCH SOI, Angela and Terry all said the soi was still performing.
+test("after the shutters, the window and the rail agree with the room (Malcolm F4)", () => {
+  G.room = "queen_vic"; G.nightTurn = 70; _setFlag("sawBalcony");
+  out = []; run("watch soi");
+  assert.doesNotMatch(text(), /parade presses right up to the window/, "no parade at 01:00");
+  assert.ok(_WATCH_SOI_LATE.some(l => text().includes(l.slice(0, 40))), "the late street instead");
+  G.known.terry = true; G.talked = {}; G.convo = null;
+  out = []; run("talk to terry");
+  assert.doesNotMatch(text(), /Soi's still performing/, "Terry reads the hour");
+  assert.doesNotMatch(NPCS.angela.dialogue.map(d => d.text).join(" "), /howling away across the road/, "Angela's window is neutral");
+});
+
+test("Phil's visits square with any calendar (Malcolm F2)", () => {
+  assert.doesNotMatch(JSON.stringify(NPCS.phil.dialogue), /every March, every October/, "named months a September or November can't hold");
+});
+
+test("the foot of Soi 6 has no sunset baked into its revisits (Malcolm F7)", () => {
+  for (const l of ROOMS.beach_rd_n.revisit || [])
+    assert.doesNotMatch(l, /sun thinking about going down|bay going gold|with a sunset/, "time-neutral");
+  assert.match(ROOMS.beach_rd_n.desc, /From about six, the police/, "…and the checkpoint keeps the Owl's hours (F8)");
+});
+
+test("the Owl's banner doesn't call a nightly column weekly (Malcolm F5)", () => {
+  assert.doesNotMatch(JSON.stringify(_OWL_LEADS || []) + JSON.stringify(NPCS.mort.dialogue), /still lands every week/);
+});
+
+test("a chartered truck has no bench of passengers (Malcolm F10)", () => {
+  G.pendingFare = { kind: "bus", price: BUS_CHARTER, dest: "beach_rd_s", charter: true };
+  for (let i = 0; i < 4; i++) { out = []; _farePrompt(); assert.doesNotMatch(text(), /bench of passengers/); }
+  G.pendingFare = null;
+});
+
+test("pitch dark admits the sign burning in it (Malcolm F12)", () => {
+  G.room = "tt_deep"; G.lightOn = false; G.battery = 50;
+  out = []; run("look");
+  assert.match(text(), /One big sign burns/, "the glow the manifest already knew about");
+});
+
+test("Mort has a view on the biggest story on his own street (Malcolm F13)", () => {
+  G.room = "queen_vic"; G.nightTurn = 20; G.known.mort = true;
+  out = []; run("ask mort about white dish");
+  assert.match(text(), /rollup|who they pay/i);
+  assert.doesNotMatch(text(), /Not one I know/, "the best-informed man on the coast");
+});
+
+test("Cheap Charlie's prices only the plate it sells (Malcolm F14)", () => {
+  assert.doesNotMatch(JSON.stringify(ROOMS.cheap_charlies.desc + ROOMS.cheap_charlies_jt.desc), /Forty baht gets you fed/);
+});
+
+test("Aoy knows her own roast on a Tuesday (Malcolm F15)", () => {
+  G.room = "queen_vic"; G.day = 2; assert.ok(!_roastDay(), "premise: not Sunday");
+  out = []; run("ask aoy about roast");
+  assert.match(text(), /Sunday, tilac/);
+});
+
+test("the beach doesn't keep your face in the sand for a week (Malcolm F16)", () => {
+  assert.doesNotMatch(ROOMS.jomtien_beach.desc, /until about a minute ago/);
+});
+
+test("common words are not topics: ASK CANDY ABOUT LAST NIGHT is her account (Malcolm)", () => {
+  G.stage = "act1"; G.flags = { knowWasHere: true }; G.room = "candy_bar";
+  out = []; run("ask candy about last night");
+  assert.match(text(), /Mot follow/, "her own story of the night");
+  const beeNode = NPCS.candy.dialogue.find(d => d.topic === "bee");
+  if (beeNode) assert.ok(!text().includes(String(beeNode.text).slice(0, 40)), "not the node that merely contains the word night");
+});
+
+test("the waving cat is the waving cat, and a tip box is a tip box (Malcolm)", () => {
+  G.room = "lucky_tiger"; out = []; run("examine cat");
+  assert.match(text(), /maneki|waving cat/i);
+  G.room = "rock_factory"; out = []; run("examine tip box");
+  assert.match(text(), /TIPS in marker/);
+  assert.doesNotMatch(text(), /crate/i, "not the beer crates the box key ate");
+});
+
+test("ENTER a namesake bar goes to the one in your own region (Malcolm)", () => {
+  G.visited.cheap_charlies_jt = true; G.visited.cheap_charlies = true;
+  G.room = "jomtien_soi_7_w"; run("enter cheap charlies");
+  assert.equal(G.room, "cheap_charlies_jt", "the Jomtien branch, one room away");
+  newGame(); _setFlag("act1Done"); G.visited.cheap_charlies_jt = true; G.visited.cheap_charlies = true;
+  G.room = "buakhao_n"; run("enter cheap charlies");
+  assert.equal(G.room, "cheap_charlies", "…and the original from Buakhao");
+});

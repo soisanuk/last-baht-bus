@@ -736,11 +736,18 @@ function _doTravel(arg) {
   // standing in, so "candy bar" from inside "Candy Bar 2" resolves to the real
   // Candy Bar rather than being swallowed by its own numbered sibling.
   if (!dest) {
-    for (const id of dests) {
-      if (id === home) continue;
-      const r = ROOMS[id];
-      if ((r.bar && _pnm(r.bar) === _pnm(w)) || _pnm(r.name) === _pnm(w)) { dest = id; break; }
-    }
+    // An exact name match wins — unless it's the OTHER branch. "Cheap
+    // Charlie's" is the exact name of the Buakhao original and a prefix of
+    // "Cheap Charlie's (Jomtien)", so from one room away in Jomtien the exact
+    // branch walked 19 turns to Buakhao (Malcolm, round 36). A namesake in
+    // your own region outranks an exact match in somebody else's.
+    const here = _room().region;
+    const exact = dests.filter(id => id !== home && ROOMS[id] &&
+      ((ROOMS[id].bar && _pnm(ROOMS[id].bar) === _pnm(w)) || _pnm(ROOMS[id].name) === _pnm(w)));
+    const namesake = dests.filter(id => id !== home && ROOMS[id] && ROOMS[id].region === here && !exact.includes(id) &&
+      ((ROOMS[id].bar && _pnm(ROOMS[id].bar).startsWith(_pnm(w))) || _pnm(ROOMS[id].name).startsWith(_pnm(w))));
+    const local = exact.find(id => ROOMS[id].region === here) || namesake[0];
+    dest = local || exact[0] || null;
   }
   // Only now fall back to a loose match on the room you're standing in — the
   // Queen Vic Inn case ("queen vic" typed inside the pub, loosely matching both
@@ -750,12 +757,16 @@ function _doTravel(arg) {
   // Queen Vic *pub* wins over "Your Room — Queen Vic Inn" (both contain "queen vic
   // inn"); the room is reachable via the keywords above and the hotel-name match below.
   if (!dest) {
-    for (const id of dests) {
-      if (id === home) continue;
-      const r = ROOMS[id];
-      if ((r.bar && _pnm(r.bar).includes(_pnm(w))) ||
-          _pnm(r.name).includes(_pnm(w))) { dest = id; break; }
-    }
+    // Two Cheap Charlie's, two Candy Bars, two Sundowners: among loose matches
+    // the one in YOUR region wins, else the nearest. ENTER CHEAP CHARLIE'S from
+    // one room away in Jomtien walked 19 turns to the Buakhao original
+    // (Malcolm, round 36).
+    const loose = dests.filter(id => id !== home && ROOMS[id] &&
+      ((ROOMS[id].bar && _pnm(ROOMS[id].bar).includes(_pnm(w))) || _pnm(ROOMS[id].name).includes(_pnm(w))));
+    const here = _room().region;
+    loose.sort((a, b) => ((ROOMS[b].region === here) - (ROOMS[a].region === here)) ||
+      ((_hops(G.room, a) ?? 999) - (_hops(G.room, b) ?? 999)));
+    if (loose.length) dest = loose[0];
   }
   // Finally the hotel's own name (so "travel sabai palms" works) — after venues,
   // so a same-named pub isn't shadowed by the hotel you happen to sleep in.
@@ -1607,6 +1618,20 @@ const _NO_SUCH_THING = [
   "Not here. Or not a thing. The night is unclear on the distinction.",
 ];
 
+const _CAT_LINES = {
+    bar: [
+      "A bar cat, asleep on the one stool nobody ever seems to claim. It opens one eye, " +
+        "prices you, and closes it. You are not worth the second eye.",
+      "It lives here the way the mamasan lives here: it was here before you, it will be " +
+        "here after you, and the arrangement is not up for discussion.",
+    ],
+    any: [
+      "A soi cat gives you the long unhurried blink of an animal that owns real estate on " +
+        "this street and knows sunburn when it sees it.",
+      "It sits in the exact centre of the pavement, washing a paw, making the entire " +
+        "street route around it. Correctly.",
+    ],
+  };
 const _SCENERY = [
   // the animals the prose names (dog-person playtest 2026-08-22): the tide-line dog
   // before you have one, the rats with routines, the Dolphin Bar's dolphin, Tree
@@ -1800,7 +1825,12 @@ const _SCENERY = [
         "ever paid for.",
     ],
   } },
-  { key: "box", m: /\b(box|boxes|crate|crates)\b/, lines: {
+  // TIP BOX at the Rock Factory examined as beer crates — the box key ate it
+  // (Malcolm, round 36). A tip box is its own thing everywhere it exists.
+  { key: "tipbox", m: /\btip ?(box|jar)\b|\btips\b/, fn: () => "The tip box: a Chang carton with a slot cut in the lid and " +
+    "TIPS in marker, positioned where the band can see it and you can't pretend not to. Whatever's in it " +
+    "is the difference between this being a job and a hobby, and the drummer knows to the baht." },
+  { key: "box", m: /\b(box|boxes|crate|crates)\b/, unless: /\btip\b/, lines: {
     bar: [
       "Beer crates, stacked four high behind the ice, holding up a corner of the operation " +
         "in a way the architect never drew.",
@@ -2241,20 +2271,19 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "cat", m: /\bcats?\b|\bkittens?\b/, lines: {
-    bar: [
-      "A bar cat, asleep on the one stool nobody ever seems to claim. It opens one eye, " +
-        "prices you, and closes it. You are not worth the second eye.",
-      "It lives here the way the mamasan lives here: it was here before you, it will be " +
-        "here after you, and the arrangement is not up for discussion.",
-    ],
-    any: [
-      "A soi cat gives you the long unhurried blink of an animal that owns real estate on " +
-        "this street and knows sunburn when it sees it.",
-      "It sits in the exact centre of the pavement, washing a paw, making the entire " +
-        "street route around it. Correctly.",
-    ],
+  // EXAMINE CAT at the Lucky Tiger described a sleeping bar cat where the prose
+  // has a golden waving cat with dead batteries (Malcolm, round 36). A first
+  // separate entry shadowed the real cats — one entry, the desc decides.
+  { key: "cat", m: /\bcats?\b|\bkittens?\b|\b(waving|lucky|golden|maneki|beckoning) cat\b/, fn: () => {
+    if (/waving cat/i.test(String(_room().desc || "")))
+      return "The golden waving cat on the bar top — a maneki-neko, paw raised for luck, batteries dead " +
+        "since whenever. The paw is frozen mid-beckon. Somebody has put a Chang cap on its head. It has " +
+        "never once been asked to bring in money it didn't.";
+    const L = _CAT_LINES;
+    const pool = _inBar() ? L.bar : /beach|sand/.test(G.room) ? (L.sand || L.street) : L.street;
+    return _pickVary(pool || L.any || L.bar, "cat");
   } },
+
 
   // ── batch 2 (the singleton-tail pass, same day) ────────────────────────────
 
@@ -7546,7 +7575,14 @@ function _checkoutPrompt() {
 let _fareNags = 0;
 function _farePrompt() {
   const baht = thaiBaht(G.pendingFare.price);
-  const lines = [
+  // A chartered truck has no bench of passengers — "you are renting the
+  // truck" three lines above "the whole bench of passengers has turned to
+  // watch" (Malcolm, round 36). The charter waits alone.
+  const lines = G.pendingFare.charter ? [
+    `The driver is still waiting: “${baht}”. It is his truck and his evening, and he has both to spare. (PAY <amount> · or WALK)`,
+    `He turns the engine off, which is worse than leaving it on. “${baht}, boss.” The empty truck bed says the rest. (PAY <amount> · or WALK)`,
+    `“${baht}.” He lights a cigarette and looks at the road he is not driving down. (PAY <amount> · or WALK)`,
+  ] : [
     `The driver is still waiting: “${baht}”. (PAY <amount>)`,
     `The driver taps the rail, twice. “${baht}, my friend.” The whole bench of ` +
       "passengers has turned to watch how this goes. (PAY <amount>)",
@@ -8519,7 +8555,11 @@ function doCommand(input) {
         _doWatchSoi();
       else if (G.room === "queen_vic" && (!arg || /soi|street|window|glass|outside|show|chaos|girls|parade/.test(arg)))
         _doWatchPubSoi();
-      else if ((G.room === "blue_dog" || G.room === "stinky_bar") && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view|sun/.test(arg)))
+      // …and the street between them: "Beach Road (foot of Soi 6)" says in its
+      // own prose that you can catch the sunset from either corner and watch the
+      // checkpoint just south of the junction, and both verbs refused it on the
+      // spot while working from inside either bar (Malcolm, round 36).
+      else if ((G.room === "blue_dog" || G.room === "stinky_bar" || G.room === "beach_rd_n") && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view|sun/.test(arg)))
         _doWatchJunction(arg);
       else if ((G.room === "soi6_mid" || G.room === "sunset_rail" || G.room === "bay_watch" || G.room === "sandy_toes") && (!arg || /soi|street|parade|people|show|girls|circus|watch/.test(arg)))
         _doWatchParade();
