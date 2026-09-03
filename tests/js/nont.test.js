@@ -71,8 +71,8 @@ test("one transfer in six has a moment, and lands at the next wake", () => {
       stuckSeen = true;
       assert.equal(G.money, 5000, "no notes tonight"); assert.equal(G.bank, 49000, "the account is down");
       assert.equal(G.nontStuck, 950);
-      G.room = "hotel_room"; out = []; _endNight("sleep");
-      landed = /sorted/.test(text()) && G.money > 5000 && G.nontStuck === 0;
+      G.room = "hotel_room"; G.money = 5000; out = []; _endNight("sleep");
+      landed = /sorted/.test(text()) && G.bank === 49000 + 950 - 0 && G.nontStuck === 0;   // it lands in the ACCOUNT (Piotr)
     }
   }
   assert.ok(stuckSeen, "the hash makes it happen within forty nights");
@@ -122,4 +122,44 @@ test("a stranger on a stool is not asked; the crane is a real item and the quest
   G.room = "sunset_dreams"; _npcState("kwan").trust = 0; G.known.kwan = true;
   run("talk to kwan"); assert.doesNotMatch(text(), /A Crane for Her Brother/);
   assert.ok(ITEMS.crane_photo && NPCS[QUESTS.kwan_crane.giver] && NPCS[QUESTS.kwan_crane.at]);
+});
+
+// ── Piotr, round 40: the fixer's seams ──
+test("a delayed transfer survives the vacation reset — it lands in the account before the week is scored", () => {
+  G.nontStuck = 475; G.bank = 1000; G.day = 8; out = [];
+  _endVacation();
+  assert.equal(G.nontStuck, 0); assert.equal(G.bank, 1475); assert.match(text(), /lands in your account on the last morning/);
+});
+
+test("the overnight landing goes to the account, not a sleeping man's hand", () => {
+  G.nontStuck = 475; G.bank = 1000; G.money = 5000; G.room = "hotel_room"; out = []; _endNight("sleep");   // pocket covers the rent, so the account only moves by his ฿475
+  assert.equal(G.nontStuck, 0); assert.equal(G.bank, 1475); assert.match(text(), /back in your account/);
+});
+
+test("a locate to a bar that shut at midnight is a free no; the girl whose crane he just unfolded is free too", () => {
+  G.nightTurn = 66; G.money = 5000; out = []; run("ask nont about kwan");
+  assert.equal(G.money, 5000); assert.match(text(), /shut at midnight, so no/);
+  G.nightTurn = 30; _setFlag("craneDelivered"); G.soc.craneDay = G.day; out = []; run("ask nont about kwan");
+  assert.equal(G.money, 5000); assert.match(text(), /You know that\. I know that/);
+});
+
+test("the SIM his greeting promises is for sale; charge/transfer/delay are topics he answers; Tan has a read on him", () => {
+  G.money = 5000; run("buy sim"); assert.equal(G.itemLoc.thai_sim, "inventory"); assert.equal(G.money, 5000 - NONT_SIM);
+  out = []; run("buy sim"); assert.match(text(), /One is plenty/);
+  out = []; run("ask nont about transfer"); assert.match(text(), /five\s+percent/);
+  out = []; run("ask nont about delay"); assert.match(text(), /Nothing's late/);
+  G.nontStuck = 475; out = []; run("ask nont about delay"); assert.match(text(), /Tomorrow/); G.nontStuck = 0;
+  G.room = "soi6_street"; G.known.nont = true; out = []; run("ask tan about nont"); assert.match(text(), /Rabbit's boy/);
+});
+
+test("his cash-outs are not 'up on the night'; the noodle girl keeps Soi 6's hours; the club pickup needs a club behind you", () => {
+  while (_hh("nontstuck:" + G.vacation + ":" + G.day + ":1", 71) % 6 === 0) G.day++;
+  const a = G.atmTotal || 0; run("cash 2000"); assert.equal((G.atmTotal || 0) - a, 1900);
+  G.nightTurn = 66; G.room = "soi6_street"; G.encDone = {}; G.lastEnc = -99;
+  const saved = _rand; _rand = () => 0.0;   // always an encounter, always the first eligible
+  try {
+    _maybeEncounter(); assert.notEqual(G.pendingEnc, "noodle", "not after midnight");
+    G.pendingEnc = null; G.encDone = {}; G.prevRoom = "soi6_street"; G.room = "ws_north"; G.nightTurn = 50;
+    _maybeEncounter(); assert.notEqual(G.pendingEnc, "clubpickup", "no club behind you");
+  } finally { _rand = saved; G.pendingEnc = null; }
 });

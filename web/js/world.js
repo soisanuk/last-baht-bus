@@ -220,6 +220,7 @@ const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the sho
 const NONT_LOCATE = 200;     // where somebody is TONIGHT — anybody, no relationship required
 const NONT_CUT = 0.05;       // his account to your hand: five percent, no card fee, no daily cap (a mule account, in plain sight)
 const NONT_CHARGE = 50;      // a charge off his power bank, no charger of your own needed
+const NONT_SIM = 200;        // "a Thai SIM that isn't in your name" — his own greeting promised it (Piotr, round 40)
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
 // the "off" fee doubles the go-go barfine (canon). Even your own beer is
 // premium-priced (and arrives with ice, whether you wanted ice or not).
@@ -4369,6 +4370,14 @@ const ITEMS = {
   // "a former bar girl gf on Soi 6 who he ghosted; she wants you to take something
   // to her 'brother'; whatever it is upsets him"). Folded from the one photograph
   // she has of the two of them, with two Thai words on the back.
+  thai_sim: {
+    name: "a Thai SIM (not in your name)",
+    aliases: ["sim", "thai sim", "sim card", "the sim"],
+    portable: true,
+    location: null, // sold by Nont (BUY SIM at his table)
+    desc: "A prepaid SIM in a cut-down card, registered to somebody with a Buriram address who is " +
+      "not you and, Nont says, not anybody. It works. That is the whole guarantee.",
+  },
   crane_photo: {
     name: "Kwan's paper crane",
     aliases: ["crane", "paper crane", "kwan's crane", "the crane", "bird", "paper bird"],
@@ -10336,14 +10345,31 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "five percent, no card fee. I charge {{phones}}. Tan does favours. I do prices.” " +
           "(ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)",
         short: "“Alex — Nont, whatever's easier. People, money, {{phones}}. Tan does favours; I do prices.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)" },
-      { topic: "fixer|price|prices|services|money|cash",
+      { topic: "fixer|price|prices|services|money|cash|charge|transfer|rates|menu",
         text: "“The menu?” He doesn't look up from the tweezers. “Where anybody is tonight: two " +
           "hundred, and I'm right. Cash: you send to my account, I hand you notes, I keep five " +
           "percent — no three-hundred-baht card fee, no daily limit, no questions, sometimes a " +
-          "day's delay when the account's having a moment. {{Phone}}: fifty off the brick.” The grin. " +
+          "day's delay when the account's having a moment. Small money, I'm cheaper than the " +
+          "machine; big money, the machine's cheaper than me — work it out, I'm not going to. " +
+          "{{Phone}}: fifty off the brick. A SIM that isn't in your name: two hundred.” The grin. " +
           "“Tan will do any of that for nothing and you'll owe him for ever. Me you pay and " +
-          "we're square. Pick.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)",
-        short: "“Two hundred to find anybody. Five percent on cash. Fifty for the {{phone}}. Pay me and we're square.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)" },
+          "we're square. Pick.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)",
+        short: "“Two hundred to find anybody. Five percent on cash. Fifty for the {{phone}}, two hundred for a SIM. Pay me and we're square.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)" },
+      { topic: "sim|thai sim|sim card",
+        text: "“Not in your name. Two hundred.” He doesn't say whose name it is in, and you don't want " +
+          "him to. “Works on every tower in the country. Don't do anything with it you wouldn't do " +
+          "in your own.” (BUY SIM)",
+        short: "“Not in your name. Two hundred.” (BUY SIM)" },
+      { topic: "delay|late|my money|sorted|where is my money", when: (st, G) => (G.nontStuck || 0) > 0,
+        text: "“Tomorrow.” He says it before you've finished. “I said tomorrow. The account had a " +
+          "moment; the money's the bank's problem for a night, not mine and not yours. It lands, it " +
+          "lands in YOUR account, not my drawer.” He goes back to the tweezers. “I don't lose money. " +
+          "I'd be dead.”",
+        short: "“Tomorrow. I don't lose money. I'd be dead.”" },
+      { topic: "delay|late|my money|sorted|where is my money",
+        text: "“Nothing's late.” A glance at the {{phone}}, a glance at you. “Everything I owe you is in " +
+          "your account already. Check it.”",
+        short: "“Nothing's late. Check your account.”" },
       { topic: "rabbit", text: "“Rabbit.” A small pause, weighing how much to hand you. “Yeah. " +
           "Knew him better than most. Old farang, had a bar on the 6 when I was a kid — I ran his " +
           "till, fixed his wifi, translated when the Thai side of things got complicated. He " +

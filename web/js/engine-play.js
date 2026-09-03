@@ -3976,7 +3976,7 @@ const _ALLNIGHTER_LINES = [
   "You close the place. Not a figure of speech — a woman in rubber gloves is stacking stools around you when you finally surface, and outside the sky is the colour of the inside of a shell. The ride home smells of jasmine from somewhere and last night from you. Worth it. Ask again at noon.",
 ];
 const _ALLNIGHTER_STREET = [
-  "The sky goes grey over the soi and you are, somehow, still upright on it. The sweepers work round you; a noodle cart is setting up where a bar's tables were an hour ago. A taxi with two strangers in it slows, and the driver names a price for the light.",
+  "The sky goes grey over the soi and you are, somehow, still upright on it. The sweepers work round you; a noodle cart is setting up where a bar's tables were an hour ago. A taxi with two strangers in it slows, and the driver waves you in for the price of the light, which this once is nothing.",
   "04:00 finds you on the pavement, which at this point feels like a citation for valour. The shutters are down the length of the street and the first monks are out. You share a taxi home with a man who says nothing and a woman who says everything.",
   "Dawn on the kerb. The neon has been off long enough that you'd forgotten the street had a colour. A songthaew with three sleeping girls in the back takes you most of the way for the day rate, and the driver does not ask.",
 ];
@@ -4348,9 +4348,9 @@ function _endNight(reason) {
     G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20);
   }
   G.rain = 0;   // a downpour does not follow you through sleep — one pinned a man in his room at 18:00 (Gordon, round 37)
-  if (G.nontStuck) {   // the account's moment passes overnight: Nont's cash lands
-    G.money += G.nontStuck;
-    _say(`(A text from Nont at some hour you slept through: “sorted.” ฿${_num(G.nontStuck)} of your own money, back in your hand a day late. ฿${G.money} in pocket.)`, "dim");
+  if (G.nontStuck) {   // the account's moment passes overnight: the money lands in your ACCOUNT, not your hand (Piotr, round 40: cash teleporting into a sleeping man's pocket)
+    G.bank = (G.bank || 0) + G.nontStuck;
+    _say(`(A text from Nont at some hour you slept through: “sorted.” ฿${_num(G.nontStuck)} of your own money, back in your account a day late — ฿${_num(G.bank)} there now. Draw it or don't.)`, "dim");
     G.nontStuck = 0;
   }
   _say("");
@@ -4520,6 +4520,11 @@ function _lastGoodbye() {
 }
 
 function _endVacation() {
+  if (G.nontStuck) {   // a delayed transfer never landed across the reset (Piotr, round 40): it lands in the account before the week is scored
+    G.bank = (G.bank || 0) + G.nontStuck;
+    _say(`(Nont's delayed ฿${_num(G.nontStuck)} lands in your account on the last morning. He does not lose money; he'd be dead.)`, "dim");
+    G.nontStuck = 0;
+  }
   G.pendingChoice = "vacation_end";
   G.bestHappy = Math.max(G.bestHappy, G.happy);
   _say("═══════════════════════════════════", "win");

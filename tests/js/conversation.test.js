@@ -615,7 +615,7 @@ test("subjects a character volunteers about themselves resolve", () => {
     ["bob",     "succubus",                 "kinnaree",    /Thirty-one years|runs the floor/],
     ["bob",     "succubus",                 "house rules", /hands to yourself|whole list/i],
     ["nott",    "adonis_club",              "hosts",       /Host bars are small|gold walls/],
-    ["nont",    "buakhao_market",           "sim",         /chip in it|This is the college/],
+    ["nont",    "buakhao_market",           "sim",         /chip in it|This is the college|Not in your name/],   // the SIM is for sale now (Piotr, round 40)
     ["sumalee", "coconut",                  "bar",         /Fourteen stools|quiet money/i],
     ["nok",     "jomtien_soi_7_beach_end",  "bottles",     /Glass one|every night is the good part/i],
     ["bert",    "stinky_bar",               "soi 6",       /Guest houses|Soi Six/],

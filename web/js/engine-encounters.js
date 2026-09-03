@@ -308,7 +308,9 @@ function _maybeEncounter() {
     // 70 = 01:00, which is when her text claims she finishes ("It is gone 1 a.m.")
     // — the old gate of 40 fired the "gone 1 a.m." prose at half past ten.
     (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70)) && // the apps come alive after 1 a.m.
-    (id !== "clubpickup" || (_flag("act1Done") && G.nightTurn >= 40))); // you can spill out of a club any time from mid-evening
+    (id !== "noodle" || G.nightTurn < 60) &&   // Soi 6 shuts at midnight; the noodle girl went home with it (Piotr, round 40)
+    (id !== "clubpickup" || (_flag("act1Done") && G.nightTurn >= 40 &&
+      (ROOMS[G.prevRoom || ""] || {}).barType === "club"))); // "coming out of the club" means you were IN one (Piotr, round 40)
   const chance = ENC_CHANCE * (_bandNearby() ? 1.5 : 1);
   if (!eligible.length || _rand() > chance) return;
   _startEnc(eligible[Math.floor(_rand() * eligible.length)]);

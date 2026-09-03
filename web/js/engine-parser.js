@@ -617,6 +617,7 @@ function _arriveAt(to) {
         ? _busyPool[Math.floor(_rand() * _busyPool.length)] : false;
     }
   }
+  G.prevRoom = G.room;   // where you came from — an encounter that says "coming out of the club" reads it
   G.room = to;
   if (typeof _stuckReset === "function") _stuckReset(); // you moved: not stuck
   if (typeof _partyArrive === "function") _partyArrive(to); // company makes an entrance of every new door
@@ -4096,6 +4097,7 @@ function _doGive(itemWord, npcWord) {
     // "A Crane for Her Brother": the hand-off is the beat (world.js, nont.crane)
     G.itemLoc.crane_photo = null;
     _setFlag("craneDelivered");
+    G.soc.craneDay = G.day;   // tonight he does not charge to say where she is
     const d = _pickDialogue("nont", "crane");
     if (d) _deliver("nont", d);
     return;
@@ -4489,6 +4491,14 @@ function _ladyDrinkCharge(id) {
 
 function _doBuy(arg) {
   const r = _room();
+  // Nont's SIM — "a Thai SIM that isn't in your name", promised in his own greeting
+  if (/\bsim\b/.test(arg) && typeof _nontHere === "function" && _nontHere()) {
+    if (G.itemLoc.thai_sim === "inventory") { _say("“You've got one. One is plenty. Two is a pattern.”"); return; }
+    if (G.money < NONT_SIM) { _say(`“Two hundred.” He does not do credit on the thing that is literally in somebody else's name. You have ฿${G.money}.`); return; }
+    G.money -= NONT_SIM; G.itemLoc.thai_sim = "inventory";
+    _say(`Two hundred across the table and a cut-down SIM comes back the other way, already out of its card. “Buriram. Don't ask.” (-฿${NONT_SIM}, ฿${G.money} left.)`);
+    return;
+  }
   // The Vic's kitchen: Aoy advertises it with an order pad in her hand, and it
   // sold nothing (grapevine playtest F6, 2026-08-25). Hours are hers: basket
   // till eleven, after that only crisp.

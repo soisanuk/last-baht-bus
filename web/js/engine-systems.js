@@ -984,6 +984,16 @@ function _nontLocate(topic) {
   const name = NPCS[id].name;
   if (!room) { _say(`“${name}? Not out tonight.” He waves the notes away before you've reached for them. “I don't charge for a no.”`); return true; }
   const where = `${_barName(room) || ROOMS[room].name}, over on ${ROOMS[room].region}`;
+  if (typeof _closedNow === "function" && _closedNow(room)) {
+    // "Sunset Dreams, two hundred" at half past midnight, to a bar that shut at twelve (Piotr, round 40)
+    _say(`“${name}? ${_barName(room) || ROOMS[room].name} — and it shut at midnight, so no.” He waves the notes off. “Tomorrow's two hundred. Tonight's a no.”`);
+    return true;
+  }
+  if (id === "kwan" && _flag("craneDelivered") && G.soc.craneDay === G.day) {
+    // he unfolded her photograph one command ago; he does not get to charge for where she is
+    _say(`“Kwan.” The tweezers stop. “${where}. You know that. I know that.” No hand out. “Not tonight.”`);
+    return true;
+  }
   if (G.soc.nontTold[id] === G.day) { _say(`“Told you already. ${where}. Same answer, same night, no charge.”`); return true; }
   if (G.money < NONT_LOCATE) {
     _say(`“Two hundred.” He looks at your hands, not your face. “You haven't got it. Come back when you have, or ask Tan and owe him instead.” (WITHDRAW at a machine, or CASH <amount> here.)`);
@@ -1011,6 +1021,7 @@ function _nontCash(arg) {
     return;
   }
   G.money += n - cut;
+  G.atmTotal = (G.atmTotal || 0) + (n - cut);   // your own money moving pocketward is not "up on the night" (Piotr, round 40)
   _say(`You send ฿${_num(n)} to a name you don't recognise; he counts ฿${_num(n - cut)} into your hand off a roll from the table drawer before the app has finished spinning. ` +
     `“Five percent.” No fee, no limit, no question. (฿${G.money} in pocket, ฿${_num(G.bank)} in the bank.)`);
 }
@@ -2803,6 +2814,9 @@ function _tanWhere(id) {
 // my mother money when I want. I chose it." One reused template contradicted
 // three women who assert otherwise (round 23).
 const _TAN_WHO = {
+  nont: "was Rabbit's boy — the phone, the till, the talking between a farang and everybody else — " +
+    "until I found him a table that doesn't end on a police corkboard. He sells you an answer for " +
+    "two hundred. I give it to you for nothing. You know the difference now, and so does he",
   mercedes: "is back on that rail because she decided to be, which is not the same story as the others " +
     "and she will correct you if you get it wrong. Ask her yourself. She does not mind the question; " +
     "she minds the assumption",
