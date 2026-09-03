@@ -4833,6 +4833,22 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Mot?! That little— okay okay. This morning he come here all big smile, buy whisky-cola, PAY CASH. Say he 'do business' with Madam Oy at Rainbow Girls — Tree Town maze, top of Buakhao. Business!\" She snorts. \"Your wallet in Oy's safe by lunchtime, guarantee.\"",
         sets: ["knowOyHasIt"],
         short: "\"Mot sold your wallet to Madam Oy at Rainbow Girls, in Tree Town. In her safe by now, guarantee.\"" },
+      // THE GREETING HAS TO AGE. Hers was frozen at night one and delivered
+      // identically on the tenth, to a man she waives fines for, in bars she
+      // wasn't working, a month apart — the single worst line in the game by
+      // the time a one-woman player had heard it (Frank, round 34). Bond-tiered
+      // hellos, first match wins, so the room warms as the ledger does.
+      { bond: 3, th: "มาแล้วเหรอ", rom: "ma laeo ro",
+        text: "She sees you before the door finishes opening, and whatever she was doing " +
+          "stops being important. No hello handsome, no pool joke — she just says your " +
+          "arrival like a fact she's pleased about, and the stool beside her has been " +
+          "nobody else's all evening on the off chance.",
+        short: "She clocks you from the far end and the stool beside her turns out to have been yours all evening." },
+      { bond: 2, th: "อ้าว มาอีกแล้ว", rom: "aow, ma iik laeo",
+        text: "\"Ohhh, again! You have no other bar?\" Lek doesn't look up from the shot " +
+          "she's lining up, but she's grinning at the felt. \"Sit, sit. Two minutes, I " +
+          "finish taking this man's money and I am yours.\" It takes ninety seconds.",
+        short: "\"Again! You have no other bar?\" She doesn't look up from the shot, but she's grinning." },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello handsome! You play pool? No? Good — you look like you lose enough already tonight.\" The earrings flash as she laughs.",
         short: "\"Hello handsome! You play pool, or you just hiding from your night?\"" },
@@ -4861,6 +4877,59 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Polite works better than clever, with Oy.\"",
         short: "\"Mot sold your wallet to Madam Oy at Rainbow Girls, Tree Town. Go — and be polite to her.\"" },
       { topic: "oy", text: "\"Madam Oy? Big boss. Her place is Rainbow Girls — deep in Tree Town, the maze up the top of this road. Undefeated at Connect 4 since two thousand nine. Do NOT play her.\"" },
+      // THE FLAGSHIP GIRL COULD NOT BE ASKED WHERE SHE WAS FROM. Auntie Nok's
+      // opening tells you to ask the bar ladies, every filler hostess carries
+      // family/home/plan, and the woman the whole wallet quest walks you to
+      // answered "not my story" to all three — five nights in, fine waived,
+      // "your girl" in the black book (Frank, round 34). Bond-tiered, because
+      // the depth should be earned rather than vended: at stranger tier she
+      // deflects in her own voice, and the real answers arrive as she does.
+      //
+      // Canon anchored to her price story (world.js, heardPriceStory): two
+      // years at the same price, called a cheap village girl for it, the
+      // ฿3,000 advice that cost her the week. The village is now named.
+      { topic: "family", bond: 2,
+        text: "\"Ah. The real question.\" She racks the balls she isn't going to play. " +
+          "\"Mother, and my boy. He is seven. He live with her, Ban Phai — Khon Kaen " +
+          "side.\" She holds up {{the phone}}: a serious child in a school uniform two sizes " +
+          "up, standing to attention for the camera. \"Every month I send. School shoe, " +
+          "school book, the fee they say is not a fee.\" A shrug that isn't casual at " +
+          "all. \"He think I work in a hotel. One day he is old enough to do the sum " +
+          "himself, na. I think about that a lot.\"",
+        short: "\"My boy is seven, with my mother in Ban Phai. He thinks I work in a hotel.\"" },
+      { topic: "family",
+        text: "\"Family?\" The cue goes back on the rack, which is the whole answer. " +
+          "\"Everybody here have family, tilac. Is why everybody here IS here.\" She " +
+          "smiles the working smile. \"You want the sad story? Cost you more than a " +
+          "lady drink.\"",
+        short: "\"Everybody here have family — is why everybody here is here.\"" },
+      { topic: "home", bond: 2,
+        text: "\"Ban Phai. Khon Kaen.\" She says it like a place, not like a wound. " +
+          "\"Rice, and the road to Korat, and nothing else, and I miss it every day and " +
+          "I could not live there one month.\" She laughs at herself. \"Both true! " +
+          "Songkran I go back, everybody say Lek so thin, Lek so tired, eat, eat — and " +
+          "by day four I am counting how many bus to Pattaya.\"",
+        short: "\"Ban Phai, Khon Kaen. I miss it every day and I could not live there one month. Both true.\"" },
+      { topic: "home",
+        text: "\"Isaan.\" She waves the cue vaguely north-east, at eight hundred kilometres " +
+          "of it. \"Same as her, and her, and her.\" The wave takes in the whole bar. " +
+          "\"You want the village name? Buy the girl a drink first, hansum, we are not " +
+          "at the village-name part yet.\"",
+        short: "\"Isaan — same as her, and her, and her. We're not at the village-name part yet.\"" },
+      { topic: "plan", bond: 3,
+        text: "\"Plan.\" She turns the word over like a coin she's checking. \"Two more " +
+          "year. Not for a bar — everybody say bar, then the bar eat them.\" She taps the " +
+          "felt. \"Small shop, front of my mother's house. Motorbike part, oil, the drink " +
+          "in the ice box. My cousin do it in Chum Phae and she is FINE, na, boring and " +
+          "fine.\" Then the quiet part, and she says it to the table: \"I have said two " +
+          "more year for four year. I know I say it. But I say it with a number now, and " +
+          "the number goes up, so.\"",
+        short: "\"Two more year. A small shop at my mother's house — not a bar, the bar eats them. I've said two more year for four year.\"" },
+      { topic: "plan",
+        text: "\"Plan?\" Genuine laugh, the loud one. \"Tonight the plan is you buy, I " +
+          "win, everybody happy.\" She chalks the cue. \"Long plan is for people with " +
+          "long money, tilac.\"",
+        short: "\"Tonight the plan is you buy, I win, everybody happy.\"" },
     ],
   },
 
@@ -9333,6 +9402,24 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "before. One bar is already more than most farang can hold.\"",
         short: "\"The Shamrock, up the soi. Land is Khun Rattana. Ask me again when your bar stands by itself.\"",
       },
+      // The Shamrock key's own description says "Khun Rattana owns the ground
+      // under that bar, DAENG SAYS" — and asking Daeng about Rattana got "that
+      // one I don't know, na" (Gerry, round 34). The key is obtainable long
+      // before the expat-gated Shamrock node, so this one is ungated: a
+      // landowner's name is ordinary local knowledge out here.
+      //
+      // Register per docs/factions-thai.md: land and patronage, told flat, no
+      // scandal and no menace — the whole point is that nothing needs saying.
+      { topic: "rattana",
+        text: "\"Khun Rattana.\" Daeng says the name the way you'd say the weather. \"Not " +
+          "a bar person. LAND person. Three shophouse on this soi, the empty lot behind, " +
+          "and I don't know what else and I don't ask.\" She wipes the same clean spot on " +
+          "the bar. \"Old money out here, quiet money. Sons at university in Bangkok, one " +
+          "in the district office now, na — that is how it goes, farm to land to office, " +
+          "three generation.\" A small shrug. \"Never sell. Why sell? Land only do one " +
+          "thing and it does it by itself. Rent to the right person, no problem forever; " +
+          "rent to the wrong person, also no problem — for Khun Rattana.\"",
+        short: "\"Land person, not bar person. Three shophouse and the lot behind. Never sells — why would she?\"" },
     ],
   },
 
@@ -10686,7 +10773,13 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       "He has the serene look of a man whose 7-Eleven receipts are all groceries now.",
     dialogue: [
       { th: "สบายดีไหม", rom: "sabai dii mai",
-        text: "\"Evenin'. Twenty-two years here, eight in town, fourteen at the lake — town's for sprinting, lake's for living.\" The retriever confirms with a sigh. \"You look like you're mid-sprint, son. It gets better. Married her, didn't I — met her at the Midnight Sun in '04.\"" },
+        text: "\"Evenin'. Twenty-two years here, eight in town, fourteen at the lake — town's for sprinting, lake's for living.\" The retriever confirms with a sigh. \"You look like you're mid-sprint, son. It gets better. Married her, didn't I — met her at the Midnight Sun in '04.\"",
+        // A hello that name-drops three askable things needs a gist. Without a
+        // `short`, the asNew path (a genuinely NEW question answered by an
+        // already-spoken node) falls through to the FULL text — so asking him
+        // about the Midnight Sun replayed his entire greeting verbatim (Gerry,
+        // round 34). With one, the new question gets the point, not the spiel.
+        short: "\"Twenty-two years — eight in town, fourteen at the lake. Met her at the Midnight Sun in '04.\"" },
       { topic: "wallet", text: "\"Lost the wallet? Classic first act.\" He chuckles. \"The ladies of this town run the best information network east of Bangkok. Be polite, buy a few drinks, wai like you mean it — it'll find you before you find it.\"" },
       { topic: "sabai", text: "\"Sabai.\" He says it like it's the answer to something " +
         "you didn't quite ask. \"Took me four years in town to understand it. I kept " +
@@ -10700,6 +10793,32 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "and I was younger. Two of those things I miss.\" He doesn't say which two. " +
         "\"The lake's better than 1998. Quieter. That's not nostalgia — that's " +
         "just true.\"" },
+      // He volunteers all three of these in his own hello — "fourteen at the
+      // lake", "married her, didn't I", and he is sat at a fishing lake with a
+      // rod — and every one of them missed (Gerry, round 34). A man who tells
+      // you the headline owes you the paragraph.
+      { topic: "lake", text: "\"The lake?\" He says it as if you'd asked about a person. " +
+        "\"Mabprachan. Big enough to lose an afternoon on, small enough that everyone " +
+        "round it knows whose dog that is.\" The retriever does not deny being the dog. " +
+        "\"Farmers, a few Thai families, us lot who got old and admitted it. Nobody's " +
+        "selling anything out here, son. That's the entire attraction, and it took me " +
+        "eight years in town to work out it was available.\"",
+        short: "\"Mabprachan. Nobody out here is selling anything — that's the whole attraction.\"" },
+      { topic: "wife", text: "He takes his time, the way he does. \"Midnight Sun, 2004. " +
+        "She was on the till, not the floor — I want that said properly, because the lads " +
+        "in town assume, and she's heard them assume.\" A dry look. \"Two years I came in " +
+        "and talked rubbish at her. She corrected my Thai and kept my change. Then one " +
+        "night she said, come and eat with my family instead of drinking here, and that " +
+        "was the whole courtship.\" He nods at the water. \"The lake was her idea. " +
+        "Everything decent out here was.\"",
+        short: "\"Midnight Sun, 2004 — on the till, not the floor. She corrected my Thai and kept my change.\"" },
+      { topic: "fishing", text: "\"Snakehead, mostly. Tilapia if the water's warm.\" He " +
+        "indicates the rod without enthusiasm. \"I'll tell you the truth about the " +
+        "fishing: it is the excuse, not the point. Man needs a reason to sit still for " +
+        "four hours or people start asking if he's all right.\" The retriever sighs " +
+        "agreement. \"Catch something once a fortnight and nobody questions the other " +
+        "thirteen days.\"",
+        short: "\"Snakehead, mostly. Though the fishing's the excuse, not the point — a man needs a reason to sit still.\"" },
     ],
   },
 
@@ -12390,6 +12509,28 @@ const _REGULARS = {
         "the year I left. No grand tragedy — I just did the arithmetic and the " +
         "arithmetic said Khao Talo. Same beer money, twice the sun, none of the " +
         "committee meetings.\"" },
+      // His hello volunteers the wife off that very stool, and his Darkside
+      // answer sends you to "Gary out at the lake" — both missed (Gerry, r34).
+      { topic: "wife", text: "\"That stool. That exact stool, and she'll tell you the " +
+        "same, which is how you know it's true.\" He taps the bar between them. \"Cashier " +
+        "here, four years. I came in for the football and kept coming in when there wasn't " +
+        "any.\" A short laugh at himself. \"Took me eleven months to ask her anything that " +
+        "wasn't the price of a Chang. She says nine. She's counting from a different night " +
+        "than I am, and I've stopped arguing about which.\"",
+        short: "\"Cashier off that exact stool. Eleven months before I asked her anything that wasn't the price of a Chang.\"" },
+      { topic: "gary", text: "\"Lake Gary.\" Ron says the name with the flatness reserved " +
+        "for people you'd take a bullet for. \"Twenty-odd years, most of them out at " +
+        "Mabprachan with that dog. Married his too, years before I did.\" He drinks. " +
+        "\"Won't talk unless you sit down properly, and won't stop if you do. Ask him " +
+        "about the lake and settle in — that's the closest thing to a sermon you'll get " +
+        "on this side of the highway.\"",
+        short: "\"Gary's out at Mabprachan with the dog. Sit down properly and ask him about the lake.\"" },
+      { topic: "lake", text: "\"Mabprachan? Twenty minutes on the bike, and it's a " +
+        "different country.\" He nods east past the kitchen. \"No neon, no music, water " +
+        "and buffalo and a couple of bars that shut when the last bloke goes home. Gary's " +
+        "out there. Half the men who make it past their sixties out here end up round that " +
+        "water — and the other half end up back in Jomtien wondering where everyone went.\"",
+        short: "\"Twenty minutes east and it's a different country — no neon, water and buffalo. Gary's out there.\"" },
     ],
   },
 
@@ -12434,6 +12575,22 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
           "We ate them. She stayed.\" He looks at the bottle as if it has said something. " +
           "\"That's the whole of it. Everything after is just what happened next.\"",
         short: "\"The money went, and instead of leaving she dug clams off the Naklua flats at low tide and cooked them. She stayed. Everything after is just what happened next.\"" },
+      // CLAM is the word the game keeps putting in the player's mouth — the
+      // Owl's column signposts "the quiet man on the end stool", and Boonsri
+      // says "He tell you about the clam? Of course he tell you" — while the
+      // story lived on `wife`, so the one word everybody hands you missed
+      // (Gerry, round 34). A literal key on HIM: the synonym was tried
+      // globally first and collided with every other character who has a wife
+      // (asking Lake Gary about clams answered with HIS marriage).
+      { topic: "clam",
+        text: "\"The clams.\" Neil turns the bottle a half-circle on the mat, which is what " +
+          "he does instead of starting. \"Somebody's told you, then. Boonsri, probably — " +
+          "she thinks it's the best thing about me, and she's right.\" A long look at the " +
+          "lake. \"Naklua flats, low tide, with her hands, in the months when I had nothing " +
+          "and the rule says a dry wallet gets an empty bed.\" He drinks. \"Ask me about my " +
+          "wife and I'll tell it properly. It's not a clam story. It's the only story I've " +
+          "got.\"",
+        short: "\"Naklua flats, low tide, with her hands, in the months I had nothing. Ask me about my wife for the whole of it.\"" },
       { topic: "family", sets: ["neilStory"],
         text: "\"The village.\" He says it like a man naming a wall he walked into. \"That's " +
           "where I nearly lost it. Not the bars, not the money going — the money going HOME. " +

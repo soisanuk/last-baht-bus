@@ -3146,12 +3146,6 @@ const _CONVO_TOPIC_RULES = [
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
-  // The Owl signposts Neil's story twice ("ask the quiet man on the end
-  // stool"), two other characters put the word "clam" in the player's mouth,
-  // and the working topic was "wife" — unreachable from any word the player
-  // had been given (Gerry, round 34). Daeng's own clam story keeps its
-  // literal "clam" key, which beats this synonym by the literal-first rule.
-  [/\bclams?\b/,                                                              "wife"],
   // …and the words the column itself puts in a reader's mouth: Box 15's
   // personal taunts "not one of you has asked me why", and the reader typed
   // exactly "personals"/"box 15" at its author and got the generic shrug

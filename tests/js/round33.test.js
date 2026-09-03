@@ -89,13 +89,18 @@ test("a new question answered by an old line is not an accusation (Wes)", () => 
   out = []; run("ask gary about midnight sun");
   assert.doesNotMatch(text(), /asked me that|Already told you|Same answer/i, "he was asked something new");
   assert.match(text(), /Midnight Sun/, "and the answer contains the thing asked about");
-  // a genuine repeat is still terse — the brush-off isn't gone, just aimed
-  // right. Assert against the POOL, not one of its lines: _pickVary rotates
-  // them, so a single-string match is a coin flip (the house rule, and I broke
-  // it writing this test).
+  // A genuine repeat is still terse. It used to fall to the generic brush-off
+  // pool because his greeting had no `short`; round 34 authored one (the same
+  // absence made a NEW question replay his whole hello verbatim), so the
+  // repeat is now his own gist — which is what a `short` is FOR, and strictly
+  // better than the generic line. Terse either way is the property; assert
+  // that, not which of the two it lands on.
+  const full = NPCS.gary.dialogue[0].text;
   out = []; run("talk to gary"); out = []; run("talk to gary");
-  assert.ok(_ASK_AGAIN_EN.some(f => text().includes(f("Lake Gary"))),
-    "repeats still get the brush-off, whichever line comes up");
+  assert.notEqual(text().trim(), full, "a repeat is never the whole spiel again");
+  assert.ok(text().includes(NPCS.gary.dialogue[0].short) ||
+    _ASK_AGAIN_EN.some(f => text().includes(f("Lake Gary"))),
+    "…it's his authored gist, or the brush-off pool if he ever loses the short");
 });
 
 test("the Sundowner's fridge is the fridge its own description leads with (Wes)", () => {

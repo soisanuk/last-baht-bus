@@ -289,3 +289,94 @@ test("the bar-bore isn't on a rail the room called empty (Gerry)", () => {
   G.season0 = 10; out = []; run("talk to patron");
   assert.ok(text().length > 0, "…and in season he's back");
 });
+
+// ── batch B: volunteer-then-miss (the unlintable class, authored) ────────────
+// A character puts a proper noun in their own greeting and then has no answer
+// for it. No tool can find these — the words are topics nowhere in the game
+// yet — so they come from personas standing in front of the character.
+
+test("Gary answers for everything his own hello volunteers (Gerry)", () => {
+  _setFlag("act1Done"); G.nightTurn = 20; G.room = _npcRoom("gary"); G.known.gary = true;
+  const greet = NPCS.gary.dialogue[0].text;
+  assert.match(greet, /fourteen at the lake/, "premise: he volunteers the lake");
+  assert.match(greet, /Married her/, "…and the wife");
+  for (const [topic, want] of [["lake", /Mabprachan/], ["wife", /Midnight Sun, 2004/],
+    ["fishing", /Snakehead/]]) {
+    G.talked.gary = []; out = []; run("ask gary about " + topic);
+    assert.match(text(), want, "gary/" + topic);
+    assert.doesNotMatch(text(), /Not my story|Couldn't tell you|Search me/i, topic + " lands");
+  }
+});
+
+test("Ron answers for his wife, and for the man he sends you to (Gerry)", () => {
+  _setFlag("act1Done"); G.nightTurn = 20; G.room = _npcRoom("ron"); G.known.ron = true;
+  assert.match(NPCS.ron.dialogue[0].text, /Married a cashier off that very stool/, "premise");
+  assert.match(NPCS.ron.dialogue.find(d => d.topic === "darkside").text, /Gary out at the lake/,
+    "premise: he names Gary");
+  for (const [topic, want] of [["wife", /That exact stool/], ["gary", /Lake Gary/],
+    ["lake", /different country/]]) {
+    G.talked.ron = []; out = []; run("ask ron about " + topic);
+    assert.match(text(), want, "ron/" + topic);
+  }
+});
+
+// The Shamrock key's own desc says "Khun Rattana owns the ground under that
+// bar, DAENG SAYS" — and Daeng didn't know the name.
+test("Daeng knows the landowner her own key credits her with naming (Gerry)", () => {
+  assert.match(ITEMS.shamrock_key.desc, /Khun Rattana.*Daeng says/, "premise: the key cites her");
+  _setFlag("act1Done"); G.room = "khao_talo_bar"; G.known.daeng = true;
+  out = []; run("ask daeng about rattana");
+  assert.match(text(), /Land person|three shophouse|Never sell/i, "she answers");
+  assert.doesNotMatch(text(), /don't know, na/, "no miss on a name she is quoted about");
+  // the factions register: flat, no scandal, no menace (docs/factions-thai.md)
+  const node = NPCS.daeng.dialogue.find(d => d.topic === "rattana");
+  assert.doesNotMatch(node.text, /bribe|corrupt|mafia|threat|dangerous/i,
+    "structural pattern, never a scandal");
+});
+
+// The flagship girl — the woman the whole wallet quest walks you to — could
+// not be asked where she was from, at any bond tier, while every filler
+// hostess in the game carries family/home/plan.
+test("Lek's personal topics exist, and deepen with the ledger (Frank)", () => {
+  _setFlag("act1Done"); G.room = "lucky_tiger"; G.known.lek = true;
+  const ask = topic => { G.talked.lek = []; out = []; run("ask lek about " + topic); return text(); };
+
+  G.soc.drinks = { lek: 0 };                       // stranger: deflects, in voice
+  assert.match(ask("family"), /Everybody here have family/, "stranger gets the deflection");
+  assert.match(ask("home"), /Isaan/, "…a region, not a village");
+  assert.doesNotMatch(ask("family"), /Not my story/, "but never a flat miss");
+
+  G.soc.drinks = { lek: 7 };                       // regular: the boy, the village
+  assert.equal(_bondTier("lek"), 2);
+  assert.match(ask("family"), /seven|Ban Phai/, "the boy and the village arrive");
+  assert.match(ask("home"), /Ban Phai/, "…named now");
+
+  G.soc.drinks = { lek: 14 };                      // her-farang: the admission
+  assert.equal(_bondTier("lek"), 3);
+  assert.match(ask("plan"), /two more year for four year|Small shop/i, "the plan, and its honesty");
+});
+
+test("Lek's hello is not frozen at night one (Frank)", () => {
+  _setFlag("act1Done"); G.room = "lucky_tiger"; G.known.lek = true;
+  const hello = drinks => { G.soc.drinks = { lek: drinks }; G.talked = {}; G.convo = null;
+    out = []; run("talk to lek"); return text(); };
+  const cold = hello(0), warm = hello(7), close = hello(14);
+  assert.match(cold, /Hello handsome/, "night one is night one");
+  assert.notEqual(warm, cold, "a regular gets a different door");
+  assert.notEqual(close, warm, "…and her-farang another");
+  assert.match(close, /nobody else's all evening|stool/i, "the kept seat, in the greeting");
+});
+
+// asNew (a NEW question answered by an already-spoken node) fell back to the
+// node's FULL text when it had no `short` — so the fix for a false "you asked
+// me that" accusation produced a verbatim replay of his whole hello instead.
+test("a new question about an old line gets the gist, not the spiel (Gerry+Wes)", () => {
+  _setFlag("act1Done"); G.nightTurn = 20; G.room = _npcRoom("gary"); G.known.gary = true;
+  out = []; run("talk to gary");
+  const first = text();
+  out = []; run("ask gary about midnight sun");
+  const again = text();
+  assert.notEqual(again, first, "not a verbatim replay (Gerry)");
+  assert.doesNotMatch(again, /asked me that|sieve/i, "and not an accusation (Wes)");
+  assert.match(again, /Midnight Sun/, "…it still answers what was asked");
+});
