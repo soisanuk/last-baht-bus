@@ -5317,8 +5317,10 @@ function _doMotosai(arg) {
       G.pityRideDay = G.day;
       G.pityRides = (G.pityRides || 0) + 1;
       G.pityOwed = (G.pityOwed || 0) + d.price;   // "pay next time" is a promise the game keeps
+      const _pityExtra = Math.max(0, _districtHops(_room().region, ROOMS[d.room].region) - 1);
       G.room = d.room;
       G.darkStreak = 0;
+      if (_pityExtra) { G.offstage = true; const ended = _passTime(_pityExtra); G.offstage = false; if (ended) return; }
       _say(G.pityRides === 1
         ? "The piwin takes in the empty pockets, the hour, and the state of you, " +
           "and sighs the sigh of a man who has done this before. “Mai pen rai. Get " +
@@ -5357,7 +5359,11 @@ function _doMotosai(arg) {
   // Rolled here (the dice order is the save's contract), PRINTED after the fare line
   // below — it read as "crashed, then got on" (Darren, round 37).
   const nearMiss = risk >= 0.05 && _rand() < 0.5;
+  // the ride takes the time the road takes: one turn within the district or the
+  // next one over, one more for every district beyond that (Mario, 2026-09-03)
+  const extraTurns = Math.max(0, _districtHops(_room().region, ROOMS[d.room].region) - 1);
   G.room = d.room;
+  if (extraTurns) { G.offstage = true; const ended = _passTime(extraTurns); G.offstage = false; if (ended) return; }
   G.darkStreak = 0;
   if (lateGouge) _say("Gone two in the morning, the buses gone sparse and slow, and the " +
     "piwin reads the empty road and your lack of options and names his small-hours " +
@@ -5370,7 +5376,11 @@ function _doMotosai(arg) {
   _say(`“${thaiBaht(price)}${dogFare ? ` (plus ${thaiBaht(dogFare)} for his lordship's ride)` : ""}.” ` +
     `You pay${price === 20 ? " — Bank's special price" : ""}, ` +
     "swing on the back, and the piwin threads traffic like it owes him money. " +
-    `That was the fastest ฿${total} of your life. (฿${G.money} left.)`, "thai");
+    `That was the fastest ฿${total} of your life` +
+    (extraTurns
+      ? ` — ${_minutesWord((extraTurns + 1) * 6).toLowerCase()} of it, ` +
+        `${extraTurns >= 3 ? "the town going by in districts" : "one district into the next"}.`
+      : ".") + ` (฿${G.money} left.)`, "thai");
   _engineSpeak(thaiBaht(price));
   if (nearMiss) _say(_pickVary(_MOTO_NEARMISS, "motonear"), "alert");
   // the night you had nothing: the piwin who fronted the ride remembers, and the
@@ -6912,6 +6922,10 @@ function _doCheers() {
 // TAO RAI — the veteran's reflex: ask the price before you accept anything. The
 // one word that keeps a "free" favour from becoming a debt you can't see yet.
 const _GRAB_LINE = "No app car worth the wait at this hour and this address — the piwins on the corner ARE the app, and they don't cancel. (MOTOSAI TO <place>.)";
+function _minutesWord(n) {
+  const w = { 6: "Six minutes", 12: "Twelve minutes", 18: "Eighteen minutes", 24: "Twenty-four minutes", 30: "Half an hour" };
+  return w[n] || (n + " minutes");
+}
 function _doTaoRai() {
   // at a motosai stand it is a question with a number in the answer (Darren, round 37)
   if (_room().motosai && !G.pendingEnc && !_convoActive()) {

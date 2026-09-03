@@ -2306,6 +2306,37 @@ function _describeRoom(full, forceFull) {
 // night ended mid-pass (the caller should stop). Replaces the old `if (G.over)`
 // guards, which never fired (G.over is never set true), so those loops used to
 // tick straight past _endNight into the next night.
+// ── Districts, and the distance between them ────────────────────────────────
+// A district is a room's `region`; two districts touch when any exit joins
+// them. Derived from ROOMS once (pure, no dice), so a new road changes the
+// answer with no new code. _districtHops is the BFS distance — 0 same, 1
+// adjacent — and is what a motosai ride's length reads (Mario, 2026-09-03: a
+// bike was one turn regardless of distance, which made it strictly dominant;
+// same or adjacent district stays one turn, every district beyond that is at
+// least one more).
+let _districtAdj = null;
+function _districtHops(a, b) {
+  if (!a || !b) return 0;
+  if (a === b) return 0;
+  if (!_districtAdj) {
+    _districtAdj = {};
+    for (const r of Object.values(ROOMS)) for (const to of Object.values(r.exits || {})) {
+      const x = r.region, y = ROOMS[to] && ROOMS[to].region;
+      if (!x || !y || x === y) continue;
+      (_districtAdj[x] = _districtAdj[x] || new Set()).add(y);
+      (_districtAdj[y] = _districtAdj[y] || new Set()).add(x);
+    }
+  }
+  const seen = new Set([a]); let q = [[a, 0]];
+  while (q.length) {
+    const [x, d] = q.shift();
+    for (const y of _districtAdj[x] || []) {
+      if (y === b) return d + 1;
+      if (!seen.has(y)) { seen.add(y); q.push([y, d + 1]); }
+    }
+  }
+  return 3; // unconnected on the map: call it a long way
+}
 function _passTime(n) {
   const startDay = G.day;
   for (let i = 0; i < n; i++) {

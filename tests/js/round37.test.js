@@ -220,3 +220,27 @@ test("drink and the small hours raise the crossing's risk; TRAVEL through it pay
     assert.ok(_CROSS_CLEAN.some(l => text().includes(l)), "TRAVEL walked the crossing and it was narrated");
   } finally { _rand = saved; }
 });
+
+// ── A motosai ride takes the time the road takes (Mario, 2026-09-03) ──
+test("a bike is one turn within the district or the next one over, and a turn more per district beyond", () => {
+  assert.equal(_districtHops("Beach Road", "Beach Road"), 0);
+  assert.equal(_districtHops("Beach Road", "Naklua"), 1);
+  assert.equal(_districtHops("Beach Road", "Darkside"), 3);
+  assert.equal(_districtHops("Jomtien", "Darkside"), 4);
+  const ride = (from, to) => {
+    newGame(); _setFlag("act1Done"); G.money = 5000; G.soc.drunk = 0; G.dog = null; G.nightTurn = 30;
+    for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+    G.hunger = 0; G.thirst = 0; G.room = from; const t = G.turns; out = []; run("motosai to " + to);
+    assert.equal(G.room, MOTOSAI_DESTS[to].room, from + " → " + to + " arrived");
+    return G.turns - t;
+  };
+  const expect = (from, to) => Math.max(1, _districtHops(ROOMS[from].region, MOTOSAI_DESTS[to].room && ROOMS[MOTOSAI_DESTS[to].room].region));
+  for (const [from, to] of [["pattaya_klang", "beach road"], ["pattaya_klang", "darkside"], ["khao_talo", "jomtien"], ["naklua_rd", "walking street"]]) {
+    assert.ok(ROOMS[from].motosai, from + " has a stand");
+    assert.equal(ride(from, to), expect(from, to), from + " → " + to);
+  }
+  assert.ok(expect("khao_talo", "jomtien") >= 3, "the far corner to the far corner is a long ride");
+  assert.match(text(), /minutes of it/, "and the pay line says how long it was");
+  G.money = 0; G.room = "khao_talo"; const t = G.turns; out = []; run("motosai to naklua");
+  assert.equal(G.turns - t, expect("khao_talo", "naklua"), "the mercy ride takes the same road");
+});
