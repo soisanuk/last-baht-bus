@@ -8668,6 +8668,28 @@ function _boardShow() {
 }
 function _doAnswer(arg) {
   if (!_waenHere()) { _say("Nothing here to answer. The board is Kruu Waen's, at Cloze on Soi Diana."); return; }
+  // THE SIGN IS ALSO THE EXERCISE, and she has never said so out loud. A player
+  // who works out that CL_ZE is itself a cloze test and answers IT rather than
+  // the board gets the one thing she does not sell (Mario, round 43: "trying to
+  // figure out how to reward a player who makes that connection"). Insight only:
+  // no hint, no chip, nothing in HELP, and nothing anywhere says the sign can be
+  // answered — the reward for knowing the word is that the word works.
+  if (/^(o|the o|sign|the sign|cloze|cl_ze|clze)$/i.test(String(arg || "").trim()) && !_flag("clozeGot")) {
+    _setFlag("clozeGot");
+    _say("Waen puts the chalk down. She does not say anything for long enough that the girl at the " +
+      "end of the bar looks over.", "win");
+    _say("\"Eleven years I have had that sign.\" Quietly, and to you rather than to the room. \"Four " +
+      "farang have said that to me. Two were teachers and one was drunk and did not know what he " +
+      "had said.\" She looks at the gap in the tubing through the open front, the way you look at " +
+      "something you have stopped seeing. \"My father put the O back on, once. I took it off again " +
+      "the same week and we did not discuss it.\"", "win");
+    _say("Then, briskly, because she is not a sentimental woman: \"Sit down. This one is free, and " +
+      "you will work harder than the ones who pay.\"", "win");
+    _addHappy(2);
+    _addBond("waen", 2);
+    G.clozeFree = true;                       // one hour on the house, taken whenever
+    return;
+  }
   const w = _boardWord();
   if (!arg) { _boardShow(); return; }
   if (G.boardWon === G.day) { _say("\"You already had it.\" She is amused. \"Let somebody else have a go — and drink your cheap beer.\""); return; }
@@ -8692,6 +8714,19 @@ function _doLesson(arg) {
   }
   const tier = _lessonTier(arg);
   if (!tier) { _say("\"Phrases, reading, or verbs.\" She holds up three fingers and does not offer a fourth. (LESSON PHRASES · LESSON READING · LESSON VERBS)"); return; }
+  if (G.clozeFree) {
+    G.clozeFree = false;
+    _say("\"You do not pay for this one.\" She says it once and does not repeat it.", "dim");
+    const { take, left } = _lessonItems(tier);
+    if (!take.length) { G.clozeFree = true; _say("\"Not that one — you have had all of it. Pick another and it is still free.\""); return; }
+    _say(_LESSON_OPEN[tier], "win");
+    for (const p of take) _say("  " + p.th + (p.rom ? "  " + p.rom : "") + (p.use ? "   — " + p.use : ""), "thai");
+    _say(_pickVary(_LESSON_CLOSE, "lessonclose"));
+    if (left > 0) _say("(She has more of this one: another LESSON " + tier.toUpperCase() + " when you want it.)", "dim");
+    _passTime(LESSON_TURNS);
+    _addBond("waen", 1);
+    return;
+  }
   if (G.money < LESSON_PRICE) {
     _say("\"One hundred.\" She says it without embarrassment and without moving. \"I do not teach on credit — not because of you. Because of the last four.\"");
     return;

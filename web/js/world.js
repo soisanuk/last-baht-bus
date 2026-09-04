@@ -4294,6 +4294,12 @@ const ROOMS = {
       "to fill. Half the stools are farang with notebooks, which on this soi is either very sad " +
       "or the best idea anybody has had.",
     reads: {
+      // the sign says what a sign says and explains nothing: the joke belongs to
+      // whoever spots it, and ANSWER O is how they say so (Mario, round 43)
+      sign: "Four letters and a gap where the fifth should be, in tubing that was expensive once: " +
+        "C L _ Z E. The bracket for the missing letter is still there, and so is the wiring, and " +
+        "the gap has been part of the name for so long that the regulars would complain if it " +
+        "came back.",
       board: "Tonight's word is chalked in three lines: the Thai, the romanisation with the tone " +
         "marks done properly, and a sentence with a hole in it. Underneath, in smaller writing: " +
         "FIRST CORRECT ANSWER DRINKS FOR HALF PRICE. The rule appears to be enforced.",

@@ -512,3 +512,23 @@ test("ค่ะ from a man: corrected twice, then never mentioned again (Mario's
   _setFlag("act1Done"); G.room = "cloze"; G.nightTurn = 30; out = []; run("สวัสดีค่ะ");
   assert.match(text(), /unless you would rather not/);
 });
+
+test("the sign is also the exercise, and answering IT is the reward (Mario)", () => {
+  G.room = "cloze"; G.money = 0;
+  out = []; run("examine sign");
+  assert.match(text(), /C L _ Z E/); assert.doesNotMatch(text(), /cloze test|exercise/i, "the sign explains nothing");
+  const h = G.happy;
+  out = []; run("answer o");
+  assert.match(text(), /Eleven years I have had that sign/);
+  assert.equal(G.happy, h + 2); assert.equal(G.clozeFree, true);
+  // …once ever, and it does not shadow the board
+  out = []; run("answer o"); assert.doesNotMatch(text(), /Eleven years/);
+  // the free hour is real, and it is an hour
+  const t = G.nightTurn; out = []; run("lesson");
+  assert.match(text(), /You do not pay for this one/); assert.equal(G.money, 0);
+  assert.ok(G.nightTurn - t >= LESSON_TURNS); assert.ok(!G.clozeFree, "one hour, not a season ticket");
+  // nothing anywhere advertises it: insight only
+  const src = ["engine-parser.js", "engine-systems.js", "world.js"]
+    .map(f => readFileSync(join(here, "../../web/js", f), "utf8")).join("\n");
+  assert.doesNotMatch(src, /\(ANSWER O\)/, "no tappable hint, no HELP line, no chip");
+});
