@@ -4549,7 +4549,7 @@ test("Sai Krok: feed a soi dog once and you have a dog, whether you meant to or 
   // he follows: at heel outside, under the rail in open-air beer bars,
   // outside the door where there's a door
   out = []; run("look");
-  assert.match(out.join("\n"), /pads at your heel/);
+  assert.match(out.join("\n"), /(pads at your heel|is at your heel|keeps station|falls in beside you)/);
   state().room = "candy_bar"; // beer bar: open-air, no door to stop him
   out = []; run("look");
   assert.match(out.join("\n"), /under the rail/);
@@ -4620,7 +4620,7 @@ test("NAME DOG: rename him and every line of his re-letters, no strays", () => {
   assert.match(lastOut(), /official: Biscuit/);
   // the whole repertoire re-letters: presence, examine, and no Sai Krok strays
   out = []; run("look");
-  assert.match(out.join("\n"), /Biscuit pads at your heel/);
+  assert.match(out.join("\n"), /Biscuit (pads|is|keeps station|falls in)/);
   assert.ok(!/Sai Krok/.test(out.join("\n")), "no stray default-name lines");
   out = []; run("examine biscuit");
   assert.match(lastOut(), /Biscuit: a Pattaya-special soi dog/);
@@ -4637,7 +4637,7 @@ test("NAME DOG: rename him and every line of his re-letters, no strays", () => {
   assert.match(lastOut(), /Biscuit/, "bare PET reaches your own dog");
   run("name dog bo$$");
   out = []; run("look");
-  assert.match(out.join("\n"), /Bo\$\$ pads at your heel/, "replacement-magic $ names render literally");
+  assert.match(out.join("\n"), /Bo\$\$ (pads|is|keeps station|falls in)/, "replacement-magic $ names render literally");
 });
 
 test("PHOTO DOG is a voiced refusal, not a phantom collectible", () => {
@@ -4646,8 +4646,12 @@ test("PHOTO DOG is a voiced refusal, not a phantom collectible", () => {
   // initially misreported it as broken (a fallthrough to the generic
   // scene-shot line) before direct probing showed the dedicated pool firing
   // correctly every time. He won't hold still; that's the joke, and no
-  // gallery entry is meant to result — pin it so the next round doesn't have
-  // to re-litigate it from scratch.
+  // gallery entry was meant to result — REVERSED round 44. All three variants
+  // describe a photograph that exists ("one of his nose, enormous", "you get
+  // him mid-yawn", "One good one. It'll do."), and the gallery two turns later
+  // said "your gallery is one blurry thumb" while SCORE read 0 faces on the
+  // last night of a week spent with him (Bill). The prose promised a keeper;
+  // the keeper is now kept. He is filed under "dog", outside the face count.
   state().flags.act1Done = true; state().stage = "expat";
   state().dog = { since: 1, name: null };
   state().battery = 50;
@@ -4657,7 +4661,13 @@ test("PHOTO DOG is a voiced refusal, not a phantom collectible", () => {
     assert.match(lastOut(), /no interest in being photographed|mid-yawn|steps out of frame/,
       `PHOTO ${arg.toUpperCase()} hits the dedicated dog scene, not a generic fallback`);
   }
-  assert.equal(state().phone.photos.length, 0, "he never actually holds still for one");
+  assert.equal(state().phone.photos.length, 1,
+    "the first frame is filed — one entry for the dog, however many times you try");
+  assert.equal(state().phone.photos[0].id, "dog");
+  { out = []; run("gallery");
+    assert.match(lastOut(), /Sai Krok/, "and he shows up in it");
+    assert.doesNotMatch(lastOut(), /of the 0 faces|0 of 0/,
+      "but he is not a face — the met-denominator counts people"); }
   // renamed dog answers to his own name too
   state().dog.name = "Biscuit";
   out = []; run("photo biscuit");

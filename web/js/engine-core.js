@@ -1975,12 +1975,28 @@ const _BAR_THIN = [
 // "outside the door" of an open-air market that has no door and is, of all the
 // places in this town, the one most full of dogs (persona report A#21,
 // 2026-08-23).
+// He is at your heel in a great many places and the line said "nose reading the
+// street" in all of them, including a police station counter and the sand at
+// Dongtan (Bill, round 44). Pooled, and pavement-free.
+const _DOG_HEEL = [
+  "Sai Krok pads at your heel, reading the ground ahead of you.",
+  "Sai Krok is at your heel, half a step back, checking things you have not noticed.",
+  "Sai Krok keeps station at your left knee, nose up, entirely at ease.",
+  "Sai Krok falls in beside you and stays there, the way he has since the night you fed him.",
+];
+
 function _dogSpot(r) {
   if (r.barType === "beer") return "under";                 // open front, no door to stop him
   if (/market|bazaar/i.test(r.name || "")) return "heel";   // tarpaulins and scraps: his country
   if (/\bmall\b|central festival/i.test(r.name || "")) return "outside";  // glass, aircon, guards
   if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) return "outside";
-  if (_isHotelRoom(G.room) || r.shop || r.food) return "mat";
+  if (_isHotelRoom(G.room)) return "mat";            // your own door, your own dog
+  // A 7-Eleven does not admit a street dog, and a restaurant does not either —
+  // both were printing the hotel-mat line, so he turned three circles on a mat
+  // that does not exist, inside a shop that would never have him (Bill, r44).
+  // (r.seven is a STREET that has a 7-Eleven on it, not a shop room — he stays
+  //  at your heel out there.)
+  if (r.shop || r.food) return "outside";
   return "heel";
 }
 
@@ -2149,7 +2165,7 @@ function _describeRoom(full, forceFull) {
     if (_spot === "under") _say(_dogN("(Sai Krok is under your stool, one ear up.)"), "dim");
     else if (_spot === "outside") _say(_dogN("(Sai Krok, outside the door, chin on paws.)"), "dim");
     else if (_spot === "mat") _say(_dogN("(Sai Krok is on the mat by the door.)"), "dim");
-    else _say(_dogN("Sai Krok pads at your heel, nose reading the street."), "dim");
+    else _say(_dogN(_pickVary(_DOG_HEEL, "doghere")), "dim");
   } else if (G.dog) {
     G.dogRoomSeen = G.room;
     const _spot = _dogSpot(r);
@@ -2165,7 +2181,7 @@ function _describeRoom(full, forceFull) {
       _say(_dogN("(Sai Krok is three stalls ahead before you have finished arriving. This is " +
         "his industry, and he has contacts in it.)"), "dim");
     } else {
-      _say(_dogN("Sai Krok pads at your heel, nose reading the street."), "dim");
+      _say(_dogN(_pickVary(_DOG_HEEL, "doghere")), "dim");
     }
     if (G.room === "khao_talo_strip") _dogShamrock(); // the dead pub knows him
   } else if (_flag("act1Done") && !r.bar && !r.barType && !r.massage && !r.soapy &&
@@ -2650,7 +2666,10 @@ function _tick() {
 // nobody on this soi quotes ฿87.
 function _drinkMult(room) {
   const r = ROOMS[room || G.room];
-  const t = r && r.barType;
+  // A venue can sell drinks without being a bar-girl bar: the cabaret and the
+  // host club carry `drinks: <class>` instead of a barType, precisely so none
+  // of the go-go apparatus (barfine, lady drinks, mamasan) reaches them.
+  const t = r && (r.barType || r.drinks);
   return (typeof DRINK_MULT !== "undefined" && DRINK_MULT[t]) || 1;
 }
 // `beerOff` is a room's authored discount — "the beer is ten baht cheaper than

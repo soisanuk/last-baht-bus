@@ -431,6 +431,15 @@ function _footCrossing(from, to) {
     (from === "khao_talo_strip" && to === "sukhumvit_crossing");
   if (!pair || G.mode === "soi6") return false;
   const late = G.nightTurn >= LAST_BUS_TURN;
+  // The game's own most dangerous move, walked with a dog at heel and not one
+  // word about him (Bill, round 44). He is never at risk — he has crossed this
+  // road his whole life and is better at it than you — but the crossing is the
+  // thirty seconds a dog owner actually feels.
+  if (G.dog) _say(_dogN(_pickVary([
+    "Sai Krok reads the road once, picks his gap before you have finished picking yours, and is on the far kerb waiting while you are still in the second lane.",
+    "Sai Krok crosses eight lanes of Sukhumvit the way a soi dog crosses everything: without hurrying, without stopping, and without ever quite being where a truck is.",
+    "Sai Krok will not cross until you do. He watches your legs, not the traffic, which is a level of trust nobody has placed in you before and you would rather he did not.",
+  ], "dogcross")), "dim");
   const risk = Math.min(0.45, 0.04 + 0.03 * (G.soc.drunk || 0) + (late ? 0.04 : 0));
   const roll = _rand();
   if (roll < risk) {
@@ -3091,6 +3100,22 @@ function _doResume() {
 function _doWear(arg) {
   const a = String(arg || "").trim().toLowerCase();
   if (!a) { _say("Wear what?"); return; }
+  // The one thing anybody does with a dog tag. It was the generic parser miss —
+  // "The soi blinks at you" — on the most obvious act in the game, to a man
+  // holding a tag with a dog's name on it and the dog at his feet (Bill, r44).
+  if (G.dog && /\btag\b|seamus/.test(a)) {
+    if (G.itemLoc.brass_tag !== "inventory") { _say("You haven't got it on you."); return; }
+    if (G.dogTagged) { _say(_dogN("It's already on him, turning green a shade further every "
+      + "night. Sai Krok wears his own name again and has no opinion about it.")); return; }
+    G.dogTagged = true;
+    _say(_dogN("You work the green brass onto his collar — he has no collar, so it goes on "
+      + "the frayed nylon somebody put on him years ago and never took off. He stands "
+      + "for it, the way he stood for the shutter. SEAMUS \u2014 THE SHAMROCK \u2014 "
+      + "GOOD BOY, back where it was engraved to be. It chinks against the buckle when "
+      + "he walks, which is the sound the Khao Talo strip used to know him by."), "win");
+    _addHappy(2);
+    return;
+  }
   if (!/amulet|buddha|pendant|medallion/.test(a)) {
     // a plausible verb never dead-ends — see the Zork ledger in CLAUDE.md
     _say(_pickVary(_WEAR_NO, "wearno"));
@@ -5015,6 +5040,13 @@ function _doBuy(arg) {
   // stall in it, so every branch below correctly concludes there is nothing for
   // sale — which is how a dinner two characters promise by name and by price
   // answered "Not for sale here" for the whole life of the game.
+  // BUY MOO PING FOR SEAMUS bought a skewer and ate it yourself — the saleng's
+  // own pitch prints "(BUY <item> FOR <lady>)" and a dog owner reads that as an
+  // instruction (Bill, round 44). FEED and GIVE both worked; only BUY didn't.
+  if (G.dog && /\bfor\b|\bto\b/.test(arg) && typeof _isDogWord === "function" &&
+      arg.split(/\bfor\b|\bto\b/).slice(1).some(t => _isDogWord(t.trim()))) {
+    _doFeedDog(arg.replace(/.*\b(?:for|to)\b/, "").trim()); return;
+  }
   if (_npcsHere().includes("mot") &&
       (/\bmot\b/.test(arg) || /khao ?man ?gai/.test(arg))) { _motDinner(); return; }
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
@@ -5132,12 +5164,12 @@ function _doBuy(arg) {
       ], "roomwater"));
       return;
     }
-    const canBuy = r.shop || r.seven || r.water || _inBar() || FOOD_STALLS[G.room]; // r.water: a drinks cart in the desc
+    const canBuy = r.shop || r.seven || r.water || _servesDrinks() || FOOD_STALLS[G.room]; // r.water: a drinks cart in the desc
     if (!canBuy) { _say(soft ? "No soft drinks for sale here. 7-Elevens, bars, and the street carts all have them." : "No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
     // In a bar the water and the soda cost what the cheapest alcohol costs —
     // you are paying for the SEAT, and the seat is worth more than the bottle
     // (Mario, 2026-09-04). A shop sells the bottle.
-    const price = _inBar() ? _beerPrice() : soft ? 20 : 10;
+    const price = _servesDrinks() ? _beerPrice() : soft ? 20 : 10;
     if (typeof _atOwnBar === "function" && _atOwnBar()) {   // your own stock: off the take, not your pocket (Des, round 41)
       G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
       _ownStock(price, soft ? "a soda" : "a water");
@@ -5236,7 +5268,7 @@ function _doBuy(arg) {
   }
   if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
     // a restaurant serves beer too — KISS's Item 47 IS 'BIG BEER'
-    if (!_inBar() && !_room().food && !FOOD_STALLS[G.room]) {
+    if (!_servesDrinks() && !_room().food && !FOOD_STALLS[G.room]) {
       _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return;
     }
     // Bert said "that's a beer on the house, bud" to the ex-married origin and
@@ -7269,11 +7301,15 @@ function _photoList() {
 function _hasPortrait(id) { return _photoList().some(p => p.id === id && !p.cap); }
 // Add a photo to the gallery. No cap = a portrait (deduped per character); a cap =
 // a texted selfie (always a distinct new frame). Learns her name either way.
+// "dog" is the one photo subject that is not on the roster: he has no NPCS
+// entry, so every frame Bill took of him printed a lovely line and was never
+// seen again — the gallery said "one blurry thumb" two turns later, and SCORE
+// still read 0 faces on the last night (round 44).
 function _addPhoto(id, cap) {
-  if (!NPCS[id]) return false;
+  if (id !== "dog" && !NPCS[id]) return false;
   if (!cap && _hasPortrait(id)) return false;
   if (cap && _photoList().some(p => p.id === id && p.cap === cap)) return false;   // she re-sent the same selfie (Frank, round 38)
-  if (G.known) G.known[id] = true;
+  if (G.known && id !== "dog") G.known[id] = true;
   _photoList().push(cap ? { id, cap, turn: G.turns } : { id, turn: G.turns, room: G.room });
   return true;
 }
@@ -7302,6 +7338,8 @@ function _doPhoto(arg) {
   if (G.dog && arg && _isDogWord(arg.trim().toLowerCase())) {
     if (G.battery <= 0) { _say("Dead phone. He'll still be here when it isn't."); return; }
     G.battery = Math.max(0, G.battery - 1);
+    const _first = _addPhoto("dog");
+    if (_first) _addHappy(1);
     _say(_dogN(_pickVary([
       "Three frames of blur and one of his nose, enormous, investigating the lens. He has no " +
         "interest in being photographed and every interest in the phone.",
@@ -7350,13 +7388,15 @@ function _doGallery() {
     _say("Dead phone, dark gallery. The faces are in there somewhere. Find a charger.");
     return;
   }
-  const photos = _photoList().filter(p => NPCS[p.id]);
+  const photos = _photoList().filter(p => p.id === "dog" ? !!G.dog : !!NPCS[p.id]);
   if (!photos.length) {
     _say("Your gallery is one blurry thumb and a lot of smeared neon. PHOTO someone — " +
       "a face at the rail, a lady who's caught your eye — to start a collection.");
     return;
   }
   const rows = photos.slice().sort((a, b) => (a.turn || 0) - (b.turn || 0)).map(p => {
+    if (p.id === "dog") return _dogN("\uD83D\uDC15 Sai Krok") +
+      (_photoWhere(p.id, p) ? " \u2014 " + _photoWhere(p.id, p) : "");
     const n = NPCS[p.id];
     // a texted selfie shows its caption; a snapped portrait, where she works
     const detail = p.cap ? `«${p.cap}»` : _photoWhere(p.id, p);
@@ -7367,7 +7407,9 @@ function _doGallery() {
   // honest number is people you HAVE met, which is also the one that grows as
   // you explore, so the ratio pushes outward instead of down.
   const met = Object.keys(G.known || {}).filter(id => NPCS[id]).length;
-  const have = new Set(photos.map(p => p.id)).size;
+  const have = new Set(photos.filter(p => p.id !== "dog").map(p => p.id)).size;
+  if (!have) { _say(`Gallery — ${rows.length} photo${rows.length > 1 ? "s" : ""}:\n` + rows.join("\n"), "room");
+    _say("  (No faces yet. PHOTO someone at the rail to start the collection.)", "dim"); return; }
   const tail = met > have
     ? `  (${have} of the ${met} faces you've met — the rest haven't been asked.)`
     : `  (${have} of ${met} — everyone you've met is in here.)`;
@@ -9271,6 +9313,10 @@ function doCommand(input) {
     case "handover": case "baton": _doHandover(); return;
     case "resume": _doResume(); return;
     case "wear": case "put on": _doWear(arg); break;
+    // PUT TAG ON HIM. Bare PUT was an unknown verb, so the one act a man with a
+    // dog tag reaches for landed on "The soi blinks at you" (Bill, round 44).
+    case "put": _doWear(String(arg || "").replace(/\bon\b.*$/, "").trim() ||
+      String(arg || "")); break;
     case "read": _doRead(arg); break;
     case "talk": case "chat": {
       if (/\bband\b|\bmusicians?\b|\bguitar|\bbass|\bdrummer|\bvocalist|\bsinger/.test(arg) && _bandHere()) {

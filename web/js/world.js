@@ -632,7 +632,7 @@ const ROOMS = {
     // fee run on their own premium track (HOST_DRINK / HOST_OFF), and BUY DRINK
     // FOR / HIRE are intercepted here. Welcoming to every orientation; most of
     // the boys are gay-for-pay and honest about it.
-    hostBar: true,
+    hostBar: true, drinks: "host",
     desc: "Cool gold light, a low mirrored bar, and a raised bench where the hosts sit in numbered " +
       "order — young men, gym-cut, oiled to catch the light, some bored, some working the room with " +
       "their eyes. A drinks list stands on the bar with prices that would make a Walking Street " +
@@ -657,8 +657,10 @@ const ROOMS = {
     bar: "The Peacock Cabaret",
     region: "Thappraya",
     liveMusic: true,
+    drinks: "club",
     // A drag-cabaret venue, not a barfine bar — no barType, so none of the go-go
-    // apparatus applies. You come to WATCH DRAG, tip, and be gently roasted.
+    // apparatus applies. `drinks` is the bar without the bar girls: it sells you a
+    // beer at club prices (Miss Mala tells you to buy one) and nothing else. You come to WATCH DRAG, tip, and be gently roasted.
     desc: "Inside it is all mirror and marabou and a stage lit like a jewel box, the little tables " +
       "packed with a mixed, delighted crowd — gay boys, a hen party, three sunburnt husbands whose " +
       "wives dragged them in and who are now, unexpectedly, having the night of their lives. Miss Mala " +
@@ -4654,7 +4656,8 @@ const ITEMS = {
     portable: true, location: null, // worked free of the Shamrock's shutter hasp
     keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — " +
-      "GOOD BOY. The pub is shuttered and Paddy is long gone home, but somebody once " +
+      "GOOD BOY. The pub is shuttered and the Irishman the soi called Paddy is long gone "
+      + "home, but somebody once " +
       "paid to have GOOD BOY engraved in brass, and they were right.",
   },
   fake_rolex: {
@@ -8403,6 +8406,32 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"My airport friend. Still got your wallet? ...Mostly. Anything you need — you have my number.\"",
         asks: { key: "finding", q: "\"Tell me true—\" the easy grin, the eyes a half-beat behind it \"—this town, is it what you came for? Or is it turning out to be something else?\"" } },
 
+      // THE PROMISE HE MADE AT THE AIRPORT. Answer his third question with an
+      // open mind and he says "some of the most beautiful girls on this soi
+      // weren't born girls — I'll point you right", and then had no topic for
+      // katoey, ladyboy, cabaret, host bar or any of it: the one man who
+      // promised to point, pointing nowhere (Marco, round 44). He is the hub;
+      // he drove all of them too.
+      { topic: "katoey|ladyboy|ladyboys|trans|cabaret|drag|drag show",
+        text: "\u201cAh. You remember what I said in the car.\u201d He is pleased, and does not " +
+          "make a thing of it. \u201cOkay. Three places, three different nights. Katoey\u2019s R Us, " +
+          "on Soi Diamond off Walking Street \u2014 that is a BAR, you sit, you drink, you talk, " +
+          "same as anywhere. The Peacock, out in Supertown on Thappraya, is the SHOW \u2014 " +
+          "cabaret, you tip the performers, you laugh, everybody laughs. And Hyper on " +
+          "Thappraya, big go-go, Diamond runs the floor there and she is the smartest " +
+          "person in that building.\u201d He shrugs. \u201cThe ladies are ladies. Nobody in this " +
+          "town will make it strange for you. Only farang make it strange, and only " +
+          "the ones who are frightened of something.\u201d",
+        short: "\u201cKatoey\u2019s R Us on Soi Diamond to sit and drink. The Peacock in Supertown " +
+          "for the show. Hyper on Thappraya for the go-go. That is the map.\u201d" },
+      { topic: "host bar|hosts|boys|host",
+        text: "\u201cThe Adonis, Supertown, off Thappraya.\u201d He says it exactly as flatly as he " +
+          "says everything else. \u201cHost bar. The boys sit with you, they drink, the drink " +
+          "is \u0e3f" + HOST_DRINK + " because the boy gets his half. Nott runs it and Nott is " +
+          "correct with everybody \u2014 I have driven his boys home at four in the morning " +
+          "many times and not one of them has ever been afraid to get in the car. That " +
+          "tells you the place.\u201d",
+        short: "\u201cThe Adonis in Supertown. Nott runs it straight. \u0e3f" + HOST_DRINK + " a drink, the boy gets half.\u201d" },
       { topic: "fix", text: "\"What can I fix?\" He says it like the question delights him. \"A ride. A room. A " +
           "visa man who actually answers his phone. A problem that needs to quietly become not-a-problem. A " +
           "door that is closed to you—\" the smallest smile \"—and open to me.\" He lets that hang a half-beat " +
@@ -11214,13 +11243,15 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // Bert's generic dog line below.
       { topic: "dog", req: ["hasDog"], when: () => G.mode !== "soi6",
         text: "Bert looks past you at the dog by the door and sets his Singha down " +
-        "slow. \"I'll be damned. That's the Shamrock dog, bud. Paddy's dog — the Irish " +
-        "place out on Khao Talo, went under in COVID. Paddy caught the one flight home " +
+        "slow. \"I'll be damned. That's the Shamrock dog, bud. Sean's dog — the soi only "
+        + "ever called him Paddy, the way it calls every Irishman Paddy. The Irish " +
+        "place out on Khao Talo, went under in COVID. He caught the one flight home " +
         "and the dog sat that step for a month. Then he went walking.\" He shakes his " +
         "head. \"Four years walking, and of every farang in this town he picked you. " +
         "Do him a right thing: walk him out to the old place and let him see it. Dogs " +
         "need funerals too, in their way.\"",
-        short: "\"That's the Shamrock dog — Paddy's. Walk him out to the old place on " +
+        short: "\"That's the Shamrock dog — Sean's, that the soi called Paddy. Walk him "
+        + "out to the old place on " +
         "Khao Talo. Dogs need funerals too.\"" },
       { topic: "dog", text: "\"Dogs? Kept one on the rail at Candy's place for years. " +
         "Best doorman I ever had — worked for chicken and never once stole from the " +
@@ -11735,6 +11766,12 @@ const MOTOSAI_DESTS = {
   // that reaches the far side of town couldn't take you to it (Gerry, r34).
   "myth night":     { room: "myth_night", price: MOTOSAI_TOWN },
   "lake":           { room: "lake_mabprachan", price: MOTOSAI_FAR },
+  // Thappraya carries a whole wing — the cabaret, the host club, Supertown,
+  // Hyper — and was the one district with venues that no piwin would take
+  // you to, while TRAVEL's own hint said "or a MOTOSAI to the district"
+  // (Marco, round 44). The hint was right; the rank was missing.
+  "thappraya":      { room: "thappraya_w", price: MOTOSAI_TOWN },
+  "supertown":      { room: "supertown_elbow", price: MOTOSAI_TOWN },
 };
 
 // ── Random street encounters ───────────────────────────────────────────────

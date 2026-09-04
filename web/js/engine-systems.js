@@ -429,8 +429,20 @@ function _hostHere(arg) {
 }
 
 function _doHostDrink(arg) {
-  const id = _hostHere(arg) || (!arg ? "arm" : null);
-  if (!id) { _say("Buy a drink for which host — ARM (4) or WIN (9)? (BUY DRINK FOR WIN.)"); return; }
+  // The prompt used to name both hosts by number off a fixed string, so a man
+  // who had taken Win out and come back for another round was asked "ARM (4)
+  // or WIN (9)? (BUY DRINK FOR WIN.)" — the exact command that produced it,
+  // forever (Marco, round 44). Ask about the men who are actually standing here.
+  const here = _HOSTS.filter(h => _npcsHere().includes(h));
+  const id = _hostHere(arg) || (!arg ? (here[0] || null) : null);
+  if (!id) {
+    const named = arg && _HOSTS.find(h => new RegExp("\\b" + NPCS[h].name.toLowerCase() + "\\b").test(String(arg).toLowerCase()));
+    if (named) { _say(`${NPCS[named].name} isn't on the floor — he's working, or he's with you, ` +
+      "and either way the drink goes on somebody else's number."); return; }
+    if (!here.length) { _say("Nobody on the floor to buy for just now."); return; }
+    _say("Buy a drink for which host — " + here.map(h => NPCS[h].name.toUpperCase()).join(" or ") +
+      "? (BUY DRINK FOR " + NPCS[here[0]].name.toUpperCase() + ".)"); return;
+  }
   if (G.money < HOST_DRINK) {
     _say(`A host drink is ฿${HOST_DRINK} — twice a lady drink, the premium end. You have ฿${G.money}.`);
     return;
@@ -978,7 +990,11 @@ function _partyArrive(to) {
     return;
   }
   const r = ROOMS[to];
-  if (!r || !(r.bar || r.barType)) return;
+  // A massage shop carries a `bar:` DISPLAY name (so its name taps as a venue),
+  // which is why walking a companion into Cherry Oil printed the full bar
+  // arrival — "steers you to the exact right spot at the bar" — and billed a
+  // lady drink in a room with no bar and no staff (Marco, round 44).
+  if (!r || !_servesDrinks(to)) return;
   if (p.seen[to]) return;
   p.seen[to] = true;
   const who = _partyLabel();
@@ -2595,9 +2611,16 @@ function _questOffer(npcId) {
     // one was the wrong one, and a playtester did exactly what it said and got
     // brushed off. So strip the hint here; ACCEPT is the only live command at
     // this point, and QUESTS/HINT print the desc in full once it is.
-    _say(_fmt("✦ {who} has a job for you: “{name}” — {desc}",
+    // You can arrive at the deed before the job. Bert acknowledged the Shamrock
+    // pilgrimage in one line ("Found it, then. Found HIM.") and offered it as a
+    // job in the next, to a man holding the brass tag (Bill, round 44). The
+    // reward still stands — ACCEPT settles it — but he knows you did it.
+    const _lived = q.doneFlag && _flag(q.doneFlag);
+    _say(_fmt(_lived ? "✦ {who} owes you for one already done: “{name}”"
+                     : "✦ {who} has a job for you: “{name}” — {desc}",
       { who: NPCS[npcId].name, name: _L(q.name), desc: _questPitch(_L(_qDesc(q))) }), "win");
-    _say(`(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
+    _say(_lived ? `(ACCEPT ${qid.toUpperCase()} — you have already done the thing; this is him settling up.)`
+                : `(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
     return; // one offer at a time keeps the bar chatter sane
   }
 }
@@ -7784,7 +7807,9 @@ const _OWL_ARRIVED = [
     "BEER BAR is a stool with the street on one side and a girl on the other; a SOI 6 BAR is " +
     "the same stool with a staircase behind it; a GO-GO is a stage, chrome, and a bell that " +
     "buys the room a round; a GENTLEMAN'S CLUB is a sofa behind a curtain in a villa with " +
-    `the air-con set to Norway. A beer there is ฿${BEER_PRICE} at the cheapest and climbs by ` +
+    `the air-con set to Norway. A CABARET is a show and a chair, where you tip rather than `+
+    "buy, and a HOST BAR is the same trade with the sexes swapped and better manners. A beer " +
+    `is ฿${BEER_PRICE} at the cheapest and climbs by ` +
     "the class of the room, and nobody will tell you the number until it's in your hand — ask " +
     "(tao rai, squire: how much) before the glass lands. And one more: everybody in every one " +
     "of these rooms would rather you ASKED than looked. This is a town that talks. Use it.",

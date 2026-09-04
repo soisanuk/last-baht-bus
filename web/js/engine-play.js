@@ -990,7 +990,12 @@ function _startJackpot(w) {
   const asked = betM ? parseInt(betM[0], 10) : JP_DEFAULT;
   const want = Math.max(JP_MIN, Math.min(JP_MAX, asked));
   if (asked > JP_MAX) _say(`(House max on the Jackpot is ฿${JP_MAX} — the rest stays in your pocket.)`, "dim");
-  const opp = _gameHostess().name; // jackpot is dice — no skill tier to carry
+  // Connect 4 honoured "with <name>" and Jackpot silently ignored it, so a man
+  // who asked for the mamasan by name got dealt to a floor girl with no comment
+  // (Trev, round 44). Dice carry no skill tier — but who shakes the cup at you
+  // is the whole reason you asked.
+  const vs = (w.match(/\b(?:with|vs|against)\s+([a-z]+)/) || [])[1];
+  const opp = _gameHostess(vs).name;
   const stake = _takeStake(want);
   // First game ever (flags.jpLearned unset): the hostess walks you through it —
   // every roll is a manual flip, even a forced one, so you learn the moves. After
@@ -1445,6 +1450,23 @@ const _KP_POT = [
   "{who} pots. Nobody says anything. That is somehow worse than if they had.",
 ];
 
+// A league frame runs a dozen shots and the pot line was ONE string, so it read
+// three turns running like a jukebox stuck on a song (Trev, round 44).
+const _KP_MY_POWER = [
+  "You lean into it — the ball SLAMS home and the bar goes quiet for one beautiful second.",
+  "You hit it like you mean it. The pocket takes it whole and the cue ball keeps travelling out of pure surprise.",
+  "Everything goes into the shot. It drops with a bang somebody at the rail feels through their glass.",
+  "No finesse, all conviction. In it goes, and the man keeping score raises an eyebrow he has not raised all night.",
+];
+const _KP_MY_POT = [
+  "Clean pot. The felt forgives you another round.",
+  "Down it goes, quietly, the way the good ones do. Nobody says anything, which is how you know.",
+  "You take your time and it drops on the slow side of the pocket. Still counts.",
+  "A tidy one. The cue ball sits exactly where you left it, which is the part that actually takes practice.",
+  "In. Somebody at the rail says something in Thai that is almost certainly about your hairline.",
+  "It rattles the jaws, thinks about it, and drops. You take that.",
+];
+
 function _kpInput(input) {
   const g = G.game;
   const kind = /power|smash/.test(input) ? "power" :
@@ -1452,9 +1474,7 @@ function _kpInput(input) {
   if (!kind) { _gameBoard(); _say("SHOT or POWER — the table is waiting.", "dim"); return false; } // not a move: no tick
   const you = kpShot(g.kp, _rand, kind === "power" ? 0.45 : 0.6);
   if (you.potted) {
-    _say(kind === "power" ?
-      "You lean into it — the ball SLAMS home and the bar goes quiet for one " +
-      "beautiful second." : "Clean pot. The felt forgives you another round.");
+    _say(kind === "power" ? _pickVary(_KP_MY_POWER, "kppower") : _pickVary(_KP_MY_POT, "kpmypot"));
   } else {
     _say(`Miss. ${you.player.lives > 0 ? `Life gone (${you.player.lives} left).` :
       "That was your last life. You're out."}`, you.out ? "alert" : "");
@@ -1842,6 +1862,12 @@ const BELL_GLOW = 25;  // turns the whole bar loves you after a ring
 const BAN_TURNS = 40;  // security shift length
 
 function _inBar() { return !!_room().barType; }
+// WHO WILL POUR YOU ONE. Wider than _inBar on purpose: the Peacock's own
+// compere says "buy a drink, tip a girl, laugh loud" and the room then
+// refused BUY BEER and BUY WATER while its menu line offered both (Marco,
+// round 44) — because a cabaret deliberately carries no barType. _inBar
+// still gates the bar-girl machinery; this gates the bar.
+function _servesDrinks(room) { const r = (room && ROOMS[room]) || _room(); return !!(r.barType || r.drinks); }
 // The Peacock Cabaret sells drinks and takes flirting seriously without any of
 // the barType apparatus (no bells, games, closing hour, or barfine ledger) —
 // social verbs and lady drinks treat it as a bar, everything else doesn't.
@@ -3804,8 +3830,9 @@ const _DEBRIEF = {
     what: "The motorbike found the one bit of gravel it was looking for.",
     why: "A late-hours motosai ride is the one journey in the game that can " +
       "hurt you, and drink makes it likelier.",
-    next: "The baht bus is ฿" + BUS_FARE + " and cannot crash you — but it stops running at " +
-      "02:00. TIME tells you whether the last one has gone.",
+    next: "The baht bus is ฿" + BUS_FARE + " and cannot crash you. After two it goes " +
+      "sparse rather than away — you wait at the kerb instead of riding straight off. " +
+      "TIME tells you how thin they are running.",
   }),
   robbed: () => ({
     what: "You went with a freelancer and woke up lighter.",
@@ -4549,11 +4576,19 @@ function _endVacation() {
   }
   G.pendingChoice = "vacation_end";
   G.bestHappy = Math.max(G.bestHappy, G.happy);
+  // "the city doesn't come to see you off" was printed to a man whose dog was
+  // asleep against his door (Bill, round 44). The city doesn't. He does.
+  const _dogBye = G.dog ? _dogN(_pickVary([
+    "Sai Krok is on the mat by the door when the taxi is called, and does not get up, and does not stop watching you. He has done this before, at a shuttered pub on the Darkside, and he knows how it goes.",
+    "You leave the last of the water down for Sai Krok. He drinks it, and then sits by the case, which is the argument he is able to make.",
+    "Sai Krok walks you to the lobby doors and stops at the line where the aircon ends, because he has never once come further, and looks up at you with his whole plan showing.",
+  ], "dogbye")) : null;
   _say("═══════════════════════════════════", "win");
   _say("The week is up. The taxi to the airport leaves in an hour, and the city " +
     "doesn't come to see you off — it just keeps roaring, the way it was " +
     "roaring before you came, the way it will roar after. From the highway " +
     "the neon shrinks to a smudge on the coast.", "win");
+  if (_dogBye) _say(_dogBye, "room");
   if (G.mode === "soi6") {
     _say(`SOI 6 · DAY 7 — happiness ${G.happy}: ${_happyLevel(G.happy)}.` +
       (G.happy >= 100 ? " You maxed the week. ★"
@@ -4827,6 +4862,11 @@ function _goExpat() {
     "Sang Som with the night clerk, and your savings wired over — " +
     `฿${_num(EXPAT_SAVINGS)}, in your pocket by the time the clerk finishes his ` +
     "cigarette. The soi absorbs the news without comment. Candy just sets out your glass.", "win");
+  if (G.dog) _say(_dogN(_pickVary([
+    "Sai Krok, who was never told and never asked, turns three circles on the mat by the door of room 412 and drops, chin on paws. As far as he is concerned nothing has been decided today; you were always going to stay.",
+    "The only one who gets told is Sai Krok, and you tell him out loud, feeling every inch the fool. He thumps his tail twice on the tile. Motion carried.",
+    "Somewhere in the paperwork it stops being a holiday, and the moment goes by unmarked except by a dog on a mat who has been waiting four years for somebody to not get on the plane.",
+  ], "dogstay")), "room");
   if (G.money > EXPAT_SAVINGS * 4) {
     // a man who arrives carrying a fortune shouldn't be told he has ฿20,000
     // (millionaire playtest 2026-08-22)

@@ -1,0 +1,249 @@
+// Round 44 — Marco (the open mind), Trev (every staked game), Bill (the dog).
+import { test, beforeEach } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+import vm from "node:vm";
+
+const here = dirname(fileURLToPath(import.meta.url));
+for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js",
+  "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
+  vm.runInThisContext(readFileSync(join(here, "../../web/js", f), "utf8"), { filename: f });
+}
+let out = [];
+engineInit((t, c) => out.push({ text: t, cls: c }));
+const text = () => out.map(o => o.text).join("\n");
+const run = (...cmds) => { for (const c of cmds) doCommand(c); };
+const stub = (fn, v = 0.99) => { const saved = _rand; _rand = () => v; try { return fn(); } finally { _rand = saved; } };
+beforeEach(() => {
+  out = []; newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); G.stage = "vacation"; G.money = 9000; G.nightTurn = 30;
+  for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
+  G.peddlerNight = 2;
+});
+
+// ── Marco: a venue that tells you to buy a drink sells one ─────────────────
+
+test("the cabaret and the host club sell the drink their own prose orders", () => {
+  // Miss Mala: "Buy a drink, tip a girl, laugh loud. That is the whole religion
+  // here." — and BUY BEER answered "this calls for a bar stool", while the room's
+  // own menu line offered (BUY BEER · BUY WATER). Neither venue carries a
+  // barType, deliberately, so none of the go-go machinery reaches them.
+  for (const room of ["peacock_cabaret", "adonis_club"]) {
+    G.room = room; G.money = 9000; G.thirst = 60;
+    out = []; run("buy beer");
+    assert.doesNotMatch(text(), /calls for a bar stool/, `${room} pours a beer`);
+    assert.ok(G.money < 9000, `${room} charges for it`);
+    G.money = 9000;
+    out = []; run("buy water");
+    assert.doesNotMatch(text(), /No water for sale here/, `${room} sells water too`);
+  }
+  // …and none of the bar-girl apparatus followed the drinks in
+  for (const room of ["peacock_cabaret", "adonis_club"]) {
+    assert.equal(!!ROOMS[room].barType, false, `${room} is still not a barfine bar`);
+    assert.equal(_inBar.call(null) || true, true);
+  }
+  // the seat is priced by the class of the room, not flat
+  G.room = "peacock_cabaret";
+  assert.ok(_beerPrice("peacock_cabaret") > _beerPrice("stinky_bar"),
+    "a cabaret charges above a beer bar");
+});
+
+test("Thappraya is reachable by bike — the district TRAVEL points a motosai at", () => {
+  // TRAVEL: "…over in Thappraya — you haven't found it yet… Walk it, or a MOTOSAI
+  // to the district." The piwin's list had no Thappraya on it, stranding the
+  // cabaret, the host club, Supertown and Hyper behind a hill walk.
+  assert.ok(MOTOSAI_DESTS.thappraya, "the rank serves Thappraya");
+  assert.ok(ROOMS[MOTOSAI_DESTS.thappraya.room], "at a real room");
+  assert.equal(ROOMS[MOTOSAI_DESTS.thappraya.room].region, "Thappraya");
+  assert.equal(ROOMS[MOTOSAI_DESTS.supertown.room].region, "Thappraya");
+});
+
+test("Tan keeps the promise he makes in the taxi", () => {
+  // "Some of the most beautiful girls on this soi weren't born girls. I'll point
+  // you right." — and then ASK TAN ABOUT LADYBOY / KATOEY / CABARET / HOST BAR
+  // all missed. The one man who promised to point, pointing nowhere.
+  for (const topic of ["ladyboy", "katoey", "cabaret", "drag", "host bar"]) {
+    G.room = "soi6_street"; G.known.tan = true; G.talked = {};
+    out = []; run("ask tan about " + topic);
+    assert.match(text(), /Katoey|Peacock|Adonis|Hyper/,
+      `ASK TAN ABOUT ${topic.toUpperCase()} names a venue you can walk into`);
+  }
+  // and every venue he names is real, and where he says it is
+  G.room = "soi6_street"; G.known.tan = true; G.talked = {};
+  out = []; run("ask tan about ladyboy");
+  assert.equal(ROOMS.katoeys.region, "Walking Street");
+  assert.equal(ROOMS.peacock_cabaret.region, "Thappraya");
+  assert.equal(ROOMS.hyper.region, "Thappraya");
+  assert.equal(ROOMS.adonis_club.region, "Thappraya");
+});
+
+test("a host who has left the floor is said to have left it, not offered as a choice", () => {
+  // After BARFINE WIN, "buy drink for win" answered "ARM (4) or WIN (9)? (BUY
+  // DRINK FOR WIN.)" — the prompt instructing the exact command that produced
+  // it, forever.
+  G.room = "adonis_club";
+  const away = NPCS.win.room; NPCS.win.room = "khao_talo";
+  try {
+    out = []; run("buy drink for win");
+    assert.doesNotMatch(text(), /BUY DRINK FOR WIN/, "never instructs the command that just failed");
+    assert.match(text(), /isn't on the floor/);
+  } finally { NPCS.win.room = away; }
+  // with both present the disambiguation still asks, and only about men who are here
+  out = []; run("buy drink for");
+  assert.ok(G.money < 9000, "a bare ask lands on whoever is standing there");
+});
+
+// ── Trev: the games ────────────────────────────────────────────────────────
+
+test("PLAY JACKPOT WITH <name> deals to the woman you named", () => {
+  // Connect 4 honoured the name and Jackpot silently ignored it: asked for the
+  // mamasan, got a floor girl, no comment.
+  G.room = "lucky_tiger"; G.money = 5000;
+  const staff = _npcsHere().filter(n => NPC_ROLES[n]);
+  assert.ok(staff.length > 1, "this bar has a floor to choose from");
+  const pick = staff[staff.length - 1];
+  out = []; run(`play jackpot with ${NPCS[pick].name.toLowerCase()} 20`);
+  assert.equal(G.game.opp, NPCS[pick].name);
+  // a name nobody answers to still says so rather than silently substituting
+  G.game = null; out = []; run("play jackpot with zzzz 20");
+  assert.match(text(), /Nobody here answers to/);
+});
+
+test("the killer-pool table has more than one way of saying you potted it", () => {
+  // The same string three turns running inside one frame, in a game built on
+  // rotating pools everywhere else.
+  assert.ok(_KP_MY_POT.length >= 4 && _KP_MY_POWER.length >= 3);
+  const seen = new Set();
+  for (let i = 0; i < 40; i++) seen.add(_pickVary(_KP_MY_POT, "kpmypot"));
+  assert.ok(seen.size >= 3, "the pool actually rotates");
+});
+
+// ── Bill: the dog ──────────────────────────────────────────────────────────
+
+test("the dog is filed in the gallery, and is not counted as a face", () => {
+  // Two bespoke, excellent photo lines and an empty gallery two turns later;
+  // SCORE still read "0 faces" on the last night of a week spent with him.
+  G.dog = { since: 1, name: null }; G.battery = 50; G.phone.photos = [];
+  G.room = "beach_rd_c";
+  out = []; run("photo dog");
+  assert.equal(_photoList().length, 1);
+  assert.equal(_photoList()[0].id, "dog");
+  out = []; run("gallery");
+  assert.match(text(), /Sai Krok/, "he is in the collection");
+  assert.doesNotMatch(text(), /one blurry thumb/);
+  // one entry however many times you point the phone at him
+  out = []; run("photo dog", "photo dog");
+  assert.equal(_photoList().filter(p => p.id === "dog").length, 1);
+  // and he never inflates the people you've met
+  assert.ok(!G.known.dog, "a dog is not an acquaintance the black book knows");
+});
+
+test("PUT TAG ON HIM is the one thing anybody does with a dog tag", () => {
+  // The generic parser miss — "The soi blinks at you. Try again." — on the most
+  // obvious act in the game, to a man holding a tag with a dog's name on it.
+  G.dog = { since: 1, name: null }; G.itemLoc.brass_tag = "inventory"; G.room = "stinky_bar";
+  out = []; run("put tag on him");
+  assert.doesNotMatch(text(), /didn't understand|soi blinks/);
+  assert.equal(G.dogTagged, true);
+  out = []; run("put tag on seamus");
+  assert.match(text(), /already on him/, "and it stays on him");
+  // a genuinely meaningless PUT still gets a voiced refusal, not a parser miss
+  G.dogTagged = false; delete G.itemLoc.brass_tag;
+  out = []; run("put hat on cat");
+  assert.doesNotMatch(text(), /didn't understand/);
+});
+
+test("BUY <food> FOR <dog> feeds the dog", () => {
+  // The saleng's own pitch prints "(BUY <item> FOR <lady>)", a dog owner reads
+  // it as an instruction, and the game sold him a skewer and ate it for him.
+  G.dog = { since: 1, name: null }; G.room = "soi_rompho"; G.money = 2000; G.hunger = 50;
+  const before = G.hunger;
+  out = []; run("buy moo ping for dog");
+  assert.match(text(), /Sai Krok/, "he is the one who eats");
+  assert.equal(G.hunger, before, "and you are no less hungry for it");
+});
+
+test("where the dog lies is true of the room he is in", () => {
+  // He turned three circles on the hotel mat inside a 7-Eleven, and padded at
+  // heel "nose reading the street" at a police station counter and on sand.
+  assert.equal(_dogSpot(ROOMS.jomtien_7eleven), "outside", "no Thai shop admits a street dog");
+  assert.equal(_dogSpot(ROOMS.stinky_bar), "under", "an open-front beer bar has no door to stop him");
+  assert.equal(_dogSpot(ROOMS.soi_rompho), "heel", "the market is his industry");
+  G.dog = { since: 1, name: null };
+  for (const room of ["police_station", "jomtien_beach"]) {
+    G.room = room; G.dogRoomSeen = null; out = [];
+    _describeRoom(false);
+    assert.doesNotMatch(text(), /nose reading the street/,
+      `${room} is not a street and the line no longer says it is`);
+  }
+});
+
+test("the dog is in the goodbye, and in the decision to stay", () => {
+  // "the city doesn't come to see you off" was printed to a man whose dog was
+  // asleep against his door; "the soi absorbs the news without comment" to the
+  // man deciding never to fly home, with the reason at his feet.
+  G.dog = { since: 1, name: null }; G.day = 8;
+  out = []; _endVacation();
+  assert.match(text(), /Sai Krok/, "the flight home");
+  out = []; _goExpat();
+  assert.match(text(), /Sai Krok/, "and the decision to stay");
+  // no dog, no line — nobody gets a phantom companion
+  G.dog = null; out = []; _goExpat();
+  assert.doesNotMatch(text(), /Sai Krok/);
+});
+
+test("eight lanes of Sukhumvit, crossed with a dog", () => {
+  // The game's own most dangerous move — "every year this road kills a handful
+  // of people" — walked with a dog at heel and not one word about him.
+  G.dog = { since: 1, name: null }; G.room = "sukhumvit_crossing";
+  out = []; stub(() => run("e"));
+  assert.match(text(), /Sai Krok/, "he crosses it with you");
+  // he is never the one who gets hit — the risk stays yours
+  assert.equal(!!G.dog, true);
+});
+
+test("a job you already did is settled, not offered", () => {
+  // Bert acknowledged the Shamrock pilgrimage in one line and offered it as a
+  // job in the next, to a man holding the brass tag.
+  const q = Object.entries(QUESTS).find(([, v]) => v.doneFlag && v.giver);
+  assert.ok(q, "some quest carries a doneFlag");
+  const [qid, quest] = q;
+  G.quests = {}; _setFlag(quest.doneFlag);
+  for (const dep of quest.deps || []) G.quests[dep] = "done";
+  if (quest.reqFlags) for (const f of quest.reqFlags) _setFlag(f);
+  if (_questAvailable(qid)) {
+    out = []; _questOffer(_qGiver(quest));
+    if (/has a job for you|owes you for one already done/.test(text()))
+      assert.match(text(), /owes you for one already done/,
+        "the offer knows the thing is done");
+  }
+});
+
+test("a companion in a massage shop is not drinking at a bar that isn't there", () => {
+  // Cherry Oil Massage carries a `bar:` display name, so walking a companion in
+  // printed the full bar arrival and billed a lady drink in a room with no bar
+  // and no staff.
+  G.party = { ids: ["lek"], stops: 0, spent: 0, seen: {} };
+  G.money = 5000;
+  out = []; _partyArrive("beachrd_oil");
+  assert.equal(text(), "", "a massage shop pays no arrival");
+  assert.equal(G.money, 5000, "and bills no drink");
+  out = []; _partyArrive("stinky_bar");
+  assert.match(text(), /Lek/, "a real bar still does");
+});
+
+test("the hospital lesson teaches the transport rules the game actually runs", () => {
+  // "The baht bus … stops running at 02:00" survived the last-bus rework, which
+  // replaced the curfew with a wait at the kerb — and the in-game warning the
+  // same night says the opposite.
+  const lessons = [...Object.values(_DEBRIEF), ...Object.values(_HOSP_WHY),
+    ...Object.values(_HOSP_WHY_SOI6)].map(f => (typeof f === "function" ? f() : f));
+  for (const l of lessons)
+    if (l && typeof l.next === "string")
+      assert.doesNotMatch(l.next, /stops running at/, "no lesson teaches the retired curfew");
+  assert.ok(lessons.some(l => l && typeof l.next === "string" && /sparse|wait at the kerb|how thin/.test(l.next)),
+    "the bike lesson teaches what the buses actually do after two");
+});

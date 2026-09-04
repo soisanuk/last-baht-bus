@@ -817,8 +817,8 @@ const _CATALOGS = {
       "Ein Hochglanz-Flyer für die Revue des Peacock Cabaret: Petch mitten im Playback in einem Kleid aus Licht, Miss Malas Kopfschmuck füllt die obere Ecke wie ein Wetterphänomen. Auf der Rückseite, in sorgfältigem Kugelschreiber: 'für den Alcazar-Mann – M.'",
     "brass dog tag":
       "Hundemarke aus Messing",
-    "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — GOOD BOY. The pub is shuttered and Paddy is long gone home, but somebody once paid to have GOOD BOY engraved in brass, and they were right.":
-      "Eine Hundemarke aus Messing, grün angelaufen nach vier Regenzeiten: SEAMUS — THE SHAMROCK — GOOD BOY. Der Pub ist verrammelt und Paddy längst zurück in der Heimat, aber irgendjemand hat einmal bezahlt, um GOOD BOY in Messing gravieren zu lassen, und er hatte recht.",
+    "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — GOOD BOY. The pub is shuttered and the Irishman the soi called Paddy is long gone home, but somebody once paid to have GOOD BOY engraved in brass, and they were right.":
+      "Eine Hundemarke aus Messing, grün angelaufen nach vier Regenzeiten: SEAMUS — THE SHAMROCK — GOOD BOY. Der Pub ist verrammelt und der Ire, den die Soi Paddy nannte, längst zurück in der Heimat, aber irgendjemand hat einmal bezahlt, um GOOD BOY in Messing gravieren zu lassen, und er hatte recht.",
     "genuine Rolex (allegedly)":
       "echte Rolex (angeblich)",
     "A 'Rolex' of tremendous confidence and negligible mass. The second hand moves in a way Rolex engineers would describe as 'jazz'. It has already started a conversation at every bar you've worn it to.":
