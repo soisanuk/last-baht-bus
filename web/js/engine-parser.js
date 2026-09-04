@@ -4286,11 +4286,47 @@ function _thaiPraise(key) {
 function _saidPolite(raw, phrase) {
   const t = String(raw || "");
   const fem = /ค่ะ|คะ|\bkha\b|\bka\b/i.test(t);
+  const masc = /ครับ|\bkhrap\b|\bkrap\b|\bkrub\b|\bkrab\b/i.test(t);
+  if (fem) G.saidKha = (G.saidKha || 0) + 1;
+  if (masc) G.saidKhrap = (G.saidKhrap || 0) + 1;
   if (!fem) return { th: phrase.th, rom: phrase.rom };
   return {
     th: phrase.th.replace(/ครับ$/, "ค่ะ"),
     rom: phrase.rom.replace(/\bkhrap\b|\bkrap\b|\bkrub\b/i, "kha"),
   };
+}
+
+// ── The particle ────────────────────────────────────────────────────────────
+// A farang man saying ค่ะ is one of two people and the soi can tell them apart
+// faster than he can (Mario's canon, 2026-09-05). MOST of them copied it off a
+// hostess an hour ago and have no idea they are speaking in a woman's voice —
+// that one gets corrected, warmly, because everybody corrects it and a teacher
+// especially. The other is doing it on purpose: for an effeminate or gay man it
+// is a quiet, deniable way of saying so, and the town reads that instantly.
+//
+// So the mechanic is the CORRECTION STOPPING. Two nudges, and then, if he has
+// kept it up and never once used ครับ, nobody mentions it again — which is not
+// the game failing to notice, it is the game noticing properly. No arc, no
+// flag, no reward: the absence of comment is the whole acknowledgement, exactly
+// as it is in life.
+const _KHA_TEASE = [
+  "{n} hears the ค่ะ and her hand goes to her mouth. \"You speak LADY, na!\" Delighted, not unkind. \"Man say KRAP. Ka is for me.\" She makes you do it once, correctly, and applauds like you have done something difficult.",
+  "\"Kha?\" {n} repeats it back an octave up, grinning. \"You learn from girl, I think. Every farang learn from girl and every farang talk like girl for one week.\" She waits. \"Say krap.\"",
+  "A small correction, offered the way you would straighten somebody's collar: \"Krap, na. You say krap.\" {n} does not labour it, and does not let it go either.",
+];
+const _KHA_TEACHER = [
+  "\"Kha.\" Waen stops, and does the thing she does before she decides how much to say. \"You learned that off a girl in a bar, which is how everybody learns it, and it is why every man in this town spends his first month sounding like his own girlfriend.\" A beat. \"Krap is yours. Use it — unless you would rather not, in which case nobody here will ask you about it again, including me.\"",
+];
+function _khaNudge() {
+  const kha = G.saidKha || 0, krap = G.saidKhrap || 0;
+  if (!kha || kha > 2 || krap) return;                  // deliberate, or he says both: leave him alone
+  if ((G.soc.khaSaid || 0) >= 2) return;                // twice is a correction; three times is nagging
+  const here = _npcsHere().filter(id => NPC_ROLES[id] && typeof _thaiVoice === "function" && _thaiVoice(id));
+  if (!here.length) return;
+  G.soc.khaSaid = (G.soc.khaSaid || 0) + 1;
+  const teacher = here.includes("waen");
+  _say(_fmt(_pickVary(teacher ? _KHA_TEACHER : _KHA_TEASE, "khatease"),
+    { n: NPCS[teacher ? "waen" : here[0]].name }), "dim");
 }
 
 function _stripPolite(s) {
@@ -4330,6 +4366,7 @@ function _doSay(arg, targetWord) {
     const _sp = _saidPolite(arg, phrase);
     _say(`You say to ${name}: “${_sp.th}” (${_sp.rom})`, "thai");
     _engineSpeak(_sp.th);
+    _khaNudge();
     _sayDirectedReact(key, id, name);
     _thaiPraise(key);
     return;
@@ -4340,6 +4377,7 @@ function _doSay(arg, targetWord) {
   const _sp = _saidPolite(arg, phrase);
   _say(`You say: “${_sp.th}” (${_sp.rom})`, "thai");
   _engineSpeak(_sp.th);
+  _khaNudge();
   const _here = _npcsHere();
   if (key === "hello") {
     for (const id of _here) _waiEffect(id);

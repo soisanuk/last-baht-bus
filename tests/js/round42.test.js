@@ -493,3 +493,22 @@ test("Tan opens formal and lands familiar — the arc says whose week this is (M
   const sirs = (NPCS.tan.dialogue || []).filter(d => /\bsir\b/.test(d.text || ""));
   assert.deepEqual(sirs, [], "sir belongs to the first ninety minutes only");
 });
+
+test("ค่ะ from a man: corrected twice, then never mentioned again (Mario's canon)", () => {
+  const CORRECTED = /speak LADY|Kha\?|Krap, na|Krap is yours/;
+  G.room = "candy_bar";
+  out = []; run("สวัสดีค่ะ"); assert.match(text(), CORRECTED, "everybody corrects the first one");
+  out = []; run("สวัสดีค่ะ"); assert.match(text(), CORRECTED);
+  for (let i = 0; i < 4; i++) { out = []; run("สวัสดีค่ะ"); assert.doesNotMatch(text(), CORRECTED, "twice is a correction; three times is nagging"); }
+  // …and it is still HIS sentence that gets repeated back, every time
+  assert.match(text(), /สวัสดีค่ะ/);
+  // a man who uses both is a man who learned both — nobody corrects him
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); G.room = "candy_bar"; G.nightTurn = 30;
+  run("สวัสดีครับ"); out = []; run("ขอบคุณค่ะ");
+  assert.doesNotMatch(text(), CORRECTED);
+  // the teacher has her own version of it, and hers leaves the door open
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); G.room = "cloze"; G.nightTurn = 30; out = []; run("สวัสดีค่ะ");
+  assert.match(text(), /unless you would rather not/);
+});
