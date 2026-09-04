@@ -9,79 +9,79 @@ var NEWS_FEED = [
   },
   {
     "t": "Drunken brawl in Thailand sends two USS Abraham Lincoln service members back to ship",
-    "s": "MS NOW",
-    "d": "03 Sep 2026"
+    "s": "ms.now",
+    "d": "02 Sep 2026"
   },
   {
-    "t": "British tourist, 70, attacked on Jomtien Beach, Thai man arrested after chase",
+    "t": "70-year-old Brit assaulted on Jomtien Beach, perp arrested immediately",
     "s": "Pattaya Mail",
     "d": "03 Sep 2026"
   },
   {
-    "t": "Koh Tao ex-tattoo partners cross paths before knife attack leaves one dead",
-    "s": "Pattaya Mail",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "USS Lincoln crew hits the streets of Thai beach city after lengthy Middle East deployment",
-    "s": "AP News",
+    "t": "USS Lincoln crew hits the streets of Thailand's Pattaya after nine-month deployment",
+    "s": "France 24",
     "d": "04 Sep 2026"
   },
   {
-    "t": "After 286 Days at Sea, Exhausted US Sailors Show the Strain of War",
-    "s": "bloomberg.com",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "US sailors roll into Thailand’s Pattaya resort after nine months at sea",
-    "s": "Financial Times",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "Thai resort city cracks down on prostitution ahead of USS Abraham Lincoln arrival",
-    "s": "Fox News",
+    "t": "USS Abraham Lincoln Pattaya: Why US troops have a history in this raucous Thai city",
+    "s": "BBC",
     "d": "02 Sep 2026"
+  },
+  {
+    "t": "Thai activist demands Israel Embassy action over alleged harassment",
+    "s": "Pattaya Mail",
+    "d": "02 Sep 2026"
+  },
+  {
+    "t": "Chonburi Governor leads first Thai group aboard USS Abraham Lincoln",
+    "s": "Pattaya Mail",
+    "d": "03 Sep 2026"
+  },
+  {
+    "t": "Pedicures and a pair of socks: sailors from USS Abraham Lincoln go wild in party resort of Pattaya",
+    "s": "The Guardian",
+    "d": "04 Sep 2026"
   },
   {
     "t": "U.S.S. Abraham Lincoln Docks in Thailand, Giving Weary Crew a Break",
-    "s": "The New York Times",
+    "s": "nytimes.com",
     "d": "02 Sep 2026"
   },
   {
-    "t": "Thailand's neutrality is an advantage in the chip race: Miller",
-    "s": "CNBC",
+    "t": "Rusty USS Lincoln docks in Thailand",
+    "s": "CNN",
+    "d": "03 Sep 2026"
+  },
+  {
+    "t": "Building Thailand’s Future Today",
+    "s": "World Bank Group",
+    "d": "02 Sep 2026"
+  },
+  {
+    "t": "Mother of USS Abraham Lincoln sailor \"so relieved\" son has arrived in Thailand after record deployment",
+    "s": "CBS News",
+    "d": "03 Sep 2026"
+  },
+  {
+    "t": "Scientists discover a bizarre “devil flower” hidden in Thailand",
+    "s": "Science Daily",
     "d": "04 Sep 2026"
   },
   {
-    "t": "Thailand bets on rooftop solar to guard against LNG price shocks",
-    "s": "Reuters",
-    "d": "02 Sep 2026"
-  },
-  {
-    "t": "Thailand cuts visa-free entry for Israelis from 60 days to 30",
-    "s": "The Jerusalem Post",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "Filipinos’ visa-free stay in Thailand back to 30 days",
-    "s": "Inquirer.net",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "Thailand confirms it will cut visa-free stays for EU travellers",
-    "s": "Euronews",
-    "d": "01 Sep 2026"
+    "t": "Thailand Puts 49 Data Centers on Hold Over Resource Strain",
+    "s": "Bloomberg.com",
+    "d": "04 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-03","USD":32.98,"AUD":23.72,"GBP":44.52,"EUR":38.31};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-04","temp":31,"humid":67,"code":3,"hi":32,"rain":37};
+var WX_NOW = {"date":"2026-09-04","temp":30,"humid":75,"code":3,"hi":31,"rain":45};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-04","done":false,"h":"Ipswich","hs":0,"a":"Liverpool","as":0},{"d":"2026-09-05","done":false,"h":"Newcastle","hs":0,"a":"Bournemouth","as":0},{"d":"2026-09-05","done":false,"h":"Brentford","hs":0,"a":"Sunderland","as":0},{"d":"2026-09-05","done":false,"h":"Brighton","hs":0,"a":"Leeds","as":0},{"d":"2026-09-05","done":false,"h":"Fulham","hs":0,"a":"C Palace","as":0},{"d":"2026-09-05","done":false,"h":"Man City","hs":0,"a":"Coventry","as":0},{"d":"2026-09-05","done":false,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":false,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":false,"h":"Everton","hs":0,"a":"Man United","as":0},{"d":"2026-09-06","done":false,"h":"Arsenal","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4474,"date":"2026-09-04","baht":69800};
+var GOLD = {"usd":4471,"date":"2026-09-04","baht":69750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81248,"thb":2678088};
+var BTC = {"usd":81196,"thb":2672636};
