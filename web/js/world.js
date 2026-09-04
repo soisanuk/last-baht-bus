@@ -247,6 +247,57 @@ const SEAWALL_ONE = 1000, SEAWALL_TWO = 1800;
 // finds you, and BOX_COUNT boxes before Rabbit is out of them. Reuses the
 // go-go flashlight's suspicion-ratchet shape, reskinned.
 const BOX_TURNS = 8, BOX_FOOTSTEP = 0.25, BOX_HEAT_MAX = 3, BOX_COUNT = 2;
+
+// ── The operator path's machine (docs/rabbit-arc.md; cli-sim.js is the engine) ─
+// DATA, not code: cli-sim.js knows nothing about WDG, baht or Rabbit; all of
+// that lives here. Keep it visibly fictional — no real tool names, nothing that
+// maps onto real exploitation. The realism is an unlocked machine and a file.
+const BOOK_TAKINGS = 1.06;   // Eddy's old regulars, run at YOUR bar — the European trade he survives on
+const CLI_SCENARIOS = {
+  wdg_office: {
+    prompt: "office-pc:~$",
+    home: "/home/office",
+    stick: "Rabbit's stick",
+    budget: 40,
+    goal: "wallet.dat",
+    bonus: ["regulars_2019.xls"],
+    lockLine: "The screen dims, then locks itself with a small polite chime. Somewhere a timer " +
+      "you never saw ran out. The login box wants a password you were never going to have.",
+    fs: {
+      "/home/office": {
+        dirs: ["vault", "archive", "photos"],
+        files: {
+          "notes.txt": "wifi = dish2019\nvault = same as the wifi (change this - K)\nice man tues/fri\nR.P. wants the photos folder cleared before the audit",
+          "recent.log": "09:12 opened vault/wallet.dat\n09:14 opened vault/payouts.csv\n09:31 archive/white_rabbit_2019/regulars_2019.xls (read-only)\n23:50 photos/golf.jpg",
+          "todo.txt": "- new till roll\n- Baimon's visa run (Thurs)\n- tell Kesinee about the cameras (again)",
+        },
+      },
+      "/home/office/vault": {
+        locked: "dish2019",
+        files: {
+          "wallet.dat": "-----BEGIN COLD STORE-----\n7f3a 91c0 22de b8e4 0a17 ... (four hundred more lines of this)\n-----END COLD STORE-----\n\n# do not copy. do not email. do not put on a stick. - K",
+          "payouts.csv": "month,envelope,dinner,who\n01,90000,12000,brown\n02,90000,0,brown\n03,95000,14500,brown+imm\n04,90000,0,brown",
+        },
+      },
+      "/home/office/archive": {
+        dirs: ["white_rabbit_2019"],
+        files: { "readme.txt": "old paper from bars the group took over. keep 7 years then shred. - K" },
+      },
+      "/home/office/archive/white_rabbit_2019": {
+        files: {
+          "regulars_2019.xls": "name,from,drink,birthday,girl,notes\nDirk,NL,Heineken,14-Mar,Nuan,tips well when losing at pool\nSven,SE,Chang,02-Aug,-,quiet, twice a year, always Feb+Aug\nKlaus,DE,Singha,30-Nov,Pooky,sends money in the wet season\n(… two hundred and eleven more rows. Somebody kept this for years.)",
+          "lease.pdf": "SHOPHOUSE LEASE — SOI 6 — 36 MONTHS — (scanned, the signature page missing)",
+        },
+      },
+      "/home/office/photos": {
+        files: {
+          "golf.jpg": "a man in a white polo on a green, squinting. The same man as the lock screen.",
+          "staff_party.jpg": "twelve girls and a cake, one of them looking straight down the lens like she knows exactly who'll be looking back.",
+        },
+      },
+    },
+  },
+};
 // Nont, the second fixer — the priced one. Tan is the favour with no figure on
 // it; Nont is the figure with no favour in it (Mario, 2026-09-04). Thais deal in
 // favours, foreigners pay cash: to a farang he sells, to Tan he owes.
@@ -4719,6 +4770,16 @@ const ITEMS = {
     desc: "A glossy flyer for the Peacock Cabaret's revue: Petch mid-lip-sync in a gown " +
       "made of light, Miss Mala's headdress filling the top corner like weather. On the " +
       "back, in careful biro: 'for the Alcazar man — M.'",
+  },
+  trade_book: {
+    name: "Rabbit's old regulars", aliases: ["book", "regulars", "spreadsheet", "the book", "customer book", "list"],
+    portable: true, location: null, // copied off the WDG office machine — the operator path's bonus
+    keepsafe: true,
+    desc: "Two hundred-odd rows on Rabbit's stick: name, country, drink, birthday, which girl, and " +
+      "a notes column that reads like a man who loved his customers. Dirk from Rotterdam tips " +
+      "well when he's losing. Sven comes in February and August. Klaus sends money in the wet " +
+      "season. White Dish took the bar and kept the book, and never used it, and never gave it " +
+      "back. (GIVE it to Eddy — or, at your own bar, READ it into your own phone.)",
   },
   black_box: {
     name: "black box", aliases: ["box", "rabbit's box", "the box", "device", "eddy's box"],
@@ -10411,6 +10472,34 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "He lifts the soda an inch. “Go home. Sleep. If anybody ever asks, you drink here " +
           "because the beer's cold.”",
         short: "“Done. You were never there. The beer's cold, that's all.”" },
+      // the operator's recap — the same job, the other way in
+      { topic: "job|heist|work|the job|rabbit job|your job|box job",
+        when: (st, G) => _flag("rabbitPath") && !_flag("rabbitData") && G.rabbitWay === "operator",
+        text: "“You know the plan.” He turns the glass. “Kitten Corner. Corridor behind the till, " +
+          "office at the end. Buy the girl on the till a drink so she's looking at that instead of " +
+          "you. There's a laptop in there somebody never locks — sit at it, find the file, put it on " +
+          "my stick, and leave the machine how you found it.” A beat. “And boss: it's a filing " +
+          "cabinet, not a bomb. HELP tells you what it does. Read what's lying about. People write " +
+          "their passwords down; that's not hacking, that's housekeeping.”",
+        short: "“Kitten Corner, the office laptop. Sit at it, find the file, stick, leave it as you found it. HELP is your friend.”" },
+      // THE BOOK — the operator's bonus, and what you did with it
+      { topic: "book|regulars|spreadsheet|customer book|list",
+        req: ["bookGiven"],
+        text: "“You didn't have to.” He says it to the soda. “Two hundred names. Dirk still comes — " +
+          "he found me on his own, the stubborn Dutch bastard — but Sven, Klaus… I thought they'd " +
+          "gone home, or died.” He looks up. “They didn't. They got moved. Now I've got the list " +
+          "and they've got a bar with the beer they like in it.” The nearest thing to a smile he " +
+          "has. “That's the first thing anybody's given me back in five years.”",
+        short: "“The book. First thing anybody's given me back in five years.”" },
+      { topic: "book|regulars|spreadsheet|customer book|list",
+        when: (st, G) => _flag("barBook") && !_flag("bookGiven"),
+        text: "“Funny thing.” He doesn't look up from the soda. “Three of my old Dutchmen turned " +
+          "up at YOUR bar last week. Knew the drink, knew the birthday, the girl had a card " +
+          "ready.” He turns the glass a quarter. “Good for you. That's how it's done here — I " +
+          "should know, I taught them.” Nothing else. He doesn't ask. He doesn't have to.",
+        short: "“My old Dutchmen at your bar. Good for you.”" },
+      { topic: "book|regulars|spreadsheet|customer book|list", deflect: true,
+        text: "“Book?” A flat look. “I don't keep a book. Not any more. Somebody kept it for me.”" },
       { topic: "job|heist|work|the job|rabbit job|your job|box job",
         req: ["rabbitPath"], notFlags: ["rabbitData"],
         text: "“You know the plan.” He counts it on the bar with a finger. “Kitten Corner. Behind " +

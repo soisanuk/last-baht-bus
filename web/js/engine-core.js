@@ -248,6 +248,7 @@ function newGame() {
     darkDoorDay: -1,     // the once-a-night "there's no lights out there" nudge at your own door
     convoPage: 0,        // which window of their open topics the chip bar is showing (see TOPICS)
     boxJob: null,        // Rabbit's mule job while it's live: {turns,heat,done} (see _boxTick)
+    rabbitWay: null,     // which way into the WDG office you took: "mule" | "operator" (see _rabbitJobYes/_rabbitJobKeyboard)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining

@@ -81,6 +81,8 @@ function _jpChoices() {
 function _gameVerbs() {
   if (!G || !G.game) return [];
   switch (G.game.type) {
+    case "cli": return typeof cliOptions === "function" && typeof CLI_SCENARIOS !== "undefined"
+      ? cliOptions(CLI_SCENARIOS[G.game.scenario], G.game.cli) : ["exit"];
     case "c4": return ["drop", "1", "2", "3", "4", "5", "6", "7", "q", "quit"];
     case "jp": return ["flip", ..._jpChoices(), "quit"];
     case "pool": case "killer": return ["shot", "power", "safety", "quit"];
@@ -1773,6 +1775,7 @@ const _C4_LOSS = [
 function _gameQuit() {
   if (G.game) G.lastGame = { type: G.game.type, stake: G.game.stake || 0, room: G.room }; // REMATCH / DOUBLE after a concede too
   const g = G.game;
+  if (g.type === "cli") { _cliInput("exit"); return; }   // the terminal: walk away, keep what you copied
   G.game = null;
   if (g.type === "quiz") {
     _say("You mumble something about the toilet and keep walking, past the toilet, " +
@@ -1788,6 +1791,7 @@ function _gameQuit() {
 
 function _gameInput(input) {
   switch (G.game.type) {
+    case "cli": return _cliInput(input);
     case "c4": return _c4Input(input);
     case "jp": return _jpInput(input);
     case "pool": return _poolInput(input);
@@ -1804,6 +1808,7 @@ function _gameBoard() {
   const g = G.game;
   if (!g) return;
   switch (g.type) {
+    case "cli":  _cliBoard(); break;
     case "c4":   _say(c4Render(g.board)); break;
     case "jp":   _say(`[ ${jpRender(g.tiles)} ]`); break;
     case "kp":   _say(kpRender(g.kp), "dim"); break;
@@ -1835,6 +1840,7 @@ function _renderGame() {
     _say("(Nothing is riding on this one — you're playing for สนุก.)", "dim");
   }
   switch (g.type) {
+    case "cli":  _say("(HELP lists what the machine does. Every command is a tap. EXIT leaves it as you found it.)", "dim"); break;
     case "c4":   _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim"); break;
     case "jp":
       if (g.pending) _say(_jpHint(g.pending), "dim");
@@ -4892,4 +4898,59 @@ function _goExpat() {
 // second surface cannot drift out of agreement with the first (round 22).
 function _mgrIced(id) {
   return id === "bert" && _faction("wdg") > 0 && !_flag("wdgResolved");
+}
+
+// ─ The operator's terminal (cli-sim.js) ─
+// The simulator is a portable pure module; THIS is the LBB host wiring. G.game
+// carries { type: "cli", scenario, cli: <plain state> } so a save resumes the
+// puzzle; every command routes through _cliInput while it's live; won pays the
+// quest by flag; the bonus file becomes an item. No stake — nothing is escrowed.
+function _startCli(scenarioId) {
+  if (typeof cliNew !== "function" || typeof CLI_SCENARIOS === "undefined") { _say("The screen stays dark."); return; }
+  const sc = CLI_SCENARIOS[scenarioId];
+  if (!sc) { _say("The screen stays dark."); return; }
+  G.game = { type: "cli", scenario: scenarioId, cli: cliNew(sc, _rand), stake: 0 };
+  _say("You sit. The chair is still warm. The lock screen is a golf course and it is not locked " +
+    "— somebody went for a cigarette in the middle of something and the machine is still in the " +
+    "middle of it. A cursor blinks in a black window over the golf course, waiting for a person " +
+    "who isn't you.", "alert");
+  _say("(It's a filing cabinet, not a bomb: HELP lists what it does. LS looks around, READ opens a " +
+    "file, CD goes into a folder. Find the file, COPY it to Rabbit's stick, EXIT when you're done. " +
+    "Every command is a tap; nothing here needs typing.)", "dim");
+  _cliBoard();
+}
+function _cliBoard() {
+  const g = G.game; if (!g || g.type !== "cli") return;
+  const sc = CLI_SCENARIOS[g.scenario];
+  _say(cliPrompt(sc, g.cli), "dim");
+}
+function _cliInput(input) {
+  const g = G.game;
+  const sc = CLI_SCENARIOS[g.scenario];
+  const r = cliInput(sc, g.cli, input, _rand);
+  for (const l of r.output) _say(l, "room");
+  // the bonus: Rabbit's old regulars, copied on the way past
+  if (r.took.includes("regulars_2019.xls") && G.itemLoc.trade_book !== "inventory") {
+    G.itemLoc.trade_book = "inventory";
+    _say("(Two hundred-odd rows of somebody's regulars go onto the stick alongside whatever " +
+      "else is on it. Not what you came for. Worth having.)", "dim");
+  }
+  if (!r.done) { _cliBoard(); return true; }
+  G.game = null;
+  if (r.won) {
+    _say("The file is on the stick. You back out the way you came in — folders closed, window " +
+      "the size it was, the golf course back over everything — and the machine goes on waiting " +
+      "for its owner exactly as it was. Nothing happened here. That is the entire skill.", "win");
+    _setFlag("rabbitData");   // completes rabbit_heist at the next _questTick
+    return true;
+  }
+  if (r.lost) {
+    _say("You get up. The chair is warm and the screen is locked and there is nothing on the stick " +
+      "worth the name. Nobody saw. Nobody knows. It can be tried again — the machine will be " +
+      "left unlocked again, because it always is — but not tonight.", "alert");
+    return true;
+  }
+  // walked away (EXIT): keep what you copied, no flag either way
+  _say("(You leave it as you found it. Whatever's on the stick is on the stick.)", "dim");
+  return true;
 }

@@ -131,6 +131,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "owlBox15",  // the Nite Owl's personals cipher was solved (_owlBox15Answer) — docs/ctf.md
     "owlAmulet",      // the column printed its one-shot letter (_doColumn)
     "rabbitPath", "rabbitData", "rabbitBlown", // the Rabbit arc: interview + mule path (engine-set)
+    "bookGiven", "barBook",                     // …and the operator path's bonus, given back or run at your own bar
   ]); // set by engine actions (read/wai/give/enter), not NPC dialogue
   for (const npc of Object.values(NPCS)) {
     for (const d of npc.dialogue) {

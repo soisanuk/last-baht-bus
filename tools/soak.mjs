@@ -52,7 +52,7 @@ import { fileURLToPath } from "node:url";
 // ── engine load (probe.mjs pattern: import.meta-relative, cwd-proof) ─────────
 if (typeof globalThis.newGame === "undefined") {
   const JS = new URL("../web/js/", import.meta.url);
-  for (const f of ["thai", "world", "games", "lang", "engine-core", "engine-encounters",
+  for (const f of ["thai", "world", "games", "cli-sim", "lang", "engine-core", "engine-encounters",
     "engine-play", "engine-systems", "engine-parser"])
     vm.runInThisContext(fs.readFileSync(new URL(f + ".js", JS), "utf8"), { filename: f });
 }

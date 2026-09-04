@@ -11,7 +11,7 @@ import { dirname, join } from "node:path";
 import vm from "node:vm";
 
 const here = dirname(fileURLToPath(import.meta.url));
-for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js",
+for (const f of ["thai.js", "world.js", "games.js", "cli-sim.js", "engine-core.js", "engine-encounters.js",
   "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
   vm.runInThisContext(readFileSync(join(here, "../../web/js", f), "utf8"), { filename: f });
 }
@@ -187,4 +187,110 @@ test("PLACE only works with the box, in the office", () => {
   out = []; run("place box");
   assert.match(text(), /their room|behind Kitten Corner/i);
   assert.equal(G.itemLoc.black_box, "inventory", "still in your bag");
+});
+
+// ── The operator path (cli-sim.js, the portable terminal) ──────────────────
+
+function recruitOperator() {
+  G.room = "white_rabbit";
+  run("talk to eddy", "ask eddy about job", "accept rabbit_job");
+  run("ask eddy about job", "keyboard");
+}
+function toLaptop() {
+  G.room = "kitten_corner";
+  const till = _tillKeeper("kitten_corner");
+  run("buy drink for " + NPCS[till].name.toLowerCase(), "back", "use laptop");
+}
+
+test("KEYBOARD is the other way in: same corridor, same gate, a stick instead of a box", () => {
+  recruitOperator();
+  assert.ok(_flag("rabbitPath"));
+  assert.equal(G.rabbitWay, "operator");
+  assert.equal(G.itemLoc.black_box, null, "no box on the operator path");
+  assert.equal(G.quests.rabbit_heist, "active");
+  // the corridor gate is the same
+  G.room = "kitten_corner"; out = []; run("back");
+  assert.equal(G.room, "kitten_corner", "the till girl still watches the corridor");
+});
+
+test("the terminal is solvable by TAPS ALONE, through the real game router", () => {
+  // never type a command the chip bar doesn't offer: pick from _gameVerbs()
+  recruitOperator(); toLaptop();
+  assert.equal(G.game && G.game.type, "cli", "sat at the machine");
+  const pick = (re) => { const o = _gameVerbs().find(v => re.test(v)); assert.ok(o, `an option matching ${re} is on offer: ${_gameVerbs()}`); run(o); };
+  assert.ok(!_gameVerbs().some(v => /^unlock/.test(v)), "the vault password is not a chip until you've read it");
+  pick(/^read notes/);
+  assert.ok(_gameVerbs().some(v => /^unlock vault/.test(v)), "read the note, and the unlock is one tap");
+  pick(/^unlock vault/);
+  pick(/^cd vault/);
+  pick(/^copy wallet/);
+  assert.equal(G.game, null, "the machine is left as you found it");
+  assert.ok(_flag("rabbitData"), "the data is on the stick");
+  run("wait");
+  assert.equal(G.quests.rabbit_heist, "done");
+  // and Eddy's done node fires for this path too
+  G.room = "white_rabbit"; out = []; run("ask eddy about job");
+  assert.match(text(), /Done|never in that office/);
+});
+
+test("the bonus: Rabbit's old regulars — give them back, or run them at your own bar", () => {
+  recruitOperator(); toLaptop();
+  run("cd archive", "cd white_rabbit_2019", "copy regulars_2019.xls");
+  assert.equal(G.itemLoc.trade_book, "inventory", "the book is on the stick");
+  run("exit");
+  assert.equal(G.game, null);
+  assert.ok(!_flag("rabbitData"), "EXIT walks away — the goal wasn't copied");
+  // reading it anywhere but your own bar just reads it
+  G.room = "beach_rd_c"; out = []; run("read book");
+  assert.ok(!_flag("barBook"));
+  assert.match(text(), /Dirk/);
+  // at your own bar it becomes yours — and the till feels it
+  _setFlag("barPaid"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  out = []; run("read book");
+  assert.ok(_flag("barBook"), "run at your own rail");
+  assert.ok(BOOK_TAKINGS > 1, "and it is worth money");
+  // Eddy hears
+  G.room = "white_rabbit"; G.talked = {}; out = []; run("ask eddy about book");
+  assert.match(text(), /Dutchmen|your bar/i, "the soi talks");
+  // or: give it back
+  out = []; newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 9000;
+  _setFlag("white_dish"); G.quests.white_dish = "done";
+  for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+  _npcState("fast_eddy").trust = 3;
+  G.itemLoc.trade_book = "inventory"; G.room = "white_rabbit";
+  const t0 = _npcState("fast_eddy").trust;
+  out = []; run("give book to eddy");
+  assert.ok(_flag("bookGiven"));
+  assert.equal(G.itemLoc.trade_book, null, "it's his again");
+  assert.ok(_npcState("fast_eddy").trust > t0, "and he knows what it cost you to hand it over");
+  assert.match(text(), /Klaus|Dirk/);
+});
+
+test("USE LAPTOP is refused everywhere it shouldn't work, with a voice", () => {
+  // no job at all
+  G.room = "kitten_office"; out = []; run("use laptop");
+  assert.equal(G.game, null);
+  assert.match(text(), /somebody else's office|no reason/i);
+  // the mule path: you were given a box, not a stick
+  recruit(); G.room = "kitten_office"; out = []; run("use laptop");
+  assert.equal(G.game, null);
+  assert.match(text(), /box, not a stick|PLACE/i);
+  // wrong room
+  G.room = "beach_rd_c"; out = []; run("use laptop");
+  assert.equal(G.game, null);
+  assert.doesNotMatch(text(), /didn't understand/);
+});
+
+test("running out the machine's clock locks it — not a loss of the arc, just not tonight", () => {
+  recruitOperator(); toLaptop();
+  const budget = CLI_SCENARIOS.wdg_office.budget;
+  for (let i = 0; i < budget + 1 && G.game; i++) run("ls");
+  assert.equal(G.game, null, "locked out");
+  assert.ok(!_flag("rabbitData") && !_flag("rabbitBlown"), "neither done nor blown");
+  assert.equal(G.quests.rabbit_heist, "active", "the job is still open to try again");
+  // and it can be tried again
+  out = []; run("use laptop");
+  assert.equal(G.game && G.game.type, "cli", "sat down again");
 });

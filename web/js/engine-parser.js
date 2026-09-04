@@ -1369,6 +1369,8 @@ function _doInventory() {
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
   menu: ["card", "menus", "price list", "prices", "price board"],
+  laptop: ["computer", "machine", "pc", "screen", "lock screen", "post-it", "postit"],
+  monitor: ["cameras", "camera", "cctv", "feeds", "feed"],
   alley: ["lane", "side alley", "the alley"],
   beach: ["sea", "bay", "water", "gulf", "the beach", "the sea"],
   // the one `reads.board` in the game is Myth Night's DJ request sheet — the
@@ -3132,6 +3134,26 @@ function _doResume() {
 // the sand on a snapped cord, so putting it on costs a trip to a 7-Eleven and
 // twenty baht. That is the whole design of the step — wearing it has to be a
 // DECISION ("this is mine now"), not a state that arrives with the pickup.
+// The operator's way in: sit at the WDG office laptop. Only on Rabbit's job, only
+// the keyboard way, only in the office — everywhere else it's a voiced no.
+function _doUseLaptop() {
+  if (G.game) { _say("You're already at it."); return; }
+  if (G.room !== "kitten_office") {
+    _say(_room().region === "Soi 6" || _inBar()
+      ? "No machine here you'd want to touch — bar laptops play the football and nothing else."
+      : "There's no machine here. (The one that matters is in an office behind a till on Soi 6.)");
+    return;
+  }
+  if (!_flag("rabbitPath") || G.rabbitWay !== "operator") {
+    _say("The laptop sits there, unlocked, a golf course on the screen. You could. You have no " +
+      "reason to, and a very good reason not to — this is somebody else's office and you are " +
+      "already somewhere you shouldn't be." + (_flag("rabbitPath") ? " (Rabbit gave you a box, not a stick. PLACE it.)" : ""));
+    return;
+  }
+  if (_flag("rabbitData")) { _say("You've already got what you came for. Leave it exactly as it is."); return; }
+  _startCli("wdg_office");
+}
+
 function _doWear(arg) {
   const a = String(arg || "").trim().toLowerCase();
   if (!a) { _say("Wear what?"); return; }
@@ -3180,6 +3202,7 @@ const _WEAR_NO = [
 ];
 
 function _doRead(arg) {
+  if (/\b(book|regulars|spreadsheet|list)\b/.test(String(arg||"")) && G.itemLoc.trade_book === "inventory") { _readBook(); return; }
   if (/news|paper/.test(arg)) return _doPaper();
   if (/column|owl/.test(arg)) return _doColumn(); // READ (THE) COLUMN / NITE OWL
   // READ MENU and the bare MENU verb are separate paths and both have to reach
@@ -3808,6 +3831,25 @@ const _TOPICS_NONE = [
   "Nothing doing. {n} answers the people who stick around; come back when you're less of a stranger.",
   "{n} has nothing open for you just now. That changes with drinks bought and nights spent.",
 ];
+// Rabbit's regulars, read INTO your own bar: two hundred names, drinks and
+// birthdays, typed into your own phone at your own rail. From then on the
+// European trade Rabbit survives on walks into your bar instead (BOOK_TAKINGS
+// in _barNight). Nobody stops you. Eddy will hear. He always hears.
+function _readBook() {
+  if (_flag("barBook")) { _say("You've already run them. Dirk's birthday is in your phone now."); return; }
+  if (typeof _atOwnBar !== "function" || !_atOwnBar()) {
+    _say(_L(ITEMS.trade_book.desc));
+    return;
+  }
+  _setFlag("barBook");
+  _say("You sit at your own rail with Rabbit's stick and type two hundred names into your " +
+    "own phone. Dirk, Rotterdam, Heineken, March. Sven, February and August. Klaus, sends " +
+    "money in the wet. Your girls get a list: who's due, what he drinks, whose stool it is. " +
+    "By the time you've finished, the European trade that kept the White Rabbit alive has " +
+    "a second home, and it isn't his.", "win");
+  _say("(The book runs at your bar now — BOOKS will show it. Rabbit doesn't know. Yet.)", "dim");
+}
+
 function _doTopics(arg) {
   let id = _convoActive();
   const a = String(arg || "").replace(/^(about|to|with|for)\s+/, "").trim();
@@ -4680,6 +4722,19 @@ function _doGive(itemWord, npcWord) {
     const d = _pickDialogue("pim"); // helmet entry matches on hasHelmet
     _deliver("pim", d);
     _setFlag("helmetDelivered");
+    return;
+  }
+  if (id === "trade_book" && npc === "fast_eddy") {
+    G.itemLoc.trade_book = null;
+    _setFlag("bookGiven");
+    _npcState("fast_eddy").trust = Math.min(5, (_npcState("fast_eddy").trust || 0) + 2);
+    _say("You put the stick on the bar and tell him what's on it. He doesn't touch it for a " +
+      "while. Then he does, and reads the first screen of names with his lips moving very " +
+      "slightly, and you understand that for five years he thought these people had simply " +
+      "stopped existing. \"Dirk,\" he says. \"Dirk still comes. Found me on his own.\" He " +
+      "scrolls. \"Klaus. I thought Klaus died.\" Nothing else for a long moment. The bar goes " +
+      "on around the two of you like weather.", "win");
+    _addHappy(2);
     return;
   }
   if (id === "crane_photo" && npc === "nont") {
@@ -8139,7 +8194,7 @@ function _chipSet() {
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
   }
   if (G.pendingChoice === "rabbitjob") {
-    add("carry it"); add("not me"); add("ask", "ask what's on it"); return chips;
+    add("carry it"); add("keyboard", "the keyboard"); add("not me"); add("ask", "ask what's on it"); return chips;
   }
   if (G.pendingChoice === "tanfavour") {
     add("yes"); add("no"); add("ask", "ask what it's for"); return chips;
@@ -8581,7 +8636,7 @@ function engineComplete(input) {
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
   if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
-  else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "not me", "ask"];
+  else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", "not me", "ask"];
   else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "bkkdinner") pool = ["go", "decline"];
   else if (G.pendingChoice === "bkkbill") pool = ["let", "grab"];
@@ -9088,9 +9143,10 @@ function doCommand(input) {
   // Tan is stood at your rail with a folded slip on the bar
   if (G.pendingChoice === "rabbitjob") {
     if (/^(ask|what|why|explain|tell|on it)/.test(lower)) { _rabbitJobAsk(); return; }
+    if (/^(keyboard|operator|sit|the machine|laptop|computer|i'?m good with)/.test(lower)) { _rabbitJobKeyboard(); return; }
     if (/^(carry|yes|y|ok|okay|sure|deal|fine|do it|take|i'?ll)/.test(lower)) { _rabbitJobYes(); return; }
     if (/^(not me|no|n|nope|never|decline|refuse|pass|sorry)/.test(lower)) { _rabbitJobNo(); return; }
-    _say("Eddy waits, soda in hand. (CARRY IT \u00b7 NOT ME \u00b7 ASK.)", "dim");
+    _say("Eddy waits, soda in hand. (CARRY IT \u00b7 KEYBOARD \u00b7 NOT ME \u00b7 ASK.)", "dim");
     _rabbitJobPrompt();
     return;
   }
@@ -9420,6 +9476,9 @@ function doCommand(input) {
     case "handover": case "baton": _doHandover(); return;
     case "resume": _doResume(); return;
     case "place": case "plant": _doPlaceBox(arg); break;
+    case "sit": if (/laptop|computer|machine|desk|terminal|keyboard/.test(arg || "")) { _doUseLaptop(); break; }
+      _say(_pickVary(["You sit. The world declines to notice.", "You take a seat, which changes nothing and is nice.", "Sat. Now what?"], "sit"), "dim"); break;
+    case "hack": case "login": case "log": _doUseLaptop(); break;
     case "wear": case "put on": _doWear(arg); break;
     // PUT TAG ON HIM. Bare PUT was an unknown verb, so the one act a man with a
     // dog tag reaches for landed on "The soi blinks at you" (Bill, round 44).
@@ -9527,6 +9586,7 @@ function doCommand(input) {
       break;
     case "charge": case "plug": _doCharge(); break;
     case "use":
+      if (/laptop|computer|machine|terminal|\bpc\b|keyboard/.test(arg)) { _doUseLaptop(); break; }
       if (arg.includes("phone") || arg.includes("light")) _doLight(true);
       else if (arg.includes("charger")) _doCharge();
       else _say("Be more specific.");

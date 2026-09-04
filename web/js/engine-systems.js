@@ -6499,6 +6499,8 @@ function _barNight(settleDay) {
   if (worked && (b.stoodTurns || 0) < WORK_MIN_STOOD) { worked = false; declaredOnly = true; b.lapses = (b.lapses || 0) + 1; }
   take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
   if (worked) take += BAR_PRESENT;
+  // Rabbit's old regulars, run at your bar (the operator path's bonus, READ at your own rail)
+  if (_flag("barBook") && typeof BOOK_TAKINGS !== "undefined") take = Math.round(take * BOOK_TAKINGS);
   take = Math.round(take * _seasonTakingsOn(day));   // graded by the month you traded in, peak → trough
   // the affair: the floor knows, and the till says so — worse once the room has
   // turned, and a scar for a while after a break (the chapter, not the girl)
@@ -8941,9 +8943,11 @@ function _rabbitInterview() {
 }
 
 function _rabbitJobPrompt() {
-  _say("\"So. The box does the clever part. Somebody carries it and holds their nerve. " +
-    "That's the whole job — you'd be the nerve.\" (CARRY IT · NOT ME · ASK what's on it.)",
-    "room");
+  _say("\"So. Two ways in. The box does the clever part and somebody carries it and holds " +
+    "their nerve — you'd be the nerve. Or —\" the look sharpens a degree, \"— you any good " +
+    "with a keyboard? There's a machine in that room nobody locks. Sit at it, find the file, " +
+    "put it on my stick. Slower to explain, quicker to do, and nothing to leave behind.\" " +
+    "(CARRY IT · KEYBOARD · NOT ME · ASK what's on it.)", "room");
 }
 
 function _rabbitJobAsk() {
@@ -8955,9 +8959,32 @@ function _rabbitJobAsk() {
   _rabbitJobPrompt();
 }
 
+// THE OPERATOR PATH — the fake-CLI set piece (cli-sim.js, a portable module;
+// CLI_SCENARIOS.wdg_office is the data). Same corridor, same gate, same office;
+// instead of a box on a shelf you sit at the laptop. Fork-not-filter: it is
+// offered to everybody and a determined non-expert can finish it (the puzzle is
+// navigation and noticing; HELP lists the verbs; every move is a tap).
+function _rabbitJobKeyboard() {
+  G.pendingChoice = null;
+  _setFlag("rabbitPath");
+  G.rabbitWay = "operator";
+  if (G.quests.rabbit_heist !== "done") G.quests.rabbit_heist = "active";
+  _say("\"Good.\" He doesn't make a thing of it. A thumb-sized stick comes across the bar under " +
+    "his hand and stays under yours. \"Kitten Corner. Corridor behind the till, office at the " +
+    "end, girl on the till watching the corridor — you know what takes a bar girl's eyes off a " +
+    "corridor. In the office there's a laptop somebody never locks. Sit at it. It's a filing " +
+    "cabinet, not a bomb: HELP tells you what it does, people write their passwords down, and " +
+    "the file you want is called what it is. Copy it to the stick. Leave the machine how you " +
+    "found it.\" He lifts the soda an inch. \"Nothing to carry, nothing to leave behind. Just " +
+    "don't sit there all night.\"", "win");
+  _say("(Buy the girl on Kitten Corner's till a drink, take the corridor BACK, and USE the " +
+    "LAPTOP. QUESTS if you lose the thread.)", "dim");
+}
+
 function _rabbitJobYes() {
   G.pendingChoice = null;
   _setFlag("rabbitPath");
+  G.rabbitWay = "mule";
   G.itemLoc.black_box = "inventory";
   // taking the box IS accepting the box run — the follow-on quest goes active
   // here rather than waiting to be ACCEPTed off a re-talk (you're already
