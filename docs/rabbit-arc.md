@@ -379,6 +379,82 @@ about a number, not a raid). No Bangkok in it. And it is not a new system: the i
 the vendor, the verb and the landing fork all exist; this section only makes the
 existing object mean what it already says.
 
+### The dog — cover, and description (agreed 2026-09-05)
+
+If the player owns the soi dog by the time this arc runs — and a resident who has
+been here long enough to know Rabbit very often does — he is **not** a bonus, a
+gadget or a lockpick. He is **one property, cutting both ways**: the dog makes you
+*legible*. Which is cover in one scene and conviction in the next, and the player
+does not get to have it only one way.
+
+**As cover.** A farang standing on a Naklua soi at three in the morning is a farang
+standing on a soi at three in the morning, and everybody who passes files it. A
+farang *walking his dog* at three in the morning is nobody at all — the most ordinary
+sight in the country, and the only thing that explains a man being anywhere at any
+hour without explaining anything. It is real tradecraft and it is warm: the dog you
+fed once for no reason is the best cover you will ever own, and you acquired it by
+being kind to something.
+
+**As description.** CCIB is competent and unhurried, and competent, unhurried people
+do not need your face. **Nobody remembers a farang. Everybody remembers the farang
+with the dog** — and this one has a clipped ear, which is not a memory, it is a
+*description*. So the same property that made you invisible to the street makes you
+trivial to the officer who is not looking at CCTV so much as asking the noodle
+seller who was about. Where the SIM is the paper trail, the dog is the witness trail:
+both acquired innocently, both the thread.
+
+**This is the fourth verse at the player's own level.** Eddy's whole life is one long
+song titled *clever farang underestimates the real world* — and here the clever thing
+the player did, the thing that genuinely worked, is the thing that identifies him.
+The arc should not editorialise; it should let the player enjoy the cover for a whole
+beat before anybody says the other half out loud.
+
+**And he is in the room for it.** The White Rabbit is a `beer` bar, so `_dogSpot`
+already puts him in under the rail rather than outside the door — no new rule, no
+exception to write. Every scene in this arc that happens at Rabbit's own bar
+happens with the dog under the stool, which is worth knowing before writing any
+of them.
+
+**Rabbit says the other half**, because he is the professional and it is exactly the
+register he has: fond, deadpan, unsparing, and correct.
+
+> *"He's a lovely dog."* A pause that goes on slightly too long. *"He's also a
+> description. You want to be a shape in a doorway, boss, not a bloke with a dog."*
+
+And a beat for the man rather than the operator: a dog gets through Eddy's armour
+where nothing else in the arc does. He has no dependants, has lost two lives, and is
+one year sober; he is precisely the sort of man who talks to a dog properly and to
+people sideways. **Tier 0 can carry this for free** — Rabbit greeting the dog by name
+before he greets you is characterisation that costs one line and needs no heist.
+
+**The lever that already exists, and it is the good one.** The Shamrock dog's whole
+backstory is *a farang who had to go*: Sean caught the one flight home, and the dog
+sat that step for a month before he went walking. So when the arc's climax puts
+**going to ground** on the table — Rabbit's own landing, or the heavy version of
+yours — the game does not have to invent a cost. It has one, four years old and
+engraved in brass. Nothing needs saying; the dog is simply in the room while the
+option is discussed. *(A player who has done the Shamrock pilgrimage is carrying
+the tag itself, which is the loudest version of this and needs even less said. A
+player who hasn't still has the dog, and the dog is enough — do not gate the beat
+on `brass_tag`.)*
+
+**Where he goes if you have to.** If a landing takes you off the map for a while,
+the dog must have somewhere to be, named in the scene: **Nuan** (who runs the
+White Rabbit's floor and would take him without being asked twice), **Daeng** on
+Khao Talo (who knew him as Paddy's dog and crouched to his face), or **Auntie Nok**,
+who has fed two beach cats morning and night for ten years and has room for a third
+mouth. He is never killed, never lost, never hurt, and never taken — violence never
+becomes mechanics, and least of all here.
+
+**Doctrine checks.** No path requires a dog and none is easier for the want of one;
+the cover is *flavour and framing*, never a lockpick, and the description tilts a
+landing's weight rather than deciding it (heat, per the open question below, not a
+different ending). Owning him moves nothing until a deed is done. He costs the
+player nothing he did not already sign up for by feeding a stray. And it is not a
+new system: `G.dog`, `_dogName()`, the brass tag and the Shamrock scene all exist —
+this section only makes the animal already at the player's heel mean what he already
+means.
+
 ### The CLI simulator is a PORTABLE MODULE (architectural rule)
 
 Mario sees a follow-on game taking shape — cyberpunk, Bangkok (concept grounded in
@@ -595,6 +671,7 @@ argument for the firewall this arc already has.
 | 2026-08-13 | The White Rabbit staff are an AUTHORED ensemble, not filler, unified by one keystone: everyone here is a WDG castoff (Rabbit lost his bar to them; Nuan + hostesses are ex-Soi-6). The bar is a refuge and the revenge crew. |
 | 2026-08-13 | Ownership trap: Rabbit doesn't control his own bar — the nominee structure means mamasan Nuan (Lao, 42, ex-Soi-6, first hire he trusted) is one call from removing him, is giving herself pay rises, and he survives only by the European trade he brings. Ampha the "innocent" cashier is the likely Thai nominee name (a threat in cover). Pay-rise drain + leverage = future quest. |
 | 2026-08-13 | Nuan takes a romantic liking to the PLAYER — a novel vector (she's management, not a barfinable hostess, so bond/barfine machinery doesn't apply). Tier 0 = characterisation only; the mechanic needs its own design pass. |
+| 2026-09-05 | **The dog is cover AND description**: if `G.dog` is owned, one property cutting both ways — a man walking a dog at 3am is invisible to the street and trivial to describe to an officer (the SIM is the paper trail, the dog is the witness trail). Rabbit names the second half out loud; a dog gets through his armour, which is free Tier-0 characterisation. The going-to-ground cost needs no invention: the Shamrock dog has already been left behind by a farang who had to go. He is never killed, lost or taken, and is never required by any path. |
 | 2026-09-04 | **The SIM is the wire**: Nont's Buriram SIM is a mule SIM (ซิมม้า); "not your phone" is Rabbit's first rule on every path; the wire you used decides where CCIB's thread leads (you / Rabbit / Buriram → the table → the kid); a farang caught still HOLDING a Thai's registered SIM is the heaviest "you take it" landing, so ditching it is a voiced choice the game makes tempting to skip. Never required; buying it stays innocent; no new system. |
 | open | CCIB heat: scripted landing vs. computed from play. |
 | open | Betrayal fork in v1 (tentative yes). |
