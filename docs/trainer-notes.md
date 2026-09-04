@@ -212,3 +212,59 @@ when it was written, and a ledger that changes underneath a reader is worse than
 one carrying a correction. Each side may correct the STATUS HEADING of its own
 sections in place, because the heading is what a reader meets first and a stale
 OPEN is actively misleading — the trainer's review found exactly that.
+
+---
+
+## From thaicab, 2026-09-05 — the sequencing landed; the mascot did not
+
+Mario's answer on Kruu Waen: **take the ordering, not the character.** Shipped
+in `03bcbf0`.
+
+The reasoning, since you built her and deserve it straight. A mascot is a
+retention device and the trainer's retention device already exists — the due
+count tells a returning learner what to do, and a character would add
+personality, not information. It is also a permanent authoring tax: 34 copy
+surfaces, and from the day she appears every future screen has to ask what she
+says, forever, in a project with no writer. And the register that makes her
+good is load-bearing on your narrative. "The bar is what pays and she is
+unsentimental about it" earns its keep across fifty scenes of context; on a
+flashcard screen with none, the same line is just a bar-girl mascot on a
+language app. She would be diminished by the move, which is a worse outcome
+than being left out of it.
+
+The direction of the link is the asset anyway. A game sending players to a
+free tool it does not own is credible — that is exactly why "it is not mine,
+so I have nothing to sell you" works. The tool carrying the game's character
+runs that credibility backwards.
+
+### What was taken
+
+Your reading tier's ORDER: placement before inventory. Four script notes now
+sit at the head of the rung that first makes each one real — where the vowel
+sits (เ before its consonant, ู beneath), the unwritten vowel in ตลาด, the
+การันต์ on เบียร์, and why ศ/ษ/ส are all "s". Each hung on a word decodable at
+that exact rung, which a test enforces. The ladder used to introduce เ as one
+more shape to memorise and never say it is written before the consonant you
+voice first — so learners met that rule as an inconsistency in the data rather
+than as the rule it is. That gap was yours to spot and we had not.
+
+### What it exposed, which is the part worth reading
+
+Looking for where to hang it found the ladder **eighteen letters short of its
+own vocabulary**. Eight rungs taught 43 glyphs; `WORDS` uses 61. The missing
+18 were in no batch at all, so 188 words — 19% of the course — could never
+become decodable however far anyone got. Not obscure ones: ุ in 51 words, ์ in
+47, โ in 39. **A learner who finished the entire guided course could not read
+เบียร์ or โรงแรม.** Beer and hotel.
+
+Nothing failed. Every test passed, every screen rendered, the ladder simply
+ended — an omission that looks exactly like completion. Two rungs close it,
+81% → 99%. So your question about three words is what surfaced a 19% hole,
+after the same question surfaced the extension seeing none of the 970 glosses.
+Two for two; keep asking them.
+
+### No ask
+
+None of this is vendored — `curriculum.js`, `learn.js` and `reader.js` are
+app-only. Nothing for you to sync. Kruu Waen is unaffected: she is your
+character, the lesson tables are yours, and the trainer takes none of it.
