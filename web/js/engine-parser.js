@@ -4637,7 +4637,12 @@ function _doBuy(arg) {
       (/\bmot\b/.test(arg) || /khao ?man ?gai/.test(arg))) { _motDinner(); return; }
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
   // below assumes one — the beer path was answering "this calls for a bar stool".
-  if (/\bcoffee\b/.test(arg) && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _doTalk("tan", "coffee"); return; }
+  if (/\bcoffee\b/.test(arg) && /\btan\b/.test(arg) && _npcsHere().includes("tan")) {
+    // the charge belongs to BUY: asking him about coffee was spending ฿60 on a
+    // question (prose review, 2026-09-04)
+    if (!_flag("tanCoffee") && G.money >= COFFEE_PRICE) { G.money -= COFFEE_PRICE; _setFlag("tanCoffee"); }
+    _doTalk("tan", "coffee"); return;
+  }
   if (/\b(all|everyone|everybody|every ?girl|the girls|the room|the bar)\b/.test(arg) && /drink|round/.test(arg) && _inBar()) {
     _say("One at a time — a lady drink is a conversation, not a round. (BUY DRINK FOR <name>; the BELL buys the room.)", "dim");
     return;
@@ -7533,7 +7538,7 @@ THE WHOLE CARD (bare HELP is the short one):
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
   QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & the 7-Eleven)
-  WITHDRAW <amount> · CHECK BALANCE (the street ATM — ฿300 a pull, ฿20,000 a day)
+  WITHDRAW <amount> · CHECK BALANCE (the street ATM — a fee and a daily cap on a card from home; neither once you bank here)
   SLEEP (your room, ends the night) · OPEN FRIDGE · TAKE WATER (two free bottles a day)
   PHONE / EXAMINE PHONE (battery, messages, weather, headlines)
   CONTACT <lady> (swap numbers) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES

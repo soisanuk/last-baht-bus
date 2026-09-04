@@ -122,7 +122,8 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "bkkArcDone", // engine-set by the Sao arc's Sathorn dinner resolution (_bkkArc* in engine-systems) — gates Colin's seen-it node
     "hasDog",    // set by the adoption action (FEED DOG), not dialogue
     "expatLife", // set by _goExpat — gates the bar-owning chain to the endless stage
-    "barPaid",   // set by _barDeposit (the money has to actually exist), not dialogue
+    "barPaid",     // set by _barDeposit (the money has to actually exist), not dialogue
+    "tanCoffee",   // set by _doBuy — the coffee is bought, not asked about
     // the beach amulet — all engine-set, none of them dialogue
     "amuletSeen",     // a piwin read it (_amuletNotice)
     "nokSawAmulet",   // Nok clocked it on arrival (_nokAmulet)

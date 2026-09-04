@@ -84,10 +84,13 @@ test("the Bangkok lawyer sends a bill, and Tan's coffee costs sixty baht once (D
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; _setFlag("act1Done");
   G.room = "soi6_street"; G.money = 1000; G.known.tan = true; out = [];
   run("ask tan about buying a bar"); assert.match(text(), /BUY TAN A COFFEE/);
+  // asking about coffee is a question, not a purchase — it was charging ฿60 (prose review)
+  out = []; run("ask tan about coffee"); assert.equal(G.money, 1000); assert.match(text(), /buy me one\?|BUY TAN A COFFEE/);
   out = []; run("buy tan a coffee"); assert.equal(G.money, 1000 - COFFEE_PRICE); assert.match(text(), /Who really owns his own bar/);
   out = []; run("ask tan about coffee"); assert.equal(G.money, 1000 - COFFEE_PRICE, "the repeat is a gist, not a second coffee");
   out = []; run("ask tan about buying a bar"); assert.match(text(), /whose name goes on the fifty-one/);
-  G.money = 10; G.flags.tanCoffee = false; delete G.talked.tan; out = []; run("buy tan a coffee"); assert.match(text(), /Come back with 60 baht/);
+  G.money = 10; G.flags.tanCoffee = false; delete G.talked.tan; out = []; run("buy tan a coffee");
+  assert.equal(G.money, 10, "no coffee on ten baht"); assert.match(text(), /buy me one\?/);
 });
 
 test("PAY NOTE 5000 pays five thousand, not the till (Des)", () => {

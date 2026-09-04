@@ -8117,15 +8117,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "only one question, and it is not the price. It is whose name goes on the fifty-one — " +
           "somebody you would hand your passport to. There are not many of those in any town.\"",
         short: "\"Who owns what, you know. Whose name goes on the fifty-one is the only question.\"" },
-      { topic: "coffee", when: (st, G) => G.money >= COFFEE_PRICE, sets: ["tanCoffee"],
-        fx: (st, G) => { G.money -= COFFEE_PRICE; },
+      { topic: "coffee", req: ["tanCoffee"],
         text: "\"The coffee.\" He takes it, which from Tan is a speech. \"Who really owns his own bar. " +
           "Bert does not — an American in Ohio does, a sick man, and Bert runs it better than an owner " +
           "would. Gavin owns nothing; White Dish owns Gavin. Candy owns hers, both of them, and that is " +
           "rarer than you think.\" He sips. \"The ones who say 'my bar' loudest are the ones whose " +
           "name is furthest from the paper. Remember that when somebody offers you one.\"",
         short: "\"Bert doesn't own the Stinky, Gavin owns nothing, Candy owns hers. The loudest 'my bar' is the furthest from the paper.\"" },
-      { topic: "coffee", text: "\"Coffee here is " + COFFEE_PRICE + " baht, my friend. Come back with " + COFFEE_PRICE + " baht.\" He is not joking, and he is not unkind about it." },
+      { topic: "coffee", text: "\"You want to talk about coffee or you want to buy me one?\" The eyes in the mirror " +
+          "are amused. \"" + COFFEE_PRICE + " baht at the stall behind you, and then I talk. (BUY TAN A COFFEE)\"" },
       { topic: "others", when: (st, G) => ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
           .filter(id => G.known && G.known[id]).length >= 2,
         text: "\"The others?\" A knowing tilt. \"The detective. The Australian with the bar he should not " +
@@ -10628,7 +10628,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "\u201cBud.\u201d He does not make you say anything. \u201cTwenty years I stood that rail and I " +
           "never once had my name on it, so I'll tell you the thing nobody told me: it was never the " +
           "money that got you. It was the month.\u201d He drinks. \u201cThe old man'd have carried you " +
-          "forever. The LANDLORD only wanted the first, every first, and there's no relationship in a " +
+          "forever. The LANDLORD only ever wanted his date, every thirty days, and there's no relationship in a " +
           "date.\u201d A shrug that costs him something. \u201cI'm all right. Somebody'll want a man who " +
           "knows every pour on this soi. Sit down.\u201d",
         short: "\u201cIt was never the money that got you, bud. It was the month. Sit down.\u201d" },
