@@ -4157,6 +4157,34 @@ function _thaiWordTalk(npc, topic) {
   return _THAI_WORD_TALK[key][thai ? "thai" : "farang"](n);
 }
 
+// ── "Poot Thai geng!" ───────────────────────────────────────────────────────
+// The town's standard reaction to a farang producing correct Thai, which in
+// life is said to anybody who manages two words and is therefore no measure of
+// anything (Mario, 2026-09-04). It is the FIRST tier: acknowledgement, once per
+// person, from the Thai-voiced cast. Nont is the deliberate exception — he is
+// luk khrueng, he grew up in both languages, and his register is to clock you as
+// farang and switch to English before you open your mouth.
+const _THAI_PRAISE = [
+  "{n}'s whole face changes. \"Ooooh — poot Thai geng!\" Palms together, delighted, and slightly too loud. Every farang who has ever said two words in this town has been told this, and it is still nice.",
+  "\"Poot Thai dai!\" {n} announces it to the room rather than to you, and the room makes an approving noise. \"Farang poot Thai geng maak.\"",
+  "\"You speak Thai!\" {n} says, in English, delightedly, and then carries straight on in English, which is the joke and neither of you will mention it.",
+  "{n} claps once. \"Geng! Geng maak!\" Then, testing: something quick and colloquial you catch about half of, and she laughs at your face and lets you off.",
+  "\"Oh! Poot Thai.\" {n} shifts a little on the stool — the small physical adjustment of somebody deciding to talk to you rather than serve you.",
+];
+// Called wherever the player produces correct Thai. Once per character, ever.
+function _thaiPraise() {
+  if (!_flag("act1Done") && !G.player) return;
+  G.thaiUsed = (G.thaiUsed || 0) + 1;
+  const here = _npcsHere().filter(id =>
+    id !== "nont" && typeof _thaiVoice === "function" && _thaiVoice(id));
+  if (!here.length) return;
+  G.soc.thaiPraised = G.soc.thaiPraised || {};
+  const id = here.find(x => !G.soc.thaiPraised[x]);
+  if (!id) return;
+  G.soc.thaiPraised[id] = true;
+  _say(_fmt(_pickVary(_THAI_PRAISE, "thaipraise"), { n: NPCS[id].name }), "dim");
+}
+
 function _stripPolite(s) {
   return String(s || "").replace(/\s*(นะคะ|นะครับ|ค่ะ|คะ|ครับ|นะ)\s*$/g, "")
     .replace(/\s+(na )?(kha|ka|khrap|krub|krap|krab|na)\s*$/i, "").trim();
@@ -4194,6 +4222,7 @@ function _doSay(arg, targetWord) {
     _say(`You say to ${name}: “${phrase.th}” (${phrase.rom})`, "thai");
     _engineSpeak(phrase.th);
     _sayDirectedReact(key, id, name);
+    _thaiPraise();
     return;
   }
 
@@ -4225,6 +4254,7 @@ function _doSay(arg, targetWord) {
   } else {
     _say("Laughter and approval. สนุก!");
   }
+  _thaiPraise();   // …and then somebody tells you how good your Thai is
 }
 
 // The phrases a learner actually arrives with, answered in the room's voice
@@ -9630,7 +9660,7 @@ function doCommand(input) {
       // a Thai line the parser can read becomes the English command; other Thai is voiced, not "didn't understand"
       if (/[\u0E00-\u0E7F]/.test(lower)) {
         const en = _thaiToCmd(lower);
-        if (en) { _say(`(เข้าใจ — ${en})`, "dim"); doCommand(en); return; }
+        if (en) { _say(`(เข้าใจ — ${en})`, "dim"); _thaiPraise(); doCommand(en); return; }
         _say("(The soi reads a little Thai — ซื้อ, ไป, ดู, น้ำ, เบียร์, เท่าไหร่, สวัสดี, ขอบคุณ — but not that one yet. " +
           "Try it in English, or tap a Thai word for the card.)", "dim");
         return;

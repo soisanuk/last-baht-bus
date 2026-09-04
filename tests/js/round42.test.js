@@ -174,3 +174,21 @@ test("WATCH SUNRISE is a real thing, and the sun comes up behind the town (Jacko
   G.nightTurn = 20; assert.ok(!engineComplete("watch ").some(c => /sunrise/.test(c)), "…and not at eight in the evening");
   assert.match(_HELP, /WATCH SUNRISE/);
 });
+
+test("the town's standard compliment: once per person, and never from Nont (Mario)", () => {
+  G.room = "candy_bar"; out = []; run("sawatdee khrap");
+  assert.ok(_THAI_PRAISE.some(l => text().includes(l.split("{")[0].slice(0, 15)) || /Poot Thai|poot Thai|speak Thai/.test(text())), "somebody says it");
+  const said = text();
+  out = []; run("khop khun khrap");
+  assert.notEqual(text(), said, "…a different person, or nobody twice");
+  const praised = Object.keys(G.soc.thaiPraised || {});
+  out = []; for (let i = 0; i < 6; i++) run("chok dee");
+  for (const id of Object.keys(G.soc.thaiPraised || {})) assert.ok(_thaiVoice(id), `${id} is a Thai speaker`);
+  assert.ok(Object.keys(G.soc.thaiPraised).length >= praised.length);
+  // Nont is bilingual and unimpressed — his register is switching to English first
+  _setFlag("hasWallet"); G.room = _npcRoom("nont"); G.nightTurn = 30;
+  out = []; run("sawatdee khrap"); run("khop khun khrap"); run("chok dee");
+  assert.ok(!(G.soc.thaiPraised || {}).nont, "not from Nont");
+  // and the counter is there for whatever the second tier turns out to be
+  assert.ok(G.thaiUsed >= 3);
+});
