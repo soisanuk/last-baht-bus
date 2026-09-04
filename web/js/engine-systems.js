@@ -2764,6 +2764,15 @@ function _questTick() {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
     G.quests[qid] = "done";
     if (!q.vignette) _say(`✦ QUEST COMPLETE: ${q.name}`, "win");
+    // A dep chain names its next door when the last one closes — the flagship
+    // 51% decision was offered by nobody a money-driven publican thought to ask,
+    // and he got there by guessing the quest id (Des, round 41).
+    for (const [nid, nq] of Object.entries(QUESTS)) {
+      if (nq.vignette || !(nq.deps || []).includes(qid) || G.quests[nid] || !_questAvailable(nid)) continue;
+      const giver = _qGiver(nq);
+      if (!giver || !NPCS[giver]) continue;
+      _say(`(The next door: “${_L(nq.name)}” — ${NPCS[giver].name} has it${_questWhere(giver) || ""}.)`, "dim");
+    }
     if (q.reward.money) {
       G.money += q.reward.money;
       _say(`(+฿${q.reward.money} — ฿${G.money} in pocket.)`, "dim");
@@ -5354,7 +5363,7 @@ function _workNight() {
     // line prints, so three nights in twelve the books did not add up — the
     // event announces itself in the moment, but the settle line is the only
     // summary a player reads the next afternoon (publican playtest 2026-08-23).
-    G.bar.eventCash = (G.bar.eventCash || 0) + pick.money;
+    _barEvent(pick.money, pick.label || String(pick.id || "").replace(/_/g, " "));
     _say(_fmt(pick.money > 0 ? "(฿{amt} on the night, over the ordinary take.)"
       : "(฿{amt} out of the till.)", { amt: Math.abs(pick.money) }), "dim");
   }
@@ -5708,8 +5717,8 @@ function _shiftAsk() {
 function _partnerPrompt() {
   const who = G.partnerWho;
   _say(_fmt(who === "tan"
-    ? "(Hand Tan 51% of your bar? He asks nothing, takes nothing \u2014 which is its own kind of price. YES \u00b7 NO \u2014 think on it.)"
-    : "(Make Candy your 51%? Slow, lawyered, everything on paper. YES \u00b7 NO \u2014 think on it.)", {}), "dim");
+    ? "(Hand Tan 51% of your bar? He asks nothing, takes nothing \u2014 which is its own kind of price. YES \u00b7 NO \u2014 think on it. NO is free: go and hear Candy first if you like; the offer stands.)"
+    : "(Make Candy your 51%? Slow, lawyered, everything on paper. YES \u00b7 NO \u2014 think on it. NO is free: go and hear Tan first if you like; the offer stands.)", {}), "dim");
 }
 function _partnerYes() {
   const who = G.partnerWho;
@@ -5727,6 +5736,18 @@ function _partnerYes() {
   } else {
     _setFlag("partnerCandy");
     _align("indie", 2); _align("wdg", -2);
+    // "a lawyer, a real one, in Bangkok" — and it cost nothing (Des, round 41).
+    // The account first, the pocket for the rest; what neither covers she pays
+    // and never mentions, which is its own kind of paper.
+    {
+      const bank = G.bank || 0, fromBank = Math.min(bank, LAWYER_FEE), fromPocket = Math.min(G.money, LAWYER_FEE - fromBank);
+      G.bank = bank - fromBank; G.money -= fromPocket;
+      const short = LAWYER_FEE - fromBank - fromPocket;
+      _say(`(The lawyer's bill is ฿${_num(LAWYER_FEE)}` +
+        (fromBank ? `: ฿${_num(fromBank)} from the account` : "") + (fromBank && fromPocket ? ", " : fromPocket ? ": " : "") +
+        (fromPocket ? `฿${_num(fromPocket)} from your pocket` : "") +
+        (short ? `${fromBank || fromPocket ? ", and" : ":"} ฿${_num(short)} Candy pays and never mentions, which is its own kind of paper` : "") + ".)", "dim");
+    }
     _say("\"Then we do it right.\" The Bangkok lawyer takes his time and a stack " +
       "of paper you actually read, and at the end of it Candy's name is on 51% of " +
       "your bar and yours is on the rest, and every way it could go wrong is " +
@@ -5755,10 +5776,20 @@ function _shiftPrompt() {
 }
 
 // takings the shift itself moved, added to the night at settle
-function _shiftTake(n) {
+function _shiftTake(n, why) {
   const b = G.bar;
-  b.eventCash = (b.eventCash || 0) + n;
+  _barEvent(n, why);
   if (n) b.cash += n;
+}
+// The night's own money, kept by SIGN and by NAME: a +฿2,200 football finish
+// and a −฿500 round on the house netted to "฿1,700 of luck" and an unnamed
+// "night's own bill" (Des, round 41). Income and spend are separate lines and
+// each carries what it was.
+function _barEvent(n, why) {
+  const b = G.bar;
+  if (!n) return;
+  if (n > 0) b.eventIn = (b.eventIn || 0) + n; else b.eventOut = (b.eventOut || 0) - n;
+  if (why) (b.eventNotes = b.eventNotes || []).push(`${why} ${n > 0 ? "+" : "−"}฿${_num(Math.abs(n))}`);
 }
 
 function _shiftClear() { G.pendingChoice = null; G.shiftCall = null; G.shiftWho = null; }
@@ -5769,12 +5800,12 @@ function _shiftYes() {
   if (!call) { _shiftClear(); return; }
   _say(_fmt(call.yes, { who: who ? _npcLabel(who) : "" }), "win");
   if (call.id === "tab") {
-    _shiftTake(SHIFT_TAB_TAKE);
+    _shiftTake(SHIFT_TAB_TAKE, "a regular's slate, settled");
     _repGain();
     if (_rand() < SHIFT_TAB_STIFF) {
       // the docket outlives the man. Not malice — he simply stops coming in,
       // which is how bar debts actually end.
-      _shiftTake(-SHIFT_TAB_TAKE);
+      _shiftTake(-SHIFT_TAB_TAKE, "a regular's slate, stiffed");
       G.bar.stiffed = (G.bar.stiffed || 0) + 1;
       _say(_fmt("(The docket is still under the till a week later. He is not " +
         "barred and nobody has said a word about it; he has simply started " +
@@ -5783,7 +5814,7 @@ function _shiftYes() {
       _say("(He settles on Thursday, in full, and stands you one out of it.)", "dim");
     }
   } else if (call.id === "early") {
-    _shiftTake(-SHIFT_EARLY_COST);
+    _shiftTake(-SHIFT_EARLY_COST, "the floor one short");
     if (who) { _addBond(who, 2); (G.soc.leftEarly = G.soc.leftEarly || {})[who] = G.day; }
   } else if (call.id === "round") {
     // IT IS A GAMBLE, AND IT SAYS SO: "a round on the house here might buy the
@@ -5798,11 +5829,11 @@ function _shiftYes() {
     // the floor watched you do it, so the bond and the สนุก land either way —
     // what you are gambling is whether it turns the night.
     if (_rand() < 0.6) {
-      _shiftTake(SHIFT_ROUND_TAKE - SHIFT_ROUND_COST);
+      _shiftTake(SHIFT_ROUND_TAKE - SHIFT_ROUND_COST, "a round on the house that landed");
       _say("It lands. The rail thickens, somebody puts money in the jukebox, and the " +
         "hour that was going to end the night starts it again instead.", "win");
     } else {
-      _shiftTake(-SHIFT_ROUND_COST);
+      _shiftTake(-SHIFT_ROUND_COST, "a round on the house");
       _say("It does not land. They drink it, they thank you, and they go anyway \u2014 " +
         "some nights are just over and no amount of free Chang argues them out of it.", "dim");
     }
@@ -6292,6 +6323,7 @@ function _barDeposit() {
 // every route already exists: the ATM, Nont's CASH, the till. A pendingChoice
 // modal wired the standard five ways; LATER leaves it due at the first rent
 // (full figure, by transfer) unless PAY KEY MONEY settles it in notes first.
+function _cashMan() { return (G.known && G.known.nont) ? "Nont at his Old Market table" : "whoever you know who turns bank into cash"; }
 function _leaseTerms() {
   const tier = _seasonTier();
   const key = _barRent() * LEASE_KEY_MONTHS;
@@ -6309,7 +6341,7 @@ function _leaseAsk() {
     _fmt("\"Now. Key money for the lease — one month, to re-paper it in your name. Full whack on the app, or {pct}% off if it's notes, all of it, in his hand. He's not fussy about where notes come from and he's very fussy about where transfers go.\"", { pct: Math.round(l.off * 100) });
   _say("\"One more, and this one's the landlord's.\" Bert lowers his voice, which he never does. " + terms, "alert");
   _say(_fmt(l.off
-    ? "(Key money ฿{key}, due with the first rent — or ฿{cash} in notes any time before then: PAY KEY MONEY. The app, at the full figure, whenever: TRANSFER KEY MONEY. Getting the notes together is your problem — the machine, the till, or whoever you know who turns bank into cash.)"
+    ? "(Key money ฿{key}, due with the first rent — or ฿{cash} in notes any time before then: PAY KEY MONEY. The app, at the full figure, whenever: TRANSFER KEY MONEY. Getting the notes together is your problem — the machine, the till, or " + _cashMan() + ".)"
     : "(Key money ฿{key}, due with the first rent — PAY KEY MONEY in notes or TRANSFER KEY MONEY from the account, whenever, same figure.)",
     { key: l.key, cash: l.cash }), "dim");
 }
@@ -6317,7 +6349,7 @@ function _leaseCash() {
   const l = G.bar.lease, b = G.bar;
   const pot = Math.max(0, b.cash) + G.money;
   if (pot < l.cash) {
-    _say(_fmt("He wants ฿{cash} in notes, all of it, and between the till and your pocket you have ฿{have}. Get the rest together — the machine, or whoever you know who turns bank into cash — and it stays on the first rent till then.", { cash: l.cash, have: pot }));
+    _say(_fmt("He wants ฿{cash} in notes, all of it, and between the till and your pocket you have ฿{have}. Get the rest together — the machine, or " + _cashMan() + " — and it stays on the first rent till then.", { cash: l.cash, have: pot }));
     return;
   }
   const fromTill = Math.min(Math.max(b.cash, 0), l.cash), fromPocket = l.cash - fromTill;
@@ -6425,12 +6457,13 @@ function _barNight(settleDay) {
   // the "in" line; a staff birthday (−) is a spend and belongs on the "out"
   // line — folding it into the take printed "฿-4 in" on a trough night when the
   // graded take was smaller than the cake (cost-accountant/publican playtests).
-  const evt = b.eventCash || 0;
-  b.eventCash = 0;
-  const evtIn = Math.max(0, evt), evtCost = Math.max(0, -evt);
+  if (b.eventCash) _barEvent(b.eventCash, null);   // a save from before the split, mid-night: fold it in by sign
+  const evtIn = b.eventIn || 0, evtCost = b.eventOut || 0, notes = b.eventNotes || [];
+  b.eventIn = 0; b.eventOut = 0; b.eventNotes = []; b.eventCash = 0;
+  const evt = evtIn - evtCost;
   // the itemised night, for BOOKS — one "in" and one "out" hid a ฿400 gap a
   // twenty-year publican could not name (Keith, round 40)
-  b.lastLines = { day, take: take + evtIn, nut, cogs, wages: BAR_WAGES, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, evtIn, evtCost, worked, declaredOnly };
+  b.lastLines = { day, take: take + evtIn, nut, cogs, wages: BAR_WAGES, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, evtIn, evtCost, worked, declaredOnly, notes };
   return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
     worked, away: b.away, nut, cogs, wages, proc };
 }
@@ -6722,6 +6755,7 @@ function _doBooks() {
         proc: ll.proc ? _fmt(" · the arrangements ฿{p}", { p: ll.proc }) : "",
         cost: ll.evtCost ? _fmt(" · the night's own bill ฿{c}", { c: ll.evtCost }) : "",
         who: ll.declaredOnly ? "declared, not stood" : ll.worked ? "you stood it" : "Bert ran it" }), "dim");
+    if (ll.notes && ll.notes.length) _say(`(The night's own money: ${ll.notes.join(" · ")}.)`, "dim");
   }
   _say(_fmt("Nights stood: {w} of {n}. A stood night takes about a third more over the rail and saves Bert's ฿{m}.", { w: b.worked || 0, n: b.nights || 0, m: BAR_MGR_NIGHT }), "dim");
   if (b.drawn) _say(_fmt("Taken out by you, all told: ฿{d}.", { d: b.drawn }), "dim");
@@ -8414,7 +8448,8 @@ function _payCreditor(arg) {
   }
   const pot = Math.max(0, b.cash) + G.money;
   if (pot <= 0) { _say(`You have nothing to give ${who}, from the till or out of your own pocket.`); return; }
-  const pay = Math.min(target, pot);
+  const want = parseInt(String(arg || "").replace(/[^\d]/g, ""), 10);   // PAY NOTE 5000 — the whole till went unasked (Des, round 41)
+  const pay = Math.min(target, pot, want > 0 ? want : Infinity);
   const fromTill = Math.min(Math.max(b.cash, 0), pay);
   b.cash -= fromTill;
   const fromPocket = pay - fromTill;

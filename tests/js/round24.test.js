@@ -67,7 +67,7 @@ test("declining the 51% does not delete the expat endgame", () => {
 
 test("both partners re-arm, and fxAlways is what makes an offer an offer", () => {
   for (const who of ["candy", "tan"]) {
-    const node = NPCS[who].dialogue.find(d => d.topic === "partnership");
+    const node = NPCS[who].dialogue.find(d => String(d.topic).split("|")[0] === "partnership");
     assert.ok(node && node.fx, `${who} pitches through an fx`);
     assert.ok(node.fxAlways, `${who}'s offer re-arms on the re-ask`);
   }

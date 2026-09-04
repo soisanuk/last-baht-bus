@@ -275,6 +275,14 @@ function _sevenIn() {
   _say(_pickVary(_SEVEN_IN, "sevenin"), "dim");
 }
 
+// The guv'nor drinks his own stock: nothing off the pocket, the wholesale share
+// off the till, and the books see it as stock (Des, round 41: his soda
+// evaporated while his hostess's drink rang into his own till).
+function _ownStock(price, what, line) {
+  const cogs = Math.round(price * BAR_COGS);
+  G.bar.cash -= cogs;
+  _say((line ? line + " " : "") + `(${what[0].toUpperCase() + what.slice(1)} off your own stock — ฿${cogs} of wholesale off the till, nothing off your pocket. The house drinks free; the house pays the wholesaler.)`);
+}
 const _SOFT_LINES = [
   "A Coke, in a glass, with a straw, the same price as the beer beside it. Nobody blinks. Nobody was ever going to.",
   "A soda comes over with ice and a slice and a little paper doily under it, which is the bar's way of saying this drink costs what a drink costs.",
@@ -4716,6 +4724,11 @@ function _doBuy(arg) {
     // you are paying for the SEAT, and the seat is worth more than the bottle
     // (Mario, 2026-09-04). A shop sells the bottle.
     const price = _inBar() ? _beerPrice() : soft ? 20 : 10;
+    if (typeof _atOwnBar === "function" && _atOwnBar()) {   // your own stock: off the take, not your pocket (Des, round 41)
+      G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
+      _ownStock(price, soft ? "a soda" : "a water");
+      return;
+    }
     if (G.money < price) { _say(_fmt("฿{p} for a cold bottle, and you don't have it. Grim.", { p: price })); return; }
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
@@ -4839,7 +4852,8 @@ function _doBuy(arg) {
     const beerName = arg.replace(/\b(buy|order|get|a|an|the|beer|chang|leo|singha|bottle|for|him)\b/g, " ").trim();
     const regId = _regularHere(beerName);
     if (/patron|regular|expat|him|guy|bloke/.test(arg) || regId) { _standRegular(regId); return; }
-    G.money -= _beerPrice();
+    const _ownBeer = typeof _atOwnBar === "function" && _atOwnBar();
+    if (!_ownBeer) G.money -= _beerPrice();
     (G.soc.selfDrinks = G.soc.selfDrinks || {})[G.room] = ((G.soc.selfDrinks[G.room] || 0) + 1); // "sit like a customer" — the midnight gate reads it
     G.soc.drunk++;
     G.thirst = Math.max(0, G.thirst - 20);
@@ -4850,7 +4864,8 @@ function _doBuy(arg) {
     // the price on the line that charges it: no bar quoted a beer before it was
     // in his hand, and a go-go's ฿140 Chang was only detectable by subtraction
     // (Colin, round 37) — and the −1 สนุก past four bottles gets its reason
-    _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_BEER_LINES, "beer")), p: _beerPrice(), m: G.money }) +
+    if (_ownBeer) _ownStock(_beerPrice(), "a beer", _L(_pickVary(_BEER_LINES, "beer")) + (_beerTail ? " " + _L(_beerTail) : ""));
+    else _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_BEER_LINES, "beer")), p: _beerPrice(), m: G.money }) +
       (_beerTail ? " " + _L(_beerTail) : "") + (d > 4 ? " One past the sweet spot." : ""));
     _addHappy(d <= 4 ? 1 : -1);
     _checkDrunk();
@@ -4965,9 +4980,13 @@ function _doBuy(arg) {
     // the mamasan's blessing: her bar warms to you, and the house may pour one back
     if (NPC_ROLES[id] === "mamasan" && _npcRoom(id) === G.room && !G.soc.mamaTreat[G.room]) {
       G.soc.mamaTreat[G.room] = true;
-      _say(`${NPCS[id].name} raises the glass a centimetre in your direction — the ` +
-        "royal assent. The temperature of the whole bar changes; from here on, " +
-        "the girls treat you like a regular.", "dim");
+      _say(typeof _atOwnBar === "function" && _atOwnBar()
+        ? `${NPCS[id].name} raises the glass a centimetre in your direction — the guv'nor ` +
+          "buying his own mama a drink, and the floor notices, and the floor talks. It is " +
+          "the cheapest thing you will do for the room all week."
+        : `${NPCS[id].name} raises the glass a centimetre in your direction — the ` +
+          "royal assent. The temperature of the whole bar changes; from here on, " +
+          "the girls treat you like a regular.", "dim");
       _addHappy(2);
       if (_rand() < 0.5) {
         G.soc.drunk++;

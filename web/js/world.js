@@ -205,7 +205,9 @@ const THAI_ATM_CAP = 50000;  // a RESIDENT's own Thai account (opened with expat
 // Ohio and never negotiates: his terms are the story's favour, not the season's.
 const LEASE_KEY_MONTHS = 1;                                                // key money, in months of rent
 const LEASE_CASH_OFF = { peak: 0, high: 0.10, shoulder: 0.15, low: 0.25, deeplow: 0.35 };   // the cash discount by season
-const LEASE_WET_FREE = 1;                                                  // rent-free months when you sign in the wet
+const LEASE_WET_FREE = 1;
+const LAWYER_FEE = 12000;     // Candy's route: the Bangkok lawyer, "real, and audited, and costs" — it did not (Des, round 41)
+const COFFEE_PRICE = 60;      // Tan's coffee — the airport promise was free (Des, round 41)                                                  // rent-free months when you sign in the wet
 const ATM_DENOMS = [1000, 5000, 10000];
 // The Soi 6 challenge mode confines movement to this pocket of the map.
 const SOI6_ROOMS = new Set([
@@ -4952,8 +4954,18 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "farang fail at it.\"",
         short: "\"Supply is my side. Yours is the stool the farang can see, and the first round on a Tuesday.\"",
       },
+      // the woman with two bars and 51% of yours had nothing to say about the
+      // trade — "You ask the wrong girl" (Des, round 41)
+      { topic: "buying a bar|buying bar|buy a bar|buy bar|bar trade|the trade|business|landlord|rent|money|key money", req: ["expatLife"],
+        text: "\"Buying a bar.\" She does not laugh, which from Candy is the compliment. \"Two things " +
+          "nobody tell farang. One: the building is never yours. The landlord is the man you pay on " +
+          "time; the old man who sell you the business is the man you pay when you can. Two: " +
+          "fifty-one percent is a PERSON, not a paper.\" A shrug. \"Rent, key money, the note — the " +
+          "order you pay them is the whole trade. I have two bars. I did not get them by being nice " +
+          "about the order.\"",
+        short: "\"The building is never yours. Pay the landlord on time, the old man when you can. Fifty-one is a person.\"" },
       {
-        topic: "partnership", chip: false,
+        topic: "partnership|partner|fifty-one|51 percent|fifty one percent|the partner", chip: false,
         // THE OFFER STANDS, and she says so out loud. fx arms the modal, and
         // effects fire on first delivery only — so declining once made the whole
         // expat endgame unreachable (round 24). fxAlways re-arms it on the
@@ -4968,7 +4980,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the voice she uses on the floor.\n\n\"You know what you are asking me.\" " +
           "Not a question. \"Fifty-one is not a favour, tilac. Fifty-one is my name " +
           "on your bar. If you drink it away, is my name. If you hit a girl, is my " +
-          "name. If you go home to England and never come back—\" a small shrug " +
+          "name. If you go home and never come back—\" a small shrug " +
           "\"—then I have a bar, and everybody on this soi know how I got it.\"\n\n" +
           "She lets that sit.\n\n\"So. If we do this: a lawyer, a real one, in " +
           "Bangkok, not the man Gavin use. Everything written. What I take, what " +
@@ -8065,13 +8077,25 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "glance in the mirror. \"The question is never the percent, my friend. It is who the person is.\"",
         short: "\"Fifty-one percent is Thai — the law. Nominee, company, or your name on nothing. The question is who the person is.\"" },
       // the promise in the taxi ("buy me a coffee — I'll tell you which farang really owns his 'own' bar")
-      { topic: "coffee",
+      // — asked about the TRADE before the coffee, he points at the coffee (Des, round 41: "Not my story")
+      { topic: "bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade", notFlags: ["tanCoffee"],
+        text: "\"A bar.\" The glance in the mirror, the small smile. \"I said in the car: before you sign " +
+          "your name to anything, buy me a coffee. I meant the coffee. (BUY TAN A COFFEE)\"",
+        short: "\"Coffee first. I said so in the car. (BUY TAN A COFFEE)\"" },
+      { topic: "bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade", req: ["tanCoffee"],
+        text: "\"You had the coffee, so you know who owns what.\" A shrug at the wheel. \"The rest is " +
+          "only one question, and it is not the price. It is whose name goes on the fifty-one — " +
+          "somebody you would hand your passport to. There are not many of those in any town.\"",
+        short: "\"Who owns what, you know. Whose name goes on the fifty-one is the only question.\"" },
+      { topic: "coffee", when: (st, G) => G.money >= COFFEE_PRICE, sets: ["tanCoffee"],
+        fx: (st, G) => { G.money -= COFFEE_PRICE; },
         text: "\"The coffee.\" He takes it, which from Tan is a speech. \"Who really owns his own bar. " +
           "Bert does not — an American in Ohio does, a sick man, and Bert runs it better than an owner " +
           "would. Gavin owns nothing; White Dish owns Gavin. Candy owns hers, both of them, and that is " +
           "rarer than you think.\" He sips. \"The ones who say 'my bar' loudest are the ones whose " +
           "name is furthest from the paper. Remember that when somebody offers you one.\"",
         short: "\"Bert doesn't own the Stinky, Gavin owns nothing, Candy owns hers. The loudest 'my bar' is the furthest from the paper.\"" },
+      { topic: "coffee", text: "\"Coffee here is " + COFFEE_PRICE + " baht, my friend. Come back with " + COFFEE_PRICE + " baht.\" He is not joking, and he is not unkind about it." },
       { topic: "others", when: (st, G) => ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
           .filter(id => G.known && G.known[id]).length >= 2,
         text: "\"The others?\" A knowing tilt. \"The detective. The Australian with the bar he should not " +
@@ -8139,7 +8163,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // player handing that man 51% of a bar and a debt with no figure on it.
       // Deliberately warm and not sinister: he means every word he says here.
       {
-        topic: "partnership", chip: false,
+        topic: "partnership|partner|fifty-one|51 percent|fifty one percent|the partner", chip: false,
         // THE OFFER STANDS, and she says so out loud. fx arms the modal, and
         // effects fire on first delivery only — so declining once made the whole
         // expat endgame unreachable (round 24). fxAlways re-arms it on the
@@ -10375,6 +10399,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "five percent, no card fee. I charge {{phones}}. Tan does favours. I do prices.” " +
           "(ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)",
         short: "“Alex — Nont, whatever's easier. People, money, {{phones}}. Tan does favours; I do prices.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)" },
+      // a resident has a Thai book — the fee pitch is a tourist's pitch (Des, round 41)
+      { topic: "fixer|price|prices|services|money|cash|charge|transfer|rates|menu", when: (st, G) => !!G.thaiAccount,
+        text: "“The menu, for a man with a Thai bank book?” The tweezers pause. “The card-fee line is " +
+          "for tourists, so I'll not insult you with it. Mine's different for you: money the book " +
+          "never sees. You send to my account, I hand you notes, I keep five percent — and there is no " +
+          "line on any statement that says Nont, or says anything. Some people want that more than " +
+          "they want the fee back.” The grin. “Where anybody is tonight: two hundred. {{Phone}}: fifty " +
+          "off the brick. A SIM that isn't in your name: two hundred.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)",
+        short: "“For a man with a Thai book: money the book never sees, five percent. Two hundred to find anybody. Fifty for the {{phone}}, two hundred for a SIM.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)" },
       { topic: "fixer|price|prices|services|money|cash|charge|transfer|rates|menu",
         text: "“The menu?” He doesn't look up from the tweezers. “Where anybody is tonight: two " +
           "hundred, and I'm right. Cash: you send to my account, I hand you notes, I keep five " +
@@ -10500,6 +10533,39 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      // Bert briefs you on rent, key money, the note and the wet at the deposit,
+      // and then couldn't discuss a word of it — five topics he put in your
+      // mouth, five misses (Des, round 41). And "partner" pointed at nobody.
+      { topic: "partner|partnership|fifty-one|51 percent|the partner", when: (st, G) => _flag("expatLife") && !_flag("barPartner"),
+        text: "\"Fifty-one's not mine to give, bud — it's got to be a Thai name, and it's got to be a " +
+          "PERSON.\" A nod down the soi. \"Candy'll tell you how she'd do it, and she's the one to ask " +
+          "first. Tan'll tell you how he'd do it, and he'll not be asking for money. Hear both. Then " +
+          "pick the one you'd hand your passport to.\" (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP)",
+        short: "\"Candy first, then Tan. Hear both before you pick.\" (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP)" },
+      { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease) && !G.bar.lease.paid,
+        text: "\"The landlord's month. Due with the first rent on the app — or notes in his hand before " +
+          "then and he knocks a bit off. PAY KEY MONEY when you've the notes together, TRANSFER KEY " +
+          "MONEY if you'd rather the paper. He'd rather the notes. He'd rather everything was notes.\"",
+        short: "\"Notes before the first rent, or the app. He'd rather notes.\" (PAY KEY MONEY · TRANSFER KEY MONEY)" },
+      { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease && G.bar.lease.paid),
+        text: "\"Sorted, that. He's not a man who sends receipts, so if you're waiting on one, don't.\"",
+        short: "\"Sorted.\"" },
+      { topic: "note|the note|old man|arrears", when: (st, G) => _flag("barPaid"),
+        text: "\"฿" + BAR_MONTHLY + " a month to Ohio, six years, and he'll not chase you. That's the whole " +
+          "of it, and it's the worst bit — a man who chases, you can argue with.\" He wipes the same " +
+          "patch twice. \"PAY THE NOTE walks it round when you're behind, and you can say how much: " +
+          "PAY NOTE 5000. He'll not thank you. He'll not not thank you either.\"",
+        short: "\"฿" + BAR_MONTHLY + " a month, he'll not chase. PAY THE NOTE, or PAY NOTE <amount>.\"" },
+      { topic: "rent|landlord", when: (st, G) => _flag("barPaid"),
+        text: "\"Every thirty days, to a fella who's never late collecting and never early with anything " +
+          "else. Miss it once, his daughter comes round with a book. Miss it twice, I've told you what " +
+          "happens.\" A beat. \"PAY RENT when it's owing. Before the daughter, ideally.\"",
+        short: "\"Every thirty days. Miss it twice and you know. PAY RENT when it's owing.\"" },
+      { topic: "cash|notes|getting cash|hard cash", when: (st, G) => _flag("barPaid"),
+        text: "\"Notes? The machine — twenty a day on a wallet card, more once you've a Thai book. The " +
+          "till, if it's had a night. Or there's a lad with a table in the Old Market turns bank into " +
+          "notes for a cut — Tan knows him.\" (ASK TAN ABOUT NONT)",
+        short: "\"The machine, the till, or the lad in the Old Market. Tan knows him.\" (ASK TAN ABOUT NONT)" },
       // THE WHOLE WHITE DISH ARC IS MOOT ONCE THE BAR IS GONE. Gating his
       // greeting was only half of it: ASK BERT ABOUT GAVIN still handed the man
       // who had just lost the place the errand to go and gather the picture "so

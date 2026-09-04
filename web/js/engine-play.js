@@ -3479,6 +3479,11 @@ const _REGION_CRASH = {
   "Naklua": "naklua",
   "Darkside": "darkside",
 };
+const _OWN_BAR_RESCUE = [
+  "You go down behind your own rail, and the last thing you hear is Bert saying \"right\" in the voice he uses for a keg. You wake in room 412 with your shoes off and lined up, your wallet on the nightstand with a Stinky Pinky beer mat on top of it, and a note in a hand you don't recognise: EAT SOMETHING. The floor got you home. The floor always gets the guv'nor home.",
+  "The room tilts and the floor comes up, and then it's Lamai's voice, very calm, and a taxi that smells of jasmine, and your own bed. Your pockets are exactly as you left them — you own the people who'd have turned them out. There is a bottle of water on the nightstand that wasn't there.",
+  "You don't remember the taxi. Bert paid it, out of the till, and wrote it on the docket under the date like any other line — which is the only lecture you'll get. Your wallet is where a wallet should be. The girls know before you do that the guv'nor went down last night, and none of them will mention it, which is worse.",
+];
 function _crashSpotFor(roomId) {
   if (G.mode === "soi6") return _CRASH_SPOTS.soi6; // stay in-pocket, never off-map
   const reg = (ROOMS[roomId] && ROOMS[roomId].region) || "Jomtien";
@@ -3887,7 +3892,8 @@ function _morningLedger() {
   const spent = b.money + drawn - G.money - barDraw + fees;
   if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night");
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night");
-  if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + " of it lifted while you were out");
+  // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
+  if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
   const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
   if (dk > 0) bits.push("met " + dk);
   const dn = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length - b.nums;
@@ -4213,7 +4219,7 @@ function _endNight(reason) {
     // skipped — you are not waking up here tomorrow — but the pockets go.
     const _lastRough = (reason === "dawn" || reason === "collapse" || reason === "blackout") &&
       !(_flag("act1Done") && G.room === _hotelRoomId()) && _dogEgg() !== "rescue" && !G.dog &&
-      !(G.party && G.party.ids && G.party.ids.length);
+      !(G.party && G.party.ids && G.party.ids.length) && !(typeof _atOwnBar === "function" && _atOwnBar());
     if (_lastRough && G.money > 0) {
       G.roughLost = Math.min(G.money, ROUGH_WAKE_CAP);
       G.money -= G.roughLost;
@@ -4329,7 +4335,11 @@ function _endNight(reason) {
   // a rescue dog (Lassie) never leaves you in the gutter — he brings you home
   // …and a barfined companion never leaves you in the gutter either: she has
   // poured worse than you into worse taxis (see _partyNightEnd for the scene)
-  const rough = wouldRough && _dogEgg() !== "rescue" && !_hadParty;
+  // …and your own staff never leave you in the gutter either: a man who goes
+  // down behind his own rail is carried home by the floor he pays (Des, round
+  // 41: three collapses on his own shift, three Beach Road benches, pockets out)
+  const _ownBarRescue = (reason === "collapse" || reason === "blackout") && typeof _atOwnBar === "function" && _atOwnBar();
+  const rough = wouldRough && _dogEgg() !== "rescue" && !_hadParty && !_ownBarRescue;
   const crash = rough ? _crashSpotFor(G.room) : null;
   if (crash) {
     G.battery = _CRASH_BATTERY;
@@ -4355,6 +4365,7 @@ function _endNight(reason) {
     G.nontStuck = 0;
   }
   _say("");
+  if (_ownBarRescue) _say(_pickVary(_OWN_BAR_RESCUE, "ownrescue"), "alert");
   if (crash) {
     _say(crash.prose[Math.floor(_rand() * crash.prose.length)], "alert");
     _say(G.dog
