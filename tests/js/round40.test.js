@@ -137,3 +137,29 @@ test("the Candy route says out loud whose side of the paper supply sits on (Keit
   assert.match(text(), /Not your side|my ice man/);
   out = []; run("ask candy about cleaning"); assert.match(text(), /Supply is my side|my ice man|Not your side/);
 });
+
+// ── the seat: soft drinks cost the beer, and the house's patience ────────────
+test("in a bar, water and a soda cost the beer — you are paying for the seat (Mario)", () => {
+  G.room = "candy_bar"; G.money = 5000; const p = _beerPrice();
+  run("buy water"); assert.equal(G.money, 5000 - p);
+  out = []; run("buy coke"); assert.equal(G.money, 5000 - 2 * p); assert.ok(_SOFT_LINES.some(l => text().includes(l.slice(0, 30))));
+  out = []; run("why so expensive"); assert.ok(_SEAT_LINES.some(l => text().includes(l.slice(0, 25))), text());
+  out = []; run("tao rai"); assert.match(text(), new RegExp(`water or soda ฿${p}`));
+  G.room = "beach_rd_c"; G.money = 5000; run("buy water"); assert.equal(G.money, 4990, "the shop sells the bottle");
+});
+
+test("WAIT in a go-go stops at twenty minutes, in a bar at an hour; a bought drink resets it; your own bar and your room never nag (Mario)", () => {
+  const saved = _rand; _rand = () => 0.99;
+  try {
+    G.room = "tequila_queen"; G.money = 5000; G.nightTurn = 30; doCommand("look"); const t0 = G.nightTurn;
+    out = []; run("wait until midnight");
+    assert.ok(G.nightTurn - t0 <= HOUSE_PATIENCE.gogo + 1, `stopped at ${G.nightTurn - t0} turns`);
+    assert.ok(_NURSE_GOGO.some(l => text().includes(l.slice(l.indexOf("}") + 1, l.indexOf("}") + 25))), text());
+    run("buy beer"); out = []; const t1 = G.nightTurn; run("wait 2"); assert.doesNotMatch(text(), /at your elbow|Same again|Lonely\?|drink nothing/);
+    G.room = "candy_bar"; doCommand("look"); const t2 = G.nightTurn; out = []; run("wait until midnight");
+    assert.ok(G.nightTurn - t2 >= HOUSE_PATIENCE.bar - 1 && G.nightTurn - t2 <= HOUSE_PATIENCE.bar + 1, `bar stopped at ${G.nightTurn - t2}`);
+    assert.match(text(), /house wants a drink bought/);
+    G.room = "hotel_room"; const t3 = G.nightTurn; out = []; run("wait 12"); assert.ok(G.nightTurn - t3 >= 12);
+    ownsBar(); doCommand("look"); const t4 = G.nightTurn; out = []; run("wait 12"); assert.ok(G.nightTurn - t4 >= 12, "your own rail is yours to sit at");
+  } finally { _rand = saved; }
+});

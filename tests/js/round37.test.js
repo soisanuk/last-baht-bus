@@ -296,7 +296,7 @@ test("the beer names its price on the line that charges it, and the fifth one sa
 
 test("TAO RAI in a bar is the price list nobody hands you (Colin)", () => {
   G.room = "candy_bar"; run("tao rai");
-  assert.match(text(), new RegExp(`beer ฿${_beerPrice()} · lady drink ฿${_ladyPrice()} · water ฿20 · the bell ฿${_bellPrice("candy_bar")}`));
+  assert.match(text(), new RegExp(`beer ฿${_beerPrice()} · lady drink ฿${_ladyPrice()} · water or soda ฿${_beerPrice()} \\(the seat, not the bottle\\) · the bell ฿${_bellPrice("candy_bar")}`));
 });
 
 test("the ATM says the fee before you commit, the piwin's rumour is a street thing, and a street with a 7-Eleven has no mamasan (Colin)", () => {

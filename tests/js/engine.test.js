@@ -6429,7 +6429,7 @@ test("drink: beer at the bar, water where it's sold, humidity elsewhere", () => 
   assert.equal(state().soc.drunk, 1);
   assert.equal(state().money, 500 - BEER_PRICE);
   run("drink water");
-  assert.equal(state().money, 500 - BEER_PRICE - 20);
+  assert.equal(state().money, 500 - BEER_PRICE - _beerPrice(), "in a bar the water costs the seat (2026-09-04)");
   state().room = "jomtien_beach";
   run("drink");
   assert.match(lastOut(), /humidity/);

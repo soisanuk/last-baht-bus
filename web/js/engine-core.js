@@ -2497,6 +2497,11 @@ function _tick() {
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
   if (_inBar()) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // presence, for the regular's bond (Trevor, round 39)
+  // the house's patience clock (_nursed): money spent in this bar since last tick,
+  // or a fresh arrival, resets it — one hook, every till (Mario, 2026-09-04)
+  if (_inBar() && (G.room !== G.soc.tickRoom || G.money < (G.soc.moneyTick == null ? G.money : G.soc.moneyTick)))
+    (G.soc.spentTurn = G.soc.spentTurn || {})[G.room] = G.turns;
+  G.soc.moneyTick = G.money; G.soc.tickRoom = G.room;
   _railTick();     // the hour turns and somebody drains a glass and moves on
   if (typeof _flowerTick === "function") _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter

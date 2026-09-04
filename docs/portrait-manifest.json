@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-03",
+  "generated": "2026-09-04",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 147,
@@ -313,7 +313,7 @@
       "source": "NPCS",
       "role": "story",
       "sex": "m",
-      "look": "Luk khrueng — half Thai, half American: Eurasian face, skin a shade lighter than the Thai men around him, light brown eyes, boyish and clean-shaven, early twenties, lean, close-cropped black hair, a cheap gold chain, a faded band tee, a phone in hand, quick eyes.",
+      "look": "Luk khrueng — half Thai, half American: Eurasian face, skin a shade lighter than the Thai men around him, light brown eyes, boyish and with a goatee he is plainly proud of, early twenties, lean, close-cropped black hair, a cheap gold chain, a faded band tee, a phone in hand, quick eyes.",
       "venueKind": null,
       "emoji": "📱",
       "th": null,

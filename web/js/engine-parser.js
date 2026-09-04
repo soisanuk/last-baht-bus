@@ -275,6 +275,21 @@ function _sevenIn() {
   _say(_pickVary(_SEVEN_IN, "sevenin"), "dim");
 }
 
+const _SOFT_LINES = [
+  "A Coke, in a glass, with a straw, the same price as the beer beside it. Nobody blinks. Nobody was ever going to.",
+  "A soda comes over with ice and a slice and a little paper doily under it, which is the bar's way of saying this drink costs what a drink costs.",
+  "You order the soft option and get it fast, cold, and priced like the beer — the seat under you is the thing on the bill.",
+  "A Sprite, sweating in a proper glass. The girl who brings it does not ask why; a man drinking soda at nine has his reasons, and the till doesn't care what they are.",
+  "Cola, ice, lime. The barman rings it up at the beer price without looking at the key, because there is only one key.",
+];
+// What the house says when you query the price of a soft drink — the seat, said
+// by whoever is nearest the till.
+const _SEAT_LINES = [
+  "\"Same price as beer, tilac.\" A shrug that has done this a thousand times. \"You not pay for water. You pay for the seat. Seat is worth more than the drink — ask anybody who doesn't have one.\"",
+  "\"Water, beer, Coke — one price.\" The cashier does not even look up. \"The bottle is twenty baht. The stool is the rest.\"",
+  "Mama takes the question the way she takes all of them, pleasantly and finally. \"You sit here, you drink something, it cost one price. Sit outside on the kerb, water is free. The kerb is also free.\"",
+  "\"Is not for the water.\" She taps the bar top under your glass. \"Is for THIS. Every seat in here has to earn. Yours too.\"",
+];
 const _WATER_LINES = [
   "A cold bottle of water, gone in one go. Civilisation.",
   "Ice-cold plastic, sweating in your hand; half of it's gone before you lower the bottle.",
@@ -4674,7 +4689,8 @@ function _doBuy(arg) {
           { p: UMBRELLA_PRICE, m: G.money }));
     return;
   }
-  if (/water|nam plao/.test(arg)) {
+  if (/water|nam plao|\bsoda\b|\bcoke\b|\bcola\b|\bsprite\b|\bfanta\b|\bjuice\b|lemonade|soft ?drink|\bpepsi\b|tonic water/.test(arg)) {
+    const soft = !/water|nam plao/.test(arg);   // a soda is a seat too
     // Your own hotel room has the two complimentary bottles every Thai hotel
     // leaves by the kettle — free, two a day, restocked by housekeeping. This is
     // both true to the country and the fix for the rain-lock dehydration loop: a
@@ -4695,13 +4711,17 @@ function _doBuy(arg) {
       return;
     }
     const canBuy = r.shop || r.seven || r.water || _inBar() || FOOD_STALLS[G.room]; // r.water: a drinks cart in the desc
-    if (!canBuy) { _say("No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
-    const price = _inBar() ? 20 : 10;
+    if (!canBuy) { _say(soft ? "No soft drinks for sale here. 7-Elevens, bars, and the street carts all have them." : "No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
+    // In a bar the water and the soda cost what the cheapest alcohol costs —
+    // you are paying for the SEAT, and the seat is worth more than the bottle
+    // (Mario, 2026-09-04). A shop sells the bottle.
+    const price = _inBar() ? _beerPrice() : soft ? 20 : 10;
     if (G.money < price) { _say(_fmt("฿{p} for a cold bottle, and you don't have it. Grim.", { p: price })); return; }
     G.money -= price;
-    G.thirst = Math.max(0, G.thirst - 45);
+    G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
     _sevenIn();
-    _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_WATER_LINES, "water")), p: price, m: G.money }));
+    if (_inBar()) { (G.soc.softDrink = G.soc.softDrink || {})[G.room] = G.turns; _spentHere(); }
+    _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(soft ? _SOFT_LINES : _WATER_LINES, soft ? "soft" : "water")), p: price, m: G.money }));
     return;
   }
   // seven:true marks a street with a 7-Eleven on it; the walk-in branches are
@@ -6440,7 +6460,43 @@ function _hourToTurn(h) { // 24h clock → nightTurn; the game lives 18:00–04:
   return null;
 }
 
+// THE HOUSE'S PATIENCE. A seat in a bar is rented by the drink: an hour on one
+// beer and somebody is at your elbow; in a go-go you do not buy a single bottle
+// and stare at the girls for the evening, so twenty minutes (Mario, 2026-09-04).
+// Your own bar is exempt (you are the house). WAIT cannot fast-forward past it;
+// the clock of "since you last spent" is kept by _tick (_spentHere) and reset
+// on arrival, so the first hour is grace, not a trap. Turns, at six minutes each.
+const HOUSE_PATIENCE = { gogo: 3, bar: 10 };
+function _housePatience() {
+  if (!_inBar() || (typeof _atOwnBar === "function" && _atOwnBar())) return 0;
+  return _room().barType === "gogo" ? HOUSE_PATIENCE.gogo : HOUSE_PATIENCE.bar;
+}
+function _spentHere() { (G.soc.spentTurn = G.soc.spentTurn || {})[G.room] = G.turns; }
+function _nursed() {
+  const lim = _housePatience();
+  if (!lim) return false;
+  const t = (G.soc.spentTurn || {})[G.room];
+  return t != null && G.turns - t >= lim;
+}
+const _NURSE_GOGO = [
+  "{n} is at your elbow before the song changes. \"You buy drink, na? Buy me drink?\" The smile is fixed and the mamasan behind it is not. In here the stool is rented by the bottle, and yours is due.",
+  "The bottle in front of you has been empty long enough to be noticed, and it has been noticed. {n} slides onto the next stool: \"Lonely? Buy lady drink, I sit with you.\" Twenty minutes is what a go-go gives a man for free.",
+  "A tap on the shoulder that is friendlier than it will be next time. {n}: \"One more? Or lady drink?\" Behind the rail, mama is not looking at you in the way that means she is.",
+  "Mama herself. \"Handsome man, you drink nothing.\" Not a question. The girls are turning on the stage and the seats are for people who buy. \"One more, or you want the door? Both fine.\"",
+];
+const _NURSE_BAR = [
+  "An hour on one drink and {n} is beside you with the question every bar eventually asks. \"Same again?\" The seat is the rent; the drink is how it's paid.",
+  "{n} clears the empty with a little more ceremony than an empty needs. \"Another? Or water? Same price, tilac.\" The stool has been free for an hour. It is no longer free.",
+  "\"You okay, boss? Need something?\" {n}, warmly, and the warmth has a bill attached. A man who sits an hour without buying is either heartbroken or Dutch, and the bar treats both the same.",
+  "The cashier's glance reaches you down the rail before {n} does. \"Drink? Beer, water, Coke — up to you.\" The one thing not on the list is nothing.",
+];
+function _sayNursed() {
+  const staff = (typeof _staffAt === "function" ? _staffAt(G.room) : []).filter(id => NPC_ROLES[id] === "hostess" && _npcsHere().includes(id));
+  const n = staff.length ? NPCS[staff[Math.floor(_hh(G.room + ":" + G.turns, 3) % staff.length)]].name : "A girl";
+  _say(_fmt(_pickVary(_room().barType === "gogo" ? _NURSE_GOGO : _NURSE_BAR, "nursed"), { n }), "alert");
+}
 function _doWait(arg) {
+  if (!arg && _nursed()) { _sayNursed(); return; }
   if (!arg) {
     // Bare WAIT is free — the joke is the point. But in a downpour a man
     // waiting for the rain fired it five times blind with no way to tell
@@ -6477,6 +6533,7 @@ function _doWait(arg) {
   const startDay = G.day, inbox0 = G.phone.inbox.length, g0 = G, room0 = G.room;
   // leave one turn for the tick every command pays at the bottom of doCommand
   while (G.nightTurn < target - 1) {
+    if (_nursed()) { _sayNursed(); _say(`(${_clockStr()} — the house wants a drink bought before it lets you sit any longer.)`, "dim"); return; }
     _tick();
     if (G !== g0) return;
     if (G.room !== room0) { _say(`(${_clockStr()} — you're somewhere else now; the waiting stops.)`, "dim"); return; } // Tan's sedan, a kick-out
@@ -7222,7 +7279,7 @@ function _doTaoRai() {
   // in a bar it is the price list nobody hands you (Colin, round 37)
   if (_inBar() && !G.pendingEnc) {
     const r = _room();
-    const bits = [`beer ฿${_beerPrice()}`, `lady drink ฿${_ladyPrice()}`, "water ฿20"];
+    const bits = [`beer ฿${_beerPrice()}`, `lady drink ฿${_ladyPrice()}`, `water or soda ฿${_beerPrice()} (the seat, not the bottle)`];
     if (r.barType && r.barType !== "pub") bits.push(`the bell ฿${_bellPrice(G.room)}`);
     _say("“เท่าไหร่?” (tao rai — how much?) " + (_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name + " answers without looking up: " : "The answer comes from behind the till: ") +
       bits.join(" · ") + ". Ask before the glass lands; the price never changes, only whether you knew it.", "dim");
@@ -9222,7 +9279,12 @@ function doCommand(input) {
     case "name": case "rename":
       if (!arg && !G.dog && _convoTopicHere("name")) { _doTalkBody("", "name"); break; }
       _doNameDog(arg); break;
-    case "haggle": case "bargain":
+    case "haggle": case "bargain": case "expensive": case "too": case "rip": case "ripoff": case "robbery": case "why":
+      if (_inBar()) {
+        // "why does water cost the same as beer" — the seat (Mario, 2026-09-04)
+        _say(_pickVary(_SEAT_LINES, "seat"));
+        break;
+      }
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
         "display board of watches.");
       break;
