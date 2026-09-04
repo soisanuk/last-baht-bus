@@ -8919,3 +8919,187 @@ function _doNotebook() {
     _say("Recent, in the order you heard them: " + G.thaiSeen.slice(-8).join(" · "), "thai");
   }
 }
+
+// ── The Rabbit arc, Tier 2, phase 1 — the interview and the mule path ───────
+// docs/rabbit-arc.md. The interview is a FORK, not a filter: it offers, both
+// branches (this phase: only MULE is built) reach the same doneFlag, and no
+// answer throws you into a path you can't finish. Wired the standard five ways
+// as pendingChoice="rabbitjob", the tanfavour modal's twin.
+
+function _rabbitInterview() {
+  G.pendingChoice = "rabbitjob";
+  _say("");
+  _say("Eddy sets the soda down and looks at you properly for the first time — not the " +
+    "bar-owner's glance that prices a customer, the other one, the one that sizes up a " +
+    "man for a job.", "alert");
+  _say("\"White Dish took my bar. Not in a fight — with paper, a lawyer, and a smile, which " +
+    "is how they take everything. I've got something that reads what's on their machines " +
+    "from across a room, and I've got no way to walk it into a room, because every farang " +
+    "they've got a photo of is me.\" He turns the glass. \"You they don't have a photo of. " +
+    "Yet.\"");
+  _rabbitJobPrompt();
+}
+
+function _rabbitJobPrompt() {
+  _say("\"So. The box does the clever part. Somebody carries it and holds their nerve. " +
+    "That's the whole job — you'd be the nerve.\" (CARRY IT · NOT ME · ASK what's on it.)",
+    "room");
+}
+
+function _rabbitJobAsk() {
+  _say("\"What's on it?\" He almost smiles. \"Their money, boss. Where it goes when it " +
+    "stops being tips and starts being clean. I don't need to steal a baht of it — I " +
+    "just need a copy of it doing what it does. What I do with the copy is my business, " +
+    "and the less of my business you know, the better a night's sleep you get.\" He " +
+    "shrugs. \"Carry the box, or don't. Either way the beer's cold.\"");
+  _rabbitJobPrompt();
+}
+
+function _rabbitJobYes() {
+  G.pendingChoice = null;
+  _setFlag("rabbitPath");
+  G.itemLoc.black_box = "inventory";
+  // taking the box IS accepting the box run — the follow-on quest goes active
+  // here rather than waiting to be ACCEPTed off a re-talk (you're already
+  // carrying it). rabbit_job completes on rabbitPath at the next _questTick.
+  if (G.quests.rabbit_heist !== "done") G.quests.rabbit_heist = "active";
+  _say("He doesn't hand it over across the bar like a drug deal — it's already in a Lotus's " +
+    "bag by your stool, because he decided you'd say yes before you did. \"Kitten Corner. " +
+    "Behind the till, the corridor, the office at the end. Girl on the till watches that " +
+    "corridor — you know what takes a bar girl's eyes off a corridor.\" He lifts the soda " +
+    "half an inch. \"Box on a shelf. Stay with it. Green light, you walk, you leave it. " +
+    "And boss — QUIET is a verb.\"", "win");
+  _say("(You're carrying the BLACK BOX. Buy the girl on Kitten Corner's till a drink, take " +
+    "the corridor BACK, PLACE the box, and WAIT with it. QUESTS if you lose the thread.)", "dim");
+}
+
+function _rabbitJobNo() {
+  G.pendingChoice = null;
+  // Declining is free AND re-offerable (doctrine). The interview lives on a
+  // chip:false dialogue node whose fx arms the modal; _deliver has now marked it
+  // seen, so a re-ask would give the terse "already told you" instead of
+  // re-opening it. Forget that one node — the same trick _convoStart uses to
+  // re-ask a question you walked away from — so ASK EDDY ABOUT THE JOB works again.
+  const seen = G.talked && G.talked.fast_eddy;
+  if (seen) {
+    const idx = NPCS.fast_eddy.dialogue.findIndex(n =>
+      n.fx && /job/.test(n.topic || "") && n.chip === false);
+    const arr = Array.isArray(seen) ? seen : String(seen).split(",").map(Number);
+    const at = arr.indexOf(idx);
+    if (at >= 0) { arr.splice(at, 1); G.talked.fast_eddy = arr; }
+  }
+  // doctrine: declining costs nothing and is re-offerable — the quest stays
+  // active and ASK EDDY ABOUT THE JOB re-arms the interview.
+  _say("\"No.\" He nods once, like he expected it and respects it. \"Smart, probably. It's " +
+    "not a small thing I'm asking and I'm not going to dress it up as one.\" He turns back " +
+    "to the soda. \"Offer's open. Drink here whenever. If you change your mind, you know " +
+    "the word.\"");
+  _say("(The job's still there — ASK EDDY ABOUT THE JOB if you reconsider.)", "dim");
+}
+
+// ── The box, in the office ─────────────────────────────────────────────────
+// PLACE BOX arms the babysit: G.boxJob = { turns, heat, footstep }. Each tick
+// in kitten_office counts one turn; a footstep roll may force you to react
+// (WAIT / hush stays clean, a noisy verb or leaving the room spends heat), and
+// heat >= BOX_HEAT_MAX brings Kesinee down the corridor. BOX_TURNS clean ticks
+// finishes the job. Reuses the go-go light-warn ratchet's SHAPE, not its code.
+
+// The girl on Kitten Corner's till watches the corridor; a lady drink bought
+// for her tonight takes her eyes off it. _tillKeeper is the canonical "who's on
+// the money here", so this reads the real cashier rather than a hard-coded name.
+function _boxGirlPaid() {
+  const g = typeof _tillKeeper === "function" ? _tillKeeper("kitten_corner") : null;
+  return !!(g && G.soc.drinkCount && G.soc.drinkCount[g] > 0);
+}
+
+function _boxHere() { return G.room === "kitten_office"; }
+
+function _doPlaceBox(arg) {
+  if (!(G.itemLoc.black_box === "inventory")) {
+    _say("You're not carrying anything to place. (Rabbit's box, if you've taken his job.)");
+    return;
+  }
+  if (!_boxHere()) {
+    _say("Not here. The box wants the group's own Wi-Fi — that means their room, the office " +
+      "behind Kitten Corner's till, not a bar and not the street. (Take the corridor BACK " +
+      "from Kitten Corner.)");
+    return;
+  }
+  if (G.boxJob && G.boxJob.done) { _say("It's done. The light's green. Take it and walk — " +
+    "or leave it, which is what Rabbit told you to do."); return; }
+  if (G.boxJob) { _say("It's already on the shelf, light blinking, doing its work. Stay with it."); return; }
+  G.itemLoc.black_box = "kitten_office";
+  G.boxJob = { turns: 0, heat: 0, done: false };
+  _say("You set the box on the steel shelf, behind a milk crate of cash bags where the " +
+    "monitor's own body hides it, and thread the little cable to the wall. The light comes " +
+    "up amber and starts to pulse, slow, like something breathing. The laptop's fan ticks " +
+    "over. Nothing happens, loudly.", "win");
+  _say("(Now WAIT with it. Stay QUIET — don't go poking about, and don't leave the room. " +
+    "The light goes green when it's done.)", "dim");
+}
+
+// called from _tick, once, while the box is live and you're in the office
+function _boxTick() {
+  const j = G.boxJob;
+  if (!j || j.done || !_boxHere()) return;
+  if (G.itemLoc.black_box !== "kitten_office") return;
+  j.turns++;
+  if (j.turns >= BOX_TURNS) {
+    j.done = true;
+    _say("The light stops pulsing and goes hard green, and stays there. That's it — whatever " +
+      "it came to read, it's read. The laptop across the desk has no idea anything happened " +
+      "to it, which is the point.", "win");
+    _say("(Done. Rabbit said LEAVE it — walk out and don't take it. Or TAKE THE BOX if you " +
+      "can't help yourself, and carry the one thing with his prints on it.)", "dim");
+    _setFlag("rabbitData");   // completes rabbit_heist next _questTick
+    return;
+  }
+  // a footstep in the corridor — the suspicion beat. A clean player who WAITS
+  // rides it out; heat only climbs on a noisy command (see _boxNoise) or on
+  // leaving the room mid-job (see _doGo hook).
+  if (_rand() < BOX_FOOTSTEP) {
+    j.footstep = true;   // the next command is judged against it
+    _say(_pickVary(_BOX_FOOTSTEP_LINES, "boxstep"), "alert");
+  }
+}
+
+const _BOX_FOOTSTEP_LINES = [
+  "Footsteps in the corridor, unhurried. Somebody's coming back for something. The box pulses amber on the shelf, small and obvious.",
+  "The bass through the door drops as the corridor door opens — a girl's voice, a man's answer, getting closer. You are a farang standing alone in a room you have no reason to be in.",
+  "Heels on concrete outside, slowing. The monitor above you cycles to the corridor camera and there is Kesinee on it, halfway down, looking at her phone. For now.",
+  "Somebody rattles the office door handle from the far side, finds it open, and — a shout from the bar pulls them back. Not yet. But somebody knows this door doesn't lock.",
+];
+
+// a command taken in the office while the box is live is judged: quiet ones
+// (wait, look, examine, the box itself) are fine; a noisy one on a footstep
+// turn spends heat, and heat maxing brings the mamasan.
+function _boxNoise() {
+  const j = G.boxJob;
+  if (!j || j.done || !_boxHere()) return;
+  j.heat++;
+  j.footstep = false;
+  if (j.heat >= BOX_HEAT_MAX) { _boxBlown(); return; }
+  _say(_pickVary(_BOX_HEAT_LINES, "boxheat"), "alert");
+}
+
+const _BOX_HEAT_LINES = [
+  "The noise carries. In the corridor the footsteps stop, then start again, slower, curious now. Every sound you make in here is a reason for somebody to open this door.",
+  "That was loud, in a room that should be empty. Somewhere past the door a conversation pauses. You have used up some of the room's patience and it did not have much.",
+];
+
+function _boxBlown() {
+  _setFlag("rabbitBlown");
+  const npcs = _npcsHere();
+  const mama = "Kesinee";
+  G.itemLoc.black_box = null;   // she has it now
+  G.boxJob = null;
+  _say(`The door opens without a knock and ${mama} is in it, and she is not smiling, and ` +
+    "the two things she looks at are your face and the amber light on the shelf, in that " +
+    "order. She crosses the room, unplugs the box without hurry, and turns it over in her " +
+    "hand like a woman reading a price tag. \"This is not yours.\" It isn't a question. " +
+    "\"And you are not here.\"", "alert");
+  _say("Nobody lays a hand on you. Two shirts walk you to the pavement and the corridor door " +
+    "shuts behind you, and that is the whole of it — except that White Dish now has a black " +
+    "box with a farang's evening attached to it, and Rabbit is down to nothing.", "alert");
+  _kickOut();
+}

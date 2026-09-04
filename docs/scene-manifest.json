@@ -2,11 +2,11 @@
   "generated": "2026-09-04",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 239,
+    "rooms": 240,
     "regions": 15,
     "byKind": {
       "beach": 14,
-      "street": 94,
+      "street": 95,
       "massage": 19,
       "beer": 58,
       "mall": 1,
@@ -270,6 +270,7 @@
         "cherry_pop",
         "golden_dragon",
         "kitten_corner",
+        "kitten_office",
         "orchid_room",
         "pink_lotus",
         "queen_vic",
@@ -2497,7 +2498,19 @@
         "Praewa",
         "Rob"
       ],
-      "desc": "Open to the pavement, walled in cat posters and a neon paw print. Praewa and Nangfah work the front, and the grab-and-giggle starts before you've fully stopped walking; Kesinee watches it all from the end of the rail, pricing you before you sit, and Baimon has the till. A staircase at the back goes up to the short-time rooms."
+      "desc": "Open to the pavement, walled in cat posters and a neon paw print. Praewa and Nangfah work the front, and the grab-and-giggle starts before you've fully stopped walking; Kesinee watches it all from the end of the rail, pricing you before you sit, and Baimon has the till. A staircase at the back goes up to the short-time rooms, and a corridor past the till goes (BACK) to an office nobody is invited into."
+    },
+    {
+      "id": "kitten_office",
+      "name": "Kitten Corner — the back office",
+      "bar": null,
+      "barType": null,
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "A windowless box behind the till, cold with aircon and lit like a fridge. Steel shelving, the night's cash bags in a milk crate, a wall safe with a keypad, and a laptop on a desk nobody sits at for long — the group's, not the bar's, with a sticker on the lid of a white dish and nothing else. A monitor above it cycles through six cameras, none of them pointing in here. Through the door the bar is a muffled bass line and a laugh; the corridor outside is the only way anybody comes, and the only way you leave."
     },
     {
       "id": "orchid_room",

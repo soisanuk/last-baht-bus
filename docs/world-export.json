@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 239,
+  "geolocated": 240,
   "patrons": 24,
   "people": 338,
   "portraits": 362,
   "renders": 362,
   "thumbs": 362,
-  "venues": 239
+  "venues": 240
  },
  "frames": [
   "baimon_pic1",
@@ -5580,6 +5580,14 @@
     100.88727
    ],
    "name": "Kitten Corner",
+   "region": "Soi 6"
+  },
+  "kitten_office": {
+   "geo": [
+    12.94218,
+    100.88727
+   ],
+   "name": "Kitten Corner — the back office",
    "region": "Soi 6"
   },
   "klang_massage": {

@@ -240,6 +240,13 @@ const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the sho
 // encounter and it is a pickpocket; three more thieves would have made theft
 // the only thing this game ever said about them on a pavement (Marco, r44).
 const SEAWALL_ONE = 1000, SEAWALL_TWO = 1800;
+// THE BOX — Rabbit's mule path (docs/rabbit-arc.md, Tier 2, phase 1). You carry
+// a black box into a WDG back office, PLACE it, and babysit it while it does
+// its work: BOX_TURNS clean ticks of counting, a BOX_FOOTSTEP chance per tick
+// that somebody comes down the corridor, BOX_HEAT_MAX strikes before Kesinee
+// finds you, and BOX_COUNT boxes before Rabbit is out of them. Reuses the
+// go-go flashlight's suspicion-ratchet shape, reskinned.
+const BOX_TURNS = 8, BOX_FOOTSTEP = 0.25, BOX_HEAT_MAX = 3, BOX_COUNT = 2;
 // Nont, the second fixer — the priced one. Tan is the favour with no figure on
 // it; Nont is the figure with no favour in it (Mario, 2026-09-04). Thais deal in
 // favours, foreigners pay cash: to a farang he sells, to Tan he owes.
@@ -3361,7 +3368,8 @@ const ROOMS = {
       "Nangfah work the front, and the grab-and-giggle starts before you've fully stopped " +
       "walking; Kesinee watches it all from the end of the rail, pricing you before you sit, " +
       "and Baimon has the till. A " +
-      "staircase at the back goes up to the short-time rooms.",
+      "staircase at the back goes up to the short-time rooms, and a corridor past the till " +
+      "goes (BACK) to an office nobody is invited into.",
     revisit: [
       "Back into Kitten Corner and the grab-and-giggle is instant — Praewa in your lap, Nangfah at your ear, both purring the offer. \"You want kitten tonight? Two kitten? Buy us drink, we go up, we play.\"",
       "The neon paw flickers you back in and a girl is already climbing you like furniture. \"Meow, handsome.\" A grin, a hand, a price. \"Short time upstairs — you like? Everybody like.\"",
@@ -3372,7 +3380,43 @@ const ROOMS = {
       "Into Kitten Corner, all posters and pounce, where the girls tell you exactly what the staircase is for inside the first breath and dare you to be shocked.",
       "Back to the paw and the purr, and a girl who has decided you are hers for the night. \"No shy, handsome. This Soi 6. We say what we want, you buy the drink, we go up. Easy, na?\"",
     ],
-    exits: { out: "soi6_deep" },
+    exits: { out: "soi6_deep", back: "kitten_office" },
+  },
+  // WDG's Soi 6 back office, behind Kitten Corner's till (Mario, 2026-09-05:
+  // "pick a Soi 6 WDG bar, preferably one not already involved in other
+  // quests" — Kitten Corner is WDG by Kesinee's own line and carries one
+  // personal quest, where the Pink Lotus is the flagship and the Golden
+  // Dragon is where WDG's manager and nominee lawyer drink). Not a venue: no
+  // `bar`, no barType, and _doGo refuses the corridor unless the box job is
+  // live and the girl on the till has been bought off it.
+  kitten_office: {
+    name: "Kitten Corner — the back office",
+    region: "Soi 6",
+    desc: "A windowless box behind the till, cold with aircon and lit like a fridge. Steel " +
+      "shelving, the night's cash bags in a milk crate, a wall safe with a keypad, and a " +
+      "laptop on a desk nobody sits at for long — the group's, not the bar's, with a " +
+      "sticker on the lid of a white dish and nothing else. A monitor above it cycles " +
+      "through six cameras, none of them pointing in here. Through the door the bar is " +
+      "a muffled bass line and a laugh; the corridor outside is the only way anybody " +
+      "comes, and the only way you leave.",
+    revisit: [
+      "The office again: fridge light, cash bags, the laptop's fan ticking over. The corridor outside is quiet, for now.",
+      "Steel shelving and six cameras looking anywhere but here. Somebody has left a half-finished iced coffee sweating on the desk.",
+      "Cold, bright, and nobody's. The monitor cycles the six views; the bar, through the door, is a bass line with no words in it.",
+      "The back office, and the small sound your own breathing makes in it.",
+    ],
+    reads: {
+      laptop: "The group's machine, not the bar's: a white-dish sticker on the lid, a lock " +
+        "screen with a photo of a golf course, and a Post-it on the bezel with what is " +
+        "almost certainly the password on it, because it is always the password on it. " +
+        "Nothing here is yours to touch tonight.",
+      monitor: "Six camera feeds on a cycle — the rail, the door, the stairs, the till, the " +
+        "pavement both ways. The office is the one room in the building with no camera in " +
+        "it, which tells you what the office is for.",
+      safe: "A wall safe with a keypad, the kind every bar on the soi has and every " +
+        "mamasan opens without looking. You are not here for the safe.",
+    },
+    exits: { out: "kitten_corner" },
   },
   cherry_pop: {
     name: "Cherry Pop Bar",
@@ -4675,6 +4719,15 @@ const ITEMS = {
     desc: "A glossy flyer for the Peacock Cabaret's revue: Petch mid-lip-sync in a gown " +
       "made of light, Miss Mala's headdress filling the top corner like weather. On the " +
       "back, in careful biro: 'for the Alcazar man — M.'",
+  },
+  black_box: {
+    name: "black box", aliases: ["box", "rabbit's box", "the box", "device", "eddy's box"],
+    portable: true, location: null, // Rabbit hands it over on ACCEPT
+    keepsafe: true,
+    desc: "A matt black box the size of a paperback, no markings, one rubber-sealed port " +
+      "and one tiny light that is currently off. Heavier than it looks. Rabbit's rule, " +
+      "said once and not repeated: it goes somewhere with the group's Wi-Fi in reach, " +
+      "it stays there until the light goes green, and you stay with it.",
   },
   brass_tag: {
     name: "brass dog tag", aliases: ["tag", "brass tag", "dog tag", "seamus"],
@@ -10342,6 +10395,47 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "tips like the money's on fire. That last part keeps the lights on, so I don't ask " +
           "where the crowd's from either.”",
         short: "“Mine, on paper. Company structure, local partner — you know how it works out here. My crowd tips like it's on fire. I don't ask.”" },
+      // THE JOB (Tier 2, phase 1). The dialogue only ARMS the interview modal —
+      // the choice is committed in _rabbitChoose, same shape as the 51% fork.
+      { topic: "job|heist|work|the job|rabbit job|your job|box job",
+        when: (st, G) => _flag("rabbitBlown"),
+        text: "“Two boxes.” He does not raise his voice, which is worse. “I had two, and I don't " +
+          "have three, and the second one is in a drawer in a WDG office with my fingerprints " +
+          "on the inside.” He drinks the soda. “We're done with that. You're still welcome " +
+          "at the bar. That's the difference between me and them.”",
+        short: "“Two boxes, and you lost two. We're done with that.”" },
+      { topic: "job|heist|work|the job|rabbit job|your job|box job",
+        req: ["rabbitData"],
+        text: "“Done.” The nearest thing to a smile he has. “It's mine now — what's on it, what " +
+          "I do with it. You were never in that office and you never met a man called Rabbit.” " +
+          "He lifts the soda an inch. “Go home. Sleep. If anybody ever asks, you drink here " +
+          "because the beer's cold.”",
+        short: "“Done. You were never there. The beer's cold, that's all.”" },
+      { topic: "job|heist|work|the job|rabbit job|your job|box job",
+        req: ["rabbitPath"], notFlags: ["rabbitData"],
+        text: "“You know the plan.” He counts it on the bar with a finger. “Kitten Corner. Behind " +
+          "the till there's a corridor and behind the corridor there's an office. The girl on " +
+          "the till watches that corridor like it owes her money — buy her a drink and she " +
+          "watches the drink instead. Box goes on the shelf. Light goes green, you walk. " +
+          "Until it does, you stay with it, and you stay QUIET.” He taps the bar. “Quiet is " +
+          "a verb, boss. You wait. You don't poke about.”",
+        short: "“Kitten Corner. Drink for the girl on the till. Box on the shelf. Wait — don't poke about.”" },
+      { topic: "job|heist|work|the job|rabbit job|your job|box job", chip: false,
+        when: (st, G) => G.quests.rabbit_job === "active" && !_flag("rabbitPath"),
+        fx: () => { if (typeof _rabbitInterview === "function") _rabbitInterview(); },
+        text: "He looks at you for longer than is polite, the way a man looks at a used car." },
+      { topic: "job|heist|work|the job|rabbit job|your job|box job", deflect: true,
+        text: "“Job.” He lets the word sit there and go flat. “Everybody's got a job for me, boss, " +
+          "and I've got a soda water.” He turns the glass a quarter. “Drink here a while. " +
+          "People who drink here a while sometimes hear things.”" },
+      { topic: "box|black box|the box|device", req: ["rabbitPath"],
+        text: "“The box.” He holds up three fingers and folds them down one at a time. “One: " +
+          "it wants the group's Wi-Fi, so it goes in THEIR room, not the bar. Two: it works " +
+          "on its own, it doesn't need you — but a box on a shelf with nobody standing next to " +
+          "it is a box somebody picks up. Three: if it drops, it'll tell you. Pull the cable, put " +
+          "it back. That's the only time you touch it.” He drinks. “And boss — when the light " +
+          "goes green, you don't take it with you. You leave it. It's already gone.”",
+        short: "“Their room, not the bar. Stay with it. If it drops, pull the cable and put it back. Leave it when it's green.”" },
     ],
   },
   nuan: {
@@ -12580,6 +12674,34 @@ const QUESTS = {
   //
   // Built AS a dep chain, not a subsystem: each step completes off a `sets:` on
   // a giver's dialogue node. Four steps: premises → licence → partner → opening.
+  // THE RABBIT ARC, Tier 2, phase 1 — the interview and the mule path
+  // (docs/rabbit-arc.md; decisions of 2026-09-05 in its log). Expat-only like
+  // the bar chain: Rabbit does not recruit a man with a return ticket. Deps on
+  // white_dish because that is where a player learns what WDG IS.
+  rabbit_job: {
+    name: "Rabbit's Job",
+    giver: "fast_eddy",
+    reqFlags: ["expatLife"],
+    deps: ["white_dish"],
+    trust: 2,
+    desc: "Rabbit has work, and he wants to look at you before he says what (ASK EDDY ABOUT THE JOB).",
+    at: "fast_eddy",
+    doneFlag: "rabbitPath",
+    reward: { money: 0, happy: 2 },
+  },
+  rabbit_heist: {
+    name: "The Box",
+    giver: "fast_eddy",
+    reqFlags: ["expatLife"],
+    deps: ["rabbit_job"],
+    item: "black_box",
+    desc: "Get the box into the back office at Kitten Corner, set it down (PLACE BOX), and stay " +
+      "with it until Rabbit says it's done. The girl on the till watches the corridor — a drink " +
+      "takes her eyes off it.",
+    at: "kitten_office",
+    doneFlag: "rabbitData",
+    reward: { money: 0, happy: 6 },
+  },
   bar_premises: {
     name: "The Old Man's Bar",
     giver: "bert",
@@ -16127,6 +16249,7 @@ const ROOM_GEO = {
   sandy_toes:       [12.94206, 100.88671],
   soi6_deep:        [12.94198, 100.88741],
   kitten_corner:    [12.94218, 100.88727],
+  kitten_office:    [12.94218, 100.88727],   // the room behind the till — same building
   cherry_pop:       [12.94184, 100.88736],
   ruby_kiss:        [12.94205, 100.88765],
   // Naklua

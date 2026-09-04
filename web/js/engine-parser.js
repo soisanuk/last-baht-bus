@@ -507,6 +507,30 @@ function _doGo(dirWord) {
   // move invalidates that memory. (Single-door venues: enteredVia === exits.out.)
   const to = (dir === "out" && G.enteredVia) ? G.enteredVia : r.exits[dir];
   G.enteredVia = null;
+  // The corridor past Kitten Corner's till is not a public exit: you go BACK
+  // there only on Rabbit's job, and only once the girl on the till has her eyes
+  // on a drink instead of the corridor (docs/rabbit-arc.md, the mule path).
+  if (to === "kitten_office" && G.room === "kitten_corner") {
+    if (!_flag("rabbitPath") || _flag("rabbitData") || _flag("rabbitBlown")) {
+      _say("The corridor past the till goes to the office, and the office is not for customers. " +
+        "Baimon on the till clocks you looking at it and doesn't stop smiling. (Nothing back there for you.)");
+      return false;
+    }
+    if (!_boxGirlPaid()) {
+      _say("Baimon has the till and the till has a clear line down that corridor. She watches you " +
+        "the whole time you're near it — you'll not get past her cold. (Buy the girl on the till a " +
+        "DRINK first; that's what takes her eyes off it.)", "dim");
+      return false;
+    }
+  }
+  // Walk out of the office with the box still running and you've left it
+  // unattended — the one thing Rabbit told you not to do (docs/rabbit-arc.md).
+  if (G.boxJob && !G.boxJob.done && G.itemLoc.black_box === "kitten_office" && G.room === "kitten_office" && to !== "kitten_office") {
+    _say("You can't just walk out and leave it pulsing on the shelf — a box nobody's standing " +
+      "next to is a box somebody picks up. (WAIT with it until it's green, or TAKE THE BOX " +
+      "and abort — but Rabbit wanted it left, not carried.)", "alert");
+    return false;
+  }
   if (_footCrossing(G.room, to)) return;   // eight lanes of Sukhumvit, on foot — the night may end here
   // a downpour owns the street: nothing moves except into shelter
   if (G.rain > 0) {
@@ -1183,6 +1207,17 @@ function _doTake(arg) {
   // to the man whose name is on the paperwork (Keith, round 40)
   if (typeof _atOwnBar === "function" && _atOwnBar() && /\b(money|cash|till|baht|wages|drawer|\d+)\b/.test(arg)) { _doDraw(arg); return; }
   const id = _findItem(arg, "room");
+  // Taking Rabbit's box off the shelf mid-run unplugs it: the job aborts (the
+  // box is back in your pocket, nothing was read, nobody was alerted). You can
+  // PLACE it again to restart, or carry it out and abandon the whole thing.
+  if (id === "black_box" && G.boxJob && !G.boxJob.done) {
+    G.itemLoc.black_box = "inventory";
+    G.boxJob = null;
+    _say("You pull the cable and the amber light dies. Whatever it was doing, it wasn't " +
+      "finished, and now it's a paperback-sized weight in your bag again. (PLACE it again to " +
+      "start over, or walk out and tell Rabbit it didn't happen.)", "dim");
+    return;
+  }
   if (!id) {
     // Already in your pocket. Checked BEFORE the advertised-fixture branch, which
     // owns words like "bottle" and was answering "that's fixtures, not luggage;
@@ -8103,6 +8138,9 @@ function _chipSet() {
     if (G.mode === "soi6") { add("play again"); add("share", "share card"); return chips; }
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
   }
+  if (G.pendingChoice === "rabbitjob") {
+    add("carry it"); add("not me"); add("ask", "ask what's on it"); return chips;
+  }
   if (G.pendingChoice === "tanfavour") {
     add("yes"); add("no"); add("ask", "ask what it's for"); return chips;
   }
@@ -8543,6 +8581,7 @@ function engineComplete(input) {
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
   if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
+  else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "not me", "ask"];
   else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "bkkdinner") pool = ["go", "decline"];
   else if (G.pendingChoice === "bkkbill") pool = ["let", "grab"];
@@ -8793,6 +8832,7 @@ function _renderResume() {
   if (G.pendingChoice === "intro") { _introPrompt(); return; }
   if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
+  if (G.pendingChoice === "rabbitjob") { _rabbitJobPrompt(); return; }
   if (G.pendingChoice === "tanfavour") { _tanFavourPrompt(); return; }
   if (G.pendingChoice === "bkkdinner") { _bkkDinnerPrompt(); return; }
   if (G.pendingChoice === "bkkbill") { _say("The bill sits in its black folder, his card on top. (GRAB · LET)", "dim"); return; }
@@ -9046,6 +9086,14 @@ function doCommand(input) {
   }
 
   // Tan is stood at your rail with a folded slip on the bar
+  if (G.pendingChoice === "rabbitjob") {
+    if (/^(ask|what|why|explain|tell|on it)/.test(lower)) { _rabbitJobAsk(); return; }
+    if (/^(carry|yes|y|ok|okay|sure|deal|fine|do it|take|i'?ll)/.test(lower)) { _rabbitJobYes(); return; }
+    if (/^(not me|no|n|nope|never|decline|refuse|pass|sorry)/.test(lower)) { _rabbitJobNo(); return; }
+    _say("Eddy waits, soda in hand. (CARRY IT \u00b7 NOT ME \u00b7 ASK.)", "dim");
+    _rabbitJobPrompt();
+    return;
+  }
   if (G.pendingChoice === "tanfavour") {
     if (/^(ask|what|why|who|explain|tell)/.test(lower)) { _tanFavourAsk(); return; }
     if (/^(y|yes|ok|okay|sure|fine|deal|take|agree)/.test(lower)) { _tanFavourYes(); return; }
@@ -9371,10 +9419,14 @@ function doCommand(input) {
     // playtest 2026-08-23).
     case "handover": case "baton": _doHandover(); return;
     case "resume": _doResume(); return;
+    case "place": case "plant": _doPlaceBox(arg); break;
     case "wear": case "put on": _doWear(arg); break;
     // PUT TAG ON HIM. Bare PUT was an unknown verb, so the one act a man with a
     // dog tag reaches for landed on "The soi blinks at you" (Bill, round 44).
-    case "put": _doWear(String(arg || "").replace(/\bon\b.*$/, "").trim() ||
+    case "set": if (/box|device/.test(arg||"")) { _doPlaceBox(arg); break; }  // SET DOWN THE BOX
+      _say(_pickVary(_WEAR_NO, "wearno")); break;
+    case "put": if (/\bdown\b/.test(arg||"") && /box|device/.test(arg||"")) { _doPlaceBox(arg); break; }
+      _doWear(String(arg || "").replace(/\bon\b.*$/, "").trim() ||
       String(arg || "")); break;
     case "read": _doRead(arg); break;
     case "talk": case "chat": {
@@ -10041,6 +10093,12 @@ function doCommand(input) {
   // not. LOOK, EXAMINE, WEATHER and LISTEN still cost a turn — you are doing
   // something in a room — but the scoreboard, the clock, your pockets, the map
   // and the help are not things the night can charge you for.
+  // Babysitting Rabbit's box: a NOISY command on a footstep turn spends heat.
+  // Quiet ones ride it out — wait, look, examine, the box itself, the readouts.
+  if (G.boxJob && !G.boxJob.done && G.room === "kitten_office" && G.boxJob.footstep &&
+      !/^(wait|z|look|l|examine|x|read|topics|score|time|clock|inventory|i|inv|quests|hint|diagnose|place|help)$/.test(v)) {
+    if (typeof _boxNoise === "function") _boxNoise();
+  }
   if (!_FREE_VERBS.has(v)) _tick();
   _questTick();
   _checkAct1();

@@ -247,6 +247,7 @@ function newGame() {
     convoLapsed: {},     // …and questions you walked away from, re-asked next time you talk to them
     darkDoorDay: -1,     // the once-a-night "there's no lights out there" nudge at your own door
     convoPage: 0,        // which window of their open topics the chip bar is showing (see TOPICS)
+    boxJob: null,        // Rabbit's mule job while it's live: {turns,heat,done} (see _boxTick)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
@@ -2578,6 +2579,7 @@ function _tick() {
   if (typeof _wrongNumberTick === "function") _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it
   _soidogTick();   // the day after you adopt the soi dog, the Foundation texts for a donation
   if (typeof _waenTick === "function") _waenTick();   // Kruu Waen's homework, free, once a day
+  if (typeof _boxTick === "function") _boxTick();      // Rabbit's box, while it's live and you're in the office
   if (G.lightOn && G.battery > 0) {
     G.battery--;
     if (G.battery === 0) {

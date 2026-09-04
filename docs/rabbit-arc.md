@@ -207,9 +207,9 @@ foreshadowing*, never a door a verb must open.
 
 | Tier | What | Depends on | Status |
 |---|---|---|---|
-| **0** | The bar + Eddy as a voiced, unlikeable presence; backstory in `ASK` topics | nothing | building now |
+| **0** | The bar + Eddy as a voiced, unlikeable presence; backstory in `ASK` topics | nothing | SHIPPED |
 | **1** | Rabbit is the in-world author of CTF stage 2 (the security-probe text) | CTF stage 2 (`docs/ctf.md`) | spec |
-| **2** | The heist quest — fork-not-filter, the inversion, CCIB | Tier 0 | spec (this doc) |
+| **2** | The heist quest — fork-not-filter, the inversion, CCIB | Tier 0 | phase 1 SHIPPED (interview + mule path); operator/kid/landings spec |
 | **3** | Black-market tie-in (the tourists who tip too well) | Tier 2 | seed only, build nothing |
 
 Tiers are independent by design. Tier 0 ships standalone. Tier 1 makes existing
@@ -673,6 +673,8 @@ argument for the firewall this arc already has.
 | 2026-08-13 | Nuan takes a romantic liking to the PLAYER — a novel vector (she's management, not a barfinable hostess, so bond/barfine machinery doesn't apply). Tier 0 = characterisation only; the mechanic needs its own design pass. |
 | 2026-09-05 | **The dog is cover AND description**: if `G.dog` is owned, one property cutting both ways — a man walking a dog at 3am is invisible to the street and trivial to describe to an officer (the SIM is the paper trail, the dog is the witness trail). Rabbit names the second half out loud; a dog gets through his armour, which is free Tier-0 characterisation. The going-to-ground cost needs no invention: the Shamrock dog has already been left behind by a farang who had to go. He is never killed, lost or taken, and is never required by any path. |
 | 2026-09-04 | **The SIM is the wire**: Nont's Buriram SIM is a mule SIM (ซิมม้า); "not your phone" is Rabbit's first rule on every path; the wire you used decides where CCIB's thread leads (you / Rabbit / Buriram → the table → the kid); a farang caught still HOLDING a Thai's registered SIM is the heaviest "you take it" landing, so ditching it is a voiced choice the game makes tempting to skip. Never required; buying it stays innocent; no new system. |
+| 2026-09-05 | **Phase 1 built** (interview + mule path). Office = `kitten_office` behind Kitten Corner's till (WDG by Kesinee's own line; not the flagship or the ops bar). Expat-only, deps `white_dish`. Interview is a `pendingChoice="rabbitjob"` modal (CARRY IT / NOT ME / ASK), NOT ME free and re-offerable. Mule path: buy the till girl a drink to open the corridor (`_boxGirlPaid` via `_tillKeeper`), PLACE the box, WAIT `BOX_TURNS` clean ticks; a noisy command on a footstep turn spends heat (`_gogoLightWarn` shape), 3 strikes = Kesinee finds you = `rabbitBlown` + `_kickOut`; leaving mid-run refused, TAKE aborts clean. Two quests `rabbit_job`/`rabbit_heist`, doneFlags `rabbitPath`/`rabbitData`. Operator path, kid path, SIM/dog beats and the CCIB landings are the next phases. |
+| 2026-09-05 | **Landing decided** (Mario): CCIB's heat lands mostly on WDG no matter what — the real outsiders — and may even acknowledge the player's contribution as the excuse it needed to build the WDG case "for a mutual friend". The player is not scot-free but keeps visa/liberty: lay low until focus is elsewhere (the WDG investigation). The SIM DECIDES the landing (not a computed score). Betrayal fork IN for v1. Operator path yields a recoverable, player-useful thing (TBD in the operator build). |
 | open | CCIB heat: scripted landing vs. computed from play. |
 | open | Betrayal fork in v1 (tentative yes). |
 | open | Operator-path reward (flavour-only vs. nothing extra). |
