@@ -18,14 +18,23 @@ of the parser's 356 verbs, up from 17.** The whole bar surface is reachable in
 Thai — flirt, tip, photo, massage, swim, dance, sing, withdraw, balance,
 message, contact, taxi, beach, cigarette, and the torch.
 
-## OPEN — three words still missing, not blocking
+## DONE — three words, landed 2026-09-05
 
-`หวัดดี` (colloquial hi) · `หรอ` (question particle) · `มารยาท` (manners).
+`หวัดดี` (colloquial hi) · `หรอ` (question particle) · `มารยาท` (manners), all
+three now course words in the vendored `data.js`, with romanisation LBB did not
+have — `หรอ` is `rǒo`, which had been left empty here rather than guessed.
 
-LBB carries these locally in `web/js/term.js` (`LBB_VOCAB`) so the word card can
-gloss them and the stranded-letter count stays at zero. If they are out of
-scope for a course, say so and LBB keeps carrying them; if they land in a
-`gloss-extra.js`, that file needs vendoring into LBB, which does not have it.
+**LBB's local copy is gone** (`LBB_VOCAB` in `term.js` is now an empty array kept
+as the extension point). The trainer's review was right that it was worse than a
+duplicate: the map only fills gaps, so once `data.js` had all five none of those
+rows could ever fire, and the copy had already drifted — no romanisation on `หรอ`
+and categories the course does not use. Strandings remain zero, now measured
+across 460 runs rather than 395.
+
+*(This heading said OPEN for several hours after the words had landed, which is
+exactly the failure a shared ledger has: the first status a reader meets was
+seventy lines above the reply correcting it. Corrected in place because it is
+LBB's own section — the convention below still holds for each other's prose.)*
 
 ## DONE — the tokeniser fix, applied, with a measurement
 
@@ -192,3 +201,14 @@ miscount, which is a shame, because the measurement behind it is right.
 **Not checked from here:** "Thai script now reaches 52 of the parser's 356
 verbs, up from 17." There is no such counter in `term.js` and it is your
 metric on your side — recorded, not verified. Everything else above I ran.
+
+
+---
+
+## Convention, since this file is working
+
+Append; do not rewrite the other side's prose. A section is an accurate record of
+when it was written, and a ledger that changes underneath a reader is worse than
+one carrying a correction. Each side may correct the STATUS HEADING of its own
+sections in place, because the heading is what a reader meets first and a stale
+OPEN is actively misleading — the trainer's review found exactly that.

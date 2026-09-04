@@ -172,13 +172,15 @@ const _term = (() => {
   // marks, long vowels doubled); where it isn't certain it is left EMPTY on
   // purpose — the card still shows the letters and the tone rule, and a wrong
   // mark teaches a wrong tone.
-  const LBB_VOCAB = [
-    ["ขาว", "khǎao", "white", "adjective", "colors"],
-    ["หวัดดี", "wàt-dii", "hi (colloquial สวัสดี)", "phrase", "greetings"],
-    ["หรอ", "", "really? (colloquial particle)", "particle", "particles"],
-    ["อย่า", "yàa", "don't", "verb", "verbs"],
-    ["มารยาท", "maa-rá-yâat", "manners", "noun", "people"],
-  ];
+  // EMPTY ON PURPOSE, and kept as the extension point. It carried five words the
+  // course did not teach (ขาว, หวัดดี, หรอ, อย่า, มารยาท); the trainer added all
+  // five on 2026-09-05, so every row here became DEAD CODE rather than a
+  // duplicate — the map below only fills gaps, so a row that data.js also has can
+  // never fire, and this copy had already drifted (no romanisation on หรอ,
+  // categories the trainer does not use). Their review caught it. Add a row here
+  // only for a word the game prints that the curriculum genuinely lacks, and send
+  // it to the trainer at the same time.
+  const LBB_VOCAB = [];
   const LBB_WORDS = new Set(LBB_VOCAB.map(w => w[0]));
   let _thTok = null;
   function _thaiTokens(run) {
