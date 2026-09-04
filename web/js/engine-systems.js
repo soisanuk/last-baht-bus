@@ -2868,7 +2868,8 @@ function _tanAbout(topic) {
     ? "is round there somewhere before ten — he moves, that one. After ten you " +
       "will find him at " + (_barName(n.room) || "his own bar") + ". Always"
     : n.patron
-    ? "drinks there most nights — " + (n.nat || "") + ", " + (n.age || "") + ", you know the type"
+    ? "drinks there most nights — " + (n.nat || "") + ", " + (n.age || "") + ", you know the type. " +
+      _ANCHOR_NAMES[_anchorNight(id)] + ", always, whatever the season"
     : _role === "mamasan" ? "runs the floor there. Owns the room in everything but the paperwork — and sometimes that too. You do not get past her by accident"
     : _role === "cashier" ? "keeps the till there. Nothing crosses that bar she has not already counted twice"
     : _role === "manager" ? "runs the place for the owner. Different job — the man who is there so the owner does not have to be"
@@ -5422,6 +5423,7 @@ function _doWork() {
   // _barNight consumes and clears it, so it cannot leak into a later night.
   G.bar.workedLast = true;
   G.bar.awayTurns = 0;               // the presence clock starts now (_workPresenceTick)
+  G.bar.stoodTurns = 0;
   G.bar.floorN = 0; G.bar.floorTurn = -99;   // …and the floor's moments start with it
   G.bar.workedTurn = G.turns;        // the call needs the room to settle first
   G.bar.worked = (G.bar.worked || 0) + 1;
@@ -5452,10 +5454,14 @@ function _doWork() {
 // A publican can nip out; he cannot spend the evening somewhere else. Cumulative,
 // because three trips out is not minding a bar either.
 const WORK_AWAY_BUDGET = 15;   // turns off your own floor before the shift lapses
+// …and a floor at the NEAR end: declare, walk home, sleep — ninety seconds on
+// the premises settled at the full worked multiplier (Keith, round 40). A shift
+// is at least two hours stood; short of that the night is Bert's.
+const WORK_MIN_STOOD = 20;
 function _workPresenceTick() {
   const b = G.bar;
   if (!_barOwned() || !b || b.workedDay !== G.day || !b.workedLast) return;
-  if (G.room === "stinky_bar") return;
+  if (G.room === "stinky_bar") { b.stoodTurns = (b.stoodTurns || 0) + 1; return; }
   b.awayTurns = (b.awayTurns || 0) + 1;
   if (b.awayTurns === Math.floor(WORK_AWAY_BUDGET / 2)) {
     _say("(Your bar is open, your name is on the shift, and you are not in it. " +
@@ -5721,7 +5727,7 @@ function _partnerYes() {
   } else {
     _setFlag("partnerCandy");
     _align("indie", 2); _align("wdg", -2);
-    _say("\"Then we do it right.\" The Bangkok lawyer takes three weeks and a stack " +
+    _say("\"Then we do it right.\" The Bangkok lawyer takes his time and a stack " +
       "of paper you actually read, and at the end of it Candy's name is on 51% of " +
       "your bar and yours is on the rest, and every way it could go wrong is " +
       "written down and signed. It is not romantic. It is the safest thing you " +
@@ -6242,10 +6248,20 @@ function _barDeposit() {
   _say(_fmt("\"One more and then I'll leave you to it.\" Bert taps the docket " +
     "twice. \"You've bought the BAR. You've not bought the BUILDING — nobody " +
     "ever does. Rent's ฿{rent} a month to the fella that owns the shophouse, " +
-    "first of the month, and he's nothing like the old man.\" He lets that sit. " +
+    "every thirty days from tonight, and he's nothing like the old man.\" He lets that sit. " +
     "\"Miss the old man and you'll feel bad. Miss the rent twice and there's a " +
     "lad with a tape measuring your frontage. I've seen it done to better bars " +
     "than this one.\"", { rent: _barRent() }), "alert");
+  if (typeof _lowSeason === "function" && _lowSeason()) {
+    // the one thing a publican buying in the wet needs told BEFORE the money
+    // moves — BOOKS said "this is the month a cushion is for" the morning after
+    // he had handed over the cushion (Keith, round 40)
+    _say("\"And you're buying in the wet.\" He says it to the docket, not to you. \"Trade's " +
+      "half what it is at Christmas and the rent isn't. Every fella that's bought " +
+      "in the rains has spent the first two months feeding the bar out of his own " +
+      "pocket and wondering what he's done. Stand it every night you can, draw " +
+      "nothing you don't need, and the cool season pays you back. It does. Eventually.\"", "alert");
+  }
   _say(_fmt("(You owe ฿{owed}, and ฿{rent} a month to the landlord on top. The " +
     "bar is yours the day it opens — ASK BERT ABOUT OPENING.)",
     { owed: G.bar.owed, rent: _barRent() }), "win");
@@ -6271,7 +6287,9 @@ function _barNight(settleDay) {
   // guard is belt-and-braces: settle runs either on the same day (a direct call)
   // or the morning after (via _endNight, which has already done G.day++), so a
   // flag older than that is stale and must not count.
-  const worked = !!b.workedLast && (b.workedDay === G.day || b.workedDay === G.day - 1);
+  let worked = !!b.workedLast && (b.workedDay === G.day || b.workedDay === G.day - 1);
+  let declaredOnly = false;
+  if (worked && (b.stoodTurns || 0) < WORK_MIN_STOOD) { worked = false; declaredOnly = true; b.lapses = (b.lapses || 0) + 1; }
   take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
   if (worked) take += BAR_PRESENT;
   take = Math.round(take * _seasonTakingsOn(day));   // graded by the month you traded in, peak → trough
@@ -6336,7 +6354,10 @@ function _barNight(settleDay) {
   const evt = b.eventCash || 0;
   b.eventCash = 0;
   const evtIn = Math.max(0, evt), evtCost = Math.max(0, -evt);
-  return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater,
+  // the itemised night, for BOOKS — one "in" and one "out" hid a ฿400 gap a
+  // twenty-year publican could not name (Keith, round 40)
+  b.lastLines = { day, take: take + evtIn, nut, cogs, wages: BAR_WAGES, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, evtIn, evtCost, worked, declaredOnly };
+  return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
     worked, away: b.away, nut, cogs, wages, proc };
 }
 
@@ -6404,7 +6425,7 @@ function _barMonthly() {
 // Tan's is a phone call you are told about afterwards. Neither is a game over:
 // you are an expat without a bar, and the sandbox carries on.
 const _RENT_LATE = [
-  "The landlord's daughter comes for the rent, as she does on the first, and this time there is a conversation instead of a receipt. She is perfectly pleasant about it. She writes the date on the back of her own hand where you can see her do it.",
+  "The landlord's daughter comes for the rent, on the thirtieth day as she always does, and this time there is a conversation instead of a receipt. She is perfectly pleasant about it. She writes the date on the back of her own hand where you can see her do it.",
   "The rent is not there and everybody knows it before you say it — Bert, the girls, the man who brings the ice. Nobody is unkind. That is somehow the worst available option.",
   "The landlord himself comes, which he has not done once, and he stays for a soda he does not drink. He tells you about the last farang who had the room. It is not a threat and it is not a story about a threat. It is just the last farang who had the room.",
 ];
@@ -6610,8 +6631,20 @@ function _doBooks() {
     ? "Months elapsed: {m} of {term}   ·   Nights open: {n}"
     : "Months paid: {m} of {term}   ·   Nights open: {n}",
     { m: b.months, term: BAR_TERM, n: b.nights }));
-  _say(_fmt("Rent: ฿{r} a month to the landlord, due on the first.", { r: _barRent() }), "dim");
+  _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened.", { r: _barRent() }), "dim");
+  const ll = b.lastLines;
+  if (ll) {
+    _say(_fmt("Last night: ฿{take} in{evt}. Out: nut ฿{nut} · stock ฿{cogs} · wages ฿{wages}{mgr}{proc}{cost} — {who}.",
+      { take: ll.take, evt: ll.evtIn ? _fmt(" (฿{e} of it the night's luck)", { e: ll.evtIn }) : "",
+        nut: ll.nut, cogs: ll.cogs, wages: ll.wages,
+        mgr: ll.mgr ? _fmt(" · Bert ฿{m}", { m: ll.mgr }) : "",
+        proc: ll.proc ? _fmt(" · the arrangements ฿{p}", { p: ll.proc }) : "",
+        cost: ll.evtCost ? _fmt(" · the night's own bill ฿{c}", { c: ll.evtCost }) : "",
+        who: ll.declaredOnly ? "declared, not stood" : ll.worked ? "you stood it" : "Bert ran it" }), "dim");
+  }
+  _say(_fmt("Nights stood: {w} of {n}. A stood night takes about a third more over the rail and saves Bert's ฿{m}.", { w: b.worked || 0, n: b.nights || 0, m: BAR_MGR_NIGHT }), "dim");
   if (b.drawn) _say(_fmt("Taken out by you, all told: ฿{d}.", { d: b.drawn }), "dim");
+  if (b.cash > 0 && G.room === "stinky_bar") _say("(DRAW <amount> takes it out of the till and into your pocket.)", "dim");
   if (b.rentOwed > 0) {
     // With RENT_GRACE at 2 the only figure this ever shows is one month, because
     // the second month is an eviction rather than a line in the books.
@@ -6667,6 +6700,8 @@ function _barSettle(settleDay) {
     { take: n.take, costs: n.costs + (n.evtCost || 0), cash: G.bar.cash, short: -G.bar.cash,
       low: n.low ? _L(" — low season") : "",
       who: n.worked ? _L(" — you worked it") : _L(" — Bert ran it") }), "dim");
+  if (n.declaredOnly)
+    _say("(You put your name on the shift and then you weren't there for it. Bert stood the night; the takings are his kind.)", "dim");
   if (n.away === WORK_DRIFT) {
     _say("Bert mentions, without making anything of it, that one of the girls " +
       "asked whether you still own the place. He told her yes. He did not tell " +

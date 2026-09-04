@@ -475,7 +475,7 @@ test("the old man is paid every thirty days, from the till then your pocket", ()
   const before = G.bar.months;
   let paidLine = "";
   for (let i = 0; i < 31; i++) {
-    G.day++; G.room = "stinky_bar"; _doWork(); out = []; _barSettle();
+    G.day++; G.room = "stinky_bar"; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */ out = []; _barSettle();
     if (/to the old man/.test(out.join("\n"))) paidLine = out.join("\n");
   }
   assert.equal(G.bar.months, before + 1, "one payment a month, not one a night");
@@ -488,7 +488,7 @@ test("refusing procurement is what makes the month hard — it's on the supply l
   const yearEnd = friction => {
     readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
     G.syn = { done: {}, asked: {}, friction };
-    for (let d = 0; d < 360; d++) { G.day++; G.room = "stinky_bar"; _doWork(); out = []; _barSettle(); }
+    for (let d = 0; d < 360; d++) { G.day++; G.room = "stinky_bar"; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */ out = []; _barSettle(); }
     return G.bar.cash;
   };
   const inside = yearEnd(0), outside = yearEnd(6);
@@ -531,7 +531,7 @@ test("the nightly line reconciles: what it says moved is what the till did", () 
   G.stage = "expat"; G.bar.lastMonthDay = G.day; G.money = 5000; G.rng = 991;
   for (let i = 0; i < 8; i++) {
     const before = G.bar.cash;
-    G.room = "stinky_bar"; out = []; _doWork(); _endNight("dawn");
+    G.room = "stinky_bar"; out = []; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */ _endNight("dawn");
     const line = (out.join("\n").match(/\(The bar: .*?\)/) || [""])[0];
     const m = line.match(/฿(-?\d+) in, ฿(\d+) out/);
     if (!m) continue;
@@ -632,7 +632,7 @@ test("working roughly doubles the night — that's what makes going out a decisi
     running(); let total = 0;
     for (let i = 0; i < nights; i++) {
       G.day++; G.room = "stinky_bar";
-      if (work) _doWork();
+      if (work) _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */
       const before = G.bar.cash; out = []; _barSettle();
       total += G.bar.cash - before;
     }
@@ -654,7 +654,7 @@ test("the shift survives the night ending — the presence dilemma runs through 
   G.stage = "expat";
   G.room = "stinky_bar";
   G.rng = 4242;
-  _doWork();
+  _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */
   assert.ok(G.bar.workedLast, "the shift is flagged when it's declared");
   const cash0 = G.bar.cash, day0 = G.day;
   _endNight("dawn");
@@ -685,7 +685,7 @@ test("a declared shift has to be STOOD — you can't clock on and go out", () =>
   // worked, nothing checked you were still there.
   running();
   G.stage = "expat"; G.room = "stinky_bar"; G.nightTurn = 20;
-  _doWork();
+  _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */
   assert.ok(G.bar.workedLast, "clocked on");
   G.room = "queen_vic";
   for (let i = 0; i < WORK_AWAY_BUDGET + 1; i++) _tick();
@@ -694,7 +694,7 @@ test("a declared shift has to be STOOD — you can't clock on and go out", () =>
   // …and staying put keeps it
   running();
   G.stage = "expat"; G.room = "stinky_bar"; G.nightTurn = 20;
-  _doWork();
+  _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */
   for (let i = 0; i < WORK_AWAY_BUDGET + 10; i++) _tick();
   assert.ok(G.bar.workedLast, "a night actually spent behind your own rail still counts");
 });
@@ -708,7 +708,7 @@ test("a year of unbroken shifts is rich and joyless — the grind is the cost", 
     // the presence-dilemma bug hide for as long as it did (actuary playtest
     // 2026-08-23): the shift flag is set on WORK and consumed at settle, so a
     // night that never settles leaves it standing.
-    G.day++; G.room = "stinky_bar"; out = []; _doWork();
+    G.day++; G.room = "stinky_bar"; out = []; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */
     if (/ten of them in a row|ten nights|look tired|forty seconds from this door/.test(out.join("\n"))) grind++;
     _barSettle();
   }
@@ -722,7 +722,7 @@ test("a year of unbroken shifts is rich and joyless — the grind is the cost", 
 test("what you get from a shift is what HAPPENED, not the fact of working", () => {
   running();
   const seen = new Set();
-  for (let i = 0; i < 400; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); }
+  for (let i = 0; i < 400; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */ }
   for (const k of Object.keys(G.bar.seen || {})) seen.add(k);
   assert.ok(seen.size >= 4, `several kinds of night should turn up (saw ${[...seen].join(",")})`);
   assert.ok(seen.has("millionaires") || seen.has("allin"),
@@ -732,7 +732,7 @@ test("what you get from a shift is what HAPPENED, not the fact of working", () =
 test("faction standing is what keeps the police away — and nothing else does", () => {
   const policeNights = (friction, syndicate) => {
     running(friction); G.faction.syndicate = syndicate;
-    for (let i = 0; i < 300; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); }
+    for (let i = 0; i < 300; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */ }
     return (G.bar.seen || {}).police || 0;
   };
   assert.equal(policeNights(6, 3), 0,
@@ -1198,7 +1198,7 @@ test("a night away costs you money, which is what makes standing the rail a choi
   for (let i = 0; i < 300; i++) {
     G.day = 200 + i; G.bar.lastMonthDay = G.day;
     const worked = i % 2 === 0;
-    if (worked) { G.bar.workedLast = true; G.bar.workedDay = G.day; }
+    if (worked) { G.bar.workedLast = true; G.bar.workedDay = G.day; G.bar.stoodTurns = WORK_MIN_STOOD; }
     const n = _barNight();
     if (worked) W += n.net; else A += n.net;
   }

@@ -8030,8 +8030,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // The investor's licence answer — the bar chain when you ARE Wayne (see
       // QUESTS.bar_licence.giverIfSelf). Same facts as Wayne's node, Tan's register.
       { topic: "licence", when: (st, G) => G.quests.bar_licence === "active", sets: ["barLicence"],
-        text: "\"The licence.\" Tan almost smiles. \"You nearly signed the other version once, I think — " +
-          "the one where a stranger's name holds your life. So you know the rule already. Fifty-one " +
+        text: "\"The licence.\" Tan almost smiles. \"You came here to sign the other version, I think — " +
+          "the one where a stranger's name holds your life. I said so in the car: coffee first. So — the rule. Fifty-one " +
           "percent is Thai. Not a loophole — the law.\" He counts it on the wheel. \"A nominee is a " +
           "stranger. A company is real, and audited, and costs. Or your name is on nothing — you are " +
           "the manager, you take a wage and a cut, and somebody you trust holds the paper.\" The " +
@@ -12042,8 +12042,8 @@ const QUESTS = {
     // If you ARE Wayne (the investor origin), the man who'd give you the straight
     // answer is you — so Tan gives it, and the nominee vignette counts as lived.
     giverIfSelf: "tan",
-    descIfSelf: "A farang can't hold the majority — that's the law, not a loophole. You nearly " +
-      "signed the crooked version yourself once; Tan will tell you how it's actually done " +
+    descIfSelf: "A farang can't hold the majority — that's the law, not a loophole. You came here " +
+      "to sign the crooked version yourself, near enough; Tan will tell you how it's actually done " +
       "(ASK TAN ABOUT THE LICENCE).",
     reqFlags: ["expatLife"],
     // nominee_deal is a real prerequisite: Wayne gives the straight answer to the

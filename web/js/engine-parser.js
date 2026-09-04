@@ -954,6 +954,11 @@ function _doTravel(arg) {
   // partway — not back at the door you set out from.
   const startDay = G.day, g0 = G;
   const route = _path(G.room, dest) || [];
+  // a manual step into the dark prints the light hint; TRAVEL inherited the risk of
+  // the walk without repeating it, and a man ate two dog bites on a 21-turn walk
+  // with the torch off (Vic, round 40)
+  if (!(G.lightOn && G.battery > 0) && route.some(r => ROOMS[r] && ROOMS[r].dark))
+    _say("(The way runs through the dark. LIGHT ON first, or the soi dogs pick the route.)", "dim");
   for (let i = 0; i < hops - 1; i++) {
     if (route[i] && _footCrossing(G.room, route[i])) return;   // TRAVEL walks the real route, highway included
     if (route[i]) G.room = route[i];   // a step of actual soi, quietly walked
@@ -983,7 +988,7 @@ function _doTravel(arg) {
 // its articles too or the venue is unenterable by its own printed name
 // (caught by the enumerate-every-doorway test, 2026-08-17).
 function _pnm(s) {
-  return (s || "").toLowerCase().replace(/['\u2019]/g, "")
+  return (s || "").toLowerCase().replace(/['\u2019]/g, "").replace(/-/g, " ")   // "a go-go" / "a-go-go" / "a go go" are one name (Vic, round 40)
     .replace(/\b(?:a|an|the)\b/g, " ").replace(/\s+/g, " ").trim();
 }
 
@@ -1089,6 +1094,9 @@ function _doTake(arg) {
   // it goes straight down, like a bought one, and cuts thirst).
   if (/water|\bnam\b/.test(arg) && _isHotelRoom(G.room)) { _takeFridgeWater(); return; }
   if (_isDarkHere()) { _say("You grope around in the dark and find nothing but regret. (LIGHT ON)"); return; }
+  // "take 300 from till" at your OWN bar is DRAW — "fixtures, not luggage" was said
+  // to the man whose name is on the paperwork (Keith, round 40)
+  if (typeof _atOwnBar === "function" && _atOwnBar() && /\b(money|cash|till|baht|wages|drawer|\d+)\b/.test(arg)) { _doDraw(arg); return; }
   const id = _findItem(arg, "room");
   if (!id) {
     // Already in your pocket. Checked BEFORE the advertised-fixture branch, which
@@ -3255,6 +3263,50 @@ function _doTalkBody(arg, topic) {
     _say(_dogTalk(npc)); // the dog at your heel is a subject everyone has
     return;
   }
+    // STAFF TALK ABOUT THE PEOPLE THEY WORK WITH, AND THE ROOM THEY WORK IN.
+    // Six nights on one stool and the mamasan "didn't know" the girl on her own
+    // pool table (Trevor, round 39); a cashier wouldn't discuss the manager the
+    // room had just named beside her (Vic, round 40); a manager was one great
+    // line and then a wall. Generic, by role pair, so every bar answers.
+    if (topic && !d.topic && (NPC_ROLES[npc] || NPCS[npc].manager)) {
+      const _rt = String(topic).toLowerCase().trim();
+      const roleOf = x => NPCS[x].manager ? "manager" : NPC_ROLES[x];
+      const here = (typeof _staffAt === "function" ? _staffAt(G.room) : []).filter(x => x !== npc);
+      for (const x of Object.keys(NPCS)) if (NPCS[x].bars && NPCS[x].bars.includes(G.room) && !here.includes(x) && x !== npc) here.push(x);
+      const mate = here.find(x => NPCS[x].name.toLowerCase() === _rt || x === _rt || NPCS[x].name.toLowerCase().split(" ").pop() === _rt);
+      if (mate) {
+        const me = roleOf(npc), them = roleOf(mate), n = NPCS[mate].name;
+        const line =
+          them === "mamasan" ? `"Mama?" ${NPCS[npc].name} glances at the till before answering, which is the answer. "Strict. Fair. Don't tell her I said fair."` :
+          them === "manager" ? `"The boss? Pays on time, drinks his own stock, doesn't touch the girls. That is the whole review, and it is a good one."` :
+          them === "cashier" ? `"${n} holds the money and the gossip — same drawer. Whatever you did, ${n} knows the number."` :
+          me === "mamasan" ? `"${n}?" Mama ${NPCS[npc].name} weighs it. "Good girl. Sends money home, same as all of them, and works harder than she lets on. Ask her yourself — she will tell you a different version, and hers is also true."` :
+          me === "cashier" ? `"${n} is on the book same as everybody." ${NPCS[npc].name} does not look up. "That is all the book says about anyone."` :
+          me === "manager" ? `"${n}'s been here longer than me. Ask her — she runs me as much as I run her, and she'd say more."` :
+          `"${n}? My sister." A beat. "Not real sister. Bar sister. She take my customer, I take hers, we eat together after. Same same."`;
+        _say(line);
+        _questOffer(npc);
+        return;
+      }
+      const bn = _barName(G.room) || "";
+      if (/^(bar|here|this place|the place|place|business|the bar|your bar|this bar)$/.test(_rt) || (bn && _rt.length >= 4 && bn.toLowerCase().includes(_rt))) {
+        const me = roleOf(npc);
+        const line =
+          me === "mamasan" ? `"This bar?" A look down the rail that takes in every stool. "My bar. Every girl on it is my problem and my paycheque. You want to know how it runs, buy a drink and watch me."` :
+          me === "manager" ? `"The place?" He wipes the same patch of bar twice. "Runs itself on a good night and runs me on a bad one. Ask me anything about it except who owns it."` :
+          me === "cashier" ? `"${bn || "This bar"}?" She taps the drawer. "Comes in here, goes out there. On a good night more comes in. That is the whole business, and I see all of it."` :
+          `"Here? Is okay." She shrugs at the room. "Mama good, customer sometimes good. Better than the village — is what everybody say, and is true."`;
+        _say(line);
+        _questOffer(npc);
+        return;
+      }
+      if (/^(wallet|my wallet)$/.test(_rt) && !_flag("hasWallet") && !NPCS[npc].filler &&
+          !NPCS[npc].dialogue.some(e => e.topic && /\bwallet\b/.test(String(e.topic)))) {   // a gated wallet node is a "not yet", not a miss
+        _say(`"Wallet?" ${NPCS[npc].name} shakes the head. "Not here — nobody lose anything in here, bad luck for the bar. Soi Buakhao, Candy Bar. Everybody's problem goes to Candy."`);
+        _questOffer(npc);
+        return;
+      }
+    }
     // An authored girl asked the three questions every girl gets — home, family,
   // plan — and stonewalled where a filler girl would have answered (Eamonn,
   // round 39: a dozen Soi 6 girls "went dead flat"). The filler pools are the
@@ -4484,6 +4536,16 @@ const _SNIPE_LINES = [
 // till, instead of vanishing from the economy (Ronnie, 2026-08-26).
 function _ladyDrinkCharge(id) {
   G.money -= _ladyPrice();
+  // "Buy a girl a drink. Ask me about my bar. Let me see your face." — the first
+  // of the three moved nothing (Keith, round 40). An authored mamasan on this
+  // floor warms one notch, once a night, when you buy a round on her rail.
+  if (id && typeof _npcState === "function") {
+    const mama = (typeof _staffAt === "function" ? _staffAt(G.room) : []).find(x => NPC_ROLES[x] === "mamasan" && !NPCS[x].filler);
+    if (mama && ((G.soc.mamaWarm = G.soc.mamaWarm || {})[mama] !== G.day)) {
+      G.soc.mamaWarm[mama] = G.day;
+      const st = _npcState(mama); st.trust = Math.min(5, (st.trust || 0) + 1);
+    }
+  }
   // a drink buys one telling in full — the brush-off pools promise it (see _deliver)
   if (id) (G.soc.roundFor = G.soc.roundFor || {})[id] = G.turns;
   if (typeof _atOwnBar === "function" && _atOwnBar() && G.bar) G.bar.cash += _ladyPrice();
@@ -4852,7 +4914,7 @@ function _doBuy(arg) {
       _poachAnger(id);
       return;
     }
-    _ladyDrinkCharge();
+    _ladyDrinkCharge(id);   // was called without her id — "a drink buys one telling in full" never armed on the ordinary path
     // a lazy girl banks the drink but rarely the warmth — favor sticks only ~40%.
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)
     const _lazy = NPCS[id].type === "lazy";
@@ -7970,6 +8032,7 @@ function _norm(s) {
 // 2026-08-22); "go north" matched the noodle girl's "go". The observation verbs
 // (look/help/…) are exempted earlier in the gate, so they never reach this.
 const _ENC_SOFT = {
+  powerbank:  /^(?:yes|yeah|sure|ok|okay|thank|khop|krub|krap|please|borrow|charge|why not|plug|tao ?rai|how much|price|no|nah|pass|wave|walk(?: on)?)\b/,   // "n" meant north, and cost a man his charge (Keith, round 40)
   peddler:    /^(?:haggle|bargain|cheap(?:er)?|discount|too much|lower|tao ?rai|how much|(?:buy (?:the |a )?)?(?:watch|rolex|glass(?:es)?|shades|sunglasses|vit(?:amin)?s?|pills?)|yes|no|nah|not interested|wave|pass)\b/,
   noodle:     /^(?:yes|yeah|ok|okay|sure|come(?: on)?|fine|why not|her|deal|no|nah|pass|wave|walk(?: on)?)\b/,
   freelancer: /^(?:both|two|friend|ning|threesome|them|yes|ok|okay|sure|company|come|deal|her|why not|no|nah|pass|wave|walk(?: on)?|thanks)\b/,

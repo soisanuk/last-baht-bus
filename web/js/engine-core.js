@@ -323,7 +323,8 @@ function newGame() {
     // due to the old man; `arrears` is what you failed to pay him and haven't
     // made up. Nightly trade lands in `cash` — the bar's own till, kept separate
     // from your pocket so a good week at the bar isn't the same as a good week.
-    bar: { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0,
+    bar: { room: "stinky_bar",   // the bar you'd own — _atOwnBar compared G.room to a field nothing set, so every own-bar guard was dead in play (Keith, round 40)
+      cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0,
       workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 },
     affair: null,        // the staff affair (engine-systems) — null until she stays after close
     affairCool: 0,       // day a STEP BACK was given; the door re-opens after a fortnight
@@ -1041,6 +1042,8 @@ const _PATRON_HOP_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].barType);
 // (rule #6). This is what finally lets the season reach the ROOM (both publican
 // playtests, 2026-08-26: the rail read identical in Sept and Dec) and unlocks the
 // empty-bar monsoon register, which was unreachable while the bench never thinned.
+function _anchorNight(id) { return _hh(id + ":anchor", 5) % 7; }   // 0 = Sunday … 6 = Saturday (day 1 is a Monday)
+const _ANCHOR_NAMES = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"];
 function _benchOut(id) {
   if (!_flag("act1Done")) return false;              // the opening night's cast is fixed
   // A MAN WHO NAMED HIS NIGHTS KEEPS THEM. David is the only character in this
@@ -1053,6 +1056,11 @@ function _benchOut(id) {
   // the promise doctrine applied to a rota — an invitation is a promise, and so
   // is a timetable.
   if (NPCS[id] && NPCS[id].days && NPCS[id].days.includes(G.day % 7)) return false;
+  // …and EVERY regular has one night a week that is his, season or no season
+  // (Vic, round 40: Randy stayed in seven nights of seven in a September week,
+  // by the per-night hash alone — a man nobody can find is not a regular).
+  // Pure hash of the id, so Tan can name the night.
+  if ((G.day % 7) === _anchorNight(id)) return false;
   const stay = { peak: 0, high: 0.05, shoulder: 0.22, low: 0.45, deeplow: 0.6 };
   const p = (typeof _seasonTier === "function") ? (stay[_seasonTier()] || 0) : 0;
   if (p <= 0) return false;
@@ -2476,7 +2484,7 @@ function _tick() {
   // couple of passes a night, not six (Frank, 2026-08-26: 4–6 identical visits
   // in one long evening on one stool)
   if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
-      G.turns - G.lastPeddler >= 20 && (G.peddlerNight || 0) < 2 && _rand() < 0.12) {
+      G.turns - G.lastPeddler >= 20 && (G.peddlerNight || 0) < (typeof _atOwnBar === "function" && _atOwnBar() ? 1 : 2) && _rand() < 0.12) {   // he works YOUR rail once a night, not twice — thirty shifts of it (Keith, round 40)
     G.lastPeddler = G.turns;
     G.peddlerNight = (G.peddlerNight || 0) + 1;
     G.pendingEnc = "peddler";

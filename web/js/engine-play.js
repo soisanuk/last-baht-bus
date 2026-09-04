@@ -4290,6 +4290,7 @@ function _endNight(reason) {
       if (girls.length) _say(`(Three hours on the same stool at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
     }
   }
+  G.soc.barTurns = {};   // tonight's stools, not the vacation's — the line fired on a night slept through in the hotel (Keith, round 40)
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh
@@ -4790,6 +4791,7 @@ function _goExpat() {
   // quests stay pure data.
   _setFlag("expatLife");
   G.money += EXPAT_SAVINGS;
+  if (G.lastNight) G.lastNight.money += EXPAT_SAVINGS;   // the wire is not "up ฿19,275 on the night" (Keith, round 40)
   G.nightTurn = 0;
   G.hunger = 20;
   G.thirst = 30;
@@ -4807,7 +4809,7 @@ function _goExpat() {
   if (G.money > EXPAT_SAVINGS * 4) {
     // a man who arrives carrying a fortune shouldn't be told he has ฿20,000
     // (millionaire playtest 2026-08-22)
-    _say(`(On top of what you were already carrying — ฿${_num(G.money)} — which nobody ` +
+    _say(`(On top of what you were already carrying — ฿${_num(G.money - EXPAT_SAVINGS)} — which nobody ` +
       "here asks about and everybody here notices.)", "dim");
   }
   _say("★ EXPAT MODE — no flights, no clock on the week. The city is yours to " +
