@@ -8428,6 +8428,24 @@ function engineComplete(input) {
 // spaces; a line that maps entirely becomes the English command, anything else
 // Thai gets a voiced "the soi reads a little" instead of "didn't understand".
 const _THAI_CMD = [
+  // ── The verbs a Thai speaker actually reaches for ──────────────────────────
+  // The script table read 36 words and covered 17 of the parser's verbs, so a
+  // player could walk, look, drink and greet in Thai and then had to switch to
+  // English for everything the game is about (Hugo, round 42). These are the
+  // rest — every one already in the trainer's 950-word curriculum, so the
+  // coverage test passes and every one is tappable on the word card. LONGEST
+  // FIRST: matching is greedy startsWith down this array, so a compound has to
+  // beat its own prefix (รถจักรยานยนต์ before รถ, น้ำแข็ง before น้ำ).
+  ["รถจักรยานยนต์", "motosai"], ["โรงพยาบาล", "hospital"], ["บาร์ไฟน์", "barfine"],
+  ["โทรศัพท์", "phone"], ["ถุงยาง", "condom"], ["น้ำแข็ง", "ice"], ["ผู้หญิง", "lady"],
+  ["ผู้ชาย", "man"], ["ธนาคาร", "check balance"], ["โรงแรม", "hotel"], ["ทำงาน", "work"],
+  ["ที่ไหน", "where"], ["เมื่อไร", "time"], ["ตำรวจ", "police"], ["สถานี", "bus"],
+  ["ระฆัง", "ring bell"], ["อาหาร", "food"], ["ตลาด", "market"], ["ทะเล", "sea"],
+  ["ทำไม", "why"], ["อะไร", "what"], ["ป้าย", "bus"], ["ห้อง", "room"], ["ร้าน", "shop"],
+  ["ดื่ม", "drink"], ["เปิด", "open"], ["แบต", "phone"], ["จ่าย", "pay"], ["ถาม", "ask"],
+  ["บอก", "tell"], ["ขาย", "sell"], ["ให้", "give"], ["กิน", "eat"], ["ปิด", "close"],
+  ["ใคร", "who"], ["ฟัง", "listen"], ["รอ", "wait"], ["ดม", "smell"],
+
   ["ขอบคุณ", "thank you"], ["สวัสดี", "hello"], ["เท่าไหร่", "how much"], ["ไม่เอา", "no"], ["ขอโทษ", "sorry"],
   ["ขอ", "buy"], ["เอา", "buy"],   // the two ordering words in the language — "buy beer" is not what anybody says (Hugo, round 42)
   ["ซื้อ", "buy"], ["เบียร์", "beer"], ["น้ำเปล่า", "water"], ["น้ำ", "water"], ["ข้าว", "food"], ["กิน", "eat"],
@@ -8437,13 +8455,26 @@ const _THAI_CMD = [
   ["เงิน", "money"], ["โทร", "call"], ["เวลา", "time"], ["กระเป๋า", "inventory"],
   ["รถ", "bus"], ["บาท", "baht"], ["ชื่ออะไร", "who"],
 ];
+// The table, plus every character's own Thai name — you cannot ask a woman
+// about anything in Thai if the parser has never heard of her (Hugo, round 42:
+// ถามแคนดี้ missed while ถาม worked). Built once, longest-first, so a name
+// beats any table word it happens to start with.
+let _thaiCmdAll = null;
+function _thaiCmdTable() {
+  if (_thaiCmdAll) return _thaiCmdAll;
+  const rows = _THAI_CMD.slice();
+  for (const [id, n] of Object.entries(NPCS))
+    if (n.th && /[\u0E00-\u0E7F]/.test(n.th)) rows.push([n.th, String(n.name || id).toLowerCase().split(" ").pop()]);
+  rows.sort((a, b) => b[0].length - a[0].length);
+  return (_thaiCmdAll = rows);
+}
 function _thaiToCmd(s) {
   if (!/[\u0E00-\u0E7F]/.test(s)) return null;
   let rest = s, out = [], i = 0;
   while (rest.length) {
     if (/^\s/.test(rest)) { rest = rest.slice(1); continue; }
     if (!/^[\u0E00-\u0E7F]/.test(rest)) { const m = rest.match(/^[^\u0E00-\u0E7F\s]+/); out.push(m[0]); rest = rest.slice(m[0].length); continue; }
-    const hit = _THAI_CMD.find(([th]) => rest.startsWith(th));
+    const hit = _thaiCmdTable().find(([th]) => rest.startsWith(th));
     if (!hit) return false; // some Thai the game doesn't read
     out.push(hit[1]); rest = rest.slice(hit[0].length);
     if (++i > 12) return false;

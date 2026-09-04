@@ -258,3 +258,28 @@ test("no Thai the game prints leaves a lone letter on the word card", () => {
   assert.deepEqual([...stranded], [],
     "a lone letter on the card — add the whole word to LBB_VOCAB in term.js (and send it to the trainer)");
 });
+
+test("the verbs a Thai speaker reaches for, in Thai (Hugo)", () => {
+  // every word in the table has to exist in the trainer's curriculum, or the
+  // card cannot gloss it — the coverage test enforces that; this one enforces
+  // that the command on the other side is real
+  const src = readFileSync(join(here, "../../web/js/engine-parser.js"), "utf8");
+  const verbs = new Set();
+  for (const m of src.matchAll(/case\s+"([a-z0-9 ]+)":/g)) verbs.add(m[1].split(" ")[0]);
+  const reach = [...new Set(_THAI_CMD.map(([, en]) => en.split(" ")[0]))].filter(w => verbs.has(w));
+  assert.ok(reach.length >= 35, `${reach.length} parser verbs reachable in Thai script`);
+  for (const v of ["work", "pay", "ask", "barfine", "wait", "listen", "smell", "give", "sell", "ring"])
+    assert.ok(reach.includes(v), `${v} is reachable in Thai`);
+  // …and the sentences actually run
+  const fresh = r => { newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+    for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+    _setFlag("act1Done"); _setFlag("hasWallet"); G.money = 3000; G.nightTurn = 30; G.room = r; out = []; };
+  const miss = /didn't understand|didn't parse|blinks at you|No idea what you're after|soi reads a little/i;
+  for (const [th, room] of [["ทำงาน", "stinky_bar"], ["ซื้อถุงยาง", "beach_rd_c"], ["ดื่มเบียร์", "candy_bar"],
+    ["ไปโรงแรม", "candy_bar"], ["บาร์ไฟน์", "candy_bar"], ["ระฆัง", "candy_bar"], ["จ่าย ๑๕", "candy_bar"]]) {
+    fresh(room); run(th); assert.doesNotMatch(text(), miss, th);
+  }
+  // a character's own Thai name is addressable — you cannot ask a woman about
+  // anything in Thai if the parser has never heard of her
+  fresh("candy_bar"); run("ถามแคนดี้"); assert.match(text(), /เข้าใจ — ask candy/);
+});
