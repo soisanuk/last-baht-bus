@@ -4274,15 +4274,44 @@ const ROOMS = {
     venues: ["kiss", "dollhouse"],
     exits: { w: "second_rd_diana", e: "diana_mid" },
   },
+  // A beer bar named after a fill-in-the-blank exercise, which nobody on this
+  // soi knows and which is the whole joke: the O fell off the sign years ago
+  // and Waen has never replaced it, because a cloze test with a blank in it is
+  // funnier than one without. She was a teacher. She is now a hostess who
+  // teaches, which she will tell you is the same job with better hours.
+  cloze: {
+    name: "Cloze",
+    region: "Soi Diana",
+    bar: "Cloze", barType: "beer",
+    desc: "A narrow open-front beer bar with eight stools and a sign that reads CL_ZE — the O " +
+      "came off in a storm and has stayed off. A blackboard by the ice bin carries a Thai word " +
+      "in a careful teacher's hand, the English under it, and a gap in a sentence for somebody " +
+      "to fill. Half the stools are farang with notebooks, which on this soi is either very sad " +
+      "or the best idea anybody has had.",
+    reads: {
+      board: "Tonight's word is chalked in three lines: the Thai, the romanisation with the tone " +
+        "marks done properly, and a sentence with a hole in it. Underneath, in smaller writing: " +
+        "FIRST CORRECT ANSWER DRINKS FOR HALF PRICE. The rule appears to be enforced.",
+    },
+    revisit: [
+      "Cloze again — eight stools, the missing O, and a new word on the blackboard in that careful hand.",
+      "Back in under the CL_ZE sign. Somebody at the end of the bar is being made to say a tone three times and is getting it wrong three times, cheerfully.",
+      "The blackboard has been wiped and rewritten since you were last in. The chalk is always the same colour and the handwriting is always hers.",
+      "Cloze, quiet end of the evening: two farang arguing about a vowel length and a woman behind the bar refusing, on principle, to settle it for them.",
+    ],
+    exits: { out: "diana_mid" },
+  },
+
   diana_mid: {
     name: "Soi Diana (middle)",
     region: "Soi Diana",
     desc: "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers " +
       "working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE " +
-      "BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of " +
+      "BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi, and CLOZE " +
+      "sits between them with a letter missing off its sign and a blackboard out front. A side door of " +
       "the LK Metro complex breathes cold air and go-go bass from further along — but that's the " +
       "complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here.",
-    venues: ["sapphire", "sundowner"],
+    venues: ["sapphire", "sundowner", "cloze"],
     exits: { w: "diana_w", e: "diana_e", hotel: "areca_room" },
   },
   diana_e: {
@@ -5091,6 +5120,84 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "So the answer from me is yes \u2014 if the answer from you is yes.\"",
         short: "\"Fifty-one is my name on your bar. Lawyer in Bangkok, everything written. Yes from me, if yes from you.\"",
       },
+    ],
+  },
+
+  // THE TUTOR. A hostess who teaches, at the bar she named after a fill-in-the-
+  // blank exercise. Written flat: she is not a tragic teacher fallen on hard
+  // times and she is not a saint improving the farang — she is a woman who is
+  // good at one thing, found the trade paid four times what the classroom did,
+  // and has arranged her evenings so she still gets to do it. The register is
+  // hers: precise English, because it is her subject, with the particles
+  // intact. At fluency she is the ONE person on the floor who is delighted
+  // rather than wary (see _THAI_SPY) — that is her whole function in the game.
+  waen: {
+    name: "Waen", th: "แหวน", emoji: "📓",
+    room: "cloze",
+    look: "Thai woman of thirty-four, hair up in a clip, no make-up to speak of, plain dark blouse, reading glasses pushed into her hair.",
+    desc: "Hair up in a clip, no make-up worth the name, and a plain dark blouse in a soi of sequins. " +
+      "Reading glasses pushed up into her hair and a piece of chalk in her hand. She works the bar like " +
+      "anybody else here and she does it while marking something, and neither activity appears to " +
+      "interrupt the other.",
+    dialogue: [
+      { text: "\"Ah — you looked at the board.\" She says it before hello, pleased. \"Everybody looks and " +
+          "nobody asks. I am Waen.\" A hand indicates the stools, the chalk, the eight farang in various " +
+          "states of comprehension. \"This is Cloze. The O fell off in a storm and I left it, because it " +
+          "is funnier, and because now the sign is also the exercise.\" (ASK WAEN ABOUT THE NAME · ASK WAEN ABOUT THAI)",
+        short: "\"You looked at the board. Everybody looks; nobody asks.\" (ASK WAEN ABOUT THAI)" },
+      { topic: "name|cloze|sign|the name|bar name",
+        text: "\"A cloze test.\" She writes it on the board, in English, and underlines it. \"You take a " +
+          "sentence, you remove one word, and the student must put it back. It is the oldest exercise " +
+          "there is and it is the only one that tells you what somebody actually knows.\" A dry look at " +
+          "the soi outside. \"Also, nobody on this street knows what it means, so they think it is a " +
+          "girl's name, and they come in to meet her. That is the second exercise.\"",
+        short: "\"A cloze test — remove one word, the student puts it back. Everybody thinks it's a girl's name and comes in to meet her.\"" },
+      { topic: "thai|language|teach|lesson|learn|study|words|vocabulary",
+        text: "\"You want to learn, or you want to be told you are good?\" It is not unkind; it is the " +
+          "question she asks everybody, and she waits for the answer. \"Because the second one is free " +
+          "and every girl on this soi will give it to you all night. The first one costs you being " +
+          "wrong in front of people.\" She taps the board. \"Word on the board. Say it wrong, I correct " +
+          "you, you say it again. That is the whole method. It is not a secret.\"",
+        short: "\"You want to learn, or to be told you are good? The second is free everywhere. The first costs being wrong in front of people.\"" },
+      { topic: "teacher|school|before|job|used to|career",
+        text: "\"Nine years. Prathom four, mostly — nine and ten years old, the best age, they still " +
+          "want to know things.\" She squares the chalk on its ledge. \"Fifteen thousand a month, and " +
+          "my own materials out of it, and the mother of a boy I taught to read stopped me in the " +
+          "market to complain about his handwriting.\" No self-pity anywhere in it. \"I make that in a " +
+          "week here, and on Tuesday a man from Norway learned to hear the difference between " +
+          "khao and khao. I did not stop teaching. I stopped being paid badly for it.\"",
+        short: "\"Nine years, prathom four. Fifteen thousand a month. I make that in a week here — and I did not stop teaching.\"" },
+      { topic: "tone|tones|hard|difficult|pronunciation",
+        text: "\"The tones are not the hard part. The hard part is that you do not believe they are real.\" " +
+          "She holds up five fingers and drops them one at a time. \"Every farang says yes yes, five " +
+          "tones, and then says my name flat and looks at me like I am being difficult.\" A small " +
+          "shrug. \"Mai mai mai mai mai. Six months of hearing it before you can say it. Everybody " +
+          "wants the six months to be a weekend.\"",
+        short: "\"The tones aren't the hard part. The hard part is you don't believe they're real.\"" },
+      { topic: "farang|customers|students|men|notebooks",
+        text: "\"Three kinds.\" She counts them without looking up. \"The one who learns twenty words and " +
+          "tells everybody he speaks Thai. The one who learns nothing and is very happy. And the one " +
+          "who gets past the twenty words —\" and here, for the first time, she looks directly at you " +
+          "\"— and finds out the girls liked him better before. That one I keep the good stool for.\"",
+        short: "\"Three kinds: the twenty-word man, the happy one who learns nothing, and the one who gets past twenty and finds out it cost him.\"" },
+      { topic: "home|isan|village|from",
+        text: "\"Surin. The elephant place, yes, everybody says the elephants.\" A patient nod at a joke " +
+          "she has heard several thousand times. \"Khmer at home, Thai at school, English at " +
+          "university, and now I sell beer in all three. My mother thinks this is a waste. My mother " +
+          "is not entirely wrong, and she is not right either.\"",
+        short: "\"Surin. Khmer at home, Thai at school, English at university — and now I sell beer in all three.\"" },
+      { topic: "family|mother|money|send",
+        text: "\"My mother, my aunt, and a nephew whose school fees I pay and whose report I read " +
+          "properly, which nobody else in that house does.\" She says it as arithmetic, not as a " +
+          "confession. \"He is not clever. He is careful, which is better and lasts longer. I tell " +
+          "him so, in case somebody tells him the other thing first.\"",
+        short: "\"My mother, my aunt, a nephew whose report I actually read. He is careful, which is better than clever.\"" },
+      { topic: "plan|future|dream|later",
+        text: "\"A room with eight chairs, a whiteboard and no bar in it.\" She says it flatly, the way " +
+          "you state a target you have costed. \"Not a school. A room. Eight is the number where " +
+          "everybody still has to speak.\" A glance at the eight stools. \"I have the eight. I am " +
+          "practising on drunk people, which is harder, so the room will be easy.\"",
+        short: "\"A room with eight chairs and no bar in it. I'm practising on drunk people; the room will be easy.\"" },
     ],
   },
 
@@ -14654,6 +14761,7 @@ const CANON_HOSTESSES = [
 // (Ringing the bell a couple of times has been known to soften the rules.)
 
 const NPC_ROLES = {
+  waen: "hostess",     // she teaches; the trade is still the trade
   // The White Rabbit's Lao family (Fast Eddy is manager:true, deliberately not here)
   nuan: "mamasan", ampha: "cashier", champa: "hostess", boua: "hostess",
   kinnaree: "mamasan",
@@ -15862,6 +15970,7 @@ const ROOM_GEO = {
   dollhouse:        [12.93126, 100.88199],
   sapphire:         [12.93015, 100.88346],
   sundowner:        [12.92971, 100.88339],
+  cloze:            [12.93001, 100.88357],
   cricketers:       [12.92930, 100.88453],
   areca_room:       [12.92915, 100.88290],
   // Tree Town (real: the Buakhao/Klang corner)

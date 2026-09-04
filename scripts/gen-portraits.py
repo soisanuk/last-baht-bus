@@ -304,6 +304,9 @@ CHARS = {
                      vest=C(0xff7a00), mouth="neutral", bg=BG_STREET),
     "candy":    lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xe86a9a), bg=BG_BAR,
                      acc=["earrings", "chain"]),
+    # the tutor at Cloze: hair up in a clip, plain dark blouse, glasses in her hair
+    "waen":     lady(skin=THAI, hair="bun", hc=BLACK, shirt=C(0x2a2f3a), bg=BG_BAR,
+                     mouth="neutral", acc=["glasses"]),
     "lek":      lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0xd028b0),
                      bg=BG_BAR, mouth="grin", earc=CYAN),
     "noi":      lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x7a3ad0), bg=BG_BAR),

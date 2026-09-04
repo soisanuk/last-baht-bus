@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 238,
+  "geolocated": 239,
   "patrons": 24,
-  "people": 332,
-  "portraits": 356,
+  "people": 333,
+  "portraits": 357,
   "renders": 356,
   "thumbs": 356,
-  "venues": 238
+  "venues": 239
  },
  "frames": [
   "baimon_pic1",
@@ -3309,6 +3309,15 @@
    "pronoun": "she",
    "room": "smile_massage"
   },
+  "waen": {
+   "desc": "Hair up in a clip, no make-up worth the name, and a plain dark blouse in a soi of sequins. Reading glasses pushed up into her hair and a piece of chalk in her hand. She works the bar like anybody else here and she does it while marking something, and neither activity appears to interrupt the other.",
+   "emoji": "📓",
+   "name": "Waen",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "cloze",
+   "th": "แหวน"
+  },
   "waew": {
    "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Silk Rose Bar, from Khon Kaen. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
    "emoji": "👑",
@@ -3832,6 +3841,7 @@
   "view",
   "wa",
   "waan",
+  "waen",
   "waew",
   "wan",
   "wandee",
@@ -4932,6 +4942,16 @@
    ],
    "name": "Cherry Pop Bar",
    "region": "Soi 6"
+  },
+  "cloze": {
+   "bar": "Cloze",
+   "barType": "beer",
+   "geo": [
+    12.93001,
+    100.88357
+   ],
+   "name": "Cloze",
+   "region": "Soi Diana"
   },
   "club_mirage": {
    "bar": "Club Mirage",

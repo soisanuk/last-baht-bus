@@ -283,3 +283,24 @@ test("the verbs a Thai speaker reaches for, in Thai (Hugo)", () => {
   // anything in Thai if the parser has never heard of her
   fresh("candy_bar"); run("ถามแคนดี้"); assert.match(text(), /เข้าใจ — ask candy/);
 });
+
+// ── Cloze, and the tutor who works it ───────────────────────────────────────
+test("Cloze is a real bar on Soi Diana, and Waen is in it", () => {
+  assert.equal(ROOMS.cloze.barType, "beer");
+  assert.equal(ROOMS.cloze.region, "Soi Diana");
+  assert.ok(ROOMS.diana_mid.venues.includes("cloze"), "the soi names it");
+  assert.match(ROOMS.diana_mid.desc, /CLOZE/, "…and its own prose says so");
+  G.room = "diana_mid"; run("enter cloze"); assert.equal(G.room, "cloze");
+  assert.ok(_npcsHere().includes("waen"));
+  out = []; run("talk to waen"); assert.match(text(), /I am Waen/);
+  for (const t of ["name", "thai", "teacher", "tones", "farang", "home", "family", "plan"]) {
+    out = []; run(`ask waen about ${t}`);
+    assert.doesNotMatch(text(), /not my story|wrong girl|don't know about that/i, t);
+  }
+  // the blackboard the room advertises answers a close look
+  out = []; run("examine board"); assert.match(text(), /Tonight's word/);
+  // she is staff, so the trade's own machinery sees her
+  assert.equal(NPC_ROLES.waen, "hostess");
+  G.money = 3000; out = []; run("buy waen a drink");
+  assert.doesNotMatch(text(), /didn't understand|No one here/);
+});

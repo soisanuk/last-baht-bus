@@ -2,13 +2,13 @@
   "generated": "2026-09-04",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 238,
+    "rooms": 239,
     "regions": 15,
     "byKind": {
       "beach": 14,
       "street": 94,
       "massage": 19,
-      "beer": 57,
+      "beer": 58,
       "mall": 1,
       "interior": 2,
       "motel": 1,
@@ -323,6 +323,7 @@
       "name": "Soi Diana",
       "roomIds": [
         "areca_room",
+        "cloze",
         "cricketers",
         "diana_e",
         "diana_mid",
@@ -334,7 +335,7 @@
       ],
       "sampleDescs": [
         "The Buakhao end of Soi Diana. THE CRICKETERS holds the corner here — dartboard, three screens, pies — and the LK Metro alley opens off to one side (its other mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it.",
-        "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here.",
+        "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi, and CLOZE sits between them with a letter missing off its sign and a blackboard out front. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here.",
         "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block south of Soi Honey. The open-air KISS restaurant does brisk trade on the corner under its fairy lights — everyone in Pattaya gives directions off it — with THE DOLLHOUSE's horseshoe counter glowing right alongside. Ahead, the soi runs into warm light and eighty different sound systems; the first beer bar's girls are already waving."
       ]
     },
@@ -2952,6 +2953,20 @@
       "desc": "A proper mid-range room at the Areca Lodge on Soi Diana: firm bed, cold aircon that actually works, a kettle, and a window over the garden pool where a few long-stay couples are doing slow lengths. Comfortable, central, unremarkable in the best way — the whole soi's racket is thirty seconds out the door, and none of it follows you in."
     },
     {
+      "id": "cloze",
+      "name": "Cloze",
+      "bar": "Cloze",
+      "barType": "beer",
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Waen"
+      ],
+      "desc": "A narrow open-front beer bar with eight stools and a sign that reads CL_ZE — the O came off in a storm and has stayed off. A blackboard by the ice bin carries a Thai word in a careful teacher's hand, the English under it, and a gap in a sentence for somebody to fill. Half the stools are farang with notebooks, which on this soi is either very sad or the best idea anybody has had."
+    },
+    {
       "id": "cricketers",
       "name": "The Cricketers",
       "bar": "The Cricketers",
@@ -2991,7 +3006,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here."
+      "desc": "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi, and CLOZE sits between them with a letter missing off its sign and a blackboard out front. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here."
     },
     {
       "id": "diana_w",
