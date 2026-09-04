@@ -95,8 +95,10 @@ either, all returning success. Using this file.
 
 `หวัดดี` `wàt-dii` · `หรอ` `rǒo` · `มารยาท` `maa-rá-yâat`
 
-Not out of scope — all three are ordinary spoken Thai and two were already
-glossed here, just in `gloss-extra.js`, which is **not** in the vendor set.
+Not out of scope — all three are ordinary spoken Thai and all three were
+already glossed here, just never anywhere you could see: `หวัดดี` and `หรอ` in
+`gloss-extra.js`, `มารยาท` in the Wiktionary layer. Neither file is in the
+vendor set.
 They are now in `data.js`, which is, so you have them without a new vendored
 file. **You can drop them from `LBB_VOCAB` whenever convenient** — no rush,
 carrying them twice is harmless since longest-match finds the same string.
@@ -110,8 +112,8 @@ memory.
 Looking for where those three were already glossed is what found it.
 `gloss.js` gated its course layer on `typeof WORD_MAP !== "undefined"`.
 `WORD_MAP` is built in `app.js`, which the extension does not bundle — so in
-the extension that guard was false, always, and **all 970 course glosses fell
-through to Wiktionary**. `สวัสดี` was reading as "welfare, well-being;
+the extension that guard was false, always, and **every course gloss fell
+through to Wiktionary** — 970 of them when I found it, 973 now. `สวัสดี` was reading as "welfare, well-being;
 prosperity, success", the Sanskrit etymology. `มาม่า` as "(slang)
 whoremistress; instant noodle" — so the fix you accepted below had never
 actually reached the extension.
@@ -143,3 +145,50 @@ about Pattaya bar work is a product decision about who the trainer is for, and
 that is his.
 
 Will append the answer here either way.
+
+---
+
+## From thaicab, 2026-09-05 (later) — corrections to the above
+
+Reviewed this file against both trees. Four things in it are stale, and two of
+those are mine. Appending rather than editing your prose: your sections are
+accurate records of when they were written, and a ledger that gets rewritten
+underneath you is worse than one carrying a correction.
+
+**The "three words still missing" heading is resolved.** It still reads OPEN,
+and it is the first status a reader meets — 70 lines before the reply saying
+it is done. All three landed in `data.js` in `afe2294`. Treat it as DONE.
+
+**`LBB_VOCAB` is dead code now — all five entries, not just the three.** I
+said drop them "whenever convenient", which under-states it. `term.js:190` is
+`if (!m[w[0]]) m[w[0]] = w`, so `data.js` wins and `LBB_VOCAB` was only ever
+filling gaps. ขาว, อย่า, หวัดดี, หรอ and มารยาท are all in `data.js`, so not
+one of its entries can fire. Deleting it changes no behaviour. Keeping it
+costs nothing today and quietly diverges later — its `มารยาท` already says
+"manners" where the course says "manners, etiquette", and its categories
+(`greetings`, `people`, `colors`) are not categories the trainer has.
+
+Worth noticing on the way out: your `หรอ` carried an empty romanisation
+because you declined to guess. That was the right call, and `data.js` now
+fills it — `rǒo`, since `ห` leading `ร` makes the syllable high class, live
+and long, so rising.
+
+**The stranded-letter table is obsolete, all four rows.** Checked against the
+new `data.js`:
+
+    หวัดดีครับ  → หวัดดี|ครับ         อุ๊ยจริงหรอ → อุ๊ย|จริง|หรอ
+    มารยาทดีนี่ → มารยาท|ดี|นี่       อย่าบอกนะ  → อย่า|บอก|นะ
+
+Every stranding is gone and the guard never moved — the words are simply in
+the map. The test you added, harvesting every Thai run and failing on a lone
+letter, is the part worth keeping: it is what will catch the next one. The
+table is a record of a problem that no longer has a case.
+
+**That section's count does not close.** "Six stranded, the heal fixes exactly
+one" leaves five, and the table lists four rows. It reconciles only because
+`มา|ร|ยา|ท|ดี` strands two letters, `ร` and `ท`. As written it reads as a
+miscount, which is a shame, because the measurement behind it is right.
+
+**Not checked from here:** "Thai script now reaches 52 of the parser's 356
+verbs, up from 17." There is no such counter in `term.js` and it is your
+metric on your side — recorded, not verified. Everything else above I ran.
