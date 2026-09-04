@@ -3358,6 +3358,14 @@ function _doTalkBody(arg, topic) {
   // These are words, not subjects: the alias table routes them to a real topic
   // where the character has one, and this answers where nobody does.
   if (topic && !d.topic && typeof _thaiWordTalk === "function") { const tw = _thaiWordTalk(npc, topic); if (tw) { _say(tw); return; } }
+  // "ask <anyone> about thai" is the first thing a learner types and it landed
+  // on whatever unrelated node happened to contain the word (Anders, round 43)
+  if (topic && !d.topic && /^(thai|language|thai language|phasa thai|teach|teaching|lessons?)$/.test(String(topic).toLowerCase().trim())) {
+    _say(npc === "waen"
+      ? "\"You are IN the lesson, khun. This is what it looks like.\" She taps the board. \"LESSON when you want the hour.\""
+      : _fmt(_pickVary(_THAI_POINTER, "thaipointer"), { n: NPCS[npc].name }));
+    return;
+  }
   if (topic && !d.topic && /\bquiz\b|trivia/.test(topic)) { _say(_quizTalk()); return; }
   if (topic && !d.topic && /\bdarts?\b/.test(topic)) { _say(_dartsTalk()); return; }
   if (topic && !d.topic && G.dog && (/\bdogs?\b|sai ?krok|\bpuppy\b|\bpaddy\b/.test(topic) || _isDogWord(topic))) {
@@ -3577,7 +3585,7 @@ const _CONVO_TOPIC_RULES = [
   [/\bsom ?tam\b|\bsomtam\b|\bkhao ?niao\b|\bsticky rice\b/,                    "food"],
   [/\bsanuk\b|\bmai pen rai\b|\bjai yen\b|\bgreng ?jai\b/,                      "philosophy"],
   [/\bmor ?lam\b|\bmoh ?lam\b|\bluk ?thung\b/,                                  "music"],
-  [/\bphasa ?thai\b|\bthai language\b|\bspeak thai\b|\bmy thai\b/,             "thai"],
+  [/\bphasa ?thai\b|\bthai language\b|\bspeak thai\b|\bmy thai\b|\bteach me\b|\blearn thai\b/, "thai"],
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
@@ -4184,6 +4192,13 @@ const _THAI_NO_DEFLECT = [
   "{n} answers a slightly different question, gracefully, in fast Thai — and knows that you noticed she changed it, and lets that sit there between you like a third drink.",
   "\"You already know I'm not going to say.\" {n} says it lightly, and then, because the door is open anyway: \"Ask me something you actually want to know and I'll think about it.\"",
 ];
+// Everybody on the soi has the same answer to "can you teach me Thai": no, and
+// somebody else can.
+const _THAI_POINTER = [
+  "\"Teach you?\" {n} laughs, not unkindly. \"I teach you 'same same' and 'no have' and then I am finish. The one who really teach is Kruu Waen, Soi Diana — the bar with the letter fall off. She take money for it, so she do it properly.\"",
+  "\"I speak Thai, I not TEACH Thai.\" {n} shakes her head. \"Different job, na. Waen at Cloze — Soi Diana. She have the board.\"",
+  "\"Ooh, my English teacher!\" {n} finds this very funny, and then is helpful about it. \"Cloze bar, Soi Diana. Ask for Kruu Waen. Everybody know her, nobody go, because is homework.\"",
+];
 const _THAI_SWITCH = [
   "Somebody catches about half of it, decides that English will be quicker for both of you, and answers you in English before you have finished. Nobody means anything by it; it is simply the faster road, and you are not yet good enough to make it the slower one.",
   "The reply comes back in English. It always will, at this level — the moment a Thai speaker has to work to follow you, they stop making you work, and the kindness is indistinguishable from the dismissal.",
@@ -4309,11 +4324,18 @@ function _doSay(arg, targetWord) {
       : "You say it to nobody in particular, which is how most of the language gets practised.");
     if (_here.length) _waiBack(_here.find(id => NPC_ROLES[id]) || _here[0]);
   } else if (key === "thanks") {
-    _say(_here.length
+    // the stand, the counter and the cart are people too: "nobody to thank"
+    // printed one turn after a piwin charged the phone (Anders, round 43)
+    const _folk = _here.length || _room().motosai || _room().seven || _room().busStop || FOOD_STALLS[G.room];
+    _say(_folk
       ? "Warm smiles all round. Manners are the strongest currency on the soi."
       : "Nobody to thank. The night takes it anyway.");
   } else if (key === "how_much") {
     const r = _room();
+    // the taught phrase and the taught verb are the same question: SAY THAO RAI
+    // answered "nobody here is selling anything" in a bar whose price list TAO
+    // RAI prints in full, one turn apart (Anders, round 43)
+    if ((_inBar() || r.motosai) && typeof _doTaoRai === "function") { _doTaoRai(); return; }
     if (r.busStop) _say(`A driver leans out: “${thaiBaht(BUS_FARE)}” (${thaiNumRoman(BUS_FARE)} baht).`, "thai");
     else if (r.motosai) _say(`A piwin grins: “${thaiBaht(MOTOSAI_TOWN)} in town, ${thaiBaht(MOTOSAI_FAR)} to Darkside.”`, "thai");
     else _say("Nobody here is selling anything. Officially.");
@@ -4901,6 +4923,7 @@ function _ladyDrinkCharge(id) {
 function _doBuy(arg) {
   const r = _room();
   // Nont's SIM — "a Thai SIM that isn't in your name", promised in his own greeting
+  if (/\blesson\b|\bhour\b|\bclass\b|\btuition\b/.test(arg) && typeof _doLesson === "function" && _waenHere()) { _doLesson(arg); return; }
   if (/\bsim\b/.test(arg) && typeof _nontHere === "function" && _nontHere()) {
     if (G.itemLoc.thai_sim === "inventory") { _say("“You've got one. One is plenty. Two is a pattern.”"); return; }
     if (G.money < NONT_SIM) { _say(`“Two hundred.” He does not do credit on the thing that is literally in somebody else's name. You have ฿${G.money}.`); return; }
@@ -7744,6 +7767,7 @@ THE WHOLE CARD (bare HELP is the short one):
   WATCH POLICE · WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
   WATCH SUNRISE (outside, at the far end of the night — the other one nobody sober sees)
   LESSON [phrases|reading|verbs] (Kruu Waen at Cloze, Soi Diana — ฿100 the hour, and she means it)
+  NOTEBOOK / WORDS (the Thai you have actually used, and what she has taught you)
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch the parade, don't join it)
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
@@ -7891,7 +7915,7 @@ const _COMPLETE_VERBS = [
   // or advertised (Mario's call, round 32). FLIRT auto-escalates toward KISS
   // on repetition on its own now; spank/fondle stay a manual, undocumented
   // find for a player who goes looking.
-  "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink", "lesson",
+  "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink", "lesson", "answer", "notebook",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
@@ -8533,7 +8557,7 @@ const _ENC_SOFT = {
 // A real top-level command word (not a bare answer): used only to decide whether
 // a soft encounter should let the line through.
 function _isRealCommand(v) {
-  return /^(go|n|s|e|w|ne|nw|se|sw|in|out|up|down|enter|travel|goto|ride|motosai|bus|buy|drink|eat|talk|ask|tell|tip|give|quests|journal|watch|light|check|message|send|look|l|examine|x|wait|sleep|map|time|hint|who|blackbook|contacts|phone|photo|play|rematch|sell|feed|pet|wai|dance|sing|order|read|inventory|i|inv|diagnose|score|call|follow|shower|withdraw|atm|balance|borrow|repay|work|books|draw|complain|report|column|owl|paper|tv|scores|lottery|weather|standing|rep|gallery|share|charge|barfine|flirt|kiss|spank|fondle|contact|number|meet|name|rename|accept|abandon|drop|take|get|open|close|use|search|smell|listen|pray|swim|throw|stand|ring|bell|help|checkout|toggle|undo|restart|reset|again|g|hug|good|stay|heel|whistle|come|bet|wager|beg)$/.test(v);
+  return /^(haggle|bargain|answer|lesson|learn|go|n|s|e|w|ne|nw|se|sw|in|out|up|down|enter|travel|goto|ride|motosai|bus|buy|drink|eat|talk|ask|tell|tip|give|quests|journal|watch|light|check|message|send|look|l|examine|x|wait|sleep|map|time|hint|who|blackbook|contacts|phone|photo|play|rematch|sell|feed|pet|wai|dance|sing|order|read|inventory|i|inv|diagnose|score|call|follow|shower|withdraw|atm|balance|borrow|repay|work|books|draw|complain|report|column|owl|paper|tv|scores|lottery|weather|standing|rep|gallery|share|charge|barfine|flirt|kiss|spank|fondle|contact|number|meet|name|rename|accept|abandon|drop|take|get|open|close|use|search|smell|listen|pray|swim|throw|stand|ring|bell|help|checkout|toggle|undo|restart|reset|again|g|hug|good|stay|heel|whistle|come|bet|wager|beg)$/.test(v);
 }
 let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die with the session
 let _prevCmd = ""; // the one before it (the SLEEP-on-waking guard: two SLEEPs in a row means it)
@@ -9386,6 +9410,9 @@ function doCommand(input) {
     case "ring": case "bell": _doBell(); break;
     case "barfine": case "bf": _doBarfine(arg.replace(/^with /, "")); break;
     case "meet": case "visit": _doMeetOffShift(arg); break;
+    case "answer": case "guess": case "fill": _doAnswer(arg); break;
+    case "notebook": case "vocab": case "vocabulary": case "words": case "phrasebook":
+      _doNotebook(); break;
     case "lesson": case "lessons": case "learn": case "study": case "teach": case "tutor":
       _doLesson(arg); break;
     case "massage": case "nuad": case "nuat": _doMassage(arg); break;

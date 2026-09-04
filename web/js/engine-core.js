@@ -2655,7 +2655,10 @@ function _drinkMult(room) {
 // claim is the character of the place.
 function _beerPrice(room) {
   const r = (typeof ROOMS !== "undefined" && ROOMS[room || G.room]) || {};
-  return Math.max(10, Math.round(BEER_PRICE * _drinkMult(room) / 10) * 10 - (r.beerOff || 0));
+  // …and Cloze's board: get tonight's word right and the drinks are half price
+  // in here until dawn (the sign says the rule is enforced; now it is)
+  const half = (room || G.room) === "cloze" && G.boardWon === G.day ? 0.5 : 1;
+  return Math.max(10, Math.round(BEER_PRICE * _drinkMult(room) * half / 10) * 10 - (r.beerOff || 0));
 }
 function _ladyPrice(room) { return Math.round(LADY_DRINK * _drinkMult(room) / 10) * 10; }
 // The bell was the one round-for-the-house price the venue tier never

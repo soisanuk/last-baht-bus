@@ -382,3 +382,53 @@ test("Waen sends the app after the first hour, then a word a night, free (Mario)
   _setFlag("act1Done"); G.day = 3; _waenTick();
   assert.equal(G.phone.inbox.filter(m => m.from === "waen").length, 0, "you have not met her");
 });
+
+// ── Round 43: Anders paid ฿1,500 and Barry paid nothing ─────────────────────
+test("a lesson only sells what the parser takes (Anders)", () => {
+  G.room = "cloze"; G.money = 9000; const taught = [];
+  for (let i = 0; i < 8; i++) { G.nightTurn = 20; out = []; run("lesson verbs"); taught.push(...text().split("\n").filter(l => /^ {2}\S/.test(l))); }
+  assert.ok(taught.length >= 8);
+  for (const l of taught) {
+    const verb = (l.split("—")[1] || "").trim().toLowerCase();
+    assert.ok(_lessonUsable(verb), `she sold "${verb}", which the parser does not take`);
+  }
+  for (const bad of ["ice", "lady", "man", "market", "sea", "hospital"])
+    assert.ok(!taught.some(l => new RegExp("— " + bad.toUpperCase() + "$", "i").test(l.trim())), bad);
+});
+
+test("the board is playable and the rule is enforced (Barry, Anders)", () => {
+  G.room = "cloze"; G.money = 2000;
+  out = []; run("answer"); assert.match(text(), /______/, "it shows you the sentence with the hole in it");
+  const beer = _beerPrice();
+  out = []; run("answer definitely-wrong-nonsense"); assert.ok(_BOARD_WRONG.some(l => text().includes(l.slice(0, 25))));
+  assert.equal(_beerPrice(), beer, "a wrong answer buys nothing");
+  const w = _boardWord(); out = []; run("answer " + w.rom);
+  assert.match(text(), /THERE it is/); assert.equal(_beerPrice(), Math.round(beer / 2), "half price, as the sign says");
+  out = []; run("answer " + w.rom); assert.match(text(), /already had it/);
+  // day-stable: reloading cannot reroll tonight's word
+  assert.deepEqual(_boardWord(), w);
+  G.room = "candy_bar"; out = []; run("answer beer"); assert.match(text(), /Cloze on Soi Diana/);
+});
+
+test("the taught phrase does what the taught verb does, and the game's own sentence is buyable (Anders)", () => {
+  G.room = "cloze"; G.money = 2000;
+  out = []; run("thao rai");
+  assert.match(text(), /beer ฿/, "SAY THAO RAI answered 'nobody here is selling anything' in a bar with a price list");
+  out = []; run("buy lesson"); assert.match(text(), /Phrases, reading, or verbs/);
+});
+
+test("the notebook shows what the counters knew (Anders)", () => {
+  G.room = "cloze"; G.money = 1000;
+  out = []; run("notebook"); assert.match(text(), /back pages are empty/);
+  run("lesson"); run("sawatdee khrap"); out = []; run("notebook");
+  assert.match(text(), /Thai you have actually used: \d+/);
+  assert.match(text(), /Taught by Kruu Waen: 4 phrases/);
+  assert.match(text(), /the real syllabus/);
+});
+
+test("ASK ABOUT THAI means the language, and Tan is not a she (Anders)", () => {
+  G.room = "candy_bar"; out = []; run("ask candy about thai");
+  assert.match(text(), /Kruu Waen|Cloze/, "the first question a learner types");
+  G.room = "soi6_street"; G.phone.contacts.tan = true; G.known.tan = true;
+  out = []; run("message tan"); assert.doesNotMatch(text(), /She replies/);
+});

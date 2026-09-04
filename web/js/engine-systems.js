@@ -3196,7 +3196,8 @@ function _doMessage(arg) {
   }
   _pushMsg(id, ["555+ you funny", "miss you na 🥺", "come see me tonight!!",
     "work boring... you come make sanuk"][Math.floor(_rand() * 4)]);
-  _say("(📱 She replies almost instantly. CHECK MESSAGES.)", "dim");
+  _say(_fmt("(📱 {who} replies almost instantly. CHECK MESSAGES.)",
+    { who: (NPCS[id] && NPCS[id].pronoun === "he") || !NPC_ROLES[id] ? NPCS[id].name : "She" }), "dim");   // Tan was a "she" (Anders, round 43)
 }
 
 // ── Phone-Tan: the fixer in your contacts ───────────────────────────────────
@@ -8598,6 +8599,20 @@ const _LESSON_CLOSE = [
   "At the end she rubs the board clean and writes tomorrow's word before you have your change. The next man in gets a fresh sheet; that seems to be the arrangement she has with herself.",
   "Somewhere in the second half you stop translating in your head, for about ninety seconds, and she catches it happening and says nothing at all, which is the compliment.",
 ];
+// Is this English string something doCommand actually answers? Derived from the
+// parser's own case labels at load, so a verb added tomorrow is teachable and a
+// noun never is.
+let _lessonVerbSet = null;
+function _lessonUsable(en) {
+  const head = String(en || "").split(" ")[0];
+  if (!_lessonVerbSet) {
+    _lessonVerbSet = new Set(["light", "ring", "check", "buy", "go", "travel", "watch", "photo",
+      "massage", "swim", "dance", "sing", "withdraw", "flirt", "tip", "message", "contact",
+      "barfine", "phone", "motosai", "work", "pay", "ask", "sell", "wait", "listen", "smell",
+      "drink", "eat", "look", "talk", "sleep", "help", "time", "map", "balance", "give"]);
+  }
+  return _lessonVerbSet.has(head);
+}
 function _lessonItems(tier) {
   const taught = (G.taught = G.taught || {});
   const seen = taught[tier] = taught[tier] || [];
@@ -8612,14 +8627,61 @@ function _lessonItems(tier) {
     // Every example is a word the game itself prints, so the card can gloss it.
     pool = _LESSON_READING.map(r => ({ key: "r:" + r[0], th: r[0], rom: r[1], use: r[2] }));
   } else {
+    // ONLY WHAT THE PARSER TAKES. The filter was "looks like an English word",
+    // which sold ICE, LADY and MAN for ฿100 and left a man typing nouns at a bar
+    // (Anders, round 43: "a teacher who sells a word the town won't accept is
+    // the one thing a teacher cannot be"). _lessonVerbs is the check, and the
+    // reading tier's words are excluded so a tier cannot resell its neighbour.
+    const readWords = new Set(_LESSON_READING.map(r => r[0]));
     pool = (typeof _THAI_CMD !== "undefined" ? _THAI_CMD : [])
-      .filter(([, en]) => /^[a-z]+( [a-z]+)?$/.test(en))
+      .filter(([th, en]) => !readWords.has(th) && _lessonUsable(en))
       .map(([th, en]) => ({ key: "v:" + th, th, rom: "", use: en.toUpperCase() }));
   }
   const fresh = pool.filter(p => !seen.includes(p.key));
   const take = fresh.slice(0, 4);
   for (const p of take) seen.push(p.key);
   return { take, left: fresh.length - take.length };
+}
+// ── The board ───────────────────────────────────────────────────────────────
+// "FIRST CORRECT ANSWER DRINKS FOR HALF PRICE. The rule appears to be enforced."
+// It was not enforced; it could not even be attempted (Barry and Anders, round
+// 43, independently — a stated, priced offer with no way in, in the bar whose
+// whole premise it is). One word a night, day-stable, from the same tables the
+// lessons use, and getting it right halves your drinks in here for the night.
+const _BOARD_WRONG = [
+  "\"No.\" Not unkind, and not a hint either. She taps the board twice and goes back to the ice.",
+  "\"Mm — no.\" A shake of the head. \"Say it out loud before you say it to me. You will hear it.\"",
+  "She lets the wrong answer sit there for a second, which is worse than saying so, and then: \"Again.\"",
+];
+function _boardWord() {
+  const pool = (typeof THAI_PHRASES !== "undefined" ? THAI_PHRASES : [])
+    .map(p => ({ th: p.th, rom: p.rom, en: p.key }))
+    .concat(_LESSON_READING.map(r => ({ th: r[0], rom: r[1], en: r[2].split(".")[0].toLowerCase() })));
+  return pool[_hh("board:" + G.vacation + ":" + G.day, 37) % pool.length];
+}
+function _boardShow() {
+  const w = _boardWord();
+  _say("The board, in her hand: a Thai word, the romanisation under it, and a sentence with the " +
+    "word taken out of it.", "dim");
+  _say("   " + w.th + "   ______   (" + w.rom + ")", "thai");
+  _say("(ANSWER <the romanisation, or the English> — first one right drinks half price here tonight.)", "dim");
+}
+function _doAnswer(arg) {
+  if (!_waenHere()) { _say("Nothing here to answer. The board is Kruu Waen's, at Cloze on Soi Diana."); return; }
+  const w = _boardWord();
+  if (!arg) { _boardShow(); return; }
+  if (G.boardWon === G.day) { _say("\"You already had it.\" She is amused. \"Let somebody else have a go — and drink your cheap beer.\""); return; }
+  const a = String(arg).toLowerCase().replace(/[^a-z\u0E00-\u0E7F ]/g, "").trim();
+  const ok = a && (a === w.th || w.rom.toLowerCase().replace(/[^a-z ]/g, "").includes(a) ||
+    a.includes(w.rom.toLowerCase().replace(/[^a-z ]/g, "")) || (w.en && w.en.includes(a)) ||
+    (a.length > 2 && String(w.en).toLowerCase().includes(a)));
+  if (!ok) { _say(_pickVary(_BOARD_WRONG, "boardwrong")); return; }
+  G.boardWon = G.day;
+  _say("\"THERE it is.\" She writes your answer in the gap, underlines it, and rings nothing, because " +
+    "this bar has no bell and she thinks bells are for people with nothing to say. \"Half price " +
+    "tonight. Tell your friends the rule is real; nobody believes the rule is real.\"", "win");
+  _addHappy(1);
+  _addBond("waen", 1);
 }
 function _doLesson(arg) {
   if (!_waenHere()) {
@@ -8707,4 +8769,44 @@ function _waenTick() {
   G.waenDay = G.day;
   if (!_flag("waenLink") && !_flag("lessonTaken") && _hh("waenskip:" + G.day, 13) % 3 !== 0) return;  // before you have paid her, only now and then
   _pushMsg("waen", _fmt(_pickVary(_WAEN_HOMEWORK, "waenhw"), { th: w.th, rom: w.rom }));
+}
+
+// ── The notebook ────────────────────────────────────────────────────────────
+// "There is a counter in there that knows what I did. Nothing in the world
+// does" — Anders, round 43, after seven nights and ฿1,500 of lessons. The game
+// tracked every one of them (G.thaiSaid, G.thaiScript, G.taught, G.thaiSeen)
+// and surfaced none of it. This is the readout, and it is deliberately a
+// PLAYER'S notebook rather than a score: what you have said, what she has
+// taught you, and the honest line about which of those two counts.
+function _doNotebook() {
+  const said = G.thaiSaid ? Object.keys(G.thaiSaid).length : 0;
+  const script = G.thaiScript || 0;
+  const taught = G.taught || {};
+  const tiers = ["phrases", "reading", "verbs"].map(t => [t, (taught[t] || []).length]).filter(([, n]) => n);
+  const seen = (G.thaiSeen || []).length;
+  if (!said && !script && !tiers.length && !seen) {
+    _say("The back pages are empty. You have not written down a word of Thai, said one on purpose, " +
+      "or had one taught to you. (Kruu Waen at Cloze, Soi Diana, takes ฿" + LESSON_PRICE + " the hour.)");
+    return;
+  }
+  _say("── THE BACK OF YOUR NOTEBOOK ──", "win");
+  _say(_fmt("Thai you have actually used: {n} different things{s}.",
+    { n: said, s: script ? ", " + script + " of them typed in the script" : "" }));
+  if (tiers.length) _say("Taught by Kruu Waen: " + tiers.map(([t, n]) => n + " " + t).join(" · ") + ".");
+  if (seen) _say(_fmt("Thai the town has said at you: {n} words and phrases, which is the real syllabus.", { n: seen }));
+  const reg = typeof _thaiRegister === "function" ? _thaiRegister() : "novice";
+  _say(reg === "fluent"
+    ? "The soi has stopped telling you your Thai is good, which is the promotion."
+    : reg === "adequate"
+    ? "Enough that people answer you in English to save time, which is the wall everybody hits."
+    : "Enough to be told it is excellent, which it is not, yet.", "dim");
+  // the reading tier finally pays for itself: what you can read on the street
+  const read = (taught.reading || []).length;
+  if (read >= 4) {
+    _say(_fmt("You can read {n} of the words that turn up on signs out there — which is why the " +
+      "arrows in Tree Town stopped being decoration.", { n: read }), "dim");
+  }
+  if (G.thaiSeen && G.thaiSeen.length) {
+    _say("Recent, in the order you heard them: " + G.thaiSeen.slice(-8).join(" · "), "thai");
+  }
 }

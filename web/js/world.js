@@ -9017,6 +9017,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "King. Nobody will ask who it is, and I will know.” She presses some notes into your " +
           "hand. “For your trouble — and for coming back to tell me instead of forgetting. " +
           "That is the Jomtien way. You are welcome on my soi any season.”",
+        // she presses notes into your hand — and now they actually arrive
+        // (Anders, round 43: money promised in prose, none in the pocket)
+        fx: (st, G) => { G.money += 500; },
         short: "Sumalee lights incense for Gordon and puts his photo up small, by the King's. “Fifteen seasons, never once made trouble. A whole life, on the quiet side.”" },
       { topic: "offer", chip: false,
         text: "“A small thing.” She says it the way she says everything, no hurry. “You " +
