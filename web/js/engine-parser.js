@@ -7641,6 +7641,7 @@ THE WHOLE CARD (bare HELP is the short one):
   WATCH TV (bars & your hotel room) · READ PAPER (on your phone) — the day's real headlines
   OWL / COLUMN — the Nite Owl newsletter in your inbox (a hard copy still at the Queen Vic)
   WATCH POLICE · WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
+  WATCH SUNRISE (outside, at the far end of the night — the other one nobody sober sees)
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch the parade, don't join it)
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
@@ -7741,7 +7742,7 @@ THE WHOLE CARD (bare HELP is the short one):
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
   WAI [person] · SAY <thai phrase> [TO <person>]
   WATCH TV · READ PAPER — the day's real headlines · OWL — the Nite Owl newsletter · WEATHER · SCORES · LOTTERY
-  WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
+  WATCH SUNSET (Blue Dog & Stinky Pinky, early evening) · WATCH SUNRISE (outside, at dawn)
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
@@ -8218,9 +8219,11 @@ function _completePool(verb, ctx) {
     case "contact": return girls();
     case "play": case "challenge": return _playOptions();
     case "light": case "turn": return ["on", "off"];
-    case "watch":
-      return G.room === "blue_dog" ? ["police", "sunset", "tv"]
-        : G.room === "peacock_cabaret" ? ["drag", "show", "cabaret"] : ["tv"];
+    case "watch": {
+      const _dawn = G.nightTurn >= LAST_BUS_TURN + 5 && !_room().bar && !_room().barType ? ["sunrise"] : [];
+      return G.room === "blue_dog" ? ["police", "sunset", "tv", ..._dawn]
+        : G.room === "peacock_cabaret" ? ["drag", "show", "cabaret"] : ["tv", ..._dawn];
+    }
     case "hire": return _room().hostBar ? ["arm", "win"] : [];
     case "check": return ["messages"];
     case "throw": case "toss": case "chuck": case "fling":
@@ -9435,7 +9438,8 @@ function doCommand(input) {
       else _say("No balcony here. Yours is the one over the Queen Vic — head UP to your room and WATCH SOI from the rail.");
       break;
     case "watch":
-      if (G.room === "qv_room" && (!arg || /soi|street|balcony|show|chaos|girls|parade/.test(arg)))
+      if (/sunrise|daybreak|first light|sun ?up/.test(arg || "")) { _doWatchSunrise(); return; }
+  if (G.room === "qv_room" && (!arg || /soi|street|balcony|show|chaos|girls|parade/.test(arg)))
         _doWatchSoi();
       else if (G.room === "queen_vic" && (!arg || /soi|street|window|glass|outside|show|chaos|girls|parade/.test(arg)))
         _doWatchPubSoi();
@@ -9456,11 +9460,13 @@ function doCommand(input) {
       else if ((ROOMS[G.room].water || G.room === "promenade" || (/beach/.test(G.room) && !/beach_rd|_rd\b/.test(G.room) && !ROOMS[G.room].bar)) &&
           (!arg || /sunset|bay|sea|view|sun\b|water|waves?|horizon|boats?/.test(arg)))
         _say(_pickVary(_WATCH_SEA, "watchsea"));
+      else if (/sunrise|dawn|sun ?up|first light|daybreak|morning/.test(arg)) _doWatchSunrise();
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
       else if (/police|checkpoint|shakedown/.test(arg))
         _say("No checkpoint from here — that's the junction outside the Blue Dog or the Stinky Pinky, on Beach Road. (WATCH POLICE, once you're there.)");
       else if (/sunset|bay|sea|view|sun\b/.test(arg))
-        _say("No sea view from here. The bay opens up at the Blue Dog/Stinky Pinky junction, or from Buddha Hill. (WATCH SUNSET.)");
+        _say("No sea view from here. The bay opens up at the Blue Dog/Stinky Pinky junction, or from Buddha Hill. (WATCH SUNSET.)" +
+          (G.nightTurn >= LAST_BUS_TURN ? " The other end of the day is going on outside, mind. (WATCH SUNRISE)" : ""));
       else if (/drag|cabaret|revue|queen|petch|mala/.test(arg))
         _say("No stage here — the drag revue is at the Peacock Cabaret. (WATCH DRAG, once you're there.)");
       else if (/soi|street|parade|chaos|girls\b/.test(arg))

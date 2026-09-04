@@ -2020,8 +2020,12 @@ function _describeRoom(full, forceFull) {
   // Opt-in per room via `revisit`; LOOK and boot/restore force the full desc.
   // a street can carry a post-midnight paint (`lateDesc`): the Khao Talo prose
   // kept advertising Mama Yai's charcoal smoke after the shutters (playtest 2026-08-22)
+  // …and a lateDesc may be a POOL, like every other repeatable line in the game
+  // (Mario, 2026-09-04): a man who stays out to dawn every night reads it more
+  // often than he reads the daytime paint.
   const late = r.lateDesc && typeof _closesMidnight === "function" && G.nightTurn >= 60;
-  if (full) _say(late ? r.lateDesc : (!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc));
+  if (full) _say(late ? (Array.isArray(r.lateDesc) ? _pickVary(r.lateDesc, "late:" + G.room) : r.lateDesc)
+    : (!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc));
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) {
     // An item may carry a `sight:` line that places it in the scene ("...at the

@@ -254,6 +254,12 @@ const ROOMS = {
   jomtien_beach: { water: true,
     name: "Jomtien Beach (South)",
     region: "Jomtien",
+    lateDesc: [
+      "Jomtien sand in the small hours: the loungers folded and chained, the sea a black field with a line of white going along it every few seconds. No sunset left to die — that was hours ago, and the sky behind the town is the colour of a switched-off screen.",
+      "The beach after everything: cold sand, the tide further out than it looks, and the two cats asleep in the same lounger with the big one's chin on the little one. Somewhere behind the tree line a single motorbike changes gear.",
+      "Nothing is open and the sand is better for it. The bay pushes the same four notes up the beach over and over. A man is asleep on a lounger further down and has clearly done this before.",
+      "The sea does the only work left at this hour. The lights along the far curve of the bay are still on because nobody is paid to turn them off.",
+    ],
     desc: "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. " +
       "Two grey-and-white soi cats hold down the end of a lounger, the big one sitting slightly " +
       "in front of the small one, both watching the water. The beach road glows to the east; the " +
@@ -286,6 +292,11 @@ const ROOMS = {
   jomtien_soi_7_beach_end: { water: true,
     name: "Soi 7 Sands (Auntie Nok's pitch)",
     region: "Jomtien",
+    lateDesc: [
+      "Soi 7 Sands with the cart shuttered: Auntie Nok's pitch is a padlocked box under the sea almond, the cooler wheeled home hours ago, and the sand keeps the day's heat under a cool skin.",
+      "The end of Soi 7 at an hour with nothing to sell: upturned boats, a coil of blue rope, and the tree doing its slow work in the dark. Whoever wants a bottle now can want it.",
+      "Nobody's pitch, this late. Just the boats, the sand, and the bay going about its business a few metres out.",
+    ],
     desc: "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of " +
       "upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler " +
       "humming. The beach opens north; Soi 7 runs back inland to the east, up toward the middle " +
@@ -476,6 +487,11 @@ const ROOMS = {
     name: "Lucky 7 Bar",
     bar: "Lucky 7 Bar", barType: "beer",
     region: "Jomtien",
+    lateDesc: [
+      "Lucky 7 in the last hours: the sevens still painted on everything, the Connect 4 frame back on its hook, and three regulars who have got past talking and are just sitting with it.",
+      "The open front is still open because closing it is a decision nobody wants to make. The ice is going fast; the fairy lights are on for whoever walks past, and nobody is walking past.",
+      "Lucky 7, small hours: one girl doing the tally, one man asleep upright, and the sound of the soi outside reduced to the occasional motorbike.",
+    ],
     desc: "The soi's namesake: a friendly open-front beer bar with sevens painted on everything, " +
       "a Connect 4 frame, and a knot of regulars who've been coming since before the fairy lights. " +
       "The girls know every one of them by their drink." +
@@ -1220,6 +1236,11 @@ const ROOMS = {
     atm: true,
     region: "Beach Road",
     seven: true,
+    lateDesc: [
+      "Mid-Beach-Road at four: the tailor touts gone, the tour groups long back in their hotels, and CENTRAL a black glass cliff with its own reflection in it. The sea breathes on the far side of the promenade for an audience of nobody.",
+      "Beach Road Central, small hours: taxis parked with drivers asleep across the front seats, a 7-Eleven glowing like an aquarium, and the whole width of the road available to anybody who wants to walk down the middle of it.",
+      "The mall is dark, the pavement is empty, and the road is doing about a tenth of what it does at nine. It is, briefly, a nice place to stand.",
+    ],
     desc: "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark " +
       "beyond the promenade. The glass cliff of CENTRAL mall rises straight off the " +
       "pavement on the inland side, its front steps on Beach Road itself between Soi 9 and " +
@@ -1600,6 +1621,11 @@ const ROOMS = {
   promenade: {
     name: "Beach Promenade",
     region: "Beach Road",
+    lateDesc: [
+      "The promenade with nobody on it but the bins: the joggers gone, the couples gone, the ladies in the lamplight gone wherever they go. The sea wall is cold to sit on and you sit on it anyway.",
+      "Paved walk, empty benches, one sweeper away down the line. The bay makes its noise on the left; the road makes almost none on the right.",
+      "This late the promenade is just a long straight line of lamps with the dark on both sides of it.",
+    ],
     desc: "The paved walk between road and sand. Couples, joggers who've made bad choices, " +
       "and ladies standing in the lamplight with nowhere in particular to be. The " +
       "bins are full of collectable glass, if a man were desperate. One step down off " +
@@ -1616,6 +1642,11 @@ const ROOMS = {
   beach_rd_n: {
     name: "Beach Road (foot of Soi 6)",
     region: "Beach Road",
+    lateDesc: [
+      "Beach Road at the foot of Soi 6, and the runway is switched off: the soi behind you is grilles and mop buckets, the sea across the road is a sound rather than a view, and the songthaews that pass are half empty and not stopping unless you make it obvious.",
+      "The junction at an hour that belongs to the road sweepers. Two of them are working the gutter with those long brooms and neither looks up. The Dolphin roundabout glows away to the north for nobody.",
+      "Foot of Soi 6, small hours: the taxi bikes have gone down to one man on a saddle with his boots on the handlebars, and he is awake, which is his entire professional advantage.",
+    ],
     desc: "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and " +
       "lit like a runway. Across Beach Road to the west lies the open sand and the bay; the " +
       "Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of " +
@@ -1977,6 +2008,11 @@ const ROOMS = {
     motosai: true,
     name: "Second Road (Soi 6)",
     region: "Second Road",
+    lateDesc: [
+      "Second Road where Soi 6 gives out, with the soi behind you dark: four lanes still running because Second Road always runs, a 7-Eleven doing the only trade left, and nobody coming out of that soi's mouth any more tonight.",
+      "The junction after the shutters: traffic, sodium light, a man asleep sitting up on a parked bike. The corridor behind you has stopped shouting; it will start again at six in the evening, exactly as loud.",
+      "Second Road at this hour is a road, which is all it ever wanted to be. The soi behind you is a row of grilles and one lit doorway that is a laundry, not a bar.",
+    ],
     desc: "Second Road where Soi 6 runs into it, and the contrast does the work: " +
       "behind you a corridor of shouting neon, out here four lanes of traffic that " +
       "could not care less. Girls come out of the soi's mouth in ones and twos to " +
@@ -2707,6 +2743,11 @@ const ROOMS = {
     region: "Soi Buakhao",
     busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     seven: true,
+    lateDesc: [
+      "Soi Buakhao at the Diana end, after: the pharmacies dark, the laundry dark, the Rock Factory's stage lit and silent with the gear still on it. The artery is running at about one vehicle a minute.",
+      "The soi with the volume off. A dog crosses at its own pace, which at this hour it is entitled to. Somewhere north a shutter comes down in one long rattle.",
+      "Buakhao in the last hour of the night: bar mats out drying on stools, a girl in a hoodie on the back of somebody's bike going home, and the whole street smelling faintly of the drains and yesterday's grill.",
+    ],
     desc: "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey " +
       "stage looms on the corner — currently doing what every band in Thailand does to " +
       "'Hotel California' and somehow getting away with it — with LUCKY TIGER BAR right " +
@@ -2874,6 +2915,11 @@ const ROOMS = {
     name: "Tree Town (Entrance Arch)",
     region: "Tree Town",
     seven: true,
+    lateDesc: [
+      "The Tree Town arch with the tangle behind it gone quiet: the neon still burns because the switch is somewhere nobody can be bothered to reach, and the security lounges properly now, feet up, phone tilted.",
+      "TREE TOWN at four in the morning is a lit arch over a dark warren. The painted Thai directions point into somewhere that has stopped happening. One bar deep in there is still going, and you can hear exactly which.",
+      "The arch, the plastic chairs, and a mop leaning where a tout was standing six hours ago. Whatever swallowed the tourists earlier has finished digesting.",
+    ],
     desc: "The neon arch of TREE TOWN, gateway to a pocket maze of go-gos and beer bars. " +
       "Painted directions in Thai point into the tangle. Shared security lounges by the " +
       "arch on plastic stools — bounce out of one bar here and you've bounced out of all of them.",
@@ -3889,6 +3935,11 @@ const ROOMS = {
   naklua_bars: {
     name: "Naklua (Bar Corner)",
     region: "Naklua",
+    lateDesc: [
+      "The Naklua bar corner after last orders: fairy lights still on, stools up on two of the three bars, and one long-stay drinker finishing something slowly because nobody has told him not to.",
+      "Up here the night ends early and quietly. A cat sits in the middle of the lane. The sea breeze does the rest.",
+      "Bar corner, small hours: the tills counted, the ice bins draining, and the kind of silence a pocket of expat bars only manages once a night.",
+    ],
     desc: "A pocket of low-key expat beer bars off the main road, the kind that open at four " +
       "and know every customer's pour by five. No neon war up here — just fairy lights, a " +
       "sea breeze off the old fishing harbour, and the clack of a single pool table. THE " +
@@ -3903,6 +3954,11 @@ const ROOMS = {
     name: "The Anchor Bar",
     region: "Naklua",
     bar: "The Anchor Bar", barType: "beer", pool: true, outlet: true,
+    lateDesc: [
+      "The Anchor at the end of the night: the ship's wheel throwing a long shadow, the glass floats gone dull, and the moorings mostly empty — two stools left occupied and both men are talking about somebody who isn't there.",
+      "Last ice, last round, and the barometer still not to be trusted. Namfon is wiping down the same stretch of bar she wiped an hour ago, which is how you can tell what time it is.",
+      "The Anchor after midnight: quieter than the neon places, warmer than the pavement, and the crowd down to whoever has nothing to get up for.",
+    ],
     desc: "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, " +
       "a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon " +
       "pours a cold one before you've picked a seat — and the chit lands with it.",

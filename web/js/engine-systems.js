@@ -4795,6 +4795,39 @@ const _SHAKEDOWN_DONE = [
   "Checkpoint's over — packed up on the dot and rolled off in a loose, unhurried convoy. " +
     "Whatever drama the road had, it's spent. The bay keeps later hours.",
 ];
+// THE OTHER END OF THE DAY. A man who stays out to dawn eight nights running
+// typed WATCH SUNRISE and got a shrug, in a game called The Last Baht Bus
+// (Jacko, round 42). Note the geography and keep it honest: Pattaya faces WEST
+// — the famous sunsets go into the sea, and the sun comes up BEHIND the town,
+// over Sukhumvit and the hills. Nobody here watches it out of the water.
+const _SUNRISE = [
+  "It does not come up out of the sea — that is the other coast, and the other holiday. It comes up behind the town: the sky over the hills goes from nothing to grey to a thin bad orange, and the bay turns from black to pewter without anybody watching it but you. A rooster somewhere is already several minutes into its opinion.",
+  "The light arrives the way it does here, sideways and all at once. Sukhumvit goes gold for about ninety seconds. The sea, which had all the drama last night, sits there flat and pale and says nothing, and somebody's shutter goes up two streets away.",
+  "First light, and the town changes staff: the last of the night walking one way with their shoes in their hands, the first of the morning walking the other with brooms and ice and rice. For one hour they share the street and neither is embarrassed. It is the best hour and nobody sober has ever seen it.",
+  "Grey, then that flat gold that only lasts as long as it takes to notice it. The bay comes up out of the dark colour by colour. Behind you the hill is a black shape with a temple on it and the sky is doing the work. You have paid for worse views and gone further to get them.",
+  "Dawn over Pattaya, which is to say dawn over the traffic: a fruit cart already moving, a schoolgirl in uniform on the back of her father's bike, the night's last two farang arguing gently about whose hotel is which. The sky is a colour with no name and it is already too warm.",
+];
+const _SUNRISE_SOON = [
+  "Not yet. The sky is still doing its black-and-neon thing and the town is still trading. Give it until the small hours and stand somewhere with a bit of open in front of you.",
+  "Too early for that. It comes up behind the town at the far end of the night — stay out, keep upright, and be outside when it does.",
+];
+const _SUNRISE_INDOORS = [
+  "Not from in here. Whatever the sky is doing, this room is not part of it — outside, and somewhere with a bit of open in front of you.",
+  "No window worth the name. The dawn is out there; you are in here, which is a choice you can still change.",
+];
+function _doWatchSunrise() {
+  const r = _room();
+  const indoors = !!(r.bar || r.barType || r.shop || r.massage || r.soapy || r.seven || _isHotelRoom(G.room));
+  const balcony = G.room === "qv_room" || (typeof _hotelRoomId === "function" && G.room === _hotelRoomId() && G.hotel === "queenvic");
+  if (indoors && !balcony) { _say(_pickVary(_SUNRISE_INDOORS, "sunriseIn"), "dim"); return; }
+  if (G.nightTurn < LAST_BUS_TURN + 5) { _say(_pickVary(_SUNRISE_SOON, "sunriseSoon"), "dim"); return; }
+  _say(_pickVary(_SUNRISE, "sunrise"), "win");
+  if (G.sunriseDay === G.day) return;               // one sky a night
+  G.sunriseDay = G.day;
+  _addHappy(2);                                      // free, and the point of staying up
+  _say("(สบาย. You will pay for this in about four hours, and it will still have been worth it.)", "dim");
+}
+
 function _doWatchJunction(arg) {
   const sunset = /sunset|bay|sea|view|\bsun\b/.test(arg || "");
   if (sunset || !_shakedownOn()) {

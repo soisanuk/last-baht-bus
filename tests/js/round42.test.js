@@ -140,3 +140,37 @@ test("everybody has a view on som tam, and the register is theirs (Hugo)", () =>
   G.room = "candy_bar"; out = []; run(`ask ${NPCS[g].name} about isan`);
   assert.doesNotMatch(text(), /wrong girl|don't know about that/, "isan is home");
 });
+
+test("the streets know what time it is, in a pool (Jacko / Mario)", () => {
+  const late = Object.keys(ROOMS).filter(r => ROOMS[r].lateDesc);
+  assert.ok(late.length >= 15, `${late.length} rooms carry a late paint`);
+  for (const r of late) {
+    const d = ROOMS[r].lateDesc;
+    if (Array.isArray(d)) assert.ok(d.length >= 3, `${r}: a repeatable line wants a real pool`);
+  }
+  // the sunset that was still dying over Jomtien at a quarter to two
+  G.room = "jomtien_beach"; G.nightTurn = 88; out = []; _describeRoom(true);
+  assert.doesNotMatch(text(), /smear of sunset/);
+  G.nightTurn = 20; out = []; _describeRoom(true, true); assert.match(text(), /sunset|loungers/, "early, the room reads as itself");
+  // and the pool rotates rather than repeating
+  const seen = new Set();
+  G.nightTurn = 88; for (let i = 0; i < 6; i++) { out = []; _describeRoom(true); seen.add(text().slice(0, 40)); }
+  assert.ok(seen.size >= 2, "the late paint varies");
+});
+
+test("WATCH SUNRISE is a real thing, and the sun comes up behind the town (Jacko)", () => {
+  G.room = "jomtien_beach"; G.nightTurn = 90; const h = G.happy;
+  out = []; run("watch sunrise");
+  assert.ok(_SUNRISE.some(l => text().includes(l.slice(0, 40))));
+  assert.equal(G.happy, h + 2); assert.match(text(), /สบาย/);
+  out = []; run("watch sunrise"); assert.equal(G.happy, h + 2, "one sky a night");
+  G.nightTurn = 30; out = []; run("watch dawn"); assert.match(text(), /Too early|Not yet/);
+  G.room = "candy_bar"; G.nightTurn = 95; out = []; run("watch sunrise"); assert.match(text(), /Not from in here|No window/);
+  // it never claims the sun rises out of the sea: Pattaya faces west
+  for (const l of _SUNRISE) assert.doesNotMatch(l, /sun (rises?|coming up) (out of|from) the sea|over the sea/);
+  // three surfaces: the parser has it, the completion offers it late and outdoors, HELP names it
+  G.room = "jomtien_beach"; G.nightTurn = 95;
+  assert.ok(engineComplete("watch ").some(c => /sunrise/.test(c)), "offered at dawn, outdoors");
+  G.nightTurn = 20; assert.ok(!engineComplete("watch ").some(c => /sunrise/.test(c)), "…and not at eight in the evening");
+  assert.match(_HELP, /WATCH SUNRISE/);
+});
