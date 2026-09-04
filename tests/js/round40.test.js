@@ -163,3 +163,16 @@ test("WAIT in a go-go stops at twenty minutes, in a bar at an hour; a bought dri
     ownsBar(); doCommand("look"); const t4 = G.nightTurn; out = []; run("wait 12"); assert.ok(G.nightTurn - t4 >= 12, "your own rail is yours to sit at");
   } finally { _rand = saved; }
 });
+
+test("the deposit clears by transfer from the account, the pocket topping up — never through the ATM (Mario)", () => {
+  const setup = () => { newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; _setFlag("act1Done"); G.stage = "expat"; _setFlag("expatLife");
+    for (const f of ["barPremises", "barLicence", "barPartner", "partnerCandy"]) _setFlag(f); G.room = "stinky_bar"; out = []; };
+  setup(); G.money = 3000; G.bank = 120000; _barDeposit();
+  assert.ok(_flag("barPaid")); assert.equal(G.bank, 0); assert.equal(G.money, 3000, "the pocket was not touched");
+  assert.match(text(), /account number off the docket/); assert.doesNotMatch(text(), /bar towel/);
+  setup(); G.money = 30000; G.bank = 100000; _barDeposit();
+  assert.ok(_flag("barPaid")); assert.equal(G.bank, 0); assert.equal(G.money, 10000); assert.equal(G.bar.pocketDrawn, 20000);
+  assert.match(text(), /฿20,000 light of it|฿20000 light of it/);
+  setup(); G.money = 5000; G.bank = 100000; _barDeposit();
+  assert.ok(!_flag("barPaid")); assert.match(text(), /฿15,000 short|฿15000 short/); assert.match(text(), /pocket and account together/);
+});

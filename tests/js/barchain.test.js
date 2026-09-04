@@ -423,7 +423,7 @@ test("the deposit prose doesn't claim it's your last baht when it plainly isn't"
   // and printed verbatim to a player holding ฿2m. True for the intended player,
   // who scrapes it together over several ATM days; a plain falsehood otherwise.
   readyToBuy();
-  G.money = BAR_DEPOSIT;              // the intended case: it really is everything
+  G.money = 20000; G.bank = BAR_DEPOSIT - 20000;   // the intended case: pocket and account together, it really is everything
   out = []; _barDeposit();
   assert.match(out.join("\n"), /every baht you have/);
 
@@ -432,17 +432,17 @@ test("the deposit prose doesn't claim it's your last baht when it plainly isn't"
   out = []; _barDeposit();
   const rich = out.join("\n");
   assert.doesNotMatch(rich, /every baht you have/, "…and it doesn't lie to a rich one");
-  assert.match(rich, /bar towel/, "same beat, honest wording");
+  assert.match(rich, /banking app/, "same beat, honest wording — a transfer, not a towel (2026-09-04)");
 });
 
 test("you cannot buy a bar with what you have — the deposit is your ceiling", () => {
-  readyToBuy();
+  readyToBuy(); G.bank = 0;
   assert.ok(G.money < BAR_DEPOSIT, "expat savings alone must not cover it");
   out = []; _barDeposit();
   assert.equal(_flag("barPaid"), false, "short is short");
   assert.match(out.join("\n"), /short/, "and Bert says how short");
 
-  G.money = BAR_DEPOSIT + 10000;          // a week at the ATM
+  G.money = BAR_DEPOSIT + 10000;          // the account emptied into the pocket, say
   out = []; _barDeposit();
   assert.ok(_flag("barPaid"));
   assert.equal(G.money, 10000, "it takes every baht of the deposit");

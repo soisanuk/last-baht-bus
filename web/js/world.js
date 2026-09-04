@@ -90,7 +90,7 @@ const EXPAT_SAVINGS = 20000; // wired over when you make the move
 // a dying man in Ohio whether or not it rains, which is what makes low season
 // bite instead of merely being mentioned.
 const BAR_PRICE    = 1800000;  // the headline, mostly for the prose
-const BAR_DEPOSIT  = 120000;   // everything you have
+const BAR_DEPOSIT  = 120000;   // everything you have — paid by TRANSFER from the account (pocket tops up), never carried through the ATM
 const BAR_MONTHLY  = 25000;    // to the old man, every 30 days, for six years
 // Rent, and why a bar bought with a handshake can still go under. The sale price
 // buys the BUSINESS — the fit-out, the stock, the licence, the fact that people

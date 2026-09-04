@@ -29,7 +29,10 @@ test("the Darkside is not an island: the crossing walks west to Soi Buakhao, and
   assert.ok(ROOMS.sukhumvit_verge.dark, "and it is dark — the streak counts");
   run("w"); assert.equal(G.room, "buakhao_pt");
   G.room = "khao_talo"; G.visited.stinky_bar = true; G.hunger = 0; G.thirst = 0; const t0 = G.turns;
-  run("travel stinky pinky");
+  // the route crosses Sukhumvit on foot, which is a ROLL (4%+): the unidentified
+  // flake of rounds 37–40 was the truck ending the night mid-assert
+  const saved = _rand; _rand = () => 0.99;
+  try { run("travel stinky pinky"); } finally { _rand = saved; }
   assert.equal(G.room, "stinky_bar"); assert.ok(G.turns - t0 >= 10, "a long walk, paid in ticks: " + (G.turns - t0));
 });
 

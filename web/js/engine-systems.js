@@ -6202,39 +6202,52 @@ function _barOwned() { return _flag("barOpen") && !!G.bar; }
 // ── The deposit ──────────────────────────────────────────────────────────────
 // The one moment in the arc where the money has to actually exist. Fires at
 // your own bar once the 51% is settled; until it's paid there is no opening
-// night. If you're short, Bert tells you how short — the ATM caps at ฿20k a
-// day, so assembling it is a few days' work, and that grind is deliberate: it
-// is the last thing that happens before the bar stops being an idea.
+// night. It clears the way ฿120k actually moves — a TRANSFER from the account
+// to the old man's bank, the pocket topping up only what the account can't
+// (Mario, 2026-09-04: nobody carries it through the ATM; that version cost
+// ฿1,800 in fees and stranded ฿500 below the note size — Keith, round 40). If
+// you're short, Bert names the shortfall against everything you have.
 function _barDepositDue() {
   return _flag("barPartner") && !_flag("barPaid") && G.room === "stinky_bar";
 }
 
 function _barDeposit() {
-  if (G.money < BAR_DEPOSIT) {
+  const bank = G.bank || 0, have = G.money + bank;
+  if (have < BAR_DEPOSIT) {
     if (G.soc.depositNagDay === G.day) return;
     G.soc.depositNagDay = G.day;
     _say(_fmt("Bert has the figure written on the back of a docket. \"Deposit's " +
       "฿{dep}, and the old man carries the rest — ฿{monthly} a month, six " +
       "years. Rent's ฿{rent}, separate, to the fella that owns the building.\" " +
-      "He slides it over. \"You're ฿{short} short, bud. Bank won't give you it " +
-      "all in one day either.\"",
+      "He slides it over. \"Straight to his bank, from yours — nobody's counting " +
+      "that on a towel. You're ฿{short} short, bud, pocket and account together.\"",
       { dep: BAR_DEPOSIT, monthly: BAR_MONTHLY, rent: _barRent(),
-        short: BAR_DEPOSIT - G.money }), "alert");
+        short: BAR_DEPOSIT - have }), "alert");
     return;
   }
   _setFlag("barPaid");
-  G.money -= BAR_DEPOSIT;
+  // the account first, the pocket for whatever the account can't cover — and the
+  // pocket share is the BAR's ledger, not tonight's spending (the morning line)
+  const fromBank = Math.min(bank, BAR_DEPOSIT), fromPocket = BAR_DEPOSIT - fromBank;
+  G.bank = bank - fromBank;
+  G.money -= fromPocket;
+  if (fromPocket) G.bar.pocketDrawn = (G.bar.pocketDrawn || 0) + fromPocket;
   G.bar.owed = BAR_PRICE - BAR_DEPOSIT;
   G.bar.lastMonthDay = G.day;
   _say("");
-  // "every baht you have" was unconditional — true for the intended player, who
-  // scrapes the deposit together over several ATM days, and a plain falsehood for
-  // a rich one (actuary playtest 2026-08-23: printed while holding ฿2m).
-  _say(_fmt(G.money > 0
-    ? "You count out ฿{dep}. It does not look like very much on a bar towel, " +
-      "and it does not leave much behind it either."
-    : "You count out ฿{dep}. It is every baht you have, and it does not " +
-      "look like very much on a bar towel.", { dep: BAR_DEPOSIT }), "alert");
+  // "every baht you have" was unconditional — a plain falsehood for a rich player
+  // (actuary playtest 2026-08-23: printed while holding ฿2m).
+  _say(_fmt(G.money + G.bank > 0
+    ? "Bert reads the old man's account number off the docket and you type it into " +
+      "the app with the care of a man who has never sent ฿{dep} anywhere. Two " +
+      "screens, a thumbprint, and the number on the front of your banking app is " +
+      "smaller in a way that does not look like a bar yet.{pocket}"
+    : "Bert reads the old man's account number off the docket and you type it into " +
+      "the app with the care of a man who has never sent ฿{dep} anywhere. Two " +
+      "screens, a thumbprint, and it is every baht you have, gone to Ohio in the " +
+      "time it takes the ice to settle.{pocket}",
+    { dep: BAR_DEPOSIT,
+      pocket: fromPocket ? _fmt(" The account was ฿{p} light of it; the rest goes across the bar in notes, which Bert counts twice without appearing to.", { p: fromPocket }) : "" }), "alert");
   _say(_fmt("\"Right.\" Bert doesn't make a thing of it. \"Rest is ฿{monthly} " +
     "a month for six years, direct to him, and he'll not chase you for it " +
     "because he's not the sort and he's not well enough — which if you've any " +
