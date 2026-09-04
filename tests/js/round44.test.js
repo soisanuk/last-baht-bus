@@ -317,3 +317,90 @@ test("the chip bar carries the sea wall's three answers", () => {
   const chips = _chipSet().map(c => c.cmd);
   for (const c of ["yes", "both", "no"]) assert.ok(chips.includes(c), `${c} is tappable`);
 });
+
+// ── TOPICS: the conversation surface (2026-09-05) ──────────────────────────
+
+test("TOPICS lists only what the person will actually answer, right now", () => {
+  // The promise property, and the reason the list can't rot: _convoTopics mirrors
+  // _pickDialogue's own gates, so anything printed is answerable THIS turn.
+  // Build the miss oracle by running nonsense rather than transcribing pools.
+  for (const id of ["bert", "lek", "mort"]) {
+    if (!NPCS[id]) continue;
+    const room = _npcRoom(id);
+    const setup = () => {
+      out = []; newGame();
+      G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+      _setFlag("act1Done"); G.stage = "vacation"; G.money = 9000; G.nightTurn = 30;
+      for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
+      G.peddlerNight = 2; G.room = room; G.known[id] = true;
+    };
+    setup();
+    const misses = new Set();
+    for (const junk of ["zqxwv", "photosynthesis", "belgium"]) {
+      out = []; run(`ask ${id} about ${junk}`); misses.add(text().slice(-90));
+    }
+    setup();
+    const open = _convoTopics(id);
+    assert.ok(open.length, `${id} has open topics`);
+    for (const t of open) {
+      setup();
+      out = []; run(`ask ${id} about ${t}`);
+      assert.ok(!misses.has(text().slice(-90)),
+        `${id} answers "${t}" — TOPICS must never offer a topic that misses`);
+    }
+  }
+});
+
+test("the chip bar reaches every open topic, four at a time", () => {
+  G.room = "stinky_bar"; G.known.bert = true;
+  run("talk to bert");
+  const open = _convoTopics("bert");
+  assert.ok(open.length > 4, "Bert is deep enough to page");
+  const seen = new Set();
+  const pages = Math.ceil(open.length / 4);
+  for (let i = 0; i < pages; i++) {
+    for (const c of _chipSet()) {
+      const m = /^ask bert about (.+)$/.exec(c.cmd);
+      if (m) seen.add(m[1]);
+    }
+    run("topics");
+  }
+  assert.equal(seen.size, open.length,
+    `every one of Bert's ${open.length} open topics is tappable across ${pages} pages`);
+  // and the pager itself is on the bar, so a thumb knows there is more
+  assert.ok(_chipSet().some(c => c.cmd === "topics"), "the more-chip is offered");
+});
+
+test("TOPICS is a readout: free, and it never lies about an empty book", () => {
+  G.room = "stinky_bar"; G.known.bert = true;
+  const t0 = G.turns;
+  run("topics bert");
+  assert.equal(G.turns, t0, "a readout costs no turn, like QUESTS and SCORE");
+  // somebody with nothing open gets a voiced line, not a crash and not a blank
+  const shy = Object.keys(NPCS).find(id => NPCS[id].dialogue && !_convoTopics(id).length);
+  if (shy) {
+    out = []; run("topics " + NPCS[shy].name.toLowerCase());
+    assert.ok(text().trim().length > 0);
+    assert.doesNotMatch(text(), /undefined|\[object/);
+  }
+});
+
+test("the page belongs to the partner, not to the bar", () => {
+  G.room = "stinky_bar"; G.known.bert = true;
+  run("talk to bert", "topics");
+  assert.ok(G.convoPage > 0, "you turned Bert's page");
+  const other = _npcsHere().find(id => id !== "bert" && NPCS[id].dialogue);
+  if (other) {
+    run("talk to " + NPCS[other].name.toLowerCase());
+    assert.equal(G.convoPage, 0, "a page into Bert means nothing with somebody else");
+  }
+});
+
+test("TOPICS is on all the surfaces a verb has to be on", () => {
+  assert.ok(_COMPLETE_VERBS.includes("topics"), "autocomplete");
+  assert.ok(_FREE_VERBS.has("topics"), "free");
+  assert.match(_HELP, /TOPICS/, "the full card");
+  assert.match(_HELP_SOI6, /TOPICS/, "and the soi6 card");
+  G.room = "stinky_bar"; G.known.bert = true; run("talk to bert");
+  assert.ok(_chipSet().some(c => c.cmd === "topics"), "the chip bar");
+});

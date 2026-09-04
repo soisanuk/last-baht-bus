@@ -3753,6 +3753,52 @@ function _convoTopic(s) {
 const _TOPIC_LABELS = { sponsor: "the kept girls" };
 function _topicLabel(t) { return _TOPIC_LABELS[t] || t.replace(/\b\w/g, c => c.toUpperCase()); }
 
+// WHAT WILL HE TALK ABOUT. The sharpest number this project measures is authored
+// dialogue actually delivered to a player — 21.8% of 2,726 lines — and the
+// bottleneck turned out not to be breadth but DEPTH: Bert answers 13 topics on a
+// given night and the chip bar showed four of them, with no way to reach the
+// other nine except already knowing the word. Every persona who liked a
+// character ran out of things to ask them long before the character ran out of
+// answers. So: ask him. _convoTopics is already the honest list — it mirrors
+// _pickDialogue's own gates, so everything printed here is a topic he will
+// answer THIS turn, which makes the list a promise that cannot rot.
+const _TOPICS_LEAD = [
+  "{n} will talk about",
+  "Things {n} has an opinion on tonight",
+  "What you can get out of {n} right now",
+  "{n}, on the evidence so far, will discuss",
+];
+const _TOPICS_NONE = [
+  "{n} isn't giving you much tonight — buy a drink, stay a while, and the list gets longer.",
+  "Nothing doing. {n} answers the people who stick around; come back when you're less of a stranger.",
+  "{n} has nothing open for you just now. That changes with drinks bought and nights spent.",
+];
+function _doTopics(arg) {
+  let id = _convoActive();
+  const a = String(arg || "").replace(/^(about|to|with|for)\s+/, "").trim();
+  if (a) id = _findNpc(a) || id;
+  if (!id) {
+    const here = _npcsHere();
+    if (here.length === 1) id = here[0];
+    else { _say("Topics for who? TALK to somebody first, or TOPICS <name>.", "dim"); return; }
+  }
+  const n = NPCS[id];
+  if (!n) { _say("Nobody by that name here.", "dim"); return; }
+  const open = _convoTopics(id);
+  const who = _convoName(id);
+  if (!open.length) { _say(_fmt(_pickVary(_TOPICS_NONE, "topicsnone"), { n: who })); return; }
+  _say(_fmt(_pickVary(_TOPICS_LEAD, "topicslead"), { n: who }) + ": " +
+    open.map(t => _topicLabel(t).toLowerCase()).join(" \u00b7 ") + ".", "room");
+  // Turn the page too, so the four the chip bar is showing are not the four it
+  // was showing a moment ago — the thumb player's only route to the rest.
+  const per = 4;
+  if (open.length > per) {
+    G.convoPage = ((G.convoPage || 0) + 1) % Math.ceil(open.length / per);
+    _say("(Tapping cycles the rest onto the chip bar. ASK " + who.split(" ")[0].toUpperCase() +
+      " ABOUT <topic> works for any of them.)", "dim");
+  }
+}
+
 // When the partner has asked YOU something (G.convoQ), your plain reply lands
 // here: it's remembered (globally in G.player.said, and per-partner in st.heard
 // so they can catch a change), and they react. First time you open up warms them
@@ -7863,6 +7909,7 @@ THE WHOLE CARD (bare HELP is the short one):
   LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
   N/S/E/W · IN/OUT · ENTER <place>
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
+  TOPICS [person] — what they will actually talk about tonight (free, and it grows)
   WAI [person] · SAY <thai phrase> [TO <person>]
   RIDE BUS TO <place> · RIDE THE LOOP (the whole circuit, for the breeze) · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
@@ -7937,7 +7984,7 @@ function _helpFirstPage() {
     L.push(G.act1Tries > 0 ? "  HINT — the soi's nudge toward the next step" : "  HINT — a nudge, once the soi knows your face");
   } else {
     L.push("Getting around:  LOOK · EXAMINE <thing> · N / S / E / W · ENTER <place> · TRAVEL <bar> · MAP · TIME");
-    L.push("People:          TALK TO <person> · ASK <person> ABOUT <topic> · WAI · CONTACT <lady> — this town runs on asking");
+    L.push("People:          TALK TO <person> · ASK <person> ABOUT <topic> · TOPICS (what they'll discuss) · WAI · CONTACT <lady>");
     L.push("The bar:         BUY BEER · BUY DRINK FOR <lady> · FLIRT <lady> · RING BELL · BARFINE <lady> · TAO RAI (ask the price)");
     L.push(soi6 ? "Money & phone:   WITHDRAW <amount> · CHECK BALANCE · PHONE · MESSAGE <lady> · CHECK MESSAGES"
                 : "Money & phone:   WITHDRAW <amount> · CHECK BALANCE · PHONE · MESSAGE <lady> · CHECK MESSAGES · CHARGE PHONE");
@@ -7970,6 +8017,7 @@ THE WHOLE CARD (bare HELP is the short one):
   LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
   N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (fast-hop to any bar you've seen)
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
+  TOPICS [person] — what they will actually talk about tonight (free, and it grows)
   WAI [person] · SAY <thai phrase> [TO <person>]
   WATCH TV · READ PAPER — the day's real headlines · OWL — the Nite Owl newsletter · WEATHER · SCORES · LOTTERY
   WATCH SUNSET (Blue Dog & Stinky Pinky, early evening) · WATCH SUNRISE (outside, at dawn)
@@ -8009,6 +8057,7 @@ THE WHOLE CARD (bare HELP is the short one):
 
 const _COMPLETE_VERBS = [
   "reply", "unsubscribe",
+  "topics",
   "buy piwin a beer",
   "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
@@ -8189,8 +8238,17 @@ function _chipSet() {
     // wheel carries verbs). So the chip types what a player would have to type;
     // the LABEL still reads as the bare topic, so the bar looks unchanged.
     const _who = _convoName(partner).toLowerCase();
-    for (const t of _convoTopics(partner).slice(0, acts.length ? 2 : 4))
+    // The bar used to slice(0, 4) and stop, so nine of Bert's thirteen open
+    // topics were unreachable by thumb and invisible to everybody else. Same
+    // four at a time — a wall of chips buries the social moves below it — but
+    // TOPICS turns the page, so the whole list is reachable by tapping.
+    const _open = _convoTopics(partner);
+    const _per = acts.length ? 2 : 4;
+    const _pages = Math.max(1, Math.ceil(_open.length / _per));
+    const _pg = ((G.convoPage || 0) % _pages + _pages) % _pages;
+    for (const t of _open.slice(_pg * _per, _pg * _per + _per))
       add(`ask ${_who} about ${t}`, _topicLabel(t));
+    if (_open.length > _per) add("topics", `more (${_pg + 1}/${_pages})`);
     add("compliment", "compliment");
     add("joke", "joke");
     if (_npcState(partner).trust >= 3) add("tease", "tease"); // banter unlocks once you're close
@@ -8817,7 +8875,7 @@ const _GERMAN_QUIP = {
 const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health", "verbs",
   "inventory", "inv", "i", "map", "help", "quests", "journal", "hint", "share",
   "who", "blackbook", "standing", "rep", "gallery", "photos", "album", "books",
-  "takings", "identity"]);
+  "takings", "identity", "topics", "subjects"]);
 
 let _rawAnswer = null; // the raw-cased line, for _convoAnswer's quote-back memory
 function doCommand(input) {
@@ -9283,6 +9341,7 @@ function doCommand(input) {
     case "books": case "takings": case "accounts": _doBooks(); break;
     case "draw": case "cashup": _doDraw(arg); break;
     case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
+    case "topics": case "subjects": _doTopics(arg); break;
     case "accept": _doAccept(arg); break;
     case "abandon": _doAbandon(arg); break;
     case "take": case "get": case "grab": case "pick":

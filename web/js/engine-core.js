@@ -246,6 +246,7 @@ function newGame() {
     convoQ: null,        // a question the partner has put to YOU, awaiting a reply: {id,key} (see _convoAsk/_convoAnswer)
     convoLapsed: {},     // …and questions you walked away from, re-asked next time you talk to them
     darkDoorDay: -1,     // the once-a-night "there's no lights out there" nudge at your own door
+    convoPage: 0,        // which window of their open topics the chip bar is showing (see TOPICS)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
@@ -1120,6 +1121,7 @@ function _npcState(id) {
 // parser layer that consumes this lives in engine-parser.js.
 function _convoStart(id) {
   if (!id) return;
+  if (G.convo !== id) G.convoPage = 0;   // a page into Bert means nothing with Lek
   G.convoHour = _nightHour(); // his drift clock stops while you're talking (see _hopRoom)
   // Switching partners LAPSES a pending question from the old one — the doc'd
   // "changes the subject" rule, enforced at the switch itself. Without this the
