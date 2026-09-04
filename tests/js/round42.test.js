@@ -351,3 +351,34 @@ test("Kruu Waen sells an hour, and an hour is not a promotion (Mario)", () => {
   G.room = "cloze"; assert.deepEqual(_completePool("lesson"), ["phrases", "reading", "verbs"]);
   assert.match(_HELP, /LESSON \[phrases\|reading\|verbs\]/);
 });
+
+test("Waen sends the app after the first hour, then a word a night, free (Mario)", () => {
+  G.room = "cloze"; G.money = 1000;
+  run("talk to waen"); assert.ok(G.known.waen);
+  run("lesson");
+  const link = G.phone.inbox.find(m => m.from === "waen" && /soisanuk/.test(m.text));
+  assert.ok(link, "the app she makes her students use");
+  assert.match(link.text, /it is free and it is not mine/, "she is recommending, not selling");
+  // The fourth wall stays deliberate. Real places a player could actually go:
+  // the dog's charity, and now hers. Everything else is in-fiction (a CTF
+  // puzzle domain, a bar's own web address) or the game's own share card.
+  const src = ["engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js", "world.js"]
+    .map(f => readFileSync(join(here, "../../web/js", f), "utf8")).join("\n");
+  const OK = ["soisanuk.github.io/last-baht-bus", "soidog.org", "blacksite.org", "soc.com"];
+  const real = [...new Set((src.match(/[a-z0-9-]+\.(?:org|com|io)(?:\/[a-z-]+)?/gi) || []))]
+    .filter(u => !OK.some(k => u.includes(k) || k.includes(u)));
+  assert.deepEqual(real, [], "a third link out would make this a game with adverts: " + real.join(" "));
+  // then the homework, once a night, free, and the same for everybody that night
+  const before = G.money;
+  G.day++; G.waenDay = null; out = []; _waenTick();
+  const hw = G.phone.inbox.slice(-1)[0];
+  assert.equal(hw.from, "waen"); assert.equal(hw.gives, 0); assert.equal(G.money, before, "free");
+  const n = G.phone.inbox.length; _waenTick();
+  assert.equal(G.phone.inbox.length, n, "once a night");
+  // day-stable: reading a save must not reroll tonight's word
+  const w1 = _waenWord(); assert.deepEqual(_waenWord(), w1);
+  // and she does not text a stranger
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); G.day = 3; _waenTick();
+  assert.equal(G.phone.inbox.filter(m => m.from === "waen").length, 0, "you have not met her");
+});

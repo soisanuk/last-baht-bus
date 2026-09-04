@@ -2555,6 +2555,7 @@ function _tick() {
   _maybeIncomingText();
   if (typeof _wrongNumberTick === "function") _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it
   _soidogTick();   // the day after you adopt the soi dog, the Foundation texts for a donation
+  if (typeof _waenTick === "function") _waenTick();   // Kruu Waen's homework, free, once a day
   if (G.lightOn && G.battery > 0) {
     G.battery--;
     if (G.battery === 0) {

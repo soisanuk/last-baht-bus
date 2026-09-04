@@ -8648,7 +8648,63 @@ function _doLesson(arg) {
   }
   _say(_pickVary(_LESSON_CLOSE, "lessonclose"));
   _say("(-฿" + LESSON_PRICE + ", ฿" + G.money + " left." + (left > 0 ? " She has more of this one: another LESSON " + tier.toUpperCase() + " when you want it." : " That is the whole of that tier.") + ")", "dim");
+  // the flag goes up BEFORE the hour passes, so the tick inside the lesson sends
+  // her link first and the nightly homework can never beat it to the inbox
+  const _first = !_flag("lessonTaken");
+  if (_first) _setFlag("lessonTaken");
   _passTime(LESSON_TURNS);
   _addBond("waen", 1);
-  if (!G.flags.lessonTaken) { _setFlag("lessonTaken"); _addHappy(1); }
+  if (_first) _addHappy(1);
+}
+
+// ── Kruu Waen's homework ────────────────────────────────────────────────────
+// Two things, both Mario's call (2026-09-04). After your first paid hour she
+// sends the app she makes her students use — and yes, that is a REAL link, the
+// second in the game after the Soi Dog Foundation's. It is allowed here because
+// the trainer is not an outside world: it is the same universe, the same
+// origin, and the game already writes G.thaiSeen for it to read back, so a
+// teacher on this soi recommending it is the most in-character thing she does.
+// Keep it to hers and the dog's; a third would make this a game with adverts.
+//
+// And then the homework: once you have met her she texts a word a night, free,
+// forever, because a teacher who has decided you are a student does not stop
+// when the hour is up. Content comes from the same tables the lesson uses, so
+// she can never set homework the parser refuses.
+const TRAINER_URL = "soisanuk.github.io";
+const _WAEN_HOMEWORK = [
+  "Word for tonight: {th} — {rom}. Use it on somebody who is not me. 📓",
+  "{th} ({rom}). You will hear this one four times tonight if you listen for it. Listening is the homework.",
+  "Tonight: {th} = {rom}. Say it to the first person who serves you anything. Report back.",
+  "Homework. {th} — {rom}. If they laugh, you said it flat. Say it again anyway; that is the whole method.",
+  "{th}, {rom}. Small word. Everybody uses it and nobody teaches it, which is why I am.",
+  "For tonight: {th} ({rom}). Do not look at the romanisation twice. Look at the letters.",
+];
+function _waenWord() {
+  // deterministic per day, so a reload cannot reroll tonight's homework
+  const pool = (typeof THAI_PHRASES !== "undefined" ? THAI_PHRASES : [])
+    .map(p => ({ th: p.th, rom: p.rom }))
+    .concat((typeof _LESSON_READING !== "undefined" ? _LESSON_READING : []).map(r => ({ th: r[0], rom: r[1] })));
+  if (!pool.length) return null;
+  return pool[_hh("waen:" + G.vacation + ":" + G.day, 29) % pool.length];
+}
+function _waenTick() {
+  if (!G.phone || G.battery <= 0 || !G.known || !G.known.waen) return;
+  // the link, once, after the first hour she was actually paid for
+  if (_flag("lessonTaken") && !_flag("waenLink")) {
+    _setFlag("waenLink");
+    _pushMsg("waen",
+      "Homework, khun. The app I make my students use — it is free and it is not mine, so I " +
+      "have nothing to sell you: " + TRAINER_URL + " 📓 Do ten minutes on the bus. Ten minutes on " +
+      "the bus is worth an hour with me, and I would rather you spent the hundred baht on the hour " +
+      "you cannot get from a phone.");
+    _say("(📱 A text from Waen. CHECK MESSAGES.)", "dim");
+    return;
+  }
+  // …and then a word a night, free, because she has decided you are a student
+  if (G.waenDay === G.day) return;
+  const w = _waenWord();
+  if (!w) return;
+  G.waenDay = G.day;
+  if (!_flag("waenLink") && !_flag("lessonTaken") && _hh("waenskip:" + G.day, 13) % 3 !== 0) return;  // before you have paid her, only now and then
+  _pushMsg("waen", _fmt(_pickVary(_WAEN_HOMEWORK, "waenhw"), { th: w.th, rom: w.rom }));
 }
