@@ -304,3 +304,21 @@ test("Cloze is a real bar on Soi Diana, and Waen is in it", () => {
   G.money = 3000; out = []; run("buy waen a drink");
   assert.doesNotMatch(text(), /didn't understand|No one here/);
 });
+
+test("the seventeen requested words reach the verbs they were requested for", () => {
+  const en = new Set(_THAI_CMD.map(([, e]) => e));
+  for (const v of ["flirt", "tip", "photo", "massage", "swim", "dance", "sing",
+    "withdraw", "cash", "balance", "message", "contact", "taxi", "beach", "cigarette", "light on"])
+    assert.ok(en.has(v), `${v} is reachable in Thai`);
+  const fresh = r => { newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+    for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+    _setFlag("act1Done"); _setFlag("hasWallet"); G.money = 5000; G.bank = 50000; G.nightTurn = 30; G.room = r; out = []; };
+  const miss = /didn't understand|didn't parse|blinks at you|No idea what you're after|soi reads a little/i;
+  for (const [th, room] of [["จีบ", "candy_bar"], ["นวด", "thai_massage"], ["ว่ายน้ำ", "jomtien_beach"],
+    ["ถอนเงิน", "beach_rd_c"], ["บัญชี", "beach_rd_c"], ["ไปชายหาด", "beach_rd_c"]]) {
+    fresh(room); run(th); assert.doesNotMatch(text(), miss, th);
+  }
+  // the torch is not a door: เปิดไฟ is LIGHT ON, not OPEN
+  fresh("jomtien_beach_s3"); run("เปิดไฟ");
+  assert.match(text(), /Flashlight on/); assert.equal(G.lightOn, true);
+});

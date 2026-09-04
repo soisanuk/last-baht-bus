@@ -8436,6 +8436,14 @@ const _THAI_CMD = [
   // coverage test passes and every one is tappable on the word card. LONGEST
   // FIRST: matching is greedy startsWith down this array, so a compound has to
   // beat its own prefix (รถจักรยานยนต์ before รถ, น้ำแข็ง before น้ำ).
+  // …and the seventeen the trainer added on request (2026-09-04), which is the
+  // whole bar surface: flirt, tip, photo, massage, swim, dance, sing, the money
+  // verbs and the torch.
+  ["เปิดไฟ", "light on"], ["ปิดไฟ", "light off"],   // above เปิด/ปิด: the torch is not a door
+  ["ร้องเพลง", "sing"], ["ถ่ายรูป", "photo"], ["ถอนเงิน", "withdraw"], ["ว่ายน้ำ", "swim"],
+  ["ชายหาด", "beach"], ["ข้อความ", "message"], ["แท็กซี่", "taxi"], ["เงินสด", "cash"],
+  ["บุหรี่", "cigarette"], ["บัญชี", "balance"], ["เบอร์", "contact"], ["จีบ", "flirt"],
+  ["ทิป", "tip"], ["นวด", "massage"], ["เต้น", "dance"], ["รูป", "photo"], ["ไฟ", "light"],
   ["รถจักรยานยนต์", "motosai"], ["โรงพยาบาล", "hospital"], ["บาร์ไฟน์", "barfine"],
   ["โทรศัพท์", "phone"], ["ถุงยาง", "condom"], ["น้ำแข็ง", "ice"], ["ผู้หญิง", "lady"],
   ["ผู้ชาย", "man"], ["ธนาคาร", "check balance"], ["โรงแรม", "hotel"], ["ทำงาน", "work"],
