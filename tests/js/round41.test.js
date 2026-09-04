@@ -82,6 +82,7 @@ test("the Bangkok lawyer sends a bill, and Tan's coffee costs sixty baht once (D
   G.partnerWho = "candy"; G.pendingChoice = "partner"; out = []; _partnerYes();
   assert.equal(G.bank, 100000 - LAWYER_FEE); assert.match(text(), /lawyer's bill is ฿12,000/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; _setFlag("act1Done");
+  for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
   G.room = "soi6_street"; G.money = 1000; G.known.tan = true; out = [];
   run("ask tan about buying a bar"); assert.match(text(), /BUY TAN A COFFEE/);
   // asking about coffee is a question, not a purchase — it was charging ฿60 (prose review)
@@ -131,6 +132,7 @@ test("prose review: the 51% is not the bar, and peak season is two months (slice
   // January is peak too, and the landlord's line said December in it
   for (const [m0, name] of [[11, "December"], [0, "January"]]) {
     newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+    for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
     _setFlag("act1Done"); expat(); for (const f of ["barPremises", "barLicence", "barPartner", "partnerCandy"]) _setFlag(f);
     G.season0 = m0; G.day = 9; G.room = "stinky_bar"; G.money = 130000; G.bank = 0;
     assert.equal(_seasonTier(), "peak"); out = []; _barDeposit();
@@ -152,6 +154,7 @@ test("prose review: 'nobody walks Sukhumvit' is no longer true, and 'what should
   assert.doesNotMatch(text(), /about your wallet/, "he has had the wallet back for weeks");
   assert.match(text(), /this town runs on asking/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
   G.stage = "act1"; G.room = "jomtien_beach"; out = []; run("what should i do");
   assert.match(text(), /about your wallet/, "…but in the opening it is the wallet");
 });

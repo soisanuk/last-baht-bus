@@ -3353,6 +3353,11 @@ function _doTalkBody(arg, topic) {
   }
   // A topic that found no node: say so in her voice. Falling through to the
   // greeting spent its repeat path on a question never asked (playtests 2026-08-22).
+  // EVERYBODY HAS A VIEW ON SOM TAM. Not one character answered a single Thai
+  // word — including สนุก, which is the game's own score unit (Hugo, round 42).
+  // These are words, not subjects: the alias table routes them to a real topic
+  // where the character has one, and this answers where nobody does.
+  if (topic && !d.topic && typeof _thaiWordTalk === "function") { const tw = _thaiWordTalk(npc, topic); if (tw) { _say(tw); return; } }
   if (topic && !d.topic && /\bquiz\b|trivia/.test(topic)) { _say(_quizTalk()); return; }
   if (topic && !d.topic && /\bdarts?\b/.test(topic)) { _say(_dartsTalk()); return; }
   if (topic && !d.topic && G.dog && (/\bdogs?\b|sai ?krok|\bpuppy\b|\bpaddy\b/.test(topic) || _isDogWord(topic))) {
@@ -3555,6 +3560,15 @@ const _CONVO_TOPIC_RULES = [
   // sentence and therefore the word a player types (persona report 2026-08-23,
   // now caught by tools/asktopic-audit.mjs). One alias row serves typed ASK, the
   // wheel and the conversation layer alike, which is what this table is for.
+  // THE WORDS A THAI SPEAKER ASKS IN. Not one NPC answered a single Thai topic —
+  // including สนุก, the game's own score unit (Hugo, round 42). These map onto
+  // subjects the cast already has, so the alias row is the whole fix.
+  [/\bisan\b|\bisaan\b|\be-?san\b|\bupcountry\b|\bvillage\b/,                    "home"],
+  [/\bsin ?sot\b|\bdowry\b|\bbride ?price\b/,                                "family"],
+  [/\bsom ?tam\b|\bsomtam\b|\bkhao ?niao\b|\bsticky rice\b/,                    "food"],
+  [/\bsanuk\b|\bmai pen rai\b|\bjai yen\b|\bgreng ?jai\b/,                      "philosophy"],
+  [/\bmor ?lam\b|\bmoh ?lam\b|\bluk ?thung\b/,                                  "music"],
+  [/\bphasa ?thai\b|\bthai language\b|\bspeak thai\b|\bmy thai\b/,             "thai"],
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
@@ -4026,13 +4040,47 @@ function _doWai(arg) {
   const staff = npcs.filter(id => !NPCS[id].patron);
   const target = arg ? _findNpc(arg) : (staff.length === 1 ? staff[0] : null);
   if (!target) {
-    if (!npcs.length) { _say(`You wai the empty ${/beach/.test(G.room) && !/_rd|beach_rd/.test(G.room) ? "sand" : "street"}. A passing soi dog looks moved.`); return; }
+    if (!npcs.length) {
+      // it said "the empty street" inside a massage shop and inside his own
+      // hotel room (Hugo, round 42)
+      const r = _room();
+      const where = r.barType ? "empty bar" : (r.massage || r.soapy) ? "empty shop" :
+        r.food ? "empty counter" : /beach/.test(G.room) && !/_rd|beach_rd/.test(G.room) ? "empty sand" :
+        _isHotelRoom(G.room) ? "empty room" : r.bar || r.shop ? "empty room" : "empty street";
+      _say(`You wai the ${where}. ${where === "empty street" ? "A passing soi dog looks moved." : "Nobody sees it, which does not make it worse."}`);
+      return;
+    }
     _say("You press your palms together and wai the room in general. Approving nods.");
+    _waiBack(npcs.find(id => NPC_ROLES[id] || NPCS[id].manager) || npcs[0]);
     for (const id of npcs) _waiEffect(id);
     return;
   }
   _say(`You wai ${NPCS[target].name} — palms together, small bow, like you mean it.`);
+  _waiBack(target);
   _waiEffect(target);
+}
+
+// NOBODY EVER WAI'D BACK. Seven nights of correct manners and not one return
+// (Hugo, round 42) — the one thing a man who learned the language came for.
+// Once per person per night, and the register is hers: staff return it properly,
+// a mamasan gives you the version that costs her nothing, farang don't.
+const _WAI_BACK = [
+  "{n} returns it without thinking about it — palms up under the chin, a half-second, back to what she was doing. You were placed, and you passed.",
+  "{n} wais back properly, which she does not do for everyone, and something in the room's temperature moves one degree in your favour.",
+  "{n} gets hers in first the second time, which is the whole game and she knows you know it.",
+  "The wai comes back a little higher than she owes you — a small joke about the fact that you know where it should be — and she laughs at your face.",
+];
+const _WAI_BACK_MAMA = [
+  "Mama returns it exactly as far as she has to and not one millimetre further, which from her is a warm review.",
+  "The mamasan's wai is a formality performed by a professional, and it is still worth more than the nods you have been getting all week.",
+];
+function _waiBack(id) {
+  if (!id || !NPCS[id]) return;
+  if (NPCS[id].nat && !/thai/i.test(NPCS[id].nat)) return;   // the expats nod; they don't wai
+  (G.soc.waiBack = G.soc.waiBack || {});
+  if (G.soc.waiBack[id]) return;
+  G.soc.waiBack[id] = true;
+  _say(_fmt(_pickVary(NPC_ROLES[id] === "mamasan" ? _WAI_BACK_MAMA : _WAI_BACK, "waiback"), { n: NPCS[id].name }), "dim");
 }
 
 function _waiEffect(id) {
@@ -4056,6 +4104,59 @@ function _waiEffect(id) {
 // Strip the polite particles a Thai speaker naturally appends (ค่ะ/คะ/ครับ/นะ…)
 // so สวัสดีค่ะ matches the greeting — it was "gibberish" to a Thai woman NPC
 // (Thai-speaker playtest 2026-08-22).
+// Does this romanised input look like somebody trying Thai? Syllable-shaped
+// words from the learner's first hundred, so an English sentence never trips it.
+const _THAI_ROM = /\b(khrap|krub|krap|kha|ka|na|mai|dai|arai|nit|noi|phi|nong|pai|nai|gin|kin|khao|kao|aroi|aroy|sanuk|sabai|suay|phaeng|paeng|chok|dee|jai|yen|tilac|teerak|mao|farang|jing|mee|tang|ao|khor|kor|thot|tot|sawat|sawas|khun|khop|kob|rai|pen|som|tam|isan|isaan|lao|luk|thung|sin|sot|greng|wai)\b/;
+function _looksThai(s) {
+  const t = String(s || "").trim().toLowerCase();
+  if (!t || t.length > 40) return false;
+  const words = t.split(/\s+/);
+  if (words.length > 5) return false;
+  const hits = words.filter(w => _THAI_ROM.test(w)).length;
+  return hits >= 1 && hits >= words.length - 1;   // nearly every word has to be Thai-shaped
+}
+
+// One Thai word, answered by whoever you asked. Thai staff get the native's
+// version (mild disbelief that it needs explaining); the expats get the
+// twenty-years version.
+const _THAI_WORD_TALK = {
+  somtam: {
+    thai: n => `"Som tam?" ${n} looks at you as if you had asked what water is. "Papaya, chilli, lime, pla ra. You eat how spicy? Two chilli? Farang two chilli is not two chilli." She is already deciding for you.`,
+    farang: n => `"Som tam," ${n} says, "is how they find out what you're made of. Ask for it Thai-hot once, in front of people, and you'll never pay full price for anything on that soi again. Might not taste much for a week, mind."`,
+  },
+  sanuk: {
+    thai: n => `"Sanuk?" ${n} laughs, because the question is the answer. "Everything must be sanuk. Work must be sanuk, or why work? If not sanuk, we go home." A shrug that has closed more arguments than it sounds like.`,
+    farang: n => `"Sanuk." ${n} turns the glass a quarter turn. "It's the whole country in five letters. If a thing stops being fun they'll stop doing it, and no amount of your shouting changes that. Took me about six years to stop shouting."`,
+  },
+  maipenrai: {
+    thai: n => `"Mai pen rai." ${n} says it the way you would say 'of course' — and then, seeing that you want more: "Is finish. No problem. Why you carry it?"`,
+    farang: n => `"Mai pen rai," ${n} says, "is not 'no problem'. It's 'this is not worth either of us minding', and half the farang out here hear the first one and spend a decade being furious about the second."`,
+  },
+  jaiyen: {
+    thai: n => `"Jai yen." ${n} presses a flat palm downward, slowly. "Cool heart. You angry — you lose. Always. Even when you right, especially when you right."`,
+    farang: n => `"Cool heart. Jai yen." ${n} nods at the room. "Every man who's been thrown out of a bar out here had a hot one for about four seconds. Cheapest advice in Thailand and nobody takes it."`,
+  },
+  sinsot: {
+    thai: n => `"Sin sot." ${n}'s face does something complicated and lands on honest. "Is for the family, for the face. Not buying. But if a man have nothing to give, the village will say something, and my mother will hear it."`,
+    farang: n => `"The dowry?" ${n} snorts. "Depends entirely who's asking and how many farang came before you. It's real, it's face, and the number is a conversation, not a price list — which is exactly what the ones who complain never worked out."`,
+  },
+};
+function _thaiWordTalk(npc, topic) {
+  const t = String(topic || "").toLowerCase();
+  const key = /\bsom ?tam\b|\bsomtam\b/.test(t) ? "somtam" :
+    /\bsanuk\b|\bsanook\b/.test(t) ? "sanuk" :
+    /\bmai ?pen ?rai\b/.test(t) ? "maipenrai" :
+    /\bjai ?yen\b|\bgreng ?jai\b/.test(t) ? "jaiyen" :
+    /\bsin ?sot\b|\bdowry\b/.test(t) ? "sinsot" : null;
+  if (!key) return null;
+  const n = NPCS[npc] && NPCS[npc].name;
+  if (!n) return null;
+  // _thaiVoice is the game's own "is this a Thai speaker" test (engine-core) —
+  // Terry carries no nat and no role and is nobody's idea of a Thai
+  const thai = typeof _thaiVoice === "function" ? _thaiVoice(npc) : !NPCS[npc].nat;
+  return _THAI_WORD_TALK[key][thai ? "thai" : "farang"](n);
+}
+
 function _stripPolite(s) {
   return String(s || "").replace(/\s*(นะคะ|นะครับ|ค่ะ|คะ|ครับ|นะ)\s*$/g, "")
     .replace(/\s+(na )?(kha|ka|khrap|krub|krap|krab|na)\s*$/i, "").trim();
@@ -4100,11 +4201,17 @@ function _doSay(arg, targetWord) {
   const phrase = THAI_PHRASES.find(p => p.key === key);
   _say(`You say: “${phrase.th}” (${phrase.rom})`, "thai");
   _engineSpeak(phrase.th);
+  const _here = _npcsHere();
   if (key === "hello") {
-    for (const id of _npcsHere()) _waiEffect(id);
-    _say("Faces soften. One word of Thai buys more than a round of drinks here.");
+    for (const id of _here) _waiEffect(id);
+    _say(_here.length
+      ? "Faces soften. One word of Thai buys more than a round of drinks here."
+      : "You say it to nobody in particular, which is how most of the language gets practised.");
+    if (_here.length) _waiBack(_here.find(id => NPC_ROLES[id]) || _here[0]);
   } else if (key === "thanks") {
-    _say("Warm smiles all round. Manners are the strongest currency on the soi.");
+    _say(_here.length
+      ? "Warm smiles all round. Manners are the strongest currency on the soi."
+      : "Nobody to thank. The night takes it anyway.");
   } else if (key === "how_much") {
     const r = _room();
     if (r.busStop) _say(`A driver leans out: “${thaiBaht(BUS_FARE)}” (${thaiNumRoman(BUS_FARE)} baht).`, "thai");
@@ -4113,16 +4220,59 @@ function _doSay(arg, targetWord) {
   } else if (key === "no") {
     _say("“ไม่เอา” — mai ao. You wave it off, whatever it was. The nearest vendor shrugs it back into the bag; " +
       "the nearest girl laughs: “Ooh, he know this one.”");
+  } else if (_THAI_REPLY[key]) {
+    _say(_THAI_REPLY[key](_here));
   } else {
     _say("Laughter and approval. สนุก!");
   }
 }
+
+// The phrases a learner actually arrives with, answered in the room's voice
+// (Hugo, round 42: every one of these fell through to "the soi blinks at you").
+const _THAI_REPLY = {
+  nevermind: here => here.length
+    ? "\"Mai pen rai\" lands the way it always does — a shrug back, a smile, and the sense that you have just agreed to something larger than the thing you were talking about."
+    : "You say it to the street, which is the correct audience for it.",
+  luck: here => here.length
+    ? "\"Chok dee!\" comes back doubled, from two directions, and somebody raises a glass on principle."
+    : "Chok dee. The night does not answer, which is not the same as no.",
+  howareyou: here => here.length
+    ? "\"Sabai dee kha!\" — and then the real answer, which is a laugh and a hand tipped side to side. Everyone is fine. Everyone is always fine."
+    : "You ask the empty air how it is doing. It is doing fine.",
+  sorry: here => here.length
+    ? "The apology is accepted before it is finished, with the particular Thai speed that means it was never going to be a problem — and a look that says the language was the apology."
+    : "Nobody here to forgive you. Bank it.",
+  beautiful: here => here.length
+    ? "\"Suay!\" She takes the compliment the way you take a beer: quickly, and without pretending to be surprised."
+    : "You tell the night it is beautiful. It is, in fact.",
+  expensive: here => here.length
+    ? "\"Phaeng!\" You get the laugh you were fishing for and not one baht off, because the price was never the point of the word."
+    : "Nobody is charging you anything at the moment, which is the cheapest the town gets.",
+  eatenyet: here => here.length
+    ? "\"Kin laew!\" — and then, inevitably, whether YOU have eaten, and a real concern behind it that no phrasebook prepares you for."
+    : "You ask the street whether it has eaten. It has, at some point, off a cart.",
+  cool: here => here.length
+    ? "\"Jai yen yen.\" Somebody says it back at you, slower, with a flat hand pressed downward — the gesture that goes with it, and half the meaning."
+    : "Jai yen. Cool heart. Easier said to an empty street.",
+};
+
+const _THAI_REPLY_TO = {
+  nevermind: n => `${n} says it straight back — "mai pen rai" — and means a slightly different thing by it than you did, which is the whole lesson.`,
+  luck: n => `"Chok dee!" ${n} raises whatever is in reach, including nothing.`,
+  howareyou: n => `"Sabai dee kha." ${n} tips a hand side to side, then asks it back, and waits for the answer like it matters.`,
+  sorry: n => `${n} waves it off before you finish. Whatever it was, it is already not a problem — and that you said it in Thai is the part that registers.`,
+  beautiful: n => `${n} accepts "suay" as a statement of fact, briskly, and carries on with what she was doing.`,
+  expensive: n => `"Phaeng!" ${n} laughs at you, delighted, and does not move the price a single baht.`,
+  eatenyet: n => `"Kin laew?" ${n} asks it back before answering, and looks at you properly when you say no.`,
+  cool: n => `${n} presses a flat hand downward — jai yen yen — and it is not entirely a joke.`,
+};
 
 // One matched phrase, aimed at one person. `id` is null for the ambient bar
 // regular. Greetings run the per-NPC unlock (_waiEffect) so SAY สวัสดี TO FON
 // works like WAI FON; the rest are targeted flavor.
 function _sayDirectedReact(key, id, name) {
   const role = id ? NPC_ROLES[id] : null;
+  if (_THAI_REPLY_TO[key]) { _say(_THAI_REPLY_TO[key](name)); return; }
   if (key === "hello") {
     if (id) _waiEffect(id); // fires greetedFon / waiedOy / waiedPloy once
     _say(`${name} returns it — palms not quite together, but the warmth is real.`);
@@ -5749,7 +5899,7 @@ function _doPay(arg) {
   if (!G.pendingFare && typeof _payCreditor === "function" &&
       /rent|landlord|note|arrears|old man|bert|bar|key|lease|pae ?jia/i.test(arg || "")) { _payCreditor(arg); return; }
   if (!G.pendingFare) { _say("Nobody's waiting to be paid."); return; }
-  const amount = /^\d+$/.test(arg) ? parseInt(arg, 10) : parseThaiDigits(arg);
+  const amount = _amount(arg);
   const { price, dest } = G.pendingFare;
 
   if (amount === null || Number.isNaN(amount)) {
@@ -7188,6 +7338,18 @@ function _doWithdraw(arg) {
 // A tourist draws on a card from home; a resident (G.thaiAccount, expat mode) on
 // his own Thai account — no foreign-card fee and a counter that hands over real
 // money for a real purchase (Mario, 2026-09-04).
+// A number in any of the three forms a player might use: digits, Thai numerals,
+// or the words the game itself speaks at him (the bus driver shouts สิบห้าบาท and
+// then would not take สิบห้า back — only ๑๕, which nobody says out loud; Hugo,
+// round 42).
+function _amount(s) {
+  const t = String(s || "").trim();
+  if (!t) return null;
+  if (/^\d+$/.test(t)) return parseInt(t, 10);
+  const d = parseThaiDigits(t.replace(/\s/g, ""));
+  if (d != null && !Number.isNaN(d)) return d;
+  return (typeof parseThaiWords === "function") ? parseThaiWords(t) : null;
+}
 function _atmFee() { return G.thaiAccount ? 0 : ATM_FEE; }
 function _atmCap() { return G.thaiAccount ? THAI_ATM_CAP : ATM_DAILY_CAP; }
 function _doWithdrawInner(arg) {
@@ -8163,6 +8325,7 @@ function engineComplete(input) {
 // Thai gets a voiced "the soi reads a little" instead of "didn't understand".
 const _THAI_CMD = [
   ["ขอบคุณ", "thank you"], ["สวัสดี", "hello"], ["เท่าไหร่", "how much"], ["ไม่เอา", "no"], ["ขอโทษ", "sorry"],
+  ["ขอ", "buy"], ["เอา", "buy"],   // the two ordering words in the language — "buy beer" is not what anybody says (Hugo, round 42)
   ["ซื้อ", "buy"], ["เบียร์", "beer"], ["น้ำเปล่า", "water"], ["น้ำ", "water"], ["ข้าว", "food"], ["กิน", "eat"],
   ["ไปไหน", "exits"], ["ไป", "go"], ["เหนือ", "north"], ["ใต้", "south"], ["ตะวันออก", "east"], ["ตะวันตก", "west"],
   ["ออก", "out"], ["เข้า", "in"], ["ขึ้น", "up"], ["ดูสิ", "look"], ["ดู", "look"],
@@ -8738,7 +8901,7 @@ function doCommand(input) {
     if (/^send/.test(lower.trim())) { _say("Nobody on your arm to send anywhere. (SEND <amount> TO <name> is the banking app.)", "dim"); return; }
   }
   if (G.room === "oy_office" && !_flag("hasWallet") && /^[\d๐-๙]{1,4}$/.test(lower.trim())) {
-    const n = /^\d+$/.test(lower.trim()) ? parseInt(lower.trim(), 10) : parseThaiDigits(lower.trim());
+    const n = _amount(lower.trim());
     if (n !== null && !Number.isNaN(n)) { _doSafe(n); _tick(); return; }
   }
 
@@ -9331,7 +9494,7 @@ function doCommand(input) {
     // ENTER <digits> was the only route, so SAFE 719 — and a bare 719 — fell
     // into "I didn't understand that" at the climax of the opening quest.
     case "safe": case "keypad": case "code": case "pin": {
-      const n = /^\d+$/.test(arg) ? parseInt(arg, 10) : parseThaiDigits(arg.replace(/\s/g, ""));
+      const n = _amount(arg);
       if (n === null || Number.isNaN(n)) { _say("Three digits, on the keypad. (ENTER <digits>)"); break; }
       _doSafe(n); break;
     }
@@ -9449,6 +9612,14 @@ function doCommand(input) {
             }
           }
         }
+      }
+      // …and the SAME hint for romanised Thai. Script got a helpful list and
+      // romanised got "the soi blinks at you", so a learner who types the way
+      // learners type never learned there was a Thai layer (Hugo, round 42).
+      if (!/[\u0E00-\u0E7F]/.test(lower) && _looksThai(lower)) {
+        _say("(That sounded like Thai and the soi only reads a little — SAWATDEE, KHOP KHUN, TAO RAI, MAI AO, AROI, SANUK, " +
+          "MAI PEN RAI, CHOK DEE, KHOR THOT, SUAY, PHAENG, JAI YEN, KIN KHAO MAI — and Thai numbers, spoken or written.)", "dim");
+        return;
       }
       // a Thai line the parser can read becomes the English command; other Thai is voiced, not "didn't understand"
       if (/[\u0E00-\u0E7F]/.test(lower)) {

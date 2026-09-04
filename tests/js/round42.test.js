@@ -96,3 +96,47 @@ test("the massage shop has somebody in it, and Auntie Nok sells the mango she of
   G.room = "jomtien_beach_rd"; G.hunger = 60; out = []; run("buy mango");
   assert.doesNotMatch(text(), /Auntie Nok/, "she is two rooms south, at her pitch");
 });
+
+test("the Thai a learner actually types (Hugo)", () => {
+  // the number he SAYS, in every form — the driver shouts สิบห้าบาท and would only take ๑๕
+  assert.equal(parseThaiWords("sip ha"), 15); assert.equal(parseThaiWords("ยี่สิบ"), 20);
+  assert.equal(parseThaiWords("song roi"), 200); assert.equal(parseThaiWords("สองร้อย"), 200);
+  assert.equal(parseThaiWords("banana"), null);
+  G.room = "jomtien_beach_rd"; G.money = 500;
+  run("ride bus to pattaya tai"); out = []; run("pay sip ha");
+  assert.equal(G.money, 500 - BUS_FARE); assert.doesNotMatch(text(), /A number would help/);
+  // the phrases, and the spellings people use
+  for (const p of ["mai pen rai", "chok dee", "sabai dee mai", "khor thot", "suay", "phaeng", "kin khao mai", "jai yen", "aroy"]) {
+    assert.ok(matchThaiPhrase(p), `${p} is a phrase the game knows`);
+  }
+  G.room = "candy_bar"; for (const p of ["mai pen rai", "chok dee", "jai yen"]) {
+    out = []; run(p); assert.doesNotMatch(text(), /didn't understand|didn't parse|blinks at you/, p);
+  }
+  // romanised Thai that misses gets the hint the script always got
+  out = []; run("nit noi"); assert.match(text(), /sounded like Thai/);
+  out = []; run("i am going to the bar"); assert.doesNotMatch(text(), /sounded like Thai/, "English is not Thai");
+  // the ordering words
+  G.money = 900; out = []; run("ขอเบียร์"); assert.match(text(), /เข้าใจ — buy beer/);
+});
+
+test("somebody wais back, and the empty room is the room you are in (Hugo)", () => {
+  G.room = "hotel_room"; out = []; run("wai");
+  assert.match(text(), /empty room/); assert.doesNotMatch(text(), /empty street/);
+  G.room = "thai_massage"; out = []; run("wai"); assert.doesNotMatch(text(), /street/);
+  G.room = "candy_bar"; out = []; run("wai");
+  assert.ok(_WAI_BACK.concat(_WAI_BACK_MAMA).some(l => text().includes(l.split("{")[0].slice(0, 20)) || /returns it|wais back/.test(text())), "somebody returns it");
+  out = []; run("wai"); assert.doesNotMatch(text(), /returns it exactly as far/, "once a night, not every time");
+  // …and SAY to an empty room stops describing a crowd
+  G.room = "hotel_room"; out = []; run("sawatdee khrap");
+  assert.doesNotMatch(text(), /Faces soften|smiles all round/);
+});
+
+test("everybody has a view on som tam, and the register is theirs (Hugo)", () => {
+  G.room = "candy_bar"; const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
+  out = []; run(`ask ${NPCS[g].name} about som tam`); assert.match(text(), /Papaya, chilli, lime/);
+  out = []; run(`ask ${NPCS[g].name} about sanuk`); assert.match(text(), /question is the answer/);
+  G.room = "queen_vic"; out = []; run("ask terry about sanuk");
+  assert.match(text(), /whole country in five letters/, "the expat gets the twenty-years version");
+  G.room = "candy_bar"; out = []; run(`ask ${NPCS[g].name} about isan`);
+  assert.doesNotMatch(text(), /wrong girl|don't know about that/, "isan is home");
+});
