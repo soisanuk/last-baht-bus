@@ -1648,6 +1648,14 @@ function _sceneryCtx() {
   // in it — EXAMINE CEILING promised the pasties game and THROW COVER answered
   // "this room is short one dancer" on the very next turn. Its own context.
   if (r.barType === "pub") return "pub";
+  // A VENUE IS NOT A BAR JUST BECAUSE IT HAS A NAME. Every venue carries a `bar`
+  // display name (so the name taps as a place), and this read all of them as
+  // drinking bars — so EXAMINE PRICE LIST in a massage shop whose own wall says
+  // "foot, Thai, herbal compress, all ฿300" answered "Beer, spirits, lady drink"
+  // (Hugo, round 42). The parlours and the kitchens get their own context, and
+  // fall back to `any` rather than to a rail they haven't got.
+  if (r.massage || r.soapy) return "parlour";
+  if (r.food && !r.barType) return "eatery";
   if (r.bar) return "bar";
   if (/beach|promenade/i.test(r.name) && !/\b(road|rd)\b/i.test(r.name)) return "sand";
   return "street";
@@ -1993,6 +2001,18 @@ const _SCENERY = [
         "at the bottom that is deliberately not itemised.",
       "Prices in two columns and a third column that is just a smile. Nothing on it has " +
         "changed since the last time petrol did.",
+    ],
+    parlour: [
+      "Foot, Thai, oil, herbal compress, and a column of times against a column of prices, " +
+        "all of it laminated and none of it negotiable. What is not on the list is not on " +
+        "the list because it does not need to be.",
+      "A price list in two languages that agree with each other, which is rarer here than " +
+        "it sounds. An hour is an hour. The extras have no line and no name.",
+    ],
+    eatery: [
+      "Numbered dishes down one side, prices down the other, and a chalked line at the " +
+        "bottom for whatever came in this morning. Nothing on it has moved in years except " +
+        "the chalk.",
     ],
     any: [
       "A price board, angled at the pavement, doing the only advertising this place has " +

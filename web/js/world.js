@@ -14848,12 +14848,9 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
         short: `"Mamasan first, then me. Two prices." (BARFINE <name>)` },
       { topic: "late",
         text: idx([
-          `"After bar close?" She laughs. "Go home, sleep, wake up, same same. Sometimes friend of me have " +
-            "party — Thai place, karaoke, you know? Farang cannot come." A pause. "Cannot come ALONE."`,
-          `"Late-late?" She thinks about whether to tell you. "Have place. Thai disco, ran lao. Girl go after " +
-            "work with friend. If girl like you, maybe she take you on motorbike." She does not say which girl.`,
-          `"After two, everybody go eat. Khao tom, som tam, sit on the floor." She pats the stool. "You want " +
-            "see? Be nice to somebody who like you. Then she drive."`,
+          `"After bar close?" She laughs. "Go home, sleep, wake up, same same. Sometimes friend of me have party — Thai place, karaoke, you know? Farang cannot come." A pause. "Cannot come ALONE."`,
+          `"Late-late?" She thinks about whether to tell you. "Have place. Thai disco, ran lao. Girl go after work with friend. If girl like you, maybe she take you on motorbike." She does not say which girl.`,
+          `"After two, everybody go eat. Khao tom, som tam, sit on the floor." She pats the stool. "You want see? Be nice to somebody who like you. Then she drive."`,
         ], 53),
         short: `"After two? Thai place, on the bike — if somebody like you."` },
       { topic: "quota", bond: 1,
