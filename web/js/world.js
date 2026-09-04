@@ -207,7 +207,12 @@ const LEASE_KEY_MONTHS = 1;                                                // ke
 const LEASE_CASH_OFF = { peak: 0, high: 0.10, shoulder: 0.15, low: 0.25, deeplow: 0.35 };   // the cash discount by season
 const LEASE_WET_FREE = 1;
 const LAWYER_FEE = 12000;     // Candy's route: the Bangkok lawyer, "real, and audited, and costs" — it did not (Des, round 41)
-const COFFEE_PRICE = 60;      // Tan's coffee — the airport promise was free (Des, round 41)                                                  // rent-free months when you sign in the wet
+const COFFEE_PRICE = 60;
+// Kruu Waen's rate at Cloze: an hour of actual teaching, which on this soi is
+// roughly a lady drink and change. Three tiers — the phrases, the script, and
+// the verbs the game itself takes — and she picks by what you can already do.
+const LESSON_PRICE = 100;
+const LESSON_TURNS = 10;      // an hour, at six minutes a turn      // Tan's coffee — the airport promise was free (Des, round 41)                                                  // rent-free months when you sign in the wet
 const ATM_DENOMS = [1000, 5000, 10000];
 // The Soi 6 challenge mode confines movement to this pocket of the map.
 const SOI6_ROOMS = new Set([
@@ -5152,6 +5157,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the soi outside. \"Also, nobody on this street knows what it means, so they think it is a " +
           "girl's name, and they come in to meet her. That is the second exercise.\"",
         short: "\"A cloze test — remove one word, the student puts it back. Everybody thinks it's a girl's name and comes in to meet her.\"" },
+      { topic: "price|rate|how much|cost|lesson price|tutor",
+        text: "\"One hundred an hour.\" She says it the way you would read a number off a " +
+          "wall, and then, because she can see you doing the arithmetic: \"Yes. Less than the " +
+          "drink you would have bought the girl next door, and she was not going to teach you " +
+          "anything.\" A tap on the board. \"LESSON when you want one. I do not chase people.\" (LESSON)",
+        short: "\"One hundred an hour. Less than the drink next door, and she wasn't going to teach you anything.\" (LESSON)" },
       { topic: "thai|language|teach|lesson|learn|study|words|vocabulary",
         text: "\"You want to learn, or you want to be told you are good?\" It is not unkind; it is the " +
           "question she asks everybody, and she waits for the answer. \"Because the second one is free " +
@@ -14761,12 +14772,12 @@ const CANON_HOSTESSES = [
 // (Ringing the bell a couple of times has been known to soften the rules.)
 
 const NPC_ROLES = {
-  waen: "hostess",     // she teaches; the trade is still the trade
   // The White Rabbit's Lao family (Fast Eddy is manager:true, deliberately not here)
   nuan: "mamasan", ampha: "cashier", champa: "hostess", boua: "hostess",
   kinnaree: "mamasan",
   pancake: "hostess", baitoey: "hostess",
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
+  waen: "hostess",   // Kruu Waen at Cloze — she teaches; the trade is still the trade
   kai: "hostess", nook: "hostess", dew: "hostess",
   kat: "hostess", may: "hostess", dear: "hostess",
   kluay: "hostess", benz: "hostess", puu: "hostess", belle: "hostess",

@@ -322,3 +322,32 @@ test("the seventeen requested words reach the verbs they were requested for", ()
   fresh("jomtien_beach_s3"); run("เปิดไฟ");
   assert.match(text(), /Flashlight on/); assert.equal(G.lightOn, true);
 });
+
+test("Kruu Waen sells an hour, and an hour is not a promotion (Mario)", () => {
+  G.room = "cloze"; G.money = 1000;
+  const before = _thaiPoints();
+  out = []; run("lesson");
+  assert.match(text(), /Phrases, then/); assert.equal(G.money, 1000 - LESSON_PRICE);
+  assert.match(text(), /สวัสดีครับ/, "the content is the game's own phrase table");
+  // THE RULE: you can buy the knowing, not the standing
+  assert.equal(_thaiPoints(), before, "a lesson teaches; the ladder counts what you USE");
+  // three tiers, and she picks by what you can already do
+  out = []; run("lesson reading"); assert.match(text(), /Forty-four consonants/);
+  assert.match(text(), /ไป|ดู|น้ำ/, "reading is taught off words the game prints");
+  out = []; run("lesson verbs"); assert.match(text(), /useful half/);
+  assert.match(text(), /LIGHT ON|SING|PHOTO|WORK/, "…and the verbs are the parser's own");
+  // it is a real hour, and it costs
+  const t = G.nightTurn; out = []; run("lesson phrases");
+  assert.ok(G.nightTurn - t >= LESSON_TURNS, "an hour of the evening");
+  // she runs out, and says the honest thing about what she cannot sell
+  for (let i = 0; i < 8; i++) { G.money = 1000; G.nightTurn = 20; G.room = "cloze"; run("lesson phrases"); }
+  out = []; G.money = 1000; G.nightTurn = 20; G.room = "cloze"; run("lesson phrases");
+  assert.match(text(), /cannot sell you/); assert.equal(G.money, 1000, "and she doesn't charge for it");
+  // broke, and elsewhere
+  G.money = 20; delete G.taught; out = []; run("lesson"); assert.match(text(), /do not teach on credit/);
+  G.room = "candy_bar"; out = []; run("lesson"); assert.match(text(), /Cloze on Soi Diana/);
+  // three surfaces
+  assert.ok(_npcActions("waen", true).includes("lesson"));
+  G.room = "cloze"; assert.deepEqual(_completePool("lesson"), ["phrases", "reading", "verbs"]);
+  assert.match(_HELP, /LESSON \[phrases\|reading\|verbs\]/);
+});

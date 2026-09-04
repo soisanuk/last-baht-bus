@@ -407,6 +407,7 @@ function _npcActions(id, full) {
     // Tan's standing food invite is a real option, so it gets the third surface
     // (parser + autocomplete + here). Hidden during Act One, when he refuses.
     if (id === "tan" && typeof _flag === "function" && _flag("act1Done")) acts.push("follow");
+    if (id === "waen") acts.push("lesson");   // ฿100 the hour, the third surface
     if (id === "nont" && typeof _flag === "function" && _flag("hasWallet")) acts.push("cash");   // the priced fixer's verb on his own wheel
     // A WAI IS ALWAYS AVAILABLE TO A PERSON, and Act One is SOLVED with one:
     // the game says "(Manners might open it. A proper wai.)" and Madam Oy's
@@ -8543,4 +8544,111 @@ function _thaiOverheard() {
   if (_rand() > 0.12) return;
   G.thaiHeardTurn = G.turns;
   _say(_pickVary(_THAI_OVERHEARD, "thaiheard"), "dim");
+}
+
+// ── Kruu Waen's hour ────────────────────────────────────────────────────────
+// A paid lesson at Cloze: ฿100 and an hour of the evening (Mario, 2026-09-04).
+// Three tiers, and the rule that makes it honest — A LESSON TEACHES, IT DOES
+// NOT PROMOTE. Nothing here touches G.thaiSaid or the fluency ladder, because
+// that ladder counts Thai you have actually USED on somebody. You can buy the
+// knowledge; you cannot buy the standing. What the money buys is knowing what
+// to type, which for a game whose Thai layer was invisible for a year is the
+// thing actually worth selling.
+//
+// The content is GENERATED from the game's own tables — THAI_PHRASES for the
+// phrases, the script's own consonant classes for the reading, _THAI_CMD for
+// the verbs — so a lesson can never teach a word the parser does not take.
+function _waenHere() { return G.room === "cloze" && _npcsHere().includes("waen"); }
+const _LESSON_TIERS = ["phrases", "reading", "verbs"];
+function _lessonTier(arg) {
+  const a = String(arg || "").toLowerCase();
+  if (/phrase|basic|start|beginner|word/.test(a)) return "phrases";
+  if (/read|script|letter|alphabet|tone|write/.test(a)) return "reading";
+  if (/verb|command|game|play|order/.test(a)) return "verbs";
+  if (a) return null;
+  // she picks: what you can already do decides where she starts you
+  const reg = typeof _thaiRegister === "function" ? _thaiRegister() : "novice";
+  return reg === "fluent" ? "verbs" : reg === "adequate" ? "reading" : "phrases";
+}
+// The reading tier: not the alphabet chart, which everybody quits at eight.
+// Twelve things in the order a teacher actually gives them, each hung on a word
+// the player has already seen on a sign or a bar mat.
+const _LESSON_READING = [
+  ["ไป", "pai", "GO. Two letters, and the vowel is written BEFORE the consonant you say first. Thai does that; English never warns you."],
+  ["ดู", "duu", "LOOK. Same two shapes, vowel underneath this time. The vowel moves; the consonant does not."],
+  ["น้ำ", "náam", "WATER. The little mark over it is a tone, not an accent — high, and it changes the word, not the mood."],
+  ["เบียร์", "bia", "BEER. The ร on the end is silent, killed by that curl above it. Thai marks its silent letters, which is more than English does."],
+  ["ซื้อ", "súe", "BUY. The vowel is three pieces around one consonant. You will hate this one for a week."],
+  ["ข้าว", "khâao", "RICE — and FOOD, and the word for a meal. Falling tone. If you get this one flat you have ordered nothing."],
+  ["เท่าไหร่", "thâo-rài", "HOW MUCH. The single most profitable four syllables you will ever learn on this street."],
+  ["ผู้หญิง", "phûu-yǐng", "WOMAN. ผู้ is a person-marker; it turns up in front of half the jobs in the country."],
+  ["ร้าน", "ráan", "SHOP. On every second sign on this soi, once you can see it."],
+  ["ตลาด", "ta-làat", "MARKET. Two syllables, and the first one is not written — Thai leaves short vowels out and expects you to know."],
+  ["โรงแรม", "roong-raem", "HOTEL. The first syllable means 'hall, building'; you will meet it again in โรงพยาบาล, and one day that will matter."],
+  ["ทำงาน", "tham-ngaan", "TO WORK. ngaan is also 'a party'. Nobody in this country thinks that is a coincidence."],
+];
+const _LESSON_OPEN = {
+  phrases: "\"Phrases, then. Good — everybody wants the alphabet on day one and nobody wants the alphabet on day two.\" She wipes the board with the side of her hand.",
+  reading: "\"Reading.\" She looks genuinely pleased, which she does not fake. \"Forty-four consonants and everybody quits at eight. We will not do forty-four tonight.\"",
+  verbs:   "\"Ah — you want to DO things in Thai, not say things about them.\" She turns the board over; the other side is a list. \"This is the useful half and nobody ever asks for it.\"",
+};
+const _LESSON_CLOSE = [
+  "The hour goes the way an hour goes when somebody competent is running it: fast, and you are tired at the end of it in a way a night on a stool never makes you.",
+  "She works you until the chalk is down to a stub, corrects you six times without once making it a joke, and then says \"enough\" at exactly the point you would have stopped enjoying it.",
+  "At the end she rubs the board clean and writes tomorrow's word before you have your change. The next man in gets a fresh sheet; that seems to be the arrangement she has with herself.",
+  "Somewhere in the second half you stop translating in your head, for about ninety seconds, and she catches it happening and says nothing at all, which is the compliment.",
+];
+function _lessonItems(tier) {
+  const taught = (G.taught = G.taught || {});
+  const seen = taught[tier] = taught[tier] || [];
+  let pool = [];
+  if (tier === "phrases") {
+    pool = (typeof THAI_PHRASES !== "undefined" ? THAI_PHRASES : [])
+      .map(p => ({ key: p.key, th: p.th, rom: p.rom, use: "SAY " + p.rom.toUpperCase() }));
+  } else if (tier === "reading") {
+    // authored HERE rather than pulled from the vendored consonant table: the
+    // engine never loads data.js (that is the browser's and the word card's),
+    // so a lesson built on it would work in play and teach nothing headless.
+    // Every example is a word the game itself prints, so the card can gloss it.
+    pool = _LESSON_READING.map(r => ({ key: "r:" + r[0], th: r[0], rom: r[1], use: r[2] }));
+  } else {
+    pool = (typeof _THAI_CMD !== "undefined" ? _THAI_CMD : [])
+      .filter(([, en]) => /^[a-z]+( [a-z]+)?$/.test(en))
+      .map(([th, en]) => ({ key: "v:" + th, th, rom: "", use: en.toUpperCase() }));
+  }
+  const fresh = pool.filter(p => !seen.includes(p.key));
+  const take = fresh.slice(0, 4);
+  for (const p of take) seen.push(p.key);
+  return { take, left: fresh.length - take.length };
+}
+function _doLesson(arg) {
+  if (!_waenHere()) {
+    _say(G.room === "cloze"
+      ? "Waen isn't behind the bar just now. The board is still up; the chalk is not."
+      : "Nobody here teaches. Kruu Waen does, at Cloze on Soi Diana — ฿" + LESSON_PRICE + " the hour, and she keeps the good stool for people who come back.");
+    return;
+  }
+  const tier = _lessonTier(arg);
+  if (!tier) { _say("\"Phrases, reading, or verbs.\" She holds up three fingers and does not offer a fourth. (LESSON PHRASES · LESSON READING · LESSON VERBS)"); return; }
+  if (G.money < LESSON_PRICE) {
+    _say("\"One hundred.\" She says it without embarrassment and without moving. \"I do not teach on credit — not because of you. Because of the last four.\"");
+    return;
+  }
+  const { take, left } = _lessonItems(tier);
+  if (!take.length) {
+    _say("\"You have had everything I put on that board for this one.\" She looks at you with something close to " +
+      "approval. \"Now go and be wrong in front of somebody who is not paid to be patient with you. That part I " +
+      "cannot sell you.\"");
+    return;
+  }
+  G.money -= LESSON_PRICE;
+  _say(_LESSON_OPEN[tier], "win");
+  for (const p of take) {
+    _say("  " + p.th + (p.rom ? "  " + p.rom : "") + (p.use ? "   — " + p.use : ""), "thai");
+  }
+  _say(_pickVary(_LESSON_CLOSE, "lessonclose"));
+  _say("(-฿" + LESSON_PRICE + ", ฿" + G.money + " left." + (left > 0 ? " She has more of this one: another LESSON " + tier.toUpperCase() + " when you want it." : " That is the whole of that tier.") + ")", "dim");
+  _passTime(LESSON_TURNS);
+  _addBond("waen", 1);
+  if (!G.flags.lessonTaken) { _setFlag("lessonTaken"); _addHappy(1); }
 }

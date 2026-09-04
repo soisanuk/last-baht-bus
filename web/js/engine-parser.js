@@ -7743,6 +7743,7 @@ THE WHOLE CARD (bare HELP is the short one):
   OWL / COLUMN — the Nite Owl newsletter in your inbox (a hard copy still at the Queen Vic)
   WATCH POLICE · WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
   WATCH SUNRISE (outside, at the far end of the night — the other one nobody sober sees)
+  LESSON [phrases|reading|verbs] (Kruu Waen at Cloze, Soi Diana — ฿100 the hour, and she means it)
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch the parade, don't join it)
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
@@ -7890,7 +7891,7 @@ const _COMPLETE_VERBS = [
   // or advertised (Mario's call, round 32). FLIRT auto-escalates toward KISS
   // on repetition on its own now; spank/fondle stay a manual, undocumented
   // find for a player who goes looking.
-  "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
+  "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink", "lesson",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
@@ -8320,6 +8321,8 @@ function _completePool(verb, ctx) {
     case "contact": return girls();
     case "play": case "challenge": return _playOptions();
     case "light": case "turn": return ["on", "off"];
+    case "lesson": case "learn": case "study":
+      return (typeof _waenHere === "function" && _waenHere()) ? ["phrases", "reading", "verbs"] : [];
     case "watch": {
       const _dawn = G.nightTurn >= LAST_BUS_TURN + 5 && !_room().bar && !_room().barType ? ["sunrise"] : [];
       return G.room === "blue_dog" ? ["police", "sunset", "tv", ..._dawn]
@@ -9383,6 +9386,8 @@ function doCommand(input) {
     case "ring": case "bell": _doBell(); break;
     case "barfine": case "bf": _doBarfine(arg.replace(/^with /, "")); break;
     case "meet": case "visit": _doMeetOffShift(arg); break;
+    case "lesson": case "lessons": case "learn": case "study": case "teach": case "tutor":
+      _doLesson(arg); break;
     case "massage": case "nuad": case "nuat": _doMassage(arg); break;
     case "special": case "happyending": _doMassage("special"); break;
     case "soapy": case "fishbowl": _doSoapy(); break;
