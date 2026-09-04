@@ -226,3 +226,35 @@ test("adequate is not fluent, and fluency is a cost on the floor (Mario)", () =>
   finally { _rand = saved; }
   assert.ok(heard, "you catch what was not meant for you");
 });
+
+// ── The stranded letter (the trainer's tokeniser fix, wired on our side) ─────
+test("no Thai the game prints leaves a lone letter on the word card", () => {
+  // ซอยบัวขาว came out ซอย|บัว|ขา|ว — "soi, lotus, leg" and a loose ว — because
+  // greedy longest-match takes a shorter word that is a prefix of the real one.
+  // A lone Thai letter is never a word, so it is always a tokenisation failure.
+  // the vendored stack the card is built on (this suite doesn't load it by default)
+  for (const f of ["data.js", "tokeniser.js"])
+    vm.runInThisContext(readFileSync(join(here, "../../web/js", f), "utf8"), { filename: f });
+  const term = readFileSync(join(here, "../../web/js/term.js"), "utf8");
+  const m = term.match(/const LBB_VOCAB = \[([\s\S]*?)\];/);
+  assert.ok(m, "term.js carries the game's own word rows");
+  const vocab = JSON.parse("[" + m[1].replace(/\/\/[^\n]*/g, "").replace(/,\s*]/g, "]").trim().replace(/,$/, "") + "]");
+  const map = {};
+  for (const w of WORDS) map[w[0]] = w;
+  for (const n of Object.values(NPCS)) if (n.th) map[n.th] = ["ent"];
+  for (const w of vocab) if (!map[w[0]]) map[w[0]] = w;
+  const words = new Set(vocab.map(w => w[0]));
+  const tok = makeTokeniser(map, w => !!map[w] || words.has(w));
+  const src = ["world.js", "engine-core.js", "engine-encounters.js", "engine-play.js",
+    "engine-systems.js", "engine-parser.js"]
+    .map(f => readFileSync(join(here, "../../web/js", f), "utf8")).join("\n");
+  const stranded = new Set();
+  for (const run of src.match(/[฀-๿]{2,}/g) || []) {
+    if (/^[๐-๙]+$/.test(run)) continue;
+    for (const t of tok(run)) {
+      if (!t.word && [...t.text].length === 1 && /[ก-ฮ]/.test(t.text)) stranded.add(run);
+    }
+  }
+  assert.deepEqual([...stranded], [],
+    "a lone letter on the card — add the whole word to LBB_VOCAB in term.js (and send it to the trainer)");
+});

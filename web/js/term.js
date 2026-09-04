@@ -153,6 +153,33 @@ const _term = (() => {
   }
 
   // Lazy tokenizer over the vendored WORDS plus the world's Thai names.
+  // THE STRANDED LETTER. Greedy longest-match takes a shorter word that is a
+  // prefix of the real one and leaves the remainder as a lone letter: ซอยบัวขาว
+  // came out ซอย|บัว|ขา|ว ("soi, lotus, leg" and a loose ว), because the
+  // curriculum has ขา "leg" and no bare ขาว. The vendored tokeniser can rejoin a
+  // stray letter, but only if it can ASK whether the result is a word — joining
+  // blind is wrong about one time in fifty-five (the trainer measured it on its
+  // own examples: ไปอ|ย่าง, ให้พ|นัก|งาน). So we hand it the words the game
+  // itself uses that the course does not teach. Every one of these was found by
+  // the harvest in term.test.js, which fails if the game ever prints another.
+  // The heal only reaches a letter with an UNMATCHED neighbour, which is the
+  // prefix case (ขาว) and no more: five of the six strandings in this game have
+  // a real word on both sides — จริง|ห|รอ, |ห|วัด, |อ|ย่า, มา|ร|ยา|ท|ดี — where
+  // no merge is legal and the only fix is the whole word being in the map, so
+  // longest-match takes it first. Both are wired: these rows go INTO the map,
+  // and the predicate below still saves any future place name of the ขาว shape.
+  // Romanisation follows the trainer's scheme (RTGS consonants, Paiboon tone
+  // marks, long vowels doubled); where it isn't certain it is left EMPTY on
+  // purpose — the card still shows the letters and the tone rule, and a wrong
+  // mark teaches a wrong tone.
+  const LBB_VOCAB = [
+    ["ขาว", "khǎao", "white", "adjective", "colors"],
+    ["หวัดดี", "wàt-dii", "hi (colloquial สวัสดี)", "phrase", "greetings"],
+    ["หรอ", "", "really? (colloquial particle)", "particle", "particles"],
+    ["อย่า", "yàa", "don't", "verb", "verbs"],
+    ["มารยาท", "maa-rá-yâat", "manners", "noun", "people"],
+  ];
+  const LBB_WORDS = new Set(LBB_VOCAB.map(w => w[0]));
   let _thTok = null;
   function _thaiTokens(run) {
     try {
@@ -160,7 +187,8 @@ const _term = (() => {
         const m = {};
         for (const w of WORDS) m[w[0]] = w;
         for (const n of Object.values(NPCS)) if (n.th) m[n.th] = ["ent"];
-        _thTok = makeTokeniser(m);
+        for (const w of LBB_VOCAB) if (!m[w[0]]) m[w[0]] = w;   // the game's own words, in the map so longest-match takes them whole
+        _thTok = makeTokeniser(m, w => !!m[w] || LBB_WORDS.has(w));
       }
       return _thTok(run);
     } catch (e) { return null; } // vendored stack absent: leave Thai plain
