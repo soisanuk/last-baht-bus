@@ -3911,8 +3911,8 @@ const ROOMS = {
     name: "Dolphin Bar",
     region: "Naklua",
     bar: "Dolphin Bar", barType: "beer",
-    desc: "Named for the roundabout to the south, painted with a leaping dolphin that's had a " +
-      "few touch-ups too many. Quiet, cheap, and friendly. Bunny keeps the cooler stocked and " +
+    desc: "Named for the roundabout to the south, painted with a leaping dolphin touched up just " +
+      "often enough to stay bad on purpose. Quiet, cheap, and friendly. Bunny keeps the cooler stocked and " +
       "the football on low.",
     exits: { out: "naklua_bars" },
   },

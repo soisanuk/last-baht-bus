@@ -8235,7 +8235,7 @@ function _qvCard() {
 const _QV_ROAST_LINES = [
   "It arrives on a plate too hot to hold: beef, three roast potatoes with the corners gone dark, a Yorkshire like a small collapsed hat, and gravy in its own jug because the cook has opinions. Somebody two tables down says \u201cbloody hell\u201d with real feeling.",
   "Aoy sets it down and stands there half a second longer than she needs to, watching your face. The carrots are done properly. The gravy is not from a packet and she wants you to notice, and you do, and something passes between you that neither of you says.",
-  "Beef, potatoes, a Yorkshire, and the greens that in England you would have left. You do not leave them. Eight thousand miles will do that to a man and a plate of cabbage.",
+  "Beef, potatoes, a Yorkshire, and the greens you would have left on the plate at home. You do not leave them. A long way from wherever that is will do that to a man and a plate of cabbage.",
   "The plate comes out under a cloud of its own steam and the whole rail turns to look, the way men do, and one of them says what they always say, which is that you'd pay triple for this at home and it wouldn't be as good.",
   "It is enormous and it is Sunday and outside the door it is thirty-one degrees. The cook, whom you have never seen, has put a whole roast dinner into the tropics for the twelfth year running, and nobody has ever asked him to stop.",
 ];

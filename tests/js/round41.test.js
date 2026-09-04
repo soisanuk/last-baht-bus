@@ -155,3 +155,9 @@ test("prose review: 'nobody walks Sukhumvit' is no longer true, and 'what should
   G.stage = "act1"; G.room = "jomtien_beach"; out = []; run("what should i do");
   assert.match(text(), /about your wallet/, "…but in the opening it is the wallet");
 });
+
+test("prose review: the roast doesn't decide where you grew up, and OUT is tappable in every sibling (slice 3)", () => {
+  const roast = _QV_ROAST_LINES.join(" ");
+  assert.doesNotMatch(roast, /in England|Eight thousand miles/, "the player's nationality is his own");
+  for (const l of _NO_EXIT_IN) assert.match(l, /\(OUT\)/, "CAPS only decorate inside parens: " + l.slice(0, 40));
+});

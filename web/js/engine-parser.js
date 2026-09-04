@@ -104,8 +104,8 @@ const _NO_EXIT_OPEN = [
   "You get three stalls further and find the whole thing backs onto a building. (OUT)",
 ];
 const _NO_EXIT_IN = [
-  "You're indoors. The only way out of here is OUT.",
-  "That's a wall with a beer fridge against it. OUT is the way you came.",
+  "You're indoors. The only way out of here is back the way you came. (OUT)",
+  "That's a wall with a beer fridge against it. The door is the way you came. (OUT)",
   "Not from in here — this room has one door, and you came through it. (OUT)",
 ];
 // Soi 6 challenge mode: the rest of the city is off-limits this trip.
