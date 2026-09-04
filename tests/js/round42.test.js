@@ -432,3 +432,51 @@ test("ASK ABOUT THAI means the language, and Tan is not a she (Anders)", () => {
   G.room = "soi6_street"; G.phone.contacts.tan = true; G.known.tan = true;
   out = []; run("message tan"); assert.doesNotMatch(text(), /She replies/);
 });
+
+// ── Nok-Anne, who arrived fluent ────────────────────────────────────────────
+test("fluency does not turn every gap in the writing into a refusal (Nok-Anne)", () => {
+  G.room = "lucky_tiger";
+  for (const p of ["mai pen rai", "suay", "phaeng", "jai yen", "kin khao mai", "aroi", "sanuk", "mai ao", "chok dee", "sabai dee mai"]) run(p);
+  assert.equal(_thaiRegister(), "fluent");
+  const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
+  const REFUSAL = /don't want to talk about that one|deciding, in front of you, not to answer|answers a slightly different question|not going to say/;
+  for (const nonsense of ["photosynthesis", "norway", "pizza", "muay thai"]) {
+    out = []; run(`ask ${NPCS[g].name} about ${nonsense}`);
+    assert.doesNotMatch(text(), REFUSAL, `"${nonsense}" read as her hiding something`);
+  }
+  // …but the things she would actually dodge still land
+  let dodged = false;
+  for (const touchy of ["her sponsor", "money", "her boyfriend", "the quota"]) {
+    out = []; run(`ask ${NPCS[g].name} about ${touchy}`);
+    if (REFUSAL.test(text())) dodged = true;
+  }
+  assert.ok(dodged, "she still declines the things she would decline");
+});
+
+test("the game repeats what was said, particle and all (Nok-Anne)", () => {
+  G.room = "candy_bar";
+  out = []; run("สวัสดีค่ะ"); assert.match(text(), /สวัสดีค่ะ/); assert.doesNotMatch(text(), /สวัสดีครับ/);
+  out = []; run("ขอบคุณค่ะ"); assert.match(text(), /khop khun kha/);
+  out = []; run("สวัสดีครับ"); assert.match(text(), /สวัสดีครับ/, "and a man's particle is still his");
+});
+
+test("Thai typed at a pending question is an answer, not a vocabulary miss (Nok-Anne)", () => {
+  G.room = "lucky_tiger"; const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
+  G.convoQ = { key: "home", q: "You from where?", who: g }; G.convo = g;
+  out = []; run("ฝรั่งเศส");
+  assert.doesNotMatch(text(), /soi reads a little Thai/, "her answer was eaten by the vocabulary gate");
+});
+
+test("ซื้อ X ให้ Y buys it for HER (Nok-Anne)", () => {
+  G.room = "lucky_tiger"; G.money = 2000; const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
+  const before = G.money;
+  out = []; run("ซื้อเบียร์ให้" + NPCS[g].th);
+  assert.match(text(), /buy drink for/); assert.equal(before - G.money, _ladyPrice(), "her drink, not yours");
+});
+
+test("the wai, yes and no are typeable in Thai; the arch claims no hour (Nok-Anne)", () => {
+  G.room = "candy_bar"; out = []; run("ไหว้");
+  assert.match(text(), /เข้าใจ — wai/, "the gesture that wins Act One");
+  const W = readFileSync(join(here, "../../web/js/world.js"), "utf8");
+  assert.doesNotMatch(W, /TREE TOWN at four in the morning/, "the late paint fires from midnight");
+});

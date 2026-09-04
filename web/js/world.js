@@ -2922,7 +2922,7 @@ const ROOMS = {
     seven: true,
     lateDesc: [
       "The Tree Town arch with the tangle behind it gone quiet: the neon still burns because the switch is somewhere nobody can be bothered to reach, and the security lounges properly now, feet up, phone tilted.",
-      "TREE TOWN at four in the morning is a lit arch over a dark warren. The painted Thai directions point into somewhere that has stopped happening. One bar deep in there is still going, and you can hear exactly which.",
+      "TREE TOWN after the crowd has gone is a lit arch over a dark warren. The painted Thai directions point into somewhere that has stopped happening. One bar deep in there is still going, and you can hear exactly which.",
       "The arch, the plastic chairs, and a mop leaning where a tout was standing six hours ago. Whatever swallowed the tourists earlier has finished digesting.",
     ],
     desc: "The neon arch of TREE TOWN, gateway to a pocket maze of go-gos and beer bars. " +

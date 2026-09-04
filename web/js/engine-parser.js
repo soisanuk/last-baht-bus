@@ -3516,7 +3516,15 @@ function _doTalkBody(arg, topic) {
     // gone: she cannot say she does not understand a question she plainly did
     // (Mario, round 42). She still doesn't have to answer — but the refusal has
     // to be hers, out loud, which is a different thing to be told.
-    if (!gated && typeof _thaiFluent === "function" && _thaiFluent() &&
+    // …but ONLY about things she would actually be dodging. It fired on every
+    // miss, so an empty database became forty little acts of stonewalling a
+    // night — Norway, photosynthesis and pizza all read as secrets, and the
+    // chit she had just unfolded in your hand read as a secret too (Nok-Anne,
+    // round 43, and she is right that it is the worst kind of bug: the
+    // best-written line in the file, doing damage).
+    const _touchy = /\b(money|price|quota|chit|cut|fine|barfine|sponsor|boyfriend|husband|farang|customer|mama|mamasan|owner|debt|loan|send|home|family|village|son|daughter|kid|child|age|old|real name|papa|before|last night|other man|him)\b/
+      .test(String(topic || "").toLowerCase());
+    if (_touchy && !gated && typeof _thaiFluent === "function" && _thaiFluent() &&
         NPC_ROLES[npc] === "hostess" && typeof _thaiVoice === "function" && _thaiVoice(npc)) {
       _say(_fmt(_pickVary(_THAI_NO_DEFLECT, "thainodeflect"), { n: NPCS[npc].name }));
       return;
@@ -4271,6 +4279,20 @@ function _thaiPraise(key) {
   _say(_fmt(_pickVary(_THAI_PRAISE, "thaipraise"), { n: NPCS[id].name }), "dim");
 }
 
+// KEEP THE PARTICLE THE PLAYER TYPED. Every phrase echoed back in ครับ, so a
+// woman typing สวัสดีค่ะ watched the game reprint her own sentence in a man's
+// mouth, eight times a night for six nights (Nok-Anne, round 43). The game does
+// not decide who is speaking; it repeats what was said.
+function _saidPolite(raw, phrase) {
+  const t = String(raw || "");
+  const fem = /ค่ะ|คะ|\bkha\b|\bka\b/i.test(t);
+  if (!fem) return { th: phrase.th, rom: phrase.rom };
+  return {
+    th: phrase.th.replace(/ครับ$/, "ค่ะ"),
+    rom: phrase.rom.replace(/\bkhrap\b|\bkrap\b|\bkrub\b/i, "kha"),
+  };
+}
+
 function _stripPolite(s) {
   return String(s || "").replace(/\s*(นะคะ|นะครับ|ค่ะ|คะ|ครับ|นะ)\s*$/g, "")
     .replace(/\s+(na )?(kha|ka|khrap|krub|krap|krab|na)\s*$/i, "").trim();
@@ -4305,8 +4327,9 @@ function _doSay(arg, targetWord) {
       return;
     }
     const phrase = THAI_PHRASES.find(p => p.key === key);
-    _say(`You say to ${name}: “${phrase.th}” (${phrase.rom})`, "thai");
-    _engineSpeak(phrase.th);
+    const _sp = _saidPolite(arg, phrase);
+    _say(`You say to ${name}: “${_sp.th}” (${_sp.rom})`, "thai");
+    _engineSpeak(_sp.th);
     _sayDirectedReact(key, id, name);
     _thaiPraise(key);
     return;
@@ -4314,8 +4337,9 @@ function _doSay(arg, targetWord) {
 
   if (!key) { _say("You give it your best shot. A passing lady pats your arm kindly."); return; }
   const phrase = THAI_PHRASES.find(p => p.key === key);
-  _say(`You say: “${phrase.th}” (${phrase.rom})`, "thai");
-  _engineSpeak(phrase.th);
+  const _sp = _saidPolite(arg, phrase);
+  _say(`You say: “${_sp.th}” (${_sp.rom})`, "thai");
+  _engineSpeak(_sp.th);
   const _here = _npcsHere();
   if (key === "hello") {
     for (const id of _here) _waiEffect(id);
@@ -8467,6 +8491,9 @@ const _THAI_CMD = [
   // whole bar surface: flirt, tip, photo, massage, swim, dance, sing, the money
   // verbs and the torch.
   ["เปิดไฟ", "light on"], ["ปิดไฟ", "light off"],   // above เปิด/ปิด: the torch is not a door
+  // the ones a native typed on night one and the parser had never heard: the wai
+  // itself (which WINS Act One), yes, no, and the time (Nok-Anne, round 43)
+  ["ไหว้", "wai"], ["ใช่", "yes"], ["ไม่", "no"],
   ["ร้องเพลง", "sing"], ["ถ่ายรูป", "photo"], ["ถอนเงิน", "withdraw"], ["ว่ายน้ำ", "swim"],
   ["ชายหาด", "beach"], ["ข้อความ", "message"], ["แท็กซี่", "taxi"], ["เงินสด", "cash"],
   ["บุหรี่", "cigarette"], ["บัญชี", "balance"], ["เบอร์", "contact"], ["จีบ", "flirt"],
@@ -9771,7 +9798,7 @@ function doCommand(input) {
     }
     default:
       // bare Thai phrase typed directly (polite particles allowed)
-      if (matchThaiPhrase(lower) || matchThaiPhrase(_stripPolite(lower))) { _doSay(_stripPolite(lower) || lower); break; }
+      if (matchThaiPhrase(lower) || matchThaiPhrase(_stripPolite(lower))) { _doSay(lower); break; }
       // "sawatdee fon" — a greeting with a trailing NAME, typed without the SAY
       // verb or "TO": the whole string never matches a phrase, so this fell
       // through to the conversation layer and misfired on whoever was last
@@ -9785,7 +9812,7 @@ function doCommand(input) {
           if (_who) {
             const _phrase = _w.slice(0, -1).join(" ");
             if (matchThaiPhrase(_phrase) || matchThaiPhrase(_stripPolite(_phrase))) {
-              _doSay(_stripPolite(_phrase) || _phrase, _last);
+              _doSay(_phrase, _last);
               break;
             }
           }
@@ -9797,6 +9824,12 @@ function doCommand(input) {
       // ADEQUATE gets the switch to English, which is what Thai, Korean and German
       // speakers all do to a foreigner who is competent but not fluent: it is
       // faster, and it is not meant unkindly (Mario, round 42).
+      // A question is pending and this is THAI: it is her answer, not a
+      // vocabulary miss — a Thai answer was eaten by the Thai gate while "Lyon" was
+      // accepted instantly (Nok-Anne, round 43). Narrow on purpose: anything
+      // else pending still resolves the normal way, topics included.
+      if (G.convoQ && typeof _convoAnswer === "function" &&
+          (/[\u0E00-\u0E7F]/.test(lower) || _looksThai(lower))) { _convoAnswer(raw); return; }
       if (!/[\u0E00-\u0E7F]/.test(lower) && _looksThai(lower) && _thaiRegister() === "adequate" && _npcsHere().some(_thaiVoice)) {
         _say(_pickVary(_THAI_SWITCH, "thaiswitch"), "dim");
         return;
@@ -9809,7 +9842,13 @@ function doCommand(input) {
       // a Thai line the parser can read becomes the English command; other Thai is voiced, not "didn't understand"
       if (/[\u0E00-\u0E7F]/.test(lower)) {
         const en = _thaiToCmd(lower);
-        if (en) { _say(`(เข้าใจ — ${en})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1; _thaiPraise("script:" + en.split(" ")[0]); doCommand(en); return; }
+        if (en) {
+          // ซื้อเบียร์ให้กล้วย came out "buy beer give kluay" and silently dropped
+          // the recipient, buying the player's own beer (Nok-Anne, round 43)
+          const en2 = /^buy .+ give /.test(en) ? en.replace(/^buy (.+) give /, "buy drink for ") : en;
+          _say(`(เข้าใจ — ${en2})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1;
+          _thaiPraise("script:" + en2.split(" ")[0]); doCommand(en2); return;
+        }
         _say("(The soi reads a little Thai — ซื้อ, ไป, ดู, น้ำ, เบียร์, เท่าไหร่, สวัสดี, ขอบคุณ — but not that one yet. " +
           "Try it in English, or tap a Thai word for the card.)", "dim");
         return;

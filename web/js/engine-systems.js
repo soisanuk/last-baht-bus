@@ -8581,7 +8581,7 @@ const _LESSON_READING = [
   ["เบียร์", "bia", "BEER. The ร on the end is silent, killed by that curl above it. Thai marks its silent letters, which is more than English does."],
   ["ซื้อ", "súe", "BUY. The vowel is three pieces around one consonant. You will hate this one for a week."],
   ["ข้าว", "khâao", "RICE — and FOOD, and the word for a meal. Falling tone. If you get this one flat you have ordered nothing."],
-  ["เท่าไหร่", "thâo-rài", "HOW MUCH. The single most profitable four syllables you will ever learn on this street."],
+  ["เท่าไหร่", "thâo-rài", "HOW MUCH. The two most profitable syllables you will ever learn on this street."],
   ["ผู้หญิง", "phûu-yǐng", "WOMAN. ผู้ is a person-marker; it turns up in front of half the jobs in the country."],
   ["ร้าน", "ráan", "SHOP. On every second sign on this soi, once you can see it."],
   ["ตลาด", "ta-làat", "MARKET. Two syllables, and the first one is not written — Thai leaves short vowels out and expects you to know."],
