@@ -5145,6 +5145,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   waen: {
     name: "Waen", th: "แหวน", emoji: "📓",
     room: "cloze",
+    owner: true,   // her name is on the lease; on a bar this small the owner is the mamasan is the cashier
     look: "Thai woman of thirty-four, hair up in a clip, no make-up to speak of, plain dark blouse, reading glasses pushed into her hair.",
     desc: "Hair up in a clip, no make-up worth the name, and a plain dark blouse in a soi of sequins. " +
       "Reading glasses pushed up into her hair and a piece of chalk in her hand. She works the bar like " +
@@ -5156,6 +5157,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "states of comprehension. \"This is Cloze. The O fell off in a storm and I left it, because it " +
           "is funnier, and because now the sign is also the exercise.\" (ASK WAEN ABOUT THE NAME · ASK WAEN ABOUT THAI)",
         short: "\"You looked at the board. Everybody looks; nobody asks.\" (ASK WAEN ABOUT THAI)" },
+      { topic: "owner|own|yours|your bar|lease|boss|mamasan",
+        text: "\"Mine.\" She says it without any particular weight. \"Eight stools, one licence, and " +
+          "a landlord who has put the rent up twice in eleven years, which for this soi is a love " +
+          "letter.\" A glance along the bar. \"No mamasan. No cashier. Me, and whoever is working, " +
+          "and I do the till after because I am the only one who can be bothered to do it properly.\"",
+        short: "\"Mine. Eight stools, one licence, no mamasan and no cashier — me, and whoever's working.\"" },
       { topic: "name|cloze|sign|the name|bar name",
         text: "\"A cloze test.\" She writes it on the board, in English, and underlines it. \"You take a " +
           "sentence, you remove one word, and the student must put it back. It is the oldest exercise " +

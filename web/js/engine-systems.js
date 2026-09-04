@@ -700,6 +700,15 @@ function _doBarfine(arg) {
       (G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
         "apologetic shrug: take a Soi 6 girl off the floor for a whole night " +
         "this early and the mamasan prices her like a go-go headliner." : ""));
+  } else if (NPCS[id] && NPCS[id].owner) {
+    // her name is on the lease, so there is nobody to drift over and do the
+    // arithmetic: she is the mamasan, the cashier and the girl, and the fee is
+    // hers to name (Mario, round 43 — the prompt summoned a mamasan Cloze has
+    // never had)
+    _say(`${name} does the thing nobody else on this soi has to do: she quotes you her own ` +
+      "barfine, in her own bar, without looking away and without dressing it up. \"There is " +
+      "no mama here to be embarrassed on my behalf,\" she says, \"so we will both have to " +
+      "manage.\"");
   } else {
     const stf = _npcsHere().find(n => NPC_ROLES[n] === "mamasan") ||
       _npcsHere().find(n => NPC_ROLES[n] === "cashier");
@@ -8686,7 +8695,7 @@ function _doAnswer(arg) {
     _say("Then, briskly, because she is not a sentimental woman: \"Sit down. This one is free, and " +
       "you will work harder than the ones who pay.\"", "win");
     _addHappy(2);
-    _addBond("waen", 2);
+    G.taughtBy = (G.taughtBy || 0) + 2;       // her regard, not her price
     G.clozeFree = true;                       // one hour on the house, taken whenever
     return;
   }
@@ -8699,11 +8708,11 @@ function _doAnswer(arg) {
     (a.length > 2 && String(w.en).toLowerCase().includes(a)));
   if (!ok) { _say(_pickVary(_BOARD_WRONG, "boardwrong")); return; }
   G.boardWon = G.day;
+  G.taughtBy = (G.taughtBy || 0) + 1;
   _say("\"THERE it is.\" She writes your answer in the gap, underlines it, and rings nothing, because " +
     "this bar has no bell and she thinks bells are for people with nothing to say. \"Half price " +
     "tonight. Tell your friends the rule is real; nobody believes the rule is real.\"", "win");
   _addHappy(1);
-  _addBond("waen", 1);
 }
 function _doLesson(arg) {
   if (!_waenHere()) {
@@ -8724,7 +8733,7 @@ function _doLesson(arg) {
     _say(_pickVary(_LESSON_CLOSE, "lessonclose"));
     if (left > 0) _say("(She has more of this one: another LESSON " + tier.toUpperCase() + " when you want it.)", "dim");
     _passTime(LESSON_TURNS);
-    _addBond("waen", 1);
+    G.taughtBy = (G.taughtBy || 0) + 1;
     return;
   }
   if (G.money < LESSON_PRICE) {
@@ -8750,7 +8759,12 @@ function _doLesson(arg) {
   const _first = !_flag("lessonTaken");
   if (_first) _setFlag("lessonTaken");
   _passTime(LESSON_TURNS);
-  _addBond("waen", 1);
+  // TEACHING IS NOT COURTING. _addBond writes G.soc.drinks, which is the same
+  // currency the barfine ladder reads — so fifteen hours of Thai lessons counted
+  // exactly like fifteen lady drinks and a man could study his way into the
+  // negotiation (Mario, round 43). Hours build her regard on their own track;
+  // if you want the other thing you do the other thing.
+  G.taughtBy = (G.taughtBy || 0) + 1;
   if (_first) _addHappy(1);
 }
 

@@ -532,3 +532,21 @@ test("the sign is also the exercise, and answering IT is the reward (Mario)", ()
     .map(f => readFileSync(join(here, "../../web/js", f), "utf8")).join("\n");
   assert.doesNotMatch(src, /\(ANSWER O\)/, "no tappable hint, no HELP line, no chip");
 });
+
+test("teaching is not courting, and the bar is hers (Mario)", () => {
+  G.room = "cloze"; G.money = 9000;
+  for (let i = 0; i < 6; i++) { G.nightTurn = 20; run("lesson"); }
+  assert.ok((G.taughtBy || 0) >= 3, "the hours are counted");
+  assert.equal((G.soc.drinks || {}).waen || 0, 0, "…on their own track, not the barfine ladder");
+  // she is still finable — she works a beer bar and the game does not sanctify her
+  G.nightTurn = 40; G.soc.drinks = { waen: 9 }; G.soc.drinkCount = { waen: 4 };
+  out = []; run("barfine waen");
+  assert.ok(G.pendingBf, "the trade is the trade");
+  // …but there is no mamasan at Cloze, so nobody drifts over to do the arithmetic
+  assert.match(text(), /her own barfine, in her own bar/);
+  assert.doesNotMatch(text(), /materialises at your elbow/);
+  assert.equal(NPCS.waen.owner, true);
+  doCommand("no");
+  G.room = "cloze"; out = []; run("ask waen about owner");
+  assert.match(text(), /No mamasan\. No cashier/);
+});
