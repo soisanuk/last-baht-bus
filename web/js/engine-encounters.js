@@ -309,6 +309,10 @@ function _maybeEncounter() {
     // — the old gate of 40 fired the "gone 1 a.m." prose at half past ten.
     (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70)) && // the apps come alive after 1 a.m.
     (id !== "noodle" || G.nightTurn < 60) &&   // Soi 6 shuts at midnight; the noodle girl went home with it (Piotr, round 40)
+    // 60 = midnight, the same threshold beach_rd_top's own lateDesc uses: the
+    // corner must not produce the wall's regulars while the room is still
+    // describing joggers and an ice-cream cart.
+    (id !== "seawall" || G.nightTurn >= 60) &&
     (id !== "clubpickup" || (_flag("act1Done") && G.nightTurn >= 40 &&
       (ROOMS[G.prevRoom || ""] || {}).barType === "club"))); // "coming out of the club" means you were IN one (Piotr, round 40)
   const chance = ENC_CHANCE * (_bandNearby() ? 1.5 : 1);
@@ -841,6 +845,77 @@ const _ENC = {
         "the room rent; you get the arithmetic of her whole life on the walk off the beach. ";
       _say(`฿${price} settles it in the dark — no ledger, no mama, every baht of it hers. ` +
         flavor + "She takes your arm and steers you off the sand toward the lights.", "win");
+    }
+    _endNight("barfine");
+  },
+
+  // THE SEA WALL. Deliberately the coconut bar with two differences. One: they
+  // say what they are in the first ten words, so there is no reveal, no trick and
+  // no punchline — the version of this scene where the farang finds out later is
+  // the oldest and worst joke about this town and the game does not tell it.
+  // Two: NOTHING GOES WRONG. The dark sand rolls `robbed` because the dark sand
+  // has no witnesses; this is a lit corner within sight of two hotels, and the
+  // one katoey already loose on a pavement in this game is a pickpocket, so a
+  // second thieving scene would have made theft the whole of what the game says
+  // about them outdoors (Marco, round 44). You pay more; nobody takes anything.
+  seawall(input) {
+    const both = /both|two|threesome|pair|aor|baiyok|kate/.test(input) && /both|two|threesome|pair/.test(input);
+    const yes = both || /yes|yeah|ok|sure|deal|come|why not|how much|price|please|kate|aor|baiyok|her/.test(input);
+    if (!yes) {
+      _say("You pass on it, and you do it politely, and that is all it takes. \u201cOkay, " +
+        "hansum. Have good night, na.\u201d She is back on the wall before you have gone ten " +
+        "metres, and the conversation she rejoins was clearly more interesting than you.");
+      return;
+    }
+    if (!_flag("act1Done")) {
+      _say("She looks at the sand on your shins, the phone in your hand, and the way you are " +
+        "standing, and works out the whole situation without asking a single question. " +
+        "\u201cAh. You have bad night already.\u201d Not unkind at all. \u201cGo home, hansum. " +
+        "Wall still here tomorrow.\u201d She goes back to it.");
+      return;
+    }
+    const price = both ? SEAWALL_TWO : SEAWALL_ONE;
+    if (G.money < price) {
+      _say(_fmt("She names \u0e3f{p} and does not decorate it. Your pocket says \u0e3f{m}. " +
+        "\u201cThen no, na \u2014 and I not going to argue you down, because then tomorrow " +
+        "everybody want the tomorrow price.\u201d She says it without a trace of hard feeling, " +
+        "and goes back to the wall.", { p: price, m: G.money }));
+      return;
+    }
+    G.money -= price;
+    G.lastBfId = null;              // freelance wall, not a bar girl — no bond bonus
+    if (both) _setFlag("hadThreesome");
+    if (both) {
+      _say(_fmt("\u0e3f{p}, and Baiyok comes off the wall still finishing her sentence to " +
+        "somebody, because Baiyok finishes every sentence. What follows is a taxi with too many " +
+        "people in it, a hotel lift with a very professional silence in it, and an evening you " +
+        "will remember in a different order than it happened. (\u0e3f{m} left.)",
+        { p: price, m: G.money }), "win");
+      _conquestHappy(6);
+      _endNight("barfine");
+      return;
+    }
+    // A third of the time you get the person instead of the performance. Same
+    // doctrine as the honest long time and the other ledger: being told the truth
+    // is not a prize, so it pays no extra — it just changes what you know.
+    const honest = _rand() < 0.34;
+    if (honest) {
+      _say(_fmt("\u0e3f{p}, and somewhere in the small hours it stops being a transaction and " +
+        "becomes a conversation, which she allows and does not encourage. Eleven years on that " +
+        "wall. A mother in Sisaket who knows exactly what her daughter does and has never once " +
+        "made her say it out loud. The surgery, itemised, in the flat voice of a woman reading " +
+        "a receipt. \u201cEverybody think we are sad,\u201d she says, at the window, not sad. " +
+        "\u201cI have my own room, my own money, nobody tell me anything. My brother has a wife " +
+        "and a truck and he calls ME to borrow.\u201d (\u0e3f{m} left.)",
+        { p: price, m: G.money }), "win");
+      _conquestHappy(3);
+    } else {
+      _say(_fmt("\u0e3f{p}, handed over in the open on a lit corner, and every baht of it stays " +
+        "with the woman who earned it \u2014 no bar, no book, no cut for anybody. She is funny " +
+        "on the walk to the lift and funnier in the morning, and she is gone before the tray " +
+        "comes up, having taken nothing that was not agreed. (\u0e3f{m} left.)",
+        { p: price, m: G.money }), "win");
+      _conquestHappy(5);
     }
     _endNight("barfine");
   },

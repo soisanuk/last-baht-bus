@@ -232,6 +232,14 @@ const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 // what she wants when the bar wants nothing.
 const LADY_ST = 300, LADY_LT = 500;
 const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the short-time motel off Soi 7
+// THE SEA WALL, north of Soi 6 — the coconut bar's sibling pitch, and the town's
+// katoey freelancers (Mario, 2026-09-05). Priced ABOVE the dark sand on purpose:
+// these three are regulars on a known corner within sight of the hotels, they
+// say what they are before you have decided anything, and — the part that is
+// the whole point — nothing goes wrong. The game already has a katoey street
+// encounter and it is a pickpocket; three more thieves would have made theft
+// the only thing this game ever said about them on a pavement (Marco, r44).
+const SEAWALL_ONE = 1000, SEAWALL_TWO = 1800;
 // Nont, the second fixer — the priced one. Tan is the favour with no figure on
 // it; Nont is the figure with no favour in it (Mario, 2026-09-04). Thais deal in
 // favours, foreigners pay cash: to a farang he sells, to Tan he owes.
@@ -1449,6 +1457,23 @@ const ROOMS = {
       "Somebody on the sea wall with a coffee, watching nothing in particular.",
       "The ice-cream cart is packing up. It always seems to be packing up.",
       "Quiet enough here to hear the water. Two kilometres down, it will not be.",
+    ],
+    // The quiet end is only quiet until about ten. Then the wall north of Soi 6
+    // gets its regulars — no bar, no sign, no mama, and the joggers long gone.
+    lateDesc: [
+      "The corner after dark is a different corner. The ice-cream cart went hours ago and the " +
+        "low wall has three women sitting along it with their backs to the bay and their faces to " +
+        "the road, unhurried, entirely at home, watching the traffic the way fishermen watch " +
+        "water. No bar behind them, no sign, nobody taking a cut: this stretch never needed one.",
+      "Three of them on the sea wall, spaced out along it like they have agreed the distances, " +
+        "phones down, talking across the gaps in Thai. A car slows, thinks better of it, and goes " +
+        "on up to the roundabout. Nobody on the wall reacts. They have all night.",
+      "The quiet end, at the hour it stops being quiet: cigarette ends going orange along the " +
+        "low wall, the bay black behind them, and the whole two-kilometre glow of the beach road " +
+        "starting somewhere south of here and having nothing to do with this corner at all.",
+      "Somebody is laughing on the sea wall, the big unbothered laugh of a woman who has heard " +
+        "worse from a passing car and did not think much of that either. The trees hold the dark " +
+        "down over the sand; the road runs empty up to the roundabout.",
     ],
     exits: { n: "dolphin", s: "beach_rd_n", w: "beach_north_end" },
   },
@@ -11862,6 +11887,37 @@ const ENCOUNTERS = {
       "too — we not shy like the soi girl. We say the price, you say yes.”",
     hint: "(No bar, no barfine — pay her direct, cheaper than the soi. But this is the dark " +
       "sand: no mamasan, no rail, nobody at all if it turns. ฿500, or ฿900 with Muk. YES / NO.)",
+  },
+  // THE SEA WALL — the coconut bar's sibling, north of Soi 6, and the answer to a
+  // playtest that found the game's ONLY katoey on a pavement was a pickpocket
+  // (Marco, round 44). Same trade, same no-bar-no-barfine doctrine, three named
+  // regulars — and they tell you what they are in the first ten words, because
+  // that is what the real ones do and because the trick version of this scene is
+  // the one joke this game does not make.
+  seawall: { solo: true,
+    rooms: ["beach_rd_top"],
+    interactive: true, nightly: true,
+    th: "พี่หล่อ ไปด้วยกันไหม", rom: "phii lor, pai duay kan mai?",
+    intro: [
+      "Three women are sitting along the low sea wall with their backs to the bay, and the " +
+        "nearest one is off it and walking before you have finished deciding whether to look. " +
+        "Tall. Unhurried. Completely unbothered by any of it. \u201cSawatdee kha, hansum.\u201d " +
+        "She stops closer than a stranger stops. \u201cOkay \u2014 first thing, so nobody waste " +
+        "time: I am ladyboy. Kate. That one is Aor, the loud one is Baiyok, we all ladyboy, " +
+        "nobody hiding.\u201d A shrug, and a grin that has done this ten thousand times. " +
+        "\u201cNow you know, so now you can say no like a gentleman, or you can say yes like " +
+        "one. No bar here. No barfine. No mama take my money. Just us and the wall.\u201d",
+      "The wall has three women on it and the middle one is already coming over, arms folded " +
+        "against nothing, because it is twenty-nine degrees at midnight. \u201cHansum. Wait \u2014 \u201d " +
+        "a raised finger, businesslike, before you can open your mouth. \u201cI say it first, I " +
+        "always say it first: ladyboy. Me, Kate on the end, Baiyok making all that noise. If " +
+        "that is a no, is a no, is okay, everybody still friends. I am Aor.\u201d She waits, " +
+        "genuinely unbothered, while you catch up. \u201cNo bar behind us, na. Nobody take a cut. " +
+        "Whatever we say, that is the whole price.\u201d",
+    ],
+    hint: "(No bar, no barfine, no mamasan \u2014 and they told you what they are before you " +
+      "asked, which is the difference between this wall and a story you would tell badly " +
+      "later. \u0e3f" + SEAWALL_ONE + ", or \u0e3f" + SEAWALL_TWO + " for two. YES / BOTH / NO.)",
   },
   bkktourist: { solo: true,
     rooms: ["ws_north", "ws_south", "beach_rd_c", "second_rd_c", "buakhao_market"],

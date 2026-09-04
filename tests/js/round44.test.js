@@ -247,3 +247,73 @@ test("the hospital lesson teaches the transport rules the game actually runs", (
   assert.ok(lessons.some(l => l && typeof l.next === "string" && /sparse|wait at the kerb|how thin/.test(l.next)),
     "the bike lesson teaches what the buses actually do after two");
 });
+
+// ── The sea wall (Mario, 2026-09-05) ───────────────────────────────────────
+
+test("the sea wall north of Soi 6 is the coconut bar's sibling, and its cast says so first", () => {
+  // Three ladyboy freelancers on the low wall at the north corner — the answer
+  // to round 44's finding that the game's only katoey on a pavement was a
+  // pickpocket. The doctrine of the scene is that there is no reveal in it.
+  const e = ENCOUNTERS.seawall;
+  assert.deepEqual(e.rooms, ["beach_rd_top"]);
+  assert.ok(e.interactive && e.nightly && e.solo);
+  const intros = Array.isArray(e.intro) ? e.intro : [e.intro];
+  assert.ok(intros.length >= 2, "the opening is pooled like every repeatable line");
+  for (const i of intros) {
+    assert.match(i, /ladyboy/, "she says what she is, unprompted, in the intro itself");
+    assert.match(i, /Kate|Aor|Baiyok/, "and all three are named");
+    assert.match(i, /No bar|no bar/, "no bar, no barfine — the coconut-bar doctrine");
+  }
+  // the prices are constants, quoted from them
+  assert.ok(SEAWALL_ONE > 0 && SEAWALL_TWO > SEAWALL_ONE);
+  assert.match(e.hint, new RegExp("฿" + SEAWALL_ONE));
+  assert.match(e.hint, new RegExp("฿" + SEAWALL_TWO));
+});
+
+test("the sea wall never robs you — the pickpocket is the other encounter", () => {
+  // The dark sand rolls `robbed` because the dark sand has no witnesses. This is
+  // a lit corner, and a second thieving katoey scene would have made theft the
+  // whole of what the game says about them outdoors.
+  for (const roll of [0.01, 0.2, 0.5, 0.8, 0.99]) {
+    out = []; newGame();
+    _setFlag("act1Done"); G.stage = "vacation"; G.money = 9000;
+    G.room = "beach_rd_top"; G.nightTurn = 65;
+    for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
+    const saved = _rand; _rand = () => roll;
+    try { _startEnc("seawall"); run("yes"); } finally { _rand = saved; }
+    assert.doesNotMatch(text(), /woke up lighter|robbed/i, `roll ${roll} takes nothing`);
+    // the night ends the way a barfine ends, never the way the dark sand can
+    assert.equal(G.nightLog[G.nightLog.length - 1], "barfine",
+      `roll ${roll} closes as an ordinary night, not a robbery`);
+  }
+});
+
+test("saying no on the sea wall costs nothing and is not punished", () => {
+  G.room = "beach_rd_top"; G.nightTurn = 65; G.money = 9000;
+  const happy = G.happy;
+  out = []; _startEnc("seawall"); run("no");
+  assert.equal(G.money, 9000);
+  assert.equal(G.happy, happy, "declining is free — no moral grading in either direction");
+  assert.doesNotMatch(text(), /insult|laugh/i);
+});
+
+test("the north corner only produces the wall once its own prose has changed", () => {
+  // The room describes joggers and an ice-cream cart until midnight; the
+  // encounter must not deliver three women onto a wall the prose says is empty.
+  assert.ok(Array.isArray(ROOMS.beach_rd_top.lateDesc), "the corner has a pooled night face");
+  for (const l of ROOMS.beach_rd_top.lateDesc)
+    assert.match(l, /wall|corner/, "and every variant paints the same place");
+  G.room = "beach_rd_top"; G.nightTurn = 20; G.visited.beach_rd_top = false;
+  out = []; _describeRoom(true);
+  assert.match(text(), /ice-cream cart/, "before midnight it is still the quiet end");
+  G.nightTurn = 65; G.visited.beach_rd_top = false;
+  out = []; _describeRoom(true);
+  assert.match(text(), /wall/, "after midnight the wall has people on it");
+});
+
+test("the chip bar carries the sea wall's three answers", () => {
+  G.room = "beach_rd_top"; G.nightTurn = 65; G.money = 9000;
+  _startEnc("seawall");
+  const chips = _chipSet().map(c => c.cmd);
+  for (const c of ["yes", "both", "no"]) assert.ok(chips.includes(c), `${c} is tappable`);
+});
