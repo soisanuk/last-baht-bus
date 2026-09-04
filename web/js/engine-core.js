@@ -1042,6 +1042,17 @@ const _PATRON_HOP_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].barType);
 // (rule #6). This is what finally lets the season reach the ROOM (both publican
 // playtests, 2026-08-26: the rail read identical in Sept and Dec) and unlocks the
 // empty-bar monsoon register, which was unreachable while the bench never thinned.
+// Two bars can share a name — they do in the real town, and the game keeps both
+// (a Sundowner on Soi Diana, Neil's on the lake). A POINTER to one of them has
+// to say which: a man sent after Neil was being sent four districts wrong
+// (prose review, 2026-09-04).
+function _dupeBar(room) {
+  // normalised, because the pair that actually collides is "The Sundowner" and
+  // "Sundowner Bar" — a player hears one name and walks to either
+  const norm = x => String(x || "").toLowerCase().replace(/^the /, "").replace(/ (bar|pub|club)$/, "").trim();
+  const n = norm(_barName(room));
+  return !!n && Object.keys(ROOMS).some(r => r !== room && norm(_barName(r)) === n);
+}
 function _anchorNight(id) { return _hh(id + ":anchor", 5) % 7; }   // 0 = Sunday … 6 = Saturday (day 1 is a Monday)
 const _ANCHOR_NAMES = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"];
 function _benchOut(id) {
@@ -1547,7 +1558,7 @@ function _elsewhereLine(word) {
       return `${NPCS[nid].name} ${notHere} — he'll have gone home for the night. ` +
         (NPCS[nid].room === G.room
           ? `Back here early doors is when you'll catch him.`
-          : `${_barName(NPCS[nid].room)}, early doors, is where you'll find him.`);
+          : `${_barName(NPCS[nid].room)}${_dupeBar(NPCS[nid].room) ? " out in " + (ROOMS[NPCS[nid].room].region || "") : ""}, early doors, is where you'll find him.`);
     if (!_npcActive(nid)) return `${NPCS[nid].name} isn't around right now.`; // not in at this hour / not here at all
     const cur = _npcRoom(nid);
     // Point the player to her only when she's at one of HER OWN bars (a

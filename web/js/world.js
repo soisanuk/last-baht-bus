@@ -255,7 +255,7 @@ const ROOMS = {
     name: "Jomtien Beach (South)",
     region: "Jomtien",
     desc: "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. " +
-      "Two gray-and-white soi cats hold down the end of a lounger, the big one sitting slightly " +
+      "Two grey-and-white soi cats hold down the end of a lounger, the big one sitting slightly " +
       "in front of the small one, both watching the water. The beach road glows to the east; the " +
       "sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart " +
       "is parked.",
@@ -1200,7 +1200,7 @@ const ROOMS = {
   short_time_motel: {
     name: "Short-Time Motel",
     region: "Beach Road",
-    desc: "A dark alley off Beach Road that smells of lemongrass floor cleaner and " +
+    desc: "A dark alley halfway up Soi 7 that smells of lemongrass floor cleaner and " +
       "old air conditioning. The motel has no sign you could read from the street — " +
       "its reputation travels by word of mouth and the direction of high heels. " +
       "A small reception counter lit by one fluorescent tube. A ring of numbered " +
@@ -1224,7 +1224,7 @@ const ROOMS = {
       "beyond the promenade. The glass cliff of CENTRAL mall rises straight off the " +
       "pavement on the inland side, its front steps on Beach Road itself between Soi 9 and " +
       "Soi 10, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she " +
-      "has since before you were born — CHERRY OIL MASSAGE keeps a quieter door right " +
+      "has since long before this stretch had a mall on it — CHERRY OIL MASSAGE keeps a quieter door right " +
       "alongside.",
     busStop: "beachrd",
     venues: ["tequila_queen", "beachrd_oil"],
@@ -3558,7 +3558,7 @@ const ROOMS = {
       "songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. " +
       "Two kilometres of this, on foot, a metre from traffic that does not expect you: " +
       "people die on this road every year doing exactly this, mostly at night, mostly " +
-      "somebody else's fault. Nobody walks it twice.",
+      "somebody else's fault. You walk it once, and after that you find the fare.",
     revisit: [
       "The verge again: gravel, ditch, lorry-wind. The temple wall has not moved.",
       "A truck's slipstream shoves you a step sideways. The footpath is a rumour here.",
@@ -3574,8 +3574,8 @@ const ROOMS = {
       "side, where expats go when they stop being tourists. On foot this is a coin flip " +
       "with a truck. Every year this road kills a handful of people trying exactly that — " +
       "at night, when the drivers are drunk and half the bikes run dark, a gap closes faster " +
-      "than a man on foot can read it. The motosai drivers do it forty times a night for a " +
-      "hundred baht, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs " +
+      "than a man on foot can read it. The motosai drivers do it forty times a night for the " +
+      "fare, and more of it after the last bus, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs " +
       "back up the highway toward South Pattaya Road — the long way home, and the " +
       "Pattaya Tai trucks stop here for anyone who'd rather ride it.",
     motosai: true,
@@ -4607,7 +4607,7 @@ const ITEMS = {
   soi_cats: {
     name: "two soi cats", aliases: ["cats", "cat", "big one", "little one", "kittens", "soi cats"],
     portable: false, location: "jomtien_beach",
-    desc: "Two gray-and-white shorthairs holding down the end of a lounger like a deposit. " +
+    desc: "Two grey-and-white shorthairs holding down the end of a lounger like a deposit. " +
       "Sisters, plainly — same coat, same sea-watching squint — though the little one is a " +
       "runt who never grew into her ears, and the big one sits slightly in front of her the " +
       "way she always has and always will. The beach calls them Big One and Little One; " +
@@ -4756,8 +4756,8 @@ const NPCS = {
         short: "\"Glass I take, plastic no. Sixty baht some night, two hundred if the " +
           "farang been happy. Every night is the good part.\" (SELL BOTTLES.)",
       },
-      { topic: "cat", text: "\"The gray sisters, by the loungers? Mine — well, nobody's, but I feed them, morning and night, ten year now. Big One and Little One. You watch the big one: she never eat before the little one eat. Not one time in ten year.\" Auntie Nok's whole face goes soft. \"They my security, na. Nobody sleep rough on MY beach the cats don't tell me first. Better than police. Cheaper than police, hahaha.\"",
-        short: "\"The gray sisters — I feed them ten year. Big One never eats before Little One. My security.\"" },
+      { topic: "cat", text: "\"The grey sisters, by the loungers? Mine — well, nobody's, but I feed them, morning and night, ten year now. Big One and Little One. You watch the big one: she never eat before the little one eat. Not one time in ten year.\" Auntie Nok's whole face goes soft. \"They my security, na. Nobody sleep rough on MY beach the cats don't tell me first. Better than police. Cheaper than police, hahaha.\"",
+        short: "\"The grey sisters — I feed them ten year. Big One never eats before Little One. My security.\"" },
       // The Quiet Side quest (docs/map-coverage.md): Nok is the beach grapevine Sumalee
       // sends you to; her node sets the intel flag. chip:false — quest-directed.
       { topic: "regular", sets: ["heardGordon"], chip: false,
@@ -4887,7 +4887,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "tuesday", req: ["roseReplied"],
         text: "\"She say WHAT.\" Candy's hand goes flat on the bar, and for a second the whole " +
           "rail act drops off her face. \"Tuesday. The photographs.\" A long, slow laugh that " +
-          "isn't really about you at all. \"Forty years and she still knows how to make an old " +
+          "isn't really about you at all. \"Twenty years and she still knows how to make an old " +
           "woman's heart go like a girl's.\" She flicks her eyes back to you, delighted again. " +
           "\"Okay, tilac. You did good. Now go, before I start crying in front of my own customers.\"",
         short: "\"Tuesday. The photographs.\" Candy laughs like it isn't really about you at all." },
@@ -9647,7 +9647,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // different hours all night (Marcus, round 34). It's a knowledge gate,
       // and the refusal now points at the knowledge: the song is cage
       // business, and the cage lady is the one to square.
-      { topic: "sabai sabai", notFlags: ["knowDoorTrick"],
+      { topic: "sabai sabai|song|the song|mamasan song|that song|music", notFlags: ["knowDoorTrick"],   // security says "ask DJ, he tell you the song" (prose review)
         text: "\"Sabai Sabai?\" He slides one headphone off, properly awake for the first " +
           "time tonight. \"That is not a request, bro, that is an EVENT. Mamasan's song. I " +
           "play that, the whole house stops working.\" The headphone goes back on. \"Man " +
@@ -9890,7 +9890,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     dry: true, // a year and a bit sober — a man drink is a soda water, never "a proper one"
     name: "Fast Eddy", emoji: "🕶️", manager: true, pronoun: "he",
     nudge: "Eddy lets a beat hang, then taps the bar with two knuckles: “You're good company — but a man gets " +
-      "thirsty holding up his end, and mine's a soda with lime, so it'll cost you about nothing. Stand us one?” (BUY MAN DRINK.)",
+      "thirsty holding up his end, and mine's a soda with lime — same price as a beer in here, which is the joke of my life. Stand us one?” (BUY MAN DRINK.)",
     room: "white_rabbit",
     look: "American man, fifties, overweight, bald but for a thin grey rat-tail, gold hoop earring, wraparound shades pushed up, black tee.",
     desc: "The owner, and he will have told you so inside a minute. American, the wrong " +
@@ -10425,14 +10425,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "something delicate held in tweezers, and he doesn't stop working it while he talks.",
     dialogue: [
       { text: "The kid glances up, clocks you as farang in about half a second, and switches to " +
-          "easy, unaccented English. “Need something? Phone unlocked, screen fixed, a Thai SIM " +
-          "that isn't in your name — whatever.” A grin that's friendly and doesn't quite reach " +
+          "easy, unaccented English. “Need something? Phones, money, people — or a Thai SIM " +
+          "that isn't in your name.” A grin that's friendly and doesn't quite reach " +
           "the eyes. “Alex. Well — Nont, but Alex is easier for you. Everybody down here's got " +
           "two names. What do you need?” He doesn't wait for you to work it out. “I find " +
           "people — two hundred, tonight's answer. I move money — my account to your hand, " +
           "five percent, no card fee. I charge {{phones}}. Tan does favours. I do prices.” " +
-          "(ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)",
-        short: "“Alex — Nont, whatever's easier. People, money, {{phones}}. Tan does favours; I do prices.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)" },
+          "(ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)",
+        short: "“Alex — Nont, whatever's easier. People, money, {{phones}}. Tan does favours; I do prices.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)" },
       // a resident has a Thai book — the fee pitch is a tourist's pitch (Des, round 41)
       { topic: "fixer|price|prices|services|money|cash|charge|transfer|rates|menu", when: (st, G) => !!G.thaiAccount,
         text: "“The menu, for a man with a Thai bank book?” The tweezers pause. “The card-fee line is " +
@@ -10570,7 +10570,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // Bert briefs you on rent, key money, the note and the wet at the deposit,
       // and then couldn't discuss a word of it — five topics he put in your
       // mouth, five misses (Des, round 41). And "partner" pointed at nobody.
-      { topic: "partner|partnership|fifty-one|51 percent|the partner", when: (st, G) => _flag("expatLife") && !_flag("barPartner"),
+      { topic: "partner|partnership|fifty-one|51 percent|the partner", when: (st, G) => _flag("barLicence") && !_flag("barPartner"),   // both partner nodes need the licence too (prose review)
         text: "\"Fifty-one's not mine to give, bud — it's got to be a Thai name, and it's got to be a " +
           "PERSON.\" A nod down the soi. \"Candy'll tell you how she'd do it, and she's the one to ask " +
           "first. Tan'll tell you how he'd do it, and he'll not be asking for money. Hear both. Then " +
@@ -10578,8 +10578,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         short: "\"Candy first, then Tan. Hear both before you pick.\" (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP)" },
       { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease) && !G.bar.lease.paid,
         text: "\"The landlord's month. Due with the first rent on the app — or notes in his hand before " +
-          "then and he knocks a bit off. PAY KEY MONEY when you've the notes together, TRANSFER KEY " +
-          "MONEY if you'd rather the paper. He'd rather the notes. He'd rather everything was notes.\"",
+          "then and he knocks a bit off. He'd rather the notes. He'd rather everything was notes.\" " +
+          "(PAY KEY MONEY · TRANSFER KEY MONEY)",
         short: "\"Notes before the first rent, or the app. He'd rather notes.\" (PAY KEY MONEY · TRANSFER KEY MONEY)" },
       { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease && G.bar.lease.paid),
         text: "\"Sorted, that. He's not a man who sends receipts, so if you're waiting on one, don't.\"",
@@ -10587,13 +10587,13 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "note|the note|old man|arrears", when: (st, G) => _flag("barPaid"),
         text: "\"฿" + BAR_MONTHLY + " a month to Ohio, six years, and he'll not chase you. That's the whole " +
           "of it, and it's the worst bit — a man who chases, you can argue with.\" He wipes the same " +
-          "patch twice. \"PAY THE NOTE walks it round when you're behind, and you can say how much: " +
-          "PAY NOTE 5000. He'll not thank you. He'll not not thank you either.\"",
+          "patch twice. \"Walk it round when you're behind, and you can say how much. He'll not thank " +
+          "you. He'll not not thank you either.\" (PAY THE NOTE · PAY NOTE <amount>)",
         short: "\"฿" + BAR_MONTHLY + " a month, he'll not chase. PAY THE NOTE, or PAY NOTE <amount>.\"" },
       { topic: "rent|landlord", when: (st, G) => _flag("barPaid"),
         text: "\"Every thirty days, to a fella who's never late collecting and never early with anything " +
           "else. Miss it once, his daughter comes round with a book. Miss it twice, I've told you what " +
-          "happens.\" A beat. \"PAY RENT when it's owing. Before the daughter, ideally.\"",
+          "happens.\" A beat. \"Settle it the moment it's owing. Before the daughter, ideally.\" (PAY RENT)",
         short: "\"Every thirty days. Miss it twice and you know. PAY RENT when it's owing.\"" },
       { topic: "cash|notes|getting cash|hard cash", when: (st, G) => _flag("barPaid"),
         text: "\"Notes? The machine — twenty a day on a wallet card, more once you've a Thai book. The " +
@@ -11309,7 +11309,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         short: "\"Midnight Sun, 2004 — on the till, not the floor. She corrected my Thai and kept my change.\"" },
       // Ron: "Gary out at the lake'll tell you the same" — about the Darkside —
       // and Gary couldn't (Stan, round 35).
-      { topic: "darkside", text: "\"Ron sent you, did he. 'Pattaya for blokes who did the sums.'\" A " +
+      { topic: "darkside", text: "\"That'll be Ron's line, that. 'Pattaya for blokes who did the sums.'\" A " +
         "small nod — he's heard it, he likes it, he'd put it differently. \"Sums are half of " +
         "it. The other half is the noise stops. Town's a performance that never ends and out " +
         "here nobody's performing — not the bars, not the girls, not you.\" The retriever " +
@@ -11594,12 +11594,12 @@ const ENCOUNTERS = {
     intro: [
       "Your phone buzzes — one of the girls you'd been messaging off the apps, " +
         "the stunner from the photos who kept leaving you on read, is suddenly awake " +
-        "and suddenly free. “Hi baby, I finish work. I come you now? 2500, no bar, no " +
+        "and suddenly free. “Hi baby, I finish work. I come you now? " + BOOK_PRICE + ", no bar, no " +
         "barfine, only you.” It is gone 1 a.m. The photos are, it must be said, " +
         "extraordinary.",
       "The phone lights the ceiling. An app girl you'd written off three days ago — six " +
         "photos, two words, then silence — is suddenly all words. “Baby you sleep?? I free " +
-        "now. Come you 2500, no bar. Only you, na.” Small hours, and the photos have not " +
+        "now. Come you " + BOOK_PRICE + ", no bar. Only you, na.” Small hours, and the photos have not " +
         "got any less extraordinary.",
       "A buzz, a name you'd half forgotten from the app, and a message that reads like it " +
         "was typed in a taxi: “finish work now!! i come hotel? 2500 all night no bar no " +

@@ -5012,7 +5012,7 @@ function _doWatchPubSoi() {
   _soiSpectateHappy("(A pint, and the whole circus safely behind glass.)");
 }
 
-// The Jomtien beach cats: Big One and Little One, the two gray-and-white
+// The Jomtien beach cats: Big One and Little One, the two grey-and-white
 // sisters on the lounger. Petting them is a small daily blessing — one happy
 // point a night, same house rules as the sunsets and the free shows. Big One
 // vets every hand before it gets anywhere near her sister; that's the deal.

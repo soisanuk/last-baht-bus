@@ -64,7 +64,7 @@
         "the_bucket"
       ],
       "sampleDescs": [
-        "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises straight off the pavement on the inland side, its front steps on Beach Road itself between Soi 9 and Soi 10, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since before you were born — CHERRY OIL MASSAGE keeps a quieter door right alongside.",
+        "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises straight off the pavement on the inland side, its front steps on Beach Road itself between Soi 9 and Soi 10, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since long before this stretch had a mall on it — CHERRY OIL MASSAGE keeps a quieter door right alongside.",
         "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. From about six, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past on the Beach Road run, headlights strung north toward the Dolphin and south into the rest of the neon city.",
         "The south end of Beach Road, where the palms wear fairy lights and the baht buses bunch up like beads. PAPAYA MASSAGE and BEACH ROAD THAI MASSAGE keep pink-lit shopfronts along here. The Walking Street arch blazes to the south. A motosai stand idles on the corner, drivers watching the street like sleepy hawks."
       ]
@@ -90,7 +90,7 @@
       "sampleDescs": [
         "A long, plain soi of beer bars with no neon budget and no need for one. The ladies here are older, the customers older still, and every bar knows every customer's pour. It's seedier than town and more honest about it. DAENG'S PLACE holds the near end, and from the far side MAMA YAI'S sends out charcoal smoke and the smell of som tam being argued about.",
         "The working stretch of the soi: a dozen open-front bars shoulder to shoulder under one long tin roof, fairy lights doing the job neon does in town at a tenth of the wattage. Ladies call the odds from bamboo rails, a pool table clacks somewhere, and every third stool holds an expat who has been on it since the flood. THE WATER BUFFALO and FIREFLY BAR glow closest; the soi runs on east toward Daeng's end. At the dark end, a padded door with no sign worth reading — THE NIGHT HERON, if you know to ask — and beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters down for good.",
-        "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. Every year this road kills a handful of people trying exactly that — at night, when the drivers are drunk and half the bikes run dark, a gap closes faster than a man on foot can read it. The motosai drivers do it forty times a night for a hundred baht, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
+        "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. Every year this road kills a handful of people trying exactly that — at night, when the drivers are drunk and half the bikes run dark, a gap closes faster than a man on foot can read it. The motosai drivers do it forty times a night for the fare, and more of it after the last bus, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
       ]
     },
     {
@@ -455,7 +455,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises straight off the pavement on the inland side, its front steps on Beach Road itself between Soi 9 and Soi 10, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since before you were born — CHERRY OIL MASSAGE keeps a quieter door right alongside."
+      "desc": "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises straight off the pavement on the inland side, its front steps on Beach Road itself between Soi 9 and Soi 10, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since long before this stretch had a mall on it — CHERRY OIL MASSAGE keeps a quieter door right alongside."
     },
     {
       "id": "beach_rd_klang",
@@ -772,7 +772,7 @@
       "people": [
         "Somchith"
       ],
-      "desc": "A dark alley off Beach Road that smells of lemongrass floor cleaner and old air conditioning. The motel has no sign you could read from the street — its reputation travels by word of mouth and the direction of high heels. A small reception counter lit by one fluorescent tube. A ring of numbered keys on a nail. Two plastic stools. An older Thai man sits behind the counter, a thermos of coffee at his elbow, watching the alley with the patient stillness of someone who has long stopped being surprised by anything."
+      "desc": "A dark alley halfway up Soi 7 that smells of lemongrass floor cleaner and old air conditioning. The motel has no sign you could read from the street — its reputation travels by word of mouth and the direction of high heels. A small reception counter lit by one fluorescent tube. A ring of numbered keys on a nail. Two plastic stools. An older Thai man sits behind the counter, a thermos of coffee at his elbow, watching the alley with the patient stillness of someone who has long stopped being surprised by anything."
     },
     {
       "id": "stinky_bar",
@@ -999,7 +999,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. Every year this road kills a handful of people trying exactly that — at night, when the drivers are drunk and half the bikes run dark, a gap closes faster than a man on foot can read it. The motosai drivers do it forty times a night for a hundred baht, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
+      "desc": "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. Every year this road kills a handful of people trying exactly that — at night, when the drivers are drunk and half the bikes run dark, a gap closes faster than a man on foot can read it. The motosai drivers do it forty times a night for the fare, and more of it after the last bus, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
     },
     {
       "id": "sukhumvit_verge",
@@ -1012,7 +1012,7 @@
       "dark": true,
       "darkLight": null,
       "people": [],
-      "desc": "South Pattaya Road runs out past Soi Buakhao into shuttered shophouses, a closed tyre shop, a temple wall — and then Sukhumvit itself, eight lanes of trucks doing ninety under sodium lamps. The verge south toward the Khao Talo crossing is a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. Two kilometres of this, on foot, a metre from traffic that does not expect you: people die on this road every year doing exactly this, mostly at night, mostly somebody else's fault. Nobody walks it twice."
+      "desc": "South Pattaya Road runs out past Soi Buakhao into shuttered shophouses, a closed tyre shop, a temple wall — and then Sukhumvit itself, eight lanes of trucks doing ninety under sodium lamps. The verge south toward the Khao Talo crossing is a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. Two kilometres of this, on foot, a metre from traffic that does not expect you: people die on this road every year doing exactly this, mostly at night, mostly somebody else's fault. You walk it once, and after that you find the fare."
     },
     {
       "id": "water_buffalo",
@@ -1199,7 +1199,7 @@
       "kind": "beach",
       "dark": false,
       "people": [],
-      "desc": "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. Two gray-and-white soi cats hold down the end of a lounger, the big one sitting slightly in front of the small one, both watching the water. The beach road glows to the east; the sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart is parked."
+      "desc": "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. Two grey-and-white soi cats hold down the end of a lounger, the big one sitting slightly in front of the small one, both watching the water. The beach road glows to the east; the sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart is parked."
     },
     {
       "id": "jomtien_beach_m",

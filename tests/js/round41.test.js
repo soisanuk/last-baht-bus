@@ -36,11 +36,11 @@ test("a dep chain names its next door when the last one closes (Des)", () => {
 });
 
 test("Bert points PARTNER at both names, and answers the money he briefed (Des)", () => {
-  expat(); G.room = "stinky_bar"; out = []; run("ask bert about partner");
+  expat(); _setFlag("barLicence"); G.room = "stinky_bar"; out = []; run("ask bert about partner");   // his pointer waits for the licence, like both partners do
   assert.match(text(), /ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP/);
   ownsBar(); G.bar.lease = { key: 15000, cash: 13500, off: 0.1, tier: "high", paid: false };
   out = []; run("ask bert about key money"); assert.match(text(), /PAY KEY MONEY/);
-  out = []; run("ask bert about the note"); assert.match(text(), /PAY NOTE 5000/);
+  out = []; run("ask bert about the note"); assert.match(text(), /\(PAY THE NOTE · PAY NOTE <amount>\)/);
   out = []; run("ask bert about rent"); assert.match(text(), /Every thirty days/);
   out = []; run("ask bert about cash"); assert.match(text(), /ASK TAN ABOUT NONT/);
   G.day = 2; G.room = "candy_bar"; out = []; run("ask candy about buying a bar"); assert.match(text(), /the order you pay them is the whole trade/i);
@@ -160,4 +160,27 @@ test("prose review: the roast doesn't decide where you grew up, and OUT is tappa
   const roast = _QV_ROAST_LINES.join(" ");
   assert.doesNotMatch(roast, /in England|Eight thousand miles/, "the player's nationality is his own");
   for (const l of _NO_EXIT_IN) assert.match(l, /\(OUT\)/, "CAPS only decorate inside parens: " + l.slice(0, 40));
+});
+
+test("prose review slice 1: the claims the authored cast was making", () => {
+  const W = readFileSync(join(here, "../../web/js/world.js"), "utf8");
+  // Candy is 38 and the friendship is twenty years everywhere else
+  assert.doesNotMatch(W, /Forty years and she still knows/);
+  // the player's age and nationality are his own
+  assert.doesNotMatch(W, /since before you were born/);
+  // a British narrator writes grey
+  assert.doesNotMatch(W, /gray-and-white|gray sisters/);
+  // constants own the numbers
+  assert.doesNotMatch(W, /Come you 2500|now\? 2500, no bar/);
+  // Nont's greeting sells only what the parser knows
+  assert.doesNotMatch(W, /Phone unlocked, screen fixed/);
+  for (const d of NPCS.nont.dialogue.filter(d => /ASK NONT ABOUT/.test(d.text || "")))
+    assert.match(d.text, /BUY SIM/, "every menu names the SIM it sells");
+  // the errand's own word answers: security says "ask DJ, he tell you the song"
+  G.room = "rainbow_girls"; G.known.dj = true; out = []; run("ask dj about the song");
+  assert.doesNotMatch(text(), /wrong man|don't know about that/);
+  // two bars share a name, so the pointer says which town it is in
+  assert.equal(_dupeBar("lake_beer"), true); assert.equal(_dupeBar("stinky_bar"), false);
+  G.room = "candy_bar"; G.known.neil = true; out = []; run("talk to neil");
+  assert.match(text(), /Sundowner/); assert.match(text(), /Darkside/, "…and the man four districts away is placed");
 });
