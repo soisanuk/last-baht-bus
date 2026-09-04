@@ -306,6 +306,9 @@ argument, which is the point.** Three beats, in order:
      money has just done the biggest favour in the game.
    - **Or the player buys the kid clear**, with cash, through Nont's own channel —
      the priced fixer paying for the priced fixer. `CASH` is already his verb.
+   - **How the thread reaches him at all** is the SIM — see *The SIM — the wire, and
+     the name on it* below. On your own phone or Rabbit's burner the fourth landing is
+     a threat that never quite arrives; on a Nont SIM it is the road you paved.
    - **Duangjai never learns which.** The tiffin errand reads differently afterward,
      and nothing in her dialogue changes — the player carries that one alone.
 
@@ -319,6 +322,62 @@ Tan-favour modal, Nont's price-not-favour doctrine, the tiffin errand's mother, 
 CCIB landing fork. The kid path is those pieces made to touch, and it is the only
 version of the heist where the *player's* choice is a moral one rather than a
 technical one.
+
+### The SIM — the wire, and the name on it (agreed 2026-09-04)
+
+Nont already sells a Thai SIM that isn't in your name (`BUY SIM`, `NONT_SIM`, item
+`thai_sim` — *"Buriram. Don't ask."*). In the real economy that is a **mule SIM**
+(ซิมม้า, *sim ma*, "horse SIM" — the SIM-side sibling of the mule account, บัญชีม้า,
+that his `CASH` transfers run through): a villager's ID registered against a stack
+of numbers for a few hundred baht, sold on to people who need a phone that isn't
+theirs. Thai SIMs are ID-registered by law, and the mule-SIM trade is exactly what
+CCIB runs public campaigns against. So the SIM is not colour. It is **the wire the
+heist runs on, and the name CCIB finds at the end of it.**
+
+**Rabbit's first instruction on every path is "not your phone."** The black box
+phones home, the operator run needs a hotspot, the kid needs a number to be reached
+on — and none of it can touch a farang's own registered number. That gives the player
+three wires, chosen by what they already own, never by a menu:
+
+| The wire | Where it comes from | Where the thread leads |
+|---|---|---|
+| **Your own phone** | doing nothing — the sloppy default | **You.** The knock comes to your door; the "you take it" landing gets its mechanism. |
+| **Rabbit's burner** | he hands you one if you have nothing else | **Rabbit.** His supply, his name on the registration chain; he slips the noose a third time. |
+| **Nont's SIM** | ฿200 at the Old Market, before or during the arc | **Buriram** — a man who sold his ID for ฿300 and has never heard of any of you — and from Buriram to the table that bought the stack, which is **how CCIB reaches the kid.** The player's own ฿200 built the road. |
+
+**The SIM is the cheapest wire and the worst one to be caught holding.** A farang
+found with his own number in a suspicious pattern is a farang with a story to tell.
+A farang found holding *a Thai person's registered SIM* in that pattern is the exact
+picture CCIB is built to see, and no story covers it — mule SIM, foreign operator,
+done. So Rabbit says the rule out loud, once: *"The second it's done, that SIM goes
+in the sea."* And the game makes keeping it tempting, because it is genuinely useful
+afterward — a Thai number with no name on it is what the booking app, LINE and every
+hostess's *"you have Thai number?"* want. Whether the player still **has** it when the
+thread is pulled is the variable:
+
+- **Ditched** (`BREAK SIM` / `THROW SIM` / drop it off the Bali Hai pier — a voiced
+  verb, nothing more): the trail stops at Buriram. Nothing reaches you. It may still
+  reach the table, and the kid — see below.
+- **Kept**: the knock is polite, the officer is unhurried, and the question is the
+  number. That is the "you take it" landing at its heaviest — heat, money, a scare, and
+  a favour owed to get clear — with Tan's read afterward: *"A Thai name in a farang
+  pocket. My friend, you gave them the one thing they did not have to work for."*
+
+**What it does to the kid path.** Beat 3 no longer needs fiat: CCIB reaches the kid
+*through the SIM the player bought*, Buriram → the Old Market table → Nont's
+channel → the boy on the other end of the number. Bring the kid in on your own phone
+or Rabbit's burner and the fourth landing is a threat that never quite arrives; bring
+him in on a Nont SIM and it is the road you paved. This is also the moment the player
+learns what Nont's trade *is* — every `CASH` transfer that "had a moment", every SIM
+from Buriram, was mule infrastructure in plain sight, and the arc is where the plain
+sight ends. **Nont knew; he priced it; he wished you wouldn't pay.**
+
+**Doctrine checks.** The SIM is never required — every path has a wire without it. It
+moves nothing until a deed is done on it (buying it is innocent; Piotr bought one for
+the noodle girl's LINE). CCIB stays competent and unhurried (the knock is a question
+about a number, not a raid). No Bangkok in it. And it is not a new system: the item,
+the vendor, the verb and the landing fork all exist; this section only makes the
+existing object mean what it already says.
 
 ### The CLI simulator is a PORTABLE MODULE (architectural rule)
 
@@ -460,6 +519,11 @@ and canon continuity are independent axes (see `docs/settings-reuse.md`).
   "involved no matter what"; the open part is whether the *landing* is scripted by a
   final choice or computed from play.
 - **Betrayal fork in v1?** Tentatively yes; revisit once the straight arc exists.
+- **Does the SIM decide the landing on its own, or weight it?** Lean *decide*: the
+  table above is three clean outcomes and the ditched/kept split is one readable
+  choice. Weighting it into a computed heat score (the open question below) risks the
+  player never learning that the SIM was the reason — and the SIM being the reason is
+  the whole lesson.
 - **Does the operator path award anything the mule path doesn't?** Lean no on
   mechanics (both reach the same `doneFlag`), maybe yes on *flavour/trophy* — a
   `WHO AM I` line, a nod from Rabbit — so the richer path feels seen without
@@ -531,6 +595,7 @@ argument for the firewall this arc already has.
 | 2026-08-13 | The White Rabbit staff are an AUTHORED ensemble, not filler, unified by one keystone: everyone here is a WDG castoff (Rabbit lost his bar to them; Nuan + hostesses are ex-Soi-6). The bar is a refuge and the revenge crew. |
 | 2026-08-13 | Ownership trap: Rabbit doesn't control his own bar — the nominee structure means mamasan Nuan (Lao, 42, ex-Soi-6, first hire he trusted) is one call from removing him, is giving herself pay rises, and he survives only by the European trade he brings. Ampha the "innocent" cashier is the likely Thai nominee name (a threat in cover). Pay-rise drain + leverage = future quest. |
 | 2026-08-13 | Nuan takes a romantic liking to the PLAYER — a novel vector (she's management, not a barfinable hostess, so bond/barfine machinery doesn't apply). Tier 0 = characterisation only; the mechanic needs its own design pass. |
+| 2026-09-04 | **The SIM is the wire**: Nont's Buriram SIM is a mule SIM (ซิมม้า); "not your phone" is Rabbit's first rule on every path; the wire you used decides where CCIB's thread leads (you / Rabbit / Buriram → the table → the kid); a farang caught still HOLDING a Thai's registered SIM is the heaviest "you take it" landing, so ditching it is a voiced choice the game makes tempting to skip. Never required; buying it stays innocent; no new system. |
 | open | CCIB heat: scripted landing vs. computed from play. |
 | open | Betrayal fork in v1 (tentative yes). |
 | open | Operator-path reward (flavour-only vs. nothing extra). |
