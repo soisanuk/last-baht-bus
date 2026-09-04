@@ -17,7 +17,7 @@ const _CATALOGS = {
       "\"Deutsch — gut.\" Etwas in seinem Geplapper lockert sich, wie ein Sender, den er lieber mag. \"Ab hier in deiner Sprache, mein Freund. Die Stadt bleibt fremd. Das ist der Spaß daran.\"",
 
     // ── the three identity questions ─────────────────────────────────────────
-    "\"So — what's the story back home?\" A glance in the mirror. \"Everybody on this drive is leaving something behind. What's yours?\"":
+    "\"So — what's the story back home, sir?\" A glance in the mirror. \"Everybody on this drive is leaving something behind. What's yours?\"":
       "\"Also — was ist die Geschichte daheim?\" Ein Blick in den Spiegel. \"Jeder auf dieser Fahrt lässt etwas zurück. Was ist deins?\"",
     "\"Okay. Two hours to fill.\" He drums the wheel. \"When a room turns to look at you — and out here, my friend, it will — what do they get?\"":
       "\"Okay. Zwei Stunden zu füllen.\" Er trommelt aufs Lenkrad. \"Wenn ein Raum sich umdreht und dich ansieht — und hier draußen, mein Freund, wird er das — was kriegt er zu sehen?\"",

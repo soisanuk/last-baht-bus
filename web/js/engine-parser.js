@@ -10199,7 +10199,7 @@ function _beachOpening(withTitle) {
 // coming back the day the translation is real.
 const _INTRO_STEPS = [
   { field: "origin", table: () => ORIGINS,
-    q: "\"So — what's the story back home?\" A glance in the mirror. \"Everybody on this drive is leaving something behind. What's yours?\"" },
+    q: "\"So — what's the story back home, sir?\" A glance in the mirror. \"Everybody on this drive is leaving something behind. What's yours?\"" },
   { field: "personality", table: () => PERSONALITIES,
     q: "\"Okay. Two hours to fill.\" He drums the wheel. \"When a room turns to look at you — and out here, my friend, it will — what do they get?\"" },
   { field: "orientation", table: () => ORIENTATIONS,
@@ -10221,10 +10221,16 @@ function _taxiIntro(after) {
     "compact Thai guy about thirty-five, a faded Cleveland State hoodie, English " +
     "better than the arrivals-hall signage — has already decided the two of you are " +
     "going to be friends.");
+  // "Sir" until you have talked, "my friend" after — the arrivals-hall register
+  // dropping to the real one, which is exactly how the first ninety minutes with
+  // a driver-fixer go. It also does the quiet job of saying whose life this is:
+  // the game is a man's week out here, and a player should know that in the first
+  // minute rather than assemble it from asides ten minutes in (Mario, round 43,
+  // after Nok-Anne read the ambiguity as the game not having considered her).
   _say("\"Tan,\" he says, tapping his chest, not turning round. \"Six years in Ohio " +
     "for a film degree. Now I drive, and I fix — turns out the English was the only " +
-    "part of the degree that pays.\" He finds your eye in the mirror. \"Two hours, na. " +
-    "Might as well know who I'm dropping off.\"");
+    "part of the degree that pays.\" He finds your eye in the mirror. \"Two hours, na, " +
+    "sir. Might as well know who I'm dropping off.\"");
   _introPrompt();
 }
 

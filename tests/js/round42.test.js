@@ -480,3 +480,16 @@ test("the wai, yes and no are typeable in Thai; the arch claims no hour (Nok-Ann
   const W = readFileSync(join(here, "../../web/js/world.js"), "utf8");
   assert.doesNotMatch(W, /TREE TOWN at four in the morning/, "the late paint fires from midnight");
 });
+
+test("Tan opens formal and lands familiar — the arc says whose week this is (Mario)", () => {
+  newGame(); G.player = null; out = []; engineIntro();
+  assert.match(text(), /Two hours, na, sir/, "the arrivals-hall register, before he knows you");
+  assert.match(text(), /story back home, sir/);
+  // …and by the time he puts you down he has stopped: ninety minutes is ninety minutes
+  const src = readFileSync(join(here, "../../web/js/engine-parser.js"), "utf8");
+  const drop = src.slice(src.indexOf("One thing, my friend, before you get out"));
+  assert.ok(drop.startsWith("One thing, my friend"), "the drop-off is 'my friend'");
+  // he never calls you sir again once you are somebody
+  const sirs = (NPCS.tan.dialogue || []).filter(d => /\bsir\b/.test(d.text || ""));
+  assert.deepEqual(sirs, [], "sir belongs to the first ninety minutes only");
+});
