@@ -4812,6 +4812,12 @@ function _goExpat() {
     _say(`(On top of what you were already carrying — ฿${_num(G.money - EXPAT_SAVINGS)} — which nobody ` +
       "here asks about and everybody here notices.)", "dim");
   }
+  // a resident has a Thai account of his own — the difference between a tourist
+  // and an expat at every ATM in the kingdom (Mario, 2026-09-04)
+  G.thaiAccount = true;
+  _say("The visa comes with a bank book: a Thai account in your own name, which is " +
+    "the difference between a tourist and a resident at every ATM in the kingdom — " +
+    "no card fee, and a counter that will hand you real money for a real purchase.", "dim");
   _say("★ EXPAT MODE — no flights, no clock on the week. The city is yours to " +
     "figure out. (They say the smart ones end up owning a bar…) ★", "win");
   _say(`── DAY ${G.day} · PATTAYA, HOME ──`, "win");

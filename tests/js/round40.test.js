@@ -176,3 +176,48 @@ test("the deposit clears by transfer from the account, the pocket topping up —
   setup(); G.money = 5000; G.bank = 100000; _barDeposit();
   assert.ok(!_flag("barPaid")); assert.match(text(), /฿15,000 short|฿15000 short/); assert.match(text(), /pocket and account together/);
 });
+
+// ── the lease: the landlord's money, the season he asks in, and the resident's bank ──
+const buyer = () => { newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; _setFlag("act1Done"); G.stage = "expat"; _setFlag("expatLife");
+  for (const f of ["barPremises", "barLicence", "barPartner", "partnerCandy"]) _setFlag(f); G.room = "stinky_bar"; G.money = 30000; G.bank = 150000; out = []; };
+
+test("expat mode opens a Thai account: no card fee, a resident's counter limit (Mario)", () => {
+  G.day = 8; G.pendingChoice = "vacation_end"; G.stage = "vacation"; G.bank = 100000;
+  const saved = _rand; _rand = () => 0.5; try { _goExpat(); } finally { _rand = saved; }
+  assert.equal(G.thaiAccount, true); assert.match(text(), /Thai account in your own name/);
+  assert.equal(_atmFee(), 0); assert.equal(_atmCap(), THAI_ATM_CAP);
+  G.room = "beach_rd_c"; G.money = 0; out = []; run("withdraw 30000");
+  assert.equal(G.money, 30000); assert.equal(G.bank, 100000 - 30000, "no fee left the account"); assert.match(text(), /your own bank, no fee/);
+});
+
+test("signing in the wet: a rent-free month and a steep cash discount, and PAY KEY MONEY takes notes (Mario)", () => {
+  buyer(); G.season0 = 8; G.day = 9;   // September, deep low
+  _barDeposit();
+  const l = G.bar.lease; assert.ok(l && !l.paid); assert.equal(l.off, LEASE_CASH_OFF.deeplow); assert.equal(l.cash, 9800); assert.equal(l.key, _barRent());
+  assert.match(text(), /first month's rent is off/); assert.match(text(), /35% off/); assert.equal(G.bar.rentFree, 1);
+  assert.equal(G.pendingChoice, null, "stated, not asked — the verbs decide");
+  const m0 = G.money; out = []; run("pay key money");
+  assert.equal(G.money, m0 - 9800); assert.equal(l.how, "cash"); assert.match(text(), /Nobody writes anything down/);
+  out = []; run("books"); assert.match(text(), /Key money: ฿9,?800 paid, in notes/); assert.match(text(), /First month's rent: off/);
+  G.bar.cash = 60000; G.bar.lastMonthDay = G.day - 30; out = []; const m = _barMonthly();
+  assert.equal(m.waived, true); assert.equal(m.rent, 0); assert.equal(G.bar.rentOwed, 0); assert.equal(G.bar.cash, 60000 - BAR_MONTHLY, "only the old man this month");
+  G.bar.lastMonthDay = G.day - 30; const m2 = _barMonthly(); assert.equal(m2.waived, false); assert.equal(m2.rent, _barRent(), "the second month bills");
+});
+
+test("signing at peak: no discount, and LATER means the full figure rides on the first rent (Mario)", () => {
+  buyer(); G.season0 = 11; G.day = 9;   // December
+  _barDeposit(); const l = G.bar.lease; assert.equal(l.off, 0); assert.equal(l.cash, l.key); assert.match(text(), /queue for the room/);
+  assert.ok(!G.bar.rentFree);
+  G.bar.cash = 100000; G.bar.lastMonthDay = G.day - 30; const m = _barMonthly();
+  assert.equal(m.keyBilled, l.key); assert.equal(l.how, "billed"); assert.equal(m.rentPaid, _barRent() + l.key);
+  out = []; run("pay key money"); assert.match(text(), /at list/);
+});
+
+test("TRANSFER KEY MONEY pays the list price from the account; short of notes, PAY KEY MONEY says how to get them (Mario)", () => {
+  buyer(); G.season0 = 10; G.day = 9;   // November, high: 10% off for notes
+  _barDeposit(); const l = G.bar.lease; assert.equal(l.cash, 13500);
+  G.money = 2000; G.bar.cash = 1000; out = []; run("pay key money");
+  assert.ok(!l.paid); assert.match(text(), /whoever you know who turns bank into cash/);
+  const b0 = G.bank; out = []; run("transfer key money");
+  assert.equal(l.how, "transfer"); assert.equal(G.bank, b0 - l.key); assert.match(text(), /You paid for the paper/);
+});

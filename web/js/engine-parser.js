@@ -5646,7 +5646,7 @@ function _doPay(arg) {
   // nothing at all for the two creditors who can actually finish you (round 24,
   // Keith). Sits above the fare so a bus ride is never ambiguous.
   if (!G.pendingFare && typeof _payCreditor === "function" &&
-      /rent|landlord|note|arrears|old man|bert|bar/i.test(arg || "")) { _payCreditor(arg); return; }
+      /rent|landlord|note|arrears|old man|bert|bar|key|lease|pae ?jia/i.test(arg || "")) { _payCreditor(arg); return; }
   if (!G.pendingFare) { _say("Nobody's waiting to be paid."); return; }
   const amount = /^\d+$/.test(arg) ? parseInt(arg, 10) : parseThaiDigits(arg);
   const { price, dest } = G.pendingFare;
@@ -7084,6 +7084,11 @@ function _doWithdraw(arg) {
   _doWithdrawInner(arg);
   if (G.money > _m0) G.atmTotal = (G.atmTotal || 0) + (G.money - _m0); // the morning ledger nets ATM cash out
 }
+// A tourist draws on a card from home; a resident (G.thaiAccount, expat mode) on
+// his own Thai account — no foreign-card fee and a counter that hands over real
+// money for a real purchase (Mario, 2026-09-04).
+function _atmFee() { return G.thaiAccount ? 0 : ATM_FEE; }
+function _atmCap() { return G.thaiAccount ? THAI_ATM_CAP : ATM_DAILY_CAP; }
 function _doWithdrawInner(arg) {
   if (!_flag("hasWallet")) {
     _say("Your bank card was in the wallet — and the wallet is the whole problem. " +
@@ -7115,28 +7120,29 @@ function _doWithdrawInner(arg) {
     _say("The machine pays out in ฿1,000 · ฿5,000 · ฿10,000 notes — thousands only. (WITHDRAW <amount>)");
     return;
   }
-  const drawn = _atmDrawnToday(), left = ATM_DAILY_CAP - drawn;
+  const drawn = _atmDrawnToday(), left = _atmCap() - drawn;
   if (n > left) {
     _say(left <= 0
-      ? `Daily limit reached — ฿${_num(ATM_DAILY_CAP)} is the max, and you've hit it. ` +
+      ? `Daily limit reached — ฿${_num(_atmCap())} is the max, and you've hit it. ` +
         "The machine keeps your card just long enough to make the point, then spits it back."
-      : `Over the daily limit. You've drawn ฿${_num(drawn)} of ฿${_num(ATM_DAILY_CAP)} ` +
+      : `Over the daily limit. You've drawn ฿${_num(drawn)} of ฿${_num(_atmCap())} ` +
         `today — only ฿${_num(left)} left until tomorrow.`);
     return;
   }
-  const cost = n + ATM_FEE;
+  const cost = n + _atmFee();   // a resident's own account pays no card fee (G.thaiAccount, expat mode)
   if ((G.bank || 0) < cost) {
     _say(`Insufficient funds. ฿${_num(G.bank || 0)} in the account, and the machine ` +
-      `wants ฿${_num(cost)} (฿${_num(n)} + ฿${ATM_FEE} fee).`);
+      `wants ฿${_num(cost)} (฿${_num(n)} + ฿${_atmFee()} fee).`);
     return;
   }
   G.bank -= cost;
   G.money += n;
   G.atmDay = G.day;
   G.atmToday = drawn + n;
-  G.atmFees = (G.atmFees || 0) + ATM_FEE;   // the morning ledger counts the fee, which never touches the pocket (Stan, r35)
-  _say(`The machine whirrs, thinks, and counts out ฿${_num(n)} — lighter a ฿${ATM_FEE} ` +
-    `foreign-card fee. (฿${_num(G.money)} in pocket · ฿${_num(G.bank)} in the account.)`, "win");
+  G.atmFees = (G.atmFees || 0) + _atmFee();   // the morning ledger counts the fee, which never touches the pocket (Stan, r35)
+  _say(`The machine whirrs, thinks, and counts out ฿${_num(n)}` + (_atmFee()
+    ? ` — lighter a ฿${_atmFee()} foreign-card fee.` : " — your own bank, no fee.") +
+    ` (฿${_num(G.money)} in pocket · ฿${_num(G.bank)} in the account.)`, "win");
 }
 
 function _doBalance() {
@@ -7146,7 +7152,7 @@ function _doBalance() {
   }
   const drawn = _atmDrawnToday();
   _say(`Account: ฿${_num(G.bank || 0)} · in pocket: ฿${_num(G.money)} · ` +
-    `withdrawn today: ฿${_num(drawn)} of ฿${_num(ATM_DAILY_CAP)} · foreign-card fee ฿${ATM_FEE} a pull, so pull big.`, "dim");
+    `withdrawn today: ฿${_num(drawn)} of ฿${_num(_atmCap())}` + (_atmFee() ? ` · foreign-card fee ฿${_atmFee()} a pull, so pull big.` : " · your own account — no fee."), "dim");
 }
 
 function _doAtmVerb() {
@@ -7157,8 +7163,8 @@ function _doAtmVerb() {
     return;
   }
   _doBalance();
-  _say(`(WITHDRAW 1000) · (WITHDRAW 5000) · (WITHDRAW 10000) — ฿${ATM_FEE} fee, ` +
-    `฿${_num(ATM_DAILY_CAP)}/day.`, "dim");
+  _say(`(WITHDRAW 1000) · (WITHDRAW 5000) · (WITHDRAW 10000) — ฿${_atmFee()} fee, ` +
+    `฿${_num(_atmCap())}/day.`, "dim");
 }
 
 // Filing a police report — right now only the hair-tonic shop shakedown has a
@@ -7579,6 +7585,7 @@ function _chipSet() {
     return chips;
   }
   if (G.pendingChoice === "sellbar") { add("yes", "yes — sell up"); add("no", "not yet"); return chips; }
+
   if (G.pendingChoice === "partner") {
     add("yes", G.partnerWho === "tan" ? "yes — Tan's 51%" : "yes — Candy's 51%"); add("no"); return chips;
   }
@@ -7994,6 +8001,7 @@ function engineComplete(input) {
     pool = c ? [["1", c.a], ["2", c.b], ["3", c.c]].filter(([, o]) => o).map(([n]) => n) : ["1", "2"];
   }
   else if (G.pendingChoice === "sellbar") pool = ["yes", "no"];
+
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
@@ -8726,7 +8734,10 @@ function doCommand(input) {
       if (!arg) _doContacts(); // bare CONTACT reads as "show my contacts"
       else _doContact(arg.replace(/^(with |for )/, ""));
       break;
-    case "send": case "transfer": case "wire": _doSendMoney(arg); break;
+    case "send": case "transfer": case "wire":
+      // TRANSFER KEY MONEY — the landlord's list price, on the app (the banking app owns the verb otherwise)
+      if (/key money|key|lease|pae ?jia/i.test(arg || "") && G.bar && G.bar.lease && typeof _payCreditor === "function") { _payCreditor("key money transfer"); break; }
+      _doSendMoney(arg); break;
     case "work": case "mind": case "shift": _doWork(); break;
     case "books": case "takings": case "accounts": _doBooks(); break;
     case "draw": case "cashup": _doDraw(arg); break;
@@ -9597,7 +9608,7 @@ function _soi6Opening() {
   _say(_fmt("฿{bank} for the week sits in the bank. ฿{pocket} is in your pocket — the rest " +
     "comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.",
     { bank: _num(SOI6_BANK), pocket: _num(SOI6_POCKET),
-      fee: ATM_FEE, cap: _num(ATM_DAILY_CAP) }));
+      fee: _atmFee(), cap: _num(_atmCap()) }));
   // the goal word carries its own pronunciation the first time — a cold player's
   // win condition was "written in a script I can't read" (Tyler, 2026-08-26)
   _say("Goal: สบายสบาย — say it “sabai sabai”: easy-easy, the good life. Get happy. Max out the week. ★", "win");

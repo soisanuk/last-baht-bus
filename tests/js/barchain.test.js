@@ -457,7 +457,7 @@ test("no deposit, no opening night", () => {
 });
 
 test("a losing night comes out of your own pocket before it shows anywhere", () => {
-  readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); G.bar.lease.paid = true; /* key money settled (2026-09-04) */ _setFlag("barOpen");
   G.bar.cash = 0; G.money = 5000;
   // friction high enough that costs exceed even the best night's take, so every
   // night loses — otherwise the till builds a buffer and absorbs it, which is
@@ -470,7 +470,7 @@ test("a losing night comes out of your own pocket before it shows anywhere", () 
 });
 
 test("the old man is paid every thirty days, from the till then your pocket", () => {
-  readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); G.bar.lease.paid = true; /* key money settled (2026-09-04) */ _setFlag("barOpen");
   G.bar.cash = 200000;
   const before = G.bar.months;
   let paidLine = "";
@@ -486,7 +486,7 @@ test("the old man is paid every thirty days, from the till then your pocket", ()
 
 test("refusing procurement is what makes the month hard — it's on the supply line forever", () => {
   const yearEnd = friction => {
-    readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+    readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); G.bar.lease.paid = true; /* key money settled (2026-09-04) */ _setFlag("barOpen");
     G.syn = { done: {}, asked: {}, friction };
     for (let d = 0; d < 360; d++) { G.day++; G.room = "stinky_bar"; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */ out = []; _barSettle(); }
     return G.bar.cash;
@@ -589,7 +589,7 @@ test("BOOKS is honest about all of it", () => {
   assert.match(out.join("\n"), /deposit isn't paid|nothing to keep books on/i,
     "before the purchase there is nothing to look at");
 
-  G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.money = BAR_DEPOSIT; _barDeposit(); G.bar.lease.paid = true; /* key money settled (2026-09-04) */ _setFlag("barOpen");
   G.syn = { done: {}, asked: {}, friction: 3 };
   G.day += 31; out = []; _barSettle();
   out = []; _doBooks();
@@ -611,7 +611,7 @@ test("BOOKS is reachable as a typed verb", () => {
 function running(friction = 0) {
   becomeExpat();
   for (const f of ["barPremises", "barLicence", "barPartner", "partnerTan"]) _setFlag(f);
-  G.room = "stinky_bar"; G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.room = "stinky_bar"; G.money = BAR_DEPOSIT; _barDeposit(); G.bar.lease.paid = true; /* key money settled (2026-09-04) */ _setFlag("barOpen");
   G.syn = { done: {}, asked: {}, friction };
 }
 

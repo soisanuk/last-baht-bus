@@ -30,7 +30,7 @@ function livedIn() {
   G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
   G.day = 8; _goExpat();
   for (const f of ["barPremises", "barLicence", "barPartner", "partnerTan"]) _setFlag(f);
-  G.room = "stinky_bar"; G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.room = "stinky_bar"; G.money = BAR_DEPOSIT; _barDeposit(); G.bar.lease.paid = true; /* key money settled (2026-09-04) */ _setFlag("barOpen");
   G.soc.drinks = { nong: 9, manow: 4 };
   G.syn = { done: { cleaning: true }, asked: { cleaning: true }, friction: 2 };
   _align("syndicate", 2);

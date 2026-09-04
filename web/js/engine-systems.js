@@ -6278,6 +6278,67 @@ function _barDeposit() {
   _say(_fmt("(You owe ฿{owed}, and ฿{rent} a month to the landlord on top. The " +
     "bar is yours the day it opens — ASK BERT ABOUT OPENING.)",
     { owed: G.bar.owed, rent: _barRent() }), "win");
+  _leaseAsk();
+}
+
+// ── The lease: the landlord's money, and the season he asks in ──────────────
+// Re-papering the lease is the moment his money moves, and he is the creditor
+// who prefers cash (Mario, 2026-09-04: some landlords still would rather notes
+// than a money trail, and a full cash payment on a large sum is negotiable).
+// Key money at list by transfer, or a discount for notes in full — the discount
+// set by the season you sign in (LEASE_CASH_OFF; none at peak, when he has a
+// queue), and the wet buys a rent-free month, because an empty shutter till
+// November is his alternative. Getting the notes together is YOUR problem, and
+// every route already exists: the ATM, Nont's CASH, the till. A pendingChoice
+// modal wired the standard five ways; LATER leaves it due at the first rent
+// (full figure, by transfer) unless PAY KEY MONEY settles it in notes first.
+function _leaseTerms() {
+  const tier = _seasonTier();
+  const key = _barRent() * LEASE_KEY_MONTHS;
+  const off = LEASE_CASH_OFF[tier] || 0;
+  return { key, off, cash: Math.round(key * (1 - off) / 100) * 100, tier, wet: tier === "low" || tier === "deeplow" };
+}
+function _leaseAsk() {
+  const t = _leaseTerms();
+  G.bar.lease = { key: t.key, cash: t.cash, off: t.off, tier: t.tier, wet: t.wet, paid: false, how: null, billed: false };
+  if (t.wet) G.bar.rentFree = LEASE_WET_FREE;
+  const l = G.bar.lease;
+  const terms =
+    l.tier === "peak" ? "\"And it's December, so he's a queue for the room and he knows it. Key money's the full month, notes or the app, makes no odds to him this time of year — and it's due with the first rent.\"" :
+    l.wet ? _fmt("\"And here's the thing about buying in the rains. He'd rather half a rent than an empty shutter till November — so the first month's rent is off, and if the key money comes in NOTES, all of it, he'll knock {pct}% off. Cash he can put in a drawer. A transfer he has to explain to somebody.\"", { pct: Math.round(l.off * 100) }) :
+    _fmt("\"Now. Key money for the lease — one month, to re-paper it in your name. Full whack on the app, or {pct}% off if it's notes, all of it, in his hand. He's not fussy about where notes come from and he's very fussy about where transfers go.\"", { pct: Math.round(l.off * 100) });
+  _say("\"One more, and this one's the landlord's.\" Bert lowers his voice, which he never does. " + terms, "alert");
+  _say(_fmt(l.off
+    ? "(Key money ฿{key}, due with the first rent — or ฿{cash} in notes any time before then: PAY KEY MONEY. The app, at the full figure, whenever: TRANSFER KEY MONEY. Getting the notes together is your problem — the machine, the till, or whoever you know who turns bank into cash.)"
+    : "(Key money ฿{key}, due with the first rent — PAY KEY MONEY in notes or TRANSFER KEY MONEY from the account, whenever, same figure.)",
+    { key: l.key, cash: l.cash }), "dim");
+}
+function _leaseCash() {
+  const l = G.bar.lease, b = G.bar;
+  const pot = Math.max(0, b.cash) + G.money;
+  if (pot < l.cash) {
+    _say(_fmt("He wants ฿{cash} in notes, all of it, and between the till and your pocket you have ฿{have}. Get the rest together — the machine, or whoever you know who turns bank into cash — and it stays on the first rent till then.", { cash: l.cash, have: pot }));
+    return;
+  }
+  const fromTill = Math.min(Math.max(b.cash, 0), l.cash), fromPocket = l.cash - fromTill;
+  b.cash -= fromTill; if (fromPocket > 0) { G.money -= fromPocket; b.pocketDrawn = (b.pocketDrawn || 0) + fromPocket; }
+  l.paid = true; l.how = "cash";
+  _say(_fmt("฿{cash} in notes, counted onto the bar, counted again into an envelope that has been ready under the till since this morning. Nobody writes anything down. \"He'll be round for a soda he doesn't drink. That's the receipt.\"{off}",
+    { cash: l.cash, off: l.off ? _fmt(" ฿{saved} under the list, for keeping it off paper.", { saved: l.key - l.cash }) : "" }), "win");
+}
+function _leaseTransfer() {
+  const l = G.bar.lease;
+  const bank = G.bank || 0;
+  if (G.money + bank < l.key) {
+    _say(_fmt("Pocket and account together come to ฿{have}; the key money is ฿{key}. It stays on the first rent.", { have: G.money + bank, key: l.key }));
+    return;
+  }
+  const fromBank = Math.min(bank, l.key), fromPocket = l.key - fromBank;
+  G.bank = bank - fromBank; G.money -= fromPocket;
+  if (fromPocket) G.bar.pocketDrawn = (G.bar.pocketDrawn || 0) + fromPocket;
+  l.paid = true; l.how = "transfer";
+  _say(_fmt("฿{key} across on the app to an account number Bert reads twice. The landlord's daughter sends a sticker back, which is the closest that family comes to a receipt.{off}",
+    { key: l.key, off: l.off ? _fmt(" (He'd have taken ฿{cash} in notes. You paid for the paper.)", { cash: l.cash }) : "" }), "win");
 }
 
 // what tonight's trade did. Called once from _endNight when you own the place.
@@ -6392,8 +6453,11 @@ function _barMonthly() {
   b.lastMonthDay = G.day;
   b.months++;
   // ── the landlord, first ──────────────────────────────────────────────
-  const rent = _barRent();
-  const rentOwedNow = rent + (b.rentOwed || 0);
+  let rent = _barRent(), waived = false, keyBilled = 0;
+  if ((b.rentFree || 0) > 0) { b.rentFree--; rent = 0; waived = true; }   // signed in the wet: a month off
+  const l = b.lease;
+  if (l && !l.paid && !l.billed) { l.billed = true; l.paid = true; l.how = "billed"; keyBilled = l.key; }   // LATER: the full figure, with the first rent
+  const rentOwedNow = rent + keyBilled + (b.rentOwed || 0);
   let rentDue = rentOwedNow, rentFrom = [];
   let take = Math.min(Math.max(b.cash, 0), rentDue);
   if (take > 0) { b.cash -= take; rentDue -= take; rentFrom.push("the till"); }
@@ -6427,7 +6491,7 @@ function _barMonthly() {
   if (paid > 0) b.owed = Math.max(0, b.owed - paid);
   return { paidFrom, short: due, month: b.months, paid,
     cleared: Math.max(0, owedNow - BAR_MONTHLY - due),
-    rent, rentFrom, rentShort: rentDue, rentMonths: b.rentShort, rentPaid };
+    rent, rentFrom, rentShort: rentDue, rentMonths: b.rentShort, rentPaid, waived, keyBilled };
 }
 
 // ── the note's teeth ────────────────────────────────────────────────────────
@@ -6624,9 +6688,12 @@ function _doBooks() {
       ? "There are no books \u2014 not yours, anyway. The bar is still there, with your " +
         "name off the paper and somebody else's card machine on the counter, and " +
         "the docket you used to pin your takings to is a laminated drinks menu now."
+      : _flag("barPaid")
+      ? "Paid, not open — the books start on opening night. (ASK BERT ABOUT OPENING.)"
       : _flag("barPartner")
       ? "Not yet. The deposit isn't paid, so there is nothing to keep books on."
       : "You don't own a bar. Your books are your pocket, and you know what's in it.");
+    if (_flag("barPaid") && G.bar && G.bar.lease) _sayLease();   // the landlord's money is due before the door opens
     return;
   }
   const b = G.bar;
@@ -6645,6 +6712,7 @@ function _doBooks() {
     : "Months paid: {m} of {term}   ·   Nights open: {n}",
     { m: b.months, term: BAR_TERM, n: b.nights }));
   _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened.", { r: _barRent() }), "dim");
+  _sayLease();
   const ll = b.lastLines;
   if (ll) {
     _say(_fmt("Last night: ฿{take} in{evt}. Out: nut ฿{nut} · stock ฿{cogs} · wages ฿{wages}{mgr}{proc}{cost} — {who}.",
@@ -6684,6 +6752,19 @@ function _doBooks() {
       { pct: Math.round(friction * BAR_FRICTION * 100) }), "dim");
   }
   _sayBarSeason();
+}
+
+// The landlord's money, on the books — readable from the deposit on, since it
+// is due before the door opens.
+function _sayLease() {
+  const b = G.bar, l = b && b.lease;
+  if (!l) return;
+  _say(l.paid
+    ? (l.how === "cash" ? _fmt("Key money: ฿{c} paid, in notes, off paper.", { c: l.cash })
+      : l.how === "transfer" ? _fmt("Key money: ฿{k} paid, on the app.", { k: l.key })
+      : _fmt("Key money: ฿{k}, billed with the first rent.", { k: l.key }))
+    : _fmt("Key money: ฿{k} due with the first rent — or ฿{c} in notes before then (PAY KEY MONEY).", { k: l.key, c: l.cash }), "dim");
+  if ((b.rentFree || 0) > 0) _say("First month's rent: off — you signed in the wet.", "dim");
 }
 
 // The year read off the till, in a publican's terms. Names the month and what
@@ -6752,6 +6833,8 @@ function _barSettle(settleDay) {
   if (!m) return;
   // Rent reads first because it was paid first, and because a player who is
   // short needs to see which of the two shortfalls is the one that matters.
+  if (m.waived) _say("(No rent this month — the wet-season month he gave you to get the door open.)", "dim");
+  if (m.keyBilled) _say(_fmt("(The key money rode on this bill at the full ฿{k} — the notes never turned up.)", { k: m.keyBilled }), "dim");
   if (m.rentShort <= 0) {
     _say(_fmt("Rent to the landlord: ฿{amt}, from {src}. He counts it in " +
       "front of you, every month, and it has never once been wrong.",
@@ -8305,6 +8388,14 @@ function _checkAct1() {
 // with the money you have now — and crucially it CLEARS THE EVICTION CLOCK,
 // because a month that gets paid is not a month you were short.
 function _payCreditor(arg) {
+  // PAY KEY MONEY (notes, the cash price) / TRANSFER KEY MONEY (the app, the list price)
+  if (/key|pae ?jia|lease/i.test(arg || "") && G.bar && G.bar.lease) {   // due before opening night, so above the owned gate
+    const b = G.bar, l = b.lease;
+    if (!l) { _say("No lease in your name to pay key money on."); return; }
+    if (l.paid) { _say(l.how === "billed" ? "It went on the first rent at the full figure. That ship has sailed, at list." : "Paid, and he has the envelope to prove it — or would, if he kept receipts."); return; }
+    if (/transfer|app|bank|wire/i.test(arg || "")) _leaseTransfer(); else _leaseCash();
+    return;
+  }
   if (!_barOwned() || !G.bar) {
     _say("You have no landlord and no note. Whatever you owe in this town, you owe it to somebody else.");
     return;

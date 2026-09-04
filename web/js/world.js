@@ -195,6 +195,17 @@ const WORK_DRIFT   = 6;        // nights away in a row before the staff feel it
 // The ATM: draw pocket cash from your account (G.bank) at any `atm:true` room.
 const ATM_FEE = 300;         // foreign-card fee per withdrawal (charged to the account)
 const ATM_DAILY_CAP = 20000; // most you can pull in a day (principal, fees don't count)
+const THAI_ATM_CAP = 50000;  // a RESIDENT's own Thai account (opened with expat mode): no card fee, and a counter that hands over real money for a real purchase
+// ── The lease (Mario, 2026-09-04) ─────────────────────────────────────────
+// Re-papering the lease is where the landlord's money moves, and he is the
+// creditor who prefers CASH: key money (pae jia) at list by transfer, or
+// a discount for notes in full — steeper in the wet, when an empty shutter till
+// November is the alternative, and none at all at peak, when he has a queue.
+// The wet also buys a rent-free month. The old man's deposit is a transfer to
+// Ohio and never negotiates: his terms are the story's favour, not the season's.
+const LEASE_KEY_MONTHS = 1;                                                // key money, in months of rent
+const LEASE_CASH_OFF = { peak: 0, high: 0.10, shoulder: 0.15, low: 0.25, deeplow: 0.35 };   // the cash discount by season
+const LEASE_WET_FREE = 1;                                                  // rent-free months when you sign in the wet
 const ATM_DENOMS = [1000, 5000, 10000];
 // The Soi 6 challenge mode confines movement to this pocket of the map.
 const SOI6_ROOMS = new Set([

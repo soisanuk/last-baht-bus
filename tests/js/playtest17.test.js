@@ -135,7 +135,7 @@ test("DEBT joins the info menu when you owe somebody, and only then", () => {
 test("DRAW is offered where the till is, since that is the only place it works", () => {
   G.stage = "expat";
   for (const f of ["barPremises", "barLicence", "barPartner", "partnerTan"]) _setFlag(f);
-  G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.money = BAR_DEPOSIT; _barDeposit(); G.bar.lease.paid = true; /* key money settled (2026-09-04) */ _setFlag("barOpen");
   G.bar.cash = 5291;
   G.room = "stinky_bar";
   assert.ok(engineComplete("__info ").includes("draw"), "at your own till it's on the menu");
