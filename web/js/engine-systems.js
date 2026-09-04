@@ -6662,6 +6662,8 @@ function _doBooks() {
     _say("(You can settle either of them now, out of the till or your own pocket: " +
       (b.rentOwed > 0 ? "PAY RENT" : "") + (b.rentOwed > 0 && b.arrears > 0 ? " \u00b7 " : "") +
       (b.arrears > 0 ? "PAY THE NOTE" : "") + ".)", "dim");
+  if (_flag("partnerCandy"))
+    _say("Supply, ice, the screen, the cleaning — Candy's side of the paper, and nobody rings you about any of it. Yours is the stool the farang regulars can see.", "dim");
   const friction = (G.syn && G.syn.friction) || 0;
   if (friction) {
     _say(_fmt("Supply is costing you about {pct}% over the going rate — the jobs " +

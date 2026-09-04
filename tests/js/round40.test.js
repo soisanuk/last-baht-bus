@@ -129,3 +129,11 @@ test("Bert names the wet before the money moves, and the calendar makes no three
   assert.match(text(), /buying in the wet/); assert.match(text(), /every thirty days/);
   assert.doesNotMatch(readFileSync(join(here, "../../web/js/engine-systems.js"), "utf8"), /lawyer takes three weeks/);
 });
+
+test("the Candy route says out loud whose side of the paper supply sits on (Keith / Mario)", () => {
+  ownsBar(); out = []; run("books");
+  assert.match(text(), /Candy's side of the paper/);
+  G.day = 2; G.room = "candy_bar"; out = []; run("ask candy about supply");
+  assert.match(text(), /Not your side|my ice man/);
+  out = []; run("ask candy about cleaning"); assert.match(text(), /Supply is my side|my ice man|Not your side/);
+});

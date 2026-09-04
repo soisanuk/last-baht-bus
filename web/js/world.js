@@ -4925,6 +4925,22 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Wayne's answer was "pick a person, not a structure". This is the person.
       // She does not say yes warmly — she says yes like a woman who has watched
       // this arrangement destroy people, and wants it written down.
+      // the Candy route never sees procurement — by design (it is the Tan endgame),
+      // but a man who picked the safe partner has to be TOLD the system exists and
+      // whose side of the paper it sits on (Keith, round 40; Mario's call: a line,
+      // not a mechanic)
+      {
+        topic: "supply|supplier|suppliers|logistics|cleaning|contracts|jobs|arrangements|the arrangements|screen|ice man|beer man",
+        req: ["partnerCandy", "barOpen"],
+        text: "\"Supply?\" She does not even put the glass down. \"Not your side, tilac. Ice " +
+          "comes from my ice man, beer from my beer man, the boy who does the screen is my " +
+          "sister's boy, and the cleaning is a cousin who owes me from 2009. Nobody rings a " +
+          "farang about any of it, and nobody ever will.\" A nod down the rail. \"You sit " +
+          "where they can see you. Buy the first round on a Tuesday. They come back " +
+          "Wednesday. That is your job, and it is the hard one — I have watched a hundred " +
+          "farang fail at it.\"",
+        short: "\"Supply is my side. Yours is the stool the farang can see, and the first round on a Tuesday.\"",
+      },
       {
         topic: "partnership", chip: false,
         // THE OFFER STANDS, and she says so out loud. fx arms the modal, and
@@ -10914,7 +10930,11 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "him. Candy comes over from her own bar at nine, looks at the paperwork " +
           "pinned behind the till — her name first, as the law requires and as she " +
           "insisted twice — and says only \"good\" before taking a stool like any " +
-          "customer.\n\nThe old man is on speakerphone from a hospital corridor in " +
+          "customer. Then, in the tone of somebody closing a subject: the ice, the beer, " +
+          "the man who does the cleaning, the boy for the screen — those come through her " +
+          "from tonight, and nobody rings you. \"You sit there.\" The stool at the end of " +
+          "the rail, the one the farang can see from the soi. \"Familiar face. You keep them " +
+          "coming back. I keep everything else coming.\"\n\nThe old man is on speakerphone from a hospital corridor in " +
           "Ohio for about four minutes. He asks after the table, not the takings. " +
           "Bert holds the {{phone}} up so he can hear the room.\n\nAnd at half eleven " +
           "Gavin comes in, because of course he does. Buys a beer, pays for it, " +
@@ -10922,7 +10942,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "\"Congratulations,\" he says, and means about half of it. \"You know " +
           "we'd have paid more.\"\n\n\"He knows,\" says Bert, not looking up from " +
           "the pumps.",
-        short: "\"Sign stays, trophies stay, Bert stays. Gavin bought a beer and paid for it.\"",
+        short: "\"Sign stays, trophies stay, Bert stays. Supply is Candy's; the stool is yours. Gavin bought a beer and paid for it.\"",
       },
       {
         topic: "opening", chip: false,
