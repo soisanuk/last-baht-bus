@@ -10474,10 +10474,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "lands in YOUR account, not my drawer.” He goes back to the tweezers. “I don't lose money. " +
           "I'd be dead.”",
         short: "“Tomorrow. I don't lose money. I'd be dead.”" },
-      { topic: "delay|late|my money|sorted|where is my money",
+      { topic: "delay|late|my money|sorted|where is my money", when: (st, G) => !!G.nontCashed,
         text: "“Nothing's late.” A glance at the {{phone}}, a glance at you. “Everything I owe you is in " +
           "your account already. Check it.”",
         short: "“Nothing's late. Check your account.”" },
+      // …and to a man he has never done business with, the question is the answer
+      // (Jacko, round 42: a running account on a first meeting)
+      { topic: "delay|late|my money|sorted|where is my money",
+        text: "“Late.” The tweezers pause, and the grin has an edge of genuine enjoyment in it. “You've " +
+          "not given me anything to be late WITH. Send me something first and then come and stand " +
+          "there like that. I'll enjoy it more.”",
+        short: "“You've not given me anything to be late with. Send me something first.”" },
       { topic: "rabbit", text: "“Rabbit.” A small pause, weighing how much to hand you. “Yeah. " +
           "Knew him better than most. Old farang, had a bar on the 6 when I was a kid — I ran his " +
           "till, fixed his wifi, translated when the Thai side of things got complicated. He " +

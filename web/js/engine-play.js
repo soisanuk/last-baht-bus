@@ -4049,9 +4049,11 @@ function _endNight(reason) {
   // the week's spine, one entry per night — what the share card renders.
   // Capped so an endless expat run can't grow the save without bound.
   if ((G.nightLog = G.nightLog || []).length < 30) G.nightLog.push(reason);
+  let _herDawn = false;
   if (reason === "allnighter" && typeof _partyNightEnd === "function" &&
       G.party && G.party.ids && G.party.ids.length) {
     _partyNightEnd(reason);   // she finds you the taxi BEFORE the morning takes it
+    _herDawn = true;          // …and one dawn is enough: the generic sky printed after hers (Jacko, round 42)
   }
   switch (reason) {
     case "dawn":
@@ -4071,10 +4073,10 @@ function _endNight(reason) {
           "The black paint on the windows had been doing its job all night. You step out " +
           "into a Darkside dawn: dogs, roosters, one motorbike, and a sky already too " +
           "bright, and behind you the stools go up as if none of it happened.", "win");
-      } else {
+      } else if (!_herDawn) {
         _say(_pickVary(_inBar() ? _ALLNIGHTER_LINES : _ALLNIGHTER_STREET, _inBar() ? "allnighter" : "allnighterst"), "win");
       }
-      _addHappy(2); // the big night out is a WIN — the invoice is the morning
+      if (!_herDawn) _addHappy(2); // the big night out is a WIN — the invoice is the morning (her goodbye paid its own)
       break;
     case "collapse":
       _say((_flag("act1Done") && G.room === _hotelRoomId()) ?

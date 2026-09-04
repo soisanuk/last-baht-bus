@@ -772,7 +772,11 @@ function _bfRefusal(id, bt) {
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   if (G.soc.drunk >= 6 && _rand() < 0.5) return keep("mess");
   const gate = bt === "soi6" ? 2 : 4;
-  if (_favor(id) < gate + 2 && _rand() < 0.2) return keep(_rand() < 0.5 ? "cheap" : "dislike");
+  // …but not to a girl who ASKED. "I go with you, na" and then "maybe you buy me
+  // a drink first" is the game offering a verb and refusing it in the same breath
+  // (Jacko, round 42) — she opened the subject; she can't call you a cheap charlie for it.
+  const _sheAsked = !!(G.soc.goWith && G.soc.goWith[id]);
+  if (!_sheAsked && _favor(id) < gate + 2 && _rand() < 0.2) return keep(_rand() < 0.5 ? "cheap" : "dislike");
   // day goes MID-key (not trailing) so consecutive days don't hash to consecutive
   // values — _hh has no output mixing, so a trailing ":day" made this ~10% refusal
   // cluster into week-long runs (a girl refused every night of the vacation). The
@@ -1016,11 +1020,13 @@ function _nontCash(arg) {
   const stuck = _hh("nontstuck:" + G.vacation + ":" + G.day + ":" + G.nontCashCount, 71) % 6 === 0;   // pure hash, no dice
   if (stuck) {
     G.nontStuck = (G.nontStuck || 0) + (n - cut);
+    G.nontCashed = true;
     _say(`You send ฿${_num(n)} to a name you don't recognise. The app spins. Nont watches it spin, and something behind his eyes does a small calculation. ` +
       `“It's fine. The account's having a moment. Tomorrow — I'll have it for you tomorrow.” No notes tonight; the five percent he keeps regardless. (฿${_num(G.bank)} in the bank.)`, "alert");
     return;
   }
   G.money += n - cut;
+  G.nontCashed = true;   // he has an account with you now, and only now (Jacko, round 42)
   G.atmTotal = (G.atmTotal || 0) + (n - cut);   // your own money moving pocketward is not "up on the night" (Piotr, round 40)
   _say(`You send ฿${_num(n)} to a name you don't recognise; he counts ฿${_num(n - cut)} into your hand off a roll from the table drawer before the app has finished spinning. ` +
     `“Five percent.” No fee, no limit, no question. (฿${G.money} in pocket, ฿${_num(G.bank)} in the bank.)`);
@@ -8071,7 +8077,11 @@ const FOOD_STALLS = {
   cheap_charlies: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },
   jomtien_soi_7_m: { name: "som tam off the lone cart doing quiet business, extra lime", price: 50, hunger: 50, thirst: -5 },
   cheap_charlies_jt: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },
-  jomtien_beach_rd: { name: "a cold mango from Auntie Nok, salt and chilli on the side", price: 30, hunger: 25, thirst: 15 },
+  // her greeting offers "water, mango?" and BUY MANGO answered "not for sale here"
+  // (Roland, round 42); and the Beach Road cart used her NAME two rooms from where
+  // she stands (Jacko, round 42) — she is at her pitch, and this is somebody else's fruit
+  jomtien_soi_7_beach_end: { name: "a cold mango off Auntie Nok's cart, salt and chilli in a twist of paper", price: 30, hunger: 25, thirst: 15 },
+  jomtien_beach_rd: { name: "a cold mango off a fruit cart, salt and chilli on the side", price: 30, hunger: 25, thirst: 15 },
   buakhao_market: { name: "som tam from the cart, extra everything", price: 50, hunger: 55, thirst: -10 },
   lake_bar: { name: "a whole grilled lake fish, salt-crusted, som tam on the side", price: 180, hunger: 65, thirst: 5 },
   naklua_rd: { name: "grilled chicken and sticky rice off a smoky cart", price: 60, hunger: 60, thirst: 0 },

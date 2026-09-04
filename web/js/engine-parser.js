@@ -201,6 +201,18 @@ const _FOLK_COUNTER = [
   "A nod from the nearest one, the way men nod in a place where the food is the point and the talk is optional. Nobody here is working you. It is restful and it takes a minute to recognise why.",
   "They are eating. It is a room for eating in. You get a glance and a shuffle of stools, which in this town is practically an embrace.",
 ];
+// THE WOMAN WHOSE SHOP IT IS. Twelve massage shops and a soapy, and TALK TO
+// MASSEUSE answered "no one here answers to that" in every one — including the
+// three that have a named woman standing in them, because "masseuse" is not her
+// name (Roland, round 42, who asked six of them where they were from and got
+// nothing). She is a professional in a trade the rest of the game keeps
+// mistaking for the other trade, and that is the register.
+const _FOLK_MASSEUSE = [
+  "She looks up from folding towels, and what you get is the professional half-smile that goes with a fixed price. \"You want massage? Foot, Thai, oil.\" Whatever else you were going to ask can wait until you are face-down and paying.",
+  "\"Massage first, talk after.\" She says it pleasantly and she means it — the chair is the meter, and standing in the doorway is not.",
+  "A woman who has worked out somebody's shoulders for thirty years does not need to charm you into a chair. She nods at the one nearest the door and goes back to the towels.",
+  "\"Sit, sit.\" She pats the chair, and then, when it is clear you only want to talk, gives you the flat kind look reserved for men who mistake this shop for the other kind. \"This is massage shop, na. Only massage.\"",
+];
 const _FOLK_SEVEN = [
   "The 7-Eleven lad looks up from his phone. “Sawatdee khrap.” Then back down. That is the whole conversation available, and it is not unfriendly.",
   "The girl on the till gives you the smile the uniform requires and the eyes it doesn't. “Toastie?” No? The smile stays; the attention goes.",
@@ -213,6 +225,14 @@ function _promptedFolk(arg) {
   if (!a) return false;
   if (/\b(motosai|piwin|driver|rider|bike ?boy)\b/.test(a) && r.motosai) {
     _say(_pickVary(_FOLK_MOTO, "folkmoto")); return true;
+  }
+  if (r.massage || r.soapy) {
+    if (/\b(masseuse|massuse|therapist|girl|girls|lady|ladies|woman|women|staff|her|them|manageress|mama|mamasan|owner)\b/.test(a)) {
+      // the shop that HAS a named woman sends you to her by name — she is right there
+      const named = _npcsHere().find(x => NPCS[x] && /^[A-Z]/.test(NPCS[x].name));
+      if (named) { _say(`The one on the floor tonight is ${NPCS[named].name} — she is right there, and she has a name. (TALK TO ${NPCS[named].name.toUpperCase()})`, "dim"); return true; }
+      _say(_pickVary(_FOLK_MASSEUSE, "folkmasseuse")); return true;
+    }
   }
   if (FOOD_STALLS[G.room]) {
     if (/\b(cook|wok|woman|lady|auntie|pa|mae|chef|server|waitress|waiter|girl|owner|her)\b/.test(a)) {
@@ -5525,7 +5545,11 @@ function _doMotosai(arg) {
       G.motoBalkTurn = G.turns;
       // the balk points at the bench — only where a bench exists. On a Darkside
       // soi "the bus will have you" named a bus that never came (Darren, round 37)
-      const bench = typeof _busLinesFor === "function" && _busLinesFor(G.room).length;
+      // …and the bench is a SHORT WALK, not this exact kerb: the east pool fired
+      // at the Walking Street gate, a hundred metres from Pattaya Tai (Jacko,
+      // round 42). Look one room out before telling a man there is no truck.
+      const _bench = r => typeof _busLinesFor === "function" && _busLinesFor(r).length;
+      const bench = _bench(G.room) || Object.values(_room().exits || {}).some(_bench);
       _say(_pickVary(bench ? _MOTO_DRUNK_NO : _MOTO_DRUNK_NO_EAST, bench ? "motodrunk" : "motodrunkeast"), "alert");
       return false;
     }
