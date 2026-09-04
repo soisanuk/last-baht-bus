@@ -5731,8 +5731,9 @@ function _partnerYes() {
     _say("\"Good.\" It is done by Tuesday, the way he said. It costs you nothing at " +
       "all \u2014 no lawyer, no signature you kept a copy of, no figure anywhere. " +
       "Just a land office that turned out to be his wife's cousin, and a lunch " +
-      "afterward that he paid for. You own a bar now. You also, somewhere with no " +
-      "paper on it, owe a man a thing he has not yet named.", "win");
+      "afterward that he paid for. The fifty-one is settled — the deposit is still " +
+      "yours to find. You also, somewhere with no paper on it, owe a man a thing he " +
+      "has not yet named.", "win");
   } else {
     _setFlag("partnerCandy");
     _align("indie", 2); _align("wdg", -2);
@@ -6336,7 +6337,7 @@ function _leaseAsk() {
   if (t.wet) G.bar.rentFree = LEASE_WET_FREE;
   const l = G.bar.lease;
   const terms =
-    l.tier === "peak" ? "\"And it's December, so he's a queue for the room and he knows it. Key money's the full month, notes or the app, makes no odds to him this time of year — and it's due with the first rent.\"" :
+    l.tier === "peak" ? _fmt("\"And it's {month}, so he's a queue for the room and he knows it. Key money's the full month, notes or the app, makes no odds to him this time of year — and it's due with the first rent.\"", { month: _SEASON_MONTHS[_seasonMonth()] }) :
     l.wet ? _fmt("\"And here's the thing about buying in the rains. He'd rather half a rent than an empty shutter till November — so the first month's rent is off, and if the key money comes in NOTES, all of it, he'll knock {pct}% off. Cash he can put in a drawer. A transfer he has to explain to somebody.\"", { pct: Math.round(l.off * 100) }) :
     _fmt("\"Now. Key money for the lease — one month, to re-paper it in your name. Full whack on the app, or {pct}% off if it's notes, all of it, in his hand. He's not fussy about where notes come from and he's very fussy about where transfers go.\"", { pct: Math.round(l.off * 100) });
   _say("\"One more, and this one's the landlord's.\" Bert lowers his voice, which he never does. " + terms, "alert");

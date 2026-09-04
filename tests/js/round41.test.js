@@ -121,3 +121,19 @@ test("the counter has people at it: the cook nods, the stools shuffle along (Des
   G.room = "candy_bar"; out = []; run("talk to cook");
   assert.ok(!_FOLK_COOK.some(l => text().includes(l.slice(0, 40))));
 });
+
+test("prose review: the 51% is not the bar, and peak season is two months (slice 4)", () => {
+  expat(); for (const f of ["barPremises", "barLicence"]) _setFlag(f);
+  G.partnerWho = "tan"; G.pendingChoice = "partner"; out = []; _partnerYes();
+  assert.doesNotMatch(text(), /You own a bar now/, "the deposit is still to pay — _doWork says so in the same state");
+  assert.match(text(), /deposit is still/);
+  out = []; _doWork(); assert.match(text(), /Until the deposit's paid/);
+  // January is peak too, and the landlord's line said December in it
+  for (const [m0, name] of [[11, "December"], [0, "January"]]) {
+    newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+    _setFlag("act1Done"); expat(); for (const f of ["barPremises", "barLicence", "barPartner", "partnerCandy"]) _setFlag(f);
+    G.season0 = m0; G.day = 9; G.room = "stinky_bar"; G.money = 130000; G.bank = 0;
+    assert.equal(_seasonTier(), "peak"); out = []; _barDeposit();
+    assert.match(text(), new RegExp(`it's ${name}, so he's a queue`));
+  }
+});
