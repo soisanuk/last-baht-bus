@@ -52,6 +52,17 @@ const _term = (() => {
           if (loc === "inventory" || loc === G.room) kind.set(ITEMS[id].name, "item");
         }
       }
+      // THE DOG. He is the one companion in the game with a name, a wheel's worth
+      // of verbs and no NPCS entry — so he decorated nowhere, the flyout had no
+      // entry for him, and on a phone the entire dog layer was unreachable unless
+      // you already knew the words (Bill, round 44, thumbs-only for a week).
+      // His name is printed on essentially every room entry by _dogN, so the tap
+      // target is always on screen. LAST, and never over an existing entity: a
+      // player who names him Candy must not steal her taps — he answers to DOG.
+      if (typeof G !== "undefined" && G && G.dog && typeof _dogName === "function") {
+        const dn = _dogName();
+        if (dn && !kind.has(dn)) kind.set(dn, "dog");
+      }
     } catch (e) { /* pre-boot print: decorate nothing */ }
     return kind;
   }
@@ -367,6 +378,23 @@ const _term = (() => {
         return [translate];
       }
       if (k === "exit") return [{ t: "go " + v, c: "go " + v, go: true }];
+      // Every command here takes DOG rather than his name, because _isDogWord
+      // accepts it whatever you have called him — so a rename can never break
+      // his own wheel. NAME is the open prefill; the rest fire on one tap.
+      if (k === "dog") {
+        const d = [
+          { t: "pet", c: "pet dog", go: true },
+          { t: "feed", c: "feed dog", go: true },
+          { t: "talk to " + lo, c: "talk to dog", go: true },
+        ];
+        if (full) {
+          d.push({ t: "examine", c: "x dog", go: true });
+          d.push({ t: "photo", c: "photo dog", go: true });
+          d.push({ t: "stay", c: "stay", go: true });
+          d.push({ t: "name him …", c: "name dog ", go: false });
+        }
+        return d;
+      }
       if (k === "cmd") {
         const open = /<|…|\[/.test(v);
         const cmd = lo.replace(/\s*[<…[].*$/, "");

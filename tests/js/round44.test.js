@@ -324,26 +324,23 @@ test("TOPICS lists only what the person will actually answer, right now", () => 
   // The promise property, and the reason the list can't rot: _convoTopics mirrors
   // _pickDialogue's own gates, so anything printed is answerable THIS turn.
   // Build the miss oracle by running nonsense rather than transcribing pools.
+  //
+  // ONE state for the whole check, deliberately: an earlier version called
+  // newGame() between listing the topics and asking them, which re-seeds G.rng
+  // and can move a hash- or day-gated `when`, so a topic that was open when
+  // listed was closed when asked. That made the pin FLAKY — it passed alone and
+  // failed in the suite — which is worse than red.
   for (const id of ["bert", "lek", "mort"]) {
     if (!NPCS[id]) continue;
-    const room = _npcRoom(id);
-    const setup = () => {
-      out = []; newGame();
-      G.player = { origin: "monger", personality: "joker", orientation: "straight" };
-      _setFlag("act1Done"); G.stage = "vacation"; G.money = 9000; G.nightTurn = 30;
-      for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
-      G.peddlerNight = 2; G.room = room; G.known[id] = true;
-    };
-    setup();
+    G.room = _npcRoom(id); G.known[id] = true;
     const misses = new Set();
     for (const junk of ["zqxwv", "photosynthesis", "belgium"]) {
-      out = []; run(`ask ${id} about ${junk}`); misses.add(text().slice(-90));
+      G.talked = {}; out = []; run(`ask ${id} about ${junk}`); misses.add(text().slice(-90));
     }
-    setup();
     const open = _convoTopics(id);
     assert.ok(open.length, `${id} has open topics`);
     for (const t of open) {
-      setup();
+      G.talked = {};                       // a fresh ear, not a fresh world
       out = []; run(`ask ${id} about ${t}`);
       assert.ok(!misses.has(text().slice(-90)),
         `${id} answers "${t}" — TOPICS must never offer a topic that misses`);

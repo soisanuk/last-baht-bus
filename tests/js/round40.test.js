@@ -179,7 +179,14 @@ test("the deposit clears by transfer from the account, the pocket topping up —
 
 // ── the lease: the landlord's money, the season he asks in, and the resident's bank ──
 const buyer = () => { newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; _setFlag("act1Done"); G.stage = "expat"; _setFlag("expatLife");
-  for (const f of ["barPremises", "barLicence", "barPartner", "partnerCandy"]) _setFlag(f); G.room = "stinky_bar"; G.money = 30000; G.bank = 150000; out = []; };
+  for (const f of ["barPremises", "barLicence", "barPartner", "partnerCandy"]) _setFlag(f); G.room = "stinky_bar"; G.money = 30000; G.bank = 150000;
+  // newGame() clears encDone, so the peddler works your own rail and EATS the
+  // next typed command as his brush-off — "transfer key money" became a slow
+  // head-shake at a watch seller, 50 times in 400 (a 1-in-6 suite flake, and
+  // the third appearance of this class). Any helper that calls newGame() and
+  // then TYPES has to re-arm these two.
+  for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+  out = []; };
 
 test("expat mode opens a Thai account: no card fee, a resident's counter limit (Mario)", () => {
   G.day = 8; G.pendingChoice = "vacation_end"; G.stage = "vacation"; G.bank = 100000;

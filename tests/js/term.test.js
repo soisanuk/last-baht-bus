@@ -399,3 +399,41 @@ test("Thai numerals stay undecorated — the safe PIN is a puzzle, not vocab", (
   const d = _term.decorate("The keypad reads ๗๑๙ in fading paint.");
   assert.equal(d, "The keypad reads ๗๑๙ in fading paint.");
 });
+
+// The dog is the one companion with a name, a wheel's worth of verbs and no
+// NPCS entry, so he decorated nowhere and the flyout had no entry for him — on
+// a phone the whole dog layer was unreachable unless you already knew the words
+// (Bill, round 44, thumbs-only for a week). His name is printed on essentially
+// every room entry by _dogN, so the tap target is always on screen.
+test("the dog taps: his name decorates, and the wheel carries his verbs", () => {
+  newGame(); G.flags.act1Done = true; G.stage = "vacation"; G.room = "beach_rd_c";
+  G.dog = { since: 1, name: null };
+  assert.equal(_term.decorate("Sai Krok pads at your heel."),
+    `${kw("Sai Krok", "dog")} pads at your heel.`);
+  // a single tap gets the everyday three; the long-press gets the rest
+  const quick = _term.kwActions("dog", "Sai Krok", false).map(a => a.c);
+  assert.deepEqual(quick, ["pet dog", "feed dog", "talk to dog"]);
+  const full = _term.kwActions("dog", "Sai Krok", true).map(a => a.c);
+  for (const c of ["x dog", "photo dog", "stay", "name dog "]) assert.ok(full.includes(c), c);
+  // every command takes DOG, never his name, so a rename cannot break his wheel
+  for (const c of full) assert.doesNotMatch(c, /sai krok/i);
+});
+
+test("the renamed dog follows his own name, and never steals somebody else's", () => {
+  newGame(); G.flags.act1Done = true; G.stage = "vacation"; G.room = "beach_rd_c";
+  G.dog = { since: 1, name: "Rex" };
+  assert.equal(_term.decorate("Rex is under your stool."), `${kw("Rex", "dog")} is under your stool.`);
+  assert.ok(_term.kwActions("dog", "Rex", false).every(a => /\bdog\b/.test(a.c)),
+    "his commands still say dog");
+  // name him after a real character and SHE keeps her taps — he answers to DOG
+  G.dog.name = "Candy";
+  assert.match(_term.decorate("Candy is at the bar."), /data-k="npc"/);
+  G.dog = null;
+});
+
+test("no dog, no dog taps", () => {
+  newGame(); G.flags.act1Done = true; G.stage = "vacation"; G.room = "beach_rd_c";
+  G.dog = null;
+  assert.doesNotMatch(_term.decorate("A soi dog with one clipped ear falls in beside you."),
+    /data-k="dog"/);
+});
