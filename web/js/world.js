@@ -346,6 +346,12 @@ const ROOMS = {
     bar: "Rompho Market",
     region: "Jomtien",
     food: true,
+    revisit: [
+      "Rompho after dark: grill smoke, chilli in the air, fruit pyramids under bare bulbs, and plastic stools filling and emptying all along the row.",
+      "A few bar girls off shift are eating som tam standing up, out of the working clothes and entirely uninterested in you, which is its own kind of restful.",
+      "The stalls run on, one after another, and the haze off the grills catches the light from KISS glowing over the roofs to the north.",
+      "Somebody's pestle is going in a som tam mortar at a speed that suggests she could do it in her sleep and possibly is.",
+    ],
     desc: "Directly across Second Road from the mouth of Soi 7: the sprawl of Rompho Market — " +
       "grilled everything, fruit pyramids, plastic stools, and a haze of chilli smoke. Locals, " +
       "long-stay farang, and a few bar girls off shift graze the stalls. The Jomtien branch of " +
@@ -381,6 +387,12 @@ const ROOMS = {
     bar: "Cheap Charlie's (Jomtien)",
     region: "Jomtien",
     food: true,
+    revisit: [
+      "The Jomtien branch, mid-service: the wok never stops, the fan actually works, and the queue for a stool is two men deep and moving.",
+      "She is cooking four orders at once off one burner and losing track of none of them. The board is the same board. The prices are the same prices.",
+      "Rice, garlic, fish sauce hitting a hot pan — the smell arrives at the door before you do, which is the entire marketing strategy.",
+      "Somebody's plate lands in front of somebody else, is silently swapped, and both men carry on. The rice will run out at some point tonight and then that is that.",
+    ],
     desc: "The second one, and the newer regulars swear it is better — more room, a " +
       "fan that works, and a woman on the wok who does not stop from six until the " +
       "rice runs out. The board is the same board. The prices are the same prices. " +
@@ -418,6 +430,12 @@ const ROOMS = {
     bar: "KISS Jomtien",
     region: "Jomtien",
     food: true,
+    revisit: [
+      "The Jomtien KISS, as packed as the original and slightly louder about it. The grill is going, the menu is a mile long, and a stool is a matter of timing.",
+      "Same menu, same chairs, same smoke — a branch that is not trying to be different from the one up the road, which is why it works.",
+      "Somebody two tables over is on their third Chang and their first plate, in that order, and is having an excellent evening.",
+      "The waitress takes the order without writing anything down, which is either confidence or contempt, and the food arrives correct.",
+    ],
     desc: "The Jomtien branch of the famous open-air corner restaurant, just north of Rompho " +
       "Market — the exact same mile-long menu as the Pattaya original (simple Thai one side, " +
       "farang comfort food the other) and exactly as packed. Plastic chairs, a grill going full " +
@@ -2767,6 +2785,12 @@ const ROOMS = {
     bar: "Cheap Charlie's",
     region: "Soi Buakhao",
     food: true,
+    revisit: [
+      "Cheap Charlie's, the original. The chalked board says WHATEVER SHE MADE TODAY and today it is something with holy basil that is going faster than she can plate it.",
+      "Six stools, five of them taken, and the sixth going the moment somebody stands. The freezer hums. Nobody is in a hurry and nobody is slow either.",
+      "The counter, the board, the fan, the smell of garlic hitting hot oil. Sixty baht. It has been sixty baht for longer than most of the bars out there have existed.",
+      "A man at the end of the counter is explaining to a newer man that the Jomtien one is not the same. The newer man is eating and not arguing.",
+    ],
     desc: "Six stools, a chest freezer, a laminated board of numbered dishes and a " +
       "chalked one underneath it that says WHATEVER SHE MADE TODAY. Sixty baht gets " +
       "you a plate and properly fed for it. Half the men in here have been eating " +
@@ -4206,6 +4230,12 @@ const ROOMS = {
     bar: "KISS Restaurant",
     region: "Soi Diana",
     food: true,
+    revisit: [
+      "KISS on the corner, doing what KISS does: every stool full, the grill roaring, and a waitress crossing the room with four plates and no tray.",
+      "The mile-long menu is going round the tables, Thai side and farang side, and somebody at the next table is ordering the wrong thing with great confidence.",
+      "Plastic chairs, paper menus, smoke off the grill and the whole of Soi Diana walking past the open front. Everybody meets here eventually.",
+      "A table of six is finishing up, which means a table of six is about to be free, which means half the room is pretending not to watch them.",
+    ],
     desc: "The famous open-air corner restaurant at the mouth of Soi Diana — plastic chairs, " +
       "paper menus a mile long (simple Thai one side, farang comfort food the other), and a grill " +
       "going full tilt. Everyone knows KISS; everyone meets at KISS. In high season you can stand " +

@@ -101,3 +101,20 @@ test("Nont's pitch changes for a man with a Thai bank book (Des)", () => {
   assert.match(text(), /money the book never sees/); assert.doesNotMatch(text(), /card fee, no daily limit/);
   assert.match(_cashMan(), /Nont/);
 });
+
+test("the counter has people at it: the cook nods, the stools shuffle along (Des)", () => {
+  for (const id of ["cheap_charlies", "cheap_charlies_jt", "kiss", "kiss_jomtien", "soi_rompho"]) {
+    G.room = id;
+    out = []; run("talk to cook");
+    assert.ok(_FOLK_COOK.some(l => text().includes(l.slice(0, 40))), `${id}: the cook answers`);
+    out = []; run("talk to the regulars");
+    assert.ok(_FOLK_COUNTER.some(l => text().includes(l.slice(0, 40))), `${id}: the counter answers`);
+    assert.ok((ROOMS[id].revisit || []).length >= 4, `${id}: a second look is not the same paragraph`);
+  }
+  // …and the wok woman is not given the stranger-on-a-soi brush-off
+  G.room = "cheap_charlies_jt"; out = []; run("talk to the woman on the wok");
+  assert.ok(!_FOLK_GENERIC.some(l => text().includes(l.slice(0, 40))));
+  // a bar is not an eatery: the pool doesn't leak
+  G.room = "candy_bar"; out = []; run("talk to cook");
+  assert.ok(!_FOLK_COOK.some(l => text().includes(l.slice(0, 40))));
+});

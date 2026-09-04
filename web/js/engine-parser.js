@@ -182,6 +182,25 @@ function _roomProse(r) {
   return String((r && r.desc) || "").toLowerCase();
 }
 
+// THE COUNTER HAS PEOPLE AT IT. An eatery's whole premise is somebody cooking
+// and somebody eating — Cheap Charlie's Jomtien advertises "a woman on the wok
+// who does not stop from six until the rice runs out", the original says "half
+// the men in here", KISS says everyone meets at KISS — and TALK TO THE COOK got
+// "No one here answers to that" while the woman on the wok got the brush-off
+// pool written for strangers on a soi (Des, round 41). She is not a character
+// and is not going to be; she is the reason the room exists, and she nods.
+const _FOLK_COOK = [
+  "She looks up from the wok for exactly as long as the wok allows, which is not long, and gives you the nod that means sit down. The nod is the conversation. The plate is the rest of it.",
+  "\u201cKin khao mai?\u201d Eaten yet? It is not small talk here; it is the entire question, and she is already reaching for a plate before you answer it.",
+  "She has one hand on the wok and one on the ladle and no intention of putting either down for a chat. What you get is a glance, a grunt, and food faster than you expected \u2014 which is the local definition of good service.",
+  "A woman who has fed this street for twenty years does not need to be charming to you and is anyway, briefly, in the two seconds between one order and the next.",
+];
+const _FOLK_COUNTER = [
+  "The men at the counter have the particular solidarity of people eating cheaply on purpose. One shifts along a stool without being asked. Nobody says anything, and that is the welcome.",
+  "Somebody two stools down tells you, unprompted, what to order, and is right, and goes back to his plate before you can thank him.",
+  "A nod from the nearest one, the way men nod in a place where the food is the point and the talk is optional. Nobody here is working you. It is restful and it takes a minute to recognise why.",
+  "They are eating. It is a room for eating in. You get a glance and a shuffle of stools, which in this town is practically an embrace.",
+];
 const _FOLK_SEVEN = [
   "The 7-Eleven lad looks up from his phone. “Sawatdee khrap.” Then back down. That is the whole conversation available, and it is not unfriendly.",
   "The girl on the till gives you the smile the uniform requires and the eyes it doesn't. “Toastie?” No? The smile stays; the attention goes.",
@@ -194,6 +213,14 @@ function _promptedFolk(arg) {
   if (!a) return false;
   if (/\b(motosai|piwin|driver|rider|bike ?boy)\b/.test(a) && r.motosai) {
     _say(_pickVary(_FOLK_MOTO, "folkmoto")); return true;
+  }
+  if (FOOD_STALLS[G.room]) {
+    if (/\b(cook|wok|woman|lady|auntie|pa|mae|chef|server|waitress|waiter|girl|owner|her)\b/.test(a)) {
+      _say(_pickVary(_FOLK_COOK, "folkcook")); return true;
+    }
+    if (/\b(men|man|regulars?|locals?|lads?|diners?|customers?|crowd|farang|punters?|people|them|everyone|others?|stools?|counter)\b/.test(a)) {
+      _say(_pickVary(_FOLK_COUNTER, "folkcounter")); return true;
+    }
   }
   if (/\b(clerk|cashier|staff|lad|counter|shop ?(girl|boy|assistant))\b/.test(a) && r.seven) {
     _say(_pickVary(_FOLK_SEVEN, "folkseven")); return true;   // three refusals for a lad the receipt named (Bronwyn, round 39)
