@@ -671,6 +671,15 @@ CHARS = {
     "min":      lady(skin=THAI2, hair="long", hc=DKBRN, shirt=C(0x1a1a24), bg=BG_BAR, mouth="smile", acc=["earrings", "bracelets"], earc=CYAN),
     "milk":     lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x8a2a5a), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=GOLD),
     "june":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x3a2a6a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=PINKN),
+    # --- the Orchid Room: mama and cashier (filler) ---
+    "sudjai":   lady(skin=THAI, hair="chignon", hc=GRBLK, shirt=C(0x2a1a2e), bg=BG_BAR,
+                     mouth="neutral", acc=["earrings", "chain"]),
+    "kae":      lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x1e2430), bg=BG_BAR, mouth="smile", acc=["earrings"]),
+    # --- the Orchid Room floor (authored; WDG's flashiest, dressier palette) ---
+    "nune":     lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x1a1a24), bg=BG_BAR, mouth="neutral"),
+    "pae":      lady(skin=THAI, hair="long", hc=C(0x6b3a1a), shirt=C(0x101014), bg=BG_BAR,
+                     mouth="smile", acc=["earrings", "chain"], earc=C(0xffd24a)),
+    "gyp":      lady(skin=THAI2, hair="long", hc=BLACK, shirt=C(0xc9ccd4), bg=BG_BAR, mouth="grin"),
     # --- filler mamas / cashiers / extra hostesses ---
     "pen":      lady(skin=THAI, hair="bun", hc=GREY, shirt=C(0x4a2a6a), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
     "muay":     lady(skin=THAI, hair="sleek", hc=SILVER, shirt=C(0x181820), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=PINKN),

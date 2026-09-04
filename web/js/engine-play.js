@@ -2665,7 +2665,8 @@ function _doBell() {
   const pool = bt === "pub" ? _BELL_PUB
     : (bt === "soi6" || bt === "gogo") ? _BELL_GOGO
     : _BELL_BEER; // beer bars, and any other bar-type, buy a round for the staff
-  _say(`${_pickVary(pool, "bell:" + bt)} (-฿${price}, ฿${G.money} left — reign while it lasts.)`);
+  const _solo = _staffAt(G.room).length === 1 && bt !== "gogo";
+  _say(`${_pickVary(_solo ? _BELL_SOLO : pool, _solo ? "bellsolo" : "bell:" + bt)} (-฿${price}, ฿${G.money} left — reign while it lasts.)`);
   if (pool === _BELL_BEER) _compDrink(1);      // every line in that pool hands one back across the rail
   const rings = G.soc.bells[r];
   if (rings === 2) {
@@ -2700,6 +2701,13 @@ const _BELL_GOGO = [
     "shouting something with your description in it. The mamasan lets you have this one.",
   "You haul the rope and the bar erupts — a round for the ladies on stage and off, every eye and " +
     "every smile suddenly aimed at you. Expensive way to be handsome. Works every time.",
+];
+// A bar with one woman in it: the bell still works, it is simply a different
+// scene, and the crowd lines were describing staff who are not there.
+const _BELL_SOLO = [
+  "You ring it, and the round is for a staff of one. She laughs at the sound of it — one bell, one girl, one cold bottle pushed back across the rail at you — and for the next ten minutes this is the friendliest bar in Pattaya, because there is nobody in it to disagree.",
+  "The bell in a one-woman bar is an odd, lovely noise: too big for the room, and she rings the last of it herself with a fingernail. \"For me? Okay!\" A bottle for her, a bottle back for you, and the whole ceremony costs less than a round anywhere with a crowd in it.",
+  "A round for the house, and the house is her. She toasts you with something she was already drinking, tops your bottle up before it is empty, and says the thing every small bar says to a man who rings the bell early: \"You come back, na.\"",
 ];
 const _BELL_BEER = [
   "A round for the staff, and the little beer bar loves you for it. The two or three girls behind " +

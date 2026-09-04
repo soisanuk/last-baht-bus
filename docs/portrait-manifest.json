@@ -2,15 +2,15 @@
   "generated": "2026-09-04",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 148,
+    "total": 151,
     "byRole": {
       "story": 41,
       "mamasan": 25,
-      "hostess": 45,
+      "hostess": 48,
       "cashier": 13,
       "patron": 24
     },
-    "filler": 209
+    "filler": 211
   },
   "characters": [
     {
@@ -1141,6 +1141,20 @@
       "desc": "Confident, perfect makeup, running the floor of Crystal Palace with the crisp authority of a duty-free manager."
     },
     {
+      "id": "gyp",
+      "name": "Gyp",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "look": "Thai woman of twenty-two, long straight black hair, round face, simple make-up, borrowed silver dress a size too big.",
+      "venueKind": "soi6",
+      "emoji": "🌱",
+      "th": "ยิบ",
+      "room": "orchid_room",
+      "tags": [],
+      "desc": "A round-faced girl of about twenty-two in a silver dress that is not hers and does not quite fit, watching the other women the way you watch someone doing a job you have just been given. Five weeks off a beer bar in Buakhao and still visibly converting every price into the old one."
+    },
+    {
       "id": "jane",
       "name": "Jane",
       "source": "NPCS",
@@ -1376,6 +1390,34 @@
       "desc": "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who think she is magic. She is having the best night of her life. Again."
     },
     {
+      "id": "nune",
+      "name": "Nune",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "look": "Thai woman of twenty-nine, sleek black bob, long neck, minimal make-up, dark silk slip dress, no jewellery at all.",
+      "venueKind": "soi6",
+      "emoji": "🌙",
+      "th": "นุ่น",
+      "room": "orchid_room",
+      "tags": [],
+      "desc": "The only woman in the room not dressed to be looked at from across it: a plain dark slip, no jewellery, hair cut sharp. She works the corner tables, moves like she is not there, and is the calmest person in a room that is not calm."
+    },
+    {
+      "id": "pae",
+      "name": "Pae",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "look": "Thai woman of twenty-six, long hair with a copper tint, heavy gold hoops, gold chain, tight black dress, immaculate.",
+      "venueKind": "soi6",
+      "emoji": "💎",
+      "th": "แป้",
+      "room": "orchid_room",
+      "tags": [],
+      "desc": "Copper in her hair, real gold at her ears, and the immaculate finish of somebody who treats her appearance as capital equipment. Top earner in the room and entirely unembarrassed about it; she will tell you her numbers before she tells you her nickname."
+    },
+    {
       "id": "pancake",
       "name": "Pancake",
       "source": "NPCS",
@@ -1527,13 +1569,13 @@
       "source": "NPCS",
       "role": "hostess",
       "sex": "f",
-      "look": "Thai woman of thirty-four, hair up in a clip, no make-up to speak of, plain dark blouse, reading glasses pushed into her hair.",
+      "look": "In a lit beer bar: striking Thai woman of thirty-four, sharp cheekbones, dark hair pinned up, red lipstick, fitted black dress, reading glasses.",
       "venueKind": "beer",
       "emoji": "📓",
       "th": "แหวน",
       "room": "cloze",
       "tags": [],
-      "desc": "Hair up in a clip, no make-up worth the name, and a plain dark blouse in a soi of sequins. Reading glasses pushed up into her hair and a piece of chalk in her hand. She works the bar like anybody else here and she does it while marking something, and neither activity appears to interrupt the other."
+      "desc": "Hair pinned up, red lipstick, a black dress that cost more than the bar took last Tuesday, and reading glasses she is not remotely embarrassed about — she works this floor like everybody else on this soi and she is better at it than most. The chalk in her hand is the other half of the business, and she will happily sell you either."
     },
     {
       "id": "wilai",
@@ -4112,6 +4154,20 @@
       "desc": "Bored until you try a word of Thai, then radiant — one of The Bucket's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand."
     },
     {
+      "id": "sudjai",
+      "name": "Sudjai",
+      "source": "NPCS",
+      "role": "mamasan",
+      "filler": true,
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "👑",
+      "th": "สุดใจ",
+      "room": "orchid_room",
+      "tags": [],
+      "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Orchid Room, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three."
+    },
+    {
       "id": "boonsri",
       "name": "Boonsri",
       "source": "NPCS",
@@ -4530,6 +4586,20 @@
       "room": "the_bucket",
       "tags": [],
       "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Bucket, from Roi Et. She married a farang, buried the marriage, and kept the house."
+    },
+    {
+      "id": "kae",
+      "name": "Kae",
+      "source": "NPCS",
+      "role": "cashier",
+      "filler": true,
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🧾",
+      "th": "แก้ว",
+      "room": "orchid_room",
+      "tags": [],
+      "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at The Orchid Room, from Kalasin."
     },
     {
       "id": "napa",

@@ -5134,23 +5134,29 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     ],
   },
 
-  // THE TUTOR. A hostess who teaches, at the bar she named after a fill-in-the-
-  // blank exercise. Written flat: she is not a tragic teacher fallen on hard
-  // times and she is not a saint improving the farang — she is a woman who is
-  // good at one thing, found the trade paid four times what the classroom did,
-  // and has arranged her evenings so she still gets to do it. The register is
-  // hers: precise English, because it is her subject, with the particles
-  // intact. At fluency she is the ONE person on the floor who is delighted
-  // rather than wary (see _THAI_SPY) — that is her whole function in the game.
+  // THE TUTOR — and the correction that matters (Mario, 2026-09-05): she is a
+  // BAR GIRL who also teaches, not a teacher slumming. Cloze is a beer bar
+  // aimed at punters and it earns like one; the lessons are a second income
+  // stream she is good at, and she is entirely unsentimental about which of the
+  // two is paying tonight. So: smart AND sexy, not blousy — the first draft
+  // stacked anti-glamour negatives ("no make-up worth the name", "plain dark
+  // blouse in a soi of sequins") which made her a schoolmistress by accident and
+  // which the portrait model dutifully obeyed. Written flat either way: no
+  // tragic fallen teacher, no saint improving the farang. Precise English,
+  // because the language is her subject, and the particles intact. At fluency
+  // she is the ONE person on the floor delighted rather than wary (_THAI_SPY).
   waen: {
     name: "Waen", th: "แหวน", emoji: "📓",
     room: "cloze",
     owner: true,   // her name is on the lease; on a bar this small the owner is the mamasan is the cashier
-    look: "Thai woman of thirty-four, hair up in a clip, no make-up to speak of, plain dark blouse, reading glasses pushed into her hair.",
-    desc: "Hair up in a clip, no make-up worth the name, and a plain dark blouse in a soi of sequins. " +
-      "Reading glasses pushed up into her hair and a piece of chalk in her hand. She works the bar like " +
-      "anybody else here and she does it while marking something, and neither activity appears to " +
-      "interrupt the other.",
+    // 26 words, front-loaded, bar setting first, and the anti-glamour negatives
+    // gone — they were what the model was obeying (art agent, 2026-09-05). The
+    // glasses stay as the one "smart" signal that reads at thumb size.
+    look: "In a lit beer bar: striking Thai woman of thirty-four, sharp cheekbones, dark hair pinned up, red lipstick, fitted black dress, reading glasses.",
+    desc: "Hair pinned up, red lipstick, a black dress that cost more than the bar took last Tuesday, " +
+      "and reading glasses she is not remotely embarrassed about — she works this floor like everybody " +
+      "else on this soi and she is better at it than most. The chalk in her hand is the other half of " +
+      "the business, and she will happily sell you either.",
     dialogue: [
       { text: "\"Ah — you looked at the board.\" She says it before hello, pleased. \"Everybody looks and " +
           "nobody asks. I am Waen.\" A hand indicates the stools, the chalk, the eight farang in various " +
@@ -5198,6 +5204,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "shrug. \"Mai mai mai mai mai. Six months of hearing it before you can say it. Everybody " +
           "wants the six months to be a weekend.\"",
         short: "\"The tones aren't the hard part. The hard part is you don't believe they're real.\"" },
+      { topic: "two jobs|both|business|money|which|income",
+        text: "\"Which one pays?\" She looks amused that you asked, and answers it properly. \"The bar. " +
+          "Always the bar. Eight stools of men buying beer at eighty baht beats one Norwegian doing " +
+          "vowel drills at a hundred an hour, and it is not close.\" She squares the chalk on its " +
+          "ledge. \"But the lessons bring the ones who come back on a Tuesday, and a Tuesday is where " +
+          "a small bar lives or dies. So: two jobs, one room, and I am good at both. You may buy " +
+          "either. Most men buy the beer and tell themselves they came for the other one.\"",
+        short: "\"The bar pays, always. The lessons bring the ones who come back on a Tuesday, and Tuesday is where a small bar lives.\"" },
       { topic: "farang|customers|students|men|notebooks",
         text: "\"Three kinds.\" She counts them without looking up. \"The one who learns twenty words and " +
           "tells everybody he speaks Thai. The one who learns nothing and is very happy. And the one " +
@@ -5222,6 +5236,113 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "everybody still has to speak.\" A glance at the eight stools. \"I have the eight. I am " +
           "practising on drunk people, which is harder, so the room will be easy.\"",
         short: "\"A room with eight chairs and no bar in it. I'm practising on drunk people; the room will be easy.\"" },
+    ],
+  },
+
+  // ── The Orchid Room floor ──────────────────────────────────────────────────
+  // WDG's flashiest room had an owner and nobody to work it (Mario, round 43).
+  // Three, and they are the three the room actually needs: the one who works
+  // the corner tables and has learned to be furniture, the one who treats it as
+  // a job with targets, and the one who came up from a beer bar last month and
+  // has not adjusted to any of it. Nothing here leaks the envelope — the corner
+  // tables are canon the player earns elsewhere, and Nune's whole character is
+  // that she would never be the leak.
+  nune: {
+    name: "Nune", th: "นุ่น", emoji: "🌙",
+    room: "orchid_room",
+    look: "Thai woman of twenty-nine, sleek black bob, long neck, minimal make-up, dark silk slip dress, no jewellery at all.",
+    desc: "The only woman in the room not dressed to be looked at from across it: a plain dark slip, " +
+      "no jewellery, hair cut sharp. She works the corner tables, moves like she is not there, and " +
+      "is the calmest person in a room that is not calm.",
+    dialogue: [
+      { text: "She arrives beside you without having crossed the room, which is a skill. \"You want " +
+          "company or you want quiet? Both is fine.\" The smile is real and goes nowhere near her " +
+          "eyes, and she does not seem to be pretending otherwise.",
+        short: "\"Company or quiet? Both is fine.\"" },
+      { topic: "corner|tables|corner tables|those men|the men",
+        text: "\"I work the corner.\" That is the whole answer, and she lets it be, refilling something " +
+          "that did not need refilling. \"Ten years I work rooms like this. The men at the corner " +
+          "table are the same men in every one of them, and the girl who talks about them works " +
+          "one season.\" She looks at you pleasantly. \"Ask me about anything else and I will tell " +
+          "you the truth about it.\"",
+        short: "\"I work the corner. The girl who talks about them works one season. Ask me anything else.\"" },
+      { topic: "quiet|invisible|furniture|not there",
+        text: "\"You noticed.\" She seems mildly pleased. \"Is a job. Loud girls make the money at the " +
+          "front; quiet girls make it at the back, and the back pays better because the back is " +
+          "where the men who cannot be seen sit.\" A small shrug. \"I am very good at being a lamp.\"",
+        short: "\"Loud girls make it at the front, quiet at the back. I am very good at being a lamp.\"" },
+      { topic: "home|from|isan|family",
+        text: "\"Roi Et, and no.\" The 'no' is for the question everybody asks second. \"No farang " +
+          "husband, no house being built, no story. I send money, my mother spends it on people who " +
+          "are not me, and in four years I stop.\" She says the four the way an accountant says a " +
+          "date. \"Then I do something else, somewhere with no music in it.\"",
+        short: "\"Roi Et. No husband, no house, no story. Four more years, then somewhere with no music in it.\"" },
+    ],
+  },
+  pae: {
+    name: "Pae", th: "แป้", emoji: "💎",
+    room: "orchid_room",
+    look: "Thai woman of twenty-six, long hair with a copper tint, heavy gold hoops, gold chain, tight black dress, immaculate.",
+    desc: "Copper in her hair, real gold at her ears, and the immaculate finish of somebody who treats " +
+      "her appearance as capital equipment. Top earner in the room and entirely unembarrassed about " +
+      "it; she will tell you her numbers before she tells you her nickname.",
+    dialogue: [
+      { text: "\"Sit here, not there.\" She moves your drink two feet and you are somehow now at a " +
+          "better table. \"There you see the door. Here you see the room, and the room is what you " +
+          "came for.\" Everything about the manoeuvre is professional and none of it is hidden.",
+        short: "\"Sit here, not there. Here you see the room, and the room is what you came for.\"" },
+      { topic: "money|earn|target|best|top|number",
+        text: "\"This month? I am second.\" She says it the way a rep says it, and the annoyance is " +
+          "genuine. \"Fon is first because a Korean gentleman came four nights and she was on and I " +
+          "was not. Luck is a KPI, nobody tells you that.\" She counts on her fingers, briskly: " +
+          "\"Drink, barfine, and the ones who come back. The third one is the whole job and every " +
+          "new girl thinks it is the first one.\"",
+        short: "\"Second this month, and it was luck. Drink, barfine, and the ones who come back — the third is the job.\"" },
+      { topic: "gold|jewellery|chain|earrings",
+        text: "\"Not a present.\" She turns an earring so you can see the weight of it. \"Every baht of " +
+          "this I bought, and the shop knows me, and if a bad month comes it goes back and comes out " +
+          "again after.\" A cool look. \"Girls who wear a man's gold have to give it back when he " +
+          "goes home. I wear the bank.\"",
+        short: "\"Not a present — every baht of it I bought. Girls who wear a man's gold give it back. I wear the bank.\"" },
+      { topic: "orchid|room|bar|here|work",
+        text: "\"Best floor on the soi and everybody knows it, so the girls here are the ones who can " +
+          "hold it.\" She scans the room while she talks, the way a supervisor does. \"Big money, big " +
+          "rules. No drunk, no {{phone}} at the table, no crying in the toilet where a customer can hear " +
+          "you.\" A flick of the eyes toward the back. \"And you do not look at the corner tables. " +
+          "That one is not a rule anybody wrote down.\"",
+        short: "\"Best floor on the soi, and big rules. And you do not look at the corner tables.\"" },
+    ],
+  },
+  gyp: {
+    name: "Gyp", th: "ยิบ", emoji: "🌱",
+    room: "orchid_room",
+    look: "Thai woman of twenty-two, long straight black hair, round face, simple make-up, borrowed silver dress a size too big.",
+    desc: "A round-faced girl of about twenty-two in a silver dress that is not hers and does not quite " +
+      "fit, watching the other women the way you watch someone doing a job you have just been given. " +
+      "Five weeks off a beer bar in Buakhao and still visibly converting every price into the old one.",
+    dialogue: [
+      { text: "\"Hello — hi — welcome.\" She gets all three out and then laughs at herself for it. " +
+          "\"Sorry. Five week only here. Before, beer bar, Buakhao — is different, na. Very different.\"",
+        short: "\"Five week only here. Before, beer bar Buakhao. Is different, na.\"" },
+      { topic: "different|beer bar|before|buakhao|change",
+        text: "\"Beer bar, you sit outside, everybody see you, you shout at farang walking past, is fun.\" " +
+          "She says fun without irony. \"Here, inside, dark, quiet, and the money is —\" she stops, and " +
+          "does the arithmetic on her face rather than out loud. \"One night here is one week there. " +
+          "So I learn. Mama Sudjai teach me: no {{phone}}, no shouting, no running.\" A rueful grin. \"I " +
+          "run all the time.\"",
+        short: "\"One night here is one week there. So I learn: no {{phone}}, no shouting, no running. I run all the time.\"" },
+      { topic: "topless|dress|clothes|uniform|scared|nervous",
+        text: "\"First week I cry in the toilet.\" She says it cheerfully, which is somehow worse. \"Now, " +
+          "is okay. Is job.\" She tugs at the silver dress, which is not hers. \"This one is Pae's " +
+          "old one. She give me, and she tell me: stand up straight, is easier than being shy.\" A " +
+          "pause. \"She is right. She is right about everything, is very annoying.\"",
+        short: "\"First week I cry in the toilet. Now is okay, is job. Pae gave me the dress — stand up straight, is easier than being shy.\"" },
+      { topic: "home|family|from|money|send",
+        text: "\"Sisaket. My daughter three year old, stay with my mother.\" It arrives without weight, " +
+          "the way a fact does. \"Everybody here have same story, so is not sad story, is just story. " +
+          "I send eight thousand, keep little bit. When I go home she call me pi, not mama.\" She " +
+          "shrugs, and this time it is not cheerful. \"Mai pen rai. Is normal.\"",
+        short: "\"Sisaket, daughter is three, with my mother. She call me pi, not mama. Is normal.\"" },
     ],
   },
 
@@ -14793,6 +14914,7 @@ const NPC_ROLES = {
   kinnaree: "mamasan",
   pancake: "hostess", baitoey: "hostess",
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
+  nune: "hostess", pae: "hostess", gyp: "hostess",   // the Orchid Room floor
   waen: "hostess",   // Kruu Waen at Cloze — she teaches; the trade is still the trade
   kai: "hostess", nook: "hostess", dew: "hostess",
   kat: "hostess", may: "hostess", dear: "hostess",
@@ -15237,7 +15359,7 @@ const _C_LOOK = [
   "A note-counting machine at her elbow and a faster one behind her eyes",
   "A blunt bob, red lipstick, and a stare that reconciles you at a glance",
   "Perched above the till like a lifeguard watching a pool of drunks",
-  "Cash drawer open, phone face-down, all of her attention on the maths",
+  "Cash drawer open, {{phone}} face-down, all of her attention on the maths",
   "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
 ];
 
@@ -15330,6 +15452,7 @@ function _buildCashier(name, th, room, id = name.toLowerCase()) {
 // Candy Bars are absent here) and one cashier per bar. Distribution mirrors the
 // hostesses': every hostess venue gets both; the Queen Vic pub gets neither.
 const _FILLER_MAMAS = [
+  ["Sudjai","สุดใจ","orchid_room"],
   ["Boonsri","บุญศรี","lake_beer"],
   ["Wanida","วนิดา","windmill"], ["Alisa","อลิสา","katoeys"],
   ["Sunee","สุนีย์","doghouse"],
@@ -15347,6 +15470,7 @@ const _FILLER_MAMAS = [
   ["Nittaya","นิตยา","neon_palm"], ["Ratchada","รัชดา","the_bucket"],
 ];
 const _FILLER_CASHIERS = [
+  ["Kae","แก้ว","orchid_room"],
   ["Napa","นภา","lake_beer"],
   ["Nubnab","นับหนับ","windmill"], ["Farida","ฟาริดา","katoeys"],
   ["Tukky","ตุ๊กกี้","doghouse"], ["Noot","นุช","succubus"],

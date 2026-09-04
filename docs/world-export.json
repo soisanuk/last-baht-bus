@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 239,
   "patrons": 24,
-  "people": 333,
-  "portraits": 357,
+  "people": 338,
+  "portraits": 362,
   "renders": 357,
   "thumbs": 357,
   "venues": 239
@@ -1194,6 +1194,15 @@
    "room": "rabbit_hole",
    "th": "กีตาร์"
   },
+  "gyp": {
+   "desc": "A round-faced girl of about twenty-two in a silver dress that is not hers and does not quite fit, watching the other women the way you watch someone doing a job you have just been given. Five weeks off a beer bar in Buakhao and still visibly converting every price into the old one.",
+   "emoji": "🌱",
+   "name": "Gyp",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "orchid_room",
+   "th": "ยิบ"
+  },
   "haad": {
    "desc": "Malila's younger sister and the Verandah's cashier, cut from the same easygoing cloth — she runs the till the way the bar runs everything, slowly and kindly, and always has a bowl of peanuts within reach.",
    "emoji": "🧾",
@@ -1408,6 +1417,16 @@
    "role": "hostess",
    "room": "arrow_bar",
    "th": "เกด"
+  },
+  "kae": {
+   "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at The Orchid Room, from Kalasin.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Kae",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "orchid_room",
+   "th": "แก้ว"
   },
   "kaew": {
    "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Paradise Nights Club's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
@@ -2295,6 +2314,15 @@
    "room": "sunset_rail",
    "th": "น้ำฝน"
   },
+  "nune": {
+   "desc": "The only woman in the room not dressed to be looked at from across it: a plain dark slip, no jewellery, hair cut sharp. She works the corner tables, moves like she is not there, and is the calmest person in a room that is not calm.",
+   "emoji": "🌙",
+   "name": "Nune",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "orchid_room",
+   "th": "นุ่น"
+  },
   "nut": {
    "desc": "Round-faced and quick to laugh — one of Midnight Sun Bar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
    "emoji": "🌙",
@@ -2353,6 +2381,15 @@
    "role": "mamasan",
    "room": "rainbow_girls",
    "th": "ออย"
+  },
+  "pae": {
+   "desc": "Copper in her hair, real gold at her ears, and the immaculate finish of somebody who treats her appearance as capital equipment. Top earner in the room and entirely unembarrassed about it; she will tell you her numbers before she tells you her nickname.",
+   "emoji": "💎",
+   "name": "Pae",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "orchid_room",
+   "th": "แป้"
   },
   "pancake": {
    "desc": "The one on the flyer, and she knows it. Six foot two before the heels, a waist that took surgery and discipline in that order, and a face assembled with the precision of someone who has been getting it exactly right since she was fifteen. She works the front of house because nobody sells the room better — she can read a man's nerve from the doorway and pitch herself accordingly, warm or wicked, in about a second and a half.",
@@ -2939,6 +2976,16 @@
    "room": "succubus",
    "th": "สร้อย"
   },
+  "sudjai": {
+   "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Orchid Room, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Sudjai",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "orchid_room",
+   "th": "สุดใจ"
+  },
   "sumalee": {
    "bars": [
     "lucky7",
@@ -3310,7 +3357,7 @@
    "room": "smile_massage"
   },
   "waen": {
-   "desc": "Hair up in a clip, no make-up worth the name, and a plain dark blouse in a soi of sequins. Reading glasses pushed up into her hair and a piece of chalk in her hand. She works the bar like anybody else here and she does it while marking something, and neither activity appears to interrupt the other.",
+   "desc": "Hair pinned up, red lipstick, a black dress that cost more than the bar took last Tuesday, and reading glasses she is not remotely embarrassed about — she works this floor like everybody else on this soi and she is better at it than most. The chalk in her hand is the other half of the business, and she will happily sell you either.",
    "emoji": "📓",
    "name": "Waen",
    "pronoun": "she",
@@ -3608,6 +3655,7 @@
   "goong",
   "grace",
   "guitar",
+  "gyp",
   "haad",
   "helmut",
   "hong",
@@ -3632,6 +3680,7 @@
   "jun",
   "june",
   "kade",
+  "kae",
   "kaew",
   "kai",
   "kaimook",
@@ -3728,12 +3777,14 @@
   "nubnab",
   "nuch",
   "numfon",
+  "nune",
   "nut",
   "oat",
   "ohm",
   "orm",
   "orn",
   "oy",
+  "pae",
   "pancake",
   "pang",
   "pao",
@@ -3802,6 +3853,7 @@
   "somsri",
   "sopha",
   "sroy",
+  "sudjai",
   "sumalee",
   "sunee",
   "superman",

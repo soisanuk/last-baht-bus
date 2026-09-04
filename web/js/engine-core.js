@@ -929,7 +929,11 @@ function _mamaHere() {
 function _mamaRef(cap) {
   // through _L: this is interpolated INTO an already-translated sentence, so an
   // untranslated word here would leave "der Kuli von the mamasan" in a de run.
-  const s = _L(_mamaHere() ? "the mamasan" : "the cashier");
+  // …and on a one-woman bar there is no mamasan AND no cashier, so it named a
+  // second member of staff who has never worked there (round 43, the one-person
+  // bar audit — sixteen bars of eighty-eight are somebody on her own).
+  const cashier = _npcsHere().some(x => NPC_ROLES[x] === "cashier");
+  const s = _L(_mamaHere() ? "the mamasan" : cashier ? "the cashier" : "the girl on the till");
   return cap ? s[0].toUpperCase() + s.slice(1) : s;
 }
 
@@ -2679,7 +2683,13 @@ function _bellPrice(room) { return Math.round(BELL_PRICE * _drinkMult(room) / 10
 // jobs and should be written as doing both jobs.
 function _staffAt(room) {
   const to = room || G.room;
-  return Object.keys(NPCS).filter(id => _npcActive(id) && _npcRoom(id) === to);
+  // A girl you have taken out is not WORKING, wherever the two of you are.
+  // _npcRoom deliberately puts a companion at your side so every targeted verb
+  // reaches her — which meant she also read as staff of whatever bar you walked
+  // her into, and as still on the rota at her own (round 43 barfine audit). She
+  // is present; she is not on shift.
+  const party = (G.party && G.party.ids) || [];
+  return Object.keys(NPCS).filter(id => !party.includes(id) && _npcActive(id) && _npcRoom(id) === to);
 }
 function _tillKeeper(room) {
   const here = _staffAt(room);

@@ -700,6 +700,13 @@ function _doBarfine(arg) {
       (G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
         "apologetic shrug: take a Soi 6 girl off the floor for a whole night " +
         "this early and the mamasan prices her like a go-go headliner." : ""));
+  } else if (typeof _soleStaff === "function" && _soleStaff(id) && !(NPCS[id] && NPCS[id].owner)) {
+    // she is the only one working, and the canon says a bar this small is hers or
+    // as good as: there is no mamasan to appear and quote you (round 43 audit)
+    _say(`${name} does not call anybody over, because there is nobody to call. She wipes her ` +
+      "hands, works out the number the way you would work out a bus fare, and says it straight " +
+      "at you — and then, because the silence needs filling, tells you what time she has to be " +
+      "back to open up.");
   } else if (NPCS[id] && NPCS[id].owner && typeof _soleStaff === "function" && _soleStaff(id)) {
     _say(`${name} looks at the clock, and then at the eight stools, and does the sum out loud ` +
       "because there is nobody else to do it for her: what is still in the till, what the last " +
@@ -775,7 +782,7 @@ function _bfRefusal(id, bt) {
   // happens?"). It lifts near closing, when shutting up early is a thing she can
   // actually choose to do, and then it costs her the end of the night, which she
   // charges for. Not held: it is the clock, not her mood.
-  if (NPCS[id] && NPCS[id].owner && _soleStaff(id) && G.nightTurn < 55) return { kind: "till" };
+  if (_soleStaff(id) && NPC_ROLES[id] === "hostess" && G.nightTurn < 55) return { kind: "till" };
   // a prized DRAW: the mama won't let her go while she's pulling the early crowd.
   // Not held — it lifts at midnight (come back then, and pay a premium).
   if (_isDraw(id) && G.nightTurn < 60) return { kind: "draw" };
@@ -840,10 +847,14 @@ function _bfRefusalSay(id, r) {
       "customer. You want? Twenty-five lady drink, five thousand bar fine.” It is " +
       "not a price. It is a NO with a number on it. (Come back after midnight, when " +
       "the floor is thin — she'll be cheaper, but never cheap.)",
-    till: `${name} looks along her own bar — eight stools, a till, an ice bin and nobody else ` +
-      `behind any of it — and the answer is in the look before she says it. “And who stands ` +
-      `here?” Not a refusal on principle; a rota with one name on it. “Come back at the end of ` +
-      `the night, when I can put the shutter down and it costs me nothing but the last hour.”`,
+    till: NPCS[id] && NPCS[id].owner
+      ? `${name} looks along her own bar — eight stools, a till, an ice bin and nobody else ` +
+        `behind any of it — and the answer is in the look before she says it. “And who stands ` +
+        `here?” Not a refusal on principle; a rota with one name on it. “Come back at the end of ` +
+        `the night, when I can put the shutter down and it costs me nothing but the last hour.”`
+      : `${name} tips her head at the empty rail beside her. “Tonight only me, na. Nobody for ` +
+        `the till, nobody for the beer.” It is not a no about you and she makes sure you know ` +
+        `it. “Later, when I can close. Come back later.”`,
     sponsor: `${name} touches your arm, honestly sorry: “Cannot now, tilac. My ` +
       "friend — he take care me, I no working while he in town. You " +
       "understand, na?” Everyone understands. It's a calendar, not a heartbreak.",
