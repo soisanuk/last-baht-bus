@@ -3504,6 +3504,15 @@ function _doTalkBody(arg, topic) {
     const _n2 = _convoTopic(topic);
     const gated = NPCS[npc].dialogue.some(e => e.topic && String(e.topic).split("|").some(k => k === topic || topic.includes(k) ||
       (_n2 !== topic && (k === _n2 || _n2.includes(k)))));
+    // A girl's standard deflection is the language itself, and at fluency it is
+    // gone: she cannot say she does not understand a question she plainly did
+    // (Mario, round 42). She still doesn't have to answer — but the refusal has
+    // to be hers, out loud, which is a different thing to be told.
+    if (!gated && typeof _thaiFluent === "function" && _thaiFluent() &&
+        NPC_ROLES[npc] === "hostess" && typeof _thaiVoice === "function" && _thaiVoice(npc)) {
+      _say(_fmt(_pickVary(_THAI_NO_DEFLECT, "thainodeflect"), { n: NPCS[npc].name }));
+      return;
+    }
     _say(gated ? _topicLocked(npc) : _topicMiss(npc));
     _questOffer(npc);
     return;
@@ -4164,6 +4173,28 @@ function _thaiWordTalk(npc, topic) {
 // person, from the Thai-voiced cast. Nont is the deliberate exception — he is
 // luk khrueng, he grew up in both languages, and his register is to clock you as
 // farang and switch to English before you open your mouth.
+// The working floor, once you are past the phrasebook: friendly, and not
+// entirely comfortable. Nobody is unkind and nobody says the real reason.
+// What a hostess has instead of "I no understand", once you have taken that
+// away from her. Nobody is cruel and nobody is caught out; she simply has to
+// decline in her own voice, and both of you can hear her doing it.
+const _THAI_NO_DEFLECT = [
+  "{n} starts the shrug that goes with not understanding, and stops it, because you would know. \"I don't want to talk about that one,\" she says instead, in Thai, and it is the first completely honest sentence of the evening.",
+  "\"Mm.\" {n} looks at the bar top. She cannot do the thing where she doesn't understand the question, and so what you get is a woman deciding, in front of you, not to answer. It is not a nice feeling and it is not meant to be.",
+  "{n} answers a slightly different question, gracefully, in fast Thai — and knows that you noticed she changed it, and lets that sit there between you like a third drink.",
+  "\"You already know I'm not going to say.\" {n} says it lightly, and then, because the door is open anyway: \"Ask me something you actually want to know and I'll think about it.\"",
+];
+const _THAI_SWITCH = [
+  "Somebody catches about half of it, decides that English will be quicker for both of you, and answers you in English before you have finished. Nobody means anything by it; it is simply the faster road, and you are not yet good enough to make it the slower one.",
+  "The reply comes back in English. It always will, at this level — the moment a Thai speaker has to work to follow you, they stop making you work, and the kindness is indistinguishable from the dismissal.",
+  "\"Yes yes,\" in English, warmly, to whatever you just attempted. You are being met halfway by somebody who has decided halfway is faster.",
+];
+const _THAI_SPY = [
+  "{n} listens to you produce a whole sentence, and the smile stays exactly where it is while something behind it recalculates. \"You speak too good.\" A laugh, one beat late. \"You police? Spy?\" It is a joke. It is not only a joke, and she goes back to English for the rest of the night.",
+  "\"Ooh.\" {n} does not say geng this time. She looks at you for a second longer than the conversation needed and then answers in English, deliberately, the way you would put a lid back on something. \"English is okay. English more easy for me.\"",
+  "{n} says something quick to the girl beside her, and the girl looks at you, and neither of them says anything else in Thai for the next hour. Whatever the sentence was, it was about the fact that you understood the last one.",
+  "\"You understand everything?\" {n} asks it lightly, and waits for the answer properly. When you say yes she nods, thinks, and switches to English — not colder, just careful, the way you would be careful with somebody who has turned out to read your post.",
+];
 const _THAI_PRAISE = [
   "{n}'s whole face changes. \"Ooooh — poot Thai geng!\" Palms together, delighted, and slightly too loud. Every farang who has ever said two words in this town has been told this, and it is still nice.",
   "\"Poot Thai dai!\" {n} announces it to the room rather than to you, and the room makes an approving noise. \"Farang poot Thai geng maak.\"",
@@ -4171,14 +4202,54 @@ const _THAI_PRAISE = [
   "{n} claps once. \"Geng! Geng maak!\" Then, testing: something quick and colloquial you catch about half of, and she laughs at your face and lets you off.",
   "\"Oh! Poot Thai.\" {n} shifts a little on the stool — the small physical adjustment of somebody deciding to talk to you rather than serve you.",
 ];
+// ── ADEQUATE, AND THEN FLUENT ───────────────────────────────────────────────
+// Mario's canon (2026-09-04), and it inverts the usual reward shape: on the
+// working floor, understanding Thai is a COST. The farang's inability to follow
+// the language is a load-bearing part of the arrangement — it is why she is
+// needed (she runs the logistics of a life you cannot read), it is what keeps
+// things hideable, and it is the box the customer is supposed to stay in. A man
+// who can hear the rail is overhead: the girls have to be careful near him, he
+// cannot be deflected with "I no understand", and somebody will joke that he is
+// police. Doors open elsewhere — the Thai-side world, the older women, the ones
+// who are off the clock — but the floor gets warier, not warmer.
+//
+// Thai, Korean and German speakers all do the same thing to a competent-but-not-
+// fluent foreigner: they switch to English, because it is faster. So ADEQUATE is
+// its own state with its own reply, and fluency is measured on DISTINCT Thai
+// (repeating sawatdee forever is a phrasebook, not a language) with script use
+// weighted double — a Thai keyboard and the ability to read what you typed is
+// the strongest thing the parser can actually observe.
+const THAI_FLUENT = 10;                       // distinct points before the town stops performing
+function _thaiPoints() {
+  const d = G.thaiSaid ? Object.keys(G.thaiSaid).length : 0;
+  return d + (G.thaiScript || 0);             // script counts twice: once as a phrase, once here
+}
+function _thaiFluent() { return _thaiPoints() >= THAI_FLUENT; }
+// what a Thai character does with your Thai: nothing (a stranger), the polite
+// switch to English (adequate), or actually talking to you (fluent)
+function _thaiRegister() { return _thaiFluent() ? "fluent" : _thaiPoints() >= 3 ? "adequate" : "novice"; }
+
 // Called wherever the player produces correct Thai. Once per character, ever.
-function _thaiPraise() {
+function _thaiPraise(key) {
   if (!_flag("act1Done") && !G.player) return;
   G.thaiUsed = (G.thaiUsed || 0) + 1;
+  if (key) (G.thaiSaid = G.thaiSaid || {})[key] = true;
   const here = _npcsHere().filter(id =>
     id !== "nont" && typeof _thaiVoice === "function" && _thaiVoice(id));
   if (!here.length) return;
   G.soc.thaiPraised = G.soc.thaiPraised || {};
+  // THE PROMOTION IS THE COMPLIMENT STOPPING. "Poot Thai geng" is what you get
+  // while you are still a novelty; when they stop saying it and simply talk to
+  // you, differently, that is the whole reward — and on the floor it comes with
+  // the wariness (_THAI_SPY), because now you can hear the room.
+  if (_thaiFluent()) {
+    const girl = here.find(x => NPC_ROLES[x] === "hostess");
+    if (girl && !G.soc.thaiSpy) {
+      G.soc.thaiSpy = true;
+      _say(_fmt(_pickVary(_THAI_SPY, "thaispy"), { n: NPCS[girl].name }), "alert");
+    }
+    return;
+  }
   const id = here.find(x => !G.soc.thaiPraised[x]);
   if (!id) return;
   G.soc.thaiPraised[id] = true;
@@ -4222,7 +4293,7 @@ function _doSay(arg, targetWord) {
     _say(`You say to ${name}: “${phrase.th}” (${phrase.rom})`, "thai");
     _engineSpeak(phrase.th);
     _sayDirectedReact(key, id, name);
-    _thaiPraise();
+    _thaiPraise(key);
     return;
   }
 
@@ -4254,7 +4325,7 @@ function _doSay(arg, targetWord) {
   } else {
     _say("Laughter and approval. สนุก!");
   }
-  _thaiPraise();   // …and then somebody tells you how good your Thai is
+  _thaiPraise(key);   // …and then somebody tells you how good your Thai is
 }
 
 // The phrases a learner actually arrives with, answered in the room's voice
@@ -9652,6 +9723,13 @@ function doCommand(input) {
       // …and the SAME hint for romanised Thai. Script got a helpful list and
       // romanised got "the soi blinks at you", so a learner who types the way
       // learners type never learned there was a Thai layer (Hugo, round 42).
+      // ADEQUATE gets the switch to English, which is what Thai, Korean and German
+      // speakers all do to a foreigner who is competent but not fluent: it is
+      // faster, and it is not meant unkindly (Mario, round 42).
+      if (!/[\u0E00-\u0E7F]/.test(lower) && _looksThai(lower) && _thaiRegister() === "adequate" && _npcsHere().some(_thaiVoice)) {
+        _say(_pickVary(_THAI_SWITCH, "thaiswitch"), "dim");
+        return;
+      }
       if (!/[\u0E00-\u0E7F]/.test(lower) && _looksThai(lower)) {
         _say("(That sounded like Thai and the soi only reads a little — SAWATDEE, KHOP KHUN, TAO RAI, MAI AO, AROI, SANUK, " +
           "MAI PEN RAI, CHOK DEE, KHOR THOT, SUAY, PHAENG, JAI YEN, KIN KHAO MAI — and Thai numbers, spoken or written.)", "dim");
@@ -9660,7 +9738,7 @@ function doCommand(input) {
       // a Thai line the parser can read becomes the English command; other Thai is voiced, not "didn't understand"
       if (/[\u0E00-\u0E7F]/.test(lower)) {
         const en = _thaiToCmd(lower);
-        if (en) { _say(`(เข้าใจ — ${en})`, "dim"); _thaiPraise(); doCommand(en); return; }
+        if (en) { _say(`(เข้าใจ — ${en})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1; _thaiPraise("script:" + en.split(" ")[0]); doCommand(en); return; }
         _say("(The soi reads a little Thai — ซื้อ, ไป, ดู, น้ำ, เบียร์, เท่าไหร่, สวัสดี, ขอบคุณ — but not that one yet. " +
           "Try it in English, or tap a Thai word for the card.)", "dim");
         return;

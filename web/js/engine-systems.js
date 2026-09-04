@@ -8519,3 +8519,28 @@ function _payCreditor(arg) {
       `฿${_num(b.rentOwed)} still short, and he is still counting the months.`, "alert");
   }
 }
+
+// ── The rail, overheard ─────────────────────────────────────────────────────
+// The other half of Mario's canon (round 42): a farang who cannot follow the
+// language is easy to talk around, and that is load-bearing on the floor. Take
+// it away and two things happen at once — you catch what was never meant for
+// you, and they start being careful, which you also catch. Neither is a reward.
+// Ambient, in a bar, at fluency, rarely, and never about a bonded regular's
+// private business (that belongs to her own beats).
+const _THAI_OVERHEARD = [
+  "Two stools down, in Thai, not quietly enough: \"…he's been here since eight and bought one drink.\" The other one answers something you don't catch. Neither of them has looked at you, and neither of them needs to.",
+  "The mamasan says something short and flat to the girl beside you and the girl gets up. In English it would have been an instruction; in Thai, at this volume, it was not meant to be a sentence you owned.",
+  "Somebody at the far end says the word farang, and then, a beat later and lower, says it again with your seat attached to it. It is not unkind. It is inventory.",
+  "\"Is he listening?\" — in Thai, from behind you, genuinely uncertain. Somebody must have shaken their head, because the conversation carries on, and it is about a landlord, and it is dull, and it is theirs.",
+  "You catch the whole of a small exchange about a bus to Nong Khai on Sunday and the price of a ticket, and you understand every word of it, and you were not supposed to be in the room for it.",
+  "The girl beside you says something to her friend, stops halfway, and finishes it in English for your benefit — which is the moment you understand that from now on, everything near you is going to be translated first.",
+];
+function _thaiOverheard() {
+  if (!_inBar() || G.game || G.pendingEnc || G.pendingChoice) return;
+  if (typeof _thaiFluent !== "function" || !_thaiFluent()) return;
+  if (!_npcsHere().some(id => NPC_ROLES[id])) return;
+  if (G.turns - (G.thaiHeardTurn || -99) < 25) return;
+  if (_rand() > 0.12) return;
+  G.thaiHeardTurn = G.turns;
+  _say(_pickVary(_THAI_OVERHEARD, "thaiheard"), "dim");
+}

@@ -112,7 +112,12 @@ test("the Thai a learner actually types (Hugo)", () => {
   G.room = "candy_bar"; for (const p of ["mai pen rai", "chok dee", "jai yen"]) {
     out = []; run(p); assert.doesNotMatch(text(), /didn't understand|didn't parse|blinks at you/, p);
   }
-  // romanised Thai that misses gets the hint the script always got
+  // romanised Thai that misses gets the hint the script always got — while you
+  // are still a novice; past that the room switches to English instead, which is
+  // what actually happens to a competent-but-not-fluent foreigner
+  assert.equal(_thaiRegister(), "adequate", "he has just said several things");
+  out = []; run("nit noi"); assert.ok(_THAI_SWITCH.some(l => text().includes(l.slice(0, 40))));
+  G.thaiSaid = {}; G.thaiScript = 0; G.room = "beach_rd_c";
   out = []; run("nit noi"); assert.match(text(), /sounded like Thai/);
   out = []; run("i am going to the bar"); assert.doesNotMatch(text(), /sounded like Thai/, "English is not Thai");
   // the ordering words
@@ -191,4 +196,33 @@ test("the town's standard compliment: once per person, and never from Nont (Mari
   assert.ok(!(G.soc.thaiPraised || {}).nont, "not from Nont");
   // and the counter is there for whatever the second tier turns out to be
   assert.ok(G.thaiUsed >= 3);
+});
+
+test("adequate is not fluent, and fluency is a cost on the floor (Mario)", () => {
+  G.room = "candy_bar";
+  assert.equal(_thaiRegister(), "novice");
+  for (const p of ["sawatdee khrap", "khop khun", "chok dee"]) run(p);
+  assert.equal(_thaiRegister(), "adequate", "three distinct phrases is a phrasebook");
+  // repetition is not learning
+  const pts = _thaiPoints(); for (let i = 0; i < 8; i++) run("chok dee");
+  assert.equal(_thaiPoints(), pts, "saying the same thing forever moves nothing");
+  // script counts double — a Thai keyboard is the strongest signal the parser has
+  G.money = 900; run("ซื้อเบียร์");
+  assert.ok(_thaiPoints() >= pts + 2, "script is worth a phrase and a point");
+  for (const p of ["mai pen rai", "suay", "phaeng", "jai yen", "kin khao mai", "aroi"]) run(p);
+  assert.ok(_thaiFluent());
+  // …and now the compliments stop and the floor gets careful
+  G.soc.thaiSpy = false; G.room = "lucky_tiger"; out = []; run("sanuk");
+  assert.ok(_THAI_SPY.some(l => text().includes(l.split("{")[0].slice(0, 12)) || /spy|police|English more easy|understand everything/i.test(text())));
+  assert.ok(!_THAI_PRAISE.some(l => /Poot Thai geng/.test(text()) && text().includes("geng!")), "no more poot Thai geng");
+  // the deflection she used to have is gone
+  const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
+  out = []; run(`ask ${NPCS[g].name} about her sponsor's name`);
+  assert.ok(_THAI_NO_DEFLECT.some(l => text().includes(l.split("{")[0].slice(0, 12))) || /don't want to talk|not going to say|changed it|deciding, in front of you/.test(text()));
+  // and the rail is comprehensible, including the part about being careful
+  G.thaiHeardTurn = -99; let heard = false;
+  const saved = _rand; _rand = () => 0.01;
+  try { for (let i = 0; i < 3 && !heard; i++) { out = []; G.thaiHeardTurn = -99; _thaiOverheard(); heard = _THAI_OVERHEARD.some(l => text().includes(l.slice(0, 30))); } }
+  finally { _rand = saved; }
+  assert.ok(heard, "you catch what was not meant for you");
 });
