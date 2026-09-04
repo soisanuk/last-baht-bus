@@ -85,7 +85,7 @@ test("plain English from a first-timer is pointed somewhere, never 'I didn't und
   assert.match(text(), /LOOK shows where you are/); assert.doesNotMatch(text(), /didn't understand|didn't parse/);
   out = []; run("where am i"); assert.match(text(), /Jomtien Beach/); assert.doesNotMatch(text(), /You talked to/);
   out = []; run("look around"); assert.match(text(), /Jomtien Beach/);
-  out = []; run("i'm lost"); assert.match(text(), /HINT when you're stuck/);
+  out = []; run("i'm lost"); assert.match(text(), /HINT/);   // the wallet clause is stage-gated now (prose review, 2026-09-04)
 });
 
 test("฿5 and a ฿15 fare on the opening night: the phone has one number in it (Bronwyn)", () => {

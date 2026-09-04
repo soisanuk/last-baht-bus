@@ -3480,7 +3480,7 @@ const _REGION_CRASH = {
   "Darkside": "darkside",
 };
 const _OWN_BAR_RESCUE = [
-  "You go down behind your own rail, and the last thing you hear is Bert saying \"right\" in the voice he uses for a keg. You wake in room 412 with your shoes off and lined up, your wallet on the nightstand with a Stinky Pinky beer mat on top of it, and a note in a hand you don't recognise: EAT SOMETHING. The floor got you home. The floor always gets the guv'nor home.",
+  "You go down behind your own rail, and the last thing you hear is Bert saying \"right\" in the voice he uses for a keg. You wake in your own bed with your shoes off and lined up, your wallet on the nightstand with a Stinky Pinky beer mat on top of it, and a note in a hand you don't recognise: EAT SOMETHING. The floor got you home. The floor always gets the guv'nor home.",
   "The room tilts and the floor comes up, and then it's Lamai's voice, very calm, and a taxi that smells of jasmine, and your own bed. Your pockets are exactly as you left them — you own the people who'd have turned them out. There is a bottle of water on the nightstand that wasn't there.",
   "You don't remember the taxi. Bert paid it, out of the till, and wrote it on the docket under the date like any other line — which is the only lecture you'll get. Your wallet is where a wallet should be. The girls know before you do that the guv'nor went down last night, and none of them will mention it, which is worse.",
 ];

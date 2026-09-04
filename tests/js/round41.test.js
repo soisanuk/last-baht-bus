@@ -137,3 +137,21 @@ test("prose review: the 51% is not the bar, and peak season is two months (slice
     assert.match(text(), new RegExp(`it's ${name}, so he's a queue`));
   }
 });
+
+test("prose review: the own-bar rescue wakes you in YOUR hotel, not room 412 (slice 2)", () => {
+  ownsBar(); G.hotel = "metropole"; G.money = 3000; G.thirst = 100;
+  stub(() => _endNight("collapse"));
+  assert.equal(G.room, _hotelRoomId());
+  assert.doesNotMatch(text(), /room 412/, "the Sabai's room number on a man living in the Metropole");
+});
+
+test("prose review: 'nobody walks Sukhumvit' is no longer true, and 'what should I do' knows the stage (slice 5)", () => {
+  assert.doesNotMatch(readFileSync(join(here, "../../web/js/engine-parser.js"), "utf8"), /nobody walks Sukhumvit/);
+  G.room = "beach_rd_c"; assert.ok(_path("beach_rd_c", "khao_talo"), "the Darkside is walkable");
+  out = []; run("what should i do");
+  assert.doesNotMatch(text(), /about your wallet/, "he has had the wallet back for weeks");
+  assert.match(text(), /this town runs on asking/);
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.stage = "act1"; G.room = "jomtien_beach"; out = []; run("what should i do");
+  assert.match(text(), /about your wallet/, "…but in the opening it is the wallet");
+});

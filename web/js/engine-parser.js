@@ -254,7 +254,12 @@ function _naturalHelp(lower) {
   const l = lower.trim();
   if (/^(where am i|where is this|where are we|look around|look about|have a look)\b/.test(l)) { _describeRoom(true); return true; }
   if (/^(what (should|do|can) i do|what now|what next|help me|i'?m (lost|stuck|confused)|i don'?t know what to do)\b/.test(l)) {
-    _say("(LOOK shows where you are. TALK to whoever is here and ASK them about your wallet — this town runs on asking. HINT when you're stuck; HELP for everything.)", "dim");
+    // state-blind before this: an expat weeks past the opening was told to ask
+    // people about a wallet he had back (prose review, 2026-09-04) — gated the
+    // way _helpFirstPage gates the same copy
+    _say(_flag("act1Done")
+      ? "(LOOK shows where you are. TALK to whoever is here and ASK them about anything they've mentioned — this town runs on asking. HINT points at what you're in the middle of; HELP for everything.)"
+      : "(LOOK shows where you are. TALK to whoever is here and ASK them about your wallet — this town runs on asking. HINT when you're stuck; HELP for everything.)", "dim");
     return true;
   }
   return false;
@@ -956,17 +961,18 @@ function _doTravel(arg) {
   const hops = _hops(G.room, dest);
   if (hops === null) {
     // "You can't get there from here" is TRUE and says nothing (Gerry, round
-    // 34). The places TRAVEL can't reach are the ones across the highway — the
-    // Darkside and the lake — and they are motosai-only on purpose: the fare
-    // is the only thing that makes them feel like the different country the
-    // prose keeps calling them. So the refusal keeps the rule and names the
-    // ride, by finding a motosai stop that CAN walk to where you asked for.
+    // 34), so the refusal names the ride instead, by finding a motosai stop that
+    // CAN walk to where you asked for. It no longer claims nobody walks
+    // Sukhumvit: the verge and the crossing went into the exits graph in round
+    // 37 and the crossing is a modelled roll, so the Darkside and the lake are
+    // walkable and this branch is now only for a genuinely unlinked room
+    // (prose review, 2026-09-04).
     const ride = typeof MOTOSAI_DESTS !== "undefined" && Object.keys(MOTOSAI_DESTS)
       .find(k => MOTOSAI_DESTS[k].room === dest || _hops(MOTOSAI_DESTS[k].room, dest) !== null);
     if (ride) {
       const _q = _motoFare(MOTOSAI_DESTS[ride], true), _qNow = _motoFare(MOTOSAI_DESTS[ride]);
-      _say(_fmt("No walking route to {v} — that side is across Sukhumvit, and nobody walks " +
-        "Sukhumvit. The bikes do it in twenty minutes. (MOTOSAI TO {r} — ฿{p}" +
+      _say(_fmt("No walking route to {v} that you know — and it's a long way to be " +
+        "guessing at on foot. The bikes know it. (MOTOSAI TO {r} — ฿{p}" +
         "{late})", { v: _barName(dest) || ROOMS[dest].name, r: ride.toUpperCase(),
           p: _q, late: _qNow > _q ? `, ฿${_qNow} at this hour` : "" }), "dim");
       return;

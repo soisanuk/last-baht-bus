@@ -230,6 +230,10 @@ const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the sho
 // Nont, the second fixer — the priced one. Tan is the favour with no figure on
 // it; Nont is the figure with no favour in it (Mario, 2026-09-04). Thais deal in
 // favours, foreigners pay cash: to a farang he sells, to Tan he owes.
+// Spoken as WORDS in his own dialogue and in _NONT_LOCATE / _TAN_WHO.nont ("two
+// hundred") — a character says a number, he doesn't read a constant. Grep those
+// pools before retuning any of these three, or the flavour goes stale while the
+// charge line moves (prose review, 2026-09-04).
 const NONT_LOCATE = 200;     // where somebody is TONIGHT — anybody, no relationship required
 const NONT_CUT = 0.05;       // his account to your hand: five percent, no card fee, no daily cap (a mule account, in plain sight)
 const NONT_CHARGE = 50;      // a charge off his power bank, no charger of your own needed
