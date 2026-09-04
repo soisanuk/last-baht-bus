@@ -539,11 +539,15 @@ test("teaching is not courting, and the bar is hers (Mario)", () => {
   assert.ok((G.taughtBy || 0) >= 3, "the hours are counted");
   assert.equal((G.soc.drinks || {}).waen || 0, 0, "…on their own track, not the barfine ladder");
   // she is still finable — she works a beer bar and the game does not sanctify her
-  G.nightTurn = 40; G.soc.drinks = { waen: 9 }; G.soc.drinkCount = { waen: 4 };
-  out = []; run("barfine waen");
+  G.soc.drinks = { waen: 9 }; G.soc.drinkCount = { waen: 4 };
+  // …but not while she is the only person behind her own bar
+  G.nightTurn = 40; G.soc.bfRefused = {}; out = []; run("barfine waen");
+  assert.ok(!G.pendingBf, "somebody has to stand there");
+  assert.match(text(), /And who stands here\?/);
+  // it lifts near closing, when shutting up is a thing she can choose
+  G.nightTurn = 58; G.soc.bfRefused = {}; out = []; run("barfine waen");
   assert.ok(G.pendingBf, "the trade is the trade");
-  // …but there is no mamasan at Cloze, so nobody drifts over to do the arithmetic
-  assert.match(text(), /her own barfine, in her own bar/);
+  assert.match(text(), /I close early, then/);
   assert.doesNotMatch(text(), /materialises at your elbow/);
   assert.equal(NPCS.waen.owner, true);
   doCommand("no");

@@ -700,6 +700,11 @@ function _doBarfine(arg) {
       (G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
         "apologetic shrug: take a Soi 6 girl off the floor for a whole night " +
         "this early and the mamasan prices her like a go-go headliner." : ""));
+  } else if (NPCS[id] && NPCS[id].owner && typeof _soleStaff === "function" && _soleStaff(id)) {
+    _say(`${name} looks at the clock, and then at the eight stools, and does the sum out loud ` +
+      "because there is nobody else to do it for her: what is still in the till, what the last " +
+      "hour would have been, and what she is being offered instead. \"I close early, then,\" " +
+      "she says. \"That is the price and it is not rude to say so.\"");
   } else if (NPCS[id] && NPCS[id].owner) {
     // her name is on the lease, so there is nobody to drift over and do the
     // arithmetic: she is the mamasan, the cashier and the girl, and the fee is
@@ -764,6 +769,13 @@ function _bfRefusal(id, bt) {
     (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind, favor: _favor(id) };
     return G.soc.bfRefused[id];
   };
+  // SOMEBODY HAS TO STAND HERE. A one-woman bar's owner cannot leave with you,
+  // and the reason is a rota rather than a virtue: there is no mamasan to cover
+  // and no cashier to hold the till (Mario, round 43 — "who runs the bar if that
+  // happens?"). It lifts near closing, when shutting up early is a thing she can
+  // actually choose to do, and then it costs her the end of the night, which she
+  // charges for. Not held: it is the clock, not her mood.
+  if (NPCS[id] && NPCS[id].owner && _soleStaff(id) && G.nightTurn < 55) return { kind: "till" };
   // a prized DRAW: the mama won't let her go while she's pulling the early crowd.
   // Not held — it lifts at midnight (come back then, and pay a premium).
   if (_isDraw(id) && G.nightTurn < 60) return { kind: "draw" };
@@ -828,6 +840,10 @@ function _bfRefusalSay(id, r) {
       "customer. You want? Twenty-five lady drink, five thousand bar fine.” It is " +
       "not a price. It is a NO with a number on it. (Come back after midnight, when " +
       "the floor is thin — she'll be cheaper, but never cheap.)",
+    till: `${name} looks along her own bar — eight stools, a till, an ice bin and nobody else ` +
+      `behind any of it — and the answer is in the look before she says it. “And who stands ` +
+      `here?” Not a refusal on principle; a rota with one name on it. “Come back at the end of ` +
+      `the night, when I can put the shutter down and it costs me nothing but the last hour.”`,
     sponsor: `${name} touches your arm, honestly sorry: “Cannot now, tilac. My ` +
       "friend — he take care me, I no working while he in town. You " +
       "understand, na?” Everyone understands. It's a calendar, not a heartbreak.",
@@ -8568,6 +8584,14 @@ function _thaiOverheard() {
 // The content is GENERATED from the game's own tables — THAI_PHRASES for the
 // phrases, the script's own consonant classes for the reading, _THAI_CMD for
 // the verbs — so a lesson can never teach a word the parser does not take.
+// Is she the only person working this bar tonight? (Canon: on a small bar the
+// owner is the mamasan is the cashier — and there is nobody to leave the till
+// with.) Cheap and general: any owner-flagged NPC standing her own floor alone.
+function _soleStaff(id) {
+  const room = _npcRoom(id);
+  const staff = (typeof _staffAt === "function" ? _staffAt(room) : []).filter(x => x !== id);
+  return !staff.length;
+}
 function _waenHere() { return G.room === "cloze" && _npcsHere().includes("waen"); }
 const _LESSON_TIERS = ["phrases", "reading", "verbs"];
 function _lessonTier(arg) {
