@@ -8,19 +8,19 @@ var NEWS_FEED = [
     "d": "03 Sep 2026"
   },
   {
-    "t": "Drunken brawl in Thailand sends two USS Abraham Lincoln service members back to ship",
-    "s": "ms.now",
-    "d": "02 Sep 2026"
-  },
-  {
     "t": "70-year-old Brit assaulted on Jomtien Beach, perp arrested immediately",
     "s": "Pattaya Mail",
     "d": "03 Sep 2026"
   },
   {
-    "t": "USS Lincoln crew hits the streets of Thailand's Pattaya after nine-month deployment",
-    "s": "France 24",
-    "d": "04 Sep 2026"
+    "t": "Koh Tao ex-tattoo partners cross paths before knife attack leaves one dead",
+    "s": "Pattaya Mail",
+    "d": "03 Sep 2026"
+  },
+  {
+    "t": "Drunken brawl in Thailand sends two USS Abraham Lincoln service members back to ship",
+    "s": "MS NOW",
+    "d": "02 Sep 2026"
   },
   {
     "t": "USS Abraham Lincoln Pattaya: Why US troops have a history in this raucous Thai city",
@@ -44,23 +44,13 @@ var NEWS_FEED = [
   },
   {
     "t": "U.S.S. Abraham Lincoln Docks in Thailand, Giving Weary Crew a Break",
-    "s": "nytimes.com",
+    "s": "The New York Times",
     "d": "02 Sep 2026"
   },
   {
-    "t": "Rusty USS Lincoln docks in Thailand",
-    "s": "CNN",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "Building Thailand’s Future Today",
-    "s": "World Bank Group",
-    "d": "02 Sep 2026"
-  },
-  {
-    "t": "Mother of USS Abraham Lincoln sailor \"so relieved\" son has arrived in Thailand after record deployment",
-    "s": "CBS News",
-    "d": "03 Sep 2026"
+    "t": "Thailand suspends building of 49 data centres as resource strain concerns grow",
+    "s": "South China Morning Post",
+    "d": "04 Sep 2026"
   },
   {
     "t": "Scientists discover a bizarre “devil flower” hidden in Thailand",
@@ -68,20 +58,30 @@ var NEWS_FEED = [
     "d": "04 Sep 2026"
   },
   {
-    "t": "Thailand Puts 49 Data Centers on Hold Over Resource Strain",
-    "s": "Bloomberg.com",
+    "t": "Thailand: Conviction and prison sentence of pro-democracy student activist Tantawan Tuatulanon on lèse-majesté charges - Fédération internat",
+    "s": "Fédération internationale pour les droits humains",
     "d": "04 Sep 2026"
+  },
+  {
+    "t": "Building Thailand’s Future Today",
+    "s": "World Bank Group",
+    "d": "02 Sep 2026"
+  },
+  {
+    "t": "U.S. Skaters Continue Junior Grand Prix Series in Thailand",
+    "s": "U.S. Figure Skating",
+    "d": "01 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-03","USD":32.98,"AUD":23.72,"GBP":44.52,"EUR":38.31};
+var FX_RATES = {"date":"2026-09-04","USD":32.92,"AUD":23.71,"GBP":44.54,"EUR":38.26};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-04","temp":30,"humid":75,"code":3,"hi":31,"rain":45};
+var WX_NOW = {"date":"2026-09-04","temp":29,"humid":84,"code":3,"hi":32,"rain":45};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-04","done":false,"h":"Ipswich","hs":0,"a":"Liverpool","as":0},{"d":"2026-09-05","done":false,"h":"Newcastle","hs":0,"a":"Bournemouth","as":0},{"d":"2026-09-05","done":false,"h":"Brentford","hs":0,"a":"Sunderland","as":0},{"d":"2026-09-05","done":false,"h":"Brighton","hs":0,"a":"Leeds","as":0},{"d":"2026-09-05","done":false,"h":"Fulham","hs":0,"a":"C Palace","as":0},{"d":"2026-09-05","done":false,"h":"Man City","hs":0,"a":"Coventry","as":0},{"d":"2026-09-05","done":false,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":false,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":false,"h":"Everton","hs":0,"a":"Man United","as":0},{"d":"2026-09-06","done":false,"h":"Arsenal","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4471,"date":"2026-09-04","baht":69750};
+var GOLD = {"usd":4443,"date":"2026-09-04","baht":69150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81196,"thb":2672636};
+var BTC = {"usd":79479,"thb":2614090};
