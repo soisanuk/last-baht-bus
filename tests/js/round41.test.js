@@ -184,3 +184,9 @@ test("prose review slice 1: the claims the authored cast was making", () => {
   G.room = "candy_bar"; G.known.neil = true; out = []; run("talk to neil");
   assert.match(text(), /Sundowner/); assert.match(text(), /Darkside/, "…and the man four districts away is placed");
 });
+
+test("the signed photo behind the bottles answers a close look (slice 1)", () => {
+  G.room = "candy_bar_2"; out = []; run("examine photo");
+  assert.match(text(), /The first Candy Bar/); assert.match(text(), /สู้ๆ/);
+  out = []; run("examine framed photo"); assert.match(text(), /The first Candy Bar/);
+});

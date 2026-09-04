@@ -2240,6 +2240,17 @@ const ROOMS = {
       "same bell over a newer till — the empire expands. Bee works the floor with a " +
       "trainee's energy and the boss's exact smile. A framed photo of the original " +
       "bar hangs behind the bottles, signed 'สู้ๆ — Candy'.",
+    // the photo the room advertises, signed and specific — it answered nothing
+    // until now, which is the dead-end class the examine audit is for (prose
+    // review, 2026-09-04)
+    reads: {
+      photos: "The first Candy Bar, in a cheaper frame than it deserves: six stools, a strip " +
+        "light, a hand-painted sign with the second D squeezed in at the end, and a much " +
+        "younger Candy behind the till with her arms folded, not smiling, daring the camera. " +
+        "Across the corner in silver marker: สู้ๆ — Candy. Fight on. She signed her own photograph " +
+        "and hung it in the second bar where the girls would see it every shift, which tells you " +
+        "most of what the bar is for.",
+    },
     exits: { out: "myth_night" },
   },
 
