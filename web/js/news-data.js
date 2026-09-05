@@ -8,9 +8,9 @@ var NEWS_FEED = [
     "d": "03 Sep 2026"
   },
   {
-    "t": "Drunken brawl in Thailand sends two USS Abraham Lincoln service members back to ship",
-    "s": "MS NOW",
-    "d": "03 Sep 2026"
+    "t": "USS Lincoln crew hits the streets of Thailand's Pattaya after nine-month deployment",
+    "s": "france24.com",
+    "d": "04 Sep 2026"
   },
   {
     "t": "70-year-old Brit assaulted on Jomtien Beach, perp arrested immediately",
@@ -18,9 +18,9 @@ var NEWS_FEED = [
     "d": "03 Sep 2026"
   },
   {
-    "t": "USS Lincoln crew hits the streets of Thailand's Pattaya after nine-month deployment",
-    "s": "France 24",
-    "d": "04 Sep 2026"
+    "t": "British tourist, 70, attacked on Jomtien Beach, Thai man arrested after chase",
+    "s": "Pattaya Mail",
+    "d": "03 Sep 2026"
   },
   {
     "t": "U.S. service members are unwinding in a Thai resort town strained by the Iran war they’ve been fighting",
@@ -33,19 +33,14 @@ var NEWS_FEED = [
     "d": "04 Sep 2026"
   },
   {
+    "t": "After Months at War, Brief Solace in a Party Town Far From Home",
+    "s": "The New York Times",
+    "d": "05 Sep 2026"
+  },
+  {
     "t": "After 286 Days at Sea, Exhausted US Sailors Show the Strain of War",
     "s": "Bloomberg.com",
     "d": "03 Sep 2026"
-  },
-  {
-    "t": "Crew from USS Abraham Lincoln takes a break in Thailand after long months at sea",
-    "s": "apnews.com",
-    "d": "02 Sep 2026"
-  },
-  {
-    "t": "USS Abraham Lincoln docks in Thailand after 9 months at sea",
-    "s": "The Washington Post",
-    "d": "02 Sep 2026"
   },
   {
     "t": "USS Lincoln sailors bathe with elephants in Thailand",
@@ -58,30 +53,35 @@ var NEWS_FEED = [
     "d": "05 Sep 2026"
   },
   {
-    "t": "Miss Thailand could not be competing at Miss Universe 2026 as MUO and Nawat Itsaragrisil dispute escalates",
-    "s": "HOLA",
-    "d": "04 Sep 2026"
-  },
-  {
     "t": "Building Thailand’s Future Today",
     "s": "worldbank.org",
     "d": "02 Sep 2026"
   },
   {
+    "t": "Miss Thailand could not be competing at Miss Universe 2026 as MUO and Nawat Itsaragrisil dispute escalates",
+    "s": "HOLA",
+    "d": "04 Sep 2026"
+  },
+  {
     "t": "Scientists discover a bizarre “devil flower” hidden in Thailand",
     "s": "Science Daily",
     "d": "04 Sep 2026"
+  },
+  {
+    "t": "Abraham Lincoln Carrier Strike Group Arrives in Thailand",
+    "s": "U.S. Embassy & Consulate in Thailand (.gov)",
+    "d": "02 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-04","USD":32.92,"AUD":23.71,"GBP":44.54,"EUR":38.26};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-05","temp":30,"humid":73,"code":51,"hi":32,"rain":43};
+var WX_NOW = {"date":"2026-09-05","temp":29,"humid":82,"code":3,"hi":32,"rain":39};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-04","done":true,"h":"Ipswich","hs":0,"a":"Liverpool","as":2},{"d":"2026-09-05","done":false,"h":"Newcastle","hs":0,"a":"Bournemouth","as":0},{"d":"2026-09-05","done":false,"h":"Brentford","hs":0,"a":"Sunderland","as":0},{"d":"2026-09-05","done":false,"h":"Brighton","hs":0,"a":"Leeds","as":0},{"d":"2026-09-05","done":false,"h":"Fulham","hs":0,"a":"C Palace","as":0},{"d":"2026-09-05","done":false,"h":"Man City","hs":0,"a":"Coventry","as":0},{"d":"2026-09-05","done":false,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":false,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":false,"h":"Everton","hs":0,"a":"Man United","as":0},{"d":"2026-09-06","done":false,"h":"Arsenal","hs":0,"a":"Chelsea","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-04","done":true,"h":"Ipswich","hs":0,"a":"Liverpool","as":2},{"d":"2026-09-05","done":true,"h":"Newcastle","hs":2,"a":"Bournemouth","as":2},{"d":"2026-09-05","done":false,"h":"Brentford","hs":0,"a":"Sunderland","as":0},{"d":"2026-09-05","done":false,"h":"Brighton","hs":0,"a":"Leeds","as":1},{"d":"2026-09-05","done":false,"h":"Fulham","hs":2,"a":"C Palace","as":1},{"d":"2026-09-05","done":false,"h":"Man City","hs":1,"a":"Coventry","as":0},{"d":"2026-09-05","done":false,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":false,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":false,"h":"Everton","hs":0,"a":"Man United","as":0},{"d":"2026-09-06","done":false,"h":"Arsenal","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4431,"date":"2026-09-05","baht":69000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79648,"thb":2620563};
+var BTC = {"usd":79738,"thb":2623536};
