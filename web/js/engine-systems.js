@@ -1035,7 +1035,13 @@ function _nontLocate(topic) {
   const id = Object.keys(NPCS).find(i => i !== "nont" && (NPCS[i].name.toLowerCase() === t || i === t ||
     NPCS[i].name.toLowerCase().split(" ").pop() === t));
   if (!id) return false;
-  if (id === "tan") { _say("“Tan?” The first laugh you've had out of him. “Tan finds YOU. Keep your money.”"); return true; }
+  if (id === "fast_eddy") return false;   // the history, not the locate: his `rabbit|eddy` node answers (Declan, r45)
+  if (id === "tan") {
+    // "the first laugh you've had out of him" was printing on the third night (Declan, r45)
+    if (_flag("nontTanLaugh")) _say("“Tan finds you. Keep your money.” He doesn't look up this time.");
+    else { _setFlag("nontTanLaugh"); _say("“Tan?” The first laugh you've had out of him. “Tan finds YOU. Keep your money.”"); }
+    return true;
+  }
   G.soc.nontTold = G.soc.nontTold || {};
   const room = typeof _npcWhere === "function" ? _npcWhere(id) : _npcRoom(id);
   const name = NPCS[id].name;
@@ -2487,6 +2493,7 @@ function _qGiver(q) {
 }
 function _qAt(q) { return typeof q.at === "function" ? q.at(G) : q.at; }
 function _qDesc(q) {
+  if (q.descBy && G.rabbitWay && q.descBy[G.rabbitWay]) return q.descBy[G.rabbitWay];   // one quest, several ways in
   return (q.descIfSelf && _qGiver(q) !== q.giver) ? q.descIfSelf : q.desc;
 }
 function _questAvailable(qid) {
@@ -2918,7 +2925,8 @@ const _TAN_SIGNOFF = [
 // driver's placing — where they drink, how long, and no secrets.
 function _tanAbout(topic) {
   const t = String(topic || "").toLowerCase().trim();
-  const id = Object.keys(NPCS).find(i => NPCS[i].name.toLowerCase() === t || i === t ||
+  const id = (/^(the )?rabbit$/.test(t) ? "fast_eddy" : null) ||   // the soi calls him Rabbit (Declan, r45)
+    Object.keys(NPCS).find(i => NPCS[i].name.toLowerCase() === t || i === t ||
       NPCS[i].name.toLowerCase().split(" ").pop() === t) ||
     null;
   if (!id || id === "tan") return false;
@@ -8973,6 +8981,8 @@ function _rabbitJobKeyboard() {
   _setFlag("rabbitPath");
   G.rabbitWay = "operator";
   if (G.quests.rabbit_heist !== "done") G.quests.rabbit_heist = "active";
+  G.itemLoc.data_stick = "inventory";
+  G.stickFiles = [];
   _say("\"Good.\" He doesn't make a thing of it. A thumb-sized stick comes across the bar under " +
     "his hand and stays under yours. \"Kitten Corner. Corridor behind the till, office at the " +
     "end, girl on the till watching the corridor — you know what takes a bar girl's eyes off a " +
@@ -9089,13 +9099,24 @@ function _boxTick() {
       "to it, which is the point.", "win");
     _say("(Done. Rabbit said LEAVE it — walk out and don't take it. Or TAKE THE BOX if you " +
       "can't help yourself, and carry the one thing with his prints on it.)", "dim");
-    _setFlag("rabbitData");   // completes rabbit_heist next _questTick
+    _setFlag("rabbitData"); G.rabbitDataDay = G.day;   // completes rabbit_heist next _questTick
     return;
   }
   // a footstep in the corridor — the suspicion beat. A clean player who WAITS
   // rides it out; heat only climbs on a noisy command (see _boxNoise) or on
   // leaving the room mid-job (see _doGo hook).
   if (_rand() < BOX_FOOTSTEP) {
+    j.steps = (j.steps || 0) + 1;
+    // the third footstep gets a door on the end of it: somebody comes IN, and the
+    // milk crate does its job — dread with a payoff, once (Ray, r45)
+    if (j.steps === 3 && !j.doorSeen) {
+      j.doorSeen = true;
+      _say("The door opens. A girl in the bar's T-shirt comes in fast, head down, grabs a cash bag " +
+        "off the crate a foot from the box, says something to nobody about the ice man, and is gone " +
+        "again — the door swinging shut on a room she has already forgotten was occupied. The box " +
+        "pulses amber behind the crate. She never looked. You did not breathe.", "alert");
+      return;
+    }
     j.footstep = true;   // the next command is judged against it
     _say(_pickVary(_BOX_FOOTSTEP_LINES, "boxstep"), "alert");
   }
@@ -9185,7 +9206,7 @@ function _ccibSet() {
 
 function _ccibDue() {
   return _flag("rabbitData") && !_flag("ccibVisited") &&
-    G.room === "white_rabbit" && G.nightTurn >= 20;
+    G.room === "white_rabbit" && G.day > (G.rabbitDataDay || 0);   // "last night" has to be true
 }
 
 // the morning-after scene: coffee, not a warrant. First name only, no threat.
@@ -9220,12 +9241,16 @@ function _ccibVisit() {
       "Boathouse. I mention it only because I know it.\"", "alert");
   if (G.dog && G.rabbitWay !== "kid")
     _say(_dogN("He glances down at Sai Krok, who is under the rail regarding him with professional " +
-      "interest. \"The noodle woman on Soi 6 remembers a farang with a dog. Clipped ear.\" A small " +
+      "interest. \"The girl on the till at Kitten Corner remembers a farang with a dog. Clipped ear.\" A small " +
       "nod at the ear in question. \"Nobody remembers a farang. Everybody remembers the dog.\""), "alert");
   if (_flag("burnerUsed") && G.rabbitWay === "mule" && !_flag("ownPhoneUsed") && G.itemLoc.thai_sim !== "inventory" && !G.dog)
     _say("He does not look at you at all, in the end. Whoever carried that box used a phone that " +
       "leads to the man pouring the coffee, and walked away from it, and was never at a keyboard. " +
       "There is nothing to write down. You can feel him not writing it.", "dim");
+  if (_flag("payoutsCopied"))
+    _say("\"And you copied the ledger.\" Almost approving. \"The envelopes, the dinners, the men in " +
+      "brown. We have had that page since March; it is the page. Keep your copy — it is a useful " +
+      "thing to be known to be holding, and a dangerous one, and I leave it to you which.\"", "alert");
   if (G.itemLoc.thai_sim === "inventory")
     _say("\"You are carrying a SIM,\" he says, not as a question. \"A Buriram address. Not " +
       "yours, not anybody's. We know that address well.\" He lets it sit. \"It is a small thing " +
@@ -9239,8 +9264,7 @@ function _ccibVisit() {
   _say("(Nobody warned you. He told you what he knows and left, which is worse. TALK TO TAN " +
     "when you see him.)", "dim");
   // Eddy goes to ground — theatrically, and for the wrong reason
-  G.soc.hostOut = G.soc.hostOut || {};
-  G.soc.hostOut.fast_eddy = true;
+  G.eddyBackDay = G.day + EDDY_GROUND_DAYS;   // gone for a bit — see _npcActive
   _say("Eddy watches the door for a while after it's shut. \"Right,\" he says, to nobody. " +
     "\"That's me gone for a bit. New number. You don't have it.\" He believes this is about " +
     "him. It is the one thing about last night that isn't.", "dim");
@@ -9259,7 +9283,7 @@ function _ccibLowTick() {
   if (!_flag("ccibVisited") || _flag("ccibCleared")) return;
   if (G.day >= (G.ccibLowUntil || 0)) {
     _setFlag("ccibCleared");
-    if (G.soc.hostOut) G.soc.hostOut.fast_eddy = false;   // Eddy resurfaces
+    G.eddyBackDay = 0;   // Eddy resurfaces
     _say("The White Dish thing is finally in the paper — a group of bars, an investigation, " +
       "words like 'financial irregularities' doing a lot of polite work. No names you know, " +
       "and none of them yours. The footnote got left out, exactly as promised. Eddy's back on " +
@@ -9275,7 +9299,7 @@ function _ccibLowTick() {
   }
 }
 const _CCIB_WATCHED = [
-  "The same forgettable polo shirt is two tables over, not reading the same newspaper he wasn't reading last time. He doesn't look up. He doesn't have to. You order water and it is the most boring thing you have ever done on purpose.",
+  "The same forgettable polo shirt is across the way, not reading the same newspaper he wasn't reading last time. He doesn't look up. He doesn't have to. You keep walking at exactly the pace of a man with nowhere to be, which is the most boring thing you have ever done on purpose.",
   "A motorbike you've seen before idles across the soi for exactly as long as it takes you to notice it, and then doesn't hurry off, which is the message. Somebody is confirming a footnote stays where footnotes stay.",
   "Your phone does the small hiccup a phone does when somebody polite is interested in it. Probably nothing. In this specific fortnight, you decide to believe 'probably' and go home early.",
 ];
@@ -9307,8 +9331,10 @@ function _rabbitWireHand() {
   }
   G.itemLoc.burner = "inventory";
   _say("\"And — not your phone. Never your phone.\" A scuffed prepaid handset comes across " +
-    "the bar under his palm. \"Mine. Registered to nobody you'll meet. The box talks through " +
-    "it, you don't. Lose it after.\" (You're carrying RABBIT'S BURNER.)", "dim");
+    "the bar under his palm. \"Mine. Registered to nobody you'll meet. " +
+    (G.rabbitWay === "operator" ? "If that machine wants a hotspot, it gets this one, not yours. "
+                                : "The box talks through it, you don't. ") +
+    "Lose it after.\" (You're carrying RABBIT'S BURNER.)", "dim");
 }
 
 // The dog is cover AND description, and Rabbit is the professional who says the
@@ -9400,7 +9426,7 @@ function _kidPriceNo() {
 // the offscreen run: he does it his way, and you get a text in the morning
 function _kidTick() {
   if (!_flag("kidPaid") || _flag("rabbitData") || G.day <= (G.kidJobDay || 0)) return;
-  _setFlag("rabbitData");
+  _setFlag("rabbitData"); G.rabbitDataDay = G.day;
   if (typeof _pushMsg === "function")
     _pushMsg("nont", "done. it's on rabbit's stick, stick's under his bar. i was never there and neither were you. delete this.");
   _say("(📱 A text from Nont. CHECK MESSAGES.)", "dim");

@@ -248,6 +248,9 @@ function newGame() {
     darkDoorDay: -1,     // the once-a-night "there's no lights out there" nudge at your own door
     convoPage: 0,        // which window of their open topics the chip bar is showing (see TOPICS)
     boxJob: null,        // Rabbit's mule job while it's live: {turns,heat,done} (see _boxTick)
+    eddyBackDay: 0,      // Rabbit gone to ground until this day (see _ccibVisit / _npcActive)
+    stickFiles: [],      // what has been copied onto Rabbit's stick (READ STICK)
+    rabbitDataDay: 0,    // the day the data landed — the CCIB visit is the morning AFTER
     rabbitWay: null,     // which way into the WDG office you took: "mule" | "operator" (see _rabbitJobYes/_rabbitJobKeyboard)
     ccibRadar: null,     // who CCIB has a file on after the heist: {player,eddy,nont} — set at the morning scene, rides the export (docs/bangkok-concept.md)
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
@@ -906,6 +909,7 @@ function _npcActive(id) {
   // a host you took off the floor tonight is off the floor (HIRE narrated
   // leaving the building while leaving him standing there — persona A#13)
   if (G.soc && G.soc.hostOut && G.soc.hostOut[id]) return false;
+  if (id === "fast_eddy" && G.eddyBackDay && G.day < G.eddyBackDay) return false;   // gone to ground after the coffee (days, not a nightly flag)
   // The regulars' bench (patron: true) keeps its two absences from the old
   // separate table, keyed on the flag so the STAFF never thin (barchain.test
   // pins that): `days` holds a working man to his nights out (David's Mon/Fri),
@@ -1945,6 +1949,10 @@ function _willMove(id) {
 function _venuesHere(r) {
   if (r.venues) return r.venues;
   const out = [];
+  // a windowless interior whose only exit is OUT is not "beside" the bar it opens
+  // into — the back office listed Kitten Corner under "Step inside" (Ray, r45)
+  const keys = Object.keys(r.exits || {});
+  if (!r.bar && !r.barType && keys.length === 1 && keys[0] === "out") return out;
   for (const to of Object.values(r.exits || {}))
     if (ROOMS[to] && ROOMS[to].bar && !out.includes(to)) out.push(to); // one bar, one listing
   return out;

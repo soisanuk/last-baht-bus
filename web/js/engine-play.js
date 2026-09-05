@@ -4930,6 +4930,9 @@ function _cliInput(input) {
   const sc = CLI_SCENARIOS[g.scenario];
   const r = cliInput(sc, g.cli, input, _rand);
   for (const l of r.output) _say(l, "room");
+  for (const f of r.took) { G.stickFiles = G.stickFiles || []; if (!G.stickFiles.includes(f)) G.stickFiles.push(f); }
+  if (r.took.includes("payouts.csv")) { _setFlag("payoutsCopied");
+    _say("(The envelope ledger goes onto the stick. Months, amounts, \"brown\", \"brown+imm\". Not what you came for. The most dangerous page in the room.)", "dim"); }
   // the bonus: Rabbit's old regulars, copied on the way past
   if (r.took.includes("regulars_2019.xls") && G.itemLoc.trade_book !== "inventory") {
     G.itemLoc.trade_book = "inventory";
@@ -4942,7 +4945,7 @@ function _cliInput(input) {
     _say("The file is on the stick. You back out the way you came in — folders closed, window " +
       "the size it was, the golf course back over everything — and the machine goes on waiting " +
       "for its owner exactly as it was. Nothing happened here. That is the entire skill.", "win");
-    _setFlag("rabbitData");   // completes rabbit_heist at the next _questTick
+    _setFlag("rabbitData"); G.rabbitDataDay = G.day;   // completes rabbit_heist at the next _questTick
     return true;
   }
   if (r.lost) {

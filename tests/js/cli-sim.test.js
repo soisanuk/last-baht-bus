@@ -123,3 +123,26 @@ test("the module reaches for no host global", () => {
   for (const noun of [/baht/i, /สนุก/, /WDG/, /Naklua/, /Pattaya/, /Rabbit/])
     assert.doesNotMatch(src, noun, `no host noun ${noun} in the simulator`);
 });
+
+
+test("cd .. at the top says so; ls flags are noted; the prompt shows the full relative path", () => {
+  const st = cliNew(FIX, seq([0.5]));
+  assert.match(cliInput(FIX, st, "cd ..", seq([0.5])).output.join("\n"), /top of what you can reach/);
+  assert.match(cliInput(FIX, st, "ls -la", seq([0.5])).output.join("\n"), /flags ignored/);
+  const deep = { ...FIX, fs: { ...FIX.fs, "/home/u/side": { dirs: ["deeper"], files: {} }, "/home/u/side/deeper": { files: { "x.txt": "x" } } } };
+  const s2 = cliNew(deep, seq([0.5]));
+  cliInput(deep, s2, "cd side", seq([0.5])); cliInput(deep, s2, "cd deeper", seq([0.5]));
+  assert.equal(cliPrompt(deep, s2), "box:~/side/deeper$", "every segment, not just the last");
+});
+
+test("the budget telegraphs at 15 and 5 to go, in the scenario's words or a default", () => {
+  const sc = { ...FIX, budget: 20 };
+  const st = cliNew(sc, seq([0.5]));
+  let warned = [];
+  for (let i = 0; i < 20 && !st.done; i++) {
+    const r = cliInput(sc, st, "ls", seq([0.5]));
+    if (r.output.some(l => /clock icon/.test(l))) warned.push(st.steps);
+  }
+  assert.deepEqual(warned, [5, 15], "warnings land at 15-to-go and 5-to-go");
+  assert.ok(st.lost, "and then it locks");
+});

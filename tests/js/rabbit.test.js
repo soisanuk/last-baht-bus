@@ -302,8 +302,8 @@ test("running out the machine's clock locks it — not a loss of the arc, just n
 
 // arrive at the White Rabbit the morning after, which fires the visit
 function morningAfter() {
-  G.nightTurn = 25; G.room = "naklua_rd";
-  run.length; out = []; _arriveAt("white_rabbit");
+  G.day++; G.nightTurn = 12; G.room = "naklua_rd";   // the morning AFTER — any hour, never the same night
+  out = []; _arriveAt("white_rabbit");
 }
 
 test("the job COMPLETES — CCIB interrupts the follow-through, not the heist", () => {
@@ -376,8 +376,8 @@ test("the kid path: Rabbit can't ask, Nont names a price, the run is offscreen, 
   run("yes");
   assert.ok(_flag("tanKidFavour") && _flag("kidHandled"));
   assert.ok(G.faction.syndicate >= 1, "deeper in — the obligation with no figure on it");
-  // Eddy's guilt line is said aloud, in the one scene that earns it
-  G.room = "white_rabbit"; if (G.soc.hostOut) G.soc.hostOut.fast_eddy = false;
+  // Eddy's guilt line is said aloud, in the one scene that earns it (once he's back)
+  G.room = "white_rabbit"; G.eddyBackDay = 0;
   out = []; run("ask eddy about kid");
   assert.match(text(), /taught|sent you to fetch him back/i);
 });
@@ -468,13 +468,13 @@ test("the lay-low window lifts when the WDG case is the news, and Eddy resurface
   recruit(); intoOffice();
   nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
   morningAfter();
-  assert.ok(G.soc.hostOut && G.soc.hostOut.fast_eddy, "Eddy's gone to ground");
+  assert.ok(!_npcActive("fast_eddy"), "Eddy's gone to ground");
   assert.ok(!_flag("ccibCleared"));
   // jump past the window and tick
   G.day = G.ccibLowUntil + 1; G.room = "beach_rd_c";
   out = []; nofoot(() => run("wait"));
   assert.ok(_flag("ccibCleared"), "the case broke; the footnote was left out");
-  assert.ok(!(G.soc.hostOut && G.soc.hostOut.fast_eddy), "Eddy's back on his stool");
+  assert.ok(_npcActive("fast_eddy"), "Eddy's back on his stool");
 });
 
 test("BREAK SIM only works on Nont's SIM, and is voiced otherwise", () => {
@@ -486,4 +486,155 @@ test("BREAK SIM only works on Nont's SIM, and is voiced otherwise", () => {
   out = []; run("throw sim");
   assert.equal(G.itemLoc.thai_sim, null);
   assert.ok(_flag("simDitched"));
+});
+
+
+// ── Round 45 (Ray the mule, Pri the operator, Declan the kid path) ─────────
+
+test("QUIET is a verb, and STAY QUIET is not the dog", () => {
+  recruit(); intoOffice();
+  const s = _rand; _rand = () => 0.01;   // footstep every tick
+  try {
+    run("wait");                        // footstep armed
+    const h0 = G.boxJob.heat;
+    out = []; run("quiet");
+    assert.doesNotMatch(text(), /didn't understand|soi blinks/);
+    assert.equal(G.boxJob.heat, h0, "quiet is quiet");
+    run("wait"); out = []; run("stay quiet");
+    assert.doesNotMatch(text(), /He stays|he was going to anyway/, "not the dog's STAY");
+    assert.equal(G.boxJob.heat, h0, "and it spends no heat");
+  } finally { _rand = s; }
+});
+
+test("the journal describes the way YOU took (kid and operator never see PLACE BOX)", () => {
+  G.known.nont = true; G.money = 60000; G.room = "white_rabbit";
+  run("talk to eddy", "ask eddy about job", "accept rabbit_job", "ask eddy about job", "the kid");
+  out = []; run("quests");
+  assert.doesNotMatch(text(), /PLACE BOX/);
+  assert.match(text(), /Nont|witnesses/);
+  out = []; newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 9000;
+  _setFlag("white_dish"); G.quests.white_dish = "done";
+  for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+  _npcState("fast_eddy").trust = 3;
+  recruitOperator();
+  out = []; run("quests");
+  assert.doesNotMatch(text(), /PLACE BOX/);
+  assert.match(text(), /LAPTOP/);
+});
+
+test("the CCIB visit is the MORNING AFTER — never the same night", () => {
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  // same night, late: nothing
+  G.nightTurn = 30; G.room = "naklua_rd"; out = []; _arriveAt("white_rabbit");
+  assert.ok(!_flag("ccibVisited"), "'last night' has to be true");
+  // next day, early evening, sitting there: the tick finds you
+  G.day++; G.nightTurn = 8; G.room = "white_rabbit"; out = []; run("wait");
+  assert.ok(_flag("ccibVisited"), "the hour need not be late, and a sitter gets it");
+});
+
+test("Eddy goes to ground for DAYS, and has something to say about the policeman when he's back", () => {
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  assert.ok(!_npcActive("fast_eddy"), "gone");
+  G.day++; G.nightTurn = 20;
+  assert.ok(!_npcActive("fast_eddy"), "still gone the next evening — not a nightly flag");
+  G.day = G.eddyBackDay; 
+  assert.ok(_npcActive("fast_eddy"), "back when the days are up");
+  G.room = "white_rabbit"; out = []; run("ask eddy about the policeman");
+  assert.match(text(), /about me|eleven months|envelope/i, "his wrong-reason version");
+  out = []; run("ask eddy about the box");
+  assert.match(text(), /What box|gone/i, "the box is a thing that happened");
+  out = []; run("ask eddy about kitten corner");
+  assert.match(text(), /Never heard of it/);
+});
+
+test("the burner can be lost, as Rabbit said", () => {
+  recruit();
+  assert.equal(G.itemLoc.burner, "inventory");
+  out = []; run("lose burner");
+  assert.equal(G.itemLoc.burner, null);
+  assert.match(text(), /drain|leads nowhere/i);
+  // or handed back
+  G.itemLoc.burner = "inventory"; G.room = "white_rabbit"; out = []; run("give burner to eddy");
+  assert.equal(G.itemLoc.burner, null);
+  assert.match(text(), /Never saw it/);
+});
+
+test("the stick is an item: handed at KEYBOARD, READ lists what's on it, the ledger is copyable", () => {
+  recruitOperator();
+  assert.equal(G.itemLoc.data_stick, "inventory", "a real object in your pocket");
+  toLaptop();
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy payouts.csv");
+  assert.ok(_flag("payoutsCopied"), "the envelope ledger is worth the space");
+  run("copy wallet.dat");
+  assert.deepEqual(G.stickFiles, ["payouts.csv", "wallet.dat"]);
+  out = []; run("read stick");
+  assert.match(text(), /payouts\.csv/); assert.match(text(), /wallet\.dat/);
+  morningAfter();
+  assert.match(text(), /copied the ledger/i, "the officer knows about the page");
+});
+
+test("during the terminal the CHIP BAR carries every legal move — taps alone finish it", () => {
+  recruitOperator(); toLaptop();
+  const chips = () => _chipSet().map(c => c.cmd);
+  assert.deepEqual(chips(), _gameVerbs(), "the bar IS the option list");
+  assert.ok(chips().length > 3 && !chips().includes("quit"), "not one lonely QUIT");
+  // finish by tapping only what the bar offers
+  const tap = re => { const o = chips().find(v => re.test(v)); assert.ok(o, `chip ${re}`); run(o); };
+  tap(/^read notes/); tap(/^unlock vault/); tap(/^cd vault/); tap(/^copy wallet/);
+  assert.ok(_flag("rabbitData"));
+});
+
+test("the machine telegraphs its clock before it locks", () => {
+  recruitOperator(); toLaptop();
+  const budget = CLI_SCENARIOS.wdg_office.budget;
+  for (let i = 0; i < budget - 16; i++) run("ls");
+  out = []; run("ls");
+  assert.match(text(), /changed the song|been in here a while/i, "a warning at 15 to go");
+  for (let i = 0; i < 9; i++) run("ls");
+  out = []; run("ls");
+  assert.match(text(), /nearly done|your time/i, "and at 5");
+  assert.ok(G.game, "still running");
+});
+
+test("midnight in the office: OUT lets you out the back onto the soi", () => {
+  recruitOperator(); toLaptop(); run("exit");
+  G.nightTurn = 70;   // the bar's shutters are down
+  assert.ok(_closedNow("kitten_corner"));
+  out = []; run("out");
+  assert.equal(G.room, "soi6_deep", "not sealed in a windowless room");
+  assert.match(text(), /fire door|let yourself out/i);
+});
+
+test("Tan knows White Dish and knows who Rabbit is; Nont's Rabbit is history, not a ฿200 locate", () => {
+  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
+  out = []; run("ask tan about white dish");
+  assert.match(text(), /pay to be allowed|tolerance/i);
+  out = []; run("ask tan about rabbit");
+  assert.match(text(), /Fast Eddy|Eddy/);
+  G.known.nont = true; G.room = _npcRoom("nont"); const m0 = G.money;
+  out = []; run("ask nont about eddy");
+  assert.equal(G.money, m0, "no locate fee for the man he has a history with");
+  assert.match(text(), /Rabbit/);
+  // the Tan laugh is terse the second time
+  out = []; run("ask nont about tan"); out = []; run("ask nont about tan");
+  assert.doesNotMatch(text(), /first laugh/);
+});
+
+test("Nont knows you're holding his SIM; MOTOSAI knows the Old Market; DELETE MESSAGE is voiced", () => {
+  G.known.nont = true; G.itemLoc.thai_sim = "inventory"; G.room = _npcRoom("nont"); G.nightTurn = 25;
+  out = []; run("ask nont about sim");
+  assert.match(text(), /You've got one|finish with it/i);
+  assert.ok(MOTOSAI_DESTS["old market"] && MOTOSAI_DESTS["old market"].room === "buakhao_market");
+  out = []; run("delete message");
+  assert.doesNotMatch(text(), /didn't parse|didn't understand/);
+});
+
+test("the back office lists no door to 'step inside'", () => {
+  G.room = "kitten_office"; out = []; _describeRoom(true);
+  assert.doesNotMatch(text(), /Step inside/);
 });

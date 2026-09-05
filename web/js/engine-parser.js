@@ -507,6 +507,15 @@ function _doGo(dirWord) {
   // move invalidates that memory. (Single-door venues: enteredVia === exits.out.)
   const to = (dir === "out" && G.enteredVia) ? G.enteredVia : r.exits[dir];
   G.enteredVia = null;
+  // After midnight the bar you came through has its shutters down; OUT from the
+  // office would bounce off _closedNow. You were inside already — you let yourself
+  // out the back onto the soi instead (Pri, r45: sealed in a windowless room).
+  if (G.room === "kitten_office" && to === "kitten_corner" && typeof _closedNow === "function" && _closedNow("kitten_corner")) {
+    _say("The bar side of the corridor is dark — shutters down, chairs up, the till locked. You find " +
+      "the fire door at the corridor's end and let yourself out into the soi.", "dim");
+    _arriveAt("soi6_deep");
+    return true;
+  }
   // The corridor past Kitten Corner's till is not a public exit: you go BACK
   // there only on Rabbit's job, and only once the girl on the till has her eyes
   // on a drink instead of the corridor (docs/rabbit-arc.md, the mule path).
@@ -525,6 +534,12 @@ function _doGo(dirWord) {
   }
   // Walk out of the office with the box still running and you've left it
   // unattended — the one thing Rabbit told you not to do (docs/rabbit-arc.md).
+  if (G.boxJob && G.boxJob.done && G.room === "kitten_office" && to !== "kitten_office") {
+    G.boxJob = null;   // the run is over; the beat prints once
+    _say("You pull the office door to behind you and walk down the corridor at the speed of a man " +
+      "who was looking for the toilet, past a till you bought a drink at, into a bar that never " +
+      "noticed you leave it. Nobody looks up. That was the entire skill.", "dim");
+  }
   if (G.boxJob && !G.boxJob.done && G.itemLoc.black_box === "kitten_office" && G.room === "kitten_office" && to !== "kitten_office") {
     _say("You can't just walk out and leave it pulsing on the shelf — a box nobody's standing " +
       "next to is a box somebody picks up. (WAIT with it until it's green, or TAKE THE BOX " +
@@ -1372,6 +1387,7 @@ const _READ_NOUNS = {
   menu: ["card", "menus", "price list", "prices", "price board"],
   laptop: ["computer", "machine", "pc", "screen", "lock screen", "post-it", "postit"],
   monitor: ["cameras", "camera", "cctv", "feeds", "feed"],
+  stick: ["usb", "usb stick", "rabbit's stick", "the stick", "under the bar"],
   alley: ["lane", "side alley", "the alley"],
   beach: ["sea", "bay", "water", "gulf", "the beach", "the sea"],
   // the one `reads.board` in the game is Myth Night's DJ request sheet — the
@@ -3204,6 +3220,7 @@ const _WEAR_NO = [
 
 function _doRead(arg) {
   if (/\b(book|regulars|spreadsheet|list)\b/.test(String(arg||"")) && G.itemLoc.trade_book === "inventory") { _readBook(); return; }
+  if (/\b(stick|usb|thumb drive)\b/.test(String(arg||"")) && G.itemLoc.data_stick === "inventory") { _readStick(); return; }
   if (/news|paper/.test(arg)) return _doPaper();
   if (/column|owl/.test(arg)) return _doColumn(); // READ (THE) COLUMN / NITE OWL
   // READ MENU and the bare MENU verb are separate paths and both have to reach
@@ -3832,6 +3849,37 @@ const _TOPICS_NONE = [
   "Nothing doing. {n} answers the people who stick around; come back when you're less of a stranger.",
   "{n} has nothing open for you just now. That changes with drinks bought and nights spent.",
 ];
+// READ STICK — what's on Rabbit's stick (Pri, r45: the point of the job was a flag)
+function _readStick() {
+  const files = G.stickFiles || [];
+  if (!files.length) { _say("Empty. Whatever it's for, it hasn't happened yet."); return; }
+  _say("On the stick: " + files.join(" \u00b7 ") + ". " +
+    (files.includes("wallet.dat") ? "The first is Rabbit's, by arrangement. " : "") +
+    (files.includes("payouts.csv") ? "The ledger is nobody's, and everybody's, and you are the one holding it. " : "") +
+    (files.includes("regulars_2019.xls") ? "The regulars are a book with a history — GIVE it to Eddy, or READ BOOK at your own bar." : ""), "room");
+}
+
+// QUIET IS A VERB — Rabbit says so, and it wasn't (Ray, r45): "quiet" was a parser
+// miss and "stay quiet" sat the dog down and charged a noise. A still, silent turn,
+// wherever you are; in the office it is the whole job.
+const _QUIET_LINES = [
+  "You go still. The room does what rooms do when nobody in them is moving: nothing, loudly.",
+  "You stop, and breathe through your nose, and let a minute go by that belongs to nobody.",
+  "Quiet. The aircon ticks. Somewhere a bass line is a rumour. You are furniture, and furniture is not remembered.",
+  "You hold still the way a man holds still for a photograph he doesn't want taken.",
+];
+function _doQuiet() { _say(_pickVary(_QUIET_LINES, "quiet"), "dim"); }
+
+// LOSE IT AFTER — Rabbit's own instruction for the burner (Ray, r45): it could be
+// dropped and picked back up, and nothing else. Same disposal as the SIM.
+function _doDitchBurner() {
+  if (G.itemLoc.burner !== "inventory") { _say("No burner on you. Your own phone stays where it is."); return; }
+  G.itemLoc.burner = null;
+  _say("You take the back off the burner, thumb the battery out, and drop the halves down two " +
+    "different drains a soi apart, which is more care than the phone was ever shown in its life. " +
+    "A number that led to Rabbit leads nowhere now.", "win");
+}
+
 // THROW/BREAK SIM — the one deliberate act that keeps you off CCIB's file
 // (docs/rabbit-arc.md). A Thai number with no name on it is genuinely useful
 // afterward — the booking app, LINE, every "you have Thai number?" — so the game
@@ -4745,6 +4793,21 @@ function _doGive(itemWord, npcWord) {
     const d = _pickDialogue("pim"); // helmet entry matches on hasHelmet
     _deliver("pim", d);
     _setFlag("helmetDelivered");
+    return;
+  }
+  if (id === "data_stick" && npc === "fast_eddy") {
+    const files = G.stickFiles || [];
+    G.itemLoc.data_stick = null;
+    _say(files.includes("wallet.dat")
+      ? "The stick goes under his palm and stays there. \"Mine now.\" He doesn't look at it; he doesn't need to. \"You were never in that office.\""
+      : "He takes the stick, thumbs it, hands it back. \"Nothing on it I'm owed. Keep it.\" You keep it.", "dim");
+    if (!files.includes("wallet.dat")) G.itemLoc.data_stick = "inventory";
+    return;
+  }
+  if (id === "burner" && npc === "fast_eddy") {
+    G.itemLoc.burner = null;
+    _say("You slide the burner back across under your hand the way it came. He pockets it without " +
+      "looking. \"Never saw it.\" Which is the whole point of it.");
     return;
   }
   if (id === "trade_book" && npc === "fast_eddy") {
@@ -8272,6 +8335,13 @@ function _chipSet() {
     return chips;
   }
   // 2) A live mini-game answers to its own moves only
+  if (G.game && G.game.type === "cli") {
+    // every legal command right now, straight from the module — the tap-reachability
+    // constraint made real on the surface a thumb actually touches (Pri, r45: the bar
+    // showed one chip, QUIT, under an intro that promised "every command is a tap")
+    for (const o of _gameVerbs()) add(o, o);
+    return chips;
+  }
   if (G.game) {
     for (const c of _c4Choices()) add(c, "drop " + c);
     for (const m of _jpChoices()) add("flip " + m, "flip " + m);
@@ -9507,6 +9577,10 @@ function doCommand(input) {
     case "draw": case "cashup": _doDraw(arg); break;
     case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
     case "topics": case "subjects": _doTopics(arg); break;
+    case "delete": case "erase": case "wipe":
+      if (/message|text|msg|sms|it|that/.test(arg || "")) _say("You delete it. It was never there, which is what it said. The phone remembers anyway, somewhere; phones do. You did what you were told.", "dim");
+      else _say("Nothing here to delete.", "dim");
+      break;
     case "accept": _doAccept(arg); break;
     case "abandon": _doAbandon(arg); break;
     case "take": case "get": case "grab": case "pick":
@@ -9882,13 +9956,15 @@ function doCommand(input) {
       else _say("Show what, to whom? (SHOW <thing> TO <someone>)");
       break;
     }
-    case "break": case "snap": case "destroy": case "ditch": case "kill":
+    case "break": case "snap": case "destroy": case "ditch": case "kill": case "lose": case "bin":
       if (/\bsim\b|sim ?card/.test(arg || "")) { _doBreakSim(); break; }
+      if (/burner|rabbit'?s phone/.test(arg || "")) { _doDitchBurner(); break; }
       _say(_pickVary(["Nothing here to break — and the impulse passes.", "You break nothing. The night is fragile enough."], "breakno"), "dim"); break;
     case "throw": case "toss": case "chuck": case "fling":
       // THROW SIM (into the sea off Bali Hai) is the one deliberate act that
       // keeps you off the file; THROW DARTS starts 501; THROW COVER is the ceiling game.
       if (/\bsim\b|sim ?card/.test(arg || "")) { _doBreakSim(); break; }
+      if (/burner|rabbit'?s phone/.test(arg || "")) { _doDitchBurner(); break; }
       // THROW DARTS at a board starts the 501 game; THROW COVER / PASTIE [AT <name>]
       // is the ceiling game; anything else keeps the old flavor refusal.
       if (/\bdarts?\b/.test(arg)) { if (_room().darts) _doPlay("darts"); else _say("No dartboard here to throw at."); }
@@ -10066,7 +10142,9 @@ function doCommand(input) {
       if (G.dog && /\b(boy|dog|lad|girl)\b/.test(arg)) { _dogPraise(v); break; }
       if (_politePhrase(lower) || _convoResolve(lower)) break;
       _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse"); return;
+    case "quiet": case "hush": case "shh": case "shush": case "still": _doQuiet(); break;
     case "stay": case "heel": case "whistle": case "come":
+      if (v === "stay" && /quiet|still|put|silent|low|calm/.test(arg || "")) { _doQuiet(); break; }
       if (G.dog) { _dogPraise(v); break; }
       _say(v === "whistle" ? "You whistle. A soi dog on the far kerb looks up, files you under 'no', and lies back down."
         : "There's nobody here who takes that kind of instruction from you.", "dim");
@@ -10231,7 +10309,7 @@ function doCommand(input) {
   // Babysitting Rabbit's box: a NOISY command on a footstep turn spends heat.
   // Quiet ones ride it out — wait, look, examine, the box itself, the readouts.
   if (G.boxJob && !G.boxJob.done && G.room === "kitten_office" && G.boxJob.footstep &&
-      !/^(wait|z|look|l|examine|x|read|topics|score|time|clock|inventory|i|inv|quests|hint|diagnose|place|help)$/.test(v)) {
+      !/^(wait|z|look|l|examine|x|read|topics|score|time|clock|inventory|i|inv|quests|hint|diagnose|place|help|quiet|hush|shh|shush|still|stay|sit|breathe)$/.test(v)) {
     if (typeof _boxNoise === "function") _boxNoise();
   }
   if (!_FREE_VERBS.has(v)) _tick();

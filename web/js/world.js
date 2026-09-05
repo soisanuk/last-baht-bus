@@ -258,9 +258,13 @@ const CLI_SCENARIOS = {
     prompt: "office-pc:~$",
     home: "/home/office",
     stick: "Rabbit's stick",
-    budget: 40,
+    budget: 60,   // a thorough reader spends ~25 on the files alone (Pri, r45); 40 locked her out unwarned
     goal: "wallet.dat",
-    bonus: ["regulars_2019.xls"],
+    bonus: ["regulars_2019.xls", "payouts.csv"],   // the envelope ledger is the most incriminating page in the room — copyable (Pri)
+    warnLines: {
+      far: "(Through the door the bass drops for a second — somebody's changed the song. You have been in here a while.)",
+      near: "(The girl on the till laughs at something, close. Her drink must be nearly done. So is your time.)",
+    },
     lockLine: "The screen dims, then locks itself with a small polite chime. Somewhere a timer " +
       "you never saw ran out. The login box wants a password you were never going to have.",
     fs: {
@@ -312,6 +316,7 @@ const NONT_SIM = 200;        // "a Thai SIM that isn't in your name" — his own
 // THE KID PATH (docs/rabbit-arc.md): the price Nont names for walking back into the
 // one thing he stepped out of, and the price of making a file into a footnote.
 const KID_PRICE = 15000, KID_CLEAR = 20000;
+const EDDY_GROUND_DAYS = 3;   // how long Rabbit goes to ground after the coffee — for the wrong reason, but gone
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
 // the "off" fee doubles the go-go barfine (canon). Even your own beer is
 // premium-priced (and arrives with ice, whether you wanted ice or not).
@@ -4135,6 +4140,12 @@ const ROOMS = {
       "somehow fuller than the room can explain. Everything is a shade too new: the paint, the " +
       "stools, the confidence.",
     reads: {
+      stick: [
+        { req: ["kidPaid", "rabbitData"], text: "You don't look. You know it's there — taped up under the rail on the far side, a thumb-sized " +
+          "thing with two hundred rows of somebody's money on it — and Eddy knows you know, and neither of you " +
+          "looks. It isn't yours to take and it wouldn't be wise to be seen taking it." },
+        { text: "No stick here that you know of." },
+      ],
       rabbit: "The hand-painted rabbit tumbles down its hole of green ones-and-zeroes, " +
         "brushstroke pixels raining around it. It wants to be The Matrix and lands closer " +
         "to a man describing The Matrix in a bar. Somebody spent real hours on it, and " +
@@ -4783,6 +4794,13 @@ const ITEMS = {
       "well when he's losing. Sven comes in February and August. Klaus sends money in the wet " +
       "season. White Dish took the bar and kept the book, and never used it, and never gave it " +
       "back. (GIVE it to Eddy — or, at your own bar, READ it into your own phone.)",
+  },
+  data_stick: {
+    name: "Rabbit's stick", aliases: ["stick", "usb", "usb stick", "the stick", "rabbit's stick", "thumb drive"],
+    portable: true, location: null, // handed over at KEYBOARD; the files land on it (READ STICK lists them)
+    keepsafe: true,
+    desc: "A thumb-sized stick, unbranded, the cap long lost. Whatever you copy onto it is Rabbit's, " +
+      "by prior arrangement; whatever you don't is nobody's. (READ it to see what's on it.)",
   },
   burner: {
     name: "Rabbit's burner", aliases: ["burner", "burner phone", "rabbit's phone", "the burner"],
@@ -8547,6 +8565,27 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "than being clever.\" He settles back against the car. \"I do not find it for you. You " +
           "would not thank me. But you have my number.\"",
         short: "\"No wallet.\" Not a question. \"Somebody saw — somebody always see. Go and ask, and be polite. I do not find it for you.\"" },
+      // a three-year resident is not an airport friend finding his feet (Declan, r45)
+      { when: (st, G) => _flag("expatLife"),
+        text: "\"My friend.\" Tan comes off the car the way he always does, as though he had been " +
+          "waiting precisely for you and precisely no time at all. \"You look like a man who lives " +
+          "here. It suits you. It does not suit everybody.\"",
+        short: "\"My friend. You look like a man who lives here.\"" },
+      { topic: "white dish|wdg|the group|white dish group",
+        text: "\"White Dish.\" No warmth and no heat either — a weather report. \"A foreign company " +
+          "buying bars on a soi where nobody sells to foreigners. You ask how. I tell you: they pay " +
+          "to be allowed.\" He turns the glass a quarter. \"A Thai man in their position would be " +
+          "owed favours. A farang cannot be owed. So he pays, every month, and calls it business, " +
+          "and the men he pays call it tolerance. Tolerance, my friend, is a thing that can be " +
+          "withdrawn.\" He does not say by whom.",
+        short: "\"White Dish pay to be allowed. Tolerance can be withdrawn.\"" },
+      { topic: "rabbit|the rabbit|fast eddy|eddy",
+        text: "\"Fast Eddy.\" Tan considers the mirror. \"He had a bar and now he has a smaller one, " +
+          "and he thinks the difference is bad luck. It was never luck. He is a man who learned " +
+          "everything about this town except the one thing, and the one thing is that you cannot " +
+          "buy your way inside — you can only be let.\" A small shrug. \"I like him. He makes a " +
+          "good coffee, for a man who drinks soda water.\"",
+        short: "\"Eddy learned everything about this town except the one thing.\"" },
       { text: "\"Ha — my airport friend.\" Tan comes off the car, genuinely pleased, or doing pleased so well " +
           "it makes no difference. \"Still got your wallet? ...Mostly. Good. Most of you I drop once and never " +
           "see again. The ones I see twice—\" a warm shrug \"—those are the interesting ones.\" He tips his " +
@@ -10456,6 +10495,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     dialogue: [
       // a dog gets through the armour where nothing else in the arc does (spec:
       // free Tier-0 characterisation — he greets the dog before he greets you)
+      // back from going to ground — telling it as if he planned it (Ray, r45)
+      { when: (st, G) => _flag("ccibCleared") && !_flag("eddyBackSeen"), sets: ["eddyBackSeen"],
+        text: "“You're still here.” He says it like a man who bet you wouldn't be and is pleased to " +
+          "lose. “So am I. Funny how that works out when you know what you're doing.” He did not " +
+          "know what he was doing. He pours you one and himself nothing. “White Dish are in the " +
+          "paper. Not us. Sit down.”",
+        short: "“You're still here. So am I. White Dish are in the paper — not us.”" },
       { when: (st, G) => !!G.dog,
         text: "He's down off the stool before he's looked at you, one hand out flat, palm down, " +
           "and the dog decides in about a second that this is a man who has fed dogs. “Hello, " +
@@ -10488,7 +10534,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "too long. “Smartest thing I ever did. Everybody keeps telling me it was luck. " +
           "Everybody can get bent.”",
         short: "“Vegas oh-six — a wallet somebody left open. Best thing I ever did. Luck, they say. Bent, I say.”" },
-      { topic: "wdg", text: "“White Dish.” The warmth goes out of it. “I had a bar on Soi 6 — a " +
+      { topic: "wdg|white dish|white dish group|the group", text: "“White Dish.” The warmth goes out of it. “I had a bar on Soi 6 — a " +
           "good one, mine, paid for in Vegas money. Then the suit shows up, all handshakes and " +
           "PowerPoint, and somehow the rent's a problem, the license is a problem, the girls " +
           "get walked across the road one by one, and I'm selling at forty cents on the dollar " +
@@ -10584,12 +10630,71 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "“Job.” He lets the word sit there and go flat. “Everybody's got a job for me, boss, " +
           "and I've got a soda water.” He turns the glass a quarter. “Drink here a while. " +
           "People who drink here a while sometimes hear things.”" },
+      // after the job the box is a thing that happened, not a thing to place (Ray, r45)
+      { topic: "box|black box|the box|device|file|the file|wallet|data|stick|the stick", req: ["rabbitData"],
+        text: "“What box.” Flat, final, and then the ghost of a smile. “It did what it was for and " +
+          "it's gone, and if anybody ever finds it, it's a battery pack with no battery in it. " +
+          "Don't ask me about it in here again, boss. Walls.”",
+        short: "“What box. It's gone. Walls.”" },
+      // the policeman, in his own bar, where he poured the coffee (Ray, r45) — the wrong-reason version
+      { topic: "ccib|police|policeman|officer|coffee|the man|cyber|visit",
+        when: (st, G) => _flag("ccibVisited"),
+        text: "“Him.” The soda glass goes down a little too hard. “Eleven months in that machine and " +
+          "he waits till the night I've finally got a way in, and then he sits at MY bar and drinks " +
+          "MY coffee to tell me about it.” He is not looking at you. “They've had me since the " +
+          "nominee thing. This is them letting me know it. That's all last night was — a message, " +
+          "and I'm the envelope.” He does not consider, at any point, that the message might not " +
+          "have been for him.",
+        short: "“Him. Eleven months, and he waits till my night. It's about me. It's always been about me.”" },
+      // the kid, before the coffee: he sent you and won't say more (Declan, r45)
+      { topic: "nont|kid|the boy|alex|the kid",
+        when: (st, G) => G.rabbitWay === "kid" && !_flag("ccibVisited"),
+        text: "“I said where he is.” He picks up the soda and puts it down without drinking. “Don't " +
+          "make me say the rest of it, boss. I'll say it wrong.”",
+        short: "“I said where he is. Don't make me say the rest.”" },
+      // …and in general: a sharp kid who worked for him once, and Tan's now
+      { topic: "nont|kid|the boy|alex",
+        text: "“Nont?” Something moves and is put away. “Sharp kid. Worked for me when I had the bar " +
+          "— wifi, cameras, the till, everything the Thai side wouldn't explain to a farang and he " +
+          "would. Then Tan found him a table.” A shrug that isn't one. “Tan was right. Leave it there.”",
+        short: "“Sharp kid. Worked for me once. Tan's got him now, and Tan was right.”" },
+      // Kitten Corner, after the job: never heard of it (Ray/Declan, r45)
+      { topic: "kitten corner|the office|corridor|back office|the bar on soi 6",
+        req: ["rabbitData"],
+        text: "“Kitten Corner?” He gives it a moment's honest thought. “Never heard of it. Neither " +
+          "have you.” The nearest thing to a wink he owns.",
+        short: "“Never heard of it. Neither have you.”" },
+      { topic: "kitten corner|the office|corridor|back office",
+        req: ["rabbitPath"], notFlags: ["rabbitData"],
+        text: "“Behind the till. Corridor. Office at the end, with a laptop nobody locks and a shelf " +
+          "nobody looks at.” He counts it on the bar. “Girl on the till watches the corridor. You " +
+          "know what takes a bar girl's eyes off a corridor.”",
+        short: "“Behind the till, the corridor, the office. Drink for the girl on the till.”" },
+      // path-aware DONE: the operator sat at their machine; the kid path never went near it
+      { topic: "job|heist|work|the job|rabbit job|your job|box job",
+        when: (st, G) => _flag("rabbitData") && G.rabbitWay === "operator",
+        text: "“Done.” The nearest thing to a smile he has. “You sat at their machine and left it " +
+          "the way you found it, and what's on my stick is mine now. You were never in that " +
+          "office.” He lifts the soda an inch. “Machines remember, though. Bear that in mind for " +
+          "a while.”",
+        short: "“Done. You were never in that office. Machines remember, though.”" },
+      { topic: "job|heist|work|the job|rabbit job|your job|box job",
+        when: (st, G) => _flag("rabbitData") && G.rabbitWay === "kid",
+        text: "“Done.” He says it to the glass. “The boy did it clean, faster than I would have, " +
+          "and you were never within a mile of it. That's the right way round.” A long beat. " +
+          "“It should never have been him at all. Don't tell him I said that either.”",
+        short: "“The boy did it clean. It should never have been him. Don't tell him I said that.”" },
+      // the OFFERED-but-not-accepted ask: say yes first (Ray, r45 — he typed the quest's own instruction and got a brush-off)
+      { topic: "job|heist|work|the job|rabbit job|your job|box job", chip: false,
+        when: (st, G) => G.quests.rabbit_job === "offered",
+        text: "“Yes or no first, boss.” He doesn't move. “I don't tell it to a man who hasn't said " +
+          "yes to hearing it. (ACCEPT RABBIT_JOB.)”" },
       { topic: "box|black box|the box|device", req: ["rabbitPath"],
         text: "“The box.” He holds up three fingers and folds them down one at a time. “One: " +
           "it wants the group's Wi-Fi, so it goes in THEIR room, not the bar. Two: it works " +
           "on its own, it doesn't need you — but a box on a shelf with nobody standing next to " +
           "it is a box somebody picks up. Three: if it drops, it'll tell you. Pull the cable, put " +
-          "it back. That's the only time you touch it.” He drinks. “And boss — when the light " +
+          "it back. That's the only time you touch it.” He drinks the soda. “And boss — when the light " +
           "goes green, you don't take it with you. You leave it. It's already gone.”",
         short: "“Their room, not the bar. Stay with it. If it drops, pull the cable and put it back. Leave it when it's green.”" },
     ],
@@ -11078,6 +11183,18 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "“Tan will do any of that for nothing and you'll owe him for ever. Me you pay and " +
           "we're square. Pick.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)",
         short: "“Two hundred to find anybody. Five percent on cash. Fifty for the {{phone}}, two hundred for a SIM. Pay me and we're square.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)" },
+      { topic: "sim|thai sim|sim card|the sim",
+        when: (st, G) => G.itemLoc.thai_sim === "inventory",
+        text: "“You've got one.” He doesn't look up. “Buriram. Works. Don't lose it — until you " +
+          "should.” A beat, and then, because he is not going to say it twice: “A farang carrying " +
+          "a Thai name is a thing people notice. When you've finished with it, finish with it.”",
+        short: "“You've got one. When you've finished with it, finish with it.”" },
+      { topic: "job|the job|stick|rabbit's stick|the run|last night",
+        when: (st, G) => _flag("kidPaid") && _flag("rabbitData"),
+        text: "“What job.” The tweezers don't stop. “I was at this table. You were somewhere with " +
+          "witnesses. There's a stick under a bar in Naklua that nobody put there.” The nearest he " +
+          "comes to a smile. “Delete the text. I mean it.”",
+        short: "“What job. Delete the text.”" },
       { topic: "sim|thai sim|sim card",
         text: "“Not in your name. Two hundred.” He doesn't say whose name it is in, and you don't want " +
           "him to. “Works on every tower in the country. Don't do anything with it you wouldn't do " +
@@ -11135,7 +11252,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the number because there isn't one, and that's worse than a number.” A beat. “I'd " +
           "have rather you paid me. But I'm not going anywhere, and neither is the file, so.”",
         short: "“Tan made a call. You'll owe him for me. I'd rather you'd paid.”" },
-      { topic: "rabbit", text: "“Rabbit.” A small pause, weighing how much to hand you. “Yeah. " +
+      { topic: "rabbit|eddy|fast eddy|the rabbit", text: "“Rabbit.” A small pause, weighing how much to hand you. “Yeah. " +
           "Knew him better than most. Old farang, had a bar on the 6 when I was a kid — I ran his " +
           "till, fixed his wifi, translated when the Thai side of things got complicated. He " +
           "taught me the rest. Computers first, then the other stuff.” He sets the tweezers down. " +
@@ -12082,6 +12199,8 @@ const MOTOSAI_DESTS = {
   // (Marco, round 44). The hint was right; the rank was missing.
   "thappraya":      { room: "thappraya_w", price: MOTOSAI_TOWN },
   "supertown":      { room: "supertown_elbow", price: MOTOSAI_TOWN },
+  // Eddy says "Old Market, the table with the phones" and the piwin didn't know the name (Declan, r45)
+  "old market":     { room: "buakhao_market", price: MOTOSAI_TOWN },
 };
 
 // ── Random street encounters ───────────────────────────────────────────────
@@ -12889,6 +13008,14 @@ const QUESTS = {
     desc: "Get the box into the back office at Kitten Corner, set it down (PLACE BOX), and stay " +
       "with it until Rabbit says it's done. The girl on the till watches the corridor — a drink " +
       "takes her eyes off it.",
+    // one quest, three ways in — the journal must describe the way YOU took (Declan, r45)
+    descBy: {
+      operator: "Sit at the laptop in the back office at Kitten Corner (USE LAPTOP), find the file, " +
+        "copy it to Rabbit's stick, and leave the machine as you found it. The girl on the till " +
+        "watches the corridor — a drink takes her eyes off it.",
+      kid: "Rabbit can't ask; you carried it. Nont has his price and his own way in — pay it, go and " +
+        "be somewhere with witnesses, and wait for his text.",
+    },
     at: "kitten_office",
     doneFlag: "rabbitData",
     reward: { money: 0, happy: 6 },

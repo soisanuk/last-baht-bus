@@ -69,7 +69,9 @@ function _cliShort(path) { return path.split("/").filter(Boolean).pop() || "/"; 
 
 function cliPrompt(scenario, state) {
   const p = scenario.prompt || "$";
-  return p.replace(/~/, "~" + (state.cwd === scenario.home ? "" : "/" + _cliShort(state.cwd)));
+  const rel = state.cwd === scenario.home ? "" :
+    state.cwd.startsWith(scenario.home + "/") ? state.cwd.slice(scenario.home.length) : state.cwd;
+  return p.replace(/~/, "~" + rel);
 }
 
 // every legal command right now — the whole point of the data shape
@@ -126,6 +128,8 @@ function cliInput(scenario, state, line, rnd) {
     for (const l of _cliHelp(scenario)) say(l);
   } else if (verb === "ls" || verb === "dir" || verb === "list") {
     const rows = [];
+    if (arg && arg.startsWith("-")) rows.push("(flags ignored — this is a very small machine)");
+    else if (arg) rows.push(`(ls takes no path here — cd first; you're in ${_cliShort(state.cwd)}/)`);
     for (const d of here.dirs || []) {
       const path = _cliJoin(state.cwd, d);
       rows.push(d + "/" + (_cliLocked(scenario, state, path) ? "  [locked]" : ""));
@@ -134,6 +138,7 @@ function cliInput(scenario, state, line, rnd) {
     say(rows.length ? rows.join("\n") : "(empty)");
   } else if (verb === "cd") {
     if (!arg) say("cd where? (ls lists the folders)");
+    else if (arg === ".." && !_cliDir(scenario, _cliJoin(state.cwd, ".."))) say("you're at the top of what you can reach.");
     else {
       const path = _cliJoin(state.cwd, arg);
       const d = _cliDir(scenario, path);
@@ -200,7 +205,14 @@ function cliInput(scenario, state, line, rnd) {
     say(`${verb}: not a thing this machine does. (help lists what is.)`);
   }
 
-  // the only clock: the budget
+  // the only clock: the budget — and it TELEGRAPHS, at 15 and 5 to go, in the
+  // scenario's own words (warnLines) or a plain default
+  if (!state.done && scenario.budget) {
+    const left = scenario.budget - state.steps;
+    const warn = scenario.warnLines || {};
+    if (left === 15) say(warn.far || "(A small clock icon has appeared in the corner of the screen. It was not there before.)");
+    if (left === 5)  say(warn.near || "(The clock icon is blinking. Whatever this machine does when nobody touches it, it is about to do.)");
+  }
   if (!state.done && scenario.budget && state.steps >= scenario.budget) {
     state.done = true; state.lost = true;
     say(scenario.lockLine || "The screen dims, then locks. Whatever timer this machine runs on, you ran it out.");
