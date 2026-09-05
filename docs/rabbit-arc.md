@@ -542,6 +542,40 @@ gave him: that a mutual friend had mentioned the group might have a problem soon
 that a problem is only useful if nobody else is standing in it. **Then he leaves, and
 the case against WDG proceeds without you, exactly as it would have.**
 
+**Why the player lays low — three voices, one of them right (agreed 2026-09-06).**
+Nobody tells the player to lay low in so many words, because the two people who could
+are the two who mustn't.
+
+- **The officer informs; he never warns.** A warning is a threat made, and the faction
+  doctrine says the competent never make one — making it is already a failure. So over
+  the coffee he tells you what he knows, which is everything: how long they have been
+  inside that machine, what you typed, the number the box phoned home on. He never says
+  *don't*. He never says anything about you beyond the facts. Then he leaves. That is
+  worse than a warning — a competent man has just shown you your own name in his file
+  and gone back to work as though you weren't worth a second sentence. The player lays
+  low because he understood that on his own, which is the only way this town teaches
+  anything.
+- **Eddy tells you to lay low, and is wrong about why.** He goes to ground theatrically —
+  shutters the bar for a week, changes his number — because he thinks this is about
+  *him*: the fourth life, the noose. It isn't. CCIB decided he was irrelevant to the
+  case months ago, which for a man who needs to matter is the one thing he cannot hear.
+  His advice is correct by accident and for the wrong reason. That is his verse, sung
+  one more time.
+- **Tan gives the read — and Tan is the mutual friend.** CANON: the syndicate has a
+  working relationship with CCIB, favours both ways, exactly as `docs/factions-thai.md`
+  says influence works; withdrawing tolerance of WDG was never going to be a threat, it
+  was a coffee with someone who was already looking. Tan says so afterward, in his usual
+  register, no favour with a number on it: *"For some weeks, my friend, be boring. It is
+  not about you. They have a case to finish and you are a footnote they would prefer
+  not to write. Footnotes that stay still get left out."* And the player realises Tan
+  didn't read the situation. He is in it. He has been in it the whole time — which is
+  what the hidden hub is for.
+
+So the lay-low period is **Tan's read**, triggered by an officer who never warned, with
+Eddy's advice as the wrong-reason counterpoint. It ends the way Tan says it will: the
+WDG case breaks in the Owl, the footnote is left out, and the flag stays. Being off the
+news is not the same as being off the radar.
+
 **The variable is the RADAR, not the heat.** The heat lands on WDG regardless — they
 are the real outsiders, the ones paying *suay* to be tolerated, and the case is
 already made. What the player's choices decide is **who CCIB now has a file on**, and
@@ -712,6 +746,7 @@ argument for the firewall this arc already has.
 | 2026-09-05 | **Landing decided** (Mario): CCIB's heat lands mostly on WDG no matter what — the real outsiders — and may even acknowledge the player's contribution as the excuse it needed to build the WDG case "for a mutual friend". The player is not scot-free but keeps visa/liberty: lay low until focus is elsewhere (the WDG investigation). The SIM DECIDES the landing (not a computed score). Betrayal fork IN for v1. Operator path yields a recoverable, player-useful thing (TBD in the operator build). |
 | 2026-09-05 | **Phase 2 built — the operator path, on a PORTABLE module.** `web/js/cli-sim.js` loads after `games.js` and follows its doctrine exactly: pure, no G/DOM/clock, injected rnd, plain-data state (lives in `G.game.cli`, so a save resumes the puzzle), data-driven (`CLI_SCENARIOS.wdg_office` in world.js holds every host noun), and **enumerable moves** — `cliOptions()` lists every legal command, a password only becoming a chip once READ. `tests/js/cli-sim.test.js` loads ONLY the module (the portability assertion) and proves tap-reachability by breadth-first search over the options to the win; it also greps the source for host nouns and globals. Host wiring: KEYBOARD at the interview → `G.rabbitWay="operator"` + Rabbit's stick (no item) → same corridor gate → USE/SIT AT LAPTOP → `G.game.type="cli"` through the real game router (`_gameInput/_gameBoard/_gameVerbs/_renderGame`, QUIT = EXIT, no stake). Won → `rabbitData`; budget lock → retry another night, no flag; EXIT keeps what was copied. **The reward decided (Mario: "something recoverable, interesting, useful"): Rabbit's old regulars** — `regulars_2019.xls` in the office archive, WDG lifted it with his bar and never used it. Copy it and it is an item (`trade_book`) with a fork: GIVE it to Eddy (trust +2, +2 สนุก, his best line) or READ it at your own bar (`barBook` → takings × `BOOK_TAKINGS` 1.06 — the European trade he survives on, now yours; he hears, and says so, and doesn't ask). Not the crypto, so the inversion stands. |
 | 2026-09-06 | **WDG was already under CCIB investigation** for crypto laundering before the arc begins. The heist doesn't bring CCIB — it nearly BLOWS their case, and CCIB interrupts it: the job completes (both built paths stand) but the follow-through is taken from Rabbit by a plainclothes visit the morning after, coffee not warrant, "a mutual friend mentioned the group might have a problem soon". The heat lands on WDG regardless. **The variable is the RADAR** — `G.ccibRadar = {player, eddy, nont}` — Eddy always; the player if operator / own phone / holding a Thai SIM; Nont if his SIM or the kid. No visa/deportation/jail: the player lays low for weeks (a second visit possible, WORK notes it, Tan reads it) until the WDG case is the news. The four-way "who takes the heat" fork is retired. The radar flags are the Bangkok seed and should ride the export. |
+| 2026-09-06 | **Tan is the mutual friend** (canon): the syndicate and CCIB have a working relationship, favours both ways; WDG's tolerance was withdrawn as a coffee with someone already looking. The lay-low is Tan's read, not a CCIB warning (they inform, never warn) and not Eddy's advice (he goes to ground for the wrong reason — he thinks it's about him). |
 | 2026-09-06 | **CCIB heat: CLOSED** — neither scripted-landing nor computed; the landing is fixed (WDG) and the radar is set by three legible facts (path, wire, SIM held). |
 
 | open | Betrayal fork in v1 (tentative yes). |

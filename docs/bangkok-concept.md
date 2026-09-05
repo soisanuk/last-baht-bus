@@ -140,6 +140,52 @@ decided isn't really listening."*
 (The mother — **Duangjai** — is now built, cashier at **The Boathouse**, `lake_bar`; the beer
 bar next door is **The Sundowner**, `lake_beer`.)
 
+### What LBB hands over — the radar, and the asset (agreed 2026-09-06)
+
+The Rabbit arc's climax (`docs/rabbit-arc.md`, *CCIB — the fourth verse*) was reframed: WDG
+was **already under CCIB investigation** for crypto laundering, the heist nearly blows that
+case, and CCIB interrupts the follow-through. The heat lands on WDG regardless. What LBB
+actually decides — and exports — is **who CCIB now has a file on**: `G.ccibRadar = { player,
+eddy, nont }`, three flat booleans on the baton. This is the single most important thing LBB
+hands this game, and it is Nont's origin story finishing.
+
+**Mario's lean, adopted here as the working thesis: Nont becomes a CCIB HUMINT asset — a
+human source they hold leverage over because of what he has done.** Not a convert, not an
+informer by conviction, not a villain: a young man who sold mule SIMs out of the Old Market,
+ran a `CASH` channel through a mule account in plain sight, and once carried the wire for a
+farang's heist — all documented, none of it charged, because a competent institution keeps
+the useful ones outside. *"You are more use to us where you are."* That sentence is the
+recruitment, and it is also the engine of his defining mechanic: the code-switch was always a
+man nobody thinks is listening. Now somebody is paying him to listen. **Doctrine, same as
+everywhere in this universe: structural, never moral.** Nobody grades him; the position is the
+antagonist; being an asset is a thing that happened to him, the way the position happened to
+the bar owner who fell for his hostess.
+
+**How each LBB outcome shapes the leverage** (the reverse test applies — the Bangkok game
+must open cleanly under all four states, with the radar as a *bonus*, never a key):
+
+| LBB export | What CCIB has on Nont at the start of Bangkok | What it does to the opening |
+|---|---|---|
+| `nont: false` (mule path, Rabbit's burner, no kid) | **Nothing.** The Old Market trade is known the way weather is known; there is no file. | The leverage has to be built inside the Bangkok game — or the pull is **Tan's unpriced favour** instead, the other hook this doc already carries. Two openings, one protagonist. |
+| `nont: true` via **the SIM only** | **His channel, not his face.** Buriram → the table → a number pattern; a name on a list, not a man in a room. | He does not know. The Bangkok opening is the tap on the shoulder — the first time anyone tells him a file exists — and the player learns it with him. |
+| `nont: true` via **the kid path** | **Everything, and personally.** He was in it; Rabbit's guilt line was said aloud; Tan's favour was spent on him, or a farang's cash was. | He knows. He has known since a coffee he wasn't invited to. The Tan-calls-it-in hook is **weaker or reversed** (the favour is already spent — Tan may now owe *him* the quiet), and the leverage is total. The darkest and richest opening. |
+| `player: true` (operator / own phone / SIM held) | The LBB farang is in the same file. | A cameo, or a complication: the footnote turns up in Bangkok as a man CCIB can still name. Never required. |
+| `eddy: true` (always) | Rabbit is *known*, not charged. | The Bangkok Rabbit's constraint: a man planning a fourth life whom a competent institution simply keeps an eye on. He can bridge; he cannot hide. |
+
+**What an asset does, in play.** Not a mission-giver. Leverage means *asks* — a name, a number,
+a night's location, exactly Nont's own LBB trade turned inside out — arriving as a
+`pendingChoice` the player answers YES / NO / ASK, declining always free of *standing* but
+never free of *file*: the same shape as Tan's favour and the syndicate jobs, from the other
+side of the wall. The code-switch is the tool; the asks are what it is for. The reverse test
+and the accessibility rules above hold: no ask may require the CLI, and no ask may be the only
+way forward.
+
+**Guardrails, restated for this specifically.** CCIB stays a competent institution doing a real
+job — recruiting a source with leverage is a real thing real agencies do and is not an
+allegation; no named officers, no real cases, no how-to. The mule-SIM and mule-account trade
+is depicted as the ordinary economy it is, not glamorised. And Nont's mother never learns
+which — the tiffin still reads differently afterward, and nothing in her dialogue changes.
+
 ### Quest hook — "a reason to visit the lake" (BUILT 2026-08-15 as `lake_errand`)
 
 **Built as spec'd, spec kept below as the design record.** `QUESTS.lake_errand` "Look In on
@@ -193,6 +239,10 @@ the no-signpost test above.
   (barfine, treadmill, venue tiers) does **not** come along.
 - **Canon bridges:** Eddy/Rabbit, Tan, WDG, *suay* — shared canon, and the CTF/CLI-sim work
   (`docs/ctf.md`, `docs/rabbit-arc.md`) is the thematic and mechanical seed already built.
+- **Carried state (the baton):** `G.ccibRadar = { player, eddy, nont }` — three booleans set by
+  the Rabbit arc's ending, read by this game on day one. Flat, boolean, named; nothing else
+  about the heist needs to cross (see *What LBB hands over* above). `cli-sim.js` crosses as a
+  file, not as state.
 - **Scoping:** vertical + bounded (the husk's floors, the elevator as the room-graph) beats
   Bangkok's horizontal sprawl; the rest of the city is a destination-menu that resolves as
   scenes, not walkable pockets. ~40–80 dense rooms, depth over breadth. See the reasoning in the
@@ -263,7 +313,9 @@ them see it; let the LBB player *recognise* it.
 - Core loop spine: heist-crew (the Rabbit-arc fork scaled up) vs. noir investigation vs.
   survival/hustle — probably one spine with the others hanging off it. Not yet chosen.
 - The protagonist's *pull* to Bangkok and their starting debt/leverage (who sent them, what they
-  owe, to whom).
+  owe, to whom). **Part-answered 2026-09-06:** the leverage is CCIB's, built from what he did in
+  LBB (see *What LBB hands over*); the pull is either that or Tan's favour, by export state.
+  Still open: which of the two the game leads with when both are live.
 - Tone/darkness ceiling: noir vs. satire vs. thriller (LBB blends grounded-sad + sharp-funny;
   the ceiling is higher here).
 - Whether the code-switch mechanic is a hard binary (pick a face per scene) or a fluid,
@@ -276,4 +328,5 @@ them see it; let the LBB player *recognise* it.
 | 2026-08-13 | Concept committed to the repo (not siloed). Thesis: reveal Bangkok as already-cyberpunk, anti-fantasy per LBB doctrine. |
 | 2026-08-13 | Research killed the "living Pantip" assumption (it died / became a food-wholesale hub); the **husk** is the setting instead, and it's stronger. Scam/laundering economy, CCIB competence, and the liability/surveillance regime verified as real and current. |
 | 2026-08-13 | Protagonist = *luk khrueng*, Pattaya-raised, fluent both, knows Eddy and Tan → the broker between the farang cyber-underground and the Thai patronage web. Central tension (Eddy wants WDG dead / Tan's syndicate profits from WDG alive) is pre-existing LBB canon. Signature mechanic: code-switching. |
+| 2026-09-06 | **Nont → CCIB HUMINT asset** (Mario's lean, adopted): leverage from what he did in LBB — mule SIMs, the CASH mule channel, the heist wire, the kid path — none charged, all kept. LBB exports `G.ccibRadar = {player, eddy, nont}`; a table maps each state to what CCIB holds and how the opening changes (no file → Tan's favour is the pull; SIM-only → he doesn't know, the opening is the tap on the shoulder; kid path → he knows, total leverage, Tan's hook reversed). Structural, never moral; reverse test holds (radar is a bonus, never a key); asks arrive as YES/NO/ASK modals from the other side of the wall. |
 | 2026-09-03 | **Accessibility section added** after the LBB pass (Nok opening / Tan's habit / Owl's five words). The reverse test is a hard rule: every scene must work for a player who never played LBB; LBB payoffs are bonuses, never keys. The code-switch must telegraph; the CLI sim is never a literacy test. |
