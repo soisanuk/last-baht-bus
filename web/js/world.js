@@ -309,6 +309,9 @@ const NONT_LOCATE = 200;     // where somebody is TONIGHT — anybody, no relati
 const NONT_CUT = 0.05;       // his account to your hand: five percent, no card fee, no daily cap (a mule account, in plain sight)
 const NONT_CHARGE = 50;      // a charge off his power bank, no charger of your own needed
 const NONT_SIM = 200;        // "a Thai SIM that isn't in your name" — his own greeting promised it (Piotr, round 40)
+// THE KID PATH (docs/rabbit-arc.md): the price Nont names for walking back into the
+// one thing he stepped out of, and the price of making a file into a footnote.
+const KID_PRICE = 15000, KID_CLEAR = 20000;
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
 // the "off" fee doubles the go-go barfine (canon). Even your own beer is
 // premium-priced (and arrives with ice, whether you wanted ice or not).
@@ -4781,6 +4784,13 @@ const ITEMS = {
       "season. White Dish took the bar and kept the book, and never used it, and never gave it " +
       "back. (GIVE it to Eddy — or, at your own bar, READ it into your own phone.)",
   },
+  burner: {
+    name: "Rabbit's burner", aliases: ["burner", "burner phone", "rabbit's phone", "the burner"],
+    portable: true, location: null, // handed over at the interview when you've no Thai SIM
+    desc: "A scuffed prepaid phone, screen cracked in one corner, registered to a name that is " +
+      "not Rabbit's and leads to Rabbit anyway if anybody cares to walk the chain. His first " +
+      "rule, said once: not your phone. This is what not-your-phone looks like.",
+  },
   black_box: {
     name: "black box", aliases: ["box", "rabbit's box", "the box", "device", "eddy's box"],
     portable: true, location: null, // Rabbit hands it over on ACCEPT
@@ -8574,6 +8584,19 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // TAN'S READ on the CCIB visit — the mechanic's real voice. Gated after the
       // morning scene, once; sets ccibReadGiven, which arms the second-look roll
       // and IS the "why am I laying low" answer. Tan is the mutual friend (canon).
+      // the kid-path version of the read: Tan offers the call. Sets ccibReadGiven so
+      // the plain read below is skipped; the modal is armed by fx (see _kidFavourAsk).
+      { topic: "ccib|police|cyber|coffee|visit|officer|the man|laying low|lay low|radar|watched|kid|nont",
+        when: (st, G) => _flag("ccibVisited") && _flag("kidPath") && !_flag("ccibReadGiven") && !_flag("ccibCleared"),
+        sets: ["ccibReadGiven"], chip: false,
+        fx: () => { if (typeof _kidFavourAsk === "function") _kidFavourAsk(); },
+        text: "“So. You had a coffee. And the boy had one too.” He says it without weight, which " +
+          "is how you know the weight. “I put him at that table so nobody would ever pour him " +
+          "one. I did not price it, because I do not price things. And now there is a file with " +
+          "his mother's name in it, because a farang wanted a box carried and another farang " +
+          "wanted to help.” He is not angry. He is doing the arithmetic out loud, the way the " +
+          "officer did, and you notice for the second time whose gesture that is.",
+        short: "“You had a coffee, and the boy had one too. I put him at that table so nobody would pour him one.”" },
       { topic: "ccib|police|cyber|coffee|visit|officer|the man|laying low|lay low|radar|watched",
         when: (st, G) => _flag("ccibVisited") && !_flag("ccibReadGiven") && !_flag("ccibCleared"),
         sets: ["ccibReadGiven"],
@@ -10431,6 +10454,26 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "fine. The care he takes not to look at your glass says it mostly is.",
     ],
     dialogue: [
+      // a dog gets through the armour where nothing else in the arc does (spec:
+      // free Tier-0 characterisation — he greets the dog before he greets you)
+      { when: (st, G) => !!G.dog,
+        text: "He's down off the stool before he's looked at you, one hand out flat, palm down, " +
+          "and the dog decides in about a second that this is a man who has fed dogs. “Hello, " +
+          "mate,” Eddy says, to the dog, with more warmth than you will hear him spend on a " +
+          "person all night. Then, straightening, back in the armour: “Fast Eddy. My place. He " +
+          "can stay. You can stay if he says so.”",
+        short: "“Hello, mate,” to the dog first. Then: “Fast Eddy. He can stay; you can if he says so.”" },
+      // THE GUILT LINE, said aloud in the one scene that earns it (kid path, after the coffee)
+      { topic: "kid|nont|the boy|alex|the kid",
+        when: (st, G) => _flag("kidPath") && _flag("ccibVisited"),
+        text: "He doesn't answer for long enough that you think he won't. “I taught that kid to " +
+          "read a network before he could read a bar tab. Then I taught him the other thing, " +
+          "because I was good at it and it was the only thing I was good at and I wanted somebody " +
+          "to see.” The soda goes down untouched. “Tan pulled him out. I let him. I told myself " +
+          "that was me doing right by the boy — letting somebody else do it.” He looks at you " +
+          "properly. “And then I sent you to fetch him back. So don't tell me I'm sober, boss. " +
+          "I'm just not drinking.”",
+        short: "“I taught him the other thing because I wanted somebody to see. Then I sent you to fetch him back.”" },
       { text: "“Fast Eddy.” He says it like it should land, and waits half a beat to see if " +
           "it does. “My place — the White Rabbit. You get it? Down the hole, other side of " +
           "the glass.” He taps the painted rabbit without looking at it. “Coldest, cheapest " +
@@ -11057,6 +11100,41 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "not given me anything to be late WITH. Send me something first and then come and stand " +
           "there like that. I'll enjoy it more.”",
         short: "“You've not given me anything to be late with. Send me something first.”" },
+      // THE KID PATH (docs/rabbit-arc.md). Rabbit can't ask; you carry the request.
+      // Nont does not do favours, so he prices it — the first price he has named
+      // that he plainly wishes you wouldn't meet. The node only ARMS the modal.
+      { topic: "job|rabbit|the job|eddy|rabbit's job|heist", chip: false,
+        when: (st, G) => G.rabbitWay === "kid" && !_flag("kidPaid") && !_flag("kidRefused"),
+        fx: () => { if (typeof _kidPriceAsk === "function") _kidPriceAsk(); },
+        text: "He hears the name and something in his face closes and opens again in the same " +
+          "second, like a shutter. “Rabbit sent you.” Not a question. “He can't ask me himself. " +
+          "Good. That's the one decent thing he's done.” He looks at the {{phone}} in his hand for a " +
+          "long moment, and it is the only time you have seen Nont look at a {{phone}} as if he " +
+          "didn't want to." },
+      // after the coffee: he knows, or he doesn't, and either way the tiffin reads differently
+      { topic: "ccib|police|coffee|the man|radar|file|kid|job",
+        when: (st, G) => _flag("kidPath") && _flag("ccibVisited") && !_flag("kidHandled"),
+        text: "“They came to the market.” He says it lightly, the way he says everything, and " +
+          "his hands do not stop working on the {{phone}} in front of him. “A coffee. He knew my " +
+          "mother's name. He knew the school.” A shrug that costs him. “I'm not going anywhere. " +
+          "That's the point of it — I'm more use here. You understand what that means? I do " +
+          "now.” He finally looks up. “There's a price on making a file into a footnote. There " +
+          "always is. Mine's " + "฿" + KID_CLEAR.toLocaleString() + ", through the same door the " +
+          "money always goes. (PAY NONT " + KID_CLEAR + ".) Or don't. Tan will do it for " +
+          "nothing, and you'll owe him for me, and I would rather you paid.”",
+        short: "“A coffee, at the market. I'm more use here — I understand that now. " + "฿" + KID_CLEAR.toLocaleString() + " makes it a footnote. (PAY NONT " + KID_CLEAR + ".)”" },
+      { topic: "ccib|police|coffee|the man|radar|file|kid|job", req: ["kidCleared"],
+        text: "“Paid.” He doesn't say thank you. He never has, and it would frighten you if he " +
+          "started. “The price was fair. That's the whole of what I'll say about it.” He goes " +
+          "back to the {{phone}}. “They still have the file. They'll always have the file. It's just " +
+          "shorter now, and nobody's reading it.”",
+        short: "“Paid. The price was fair. They still have the file; it's just shorter.”" },
+      { topic: "ccib|police|coffee|the man|radar|file|kid|job|the call", req: ["tanKidFavour"],
+        text: "“Tan made a call.” He says the name the way he always says it — straightening " +
+          "slightly, like a boy at a desk. “I know what that costs. Not him — you. He'll never say " +
+          "the number because there isn't one, and that's worse than a number.” A beat. “I'd " +
+          "have rather you paid me. But I'm not going anywhere, and neither is the file, so.”",
+        short: "“Tan made a call. You'll owe him for me. I'd rather you'd paid.”" },
       { topic: "rabbit", text: "“Rabbit.” A small pause, weighing how much to hand you. “Yeah. " +
           "Knew him better than most. Old farang, had a bar on the 6 when I was a kid — I ran his " +
           "till, fixed his wifi, translated when the Thai side of things got complicated. He " +

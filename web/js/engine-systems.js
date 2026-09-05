@@ -8944,11 +8944,14 @@ function _rabbitInterview() {
 }
 
 function _rabbitJobPrompt() {
+  const kid = !!(G.known && G.known.nont) && !_flag("kidRefused");
   _say("\"So. Two ways in. The box does the clever part and somebody carries it and holds " +
     "their nerve — you'd be the nerve. Or —\" the look sharpens a degree, \"— you any good " +
     "with a keyboard? There's a machine in that room nobody locks. Sit at it, find the file, " +
     "put it on my stick. Slower to explain, quicker to do, and nothing to leave behind.\" " +
-    "(CARRY IT · KEYBOARD · NOT ME · ASK what's on it.)", "room");
+    (kid ? "He stops. There is a third way and he is not going to say it, and you both know " +
+      "whose name it is. (CARRY IT · KEYBOARD · THE KID · NOT ME · ASK what's on it.)"
+         : "(CARRY IT · KEYBOARD · NOT ME · ASK what's on it.)"), "room");
 }
 
 function _rabbitJobAsk() {
@@ -8980,6 +8983,8 @@ function _rabbitJobKeyboard() {
     "don't sit there all night.\"", "win");
   _say("(Buy the girl on Kitten Corner's till a drink, take the corridor BACK, and USE the " +
     "LAPTOP. QUESTS if you lose the thread.)", "dim");
+  _rabbitWireHand();
+  _rabbitDogLine();
 }
 
 function _rabbitJobYes() {
@@ -8999,23 +9004,27 @@ function _rabbitJobYes() {
     "And boss — QUIET is a verb.\"", "win");
   _say("(You're carrying the BLACK BOX. Buy the girl on Kitten Corner's till a drink, take " +
     "the corridor BACK, PLACE the box, and WAIT with it. QUESTS if you lose the thread.)", "dim");
+  _rabbitWireHand();
+  _rabbitDogLine();
 }
 
+// Declining is free AND re-offerable (doctrine). The interview lives on a
+// chip:false dialogue node whose fx arms the modal; _deliver marks it seen, so
+// a re-ask would give the terse "already told you" instead of re-opening it.
+// Forget that one node — the same trick _convoStart uses to re-ask a question
+// you walked away from — so ASK EDDY ABOUT THE JOB works again.
+function _rabbitForgetInterview() {
+  const seen = G.talked && G.talked.fast_eddy;
+  if (!seen) return;
+  const idx = NPCS.fast_eddy.dialogue.findIndex(n =>
+    n.fx && /job/.test(n.topic || "") && n.chip === false);
+  const arr = Array.isArray(seen) ? seen : String(seen).split(",").map(Number);
+  const at = arr.indexOf(idx);
+  if (at >= 0) { arr.splice(at, 1); G.talked.fast_eddy = arr; }
+}
 function _rabbitJobNo() {
   G.pendingChoice = null;
-  // Declining is free AND re-offerable (doctrine). The interview lives on a
-  // chip:false dialogue node whose fx arms the modal; _deliver has now marked it
-  // seen, so a re-ask would give the terse "already told you" instead of
-  // re-opening it. Forget that one node — the same trick _convoStart uses to
-  // re-ask a question you walked away from — so ASK EDDY ABOUT THE JOB works again.
-  const seen = G.talked && G.talked.fast_eddy;
-  if (seen) {
-    const idx = NPCS.fast_eddy.dialogue.findIndex(n =>
-      n.fx && /job/.test(n.topic || "") && n.chip === false);
-    const arr = Array.isArray(seen) ? seen : String(seen).split(",").map(Number);
-    const at = arr.indexOf(idx);
-    if (at >= 0) { arr.splice(at, 1); G.talked.fast_eddy = arr; }
-  }
+  _rabbitForgetInterview();
   // doctrine: declining costs nothing and is re-offerable — the quest stays
   // active and ASK EDDY ABOUT THE JOB re-arms the interview.
   _say("\"No.\" He nods once, like he expected it and respects it. \"Smart, probably. It's " +
@@ -9153,7 +9162,9 @@ const CCIB_LOW_DAYS = 21;   // "for some weeks, be boring" — the lay-low windo
 // runs on your own registered number. (Rabbit's burner is a spec wire, not yet
 // built — when it is, it sets burnerUsed here.)
 function _ccibWire() {
-  if (G.itemLoc.thai_sim === "inventory") _setFlag("simUsed");
+  if (G.itemLoc.thai_sim === "inventory") { _setFlag("simUsed"); return; }
+  if (G.itemLoc.burner === "inventory") _setFlag("burnerUsed");
+  // neither: the box talks through your own registered number — the sloppy default
 }
 
 // who's on the radar, from how you played (called once, at the morning scene)
@@ -9162,8 +9173,10 @@ function _ccibSet() {
   r.eddy = true;   // his bar, his box, his stick — they had him before you
   // the player: sat at the keyboard, ran it on their own number, or still holds a Thai SIM
   if (G.rabbitWay === "operator") r.player = true;
-  if (G.rabbitWay !== "operator" && !_flag("simUsed") && !_flag("burnerUsed")) r.player = true; // own phone was the wire
+  if (G.rabbitWay !== "operator" && G.rabbitWay !== "kid" && !_flag("simUsed") && !_flag("burnerUsed")) r.player = true; // own phone was the wire (the kid used his own kit)
   if (G.itemLoc.thai_sim === "inventory") r.player = true;
+  if (_flag("ownPhoneUsed")) r.player = true;          // you used your own phone in their office
+  if (G.dog && G.rabbitWay !== "kid") r.player = true;  // "everybody remembers the farang with the dog"
   // Nont: his SIM was the wire, or the kid was brought in
   if (_flag("simUsed")) r.nont = true;
   if (_flag("kidPath")) r.nont = true;
@@ -9200,6 +9213,19 @@ function _ccibVisit() {
   else
     _say("He does not look at you any longer than at anyone. That is either mercy or filing; " +
       "you cannot tell which, and that you cannot tell is the whole of it.");
+  if (G.rabbitWay === "kid")
+    _say("\"And there was a young man,\" he says, to the coffee, \"from the lake. Very good. " +
+      "Very quick. In and out of that machine like he'd built it — which, I gather, he did.\" " +
+      "He lets that sit exactly as long as it needs to. \"His mother is a cashier at the " +
+      "Boathouse. I mention it only because I know it.\"", "alert");
+  if (G.dog && G.rabbitWay !== "kid")
+    _say(_dogN("He glances down at Sai Krok, who is under the rail regarding him with professional " +
+      "interest. \"The noodle woman on Soi 6 remembers a farang with a dog. Clipped ear.\" A small " +
+      "nod at the ear in question. \"Nobody remembers a farang. Everybody remembers the dog.\""), "alert");
+  if (_flag("burnerUsed") && G.rabbitWay === "mule" && !_flag("ownPhoneUsed") && G.itemLoc.thai_sim !== "inventory" && !G.dog)
+    _say("He does not look at you at all, in the end. Whoever carried that box used a phone that " +
+      "leads to the man pouring the coffee, and walked away from it, and was never at a keyboard. " +
+      "There is nothing to write down. You can feel him not writing it.", "dim");
   if (G.itemLoc.thai_sim === "inventory")
     _say("\"You are carrying a SIM,\" he says, not as a question. \"A Buriram address. Not " +
       "yours, not anybody's. We know that address well.\" He lets it sit. \"It is a small thing " +
@@ -9218,6 +9244,9 @@ function _ccibVisit() {
   _say("Eddy watches the door for a while after it's shut. \"Right,\" he says, to nobody. " +
     "\"That's me gone for a bit. New number. You don't have it.\" He believes this is about " +
     "him. It is the one thing about last night that isn't.", "dim");
+  if (G.rabbitWay === "kid")
+    _say("(Nont is on that file now — direct, by name. His mother will never learn which. That " +
+      "one you carry alone. TALK TO TAN; TALK TO NONT.)", "dim");
   _setFlag("ccibRadarSet");
 }
 
@@ -9262,3 +9291,173 @@ const _CCIB_WORK = [
   "Every face at the bar is just a face this fortnight — no angles, no favours, nobody's cousin's phone. You pour, you smile, you go home. A man being watched runs the tidiest bar on the soi.",
   "You catch yourself doing the sums a careful man does — who saw you, what the till says, whether tonight was ordinary. It was. You are getting good at ordinary. Tan would approve, which is the point.",
 ];
+
+// ── The kid path, the wires, and the dog at the landing (docs/rabbit-arc.md) ──
+
+// Rabbit's first rule on every path: NOT YOUR PHONE. Got a Thai SIM? Use that
+// (cheaper, not his). No? Here's a burner. The wire the run actually uses is
+// read at PLACE / USE LAPTOP by _ccibWire: SIM > burner > your own number.
+function _rabbitWireHand() {
+  if (G.itemLoc.thai_sim === "inventory") {
+    _say("\"And — not your phone. Never your phone.\" He nods at your pocket. \"You've got a " +
+      "Thai number that isn't yours. Use that. It's cheaper than mine and it isn't mine, which " +
+      "is the point of it.\" A beat. \"When it's done, that SIM goes in the sea. I'll say that " +
+      "once.\"", "dim");
+    return;
+  }
+  G.itemLoc.burner = "inventory";
+  _say("\"And — not your phone. Never your phone.\" A scuffed prepaid handset comes across " +
+    "the bar under his palm. \"Mine. Registered to nobody you'll meet. The box talks through " +
+    "it, you don't. Lose it after.\" (You're carrying RABBIT'S BURNER.)", "dim");
+}
+
+// The dog is cover AND description, and Rabbit is the professional who says the
+// second half out loud — fond, deadpan, unsparing, correct.
+function _rabbitDogLine() {
+  if (!G.dog) return;
+  _say(_dogN("He looks down at Sai Krok, who has been looking up at him with the total " +
+    "attention of a dog near a man who might have food. \"He's a lovely dog.\" A pause that " +
+    "goes on slightly too long. \"He's also a description. You want to be a shape in a " +
+    "doorway, boss, not a bloke with a dog.\""), "dim");
+}
+
+// THE KID: the interview's third answer. Rabbit can't ask; you carry it.
+function _rabbitJobKid() {
+  G.pendingChoice = null;
+  _setFlag("rabbitPath");
+  G.rabbitWay = "kid";
+  if (G.quests.rabbit_heist !== "done") G.quests.rabbit_heist = "active";
+  _say("You say the name. Eddy goes still in a way he hasn't all night — not the armour, " +
+    "something under it. He wants this more than the box, more than the file, and he knows " +
+    "exactly why he mustn't ask for it, and he is not going to ask for it, and he is going to " +
+    "let you.", "alert");
+  _say("\"He's at the market. Old Market, the table with the phones.\" He turns the soda a " +
+    "quarter and does not drink it. \"I can't go to him. You can. Tell him it's me and let him " +
+    "name it — he'll name it. He doesn't do favours. Tan taught him that, and Tan was right.\" " +
+    "A beat. \"Don't tell him I said that either.\"", "win");
+  _say("(Find NONT at his table in the Old Market and ASK NONT ABOUT THE JOB. QUESTS if you lose the thread.)", "dim");
+  _rabbitDogLine();
+}
+
+// ── Nont's price: a pendingChoice="kidprice" modal, wired the standard five ways ──
+function _kidPriceAsk() {
+  G.pendingChoice = "kidprice";
+  _say("");
+  _say("\"Okay.\" He puts the phone face-down, which he never does. \"Rabbit's box wants a " +
+    "room and a nerve. I don't need the room and I've got the nerve. I did their wifi, their " +
+    "cameras, their till — I know that office better than the woman who owns it.\" A breath. " +
+    "\"So it's a night's work. Clean. Nobody stands in a corridor.\"", "alert");
+  _kidPricePrompt();
+}
+function _kidPricePrompt() {
+  _say(`\"The price is ฿${KID_PRICE.toLocaleString()}.\" He says the number like a man reading it off a ` +
+    "wall he'd rather not be looking at. \"That's not a discount. That's what it costs to walk " +
+    "back into the one thing I got out of, for the man who put me in it. Pay it or don't. I'd " +
+    "honestly rather you didn't.\" (PAY · NO · ASK.)", "room");
+}
+function _kidPriceAskMore() {
+  _say("\"Why so much?\" He almost laughs. \"Because it should be. Because if it was cheap you'd " +
+    "say yes without thinking, and I want you to think. Tan got me out of Rabbit's world with " +
+    "one phone call and never named a price, and I have been paying that back in ways you " +
+    "wouldn't recognise ever since.\" He turns the phone back over. \"This one has a number. " +
+    "That's me being kind.\"");
+  _kidPricePrompt();
+}
+function _kidPriceYes() {
+  if (G.money < KID_PRICE) {
+    _say(`You haven't got ฿${KID_PRICE.toLocaleString()} on you, and he sees you know it before you've ` +
+      "finished checking. \"Come back with it. Or don't.\" The phone is face-up again. (NONT's " +
+      "CASH pulls from the account, if it's there.)", "dim");
+    _kidPricePrompt();
+    return;
+  }
+  G.pendingChoice = null;
+  G.money -= KID_PRICE;
+  _setFlag("kidPaid"); _setFlag("kidPath");
+  G.kidJobDay = G.day;
+  _say(`฿${KID_PRICE.toLocaleString()} across the table, and it disappears the way money always disappears ` +
+    "at this table — no wallet, no pocket you saw, just gone. He doesn't count it. \"Tonight,\" " +
+    "he says. \"Go and be somewhere with witnesses. You'll get a text.\" He is already back on the " +
+    "phone, and the thing he is doing on it is not what he was doing a minute ago.", "win");
+  _say("(Nothing to carry, nothing to place. Go home. The text comes in the morning.)", "dim");
+}
+function _kidPriceNo() {
+  G.pendingChoice = null;
+  _setFlag("kidRefused");
+  _say("\"Good.\" He means it, which is the surprise. \"That's the right answer. Rabbit's got two " +
+    "other ways in and neither of them is a kid.\" The phone is face-up again before you've " +
+    "stood. \"Tell him no. Tell him I said no, if it's easier.\" (Go back to EDDY — ASK EDDY " +
+    "ABOUT THE JOB — and the other two ways are still there.)");
+  // declining is free and the fork re-opens, minus the kid: unwind the commitment
+  // (rabbitPath was set at THE KID) and forget the interview node so it re-fires
+  G.rabbitWay = null;
+  G.flags.rabbitPath = false;
+  if (G.quests.rabbit_heist === "active") delete G.quests.rabbit_heist;
+  if (G.quests.rabbit_job === "done") G.quests.rabbit_job = "active";
+  _rabbitForgetInterview();
+}
+
+// the offscreen run: he does it his way, and you get a text in the morning
+function _kidTick() {
+  if (!_flag("kidPaid") || _flag("rabbitData") || G.day <= (G.kidJobDay || 0)) return;
+  _setFlag("rabbitData");
+  if (typeof _pushMsg === "function")
+    _pushMsg("nont", "done. it's on rabbit's stick, stick's under his bar. i was never there and neither were you. delete this.");
+  _say("(📱 A text from Nont. CHECK MESSAGES.)", "dim");
+}
+
+// ── Tan's call: a pendingChoice="kidfavour" modal — the tanfavour machinery's second use ──
+function _kidFavourAsk() {
+  G.pendingChoice = "kidfavour";
+  _kidFavourPrompt();
+}
+function _kidFavourPrompt() {
+  _say("\"I can make one call.\" He does not say to whom. \"The file stays — nobody takes a file " +
+    "back. But a file has a first page and a last page, and I can decide which one his name is " +
+    "on.\" He looks at you, and it is the look from the airport, and you understand that it was " +
+    "always going to come to this. \"You will owe me for him. Not money. You know that by now.\" " +
+    "(YES · NO · ASK.)", "room");
+}
+function _kidFavourAskMore() {
+  _say("\"Ask what?\" Mild. \"What it costs? I do not know yet. That is what a favour is, my " +
+    "friend — the not knowing. If I knew, I would send you a bill, and then we would be " +
+    "strangers again.\" A beat. \"The boy could pay Nont's way — money through the same door. " +
+    "That is also a choice. It is the choice that leaves you owing nobody, and him owing " +
+    "everybody.\"");
+  _kidFavourPrompt();
+}
+function _kidFavourYes() {
+  G.pendingChoice = null;
+  _setFlag("tanKidFavour"); _setFlag("kidHandled");
+  if (typeof _align === "function") _align("syndicate", 1);   // deeper in: the obligation with no figure on it
+  _say("He nods once and takes out the phone you have never seen him use for anything but " +
+    "the banking app that bounces your money back. The call is in Thai, forty seconds, and " +
+    "the only word you catch is a name that isn't Nont's. Then it is over. \"Done. He is on the " +
+    "last page.\" He puts the phone away. \"Now you owe me for a boy you met at a market. That " +
+    "is a strange thing to owe a man. Most of the real debts are.\"", "win");
+  _say("(Tan called it in — for the kid, not for you. The file stays. The Owl will never print his name.)", "dim");
+}
+function _kidFavourNo() {
+  G.pendingChoice = null;
+  _setFlag("tanKidRefused");
+  _say("\"No.\" He accepts it the way he accepts everything, which is completely. \"Then it is " +
+    "Nont's own door, or nobody's. Both are honest.\" He does not mention it again, ever, " +
+    "which is how you know it was real. (Nont's price still stands at his table — PAY NONT " +
+    KID_CLEAR + ".)");
+}
+
+// PAY NONT <amt> at his table, after the coffee: the priced fixer paying for the priced fixer
+function _kidClear(amount) {
+  if (amount < KID_CLEAR) {
+    _say(`\"It's ฿${KID_CLEAR.toLocaleString()}.\" Flat. \"Not a negotiation. I'm not haggling over my own name.\"`);
+    return;
+  }
+  if (G.money < amount) { _say(`You haven't got ฿${amount.toLocaleString()} on you. (CASH pulls from the account.)`); return; }
+  G.money -= amount;
+  _setFlag("kidCleared"); _setFlag("kidHandled");
+  _say(`฿${amount.toLocaleString()} across the table, through the same door the money always goes. ` +
+    "He doesn't count it and doesn't thank you. \"Footnote,\" he says. \"Not gone. Short.\" The " +
+    "phone is face-up again. \"Tan doesn't need to know you did it this way. He'll know anyway. " +
+    "Everybody always does.\"", "win");
+  _say("(You paid the kid's way clear — nobody owes anybody. The file stays; it's shorter.)", "dim");
+}

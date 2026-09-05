@@ -251,6 +251,7 @@ function newGame() {
     rabbitWay: null,     // which way into the WDG office you took: "mule" | "operator" (see _rabbitJobYes/_rabbitJobKeyboard)
     ccibRadar: null,     // who CCIB has a file on after the heist: {player,eddy,nont} — set at the morning scene, rides the export (docs/bangkok-concept.md)
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
+    kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
@@ -2585,6 +2586,7 @@ function _tick() {
   if (typeof _waenTick === "function") _waenTick();   // Kruu Waen's homework, free, once a day
   if (typeof _boxTick === "function") _boxTick();      // Rabbit's box, while it's live and you're in the office
   if (typeof _ccibLowTick === "function") _ccibLowTick();  // the lay-low window: a second look, and the day it lifts
+  if (typeof _kidTick === "function") _kidTick();          // the kid's offscreen run lands as a text the next day
   if (G.lightOn && G.battery > 0) {
     G.battery--;
     if (G.battery === 0) {

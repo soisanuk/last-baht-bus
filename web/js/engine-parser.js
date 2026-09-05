@@ -6273,6 +6273,14 @@ function _doPay(arg) {
   // HELP listed REPAY for the loan shark and DRAW for your own till, and
   // nothing at all for the two creditors who can actually finish you (round 24,
   // Keith). Sits above the fare so a bus ride is never ambiguous.
+  // PAY NONT <amt> at his table, after the coffee: the kid's way clear
+  if (!G.pendingFare && /\bnont\b|\balex\b|the kid/.test(arg || "") && _npcsHere().includes("nont") &&
+      _flag("kidPath") && _flag("ccibVisited") && !_flag("kidHandled") && typeof _kidClear === "function") {
+    // "PAY NONT 20000" — the number rides after the name, which _amount may not read
+    const m = String(arg).replace(/,/g, "").match(/\d+/);
+    const amt = m ? parseInt(m[0], 10) : (_amount(arg) || 0);
+    _kidClear(Number.isNaN(amt) ? 0 : amt); return;
+  }
   if (!G.pendingFare && typeof _payCreditor === "function" &&
       /rent|landlord|note|arrears|old man|bert|bar|key|lease|pae ?jia/i.test(arg || "")) { _payCreditor(arg); return; }
   if (!G.pendingFare) { _say("Nobody's waiting to be paid."); return; }
@@ -8218,7 +8226,13 @@ function _chipSet() {
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
   }
   if (G.pendingChoice === "rabbitjob") {
-    add("carry it"); add("keyboard", "the keyboard"); add("not me"); add("ask", "ask what's on it"); return chips;
+    add("carry it"); add("keyboard", "the keyboard");
+    if (G.known && G.known.nont && !_flag("kidRefused")) add("the kid", "the kid");
+    add("not me"); add("ask", "ask what's on it"); return chips;
+  }
+  if (G.pendingChoice === "kidprice") { add("pay", `pay ฿${KID_PRICE.toLocaleString()}`); add("no"); add("ask", "ask why so much"); return chips;
+  }
+  if (G.pendingChoice === "kidfavour") { add("yes", "let him make the call"); add("no"); add("ask", "ask what it costs"); return chips;
   }
   if (G.pendingChoice === "tanfavour") {
     add("yes"); add("no"); add("ask", "ask what it's for"); return chips;
@@ -8660,7 +8674,9 @@ function engineComplete(input) {
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
   if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
-  else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", "not me", "ask"];
+  else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", ...(G.known && G.known.nont && !_flag("kidRefused") ? ["the kid"] : []), "not me", "ask"];
+  else if (G.pendingChoice === "kidprice") pool = ["pay", "no", "ask"];
+  else if (G.pendingChoice === "kidfavour") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "bkkdinner") pool = ["go", "decline"];
   else if (G.pendingChoice === "bkkbill") pool = ["let", "grab"];
@@ -8912,6 +8928,8 @@ function _renderResume() {
   if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.pendingChoice === "rabbitjob") { _rabbitJobPrompt(); return; }
+  if (G.pendingChoice === "kidprice") { _kidPricePrompt(); return; }
+  if (G.pendingChoice === "kidfavour") { _kidFavourPrompt(); return; }
   if (G.pendingChoice === "tanfavour") { _tanFavourPrompt(); return; }
   if (G.pendingChoice === "bkkdinner") { _bkkDinnerPrompt(); return; }
   if (G.pendingChoice === "bkkbill") { _say("The bill sits in its black folder, his card on top. (GRAB · LET)", "dim"); return; }
@@ -9167,11 +9185,30 @@ function doCommand(input) {
   // Tan is stood at your rail with a folded slip on the bar
   if (G.pendingChoice === "rabbitjob") {
     if (/^(ask|what|why|explain|tell|on it)/.test(lower)) { _rabbitJobAsk(); return; }
+    if (/^(the kid|kid|nont|alex|the boy)/.test(lower) && G.known && G.known.nont && !_flag("kidRefused")) { _rabbitJobKid(); return; }
     if (/^(keyboard|operator|sit|the machine|laptop|computer|i'?m good with)/.test(lower)) { _rabbitJobKeyboard(); return; }
     if (/^(carry|yes|y|ok|okay|sure|deal|fine|do it|take|i'?ll)/.test(lower)) { _rabbitJobYes(); return; }
     if (/^(not me|no|n|nope|never|decline|refuse|pass|sorry)/.test(lower)) { _rabbitJobNo(); return; }
-    _say("Eddy waits, soda in hand. (CARRY IT \u00b7 KEYBOARD \u00b7 NOT ME \u00b7 ASK.)", "dim");
+    _say(G.known && G.known.nont && !_flag("kidRefused")
+      ? "Eddy waits, soda in hand. (CARRY IT \u00b7 KEYBOARD \u00b7 THE KID \u00b7 NOT ME \u00b7 ASK.)"
+      : "Eddy waits, soda in hand. (CARRY IT \u00b7 KEYBOARD \u00b7 NOT ME \u00b7 ASK.)", "dim");
     _rabbitJobPrompt();
+    return;
+  }
+  if (G.pendingChoice === "kidprice") {
+    if (/^(ask|what|why|explain|tell)/.test(lower)) { _kidPriceAskMore(); return; }
+    if (/^(pay|yes|y|ok|okay|sure|deal|fine|here)/.test(lower)) { _kidPriceYes(); return; }
+    if (/^(no|n|nope|never|decline|refuse|pass|sorry|don'?t)/.test(lower)) { _kidPriceNo(); return; }
+    _say("Nont waits, phone face-down. (PAY \u00b7 NO \u00b7 ASK.)", "dim");
+    _kidPricePrompt();
+    return;
+  }
+  if (G.pendingChoice === "kidfavour") {
+    if (/^(ask|what|why|who|explain|tell)/.test(lower)) { _kidFavourAskMore(); return; }
+    if (/^(y|yes|ok|okay|sure|please|do it|make the call)/.test(lower)) { _kidFavourYes(); return; }
+    if (/^(n|no|refuse|decline|nope|never|sorry)/.test(lower)) { _kidFavourNo(); return; }
+    _say("Tan waits. He has all night; he always has.", "dim");
+    _kidFavourPrompt();
     return;
   }
   if (G.pendingChoice === "tanfavour") {
@@ -10183,6 +10220,14 @@ function doCommand(input) {
   // not. LOOK, EXAMINE, WEATHER and LISTEN still cost a turn — you are doing
   // something in a room — but the scoreboard, the clock, your pockets, the map
   // and the help are not things the night can charge you for.
+  // NOT YOUR PHONE — Rabbit's first rule. Using your own registered number inside
+  // WDG's office while the job runs is the sloppy default the spec describes, and
+  // it puts you on the file whatever wire the box used (docs/rabbit-arc.md).
+  if (G.room === "kitten_office" && ((G.boxJob && !G.boxJob.done) || (G.game && G.game.type === "cli")) &&
+      /^(message|msg|text|call|phone|send|photo|selfie|check)$/.test(v) && !_flag("ownPhoneUsed")) {
+    _setFlag("ownPhoneUsed");
+    _say("(Your own phone, on their Wi-Fi, in their office, tonight. Rabbit said one thing about that.)", "dim");
+  }
   // Babysitting Rabbit's box: a NOISY command on a footstep turn spends heat.
   // Quiet ones ride it out — wait, look, examine, the box itself, the readouts.
   if (G.boxJob && !G.boxJob.done && G.room === "kitten_office" && G.boxJob.footstep &&

@@ -313,14 +313,100 @@ test("the job COMPLETES — CCIB interrupts the follow-through, not the heist", 
   assert.ok(!_flag("ccibVisited"), "the interruption is the morning after, not mid-job");
 });
 
-test("the radar reads three legible facts: path, wire, SIM held", () => {
-  // mule, own phone, no SIM: the player is on it (own number was the wire), Nont is not
-  recruit(); intoOffice();
+test("the clean mule: Rabbit's burner, walk away from the box, stay off the file", () => {
+  // Rabbit hands a burner when you have no Thai SIM — "not your phone" — and the
+  // mule who uses it and never sits at a keyboard is the one player who stays clean.
+  recruit();
+  assert.equal(G.itemLoc.burner, "inventory", "the burner is handed at the interview");
+  intoOffice();
+  assert.ok(_flag("burnerUsed"), "the box talks through his phone, not yours");
   nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
   morningAfter();
   assert.ok(_flag("ccibVisited"));
-  assert.deepEqual(G.ccibRadar, { player: true, eddy: true, nont: false },
-    "own-phone mule: Eddy always, player by his own number, Nont clear");
+  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: false },
+    "burner mule: Eddy always, player clean, Nont clear");
+  assert.match(text(), /nothing to write down/i, "and the scene says so");
+});
+
+test("your own phone in their office puts you on the file, whatever the box used", () => {
+  recruit(); intoOffice();
+  run("message tan hello");   // the sloppy default: your registered number, their Wi-Fi, tonight
+  assert.ok(_flag("ownPhoneUsed"));
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  assert.equal(G.ccibRadar.player, true);
+});
+
+test("the dog is a description: a clean mule with a dog is on the file anyway", () => {
+  G.dog = { since: 1, name: null };
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  assert.equal(G.ccibRadar.player, true, "everybody remembers the farang with the dog");
+  assert.match(text(), /Clipped ear|remembers the dog/i);
+});
+
+test("the kid path: Rabbit can't ask, Nont names a price, the run is offscreen, and Nont is on the file", () => {
+  G.known.nont = true; G.money = 60000;
+  G.room = "white_rabbit";
+  run("talk to eddy", "ask eddy about job", "accept rabbit_job", "ask eddy about job");
+  assert.ok(_chipSet().some(c => c.cmd === "the kid"), "THE KID is offered once you've met him");
+  run("the kid");
+  assert.equal(G.rabbitWay, "kid");
+  assert.equal(G.itemLoc.black_box, null, "no box, no stick — the kid brings his own kit");
+  G.room = _npcRoom("nont");
+  out = []; run("ask nont about job");
+  assert.equal(G.pendingChoice, "kidprice", "his price is a modal");
+  run("ask"); assert.equal(G.pendingChoice, "kidprice", "ASK re-prompts");
+  const m0 = G.money; run("pay");
+  assert.equal(m0 - G.money, KID_PRICE);
+  assert.ok(_flag("kidPaid") && _flag("kidPath"));
+  assert.ok(!_flag("rabbitData"), "not yet — the text comes in the morning");
+  G.day++; G.room = "beach_rd_c"; nofoot(() => run("wait"));
+  assert.ok(_flag("rabbitData"), "his text lands the next day");
+  assert.ok(G.phone.inbox.some(m => m.from === "nont"));
+  morningAfter();
+  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: true },
+    "the kid is on the file; the player, who never touched the machine, is not");
+  assert.match(text(), /young man|from the lake/i, "the officer names him without naming him");
+  // Tan's version of the read arms the call
+  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
+  out = []; run("ask tan about kid");
+  assert.equal(G.pendingChoice, "kidfavour");
+  run("yes");
+  assert.ok(_flag("tanKidFavour") && _flag("kidHandled"));
+  assert.ok(G.faction.syndicate >= 1, "deeper in — the obligation with no figure on it");
+  // Eddy's guilt line is said aloud, in the one scene that earns it
+  G.room = "white_rabbit"; if (G.soc.hostOut) G.soc.hostOut.fast_eddy = false;
+  out = []; run("ask eddy about kid");
+  assert.match(text(), /taught|sent you to fetch him back/i);
+});
+
+test("the kid path: NO at Nont's price is free and re-opens the fork; PAY NONT is the other way clear", () => {
+  G.known.nont = true; G.money = 60000;
+  G.room = "white_rabbit";
+  run("talk to eddy", "ask eddy about job", "accept rabbit_job", "ask eddy about job", "the kid");
+  G.room = _npcRoom("nont");
+  run("ask nont about job"); const m0 = G.money; run("no");
+  assert.equal(G.money, m0, "declining costs nothing");
+  assert.ok(_flag("kidRefused")); assert.equal(G.rabbitWay, null);
+  G.room = "white_rabbit"; out = []; run("ask eddy about job");
+  assert.equal(G.pendingChoice, "rabbitjob", "the interview re-arms");
+  assert.ok(!_chipSet().some(c => c.cmd === "the kid"), "minus the kid");
+  run("not me");
+  // the cash door, after a coffee: set the state directly and pay at his table
+  out = []; newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 60000;
+  for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+  _setFlag("kidPath"); _setFlag("ccibVisited"); G.known.nont = true;
+  G.room = _npcRoom("nont"); G.nightTurn = 25;
+  out = []; run("pay nont 5000");
+  assert.match(text(), /Not a negotiation/i); assert.ok(!_flag("kidCleared"));
+  out = []; run(`pay nont ${KID_CLEAR}`);
+  assert.ok(_flag("kidCleared") && _flag("kidHandled"));
+  assert.equal(G.money, 60000 - KID_CLEAR);
+  assert.match(text(), /Footnote/);
 });
 
 test("the SIM is the wire that names Nont — and ditching it clears the player, not him", () => {
