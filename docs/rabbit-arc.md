@@ -209,7 +209,7 @@ foreshadowing*, never a door a verb must open.
 |---|---|---|---|
 | **0** | The bar + Eddy as a voiced, unlikeable presence; backstory in `ASK` topics | nothing | SHIPPED |
 | **1** | Rabbit is the in-world author of CTF stage 2 (the security-probe text) | CTF stage 2 (`docs/ctf.md`) | spec |
-| **2** | The heist quest — fork-not-filter, the inversion, CCIB | Tier 0 | phases 1–2 SHIPPED (interview, mule path, operator path + `cli-sim.js`); kid path, SIM/dog beats, landings spec |
+| **2** | The heist quest — fork-not-filter, the inversion, CCIB | Tier 0 | phases 1–3 SHIPPED (interview, mule + operator paths, the CCIB landing + radar + BREAK SIM + Tan's read); kid path, dog beat spec |
 | **3** | Black-market tie-in (the tourists who tip too well) | Tier 2 | seed only, build nothing |
 
 Tiers are independent by design. Tier 0 ships standalone. Tier 1 makes existing
@@ -749,6 +749,7 @@ argument for the firewall this arc already has.
 | 2026-09-06 | **Tan is the mutual friend** (canon): the syndicate and CCIB have a working relationship, favours both ways; WDG's tolerance was withdrawn as a coffee with someone already looking. The lay-low is Tan's read, not a CCIB warning (they inform, never warn) and not Eddy's advice (he goes to ground for the wrong reason — he thinks it's about him). |
 | 2026-09-06 | **CCIB heat: CLOSED** — neither scripted-landing nor computed; the landing is fixed (WDG) and the radar is set by three legible facts (path, wire, SIM held). |
 
+| 2026-09-06 | **Phase 3 built — the CCIB landing.** Arrival at the White Rabbit with `rabbitData` set (morning after) fires `_ccibVisit`: the plainclothes coffee, path/SIM-aware, no threat. `_ccibSet` writes `G.ccibRadar = {player, eddy, nont}` from three facts — Eddy always; player if operator OR own-phone wire (`!simUsed && !burnerUsed`) OR holding the SIM; Nont if `simUsed` or `kidPath`. `_ccibWire` marks the wire (`simUsed`) when the box is PLACED or the laptop opened. `BREAK SIM`/`THROW SIM` (`_doBreakSim`) clears the player off the file but not Nont (the road was paved) — the one deliberate act, made tempting to skip. Tan's read (two dialogue nodes, `ccibReadGiven`) is the "why am I laying low" voice; the officer informs and never warns (a test asserts no threat words); Eddy goes to ground for the wrong reason (`soc.hostOut`). `_ccibLowTick` runs the `CCIB_LOW_DAYS` (21) window — a rare second look, the WORK-shift awareness (`_ccibWorkLine`), and the lift when the WDG case is the news (`ccibCleared`, Eddy resurfaces). The radar rides the export for Bangkok. Guarded by 8 tests in rabbit.test.js across every wire. |
 | open | Betrayal fork in v1 (tentative yes). |
 | 2026-09-05 | Operator-path reward: CLOSED — Rabbit's old regulars (see phase 2 row). |
 | 2026-08-24 | If iOS happens: tap-reachability is a HARD constraint on the CLI scenario format (every legal move enumerable and tappable, per the thumbs-only precedent), and a `sanuk{…}` flag is decoration only on mobile. The CTF stays web-only — its affordances (`/.well-known/`, a scannable QR, `dig TXT`) have no app analogue, and the existing CTF-independence firewall is what makes that free. |

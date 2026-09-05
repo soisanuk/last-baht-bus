@@ -8571,6 +8571,30 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "many times and not one of them has ever been afraid to get in the car. That " +
           "tells you the place.\u201d",
         short: "\u201cThe Adonis in Supertown. Nott runs it straight. \u0e3f" + HOST_DRINK + " a drink, the boy gets half.\u201d" },
+      // TAN'S READ on the CCIB visit — the mechanic's real voice. Gated after the
+      // morning scene, once; sets ccibReadGiven, which arms the second-look roll
+      // and IS the "why am I laying low" answer. Tan is the mutual friend (canon).
+      { topic: "ccib|police|cyber|coffee|visit|officer|the man|laying low|lay low|radar|watched",
+        when: (st, G) => _flag("ccibVisited") && !_flag("ccibReadGiven") && !_flag("ccibCleared"),
+        sets: ["ccibReadGiven"],
+        text: "He doesn't ask how you know to bring it up, which is its own answer. \"So. You " +
+          "had a coffee.\" A small nod, approving of the officer's manners more than anything. " +
+          "\"He is good, that one. He told you everything and asked you for nothing, and now you " +
+          "cannot sleep. That is the job, done properly.\" He turns his own cup a quarter — the " +
+          "gesture you saw the officer borrow, and you understand, too late, which way the " +
+          "borrowing went. \"White Dish has a problem coming. It has been coming since March. It " +
+          "is not your problem and it is not mine — but for some weeks, my friend, be boring. Not " +
+          "afraid. Boring. They have a case to finish, and you are a footnote they would prefer " +
+          "not to write. Footnotes that hold still get left out.\" A beat. \"Eddy thinks it is " +
+          "about Eddy. Let him. It keeps him quiet, which is the one thing that helps him.\"",
+        short: "\"Be boring for some weeks — not afraid, boring. You are a footnote. Footnotes that hold still get left out.\"" },
+      { topic: "ccib|police|cyber|coffee|visit|officer|laying low|radar|mutual friend",
+        when: (st, G) => _flag("ccibReadGiven"),
+        text: "\"You are still being boring?\" The nearest he comes to a joke. \"Good. It suits " +
+          "you better than you would think.\" He does not say the other thing — that a mutual " +
+          "friend mentioned a problem to the right coffee — and you do not ask, because you have " +
+          "finally learned that the not-asking is the price, and that it is cheap.",
+        short: "\"Still boring? Good. It suits you.\"" },
       { topic: "fix", text: "\"What can I fix?\" He says it like the question delights him. \"A ride. A room. A " +
           "visa man who actually answers his phone. A problem that needs to quietly become not-a-problem. A " +
           "door that is closed to you—\" the smallest smile \"—and open to me.\" He lets that hang a half-beat " +

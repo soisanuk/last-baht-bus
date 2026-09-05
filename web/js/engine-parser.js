@@ -782,6 +782,7 @@ function _arriveAt(to) {
   // the partnerTan route comes due: he said he'd ask, and this is him asking
   // the deposit: the one moment the money has to actually exist
   if (typeof _barDepositDue === "function" && _barDepositDue()) { _barDeposit(); }
+  if (typeof _ccibDue === "function" && _ccibDue()) { _ccibVisit(); return; }
   if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
   // procurement: a name on a list was free, the cleaning contract is not
   if (typeof _shiftDue === "function" && _shiftDue()) { _shiftAsk(); return; }
@@ -3831,6 +3832,28 @@ const _TOPICS_NONE = [
   "Nothing doing. {n} answers the people who stick around; come back when you're less of a stranger.",
   "{n} has nothing open for you just now. That changes with drinks bought and nights spent.",
 ];
+// THROW/BREAK SIM — the one deliberate act that keeps you off CCIB's file
+// (docs/rabbit-arc.md). A Thai number with no name on it is genuinely useful
+// afterward — the booking app, LINE, every "you have Thai number?" — so the game
+// makes keeping it tempting and the choice a real one.
+function _doBreakSim() {
+  if (G.itemLoc.thai_sim !== "inventory") {
+    _say("You've no SIM on you but your own, and that one stays where it is.");
+    return;
+  }
+  G.itemLoc.thai_sim = null;
+  _setFlag("simDitched");
+  const bali = /bali/i.test(G.room) || (_room().region || "").includes("Bali");
+  _say(bali
+    ? "You thumb the little card out of the tray at the Bali Hai rail and flick it, underhand, " +
+      "off the pier. It catches the light once and the sea has it. A Buriram address nobody can " +
+      "put in your pocket now, because it isn't in your pocket."
+    : "You snap the SIM in half — it takes more of a bend than you expect, cheap plastic being " +
+      "stubborn about the one useful thing it ever did — and drop the halves down a drain. A Thai " +
+      "number with no name on it, gone. It was useful. That was the problem with it.", "win");
+  _say("(A Thai number with no name is a legible thing to be holding. You aren't holding it now.)", "dim");
+}
+
 // Rabbit's regulars, read INTO your own bar: two hundred names, drinks and
 // birthdays, typed into your own phone at your own rail. From then on the
 // European trade Rabbit survives on walks into your bar instead (BOOK_TAKINGS
@@ -8148,6 +8171,7 @@ THE WHOLE CARD (bare HELP is the short one):
 const _COMPLETE_VERBS = [
   "reply", "unsubscribe",
   "topics",
+  "break sim",
   "buy piwin a beer",
   "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
@@ -9821,7 +9845,13 @@ function doCommand(input) {
       else _say("Show what, to whom? (SHOW <thing> TO <someone>)");
       break;
     }
+    case "break": case "snap": case "destroy": case "ditch": case "kill":
+      if (/\bsim\b|sim ?card/.test(arg || "")) { _doBreakSim(); break; }
+      _say(_pickVary(["Nothing here to break — and the impulse passes.", "You break nothing. The night is fragile enough."], "breakno"), "dim"); break;
     case "throw": case "toss": case "chuck": case "fling":
+      // THROW SIM (into the sea off Bali Hai) is the one deliberate act that
+      // keeps you off the file; THROW DARTS starts 501; THROW COVER is the ceiling game.
+      if (/\bsim\b|sim ?card/.test(arg || "")) { _doBreakSim(); break; }
       // THROW DARTS at a board starts the 501 game; THROW COVER / PASTIE [AT <name>]
       // is the ceiling game; anything else keeps the old flavor refusal.
       if (/\bdarts?\b/.test(arg)) { if (_room().darts) _doPlay("darts"); else _say("No dartboard here to throw at."); }

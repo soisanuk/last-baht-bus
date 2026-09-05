@@ -294,3 +294,110 @@ test("running out the machine's clock locks it — not a loss of the arc, just n
   out = []; run("use laptop");
   assert.equal(G.game && G.game.type, "cli", "sat down again");
 });
+
+// ── The CCIB landing: the interruption, the radar, the lay-low ─────────────
+// docs/rabbit-arc.md — WDG was already under investigation; the heist nearly
+// blows the case, CCIB interrupts the follow-through, and the VARIABLE is who
+// they now have a file on (G.ccibRadar, the Bangkok export).
+
+// arrive at the White Rabbit the morning after, which fires the visit
+function morningAfter() {
+  G.nightTurn = 25; G.room = "naklua_rd";
+  run.length; out = []; _arriveAt("white_rabbit");
+}
+
+test("the job COMPLETES — CCIB interrupts the follow-through, not the heist", () => {
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  assert.ok(_flag("rabbitData"), "the light still went green; the player's nerve paid");
+  assert.ok(!_flag("ccibVisited"), "the interruption is the morning after, not mid-job");
+});
+
+test("the radar reads three legible facts: path, wire, SIM held", () => {
+  // mule, own phone, no SIM: the player is on it (own number was the wire), Nont is not
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  assert.ok(_flag("ccibVisited"));
+  assert.deepEqual(G.ccibRadar, { player: true, eddy: true, nont: false },
+    "own-phone mule: Eddy always, player by his own number, Nont clear");
+});
+
+test("the SIM is the wire that names Nont — and ditching it clears the player, not him", () => {
+  // carry Nont's SIM as the wire
+  recruit();
+  G.itemLoc.thai_sim = "inventory";
+  G.room = "kitten_corner";
+  const till = _tillKeeper("kitten_corner");
+  run("buy drink for " + NPCS[till].name.toLowerCase(), "back", "place box");
+  assert.ok(_flag("simUsed"), "placing the box on the SIM marks the wire");
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  // still holding it at the visit → player on the radar too
+  morningAfter();
+  assert.deepEqual(G.ccibRadar, { player: true, eddy: true, nont: true });
+
+  // same run, but THROW SIM before the morning: the player comes off, Nont stays
+  out = []; newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 9000;
+  _setFlag("white_dish"); G.quests.white_dish = "done";
+  for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+  _npcState("fast_eddy").trust = 3;
+  recruit();
+  G.itemLoc.thai_sim = "inventory";
+  G.room = "kitten_corner";
+  const till2 = _tillKeeper("kitten_corner");
+  run("buy drink for " + NPCS[till2].name.toLowerCase(), "back", "place box");
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  run("break sim");
+  assert.equal(G.itemLoc.thai_sim, null, "the SIM is gone");
+  morningAfter();
+  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: true },
+    "ditching clears YOU; the road to Nont was already paved");
+});
+
+test("the operator path puts the player on the radar — a machine remembers a visitor", () => {
+  recruitOperator(); toLaptop();
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy wallet.dat");
+  assert.ok(_flag("rabbitData"));
+  morningAfter();
+  assert.equal(G.ccibRadar.player, true, "sat at the keyboard → on the file");
+});
+
+test("Tan gives the read — and nobody warned the player", () => {
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  assert.match(text(), /told you what he knows|nobody warned/i, "the scene names the shape: informed, not warned");
+  // the officer never says don't / lay low / a threat
+  assert.doesNotMatch(text(), /\bor else\b|you will be|we will|don't you|if you/i);
+  // Tan's read is the mechanic's voice
+  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
+  out = []; run("ask tan about laying low");
+  assert.match(text(), /boring|footnote/i);
+  assert.ok(_flag("ccibReadGiven"));
+});
+
+test("the lay-low window lifts when the WDG case is the news, and Eddy resurfaces", () => {
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  assert.ok(G.soc.hostOut && G.soc.hostOut.fast_eddy, "Eddy's gone to ground");
+  assert.ok(!_flag("ccibCleared"));
+  // jump past the window and tick
+  G.day = G.ccibLowUntil + 1; G.room = "beach_rd_c";
+  out = []; nofoot(() => run("wait"));
+  assert.ok(_flag("ccibCleared"), "the case broke; the footnote was left out");
+  assert.ok(!(G.soc.hostOut && G.soc.hostOut.fast_eddy), "Eddy's back on his stool");
+});
+
+test("BREAK SIM only works on Nont's SIM, and is voiced otherwise", () => {
+  G.room = "beach_rd_c";
+  out = []; run("break sim");
+  assert.match(text(), /your own|stays where/i, "no throwaway SIM to throw away");
+  assert.doesNotMatch(text(), /didn't understand/);
+  G.itemLoc.thai_sim = "inventory";
+  out = []; run("throw sim");
+  assert.equal(G.itemLoc.thai_sim, null);
+  assert.ok(_flag("simDitched"));
+});

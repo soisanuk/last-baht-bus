@@ -4910,6 +4910,7 @@ function _startCli(scenarioId) {
   const sc = CLI_SCENARIOS[scenarioId];
   if (!sc) { _say("The screen stays dark."); return; }
   G.game = { type: "cli", scenario: scenarioId, cli: cliNew(sc, _rand), stake: 0 };
+  if (typeof _ccibWire === "function") _ccibWire();   // the operator run uses a wire too
   _say("You sit. The chair is still warm. The lock screen is a golf course and it is not locked " +
     "— somebody went for a cigarette in the middle of something and the machine is still in the " +
     "middle of it. A cursor blinks in a black window over the golf course, waiting for a person " +

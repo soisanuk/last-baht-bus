@@ -5538,6 +5538,7 @@ function _doWork() {
   G.bar.worked = (G.bar.worked || 0) + 1;
   G.bar.away = 0;
   _say(_pickVary(_WORK_SHIFT, "workshift"), "win");
+  if (typeof _ccibWorkLine === "function") _ccibWorkLine();   // being watched runs the tidiest bar on the soi
   _say(_pickVary(_WORK_SEEN, "workseen"));
   _say(_pickVary(_WORK_MISSED, "workmissed"), "dim");
   _say("(You're working tonight. The takings will show it — and so will the " +
@@ -9057,6 +9058,7 @@ function _doPlaceBox(arg) {
   if (G.boxJob) { _say("It's already on the shelf, light blinking, doing its work. Stay with it."); return; }
   G.itemLoc.black_box = "kitten_office";
   G.boxJob = { turns: 0, heat: 0, done: false };
+  _ccibWire();   // which number the box phones home on decides who the thread leads to
   _say("You set the box on the steel shelf, behind a milk crate of cash bags where the " +
     "monitor's own body hides it, and thread the little cable to the wall. The light comes " +
     "up amber and starts to pulse, slow, like something breathing. The laptop's fan ticks " +
@@ -9130,3 +9132,133 @@ function _boxBlown() {
     "box with a farang's evening attached to it, and Rabbit is down to nothing.", "alert");
   _kickOut();
 }
+
+// ── The CCIB landing (docs/rabbit-arc.md, "CCIB were already there") ────────
+// WDG was under investigation before the arc began; the heist nearly blows the
+// case, so CCIB interrupts the FOLLOW-THROUGH, not the job (both built paths
+// stand — rabbitData is set the moment the light goes green or the file lands).
+// The morning after, a plainclothes visit at the White Rabbit. The heat lands on
+// WDG regardless; the VARIABLE is the radar — who CCIB now has a file on. Three
+// flat booleans on G.ccibRadar, set here from three legible facts and carried on
+// the export for the Bangkok game (docs/bangkok-concept.md).
+//
+// Nobody tells the player to lay low: the officer INFORMS (a warning is a threat
+// made, and the competent never make one), Eddy's advice is wrong-reason
+// counterpoint, and TAN gives the read — Tan is the mutual friend.
+
+const CCIB_LOW_DAYS = 21;   // "for some weeks, be boring" — the lay-low window
+
+// which wire the run used — set when it starts, read at the morning scene. The
+// SIM is the cheap wire and the worst to be caught holding; without it, the job
+// runs on your own registered number. (Rabbit's burner is a spec wire, not yet
+// built — when it is, it sets burnerUsed here.)
+function _ccibWire() {
+  if (G.itemLoc.thai_sim === "inventory") _setFlag("simUsed");
+}
+
+// who's on the radar, from how you played (called once, at the morning scene)
+function _ccibSet() {
+  const r = G.ccibRadar = G.ccibRadar || { player: false, eddy: false, nont: false };
+  r.eddy = true;   // his bar, his box, his stick — they had him before you
+  // the player: sat at the keyboard, ran it on their own number, or still holds a Thai SIM
+  if (G.rabbitWay === "operator") r.player = true;
+  if (G.rabbitWay !== "operator" && !_flag("simUsed") && !_flag("burnerUsed")) r.player = true; // own phone was the wire
+  if (G.itemLoc.thai_sim === "inventory") r.player = true;
+  // Nont: his SIM was the wire, or the kid was brought in
+  if (_flag("simUsed")) r.nont = true;
+  if (_flag("kidPath")) r.nont = true;
+  return r;
+}
+
+function _ccibDue() {
+  return _flag("rabbitData") && !_flag("ccibVisited") &&
+    G.room === "white_rabbit" && G.nightTurn >= 20;
+}
+
+// the morning-after scene: coffee, not a warrant. First name only, no threat.
+function _ccibVisit() {
+  _setFlag("ccibVisited");
+  const r = _ccibSet();
+  G.ccibLowUntil = G.day + CCIB_LOW_DAYS;   // the lay-low clock (days)
+  _say("");
+  _say("There's a man at the end of the rail who wasn't there a second ago, and Eddy is " +
+    "pouring him a coffee without being asked and without meeting his eye.", "alert");
+  _say("Plainclothes, polo shirt, the kind of forgettable Tan works hard at. He gives you a " +
+    "first name you won't keep and doesn't ask for yours, because he already has it. He is " +
+    "not unfriendly. He is not anything — he is a man doing arithmetic out loud so you can " +
+    "hear that it's already done.");
+  _say("\"That machine on Soi 6,\" he says, to his coffee. \"We have been reading it since " +
+    "March. Carefully. Quietly. It is a great deal of work, that kind of quiet.\" He turns the " +
+    "cup a quarter, and it is Tan's exact gesture, and you notice it and wish you hadn't. " +
+    "\"Last night was not quiet. Amateurs in a room we were watching, nearly walking off with " +
+    "the one thing that finishes a case that took a year to build.\"");
+  // path-aware middle: what HE saw of what YOU did
+  if (G.rabbitWay === "operator")
+    _say("He looks at you a moment longer than at Eddy. \"Somebody sat at the keyboard. A " +
+      "machine remembers a visitor better than a doorman does.\" That is all he says about it. " +
+      "It is enough.");
+  else
+    _say("He does not look at you any longer than at anyone. That is either mercy or filing; " +
+      "you cannot tell which, and that you cannot tell is the whole of it.");
+  if (G.itemLoc.thai_sim === "inventory")
+    _say("\"You are carrying a SIM,\" he says, not as a question. \"A Buriram address. Not " +
+      "yours, not anybody's. We know that address well.\" He lets it sit. \"It is a small thing " +
+      "to be carrying. It is a very legible small thing.\"");
+  // the informing, and the exit
+  _say("\"Here is what I want from you.\" A pause, so you lean in for the ask that isn't " +
+    "coming. \"Nothing. A mutual friend mentioned the group might have a problem soon, and a " +
+    "problem is only useful if nobody is standing in it when it arrives. So do not stand in " +
+    "it.\" He finishes the coffee, thanks Eddy by a name Eddy answers to, and is gone into the " +
+    "morning before you have decided what your face should be doing.", "alert");
+  _say("(Nobody warned you. He told you what he knows and left, which is worse. TALK TO TAN " +
+    "when you see him.)", "dim");
+  // Eddy goes to ground — theatrically, and for the wrong reason
+  G.soc.hostOut = G.soc.hostOut || {};
+  G.soc.hostOut.fast_eddy = true;
+  _say("Eddy watches the door for a while after it's shut. \"Right,\" he says, to nobody. " +
+    "\"That's me gone for a bit. New number. You don't have it.\" He believes this is about " +
+    "him. It is the one thing about last night that isn't.", "dim");
+  _setFlag("ccibRadarSet");
+}
+
+// TAN'S READ — the mechanic's real voice, delivered when you next reach him.
+// (His dialogue node, gated on ccibVisited && !ccibReadGiven, sets ccibReadGiven.)
+
+// the lay-low window, felt: a possible second look, and it lifts when the WDG
+// case becomes the news. Called from _tick (cheap; guarded on the flag).
+function _ccibLowTick() {
+  if (!_flag("ccibVisited") || _flag("ccibCleared")) return;
+  if (G.day >= (G.ccibLowUntil || 0)) {
+    _setFlag("ccibCleared");
+    if (G.soc.hostOut) G.soc.hostOut.fast_eddy = false;   // Eddy resurfaces
+    _say("The White Dish thing is finally in the paper — a group of bars, an investigation, " +
+      "words like 'financial irregularities' doing a lot of polite work. No names you know, " +
+      "and none of them yours. The footnote got left out, exactly as promised. Eddy's back on " +
+      "his stool by the weekend, telling the story as though he planned it.", "win");
+    _say("(You can stop being boring now. Mostly.)", "dim");
+    return;
+  }
+  // a rare second look during the window — ambient, no mechanics, once
+  if (!_flag("ccibSecondLook") && _flag("ccibReadGiven") && G.nightTurn >= 30 &&
+      typeof _rand === "function" && _rand() < 0.04) {
+    _setFlag("ccibSecondLook");
+    _say(_pickVary(_CCIB_WATCHED, "ccibwatch"), "dim");
+  }
+}
+const _CCIB_WATCHED = [
+  "The same forgettable polo shirt is two tables over, not reading the same newspaper he wasn't reading last time. He doesn't look up. He doesn't have to. You order water and it is the most boring thing you have ever done on purpose.",
+  "A motorbike you've seen before idles across the soi for exactly as long as it takes you to notice it, and then doesn't hurry off, which is the message. Somebody is confirming a footnote stays where footnotes stay.",
+  "Your phone does the small hiccup a phone does when somebody polite is interested in it. Probably nothing. In this specific fortnight, you decide to believe 'probably' and go home early.",
+];
+
+// the WORK-shift awareness (hooked in _doWork, during the window)
+function _ccibWorkLine() {
+  if (!_flag("ccibVisited") || _flag("ccibCleared")) return false;
+  _say(_pickVary(_CCIB_WORK, "ccibwork"), "dim");
+  return true;
+}
+const _CCIB_WORK = [
+  "You work the rail clean and quiet, ring nothing you don't have to, and keep the night's takings the kind of dull that survives a second glance. Being boring, it turns out, is also a business plan.",
+  "Every face at the bar is just a face this fortnight — no angles, no favours, nobody's cousin's phone. You pour, you smile, you go home. A man being watched runs the tidiest bar on the soi.",
+  "You catch yourself doing the sums a careful man does — who saw you, what the till says, whether tonight was ordinary. It was. You are getting good at ordinary. Tan would approve, which is the point.",
+];

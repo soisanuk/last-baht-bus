@@ -132,6 +132,8 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "owlAmulet",      // the column printed its one-shot letter (_doColumn)
     "rabbitPath", "rabbitData", "rabbitBlown", // the Rabbit arc: interview + mule path (engine-set)
     "bookGiven", "barBook",                     // …and the operator path's bonus, given back or run at your own bar
+    "simUsed", "burnerUsed", "simDitched", "kidPath",  // the Rabbit arc's wires and paths (engine-set)
+    "ccibVisited", "ccibRadarSet", "ccibReadGiven", "ccibCleared", "ccibSecondLook", // …and the CCIB landing
   ]); // set by engine actions (read/wai/give/enter), not NPC dialogue
   for (const npc of Object.values(NPCS)) {
     for (const d of npc.dialogue) {
