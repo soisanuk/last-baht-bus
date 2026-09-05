@@ -296,19 +296,25 @@ argument, which is the point.** Three beats, in order:
    Decline and nothing moves (doctrine). **No Bangkok in it, no "he's going places":**
    the no-signpost test applies exactly as it does to the lake errand — the beat must
    be worth having if the follow-on is never built.
-3. **A fourth landing for the heat, and it's the one nobody can allow.** CCIB pulls
-   the thread and it leads to the kid. The three adults in his life collide:
+3. **The kid lands on CCIB's radar, and it's the one outcome nobody in the arc can
+   allow.** (Revised 2026-09-06: CCIB were already inside WDG's case — see *CCIB* below —
+   so nothing "lands" on Nont as heat; what happens is that a competent institution now
+   has his name, which for the follow-on game is the point.) The three adults in his
+   life collide over what to do about that:
    - **Rabbit's guilt line, finally said out loud** (the unbuilt thread the concept doc
      notes is built here, in the only scene that earns it).
    - **Tan's unpriced favour gets called in early and in the wrong direction**: Tan
-     moves the heat — the `tanfavour` modal machinery, its second use — and now the
-     *player* owes him for the kid, with no figure on it. The fixer who never takes
-     money has just done the biggest favour in the game.
-   - **Or the player buys the kid clear**, with cash, through Nont's own channel —
-     the priced fixer paying for the priced fixer. `CASH` is already his verb.
+     makes a call that turns a file into a footnote — the `tanfavour` modal machinery,
+     its second use — and now the *player* owes him for the kid, with no figure on it.
+     The fixer who never takes money has just done the biggest favour in the game. (He
+     cannot take the kid OFF the radar; nobody can. He can make sure the name is the
+     last thing anyone looks at.)
+   - **Or the player pays**, with cash, through Nont's own channel — the priced fixer
+     paying for the priced fixer. `CASH` is already his verb. Same limit: it buys
+     distance, not erasure.
    - **How the thread reaches him at all** is the SIM — see *The SIM — the wire, and
-     the name on it* below. On your own phone or Rabbit's burner the fourth landing is
-     a threat that never quite arrives; on a Nont SIM it is the road you paved.
+     the name on it* below. On your own phone or Rabbit's burner the kid stays off the
+     radar unless you brought him in; on a Nont SIM it is the road you paved.
    - **Duangjai never learns which.** The tiffin errand reads differently afterward,
      and nothing in her dialogue changes — the player carries that one alone.
 
@@ -339,11 +345,11 @@ phones home, the operator run needs a hotspot, the kid needs a number to be reac
 on — and none of it can touch a farang's own registered number. That gives the player
 three wires, chosen by what they already own, never by a menu:
 
-| The wire | Where it comes from | Where the thread leads |
+| The wire | Where it comes from | Who lands on CCIB's radar |
 |---|---|---|
-| **Your own phone** | doing nothing — the sloppy default | **You.** The knock comes to your door; the "you take it" landing gets its mechanism. |
-| **Rabbit's burner** | he hands you one if you have nothing else | **Rabbit.** His supply, his name on the registration chain; he slips the noose a third time. |
-| **Nont's SIM** | ฿200 at the Old Market, before or during the arc | **Buriram** — a man who sold his ID for ฿300 and has never heard of any of you — and from Buriram to the table that bought the stack, which is **how CCIB reaches the kid.** The player's own ฿200 built the road. |
+| **Your own phone** | doing nothing — the sloppy default | **You.** A registered farang number inside a monitored machine's traffic: the plainclothes coffee is poured for you by name, and `ccibRadar.player` is set. |
+| **Rabbit's burner** | he hands you one if you have nothing else | **Rabbit only** — and he was on it already. The one wire that keeps *you* off the radar (unless you sat at the keyboard). |
+| **Nont's SIM** | ฿200 at the Old Market, before or during the arc | **Buriram** — a man who sold his ID for ฿300 and has never heard of any of you — and from Buriram to the table that bought the stack, which is **how Nont lands on the radar.** The player's own ฿200 built the road. |
 
 **The SIM is the cheapest wire and the worst one to be caught holding.** A farang
 found with his own number in a suspicious pattern is a farang with a story to tell.
@@ -356,12 +362,11 @@ hostess's *"you have Thai number?"* want. Whether the player still **has** it wh
 thread is pulled is the variable:
 
 - **Ditched** (`BREAK SIM` / `THROW SIM` / drop it off the Bali Hai pier — a voiced
-  verb, nothing more): the trail stops at Buriram. Nothing reaches you. It may still
-  reach the table, and the kid — see below.
-- **Kept**: the knock is polite, the officer is unhurried, and the question is the
-  number. That is the "you take it" landing at its heaviest — heat, money, a scare, and
-  a favour owed to get clear — with Tan's read afterward: *"A Thai name in a farang
-  pocket. My friend, you gave them the one thing they did not have to work for."*
+  verb, nothing more): you stay off the radar. The table, and Nont, may not.
+- **Kept**: the coffee is poured for you too, and the question is the number. You are
+  on the radar alongside Nont — the heaviest version of laying low — with Tan's read
+  afterward: *"A Thai name in a farang pocket. My friend, you gave them the one thing
+  they did not have to work for."*
 
 **What it does to the kid path.** Beat 3 no longer needs fiat: CCIB reaches the kid
 *through the SIM the player bought*, Buriram → the Old Market table → Nont's
@@ -401,7 +406,8 @@ with the dog** — and this one has a clipped ear, which is not a memory, it is 
 *description*. So the same property that made you invisible to the street makes you
 trivial to the officer who is not looking at CCTV so much as asking the noodle
 seller who was about. Where the SIM is the paper trail, the dog is the witness trail:
-both acquired innocently, both the thread.
+both acquired innocently, both the thread — and either is enough to put a mule who
+otherwise stayed clean onto the radar by description alone.
 
 **This is the fourth verse at the player's own level.** Eddy's whole life is one long
 song titled *clever farang underestimates the real world* — and here the clever thing
@@ -512,30 +518,59 @@ is safe to name precisely because there is no allegation attached. No named offi
 no real cases — the institution and its reputation, nothing more. (Same spirit as
 using the *category* of the syndicate without naming a real family.)
 
-**CCIB is involved no matter what — the only variable is who takes the heat.** A
-crypto move against WDG draws the one thing the powers cannot abide: *attention*
-(`docs/factions-thai.md`, "Influence, not violence"). CCIB pulls the thread
-regardless; the arc's climax is **where it lands**, a three-way fork:
+**WDG WAS ALREADY UNDER INVESTIGATION** (Mario, 2026-09-06 — this replaces the
+"who takes the heat" fork below). CCIB had the group's crypto laundering open for
+months before the player ever sat down at the White Rabbit. Rabbit does not know.
+Nobody on the soi knows, because that is what competent and unhurried looks like from
+the outside: nothing. So the heist is not the thing that brings CCIB to WDG. **The
+heist is the thing that nearly blows the case CCIB already had** — two amateurs and a
+black box stumbling around inside a monitored machine — and CCIB's move is to
+*interrupt it*, quietly, so their own work isn't wrecked by the help. That is the
+fourth verse sung straight: the clever farang thought he was first. He was a year
+late, and in the way.
 
-- **Rabbit** takes it — but he is a survivor who has landed on his feet twice, so he
-  *slips the noose a third time* rather than going to jail (Mario's constraint: he is
-  a future asset). The near-miss is the tension, not a game-over. Cost: he goes to
-  ground; you lose easy access to him for a while.
-- **You** take it — the sloppy-play outcome. You underestimated the locals exactly
-  as Eddy always has, and the knock comes to *your* door. Survivable (violence never
-  becomes mechanics; nobody threatens you), but it costs you — heat, money, a scare,
-  a favour owed to get clear.
-- **WDG** takes it — the elegant outcome. The heist's real product was never the
-  coins; it was *evidence of the laundering*, and CCIB doing its competent job on
-  **WDG** is the lever Rabbit could never see. This is the inversion made mechanical:
-  you win by handing the competent locals a true thing, not by out-hacking anyone.
+**What the interruption IS.** Not a raid — raids are loud, and loud is what the whole
+faction doctrine says the competent never are. The job completes on its own terms
+(the light goes green; the file lands on the stick — the player's nerve or skill still
+pays, and both built paths stand). What is interrupted is the *follow-through*: Rabbit
+never gets to use what you brought him. The morning after, a plainclothes officer is
+already at the White Rabbit when you arrive — coffee, not a warrant, first name only —
+and the conversation is about how long they have been in that machine and how close
+last night came to costing them the case. The data is theirs now; it always was. He
+does not threaten anybody. He does not have to. He does, once, say the thing Mario
+gave him: that a mutual friend had mentioned the group might have a problem soon, and
+that a problem is only useful if nobody else is standing in it. **Then he leaves, and
+the case against WDG proceeds without you, exactly as it would have.**
 
-- **Nont** takes it — the fourth landing, available only if you brought the kid in,
-  and the one nobody in the arc can allow. See *The kid path* above: Rabbit's guilt,
-  Tan's favour called in the wrong direction, or the player paying the kid clear.
+**The variable is the RADAR, not the heat.** The heat lands on WDG regardless — they
+are the real outsiders, the ones paying *suay* to be tolerated, and the case is
+already made. What the player's choices decide is **who CCIB now has a file on**, and
+that is the Bangkok seed (`docs/bangkok-concept.md`): a name on a competent
+institution's radar is a thread a later game can pull.
 
-Who it lands on is a function of *how you played* (see the open question below) and
-of the betrayal fork.
+| Who lands on the radar | How |
+|---|---|
+| **Eddy / Rabbit** | Always. It is his bar, his box, his stick; they had him before you. He slips nothing this time — he is simply *known*, which for a man planning a fourth life is worse than a charge. |
+| **You** | If you sat at the machine (the operator path — a monitored keyboard remembers), if the job ran on **your own phone**, or if you were still holding a Thai SIM when the coffee was poured. The mule who used Rabbit's burner and walked away from the box is the one player who stays off it. |
+| **Nont** | If the wire was **his SIM** (Buriram → the table → his channel), or if you brought **the kid** in. Direct or indirect, he is on it — and he is the one the follow-on game most needs to be on it. |
+
+**What "you don't get away scot-free" means, mechanically.** No visa revoked, no
+deportation, no cell, no ban — that would be a scandal and this town does not do
+scandals. You **lay low**: a `ccibRadar.player` flag, a period (weeks) in which a
+second plainclothes visit is possible, WORK at your own bar prints the awareness of
+being watched, Tan's read on it, and the Owl running a lead about the group's
+troubles with nobody's name in it. It lifts when the WDG investigation becomes the
+news — the focus was always elsewhere; you were only ever adjacent. Standing moves as
+before: aiding Rabbit against WDG still lowers `wdg`; nothing moves for a choice not
+taken.
+
+**Portability note.** `G.ccibRadar = { player, eddy, nont }` is exactly the kind of
+field the baton/export should carry forward: three booleans a Bangkok game can read
+on day one without importing an engine. Keep it flat, keep it boolean, keep it named.
+
+**The old four-way "who takes the heat" fork is retired** (it lives in the decision
+log). Its best line survives in the new shape — you win, insofar as anybody wins, by
+being the one person in the story who *wasn't in the way*.
 
 ### The betrayal fork (v1, tentative)
 
@@ -676,7 +711,9 @@ argument for the firewall this arc already has.
 | 2026-09-05 | **Phase 1 built** (interview + mule path). Office = `kitten_office` behind Kitten Corner's till (WDG by Kesinee's own line; not the flagship or the ops bar). Expat-only, deps `white_dish`. Interview is a `pendingChoice="rabbitjob"` modal (CARRY IT / NOT ME / ASK), NOT ME free and re-offerable. Mule path: buy the till girl a drink to open the corridor (`_boxGirlPaid` via `_tillKeeper`), PLACE the box, WAIT `BOX_TURNS` clean ticks; a noisy command on a footstep turn spends heat (`_gogoLightWarn` shape), 3 strikes = Kesinee finds you = `rabbitBlown` + `_kickOut`; leaving mid-run refused, TAKE aborts clean. Two quests `rabbit_job`/`rabbit_heist`, doneFlags `rabbitPath`/`rabbitData`. Operator path, kid path, SIM/dog beats and the CCIB landings are the next phases. |
 | 2026-09-05 | **Landing decided** (Mario): CCIB's heat lands mostly on WDG no matter what — the real outsiders — and may even acknowledge the player's contribution as the excuse it needed to build the WDG case "for a mutual friend". The player is not scot-free but keeps visa/liberty: lay low until focus is elsewhere (the WDG investigation). The SIM DECIDES the landing (not a computed score). Betrayal fork IN for v1. Operator path yields a recoverable, player-useful thing (TBD in the operator build). |
 | 2026-09-05 | **Phase 2 built — the operator path, on a PORTABLE module.** `web/js/cli-sim.js` loads after `games.js` and follows its doctrine exactly: pure, no G/DOM/clock, injected rnd, plain-data state (lives in `G.game.cli`, so a save resumes the puzzle), data-driven (`CLI_SCENARIOS.wdg_office` in world.js holds every host noun), and **enumerable moves** — `cliOptions()` lists every legal command, a password only becoming a chip once READ. `tests/js/cli-sim.test.js` loads ONLY the module (the portability assertion) and proves tap-reachability by breadth-first search over the options to the win; it also greps the source for host nouns and globals. Host wiring: KEYBOARD at the interview → `G.rabbitWay="operator"` + Rabbit's stick (no item) → same corridor gate → USE/SIT AT LAPTOP → `G.game.type="cli"` through the real game router (`_gameInput/_gameBoard/_gameVerbs/_renderGame`, QUIT = EXIT, no stake). Won → `rabbitData`; budget lock → retry another night, no flag; EXIT keeps what was copied. **The reward decided (Mario: "something recoverable, interesting, useful"): Rabbit's old regulars** — `regulars_2019.xls` in the office archive, WDG lifted it with his bar and never used it. Copy it and it is an item (`trade_book`) with a fork: GIVE it to Eddy (trust +2, +2 สนุก, his best line) or READ it at your own bar (`barBook` → takings × `BOOK_TAKINGS` 1.06 — the European trade he survives on, now yours; he hears, and says so, and doesn't ask). Not the crypto, so the inversion stands. |
-| open | CCIB heat: scripted landing vs. computed from play. |
+| 2026-09-06 | **WDG was already under CCIB investigation** for crypto laundering before the arc begins. The heist doesn't bring CCIB — it nearly BLOWS their case, and CCIB interrupts it: the job completes (both built paths stand) but the follow-through is taken from Rabbit by a plainclothes visit the morning after, coffee not warrant, "a mutual friend mentioned the group might have a problem soon". The heat lands on WDG regardless. **The variable is the RADAR** — `G.ccibRadar = {player, eddy, nont}` — Eddy always; the player if operator / own phone / holding a Thai SIM; Nont if his SIM or the kid. No visa/deportation/jail: the player lays low for weeks (a second visit possible, WORK notes it, Tan reads it) until the WDG case is the news. The four-way "who takes the heat" fork is retired. The radar flags are the Bangkok seed and should ride the export. |
+| 2026-09-06 | **CCIB heat: CLOSED** — neither scripted-landing nor computed; the landing is fixed (WDG) and the radar is set by three legible facts (path, wire, SIM held). |
+
 | open | Betrayal fork in v1 (tentative yes). |
 | 2026-09-05 | Operator-path reward: CLOSED — Rabbit's old regulars (see phase 2 row). |
 | 2026-08-24 | If iOS happens: tap-reachability is a HARD constraint on the CLI scenario format (every legal move enumerable and tappable, per the thumbs-only precedent), and a `sanuk{…}` flag is decoration only on mobile. The CTF stays web-only — its affordances (`/.well-known/`, a scannable QR, `dig TXT`) have no app analogue, and the existing CTF-independence firewall is what makes that free. |
