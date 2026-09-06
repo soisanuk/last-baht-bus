@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 241,
+  "geolocated": 243,
   "patrons": 24,
-  "people": 340,
-  "portraits": 364,
+  "people": 341,
+  "portraits": 365,
   "renders": 364,
   "thumbs": 364,
-  "venues": 241
+  "venues": 243
  },
  "frames": [
   "baimon_pic1",
@@ -3458,6 +3458,13 @@
    "room": "eastern_seaboard",
    "th": "วิลาวัลย์"
   },
+  "wilf": {
+   "desc": "Seventy-eight, thin as a rail, white hair combed flat with water, in a grey polo shirt that was navy once. He has the corner seat at the long table — the one by the socket — and a fifty-baht plate he makes last the afternoon. Nottingham, thirty years ago. He is not counting anything out loud, and he is counting everything.",
+   "emoji": "🍛",
+   "name": "Wilf",
+   "pronoun": "he",
+   "room": "mikes_mall"
+  },
   "wimon": {
    "bars": [
     "arrow_bar",
@@ -3920,6 +3927,7 @@
   "wayne",
   "wilai",
   "wilawan",
+  "wilf",
   "wimon",
   "win",
   "yada",
@@ -6046,6 +6054,24 @@
    ],
    "name": "The Pit Stop",
    "region": "LK Metro"
+  },
+  "pk_buakhao": {
+   "estimated": true,
+   "geo": [
+    12.9362,
+    100.8886
+   ],
+   "name": "Central Pattaya Road (Soi Buakhao)",
+   "region": "Soi Buakhao"
+  },
+  "pk_east": {
+   "estimated": true,
+   "geo": [
+    12.935,
+    100.8985
+   ],
+   "name": "Central Pattaya Road (Sukhumvit end)",
+   "region": "Soi Buakhao"
   },
   "police_station": {
    "geo": [

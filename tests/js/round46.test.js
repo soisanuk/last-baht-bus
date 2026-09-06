@@ -245,3 +245,58 @@ test("Nont knows Boonchu is a morning man, and charges nothing for it", () => {
   out = []; run("ask nont about boonchu");
   assert.match(text(), /pickup with no tailgate/); assert.equal(G.money, m0);
 });
+
+// ── Mario's calls on Owen's geography (2026-09-06) ────────────────────────
+
+test("road travel is reversible: a cardinal step between two street rooms has the opposite cardinal back (or a junction's named connector where that slot is another road)", () => {
+  const OPP = { n: "s", s: "n", e: "w", w: "e" };
+  const venue = r => !!(r.bar || r.barType || r.shop || r.outlet || r.indoors || r.massage || r.soapy || r.hostBar || r.food || r.hotel);
+  // documented exceptions: Tree Town's lanes are a warren, not roads; Jomtien Soi 7's middle and
+  // its beach end sit on one south-west line with the soi's west stretch (both 233°), which a
+  // four-cardinal grid cannot hold honestly — a bar-mat question for Mario, not a bug
+  const skip = id => /^tt_/.test(id) || id === "jomtien_soi_7_m" || id === "jomtien_soi_7_beach_end";
+  const bad = [];
+  for (const [a, r] of Object.entries(ROOMS)) {
+    if (venue(r) || skip(a)) continue;
+    for (const [d, b] of Object.entries(r.exits || {})) {
+      if (!OPP[d] || !ROOMS[b] || venue(ROOMS[b]) || skip(b)) continue;
+      const ex = ROOMS[b].exits || {};
+      if (ex[OPP[d]] === a) continue;                                   // honest both ways
+      const back = Object.entries(ex).find(([, x]) => x === a);
+      if (!back) { bad.push(`${a} -${d}-> ${b}: no way back`); continue; }
+      if (ex[OPP[d]] && ex[OPP[d]] !== a) continue;                    // that slot is another road: a junction, named connector allowed
+      bad.push(`${a} -${d}-> ${b} -${back[0]}-> back, and ${OPP[d]} is free`);
+    }
+  }
+  assert.deepEqual(bad, []);
+});
+
+test("Pattaya Klang runs Beach Road → Second Road → Soi Buakhao → Sukhumvit, and Soi Buakhao terminates into it", () => {
+  assert.equal(ROOMS.beach_rd_klang.exits.e, "pattaya_klang");
+  assert.equal(ROOMS.pattaya_klang.exits.e, "pk_buakhao");
+  assert.equal(ROOMS.pk_buakhao.exits.e, "pk_east");
+  assert.equal(ROOMS.pk_buakhao.exits.w, "pattaya_klang");
+  assert.equal(ROOMS.pk_buakhao.exits.s, "buakhao_klang");
+  assert.equal(ROOMS.buakhao_klang.exits.n, "pk_buakhao");
+  assert.equal(ROOMS.buakhao_klang.exits.w, undefined, "the soi ends at the road, it does not cross it");
+  assert.equal(ROOMS.pk_east.exits.w, "pk_buakhao");
+  assert.ok(ROOM_GEO.pk_buakhao && ROOM_GEO.pk_east);
+  assert.ok(_path("beach_rd_klang", "pk_east").length >= 3, "walkable end to end");
+});
+
+test("the Areca Lodge's driveway is where its door is: Soi Diana middle, not the Buakhao end", () => {
+  assert.match(String(ROOMS.diana_mid.desc), /ARECA LODGE|Areca Lodge/);
+  assert.doesNotMatch(String(ROOMS.diana_e.desc), /Areca/);
+  assert.equal(ROOMS.diana_mid.exits.hotel, "areca_room");
+});
+
+test("Wilf at Mike's Mall: thirty years, a pension the rate has been eating, one thing away, and not going back", () => {
+  vac(); G.room = "mikes_mall"; G.nightTurn = 20;
+  assert.ok(_npcsHere().includes("wilf"), "he is at the long table");
+  out = []; run("talk to wilf"); assert.match(text(), /Fortnight's not finished/);
+  out = []; run("ask wilf about pension"); assert.match(text(), /taking/);
+  out = []; run("ask wilf about home"); assert.match(text(), /Go back to what/);
+  out = []; run("ask wilf about hospital"); assert.match(text(), /one thing away|just the sum/i);
+  assert.doesNotMatch(text(), /\bpity\b/i);
+  for (let d = 1; d <= 7; d++) { G.day = d; assert.ok(_npcActive("wilf"), "every day of the week — he has nowhere else to be"); }
+});

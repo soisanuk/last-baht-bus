@@ -198,7 +198,7 @@ test("the Buakhao shuttle is never spliced into the town circuit", () => {
   assert.ok(reachable.every(id => /^buakhao_/.test(id)), "and it reaches nowhere else");
   // both ends still touch a main road on foot, which is the honest cheap route
   assert.equal(ROOMS.buakhao_pt.exits.w, "pattaya_tai");
-  assert.equal(ROOMS.buakhao_klang.exits.w, "pattaya_klang");
+  assert.equal(ROOMS.buakhao_klang.exits.n, "pk_buakhao");   // the soi TERMINATES into Pattaya Klang at its north end (Mario, 2026-09-06)
 });
 
 // ── Yuki (Opus, economy): the free-flirt economy, braked two ways ──

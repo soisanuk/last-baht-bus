@@ -703,7 +703,7 @@ const ROOMS = {
       "throws a guitar solo out its open front — the freelancers' favourite, and loud about it. " +
       "Another 7-Eleven glows across the intersection. THE OFFICE BAR and THAPPRAYA THAI MASSAGE " +
       "see out the strip before the traffic of Second Road takes over.",
-    exits: { w: "thappraya_mid", e: "jomtien_2nd_n", n: "thappraya_ext_s",
+    exits: { w: "thappraya_mid", s: "jomtien_2nd_n", n: "thappraya_ext_s",
              up: "thappraya_ext_s" },
     venues: ["take_care_me", "the_office", "thappraya_massage"],
   },
@@ -925,7 +925,7 @@ const ROOMS = {
       "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north. " +
       "The HILL road climbs away over the crest toward the Pratumnak clubs and Soi 5 " +
       "beyond it; a turning drops to the PIER at Bali Hai.",
-    exits: { n: "second_rd_india", w: "buddha_hill",
+    exits: { n: "second_rd_india", s: "pratumnak_hill_rd", w: "buddha_hill",
              hill: "pratumnak_hill_rd", soi5: "pratumnak_hill_rd", pier: "bali_hai" },
   },
 
@@ -2049,7 +2049,7 @@ const ROOMS = {
       "a four-lane road that never quite stops. Soi 9 comes in from the beach side, " +
       "quiet and daytime-ish next to all this; the mall's Second Road entrance and " +
       "its run of food stalls is a block south, and MYTH NIGHT market further down again.",
-    exits: { s: "second_rd_mall", n: "second_rd_soi8", soi9: "pattaya_soi_9" },
+    exits: { s: "second_rd_mall", n: "second_rd_soi8", soi9: "pattaya_soi_9", w: "pattaya_soi_9" },
   },
   // Second Road's Soi Diana mouth. Until now the whole road was three rooms and
   // this junction had none, which left Soi Diana, Soi Honey and Myth Night all
@@ -2110,7 +2110,7 @@ const ROOMS = {
     desc: "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao " +
       "in one straight shot from the sea to Sukhumvit — on foot it stops being a walk at Soi Buakhao. Baht buses, banks, gold shops, " +
       "and a river of traffic that never quite jams and never quite flows.",
-    exits: { w: "beach_rd_klang", n: "second_rd_soi6", s: "second_rd_n", e: "buakhao_klang" },
+    exits: { w: "beach_rd_klang", n: "second_rd_soi6", s: "second_rd_n", e: "pk_buakhao" },
   },
 
   // ─── Shopping (Second Road) ───
@@ -2510,7 +2510,7 @@ const ROOMS = {
       "The touts with the laminated menus are still here. A dark side-alley slinks off " +
       "between them.",
     venues: ["neon_paradise", "club_mirage"],
-    exits: { n: "ws_gate", s: "ws_south", out: "ws_gate", alley: "ws_alley", diamond: "soi_diamond" },
+    exits: { n: "ws_gate", s: "ws_south", out: "ws_gate", alley: "ws_alley", w: "ws_alley", diamond: "soi_diamond", e: "soi_diamond" },
   },
   ws_alley: {
     name: "Walking Street Side-Alley",
@@ -2529,7 +2529,7 @@ const ROOMS = {
       "conversation levels, the kind of place you end up after you've stopped trying. Late " +
       "enough, the whole strip fills with barfined ladies and their friends en route to the clubs.",
     venues: ["crystal_palace", "paradise_nights", "midnight_sun"],
-    exits: { n: "ws_north", pier: "bali_hai" },
+    exits: { n: "ws_north", pier: "bali_hai", w: "bali_hai" },
   },
   neon_paradise: {
     name: "Neon Paradise A-Go-Go",
@@ -2593,7 +2593,7 @@ const ROOMS = {
       mast: "Masts and rigging on the Koh Larn boats, awnings rolled, the ropes creaking the way ropes do when nobody is aboard. A cat on one of the decks has opinions about you.",
       engines: "The songthaews' engines are off, which on Walking Street counts as silence. The drivers don't start them for a man who is only looking.",
     },
-    exits: { n: "ws_south", s: "pratumnak_rd" },
+    exits: { e: "ws_south", s: "pratumnak_rd" },
   },
   // Soi Diamond runs off Walking Street to Second Road — 153 m of it, and two of
   // the loudest rooms on the coast.
@@ -2810,6 +2810,52 @@ const ROOMS = {
   // had three rooms for the whole of it. These two open the northern half, where
   // the real junctions are: Klang at the top, then Soi Made In Thailand where
   // Myth Night runs west and the Tree Town arch stands east.
+  // CENTRAL PATTAYA ROAD runs from Beach Road to Sukhumvit with three intersections
+  // — Beach Road, Second Road, Soi Buakhao — and Soi Buakhao TERMINATES into it at
+  // the soi's north end (Mario, 2026-09-06; Owen had walked it and found the road
+  // stopped at the soi while its own prose ran to the highway).
+  pk_buakhao: { motosai: true,
+    name: "Central Pattaya Road (Soi Buakhao)",
+    region: "Soi Buakhao",
+    desc: "The Soi Buakhao lights: a four-way junction where the expat soi runs out into Pattaya Klang " +
+      "and stops, a 7-Eleven on one corner and a gold shop on the other, motorbikes stacked ten deep " +
+      "at the red. West, the road runs back to Second Road and the sea; east it widens, loses its " +
+      "pavement, and goes on to Sukhumvit under sodium lamps. South is the top of Soi Buakhao, the " +
+      "market end, and every bar you know.",
+    revisit: [
+      "The Buakhao lights again — a songthaew stopped dead across the junction, the whole town's horns behind it.",
+      "Back at the junction. The gold shop's shutter is half down and a woman is counting the day into a bag.",
+      "The Klang lights. A piwin on the corner reads you the way a fisherman reads weather.",
+      "The junction. Somebody has parked a pickup across the 7-Eleven's forecourt and nobody is going to say anything.",
+    ],
+    lateDesc: [
+      "The junction at the dead hour: the lights cycling for nobody, a single songthaew idling with its board turned off, the 7-Eleven the brightest thing for a kilometre.",
+      "Past midnight the Buakhao lights go amber-flash and the junction becomes a suggestion. A pickup goes through it without slowing. Nobody minds.",
+      "Late, the corner belongs to the piwins and a soup cart, and the road east is a row of lamps going somewhere you cannot see the end of.",
+    ],
+    exits: { w: "pattaya_klang", s: "buakhao_klang", e: "pk_east" },
+  },
+  pk_east: { motosai: true,
+    name: "Central Pattaya Road (Sukhumvit end)",
+    region: "Soi Buakhao",
+    desc: "The long east stretch of Pattaya Klang, where the town stops pretending to be a resort: tyre " +
+      "shops, a car showroom with the lights left on, a Buddhist supplies shop with a gold Buddha in the " +
+      "window taller than you, and the pavement giving up in favour of parked pickups. Ahead, the " +
+      "sodium-lit width of Sukhumvit and the lights of the Big C across it; behind, the Buakhao " +
+      "junction and everything you came for. Nobody walks this on purpose.",
+    revisit: [
+      "The Sukhumvit end again: a wall of trucks, a bus with its interior lights on, a dog asleep in the showroom's forecourt.",
+      "The last of Pattaya Klang. The highway noise arrives before the highway does.",
+      "Back at the Sukhumvit end. The gold Buddha in the shop window has not moved, which is more than can be said for the traffic.",
+      "The east end of Pattaya Klang, where the pavement is a rumour and the pickups own it.",
+    ],
+    lateDesc: [
+      "Late, the showroom's lights are the only ones on this stretch, and the highway beyond is a river of headlights that never gets to the sea.",
+      "Past midnight the east end is trucks and nothing else — eight lanes of them, and a footpath in theory.",
+      "The dead hour on the Sukhumvit end: a lorry every twenty seconds, a stray dog working the bins behind the showroom, the Big C sign the only colour.",
+    ],
+    exits: { w: "pk_buakhao" },
+  },
   buakhao_klang: {
     motosai: true,
     seven: true,
@@ -2837,7 +2883,7 @@ const ROOMS = {
         "watching the traffic fail to move.",
     ],
     venues: ["klang_massage"],
-    exits: { w: "pattaya_klang", s: "buakhao_myth" },
+    exits: { n: "pk_buakhao", s: "buakhao_myth" },
   },
   buakhao_myth: {
     motosai: true,
@@ -2966,7 +3012,7 @@ const ROOMS = {
         "exactly what it's selling. It just won't say so out loud.",
     },
     venues: ["rock_factory", "lucky_tiger", "cheap_charlies", "candy_bar"],
-    exits: { n: "buakhao_lk", s: "buakhao_market", alley: "lk_entrance",
+    exits: { n: "buakhao_lk", s: "buakhao_market", w: "diana_e", alley: "lk_entrance",
              hotel: "metropole_room", diana: "diana_e" },
   },
   buakhao_market: {
@@ -4577,7 +4623,9 @@ const ROOMS = {
     desc: "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers " +
       "working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE " +
       "BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi, and CLOZE " +
-      "sits between them with a letter missing off its sign and a blackboard out front. A side door of " +
+      "sits between them with a letter missing off its sign and a blackboard out front. The ARECA " +
+      "LODGE's lit driveway opens off the north side between two bars — a hotel keeping its own " +
+      "hours in the middle of everyone else's. A side door of " +
       "the LK Metro complex breathes cold air and go-go bass from further along — but that's the " +
       "complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here.",
     venues: ["sapphire", "sundowner", "cloze"],
@@ -4588,7 +4636,7 @@ const ROOMS = {
     region: "Soi Diana",
     desc: "The Buakhao end of Soi Diana. THE CRICKETERS holds the corner here — dartboard, three " +
       "screens, pies — and the LK Metro alley opens off to one side (its other mouth is up on " +
-      "Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto " +
+      "Buakhao proper). Ahead, the soi spills onto " +
       "Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors " +
       "south of it.",
     venues: ["cricketers"],
@@ -12520,7 +12568,7 @@ const BUS_LINES = {
   // Deliberately NOT joined to the town circuit: this line is a local, and the
   // rule is Mario's — they only go up and down Buakhao unless you NEGOTIATE
   // otherwise, which is the charter (BUS_CHARTER, see _doRideBus). Both ends
-  // touch a main road one room west (buakhao_klang → pattaya_klang,
+  // touch a main road one room on (buakhao_klang → pk_buakhao on Pattaya Klang,
   // buakhao_pt → pattaya_tai), so the honest cheap route off the soi is still
   // to ride to an end and walk. _busLinesFor's loop-completion only fires for
   // beachrd/secondrd, so this line never gets silently spliced into the circuit.
@@ -15477,6 +15525,82 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"They don't KNOW her, man. And even if they're right — so.\"" },
     ],
   },
+  // THE OLD-TIMER AT MIKE'S MALL (Mario, 2026-09-06 — Owen: "give the food court one old man
+  // with a name"): retired here thirty years ago, survives on a UK pension the exchange rate has
+  // been eating since 2013, one medical incident from insolvent and knows it; won't go back —
+  // nobody left there, hasn't been in twenty years. Would rather die poor here than cold alone
+  // there. No self-pity anywhere in it; the arithmetic is stated flat, like Lek's price story.
+  // (Not "Reg" — Reginald is already on the bench, and _findNpc matches a regular by name-prefix.)
+  wilf: {
+    name: "Wilf", emoji: "🍛",
+    pronoun: "he",
+    room: "mikes_mall",
+    hops: false,
+    title: "the old man with the fifty-baht plate",
+    look: "English man of seventy-eight, thin, white hair combed flat, sun-spotted, faded grey polo shirt, reading glasses on a cord",
+    desc: "Seventy-eight, thin as a rail, white hair combed flat with water, in a grey polo shirt that " +
+      "was navy once. He has the corner seat at the long table — the one by the socket — and a " +
+      "fifty-baht plate he makes last the afternoon. Nottingham, thirty years ago. He is not " +
+      "counting anything out loud, and he is counting everything.",
+    dialogue: [
+      { text: "\"Sit down, lad, you're blocking the fan.\" He moves a folded newspaper an inch to make " +
+          "room that was already there. \"Wilf. Nottingham, if the accent's not doing it. Nineteen " +
+          "ninety-six I came, for a fortnight.\" He has the timing of a man who has told it before " +
+          "and still likes the ending. \"Fortnight's not finished.\"",
+        short: "\"Wilf. Nottingham. Came for a fortnight in ninety-six. Fortnight's not finished.\"" },
+      { topic: "pension|money|budget|cheap|afford|poor|broke|pension day|monthly|exchange rate|the rate|pound",
+        text: "\"State pension and a bit of a works one, paid into a Nottingham account, drawn here at " +
+          "whatever the rate's doing. Which since twenty-thirteen has been *taking*.\" He turns the " +
+          "plate a quarter. \"Room's four thousand. Plate's fifty. Beer's one, at the Anchor, on a " +
+          "Thursday. I don't do the sums where you can see them and I don't need to.\" A nod down the " +
+          "table. \"Nobody here does. We all know what everybody's monthly is. It's never mentioned.\"",
+        short: "\"Pension, drawn at whatever the rate's doing — since twenty-thirteen, taking. Room four thousand, plate fifty. Never mentioned.\"" },
+      { topic: "home|uk|england|britain|nottingham|back home|go home|return|go back",
+        text: "\"Home.\" He lets the word sit like something on a plate he didn't order. \"Haven't been back " +
+          "since two thousand and four. Mother's funeral. There's nobody there now, lad — no wife, no " +
+          "kids, brother went in oh-nine. The house I grew up in is a Tesco Express.\" He picks up his " +
+          "fork. \"Go back to what? A council flat in Bulwell with the heating on a meter and a carer " +
+          "who's twenty minutes late? I've seen how that ends. I'd rather it ended here.\"",
+        short: "\"Not since oh-four. Nobody there — no wife, no kids, brother's gone. Go back to what?\"" },
+      { topic: "family|wife|kids|children|brother|mother|father|parents|relatives",
+        text: "\"There was a wife, in the eighties. Didn't take.\" No more than that on the subject, and " +
+          "his face says there won't be. \"Brother in Mansfield — went in oh-nine, heart. I got the " +
+          "letter three weeks late because I'd moved rooms. That's the family. That's the whole " +
+          "list.\" He straightens the newspaper. \"You want family, lad, buy a dog. Half the lads " +
+          "here have.\"",
+        short: "\"A wife once, didn't take. A brother, gone oh-nine. That's the list.\"" },
+      { topic: "hospital|medical|doctor|sick|ill|insurance|health|heart|dying|die|death|cold|alone",
+        text: "\"Insurance? At seventy-eight? They'd want the pension and the plate.\" Flat, not " +
+          "bitter. \"I'm one thing away, lad. One fall, one chest, one of those nights the lads carry " +
+          "you into the Memorial, and it's forty thousand before they've found a vein, and then it's " +
+          "the room, and then it's the embassy ringing somebody who doesn't answer.\" He eats a " +
+          "forkful, unhurried. \"I know it. Everybody at this table knows it. And I'll still tell you " +
+          "I'd sooner go poor here with the fan on than cold in Bulwell with nobody. That's not " +
+          "brave, that's just the sum.\"",
+        short: "\"One thing away. One fall, forty thousand, the embassy ringing nobody. Sooner poor here than cold there. That's just the sum.\"" },
+      { topic: "pattaya|thirty years|ninety-six|1996|how long|why here|why pattaya|the town|changed",
+        text: "\"Ninety-six it was a fishing town with a bad reputation and one road. You could get a " +
+          "room with a fan for eighty baht and the girls were from the next province, not the next " +
+          "country.\" He looks at the food court like it is a window. \"Now it's a city with a worse " +
+          "reputation and the same road. I don't mind it. It's mine. I've watched every one of these " +
+          "shops open, and I'll watch a few close.\"",
+        short: "\"Ninety-six: a fishing town, one road, a room for eighty baht. Now it's a city and the same road. It's mine.\"" },
+      { topic: "table|lads|the lads|men|regulars|the others|friends|mates|food court|mall|mike|mike's|here",
+        text: "\"The table? Same eight of us, near enough, since the mall opened. Scots, a Dutchman, two " +
+          "Geordies who don't speak.\" A dry nod down the length of it. \"We don't do names much and we " +
+          "don't do money at all. But when Alf didn't come in for three days somebody went round, " +
+          "and when he went, somebody rang the embassy, and somebody paid the temple.\" He puts " +
+          "the fork down. \"That's what the table's for. You'll want to know that one day.\"",
+        short: "\"Same eight of us since it opened. No names, no money. When one of us doesn't come in, somebody goes round.\"" },
+      { topic: "plan|future|tomorrow|next|what now|advice",
+        text: "\"Plan.\" It gets the ghost of a laugh. \"Same as yours, lad, only I'm honest about it: get " +
+          "up, walk to the mall, eat the plate, do the crossword, walk back before the heat. Thursday " +
+          "the Anchor, one beer. Pension day, two.\" He taps the newspaper. \"Advice? Don't wire your " +
+          "lot into anything with a logo. And learn what the plate costs before you learn what the " +
+          "girls do. The lads who learned it the other way round aren't at this table any more.\"",
+        short: "\"Get up, walk, eat the plate, walk back before the heat. Don't wire your lot into anything with a logo.\"" },
+    ],
+  },
 };
 
 // What a patron looks like before you've learned their name — shown on the "At
@@ -17057,6 +17181,8 @@ const ROOM_GEO = {
   buakhao_myth:      [12.93208, 100.88678],
   buakhao_tt:       [12.93146, 100.88646],
   buakhao_klang:     [12.93594, 100.88854],
+  pk_buakhao: [12.9362, 100.8886],   // sketched (4dp): PK at the Buakhao lights
+  pk_east: [12.9350, 100.8985],      // sketched (4dp): PK at Sukhumvit
   metropole_room:   [12.92974, 100.88485],
   rock_factory:     [12.92914, 100.88489],
   lucky_tiger:      [12.92901, 100.88506],

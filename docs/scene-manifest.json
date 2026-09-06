@@ -2,11 +2,11 @@
   "generated": "2026-09-06",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 241,
+    "rooms": 243,
     "regions": 15,
     "byKind": {
       "beach": 14,
-      "street": 94,
+      "street": 96,
       "massage": 19,
       "beer": 58,
       "mall": 1,
@@ -311,6 +311,8 @@
         "lucky_tiger",
         "metropole_room",
         "myth_massage",
+        "pk_buakhao",
+        "pk_east",
         "rock_factory",
         "silk_rose"
       ],
@@ -336,8 +338,8 @@
         "sundowner"
       ],
       "sampleDescs": [
-        "The Buakhao end of Soi Diana. THE CRICKETERS holds the corner here — dartboard, three screens, pies — and the LK Metro alley opens off to one side (its other mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it.",
-        "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi, and CLOZE sits between them with a letter missing off its sign and a blackboard out front. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here.",
+        "The Buakhao end of Soi Diana. THE CRICKETERS holds the corner here — dartboard, three screens, pies — and the LK Metro alley opens off to one side (its other mouth is up on Buakhao proper). Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it.",
+        "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi, and CLOZE sits between them with a letter missing off its sign and a blackboard out front. The ARECA LODGE's lit driveway opens off the north side between two bars — a hotel keeping its own hours in the middle of everyone else's. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here.",
         "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block south of Soi Honey. The open-air KISS restaurant does brisk trade on the corner under its fairy lights — everyone in Pattaya gives directions off it — with THE DOLLHOUSE's horseshoe counter glowing right alongside. Ahead, the soi runs into warm light and eighty different sound systems; the first beer bar's girls are already waving."
       ]
     },
@@ -429,8 +431,8 @@
         "ws_south"
       ],
       "sampleDescs": [
-        "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous enough that people photograph it before they've seen what's behind it. The strip runs south. It used to be louder. The gap between what this street was and what it is now is not visible from the gate, but you'll feel it by the time you reach the other end. RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded, right at the gate.",
         "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes; CLUB MIRAGE shimmers a few doors along. The touts with the laminated menus are still here. A dark side-alley slinks off between them.",
+        "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous enough that people photograph it before they've seen what's behind it. The strip runs south. It used to be louder. The gap between what this street was and what it is now is not visible from the gate, but you'll feel it by the time you reach the other end. RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded, right at the gate.",
         "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE WINDMILL on one side, KATOEY'S R US on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far."
       ]
     }
@@ -2246,7 +2248,9 @@
       "regionSlug": "second-road",
       "kind": "street",
       "dark": false,
-      "people": [],
+      "people": [
+        "Wilf"
+      ],
       "desc": "Four floors of strip-lit shopping for people counting it. Luggage, phone repair, tailors who will do you a suit by Thursday, and a whole floor of swimwear that has been there since before the swimwear was fashionable the first time. The lift works most days. Up on the top floor is the food court: laminated photo menus, a fifty-baht plate that is honestly enough food, and a long table of men in their sixties and seventies who have been coming here since it opened. Pension day is the busy one. They know each other's names, and roughly what everyone's monthly is, and neither is ever mentioned."
     },
     {
@@ -2941,6 +2945,30 @@
       "desc": "Right on the corner of the plaza, doors open to the soi so the whole street can watch a row of farang being folded in half. Nobody minds. There is a hand-lettered price list, a stack of loose cotton trousers, and a kettle that never quite goes off the boil."
     },
     {
+      "id": "pk_buakhao",
+      "name": "Central Pattaya Road (Soi Buakhao)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The Soi Buakhao lights: a four-way junction where the expat soi runs out into Pattaya Klang and stops, a 7-Eleven on one corner and a gold shop on the other, motorbikes stacked ten deep at the red. West, the road runs back to Second Road and the sea; east it widens, loses its pavement, and goes on to Sukhumvit under sodium lamps. South is the top of Soi Buakhao, the market end, and every bar you know."
+    },
+    {
+      "id": "pk_east",
+      "name": "Central Pattaya Road (Sukhumvit end)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The long east stretch of Pattaya Klang, where the town stops pretending to be a resort: tyre shops, a car showroom with the lights left on, a Buddhist supplies shop with a gold Buddha in the window taller than you, and the pavement giving up in favour of parked pickups. Ahead, the sodium-lit width of Sukhumvit and the lights of the Big C across it; behind, the Buakhao junction and everything you came for. Nobody walks this on purpose."
+    },
+    {
       "id": "rock_factory",
       "name": "Rock Factory",
       "bar": "Rock Factory",
@@ -3031,7 +3059,7 @@
       "people": [
         "Candy"
       ],
-      "desc": "The Buakhao end of Soi Diana. THE CRICKETERS holds the corner here — dartboard, three screens, pies — and the LK Metro alley opens off to one side (its other mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it."
+      "desc": "The Buakhao end of Soi Diana. THE CRICKETERS holds the corner here — dartboard, three screens, pies — and the LK Metro alley opens off to one side (its other mouth is up on Buakhao proper). Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it."
     },
     {
       "id": "diana_mid",
@@ -3043,7 +3071,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi, and CLOZE sits between them with a letter missing off its sign and a blackboard out front. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here."
+      "desc": "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi, and CLOZE sits between them with a letter missing off its sign and a blackboard out front. The ARECA LODGE's lit driveway opens off the north side between two bars — a hotel keeping its own hours in the middle of everyone else's. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here."
     },
     {
       "id": "diana_w",

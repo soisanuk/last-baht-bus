@@ -456,6 +456,7 @@ CHARS = {
     # Bob: 76, American, reading glasses pushed up on a bald head, behind his own bar.
     "bob":      dict(skin=TAN, hair="balding", hc=C(0xd8d8dc), shirt=C(0x4a6a58), collar=True,
                      mouth="smile", acc=["mustache", "glasses"], bg=BG_BAR),
+    "wilf":     dict(skin=RED, hair="bald", hc=SILVER, shirt=C(0x6a6a72), collar=True, mouth="stern", bg=BG_STREET),
     "doug":     dict(skin=TAN, hair="combover", hc=GREY, shirt=C(0x8a3a3a), collar=True, mouth="stern", bg=BG_BAR),
     # ── Origin archetypes (the seven "who are you?" NPCs on Soi 6) ──
     "doyle":    dict(skin=TAN, hair="short", hc=GREY, shirt=C(0x6a7078), collar=True, mouth="stern", bg=BG_BAR),
