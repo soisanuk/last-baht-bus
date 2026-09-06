@@ -142,6 +142,8 @@ bar next door is **The Sundowner**, `lake_beer`.)
 
 ### What LBB hands over — the radar, and the asset (agreed 2026-09-06)
 
+`G.ccibRadar` carries a fourth field, `described` (2026-09-06): true only when a run that already pointed at the player was walked with the dog — the officer has a *face* for the name, not just a number. Never set on a clean run. Bangkok may read it as "they know what he looks like" — a bonus texture, never a key.
+
 The Rabbit arc's climax (`docs/rabbit-arc.md`, *CCIB — the fourth verse*) was reframed: WDG
 was **already under CCIB investigation** for crypto laundering, the heist nearly blows that
 case, and CCIB interrupts the follow-through. The heat lands on WDG regardless. What LBB

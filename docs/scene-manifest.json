@@ -6,11 +6,11 @@
     "regions": 15,
     "byKind": {
       "beach": 14,
-      "street": 96,
+      "street": 94,
       "massage": 19,
       "beer": 58,
       "mall": 1,
-      "interior": 2,
+      "interior": 4,
       "motel": 1,
       "gogo": 11,
       "pub": 3,
@@ -1991,8 +1991,9 @@
       "barType": null,
       "region": "Pratumnak",
       "regionSlug": "pratumnak",
-      "kind": "street",
+      "kind": "interior",
       "dark": false,
+      "indoors": true,
       "people": [
         "Khun Wilawan",
         "Tul"
@@ -2523,8 +2524,9 @@
       "barType": null,
       "region": "Soi 6",
       "regionSlug": "soi-6",
-      "kind": "street",
+      "kind": "interior",
       "dark": false,
+      "indoors": true,
       "people": [],
       "desc": "A windowless box behind the till, cold with aircon and lit like a fridge. Steel shelving, the night's cash bags in a milk crate, a wall safe with a keypad, and a laptop on a desk nobody sits at for long — the group's, not the bar's, with a sticker on the lid of a white dish and nothing else. A monitor above it cycles through six cameras, none of them pointing in here. Through the door the bar is a muffled bass line and a laugh; the corridor outside is the only way anybody comes, and the only way you leave."
     },

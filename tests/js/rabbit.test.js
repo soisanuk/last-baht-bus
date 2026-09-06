@@ -22,7 +22,7 @@ const run = (...cmds) => { for (const c of cmds) doCommand(c); };
 const nofoot = (fn) => { const s = _rand; _rand = () => 0.99; try { return fn(); } finally { _rand = s; } };
 
 // An expat who has done the White Dish quest — the arc's two gates.
-beforeEach(() => {
+function fresh() {
   out = []; newGame();
   G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 9000;
@@ -30,7 +30,8 @@ beforeEach(() => {
   for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
   G.peddlerNight = 2;
   _npcState("fast_eddy").trust = 3;   // he sizes you up before he offers
-});
+}
+beforeEach(fresh);
 
 // take the job cleanly, to the point of carrying the box — the shared preamble
 function recruit() {
@@ -332,7 +333,7 @@ test("the clean mule: Rabbit's burner, walk away from the box, stay off the file
   nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
   morningAfter();
   assert.ok(_flag("ccibVisited"));
-  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: false },
+  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: false, described: false },
     "burner mule: Eddy always, player clean, Nont clear");
   assert.match(text(), /nothing to write down/i, "and the scene says so");
 });
@@ -346,12 +347,24 @@ test("your own phone in their office puts you on the file, whatever the box used
   assert.equal(G.ccibRadar.player, true);
 });
 
-test("the dog is a description: a clean mule with a dog is on the file anyway", () => {
+test("the dog CONFIRMS, never accuses: a burner mule with a dog stays clean; a sloppy run with a dog is described", () => {
+  // clean: the burner was the wire, the dog was at heel
   G.dog = { since: 1, name: null };
-  recruit(); intoOffice();
+  recruit(); G.itemLoc.burner = "inventory"; intoOffice();
   nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
   morningAfter();
-  assert.equal(G.ccibRadar.player, true, "everybody remembers the farang with the dog");
+  assert.equal(G.ccibRadar.player, false, "the burner mule is the one clean player, dog or no dog");
+  assert.equal(!!G.ccibRadar.described, false);
+  assert.doesNotMatch(text(), /Clipped ear\."/, "he does not say the till girl remembers you");
+  assert.match(text(), /nobody to attach it to|not write that down either/i, "but he looks at the dog");
+  // sloppy: own phone was the wire — now the dog turns a mule into a face
+  fresh();
+  G.dog = { since: 1, name: null };
+  recruit(); G.itemLoc.burner = null; intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  assert.equal(G.ccibRadar.player, true, "own number was the wire");
+  assert.equal(G.ccibRadar.described, true, "and everybody remembers the farang with the dog");
   assert.match(text(), /Clipped ear|remembers the dog/i);
 });
 
@@ -375,7 +388,7 @@ test("the kid path: Rabbit can't ask, Nont names a price, the run is offscreen, 
   assert.ok(_flag("rabbitData"), "his text lands the next day");
   assert.ok(G.phone.inbox.some(m => m.from === "nont"));
   morningAfter();
-  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: true },
+  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: true, described: false },
     "the kid is on the file; the player, who never touched the machine, is not");
   assert.match(text(), /young man|from the lake/i, "the officer names him without naming him");
   // Tan's version of the read arms the call
@@ -429,7 +442,7 @@ test("the SIM is the wire that names Nont — and ditching it clears the player,
   nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
   // still holding it at the visit → player on the radar too
   morningAfter();
-  assert.deepEqual(G.ccibRadar, { player: true, eddy: true, nont: true });
+  assert.deepEqual(G.ccibRadar, { player: true, eddy: true, nont: true, described: false });
 
   // same run, but THROW SIM before the morning: the player comes off, Nont stays
   out = []; newGame();
@@ -447,7 +460,7 @@ test("the SIM is the wire that names Nont — and ditching it clears the player,
   run("break sim");
   assert.equal(G.itemLoc.thai_sim, null, "the SIM is gone");
   morningAfter();
-  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: true },
+  assert.deepEqual(G.ccibRadar, { player: false, eddy: true, nont: true, described: false },
     "ditching clears YOU; the road to Nont was already paved");
 });
 

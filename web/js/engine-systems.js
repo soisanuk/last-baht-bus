@@ -9203,16 +9203,26 @@ function _ccibWire() {
   // neither: the box talks through your own registered number — the sloppy default
 }
 
+// did the run itself point at you? — sat at the keyboard, ran it on your own
+// number, still holding a Thai SIM, or used your own phone in their office.
+// The dog is deliberately NOT in here (Mario, 2026-09-06): a description
+// confirms a name the paper already gave them; it never supplies one. The
+// burner mule with a dog stays the one clean player.
+function _ccibPointed() {
+  if (G.rabbitWay === "operator") return true;
+  if (G.rabbitWay !== "operator" && G.rabbitWay !== "kid" && !_flag("simUsed") && !_flag("burnerUsed")) return true; // own phone was the wire (the kid used his own kit)
+  if (G.itemLoc.thai_sim === "inventory") return true;
+  if (_flag("ownPhoneUsed")) return true;
+  return false;
+}
 // who's on the radar, from how you played (called once, at the morning scene)
 function _ccibSet() {
-  const r = G.ccibRadar = G.ccibRadar || { player: false, eddy: false, nont: false };
+  const r = G.ccibRadar = G.ccibRadar || { player: false, eddy: false, nont: false, described: false };
   r.eddy = true;   // his bar, his box, his stick — they had him before you
-  // the player: sat at the keyboard, ran it on their own number, or still holds a Thai SIM
-  if (G.rabbitWay === "operator") r.player = true;
-  if (G.rabbitWay !== "operator" && G.rabbitWay !== "kid" && !_flag("simUsed") && !_flag("burnerUsed")) r.player = true; // own phone was the wire (the kid used his own kit)
-  if (G.itemLoc.thai_sim === "inventory") r.player = true;
-  if (_flag("ownPhoneUsed")) r.player = true;          // you used your own phone in their office
-  if (G.dog && G.rabbitWay !== "kid") r.player = true;  // "everybody remembers the farang with the dog"
+  if (_ccibPointed()) r.player = true;
+  // the dog: cover on the street, a description to an officer — but only a description.
+  // It turns "one of Rabbit's mules" into a face, when the paper already had a name.
+  if (G.dog && G.rabbitWay !== "kid" && r.player) r.described = true;   // "everybody remembers the farang with the dog"
   // Nont: his SIM was the wire, or the kid was brought in
   if (_flag("simUsed")) r.nont = true;
   if (_flag("kidPath")) r.nont = true;
@@ -9255,14 +9265,17 @@ function _ccibVisit() {
       "Very quick. In and out of that machine like he'd built it — which, I gather, he did.\" " +
       "He lets that sit exactly as long as it needs to. \"His mother is a cashier at the " +
       "Boathouse. I mention it only because I know it.\"", "alert");
-  if (G.dog && G.rabbitWay !== "kid")
+  if (G.dog && G.rabbitWay !== "kid" && _ccibPointed())
     _say(_dogN("He glances down at Sai Krok, who is under the rail regarding him with professional " +
       "interest. \"The girl on the till at Kitten Corner remembers a farang with a dog. Clipped ear.\" A small " +
       "nod at the ear in question. \"Nobody remembers a farang. Everybody remembers the dog.\""), "alert");
-  if (_flag("burnerUsed") && G.rabbitWay === "mule" && !_flag("ownPhoneUsed") && G.itemLoc.thai_sim !== "inventory" && !G.dog)
+  if (_flag("burnerUsed") && G.rabbitWay === "mule" && !_flag("ownPhoneUsed") && G.itemLoc.thai_sim !== "inventory") {
     _say("He does not look at you at all, in the end. Whoever carried that box used a phone that " +
       "leads to the man pouring the coffee, and walked away from it, and was never at a keyboard. " +
       "There is nothing to write down. You can feel him not writing it.", "dim");
+    if (G.dog) _say(_dogN("He looks at Sai Krok rather longer than he looked at you. A dog with a clipped ear " +
+      "is a description of somebody, and he has nobody to attach it to. He does not write that down either."), "dim");
+  }
   if (_flag("invoicesCopied"))
     _say("\"And you read the invoices.\" Almost approving. \"Most people would not know what they " +
       "were looking at. A cleaner at ninety thousand a month, and a bar that pours to nobody. " +
