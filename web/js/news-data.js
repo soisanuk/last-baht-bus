@@ -3,29 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "USS Abraham Lincoln: US sailors unwind in Thailand by shopping and bar-hopping",
-    "s": "BBC",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "70-year-old Brit assaulted on Jomtien Beach, perp arrested immediately",
-    "s": "Pattaya Mail",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "Pattaya port call sees minor drama as two US sailors are sent back to carrier",
-    "s": "Malay Mail",
-    "d": "04 Sep 2026"
-  },
-  {
-    "t": "U.S. service members are unwinding in a Thai resort town strained by the Iran war they’ve been fighting",
-    "s": "NBC News",
-    "d": "04 Sep 2026"
-  },
-  {
-    "t": "To Lam’s four-nation tour puts Vietnam’s growing regional influence in focus",
-    "s": "Pattaya Mail",
-    "d": "04 Sep 2026"
+    "t": "‘It’s a fever dream right now’: sailors of USS Abraham Lincoln voice joy after arriving in Thailand",
+    "s": "The Guardian",
+    "d": "02 Sep 2026"
   },
   {
     "t": "Pedicures and a pair of socks: sailors from USS Abraham Lincoln go wild in party resort of Pattaya",
@@ -43,14 +23,39 @@ var NEWS_FEED = [
     "d": "03 Sep 2026"
   },
   {
-    "t": "British-Nigerian influencer died after penile filler procedure in Thailand",
-    "s": "Bangkok Post",
+    "t": "U.S. service members are unwinding in a Thai resort town strained by the Iran war they’ve been fighting",
+    "s": "NBC News",
+    "d": "04 Sep 2026"
+  },
+  {
+    "t": "I live in Thailand and Pattaya shows the worst of our tourism – but also the best",
+    "s": "The Independent",
+    "d": "04 Sep 2026"
+  },
+  {
+    "t": "Drunken brawl in Thailand sends two USS Abraham Lincoln service members back to ship",
+    "s": "MS NOW",
+    "d": "03 Sep 2026"
+  },
+  {
+    "t": "My night out with US sailors in Thailand’s ‘Sin City’",
+    "s": "The Telegraph",
+    "d": "03 Sep 2026"
+  },
+  {
+    "t": "US carrier Abraham Lincoln departs Thailand after respite visit",
+    "s": "reuters.com",
     "d": "06 Sep 2026"
   },
   {
-    "t": "Influencer Dies After Penis Enlargement Procedure in Thailand",
-    "s": "TMZ",
-    "d": "05 Sep 2026"
+    "t": "Thailand Puts 49 Data Centers on Hold Over Resource Strain",
+    "s": "Bloomberg.com",
+    "d": "04 Sep 2026"
+  },
+  {
+    "t": "British-Nigerian influencer died after penile filler procedure in Thailand",
+    "s": "Bangkok Post",
+    "d": "06 Sep 2026"
   },
   {
     "t": "Influencer dies after receiving penis enlargement injection in Thailand: report",
@@ -58,25 +63,20 @@ var NEWS_FEED = [
     "d": "05 Sep 2026"
   },
   {
-    "t": "Building Thailand’s Future Today",
-    "s": "World Bank Group",
-    "d": "02 Sep 2026"
+    "t": "Nigerian-British businessman dies after penis enlargement procedure",
+    "s": "Vanguard News",
+    "d": "05 Sep 2026"
   },
   {
-    "t": "Thailand Spring-Loaded Vial Stoppers - Market Analysis, Forecast, Size, Trends and Insights",
-    "s": "IndexBox",
-    "d": "06 Sep 2026"
-  },
-  {
-    "t": "Abraham Lincoln Carrier Strike Group Arrives in Thailand",
-    "s": "U.S. Embassy & Consulate in Thailand (.gov)",
-    "d": "02 Sep 2026"
+    "t": "Thailand and Singapore prime ministers perform The Beatles hit ‘Let It Be’ in Bangkok",
+    "s": "AP News",
+    "d": "03 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-04","USD":32.92,"AUD":23.71,"GBP":44.54,"EUR":38.26};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-06","temp":31,"humid":70,"code":2,"hi":31,"rain":71};
+var WX_NOW = {"date":"2026-09-06","temp":29,"humid":79,"code":3,"hi":31,"rain":88};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-04","done":true,"h":"Ipswich","hs":0,"a":"Liverpool","as":2},{"d":"2026-09-05","done":true,"h":"Newcastle","hs":2,"a":"Bournemouth","as":2},{"d":"2026-09-05","done":true,"h":"Brentford","hs":1,"a":"Sunderland","as":1},{"d":"2026-09-05","done":true,"h":"Brighton","hs":1,"a":"Leeds","as":1},{"d":"2026-09-05","done":true,"h":"Fulham","hs":2,"a":"C Palace","as":3},{"d":"2026-09-05","done":true,"h":"Man City","hs":1,"a":"Coventry","as":0},{"d":"2026-09-05","done":true,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":true,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":false,"h":"Everton","hs":0,"a":"Man United","as":0},{"d":"2026-09-06","done":false,"h":"Arsenal","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4431,"date":"2026-09-06","baht":69000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79907,"thb":2629088};
+var BTC = {"usd":79995,"thb":2633710};
