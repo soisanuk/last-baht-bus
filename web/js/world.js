@@ -3504,6 +3504,16 @@ const ROOMS = {
       "Into Kitten Corner, all posters and pounce, where the girls tell you exactly what the staircase is for inside the first breath and dare you to be shocked.",
       "Back to the paw and the purr, and a girl who has decided you are hers for the night. \"No shy, handsome. This Soi 6. We say what we want, you buy the drink, we go up. Easy, na?\"",
     ],
+    reads: {
+      corridor: [
+        { req: ["rabbitData"], text: "Past the till, a strip of lino and a door with a keypad. You know exactly what is behind it, " +
+          "and the girl on the till knows you know; she has stopped looking at her phone. Nothing back there is yours." },
+        { req: ["rabbitPath"], text: "Past the till, a strip of lino under a bare tube and a door at the end with a keypad and a " +
+          "camera over it. Staff only, by every sign in two languages. The girl on the till is between you and it." },
+        { text: "Past the till, a strip of lino under a bare tube and a door at the end. Staff only, by every " +
+          "sign in two languages; the toilets are the other way." },
+      ],
+    },
     exits: { out: "soi6_deep", back: "kitten_office" },
   },
   // WDG's Soi 6 back office, behind Kitten Corner's till (Mario, 2026-09-05:
@@ -3535,6 +3545,8 @@ const ROOMS = {
         "screen with a photo of a golf course, and a Post-it on the bezel with what is " +
         "almost certainly the password on it, because it is always the password on it. " +
         "Nothing here is yours to touch tonight.",
+      safe: "A wall safe with a keypad, the night's cash bags stacked in a milk crate on the floor " +
+        "beside it because the safe is full, or nobody bothers. Not yours, not tonight, and not the job.",
       monitor: "Six camera feeds on a cycle — the rail, the door, the stairs, the till, the " +
         "pavement both ways. The office is the one room in the building with no camera in " +
         "it, which tells you what the office is for.",

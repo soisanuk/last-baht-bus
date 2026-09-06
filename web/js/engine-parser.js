@@ -1390,6 +1390,8 @@ const _READ_NOUNS = {
   laptop: ["computer", "machine", "pc", "screen", "lock screen", "post-it", "postit"],
   monitor: ["cameras", "camera", "cctv", "feeds", "feed"],
   stick: ["usb", "usb stick", "rabbit's stick", "the stick", "under the bar"],
+  safe: ["wall safe", "keypad", "cash bags", "cash bag", "milk crate", "crate"],
+  corridor: ["hallway", "passage", "back corridor", "the back"],
   alley: ["lane", "side alley", "the alley"],
   beach: ["sea", "bay", "water", "gulf", "the beach", "the sea"],
   // the one `reads.board` in the game is Myth Night's DJ request sheet — the
@@ -3973,7 +3975,7 @@ function _doTopics(arg) {
   const per = 4;
   if (open.length > per) {
     G.convoPage = ((G.convoPage || 0) + 1) % Math.ceil(open.length / per);
-    _say("(Tapping cycles the rest onto the chip bar. ASK " + who.split(" ")[0].toUpperCase() +
+    _say("(Tapping cycles the rest onto the chip bar. ASK " + who.split(" ").pop().toUpperCase() +   // the last word is the one the parser answers to ("Fast Eddy" → EDDY, "Madam Oy" → OY; Dougie, round 46)
       " ABOUT <topic> works for any of them.)", "dim");
   }
 }
@@ -5112,6 +5114,12 @@ function _buyManDrink(id) {
   G.money -= _beerPrice();
   G.soc.manDrinks = G.soc.manDrinks || {};
   G.soc.manDrinks[id] = (G.soc.manDrinks[id] || 0) + 1;
+  // A man drink is the one thing a manager notices on the night: the first of the
+  // evening moves his trust a notch (capped where the quest gates sit). Eddy's
+  // "drink here a while, hear things" was a promise nothing kept — three nights
+  // of soda and a bell moved him nowhere, and only a JOKE did (Dougie, round 46).
+  G.soc.mgrTrustNight = G.soc.mgrTrustNight || {};
+  if (!G.soc.mgrTrustNight[id]) { G.soc.mgrTrustNight[id] = 1; const mst = _npcState(id); mst.trust = Math.min(3, (mst.trust || 0) + 1); }
   if (G.soc.mgrChat) G.soc.mgrChat[id] = 0; // debt squared
   _addHappy(2); _repGain(); // standing the manager a drink is exactly the sort of thing that gets around well
   if (NPCS[id].dry) {
@@ -5133,6 +5141,7 @@ function _managerChatTick(id) {
   if (typeof _atOwnBar === "function" && _atOwnBar()) return; // he works for you here; he doesn't angle you for a drink
   G.soc.mgrChat = G.soc.mgrChat || {};
   G.soc.mgrChat[id] = (G.soc.mgrChat[id] || 0) + 1;
+  if (G.pendingChoice) return;   // a modal is up — a man mid-interview doesn't angle for a drink under his own prompt (Dougie, round 46)
   if (G.soc.mgrChat[id] === 3) {
     _say(NPCS[id].nudge || (`${NPCS[id].name} lets a beat hang, then taps the bar with two knuckles: “You're ` +
       "good company, bud — but a man gets thirsty holding up his end. Stand us one?” (BUY MAN DRINK.)"), "dim");

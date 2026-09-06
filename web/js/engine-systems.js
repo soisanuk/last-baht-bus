@@ -4614,7 +4614,10 @@ function _startRain(len) {
       "empties in five seconds flat. Nobody is going anywhere for a while.", "alert");
     _say("(Nowhere to be. Nothing to be done about it. สบาย.)", "dim");
     _addHappy(1);
-  } else if (_sheltered(G.room)) {
+  } else if (_room().indoors) {   // windowless: you hear it, you don't see it (the WDG back office said "outside the glass" — Dougie, round 46)
+    _say("Rain arrives on the roof like a verdict — a drumming that fills the room with no window " +
+      "to watch it through. In here: dry, humming air-con, and the fridge light. Out there, everything.", "alert");
+  } else if (_sheltered(G.room) && (_room().shop || G.room === "police_station" || G.room === "oy_office")) {
     _say("Rain arrives like a verdict — the world outside the glass goes " +
       "grey-white and deafening. In here: dry, humming air-con, and the smug " +
       "particular pleasure of watching weather happen to other people.", "alert");
@@ -9363,7 +9366,11 @@ const _CCIB_LOUD_LINES = {
   money: "(A large sum through a door that is being watched, inside the window. Loud.)",
 };
 function _ccibLoud(kind) {
-  if (!_flag("ccibVisited") || _flag("ccibCleared") || _flag("ccibLanded")) return false;
+  if (!_flag("ccibVisited") || _flag("ccibCleared")) return false;
+  if (_flag("ccibLanded")) {   // past the ceiling nothing counts — say so once, or the silence reads as a bug (Dougie, round 46)
+    if (!_flag("ccibLoudAfter")) { _setFlag("ccibLoudAfter"); _say("(Loud, still. It no longer counts for anything; it already landed.)", "dim"); }
+    return false;
+  }
   G.ccibLoudNight = G.ccibLoudNight || {};
   if (G.ccibLoudNight[kind] === G.day) return false;   // one mark per kind per night
   G.ccibLoudNight[kind] = G.day;
@@ -9405,8 +9412,9 @@ function _ccibLand() {
   _say("Nothing happens to you. That is the whole of what happens. But the polo shirt has sat at a " +
     "rail with your name on it, in front of people" + (_flag("ccibSecondCoffee") ? ", twice" : "") + ", and this town does the rest without " +
     "being asked: the nod that was a nod is a glance, the girl who kept your stool has stopped " +
-    "keeping it, and the men who talk to everybody are talking to everybody but you. Eddy's " +
-    "shutter is down when you go by. Tan is where he always is, and looks at the soi.", "alert");
+    "keeping it, and the men who talk to everybody are talking to everybody but you. Eddy is " +
+    "not behind his own rail when you go by, and Nuan does not say where he is. Tan is where " +
+    "he always is, and looks at the soi.", "alert");
   _say("(You were told to be boring. You weren't. Nobody did anything to you; they didn't have to. " +
     "Tan will tell you the rest, once, and not warmly.)", "dim");
 }

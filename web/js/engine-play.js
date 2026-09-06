@@ -4338,6 +4338,9 @@ function _endNight(reason) {
       const girls = _staffAt(top).filter(id => NPC_ROLES[id] === "hostess");
       for (const id of girls) _addBond(id, 1);
       if (girls.length) _say(`(Three hours on the same stool at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
+      // and the man behind the rail: presence is how a manager decides you're not a tourist
+      const mgr = _staffAt(top).find(id => NPCS[id] && NPCS[id].manager);
+      if (mgr) { const mst = _npcState(mgr); if ((mst.trust || 0) < 3) { mst.trust = (mst.trust || 0) + 1; _say(`(${NPCS[mgr].name} will know it too.)`, "dim"); } }
     }
   }
   G.soc.barTurns = {};   // tonight's stools, not the vacation's — the line fired on a night slept through in the hotel (Keith, round 40)
