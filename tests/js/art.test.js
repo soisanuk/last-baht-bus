@@ -4,6 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert";
 import fs from "node:fs";
+import { spawnSync } from "node:child_process";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
@@ -108,6 +109,23 @@ test("filler art is not referenced by the game", () => {
   for (const n of names) {
     assert.ok(!new RegExp(`["'\`/]${n}["'\`.]`).test(src), n + " is referenced in web/js — move it out of filler/");
   }
+});
+
+test("the committed manifest is REPRODUCIBLE from the committed generator", () => {
+  // The sync test below compares room IDS, which is a weaker claim than it
+  // looks: it passes on a manifest whose generator can no longer produce it.
+  // That happened — a regenerated manifest was committed (carrying a new
+  // `indoors` field and a re-typed room) while the generator change that
+  // produced it sat uncommitted in another session's tree, so `--check`
+  // reported drift and nothing failed. A generated file the repo cannot
+  // regenerate is a hand-edit by another name.
+  const r = spawnSync("node", [path.join(root, "scripts", "gen-scene-manifest.mjs"), "--check"],
+    { cwd: root, encoding: "utf8" });
+  assert.equal(r.status, 0,
+    "docs/scene-manifest.json does not match its generator's output — either the " +
+    "generator changed without regenerating, or the manifest was edited/committed " +
+    "without the generator change that makes it. Run: node scripts/gen-scene-manifest.mjs\n" +
+    (r.stderr || r.stdout || ""));
 });
 
 test("the scene manifest is in sync with world.js", () => {

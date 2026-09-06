@@ -76,6 +76,12 @@ const KIND_OVERRIDE = {
 function kindOf(id, r) {
   if (KIND_OVERRIDE[id]) return KIND_OVERRIDE[id];
   if (r.barType) return r.barType;                       // beer gogo pub gents club soi6
+  // `indoors` is an ENGINE flag world.js already carries (no weather, no street
+  // dog, shelter counts) and it is exactly what the art side needs to know: a
+  // windowless room is not a street. Without it the Rabbit arc's two offices —
+  // "an office that is mostly not there", "a windowless box behind the till" —
+  // both typed `street` and would have rendered as Pattaya soi at night.
+  if (r.indoors) return "interior";
   if (r.soapy) return "soapy";
   if (r.massage) return "massage";
   if (r.hostBar) return "hostbar";
@@ -185,6 +191,7 @@ for (const id of Object.keys(ROOMS)) {
     regionSlug: slug(r.region),
     kind: kindOf(id, r),
     dark: !!r.dark,
+    indoors: r.indoors || undefined,   // windowless: no sky, no street, no weather
     // only meaningful when dark: what is lit, or null for genuinely deserted
     darkLight: r.dark ? (DARK_LIGHT[id] || null) : undefined,
     narrow: NARROW.has(id) || undefined,   // absent = an ordinary open street
