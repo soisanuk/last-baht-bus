@@ -3535,10 +3535,11 @@ function _doTalkBody(arg, topic) {
   // trade's stock answers; a story girl without her own line draws from them.
   if (topic && !d.topic && NPC_ROLES[npc] === "hostess" && !NPCS[npc].filler && /^(home|hometown|village|family|plan|future|dream)$/.test(_convoTopic(topic) || topic)) {
     const t = _convoTopic(topic) || topic;
-    const from = _H_FROM[_hh(npc, 3) % _H_FROM.length];
+    const story = _authoredStory(npc);   // her own province if her text names one; family/plan nobody else at her bar tells
+    const from = story.from;
     const line = /home|village/.test(t) ? `"${from}, Isan side. Small village, big family." She says it like a postcode, and then, softer: "Very far."`
-      : /family/.test(t) ? _H_FAMILY[_hh(npc, 7) % _H_FAMILY.length].replace(/\{from\}/g, from)
-      : _H_PLAN[_hh(npc, 11) % _H_PLAN.length];
+      : /family/.test(t) ? story.family
+      : story.plan;
     _say(`${NPCS[npc].name}: ${line}`);
     _questOffer(npc);
     return;
@@ -4201,7 +4202,7 @@ function _convoResolve(lower) {
       _findNpc(bare) ||
       _partnerHasTopic(G.convoQ.id, _convoTopic(lower));
     if (!changingSubject) return _convoAnswer(lower);
-    G.convoQ = null; // dodged (or a question back) — fall through to normal handling
+    _convoDrop(true); // dodged (or a question back) — fall through; a late digit still gets the drift line, never "didn't understand" (Gareth, round 46)
   }
   // 0) A canned reply typed a beat late — the chip was still on screen after you
   //    turned to somebody else, and the game printed the phrase then rejected it
@@ -4234,7 +4235,7 @@ function _convoResolve(lower) {
   // prompt it belonged to lapsed when you switched partners. Routing it as a
   // topic produced "You asked Terry about 1" (veteran playtest, 2026-08-17).
   const id = _convoActive();
-  if (id && /^[1-9]$/.test(bare)) {
+  if ((id || (G.convoLapsed && Object.keys(G.convoLapsed).length)) && /^[1-9]$/.test(bare)) {   // or she's gone and her question with her
     _say("(That numbered question has drifted past — the moment moved on. Ask again if it matters.)", "dim");
     return true;
   }

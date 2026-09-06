@@ -1162,7 +1162,7 @@ function _convoStart(id) {
   const lapsed = G.convoLapsed && G.convoLapsed[id];
   if (lapsed && !G.convoQ) {
     delete G.convoLapsed[id];
-    if (lapsed.q) {
+    if (lapsed.q && !lapsed.dodged) {
       _say(`${_convoName(id)} comes back to it, because ${_sheHe(id).s} was actually asking.`, "dim");
       _say(lapsed.q);
       G.convoQ = { id, key: lapsed.key, q: lapsed.q };
@@ -1184,9 +1184,18 @@ function _convoActive() {
   const here = NPCS[id] && _npcsHere().includes(id);
   if (!here) { // partner gone → conversation over; the question isn't spent, she can ask again
     if (G.convoQ) { const ost = _npcState(G.convoQ.id); if (ost && ost.know) delete ost.know["asked_" + G.convoQ.key]; }
-    G.convo = null; G.convoQ = null; return null;
+    G.convo = null; _convoDrop(true); return null;
   }
   return id;
+}
+// A question left unanswered is remembered (G.convoLapsed) so a numbered reply
+// typed a beat late gets the drift line rather than a parse failure — every
+// site that clears convoQ without an answer goes through here (Gareth, round 46).
+// `dodged`: you changed the subject (or she left) — remembered for the digit
+// courtesy only, never re-asked; a walk-away (dodged=false) is re-asked next talk.
+function _convoDrop(dodged) {
+  if (G.convoQ && G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, dodged: !!dodged };
+  G.convoQ = null;
 }
 // she/he/they for a character the engine is ABOUT to pronoun — same logic the
 // repeat-brush-off already uses (a working role or a filler girl reads she).

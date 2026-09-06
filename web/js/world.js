@@ -15808,6 +15808,18 @@ const _H_FAMILY = [
   "My mama, my papa, two nephew — everybody eat from my {{phone}}",
   "My mama house not finish — I send money every month for the roof",
   "I have one baby, no papa for him — so I am papa and mama both",
+  // Gareth, round 46 (2026-09-06): ten of each meant two girls at one rail told the
+  // same life; twenty, and a same-bar dedupe, so a punter can't recite it back.
+  "Papa gone, mama sell som tam at the market — not enough for my brother school",
+  "My grandmother, ninety year, still plant rice in {from} — I send so she can stop; she never stop",
+  "One daughter, twelve, very clever — I pay the good school in town, not the village one",
+  "My husband go, leave me the baby and the loan on the motorbike",
+  "Big family — seven of us — I am the one who come to Pattaya, so everybody call me",
+  "My mama have the sugar sick; the medicine every month, that is my job",
+  "Little sister finish school next year — after that I go home, I promise myself",
+  "My son stay with his papa family in {from}; I send, they let me see him",
+  "My papa have the buffalo and the rice and the debt — the debt is mine now",
+  "Two nephew, my sister cannot work — so their school shoes come from here",
 ];
 const _H_PLAN = [
   "open a small clothes shop",
@@ -15820,6 +15832,16 @@ const _H_PLAN = [
   "open a small coffee shop",
   "buy some land for rice",
   "learn hair and make-up and open a salon",
+  "open a small restaurant by the temple",
+  "buy a house in town for my mama, with a tile roof",
+  "go back and finish my school certificate",
+  "open a small laundry shop",
+  "buy a motorbike taxi for my brother",
+  "have a small shop selling {{phone}} cover and SIM",
+  "open a small beauty shop with my sister",
+  "buy a rubber plantation — small one",
+  "study accounting at the open university",
+  "have a food truck at the night market",
 ];
 const _H_EMOJI = ["🌸", "🌺", "💐", "🌷", "🌼", "🌻", "💫", "✨", "🌙", "💕", "🦋", "🍒"];
 const _H_PHONE = [
@@ -15869,15 +15891,51 @@ function _c4Depth(id) {
 // the short ids collided across every pool. A girl whose signature matches a
 // colleague already built at her bar is re-rolled off a bumped seed. Pure and
 // stable (same roster, same result), so saves are unaffected.
+// An authored girl with no home/family/plan node answers from the filler pools
+// (engine-parser's miss path). Two rules, both from persona rounds: her
+// hometown is the province HER OWN TEXT names, if it names one (Kai's fallback
+// said Chaiyaphum two lines after her sob story put her mama in Buriram —
+// Gareth, round 46; the claim-collision class exactly), and her family/plan
+// lines dodge everything already told at her bar — filler girls first, then the
+// authored girls before her in id order. Pure: same id, same answer, every night.
+function _authoredStory(npc) {
+  const n = NPCS[npc]; if (!n) return null;
+  const room = n.room || (n.bars && n.bars[0]);
+  const provs = _H_FROM.map(p => p.replace(/[{}]/g, ""));
+  const own = (n.dialogue || []).map(e => e.text || "").join(" ") + " " + (n.desc || "");
+  const named = provs.find(p => own.includes(p));
+  const from = named ? _H_FROM[provs.indexOf(named)] : _H_FROM[_hh(npc, 3) % _H_FROM.length];
+  const taken = { family: new Set(_storyTaken(room).family), plan: new Set(_storyTaken(room).plan) };
+  const peers = Object.keys(NPCS).filter(id => id !== npc && id < npc && !NPCS[id].filler &&
+    NPC_ROLES[id] === "hostess" && (NPCS[id].room === room || (NPCS[id].bars || []).includes(room)));
+  for (const id of peers) { const st = _authoredStory(id); taken.family.add(st.familyIdx); taken.plan.add(st.planIdx); }
+  const pick = (axis, pool, start) => { let i = start % pool.length; for (let k = 0; k < pool.length && taken[axis].has(i); k++) i = (i + 1) % pool.length; return i; };
+  const familyIdx = pick("family", _H_FAMILY, _hh(npc, 7)), planIdx = pick("plan", _H_PLAN, _hh(npc, 11));
+  return { from, familyIdx, planIdx, family: _H_FAMILY[familyIdx].replace(/\{from\}/g, from), plan: _H_PLAN[planIdx] };
+}
 const _hostessSigs = {};
+// ONE LIFE STORY PER RAIL (Gareth, round 46): family and plan are picked by hash, then
+// advanced past any line another girl at the same bar already tells — a punter who
+// interviews the whole rail must never hear the same coffee shop twice. Per-room sets,
+// filled as the bar is built; the authored fallback (_authoredStory) reads them too.
+const _hostessStories = {};
+function _storyTaken(room) { return _hostessStories[room] || (_hostessStories[room] = { family: new Set(), plan: new Set() }); }
+function _storyPick(room, axis, pool, start) {
+  const taken = _storyTaken(room)[axis];
+  let i = start % pool.length;
+  for (let n = 0; n < pool.length && taken.has(i); n++) i = (i + 1) % pool.length;
+  return i;
+}
 function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(seed, salt) % arr.length];
   const from = idx(_H_FROM, 3);
   const darkside = ROOMS[room] && ROOMS[room].region === "Darkside";
   const look = idx(darkside ? _H_LOOK_DARK : _H_LOOK, 5);
-  const family = idx(_H_FAMILY, 7).replace(/\{from\}/g, from);
-  const plan = idx(_H_PLAN, 11);
+  const famIdx = _storyPick(room, "family", _H_FAMILY, _hh(seed, 7));
+  const planIdx = _storyPick(room, "plan", _H_PLAN, _hh(seed, 11));
+  const family = _H_FAMILY[famIdx].replace(/\{from\}/g, from);
+  const plan = _H_PLAN[planIdx];
   const emoji = idx(_H_EMOJI, 13);
   const phone = idx(_H_PHONE, 19);
 
@@ -15946,12 +16004,13 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const selfies = hasPics
     ? [0, 1, 2].map(k => _H_SELFIES[_hh(id, 51 + k * 17) % _H_SELFIES.length])
     : null;
-  const _sig = [look, family, idx(GREET, 23)].join("|");
+  const _sig = [look, idx(GREET, 23)].join("|");   // look + greeting alone: family is deduped per rail now, so it must not mask a twin
   if (!_hostessSigs[room]) _hostessSigs[room] = new Set();
   if (_hostessSigs[room].has(_sig) && seed.length < id.length + 3) return _buildHostess(name, th, room, id, seed + "~");
   _hostessSigs[room].add(_sig);
+  _storyTaken(room).family.add(famIdx); _storyTaken(room).plan.add(planIdx);
   return {
-    name, th, emoji, room, filler: true,
+    name, th, emoji, room, filler: true, storyIdx: { family: famIdx, plan: planIdx },
     ...(green ? { c4: 2 } : {}),
     ...(selfies ? { selfies } : {}),
     desc: `${look} — one of ${/s$/.test(bar) ? bar + "'" : bar + "'s"} girls, from ${from}. ${phone}`,   // "Mama Yai's' girls", not "Mama Yai's's" (Stan, r35)
