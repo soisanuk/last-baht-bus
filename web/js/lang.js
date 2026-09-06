@@ -619,7 +619,7 @@ const _CATALOGS = {
       "Zurück auf einen pinken Hocker, ein Mädchen drapiert sich schon über dir. \"Du hast den ganzen Tag an mich gedacht? Lügner.\" Sie lacht, entzückt. \"Okay — kauf den Drink, wir gehen hoch, morgen denkst du an mich.\"",
     "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Powers keeps calling classy while it proves him wrong in every direction at once.":
       "Zurück in den Orchid Room, das Stroboskop, der Lärm, die nackte Haut — der Mitgliederclub, den Powers ständig \"classy\" nennt, während er ihm in jeder Hinsicht gleichzeitig widerspricht.",
-    "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own phone.":
+    "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own {{phone}}.":
       "Der Orchid holt dich zurück in seine teure Bacchanalie — die High Roller, die MC-Patches, der stille Thai-Mann am guten Tisch, und Powers auf seiner Bank, der sich selbst seinem eigenen Handy vorführt.",
     "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and Powers throws you a two-fingered salute without pausing his livestream.":
       "Zurück am Samtseil vorbei in das wilde Dunkel. Hier ist niemand Laufkundschaft; jeder hier ist irgendjemandes Problem, und Powers wirft dir einen Zwei-Finger-Gruß zu, ohne seinen Livestream zu unterbrechen.",

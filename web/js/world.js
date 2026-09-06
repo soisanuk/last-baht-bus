@@ -1099,7 +1099,7 @@ const ROOMS = {
       bird: "You give the painted bird a proper look. Blue where a kingfisher is blue, but " +
         "the beak is wrong, the tail is somebody else's, and the feet belong to a duck. The " +
         "regulars' best theory is that the painter was working from a description given over " +
-        "the phone. Nobody would dream of fixing it.",
+        "the {{phone}}. Nobody would dream of fixing it.",
     },
     revisit: [
       "The Kingfisher takes you back, at volume. Somebody is losing at pool, cheerfully.",
@@ -1583,7 +1583,7 @@ const ROOMS = {
       "which end to start at, and they walk.",
     revisit: [
       "Traffic, and the mouth of a soi that sounds better a hundred metres in.",
-      "Two farang come out squinting at a phone, turn round, and go back in.",
+      "Two farang come out squinting at a {{phone}}, turn round, and go back in.",
       "The noise from the beach end arrives thin and secondhand.",
       "Nobody hails anything. The traffic keeps not stopping.",
     ],
@@ -3162,7 +3162,7 @@ const ROOMS = {
     region: "Tree Town",
     seven: true,
     lateDesc: [
-      "The Tree Town arch with the tangle behind it gone quiet: the neon still burns because the switch is somewhere nobody can be bothered to reach, and the security lounges properly now, feet up, phone tilted.",
+      "The Tree Town arch with the tangle behind it gone quiet: the neon still burns because the switch is somewhere nobody can be bothered to reach, and the security lounges properly now, feet up, {{phone}} tilted.",
       "TREE TOWN after the crowd has gone is a lit arch over a dark warren. The painted Thai directions point into somewhere that has stopped happening. One bar deep in there is still going, and you can hear exactly which.",
       "The arch, the plastic chairs, and a mop leaning where a tout was standing six hours ago. Whatever swallowed the tourists earlier has finished digesting.",
     ],
@@ -3452,7 +3452,7 @@ const ROOMS = {
     },
     revisit: [
       "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Powers keeps calling classy while it proves him wrong in every direction at once.",
-      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own phone.",
+      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own {{phone}}.",
       "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and Powers throws you a two-fingered salute without pausing his livestream.",
       "The back room again — topless going on nude, Blue Label going on trouble, and the one soft-spoken man everyone watches without looking at him. You've learned to sit where you can see the door.",
       "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and Ryan Powers mistakes the whole arrangement for something he built.",
@@ -3713,7 +3713,7 @@ const ROOMS = {
             "the shape of him in it without him." },
         { req: ["jokeWho"],
           text: "Mort's spiral notebook, half an arm's length away and utterly private. " +
-            "Somewhere in there, you now know, is a page of phone numbers with a tally " +
+            "Somewhere in there, you now know, is a page of {{phone}} numbers with a tally " +
             "beside each — the joke ledger — and against one of them, yours, a tick: the " +
             "one in forty who answered. You are in the material now. There is no way back " +
             "out of the material." },
@@ -12975,7 +12975,7 @@ const QUESTS = {
     name: "A Crane for Her Brother",
     giver: "kwan",
     trust: 1,   // she asks a man who has answered her, not a stranger on a stool
-    desc: "Kwan wants her paper crane carried to her brother — the phone kid at the Old Market " +
+    desc: "Kwan wants her paper crane carried to her brother — the {{phone}} kid at the Old Market " +
       "on Soi Buakhao (GIVE CRANE TO NONT). Don't unfold it.",
     deps: [],
     reqFlags: ["act1Done"],
@@ -13074,7 +13074,7 @@ const QUESTS = {
   hill_order: {
     name: "A Name on the Order",
     giver: "bill",
-    desc: "Bill can fix Bob's ice with one phone call — but it cannot come from him, " +
+    desc: "Bill can fix Bob's ice with one {{phone}} call — but it cannot come from him, " +
       "and he will explain why. Put it to Bob as your own idea (ASK BOB ABOUT THE ORDER).",
     deps: ["hill_ice"],
     at: "bob",

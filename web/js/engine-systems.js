@@ -1026,7 +1026,7 @@ function _partyArrive(to) {
 function _nontHere() { return _npcsHere().includes("nont"); }
 const _NONT_LOCATE = [
   "He doesn't look up. “{n}? {where}.” A hand out, palm up, for the two hundred. “Tonight. Don't ask me tomorrow, tomorrow's another two hundred.”",
-  "“{n}.” Two thumbs on the phone, four seconds. “{where}. Two hundred.” The tweezers go back into the phone before your notes have reached his pocket.",
+  "“{n}.” Two thumbs on the {{phone}}, four seconds. “{where}. Two hundred.” The tweezers go back into the {{phone}} before your notes have reached his pocket.",
   "“Easy one.” He names it without checking: “{where}.” Then the price, as if it were part of the sentence. “Two hundred, and I'm right.”",
 ];
 function _nontLocate(topic) {
@@ -1328,7 +1328,7 @@ function _bfResolve(kind) {
         ? "{n} tips her head at the number, not embarrassed by it. \u201cWhole night " +
           "with you, I no work no more tonight, na. Long time, the girl go back bar " +
           "after you sleep \u2014 full night is different thing.\u201d A grin. " +
-          "\u201cBut okay. For you, I switch off the phone.\u201d"
+          "\u201cBut okay. For you, I switch off the {{phone}}.\u201d"
         : "{n} looks at the room \u2014 " + (_lowSeason()
           ? "half empty, and both of you know it \u2014 and names the number without ceremony. \u201cSlow night anyway, tilac. You pay, I party. Good deal for both.\u201d"
           : "FULL, and both of you know it \u2014 and names the number plainly. \u201cHigh season, tilac. Tonight this stool make money all night. You want my whole night, the number is the whole night.\u201d No apology in it. It is just the price of her time, told straight."),
@@ -2906,7 +2906,7 @@ function _tanWhere(id) {
 // my mother money when I want. I chose it." One reused template contradicted
 // three women who assert otherwise (round 23).
 const _TAN_WHO = {
-  nont: "was Rabbit's boy — the phone, the till, the talking between a farang and everybody else — " +
+  nont: "was Rabbit's boy — the {{phone}}, the till, the talking between a farang and everybody else — " +
     "until I found him a table that doesn't end on a police corkboard. He sells you an answer for " +
     "two hundred. I give it to you for nothing. You know the difference now, and so does he",
   mercedes: "is back on that rail because she decided to be, which is not the same story as the others " +
@@ -3253,7 +3253,7 @@ function _doMessage(arg) {
         ], "wonmsg")
       : _pickVary([
           `Two grey ticks. Then, a long minute later, one word: "kha." Which from her means received, understood, and closed — the politest door in Thailand, shutting gently.`,
-          `The ticks go blue and no reply comes. Somewhere in Sakon Nakhon she read it twice — you know she read it twice — and put the phone face down, the loudest thing she does.`,
+          `The ticks go blue and no reply comes. Somewhere in Sakon Nakhon she read it twice — you know she read it twice — and put the {{phone}} face down, the loudest thing she does.`,
         ], "gonemsg"));
     return;
   }
@@ -6276,7 +6276,7 @@ function _sellBarYes() {
     best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 };
   _say("");
   _say(tan
-    ? "Tan handles the sale the way he handles everything: one phone call you never " +
+    ? "Tan handles the sale the way he handles everything: one {{phone}} call you never " +
       "hear, one meeting you attend but do not speak at, and a number that is exactly " +
       "fair — not a baht of friendship in it either direction, which from him is a kind " +
       "of respect. \"The fifty-one per cent,\" he says at the end, and slides his copy " +
@@ -9509,8 +9509,8 @@ function _kidPricePrompt() {
 function _kidPriceAskMore() {
   _say("\"Why so much?\" He almost laughs. \"Because it should be. Because if it was cheap you'd " +
     "say yes without thinking, and I want you to think. Tan got me out of Rabbit's world with " +
-    "one phone call and never named a price, and I have been paying that back in ways you " +
-    "wouldn't recognise ever since.\" He turns the phone back over. \"This one has a number. " +
+    "one {{phone}} call and never named a price, and I have been paying that back in ways you " +
+    "wouldn't recognise ever since.\" He turns the {{phone}} back over. \"This one has a number. " +
     "That's me being kind.\"");
   _kidPricePrompt();
 }

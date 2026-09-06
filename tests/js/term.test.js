@@ -7,6 +7,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
+import { execFileSync } from "node:child_process";
 
 for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js",
   "data.js", "examples.js", "tokeniser.js", "thai-script.js", "wordcard.js",
@@ -110,6 +111,47 @@ test("no NPC/patron/room prose taps 'phone' through to your inventory item", () 
     (p.dialogue || []).forEach((d, i) => { check(`PAT ${id} #${i}`, d.text); check(`PAT ${id} short#${i}`, d.short); });
   }
   for (const [id, r] of Object.entries(ROOMS)) check(`ROOM ${id}`, r.desc);
+  assert.deepEqual(bad, [], "wrap the offending 'phone' in {{…}} or a possessive");
+});
+
+// THE SURFACES THE FIRST SWEEP NEVER SAW (Mario, 2026-09-07: "how do these keep making it
+// past the tests?"). The test above reads NPC desc/dialogue and ROOM desc — and Nont's
+// "he turns the phone back over" lived in an engine _say literal, which no tap test had
+// ever decorated. Two rules, because the surfaces differ: declarative room prose (reads,
+// revisit, lateDesc) and quest descs are never about YOUR phone, so any tap is wrong;
+// engine prose and encounter intros are often about your phone ("Your phone buzzes"), so
+// there the rule is the third-person heuristic — a he/she/they/Name within the same
+// sentence before "the phone" that still taps after decoration. The engine corpus comes
+// from tools/prose-corpus.mjs --json, so a new _say literal is swept without anyone
+// remembering to list it.
+test("the phone tap sweep covers reads/revisit/lateDesc, quests, encounters and the engine's own prose", () => {
+  G.itemLoc.phone = "inventory";
+  const dv = 'data-v="phone"';
+  const bad = [];
+  const strict = (label, text) => { if (typeof text === "string" && text && _term.decorate(text).includes(dv)) bad.push(label); };
+  for (const [id, r] of Object.entries(ROOMS)) {
+    for (const [k, v] of Object.entries(r.reads || {})) (Array.isArray(v) ? v : [v]).forEach((n, i) => strict(`ROOM ${id} reads.${k}[${i}]`, typeof n === "string" ? n : n && n.text));
+    (r.revisit || []).forEach((t, i) => strict(`ROOM ${id} revisit[${i}]`, t));
+    (Array.isArray(r.lateDesc) ? r.lateDesc : [r.lateDesc]).forEach((t, i) => strict(`ROOM ${id} lateDesc[${i}]`, t));
+  }
+  for (const [id, q] of Object.entries(QUESTS)) { strict(`QUEST ${id}`, q.desc); for (const [k, d] of Object.entries(q.descBy || {})) strict(`QUEST ${id} descBy.${k}`, d); }
+  // third-person heuristic: somebody else is handling "the phone", and it still taps
+  // a pronoun, or a cast name (never a bare capitalised word — "You put the phone" and "Then the
+  // phone" are your phone); the two known cases where SHE handles YOUR phone are allowed by ref
+  const names = [...new Set(Object.values(NPCS).map(n => String(n.name || "").split(" ").pop()).filter(w => /^[A-Z][a-z]{2,}$/.test(w)))];
+  const THIRD = new RegExp(`\\b(he|she|they|him|her|${names.join("|")})\\b[^.!?"“”]{0,60}\\bthe phone\\b`);
+  const OK = { "ENC powerbank intro[0]": "the piwin nods at the phone in YOUR hand", "ENGINE engine-encounters.js:_ENC[120]": "she looks at YOUR phone, the sand on your shins" };
+  const heur = (label, text) => { if (OK[label]) return; if (typeof text === "string" && THIRD.test(text) && _term.decorate(text).includes(dv)) bad.push(label + " :: " + text.match(THIRD)[0]); };
+  for (const [id, e] of Object.entries(ENCOUNTERS)) (Array.isArray(e.intro) ? e.intro : [e.intro]).forEach((t, i) => heur(`ENC ${id} intro[${i}]`, t));
+  const raw = execFileSync("node", [fileURLToPath(new URL("../../tools/prose-corpus.mjs", import.meta.url)), "--json"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  let n = 0;
+  for (const line of raw.split("\n")) {
+    if (!line.trim()) continue;
+    let rec; try { rec = JSON.parse(line); } catch { continue; }
+    if (rec.group !== "pool" && rec.group !== "fn") continue;
+    n++; heur(`ENGINE ${rec.ref}`, rec.text);
+  }
+  assert.ok(n > 1000, "the engine corpus was actually swept");
   assert.deepEqual(bad, [], "wrap the offending 'phone' in {{…}} or a possessive");
 });
 

@@ -490,7 +490,7 @@ function _amuletNotice() {
 // outcome, not a missed one.
 const _NOK_AMULET = [
   "Auntie Nok looks up from her phone with the bottle-price face on, and then she does " +
-    "not. She has seen it. She puts the phone down — actually down, screen to the cart — " +
+    "not. She has seen it. She puts the {{phone}} down — actually down, screen to the cart — " +
     "and holds out her hand, palm up, and waits.",
   "She is halfway through telling you the price of a Leo when she stops. Her eyes go to " +
     "the amulet and stay there, and the whole cheerful machinery of the cart switches off. " +
@@ -513,7 +513,7 @@ function _nokTakeAmulet() {
   _setFlag("amuletReturned");
   _say("She takes it off you the moment it is off your neck, closes her hand round it, " +
     "and says “Thank you, kha.” Twice. The second one is quieter and is not for you.\n\n" +
-    "Then she picks the phone back up. The cooler hums. A boy comes for a bag of ice and " +
+    "Then she picks the {{phone}} back up. The cooler hums. A boy comes for a bag of ice and " +
     "she serves him, and the price of a Leo is what it was, and the evening carries on " +
     "exactly as it was going to. She does not mention it again, that night or any other.",
     "win");
@@ -3176,7 +3176,7 @@ const _OTHER_LEDGER = {
     (n) => `${n} shows you her phone: a bank app, an amount, a date. "Every month, same day." ` +
       `฿${HOME_SEND} goes north — her mother, the boy's school, a roof somebody keeps meaning ` +
       `to finish. The bar's salary is ฿${BAR_SALARY}; the rest is drinks, and drinks are you and ` +
-      `men like you. "So." She locks the phone and puts it face-down, the way she does. "Now you ` +
+      `men like you. "So." She locks the {{phone}} and puts it face-down, the way she does. "Now you ` +
       `know all my number. Nobody know all my number." It is not said as a burden. It is said as ` +
       `an accounting, handed over.`,
     (n) => `The talk goes somewhere it has not been before, and ${n} does the sum out loud without ` +

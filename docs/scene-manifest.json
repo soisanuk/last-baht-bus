@@ -1004,6 +1004,7 @@
       "regionSlug": "darkside",
       "kind": "street",
       "dark": false,
+      "mainRoad": true,
       "people": [],
       "desc": "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. Every year this road kills a handful of people trying exactly that — at night, when the drivers are drunk and half the bikes run dark, a gap closes faster than a man on foot can read it. The motosai drivers do it forty times a night for the fare, and more of it after the last bus, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
     },
@@ -2276,6 +2277,7 @@
       "regionSlug": "second-road",
       "kind": "street",
       "dark": false,
+      "mainRoad": true,
       "people": [],
       "desc": "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao in one straight shot from the sea to Sukhumvit — on foot it stops being a walk at Soi Buakhao. Baht buses, banks, gold shops, and a river of traffic that never quite jams and never quite flows."
     },
@@ -2953,6 +2955,7 @@
       "regionSlug": "soi-buakhao",
       "kind": "street",
       "dark": false,
+      "mainRoad": true,
       "people": [],
       "desc": "The Soi Buakhao lights: a four-way junction where the expat soi runs out into Pattaya Klang and stops, a 7-Eleven on one corner and a gold shop on the other, motorbikes stacked ten deep at the red. West, the road runs back to Second Road and the sea; east it widens, loses its pavement, and goes on to Sukhumvit under sodium lamps. South is the top of Soi Buakhao, the market end, and every bar you know."
     },
@@ -2965,6 +2968,7 @@
       "regionSlug": "soi-buakhao",
       "kind": "street",
       "dark": false,
+      "mainRoad": true,
       "people": [],
       "desc": "The long east stretch of Pattaya Klang, where the town stops pretending to be a resort: tyre shops, a car showroom with the lights left on, a Buddhist supplies shop with a gold Buddha in the window taller than you, and the pavement giving up in favour of parked pickups. Ahead, the sodium-lit width of Sukhumvit and the lights of the Big C across it; behind, the Buakhao junction and everything you came for. Nobody walks this on purpose."
     },
@@ -3784,6 +3788,7 @@
       "regionSlug": "walking-street",
       "kind": "street",
       "dark": false,
+      "mainRoad": true,
       "people": [],
       "desc": "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and come two in the morning it will be the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the north-west corner is filling for the run north — up Second Road toward Terminal 21 — and the south-east corner is filling for Jomtien, and neither truck moves until its benches are full. The whole town runs one-way, counter-clockwise, so stand on the wrong corner and you will get where you are going eventually, the long way round, for the same fifteen baht."
     },
