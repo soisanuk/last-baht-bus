@@ -9366,10 +9366,11 @@ function _ccibCoffee() {
   const own = typeof _atOwnBar === "function" && _atOwnBar();
   if (!own && G.room !== "white_rabbit") return false;
   _setFlag("ccibSecondCoffee");
+  const reg = own && typeof _regularsHere === "function" ? _regularsHere()[0] : null;   // whoever is actually on the bench tonight
   _say("");
   _say(own
     ? "He is at the end of your rail. Your rail. Bert has already poured him a coffee and gone very " +
-      "quiet at the far end, and Doug has stopped pretending about his third."
+      "quiet at the far end" + (reg && NPCS[reg] ? ", and " + NPCS[reg].name + " has stopped pretending about his third." : ", and the rail has gone quiet with him.")
     : "He is at the end of the Rabbit's rail again, and Eddy is not pouring this time; Nuan is, and " +
       "she does it without looking at either of you.", "alert");
   _say("The same first name. The same polo shirt. He does not open with the machine this time. " +
@@ -9389,7 +9390,7 @@ function _ccibLand() {
   G.rep = Math.max(typeof REP_MIN !== "undefined" ? REP_MIN : -20, (G.rep || 0) - 2);   // not via _repHit — that would count itself
   _say("");
   _say("Nothing happens to you. That is the whole of what happens. But the polo shirt has sat at a " +
-    "rail with your name on it, in front of people, twice, and this town does the rest without " +
+    "rail with your name on it, in front of people" + (_flag("ccibSecondCoffee") ? ", twice" : "") + ", and this town does the rest without " +
     "being asked: the nod that was a nod is a glance, the girl who kept your stool has stopped " +
     "keeping it, and the men who talk to everybody are talking to everybody but you. Eddy's " +
     "shutter is down when you go by. Tan is where he always is, and looks at the soi.", "alert");
