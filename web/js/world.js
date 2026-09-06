@@ -8641,7 +8641,22 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "and the men he pays call it tolerance. Tolerance, my friend, is a thing that can be " +
           "withdrawn.\" He does not say by whom.",
         short: "\"White Dish pay to be allowed. Tolerance can be withdrawn.\"" },
-      { topic: "invoices|invoice|takings|the books|eastern seaboard|the paperwork|consulting|the spreadsheet",
+      // EASTERN SEABOARD, after the heist (Mario, 2026-09-06). Not a warning — the
+      // competent never make one — and not an answer. The syndicate's tolerance of
+      // WDG was paid THROUGH that shell; he declines to say whose company it is, and
+      // the declining is the answer. Before the heist a player has no reason to ask
+      // and gets his ordinary "not my story", which is honest.
+      { topic: "eastern seaboard|the trading company|trading company|the office on thappraya|the shophouse|facilities company|the facilities company|the company on the hill",
+        req: ["rabbitData"],
+        text: "\"Eastern Seaboard.\" He lets the name sit on the roof of the car between you, and " +
+          "does not pick it up. \"You have found an office. My friend, Pattaya is full of offices; " +
+          "most of them are two desks and a kettle, and the kettle is the honest one.\" He looks at " +
+          "the soi, not at you. \"Ask me nothing about that company, and I will tell you nothing " +
+          "that is not true. That is the best arrangement two men can have, and it is the only one " +
+          "I am offering.\" A beat, and the warmth comes back exactly as it left. \"You did well. " +
+          "Do not do better.\"",
+        short: "\"Ask me nothing about that company and I will tell you nothing that is not true. You did well. Do not do better.\"" },
+      { topic: "invoices|invoice|takings|the books|the paperwork|consulting|the spreadsheet",
         req: ["invoicesCopied"],
         text: "\"Eastern Seaboard Trading.\" He does not ask to see it, which is how you know he already " +
           "knows what is on it. \"A company that sells nothing, to people who buy nothing, every month, " +

@@ -777,3 +777,20 @@ test("once the WDG case is the news, the company has ceased to be somewhere you 
   out = []; run("talk to wilawan");
   assert.doesNotMatch(text(), /Can I help you/);
 });
+
+
+test("Eastern Seaboard is a topic with Tan after the heist — no questions, no lies — and nothing before it", () => {
+  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
+  out = []; run("ask tan about eastern seaboard");
+  assert.doesNotMatch(text(), /two desks and a kettle/, "before the heist he has nothing on it");
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  G.room = _npcRoom("tan"); G.nightTurn = 25; G.talked = {};
+  out = []; run("ask tan about eastern seaboard");
+  assert.match(text(), /Ask me nothing about that company/, "the not-answer");
+  assert.doesNotMatch(text(), /\bor else\b|you will be|we will/i, "and it is not a threat");
+  // the invoices node still answers the paperwork by its own words
+  _setFlag("invoicesCopied"); G.talked = {};
+  out = []; run("ask tan about the invoices");
+  assert.match(text(), /sells nothing, to people who buy nothing/);
+});
