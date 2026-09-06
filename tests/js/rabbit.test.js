@@ -810,3 +810,68 @@ test("Nont on White Dish: he was on the premises, fourteen, when the paper came 
   out = []; run("ask nont about white dish");
   assert.match(text(), /golf shirt came in with the lawyer|It's always paper/, "gossip plus the detail only he has");
 });
+
+
+// ── Laying low has teeth (Mario, 2026-09-06) ───────────────────────────────
+
+function afterTheCoffee() {
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  assert.ok(_flag("ccibVisited"));
+  assert.equal(G.ccibLoud || 0, 0);
+}
+
+test("loud acts count, one per kind per night; boring counts nothing", () => {
+  afterTheCoffee();
+  G.room = "kitten_corner"; out = []; run("back");
+  assert.equal(G.ccibLoud, 1); assert.match(text(), /Loud\./);
+  out = []; run("back");
+  assert.equal(G.ccibLoud, 1, "one mark per kind per night");
+  G.room = "thappraya_ext_m"; G.lightOn = true; run("office");
+  assert.equal(G.ccibLoud, 2);
+  G.room = "stinky_bar"; G.known.bert = true; run("ask bert about the police");
+  assert.equal(G.ccibLoud, 3);
+  G.room = _npcRoom("tan"); G.known.tan = true; run("ask tan about the police");
+  assert.equal(G.ccibLoud, 3, "Tan is inside");
+});
+
+test("outside the window nothing is loud", () => {
+  G.room = "kitten_corner"; out = []; run("back");
+  assert.equal(G.ccibLoud || 0, 0);
+  G.room = "stinky_bar"; G.known.bert = true; run("ask bert about the police");
+  assert.equal(G.ccibLoud || 0, 0);
+});
+
+test("at two the second coffee comes to YOUR bar, with Bert watching", () => {
+  afterTheCoffee();
+  _setFlag("barPaid"); _setFlag("barOpen"); G.bar.room = "stinky_bar";
+  G.room = "kitten_corner"; run("back");
+  G.day++; G.room = "thappraya_ext_m"; G.lightOn = true; run("office");
+  assert.equal(G.ccibLoud, 2);
+  G.room = "stinky_bar"; G.nightTurn = 20; out = []; nofoot(() => run("wait"));
+  assert.ok(_flag("ccibSecondCoffee"), "the tick brings him to your rail");
+  assert.match(text(), /Your rail|You were told nothing/);
+  assert.doesNotMatch(text(), /\bor else\b|we will|you will be/i, "still not a threat");
+});
+
+test("at four the attention lands: Tan curdles, Eddy's door shuts, the soi's read drops — never jail", () => {
+  afterTheCoffee();
+  const syn0 = (G.faction && G.faction.syndicate) || 0; const rep0 = G.rep || 0;
+  G.room = "kitten_corner"; run("back");
+  G.day++; G.room = "kitten_corner"; run("back");
+  G.day++; G.room = "kitten_corner"; run("back");
+  G.day++; G.known.bert = true; G.room = "stinky_bar"; out = []; run("ask bert about the heist");
+  assert.ok(_flag("ccibLanded"), "landed");
+  assert.match(text(), /Nothing happens to you. That is the whole of what happens/);
+  assert.equal((G.faction && G.faction.syndicate) || 0, syn0 - 1, "you stopped being inside");
+  assert.ok((G.rep || 0) < rep0, "the soi's read on you drops");
+  assert.ok(!_npcActive("fast_eddy"), "Eddy's shutter is down");
+  assert.ok(G.eddyBackDay >= G.ccibLowUntil, "for the window");
+  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25; G.talked = {};
+  out = []; run("ask tan about laying low");
+  assert.match(text(), /I told you to be boring/);
+  G.room = "kitten_corner"; run("back");
+  assert.equal(G.ccibLoud, 4, "you can't get louder than landed");
+  assert.ok(!/visa|deport|cell|arrest/i.test(text()), "never a visa, never a cell");
+});

@@ -332,7 +332,11 @@ const NONT_SIM = 200;        // "a Thai SIM that isn't in your name" — his own
 // THE KID PATH (docs/rabbit-arc.md): the price Nont names for walking back into the
 // one thing he stepped out of, and the price of making a file into a footnote.
 const KID_PRICE = 15000, KID_CLEAR = 20000;
-const EDDY_GROUND_DAYS = 3;   // how long Rabbit goes to ground after the coffee — for the wrong reason, but gone
+const EDDY_GROUND_DAYS = 3;
+// LAYING LOW HAS TEETH (Mario, 2026-09-06): loud acts during the window count; at
+// CCIB_LOUD_COFFEE the second coffee comes to YOUR bar; at CCIB_LOUD_LAND the
+// attention itself lands — socially, the only place this town punishes anyone.
+const CCIB_LOUD_COFFEE = 2, CCIB_LOUD_LAND = 4, CCIB_LOUD_MONEY = 50000;   // how long Rabbit goes to ground after the coffee — for the wrong reason, but gone
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
 // the "off" fee doubles the go-go barfine (canon). Even your own beer is
 // premium-priced (and arrives with ice, whether you wanted ice or not).
@@ -8711,6 +8715,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // TAN'S READ on the CCIB visit — the mechanic's real voice. Gated after the
       // morning scene, once; sets ccibReadGiven, which arms the second-look roll
       // and IS the "why am I laying low" answer. Tan is the mutual friend (canon).
+      // I TOLD YOU TO BE BORING. After the attention lands (ccibLanded): the read, curdled.
+      { topic: "ccib|police|cyber|coffee|visit|officer|the man|laying low|lay low|radar|watched|boring",
+        req: ["ccibLanded"],
+        text: "He does not come off the car. \"I told you to be boring.\" No heat in it, which is the " +
+          "heat. \"A footnote that moves is a paragraph. A paragraph gets read.\" He looks at the soi " +
+          "for a while. \"They have not done anything to you, my friend, and they will not, because " +
+          "they do not have to — you have done it. Every man on this soi saw a polo shirt sit at " +
+          "your rail and drink a coffee, and every one of them now knows what you are, and none of " +
+          "them will say so.\" A small shrug, the old warmth entirely absent. \"I can carry a quiet " +
+          "man a long way. A loud one I can only watch.\"",
+        short: "\"I told you to be boring. A footnote that moves is a paragraph. A loud man I can only watch.\"" },
       // the kid-path version of the read: Tan offers the call. Sets ccibReadGiven so
       // the plain read below is skipped; the modal is armed by fx (see _kidFavourAsk).
       { topic: "ccib|police|cyber|coffee|visit|officer|the man|laying low|lay low|radar|watched|kid|nont",

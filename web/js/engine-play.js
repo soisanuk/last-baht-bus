@@ -2017,6 +2017,7 @@ function _doApologize() {
 
 function _kickOut() {
   const here = G.room, r = _room();
+  if (typeof _ccibLoud === "function") _ccibLoud("incident");
   G.soc.banned[here] = G.turns;
   G.soc.heat[here] = 0;
   G.game = null; // any live game dies with your welcome

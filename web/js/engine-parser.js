@@ -521,6 +521,7 @@ function _doGo(dirWord) {
   // on a drink instead of the corridor (docs/rabbit-arc.md, the mule path).
   if (to === "kitten_office" && G.room === "kitten_corner") {
     if (!_flag("rabbitPath") || _flag("rabbitData") || _flag("rabbitBlown")) {
+      if (_flag("rabbitData") && typeof _ccibLoud === "function") _ccibLoud("corridor");
       _say("The corridor past the till goes to the office, and the office is not for customers. " +
         "Baimon on the till clocks you looking at it and doesn't stop smiling. (Nothing back there for you.)");
       return false;
@@ -797,6 +798,7 @@ function _arriveAt(to) {
   // the partnerTan route comes due: he said he'd ask, and this is him asking
   // the deposit: the one moment the money has to actually exist
   if (typeof _barDepositDue === "function" && _barDepositDue()) { _barDeposit(); }
+  if (to === "eastern_seaboard" && _flag("rabbitData") && typeof _ccibLoud === "function") _ccibLoud("office");
   if (typeof _ccibDue === "function" && _ccibDue()) { _ccibVisit(); return; }
   if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
   // procurement: a name on a list was free, the cleaning contract is not
@@ -3417,6 +3419,8 @@ function _doTalkBody(arg, topic) {
   // delivery only, so the list would freeze on the night you first asked.
   if (npc === "tan" && _convoTopic(topic || "") === "others" && _tanOthers()) return;
   if (npc === "tan" && topic && typeof _tanAbout === "function" && _tanAbout(topic)) return; // "meet somebody, then ask me who they are" — honoured
+  if (topic && typeof _ccibLoud === "function" && !["tan", "fast_eddy", "nont"].includes(npc) &&
+      /\bccib\b|cyber ?police|\bpolice\b|\bheist\b|\bbox\b|eastern seaboard|invoices|rabbit'?s job|\bcoffee\b|\bofficer\b|polo shirt|laptop|kitten office/.test(topic)) _ccibLoud("asking");   // the article is stripped before we see it
   if (npc === "nont" && topic && typeof _nontLocate === "function" && _nontLocate(topic)) return; // the priced locator: anybody, tonight, ฿200
   // the civilian at the table: "how much" is not a topic she answers, it's the
   // scene (chameleon economy) — no dialogue node, so the wheel never advertises it

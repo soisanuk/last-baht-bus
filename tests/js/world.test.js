@@ -135,6 +135,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "simUsed", "burnerUsed", "simDitched", "kidPath", "ownPhoneUsed",  // the Rabbit arc's wires and paths (engine-set)
     "kidPaid", "kidRefused", "kidHandled", "kidCleared", "tanKidFavour", "tanKidRefused", // the kid path
     "nontTanLaugh", "eddyBackSeen", "invoicesCopied", "invoicesBurned",  // round 45 pins
+    "ccibSecondCoffee", "ccibLanded",  // laying low has teeth (_ccibCoffee / _ccibLand)
     "ccibVisited", "ccibRadarSet", "ccibReadGiven", "ccibCleared", "ccibSecondLook", // …and the CCIB landing
   ]); // set by engine actions (read/wai/give/enter), not NPC dialogue
   for (const npc of Object.values(NPCS)) {

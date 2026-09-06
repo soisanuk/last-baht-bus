@@ -1075,6 +1075,7 @@ function _nontCash(arg) {
   if (n > (G.bank || 0)) { _say(`“The app says you haven't got that.” He turns the screen so you can see it: ฿${_num(G.bank || 0)}.`); return; }
   const cut = Math.round(n * NONT_CUT);
   G.bank -= n;
+  if (n >= CCIB_LOUD_MONEY && typeof _ccibLoud === "function") _ccibLoud("money");   // a big move through a mule account, inside the window
   G.nontCashCount = (G.nontCashCount || 0) + 1;
   const stuck = _hh("nontstuck:" + G.vacation + ":" + G.day + ":" + G.nontCashCount, 71) % 6 === 0;   // pure hash, no dice
   if (stuck) {
@@ -3558,6 +3559,7 @@ function _doSendMoney(arg) {
     return;
   }
   G.money -= amt;
+  if (amt >= CCIB_LOUD_MONEY && typeof _ccibLoud === "function") _ccibLoud("money");
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amt; // toward a sponsor flip
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
@@ -9307,6 +9309,7 @@ function _ccibLowTick() {
     _say("(You can stop being boring now. Mostly.)", "dim");
     return;
   }
+  if (typeof _ccibCoffee === "function" && _ccibCoffee()) return;   // the teeth: the second coffee, at YOUR bar
   // a rare second look during the window — ambient, no mechanics, once
   if (!_flag("ccibSecondLook") && _flag("ccibReadGiven") && G.nightTurn >= 30 &&
       typeof _rand === "function" && _rand() < 0.04) {
@@ -9326,6 +9329,74 @@ function _ccibWorkLine() {
   _say(_pickVary(_CCIB_WORK, "ccibwork"), "dim");
   return true;
 }
+// ── LAYING LOW HAS TEETH (Mario, 2026-09-06) ─────────────────────────────────
+// Tan says "be boring" and, until now, the game never checked. Loud acts inside
+// the window tick G.ccibLoud — one per kind per night, so a bad evening is one
+// mark, not five: going back down Kitten Corner's corridor; walking into
+// Eastern Seaboard after the heist; asking people who aren't inside about the
+// heist, the company or the police; an incident (a kick-out, a rep hit); a big
+// money move through a mule account. At CCIB_LOUD_COFFEE the same man has a
+// second coffee, at YOUR bar this time, with Bert watching — still no threat,
+// one sentence more. At CCIB_LOUD_LAND the attention itself lands, socially:
+// Tan's read curdles (syndicate −1, the one standing that moves), Eddy shuts
+// his door for the window, the soi's read on you takes the hit. Never jail,
+// never a visa. Being boring earns nothing — a non-deed — except that none of
+// this happens, and Tan's "you did well" at the lift is true.
+const _CCIB_LOUD_LINES = {
+  corridor: "(You went back for the corridor. A girl on a till remembers a farang who came back. Loud.)",
+  office: "(You walked into that office after the fact, and two people who would rather you hadn't now have a face for the name. Loud.)",
+  asking: "(You asked. Out loud, of somebody who isn't inside. Questions travel in this town faster than answers. Loud.)",
+  incident: "(A scene. Attention, of the kind a watched man cannot afford this fortnight. Loud.)",
+  money: "(A large sum through a door that is being watched, inside the window. Loud.)",
+};
+function _ccibLoud(kind) {
+  if (!_flag("ccibVisited") || _flag("ccibCleared") || _flag("ccibLanded")) return false;
+  G.ccibLoudNight = G.ccibLoudNight || {};
+  if (G.ccibLoudNight[kind] === G.day) return false;   // one mark per kind per night
+  G.ccibLoudNight[kind] = G.day;
+  G.ccibLoud = (G.ccibLoud || 0) + 1;
+  if (_CCIB_LOUD_LINES[kind]) _say(_CCIB_LOUD_LINES[kind], "dim");
+  if (G.ccibLoud >= CCIB_LOUD_LAND) _ccibLand();
+  return true;
+}
+// the second coffee — fires on the tick once you're somewhere it can be poured
+function _ccibCoffee() {
+  if (!_flag("ccibVisited") || _flag("ccibCleared") || _flag("ccibSecondCoffee") || _flag("ccibLanded")) return false;
+  if ((G.ccibLoud || 0) < CCIB_LOUD_COFFEE) return false;
+  const own = typeof _atOwnBar === "function" && _atOwnBar();
+  if (!own && G.room !== "white_rabbit") return false;
+  _setFlag("ccibSecondCoffee");
+  _say("");
+  _say(own
+    ? "He is at the end of your rail. Your rail. Bert has already poured him a coffee and gone very " +
+      "quiet at the far end, and Doug has stopped pretending about his third."
+    : "He is at the end of the Rabbit's rail again, and Eddy is not pouring this time; Nuan is, and " +
+      "she does it without looking at either of you.", "alert");
+  _say("The same first name. The same polo shirt. He does not open with the machine this time. " +
+    "\"You were told nothing,\" he says, to the coffee. \"I made a point of it. I told you nothing " +
+    "and I asked you for nothing, and you did something anyway.\" He turns the cup a quarter. " +
+    "\"A footnote that moves is a paragraph.\" He finishes the coffee. He leaves. It takes " +
+    "eleven seconds and everybody at the rail counted them.", "alert");
+  _say("(Loud twice, and now the whole rail has seen it. Be boring. The next one isn't a coffee.)", "dim");
+  return true;
+}
+// the attention lands — socially, the only place this town punishes anyone
+function _ccibLand() {
+  if (_flag("ccibLanded")) return;
+  _setFlag("ccibLanded");
+  if (typeof _align === "function") _align("syndicate", -1);   // you stopped being inside
+  G.eddyBackDay = Math.max(G.eddyBackDay || 0, G.ccibLowUntil || 0);   // Eddy's door, shut for the window
+  G.rep = Math.max(typeof REP_MIN !== "undefined" ? REP_MIN : -20, (G.rep || 0) - 2);   // not via _repHit — that would count itself
+  _say("");
+  _say("Nothing happens to you. That is the whole of what happens. But the polo shirt has sat at a " +
+    "rail with your name on it, in front of people, twice, and this town does the rest without " +
+    "being asked: the nod that was a nod is a glance, the girl who kept your stool has stopped " +
+    "keeping it, and the men who talk to everybody are talking to everybody but you. Eddy's " +
+    "shutter is down when you go by. Tan is where he always is, and looks at the soi.", "alert");
+  _say("(You were told to be boring. You weren't. Nobody did anything to you; they didn't have to. " +
+    "Tan will tell you the rest, once, and not warmly.)", "dim");
+}
+
 const _CCIB_WORK = [
   "You work the rail clean and quiet, ring nothing you don't have to, and keep the night's takings the kind of dull that survives a second glance. Being boring, it turns out, is also a business plan.",
   "Every face at the bar is just a face this fortnight — no angles, no favours, nobody's cousin's phone. You pour, you smile, you go home. A man being watched runs the tidiest bar on the soi.",

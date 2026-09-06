@@ -256,6 +256,8 @@ function newGame() {
     rabbitWay: null,     // which way into the WDG office you took: "mule" | "operator" (see _rabbitJobYes/_rabbitJobKeyboard)
     ccibRadar: null,     // who CCIB has a file on after the heist: {player,eddy,nont} — set at the morning scene, rides the export (docs/bangkok-concept.md)
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
+    ccibLoud: 0,         // loud acts inside the window (see _ccibLoud) — the teeth
+    ccibLoudNight: {},   // {kind: day} — one count per kind per night
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
@@ -2456,6 +2458,7 @@ function _repGain() {
 }
 function _repHit(n) {                          // an incident: lands in full, uncapped, stacks
   if (!_flag("act1Done")) return false;
+  if (typeof _ccibLoud === "function") _ccibLoud("incident");   // an incident is attention, and attention is the one thing a watched man cannot afford
   G.rep = Math.max(REP_MIN, (G.rep || 0) - Math.abs(n));
   return true;
 }
