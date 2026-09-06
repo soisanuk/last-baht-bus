@@ -3168,6 +3168,12 @@ function _doUseLaptop() {
     return;
   }
   if (_flag("rabbitData")) { _say("You've already got what you came for. Leave it exactly as it is."); return; }
+  if (G.cliLockedDay === G.day) {
+    _say("The screen is locked — a login box over the golf course, waiting for a password you were " +
+      "never going to have. Not tonight. Whoever sits here will unlock it in the morning without a " +
+      "thought, because they always do.", "alert");
+    return;
+  }
   _startCli("wdg_office");
 }
 
@@ -3854,9 +3860,9 @@ function _readStick() {
   const files = G.stickFiles || [];
   if (!files.length) { _say("Empty. Whatever it's for, it hasn't happened yet."); return; }
   _say("On the stick: " + files.join(" \u00b7 ") + ". " +
-    (files.includes("wallet.dat") ? "The first is Rabbit's, by arrangement. " : "") +
-    (files.includes("payouts.csv") ? "The ledger is nobody's, and everybody's, and you are the one holding it. " : "") +
-    (files.includes("regulars_2019.xls") ? "The regulars are a book with a history — GIVE it to Eddy, or READ BOOK at your own bar." : ""), "room");
+    (files.includes("wallet.dat") ? "wallet.dat is Rabbit's, by arrangement. " : "") +
+    (files.includes("payouts.csv") ? "The ledger is nobody's, and everybody's, and you are the one holding it (BURN LEDGER, if you'd rather not be). " : "") +
+    (files.includes("regulars_2019.xls") ? (_flag("barBook") ? "The regulars are running at your bar. " : _flag("bookGiven") ? "" : "The regulars are a book with a history — GIVE it to Eddy, or READ BOOK at your own bar.") : ""), "room");
 }
 
 // QUIET IS A VERB — Rabbit says so, and it wasn't (Ray, r45): "quiet" was a parser
@@ -3870,13 +3876,31 @@ const _QUIET_LINES = [
 ];
 function _doQuiet() { _say(_pickVary(_QUIET_LINES, "quiet"), "dim"); }
 
+// BURN LEDGER — the one thing you can do with the most dangerous page in the
+// room (Pri, r45: "not one verb in Pattaya that takes it off me"). It does not
+// unmake the copying — the officer knew — but it ends the holding.
+function _doBurnLedger() {
+  const files = G.stickFiles || [];
+  if (!files.includes("payouts.csv") || G.itemLoc.data_stick !== "inventory") {
+    _say(_flag("payoutsCopied") ? "You haven't got it any more. Whoever has the stick has the page." : "You're not holding any ledger.");
+    return;
+  }
+  G.stickFiles = files.filter(f => f !== "payouts.csv");
+  _setFlag("payoutsBurned");
+  _say("You delete it off the stick, and then, because you have read enough to know that deleting is " +
+    "a word people use to feel better, you do the other thing too — the file gone, the space written " +
+    "over, the stick held under the tap for a minute for luck. The envelopes, the dinners, the men in " +
+    "brown: still true, no longer yours. You are a man who was known to be holding it. You are not " +
+    "holding it.", "win");
+}
+
 // LOSE IT AFTER — Rabbit's own instruction for the burner (Ray, r45): it could be
 // dropped and picked back up, and nothing else. Same disposal as the SIM.
 function _doDitchBurner() {
   if (G.itemLoc.burner !== "inventory") { _say("No burner on you. Your own phone stays where it is."); return; }
   G.itemLoc.burner = null;
-  _say("You take the back off the burner, thumb the battery out, and drop the halves down two " +
-    "different drains a soi apart, which is more care than the phone was ever shown in its life. " +
+  _say("You take the back off the burner and thumb the battery out. Later, walking, the halves go " +
+    "down two different drains a soi apart — more care than the phone was ever shown in its life. " +
     "A number that led to Rabbit leads nowhere now.", "win");
 }
 
@@ -7660,6 +7684,10 @@ function _doCall(arg) {
       "where he's going. He arrives, sits, and looks up: well?"));
     return;
   }
+  if (/^(eddy|fast eddy|rabbit)$/.test(arg.trim().toLowerCase()) && G.eddyBackDay && G.day < G.eddyBackDay) {
+    _say("The number you have for Eddy rings once and dies. New number. You don't have it. He said.", "dim");
+    return;
+  }
   const id = _findNpc(arg);
   if (!id) { _say("Call who? Nobody by that name in your phone or your eyeline."); return; }
   if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
@@ -8468,6 +8496,7 @@ function _chipSet() {
   const r = _room();
   if (_isDarkHere()) add("light");
   add("look");
+  if (G.room === "kitten_office" && G.rabbitWay === "operator" && !_flag("rabbitData") && !G.game) add("use laptop", "use the laptop");
   if (G.room === _hotelRoomId() && _flag("act1Done")) add("sleep", "sleep — end the night");
   // The readout verbs live only in HELP, which is itself untappable — a thumb
   // player could not reach QUESTS/HINT/TIME/WHO/GALLERY at all (thumbs-only
@@ -9578,6 +9607,7 @@ function doCommand(input) {
     case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
     case "topics": case "subjects": _doTopics(arg); break;
     case "delete": case "erase": case "wipe":
+      if (/ledger|payouts|envelopes|csv/.test(arg || "")) { _doBurnLedger(); break; }
       if (/message|text|msg|sms|it|that/.test(arg || "")) _say("You delete it. It was never there, which is what it said. The phone remembers anyway, somewhere; phones do. You did what you were told.", "dim");
       else _say("Nothing here to delete.", "dim");
       break;
@@ -9956,8 +9986,12 @@ function doCommand(input) {
       else _say("Show what, to whom? (SHOW <thing> TO <someone>)");
       break;
     }
+    case "burn": case "shred":
+      if (/ledger|payouts|envelopes|csv|stick/.test(arg || "")) { _doBurnLedger(); break; }
+      _say("Nothing here you'd burn.", "dim"); break;
     case "break": case "snap": case "destroy": case "ditch": case "kill": case "lose": case "bin":
       if (/\bsim\b|sim ?card/.test(arg || "")) { _doBreakSim(); break; }
+      if (/ledger|payouts|envelopes/.test(arg || "")) { _doBurnLedger(); break; }
       if (/burner|rabbit'?s phone/.test(arg || "")) { _doDitchBurner(); break; }
       _say(_pickVary(["Nothing here to break — and the impulse passes.", "You break nothing. The night is fragile enough."], "breakno"), "dim"); break;
     case "throw": case "toss": case "chuck": case "fling":

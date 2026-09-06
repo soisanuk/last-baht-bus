@@ -1826,7 +1826,7 @@ function _gameBoard() {
 function _renderGame() {
   const g = G.game;
   if (!g) return;
-  _say("(A bar game is still in progress — here's where it stands:)", "dim");
+  _say(g.type === "cli" ? "(The terminal, where you left it:)" : "(A bar game is still in progress — here's where it stands:)", "dim");
   _gameBoard();
   // WHAT'S RIDING ON IT. The stake is escrowed when the game starts and named in
   // the opening line; a resume redrew a perfect board and never mentioned the
@@ -4911,6 +4911,14 @@ function _startCli(scenarioId) {
   if (!sc) { _say("The screen stays dark."); return; }
   G.game = { type: "cli", scenario: scenarioId, cli: cliNew(sc, _rand), stake: 0 };
   if (typeof _ccibWire === "function") _ccibWire();   // the operator run uses a wire too
+  if (G.cliSat) {   // a second sitting — not the same paragraph verbatim (Pri, r45)
+    G.cliSat++;
+    _say("Back at the desk. The golf course, the cursor, the chair still warm from you. The vault has " +
+      "locked itself again behind you, the way it does, and nothing else has changed, which is the " +
+      "point of the place.", "alert");
+    _cliBoard(); return;
+  }
+  G.cliSat = 1;
   _say("You sit. The chair is still warm. The lock screen is a golf course and it is not locked " +
     "— somebody went for a cigarette in the middle of something and the machine is still in the " +
     "middle of it. A cursor blinks in a black window over the golf course, waiting for a person " +
@@ -4949,9 +4957,12 @@ function _cliInput(input) {
     return true;
   }
   if (r.lost) {
-    _say("You get up. The chair is warm and the screen is locked and there is nothing on the stick " +
-      "worth the name. Nobody saw. Nobody knows. It can be tried again — the machine will be " +
-      "left unlocked again, because it always is — but not tonight.", "alert");
+    G.cliLockedDay = G.day;   // "not tonight" is a rule now, not a sentence (Pri, r45: sat back down in four seconds)
+    const have = (G.stickFiles || []).length;
+    _say("You get up. The chair is warm and the screen is locked" +
+      (have ? ", and whatever is on the stick is on the stick." : " and there is nothing on the stick worth the name.") +
+      " Nobody saw. Nobody knows. It can be tried again — the machine will be left unlocked again, " +
+      "because it always is — but not tonight.", "alert");
     return true;
   }
   // walked away (EXIT): keep what you copied, no flag either way

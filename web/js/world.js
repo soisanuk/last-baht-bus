@@ -3451,6 +3451,7 @@ const ROOMS = {
   kitten_office: {
     name: "Kitten Corner — the back office",
     region: "Soi 6",
+    indoors: true,   // no weather, no street dog, and shelter counts (Pri, r45)
     desc: "A windowless box behind the till, cold with aircon and lit like a fridge. Steel " +
       "shelving, the night's cash bags in a milk crate, a wall safe with a keypad, and a " +
       "laptop on a desk nobody sits at for long — the group's, not the bar's, with a " +
@@ -8579,6 +8580,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "and the men he pays call it tolerance. Tolerance, my friend, is a thing that can be " +
           "withdrawn.\" He does not say by whom.",
         short: "\"White Dish pay to be allowed. Tolerance can be withdrawn.\"" },
+      { topic: "ledger|payouts|envelopes|the envelope|payouts.csv|the men in brown",
+        req: ["payoutsCopied"],
+        text: "\"The envelope page.\" He does not ask to see it, which is how you know he already " +
+          "knows what is on it. \"Ninety thousand a month to be allowed to stand on a soi. You " +
+          "understand what that is? It is not a bribe, my friend. A bribe buys a thing. That buys " +
+          "the absence of a thing.\" A small shrug. \"You are holding a receipt for tolerance. " +
+          "Whoever holds it is a person of interest to everybody named on it. Burn it, or be " +
+          "interesting. I would not sell it. Nobody who sells it is ever paid twice.\"",
+        short: "\"A receipt for tolerance. Burn it, or be interesting. Do not sell it.\"" },
       { topic: "rabbit|the rabbit|fast eddy|eddy",
         text: "\"Fast Eddy.\" Tan considers the mirror. \"He had a bar and now he has a smaller one, " +
           "and he thinks the difference is bad luck. It was never luck. He is a man who learned " +
@@ -8642,9 +8652,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "He doesn't ask how you know to bring it up, which is its own answer. \"So. You " +
           "had a coffee.\" A small nod, approving of the officer's manners more than anything. " +
           "\"He is good, that one. He told you everything and asked you for nothing, and now you " +
-          "cannot sleep. That is the job, done properly.\" He turns his own cup a quarter — the " +
-          "gesture you saw the officer borrow, and you understand, too late, which way the " +
-          "borrowing went. \"White Dish has a problem coming. It has been coming since March. It " +
+          "cannot sleep. That is the job, done properly.\" His hand makes the gesture — a cup turned a " +
+          "quarter, though there is no cup — the one you saw the officer borrow, and you understand, " +
+          "too late, which way the borrowing went. \"White Dish has a problem coming. It has been coming since March. It " +
           "is not your problem and it is not mine — but for some weeks, my friend, be boring. Not " +
           "afraid. Boring. They have a case to finish, and you are a footnote they would prefer " +
           "not to write. Footnotes that hold still get left out.\" A beat. \"Eddy thinks it is " +
@@ -10631,7 +10641,24 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "and I've got a soda water.” He turns the glass a quarter. “Drink here a while. " +
           "People who drink here a while sometimes hear things.”" },
       // after the job the box is a thing that happened, not a thing to place (Ray, r45)
-      { topic: "box|black box|the box|device|file|the file|wallet|data|stick|the stick", req: ["rabbitData"],
+      { topic: "file|the file|wallet|data|stick|the stick|wallet.dat", req: ["rabbitData"],
+        when: (st, G) => G.rabbitWay === "operator",
+        text: "“The file.” He says it the way other men say a woman's name. “It's mine now — what's on " +
+          "it, what I do with it. The machine never knew it had a visitor.” The nearest thing to a " +
+          "smile. “You were never in that office.”",
+        short: "“The file's mine now. You were never in that office.”" },
+      { topic: "file|the file|wallet|data|stick|the stick|wallet.dat", req: ["rabbitData"],
+        when: (st, G) => G.rabbitWay === "kid",
+        text: "“The file.” He doesn't look at the bar, under which it is. “The boy's business, how it " +
+          "got here. Mine, what happens to it. Yours, nothing — which is the whole reason it was done " +
+          "the way it was done.”",
+        short: "“The boy's business how it got here. Yours, nothing.”" },
+      { topic: "file|the file|wallet|data|stick|the stick|wallet.dat", req: ["rabbitData"],
+        text: "“The file.” A quarter-turn of the soda. “A copy of their money doing what it does. That's " +
+          "all I ever wanted — not a baht of it, the shape of it.” He lifts the glass an inch. “The box " +
+          "did the clever part. You did the other part. Nobody talks about either part in here.”",
+        short: "“A copy of their money doing what it does. Nobody talks about it in here.”" },
+      { topic: "box|black box|the box|device", req: ["rabbitData"],
         text: "“What box.” Flat, final, and then the ghost of a smile. “It did what it was for and " +
           "it's gone, and if anybody ever finds it, it's a battery pack with no battery in it. " +
           "Don't ask me about it in here again, boss. Walls.”",
@@ -10659,6 +10686,20 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "would. Then Tan found him a table.” A shrug that isn't one. “Tan was right. Leave it there.”",
         short: "“Sharp kid. Worked for me once. Tan's got him now, and Tan was right.”" },
       // Kitten Corner, after the job: never heard of it (Ray/Declan, r45)
+      { topic: "tan|the fixer|the driver",
+        text: "“Tan.” The name gets the respect he gives nothing else. “Drove me from the airport nine " +
+          "years ago and has known where I am every night since. Never charged me a baht for " +
+          "anything, which is how I know what I owe him.” A beat. “He took the kid off me. He was " +
+          "right to. I've never said thank you and he's never wanted it, and that's the whole " +
+          "arrangement.”",
+        short: "“Tan. Never charged me a baht, which is how I know what I owe him.”" },
+      { topic: "ledger|payouts|envelopes|the envelope|payouts.csv|the men in brown",
+        req: ["payoutsCopied"],
+        text: "“You took the envelope page.” He goes very still. “Don't show it to me. Don't show it to " +
+          "anybody. That page is the one thing in that building I'd have paid for and the one thing " +
+          "I'd never touch, and both of those are the same reason.” He drinks the soda. “Burn it, or " +
+          "hold it and know you're holding it. There's no third thing.”",
+        short: "“The envelope page. Burn it, or hold it and know you're holding it.”" },
       { topic: "kitten corner|the office|corridor|back office|the bar on soi 6",
         req: ["rabbitData"],
         text: "“Kitten Corner?” He gives it a moment's honest thought. “Never heard of it. Neither " +
@@ -10743,6 +10784,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "would have us, and we made it work. Eddy thinks he saved us.” The smile again, " +
           "cooler. “It is kinder to let him think it.”",
         short: "“We all worked Soi 6 till the company pushed the older girls out. Eddy thinks he saved us. Kinder to let him.”" },
+      { topic: "eddy|boss|the boss|where is eddy",
+        when: (st, G) => !!(G.eddyBackDay && G.day < G.eddyBackDay),
+        text: "“Hua Hin, he says.” She doesn't look up from the till. “A man in a polo shirt drinks one " +
+          "coffee and Eddy needs the sea air.” The bracelets go still for a second. “It's never about " +
+          "him. He's the only one who doesn't know that. I run the bar. I always run the bar.”",
+        short: "“Hua Hin, he says. It's never about him. I run the bar.”" },
       { topic: "eddy", text: "“The boss.” She lets a silence sit under it. “He is not a bad " +
           "man. He is a loud man who was lucky once and has spent twenty years sure the luck " +
           "was skill. I have known him a long time — I was the first girl he hired, when he " +
@@ -11352,6 +11399,11 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      { when: (st, G) => _flag("barPaid"),
+        text: "\"Guv.\" Bert doesn't look up from the cue he's chalking, which is how he says hello to " +
+          "the man whose name is on the float. \"Till's honest, ice is in, Doug's on his third and " +
+          "pretending it's his first. Anything you want to know, BOOKS knows it before I do.\"",
+        short: "\"Guv. Till's honest, ice is in.\"" },
       // Bert briefs you on rent, key money, the note and the wet at the deposit,
       // and then couldn't discuss a word of it — five topics he put in your
       // mouth, five misses (Des, round 41). And "partner" pointed at nobody.

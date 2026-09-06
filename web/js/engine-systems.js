@@ -4499,6 +4499,7 @@ const _DRIZZLE_BAR = [
     "come in around her while she does.",
 ];
 function _sayDrizzle() {
+  if (_room().indoors) return;   // a windowless back office has no weather (Pri, r45)
   const alt = G.turns % 2 === 0; // variant by parity — no dice for flavor
   if (_inBar()) {
     // LOW SEASON'S OTHER REGISTER (monsoon-purgatory canon, 2026-08-22): when the
@@ -4591,7 +4592,7 @@ const _DRIZZLE_DARK = [
 
 function _sheltered(id) {
   const r = ROOMS[id];
-  return !!(r.bar || r.barType || r.shop || r.outlet) ||
+  return !!(r.bar || r.barType || r.shop || r.outlet || r.indoors) ||
     id === "police_station" || id === "oy_office";
 }
 
@@ -6856,6 +6857,7 @@ function _doBooks() {
     ? "Months elapsed: {m} of {term}   ·   Nights open: {n}"
     : "Months paid: {m} of {term}   ·   Nights open: {n}",
     { m: b.months, term: BAR_TERM, n: b.nights }));
+  if (_flag("barBook")) _say(_fmt("Rabbit's regulars: running at your rail — the European trade, +{p}% on the take, every night.", { p: Math.round((BOOK_TAKINGS - 1) * 100) }), "dim");
   _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened.", { r: _barRent() }), "dim");
   _sayLease();
   const ll = b.lastLines;
@@ -9221,10 +9223,11 @@ function _ccibVisit() {
     "first name you won't keep and doesn't ask for yours, because he already has it. He is " +
     "not unfriendly. He is not anything — he is a man doing arithmetic out loud so you can " +
     "hear that it's already done.");
+  const _nights = G.day - (G.rabbitDataDay || 0);
   _say("\"That machine on Soi 6,\" he says, to his coffee. \"We have been reading it since " +
     "March. Carefully. Quietly. It is a great deal of work, that kind of quiet.\" He turns the " +
     "cup a quarter, and it is Tan's exact gesture, and you notice it and wish you hadn't. " +
-    "\"Last night was not quiet. Amateurs in a room we were watching, nearly walking off with " +
+    "\"" + (_nights <= 1 ? "Last night" : "The other night") + " was not quiet. Amateurs in a room we were watching, nearly walking off with " +
     "the one thing that finishes a case that took a year to build.\"");
   // path-aware middle: what HE saw of what YOU did
   if (G.rabbitWay === "operator")
@@ -9249,8 +9252,9 @@ function _ccibVisit() {
       "There is nothing to write down. You can feel him not writing it.", "dim");
   if (_flag("payoutsCopied"))
     _say("\"And you copied the ledger.\" Almost approving. \"The envelopes, the dinners, the men in " +
-      "brown. We have had that page since March; it is the page. Keep your copy — it is a useful " +
-      "thing to be known to be holding, and a dangerous one, and I leave it to you which.\"", "alert");
+      "brown. We have had that page since March; it is the page. " +
+      (G.itemLoc.data_stick === "inventory" ? "Keep your copy — it is a useful thing to be known to be holding, and a dangerous one, and I leave it to you which."
+                                            : "Your friend has the copy now. That is his to be known for.") + "\"", "alert");
   if (G.itemLoc.thai_sim === "inventory")
     _say("\"You are carrying a SIM,\" he says, not as a question. \"A Buriram address. Not " +
       "yours, not anybody's. We know that address well.\" He lets it sit. \"It is a small thing " +
@@ -9260,9 +9264,9 @@ function _ccibVisit() {
     "coming. \"Nothing. A mutual friend mentioned the group might have a problem soon, and a " +
     "problem is only useful if nobody is standing in it when it arrives. So do not stand in " +
     "it.\" He finishes the coffee, thanks Eddy by a name Eddy answers to, and is gone into the " +
-    "morning before you have decided what your face should be doing.", "alert");
-  _say("(Nobody warned you. He told you what he knows and left, which is worse. TALK TO TAN " +
-    "when you see him.)", "dim");
+    "street before you have decided what your face should be doing.", "alert");
+  _say("(Nobody warned you. He told you what he knows and left, which is worse. ASK TAN ABOUT " +
+    "THE POLICEMAN — he's at the mouth of Soi 6 most nights.)", "dim");
   // Eddy goes to ground — theatrically, and for the wrong reason
   G.eddyBackDay = G.day + EDDY_GROUND_DAYS;   // gone for a bit — see _npcActive
   _say("Eddy watches the door for a while after it's shut. \"Right,\" he says, to nobody. " +

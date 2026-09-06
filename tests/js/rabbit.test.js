@@ -290,9 +290,18 @@ test("running out the machine's clock locks it — not a loss of the arc, just n
   assert.equal(G.game, null, "locked out");
   assert.ok(!_flag("rabbitData") && !_flag("rabbitBlown"), "neither done nor blown");
   assert.equal(G.quests.rabbit_heist, "active", "the job is still open to try again");
-  // and it can be tried again
+  // "not tonight" is a rule: the same night the screen stays locked (Pri, r45 — she sat back down in four seconds)
   out = []; run("use laptop");
-  assert.equal(G.game && G.game.type, "cli", "sat down again");
+  assert.equal(G.game, null, "locked tonight");
+  assert.match(text(), /Not tonight|locked/i);
+  // tomorrow it's unlocked again, because it always is — and the second sitting is a shorter paragraph
+  // (sixty LS commands ticked the clock past midnight and shut Soi 6; a new evening, not 3 a.m.)
+  G.day++; G.nightTurn = 20; G.room = "kitten_corner";
+  const till = _tillKeeper("kitten_corner");
+  run("buy drink for " + NPCS[till].name.toLowerCase(), "back");
+  out = []; run("use laptop");
+  assert.equal(G.game && G.game.type, "cli", "sat down again the next day");
+  assert.match(text(), /Back at the desk/, "not the same paragraph verbatim");
 });
 
 // ── The CCIB landing: the interruption, the radar, the lay-low ─────────────
@@ -637,4 +646,71 @@ test("Nont knows you're holding his SIM; MOTOSAI knows the Old Market; DELETE ME
 test("the back office lists no door to 'step inside'", () => {
   G.room = "kitten_office"; out = []; _describeRoom(true);
   assert.doesNotMatch(text(), /Step inside/);
+});
+
+
+// ── Round 45, Pri's second visit ───────────────────────────────────────────
+
+test("ASK EDDY ABOUT THE FILE answers per path — the operator never hears about a box", () => {
+  recruitOperator(); toLaptop();
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy wallet.dat");
+  G.room = "white_rabbit"; out = []; run("ask eddy about the file");
+  assert.doesNotMatch(text(), /What box|battery pack/, "that is the mule's answer");
+  assert.match(text(), /never knew it had a visitor|mine now/i);
+});
+
+test("BOOKS shows the book once it runs, and the officer only says 'keep your copy' if you have one", () => {
+  recruitOperator(); toLaptop();
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy payouts.csv", "cd ..", "cd archive",
+      "cd white_rabbit_2019", "copy regulars_2019.xls", "cd ..", "cd ..", "cd vault", "copy wallet.dat");
+  _setFlag("barPaid"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  run("read book");
+  out = []; run("books");
+  assert.match(text(), /Rabbit's regulars: running/, "the ledger it promised now shows it");
+  // hand the stick over, then the visit: no 'keep your copy' for a copy you gave away
+  G.room = "white_rabbit"; run("give stick to eddy");
+  assert.equal(G.itemLoc.data_stick, null);
+  morningAfter();
+  assert.doesNotMatch(text(), /Keep your copy/);
+  assert.match(text(), /Your friend has the copy/);
+});
+
+test("BURN LEDGER ends the holding; the office is indoors; the office chip offers the laptop", () => {
+  recruitOperator();
+  G.room = "kitten_office";
+  assert.ok(_chipSet().some(c => c.cmd === "use laptop"), "the one thing in the room is a chip");
+  toLaptop();
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy payouts.csv", "exit");
+  assert.ok(_flag("payoutsCopied"));
+  out = []; run("burn ledger");
+  assert.ok(_flag("payoutsBurned")); assert.ok(!G.stickFiles.includes("payouts.csv"));
+  assert.match(text(), /no longer yours/);
+  // indoors: no drizzle, no street dog, and it counts as shelter
+  assert.ok(ROOMS.kitten_office.indoors && _sheltered("kitten_office"));
+  G.room = "kitten_office"; out = []; _sayDrizzle();
+  assert.equal(text(), "", "a windowless box has no weather");
+});
+
+test("Bert greets his own boss as the boss; Nuan notices Eddy's gone; CALL EDDY while away is voiced", () => {
+  _setFlag("barPaid"); G.bar.room = "stinky_bar"; G.room = "stinky_bar"; G.talked = {};
+  out = []; run("talk to bert");
+  assert.match(text(), /Guv/, "not 'Welcome to the Stinky' to the man whose name is on the float");
+  recruit(); intoOffice();
+  nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
+  morningAfter();
+  G.room = "white_rabbit"; out = []; run("ask nuan about the boss");
+  assert.match(text(), /Hua Hin|never about him/);
+  out = []; run("call eddy");
+  assert.match(text(), /New number/);
+});
+
+test("'l' inside the terminal is the terminal, not a bar game; the lost line knows the stick", () => {
+  recruitOperator(); toLaptop();
+  out = []; run("l");
+  assert.doesNotMatch(text(), /bar game/);
+  assert.match(text(), /terminal/i);
+  run("cd archive", "cd white_rabbit_2019", "copy regulars_2019.xls");
+  const budget = CLI_SCENARIOS.wdg_office.budget;
+  for (let i = 0; i < budget + 1 && G.game; i++) run("ls");
+  assert.match(text(), /whatever is on the stick is on the stick/, "it does not call a loaded stick empty");
 });

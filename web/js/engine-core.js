@@ -250,6 +250,8 @@ function newGame() {
     boxJob: null,        // Rabbit's mule job while it's live: {turns,heat,done} (see _boxTick)
     eddyBackDay: 0,      // Rabbit gone to ground until this day (see _ccibVisit / _npcActive)
     stickFiles: [],      // what has been copied onto Rabbit's stick (READ STICK)
+    cliLockedDay: 0,     // the day the office laptop locked you out — not tonight means not tonight
+    cliSat: 0,           // sittings at that laptop (the second gets a shorter paragraph)
     rabbitDataDay: 0,    // the day the data landed — the CCIB visit is the morning AFTER
     rabbitWay: null,     // which way into the WDG office you took: "mule" | "operator" (see _rabbitJobYes/_rabbitJobKeyboard)
     ccibRadar: null,     // who CCIB has a file on after the heist: {player,eddy,nont} — set at the morning scene, rides the export (docs/bangkok-concept.md)
@@ -2200,7 +2202,7 @@ function _describeRoom(full, forceFull) {
     }
     if (G.room === "khao_talo_strip") _dogShamrock(); // the dead pub knows him
   } else if (_flag("act1Done") && !r.bar && !r.barType && !r.massage && !r.soapy &&
-      !r.hostBar && !_isHotelRoom(G.room) && !_isDarkHere() && !G.rain && G.dogNudgeDay !== G.day && _rand() < 0.35) {
+      !r.hostBar && !r.indoors && !_isHotelRoom(G.room) && !_isDarkHere() && !G.rain && G.dogNudgeDay !== G.day && _rand() < 0.35) {
     // the un-adopted dog makes himself known: at most once a night, lit streets
     // only (never a hotel room — he can't climb to your balcony), and never
     // during Act One's tight opening
