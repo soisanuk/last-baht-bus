@@ -8647,7 +8647,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // the declining is the answer. Before the heist a player has no reason to ask
       // and gets his ordinary "not my story", which is honest.
       { topic: "eastern seaboard|the trading company|trading company|the office on thappraya|the shophouse|facilities company|the facilities company|the company on the hill",
-        req: ["rabbitData"],
+        req: ["invoicesCopied"],   // the player has no reason to say the name until he has read it on paper
         text: "\"Eastern Seaboard.\" He lets the name sit on the roof of the car between you, and " +
           "does not pick it up. \"You have found an office. My friend, Pattaya is full of offices; " +
           "most of them are two desks and a kettle, and the kettle is the honest one.\" He looks at " +
@@ -11481,6 +11481,29 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the number because there isn't one, and that's worse than a number.” A beat. “I'd " +
           "have rather you paid me. But I'm not going anywhere, and neither is the file, so.”",
         short: "“Tan made a call. You'll owe him for me. I'd rather you'd paid.”" },
+      // WHITE DISH, from the kid who was on the premises when the paper came in
+      { topic: "white dish|wdg|the group|white dish group|the takeover|the sale",
+        text: "“White Dish.” He doesn't stop working, but the tweezers slow down. “I was there. " +
+          "Fourteen, on the till, when the golf shirt came in with the lawyer — the one who does " +
+          "the nominee paper, you'd know him if you've been on the 6 a week. They didn't shout. " +
+          "They never shout. They bought the old man's debt, then they bought the lease, then one " +
+          "day Rabbit's name wasn't on anything and mine wasn't on the rota.” A shrug. “I'd set up " +
+          "their cameras by then. I mean — his cameras. Then they were their cameras. Same cameras.” " +
+          "He finally looks up. “You want gossip, the whole 6 has gossip. You want how it's actually " +
+          "done, I watched it done. It's paper. It's always paper.”",
+        short: "“I was there, fourteen, on the till, when the golf shirt came in with the lawyer. It's paper. It's always paper.”" },
+      // EASTERN SEABOARD — only once you've read the name on an invoice; he put those in a drawer at fourteen
+      { topic: "eastern seaboard|the trading company|trading company|facilities company|the facilities company|the invoices|invoices|invoice|consulting|the office on thappraya",
+        req: ["invoicesCopied"],
+        text: "The tweezers stop. He doesn't ask how you know the name; he has seen enough of your " +
+          "face to know. “Eastern Seaboard.” Quietly. “They invoiced Rabbit's place too. Every month, " +
+          "‘facilities’, and I never once saw a facility. I put them in the drawer under the till " +
+          "because I was fourteen and that's what you do with paper.” He turns the {{phone}} over in his " +
+          "hands. “That's how I knew the sale was coming, actually. The invoices stopped. Two months " +
+          "before the golf shirt. You don't bill a man you're about to own.” He looks at you " +
+          "properly. “Whoever's name is on that company isn't a name I'm going to say, and it isn't " +
+          "the group's. You've read enough to work out whose. Don't work it out loud.”",
+        short: "“They invoiced Rabbit's place too. The invoices stopped two months before the sale — you don't bill a man you're about to own. Don't work out whose name it is out loud.”" },
       { topic: "rabbit|eddy|fast eddy|the rabbit", text: "“Rabbit.” A small pause, weighing how much to hand you. “Yeah. " +
           "Knew him better than most. Old farang, had a bar on the 6 when I was a kid — I ran his " +
           "till, fixed his wifi, translated when the Thai side of things got complicated. He " +

@@ -779,18 +779,34 @@ test("once the WDG case is the news, the company has ceased to be somewhere you 
 });
 
 
-test("Eastern Seaboard is a topic with Tan after the heist — no questions, no lies — and nothing before it", () => {
-  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
-  out = []; run("ask tan about eastern seaboard");
-  assert.doesNotMatch(text(), /two desks and a kettle/, "before the heist he has nothing on it");
+test("Eastern Seaboard is a topic with Tan and Nont only once you've read the name on paper", () => {
+  // the heist alone is not enough — a mule who never read the invoices has no reason to say the name
   recruit(); intoOffice();
   nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
-  G.room = _npcRoom("tan"); G.nightTurn = 25; G.talked = {};
+  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25; G.talked = {};
+  out = []; run("ask tan about eastern seaboard");
+  assert.doesNotMatch(text(), /two desks and a kettle/, "no paper read, nothing to say");
+  G.known.nont = true; G.room = _npcRoom("nont"); G.talked = {};
+  out = []; run("ask nont about eastern seaboard");
+  assert.doesNotMatch(text(), /invoiced Rabbit's place/);
+  // read the name on an invoice, and both have something — neither says whose company it is
+  _setFlag("invoicesCopied");
+  G.room = _npcRoom("tan"); G.talked = {};
   out = []; run("ask tan about eastern seaboard");
   assert.match(text(), /Ask me nothing about that company/, "the not-answer");
   assert.doesNotMatch(text(), /\bor else\b|you will be|we will/i, "and it is not a threat");
-  // the invoices node still answers the paperwork by its own words
-  _setFlag("invoicesCopied"); G.talked = {};
+  G.room = _npcRoom("nont"); G.talked = {};
+  out = []; run("ask nont about eastern seaboard");
+  assert.match(text(), /invoiced Rabbit's place too|Don't work it out loud/, "the kid who filed the invoices");
+  assert.doesNotMatch(text(), /Tan/, "and he never says the name either");
+  // the paperwork node still answers the paperwork by its own words
+  G.room = _npcRoom("tan"); G.talked = {};
   out = []; run("ask tan about the invoices");
   assert.match(text(), /sells nothing, to people who buy nothing/);
+});
+
+test("Nont on White Dish: he was on the premises, fourteen, when the paper came in", () => {
+  G.known.nont = true; G.room = _npcRoom("nont"); G.nightTurn = 25;
+  out = []; run("ask nont about white dish");
+  assert.match(text(), /golf shirt came in with the lawyer|It's always paper/, "gossip plus the detail only he has");
 });
