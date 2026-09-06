@@ -912,6 +912,7 @@ function _npcActive(id) {
   // leaving the building while leaving him standing there — persona A#13)
   if (G.soc && G.soc.hostOut && G.soc.hostOut[id]) return false;
   if (id === "fast_eddy" && G.eddyBackDay && G.day < G.eddyBackDay) return false;   // gone to ground after the coffee (days, not a nightly flag)
+  if (n && typeof n.hidden === "function" && n.hidden(G)) return false;   // a data-driven absence (a company that ceased to exist)
   // The regulars' bench (patron: true) keeps its two absences from the old
   // separate table, keyed on the flag so the STAFF never thin (barchain.test
   // pins that): `days` holds a working man to his nights out (David's Mon/Fri),

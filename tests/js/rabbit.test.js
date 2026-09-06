@@ -725,3 +725,55 @@ test("Bert has a White Dish answer for the man whose bar they tried to buy", () 
   out = []; run("ask bert about white dish");
   assert.match(text(), /You've got it|ends that way/, "owner: the only story on this road that ends that way");
 });
+
+// ── Eastern Seaboard Trading & Facilities — the name on the invoice, given a door ──
+
+test("the office is accidentally discoverable from the hill road, and its staff are confused you came", () => {
+  G.room = "thappraya_ext_m"; G.nightTurn = 20; G.itemLoc.torch = G.itemLoc.torch;   // a dark road; the door is named in the prose
+  G.lightOn = true;
+  out = []; _describeRoom(true);
+  assert.match(text(), /brass plates|shutter half down/, "the row is in the prose");
+  out = []; run("office");
+  assert.equal(G.room, "eastern_seaboard", "OFFICE walks in");
+  assert.ok(_npcsHere().includes("wilawan") && _npcsHere().includes("tul"), "both at their desks in the evening");
+  out = []; run("talk to wilawan");
+  assert.match(text(), /Are you looking for the massage|This is an office/, "genuinely confused, politely");
+  out = []; run("ask wilawan about the company");
+  assert.match(text(), /Import, export|hospitality sector/);
+  out = []; run("ask wilawan about kitten corner");
+  assert.match(text(), /do not discuss clients/, "before you've read anything, a receptionist's blank");
+  out = []; run("talk to tul");
+  assert.match(text(), /an office/);
+  out = []; run("read sign");
+  assert.match(text(), /EASTERN SEABOARD TRADING/);
+  // ENTER by name works from the road too
+  run("out"); out = []; run("enter eastern seaboard");
+  assert.equal(G.room, "eastern_seaboard");
+  // and they keep office hours: gone by ten
+  G.nightTurn = 45;
+  assert.ok(!_npcActive("wilawan") && !_npcActive("tul"), "an office, not a bar");
+});
+
+test("after the heist the office is packing; once you've read the invoices, she stops being a receptionist", () => {
+  recruitOperator(); toLaptop();
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy takings_2023.xlsx", "copy wallet.dat");
+  assert.ok(_flag("rabbitData") && _flag("invoicesCopied"));
+  G.room = "eastern_seaboard"; G.nightTurn = 50;   // present all night now
+  assert.ok(_npcActive("wilawan"), "present past office hours — she has boxes to fill");
+  G.talked = {}; out = []; run("talk to wilawan");
+  assert.match(text(), /We are closed|never anything here/);
+  out = []; run("ask wilawan about the invoices");
+  assert.match(text(), /don't know what you think you have read|who you tell/, "nothing of the receptionist left");
+  out = []; run("talk to tul");
+  assert.match(text(), /taping a box|tape/);
+});
+
+test("once the WDG case is the news, the company has ceased to be somewhere you can walk into", () => {
+  _setFlag("ccibCleared");
+  G.room = "eastern_seaboard"; G.nightTurn = 20;
+  assert.ok(!_npcActive("wilawan") && !_npcActive("tul"), "gone — the whole company");
+  out = []; run("read sign");
+  assert.match(text(), /FOR RENT|four screw holes/);
+  out = []; run("talk to wilawan");
+  assert.doesNotMatch(text(), /Can I help you/);
+});

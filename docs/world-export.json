@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 240,
+  "geolocated": 241,
   "patrons": 24,
-  "people": 338,
-  "portraits": 362,
+  "people": 340,
+  "portraits": 364,
   "renders": 362,
   "thumbs": 362,
-  "venues": 240
+  "venues": 241
  },
  "frames": [
   "baimon_pic1",
@@ -3289,6 +3289,14 @@
    "room": "slutty",
    "th": "ตุ๊กตา"
   },
+  "tul": {
+   "desc": "The other desk: a slim lad in a white short-sleeved shirt with a lanyard he doesn't need, one earbud in, a {{phone}} face-down beside a keyboard he is not typing on. He looks up the way a man looks up when the door has never once opened in the evening before.",
+   "emoji": "🧑‍💻",
+   "name": "Tul",
+   "pronoun": "he",
+   "room": "eastern_seaboard",
+   "th": "ตุล"
+  },
   "two_stools_jinda": {
    "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Two Stools Bar's girls, from {{Nong Khai}}. The {{phone}} never leaves her hand.",
    "emoji": "🌻",
@@ -3441,6 +3449,14 @@
    "role": "hostess",
    "room": "ruby_kiss",
    "th": "วิไล"
+  },
+  "wilawan": {
+   "desc": "The woman at the desk with the computer: late forties, reading glasses on a chain, a blouse that was ironed this morning and has stayed ironed. She has the stillness of a person who signs things for a living and reads them first. She was not expecting anybody, and she is not going to pretend she was.",
+   "emoji": "👩‍💼",
+   "name": "Khun Wilawan",
+   "pronoun": "she",
+   "room": "eastern_seaboard",
+   "th": "วิลาวัลย์"
   },
   "wimon": {
    "bars": [
@@ -3886,6 +3902,7 @@
   "tui",
   "tukky",
   "tukta",
+  "tul",
   "two_stools_jinda",
   "two_stools_meaw",
   "two_stools_orm",
@@ -3902,6 +3919,7 @@
   "wassana",
   "wayne",
   "wilai",
+  "wilawan",
   "wimon",
   "win",
   "yada",
@@ -5204,6 +5222,14 @@
    ],
    "name": "Dongtan Beach Road (South)",
    "region": "Jomtien"
+  },
+  "eastern_seaboard": {
+   "geo": [
+    12.90703,
+    100.86903
+   ],
+   "name": "Eastern Seaboard Trading & Facilities",
+   "region": "Pratumnak"
   },
   "emperor_soapy": {
    "bar": "The Emperor Massage",

@@ -2,11 +2,11 @@
   "generated": "2026-09-06",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 240,
+    "rooms": 241,
     "regions": 15,
     "byKind": {
       "beach": 14,
-      "street": 95,
+      "street": 96,
       "massage": 19,
       "beer": 58,
       "mall": 1,
@@ -211,6 +211,7 @@
         "buddha_hill",
         "doghouse",
         "dongtan_rd_n",
+        "eastern_seaboard",
         "half_moon_massage",
         "hillside_massage",
         "kingfisher",
@@ -1984,6 +1985,21 @@
       "desc": "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, past that, the crest. On the bend a 7-ELEVEN throws the only real light for half a kilometre — cold air, a cash machine, and two lads on a scooter parked across the front eating toasties. Everyone going up the hill or down it stops here, because there is nothing either way for a long time."
     },
     {
+      "id": "eastern_seaboard",
+      "name": "Eastern Seaboard Trading & Facilities",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Khun Wilawan",
+        "Tul"
+      ],
+      "desc": "Up a half-flight past the shutter: an office that is mostly not there. Two desks, one with a computer on it and one with a kettle; a filing cabinet; a wall calendar from a shipping agent three years out of date; a framed company registration in Thai with a gold seal. No stock, no samples, no brochures — a trading company that trades nothing you can point at. A brass plate by the stairs says the name in two languages. The aircon is on. That is the whole of the business you can see."
+    },
+    {
       "id": "half_moon_massage",
       "name": "Half Moon Massage",
       "bar": "Half Moon Massage",
@@ -2128,7 +2144,7 @@
       "dark": true,
       "darkLight": null,
       "people": [],
-      "desc": "Mid-climb on the eastern shoulder of Pratumnak: gated condos, a sleeping soi dog or three, the streetlights getting shy. The lights of Jomtien spread out below to the south."
+      "desc": "Mid-climb on the eastern shoulder of Pratumnak: gated condos, a sleeping soi dog or three, the streetlights getting shy. The lights of Jomtien spread out below to the south. On the inland side a three-storey shophouse row carries a run of brass plates — law offices, the kind that do visas and condo paper for farang — and one unit in the middle with the shutter half down and a strip light on upstairs. (The OFFICE, if you have any reason.)"
     },
     {
       "id": "thappraya_ext_n",

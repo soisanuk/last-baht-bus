@@ -239,6 +239,12 @@ the no-signpost test above.
   (barfine, treadmill, venue tiers) does **not** come along.
 - **Canon bridges:** Eddy/Rabbit, Tan, WDG, *suay* — shared canon, and the CTF/CLI-sim work
   (`docs/ctf.md`, `docs/rabbit-arc.md`) is the thematic and mechanical seed already built.
+- **A second bridge, in a building:** *Eastern Seaboard Trading & Facilities Co., Ltd.* — the invoicing
+  shell on WDG's paperwork, built in LBB as an office you can walk into (306 Thappraya, two
+  professionals, a company that ceases to exist when the case breaks). A trading company with a Thai
+  registration and no goods is exactly the kind of thing that has a Bangkok end — a registered
+  address in the capital, a director who is a name — and the LBB player who stood in that office
+  before it emptied is a witness the follow-on can use. Seed only; nothing here decides anything.
 - **Carried state (the baton):** `G.ccibRadar = { player, eddy, nont }` — three booleans set by
   the Rabbit arc's ending, read by this game on day one. Flat, boolean, named; nothing else
   about the heist needs to cross (see *What LBB hands over* above). `cli-sim.js` crosses as a

@@ -944,8 +944,53 @@ const ROOMS = {
     region: "Pratumnak",
     dark: true,
     desc: "Mid-climb on the eastern shoulder of Pratumnak: gated condos, a sleeping soi dog or " +
-      "three, the streetlights getting shy. The lights of Jomtien spread out below to the south.",
-    exits: { s: "thappraya_ext_s", n: "thappraya_ext_n" },
+      "three, the streetlights getting shy. The lights of Jomtien spread out below to the south. " +
+      "On the inland side a three-storey shophouse row carries a run of brass plates — law offices, " +
+      "the kind that do visas and condo paper for farang — and one unit in the middle with the " +
+      "shutter half down and a strip light on upstairs. (The OFFICE, if you have any reason.)",
+    venues: ["eastern_seaboard"],
+    exits: { s: "thappraya_ext_s", n: "thappraya_ext_n", office: "eastern_seaboard" },
+  },
+  // EASTERN SEABOARD TRADING & FACILITIES CO., LTD. — the name on the invoice
+  // (docs/factions-thai.md, "Fronts"), given a door (Mario, 2026-09-06): an
+  // innocuous, accidentally-discoverable office in the law-firm shophouse row on
+  // the Thappraya hill road — 306 Thappraya, the unit with the shutter half down.
+  // Staffed by two local professionals who are, before the heist, genuinely
+  // confused why a farang has wandered in, and after it, something else. A hook
+  // for later quests and a link to the Bangkok game; nothing here is a scene yet.
+  eastern_seaboard: {
+    name: "Eastern Seaboard Trading & Facilities",
+    region: "Pratumnak",
+    indoors: true,
+    desc: "Up a half-flight past the shutter: an office that is mostly not there. Two desks, one " +
+      "with a computer on it and one with a kettle; a filing cabinet; a wall calendar from a " +
+      "shipping agent three years out of date; a framed company registration in Thai with a " +
+      "gold seal. No stock, no samples, no brochures — a trading company that trades nothing " +
+      "you can point at. A brass plate by the stairs says the name in two languages. The aircon " +
+      "is on. That is the whole of the business you can see.",
+    revisit: [
+      "The office, still mostly not there: the kettle, the calendar, the seal on the wall.",
+      "Two desks and a filing cabinet. Somebody has watered the plant. Nothing else has happened.",
+      "The strip light hums. The company registration hangs straight. Nobody is trading anything.",
+      "Up the half-flight again. The same quiet, which is the only thing this office produces.",
+    ],
+    reads: {
+      sign: [
+        { req: ["ccibCleared"], text: "The brass plate is gone — four screw holes and a cleaner rectangle. A laminated " +
+          "sheet in the window says FOR RENT in two languages and gives a number. The strip light " +
+          "upstairs is off. Eastern Seaboard Trading & Facilities Co., Ltd. has, as a company, " +
+          "ceased to be somewhere you can walk into, which is the most it ever was." },
+        { text: "EASTERN SEABOARD TRADING & FACILITIES CO., LTD. — Import · Export · Facilities " +
+          "Management · Consulting — in brass, in English and Thai, with a registration number. It " +
+          "is a very complete sign for a company with nothing on the shelves." },
+      ],
+      calendar: "A shipping agent's calendar — a container ship on every month — stopped three " +
+        "years ago on a month nobody turned. The dates are wrong. Nothing here needs a date.",
+      registration: "A company registration certificate, Thai, gold seal, two Thai names as " +
+        "directors and a registered capital that would buy a nice condo. Framed and level. The " +
+        "one thing in the room anybody has ever cared about.",
+    },
+    exits: { out: "thappraya_ext_m" },
   },
   thappraya_ext_n: {
     busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
@@ -10761,6 +10806,107 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "“Their room, not the bar. Stay with it. If it drops, pull the cable and put it back. Leave it when it's green.”" },
     ],
   },
+  // ── Eastern Seaboard's two professionals ────────────────────────────────
+  // Not staff in the bar sense: no NPC_ROLES, no manager flag, none of the
+  // lady-logic. Evening hours (an office that keeps a clerk on because bars pay
+  // at night); present all night and packing once the heist has happened; gone
+  // — the whole company gone — once the WDG case is the news (`hidden`).
+  wilawan: {
+    name: "Khun Wilawan", th: "วิลาวัลย์", emoji: "👩‍💼", pronoun: "she",
+    room: "eastern_seaboard",
+    hidden: (G) => !!(G.flags && (G.flags.ccibCleared || (!G.flags.rabbitData && G.nightTurn >= 40))),   // office hours till ten; all night once there are boxes to fill; gone for good with the news
+    look: "Thai woman of forty-eight, reading glasses on a chain, neat blouse, hair pinned up, office desk.",
+    desc: "The woman at the desk with the computer: late forties, reading glasses on a chain, a " +
+      "blouse that was ironed this morning and has stayed ironed. She has the stillness of a " +
+      "person who signs things for a living and reads them first. She was not expecting anybody, " +
+      "and she is not going to pretend she was.",
+    dialogue: [
+      // AFTER the news: nobody. (hidden — the greeting below never fires; the sign does)
+      // AFTER the heist, before the news: present all night, and packing
+      { when: (st, G) => _flag("rabbitData") && !_flag("ccibCleared"),
+        text: "She is standing, not sitting, and there are two cardboard boxes on the desk that were " +
+          "not there before, and the filing cabinet is open and lighter. “We are closed.” Said in " +
+          "the voice of a woman who has said it to somebody more important than you today. She " +
+          "looks at you a second longer than a stranger gets. “You are the farang who came before. " +
+          "Yes.” Not a question. “There is nothing here. There was never anything here.”",
+        short: "“We are closed. There was never anything here.”" },
+      // BEFORE: honest confusion, politely managed
+      { text: "She takes the glasses off, which is how she looks at something properly. “Sawatdee " +
+          "kha. Can I help you?” A pause in which it becomes clear she cannot imagine how. “This is " +
+          "an office, sir. Eastern Seaboard. We are — trading. Facilities.” A small gesture at the " +
+          "room, which does not help her case. “The lawyers are next door. The massage is on the " +
+          "main road. Are you looking for the massage?”",
+        short: "“This is an office, sir. The lawyers are next door. Are you looking for the massage?”" },
+      { topic: "company|business|trading|facilities|import|export|what do you do|eastern seaboard|the company",
+        text: "“Import, export. Facilities management. Consulting.” She says the four words the way " +
+          "they are written on the plate, in that order, and stops. “We serve clients in the " +
+          "hospitality sector.” Another stop. “Is there a particular service you require, sir?” " +
+          "There is a kettle on the other desk and a plant, and that is the entire inventory.",
+        short: "“Import, export, facilities, consulting. Clients in the hospitality sector.”" },
+      { topic: "invoices|invoice|consulting|kitten corner|white dish|the invoices|paperwork",
+        req: ["invoicesCopied"],
+        text: "The glasses come off, slowly, and go on the desk, and she looks at you with an " +
+          "expression that has nothing of the receptionist left in it. “I don't know what you " +
+          "think you have read.” Quiet. “A company sends invoices. Clients pay them. That is what " +
+          "a company is.” She does not blink. “You should go now, sir. And you should think about " +
+          "who you tell that you were here, because they will already know.”",
+        short: "“A company sends invoices; clients pay them. You should go, and think about who you tell.”" },
+      { topic: "invoices|invoice|consulting|kitten corner|white dish|the invoices|paperwork",
+        text: "“Kitten Corner?” She has to think about it, or performs having to. “We have many " +
+          "clients in hospitality, sir. I do not discuss clients.” The glasses go back on. “That " +
+          "is a bar, I think. On Soi 6. You would be better asking there.”",
+        short: "“I do not discuss clients. That is a bar, I think. Ask there.”" },
+      { topic: "boss|owner|director|directors|who runs|the seal", deflect: true,
+        text: "“The directors are not in the office.” Which is true in a way she does not elaborate. " +
+          "“I am the office manager. If you have a matter for the directors you may leave a " +
+          "card.” There is no tray for cards." },
+      { topic: "lawyer|lawyers|law|the neighbours|next door",
+        text: "“Next door, and next door again.” A thin smile, the first. “Visas, condominiums, " +
+          "prenuptials for farang. Good businesses. We are not one of them; we only share the " +
+          "wall.”",
+        short: "“The lawyers are next door. Good businesses. We only share the wall.”" },
+      { topic: "tul|the boy|the clerk|him",
+        text: "“Tul. He does the evening post and the bank runs.” She does not look at him. “He is a " +
+          "good boy. He does not ask what is in the envelopes, which is the whole of the job.”",
+        short: "“Tul does the bank runs. He does not ask what is in the envelopes.”" },
+    ],
+  },
+  tul: {
+    name: "Tul", th: "ตุล", emoji: "🧑‍💻", pronoun: "he",
+    room: "eastern_seaboard",
+    hidden: (G) => !!(G.flags && (G.flags.ccibCleared || (!G.flags.rabbitData && G.nightTurn >= 40))),
+    look: "Thai man of twenty-three, slim, short black hair, white short-sleeved shirt, lanyard, office chair.",
+    desc: "The other desk: a slim lad in a white short-sleeved shirt with a lanyard he doesn't need, " +
+      "one earbud in, a {{phone}} face-down beside a keyboard he is not typing on. He looks up the way " +
+      "a man looks up when the door has never once opened in the evening before.",
+    dialogue: [
+      { when: (st, G) => _flag("rabbitData") && !_flag("ccibCleared"),
+        text: "He is taping a box shut and does not stop. Both earbuds are in. When he sees you he " +
+          "takes one out, decides against saying anything, and puts it back. The tape screams off " +
+          "the roll.",
+        short: "He tapes a box and puts the earbud back in." },
+      { text: "The earbud comes out. “Uh — sawatdee khrap?” He looks at Khun Wilawan and back. “Can " +
+          "I help you, sir? This is…” he gestures at the office as if it might explain itself, " +
+          "“…an office.” He is not being rude. Nobody has ever needed directions to here.",
+        short: "“Sawatdee khrap? This is… an office.”" },
+      { topic: "job|work|what do you do|evening|post|bank",
+        text: "“Evening post. Bank runs, sometimes — the branch on Thepprasit stays open late for " +
+          "business.” He shrugs. “Mostly I sit here till ten in case somebody calls, and nobody " +
+          "calls. It's a good job. My mum thinks it's a real one.”",
+        short: "“Evening post, bank runs, and sitting here till ten in case somebody calls.”" },
+      { topic: "boss|wilawan|khun wilawan|her",
+        text: "A glance at the other desk. “Khun Wilawan. She's been here since before the company " +
+          "was called this.” He hears what he has said and looks at his keyboard. “I mean — a long " +
+          "time.”",
+        short: "“Khun Wilawan. Since before the company was called this. I mean, a long time.”" },
+      { topic: "company|business|trading|facilities|import|export|eastern seaboard|clients",
+        text: "“Facilities.” He says it like a word from a test. “We do facilities for bars. And " +
+          "consulting.” A beat. “I've never been to any of the bars. I don't think anyone from here " +
+          "has.” He looks faintly surprised to have said that out loud.",
+        short: "“Facilities for bars. I've never been to any of the bars. I don't think anyone from here has.”" },
+    ],
+  },
+
   nuan: {
     name: "Nuan", emoji: "👑",
     room: "white_rabbit",
@@ -16658,6 +16804,7 @@ const ROOM_GEO = {
   soi6_deep:        [12.94198, 100.88741],
   kitten_corner:    [12.94218, 100.88727],
   kitten_office:    [12.94218, 100.88727],   // the room behind the till — same building
+  eastern_seaboard: [12.90703, 100.86903],   // 306 Thappraya Rd, the law-firm shophouse row (surveyed 2026-09-06)
   cherry_pop:       [12.94184, 100.88736],
   ruby_kiss:        [12.94205, 100.88765],
   // Naklua

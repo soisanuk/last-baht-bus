@@ -1,10 +1,10 @@
 {
-  "generated": "2026-09-04",
+  "generated": "2026-09-06",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 151,
+    "total": 153,
     "byRole": {
-      "story": 41,
+      "story": 43,
       "mamasan": 25,
       "hostess": 48,
       "cashier": 13,
@@ -543,6 +543,20 @@
       "desc": "Broad, brisk, unbothered. Toom runs the Poseidon floor from a little desk by the glass, and has explained the menu ten thousand times."
     },
     {
+      "id": "tul",
+      "name": "Tul",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "look": "Thai man of twenty-three, slim, short black hair, white short-sleeved shirt, lanyard, office chair.",
+      "venueKind": null,
+      "emoji": "🧑‍💻",
+      "th": "ตุล",
+      "room": "eastern_seaboard",
+      "tags": [],
+      "desc": "The other desk: a slim lad in a white short-sleeved shirt with a lanyard he doesn't need, one earbud in, a phone face-down beside a keyboard he is not typing on. He looks up the way a man looks up when the door has never once opened in the evening before."
+    },
+    {
       "id": "waan",
       "name": "Waan",
       "source": "NPCS",
@@ -569,6 +583,20 @@
       "room": "golden_dragon",
       "tags": [],
       "desc": "Australian, forty-five, a Gold Coast tan and a shirt with the top three buttons making a decision. Made real money in earthmoving back home and has decided, with the total confidence of a man who's never been conned, that a Soi 6 bar is 'basically the same game, mate — plant, cashflow, location.' The girls have his order memorised. So has the till."
+    },
+    {
+      "id": "wilawan",
+      "name": "Khun Wilawan",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman of forty-eight, reading glasses on a chain, neat blouse, hair pinned up, office desk.",
+      "venueKind": null,
+      "emoji": "👩‍💼",
+      "th": "วิลาวัลย์",
+      "room": "eastern_seaboard",
+      "tags": [],
+      "desc": "The woman at the desk with the computer: late forties, reading glasses on a chain, a blouse that was ironed this morning and has stayed ironed. She has the stillness of a person who signs things for a living and reads them first. She was not expecting anybody, and she is not going to pretend she was."
     },
     {
       "id": "win",

@@ -1399,7 +1399,9 @@ const _READ_NOUNS = {
   // player who examines either gets the story (Wes, round 33). Harmless in the
   // other photos rooms: a fridge they don't have is a noun nobody types there.
   photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "portrait", "fridge"],
-  sign: ["notice", "placard", "arrows", "arrow", "signage"],
+  sign: ["notice", "placard", "arrows", "arrow", "signage", "plate", "brass plate", "nameplate", "name plate"],
+  calendar: ["wall calendar", "shipping calendar"],
+  registration: ["certificate", "company registration", "the seal", "gold seal", "frame"],
   // the Shamrock's darts-and-fixtures wall (renamed from `board`, whose aliases
   // were all DJ-sheet words — the authored elegy was unreachable by any noun a
   // player would type; critic playtest 2026-08-22)

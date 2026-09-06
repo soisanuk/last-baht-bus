@@ -416,6 +416,9 @@ CHARS = {
     "fast_eddy": dict(skin=TAN, hair="balding", hc=GREY, shirt=C(0x181820),
                       acc=["sunglasses", "earrings"], earc=GOLD, mouth="grin", bg=BG_BAR),
     "nuan":     lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x8a1030), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
+    # Eastern Seaboard Trading & Facilities — the office manager and the evening clerk
+    "wilawan":  lady(skin=THAI2, hair="chignon", hc=GRBLK, shirt=C(0xe8e4dc), bg=BG_STREET, mouth="neutral", acc=["glasses"]),
+    "tul":      dict(skin=THAI, hair="short", hc=BLACK, shirt=C(0xf4f4f4), collar=True, mouth="neutral", bg=BG_STREET),
     "ampha":    lady(skin=THAI, hair="bun", hc=BLACK, shirt=C(0x6a6a78), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=SILVER),
     "champa":   lady(skin=THAI2, hair="long", hc=GRBLK, shirt=C(0x9a2a3a), bg=BG_BAR, mouth="smile", acc=["earrings", "flower"], earc=GOLD),
     "boua":     lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x3a4a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=SILVER, framec=SILVER),
