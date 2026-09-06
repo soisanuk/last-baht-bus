@@ -3861,7 +3861,7 @@ function _readStick() {
   if (!files.length) { _say("Empty. Whatever it's for, it hasn't happened yet."); return; }
   _say("On the stick: " + files.join(" \u00b7 ") + ". " +
     (files.includes("wallet.dat") ? "wallet.dat is Rabbit's, by arrangement. " : "") +
-    (files.includes("payouts.csv") ? "The ledger is nobody's, and everybody's, and you are the one holding it (BURN LEDGER, if you'd rather not be). " : "") +
+    (files.some(f => /takings|2023-11/.test(f)) ? "The paperwork is nobody's, and proof that you understood (BURN PAPERWORK, if you'd rather not have). " : "") +
     (files.includes("regulars_2019.xls") ? (_flag("barBook") ? "The regulars are running at your bar. " : _flag("bookGiven") ? "" : "The regulars are a book with a history — GIVE it to Eddy, or READ BOOK at your own bar.") : ""), "room");
 }
 
@@ -3881,17 +3881,17 @@ function _doQuiet() { _say(_pickVary(_QUIET_LINES, "quiet"), "dim"); }
 // unmake the copying — the officer knew — but it ends the holding.
 function _doBurnLedger() {
   const files = G.stickFiles || [];
-  if (!files.includes("payouts.csv") || G.itemLoc.data_stick !== "inventory") {
-    _say(_flag("payoutsCopied") ? "You haven't got it any more. Whoever has the stick has the page." : "You're not holding any ledger.");
+  const paper = f => /takings|2023-\d\d\.pdf|ice_nov/.test(f);
+  if (!files.some(paper) || G.itemLoc.data_stick !== "inventory") {
+    _say(_flag("invoicesCopied") ? "You haven't got it any more. Whoever has the stick has the paper." : "You're not holding any paperwork worth burning.");
     return;
   }
-  G.stickFiles = files.filter(f => f !== "payouts.csv");
-  _setFlag("payoutsBurned");
+  G.stickFiles = files.filter(f => !paper(f));
+  _setFlag("invoicesBurned");
   _say("You delete it off the stick, and then, because you have read enough to know that deleting is " +
-    "a word people use to feel better, you do the other thing too — the file gone, the space written " +
-    "over, the stick held under the tap for a minute for luck. The envelopes, the dinners, the men in " +
-    "brown: still true, no longer yours. You are a man who was known to be holding it. You are not " +
-    "holding it.", "win");
+    "a word people use to feel better, you do the other thing too — the files gone, the space written " +
+    "over, the stick held under the tap for a minute for luck. A cleaner who never came, a bar that " +
+    "poured to nobody: still true, no longer yours. You understood it. Nobody can prove you did.", "win");
 }
 
 // LOSE IT AFTER — Rabbit's own instruction for the burner (Ray, r45): it could be
@@ -9607,7 +9607,7 @@ function doCommand(input) {
     case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
     case "topics": case "subjects": _doTopics(arg); break;
     case "delete": case "erase": case "wipe":
-      if (/ledger|payouts|envelopes|csv/.test(arg || "")) { _doBurnLedger(); break; }
+      if (/ledger|payouts|invoices?|takings|paperwork|csv/.test(arg || "")) { _doBurnLedger(); break; }
       if (/message|text|msg|sms|it|that/.test(arg || "")) _say("You delete it. It was never there, which is what it said. The phone remembers anyway, somewhere; phones do. You did what you were told.", "dim");
       else _say("Nothing here to delete.", "dim");
       break;
@@ -9987,11 +9987,11 @@ function doCommand(input) {
       break;
     }
     case "burn": case "shred":
-      if (/ledger|payouts|envelopes|csv|stick/.test(arg || "")) { _doBurnLedger(); break; }
+      if (/ledger|payouts|invoices?|takings|paperwork|csv|stick/.test(arg || "")) { _doBurnLedger(); break; }
       _say("Nothing here you'd burn.", "dim"); break;
     case "break": case "snap": case "destroy": case "ditch": case "kill": case "lose": case "bin":
       if (/\bsim\b|sim ?card/.test(arg || "")) { _doBreakSim(); break; }
-      if (/ledger|payouts|envelopes/.test(arg || "")) { _doBurnLedger(); break; }
+      if (/ledger|payouts|invoices?|takings|paperwork/.test(arg || "")) { _doBurnLedger(); break; }
       if (/burner|rabbit'?s phone/.test(arg || "")) { _doDitchBurner(); break; }
       _say(_pickVary(["Nothing here to break — and the impulse passes.", "You break nothing. The night is fragile enough."], "breakno"), "dim"); break;
     case "throw": case "toss": case "chuck": case "fling":

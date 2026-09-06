@@ -573,18 +573,18 @@ test("the burner can be lost, as Rabbit said", () => {
   assert.match(text(), /Never saw it/);
 });
 
-test("the stick is an item: handed at KEYBOARD, READ lists what's on it, the ledger is copyable", () => {
+test("the stick is an item: handed at KEYBOARD, READ lists what's on it, the paperwork is copyable", () => {
   recruitOperator();
   assert.equal(G.itemLoc.data_stick, "inventory", "a real object in your pocket");
   toLaptop();
-  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy payouts.csv");
-  assert.ok(_flag("payoutsCopied"), "the envelope ledger is worth the space");
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy takings_2023.xlsx");
+  assert.ok(_flag("invoicesCopied"), "the paperwork is worth the space");
   run("copy wallet.dat");
-  assert.deepEqual(G.stickFiles, ["payouts.csv", "wallet.dat"]);
+  assert.deepEqual(G.stickFiles, ["takings_2023.xlsx", "wallet.dat"]);
   out = []; run("read stick");
-  assert.match(text(), /payouts\.csv/); assert.match(text(), /wallet\.dat/);
+  assert.match(text(), /takings_2023\.xlsx/); assert.match(text(), /wallet\.dat/);
   morningAfter();
-  assert.match(text(), /copied the ledger/i, "the officer knows about the page");
+  assert.match(text(), /read the invoices/i, "the officer knows about the page");
 });
 
 test("during the terminal the CHIP BAR carries every legal move — taps alone finish it", () => {
@@ -661,7 +661,7 @@ test("ASK EDDY ABOUT THE FILE answers per path — the operator never hears abou
 
 test("BOOKS shows the book once it runs, and the officer only says 'keep your copy' if you have one", () => {
   recruitOperator(); toLaptop();
-  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy payouts.csv", "cd ..", "cd archive",
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy takings_2023.xlsx", "cd ..", "cd archive",
       "cd white_rabbit_2019", "copy regulars_2019.xls", "cd ..", "cd ..", "cd vault", "copy wallet.dat");
   _setFlag("barPaid"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.room = "stinky_bar";
   run("read book");
@@ -680,10 +680,10 @@ test("BURN LEDGER ends the holding; the office is indoors; the office chip offer
   G.room = "kitten_office";
   assert.ok(_chipSet().some(c => c.cmd === "use laptop"), "the one thing in the room is a chip");
   toLaptop();
-  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy payouts.csv", "exit");
-  assert.ok(_flag("payoutsCopied"));
-  out = []; run("burn ledger");
-  assert.ok(_flag("payoutsBurned")); assert.ok(!G.stickFiles.includes("payouts.csv"));
+  run("read notes.txt", "unlock vault dish2019", "cd vault", "copy takings_2023.xlsx", "exit");
+  assert.ok(_flag("invoicesCopied"));
+  out = []; run("burn paperwork");
+  assert.ok(_flag("invoicesBurned")); assert.ok(!G.stickFiles.includes("takings_2023.xlsx"));
   assert.match(text(), /no longer yours/);
   // indoors: no drizzle, no street dog, and it counts as shelter
   assert.ok(ROOMS.kitten_office.indoors && _sheltered("kitten_office"));

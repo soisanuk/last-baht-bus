@@ -7633,6 +7633,17 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  "THE THEORY OF FRONTS, squire, which every man at every rail in this town will explain to you " +
+    "by his second Chang: the bar with no customers that never closes, the tailor with a window " +
+    "full of suits and nobody in it, the restaurant that has been empty every night for nine " +
+    "years and repaints the sign. Money going in a door that money does not come out of. The Owl " +
+    "has heard it a thousand times and will tell you what nobody at the rail will: half of it is " +
+    "a business model the teller does not understand — three suits a day pays a tailor's rent, " +
+    "and the touts on the corner are the customers you cannot see — and the other half is a " +
+    "girlfriend's present, a sponsor's hobby, or a man with a company that sells nothing to " +
+    "people who buy nothing, every month, for a great deal of money. Which half is which, " +
+    "squire, is not a thing you learn by counting stools. It is a thing you learn by reading " +
+    "an invoice, and nobody is going to show you one.",
   "Another one this month, squire, on Sukhumvit, on foot, at three in the morning — a man of " +
     "our vintage who had drunk exactly enough to read a gap in eight lanes of traffic that " +
     "wasn't there. The Owl has written this paragraph before and will write it again, because " +
@@ -9250,9 +9261,10 @@ function _ccibVisit() {
     _say("He does not look at you at all, in the end. Whoever carried that box used a phone that " +
       "leads to the man pouring the coffee, and walked away from it, and was never at a keyboard. " +
       "There is nothing to write down. You can feel him not writing it.", "dim");
-  if (_flag("payoutsCopied"))
-    _say("\"And you copied the ledger.\" Almost approving. \"The envelopes, the dinners, the men in " +
-      "brown. We have had that page since March; it is the page. " +
+  if (_flag("invoicesCopied"))
+    _say("\"And you read the invoices.\" Almost approving. \"Most people would not know what they " +
+      "were looking at. A cleaner at ninety thousand a month, and a bar that pours to nobody. " +
+      "We have had those since March; they are the case. " +
       (G.itemLoc.data_stick === "inventory" ? "Keep your copy — it is a useful thing to be known to be holding, and a dangerous one, and I leave it to you which."
                                             : "Your friend has the copy now. That is his to be known for.") + "\"", "alert");
   if (G.itemLoc.thai_sim === "inventory")

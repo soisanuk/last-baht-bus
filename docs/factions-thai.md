@@ -230,3 +230,44 @@ rest, and the player who hasn't just hears about a sad Irishman.
 - The second-bar arc is hooked in Daeng's dialogue behind `barOpen` and has
   nothing behind it. That hook is a promise, and promises are the documented
   defect class (`docs/prose-defects.md`).
+
+## Fronts, and the theory of fronts (2026-09-06)
+
+**The belief.** Every expat in this town will tell you by his second beer that the bar with no
+customers that never closes, the tailor with a window full of suits and nobody in it, and the
+restaurant that has been empty for nine years are all *fronts* — money going in a door that money
+does not come out of. It is canon **as a belief**: the Owl voices it, a rail regular will voice it,
+and it is the sort of thing a farang says with total confidence about a country he cannot read.
+
+**The truth, which the game undercuts it with.** Half of it is a business model the teller does not
+understand — a tailor's trade is commission-and-touts, three suits a day pays the rent, and the
+customers are the ones the touts bring in off the hotel steps, not the ones you see through the
+window. The other half is a sponsor's hobby, a girlfriend's present, a nominee shell, and —
+sometimes — a genuine front. **Which half is which is not a thing you learn by counting stools.**
+That is the same move the game makes everywhere: the farang misreads what he sees and calls it a
+conspiracy.
+
+**Repo guardrail, restated for this specifically:** structural pattern only. No real community is
+named as a laundering trade, ever — the tailor-shop belief is voiced *as an expat belief* and given
+its mundane explanation in the same breath. The Indian diaspora tailoring trade in Thailand is a
+real, multi-generational, mostly legitimate business network and stays out of the repo except as
+the thing the belief is *about*.
+
+**How laundering actually looks on paper, which is what the heist finds.** Nobody files a bribe
+ledger. The real signatures are boring:
+- **Declared turnover the stools could not pour** — a twelve-stool bar's books showing four hundred
+  thousand a month in September. Cash in, clean sales out. (`takings_2023.xlsx`.)
+- **A monthly invoice from a trading company for services never rendered**, at ten times what the
+  service costs. That is the envelope as it exists on paper: nobody wrote *police*, they wrote
+  *consulting*. The invoicing shell **is** the import/export company — it exists to generate paper
+  for goods that never ship. (`Eastern Seaboard Trading & Facilities Co., Ltd.`, `invoices/`.)
+- **The nominee share register** — already built as Wayne's `nominee_deal`; the 49/51 rule
+  manufactures a nation of straw shareholders and every one is a vehicle waiting for a purpose.
+
+Tan's line is the doctrine in one sentence: *"a company that sells nothing to people who buy nothing
+— it is how a favour is written down when the man paying it cannot be owed one."* Eddy's is the
+lived version: *"I paid them too, when I had the bar. Not a bribe. A subscription."*
+
+**Import/export as a further avenue (Mario, 2026-09-06):** noted and deliberately NOT built as a
+system — folded in as the *name on the invoice*, which is the honest shape of it anyway.
+

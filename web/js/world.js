@@ -260,7 +260,14 @@ const CLI_SCENARIOS = {
     stick: "Rabbit's stick",
     budget: 60,   // a thorough reader spends ~25 on the files alone (Pri, r45); 40 locked her out unwarned
     goal: "wallet.dat",
-    bonus: ["regulars_2019.xls", "payouts.csv"],   // the envelope ledger is the most incriminating page in the room — copyable (Pri)
+    // THE CASE, as it would actually sit on a bar manager's laptop (Mario, 2026-09-06):
+    // nobody files a bribe ledger. What exists is boring — declared takings a
+    // twelve-stool bar could not physically pour (cash in, clean sales out), and a
+    // monthly invoice from a trading company for services never rendered, at ten
+    // times what the service costs. That is the envelope, on paper: nobody wrote
+    // "police"; they wrote "consulting". The invoicing shell IS the import/export
+    // company — it exists to generate paper for goods that never ship.
+    bonus: ["regulars_2019.xls", "takings_2023.xlsx", "2023-11.pdf"],
     warnLines: {
       far: "(Through the door the bass drops for a second — somebody's changed the song. You have been in here a while.)",
       near: "(The girl on the till laughs at something, close. Her drink must be nearly done. So is your time.)",
@@ -272,15 +279,24 @@ const CLI_SCENARIOS = {
         dirs: ["vault", "archive", "photos"],
         files: {
           "notes.txt": "wifi = dish2019\nvault = same as the wifi (change this - K)\nice man tues/fri\nR.P. wants the photos folder cleared before the audit",
-          "recent.log": "09:12 opened vault/wallet.dat\n09:14 opened vault/payouts.csv\n09:31 archive/white_rabbit_2019/regulars_2019.xls (read-only)\n23:50 photos/golf.jpg",
+          "recent.log": "09:12 opened vault/wallet.dat\n09:14 opened vault/takings_2023.xlsx\n09:16 opened vault/invoices/2023-11.pdf\n09:31 archive/white_rabbit_2019/regulars_2019.xls (read-only)\n23:50 photos/golf.jpg",
           "todo.txt": "- new till roll\n- Baimon's visa run (Thurs)\n- tell Kesinee about the cameras (again)",
         },
       },
       "/home/office/vault": {
         locked: "dish2019",
+        dirs: ["invoices"],
         files: {
           "wallet.dat": "-----BEGIN COLD STORE-----\n7f3a 91c0 22de b8e4 0a17 ... (four hundred more lines of this)\n-----END COLD STORE-----\n\n# do not copy. do not email. do not put on a stick. - K",
-          "payouts.csv": "month,envelope,dinner,who\n01,90000,12000,brown\n02,90000,0,brown\n03,95000,14500,brown+imm\n04,90000,0,brown",
+          "takings_2023.xlsx": "bar,month,declared_sales,stools,nights_open\nKitten Corner,09,412000,12,30\nKitten Corner,10,398000,12,31\nPink Lotus,09,1150000,18,30\nGolden Dragon,09,640000,14,30\n(… every month back to 2019. You do the sum on the first row, and then you do it again, because a twelve-stool bar declaring four hundred thousand a month in a September is pouring a beer every ninety seconds to nobody.)",
+        },
+      },
+      "/home/office/vault/invoices": {
+        files: {
+          "2023-09.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: White Dish Group (Thailand) — Kitten Corner\nFacilities management & consulting, Sept 2023 ...... ฿90,000\nPAID — bank transfer 03/10",
+          "2023-10.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: White Dish Group (Thailand) — Kitten Corner\nFacilities management & consulting, Oct 2023 ...... ฿90,000\nPAID — bank transfer 02/11",
+          "2023-11.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: White Dish Group (Thailand) — Kitten Corner\nFacilities management & consulting, Nov 2023 ...... ฿95,000\n(one line, the same line, every month, from a trading company with no goods that anybody has ever seen ship. Somebody paid a cleaner ninety thousand baht a month and the cleaner never came.)",
+          "ice_nov.pdf": "SIAM ICE — 22 sacks @ ฿190 ...... ฿4,180\nPAID cash",
         },
       },
       "/home/office/archive": {
@@ -8580,15 +8596,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "and the men he pays call it tolerance. Tolerance, my friend, is a thing that can be " +
           "withdrawn.\" He does not say by whom.",
         short: "\"White Dish pay to be allowed. Tolerance can be withdrawn.\"" },
-      { topic: "ledger|payouts|envelopes|the envelope|payouts.csv|the men in brown",
-        req: ["payoutsCopied"],
-        text: "\"The envelope page.\" He does not ask to see it, which is how you know he already " +
-          "knows what is on it. \"Ninety thousand a month to be allowed to stand on a soi. You " +
-          "understand what that is? It is not a bribe, my friend. A bribe buys a thing. That buys " +
-          "the absence of a thing.\" A small shrug. \"You are holding a receipt for tolerance. " +
-          "Whoever holds it is a person of interest to everybody named on it. Burn it, or be " +
-          "interesting. I would not sell it. Nobody who sells it is ever paid twice.\"",
-        short: "\"A receipt for tolerance. Burn it, or be interesting. Do not sell it.\"" },
+      { topic: "invoices|invoice|takings|the books|eastern seaboard|the paperwork|consulting|the spreadsheet",
+        req: ["invoicesCopied"],
+        text: "\"Eastern Seaboard Trading.\" He does not ask to see it, which is how you know he already " +
+          "knows what is on it. \"A company that sells nothing, to people who buy nothing, every month, " +
+          "for a great deal of money. You understand what that is? It is how a favour is written down " +
+          "when the man paying it cannot be owed one.\" A small shrug. \"A Thai man would be inside. " +
+          "A farang buys a cleaner who never comes. And the other page — the sales — that is the " +
+          "other half of the same sentence: money that needs a reason to exist.\" He turns the glass. " +
+          "\"You are holding nothing anybody wants. You are holding proof that you understood. Burn it, " +
+          "or be a man who understood.\"",
+        short: "\"A company that sells nothing to people who buy nothing. How a favour is written down when the man cannot be owed one.\"" },
       { topic: "rabbit|the rabbit|fast eddy|eddy",
         text: "\"Fast Eddy.\" Tan considers the mirror. \"He had a bar and now he has a smaller one, " +
           "and he thinks the difference is bad luck. It was never luck. He is a man who learned " +
@@ -10693,13 +10711,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "right to. I've never said thank you and he's never wanted it, and that's the whole " +
           "arrangement.”",
         short: "“Tan. Never charged me a baht, which is how I know what I owe him.”" },
-      { topic: "ledger|payouts|envelopes|the envelope|payouts.csv|the men in brown",
-        req: ["payoutsCopied"],
-        text: "“You took the envelope page.” He goes very still. “Don't show it to me. Don't show it to " +
-          "anybody. That page is the one thing in that building I'd have paid for and the one thing " +
-          "I'd never touch, and both of those are the same reason.” He drinks the soda. “Burn it, or " +
-          "hold it and know you're holding it. There's no third thing.”",
-        short: "“The envelope page. Burn it, or hold it and know you're holding it.”" },
+      { topic: "invoices|invoice|takings|the books|eastern seaboard|the paperwork|consulting|the spreadsheet",
+        req: ["invoicesCopied"],
+        text: "“Eastern Seaboard.” He says the name the way you'd name a doctor. “I paid them too, when I " +
+          "had the bar. Ninety a month, facilities and consulting, and the facilities never came and " +
+          "nobody consulted me about anything.” He drinks the soda. “Everybody on the 6 pays them. " +
+          "That's what the paper is — not a bribe, boss. A subscription. And that spreadsheet is a " +
+          "twelve-stool bar pouring a beer every ninety seconds to nobody.” He looks at you properly. " +
+          "“You read them. Most people wouldn't know what they were looking at. Don't show anybody " +
+          "that you did.”",
+        short: "“Eastern Seaboard. I paid them too. A subscription, not a bribe. Don't show anybody you read it.”" },
       { topic: "kitten corner|the office|corridor|back office|the bar on soi 6",
         req: ["rabbitData"],
         text: "“Kitten Corner?” He gives it a moment's honest thought. “Never heard of it. Neither " +

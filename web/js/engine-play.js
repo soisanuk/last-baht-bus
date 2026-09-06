@@ -4939,8 +4939,8 @@ function _cliInput(input) {
   const r = cliInput(sc, g.cli, input, _rand);
   for (const l of r.output) _say(l, "room");
   for (const f of r.took) { G.stickFiles = G.stickFiles || []; if (!G.stickFiles.includes(f)) G.stickFiles.push(f); }
-  if (r.took.includes("payouts.csv")) { _setFlag("payoutsCopied");
-    _say("(The envelope ledger goes onto the stick. Months, amounts, \"brown\", \"brown+imm\". Not what you came for. The most dangerous page in the room.)", "dim"); }
+  if ((r.took.includes("takings_2023.xlsx") || r.took.includes("2023-11.pdf")) && !_flag("invoicesCopied")) { _setFlag("invoicesCopied");
+    _say("(Onto the stick, beside whatever else is there: paper. A sales sheet a twelve-stool bar could not have poured, and an invoice for a cleaner who never came. Nothing anybody wants. Proof that you understood.)", "dim"); }
   // the bonus: Rabbit's old regulars, copied on the way past
   if (r.took.includes("regulars_2019.xls") && G.itemLoc.trade_book !== "inventory") {
     G.itemLoc.trade_book = "inventory";
