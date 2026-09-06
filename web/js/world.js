@@ -15551,8 +15551,8 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       { topic: "pension|money|budget|cheap|afford|poor|broke|pension day|monthly|exchange rate|the rate|pound",
         text: "\"State pension and a bit of a works one, paid into a Nottingham account, drawn here at " +
           "whatever the rate's doing. Which since twenty-thirteen has been *taking*.\" He turns the " +
-          "plate a quarter. \"Room's four thousand. Plate's fifty. Beer's one, at the Anchor, on a " +
-          "Thursday. I don't do the sums where you can see them and I don't need to.\" A nod down the " +
+          "plate a quarter. \"Room's four thousand. Plate's fifty. Beer's nothing, because I don't. " +
+          "I don't do the sums where you can see them and I don't need to.\" A nod down the " +
           "table. \"Nobody here does. We all know what everybody's monthly is. It's never mentioned.\"",
         short: "\"Pension, drawn at whatever the rate's doing — since twenty-thirteen, taking. Room four thousand, plate fifty. Never mentioned.\"" },
       { topic: "home|uk|england|britain|nottingham|back home|go home|return|go back",
@@ -15594,11 +15594,31 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"Same eight of us since it opened. No names, no money. When one of us doesn't come in, somebody goes round.\"" },
       { topic: "plan|future|tomorrow|next|what now|advice",
         text: "\"Plan.\" It gets the ghost of a laugh. \"Same as yours, lad, only I'm honest about it: get " +
-          "up, walk to the mall, eat the plate, do the crossword, walk back before the heat. Thursday " +
-          "the Anchor, one beer. Pension day, two.\" He taps the newspaper. \"Advice? Don't wire your " +
+          "up, walk to the mall, eat the plate, do the crossword, walk back before the heat. Beach " +
+          "Road if there's a breeze, for the view.\" He taps the newspaper. \"Advice? Don't wire your " +
           "lot into anything with a logo. And learn what the plate costs before you learn what the " +
           "girls do. The lads who learned it the other way round aren't at this table any more.\"",
         short: "\"Get up, walk, eat the plate, walk back before the heat. Don't wire your lot into anything with a logo.\"" },
+      // Mario, 2026-09-06: he gave up drinking ten years ago because he couldn't afford it — not
+      // couldn't stop — and there's no girlfriend, just a massage once or twice a month when the
+      // cash is spare. He's fine with it: eye candy on Beach Road and in the mall, and no sick
+      // buffalo, no mood swings. Content, not resigned; the register stays flat.
+      { topic: "drink|beer|drinking|bar|bars|anchor|pub|chang|leo|sober|teetotal|whisky",
+        text: "\"Gave it up ten year ago.\" He says it the way you'd report the weather. \"Not the " +
+          "doctor — the rate. A beer's a plate, lad, and a night's a week, and I had a fortnight one " +
+          "month where I did the sums the wrong way round.\" He turns the newspaper over. \"Don't miss " +
+          "it. Thought I would. Turns out what I liked was the stool and the fan and somebody to " +
+          "argue with, and that's fifty baht up here.\"",
+        short: "\"Gave it up ten year ago. Not the doctor — the rate. What I liked was the stool and the fan, and that's fifty baht up here.\"" },
+      { topic: "girlfriend|girl|girls|women|lady|ladies|wife|love|romance|lonely|company|massage|happy ending|sex|barfine",
+        text: "\"Girlfriend?\" It is the nearest he comes to laughing. \"Had the whole set in the " +
+          "nineties, lad — the sick buffalo, the brother's motorbike, the mood that came in with the " +
+          "rain and went out with the money. No.\" He squares the fork on the plate. \"Massage, once " +
+          "a month, twice if the pension's been kind. The one with the ending. Nice girl, knows my " +
+          "name, doesn't want my life.\" A nod at the mall around him, and at Beach Road beyond it. " +
+          "\"And the rest of it is free to look at. Beach Road on a breezy day, this place on a " +
+          "Sunday. I'm not short of a view. I'm short of a wage, which is different.\"",
+        short: "\"Had the whole set in the nineties — the buffalo, the motorbike, the moods. No. A massage once a month, and the rest is free to look at.\"" },
     ],
   },
 };

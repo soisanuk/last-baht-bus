@@ -300,3 +300,11 @@ test("Wilf at Mike's Mall: thirty years, a pension the rate has been eating, one
   assert.doesNotMatch(text(), /\bpity\b/i);
   for (let d = 1; d <= 7; d++) { G.day = d; assert.ok(_npcActive("wilf"), "every day of the week — he has nowhere else to be"); }
 });
+
+test("Wilf gave up drinking ten years ago (the rate, not the doctor) and has no girlfriend by choice", () => {
+  vac(); G.room = "mikes_mall"; G.nightTurn = 20;
+  out = []; run("ask wilf about beer"); assert.match(text(), /Gave it up ten year ago/);
+  out = []; run("ask wilf about girlfriend"); assert.match(text(), /sick buffalo|mood/); assert.match(text(), /Massage, once/);
+  const all = NPCS.wilf.dialogue.map(d => (d.text || "") + (d.short || "")).join(" ");
+  assert.doesNotMatch(all, /the Anchor, one beer|Beer's one/, "a man who doesn't drink has no Thursday beer");
+});
