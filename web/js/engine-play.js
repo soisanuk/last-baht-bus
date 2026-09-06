@@ -4023,6 +4023,12 @@ const _ALLNIGHTER_LINES = [
   "Dawn. The music stops being music and becomes memory; the lights come up on faces that have all earned the morning. You walk out into pink light and pressure-washed pavement, flag the first songthaew of the DAY shift, and ride home with the wind doing what it can for you. The night is over because it ran out of night.",
   "You close the place. Not a figure of speech — a woman in rubber gloves is stacking stools around you when you finally surface, and outside the sky is the colour of the inside of a shell. The ride home smells of jasmine from somewhere and last night from you. Worth it. Ask again at noon.",
 ];
+// dawn inside somewhere that isn't a bar — an office, a motel counter (Owen, round 46: "still upright on the soi" printed in a windowless office)
+const _ALLNIGHTER_INDOORS = [
+  "The light changes under the door before anything else does, and you are, somehow, still upright to notice it. Outside, the sweepers; in here, the fluorescent tube that has been the whole night's sky.",
+  "Dawn arrives as a strip of grey under the door and a change in the traffic note. You have been indoors for all of it and you can feel every hour in your back.",
+  "The air-con clicks off on its timer and that is how you know it is morning. You get up. Nothing in here has moved but you.",
+];
 const _ALLNIGHTER_STREET = [
   "The sky goes grey over the soi and you are, somehow, still upright on it. The sweepers work round you; a noodle cart is setting up where a bar's tables were an hour ago. A taxi with two strangers in it slows, and the driver waves you in for the price of the light, which this once is nothing.",
   "04:00 finds you on the pavement, which at this point feels like a citation for valour. The shutters are down the length of the street and the first monks are out. You share a taxi home with a man who says nothing and a woman who says everything.",
@@ -4116,7 +4122,7 @@ function _endNight(reason) {
           "into a Darkside dawn: dogs, roosters, one motorbike, and a sky already too " +
           "bright, and behind you the stools go up as if none of it happened.", "win");
       } else if (!_herDawn) {
-        _say(_pickVary(_inBar() ? _ALLNIGHTER_LINES : _ALLNIGHTER_STREET, _inBar() ? "allnighter" : "allnighterst"), "win");
+        _say(_pickVary(_inBar() ? _ALLNIGHTER_LINES : (_sheltered(G.room) ? _ALLNIGHTER_INDOORS : _ALLNIGHTER_STREET), _inBar() ? "allnighter" : (_sheltered(G.room) ? "allnighterin" : "allnighterst")), "win");
       }
       if (!_herDawn) _addHappy(2); // the big night out is a WIN — the invoice is the morning (her goodbye paid its own)
       break;

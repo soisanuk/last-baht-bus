@@ -149,7 +149,7 @@ test("Eddy's nudge is a soda; a cashier on the floor is the answer to 'who minds
 // ── Hamish ──
 test("a rotating owner's elsewhere line names the district — two bars are called the Sundowner (Hamish)", () => {
   G.day = 2; G.room = "cricketers"; _describeRoom(true);
-  assert.match(text(), /Lawan is working Sundowner Bar, over on Soi Diana, tonight/);
+  assert.match(text(), /Lawan is working Sundowner Bar, (over on|along) Soi Diana, tonight/);
 });
 
 test("a named exit typed into a soft pitch walks you off — the decline AND the move (Hamish)", () => {

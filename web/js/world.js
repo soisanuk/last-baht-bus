@@ -512,6 +512,7 @@ const ROOMS = {
       "rice runs out. The board is the same board. The prices are the same prices. " +
       "The Buakhao lot will tell you it is not the same, and mean it. (BUY FOOD.)",
     reads: {
+      wok: "The woman on the wok does not stop from six until the rice runs out — one pan, one flame that would take your eyebrows, and a rhythm you could set a clock by. She does not look up. Looking up is how the rice burns.",
       board: "The board is the same board — same fourteen dishes, same decade-old photos, " +
         "same chalk line underneath. They photocopied the menu when they opened this " +
         "branch, and the Buakhao lot have never forgiven the photocopier.",
@@ -979,6 +980,10 @@ const ROOMS = {
       "Up the half-flight again. The same quiet, which is the only thing this office produces.",
     ],
     reads: {
+      laptop: "A desktop from an era of desktops, a mouse mat from a bank, and a screensaver of the company name drifting across a black field. Nobody is logged in. Nobody, you suspect, is often logged in.",
+      cabinet: "A four-drawer filing cabinet with one drawer labelled in Thai and three labelled nothing. The labelled one is invoices. You are not going to open it in front of two people who are wondering why you are here.",
+      desks: "Two desks. One has the computer. One has the kettle, a mug with a cartoon shrimp on it, and a paperback face down at page two hundred — a life being lived behind the trade, and none of your business.",
+      seal: "The gold seal on the registration: a real one, from a real ministry, on a company that is real in every way the law can check. That is rather the point of it.",
       sign: [
         { req: ["ccibCleared"], text: "The brass plate is gone — four screw holes and a cleaner rectangle. A laminated " +
           "sheet in the window says FOR RENT in two languages and gives a number. The strip light " +
@@ -1022,6 +1027,9 @@ const ROOMS = {
       "The gap between the walls, the bay, and Jomtien laid out along the far side.",
       "Downhill from here. Your knees register it before you do.",
     ],
+    reads: {
+      gap: "Between two condo walls, one gap the width of a doorway, and through it the whole bay: the beach road's string of lights, Walking Street's pink smear, a ship's lights out where the water goes black. The condos paid for the view. The gap is free.",
+    },
     exits: { e: "pratumnak_clubs", w: "pratumnak_soi5_m" },
   },
   pratumnak_soi5_m: {
@@ -1338,6 +1346,10 @@ const ROOMS = {
       "curve of Pattaya glitters — Walking Street burning neon-pink at the south end. " +
       "Someone has left an offering of marigolds and a small bottle of red Fanta. It is the " +
       "one quiet place for miles, and the view is the whole reason to climb. (WATCH THE BAY.)",
+    reads: {
+      buddha: "Gold leaf over concrete, eighteen metres of it, the hands in the gesture that means fear nothing. Somebody has swept the steps tonight. The marigolds at the base are fresh and the red Fanta has a straw in it, because a Buddha is offered what a person would want.",
+      curve: "The whole curve of the bay from Naklua to Bali Hai, the beach road a string of sodium beads and Walking Street a pink burn at the south end. From up here the town looks like it has a plan.",
+    },
     exits: { e: "pratumnak_rd" },
   },
 
@@ -1375,6 +1387,7 @@ const ROOMS = {
         "done, the way a stationmaster knows his trains. The nail has held that ring longer " +
         "than most marriages in this town.",
     },
+    indoors: true,   // a counter and a corridor, no awning to be pinned under (Owen, round 46)
     exits: { out: "pattaya_soi_7" },
   },
   beach_rd_c: {
@@ -1383,7 +1396,7 @@ const ROOMS = {
     region: "Beach Road",
     seven: true,
     lateDesc: [
-      "Mid-Beach-Road at four: the tailor touts gone, the tour groups long back in their hotels, and CENTRAL a black glass cliff with its own reflection in it. The sea breathes on the far side of the promenade for an audience of nobody.",
+      "Mid-Beach-Road after the last bar: the tailor touts gone, the tour groups long back in their hotels, and CENTRAL a black glass cliff with its own reflection in it. The sea breathes on the far side of the promenade for an audience of nobody.",
       "Beach Road Central, small hours: taxis parked with drivers asleep across the front seats, a 7-Eleven glowing like an aquarium, and the whole width of the road available to anybody who wants to walk down the middle of it.",
       "The mall is dark, the pavement is empty, and the road is doing about a tenth of what it does at nine. It is, briefly, a nice place to stand.",
     ],
@@ -1531,6 +1544,10 @@ const ROOMS = {
       "A bus full of tourists takes the roundabout twice, deliberating.",
       "Four roads' worth of traffic, folding into each other and out again.",
     ],
+    reads: {
+      terminal: "TERMINAL 21 across the roundabout, a mall built to look like an airport, its departure boards lit all night for flights nobody is catching. The doors are real doors and they do not open onto anything this town sells after dark.",
+      rank: "The songthaew rank in the mall car park: a dozen trucks, the drivers on their phones, a board of fares nobody consults. Naklua one way, Jomtien the other, and the price is the price.",
+    },
     exits: { s: "beach_rd_top", n: "naklua_rd", second: "second_rd_soi6" },
   },
   beach_rd_soi8: {
@@ -1989,6 +2006,11 @@ const ROOMS = {
       "police station squats a couple of blocks north like a paperweight — round " +
       "on the Beach Road side, not through here; nobody walks out of Central " +
       "Festival into a charge desk.",
+    lateDesc: [
+      "The mothership is dark behind its glass after the shops shut — one bank of lights left on for the guards, the escalators stopped mid-stride, the food court a grid of chairs on tables. Beach Road still glitters west; the mall has clocked off.",
+      "After midnight the glass gives back the Beach Road neon and nothing of its own: the shutters are down inside the doors, a guard sits on a stool with his phone, and the arctic air has gone off with the lights.",
+      "Seven storeys of dark glass with one lit floor for the cleaners, who are the only people in Pattaya working a normal shift. The doorman's stool is empty; the doors are locked; the sea across the road is doing its own thing.",
+    ],
     exits: { w: "beach_rd_c", e: "second_rd_mall" },
   },
   police_station: {
@@ -1998,6 +2020,11 @@ const ROOMS = {
       "unhurried patience of a man who has seen every possible farang. A wall of " +
       "confiscated selfie sticks. Sitting between the mall and the Beach Road bars, " +
       "it catches whatever the tide washes up. Best visited voluntarily.",
+    reads: {
+      sergeant: "The desk sergeant has the unhurried patience of a man who has seen every possible farang and is prepared to see this one too. He does not look up until you speak, and then he looks at your hands. (REPORT, if you have something to report.)",
+      whiteboard: "Whiteboards of unpaid fines in two languages — a column of bike numbers, a column of baht, a column of names that are all the same three Thai nicknames and the occasional Kevin.",
+      sticks: "A wall of confiscated selfie sticks, tagged and dated, the reasons unrecorded. There are more of them than seems possible for one town. Nobody is coming back for one.",
+    },
     exits: { w: "beach_rd_soi9", out: "beach_rd_soi9" },
   },
 
@@ -2068,7 +2095,7 @@ const ROOMS = {
     busStop: "secondrd",
     name: "Second Road (Soi 7)",
     region: "Second Road",
-    desc: "Soi 7 comes out here and carries on east; the seafront is fifteen minutes " +
+    desc: "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is fifteen minutes " +
       "down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting " +
       "the whole town into north and south. Soi 8 comes out a block south — this " +
       "end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink " +
@@ -2081,7 +2108,7 @@ const ROOMS = {
     name: "Central Pattaya Road (Pattaya Klang)",
     region: "Second Road",
     desc: "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao " +
-      "in one straight shot from the sea to Sukhumvit. Baht buses, banks, gold shops, " +
+      "in one straight shot from the sea to Sukhumvit — on foot it stops being a walk at Soi Buakhao. Baht buses, banks, gold shops, " +
       "and a river of traffic that never quite jams and never quite flows.",
     exits: { w: "beach_rd_klang", n: "second_rd_soi6", s: "second_rd_n", e: "buakhao_klang" },
   },
@@ -2258,6 +2285,11 @@ const ROOMS = {
       "Charcoal smoke drifting up a glass frontage. Nobody inside appears to mind.",
       "Signage four storeys high, and a som tam cart doing better business underneath.",
       "Somebody finally asks the crocodile woman a question. She answers without looking up.",
+    ],
+    lateDesc: [
+      "The mall's other face after hours: the escalators stopped behind the glass, its own doorman gone home, and the pavement still working — food stalls nose to tail, the last office workers long replaced by girls on a break and men on a mission.",
+      "Past midnight the signage is the only part of CENTRAL still lit on this side; the doors are locked, the escalators are stairs, and the stalls on the pavement have the street to themselves.",
+      "The mall's back is asleep and the pavement is not: a grill going, a woman counting a float, two piwins arguing about a fare with nobody to give it to. The escalators stopped hours ago behind the glass.",
     ],
     exits: { n: "second_rd_c", s: "second_rd_myth", w: "central_mall" },
   },
@@ -2556,6 +2588,11 @@ const ROOMS = {
       "Two piwins are asleep on their bikes in a way that looks impossible and isn't.",
       "Somebody photographs the pier, gets it wrong, and tries again.",
     ],
+    reads: {
+      pier: "Concrete legs going out into the dark, the ferry building shut, and the water slapping underneath with the loudest street in Thailand at your back. In daylight this is where the island boats leave. At night it is where the town ends.",
+      mast: "Masts and rigging on the Koh Larn boats, awnings rolled, the ropes creaking the way ropes do when nobody is aboard. A cat on one of the decks has opinions about you.",
+      engines: "The songthaews' engines are off, which on Walking Street counts as silence. The drivers don't start them for a man who is only looking.",
+    },
     exits: { n: "ws_south", s: "pratumnak_rd" },
   },
   // Soi Diamond runs off Walking Street to Second Road — 153 m of it, and two of
@@ -2909,7 +2946,7 @@ const ROOMS = {
     lateDesc: [
       "Soi Buakhao at the Diana end, after: the pharmacies dark, the laundry dark, the Rock Factory's stage lit and silent with the gear still on it. The artery is running at about one vehicle a minute.",
       "The soi with the volume off. A dog crosses at its own pace, which at this hour it is entitled to. Somewhere north a shutter comes down in one long rattle.",
-      "Buakhao in the last hour of the night: bar mats out drying on stools, a girl in a hoodie on the back of somebody's bike going home, and the whole street smelling faintly of the drains and yesterday's grill.",
+      "Buakhao past midnight: a girl in a hoodie on the back of somebody's bike going home, and the whole street smelling faintly of the drains and yesterday's grill.",
     ],
     desc: "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey " +
       "stage looms on the corner — currently doing what every band in Thailand does to " +
@@ -3823,7 +3860,7 @@ const ROOMS = {
     busStop: "sukhumvit",   // the Pattaya Tai trucks — see BUS_LINES.sukhumvit
     desc: "South Pattaya Road runs out past Soi Buakhao into shuttered shophouses, a " +
       "closed tyre shop, a temple wall — and then Sukhumvit itself, eight lanes of trucks " +
-      "doing ninety under sodium lamps. The verge south toward the Khao Talo crossing is " +
+      "doing ninety under sodium lamps. The verge east toward the Khao Talo crossing is " +
       "a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A " +
       "songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. " +
       "Two kilometres of this, on foot, a metre from traffic that does not expect you: " +
@@ -3835,6 +3872,10 @@ const ROOMS = {
       "Headlights, headlights, a gap, headlights. The crossing is somewhere in the sodium haze ahead.",
       "A songthaew slows, reads you, and moves on when you don't raise a hand.",
     ],
+    reads: {
+      wall: "A temple wall, whitewashed once, the top edged in orange tiles, a gate at the far end with a monk's flip-flops outside it. The last quiet thing before eight lanes of trucks.",
+      ditch: "A drainage ditch the width of a man, dry in the hot season, a river in the wet, with a plank across it that somebody trusts. The gravel beside it is the footpath, in theory.",
+    },
     exits: { w: "buakhao_pt", e: "sukhumvit_crossing" },
   },
   sukhumvit_crossing: {
@@ -4050,8 +4091,8 @@ const ROOMS = {
     // 2026-09-01). Khao Talo's "wet ash and dog" is the standard it's written to.
     lateDesc: "The string lights are off and the lake has gone from black water to just " +
       "black — you hear it rather than see it. The Boathouse's chairs are up on its tables, " +
-      "the grills are cold and wiped, and the only light on the road is the Sundowner's, " +
-      "spilling a short way onto the tarmac and stopping. Somewhere out on the water a fish " +
+      "the grills are cold and wiped, and the Sundowner's sign has gone dark with the rest — " +
+      "the only light on the road is a house up the lane with somebody still awake in it. Somewhere out on the water a fish " +
       "turns over.",
     venues: ["lake_bar", "lake_beer"],
     exits: { s: "khao_talo" },
@@ -4138,6 +4179,9 @@ const ROOMS = {
     venues: ["orchid_club"],
     busStop: "beachrd",
     reads: {
+      bell: "The Orchid Club's brass bell, out of sight up the soi behind the bar corner: you can't see it from the road, but a man who has heard it rung knows exactly what it costs, and the road is quiet enough to hear it if somebody does.",
+      letters: "S, A, gap, A, I, gap, P, A, gap, M, S — the dead tubes have been dead so long the long-stay guests give the taxi the wrong name on purpose and the drivers know it. Nobody is going to fix it. Fixing it would be a change.",
+      guests: "The long-stay guests: men in their sixties on the hotel's plastic chairs by the soi mouth, one beer each, watching the road the way they watched it last year. They know which bike is the reliable one and which girl on the corner is somebody's cousin.",
       sign: "The SABAI PALMS sign, up close: half its letters dark, so the soi announces " +
         "SA AI PA MS to the night in confident neon. Maintenance was promised, the " +
         "long-stay guests petitioned AGAINST it, and management — reading the room " +
@@ -4173,7 +4217,7 @@ const ROOMS = {
       "The Anchor after midnight: quieter than the neon places, warmer than the pavement, and the crowd down to whoever has nothing to get up for.",
     ],
     desc: "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, " +
-      "a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon " +
+      "a barometer nobody trusts. In season the long-stay crowd holds the stools like moorings. Namfon " +
       "pours a cold one before you've picked a seat — and the chit lands with it.",
     reads: {
       barometer: "The barometer nobody trusts: brass, salt-pitted, its needle parked on " +
@@ -4505,7 +4549,7 @@ const ROOMS = {
     desc: "A narrow open-front beer bar with eight stools and a sign that reads CL_ZE — the O " +
       "came off in a storm and has stayed off. A blackboard by the ice bin carries a Thai word " +
       "in a careful teacher's hand, the English under it, and a gap in a sentence for somebody " +
-      "to fill. Half the stools are farang with notebooks, which on this soi is either very sad " +
+      "to fill. On a good night half the stools are farang with notebooks, which on this soi is either very sad " +
       "or the best idea anybody has had.",
     reads: {
       // the sign says what a sign says and explains nothing: the joke belongs to
@@ -11548,6 +11592,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "baht, and I'll do it — because you don't say no to the man who kept you out of the " +
           "hole. That's just how it works with Tan.”",
         short: "“Tan kept me out of the hole at fifteen. Never asked for a baht. One day he'll ask for something else, and I'll do it.”" },
+      // a name in Bill's standing order is not a man who is out (Owen, round 46)
+      { topic: "boonchu|the ice man|ice man|the ice truck",
+        text: "\"Boonchu?\" Nont almost smiles. \"Old boy, the ice truck. He is not a man who is *out*, " +
+          "phi — he is a man who is *up*, five in the morning, and asleep by the time I sit down. You want " +
+          "him, you stand on Thappraya at dawn and wave at a pickup with no tailgate. Two hundred would " +
+          "be robbing you.\"",
+        short: "\"Boonchu is up at five, not out at night. Wave at a pickup with no tailgate. No charge.\"" },
       { topic: "family", text: "“My mum's out at the lake — Mabprachan. Cashier at one of the " +
           "bar-restaurants now.” He says it flat, daring you to make it sad. “She worked the 6 " +
           "back in the day, met my dad, he bought her a villa on the Darkside and paid for me to " +
@@ -12421,6 +12472,20 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
     desc: "A skinny kid in a fake Barça shirt, materialising from behind the kegs only " +
       "after word got around that you're not the swinging type. Quick eyes, quicker feet.",
     dialogue: [
+      // the wallet is the one thing he has, and he wouldn't discuss it (Owen, round 46)
+      { topic: "wallet|my wallet|oy|madam oy|receipt|steal|stole|thief", req: ["hasWallet"],
+        text: "\"The wallet? Gone to Madam Oy, same night, same as everything. She pay, she don't ask, she don't " +
+          "tell — that is the whole business.\" He looks at your pocket. \"You got it back. So she liked you. " +
+          "That never happen for me.\"",
+        short: "\"Gone to Madam Oy same night. You got it back — so she liked you.\"" },
+      { topic: "wallet|my wallet|oy|madam oy|receipt|steal|stole|thief",
+        text: "The shape behind the kegs does not come out for that question. Fast feet, the other way.",
+        short: "Fast feet, the other way." },
+      { topic: "cart|food|khao man gai|chicken rice|eat|noodles|hungry",
+        text: "\"Khao man gai, forty baht — the cart at the Walking Street mouth, the one with the yellow " +
+          "light, not the green. Say Mot send you and she give you the good sauce.\" He is, briefly, " +
+          "proud of something.",
+        short: "\"Yellow light, not green. Say Mot send you.\"" },
       { req: ["hasWallet"], th: "ขอโทษครับพี่", rom: "kho thot khrap phi",
         text: "\"Sorry, phi. Business only, nothing personal.\" He shrugs with his whole body. \"Madam Oy pay fair and never ask where things come from. You get it back? ...She TOLD you to buy my dinner?! \" He looks genuinely moved. \"Khao man gai, forty baht. I know a cart.\"" },
       { req: ["knowOyHasIt"], text: "A shape flickers behind the kegs and is gone. Fast feet. You get the strong impression Mot knows exactly who you are and prefers ballistic distance." },
@@ -12502,6 +12567,7 @@ const MOTOSAI_DESTS = {
   "supertown":      { room: "supertown_elbow", price: MOTOSAI_TOWN },
   // Eddy says "Old Market, the table with the phones" and the piwin didn't know the name (Declan, r45)
   "old market":     { room: "buakhao_market", price: MOTOSAI_TOWN },
+  "pratumnak": { room: "pratumnak_soi5_m", price: 50 },   // a whole district of bars was walk-only from Bali Hai (Owen, round 46)
 };
 
 // ── Random street encounters ───────────────────────────────────────────────
@@ -12564,7 +12630,7 @@ const ENCOUNTERS = {
     th: "ไปไหนคะ", rom: "pai nai kha?",
     intro: "She's leaning where the lamplight is kindest — no " +
       "bar, no mamasan, freelance and unhurried. “Going where, hansum? Tonight I " +
-      "am also free.” A beat, then, nodding down the rail at a friend pretending " +
+      "am also free.” A beat, then, nodding at a friend a few steps off pretending " +
       "not to listen: “Ning also free. VERY boring night, na.”",
     hint: "(Company is ฿700. Ning makes it ฿1400 — cheaper than a bar, but no " +
       "mamasan means nobody to complain to if it goes wrong. YES her · BOTH of them · NO.)",

@@ -256,6 +256,7 @@ function newGame() {
     rabbitWay: null,     // which way into the WDG office you took: "mule" | "operator" (see _rabbitJobYes/_rabbitJobKeyboard)
     ccibRadar: null,     // who CCIB has a file on after the heist: {player,eddy,nont} — set at the morning scene, rides the export (docs/bangkok-concept.md)
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
+    motoAsked: 0,        // the turn the piwin last asked "where to?" — a bare place typed next answers him
     ccibLoud: 0,         // loud acts inside the window (see _ccibLoud) — the teeth
     ccibLoudNight: {},   // {kind: day} — one count per kind per night
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)
@@ -2019,6 +2020,7 @@ function _dogSpot(r) {
   if (/market|bazaar/i.test(r.name || "")) return "heel";   // tarpaulins and scraps: his country
   if (/\bmall\b|central festival/i.test(r.name || "")) return "outside";  // glass, aircon, guards
   if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) return "outside";
+  if (r.indoors || G.room === "police_station" || G.room === "oy_office") return "outside";   // an office, a desk sergeant: he waits by the door (Owen, round 46)
   if (_isHotelRoom(G.room)) return "mat";            // your own door, your own dog
   // A 7-Eleven does not admit a street dog, and a restaurant does not either —
   // both were printing the hotel-mat line, so he turned three circles on a mat
@@ -2124,19 +2126,20 @@ function _describeRoom(full, forceFull) {
   // A bar owner who alternates nights between her rooms: when this is one of her
   // bars but she's working the other one tonight, say so — otherwise the room
   // reads as hers with no sign of her.
-  for (const [id, n] of Object.entries(NPCS)) {
-    if (n.bars && n.bars.includes(G.room) && _npcRoom(id) !== G.room) {
-      // …and NAME the girl she left the till with. "The floor staff keep this
-      // one running" was true and vague, and the canon is specific: an owner
-      // who cannot be in two places has one girl she trusts with the money,
-      // very often a relative (Mario, 2026-09-03). She is a real person on the
-      // Here: line, so the room can say which one she is.
-      const cover = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : _coverGirl(G.room);   // a cashier on the floor IS the answer (Frank, round 38)
-      // …and WHICH one: two bars in this town are called the Sundowner, and a
-      // man sent to "Sundowner Bar" walked to the lake (Hamish, round 38)
-      _say(`${n.name} is working ${_barName(_npcRoom(id))}, over on ${ROOMS[_npcRoom(id)].region}, tonight` +
-        (cover ? `, and it is ${NPCS[cover].name} on the till — the one she leaves it with.`
-               : `; the floor staff keep this one running.`), "dim");
+  // One line for the room, not one per absent owner — the Boardroom printed the
+  // template twice for Bill and Ampai, and said "over on Thappraya" to a man
+  // standing on Thappraya (Owen, round 46). Names the girl the till is left with.
+  {
+    const away = Object.entries(NPCS).filter(([id, n]) => n.bars && n.bars.includes(G.room) && _npcRoom(id) !== G.room);
+    if (away.length) {
+      const cover = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : _coverGirl(G.room);
+      // the district is ALWAYS named (two bars are called the Sundowner — Hamish, round 38);
+      // "over on" only when it is another district, "along" when it is this one
+      const where = ([id]) => { const rm = _npcRoom(id); const reg = ROOMS[rm] && ROOMS[rm].region;
+        return _barName(rm) + (reg ? (reg !== _room().region ? `, over on ${reg},` : `, along ${reg},`) : ","); };
+      const line = away.map(a => `${a[1].name} is working ${where(a)}`).join(" and ");
+      _say(`${line} tonight` + (cover ? `, and it is ${NPCS[cover].name} on the till — the one ${away.length === 1 ? "she" : "they"} leave${away.length === 1 ? "s" : ""} it with.`
+                                       : `; the floor staff keep this one running.`), "dim");
     }
   }
   // The Orchid good table: once Tan's near-confirmation has armed it, walking in

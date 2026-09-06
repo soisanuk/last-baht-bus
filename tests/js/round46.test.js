@@ -138,3 +138,110 @@ test("past the landing a loud act says once that it no longer counts; the landin
   assert.doesNotMatch(text(), /no longer counts/, "said once");
   assert.equal(G.ccibLoud, 4, "nothing past the ceiling counts — the fourth was the landing");
 });
+
+// ── Owen, every door (lens: every-door) ───────────────────────────────────
+
+function vac() { G.stage = "vacation"; G.money = 9000; G.nightTurn = 20; }
+
+test("the motel is indoors: the downpour is on the roof, and leaving it speaks from the doorway", () => {
+  vac(); assert.ok(_sheltered("short_time_motel"));
+  G.room = "short_time_motel"; G.rain = 4; out = []; _describeRoom(true);
+  assert.match(text(), /hammers the roof/); assert.doesNotMatch(text(), /awning overhead/);
+  out = []; run("out");
+  assert.match(text(), /From the doorway/); assert.doesNotMatch(text(), /awning above you/);
+});
+
+test("the dolphins are the roundabout you are standing on", () => {
+  vac(); G.room = "dolphin"; out = []; run("examine dolphins");
+  assert.match(text(), /The pod/); assert.doesNotMatch(text(), /No dolphins here/);
+});
+
+test("Mot will discuss the wallet he stole, and the cart he mentioned", () => {
+  vac(); _setFlag("hasWallet"); _setFlag("knowOyHasIt"); G.room = "ws_alley"; G.known.mot = true;
+  out = []; run("ask mot about wallet"); assert.match(text(), /Madam Oy/); assert.doesNotMatch(text(), /don't know, na/);
+  out = []; run("ask mot about cart"); assert.match(text(), /yellow light/);
+});
+
+test("TRAVEL stops where the rain catches it, like a typed step would", () => {
+  vac(); G.room = "second_rd_c"; G.visited.stinky_bar = true; G.rain = 0; G.lastRain = -99;
+  const t0 = _tick; let n = 0;
+  try { _tick = () => { t0(); if (++n === 1) G.rain = 5; }; out = []; run("travel stinky pinky"); }
+  finally { _tick = t0; }
+  assert.notEqual(G.room, "stinky_bar"); assert.match(text(), /Pinned until it passes/);
+});
+
+test("the Boardroom's absent owners are one line, and not 'over on Thappraya' to a man on Thappraya", () => {
+  vac(); G.room = "the_boardroom";
+  let found = false;
+  for (let d = 1; d <= 8 && !found; d++) { G.day = d; out = []; _describeRoom(true); if (/is working|is at/.test(text())) found = true; }
+  assert.ok(found, "some night an owner is away");
+  const lines = out.map(o => o.text).filter(l => /on the till|floor staff keep/.test(l));
+  assert.equal(lines.length, 1, "one line for the room"); assert.doesNotMatch(lines[0], /over on Thappraya/);
+});
+
+test("dawn inside an office is not 'upright on the soi'", () => {
+  vac(); G.room = "eastern_seaboard"; G.nightTurn = 99; out = [];
+  _endNight("dawn");
+  assert.ok(_ALLNIGHTER_INDOORS.some(l => text().includes(l.slice(0, 40))), "the indoors pool");
+  assert.doesNotMatch(text(), /still upright on it|on the pavement/);
+});
+
+test("a whole district is a bike ride: pratumnak is a piwin destination", () => {
+  assert.equal(MOTOSAI_DESTS.pratumnak.room, "pratumnak_soi5_m");
+});
+
+test("the piwin's own menu parses as the answer: 'bali hai' after 'where to?'", () => {
+  vac(); G.room = "beach_rd_s"; out = []; run("motosai");
+  assert.match(text(), /where to\?/);
+  out = []; run("bali hai");
+  assert.doesNotMatch(text(), /soi blinks|didn't understand/); assert.equal(G.room, "bali_hai");
+});
+
+test("a real building with no room behind it is refused as what it is", () => {
+  vac(); G.room = "naklua_rd"; out = []; run("enter temple");
+  assert.match(text(), /monks are asleep|correct place/); assert.doesNotMatch(text(), /only know the way/);
+  G.room = "dolphin"; out = []; run("enter terminal 21"); assert.match(text(), /mall|doorman|food court/i);
+  G.room = "pattaya_klang"; out = []; run("enter gold shop"); assert.match(text(), /gold shop keeps/);
+});
+
+test("PRAY on Buddha Hill is the Buddha, not a spirit house by a doorway", () => {
+  vac(); G.room = "buddha_hill"; out = []; run("pray");
+  assert.match(text(), /wai the big Buddha/); assert.doesNotMatch(text(), /spirit house/);
+});
+
+test("the lake after midnight does not light a bar that has shut", () => {
+  assert.doesNotMatch(String(ROOMS.lake_mabprachan.lateDesc), /only light on the road is the Sundowner/);
+});
+
+test("Soi 9 sells the bowl its prose dares you to try", () => {
+  vac(); G.room = "pattaya_soi_9"; const m0 = G.money; out = []; run("buy food");
+  assert.ok(G.money < m0, "money moved"); assert.match(text(), /noodle/);
+});
+
+test("four massages are four massages", () => {
+  vac(); G.money = 5000;
+  const room = Object.keys(ROOMS).find(k => /Naklua Traditional/.test(ROOMS[k].name));
+  assert.ok(room, "the Thai shop exists");
+  G.room = room; out = []; run("massage foot"); const a = text();
+  G.room = room; G.nightTurn = 20; out = []; run("massage herbal compress"); const b = text();
+  assert.match(a, /sole|feet|calves/); assert.match(b, /compress|lemongrass|herb/); assert.notEqual(a, b);
+});
+
+test("the fixtures a walking man reaches for answer EXAMINE", () => {
+  vac();
+  const cases = [["buddha_hill", "buddha", /Gold leaf/], ["police_station", "sergeant", /unhurried patience/], ["eastern_seaboard", "filing cabinet", /invoices/],
+    ["bali_hai", "pier", /Concrete legs/], ["sukhumvit_verge", "ditch", /plank/], ["pratumnak_soi5", "gap", /the whole bay/], ["cheap_charlies_jt", "wok", /rice burns/],
+    ["naklua_rd", "bell", /Orchid Club/], ["dolphin", "terminal 21", /departure boards/], ["eastern_seaboard", "computer", /screensaver/]];
+  G.lightOn = true; G.battery = 60;
+  for (const [room, noun, re] of cases) { G.room = room; out = []; run("examine " + noun); assert.match(text(), re, room + " / " + noun); }
+});
+
+test("both faces of the mall keep the same hours", () => {
+  assert.ok(ROOMS.central_mall.lateDesc && ROOMS.second_rd_mall.lateDesc);
+});
+
+test("Nont knows Boonchu is a morning man, and charges nothing for it", () => {
+  vac(); G.stage = "expat"; _setFlag("expatLife"); G.room = _npcRoom("nont"); G.known.nont = true; const m0 = G.money;
+  out = []; run("ask nont about boonchu");
+  assert.match(text(), /pickup with no tailgate/); assert.equal(G.money, m0);
+});

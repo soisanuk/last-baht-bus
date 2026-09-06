@@ -1364,7 +1364,7 @@ const _ENC = {
     if (!yes) {
       _say(_isHotelRoom(G.room)
         ? "You put the phone face-down. Tomorrow's problem, or nobody's. The " +
-          "ceiling fan turns; you put the phone face down and let the night decide the rest."
+          "ceiling fan turns, and the night decides the rest."
         : "You put the phone face-down in your pocket and keep walking. Tomorrow's " +
           "problem, or nobody's — the night has other things in it.");
       return;

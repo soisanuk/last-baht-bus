@@ -259,7 +259,7 @@
       ],
       "sampleDescs": [
         "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. BAMBOO OIL MASSAGE and MIKE'S MALL front the corner here. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light.",
-        "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
+        "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
         "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. SECOND ROAD TRADITIONAL MASSAGE keeps a plain shopfront along here. South it runs down to the Pattaya Tai crossroads and the hill beyond; Buakhao is a block east, but not from here — the sois between are somebody's back wall."
       ]
     },
@@ -772,6 +772,7 @@
       "regionSlug": "beach-road",
       "kind": "motel",
       "dark": false,
+      "indoors": true,
       "people": [
         "Somchith"
       ],
@@ -1015,7 +1016,7 @@
       "dark": true,
       "darkLight": null,
       "people": [],
-      "desc": "South Pattaya Road runs out past Soi Buakhao into shuttered shophouses, a closed tyre shop, a temple wall — and then Sukhumvit itself, eight lanes of trucks doing ninety under sodium lamps. The verge south toward the Khao Talo crossing is a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. Two kilometres of this, on foot, a metre from traffic that does not expect you: people die on this road every year doing exactly this, mostly at night, mostly somebody else's fault. You walk it once, and after that you find the fare."
+      "desc": "South Pattaya Road runs out past Soi Buakhao into shuttered shophouses, a closed tyre shop, a temple wall — and then Sukhumvit itself, eight lanes of trucks doing ninety under sodium lamps. The verge east toward the Khao Talo crossing is a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. Two kilometres of this, on foot, a metre from traffic that does not expect you: people die on this road every year doing exactly this, mostly at night, mostly somebody else's fault. You walk it once, and after that you find the fare."
     },
     {
       "id": "water_buffalo",
@@ -1765,7 +1766,7 @@
       "people": [
         "Namfon"
       ],
-      "desc": "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon pours a cold one before you've picked a seat — and the chit lands with it."
+      "desc": "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, a barometer nobody trusts. In season the long-stay crowd holds the stools like moorings. Namfon pours a cold one before you've picked a seat — and the chit lands with it."
     },
     {
       "id": "dolphin",
@@ -2272,7 +2273,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao in one straight shot from the sea to Sukhumvit. Baht buses, banks, gold shops, and a river of traffic that never quite jams and never quite flows."
+      "desc": "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao in one straight shot from the sea to Sukhumvit — on foot it stops being a walk at Soi Buakhao. Baht buses, banks, gold shops, and a river of traffic that never quite jams and never quite flows."
     },
     {
       "id": "poseidon_soapy",
@@ -2389,7 +2390,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
+      "desc": "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
     },
     {
       "id": "second_rd_s",
@@ -3000,7 +3001,7 @@
       "people": [
         "Waen"
       ],
-      "desc": "A narrow open-front beer bar with eight stools and a sign that reads CL_ZE — the O came off in a storm and has stayed off. A blackboard by the ice bin carries a Thai word in a careful teacher's hand, the English under it, and a gap in a sentence for somebody to fill. Half the stools are farang with notebooks, which on this soi is either very sad or the best idea anybody has had."
+      "desc": "A narrow open-front beer bar with eight stools and a sign that reads CL_ZE — the O came off in a storm and has stayed off. A blackboard by the ice bin carries a Thai word in a careful teacher's hand, the English under it, and a gap in a sentence for somebody to fill. On a good night half the stools are farang with notebooks, which on this soi is either very sad or the best idea anybody has had."
     },
     {
       "id": "cricketers",

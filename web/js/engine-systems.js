@@ -2020,10 +2020,19 @@ function _doMassage(arg) {
     G.hurt = Math.max(0, G.hurt - 1);
     G.soc.drunk = Math.max(0, G.soc.drunk - 2);
     if (_passTime(6)) return;
-    _say(`฿${MASSAGE_LEGIT}, and ${name} goes to work like she has a personal grudge against ` +
-      "the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving " +
-      "her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and " +
-      `walking two inches taller. (฿${G.money} left.)`, "win");
+    // the price list names four and all four printed the Thai one (Owen, round 46)
+    const kind = /foot|feet|reflex/.test(arg) ? "foot" : /herbal|compress|ball|steam/.test(arg) ? "herbal" : /oil|aroma|swedish/.test(arg) ? "oil" : "thai";
+    const MASSAGE_KIND = {
+      thai: [`฿${MASSAGE_LEGIT}, and ${name} goes to work like she has a personal grudge against the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and walking two inches taller.`,
+             `฿${MASSAGE_LEGIT}. ${name} folds you like a deckchair, walks on you, and at one point uses a knee in a way you will describe to nobody. An hour later every joint has been reintroduced to its neighbour.`],
+      foot: [`฿${MASSAGE_LEGIT}, a recliner, a bowl of warm water, and ${name} with a wooden stick and a chart of the sole that maps every organ you have to a place she can hurt. Forty minutes of that and the walk home is a different walk.`,
+             `฿${MASSAGE_LEGIT}. ${name} takes your feet as if they have been handed in lost. Thumbs, knuckles, the stick, the one spot near the heel that makes you grip the chair — and then the thing where the calves stop belonging to a man who has walked Beach Road twice.`],
+      herbal: [`฿${MASSAGE_LEGIT}. The compress comes out of the steamer smelling of lemongrass and something medicinal, wrapped in muslin, too hot for the first minute and exactly right for the next fifty; ${name} presses it down the spine in a line and the day comes out of you like steam.`,
+               `฿${MASSAGE_LEGIT}, and the room fills with the smell of the herb ball — turmeric, kaffir, camphor — before ${name} has laid a hand on you. The compress does most of the work. She does the rest, unhurried, and you leave smelling like a temple kitchen.`],
+      oil: [`฿${MASSAGE_LEGIT}. Warm oil, dim light, a towel, and ${name} working long strokes down the back with the radio on low. Nothing alarming happens to your spine. An hour later you are loose, slightly shiny, and asleep on your feet.`,
+            `฿${MASSAGE_LEGIT}, and the oil is warm from a bottle on the water heater. ${name} does the shoulders until they drop, the legs until they give, and says nothing at all for an hour, which is the luxury.`],
+    };
+    _say(_pickVary(MASSAGE_KIND[kind], "massage:" + kind) + ` (฿${G.money} left.)`, "win");
     if (wasHurt > G.hurt) _say("(The banged-up ache eases a notch — this is the one place in " +
       "town that actually mends you, not just numbs you.)", "dim");
     if (wasDrunk > G.soc.drunk) _say("(And the Chang fog thins; she pressed something behind " +
@@ -4628,6 +4637,12 @@ function _startRain(len) {
       "headlights in it. Even the soi dogs have vanished.", "alert");
     _say("(Pinned until it passes. There are worse chapels — the toasties are " +
       "right there.)", "dim");
+  } else if (typeof _sceneryCtx === "function" && _sceneryCtx(G.room) === "sand") {   // no awning on a beach (Owen, round 46)
+    _say("The sky lets go all at once — a grey-white wall of rainy-season rain " +
+      "coming in off the water. There is no awning on a beach; you make the nearest " +
+      "bar's eave already soaked through, and the sand behind you goes dark and pocked.", "alert");
+    _say("(Pinned until it passes — though a doorway close enough to dive " +
+      "through would still take you. GO <somewhere inside>, or wait it out.)", "dim");
   } else {
     _say("The sky lets go all at once — a grey-white wall of rainy-season rain " +
       "marching up the street. You make the nearest awning already soaked. " +
@@ -8197,6 +8212,7 @@ function _whiteRabbitAnswer(input) {
 // ── Food and water ───────────────────────────────────────────────────────────
 
 const FOOD_STALLS = {
+  pattaya_soi_9: { name: "a bowl at the noodle place that is very good and knows it", price: 60, hunger: 55, thirst: 5 },   // the soi's own prose promised it (Owen, round 46)
   jomtien_7eleven: { name: "a toastie, pressed while you wait", price: 35, hunger: 40, thirst: 0 },
   mikes_mall: { name: "the fifty-baht plate from the top-floor food court, honestly enough food", price: 50, hunger: 55, thirst: 0 },
   cheap_charlies: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },

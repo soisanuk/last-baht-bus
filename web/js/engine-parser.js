@@ -571,6 +571,9 @@ function _doGo(dirWord) {
             "brown river with motorbikes fording it; the rain is hitting the " +
             "glass sideways. The room, the kettle, and the bed all make the " +
             "same argument, and the argument wins."
+          : _room().indoors   // a windowless room: no awning, no mamasan (Owen, round 46)
+          ? "From the doorway the street is a river with a motorbike fording it, and nobody in " +
+            "here is stepping into that until it eases. It can't last much longer. Probably."
           : _inBar()
           ? "You get one step toward the door before the doorway itself talks " +
             "you out of it — a solid moving wall of water where the street used " +
@@ -582,7 +585,10 @@ function _doGo(dirWord) {
             "is a moving brown river with a motorbike fording it. Everyone under the " +
             "7-Eleven's lights has made the same decision you're about to make.");
       } else {
-        _say("Not in this. The street is a river, the rain is horizontal, and " +
+        _say(_sheltered(G.room)
+          ? "Not in this. From the doorway the street is a river with a motorbike fording it, and " +
+            "nobody in here is stepping into that until it eases. It can't last much longer. Probably."
+          : "Not in this. The street is a river, the rain is horizontal, and " +
           "the awning above you is the entire habitable world. It can't last " +
           "much longer. Probably.");
       }
@@ -911,6 +917,40 @@ function _travelDests() {
   return out;
 }
 
+// Real buildings the prose names that this game has no room behind — a mall, a
+// temple, a bank — deserve a refusal that knows what they are, not "you only know
+// the way to bars" (Owen, round 46, every door with a sign on it). Pools, one per kind.
+const _NOT_A_DOOR = [
+  [/\b(mall|central|festival|terminal ?21|terminal|department store|escalators?)\b/, [
+    "The mall is real and it is not this game's. Escalators, arctic air, families who have no idea what the town does after dinner — nothing in there is for sale on the soi's terms, and the soi is where you are.",
+    "Glass doors, a doorman, a wai. You could go in. There is nothing in there that this night runs on — the food court sells the same toastie the 7-Eleven does, colder.",
+  ]],
+  [/\b(temple|wat|monks?)\b/, [
+    "The temple gate is open and the temple is not for you at this hour: the monks are asleep, the dogs are not, and a farang wandering the wat after dark is a story somebody tells tomorrow. In daylight, with a shirt on, it would be different.",
+    "Orange tiles, a whitewashed wall, a flip-flop outside the gate. You stop at the gate. That is the correct place for you to stop.",
+  ]],
+  [/\b(banks?|gold shops?|goldshop|atm booth|exchange)\b/, [
+    "Shuttered, alarmed, and staffed by a man asleep in a plastic chair. A bank in this town works nine to three-thirty and the gold shop keeps roughly the same hours as the gold. (The ATM outside works all night.)",
+  ]],
+  [/\b(laundry|launderette|wash)\b/, [
+    "One lit doorway that is a laundry, not a bar: a woman folding, a machine going, a price list by the kilo. She looks up, decides you have nothing to wash, and looks down.",
+  ]],
+  [/\b(immigration|visa office|immigration office)\b/, [
+    "Fenced, flagpoled, shut. The queue of resigned farang forms at seven in the morning with a plastic folder each; whatever you need from that building, you need it in daylight and with photocopies.",
+  ]],
+  [/\b(print shop|printers?|photocop)/, [
+    "A print shop with the shutter half down and a man inside feeding a machine. Passport copies, four baht a sheet, in the morning. Not a door for tonight.",
+  ]],
+  [/\b(shophouses?|shop houses?|offices?|clinic|pharmacy|chemist)\b/, [
+    "A row of shophouses with the shutters down, a lit sign above one, a motorbike on the pavement outside another. Whatever they do, they do it in the daytime.",
+  ]],
+];
+function _notADoor(arg) {
+  const w = String(arg || "").toLowerCase().replace(/^(the|a|an)\s+/, "");
+  if (!w) return false;
+  for (const [re, pool] of _NOT_A_DOOR) if (re.test(w)) { _say(_pickVary(pool, "notadoor:" + pool.length + ":" + re.source.length), "dim"); return true; }
+  return false;
+}
 function _doTravel(arg) {
   const w = (arg || "").toLowerCase().replace(/^to (the )?/, "").trim();
   const dests = _travelDests();
@@ -1017,6 +1057,7 @@ function _doTravel(arg) {
         return;
       }
     }
+    if (_notADoor(arg)) return;   // the mall, the temple, the bank: real buildings this game has no room behind (Owen, round 46)
     _say("You only know the way to bars and hotels you've already found. (Bare TRAVEL lists them.)");
     return;
   }
@@ -1090,6 +1131,12 @@ function _doTravel(arg) {
     if (route[i] && _footCrossing(G.room, route[i])) return;   // TRAVEL walks the real route, highway included
     if (route[i]) G.room = route[i];   // a step of actual soi, quietly walked
     _tick();
+    // a downpour that starts mid-walk pins you where it finds you, same as a typed step
+    // would — TRAVEL used to walk nine turns through weather that refuses S (Owen, round 46)
+    if (G.rain > 0 && !_sheltered(G.room) && !(i === hops - 2 && _sheltered(dest))) {
+      _say(`(${_clockStr()} — the rain catches you at ${_barName(G.room) || _room().name}. Pinned until it passes.)`, "dim");
+      return;
+    }
     if (G !== g0) return; // an Act One dawn mid-walk rebuilt the world (same-day reset — see _doWait)
     if (G.day !== startDay || G.over) return; // the night ended mid-walk
     if (G.pendingEnc || G.game) {
@@ -1391,6 +1438,27 @@ const _READ_NOUNS = {
   monitor: ["cameras", "camera", "cctv", "feeds", "feed"],
   stick: ["usb", "usb stick", "rabbit's stick", "the stick", "under the bar"],
   safe: ["wall safe", "keypad", "cash bags", "cash bag", "milk crate", "crate"],
+  // round 46 (Owen): the fixtures a walking man reaches for
+  buddha: ["big buddha", "golden buddha", "statue", "the buddha"],
+  curve: ["view", "the bay", "bay", "the view", "whole curve"],
+  bell: ["brass bell", "the bell"],
+  letters: ["hotel sign", "sign letters", "dead letters", "tubes"],
+  guests: ["long-stay guests", "long-stay", "old men", "plastic chairs"],
+  sergeant: ["desk sergeant", "policeman", "the desk", "cop"],
+  whiteboard: ["whiteboards", "fines", "unpaid fines"],
+  sticks: ["selfie sticks", "selfie stick", "confiscated"],
+  cabinet: ["filing cabinet", "files", "drawers", "drawer"],
+  desks: ["desk", "kettle", "mug", "paperback"],
+  seal: ["gold seal", "stamp"],
+  terminal: ["terminal 21", "departure boards", "boards", "airport", "mall"],
+  rank: ["taxi rank", "songthaew rank", "car park", "trucks"],
+  pier: ["concrete legs", "ferry", "the pier"],
+  mast: ["masts", "rigging", "ropes", "boats", "koh larn boats"],
+  engines: ["engine", "drivers"],
+  wall: ["temple wall", "temple", "gate"],
+  ditch: ["drainage ditch", "gravel", "plank", "footpath"],
+  gap: ["the gap", "between two walls", "walls"],
+  wok: ["the wok", "woman on the wok", "pan", "flame"],
   corridor: ["hallway", "passage", "back corridor", "the back"],
   alley: ["lane", "side alley", "the alley"],
   beach: ["sea", "bay", "water", "gulf", "the beach", "the sea"],
@@ -1913,6 +1981,11 @@ const _SCENERY = [
   { key: "dolphin", m: /\bdolphins?\b/, fn: () => G.room === "dolphin_bar"
     ? "The Dolphin Bar's dolphin: painted over the bar in three colours of house paint, grinning " +
       "with a confidence the artist did not share. Repainted once a decade, badly, on purpose."
+    : G.room === "dolphin"   // you are standing on the roundabout (Owen, round 46)
+    ? "The pod: five concrete dolphins mid-leap in a ring, floodlit from below so the water they " +
+      "are supposed to be leaving is a pool of light. Every taxi in town says 'the dolphins' and " +
+      "means here; every tourist photographs them and means nothing by it. The traffic goes round " +
+      "them all night like they are the only fixed point in Pattaya, which they may be."
     : "No dolphins here — the roundabout up the road has the statues, and the bar up in Naklua has the painting." },
   { key: "fishtank", m: /\bfish ?tank\b|\baquarium\b/, fn: () => /^tt_/.test(G.room)
     ? "Somewhere in this maze a bar has a big fish tank out the front. Everybody who is lost in " +
@@ -6202,6 +6275,7 @@ function _doMotosai(arg) {
     // voice was offering the whole city as a menu one command earlier
     // (grapevine playtest F4, 2026-08-25). His menu and his mouth agree now.
     if (G.mode === "soi6") { _say(_pickVary(_SOI6_BOUND, "soi6bound")); return; }
+    G.motoAsked = G.turns + 1;   // the next bare destination typed answers him (stored +1 so turn 0 is truthy) (Owen, round 46: "bali hai" → "the soi blinks")
     _say("The piwin raises an eyebrow: where to? (" +
       Object.keys(MOTOSAI_DESTS).join(" · ") + " · hotel)", "dim");
     return;
@@ -6349,7 +6423,7 @@ function _doMotosai(arg) {
     `That was the fastest ฿${total} of your life` +
     (extraTurns
       ? ` — ${_minutesWord((extraTurns + 1) * 6).toLowerCase()} of it, ` +
-        `${extraTurns >= 3 ? "the town going by in districts" : "one district into the next"}.`
+        `${extraTurns >= 2 ? "the town going by in districts" : "one district into the next"}.`   // two districts over is already "districts" (Owen, round 46: Jomtien to Naklua read as one)
       : ".") + ` (฿${G.money} left.)`, "thai");
   _engineSpeak(thaiBaht(price));
   if (nearMiss) _say(_pickVary(_MOTO_NEARMISS, "motonear"), "alert");
@@ -6860,6 +6934,11 @@ function _doMagic(v) {
   if (v === "plugh") {
     _say("A hollow voice says the magic went out of that one around the same " +
       "time it went out of Walking Street.");
+  } else if (v === "pray" && G.room === "buddha_hill") {   // the Buddha is the room (Owen, round 46)
+    _say("You wai the big Buddha, which is what the hill is for. The marigolds, the red Fanta with its " +
+      "straw, the swept steps: somebody does this every evening and asks for nothing you'd recognise. " +
+      "You ask for nothing either. The bay glitters on regardless, which is either an answer or the view.");
+    _addHappy(1);
   } else if (v === "pray") {
     _say("The nearest spirit house glitters by a doorway, properly kept — " +
       "marigolds, incense, a strawberry Fanta with a straw in it. You add a " +
@@ -10247,6 +10326,9 @@ function doCommand(input) {
       const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return;
     }
     default:
+      // the piwin just asked "where to?" and the player answered with a place, not a verb
+      if (G.motoAsked && G.turns - G.motoAsked <= 1 && lower.length >= 3 && typeof MOTOSAI_DESTS !== "undefined" &&
+          (lower === "hotel" || Object.keys(MOTOSAI_DESTS).some(k => lower === k || lower.includes(k)))) { G.motoAsked = 0; _doMotosai(lower); break; }
       // bare Thai phrase typed directly (polite particles allowed)
       if (matchThaiPhrase(lower) || matchThaiPhrase(_stripPolite(lower))) { _doSay(lower); break; }
       // "sawatdee fon" — a greeting with a trailing NAME, typed without the SAY
