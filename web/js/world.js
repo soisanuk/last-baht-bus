@@ -11450,6 +11450,23 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "they just had to wait for a month you couldn't cover.\u201d He drinks. \u201cThat's the whole " +
           "trick and it always was. They don't beat you. They outlast you.\u201d",
         short: "\u201cThey got it in the end. They don't beat you, bud. They outlast you.\u201d" },
+      // the owner of the bar they tried to buy (Pri, r45: his cold-open fired at the man whose name is on the float)
+      { when: (st, G) => _flag("barPaid") && !_flag("barLost"),
+        topic: "white dish|wdg|the group",
+        text: "\u201cWhite Dish.\u201d Bert chalks the cue, which is what he does instead of spitting. \u201cThey " +
+          "wanted this bar. Sent a lad in a golf shirt to buy it off a dying man for a number that " +
+          "sounded like a lot until you did the sums.\u201d He sights down the cue at nothing. \u201cYou've " +
+          "got it. They haven't. That's the whole story of White Dish on Beach Road, guv, and it's the " +
+          "only one on this road that ends that way.\u201d",
+        short: "\u201cThey wanted this bar. You've got it. Only story on this road that ends that way.\u201d" },
+      // the quest is done and the bar is still the old man's: they wait
+      { when: (st, G) => G.quests.white_dish === "done" && !_flag("barPaid") && !_flag("barLost"),
+        topic: "white dish|wdg|the group",
+        text: "\u201cStill out there.\u201d Bert nods at the door as if they were standing in it. \u201cYou " +
+          "put the old man off signing, and I'll thank you for that till one of us dies. But they " +
+          "don't go away, bud. They wait. Every bar on this road that's got a WDG logo on it had a " +
+          "month it couldn't cover, and they were there that month with the paper ready.\u201d",
+        short: "\u201cStill out there. They don't go away. They wait for the month you can't cover.\u201d" },
       { when: (st, G) => _flag("barLost"),
         topic: "white dish",
         text: "\u201cNot my fight any more, and not yours either.\u201d Bert turns the pint a quarter. " +

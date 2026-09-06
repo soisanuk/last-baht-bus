@@ -714,3 +714,14 @@ test("'l' inside the terminal is the terminal, not a bar game; the lost line kno
   for (let i = 0; i < budget + 1 && G.game; i++) run("ls");
   assert.match(text(), /whatever is on the stick is on the stick/, "it does not call a loaded stick empty");
 });
+
+
+test("Bert has a White Dish answer for the man whose bar they tried to buy", () => {
+  G.room = "stinky_bar"; G.talked = {};
+  out = []; run("ask bert about white dish");
+  assert.match(text(), /They wait|don't go away/, "post-quest: they wait");
+  assert.doesNotMatch(text(), /Welcome to the Stinky/);
+  _setFlag("barPaid"); G.bar.room = "stinky_bar"; G.talked = {};
+  out = []; run("ask bert about white dish");
+  assert.match(text(), /You've got it|ends that way/, "owner: the only story on this road that ends that way");
+});
