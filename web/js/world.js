@@ -9717,6 +9717,39 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "{{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow " +
       "knows exactly what happened at the other two.",
     dialogue: [
+      // THE THREE ERRANDS IN HER OWN MOUTH (round-46 quest sweep, 2026-09-07). She gives
+      // three of the four quests in the Glam saga and her five nodes never mentioned any
+      // of them — the journal asserted a blessing she never gave and handed over a dead
+      // man's keys she never offered. These fire only while the quest is live, and they sit
+      // ABOVE the plain `glam` and `husband` nodes so the closed door stays the first thing
+      // a stranger gets. chip:false — the quest drives them, they are not small talk.
+      { topic: "glam|music|tour|old rocker", chip: false,
+        when: (st, G) => G.quests.oldrocker === "offered" || G.quests.oldrocker === "active",
+        text: "\"Khun Glam.\" The same soft, closed look — she is not going to tell you one thing " +
+          "about him and you can stop asking. Then, because you are still standing there: \"You " +
+          "want to be useful? Don't ask ME. Sit with him. Buy nothing, ask nothing — say music, " +
+          "and then be quiet for a long time.\" A glance down the strip toward the Monkey. \"He " +
+          "was somebody. Nobody under fifty in this town know that, and he is too polite to say " +
+          "it twice.\" Both phones come back up. \"Go on. He like the early evening best.\"",
+        short: "\"Don't ask me — sit with him. Say music, then be quiet. He was somebody, and nobody here knows it.\"" },
+      { topic: "husband|keys|shrine|foreman", chip: false,
+        when: (st, G) => G.quests.keys === "offered" || G.quests.keys === "active",
+        text: "She takes the ring of keys out of the drawer under the till, where they have been " +
+          "for a while, and sets them on the wood between you. \"His keys. Every lock in that " +
+          "go-go, from the day it was a hole in the ground.\" Her thumb goes over the brass once " +
+          "and stops. \"I cannot carry them in there. Twenty year I do not go past that door, and " +
+          "I am not going to start now, and that is not sadness, that is just how it is.\" She " +
+          "pushes them an inch nearer. \"Diamond keep a little shrine by the office. Hang them " +
+          "there. Say nothing clever.\"",
+        short: "\"His keys — every lock in that go-go. I do not go past that door. Diamond has a shrine. Hang them there.\"" },
+      { topic: "diamond|family|blessing|glam|the whole of it", chip: false,
+        when: (st, G) => G.quests.family === "offered" || G.quests.family === "active",
+        text: "For once she puts both phones face-down without being asked. \"You carry the keys, " +
+          "you sit with him, you never once come back to me for the story.\" A small nod, more to " +
+          "herself than to you. \"So. Go and ask Diamond about Khun Glam — the whole of it, not " +
+          "the nice half. Tell her I said you can.\" The businesslike face comes back down like " +
+          "a shutter. \"And after, you do not tell it to anybody in my bars. Not one.\"",
+        short: "\"Ask Diamond about Khun Glam — the whole of it. Tell her I said you can. And after, you tell nobody in my bars.\"" },
       { topic: "keys", req: ["keysDelivered"], notFlags: ["wimonThanked"], sets: ["wimonThanked"],
         text: "You pass it on the way Diamond said it: the keys hang where they belong, and — " +
           "she said to say — thank you. Wimon goes very still over the till. Both phones stay " +

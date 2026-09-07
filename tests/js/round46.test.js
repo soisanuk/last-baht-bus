@@ -340,3 +340,22 @@ test("Glam walks the crossing on somebody's arm, and comes back after an hour (M
   // _railRoomAt agrees, or the narration reports a move that didn't happen
   for (const h of [3, 4, 5, 9]) { G.nightTurn = h * 10; assert.equal(_railRoomAt("glam", h), _npcRoom("glam"), "hour " + h); }
 });
+
+test("Wimon says her own three errands out loud, and the closed door survives (round-46 quest sweep)", () => {
+  vac(); _setFlag("act1Done"); G.room = _npcRoom("wimon"); G.nightTurn = 25; G.known.wimon = true;
+  const ask = (t) => { G.talked = {}; out = []; run("ask wimon about " + t); return text(); };
+  // with nothing live she gives the closed door — that beat is the character
+  G.quests.oldrocker = "done"; G.quests.keys = "done"; G.quests.family = "done";
+  assert.match(ask("glam"), /that is the entire interview|You want another beer/);
+  // …and while each quest is live the errand comes out of her mouth
+  G.quests.oldrocker = "active";
+  assert.match(ask("glam"), /Don't ask ME|say music/);
+  G.quests.keys = "active";
+  assert.match(ask("husband"), /His keys|shrine/);
+  G.quests.family = "active";
+  assert.match(ask("diamond"), /the whole of it|Tell her I said you can/);
+  // the three she gives are hers, and none of them is small talk on the chip bar
+  for (const q of ["oldrocker", "keys", "family"]) assert.equal(QUESTS[q].giver, "wimon", q);
+  const live = NPCS.wimon.dialogue.filter(d => d.when && d.chip === false);
+  assert.equal(live.length, 3, "one voiced offer per quest, all chip:false");
+});
