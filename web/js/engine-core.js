@@ -1356,7 +1356,19 @@ function _topicNamesCharacter(topic, partnerId) {
     cid !== partnerId && (cid === t || (map[cid].name && map[cid].name.toLowerCase() === t)));
   return hit(NPCS);
 }
-function _convoTopics(id) {
+// `all` is the TOPICS verb's list, and it is DELIBERATELY LONGER than the chip
+// bar's (Maureen, round 47 — she ran TOPICS PIM twice, bought two lady drinks
+// between, and was told both times that Pim had nothing open, in the minutes
+// Pim was answering a borrowed-name subplot, a quest turn-in and the safe clue).
+// Two of the three suppressions below are CHIP ETIQUETTE, not honesty: don't
+// dangle a node the quest flow drives, and don't invite a player to gossip about
+// a person they had no reason to name. Neither is a reason to tell somebody who
+// TYPED a character's name that she has nothing to say. So the verb keeps the
+// gates (which are what "answerable this turn" means) and drops the etiquette —
+// person-name topics still wait on _topicKnown, so nothing spoils a name the
+// transcript has never printed.
+function _convoTopics(id, opts) {
+  const all = !!(opts && opts.all);
   const st = _npcState(id);
   const n = NPCS[id];
   const nodes = (n && n.dialogue) || [];
@@ -1365,8 +1377,10 @@ function _convoTopics(id) {
   for (const d of nodes) {
     if (!d.topic) continue;
     if (d.deflect) continue;              // a gated "come back when you've earned it" refusal — don't offer it as a chip
-    if (d.chip === false) continue;       // a plot/quest node the quest flow drives — typeable, never suggested
-    if (!d.chip && _topicNamesCharacter(d.topic, id)) continue; // gossip about a person — typeable, not suggested
+    if (d.chip === false && !all) continue;       // a plot/quest node the quest flow drives — typeable, never suggested
+    if (!d.chip && _topicNamesCharacter(d.topic, id)) {
+      if (!all || !_topicKnown(String(d.topic).split("|")[0])) continue; // gossip about a person — typeable, not suggested
+    }
     if (rage.some(k => d.topic.includes(k))) continue;
     if (d.req && d.req.some(f => !_flag(f))) continue;
     if (d.notFlags && d.notFlags.some(f => _flag(f))) continue;

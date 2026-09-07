@@ -3918,6 +3918,21 @@ function _convoTopic(s) {
 // COLUMNIST is about the kept girls, not his own) — label those by meaning.
 const _TOPIC_LABELS = { sponsor: "the kept girls" };
 function _topicLabel(t) { return _TOPIC_LABELS[t] || t.replace(/\b\w/g, c => c.toUpperCase()); }
+// A LABEL IS A PHRASING OF ITS TOPIC, so the parser has to take it — TOPICS
+// prints the label as prose and a player types back what they just read. Jenny's
+// only two subjects listed as "the kept girls · ring", and asking Jenny about the
+// kept girls missed. The pinning test never saw it: the test asked the KEY
+// (Maureen, round 47). Derived rather than hand-written so the two can't diverge:
+// add a label and its alias exists. (Don't write the verb-and-name form in this
+// comment — tools/asktopic-audit.mjs harvests those out of source and would go
+// hunting for a promise nobody made.)
+for (const [key, label] of Object.entries(_TOPIC_LABELS)) {
+  if (label === key) continue;
+  // the parser strips articles before the topic reaches here, so "the kept girls"
+  // arrives as "kept girls" — match the label with its own article optional.
+  const body = label.replace(/^(the|a|an)\s+/i, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  _CONVO_TOPIC_RULES.push([new RegExp("\\b" + body + "\\b", "i"), key]);
+}
 
 // WHAT WILL HE TALK ABOUT. The sharpest number this project measures is authored
 // dialogue actually delivered to a player — 21.8% of 2,726 lines — and the
@@ -4040,7 +4055,8 @@ function _doTopics(arg) {
   }
   const n = NPCS[id];
   if (!n) { _say("Nobody by that name here.", "dim"); return; }
-  const open = _convoTopics(id);
+  const open = _convoTopics(id, { all: true });   // the ANSWERABLE list, not the chip bar's
+  const chips = _convoTopics(id);                // what a thumb can actually reach
   const who = _convoName(id);
   if (!open.length) { _say(_fmt(_pickVary(_TOPICS_NONE, "topicsnone"), { n: who })); return; }
   _say(_fmt(_pickVary(_TOPICS_LEAD, "topicslead"), { n: who }) + ": " +
@@ -4048,8 +4064,8 @@ function _doTopics(arg) {
   // Turn the page too, so the four the chip bar is showing are not the four it
   // was showing a moment ago — the thumb player's only route to the rest.
   const per = 4;
-  if (open.length > per) {
-    G.convoPage = ((G.convoPage || 0) + 1) % Math.ceil(open.length / per);
+  if (chips.length > per) {
+    G.convoPage = ((G.convoPage || 0) + 1) % Math.ceil(chips.length / per);
     _say("(Tapping cycles the rest onto the chip bar. ASK " + who.split(" ").pop().toUpperCase() +   // the last word is the one the parser answers to ("Fast Eddy" → EDDY, "Madam Oy" → OY; Dougie, round 46)
       " ABOUT <topic> works for any of them.)", "dim");
   }
