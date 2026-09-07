@@ -60,12 +60,28 @@ review. The dossier pivot supplies the co-location; that is the entire mechanism
 Read for, in order: contradiction · arithmetic that doesn't close · voice drift within one
 character · a place whose strings aren't the same place at the same hour.
 
+### The quest pivot
+
+```sh
+node tools/prose-corpus.mjs --quests --taps      # every quest, its prose AND its wiring
+node tools/prose-corpus.mjs --quests white_dish  # one quest
+```
+
+The third pivot, and the only one whose contradictions break **play** rather than fiction.
+A quest is written in five places that never sit together — the `QUESTS` record, the giver's
+whole dialogue, the node that sets its `doneFlag`, the item it hands over, and the `at:`
+that HINT and the journal turn into "where to go next". The section header states the wiring
+before the prose, so a reviewer can see that a desc promises a step nobody can take, that a
+`doneFlag` is set by a node gated behind the quest itself, or that `at:` and the prose name
+two different places.
+
 ### The coverage map
 
 ```sh
 node tools/prose-corpus.mjs --map                  # who has been read as a whole, and who moved since
 node tools/prose-corpus.mjs --dossiers --delta --taps   # only the new or stale subjects
 node tools/prose-corpus.mjs --rooms --delta --taps      # …and rooms
+node tools/prose-corpus.mjs --quests --delta --taps     # …and quests
 node tools/prose-corpus.mjs --dossiers --seed       # record what was actually read
 ```
 

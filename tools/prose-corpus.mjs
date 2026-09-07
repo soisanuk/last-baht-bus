@@ -11,6 +11,7 @@
 //   node tools/prose-corpus.mjs --delta --taps          # …with the taps each record renders
 //   node tools/prose-corpus.mjs --dossiers              # regrouped by WHO/WHAT each record is about
 //   node tools/prose-corpus.mjs --rooms                 # regrouped by the PLACE each record describes
+//   node tools/prose-corpus.mjs --quests                # regrouped by QUEST, with its wiring at the head
 //   node tools/prose-corpus.mjs --map                   # which dossiers have been read as a whole, and which moved since
 //   node tools/prose-corpus.mjs --dossiers --delta      # only the subjects that are new or stale
 //   node tools/prose-corpus.mjs --rooms --seed          # record the dumped rooms as read
@@ -286,7 +287,7 @@ if (groups) { const set = new Set(groups.split(",")); out = out.filter(r => set.
 // --delta means "unreviewed STRINGS" for the string pass and "new or stale
 // SUBJECTS" for the dossier pass — a dossier needs its whole cast of records
 // present to be read against itself, so the string filter must not run first.
-if (has("delta") && !has("dossiers") && !has("rooms") && !has("about") && !has("map"))
+if (has("delta") && !has("dossiers") && !has("rooms") && !has("quests") && !has("about") && !has("map"))
   out = out.filter(r => !ledger[hash(r.text)]);
 
 if (has("stats")) {
@@ -301,7 +302,7 @@ if (has("stats")) {
 
 // the STRING seed — scoped, because --dossiers/--rooms have their own ledger and
 // their own --seed below (a bare --seed here would silently swallow theirs)
-if (has("seed") && !has("dossiers") && !has("rooms") && !has("map")) {
+if (has("seed") && !has("dossiers") && !has("rooms") && !has("quests") && !has("map")) {
   const today = new Date().toISOString().slice(0, 10);
   let added = 0;
   for (const r of out) { const h = hash(r.text); if (!ledger[h]) { ledger[h] = { ref: r.ref, reviewed: today }; added++; } }
@@ -355,6 +356,58 @@ function _subjects() {
 // since — and the new record is exactly the one that might contradict the rest),
 // or `current`. Sorted by size, because the biggest unread dossier is where the
 // next contradiction most likely is.
+// ── the QUEST dossier (--quests) ───────────────────────────────────────────
+// The third pivot, and the one whose contradictions break PLAY rather than just
+// fiction (Mario, 2026-09-07). A quest is written in five places that never sit
+// together: the QUESTS record (name, desc, reward, deps, the trust gate), the
+// giver's offer node, whatever node or handler SETS its doneFlag, the item it
+// hands over, and the `at:` that HINT and the journal point at. So a desc can
+// promise a step nobody can take, an offer can name a venue the `at:` disagrees
+// with, and the flag can be set by a node the player reaches before the offer.
+// Everything about one quest, in one place, with its wiring stated at the head.
+if (has("quests")) {
+  const want = val("quests") && !val("quests").startsWith("--") ? val("quests") : null;
+  const seeding = has("seed"), delta = has("delta"), picked = [];
+  let n = 0;
+  for (const [qid, q] of Object.entries(QUESTS)) {
+    if (want && qid !== want) continue;
+    // every string this quest is made of — its own fields, its giver's whole
+    // dialogue, and any node anywhere that sets or requires its flags
+    const recs = out.filter(r => r.ref.startsWith(`quest.${qid}.`) ||
+      (q.giver && r.ref.startsWith(`npc.${q.giver}.`)) ||
+      (q.item && r.ref.startsWith(`item.${q.item}.`)));
+    const setters = [], gates = [];
+    for (const [id, npc] of Object.entries(NPCS))
+      (npc.dialogue || []).forEach((d, i) => {
+        if ((d.sets || []).includes(q.doneFlag)) setters.push(`npc.${id}.dialogue[${i}]`);
+        if ((d.req || []).includes(q.doneFlag)) gates.push(`npc.${id}.dialogue[${i}]`);
+      });
+    const state = dossierState("quest:" + qid, recs);
+    if (delta && state === "current") continue;
+    picked.push(["quest:" + qid, recs]);
+    if (seeding) continue;
+    n++;
+    console.log(`\n\n════════ ${q.name}  [${qid}] — ${recs.length} records ════════`);
+    printAccepted(q.name);
+    console.log(`   giver: ${q.giver}${NPCS[q.giver] ? " (" + NPCS[q.giver].name + ", " + ((NPCS[q.giver].room) || (NPCS[q.giver].bars || [])[0] || "?") + ")" : " — MISSING"}` +
+      `${q.trust ? " · trust ≥ " + q.trust : ""}`);
+    console.log(`   at: ${q.at || "—"}   deps: ${(q.deps || []).join(", ") || "—"}   reqFlags: ${(q.reqFlags || []).join(", ") || "—"}` +
+      `${q.item ? "   item: " + q.item : ""}`);
+    console.log(`   doneFlag: ${q.doneFlag} — set by ${setters.join(", ") || "an engine action (grep the flag)"}`);
+    if (gates.length) console.log(`   read back by: ${gates.join(", ")}`);
+    console.log(`   reward: ${JSON.stringify(q.reward || {})}`);
+    for (const r of recs) {
+      console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
+      console.log(r.text);
+      printRender(r);
+    }
+  }
+  if (seeding) { seedDossiers(picked); process.exit(0); }
+  console.log(`\n[${n} quests]`);
+  if (_warned) console.log(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
+  process.exit(0);
+}
+
 if (has("map")) {
   const rows = [];
   const subs = _subjects();
@@ -363,6 +416,13 @@ if (has("map")) {
     if (hits.length < 2) continue;
     rows.push({ kind: "subject", name, n: hits.length, state: dossierState("subject:" + name, hits),
       seen: (dossierLedger["subject:" + name] || {}).reviewed });
+  }
+  for (const [qid, q] of Object.entries(QUESTS)) {
+    const recs = out.filter(r => r.ref.startsWith(`quest.${qid}.`) ||
+      (q.giver && r.ref.startsWith(`npc.${q.giver}.`)) || (q.item && r.ref.startsWith(`item.${q.item}.`)));
+    if (!recs.length) continue;
+    rows.push({ kind: "quest", name: q.name, id: qid, n: recs.length,
+      state: dossierState("quest:" + qid, recs), seen: (dossierLedger["quest:" + qid] || {}).reviewed });
   }
   const byRoom = new Map();
   for (const r of out) { const m = /^room\.([^.]+)\./.exec(r.ref); if (!m) continue;
@@ -375,12 +435,13 @@ if (has("map")) {
   const bar = (a, b) => { const w = 25, f = b ? Math.round((a / b) * w) : 0;
     return "█".repeat(f) + "·".repeat(w - f); };
   console.log("\n── dossier review coverage ──  (has every string ABOUT this subject been read together?)\n");
-  for (const kind of ["subject", "room"]) {
+  for (const kind of ["subject", "room", "quest"]) {
     const g = rows.filter(r => r.kind === kind);
     const cur = g.filter(r => r.state === "current"), stale = g.filter(r => r.state === "stale"),
       fresh = g.filter(r => r.state === "new");
     const recs = g.reduce((a, r) => a + r.n, 0), curRecs = cur.reduce((a, r) => a + r.n, 0);
-    console.log(`  ${(kind === "subject" ? "cast + venues + items" : "rooms").padEnd(22)} ` +
+    const label = { subject: "cast + venues + items", room: "rooms", quest: "quests (wiring + prose)" }[kind];
+    console.log(`  ${label.padEnd(23)} ` +
       `${String(cur.length).padStart(4)}/${String(g.length).padEnd(4)} ${bar(cur.length, g.length)} ` +
       `${g.length ? Math.round((cur.length / g.length) * 100) : 0}%   (${curRecs}/${recs} records)`);
     if (stale.length) console.log(`     stale — a record moved since it was read: ${stale.sort((a, b) => b.n - a.n).map(r => `${r.name}(${r.n})`).join(" · ")}`);
