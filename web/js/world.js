@@ -9716,7 +9716,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     name: "Wimon", th: "วิมล", emoji: "👑",
     room: "arrow_bar", bars: ["arrow_bar", "cheeky_monkey", "the_office"],
     look: "Thai woman of sixty-two, brisk, short practical hair, reading glasses, phone in each hand.",
-    desc: "The mamasan who runs the Samson brothers' three beer bars on the strip — fifties, brisk, a " +
+    desc: "The mamasan who runs the Samson brothers' three beer bars on the strip — sixties, brisk, a " +
       "{{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow " +
       "knows exactly what happened at the other two.",
     dialogue: [
@@ -13025,7 +13025,7 @@ const QUESTS = {
     name: "An Introduction",
     giver: "candy",
     desc: "Candy is vouching you into a discreet club — the kind of place you don't find, you get " +
-      "sent. Get sent first — Candy will do it when the club comes up (ASK CANDY ABOUT ROSE) — then go and tell Rose who sent you.",
+      "sent. Get sent first — Candy will do it when the club comes up (ASK CANDY ABOUT ROSE) — then ASK ROSE ABOUT CANDY — she'll want to know who sent you.",
     deps: [],
     reqFlags: ["act1Done"],
     at: "rose",

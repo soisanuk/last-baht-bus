@@ -50,6 +50,18 @@
       "finding": "He names his ex-brother-in-law Nong, which is also a hostess at the Gold Rush.",
       "ruled": "2026-09-07",
       "reason": "Kept. Nong is an ordinary Thai term for a younger sibling and one of the commonest nicknames in the country, so two men and a girl can carry it. The tap collision is already closed — Nong is in _WORD_NAME_NPCS, so she only decorates in her own room."
+    },
+    {
+      "subject": "Gavin",
+      "finding": "wdg_flip declares reward money:0 while Gavin's line says (+฿2000).",
+      "ruled": "verified 2026-09-07",
+      "reason": "Refuted: the ฿2000 is paid by the dialogue node's own fx, not by the quest reward, which is why the record reads zero. The money really moves."
+    },
+    {
+      "subject": "Rose",
+      "finding": "The quest told the player to TELL Rose, and TELL is not a verb here.",
+      "ruled": "2026-09-07",
+      "reason": "Half-refuted, then fixed: TELL already gave a voiced refusal naming ASK, so nobody was stranded, but the desc now says ASK ROSE ABOUT CANDY, which is also tappable."
     }
   ]
 }

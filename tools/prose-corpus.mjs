@@ -389,6 +389,9 @@ if (has("quests")) {
     n++;
     console.log(`\n\n════════ ${q.name}  [${qid}] — ${recs.length} records ════════`);
     printAccepted(q.name);
+    // …and for the people this quest is made of, or a ruling made on a character
+    // is invisible to the pivot that prints that character's whole dialogue
+    for (const nm of new Set(recs.map(r => r.speaker).filter(Boolean))) printAccepted(nm);
     console.log(`   giver: ${q.giver}${NPCS[q.giver] ? " (" + NPCS[q.giver].name + ", " + ((NPCS[q.giver].room) || (NPCS[q.giver].bars || [])[0] || "?") + ")" : " — MISSING"}` +
       `${q.trust ? " · trust ≥ " + q.trust : ""}`);
     console.log(`   at: ${q.at || "—"}   deps: ${(q.deps || []).join(", ") || "—"}   reqFlags: ${(q.reqFlags || []).join(", ") || "—"}` +
