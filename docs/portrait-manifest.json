@@ -2,9 +2,9 @@
   "generated": "2026-09-06",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 153,
+    "total": 154,
     "byRole": {
-      "story": 43,
+      "story": 44,
       "mamasan": 25,
       "hostess": 48,
       "cashier": 13,
@@ -597,6 +597,20 @@
       "room": "eastern_seaboard",
       "tags": [],
       "desc": "The woman at the desk with the computer: late forties, reading glasses on a chain, a blouse that was ironed this morning and has stayed ironed. She has the stillness of a person who signs things for a living and reads them first. She was not expecting anybody, and she is not going to pretend she was."
+    },
+    {
+      "id": "wilf",
+      "name": "Wilf",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "look": "English man of seventy-eight, thin, white hair combed flat, sun-spotted, faded grey polo shirt, reading glasses on a cord",
+      "venueKind": null,
+      "emoji": "🍛",
+      "th": null,
+      "room": "mikes_mall",
+      "tags": [],
+      "desc": "Seventy-eight, thin as a rail, white hair combed flat with water, in a grey polo shirt that was navy once. He has the corner seat at the long table — the one by the socket — and a fifty-baht plate he makes last the afternoon. Nottingham, thirty years ago. He is not counting anything out loud, and he is counting everything."
     },
     {
       "id": "win",
