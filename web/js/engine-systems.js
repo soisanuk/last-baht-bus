@@ -4617,6 +4617,31 @@ function _sheltered(id) {
     id === "police_station" || id === "oy_office";
 }
 
+// _sheltered means "you can dive in HERE", which is true of a street with a
+// 7-Eleven on it. What the rain wants to know is whether there is a roof over
+// your head right now, and a street is a street however many doorways it has —
+// so a room with `venues` to step into, a `seven` on it or a bike stand at the
+// kerb is outdoors no matter what else it carries.
+function _underRoof(id) {
+  const r = ROOMS[id];
+  return !!r && _sheltered(id) && !r.venues && !r.seven && !r.motosai;
+}
+
+// Under a roof that isn't a bar, a shop or a windowless office: the massage
+// shops, the malls, the cabaret, the host bar. Deliberately incurious about what
+// kind of room it is, because it covers all of them.
+const _RAIN_INDOORS = [
+  "The rain arrives the way it does here — no first drops, just the whole sky at once, loud on the roof and louder in the gutters. Whatever you were doing, you are doing it for a while longer.",
+  "Somewhere above you the roof takes it like a drum solo, and a fine cool draught comes in off the street with the noise. Nobody in here is going anywhere, and nobody in here minds.",
+  "A wall of water goes past the doorway, close enough to feel. The light drops two stops, the air turns cold and green, and the room settles in around the sound of it.",
+  "It lands all at once, and the street beyond the door stops being a street. In here it is only weather happening to somebody else — which is the whole pleasure of being in here.",
+];
+const _RAIN_YOUR_ROOM = [
+  "Rain on the window, then rain on everything: the whole sky at once, hard enough that the glass hums with it. Your room is dry and slightly too cold, and the town has gone grey-white outside it.",
+  "The air-con is suddenly the second-loudest thing in the room. Out past the balcony the soi has turned to a river with headlights in it, and you are, for once, entirely on the right side of the glass.",
+  "It comes down like the sky has been holding it in. Somewhere below, an awning gives up with a noise like a slap. You have a roof, a bed and nowhere to be.",
+];
+
 // two to three downpours a night for six nights, the same two sentences each
 // time (Trevor, round 39): the start and the stop are pools now
 const _RAIN_START = [
@@ -4640,6 +4665,15 @@ function _startRain(len) {
     _say("Rain arrives like a verdict — the world outside the glass goes " +
       "grey-white and deafening. In here: dry, humming air-con, and the smug " +
       "particular pleasure of watching weather happen to other people.", "alert");
+  } else if (_underRoof(G.room) && G.room === _hotelRoomId()) {
+    _say(_pickVary(_RAIN_YOUR_ROOM, "rainroom"), "alert");
+  } else if (_underRoof(G.room)) {
+    // EVERY massage shop, both soapies, both malls, three hotel rooms, the
+    // cabaret and the host bar fell through to the street line and had the
+    // player making an awning they were already under (Maureen, round 47 — she
+    // got it in room 412 of her own hotel and again mid-massage). A roof is a
+    // roof; only the beaches and the pavements are outside.
+    _say(_pickVary(_RAIN_INDOORS, "rainindoors"), "alert");
   } else if (_room().seven) {
     _say("The sky lets go all at once. You make the 7-Eleven awning in three " +
       "strides, joining a motorbike, two hostesses, and a monk — the full " +

@@ -648,7 +648,11 @@ const _ENC = {
 
   bargirl() {
     // she is giving a skint-looking farang her own money; a man in a good shirt
-    // with a fat wallet gets the other version (millionaire playtest 2026-08-22)
+    // with a fat wallet gets the other version (millionaire playtest 2026-08-22).
+    // The middle case was missing and it is the common one: Maureen had ฿5,810
+    // and สนุก 90 and was told she always has a bad night (round 47). Somebody
+    // out on a Thursday with a few thousand in his pocket does not look like he
+    // needs twenty baht, and she is far too good at reading a man to think so.
     if (G.money > 50000) {
       _say("Before you can say a word she has your hand in both of hers, patting it, " +
         "telling you that you look EXACTLY like her mom's ex-boyfriend, who was a good " +
@@ -656,6 +660,16 @@ const _ENC = {
         "standing, and the sympathy turns into a grin she doesn't bother hiding: " +
         "\"Ohhh. YOU okay, na.\" She kisses your cheek and lets her friends drag her " +
         "back inside, delighted with herself.");
+      _addHappy(2);
+      return;
+    }
+    if (G.money > BARGIRL_PITY) {
+      _say("Before you can say a word she has your hand in both of hers, patting it, " +
+        "telling you that you look EXACTLY like her mom's ex-boyfriend, who was a good " +
+        "man, jing jing. Then she looks properly — at the pocket, at the state of you — " +
+        "and reaches a verdict. “You okay,” she decides, a little disappointed to " +
+        "have nobody to rescue. “So YOU buy ME one, next time.” She kisses your cheek " +
+        "and lets her friends drag her back inside, entirely satisfied with the exchange.");
       _addHappy(2);
       return;
     }

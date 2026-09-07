@@ -215,6 +215,19 @@ const _FOLK_MASSEUSE = [
   "A woman who has worked out somebody's shoulders for thirty years does not need to charm you into a chair. She nods at the one nearest the door and goes back to the towels.",
   "\"Sit, sit.\" She pats the chair, and then, when it is clear you only want to talk, gives you the flat kind look reserved for men who mistake this shop for the other kind. \"This is massage shop, na. Only massage.\"",
 ];
+// A BAR WITH NOBODY IN IT still pours a beer, because somebody is pouring it.
+// The Offside in LK Metro and Take Care Me on Thappraya carry no role-carriers at
+// all — the Offside deliberately (it is a sports pub) and Take Care Me by its own
+// prose ("no house girls work it") — so TALK TO BARMAN answered "No one here
+// answers to that" in a room that had just sold a drink (Maureen, round 47).
+// These places have bar STAFF, not bar girls, which is the distinction the whole
+// venue is built on; the pool says so without inventing anybody nameable.
+const _FOLK_BARSTAFF = [
+  "The one behind the taps looks up, takes the order that isn't coming, and goes back to the glasses. Friendly enough, and busy — this is a bar where the staff are staff.",
+  "\"Beer?\" A raised eyebrow over the pumps, and when you say you only wanted a word, a good-natured shrug and a nod at the room. \"Talk to them. I'm working.\"",
+  "Whoever is on tonight is halfway through changing a keg and answers you from down there — polite, distracted, and entirely uninterested in being a character in your evening.",
+  "The bar staff here do the job and nothing else: pour, ring it in, wipe down, next. Nobody is going to sit with you, and after some of the other rooms on this street that is close to restful.",
+];
 const _FOLK_SEVEN = [
   "The 7-Eleven lad looks up from his phone. “Sawatdee khrap.” Then back down. That is the whole conversation available, and it is not unfriendly.",
   "The girl on the till gives you the smile the uniform requires and the eyes it doesn't. “Toastie?” No? The smile stays; the attention goes.",
@@ -243,6 +256,12 @@ function _promptedFolk(arg) {
     if (/\b(men|man|regulars?|locals?|lads?|diners?|customers?|crowd|farang|punters?|people|them|everyone|others?|stools?|counter)\b/.test(a)) {
       _say(_pickVary(_FOLK_COUNTER, "folkcounter")); return true;
     }
+  }
+  // a bar with no role-carrier at all — somebody still pours
+  if ((r.bar || r.barType || _servesDrinks(G.room)) &&
+      /\b(barman|barmaid|bar ?staff|bartender|staff|hostess|hostesses|mama|mamasan|cashier|girl|girls|lady|ladies|waitress|server|anyone|anybody|somebody)\b/.test(a) &&
+      !_npcsHere().some(x => NPC_ROLES[x] || (NPCS[x] && NPCS[x].manager))) {
+    _say(_pickVary(_FOLK_BARSTAFF, "folkbarstaff")); return true;
   }
   if (/\b(clerk|cashier|staff|lad|counter|shop ?(girl|boy|assistant))\b/.test(a) && r.seven) {
     _say(_pickVary(_FOLK_SEVEN, "folkseven")); return true;   // three refusals for a lad the receipt named (Bronwyn, round 39)
@@ -3790,6 +3809,13 @@ const _CONVO_TOPIC_RULES = [
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
   [/\bvillage\b|\bhometown\b|\bsad story\b|\byour story\b/,                   "home"],
   // the after-hours question (Dex, round 38): "after", "late", "karaoke", "bike" all missed on the girl who then drove him there
+  // THE BOLTED DOOR. Mama Yai points a player at Kratae for exactly this, the room
+  // says three times that the bolt means something, and not one member of staff at
+  // either lock-in bar could discuss it (Maureen, round 47 — she rang the bell,
+  // drank through midnight, triggered the lock-in, and ran TOPICS on all four
+  // women while standing inside it with the bolt across). Above the `late` row,
+  // which would otherwise eat "after the bar" and "midnight".
+  [/\block[- ]?in\b|\bbolt\b|\bdoors?\b|\bshutters?\b|\block the door\b|\bstay(?:ing)? (?:on|late|behind)\b|\bmidnight\b/, "lockin"],
   [/\bafter ?hours?\b|\bafter (?:two|midnight|close|closing|work|the bar)\b|\blate[- ]?night\b|\blate\b|\bkaraoke\b|\bthai disco\b|\bran ?lao\b|\bmotorbike\b|\bwhere.*(?:go|party) after\b/, "late"],
   // …and the words the column itself puts in a reader's mouth: Box 15's
   // personal taunts "not one of you has asked me why", and the reader typed
@@ -5150,12 +5176,17 @@ function _doSellBottles(arg) {
   if (!bottles.length) { _say("\"No bottle, no baht, tilac.\" Fair."); return; }
   for (const b of bottles) G.itemLoc[b] = null;
   const paid = bottles.length * 5;
+  const before = G.money;
   G.money += paid;
   // ฿5 and ฿10 are a single coin; ฿15+ takes two or more.
   const coinWord = (paid === 5 || paid === 10) ? "a coin" : "coins";
   _say(`Auntie Nok counts the glass, nods, and presses ${coinWord} into your hand: ฿${paid}. ` +
     `(You have ฿${G.money}.)`);
-  if (G.money >= BUS_FARE && !_flag("gotBusFare")) {
+  // "Enough for bus now!" is a thing you say to somebody who did not have the
+  // fare a moment ago. Maureen got it on night seven with ฿4,955 in her pocket
+  // (round 47), because the only test was the total. It is the DIFFERENCE that
+  // makes the line true, and the whole beat belongs to the opening.
+  if (!_flag("act1Done") && before < BUS_FARE && G.money >= BUS_FARE && !_flag("gotBusFare")) {
     _setFlag("gotBusFare");
     _say("\"Enough for bus now! Go, go — town that way.\" She shoos you fondly.", "dim");
   } else if (!_flag("act1Done") && G.money < BUS_FARE && G.battery <= 0 && !_flag("nokFare")) {
@@ -7436,6 +7467,17 @@ function _doTip(arg) {
       _say(`฿${amount} drops into the tip box on the monitor wedge. The band plays on, ` +
         `professionally. (฿${G.money} left.)`);
     }
+    return;
+  }
+  // Mot is not staff and takes no tips, but he named a number and a shortfall
+  // over dinner, so the money has somewhere to go. Before the barType gate,
+  // because he works an alley behind a bar rather than in one.
+  if (/\bmot\b/.test(nameW) && _npcsHere().includes("mot")) {
+    if (G.money < amount) { _say(`You haven't got \u0e3f${amount}.`); return; }
+    if (_motBoots(amount)) return;
+    _say("“For what?” Mot looks at the money and then at you, honestly puzzled. " +
+      "“I do nothing for you yet.” He is not being proud about it; he simply " +
+      "has not earned anything and can see that you both know it.");
     return;
   }
   // The Peacock's performers take tips the drag way — folded long, held up,
@@ -10960,6 +11002,50 @@ const _MOT_DINNER_TALK = [
   "Halfway down the plate he says his mother is in Sa Kaeo and he sends what he can, and then changes the subject so fast and so cheerfully that you understand it is not a subject. He wants to know if you have been to a real football match. A big one. With the singing.",
   "He asks what a wallet like that costs new, and when you tell him he laughs so hard he has to put the spoon down. \"For LEATHER,\" he says. \"For a bit of a COW.\" He is still going about it when the plates are cleared.",
 ];
+// THE BOOTS. Mot names the price and his own savings at dinner, in the flattest
+// possible way, and for the whole life of the game there was nothing a player
+// could do with the number. TIP refused him — "a tip is for a service already
+// done" — which is a sentence about a waiter, said to a boy who had just walked
+// you four minutes to a cart and put you on the good stool. He is not being
+// tipped and he is not being rescued; somebody is closing a gap he told them
+// about. Once, capped at the gap, and he counts it in front of you.
+const _MOT_BOOTS_TAKE = [
+  "He counts it. Not quickly — twice, with his lips moving, the way you count money that matters. Then he looks up and the professional distance is simply gone. “Is enough.” A beat. “Is ENOUGH.” He says the number out loud once more to be sure of it.",
+  "Mot takes the notes and does not say thank you, which is somehow the point: he goes very still, does the arithmetic, and then grins at the pavement rather than at you. “The studs one,” he says. “Not the flat one. The studs one.”",
+  "He folds the notes into a shoe — his actual shoe — and pats it flat, and only then trusts himself to speak. “Saturday I go. Big shop, Sukhumvit, the one with the shirts in the window.” He has clearly walked past it a great many times.",
+];
+const _MOT_BOOTS_PART = [
+  "He counts it and adds it to the number in his head without being asked. “฿{have} now.” A small nod. “฿{gap} more.” He does not ask for the rest, and he does not pretend he has stopped counting.",
+  "Mot takes it, thinks, and reports the new total like a scoreboard. “฿{have}. Still ฿{gap}.” Then, briskly, changing the subject before it can become a request: “You eat yet?”",
+];
+function _motBootsGap() { return Math.max(0, MOT_BOOTS - MOT_BOOTS_SAVED - (G.motBoots || 0)); }
+function _motBoots(amount) {
+  if (_flag("motBooted")) {
+    _say("“No, no.” Mot pushes your hand back, delighted and slightly scandalised. " +
+      "“I HAVE the shoes. You want to buy me two shoes? What I do with four?”");
+    return true;
+  }
+  if (!_flag("motFed")) return false;      // the subject does not exist until he raises it
+  const gap = _motBootsGap();
+  const take = Math.min(amount, gap);
+  if (amount > gap) _say(`“Too much, phi.” He takes ฿${take} of it and hands the rest straight back, ` +
+    "without discussion. “The shoes cost what the shoes cost.”", "dim");
+  G.money -= take;
+  G.motBoots = (G.motBoots || 0) + take;
+  if (_motBootsGap() > 0) {
+    _say(_fmt(_pickVary(_MOT_BOOTS_PART, "motbootspart"),
+      { have: _num(MOT_BOOTS_SAVED + G.motBoots), gap: _num(_motBootsGap()) }));
+    _repGain();
+    return true;
+  }
+  _setFlag("motBooted");
+  _say(_pickVary(_MOT_BOOTS_TAKE, "motboots"), "win");
+  _addHappy(3);                            // a kindness, never a conquest — no treadmill
+  _repGain();
+  _say(`(฿${_num(take)}. ฿${_num(G.money)} left.)`, "dim");
+  return true;
+}
+
 function _motDinner() {
   if (!_npcsHere().includes("mot")) {
     _say("Mot isn't here to feed. He works Walking Street, mostly the alley behind it.");

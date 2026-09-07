@@ -7142,7 +7142,12 @@ test("low season thins the FURNITURE too: an emptied rail gets the thin line, no
   const low = out.join("\n");
   assert.doesNotMatch(low, /welded to the bar|holds court|red-faced fixture|holds forth|weathered faces/i,
     "no anonymous crowd in the emptied trough bar");
-  assert.match(low, /far stools are empty|corner stool|bare wood|Low season does this/i, "the thinned line instead");
+  // Two pools since round 47: a staffed rail says so ("the girls have the far half
+  // to themselves"), an unstaffed one does not — the generic line used to name a
+  // hostess and a mama in a sports pub with nobody in it. Asserted against the
+  // pools rather than a phrase list, so a new variant can't silently fail this.
+  assert.ok([..._BAR_THIN, ..._BAR_THIN_STAFFED].some(t => low.includes(t.slice(0, 40))),
+    "the thinned line instead");
   // high season: the crowd is back
   state().season0 = 11; state().day = 1;   // December, peak
   out = []; _describeRoom(true);

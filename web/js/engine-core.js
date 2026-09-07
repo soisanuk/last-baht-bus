@@ -258,6 +258,7 @@ function newGame() {
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
     motoAsked: 0,        // the turn the piwin last asked "where to?" — a bare place typed next answers him
     lastNightSaid: null,   // the morning ledger, kept so LAST NIGHT can reprint it
+    motBoots: 0,         // baht handed to Mot toward the football boots he named at dinner
     ccibLoud: 0,         // loud acts inside the window (see _ccibLoud) — the teeth
     ccibLoudNight: {},   // {kind: day} — one count per kind per night
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)
@@ -2025,7 +2026,15 @@ const _BAR_REGULAR_BUSY = [
 const _BAR_THIN = [
   "The far stools are empty tonight — the regulars who'd usually be welded to them are home, or wherever the low season sends them. The bar feels bigger and quieter than it should.",
   "Nobody's holding down the corner stool. In season there'd be a lifer there holding forth; tonight it's just the stool, and the fan turning over it.",
+  "The rail runs mostly to bare wood down the far end, and a lot of stools nobody's paying to sit on. Low season does this.",
+  "Down the far end it is bare wood and a fan. Whoever usually fills it is somewhere cheaper this month, and will be back when the flights are.",
+];
+// The same beat where there IS floor staff to notice it with. The generic pool
+// used to name "a hostess or two, the mama" and printed it in a sports pub with
+// nobody in it at all (Maureen, round 47).
+const _BAR_THIN_STAFFED = [
   "The rail runs mostly to bare wood down the far end. A hostess or two, the mama, and a lot of stools nobody's paying to sit on. Low season does this.",
+  "The girls have the far half of the bar to themselves and are using it to sit down, which in season they never get to do. Nobody minds you noticing.",
 ];
 
 // Where the dog actually settles. Keyed on what the room IS rather than on
@@ -2343,7 +2352,8 @@ function _describeRoom(full, forceFull) {
     const _thin = typeof _lowSeason === "function" && _lowSeason() && !_railCrowd.length &&
       ["beer", "soi6", "gents", "pub"].includes(r.barType);   // a club's floor "heaves" in its own desc — no bare-wood rail there (Dex, round 38)
     if (_thin) {
-      _say(_pickVary(_BAR_THIN, "barThin"), "dim");
+      const _staffed = _npcsHere().some(id2 => NPC_ROLES[id2]);
+      _say(_pickVary(_staffed ? _BAR_THIN_STAFFED : _BAR_THIN, "barThin"), "dim");
     } else if (G.soc.patronBusy[G.room]) {
       // name the SAME girl the snipe-jealousy keys on (parser); legacy `true`
       // falls back to the first hostess present

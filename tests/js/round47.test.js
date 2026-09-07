@@ -202,3 +202,120 @@ test("nobody sends you to Candy while Candy is standing there", () => {
     assert.match(text(), /Candy/, "…but still names her, because she is the answer");
   }
 });
+
+// ── The stragglers ──────────────────────────────────────────────────────────
+
+test("a roof is a roof: the downpour never sends you out for an awning you're under", () => {
+  // Maureen got "You make the nearest awning already soaked" in room 412 of her
+  // own hotel, and again mid-massage. _sheltered was the wrong test — it means
+  // "you can dive in HERE", which is true of a street with a 7-Eleven on it.
+  const roofed = Object.keys(ROOMS).filter(r => _underRoof(r));
+  assert.ok(roofed.length > 100, `most venues are interiors (${roofed.length})`);
+  for (const r of ["hotel_room", "qv_room", "naklua_thai", "central_mall", "peacock_cabaret", "emperor_soapy"]) {
+    G.room = r; G.rain = 0; G.lastRain = 0; out = []; _startRain(4);
+    assert.doesNotMatch(text(), /nearest awning|make the 7-Eleven awning/,
+      `${_barName(r) || ROOMS[r].name}: you are already under a roof`);
+  }
+  // …and a street is still a street however many doorways it has
+  for (const r of ["soi6_street", "beach_rd_c", "jomtien_beach"]) {
+    assert.ok(!_underRoof(r), `${r} is outdoors`);
+  }
+});
+
+test("nobody presses their own money on a man with thousands in his pocket", () => {
+  // The drunk bargirl gave Maureen ฿20 and a skewer on night 6 with ฿5,810 in
+  // pocket and สนุก 90, telling her she always has a bad night. The check
+  // existed and sat at ฿50,000.
+  G.room = "soi6_street"; G.money = 5810; const before = G.money;
+  out = []; _ENC.bargirl("");
+  assert.equal(G.money, before, "she keeps her twenty");
+  assert.doesNotMatch(text(), /always have bad night/);
+  G.money = 120; out = []; _ENC.bargirl("");
+  assert.equal(G.money, 140, "…and a man who actually needs it still gets it");
+});
+
+test("Auntie Nok only says 'enough for bus now' to somebody who hadn't got it", () => {
+  G.room = "jomtien_soi_7_beach_end"; G.money = 4955;
+  _setFlag("act1Done");
+  G.itemLoc.bottle1 = "inventory";
+  out = []; _doSellBottles ? _doSellBottles() : run("sell bottles");
+  assert.doesNotMatch(text(), /Enough for bus now/, "she is not shooing a rich woman toward a songthaew");
+});
+
+test("Mot's boots are a number the player can do something about", () => {
+  // Mot works a pitch-dark alley, so every command here rolls the soi-dog streak
+  // and a bite relocates you mid-assert. Stub the dice and stand still.
+  const saved = _rand; _rand = () => 0.99;
+  try { motBoots(); } finally { _rand = saved; }
+});
+function motBoots() {
+  const at = () => { G.room = "ws_alley"; };
+  at(); G.money = 3000;
+  out = []; run("tip mot 200");
+  assert.match(text(), /I do nothing for you yet/, "before dinner the subject does not exist");
+  assert.equal(G.money, 3000, "and nothing moved");
+  _setFlag("motFed"); at();
+  out = []; run("ask mot about boots");
+  assert.match(text(), /studs one|640/i, "he will discuss them once he has raised them");
+  at(); out = []; run("tip mot 200");
+  assert.equal(G.money, 2800);
+  assert.ok(!_flag("motBooted"), "part-paid is part-paid");
+  const h0 = G.happy, m0 = G.money;
+  at(); out = []; run("give 400 to mot");
+  assert.equal(G.motBoots, MOT_BOOTS - MOT_BOOTS_SAVED, "the gap is closed exactly");
+  assert.ok(m0 - G.money <= 260 + 40, "he takes the gap and hands the rest back");
+  assert.ok(_flag("motBooted"));
+  assert.ok(G.happy > h0, "a kindness pays, and it is not a conquest");
+  at(); out = []; run("tip mot 500");
+  assert.match(text(), /What I do with four/, "he will not take a second pair");
+  at(); out = []; run("ask mot about boots");
+  assert.match(text(), /rubbish in the shoes/i, "and the payoff is his, not yours");
+}
+
+test("the women at a lock-in bar can discuss the bolt", () => {
+  const bars = Object.keys(ROOMS).filter(r => ROOMS[r].lockIn);
+  assert.ok(bars.length, "lock-in bars exist");
+  for (const room of bars) {
+    G.room = room;
+    const staff = _npcsHere().filter(id => NPC_ROLES[id]);
+    assert.ok(staff.length, `${_barName(room)} is staffed`);
+    for (const id of staff) {
+      G.known[id] = true;
+      assert.ok(_convoTopics(id, { all: true }).includes("lockin"),
+        `${NPCS[id].name} will discuss the door at ${_barName(room)}`);
+      G.talked = {}; run(`talk to ${id}`);
+      out = []; run(`ask ${id} about the door`);
+      assert.doesNotMatch(text(), /don't know|wrong girl|Not my story/i,
+        `${NPCS[id].name} answers about the bolt that is her bar's whole premise`);
+    }
+  }
+});
+
+test("Ploy answers for the things two other people send you to her for", () => {
+  G.room = "rainbow_girls"; G.known.ploy = true;
+  run("talk to ploy");
+  const open = _convoTopics("ploy", { all: true });
+  assert.ok(open.length >= 5, `the cashier who sees everything has something to say (${JSON.stringify(open)})`);
+  for (const t of ["money", "security", "girls", "office"]) {
+    assert.ok(open.includes(t), `she discusses ${t}`);
+    G.talked = {}; out = []; run(`ask ploy about ${t}`);
+    assert.doesNotMatch(text(), /Cage is for money and me|don't know/i, `…and answers on ${t}`);
+  }
+});
+
+test("a bar with nobody in it still has somebody pouring", () => {
+  const staffless = Object.keys(ROOMS).filter(r => {
+    if (!ROOMS[r].barType) return false;
+    G.room = r;
+    return !_npcsHere().some(id => NPC_ROLES[id] || NPCS[id].manager);
+  });
+  assert.ok(staffless.length, "the case exists (the Offside, Take Care Me)");
+  for (const r of staffless) {
+    G.room = r;
+    for (const who of ["barman", "staff", "hostess"]) {
+      out = []; run(`talk to ${who}`);
+      assert.doesNotMatch(text(), /No one here answers to that|Nobody by that name here/,
+        `${_barName(r)}: it sells beer, so somebody is behind the taps`);
+    }
+  }
+});

@@ -6,6 +6,9 @@
 
 // ── Constants ──────────────────────────────────────────────────────────────
 
+// Below this in pocket and the drunk bargirl outside the Doghouse presses her own
+// ฿20 on you. Above it she reads you correctly and asks for one back instead.
+const BARGIRL_PITY = 300;
 const BUS_FARE   = 15;   // baht bus, any hop on a line
 // Taking a songthaew OFF its route: you are buying the whole truck, not a bench,
 // and the driver names the number. Well above a motosai on purpose — the point
@@ -55,6 +58,13 @@ const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "intere
 const FULL_AT = 12;      // below this you are simply not hungry, and no amount of
                          // money makes another plate mean anything
 const MOT_DINNER = 40;   // khao man gai off a cart — the price Mot names himself
+// The boots Mot names at dinner, and what he has saved toward them. He states
+// the exact numbers the way you'd tell somebody the time, and until round 47
+// there was no verb that could do anything about it (Maureen: GIVE and TIP both
+// refused, TIP with a line about services already rendered, said to the boy who
+// had just walked her to a cart and given her the good stool).
+const MOT_BOOTS = 1100;
+const MOT_BOOTS_SAVED = 640;
 const ROSE_PRICE = 100;  // the flower-seller's daughter's single rose (a gift for whoever you're with)
 const CORD_PRICE = 20;   // black nylon off a 7-Eleven counter; what an amulet hangs on
 const TAXI_DEBT = 12000; // what Nira is owed in the cousin's name — see QUESTS.taxi_debt
@@ -10445,6 +10455,48 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "snaps between her fingers. \"Candy know my order. Ask HER about it.\"",
         short: "\"Six hours in this cage and nobody brings me dinner. Candy knows my order — ask her.\"" },
       { topic: "oy", text: "\"Mamasan is the best boss on this soi and the scariest, and those are the same fact.\" The counting never stops." },
+      // TWO PEOPLE POINT AT HER AND SHE WAS A WALL (Maureen, round 47). Lek:
+      // "the cashier sees everything." DJ Beer: "business in this bar goes
+      // through the cage first. Talk to Ploy." She had five nodes, four of them
+      // Act One machinery, and TOPICS PLOY came back empty. She is the till of
+      // the biggest go-go in town and she is the one who watches the room.
+      { topic: "money|cage|till|book|business",
+        text: "\"Everything.\" She says it without looking up, and it takes you a second to " +
+          "realise it is an answer. \"Every drink, every barfine, every girl who goes out " +
+          "and what time she comes back. It all goes through this window in a night and " +
+          "it is all in this book by morning.\" The counting does not slow. \"So yes, " +
+          "sweetheart. I know who you drank with.\"",
+        short: "\"Everything goes through this window. It is all in the book by morning.\"" },
+      { topic: "office|back office|mamasan office",
+        text: "\"That door?\" She does not look at it, which is its own kind of looking. " +
+          "\"Mamasan's. The money that does not fit in my drawer goes in there, and " +
+          "so does anything else that does not fit anywhere.\" A note snaps. \"I have " +
+          "worked here four years and I have been inside it twice.\"",
+        short: "\"Mamasan's door. Four years here, been in it twice.\"" },
+      { topic: "security|bouncer|guard",
+        text: "\"They are not for you, they are for the girls.\" A brisk correction, and " +
+          "she means it. \"A man gets grabby, they are there before I finish the number " +
+          "I am on. Rest of the night they stand and sweat.\" A flicker of a smile. " +
+          "\"And they sing. When Mamasan's song comes on, they all sing.\"",
+        short: "\"They are for the girls, not for you. And they sing.\"" },
+      { topic: "ring|boyfriend|fiance|engaged",
+        text: "\"Him.\" She touches the chain without meaning to and puts her hand back on " +
+          "the money. \"He does not love that I work here. I tell him: I am in a cage, " +
+          "behind glass, with the money — the safest woman in Pattaya.\" A beat, dry. " +
+          "\"He says that is not the part he minds.\"",
+        short: "\"He does not love it. I tell him I am the safest woman in Pattaya.\"" },
+      { topic: "rainbow|bar|here|this place",
+        text: "\"Biggest room on the soi and the best-run, and those are the same fact " +
+          "too.\" She nods at the floor without stopping. \"Sixty girls, four bar staff, " +
+          "two on the door, one DJ who thinks he is on the radio. Nobody is late twice.\"",
+        short: "\"Biggest room on the soi, and nobody is late twice.\"" },
+      { topic: "girls",
+        text: "\"I pay them.\" She lets that sit, because it is the whole relationship. " +
+          "\"Which means I know which ones send it all home on the first, which ones " +
+          "have a farang paying the room, and which ones are three months behind on " +
+          "something they have not told anybody about.\" The counting never stops. " +
+          "\"I do not talk about that with customers. I am telling you that I could.\"",
+        short: "\"I pay them, so I know all of it. I am telling you that I could talk.\"" },
     ],
   },
 
@@ -10551,6 +10603,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Oy has your wallet? HA!\" She slaps the bar. \"I danced next to that woman for six years — she was 71, I was 72, Crystal Palace, best legs on the street, both of us.\" She leans in, delighted. \"Listen, jing jing: her number is everything to her. Seventy-one. And she put lucky nine on the end of every code she ever made since the farm. You didn't hear it from Daeng.\"",
         sets: ["pinPart71", "pinPart9"],
         short: "\"Oy's number is seventy-one, with a lucky nine on the end of every code. You didn't hear it from Daeng.\"" },
+      // The bolt is the most distinctive thing about her bar and she is its owner;
+      // the filler staff at the other lock-in bar got a pooled answer and she had
+      // nothing (Maureen, round 47).
+      { topic: "lockin",
+        text: "\"The door.\" She grins with her whole face, which is the answer before the " +
+          "words are. \"Some nights, yes. Not for a man who buys one beer and looks at " +
+          "his watch \u2014 for a room that has been GOOD. Then {{Daeng}} put the bolt on, and " +
+          "what happens after that is nobody's business on Sukhumvit.\" She wipes the bar " +
+          "down as though closing the subject, and does not close it. \"You be good to " +
+          "the room, na.\"",
+        short: "\"Some nights the bolt goes on. Be good to the room and find out.\"" },
       { th: "เข้ามาสิ", rom: "khao maa si",
         text: "\"Come in, come in! Farang on Khao Talo — you lost, or you smart?\" She's already opening a Chang. \"Sit. Out here the beer is cold and the stories are old. Best combination.\"",
         short: "\"Sit, farang. Cold beer, old stories. Best combination.\"" },
@@ -12563,6 +12626,19 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "wallet|my wallet|oy|madam oy|receipt|steal|stole|thief",
         text: "The shape behind the kegs does not come out for that question. Fast feet, the other way.",
         short: "Fast feet, the other way." },
+      // He names the price and his own savings over dinner; before that the
+      // subject does not exist, and asking about it out of nowhere would be a
+      // stranger knowing something about his shoes.
+      { topic: "boots|shoes|football|studs", req: ["motFed"], notFlags: ["motBooted"],
+        text: "\u201cThe studs one,\u201d he says, as though you had asked which of two obvious things. " +
+          "\u201cEleven hundred. I have \u0e3f640.\u201d He does not make it a request, and he does not " +
+          "look away either. \u201cSaturday I go look at them. Just look, is free.\u201d",
+        short: "\u201cStill \u0e3f640,\u201d {{Mot}} says, and shrugs like a man reporting the weather." },
+      { topic: "boots|shoes|football|studs", req: ["motBooted"],
+        text: "He puts a foot out on the kerb so you can admire it, which you are clearly expected to do " +
+          "properly. \u201cSunday, the pitch behind the school. They let me play the whole game.\u201d A pause. " +
+          "\u201cI was rubbish. But I was rubbish in the shoes.\u201d",
+        short: "He sticks the foot out again. The joke has not worn off for him at all." },
       { topic: "cart|food|khao man gai|chicken rice|eat|noodles|hungry",
         text: "\"Khao man gai, forty baht — the cart at the Walking Street mouth, the one with the yellow " +
           "light, not the green. Say Mot send you and she give you the good sauce.\" He is, briefly, " +
@@ -16029,6 +16105,28 @@ const NPC_ROLES = {
 // populated, each girl is stable (same id → same backstory), and the store stays
 // tiny. The named, story-bearing hostesses stay in NPCS above; these are added
 // to it below. Keep authored, plot-relevant dialogue OUT of here.
+// What the women at a lock-in bar say about the bolt. Only two bars carry
+// `lockIn`, and it is the single most distinctive thing about either of them —
+// the mamasan decides, the cashier does the arithmetic on it, the girls get the
+// night. Never a promise: whether the door goes across is the bar's call and
+// depends on what the room has spent, so nobody here says "come back and it will".
+const _M_LOCKIN = [
+  '"Some nights the door goes across." She says it as a fact about the weather. "Not for everybody, and not because you ask. If the room has been good to me, I am good to the room. That is the whole rule and I am not writing it down."',
+  '"You have heard about the door." A small, unbothered look. "Then you know it is not a party I sell. It is a party that HAPPENS, when the night deserves it, and I am the one who decides the night deserved it."',
+  '"Officially we shut at twelve, na." A pause exactly long enough. "Officially."',
+  '"The bolt is old and the wood is soft and it has never once been about keeping anybody out." She almost smiles. "It is about the rest of the street not being in."',
+];
+const _C_LOCKIN = [
+  '"If the door goes across, the till stays open and I stay with it." Entirely matter-of-fact. "So no, I am not one of the people having a lovely time. Somebody has to count."',
+  '"The late ones cost more to run and make more than the whole evening before them." She taps the book. "That is the arithmetic. Whether it happens is not my department, it is hers."',
+  '"You want to know if we do the door." She looks up for the first time. "Ask the mamasan. And do not ask her in a way that sounds like asking."',
+];
+const _H_LOCKIN = [
+  '"Ooh, you hear about the door!" Delighted, immediately conspiratorial. "Sometime mama lock, then is only us. Music loud, nobody go home, everybody dance bad." A beat. "Not every night. Mama decide, not me."',
+  '"When mama put the bolt, that is my favourite." She says it simply. "No new customer, no problem customer. Only the people already good."',
+  '"Late one? Sometime." She glances at the door and back. "Is the bar say yes, not me. But if is happen — you already inside. Is nice, na."',
+];
+
 const _H_FROM = ["Udon Thani", "Khon Kaen", "Roi Et", "Sisaket", "Buriram", "Ubon",
   "Surin", "{{Nong Khai}}", "Kalasin", "Yasothon", "Mukdahan", "Nakhon Phanom",
   "Chaiyaphum", "Loei", "Maha Sarakham", "Sakon Nakhon", "Amnat Charoen", "{{Nong Bua Lamphu}}"];
@@ -16314,6 +16412,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
           `"After two, everybody go eat. Khao tom, som tam, sit on the floor." She pats the stool. "You want see? Be nice to somebody who like you. Then she drive."`,
         ], 53),
         short: `"After two? Thai place, on the bike — if somebody like you."` },
+      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_H_LOCKIN, 59) }] : []),
       { topic: "quota", bond: 1,
         text: `"Quota, na. Every girl have number for the month — drink, and the other thing. Under ` +
           `the number, Mamasan not happy; over the number, small bonus." She counts something on ` +
@@ -16653,6 +16752,7 @@ function _buildMama(name, th, room, id = name.toLowerCase()) {
     dialogue: [
       { th: "\u0e40\u0e0a\u0e34\u0e0d\u0e04\u0e48\u0e30", rom: "chern kha", text: idx(_M_GREET, 23), short: idx(_M_GREET_SHORT, 23) },
       { topic: "girls", text: idx(_M_GIRLS, 31) },
+      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_M_LOCKIN, 47) }] : []),
       { topic: "family", text: _M_FAMILY[_mamaFamilyIdx(id)] },
       { topic: "plan", text: idx(_M_PLAN, 41) },
       // Candy standing six feet away while her own colleague says "ask Candy on
@@ -16677,6 +16777,7 @@ function _buildCashier(name, th, room, id = name.toLowerCase()) {
       // one answer, so one topic with two keys — TOPICS listed "money · tab" and
       // gave the same paragraph twice (Maureen, round 47).
       { topic: "money|tab|bill|price", text: idx(_C_MONEY, 31) },
+      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_C_LOCKIN, 47) }] : []),
       { topic: "family", text: idx(_C_FAMILY, 37).replace(/\{from\}/g, from) },
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
         text: '"Not through my till." She nods along the bar without looking up. "But Candy is in tonight \u2014 ask her, not me. She is the one who hears."' },
