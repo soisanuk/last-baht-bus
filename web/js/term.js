@@ -28,7 +28,15 @@ const _term = (() => {
   // that name was shedding a tap from every "Stinky Pinky" in prose (skimmer
   // playtest, 2026-08-17). Like the others here, she now decorates only where
   // she stands (Cheeky Monkey), never in the venue name.
-  const _WORD_NAME_NPCS = new Set(["Best", "Proud", "Near", "Nice", "Hong", "Som", "Pinky"]);
+  // A character whose name is also ordinary game vocabulary decorates ONLY in her own
+  // room — elsewhere the word is prose. Round-46 review (2026-09-07) found nine more by
+  // reading the render column: "Mai pen rai" tapped as Mai, "Sai Krok" (the dog, ~95
+  // records) as Sai, "Air-con" as Air, "Nong Khai" as Nong, "the bank runs" as Bank,
+  // "Ice comes from my ice man" as Ice, "Arm out." as Arm, "Soi Diamond" as Diamond,
+  // and the narrator's one-word "Mild." as Mild. Diamond stays OUT of the set — she is a
+  // quest giver whose name must chip anywhere; "Soi Diamond" is wrapped at its two sites instead.
+  const _WORD_NAME_NPCS = new Set(["Best", "Proud", "Near", "Nice", "Hong", "Som", "Pinky",
+    "Mai", "Sai", "Air", "Nong", "Bank", "Ice", "Arm", "Mild"]);
   function _kwIndex() {
     const kind = new Map(); // display name → npc | patron | bar | item
     try {

@@ -148,7 +148,7 @@ test("the motel is indoors: the downpour is on the roof, and leaving it speaks f
   G.room = "short_time_motel"; G.rain = 4; out = []; _describeRoom(true);
   assert.match(text(), /hammers the roof/); assert.doesNotMatch(text(), /awning overhead/);
   out = []; run("out");
-  assert.match(text(), /From the doorway/); assert.doesNotMatch(text(), /awning above you/);
+  assert.match(text(), /rain is on the roof|doorway is a wall of water/); assert.doesNotMatch(text(), /awning above you/);
 });
 
 test("the dolphins are the roundabout you are standing on", () => {

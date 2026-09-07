@@ -972,7 +972,7 @@ const ROOMS = {
       "shipping agent three years out of date; a framed company registration in Thai with a " +
       "gold seal. No stock, no samples, no brochures — a trading company that trades nothing " +
       "you can point at. A brass plate by the stairs says the name in two languages. The aircon " +
-      "is on. That is the whole of the business you can see.",
+      "is on. That is most of the business you can see.",
     revisit: [
       "The office, still mostly not there: the kettle, the calendar, the seal on the wall.",
       "Two desks and a filing cabinet. Somebody has watered the plant. Nothing else has happened.",
@@ -1833,8 +1833,7 @@ const ROOMS = {
       "sight. Two bars hold the corners of the junction and stare each other down: THE STINKY " +
       "PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one " +
       "side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either " +
-      "corner you can still catch the sun going down over the bay. From about six, the police " +
-      "run a checkpoint on Beach Road just south of the junction, waving over helmetless farang " +
+      "corner you can still catch the sun going down over the bay. For the first hour of the evening, six to seven, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang " +
       "for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars " +
       "first came in off the road ducking exactly that. Blue songthaews — the baht buses — " +
       "rattle past on the Beach Road run, headlights strung north toward the Dolphin and south " +
@@ -2095,8 +2094,7 @@ const ROOMS = {
     busStop: "secondrd",
     name: "Second Road (Soi 7)",
     region: "Second Road",
-    desc: "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is fifteen minutes " +
-      "down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting " +
+    desc: "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is a few minutes down it, or one with a piwin. Central Pattaya Road crosses just ahead, cutting " +
       "the whole town into north and south. Soi 8 comes out a block south — this " +
       "end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink " +
       "from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE " +
@@ -2719,7 +2717,7 @@ const ROOMS = {
     motosai: true,
     name: "Second Road (Soi Diamond)",
     region: "Second Road",
-    desc: "Second Road where Soi Diamond comes in — the same Soi Diamond that opens onto " +
+    desc: "Second Road where {{Soi Diamond}} comes in — the same {{Soi Diamond}} that opens onto " +
       "Walking Street at its far end, which makes this the back door to the strip and " +
       "the way the people who work there actually arrive. Girls come up it in ones and " +
       "twos with helmets under their arms, an hour before anyone is meant to see them. " +
@@ -2736,7 +2734,7 @@ const ROOMS = {
     busStop: "secondrd", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Second Road (Pratumnak end)",
     region: "Second Road",
-    desc: "The long haul of Second Road between Soi Diamond and the hill, and the expats " +
+    desc: "The long haul of Second Road between {{Soi Diamond}} and the hill, and the expats " +
       "have a name for this stretch they don't say kindly. What is actually wrong with " +
       "it is the pavement: there isn't one worth the word — broken kerb, parked bikes " +
       "nose-in, a shop's worth of stock set out across it — so everybody walks in the " +
@@ -4963,7 +4961,7 @@ const ITEMS = {
       "a notes column that reads like a man who loved his customers. Dirk from Rotterdam tips " +
       "well when he's losing. Sven comes in February and August. Klaus sends money in the wet " +
       "season. White Dish took the bar and kept the book, and never used it, and never gave it " +
-      "back. (GIVE it to Eddy — or, at your own bar, READ it into your own phone.)",
+      "back. (GIVE BOOK TO EDDY — or, at your own bar, READ BOOK.)",
   },
   data_stick: {
     name: "Rabbit's stick", aliases: ["stick", "usb", "usb stick", "the stick", "rabbit's stick", "thumb drive"],
@@ -4993,8 +4991,7 @@ const ITEMS = {
     portable: true, location: null, // worked free of the Shamrock's shutter hasp
     keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — " +
-      "GOOD BOY. The pub is shuttered and the Irishman the soi called Paddy is long gone "
-      + "home, but somebody once " +
+      "GOOD BOY. The pub is shuttered and the Irishman the soi called Sean is long gone home, but somebody once " +
       "paid to have GOOD BOY engraved in brass, and they were right.",
   },
   fake_rolex: {
@@ -5505,7 +5502,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"You looked at the board. Everybody looks; nobody asks.\" (ASK WAEN ABOUT THAI)" },
       { topic: "owner|own|yours|your bar|lease|boss|mamasan",
         text: "\"Mine.\" She says it without any particular weight. \"Eight stools, one licence, and " +
-          "a landlord who has put the rent up twice in eleven years, which for this soi is a love " +
+          "a landlord who has put the rent up twice in four years, which for this soi is a love " +
           "letter.\" A glance along the bar. \"No mamasan. No cashier. Me, and whoever is working, " +
           "and I do the till after because I am the only one who can be bothered to do it properly.\"",
         short: "\"Mine. Eight stools, one licence, no mamasan and no cashier — me, and whoever's working.\"" },
@@ -5866,8 +5863,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // age and tells you hers; the plan names a shop and a cousin; the other
       // ledger names a salary and a bonus. All of them missed.
       { topic: "pool",
-        text: "\"Pool?\" The grin is instant and unprofessional. \"Two year I play every " +
-          "night, tilac. First month I lose every game — the old men here, they let me " +
+        text: "\"Pool?\" The grin is instant and unprofessional. \"Seven year I play every night, tilac. First month I lose every game — the old men here, they let me " +
           "lose, they think is cute. Second month I stop being cute.\" She taps the cue " +
           "on the floor. \"Now nobody let me anything. Mamasan give me the table because " +
           "the table is where I make money for the bar — men lose, men buy drink, men " +
@@ -8799,14 +8795,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "katoey|ladyboy|ladyboys|trans|cabaret|drag|drag show",
         text: "\u201cAh. You remember what I said in the car.\u201d He is pleased, and does not " +
           "make a thing of it. \u201cOkay. Three places, three different nights. Katoey\u2019s R Us, " +
-          "on Soi Diamond off Walking Street \u2014 that is a BAR, you sit, you drink, you talk, " +
+          "on {{Soi Diamond}} off Walking Street \u2014 that is a BAR, you sit, you drink, you talk, " +
           "same as anywhere. The Peacock, out in Supertown on Thappraya, is the SHOW \u2014 " +
           "cabaret, you tip the performers, you laugh, everybody laughs. And Hyper on " +
           "Thappraya, big go-go, Diamond runs the floor there and she is the smartest " +
           "person in that building.\u201d He shrugs. \u201cThe ladies are ladies. Nobody in this " +
           "town will make it strange for you. Only farang make it strange, and only " +
           "the ones who are frightened of something.\u201d",
-        short: "\u201cKatoey\u2019s R Us on Soi Diamond to sit and drink. The Peacock in Supertown " +
+        short: "\u201cKatoey\u2019s R Us on {{Soi Diamond}} to sit and drink. The Peacock in Supertown " +
           "for the show. Hyper on Thappraya for the go-go. That is the map.\u201d" },
       { topic: "host bar|hosts|boys|host",
         text: "\u201cThe Adonis, Supertown, off Thappraya.\u201d He says it exactly as flatly as he " +
@@ -10929,7 +10925,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "job|heist|work|the job|rabbit job|your job|box job", chip: false,
         when: (st, G) => G.quests.rabbit_job === "offered",
         text: "“Yes or no first, boss.” He doesn't move. “I don't tell it to a man who hasn't said " +
-          "yes to hearing it. (ACCEPT RABBIT_JOB.)”" },
+          "yes to hearing it. (ACCEPT RABBIT JOB.)”" },
       { topic: "box|black box|the box|device", req: ["rabbitPath"],
         text: "“The box.” He holds up three fingers and folds them down one at a time. “One: " +
           "it wants the group's Wi-Fi, so it goes in THEIR room, not the bar. Two: it works " +
@@ -11814,8 +11810,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // carry you — I told you that").
       { when: (st, G) => _flag("barLost"),
         text: "He is on a stool, on the wrong side of a bar, and he has a pint rather than a Singha. " +
-          "\u201cBud.\u201d He does not make you say anything. \u201cTwenty years I stood that rail and I " +
-          "never once had my name on it, so I'll tell you the thing nobody told me: it was never the " +
+          "\u201cBud.\u201d He does not make you say anything. \u201cAll those years I stood a rail and never once had my name on it, so I'll tell you the thing nobody told me: it was never the " +
           "money that got you. It was the month.\u201d He drinks. \u201cThe old man'd have carried you " +
           "forever. The LANDLORD only ever wanted his date, every thirty days, and there's no relationship in a " +
           "date.\u201d A shrug that costs him something. \u201cI'm all right. Somebody'll want a man who " +
@@ -12287,8 +12282,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "in his pocket now, face-in. He lifts two fingers off the bar in acknowledgment " +
         "— that's all there is tonight.",
         short: "Phil lifts two fingers off the bar. That's all there is tonight." },
-      { text: "\"Phil.\" He shakes without getting off the stool. \"Twelve years " +
-        "coming here — twice a year, same fortnight each time, no exceptions. I've got a girl up " +
+      { text: "\"Phil.\" He shakes without getting off the stool. \"Twelve years coming here — twice a year, the same two fortnights each time, no exceptions. I've got a girl up " +
         "in Surin. Nit. Good girl. Used to work the bars, I got her sorted out of all " +
         "that — she's got a little fabric shop now. I send the rent, the bills, bit " +
         "extra every month.\" He says the amount the way men do when a number has " +
@@ -12727,7 +12721,7 @@ const ENCOUNTERS = {
         "\u201cNow you know, so now you can say no like a gentleman, or you can say yes like " +
         "one. No bar here. No barfine. No mama take my money. Just us and the wall.\u201d",
       "The wall has three women on it and the middle one is already coming over, arms folded " +
-        "against nothing, because it is twenty-nine degrees at midnight. \u201cHansum. Wait \u2014 \u201d " +
+        "against nothing, because the night is warmer than her arms are admitting. \u201cHansum. Wait \u2014 \u201d " +
         "a raised finger, businesslike, before you can open your mouth. \u201cI say it first, I " +
         "always say it first: ladyboy. Me, Kate on the end, Baiyok making all that noise. If " +
         "that is a no, is a no, is okay, everybody still friends. I am Aor.\u201d She waits, " +
@@ -12751,7 +12745,7 @@ const ENCOUNTERS = {
   jptourist: { solo: true,
     rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
     interactive: true, nightly: true,
-    intro: "At the rail outside a go-go's open front a sharply-dressed Japanese woman is watching the dancers through the door " +
+    intro: "At the rail outside a go-go a sharply-dressed Japanese woman is watching the door swing on the dark inside " +
       "with the frank, appraising interest of someone shopping rather than spectating. " +
       "A cocktail, an amused mouth. She clocks you clocking her — and clocking what " +
       "she's looking at — and the smile says: game recognises game. “Konbanwa.”",
@@ -12840,7 +12834,7 @@ const ENCOUNTERS = {
         "extraordinary.",
       "The phone lights the ceiling. An app girl you'd written off three days ago — six " +
         "photos, two words, then silence — is suddenly all words. “Baby you sleep?? I free " +
-        "now. Come you " + BOOK_PRICE + ", no bar. Only you, na.” Small hours, and the photos have not " +
+        "now. Come you " + BOOK_PRICE + ", no bar. Only you, na.” It is late enough, and the photos have not " +
         "got any less extraordinary.",
       "A buzz, a name you'd half forgotten from the app, and a message that reads like it " +
         "was typed in a taxi: “finish work now!! i come hotel? 2500 all night no bar no " +
@@ -13098,9 +13092,7 @@ const QUESTS = {
     giver: "bert",
     trust: 2, // he won't ask a near-stranger to weigh in on selling his bar — earn a little rapport first
     desc: "White Dish want to buy Bert's bar out from under its dying owner. Get him the " +
-      "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE " +
-      "at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon, Soi 6, " +
-      "ABOUT THE OFFER) — then tell Bert (ASK BERT ABOUT THE OFFER).",
+      "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE ABOUT WHITE DISH, at the Kitten Corner), and the pitch (ASK GAVIN ABOUT THE OFFER), at the Golden Dragon on Soi 6 — then tell Bert (ASK BERT ABOUT THE OFFER).",
     deps: [],
     at: "bert",
     doneFlag: "wdgResolved",
@@ -14339,7 +14331,7 @@ const _REGULARS = {
         short: "\"Cashier off that exact stool. Eleven months before I asked her anything that wasn't the price of a Chang.\"" },
       { topic: "gary", text: "\"Lake Gary.\" Ron says the name with the flatness reserved " +
         "for people you'd take a bullet for. \"Twenty-odd years, most of them out at " +
-        "Mabprachan with that dog. Married his too, years before I did.\" He drinks. " +
+        "Mabprachan with that dog. Married the girl who kept his till, too, years before I did.\" He drinks. " +
         "\"Won't talk unless you sit down properly, and won't stop if you do. Ask him " +
         "about the lake and settle in — that's the closest thing to a sermon you'll get " +
         "on this side of the highway.\"",
@@ -14642,10 +14634,9 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "be allowed to.\"",
         short: "\"A rollup. Buys the tired bars, matching shirts, calls it a group. The question is who THEY pay.\"" },
       { topic: "ryan powers", text: "\"Powers.\" A pause you could set type in. \"I've met four men like " +
-        "him and written up three. Handsome, patient, always the first round. The fourth I didn't write " +
-        "up, because he sued.\" Mort looks at the window. \"You'll form your own view. Bert's is " +
+        "him and written up three. Handsome, patient, always the first round. The fourth I did write up, and he sued.\" Mort looks at the window. \"You'll form your own view. Bert's is " +
         "worth hearing first.\"",
-        short: "\"Met four like him, wrote up three. The fourth sued. Ask Bert.\"" },
+        short: "\"Met four like him, wrote up three. The fourth one sued. Ask Bert.\"" },
       { topic: "nineties", text: "\"Everyone tells me it was better in '98. Everyone's " +
         "wrong, and I was HERE, filing copy, so I would know. It wasn't better — the beer " +
         "was cheaper and so were they, and so, crucially, were you.\" He almost smiles. " +
@@ -15224,7 +15215,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"You again.\" The headphones come half-down. Provisional." },
       { text: "\"Angela.\" The handshake is brief and firm; the eye contact is " +
         "rationed. \"Yes, that's a Discman. No, it's not ironic.\" She turns the " +
-        "corner of a smile at the window, at Soi 6 across the road. " +
+        "corner of a smile at the window, at the soi going about its evening. " +
         "\"I sit on this side of the glass. Best nature documentary in town — " +
         "you get the whole ecosystem without getting wet.\" She slides the " +
         "headphones down to her neck, which for her is a door opening.",

@@ -360,9 +360,9 @@ const _WATER_LINES = [
 ];
 const _NOODLE_LINES = [
   "A pot of Mama noodles off the shelf, hot water from the urn by the till, three minutes standing at the counter with the lid held down by a wooden chopstick. It is exactly as good as it needs to be.",
-  "Tom yum flavour, because the others are for people with a plan. You eat it standing up under the aircon vent, which is the correct way, and the girl behind the till does not comment.",
+  "Chicken flavour, because the others are for people with a plan. You eat it standing up under the aircon vent, which is the correct way, and the girl behind the till does not comment.",
   "The lid, the water, the wait, the fork from the box by the door. Fifteen baht and the ancient dignity of the man who knows this is the right decision at this hour.",
-  "You get the pork one. It is salty enough to be medicinal and hot enough to hurt, and it puts a floor under the evening that was not there a minute ago.",
+  "You get the chicken one. It is salty enough to be medicinal and hot enough to hurt, and it puts a floor under the evening that was not there a minute ago.",
 ];
 const _TOASTIE_LINES = [
   "The iconic 7-Eleven cheese toastie, pressed twice while you wait, eaten molten on the kerb " +
@@ -415,7 +415,7 @@ const _CROSS_CLEAN = [
 ];
 const _CROSS_NEAR = [
   "A pickup you never saw comes out of the dark lane with no lights on it at all. The wing mirror passes your elbow close enough to feel the paint. He does not slow down. He may not have seen you either.",
-  "Halfway across, the gap you read closes — a bike overtaking a truck on the inside, dark, fast, drunk or just Thai. You stop dead on the line between lanes and it goes past both sides of you. Then you finish crossing, badly.",
+  "Halfway across, the gap you read closes — a bike overtaking a truck on the inside, dark, fast, and driven by somebody who has done this road ten thousand times. You stop dead on the line between lanes and it goes past both sides of you. Then you finish crossing, badly.",
   "The horn comes after the car, not before. You are on the far kerb by then and only realise how close it was when your hands won't hold the lighter still.",
 ];
 const _CROSS_CLIP = [
@@ -572,8 +572,8 @@ function _doGo(dirWord) {
             "glass sideways. The room, the kettle, and the bed all make the " +
             "same argument, and the argument wins."
           : _room().indoors   // a windowless room: no awning, no mamasan (Owen, round 46)
-          ? "From the doorway the street is a river with a motorbike fording it, and nobody in " +
-            "here is stepping into that until it eases. It can't last much longer. Probably."
+          ? "The rain is on the roof and the doorway is a wall of water. Nobody in here is going " +
+            "anywhere until it eases, and neither are you."
           : _inBar()
           ? "You get one step toward the door before the doorway itself talks " +
             "you out of it — a solid moving wall of water where the street used " +
@@ -922,7 +922,7 @@ function _travelDests() {
 // the way to bars" (Owen, round 46, every door with a sign on it). Pools, one per kind.
 const _NOT_A_DOOR = [
   [/\b(mall|central|festival|terminal ?21|terminal|department store|escalators?)\b/, [
-    "The mall is real and it is not this game's. Escalators, arctic air, families who have no idea what the town does after dinner — nothing in there is for sale on the soi's terms, and the soi is where you are.",
+    "The mall is real and it is not what you came out for. Escalators, arctic air, families who have no idea what the town does after dinner — nothing in there is for sale on the soi's terms, and the soi is where you are.",
     "Glass doors, a doorman, a wai. You could go in. There is nothing in there that this night runs on — the food court sells the same toastie the 7-Eleven does, colder.",
   ]],
   [/\b(temple|wat|monks?)\b/, [
@@ -1707,7 +1707,7 @@ const _VENUE_LOOK = {
     "A rail, a fridge, a fan, and enough light spilling onto the pavement to read by. Nothing about the outside is trying to be anything.",
   ],
   gents: [
-    "A wall, a discreet sign, and a door with no glass in it. It gives away nothing at all from the pavement, and the cars parked outside are better than the ones on the street.",
+    "A wall, no sign at all, and a door with no glass in it. It gives away nothing at all from the pavement, and the cars parked outside are better than the ones on the street.",
   ],
   pub: [
     "Frosted glass, a hanging board, and a menu in a case by the door with the fixtures taped up beside it. Somebody's roast is in there somewhere.",
@@ -4022,7 +4022,7 @@ function _readBook() {
   _say("You sit at your own rail with Rabbit's stick and type two hundred names into your " +
     "own phone. Dirk, Rotterdam, Heineken, March. Sven, February and August. Klaus, sends " +
     "money in the wet. Your girls get a list: who's due, what he drinks, whose stool it is. " +
-    "By the time you've finished, the European trade that kept the White Rabbit alive has " +
+    "By the time you've finished, the European trade that kept his old Soi 6 bar alive has " +
     "a second home, and it isn't his.", "win");
   _say("(The book runs at your bar now — BOOKS will show it. Rabbit doesn't know. Yet.)", "dim");
 }
@@ -4289,7 +4289,7 @@ function _convoResolve(lower) {
       const canned = (ASK_REPLIES[l.key] || []).map(r => typeof r === "string" ? r : r.text);
       if (canned.some(t => norm(t) === norm(lower))) {
         delete G.convoLapsed[lid];
-        _say(`(You answer ${NPCS[lid] ? NPCS[lid].name : "the earlier"} question, a beat late.)`, "dim");
+        _say(`(You answer ${NPCS[lid] ? NPCS[lid].name + "'s" : "the earlier"} question, a beat late.)`, "dim");
         G.convoQ = { id: lid, key: l.key, q: l.q };
         return _convoAnswer(lower);
       }
@@ -4530,7 +4530,7 @@ const _THAI_NO_DEFLECT = [
 const _THAI_POINTER = [
   "\"Teach you?\" {n} laughs, not unkindly. \"I teach you 'same same' and 'no have' and then I am finish. The one who really teach is Kruu Waen, Soi Diana — the bar with the letter fall off. She take money for it, so she do it properly.\"",
   "\"I speak Thai, I not TEACH Thai.\" {n} shakes her head. \"Different job, na. Waen at Cloze — Soi Diana. She have the board.\"",
-  "\"Ooh, my English teacher!\" {n} finds this very funny, and then is helpful about it. \"Cloze bar, Soi Diana. Ask for Kruu Waen. Everybody know her, nobody go, because is homework.\"",
+  "\"Ooh, my Thai teacher!\" {n} finds this very funny, and then is helpful about it. \"Cloze bar, Soi Diana. Ask for Kruu Waen. Everybody know her, nobody go, because is homework.\"",
 ];
 const _THAI_SWITCH = [
   "Somebody catches about half of it, decides that English will be quicker for both of you, and answers you in English before you have finished. Nobody means anything by it; it is simply the faster road, and you are not yet good enough to make it the slower one.",
@@ -7305,7 +7305,7 @@ const _NURSE_GOGO = [
 const _NURSE_BAR = [
   "An hour on one drink and {n} is beside you with the question every bar eventually asks. \"Same again?\" The seat is the rent; the drink is how it's paid.",
   "{n} clears the empty with a little more ceremony than an empty needs. \"Another? Or water? Same price, tilac.\" The stool has been free for an hour. It is no longer free.",
-  "\"You okay, boss? Need something?\" {n}, warmly, and the warmth has a bill attached. A man who sits an hour without buying is either heartbroken or Dutch, and the bar treats both the same.",
+  "\"You okay, boss? Need something?\" {n}, warmly, and the warmth has a bill attached. A man who sits an hour without buying is either heartbroken or very far from home, and the bar treats both the same.",
   "The cashier's glance reaches you down the rail before {n} does. \"Drink? Beer, water, Coke — up to you.\" The one thing not on the list is nothing.",
 ];
 function _sayNursed() {
@@ -10910,7 +10910,7 @@ function _doRep() {
 const _MOT_DINNER_LINES = [
   "The cart is four minutes away and down a soi you would have walked past forever: a griddle, a rice cooker, a woman who has been poaching chickens since before Walking Street had a name. Mot orders for both of you without asking, which is its own kind of manners.",
   "He takes you at a trot to a corner where a hand-painted chicken is peeling off a steel shutter, and orders in the flat quick Thai of somebody who eats here most days. Two plates. The rice is yellow with fat and the ginger sauce arrives in a jar with no lid.",
-  "The cart has no sign and three stools. Mot puts you on the good one, which you only notice later, and holds up two fingers to a woman who was already reaching for the plates.",
+  "The cart has three stools and a yellow light. Mot puts you on the good one, which you only notice later, and holds up two fingers to a woman who was already reaching for the plates.",
 ];
 const _MOT_DINNER_TALK = [
   "He eats like somebody who has learned not to leave any, and talks with his mouth full about the shoes he is saving for — actual football boots, with the studs, not the flat ones. Eleven hundred baht. He has six hundred and forty. He tells you the exact number without embarrassment, the way you'd tell somebody the time.",

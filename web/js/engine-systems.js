@@ -977,7 +977,7 @@ const _PARTY_SOFT_BYE = [
 ];
 const _PARTY_HOME_NUDGE = [
   "({who} looks at the room, then at you, and starts unhooking an earring with an air of complete arrival. SLEEP when you're ready \u2014 or the night is still out there if you've got legs left.)",
-  "({who} kicks her shoes into the corner like she lives here and falls backward onto the bed, arms out. \u201cYour hotel is BORING, tilac. But the bed is good.\u201d SLEEP to call it \u2014 or drag her out for one more.)",
+  "({who} kicks her shoes into the corner like she lives here and falls backward onto the bed, arms out. \u201cYour hotel is boring, tilac. But the bed is good.\u201d SLEEP to call it \u2014 or drag her out for one more.)",
 ];
 
 // each NEW venue with company on your arm pays the night — company สนุก is
@@ -1143,7 +1143,7 @@ function _motelRoom() {
 const _PARTY_GOODBYE = [
   "{who} reads it before you say it, and is fine — a kiss on the cheek, a hand on your chest, ฿{c} for the taxi accepted without ceremony. \"Tomorrow, na? You know where.\" The bike pulls off and the night is yours again, quieter.",
   "You put {who} in a taxi with ฿{c} and a promise you both know the weight of. She waves through the back window until the corner takes her.",
-  "\"Okay, tilac.\" {who} is not offended; she has a phone full of tomorrow. ฿{c} for the ride, a squeeze of the arm, and she is a tail-light going the other way.",
+  "\"Okay, tilac.\" {who} is not offended; she has a {{phone}} full of tomorrow. ฿{c} for the ride, a squeeze of the arm, and she is a tail-light going the other way.",
   "Goodnight said properly, at the kerb, the way it should be: {who} on the back of a bike with ฿{c} folded into her hand, looking back once. The soi closes over the space she leaves.",
 ];
 function _partyGoodbye() {
@@ -1343,7 +1343,7 @@ function _bfResolve(kind) {
       { n: name, other: second ? NPCS[p2.ids[0]].name : "" }), "win");
     _say(second
       ? "(Two of them now. The town is going to remember this one. Lead on \u2014 her drinks land wherever you do.)"
-      : "(She's WITH you now \u2014 the night keeps going. Lead on: her drinks land wherever you do, and the fun stacks with every new door. Home together ends it her way; dawn ends it the town's.)", "dim");
+      : "(She is with you now \u2014 the night keeps going. Lead on: her drinks land wherever you do, and the fun stacks with every new door. Home together ends it her way; dawn ends it the town's.)", "dim");
     _addHappy(1);
     return;
   }
@@ -2643,10 +2643,16 @@ function _questOffer(npcId) {
 }
 
 function _findQuest(word) {
-  const w = word.toLowerCase().trim();
+  // APOSTROPHE- AND UNDERSCORE-PROOF, both sides (round-46 review, 2026-09-07):
+  // Eddy's own hint said "(ACCEPT RABBIT_JOB.)" and the quest is named "Rabbit's
+  // Job", so ACCEPT RABBIT JOB — the thing a player types after reading either —
+  // matched nothing at the one modal that starts the arc. Same fix the venue
+  // matcher already carries: normalise the typed word AND the stored name.
+  const norm = t => String(t).toLowerCase().replace(/[’'`]/g, "").replace(/_/g, " ").replace(/\s+/g, " ").trim();
+  const w = norm(word);
   if (!w) return null;
   return Object.keys(QUESTS).find(qid =>
-    qid === w || QUESTS[qid].name.toLowerCase().includes(w)) || null;
+    qid === w || norm(qid) === w || norm(QUESTS[qid].name).includes(w)) || null;
 }
 
 function _doAccept(arg) {
@@ -2891,7 +2897,7 @@ const _TAN_WHERE = {
   roy:    "an old fellow on the same stool every night, {bar}, since before you were coming here",
   macca:  "a man buying rounds he cannot afford, {bar} way",
   pete:   "a very quiet one at {bar}, corner stool, back to the wall",
-  rob:    "a fellow at {bar} who looks like he is waiting for a phone call",
+  rob:    "a fellow at {bar} who looks like he is waiting for a {{phone}} call",
   barry:  "a man in golf clothes at {bar} who has not played golf",
   kyle:   "a young fellow at {bar} with a computer beside his soda water, pitching the mamasan a loyalty programme",
 };
@@ -3253,7 +3259,7 @@ function _doMessage(arg) {
         ], "wonmsg")
       : _pickVary([
           `Two grey ticks. Then, a long minute later, one word: "kha." Which from her means received, understood, and closed — the politest door in Thailand, shutting gently.`,
-          `The ticks go blue and no reply comes. Somewhere in Sakon Nakhon she read it twice — you know she read it twice — and put the {{phone}} face down, the loudest thing she does.`,
+          `The ticks go blue and no reply comes. Somewhere up-country she read it twice — you know she read it twice — and put the {{phone}} face down, the loudest thing she does.`,
         ], "gonemsg"));
     return;
   }
@@ -4586,7 +4592,7 @@ const _DRIZZLE_STREET = [
     "speed, slightly shinier.",
   "A fine rain, more mist than weather. A piwin tucks his bike under an awning " +
     "and lights a cigarette with the patience of a man who is paid by the fare, " +
-    "not the hour. Two girls share one umbrella and one phone between three bars.",
+    "not the hour. Two girls share one umbrella and one {{phone}} between three bars.",
   "Drizzle, warm as breath. The soi smells suddenly of wet concrete and grilled " +
     "squid. Nobody hurries; hurrying in this town is what the rain is for.",
 ];
@@ -4893,9 +4899,9 @@ const _SHAKEDOWN_DONE = [
 const _SUNRISE = [
   "It does not come up out of the sea — that is the other coast, and the other holiday. It comes up behind the town: the sky over the hills goes from nothing to grey to a thin bad orange, and the bay turns from black to pewter without anybody watching it but you. A rooster somewhere is already several minutes into its opinion.",
   "The light arrives the way it does here, sideways and all at once. Sukhumvit goes gold for about ninety seconds. The sea, which had all the drama last night, sits there flat and pale and says nothing, and somebody's shutter goes up two streets away.",
-  "First light, and the town changes staff: the last of the night walking one way with their shoes in their hands, the first of the morning walking the other with brooms and ice and rice. For one hour they share the street and neither is embarrassed. It is the best hour and nobody sober has ever seen it.",
+  "First grey, and the town starts to change staff: the last of the night walking one way with their shoes in their hands, the first of the morning walking the other with brooms and ice and rice. For one hour they share the street and neither is embarrassed. It is the best hour and nobody sober has ever seen it.",
   "Grey, then that flat gold that only lasts as long as it takes to notice it. The bay comes up out of the dark colour by colour. Behind you the hill is a black shape with a temple on it and the sky is doing the work. You have paid for worse views and gone further to get them.",
-  "Dawn over Pattaya, which is to say dawn over the traffic: a fruit cart already moving, a schoolgirl in uniform on the back of her father's bike, the night's last two farang arguing gently about whose hotel is which. The sky is a colour with no name and it is already too warm.",
+  "Dawn over Pattaya, which is to say dawn over the traffic: a fruit cart already moving, a night-shift nurse on the back of a motorbike taxi, the night's last two farang arguing gently about whose hotel is which. The sky is a colour with no name and it is already too warm.",
 ];
 const _SUNRISE_SOON = [
   "Not yet. The sky is still doing its black-and-neon thing and the town is still trading. Give it until the small hours and stand somewhere with a bit of open in front of you.",
@@ -5663,7 +5669,7 @@ const _FLOOR_HOSTESS = [
   "{who} shows you where the good ice is kept, which is not where the ice is kept. It is a small thing to be trusted with and she does not make a speech about it.",
   "A punter asks {who} something in the doorway and she answers him without turning round, because she is watching your hands on the optic and has decided they are wrong. When he has gone she fixes them, once, and does not mention it again.",
   "Between customers {who} teaches you the two words for the ice bucket and laughs at your first attempt in a way that is entirely kind and entirely unrestrained.",
-  "{who} has done this for six years and you have done it about five minutes by comparison, and somewhere in the middle of a busy hour that stops being embarrassing and starts being useful.",
+  "{who} has done this a long time and you have done it about five minutes by comparison, and somewhere in the middle of a busy hour that stops being embarrassing and starts being useful.",
   "You catch {who} watching the door the way you have started watching it. She catches you catching her, and something passes between you that is nothing at all to do with drinks.",
   "{who} eats her rice standing up, out of the way of the till, the way people do when the room is theirs. She holds the box out. You take some. It is very good and much too spicy and she enjoys that enormously.",
   "{who} has a whole language of glances with the girl at the far end that you are only now learning to read — a lift of the chin that empties an ashtray, a look that fetches a fresh bucket before you knew you were low. She is running half the room without a word and letting you think you noticed.",
@@ -6216,13 +6222,13 @@ function _affairEnd(cause) {
   if (cause === "bleed") {
     _say(_fmt("{her} stays for the last week of it — through the tape measure and the " +
       "man with the fridge opinions — because leaving a sinking man is not a thing she " +
-      "does. She goes home to Nong Khai the day after the shutters, with her wages paid " +
+      "does. She goes home to her own province the day after the shutters, with her wages paid " +
       "to the baht because you made sure of that one thing. At the bus station she holds " +
       "your face in both hands. \"Not your fault. Not my fault.\" A small, terrible " +
       "shrug. \"Town's fault, na.\" It is the kindest possible version of losing " +
       "everything at once.", { her }), "alert");
   } else {
-    _say(_fmt("{her} doesn't make a scene, because she has spent eight years learning " +
+    _say(_fmt("{her} doesn't make a scene, because she has spent years learning " +
       "exactly how not to. There is a bag by the door of the room you half-share, packed " +
       "the calm way, and she waits until you've seen it before she says anything. \"I " +
       "love you same-same,\" she says, and you believe her, which is the worst part. " +
@@ -6281,7 +6287,7 @@ function _sellBarYes() {
       "fair — not a baht of friendship in it either direction, which from him is a kind " +
       "of respect. \"The fifty-one per cent,\" he says at the end, and slides his copy " +
       "across the table to you, torn once, cleanly. \"A man leaving does not owe. This " +
-      "is the whole of the rule.\" It is the only gift he has ever given you, and it is " +
+      "is the whole of the rule.\" It is the largest thing he has ever handed anybody, and it is " +
       "enormous."
     : "Candy runs the sale like the professional she has spent twenty years becoming: " +
       "the lawyer, the letters, the note settled to the satang, White Dish paying the " +
@@ -6298,7 +6304,7 @@ function _sellBarYes() {
     "till and somebody else certain he is different.\n\nYou got out with the girl and " +
     "the money and the morning. Nobody does. You did.", { her }), "win");
   _addHappy(12);   // the biggest single happiness in the game, and it never touches the treadmill
-  _say("(สบายสบาย has a postcode now. The sandbox is still yours — Pattaya is an hour " +
+  _say("(สบายสบาย has a postcode now. The town is still yours — Pattaya is a long drive " +
     "away and old habits keep a room ready — but the machine's claim on you is settled " +
     "in full.)", "dim");
 }
@@ -6798,7 +6804,7 @@ function _barLost(cause) {
 // once taking out is possible at all.
 const _DRAW_LINES = [
   "You count it out of the drawer yourself, which is the only part of owning a bar nobody warns you about: it is your money and it still feels like stealing.",
-  "Out of the till, into your pocket, and the note goes in the book — Bert doesn't look up, because Bert has watched owners do this for thirty years.",
+  "Out of the till, into your pocket, and the note goes in the book — Bert doesn't look up, because Bert has watched owners do this for twenty-two years.",
   "You take it out the way a landlord takes it out: quickly, without counting twice in front of the staff, and with a note of the figure.",
 ];
 function _doDraw(arg) {
@@ -7854,7 +7860,7 @@ const _OWL_ARRIVED = [
     `the air-con set to Norway. A CABARET is a show and a chair, where you tip rather than `+
     "buy, and a HOST BAR is the same trade with the sexes swapped and better manners. A beer " +
     `is ฿${BEER_PRICE} at the cheapest and climbs by ` +
-    "the class of the room, and nobody will tell you the number until it's in your hand — ask " +
+    "the class of the room, and the number is there if you ask for it, and most men do not ask — ask " +
     "(tao rai, squire: how much) before the glass lands. And one more: everybody in every one " +
     "of these rooms would rather you ASKED than looked. This is a town that talks. Use it.",
   () => "THE OWL'S PHRASEBOOK, abridged, for the man who arrived Tuesday. SAWATDEE (hello) and " +
@@ -8388,7 +8394,7 @@ const _QV_ROAST_LINES = [
   "Aoy sets it down and stands there half a second longer than she needs to, watching your face. The carrots are done properly. The gravy is not from a packet and she wants you to notice, and you do, and something passes between you that neither of you says.",
   "Beef, potatoes, a Yorkshire, and the greens you would have left on the plate at home. You do not leave them. A long way from wherever that is will do that to a man and a plate of cabbage.",
   "The plate comes out under a cloud of its own steam and the whole rail turns to look, the way men do, and one of them says what they always say, which is that you'd pay triple for this at home and it wouldn't be as good.",
-  "It is enormous and it is Sunday and outside the door it is thirty-one degrees. The cook, whom you have never seen, has put a whole roast dinner into the tropics for the twelfth year running, and nobody has ever asked him to stop.",
+  "It is enormous and it is Sunday and outside the door it is the temperature it always is. The cook, whom you have never seen, has put a whole roast dinner into the tropics for the twelfth year running, and nobody has ever asked him to stop.",
 ];
 const _QV_DISH_LINES = {
   pie: [
@@ -9459,7 +9465,7 @@ function _rabbitWireHand() {
     "the bar under his palm. \"Mine. Registered to nobody you'll meet. " +
     (G.rabbitWay === "operator" ? "If that machine wants a hotspot, it gets this one, not yours. "
                                 : "The box talks through it, you don't. ") +
-    "Lose it after.\" (You're carrying RABBIT'S BURNER.)", "dim");
+    "Lose it after.\" (You are carrying his burner.)", "dim");
 }
 
 // The dog is cover AND description, and Rabbit is the professional who says the

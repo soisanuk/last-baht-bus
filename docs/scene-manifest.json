@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-06",
+  "generated": "2026-09-07",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 243,
@@ -65,7 +65,7 @@
       ],
       "sampleDescs": [
         "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises straight off the pavement on the inland side, its front steps on Beach Road itself between Soi 9 and Soi 10, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since long before this stretch had a mall on it — CHERRY OIL MASSAGE keeps a quieter door right alongside.",
-        "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. From about six, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past on the Beach Road run, headlights strung north toward the Dolphin and south into the rest of the neon city.",
+        "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. For the first hour of the evening, six to seven, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past on the Beach Road run, headlights strung north toward the Dolphin and south into the rest of the neon city.",
         "The south end of Beach Road, where the palms wear fairy lights and the baht buses bunch up like beads. PAPAYA MASSAGE and BEACH ROAD THAI MASSAGE keep pink-lit shopfronts along here. The Walking Street arch blazes to the south. A motosai stand idles on the corner, drivers watching the street like sleepy hawks."
       ]
     },
@@ -259,7 +259,7 @@
       ],
       "sampleDescs": [
         "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. BAMBOO OIL MASSAGE and MIKE'S MALL front the corner here. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light.",
-        "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
+        "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is a few minutes down it, or one with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
         "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. SECOND ROAD TRADITIONAL MASSAGE keeps a plain shopfront along here. South it runs down to the Pattaya Tai crossroads and the hill beyond; Buakhao is a block east, but not from here — the sois between are somebody's back wall."
       ]
     },
@@ -484,7 +484,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. From about six, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past on the Beach Road run, headlights strung north toward the Dolphin and south into the rest of the neon city."
+      "desc": "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. For the first hour of the evening, six to seven, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past on the Beach Road run, headlights strung north toward the Dolphin and south into the rest of the neon city."
     },
     {
       "id": "beach_rd_s",
@@ -2002,7 +2002,7 @@
         "Khun Wilawan",
         "Tul"
       ],
-      "desc": "Up a half-flight past the shutter: an office that is mostly not there. Two desks, one with a computer on it and one with a kettle; a filing cabinet; a wall calendar from a shipping agent three years out of date; a framed company registration in Thai with a gold seal. No stock, no samples, no brochures — a trading company that trades nothing you can point at. A brass plate by the stairs says the name in two languages. The aircon is on. That is the whole of the business you can see."
+      "desc": "Up a half-flight past the shutter: an office that is mostly not there. Two desks, one with a computer on it and one with a kettle; a filing cabinet; a wall calendar from a shipping agent three years out of date; a framed company registration in Thai with a gold seal. No stock, no samples, no brochures — a trading company that trades nothing you can point at. A brass plate by the stairs says the name in two languages. The aircon is on. That is most of the business you can see."
     },
     {
       "id": "half_moon_massage",
@@ -2319,9 +2319,7 @@
       "regionSlug": "second-road",
       "kind": "street",
       "dark": false,
-      "people": [
-        "Diamond"
-      ],
+      "people": [],
       "desc": "Second Road where Soi Diamond comes in — the same Soi Diamond that opens onto Walking Street at its far end, which makes this the back door to the strip and the way the people who work there actually arrive. Girls come up it in ones and twos with helmets under their arms, an hour before anyone is meant to see them. North is the big Pattaya Tai crossroads; south the road runs down toward the hill."
     },
     {
@@ -2357,9 +2355,7 @@
       "regionSlug": "second-road",
       "kind": "street",
       "dark": false,
-      "people": [
-        "Diamond"
-      ],
+      "people": [],
       "desc": "The long haul of Second Road between Soi Diamond and the hill, and the expats have a name for this stretch they don't say kindly. What is actually wrong with it is the pavement: there isn't one worth the word — broken kerb, parked bikes nose-in, a shop's worth of stock set out across it — so everybody walks in the road, and here everybody is a great many people at once. Tour groups come through six and eight at a time, three abreast, friends hand in hand the way friends are across most of the world and farang reliably misread, moving at the speed of the conversation they are having. The bikes stack up behind them, fold around, and lean on the horn; the piwins have views, at volume, in Thai. Tailor shops down both sides, a currency booth beating the bank, and a tandoor going somewhere out of sight that smells better than anything on Beach Road."
     },
     {
@@ -2396,7 +2392,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
+      "desc": "Soi 7 comes out here and, past the junction, turns into shophouses and nothing you would walk to; the seafront is a few minutes down it, or one with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
     },
     {
       "id": "second_rd_s",

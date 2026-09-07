@@ -817,7 +817,7 @@ const _CATALOGS = {
       "Ein Hochglanz-Flyer für die Revue des Peacock Cabaret: Petch mitten im Playback in einem Kleid aus Licht, Miss Malas Kopfschmuck füllt die obere Ecke wie ein Wetterphänomen. Auf der Rückseite, in sorgfältigem Kugelschreiber: 'für den Alcazar-Mann – M.'",
     "brass dog tag":
       "Hundemarke aus Messing",
-    "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — GOOD BOY. The pub is shuttered and the Irishman the soi called Paddy is long gone home, but somebody once paid to have GOOD BOY engraved in brass, and they were right.":
+    "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — GOOD BOY. The pub is shuttered and the Irishman the soi called Sean is long gone home, but somebody once paid to have GOOD BOY engraved in brass, and they were right.":
       "Eine Hundemarke aus Messing, grün angelaufen nach vier Regenzeiten: SEAMUS — THE SHAMROCK — GOOD BOY. Der Pub ist verrammelt und der Ire, den die Soi Paddy nannte, längst zurück in der Heimat, aber irgendjemand hat einmal bezahlt, um GOOD BOY in Messing gravieren zu lassen, und er hatte recht.",
     "genuine Rolex (allegedly)":
       "echte Rolex (angeblich)",
@@ -1187,7 +1187,7 @@ const _CATALOGS = {
     //     contain that word.
 
     "The White Dish Offer": "Das Angebot von White Dish",
-    "White Dish want to buy Bert's bar out from under its dying owner. Get him the real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon, Soi 6, ABOUT THE OFFER) — then tell Bert (ASK BERT ABOUT THE OFFER).":
+    "White Dish want to buy Bert's bar out from under its dying owner. Get him the real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE ABOUT WHITE DISH, at the Kitten Corner), and the pitch (ASK GAVIN ABOUT THE OFFER), at the Golden Dragon on Soi 6 — then tell Bert (ASK BERT ABOUT THE OFFER).":
       "White Dish will Berts Bar dem sterbenden Besitzer unter dem Hintern wegkaufen. Verschaff ihm das ganze Bild — die Vorgeschichte (ASK TERRY ABOUT WHITE DISH), die Sicht von innen (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH) und das Angebot selbst (ASK GAVIN at the Golden Dragon, Soi 6, ABOUT THE OFFER) — und dann sag es Bert (ASK BERT ABOUT THE OFFER).",
 
     "Gavin's Errand": "Gavins Botengang",

@@ -733,7 +733,7 @@ const _LOCKIN_LOOSEN = [
 ];
 const _LOCKIN_GAMES = [
   "The dice game at the corner table has rules nobody explains and stakes that are visibly not " +
-    "money — and, around the third round, the narrator's full attention on the grain of the bar top, " +
+    "money — and, around the third round, your full attention on the grain of the bar top, " +
     "which has a cigarette burn the shape of Thailand you had not noticed before.",
   "A kiss is auctioned for the tip jar. The bidding is brisk, in three currencies, and won by a " +
     "man who then loses it again in a dare within the minute. The tip jar does well out of both.",
@@ -777,9 +777,9 @@ const _LOCKIN_JOIN = [
   "You get up. What happens after that stays inside the paint — but the shirt on the bell rope " +
     "is yours by the end of it, and you are not sure at which point that happened, and nobody is " +
     "going to tell you.",
-  "You go. The narrator, who has been in this room before, becomes deeply absorbed in the label " +
-    "of a bottle that isn't even yours, for quite a while, and when the narrator looks up again " +
-    "the music is a different song and you are sitting somewhere else.",
+  "You go. You have been in this room before, and the next hour arrives in pieces: a song you " +
+    "did not hear start, a glass somebody put in your hand, a joke you are laughing at from the " +
+    "middle. When you look up you are sitting somewhere else.",
   "You join in. It is later, afterwards. The mamasan puts a water in front of you without a " +
     "word, and the girl who dealt you in is back behind the bar in a different top, counting " +
     "the tip jar with an expression of professional satisfaction.",
@@ -1449,7 +1449,7 @@ function _startKiller() {
 const _KP_POT = [
   "{who} pots, unhurried, and chalks up without looking at you.",
   "{who} takes his shot, drops it, and steps back to let you have the table like a man doing you a favour.",
-  "{who} pots. Nobody says anything. That is somehow worse than if they had.",
+  "{who} pots. The table goes quiet the way tables do when they were expecting you to.",
 ];
 
 // A league frame runs a dozen shots and the pot line was ONE string, so it read
@@ -2296,8 +2296,8 @@ const _ORCHID_NOTOUCH = [
 // The girls are staff, not stock; if there's a courtship it goes through the
 // relationship layer, not the till.
 const _OWN_BARFINE_NO = [
-  "Barfine one of your own girls? The fine goes to the bar. You own the bar. You would be handing money from one pocket to the other and Lamai would watch you do it with an expression you'd never live down. If you like one of them, you're the boss — you talk to her, same as anyone, and see where it goes. There is no docket for that.",
-  "There's no barfine to pay here, squire — it's your bar, they're your staff, and the fee is a fee to yourself. That's not how it works from this side of the rail. A girl who works for you isn't shopped for; if there's something there, it's the long way round, the same as it would be for any regular. Off the clock, not off a docket.",
+  "Barfine one of your own girls? The fine goes to the bar. You own the bar. You would be handing money from one pocket to the other and the mamasan would watch you do it with an expression you'd never live down. If you like one of them, you're the boss — you talk to her, same as anyone, and see where it goes. There is no docket for that.",
+  "There's no barfine to pay here — it's your bar, they're your staff, and the fee is a fee to yourself. That's not how it works from this side of the rail. A girl who works for you isn't shopped for; if there's something there, it's the long way round, the same as it would be for any regular. Off the clock, not off a docket.",
   "You catch yourself and stop. These are your employees, and \"barfining\" one is just moving your own money in a circle while the whole floor pretends not to notice. Whatever this is, it isn't a transaction — not at your own bar. Talk to her like a person; the rest is between the two of you.",
 ];
 
@@ -3062,8 +3062,8 @@ const _BOND_TALK = {
 // Tinglish and just glad the boss is in.
 const _OWNER_GREET = {
   mamasan: [
-    n => `"Boss." ${n} gives you the nod she keeps for you and nobody else. "Quiet start, but Friday crowd not come yet. Two girl late — I already call them. You want I put more ice on, or we see how it go?"`,
-    n => `${n} is at your elbow before you've got your jacket off, low and quick: "The Nong Khai girl, her papers — I fix, don't worry. Everything else clean. Good you come in tonight, boss."`,
+    n => `"Boss." ${n} gives you the nod she keeps for you and nobody else. "Quiet start, but the crowd not come yet. Two girl late — I already call them. You want I put more ice on, or we see how it go?"`,
+    n => `${n} is at your elbow before you've got your jacket off, low and quick: "One girl, her papers — the office want new photo, I fix, don't worry. Everything else clean. Good you come in tonight, boss."`,
     n => `"Ah, the owner arrives." ${n} says it dry, fond. "Sit, sit — is your bar, but you still sit. I run the floor, you watch the door. Twenty year, I know my half. You learning yours."`,
   ],
   cashier: [
@@ -3174,7 +3174,7 @@ const _OTHER_LEDGER = {
   // the figures the man across the table is one line item inside.
   3: [
     (n) => `${n} shows you her phone: a bank app, an amount, a date. "Every month, same day." ` +
-      `฿${HOME_SEND} goes north — her mother, the boy's school, a roof somebody keeps meaning ` +
+      `฿${HOME_SEND} goes north — her mother, somebody's school fees, a roof somebody keeps meaning ` +
       `to finish. The bar's salary is ฿${BAR_SALARY}; the rest is drinks, and drinks are you and ` +
       `men like you. "So." She locks the {{phone}} and puts it face-down, the way she does. "Now you ` +
       `know all my number. Nobody know all my number." It is not said as a burden. It is said as ` +
@@ -3522,7 +3522,7 @@ const _REGION_CRASH = {
 };
 const _OWN_BAR_RESCUE = [
   "You go down behind your own rail, and the last thing you hear is Bert saying \"right\" in the voice he uses for a keg. You wake in your own bed with your shoes off and lined up, your wallet on the nightstand with a Stinky Pinky beer mat on top of it, and a note in a hand you don't recognise: EAT SOMETHING. The floor got you home. The floor always gets the guv'nor home.",
-  "The room tilts and the floor comes up, and then it's Lamai's voice, very calm, and a taxi that smells of jasmine, and your own bed. Your pockets are exactly as you left them — you own the people who'd have turned them out. There is a bottle of water on the nightstand that wasn't there.",
+  "The room tilts and the floor comes up, and then it's the mamasan's voice, very calm, and a taxi that smells of jasmine, and your own bed. Your pockets are exactly as you left them — you own the people who'd have turned them out. There is a bottle of water on the nightstand that wasn't there.",
   "You don't remember the taxi. Bert paid it, out of the till, and wrote it on the docket under the date like any other line — which is the only lecture you'll get. Your wallet is where a wallet should be. The girls know before you do that the guv'nor went down last night, and none of them will mention it, which is worse.",
 ];
 function _crashSpotFor(roomId) {
@@ -4018,9 +4018,9 @@ const _SCAM_LEAVE = [
 
 // Dawn on your feet: the whole arc — and then the taxi home in the light.
 const _ALLNIGHTER_LINES = [
-  "The sky goes grey and you are, somehow, still upright to see it do it. The club empties into the soft light, the street sweepers work around the wreckage, and a taxi with its windows down carries you home through a town changing shifts — night people going to bed, monks already walking. You did the whole night. All of it.",
+  "The music finally stops and the room is suddenly a room: strip lights, wet floor, chairs. The club empties into the soft light, the street sweepers work around the wreckage, and a taxi with its windows down carries you home through a town changing shifts — night people going to bed, monks already walking. You did the whole night. All of it.",
   "04:00 arrives and finds you still standing, which at this point feels like a citation for valour. You share a taxi with two strangers and a man asleep in a party hat, watch the neon give up section by section, and let yourself in as the breakfast carts light their first burners. The bed takes you like an old friend.",
-  "Dawn. The music stops being music and becomes memory; the lights come up on faces that have all earned the morning. You walk out into pink light and pressure-washed pavement, flag the first songthaew of the DAY shift, and ride home with the wind doing what it can for you. The night is over because it ran out of night.",
+  "Dawn. The music stops being music and becomes memory; the lights come up on faces that have all earned the morning. You walk out into grey light and pressure-washed pavement, flag the first songthaew of the DAY shift, and ride home with the wind doing what it can for you. The night is over because it ran out of night.",
   "You close the place. Not a figure of speech — a woman in rubber gloves is stacking stools around you when you finally surface, and outside the sky is the colour of the inside of a shell. The ride home smells of jasmine from somewhere and last night from you. Worth it. Ask again at noon.",
 ];
 // dawn inside somewhere that isn't a bar — an office, a motel counter (Owen, round 46: "still upright on the soi" printed in a windowless office)
@@ -4031,7 +4031,7 @@ const _ALLNIGHTER_INDOORS = [
 ];
 const _ALLNIGHTER_STREET = [
   "The sky goes grey over the soi and you are, somehow, still upright on it. The sweepers work round you; a noodle cart is setting up where a bar's tables were an hour ago. A taxi with two strangers in it slows, and the driver waves you in for the price of the light, which this once is nothing.",
-  "04:00 finds you on the pavement, which at this point feels like a citation for valour. The shutters are down the length of the street and the first monks are out. You share a taxi home with a man who says nothing and a woman who says everything.",
+  "04:00 finds you on the pavement, which at this point counts as an achievement. The shutters are down the length of the street and the first monks will be out within the hour. You share a taxi home with a man who says nothing and a woman who says everything.",
   "Dawn on the kerb. The neon has been off long enough that you'd forgotten the street had a colour. A songthaew with three sleeping girls in the back takes you most of the way for the day rate, and the driver does not ask.",
 ];
 function _endNight(reason) {
@@ -4537,7 +4537,7 @@ const _GOODBYE_REGULAR = [
   n => `${n} finds out you're flying from somebody else, which tells you something about ` +
     `how the soi carries news and something else about how many people were counting. ` +
     `"Why you not TELL me," she says, genuinely put out, and then immediately lets you ` +
-    `off. "Mai pen rai. Next time you tell me before, and I take the night off, and we ` +
+    `off. "{{Mai pen rai}}. Next time you tell me before, and I take the night off, and we ` +
     `eat somewhere not here." It is offered like a small business proposal, which is how ` +
     `she offers everything she means.`,
   n => `The last night is not a scene. ${n} pours, you drink, the football is on, and ` +

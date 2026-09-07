@@ -783,7 +783,7 @@ function _hopRoom(id, hourArg) {
 // back here (my own _STAND_BEER said "he" for exactly that reason, round 20).
 const _RAIL_LEAVES = [
   n => n + " drains the glass, slaps the bar twice, and is gone before the ice has settled.",
-  n => n + " stands, pats the pockets in the usual order — phone, wallet, phone again — and heads off.",
+  n => n + " stands, pats the pockets in the usual order — {{phone}}, wallet, {{phone}} again — and heads off.",
   n => n + " signs off with a wave that takes in the whole bar and nobody in particular.",
   n => "“Right,” says " + n + ", to no one in particular, and goes.",
   n => n + " settles up, says something over the bar that gets a laugh, and wanders out into the soi.",
@@ -876,7 +876,7 @@ const _TOO_FULL = [
   "Not a chance. You couldn't manage another mouthful and it would be rude to waste it.",
   "You are, it turns out, entirely full. The thought of another plate is faintly upsetting.",
   "Your body files an objection. There is nowhere to put it.",
-  "You've eaten. Buying more food you don't want is a farang habit and you're better than that tonight.",
+  "You've eaten. Another plate now would be a purchase, not a meal. Save it for when it's hunger.",
 ];
 function _tooFull() { return G.hunger < FULL_AT; }
 // Returns true if it printed a refusal — every food path checks it before taking

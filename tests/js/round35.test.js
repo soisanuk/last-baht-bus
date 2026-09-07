@@ -141,7 +141,7 @@ test("the LT coda invents no biography (Howard F10)", () => {
 test("Lek answers for what she volunteers (Howard F6)", () => {
   G.room = "lucky_tiger"; G.known.lek = true; G.soc.drinks = { lek: 14 };
   run("talk to lek");
-  for (const [t, want] of [["pool", /Two year I play/], ["age", /Twenty-six/], ["shop", /my mother's house/],
+  for (const [t, want] of [["pool", /Seven year I play/], ["age", /Twenty-six/], ["shop", /my mother's house/],
     ["cousin", /Noi/], ["salary", /nine thousand/i], ["bonus", /little star/], ["sandals", /shoe is for walking/]]) {
     out = []; run("ask lek about " + t);
     assert.match(text(), want, "lek/" + t);
@@ -545,7 +545,7 @@ test("Phil's visits square with any calendar (Malcolm F2)", () => {
 test("the foot of Soi 6 has no sunset baked into its revisits (Malcolm F7)", () => {
   for (const l of ROOMS.beach_rd_n.revisit || [])
     assert.doesNotMatch(l, /sun thinking about going down|bay going gold|with a sunset/, "time-neutral");
-  assert.match(ROOMS.beach_rd_n.desc, /From about six, the police/, "…and the checkpoint keeps the Owl's hours (F8)");
+  assert.match(ROOMS.beach_rd_n.desc, /six to seven, the police/, "…and the checkpoint keeps the Owl's hours (F8)");
 });
 
 test("the Owl's banner doesn't call a nightly column weekly (Malcolm F5)", () => {
@@ -614,12 +614,12 @@ test("ENTER a namesake bar goes to the one in your own region (Malcolm)", () => 
 // ── Round 36 — Nige, the quest completionist ────────────────────────────────
 
 test("a CAPS hint teaches the name, so the bar can place Gavin on Soi 6 (Nige)", () => {
-  G.known = {}; _say("(ASK GAVIN at the Golden Dragon, Soi 6, ABOUT THE OFFER)");
+  G.known = {}; _say("(ASK GAVIN ABOUT THE OFFER), at the Golden Dragon on Soi 6");
   assert.ok(G.known.gavin, "the hint printed his name — that counts as the transcript mentioning him");
   G.room = "stinky_bar"; out = []; run("talk to gavin");
   assert.match(text(), /Golden Dragon Bar.*Soi 6/, "placed, with the district");
   assert.match(NPCS.bert.dialogue.map(d => d.text).join(" "), /Golden Dragon, down on Soi 6/, "Bert's lead names the soi");
-  assert.match(QUESTS.white_dish.desc, /Golden Dragon, Soi 6/, "and so does the journal");
+  assert.match(QUESTS.white_dish.desc, /Golden Dragon on Soi 6/, "and so does the journal");
 });
 
 test("your own remembered answer doesn't show twice for a trailing full stop (Nige)", () => {

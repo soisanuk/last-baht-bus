@@ -66,7 +66,8 @@ test("a club's floor heaves in its own words — no low-season bare-wood rail li
 });
 
 test("the Japanese traveller fires on the street, and her intro stands outside (Dex)", () => {
-  assert.match(ENCOUNTERS.jptourist.intro, /outside a go-go's open front/);
+  assert.match(ENCOUNTERS.jptourist.intro, /outside a go-go\b/, "she stands on the street, not in the venue");
+  assert.doesNotMatch(ENCOUNTERS.jptourist.intro, /open front.*through the door/, "an open front you watch dancers through is not an enclosed venue (round-46 review)");
   assert.ok(ENCOUNTERS.jptourist.rooms.every(r => !ROOMS[r].barType));
 });
 

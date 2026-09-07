@@ -193,7 +193,7 @@ function _flowerTick() {
         `The rose bucket again — the same mother, the same sleepy-eyed girl, working the other end of the street tonight. The child clocks you, and something in the tiny professional face says she remembers which kind of answer you were. The rose comes up toward ${her}. ` + price + `.`,
         `The rose family reaches your rail on their round. No pitch this time — the girl simply stands the wrapped bloom on the bar next to your beer and looks from it to ${her} and back, a saleswoman who has learned that silence closes. ` + price + `.`,
       ], "flowerAgain"), "alert"],
-    [`(BUY the rose for ${her}) · or (WAVE) them gently on.`, "dim"]);
+    [`(BUY ROSE FOR ${her}) · or (WAVE) them gently on.`, "dim"]);
 }
 
 function _salengTick() {
