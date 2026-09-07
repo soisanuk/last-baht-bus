@@ -82,8 +82,32 @@ node tools/prose-corpus.mjs --map                  # who has been read as a whol
 node tools/prose-corpus.mjs --dossiers --delta --taps   # only the new or stale subjects
 node tools/prose-corpus.mjs --rooms --delta --taps      # …and rooms
 node tools/prose-corpus.mjs --quests --delta --taps     # …and quests
-node tools/prose-corpus.mjs --dossiers --seed       # record what was actually read
+node tools/prose-corpus.mjs --dossiers --only batch.txt --seed   # record exactly what was read
 ```
+
+### Running the sweep in parallel, and handing the batch back
+
+The sweep that found nineteen contradictions in one afternoon (2026-09-08) was five Fable
+subagents, each given a list of subjects and told to run `--about <subject>` per name, read
+each dossier as one document, and report clashing pairs with both refs. It works because the
+model reading is not the model that wrote the prose, and because the pivot has already done
+the only hard part.
+
+Two things about it are worth copying exactly:
+
+- **`--about` resolves NPCs, patrons, bars and items — not street or interior ROOMS.** Half
+  of the first sweep's list was room names, and each agent independently discovered they had
+  to switch to `--rooms <id>`. Split the queue by pivot before you launch: `--map` prints the
+  cast list and the room list separately, and the room pivot wants **ids**, not display names.
+- **`--dossiers --seed` seeds every subject it dumps.** Run it after a sweep and you rubber-
+  stamp the hundred-odd nobody read — done once, reverted, the same afternoon. **`--only
+  <file>`** (one subject per line, or one room id per line for `--rooms`) hands the agents'
+  batch lists back to the tool so the map records what was actually read, and reports the
+  names that didn't resolve rather than swallowing them.
+
+Three agents flagged Ryan Powers independently, which is the signal worth watching for: an
+overlap between batches is not redundancy, it is corroboration, and the corroborated finding
+was the one worth fixing first.
 
 The string ledger cannot answer this pass's question, because its unit is a sentence and
 this pass's unit is a subject. `docs/prose-dossier-ledger.json` keys on the subject and
