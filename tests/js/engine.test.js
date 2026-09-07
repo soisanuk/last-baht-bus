@@ -8039,7 +8039,8 @@ test("the newbie nudges fire once, in order, and only where the advice works", (
   });
   state().room = bar; out = [];
   _newbieNudge();
-  assert.match(out.join("\n"), /nobody's number/, "the first tip is the number");
+  // "nobody's number" was false the moment Tan's went in at the airport (round 47)
+  assert.match(out.join("\n"), /no lady's number/, "the first tip is the number");
   assert.doesNotMatch(out.join("\n"), /bell over the rail/, "one at a time");
 
   // the bell comes next visit, not the same breath

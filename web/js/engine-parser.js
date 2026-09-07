@@ -10993,7 +10993,7 @@ function _doRep() {
 // the kid who sold your wallet gets fed by you, on the word of the woman who
 // bought it. He pays for himself after this — that's the point of him.
 const _MOT_DINNER_LINES = [
-  "The cart is four minutes away and down a soi you would have walked past forever: a griddle, a rice cooker, a woman who has been poaching chickens since before Walking Street had a name. Mot orders for both of you without asking, which is its own kind of manners.",
+  "The cart is four minutes away, round the back of the arch where the coach parties never look: a griddle, a rice cooker, a woman who has been poaching chickens since before Walking Street had a name. Mot orders for both of you without asking, which is its own kind of manners.",
   "He takes you at a trot to a corner where a hand-painted chicken is peeling off a steel shutter, and orders in the flat quick Thai of somebody who eats here most days. Two plates. The rice is yellow with fat and the ginger sauce arrives in a jar with no lid.",
   "The cart has three stools and a yellow light. Mot puts you on the good one, which you only notice later, and holds up two fingers to a woman who was already reaching for the plates.",
 ];

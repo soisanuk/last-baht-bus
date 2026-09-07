@@ -533,9 +533,18 @@ if (has("rooms")) {
   }
   const want = val("rooms") && val("rooms").startsWith("--") ? null : val("rooms");
   const seeding = has("seed"), delta = has("delta");
+  // --only <file>: one ROOM ID per line, the place pivot's half of the sweep
+  // hand-back (see the note on --only in the subject pivot below).
+  let only = null;
+  if (val("only")) {
+    only = new Set(fs.readFileSync(val("only"), "utf8").split("\n").map(x => x.trim()).filter(Boolean));
+    const missing = [...only].filter(x => !ROOMS[x]);
+    if (missing.length) say(`--only: ${missing.length} id(s) are not rooms and were skipped: ${missing.join(" \u00b7 ")}`);
+  }
   const picked = [];
   let n = 0;
   for (const [id, recs] of byRoom) {
+    if (only && !only.has(id)) continue;
     if (want && id !== want) continue;
     if (recs.length < 2 && !want) continue;   // one string cannot contradict itself
     const state = dossierState("room:" + id, recs);
@@ -571,7 +580,19 @@ if (has("about") || has("dossiers")) {
     process.exit(1);
   }
   const seeding = has("seed"), delta = has("delta"), picked = [];
+  // --only <file>: one subject name per line. A dossier sweep hands its batch
+  // lists BACK to the tool so --seed records exactly what somebody read — a bare
+  // `--dossiers --seed` seeds every subject it dumps, which is the rubber stamp
+  // with a timestamp this file's header warns about (done once, reverted,
+  // 2026-09-08). Unresolvable names are reported rather than silently skipped.
+  let only = null;
+  if (val("only")) {
+    only = new Set(fs.readFileSync(val("only"), "utf8").split("\n").map(x => x.trim()).filter(Boolean));
+    const missing = [...only].filter(x => !subs.has(x));
+    if (missing.length) say(`--only: ${missing.length} name(s) are not subjects and were skipped: ${missing.join(" \u00b7 ")}`);
+  }
   for (const name of pick) {
+    if (only && !only.has(name)) continue;
     const { re, speakerOnly } = subs.get(name);
     // a record is ABOUT a subject if it names them, or is spoken by them
     const hits = out.filter(r => r.speaker === name || (!speakerOnly && re.test(r.text)));

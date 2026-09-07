@@ -1196,7 +1196,7 @@ function _newbieNudge() {
   const _hasLadyNum = Object.keys(G.phone.contacts || {}).some(id => G.phone.contacts[id] && NPC_ROLES[id]);
   if (!_flag("tipNumber") && !_hasLadyNum) {
     _setFlag("tipNumber");
-    _say("(A thought, since you're here: nobody's number is in your phone yet. Buy a lady a " +
+    _say("(A thought, since you're here: no lady's number is in your phone yet. Buy a lady a " +
       "drink or two until she's warm to you, then CONTACT her — that's how the rest of this " +
       "week gets interesting.)", "dim");
     return;                                   // one at a time; the bell keeps

@@ -993,7 +993,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "A dead pub at the dark end of the strip. The shamrock over the door has lost most of its green and all of its bulbs, and somebody long ago screwed a sheet of ply over the serving hatch and then, apparently, thought better of finishing the job. Inside it still smells faintly of beer and strongly of dust. The stools are stacked. There is a darts board with three darts still in it, and a fixtures list for a season that finished years ago. It is not derelict, which is the strange part — somebody swept it once, after the end, turned the taps off properly and squared the tables, and then locked the door and did not come back."
+      "desc": "A dead pub at the dark end of the strip. The shamrock over the door has lost most of its green and all of its bulbs, and somebody long ago screwed a sheet of ply over the serving hatch and then, apparently, thought better of finishing the job. Inside it still smells faintly of beer and strongly of dust. The stools are stacked. There is a darts board with three darts still in it, and a fixtures list for a season that finished years ago. It is not derelict, which is the strange part — somebody swept it once, after the end, turned the taps off properly and squared the tables, and then locked the front door and did not come back. The way in is the half-finished job — the ply over the serving hatch was never screwed down at one corner, and a man who wants in badly enough only has to want it."
     },
     {
       "id": "sukhumvit_crossing",
@@ -2499,7 +2499,7 @@
         "Poy",
         "Wayne"
       ],
-      "desc": "Open-fronted, louder than you expected from outside, which is saying something. The gold dragon above the bar was hand-painted by someone's cousin and has been there longer than most of the staff. Vintage Thai pop on the speakers — not the jukebox, it died in 2019, but the playlist is a faithful tribute. Nobody has updated it and nobody has complained. Pia keeps the bar — and the dead jukebox's memory — with a flat, unbothered calm."
+      "desc": "Open-fronted, louder than you expected from outside, which is saying something. The gold dragon above the bar was hand-painted by someone's cousin and has been there longer than most of the staff. Vintage Thai pop on the speakers — not the jukebox: that died in 2019, so the music comes off somebody's phone through the QR sticker the new owners put on every table. Almost nobody scans it, so the playlist stays whatever the last man who bothered chose, which is how it has stayed vintage. Pia keeps the bar — and the dead jukebox's memory — with a flat, unbothered calm."
     },
     {
       "id": "kitten_corner",
@@ -2552,7 +2552,7 @@
         "Ryan Powers",
         "Sudjai"
       ],
-      "desc": "The name is the last classy thing about it. Ryan Powers wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Ryan Powers, down here most nights."
+      "desc": "The name is the last classy thing about it. Ryan Powers wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Ryan Powers — down when he is in the country, which is not often, and never anywhere the soi itself can see him."
     },
     {
       "id": "pink_lotus",
@@ -3029,7 +3029,7 @@
       "people": [
         "Waen"
       ],
-      "desc": "A narrow open-front beer bar with eight stools and a sign that reads CL_ZE — the O came off in a storm and has stayed off. A blackboard by the ice bin carries a Thai word in a careful teacher's hand, the English under it, and a gap in a sentence for somebody to fill. On a good night half the stools are farang with notebooks, which on this soi is either very sad or the best idea anybody has had."
+      "desc": "A narrow open-front beer bar with eight stools and a sign that reads CL_ZE — the O came off in a storm and has stayed off. A blackboard by the ice bin carries a Thai word in a careful teacher's hand, the romanisation under it with the tone marks done properly, and a gap in a sentence for somebody to fill. On a good night half the stools are farang with notebooks, which on this soi is either very sad or the best idea anybody has had."
     },
     {
       "id": "cricketers",
@@ -3786,7 +3786,7 @@
       "dark": false,
       "mainRoad": true,
       "people": [],
-      "desc": "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and come two in the morning it will be the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the north-west corner is filling for the run north — up Second Road toward Terminal 21 — and the south-east corner is filling for Jomtien, and neither truck moves until its benches are full. The whole town runs one-way, counter-clockwise, so stand on the wrong corner and you will get where you are going eventually, the long way round, for the same fifteen baht."
+      "desc": "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and come midnight it will be the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the north-west corner is filling for the run north — up Second Road toward Terminal 21 — and the south-east corner is filling for Jomtien, and neither truck moves until its benches are full. The whole town runs one-way, counter-clockwise, so stand on the wrong corner and you will get where you are going eventually, the long way round, for the same fifteen baht."
     },
     {
       "id": "soi_diamond",
