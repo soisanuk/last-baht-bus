@@ -31,7 +31,9 @@ const PARTY_MULT_FACE     = 1.5;  // tier 1: she knows you; the math still exist
 const PARTY_MAX_GIRLS = 2;   // "or two" is the classic flex; three needs a minivan
 const PARTY_STOP_CAP  = 6;   // stops that pay สนุก/bond — a crawl, not a treadmill
 const PARTY_TAXI      = 200; // what she takes from your pocket to pour you home
-const LAST_BUS_TURN = 80;   // 02:00 — the songthaews go SPARSE (they never stop): flagging one after this is a wait at the kerb, and the kerb keeps whoever stands on it
+const LAST_BUS_TURN = 80;
+// 05:00 — the hour the sky actually starts, an hour before the night ends at 06:00
+const SUNRISE_TURN = 110;   // 02:00 — the songthaews go SPARSE (they never stop): flagging one after this is a wait at the kerb, and the kerb keeps whoever stands on it
 const LATE_MOTO_MULT = 1.6; // small-hours night rate: piwins price the thin hours, while they'll still have you
 const DOG_MOTOSAI_FARE = 10; // a dog needs his own bike — a buddy's saleng, waved over and paid on top (waived on the free pity-ride)
 const LADY_DRINK = 150;  // canon
@@ -2167,7 +2169,7 @@ const ROOMS = {
   },
   // Down-market by design, and the food court upstairs is where the fixed-income
   // expats eat — the same men the girls call cheap charlies, seen from the other side.
-  mikes_mall: { water: true,
+  mikes_mall: { closesAt: 30,   // 21:00 — a Thai mall shuts at nine, and so does his table water: true,
     name: "Mike's Mall",
     bar: "Mike's Mall",
     region: "Second Road",
@@ -7293,6 +7295,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         asks: { key: "girlfriend", q: "She folds, not looking up, in no hurry. \"You have somebody? Home, waiting?\" It is not the sale question — she seems to want to know. \"Kwan think everybody here miss somebody. Even the loud one.\"" } },
       // "my brother" — phi, the word she can use for him without losing face.
       // The quest offer prints after this (QUESTS.kwan_crane); the node is the lead-in.
+      // "BROTHER" IS DELIBERATE AND IS NOT A CLAIM (Mario, 2026-09-07 — flagged by the
+      // round-46 review as contradicting Nont's luk-khrueng upbringing, and kept). She
+      // says brother to a customer because a woman on this soi does not hand a farang a
+      // man, and because "brother" is what the girls call the boyfriend when the farang
+      // is listening. Nont's own reaction — "Brother. She said brother?" — is the joke.
+      // Do not reconcile these two backstories; the gap is the writing.
       { topic: "brother|nont|phi", notFlags: ["craneDelivered"],
         text: "\"My brother?\" The crane in her hands stops. \"Nont. Fix {{phone}} — Buakhao, the old " +
           "market. Everybody know him.\" A fold, another fold. \"He don't know anybody. Not any " +
@@ -10805,8 +10813,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "he found me on his own, the stubborn Dutch bastard — but Sven, Klaus… I thought they'd " +
           "gone home, or died.” He looks up. “They didn't. They got moved. Now I've got the list " +
           "and they've got a bar with the beer they like in it.” The nearest thing to a smile he " +
-          "has. “That's the first thing anybody's given me back in five years.”",
-        short: "“The book. First thing anybody's given me back in five years.”" },
+          "has. “That's the first thing anybody's given me back in eight years.”",
+        short: "“The book. First thing anybody's given me back in eight years.”" },
       { topic: "book|regulars|spreadsheet|customer book|list",
         when: (st, G) => _flag("barBook") && !_flag("bookGiven"),
         text: "“Funny thing.” He doesn't look up from the soda. “Three of my old Dutchmen turned " +
@@ -15527,6 +15535,8 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
     pronoun: "he",
     room: "mikes_mall",
     hops: false,
+    until: 30,   // he is there from opening until the mall shuts at nine, and then he walks home
+
     title: "the old man with the fifty-baht plate",
     look: "English man of seventy-eight, thin, white hair combed flat, sun-spotted, faded grey polo shirt, reading glasses on a cord",
     desc: "Seventy-eight, thin as a rail, white hair combed flat with water, in a grey polo shirt that " +

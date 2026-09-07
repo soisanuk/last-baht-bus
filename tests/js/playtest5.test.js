@@ -427,7 +427,7 @@ test("TRAVEL won't walk you to shutters or into the dawn", () => {
   doCommand("travel orchid club");
   assert.match(text(), /shuts at midnight/);
   assert.equal(G.room, "naklua_rd");
-  G.room = "ws_gate"; G.nightTurn = 95; out = [];
+  G.room = "ws_gate"; G.nightTurn = NIGHT_TURNS - 5; out = [];
   doCommand("travel hotel");
   assert.match(text(), /walking into the dawn/);
   assert.equal(G.room, "ws_gate");

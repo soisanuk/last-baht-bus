@@ -207,6 +207,12 @@ function _lockInWelcome(to) {
     !(G.soc.leftLockIn && G.soc.leftLockIn[to]));   // walked out tonight: the bolt stays (Stan, r35)
 }
 function _closedNow(to) {
+  // A venue may name its OWN closing turn (Mario, 2026-09-07: Mike's Mall shuts at
+  // nine like every mall in Thailand). `closesAt` is a nightTurn; it is checked
+  // before the bar path, because a mall is not a bar and none of the midnight
+  // machinery — last call, the Darkside bolt, the lock-in — applies to it.
+  const r = ROOMS[to];
+  if (r && r.closesAt != null) return _flag("act1Done") && G.nightTurn >= r.closesAt;
   return _flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 60 &&
     !(G.soc.lockIn && G.soc.lockIn[to]) && !_lockInWelcome(to);
 }
@@ -217,8 +223,17 @@ function _lockInDoorHere() {
   const near = [].concat(r.venues || [], Object.values(r.exits || {}));
   return near.find(id => typeof id === "string" && _lockInWelcome(id)) || null;
 }
+// A shop or mall that keeps daytime hours, seen from outside after they end.
+const _SHUT_EARLY = [
+  "The shutters are down and the lights inside are the two the guard leaves on. Whatever they sell in there, they sell it to people who get up in the morning.",
+  "Closed. A grille across the entrance, a security man on a plastic chair with his phone, and the whole building doing an impression of a place that was never open.",
+  "Shut for the night. The escalators are stopped mid-stride behind the glass and the air coming off the doors is no longer cold.",
+]
+;
 function _closedMsg(to) {
   const r = ROOMS[to];
+  if (r && r.closesAt != null)
+    return _pickVary(_SHUT_EARLY, "shutearly:" + to);
   if (r.region === "Darkside") {
     // The tease has to stop being a tease once the player can answer it. For a
     // man who has been bolted in somewhere on this side, the padded door is no
@@ -3400,7 +3415,14 @@ function _addHappy(n, why) {
 // slept through; the game is the nights. A vacation is seven days; expats
 // don't count.
 
-const NIGHT_TURNS = 100;
+// THE NIGHT RUNS TO 06:00 (Mario, 2026-09-07). It ended at 04:00, which put every
+// dawn line in the game two hours early — the all-nighter pools describe monks on
+// alms round and pressure-washed pavement, and WATCH SUNRISE opened at 02:30 and
+// narrated a school run. 120 turns at six minutes each is 18:00 → 06:00, which is
+// when Pattaya actually hands over. Costs ~8 hunger and ~10 thirst on an idle
+// night (measured), well inside the 100 redline. Every absolute nightTurn gate
+// (midnight = 60, last bus = 80) keeps its meaning.
+const NIGHT_TURNS = 120;
 
 function _clockStr(turn) {
   const t = turn == null ? G.nightTurn : turn;
@@ -3872,7 +3894,7 @@ const _DEBRIEF = {
   // defect this file keeps catching elsewhere, so it returns nothing.
   dawn: () => (_flag("act1Done") && G.room === _hotelRoomId()) ? null : ({
     what: "The night will run out at dawn, wherever you are.",
-    why: "A night is " + NIGHT_TURNS + " turns and ends at 04:00. STANDING at " +
+    why: "A night is " + NIGHT_TURNS + " turns and ends at 06:00. STANDING at " +
       "dawn is legal — the all-nighter taxis you home in the light and bills " +
       "the morning instead (a heavier hangover, a slower start). PASSING OUT " +
       "first — blackout, collapse — is what costs you up to ฿" + _num(ROUGH_WAKE_CAP) +
@@ -4019,11 +4041,25 @@ const _SCAM_LEAVE = [
 // Dawn on your feet: the whole arc — and then the taxi home in the light.
 const _ALLNIGHTER_LINES = [
   "The music finally stops and the room is suddenly a room: strip lights, wet floor, chairs. The club empties into the soft light, the street sweepers work around the wreckage, and a taxi with its windows down carries you home through a town changing shifts — night people going to bed, monks already walking. You did the whole night. All of it.",
-  "04:00 arrives and finds you still standing, which at this point feels like a citation for valour. You share a taxi with two strangers and a man asleep in a party hat, watch the neon give up section by section, and let yourself in as the breakfast carts light their first burners. The bed takes you like an old friend.",
-  "Dawn. The music stops being music and becomes memory; the lights come up on faces that have all earned the morning. You walk out into grey light and pressure-washed pavement, flag the first songthaew of the DAY shift, and ride home with the wind doing what it can for you. The night is over because it ran out of night.",
+  "06:00 arrives and finds you still standing, which at this point feels like a citation for valour. You share a taxi with two strangers and a man asleep in a party hat, watch the neon give up section by section, and let yourself in as the breakfast carts light their first burners. The bed takes you like an old friend.",
+  "Dawn. The music stops being music and becomes memory; the lights come up on faces that have all earned the morning. You walk out into pink light and pressure-washed pavement, flag the first songthaew of the DAY shift, and ride home with the wind doing what it can for you. The night is over because it ran out of night.",
   "You close the place. Not a figure of speech — a woman in rubber gloves is stacking stools around you when you finally surface, and outside the sky is the colour of the inside of a shell. The ride home smells of jasmine from somewhere and last night from you. Worth it. Ask again at noon.",
 ];
 // dawn inside somewhere that isn't a bar — an office, a motel counter (Owen, round 46: "still upright on the soi" printed in a windowless office)
+// You waited for it on purpose and then went home. The night ends on the sky,
+// not on your legs (Mario, 2026-09-07: "watching the sunrise should end the night").
+const _SUNRISE_END = [
+  "You watch it all the way up, which takes longer than anybody expects and is over faster " +
+    "than it looks. Then the light is just daylight, the town is just a town, and there is nothing " +
+    "left to stay for. You get a bike home with the sun on the back of your neck.",
+  "The sky finishes what it was doing. Somewhere behind you a shutter goes up, and a woman " +
+    "starts frying something for people who have slept. You are not one of them, and you have never " +
+    "minded less. Home, unhurried, in the light.",
+  "It comes up behind the town the way it always does — over the hills, over Sukhumvit, over the " +
+    "traffic — and lands on the water last of all. You stay until it does. Then you go to bed like " +
+    "a man who has finished something.",
+]
+;
 const _ALLNIGHTER_INDOORS = [
   "The light changes under the door before anything else does, and you are, somehow, still upright to notice it. Outside, the sweepers; in here, the fluorescent tube that has been the whole night's sky.",
   "Dawn arrives as a strip of grey under the door and a change in the traffic note. You have been indoors for all of it and you can feel every hour in your back.",
@@ -4031,7 +4067,7 @@ const _ALLNIGHTER_INDOORS = [
 ];
 const _ALLNIGHTER_STREET = [
   "The sky goes grey over the soi and you are, somehow, still upright on it. The sweepers work round you; a noodle cart is setting up where a bar's tables were an hour ago. A taxi with two strangers in it slows, and the driver waves you in for the price of the light, which this once is nothing.",
-  "04:00 finds you on the pavement, which at this point counts as an achievement. The shutters are down the length of the street and the first monks will be out within the hour. You share a taxi home with a man who says nothing and a woman who says everything.",
+  "06:00 finds you on the pavement, which at this point counts as an achievement. The shutters are down the length of the street and the first monks are out. You share a taxi home with a man who says nothing and a woman who says everything.",
   "Dawn on the kerb. The neon has been off long enough that you'd forgotten the street had a colour. A songthaew with three sleeping girls in the back takes you most of the way for the day rate, and the driver does not ask.",
 ];
 function _endNight(reason) {
@@ -4109,6 +4145,12 @@ function _endNight(reason) {
         "04:00. The last bars stack their stools; the baht buses carry home the " +
         "wreckage; somewhere a rooster who fears nothing starts up. You drift " +
         "back and let the day take you.", "room");
+      break;
+    case "sunrise":
+      // You stayed out for it deliberately, which is the difference: the all-nighter
+      // is what happens to you, this is what you did. Same body cost, more สนุก.
+      _say(_pickVary(_SUNRISE_END, "sunriseEnd"), "win");
+      _addHappy(3);
       break;
     case "allnighter":
       // A bolted lock-in has its own dawn: the generic line had "the club

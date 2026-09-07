@@ -4913,15 +4913,20 @@ const _SUNRISE_INDOORS = [
 ];
 function _doWatchSunrise() {
   const r = _room();
-  const indoors = !!(r.bar || r.barType || r.shop || r.massage || r.soapy || r.seven || _isHotelRoom(G.room));
+  // a street with a 7-Eleven on it is a STREET (`seven` is a shop the room *has*, not a
+  // room you are inside) — the same class as the downpour that put an awning over a
+  // motel counter, found the same day (round-46 review, 2026-09-07)
+  const indoors = !!(r.bar || r.barType || r.shop || r.massage || r.soapy || r.indoors || _isHotelRoom(G.room));
   const balcony = G.room === "qv_room" || (typeof _hotelRoomId === "function" && G.room === _hotelRoomId() && G.hotel === "queenvic");
   if (indoors && !balcony) { _say(_pickVary(_SUNRISE_INDOORS, "sunriseIn"), "dim"); return; }
-  if (G.nightTurn < LAST_BUS_TURN + 5) { _say(_pickVary(_SUNRISE_SOON, "sunriseSoon"), "dim"); return; }
+  // 05:00. Before that the sky is not doing anything yet and he says so.
+  if (G.nightTurn < SUNRISE_TURN) { _say(_pickVary(_SUNRISE_SOON, "sunriseSoon"), "dim"); return; }
   _say(_pickVary(_SUNRISE, "sunrise"), "win");
   if (G.sunriseDay === G.day) return;               // one sky a night
   G.sunriseDay = G.day;
   _addHappy(2);                                      // free, and the point of staying up
-  _say("(สบาย. You will pay for this in about four hours, and it will still have been worth it.)", "dim");
+  // …and it ENDS THE NIGHT. You waited for the sky; there is nothing after it.
+  _endNight("sunrise");
 }
 
 function _doWatchJunction(arg) {

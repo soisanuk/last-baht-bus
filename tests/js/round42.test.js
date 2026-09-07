@@ -163,21 +163,29 @@ test("the streets know what time it is, in a pool (Jacko / Mario)", () => {
   assert.ok(seen.size >= 2, "the late paint varies");
 });
 
-test("WATCH SUNRISE is a real thing, and the sun comes up behind the town (Jacko)", () => {
-  G.room = "jomtien_beach"; G.nightTurn = 90; const h = G.happy;
+test("WATCH SUNRISE is a real thing, it comes up behind the town, and it ENDS the night (Jacko; Mario 2026-09-07)", () => {
+  G.room = "jomtien_beach"; G.nightTurn = SUNRISE_TURN + 2; const h = G.happy, d = G.day;
   out = []; run("watch sunrise");
-  assert.ok(_SUNRISE.some(l => text().includes(l.slice(0, 40))));
-  assert.equal(G.happy, h + 2); assert.match(text(), /สบาย/);
-  out = []; run("watch sunrise"); assert.equal(G.happy, h + 2, "one sky a night");
-  G.nightTurn = 30; out = []; run("watch dawn"); assert.match(text(), /Too early|Not yet/);
-  G.room = "candy_bar"; G.nightTurn = 95; out = []; run("watch sunrise"); assert.match(text(), /Not from in here|No window/);
-  // it never claims the sun rises out of the sea: Pattaya faces west
+  assert.ok(_SUNRISE.some(l => text().includes(l.slice(0, 40))), "the sky");
+  assert.ok(_SUNRISE_END.some(l => text().includes(l.slice(0, 40))), "and then you go home on it");
+  assert.equal(G.happy, h + 5, "+2 for the sky, +3 for having waited for it");
+  assert.equal(G.day, d + 1, "the night ends on the sunrise");
+  assert.equal(G.nightLog[G.nightLog.length - 1], "sunrise");
+  // too early, indoors, and the shape of the sky itself
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); G.stage = "vacation";
+  G.room = "jomtien_beach"; G.nightTurn = 30; out = []; run("watch dawn");
+  assert.match(text(), /Too early|Not yet/);
+  G.room = "candy_bar"; G.nightTurn = SUNRISE_TURN + 5; out = []; run("watch sunrise");
+  assert.match(text(), /Not from in here|No window/);
+  assert.equal(G.day, 2, "an indoors refusal does not end anybody's night");
   for (const l of _SUNRISE) assert.doesNotMatch(l, /sun (rises?|coming up) (out of|from) the sea|over the sea/);
-  // three surfaces: the parser has it, the completion offers it late and outdoors, HELP names it
-  G.room = "jomtien_beach"; G.nightTurn = 95;
+  // offered late and outdoors only — and a street with a 7-Eleven on it is a street
+  G.room = "jomtien_beach"; G.nightTurn = SUNRISE_TURN + 5;
   assert.ok(engineComplete("watch ").some(c => /sunrise/.test(c)), "offered at dawn, outdoors");
+  G.room = "beach_rd_c"; out = []; run("watch sunrise");
+  assert.ok(!/Not from in here|No window/.test(text()), "a 7-Eleven does not put a roof on Beach Road");
   G.nightTurn = 20; assert.ok(!engineComplete("watch ").some(c => /sunrise/.test(c)), "…and not at eight in the evening");
-  assert.match(_HELP, /WATCH SUNRISE/);
 });
 
 test("the town's standard compliment: once per person, and never from Nont (Mario)", () => {

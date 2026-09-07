@@ -903,7 +903,7 @@ test("the last night of the week is not free — the town doesn't check your fli
   // making it strictly optimal to blow the bankroll and pass out in the road on
   // night seven. The debrief promised a penalty the code then skipped.
   state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
-  state().day = 7; state().money = 1750; state().room = "naklua_rd"; state().nightTurn = 99;
+  state().day = 7; state().money = 1750; state().room = "naklua_rd"; state().nightTurn = NIGHT_TURNS - 1;
   state().dog = null;
   _endNight("collapse");
   assert.equal(state().pendingChoice, "vacation_end", "the week still ends");
@@ -2836,7 +2836,7 @@ test("_passTime aborts a multi-tick action when the night ends — no phantom ti
   // short-time/massage/soapy loops ticked straight past _endNight into the next
   // night. _passTime stops the moment the day advances.
   state().stage = "vacation"; state().flags.act1Done = true;
-  state().day = 3; state().nightTurn = 98; state().room = "sunset_rail";
+  state().day = 3; state().nightTurn = NIGHT_TURNS - 2; state().room = "sunset_rail";
   const ended = _passTime(6);
   assert.ok(ended, "it reports the night ended mid-pass");
   assert.equal(state().day, 4, "the day advanced (dawn came)");
@@ -3070,7 +3070,7 @@ test("Act One is do-or-die: dawn without room 412 hard-resets to the beach", () 
   state().flags.knowOyHasIt = true;
   state().room = "beach_rd_c";
   state().money = 500;
-  state().nightTurn = 99;
+  state().nightTurn = NIGHT_TURNS - 1;
   run("wait");
   assert.match(lastOut(), /BEAT YOU HOME/, "the opening quest fails hard");
   assert.match(lastOut(), /THE LAST BAHT BUS/, "and the game restarts from the top");
@@ -3087,14 +3087,14 @@ test("Act One reset keeps a critical-path high-water mark, shown on the next run
   state().flags.knowMot = true;
   state().flags.knowOyHasIt = true;
   state().flags.knowDoorTrick = true;      // four milestones
-  state().nightTurn = 99;
+  state().nightTurn = NIGHT_TURNS - 1;
   run("wait");
   assert.equal(state().act1Best, 4);
   assert.match(lastOut(), /Furthest yet: 4\/7/, "a personal best is called out");
   assert.match(lastOut(), /Best run home so far: 4\/7/, "and echoed as the new run opens");
   // a worse run doesn't lower the mark
   state().flags.knowWasHere = true;         // just one this time
-  state().nightTurn = 99;
+  state().nightTurn = NIGHT_TURNS - 1;
   out = [];
   run("wait");
   assert.equal(state().act1Best, 4, "the best stands");
@@ -3678,7 +3678,7 @@ test("the taxi intro gates Soi 6 mode too, then opens the week", () => {
 
 test("your identity is picked once and survives an Act One reset", () => {
   // beforeEach set monger/joker/straight; a hard fail must not re-ask it
-  state().nightTurn = 99;
+  state().nightTurn = NIGHT_TURNS - 1;
   run("wait");                                // dawn → _act1Fail → reset
   assert.equal(state().player.origin, "monger", "who you are carries across the reset");
   assert.notEqual(state().pendingChoice, "intro", "no second trip through the taxi");
@@ -3725,7 +3725,7 @@ test("HINT is coy on the first run, then whispers the next step from round two",
   run("hint");
   assert.match(lastOut(), /No hints your first night/i);
   // a failure unlocks it (act1Tries → 1)
-  state().nightTurn = 99;
+  state().nightTurn = NIGHT_TURNS - 1;
   out = [];
   run("wait");                              // hard fail + reset
   assert.equal(state().act1Tries, 1, "the attempt counted");

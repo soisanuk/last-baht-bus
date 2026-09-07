@@ -4922,7 +4922,7 @@ function _doGive(itemWord, npcWord) {
     _npcState("fast_eddy").trust = Math.min(5, (_npcState("fast_eddy").trust || 0) + 2);
     _say("You put the stick on the bar and tell him what's on it. He doesn't touch it for a " +
       "while. Then he does, and reads the first screen of names with his lips moving very " +
-      "slightly, and you understand that for five years he thought these people had simply " +
+      "slightly, and you understand that for eight years he thought these people had simply " +
       "stopped existing. \"Dirk,\" he says. \"Dirk still comes. Found me on his own.\" He " +
       "scrolls. \"Klaus. I thought Klaus died.\" Nothing else for a long moment. The bar goes " +
       "on around the two of you like weather.", "win");
@@ -10537,7 +10537,7 @@ function _dailySeed(str) {
 // One emoji per night's ending — outcome class only, never content (no girl,
 // no quest, no venue), so a posted card teases without spoiling.
 const _NIGHT_EMOJI = {
-  sleep: "🛏", barfine: "💋", dawn: "🌅", allnighter: "🌇", blackout: "🍺", collapse: "😵",
+  sleep: "🛏", barfine: "💋", dawn: "🌅", allnighter: "🌇", sunrise: "🌄", blackout: "🍺", collapse: "😵",
   hurt: "🚑", accident: "🛵", roadhit: "🚛", robbed: "💸", bfscam: "🐍",
 };
 
