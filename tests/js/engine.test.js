@@ -4229,7 +4229,8 @@ test("Glam: the Cheeky Monkey regular, shuttled to Hyper, and protected", () => 
   assert.ok(g.protected, "age, money and standing put him off-limits");
   // early evening at Cheeky Monkey; escorted across to Hyper after 22:00
   state().nightTurn = 20; assert.equal(_npcWhere("glam"), "cheeky_monkey");
-  state().nightTurn = 55; assert.equal(_npcWhere("glam"), "hyper");
+  state().nightTurn = NPCS.glam.shuttle.after * 10; assert.equal(_npcWhere("glam"), "hyper");
+  state().nightTurn = NPCS.glam.shuttle.until * 10; assert.equal(_npcWhere("glam"), "cheeky_monkey", "back to his own bar after the hour");
   // harming a protected regular gets the swift repercussion, not the usual shrug
   state().flags.act1Done = true; state().flags.hasWallet = true;
   state().nightTurn = 20; state().room = "cheeky_monkey";
@@ -4245,7 +4246,7 @@ test("_questWhere tracks a shuttled patron giver's live bar, not a stale room", 
   state().nightTurn = 20;
   const early = _questWhere("glam");
   assert.match(early, /Cheeky Monkey/, "before 22:00 he's at his home bar");
-  state().nightTurn = 55;
+  state().nightTurn = NPCS.glam.shuttle.after * 10;
   const late = _questWhere("glam");
   assert.match(late, /Hyper/, "after the shuttle the clue follows him to Hyper");
   assert.notEqual(early, late, "the where-clause actually moved with him");

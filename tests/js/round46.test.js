@@ -321,3 +321,22 @@ test("Nont's arithmetic holds: father gone at twelve, on the till at fourteen, t
   const corpus = all + Object.values(NPCS.fast_eddy.dialogue).map(d => (d.text || "") + (d.short || "")).join(" ");
   assert.doesNotMatch(corpus, /given me back in five years/, "the sale has one date");
 });
+
+test("Glam walks the crossing on somebody's arm, and comes back after an hour (Mario, 2026-09-07)", () => {
+  vac(); _setFlag("act1Done");
+  // the saleng brings him to the strip and takes him home; the road is done on foot
+  assert.match(NPCS.glam.desc, /saleng/);
+  assert.match(NPCS.glam.desc, /escorted across/);
+  const pools = [..._GLAM_GOES, ..._GLAM_COMES].join(" ");
+  assert.doesNotMatch(pools, /wheel|chair|brake|pushed off/i, "there is no wheelchair");
+  assert.match(pools, /arm/, "he is escorted");
+  // the shuttle is a window: over for the music, back to his own bar after an hour
+  assert.equal(NPCS.glam.shuttle.until, NPCS.glam.shuttle.after + 1);
+  const at = h => { G.nightTurn = h * 10; return _npcRoom("glam"); };
+  assert.equal(at(3), "cheeky_monkey");
+  assert.equal(at(4), "hyper", "over the road for the music");
+  assert.equal(at(5), "cheeky_monkey", "and back to his regular bar");
+  assert.equal(at(9), "cheeky_monkey");
+  // _railRoomAt agrees, or the narration reports a move that didn't happen
+  for (const h of [3, 4, 5, 9]) { G.nightTurn = h * 10; assert.equal(_railRoomAt("glam", h), _npcRoom("glam"), "hour " + h); }
+});

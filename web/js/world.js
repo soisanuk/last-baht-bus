@@ -3570,7 +3570,7 @@ const ROOMS = {
     name: "Kitten Corner",
     region: "Soi 6",
     bar: "Kitten Corner", barType: "soi6",
-    desc: "Open to the pavement, walled in cat posters and a neon paw print. Praewa and " +
+    desc: "Open to the pavement, walled in cat posters and a neon paw print, with a curtained doorway at the back into the cold half — pool table, toilets, and the only aircon on this stretch of the soi, which is where everybody drifts by midnight. Praewa and " +
       "Nangfah work the front, and the grab-and-giggle starts before you've fully stopped " +
       "walking; Kesinee watches it all from the end of the rail, pricing you before you sit, " +
       "and Baimon has the till. A " +
@@ -14208,7 +14208,7 @@ const _REGULARS = {
   glam: {
     name: "Glam", emoji: "🎸", age: 77, nat: "German",
     pronoun: "he",
-    patron: true, room: "cheeky_monkey", hops: false, shuttle: { after: 4, to: "hyper" }, protected: true,
+    patron: true, room: "cheeky_monkey", hops: false, shuttle: { after: 4, until: 5, to: "hyper" }, protected: true,
     look: "German man of seventy-seven, wild sparse blonde hair, silk shirt open at the chest, tanned.",
     desc: "Somewhere north of seventy-five and dressed like it's 1983 in a Munich discotheque: a silk " +
       "shirt open one button too far, and a wild halo of sparse blonde hair caught somewhere between " +

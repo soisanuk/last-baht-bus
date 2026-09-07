@@ -623,7 +623,7 @@ function _npcRoom(id) {
   const n = NPCS[id];
   if (n.bars && n.bars.length) return n.bars[G.day % n.bars.length];
   // Glam's escorted evening — home bar early, wheeled across after 22:00.
-  if (n.shuttle) return _nightHour() >= n.shuttle.after ? n.shuttle.to : n.room;
+  if (n.shuttle) return _inShuttle(n, _nightHour()) ? n.shuttle.to : n.room;
   // Auntie Nok's evening feed: her own dialogue says "morning AND night, ten
   // year" — the morning half is outside the simulated clock entirely (the
   // night runs 18:00-04:00), but the evening half is a recurring, checkable
@@ -805,17 +805,31 @@ const _RAIL_QUIZ = [
 ];
 // Glam has been wheeled across to the other bar at ten every night of this
 // game's life, and it has never once been said out loud.
+// GLAM WALKS, ESCORTED — THERE IS NO WHEELCHAIR (Mario, 2026-09-07). The saleng is
+// how he ARRIVES on the strip and how he is shuttled home at the end; the crossing
+// between the two bars is done on his feet, one arm held by his companion or the
+// Hyper mama, and on a bad night by both of them with a dancer sent out to help.
+// His desc always said this; only these two pools had invented the chair.
+// A shuttle is a WINDOW, not a one-way trip: he goes over for the music and comes
+// back to his own bar after an hour (`until`, exclusive). Omit `until` for a move
+// that stands for the rest of the night.
+function _inShuttle(n, hour) {
+  return hour >= n.shuttle.after && (n.shuttle.until == null || hour < n.shuttle.until);
+}
 const _GLAM_GOES = [
-  "Somebody takes the brake off Glam's chair, and the pair of them set off for the other bar " +
-    "at the pace of a man who has all night.",
-  "Glam checks his watch, taps the arm of the chair twice, and is wheeled out towards the other bar.",
-  "“Same time,” says Glam, and is pushed off down the pavement towards the other bar.",
+  "His companion appears at his elbow without being asked, and the pair of them set off for " +
+    "the other bar at the pace of a man who has all night and intends to use it.",
+  "Glam checks his watch, taps the rail twice, and stands — slowly, and with a hand under each " +
+    "arm, because the mama has come out from behind her own till to take the other one.",
+  "“Same time,” says Glam, and goes out into the road between his companion and one of the " +
+    "girls, who has been sent across for exactly this and does not mind.",
 ];
 const _GLAM_COMES = [
-  "Glam is wheeled in, parked at his usual angle to the rail, and has a drink in front of him " +
-    "before the brake is back on.",
-  "The chair comes through the doorway backwards, as it has to, and Glam is installed at the rail.",
-  "Glam arrives on wheels and greets the bar like a man opening a meeting.",
+  "Glam comes in on his companion's arm, settles at his usual angle to the rail, and has a " +
+    "drink in front of him before he has finished sitting down.",
+  "The doorway takes them two abreast and slowly, and then Glam is installed at the rail with " +
+    "the air of a man arriving exactly on time.",
+  "Glam arrives on somebody's arm and greets the bar like a man opening a meeting.",
 ];
 
 // Where somebody stands at a GIVEN hour, settle and shuttle included — the form
@@ -823,7 +837,7 @@ const _GLAM_COMES = [
 function _railRoomAt(id, hour) {
   const n = NPCS[id];
   if (!n) return null;
-  if (n.shuttle) return hour >= n.shuttle.after ? n.shuttle.to : n.room;
+  if (n.shuttle) return _inShuttle(n, hour) ? n.shuttle.to : n.room;
   if (!_canHop(id)) return n.room;       // the MAN, not the hour — see _canHop
   return hour >= HOP_SETTLE ? n.room : _hopRoom(id, hour);
 }

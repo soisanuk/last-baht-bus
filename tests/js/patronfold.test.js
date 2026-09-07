@@ -65,7 +65,8 @@ test("David teaches Mon/Fri: on the stool his nights out, inactive (not homeless
 
 test("Glam is at the Cheeky Monkey early and walked across to Hyper after 22:00", () => {
   G.nightTurn = 20; assert.equal(_npcRoom("glam"), "cheeky_monkey");
-  G.nightTurn = 55; assert.equal(_npcRoom("glam"), "hyper");
+  G.nightTurn = NPCS.glam.shuttle.after * 10; assert.equal(_npcRoom("glam"), "hyper", "over the road for the music");
+  G.nightTurn = NPCS.glam.shuttle.until * 10; assert.equal(_npcRoom("glam"), "cheeky_monkey", "and back after an hour");
   assert.ok(NPCS.glam.protected, "age, money and standing keep him off-limits");
 });
 

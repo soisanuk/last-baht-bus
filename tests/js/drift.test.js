@@ -218,8 +218,8 @@ test("Glam's shuttle keeps its own probe — a certain move still reads as one",
   G.room = "sunset_rail";
   G.nightTurn = 20;
   assert.match(_questWhere("glam"), /Cheeky Monkey/, "early doors, his own bar");
-  G.nightTurn = 55;
-  assert.match(_questWhere("glam"), /Hyper/, "after ten, wheeled across");
+  G.nightTurn = NPCS.glam.shuttle.after * 10;
+  assert.match(_questWhere("glam"), /Hyper/, "after ten, escorted across for the hour");
 });
 
 // ── invariants the drift newly makes possible ───────────────────────────────
@@ -305,7 +305,7 @@ test("Glam's shuttle is finally narrated, from both ends", () => {
   G.room = NPCS.glam.room; out = [];
   _railTick();
   assert.match(text(), /Glam/, "the bar he leaves sees him leave");
-  assert.match(text(), /wheel|chair|pushed/i, "and it is his chair, which is the point of the beat");
+  assert.match(text(), /arm|companion|mama/i, "escorted on foot — there is no chair (Mario, 2026-09-07)");
   G.room = NPCS.glam.shuttle.to; out = [];
   _railTick();
   assert.match(text(), /Glam/, "the bar he arrives at sees him arrive");
