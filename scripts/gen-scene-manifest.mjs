@@ -172,6 +172,24 @@ const DARK_LIGHT = {
 //
 // Authored, like `darkLight`. Absent means an ordinary open street. Only
 // meaningful for outdoor kinds — a bar interior's width is the kind's business.
+// A TRUNK ROAD is not a bar soi, and nothing in the data says which is which.
+// `kind: "street"` covers both, and these sit in bar-lined regions, so they
+// inherit the neon-soi head and render as nightlife: Central Pattaya Road's east
+// stretch is "tyre shops, a car showroom, the pavement giving up", and it was
+// coming out as a neon strip. Authored for the same reason as `narrow` — the
+// prose knows and the fields do not.
+//
+// Judged on PROSE, never the name: Thappraya's "Main Strip" is named like a road
+// and is genuinely a bar strip, while Soi Buakhao's Klang end is named like a soi
+// and is genuinely one. Add a room here only when its own text says traffic.
+const MAIN_ROAD = new Set([
+  "pattaya_klang",       // "the big east-west artery"
+  "pk_buakhao",          // a four-way junction, bikes ten deep at the red
+  "pk_east",             // "where the town stops pretending to be a resort"
+  "pattaya_tai",         // "the junction at the bottom of everything"
+  "sukhumvit_crossing",  // "eight lanes of Sukhumvit roaring"
+]);
+
 const NARROW = new Set([
   "ws_alley",                                        // service alley behind the strip
   "tt_lane_1", "tt_lane_2", "tt_lane_3",             // Tree Town IS a pocket maze —
@@ -195,6 +213,7 @@ for (const id of Object.keys(ROOMS)) {
     // only meaningful when dark: what is lit, or null for genuinely deserted
     darkLight: r.dark ? (DARK_LIGHT[id] || null) : undefined,
     narrow: NARROW.has(id) || undefined,   // absent = an ordinary open street
+    mainRoad: MAIN_ROAD.has(id) || undefined,  // traffic artery, not a bar soi
     people: peopleIn(id, r),
     desc: stripMarkup(r.desc),   // sampleDescs read from these rooms, so they inherit the strip
   });
