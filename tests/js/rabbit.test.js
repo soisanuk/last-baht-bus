@@ -707,7 +707,7 @@ test("BURN LEDGER ends the holding; the office is indoors; the office chip offer
 test("Bert greets his own boss as the boss; Nuan notices Eddy's gone; CALL EDDY while away is voiced", () => {
   _setFlag("barPaid"); G.bar.room = "stinky_bar"; G.room = "stinky_bar"; G.talked = {};
   out = []; run("talk to bert");
-  assert.match(text(), /Guv/, "not 'Welcome to the Stinky' to the man whose name is on the float");
+  assert.match(text(), /Boss\./, "not 'Welcome to the Stinky' to the man whose name is on the register — and he is American, so never 'Guv'");
   recruit(); intoOffice();
   nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
   morningAfter();

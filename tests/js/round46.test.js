@@ -359,3 +359,30 @@ test("Wimon says her own three errands out loud, and the closed door survives (r
   const live = NPCS.wimon.dialogue.filter(d => d.when && d.chip === false);
   assert.equal(live.length, 3, "one voiced offer per quest, all chip:false");
 });
+
+test("a two-leg errand points HINT at the leg you are on (Opus quest re-run)", () => {
+  vac(); _setFlag("act1Done"); G.quests.lake_errand = "active"; G.room = "stinky_bar"; G.itemLoc.tiffin = "inventory";
+  const where = () => { out = []; run("quests"); return text(); };
+  assert.match(where(), /Nont is at/, "leg one: carry the tiffin to the market");
+  _setFlag("tiffinDelivered");
+  assert.match(where(), /Duangjai is at/, "leg two: go back and tell her");
+  // the pattern safecracker already used — and the soi6 gate must read it through _qAt
+  assert.equal(typeof QUESTS.lake_errand.at, "function");
+  assert.equal(typeof QUESTS.safecracker.at, "function");
+  const src = readFileSync(new URL("../../web/js/engine-systems.js", import.meta.url), "utf8");
+  assert.doesNotMatch(src, /const targetRoom = ROOMS\[q\.at\]/, "a conditional at: must not be read raw");
+});
+
+test("Bert is American: no Guv, no pint, no bloody, no that lot (Mario, 2026-09-07)", () => {
+  const t = NPCS.bert.dialogue.map(d => (d.text || "") + " " + (d.short || "")).join(" ") + NPCS.bert.desc;
+  for (const re of [/\bGuv\b/, /\bthe float\b/, /\ba pint\b/, /\bbloody\b/, /\bthat lot\b/, /\bmate\b/, /knocks a bit off/, /comes round/])
+    assert.doesNotMatch(t, re, `British tell in an American's mouth: ${re}`);
+  assert.match(t, /Walmart|bud\b|favor|humor/, "…and the American register is still there");
+});
+
+test("Wimon counts the same three beer bars twice", () => {
+  const greet = NPCS.wimon.dialogue.find(d => !d.topic && d.th).text;
+  const samson = NPCS.wimon.dialogue.find(d => d.topic === "samson").text;
+  assert.match(greet, /Three bar I look after/);
+  assert.match(samson, /this bar and the two others I run/, "not 'this bar, and that one' — that was two");
+});

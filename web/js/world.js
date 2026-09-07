@@ -9765,7 +9765,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "funny business. You drink, you play a game, you buy a lady a cola — easy. The go-go and the " +
           "quiet clubs, different manager; me, I do the honest bars.\"",
         short: "\"Three beer bars I run for the boss. Drink, play, buy a lady a cola. Easy.\"" },
-      { topic: "samson", text: "\"The Samson brothers own this bar, and that one, and the go-go, and " +
+      { topic: "samson", text: "\"The Samson brothers own this bar and the two others I run, and the go-go, and " +
           "the two quiet clubs — half the strip, really.\" A businesslike nod. \"Good owners. They put " +
           "the money back in. That is why the aircon work and the roof don't leak, na.\"" },
       { topic: "glam", text: "\"Ah — Khun Glam.\" Wimon's face softens into something you can't read " +
@@ -11769,10 +11769,10 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       "quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last three of them within nine feet of that pool table.",
     dialogue: [
       { when: (st, G) => _flag("barPaid"),
-        text: "\"Guv.\" Bert doesn't look up from the cue he's chalking, which is how he says hello to " +
-          "the man whose name is on the float. \"Till's honest, ice is in, Doug's on his third and " +
+        text: "\"Boss.\" Bert doesn't look up from the cue he's chalking, which is how he says hello to " +
+          "the man whose name is on the register. \"Till's honest, ice is in, Doug's on his third and " +
           "pretending it's his first. Anything you want to know, BOOKS knows it before I do.\"",
-        short: "\"Guv. Till's honest, ice is in.\"" },
+        short: "\"Boss. Till's honest, ice is in.\"" },
       // Bert briefs you on rent, key money, the note and the wet at the deposit,
       // and then couldn't discuss a word of it — five topics he put in your
       // mouth, five misses (Des, round 41). And "partner" pointed at nobody.
@@ -11783,8 +11783,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "pick the one you'd hand your passport to.\" (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP)",
         short: "\"Candy first, then Tan. Hear both before you pick.\" (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP)" },
       { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease) && !G.bar.lease.paid,
-        text: "\"The landlord's month. Due with the first rent on the app — or notes in his hand before " +
-          "then and he knocks a bit off. He'd rather the notes. He'd rather everything was notes.\" " +
+        text: "\"The landlord's month. Due with the first rent on the app — or notes in his hand before then and he takes a little off the top. He'd rather the notes. He'd rather everything was notes.\" " +
           "(PAY KEY MONEY · TRANSFER KEY MONEY)",
         short: "\"Notes before the first rent, or the app. He'd rather notes.\" (PAY KEY MONEY · TRANSFER KEY MONEY)" },
       { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease && G.bar.lease.paid),
@@ -11798,7 +11797,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         short: "\"฿" + BAR_MONTHLY + " a month, he'll not chase. PAY THE NOTE, or PAY NOTE <amount>.\"" },
       { topic: "rent|landlord", when: (st, G) => _flag("barPaid"),
         text: "\"Every thirty days, to a fella who's never late collecting and never early with anything " +
-          "else. Miss it once, his daughter comes round with a book. Miss it twice, I've told you what " +
+          "else. Miss it once, his daughter comes by with a book. Miss it twice, I've told you what " +
           "happens.\" A beat. \"Settle it the moment it's owing. Before the daughter, ideally.\" (PAY RENT)",
         short: "\"Every thirty days. Miss it twice and you know. PAY RENT when it's owing.\"" },
       { topic: "cash|notes|getting cash|hard cash", when: (st, G) => _flag("barPaid"),
@@ -11851,7 +11850,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // four days after White Dish took the lease, he was still saying "he'll
       // carry you — I told you that").
       { when: (st, G) => _flag("barLost"),
-        text: "He is on a stool, on the wrong side of a bar, and he has a pint rather than a Singha. " +
+        text: "He is on a stool, on the wrong side of a bar, and he has somebody else's beer in front of him rather than his own Singha. " +
           "\u201cBud.\u201d He does not make you say anything. \u201cAll those years I stood a rail and never once had my name on it, so I'll tell you the thing nobody told me: it was never the " +
           "money that got you. It was the month.\u201d He drinks. \u201cThe old man'd have carried you " +
           "forever. The LANDLORD only ever wanted his date, every thirty days, and there's no relationship in a " +
@@ -11972,7 +11971,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "You bring it round to selling — Gavin's word, friend to friend, everyone wins. Bert sets the " +
           "Singha down very slowly and looks at you the way he looks at a bad break. \"So that's the way " +
           "of it. He's got you carrying his water now.\" No heat, which is worse than heat. \"Answer's no, " +
-          "bud. Always was. You tell your mate Gavin the Stinky's not for sale and neither am I.\" He picks " +
+          "bud. Always was. You tell your buddy Gavin the Stinky's not for sale and neither am I.\" He picks " +
           "the Singha back up. \"And you — I'll remember you came in here for HIM. Soi's small. Word gets around.\"",
         short: "\"He's got you carrying his water now. The answer's no — and I'll remember you came for HIM.\"" },
       // Twenty-two years behind the rail: Bert reads your ORIGIN on the first
@@ -12240,8 +12239,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "holding's not a plan, bud, it's a stall, and the old man's running out " +
           "of stall.\" He turns the Singha a quarter turn. \"Doctors want another " +
           "go at his ticker. He's not coming back out here. He knows it, I know " +
-          "it, and Gavin knows it, which is why that lot are being so bloody " +
-          "patient.\"\n\nHe finally looks at you.\n\n\"So it sells. That's not " +
+          "it, and Gavin knows it, which is why those people are being so damn patient.\"\n\nHe finally looks at you.\n\n\"So it sells. That's not " +
           "the question. The question's who to.\" A pause. \"He'll take a regular " +
           "over a company. Not for the money — he'll lose money on you, and he " +
           "knows that too. For the lights staying on the way they are.\" He pushes " +
@@ -13029,7 +13027,9 @@ const QUESTS = {
       "(ASK DUANGJAI ABOUT THE OFFER).",
     deps: [],
     reqFlags: ["act1Done", "duangjaiNont"],
-    at: "nont",
+    // leg one is Nont at the market, leg two is back to her — a static `at:` sent HINT
+    // to the market forever (Opus quest re-run, 2026-09-07); same shape safecracker solves
+    at: (G) => _flag("tiffinDelivered") ? "duangjai" : "nont",
     item: "tiffin",
     doneFlag: "lakeErrandDone",
     reward: { money: 0, happy: 6 },

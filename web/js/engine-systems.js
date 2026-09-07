@@ -2529,10 +2529,14 @@ function _questAvailable(qid) {
       NPCS[gv] && NPCS[gv].patron ? _npcWhere(gv) : null);
     if (giverRoom && !SOI6_ROOMS.has(giverRoom)) return false;
     // and the target (a room, or an NPC/patron's bar) must be in-pocket too
-    if (q.at) {
-      const targetRoom = ROOMS[q.at] ? q.at :
-        NPCS[q.at] ? _npcRoom(q.at) :
-        NPCS[q.at] && NPCS[q.at].patron ? _npcWhere(q.at) : null;
+    // `at` may be a FUNCTION of the state — a two-leg errand points at leg one and
+    // then at leg two (safecracker, lake_errand). Read it through _qAt or a
+    // conditional target silently evaluates as an object and matches nothing.
+    const at = _qAt(q);
+    if (at) {
+      const targetRoom = ROOMS[at] ? at :
+        NPCS[at] ? _npcRoom(at) :
+        NPCS[at] && NPCS[at].patron ? _npcWhere(at) : null;
       if (targetRoom && !SOI6_ROOMS.has(targetRoom)) return false;
     }
   }
