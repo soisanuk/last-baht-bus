@@ -308,3 +308,16 @@ test("Wilf gave up drinking ten years ago (the rate, not the doctor) and has no 
   const all = NPCS.wilf.dialogue.map(d => (d.text || "") + (d.short || "")).join(" ");
   assert.doesNotMatch(all, /the Anchor, one beer|Beer's one/, "a man who doesn't drink has no Thursday beer");
 });
+
+test("Nont's arithmetic holds: father gone at twelve, on the till at fourteen, twenty-two now", () => {
+  const all = NPCS.nont.dialogue.map(d => (d.text || "") + " " + (d.short || "")).join(" ");
+  assert.match(NPCS.nont.look, /twenty-two/, "he is 22");
+  assert.match(all, /he left when I was twelve|Gone back to wherever\. I was twelve/, "the father's departure is dated");
+  assert.match(all, /Fourteen, on the till|I was there, fourteen, on the till/, "and the sale is dated");
+  // the order the dating exists to protect: school stops before the earning starts
+  const family = NPCS.nont.dialogue.find(d => d.topic === "family").text;
+  assert.ok(family.indexOf("twelve") < family.indexOf("started earning"), "he does not work before his father leaves");
+  // and the sale is eight years, everywhere it is mentioned
+  const corpus = all + Object.values(NPCS.fast_eddy.dialogue).map(d => (d.text || "") + (d.short || "")).join(" ");
+  assert.doesNotMatch(corpus, /given me back in five years/, "the sale has one date");
+});

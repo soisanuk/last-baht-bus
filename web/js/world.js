@@ -11493,6 +11493,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // he becomes. Hidden-seed doctrine like Tan's hub role: never signposted; his
   // only future-tell is "not doing this forever." Roleless (no NPC_ROLES), like
   // Bank the piwin. The code-switch mechanic is planted in his "name" node.
+  // NONT'S ARITHMETIC, in one place because three separate lines depend on it
+  // (Mario, 2026-09-07 — "he shouldn't be working anywhere until after his father
+  // leaves"): he is TWENTY-TWO. His father stopped paying when he was TWELVE, and the
+  // international school stopped with it — that is the age he starts earning, and it is
+  // deliberately the age the tiffin beat sends him back to ("for one unguarded second
+  // he's about twelve"). He ran Fast Eddy's till on Soi 6 from about then, and he was
+  // FOURTEEN on that till when White Dish bought the bar — eight years ago, which is
+  // the one date the sale has anywhere. Nothing may put the father in Pattaya after
+  // twelve, and nothing may put Nont in work before it.
   nont: {
     name: "Nont", emoji: "📱", pronoun: "he",
     room: "buakhao_market",
@@ -11654,12 +11663,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "family", text: "“My mum's out at the lake — Mabprachan. Cashier at one of the " +
           "bar-restaurants now.” He says it flat, daring you to make it sad. “She worked the 6 " +
           "back in the day, met my dad, he bought her a villa on the Darkside and paid for me to " +
-          "go to the fancy international school by the lake. Then one day he's just… not paying " +
-          "for anything. Gone back to wherever.” A shrug. “Mum's too proud to go back to the bar " +
+          "go to the fancy international school by the lake. Then one day he's just… not paying for anything. Gone back to wherever. I was twelve.” A shrug. “Mum's too proud to go back to the bar " +
           "and too old for it anyway. So the fancy school stopped and I started earning. Somebody " +
           "had to.” The grin returns, harder. “Turns out I'm better at earning than I ever was at " +
           "algebra.”",
-        short: "“Mum's a cashier at the lake now — worked the 6, met my dad, he left. School stopped, I started earning. Somebody had to.”" },
+        short: "“Mum's a cashier at the lake now — worked the 6, met my dad, he left when I was twelve. School stopped, I started earning. Somebody had to.”" },
       { topic: "job", text: "“What do I do?” He nods at the guts of the {{phone}}. “Whatever pays and " +
           "mostly doesn't hurt anybody who didn't have it coming. Unlock {{phones}}, flip devices, " +
           "fix what's broken, move a little of what shouldn't be moved. I'm good with anything " +
