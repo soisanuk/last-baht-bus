@@ -144,3 +144,61 @@ test("the pager still counts what a thumb can reach, not what TOPICS printed", (
   assert.equal(Number(m[2]), Math.ceil(chips.length / 4),
     "the page count is the chip bar's, since that is what tapping turns");
 });
+
+// ── The women on the money get their own lives ──────────────────────────────
+
+test("no two till-keepers in different districts recite the same life", () => {
+  // Maureen talked to every cashier in fifteen bars and got about three distinct
+  // sentences: Gam on Buakhao, Ging two doors down and Keng across the highway
+  // gave the SAME family answer word for word, down to "My boyfriend prefers it
+  // too." Round 46 gave the hostesses deep pools; the women on the money were
+  // still drawing a whole inner life from a pool of two.
+  const by = role => Object.keys(NPCS).filter(i => NPCS[i].filler && NPC_ROLES[i] === role);
+  for (const [role, floor] of [["cashier", 6], ["mamasan", 6]]) {
+    const ids = by(role);
+    assert.ok(ids.length > 20, `${role}s exist in numbers (${ids.length})`);
+    for (const topic of ["family", "plan", "girls", "money"]) {
+      const said = new Set();
+      for (const id of ids) {
+        const d = (NPCS[id].dialogue || []).find(x => x.topic && _topicHits(x.topic, topic));
+        if (d) said.add(d.text);
+      }
+      if (!said.size) continue;
+      assert.ok(said.size >= floor,
+        `${role}s draw "${topic}" from ${said.size} lines across ${ids.length} women — ` +
+        `a pool this shallow reads as one woman in twenty-five aprons`);
+    }
+    const greets = new Set(ids.map(id => NPCS[id].dialogue[0].text));
+    assert.ok(greets.size >= floor, `${role} greetings: ${greets.size}`);
+  }
+});
+
+test("a mamasan's look line and her family answer are about the same woman", () => {
+  // Two claims, two salts: left alone the generator eventually stands a woman
+  // whose desc says she buried a husband beside an answer about the husband she
+  // has had for twenty-one years. The co-location defect, built in at the factory.
+  for (const id of Object.keys(NPCS)) {
+    if (!NPCS[id].filler || NPC_ROLES[id] !== "mamasan") continue;
+    const story = _hh(id, 7) % _M_STORY.length;
+    const fam = _mamaFamilyIdx(id);
+    assert.ok(!(_M_FAM_CLASH[story] || []).includes(fam),
+      `${NPCS[id].name}: "${_M_STORY[story]}" does not sit with "${_M_FAMILY[fam].slice(0, 50)}…"`);
+  }
+});
+
+test("nobody sends you to Candy while Candy is standing there", () => {
+  // Gam told Maureen to "ask Candy on Buakhao" with Candy six feet away in the
+  // same room, on Buakhao. Bua, in the same bar, got it right.
+  G.flags = {}; G.stage = "act1";
+  const room = _npcWhere("candy");
+  assert.ok(room, "Candy is out tonight");
+  G.room = room;
+  const staff = _npcsHere().filter(i => NPCS[i].filler && /cashier|mamasan/.test(NPC_ROLES[i] || ""));
+  assert.ok(staff.length, `somebody keeps the till at ${_barName(room)}`);
+  for (const id of staff) {
+    G.talked = {}; out = []; run(`ask ${id} about wallet`);
+    assert.doesNotMatch(text(), /on Buakhao|Buakhao side|Candy Bar, Soi Buakhao/,
+      `${NPCS[id].name} does not send you across town to a woman in the room`);
+    assert.match(text(), /Candy/, "…but still names her, because she is the answer");
+  }
+});

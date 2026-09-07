@@ -169,13 +169,34 @@ if (typeof ASK_REPLIES !== "undefined")
 // literals are the `fn` group, attributed to their enclosing function so a
 // reviewer can see which scene a line belongs to. See docs/prose-defects.md.
 const POOL_RE = /^const (_[A-Z][A-Z0-9_]*) = [\[{]/;
+const WORLD_FOLDED = new Set(["_REGULARS", "_PATRON_TITLES"]);
+// A POOL ENDS WHERE ITS BRACKETS BALANCE, not where a bracket reaches column 0.
+// _H_FROM closes with `...Lamphu}}"];` at the end of its third line, so under the
+// column-0 rule it never closed and swallowed _H_LOOK_DARK whole — six Darkside
+// look lines filed under a list of provinces. Count brackets with the string
+// literals stripped out, so a `];` inside prose can't close anything.
+const depthOf = line => {
+  const bare = line.replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`/g, "")
+    .replace(/\/\/.*$/, "");
+  let d = 0;
+  for (const c of bare) { if (c === "[" || c === "{" || c === "(") d++; else if (c === "]" || c === "}" || c === ")") d--; }
+  return d;
+};
 const FN_RE = /^(?:function (\w+)|const (\w+) = (?:function|\([^)]*\) =>))/;
 const LIT_RE = /"((?:[^"\\]|\\.)*)"|`((?:[^`\\]|\\.)*)`/g;
 const unesc = s => s.replace(/\\"/g, '"').replace(/\\n/g, "\n").replace(/\\\\/g, "\\");
-for (const f of ["engine-core.js", "engine-encounters.js", "engine-play.js",
+// world.js IS SCANNED FOR POOLS TOO (2026-09-07). The NPC harvester above skips
+// every filler character with the comment "review the parts (pool group)" — and
+// the parts live in world.js, which this loop did not read. So the written life
+// of 143 hostesses, 37 cashiers and 31 mamasans (_H_FAMILY, _H_PLAN, _M_*, _C_*)
+// had never been in the corpus at all, while the corpus said it had. Same shape
+// as the room pivot never harvesting lateDesc: the promise was in the comment
+// and the reach was in the loop. Its declarative tables are harvested above, so
+// only the const pools are new here.
+for (const f of ["world.js", "engine-core.js", "engine-encounters.js", "engine-play.js",
   "engine-systems.js", "engine-parser.js"]) {
   const lines = fs.readFileSync(new URL(f, JS), "utf8").split("\n");
-  let pool = null, fn = null, idx = 0;
+  let pool = null, fn = null, idx = 0, depth = 0;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (pool) {
@@ -183,7 +204,16 @@ for (const f of ["engine-core.js", "engine-encounters.js", "engine-play.js",
       // `].join("\n");` and under the old `];`-only rule the block never closed,
       // so every function after it was filed under the pool name. Same failure
       // the _QUEER_ROOMS note below describes, reached from the other direction.
-      if (/^[\]}]/.test(line)) { pool = null; idx = 0; continue; }
+      if (/^[\]}]/.test(line)) { pool = null; idx = 0; depth = 0; continue; }
+      const before = depth;
+      depth += depthOf(line);
+      if (before > 0 && depth <= 0) {            // the declaration balanced on this line
+        for (const lit of line.matchAll(LIT_RE)) {
+          const str = unesc(lit[1] ?? lit[2] ?? "");
+          if (str.length >= 40 && !WORLD_FOLDED.has(pool)) add("pool", `${f}:${pool}[${idx++}]`, pool, str);
+        }
+        pool = null; idx = 0; depth = 0; continue;
+      }
     } else {
       const pm = line.match(POOL_RE);
       if (pm) {
@@ -200,7 +230,7 @@ for (const f of ["engine-core.js", "engine-encounters.js", "engine-play.js",
           }
           continue;
         }
-        pool = pm[1];
+        pool = pm[1]; depth = depthOf(line);
         continue;
       }
       const fm = line.match(FN_RE);
@@ -209,8 +239,18 @@ for (const f of ["engine-core.js", "engine-encounters.js", "engine-play.js",
     for (const lit of line.matchAll(LIT_RE)) {
       const s = unesc(lit[1] ?? lit[2] ?? "");
       if (s.length < 40) continue;
-      if (pool) add("pool", `${f}:${pool}[${idx++}]`, pool, s);
-      else if (fn) add("fn", `${f}:${fn}[${idx++}]`, fn, s);
+      // _REGULARS and _PATRON_TITLES are AUTHORING BLOCKS folded into NPCS by the
+      // loop under them, so every line in them is already a patron/npc record with
+      // the right person as its subject — filing them again as anonymous pool
+      // lines would double the corpus and put 1,081 records under a subject no
+      // reviewer reads by.
+      if (pool && !WORLD_FOLDED.has(pool)) add("pool", `${f}:${pool}[${idx++}]`, pool, s);
+      // world.js is declarative data — its records are harvested above, by
+      // record, with the character or room they belong to as the subject. Its
+      // function bodies are the three filler BUILDERS, whose prose is hoisted
+      // into pools on purpose, so scanning them as `fn` would double-file every
+      // line under a builder name nobody reviews by.
+      else if (fn && f !== "world.js") add("fn", `${f}:${fn}[${idx++}]`, fn, s);
     }
   }
 }

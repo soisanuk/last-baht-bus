@@ -126,9 +126,11 @@ test("Boonsri can discuss the photo Neil says she put up (Wes)", () => {
   out = []; run("ask boonsri about photo");
   assert.doesNotMatch(text(), /don't know about that|wrong girl|Not my story/i, "she owns the fridge");
   assert.match(text(), /Is mine|nineteen year/i, "…and it is her angle, not a retell of his");
-  // her generated dialogue is untouched by the patch
+  // her generated dialogue is untouched by the patch. Asserted against the POOL,
+  // not one string: the mamasan pools went from two lines to eight (round 47), and
+  // a fixture keyed on one of the old two was pinning the shallowness in place.
   out = []; run("ask boonsri about plan");
-  assert.match(text(), /bar honest|girls safe/i, "the filler build still works");
+  assert.ok(_M_PLAN.some(s => text().includes(s.slice(0, 40))), "the filler build still works");
 });
 
 test("the lake stops claiming it is open once it shuts (Wes)", () => {
