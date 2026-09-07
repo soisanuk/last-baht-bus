@@ -77,3 +77,14 @@ test("--quests is the third pivot: a quest's prose AND its wiring in one place",
   assert.match(all, /\[37 quests\]/);
   assert.match(run("--map"), /quests \(wiring \+ prose\)\s+\d+\/37/);
 });
+
+test("a large dump survives being piped — the tail is not lost to an async stdout flush", () => {
+  // console.log queues on a pipe and process.exit does not wait for the queue, so the last
+  // line of a 400KB dump vanished for the consumer. Node 22 lost it and node 26 did not,
+  // which is how it reached CI green-on-my-machine (2026-09-07).
+  const o = run("--quests");
+  assert.ok(o.length > 200000, "this is the big one — the bug only shows at size");
+  assert.match(o.trimEnd().split("\n").pop(), /^\[\d+ quests\]$/, "the very last line arrived");
+  const src = readFileSync(fileURLToPath(new URL("../../tools/prose-corpus.mjs", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /\bconsole\.log\(/, "write synchronously to fd 1, or exit truncates the tail");
+});

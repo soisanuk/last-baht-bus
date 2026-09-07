@@ -46,6 +46,12 @@ import fs from "node:fs";
 import vm from "node:vm";
 import crypto from "node:crypto";
 
+// STDOUT IS ASYNCHRONOUS ON A PIPE, AND THIS TOOL EXITS RIGHT AFTER A 435KB DUMP.
+// `console.log` queues; `process.exit(0)` does not wait for the queue; so the tail of a
+// large dump is simply lost when the consumer is a pipe rather than a terminal. It cost a
+// red CI on node 22 while node 26 flushed fast enough to hide it (2026-09-07). Write
+// synchronously to fd 1 instead — then exit is safe at any size.
+const say = (...a) => { try { fs.writeSync(1, a.join(" ") + "\n"); } catch (e) { if (e.code !== "EPIPE") throw e; } };
 const JS = new URL("../web/js/", import.meta.url);
 const LEDGER_PATH = new URL("../docs/prose-review-ledger.json", import.meta.url);
 // THE DOSSIER LEDGER is the string ledger's sibling, and it has to be separate
@@ -211,7 +217,7 @@ try { accepted = JSON.parse(fs.readFileSync(ACCEPTED_PATH, "utf8")); } catch (e)
 const acceptedFor = name => (accepted.accepted || []).filter(a => a.subject === name);
 function printAccepted(name) {
   for (const a of acceptedFor(name))
-    console.log(`   ✓ SETTLED (${a.ruled}) — ${a.finding}\n     ${a.reason}`);
+    say(`   ✓ SETTLED (${a.ruled}) — ${a.finding}\n     ${a.reason}`);
 }
 let dossierLedger = {};
 try { dossierLedger = JSON.parse(fs.readFileSync(DOSSIER_PATH, "utf8")); } catch (e) { /* first run */ }
@@ -233,7 +239,7 @@ function seedDossiers(entries) {   // entries: [key, records][]
     }
   }
   fs.writeFileSync(DOSSIER_PATH, JSON.stringify(dossierLedger, null, 0) + "\n");
-  console.log(`dossier ledger: ${n} subject(s) recorded as read (${Object.keys(dossierLedger).length} total)`);
+  say(`dossier ledger: ${n} subject(s) recorded as read (${Object.keys(dossierLedger).length} total)`);
 }
 
 // ── the render column ──────────────────────────────────────────────────────
@@ -276,8 +282,8 @@ const wantTaps = has("taps") || has("delta");
 function printRender(r) {
   if (!wantTaps) return;
   const { taps, warn } = renderTaps(r.text);
-  if (taps.length) console.log(`   [taps: ${taps.map(t => `${t.v}(${t.k})`).join(" · ")}]`);
-  for (const w of warn) { console.log(`   ⚠ ${w}`); _warned++; }
+  if (taps.length) say(`   [taps: ${taps.map(t => `${t.v}(${t.k})`).join(" · ")}]`);
+  for (const w of warn) { say(`   ⚠ ${w}`); _warned++; }
 }
 let _warned = 0;
 
@@ -294,8 +300,8 @@ if (has("stats")) {
   const by = {};
   for (const r of records) by[r.group] = (by[r.group] || 0) + 1;
   const reviewed = records.filter(r => ledger[hash(r.text)]).length;
-  console.log("corpus:", records.length, "records —", JSON.stringify(by));
-  console.log("ledger:", Object.keys(ledger).length, "hashes;", reviewed, "of the current corpus reviewed,",
+  say("corpus:", records.length, "records —", JSON.stringify(by));
+  say("ledger:", Object.keys(ledger).length, "hashes;", reviewed, "of the current corpus reviewed,",
     records.length - reviewed, "pending");
   process.exit(0);
 }
@@ -307,7 +313,7 @@ if (has("seed") && !has("dossiers") && !has("rooms") && !has("quests") && !has("
   let added = 0;
   for (const r of out) { const h = hash(r.text); if (!ledger[h]) { ledger[h] = { ref: r.ref, reviewed: today }; added++; } }
   fs.writeFileSync(LEDGER_PATH, JSON.stringify(ledger, null, 0) + "\n");
-  console.log(`ledger: +${added} hashes (${Object.keys(ledger).length} total) — the dumped set is marked reviewed`);
+  say(`ledger: +${added} hashes (${Object.keys(ledger).length} total) — the dumped set is marked reviewed`);
   process.exit(0);
 }
 
@@ -387,30 +393,30 @@ if (has("quests")) {
     picked.push(["quest:" + qid, recs]);
     if (seeding) continue;
     n++;
-    console.log(`\n\n════════ ${q.name}  [${qid}] — ${recs.length} records ════════`);
+    say(`\n\n════════ ${q.name}  [${qid}] — ${recs.length} records ════════`);
     printAccepted(q.name);
     // …and for the people this quest is made of, or a ruling made on a character
     // is invisible to the pivot that prints that character's whole dialogue
     for (const nm of new Set(recs.map(r => r.speaker).filter(Boolean))) printAccepted(nm);
-    console.log(`   giver: ${q.giver}${NPCS[q.giver] ? " (" + NPCS[q.giver].name + ", " + ((NPCS[q.giver].room) || (NPCS[q.giver].bars || [])[0] || "?") + ")" : " — MISSING"}` +
+    say(`   giver: ${q.giver}${NPCS[q.giver] ? " (" + NPCS[q.giver].name + ", " + ((NPCS[q.giver].room) || (NPCS[q.giver].bars || [])[0] || "?") + ")" : " — MISSING"}` +
       `${q.trust ? " · trust ≥ " + q.trust : ""}`);
-    console.log(`   at: ${q.at || "—"}   deps: ${(q.deps || []).join(", ") || "—"}   reqFlags: ${(q.reqFlags || []).join(", ") || "—"}` +
+    say(`   at: ${q.at || "—"}   deps: ${(q.deps || []).join(", ") || "—"}   reqFlags: ${(q.reqFlags || []).join(", ") || "—"}` +
       `${q.item ? "   item: " + q.item : ""}`);
-    console.log(`   doneFlag: ${q.doneFlag} — set by ${setters.join(", ") || "an engine action (grep the flag)"}`);
+    say(`   doneFlag: ${q.doneFlag} — set by ${setters.join(", ") || "an engine action (grep the flag)"}`);
     // a quest may carry PER-ROUTE descs (descBy) — without them a reviewer reads the
     // default as the only instruction the player ever gets (Opus re-run, 2026-09-07)
-    for (const [route, d] of Object.entries(q.descBy || {})) console.log(`   descBy.${route}: ${d}`);
-    if (gates.length) console.log(`   read back by: ${gates.join(", ")}`);
-    console.log(`   reward: ${JSON.stringify(q.reward || {})}`);
+    for (const [route, d] of Object.entries(q.descBy || {})) say(`   descBy.${route}: ${d}`);
+    if (gates.length) say(`   read back by: ${gates.join(", ")}`);
+    say(`   reward: ${JSON.stringify(q.reward || {})}`);
     for (const r of recs) {
-      console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
-      console.log(r.text);
+      say(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
+      say(r.text);
       printRender(r);
     }
   }
   if (seeding) { seedDossiers(picked); process.exit(0); }
-  console.log(`\n[${n} quests]`);
-  if (_warned) console.log(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
+  say(`\n[${n} quests]`);
+  if (_warned) say(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
   process.exit(0);
 }
 
@@ -440,27 +446,27 @@ if (has("map")) {
   }
   const bar = (a, b) => { const w = 25, f = b ? Math.round((a / b) * w) : 0;
     return "█".repeat(f) + "·".repeat(w - f); };
-  console.log("\n── dossier review coverage ──  (has every string ABOUT this subject been read together?)\n");
+  say("\n── dossier review coverage ──  (has every string ABOUT this subject been read together?)\n");
   for (const kind of ["subject", "room", "quest"]) {
     const g = rows.filter(r => r.kind === kind);
     const cur = g.filter(r => r.state === "current"), stale = g.filter(r => r.state === "stale"),
       fresh = g.filter(r => r.state === "new");
     const recs = g.reduce((a, r) => a + r.n, 0), curRecs = cur.reduce((a, r) => a + r.n, 0);
     const label = { subject: "cast + venues + items", room: "rooms", quest: "quests (wiring + prose)" }[kind];
-    console.log(`  ${label.padEnd(23)} ` +
+    say(`  ${label.padEnd(23)} ` +
       `${String(cur.length).padStart(4)}/${String(g.length).padEnd(4)} ${bar(cur.length, g.length)} ` +
       `${g.length ? Math.round((cur.length / g.length) * 100) : 0}%   (${curRecs}/${recs} records)`);
-    if (stale.length) console.log(`     stale — a record moved since it was read: ${stale.sort((a, b) => b.n - a.n).map(r => `${r.name}(${r.n})`).join(" · ")}`);
-    if (fresh.length) console.log(`     never read as a whole: ${fresh.sort((a, b) => b.n - a.n).slice(0, 20).map(r => `${r.name}(${r.n})`).join(" · ")}` +
+    if (stale.length) say(`     stale — a record moved since it was read: ${stale.sort((a, b) => b.n - a.n).map(r => `${r.name}(${r.n})`).join(" · ")}`);
+    if (fresh.length) say(`     never read as a whole: ${fresh.sort((a, b) => b.n - a.n).slice(0, 20).map(r => `${r.name}(${r.n})`).join(" · ")}` +
       (fresh.length > 20 ? ` … +${fresh.length - 20} more` : ""));
   }
   const all = rows.length, done = rows.filter(r => r.state === "current").length;
-  console.log(`\n  · ${done}/${all} dossiers current` +
+  say(`\n  · ${done}/${all} dossiers current` +
     `${all - done ? ` — next round: node tools/prose-corpus.mjs --dossiers --delta --taps  (and --rooms --delta)` : ""}`);
-  console.log("  · a dossier goes stale when ANY record in it changes — that record is the one that might contradict the others");
+  say("  · a dossier goes stale when ANY record in it changes — that record is the one that might contradict the others");
   const nAcc = (accepted.accepted || []).length;
-  if (nAcc) console.log(`  · ${nAcc} settled finding(s) in docs/prose-dossier-accepted.json — printed at the head of their subject's dossier, so a reviewer does not re-report them`);
-  console.log("  · seed with --dossiers --seed / --rooms --seed, and only after somebody has actually read them\n");
+  if (nAcc) say(`  · ${nAcc} settled finding(s) in docs/prose-dossier-accepted.json — printed at the head of their subject's dossier, so a reviewer does not re-report them`);
+  say("  · seed with --dossiers --seed / --rooms --seed, and only after somebody has actually read them\n");
   process.exit(0);
 }
 
@@ -485,19 +491,19 @@ if (has("rooms")) {
     if (seeding) continue;                    // --seed records without dumping
     n++;
     const r = ROOMS[id] || {};
-    console.log(`\n\n════════ ${r.name || id}  [${id}]${r.bar ? " — " + r.bar : ""} — ${recs.length} records ════════`);
+    say(`\n\n════════ ${r.name || id}  [${id}]${r.bar ? " — " + r.bar : ""} — ${recs.length} records ════════`);
     printAccepted(r.name || id);
-    if (r.region) console.log(`   region: ${r.region}${r.barType ? " · barType " + r.barType : ""}${r.indoors ? " · indoors" : ""}${r.dark ? " · dark" : ""}`);
-    console.log(`   exits: ${Object.keys(r.exits || {}).join(", ") || "—"}`);
+    if (r.region) say(`   region: ${r.region}${r.barType ? " · barType " + r.barType : ""}${r.indoors ? " · indoors" : ""}${r.dark ? " · dark" : ""}`);
+    say(`   exits: ${Object.keys(r.exits || {}).join(", ") || "—"}`);
     for (const rec of recs) {
-      console.log(`\n— ${rec.ref}`);
-      console.log(rec.text);
+      say(`\n— ${rec.ref}`);
+      say(rec.text);
       printRender(rec);
     }
   }
   if (seeding) { seedDossiers(picked); process.exit(0); }
-  console.log(`\n[${n} rooms]`);
-  if (_warned) console.log(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
+  say(`\n[${n} rooms]`);
+  if (_warned) say(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
   process.exit(0);
 }
 
@@ -508,7 +514,7 @@ if (has("about") || has("dossiers")) {
     ? [...subs.keys()].filter(k => k.toLowerCase().includes(want.toLowerCase()))
     : [...subs.keys()];
   if (!pick.length) {
-    console.log(`No subject matching "${want}". Known subjects are NPCs, patrons, bars, items.`);
+    say(`No subject matching "${want}". Known subjects are NPCs, patrons, bars, items.`);
     process.exit(1);
   }
   const seeding = has("seed"), delta = has("delta"), picked = [];
@@ -521,29 +527,29 @@ if (has("about") || has("dossiers")) {
     if (delta && state === "current") continue;
     picked.push(["subject:" + name, hits]);
     if (seeding) continue;
-    console.log(`\n\n════════ ${name} — ${hits.length} records ════════`);
+    say(`\n\n════════ ${name} — ${hits.length} records ════════`);
     printAccepted(name);
     for (const r of hits) {
-      console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
-      console.log(r.text);
+      say(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
+      say(r.text);
       printRender(r);
     }
   }
   if (seeding) { seedDossiers(picked); process.exit(0); }
-  if (_warned) console.log(`\n⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
+  if (_warned) say(`\n⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
   process.exit(0);
 }
 
 if (has("json")) {
-  for (const r of out) console.log(JSON.stringify({ ...r, hash: hash(r.text) }));
+  for (const r of out) say(JSON.stringify({ ...r, hash: hash(r.text) }));
 } else {
   let g = null;
   for (const r of out) {
-    if (r.group !== g) { g = r.group; console.log(`\n════ ${g} ════`); }
-    console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}`);
-    console.log(r.text);
+    if (r.group !== g) { g = r.group; say(`\n════ ${g} ════`); }
+    say(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}`);
+    say(r.text);
     printRender(r);
   }
-  console.log(`\n[${out.length} records]`);
-  if (_warned) console.log(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
+  say(`\n[${out.length} records]`);
+  if (_warned) say(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
 }
