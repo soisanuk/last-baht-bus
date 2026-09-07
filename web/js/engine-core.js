@@ -817,7 +817,7 @@ function _inShuttle(n, hour) {
   return hour >= n.shuttle.after && (n.shuttle.until == null || hour < n.shuttle.until);
 }
 const _GLAM_GOES = [
-  "His companion appears at his elbow without being asked, and the pair of them set off for " +
+  "Glam's companion appears at his elbow without being asked, and the pair of them set off for " +
     "the other bar at the pace of a man who has all night and intends to use it.",
   "Glam checks his watch, taps the rail twice, and stands — slowly, and with a hand under each " +
     "arm, because the mama has come out from behind her own till to take the other one.",
@@ -827,7 +827,7 @@ const _GLAM_GOES = [
 const _GLAM_COMES = [
   "Glam comes in on his companion's arm, settles at his usual angle to the rail, and has a " +
     "drink in front of him before he has finished sitting down.",
-  "The doorway takes them two abreast and slowly, and then Glam is installed at the rail with " +
+  "The doorway takes Glam and his companion two abreast and slowly, and then he is installed at the rail with " +
     "the air of a man arriving exactly on time.",
   "Glam arrives on somebody's arm and greets the bar like a man opening a meeting.",
 ];
