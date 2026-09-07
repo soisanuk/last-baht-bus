@@ -231,7 +231,7 @@
       ],
       "sampleDescs": [
         "Halfway up, the walls stop being condominiums and start being something else. Two doors on this stretch, neither of them advertising: THE DOGHOUSE, down a ramp into the basement of a villa somebody remade for the purpose, its sign a small lit rectangle you would take for a dentist; and across the road SUCCUBUS, behind a hedge, with a porch light and a bell. No barkers, no flyer girls, nobody outside at all. Cars come up, cars go down, and the men who use these rooms park where they cannot be read from the road.",
-        "The last stretch before the beach road, and the tone drops a grade: TWO STOOLS BAR is exactly as advertised and has been since somebody painted the sign by hand, and THE GECKO next to it runs on one strip light, a cool box and a lady who owns the place outright. Both open to the road, both cheaper than anything up the hill, and both entirely comfortable about it. HILLSIDE MASSAGE occupies the last shopfront before the corner. You can hear Dongtan from here.",
+        "The last stretch before the beach road, and the tone drops a grade: TWO STOOLS BAR has eleven of them, and a hand-painted sign nobody has refreshed in years, and THE GECKO next to it runs on one strip light, a cool box and a lady who owns the place outright. Both open to the road, both cheaper than anything up the hill, and both entirely comfortable about it. HILLSIDE MASSAGE occupies the last shopfront before the corner. You can hear Dongtan from here.",
         "The gradient eases and the walls give way to the first bars — open-air, all of them, because up here the evening does the air-conditioning for free. THE TERRACE and THE KINGFISHER hold this block, and both are visibly better kept than a hill bar needs to be: matched stools, a roof that has been re-thatched this year, ice that arrives before you ask. The Samson brothers own the pair, and the difference shows from across the road. Next door, HALF MOON MASSAGE has its shutters up and two ladies on the step."
       ]
     },
@@ -698,7 +698,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "One soi south of Soi 7 and a different proposition entirely. The beach end is solid bars — NEON PALM and THE BUCKET open-fronted shoulder to shoulder, stools out to the kerb, four sound systems inside thirty metres and every one of them winning something. It thins as you go inland: the bars give way to guesthouses and a tailor about halfway along, and by the Second Road end it could be any street in Thailand. Everyone stands at the wrong end at least once."
+      "desc": "One soi south of Soi 7 and a different proposition entirely. The beach end is solid bars — NEON PALM and THE BUCKET open-fronted across the lane from each other, stools out to the kerb, four sound systems inside thirty metres and every one of them winning something. It thins as you go inland: the bars give way to guesthouses and a tailor about halfway along, and by the Second Road end it could be any street in Thailand. Everyone stands at the wrong end at least once."
     },
     {
       "id": "pattaya_soi_9",
@@ -710,7 +710,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "A short working soi between the police station and the back of Central Mall, and it behaves accordingly: motorbike repair, a print shop, somewhere doing visa paperwork with a queue of resigned farang outside, and a noodle place that is very good and knows it. The bars are two sois north. Nothing here is open at three in the morning and nothing here needs to be."
+      "desc": "A short working soi between the police station and the back of Central Mall, and it behaves accordingly: motorbike repair, a print shop, somewhere doing visa paperwork with a queue of resigned farang outside, and a noodle place that is very good and knows it. The bars are one soi north. Nothing here is open at three in the morning and nothing here needs to be."
     },
     {
       "id": "police_station",
@@ -2105,7 +2105,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The last stretch before the beach road, and the tone drops a grade: TWO STOOLS BAR is exactly as advertised and has been since somebody painted the sign by hand, and THE GECKO next to it runs on one strip light, a cool box and a lady who owns the place outright. Both open to the road, both cheaper than anything up the hill, and both entirely comfortable about it. HILLSIDE MASSAGE occupies the last shopfront before the corner. You can hear Dongtan from here."
+      "desc": "The last stretch before the beach road, and the tone drops a grade: TWO STOOLS BAR has eleven of them, and a hand-painted sign nobody has refreshed in years, and THE GECKO next to it runs on one strip light, a cool box and a lady who owns the place outright. Both open to the road, both cheaper than anything up the hill, and both entirely comfortable about it. HILLSIDE MASSAGE occupies the last shopfront before the corner. You can hear Dongtan from here."
     },
     {
       "id": "pratumnak_soi5_m",
@@ -2552,7 +2552,7 @@
         "Ryan Powers",
         "Sudjai"
       ],
-      "desc": "The name is the last classy thing about it. Ryan Powers wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Ryan Powers — actually, improbably, down tonight."
+      "desc": "The name is the last classy thing about it. Ryan Powers wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Ryan Powers, down here most nights and filming all of it."
     },
     {
       "id": "pink_lotus",
