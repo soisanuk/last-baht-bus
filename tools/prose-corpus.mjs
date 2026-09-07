@@ -8,10 +8,26 @@
 //   node tools/prose-corpus.mjs --delta                 # only strings not in the ledger
 //   node tools/prose-corpus.mjs --group enc --seed      # mark the dumped set reviewed
 //   node tools/prose-corpus.mjs --json                  # JSONL records
+//   node tools/prose-corpus.mjs --delta --taps          # …with the taps each record renders
 //
 // Groups: npc (hand-authored NPCS dialogue+desc) · patron · room (desc+revisit)
 // · item · enc (ENCOUNTERS) · quest · intro (taxi tables) · pool (engine-file
 // const _NAME = […] prose pools, string literals ≥ 40 chars).
+//
+// THE DELTA CHECKLIST (Mario, 2026-09-07 — sixteen "the phone"s that were somebody
+// else's passed review because the review read the TEXT and the defect was in the
+// RENDER). Per record, before --seed:
+//   1. CLAIM  — does it assert something about a recurring entity (vehicle, home
+//               province, price, hours)? `--about <subject>` and read the dossier.
+//   2. PROMISE — an invitation ("come, I know a place") or a CAPS-in-parens hint:
+//               a verb must deliver it (promises.test / errand-audit).
+//   3. TAPS   — read the [taps: …] column this tool prints with --delta/--taps. An
+//               ⚠ is a third-person "the <item>" that taps YOUR item: {{…}} it.
+//   4. HOURS  — a late paint that names an hour ("at four") prints from midnight.
+//   5. THAI   — every Thai run must exist in the trainer's data.js (term.test).
+//   6. NUMBERS — ฿ figures come from constants, never typed.
+// Seed only after the checklist, and never in the same shell chain as the commit —
+// a --seed that runs unconditionally is a rubber stamp with a timestamp.
 //
 // The hash ledger (docs/prose-review-ledger.json) is what makes re-review
 // delta-sized: --seed records {hash → ref+date} for every record it just
@@ -173,6 +189,51 @@ const val = f => { const i = args.indexOf("--" + f); return i >= 0 ? args[i + 1]
 let ledger = {};
 try { ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, "utf8")); } catch (e) { /* first run */ }
 
+// ── the render column ──────────────────────────────────────────────────────
+// A reviewer reads prose; the player taps it. decorate() (term.js) is what turns
+// "the phone" into a tap on YOUR phone, and no eye simulates that while reading —
+// so the tool shows it. Loaded lazily (the rest of the engine + the vendored
+// tokeniser + term.js; thai/world are already in this context), only when asked.
+let _renderReady = false;
+function _renderInit() {
+  if (_renderReady) return;
+  for (const f of ["games", "cli-sim", "engine-core", "engine-encounters", "engine-play", "engine-systems", "engine-parser",
+    "data", "examples", "tokeniser", "thai-script", "wordcard", "term"])
+    vm.runInThisContext(fs.readFileSync(new URL(f + ".js", JS), "utf8"), { filename: f + ".js" });
+  engineInit(() => {});
+  newGame();
+  _renderReady = true;
+}
+const _NAMES = () => [...new Set(Object.values(NPCS).map(n => String(n.name || "").split(" ").pop()).filter(w => /^[A-Z][a-z]{2,}$/.test(w)))];
+let _third = null;
+// taps a record renders, and the ⚠ class: a third-person subject handling "the <item>" that
+// still taps after decoration — the item is yours, the sentence says it isn't
+function renderTaps(text) {
+  _renderInit();
+  const html = _term.decorate(text);
+  const taps = [], seen = new Set();
+  for (const m of html.matchAll(/data-k="(\w+)" data-v="([^"]+)"/g)) {
+    const key = m[2] + "(" + m[1] + ")";
+    if (!seen.has(key)) { seen.add(key); taps.push({ k: m[1], v: m[2] }); }
+  }
+  const warn = [];
+  for (const t of taps) {
+    if (t.k !== "item") continue;
+    _third = _third || _NAMES();
+    const re = new RegExp(`\\b(he|she|they|him|her|${_third.join("|")})\\b[^.!?"“”]{0,60}\\bthe ${t.v}\\b`);
+    if (re.test(text)) warn.push(`third-person "the ${t.v}" taps YOUR ${t.v} — {{${t.v}}} it`);
+  }
+  return { taps, warn };
+}
+const wantTaps = has("taps") || has("delta");
+function printRender(r) {
+  if (!wantTaps) return;
+  const { taps, warn } = renderTaps(r.text);
+  if (taps.length) console.log(`   [taps: ${taps.map(t => `${t.v}(${t.k})`).join(" · ")}]`);
+  for (const w of warn) { console.log(`   ⚠ ${w}`); _warned++; }
+}
+let _warned = 0;
+
 let out = records;
 const groups = val("group");
 if (groups) { const set = new Set(groups.split(",")); out = out.filter(r => set.has(r.group)); }
@@ -246,8 +307,10 @@ if (has("about") || has("dossiers")) {
     for (const r of hits) {
       console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
       console.log(r.text);
+      printRender(r);
     }
   }
+  if (_warned) console.log(`\n⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
   process.exit(0);
 }
 
@@ -259,6 +322,8 @@ if (has("json")) {
     if (r.group !== g) { g = r.group; console.log(`\n════ ${g} ════`); }
     console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}`);
     console.log(r.text);
+    printRender(r);
   }
   console.log(`\n[${out.length} records]`);
+  if (_warned) console.log(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
 }
