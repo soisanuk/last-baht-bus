@@ -32,6 +32,24 @@
       "finding": "He says Neil is 'out at the lake, still' and also that nobody has seen him since.",
       "ruled": "verified 2026-09-07",
       "reason": "Refuted, not accepted: the first node is gated on neilStory and precedes the second, so only one is ever reachable on a given night."
+    },
+    {
+      "subject": "Bee",
+      "finding": "Candy calls her 'my Sang Som girl at Myth Night' while she works Candy Bar 2.",
+      "ruled": "verified 2026-09-07",
+      "reason": "Refuted: Candy Bar 2 is IN the Myth Night region, so Candy is naming the district her second bar stands in, which is how anybody in this town gives directions."
+    },
+    {
+      "subject": "Bob",
+      "finding": "A bar called Succubus is said to be named for his wife Kinnaree.",
+      "ruled": "verified 2026-09-07",
+      "reason": "Refuted by the next clause of the same line: 'Bar's named for her. She thinks that's vulgar. She's probably right.' The joke is the point and the prose already lands it."
+    },
+    {
+      "subject": "Rob",
+      "finding": "He names his ex-brother-in-law Nong, which is also a hostess at the Gold Rush.",
+      "ruled": "2026-09-07",
+      "reason": "Kept. Nong is an ordinary Thai term for a younger sibling and one of the commonest nicknames in the country, so two men and a girl can carry it. The tap collision is already closed — Nong is in _WORD_NAME_NPCS, so she only decorates in her own room."
     }
   ]
 }

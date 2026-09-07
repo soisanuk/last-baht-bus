@@ -53,9 +53,11 @@ test("--delta on a dossier means new-or-stale SUBJECTS, not unreviewed strings",
 test("a settled finding is printed at the head of its subject's dossier, so a reviewer cannot re-report it", () => {
   const acc = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/prose-dossier-accepted.json", import.meta.url)), "utf8"));
   assert.ok(acc.accepted.length, "the list exists");
-  for (const a of acc.accepted)
-    for (const k of ["subject", "finding", "ruled", "reason"])
+  for (const a of acc.accepted) {
+    assert.ok(a.subject && a.subject.length >= 2, "every entry names its subject (Bee, Bob and Rob are three letters)");
+    for (const k of ["finding", "ruled", "reason"])
       assert.ok(a[k] && a[k].length > 3, `every entry carries ${k} — a bare exemption is how a lint gets ignored`);
+  }
   const out = run("--about", "candy");
   assert.match(out, /✓ SETTLED/); assert.match(out, /she never owned it outright, she ran it/);
   // and the ruling is real in the prose

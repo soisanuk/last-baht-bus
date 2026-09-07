@@ -11737,7 +11737,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
 desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
       "Singha that never empties and never seems to get him drunk. Candy's man, and " +
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
-      "quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last three of them within nine feet of that pool table.",
+      "quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last two of them within nine feet of that pool table.",
     dialogue: [
       { when: (st, G) => _flag("barPaid"),
         text: "\"Guv.\" Bert doesn't look up from the cue he's chalking, which is how he says hello to " +
@@ -13151,8 +13151,8 @@ const QUESTS = {
     name: "The Silent Partner",
     giver: "wayne",
     trust: 2,
-    desc: "Wayne's about to sign as the farang face of a bar he'll never really own. Once you've seen how " +
-      "White Dish works, set him straight (ASK WAYNE ABOUT THE PARTNER).",
+    desc: "Wayne's about to sign as the farang face of a bar he'll never really own. Set him " +
+      "straight before he signs (ASK WAYNE ABOUT THE PARTNER).",
     deps: [],
     at: "wayne",
     doneFlag: "nomineeWarned",
