@@ -126,8 +126,21 @@ for (const [id, n] of Object.entries(NPCS)) {
 // the flag now, and renaming it would orphan every one of those reviews.
 for (const [id, p] of Object.entries(NPCS).filter(([, n]) => n.patron)) walk("patron", `patron.${id}`, p.name, p);
 for (const [id, r] of Object.entries(ROOMS)) {
-  add("room", `room.${id}.desc`, r.bar || r.name, r.desc);
-  (r.revisit || []).forEach((s, i) => add("room", `room.${id}.revisit[${i}]`, r.bar || r.name, s));
+  const who = r.bar || r.name;
+  add("room", `room.${id}.desc`, who, r.desc);
+  (r.revisit || []).forEach((s, i) => add("room", `room.${id}.revisit[${i}]`, who, s));
+  // LATE PAINTS AND FIXTURES WERE NEVER HARVESTED (found 2026-09-07 by a reviewer who
+  // noticed the --rooms header promised them and the corpus had none). Both are heavily
+  // player-facing: a lateDesc prints for the whole back half of the night — now six hours
+  // of it — and a reads: entry is what EXAMINE answers. Neither had ever been reviewed.
+  const late = Array.isArray(r.lateDesc) ? r.lateDesc : r.lateDesc ? [r.lateDesc] : [];
+  late.forEach((s, i) => add("room", `room.${id}.lateDesc[${i}]`, who, s));
+  for (const [noun, v] of Object.entries(r.reads || {})) {
+    // a reads value may be a string, or gated nodes resolved first-match like dialogue
+    const nodes = Array.isArray(v) ? v : [v];
+    nodes.forEach((n, i) => add("room", `room.${id}.reads.${noun}${nodes.length > 1 ? `[${i}]` : ""}`,
+      who, typeof n === "string" ? n : n && n.text));
+  }
 }
 for (const [id, it] of Object.entries(ITEMS)) walk("item", `item.${id}`, it.name, it);
 for (const [id, e] of Object.entries(ENCOUNTERS)) walk("enc", `enc.${id}`, id, e);

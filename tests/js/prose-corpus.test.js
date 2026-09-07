@@ -88,3 +88,20 @@ test("a large dump survives being piped — the tail is not lost to an async std
   const src = readFileSync(fileURLToPath(new URL("../../tools/prose-corpus.mjs", import.meta.url)), "utf8");
   assert.doesNotMatch(src, /\bconsole\.log\(/, "write synchronously to fd 1, or exit truncates the tail");
 });
+
+test("room prose harvests lateDesc and reads, not just desc and revisit", () => {
+  // Both are heavily player-facing and neither was ever harvested: a lateDesc prints for
+  // the whole back half of the night (six hours of it since the clock moved) and a reads
+  // entry is what EXAMINE answers. The --rooms header promised them; the corpus had none,
+  // so every late paint and every examinable fixture in the game was unreviewed until a
+  // reviewer noticed the discrepancy (2026-09-07).
+  const kinds = new Set();
+  for (const line of run("--json").split("\n")) {
+    if (!line.trim()) continue;
+    const r = JSON.parse(line);
+    if (r.group !== "room") continue;
+    const m = /^room\.[^.]+\.([a-zA-Z]+)/.exec(r.ref);
+    if (m) kinds.add(m[1]);
+  }
+  for (const k of ["desc", "revisit", "lateDesc", "reads"]) assert.ok(kinds.has(k), `room ${k} is harvested`);
+});

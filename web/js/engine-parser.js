@@ -125,7 +125,7 @@ const _SOI6_BOUND = [
 // told (orchidVouched/orchidReported — same flags the "Step inside:" listing
 // already filters on; this closes the other half, actual entry).
 // NAMED BY THE ROOM, DENIED BY THE ROOM. Naklua Road's own description says
-// "no sign, just a brass bell, and THE ORCHID CLUB, if you know to ask" — and
+// "no sign, just a brass bell, and NOTTY'S PLACE, if you know to ask" — and
 // these lines used to answer that you'd never heard of the place and neither
 // had anyone (Gerry, round 34). The gate is real and stays: you get SENT to the
 // it, you don't find it. But the wall is right there in the prose, so the

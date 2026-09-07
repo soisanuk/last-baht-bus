@@ -2687,11 +2687,11 @@ function _doThrowCover(targetWord) {
 
 function _doBell() {
   // …except the one the street itself names. Naklua Road's prose puts a brass
-  // bell on the Orchid's wall, and RING BRASS BELL answered "no bell out here"
+  // bell on Notty's wall, and RING BRASS BELL answered "no bell out here"
   // (Gerry, round 34). It exists; what you lack is the standing to use it.
   if (!_inBar() && G.room === "naklua_rd" && !_flag("orchidSent") &&
       !_flag("orchidVouched") && !_flag("orchidReported")) {
-    _say("The brass bell on the Orchid's wall is the only bell out here, and it is not " +
+    _say("The brass bell on Notty's wall is the only bell out here, and it is not " +
       "the ringing kind — not for you. A man who has been sent presses it once and is " +
       "expected. A man who found it presses it and stands in a lane listening to nothing " +
       "happen. You leave it alone, which is the correct read.", "dim");

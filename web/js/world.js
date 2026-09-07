@@ -3433,7 +3433,7 @@ const ROOMS = {
       "— a patched MC president holding court over a bottle of Blue Label, and, at the best " +
       "table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the " +
       "MC president included, is very careful to defer to. On a raised banquette at the back, " +
-      "filming himself over all of it, is Ryan Powers, down here most nights and filming all of it.",
+      "filming himself over all of it, is Ryan Powers, down here most nights.",
     reads: {
       table: [
         { req: ["orchidReported"],
@@ -4647,7 +4647,7 @@ const ROOMS = {
     region: "Soi Diana",
     food: true,
     revisit: [
-      "KISS on the corner, doing what KISS does: every stool full, the grill roaring, and a waitress crossing the room with four plates and no tray.",
+      "KISS on the corner, doing what KISS does: the grill roaring, and a waitress crossing the room with four plates and no tray.",
       "The mile-long menu is going round the tables, Thai side and farang side, and somebody at the next table is ordering the wrong thing with great confidence.",
       "Plastic chairs, paper menus, smoke off the grill and the whole of Soi Diana walking past the open front. Everybody meets here eventually.",
       "A table of six is finishing up, which means a table of six is about to be free, which means half the room is pretending not to watch them.",
