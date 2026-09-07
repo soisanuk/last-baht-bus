@@ -12040,7 +12040,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "of 'em would fix this year and cost every one after.\" He looks down the bar — the trophies, the " +
           "dents in the rail, the stools that have names on them nobody ever wrote down. \"Kesinee's " +
           "girls last a season now. Mine's " +
-          "been here since Candy owned the place. That's the whole difference, bud, and it's the only one that " +
+          "been here since Candy ran the place. That's the whole difference, bud, and it's the only one that " +
           "matters.\" He finally lifts the Singha. \"I'll tell the old man to hold. He trusts me to keep the " +
           "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Ryan Powers wants " +
           "a pool bar, he can build his own — slap his little logo on it and film himself potting the black. " +
@@ -12207,7 +12207,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         req: ["expatLife", "wdgResolved"], notFlags: ["barPremises"], sets: ["barPremises"],
         text: "Bert doesn't answer straight away. He looks down the bar — the " +
           "trophies, the brushed table, the girls who've been here since Candy " +
-          "owned it.\n\n\"I told him to hold,\" he says. \"And he held. But " +
+          "ran it.\n\n\"I told him to hold,\" he says. \"And he held. But " +
           "holding's not a plan, bud, it's a stall, and the old man's running out " +
           "of stall.\" He turns the Singha a quarter turn. \"Doctors want another " +
           "go at his ticker. He's not coming back out here. He knows it, I know " +

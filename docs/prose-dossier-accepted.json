@@ -1,0 +1,37 @@
+{
+  "_readme": [
+    "Findings from a dossier sweep that were reported, checked, and DELIBERATELY NOT CHANGED.",
+    "Same idea as AFFORD_OK in tools/afford-audit.mjs: an instrument that cannot be told 'yes,",
+    "we know' spends every future run re-reporting the same judgement calls, and its operator",
+    "learns to skim it. Every entry carries a reason and who ruled. A reviewer is handed this",
+    "file with their batch and told these are settled — anything NOT in here is fair game.",
+    "Add an entry only for a real finding that was considered and kept. Never use it to bury",
+    "something nobody has looked at."
+  ],
+  "accepted": [
+    {
+      "subject": "Candy",
+      "finding": "She is thirty-eight, yet Bert ran her bars for twenty years and Bee says twenty years on the soi.",
+      "ruled": "Mario, 2026-09-07",
+      "reason": "Kept. Thirty-eight with twenty years on the soi means she started with one bar at eighteen and built the rest, which is a better fact about her than a rounder age would be, and it is why a man in his sixties works for her."
+    },
+    {
+      "subject": "Candy",
+      "finding": "Two Bert lines had the Stinky as a former Candy bar; three others plus Tan give it to the Ohio owner with Candy holding a quiet piece.",
+      "ruled": "Mario, 2026-09-07",
+      "reason": "Resolved in prose rather than accepted: she never owned it outright, she ran it. Bert's two lines now say 'since Candy ran the place'. The Ohio owner and her silent minority stand, and the white_dish arc is unaffected."
+    },
+    {
+      "subject": "Kwan",
+      "finding": "She calls Nont her brother; his upbringing and Duangjai's 'my family is one son' say he has no sister.",
+      "ruled": "Mario, 2026-09-06",
+      "reason": "Deliberate and must not be reconciled. She says brother to a customer because a woman on this soi does not hand a farang a man, and because 'brother' is what the girls call the boyfriend when the farang is listening. Nont's own 'Brother. She said brother?' is the joke. A note sits above her entry in world.js."
+    },
+    {
+      "subject": "Nigel",
+      "finding": "He says Neil is 'out at the lake, still' and also that nobody has seen him since.",
+      "ruled": "verified 2026-09-07",
+      "reason": "Refuted, not accepted: the first node is gated on neilStory and precedes the second, so only one is ever reachable on a given night."
+    }
+  ]
+}

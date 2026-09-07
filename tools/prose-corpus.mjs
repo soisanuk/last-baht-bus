@@ -54,6 +54,11 @@ const LEDGER_PATH = new URL("../docs/prose-review-ledger.json", import.meta.url)
 // reopens Bert, because the new line is exactly what might contradict the old
 // ones. So the key is the subject and the hash is over all its records.
 const DOSSIER_PATH = new URL("../docs/prose-dossier-ledger.json", import.meta.url);
+// …and the settled-findings list. An instrument that cannot be told "yes, we know"
+// spends every future run re-reporting the same judgement calls, and its operator
+// learns to skim it. Printed at the head of a subject's dossier so the reviewer
+// reading it knows what is already decided. (Same idea as AFFORD_OK.)
+const ACCEPTED_PATH = new URL("../docs/prose-dossier-accepted.json", import.meta.url);
 
 // world data only — the engine isn't needed for reflection, but world.js
 // references nothing outside thai.js at load, so this stays light.
@@ -200,6 +205,13 @@ const val = f => { const i = args.indexOf("--" + f); return i >= 0 ? args[i + 1]
 
 let ledger = {};
 try { ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, "utf8")); } catch (e) { /* first run */ }
+let accepted = { accepted: [] };
+try { accepted = JSON.parse(fs.readFileSync(ACCEPTED_PATH, "utf8")); } catch (e) { /* optional */ }
+const acceptedFor = name => (accepted.accepted || []).filter(a => a.subject === name);
+function printAccepted(name) {
+  for (const a of acceptedFor(name))
+    console.log(`   ✓ SETTLED (${a.ruled}) — ${a.finding}\n     ${a.reason}`);
+}
 let dossierLedger = {};
 try { dossierLedger = JSON.parse(fs.readFileSync(DOSSIER_PATH, "utf8")); } catch (e) { /* first run */ }
 // a dossier's identity: WHICH records are in it and at what wording, order-independent
@@ -379,6 +391,8 @@ if (has("map")) {
   console.log(`\n  · ${done}/${all} dossiers current` +
     `${all - done ? ` — next round: node tools/prose-corpus.mjs --dossiers --delta --taps  (and --rooms --delta)` : ""}`);
   console.log("  · a dossier goes stale when ANY record in it changes — that record is the one that might contradict the others");
+  const nAcc = (accepted.accepted || []).length;
+  if (nAcc) console.log(`  · ${nAcc} settled finding(s) in docs/prose-dossier-accepted.json — printed at the head of their subject's dossier, so a reviewer does not re-report them`);
   console.log("  · seed with --dossiers --seed / --rooms --seed, and only after somebody has actually read them\n");
   process.exit(0);
 }
@@ -405,6 +419,7 @@ if (has("rooms")) {
     n++;
     const r = ROOMS[id] || {};
     console.log(`\n\n════════ ${r.name || id}  [${id}]${r.bar ? " — " + r.bar : ""} — ${recs.length} records ════════`);
+    printAccepted(r.name || id);
     if (r.region) console.log(`   region: ${r.region}${r.barType ? " · barType " + r.barType : ""}${r.indoors ? " · indoors" : ""}${r.dark ? " · dark" : ""}`);
     console.log(`   exits: ${Object.keys(r.exits || {}).join(", ") || "—"}`);
     for (const rec of recs) {
@@ -440,6 +455,7 @@ if (has("about") || has("dossiers")) {
     picked.push(["subject:" + name, hits]);
     if (seeding) continue;
     console.log(`\n\n════════ ${name} — ${hits.length} records ════════`);
+    printAccepted(name);
     for (const r of hits) {
       console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
       console.log(r.text);

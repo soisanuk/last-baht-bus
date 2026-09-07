@@ -83,6 +83,13 @@ hashes over **all** of its records, so a dossier has three states:
 pass rests on: the new line is precisely the one that might contradict the old ones. Editing
 one line of Bert's description reopens Bert *and* Candy, because that line names them both.
 
+**Settled findings** live in `docs/prose-dossier-accepted.json` and print at the head of
+their subject's dossier, so a reviewer sees what has already been ruled on before they read
+a word. Every entry carries the finding, who ruled, and why. An instrument that cannot be
+told "yes, we know" re-reports the same judgement calls every run, and its operator learns
+to skim it — which is how a lint dies. Never use the list to bury something nobody has
+looked at.
+
 `--delta` means different things to the two passes and the tool keeps them apart: unreviewed
 *strings* for the delta pass, new-or-stale *subjects* here. Seed only after somebody has
 actually read them, and never in the same shell chain as a commit.

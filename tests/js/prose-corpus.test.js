@@ -49,3 +49,16 @@ test("--delta on a dossier means new-or-stale SUBJECTS, not unreviewed strings",
   assert.match(src, /has\("delta"\) && !has\("dossiers"\) && !has\("rooms"\)/);
   assert.match(src, /has\("seed"\) && !has\("dossiers"\) && !has\("rooms"\)/, "and --seed is scoped the same way");
 });
+
+test("a settled finding is printed at the head of its subject's dossier, so a reviewer cannot re-report it", () => {
+  const acc = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/prose-dossier-accepted.json", import.meta.url)), "utf8"));
+  assert.ok(acc.accepted.length, "the list exists");
+  for (const a of acc.accepted)
+    for (const k of ["subject", "finding", "ruled", "reason"])
+      assert.ok(a[k] && a[k].length > 3, `every entry carries ${k} — a bare exemption is how a lint gets ignored`);
+  const out = run("--about", "candy");
+  assert.match(out, /✓ SETTLED/); assert.match(out, /she never owned it outright, she ran it/);
+  // and the ruling is real in the prose
+  assert.match(run("--about", "bert"), /since Candy ran the place/);
+  assert.doesNotMatch(run("--about", "bert"), /since Candy owned/);
+});
