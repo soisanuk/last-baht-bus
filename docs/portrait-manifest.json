@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-06",
+  "generated": "2026-09-07",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 154,
@@ -80,7 +80,7 @@
       "tags": [
         "manager"
       ],
-      "desc": "The Stinky's manager — American, sixty-something, forearms like dock rope, a Singha that never empties and never seems to get him drunk. Candy's man, and once the manager of her bars; now he runs the Stinky for its ailing owner and, quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, most of them within nine feet of that pool table."
+      "desc": "The Stinky's manager — American, sixty-something, forearms like dock rope, a Singha that never empties and never seems to get him drunk. Candy's man, and once the manager of her bars; now he runs the Stinky for its ailing owner and, quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last three of them within nine feet of that pool table."
     },
     {
       "id": "bill",
@@ -511,7 +511,7 @@
       "th": null,
       "room": "queen_vic",
       "tags": [],
-      "desc": "Bald, red-faced, Chang vest, fifteen years of Pattaya compressed into a permanent corner-stool residency. He rents the same balcony room every high season. He was here before White Dish. He will tell you about it. He tells it well."
+      "desc": "Bald, red-faced, Chang vest, sixteen years of Pattaya compressed into a permanent corner-stool residency. He rents the same balcony room every high season. He was here before White Dish. He will tell you about it. He tells it well."
     },
     {
       "id": "thomas",
@@ -682,7 +682,7 @@
       "th": "แดง",
       "room": "khao_talo_bar",
       "tags": [],
-      "desc": "The owner — mid-forties, laugh lines over old glitter, pouring with a bar towel over one shoulder. The dancer in the Walking Street photos behind her, unmistakably. She was number 72."
+      "desc": "The owner — late fifties, laugh lines over old glitter, pouring with a bar towel over one shoulder. The dancer in the Walking Street photos behind her, unmistakably. She was number 72."
     },
     {
       "id": "diamond",
@@ -879,7 +879,7 @@
       "th": "โรส",
       "room": "orchid_club",
       "tags": [],
-      "desc": "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a voice you have to lean in to hear. She runs the quietest, coldest, most expensive room in Naklua, and she knows the name of every regular's wife."
+      "desc": "The madame of Notty's Place — fifties, immaculate, a silk blouse and a voice you have to lean in to hear. She runs the quietest, coldest, most expensive room in Naklua, and she knows the name of every regular's wife."
     },
     {
       "id": "saeng",
@@ -956,7 +956,7 @@
       "source": "NPCS",
       "role": "mamasan",
       "sex": "f",
-      "look": "Thai woman of fifty-five, brisk, short practical hair, reading glasses, phone in each hand.",
+      "look": "Thai woman of sixty-two, brisk, short practical hair, reading glasses, phone in each hand.",
       "venueKind": "beer",
       "emoji": "👑",
       "th": "วิมล",
@@ -964,7 +964,7 @@
       "tags": [
         "bars"
       ],
-      "desc": "The mamasan who runs the Samson brothers' three beer bars on the strip — fifties, brisk, a {{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow knows exactly what happened at the other two."
+      "desc": "The mamasan who runs the Samson brothers' three beer bars on the strip — sixties, brisk, a {{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow knows exactly what happened at the other two."
     },
     {
       "id": "yai",
@@ -1114,7 +1114,7 @@
       "th": null,
       "room": "white_rabbit",
       "tags": [],
-      "desc": "One of the two hostesses, and old enough now that the word feels generous — late thirties, handsome rather than cute, a frangipani behind one ear because the bar is named for a flower of sorts and somebody should mean it. She has the easy, unhurried warmth of a woman who did her ten years on Soi 6, learned every angle, and is genuinely relieved not to be running them any more. She names her price in drinks and gives her opinions away."
+      "desc": "One of the two hostesses, and old enough now that the word feels generous — late thirties, handsome rather than cute, a frangipani behind one ear because the bar is named for a flower of sorts and somebody should mean it. She has the easy, unhurried warmth of a woman who did her twelve years on Soi 6, learned every angle, and is genuinely relieved not to be running them any more. She names her price in drinks and gives her opinions away."
     },
     {
       "id": "chompoo",
@@ -3241,7 +3241,7 @@
       "th": "แพร์",
       "room": "orchid_club",
       "tags": [],
-      "desc": "Sleepy-eyed and entirely unbothered — one of The Orchid Club's girls, from Khon Kaen. She types more than she talks — and laughs at both."
+      "desc": "Sleepy-eyed and entirely unbothered — one of Notty's Place's girls, from Khon Kaen. She types more than she talks — and laughs at both."
     },
     {
       "id": "jinda",
@@ -3255,7 +3255,7 @@
       "th": "จินดา",
       "room": "orchid_club",
       "tags": [],
-      "desc": "Bored until you try a word of Thai, then radiant — one of The Orchid Club's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand."
+      "desc": "Bored until you try a word of Thai, then radiant — one of Notty's Place's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand."
     },
     {
       "id": "namfon",
@@ -5019,7 +5019,7 @@
       "th": "กัญญา",
       "room": "orchid_club",
       "tags": [],
-      "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at The Orchid Club, from {{Nong Khai}}."
+      "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}."
     },
     {
       "id": "mon",
