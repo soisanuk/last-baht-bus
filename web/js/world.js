@@ -8894,7 +8894,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // the promise in the taxi ("buy me a coffee — I'll tell you which farang really owns his 'own' bar")
       // — asked about the TRADE before the coffee, he points at the coffee (Des, round 41: "Not my story")
       { topic: "bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade", notFlags: ["tanCoffee"],
-        text: "\"A bar.\" The glance in the mirror, the small smile. \"I said in the car: before you sign " +
+        text: "\"A bar.\" The glance in the mirror, the small smile. \"The same thing I would have told you in the car, if you had asked: before you sign " +
           "your name to anything, buy me a coffee. I meant the coffee. (BUY TAN A COFFEE)\"",
         short: "\"Coffee first. I said so in the car. (BUY TAN A COFFEE)\"" },
       { topic: "bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade", req: ["tanCoffee"],
@@ -9655,7 +9655,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "hyper",
     look: "Thai ladyboy of forty, six feet in heels, sharp cheekbones, sleek dark gown, total poise.",
     desc: "The mamasan of Hyper A Go-Go — six feet of poise in heels, cheekbones you could open " +
-      "letters with, and a katoey's hard-won certainty that she is the most finished thing in any " +
+      "letters with, and a kathoey's hard-won certainty that she is the most finished thing in any " +
       "room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers " +
       "have made it shine. Nothing on this stage happens that Diamond didn't allow.",
     dialogue: [
@@ -9739,8 +9739,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         when: (st, G) => G.quests.keys === "offered" || G.quests.keys === "active",
         text: "She takes the ring of keys out of the drawer under the till, where they have been " +
           "for a while, and sets them on the wood between you. \"His keys. Every lock in that " +
-          "go-go, from the day it was a hole in the ground.\" Her thumb goes over the brass once " +
-          "and stops. \"I cannot carry them in there. Twenty year I do not go past that door, and " +
+          "go-go, from the day they took it back to the brick.\" Her thumb goes over the brass once " +
+          "and stops. \"I cannot carry them in there. Since he fall I do not go past that door, and " +
           "I am not going to start now, and that is not sadness, that is just how it is.\" She " +
           "pushes them an inch nearer. \"Diamond keep a little shrine by the office. Hang them " +
           "there. Say nothing clever.\"",
@@ -9756,12 +9756,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "keys", req: ["keysDelivered"], notFlags: ["wimonThanked"], sets: ["wimonThanked"],
         text: "You pass it on the way Diamond said it: the keys hang where they belong, and — " +
           "she said to say — thank you. Wimon goes very still over the till. Both phones stay " +
-          "down. \"She kept them,\" she says at last, half to herself. \"All this time, that " +
-          "one kept them.\" She looks at you the way people look at a messenger who doesn't " +
+          "down. \"She hung them,\" she says at last, half to herself. \"All this time " +
+          "I keep them in a drawer, and that one puts them where he can see them.\" She looks at you the way people look at a messenger who doesn't " +
           "know the weight of the letter. \"You tell her — no. Mai pen rai. Some things I tell " +
           "her myself, after twenty years.\" She pours you one from the good bottle, on the " +
           "house, and doesn't explain it.",
-        short: "\"She kept them. All this time.\" The good bottle comes down. \"Some things I tell her myself.\"" },
+        short: "\"She hung them where he can see them. I only kept them in a drawer.\" The good bottle comes down. \"Some things I tell her myself.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome, sit anywhere.\" Wimon's smile is warm and her arithmetic is instant. \"Three " +
           "bar I look after for the boss — Arrow, Cheeky Monkey, the Office. Beer cold, girls nice, no " +
@@ -10378,7 +10378,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "for the menu. \"But you are not buying anything tonight, are you.\" No malice in " +
           "it at all; she has been reading men across this bar for five years. \"So you do " +
           "something for me instead, na. Bank — my Bank, the piwin down on Beach Road " +
-          "South — he has my helmet again. Again! Bring it to me and I tell you about " +
+          "South — he lend me his spare helmet and I leave it at his stand. Again! Bring it to me and I tell you about " +
           "Madam Oy for free.\"",
         short: "\"You're not buying tonight. So: Bank, the piwin on Beach Road South, has my helmet. Bring it and I talk for free.\"" },
       { topic: "oy", notFlags: ["helmetDelivered"],
@@ -11790,7 +11790,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "(PAY KEY MONEY · TRANSFER KEY MONEY)",
         short: "\"Notes before the first rent, or the app. He'd rather notes.\" (PAY KEY MONEY · TRANSFER KEY MONEY)" },
       { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease && G.bar.lease.paid),
-        text: "\"Sorted, that. He's not a man who sends receipts, so if you're waiting on one, don't.\"",
+        text: "\"That's that handled. He's not a man who sends receipts, so if you're waiting on one, don't.\"",
         short: "\"Sorted.\"" },
       { topic: "note|the note|old man|arrears", when: (st, G) => _flag("barPaid"),
         text: "\"฿" + BAR_MONTHLY + " a month to Ohio, six years, and he'll not chase you. That's the whole " +
@@ -11799,7 +11799,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "you. He'll not not thank you either.\" (PAY THE NOTE · PAY NOTE <amount>)",
         short: "\"฿" + BAR_MONTHLY + " a month, he'll not chase. PAY THE NOTE, or PAY NOTE <amount>.\"" },
       { topic: "rent|landlord", when: (st, G) => _flag("barPaid"),
-        text: "\"Every thirty days, to a fella who's never late collecting and never early with anything " +
+        text: "\"Every thirty days, to a guy who's never late collecting and never early with anything " +
           "else. Miss it once, his daughter comes by with a book. Miss it twice, I've told you what " +
           "happens.\" A beat. \"Settle it the moment it's owing. Before the daughter, ideally.\" (PAY RENT)",
         short: "\"Every thirty days. Miss it twice and you know. PAY RENT when it's owing.\"" },
@@ -11827,7 +11827,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\u201cWhite Dish.\u201d Bert chalks the cue, which is what he does instead of spitting. \u201cThey " +
           "wanted this bar. Sent a lad in a golf shirt to buy it off a dying man for a number that " +
           "sounded like a lot until you did the sums.\u201d He sights down the cue at nothing. \u201cYou've " +
-          "got it. They haven't. That's the whole story of White Dish on Beach Road, guv, and it's the " +
+          "got it. They haven't. That's the whole story of White Dish on Beach Road, bud, and it's the " +
           "only one on this road that ends that way.\u201d",
         short: "\u201cThey wanted this bar. You've got it. Only story on this road that ends that way.\u201d" },
       // the quest is done and the bar is still the old man's: they wait
@@ -11840,7 +11840,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         short: "\u201cStill out there. They don't go away. They wait for the month you can't cover.\u201d" },
       { when: (st, G) => _flag("barLost"),
         topic: "white dish",
-        text: "\u201cNot my fight any more, and not yours either.\u201d Bert turns the pint a quarter. " +
+        text: "\u201cNot my fight any more, and not yours either.\u201d Bert turns the Singha a quarter. " +
           "\u201cI'd have told you a week ago that the answer was standing behind the rail more nights " +
           "than you were. I'd have been half right, which is the most annoying kind of right.\u201d",
         short: "\u201cNot my fight any more, and not yours. The answer was more nights behind the rail, and I'd only have been half right.\u201d" },
@@ -12058,7 +12058,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "shown the machine behind it. He lets you finish. He does not help you along.\n\n" +
           "\"Right,\" he says at last, and sets the chalk down square. \"So you carried it, and " +
           "then you went and looked, and then you came back and told me what you found.\" A long " +
-          "pull on the Singha. \"Bud, I've had men in this bar twenty years who never did the " +
+          "pull on the Singha. \"Bud, I've had men drinking in front of me twenty years who never did the " +
           "middle part.\" He racks the balls. \"I'll tell the old man to hold. And I'll not " +
           "pretend I didn't hear the first version — but I'd sooner have a man who changes his " +
           "mind out loud than one who never had one.\"",
@@ -12986,7 +12986,7 @@ const QUESTS = {
     name: "The Safe-Cracker",
     giver: "oy",
     desc: "Madam Oy has a job for the farang who got a wallet back off her. Find out what has " +
-      "her girls jumpy — ASK PIM ABOUT THE WHISPERS, then take it back to her (ASK OY ABOUT " +
+      "her girls jumpy (ASK PIM ABOUT THE WHISPERS), then take it back to her (ASK OY ABOUT " +
       "THE OFFER).",
     deps: [],
     reqFlags: ["act1Done"],
@@ -13041,7 +13041,7 @@ const QUESTS = {
     name: "The Quiet Side",
     giver: "sumalee",
     desc: "Sumalee misses an old regular who didn't come back this season. ASK NOK ABOUT THE " +
-      "REGULAR, then bring it back to her (ASK SUMALEE ABOUT THE OFFER).",
+      "REGULAR, then bring it back to her (ASK SUMALEE ABOUT GORDON).",
     deps: [],
     reqFlags: ["act1Done"],
     at: "nok",
@@ -13333,7 +13333,7 @@ const QUESTS = {
   keys: {
     name: "The Foreman's Keys",
     giver: "wimon",
-    desc: "Carry her late husband's site keys to the bar he built, for the shrine " +
+    desc: "Carry her late husband's site keys to the bar he rebuilt, for the shrine " +
       "(GIVE KEYS TO DIAMOND).",
     deps: ["oldrocker"],
     item: "foreman_keys",
@@ -14545,7 +14545,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         text: "The biro stops. \u201cAh. Doyle.\u201d Mort looks pleased and slightly thwarted at once. \u201cI have been trying to get that man into the column for two years. Two YEARS. A homicide detective retires to Soi 6 \u2014 that writes itself, it's a gift.\u201d He clicks the biro twice. \u201cAnd every time I raise it he buys me a soda water and asks after my HEALTH.\u201d A dry look over the horn-rims. \u201cHe is very good. I have been deflected by professionals, and he is the politest of them.\u201d",
         short: "\u201cTwo years I've tried to get him in the column. Every time he buys me a soda water and asks after my health.\u201d" },
       { topic: "terry",
-        text: "\u201cTerry is the best primary source on this street and has no idea that is what he is.\u201d The biro taps the page. \u201cFifteen years, one vantage point, total recall and no agenda whatsoever \u2014 you cannot buy that. Historians would weep.\u201d He turns a page. \u201cThe trick is you must never take notes while he talks. The moment the book comes out he starts performing, and a performance is worth nothing. So I listen, and I write it down afterwards, in the gents.\u201d",
+        text: "\u201cTerry is the best primary source on this street and has no idea that is what he is.\u201d The biro taps the page. \u201cSixteen years, one vantage point, total recall and no agenda whatsoever \u2014 you cannot buy that. Historians would weep.\u201d He turns a page. \u201cThe trick is you must never take notes while he talks. The moment the book comes out he starts performing, and a performance is worth nothing. So I listen, and I write it down afterwards, in the gents.\u201d",
         short: "\u201cBest primary source on the street. Never take notes while he talks \u2014 write it up after, in the gents.\u201d" },
       { topic: "angela",
         text: "The biro goes down entirely, which you will come to learn is significant. \u201cShe corrected me. In print \u2014 wrote in about a ship's name I had wrong by one word, and she was right, and she had known she was right for six weeks before she said anything.\u201d He adjusts the horn-rims. \u201cI printed the correction and bought her a drink, and she looked at me as though I'd handed her a live animal.\u201d A small shrug. \u201cWe get on. From a distance, mostly, which suits us both.\u201d",
@@ -15233,7 +15233,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         text: "She lifts one headphone. \u201cDoyle's fine.\u201d Which, from Angela, is a character reference with a seal on it. \u201cHe clocked the Discman the first night and didn't say anything clever about it. Do you know how rare that is? Every bloke in here has a bit about the Discman. They've all got a bit.\u201d The headphone goes back. \u201cHe noted it and left it alone. That's a man trained not to touch the evidence.\u201d",
         short: "\u201cHe clocked the Discman and didn't say anything clever about it. Nobody else manages that.\u201d" },
       { topic: "terry",
-        text: "\u201cTerry talks.\u201d A pause you could park a bus in. \u201cNot a complaint. I don't, and it turns out a room needs one of each.\u201d She turns the Singha a quarter. \u201cHe has never once asked me why I'm here. Fifteen years of asking everybody everything, and never that.\u201d She almost smiles. \u201cI don't think it's tact. I think he's decided he already knows, and he's wrong, and I'm going to let him have it.\u201d",
+        text: "\u201cTerry talks.\u201d A pause you could park a bus in. \u201cNot a complaint. I don't, and it turns out a room needs one of each.\u201d She turns the Singha a quarter. \u201cHe has never once asked me why I'm here. Sixteen years of asking everybody everything, and never that.\u201d She almost smiles. \u201cI don't think it's tact. I think he's decided he already knows, and he's wrong, and I'm going to let him have it.\u201d",
         short: "\u201cHe's never asked me why I'm here. He thinks he knows. He's wrong. He can have it.\u201d" },
       { topic: "mort",
         text: "\u201cThe old man writes it down properly.\u201d She says it like a verdict. \u201cI wrote in once and corrected him, and he printed it. Didn't hedge, didn't make a joke of it, printed the correction like it mattered.\u201d The Discman gets a look. \u201cI'd assumed he'd be a prick about it. Most of them are, about being wrong.\u201d A beat. \u201cSo now I read the whole thing every week, which I imagine was the plan.\u201d",

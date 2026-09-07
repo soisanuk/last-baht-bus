@@ -1239,7 +1239,7 @@ const _CATALOGS = {
       "Setz dich eine Weile zu Glam und lass ihn von der Tour erzählen (ASK GLAM ABOUT MUSIC).",
 
     "The Foreman's Keys": "Die Schlüssel des Poliers",
-    "Carry her late husband's site keys to the bar he built, for the shrine (GIVE KEYS TO DIAMOND).":
+    "Carry her late husband's site keys to the bar he rebuilt, for the shrine (GIVE KEYS TO DIAMOND).":
       "Bring die Baustellenschlüssel ihres verstorbenen Mannes für den Schrein in die Bar, die er gebaut hat (GIVE KEYS TO DIAMOND).",
 
     "The Quiet Money": "Das stille Geld",
