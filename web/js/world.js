@@ -5249,8 +5249,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\u201cMy mother. Two year. And she call it savings.\u201d" },
       { topic: "debt", chip: false, when: (st, G) => _flag("debtSettled"),
         text: "\u201cFinish?\u201d He looks at you a long moment, then laughs once and puts his boots " +
-          "back on the handlebars, which is Bank for thank you. \u201cOkay. Okay! You ride free with " +
-          "me now, boss. Always. Do not tell the other drivers.\u201d",
+          "back on the handlebars, which is Bank for thank you. \u201cOkay. Okay! Special price for you now, boss. Always. Do not tell the other drivers.\u201d",
         short: "\u201cSpecial price for you now, boss. Always.\u201d" },
       { req: ["helmetDelivered"], th: "โอเคเลย", rom: "okay loei",
         text: "\"My man! Pim say thank you. You need ride anywhere — special price. And listen: you have problem with anyone on this street, you stand next to Bank, okay?\"",
@@ -8068,7 +8067,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // is the right man to start with — reading people is the job he retired from
       // and didn't stop doing, so every one of these is in character by construction.
       { topic: "terry",
-        text: "\u201cTerry.\u201d Doyle almost smiles. \u201cFifteen years, one stool, and he tells the White Dish story like it happened to him last Tuesday.\u201d He turns the soda water a quarter. \u201cIt didn't. He was here, he saw it, and every detail he gives you is true \u2014 I've checked two of them. But he's told it so many times the telling has its own shape now. Wears grooves.\u201d A shrug. \u201cThat's not lying. That's what a story does to a man who loves it.\u201d",
+        text: "\u201cTerry.\u201d Doyle almost smiles. \u201cSixteen years, one stool, and he tells the White Dish story like it happened to him last Tuesday.\u201d He turns the soda water a quarter. \u201cIt didn't. He was here, he saw it, and every detail he gives you is true \u2014 I've checked two of them. But he's told it so many times the telling has its own shape now. Wears grooves.\u201d A shrug. \u201cThat's not lying. That's what a story does to a man who loves it.\u201d",
         short: "\u201cEvery detail's true. He's just told it so often the telling wears grooves.\u201d" },
       { topic: "mort",
         text: "\u201cThe notebook.\u201d Doyle's eyes go to the far end without his head following, which is a whole career in one movement. \u201cSeventy-four and the best-informed man on this coast. Knows it, too.\u201d A pause. \u201cI've sat in rooms with men who'd have paid serious money for what's in that book. He writes it down in a pub on Soi 6 with the cap off his biro and nobody has ever laid a finger on him.\u201d He looks genuinely pleased about it. \u201cSays something about the place, doesn't it.\u201d",
@@ -8629,7 +8628,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     dialogue: [
       { req: ["kyleShift"],
         text: "\"Dude. DUDE.\" Kyle is off the stool before you're through the beads, and his " +
-          "handshake has changed — two days of ice-barrel work in it. \"Tuesday happened. Four " +
+          "handshake has changed — a day of ice-barrel work in it. \"Tuesday happened. Four " +
           "hours of ice and close-down, and Bert let me count the float WITH him — watching, not " +
           "touching, but still.\" He glows like his own ring light. \"He called me 'bud'. I think " +
           "it's a rank. I learned more in one shift than in three years of content about " +
@@ -9607,7 +9606,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // intel), directions node second — same first-match ordering pattern. chip:false.
       { topic: "offer", req: ["heardGordon"], sets: ["quietSideDone"], chip: false,
         text: "You tell her what Nok heard — that Gordon went in his sleep back in England " +
-          "over the summer, old and quiet, a photo of this beach still on his wall. Sumalee is " +
+          "over the summer, old and quiet, a photo of this beach still by his bed. Sumalee is " +
           "silent a moment, then nods once, the way you close a ledger you always knew you would " +
           "close. “Good. Not good — but good to know.” She takes a stick of incense " +
           "from the shrine behind the bar and lights it. “Fifteen season, he never once made " +
@@ -9886,7 +9885,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "somewhere. You settle your bill the night you run it. And you do not " +
           "raise your voice at a woman who works here, ever, for any reason, " +
           "including a good one.\"\n\nHe puts the hand down. \"That's it. That's the " +
-          "whole list, it's been the whole list since nineteen ninety-eight, and " +
+          "whole list, it's been the whole list since nineteen ninety-six, and " +
           "I've never had to say it twice to the same guy.\" A beat. \"Because the " +
           "guys I've said it to once don't come back, mostly. Works out.\"",
         short: "\"Hands to yourself, settle your bill, never raise your voice at a " +
@@ -10887,8 +10886,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "“Sharp kid. Worked for me once. Tan's got him now, and Tan was right.”" },
       // Kitten Corner, after the job: never heard of it (Ray/Declan, r45)
       { topic: "tan|the fixer|the driver",
-        text: "“Tan.” The name gets the respect he gives nothing else. “Drove me from the airport twenty " +
-          "years ago and has known where I am every night since. Never charged me a baht for " +
+        text: "“Tan.” The name gets the respect he gives nothing else. “Drove me in from the airport back when, and has known where I am every night since. Never charged me a baht for " +
           "anything, which is how I know what I owe him.” A beat. “He took the kid off me. He was " +
           "right to. I've never said thank you and he's never wanted it, and that's the whole " +
           "arrangement.”",
@@ -11737,7 +11735,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
 desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
       "Singha that never empties and never seems to get him drunk. Candy's man, and " +
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
-      "quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last two of them within nine feet of that pool table.",
+      "quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last three of them within nine feet of that pool table.",
     dialogue: [
       { when: (st, G) => _flag("barPaid"),
         text: "\"Guv.\" Bert doesn't look up from the cue he's chalking, which is how he says hello to " +
@@ -12108,7 +12106,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         short: "\"My lady, and a piece of this place. That's all you need for now, bud.\"" },
       { topic: "candy", when: (st) => st.trust >= 3,
         text: "A crooked grin, and the cue goes down. \"Candy. My lady, and my old boss — both, which is a " +
-          "hell of a retirement plan. Twenty years I ran her bars. Love her to death.\" The grin steadies into " +
+          "hell of a retirement plan. Nineteen years I ran her bars. Love her to death.\" The grin steadies into " +
           "something more honest. \"Doesn't mean I want her name over my door forever. Man gets to my age, he'd " +
           "like one thing in this town that's his and not hers. The Stinky's it. That's the whole of it, bud.\"",
         short: "\"My lady and my old boss both. Love her to death — but I'd like one thing here that's mine, not hers.\"",

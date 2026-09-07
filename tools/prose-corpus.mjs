@@ -397,6 +397,9 @@ if (has("quests")) {
     console.log(`   at: ${q.at || "—"}   deps: ${(q.deps || []).join(", ") || "—"}   reqFlags: ${(q.reqFlags || []).join(", ") || "—"}` +
       `${q.item ? "   item: " + q.item : ""}`);
     console.log(`   doneFlag: ${q.doneFlag} — set by ${setters.join(", ") || "an engine action (grep the flag)"}`);
+    // a quest may carry PER-ROUTE descs (descBy) — without them a reviewer reads the
+    // default as the only instruction the player ever gets (Opus re-run, 2026-09-07)
+    for (const [route, d] of Object.entries(q.descBy || {})) console.log(`   descBy.${route}: ${d}`);
     if (gates.length) console.log(`   read back by: ${gates.join(", ")}`);
     console.log(`   reward: ${JSON.stringify(q.reward || {})}`);
     for (const r of recs) {

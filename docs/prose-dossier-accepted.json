@@ -62,6 +62,18 @@
       "finding": "The quest told the player to TELL Rose, and TELL is not a verb here.",
       "ruled": "2026-09-07",
       "reason": "Half-refuted, then fixed: TELL already gave a voiced refusal naming ASK, so nobody was stranded, but the desc now says ASK ROSE ABOUT CANDY, which is also tappable."
+    },
+    {
+      "subject": "The Box",
+      "finding": "rabbit_heist is described and equipped for the box path alone while its doneFlag is set by all three routes.",
+      "ruled": "verified 2026-09-07",
+      "reason": "Refuted, and a TOOL gap rather than a prose one: the quest carries per-route descBy entries for the operator and the kid, which the pivot was not printing. It prints them now, so the next reviewer sees all three instructions."
+    },
+    {
+      "subject": "Wayne",
+      "finding": "Wayne's silent partner carries every one of Tan's identifying details while the narration files the arrangement under White Dish.",
+      "ruled": "2026-09-07",
+      "reason": "Deliberate. The resonance is the point of the nominee arc — the reader is meant to half-recognise him — and canon puts White Dish on the paying side of Tan, which is exactly why the narrator's flat attribution is what a farang would assume and get wrong."
     }
   ]
 }
