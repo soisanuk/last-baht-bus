@@ -3965,14 +3965,18 @@ function _morningLedger() {
   const df = new Set((_photoList() || []).map(p => p.id)).size - b.faces;
   if (df > 0) bits.push(df + " new face" + (df > 1 ? "s" : "") + " in the gallery");
 
-  if (!bits.length) {
-    _say("(A quiet one. It happens, and the week is long enough to carry a few.)", "dim");
-  } else {
-    _say("Last night: " + bits.join(" · "), "dim");
-  }
-  _say(_fmt("\u0e2a\u0e19\u0e38\u0e01 {h} — {label}{left}",
-    { h: G.happy, label: _happyLevel(G.happy),
-      left: G.stage === "expat" ? "" : " \u00b7 " + (8 - G.day) + " night" + (8 - G.day === 1 ? "" : "s") + " left" }), "dim");
+  // THE MORNING LEDGER IS ONE FRAME, AND IT CARRIES THE NIGHT'S WORST NEWS (Stuart,
+  // round 47): black out, get your pockets emptied, close the app because you are not
+  // proud of yourself, come back — and ฿1,181 is gone with the game saying nothing. Keep
+  // what was said so LAST NIGHT can say it again.
+  G.lastNightSaid = [
+    bits.length ? "Last night: " + bits.join(" \u00b7 ")
+      : "(A quiet one. It happens, and the week is long enough to carry a few.)",
+    _fmt("\u0e2a\u0e19\u0e38\u0e01 {h} \u2014 {label}{left}",
+      { h: G.happy, label: _happyLevel(G.happy),
+        left: G.stage === "expat" ? "" : " \u00b7 " + (8 - G.day) + " night" + (8 - G.day === 1 ? "" : "s") + " left" }),
+  ];
+  for (const l of G.lastNightSaid) _say(l, "dim");
 }
 
 function _nightDebrief(reason) {

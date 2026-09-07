@@ -44,7 +44,20 @@ test("liveness: a declared shift always reaches the books", () => {
   // did wander read as the round-13 regression. Every declared shift must still
   // ACCOUNT for itself — what must never happen is a shift that neither settles
   // nor lapses, which is exactly what going silent looks like.
-  const t = tally([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], { nights: 6, mode: "barowner" });
+  //
+  // THE SAMPLE IS THE FRAGILE PART, AND IT HAS NOW COST TWO SESSIONS. Standing a
+  // shift is "stay in one room for 20 turns", which is the one thing a random
+  // walker is built not to do — so `worked` is a rare-event count, and ANY change
+  // to the walker's vocabulary re-rolls every seed's trajectory. Measured
+  // 2026-09-07: adding one entry to _COMPLETE_VERBS ("last night"), touching no
+  // bar code at all, moved 12 seeds x 6 nights from declared 14 / worked 6 to
+  // declared 6 / worked 0 — a red suite with the game unchanged. At 32 seeds x 10
+  // nights the walker declares ~14 and stands ~4 of them, so a re-roll landing on
+  // zero is under 1%. If this assertion goes red, FIRST check whether the diff
+  // touched the walker's vocabulary (_COMPLETE_VERBS, engineComplete, the soak's
+  // own channels) — that is the dice moving, not the mechanic dying. The balance
+  // assertion above is the one that actually watches the bar.
+  const t = tally([...Array(32)].map((_, i) => i + 1), { nights: 10, mode: "barowner" });
   assert.ok(t["bar.night.settled"] > 0, "the bar's books settle at all");
   assert.equal(t["bar.night.worked"] + t["bar.shift.lapsed"], t["bar.shift.declared"],
     `every declared shift must either settle as worked or lapse (declared ${t["bar.shift.declared"]}, ` +

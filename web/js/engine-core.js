@@ -257,6 +257,7 @@ function newGame() {
     ccibRadar: null,     // who CCIB has a file on after the heist: {player,eddy,nont} — set at the morning scene, rides the export (docs/bangkok-concept.md)
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
     motoAsked: 0,        // the turn the piwin last asked "where to?" — a bare place typed next answers him
+    lastNightSaid: null,   // the morning ledger, kept so LAST NIGHT can reprint it
     ccibLoud: 0,         // loud acts inside the window (see _ccibLoud) — the teeth
     ccibLoudNight: {},   // {kind: day} — one count per kind per night
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)

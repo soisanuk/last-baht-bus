@@ -7322,6 +7322,13 @@ function _sayNursed() {
   const n = staff.length ? NPCS[staff[Math.floor(_hh(G.room + ":" + G.turns, 3) % staff.length)]].name : "A girl";
   _say(_fmt(_pickVary(_room().barType === "gogo" ? _NURSE_GOGO : _NURSE_BAR, "nursed"), { n }), "alert");
 }
+let _waitRefused = false;   // set by a WAIT that refused; scoped to one doCommand
+function _doLastNight() {
+  const said = G.lastNightSaid;
+  if (!said || !said.length) { _say("(Nothing to report from last night — or you have not slept on it yet.)", "dim"); return; }
+  for (const l of said) _say(l, "dim");
+}
+
 function _doWait(arg) {
   if (!arg && _nursed()) { _sayNursed(); return; }
   if (!arg) {
@@ -7353,13 +7360,13 @@ function _doWait(arg) {
       else if (!until[2] && h >= 5 && h <= 11 && _hourToTurn(h) === null) h += 12;
       if (h === 12 && until[2] !== "pm") h = 0;         // "until 12" means midnight
       target = _hourToTurn(h % 24);
-      if (target === null) { _say(`The night runs ${_nightSpanStr()}. Daylight is for sleeping.`); G.waitFree = true; return; }
+      if (target === null) { _say(`The night runs ${_nightSpanStr()}. Daylight is for sleeping.`); _waitRefused = true; return; }
     } else {
       target = G.nightTurn + Math.min(h, 60); // WAIT <n> turns
     }
   }
   if (target === null) { _say("WAIT <turns>, or WAIT UNTIL <hour> (say, MIDNIGHT)."); return; }
-  if (target <= G.nightTurn) { G.waitFree = true; _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
+  if (target <= G.nightTurn) { _waitRefused = true; _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
   const startDay = G.day, inbox0 = G.phone.inbox.length, g0 = G, room0 = G.room;
   // leave one turn for the tick every command pays at the bottom of doCommand
   while (G.nightTurn < target - 1) {
@@ -8270,7 +8277,7 @@ THE WHOLE CARD (bare HELP is the short one):
     DRAW [amount] (take your own money out of your own till — nobody else will do it for you)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
-  SCORE (happiness & progress) · DEBT (what you owe, and to whom)
+  SCORE (happiness & progress) · DEBT (what you owe, and to whom) · LAST NIGHT (the morning ledger again)
   UNDO · RESTART   (the night autosaves itself; UNSHELVE takes back a night you stepped away from)
   BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
@@ -8358,7 +8365,7 @@ THE WHOLE CARD (bare HELP is the short one):
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)
   AGAIN or G (repeat last command)
-  SCORE (happiness & progress) · SHARE (your week card — one emoji a night, copy & compare)
+  SCORE (happiness & progress) · LAST NIGHT (the morning ledger again) · SHARE (your week card — one emoji a night, copy & compare)
   UNDO · RESTART   (the night autosaves itself)
   PLAY AGAIN (once the week's up — another seven days on the soi)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
@@ -8392,7 +8399,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
-  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
+  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
 
@@ -8904,7 +8911,7 @@ function engineComplete(input) {
   } else if (G.pendingBf) pool = ["short time", "long time", "take her out", "no"];
   else if (G.pendingSoapy) pool = [..._SOAPY_TIERS.map(t => String(t.num)), "star", "super star", "model", "no"];
   else if (raw === "__info " || raw === "__info") {
-    pool = ["quests", "hint", "time", "who", "contacts", "gallery", "standing", "diagnose", "score", "map", "help"];
+    pool = ["quests", "hint", "time", "who", "contacts", "gallery", "standing", "diagnose", "score", "last night", "map", "help"];
     if (G.mode === "soi6") pool.push("share");
     if (G.stage === "expat") pool.push("books");
     // DEBT and DRAW are readouts about YOUR money, and they were the two verbs a
@@ -9215,7 +9222,7 @@ const _GERMAN_QUIP = {
 
 // Verbs that cost no turn: pure readouts of state you already have. See the
 // comment at the bottom of doCommand for why this matters more than it looks.
-const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health", "verbs",
+const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health", "verbs", "ledger",
   "inventory", "inv", "i", "map", "help", "quests", "journal", "hint", "share",
   "who", "blackbook", "standing", "rep", "gallery", "photos", "album", "books",
   "takings", "identity", "topics", "subjects"]);
@@ -9241,6 +9248,9 @@ function doCommand(input) {
   // readouts", so answer with HELP rather than nothing.
   if (/^__info\b/i.test(raw)) raw = raw.replace(/^__info\b\s*/i, "") || "help";
   if (!raw) return;
+  _waitRefused = false;
+  // "last night" is the natural two-word form of the ledger verb (Stuart, round 47)
+  if (/^\s*last night\b/i.test(raw)) raw = "ledger";
   const lower = raw.toLowerCase();
   const words = lower.split(" ");
   const [v, ...rest] = words;
@@ -9728,6 +9738,9 @@ function doCommand(input) {
       else if (/^(tested|checked|test|checkup|screen)\b/.test(arg)) _doClinic();
       else _doTake(arg.replace(/^up /, ""));
       break;
+    // LAST NIGHT reprints the morning ledger — the one frame that carries a rough wake's
+    // missing money, and the easiest thing in the game to miss by locking your phone.
+    case "ledger": _doLastNight(); break;
     case "clinic": case "tested": case "screening": _doClinic(); break;
     case "drop": _doDrop(arg); break;
     case "inv": case "inventory": _doInventory(); break;
@@ -10456,9 +10469,9 @@ function doCommand(input) {
       !/^(wait|z|look|l|examine|x|read|topics|score|time|clock|inventory|i|inv|quests|hint|diagnose|place|help|quiet|hush|shh|shush|still|stay|sit|breathe)$/.test(v)) {
     if (typeof _boxNoise === "function") _boxNoise();
   }
-  // a WAIT that refused to wait has not spent anything (Kenji, round 47)
-  if (G.waitFree) { G.waitFree = false; }
-  else if (!_FREE_VERBS.has(v)) _tick();
+  // a WAIT that refused to wait has not spent anything (Kenji, round 47). Module-local and
+  // cleared at dispatch, so it can never eat the NEXT command's tick (soak liveness caught that).
+  if (!_waitRefused && !_FREE_VERBS.has(v)) _tick();
   _questTick();
   _checkAct1();
 }
