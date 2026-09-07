@@ -9668,11 +9668,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Buy a girl a drink, treat her nice, mind your manners. I run this floor.\"" },
       { topic: "hyper", text: "\"You should have seen this place before — sticky floor, dead neon, " +
           "three girls and a fan.\" She waves a manicured hand at the chrome. \"Two brothers, European, " +
-          "buy it in the COVID time, when every bar in Jomtien is dying. Put in every baht they own — " +
+          "buy it in the COVID time, when every bar in Jomtien is dying. Put in every baht they had, " +
+          "which was not the half of what that chrome cost, and nobody ever said out loud where " +
+          "the rest came from — " +
           "and, crazy, they live UPSTAIRS in the old short-time rooms, to watch the builders with their " +
           "own eyes. Everybody laugh at them then. Nobody laughing now.\"" },
-      { topic: "samson", text: "\"My bosses. Two brothers — came with their savings and a wreck of a " +
-          "go-go, made a fortune out of it, and never once stopped buying.\" A cool look. \"Now: seven " +
+      { topic: "samson", text: "\"My bosses. Two brothers — came with their savings, a wreck of a " +
+          "go-go, and somebody behind them nobody has ever named — made a fortune out of it, " +
+          "and never once stopped buying.\" A cool look. \"Now: seven " +
           "beer bar, three of the quiet clubs, and Hyper. They took partners to grow so fast — quiet " +
           "money, and you do not ask a Samson brother about the quiet money. The go-go is not their " +
           "favourite child any more; they just want more strip. Good bosses, though — pay on time, let " +
@@ -14269,7 +14272,10 @@ const _REGULARS = {
         "entirely here, and his eyes are old and clear and amused. \"They call every Sunday. So " +
         "polite. 'How are you feeling, Papa?' They are not asking how I am feeling.\" A dry little " +
         "laugh. \"I gave them the bar money — every mark of it, the last of the good years — and they " +
-        "think that was the TASTE. They are waiting for the rest, liebchen. The inheritance.\" He " +
+        "think that was the TASTE — the buying of it, and every mark of the building work. " +
+        "What came after, the growing, the seven bars: that is other men's money, and I do " +
+        "not know their names and neither do the boys, not really.\" The amusement goes out " +
+        "of him for exactly one beat. \"They are waiting for the rest, liebchen. The inheritance.\" He " +
         "leans in, delighted, conspiratorial, dying. \"There is no rest. I spent it. On the town, on " +
         "the envelope nobody knows about, on the SHIRTS. A man should go out like a good bottle — " +
         "empty, and having been a party.\" And the fog rolls back in, gently, like a tide.",

@@ -231,6 +231,51 @@ rest, and the player who hasn't just hears about a sad Irishman.
   nothing behind it. That hook is a promise, and promises are the documented
   defect class (`docs/prose-defects.md`).
 
+## The Samson bail-out — an unbuilt hook (2026-09-07)
+
+**Not built. Annotated so the canon underneath it does not get quietly contradicted, and so
+whoever picks it up finds the shape already decided.**
+
+The Glam saga establishes, across four quests, who actually paid for what on the Thappraya
+strip:
+
+| Money | Whose | Known to |
+|---|---|---|
+| Buying Hyper, and every baht of the renovation | Glam's, the last of the good years | Nobody. Diamond says only that the brothers' own money "was not the half of what that chrome cost" |
+| The brothers' own stake | Real, and a minority | Public — it is the story they tell |
+| The expansion: seven beer bars, three quiet clubs | Unnamed investors, the "quiet money" | Half-public. Diamond: "you do not ask a Samson brother about the quiet money" |
+
+Glam disapproves of the second lot, cannot name them, and believes the brothers are waiting
+for him to die so his estate can settle them. **There is no estate — he has spent it**, which
+is the joke he goes out on ("a man should go out like a good bottle — empty, and having been
+a party").
+
+**The hook, therefore:** the inheritance the Samsons are quietly counting on does not exist,
+so when Glam dies the investors call it in and take control of the strip. A player who is
+already inside the ecosystem could bail the brothers out and keep them independent.
+
+**Why it belongs to the expat long haul and not to a vacation week.** It is not an errand, it
+is a *position* — the same shape as the procurement fork and the 51% partner choice. It needs
+a player who owns a bar, has money that means something, and has standing with more than one
+faction. On a seven-day trip it would be a stranger writing a cheque, which is exactly the
+farang-savior register this game refuses.
+
+**What it would need, and the two things it must not become:**
+
+- The Darkside `_align` key that the Open section above still lists as missing, or a fifth
+  faction for the investors, decided deliberately rather than by accident.
+- Money at a scale the bar economy can express. The bar note is ฿1.68M over six years; a
+  strip-level rescue is a different order and would need its own answer.
+- **It must not be a purchase.** Buying the strip makes the player the new investor, which is
+  the thing the arc is against. The interesting version is standing surety, or bringing Tan's
+  side in, and either of those is an obligation with no figure on it — the syndicate doctrine.
+- **Glam must not be rescued by it.** He is dying, he knows, and he arranged his own exit. A
+  version where the player's money buys him more time turns the best beat in the arc into a
+  problem the farang solved.
+
+Nothing points at this in play yet, and nothing should until it is built — an unkept hook is
+the documented defect class (`docs/prose-defects.md`).
+
 ## Fronts, and the theory of fronts (2026-09-06)
 
 **The belief.** Every expat in this town will tell you by his second beer that the bar with no
