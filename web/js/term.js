@@ -36,7 +36,10 @@ const _term = (() => {
   // and the narrator's one-word "Mild." as Mild. Diamond stays OUT of the set — she is a
   // quest giver whose name must chip anywhere; "Soi Diamond" is wrapped at its two sites instead.
   const _WORD_NAME_NPCS = new Set(["Best", "Proud", "Near", "Nice", "Hong", "Som", "Pinky",
-    "Mai", "Sai", "Air", "Nong", "Bank", "Ice", "Arm", "Mild"]);
+    "Mai", "Sai", "Air", "Nong", "Bank", "Ice", "Arm", "Mild",
+    // round-46 dossier sweep: "Mind how you carry it", "Earn his trust", CHERRY POP,
+    // "Rob, not the other one… Thomas" (a 1995 Liverpool squad), "Golf shirt", "Tom Yum Goong"
+    "Mind", "Earn", "Cherry", "Pop", "Rob", "Thomas", "Golf", "Goong"]);
   function _kwIndex() {
     const kind = new Map(); // display name → npc | patron | bar | item
     try {

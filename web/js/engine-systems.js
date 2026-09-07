@@ -5441,7 +5441,7 @@ const _WORK_GRIND = [
   "The soi is forty seconds from this door. You know exactly what it sounds " +
     "like tonight, and you have known for ten nights, and you have not been in " +
     "it once.",
-  "Bert says you look tired. Bert, who has done this for eleven years and looks " +
+  "Bert says you look tired. Bert, who has done this for twenty-two years and looks " +
     "like a man who sleeps beautifully, says you look tired.",
 ];
 const _WORK_MISSED = [

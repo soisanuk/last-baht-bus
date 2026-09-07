@@ -298,7 +298,7 @@ test("the bar-bore isn't on a rail the room called empty (Gerry)", () => {
 test("Gary answers for everything his own hello volunteers (Gerry)", () => {
   _setFlag("act1Done"); G.nightTurn = 20; G.room = _npcRoom("gary"); G.known.gary = true;
   const greet = NPCS.gary.dialogue[0].text;
-  assert.match(greet, /fourteen at the lake/, "premise: he volunteers the lake");
+  assert.match(greet, /fifteen at the lake/, "premise: he volunteers the lake");
   assert.match(greet, /Married her/, "…and the wife");
   for (const [topic, want] of [["lake", /Mabprachan/], ["wife", /Midnight Sun, 2004/],
     ["fishing", /Snakehead/]]) {

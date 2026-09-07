@@ -1231,8 +1231,7 @@ const ROOMS = {
     name: "Succubus",
     bar: "Succubus", barType: "gents", outlet: true,
     region: "Pratumnak",
-    desc: "Past the hedge, up a porch, and into a front room somebody has been improving for " +
-      "twenty years: dark wood, a proper bar with a brass rail, a ceiling fan turning under " +
+    desc: "Past the hedge, up a porch, and into a front room somebody has been improving for thirty years: dark wood, a proper bar with a brass rail, a ceiling fan turning under " +
       "the aircon because the owner likes the look of it, and framed photographs going all " +
       "the way back — the same coast with nothing on it. Nobody's chain owns this one. Bob " +
       "is behind the bar most nights and his wife runs the floor, and between them they " +
@@ -4993,7 +4992,7 @@ const ITEMS = {
     portable: true, location: null, // worked free of the Shamrock's shutter hasp
     keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — " +
-      "GOOD BOY. The pub is shuttered and the Irishman the soi called Sean is long gone home, but somebody once " +
+      "GOOD BOY. The pub is shuttered and the Irishman the soi called Paddy is long gone home, but somebody once " +
       "paid to have GOOD BOY engraved in brass, and they were right.",
   },
   fake_rolex: {
@@ -6842,7 +6841,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "here.\" Her hands are very still on the till. \"He said a good girl deserve better. Turn out " +
           "'better' just mean 'more'. Okay. Okay.\"",
         short: "\"You have more money than Dave. A good girl deserve better — turn out 'better' just mean 'more'.\"" },
-      { topic: "sponsor", text: "\"Dave. Perth.\" A soft, careful pride. \"He send money so I don't work the " +
+      { topic: "sponsor", text: "\"{{Dave}}. Perth.\" A soft, careful pride. \"He send money so I don't work the " +
         "floor. Just the till. He say a good girl deserve better than the floor, and he make it true for me. One " +
         "year already, he send every week, never miss.\" A tiny pause. \"He is coming. He say he is coming.\"" },
     ],
@@ -7271,7 +7270,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "career", text: "She tilts her head very slightly. \"Career.\" The word " +
         "lands like she's reading it off a slide deck. \"I had one. Bangkok, six days " +
         "a week, mandatory overtime, seventeen thousand baht a month.\" She adjusts an " +
-        "invisible hair. \"I have a degree, you know. International business. My " +
+        "invisible hair. \"I have a degree, you know. Economics. My " +
         "English is better than my boss's was. My Mandarin is better than his " +
         "assistant's.\" The wink is exact, controlled. \"I did the math. Everyone " +
         "does the math eventually. I just did it faster than most.\"" },
@@ -11145,8 +11144,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Laotian woman, late thirties, handsome not cute, long dark hair with a frangipani behind one ear, worn red dress, knowing smile.",
     desc: "One of the two hostesses, and old enough now that the word feels generous — late " +
       "thirties, handsome rather than cute, a frangipani behind one ear because the bar is " +
-      "named for a flower of sorts and somebody should mean it. She has the easy, unhurried " +
-      "warmth of a woman who did her ten years on Soi 6, learned every angle, and is " +
+      "named for a flower of sorts and somebody should mean it. She has the easy, unhurried warmth of a woman who did her twelve years on Soi 6, learned every angle, and is " +
       "genuinely relieved not to be running them any more. She names her price in drinks and " +
       "gives her opinions away.",
     dialogue: [
@@ -11739,8 +11737,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
 desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
       "Singha that never empties and never seems to get him drunk. Candy's man, and " +
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
-      "quietly, works at being his own man out from under her shadow. Twenty-two years " +
-      "on Beach Road, most of them within nine feet of that pool table.",
+      "quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last three of them within nine feet of that pool table.",
     dialogue: [
       { when: (st, G) => _flag("barPaid"),
         text: "\"Guv.\" Bert doesn't look up from the cue he's chalking, which is how he says hello to " +
@@ -11881,9 +11878,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "shamrock", req: ["shamrockVisited"],
         text: "\"Found it, then. Found HIM.\" Bert doesn't look up from the glass he's drying. \"Sean's " +
           "place. Good man, bad luck, no partner — you go home for an operation and nobody's holding " +
-          "the door.\" He sets the glass down. \"The dog sat that step four years. Don't reckon he " +
-          "was waiting for Sean, bud. Reckon he was waiting for whoever came next.\"",
-        short: "\"Sean's place. Good man, no partner, nobody holding the door. The dog was waiting for whoever came next.\"" },
+          "the door.\" He sets the glass down. \"The dog sat that step a month, then walked this town four years. Don't reckon he was waiting for Sean, bud. Reckon he was waiting for whoever came next.\"",
+        short: "\"Sean's place. Good man, no partner, nobody holding the door. The dog walked four years waiting for whoever came next.\"" },
       { topic: "key", req: ["hatchPried"],
         text: "\"Off the hatch? That'll be the landlord's, the one he leaves for the next tenant there's " +
           "never going to be.\" Bert weighs it without touching it. \"Hang onto it. Nobody else out " +
@@ -12065,8 +12061,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"Here he is.\" Bert reaches under the till and sets your name-chalk on the bar like " +
         "evidence. \"King of the killer table. I've had that up a week — half the rail's sick of hearing " +
         "about it, other half wants a rematch with money on.\" He slides a Singha across, on the house, " +
-        "which from Bert is a civic honour. \"Defend it Thursday, or don't. Champions get to be busy.\"",
-        short: "\"King of the killer table. Defend it Thursday, or don't — champions get to be busy.\"" },
+        "which from Bert is a civic honour. \"Defend it next league night, or don't. Champions get to be busy.\"",
+        short: "\"King of the killer table. Defend it next league night, or don't — champions get to be busy.\"" },
       { topic: "league", text: "\"Killer pool. Everybody's got three lives, pot or " +
         "you lose one, last man standing takes the pot. Every third night, right " +
         "here. Half the piwins in North Pattaya play. Bring your hundred baht and " +
@@ -12082,9 +12078,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "dog", req: ["hasDog"], when: () => G.mode !== "soi6",
         text: "Bert looks past you at the dog by the door and sets his Singha down " +
         "slow. \"I'll be damned. That's the Shamrock dog, bud. Sean's dog — the soi only "
-        + "ever called him Paddy, the way it calls every Irishman Paddy. The Irish " +
-        "place out on Khao Talo, went under in COVID. He caught the one flight home " +
-        "and the dog sat that step for a month. Then he went walking.\" He shakes his " +
+        + "ever called him Paddy, the way it calls every Irishman Paddy. The Irish place out on Khao Talo. He went home for an operation and never came back, and the dog sat that step for a month. Then he went walking.\" He shakes his " +
         "head. \"Four years walking, and of every farang in this town he picked you. " +
         "Do him a right thing: walk him out to the old place and let him see it. Dogs " +
         "need funerals too, in their way.\"",
@@ -12465,13 +12459,13 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       "He has the serene look of a man whose 7-Eleven receipts are all groceries now.",
     dialogue: [
       { th: "สบายดีไหม", rom: "sabai dii mai",
-        text: "\"Evenin'. Twenty-two years here, eight in town, fourteen at the lake — town's for sprinting, lake's for living.\" The retriever confirms with a sigh. \"You look like you're mid-sprint, son. It gets better. Married her, didn't I — met her at the Midnight Sun in '04.\"",
+        text: "\"Evenin'. Twenty-two years here, seven in town, fifteen at the lake — town's for sprinting, lake's for living.\" The retriever confirms with a sigh. \"You look like you're mid-sprint, son. It gets better. Married her, didn't I — met her at the Midnight Sun in '04.\"",
         // A hello that name-drops three askable things needs a gist. Without a
         // `short`, the asNew path (a genuinely NEW question answered by an
         // already-spoken node) falls through to the FULL text — so asking him
         // about the Midnight Sun replayed his entire greeting verbatim (Gerry,
         // round 34). With one, the new question gets the point, not the spiel.
-        short: "\"Twenty-two years — eight in town, fourteen at the lake. Met her at the Midnight Sun in '04.\"" },
+        short: "\"Twenty-two years — seven in town, fifteen at the lake. Met her at the Midnight Sun in '04.\"" },
       { topic: "wallet", text: "\"Lost the wallet? Classic first act.\" He chuckles. \"The ladies of this town run the best information network east of Bangkok. Be polite, buy a few drinks, wai like you mean it — it'll find you before you find it.\"" },
       { topic: "sabai", text: "\"Sabai.\" He says it like it's the answer to something " +
         "you didn't quite ask. \"Took me four years in town to understand it. I kept " +
@@ -15426,7 +15420,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "before I hit record — drummers notice timing.\" She turns back. " +
         "\"Two years now. His mum in Cebu knits me things for a climate she " +
         "refuses to believe in. I'm keeping all of it. Him included.\"",
-        short: "\"Boyet. Drummers notice timing. Three years. I'm keeping him.\"" },
+        short: "\"Boyet. Drummers notice timing. Two years. I'm keeping him.\"" },
     ],
   },
 
