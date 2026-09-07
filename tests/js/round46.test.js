@@ -386,3 +386,44 @@ test("Wimon counts the same three beer bars twice", () => {
   assert.match(greet, /Three bar I look after/);
   assert.match(samson, /this bar and the two others I run/, "not 'this bar, and that one' — that was two");
 });
+
+test("WAIT UNTIL reaches the whole night, and a refusal costs nothing (Kenji, round 47)", () => {
+  vac(); _setFlag("act1Done"); G.room = "beach_rd_c";
+  // the night moved to 06:00 and this was capped at the old 04:00 — the one command a man
+  // staying up for the sunrise types was refused with a clock that had stopped two hours back
+  G.nightTurn = 100; out = []; run("wait until 5");
+  assert.equal(G.nightTurn, 110, "05:00 is reachable");
+  assert.doesNotMatch(text(), /18:00 to 04:00/);
+  // …and the message states the clock the game actually keeps
+  G.nightTurn = 100; out = []; run("wait until 3");
+  assert.match(text(), /18:00 to 06:00|already/, "the span is derived, not typed");
+  // a refusal must not spend the turn it refused to spend
+  G.nightTurn = 100; out = []; run("wait until 4");
+  assert.equal(G.nightTurn, 100, "refusing to wait is free");
+  // "until 9" still means 21:00; 5 and 6 are real night hours now and read as themselves
+  G.nightTurn = 20; run("wait until 9"); assert.equal(G.nightTurn, 30);
+  const src = readFileSync(new URL("../../web/js/engine-parser.js", import.meta.url), "utf8");
+  assert.doesNotMatch(src, /The night runs 18:00 to 04:00/, "no hard-coded span");
+});
+
+test("the round on the house books the spend AND the return, never the net (Des, round 47)", () => {
+  vac(); G.stage = "expat"; _setFlag("expatLife"); _setFlag("barPaid"); _setFlag("barOpen");
+  G.bar.room = "stinky_bar"; G.bar.cash = 5000; G.room = "stinky_bar";
+  const saved = _rand;
+  try {
+    _rand = () => 0.1;                       // it lands
+    G.pendingChoice = "shift"; G.shiftCall = "round"; out = []; _shiftYes();
+    assert.ok(G.bar.eventNotes.some(n => /round on the house −/.test(n)), "the spend is named and negative");
+    assert.ok(G.bar.eventNotes.some(n => /\+/.test(n)), "and the return is its own line");
+    assert.equal(G.bar.eventOut, SHIFT_ROUND_COST, "the cost happened either way");
+  } finally { _rand = saved; }
+});
+
+test("the next-door hand-off is one sentence, not a doubled name and two full stops", () => {
+  vac(); G.stage = "expat"; _setFlag("expatLife");
+  const w = _questWhere("tan");
+  assert.match(w, /Tan is at/, "questWhere already names him and ends the sentence");
+  assert.match(w, /\.$/);
+  const src = readFileSync(new URL("../../web/js/engine-systems.js", import.meta.url), "utf8");
+  assert.doesNotMatch(src, /has it\$\{_questWhere\(giver\) \|\| ""\}\./, "…so do not prefix the name and add another stop");
+});

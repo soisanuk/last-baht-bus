@@ -7274,11 +7274,18 @@ function _doTime() {
   }
 }
 
-function _hourToTurn(h) { // 24h clock → nightTurn; the game lives 18:00–04:00
+// 24h clock → nightTurn. DERIVED FROM NIGHT_TURNS, never hard-coded: the night ran to
+// 04:00 for a year and moving it to 06:00 left this capped at four, so WAIT UNTIL 5 — the
+// one command a man staying up for the sunrise types — refused with "the night runs 18:00
+// to 04:00", two hours after that stopped being true (Kenji, round 47).
+function _hourToTurn(h) {
+  const last = 18 + NIGHT_TURNS / 10;                       // 18:00 + the night's length
   if (h >= 18 && h <= 23) return (h - 18) * 10;
-  if (h >= 0 && h <= 4) return (h + 6) * 10;
+  if (h >= 0 && h <= last - 24) return (h + 6) * 10;   // inclusive: waiting until 06:00 is waiting for dawn
   return null;
 }
+// …and the refusal says what the clock actually is
+function _nightSpanStr() { return `18:00 to ${String((18 + NIGHT_TURNS / 10) % 24).padStart(2, "0")}:00`; }
 
 // THE HOUSE'S PATIENCE. A seat in a bar is rented by the drink: an hour on one
 // beer and somebody is at your elbow; in a go-go you do not buy a single bottle
@@ -7340,16 +7347,19 @@ function _doWait(arg) {
     let h = parseInt(until[1], 10);
     if (/^(?:until|till)/.test(arg)) {
       if (until[2] === "pm" && h < 12) h += 12;
-      else if (!until[2] && h >= 5 && h <= 11) h += 12; // "until 9" means 21:00 here
+      // "until 9" means 21:00 — but ONLY where the bare hour is not itself a night hour.
+      // Once the night ran to 06:00, 5 and 6 became real hours of it, and this was
+      // silently reading them as 17:00 and 18:00 (Kenji, round 47).
+      else if (!until[2] && h >= 5 && h <= 11 && _hourToTurn(h) === null) h += 12;
       if (h === 12 && until[2] !== "pm") h = 0;         // "until 12" means midnight
       target = _hourToTurn(h % 24);
-      if (target === null) { _say("The night runs 18:00 to 04:00. Daylight is for sleeping."); return; }
+      if (target === null) { _say(`The night runs ${_nightSpanStr()}. Daylight is for sleeping.`); G.waitFree = true; return; }
     } else {
       target = G.nightTurn + Math.min(h, 60); // WAIT <n> turns
     }
   }
   if (target === null) { _say("WAIT <turns>, or WAIT UNTIL <hour> (say, MIDNIGHT)."); return; }
-  if (target <= G.nightTurn) { _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
+  if (target <= G.nightTurn) { G.waitFree = true; _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
   const startDay = G.day, inbox0 = G.phone.inbox.length, g0 = G, room0 = G.room;
   // leave one turn for the tick every command pays at the bottom of doCommand
   while (G.nightTurn < target - 1) {
@@ -10446,7 +10456,9 @@ function doCommand(input) {
       !/^(wait|z|look|l|examine|x|read|topics|score|time|clock|inventory|i|inv|quests|hint|diagnose|place|help|quiet|hush|shh|shush|still|stay|sit|breathe)$/.test(v)) {
     if (typeof _boxNoise === "function") _boxNoise();
   }
-  if (!_FREE_VERBS.has(v)) _tick();
+  // a WAIT that refused to wait has not spent anything (Kenji, round 47)
+  if (G.waitFree) { G.waitFree = false; }
+  else if (!_FREE_VERBS.has(v)) _tick();
   _questTick();
   _checkAct1();
 }

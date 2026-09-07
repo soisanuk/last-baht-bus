@@ -2864,7 +2864,7 @@ function _questTick() {
       if (nq.vignette || !(nq.deps || []).includes(qid) || G.quests[nid] || !_questAvailable(nid)) continue;
       const giver = _qGiver(nq);
       if (!giver || !NPCS[giver]) continue;
-      _say(`(The next door: “${_L(nq.name)}” — ${NPCS[giver].name} has it${_questWhere(giver) || ""}.)`, "dim");
+      _say(`(The next door: “${_L(nq.name)}” —${_questWhere(giver) || ` ${NPCS[giver].name} has it.`})`, "dim");
     }
     if (q.reward.money) {
       G.money += q.reward.money;
@@ -4920,7 +4920,14 @@ function _doWatchSunrise() {
   // a street with a 7-Eleven on it is a STREET (`seven` is a shop the room *has*, not a
   // room you are inside) — the same class as the downpour that put an awning over a
   // motel counter, found the same day (round-46 review, 2026-09-07)
-  const indoors = !!(r.bar || r.barType || r.shop || r.massage || r.soapy || r.indoors || _isHotelRoom(G.room));
+  // AN OPEN-FRONTED BAR HAS NO WINDOW BECAUSE IT HAS NO WALL (Kenji, round 47): the refusal
+  // fired in the Front Row's "stools pulled up to the open front, the soi a few feet away",
+  // and in room 412, whose own prose is "below the window, the city hums on, wide open".
+  // Only a genuinely enclosed room can be shut off from the sky.
+  const openFront = !!(r.barType && r.barType !== "gogo" && r.barType !== "gents") && !r.indoors;
+  const hotelWindow = _isHotelRoom(G.room);   // every room in this game has a window on the soi
+  const indoors = !openFront && !hotelWindow &&
+    !!(r.bar || r.barType || r.shop || r.massage || r.soapy || r.indoors);
   const balcony = G.room === "qv_room" || (typeof _hotelRoomId === "function" && G.room === _hotelRoomId() && G.hotel === "queenvic");
   if (indoors && !balcony) { _say(_pickVary(_SUNRISE_INDOORS, "sunriseIn"), "dim"); return; }
   // 05:00. Before that the sky is not doing anything yet and he says so.
@@ -5975,7 +5982,8 @@ function _shiftYes() {
     // the floor watched you do it, so the bond and the สนุก land either way —
     // what you are gambling is whether it turns the night.
     if (_rand() < 0.6) {
-      _shiftTake(SHIFT_ROUND_TAKE - SHIFT_ROUND_COST, "a round on the house that landed");
+      _shiftTake(-SHIFT_ROUND_COST, "a round on the house");
+      _shiftTake(SHIFT_ROUND_TAKE, "the hour it bought");
       _say("It lands. The rail thickens, somebody puts money in the jukebox, and the " +
         "hour that was going to end the night starts it again instead.", "win");
     } else {
