@@ -221,3 +221,28 @@ test("a character quotes the price their OWN bar charges", () => {
   }
   assert.deepEqual(bad, [], "a price in somebody's mouth is a claim about the room they stand in");
 });
+
+// ── A REVISIT LINE IS HOUR-BLIND ────────────────────────────────────────────
+// `desc` is how a place usually is and `lateDesc` prints in the small hours, but
+// `revisit` fires on re-entry at any point in an 18:00–06:00 night. So a revisit
+// that says the sun is going down NOW, or that something is STILL warm from the
+// day, is wrong for most of the hours it prints — and it prints under a late paint
+// that has just said the opposite. Four of these shipped (round 47 room sweep):
+// the Stinky facing "another sunset over the bay" at 02:00, Jomtien's sand "still
+// warm" directly beneath a late paint calling it cold, Cloze at "the quiet end of
+// the evening" at half six, and Beach Road's "last of the light" at three.
+//
+// Deliberately narrow. The loose version of this regex flags seven lines and all
+// seven are fine — a bar CALLED Sunset Dreams, a past-tense "the last of the light
+// has gone", a future-tense "in the morning they will be a menace again" — and a
+// lint whose every hit is benign teaches people to skip it. This one matches the
+// present-tense claim only, catches three of the four that shipped, and is clean.
+test("no revisit line claims a time of day it cannot know", () => {
+  const NOW = /\b(?:another sunset|sunset (?:over|dying|going)|(?:the )?sun (?:going|goes|is going|setting|sinking)|last (?:of the light|smear of sunset)[^.]{0,30}(?:dying|going|left)|still warm|quiet end of the evening|end of the evening|early evening|this afternoon|it is (?:morning|afternoon|evening))\b/i;
+  const bad = [];
+  for (const [id, r] of Object.entries(ROOMS))
+    for (const [i, t] of (r.revisit || []).entries())
+      if (typeof t === "string" && NOW.test(t))
+        bad.push(`${id}.revisit[${i}]: "${t.slice(0, 90)}" — this prints at 03:00 too`);
+  assert.deepEqual(bad, [], "a revisit line fires at any hour; move the clock into lateDesc");
+});

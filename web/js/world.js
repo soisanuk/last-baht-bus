@@ -380,7 +380,7 @@ const ROOMS = {
       "The cats have not moved. The big one checks you, decides, and looks back at the water.",
       "Somebody's flip-flops sit neatly by a lounger, ownership unclear, hours old.",
       "The last of the light has gone out of the sea. The loungers stay folded.",
-      "Sand still warm through your soles. It will not be for much longer.",
+      "The sand gives under your soles, and holds whatever heat the day left in it.",
       "A dog trots the tide line with somewhere to be, and does not look up.",
     ],
     exits: { e: "jomtien_beach_rd_s", n: "jomtien_beach_m", s: "jomtien_soi_7_beach_end" },
@@ -998,9 +998,10 @@ const ROOMS = {
       seal: "The gold seal on the registration: a real one, from a real ministry, on a company that is real in every way the law can check. That is rather the point of it.",
       sign: [
         { req: ["ccibCleared"], text: "The brass plate is gone — four screw holes and a cleaner rectangle. A laminated " +
-          "sheet in the window says FOR RENT in two languages and gives a number. The strip light " +
-          "upstairs is off. Eastern Seaboard Trading & Facilities Co., Ltd. has, as a company, " +
-          "ceased to be somewhere you can walk into, which is the most it ever was." },
+          "sheet in the window says FOR RENT in two languages and gives a number. Upstairs the " +
+          "aircon is still running over two desks nobody is coming back to, because somebody " +
+          "is paying the bill until the lease runs out. Eastern Seaboard Trading & Facilities " +
+          "Co., Ltd. has, as a company, ceased to be, which is the most it ever was." },
         { text: "EASTERN SEABOARD TRADING & FACILITIES CO., LTD. — Import · Export · Facilities " +
           "Management · Consulting — in brass, in English and Thai, with a registration number. It " +
           "is a very complete sign for a company with nothing on the shelves." },
@@ -1140,6 +1141,7 @@ const ROOMS = {
     exits: { out: "pratumnak_soi5_b" },
   },
   the_gecko: {
+    beerOff: 10, // "the cheapest beer on the hill", said twice — the till agrees (Colin, round 37)
     name: "The Gecko",
     bar: "The Gecko", barType: "beer",
     region: "Pratumnak",
@@ -1547,8 +1549,9 @@ const ROOMS = {
       "boards lit all night for a terminal nobody flies from. Beach Road runs south " +
       "along the sea, Second Road south into town, Naklua Road north-east toward the " +
       "quieter money, and the songthaews go round and round because this is where the " +
-      "loop turns. Across from Terminal 21, a rank of blue trucks fills bench by " +
-      "bench for the run south — the drivers don't budge until the benches do.",
+      "loop turns. In the mall's own car park a rank of blue trucks fills bench by " +
+      "bench — Naklua one way, Jomtien the other, and the drivers don't budge until the " +
+      "benches do.",
     revisit: [
       "Round go the songthaews. The dolphins remain mid-leap.",
       "Terminal 21's boards announce destinations to a car park.",
@@ -1861,7 +1864,7 @@ const ROOMS = {
       "You're back at the junction. Soi 6's runway of light runs off east; blue songthaews rattle by on the Beach Road run, and the junction absorbs you back into its noise.",
       "Back where the soi hits Beach Road. Two corner bars, one loud sea breeze, and the choice you keep making: into the noise east, or a quiet cold one facing the water.",
       "The foot of the soi, the cartoon skunk and the Blue Dog holding their corners, the bay a dark sheet across the traffic. A baht bus slows, hopeful; you let it pass.",
-      "Back to the junction, the neon fuse of Soi 6 lit and waiting east, the water and the last of the light off west past the road.",
+      "Back to the junction, the neon fuse of Soi 6 lit and waiting east, and west past the road the water doing whatever the hour has left it doing.",
     ],
     exits: { s: "beach_rd_klang", e: "soi6_street", n: "beach_rd_top", w: "north_beach" },
     venues: ["stinky_bar", "blue_dog"],
@@ -1997,7 +2000,7 @@ const ROOMS = {
     revisit: [
       "Back into the Stinky Pinky — lime and cue chalk in defiance of the name, trophies crowding the back bar, the table brushed like a green.",
       "The pool bar takes you back. Bert holds the end stool with a bottomless Singha and an opinion on your break already loading.",
-      "You step back into the crack of cue balls. Across the junction the Blue Dog's rail faces another sunset over the bay.",
+      "You step back into the crack of cue balls. Across the junction the Blue Dog's rail faces the bay, and whatever the bay is doing tonight.",
       "The Stinky Pinky again: chalk, trophies, cold Singha, and Bert's court in permanent session at the end of the bar.",
       "Back under the buzzing skunk into the crack of pool balls and the smell of lime. Somebody's mid-break; Bert's already narrating it from the end stool.",
       "The Stinky Pinky folds you back in — league flags, brushed felt, the Blue Dog glowing across the mouth of the soi. Bert lifts his Singha a half-inch in greeting.",
@@ -3012,8 +3015,8 @@ const ROOMS = {
       "down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on " +
       "the corner here, its go-go neon running away west. A few doors down the quiet " +
       "side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main " +
-      "drag that the soi forgets about it until about three in the morning, which is " +
-      "roughly when it fills up — on the good nights, anyway. If you're after the mamasan, that's her door (ENTER CANDY BAR).",
+      "drag that the soi forgets about it entirely, which suits the people who go — on a good " +
+      "night it is the last window still lit down this end. If you're after the mamasan, that's her door (ENTER CANDY BAR).",
     reads: {
       sign: "The LK METRO arrow: black marker on a scrap of board wired to the wall, pointing " +
         "down an alley that promises nothing. LK Metro — three lanes of go-go and short-time " +
@@ -3069,7 +3072,8 @@ const ROOMS = {
     bar: "Candy Bar", barType: "beer",
     outlet: true,
     desc: "A rose-pink corner bar, spotless, with a bell over the till and a wall of " +
-      "photos going back decades — same bar, same smile, different haircuts. Run like a " +
+      "photos going back decades — same smile, different haircuts, and not all of them taken " +
+      "here. Run like a " +
       "harbourmaster's deck, nothing out of place. There's a power outlet under the counter, " +
       "for customers the boss likes.",
     revisit: [
@@ -3275,8 +3279,8 @@ const ROOMS = {
     name: "Moonshine Bar",
     region: "Tree Town",
     bar: "Moonshine Bar", barType: "beer",
-    desc: "A jars-on-the-shelf hillbilly theme done on a Pattaya budget — fairy lights in " +
-      "mason jars, a banjo nobody plays, ya dong in an unlabelled bottle for the brave. Prik " +
+    desc: "A jars-on-the-shelf hillbilly theme done on a Pattaya budget — fairy lights strung over " +
+      "a shelf of mason jars, a banjo nobody plays, ya dong in an unlabelled bottle for the brave. Prik " +
       "and Mek run the rail and dare you to try the house infusion. (BUY YA DONG)",
     reads: {
       jar: "The mason jars hold the house infusions: ya dong in half a dozen ambers and " +
@@ -3462,10 +3466,10 @@ const ROOMS = {
     },
     revisit: [
       "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Powers keeps calling classy while it proves him wrong in every direction at once.",
-      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own {{phone}}.",
-      "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and Powers throws you a two-fingered salute without pausing his livestream.",
+      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and, on the nights he is in the country at all, Powers on his banquette narrating himself to his own {{phone}}.",
+      "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and the banquette at the back is either empty or has a livestream running off it.",
       "The back room again — topless going on nude, Blue Label going on trouble, and the one soft-spoken man everyone watches without looking at him. You've learned to sit where you can see the door.",
-      "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and Ryan Powers mistakes the whole arrangement for something he built.",
+      "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and the man whose name is on the door mistakes the whole arrangement for something he built.",
     ],
     exits: { out: "pink_lotus" },
   },
@@ -3549,7 +3553,7 @@ const ROOMS = {
       "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.",
       "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
     ],
-    lateDesc: "The middle of Soi 6 past midnight: the short-time places have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours, and either side of it a few beer bars run their last ice to dawn for whoever is still upright.",
+    lateDesc: "The middle of Soi 6 past midnight: the short-time places have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours and is most of the light left on this stretch; either side of it the grilles are down and the ice buckets are out on the pavement.",
     exits: { w: "soi6_street", e: "soi6_deep" },
     venues: ["queen_vic", "sunset_rail", "bay_watch", "sandy_toes"],
   },
@@ -4155,6 +4159,15 @@ const ROOMS = {
     exits: { s: "khao_talo" },
   },
   lake_bar: {
+    // A fish restaurant by a reservoir with no late paint: its only voice narrated
+    // the water going pink and then black, which is a sunset, and it printed on a
+    // 01:00 arrival (round 47 room sweep). The Darkside is walkable and bussed, so
+    // people do get out here late.
+    lateDesc: [
+      "The Boathouse after the families have gone: the grill down to embers, most of the fairy lights off to save the bill, and two tables of men who have been talking quietly for three hours. The reservoir is a sound and a smell rather than a view.",
+      "Late at the sala. The fish is finished, the ice is finished, and Duangjai is squaring the register with the patience of a woman who does this every night and has never once been out by a baht. Across the road the water is just dark.",
+      "The lake at an hour with nothing on it. Somebody's radio is on somewhere over the water, too far off to name the song, and the sala keeps one string of lights on for whoever is still coming.",
+    ],
     name: "The Boathouse",
     region: "Darkside",
     bar: "The Boathouse", barType: "pub", food: true,
@@ -4625,7 +4638,7 @@ const ROOMS = {
       "Cloze again — eight stools, the missing O, and a new word on the blackboard in that careful hand.",
       "Back in under the CL_ZE sign. Somebody at the end of the bar is being made to say a tone three times and is getting it wrong three times, cheerfully.",
       "The blackboard has been wiped and rewritten since you were last in. The chalk is always the same colour and the handwriting is always hers.",
-      "Cloze, quiet end of the evening: two farang arguing about a vowel length and a woman behind the bar refusing, on principle, to settle it for them.",
+      "Cloze, in one of its quiet stretches: two farang arguing about a vowel length and a woman behind the bar refusing, on principle, to settle it for them.",
     ],
     exits: { out: "diana_mid" },
   },

@@ -619,14 +619,14 @@ const _CATALOGS = {
       "Zurück auf einen pinken Hocker, ein Mädchen drapiert sich schon über dir. \"Du hast den ganzen Tag an mich gedacht? Lügner.\" Sie lacht, entzückt. \"Okay — kauf den Drink, wir gehen hoch, morgen denkst du an mich.\"",
     "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Powers keeps calling classy while it proves him wrong in every direction at once.":
       "Zurück in den Orchid Room, das Stroboskop, der Lärm, die nackte Haut — der Mitgliederclub, den Powers ständig \"classy\" nennt, während er ihm in jeder Hinsicht gleichzeitig widerspricht.",
-    "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own {{phone}}.":
-      "Der Orchid holt dich zurück in seine teure Bacchanalie — die High Roller, die MC-Patches, der stille Thai-Mann am guten Tisch, und Powers auf seiner Bank, der sich selbst seinem eigenen Handy vorführt.",
-    "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and Powers throws you a two-fingered salute without pausing his livestream.":
-      "Zurück am Samtseil vorbei in das wilde Dunkel. Hier ist niemand Laufkundschaft; jeder hier ist irgendjemandes Problem, und Powers wirft dir einen Zwei-Finger-Gruß zu, ohne seinen Livestream zu unterbrechen.",
+    "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and, on the nights he is in the country at all, Powers on his banquette narrating himself to his own {{phone}}.":
+      "Der Orchid holt dich zurück in seine teure Bacchanalie — die High Roller, die MC-Patches, der stille Thai-Mann am guten Tisch, und, an den Abenden, an denen er überhaupt im Land ist, Powers auf seiner Bank, der sich selbst seinem eigenen Handy vorführt.",
+    "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and the banquette at the back is either empty or has a livestream running off it.":
+      "Zurück am Samtseil vorbei in das wilde Dunkel. Hier ist niemand Laufkundschaft; jeder hier ist irgendjemandes Problem, und die Bank hinten ist entweder leer, oder es läuft ein Livestream von ihr.",
     "The back room again — topless going on nude, Blue Label going on trouble, and the one soft-spoken man everyone watches without looking at him. You've learned to sit where you can see the door.":
       "Der Hinterraum, wieder — oben ohne wird zu nackt, Blue Label wird zu Ärger, und der eine leise sprechende Mann, den alle beobachten, ohne ihn anzusehen. Du hast gelernt, dich so zu setzen, dass du die Tür sehen kannst.",
-    "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and Ryan Powers mistakes the whole arrangement for something he built.":
-      "Zurück in den Orchid, wo das Geld laut ist, die Mädchen lauter, die wirkliche Macht schweigt, und Ryan Powers das ganze Arrangement mit etwas verwechselt, das er selbst aufgebaut hat.",
+    "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and the man whose name is on the door mistakes the whole arrangement for something he built.":
+      "Zurück in den Orchid, wo das Geld laut ist, die Mädchen lauter, die wirkliche Macht schweigt, und der Mann, dessen Name an der Tür steht, das ganze Arrangement mit etwas verwechselt, das er selbst aufgebaut hat.",
     "Back into the Golden Dragon, the dragon presiding, and a girl already peeling you toward a stool with a hand in your belt loop. \"You, handsome. Sit here. Buy me one, then we talk about upstairs.\"":
       "Zurück in den Golden Dragon, der Drache thront darüber, und ein Mädchen zieht dich schon an einem Gürtelbund zu einem Hocker. \"Du, handsome. Setz dich hier. Kauf mir einen, dann reden wir über oben.\"",
     "The vintage playlist and the wall of noise take you back — and so do two girls at once, one on each arm, negotiating you like a shared prize. \"Me first.\" \"No — ME first.\" \"Okay, you choose, but choose FAST.\"":
@@ -1450,8 +1450,8 @@ const _CATALOGS = {
       "Die Katzen haben sich nicht bewegt. Die Große mustert dich, entscheidet sich, und schaut wieder aufs Wasser.",
     "A dog trots the tide line with somewhere to be, and does not look up.":
       "Ein Hund trabt die Flutlinie entlang, hat ein Ziel, und schaut nicht hoch.",
-    "Sand still warm through your soles. It will not be for much longer.":
-      "Der Sand ist durch die Sohlen noch warm. Nicht mehr lange.",
+    "The sand gives under your soles, and holds whatever heat the day left in it.":
+      "Der Sand gibt unter den Sohlen nach und hält, was der Tag an Wärme in ihm gelassen hat.",
     "Somebody's flip-flops sit neatly by a lounger, ownership unclear, hours old.":
       "Jemandes Flip-Flops stehen ordentlich neben einer Liege, Besitzverhältnisse unklar, seit Stunden.",
 

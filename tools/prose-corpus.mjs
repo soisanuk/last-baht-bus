@@ -29,7 +29,10 @@
 //               a verb must deliver it (promises.test / errand-audit).
 //   3. TAPS   — read the [taps: …] column this tool prints with --delta/--taps. An
 //               ⚠ is a third-person "the <item>" that taps YOUR item: {{…}} it.
-//   4. HOURS  — a late paint that names an hour ("at four") prints from midnight.
+//   4. HOURS  — a late paint that names an hour ("at four") prints from midnight,
+//               and a `revisit` line prints at ANY hour of an 18:00–06:00 night, so
+//               it can never say the sun is going down or the sand is still warm
+//               (references.test lints the present-tense forms).
 //   5. THAI   — every Thai run must exist in the trainer's data.js (term.test).
 //   6. NUMBERS — ฿ figures come from constants, never typed.
 // Seed only after the checklist, and never in the same shell chain as the commit —
