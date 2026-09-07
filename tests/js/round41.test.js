@@ -32,7 +32,7 @@ function ownsBar() {
 test("a dep chain names its next door when the last one closes (Des)", () => {
   expat(); for (const f of ["barPremises", "nomineeWarned"]) _setFlag(f); G.quests.bar_premises = "done"; G.quests.nominee_deal = "done";
   G.quests.bar_licence = "active"; _setFlag("barLicence"); out = []; _questTick();
-  assert.match(text(), /QUEST COMPLETE/); assert.match(text(), /The next door: “Fifty-One Percent” — Candy has it/);
+  assert.match(text(), /QUEST COMPLETE/); assert.match(text(), /The next door: “Fifty-One Percent” — Candy is at/);
 });
 
 test("Bert points PARTNER at both names, and answers the money he briefed (Des)", () => {

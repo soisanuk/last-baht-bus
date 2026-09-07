@@ -176,7 +176,8 @@ test("WATCH SUNRISE is a real thing, it comes up behind the town, and it ENDS th
   _setFlag("act1Done"); G.stage = "vacation";
   G.room = "jomtien_beach"; G.nightTurn = 30; out = []; run("watch dawn");
   assert.match(text(), /Too early|Not yet/);
-  G.room = "candy_bar"; G.nightTurn = SUNRISE_TURN + 5; out = []; run("watch sunrise");
+  // a beer bar is open to the pavement and sees the sky; an enclosed go-go does not
+  G.room = "neon_paradise"; G.nightTurn = SUNRISE_TURN + 5; out = []; run("watch sunrise");
   assert.match(text(), /Not from in here|No window/);
   assert.equal(G.day, 2, "an indoors refusal does not end anybody's night");
   for (const l of _SUNRISE) assert.doesNotMatch(l, /sun (rises?|coming up) (out of|from) the sea|over the sea/);
