@@ -1199,8 +1199,8 @@ const _CATALOGS = {
       "Wirf einen Blick auf den guten Tisch im Orchid Room — dem Hinterzimmer vom Pink Lotus — und sieh nach, wer dort wirklich das Sagen hat, dann sag es Doyle (ASK DOYLE ABOUT THE TABLE).",
 
     "The Silent Partner": "Der stille Teilhaber",
-    "Wayne's about to sign as the farang face of a bar he'll never really own. Once you've seen how White Dish works, set him straight (ASK WAYNE ABOUT THE PARTNER).":
-      "Wayne steht kurz davor, als Farang-Gesicht einer Bar zu unterschreiben, die ihm nie wirklich gehören wird. Wenn du erst mal gesehen hast, wie White Dish arbeitet, sag ihm die Wahrheit (ASK WAYNE ABOUT THE PARTNER).",
+    "Wayne's about to sign as the farang face of a bar he'll never really own. Set him straight before he signs (ASK WAYNE ABOUT THE PARTNER).":
+      "Wayne steht kurz davor, als Farang-Gesicht einer Bar zu unterschreiben, die ihm nie wirklich gehören wird. Sag ihm die Wahrheit, bevor er unterschreibt (ASK WAYNE ABOUT THE PARTNER).",
 
     "The Old Days": "Die alten Zeiten",
     "Buy Roy's time and let the old soi come back to him — the bars before the brands, and the ghosts still propping the place up (ASK ROY ABOUT THE OLD DAYS).":
