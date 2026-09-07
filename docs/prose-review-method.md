@@ -60,6 +60,33 @@ review. The dossier pivot supplies the co-location; that is the entire mechanism
 Read for, in order: contradiction · arithmetic that doesn't close · voice drift within one
 character · a place whose strings aren't the same place at the same hour.
 
+### The coverage map
+
+```sh
+node tools/prose-corpus.mjs --map                  # who has been read as a whole, and who moved since
+node tools/prose-corpus.mjs --dossiers --delta --taps   # only the new or stale subjects
+node tools/prose-corpus.mjs --rooms --delta --taps      # …and rooms
+node tools/prose-corpus.mjs --dossiers --seed       # record what was actually read
+```
+
+The string ledger cannot answer this pass's question, because its unit is a sentence and
+this pass's unit is a subject. `docs/prose-dossier-ledger.json` keys on the subject and
+hashes over **all** of its records, so a dossier has three states:
+
+| state | meaning |
+|---|---|
+| `new` | never read against itself |
+| `stale` | read once, but a record has since been added or reworded |
+| `current` | read at this exact set of records |
+
+**A dossier reopens the moment any record in it moves**, which is the property the whole
+pass rests on: the new line is precisely the one that might contradict the old ones. Editing
+one line of Bert's description reopens Bert *and* Candy, because that line names them both.
+
+`--delta` means different things to the two passes and the tool keeps them apart: unreviewed
+*strings* for the delta pass, new-or-stale *subjects* here. Seed only after somebody has
+actually read them, and never in the same shell chain as a commit.
+
 ## 3. The lints — everything mechanical, corpus-wide, on every commit
 
 `references.test.js` (venues, people, hard-coded ฿N) · `promises.test.js` (the

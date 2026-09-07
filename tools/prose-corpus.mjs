@@ -11,6 +11,9 @@
 //   node tools/prose-corpus.mjs --delta --taps          # …with the taps each record renders
 //   node tools/prose-corpus.mjs --dossiers              # regrouped by WHO/WHAT each record is about
 //   node tools/prose-corpus.mjs --rooms                 # regrouped by the PLACE each record describes
+//   node tools/prose-corpus.mjs --map                   # which dossiers have been read as a whole, and which moved since
+//   node tools/prose-corpus.mjs --dossiers --delta      # only the subjects that are new or stale
+//   node tools/prose-corpus.mjs --rooms --seed          # record the dumped rooms as read
 //
 // Groups: npc (hand-authored NPCS dialogue+desc) · patron · room (desc+revisit)
 // · item · enc (ENCOUNTERS) · quest · intro (taxi tables) · pool (engine-file
@@ -44,6 +47,13 @@ import crypto from "node:crypto";
 
 const JS = new URL("../web/js/", import.meta.url);
 const LEDGER_PATH = new URL("../docs/prose-review-ledger.json", import.meta.url);
+// THE DOSSIER LEDGER is the string ledger's sibling, and it has to be separate
+// because the two passes review different UNITS. The string ledger answers "has
+// this sentence been read at this wording?"; a dossier is read as a whole, and
+// it goes stale the moment ANY record in it changes — one new line about Bert
+// reopens Bert, because the new line is exactly what might contradict the old
+// ones. So the key is the subject and the hash is over all its records.
+const DOSSIER_PATH = new URL("../docs/prose-dossier-ledger.json", import.meta.url);
 
 // world data only — the engine isn't needed for reflection, but world.js
 // references nothing outside thai.js at load, so this stays light.
@@ -190,6 +200,28 @@ const val = f => { const i = args.indexOf("--" + f); return i >= 0 ? args[i + 1]
 
 let ledger = {};
 try { ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, "utf8")); } catch (e) { /* first run */ }
+let dossierLedger = {};
+try { dossierLedger = JSON.parse(fs.readFileSync(DOSSIER_PATH, "utf8")); } catch (e) { /* first run */ }
+// a dossier's identity: WHICH records are in it and at what wording, order-independent
+const groupHash = recs => crypto.createHash("sha256")
+  .update(recs.map(r => hash(r.text)).sort().join("")).digest("hex").slice(0, 16);
+const dossierState = (key, recs) => {
+  const prev = dossierLedger[key];
+  if (!prev) return "new";
+  return prev.hash === groupHash(recs) ? "current" : "stale";
+};
+function seedDossiers(entries) {   // entries: [key, records][]
+  const today = new Date().toISOString().slice(0, 10);
+  let n = 0;
+  for (const [key, recs] of entries) {
+    const h = groupHash(recs);
+    if (!dossierLedger[key] || dossierLedger[key].hash !== h) {
+      dossierLedger[key] = { hash: h, reviewed: today, records: recs.length }; n++;
+    }
+  }
+  fs.writeFileSync(DOSSIER_PATH, JSON.stringify(dossierLedger, null, 0) + "\n");
+  console.log(`dossier ledger: ${n} subject(s) recorded as read (${Object.keys(dossierLedger).length} total)`);
+}
 
 // ── the render column ──────────────────────────────────────────────────────
 // A reviewer reads prose; the player taps it. decorate() (term.js) is what turns
@@ -239,7 +271,11 @@ let _warned = 0;
 let out = records;
 const groups = val("group");
 if (groups) { const set = new Set(groups.split(",")); out = out.filter(r => set.has(r.group)); }
-if (has("delta")) out = out.filter(r => !ledger[hash(r.text)]);
+// --delta means "unreviewed STRINGS" for the string pass and "new or stale
+// SUBJECTS" for the dossier pass — a dossier needs its whole cast of records
+// present to be read against itself, so the string filter must not run first.
+if (has("delta") && !has("dossiers") && !has("rooms") && !has("about") && !has("map"))
+  out = out.filter(r => !ledger[hash(r.text)]);
 
 if (has("stats")) {
   const by = {};
@@ -251,7 +287,9 @@ if (has("stats")) {
   process.exit(0);
 }
 
-if (has("seed")) {
+// the STRING seed — scoped, because --dossiers/--rooms have their own ledger and
+// their own --seed below (a bare --seed here would silently swallow theirs)
+if (has("seed") && !has("dossiers") && !has("rooms") && !has("map")) {
   const today = new Date().toISOString().slice(0, 10);
   let added = 0;
   for (const r of out) { const h = hash(r.text); if (!ledger[h]) { ledger[h] = { ref: r.ref, reviewed: today }; added++; } }
@@ -298,6 +336,53 @@ function _subjects() {
 // of day; the Eastern Seaboard office listed its whole contents and then the
 // revisit watered a plant that wasn't in it). Ref-order review cannot see it;
 // this grouping is the whole check. (Mario, 2026-09-07.)
+// ── the dossier coverage map (--map) ───────────────────────────────────────
+// What the string ledger's percentage cannot tell you: which SUBJECTS have been
+// read as a whole, and which have moved since. A subject is `new` (never read
+// against itself), `stale` (read once, but a record has been added or reworded
+// since — and the new record is exactly the one that might contradict the rest),
+// or `current`. Sorted by size, because the biggest unread dossier is where the
+// next contradiction most likely is.
+if (has("map")) {
+  const rows = [];
+  const subs = _subjects();
+  for (const [name, { re, speakerOnly }] of subs) {
+    const hits = out.filter(r => r.speaker === name || (!speakerOnly && re.test(r.text)));
+    if (hits.length < 2) continue;
+    rows.push({ kind: "subject", name, n: hits.length, state: dossierState("subject:" + name, hits),
+      seen: (dossierLedger["subject:" + name] || {}).reviewed });
+  }
+  const byRoom = new Map();
+  for (const r of out) { const m = /^room\.([^.]+)\./.exec(r.ref); if (!m) continue;
+    if (!byRoom.has(m[1])) byRoom.set(m[1], []); byRoom.get(m[1]).push(r); }
+  for (const [id, recs] of byRoom) {
+    if (recs.length < 2) continue;
+    rows.push({ kind: "room", name: (ROOMS[id] && ROOMS[id].name) || id, id, n: recs.length,
+      state: dossierState("room:" + id, recs), seen: (dossierLedger["room:" + id] || {}).reviewed });
+  }
+  const bar = (a, b) => { const w = 25, f = b ? Math.round((a / b) * w) : 0;
+    return "█".repeat(f) + "·".repeat(w - f); };
+  console.log("\n── dossier review coverage ──  (has every string ABOUT this subject been read together?)\n");
+  for (const kind of ["subject", "room"]) {
+    const g = rows.filter(r => r.kind === kind);
+    const cur = g.filter(r => r.state === "current"), stale = g.filter(r => r.state === "stale"),
+      fresh = g.filter(r => r.state === "new");
+    const recs = g.reduce((a, r) => a + r.n, 0), curRecs = cur.reduce((a, r) => a + r.n, 0);
+    console.log(`  ${(kind === "subject" ? "cast + venues + items" : "rooms").padEnd(22)} ` +
+      `${String(cur.length).padStart(4)}/${String(g.length).padEnd(4)} ${bar(cur.length, g.length)} ` +
+      `${g.length ? Math.round((cur.length / g.length) * 100) : 0}%   (${curRecs}/${recs} records)`);
+    if (stale.length) console.log(`     stale — a record moved since it was read: ${stale.sort((a, b) => b.n - a.n).map(r => `${r.name}(${r.n})`).join(" · ")}`);
+    if (fresh.length) console.log(`     never read as a whole: ${fresh.sort((a, b) => b.n - a.n).slice(0, 20).map(r => `${r.name}(${r.n})`).join(" · ")}` +
+      (fresh.length > 20 ? ` … +${fresh.length - 20} more` : ""));
+  }
+  const all = rows.length, done = rows.filter(r => r.state === "current").length;
+  console.log(`\n  · ${done}/${all} dossiers current` +
+    `${all - done ? ` — next round: node tools/prose-corpus.mjs --dossiers --delta --taps  (and --rooms --delta)` : ""}`);
+  console.log("  · a dossier goes stale when ANY record in it changes — that record is the one that might contradict the others");
+  console.log("  · seed with --dossiers --seed / --rooms --seed, and only after somebody has actually read them\n");
+  process.exit(0);
+}
+
 if (has("rooms")) {
   const byRoom = new Map();
   for (const r of out) {
@@ -307,10 +392,16 @@ if (has("rooms")) {
     byRoom.get(m[1]).push(r);
   }
   const want = val("rooms") && val("rooms").startsWith("--") ? null : val("rooms");
+  const seeding = has("seed"), delta = has("delta");
+  const picked = [];
   let n = 0;
   for (const [id, recs] of byRoom) {
     if (want && id !== want) continue;
     if (recs.length < 2 && !want) continue;   // one string cannot contradict itself
+    const state = dossierState("room:" + id, recs);
+    if (delta && state === "current") continue;
+    picked.push(["room:" + id, recs]);
+    if (seeding) continue;                    // --seed records without dumping
     n++;
     const r = ROOMS[id] || {};
     console.log(`\n\n════════ ${r.name || id}  [${id}]${r.bar ? " — " + r.bar : ""} — ${recs.length} records ════════`);
@@ -322,6 +413,7 @@ if (has("rooms")) {
       printRender(rec);
     }
   }
+  if (seeding) { seedDossiers(picked); process.exit(0); }
   console.log(`\n[${n} rooms]`);
   if (_warned) console.log(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
   process.exit(0);
@@ -337,11 +429,16 @@ if (has("about") || has("dossiers")) {
     console.log(`No subject matching "${want}". Known subjects are NPCs, patrons, bars, items.`);
     process.exit(1);
   }
+  const seeding = has("seed"), delta = has("delta"), picked = [];
   for (const name of pick) {
     const { re, speakerOnly } = subs.get(name);
     // a record is ABOUT a subject if it names them, or is spoken by them
     const hits = out.filter(r => r.speaker === name || (!speakerOnly && re.test(r.text)));
     if (hits.length < (want ? 1 : 2)) continue;        // a bulk dump skips one-liners
+    const state = dossierState("subject:" + name, hits);
+    if (delta && state === "current") continue;
+    picked.push(["subject:" + name, hits]);
+    if (seeding) continue;
     console.log(`\n\n════════ ${name} — ${hits.length} records ════════`);
     for (const r of hits) {
       console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
@@ -349,6 +446,7 @@ if (has("about") || has("dossiers")) {
       printRender(r);
     }
   }
+  if (seeding) { seedDossiers(picked); process.exit(0); }
   if (_warned) console.log(`\n⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
   process.exit(0);
 }

@@ -6,6 +6,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { readFileSync } from "node:fs";
 const tool = fileURLToPath(new URL("../../tools/prose-corpus.mjs", import.meta.url));
 const run = (...a) => execFileSync("node", [tool, ...a], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 
@@ -22,4 +23,29 @@ test("without --taps the dump is text only, and the header carries the checklist
   assert.doesNotMatch(o, /\[taps: /);
   const src = execFileSync("cat", [tool], { encoding: "utf8" });
   assert.match(src, /THE DELTA CHECKLIST/); assert.match(src, /never in the same shell chain as the commit/);
+});
+
+// The DOSSIER ledger is the coverage map for the co-location pass: a subject is
+// read as a WHOLE, and it reopens the moment any record in it moves, because the
+// moved record is the one that might contradict the rest.
+test("--map reports dossier coverage for both pivots, and a moved record reopens its subject", () => {
+  const map = run("--map");
+  assert.match(map, /dossier review coverage/);
+  assert.match(map, /cast \+ venues \+ items\s+\d+\/\d+/);
+  assert.match(map, /rooms\s+\d+\/\d+/);
+  assert.match(map, /dossiers current/);
+  // the ledger is committed, so the map is meaningful on a fresh checkout
+  const led = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/prose-dossier-ledger.json", import.meta.url)), "utf8"));
+  const keys = Object.keys(led);
+  assert.ok(keys.length > 300, "both pivots are recorded");
+  assert.ok(keys.some(k => k.startsWith("subject:")) && keys.some(k => k.startsWith("room:")));
+  for (const v of Object.values(led)) { assert.match(v.hash, /^[0-9a-f]{16}$/); assert.match(v.reviewed, /^\d{4}-\d\d-\d\d$/); }
+});
+
+test("--delta on a dossier means new-or-stale SUBJECTS, not unreviewed strings", () => {
+  // the string filter must not run first, or a fully-seeded corpus yields empty dossiers
+  // and every subject silently reads as reviewed
+  const src = readFileSync(fileURLToPath(new URL("../../tools/prose-corpus.mjs", import.meta.url)), "utf8");
+  assert.match(src, /has\("delta"\) && !has\("dossiers"\) && !has\("rooms"\)/);
+  assert.match(src, /has\("seed"\) && !has\("dossiers"\) && !has\("rooms"\)/, "and --seed is scoped the same way");
 });
