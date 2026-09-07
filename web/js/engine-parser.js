@@ -115,8 +115,10 @@ const _SOI6_BOUND = [
   "One week, one street: those were the terms. Pattaya can wait. Back into Soi 6.",
   "You could. You don't. For seven days Soi 6 is the entire world by your own decree — and there's plenty of world left in it.",
 ];
-// The Orchid CLUB (Naklua, an ordinary if exclusive gents villa) is a different
-// room from the Orchid ROOM below (White Dish's back table) — same name-root,
+// NOTTY'S PLACE (Naklua, an ordinary if exclusive gents villa) is a different
+// room from the Orchid ROOM below (White Dish's back table) — they used to share
+// a name, which sent players to the wrong district (round-46 sweep); the room id
+// stays `orchid_club` so the art and old saves survive,
 // unrelated canon. "Tourists never find it. That is the entire point" is the
 // venue's own desc, so a bare compass exit that walked anyone straight in
 // undercut its one piece of characterisation. Reachable only once vouched or
@@ -126,14 +128,14 @@ const _SOI6_BOUND = [
 // "no sign, just a brass bell, and THE ORCHID CLUB, if you know to ask" — and
 // these lines used to answer that you'd never heard of the place and neither
 // had anyone (Gerry, round 34). The gate is real and stays: you get SENT to the
-// Orchid, you don't find it. But the wall is right there in the prose, so the
+// it, you don't find it. But the wall is right there in the prose, so the
 // refusal is about STANDING, not existence — "if you know to ask" means you do
 // not know who to ask, which is the actual thing you're missing.
 const _ORCHID_CLUB_UNKNOWN = [
   "The wall gives you nothing: no sign, no handle, no window, and a brass bell you have " +
     "precisely no standing to ring. Places like this don't open to a man who walked up. " +
     "Somebody sends you, or you spend the evening looking at render.",
-  "You stand in front of it long enough to feel conspicuous. Whatever the Orchid is, it is " +
+  "You stand in front of it long enough to feel conspicuous. Whatever this place is, it is " +
     "not for people who arrive on their own initiative — and the one thing you'd need is a " +
     "name to drop, which you haven't got.",
 ];

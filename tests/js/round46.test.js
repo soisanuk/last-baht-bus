@@ -231,7 +231,7 @@ test("the fixtures a walking man reaches for answer EXAMINE", () => {
   vac();
   const cases = [["buddha_hill", "buddha", /Gold leaf/], ["police_station", "sergeant", /unhurried patience/], ["eastern_seaboard", "filing cabinet", /invoices/],
     ["bali_hai", "pier", /Concrete legs/], ["sukhumvit_verge", "ditch", /plank/], ["pratumnak_soi5", "gap", /the whole bay/], ["cheap_charlies_jt", "wok", /rice burns/],
-    ["naklua_rd", "bell", /Orchid Club/], ["dolphin", "terminal 21", /departure boards/], ["eastern_seaboard", "computer", /screensaver/]];
+    ["naklua_rd", "bell", /Notty/], ["dolphin", "terminal 21", /departure boards/], ["eastern_seaboard", "computer", /screensaver/]];
   G.lightOn = true; G.battery = 60;
   for (const [room, noun, re] of cases) { G.room = room; out = []; run("examine " + noun); assert.match(text(), re, room + " / " + noun); }
 });

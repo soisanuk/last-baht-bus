@@ -1362,7 +1362,7 @@ test("Darkside: Mama Yai's is hand-authored — a mama, a hostess with a story, 
   assert.deepEqual(heron.req, ["knowYaiWall"], "the lock-in tip unlocks after the wall");
 });
 
-test("Gentleman's Club: the Orchid Club exists, is a gents club, and Rose runs it", () => {
+test("Gentleman's Club: Notty's Place exists, is a gents club, and Rose runs it", () => {
   assert.equal(ROOMS.orchid_club.barType, "gents");
   assert.equal(NPCS.rose.room, "orchid_club");
   assert.equal(NPC_ROLES.rose, "mamasan");
@@ -4983,7 +4983,7 @@ test("midnight closing: gents clubs and Soi 6 shut, the town runs on", () => {
   assert.match(lastOut(), /gentleman's hours|draws its shutters/i);
   // and you can't get back in
   state().flags.orchidVouched = true;    // the closed-hours gate is this test's subject, not the vouch
-  out = []; run("enter orchid club");    // venues[], 2026-08-27 — no more "go w"
+  out = []; run("enter Notty's Place");    // venues[], 2026-08-27 — no more "go w"
   assert.equal(state().room, "naklua_rd");
   assert.match(lastOut(), /dark and bolted|gentleman's hours/i);
 
@@ -5003,7 +5003,7 @@ test("midnight closing: walking in during last call gets the warning + barfine n
   state().flags.act1Done = true; state().flags.hasWallet = true;
   state().flags.orchidVouched = true;    // the club itself isn't this test's subject
   state().room = "naklua_rd"; state().nightTurn = 57; // 23:42 — last half hour
-  out = []; run("enter orchid club");    // venues[], 2026-08-27 — no more "go w"
+  out = []; run("enter Notty's Place");    // venues[], 2026-08-27 — no more "go w"
   assert.equal(state().room, "orchid_club", "you get in — it's not midnight yet");
   assert.match(lastOut(), /Last call|half an hour|BARFINE/i, "warned on arrival");
 });

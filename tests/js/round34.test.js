@@ -610,12 +610,12 @@ test("a shut door is not an invitation (Gerry)", () => {
   assert.doesNotMatch(text(), /Step inside: .*Night Heron/, "shut at midnight, not listed");
 });
 
-// Naklua Road's prose names the Orchid and its brass bell; the refusals denied
+// Naklua Road's prose names Notty's and its brass bell; the refusals denied
 // both existed.
-test("the Orchid is refused for standing, not for existing (Gerry)", () => {
-  assert.match(ROOMS.naklua_rd.desc, /brass bell.*ORCHID CLUB/, "premise: the room names both");
+test("Notty's is refused for standing, not for existing (Gerry)", () => {
+  assert.match(ROOMS.naklua_rd.desc, /brass bell.*NOTTY'S PLACE/, "premise: the room names both");
   _setFlag("act1Done"); G.room = "naklua_rd";
-  out = []; run("enter the orchid club");
+  out = []; run("enter Notty's Place");
   assert.doesNotMatch(text(), /nothing on this road by that name|don't know a door like that exists/,
     "it exists — the player is reading about it");
   assert.match(text(), /standing|sends you|name to drop/i, "what's missing is standing");

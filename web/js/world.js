@@ -4219,12 +4219,12 @@ const ROOMS = {
       "guests consider part of the charm. The soi itself is dark as a power cut. " +
       "East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage " +
       "and soapland fronts runs off the other way. A high wall a little further on " +
-      "gives nothing away — no sign, just a brass bell, and THE ORCHID CLUB, if " +
+      "gives nothing away — no sign, just a brass bell, and NOTTY'S PLACE, if " +
       "you know to ask.",
     venues: ["orchid_club"],
     busStop: "beachrd",
     reads: {
-      bell: "The Orchid Club's brass bell, out of sight up the soi behind the bar corner: you can't see it from the road, but a man who has heard it rung knows exactly what it costs, and the road is quiet enough to hear it if somebody does.",
+      bell: "Notty's brass bell, out of sight up the soi behind the bar corner: you can't see it from the road, but a man who has heard it rung knows exactly what it costs, and the road is quiet enough to hear it if somebody does.",
       letters: "S, A, gap, A, I, gap, P, A, gap, M, S — the dead tubes have been dead so long the long-stay guests give the taxi the wrong name on purpose and the drivers know it. Nobody is going to fix it. Fixing it would be a change.",
       guests: "The long-stay guests: men in their sixties on the hotel's plastic chairs by the soi mouth, one beer each, watching the road the way they watched it last year. They know which bike is the reliable one and which girl on the corner is somebody's cousin.",
       sign: "The SABAI PALMS sign, up close: half its letters dark, so the soi announces " +
@@ -4387,8 +4387,8 @@ const ROOMS = {
   },
 
   orchid_club: {
-    name: "The Orchid Club",
-    bar: "The Orchid Club",
+    name: "Notty's Place",
+    bar: "Notty's Place",
     region: "Naklua",
     barType: "gents", outlet: true,
     desc: "A repurposed villa behind a high wall and an unmarked door — no neon, no " +
@@ -5301,22 +5301,22 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "She doesn't say more, and the not-saying is the answer.",
         short: "\"Bert and I go back. I watch his place, he watches mine. A bar is who is watching it.\"" },
       // An Introduction quest (docs/map-coverage.md): Candy vouches you into Rose's
-      // discreet Orchid Club out in Naklua. chip:false — the quest drives it.
+      // discreet Notty's Place out in Naklua. chip:false — the quest drives it.
       // SHE SENDS YOU, and until now that was only prose: orchidVouched — the
       // door's gate AND the quest's doneFlag — was set exclusively by Rose's own
       // node, and Rose is inside the door. So Candy's "I am sending you" opened
-      // nothing, and the only way into the Orchid Club was finishing Doyle's
+      // nothing, and the only way into Notty's was finishing Doyle's
       // unrelated recon quest (whose orchidReported also lifts the rope). Two
       // personas failed this quest from opposite sides before anyone noticed the
       // loop. Being SENT is its own flag now; being introduced is still hers.
       { topic: "rose", notFlags: ["orchidVouched"], sets: ["orchidSent"],
         text: "“You want to know a place most people never find?” Candy weighs you a moment, then " +
-          "decides. “Rose. The Orchid Club, out in Naklua — behind a wall, no sign, aircon like a " +
+          "decides. “Rose. Notty's Place, out in Naklua — behind a wall, no sign, aircon like a " +
           "morgue and about as quiet. Old friend of mine, from before either of us ran anything.” " +
-          "She writes nothing down; there is nothing to write. “You don't find the Orchid, tilac. " +
+          "She writes nothing down; there is nothing to write. “That place does not get found, tilac. " +
           "You get sent. So I am sending you — go and tell Rose that Candy vouches. And mind your " +
           "manners, na: Rose forgets nothing and forgives less.”",
-        short: "“Rose's Orchid Club, Naklua — behind a wall, no sign. Old friend of mine. You don't find it, you get sent. Tell her Candy vouches.”" },
+        short: "“Rose's place — Notty's, Naklua, behind a wall, no sign. Old friend of mine. You don't find it, you get sent. Tell her Candy vouches.”" },
       // …and the reply is a message the player is told to carry, so it has to be
       // carryable: the flag is what lets Rose know it arrived (round 23).
       { topic: "lunch", req: ["orchidVouched"], sets: ["candyLunch"],
@@ -9413,7 +9413,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     name: "Rose", th: "โรส", emoji: "🌷",
     room: "orchid_club",
     look: "Thai woman of fifty-five, immaculate, silk blouse, hair sculpted, pearls, cool composed face.",
-    desc: "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a " +
+    desc: "The madame of Notty's Place — fifties, immaculate, a silk blouse and a " +
       "voice you have to lean in to hear. She runs the quietest, coldest, most " +
       "expensive room in Naklua, and she knows the name of every regular's wife.",
     dialogue: [
@@ -9455,11 +9455,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "time, the way you would re-read a letter. “She does not send me many. Two, three a " +
           "year, and never a fool.” A cool nod. “Then you are half-trusted, which here is a great " +
           "deal — most men buy their way to a quarter and think they have bought the room. Sit " +
-          "where you like. Be discreet, be kind to my ladies, and the Orchid is open to you.” The " +
+          "where you like. Be discreet, be kind to my ladies, and Notty's is open to you.” The " +
           "smallest pause. “Tell Candy she still owes me a lunch.”",
-        short: "“Candy sent you? She never sends a fool. Then you are half-trusted — more than most men can buy. The Orchid is open to you.”" },
+        short: "“Candy sent you? She never sends a fool. Then you are half-trusted — more than most men can buy. Notty's is open to you.”" },
       { th: "เชิญค่ะ", rom: "choen kha",
-        text: "\"Welcome to the Orchid. Come in from the heat.\" The door sighs shut " +
+        text: "\"Welcome to Notty's. Come in from the heat.\" The door sighs shut " +
           "and the temperature drops ten degrees. \"You sit; the girls come to you " +
           "— that is how we do it here. Buy one a drink and she will make you forget " +
           "the traffic, the year, the wife. Discreet, always. My guests are " +
@@ -10510,7 +10510,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   daeng: {
     name: "Daeng", th: "แดง", emoji: "🌶️", personality: "blunt",
     room: "khao_talo_bar",
-    desc: "The owner — mid-forties, laugh lines over old glitter, pouring with a bar " +
+    desc: "The owner — late fifties, laugh lines over old glitter, pouring with a bar " +
       "towel over one shoulder. The dancer in the Walking Street photos behind her, " +
       "unmistakably. She was number 72.",
     dialogue: [
@@ -13018,7 +13018,7 @@ const QUESTS = {
   },
   // Naklua's pull (docs/map-coverage.md), deliberately NOT the White Rabbit — that
   // bar is the CTF stage-2 discovery and stays unfindable by normal play. Instead it
-  // reveals the OTHER discreet Naklua venue: Rose's Orchid Club, a members-ish gents
+  // reveals the OTHER discreet Naklua venue: Rose's Notty's Place, a members-ish gents
   // room you "don't find, you get sent." Candy vouches you in — relationship-as-key,
   // a different flavour from Jomtien's elegy. Completes on presenting the vouch to Rose.
   orchid_intro: {
@@ -13878,7 +13878,7 @@ const SYNDICATE_JOBS = [
     ask: "\"That box is from before the flood. When it dies on a Saturday you will " +
       "lose the whole night, and it will die on a Saturday, because that is when they " +
       "die.\" He does not oversell it; he never does. \"There is a company. They do " +
-      "the Orchid, the Golden Dragon, four hotels. They come out same day, always. It " +
+      "Notty's, the Golden Dragon, four hotels. They come out same day, always. It " +
       "is not the cheapest and it is not close to the cheapest.\"",
     whoLabel: "ask what you're really paying for",
     who: "\"You are paying for same day.\" He says it as though it were obvious, " +

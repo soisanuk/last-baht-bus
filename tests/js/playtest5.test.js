@@ -424,7 +424,7 @@ test("HINT never nudges the WDG errand; Tan's manifest names venues by their sig
 
 test("TRAVEL won't walk you to shutters or into the dawn", () => {
   G.room = "naklua_rd"; G.visited.orchid_club = true; G.nightTurn = 59; out = [];
-  doCommand("travel orchid club");
+  doCommand("travel Notty's Place");
   assert.match(text(), /shuts at midnight/);
   assert.equal(G.room, "naklua_rd");
   G.room = "ws_gate"; G.nightTurn = NIGHT_TURNS - 5; out = [];
@@ -1006,17 +1006,17 @@ test("Candy's Mot reveal answers ASK ABOUT WALLET; the Shamrock quest completes 
   assert.match(text(), /INVESTOR|investor/);
 });
 
-test("Wayne and Bert answer 'bar'; the Orchid isn't on Naklua's door list until you've been sent", () => {
+test("Wayne and Bert answer 'bar'; Notty's isn't on Naklua's door list until you've been sent", () => {
   G.room = _npcRoom("wayne"); doCommand("talk to wayne"); out = [];
   doCommand("ask wayne about bar"); assert.match(text(), /Turnkey|signing Friday|sign Friday/);
   _setFlag("barPremises"); G.room = "stinky_bar"; doCommand("talk to bert"); out = [];
   doCommand("ask bert about the bar"); assert.match(text(), /Twelve stools/);
   G.room = "naklua_rd"; out = [];
   _describeRoom(true, true);
-  assert.doesNotMatch(text(), /Step inside:.*Orchid/);
+  assert.doesNotMatch(text(), /Step inside:.*Notty/);
   _setFlag("orchidVouched"); out = [];
   _describeRoom(true, true);
-  assert.match(text(), /Step inside:.*Orchid/);
+  assert.match(text(), /Step inside:.*Notty/);
 });
 
 // ── round eleven: the min-maxer (Sandeep) ──

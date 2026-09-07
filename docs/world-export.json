@@ -820,7 +820,7 @@
    "th": "ดา"
   },
   "daeng": {
-   "desc": "The owner — mid-forties, laugh lines over old glitter, pouring with a bar towel over one shoulder. The dancer in the Walking Street photos behind her, unmistakably. She was number 72.",
+   "desc": "The owner — late fifties, laugh lines over old glitter, pouring with a bar towel over one shoulder. The dancer in the Walking Street photos behind her, unmistakably. She was number 72.",
    "emoji": "🌶️",
    "name": "Daeng",
    "personality": "blunt",
@@ -1331,7 +1331,7 @@
    "th": "จิ๊บ"
   },
   "jinda": {
-   "desc": "Bored until you try a word of Thai, then radiant — one of The Orchid Club's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "desc": "Bored until you try a word of Thai, then radiant — one of Notty's Place's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "🌷",
    "filler": true,
    "name": "Jinda",
@@ -1468,7 +1468,7 @@
    "th": "ขนม"
   },
   "kanya": {
-   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at The Orchid Club, from {{Nong Khai}}.",
+   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}.",
    "emoji": "🧾",
    "filler": true,
    "name": "Kanya",
@@ -2432,7 +2432,7 @@
    "th": "แพท"
   },
   "pear": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of The Orchid Club's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of Notty's Place's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Pear",
@@ -2768,7 +2768,7 @@
    "th": "ร็อบ"
   },
   "rose": {
-   "desc": "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a voice you have to lean in to hear. She runs the quietest, coldest, most expensive room in Naklua, and she knows the name of every regular's wife.",
+   "desc": "The madame of Notty's Place — fifties, immaculate, a silk blouse and a voice you have to lean in to hear. She runs the quietest, coldest, most expensive room in Naklua, and she knows the name of every regular's wife.",
    "emoji": "🌷",
    "name": "Rose",
    "pronoun": "she",
@@ -5938,13 +5938,13 @@
    "region": "Beach Road"
   },
   "orchid_club": {
-   "bar": "The Orchid Club",
+   "bar": "Notty's Place",
    "barType": "gents",
    "geo": [
     12.95327,
     100.88884
    ],
-   "name": "The Orchid Club",
+   "name": "Notty's Place",
    "region": "Naklua"
   },
   "orchid_room": {

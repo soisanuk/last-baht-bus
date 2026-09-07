@@ -145,7 +145,7 @@ test("An Introduction can actually be completed — being SENT opens the door", 
   doCommand("ask candy about rose");
   assert.ok(_flag("orchidSent"), "being sent is a thing that happens to the world");
   G.room = "naklua_rd";
-  doCommand("enter orchid club");
+  doCommand("enter Notty's Place");
   assert.equal(G.room, "orchid_club", "the wall has a door in it for somebody Candy sent");
   doCommand("ask rose about candy");
   assert.ok(_flag("orchidVouched"), "…and the introduction is what completes the errand");

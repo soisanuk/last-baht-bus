@@ -2179,9 +2179,9 @@ function _describeRoom(full, forceFull) {
   // point (a busy soi can front 4–6 of them, and a door isn't a block away —
   // it's right here). "Exits" is roads only now; the venues list is the doors.
   let venues = _venuesHere(r);
-  // the Orchid is somewhere you get SENT, not somewhere you find — keep it off the door list until you have been
+  // Notty's is somewhere you get SENT, not somewhere you find — keep it off the door list until you have been
   if (!_flag("orchidSent") && !_flag("orchidVouched") && !_flag("orchidReported"))
-    venues = venues.filter(id => id !== "orchid_club"); // you get SENT to the Orchid — see Candy's `rose` node
+    venues = venues.filter(id => id !== "orchid_club"); // you get SENT to Notty's — see Candy's `rose` node
   // …but not in your own hotel room, whose single DOWN/OUT is the venue the
   // exit-scan fallback would otherwise re-list as "Step inside: <the bar below>".
   // A door that will refuse you is not a door you're invited through. After
