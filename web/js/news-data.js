@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "USS Lincoln crew hits the streets of Thai beach city after lengthy Middle East deployment",
-    "s": "apnews.com",
-    "d": "04 Sep 2026"
+    "t": "Pedicures and a pair of socks: sailors from USS Abraham Lincoln go wild in party resort of Pattaya",
+    "s": "theguardian.com",
+    "d": "05 Sep 2026"
   },
   {
     "t": "Motorcycle crash leaves man distressed before he holds wife at knifepoint",
@@ -18,11 +18,6 @@ var NEWS_FEED = [
     "d": "06 Sep 2026"
   },
   {
-    "t": "Pedicures and a pair of socks: sailors from USS Abraham Lincoln go wild in party resort of Pattaya",
-    "s": "The Guardian",
-    "d": "05 Sep 2026"
-  },
-  {
     "t": "USS Lincoln sailors delight in the ‘simple stuff’ as they get their first break in months in Thailand",
     "s": "NBC News",
     "d": "06 Sep 2026"
@@ -33,18 +28,28 @@ var NEWS_FEED = [
     "d": "06 Sep 2026"
   },
   {
-    "t": "Thailand’s first DreamWorks hotel planned for Pattaya in 2033",
-    "s": "Thaiger",
-    "d": "05 Sep 2026"
-  },
-  {
     "t": "Foreign interloper gropes woman at cannabis shop",
     "s": "Bangkok Post",
     "d": "06 Sep 2026"
   },
   {
+    "t": "Drones deployed over Thailand's \"sin city\" for USS Abraham Lincoln visit",
+    "s": "Newsweek",
+    "d": "04 Sep 2026"
+  },
+  {
+    "t": "Thailand’s first DreamWorks hotel planned for Pattaya in 2033",
+    "s": "Thaiger",
+    "d": "05 Sep 2026"
+  },
+  {
     "t": "USS Abraham Lincoln heads back to US after 5-day Thailand port visit",
     "s": "The Hill",
+    "d": "07 Sep 2026"
+  },
+  {
+    "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
+    "s": "dw.com",
     "d": "07 Sep 2026"
   },
   {
@@ -53,19 +58,14 @@ var NEWS_FEED = [
     "d": "07 Sep 2026"
   },
   {
-    "t": "Thailand's 'Jurassic Park' aims to bring in tourists",
-    "s": "dw.com",
-    "d": "07 Sep 2026"
-  },
-  {
     "t": "Influencer died after penis enlargement procedure in Thailand",
     "s": "Bangkok Post",
     "d": "07 Sep 2026"
   },
   {
-    "t": "Scientists discover a bizarre “devil flower” hidden in Thailand",
-    "s": "Science Daily",
-    "d": "04 Sep 2026"
+    "t": "Thailand pauses all datacenter builds and approvals",
+    "s": "The Register",
+    "d": "07 Sep 2026"
   },
   {
     "t": "Thai PM Anutin, 1 year on, prioritizes Chinese capital to buoy growth",
@@ -74,14 +74,14 @@ var NEWS_FEED = [
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-04","USD":32.92,"AUD":23.71,"GBP":44.54,"EUR":38.26};
+var FX_RATES = {"date":"2026-09-07","USD":32.89,"AUD":23.73,"GBP":44.5,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-07","temp":29,"humid":82,"code":3,"hi":31,"rain":92};
+var WX_NOW = {"date":"2026-09-08","temp":28,"humid":79,"code":3,"hi":31,"rain":75};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-04","done":true,"h":"Ipswich","hs":0,"a":"Liverpool","as":2},{"d":"2026-09-05","done":true,"h":"Newcastle","hs":2,"a":"Bournemouth","as":2},{"d":"2026-09-05","done":true,"h":"Brentford","hs":1,"a":"Sunderland","as":1},{"d":"2026-09-05","done":true,"h":"Brighton","hs":1,"a":"Leeds","as":1},{"d":"2026-09-05","done":true,"h":"Fulham","hs":2,"a":"C Palace","as":3},{"d":"2026-09-05","done":true,"h":"Man City","hs":1,"a":"Coventry","as":0},{"d":"2026-09-05","done":true,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":true,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":true,"h":"Everton","hs":2,"a":"Man United","as":2},{"d":"2026-09-06","done":true,"h":"Arsenal","hs":2,"a":"Chelsea","as":1}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4397,"date":"2026-09-07","baht":68450};
+var GOLD = {"usd":4407,"date":"2026-09-07","baht":68550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79513,"thb":2614664};
+var BTC = {"usd":79201,"thb":2604120};
