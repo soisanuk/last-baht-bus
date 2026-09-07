@@ -9,6 +9,8 @@
 //   node tools/prose-corpus.mjs --group enc --seed      # mark the dumped set reviewed
 //   node tools/prose-corpus.mjs --json                  # JSONL records
 //   node tools/prose-corpus.mjs --delta --taps          # …with the taps each record renders
+//   node tools/prose-corpus.mjs --dossiers              # regrouped by WHO/WHAT each record is about
+//   node tools/prose-corpus.mjs --rooms                 # regrouped by the PLACE each record describes
 //
 // Groups: npc (hand-authored NPCS dialogue+desc) · patron · room (desc+revisit)
 // · item · enc (ENCOUNTERS) · quest · intro (taxi tables) · pool (engine-file
@@ -288,6 +290,43 @@ function _subjects() {
   for (const it of Object.values(ITEMS)) put(it.name);
   return subs;
 }
+// ── the ROOM dossier (--rooms) ─────────────────────────────────────────────
+// The sibling pivot: every string that describes ONE PLACE, together — desc,
+// each revisit line, each lateDesc line, every reads: fixture. A room is
+// described by five or six strings written months apart, and they drift the
+// same way a character does (Central Mall's two faces disagreed about the time
+// of day; the Eastern Seaboard office listed its whole contents and then the
+// revisit watered a plant that wasn't in it). Ref-order review cannot see it;
+// this grouping is the whole check. (Mario, 2026-09-07.)
+if (has("rooms")) {
+  const byRoom = new Map();
+  for (const r of out) {
+    const m = /^room\.([^.]+)\./.exec(r.ref);
+    if (!m) continue;
+    if (!byRoom.has(m[1])) byRoom.set(m[1], []);
+    byRoom.get(m[1]).push(r);
+  }
+  const want = val("rooms") && val("rooms").startsWith("--") ? null : val("rooms");
+  let n = 0;
+  for (const [id, recs] of byRoom) {
+    if (want && id !== want) continue;
+    if (recs.length < 2 && !want) continue;   // one string cannot contradict itself
+    n++;
+    const r = ROOMS[id] || {};
+    console.log(`\n\n════════ ${r.name || id}  [${id}]${r.bar ? " — " + r.bar : ""} — ${recs.length} records ════════`);
+    if (r.region) console.log(`   region: ${r.region}${r.barType ? " · barType " + r.barType : ""}${r.indoors ? " · indoors" : ""}${r.dark ? " · dark" : ""}`);
+    console.log(`   exits: ${Object.keys(r.exits || {}).join(", ") || "—"}`);
+    for (const rec of recs) {
+      console.log(`\n— ${rec.ref}`);
+      console.log(rec.text);
+      printRender(rec);
+    }
+  }
+  console.log(`\n[${n} rooms]`);
+  if (_warned) console.log(`⚠ ${_warned} render warning(s) — see the checklist in this file's header`);
+  process.exit(0);
+}
+
 if (has("about") || has("dossiers")) {
   const subs = _subjects();
   const want = val("about");
