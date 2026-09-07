@@ -809,8 +809,8 @@ const _CATALOGS = {
       "Eine verpackte Flasche Sang Som mit rosa Schleife und einer Karte in Candys Handschrift: 'เปิดร้านใหม่ สู้ๆ นะ' – für das Eröffnungsregal in der Candy Bar 2.",
     "ring of site keys":
       "Ring mit Geländeschlüsseln",
-    "A heavy ring of brass site keys, every one oiled and worn — the locks of Hyper A Go-Go as they were the day the hoarding came down. Kept polished by a widow's thumb for years.":
-      "Ein schwerer Ring mit Messingschlüsseln, jeder geölt und abgegriffen – die Schlösser des Hyper A Go-Go, genau wie an dem Tag, als der Bauzaun fiel. Jahrelang vom Daumen einer Witwe blank poliert.",
+    "A heavy ring of brass site keys, every one oiled and worn — the locks of Hyper A Go-Go as they were the day the hoarding came down. Carried a long way to get here, and polished the whole way.":
+      "Ein schwerer Ring mit Messingschlüsseln, jeder geölt und abgegriffen – die Schlösser des Hyper A Go-Go, genau wie an dem Tag, als der Bauzaun fiel. Einen weiten Weg hierher getragen und die ganze Zeit blank poliert.",
     "Peacock revue flyer":
       "Flyer der Peacock-Revue",
     "A glossy flyer for the Peacock Cabaret's revue: Petch mid-lip-sync in a gown made of light, Miss Mala's headdress filling the top corner like weather. On the back, in careful biro: 'for the Alcazar man — M.'":

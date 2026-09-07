@@ -4943,8 +4943,7 @@ const ITEMS = {
     portable: true, location: null, // Wimon hands them over for the shrine run
     keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A heavy ring of brass site keys, every one oiled and worn — the locks of Hyper " +
-      "A Go-Go as they were the day the hoarding came down. Kept polished by a widow's " +
-      "thumb for years.",
+      "A Go-Go as they were the day the hoarding came down. Carried a long way to get here, and polished the whole way.",
   },
   revue_flyer: {
     name: "Peacock revue flyer", aliases: ["flyer", "revue flyer", "peacock flyer"],
@@ -8426,7 +8425,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "name", when: (st, G) => G.quests.quiet_one === "active" && !_flag("nameKept"),
         sets: ["nameKept"],
         text: "He weighs you a long moment, then decides — a man who's been carrying it alone too long. \"Pete's " +
-          "not it. Doesn't matter what is. Point is I booked everything under Pete — flight, hotel, the lot. " +
+          "not it. Doesn't matter what is. Point is everything here is under Pete — the hotel, the bar tabs, the lot. " +
           "Careful. I'm always careful.\" His jaw works. \"Driver at the airport. Never met him, never gave " +
           "him a name — and he opens the door and says my REAL one. Pleasant as you like. 'Welcome, khun'—\" " +
           "he stops himself before he says it. \"Then hands me a card. 'Anything you need.'\" Pete's knuckles " +
@@ -9067,8 +9066,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     // happened to Doyle and Pete.
     hops: false,
     room: "queen_vic",
-    desc: "Bald, red-faced, Chang vest, fifteen years of Pattaya compressed into a permanent " +
-      "corner-stool residency. He rents the same balcony room every high season. He was here " +
+    desc: "Bald, red-faced, Chang vest, sixteen years of Pattaya compressed into a permanent corner-stool residency. He rents the same balcony room every high season. He was here " +
       "before White Dish. He will tell you about it. He tells it well.",
     dialogue: [
       { topic: "terry",
@@ -10493,7 +10491,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // intel), then the directions node — same first-match-wins ordering as the
       // wallet pair above. chip:false so the quest, not a dangling chip, drives it.
       { topic: "offer", req: ["heardWhispers"], sets: ["oyJobDone"], chip: false,
-        text: "\"So.\" She does not ask whether Pim talked; Pim always talks to the right person. You tell her — the quiet money, the bought debts, the girls who will do what they are told. Oy listens without a flicker, which is worse than any reaction. \"New money. Not old faces.\" She repeats it like a note to herself, then a banknote is in your hand before you saw it move. \"You did a thing for me and told me the truth about it. That is rarer up here than you would think. Go. If I need the farang who opens things again, I will find you — I found you the first time.\"",
+        text: "\"So.\" She does not ask whether Pim talked; Pim always talks to the right person. You tell her — the quiet money, the bought debts, the girls who will do what they are told. Oy listens without a flicker, which is worse than any reaction. \"New money. Not old faces.\" She repeats it like a note to herself, then two banknotes are in your hand before you saw them move. \"You did a thing for me and told me the truth about it. That is rarer up here than you would think. Go. If I need the farang who opens things again, I will find you — I found you the first time.\"",
         short: "Oy takes the whisper without a flicker. \"New money, not old faces.\" She pays, and files you away for later." },
       { topic: "offer", chip: false,
         text: "\"A job.\" It is not a question and not quite an offer; it is a fact she is allowing you to be useful to. \"Somebody has my girls in a mood, and a girl in a mood counts wrong and smiles late and costs me money. The maze tells things to Pim before it tells me — five years at the Starlight, misses nothing. Ask her what the whispers are, then bring them back here.\" A beat, and something that on another face would be a smile. \"You are good at getting into places you should not be. So. Get into this one.\"",
@@ -11838,7 +11836,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "\"But you're vouching, are you. A paying customer with sense in his head.\" A long look, " +
           "the kind he gives a cue before a money shot. \"Tuesday. Four o'clock, before doors. He " +
           "carries ice, he touches no till, and if he films one second of it he goes out the door " +
-          "in the bin barrel. Tell him what I told you when you were new: everything in this " +
+          "in the bin barrel. Tell him what I told him his first night: everything in this " +
           "trade starts as a dirty glass.\"",
         short: "\"Tuesday, four o'clock, before doors. Ice, no till, no filming. Tell him: everything in this trade starts as a dirty glass.\"" },
       { topic: "kyle", req: ["kyleShift"],
@@ -12057,8 +12055,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "they always are. But not tonight, and not while I'm behind this bar. Your beer's poured, bud.\"" },
       { topic: "league", req: ["wonLeague"],
         text: "\"Here he is.\" Bert reaches under the till and sets your name-chalk on the bar like " +
-        "evidence. \"King of the killer table. I've had that up a week — half the rail's sick of hearing " +
-        "about it, other half wants a rematch with money on.\" He slides a Singha across, on the house, " +
+        "evidence. \"King of the killer table. That goes up behind the till tonight — half the rail will be sick of " +
+        "hearing about it by Sunday, other half wants a rematch with money on.\" He slides a Singha across, on the house, " +
         "which from Bert is a civic honour. \"Defend it next league night, or don't. Champions get to be busy.\"",
         short: "\"King of the killer table. Defend it next league night, or don't — champions get to be busy.\"" },
       { topic: "league", text: "\"Killer pool. Everybody's got three lives, pot or " +
