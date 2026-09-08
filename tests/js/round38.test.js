@@ -84,7 +84,12 @@ test("ASK LEK ABOUT PRICE is her price story, remembered or not yet told (Frank)
   G.room = "lucky_tiger"; _setFlag("heardPriceStory"); run("ask lek about price");
   assert.match(text(), /Same as I tell you in the rain/);
   newGame(); _setFlag("act1Done"); G.room = "lucky_tiger"; out = []; run("ask lek about price");
-  assert.match(text(), /rainy night|when it's raining/);
+  // The deflect names the condition that ACTUALLY reaches the story — sitting with
+  // her on a wet slow night, which is a topicless node — not "ask me when it's
+  // raining", which asked in the rain gave this same deflect thirteen downpours
+  // running (Colm, round 47).
+  assert.match(text(), /sit with me/i);
+  assert.doesNotMatch(text(), /\bask me\b/i, "it must not name asking as the route");
 });
 
 test("DIAGNOSE and the piwin agree on the number (Dex)", () => {

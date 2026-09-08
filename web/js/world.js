@@ -5836,9 +5836,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "The bar's number is the bar's. Mine is mine, and it is not on the board. Everybody remember " +
           "the first number and forget the second.\" She goes back to the game. \"You remember. Good.\"",
         short: "\"Same as I tell you in the rain. The bar's number, then mine. You remember.\"" },
+      // The deflect used to say "ASK me on a night when it's raining" and the
+      // payoff is a TOPICLESS node — so a man who came back in the rain and asked
+      // about the price got the same deflect, thirteen downpours running (Colm,
+      // round 47). The condition it names is now the one that actually works:
+      // sit down with her on a slow wet night and she starts talking without the
+      // hello.
       { topic: "price", notFlags: ["heardPriceStory"],
-        text: "\"Price?\" A look. \"Ask me on a night with nothing to do, when it's raining. I tell you the whole thing then.\"",
-        short: "\"Ask me on a rainy night.\"" },
+        text: "\"Price?\" A look. \"Not standing up, and not asked. Come and sit with me on a night the rain has killed the pool and nobody wants anything. I tell you the whole thing then.\"",
+        short: "\"Not asked, and not standing up. Sit with me on a wet night.\"" },
       // the after-hours question nobody would answer (Dex, round 38): where the night goes after two
       { topic: "late",
         text: "\"After two?\" Lek racks the balls without looking at them. \"Depends who ask. Customer — go home, " +
@@ -10383,7 +10389,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "Five years behind this bar and never once paid for her own drink. She looks " +
       "you over like a customs officer with a sense of humour.",
     dialogue: [
-      { topic: "debt", chip: false, when: (st, G) => !_flag("debtTruth"),
+      { topic: "debt", chip: "topics", when: (st, G) => !_flag("debtTruth"),
         sets: ["debtTruth"],
         text: "\u201cHis cousin.\u201d She says it flatly, polishing a glass that is already dry, and " +
           "five years of knowing everybody's everything arrives in her face all at once. \u201cOkay. " +
@@ -10440,7 +10446,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Ungated + chip:false — it reads as quest-directed (nobody asks about "the
       // whispers" cold), and setting the flag early is harmless (it does nothing
       // until Oy's completion node and an active quest both agree).
-      { topic: "whispers", sets: ["heardWhispers"], chip: false,
+      { topic: "whispers", sets: ["heardWhispers"], chip: "topics",
         text: "\"The whispers.\" She stops polishing the glass, which from Pim is a full stop. \"For Oy, or for yourself? For Oy.\" A dry look. \"Somebody has been buying up the girls' debts. Quiet, cash, no name on it. And a girl who owes the wrong person does not work for the bar any more — she works for whoever holds the paper, and she just happens to stand behind the bar.\" She sets the glass down. \"Tell Oy it is new money, not an old face. Tell her to watch the ones who pay off a girl's debt like it is a kindness. That is the whisper, darling. Mind how you carry it.\"",
         short: "\"Somebody's quietly buying up the girls' debts — new money, no name. Tell Oy to watch the ones paying debts off like a kindness.\"" },
       // She opens on price ("what's it worth?"), which is fine for a man with a
@@ -10682,7 +10688,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         // neither WDG nor the Samsons have any reason to care. Planted here as a
         // second-bar hook once you already run one — the pressure out this way
         // would come from local Thai interests, which is its own arc.
-        topic: "shamrock", chip: false,
+        topic: "shamrock", chip: "topics",
         req: ["expatLife", "barOpen"], sets: ["seanStory"],
         text: "\"So. You have a bar now.\" Daeng says it to the till, not to you, " +
           "and there is no particular warmth in it — but she says it, which from " +
@@ -11820,7 +11826,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // glimpse, never explained), drift (he isn't staying at this table).
       // Nothing about where he's going. The test: it has to be worth reading
       // if the sequel is never made.
-      { topic: "crane", chip: false, req: ["craneDelivered"],
+      { topic: "crane", chip: "topics", req: ["craneDelivered"],
         text: "He takes it the way you'd take a bill, and then he sees what it's folded from and " +
           "the tweezers go down. He unfolds it with the care of a man who fixes things for a " +
           "living: a photograph, creased white along every fold — a bar's neon, a younger him " +
@@ -11834,7 +11840,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "The hand goes up, stops. \"Don't tell her anything.\" The tweezers come back up. The " +
           "customer who has been waiting gets served in three languages, none of them steady.",
         short: "\"'Mai pen rai.' The worst thing anybody has ever said to me.\" The photo is in the drawer with the money he can't send back. \"Don't tell her anything.\"" },
-      { topic: "tiffin", chip: false, req: ["tiffinDelivered"],
+      { topic: "tiffin", chip: "topics", req: ["tiffinDelivered"],
         text: "He knows what it is before you've set it down — the clasp, the smell — and " +
           "for one unguarded second he's about twelve. Then the grin. “She sent FOOD. " +
           "Across the whole town. Of course she did.” He pops the lid, finds the ฿500 " +

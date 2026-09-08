@@ -379,3 +379,88 @@ test("every modal redraw carries the money, the commands and the names its live 
   });
   assert.ok(armed.length >= 5, `the audit actually armed things (${armed.join(", ")})`);
 });
+
+// ── Colm, the topics-first player: the list is a menu, so what is ON it matters ──
+
+test("TOPICS never offers a node the author marked chip:false", () => {
+  // Round 47 opened chip:false into TOPICS and put four characters' bare word
+  // "offer" on the menu — and, the severe one, Tan's `debt`, which SETS
+  // debtSettled and owesTan. Colm read the list top to bottom and spent the one
+  // favour Tan gives without knowing he had called it in. The flag means what it
+  // says; a node that is a SUBJECT rather than a MOVE opts in with chip:"topics".
+  const bad = [];
+  for (const id of Object.keys(NPCS)) {
+    const n = NPCS[id]; if (!n.dialogue) continue;
+    const room = _npcRoom(id); if (!room || !ROOMS[room]) continue;
+    G.room = room; G.known[id] = true;
+    // The invariant is about where an offered topic LANDS: two nodes can share a
+    // topic (Wimon's husband, Nont's job) with one of them chip:false, and the
+    // ungated one is the answer. What must never happen is TOPICS offering a
+    // word that resolves to the node the author hid.
+    for (const t of _convoTopics(id, { all: true })) {
+      const d = _pickDialogue(id, t);
+      if (d && d.chip === false) bad.push(`${n.name}: TOPICS offers "${t}" and it lands on a chip:false node`);
+    }
+  }
+  assert.deepEqual(bad, []);
+  // and the one that cost him the favour, by name
+  G.room = _npcRoom("tan"); G.known.tan = true;
+  assert.ok(!_convoTopics("tan", { all: true }).includes("debt"),
+    "Tan's one favour is not a menu item");
+});
+
+test("chip:\"topics\" is listed by the verb and never suggested by the bar", () => {
+  const optedIn = [];
+  for (const id of Object.keys(NPCS))
+    for (const d of NPCS[id].dialogue || []) if (d.chip === "topics") optedIn.push([id, String(d.topic).split("|")[0]]);
+  assert.ok(optedIn.length >= 4, `some nodes take the third value (${optedIn.length})`);
+  for (const [id, t] of optedIn) {
+    const room = _npcRoom(id); if (!room || !ROOMS[room]) continue;
+    G.room = room; G.known[id] = true;
+    const gated = _convoTopics(id, { all: true }).includes(t) === false && _convoTopics(id).includes(t) === false;
+    if (gated) continue;                                  // its own req/when is shut right now
+    assert.ok(_convoTopics(id, { all: true }).includes(t), `${id}: TOPICS lists "${t}"`);
+    assert.ok(!_convoTopics(id).includes(t), `${id}: the chip bar does not suggest "${t}"`);
+  }
+  // Pim is the case that started it: nothing on the bar, two subjects on the verb
+  G.room = _npcRoom("pim"); G.known.pim = true;
+  assert.deepEqual(_convoTopics("pim"), []);
+  assert.ok(_convoTopics("pim", { all: true }).length >= 2);
+});
+
+test("a topic that is somebody's own name reads as herself, and answers to it", () => {
+  // Five Queen Vic regulars each offered their own name back as a topic — the
+  // schema showing through. "Ask her about herself" is a real move; it just has
+  // to be printed and typed like one.
+  G.room = "queen_vic"; G.known.angela = true;
+  out = []; run("topics angela");
+  assert.match(text(), /herself/);
+  assert.doesNotMatch(text(), /\bangela · |· angela\b/i, "not her own name as a list item");
+  run("talk to angela");
+  G.talked = {}; out = []; run("ask angela about herself");
+  assert.doesNotMatch(text(), /don't know about that|wrong girl|Not my story/i);
+});
+
+test("a real venue is never refused as genre furniture", () => {
+  // ENTER MIKE'S MALL up in Naklua answered "the mall is real and it is not what
+  // you came out for" — about a mall two districts away that has Wilf in it.
+  G.room = "naklua_rd"; _setFlag("act1Done");
+  out = []; run("enter mikes mall");
+  assert.doesNotMatch(text(), /not what you came out for/,
+    "a place the game HAS is a navigation answer, not a refusal");
+  // …and the buildings that really have no room behind them still get theirs
+  out = []; run("enter immigration");
+  assert.match(text(), /photocopies|daylight|queue/i);
+});
+
+test("one woman is not 'the girls'", () => {
+  // "The girls have the far half of the bar to themselves" printed at Cloze,
+  // which is Waen and nobody else.
+  G.room = "cloze";
+  assert.equal(_npcsHere().filter(i => NPC_ROLES[i]).length, 1, "premise: Cloze is one woman");
+  const staffedLine = _BAR_THIN_STAFFED.some(t => t.includes("girls") || t.includes("mama"));
+  assert.ok(staffedLine, "premise: the staffed pool talks about a floor");
+  out = []; _describeRoom(true);
+  for (const t of _BAR_THIN_STAFFED)
+    assert.ok(!text().includes(t.slice(0, 40)), "a one-woman bar gets the plain thin line");
+});

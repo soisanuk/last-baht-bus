@@ -969,8 +969,30 @@ const _NOT_A_DOOR = [
 function _notADoor(arg) {
   const w = String(arg || "").toLowerCase().replace(/^(the|a|an)\s+/, "");
   if (!w) return false;
+  // A REAL PLACE IS NOT GENRE FURNITURE. These pools refuse the buildings the
+  // prose names that have no room behind them — but "mall" matched anywhere, so
+  // ENTER MIKE'S MALL up in Naklua got "the mall is real and it is not what you
+  // came out for" about a mall two districts away that has Wilf in it (Colm,
+  // round 47). If the words name a room the game actually has, it is a
+  // navigation problem and _doTravel's own answer is the honest one.
+  if (_roomByName && _roomByName(w)) return false;
   for (const [re, pool] of _NOT_A_DOOR) if (re.test(w)) { _say(_pickVary(pool, "notadoor:" + pool.length + ":" + re.source.length), "dim"); return true; }
   return false;
+}
+// Any room whose display or bar name the words match — used to keep _notADoor
+// off real venues. Deliberately loose (a substring either way), because the
+// player types "mike's mall" for "Mike's Mall (Food Court)".
+function _roomByName(w) {
+  const t = String(w).toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
+  if (t.length < 4) return null;
+  for (const [id, r] of Object.entries(ROOMS)) {
+    for (const nm of [r.bar, r.name]) {
+      if (!nm) continue;
+      const n = String(nm).toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
+      if (n === t || n.includes(t) || t.includes(n)) return id;
+    }
+  }
+  return null;
 }
 function _doTravel(arg) {
   const w = (arg || "").toLowerCase().replace(/^to (the )?/, "").trim();
@@ -3531,6 +3553,12 @@ function _doTalkBody(arg, topic) {
   // out of a man you've just set off — so it sits above _pickDialogue, where
   // the patron path always had it.
   if (topic && NPCS[npc].rage && NPCS[npc].rage.some(k => topic.includes(k))) { _patronRage(npc); return; }
+  // "ask her about herself" — a node keyed on the partner's OWN name is a real
+  // and good move (Angela's "What, the CV?"), and TOPICS lists it as "herself"
+  // rather than as the schema word "angela" (Colm, round 47: five Queen Vic
+  // regulars each offering their own name back). So the pronoun has to reach it.
+  if (topic && /^(her|him|them|your|it)self$|^you$/.test(String(topic).trim()))
+    topic = NPCS[npc].name.split(" ").pop().toLowerCase();
   let d = _pickDialogue(npc, topic || null);
   if (topic && (!d || !d.topic)) {
     const norm = _convoTopic(topic);
@@ -3942,7 +3970,10 @@ function _convoTopic(s) {
 // live when these show, so it resolves straight through _convoResolve.
 // A few canonical topic keys read cryptic as bare chips ("Sponsor" on the
 // COLUMNIST is about the kept girls, not his own) — label those by meaning.
-const _TOPIC_LABELS = { sponsor: "the kept girls" };
+// A label is what TOPICS PRINTS, and the parser takes it back (the alias rows
+// below derive from this table). Keys that read as a database column rather
+// than as something you would say to a person get one (Colm, round 47).
+const _TOPIC_LABELS = { sponsor: "the kept girls", likeyou: "why you", deal: "the deal", offer: "the offer" };
 function _topicLabel(t) { return _TOPIC_LABELS[t] || t.replace(/\b\w/g, c => c.toUpperCase()); }
 // A LABEL IS A PHRASING OF ITS TOPIC, so the parser has to take it — TOPICS
 // prints the label as prose and a player types back what they just read. Jenny's
@@ -4085,8 +4116,10 @@ function _doTopics(arg) {
   const chips = _convoTopics(id);                // what a thumb can actually reach
   const who = _convoName(id);
   if (!open.length) { _say(_fmt(_pickVary(_TOPICS_NONE, "topicsnone"), { n: who })); return; }
+  const self = String(NPCS[id].name).split(" ").pop().toLowerCase();
+  const refl = NPCS[id].pronoun === "he" ? "himself" : NPCS[id].pronoun === "they" ? "themselves" : "herself";
   _say(_fmt(_pickVary(_TOPICS_LEAD, "topicslead"), { n: who }) + ": " +
-    open.map(t => _topicLabel(t).toLowerCase()).join(" \u00b7 ") + ".", "room");
+    open.map(t => (t.toLowerCase() === self ? refl : _topicLabel(t).toLowerCase())).join(" \u00b7 ") + ".", "room");
   // Turn the page too, so the four the chip bar is showing are not the four it
   // was showing a moment ago — the thumb player's only route to the rest.
   const per = 4;

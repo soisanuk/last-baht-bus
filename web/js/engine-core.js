@@ -1379,7 +1379,18 @@ function _convoTopics(id, opts) {
   for (const d of nodes) {
     if (!d.topic) continue;
     if (d.deflect) continue;              // a gated "come back when you've earned it" refusal — don't offer it as a chip
-    if (d.chip === false && !all) continue;       // a plot/quest node the quest flow drives — typeable, never suggested
+    // `chip: false` means DON'T SUGGEST THIS ANYWHERE and the author meant it:
+    // round 47 opened these into TOPICS and put Gavin's, Bert's, Oy's and
+    // Sumalee's `offer` on the menu as the bare word "offer", and — the severe
+    // one — Tan's `debt`, a node that SETS debtSettled and owesTan, so a player
+    // reading the list top to bottom spent the one favour Tan gives without
+    // knowing he had called it in (Colm, round 47). What that round got right is
+    // that some of these are real SUBJECTS a woman will discuss (Pim's whispers,
+    // Daeng's Shamrock) and only the chip BAR needed to stay short. So the flag
+    // has a third value: `chip: "topics"` — listed by the verb, never suggested
+    // by the bar. A node that DOES something stays `chip: false`.
+    if (d.chip === false) continue;
+    if (d.chip === "topics" && !all) continue;
     if (!d.chip && _topicNamesCharacter(d.topic, id)) {
       if (!all || !_topicKnown(String(d.topic).split("|")[0])) continue; // gossip about a person — typeable, not suggested
     }
@@ -2353,7 +2364,10 @@ function _describeRoom(full, forceFull) {
     const _thin = typeof _lowSeason === "function" && _lowSeason() && !_railCrowd.length &&
       ["beer", "soi6", "gents", "pub"].includes(r.barType);   // a club's floor "heaves" in its own desc — no bare-wood rail there (Dex, round 38)
     if (_thin) {
-      const _staffed = _npcsHere().some(id2 => NPC_ROLES[id2]);
+      // "the girls have the far half of the bar to themselves" printed at Cloze,
+      // which is one woman (Colm, round 47) — the staffed pool wants a FLOOR,
+      // not a member of staff.
+      const _staffed = _npcsHere().filter(id2 => NPC_ROLES[id2]).length > 1;
       _say(_pickVary(_staffed ? _BAR_THIN_STAFFED : _BAR_THIN, "barThin"), "dim");
     } else if (G.soc.patronBusy[G.room]) {
       // name the SAME girl the snipe-jealousy keys on (parser); legacy `true`
