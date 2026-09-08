@@ -74,6 +74,24 @@
       "finding": "Wayne's silent partner carries every one of Tan's identifying details while the narration files the arrangement under White Dish.",
       "ruled": "2026-09-07",
       "reason": "Deliberate. The resonance is the point of the nominee arc — the reader is meant to half-recognise him — and canon puts White Dish on the paying side of Tan, which is exactly why the narrator's flat attribution is what a farang would assume and get wrong."
+    },
+    {
+      "subject": "The Bet on the Wall",
+      "finding": "The doneFlag looked settleable by ASK BOB ABOUT THE PHOTOGRAPH without ever walking to the pier the desc sends you to.",
+      "ruled": "round 47 quest sweep, verified",
+      "reason": "Refuted. bob.dialogue[7] carries when: (st, G) => !!(G.visited && G.visited.bali_hai) — the walk IS enforced. The pivot did not print per-node gates at the time, which is what made it unjudgeable; it does now."
+    },
+    {
+      "subject": "A Favour Back",
+      "finding": "Bank's two post-completion nodes appeared ungated, so a Tan-route settlement might never reach him.",
+      "ruled": "round 47 quest sweep, verified",
+      "reason": "Refuted. Both are gated by `when` on debtSettled (and [1] additionally on debtTruth). The pivot only scanned `req` for read-backs; it scans `when` now."
+    },
+    {
+      "subject": "The Box",
+      "finding": "Eddy says 'if it drops, it'll tell you — pull the cable, put it back', and no drop state or cable verb exists.",
+      "ruled": "round 47 quest sweep",
+      "reason": "Kept. It is a conditional that never fires, which reads as tension rather than an undelivered promise, and PULL CABLE already has a voiced refusal rather than a parse failure. Revisit only if the box gains a failure state."
     }
   ]
 }

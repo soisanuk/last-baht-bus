@@ -2517,8 +2517,21 @@ function _qGiver(q) {
   return q ? q.giver : null;
 }
 function _qAt(q) { return typeof q.at === "function" ? q.at(G) : q.at; }
+// The ROUTES a quest can be on, for `descBy`. One quest, several ways in — and
+// the journal should describe the way you actually took, because the fork is
+// visible at the payoff and reading a generic instruction is how a player stops
+// believing the journal. `rabbitWay` is the heist's three answers; the 51% fork
+// is the bar chain's. Add a key here when a quest gains a route, not a branch
+// inside _qDesc.
+function _questRoutes() {
+  const out = [];
+  if (G.rabbitWay) out.push(G.rabbitWay);
+  if (_flag("partnerCandy")) out.push("candy");
+  if (_flag("partnerTan")) out.push("tan");
+  return out;
+}
 function _qDesc(q) {
-  if (q.descBy && G.rabbitWay && q.descBy[G.rabbitWay]) return q.descBy[G.rabbitWay];   // one quest, several ways in
+  if (q.descBy) for (const r of _questRoutes()) if (q.descBy[r]) return q.descBy[r];
   return (q.descIfSelf && _qGiver(q) !== q.giver) ? q.descIfSelf : q.desc;
 }
 function _questAvailable(qid) {
@@ -9627,6 +9640,15 @@ function _kidTick() {
   if (typeof _pushMsg === "function")
     _pushMsg("nont", "done. it's on rabbit's stick, stick's under his bar. i was never there and neither were you. delete this.");
   _say("(📱 A text from Nont. CHECK MESSAGES.)", "dim");
+}
+
+// Kyle's shift is a NIGHT, not a promise. Bert vouches for him on one evening
+// and the boy carries ice on another; until round 47 the flag fired on the vouch
+// and Kyle reported "Tuesday happened" the same hour. Same shape as _kidTick:
+// the day is recorded, the deed lands after it.
+function _kyleTick() {
+  if (!G.kyleVouchDay || _flag("kyleShift") || G.day <= G.kyleVouchDay) return;
+  _setFlag("kyleShift");
 }
 
 // ── Tan's call: a pendingChoice="kidfavour" modal — the tanfavour machinery's second use ──

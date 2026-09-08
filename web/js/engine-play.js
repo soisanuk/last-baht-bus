@@ -1506,7 +1506,11 @@ function _kpInput(input) {
   if (kpOver(g.kp)) {
     const winner = kpAlive(g.kp)[0];
     if (winner && winner.name === "You") {
-      _setFlag("wonLeague");
+      // Bert's quest is King of the Killer TABLE — "every third night, RIGHT
+      // HERE" — and the flag fired for a win at any pool bar in town, so his
+      // chalk went up behind his own till for a game he never saw (round 47
+      // quest sweep). Killer runs everywhere; his league is his.
+      if (G.room === (QUESTS.league && _qAt(QUESTS.league)) || G.room === "stinky_bar") _setFlag("wonLeague");
       _endGame(true, g.stake, `Last cue standing. The pot — ฿${g.stake} — is pushed ` +
         "across the felt with due ceremony, and " +
         ((typeof _tillKeeper === "function" && _tillKeeper(G.room)) ? `${NPCS[_tillKeeper(G.room)].name} rings the bell herself. ` : "the man behind the bar rings the bell himself. ") +

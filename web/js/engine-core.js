@@ -259,6 +259,7 @@ function newGame() {
     motoAsked: 0,        // the turn the piwin last asked "where to?" — a bare place typed next answers him
     lastNightSaid: null,   // the morning ledger, kept so LAST NIGHT can reprint it
     motBoots: 0,         // baht handed to Mot toward the football boots he named at dinner
+    kyleVouchDay: 0,     // the day Bert agreed to give Kyle a shift; _kyleTick lands the shift after it
     ccibLoud: 0,         // loud acts inside the window (see _ccibLoud) — the teeth
     ccibLoudNight: {},   // {kind: day} — one count per kind per night
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)
@@ -2652,6 +2653,7 @@ function _tick() {
   if (typeof _boxTick === "function") _boxTick();      // Rabbit's box, while it's live and you're in the office
   if (typeof _ccibLowTick === "function") _ccibLowTick();  // the lay-low window: a second look, and the day it lifts
   if (typeof _kidTick === "function") _kidTick();          // the kid's offscreen run lands as a text the next day
+  if (typeof _kyleTick === "function") _kyleTick();        // …and Kyle carries the ice on a later night than the vouch
   if (G.lightOn && G.battery > 0) {
     G.battery--;
     if (G.battery === 0) {

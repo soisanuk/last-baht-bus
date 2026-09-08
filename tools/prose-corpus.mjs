@@ -427,22 +427,64 @@ function _subjects() {
 // promise a step nobody can take, an offer can name a venue the `at:` disagrees
 // with, and the flag can be set by a node the player reaches before the offer.
 // Everything about one quest, in one place, with its wiring stated at the head.
+// Each dialogue record's own gates, printed beside its ref. Without these a
+// reviewer cannot tell an unreachable node from a reachable one, which is the
+// class this pivot exists for.
+function gateOf(r) {
+  const m = /^npc\.([a-z0-9_]+)\.dialogue\[(\d+)\]/.exec(r.ref);
+  if (!m) return "";
+  const d = ((NPCS[m[1]] || {}).dialogue || [])[Number(m[2])];
+  if (!d) return "";
+  const bits = [];
+  if (d.req) bits.push("req " + d.req.join("+"));
+  if (d.notFlags) bits.push("not " + d.notFlags.join("+"));
+  if (d.bond) bits.push("bond≥" + d.bond);
+  if (d.when) bits.push("when");
+  if (d.sets) bits.push("SETS " + d.sets.join("+"));
+  if (d.gives) bits.push("GIVES " + d.gives);
+  if (d.fx) bits.push("fx");
+  return bits.length ? "   {" + bits.join(" · ") + "}" : "";
+}
+
 if (has("quests")) {
   const want = val("quests") && !val("quests").startsWith("--") ? val("quests") : null;
   const seeding = has("seed"), delta = has("delta"), picked = [];
+  // --only <file>: one QUEST ID per line — the sweep's hand-back, same as the
+  // other two pivots (see the note on --only in the subject pivot).
+  let only = null;
+  if (val("only")) {
+    only = new Set(fs.readFileSync(val("only"), "utf8").split("\n").map(x => x.trim()).filter(Boolean));
+    const missing = [...only].filter(x => !QUESTS[x]);
+    if (missing.length) say(`--only: ${missing.length} id(s) are not quests and were skipped: ${missing.join(" \u00b7 ")}`);
+  }
   let n = 0;
   for (const [qid, q] of Object.entries(QUESTS)) {
+    if (only && !only.has(qid)) continue;
     if (want && qid !== want) continue;
     // every string this quest is made of — its own fields, its giver's whole
     // dialogue, and any node anywhere that sets or requires its flags
-    const recs = out.filter(r => r.ref.startsWith(`quest.${qid}.`) ||
+    const own = r => r.ref.startsWith(`quest.${qid}.`) ||
       (q.giver && r.ref.startsWith(`npc.${q.giver}.`)) ||
-      (q.item && r.ref.startsWith(`item.${q.item}.`)));
-    const setters = [], gates = [];
+      (q.item && r.ref.startsWith(`item.${q.item}.`));
+    const recs = out.filter(own);
+    // The doneFlag's setter is the single most important node in a quest and it is
+    // very often on somebody who ISN'T the giver — Kyle's shift is set at Bert's
+    // bar, Glam's sons close Wimon's quest — so gathering only the giver's records
+    // printed the setter's REF in the header and never its text (round 47 quest
+    // sweep: the reviewer had to go and fetch it with --about). And a gate can be
+    // a `when` closure rather than a `req` array, which is how four of Bank's
+    // post-completion nodes read as ungated when they are not.
+    const setters = [], gates = [], extra = new Set();
+    const whenSrc = d => (typeof d.when === "function" ? String(d.when) : "");
     for (const [id, npc] of Object.entries(NPCS))
       (npc.dialogue || []).forEach((d, i) => {
-        if ((d.sets || []).includes(q.doneFlag)) setters.push(`npc.${id}.dialogue[${i}]`);
-        if ((d.req || []).includes(q.doneFlag)) gates.push(`npc.${id}.dialogue[${i}]`);
+        const ref = `npc.${id}.dialogue[${i}]`;
+        if ((d.sets || []).includes(q.doneFlag) || whenSrc(d).includes(`"${q.doneFlag}"`) && (d.fx || d.sets)) {
+          if ((d.sets || []).includes(q.doneFlag)) { setters.push(ref); extra.add(ref); }
+        }
+        const reads = (d.req || []).includes(q.doneFlag) ||
+          (d.notFlags || []).includes(q.doneFlag) || whenSrc(d).includes(`"${q.doneFlag}"`);
+        if (reads) { gates.push(ref + ((d.req || []).includes(q.doneFlag) ? "" : " (when)")); extra.add(ref); }
       });
     const state = dossierState("quest:" + qid, recs);
     if (delta && state === "current") continue;
@@ -464,8 +506,13 @@ if (has("quests")) {
     for (const [route, d] of Object.entries(q.descBy || {})) say(`   descBy.${route}: ${d}`);
     if (gates.length) say(`   read back by: ${gates.join(", ")}`);
     say(`   reward: ${JSON.stringify(q.reward || {})}`);
+    // …and the setter/gate nodes that live on somebody else, so the sharpest
+    // finding class — a doneFlag set at the wrong moment or gated on itself — is
+    // judgeable from this dump alone.
+    const shown = new Set(recs.map(r => r.ref));
+    for (const r of out) if (!own(r) && [...extra].some(x => r.ref.startsWith(x)) && !shown.has(r.ref)) recs.push(r);
     for (const r of recs) {
-      say(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
+      say(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]${gateOf(r) || ""}`);
       say(r.text);
       printRender(r);
     }

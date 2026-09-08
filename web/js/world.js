@@ -5280,6 +5280,22 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { req: ["helmetDelivered"], th: "โอเคเลย", rom: "okay loei",
         text: "\"My man! Pim say thank you. You need ride anywhere — special price. And listen: you have problem with anyone on this street, you stand next to Bank, okay?\"",
         short: "\"Need a ride, boss? Special price for you. Trouble on the street — stand by Bank.\"" },
+      // THE ONLY DOOR TO THE HELMET WAS THE MOT NODE (round 47 quest sweep). Pim's
+      // own instruction — "he lend me his spare and I leave it at his stand,
+      // AGAIN" — carries no gate, so a player who reaches her before Candy has
+      // named Mot walked down to Beach Road South, asked Bank about the helmet,
+      // and got "Where you go, boss?" with no reason given. And because the
+      // giving node was topicless, ASK BANK ABOUT HELMET opened with "Mot? Little
+      // rat", answering a question nobody had asked.
+      { topic: "helmet|spare helmet", notFlags: ["helmetDelivered", "hasHelmet"],
+        text: "\"The helmet.\" He is already reaching under the seat, and he is already " +
+          "laughing at her. \"Every time. She take it, she wear it, she leave it here, and " +
+          "then she call me: Bank, where is my helmet.\" He hands over a hot-pink one, the " +
+          "strap worn pale where somebody small has done it up a hundred times. \"Starlight " +
+          "Bar, Tree Town, the maze off Buakhao. Tell her: is the LAST spare.\" It is not " +
+          "the last spare.",
+        sets: ["hasHelmet"], gives: "helmet",
+        short: "\"Starlight Bar, Tree Town. Tell her is the last spare.\" It is not the last spare." },
       { req: ["knowMot"], notFlags: ["helmetDelivered", "hasHelmet"],
         text: "\"Mot? Little rat. He run, we watch. Hey — do me a favour, na? My girlfriend Pim, Starlight Bar, Tree Town — the maze off Buakhao. Take her my spare helmet, she forget again. I no can leave stand.\" He holds out a hot-pink helmet.", sets: ["hasHelmet"], gives: "helmet",
         short: "\"Take my pink helmet to Pim — Starlight Bar, in Tree Town.\"" },
@@ -11947,8 +11963,15 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
 
       // the nomad's vignette payoff: the first person in town to take the boy
       // seriously — by giving him the least serious job in the building
-      { topic: "kyle", when: (st, G) => G.quests.glass_start === "active" && !_flag("kyleShift"),
-        sets: ["kyleShift"],
+      // THE FLAG USED TO FIRE HERE, ON THE PROMISE (round 47 quest sweep): Bert
+      // said "Tuesday, four o'clock" and Kyle, two minutes' walk away, reported
+      // a shift he had not yet worked — "Tuesday happened" — while Bert himself
+      // reviewed it. A vouch is not a shift. This records the night it was given
+      // and _kyleTick sets kyleShift when a day has actually passed, so the two
+      // read-backs are true when they print and Bert's "tell him what I told
+      // him" has somewhere to be delivered in between.
+      { topic: "kyle", when: (st, G) => G.quests.glass_start === "active" && !_flag("kyleShift") && !G.kyleVouchDay,
+        fx: (st, G) => { G.kyleVouchDay = G.day; },
         text: "\"The content lad.\" Bert doesn't look up from the glass he's polishing. \"Been in " +
           "three times. Tips like a man apologising for existing. Asked could he 'shadow' me — I " +
           "told him this isn't a documentary, bud.\" The glass goes down, squared to the mat. " +
@@ -13572,8 +13595,11 @@ const QUESTS = {
     reqFlags: ["expatLife"],
     // you can only be offered the bar if you're the reason it wasn't sold
     deps: ["white_dish"],
-    desc: "The old man's not getting better, and Bert says holding isn't a plan — " +
-      "the Stinky sells to somebody. Ask him whether it could be you (ASK BERT ABOUT BUYING).",
+    // The journal quoted Bert's COMPLETION line ("holding's not a plan, bud, it's
+    // a stall") as the premise, one ask before he says it (round 47 quest sweep).
+    desc: "The old man's not getting better, and a bar that isn't sold to White Dish " +
+      "still has to be sold to somebody. Ask Bert whether it could be you " +
+      "(ASK BERT ABOUT BUYING).",
     at: "bert",
     doneFlag: "barPremises",
     reward: { money: 0, happy: 4 },
@@ -13618,9 +13644,25 @@ const QUESTS = {
   bar_opening: {
     name: "Under New Management",
     giver: "bert",
-    reqFlags: ["expatLife"],
-    desc: "Signed, stamped and paid. All that's left is to open your own doors and " +
+    // The desc said "paid" and the wiring never asked whether it was — the quest
+    // was offered the moment the 51% closed, and opening night is gated on the
+    // ฿120k deposit actually clearing, which can sit short for days (Keith,
+    // round 40: ฿355 short). A journal that says paid while the till says
+    // otherwise is the state-blind-prose defect (round 47 quest sweep).
+    reqFlags: ["expatLife", "barPaid"],
+    desc: "The deposit has cleared. All that's left is to open your own doors and " +
       "find out who walks in (ASK BERT ABOUT OPENING).",
+    // The 51% fork is visible at the payoff, so it is visible in the journal too:
+    // one route has paperwork pinned behind the till and one has nothing anybody
+    // can point at.
+    descBy: {
+      candy: "The deposit has cleared and the paperwork is signed, stamped and pinned " +
+        "behind the till. All that's left is to open your own doors and find out who " +
+        "walks in (ASK BERT ABOUT OPENING).",
+      tan: "The deposit has cleared. There is no paperwork and there was never a " +
+        "meeting, and the bar is yours anyway. All that's left is to open your own " +
+        "doors and find out who walks in (ASK BERT ABOUT OPENING).",
+    },
     deps: ["bar_partner"],
     at: "bert",
     doneFlag: "barOpen",

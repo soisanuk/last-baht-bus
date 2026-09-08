@@ -2368,7 +2368,15 @@ test("the glass-start vignette runs the real path: talk, answer, vouch at Bert, 
   G.room = "stinky_bar";
   out = []; doCommand("ask bert about kyle");
   assert.match(out.join("\n"), /dirty glass/, "Bert's price is the floor doctrine");
-  assert.ok(_flag("kyleShift"));
+  // A VOUCH IS NOT A SHIFT (round 47 quest sweep). The flag used to fire here, so
+  // Kyle reported "Tuesday happened" the same hour Bert agreed to give him the
+  // Tuesday. The vouch records the night; _kyleTick lands the shift after it.
+  assert.equal(G.kyleVouchDay, G.day, "the night of the vouch is on the record");
+  assert.ok(!_flag("kyleShift"), "and the boy has not carried the ice yet");
+  _kyleTick();
+  assert.ok(!_flag("kyleShift"), "…not on the same night, however many ticks");
+  G.day++; _kyleTick();
+  assert.ok(_flag("kyleShift"), "a day later, he has");
   _questTick();
   assert.equal(G.quests.glass_start, "done");
   // the payoff propagates both ways

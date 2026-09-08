@@ -117,6 +117,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "beeBanked",       // engine-set by _doSendMoney (SEND 100 TO BEE) — Bee's investor ack reads it
     "motFed",          // engine-set by _motDinner (BUY MOT DINNER — Madam Oy's instruction)
     "motBooted",       // engine-set by _motBoots (TIP/GIVE closing the football-boot gap he names at dinner)
+    "kyleShift",       // engine-set by _kyleTick, a day after Bert vouches — a vouch is not a shift
     // glamTruth/knowMikkel were allowlisted while the patrons lived in their own
     // table and this scan couldn't see their `sets`; one cast now, so the scan
     // covers them and the entries came off. The fold also brought patron `req`
