@@ -6,8 +6,8 @@ captures a brainstorm (2026-08-13) for the **genre-shift content-pack** that
 same reusable LBB engine. It lives in the repo, committed, *specifically because* the founding
 sibling-settings note got lost for weeks in a memory silo; this one won't.
 
-**It is grounded in real research (verified 2026-08-13), not vibes** — see the sources at the
-bottom. Where a fact was checked it says so; where we fictionalize, it says that too. The
+**It is grounded in real research, not vibes** — see Sources at the bottom (thin: the
+2026-08-13 pass was verified but never cited, and says so). Where a fact was checked it says so; where we fictionalize, it says that too. The
 project's whole value is that it doesn't assert false things about the world, and a near-future
 cyberpunk setting earns *no* exemption from that.
 
@@ -18,6 +18,80 @@ duller, sadder thing underneath. No neon katanas, no flying cars, no logo'd mega
 few minutes into the future and turn up the contrast on what's already true. The dystopia is
 here; it's a guy in a Grab jacket getting algorithmically underpaid while, three floors up, a
 trafficked worker pig-butchers a lonely widow for USDT.
+
+## The name — OPEN, working title `khlong` (2026-09-08)
+
+**There is no title yet**, and this was the only one of the three projects without one — *The
+Last Baht Bus* and *Second Road* both name a street and both names do double duty (the last
+songthaew and the curfew you are under; the road one block back from Beach Road, and looking
+one street behind the front). Use **`khlong`** — Thai for *canal* — for the repo and anything
+else that needs a string. One word, true of the setting under every candidate below, and it
+pre-commits to none of them.
+
+Shortlist, with what each buys:
+
+- **Saen Saep** (แสนแสบ) — the canal, and the street-pattern sibling. See *Two Saen Saeps*
+  below; this is the one with a spine attached. Note Mario: it is also the title of a
+  well-known old song, which is an argument in its favour (a name a Thai player hears as one
+  thing and a farang hears as another is itself the code-switch) and a caution (a famous song
+  lends the title its own mood, and if that mood is nostalgic it pulls against a thesis that is
+  explicitly anti-nostalgia).
+- **A Face for the Name** — already this doc's own language, from `ccibRadar.described`: the
+  officer has a face for the name, not just a number. Names the stakes rather than the place,
+  and is the only candidate a player understands *after* playing rather than before. Hold in
+  reserve if the spine turns out to be the CCIB leverage rather than the hustle.
+- **Ground Floor Only** — what a dead Thai mall actually is: the bottom still trading,
+  everything above it dark. A thesis in three words, and it is literally the setting.
+- **Din Daeng** — "red earth", the expressway and the flats. Grim, brutalist, real; less
+  double-duty than the others.
+
+**Etymology caveat.** แสนแสบ is popularly glossed as "a hundred thousand stings" (แสน a hundred
+thousand, แสบ stinging/smarting), usually attributed to the mosquitoes. The Thai PBS source
+below does *not* give an etymology and the origin is contested; do not assert it as fact in
+player-facing prose. Related and worth knowing: **Pantip** (พันธุ์ทิพย์) — พันธุ์ *phan*,
+lineage/stock, from Pali *bandhu*; ทิพย์ *thip*, divine — is a personal name, a woman's given
+name rather than a surname (Thai surnames only date from the 1913 mandate and are longer and
+deliberately unique). Bangkok commercial buildings are routinely named for a person in the
+owning family. Per the guardrails we do not name the plaza or the family; the note is here so
+nobody re-derives it.
+
+### Two Saen Saeps — a candidate spine, not just a title (2026-09-08)
+
+From the Thai PBS *The Active* piece in Sources. The canal is ~72 km, dug under **Rama III** to
+join the Chao Phraya to the Bang Pakong, and the thing worth building on is a resident's line:
+
+> แสนแสบในเมืองกับแสนแสบนอกเมืองมันไม่เหมือนกัน — *the in-town Saen Saep and the out-of-town
+> Saen Saep are not the same thing.*
+
+**Downtown**: black water, the smell, packed ferries, developed for transport and tourism.
+**Out at Minburi and Nong Chok**: a working canal — roughly half the long-time residents still
+live off it, and a single day's survey found **52 bird species**.
+
+Why this is a spine and not decoration:
+
+- **It IS the thesis.** "Don't invent cyberpunk, reveal that Bangkok already is" is at its most
+  honest when the cyberpunk city and the living one are the *same water under the same name*.
+  The contrast does the work no invented megacorp could.
+- **It gives the code-switch a MAP.** A *luk khrueng* protagonist who switches between two
+  systems gets a geography where the switch is a boat ride rather than a metaphor — and the
+  boat is the humble, real, locals-only transit that a baht bus is in LBB.
+- **It is the counterweight.** Scam servers and a dead mall alone are all gravity and no
+  ground. This is the Darkside-defiance layer's Bangkok equivalent: people who are not in the
+  economy the game is about, living forty minutes from it.
+- **The development story is one we have already written twice.** A concrete-embankment
+  "walking well, cycling well" project the residents learned about from a protest; 90-degree
+  walls that mean no boat can be launched, no fishing, no rescue if you go in; homes cracking
+  and settling. *"มันก็เหมือนกับว่าเราไม่มีตัวตนอีกต่อไป"* — it is as if we no longer exist.
+  Structurally that is the *jao pho* land pattern and the Samson-investors pattern in water
+  instead of land (`docs/factions-thai.md`).
+
+**Guardrail, stated before anyone gets attached.** Naming the game after a real canal whose real
+communities are being displaced *right now* is a heavier commitment than a setting detail, and
+heavier than White Dish (a fictionalised rollup). The repo rule holds — structural pattern only,
+no real names, no allegations, and the residents quoted in that article are sources, not
+characters — but a title points at something specific and current and borrows its weight. That
+is a decision to take deliberately, which is why it is written down here rather than discovered
+later.
 
 ## Grounding (verified 2026-08-13)
 
@@ -328,6 +402,9 @@ them see it; let the LBB player *recognise* it.
   the ceiling is higher here).
 - Whether the code-switch mechanic is a hard binary (pick a face per scene) or a fluid,
   read-the-room spectrum.
+- **The title.** Shortlist and reasoning in *The name* above; working title `khlong` until it
+  is settled. Tied to the spine question — *Saen Saep* only earns its keep if the two-canals
+  contrast is actually the spine.
 
 ## Decision log
 
@@ -337,4 +414,25 @@ them see it; let the LBB player *recognise* it.
 | 2026-08-13 | Research killed the "living Pantip" assumption (it died / became a food-wholesale hub); the **husk** is the setting instead, and it's stronger. Scam/laundering economy, CCIB competence, and the liability/surveillance regime verified as real and current. |
 | 2026-08-13 | Protagonist = *luk khrueng*, Pattaya-raised, fluent both, knows Eddy and Tan → the broker between the farang cyber-underground and the Thai patronage web. Central tension (Eddy wants WDG dead / Tan's syndicate profits from WDG alive) is pre-existing LBB canon. Signature mechanic: code-switching. |
 | 2026-09-06 | **Nont → CCIB HUMINT asset** (Mario's lean, adopted): leverage from what he did in LBB — mule SIMs, the CASH mule channel, the heist wire, the kid path — none charged, all kept. LBB exports `G.ccibRadar = {player, eddy, nont}`; a table maps each state to what CCIB holds and how the opening changes (no file → Tan's favour is the pull; SIM-only → he doesn't know, the opening is the tap on the shoulder; kid path → he knows, total leverage, Tan's hook reversed). Structural, never moral; reverse test holds (radar is a bonus, never a key); asks arrive as YES/NO/ASK modals from the other side of the wall. |
+| 2026-09-08 | **Naming opened and recorded, working title `khlong`.** The only one of the three projects with no title; both siblings name a street that does double duty. Shortlist: Saen Saep · A Face for the Name · Ground Floor Only · Din Daeng. Etymology of แสนแสบ noted as popular-but-contested and not to be asserted in prose; Pantip glossed as a given name (not a surname) so nobody re-derives it, with the no-real-families guardrail unchanged. |
+| 2026-09-08 | **"Two Saen Saeps" logged as a candidate SPINE** (Thai PBS source): the in-town canal and the out-of-town canal are the same water and not the same thing — black water and packed ferries downtown, ~50% of residents still living off it and 52 bird species at Minburi/Nong Chok. Argued as the honest form of the thesis, a map for the code-switch, the counterweight to scam-servers-and-a-dead-mall, and the *jao pho* land pattern in water. Guardrail attached: a title borrows the weight of a live displacement story, so it is a deliberate decision, not a default. |
 | 2026-09-03 | **Accessibility section added** after the LBB pass (Nok opening / Tan's habit / Owl's five words). The reverse test is a hard rule: every scene must work for a player who never played LBB; LBB payoffs are bonuses, never keys. The code-switch must telegraph; the CLI sim is never a literacy test. |
+
+## Sources
+
+The intro has promised "the sources at the bottom" since 2026-08-13 and there were none — the
+grounding pass was done and its conclusions recorded, but nothing was cited, which for a
+document whose stated value is that it doesn't assert false things about the world is the wrong
+way round. Anything added from here carries its link.
+
+- **Khlong Saen Saep — development against community life.** Thai PBS, *The Active*:
+  <https://theactive.thaipbs.or.th/read/khlong-saen-saep> (read 2026-09-08). Source for the
+  canal's scale and origin (~72 km, Rama III, Chao Phraya to Bang Pakong), the in-town /
+  out-of-town split, the ~50% of Minburi–Nong Chok residents still living off the water, the
+  52-bird survey, the "walking well, cycling well" embankment project and its 90-degree walls,
+  and the two residents quoted in *Two Saen Saeps*. **The people in that article are sources,
+  not characters** — the guardrail against real names and allegations applies to them exactly as
+  it applies to the factions note.
+- **The 2026-08-13 grounding pass** (dead Pantip / the scam-and-laundering economy / CCIB /
+  the liability and surveillance regime) was verified at the time but recorded without links.
+  Treat its conclusions as needing a re-check with citations before anything is built on them.
