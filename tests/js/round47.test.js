@@ -319,3 +319,63 @@ test("a bar with nobody in it still has somebody pouring", () => {
     }
   }
 });
+
+// ── A MODAL REDRAW MUST CARRY WHAT ITS LIVE PROMPT SAID ─────────────────────
+// Lock your phone mid-negotiation and come back: main.js redraws whatever modal
+// is gating input, and the redraw is a DIFFERENT code path from the prose that
+// armed it. Stuart (round 47) came back to three prices with no woman attached
+// to them, because _bfPrompt re-derives the money and the options and the girl
+// was named by the caller.
+//
+// The instrument matters as much as the fix. The first pass compared the live
+// output to the redraw LINE BY LINE and reported five modals broken — all five
+// false, because a redraw legitimately says the same thing in fewer lines (the
+// checkout list is three bullets live and one priced line on resume). What a
+// returning player actually needs off the screen is the MONEY, the COMMANDS and
+// the NAMES, so that is what this measures. Derived from the engine — every
+// ฿ figure, every CAPS command inside parens, every cast name — rather than a
+// hand-written list per modal, so a new modal is covered by adding it below.
+test("every modal redraw carries the money, the commands and the names its live prompt did", () => {
+  const money = t => [...t.matchAll(/฿\s?[\d,]+/g)].map(m => m[0].replace(/\s/g, ""));
+  const cmds = t => [...t.matchAll(/\(([^)]*)\)/g)]
+    .flatMap(m => [...m[1].matchAll(/\b[A-Z][A-Z ]{2,}\b/g)].map(x => x[0].trim()));
+  const names = t => Object.values(NPCS).map(n => n.name)
+    .filter(n => /^[A-Z]/.test(n) && new RegExp("\\b" + n + "\\b").test(t));
+
+  const armed = [];
+  const check = (label, arm) => {
+    out = []; newGame();
+    G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+    _setFlag("act1Done"); G.stage = "vacation"; G.money = 20000;
+    for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
+    G.peddlerNight = 2; G.soc.drinkCount = G.soc.drinkCount || {}; G.soc.selfDrinks = G.soc.selfDrinks || {};
+    arm();
+    const gate = G.pendingChoice || G.pendingBf || G.pendingEnc || G.pendingFare || G.pendingSoapy || G.game;
+    if (!gate) return;                       // this state didn't arm here; another test's problem
+    armed.push(label);
+    const live = text();
+    out = []; _renderResume();
+    const re = text();
+    for (const [what, got] of [["money", money(live)], ["command", cmds(live)], ["name", names(live)]])
+      for (const x of new Set(got))
+        assert.ok(re.includes(x), `${label}: the redraw drops the ${what} "${x}" — ` +
+          `a player who came back to this screen cannot act on it`);
+  };
+
+  check("barfine", () => {
+    G.room = "candy_bar"; G.nightTurn = 70;
+    for (const g of _npcsHere().filter(i => NPC_ROLES[i] === "hostess")) {
+      G.soc.drinks[g] = 8; G.soc.drinkCount[g] = 3; G.soc.selfDrinks[G.room] = 3;
+      run(`barfine ${g}`); if (G.pendingBf) return;
+    }
+  });
+  check("fare", () => { G.room = "beach_rd_c"; run("ride bus to naklua"); });
+  check("soapy", () => { G.room = "emperor_soapy"; run("soapy"); });
+  check("checkout", () => { G.room = _hotelRoomId(); G.nightTurn = 2; run("checkout"); });
+  check("vacation_end", () => { G.day = 8; _endVacation(); });
+  check("shift", () => {
+    G.stage = "expat"; _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.bar.paid = true;
+    G.room = "stinky_bar"; if (typeof _shiftAsk === "function") _shiftAsk();
+  });
+  assert.ok(armed.length >= 5, `the audit actually armed things (${armed.join(", ")})`);
+});

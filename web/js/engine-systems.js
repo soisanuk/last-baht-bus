@@ -737,12 +737,13 @@ function _doBarfine(arg) {
     const stf = _npcsHere().find(n => NPC_ROLES[n] === "mamasan") ||
       _npcsHere().find(n => NPC_ROLES[n] === "cashier");
     const who = stf ? NPCS[stf].name : "the mamasan";
+    G.pendingBf.mama = who;      // …so a redraw can say who is waiting on the answer
     _say(`${name} brightens and says nothing at all about money — that is not ` +
       `her department, and the cut she gets from it is nobody's business. ` +
       `${who} materialises at your elbow with the pleasant, final air of ` +
       "someone who does this arithmetic all night.");
   }
-  _bfPrompt();
+  _bfPrompt(true);   // the prose above just named her
 }
 
 // Why a girl turns the ask down. Refusals stick for the night (she doesn't
@@ -1177,8 +1178,22 @@ function _partyNightEnd(reason) {
   G.party = null;
 }
 
-function _bfPrompt() {
+// `fresh` = the arming prose just printed above this call and has already named
+// her. Every other route here — an invalid answer, a haggle, and above all the
+// REDRAW after a reload — has to say whose barfine this is, because the prices
+// and the options re-derive and the woman did not (Stuart, round 47: a man who
+// locks his phone mid-negotiation comes back to three numbers with nobody
+// attached to them). Of the game's nine input-gating modals this was the only
+// one that lost anything on resume, which is worth knowing: the other eight
+// re-derive their whole prompt, and the test beside this measures the
+// INFORMATION a redraw carries — money, commands, names — rather than its lines,
+// because a line-by-line comparison called five correct redraws broken.
+function _bfPrompt(fresh) {
   const { st, lt, id } = G.pendingBf;
+  if (!fresh && id && NPCS[id])
+    _say(_fmt(G.pendingBf.mama ? "(Still on the table: {n}'s barfine, with {m} waiting on your answer.)"
+      : "(Still on the table: {n}'s barfine.)",
+      { n: NPCS[id].name, m: G.pendingBf.mama }), "dim");
   const p = n => n ? "฿" + n : _L("waived — past midnight");
   // At her-farang tier she waives the fine herself — foreshadow it in the quote
   // so a price-shy player doesn't back out at a number that won't be charged
