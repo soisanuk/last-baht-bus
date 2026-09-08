@@ -3,29 +3,29 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pedicures and a pair of socks: sailors from USS Abraham Lincoln go wild in party resort of Pattaya",
-    "s": "theguardian.com",
-    "d": "05 Sep 2026"
-  },
-  {
-    "t": "USS Lincoln sailors delight in the ‘simple stuff’ as they get their first break in months in Thailand",
-    "s": "NBC News",
-    "d": "06 Sep 2026"
-  },
-  {
     "t": "After Months at War, Brief Solace in a Party Town Far From Home",
-    "s": "nytimes.com",
+    "s": "The New York Times",
     "d": "05 Sep 2026"
   },
   {
-    "t": "Thailand’s first DreamWorks hotel planned for Pattaya in 2033",
-    "s": "Thaiger",
-    "d": "05 Sep 2026"
-  },
-  {
-    "t": "US sailors help change perceptions of Pattaya beyond beer bars",
+    "t": "2 Chinese nationals arrested for illegal work at Pattaya language school",
     "s": "Pattaya Mail",
     "d": "08 Sep 2026"
+  },
+  {
+    "t": "A trip to Khao Chi Chan near Pattaya is one that you should not skip",
+    "s": "Thaiger",
+    "d": "07 Sep 2026"
+  },
+  {
+    "t": "Pattaya mayor estimates US Navy visit generated 100 million baht",
+    "s": "Khaosod English",
+    "d": "07 Sep 2026"
+  },
+  {
+    "t": "‘Load off my shoulders’: US sailors chase ‘simple stuff’ in Thailand’s Pattaya after 286 days at sea",
+    "s": "The Indian Express",
+    "d": "06 Sep 2026"
   },
   {
     "t": "Brawl And Puking Rock USS Lincoln Crew! Sailors’ Wild Pattaya Night Turns Into Chaos",
@@ -33,55 +33,55 @@ var NEWS_FEED = [
     "d": "05 Sep 2026"
   },
   {
+    "t": "Thousands of war-weary sailors FLOOD sin city - & 50k-sex workers ready",
+    "s": "the-sun.com",
+    "d": "08 Sep 2026"
+  },
+  {
     "t": "Land ahoy! From ship to shore",
     "s": "Bangkok Post",
     "d": "05 Sep 2026"
   },
   {
-    "t": "‘Load off my shoulders’: US sailors chase ‘simple stuff’ in Thailand’s Pattaya after 286 days at sea",
-    "s": "indianexpress.com",
-    "d": "06 Sep 2026"
-  },
-  {
     "t": "USS Abraham Lincoln heads back to US after 5-day Thailand port visit",
-    "s": "The Hill",
+    "s": "thehill.com",
     "d": "07 Sep 2026"
   },
   {
-    "t": "Influencer died after penis enlargement procedure in Thailand",
-    "s": "Bangkok Post",
-    "d": "07 Sep 2026"
-  },
-  {
-    "t": "Thailand Floats Plan to Source 89% of Power From Clean Energy",
+    "t": "Thailand Presses Israeli Ambassador Over Badly Behaved Tourists",
     "s": "Bloomberg.com",
     "d": "08 Sep 2026"
   },
   {
-    "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
-    "s": "DW.com",
+    "t": "Frenchman being deported for causing religious division",
+    "s": "Bangkok Post",
     "d": "07 Sep 2026"
   },
   {
-    "t": "Miss Thailand could not be competing at Miss Universe 2026 as MUO and Nawat Itsaragrisil dispute escalates",
-    "s": "Yahoo",
-    "d": "04 Sep 2026"
+    "t": "Thailand orders Israeli, French nationals deported after feud over zoo displaying Palestinian flag",
+    "s": "Anadolu Ajansı",
+    "d": "07 Sep 2026"
   },
   {
-    "t": "Thailand pauses all datacenter builds and approvals",
-    "s": "theregister.com",
-    "d": "07 Sep 2026"
+    "t": "12 South Koreans arrested in Thailand scam centre crackdown",
+    "s": "scmp.com",
+    "d": "08 Sep 2026"
+  },
+  {
+    "t": "‘Sky Castle Thailand’ vs the K-drama original: what to know about major twists",
+    "s": "Tatler Asia",
+    "d": "08 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-07","USD":32.89,"AUD":23.73,"GBP":44.5,"EUR":38.23};
+var FX_RATES = {"date":"2026-09-08","USD":32.92,"AUD":23.75,"GBP":44.58,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-08","temp":31,"humid":70,"code":3,"hi":31,"rain":57};
+var WX_NOW = {"date":"2026-09-08","temp":29,"humid":76,"code":3,"hi":32,"rain":92};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-05","done":true,"h":"Newcastle","hs":2,"a":"Bournemouth","as":2},{"d":"2026-09-05","done":true,"h":"Brentford","hs":1,"a":"Sunderland","as":1},{"d":"2026-09-05","done":true,"h":"Brighton","hs":1,"a":"Leeds","as":1},{"d":"2026-09-05","done":true,"h":"Fulham","hs":2,"a":"C Palace","as":3},{"d":"2026-09-05","done":true,"h":"Man City","hs":1,"a":"Coventry","as":0},{"d":"2026-09-05","done":true,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":true,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":true,"h":"Everton","hs":2,"a":"Man United","as":2},{"d":"2026-09-06","done":true,"h":"Arsenal","hs":2,"a":"Chelsea","as":1},{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4435,"date":"2026-09-08","baht":69000};
+var GOLD = {"usd":4396,"date":"2026-09-08","baht":68450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78834,"thb":2591128};
+var BTC = {"usd":78691,"thb":2588941};
