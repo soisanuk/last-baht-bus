@@ -14,6 +14,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   is **requested through the user, not made across the boundary.**
 - **`web/portraits/`, `scripts/gen-portraits.py`, the thumbnail track** — the art
   agent's. Consumer wiring (`_avatarSrc`, `web/js/portrait-thumbs.js`) is ours.
+- **`~/projects/khlong`** — the Bangkok follow-on (working title; the name is open — see
+  `docs/bangkok-concept.md` *The name*). Created 2026-09-08 with a `HANDOFF.md` and nothing
+  else; concept only. Same rule as Second Road: it treats this repo as **read-only upstream**
+  and the design stays HERE in `docs/bangkok-concept.md`, which that handoff points at rather
+  than duplicating. Anything it needs from us — today the one live item is that `G.ccibRadar`
+  rides the full save but is **not** a `BATON_FIELDS` entry — is requested through the user.
 
 **`scripts/gen-portraits.py` REGENERATES EVERY PORTRAIT.** Running it rewrites all
 ~315 PNGs as pixel art, which silently clobbers the art agent's full-size SDXL
