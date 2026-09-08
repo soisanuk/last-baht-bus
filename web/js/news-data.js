@@ -8,34 +8,14 @@ var NEWS_FEED = [
     "d": "05 Sep 2026"
   },
   {
-    "t": "Motorcycle crash leaves man distressed before he holds wife at knifepoint",
-    "s": "Pattaya Mail",
-    "d": "06 Sep 2026"
-  },
-  {
-    "t": "Chon Buri busts unlicensed Argentinian steakhouse",
-    "s": "Thaiger",
-    "d": "06 Sep 2026"
-  },
-  {
     "t": "USS Lincoln sailors delight in the ‘simple stuff’ as they get their first break in months in Thailand",
     "s": "NBC News",
     "d": "06 Sep 2026"
   },
   {
-    "t": "‘Load off my shoulders’: US sailors chase ‘simple stuff’ in Thailand’s Pattaya after 286 days at sea",
-    "s": "The Indian Express",
-    "d": "06 Sep 2026"
-  },
-  {
-    "t": "Foreign interloper gropes woman at cannabis shop",
-    "s": "Bangkok Post",
-    "d": "06 Sep 2026"
-  },
-  {
-    "t": "Drones deployed over Thailand's \"sin city\" for USS Abraham Lincoln visit",
-    "s": "Newsweek",
-    "d": "04 Sep 2026"
+    "t": "After Months at War, Brief Solace in a Party Town Far From Home",
+    "s": "nytimes.com",
+    "d": "05 Sep 2026"
   },
   {
     "t": "Thailand’s first DreamWorks hotel planned for Pattaya in 2033",
@@ -43,18 +23,28 @@ var NEWS_FEED = [
     "d": "05 Sep 2026"
   },
   {
+    "t": "US sailors help change perceptions of Pattaya beyond beer bars",
+    "s": "Pattaya Mail",
+    "d": "08 Sep 2026"
+  },
+  {
+    "t": "Brawl And Puking Rock USS Lincoln Crew! Sailors’ Wild Pattaya Night Turns Into Chaos",
+    "s": "The Times of India",
+    "d": "05 Sep 2026"
+  },
+  {
+    "t": "Land ahoy! From ship to shore",
+    "s": "Bangkok Post",
+    "d": "05 Sep 2026"
+  },
+  {
+    "t": "‘Load off my shoulders’: US sailors chase ‘simple stuff’ in Thailand’s Pattaya after 286 days at sea",
+    "s": "indianexpress.com",
+    "d": "06 Sep 2026"
+  },
+  {
     "t": "USS Abraham Lincoln heads back to US after 5-day Thailand port visit",
     "s": "The Hill",
-    "d": "07 Sep 2026"
-  },
-  {
-    "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
-    "s": "dw.com",
-    "d": "07 Sep 2026"
-  },
-  {
-    "t": "Adnoc Said to Be in Talks for Thailand, Dangote Refinery Stakes",
-    "s": "bloomberg.com",
     "d": "07 Sep 2026"
   },
   {
@@ -63,25 +53,35 @@ var NEWS_FEED = [
     "d": "07 Sep 2026"
   },
   {
-    "t": "Thailand pauses all datacenter builds and approvals",
-    "s": "The Register",
+    "t": "Thailand Floats Plan to Source 89% of Power From Clean Energy",
+    "s": "Bloomberg.com",
+    "d": "08 Sep 2026"
+  },
+  {
+    "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
+    "s": "DW.com",
     "d": "07 Sep 2026"
   },
   {
-    "t": "Thai PM Anutin, 1 year on, prioritizes Chinese capital to buoy growth",
-    "s": "Nikkei Asia",
+    "t": "Miss Thailand could not be competing at Miss Universe 2026 as MUO and Nawat Itsaragrisil dispute escalates",
+    "s": "Yahoo",
+    "d": "04 Sep 2026"
+  },
+  {
+    "t": "Thailand pauses all datacenter builds and approvals",
+    "s": "theregister.com",
     "d": "07 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-07","USD":32.89,"AUD":23.73,"GBP":44.5,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-08","temp":28,"humid":79,"code":3,"hi":31,"rain":75};
+var WX_NOW = {"date":"2026-09-08","temp":31,"humid":70,"code":3,"hi":31,"rain":57};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-04","done":true,"h":"Ipswich","hs":0,"a":"Liverpool","as":2},{"d":"2026-09-05","done":true,"h":"Newcastle","hs":2,"a":"Bournemouth","as":2},{"d":"2026-09-05","done":true,"h":"Brentford","hs":1,"a":"Sunderland","as":1},{"d":"2026-09-05","done":true,"h":"Brighton","hs":1,"a":"Leeds","as":1},{"d":"2026-09-05","done":true,"h":"Fulham","hs":2,"a":"C Palace","as":3},{"d":"2026-09-05","done":true,"h":"Man City","hs":1,"a":"Coventry","as":0},{"d":"2026-09-05","done":true,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":true,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":true,"h":"Everton","hs":2,"a":"Man United","as":2},{"d":"2026-09-06","done":true,"h":"Arsenal","hs":2,"a":"Chelsea","as":1}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-05","done":true,"h":"Newcastle","hs":2,"a":"Bournemouth","as":2},{"d":"2026-09-05","done":true,"h":"Brentford","hs":1,"a":"Sunderland","as":1},{"d":"2026-09-05","done":true,"h":"Brighton","hs":1,"a":"Leeds","as":1},{"d":"2026-09-05","done":true,"h":"Fulham","hs":2,"a":"C Palace","as":3},{"d":"2026-09-05","done":true,"h":"Man City","hs":1,"a":"Coventry","as":0},{"d":"2026-09-05","done":true,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0},{"d":"2026-09-05","done":true,"h":"Hull","hs":0,"a":"Aston Villa","as":0},{"d":"2026-09-06","done":true,"h":"Everton","hs":2,"a":"Man United","as":2},{"d":"2026-09-06","done":true,"h":"Arsenal","hs":2,"a":"Chelsea","as":1},{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4407,"date":"2026-09-07","baht":68550};
+var GOLD = {"usd":4435,"date":"2026-09-08","baht":69000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79201,"thb":2604120};
+var BTC = {"usd":78834,"thb":2591128};
