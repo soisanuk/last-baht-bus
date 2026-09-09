@@ -23,28 +23,38 @@ var NEWS_FEED = [
     "d": "08 Sep 2026"
   },
   {
+    "t": "Japanese F-2 fighters make history with first Thailand landing at U-Tapao",
+    "s": "Pattaya Mail",
+    "d": "06 Sep 2026"
+  },
+  {
     "t": "Five Days, thousands of smiles as Thailand bids farewell to USS Abraham Lincoln",
     "s": "Pattaya Mail",
     "d": "06 Sep 2026"
   },
   {
-    "t": "Chon Buri busts unlicensed Argentinian steakhouse",
-    "s": "Thaiger",
+    "t": "USS Abraham Lincoln departs Thailand as crowds gather to see carrier off",
+    "s": "Pattaya Mail",
     "d": "06 Sep 2026"
   },
   {
-    "t": "US sailor tips Pattaya Grab driver 1,000 baht for 120-baht fare",
-    "s": "Pattaya Mail",
+    "t": "After Months at War, Brief Solace in a Party Town Far From Home",
+    "s": "The New York Times",
     "d": "05 Sep 2026"
   },
   {
-    "t": "Female US sailors discover Pattaya’s softer side during port visit",
-    "s": "Pattaya Mail",
-    "d": "05 Sep 2026"
+    "t": "Thailand investigates after British influencer dies following penis enlargement operation",
+    "s": "Euronews.com",
+    "d": "09 Sep 2026"
   },
   {
     "t": "Thailand Presses Israeli Ambassador Over Badly Behaved Tourists",
     "s": "Bloomberg.com",
+    "d": "08 Sep 2026"
+  },
+  {
+    "t": "Thailand to deport French zoo owner who banned Israeli visitors",
+    "s": "nypost.com",
     "d": "08 Sep 2026"
   },
   {
@@ -53,35 +63,25 @@ var NEWS_FEED = [
     "d": "09 Sep 2026"
   },
   {
-    "t": "Thailand to deport French zoo owner who banned Israeli visitors",
-    "s": "nypost.com",
-    "d": "08 Sep 2026"
-  },
-  {
-    "t": "Thailand investigates after British influencer dies following penis enlargement operation",
-    "s": "Euronews.com",
+    "t": "USS Abraham Lincoln leaves Thailand",
+    "s": "NBC News",
     "d": "09 Sep 2026"
   },
   {
-    "t": "British-Nigerian influencer died after penile filler procedure in Thailand",
-    "s": "Bangkok Post",
-    "d": "06 Sep 2026"
-  },
-  {
-    "t": "Thailand investigates clinic after death of British influencer undergoing penis enlargement",
-    "s": "The Independent",
+    "t": "Gunman shoots and kills a teacher at a kindergarten in eastern Thailand",
+    "s": "AP News",
     "d": "09 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-09","USD":32.87,"AUD":23.75,"GBP":44.6,"EUR":38.3};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-09","temp":28,"humid":80,"code":3,"hi":33,"rain":67};
+var WX_NOW = {"date":"2026-09-10","temp":28,"humid":80,"code":3,"hi":32,"rain":97};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-06","done":true,"h":"Everton","hs":2,"a":"Man United","as":2},{"d":"2026-09-06","done":true,"h":"Arsenal","hs":2,"a":"Chelsea","as":1},{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0},{"d":"2026-09-12","done":false,"h":"C Palace","hs":0,"a":"Ipswich","as":0},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4403,"date":"2026-09-09","baht":68450};
+var GOLD = {"usd":4401,"date":"2026-09-09","baht":68400};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78817,"thb":2594030};
+var BTC = {"usd":78170,"thb":2573346};
