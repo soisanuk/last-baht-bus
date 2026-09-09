@@ -8,14 +8,9 @@ var NEWS_FEED = [
     "d": "05 Sep 2026"
   },
   {
-    "t": "Thailand, Israel warn tourists to respect laws after foreign violations",
-    "s": "Pattaya Mail",
-    "d": "08 Sep 2026"
-  },
-  {
-    "t": "Pattaya mayor estimates US Navy visit generated 100 million baht",
-    "s": "Khaosod English",
-    "d": "07 Sep 2026"
+    "t": "USS Lincoln sailors delight in the ‘simple stuff’ as they get their first break in months in Thailand",
+    "s": "NBC News",
+    "d": "06 Sep 2026"
   },
   {
     "t": "Pattaya Soi Buakhao waits for high season as spending remains weak",
@@ -38,9 +33,19 @@ var NEWS_FEED = [
     "d": "05 Sep 2026"
   },
   {
-    "t": "US sailors leave Pattaya after splashing millions during five-day shore break",
-    "s": "Malay Mail",
+    "t": "Thailand, Israel warn tourists to respect laws after foreign violations",
+    "s": "Pattaya Mail",
+    "d": "08 Sep 2026"
+  },
+  {
+    "t": "Chon Buri busts unlicensed Argentinian steakhouse",
+    "s": "Thaiger",
     "d": "06 Sep 2026"
+  },
+  {
+    "t": "Thailand investigates after Briton dies after penis enlargement",
+    "s": "Euronews.com",
+    "d": "09 Sep 2026"
   },
   {
     "t": "Thailand Presses Israeli Ambassador Over Badly Behaved Tourists",
@@ -48,9 +53,9 @@ var NEWS_FEED = [
     "d": "08 Sep 2026"
   },
   {
-    "t": "Govt defends bid to eject Frenchman",
-    "s": "Bangkok Post",
-    "d": "08 Sep 2026"
+    "t": "Thailand summons Israeli envoy over tourists' conduct, demands stronger action",
+    "s": "The Jerusalem Post",
+    "d": "09 Sep 2026"
   },
   {
     "t": "Thailand to deport French zoo owner who banned Israeli visitors",
@@ -58,30 +63,25 @@ var NEWS_FEED = [
     "d": "08 Sep 2026"
   },
   {
-    "t": "US carrier Abraham Lincoln departs Thailand after respite visit",
-    "s": "Reuters",
-    "d": "06 Sep 2026"
+    "t": "USS Abraham Lincoln leaves Thailand",
+    "s": "NBC News",
+    "d": "07 Sep 2026"
   },
   {
-    "t": "All we know about the iPhone 18 launch in Thailand, September 10",
-    "s": "Time Out Worldwide",
-    "d": "08 Sep 2026"
-  },
-  {
-    "t": "12 South Koreans arrested in Thailand scam centre crackdown",
-    "s": "South China Morning Post",
+    "t": "Government defends bid to eject Frenchman",
+    "s": "Bangkok Post",
     "d": "08 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-08","USD":32.92,"AUD":23.75,"GBP":44.58,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-09","temp":31,"humid":66,"code":3,"hi":32,"rain":64};
+var WX_NOW = {"date":"2026-09-09","temp":29,"humid":79,"code":3,"hi":32,"rain":64};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-06","done":true,"h":"Everton","hs":2,"a":"Man United","as":2},{"d":"2026-09-06","done":true,"h":"Arsenal","hs":2,"a":"Chelsea","as":1},{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0},{"d":"2026-09-12","done":false,"h":"C Palace","hs":0,"a":"Ipswich","as":0},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4379,"date":"2026-09-09","baht":68200};
+var GOLD = {"usd":4404,"date":"2026-09-09","baht":68550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78908,"thb":2594497};
+var BTC = {"usd":78808,"thb":2592112};
