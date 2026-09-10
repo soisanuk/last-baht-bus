@@ -43,24 +43,14 @@ var NEWS_FEED = [
     "d": "08 Sep 2026"
   },
   {
-    "t": "Hanwha Ocean Selected as Preferred Bidder for Thailand’s Next-Generation Frigate Program",
-    "s": "navalnews.com",
-    "d": "09 Sep 2026"
-  },
-  {
-    "t": "Watch: Inside Thailand's school shooter drills following recent attacks",
-    "s": "BBC",
-    "d": "09 Sep 2026"
-  },
-  {
     "t": "Hundreds rally at Israeli embassy in Bangkok to demand foreigners respect Thai laws",
     "s": "AP News",
     "d": "10 Sep 2026"
   },
   {
-    "t": "Suspected gunman in Thailand kindergarten shooting surrenders after 18-hour standoff",
-    "s": "ABC News - Breaking News, Latest News and Videos",
-    "d": "08 Sep 2026"
+    "t": "Thailand meets with Israeli ambassador to discuss incidents involving tourists",
+    "s": "jpost.com",
+    "d": "10 Sep 2026"
   },
   {
     "t": "Protests against Israelis, Jews in Thailand go on after failed bid to nix Rosh Hashanah event",
@@ -68,20 +58,30 @@ var NEWS_FEED = [
     "d": "10 Sep 2026"
   },
   {
-    "t": "Thailand to provide $1.5 billion for rooftop solar scheme starting mid-October, finance minister says",
-    "s": "Reuters",
+    "t": "Hanwha Ocean Selected as Preferred Bidder for Thailand’s Next-Generation Frigate Program",
+    "s": "navalnews.com",
+    "d": "09 Sep 2026"
+  },
+  {
+    "t": "Suspected gunman in Thailand kindergarten shooting surrenders after 18-hour standoff",
+    "s": "ABC News - Breaking News, Latest News and Videos",
+    "d": "08 Sep 2026"
+  },
+  {
+    "t": "Watch: Inside Thailand's school shooter drills following recent attacks",
+    "s": "BBC",
     "d": "09 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-10","USD":32.99,"AUD":23.71,"GBP":44.6,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-10","temp":26,"humid":95,"code":95,"hi":33,"rain":100};
+var WX_NOW = {"date":"2026-09-11","temp":26,"humid":91,"code":80,"hi":30,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0},{"d":"2026-09-12","done":false,"h":"C Palace","hs":0,"a":"Ipswich","as":0},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4363,"date":"2026-09-10","baht":68050};
+var GOLD = {"usd":4316,"date":"2026-09-10","baht":67350};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":76982,"thb":2545160};
+var BTC = {"usd":77229,"thb":2558990};
