@@ -4,7 +4,22 @@
 var NEWS_FEED = [
   {
     "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
-    "s": "dw.com",
+    "s": "DW.com",
+    "d": "07 Sep 2026"
+  },
+  {
+    "t": "Chachoengsao orders unauthorized Jewish cemetery demolished, bodies exhumed",
+    "s": "Pattaya Mail",
+    "d": "09 Sep 2026"
+  },
+  {
+    "t": "US Sailors Lose It in Pattaya! Drunken Brawl Erupts, Thai Police Intervene | Firstpost America",
+    "s": "Firstpost",
+    "d": "07 Sep 2026"
+  },
+  {
+    "t": "US Navy Pattaya visit boosts shopping and dining spending",
+    "s": "Thaiger",
     "d": "07 Sep 2026"
   },
   {
@@ -13,14 +28,14 @@ var NEWS_FEED = [
     "d": "08 Sep 2026"
   },
   {
-    "t": "US Navy Pattaya visit boosts shopping and dining spending",
-    "s": "Thaiger",
-    "d": "07 Sep 2026"
-  },
-  {
     "t": "Thailand, Israel warn tourists to respect laws after foreign violations",
     "s": "Pattaya Mail",
     "d": "08 Sep 2026"
+  },
+  {
+    "t": "‘Thai Travel Thai Plus’ offers 1 million benefits worth 3.5 billion baht",
+    "s": "Pattaya Mail",
+    "d": "09 Sep 2026"
   },
   {
     "t": "Japanese F-2 fighters make history with first Thailand landing at U-Tapao",
@@ -28,23 +43,8 @@ var NEWS_FEED = [
     "d": "06 Sep 2026"
   },
   {
-    "t": "Five Days, thousands of smiles as Thailand bids farewell to USS Abraham Lincoln",
-    "s": "Pattaya Mail",
-    "d": "06 Sep 2026"
-  },
-  {
-    "t": "USS Abraham Lincoln departs Thailand as crowds gather to see carrier off",
-    "s": "Pattaya Mail",
-    "d": "06 Sep 2026"
-  },
-  {
-    "t": "After Months at War, Brief Solace in a Party Town Far From Home",
-    "s": "The New York Times",
-    "d": "05 Sep 2026"
-  },
-  {
-    "t": "Thailand investigates after British influencer dies following penis enlargement operation",
-    "s": "Euronews.com",
+    "t": "Thailand Summons Israeli Ambassador to Discuss Bad Tourist Behavior",
+    "s": "Fodors Travel Guide",
     "d": "09 Sep 2026"
   },
   {
@@ -54,34 +54,34 @@ var NEWS_FEED = [
   },
   {
     "t": "Thailand to deport French zoo owner who banned Israeli visitors",
-    "s": "nypost.com",
+    "s": "New York Post",
     "d": "08 Sep 2026"
   },
   {
-    "t": "Thailand summons Israeli envoy over tourists' conduct, demands stronger action",
-    "s": "The Jerusalem Post",
+    "t": "Thailand investigates after British influencer dies following penis enlargement operation",
+    "s": "Euronews.com",
     "d": "09 Sep 2026"
   },
   {
-    "t": "USS Abraham Lincoln leaves Thailand",
-    "s": "NBC News",
+    "t": "Watch: Inside Thailand's school shooter drills following recent attacks",
+    "s": "BBC",
     "d": "09 Sep 2026"
   },
   {
-    "t": "Gunman shoots and kills a teacher at a kindergarten in eastern Thailand",
-    "s": "AP News",
+    "t": "Thailand to provide $1.5 billion for rooftop solar scheme starting mid-October, finance minister says",
+    "s": "Reuters",
     "d": "09 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-09","USD":32.87,"AUD":23.75,"GBP":44.6,"EUR":38.3};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-10","temp":28,"humid":80,"code":3,"hi":32,"rain":97};
+var WX_NOW = {"date":"2026-09-10","temp":31,"humid":64,"code":2,"hi":32,"rain":100};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-06","done":true,"h":"Everton","hs":2,"a":"Man United","as":2},{"d":"2026-09-06","done":true,"h":"Arsenal","hs":2,"a":"Chelsea","as":1},{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0},{"d":"2026-09-12","done":false,"h":"C Palace","hs":0,"a":"Ipswich","as":0},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0},{"d":"2026-09-12","done":false,"h":"C Palace","hs":0,"a":"Ipswich","as":0},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4401,"date":"2026-09-09","baht":68400};
+var GOLD = {"usd":4408,"date":"2026-09-10","baht":68500};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78170,"thb":2573346};
+var BTC = {"usd":78339,"thb":2577814};
