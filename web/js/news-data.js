@@ -3,13 +3,13 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Senior police officer charged in wife’s fatal shooting at East Pattaya kindergarten",
-    "s": "Pattaya Mail",
+    "t": "Concerns raised over foreign nominee-linked investment in Pattaya",
+    "s": "Nation Thailand",
     "d": "11 Sep 2026"
   },
   {
-    "t": "Concerns raised over foreign nominee-linked investment in Pattaya",
-    "s": "Nation Thailand",
+    "t": "Senior police officer charged in wife’s fatal shooting at East Pattaya kindergarten",
+    "s": "Pattaya Mail",
     "d": "11 Sep 2026"
   },
   {
@@ -23,6 +23,16 @@ var NEWS_FEED = [
     "d": "11 Sep 2026"
   },
   {
+    "t": "‘Fast Track to an Inheritance’ Pattaya faces growing wrong-way driving risk",
+    "s": "Pattaya Mail",
+    "d": "09 Sep 2026"
+  },
+  {
+    "t": "Chon Buri kindergarten gunman surrenders after overnight standoff",
+    "s": "Thaiger",
+    "d": "10 Sep 2026"
+  },
+  {
     "t": "Pattaya tourists feel the heat by day before evening rain soaks the city",
     "s": "Pattaya Mail",
     "d": "11 Sep 2026"
@@ -33,14 +43,24 @@ var NEWS_FEED = [
     "d": "11 Sep 2026"
   },
   {
-    "t": "Pattaya nightlife under pressure as Gen Z stays home and Gen Y tightens its belt",
-    "s": "Pattaya Mail",
-    "d": "09 Sep 2026"
+    "t": "Thailand meets with Israeli ambassador to discuss incidents involving tourists",
+    "s": "The Jerusalem Post",
+    "d": "10 Sep 2026"
   },
   {
-    "t": "‘Fast Track to an Inheritance’ Pattaya faces growing wrong-way driving risk",
-    "s": "Pattaya Mail",
-    "d": "09 Sep 2026"
+    "t": "Thailand to deport French zoo owner who banned Israeli visitors",
+    "s": "New York Post",
+    "d": "08 Sep 2026"
+  },
+  {
+    "t": "Buddhist monk arrested in Thailand on suspicion of embezzling $2.8m",
+    "s": "The Guardian",
+    "d": "11 Sep 2026"
+  },
+  {
+    "t": "Thai abbot arrested in $3 million embezzlement scandal",
+    "s": "BBC",
+    "d": "11 Sep 2026"
   },
   {
     "t": "Thailand to increase tax on EV imports, official says",
@@ -48,40 +68,20 @@ var NEWS_FEED = [
     "d": "10 Sep 2026"
   },
   {
-    "t": "Thailand meets with Israeli ambassador to discuss incidents involving tourists",
-    "s": "jpost.com",
+    "t": "Suspected gunman in Thailand kindergarten shooting surrenders after 18-hour standoff",
+    "s": "AP News",
     "d": "10 Sep 2026"
-  },
-  {
-    "t": "Data centres sprouting in Thailand fuel fears of public health impact",
-    "s": "South China Morning Post",
-    "d": "11 Sep 2026"
-  },
-  {
-    "t": "Thailand pushes India on joint production and cross-border QR payments",
-    "s": "Thaiger",
-    "d": "10 Sep 2026"
-  },
-  {
-    "t": "Thai abbot, 66, accused of embezzling over S$3.8 million in sex scandal with female aide",
-    "s": "Mothership",
-    "d": "11 Sep 2026"
-  },
-  {
-    "t": "Watch: Inside Thailand's school shooter drills following recent attacks",
-    "s": "BBC",
-    "d": "09 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-10","USD":32.99,"AUD":23.71,"GBP":44.6,"EUR":38.33};
+var FX_RATES = {"date":"2026-09-11","USD":33.07,"AUD":23.72,"GBP":44.66,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-11","temp":27,"humid":92,"code":3,"hi":30,"rain":98};
+var WX_NOW = {"date":"2026-09-11","temp":26,"humid":94,"code":51,"hi":30,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0},{"d":"2026-09-12","done":false,"h":"C Palace","hs":0,"a":"Ipswich","as":0},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4340,"date":"2026-09-11","baht":67700};
+var GOLD = {"usd":4358,"date":"2026-09-11","baht":68150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":76774,"thb":2537388};
+var BTC = {"usd":77599,"thb":2562667};
