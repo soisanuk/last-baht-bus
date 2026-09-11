@@ -479,9 +479,13 @@ if (has("quests")) {
     for (const [id, npc] of Object.entries(NPCS))
       (npc.dialogue || []).forEach((d, i) => {
         const ref = `npc.${id}.dialogue[${i}]`;
-        if ((d.sets || []).includes(q.doneFlag) || whenSrc(d).includes(`"${q.doneFlag}"`) && (d.fx || d.sets)) {
-          if ((d.sets || []).includes(q.doneFlag)) { setters.push(ref); extra.add(ref); }
-        }
+        // a node SETS the flag in its `sets:` array, or inside its `fx` closure
+        // (`_setFlag("x")` in source) — the second path was dead in the first cut,
+        // its outer test gated an inner test that only ever read `sets` (ultrareview)
+        const fxSrc = typeof d.fx === "function" ? String(d.fx) : "";
+        const viaSets = (d.sets || []).includes(q.doneFlag);
+        const viaFx = fxSrc.includes(`"${q.doneFlag}"`) || fxSrc.includes(`'${q.doneFlag}'`);
+        if (viaSets || viaFx) { setters.push(ref + (viaSets ? "" : " (fx)")); extra.add(ref); }
         const reads = (d.req || []).includes(q.doneFlag) ||
           (d.notFlags || []).includes(q.doneFlag) || whenSrc(d).includes(`"${q.doneFlag}"`);
         if (reads) { gates.push(ref + ((d.req || []).includes(q.doneFlag) ? "" : " (when)")); extra.add(ref); }

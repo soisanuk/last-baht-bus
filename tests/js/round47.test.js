@@ -264,6 +264,14 @@ function motBoots() {
   at(); out = []; run("give 400 to mot");
   assert.equal(G.motBoots, MOT_BOOTS - MOT_BOOTS_SAVED, "the gap is closed exactly");
   assert.ok(m0 - G.money <= 260 + 40, "he takes the gap and hands the rest back");
+  // …and he counts it ONCE. The first cut printed a "too much, he hands the rest
+  // back" line and then fell through to the completion pool, so Mot took the
+  // money twice in one beat (ultrareview, 2026-09-11). This test passed then,
+  // because it asserted the flag and the money and never the prose.
+  const takes = _MOT_BOOTS_TAKE.filter(t => text().includes(t.slice(0, 40))).length;
+  assert.equal(takes, 1, "one completion beat");
+  assert.match(text(), /hands the rest straight back/, "the overshoot is acknowledged");
+  assert.doesNotMatch(text(), /Too much, phi/, "…on the money line, not as a second counting");
   assert.ok(_flag("motBooted"));
   assert.ok(G.happy > h0, "a kindness pays, and it is not a conquest");
   at(); out = []; run("tip mot 500");

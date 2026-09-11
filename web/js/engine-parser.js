@@ -11061,8 +11061,7 @@ function _motBoots(amount) {
   if (!_flag("motFed")) return false;      // the subject does not exist until he raises it
   const gap = _motBootsGap();
   const take = Math.min(amount, gap);
-  if (amount > gap) _say(`“Too much, phi.” He takes ฿${take} of it and hands the rest straight back, ` +
-    "without discussion. “The shoes cost what the shoes cost.”", "dim");
+  const over = amount > gap;               // an overshoot always closes the gap, so it is ONE beat below
   G.money -= take;
   G.motBoots = (G.motBoots || 0) + take;
   if (_motBootsGap() > 0) {
@@ -11075,7 +11074,13 @@ function _motBoots(amount) {
   _say(_pickVary(_MOT_BOOTS_TAKE, "motboots"), "win");
   _addHappy(3);                            // a kindness, never a conquest — no treadmill
   _repGain();
-  _say(`(฿${_num(take)}. ฿${_num(G.money)} left.)`, "dim");
+  // The hand-back rides the money line. It used to be its own "Too much, phi — he
+  // takes ฿X and hands the rest back" printed BEFORE the completion pool, so Mot
+  // counted the same notes twice in one beat, at exactly the moment the arc is
+  // meant to land (ultrareview, 2026-09-11).
+  _say(over
+    ? `(He takes ฿${_num(take)} of it and hands the rest straight back — “the shoes cost what the shoes cost.” ฿${_num(G.money)} left.)`
+    : `(฿${_num(take)}. ฿${_num(G.money)} left.)`, "dim");
   return true;
 }
 
