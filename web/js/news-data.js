@@ -3,6 +3,16 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Thai man takes 400 baht to open mule account, faces four warrants",
+    "s": "Pattaya Mail",
+    "d": "11 Sep 2026"
+  },
+  {
+    "t": "House committee presses crackdown on foreign nominee property in Pattaya",
+    "s": "Thaiger",
+    "d": "12 Sep 2026"
+  },
+  {
     "t": "Concerns raised over foreign nominee-linked investment in Pattaya",
     "s": "Nation Thailand",
     "d": "11 Sep 2026"
@@ -11,11 +21,6 @@ var NEWS_FEED = [
     "t": "Pattaya’s Big Buddha Hill road faces urgent repairs after landslide damage",
     "s": "Pattaya Mail",
     "d": "11 Sep 2026"
-  },
-  {
-    "t": "House committee presses crackdown on foreign nominee property in Pattaya",
-    "s": "Thaiger",
-    "d": "12 Sep 2026"
   },
   {
     "t": "Overnight rain floods roads, homes across Pattaya",
@@ -38,11 +43,6 @@ var NEWS_FEED = [
     "d": "11 Sep 2026"
   },
   {
-    "t": "There’s more behind Pattaya’s empty streets",
-    "s": "Pattaya Mail",
-    "d": "11 Sep 2026"
-  },
-  {
     "t": "Buddhist monk arrested in Thailand on suspicion of embezzling $2.8m",
     "s": "The Guardian",
     "d": "11 Sep 2026"
@@ -53,19 +53,19 @@ var NEWS_FEED = [
     "d": "10 Sep 2026"
   },
   {
+    "t": "Thailand Presses Israeli Ambassador Over Badly Behaved Tourists",
+    "s": "Bloomberg.com",
+    "d": "08 Sep 2026"
+  },
+  {
+    "t": "​Growing Anti-Israel Sentiment in Thailand: A Covergence of factors",
+    "s": "Khaosod English",
+    "d": "11 Sep 2026"
+  },
+  {
     "t": "Phuket Chabad House cancels Rosh Hashanah meal following anti-Israel protest",
     "s": "The Jerusalem Post",
     "d": "12 Sep 2026"
-  },
-  {
-    "t": "Watch: Inside Thailand's school shooter drills following recent attacks",
-    "s": "BBC",
-    "d": "09 Sep 2026"
-  },
-  {
-    "t": "Suspected gunman in Thailand kindergarten shooting surrenders after 18-hour standoff",
-    "s": "ABC News - Breaking News, Latest News and Videos",
-    "d": "10 Sep 2026"
   },
   {
     "t": "Thailand to increase tax on EV imports, official says",
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-11","USD":33.07,"AUD":23.72,"GBP":44.66,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-12","temp":26,"humid":94,"code":3,"hi":31,"rain":99};
+var WX_NOW = {"date":"2026-09-13","temp":25,"humid":96,"code":51,"hi":31,"rain":84};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":1},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":false,"h":"C Palace","hs":1,"a":"Ipswich","as":2},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4350,"date":"2026-09-12","baht":68050};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77448,"thb":2560038};
+var BTC = {"usd":77177,"thb":2551098};
