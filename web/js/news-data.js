@@ -8,7 +8,7 @@ var NEWS_FEED = [
     "d": "11 Sep 2026"
   },
   {
-    "t": "Overnight rain floods roads, homes across Pattaya",
+    "t": "Pattaya’s Big Buddha Hill road faces urgent repairs after landslide damage",
     "s": "Pattaya Mail",
     "d": "11 Sep 2026"
   },
@@ -18,7 +18,7 @@ var NEWS_FEED = [
     "d": "12 Sep 2026"
   },
   {
-    "t": "Pattaya’s Big Buddha Hill road faces urgent repairs after landslide damage",
+    "t": "Overnight rain floods roads, homes across Pattaya",
     "s": "Pattaya Mail",
     "d": "11 Sep 2026"
   },
@@ -44,13 +44,8 @@ var NEWS_FEED = [
   },
   {
     "t": "Buddhist monk arrested in Thailand on suspicion of embezzling $2.8m",
-    "s": "theguardian.com",
+    "s": "The Guardian",
     "d": "11 Sep 2026"
-  },
-  {
-    "t": "Protests against Israelis, Jews in Thailand go on after failed bid to nix Rosh Hashanah event",
-    "s": "The Times of Israel",
-    "d": "10 Sep 2026"
   },
   {
     "t": "Hundreds rally at Israeli embassy in Bangkok to demand foreigners respect Thai laws",
@@ -58,30 +53,35 @@ var NEWS_FEED = [
     "d": "10 Sep 2026"
   },
   {
-    "t": "Thailand Presses Israeli Ambassador Over Badly Behaved Tourists",
-    "s": "Bloomberg.com",
-    "d": "08 Sep 2026"
-  },
-  {
     "t": "Phuket Chabad House cancels Rosh Hashanah meal following anti-Israel protest",
     "s": "The Jerusalem Post",
     "d": "12 Sep 2026"
   },
   {
-    "t": "Thai abbot arrested in $3 million embezzlement scandal",
+    "t": "Watch: Inside Thailand's school shooter drills following recent attacks",
     "s": "BBC",
-    "d": "11 Sep 2026"
+    "d": "09 Sep 2026"
+  },
+  {
+    "t": "Suspected gunman in Thailand kindergarten shooting surrenders after 18-hour standoff",
+    "s": "ABC News - Breaking News, Latest News and Videos",
+    "d": "10 Sep 2026"
+  },
+  {
+    "t": "Thailand to increase tax on EV imports, official says",
+    "s": "Reuters",
+    "d": "10 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-11","USD":33.07,"AUD":23.72,"GBP":44.66,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-12","temp":27,"humid":88,"code":3,"hi":31,"rain":100};
+var WX_NOW = {"date":"2026-09-12","temp":26,"humid":94,"code":3,"hi":31,"rain":99};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":0,"a":"Brentford","as":0},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":0,"a":"Hull","as":0},{"d":"2026-09-12","done":false,"h":"C Palace","hs":0,"a":"Ipswich","as":0},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":false,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":false,"h":"Aston Villa","hs":0,"a":"Nottm Forest","as":1},{"d":"2026-09-12","done":false,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":false,"h":"C Palace","hs":1,"a":"Ipswich","as":2},{"d":"2026-09-12","done":false,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":false,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":false,"h":"Sunderland","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4350,"date":"2026-09-12","baht":68050};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77351,"thb":2556843};
+var BTC = {"usd":77448,"thb":2560038};
