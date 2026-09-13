@@ -4681,6 +4681,7 @@ const _RAIN_START = [
 function _startRain(len) {
   G.rain = len;
   G.lastRain = G.turns;
+  G.rainDay = G.day;   // one a night (Mario, 2026-09-14)
   if (_inBar()) {
     _say(_pickVary(_RAIN_START, "rainstart") + " The street " +
       "empties in five seconds flat. Nobody is going anywhere for a while.", "alert");

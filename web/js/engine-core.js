@@ -361,6 +361,7 @@ function newGame() {
     selfBfId: null,      // hostess offering to barfine herself
     rain: 0,             // downpour turns remaining (0 = dry)
     lastRain: -99,       // turn the last downpour began
+    rainDay: 0,          // the day the last downpour began — one a night, never two
     lastDrizzle: -99,    // turn of the last light-rain vignette
     season0: SEASON_DEFAULT_M0,  // start month (0=Jan); the frontend re-seeds off the real calendar
 
@@ -2593,9 +2594,15 @@ function _tick() {
   // No downpours during the opening race: a September start ate eighteen of
   // the hundred turns in four blocked-move downpours and the do-or-die night was
   // lost to weather nobody chose (Darren, round 37). Drizzle still prints.
-  } else if (_flag("act1Done") && _wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
+  // ONE DOWNPOUR A NIGHT (Mario, 2026-09-14). Thirteen in five nights, each
+  // pinning the player three to six turns, cost Colm a quiz, a bed and a mall by
+  // three turns — "wet season done honestly; plays as a random five-turn stun
+  // every twenty turns". The 30-turn cooldown stays for the drizzle beneath it;
+  // the downpour itself checks G.rainDay BEFORE the dice so a second roll on the
+  // same night burns nothing.
+  } else if (_flag("act1Done") && G.rainDay !== G.day && _wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
     _startRain(3 + Math.floor(_rand() * 6));
-  } else if (_flag("act1Done") && _wetSeason() && _wxRainy() && G.turns - G.lastRain >= 30 && _rand() < 0.11) {
+  } else if (_flag("act1Done") && G.rainDay !== G.day && _wetSeason() && _wxRainy() && G.turns - G.lastRain >= 30 && _rand() < 0.11) {
     // the monsoon-months amplifier: a rainy (not stormy) sky becomes a downpour
     _startRain(3 + Math.floor(_rand() * 6));
   } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < (_wetSeason() ? 0.10 : 0.05)) {

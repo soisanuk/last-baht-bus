@@ -472,3 +472,24 @@ test("one woman is not 'the girls'", () => {
   for (const t of _BAR_THIN_STAFFED)
     assert.ok(!text().includes(t.slice(0, 40)), "a one-woman bar gets the plain thin line");
 });
+
+
+test("it rains once a night, and never twice (Mario, 2026-09-14)", () => {
+  // Colm: thirteen downpours in five nights, each a three-to-six-turn pin — a quiz,
+  // a bed and a mall lost to weather. The cooldown alone allowed three or four a
+  // night; the downpour now checks the day before it rolls the dice.
+  const savedR = _rand, savedS = _wxStormy;
+  try {
+    _rand = () => 0; _wxStormy = () => true;
+    G.room = "beach_rd_c"; G.nightTurn = 20; G.turns = 200; G.lastRain = -99; G.rain = 0;
+    _tick();
+    assert.ok(G.rain > 0, "a stormy sky with the dice at zero starts a downpour");
+    assert.equal(G.rainDay, G.day, "and the night is marked");
+    G.rain = 0; G.turns += 40; G.lastRain = -99;     // cooldown long gone, sky still stormy
+    _tick();
+    assert.equal(G.rain, 0, "the second one does not start — one a night");
+    G.day++; G.turns += 40;
+    _tick();
+    assert.ok(G.rain > 0, "a new night can rain again");
+  } finally { _rand = savedR; _wxStormy = savedS; }
+});

@@ -19,19 +19,22 @@ few minutes into the future and turn up the contrast on what's already true. The
 here; it's a guy in a Grab jacket getting algorithmically underpaid while, three floors up, a
 trafficked worker pig-butchers a lonely widow for USDT.
 
-## The name — OPEN, working title `khlong` (2026-09-08)
+## The name — OPEN, working title *Ground Floor* (2026-09-14; was `khlong`)
 
 **There is no title yet**, and this was the only one of the three projects without one — *The
 Last Baht Bus* and *Second Road* both name a street and both names do double duty (the last
 songthaew and the curfew you are under; the road one block back from Beach Road, and looking
-one street behind the front). Use **`khlong`** — Thai for *canal* — for the repo and anything
-else that needs a string. One word, true of the setting under every candidate below, and it
-pre-commits to none of them.
+one street behind the front). The working title is **Ground Floor** (repo `~/projects/ground-floor`)
+— Mario's ruling 2026-09-14 that the placeholder should be **English, and apropos**: a dead Thai
+mall is the ground floor still trading with everything above it dark, which is the setting under
+every candidate below. It was `khlong` (Thai: *canal*) for six days; that was true of the setting
+too but not in a language a reader of the repo list would get. Still a placeholder.
 
 Shortlist, with what each buys:
 
 - **Saen Saep** (แสนแสบ) — the canal, and the street-pattern sibling. See *Two Saen Saeps*
-  below; this is the one with a spine attached. Note Mario: it is also the title of a
+  below; this is the one with a spine attached. **Mario, 2026-09-14: "the Saen Saep angle seems
+  promising" — leaning, not decided.** Note Mario: it is also the title of a
   well-known old song, which is an argument in its favour (a name a Thai player hears as one
   thing and a farang hears as another is itself the code-switch) and a caution (a famous song
   lends the title its own mood, and if that mood is nostalgic it pulls against a thesis that is
@@ -416,6 +419,8 @@ them see it; let the LBB player *recognise* it.
 | 2026-09-06 | **Nont → CCIB HUMINT asset** (Mario's lean, adopted): leverage from what he did in LBB — mule SIMs, the CASH mule channel, the heist wire, the kid path — none charged, all kept. LBB exports `G.ccibRadar = {player, eddy, nont}`; a table maps each state to what CCIB holds and how the opening changes (no file → Tan's favour is the pull; SIM-only → he doesn't know, the opening is the tap on the shoulder; kid path → he knows, total leverage, Tan's hook reversed). Structural, never moral; reverse test holds (radar is a bonus, never a key); asks arrive as YES/NO/ASK modals from the other side of the wall. |
 | 2026-09-08 | **Naming opened and recorded, working title `khlong`.** The only one of the three projects with no title; both siblings name a street that does double duty. Shortlist: Saen Saep · A Face for the Name · Ground Floor Only · Din Daeng. Etymology of แสนแสบ noted as popular-but-contested and not to be asserted in prose; Pantip glossed as a given name (not a surname) so nobody re-derives it, with the no-real-families guardrail unchanged. |
 | 2026-09-08 | **"Two Saen Saeps" logged as a candidate SPINE** (Thai PBS source): the in-town canal and the out-of-town canal are the same water and not the same thing — black water and packed ferries downtown, ~50% of residents still living off it and 52 bird species at Minburi/Nong Chok. Argued as the honest form of the thesis, a map for the code-switch, the counterweight to scam-servers-and-a-dead-mall, and the *jao pho* land pattern in water. Guardrail attached: a title borrows the weight of a live displacement story, so it is a deliberate decision, not a default. |
+| 2026-09-14 | **Working title → *Ground Floor*** (Mario: English, and apropos). `khlong` lasted six days. Folder renamed; LBB's CLAUDE.md sibling entry and the handoff updated. Still a placeholder — the real name waits on the spine. |
+| 2026-09-14 | **Saen Saep angle: leaning** (Mario: "seems promising"). Not a decision; recorded so the next pass on the spine starts from the two-canals contrast rather than from zero. |
 | 2026-09-03 | **Accessibility section added** after the LBB pass (Nok opening / Tan's habit / Owl's five words). The reverse test is a hard rule: every scene must work for a player who never played LBB; LBB payoffs are bonuses, never keys. The code-switch must telegraph; the CLI sim is never a literacy test. |
 
 ## Sources

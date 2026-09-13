@@ -14,7 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   is **requested through the user, not made across the boundary.**
 - **`web/portraits/`, `scripts/gen-portraits.py`, the thumbnail track** — the art
   agent's. Consumer wiring (`_avatarSrc`, `web/js/portrait-thumbs.js`) is ours.
-- **`~/projects/khlong`** — the Bangkok follow-on (working title; the name is open — see
+- **`~/projects/ground-floor`** — the Bangkok follow-on (working title *Ground Floor*, English and
+  apropos per Mario 2026-09-14; was `khlong` for six days; the real name is open — see
   `docs/bangkok-concept.md` *The name*). Created 2026-09-08 with a `HANDOFF.md` and nothing
   else; concept only. Same rule as Second Road: it treats this repo as **read-only upstream**
   and the design stays HERE in `docs/bangkok-concept.md`, which that handoff points at rather
