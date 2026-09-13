@@ -4,7 +4,7 @@
 var NEWS_FEED = [
   {
     "t": "Israeli land network faces law",
-    "s": "bangkokpost.com",
+    "s": "Bangkok Post",
     "d": "12 Sep 2026"
   },
   {
@@ -54,7 +54,7 @@ var NEWS_FEED = [
   },
   {
     "t": "Phuket Chabad House cancels Rosh Hashanah meal following anti-Israel protest",
-    "s": "jpost.com",
+    "s": "The Jerusalem Post",
     "d": "12 Sep 2026"
   },
   {
@@ -63,25 +63,25 @@ var NEWS_FEED = [
     "d": "12 Sep 2026"
   },
   {
-    "t": "Hundreds rally at Israeli embassy in Bangkok to demand foreigners respect Thai laws",
-    "s": "AP News",
-    "d": "10 Sep 2026"
+    "t": "Thailand emergency medical system faces major gaps as 2,574 subdistricts lack units",
+    "s": "Khaosod English",
+    "d": "13 Sep 2026"
   },
   {
     "t": "Suspected gunman in Thailand kindergarten shooting surrenders after 18-hour standoff",
-    "s": "ABC News - Breaking News, Latest News and Videos",
+    "s": "abcnews.com",
     "d": "10 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-11","USD":33.07,"AUD":23.72,"GBP":44.66,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-13","temp":27,"humid":91,"code":3,"hi":30,"rain":88};
+var WX_NOW = {"date":"2026-09-13","temp":26,"humid":79,"code":3,"hi":32,"rain":88};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":false,"h":"Coventry","hs":0,"a":"Brighton","as":0},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":false,"h":"Man United","hs":0,"a":"Man City","as":0},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4350,"date":"2026-09-13","baht":68050};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":76742,"thb":2531844};
+var BTC = {"usd":77182,"thb":2551260};
