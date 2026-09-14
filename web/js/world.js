@@ -13896,16 +13896,15 @@ const SHIFT_CALLS = [
         "bit of paper?\" Bert, further down, is very carefully polishing something " +
         "that does not need it.",
       "\"Here's a thing.\" He turns his phone face-down, which tells you the " +
-        "balance without him having to. \"Pay-day's Friday and it is not Friday. " +
-        "Carry us till then?\" He has never once not paid you. He has also never " +
-        "once paid you on the night.",
+        "balance without him having to. \"Pay-day's {payday} and it is not {payday}. " +
+        "Carry us till then?\" {tabrecord}",
     ],
     yes: "You write his name on a docket and put it under the till, and he stays " +
       "another three hours and drinks like a man who has stopped counting, which " +
       "is exactly what a tab is for.",
     no: "\"No, aye, fair enough.\" He is perfectly decent about it, finishes what " +
-      "he has, and goes two doors along to a bar that will. He is back on Thursday. " +
-      "He is always back on Thursday. But not tonight, and tonight is the till.",
+      "he has, and goes two doors along to a bar that will. He is back on {payday}. " +
+      "He is always back on {payday}. But not tonight, and tonight is the till.",
   },
   {
     id: "early",
@@ -13924,6 +13923,18 @@ const SHIFT_CALLS = [
       "Her mother has the boy tonight and her mother is tired, and the last " +
         "songthaew to her room goes at half past. She lays it out flat, no plea in " +
         "it — a timetable, same as a beer order — and leaves the deciding to you.",
+    ],
+    // for a girl whose own family story has no child in it (Manow's three
+    // sisters) — the same ask, the kin it actually names
+    askKin: [
+      "Her mother rang. Nothing is wrong, she says, in the voice of somebody whose " +
+        "mother has just rung — and there is a bus at eleven that means she is " +
+        "there in the morning or she is on the phone all night. She lays it out " +
+        "as a timetable, not a plea, and waits.",
+      "Her sister starts a shift at six and somebody has to be in the room when " +
+        "the little ones wake, and the last songthaew to that end goes at half " +
+        "past. No hardship in it — a timetable, same as a beer order — and she " +
+        "leaves the deciding to you.",
     ],
     yes: "\"Kop khun ka.\" She is gone in four minutes, having first squared her own " +
       "section away so completely that nobody else has to touch it. The floor runs " +

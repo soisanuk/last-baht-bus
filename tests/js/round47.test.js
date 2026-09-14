@@ -729,3 +729,38 @@ test("TALK TO MAMASAN / CASHIER addresses the role-carrier on the floor", () => 
   out = []; doCommand("talk to mamasan");
   assert.doesNotMatch(text(), /nobody here goes by|doesn't land on anyone|no one here answers/i);
 });
+
+test("the tab call's pay-day is never tonight, and the settle line names the same day", () => {
+  for (let d = 1; d <= 7; d++) { G.day = d; assert.notEqual(_shiftPayday(), _weekday()); }
+  const tab = SHIFT_CALLS.find(c => c.id === "tab");
+  assert.ok(tab.ask.every(t => !/Friday|Thursday/.test(t)) && !/Thursday/.test(tab.no), "no baked weekday");
+  ownBar(); G.money = 5000; G.day = 5; G.bar.nights = 1;
+  const saved = _shiftEligible; _shiftEligible = () => [tab];
+  try { G.bar.shiftAsked = false; G.pendingChoice = null; G.bar.workedDay = G.day; G.bar.declared = true; G.bar.workedTurn = 0; G.turns = 10; out = []; _shiftAsk(); }
+  finally { _shiftEligible = saved; }
+  if (/Pay-day/.test(text())) {   // the ask pool has two variants; only one names the day
+    assert.match(text(), new RegExp("Pay-day's " + _shiftPayday()));
+    assert.doesNotMatch(text(), /never once not paid you/, "no record with you on night one");
+    assert.match(text(), /Bert, without looking up/);
+  }
+  out = []; doCommand("no");
+  assert.match(text(), new RegExp("back on " + _shiftPayday()));
+});
+
+test("the early call names the kin the girl actually has", () => {
+  const early = SHIFT_CALLS.find(c => c.id === "early");
+  assert.ok(early.askKin && early.askKin.length >= 2);
+  assert.ok(early.askKin.every(t => !/\bher boy\b|\bthe boy\b/.test(t)), "no boy in the kin pool");
+  // Manow: three little sisters, no child — she is asked, never about a son
+  assert.equal(_girlHasBoy("manow"), false);
+  ownBar(); G.money = 5000;
+  const saved = _shiftEligible; _shiftEligible = () => [early];
+  try {
+    for (let d = 1; d <= 4; d++) {
+      G.day = d; G.bar.shiftAsked = false; G.pendingChoice = null; G.bar.workedDay = G.day; G.bar.declared = true; G.bar.workedTurn = 0; G.turns = 10;
+      out = []; _shiftAsk();
+      if (G.shiftWho === "manow") assert.doesNotMatch(text(), /\bher boy\b|\bthe boy\b/);
+      if (G.pendingChoice) doCommand("no");
+    }
+  } finally { _shiftEligible = saved; }
+});

@@ -5893,14 +5893,32 @@ function _shiftCallById(id) { return SHIFT_CALLS.find(c => c.id === id) || null;
 // CASHIER the night after Manow left (Frank, 2026-08-26 — the exact prose-claim
 // defect class this repo lints for). One stable hash-picked hostess per bar owns
 // the boy; if she's off the floor, the call simply isn't dealt tonight.
+// The boy has to be HERS: the call says "her boy", so the girl it names must be
+// one whose own family story has a child in it. Manow (three little sisters,
+// still in school) was sent home to a son she has never mentioned (Malcolm,
+// round 47, 2026-09-14). Her family node is the claim; this reads it.
+function _girlHasBoy(id) {
+  const n = NPCS[id]; if (!n) return false;
+  const fam = (n.dialogue || []).filter(d => /family/.test(String(d.topic || "")))
+    .map(d => String(d.text || "")).join(" ");
+  if (!fam) return false;
+  return /\b(boy|son|baby|babies|kid|kids|child|children|little one)\b/i.test(fam) &&
+    !/\bno (children|kids|baby)\b/i.test(fam);
+}
+// A girl with no child in her story still gets asked — the call then reads
+// her ask from the `askKin` pool (a mother, a sister's shift), never "her boy".
 function _earlyGirl() {
   const room = (G.bar && G.bar.room) || "stinky_bar";
   const hers = Object.keys(NPCS)
     .filter(id => _npcRoom(id) === room && NPC_ROLES[id] === "hostess")
-    .sort((a, b) => _hh(a + ":boy", 13) - _hh(b + ":boy", 13));
+    .sort((a, b) => (_girlHasBoy(b) - _girlHasBoy(a)) || (_hh(a + ":boy", 13) - _hh(b + ":boy", 13)));
   const her = hers[0];
   return her && _npcActive(her) && _barStaff().includes(her) ? her : null;
 }
+// The tab call's pay-day is a weekday that is NOT tonight — "Pay-day's Friday
+// and it is not Friday" was dealt on a Friday (Malcolm, round 47). Two days on,
+// through the calendar seam, so the settle line names the same day.
+function _shiftPayday() { return WEEKDAYS[(G.day + 2) % 7]; }
 function _shiftEligible() {
   return SHIFT_CALLS.filter(c => c.id !== "early" || !!_earlyGirl());
 }
@@ -5931,10 +5949,16 @@ function _shiftAsk() {
   const who = G.shiftWho ? _npcLabel(G.shiftWho) : "";
   // lead/ask may be a POOL (array) — the flagship publican beats retold verbatim
   // same girl, same speech, across nights (Keith, 2026-08-26). Pick per call id.
-  const pick = (f, k) => _fmt(Array.isArray(f) ? _pickVary(f, "shift:" + call.id + ":" + k) : f, { who });
+  // "He has never once not paid you" on the first night you have owned a bar
+  // (Malcolm, round 47): the record is yours only once there is one
+  const tabrecord = (b.nights || 0) >= 7
+    ? "He has never once not paid you. He has also never once paid you on the night."
+    : "Bert, without looking up: he has never once not paid. He has also never once paid on the night.";
+  const pick = (f, k) => _fmt(Array.isArray(f) ? _pickVary(f, "shift:" + call.id + ":" + k) : f, { who, payday: _shiftPayday(), tabrecord });
   _say("");
   _say(pick(call.lead, "lead"), "alert");
-  _say(pick(call.ask, "ask"));
+  const askPool = (call.id === "early" && call.askKin && !_girlHasBoy(G.shiftWho)) ? call.askKin : call.ask;
+  _say(pick(askPool, "ask"));
   _shiftPrompt();
   G.pendingChoice = "shift";
 }
@@ -6029,7 +6053,7 @@ function _shiftYes() {
   const call = _shiftCallById(G.shiftCall);
   const who = G.shiftWho;
   if (!call) { _shiftClear(); return; }
-  _say(_fmt(call.yes, { who: who ? _npcLabel(who) : "" }), "win");
+  _say(_fmt(call.yes, { who: who ? _npcLabel(who) : "", payday: _shiftPayday() }), "win");
   if (call.id === "tab") {
     _shiftTake(SHIFT_TAB_TAKE, "a regular's slate, settled");
     _repGain();
@@ -6042,7 +6066,7 @@ function _shiftYes() {
         "barred and nobody has said a word about it; he has simply started " +
         "drinking somewhere he doesn't owe \u0e3f{amt}.)", { amt: SHIFT_TAB_TAKE }), "alert");
     } else {
-      _say("(He settles on Thursday, in full, and stands you one out of it.)", "dim");
+      _say(`(He settles on ${_shiftPayday()}, in full, and stands you one out of it.)`, "dim");
     }
   } else if (call.id === "early") {
     _shiftTake(-SHIFT_EARLY_COST, "the floor one short");
@@ -6098,7 +6122,7 @@ function _shiftNo() {
   const call = _shiftCallById(G.shiftCall);
   const who = G.shiftWho;
   if (!call) { _shiftClear(); return; }
-  _say(_fmt(call.no, { who: who ? _npcLabel(who) : "" }));
+  _say(_fmt(call.no, { who: who ? _npcLabel(who) : "", payday: _shiftPayday() }));
   if (call.id === "tab") {
     _shiftTake(-SHIFT_FLAT_LOSS, "a regular's slate refused, and his night taken elsewhere");
   } else if (call.id === "early") {
