@@ -18,7 +18,12 @@ var NEWS_FEED = [
     "d": "13 Sep 2026"
   },
   {
-    "t": "Early morning fire hits power lines near Sukhumvit 85 in Pattaya",
+    "t": "Ocean Marina Jomtien congratulates re-elected Pattaya Mayor Poramet",
+    "s": "Pattaya Mail",
+    "d": "14 Sep 2026"
+  },
+  {
+    "t": "Thailand and Laos team up to tackle new crime threats",
     "s": "Pattaya Mail",
     "d": "12 Sep 2026"
   },
@@ -33,18 +38,13 @@ var NEWS_FEED = [
     "d": "12 Sep 2026"
   },
   {
-    "t": "Interpol fugitive arrested in Pattaya after allegedly obtaining Thai identity",
-    "s": "Pattaya Mail",
-    "d": "13 Sep 2026"
-  },
-  {
-    "t": "Pattaya shopping expo offers up to 80% off from Sept 12–20",
+    "t": "Early morning fire hits power lines near Sukhumvit 85 in Pattaya",
     "s": "Pattaya Mail",
     "d": "12 Sep 2026"
   },
   {
     "t": "I moved my family from Utah to Thailand to work remotely. 8 months later, we came home.",
-    "s": "businessinsider.com",
+    "s": "Business Insider",
     "d": "14 Sep 2026"
   },
   {
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "11 Sep 2026"
   },
   {
-    "t": "Phuket Chabad House cancels Rosh Hashanah meal following anti-Israel protest",
-    "s": "The Jerusalem Post",
-    "d": "12 Sep 2026"
+    "t": "Petronas, Thailand's PTT secure approvals for new gas block sharing contract",
+    "s": "Reuters",
+    "d": "14 Sep 2026"
   },
   {
-    "t": "Marchers demand mass prosecutions in senate collusion case",
+    "t": "Thai Election Commission Refers Senate-Rigging Cases to Court",
+    "s": "Bloomberg.com",
+    "d": "14 Sep 2026"
+  },
+  {
+    "t": "EC poised to show its cards",
     "s": "Bangkok Post",
     "d": "13 Sep 2026"
   },
   {
-    "t": "Japan's Nidec to exit Cambodia production over Thailand border conflict",
-    "s": "Nikkei Asia",
-    "d": "12 Sep 2026"
-  },
-  {
-    "t": "Online and undercover: Saving trafficked wildlife in Thailand",
-    "s": "Japan Today",
-    "d": "13 Sep 2026"
+    "t": "Popular nation changes entry rule for Aussies",
+    "s": "news.com.au",
+    "d": "14 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-11","USD":33.07,"AUD":23.72,"GBP":44.66,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-14","temp":30,"humid":67,"code":2,"hi":30,"rain":53};
+var WX_NOW = {"date":"2026-09-14","temp":28,"humid":79,"code":51,"hi":31,"rain":67};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":false,"h":"Leeds","hs":0,"a":"Newcastle","as":0},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4328,"date":"2026-09-14","baht":67700};
+var GOLD = {"usd":4284,"date":"2026-09-14","baht":67000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77622,"thb":2573185};
+var BTC = {"usd":77896,"thb":2593440};
