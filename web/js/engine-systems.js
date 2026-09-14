@@ -9088,7 +9088,7 @@ function _rabbitInterview() {
 }
 
 function _rabbitJobPrompt() {
-  const kid = !!(G.known && G.known.nont) && !_flag("kidRefused");
+  const kid = _kidOpen();   // a NO holds for the night, not for good (one helper, five surfaces)
   _say("\"So. Two ways in. The box does the clever part and somebody carries it and holds " +
     "their nerve — you'd be the nerve. Or —\" the look sharpens a degree, \"— you any good " +
     "with a keyboard? There's a machine in that room nobody locks. Sit at it, find the file, " +
@@ -9636,11 +9636,17 @@ function _kidPriceYes() {
 }
 function _kidPriceNo() {
   G.pendingChoice = null;
-  _setFlag("kidRefused");
-  _say("\"Good.\" He means it, which is the surprise. \"That's the right answer. Rabbit's got two " +
+  // NO USED TO CLOSE THE KID PATH FOREVER, and the modal's own hint had just told
+  // the player to go and use CASH (Pimmy, round 47 — she said no to finish her
+  // questions, came back with the money, and the option was gone; the second time
+  // she typed `n` to walk north out of the market). Eddy's NOT ME is re-offerable;
+  // so is this — the day after, which is also how long it takes to get ฿15,000
+  // together through Nont's own channel.
+  G.kidRefusedDay = G.day;
+  _say("\"Okay.\" He means it, which is the surprise. \"Not tonight, then. Rabbit's got two " +
     "other ways in and neither of them is a kid.\" The phone is face-up again before you've " +
-    "stood. \"Tell him no. Tell him I said no, if it's easier.\" (Go back to EDDY — ASK EDDY " +
-    "ABOUT THE JOB — and the other two ways are still there.)");
+    "stood. \"You get it together, you know where the table is.\" (Go back to EDDY — ASK EDDY " +
+    "ABOUT THE JOB — the other two ways are still there, and so is this one, tomorrow.)");
   // declining is free and the fork re-opens, minus the kid: unwind the commitment
   // (rabbitPath was set at THE KID) and forget the interview node so it re-fires
   G.rabbitWay = null;

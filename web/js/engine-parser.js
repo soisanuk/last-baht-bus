@@ -4104,7 +4104,14 @@ function _readBook() {
 function _doTopics(arg) {
   let id = _convoActive();
   const a = String(arg || "").replace(/^(about|to|with|for)\s+/, "").trim();
-  if (a) id = _findNpc(a) || id;
+  if (a) {
+    const named = _findNpc(a);
+    // TOPICS TAN at Nont's table printed NONT's list under Tan's name (Pimmy, round
+    // 47) — a name that does not resolve here is somebody who is elsewhere, and the
+    // elsewhere line already knows where.
+    if (!named) { const away = _elsewhereLine(a); _say(away || "Nobody by that name here.", "dim"); return; }
+    id = named;
+  }
   if (!id) {
     const here = _npcsHere();
     if (here.length === 1) id = here[0];
@@ -4492,11 +4499,11 @@ function _doWai(arg) {
 // Once per person per night, and the register is hers: staff return it properly,
 // a mamasan gives you the version that costs her nothing, farang don't.
 const _WAI_BACK = [
-  "{n} returns it without thinking about it — palms up under the chin, a half-second, back to what she was doing. You were placed, and you passed.",
-  "{n} wais back properly, which she does not do for everyone, and something in the room's temperature moves one degree in your favour.",
-  "{n} gets hers in first the second time, which is the whole game and she knows you know it.",
-  "The wai comes back a little higher than she owes you — a small joke about the fact that you know where it should be — and she laughs at your face.",
-];
+  "{n} returns it without thinking about it — palms up under the chin, a half-second, back to what {s} was doing. You were placed, and you passed.",
+  "{n} wais back properly, which {s} does not do for everyone, and something in the room's temperature moves one degree in your favour.",
+  "{n} gets {p} in first the second time, which is the whole game and {s} knows you know it.",
+  "The wai comes back a little higher than {s} owes you — a small joke about the fact that you know where it should be — and {s} laughs at your face.",
+];   // pronoun tokens: Tan and Nont were "she" (Pimmy, round 47)
 const _WAI_BACK_MAMA = [
   "Mama returns it exactly as far as she has to and not one millimetre further, which from her is a warm review.",
   "The mamasan's wai is a formality performed by a professional, and it is still worth more than the nods you have been getting all week.",
@@ -4507,7 +4514,8 @@ function _waiBack(id) {
   (G.soc.waiBack = G.soc.waiBack || {});
   if (G.soc.waiBack[id]) return;
   G.soc.waiBack[id] = true;
-  _say(_fmt(_pickVary(NPC_ROLES[id] === "mamasan" ? _WAI_BACK_MAMA : _WAI_BACK, "waiback"), { n: NPCS[id].name }), "dim");
+  const pr = NPCS[id].pronoun === "he" ? { s: "he", p: "his" } : NPCS[id].pronoun === "they" ? { s: "they", p: "theirs" } : { s: "she", p: "hers" };
+  _say(_fmt(_pickVary(NPC_ROLES[id] === "mamasan" ? _WAI_BACK_MAMA : _WAI_BACK, "waiback"), { n: NPCS[id].name, s: pr.s, p: pr.p }), "dim");
 }
 
 function _waiEffect(id) {
@@ -4691,7 +4699,16 @@ function _saidPolite(raw, phrase) {
   const masc = /ครับ|\bkhrap\b|\bkrap\b|\bkrub\b|\bkrab\b/i.test(t);
   if (fem) G.saidKha = (G.saidKha || 0) + 1;
   if (masc) G.saidKhrap = (G.saidKhrap || 0) + 1;
-  if (!fem) return { th: phrase.th, rom: phrase.rom };
+  // A bare ขอบคุณ — no particle typed — was echoed back as ขอบคุณครับ to a woman who
+  // had said ค่ะ all night (Pimmy, round 47). The particle is the player's: use the
+  // one they have established, and if they have never used either, print neither.
+  if (masc) return { th: phrase.th, rom: phrase.rom };   // typed ครับ is ครับ, whatever the running count says
+  const prefersKha = (G.saidKha || 0) > (G.saidKhrap || 0);
+  if (!fem && !masc && !prefersKha) {
+    const bare = phrase.th.replace(/(ครับ|ค่ะ)$/, "").trim();
+    return { th: (G.saidKhrap || 0) > 0 ? phrase.th : bare, rom: (G.saidKhrap || 0) > 0 ? phrase.rom : phrase.rom.replace(/\s*(khrap|kha)$/i, "") };
+  }
+  if (!fem && !prefersKha) return { th: phrase.th, rom: phrase.rom };
   return {
     th: phrase.th.replace(/ครับ$/, "ค่ะ"),
     rom: phrase.rom.replace(/\bkhrap\b|\bkrap\b|\bkrub\b/i, "kha"),
@@ -8503,6 +8520,10 @@ const _COMPLETE_VERBS = [
 // space prefills and waits for an object (label carries a "…"), a bare cmd
 // submits immediately. DOM-free and pure over G, so term.js renders whatever this
 // returns each turn (the same rule the parser, wheel, and autocomplete consume).
+// The kid path is open unless you told Nont no TONIGHT. One helper for all four
+// surfaces (chip, completion pool, intercept, reprompt) plus the prompt's own gate
+// in engine-systems — a NO used to set a permanent flag read in five places.
+function _kidOpen() { return !!(G.known && G.known.nont) && !(G.kidRefusedDay && G.day <= G.kidRefusedDay); }
 function _chipSet() {
   const chips = [];
   // `kind` is presentation metadata a chip can carry — term.js styles a
@@ -8526,7 +8547,7 @@ function _chipSet() {
   }
   if (G.pendingChoice === "rabbitjob") {
     add("carry it"); add("keyboard", "the keyboard");
-    if (G.known && G.known.nont && !_flag("kidRefused")) add("the kid", "the kid");
+    if (G.known && G.known.nont && _kidOpen()) add("the kid", "the kid");
     add("not me"); add("ask", "ask what's on it"); return chips;
   }
   if (G.pendingChoice === "kidprice") { add("pay", `pay ฿${KID_PRICE.toLocaleString()}`); add("no"); add("ask", "ask why so much"); return chips;
@@ -8981,7 +9002,7 @@ function engineComplete(input) {
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
   if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
-  else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", ...(G.known && G.known.nont && !_flag("kidRefused") ? ["the kid"] : []), "not me", "ask"];
+  else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", ...(G.known && G.known.nont && _kidOpen() ? ["the kid"] : []), "not me", "ask"];
   else if (G.pendingChoice === "kidprice") pool = ["pay", "no", "ask"];
   else if (G.pendingChoice === "kidfavour") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
@@ -9397,9 +9418,14 @@ function doCommand(input) {
   }
 
   // the 51% fork: hear the pitch, then commit on purpose
+  // NO MODAL ANSWERS TO A BARE LETTER OR A PREFIX (Pimmy, round 47). Every one of
+  // these matched /^(no|n|…)/ with no word boundary, so `n` — north — declined the
+  // kid path permanently, `north`/`note`/`nothing` all read as NO, and `y` or
+  // `yeah` would have SOLD THE BAR or committed the 51%. The chips say YES and
+  // NO; a player who types the letter gets the reprompt, which costs nothing.
   if (G.pendingChoice === "partner") {
-    if (/^(y|yes|ok|okay|sure|do it|agree|deal|him|her|candy|tan)/.test(lower)) { _partnerYes(); return; }
-    if (/^(n|no|not|think|wait|later|hold|both)/.test(lower)) { _partnerNo(); return; }
+    if (/^(yes|ok|okay|sure|do it|agree|deal|him|her|candy|tan)\b/.test(lower)) { _partnerYes(); return; }
+    if (/^(no|not|think|wait|later|hold|both)\b/.test(lower)) { _partnerNo(); return; }
     _say("It's the biggest yes-or-no of the whole stage; the town will wait while " +
       "you decide. (YES \u00b7 NO)", "dim");
     _partnerPrompt();
@@ -9407,8 +9433,8 @@ function doCommand(input) {
   }
   // the shift call: one a night, while you are standing your own rail
   if (G.pendingChoice === "shift") {
-    if (/^(y|yes|ok|okay|sure|go on|aye|do it|let|have|get|put|write)/.test(lower)) { _shiftYes(); return; }
-    if (/^(n|no|nope|leave|not|refuse|decline|bert)/.test(lower)) { _shiftNo(); return; }
+    if (/^(yes|ok|okay|sure|go on|aye|do it|let|have|get|put|write)\b/.test(lower)) { _shiftYes(); return; }
+    if (/^(no|nope|leave|not|refuse|decline|bert)\b/.test(lower)) { _shiftNo(); return; }
     _say("It is still standing there waiting on you, which is most of what " +
       "owning a bar turns out to be.", "dim");
     _shiftPrompt();
@@ -9416,8 +9442,8 @@ function doCommand(input) {
   }
   // the staff affair: she asked the question nobody asks out loud
   if (G.pendingChoice === "affair") {
-    if (/^(stay|yes|make|real|begin|her|okay|ok)/.test(lower)) { _affairYes(); return; }
-    if (/^(step|back|no|not|nope|can't|cannot|don)/.test(lower)) { _affairNo(); return; }
+    if (/^(stay|yes|make|real|begin|her|okay|ok)\b/.test(lower)) { _affairYes(); return; }
+    if (/^(step|back|no|not|nope|can't|cannot|don)\b/.test(lower)) { _affairNo(); return; }
     _say("She is still sitting on the customer side of your own bar, waiting on the " +
       "only answer that counts.", "dim");
     _affairPrompt();
@@ -9443,17 +9469,17 @@ function doCommand(input) {
   }
   // selling up — the door she opened, shutting behind you on a yes
   if (G.pendingChoice === "sellbar") {
-    if (/^(y|yes|sell|do it|sign)/.test(lower)) { _sellBarYes(); return; }
-    if (/^(n|no|not|nope|stay|keep)/.test(lower)) { _sellBarNo(); return; }
+    if (/^(yes|sell|do it|sign)\b/.test(lower)) { _sellBarYes(); return; }
+    if (/^(no|not|nope|stay|keep)\b/.test(lower)) { _sellBarNo(); return; }
     _sellBarPrompt();
     return;
   }
 
   // procurement: stated, not asked
   if (G.pendingChoice === "synjob") {
-    if (/^(ask|who|what|why|explain|tell)/.test(lower)) { _synWho(); return; }
-    if (/^(y|yes|ok|okay|sure|fine|deal|agree|hire)/.test(lower)) { _synYes(); return; }
-    if (/^(n|no|refuse|decline|nope|never)/.test(lower)) { _synNo(); return; }
+    if (/^(ask|who|what|why|explain|tell)\b/.test(lower)) { _synWho(); return; }
+    if (/^(yes|ok|okay|sure|fine|deal|agree|hire)\b/.test(lower)) { _synYes(); return; }
+    if (/^(no|refuse|decline|nope|never)\b/.test(lower)) { _synNo(); return; }
     _say("Tan waits, entirely comfortable. It was not really a question.", "dim");
     _synPrompt();
     return;
@@ -9461,8 +9487,8 @@ function doCommand(input) {
 
   // The grey Alphard under the porch light — Sao's dinner (the reverse-savior arc)
   if (G.pendingChoice === "bkkdinner") {
-    if (/^(go|yes|y|ok|okay|sure|come|get in|bangkok)/.test(lower)) { _bkkGo(); return; }
-    if (/^(decline|no|n|stay|sorry|not tonight|cancel)/.test(lower)) { _bkkDecline(); return; }
+    if (/^(go|yes|ok|okay|sure|come|get in|bangkok)\b/.test(lower)) { _bkkGo(); return; }
+    if (/^(decline|no|stay|sorry|not tonight|cancel)\b/.test(lower)) { _bkkDecline(); return; }
     _say("The grey Alphard idles under the porch light; Sao's driver checks the time. " +
       "Nobody is in a hurry but you.", "dim");
     _bkkDinnerPrompt();
@@ -9470,8 +9496,8 @@ function doCommand(input) {
   }
   // Cream gathering her bag at the Metro Beer Garden (the chameleon economy)
   if (G.pendingChoice === "cham") {
-    if (/^(go|yes|y|ok|okay|sure|come|with her|let'?s go|hotel)/.test(lower)) { _chamGo(); return; }
-    if (/^(not tonight|no|n|stay|sorry|decline|another time|cancel)/.test(lower)) { _chamDecline(); return; }
+    if (/^(go|yes|ok|okay|sure|come|with her|let'?s go|hotel)\b/.test(lower)) { _chamGo(); return; }
+    if (/^(not tonight|no|stay|sorry|decline|another time|cancel)\b/.test(lower)) { _chamDecline(); return; }
     _say("She has her bag on her shoulder and is waiting, not quite looking at you.", "dim");
     _chamPrompt();
     return;
@@ -9480,51 +9506,51 @@ function doCommand(input) {
   if (G.pendingChoice === "chamgift") {
     const m = lower.match(/^(?:gift|give|tip|send|pay)?\s*(?:her\s*)?(?:฿|b)?(\d[\d,]*)/);
     if (m) { _chamGift(parseInt(m[1].replace(/,/g, ""), 10) || 0); return; }
-    if (/^(nothing|no|none|zero|keep|goodbye|bye|let her go|don'?t)/.test(lower)) { _chamGift(0); return; }
+    if (/^(nothing|no|none|zero|keep|goodbye|bye|let her go|don'?t)\b/.test(lower)) { _chamGift(0); return; }
     _say("She is by the door with the little bag, waiting a second longer than leaving takes.", "dim");
     _chamGiftPrompt();
     return;
   }
   if (G.pendingChoice === "bkkbill") {
-    if (/^(grab|reach|pay|take|wallet|insist|let me)/.test(lower)) { _bkkBill(true); return; }
-    if (/^(let|leave|thank|no|allow|fine|ok|okay)/.test(lower)) { _bkkBill(false); return; }
+    if (/^(grab|reach|pay|take|wallet|insist|let me)\b/.test(lower)) { _bkkBill(true); return; }
+    if (/^(let|leave|thank|no|allow|fine|ok|okay)\b/.test(lower)) { _bkkBill(false); return; }
     _say("The folder sits between his card and your hand. (GRAB · LET)", "dim");
     return;
   }
 
   // Tan is stood at your rail with a folded slip on the bar
   if (G.pendingChoice === "rabbitjob") {
-    if (/^(ask|what|why|explain|tell|on it)/.test(lower)) { _rabbitJobAsk(); return; }
-    if (/^(the kid|kid|nont|alex|the boy)/.test(lower) && G.known && G.known.nont && !_flag("kidRefused")) { _rabbitJobKid(); return; }
-    if (/^(keyboard|operator|sit|the machine|laptop|computer|i'?m good with)/.test(lower)) { _rabbitJobKeyboard(); return; }
-    if (/^(carry|yes|y|ok|okay|sure|deal|fine|do it|take|i'?ll)/.test(lower)) { _rabbitJobYes(); return; }
-    if (/^(not me|no|n|nope|never|decline|refuse|pass|sorry)/.test(lower)) { _rabbitJobNo(); return; }
-    _say(G.known && G.known.nont && !_flag("kidRefused")
+    if (/^(ask|what|why|explain|tell|on it)\b/.test(lower)) { _rabbitJobAsk(); return; }
+    if (/^(the kid|kid|nont|alex|the boy)\b/.test(lower) && G.known && G.known.nont && _kidOpen()) { _rabbitJobKid(); return; }
+    if (/^(keyboard|operator|sit|the machine|laptop|computer|i'?m good with)\b/.test(lower)) { _rabbitJobKeyboard(); return; }
+    if (/^(carry|yes|ok|okay|sure|deal|fine|do it|take|i'?ll)\b/.test(lower)) { _rabbitJobYes(); return; }
+    if (/^(not me|no|nope|never|decline|refuse|pass|sorry)\b/.test(lower)) { _rabbitJobNo(); return; }
+    _say(G.known && G.known.nont && _kidOpen()
       ? "Eddy waits, soda in hand. (CARRY IT \u00b7 KEYBOARD \u00b7 THE KID \u00b7 NOT ME \u00b7 ASK.)"
       : "Eddy waits, soda in hand. (CARRY IT \u00b7 KEYBOARD \u00b7 NOT ME \u00b7 ASK.)", "dim");
     _rabbitJobPrompt();
     return;
   }
   if (G.pendingChoice === "kidprice") {
-    if (/^(ask|what|why|explain|tell)/.test(lower)) { _kidPriceAskMore(); return; }
-    if (/^(pay|yes|y|ok|okay|sure|deal|fine|here)/.test(lower)) { _kidPriceYes(); return; }
-    if (/^(no|n|nope|never|decline|refuse|pass|sorry|don'?t)/.test(lower)) { _kidPriceNo(); return; }
+    if (/^(ask|what|why|explain|tell)\b/.test(lower)) { _kidPriceAskMore(); return; }
+    if (/^(pay|yes|ok|okay|sure|deal|fine|here)\b/.test(lower)) { _kidPriceYes(); return; }
+    if (/^(no|nope|never|decline|refuse|pass|sorry|don'?t)\b/.test(lower)) { _kidPriceNo(); return; }
     _say("Nont waits, phone face-down. (PAY \u00b7 NO \u00b7 ASK.)", "dim");
     _kidPricePrompt();
     return;
   }
   if (G.pendingChoice === "kidfavour") {
-    if (/^(ask|what|why|who|explain|tell)/.test(lower)) { _kidFavourAskMore(); return; }
-    if (/^(y|yes|ok|okay|sure|please|do it|make the call)/.test(lower)) { _kidFavourYes(); return; }
-    if (/^(n|no|refuse|decline|nope|never|sorry)/.test(lower)) { _kidFavourNo(); return; }
+    if (/^(ask|what|why|who|explain|tell)\b/.test(lower)) { _kidFavourAskMore(); return; }
+    if (/^(yes|ok|okay|sure|please|do it|make the call)\b/.test(lower)) { _kidFavourYes(); return; }
+    if (/^(no|refuse|decline|nope|never|sorry)\b/.test(lower)) { _kidFavourNo(); return; }
     _say("Tan waits. He has all night; he always has.", "dim");
     _kidFavourPrompt();
     return;
   }
   if (G.pendingChoice === "tanfavour") {
-    if (/^(ask|what|why|who|explain|tell)/.test(lower)) { _tanFavourAsk(); return; }
-    if (/^(y|yes|ok|okay|sure|fine|deal|take|agree)/.test(lower)) { _tanFavourYes(); return; }
-    if (/^(n|no|refuse|decline|sorry|nope|never)/.test(lower)) { _tanFavourNo(); return; }
+    if (/^(ask|what|why|who|explain|tell)\b/.test(lower)) { _tanFavourAsk(); return; }
+    if (/^(yes|ok|okay|sure|fine|deal|take|agree)\b/.test(lower)) { _tanFavourYes(); return; }
+    if (/^(no|refuse|decline|sorry|nope|never)\b/.test(lower)) { _tanFavourNo(); return; }
     _say("Tan waits. The slip is still on the bar, and he has all night.", "dim");
     _tanFavourPrompt();
     return;

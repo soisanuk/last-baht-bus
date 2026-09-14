@@ -260,6 +260,7 @@ function newGame() {
     lastNightSaid: null,   // the morning ledger, kept so LAST NIGHT can reprint it
     motBoots: 0,         // baht handed to Mot toward the football boots he named at dinner
     kyleVouchDay: 0,     // the day Bert agreed to give Kyle a shift; _kyleTick lands the shift after it
+    kidRefusedDay: 0,    // the day you told Nont no; the kid path re-opens the day after
     ccibLoud: 0,         // loud acts inside the window (see _ccibLoud) — the teeth
     ccibLoudNight: {},   // {kind: day} — one count per kind per night
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)

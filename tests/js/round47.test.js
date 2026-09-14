@@ -603,3 +603,97 @@ test("the black book names its denominator as what it counts", () => {
   assert.doesNotMatch(text(), /ladies you have actually met/);
   assert.match(text(), /working girls you have actually met/);
 });
+
+
+// ── Pimmy, the Bangkok bridge scout ─────────────────────────────────────────
+
+test("no modal answers to a bare letter or a prefix", () => {
+  // `n` — north — declined the kid path for good; `north`, `note`, `nothing` all
+  // read as NO; `y` would have sold the bar. Eleven modals shared the shape.
+  G.stage = "expat"; _setFlag("expatLife");
+  const arm = (kind, setup) => { setup(); G.pendingChoice = kind; };
+  const cases = [
+    ["kidprice",  () => { G.known.nont = true; }],
+    ["partner",   () => { G.flags.partnerWho = "tan"; }],
+    ["sellbar",   () => {}],
+    ["synjob",    () => { G.synJob = G.synJob || "clean"; }],
+    ["tanfavour", () => {}],
+  ];
+  for (const [kind, setup] of cases) {
+    for (const word of ["n", "north", "nothing", "note", "y", "yellow"]) {
+      newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+      _setFlag("act1Done"); G.stage = "expat"; G.money = 20000;
+      arm(kind, setup);
+      const before = JSON.stringify([G.flags, G.money, G.rabbitWay]);
+      out = []; doCommand(word);
+      assert.equal(G.pendingChoice, kind, `${kind}: "${word}" is not an answer — the modal is still up`);
+      assert.equal(JSON.stringify([G.flags, G.money, G.rabbitWay]), before, `${kind}: "${word}" changed nothing`);
+    }
+  }
+});
+
+test("NO at Nont's price is a night, not forever", () => {
+  G.stage = "expat"; _setFlag("expatLife"); G.known.nont = true; G.pendingChoice = "kidprice";
+  out = []; doCommand("no");
+  assert.equal(G.kidRefusedDay, G.day);
+  assert.match(text(), /tomorrow/, "and he says so");
+  const kidOffered = () => { G.room = "white_rabbit"; out = []; _rabbitJobPrompt(); return /KID/.test(text()); };
+  G.pendingChoice = null;
+  assert.ok(!kidOffered(), "tonight the kid is off the menu");
+  G.day++;
+  assert.ok(kidOffered(), "tomorrow it is back — the modal's own hint had said go and get CASH");
+});
+
+test("the wai comes back from a man as a man", () => {
+  G.room = _npcRoom("tan"); G.known.tan = true; G.soc.waiBack = {};
+  out = []; _waiBack("tan");
+  assert.doesNotMatch(text(), /\bshe\b|\bhers\b/, "Tan is not she");
+  G.soc.waiBack = {}; G.room = _npcRoom("nont"); out = []; _waiBack("nont");
+  assert.doesNotMatch(text(), /\bshe\b|\bhers\b/, "Nont is not she");
+});
+
+test("TOPICS for somebody who is not here says where they are, not the partner's list", () => {
+  G.room = _npcRoom("nont"); G.known.nont = true; G.known.tan = true;
+  run("talk to nont");
+  out = []; run("topics tan");
+  assert.doesNotMatch(text(), /Nont.*will discuss|Nont, on the evidence/, "not Nont's list under Tan's name");
+  assert.match(text(), /Tan/);
+});
+
+test("a bare ขอบคุณ is echoed without a particle the player never typed", () => {
+  G.room = _npcRoom("nont"); G.known.nont = true;
+  out = []; run("ขอบคุณ");
+  assert.doesNotMatch(text(), /ขอบคุณครับ/, "the game does not put ครับ in a mouth that said neither");
+  out = []; run("ขอบคุณค่ะ"); out = []; run("ขอบคุณ");
+  assert.doesNotMatch(text(), /ครับ/, "…and once she has said ค่ะ, a bare one is hers");
+  out = []; run("ขอบคุณครับ");
+  assert.match(text(), /ขอบคุณครับ/, "and a typed ครับ is always ครับ");
+});
+
+// ── Malcolm, the expat subeditor ────────────────────────────────────────────
+
+test("the other ledger is never told to the man who keeps it", () => {
+  G.stage = "expat"; _setFlag("expatLife"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  const staff = _npcsHere().filter(i => NPC_ROLES[i]);
+  assert.ok(staff.length);
+  for (const id of staff) {
+    G.soc.drinks[id] = 4; G.soc.ledger = {};
+    out = []; assert.equal(_otherLedger(id), false, `${NPCS[id].name} does not explain your own cut to you`);
+  }
+});
+
+test("a bonded employee never greets the owner as a new face", () => {
+  G.stage = "expat"; _setFlag("expatLife"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  const mama = _npcsHere().find(i => NPC_ROLES[i] === "mamasan");
+  assert.ok(mama);
+  G.soc.drinks[mama] = 8; G.talked = {};   // bonded, and never formally TALKed to — Malcolm's week four
+  out = []; run(`talk to ${mama}`);
+  assert.doesNotMatch(text(), /New face|I am the mamasan|First names, at last/, "the first-meeting node is not for your own staff");
+});
+
+test("the last-bus warning is not for a man standing his own rail", () => {
+  G.stage = "expat"; _setFlag("expatLife"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  G.bar.workedDay = G.day; G.bar.declared = true; G.lastBusWarned = false; G.nightTurn = LAST_BUS_TURN - 3;
+  out = []; _lastBusWarn();
+  assert.doesNotMatch(text(), /main road|frequent|last bus/i, "he has somewhere to be till dawn");
+});

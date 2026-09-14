@@ -411,7 +411,7 @@ test("the kid path: NO at Nont's price is free and re-opens the fork; PAY NONT i
   G.room = _npcRoom("nont");
   run("ask nont about job"); const m0 = G.money; run("no");
   assert.equal(G.money, m0, "declining costs nothing");
-  assert.ok(_flag("kidRefused")); assert.equal(G.rabbitWay, null);
+  assert.equal(G.kidRefusedDay, G.day, "a NO holds for the night"); assert.equal(G.rabbitWay, null);
   G.room = "white_rabbit"; out = []; run("ask eddy about job");
   assert.equal(G.pendingChoice, "rabbitjob", "the interview re-arms");
   assert.ok(!_chipSet().some(c => c.cmd === "the kid"), "minus the kid");

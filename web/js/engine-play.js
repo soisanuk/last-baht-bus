@@ -307,6 +307,7 @@ function _lastBusWarn() {
   if (!_flag("act1Done") || G.over || G.lastBusWarned) return;
   if (G.nightTurn < LAST_BUS_TURN - 5 || G.nightTurn >= LAST_BUS_TURN) return;
   if (G.room === _hotelRoomId()) return; // already home — no race left to run
+  if (typeof _workedTonight === "function" && _workedTonight() && G.room === ((G.bar && G.bar.room) || "")) return;   // standing his own rail: the last bus is not his (Malcolm, round 47)
   // …and not from the pillion seat of a night ride, whose whole design is that
   // she's your ride and the dread lifts (Howard, round 35: it printed between
   // stops on the back of her bike).
@@ -3132,6 +3133,11 @@ function _ownBarTalk(id, topic) {
     const pool = _OWNER_GREET[role]; if (!pool) return false;
     _say(_pickVary(pool, "ownergreet:" + role)(NPCS[id].name)); return true;
   }
+  // …and that warmer hello has to BE the bonded one. Falling through here sent a
+  // bonded employee to _deliver's topicless node — "New face. Good. I am the
+  // mamasan" from the woman who had called him boss for three weeks, with the
+  // first-names tag under it (Malcolm, round 47, nights 22–23).
+  if (!topic && _bondTier(id) >= 2) { _bondTalk(id); return true; }
   return false;
 }
 
@@ -3217,6 +3223,12 @@ const _OTHER_LEDGER = {
 // the bond crossing itself: an earned interstitial, in her mouth, in the room.
 function _otherLedger(id) {
   if (!NPC_ROLES[id] || !G.soc.drinks) return false;
+  // THE OTHER LEDGER IS A CUSTOMER'S BEAT. All three tiers fired on the owner's own
+  // staff — "Bar take most. I take ฿60… still better if you buy", to the man who
+  // sets the cut, whose till her drink rings into; the salary, to the man who
+  // pays it (Malcolm, round 47, 26 nights). At your own bar the asymmetry is
+  // yours to know from the other side, and it does not need explaining to you.
+  if (typeof _ownBarStaff === "function" && _ownBarStaff(id)) return false;
   const t = _bondTier(id);
   if (t < 1) return false;
   const book = (G.soc.ledger = G.soc.ledger || {});
@@ -4408,7 +4420,11 @@ function _endNight(reason) {
     if (top && n >= 30 && ROOMS[top] && ROOMS[top].barType) {
       const girls = _staffAt(top).filter(id => NPC_ROLES[id] === "hostess");
       for (const id of girls) _addBond(id, 1);
-      if (girls.length) _say(`(Three hours on the same stool at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
+      // "The girls there will know the face" — said eight times to the owner about
+      // his own employees (Malcolm, round 47). Same beat, the guv'nor's register.
+      if (girls.length) _say(G.bar && top === G.bar.room
+        ? `(Three hours on the same stool at ${_barName(top)} is its own kind of drink, and it is your own stool. The floor noticed you stayed.)`
+        : `(Three hours on the same stool at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
       // and the man behind the rail: presence is how a manager decides you're not a tourist
       const mgr = _staffAt(top).find(id => NPCS[id] && NPCS[id].manager);
       if (mgr) { const mst = _npcState(mgr); if ((mst.trust || 0) < 3) { mst.trust = (mst.trust || 0) + 1; _say(`(${NPCS[mgr].name} will know it too.)`, "dim"); } }
