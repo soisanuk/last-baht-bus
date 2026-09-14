@@ -1561,6 +1561,22 @@ function _findNpc(word) {
   for (const id of here) {
     if (!NPCS[id].patron && NPCS[id].name.toLowerCase().includes(w)) return id;
   }
+  // A ROLE is an address too. TALK TO MAMASAN / CASHIER / MANAGER is what a man
+  // says on a floor whose staff he has not been introduced to — the game's own
+  // prose names them by role ("the mamasan drifts over") — and it answered
+  // "nobody goes by that" on every rail with a filler mama (Malcolm, round 47,
+  // 2026-09-14). The room's role-carrier answers; a girl NAMED Mama would have
+  // resolved on the exact-name pass above.
+  {
+    const rw = w.replace(/^the\s+/, "").replace(/[\s-]/g, "");
+    const role = ({ mamasan: "mamasan", mama: "mamasan", mamma: "mamasan", cashier: "cashier",
+                    manager: "manager", barman: "manager", boss: "manager" })[rw];
+    if (role) {
+      const hit = here.find(id => role === "manager" ? NPCS[id].manager
+                                : (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] === role));
+      if (hit) return hit;
+    }
+  }
   // a descriptive title before you know the name ("the manager" → bert). Only
   // while unknown; once known, the name paths above already catch them.
   for (const id of here) {

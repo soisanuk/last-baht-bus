@@ -697,3 +697,35 @@ test("the last-bus warning is not for a man standing his own rail", () => {
   out = []; _lastBusWarn();
   assert.doesNotMatch(text(), /main road|frequent|last bus/i, "he has somewhere to be till dawn");
 });
+
+// ── Fable wave two (Malcolm's stragglers) ────────────────────────────────────
+
+test("a reveal is a reveal: an exhausted floor deals nobody's first confidence twice", () => {
+  // Cake found the same ฿40 on two nights — the pool restarted when dry
+  ownBar(); G.money = 5000;
+  const staff = _barStaff();
+  assert.ok(staff.length, "the Stinky has a floor");
+  G.bar.floorSaid = {};
+  for (const id of staff) G.bar.floorSaid[id] = _floorPool(id).map((_, k) => k);   // everyone has told you everything
+  G.bar.floorSeen = []; G.bar.floorN = 0; G.bar.floorTurn = -999;
+  G.bar.workedDay = G.day; G.bar.declared = true;
+  out = []; _workFloor();
+  assert.equal(text(), "", "an ordinary floor: nothing dealt");
+  assert.equal(G.bar.floorN || 0, 0, "no moment counted");
+  for (const id of staff) assert.equal(G.bar.floorSaid[id].length, _floorPool(id).length, "no book was wiped");
+});
+
+test("TALK TO MAMASAN / CASHIER addresses the role-carrier on the floor", () => {
+  G.room = "lucky_tiger";
+  const mama = _npcsHere().find(i => NPC_ROLES[i] === "mamasan");
+  const till = _npcsHere().find(i => NPC_ROLES[i] === "cashier");
+  assert.ok(mama && till, "the Tiger has both");
+  assert.equal(_findNpc("mamasan"), mama);
+  assert.equal(_findNpc("the mamasan"), mama);
+  assert.equal(_findNpc("mama-san"), mama);
+  assert.equal(_findNpc("cashier"), till);
+  G.room = "stinky_bar";
+  assert.equal(_findNpc("manager"), "bert");
+  out = []; doCommand("talk to mamasan");
+  assert.doesNotMatch(text(), /nobody here goes by|doesn't land on anyone|no one here answers/i);
+});

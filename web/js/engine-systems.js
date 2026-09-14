@@ -5811,11 +5811,14 @@ function _workFloor() {
     // bare _pickVary; Frank, 2026-08-26 — the exact class floorSaid exists for)
     const asaid = (b.floorSaid = b.floorSaid || {});
     const aheard = asaid[afId + ":us"] = asaid[afId + ":us"] || [];
-    let apool = _AFFAIR_FLOOR.map((_, i) => i).filter(i => !aheard.includes(i));
-    if (!apool.length) { aheard.length = 0; apool = _AFFAIR_FLOOR.map((_, i) => i); }
-    aheard.push(apool[0]);
-    _say(_fmt(_AFFAIR_FLOOR[apool[0]], { who: _npcLabel(afId) }));
-    return;
+    const apool = _AFFAIR_FLOOR.map((_, i) => i).filter(i => !aheard.includes(i));
+    // dry = she has told you everything; the ordinary floor takes the night
+    // rather than her first reveal coming round again as a first reveal
+    if (apool.length) {
+      aheard.push(apool[0]);
+      _say(_fmt(_AFFAIR_FLOOR[apool[0]], { who: _npcLabel(afId) }));
+      return;
+    }
   }
   if (afId && (G.affair.floorSour || 0) >= 3) {
     // The closed floor was a silent ABSENCE of moments, and absence is invisible
@@ -5838,6 +5841,15 @@ function _workFloor() {
   if (afId) staff = staff.filter(id => id !== afId);
   if (!staff.length) return;
   const seen = (b.floorSeen = b.floorSeen || []);
+  const said = (b.floorSaid = b.floorSaid || {});
+  // A moment is a REVEAL, and a reveal can only happen once: a girl whose pool
+  // is dry is not dealt to again (Cake found the same ฿40 twice — Malcolm,
+  // 2026-09-14). When the whole floor has told you everything, the floor is an
+  // ordinary floor and the tick says nothing — a restart would hand you her
+  // first confidence back as news.
+  const fresh = id => _floorPool(id).some((_, i) => !(said[id] || []).includes(i));
+  staff = staff.filter(fresh);
+  if (!staff.length) return;
   let pool = staff.filter(id => !seen.includes(id));
   if (!pool.length) { seen.length = 0; pool = staff; }
   pool.sort((a, c) => ((G.soc.drinks[a] || 0) - (G.soc.drinks[c] || 0)));
@@ -5846,11 +5858,9 @@ function _workFloor() {
   b.floorTurn = G.turns;
   b.floorN = (b.floorN || 0) + 1;
   const linePool = _floorPool(id);
-  const said = (b.floorSaid = b.floorSaid || {});
   const heard = said[id] = said[id] || [];
-  let idxPool = linePool.map((_, i) => i).filter(i => !heard.includes(i));
-  if (!idxPool.length) { heard.length = 0; idxPool = linePool.map((_, i) => i); } // exhausted: start over
-  const pick = idxPool[0];   // her reveals in order — each shift a new one, no repeat until the pool's dry
+  const idxPool = linePool.map((_, i) => i).filter(i => !heard.includes(i));
+  const pick = idxPool[0];   // her reveals in order — each shift a new one, never the same one twice
   heard.push(pick);
   _say(_fmt(linePool[pick], { who: _npcLabel(id) }));
   // A floor moment that NAMES money has to move it: "finds ฿40 you had already
