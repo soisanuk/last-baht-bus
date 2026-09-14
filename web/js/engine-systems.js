@@ -3183,7 +3183,7 @@ function _doBlackbook() {
     // "numbers" was accurate while the book was contacts-only; it now carries
     // bonded girls whose number you never asked for, so it counts entries
     const nums = ids.filter(id => G.phone.contacts[id]).length;
-    _say(_fmt("({n} in the book ({p} number{s}) \u2014 out of {k} ladies you have actually met.)",
+    _say(_fmt("({n} in the book ({p} number{s}) \u2014 out of {k} working girls you have actually met.)",   // the count is bar staff; "ladies" excluded Auntie Nok (auditor, 2026-09-14)
       { n: ids.length, p: nums, s: nums === 1 ? "" : "s", k: knownLadies }), "dim");
   }
   _say("(A bond cools a notch a night — tend the ones you mean to keep. MESSAGE / SEND / CONTACT.)", "dim");
@@ -5853,6 +5853,11 @@ function _workFloor() {
   const pick = idxPool[0];   // her reveals in order — each shift a new one, no repeat until the pool's dry
   heard.push(pick);
   _say(_fmt(linePool[pick], { who: _npcLabel(id) }));
+  // A floor moment that NAMES money has to move it: "finds ฿40 you had already
+  // written off … puts it in front of you" showed nowhere in the till or the
+  // notes (assertion auditor, 2026-09-14). The forty lands, and BOOKS says so.
+  if (/written off/.test(linePool[pick]) && typeof _barEvent === "function")
+    _barEvent(40, `the forty ${_npcLabel(id)} found`);
   _addBond(id, 1);
 }
 
@@ -6073,7 +6078,7 @@ function _shiftYes() {
         "have a forearm you are going to notice tomorrow. The room settles. " +
         "Somebody sweeps up.", "alert");
       G.hurt = (G.hurt || 0) + 1;
-      _shiftTake(-SHIFT_FLAT_LOSS);
+      _shiftTake(-SHIFT_FLAT_LOSS, "a punter put out, and what he took with him");
     }
   }
   _shiftClear();
@@ -6085,7 +6090,7 @@ function _shiftNo() {
   if (!call) { _shiftClear(); return; }
   _say(_fmt(call.no, { who: who ? _npcLabel(who) : "" }));
   if (call.id === "tab") {
-    _shiftTake(-SHIFT_FLAT_LOSS);
+    _shiftTake(-SHIFT_FLAT_LOSS, "a regular's slate refused, and his night taken elsewhere");
   } else if (call.id === "early") {
     if (who) _addBond(who, -1);
     // and the rest of the floor watched her ask
@@ -6094,7 +6099,7 @@ function _shiftNo() {
   } else if (call.id === "round") {
     // …and declining is not a guaranteed loss either. Sometimes the room finds
     // its own second wind, which is exactly why a publican hesitates.
-    if (_rand() < 0.65) _shiftTake(-SHIFT_FLAT_LOSS);
+    if (_rand() < 0.65) _shiftTake(-SHIFT_FLAT_LOSS, "the flat hour nobody bought a round for");   // every flat loss carries its reason (auditor, 2026-09-14)
     else _say("It picks up on its own, the way it sometimes does, and you saved the " +
       "money. You will never know whether the round would have done better.", "dim");
   } else if (call.id === "turning") {
@@ -8589,8 +8594,8 @@ function _roomSafeBeat() {
   G.money += SAFE_CASH;
   _say(`Your own room, and the key card works. The safe in the wardrobe opens on the ` +
     `second try: passport, return ticket \u2014 and the emergency stash you very nearly ` +
-    `forgot you packed. \u0e3f${SAFE_CASH}. (\u0e3f${G.money} in pocket. The vacation is ` +
-    "officially back on.)", "win");
+    `forgot you packed. \u0e3f${SAFE_CASH}. (\u0e3f${G.money} in pocket. ` +
+    (G.stage === "expat" ? "You live here." : "The vacation is officially back on.") + ")", "win");   // "the vacation" printed to an expat (auditor, 2026-09-14)
 }
 
 function _checkAct1() {
@@ -8679,9 +8684,14 @@ function _payCreditor(arg) {
   const target = wantsNote ? arrears : rentOwed;
   const who = wantsNote ? "the old man" : "the landlord";
   if (target <= 0) {
-    _say(rentOwed || arrears
+    // A typed amount with nothing outstanding read as a payment going through —
+    // "Square with both of them" after PAY NOTE 5000 moved zero baht and the auditor
+    // (2026-09-14) reasonably took it for a receipt. Say where the money stayed.
+    const typed = parseInt(String(arg || "").replace(/[^\d]/g, ""), 10);
+    const stays = typed > 0 ? ` Your ฿${_num(typed)} stays where it is — the note bills itself every thirty days, and there is nothing to pay ahead of it.` : "";
+    _say((rentOwed || arrears
       ? `Nothing outstanding to ${who}. (You are ฿${_num(rentOwed || arrears)} behind with the other one.)`
-      : "Square with both of them. It is a good feeling and it does not last.");
+      : "Square with both of them. It is a good feeling and it does not last.") + stays);
     return;
   }
   const pot = Math.max(0, b.cash) + G.money;
@@ -8695,6 +8705,12 @@ function _payCreditor(arg) {
   const src = [fromTill > 0 ? "the till" : null, fromPocket > 0 ? "your own pocket" : null].filter(Boolean).join(" and ");
   if (wantsNote) {
     b.arrears = arrears - pay;
+    // THE ARREARS PATH NEVER TOUCHED THE PRINCIPAL (assertion auditor, 2026-09-14).
+    // A month paid on time at billing decrements `owed` by what was paid; the same
+    // month paid back BY HAND after falling behind reduced `arrears` and left `owed`
+    // at ฿1,680,000 forever — so the one path a struggling owner takes was the one
+    // where the notes vanished. Mirror the auto path exactly.
+    b.owed = Math.max(0, (b.owed || 0) - pay);
     _say(`฿${_num(pay)} out of ${src}, into the old man's account. He does not ring to acknowledge it; ` +
       `he never has.` + (b.arrears > 0 ? ` ฿${_num(b.arrears)} still on the slate.` : " Straight with him."), "win");
     return;

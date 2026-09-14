@@ -8234,7 +8234,7 @@ test("the collections show what's left, measured against people you've MET", () 
     "the denominator is who you've met, not the 334-strong cast");
 
   out = []; run("who");
-  assert.match(out.join("\n"), /1 number — out of 5 ladies|out of \d+ ladies/,
+  assert.match(out.join("\n"), /1 number — out of 5 working girls|out of \d+ working girls/,   // "ladies" overclaimed the count (auditor, 2026-09-14)
     "the black book counts against ladies you know");
 
   out = []; run("score");

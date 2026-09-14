@@ -6390,7 +6390,10 @@ function _doMotosai(arg) {
   if (G.money < total && !_flag("act1Done") && !(ROOMS[G.room].region === "Darkside")) {
     // Act One: the walk IS the opening — a free ride anywhere would make the bus
     // fare pointless (broke playtest 2026-08-22). The Darkside stranding still gets mercy.
-    _say(`The piwin looks at your empty hands, then down the road, then back. “No money, no ride, boss. ` +
+    // "empty hands" to a man holding ฿25 — merely short, not broke (Maureen and the
+    // assertion auditor, round 47, independently). Name what he can see.
+    const hands = G.money > 0 ? `the ฿${_num(G.money)} in your hand` : "your empty hands";
+    _say(`The piwin looks at ${hands}, then down the road, then back. “${G.money > 0 ? "Not enough" : "No money"}, no ride, boss. ` +
       `Bus is ${thaiBaht(BUS_FARE)}.” He is not unkind about it. He is just not a charity before you've ` +
       "earned one.", "dim");
     return;

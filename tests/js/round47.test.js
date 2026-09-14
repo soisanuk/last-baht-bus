@@ -357,6 +357,7 @@ test("every modal redraw carries the money, the commands and the names its live 
     _setFlag("act1Done"); G.stage = "vacation"; G.money = 20000;
     for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
     G.peddlerNight = 2; G.soc.drinkCount = G.soc.drinkCount || {}; G.soc.selfDrinks = G.soc.selfDrinks || {};
+    G.rng = 12345;   // newGame reseeds from Math.random; a barfine's honest/scam roll must not flake this (it did, twice)
     arm();
     const gate = G.pendingChoice || G.pendingBf || G.pendingEnc || G.pendingFare || G.pendingSoapy || G.game;
     if (!gate) return;                       // this state didn't arm here; another test's problem
@@ -492,4 +493,113 @@ test("it rains once a night, and never twice (Mario, 2026-09-14)", () => {
     _tick();
     assert.ok(G.rain > 0, "a new night can rain again");
   } finally { _rand = savedR; _wxStormy = savedS; }
+});
+
+
+// ── The assertion auditor (2026-09-14): "is this sentence true" ─────────────
+
+test("the morning ledger names the account on a night the machine was used", () => {
+  G.vacation = 1;
+  G.lastNight = { vacation: 1, happy: G.happy, money: 2390, atm: 0, atmFees: 0, known: 0, talked: 0, nums: 0, faces: 0 };
+  G.money = 3990; G.atmTotal = 2000; G.atmFees = 300; G.day = 6;
+  out = []; _morningLedger();
+  assert.match(text(), /down ฿700 on the night/, "the arithmetic was always right");
+  assert.match(text(), /across pocket and account/, "…and now it says what it counts");
+  assert.match(text(), /฿2,000 came out of the machine/);
+  assert.match(text(), /฿300 of that in fees/);
+  G.lastNight = { vacation: 1, happy: G.happy, money: 3990, atm: 2000, atmFees: 300, known: 0, talked: 0, nums: 0, faces: 0 };
+  G.money = 3590; G.day = 7;
+  out = []; _morningLedger();
+  assert.match(text(), /down ฿400 on the night$/m, "a night with no draw keeps the short line");
+  assert.doesNotMatch(text(), /across pocket/);
+});
+
+test("a man holding ฿25 is short, not empty-handed", () => {
+  G.flags.act1Done = false; G.stage = "act1"; G.money = 25;
+  G.room = Object.keys(ROOMS).find(r => ROOMS[r].motosai && ROOMS[r].region !== "Darkside");
+  out = []; run("motosai to tree town");
+  assert.match(text(), /the ฿25 in your hand/, "he sees what is actually there");
+  assert.doesNotMatch(text(), /empty hands/);
+  G.money = 0; out = []; run("motosai to tree town");
+  assert.match(text(), /empty hands/, "and empty means empty");
+});
+
+
+// ── The bar-stage auditor: the note, the till, the floor ────────────────────
+
+function ownBar() {
+  G.stage = "expat"; _setFlag("expatLife"); _setFlag("barOpen"); _setFlag("barPaid");
+  G.bar.room = "stinky_bar"; G.bar.paid = true; G.bar.owed = 1680000; G.bar.cash = 0;
+  G.room = "stinky_bar";
+}
+
+test("paying the note back by hand pays the principal, exactly as paying it on time does", () => {
+  ownBar(); G.bar.arrears = 25000; G.money = 30000;
+  const owed0 = G.bar.owed;
+  out = []; run("pay note 10000");
+  assert.equal(G.bar.arrears, 15000, "the slate came down");
+  assert.equal(G.bar.owed, owed0 - 10000, "and so did the old man's stake — it used to stay at ฿1,680,000 forever on this path");
+  run("pay note 15000");
+  assert.equal(G.bar.arrears, 0);
+  assert.equal(G.bar.owed, owed0 - 25000, "a full month by hand is a full month");
+});
+
+test("PAY NOTE with nothing outstanding says where the money stayed", () => {
+  ownBar(); G.bar.arrears = 0; G.bar.rentOwed = 0; G.money = 10000;
+  out = []; run("pay note 5000");
+  assert.equal(G.money, 10000, "nothing moved");
+  assert.match(text(), /฿5,000 stays where it is/, "and the sentence says so, rather than reading as a receipt");
+  assert.match(text(), /nothing to pay ahead of it/);
+});
+
+test("a floor moment that names ฿40 puts ฿40 in the books", () => {
+  ownBar(); G.money = 5000;
+  const cashier = _npcsHere().find(i => NPC_ROLES[i] === "cashier");
+  assert.ok(cashier, "the Stinky has a cashier");
+  const i = _FLOOR_CASHIER.findIndex(t => /written off/.test(t));
+  assert.ok(i >= 0, "the line exists");
+  // deal her that exact line
+  G.bar.floorSaid = { [cashier]: _FLOOR_CASHIER.map((_, k) => k).filter(k => k !== i) };
+  G.bar.floorN = 0; G.bar.floorTurn = -999; G.bar.workedDay = G.day; G.bar.declared = true;
+  const in0 = G.bar.eventIn || 0;
+  out = []; if (typeof _workFloorFor === "function") _workFloorFor(cashier); else { _doWork(); G.turns += 20; _workFloor(); }
+  if (/written off/.test(text())) {
+    assert.equal((G.bar.eventIn || 0) - in0, 40, "the forty landed");
+    assert.ok((G.bar.eventNotes || []).some(n => /forty/.test(n)), "and BOOKS will name it");
+  }
+});
+
+test("every flat loss on a shift call carries its reason into BOOKS", () => {
+  // "the night's own bill ฿400" over an empty notes list — the only night the
+  // auditor could not account for, because three _shiftTake calls passed no why
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  const bare = [...src.matchAll(/_shiftTake\(([^,)]+)\)/g)].map(m => m[0]);
+  assert.deepEqual(bare, [], "a _shiftTake with no reason is a bill the owner cannot read");
+});
+
+test("the room safe does not welcome an expat back to his vacation", () => {
+  ownBar(); G.act1SafeDue = true; G.flags.roomSafeOpened = false; G.room = _hotelRoomId();
+  out = []; _roomSafeBeat();
+  assert.doesNotMatch(text(), /vacation is officially back on/);
+  assert.match(text(), /You live here/);
+});
+
+// ── The readouts auditor ────────────────────────────────────────────────────
+
+test("LAST NIGHT on the first morning does not tell a man who just slept that he hasn't", () => {
+  G.room = _hotelRoomId(); G.lastNight = null; G.lastNightSaid = null;
+  run("sleep", "sleep");
+  assert.ok(G.day >= 3, "a night passed");
+  out = []; run("last night");
+  assert.doesNotMatch(text(), /have not slept on it yet/, "the flat false negative");
+  assert.match(text(), /First morning/);
+});
+
+test("the black book names its denominator as what it counts", () => {
+  G.room = "candy_bar"; for (const id of _npcsHere()) G.known[id] = true;
+  G.known.nok = true;   // met, talked to, not bar staff — and not in the count
+  G.soc.drinks[_npcsHere().find(i => NPC_ROLES[i] === "hostess")] = 3;   // somebody in the book, or WHO stops before the denominator
+  out = []; run("who");
+  assert.doesNotMatch(text(), /ladies you have actually met/);
+  assert.match(text(), /working girls you have actually met/);
 });

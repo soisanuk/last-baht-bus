@@ -3949,7 +3949,14 @@ function _nightSnapshot() {
 
 function _morningLedger() {
   const b = (G.lastNight && (G.lastNight.vacation == null || G.lastNight.vacation === G.vacation)) ? G.lastNight : null;   // a stamp-less snapshot is a pre-stamp save; deserializeGame drops those
-  if (!b) return;
+  if (!b) {
+    // The first morning has no baseline to diff against, and used to leave
+    // lastNightSaid empty — so LAST NIGHT told a player who had just slept that he
+    // hadn't (assertion auditor, 2026-09-14: a flat false negative, on the one
+    // morning he was most likely to read it). Say what is true instead.
+    G.lastNightSaid = ["(First morning in town — nothing to measure last night against yet. From tomorrow this is the night's ledger.)"];
+    return;
+  }
   G.lastNight = null;
   const bits = [];
   const dh = G.happy - b.happy;
@@ -3958,8 +3965,16 @@ function _morningLedger() {
   const barDraw = (G.bar && G.bar.pocketDrawn) || 0; // the bar's own bills report on the bar's line, not here
   const fees = (G.atmFees || 0) - (b.atmFees || 0);   // ATM fees leave the account, not the pocket
   const spent = b.money + drawn - G.money - barDraw + fees;
-  if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night");
-  else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night");
+  // THE FIGURE IS POCKET AND ACCOUNT TOGETHER, and on a night the machine was used
+  // it has to SAY so: the assertion auditor (2026-09-14) withdrew ฿2,000, paid ฿400
+  // rent, watched his pocket go UP ฿1,600 and was told "down ฿700" — which is
+  // right (rent plus the ฿300 fee, the draw not being income) and reads as a lie
+  // to anybody watching the notes in his hand. The arithmetic was never wrong; the
+  // sentence was unsupported by its own wording.
+  const via = drawn > 0 ? ` (across pocket and account \u2014 \u0e3f${_num(drawn)} came out of the machine` +
+    (fees > 0 ? `, \u0e3f${_num(fees)} of that in fees` : "") + ")" : "";
+  if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via);
+  else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via);
   // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
   const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
