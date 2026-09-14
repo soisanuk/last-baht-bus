@@ -1879,8 +1879,17 @@ function _dogTalk(npcId) {
 }
 // "ask <anyone> about quiz / darts": TIME knew, nobody else did (gambler playtest
 // 2026-08-22). One honest line, register-neutral, computed from the schedule.
-function _quizTalk() {
+function _quizTalk(npc) {
   const bars = (typeof _quizBars === "function") ? _quizBars().map(b => _barName(b)).filter(Boolean) : [];
+  // an English pensioner does not say "na" (Brenda, round 47: eleven mouths, one hostess's sentence)
+  const farang = npc && NPCS[npc] && (NPCS[npc].patron || NPCS[npc].manager || NPCS[npc].house || NPCS[npc].pronoun === "he");
+  if (farang) {
+    if (typeof _quizDay === "function" && _quizDay())
+      return `“Quiz? Tonight — eight till ten. ${bars.join(", ")}. Five questions, prize on the board, teachers from Rayong marking it. No appeal.”`;
+    return G.mode === "soi6"
+      ? "“Thursdays, eight o'clock, here at the Vic. Prize money, teachers from Rayong, no appeal. It's on the TIME.”"
+      : "“Thursdays, eight o'clock, prize money. Which bars — you ask on the day, or check the TIME.”";
+  }
   if (typeof _quizDay === "function" && _quizDay()) {
     return `“Quiz? Tonight, na — eight till ten.” A thumb over the shoulder at the soi. “${bars.join(", ")}. Five questions, prize on the board. You clever? Go.”`;
   }
@@ -2063,7 +2072,7 @@ const _BAR_THIN = [
 // used to name "a hostess or two, the mama" and printed it in a sports pub with
 // nobody in it at all (Maureen, round 47).
 const _BAR_THIN_STAFFED = [
-  "The rail runs mostly to bare wood down the far end. A hostess or two, the mama, and a lot of stools nobody's paying to sit on. Low season does this.",
+  "The rail runs mostly to bare wood down the far end. A hostess or two, whoever has the till, and a lot of stools nobody's paying to sit on. Low season does this.",
   "The girls have the far half of the bar to themselves and are using it to sit down, which in season they never get to do. Nobody minds you noticing.",
 ];
 
@@ -2205,8 +2214,11 @@ function _describeRoom(full, forceFull) {
       // "over on" only when it is another district, "along" when it is this one
       const where = ([id]) => { const rm = _npcRoom(id); const reg = ROOMS[rm] && ROOMS[rm].region;
         return _barName(rm) + (reg ? (reg !== _room().region ? `, over on ${reg},` : `, along ${reg},`) : ","); };
-      const line = away.map(a => `${a[1].name} is working ${where(a)}`).join(" and ");
-      _say(`${line} tonight` + (cover ? `, and it is ${NPCS[cover].name} on the till — the one ${away.length === 1 ? "she" : "they"} leave${away.length === 1 ? "s" : ""} it with.`
+      // two owners at the same other bar: one clause, not the template twice (Henri, round 47)
+      const sameBar = away.length > 1 && away.every(a => _npcRoom(a[0]) === _npcRoom(away[0][0]));
+      const line = sameBar ? `${away.map(a => a[1].name).join(" and ")} are both working ${where(away[0])}`
+        : away.map(a => `${a[1].name} is working ${where(a)}`).join(" and ");
+      _say(`${line} tonight` + (cover ? `, and it is ${NPCS[cover].name} on the till — the one ${away.length === 1 ? ((NPCS[away[0][0]].pronoun === "he") ? "he" : "she") : "they"} leave${away.length === 1 ? "s" : ""} it with.`
                                        : `; the floor staff keep this one running.`), "dim");
     }
   }

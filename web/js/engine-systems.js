@@ -1634,7 +1634,7 @@ const _RIDE_VENUES = [
       `never been for sale.`,
   ]},
   { key: "ranlao", lo: 300, hi: 700, sanuk: 3, scenes: [
-    n => `A ran lao on South Pattaya Road — Thai live music, whisky sets, and a fifteen-minute ` +
+    n => `A ran lao off Pattaya Tai that a farang only ever sees from the back of a girl's bike — Thai live music, whisky sets, and a ` +
       `queue that ${n} walks straight past on somebody's nod. Inside, the mystery of the quiet ` +
       `strip solves itself: everyone is HERE. Half the rail crews of the beer bars, out of ` +
       `uniform and off the clock, and the room sings every chorus back at the band. You are the ` +
@@ -2944,9 +2944,22 @@ function _tanWhere(id) {
 // my mother money when I want. I chose it." One reused template contradicted
 // three women who assert otherwise (round 23).
 const _TAN_WHO = {
-  nont: "was Rabbit's boy — the {{phone}}, the till, the talking between a farang and everybody else — " +
-    "until I found him a table that doesn't end on a police corkboard. He sells you an answer for " +
-    "two hundred. I give it to you for nothing. You know the difference now, and so does he",
+  // Nont's read MOVES with the file (Pimmy, round 47: it was frozen at "Rabbit's
+  // boy" the morning after the boy had his own coffee). A value may be a
+  // function; _tanAbout resolves it.
+  nont: () => {
+    const cleared = _flag("kidCleared") || _flag("tanKidFavour");
+    const onFile = _flag("ccibVisited") && (_flag("kidPath") || ((G.ccibRadar || {}).nont));
+    if (cleared) return "was Rabbit's boy, and for a while he was a line in a file in a building with a " +
+      "marble floor. He is not now. He knows who to thank and he will never say it, which is the " +
+      "correct way to thank a man";
+    if (onFile) return "was Rabbit's boy, and since the morning of your coffee he is a name in a file. A " +
+      "file does not hurry, my friend, and it does not forget on its own. He sells answers for two " +
+      "hundred; this one he cannot buy. Ask me about the coffee if you want to know what I think";
+    return "was Rabbit's boy — the {{phone}}, the till, the talking between a farang and everybody else — " +
+      "until I found him a table that doesn't end on a police corkboard. He sells you an answer for " +
+      "two hundred. I give it to you for nothing. You know the difference now, and so does he";
+  },
   mercedes: "is back on that rail because she decided to be, which is not the same story as the others " +
     "and she will correct you if you get it wrong. Ask her yourself. She does not mind the question; " +
     "she minds the assumption",
@@ -2978,6 +2991,10 @@ function _tanAbout(topic) {
       NPCS[i].name.toLowerCase().split(" ").pop() === t) ||
     null;
   if (!id || id === "tan") return false;
+  // An AUTHORED read outranks the locator: Tan had a whole node on Eddy that
+  // never once printed, because the generic "somebody the soi knows" clause
+  // answered the name first (Pimmy, round 47).
+  { const d = _pickDialogue("tan", t); if (d && d.topic) return false; }
   if (_TAN_READ[id]) {
     if (!(G.known && G.known[id])) { _say("“Meet him first, my friend. Then I tell you who he is — and I will already know.”"); return true; }
     _say(`“${NPCS[id].name}.” The grin. “${_TAN_READ[id]}.”`);
@@ -3004,7 +3021,7 @@ function _tanAbout(topic) {
     : _role === "mamasan" ? "runs the floor there. Owns the room in everything but the paperwork — and sometimes that too. You do not get past her by accident"
     : _role === "cashier" ? "keeps the till there. Nothing crosses that bar she has not already counted twice"
     : _role === "manager" ? "runs the place for the owner. Different job — the man who is there so the owner does not have to be"
-    : _TAN_WHO[id] ? _TAN_WHO[id]
+    : _TAN_WHO[id] ? (typeof _TAN_WHO[id] === "function" ? _TAN_WHO[id]() : _TAN_WHO[id])
     // The generic hostess read. Pooled per-person by a stable hash rather than
     // one sentence for every woman on the roster — "sends money home, same as
     // all of them" printed about EVERYBODY was the flattening a persona caught
@@ -4906,7 +4923,7 @@ const _SHAKEDOWN_SCENES = [
   "Somebody's clearly done this before: helmet on, license out, cash folded to the right " +
     "amount before he's even fully stopped, the whole transaction over in fifteen seconds " +
     "flat with a nod on both sides. The rail respects it. That, they agree, is how you take " +
-    "a Tuesday checkpoint.",
+    "a weeknight checkpoint.",
 ];
 
 // WATCH at the two junction bars (Blue Dog, Stinky Pinky) at the foot of Soi 6,
@@ -7828,7 +7845,7 @@ const _OWL_LEADS = [
   "Every year a foreign paper 'discovers' the world's oldest profession in the Land of Smiles as though we invented it. I have watched it ply its trade in New York and London, Amsterdam and Hamburg, Rome and Tokyo — it is no more Thai than the moon is. Supply meets demand; it is here to stay; and the published figures should be taken with a barrel of salt and a slice of lime.",
   "Every night a pair of them takes a corner table on the cultural sightseeing tour — one overpriced beer, arms crossed, here to watch the fallen women and feel taller for it. And every night, the same quiet collapse: the girl on stage turns out to be twenty-one, radiant, and kind, and the superiority curdles into something that needs another drink. Here is what nobody tells the sightseers, squire. I have sat in these rooms a thousand nights, and the only person in them with a clean soul is usually the one being looked down on. She dances to make the room happy — all of it. Even the corner table.",
   "Bars change names and the girls rotate street to street, but every door on this coast has its fixture. I know a doorman who, three years back, sat on the pavement opposite every night until four — a Thai man may wait outside a farang bar, never drink in it — to take one of the girls home. She left through that door with a customer and didn't come back. He crossed the road and asked the mamasan for the job. The new girls call him P', send him out for som tam, and know nothing; ask how long he's worked there and you get 'three years', and nothing else. The monks call it ploi wang — letting go. Some men let go of everything except the geography.",
-  "A reader walked the neon on a Friday night — thin crowds on the strip, empty stools in the maze — and pronounces the town dead. That same midnight, squire, there was a fifteen-minute queue outside a ran lao on South Pattaya Road, and every second face at every table inside was one he'd have recognised from behind a bar. The pulse hasn't stopped. It clocked off, changed its clothes, and went out to spend its own money where the music is Thai and the prices are honest. The town is not dead. You are walking down the wrong streets.",
+  "A reader walked the neon on a Friday night — thin crowds on the strip, empty stools in the maze — and pronounces the town dead. That same midnight, squire, there was a queue outside a ran lao off Pattaya Tai — the kind of place a farang only sees from the back of a girl's bike — and every second face at every table inside was one he'd have recognised from behind a bar. The pulse hasn't stopped. It clocked off, changed its clothes, and went out to spend its own money where the music is Thai and the prices are honest. The town is not dead. You are walking down the wrong streets.",
   "Rents rise, the tea money rises with every contract renewal, and so the price of your beer rises to meet them — that is the whole economics of this coast in one sentence. The bakshish never stops, no matter who sits in which chair. Only the ingenuous believe it can be halted, and the ingenuous don't last a season.",
   "They set a closing time and call it reform. It reforms nothing — the market wants four a.m., or six, and the market finds a way: a bolted door on the Darkside, a painted-out window, a party that closes for no clock. Business hours belong to business, not the almanac.",
   "Low season, and the town's a ghost of itself — a beach walk to yourself before noon, hotels checking in one guest a night. Which makes it, for the naughty boy, the finest season of all: bars crammed with ladies and empty of men, and the ladies keen. Not desperate, mind — they've the family money still — just keen to make more. There is no better time to be the only customer in the room.",
@@ -7914,7 +7931,7 @@ const _OWL_LETTERS = [
    "Delighted for you, squire. Now a small prophecy, free of charge: one day the phone will ring from up-country — a brother, a motorbike, a hospital, a number with four zeros — and your answer will be worth more than nine months of home cooking. Pay it and you are her harbour. Explain about boundaries instead, and you will come home to a wardrobe of modest jeans and one suitcase gone. Nobody will have played you. The bar is not a place, sir. It is a survival mechanism, and it never closes."],
   ["A reader writes, quietly: 'Three weeks now — same girl, every single night. Dinners, the beach, coffee on my balcony of a morning. Neither of us has so much as looked at anyone else. This morning I told her she could give the bar away, we'd make a weekend of the islands. She smiled and said lovely — but send mama the fine before three, or would I rather just cover her salary by the month?'",
    "Sit down, squire. For twenty-one days you were in a relationship and she was at work, and the terrible truth of this coast is that from the outside the two are indistinguishable — that is the entire product. Nobody cheated you. She kept her side flawlessly; by her lights 'special customer' is the warmest thing there is to be. Was any of it real? The coast declines to answer. It always declines. The only question it will price for you is the one she asked: by the night, or by the month."],
-  ["A reader's ordeal: a massage shop by his hotel, ฿600 for oil. In the room she demands 'special'; he declines and asks for his money back — and she ERUPTS, screaming 'pervert', the mamasan hurling shoes and a flower vase, both daring him to call the police: 'many customers say that, nobody calls.' He fled. But his hotel manager heard, went white, and marched round with the bell boy and a guard — four men. The girls scattered; the ฿600 came back with ฿200 on top.'",
+  ["A reader's ordeal: a massage shop by his hotel, oil at the board price. In the room she demands 'special'; he declines and asks for his money back — and she ERUPTS, screaming 'pervert', the mamasan hurling shoes and a flower vase, both daring him to call the police: 'many customers say that, nobody calls.' He fled. But his hotel manager heard, went white, and marched round with the bell boy and a guard — four men. The girls scattered; the ฿600 came back with ฿200 on top.'",
    "There's the whole coast in one story: a shop that will scream you into surrendering your own refund, and a hotel man who'll walk three of his staff round the corner to get it back for a guest. The town will rob you and the town will catch you, often on the same street. Tip the bell boy. Then tip him again."],
   ["A reader writes, singed: 'Brought last night's lady back to the condo and scrubbed the place spotless. This morning today's lady found ONE hairpin down the side of the sofa, and I have not known peace since.'",
    "One hairpin is a signed confession, squire, and your condo becomes an active crime scene the instant a second guest crosses the threshold. The old hands play away games only — her room, a short-time, anywhere but the one address a wronged woman can find again at three in the morning. A man who brings them home is not a butterfly. He is a defendant."],
@@ -7948,7 +7965,7 @@ const _OWL_JOKES = [
   "A tip worth more than the nightlife: the six-table seafood shack out at Naklua — no reservations, no view, no service to speak of, and food from another planet at a price that shames the tourist traps. Nine dishes for three, two and a half thousand baht, and we over-ordered. Go hungry, go early.",
   "The Beach Road stroll is an international bazaar now. The local ladies go for a thousand, most of them; the Russians ask fifteen hundred, a Turkish lady two, and the Uzbek — pick of the promenade — the same. The African ladies hold a fixed fifteen hundred by open collusion, and heaven help the sister who undercuts. Add five hundred for the fool who won't wrap up.",
   "Half the small go-gos are zombies — dead on their feet, unable to cover the electric bill let alone the girls, shuffling on out of habit. They were zombies before Covid. Sooner or later they reform, repurpose into a live-music room, or lie down. The street is thinning itself, and not gently.",
-  "Two sights that tell you everything: the queue of ladies at the Buakhao wire-transfer window on the first of the month, collecting from a boyfriend in Farangland who believes he's the only one — and, cruising past them, a gentleman's club's promo van got up like a knocking shop on wheels, honking for trade. Supply, meet demand. Demand, meet the wire desk.",
+  "Two sights that tell you everything: the queue of ladies at the Buakhao ATM on the first of the month, collecting from a boyfriend in Farangland who believes he's the only one — and, cruising past them, a gentleman's club's promo van got up like a knocking shop on wheels, honking for trade. Supply, meet demand. Demand, meet the wire desk.",
   "The eternal dilemma of the night's first bar: a flat-out ten sits in front of you, and it's only nine o'clock. Take her now and cap the adventure early, or press on and gamble the night turns up better? Half of Pattaya's regret is the ten a man walked past 'to keep his options open.' Seize the moment, or 'no regrets, press on' — both are wisdom. Only dithering is a mistake.",
   "A reader nearly took a tiny new beauty home — she'd have gone for two thousand — when the mamasan blocked the door: 'this one is small, she brings me many customers; you want her, twenty-five lady drinks and a five-thousand fine.' The girl cried; he left. A barfine is never a fixed price, squire — it's what the girl is worth to the bar THAT night, and a fresh little draw is worth keeping on the floor. The number isn't a robbery. It's an appraisal.",
   "For the specialist: the town keeps a fetish club or two — a grand entrance fee, more again for a private room, and a roster of older ladies who, be warned, mostly DOMINATE. Go to be dominated and you're in business; go to dominate and you'll find the market thin. Know your role before you pay at the door.",
@@ -7999,7 +8016,7 @@ const _OWL_LISTINGS = [
   "CANDY BAR (Soi Buakhao), the mamasan's own — sharp as a razor, warm as a Chang on a hot night. She'll price your wallet before you sit and your story before you tell it. Buy her a drink; it's cheaper than the alternative.",
   "QUEEN VIC (Soi 6): the one air-conditioned pub on the wildest soi in the world, where the residents watch the circus from across the street and mourn the days before the paper changed hands. Cold beer, warm company, no illusions.",
   "THE LAST BAHT BUS is a lie the tourists tell each other. The songthaews run all night — sparse after two, on the long loop, but they run — and the bikes and the meter-cheats never stop. The only bus you can truly miss is the one you're too far gone to catch: too drunk for the pillion, too tired to stand the kerb, too sick to care. The curfew, gentlemen, was always on YOU. The Owl has closed more nights than he'll admit and never once failed to get home. He does not recommend the method.",
-  "DONGTAN & SOI 7 (Jomtien) — the coast for men who've stopped auditioning. The Sandbar, the Lucky 7, a warm beer and a cool argument about the football, and not one soul will grab your sleeve. A third cheaper and a mile quieter. Come when the loud end has worn you thin; you'll wonder why you fought it.",
+  "DONGTAN & SOI 7 (Jomtien) — the coast for men who've stopped auditioning. The Sandbar, the Lucky 7, a warm beer and a cool argument about the football, and not one soul will grab your sleeve. The town price for the beer and a mile quieter — the saving is in what nobody talks you into. Come when the loud end has worn you thin; you'll wonder why you fought it.",
   "BUDDHA HILL (Pratumnak) at dusk — climb past the treadmill of the soi to the big gold Buddha, the whole bay laid out and cooling below. No cover, no bar bill, no bell; the one view on this coast that asks nothing back. The Owl files his best columns up there. Or claims to.",
   "THE HAIR-TONIC MAN and the curse-remover two pitches down both work Beach Road on a commission drawn from your own gullibility. Ask the price BEFORE you follow anyone down a side soi; if the number swells at the shop door, the police station takes reports — and a cut. Mai pen rai is not a payment plan.",
 ];
@@ -8449,9 +8466,17 @@ function _qvKitchen(arg) {
   if (wantsRoast && !_roastOn()) { _say(_roastNote()); return; }
   if (wantsCurry && !_curryDay() && !_qvClosed()) { _say(_curryNote()); return; }
   if (_qvClosed() && !/crisp/.test(arg || "")) {
+    // The crisps landing unbidden is the joke, and a joke is told once: the
+    // second refused order of the night was ฿40 of crisps nobody asked for
+    // (Brenda, round 47). First time they land on the tab, price on the line.
+    if (G.soc.qvCrisped) {
+      _say("Aoy doesn't look up. \u201cKitchen close, tilac. You had the crisp already.\u201d (BUY CRISPS, if you must.)");
+      return;
+    }
+    G.soc.qvCrisped = true;
     _say("Aoy doesn't even reach for the pad. \u201cKitchen close, tilac \u2014 cook go " +
       "home eleven o'clock, same as England.\u201d A bag of crisps lands on the bar " +
-      "instead, unbidden. \u201cCrisp. \u0e3f" + QV_CRISPS + ". Salt and vinegar. Is this or nothing.\u201d");
+      "instead, unbidden, and goes on the tab. \u201cCrisp. \u0e3f" + QV_CRISPS + ". Salt and vinegar. Is this or nothing.\u201d");
   }
   if (_fullNo()) return;                  // the kitchen keeps its food, you keep your money
   const dish = _qvMatchDish(arg) ||

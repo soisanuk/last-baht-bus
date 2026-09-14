@@ -3813,7 +3813,7 @@ test("the bar manager: welcome shot, man drink, monopolise nudge — and NOT a l
   // is thirty, English, and would never say "bud"
   out = []; state().room = "pratumnak_clubs"; state().visited.doghouse = true;
   _arriveAt("doghouse");
-  assert.ok(NPCS.bill.shot.some(l => lastOut().includes(_fmt(l, { n: "Bill" }))),
+  assert.ok(NPCS.bill.shot.some(l => lastOut().includes(_fmt(l, { n: "Bill", bar: _barName(state().room) }))),
     "Bill pours from his own pool");
   assert.ok(!_MGR_SHOT.some(l => lastOut().includes(_fmt(l, { n: "Bill" }))),
     "…and not from the generic one");

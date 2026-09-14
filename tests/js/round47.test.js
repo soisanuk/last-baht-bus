@@ -764,3 +764,146 @@ test("the early call names the kin the girl actually has", () => {
     }
   } finally { _shiftEligible = saved; }
 });
+
+test("Tan's authored read on Eddy outranks the locator, and moves after the coffee", () => {
+  G.stage = "expat"; _setFlag("expatLife"); G.known.fast_eddy = true; G.room = _npcWhere("tan") || "soi6_street";
+  out = []; doCommand("ask tan about eddy");
+  assert.match(text(), /He had a bar and now he has a smaller one/, "the authored node, not 'somebody the soi knows'");
+  _setFlag("ccibVisited");
+  out = []; doCommand("ask tan about eddy");
+  assert.match(text(), /gone to ground/, "after the coffee, the other read");
+});
+
+test("Tan's read on Nont moves with the file", () => {
+  G.stage = "expat"; _setFlag("expatLife"); G.known.nont = true; G.room = _npcWhere("tan") || "soi6_street";
+  out = []; doCommand("ask tan about nont");
+  assert.match(text(), /found him a table/);
+  _setFlag("ccibVisited"); _setFlag("kidPath");
+  out = []; doCommand("ask tan about nont");
+  assert.match(text(), /the boy had one too/, "the authored kid-read node outranks the locator");
+  G.pendingChoice = null; _setFlag("ccibReadGiven");
+  out = []; doCommand("ask tan about nont");
+  assert.match(text(), /name in a file/);
+  _setFlag("kidCleared");
+  out = []; doCommand("ask tan about nont");
+  assert.match(text(), /He is not now/);
+});
+
+test("Bangkok is a subject three people answer, and Duangjai has a line on the Rabbit", () => {
+  G.stage = "expat"; _setFlag("expatLife"); G.known.nont = true;
+  const miss = /not my story|wrong (girl|man)|ask me something|another time/i;
+  G.room = _npcWhere("tan") || "soi6_street"; out = []; doCommand("ask tan about bangkok"); assert.match(text(), /lights left on/);
+  G.room = NPCS.nont.room; out = []; doCommand("ask nont about bangkok"); assert.match(text(), /bigger table/);
+  G.room = "lake_bar"; out = []; doCommand("ask duangjai about bangkok"); assert.match(text(), /Harder rooms/);
+  out = []; doCommand("ask duangjai about rabbit"); assert.match(text(), /polite both times/); assert.doesNotMatch(text(), miss);
+});
+
+test("Nont tells his exit from the Rabbit one way", () => {
+  const n = NPCS.nont.dialogue.find(d => /^rabbit\|/.test(String(d.topic)));
+  assert.match(n.text, /a month before the golf shirt took my name off/);
+  assert.match(n.short, /before they took my name off the rota/);
+});
+
+test("an authored girl's plan is a sentence, as a filler girl's is", () => {
+  G.day = 3; G.room = "candy_bar_2"; doCommand("talk to bee");
+  out = []; doCommand("ask bee about plan");
+  assert.match(text(), /My dream is to .+\./, "wrapped, not a bare fragment");
+});
+
+test("a plain line to a partner whose question lapsed is the late answer, not a topic", () => {
+  G.room = "stinky_bar"; doCommand("talk to bert");
+  G.convo = "bert"; G.convoQ = null;
+  G.convoLapsed = { bert: { key: "home", q: "Where are you from, bud?" } };
+  out = []; doCommand("bristol mate");
+  assert.match(text(), /a beat late/);
+  assert.doesNotMatch(text(), /You asked Bert about/);
+  assert.ok(!G.convoLapsed.bert, "the lapsed question is spent");
+});
+
+// ── Fable wave two: Henri (the gents' clubs), Brenda (the calendar), Desmond (the Owl) ──
+
+test("Bill welcomes you to the club you are standing in", () => {
+  G.money = 5000;
+  for (const room of NPCS.bill.bars) {
+    let d = G.day; while (_npcRoom("bill") !== room) { G.day++; if (G.day - d > 6) break; }
+    G.room = room; G.soc.mgrShot = {}; out = []; _managerWelcome();
+    if (/Welcome to/.test(text())) assert.match(text(), new RegExp("Welcome to " + ROOMS[room].bar.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+});
+
+test("staff answer the calendar they keep: closing and the league, in their own register", () => {
+  G.room = "lucky_tiger";
+  out = []; doCommand("ask lek about closing");
+  assert.match(text(), /Dawn|last man/, "an all-night beer bar");
+  G.room = "velvet_club"; const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
+  out = []; doCommand(`ask ${NPCS[g].name} about closing`);
+  assert.match(text(), /Midnight/, "a gents' club shuts at twelve");
+  G.room = "lucky_tiger"; G.day = 3;
+  out = []; doCommand("ask lek about league");
+  assert.match(text(), /Tonight/); assert.match(text(), /PLAY KILLER/);
+  G.day = 4; out = []; doCommand("ask lek about league"); assert.match(text(), /night after next/);
+  G.day = 5; out = []; doCommand("ask lek about league"); assert.match(text(), /tomorrow/);
+  G.room = "queen_vic"; out = []; doCommand("ask terry about quiz");
+  assert.doesNotMatch(text(), /\bna\b/, "a pensioner does not say na");
+  out = []; doCommand("ask aoy about closing"); assert.match(text(), /dawn/i);
+});
+
+test("TIME says where in the count the league is, and a quiz you are sitting in is ON", () => {
+  G.day = 3; out = []; _doTime(); assert.match(text(), /League night: killer pool/);
+  G.day = 4; out = []; _doTime(); assert.match(text(), /League night .* is the night after next/); G.day = 5; out = []; _doTime(); assert.match(text(), /League night .* is tomorrow/);
+  G.day = 4; G.nightTurn = 40; G.game = { type: "quiz", qs: [0, 1, 2, 3, 4], at: 0, right: 0 }; out = []; _doTime();
+  assert.match(text(), /ON right now/); G.game = null;
+});
+
+test("Mort stands behind his own copy, and the cipher's instruction is a door", () => {
+  G.room = "queen_vic"; G.day = 2;
+  out = []; doCommand("ask mort about blue dog");
+  assert.match(text(), /BLUE DOG/); assert.doesNotMatch(text(), /not my story|Search me/i);
+  out = []; doCommand("tell mort i counted the hoots");
+  assert.match(text(), /Box fifteen|Box 15/); assert.ok(_flag("owlBox15"));
+});
+
+test("TAO RAI answers in a cabaret and a massage shop", () => {
+  G.room = "peacock_cabaret"; out = []; _doTaoRai();
+  assert.match(text(), /beer ฿/); assert.doesNotMatch(text(), /lady drink|the bell/);
+  G.room = Object.keys(ROOMS).find(k => ROOMS[k].massage === "legit"); out = []; _doTaoRai();
+  assert.match(text(), new RegExp("Thai ฿" + MASSAGE_LEGIT));
+});
+
+test("the Stinky's ashtray reads; a late pie is an offer of crisps, not a charge", () => {
+  G.room = "stinky_bar"; out = []; doCommand("examine ashtray");
+  assert.match(text(), /league ashtray/i);
+  G.room = "queen_vic"; G.nightTurn = 70; G.money = 1000; out = []; doCommand("buy pie");
+  assert.match(text(), /Kitchen close/); assert.match(text(), /goes on the tab/, "the joke names its price");
+  assert.equal(G.money, 1000 - QV_CRISPS, "the joke, once");
+  out = []; doCommand("buy curry");
+  assert.match(text(), /had the crisp already/); assert.equal(G.money, 1000 - QV_CRISPS, "and not twice");
+});
+
+test("an absent owner's pronoun is his own; a filler girl's family line is not doubled", () => {
+  // Bill is a man; the Doghouse's absence line used to say "the one she leaves it with"
+  let d = G.day; while (_npcRoom("bill") === "doghouse") { G.day++; if (G.day - d > 6) break; }
+  G.room = "doghouse"; out = []; _describeRoom(true);
+  const abs = out.map(o => typeof o === "string" ? o : o.text).find(t => /is working|are both working/.test(t)) || "";
+  if (/the one \w+ leaves? it with/.test(abs)) assert.doesNotMatch(abs, /the one she leaves/);
+  for (const id of Object.keys(NPCS).filter(i => NPCS[i].filler && NPC_ROLES[i] === "hostess")) {
+    const fam = (NPCS[id].dialogue.find(x => x.topic === "family") || {}).text || "";
+    assert.ok(!/I send money every month[^.]*\. Every month I send money/.test(fam), id + " doubles the sending line");
+  }
+});
+
+test("Doyle's job waits on a face he knows; the order quest stops pitching once it is done", () => {
+  G.room = "queen_vic";
+  const st = _npcState("doyle"); st.trust = 0;
+  out = []; doCommand("ask doyle about job"); assert.match(text(), /Not yet/);
+  st.trust = 2; out = []; doCommand("ask doyle about job"); assert.match(text(), /useful/);
+  _setFlag("knowIceMan"); _setFlag("iceSettled");
+  const n = _pickDialogue("bill", "order"); assert.match(n.text, /Sorted/);
+});
+
+test("no bargirl weaves out of a shut Soi 6 door", () => {
+  G.room = "soi6_street"; G.nightTurn = 65; G.encDone = {};
+  const saved = _rand; _rand = () => 0;
+  try { out = []; for (let i = 0; i < 6; i++) _maybeEncounter(); } finally { _rand = saved; }
+  assert.doesNotMatch(text(), /weaves out of the nearest doorway/);
+});

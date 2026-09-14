@@ -1477,6 +1477,7 @@ function _doInventory() {
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
   menu: ["card", "menus", "price list", "prices", "price board"],
+  ashtray: ["the ashtray", "league ashtray", "pot", "the pot", "table money"],
   laptop: ["computer", "machine", "pc", "screen", "lock screen", "post-it", "postit"],
   monitor: ["cameras", "camera", "cctv", "feeds", "feed"],
   stick: ["usb", "usb stick", "rabbit's stick", "the stick", "under the bar"],
@@ -3603,7 +3604,24 @@ function _doTalkBody(arg, topic) {
       : _fmt(_pickVary(_THAI_POINTER, "thaipointer"), { n: NPCS[npc].name }));
     return;
   }
-  if (topic && !d.topic && /\bquiz\b|trivia/.test(topic)) { _say(_quizTalk()); return; }
+  if (topic && !d.topic && /\bquiz\b|trivia/.test(topic)) { _say(_quizTalk(npc)); return; }
+  // The room prints LEAGUE NIGHT on its wall and the woman who plays that table
+  // every night said "not my story"; thirteen people shrugged at "closing" while
+  // the shutters came down behind them (Brenda, round 47). Staff and the house
+  // answer the calendar they keep.
+  if (topic && !d.topic && (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house)) {
+    const _ct = String(topic).toLowerCase();
+    if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc)); return; }
+    if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct)) { _say(_leagueTalk(npc)); return; }
+  }
+  // The columnist answers for his column: any subject the Owl has printed, Mort
+  // will stand behind to your face — he was a stranger to every word of it
+  // (Desmond, round 47). Box 15's answer can also be handed to him as a topic.
+  if (npc === "mort" && topic && !d.topic) {
+    if (/\bhoots?\b/.test(topic) && /count/.test(topic)) { _owlBox15Answer(); return; }
+    const said = _mortColumnTalk(topic);
+    if (said) { _say(said); return; }
+  }
   if (topic && !d.topic && /\bdarts?\b/.test(topic)) { _say(_dartsTalk()); return; }
   if (topic && !d.topic && G.dog && (/\bdogs?\b|sai ?krok|\bpuppy\b|\bpaddy\b/.test(topic) || _isDogWord(topic))) {
     _say(_dogTalk(npc)); // the dog at your heel is a subject everyone has
@@ -3663,7 +3681,7 @@ function _doTalkBody(arg, topic) {
     const from = story.from;
     const line = /home|village/.test(t) ? `"${from}, Isan side. Small village, big family." She says it like a postcode, and then, softer: "Very far."`
       : /family/.test(t) ? story.family
-      : story.plan;
+      : `"Plan?" She thinks about it properly. "My dream is to ${story.plan}." A shrug, a grin. "Everybody say that one. Maybe me, I do it."`;
     _say(`${NPCS[npc].name}: ${line}`);
     _questOffer(npc);
     return;
@@ -4408,6 +4426,16 @@ function _convoResolve(lower) {
   if (id) {
     const t = _convoTopic(lower);
     const words = bare.split(/\s+/).filter(Boolean).length;
+    // Her own question lapsed when you turned away; back with her, a plain line
+    // that is nobody's topic is the answer she was waiting for — not "You asked
+    // Bee about bristol mate" (Rhiannon, round 47).
+    const lapsed = G.convoLapsed && G.convoLapsed[id];
+    if (lapsed && !_partnerHasTopic(id, t) && !_partnerHasTopic(id, bare)) {
+      delete G.convoLapsed[id];
+      _say(`(You answer ${_convoName(id)}'s question, a beat late.)`, "dim");
+      G.convoQ = { id, key: lapsed.key, q: lapsed.q };
+      return _convoAnswer(lower);
+    }
     if (words <= 2 || _partnerHasTopic(id, t) || _partnerHasTopic(id, bare)) {
       // pass the RAW words: _doTalkBody tries the literal topic first and falls
       // back to the synonym map itself. Normalising here killed every topic chip
@@ -5380,7 +5408,7 @@ function _standRegular(id) {
     // the house rule that a repeatable line is never a fixed string.
     if (id) (G.soc.roundFor = G.soc.roundFor || {})[id] = G.turns; // he'll tell it again, in full
     const drink = (id && NPCS[id] && NPCS[id].drink) || "a cold one";
-    _say(_fmt(_pickVary(_STAND_BEER, "standbeer"), { who, drink }) + ` (฿${G.money} left.)`);
+    _say(_fmt(_pickVary(_STAND_BEER, "standbeer"), { who, drink }) + ` (-฿${_beerPrice()}, ฿${G.money} left.)`);
   }
 }
 
@@ -5786,9 +5814,10 @@ function _doBuy(arg) {
         _standRegular(who); // the landlady takes one like anybody else
       } else if (/\bman drink\b/.test(arg)) {
         // the verb IS "buy man drink", so telling him to type it is no help at all
-        _say("A man drink is for the fella running the bar, and this one hasn't got one — " +
-          "the till here is somebody else's problem. (Stand one of the regulars a beer instead, " +
-          "or BUY DRINK FOR <lady>.)");
+        const _tk = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
+        _say("A man drink is for the fella running the bar, and this one hasn't got one tonight" +
+          (_tk ? ` — ${NPCS[_tk].name} keeps the till, and hers is a lady drink.` : " — the till here is somebody else's problem.") +
+          " (Stand one of the regulars a beer instead, or BUY DRINK FOR <lady>.)");
       } else if (nameW) {
         _say("She's not working this bar — nobody here by that name. (Buy a drink for one of the girls on the rail, or BUY MAN DRINK.)");
       } else _say("Nobody here to buy one for.");
@@ -7356,8 +7385,15 @@ function _doTime() {
     const qv = (typeof _quizBars === "function" ? _quizBars() : [])
       .map(r => _barName(r)).filter(Boolean).join(" · ");
     _say(t < 20 ? _fmt(_L("(Quiz night tonight: 20:00–22:00 — {venues} — teachers in from Rayong.)"), { venues: qv || _L("three bars") }) :
-      _isQuizWindow() ? _fmt(_L("(Quiz night is ON right now: {venues}.)"), { venues: qv || _L("three bars, somewhere") }) :
+      (_isQuizWindow() || (G.game && G.game.type === "quiz")) ? _fmt(_L("(Quiz night is ON right now: {venues}.)"), { venues: qv || _L("three bars, somewhere") }) :
       "(Quiz night has been and gone.)", "dim");
+  }
+  // the league walks round the week — every third night — so the clock says
+  // where in the count tonight is (Brenda, round 47: TIME knew the quiz, never the league)
+  if (typeof _leagueTonight === "function" && _flag("act1Done")) {
+    const inN = _leagueIn();
+    _say(inN === 0 ? "(League night: killer pool at every bar with a table, every third night — PLAY KILLER.)"
+      : `(League night — killer pool, every third night — is ${inN === 1 ? "tomorrow" : "the night after next"}.)`, "dim");
   }
   _say(t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
     t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine.)" :
@@ -7419,7 +7455,12 @@ const _NURSE_BAR = [
 ];
 function _sayNursed() {
   const staff = (typeof _staffAt === "function" ? _staffAt(G.room) : []).filter(id => NPC_ROLES[id] === "hostess" && _npcsHere().includes(id));
-  const n = staff.length ? NPCS[staff[Math.floor(_hh(G.room + ":" + G.turns, 3) % staff.length)]].name : "A girl";
+  // a pub has no hostess: the house (Aoy) asks, or nobody does — "A girl is
+  // beside you" printed three times in the Queen Vic (Brenda, round 47)
+  const house = staff.length ? [] : _npcsHere().filter(id => NPCS[id].house);
+  const pick = staff.length ? staff : house;
+  if (!pick.length) return;
+  const n = NPCS[pick[Math.floor(_hh(G.room + ":" + G.turns, 3) % pick.length)]].name;
   _say(_fmt(_pickVary(_room().barType === "gogo" ? _NURSE_GOGO : _NURSE_BAR, "nursed"), { n }), "alert");
 }
 let _waitRefused = false;   // set by a WAIT that refused; scoped to one doCommand
@@ -8255,12 +8296,83 @@ function _minutesWord(n) {
   const w = { 6: "Six minutes", 12: "Twelve minutes", 18: "Eighteen minutes", 24: "Twenty-four minutes", 30: "Half an hour" };
   return w[n] || (n + " minutes");
 }
+// "What time do you close?" — answered by the room's own rule, in the speaker's
+// register (Brenda, round 47: thirteen people shrugged while the shutters came down).
+function _closingTalk(npc) {
+  const r = _room();
+  const tinglish = !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
+  const hourOf = t => { const h = (18 + Math.floor(t / 10)) % 24; return `${h}:00`; };
+  if (r.closesAt != null) return tinglish
+    ? `“We close ${hourOf(r.closesAt)}, na. Same every night — not a bar, this.”`
+    : `“${hourOf(r.closesAt)}, every night. It's not a bar.”`;
+  if (_closesMidnight(G.room)) return tinglish
+    ? "“Midnight, tilac. Last call half past eleven, then shutter come down — police, na. You come back tomorrow.”"
+    : "“Midnight. Last call at half eleven and the shutters come down on the dot — that's the arrangement on this road, not my choice.”";
+  return tinglish
+    ? "“Close? When last man go home. Dawn, sometimes. You still here, we still open.”"
+    : "“We don't. Not while there's a man on a stool — dawn, most nights, and the sunrise crowd after that.”";
+}
+// The league: every third night, every table in town — a count, not a weekday.
+function _leagueTalk(npc) {
+  const tinglish = !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
+  const inN = _leagueIn();
+  if (!_room().pool) return tinglish
+    ? "“League? No table here, tilac. The bars with a table — every third night, all of them, same night.”"
+    : "“No table here. Every bar that has one runs it the same night — every third night, all over town.”";
+  if (inN === 0) return tinglish
+    ? "“Tonight, na! Killer pool — every bar with a table, same night. You play? (PLAY KILLER)”"
+    : "“Tonight. Killer pool, every table in town on the same night. Money in the ashtray, last cue standing takes it. (PLAY KILLER)”";
+  const when = inN === 1 ? "tomorrow" : "the night after next";
+  return tinglish
+    ? `“Not tonight — ${when}. Every third night, it go round the week, so you count from the last one.”`
+    : `“${when.charAt(0).toUpperCase() + when.slice(1)}. Every third night — it walks round the week, so you count from the last one, not the calendar.”`;
+}
+// Mort stands behind his own copy: find the Owl line that names the subject and
+// read it back, then the columnist's verdict on it.
+const _MORT_STANDS = [
+  "“{t}?” Mort flips back a page in the notebook and reads it off, not to you so much as to the record. “{q}” The biro clicks. “Mostly true. The part that isn't is in the back issues.”",
+  "“{t}.” He doesn't need the notebook for this one. “{q}” A sniff. “I wrote it, so I'll stand it. Correct me in writing; that's how it's done.”",
+  "Mort finds it under his thumb without looking. “{q}” He looks up. “{t} — that's the whole of what I know, and it's more than the men who'll tell you otherwise.”",
+];
+function _mortColumnTalk(topic) {
+  const t = String(topic || "").toLowerCase().trim();
+  if (t.length < 3) return null;
+  // a PERSON is the columnist's own path (he knows them, and points at the column)
+  if (Object.keys(NPCS).some(i => i === t || String(NPCS[i].name || "").toLowerCase() === t ||
+      String(NPCS[i].name || "").toLowerCase().split(" ").pop() === t)) return null;
+  const pools = [];
+  for (const p of [typeof _OWL_LISTINGS !== "undefined" ? _OWL_LISTINGS : [], typeof _OWL_LEADS !== "undefined" ? _OWL_LEADS : [],
+                   typeof _OWL_LETTERS !== "undefined" ? _OWL_LETTERS : [], typeof _OWL_JOKES !== "undefined" ? _OWL_JOKES : [],
+                   typeof _OWL_ARRIVED !== "undefined" ? _OWL_ARRIVED : []]) {
+    if (Array.isArray(p)) pools.push(...p.filter(x => typeof x === "string"));
+  }
+  const re = new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
+  const hit = pools.find(s => re.test(stripMarkup(s)));
+  if (!hit) return null;
+  // the sentence that names it, trimmed to something a man would read aloud
+  const sents = stripMarkup(hit).split(/(?<=[.!?])\s+/);
+  let q = sents.find(x => re.test(x)) || sents[0];
+  if (q.length > 220) q = q.slice(0, 217).replace(/\s+\S*$/, "") + "…";
+  const T = t.charAt(0).toUpperCase() + t.slice(1);
+  return _fmt(_pickVary(_MORT_STANDS, "mortstands"), { t: T, q });
+}
 function _doTaoRai() {
   // in a bar it is the price list nobody hands you (Colin, round 37)
-  if (_inBar() && !G.pendingEnc) {
+  // a cabaret or a host bar sells a drink without the bar-girl apparatus — its
+  // price list is beer and water; a massage shop's is the board (Desmond, round 47)
+  if (!_inBar() && !G.pendingEnc && _room().massage) {
     const r = _room();
-    const bits = [`beer ฿${_beerPrice()}`, `lady drink ฿${_ladyPrice()}`, `water or soda ฿${_beerPrice()} (the seat, not the bottle)`];
-    if (r.barType && r.barType !== "pub") bits.push(`the bell ฿${_bellPrice(G.room)}`);
+    _say("“เท่าไหร่?” (tao rai — how much?) " + (r.massage === "legit"
+      ? `Thai ฿${MASSAGE_LEGIT} the hour, oil ฿${MASSAGE_OIL}. Real massage only — the board says so in two languages.`
+      : `Thai ฿${MASSAGE_LEGIT} the hour, oil ฿${MASSAGE_OIL}. The other price is not on the board and you ask it inside, not here.`), "dim");
+    return;
+  }
+  if ((_inBar() || (typeof _servesDrinks === "function" && _servesDrinks(G.room))) && !G.pendingEnc) {
+    const r = _room();
+    const bits = [`beer ฿${_beerPrice()}`];
+    if (_inBar()) bits.push(`lady drink ฿${_ladyPrice()}`);
+    bits.push(`water or soda ฿${_beerPrice()} (the seat, not the bottle)`);
+    if (_inBar() && r.barType && r.barType !== "pub") bits.push(`the bell ฿${_bellPrice(G.room)}`);
     _say("“เท่าไหร่?” (tao rai — how much?) " + (_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name + " answers without looking up: " : "The answer comes from behind the till: ") +
       bits.join(" · ") + ". Ask before the glass lands; the price never changes, only whether you knew it.", "dim");
     return;
@@ -9394,7 +9506,7 @@ function doCommand(input) {
   // Deliberately NOT behind CHEATS_ENABLED. That switch grants advantages and is
   // meant to ship false; this grants a line of prose and a trophy, and gating it
   // there would quietly retire the puzzle the moment the game is released.
-  if (/^(i )?counted the hoots[.!]?$/.test(lower)) { _owlBox15Answer(); return; }
+  if (/\bcount(ed)? the hoots\b/.test(lower)) { _owlBox15Answer(); return; }   // "tell mort i counted the hoots" is what the cipher says to do (Desmond, round 47)
   // CTF stage 2's close: hash-checked, the phrase is NOT in the source (docs/ctf.md)
   if (typeof _isRabbitKnock === "function" && _isRabbitKnock(lower)) { _whiteRabbitAnswer(lower); return; }
 

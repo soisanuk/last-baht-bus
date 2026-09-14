@@ -627,7 +627,7 @@ test("Notty's is refused for standing, not for existing (Gerry)", () => {
 // One staffer, two places, three lines apart.
 test("a woman the room has already placed isn't also busy elsewhere (Gerry)", () => {
   _setFlag("act1Done"); G.room = "anchor_bar";
-  assert.match(ROOMS.anchor_bar.desc, /Namfon pours/, "premise: the desc places her");
+  assert.match(ROOMS.anchor_bar.desc, /Namfon has a cold one/, "premise: the desc places her");
   G.soc.patronBusy.anchor_bar = "namfon";
   out = []; run("look");
   assert.doesNotMatch(text(), /Namfon laughing on cue/, "she cannot be in two places");

@@ -582,7 +582,7 @@ function _managerWelcome() {
   // "New face" on a fifth visit read as amnesia (27-night playtest 2026-08-22)
   if ((G.soc.manDrinks && G.soc.manDrinks[id]) || (G.known && G.known[id])) pool = pool.filter(s => !/New face/.test(s));
   if (!pool.length) pool = _MGR_SHOT.filter(s => !/New face/.test(s));
-  _say(_fmt(_pickVary(pool, "mgrshot:" + id), { n: NPCS[id].name }) +
+  _say(_fmt(_pickVary(pool, "mgrshot:" + id), { n: NPCS[id].name, bar: _barName(G.room) || "the bar" }) +
     " (Stand him a BUY MAN DRINK when you've been bending his ear.)", "win");
   _compDrink(1);
 }
@@ -612,7 +612,7 @@ const _COMP_HEAVY = [
   "It's poured without a measure — a proper glass, not a shot — and whoever poured it watches you drink it.",
   "Heavy pour. The kind of free drink that is mostly the drink.",
   "Free, and about a double, and put down in front of you with a little too much attention paid to it going down.",
-  "She fills it to the brim and waits. Not for thanks.",
+  "It's filled to the brim, and whoever filled it waits. Not for thanks.",
   "It arrives large. In this town a free drink is an interview, and the size of it is the first question.",
 ];
 const _COMP_PADDED = [
@@ -1420,6 +1420,9 @@ const KP_FIELD_DARK = [ // the Darkside league has its own regulars (27-night pl
 ];
 
 function _leagueTonight() { return G.day % 3 === 0; }
+// nights until the next league night (0 = tonight) — the fixture walks round
+// the week, which is the thing nobody could say out loud (Brenda, round 47)
+function _leagueIn() { return (3 - (G.day % 3)) % 3; }
 function _isBandNight() { return G.day % 7 === 5 || G.day % 7 === 6; } // Fri or Sat
 function _bandHere() {
   const r = _room();

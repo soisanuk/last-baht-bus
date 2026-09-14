@@ -1550,7 +1550,7 @@ const ROOMS = {
       "along the sea, Second Road south into town, Naklua Road north-east toward the " +
       "quieter money, and the songthaews go round and round because this is where the " +
       "loop turns. In the mall's own car park a rank of blue trucks fills bench by " +
-      "bench — Naklua one way, Jomtien the other, and the drivers don't budge until the " +
+      "bench — Naklua one way, town the other, and the drivers don't budge until the " +
       "benches do.",
     revisit: [
       "Round go the songthaews. The dolphins remain mid-leap.",
@@ -1988,6 +1988,9 @@ const ROOMS = {
       "regulars ducked in here to dodge it once and never left — and the sun go down over the " +
       "bay between shots. (WATCH POLICE · WATCH SUNSET.)",
     reads: {
+      ashtray: "The league ashtray: a heavy glass one, kept clean, that has never held a cigarette. " +
+        "Every third night it holds the entry money and the table money, and the last cue standing " +
+        "takes it home. Tonight it holds a bottle cap and Bert's chalk.",
       skunk: "The sign's cartoon skunk hoists his Chang over the junction, tail up, grin " +
         "fixed, buzzing on a transformer that should have been replaced years ago. Bert " +
         "claims the previous owner won the artwork in a bet. The skunk has outlasted the " +
@@ -4290,7 +4293,7 @@ const ROOMS = {
     ],
     desc: "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, " +
       "a barometer nobody trusts. In season the long-stay crowd holds the stools like moorings. Namfon " +
-      "pours a cold one before you've picked a seat — and the chit lands with it.",
+      "has a cold one half out of the ice before you've picked a seat — nod, and the chit lands with it.",
     reads: {
       barometer: "The barometer nobody trusts: brass, salt-pitted, its needle parked on " +
         "CHANGE since roughly the nineties. Tap the glass and it doesn't move. Namfon says " +
@@ -8149,7 +8152,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
 
       // The quest hook — his 'boring' retirement snagged a job. Giver dialogue; the
       // offer itself is surfaced by _questOffer (giver: doyle). This just frames it.
-      { topic: "job", text: "He weighs whether to say it, then does — you passed the sightline test. \"Word got " +
+      { topic: "job", when: (st) => st.trust < 2,
+        text: "\"Work?\" He looks at his soda, then at you, the way a man reads a plate. \"Not yet. I " +
+          "don't hand a thing like that to a face I met tonight. Sit. Stand a man a drink. Come back " +
+          "when I know which way you lean.\"",
+        short: "\"Not yet. Come back when I know your face.\"" },
+      { topic: "job", when: (st) => st.trust >= 2, text: "He weighs whether to say it, then does — you passed the sightline test. \"Word got " +
           "out back home I'd be in-country. An old contact called in a marker: there's a man out here he wants " +
           "eyes on. Patched vest, motorcycle-club president, holds court in a back room on this very soi over a " +
           "bottle of Blue Label he never pays for.\" The glass stops turning. \"Trouble is, I'm the wrong face " +
@@ -8829,6 +8837,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "\"You are holding nothing anybody wants. You are holding proof that you understood. Burn it, " +
           "or be a man who understood.\"",
         short: "\"A company that sells nothing to people who buy nothing. How a favour is written down when the man cannot be owed one.\"" },
+      { topic: "rabbit|the rabbit|fast eddy|eddy", when: (st, G) => _flag("ccibVisited"),
+        text: "\"Fast Eddy.\" Tan does not look at the mirror this time. \"He has gone to ground, and he " +
+          "thinks it is because of the coffee. It is not. It is because for the first time in his life a " +
+          "thing he did worked, and he does not know what to do with that.\" A shrug at the road. \"He is on " +
+          "a list. He was on a list before you met him. The list is not the danger — the danger is a man " +
+          "who reads his own name on it and starts making calls.\"",
+        short: "\"Eddy is on a list, and was before you met him. The danger is a man who starts making calls.\"" },
       { topic: "rabbit|the rabbit|fast eddy|eddy",
         text: "\"Fast Eddy.\" Tan considers the mirror. \"He had a bar and now he has a smaller one, " +
           "and he thinks the difference is bad luck. It was never luck. He is a man who learned " +
@@ -8918,6 +8933,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "friend mentioned a problem to the right coffee — and you do not ask, because you have " +
           "finally learned that the not-asking is the price, and that it is cheap.",
         short: "\"Still boring? Good. It suits you.\"" },
+      { topic: "bangkok|krung thep|the capital|the city",
+        text: "\"Bangkok.\" Tan watches the road. \"I drive there twice a week — the airport, the hospital, a " +
+          "man who needs to sign something in a building with a marble floor. It is not a different " +
+          "country, my friend. It is the same one with the lights left on. The people who matter there " +
+          "know the people who matter here, and I have most of their numbers.\"",
+        short: "\"Bangkok is the same country with the lights left on. I have most of the numbers.\"" },
       { topic: "fix", text: "\"What can I fix?\" He says it like the question delights him. \"A ride. A room. A " +
           "visa man who actually answers his phone. A problem that needs to quietly become not-a-problem. A " +
           "door that is closed to you—\" the smallest smile \"—and open to me.\" He lets that hang a half-beat " +
@@ -9865,7 +9886,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "happen.”",
       "{n} pours, slides, and does not drink his own. “First is on me. I'd join you but " +
         "I've two more rooms to be blamed for tonight.”",
-      "The shot arrives before you've settled. “Welcome to the Doghouse,” says {n}, entirely " +
+      "The shot arrives before you've settled. “Welcome to {bar},” says {n}, entirely " +
         "deadpan. “Which I'd like on record was named before I got here.”",
       "“Go on then.” {n} sets one down and steps back to survey the room out of habit. " +
         "“House pours the first. Anything after that and we're doing business.”",
@@ -9896,7 +9917,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "wants a window. Half my regulars live within a kilometre. The other half drive " +
           "past three closer bars to get here.\"",
         short: "\"Newest of the three, and the only one I got to build. No windows, by design.\"" },
-      { topic: "succubus", text: "\"Bob's place.\" No edge at all. \"People expect me to " +
+      { topic: "succubus|bob|bob's place|the old man|the american", text: "\"Bob's place.\" No edge at all. \"People expect me to " +
           "be rude about it and I'm not going to be. He was up here twenty years before " +
           "the brothers had a baht, he built it himself, and his missus runs a better " +
           "floor than mine.\" He considers. \"Different trade, really. They get the ones " +
@@ -9912,7 +9933,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "corner isn't, and he'd never say so to Bob's face, so he just... stopped " +
           "coming. Bob'll have worked out something worse than that by now.\"",
         short: "\"Boonchu, seventy-one, dying truck. He kept the runs worth the diesel and dropped the singles.\"" },
-      { topic: "order", chip: false, req: ["knowIceMan"],
+      { topic: "order|ice", chip: false, req: ["iceSettled"],
+        text: "\"Sorted.\" Bill says it to the mat he is squaring. \"Standing order, the brothers' " +
+          "account, the old man's name on the docket. He said it was his idea. It was.\" A beat. " +
+          "\"I minded it in the wrong direction for a year. Won't again.\"",
+        short: "\"Sorted. Standing order, his name on the docket. His idea.\"" },
+      { topic: "order", chip: false, req: ["knowIceMan"], notFlags: ["iceSettled"],
         text: "\"I can fix it this afternoon,\" Bill says, and then does not immediately " +
           "fix it. \"Two more cases on our standing order. Boonchu's already coming up, " +
           "it's the same stop, and on the invoice it's a rounding error the brothers will " +
@@ -10079,7 +10105,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "this for thirty year. He say no, further round.\" The pen keeps moving. \"He " +
           "is wrong, and one day somebody go and look, and then I have thirty year of " +
           "being right all at once.\"" },
-      { topic: "ice", text: "\"Aiyo, the ice.\" A short unimpressed breath. \"He take a " +
+      { topic: "ice|boonchu|ice man|the ice man|the ice truck", text: "\"Aiyo, the ice.\" A short unimpressed breath. \"He take a " +
           "TAXI to the 7-Eleven. Seventy-six year old, two bag of ice, in a taxi.\" She " +
           "puts the pen down, which is serious. \"He will not ask the boy across the " +
           "road. Farang men, na. Everything is a mountain.\"" },
@@ -10088,11 +10114,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "\"Here, nobody push. A lady sit with you because she want the company or she " +
           "want the drink, and either one is honest. If somebody push you, you tell me " +
           "and she is not here next week.\"" },
-      { topic: "doghouse", text: "\"New. Very cold, very dark, very...\" she searches for " +
+      { topic: "doghouse|bill|the doghouse|the english boy|the boy", text: "\"New. Very cold, very dark, very...\" she searches for " +
           "the word and picks a careful one \"...professional.\" A pause. \"The English " +
           "boy come and introduce himself, and bring flowers for me, which is correct and " +
           "which nobody teach him. So — they are fine. Competition is fine. Twenty year " +
-          "we have this hill to ourself and honestly it was a little boring.\"" },
+          "before the brothers come, we have this hill to ourself, and honestly it was a little boring.\"" },
       { text: "\"Mm?\" Kinnaree does not stop counting. \"Ask me the real one, na.\"" },
     ],
   },
@@ -10108,7 +10134,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Welcome. Come in from the noise.\" The door closes and the strip vanishes. \"The " +
           "Boardroom, the Velvet Club — both mine to run, both the same idea: cold, quiet, discreet. " +
           "You buy a lady a drink, she sits close, and after that it is between you and the curtain. " +
-          "No barkers, no bells, no drama. A man pay for that peace more than for anything else.\"",
+          "No barkers, no touts, no drama. A man pay for that peace more than for anything else.\"",
         short: "\"Three quiet clubs, all mine. Buy a lady a drink; the rest is behind the curtain.\"" },
       { topic: "samson", text: "\"The Samson brothers hold the papers. They understand the quiet end " +
           "of the business — they leave it quiet.\" A faint smile. \"That is rarer than you think, in " +
@@ -11479,6 +11505,18 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "good.” Her English is easy and precise, worn smooth somewhere she doesn't mention. " +
           "“Sit anywhere you like — the front tables have the view. I'll send someone over.”",
         short: "“Good evening. A table with the view? Sit anywhere — I'll send someone over.”" },
+      { topic: "rabbit|the rabbit|eddy|fast eddy|white rabbit|the white rabbit",
+        text: "\"The Rabbit.\" The smile stays exactly where it was. \"The man my son ran a till for, when " +
+          "he was a boy who should have been in school. I have met him twice. He was polite both times.\" " +
+          "She squares a stack of notes that was already square. \"I do not have an opinion on him that " +
+          "would be useful to you. I have a son who is out of it. That is my whole opinion.\"",
+        short: "\"I have met him twice. He was polite both times. My son is out of it — that is my whole opinion.\"" },
+      { topic: "bangkok|krung thep|the capital|the city",
+        text: "\"Bangkok?\" She looks past you at the water. \"I worked there. Harder rooms than this one. " +
+          "It is a city that pays you and never once says your name — that is not a complaint, it is what " +
+          "I went for.\" The till drawer closes under her hand. \"Nont talks about it the way boys talk about " +
+          "the sea. I let him. It is further than he thinks and closer than I would like.\"",
+        short: "\"I worked there. Harder rooms. Nont talks about it the way boys talk about the sea.\"" },
       { topic: "family", text: "\"My family is one son.\" She says it plainly, no self-pity in " +
         "it at all. \"Nont. Grown now, clever with the machines, out on his own path \u2014 not " +
         "one I chose for him, but his.\" A small, contained pride. \"Ask me about HIM if you " +
@@ -11777,9 +11815,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "till, fixed his wifi, translated when the Thai side of things got complicated. He " +
           "taught me the rest. Computers first, then the other stuff.” He sets the tweezers down. " +
           "“Smart guy. Was. Then he wasn't, and anybody standing next to him was going down with " +
-          "him — so I stopped standing next to him. Nothing personal. He'd have done the same at " +
+          "him — so I stopped standing next to him, a month before the golf shirt took my name off " +
+          "the rota and saved me the trouble. Nothing personal. He'd have done the same at " +
           "my age. Probably did.”",
-        short: "“Rabbit taught me everything — computers, then the other stuff. Then he started going down, so I stepped back. Nothing personal.”" },
+        short: "“Rabbit taught me everything — computers, then the other stuff. Then he started going down, so I stepped back — a month before they took my name off the rota. Nothing personal.”" },
+      { topic: "bangkok|krung thep|the capital|the city",
+        text: "“Bangkok.” He doesn't look up. “Everybody down here says it like it's the exit. It's a bigger " +
+          "table with the same {{phones}} on it, and nobody up there knows whose boy I was — which is the " +
+          "whole point, and the whole problem.” A screw goes back in. “Not yet. Ask me when I've got a reason " +
+          "that isn't running.”",
+        short: "“Bangkok's a bigger table with the same {{phones}} on it. Not yet.”" },
       { topic: "tan", text: "“Tan.” Something in his posture straightens; he doesn't grin at this " +
           "one. “You know Tan? Then you know you don't really know Tan.” He turns a tiny screw " +
           "over in his fingers. “When I was fifteen and running wild off Rabbit's bar, somebody " +
@@ -12147,9 +12192,10 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         asks: { key: "why", q: "He racks the balls without hurry. \"So — which is it, bud? What'd you leave, and does it know you're here?\"" } },
       { text: "\"Welcome to the Stinky, bud. Name's Bert. Table's true, beer's cold, " +
         "and the only rule is don't sit on the rail.\" He chalks a cue without " +
-        "looking at it. \"You shoot? League night's every third night — killer " +
-        "pool, hundred baht in, winner takes the table money.\"",
-        short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night — hundred baht in.\"",
+        "looking at it. \"You shoot? League night's every third night — it walks round the week, " +
+        "so count from the last one — killer pool, hundred baht in, every table in town the same night, " +
+        "winner takes the table money.\"",
+        short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night, every table in town — hundred baht in.\"",
         asks: { key: "why", q: "He racks the balls without hurry. \"So what's your story, bud? Everybody out here's running to something or from something. Which one's you?\"" } },
       // THE MAN WHO TRIED IT BOTH WAYS. Running Gavin's errand used to be
       // TERMINAL: the resolution node below carries notFlags: ["wdgFlipTried"],
@@ -13058,8 +13104,8 @@ const ENCOUNTERS = {
     rooms: ["pratumnak_clubs", "thappraya_ext_s", "pratumnak_soi5"],
     interactive: true, nightly: true,
     intro: "Somebody is running up the hill. Properly running — head torch, calf sleeves, a watch he " +
-      "keeps glancing at — past the condo walls and the parked bikes and one unmarked door, at two in " +
-      "the morning, uphill. He clocks you, raises a hand without breaking stride, and says, at the " +
+      "keeps glancing at — past the condo walls and the parked bikes and one unmarked door, at this " +
+      "hour, uphill. He clocks you, raises a hand without breaking stride, and says, at the " +
       "volume of a man with earphones in, “SEVEN PERCENT GRADE, MATE. LOVELY.”",
     hint: "(WAVE back · JOIN him, briefly · or let him GO)",
   },
@@ -14828,7 +14874,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       { topic: "sane", text: "\"Boredom's the killer out here — not the drink, not the " +
         "girls, the BOREDOM. Fella retires on his pension, sits in the condo, and by March " +
         "he's counting ceiling tiles and eyeing the balcony.\" He taps the notebook. \"This " +
-        "is my ceiling tiles. Five hundred words a week and a reason to leave the room. " +
+        "is my ceiling tiles. Five hundred words a night, most nights, and a reason to leave the room. " +
         "Cheaper than a psychiatrist, and funnier.\"" },
       // "The best-informed man on this coast" didn't know the biggest story on
       // his own street (Malcolm, round 36). The columnist has a view, and it is
@@ -15399,7 +15445,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\u201cHe's never asked me why I'm here. He thinks he knows. He's wrong. He can have it.\u201d" },
       { topic: "mort",
         text: "\u201cThe old man writes it down properly.\u201d She says it like a verdict. \u201cI wrote in once and corrected him, and he printed it. Didn't hedge, didn't make a joke of it, printed the correction like it mattered.\u201d The Discman gets a look. \u201cI'd assumed he'd be a prick about it. Most of them are, about being wrong.\u201d A beat. \u201cSo now I read the whole thing every week, which I imagine was the plan.\u201d",
-        short: "\u201cI corrected him and he printed it straight. So now I read the whole thing every week.\u201d" },
+        short: "\u201cI corrected him and he printed it straight. So now I read the whole thing, every night it lands.\u201d" },
 
       // Greeting is a little state machine: a stranger gets the full introduction;
       // a returning face gets a shorter one; once she's opened up (mood "open") it
@@ -16396,7 +16442,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
     '"English small small, heart big big."',
   ];
   const FAMILY = [
-    `"${family}. Every month I send money — school, rice, everything. This why I working, not for me." She turns the {{phone}} to you: a photo, everyone squinting in the sun.`,
+    `"${family}.${/send/i.test(family) ? "" : " Every month I send money — school, rice, everything."} This why I working, not for me." She turns the {{phone}} to you: a photo, everyone squinting in the sun.`,
     `"You ask my family? Aiyo." She goes soft. "${family}. I not see them long time. Money go home, I stay here. Same same every girl."`,
     `"${family}." A proud, tired little smile, and a photo held up. "I work, they eat. Simple. Farang always think complicated — no complicated."`,
   ];
