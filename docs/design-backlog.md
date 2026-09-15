@@ -400,7 +400,7 @@ small provenance record in `_learnNames` (room + speaker at first print). Cheap;
 when `_frontier()` is built, and keep it capped (it rides the save).
 
 **Order.** Graph ships → `_frontier()` + its never-spoils test → HINT reads it (three
-surfaces: parser, the `(HINT)` tap, HELP) → the journal as presentation. **BUILT 2026-09-15** (engine side: `_frontier`, `JOURNAL`/`JOURNAL RECORD`, provenance in `_learnNames`, `_learnVenues`; tests/js/journal.test.js). The presentation layer (a notes panel in term.js / the scene panel) is still open. Measure with the
+surfaces: parser, the `(HINT)` tap, HELP) → the journal as presentation. **BUILT 2026-09-15** (engine side: `_frontier`, `JOURNAL`/`JOURNAL RECORD`, provenance in `_learnNames`, `_learnVenues`; tests/js/journal.test.js). The presentation layer shipped the same day: the 📓 glyph and the `#scene-notes` row (scene.js `_sceneNotes`), and Tan's stuck nudge reads the frontier. Measure with the
 cold-first-timer persona lens, which is the one that found the wall.
 
 **Two views, one subgraph (Mario, 2026-09-15: "room for both, if implemented correctly —

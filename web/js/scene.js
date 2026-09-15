@@ -11,6 +11,40 @@
 /* global G, ROOMS, NPCS, _room, _npcsHere, _npcLabel, _clockStr, _isDarkHere, _bellActive, _barName, _L, _term,
    SCENE_HOTSPOTS */
 
+// The notes row: the frontier rendered as taps — the known subgraph's edge,
+// nearest first (docs/design-backlog.md, 2026-09-15). Shown while the 📓 glyph
+// is lit (localStorage lbb_notes_on), after the opening. Every chip is the
+// engine's own command; a line with no command is plain. "the record" turns
+// the page (JOURNAL RECORD prints in the transcript).
+function _sceneNotes() {
+  let open = false;
+  try { open = localStorage.getItem("lbb_notes_on") === "1"; } catch (e) {}
+  if (!open || typeof _frontier !== "function" || typeof _flag !== "function" || !_flag("act1Done")) return null;
+  const row = document.createElement("div");
+  row.id = "scene-notes";
+  const lbl = document.createElement("span"); lbl.className = "lbl"; lbl.textContent = "open — nearest first:";
+  row.appendChild(lbl);
+  let fr = [];
+  try { fr = _frontier(6) || []; } catch (e) { fr = []; }
+  if (!fr.length) {
+    const p = document.createElement("span"); p.className = "plain"; p.textContent = "nothing the town has told you about yet — talk to people"; row.appendChild(p);
+  }
+  for (const f of fr) {
+    if (f.cmd) {
+      const b = document.createElement("button");
+      b.textContent = f.text; b.title = f.cmd;
+      b.addEventListener("click", () => _term.submitCmd(f.cmd.toLowerCase()));
+      row.appendChild(b);
+    } else {
+      const p = document.createElement("span"); p.className = "plain"; p.textContent = f.text; row.appendChild(p);
+    }
+  }
+  const rec = document.createElement("button");
+  rec.className = "rec"; rec.textContent = "the record ▸";
+  rec.addEventListener("click", () => _term.submitCmd("journal record"));
+  row.appendChild(rec);
+  return row;
+}
 function _updateScene() {
   const box = document.getElementById("scene");
   if (!box) return;
@@ -77,6 +111,8 @@ function _updateScene() {
       exits.insertBefore(tog, exits.firstChild);
     }
     box.appendChild(exits);
+    const notes = _sceneNotes();
+    if (notes) box.appendChild(notes);
     // One-time tip the first time the panel renders folded by default (phones):
     // six blind rounds never found the fold, so say it once. A display pref,
     // never game state; printed through the terminal like any presentation line.

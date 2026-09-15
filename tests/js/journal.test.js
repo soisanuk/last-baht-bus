@@ -92,3 +92,13 @@ test("a venue whose name printed before you found it is a frontier edge", () => 
   G.visited.queen_vic = true;
   assert.ok(!_frontier(8).find(f => f.kind === "venue" && /Queen Vic/.test(f.text)), "found: no longer an edge");
 });
+
+test("Tan's stuck nudge texts the frontier, not a shrug", () => {
+  fresh(); G.room = "stinky_bar"; G.visited.stinky_bar = true; doCommand("talk to bert"); doCommand("ask bert about white dish");
+  G.phone.contacts.tan = true; G.phone.battery = 80; G.stuck = { noname: 0, parse: 0, terse: false }; G.stuckDay = 0;
+  out = []; _tanUnstick();
+  const msg = (G.phone.inbox || []).slice(-1)[0];
+  assert.ok(msg && msg.from === "tan");
+  assert.match(String(msg.text), /try this — /);
+  assert.deepEqual(spoils([String(msg.text)]), []);
+});

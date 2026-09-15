@@ -713,6 +713,15 @@ const _term = (() => {
       try { unread = typeof _unreadCount === "function" ? _unreadCount() : 0; } catch (e) {}
       msg.classList.toggle("show", unread > 0);
     }
+    // the notes glyph: up once the opening is behind you; lit while the row is open
+    const notes = document.getElementById("notes-fab");
+    if (notes) {
+      let up = false, open = false;
+      try { up = typeof _flag === "function" && !!_flag("act1Done"); } catch (e) {}
+      try { open = localStorage.getItem("lbb_notes_on") === "1"; } catch (e) {}
+      notes.classList.toggle("show", up);
+      notes.classList.toggle("open", open);
+    }
     _updateNavFab();
     _parkFabs();
   }
@@ -992,6 +1001,15 @@ const _term = (() => {
     if (msgFab) msgFab.addEventListener("click", () => {
       _input.value = "check messages";
       submit(onCommand);
+    });
+    // the notes glyph toggles the frontier row on the scene panel — a display
+    // pref (localStorage), never game state; the row is a projection of G
+    const notesFab = document.getElementById("notes-fab");
+    if (notesFab) notesFab.addEventListener("click", () => {
+      let open = false;
+      try { open = localStorage.getItem("lbb_notes_on") === "1"; localStorage.setItem("lbb_notes_on", open ? "0" : "1"); } catch (e) {}
+      if (typeof _updateScene === "function") _updateScene();
+      _updateFabs();
     });
 
     // real typing (not programmatic Tab fills) resets the cycle and re-suggests

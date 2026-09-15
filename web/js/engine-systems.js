@@ -3824,6 +3824,14 @@ function _tanUnstick() {
     _say("(📱 CHECK MESSAGES — “ask him about it again” gets the whole story back.)", "dim");
     return;
   }
+  // the frontier: the nearest thing the transcript has printed that you have not
+  // done — Tan texts THAT, not a shrug (design note, 2026-09-15)
+  const fr = typeof _frontier === "function" ? _frontier(1) : [];
+  if (fr.length) {
+    _pushMsg("tan", "my friend. you are going round and round. try this — " + fr[0].text.replace(/\s+\(.*\)$/, "") + " 🙂");
+    _say(`(📱 CHECK MESSAGES${fr[0].cmd ? " — " + fr[0].cmd : ""}. JOURNAL has the rest of what's open.)`, "dim");
+    return;
+  }
   _pushMsg("tan", "my friend. you are going round and round. slow down, look, then say what you want — " +
     "the town is simple when you stop fighting it 🙂");
   _say("(📱 CHECK MESSAGES — HELP lists what the night understands.)", "dim");

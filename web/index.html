@@ -83,7 +83,7 @@
     gap: 12px;
     align-items: flex-end;
   }
-  #bell-fab, #msg-fab {
+  #bell-fab, #msg-fab, #notes-fab {
     display: none;
     width: 54px; height: 54px;
     border-radius: 50%;
@@ -96,14 +96,16 @@
     -webkit-tap-highlight-color: transparent;
     animation: fab-pulse 1.9s ease-out infinite;
   }
-  #bell-fab.show, #msg-fab.show { display: block; }
-  #bell-fab:active, #msg-fab:active { background: #46006b; transform: scale(0.94); }
+  #bell-fab.show, #msg-fab.show, #notes-fab.show { display: block; }
+  #bell-fab:active, #msg-fab:active, #notes-fab:active { background: #46006b; transform: scale(0.94); }
+  #notes-fab { animation: none; }   /* the notes are always there; only the bell and the inbox pulse */
+  #notes-fab.open { border-color: var(--cyan); color: var(--cyan); }
   @keyframes fab-pulse {
     0%   { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149366; }
     70%  { box-shadow: 0 0 11px 2px #ff149377, 0 0 0 13px #ff149300; }
     100% { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149300; }
   }
-  @media (prefers-reduced-motion: reduce) { #bell-fab, #msg-fab { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { #bell-fab, #msg-fab, #notes-fab { animation: none; } }
   /* Text size (the reading-glasses button) — the mute button's mirror twin,
      top-LEFT of the header. It scales BODY font-size only: the prose and the
      input inherit it, while the chrome (header, fabs, chips, the ASCII map,
@@ -884,6 +886,14 @@
   border-radius: 3px; overflow: hidden; }
 #scene-hud .bar i { display: block; height: 100%; }
 #scene-exits { display: flex; gap: 8px; padding: 2px 12px 11px; overflow-x: auto; }
+/* the notes row: the frontier as taps — what's open, nearest first (design note 2026-09-15) */
+#scene-notes { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 10px; align-items: center; }
+#scene-notes .lbl { font-size: 10px; color: #9a86b8; flex: 0 0 100%; }
+#scene-notes button, #scene-notes span.plain { font: inherit; font-size: 11px; color: var(--cyan); background: #1c0f3a;
+  border: 1px solid #3a2560; border-radius: 8px; padding: 4px 8px; text-align: left; max-width: 100%; }
+#scene-notes span.plain { color: #cbb8e8; }
+#scene-notes button:hover { border-color: var(--cyan); }
+#scene-notes button.rec { color: #9a86b8; }
 #scene-exits button { flex: 0 0 auto; font: inherit; font-size: 11px; color: var(--cyan);
   background: #0a0530; border: 1px solid #00e5ff55; border-radius: 7px; padding: 4px 14px;
   cursor: pointer; }
@@ -945,6 +955,7 @@
   <div id="fab-stack">
     <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
     <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
+    <button id="notes-fab" title="Your notes — what's open" aria-label="Your notes">📓</button>
     <div id="nav-fab" role="group" aria-label="Compass">
       <button data-nav="n" aria-label="Go north">N</button>
       <button data-nav="w" aria-label="Go west">W</button>
