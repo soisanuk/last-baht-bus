@@ -210,17 +210,41 @@ test("no topical dialogue node sits behind an ungated node on the same topic", (
 
 // ── (c) the orphan report ────────────────────────────────────────────────────
 
+// The flags that are written and never read, each with the reason it is inert.
+// Three kinds: REDUNDANT (the live state is kept elsewhere and read), TROPHY (a
+// record of a thing that happened, available to a future reader), and BY
+// DOCTRINE (the design forbids a consequence, so a reader would be the bug).
+const WRITE_ONLY_OK = new Map([
+  ["affairBegun",      "REDUNDANT — G.affair is the live state and _affairLive() reads the object; this is the soak's 'it happened' marker"],
+  ["affairWon",        "REDUNDANT — set beside barSold, and barSold is what BOOKS/WORK/_barLost read; sold-vs-lost is the distinction that matters"],
+  ["ccibRadarSet",     "REDUNDANT — _ccibVisit's re-entry guard is ccibVisited, set at the top of the same function and read widely; this marks the tail"],
+  ["hadThreesome",     "TROPHY — a record of a thing that happened, set in four encounter branches; nothing consults it yet"],
+  ["invoicesBurned",   "TROPHY — DELETE LEDGER's record. The likeliest of these to earn a reader one day (Tan, Eddy, or the CCIB visit); not a bug today"],
+  ["owesTan",          "REDUNDANT — set beside debtSettled, which is the live one; the debt-with-no-figure idea is carried by the partnerTan arc, not this flag"],
+  ["quizChamp",        "TROPHY — won a quiz night"],
+  ["sawPingPong",      "TROPHY — saw the show"],
+  ["simDitched",       "REDUNDANT — BREAK SIM moves the ITEM, and _ccibWire/_ccibSet read G.itemLoc.thai_sim plus simUsed/burnerUsed; the mechanic works without the flag"],
+  ["tanFavourDone",    "BY DOCTRINE — saying yes to Tan costs nothing and nothing bad ever happens, which is the point of him; a consequence here would be the defect"],
+  ["tanFavourRefused", "BY DOCTRINE — declining a favour is free forever (the faction rule); no standing may move, so nothing may read this"],
+  ["tanKidRefused",    "BY DOCTRINE — same rule on the kid path: refusing costs nothing"],
+]);
+
 test("REPORT: orphans (printed, never a gate)", () => {
   const lines = [];
   const setters = f => has(f, "setByDialogue") || has(f, "setByEngine") || has(f, "setByReads");
   const readers = f => has(f, "requiredBy") || has(f, "forbiddenBy") || has(f, "readByEngine") ||
     has(f, "readByData") || has(f, "doneFlagOf") || has(f, "reqFlagOf");
 
-  // A flag written and never consulted. Not automatically wrong — several are
-  // deliberate save-file records a future feature reads — which is exactly why
-  // this prints instead of failing.
+  // A flag written and never consulted. Read once, in full, on 2026-09-16: all
+  // twelve were inert-but-harmless, and three are inert BY DOCTRINE — a reader
+  // would BE the defect. So the report became a ratchet: those are known, and a
+  // NEW write-only flag fails until somebody says which kind it is.
   const writeOnly = G.flags.filter(f => setters(f) && !readers(f)).map(f => f.name);
   lines.push(`flags set and never read (${writeOnly.length}): ${writeOnly.join(" · ") || "none"}`);
+  const unexplained = writeOnly.filter(f => !WRITE_ONLY_OK.has(f));
+  assert.deepEqual(unexplained, [],
+    "a flag is set and nothing reads it — wire the reader, delete the flag, or add " +
+    "it to WRITE_ONLY_OK with the reason it is deliberately inert");
 
   // A room nothing leads to. Zero today; a new room wired into no exit and no
   // venues[] would show up here before a player ever failed to find it.

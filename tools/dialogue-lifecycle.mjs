@@ -41,8 +41,12 @@
 //     `_topicMiss` is "I have nothing on that"; `_topicLocked` is "I have that
 //     and cannot discuss it yet" — the sentence a CLOSED CHANNEL prints, and the
 //     one no nonsense word can ever provoke, because nonsense matches no node.
-// Verify the instrument can fail with `--mutate <npc>#<index>`, which drops a
-// node before the sweep: `--quest keys --mutate wimon#5 --mutate wimon#1`
+// Verify the instrument can fail. `--mutate <npc>#<index>` drops a node before
+// the sweep, but since the engine's miss path started reading the seen-book
+// (2026-09-15) a dropped successor is no longer a defect — the gist answers in
+// its place — so the mutation to use is the ENGINE one: revert that check in
+// _doTalkBody's miss path and the 21 original findings come back (verified
+// 2026-09-16). That is the class this tool exists for.
 // re-creates the round-47 Wimon finding that earned the successor nodes.
 //
 // WHAT IT CANNOT SEE. A node whose gate is a `when(st, G)` closure reading
@@ -68,7 +72,7 @@ const asJson = argv.includes("--json");
 const qi = argv.indexOf("--quest");
 const onlyQuest = qi !== -1 ? argv[qi + 1] : null;
 // A green audit proves nothing unless the instrument can be shown to go red.
-// `--mutate wimon#5` drops a node before the sweep, so the five round-47
+// `--mutate <npc>#<index>` drops a node before the sweep, so the round-47
 // findings can be re-created on demand: the successor node Arturo's report
 // earned is exactly what a mutation removes.
 //   node tools/dialogue-lifecycle.mjs --quest keys --mutate wimon#5 --mutate wimon#1
@@ -228,10 +232,16 @@ const DEAD_ENDS = ["I didn't understand", "That one didn't parse", "isn't around
 // appear (nonsense matches no node), so the oracle calls the engine's own line
 // generators instead: still derived by running, never transcribed, and a
 // rewritten pool is picked up on the next run for free.
-const GENERATORS = ["_topicMiss", "_topicLocked", "_askAgain", "_patronAgain"];
-function generatedMisses(id) {
+// A CLOSED channel and a SPENT one are different things, and only the first is a
+// finding. "Not my story" / "Not yet, na" mean she has nothing, or won't yet;
+// "We've done that one" means the player HEARD it and is asking twice — the
+// terse-repeat doctrine working, not a return channel going dark (2026-09-16,
+// once the model started marking what the player heard).
+const GENERATORS = ["_topicMiss", "_topicLocked"];
+const SPENT = ["_askAgain", "_patronAgain"];
+function generatedMisses(id, which) {
   const shapes = new Set();
-  for (const g of GENERATORS) {
+  for (const g of which || GENERATORS) {
     const fn = globalThis[g];
     if (typeof fn !== "function") continue;
     for (let i = 0; i < 40; i++) {
@@ -253,19 +263,28 @@ function answersTopic(id, alias) {
 // Behavioural: what a player gets when they type it, against what that same
 // person says about nothing at all. Only a candidate the structural pass already
 // flagged is replayed, because each one costs a couple of dozen turns.
-function reallyMisses(stage, q, cast, id, alias) {
+// `heard` are the node indices that ANSWERED at an earlier stage. A player only
+// reaches the later stage by having heard them — that is how the flag moved —
+// and since 2026-09-15 the miss path reads the seen-book and gives the gist
+// instead of the lock. Modelling the flags without the hearing made the harness
+// see a "Not yet, na" the player never gets (its own 21-entry benign list).
+function reallyMisses(stage, q, cast, id, alias, heard) {
+  const seat = () => { apply(stage, q, cast); if (heard && heard.length) (G.talked[id] = G.talked[id] || []).push(...heard); };
   const pool = new Set();
   for (const word of NONSENSE) {
     for (let i = 0; i < 3; i++) {
-      apply(stage, q, cast);
+      seat();
       if (!place(id)) return null;             // not out tonight — no claim either way
       pool.add(askShape(id, word));
     }
   }
-  apply(stage, q, cast);
+  seat();
   if (!place(id)) return null;
-  for (const s of generatedMisses(id)) pool.add(s);
+  for (const s of generatedMisses(id, GENERATORS)) pool.add(s);
+  const spent = generatedMisses(id, SPENT);
   const reply = askShape(id, alias);
+  // heard it already: the doctrine's terse second telling, not a closed door
+  if (spent.some(p => p && reply.includes(p))) return { miss: false, reply: reply.slice(0, 120) };
   // containment, not equality: a brush-off can come wrapped (a Thai-fluency
   // refusal, a chip nudge appended under it) and it is still a brush-off.
   const miss = [...pool].some(p => p && reply.includes(p)) ||
@@ -305,7 +324,10 @@ for (const [qid, q] of Object.entries(QUESTS)) {
       if (lastSilent <= first) continue;
       // confirm at the LAST stage that went silent, through the real command
       const at = stages[lastSilent];
-      const r = reallyMisses(at, q, cast, id, alias);
+      // every node that answered before it went silent — what the player heard
+      const heard = [...new Set(nodes.slice(0, lastSilent).filter(Boolean)
+        .map(d => NPCS[id].dialogue.indexOf(d)).filter(i => i >= 0))];
+      const r = reallyMisses(at, q, cast, id, alias, heard);
       if (process.env.DL_DEBUG === id + ":" + alias) console.error("replay", at.name, JSON.stringify(r));
       if (!r) continue;
       played++;

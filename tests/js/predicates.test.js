@@ -90,6 +90,19 @@ const MUST_CONSULT = {
     { fn: "_endNight", why: "the three endings: your bed, the dawn goodbye, the companion rescue" },
     { fn: "_arriveAt", why: "_partyArrive — every new venue pays her round" },
     { enc: "police", why: "the police resolver: the officer can see her" },
+    // promoted 2026-09-16 from the report's "also consulted by" list: each of
+    // these already checks, and losing the check reproduces a persona finding.
+    { fn: "_bfRefusalSay", why: "\"the other girl is gone\" said with her standing right there (Lars, round 47)" },
+    { fn: "_lightNotice", why: "the torch tease is hers to answer, not the room's" },
+    { fn: "_maybeGoWithYou", why: "she does not proposition a man she is already out with" },
+    { fn: "_maybeSelfBarfine", why: "…nor offer to pay her own fine to him" },
+    { fn: "_staffAt", why: "a girl on your arm is not on the floor's roster" },
+    { fn: "_doMotosai", why: "the pillion seats and the fare count her" },
+    { fn: "_doDance", why: "you dance with the woman you came in with" },
+    // NOT registered, deliberately: _partyArrive, _partyGoodbye, _partyLabel,
+    // _partyNightEnd and _motelRoom are the party module's OWN machinery. They
+    // read G.party because it is their subject; a registry entry there asserts
+    // that a function about the party mentions the party.
   ],
 
   // You are in the staff affair. The bar you own contains your girlfriend and
@@ -103,6 +116,10 @@ const MUST_CONSULT = {
     { fn: "_affairNight", needs: "G.affair",
       why: "the nightly account reads the object straight (`!a || a.ended` is _affairLive inlined)" },
     { fn: "_conquestHappy", why: "fidelity is absolute — a slip anywhere marks it" },
+    { fn: "_barNight", why: "the drag on takings while it runs, and worse once the floor has turned" },
+    { fn: "_barLost", why: "the bleed is one of the affair's three endings" },
+    // NOT registered: _affairCrisisDue and _affairGirl are the affair module's
+    // own machinery, reading the object that defines them.
   ],
 
   // You are standing in the bar you own. Your staff do not work you like a
@@ -118,6 +135,20 @@ const MUST_CONSULT = {
       why: "room-scoped, so it cannot use the G.room-reading helper; same question, honest form" },
     { fn: "_lastBusWarn", needs: "G.bar && G.bar.room",
       why: "same shape — standing your own rail, the last bus is not yours" },
+    // promoted 2026-09-16 — the "your staff do not work the guv'nor" doctrine,
+    // which is four separate refusals that each had to be found by hand
+    { fn: "_maybeGoWithYou", why: "your own staff don't proposition you out of your own till" },
+    { fn: "_managerWelcome", why: "your own manager doesn't stand you the house shot" },
+    { fn: "_managerChatTick", why: "…nor nudge you for a man drink; he works for you here" },
+    { fn: "_newbieNudge", why: "the owner is not a newbie in his own bar" },
+    { fn: "_doTake", why: "TAKE <money> FROM TILL is DRAW, and only here" },
+    { fn: "_readBook", why: "the trade book is the owner's to read" },
+    { fn: "_ccibCoffee", why: "the second coffee comes to the bar you own" },
+    // NOT registered: _ownBarStaff (it IS the definition — a registry entry
+    // there asserts the helper mentions itself), _doCharge (the socket rule is
+    // about buying a drink, and reads the till state rather than the predicate)
+    // and _tick (it delegates to _workPresenceTick, which is where the shift's
+    // presence clock actually lives).
   ],
 };
 
