@@ -13,9 +13,9 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "Clear Mind Pattaya inspires PCEC to make a difference through small actions",
+    "t": "Red light, alcohol bottle and a violent crash at Pattaya intersection",
     "s": "Pattaya Mail",
-    "d": "14 Sep 2026"
+    "d": "15 Sep 2026"
   },
   {
     "t": "A trip to Khao Chi Chan near Pattaya is one that you should not skip",
@@ -28,18 +28,23 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "Russian tourist attacked and robbed by three men on motorcycle in Pattaya",
-    "s": "Pattaya Mail",
-    "d": "14 Sep 2026"
-  },
-  {
     "t": "Turkish tourist attacked during attempted phone robbery in Pattaya",
     "s": "Thaiger",
     "d": "15 Sep 2026"
   },
   {
-    "t": "Pattaya Marathon sells out in two hours with 21,727 runners from 58 countries",
+    "t": "British man injured fighting off phone robbers in Pattaya",
+    "s": "Thaiger",
+    "d": "15 Sep 2026"
+  },
+  {
+    "t": "Pattaya businesses keep trading through rain, floods and changing weather",
     "s": "Pattaya Mail",
+    "d": "15 Sep 2026"
+  },
+  {
+    "t": "I moved my family from Utah to Thailand to work remotely. 8 months later, we came home.",
+    "s": "businessinsider.com",
     "d": "14 Sep 2026"
   },
   {
@@ -48,18 +53,8 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "I moved my family from Utah to Thailand to work remotely. 8 months later, we came home.",
-    "s": "Business Insider",
-    "d": "14 Sep 2026"
-  },
-  {
-    "t": "Thailand orders Jewish cemetery near Bangkok cleared, four graves moved",
-    "s": "Ynetnews",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Thailand Eyes $600 Million Tourism Boost With Travel Subsidies",
-    "s": "Bloomberg.com",
+    "t": "Ambassador to Thailand plays down anti-Israeli protests, but urges cautionary action",
+    "s": "The Times of Israel",
     "d": "15 Sep 2026"
   },
   {
@@ -68,20 +63,25 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "Israel’s ambassador to Thailand plays down anti-Israeli protests",
-    "s": "The Times of Israel",
+    "t": "Thailand: New Poll Shows Majority Calls For Tougher Action Over Behavior Of Some Israelis",
+    "s": "i24NEWS",
+    "d": "14 Sep 2026"
+  },
+  {
+    "t": "Thailand orders Jewish cemetery near Bangkok cleared, four graves moved",
+    "s": "Ynetnews",
     "d": "15 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-15","USD":33.3,"AUD":23.72,"GBP":44.88,"EUR":38.42};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-15","temp":27,"humid":86,"code":3,"hi":31,"rain":98};
+var WX_NOW = {"date":"2026-09-16","temp":28,"humid":82,"code":3,"hi":31,"rain":63};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4297,"date":"2026-09-15","baht":67700};
+var GOLD = {"usd":4295,"date":"2026-09-15","baht":67650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":76397,"thb":2542164};
+var BTC = {"usd":75814,"thb":2521828};
