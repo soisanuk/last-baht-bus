@@ -47,6 +47,12 @@ Shortlist, with what each buys:
   everything above it dark. A thesis in three words, and it is literally the setting.
 - **Din Daeng** — "red earth", the expressway and the flats. Grim, brutalist, real; less
   double-duty than the others.
+- **Sukhumvit** (สุขุมวิท) — **PROPOSED 2026-09-14, not confirmed.** The road that physically
+  joins the two games (Route 3, Bangkok to Trat, through Pattaya — LBB's `sukhumvit_crossing`
+  is on it), and an etymology that is the protagonist's job description. See *Sukhumvit — the
+  road between the games* below. Caution: to a Bangkok-familiar player the word means the
+  Nana–Asoke–Thong Lor expat strip, which may be right for the scam towers or may fight the
+  dead-mall tone.
 
 **Etymology caveat.** แสนแสบ is popularly glossed as "a hundred thousand stings" (แสน a hundred
 thousand, แสบ stinging/smarting), usually attributed to the mosquitoes. The Thai PBS source
@@ -57,6 +63,52 @@ name rather than a surname (Thai surnames only date from the 1913 mandate and ar
 deliberately unique). Bangkok commercial buildings are routinely named for a person in the
 owning family. Per the guardrails we do not name the plaza or the family; the note is here so
 nobody re-derives it.
+
+### Sukhumvit — the road between the games (PROPOSED 2026-09-14, not confirmed)
+
+Mario's thought, recorded as a proposal and nothing more: use the etymology of Sukhumvit for
+the title, given the connections between Bangkok and Pattaya. What it buys, and what it costs.
+
+**It is the literal geography of the sequel relationship.** Sukhumvit Road is Route 3 —
+Thailand's longest road, Bangkok to Trat down the eastern seaboard — and it runs through
+Pattaya as the highway that separates the beach side from the Darkside. LBB's
+`sukhumvit_crossing` and the foot-crossing roll (`_footCrossing`) are on this road. A title
+built on it is not a thematic gesture; it is the road the protagonist grew up beside.
+
+**The etymology is the protagonist's job description.** The road is named for **Phra Phisan
+Sukhumvit** (พระพิศาลสุขุมวิท), fifth director-general of the Department of Highways, in the
+same ~1950 batch of renamings that produced Phahonyothin and Phetkasem. The conferred name
+decomposes the way Thai noble names do: **สุขุม** *sukhum* — Pali *sukhuma* / Sanskrit
+*sūkṣma*, "subtle, fine, refined"; in modern Thai *prudent, discreet, level-headed* —
+and **วิท** *wit*, Sanskrit *vid*, "knowledge" (as in วิทยา). "Subtle knowledge" / "discreet
+knowing". For a *luk khrueng* broker whose whole value is knowing things on both sides of a
+boundary and being discreet about it, that is on the nose; and สุขุม in the prudent/discreet
+sense is exactly Tan's register — the *phu kwang khwang* whose power is that he never has to
+act. The word for the road and the word for the restraint are the same word.
+
+**The structural pairing with LBB comes free.** The baht bus is the smallest journey in the
+country — fifteen baht, a shared bench, a few hundred metres. Sukhumvit is the longest road in
+it. First game: the shortest trip you can fail to make. Second: the long road out. That rhymes
+without being a numbered sequel.
+
+**Costs and cautions.**
+
+- **An etymology cannot be a title on its own.** Nobody unpacks a Sanskrit root off a store
+  page. If the name is used, the gloss wants to live *in* the game — a character explains what
+  the road's name means and it lands as the thesis — not on the cover. The Owl column or a
+  mother character could carry it.
+- **Connotation.** To anyone who knows Bangkok, "Sukhumvit" means the Nana–Asoke–Thong Lor
+  expat strip. That may be precisely right for the scam-tower setting, or it may fight the
+  husk-of-Pantip / dead-mall tone. Undecided; it is the main argument against.
+- **สุขุม is NOT สุข.** *Sukhum* (subtle) and *suk* (happiness) are different Sanskrit roots that
+  converged on similar Thai spellings. A character glossing Sukhumvit as "the road of happiness"
+  is the exact defect class the LBB corpus review exists to catch — fine on its own page, false
+  about the world, and a Thai-reading player would catch it instantly. If the gloss goes in a
+  mouth, it is subtle/refined/discreet + knowledge, named for a civil servant — which is itself
+  a decent joke for a cyberpunk game.
+- **Real person.** Phra Phisan Sukhumvit was real; naming a game after the road is naming it
+  after a public road, not after him, and the road's name is public record. No guardrail issue,
+  noted only so nobody asks.
 
 ### Two Saen Saeps — a candidate spine, not just a title (2026-09-08)
 
@@ -421,6 +473,7 @@ them see it; let the LBB player *recognise* it.
 | 2026-09-08 | **"Two Saen Saeps" logged as a candidate SPINE** (Thai PBS source): the in-town canal and the out-of-town canal are the same water and not the same thing — black water and packed ferries downtown, ~50% of residents still living off it and 52 bird species at Minburi/Nong Chok. Argued as the honest form of the thesis, a map for the code-switch, the counterweight to scam-servers-and-a-dead-mall, and the *jao pho* land pattern in water. Guardrail attached: a title borrows the weight of a live displacement story, so it is a deliberate decision, not a default. |
 | 2026-09-14 | **Working title → *Ground Floor*** (Mario: English, and apropos). `khlong` lasted six days. Folder renamed; LBB's CLAUDE.md sibling entry and the handoff updated. Still a placeholder — the real name waits on the spine. |
 | 2026-09-14 | **Saen Saep angle: leaning** (Mario: "seems promising"). Not a decision; recorded so the next pass on the spine starts from the two-canals contrast rather than from zero. |
+| 2026-09-14 | **Sukhumvit added to the shortlist as PROPOSED, not confirmed** (Mario's thought, after the etymology came up). The road is the literal Bangkok–Pattaya link (Route 3, LBB's crossing room is on it); the name decomposes to *sukhum* (subtle/discreet) + *wit* (knowledge) — the broker's job and Tan's register in one word; short-trip/long-road pairing with LBB. Against: the expat-strip connotation. Two cautions recorded — the gloss belongs in a character's mouth, not on the cover, and สุขุม ≠ สุข (not "road of happiness"). |
 | 2026-09-03 | **Accessibility section added** after the LBB pass (Nok opening / Tan's habit / Owl's five words). The reverse test is a hard rule: every scene must work for a player who never played LBB; LBB payoffs are bonuses, never keys. The code-switch must telegraph; the CLI sim is never a literacy test. |
 
 ## Sources
