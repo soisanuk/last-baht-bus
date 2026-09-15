@@ -41,6 +41,18 @@ jobs:
   deploy:
     needs: [test, e2e]
     runs-on: ubuntu-latest
+    # Two pushes seconds apart raced here on 2026-09-15: both runs passed test
+    # and e2e, both force-pushed gh-pages, and the one that lost the ref lock
+    # failed red ("cannot lock ref … is at X but expected Y") while the site
+    # itself was fine — the newer commit had already deployed. gh-pages is
+    # REGENERATED from main on every push (force_orphan below), so a superseded
+    # deploy has nothing to contribute: cancel it rather than let it fail.
+    # Scoped to this job on purpose — test and e2e still run to completion on
+    # every commit, so each one is genuinely tested even when its deploy is
+    # dropped.
+    concurrency:
+      group: gh-pages-deploy
+      cancel-in-progress: true
     permissions:
       contents: write
     steps:
