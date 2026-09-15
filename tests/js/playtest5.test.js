@@ -423,7 +423,7 @@ test("HINT never nudges the WDG errand; Tan's manifest names venues by their sig
 });
 
 test("TRAVEL won't walk you to shutters or into the dawn", () => {
-  G.room = "naklua_rd"; G.visited.orchid_club = true; G.nightTurn = 59; out = [];
+  G.room = "naklua_rd"; G.visited.nottys_place = true; G.nightTurn = 59; out = [];
   doCommand("travel Notty's Place");
   assert.match(text(), /shuts at midnight/);
   assert.equal(G.room, "naklua_rd");

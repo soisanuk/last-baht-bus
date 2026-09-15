@@ -381,7 +381,7 @@ test("the architecture the rooms keep naming answers to a look (round 33)", () =
   for (const [room, noun, want] of [
     ["bali_hai", "ramp", /pier ramp/], ["doghouse", "ramp", /concrete ramp/],
     ["doghouse", "basement", /no windows anywhere/], ["succubus", "hedge", /Discretion here is landscaping/],
-    ["succubus", "porch", /villa porch/], ["orchid_club", "porch", /One orchid/],
+    ["succubus", "porch", /villa porch/], ["nottys_place", "porch", /One orchid/],
     ["sandy_toes", "deck", /raised wooden deck/], ["two_stools", "fridge", /bar fridge|hardest job|ice box/],
     ["bay_watch", "seating", /stool|Worn/i],
   ]) {

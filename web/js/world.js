@@ -4263,7 +4263,7 @@ const ROOMS = {
       "and soapland fronts runs off the other way. A high wall a little further on " +
       "gives nothing away — no sign, just a brass bell, and NOTTY'S PLACE, if " +
       "you know to ask.",
-    venues: ["orchid_club"],
+    venues: ["nottys_place"],
     busStop: "beachrd",
     reads: {
       bell: "Notty's brass bell, on the wall by the gate, up the soi behind the bar corner: you can't see it from the road, but a man who has heard it rung knows exactly what it costs, and the road is quiet enough to hear it if somebody does.",
@@ -4428,7 +4428,7 @@ const ROOMS = {
     exits: { s: "naklua_rd", n: "hotel_room" },
   },
 
-  orchid_club: {
+  nottys_place: {
     name: "Notty's Place",
     bar: "Notty's Place",
     region: "Naklua",
@@ -9532,7 +9532,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
 
   rose: {
     name: "Rose", th: "โรส", emoji: "🌷",
-    room: "orchid_club",
+    room: "nottys_place",
     look: "Thai woman of fifty-five, immaculate, silk blouse, hair sculpted, pearls, cool composed face.",
     desc: "The madame of Notty's Place — fifties, immaculate, a silk blouse and a " +
       "voice you have to lean in to hear. She runs the quietest, coldest, most " +
@@ -16706,7 +16706,7 @@ const _FILLER_HOSTESSES = [
   ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
   ["Wanpen","วันเพ็ญ","mama_yai"],
-  ["Pear","แพร์","orchid_club"], ["Jinda","จินดา","orchid_club"],
+  ["Pear","แพร์","nottys_place"], ["Jinda","จินดา","nottys_place"],
   ["Namfon","น้ำฝน","anchor_bar"], ["Bunny","บันนี่","dolphin_bar"], ["Jaja","จาจา","mooring_bar"],
   ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
@@ -17066,7 +17066,7 @@ const _FILLER_CASHIERS = [
   ["Hong","ห่อง","jasmine_garden"], ["Jah","จ๊ะ","gold_rush"], ["Jeed","จี๊ด","starlight_bar"],
   ["Kaimook","ไข่มุก","slutty"], ["Kanom","ขนม","las_vegas"], ["Keng","เก่ง","khao_talo_bar"],
   ["Best","เบสท์","water_buffalo"], ["Aim","เอม","firefly_bar"], ["Tangmo","แตงโม","mama_yai"],
-  ["Kanya","กัญญา","orchid_club"],
+  ["Kanya","กัญญา","nottys_place"],
   ["Mon","มล","night_heron"],
   
   ["Kade","เกด","the_terrace"], ["Noey","เนย","kingfisher"],
@@ -17629,7 +17629,7 @@ const ROOM_GEO = {
   // error. Its centre is the mean of the four road-ends.
   dolphin:          [12.95095, 100.88750],
   naklua_rd:        [12.95343, 100.88926],
-  orchid_club:      [12.95327, 100.88884],
+  nottys_place:      [12.95327, 100.88884],
   hotel_soi:        [12.95958, 100.89365],
   hotel_room:       [12.95978, 100.89377],
   naklua_bars:      [12.95331, 100.88967],

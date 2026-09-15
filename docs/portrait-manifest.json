@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-08",
+  "generated": "2026-09-15",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 154,
@@ -877,7 +877,7 @@
       "venueKind": "gents",
       "emoji": "🌷",
       "th": "โรส",
-      "room": "orchid_club",
+      "room": "nottys_place",
       "tags": [],
       "desc": "The madame of Notty's Place — fifties, immaculate, a silk blouse and a voice you have to lean in to hear. She runs the quietest, coldest, most expensive room in Naklua, and she knows the name of every regular's wife."
     },
@@ -3239,7 +3239,7 @@
       "venueKind": "gents",
       "emoji": "🍒",
       "th": "แพร์",
-      "room": "orchid_club",
+      "room": "nottys_place",
       "tags": [],
       "desc": "Sleepy-eyed and entirely unbothered — one of Notty's Place's girls, from Khon Kaen. She types more than she talks — and laughs at both."
     },
@@ -3253,7 +3253,7 @@
       "venueKind": "gents",
       "emoji": "🌷",
       "th": "จินดา",
-      "room": "orchid_club",
+      "room": "nottys_place",
       "tags": [],
       "desc": "Bored until you try a word of Thai, then radiant — one of Notty's Place's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand."
     },
@@ -5017,7 +5017,7 @@
       "venueKind": "gents",
       "emoji": "🧾",
       "th": "กัญญา",
-      "room": "orchid_club",
+      "room": "nottys_place",
       "tags": [],
       "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}."
     },

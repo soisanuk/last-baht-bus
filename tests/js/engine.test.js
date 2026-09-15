@@ -1363,14 +1363,14 @@ test("Darkside: Mama Yai's is hand-authored — a mama, a hostess with a story, 
 });
 
 test("Gentleman's Club: Notty's Place exists, is a gents club, and Rose runs it", () => {
-  assert.equal(ROOMS.orchid_club.barType, "gents");
-  assert.equal(NPCS.rose.room, "orchid_club");
+  assert.equal(ROOMS.nottys_place.barType, "gents");
+  assert.equal(NPCS.rose.room, "nottys_place");
   assert.equal(NPC_ROLES.rose, "mamasan");
-  assert.equal(ROOM_GEO.orchid_club.length, 2, "has an OSM anchor");
+  assert.equal(ROOM_GEO.nottys_place.length, 2, "has an OSM anchor");
 });
 
 test("Gentleman's Club: buying a lady a drink makes the staff hands-on (favor bump)", () => {
-  state().room = "orchid_club";
+  state().room = "nottys_place";
   const id = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
   state().soc.drinks[id] = 0;
   const cold = _favor(id);
@@ -1384,12 +1384,12 @@ test("Gentleman's Club: buying a lady a drink makes the staff hands-on (favor bu
 
 test("Gentleman's Club: short time is on-site (the curtained couch) and the night carries on", () => {
   state().flags.act1Done = true; state().flags.hasWallet = true;
-  state().room = "orchid_club"; state().money = 5000; state().day = 3;
+  state().room = "nottys_place"; state().money = 5000; state().day = 3;
   const id = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
-  state().pendingBf = { id, st: 900, lt: 1350, room: "orchid_club" };
+  state().pendingBf = { id, st: 900, lt: 1350, room: "nottys_place" };
   _bfResolve("st");
   assert.equal(state().day, 3, "on-site — no take-out, the night doesn't end");
-  assert.equal(state().room, "orchid_club");
+  assert.equal(state().room, "nottys_place");
   assert.equal(state().money, 5000 - 900);
   assert.match(lastOut(), /curtain|couch/i);
 });
@@ -4975,7 +4975,7 @@ test("lock-in: window shoppers get the midnight shutters instead", () => {
 test("midnight closing: gents clubs and Soi 6 shut, the town runs on", () => {
   state().flags.act1Done = true; state().flags.hasWallet = true;
   // gentleman's club: last-call warning at 23:30, then shuttered and walked out
-  state().room = "orchid_club"; state().money = 5000; state().nightTurn = 54;
+  state().room = "nottys_place"; state().money = 5000; state().nightTurn = 54;
   out = []; run("wait");                 // → nightTurn 55, the 30-min warning
   assert.match(lastOut(), /Last call|half an hour|BARFINE/i, "the courtesy warning fires");
   out = []; run("wait", "wait", "wait", "wait", "wait", "wait"); // past midnight
@@ -5004,7 +5004,7 @@ test("midnight closing: walking in during last call gets the warning + barfine n
   state().flags.orchidVouched = true;    // the club itself isn't this test's subject
   state().room = "naklua_rd"; state().nightTurn = 57; // 23:42 — last half hour
   out = []; run("enter Notty's Place");    // venues[], 2026-08-27 — no more "go w"
-  assert.equal(state().room, "orchid_club", "you get in — it's not midnight yet");
+  assert.equal(state().room, "nottys_place", "you get in — it's not midnight yet");
   assert.match(lastOut(), /Last call|half an hour|BARFINE/i, "warned on arrival");
 });
 

@@ -118,7 +118,9 @@ const _SOI6_BOUND = [
 // NOTTY'S PLACE (Naklua, an ordinary if exclusive gents villa) is a different
 // room from the Orchid ROOM below (White Dish's back table) — they used to share
 // a name, which sent players to the wrong district (round-46 sweep); the room id
-// stays `orchid_club` so the art and old saves survive,
+// was `orchid_club` for its whole life and two more personas conflated the two
+// on the id alone (round 47), so it is `nottys_place` now — deserializeGame
+// migrates the old id,
 // unrelated canon. "Tourists never find it. That is the entire point" is the
 // venue's own desc, so a bare compass exit that walked anyone straight in
 // undercut its one piece of characterisation. Reachable only once vouched or
@@ -708,7 +710,7 @@ function _arriveAt(to) {
   if (to === "orchid_room" && _faction("wdg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
   // sent by Candy, introduced to Rose, or arrived via Doyle's recon — any of the
   // three is a reason the wall has a door in it tonight
-  if (to === "orchid_club" && !_flag("orchidSent") && !_flag("orchidVouched") && !_flag("orchidReported")) {
+  if (to === "nottys_place" && !_flag("orchidSent") && !_flag("orchidVouched") && !_flag("orchidReported")) {
     _say(_pickVary(_ORCHID_CLUB_UNKNOWN, "orchidclubunknown")); return;
   }
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
@@ -3197,7 +3199,7 @@ const _SCENERY = [
       "attention would have put up neon and saved on the gardener."
     : null },
   { key: "porch", m: /\bporch(es)?\b|\bveranda(h)?\b/, fn: () => {
-    if (G.room === "orchid_club") return "One orchid in the porch, in a pot, immaculate, " +
+    if (G.room === "nottys_place") return "One orchid in the porch, in a pot, immaculate, " +
       "replaced the moment it turns — the only thing out here doing the job neon does " +
       "everywhere else. No sign, no barker. If you needed telling, you are not expected.";
     if (/succubus|villa|orchid/.test(G.room)) return "A proper villa porch, tiled and swept, " +
