@@ -402,3 +402,11 @@ when `_frontier()` is built, and keep it capped (it rides the save).
 **Order.** Graph ships → `_frontier()` + its never-spoils test → HINT reads it (three
 surfaces: parser, the `(HINT)` tap, HELP) → the journal as presentation. Measure with the
 cold-first-timer persona lens, which is the one that found the wall.
+
+**Two views, one subgraph (Mario, 2026-09-15: "room for both, if implemented correctly —
+focus on what's open").** The journal's DEFAULT page is the frontier: what is open,
+ranked by distance from where you stand. The RECORD — what you have done, what a person
+has told you — exists but is turned over on purpose, never shown unasked. Morrowind's
+journal failed by making the record the only view; Outer Wilds' rumor mode and map mode
+are one graph with two default filters, which is the right shape. Both views are
+projections of the same known subgraph; never two data sets.
