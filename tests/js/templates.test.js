@@ -157,6 +157,9 @@ test("`G.known` is never read as 'have I met them' — that is `_met`", () => {
     ["engine-play.js", "_piwinAbout asks whether YOU have heard the name you just typed — " +
       "a spoiler gate on the player's knowledge, not on the acquaintance."],
     ["engine-parser.js", "_addPhoto WRITES it: photographing somebody teaches you their name."],
+    ["engine-systems.js", "_doQuests masks an unreached Act One step's name on it — a spoiler gate on " +
+      "what the transcript has printed (Ruth, round 47: 'Madam Oy' on the beach); _frontier and " +
+      "the journal read it as 'named to you', which is exactly what it means."],
   ];
   const bad = [];
   for (const f of ENGINE) {

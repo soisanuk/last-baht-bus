@@ -2559,7 +2559,7 @@ test("the black book is the DEPTH dashboard HELP claims: bonded girls appear, nu
   // Vikram: four girls at bond 5–22 and BLACKBOOK said "the black book's empty."
   sandbox();
   G.soc.drinks.manow = 13; G.soc.drinks.lek = 5;   // bonded, never asked for a number
-  G.phone.contacts = {};
+  G.phone.contacts = {}; G.known.noi = true; G.known.ploy = true;   // met more girls than are in the book, so the footer prints
   out = []; doCommand("blackbook");
   const said = out.join("\n");
   assert.doesNotMatch(said, /black book's empty/, "it is not empty — you have two regulars");

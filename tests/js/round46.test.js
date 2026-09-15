@@ -361,7 +361,7 @@ test("Wimon says her own three errands out loud, and the closed door survives (r
 });
 
 test("a two-leg errand points HINT at the leg you are on (Opus quest re-run)", () => {
-  vac(); _setFlag("act1Done"); G.quests.lake_errand = "active"; G.room = "stinky_bar"; G.itemLoc.tiffin = "inventory";
+  vac(); _setFlag("act1Done"); G.quests.lake_errand = "active"; G.room = "stinky_bar"; G.itemLoc.tiffin = "inventory"; G.talked.nont = [0]; G.talked.duangjai = [0];
   const where = () => { out = []; run("quests"); return text(); };
   assert.match(where(), /Nont is at/, "leg one: carry the tiffin to the market");
   _setFlag("tiffinDelivered");
@@ -420,7 +420,7 @@ test("the round on the house books the spend AND the return, never the net (Des,
 });
 
 test("the next-door hand-off is one sentence, not a doubled name and two full stops", () => {
-  vac(); G.stage = "expat"; _setFlag("expatLife");
+  vac(); G.stage = "expat"; _setFlag("expatLife"); G.talked.tan = [0];
   const w = _questWhere("tan");
   assert.match(w, /Tan is at/, "questWhere already names him and ends the sentence");
   assert.match(w, /\.$/);

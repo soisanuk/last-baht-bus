@@ -175,12 +175,23 @@ function _learnNames(text) {
         // Golden Dragon…)" printed his name and taught nobody it, so the
         // elsewhere-line that would have placed him never fired and a man
         // walked the whole map for a bar one ENTER away (Nige, round 36)
-        _nameRx.push([id, new RegExp("\\b(?:" + last + "|" + last.toUpperCase() + ")\\b")]);
+        _nameRx.push([id, new RegExp("\\b" + last + "\\b"), new RegExp("\\b" + last.toUpperCase() + "\\b")]);
       }
     }
   }
-  for (const [id, rx] of _nameRx) {
-    if (!G.known[id] && rx.test(text)) {
+  // A venue's display name is blanked before the scan, and the CAPS form of a
+  // name counts only inside parentheses — the tap idiom "(ASK ROSE …)" — never in
+  // prose capitals: "SILK ROSE shares the block" filed Rose, the mamasan at Notty's,
+  // as somebody you had heard of (Ruth, round 47).
+  _learnVenues(text);
+  let scan = text;
+  if (_venueRx) for (const [, , vname] of _venueRx) {
+    const esc = vname.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    scan = scan.replace(new RegExp("\\b(?:" + esc + "|" + esc.toUpperCase() + "|" + esc.replace(/ Bar$/i, "").toUpperCase() + ")\\b", "g"), m => " ".repeat(m.length));
+  }
+  const parens = (scan.match(/\([^)]*\)/g) || []).join(" ");
+  for (const [id, rx, rxCaps] of _nameRx) {
+    if (!G.known[id] && (rx.test(scan) || rxCaps.test(parens))) {
       G.known[id] = true;
       // provenance: the frontier HINT can say "Candy mentioned her, at Candy Bar"
       // instead of "somebody mentioned Bee" (design note, 2026-09-15)
@@ -191,7 +202,6 @@ function _learnNames(text) {
       }
     }
   }
-  _learnVenues(text);
 }
 // A venue whose NAME printed before you stood in it is a frontier edge — "you've
 // heard the name, never been". Same harvest as names, over the display names.
@@ -203,7 +213,7 @@ function _learnVenues(text) {
     for (const [id, r] of Object.entries(ROOMS)) {
       if (!r.bar || r.bar.length < 5) continue;
       const esc = String(r.bar).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      _venueRx.push([id, new RegExp("\\b" + esc + "\\b")]);
+      _venueRx.push([id, new RegExp("\\b" + esc + "\\b"), String(r.bar)]);
     }
   }
   for (const [id, rx] of _venueRx) {

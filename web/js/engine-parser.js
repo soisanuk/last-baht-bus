@@ -1115,9 +1115,11 @@ function _doTravel(arg) {
           _say(`${_barName(named)} fronts the same soi as this bar — OUT, then ENTER ${_barName(named).toUpperCase()}.`);
         else if (ROOMS[named].invite)
           _say(`${_barName(named)} is not a door you walk through. Somebody takes you in there, or you are not in there — and nobody on this road drives you to it.`);
-        else
+        else if ((G.visited || {})[named] || (G.heardOf || {})[named])
           _say(`${_barName(named)} is over in ${ROOMS[named].region} — you haven't found it yet, and TRAVEL only ` +
             "knows the places you've been. Walk it, or a MOTOSAI to the district.");
+        else   // a name the transcript has not printed stays unprinted (Ruth, round 47)
+          _say("Nothing you've found goes by that name — TRAVEL only knows the places you've been. Walk, or a MOTOSAI to the district.");
         return;
       }
     }

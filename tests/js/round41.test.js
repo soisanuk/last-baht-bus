@@ -31,6 +31,7 @@ function ownsBar() {
 
 test("a dep chain names its next door when the last one closes (Des)", () => {
   expat(); for (const f of ["barPremises", "nomineeWarned"]) _setFlag(f); G.quests.bar_premises = "done"; G.quests.nominee_deal = "done";
+  G.talked.candy = [0];   // the journal names her bar only once you have met her (Ruth, round 47)
   G.quests.bar_licence = "active"; _setFlag("barLicence"); out = []; _questTick();
   assert.match(text(), /QUEST COMPLETE/); assert.match(text(), /The next door: “Fifty-One Percent” — Candy is at/);
 });

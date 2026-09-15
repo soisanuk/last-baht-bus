@@ -157,3 +157,36 @@ test("JOURNAL is not swallowed by the fare prompt", () => {
   assert.match(text(), /what is open/); assert.ok(G.pendingFare, "and the driver is still waiting");
   G.pendingFare = null;
 });
+
+// ── Ruth's round (2026-09-16): the spoiler hunter ────────────────────────────
+
+test("a bar's name is not a person's: SILK ROSE does not teach you Rose", () => {
+  fresh(); G.known = {}; G.namedBy = {};
+  _say("The lane: SILK ROSE, a massage shop, and the Old Market beyond.");
+  assert.ok(!G.known.rose, "Rose is the mamasan at Notty's, not a lane");
+  _say("Candy says Rose keeps a clean villa.");
+  assert.ok(G.known.rose, "her own name, said, still counts");
+});
+
+test("an unmet person's note never points at a door, and the quest journal names a venue only once you have heard it", () => {
+  fresh(); G.room = "naklua_rd"; G.visited.naklua_rd = true; G.known.rose = true; G.namedBy.rose = { room: "naklua_rd", by: null, day: G.day };
+  const p = _frontier(10).find(f => f.kind === "person" && /Rose/.test(f.text));
+  if (p) assert.ok(!p.cmd || !/ENTER|TRAVEL/.test(p.cmd), "no door for the unmet: " + p.cmd);
+  // the quest journal: Pim at Starlight, unheard of
+  G.room = "rainbow_girls"; G.visited.rainbow_girls = true; G.heardOf = {}; delete G.talked.pim;
+  const w = _questWhere("pim");
+  assert.doesNotMatch(w, /Starlight|Tree Town/, "not before the name has printed: " + w);
+  assert.match(w, /ask around|ASK TAN/);
+  G.heardOf[_npcRoom("pim")] = true;
+  assert.match(_questWhere("pim"), /Starlight/, "heard of: named");
+  // TRAVEL's refusal likewise
+  G.heardOf = {}; out = []; doCommand("travel naklua traditional massage");
+  assert.doesNotMatch(text(), /Naklua Traditional Massage is over in/);
+});
+
+test("the Act One checklist does not name Madam Oy on the beach, and a dead phone's notes are from memory", () => {
+  fresh(); G.flags.act1Done = false; G.stage = "act1"; G.known = {}; out = []; _doQuests();
+  assert.doesNotMatch(text(), /Madam Oy/); assert.match(text(), /somebody/);
+  G.known.oy = true; out = []; _doQuests(); assert.match(text(), /Madam Oy/);
+  fresh(); G.battery = 0; out = []; doCommand("journal"); assert.match(text(), /from memory/);
+});

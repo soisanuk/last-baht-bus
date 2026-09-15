@@ -178,7 +178,7 @@ test("_topicKnown: patron names gate too; non-name topics always pass", () => {
 
 test("fast travel: discovered places only, at exact walking pace", () => {
   run("travel candy bar");
-  assert.match(lastOut(), /haven't found it yet|already found/i, "Candy Bar not discovered yet");
+  assert.match(lastOut(), /haven't found it yet|already found|Nothing you've found goes by that name/i, "Candy Bar not discovered yet");
   assert.equal(state().room, "jomtien_beach");
   state().room = "candy_bar";
   run("look"); // standing in it puts it on the list
@@ -3754,7 +3754,7 @@ test("HINT is offered in autocomplete", () => {
 });
 
 test("in the sandbox, HINT points at the active quest and where to go", () => {
-  state().flags.act1Done = true;
+  state().flags.act1Done = true; state().heardOf.candy_bar_2 = true;   // the venue must have been said before the journal names it (Ruth, round 47)
   state().stage = "vacation";
   state().room = "beach_rd_c";
   state().quests.sangsom = "active";
@@ -3783,7 +3783,7 @@ test("sandbox HINT nudges an offer, then falls back when the books are empty", (
 });
 
 test("the quest journal shows the same live location as HINT", () => {
-  state().flags.act1Done = true; state().stage = "vacation"; state().room = "beach_rd_c";
+  state().flags.act1Done = true; state().stage = "vacation"; state().room = "beach_rd_c"; state().heardOf.candy_bar_2 = true;
   state().quests.sangsom = "active";
   run("quests");
   assert.match(lastOut(), /Bee is at Candy Bar 2.*Myth Night/);

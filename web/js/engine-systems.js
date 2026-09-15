@@ -2430,8 +2430,15 @@ function _questWhere(at) {
     const room = _npcRoom(at);
     if (room === G.room || _npcsHere().includes(at)) return ""; // she's right here
     const r = ROOMS[room];
-    return r ? _fmt(" {who} is at {v}, over in {r}.",
-      { who: NPCS[at].name, v: _barName(room), r: r.region }) : "";
+    if (!r) return "";
+    // the same law as the notebook (Ruth, round 47: "Pim is at Starlight Bar, over in
+    // Tree Town" solved the find-her step the moment the job was accepted): the
+    // venue is named only once you have stood in it or heard its name, or met her
+    if (!(G.visited || {})[room] && !(G.heardOf || {})[room] && !_met(at))
+      return _fmt(" Where {who} is tonight is a thing to ask around for. (ASK TAN ABOUT {WHO})",
+        { who: NPCS[at].name, WHO: NPCS[at].name.split(" ").pop().toUpperCase() });
+    return _fmt(" {who} is at {v}, over in {r}.",
+      { who: NPCS[at].name, v: _barName(room), r: r.region });
   }
   if (NPCS[at] && NPCS[at].patron) {
     // A patron giver moves too — a shuttled regular (Glam: home bar early, walked
@@ -2896,8 +2903,9 @@ function _frontier(max) {
       if (asked) continue;   // Tan gave you the habit; the note has done its job
       text = who ? `${who} mentioned ${NPCS[id].name}${at ? `, at ${at}` : ""}. You have not met ${NPCS[id].pronoun === "he" ? "him" : "her"}.`
                  : `Somebody mentioned ${NPCS[id].name}${at ? ` — at ${at}` : ""}. You have not met ${NPCS[id].pronoun === "he" ? "him" : "her"}.`;
-      if (rm && _room().venues && _room().venues.includes(rm)) cmd = `ENTER ${cap(ROOMS[rm].bar || ROOMS[rm].name)}`;   // the door is on this street: no secret
-      else if (rm === here) cmd = `TALK TO ${cap(NPCS[id].name.split(" ").pop())}`;
+      // no door, even one on this street: ENTER NOTTY'S PLACE under "you have not met
+      // her" told Ruth exactly where Rose was (round 47) — meeting her is the edge
+      if (rm === here) cmd = `TALK TO ${cap(NPCS[id].name.split(" ").pop())}`;
       else if (tanHere) cmd = `ASK TAN ABOUT ${cap(NPCS[id].name.split(" ").pop())}`;
     }
     people++;
@@ -3013,7 +3021,7 @@ function _leads() {
 function _doJournal(arg) {
   const a = String(arg || "").toLowerCase().trim();
   if (/record|done|history|so far|what i.ve done/.test(a)) { _journalRecord(); return; }
-  _say("Notes, on the phone — what is open, nearest first:", "win");
+  _say((G.battery > 0 ? "Notes, on the phone" : "Notes, from memory — the phone is dead") + " — what is open, nearest first:", "win");
   const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active" && !QUESTS[q].vignette);
   for (const q of active.slice(0, 2)) {
     const Q = QUESTS[q];
@@ -3027,7 +3035,7 @@ function _doJournal(arg) {
   _say("(JOURNAL RECORD turns the page to what you have done.)", "dim");
 }
 function _journalRecord() {
-  _say("Notes, on the phone — the record:", "win");
+  _say((G.battery > 0 ? "Notes, on the phone" : "Notes, from memory — the phone is dead") + " — the record:", "win");
   const met = Object.keys(G.talked || {}).filter(id => NPCS[id] && !NPCS[id].filler);
   const metF = Object.keys(G.talked || {}).filter(id => NPCS[id] && NPCS[id].filler).length;
   const known = Object.keys(G.known || {}).filter(id => NPCS[id] && !NPCS[id].filler).length;
@@ -3068,7 +3076,9 @@ function _doQuests() {
     for (const [f, label] of _ACT1_MILESTONES) {
       // A clue's LABEL is the clue (the safe digits) — mask it until it's earned,
       // or the journal spoils the PIN on turn one (mobile playtest, 2026-08-17).
-      const shownLabel = (!_flag(f) && /^Clue:/.test(label)) ? "Clue: (something you haven't found yet)" : label;
+      let shownLabel = (!_flag(f) && /^Clue:/.test(label)) ? "Clue: (something you haven't found yet)" : label;
+      // …and an unreached step does not name somebody the transcript hasn't (Ruth, round 47: "Madam Oy" on the beach)
+      if (!_flag(f)) for (const id of Object.keys(NPCS)) if (!G.known[id] && NPCS[id].name && shownLabel.includes(NPCS[id].name)) shownLabel = shownLabel.replace(NPCS[id].name, "somebody");
       _say(_fmt("  {mark} {label}", { mark: _flag(f) ? "✓" : "·", label: _L(shownLabel) }), "dim");
     }
     shown++;
