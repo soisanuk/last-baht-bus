@@ -19,7 +19,7 @@
 function _sceneNotes() {
   let open = false;
   try { open = localStorage.getItem("lbb_notes_on") === "1"; } catch (e) {}
-  if (!open || typeof _frontier !== "function" || typeof _flag !== "function" || !_flag("act1Done")) return null;
+  if (!open || typeof _frontier !== "function" || (G && G.pendingChoice === "intro")) return null;
   const row = document.createElement("div");
   row.id = "scene-notes";
   const lbl = document.createElement("span"); lbl.className = "lbl"; lbl.textContent = "open — nearest first:";

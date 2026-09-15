@@ -184,7 +184,11 @@ function _learnNames(text) {
       G.known[id] = true;
       // provenance: the frontier HINT can say "Candy mentioned her, at Candy Bar"
       // instead of "somebody mentioned Bee" (design note, 2026-09-15)
-      if (G.namedBy) G.namedBy[id] = { room: G.room, by: (typeof _convoActive === "function" && _convoActive()) || null, day: G.day };
+      if (G.namedBy) {
+        const by = (typeof _convoActive === "function" && _convoActive()) || null;
+        // a name on the room's Here: line is a face you SAW, not somebody mentioned (Ines, round 47)
+        G.namedBy[id] = { room: G.room, by, day: G.day, seen: !by && typeof _npcsHere === "function" && _npcsHere().includes(id) };
+      }
     }
   }
   _learnVenues(text);
@@ -265,6 +269,8 @@ function newGame() {
     known: {},           // charId → true once their name has printed (ask-topic gate)
     namedBy: {},         // charId → {room, by, day} the first time the name printed — the frontier says who mentioned them, and where
     heardOf: {},         // roomId → true once a venue's display name printed before you stood in it (the frontier's "heard the name, never been")
+    tanAsked: {},        // charId → day you asked Tan about them (the frontier retires the "ask Tan" note)
+    exitTried: {},       // "room:dir" → day a way was tried and refused (the frontier stops offering it that night)
     examined: {},        // "room.readKey" → 1 — distinctive fixtures you've looked at (the Owl's noticer slot)
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     // roomId → true once a Darkside bar has bolted the door with you inside.

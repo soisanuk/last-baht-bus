@@ -59,7 +59,7 @@ test("after a conversation the frontier has provenance, and still never spoils",
   assert.match(person.text, /Bert mentioned/, "who said it");
   assert.match(person.text, /at The Stinky Pinky/, "and where");
   assert.deepEqual(spoils(fr.map(f => f.text)), []);
-  for (const f of fr) if (f.kind === "person") assert.doesNotMatch(f.cmd, /TRAVEL/, "TRAVEL only for a bar you have stood in");
+  for (const f of fr) if (f.kind === "person" && f.cmd) assert.doesNotMatch(f.cmd, /TRAVEL/, "TRAVEL only for a bar you have stood in");
   // walk to Candy Bar and Bee's bar becomes a TRAVEL when known
   assert.ok(G.namedBy.kesinee && G.namedBy.kesinee.by === "bert" && G.namedBy.kesinee.room === "stinky_bar");
 });
@@ -101,4 +101,59 @@ test("Tan's stuck nudge texts the frontier, not a shrug", () => {
   assert.ok(msg && msg.from === "tan");
   assert.match(String(msg.text), /try this — /);
   assert.deepEqual(spoils([String(msg.text)]), []);
+});
+
+// ── Ines's round (2026-09-16): the law tightened ─────────────────────────────
+
+test("an unmet person's note carries provenance and never a location; Tan and Act One are excluded", () => {
+  fresh(); G.room = "stinky_bar"; G.visited.stinky_bar = true;
+  doCommand("talk to bert"); doCommand("ask bert about white dish");
+  const people = _frontier(10).filter(f => f.kind === "person");
+  assert.ok(people.length);
+  for (const p of people) {
+    assert.doesNotMatch(p.text, /is at|is out|over in|tonight/, "where they are is Tan's to tell: " + p.text);
+    assert.match(p.text, /mentioned|You saw/);
+    assert.ok(!p.cmd || !/ASK TAN/.test(p.cmd), "no ASK TAN when Tan is not here: " + p.cmd);
+    assert.doesNotMatch(p.text, /\bTan\b/);
+  }
+  // Act One: no people, no venues — only ways and topics
+  fresh(); G.flags.act1Done = false; G.stage = "act1"; G.room = "stinky_bar"; G.visited.stinky_bar = true;
+  doCommand("talk to bert");
+  assert.ok(_frontier(10).every(f => f.kind === "exit" || f.kind === "topic"));
+});
+
+test("a venue whose door you stood at is found; a way refused tonight is not offered; asking Tan retires the note", () => {
+  fresh(); G.room = "beach_rd_n"; G.visited.beach_rd_n = true;
+  const v = (ROOMS.beach_rd_n.venues || [])[0]; assert.ok(v);
+  _say(`Somebody says ${ROOMS[v].bar} is the place.`);
+  assert.ok(G.heardOf[v] || G.visited[v], "heard of");
+  assert.ok(!_frontier(10).some(f => f.kind === "venue" && f.text.includes(ROOMS[v].bar)), "its door is on a street you walked");
+  // a refused way
+  G.room = "rainbow_girls"; G.visited.rainbow_girls = true;
+  const before = _frontier(10).find(f => f.kind === "exit" && /OFFICE/.test(f.cmd || ""));
+  G.exitTried["rainbow_girls:office"] = G.day;
+  assert.ok(!_frontier(10).find(f => f.kind === "exit" && /OFFICE/.test(f.cmd || "")), "not offered again tonight" + (before ? "" : " (no office way listed at all)"));
+  // Tan asked → the person note retires
+  G.room = "stinky_bar"; G.visited.stinky_bar = true; doCommand("talk to bert"); doCommand("ask bert about white dish");
+  const id = _frontier(10).filter(f => f.kind === "person").length ? Object.keys(G.known).find(k => !_met(k) && NPCS[k] && !NPCS[k].filler && k !== "tan" && !NPCS[k].offmap) : null;
+  if (id) { G.tanAsked[id] = G.day; assert.ok(!_frontier(10).some(f => f.kind === "person" && f.text.includes(NPCS[id].name)), "retired"); }
+});
+
+test("a face seen on the Here: line is 'you saw', not 'somebody mentioned'; the small hours name your bed", () => {
+  fresh(); G.room = "queen_vic"; G.visited.queen_vic = true; G.known = {}; G.namedBy = {};
+  _describeRoom(true);
+  const seen = Object.keys(G.namedBy).filter(id => G.namedBy[id].seen);
+  assert.ok(seen.length, "the rail's names were seen, not mentioned");
+  const f = _frontier(10).find(x => x.kind === "person");
+  if (f) assert.match(f.text, /^You saw /);
+  G.nightTurn = LAST_BUS_TURN; G.room = "stinky_bar";
+  const home = _frontier(10).find(x => x.kind === "home");
+  assert.ok(home && /Your bed is at/.test(home.text) && home.cmd === "TRAVEL HOTEL");
+});
+
+test("JOURNAL is not swallowed by the fare prompt", () => {
+  fresh(); G.room = "beach_rd_c"; G.pendingFare = { kind: "bus", price: BUS_FARE, dest: "beach_rd_n" };
+  out = []; doCommand("journal");
+  assert.match(text(), /what is open/); assert.ok(G.pendingFare, "and the driver is still waiting");
+  G.pendingFare = null;
 });

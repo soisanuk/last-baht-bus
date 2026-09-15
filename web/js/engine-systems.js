@@ -2842,15 +2842,24 @@ function _doAbandon(arg) {
 function _frontier(max) {
   const out = [];
   const here = G.room;
+  const act1 = !_flag("act1Done");
+  const tanHere = _npcsHere().includes("tan");
   const dist = to => { if (!to || to === here) return 0; const p = _path(here, to); return p ? p.length : 99; };
   const cap = w => String(w || "").toUpperCase();
+  const roomLabel = r => (ROOMS[r] && (ROOMS[r].bar || ROOMS[r].name)) || "";
+  // 0. the small hours: your bed, and how far (Ines, round 47: nothing in the notes ever said "go home")
+  if (!act1 && G.nightTurn >= LAST_BUS_TURN - 5 && G.hotel && _HOTELS[G.hotel] && here !== _hotelRoomId()) {
+    const d = dist(_hotelRoomId());
+    out.push({ kind: "home", dist: 0, rank: 0, text: `Your bed is at ${_HOTELS[G.hotel].name || "your hotel"}${d && d < 99 ? ` — about ${d} turns of walking from here` : ""}.`, cmd: "TRAVEL HOTEL" });
+  }
   // 1. an invitation for tonight, not yet kept
   if (G.phone && G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
     const id = G.phone.invite.id, rm = _npcWhere(id);
     if (rm && rm !== here && _barName(rm)) out.push({ kind: "invite", dist: dist(rm), rank: 0,
       text: `${NPCS[id].name} asked you to come by tonight — ${_barName(rm)}.`, cmd: `TRAVEL ${cap(_barName(rm))}` });
   }
-  // 2. somebody here you have met, with a thing you never asked
+  // 2. somebody here you have met, with a thing you never asked (the chip palette, so
+  //    quest-driven beats stay off it)
   for (const id of _npcsHere()) {
     if (!_met(id) || !NPCS[id] || NPCS[id].filler) continue;
     const seen = (G.talked && G.talked[id]) || [];
@@ -2863,57 +2872,77 @@ function _frontier(max) {
       cmd: `ASK ${cap(NPCS[id].name.split(" ").pop())} ABOUT ${cap(label)}` });
     break;
   }
-  // 3. a name that printed, a face you never met — and who said it, where (three at most)
+  // 3. a name that printed, a face never met — WITHOUT a location. Where they are
+  //    is Tan's to tell, or your own to see: the note said "Rose is at Notty's Place"
+  //    a scene before Candy's "you get sent", and put the pickpocket on Walking
+  //    Street on the wallet night (Ines, round 47). Three at most; none in Act One.
   let people = 0;
-  for (const id of Object.keys(G.known || {})) {
+  if (!act1) for (const id of Object.keys(G.known || {})) {
     if (people >= 3) break;
-    if (_met(id) || !NPCS[id] || NPCS[id].offmap || NPCS[id].filler) continue;
+    if (_met(id) || !NPCS[id] || NPCS[id].offmap || NPCS[id].filler || id === "tan") continue;
     if (NPCS[id].origin && G.player && NPCS[id].origin === G.player.origin) continue;   // you ARE him
-    const rm = _npcWhere(id);
     const by = G.namedBy && G.namedBy[id];
+    const at = by && by.room && (G.visited || {})[by.room] ? roomLabel(by.room) : null;
     const who = by && by.by && NPCS[by.by] && by.by !== id ? NPCS[by.by].name : null;
-    const at = by && by.room && (G.visited || {})[by.room] ? (_barName(by.room) || (ROOMS[by.room] && ROOMS[by.room].name)) : null;
-    const src = who ? `${who} mentioned ${NPCS[id].name}${at ? `, at ${at}` : ""}` : `Somebody mentioned ${NPCS[id].name}${at ? ` — at ${at}` : ""}`;
-    if (rm && _barName(rm) && rm !== here) {
-      const visited = !!(G.visited && G.visited[rm]);
-      const venueKnown = visited || !!(G.heardOf && G.heardOf[rm]);   // the bar's NAME is only said if the transcript has said it
-      const reg = ROOMS[rm] && ROOMS[rm].region;
-      people++;
-      out.push({ kind: "person", dist: dist(rm), rank: 2,
-        text: `${src}. ${NPCS[id].pronoun === "he" ? "He" : "She"} is ${venueKnown ? `at ${_barName(rm)}` : "out"} tonight${reg && reg !== _room().region ? `, over in ${reg}` : venueKnown ? "" : ", somewhere on this stretch"}.`,
-        cmd: visited ? `TRAVEL ${cap(_barName(rm))}` : `ASK TAN ABOUT ${cap(NPCS[id].name.split(" ").pop())}` });
-    } else if (!rm) {
-      people++;
-      out.push({ kind: "person", dist: 50, rank: 4, text: `${src}. Not out tonight, as far as anyone knows.`, cmd: `ASK TAN ABOUT ${cap(NPCS[id].name.split(" ").pop())}` });
+    const rm = _npcWhere(id);
+    const asked = !!(G.tanAsked && G.tanAsked[id]);
+    let text, cmd = null;
+    if (by && by.seen) {
+      // a face you saw across a room and never spoke to: your own observation, so the place is yours to name
+      text = `You saw ${NPCS[id].name}${at ? ` at ${at}` : ""} and never spoke.`;
+      if (rm === here) cmd = `TALK TO ${cap(NPCS[id].name.split(" ").pop())}`;
+      else if (rm && ROOMS[rm].bar && (G.visited || {})[rm]) cmd = `TRAVEL ${cap(ROOMS[rm].bar)}`;
+    } else {
+      if (asked) continue;   // Tan gave you the habit; the note has done its job
+      text = who ? `${who} mentioned ${NPCS[id].name}${at ? `, at ${at}` : ""}. You have not met ${NPCS[id].pronoun === "he" ? "him" : "her"}.`
+                 : `Somebody mentioned ${NPCS[id].name}${at ? ` — at ${at}` : ""}. You have not met ${NPCS[id].pronoun === "he" ? "him" : "her"}.`;
+      if (rm && _room().venues && _room().venues.includes(rm)) cmd = `ENTER ${cap(ROOMS[rm].bar || ROOMS[rm].name)}`;   // the door is on this street: no secret
+      else if (rm === here) cmd = `TALK TO ${cap(NPCS[id].name.split(" ").pop())}`;
+      else if (tanHere) cmd = `ASK TAN ABOUT ${cap(NPCS[id].name.split(" ").pop())}`;
     }
+    people++;
+    out.push({ kind: "person", dist: rm ? dist(rm) : 50, rank: 2, text, cmd });
   }
-  // 4. a way out of a room you stood in, never taken (the room named; the far side never)
+  // 4. a way out of a room you stood in, never taken and not refused tonight (the room named; the far side never)
   const vis = Object.keys(G.visited || {}).filter(r => ROOMS[r] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(r)));
   const exits = [];
   for (const r of vis) for (const [dir, to] of Object.entries(ROOMS[r].exits || {})) {
     if ((G.visited || {})[to] || !ROOMS[to] || ROOMS[to].invite) continue;
     if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(to)) continue;
+    if (G.exitTried && G.exitTried[r + ":" + dir] === G.day) continue;   // tried, refused: not tonight
     exits.push({ r, dir, d: dist(r) });
   }
   exits.sort((a, b) => a.d - b.d);
-  for (const e of exits.slice(0, 2)) {
-    const nm = ROOMS[e.r].name;
+  for (const e of exits.slice(0, 4)) {
+    // a named way (spa, pier, office…) is a tap only in its own room, and the
+    // promise lint replays taps anywhere — so it prints as plain words, no tap
+    const named = !_DIRS_CARDINAL.has(e.dir);
+    const way = named ? `marked "${e.dir}"` : _dirWord(e.dir);
     out.push({ kind: "exit", dist: e.d, rank: 3,
-      text: e.r === here ? `There is a way ${_dirWord(e.dir)} from here you never took.` : `${nm} has a way ${_dirWord(e.dir)} you never took.`,
-      cmd: e.r === here ? cap(e.dir) : (ROOMS[e.r].bar && (G.visited || {})[e.r] ? `TRAVEL ${cap(ROOMS[e.r].bar)}` : null) });
+      text: e.r === here ? `There is a way ${way} from here you never took.` : `${ROOMS[e.r].name} has a way ${way} you never took.`,
+      cmd: e.r === here ? (named ? null : cap(e.dir)) : (ROOMS[e.r].bar && (G.visited || {})[e.r] ? `TRAVEL ${cap(ROOMS[e.r].bar)}` : null) });
   }
-  // 5. a venue whose name you heard and never found
+  // 5. a venue whose name you heard and whose DOOR you have never stood at — a
+  //    street you walked that lists it is a door found (Ines, round 47: "never
+  //    found the door" while standing at it). None in Act One.
   let venues = 0;
-  for (const rm of Object.keys(G.heardOf || {})) {
-    if (venues >= 2) break;
-    if ((G.visited || {})[rm] || !ROOMS[rm] || !ROOMS[rm].bar || ROOMS[rm].invite) continue;
+  if (!act1) for (const rm of Object.keys(G.heardOf || {})) {
+    if (venues >= 3) break;
+    if (!_venueUnfound(rm)) continue;
     venues++;
-    if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(rm)) continue;
     out.push({ kind: "venue", dist: 40, rank: 5, text: `${ROOMS[rm].bar} — you have heard the name and never found the door. Over in ${ROOMS[rm].region}.`,
-      cmd: `ASK TAN ABOUT ${cap(ROOMS[rm].bar)}` });
+      cmd: tanHere ? `ASK TAN ABOUT ${cap(ROOMS[rm].bar)}` : null });
   }
   out.sort((a, b) => (a.rank - b.rank) || (a.dist - b.dist));
   return out.slice(0, max || 8);
+}
+const _DIRS_CARDINAL = new Set(["n", "s", "e", "w", "in", "out", "up", "down"]);
+// heard of, never stood in, and no street you have walked lists its door
+function _venueUnfound(rm) {
+  if (!ROOMS[rm] || !ROOMS[rm].bar || ROOMS[rm].invite || (G.visited || {})[rm]) return false;
+  if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(rm)) return false;
+  for (const r of Object.keys(G.visited || {})) if (ROOMS[r] && (ROOMS[r].venues || []).includes(rm)) return false;
+  return true;
 }
 function _dirWord(d) {
   return ({ n: "north", s: "south", e: "east", w: "west", in: "in", out: "out", up: "up", down: "down", alley: "down the alley", office: "into the office", hotel: "into the hotel" })[d] || d;
@@ -2990,7 +3019,7 @@ function _doJournal(arg) {
     const Q = QUESTS[q];
     _say(_fmt("  · {name} — {desc}{where}", { name: _L(Q.name), desc: _L(_qDesc(Q)), where: _questWhere(_qAt(Q) === Q.giver ? _qGiver(Q) : _qAt(Q)) }), "dim");
   }
-  const fr = _frontier(8);
+  const fr = _frontier(10);
   if (!fr.length && !active.length) {
     _say("  · Nothing open that the town has told you about. Talk to people; that is where the edges are.", "dim");
   }
@@ -3011,7 +3040,7 @@ function _journalRecord() {
   }
   if (met.length > 12) _say(`    …and ${met.length - 12} more.`, "dim");
   const vis = Object.keys(G.visited || {}).filter(r => ROOMS[r]).length;
-  const heard = Object.keys(G.heardOf || {}).filter(r => ROOMS[r] && !(G.visited || {})[r]).length;
+  const heard = Object.keys(G.heardOf || {}).filter(_venueUnfound).length;
   _say(`  Places: ${vis} stood in, ${heard} heard of and never found.`, "dim");
   const done = Object.keys(QUESTS).filter(q => G.quests[q] === "done" && !QUESTS[q].vignette);
   if (done.length) _say(`  Jobs done: ${done.map(q => _L(QUESTS[q].name)).join(" · ")}.`, "dim");
@@ -3225,6 +3254,7 @@ function _tanAbout(topic) {
     }
   }
   if (!id || id === "tan") return false;
+  (G.tanAsked = G.tanAsked || {})[id] = G.day;   // the notes retire the "ask Tan" line once you have (Ines, round 47)
   // a person you do not find — one who finds you, by phone (Margarethe, round 47:
   // "Second Road (Central), every night" for a woman who is never on any street)
   if (NPCS[id].offmap) {

@@ -10085,7 +10085,7 @@ function doCommand(input) {
       "truck grumbles off up the road, and the night hands you back your own two feet.", "dim");
     return;
   }
-  if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say"].includes(v)) {
+  if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say", "journal", "notes", "diary", "quests", "hint", "time"].includes(v)) {   // the notes are the one thing you want mid-modal (Ines, round 47)
     _farePrompt();
     return;
   }
@@ -10145,7 +10145,7 @@ function doCommand(input) {
   if ((_DIRS[v] !== undefined || (_room().exits && _room().exits[v])) &&
       words.length === 1) {
     // bare direction — including this room's own exit keys (pub, hotel, …)
-    if (_doGo(v) === false) return;            // a refused direction costs no turn
+    if (_doGo(v) === false) { (G.exitTried = G.exitTried || {})[_room0 + ":" + v] = G.day; return; }   // a refused direction costs no turn — and the notes stop offering it tonight (Ines, round 47)
     _flushTrace(_room0); _tick(); _checkAct1(); return;
   }
 

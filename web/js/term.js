@@ -717,7 +717,7 @@ const _term = (() => {
     const notes = document.getElementById("notes-fab");
     if (notes) {
       let up = false, open = false;
-      try { up = typeof _flag === "function" && !!_flag("act1Done"); } catch (e) {}
+      try { up = typeof G !== "undefined" && !!G && G.pendingChoice !== "intro"; } catch (e) {}   // from the first night (Ines, round 47: the notebook she was told about did not exist in the opening)
       try { open = localStorage.getItem("lbb_notes_on") === "1"; } catch (e) {}
       notes.classList.toggle("show", up);
       notes.classList.toggle("open", open);
