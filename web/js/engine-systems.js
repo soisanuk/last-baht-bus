@@ -1509,7 +1509,7 @@ function _bfResolve(kind) {
   if (scam) { // runner | mao | leaveAfter — plays out across the night's end
     G.bfIncident = { id, room: G.room, kind: scam, fine: price, day: G.day };
     _say((price ?
-      `฿${price} to the mamasan, who enters it in the ledger with ceremony and ` +
+      (G.pendingBf && G.pendingBf.herMoney ? `฿${price} to her — the book is closed, this is her money — and she folds it away ` : `฿${price} to the mamasan, who enters it in the ledger with ceremony and `) +
       `gives ${name} a nod that means back by opening, mind. ` :
       `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
       `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
@@ -1532,16 +1532,16 @@ function _bfResolve(kind) {
     // 2026-08-23). The reframe is hers to make, and only if it was hers before.
     const ridden = !!(G.rodeWith && G.rodeWith[id]);
     const offer = ridden
-      ? `${name} takes your hand — and there's the scuffed Click again, already off its stand. ` +
+      ? `${name} takes your hand — and there's the ${_rideBike(id)} again, already off its stand. ` +
         `"Not hotel yet," she says, mock-stern, reading the hope on your face. "I know, I know ` +
         `— you want the same night again. Cannot step in same river, na. But come — tonight is ` +
         `its own." She pats the seat.`
-      : `${name} takes your hand — but instead of the taxi rank she wheels a scuffed Honda ` +
-        `Click off its stand, thumbs it awake, and pats the seat behind her. "Tonight I not ` +
+      : `${name} takes your hand — but instead of the taxi rank she wheels a ${_rideBike(id)} ` +
+        `off its stand, thumbs it awake, and pats the seat behind her. "Tonight I not ` +
         `want hotel yet. Come — I show you MY Pattaya, the real one. Hold me tight, na, I ` +
         `drive little bit crazy."`;
     _encPrompt(
-      [(price ? `฿${price} to the mamasan, and ` : "") + offer + ` (฿${G.money} left.)`, "win"],
+      [(price ? (G.pendingBf && G.pendingBf.herMoney ? `฿${price} to her, and ` : `฿${price} to the mamasan, and `) : "") + offer + ` (฿${G.money} left.)`, "win"],
       [`(RIDE with her into the night · or JUST the hotel — up to you.)`, "dim"]);
     return;
   }
@@ -1619,7 +1619,7 @@ const _RIDE_VENUES = [
       `orders in a machine-gun burst of Isaan and watches your face when the som tam lands — ` +
       `"not spicy, I say NOT spicy" — as your whole head catches fire. Grilled chicken, sticky ` +
       `rice, her laughing too hard to eat. The cheapest joy in Thailand.`,
-    n => `2am and she's hungry: a roadside table, moo ping smoking on the grill, som tam pla ra ` +
+    n => `${_clockStr()} and she's hungry: a roadside table, moo ping smoking on the grill, som tam pla ra ` +
       `so pungent it arrives before the plate does. ${n} builds you the perfect bite and makes ` +
       `you eat it from her fingers, then howls at your tears. You've never been so awake.`,
   ]},
@@ -1648,8 +1648,7 @@ const _RIDE_VENUES = [
       `rest, everyone delighted.`,
     n => `A beer bar down a lane — off-shift girls and their off-shift boyfriends, a speaker on ` +
       `something from 2009. ${n} is home here; you can see it in her shoulders coming down. She ` +
-      `introduces you around by a nickname she's decided without telling you. You are "{{Nong}} ` +
-      `Handsome" now. It sticks.`,
+      `introduces you around by a nickname she's decided without telling you. You are "${_rideNickname(G.rideSeq && G.rideSeq.id)}" now. It sticks.`,
   ]},
   { key: "viewpoint", lo: 0, hi: 0, sanuk: 4, scenes: [
     n => `She rides you up Pratumnak in the dark, past the sleeping resorts, to the viewpoint — ` +
@@ -1658,7 +1657,7 @@ const _RIDE_VENUES = [
       `is the part nobody sells you, and it's free, and it's the best thing in Pattaya.`,
     n => `The bike climbs to the Buddha hill overlook and stops. ${_clockStr()}, and the quietest place in town. Below, the strip you've been ` +
       `drowning in all night is a smear of gold light and, from up here, completely quiet. ${n} ` +
-      `leans back against you and points out her bar, her room, the hospital where her son was ` +
+      `leans back against you and points out her bar, her room, ${(typeof _girlHasBoy === "function" && _girlHasBoy(G.rideSeq && G.rideSeq.id)) ? "the hospital where her son was " : "the school she went to for one year, where her Thai was "}` +
       `born — a whole life you're only now seeing the shape of. The wind does the talking.`,
     n => `"Somewhere dark, na? No people." She sounds smaller than she has all night. The bike ` +
       `climbs away from the neon until the town is a rumour below, and she parks facing the ` +
@@ -1680,16 +1679,16 @@ const _RIDE_VENUES = [
       `hard to finish.`,
   ]},
   { key: "afterhours", lo: 200, hi: 500, sanuk: 3, scenes: [
-    n => `An after-hours room where the blackout curtains are load-bearing: outside the sky has ` +
-      `gone traitorously bright, inside it is packed and pretending otherwise. Time starts ` +
+    n => `An after-hours room where the blackout curtains are load-bearing: outside ${G.nightTurn >= 100 ? "the sky has " +
+      "gone traitorously bright" : "the street is still doing its dark"}, inside it is packed and pretending otherwise. Time starts ` +
       `dropping frames. At some point you surface mid-sentence with a freshly poured beer in ` +
       `front of you and ${n} laughing at something you apparently just said. You reach for your ` +
-      `pocket; the table waves you off. Already paid. Forget about it.`,
+      `pocket; the table waves you off. Already paid. Forget about it. [free]`,
     n => `The club the town's whole night shift disappears into when the shutters come down. ` +
       `${n} knows the door and the door knows her, and the hour stops meaning anything at all. ` +
-      `When you finally step out blinking, the street is doing a whole honest morning around ` +
-      `you — motorbikes, market bags, monks on the almsround — and none of it seems entirely ` +
-      `plausible.`,
+      `When you finally step out blinking, ${G.nightTurn >= 100 ? "the street is doing a whole honest morning around " +
+      "you — motorbikes, market bags, monks on the almsround — and none of it seems entirely plausible"
+      : "the street is exactly as dark as you left it, which after that room seems the least plausible thing of all"}.`,
   ]},
   { key: "market", lo: 60, hi: 200, sanuk: 2, scenes: [
     n => `A night market winding down, half the stalls shuttered. ${n} buys roti with banana and ` +
@@ -1701,6 +1700,18 @@ const _RIDE_VENUES = [
   ]},
 ];
 
+// Her bike and her nickname for you are HERS: two girls wheeled the same scuffed
+// Click and christened the same man "Nong Handsome" independently (Kenji, round 47)
+const RIDE_STOP_TURNS = 8;   // a stop is most of an hour of the night's clock
+function _rideBike(id) {
+  const bikes = ["scuffed Honda Click", "Scoopy with one cracked mirror", "PCX she is very slightly too small for",
+    "Honda Wave with a milk crate bungeed on the back", "Click with a Doraemon sticker over the fuel cap"];
+  return bikes[_hh(String(id) + ":bike", 23) % bikes.length];
+}
+function _rideNickname(id) {
+  const names = ["{{Nong}} Handsome", "Khun Big", "Farang Neung", "Papa Bear", "Mister Tomorrow", "Khun Slow"];
+  return names[_hh(String(id) + ":nick", 29) % names.length];
+}
 function _pickRideVenue(seen) {
   // Soi 6 mode fences Walking Street off entirely (the mode blocks you from walking
   // there and calls it off-map), so a ride that drops you in "Walking Street's big
@@ -1740,16 +1751,20 @@ function _nightRide(input) {
   seq.lastHop = hi;
   const hop = _RIDE_HOP[hi];
   const scene = venue.scenes[Math.floor(_rand() * venue.scenes.length)](name);
-  const cost = venue.lo + Math.floor(_rand() * (venue.hi - venue.lo + 1));
+  const cost = /\[free\]/.test(scene) ? 0 : venue.lo + Math.floor(_rand() * (venue.hi - venue.lo + 1));   // "Already paid" meant ฿393 (Kenji, round 47)
   const paid = Math.min(cost, G.money);
   G.money -= paid;
   seq.spent += paid; seq.stops++; seq.sanuk += venue.sanuk;
   if (!/viewpoint|market|somtam/.test(venue.key)) G.soc.drunk++;   // a whisky set is a drink (Dex woke "stone sober" after six stops)
   _addBond(id, 1); // every stop deepens the bond
-  _say(`${hop}\n\n${scene}` +
+  _say(`${hop}\n\n${scene.replace(/\s*\[free\]/, "")}` +
     (paid ? ` (฿${paid}. ฿${G.money} left.)` : " (Free. The best things here are.)"), "win");
   _addHappy(venue.sanuk); // does NOT jade — a bonded night is the one that keeps giving
-  if (seq.stops >= RIDE_MAX_STOPS) return _endRide(seq, "dawn");
+  // a stop is an hour of the night, not a turn of it: six stops used to fit in 36
+  // minutes of clock and the close said "morning already" at 00:48 (Kenji, round 47).
+  // Offstage, so the bar you rode away from does not narrate its drizzle at you.
+  { G.offstage = true; const ended = _passTime(RIDE_STOP_TURNS); G.offstage = false; if (ended) return; }
+  if (seq.stops >= RIDE_MAX_STOPS || G.nightTurn >= SUNRISE_TURN) return _endRide(seq, "dawn");
   _rideQuestion(seq, id, name);
   G.pendingEnc = "nightride";
   _encPrompt([`${name} looks back over her shoulder, engine idling, one eyebrow up.`, "room"],
@@ -1824,6 +1839,12 @@ function _endRide(seq, reason) {
       `reads it in your face before you can say a word — "okay, enough, tilac, we go home now" — ` +
       `no sulk, no scene, just her hand squeezing yours on the bar. The empty pockets don't ` +
       `embarrass her, and that tells you more than the whole night did.`;
+  } else if (reason === "dawn" && G.nightTurn < SUNRISE_TURN - 10) {
+    // the stop cap, reached with the sky still dark: she calls it, and does not say "morning" (Kenji, round 47)
+    G.lastBfHonest = true;
+    close = `${name} kills the engine at a red light that nobody else is waiting at and looks at the sky, which is ` +
+      `still doing nothing. "Enough Pattaya," she says. "Morning is coming for us, na — I want to be asleep when it ` +
+      `does." She points the bike toward a bed, hers or yours, and the dark carries you there.`;
   } else if (reason === "dawn") {
     G.lastBfHonest = true;   // the quiet coda: the fun close's "khao man gai at 3 a.m." read backwards after "morning already" (Dex, round 38)
     close = `The sky over the gulf goes the colour of a bruise healing, and ${name} feels you ` +
@@ -1866,6 +1887,10 @@ function _endRide(seq, reason) {
     `being told, murmuring something in Thai, and your chest does a quiet thing about that it isn't ` +
     `ready to examine.`), "dim");
   _addBond(id, (great ? 4 : 2)); // on top of the per-stop bumps
+  // she remembers the ride tomorrow, and so does the "late" question (Kenji, round 47:
+  // "you not friend yet" after three nights on her bike)
+  (G.rideLog = G.rideLog || {})[id] = { count: ((G.rideLog[id] || {}).count || 0) + 1, day: G.day, stops: seq.stops, great: !!great };
+  G.lastRide = { id, day: G.day, stops: seq.stops };
   G.lastBfId = id;
   G.lastBfBase = 10 + Math.min(4, seq.stops); // a bigger night → a bigger memory at the payout
   _endNight("barfine");
@@ -2703,7 +2728,7 @@ function _questOffer(npcId) {
     _say(_fmt(_lived ? "✦ {who} owes you for one already done: “{name}”"
                      : "✦ {who} has a job for you: “{name}” — {desc}",
       { who: NPCS[npcId].name, name: _L(q.name), desc: _questPitch(_L(_qDesc(q))) }), "win");
-    _say(_lived ? `(ACCEPT ${qid.toUpperCase()} — you have already done the thing; this is him settling up.)`
+    _say(_lived ? `(ACCEPT ${qid.toUpperCase()} — you have already done the thing; this is ${(NPCS[_qGiver(QUESTS[qid])] || {}).pronoun === "she" ? "her" : "him"} settling up.)`
                 : `(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
     return; // one offer at a time keeps the bar chatter sane
   }
@@ -2931,7 +2956,11 @@ function _questTick() {
     }
     if (q.reward.money) {
       G.money += q.reward.money;
-      _say(`(+฿${q.reward.money} — ฿${G.money} in pocket.)`, "dim");
+      // money with nobody handing it over (Arturo, round 47): name the giver, and
+      // say how it reached you when the giver is not in the room
+      const _gv = _qGiver(q), _gn = NPCS[_gv] ? NPCS[_gv].name : null;
+      const _here = _gv && _npcsHere().includes(_gv);
+      _say(`(+฿${q.reward.money}${_gn ? (_here ? ` from ${_gn}` : ` — ${_gn}'s, sent through the bank app with a sticker on it`) : ""} — ฿${G.money} in pocket.)`, "dim");
     }
     if (q.reward.happy) _addHappy(q.reward.happy);
     _repGain(); // seeing a job through is the sort of thing that earns you a name (throttled)
@@ -3340,7 +3369,7 @@ function _doMessage(arg) {
         "lunch still ok? i tell you first day — evening i work. you know now 555\" And that " +
         "is the whole of it: she never lied, and she is not going to start apologising for " +
         "your imagination."
-      : "\"555 the eye man! ankle better na. lunch some day — only lunch, i work evening, " +
+      : "\"555 the one with the eyes! ankle better na. lunch some day — only lunch, i work evening, " +
         "every day until late 😊\" Cheerful, unhurried, exactly what she said at the clinic.");
     return;
   }
@@ -3510,7 +3539,7 @@ function _tanCall() {
         "one time tonight. The rest is legs.\" Click.");
       return;
     }
-    if (ROOMS[G.room] && ROOMS[G.room].region !== "Jomtien") {
+    if (ROOMS[G.room] && !/^(Jomtien|Thappraya|Pratumnak)$/.test(ROOMS[G.room].region)) {   // Thappraya is not "in town" (Judith, round 47: ฿5 on the hill, told to walk)
       _say("\"You are already in town.\" A pause while he works out whether you know that. " +
         "\"Walk, my friend. It is four minutes and you will see something.\" Click.");
       return;
@@ -4368,7 +4397,7 @@ function _maybeIncomingText() {
   // ladies only: the unprompted-text machinery (invites, scam-asks, selfies) is
   // girl-voiced through and through — Tan (no NPC_ROLES entry) texts back when
   // texted, never into the mama-sick patter
-  let contacts = Object.keys(G.phone.contacts).filter(id => NPC_ROLES[id]);
+  let contacts = Object.keys(G.phone.contacts).filter(id => NPC_ROLES[id] || id === "priew");   // the girl from the clinic is a LINE contact who texts (Judith, round 47: four identical replies, nothing unprompted)
   // the affair's endings reach the phone too (Frank, 2026-08-26: the in-love
   // text pool kept sending the morning after she left). Gone is gone — silence
   // is her whole statement. Won gets its own register: Prachuap, not a barstool.
@@ -4417,6 +4446,14 @@ function _maybeIncomingText() {
   // a moneypit contact turns nearly every text into an ask, and the numbers climb;
   // the white knight gets steered to the top of the list and can't say no.
   if (NPCS[id].type === "moneypit") { _moneypitText(id); buzz(); return; }
+  if (id === "priew") {
+    if (G.day - (G.priewTextDay || -9) < 3) return;
+    G.priewTextDay = G.day;
+    _pushMsg("priew", _flag("priewRevealed")
+      ? _pickVary(["so now you know 😅 same me, same eyes. lunch still on, if you still want", "you come see the show or you come see me? both ok na 555", "i not lie you. evening shift, every day until late. you just not ask restaurant of WHAT 😏"], "priewtext2")
+      : _pickVary(["ankle ok now! you still in pattaya? lunch some day na, only lunch 🙏", "i see farang with your walk today on beach road. not you. same walk 555", "work busy busy. evening shift every day. you sleep early na, doctor say 😷"], "priewtext1"));
+    buzz(); return;
+  }
   const name = NPCS[id].name, t = _bondTier(id), roll = _rand();
   // the woman you went home with does not text you a customer's invite, or a
   // rent ask to the man who pays her wages (Graham, round 47)
@@ -8482,6 +8519,7 @@ function _whiteRabbitAnswer(input) {
 // ── Food and water ───────────────────────────────────────────────────────────
 
 const FOOD_STALLS = {
+  tt_deep: { name: "a paper cone of grilled squid from the corner man, chilli sauce in a bag", price: 40, hunger: 25, thirst: 0 },   // the prose grills it every night (Judith, round 47: "Not at this hour" at 03:06)
   pattaya_soi_9: { name: "a bowl at the noodle place that is very good and knows it", price: 60, hunger: 55, thirst: 5 },   // the soi's own prose promised it (Owen, round 46)
   jomtien_7eleven: { name: "a toastie, pressed while you wait", price: 35, hunger: 40, thirst: 0 },
   mikes_mall: { name: "the fifty-baht plate from the top-floor food court, honestly enough food", price: 50, hunger: 55, thirst: 0 },
@@ -8778,7 +8816,7 @@ function _roomSafeBeat() {
   if (G.room !== _hotelRoomId()) return;
   _setFlag("roomSafeOpened");
   G.act1SafeDue = false;
-  G.money += SAFE_CASH;
+  G.money += SAFE_CASH; G.safeMoneyDay = G.day;   // the next morning's ledger nets it and says so (Kenji, round 47)
   _say(`Your own room, and the key card works. The safe in the wardrobe opens on the ` +
     `second try: passport, return ticket \u2014 and the emergency stash you very nearly ` +
     `forgot you packed. \u0e3f${SAFE_CASH}. (\u0e3f${G.money} in pocket. ` +
@@ -9196,7 +9234,7 @@ function _waenWord() {
   return pool[_hh("waen:" + G.vacation + ":" + G.day, 29) % pool.length];
 }
 function _waenTick() {
-  if (!G.phone || G.battery <= 0 || !G.known || !G.known.waen) return;
+  if (!G.phone || G.battery <= 0 || !G.talked || !G.talked.waen) return;   // met, not merely named in print (Judith, round 47: homework to a stranger)
   // the link, once, after the first hour she was actually paid for
   if (_flag("lessonTaken") && !_flag("waenLink")) {
     _setFlag("waenLink");

@@ -6,7 +6,7 @@
     "regions": 15,
     "byKind": {
       "beach": 14,
-      "street": 96,
+      "street": 97,
       "massage": 19,
       "beer": 58,
       "mall": 1,
@@ -24,7 +24,6 @@
       "gents": 5,
       "soi6": 7,
       "hostbar": 1,
-      "cabaret": 1,
       "club": 1
     }
   },
@@ -2308,7 +2307,7 @@
         "Priew",
         "Sao"
       ],
-      "desc": "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn of a four-lane road that never quite stops. Soi 9 comes in from the beach side, quiet and daytime-ish next to all this; the mall's Second Road entrance and its run of food stalls is a block south, and MYTH NIGHT market further down again."
+      "desc": "Mid-Second-Road: baht buses in convoy, pharmacies, a clinic's glass door lit between them, and the constant churn of a four-lane road that never quite stops. Soi 9 comes in from the beach side, quiet and daytime-ish next to all this; the mall's Second Road entrance and its run of food stalls is a block south, and MYTH NIGHT market further down again."
     },
     {
       "id": "second_rd_diamond",
@@ -3313,7 +3312,7 @@
       "barType": null,
       "region": "Thappraya",
       "regionSlug": "thappraya",
-      "kind": "cabaret",
+      "kind": "street",
       "dark": false,
       "people": [
         "Mala",

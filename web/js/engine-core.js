@@ -226,6 +226,10 @@ function newGame() {
     dog: null,           // the accidentally-adopted soi dog: { since: day, name? } once you've fed him
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
+    rideLog: {},         // night rides per girl: {count, day, stops, great} — she remembers, and so does "late"
+    lastRide: null,      // {id, day, stops} — the coda knows she has a bike
+    selfBfHold: 0,       // the self-barfine offer stands for a command or two
+    safeMoneyDay: 0,     // the day Madam Oy's safe money landed — the next morning's ledger says so
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
@@ -2516,6 +2520,8 @@ function _districtHops(a, b) {
 // night at six and pinned a man on the hotel soi (Graham, round 47). The night's
 // earliest cloudburst is a day-stable hash: some nights it comes at seven, some
 // at one, some it never gets round to it.
+// on the back of her bike, between stops: the room you left is not the room you are in
+function _onRide() { return G.pendingEnc === "nightride" || !!G.rideSeq; }
 function _rainEarliest() { return _hh("rainstart:" + G.vacation + ":" + G.day, 41) % 70; }
 function _districtBuild() {
   if (!_districtAdj) {
@@ -2678,7 +2684,7 @@ function _tick() {
     _startRain(3 + Math.floor(_rand() * 6));
   } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < (_wetSeason() ? 0.10 : 0.05)) {
     G.lastDrizzle = G.turns; // light rain: atmosphere only, never mechanics
-    _sayDrizzle();
+    if (!_onRide()) _sayDrizzle();   // the bar you rode away from does not narrate its gutter (Kenji, round 47)
   }
   // the peddlers work the Beach Road bars, stool to stool — but a bar gets a
   // couple of passes a night, not six (Frank, 2026-08-26: 4–6 identical visits
@@ -2695,15 +2701,15 @@ function _tick() {
   // the ซาเล้ง (mobile bar cart) — a fixture for the girls, not a modal gate:
   // it parks at the bar for a while, the girls swarm it, and the player may buy
   // any time before it moves on. All of that lives in _salengTick (encounters).
-  _salengTick();
-  if (typeof _thaiOverheard === "function") _thaiOverheard();
+  if (!_onRide()) _salengTick();
+  if (typeof _thaiOverheard === "function" && !_onRide()) _thaiOverheard();
   if (_inBar()) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // presence, for the regular's bond (Trevor, round 39)
   // the house's patience clock (_nursed): money spent in this bar since last tick,
   // or a fresh arrival, resets it — one hook, every till (Mario, 2026-09-04)
   if (_inBar() && (G.room !== G.soc.tickRoom || G.money < (G.soc.moneyTick == null ? G.money : G.soc.moneyTick)))
     (G.soc.spentTurn = G.soc.spentTurn || {})[G.room] = G.turns;
   G.soc.moneyTick = G.money; G.soc.tickRoom = G.room;
-  _railTick();     // the hour turns and somebody drains a glass and moves on
+  if (!_onRide()) _railTick();     // the hour turns and somebody drains a glass and moves on
   if (typeof _flowerTick === "function") _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
   if (typeof _lockInTick === "function") _lockInTick(); // …and behind a bolted door, the night has an interior
@@ -2737,7 +2743,7 @@ function _tick() {
   }
   if (typeof _workPresenceTick === "function") _workPresenceTick(); // a declared shift has to be stood
   if (typeof _workFloor === "function") _workFloor();          // …and a stood shift is where your own staff live
-  _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
+  if (!_onRide()) _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
   if (typeof _wrongNumberTick === "function") _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it
   _soidogTick();   // the day after you adopt the soi dog, the Foundation texts for a donation

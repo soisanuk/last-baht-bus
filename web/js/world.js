@@ -769,7 +769,7 @@ const ROOMS = {
     name: "The Peacock Cabaret",
     bar: "The Peacock Cabaret",
     region: "Thappraya",
-    liveMusic: true,
+    liveMusic: false,   // the music is the SHOW — a live band beside a lip-sync was two acts on one small stage (Arturo, round 47)
     drinks: "club",
     // A drag-cabaret venue, not a barfine bar — no barType, so none of the go-go
     // apparatus applies. `drinks` is the bar without the bar girls: it sells you a
@@ -2067,7 +2067,12 @@ const ROOMS = {
     busStop: "secondrd",
     name: "Second Road (Central)",
     region: "Second Road",
-    desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn of " +
+    reads: {
+      clinic: "A glass door between a pharmacy and a {{phone}} shop, a laminated list of tests in two languages taped " +
+        "inside it, and a waiting room you can see from the pavement: plastic chairs, a fan, a grandmother, and " +
+        "whoever else this town sent tonight. Open till late, because it has to be. (GET TESTED.)",
+    },
+    desc: "Mid-Second-Road: baht buses in convoy, pharmacies, a clinic's glass door lit between them, and the constant churn of " +
       "a four-lane road that never quite stops. Soi 9 comes in from the beach side, " +
       "quiet and daytime-ish next to all this; the mall's Second Road entrance and " +
       "its run of food stalls is a block south, and MYTH NIGHT market further down again.",
@@ -3309,7 +3314,7 @@ const ROOMS = {
       "squid on the corner, and the perfume from the doorway meets the smoke halfway.",
     revisit: [
       "The deep corner: one sign, one bassline, squid smoke, and behind you the rest of the warren still arguing with itself.",
-      "RAINBOW GIRLS in every colour, the string of bulbs, a doorman who has watched you arrive from three different lanes on three different nights and says nothing about it.",
+      "RAINBOW GIRLS in every colour, the string of bulbs, a doorman who has watched you arrive from three different lanes tonight and says nothing about it.",
       "The squid man has moved his grill a metre; the smoke has not. The sign burns on through it, the only thing in Tree Town you could describe to a taxi.",
       "The corner where the warren finally makes sense: one door, one bassline, one smell. Everything behind you is the same bar four times.",
     ],
@@ -9806,6 +9811,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers " +
       "have made it shine. Nothing on this stage happens that Diamond didn't allow.",
     dialogue: [
+      { topic: "keys|the keys|mother|mama|my mother|father|papa|foreman", req: ["keysDelivered"],
+        text: "\"The keys.\" Diamond does not look at the hook behind the till, which is how you know they are on it. " +
+          "\"Twenty years in mama's drawer. Now where he can see them when he comes in, which he pretends not to.\" " +
+          "A beat. \"My father built this place twice — once with his hands, once by walking two boys past twenty " +
+          "wrecks to the right one. Mama kept the keys. I keep the hook. That is the family, darling; nobody says it.\"",
+        short: "\"On the hook where he can see them. Mama kept them; I keep the hook.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome to Hyper, darling — mind the step, mind your wallet, mind your manners.\" " +
           "Diamond looks you over the way a jeweller looks at a stone that might be paste. \"Yes, I am " +
@@ -9822,7 +9833,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "own eyes. Everybody laugh at them then. Nobody laughing now.\"" },
       { topic: "samson", text: "\"My bosses. Two brothers — came with their savings, a wreck of a " +
           "go-go, and somebody behind them nobody has ever named — made a fortune out of it, " +
-          "and never once stopped buying.\" A cool look. \"Now: seven " +
+          "and never once stopped buying.\" A cool look. \"Now: three " +
           "beer bar, three of the quiet clubs, and Hyper. They took partners to grow so fast — quiet " +
           "money, and you do not ask a Samson brother about the quiet money. The go-go is not their " +
           "favourite child any more; they just want more strip. Good bosses, though — pay on time, let " +
@@ -9867,6 +9878,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "{{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow " +
       "knows exactly what happened at the other two.",
     dialogue: [
+      // after the whole of it has been told, "diamond" is not "not yet" (Arturo, round 47)
+      { topic: "diamond|family|blessing|the whole of it|daughter", req: ["diamondTruth"],
+        text: "\"She tell you.\" Wimon does not ask what; she can see it on you. \"Good. Now you know the whole of it, " +
+          "and now she know I sent you, which is the part I could not say to her myself.\" She turns a {{phone}} " +
+          "face-up again. \"Twenty years, that took. You did it in a week. Farang.\"",
+        short: "\"She tell you. Good. Twenty years, that took; you did it in a week.\"" },
+      { topic: "keys|the keys", req: ["wimonThanked"],
+        text: "\"The keys?\" A small, complete smile. \"Where he can see them. That is all I wanted for them, and I " +
+          "could not carry them there myself.\" She goes back to her phones. \"You carried them. I remember who carries.\"",
+        short: "\"Where he can see them. I remember who carries.\"" },
       // THE THREE ERRANDS IN HER OWN MOUTH (round-46 quest sweep, 2026-09-07). She gives
       // three of the four quests in the Glam saga and her five nodes never mentioned any
       // of them — the journal asserted a blessing she never gave and handed over a dead
@@ -10318,6 +10339,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a " +
       "hundred nervous farang husbands walk in braced and walk out fans.",
     dialogue: [
+      { topic: "diamond|scout|flyer|headdress|the scout|petch", req: ["scoutSent"],
+        text: "\"Consider it done — and she owes YOU a headdress?\" Miss Mala throws her head back and the sequins " +
+          "applaud. \"She said that? Then it is done; Diamond does not say done for fun.\" The compère voice drops " +
+          "to the room-temperature one. \"The headdress is already on the hook in the back. It has been since she " +
+          "hung up her own. Tell her I said so, and tell her the back row is hers, any night she comes.\"",
+        short: "\"Then it is done. The headdress is on the hook already. The back row is hers.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome, welcome, sit anywhere the light is kind!\" Miss Mala looks you up and down " +
           "with the fond, forensic eye of a customs officer who likes you. \"You are not our usual, " +
@@ -12158,8 +12185,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // had never run the errand at all.
       { when: (st, G) => _flag("wdgFlipTried") && _flag("wdgResolved"),
         text: "The welcome arrives about two seconds later than it used to, and Bert knows you " +
-          "clocked the two seconds. \"Bud.\" A cold one, opened. \"You carried his water once and " +
-          "then you carried mine, and I've been doing this long enough to know which of those a man " +
+          "clocked the two seconds. \"Bud.\" A cold one, opened. \"You carried his water and " +
+          "you carried mine, whichever way round, and I've been doing this long enough to know which of those a man " +
           "does on purpose.\" He racks the balls. \"We're square. I'll not bring it up again — but " +
           "I'd not have been able to say that if you'd only done the one.\"",
         short: "\"We're square, bud.\" The beer arrives two seconds late, and always will." },
@@ -13021,10 +13048,13 @@ const ENCOUNTERS = {
     rooms: ["ws_north", "ws_south", "beach_rd_c", "second_rd_c", "buakhao_market"],
     interactive: true, nightly: true,
     th: "รอเพื่อนอยู่ค่ะ", rom: "ror phuean yu kha",
-    intro: "A young woman in good sneakers and a Bangkok-boutique dress is checking " +
+    intro: [
+      "A young woman in good sneakers and a Bangkok-boutique dress is checking " +
       "her phone against the crowd, plainly waiting for someone. No bar behind her, " +
       "no smile-for-hire — just a weekender killing five minutes. She catches you " +
       "noticing and returns a small, neutral nod.",
+      "A young woman in flat shoes and a Chatuchak tote is arguing gently with a map on her phone, plainly not from here and plainly not working — a weekender down from Bangkok whose friend is late again. She catches you looking and laughs first.",
+    ],
     hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here.)",
   },
   jptourist: { solo: true,
@@ -13112,8 +13142,8 @@ const ENCOUNTERS = {
     rooms: ["hotel_room", "qv_room", "areca_room", "metropole_room", "naklua_rd"],
     interactive: true, nightly: true,
     intro: [
-      "Your phone buzzes — one of the girls you'd been messaging off the apps, " +
-        "the stunner from the photos who kept leaving you on read, is suddenly awake " +
+      "Your phone buzzes — a girl off the apps — a match you barely remember making, " +
+        "the stunner from the photos, is suddenly awake " +
         "and suddenly free. “Hi baby, I finish work. I come you now? " + BOOK_PRICE + ", no bar, no " +
         "barfine, only you.” It is gone 1 a.m. The photos are, it must be said, " +
         "extraordinary.",
@@ -13379,7 +13409,7 @@ const QUESTS = {
     giver: "bert",
     trust: 2, // he won't ask a near-stranger to weigh in on selling his bar — earn a little rapport first
     desc: "White Dish want to buy Bert's bar out from under its dying owner. Get him the " +
-      "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE ABOUT WHITE DISH, at the Kitten Corner), and the pitch (ASK GAVIN ABOUT THE OFFER), at the Golden Dragon on Soi 6 — then tell Bert (ASK BERT ABOUT THE OFFER).",
+      "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE ABOUT WHITE DISH, at the Kitten Corner), and the pitch (ASK GAVIN ABOUT THE OFFER), at the Golden Dragon on Soi 6 — then tell Bert (ASK BERT ABOUT THE OFFER). Kesinee talks straight to men she has seen spend: a drink for one of her girls first.",
     deps: [],
     at: "bert",
     doneFlag: "wdgResolved",
@@ -14543,12 +14573,12 @@ const _REGULARS = {
         "the SHIRTS.\" A radiant pause, and whatever thread he was holding is simply gone; he beams at " +
         "your left ear as though it, too, has just arrived from Cologne.",
         short: "\"The countess kept the silver. I kept the SHIRTS.\" He beams at your left ear." },
-      { topic: "wife", text: "You ask, carefully, about the lady-boy at his side. Glam turns, sees " +
-        "her, and his face floods with an uncomplicated joy that stops the question dead. \"My — yes. " +
-        "YES.\" He pats the air near her hand; she does not look up from the mama. \"She drives the — " +
+      { topic: "wife", text: "You ask, carefully, about the lady who takes care of him — she is not here; " +
+        "she never is, on his nights out. Glam's face floods with an uncomplicated joy that stops the " +
+        "question dead anyway. \"My — yes. YES.\" He pats the air where her hand would be. \"She drives the — " +
         "the little one, with the wheels. Very fast. We were in Ibiza. Or we will be.\" He nods, " +
         "satisfied that this settles it. It does not settle it." },
-      { topic: "music", sets: ["glamHeard"],
+      { topic: "music|band|the band|tour|the tour", sets: ["glamHeard"],
         text: "\"You want to hear about the TOUR.\" It is not a question; his eyes go " +
         "bright and forty years younger. \"Wembley. Or — no. A tent. A very large tent, and the " +
         "promoter was a crook, God rest him, and I wore the white one, the SILK—\" He mimes a chord no " +
@@ -14854,8 +14884,8 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\u201cWhy that bar? Ask him and he changes the subject beautifully.\u201d" },
       { topic: "glam", when: (st, G) => _flag("diamondTruth"),
         text: "You tell him as much as is yours to tell, which is not much. Mort listens without " +
-          "writing anything down, which from him is a kind of ceremony. \u201cFour years I sat " +
-          "twenty feet from that and called it a dead end.\u201d He caps the biro. \u201cIt does " +
+          "writing anything down, which from him is a kind of ceremony. \u201cFour years I drank on " +
+          "Thappraya, twenty feet from that, and called it a dead end.\u201d He caps the biro. \u201cIt does " +
           "not go in the column. Some things are just a man wanting to be near his kid.\u201d",
         short: "\u201cIt does not go in the column.\u201d" },
       // He invited you for a beer over text. If you turn up and he greets you as

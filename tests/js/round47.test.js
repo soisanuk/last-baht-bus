@@ -1063,3 +1063,62 @@ test("a work event keeps its gap, and a birthday has more than one paragraph", (
   const saved = _rand; _rand = () => 0.01;   // the roll passes, the draw lands on the first weight
   try { for (let i = 0; i < 12; i++) { out = []; _workNight(); assert.doesNotMatch(text(), /birthday|turns thirty/); } } finally { _rand = saved; }
 });
+
+// ── Fable wave four: Kenji (the night ride), Arturo (the Glam saga), Judith (outside the bars) ──
+
+test("a ride stop takes the time a stop takes, the after-hours room's 'already paid' is paid, and she remembers", () => {
+  G.money = 20000; G.room = "lucky_tiger"; G.nightTurn = 62; G.soc.drinks.lek = 13;
+  G.rideSeq = { id: "lek", stops: 0, spent: 0, seen: [], sanuk: 0 }; G.pendingEnc = "nightride";
+  const t0 = G.nightTurn; out = []; doCommand("ride on");
+  assert.ok(G.nightTurn - t0 >= RIDE_STOP_TURNS, "the clock moved");
+  let guard = 0; while (G.pendingEnc === "nightride" && guard++ < 8) { out = []; doCommand("ride on"); }
+  assert.ok(G.rideLog && G.rideLog.lek && G.rideLog.lek.stops >= 1, "the ride is remembered");
+  G.room = "lucky_tiger"; G.nightTurn = 20; out = []; doCommand("ask lek about late");
+  assert.doesNotMatch(text(), /not friend yet/i); assert.match(text(), /bike|ride|after two/i);
+  assert.notEqual(_rideBike("lek"), _rideBike("nan")); assert.notEqual(_rideNickname("lek"), _rideNickname("nan"));
+  const paid = _RIDE_VENUES.find(v => v.key === "afterhours").scenes.find(f => /Already paid/.test(f("X")));
+  assert.match(paid("X"), /\[free\]/, "the free scene is tagged free");
+});
+
+test("the self-barfine offer lapses honestly, and BUY ROSE FOR <her> buys the rose", () => {
+  G.room = "candy_bar"; G.money = 3000; G.selfBfId = "candy"; G.pendingEnc = "selfbf"; G.nightTurn = 30;
+  out = []; doCommand("buy beer");
+  assert.equal(G.pendingEnc, null); assert.match(text(), /lapses/); assert.doesNotMatch(text(), /still in the room/);
+  assert.ok(G.money < 3000, "and the beer was bought");
+  G.pendingEnc = "flower"; G.flowerFor = "candy"; out = []; doCommand("buy rose for candy");
+  assert.match(text(), /rose/i); assert.doesNotMatch(text(), /steers the child on/);
+});
+
+test("the saga's return channels: Wimon after the whole of it, Diamond on the keys, Mala on the scout, the giver's pronoun", () => {
+  G.room = "the_office"; _setFlag("diamondTruth"); _setFlag("keysDelivered"); _setFlag("wimonThanked"); _setFlag("scoutSent");
+  const miss = /Not yet, na|another time|Not my story|wrong (girl|mama)/i;
+  out = []; doCommand("ask wimon about diamond"); assert.doesNotMatch(text(), miss); assert.match(text(), /whole of it|She tell you/);
+  out = []; doCommand("ask wimon about keys"); assert.doesNotMatch(text(), miss);
+  G.room = "hyper"; out = []; doCommand("ask diamond about keys"); assert.match(text(), /hook/);
+  G.room = "peacock_cabaret"; out = []; doCommand("ask mala about diamond"); assert.match(text(), /headdress/);
+  assert.equal(ROOMS.peacock_cabaret.liveMusic, false, "the show is the music");
+  const wm = NPCS.diamond.dialogue.find(d => /samson/.test(String(d.topic))); assert.match(wm.text, /three " \+\s*"beer bar|three beer bar/s);
+});
+
+test("the clinic is a place, the squid man sells squid, the weekender comes in two, the catfish keeps a cadence", () => {
+  G.room = "stinky_bar"; out = []; doCommand("get tested"); assert.match(text(), /Second Road/); assert.equal(G.room, "second_rd_c", "the verb takes you to the clinic");
+  out = []; doCommand("get tested"); assert.match(text(), /negative|antibiotics|Clean/i); assert.doesNotMatch(text(), /take a bike/);
+  out = []; doCommand("examine clinic"); assert.match(text(), /glass door/);
+  G.room = "tt_deep"; G.money = 500; G.hunger = 60; out = []; doCommand("buy squid"); assert.equal(G.money, 460);
+  assert.ok(Array.isArray(ENCOUNTERS.bkktourist.intro) && ENCOUNTERS.bkktourist.intro.length >= 2);
+  G.bookingDay = G.day - 1; G.nightTurn = 75; G.room = "hotel_room"; G.encDone = {};
+  const saved = _rand; _rand = () => 0; try { out = []; for (let i = 0; i < 4; i++) _maybeEncounter(); } finally { _rand = saved; }
+  assert.doesNotMatch(text(), /apps/, "not the night after");
+  assert.doesNotMatch(String(ENCOUNTERS.booking.intro), /kept leaving you on read/, "no asserted history");
+});
+
+test("Tan's call knows the hill is not town; Waen texts students she has met; Priew texts", () => {
+  G.flags.act1Done = false; G.phone.tanAct1 = false; G.room = "thappraya_mid"; G.money = 5; out = [];
+  doCommand("call tan"); assert.doesNotMatch(text(), /already in town/);
+  G.flags.act1Done = true; G.known.waen = true; delete G.talked.waen; G.phone.battery = 80;
+  out = []; _waenTick(); assert.doesNotMatch(text(), /Waen/);
+  G.room = "beach_rd_c"; _setFlag("metPriew"); G.phone.contacts.priew = true; G.phone.lastText = -100; G.day = 6;
+  const saved = _rand; _rand = () => 0.01; try { _maybeIncomingText(); } finally { _rand = saved; }
+  const last = (G.phone.inbox || []).slice(-1)[0];
+  assert.ok(last && last.from === "priew", "she texts unprompted");
+});

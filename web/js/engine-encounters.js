@@ -307,7 +307,7 @@ function _maybeEncounter() {
     (id !== "powerbank" || G.battery <= 30) &&
     // 70 = 01:00, which is when her text claims she finishes ("It is gone 1 a.m.")
     // — the old gate of 40 fired the "gone 1 a.m." prose at half past ten.
-    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70)) && // the apps come alive after 1 a.m.
+    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70 && G.day - (G.bookingDay || -9) >= 3)) && // the apps come alive after 1 a.m. — and not every other night (Judith, round 47)
     (id !== "noodle" || G.nightTurn < 60) &&
     (id !== "bargirl" || G.nightTurn < 60 || !/^soi6/.test(G.room)) &&   // "every door is shut" and a girl weaving out of one (Henri/Desmond, round 47)   // Soi 6 shuts at midnight; the noodle girl went home with it (Piotr, round 40)
     // 60 = midnight, the same threshold beach_rd_top's own lateDesc uses: the
@@ -322,6 +322,7 @@ function _maybeEncounter() {
 }
 
 function _startEnc(id) {
+  if (id === "booking") G.bookingDay = G.day;
   const e = ENCOUNTERS[id];
   G.encDone[id] = true;
   G.lastEnc = G.turns;
@@ -514,7 +515,7 @@ const _ENC = {
     // BUY BEER / BUY <girl> A DRINK at a rail with the rose bucket on it bought
     // the rose (Lars, Graham, round 47 — five times): a BUY is an answer to the
     // child only when it names the rose, or names nothing
-    const buysRose = /^buy(?:\s+(?:a\s+|the\s+|one\s+|her\s+a\s+)?(?:rose|flower|one|it))?\s*$/.test(input);
+    const buysRose = /^buy(?:\s+(?:a\s+|the\s+|one\s+|her\s+a\s+)?(?:rose|flower|one|it))?(?:\s+for\s+.+)?\s*$/.test(input);   // BUY ROSE FOR LEK is the tap the pitch prints (Kenji, round 47)
     if (!(buysRose || /^(?:yes|rose|flower|sure|ok|okay|please|one|no|nah|wave|leave|later|pass|shake|sorry)\b/.test(input))) {
       _say("The mother reads your attention elsewhere, nods, and steers the child on to the next stool.", "dim");
       return "passthrough";
@@ -547,9 +548,9 @@ const _ENC = {
   },
   selfbf(input) {
     const name = NPCS[G.selfBfId] ? NPCS[G.selfBfId].name : "She";
-    if (!/\b(yes|yeah|sure|ok|okay|of course|why not|please|no|nope|not tonight|sorry|pass|later|maybe)\b/.test(input)) { // word-bounded: "Manow" is not a no
+    if (!/\b(yes|yeah|sure|ok|okay|of course|why not|please|no|nope|not tonight|sorry|pass|later|maybe)\b/.test(input)) { // word-bounded: "Manow" is
       // a tip, a drink, a walk: the offer lapses without a verdict and the command runs
-      _say(`${name} reads the moment going past — a small smile, no harm done — and lets it. The offer's still in the room if you want it.`, "dim");
+      _say(`${name} reads the moment going past — a small smile, no harm done — and lets it go. (The offer lapses; she said she wouldn't ask twice, and she doesn't.)`, "dim");   // it used to say "still in the room" and YES then missed (Kenji, round 47)
       return "passthrough";
     }
     G.selfBfId = null;

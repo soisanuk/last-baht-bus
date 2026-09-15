@@ -305,6 +305,7 @@ function _lastBusWarn() {
   // last-baht-bus race (and its warning) is a full-game mechanic only.
   if (G.mode === "soi6") return;
   if (!_flag("act1Done") || G.over || G.lastBusWarned) return;
+  if (G.pendingBf) return;   // not between SHORT TIME · LONG TIME and the answer (Kenji, round 47)
   if (G.nightTurn < LAST_BUS_TURN - 5 || G.nightTurn >= LAST_BUS_TURN) return;
   if (G.room === _hotelRoomId()) return; // already home — no race left to run
   if (typeof _workedTonight === "function" && _workedTonight() && G.room === ((G.bar && G.bar.room) || "")) return;   // standing his own rail: the last bus is not his (Malcolm, round 47)
@@ -1863,7 +1864,9 @@ function _renderGame() {
   // broke player's stake-free game) is worth saying out loud too — that it costs
   // nothing is exactly the thing he can't tell from the board.
   if (g.stake > 0) {
-    _say(_fmt("(฿{s} of yours is on the table. QUIT concedes it.)", { s: g.stake }), "dim");
+    _say(g.type === "kp"
+      ? _fmt("(฿{e} of yours is in the pot of ฿{s}. QUIT concedes it.)", { e: KP_ENTRY, s: g.stake })   // ฿500 "of yours" was the pot (Arturo, round 47)
+      : _fmt("(฿{s} of yours is on the table. QUIT concedes it.)", { s: g.stake }), "dim");
   } else if (g.opp) {
     _say("(Nothing is riding on this one — you're playing for สนุก.)", "dim");
   }
@@ -3888,7 +3891,12 @@ const _CODA_CLOSE = [
 function _cinderellaCoda() {
   _say(_CODA_CUT[G.codaSeen % _CODA_CUT.length], "dim");
   _say(_CODA_DECON[Math.floor(_rand() * _CODA_DECON.length)], "room");
-  _say(_CODA_HOME[Math.floor(_rand() * _CODA_HOME.length)], "room");
+  // she rode you home on her own bike; she is not climbing into a baht bus (Kenji, round 47)
+  _say((G.lastRide && G.lastRide.day === G.day - 1)
+    ? "6 a.m. on Second Road: exhaust and grilling moo ping and a yellow, sweaty light. She kicks the bike awake, " +
+      "checks the mirror she does not need, and is gone into the traffic without looking back — a helmet she " +
+      "did not wear all night now on, because the police are up. The receipt is her tail-light, then not even that."
+    : _CODA_HOME[Math.floor(_rand() * _CODA_HOME.length)], "room");
   _say(_CODA_CLOSE[G.codaSeen % _CODA_CLOSE.length], "dim");
   G.codaSeen++;
 }
@@ -4044,7 +4052,8 @@ function _morningLedger() {
   // sentence was unsupported by its own wording.
   const via = drawn > 0 ? ` (across pocket and account \u2014 \u0e3f${_num(drawn)} came out of the machine` +
     (fees > 0 ? `, \u0e3f${_num(fees)} of that in fees` : "") + ")" : "";
-  if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via);
+  if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via +
+    (G.safeMoneyDay === G.day - 1 ? " (with Madam Oy's safe money netted in)" : ""));   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via);
   // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
@@ -4412,6 +4421,10 @@ function _endNight(reason) {
       _say(`(Pockets turned out on the last night of the week — ฿${_num(G.roughLost)} ` +
         "gone. The town has no idea you had a flight, and would not have cared.)", "dim");
     }
+    // the last night of the week still gets its ledger, and the next morning
+    // does not net two nights into one (Kenji, round 47)
+    _morningLedger();
+    _nightSnapshot();
     _endVacation();
     return;
   }

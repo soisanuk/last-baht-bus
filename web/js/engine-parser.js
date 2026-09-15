@@ -600,6 +600,10 @@ function _doGo(dirWord) {
             "you out of it — a solid moving wall of water where the street used " +
             "to be. The mamasan doesn't even look up. Nobody leaves in this; " +
             "that's what the rain is FOR."
+          : _underRoof(G.room)   // a cabaret has a doorway and no 7-Eleven (Arturo, round 47)
+          ? "You get one step toward the door before the doorway itself talks " +
+            "you out of it — a solid moving wall of water where the street used " +
+            "to be. Whoever is on the door doesn't even look up. Nobody leaves in this."
           // a street with a 7-Eleven counts as shelter, but it has no doorway and
           // no mamasan (Colin, round 37: the bar line on the Soi 6 pavement)
           : "You get to the edge of the awning and no further — the street beyond it " +
@@ -1486,6 +1490,7 @@ const _READ_NOUNS = {
   ashtray: ["the ashtray", "league ashtray", "pot", "the pot", "table money"],
   laptop: ["computer", "machine", "pc", "screen", "lock screen", "post-it", "postit"],
   fish: ["tank", "fish tank", "the fish", "aquarium"],
+  clinic: ["the clinic", "glass door", "pharmacy", "doctor"],
   monitor: ["cameras", "camera", "cctv", "feeds", "feed"],
   stick: ["usb", "usb stick", "rabbit's stick", "the stick", "under the bar"],
   safe: ["wall safe", "keypad", "cash bags", "cash bag", "milk crate", "crate"],
@@ -3573,6 +3578,17 @@ function _doTalkBody(arg, topic) {
   if (topic && /^(her|him|them|your|it)self$|^you$/.test(String(topic).trim()) &&
       !(NPCS[npc].dialogue || []).some(d => d.topic && _topicHits(d.topic, String(topic).trim())))   // Jun's "yourself" node (Margarethe, round 47)
     topic = NPCS[npc].name.split(" ").pop().toLowerCase();
+  // the girl who took you on her bike remembers it — and "late" is not "you not
+  // friend yet" to a man she has ridden three nights (Kenji, round 47)
+  if (topic && G.rideLog && G.rideLog[npc] && /\b(late|late-late|after two|ride|the ride|bike|motorbike|your bike|last night|where we went|that night)\b/i.test(String(topic))) {
+    const r = G.rideLog[npc], ago = G.day - r.day;
+    _say(_pickVary([
+      n => `${n} grins without looking up. "You want the bike again, na? ${ago <= 1 ? "Last night" : ago + " nights ago"} you eat som tam from my hand and cry. ${r.stops} place. I remember. You remember?"`,
+      n => `"After two?" ${n} laughs. "You KNOW after two. You sit on the back of my bike, you see the real one." A shrug that is not a shrug. "Maybe again. Maybe tonight. Depends how you drink."`,
+      n => `${n} tips her head toward the street. "The ride. Mm. ${r.great ? "That was a good one — I say to my friend, this farang, he can sit on a bike." : "Small one. Next time we go longer, if you don't fall off."}"`,
+    ], "ridememory:" + npc)(NPCS[npc].name));
+    return;
+  }
   let d = _pickDialogue(npc, topic || null);
   if (topic && (!d || !d.topic)) {
     const norm = _convoTopic(topic);
@@ -3663,7 +3679,8 @@ function _doTalkBody(arg, topic) {
       const roleOf = x => NPCS[x].manager ? "manager" : NPC_ROLES[x];
       const here = (typeof _staffAt === "function" ? _staffAt(G.room) : []).filter(x => x !== npc);
       for (const x of Object.keys(NPCS)) if (NPCS[x].bars && NPCS[x].bars.includes(G.room) && !here.includes(x) && x !== npc) here.push(x);
-      const mate = here.find(x => NPCS[x].name.toLowerCase() === _rt || x === _rt || NPCS[x].name.toLowerCase().split(" ").pop() === _rt);
+      const mate = here.filter(x => NPC_ROLES[x] || NPCS[x].manager || NPCS[x].house)   // "bar sister" was said of Cream, who is not staff (Judith, round 47)
+        .find(x => NPCS[x].name.toLowerCase() === _rt || x === _rt || NPCS[x].name.toLowerCase().split(" ").pop() === _rt);
       if (mate) {
         const me = roleOf(npc), them = roleOf(mate), n = NPCS[mate].name;
         // one sentence in three cities (Margarethe, round 47): pooled by the speaker,
@@ -6243,6 +6260,20 @@ function _doRideBus(arg) {
   // WAIT, at the kerb, in whatever state you're in, and the wait is where the
   // vulnerability lives. The only curfew is on you (design call 2026-08-25:
   // too drunk, too tired, too sick — the timetable was never the wall).
+  // a stop this line doesn't serve is refused BEFORE the wait, not after
+  // eighteen minutes at the kerb (Arturo, round 47: Naklua from Thappraya at 04:00)
+  {
+    const _w0 = String(arg || "").toLowerCase().replace(/[()]/g, " ").replace(/\s+/g, " ").trim();
+    const _stops = [...new Set(_busLinesFor(G.room).flatMap(l => BUS_LINES[l]))].filter(s => s !== G.room);
+    const _nm = x => String(ROOMS[x] && (ROOMS[x].name || "")).toLowerCase().replace(/[()]/g, " ").replace(/\s+/g, " ").trim();
+    if (_w0 && G.nightTurn >= LAST_BUS_TURN && G.turns - (G.busCameTurn || -99) > 6 &&
+        !/\bloop\b|\bround trip\b|\bjoyride\b|\bhotel\b|\bhome\b/.test(_w0) &&
+        !_stops.some(s => _w0.split(" ").every(x => _nm(s).includes(x)) || _nm(s).includes(_w0))) {
+      _say(`"${arg}?" The driver shakes his head once — not this truck, not this route. ` +
+        `(This line: ${_stops.map(s => ROOMS[s].name).join(" · ")}.)`);
+      return;
+    }
+  }
   if (G.nightTurn >= LAST_BUS_TURN && G.turns - (G.busCameTurn || -99) > 6) {
     _say(_pickVary(_BUS_SMALL_HOURS, "bussparse"), "alert");
     if (G.dog) _say(_dogN("(Sai Krok sits at the kerb beside you, in no hurry at all. " +
@@ -6469,7 +6500,8 @@ function _doMotosai(arg) {
   if (d.room === G.room) {
     _say("The piwin looks at you, looks at the road you are both standing on, and " +
       "declines to charge you for it — the one free thing a piwin has ever done. " +
-      "\"Boss. Is here.\"", "dim");
+      "\"Boss. Is here." + (/hotel|sabai|palms|room/.test(String(arg || "").toLowerCase()) && _room().exits && Object.values(_room().exits).some(x => ROOMS[x] && ROOMS[x].dark)
+        ? " Up the soi — the dark one. Two minutes. Light your phone, na.\"" : "\""), "dim");   // "Is here" while the hotel is up a soi that bit her twice (Judith, round 47)
     return;
   }
   // Soi 6 mode is fenced to the pocket, and _arriveAt is where that is enforced —
@@ -6965,9 +6997,18 @@ const _CLINIC_CLEAN = [
     "slightly pitying smile. Nothing's wrong. You'll be back to your bad decisions by sundown, but for " +
     "now the relief tastes like winning.",
   "A negative test and a leaflet about not needing one next time if you're sensible. You fold the good " +
-    "news into your pocket next to the condoms you should have used, and step back out a free man.",
+    "news into your pocket next to the condoms you should have used, and step back out free.",
 ];
 function _doClinic() {
+  // the clinic is a PLACE — GET TESTED ran from a bar stool and from a hotel bed
+  // (Judith, round 47). It is on Second Road at the Central junction, and the
+  // waiting room is there.
+  if (G.room !== "second_rd_c" && G.mode !== "soi6") {
+    _say("The clinic is on Second Road, at the Central junction — a glass door between a pharmacy and a " +
+      "{{phone}} shop, open till late because this town needs it late. You take a bike there and sit in the " +
+      "waiting room with whoever else the town sent tonight.", "dim");
+    G.room = "second_rd_c";
+  }
   if (G.std) {
     _say(_pickVary(_CLINIC_POS, "clinicpos"), "alert");
     G.std = null;
@@ -9818,7 +9859,13 @@ function doCommand(input) {
     // a soft pitch (the rose seller) may decline to spend an unrelated command:
     // it lapses, and the command the player actually typed runs (playtest 2026-08-22:
     // "tip rung 100" became a wave-off and the tip never happened)
-    if (_ENC[enc](lower) === "passthrough") { doCommand(raw); return; }
+    { const _r = _ENC[enc](lower);
+      if (_r === "passthrough") { doCommand(raw); return; }
+      if (_r === "hold") {   // the offer stands: the command runs, and the question is still on the table
+        const d0 = G.day; doCommand(raw);
+        if (G.day === d0 && !G.pendingEnc && !G.pendingChoice && !G.game) G.pendingEnc = enc;
+        return;
+      } }
     _tick();
     _checkAct1();
     return;
@@ -10109,6 +10156,10 @@ function doCommand(input) {
       const who = sp > 0 ? arg.slice(0, sp) : "";
       if (who && (_findNpc(who))) _doTalk(who, arg.slice(sp + 1));
       else _doTalk(arg, null);
+      break;
+    }
+    case "invite": case "invitation": {   // "You asked Cream about invite cream" (Judith, round 47)
+      _say("Nobody here gets invited; they get ASKED, and they decide. (ASK <name> ABOUT LATE for after the shift · CONTACT <name> for her number · or just sit with her.)");
       break;
     }
     case "request": { // song request = ask dj or live band
