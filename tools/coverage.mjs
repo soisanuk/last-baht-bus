@@ -70,6 +70,17 @@ const ALL_REGULARS = ALL_NPCS.filter(id => NPCS[id].patron);
 const ALL_ENC = Object.keys(ENCOUNTERS);
 const ALL_QUESTS = Object.keys(QUESTS);
 const DLG_NODES = ALL_NPCS.reduce((n, id) => n + (Array.isArray(NPCS[id].dialogue) ? NPCS[id].dialogue.length : 0), 0);
+// …and the same count with the FILLER cast taken out. 1,809 of the 2,875 nodes
+// belong to the 211 generated hostesses/mamas/cashiers, whose lines are
+// hash-picked from a handful of shared pools — showing one girl's family line is
+// very nearly showing them all. Reporting one number over the whole roster
+// called it "authored" and read 33%, which flattered nothing and misled about
+// the thing it measured; the authored figure is 62% (tools/dialogue-reach.mjs,
+// 2026-09-16). Both print, because both are true and they answer different
+// questions: the writing's reach, and the generator's.
+const AUTHORED_NPCS = ALL_NPCS.filter(id => !NPCS[id].filler);
+const AUTHORED_DLG = AUTHORED_NPCS.reduce((n, id) => n + (Array.isArray(NPCS[id].dialogue) ? NPCS[id].dialogue.length : 0), 0);
+const isAuthored = key => { const id = String(key).split("#")[0]; return NPCS[id] && !NPCS[id].filler; };
 const REG_NODES = ALL_REGULARS.reduce((n, id) => n + (Array.isArray(NPCS[id].dialogue) ? NPCS[id].dialogue.length : 0), 0);
 // the parser's real verb surface — the switch arms, same count the gap analysis used
 const PARSER_VERBS = (() => {
@@ -208,8 +219,10 @@ const rows = [
   ["rooms stood in", U.rooms.size, ALL_ROOMS.length, ""],
   ["characters spoken to", U.npcs.size, ALL_NPCS.length,
     `one cast: ${ALL_REGULARS.length} of them are rail regulars`],
-  ["authored dialogue delivered", U.dlg.size, DLG_NODES,
+  ["authored dialogue delivered", [...U.dlg].filter(isAuthored).length, AUTHORED_DLG,
     "the sharpest one: lines a player has actually been shown"],
+  ["…and the filler cast's", [...U.dlg].filter(k => !isAuthored(k)).length, DLG_NODES - AUTHORED_DLG,
+    "generated from shared pools — one girl's line is very nearly all of theirs"],
   ["street encounters seen", U.enc.size, ALL_ENC.length, ""],
   ["quests completed", U.questsDone.size, ALL_QUESTS.length,
     (savePath || doUnion) ? "" : "INSTRUMENT-LIMITED: a random walker cannot climb a dep chain"],

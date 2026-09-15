@@ -267,6 +267,16 @@ anything here.**
 | quests completed | 1 | 32 | 3.1% |
 | mechanics fired (liveness) | 17 | 19 | 89.5% |
 
+> **Correction, 2026-09-16.** The denominator in this table has filler in it.
+> 1,809 of today's 2,875 dialogue nodes belong to the 211 generated
+> hostesses/mamas/cashiers, whose lines are hash-picked from shared pools, so a
+> single figure over the whole roster averages "the writing's reach" with "the
+> generator's" and answers neither. `coverage.mjs` reports them separately now
+> (authored 62.4%, filler 15.1%); `tools/dialogue-reach.mjs` is the query that
+> found it. The 6.4% below stands as what it always was — a dated measurement of
+> the SOAK against the roster as it was in August — and the reasoning about what
+> the number means is unaffected; only the denominator needed splitting.
+
 **The number that matters is 6.4%** — and it must be stated precisely, because
 the loose version of it is wrong. Ninety-four percent of the authored dialogue in
 this game has never been delivered **to the automated instrument**. It is NOT
