@@ -2534,7 +2534,7 @@ function _doHint() {
     _say("The wallet's yours and the opening's behind you — out here there are no wrong " +
       "answers, only better nights.", "dim");
     _sayLeads(true);
-    _say("(QUESTS lists jobs, WHO your black book, MAP the lay of the land.)", "dim");
+    _say("(JOURNAL is the whole page of what's open; QUESTS lists jobs, WHO your black book, MAP the lay of the land.)", "dim");
     return;
   }
   if ((G.act1Tries || 0) < 1) {
@@ -2830,6 +2830,96 @@ function _doAbandon(arg) {
 // who is warmer to you than the rest, a district you have not walked into yet.
 // No new content — the threads all exist, and the game has simply never named
 // them.
+// ── The frontier: the nearest edges that leave what the player KNOWS ──────────
+// The known subgraph is the world graph filtered by G (visited, known, talked,
+// heardOf…); the frontier is every edge from a known node to an unknown one,
+// ranked by distance from where you stand. Doctrine (docs/design-backlog.md,
+// 2026-09-15): built ONLY from what the transcript printed — it may name a
+// person whose name printed, a room you stood in, a venue whose name printed,
+// a region (public) and a direction; never an unvisited room's name, never an
+// unmet person (journal.test pins it). It observes and never grades: no meter
+// moves for reading it. It is a projection, not state.
+function _frontier(max) {
+  const out = [];
+  const here = G.room;
+  const dist = to => { if (!to || to === here) return 0; const p = _path(here, to); return p ? p.length : 99; };
+  const cap = w => String(w || "").toUpperCase();
+  // 1. an invitation for tonight, not yet kept
+  if (G.phone && G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
+    const id = G.phone.invite.id, rm = _npcWhere(id);
+    if (rm && rm !== here && _barName(rm)) out.push({ kind: "invite", dist: dist(rm), rank: 0,
+      text: `${NPCS[id].name} asked you to come by tonight — ${_barName(rm)}.`, cmd: `TRAVEL ${cap(_barName(rm))}` });
+  }
+  // 2. somebody here you have met, with a thing you never asked
+  for (const id of _npcsHere()) {
+    if (!_met(id) || !NPCS[id] || NPCS[id].filler) continue;
+    const seen = (G.talked && G.talked[id]) || [];
+    const topics = (typeof _convoTopics === "function" ? _convoTopics(id) : []).filter(t =>
+      !NPCS[id].dialogue.some((d, i) => seen.includes(i) && d.topic && String(d.topic).split("|").includes(t)));
+    if (!topics.length) continue;
+    const t = topics[_hh(id + ":front:" + G.day, 5) % topics.length];
+    const label = typeof _topicLabel === "function" ? _topicLabel(t) : t;
+    out.push({ kind: "topic", dist: 0, rank: 1, text: `You have never asked ${NPCS[id].name} about ${label}.`,
+      cmd: `ASK ${cap(NPCS[id].name.split(" ").pop())} ABOUT ${cap(label)}` });
+    break;
+  }
+  // 3. a name that printed, a face you never met — and who said it, where (three at most)
+  let people = 0;
+  for (const id of Object.keys(G.known || {})) {
+    if (people >= 3) break;
+    if (_met(id) || !NPCS[id] || NPCS[id].offmap || NPCS[id].filler) continue;
+    if (NPCS[id].origin && G.player && NPCS[id].origin === G.player.origin) continue;   // you ARE him
+    const rm = _npcWhere(id);
+    const by = G.namedBy && G.namedBy[id];
+    const who = by && by.by && NPCS[by.by] && by.by !== id ? NPCS[by.by].name : null;
+    const at = by && by.room && (G.visited || {})[by.room] ? (_barName(by.room) || (ROOMS[by.room] && ROOMS[by.room].name)) : null;
+    const src = who ? `${who} mentioned ${NPCS[id].name}${at ? `, at ${at}` : ""}` : `Somebody mentioned ${NPCS[id].name}${at ? ` — at ${at}` : ""}`;
+    if (rm && _barName(rm) && rm !== here) {
+      const visited = !!(G.visited && G.visited[rm]);
+      const venueKnown = visited || !!(G.heardOf && G.heardOf[rm]);   // the bar's NAME is only said if the transcript has said it
+      const reg = ROOMS[rm] && ROOMS[rm].region;
+      people++;
+      out.push({ kind: "person", dist: dist(rm), rank: 2,
+        text: `${src}. ${NPCS[id].pronoun === "he" ? "He" : "She"} is ${venueKnown ? `at ${_barName(rm)}` : "out"} tonight${reg && reg !== _room().region ? `, over in ${reg}` : venueKnown ? "" : ", somewhere on this stretch"}.`,
+        cmd: visited ? `TRAVEL ${cap(_barName(rm))}` : `ASK TAN ABOUT ${cap(NPCS[id].name.split(" ").pop())}` });
+    } else if (!rm) {
+      people++;
+      out.push({ kind: "person", dist: 50, rank: 4, text: `${src}. Not out tonight, as far as anyone knows.`, cmd: `ASK TAN ABOUT ${cap(NPCS[id].name.split(" ").pop())}` });
+    }
+  }
+  // 4. a way out of a room you stood in, never taken (the room named; the far side never)
+  const vis = Object.keys(G.visited || {}).filter(r => ROOMS[r] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(r)));
+  const exits = [];
+  for (const r of vis) for (const [dir, to] of Object.entries(ROOMS[r].exits || {})) {
+    if ((G.visited || {})[to] || !ROOMS[to] || ROOMS[to].invite) continue;
+    if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(to)) continue;
+    exits.push({ r, dir, d: dist(r) });
+  }
+  exits.sort((a, b) => a.d - b.d);
+  for (const e of exits.slice(0, 2)) {
+    const nm = ROOMS[e.r].name;
+    out.push({ kind: "exit", dist: e.d, rank: 3,
+      text: e.r === here ? `There is a way ${_dirWord(e.dir)} from here you never took.` : `${nm} has a way ${_dirWord(e.dir)} you never took.`,
+      cmd: e.r === here ? cap(e.dir) : (ROOMS[e.r].bar && (G.visited || {})[e.r] ? `TRAVEL ${cap(ROOMS[e.r].bar)}` : null) });
+  }
+  // 5. a venue whose name you heard and never found
+  let venues = 0;
+  for (const rm of Object.keys(G.heardOf || {})) {
+    if (venues >= 2) break;
+    if ((G.visited || {})[rm] || !ROOMS[rm] || !ROOMS[rm].bar || ROOMS[rm].invite) continue;
+    venues++;
+    if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(rm)) continue;
+    out.push({ kind: "venue", dist: 40, rank: 5, text: `${ROOMS[rm].bar} — you have heard the name and never found the door. Over in ${ROOMS[rm].region}.`,
+      cmd: `ASK TAN ABOUT ${cap(ROOMS[rm].bar)}` });
+  }
+  out.sort((a, b) => (a.rank - b.rank) || (a.dist - b.dist));
+  return out.slice(0, max || 8);
+}
+function _dirWord(d) {
+  return ({ n: "north", s: "south", e: "east", w: "west", in: "in", out: "out", up: "up", down: "down", alley: "down the alley", office: "into the office", hotel: "into the hotel" })[d] || d;
+}
+function _frontierLine(f) { return f.cmd ? `${f.text} (${f.cmd})` : f.text; }
+
 function _leads() {
   const out = [];
 
@@ -2866,6 +2956,8 @@ function _leads() {
     all[r.region] = true;
     if (G.visited && G.visited[id]) seen[r.region] = true;
   }
+  // 2b. the frontier itself — the nearest edge out of what you know (2026-09-15)
+  for (const f of _frontier(6).filter(f => f.kind !== "invite").slice(0, 2)) out.push(_frontierLine(f));
   const unseen = Object.keys(all).filter(rg => !seen[rg] && rg !== "Myth Night");
   if (unseen.length) {
     let where = unseen[Math.floor(_hh("leads" + G.day, 7) % unseen.length)];
@@ -2883,6 +2975,50 @@ function _leads() {
     out.push(_fmt("You have not set foot in {where} yet, and it looks nothing like this stretch.", { where }));
   }
   return out;
+}
+
+// JOURNAL / NOTES — the phone's notes page. Default page is the FRONTIER (what is
+// open, nearest first); the RECORD (what you have done) is turned over on purpose
+// with JOURNAL RECORD. Two views, one subgraph; never two data sets (Mario,
+// 2026-09-15). Free, like QUESTS.
+function _doJournal(arg) {
+  const a = String(arg || "").toLowerCase().trim();
+  if (/record|done|history|so far|what i.ve done/.test(a)) { _journalRecord(); return; }
+  _say("Notes, on the phone — what is open, nearest first:", "win");
+  const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active" && !QUESTS[q].vignette);
+  for (const q of active.slice(0, 2)) {
+    const Q = QUESTS[q];
+    _say(_fmt("  · {name} — {desc}{where}", { name: _L(Q.name), desc: _L(_qDesc(Q)), where: _questWhere(_qAt(Q) === Q.giver ? _qGiver(Q) : _qAt(Q)) }), "dim");
+  }
+  const fr = _frontier(8);
+  if (!fr.length && !active.length) {
+    _say("  · Nothing open that the town has told you about. Talk to people; that is where the edges are.", "dim");
+  }
+  for (const f of fr) _say("  · " + _frontierLine(f), "dim");
+  _say("(JOURNAL RECORD turns the page to what you have done.)", "dim");
+}
+function _journalRecord() {
+  _say("Notes, on the phone — the record:", "win");
+  const met = Object.keys(G.talked || {}).filter(id => NPCS[id] && !NPCS[id].filler);
+  const metF = Object.keys(G.talked || {}).filter(id => NPCS[id] && NPCS[id].filler).length;
+  const known = Object.keys(G.known || {}).filter(id => NPCS[id] && !NPCS[id].filler).length;
+  _say(`  People: ${met.length} met of ${known} named to you${metF ? ` (and ${metF} of the girls)` : ""}.`, "dim");
+  for (const id of met.slice(0, 12)) {
+    const n = NPCS[id], seen = (G.talked[id] || []).length;
+    const open = (typeof _convoTopics === "function" ? _convoTopics(id, { all: true }) : []).length;
+    const rm = _npcRoom(id), where = rm && _barName(rm) ? ` — ${_barName(rm)}` : "";
+    _say(`    ${n.emoji || "·"} ${n.name}${where}: ${seen} thing${seen === 1 ? "" : "s"} heard${open ? `, ${open} still open` : ""}.`, "dim");
+  }
+  if (met.length > 12) _say(`    …and ${met.length - 12} more.`, "dim");
+  const vis = Object.keys(G.visited || {}).filter(r => ROOMS[r]).length;
+  const heard = Object.keys(G.heardOf || {}).filter(r => ROOMS[r] && !(G.visited || {})[r]).length;
+  _say(`  Places: ${vis} stood in, ${heard} heard of and never found.`, "dim");
+  const done = Object.keys(QUESTS).filter(q => G.quests[q] === "done" && !QUESTS[q].vignette);
+  if (done.length) _say(`  Jobs done: ${done.map(q => _L(QUESTS[q].name)).join(" · ")}.`, "dim");
+  const rides = Object.values(G.rideLog || {}).reduce((a, r) => a + (r.count || 0), 0);
+  if (rides) _say(`  Nights on the back of a bike: ${rides}.`, "dim");
+  if (G.ledgerSeen) _say(`  Told true: ${G.ledgerSeen} time${G.ledgerSeen === 1 ? "" : "s"}.`, "dim");
+  _say("(JOURNAL turns the page back to what is open.)", "dim");
 }
 
 function _sayLeads(dim) {

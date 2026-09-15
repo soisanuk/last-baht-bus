@@ -180,7 +180,30 @@ function _learnNames(text) {
     }
   }
   for (const [id, rx] of _nameRx) {
-    if (!G.known[id] && rx.test(text)) G.known[id] = true;
+    if (!G.known[id] && rx.test(text)) {
+      G.known[id] = true;
+      // provenance: the frontier HINT can say "Candy mentioned her, at Candy Bar"
+      // instead of "somebody mentioned Bee" (design note, 2026-09-15)
+      if (G.namedBy) G.namedBy[id] = { room: G.room, by: (typeof _convoActive === "function" && _convoActive()) || null, day: G.day };
+    }
+  }
+  _learnVenues(text);
+}
+// A venue whose NAME printed before you stood in it is a frontier edge — "you've
+// heard the name, never been". Same harvest as names, over the display names.
+let _venueRx = null;
+function _learnVenues(text) {
+  if (!G || !G.heardOf) return;
+  if (!_venueRx) {
+    _venueRx = [];
+    for (const [id, r] of Object.entries(ROOMS)) {
+      if (!r.bar || r.bar.length < 5) continue;
+      const esc = String(r.bar).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      _venueRx.push([id, new RegExp("\\b" + esc + "\\b")]);
+    }
+  }
+  for (const [id, rx] of _venueRx) {
+    if (!G.heardOf[id] && !(G.visited && G.visited[id]) && rx.test(text)) G.heardOf[id] = true;
   }
 }
 
@@ -240,6 +263,8 @@ function newGame() {
     sentTotal: 0,        // baht SENT to contacts over the game — the hospital queue's "money you'll never see" needs a debt to point at
     codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
     known: {},           // charId → true once their name has printed (ask-topic gate)
+    namedBy: {},         // charId → {room, by, day} the first time the name printed — the frontier says who mentioned them, and where
+    heardOf: {},         // roomId → true once a venue's display name printed before you stood in it (the frontier's "heard the name, never been")
     examined: {},        // "room.readKey" → 1 — distinctive fixtures you've looked at (the Owl's noticer slot)
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     // roomId → true once a Darkside bar has bolted the door with you inside.

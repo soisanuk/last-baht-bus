@@ -1089,8 +1089,8 @@ const _CATALOGS = {
     // journal / black book, when there is nothing in them yet
     "The wallet's yours and the opening's behind you — out here there are no wrong answers, only better nights.":
       "Die Brieftasche gehört wieder dir und der Anfang liegt hinter dir — hier draußen gibt es keine falschen Antworten, nur bessere Nächte.",
-    "(QUESTS lists jobs, WHO your black book, MAP the lay of the land.)":
-      "(QUESTS listet die Jobs, WHO dein schwarzes Buch, MAP die Gegend.)",
+    "(JOURNAL is the whole page of what's open; QUESTS lists jobs, WHO your black book, MAP the lay of the land.)":
+      "(JOURNAL ist die ganze Seite dessen, was offen ist; QUESTS listet die Jobs, WHO dein schwarzes Buch, MAP die Gegend.)",
     "The black book's empty. You earn names the honest way out here — CONTACT a lady in her own bar once she likes you, and she goes in the book.":
       "Das schwarze Buch ist leer. Namen verdient man sich hier draußen auf die ehrliche Tour — CONTACT eine Lady in ihrer eigenen Bar, sobald sie dich mag, und sie landet im Buch.",
 

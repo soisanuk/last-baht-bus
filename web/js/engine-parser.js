@@ -8763,7 +8763,7 @@ THE WHOLE CARD (bare HELP is the short one):
     DRAW [amount] (take your own money out of your own till — nobody else will do it for you)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
-  SCORE (happiness & progress) · DEBT (what you owe, and to whom) · LAST NIGHT (the morning ledger again)
+  JOURNAL (what's open, nearest first; JOURNAL RECORD for what you've done) · SCORE (happiness & progress) · DEBT (what you owe, and to whom) · LAST NIGHT (the morning ledger again)
   UNDO · RESTART   (the night autosaves itself; UNSHELVE takes back a night you stepped away from)
   BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
@@ -8800,8 +8800,8 @@ function _helpFirstPage() {
     L.push("The bar:         BUY BEER · BUY DRINK FOR <lady> · FLIRT <lady> · RING BELL · BARFINE <lady> · TAO RAI (ask the price)");
     L.push(soi6 ? "Money & phone:   WITHDRAW <amount> · CHECK BALANCE · PHONE · MESSAGE <lady> · CHECK MESSAGES"
                 : "Money & phone:   WITHDRAW <amount> · CHECK BALANCE · PHONE · MESSAGE <lady> · CHECK MESSAGES · CHARGE PHONE");
-    L.push(soi6 ? "The week:        QUESTS · HINT · SCORE · SHARE · WHO (your ladies) · SLEEP (end the night)"
-                : "The week:        QUESTS · HINT · SCORE · WHO (your ladies) · OWL (the newsletter) · SLEEP (at your hotel)");
+    L.push(soi6 ? "The week:        JOURNAL (what's open) · QUESTS · HINT · SCORE · SHARE · WHO (your ladies) · SLEEP (end the night)"
+                : "The week:        JOURNAL (what's open) · QUESTS · HINT · SCORE · WHO (your ladies) · OWL (the newsletter) · SLEEP (at your hotel)");
     L.push("Body:            EAT <food> · BUY WATER · DIAGNOSE (how bad is it)");
   }
   L.push("");
@@ -8851,7 +8851,7 @@ THE WHOLE CARD (bare HELP is the short one):
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)
   AGAIN or G (repeat last command)
-  SCORE (happiness & progress) · LAST NIGHT (the morning ledger again) · SHARE (your week card — one emoji a night, copy & compare)
+  JOURNAL (what's open; JOURNAL RECORD for the record) · SCORE (happiness & progress) · LAST NIGHT (the morning ledger again) · SHARE (your week card — one emoji a night, copy & compare)
   UNDO · RESTART   (the night autosaves itself)
   PLAY AGAIN (once the week's up — another seven days on the soi)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
@@ -8884,7 +8884,7 @@ const _COMPLETE_VERBS = [
   "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink", "lesson", "answer", "notebook",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
-  "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
+  "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "journal", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
@@ -9713,7 +9713,7 @@ const _GERMAN_QUIP = {
 // Verbs that cost no turn: pure readouts of state you already have. See the
 // comment at the bottom of doCommand for why this matters more than it looks.
 const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health", "verbs", "ledger",
-  "inventory", "inv", "i", "map", "help", "quests", "journal", "hint", "share",
+  "inventory", "inv", "i", "map", "help", "quests", "journal", "notes", "diary", "hint", "share",
   "who", "blackbook", "standing", "rep", "gallery", "photos", "album", "books",
   "takings", "identity", "topics", "subjects"]);
 
@@ -10222,7 +10222,8 @@ function doCommand(input) {
     case "work": case "mind": case "shift": _doWork(); break;
     case "books": case "takings": case "accounts": _doBooks(); break;
     case "draw": case "cashup": _doDraw(arg); break;
-    case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
+    case "quests": case "quest": case "adventures": _doQuests(); break;
+    case "journal": case "notes": case "diary": _doJournal(arg); break;   // the phone's notes: the frontier, then the record
     case "topics": case "subjects": _doTopics(arg); break;
     case "delete": case "erase": case "wipe":
       if (/ledger|payouts|invoices?|takings|paperwork|csv/.test(arg || "")) { _doBurnLedger(); break; }
