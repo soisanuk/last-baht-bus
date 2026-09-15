@@ -17,7 +17,7 @@
 // (that's the intended default). Currently ON for in-game testing.
 // Codes (typed, deliberately never surfaced in autocomplete/decoration):
 //   twoweekmillionaire — grants ฿2,000,000 for spending (handled in doCommand).
-let CHEATS_ENABLED = true;
+let CHEATS_ENABLED = false;
 
 // ── Output plumbing ────────────────────────────────────────────────────────
 

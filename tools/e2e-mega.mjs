@@ -161,6 +161,7 @@ async function run(pass, browser, ctxOpts) {
   await evalG(() => localStorage.removeItem("lbb_save"));
   await page.reload();
   await page.waitForTimeout(400);
+  await evalG(() => { CHEATS_ENABLED = true; });   // the switch ships false (release gate, 2026-09-15); a dev tool turns it on
   await cmd("twoweekmillionaire");
   // finish act 1 instantly so the whole map/systems are open: do it legitimately-ish
   await evalG(() => {

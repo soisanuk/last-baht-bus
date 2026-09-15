@@ -267,6 +267,7 @@ async function mobilePass(browser) {
 
   // sandbox: cheat into money, then bar life (harness shortcut, noted)
   section("MOBILE — sandbox beats (cheat-funded, testing bar life by tap)");
+  await page.evaluate(() => { CHEATS_ENABLED = true; });   // ships false since the release gate (2026-09-15)
   await S.type("twoweekmillionaire", "harness shortcut to fund the sandbox");
   if (hostess) {
     await S.tapKw(hostess, "buy her a drink");
