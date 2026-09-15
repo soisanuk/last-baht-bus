@@ -1128,3 +1128,16 @@ test("an old save standing in orchid_club wakes in nottys_place", () => {
   deserializeGame(JSON.stringify(g));
   assert.equal(G.room, "nottys_place"); assert.ok(G.visited.nottys_place && !G.visited.orchid_club);
 });
+
+test("Cream's door gets a hint after three nights at her table, and the Killer Table warns when the week runs out", () => {
+  G.room = "metro_garden"; G.nightTurn = 45; G.money = 3000; G.chamDays = [];
+  G.day = 3; _chamContact();
+  out = []; G.day = 4; _chamContact();
+  assert.match(text(), /Maybe later na. If you nice/, "not yet on the second night");
+  G.day = 5; out = []; _chamContact();
+  assert.match(text(), /ask|Ask/); assert.doesNotMatch(text(), /If you nice/); assert.doesNotMatch(text(), /฿|baht/, "never a price");
+  // the league warning
+  G.room = "stinky_bar"; G.stage = "vacation"; G.day = 6; delete G.quests.league; G.questsOffered = G.questsOffered || {};
+  out = []; _questOffer("bert");
+  if (/Killer|league/i.test(text())) assert.match(text(), /last league night before you fly/);
+});

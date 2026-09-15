@@ -2730,6 +2730,14 @@ function _questOffer(npcId) {
       { who: NPCS[npcId].name, name: _L(q.name), desc: _questPitch(_L(_qDesc(q))) }), "win");
     _say(_lived ? `(ACCEPT ${qid.toUpperCase()} — you have already done the thing; this is ${(NPCS[_qGiver(QUESTS[qid])] || {}).pronoun === "she" ? "her" : "him"} settling up.)`
                 : `(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
+    // a league night is every third night, and a week is seven: say when the
+    // next one is after your flight (Arturo, round 47 — offered on the last
+    // reachable one, three games lost, and no way to close it)
+    if (qid === "league" && G.stage !== "expat") {
+      const next = _leagueTonight() ? G.day + 3 : G.day + _leagueIn();
+      if (_leagueTonight() && next > 7) _say("(Tonight is the last league night before you fly. Win it tonight, or it waits for another trip.)", "alert");
+      else if (!_leagueTonight() && next > 7) _say("(No league night left before you fly — the next is after your week. It waits for another trip, or for a man who stays.)", "alert");
+    }
     return; // one offer at a time keeps the bar chatter sane
   }
 }
@@ -4078,7 +4086,15 @@ function _chamAsk() {
 // The civilian's verbs: she is not staff, so the lady-drink / flirt / contact
 // machinery must not answer for her (blind playtest 2026-08-22: BUY DRINK FOR
 // CREAM poured the patron war-story, FLIRT got "not that way, mate").
+// the nights you sat with her — the door (the question) gets a hint after a few
+// (Judith, round 47: 26 nights at her table, the rule kept, nothing opened, and
+// nothing said that asking was the door)
+function _chamSeen() {
+  G.chamDays = Array.isArray(G.chamDays) ? G.chamDays : [];
+  if (!G.chamDays.includes(G.day)) { G.chamDays.push(G.day); if (G.chamDays.length > 12) G.chamDays.shift(); }
+}
 function _chamDrink() {
+  _chamSeen();
   if (G.money < _beerPrice()) { _say(`A drink for Cream runs ฿${_beerPrice()}, and you're short. She waves it off: "Next time na."`); return; }
   G.money -= _beerPrice();
   G.soc.chamDrinks = (G.soc.chamDrinks || 0) + 1;
@@ -4093,6 +4109,7 @@ function _chamDrink() {
   _addHappy(1);
 }
 function _chamFlirt() {
+  _chamSeen();
   _say(_pickVary([
     "She laughs, looks down, looks up through her hair. \"You flirt me? Ooh.\" Pleased, and not " +
       "hiding it, and not doing anything with it either — which is exactly the thing.",
@@ -4103,7 +4120,23 @@ function _chamFlirt() {
   _addHappy(1);
 }
 function _chamContact() {
+  _chamSeen();
   if (G.phone.contacts.cream) { _say("You have Cream's LINE — she typed it in herself. (MESSAGE CREAM)"); return; }
+  if ((G.chamDays || []).length >= 3 && !_flag("chamDone") && !_flag("chamAsked")) {
+    // the third night on: she says, sideways, what the door is — never the price
+    _say(_pickVary([
+      "\"My LINE?\" She looks at you a long moment. \"Three nights you sit here, and you ask me for a number. Every " +
+        "other man in this town asks me a different thing first.\" She goes back to her drink. \"Ask me the other " +
+        "thing. Then maybe LINE.\"",
+      "\"Number, number.\" A small smile. \"You are the only farang in Pattaya who wants to text me. The rest just… " +
+        "ask. You know what they ask.\" She does not say it. She is waiting for you to.",
+      "\"Maybe later na.\" Then, quieter, into the glass: \"You never ask me. Everybody ask me. I keep waiting for " +
+        "it, so I can say no.\" A beat. \"I think.\"",
+      "\"LINE is for the coffee shop.\" A hand flat on the table between you. \"This — this is for the other " +
+        "question. You know it. Ask it, or don't. But don't ask me for LINE instead of it.\"",
+    ], "chamnudge"));
+    return;
+  }
   _say("\"My LINE?\" She tilts her head. \"For what — coffee?\" She laughs, and doesn't say no, and " +
     "doesn't give it either. \"Maybe later na. If you nice.\"");
 }

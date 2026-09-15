@@ -230,6 +230,7 @@ function newGame() {
     lastRide: null,      // {id, day, stops} — the coda knows she has a bike
     selfBfHold: 0,       // the self-barfine offer stands for a command or two
     safeMoneyDay: 0,     // the day Madam Oy's safe money landed — the next morning's ledger says so
+    chamDays: [],        // the distinct nights you sat with Cream — after a few, CONTACT nudges toward the question
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
