@@ -358,3 +358,47 @@ their bespoke role-aware prose; other gift items (shades, the "genuine Rolex
 market bracelet — now needs only `kind:"gift"` + optional bespoke `GIFT_TEXT`. This is the same "promote an ad-hoc
 check to a first-class class" down-payment CLAUDE.md calls for on the
 reuse/2D/online axes.
+
+## The known subgraph: a frontier HINT and a journal (design note, 2026-09-15 — Mario: "sounds great, especially for a game this size")
+
+**Premise.** The world graph (`tools/gen-world-graph.mjs`, landing round 47) describes
+everything the game holds. The player's KNOWN subgraph is that graph filtered by `G` —
+and `G` already records nearly every node type: rooms (`visited`), names (`known`),
+people spoken to and which lines (`talked`), fixtures examined (`examined`), numbers
+(`phone.contacts`), quests, rides (`rideLog`), bonds, the Thai seen, what the player
+told the town about themselves (`player.said`). `tools/coverage.mjs --save` already
+computes "what fraction of the graph has this player seen" from a save. No new state.
+
+**Two products, different in kind.**
+
+1. **The frontier HINT.** The nearest edge that LEAVES the known region: a person named
+   in the transcript and never met; a venue named and never entered; a topic printed
+   (TOPICS, a chip) and never asked; a door with a sign the room described; an
+   invitation heard and not kept; a quest's next door. `_frontier()` on the engine side
+   returns candidates ranked by distance from where the player stands; HINT reads it
+   after the quest journal has nothing to say, so "what should I do" (Bronwyn, the
+   cold-first-timer class) always gets something specific and never a spoiler. Tan's
+   stuck nudge is the existing in-fiction carrier: he already texts the locator line.
+2. **The journal.** The known subgraph rendered — places and the exits seen but not
+   taken, people and what they will still discuss, who mentioned whom, invitations
+   open, quests and their next door. In fiction: the phone's notes, or the Owl's back
+   page — never a menu. Presentation only (term.js / the 2D scene panel seam), because
+   every line it shows is a function of `G`.
+
+**Three cautions the doctrine already implies.**
+- **Only edges whose SOURCE is known.** The frontier is built from what the transcript
+  actually printed (`G.known` is exactly this gate), never from the graph's far side.
+  A test: `_frontier()` never names a node the player has not seen.
+- **It observes, it never grades.** The other-ledger rule: being shown your own map is
+  not a prize; no meter moves.
+- **It is a projection, not state.** The moment a journal keeps its own record it
+  drifts from `G` — the hand-listed-typedef failure.
+
+**One honest gap.** The game records THAT a name printed, not WHERE or by WHOM. The
+frontier can say "somebody mentioned Bee"; "Candy mentioned her, at Candy Bar" needs a
+small provenance record in `_learnNames` (room + speaker at first print). Cheap; add it
+when `_frontier()` is built, and keep it capped (it rides the save).
+
+**Order.** Graph ships → `_frontier()` + its never-spoils test → HINT reads it (three
+surfaces: parser, the `(HINT)` tap, HELP) → the journal as presentation. Measure with the
+cold-first-timer persona lens, which is the one that found the wall.
