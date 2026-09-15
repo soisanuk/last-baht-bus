@@ -478,10 +478,6 @@ function importBaton(b) {
     const home = _hotelRoomId();
     if (home && ROOMS[home]) { G.room = home; G.visited[home] = true; }
   }
-  // the Naklua villa's room id was `orchid_club` until 2026-09-15 (renamed: it is
-  // not the Orchid Room, and the id kept saying it was)
-  if (G.room === "orchid_club") G.room = "nottys_place";
-  if (G.visited && G.visited.orchid_club) { G.visited.nottys_place = true; delete G.visited.orchid_club; }
   if (!ROOMS[G.room]) G.room = "jomtien_beach";
   G.pendingChoice = null; G.pendingEnc = null; G.game = null;
   _sanitizeState();   // a baton is data on the wire too — same finite/in-range guard as a save
@@ -572,6 +568,10 @@ function deserializeGame(s) {
     G.pendingChoice = null;
   }
   // a room that isn't a real room would strand the player in an undefined world
+  // the Naklua villa's room id was `orchid_club` until 2026-09-15 (renamed: it is
+  // not the Orchid Room, and the id kept saying it was)
+  if (G.room === "orchid_club") G.room = "nottys_place";
+  if (G.visited && G.visited.orchid_club) { G.visited.nottys_place = true; delete G.visited.orchid_club; }
   if (!ROOMS[G.room]) G.room = "jomtien_beach";
   G.visited[G.room] = true;  // wherever the save stands, you've at least been HERE
   G.over = false;            // pre-sandbox saves could be "over"; the night reopens

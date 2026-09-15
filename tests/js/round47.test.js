@@ -1122,3 +1122,9 @@ test("Tan's call knows the hill is not town; Waen texts students she has met; Pr
   const last = (G.phone.inbox || []).slice(-1)[0];
   assert.ok(last && last.from === "priew", "she texts unprompted");
 });
+
+test("an old save standing in orchid_club wakes in nottys_place", () => {
+  const g = JSON.parse(serializeGame()); g.room = "orchid_club"; g.visited = { orchid_club: true };
+  deserializeGame(JSON.stringify(g));
+  assert.equal(G.room, "nottys_place"); assert.ok(G.visited.nottys_place && !G.visited.orchid_club);
+});
