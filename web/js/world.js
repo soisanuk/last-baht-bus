@@ -7295,7 +7295,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // spirit house — this is that thread pulled. Asking is the whole beat:
       // most farang never do, and the curiosity is worth more to her than the
       // answer is to you, which is why it pays bond rather than a flag.
-      { topic: "shrine",
+      { topic: "shrine", when: (st, G) => _bondTier("fon") < 2,   // her bond-2 line below was unreachable (graph orphan report, 2026-09-15)
         fx: (st, G) => { _addBond("fon", 1); st.trust = Math.min(5, (st.trust || 0) + 1); },
         text: "She lights up so fast it is almost embarrassing. \u201cYou want know? Really?\u201d " +
           "Her {{phone}} comes out, then goes away again \u2014 she decides to try it herself. " +
@@ -11054,7 +11054,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "at the bar. That's the difference between me and them.”",
         short: "“Two boxes, and you lost two. We're done with that.”" },
       { topic: "job|heist|work|the job|rabbit job|your job|box job",
-        req: ["rabbitData"],
+        req: ["rabbitData"], when: (st, G) => G.rabbitWay !== "operator" && G.rabbitWay !== "kid",   // the operator and kid "Done." nodes below were dead behind this one (graph lifecycle audit, 2026-09-15),
         text: "“Done.” The nearest thing to a smile he has. “It's mine now — what's on it, what " +
           "I do with it. You were never in that office and you never met a man called Rabbit.” " +
           "He lifts the soda an inch. “Go home. Sleep. If anybody ever asks, you drink here " +
@@ -11101,7 +11101,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         when: (st, G) => G.quests.rabbit_job === "active" && !_flag("rabbitPath"),
         fx: () => { if (typeof _rabbitInterview === "function") _rabbitInterview(); },
         text: "He looks at you for longer than is polite, the way a man looks at a used car." },
-      { topic: "job|heist|work|the job|rabbit job|your job|box job", deflect: true,
+      { topic: "job|heist|work|the job|rabbit job|your job|box job", when: (st, G) => !_flag("rabbitData") && G.quests.rabbit_job !== "offered",   // the post-job and the yes-or-no nudge live below this deflect (graph lifecycle audit, 2026-09-15), deflect: true,
         text: "“Job.” He lets the word sit there and go flat. “Everybody's got a job for me, boss, " +
           "and I've got a soda water.” He turns the glass a quarter. “Drink here a while. " +
           "People who drink here a while sometimes hear things.”" },

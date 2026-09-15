@@ -235,15 +235,27 @@ const _FOLK_SEVEN = [
   "The girl on the till gives you the smile the uniform requires and the eyes it doesn't. “Toastie?” No? The smile stays; the attention goes.",
   "The clerk is restocking the fridge and does not stop. “Khrap?” Whatever you were going to ask, the answer is on a shelf, and he points at the shelves.",
 ];
-function _promptedFolk(arg) {
+// `topic` matters here, not just who you addressed. An anonymous mouth is still
+// a mouth: the manageress a soapy's own description hands you a laminated menu
+// of tiers, and she could not quote one — the tiers branch above needs a real
+// NPCS id and a soapy has nobody in it (askable-audit, class N). Same for the
+// shop tariff and the trucks.
+function _promptedFolk(arg, topic) {
   const r = _room();
   if (!r) return false;
   const a = String(arg).toLowerCase().trim();
   if (!a) return false;
+  const t = String(topic || "").toLowerCase().trim();
+  const wantsPrice = /\b(price|prices|price list|how much|cost|costs|tao ?rai|tariff|rates?|menu)\b/.test(t);
   if (/\b(motosai|piwin|driver|rider|bike ?boy)\b/.test(a) && r.motosai) {
+    if (/^(?:the )?(?:bus|buses|busses|songthaews?|baht ?bus|blue trucks?|trucks?)$/.test(t)) { _say(_busTalk()); return true; }
     _say(_pickVary(_FOLK_MOTO, "folkmoto")); return true;
   }
   if (r.massage || r.soapy) {
+    if (wantsPrice && /\b(masseuse|massuse|therapist|girl|girls|lady|ladies|woman|women|staff|her|them|manageress|mama|mamasan|owner)\b/.test(a)) {
+      const said = _priceTalk(null);
+      if (said) { _say(said); return true; }
+    }
     if (/\b(masseuse|massuse|therapist|girl|girls|lady|ladies|woman|women|staff|her|them|manageress|mama|mamasan|owner)\b/.test(a)) {
       // the shop that HAS a named woman sends you to her by name — she is right there
       const named = _npcsHere().find(x => NPCS[x] && /^[A-Z]/.test(NPCS[x].name));
@@ -3535,7 +3547,7 @@ function _doTalkBody(arg, topic) {
     // "Nobody by that name here" about a man described two lines up reads as a
     // bug rather than as flavour, and the house rule is that a plausible verb
     // gets a voiced refusal (thorough-player playtest B#3, 2026-08-23).
-    if (_promptedFolk(arg)) return;
+    if (_promptedFolk(arg, topic)) return;
     _say(_pickVary(_NOBODY_NAME, "noname")); _noteMiss("noname", arg);
     return;
   }
@@ -3657,6 +3669,36 @@ function _doTalkBody(arg, topic) {
     const _ct = String(topic).toLowerCase();
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc)); return; }
     if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct)) { _say(_leagueTalk(npc)); return; }
+    if (/\b(price|prices|price list|how much|cost|costs|tao ?rai|tariff|rates?|menu)\b/.test(_ct)) {
+      const said = _priceTalk(npc);
+      if (said) { _say(said); return; }
+    }
+    if (/\b(roast|sunday roast|kitchen|food|eat|dinner|menu|card)\b/.test(_ct)) {
+      const said = _kitchenTalk(npc);
+      if (said) { _say(said); return; }
+    }
+    if (/\b(checkpoint|police|cops|roadblock|helmet)\b/.test(_ct) && _checkpointRoom(G.room)) { _say(_checkpointTalk(npc)); return; }
+  }
+  // …AND THE MAN ON THE STOOL, at his OWN local only. The calendar is the
+  // house's job, but a regular in the room he drinks in every night of his life
+  // is the mouth a player actually talks to, and "not my department" from him
+  // about the hour his own bar shuts is the whole of class N. Scoped to the
+  // three facts he'd really know — not the price list, which is the house's
+  // business and not a customer's.
+  if (topic && !d.topic && NPCS[npc].room === G.room &&
+      !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house && !NPCS[npc].filler) {
+    const _pt = String(topic).toLowerCase();
+    if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_pt)) { _say(_closingTalk(npc)); return; }
+    if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_pt)) { _say(_leagueTalk(npc)); return; }
+    if (/\b(roast|sunday roast|kitchen|food|dinner|menu|card)\b/.test(_pt)) {
+      const said = _kitchenTalk(npc);
+      if (said) { _say(said); return; }
+    }
+  }
+  // A named piwin is a piwin: the trucks are the one thing every one of them knows.
+  if (topic && !d.topic && NPCS[npc].piwin &&
+      /^(?:the )?(?:bus|buses|busses|songthaews?|baht ?bus|blue trucks?|trucks?)$/.test(String(topic).toLowerCase().trim())) {
+    _say(_busTalk()); return;
   }
   // The columnist answers for his column: any subject the Owl has printed, Mort
   // will stand behind to your face — he was a stranger to every word of it
@@ -3848,7 +3890,14 @@ function _doTalkBody(arg, topic) {
       _say(_fmt(_pickVary(_THAI_NO_DEFLECT, "thainodeflect"), { n: NPCS[npc].name }));
       return;
     }
-    _say(gated ? _topicLocked(npc) : _topicMiss(npc));
+    // "Not yet, na" about a scene the player already heard: a quest beat gated on
+    // !progressFlag goes dark once the flag is set, and the lock line read as a
+    // secret twenty-one times across the cast (graph lifecycle audit, 2026-09-15).
+    // If any node on this topic is in her seen-book, it is a REPEAT, not a lock.
+    const _heardIdx = (G.talked && G.talked[npc]) || [];
+    const _heard = gated && NPCS[npc].dialogue.some((e, i) => _heardIdx.includes(i) && e.topic &&
+      String(e.topic).split("|").some(k => k === topic || topic.includes(k) || (_n2 !== topic && (k === _n2 || _n2.includes(k)))));
+    _say(_heard ? (NPCS[npc].patron ? _patronAgain(npc) : _askAgain(npc)) : gated ? _topicLocked(npc) : _topicMiss(npc));
     _questOffer(npc);
     return;
   }
@@ -6756,7 +6805,8 @@ function _lightNotice() {
     _gogoLightWarn();
     return;
   }
-  const girl = npcs.find(id => NPC_ROLES[id] === "hostess");
+  const _armGirl = G.party && G.party.ids && G.party.ids.find(id => npcs.includes(id));   // the girl on your arm is the one who reaches for the phone (registry, 2026-09-15)
+  const girl = _armGirl || npcs.find(id => NPC_ROLES[id] === "hostess");
   let lines;
   if (girl) {
     const name = NPCS[girl].name;
@@ -6768,6 +6818,7 @@ function _lightNotice() {
       `${name} leans over and gently pushes your phone hand down. "Tilac. The ` +
         `neon works fine. You look like you hunt ghosts."`,
     ];
+    if (_armGirl) lines = lines.slice(-1);   // she pushes the phone down; she does not tease you for the other girls
   } else if (r.barType) {
     lines = [
       "The bartender squints into your beam and points, wordlessly, at the " +
@@ -8412,24 +8463,41 @@ function _minutesWord(n) {
 }
 // "What time do you close?" — answered by the room's own rule, in the speaker's
 // register (Brenda, round 47: thirteen people shrugged while the shutters came down).
+// THREE registers, not two. The house says "we"; a man on a stool says "they",
+// and he answers because he has watched the shutters come down four hundred
+// times — thirteen people shrugged at "closing" and the ones a player actually
+// talks to all night were among them (Brenda, round 47; askable-audit).
 function _closingTalk(npc) {
   const r = _room();
   const tinglish = !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
+  const punter = !!npc && !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
   const hourOf = t => { const h = (18 + Math.floor(t / 10)) % 24; return `${h}:00`; };
   if (r.closesAt != null) return tinglish
     ? `“We close ${hourOf(r.closesAt)}, na. Same every night — not a bar, this.”`
+    : punter
+    ? `“${hourOf(r.closesAt)}. On the dot, every night — it's a shop, not a bar.”`
     : `“${hourOf(r.closesAt)}, every night. It's not a bar.”`;
   if (_closesMidnight(G.room)) return tinglish
     ? "“Midnight, tilac. Last call half past eleven, then shutter come down — police, na. You come back tomorrow.”"
+    : punter
+    ? "“Midnight, and they mean it. Last call's half eleven — drink up or wear it.”"
     : "“Midnight. Last call at half eleven and the shutters come down on the dot — that's the arrangement on this road, not my choice.”";
   return tinglish
     ? "“Close? When last man go home. Dawn, sometimes. You still here, we still open.”"
+    : punter
+    ? "“They don't, as such. Last man off the stool, and that's usually me — dawn, most nights.”"
     : "“We don't. Not while there's a man on a stool — dawn, most nights, and the sunrise crowd after that.”";
 }
 // The league: every third night, every table in town — a count, not a weekday.
 function _leagueTalk(npc) {
   const tinglish = !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
+  const punter = !!npc && !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
   const inN = _leagueIn();
+  if (punter) {
+    if (!_room().pool) return "“Not here — no table. Every bar that's got one plays the same night, every third night. You'll hear it before you see it.”";
+    if (inN === 0) return `“Tonight, and I'd get your ฿${KP_ENTRY} in the ashtray now. Three lives each, pot or lose one, last cue standing. (PLAY KILLER)”`;
+    return `“${inN === 1 ? "Tomorrow" : "Night after next"}. Every third night — count from the last one, not off a calendar, or you'll turn up on the wrong evening like I did.”`;
+  }
   if (!_room().pool) return tinglish
     ? "“League? No table here, tilac. The bars with a table — every third night, all of them, same night.”"
     : "“No table here. Every bar that has one runs it the same night — every third night, all over town.”";
@@ -8440,6 +8508,82 @@ function _leagueTalk(npc) {
   return tinglish
     ? `“Not tonight — ${when}. Every third night, it go round the week, so you count from the last one.”`
     : `“${when.charAt(0).toUpperCase() + when.slice(1)}. Every third night — it walks round the week, so you count from the last one, not the calendar.”`;
+}
+// THE TILL'S OWN NUMBERS, in the mouth of whoever works there. TAO RAI has
+// printed the price list since round 37 — but a player who asks the woman
+// standing AT the till instead of typing a Thai phrase got "not my story", in a
+// go-go, a gentleman's club, a cabaret and a beer bar, from the manager and
+// three mamasans (askable-audit, class N: the engine computes it and nobody can
+// say it). Figures come from the same helpers the till charges with, so the
+// quote can never drift from the charge — the rule the whole price-transparency
+// pass rests on.
+function _priceTalk(npc) {
+  const r = _room();
+  const n = npc ? NPCS[npc].name : "";
+  const tinglish = !!npc && !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
+  if (r.soapy && typeof _SOAPY_TIERS !== "undefined")
+    return (n ? n + " turns the laminated card round" : "The laminated card comes round") +
+      " without being asked: " + _SOAPY_TIERS.map(t => `${t.label} ฿${t.price}`).join(" · ") +
+      ". “Number on the disc is the tier. Tier is the price — is honest, na.” (SOAPY to choose.)";
+  if (r.massage)
+    return `“Thai ฿${MASSAGE_LEGIT} one hour, oil ฿${MASSAGE_OIL}.”` + (r.massage === "legit"
+      ? " A nod at the board, which says the same in two languages. “Real massage only, na.”"
+      : " The two on the board, said flatly and without a flicker. The third one is not on the board and is not asked in the doorway.");
+  if (!(typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar())) return null;
+  const bits = [`beer ฿${_beerPrice()}`];
+  if (_inBar()) bits.push(`lady drink ฿${_ladyPrice()}`);
+  bits.push(`water or soda ฿${_beerPrice()} — you pay for the seat, not the bottle`);
+  if (_inBar() && r.barType && r.barType !== "pub") bits.push(`the bell ฿${_bellPrice(G.room)}`);
+  const list = bits.join(" · ");
+  return tinglish
+    ? `“Price?” ${n} counts it off without looking anything up: ${list}. “Same for everybody, tilac. Better you ask before, not after.” (TAO RAI any time.)`
+    : (n ? n + " doesn't have to check" : "The answer comes from behind the till") +
+      `: ${list}. “Same for everyone, and it doesn't move. Ask before the glass lands — that's the only bit that's ever a surprise.” (TAO RAI.)`;
+}
+// The kitchen, and the Sunday that is the whole point of it. Aoy answers the
+// roast; the OTHER woman on the same floor did not, and a pub whose anchor is a
+// dinner needs both of its floor staff able to mention it.
+function _kitchenTalk(npc) {
+  if (typeof _qvMenu !== "function" || !QV_MENU || !QV_MENU.length) return null;
+  if (G.room !== "queen_vic") return null;
+  // a man on the rail doesn't recite the card; he tells you about the roast,
+  // which is the only thing on it he has an opinion about
+  if (npc && !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house)
+    return _roastOn()
+      ? `“The roast's on. Order it before somebody else does — ${_roastLeft()} left and the cook stops at nine.” (BUY ROAST.)`
+      : _roastDay()
+      ? "“Roast's a Sunday, and it's gone. Nine o'clock he stops, and he's usually out before that. Next week, and come early.”"
+      : "“Roast's Sundays. Rest of the week it's the basket and chips, which is fine, and the crisps after eleven, which is not.” (READ MENU.)";
+  const n = npc ? NPCS[npc].name : "The one on the floor";
+  const card = _qvMenu().filter(d => d.id !== "roast" && d.id !== "curry")
+    .map(d => `${d.name} ฿${d.price}`).join(" · ");
+  return `${n} nods at the board without breaking stride. “${card}.” ` +
+    _roastNote() + " (READ MENU · BUY FOOD.)";
+}
+// The evening checkpoint, six to seven, on the road this room looks at. Derived
+// from the room's OWN prose naming it, so a new window seat is covered the day
+// it is written rather than the day somebody remembers this list.
+function _checkpointRoom(id) {
+  const r = ROOMS[id] || {};
+  return /checkpoint/i.test(String(r.desc || "") + String(r.lateDesc || ""));
+}
+function _checkpointTalk(npc) {
+  const tinglish = !!npc && !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
+  const on = G.nightTurn < 10;
+  return tinglish
+    ? (on ? "“Now, na — look.” A tip of the head at the road. “Six to seven, every night. No helmet, no licence, they wave you in. You pay there, you go.”"
+          : "“Finish already. Six to seven only, every night — you come early tomorrow, is the best show on this road and no cover charge.”")
+    : (on ? "“Right now, as it happens.” A nod at the road. “Six till seven, every evening — helmets and licences, cash on the spot, and they are perfectly polite about it.”"
+          : "“Done for tonight. Six till seven, every evening, and then they pack the cones away. Be here at opening if you want the show.”");
+}
+// Every piwin knows where the trucks run; ASK PIWIN ABOUT BUS has answered since
+// round 37. A piwin with a NAME did not — the same shape as BUY BANK A BEER
+// working only for the anonymous one (errand-audit, round 23).
+function _busTalk() {
+  const lines = typeof _busLinesFor === "function" ? _busLinesFor(G.room) : [];
+  return lines.length
+    ? "“Bus? Here, yes.” A chin at the road. “Stand there, hand up. Late, you wait — but it come. Always come.”"
+    : "“Bus? Not down here, boss. Highway.” A point west, toward the sodium glow. “Sukhumvit — the Pattaya Tai truck stop at the crossing. Or —” a pat on the pillion “— I take you.”";
 }
 // Mort stands behind his own copy: find the Owl line that names the subject and
 // read it back, then the columnist's verdict on it.
