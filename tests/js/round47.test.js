@@ -968,3 +968,98 @@ test("the hospital queue only names money you'll never see when you actually sen
   out = []; doCommand("send 300 to candy");
   if (G.money === 1700) assert.equal(G.sentTotal, 300);
 });
+
+// ── Fable wave three: Lars (the companion night), Margarethe (the unmet cast), Graham (the affair) ──
+
+test("the rose pitch takes only an answer to the rose: BUY BEER buys a beer", () => {
+  G.room = "stinky_bar"; G.money = 2000; G.pendingEnc = "flower"; G.flowerFor = "manow";
+  const m0 = G.money; out = []; doCommand("buy beer");
+  assert.equal(G.itemLoc.rose === "inventory", false, "no rose");
+  assert.doesNotMatch(text(), /rose comes to you/);
+  assert.ok(G.money <= m0 - _beerPrice() + 1, "the beer was bought");
+  G.pendingEnc = "flower"; G.flowerFor = "manow"; out = []; doCommand("buy rose");
+  assert.match(text(), /rose/i);
+});
+
+test("the girl on your arm is the party, not the jilted; the roster says she is with you", () => {
+  G.room = "rainbow_girls"; G.money = 20000; G.nightTurn = 30;
+  const girls = _npcsHere().filter(i => NPC_ROLES[i] === "hostess");
+  assert.ok(girls.length >= 2);
+  const [a, b] = girls;
+  G.soc.drinks[a] = 13; G.soc.drinks[b] = 13;   // both her-farang
+  G.party = { ids: [a], stops: 0, spent: 0, seen: {} };
+  out = []; _describeRoom(true);
+  assert.match(text(), new RegExp(NPCS[a].name + " \\(with you\\)"));
+  const bond0 = G.soc.drinks[a];
+  G.pendingBf = { id: b, st: 500, lt: 1000, party: 1000, room: G.room };
+  const saved = _rand; _rand = () => 0.99;
+  try { out = []; _bfResolve("party"); } finally { _rand = saved; }
+  assert.doesNotMatch(text(), new RegExp(NPCS[a].name + " watches you leave"), "she IS the party");
+  assert.ok(G.soc.drinks[a] >= bond0, "no souring on the companion");
+  G.party = null;
+});
+
+test("a shift stood into the small hours survives going home to bed", () => {
+  ownBar(); G.money = 5000; G.nightTurn = 30;
+  _doWork(); G.bar.stoodTurns = 45; G.nightTurn = 81; G.room = "hotel_room";
+  for (let i = 0; i < WORK_AWAY_BUDGET + 2; i++) _workPresenceTick();
+  assert.ok(G.bar.workedLast, "still yours");
+});
+
+test("the tab is one line in the books", () => {
+  ownBar(); G.money = 5000; G.bar.eventNotes = []; G.shiftCall = "tab"; G.shiftWho = null; G.pendingChoice = "shift";
+  const saved = _rand; _rand = () => 0.99;   // settles
+  try { out = []; _shiftYes(); } finally { _rand = saved; }
+  const notes = (G.bar.eventNotes || []).filter(n => /slate/.test(n));
+  assert.equal(notes.length, 1, notes.join(" | "));
+});
+
+test("the affair girl is not a customer: no barfine quote, her own texts, her own hello, and the staff know", () => {
+  ownBar(); G.money = 5000; G.day = 40;
+  const her = _barStaff().find(i => NPC_ROLES[i] === "hostess"); assert.ok(her);
+  G.soc.drinks[her] = 13;
+  G.affair = { id: her, since: 20, strain: 0, floorSour: 0, warned: {}, crisSeen: [], ended: false };
+  assert.ok(_affairLive());
+  out = []; doCommand(`ask ${NPCS[her].name} about price`);
+  assert.doesNotMatch(text(), /BARFINE|my price is my price/); assert.match(text(), /boss|come home|Ask mama/i);
+  out = []; _relGreeting(her); assert.doesNotMatch(text(), /arithmetic allows/); assert.ok(text().length > 40);
+  const mama = _barStaff().find(i => NPC_ROLES[i] === "mamasan");
+  if (mama) { out = []; doCommand(`ask ${NPCS[mama].name} about ${NPCS[her].name}`); assert.match(text(), /Your girl|Everybody know/); }
+  // her text is hers
+  G.phone.contacts[her] = true; G.phone.battery = 80; G.room = "queen_vic"; G.phone.lastText = -100;
+  const saved = _rand; _rand = () => 0.01;
+  try { _maybeIncomingText(); } finally { _rand = saved; }
+  const last = (G.phone.msgs || G.phone.inbox || []).slice(-1)[0];
+  if (last && last.from === her) assert.doesNotMatch(String(last.text), /SEND 300|keep you seat/);
+  // crises keep a cadence from the last one
+  G.affair.crisDay = 30; G.room = G.bar.room; G.nightTurn = 30; G.pendingChoice = null;
+  G.day = 35; assert.equal(_affairCrisisDue(), null); G.day = 36; assert.ok(_affairCrisisDue());
+  G.affair = null;
+});
+
+test("Jun answers to yourself and is nobody's lady drink; Tan reads a venue and a phone-only woman", () => {
+  G.room = "sunset_dreams"; G.money = 2000; doCommand("talk to jun");
+  out = []; doCommand("ask jun about yourself"); assert.match(text(), /daughter/);
+  const m0 = G.money; out = []; doCommand("buy jun a drink");
+  assert.match(text(), /Not a lady drink/); assert.equal(G.money, m0 - _beerPrice());
+  G.room = _npcWhere("tan") || "soi6_street";
+  out = []; doCommand("ask tan about crystal palace"); assert.match(text(), /go-go/);
+  out = []; doCommand("ask tan about priew"); assert.match(text(), /finds you/); assert.doesNotMatch(text(), /Second Road/);
+  out = []; doCommand("ask tan about peacock"); assert.match(text(), /Katoey|Peacock|Adonis|Hyper|katoey|cabaret/i);
+});
+
+test("a soapy has a price list, a street has no doorway, and the rain has an earliest hour", () => {
+  G.room = "poseidon_soapy"; out = []; doCommand("tao rai"); assert.match(text(), new RegExp("star ฿" + _SOAPY_TIERS[0].price));
+  out = []; doCommand("read menu"); assert.match(text(), /model ฿/);
+  out = []; doCommand("examine fish"); assert.match(text(), /real fish/);
+  for (let d = 2; d < 30; d++) { G.day = d; const e = _rainEarliest(); assert.ok(e >= 0 && e < 70); }
+  assert.ok(new Set([...Array(20).keys()].map(d => { G.day = d + 2; return _rainEarliest(); })).size > 3, "not always six o'clock");
+});
+
+test("a work event keeps its gap, and a birthday has more than one paragraph", () => {
+  const b = WORK_NIGHTS.find(e => e.id === "birthday");
+  assert.ok(Array.isArray(b.text) && b.text.length >= 3); assert.ok(b.minGapDays >= 7);
+  ownBar(); G.bar.evtDay = { birthday: G.day - 2 };
+  const saved = _rand; _rand = () => 0.01;   // the roll passes, the draw lands on the first weight
+  try { for (let i = 0; i < 12; i++) { out = []; _workNight(); assert.doesNotMatch(text(), /birthday|turns thirty/); } } finally { _rand = saved; }
+});

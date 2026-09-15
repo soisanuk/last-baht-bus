@@ -1923,6 +1923,7 @@ function _topicMiss(npcId) {
   const pool = _thaiVoice(npcId) ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;
   let line = pool[Math.floor(_rand() * pool.length)](n.name);
   if (!she && pool === _TOPIC_MISS_TH) line = line.replace("her head", "his head").replace("the wrong girl", "the wrong man");
+  if (she && NPC_ROLES[npcId] === "mamasan") line = line.replace("the wrong girl", "the wrong mama");   // Candy is nobody's girl (Margarethe, round 47)
   if (she && pool === _TOPIC_MISS_EN) line = line.replace("shakes his head", "shakes her head");
   return line;
 }
@@ -2187,7 +2188,10 @@ function _describeRoom(full, forceFull) {
   // which read like two separate crowds). One cast now: _npcsHere carries the
   // flagged regulars too, so a second patron map would list every one twice.
   // Just emoji + name for all — a patron's (age, nat) lives in EXAMINE.
-  const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`);
+  // a girl on your arm is not "on the floor" — the roster listed her back among
+  // the staff in her own bar the moment after "one arm through yours" (Lars, round 47)
+  const _onArm = id => G.party && G.party.ids && G.party.ids.includes(id);
+  const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}${_onArm(id) ? " (with you)" : ""}`);
   if (here.length) _say(_L("Here: ") + here.join(", ") + ".");
   // A punter knows the mama and the cashier the moment he sits down — the game
   // didn't say, and a man bought eight lady drinks for two cashiers and a
@@ -2508,6 +2512,11 @@ function _districtHops(a, b) {
   for (let i = 1; i < path.length - 1; i++) d += long[path[i]] || 0;
   return d;
 }
+// A once-a-night downpour that always won its first roll opened EVERY September
+// night at six and pinned a man on the hotel soi (Graham, round 47). The night's
+// earliest cloudburst is a day-stable hash: some nights it comes at seven, some
+// at one, some it never gets round to it.
+function _rainEarliest() { return _hh("rainstart:" + G.vacation + ":" + G.day, 41) % 70; }
 function _districtBuild() {
   if (!_districtAdj) {
     _districtAdj = {};
@@ -2662,9 +2671,9 @@ function _tick() {
   // every twenty turns". The 30-turn cooldown stays for the drizzle beneath it;
   // the downpour itself checks G.rainDay BEFORE the dice so a second roll on the
   // same night burns nothing.
-  } else if (_flag("act1Done") && G.rainDay !== G.day && _wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
+  } else if (_flag("act1Done") && G.rainDay !== G.day && G.nightTurn >= _rainEarliest() && _wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
     _startRain(3 + Math.floor(_rand() * 6));
-  } else if (_flag("act1Done") && G.rainDay !== G.day && _wetSeason() && _wxRainy() && G.turns - G.lastRain >= 30 && _rand() < 0.11) {
+  } else if (_flag("act1Done") && G.rainDay !== G.day && G.nightTurn >= _rainEarliest() && _wetSeason() && _wxRainy() && G.turns - G.lastRain >= 30 && _rand() < 0.11) {
     // the monsoon-months amplifier: a rainy (not stormy) sky becomes a downpour
     _startRain(3 + Math.floor(_rand() * 6));
   } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < (_wetSeason() ? 0.10 : 0.05)) {

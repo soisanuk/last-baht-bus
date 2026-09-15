@@ -213,7 +213,7 @@ test("a choice the game just printed outranks a global verb", () => {
   G.room = "kitten_corner";
   doCommand("talk to kesinee");
   out = [];
-  doCommand("swear youre no white dish man");
+  doCommand("swear you are no white dish man");
   assert.doesNotMatch(text(), /let fly at the night/, "that is the SWEAR verb, not her answer");
   assert.match(text(), /nobody's boy|Powers/i, "the printed option does what it says");
   out = [];

@@ -429,9 +429,14 @@ function _piwinAbout(who) {
   // One cast now — but a regular's absence must still read: on David's work
   // night or a low-season stay-in, _npcWhere answers null (inactive) where a
   // bare _npcRoom would happily name the stool he isn't on.
+  if (NPCS[id].offmap) { _say(_fmt("\"{n}? Nobody drives her. She call you, or she don't.\"", { n: label })); return; }
   const room = NPCS[id].patron ? _npcWhere(id) : _npcRoom(id);
   const where = room ? (_barName(room) || (ROOMS[room] && ROOMS[room].name)) : null;
   if (!where) { _say(_fmt("\"{n}. Not tonight, I think. Not seen.\"", { n: label })); return; }
+  if (ROOMS[room] && ROOMS[room].invite) {   // a room you are taken into (Margarethe, round 47)
+    _say(_fmt("\"{n}. {w} — behind the Pink Lotus.\" He shakes his head. \"You don't get in there by asking a piwin, and I don't take you. Somebody take you, or nobody.\"", { n: label, w: where }));
+    return;
+  }
   const hopper = !!(NPCS[id].patron && NPCS[id].hops);
   if (hopper) {
     _say(_fmt("He thinks, and it is a real think — he is going through his own evening. " +
@@ -1981,6 +1986,7 @@ function _heatFirstPool() {
 }
 function _addHeat(n, why) {
   if (_bellLevel() >= 3) return;         // three bells deep — the room forgives everything
+  if (typeof _atOwnBar === "function" && _atOwnBar()) return;   // your own cashier does not "keep an eye on you" (Graham, round 47)
   const r = G.room;
   const before = G.soc.heat[r] || 0;
   G.soc.heat[r] = before + n;
@@ -3021,7 +3027,15 @@ const _REL_GREET = {
       "other girls give you. You're spoken for in here, and everyone knows it but you.",
   ],
 };
+const _REL_GREET_AFFAIR = [
+  n => `${n} does not come to the door, because she is already behind the rail and the rail is yours; she looks up, once, the look that is not for customers, and goes back to the glass she was polishing. That is the whole greeting. It is enough.`,
+  n => `${n} clocks you in and says nothing to the room about it, which in this bar is the loudest thing she could do. The girls have stopped looking over. They know.`,
+  n => `${n} has your stool clear and a water on it — not a drink, a water — and the small nod that means the ice came, the float is right, and she missed you, in that order.`,
+];
 function _relGreeting(id) {
+  if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) {   // your girl, not "as close as the arithmetic allows" (Graham, round 47)
+    _say(_pickVary(_REL_GREET_AFFAIR, "relaffair")(NPCS[id].name), "win"); return;
+  }
   const t = _bondTier(id);
   if (t < 1) return;
   const pool = _REL_GREET[t];
@@ -3126,7 +3140,30 @@ function _ownBarTalk(id, topic) {
   if (!_ownBarStaff(id)) return false;
   // the affair girl is past the staff registers entirely — her tier-3 bond
   // dialogue (the phone-translator deep talk) is the true voice now
-  if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) return false;
+  if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) {
+    // …but she does not quote the man she went home with her barfine (Graham,
+    // round 47: "my price is my price" four mornings running), and she has an
+    // answer for the things the strain lines say about her
+    const tt = String(topic || "").toLowerCase();
+    if (tt && _OWNER_PITCH_TOPICS.test(tt)) {
+      _say(_pickVary([
+        n => `${n} looks at you for a second as if you had spoken Dutch. "Price?" She goes back to the glasses. "You know the price, boss. You are paying it every night. Not in baht."`,
+        n => `"Barfine." ${n} does not laugh, which is how you know it landed. "Ask mama. Then ask her whose name she writes." A beat. "Then come home."`,
+        n => `${n} tips her chin at the room. "The girls have a price. I have a boss. Which one you asking, na?" She is not entirely joking.`,
+      ], "affairpitch")(NPCS[id].name)); return true;
+    }
+    if (tt && /\b(cousin|formal|goodnight|us|strain|distance|what is wrong|what's wrong|angry|sleeping)\b/.test(tt)) {
+      const a = G.affair;
+      _say(_pickVary(a.strain >= 6 ? [
+        n => `${n} keeps her hands busy with a cloth that is already clean. "My cousin has a room and no questions. Some nights I want the no questions." She looks up. "You want to fix it, you know where the fixing is. It is not here, at the rail."`,
+        n => `"Formal?" ${n} says the word back like a customer's word. "I say goodnight the way I can say it. You want the other way — be here the other way."`,
+      ] : [
+        n => `${n} shrugs it off, warm. "Nothing wrong, boss. Nothing wrong is the thing I am telling you. Buy me nothing, sit with me, that is the price today."`,
+        n => `"Us?" ${n} laughs, short and real. "Us is fine. Us is the only thing in this bar that is not on a chit. Don't put it on one."`,
+      ], "affairus")(NPCS[id].name)); return true;
+    }
+    return false;
+  }
   const role = NPC_ROLES[id];
   if (topic && _OWNER_PITCH_TOPICS.test(topic)) {
     const pool = _OWNER_PITCH[role]; if (!pool) return false;
@@ -3258,7 +3295,7 @@ function _bondTalk(id) {
   // records the last day you sat with her; skip that variant if it was yesterday.
   const last = (G.seenDay || {})[id];
   if (t === 2 && last != null && last >= G.day - 1) pool = pool.filter((_, i) => i !== 0);
-  _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name), t >= 3 ? "win" : "");
+  _say(_pickVary(pool, "bond" + t + ":" + id)(NPCS[id].name), t >= 3 ? "win" : "");   // the "door left open" beat, five nights verbatim (Graham, round 47)
 }
 
 // Diminishing returns on raw conquest — the hedonic treadmill (see the
@@ -4658,7 +4695,7 @@ const _GOODBYE_FARANG = [
     `arrangement.\n\n"I don't do this," she says. "Airport, crying, all that — no. ` +
     `Stupid." She hands you the coffee. "So I do it here instead, quick, and then I go ` +
     `sleep." She does it here instead. It is quick. Neither of you is any good at it.`,
-  n => `${n} does not come to see you off, and tells you plainly why, the night before: ` +
+  n => `${n} does not come to see you off, and told you plainly why, the last night you saw her: ` +
     `"Because then I stand there like idiot, and after you go I still stand there." She ` +
     `says it flatly, the way she says the price of things. What she does instead is put ` +
     `you in the taxi herself at the hotel, argue with the driver about the airport fare ` +

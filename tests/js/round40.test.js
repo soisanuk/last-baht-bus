@@ -45,13 +45,13 @@ test("TRAVEL through the dark with the torch off says so first (Vic)", () => {
   G.room = "buakhao_pt"; G.visited.khao_talo_bar = true; G.lightOn = false; G.hunger = 0; G.thirst = 0;
   const saved = _rand; _rand = () => 0.99;
   try { run("travel daeng's place"); } finally { _rand = saved; }
-  assert.match(text(), /The way runs through the dark\. LIGHT ON first/);
+  assert.match(text(), /The way runs through the dark and you're walking it without a light/);
 });
 
 test("staff talk about the people they work with, the room, and the wallet (Vic / Trevor)", () => {
   G.room = "lucky_tiger"; run("ask ratana about lek");
   assert.match(text(), /Good girl|different version/); assert.doesNotMatch(text(), /Not my story|don't know/);
-  out = []; run("ask lek about ratana"); assert.match(text(), /Strict\. Fair/);
+  out = []; run("ask lek about ratana"); assert.match(text(), /Strict\. Fair|look AT us|Mama know everything/);
   G.nightTurn = 50; G.room = "lucky_tiger"; const cashier = _npcsHere().find(i => NPC_ROLES[i] === "cashier");
   out = []; run(`ask ${NPCS[cashier].name.toLowerCase()} about lucky tiger`); assert.match(text(), /Comes in here, goes out there/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; G.stage = "act1"; G.nightTurn = 50; G.room = "doghouse"; out = [];

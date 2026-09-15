@@ -511,11 +511,15 @@ const _ENC = {
     // quietly and the command runs — see the pendingEnc gate's passthrough
     // Anchored: the old unanchored /no|.../ read FLIRT NOEY as a "no" and ate the
     // flirt as a wave at the child (Lionel, round 36). An answer starts the line.
-    if (!/^(?:buy|yes|rose|flower|sure|ok|okay|please|one|no|nah|wave|leave|later|pass|shake|sorry)\b/.test(input)) {
+    // BUY BEER / BUY <girl> A DRINK at a rail with the rose bucket on it bought
+    // the rose (Lars, Graham, round 47 — five times): a BUY is an answer to the
+    // child only when it names the rose, or names nothing
+    const buysRose = /^buy(?:\s+(?:a\s+|the\s+|one\s+|her\s+a\s+)?(?:rose|flower|one|it))?\s*$/.test(input);
+    if (!(buysRose || /^(?:yes|rose|flower|sure|ok|okay|please|one|no|nah|wave|leave|later|pass|shake|sorry)\b/.test(input))) {
       _say("The mother reads your attention elsewhere, nods, and steers the child on to the next stool.", "dim");
       return "passthrough";
     }
-    if (/^(?:buy|yes|rose|flower|sure|ok|okay|please|one)\b/.test(input) && !/\b(?:no|nah|wave|leave|later|pass)\b/.test(input)) {
+    if ((buysRose || /^(?:yes|rose|flower|sure|ok|okay|please|one)\b/.test(input)) && !/\b(?:no|nah|wave|leave|later|pass)\b/.test(input)) {
       if (G.money < ROSE_PRICE) {
         _say(`You pat your pockets and come up short of even ${ROSE_PRICE} baht. The mother ` +
           "reads it in a glance — no judgement, she's seen every wallet — gathers the child " +
@@ -580,6 +584,12 @@ const _ENC = {
     }
     // "wait until 3" resolved as WAI and cost ฿300; "barfine lek" resolved as PAY
     // (Dex, round 38). Whole words only.
+    // a girl on your arm is in the conversation: she talks to him first, and the
+    // price does not change but the tone does (Lars, round 47: "no word about the
+    // girl beside me")
+    if (G.party && G.party.ids && G.party.ids.length)
+      _say(_fmt("{who} says something to him fast and low in Thai before you have opened your mouth — " +
+        "the register a woman uses on a nephew. He listens. The price is the price; the tone is not.", { who: _partyLabel() }), "dim");
     if (/\bwai\b|sorry|khrap|krub|apolog|sawatdee/.test(input)) {
       const f = Math.min(300, G.money);
       G.money -= f;
