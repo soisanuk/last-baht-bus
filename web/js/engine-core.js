@@ -232,6 +232,7 @@ function newGame() {
     flags: {},
     offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
+    sentTotal: 0,        // baht SENT to contacts over the game — the hospital queue's "money you'll never see" needs a debt to point at
     codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
     known: {},           // charId → true once their name has printed (ask-topic gate)
     examined: {},        // "room.readKey" → 1 — distinctive fixtures you've looked at (the Owl's noticer slot)
@@ -1112,6 +1113,12 @@ function _benchOut(id) {
   // by the per-night hash alone — a man nobody can find is not a regular).
   // Pure hash of the id, so Tan can name the night.
   if ((G.day % 7) === _anchorNight(id)) return false;
+  // …and a man the ROOM calls a fixture is one: the Vic's own desc puts Mort's
+  // notebook at the far end "most nights, as much a fixture as the dartboard",
+  // and a September persona found the stool empty nine visits of nine — the
+  // season kept him in on exactly her nights (Brenda, round 47). `fixture: true`
+  // on the entry; the desc is the claim, this keeps it.
+  if (NPCS[id] && NPCS[id].fixture) return false;
   const stay = { peak: 0, high: 0.05, shoulder: 0.22, low: 0.45, deeplow: 0.6 };
   const p = (typeof _seasonTier === "function") ? (stay[_seasonTier()] || 0) : 0;
   if (p <= 0) return false;

@@ -14738,6 +14738,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   mort: {
+    fixture: true,   // the Vic's desc calls his notebook a fixture "most nights" — the season never keeps him in (Brenda, round 47)
     name: "Mort", emoji: "🦉", age: 74, nat: "American",
     pronoun: "he",
     patron: true, room: "queen_vic", hops: false,

@@ -110,12 +110,15 @@ test("a close look at the notebook knows whether its owner is in", () => {
   // which is day-stable, so inside one vacation it reads to a player exactly
   // like a weekday rhythm (Derek predicted it three weekdays running and was
   // right every time). Either way the notebook has to know.
-  G.room = "queen_vic"; G.season0 = 9;        // the deep-low trough, where he misses nights
-  const nights = [];
-  for (let d = 1; d <= 14; d++) { G.day = d; nights.push(_npcWhere("mort") === "queen_vic"); }
-  assert.ok(nights.includes(true) && nights.includes(false), "premise: some nights he is out, some in");
+  // (2026-09-15: Mort is a FIXTURE now — the season never keeps him in, because
+  // the room's own desc says "most nights" — so the out-branch is exercised by
+  // the one absence that still reaches him, a night off the rail.)
+  G.room = "queen_vic"; G.season0 = 9;
+  const outNights = new Set([3, 6, 10]);
   for (let d = 1; d <= 14; d++) {
     G.day = d;
+    G.soc.leftEarly = outNights.has(d) ? { mort: d } : {};
+    if (outNights.has(d)) assert.notEqual(_npcWhere("mort"), "queen_vic", "premise: sent home");
     const said = _roomRead("notebook", true);
     if (_npcWhere("mort") === "queen_vic") assert.match(said, /forearm|biro|ledger/,
       `day ${d}: he is in, so the notebook is under his arm`);

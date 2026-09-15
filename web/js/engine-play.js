@@ -3725,6 +3725,21 @@ const _HOSP_THESIS = [
   "The marketplace, so loud out there, simply isn't in here. Strip the night off everyone and " +
     "what's left is a waiting room full of the same animal, holding the same slip of paper, hoping.",
 ];
+// …and the same queue for a man with no debts in it — she still says the word
+const _HOSP_TOMORROW_CLEAN = [
+  "And by the water cooler, a face from a bar you can't place: a girl who once told you the " +
+    "whole story — the buffalo, the province, the bus home she was forever about to catch — and " +
+    "never once asked you for a baht, which you now realise was the more expensive version. She " +
+    "clocks you, smiles like you're an old joke she's fond of, and mouths one word across the " +
+    "room: “Tomorrow.”",
+  "And there, in the queue with everyone else, is one you half-know — a name from a rail, " +
+    "attached to a story about family and a hometown bus. She meets your eye, unhurried, " +
+    "entirely unbothered, and gives you the smile and the word this whole town runs on: " +
+    "“Tomorrow.” The counter takes her number before it takes yours.",
+  "And in the plastic chairs opposite, a girl who once cried you a river across a bar and was " +
+    "laughing at the next table by the time you'd found a tissue. She sees you see her. She " +
+    "raises her queue ticket an inch, like a toast. “Tomorrow.”",
+];
 const _HOSP_TOMORROW = [
   "And by the water cooler, half a memory made flesh: a girl you lent a few hundred baht a season " +
     "ago and never saw again — the LINE messages, the sick buffalo, the province she was forever " +
@@ -3772,7 +3787,11 @@ function _hospitalMorning(reason) {
   _say(_HOSP_THESIS[Math.floor(_rand() * _HOSP_THESIS.length)], "dim");
   _say("(No charge — your travel insurance covers the public ward. In here, that makes you " +
     "exactly like everyone else: a number, waiting for it to be called.)", "dim");
-  if (_rand() < 0.55) _say(_HOSP_TOMORROW[G.hospitalVisits % _HOSP_TOMORROW.length]);
+  // the "money you'll never see" queue needs a debt to point at: a man who never
+  // sent anybody a baht gets the version without one (Desmond, round 47)
+  if (_rand() < 0.55) _say((G.sentTotal || 0) > 0
+    ? _HOSP_TOMORROW[G.hospitalVisits % _HOSP_TOMORROW.length]
+    : _HOSP_TOMORROW_CLEAN[G.hospitalVisits % _HOSP_TOMORROW_CLEAN.length]);
 }
 
 // ── The dawn coda: her last baht bus ─────────────────────────────────────────

@@ -3623,6 +3623,7 @@ function _doSendMoney(arg) {
     return;
   }
   G.money -= amt;
+  G.sentTotal = (G.sentTotal || 0) + amt;
   if (amt >= CCIB_LOUD_MONEY && typeof _ccibLoud === "function") _ccibLoud("money");
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amt; // toward a sponsor flip
   G.battery = Math.max(0, G.battery - 1);

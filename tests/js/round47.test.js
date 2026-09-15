@@ -950,3 +950,21 @@ test("the Owl's arrival slot has enough variants for a week without a rerun", ()
   const block = src.slice(src.indexOf("const _OWL_ARRIVED"), src.indexOf("const _OWL_LISTINGS"));
   assert.doesNotMatch(block, /฿\d/, "prices are constants, never digits");
 });
+
+test("Mort is a fixture: the season never keeps him in, whatever night you visit", () => {
+  G.stage = "expat"; _setFlag("expatLife"); G.season0 = 8;   // a September start: the deep-low trough
+  for (let d = 2; d <= 30; d++) { G.day = d; G.nightTurn = 30; assert.ok(_npcActive("mort") && _npcWhere("mort") === "queen_vic", "day " + d); }
+});
+
+test("the hospital queue only names money you'll never see when you actually sent some", () => {
+  G.sentTotal = 0; G.hospitalVisits = 0;
+  const saved = _rand; _rand = () => 0.1;
+  try {
+    out = []; _hospitalMorning("hurt");
+  } finally { _rand = saved; }
+  if (text()) assert.doesNotMatch(text(), /money you'll never see|lent a few hundred|rent shortfall/);
+  // SEND counts
+  G.room = "candy_bar"; G.money = 2000; G.phone.contacts = G.phone.contacts || {}; G.phone.contacts.candy = true; G.phone.battery = 80;
+  out = []; doCommand("send 300 to candy");
+  if (G.money === 1700) assert.equal(G.sentTotal, 300);
+});
