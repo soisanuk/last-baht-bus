@@ -8006,6 +8006,39 @@ const _OWL_ARRIVED = [
     "and the Owl has watched a wallet come back on the strength of one. MAO is drunk; you will " +
     "be told you are. And CHEAP CHARLIE is what they call the man who read this column and " +
     "still didn't buy her the drink. Don't be him. Don't be the other one either.",
+  () => "ON MONEY, for the newly landed, because the first three questions the Owl gets are all " +
+    `the same question. The machine on the street takes your foreign card and ฿${ATM_FEE} for the ` +
+    "privilege, every time, so pull once and pull enough; the girl at the till does not take " +
+    "cards and never will. The CHIT CUP is how a bar keeps score — every drink a slip of paper " +
+    "in a pot in front of you, and CHECK BIN (chek bin, squire: the bill) is how you ask for " +
+    "the total, which is the sum of the slips and not a baht more. Count them anyway; it is " +
+    "not rude, it is arithmetic. Tip in notes, never in coins — a coin is what you give a monk. " +
+    "And the man who tells you the price is the price is the only man in the room telling you " +
+    "the truth.",
+  () => "THE CURFEW, since a reader asked what time the town shuts. It doesn't. The blue trucks run " +
+    "all night — sparse after two, but they come; the piwins never sleep; the bars on the beach " +
+    "side go to dawn and the ones with the shutters tell you so at half eleven. The only curfew " +
+    "in Pattaya is on you: too drunk for the bike (the piwin will say so, and mean it), too " +
+    "tired for the walk, too far gone to remember the hotel's name. The LAST BAHT BUS is the " +
+    "last one you are still capable of catching, and the Owl has watched better men than you " +
+    "miss it standing up. Know the name of your hotel. Say it to somebody sober before " +
+    "midnight. That is the whole of the advice.",
+  () => "MANNERS, abridged, for the man who does not want to be the story in next week's column. " +
+    "The head is sacred and the feet are not: touch nobody's hair, point your soles at nobody, " +
+    "and take your shoes off where the pile of shoes is. A WAI returned is a wai earned — do " +
+    "not wai the girl on the stool, do wai her mother if you ever meet her. MAI PEN RAI (never " +
+    "mind) is the answer to most things and the end of every argument; JAI YEN (cool heart) is " +
+    "the man who wins it, and the loud farang at the next table is the man who has already " +
+    "lost. Do not raise your voice, do not raise your hand, and do not, ever, say a word " +
+    "about the King. The rest you can get wrong and be forgiven for, once.",
+  () => "WHAT TO DO ON NIGHT ONE, because the Owl watched a reader stand on Beach Road for an hour " +
+    "with a map. This is a town that talks, so TALK — to the girl, the mamasan, the man on the " +
+    "next stool, the piwin on the corner — and ASK them things; nobody in Pattaya has ever " +
+    "been offended by a question, only by silence. Buy one beer and sit with it; the room " +
+    "will come to you. Get a number (CONTACT, once she likes you — she'll say) and the town " +
+    "starts texting you invitations, which is how a stranger becomes a regular in a week. " +
+    `And the bus: ฿${BUS_FARE}, flag it down, sit at the back, pay when you hop off. That is ` +
+    "the whole first night. The second one you'll work out yourself.",
 ];
 const _OWL_LISTINGS = [
   "STINKY BAR (Beach Road North), the American's shop, runs killer pool every third night — ฿100 in the ashtray, last cue standing takes the pot. His felt, his rules, his Singha.",

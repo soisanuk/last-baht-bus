@@ -6513,6 +6513,8 @@ function _doMotosai(arg) {
   // the ride takes the time the road takes: one turn within the district or the
   // next one over, one more for every district beyond that (Mario, 2026-09-03)
   const extraTurns = Math.max(0, _districtHops(_room().region, ROOMS[d.room].region) - 1);
+  // the districts ridden THROUGH, read before the room changes under you
+  const _via = (_districtPath(_room().region, ROOMS[d.room].region) || []).slice(1, -1);
   G.room = d.room;
   if (extraTurns) { G.offstage = true; const ended = _passTime(extraTurns); G.offstage = false; if (ended) return; }
   G.darkStreak = 0;
@@ -6541,7 +6543,9 @@ function _doMotosai(arg) {
   } else if (_hh("hands:" + G.vacation + ":" + G.motoRides, 11) % 5 === 0) {
     seat = " " + _pickVary(_MOTO_HANDS_LATER, "motohandslater");
   }
-  const rideLine = _pickVary(extraTurns ? _MOTO_RIDE_LONG : _MOTO_RIDE_SHORT, extraTurns ? "motolong" : "motoshort");
+  // a ride that runs the length of Beach Road gets the front, not a temple car park
+  const rideLine = _pickVary(extraTurns ? (_via.includes("Beach Road") ? _MOTO_RIDE_BEACH : _MOTO_RIDE_LONG) : _MOTO_RIDE_SHORT,
+    extraTurns ? (_via.includes("Beach Road") ? "motobeach" : "motolong") : "motoshort");
   // with a seat sentence in between, the ride becomes its own sentence — "swing on
   // the back, There is the question of your hands… and the piwin" was two fragments
   // welded without punctuation (Frank, round 38)
@@ -7368,11 +7372,16 @@ function _doBandTalk() {
 }
 
 function _doTime() {
+  // after midnight the date has turned and the night has not: "00:06, Wednesday"
+  // read as the clock being wrong (Brenda, round 47) — say whose small hours these are
+  const wd = G.nightTurn >= 60
+    ? _fmt("{weekday} night, into {next}", { weekday: _L(_weekday()), next: _L(WEEKDAYS[(G.day + 1) % 7]) })
+    : _L(_weekday());
   _say(G.stage === "expat"
     ? _fmt("{clock}, {weekday} — day {day} of the rest of your life.",
-        { clock: _clockStr(), weekday: _L(_weekday()), day: G.day })
+        { clock: _clockStr(), weekday: wd, day: G.day })
     : _fmt("{clock}, {weekday} — day {day} of 7.",
-        { clock: _clockStr(), weekday: _L(_weekday()), day: G.day }));
+        { clock: _clockStr(), weekday: wd, day: G.day }));
   // the month, for a resident who lives across the year (WEATHER carries the full note)
   if (G.stage === "expat" && typeof _seasonTier === "function") {
     _say(`(${_SEASON_MONTHS[_seasonMonth()]} — ${_SEASON_LABEL[_seasonTier()]}.)`, "dim");
@@ -8263,6 +8272,13 @@ const _MOTO_RIDE_LONG = [
   "and the piwin settles into the long haul: a hand off the bar to answer his phone, a swerve round a pothole he knows by name, the sodium lights going by like a metronome",
   "and the districts change under you — bar lights, then shophouses, then dark, then the highway with the trucks, then bar lights again — and at every red light he rolls through the gap between the stopped cars to the front",
   "and somewhere in the middle of it he stops for petrol, forty baht from a bottle at a stall, and you sit on the back holding your own elbows while the girl pours",
+];
+// the long way that is also the good way: the whole front, end to end
+const _MOTO_RIDE_BEACH = [
+  "and he takes the front — the whole of Beach Road unrolling on the sea side, the promenade lamps going by like a metronome, the water black past them with one boat's light on it, the bars on the land side sliding past as one long lit sentence",
+  "and it's the scenic route because there is no other: Beach Road end to end, palms and lamps and the sea breathing on your left, girls on the wall watching the traffic like it's television, the wind doing what the aircon never does",
+  "and the ride is Beach Road, all of it — the roundabout, the long straight with the sea black on one side and the hotels lit on the other, a pause at the lights where a whole family goes past four-up, then the straight again, and he never once touches the brake",
+  "and you get the whole front for your fare: the promenade at speed, the sea smell coming and going between the exhaust, the neon of the side sois flicking past like somebody thumbing a book, and at the far end the town turning inland and the ride turning with it",
 ];
 const _MOTO_HANDS = [
   "There is the immediate question of your hands. His shoulders? Too intimate. His waist? Worse. You settle for the chrome bar behind the seat, white-knuckled, and every brake throws your chest into his back anyway.",

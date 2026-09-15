@@ -225,6 +225,7 @@ function newGame() {
     repDay: null,        // last day a good deed banked its +1 (the shared daily gain cap)
     dog: null,           // the accidentally-adopted soi dog: { since: day, name? } once you've fed him
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
+    dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
@@ -2302,6 +2303,12 @@ function _describeRoom(full, forceFull) {
     // only (never a hotel room — he can't climb to your balcony), and never
     // during Act One's tight opening
     G.dogNudgeDay = G.day;
+    // one dog, one manor: he was met in Naklua and turned up on the hill and at
+    // the Walking Street gate the same week (Henri, round 47). The first sighting
+    // pins his district; the nudge only fires there after that. FEED DOG still
+    // works anywhere — a dog you call is a dog who came looking.
+    if (G.dogRegion && r.region && G.dogRegion !== r.region) return;
+    if (!G.dogRegion && r.region) G.dogRegion = r.region;
     _say(_pickVary([
       "A soi dog with one clipped ear falls in beside you for half a block, matching " +
         "your pace with off-duty professionalism, then peels away at the soi mouth with " +
@@ -2485,6 +2492,16 @@ let _districtAdj = null;
 function _districtHops(a, b) {
   if (!a || !b) return 0;
   if (a === b) return 0;
+  _districtBuild();
+  const path = _districtPath(a, b);
+  if (!path) return 3; // unconnected on the map: call it a long way
+  // a long district costs its own turn when you ride THROUGH it (LONG_DISTRICTS)
+  const long = typeof LONG_DISTRICTS !== "undefined" ? LONG_DISTRICTS : {};
+  let d = path.length - 1;
+  for (let i = 1; i < path.length - 1; i++) d += long[path[i]] || 0;
+  return d;
+}
+function _districtBuild() {
   if (!_districtAdj) {
     _districtAdj = {};
     for (const r of Object.values(ROOMS)) for (const to of Object.values(r.exits || {})) {
@@ -2494,15 +2511,24 @@ function _districtHops(a, b) {
       (_districtAdj[y] = _districtAdj[y] || new Set()).add(x);
     }
   }
-  const seen = new Set([a]); let q = [[a, 0]];
+}
+// The districts a ride passes through, start and end inclusive — the fewest
+// crossings; null when the map doesn't join them. Pure, no dice.
+function _districtPath(a, b) {
+  if (!a || !b) return null;
+  if (a === b) return [a];
+  _districtBuild();
+  const prev = { [a]: null }; let q = [a];
   while (q.length) {
-    const [x, d] = q.shift();
+    const x = q.shift();
     for (const y of _districtAdj[x] || []) {
-      if (y === b) return d + 1;
-      if (!seen.has(y)) { seen.add(y); q.push([y, d + 1]); }
+      if (y in prev) continue;
+      prev[y] = x;
+      if (y === b) { const out = [b]; let c = b; while (prev[c]) { c = prev[c]; out.unshift(c); } return out; }
+      q.push(y);
     }
   }
-  return 3; // unconnected on the map: call it a long way
+  return null;
 }
 function _passTime(n) {
   const startDay = G.day;

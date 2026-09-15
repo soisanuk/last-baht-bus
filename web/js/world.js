@@ -17,6 +17,12 @@ const BUS_FARE   = 15;   // baht bus, any hop on a line
 const BUS_CHARTER = 200;
 const MOTOSAI_TOWN = 50; // motosai hop inside town
 const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
+// A district you ride THROUGH that is long enough to cost a turn of its own —
+// Beach Road runs the whole front, Naklua to Walking Street, and a bike from
+// Naklua to the hill spends most of the ride on it (Mario, 2026-09-15: "a long
+// ride down Beach Road, but scenic"). Extra turns when the district is an
+// intermediate stop; arriving in it costs the ordinary one.
+const LONG_DISTRICTS = { "Beach Road": 1, "Second Road": 1 };   // the two arteries that run the whole front
 // The party barfine (TAKE HER OUT): the honest mirror of the bfparty scam —
 // she comes WITH you, and the night continues instead of ending at the ledger.
 // TAKE HER OUT is a hard sell (design call 2026-08-25): the full night eats her
@@ -16041,7 +16047,7 @@ const ASK_REPLIES = {
   // where you're from — quoted back by %home%, so: places only
   home: [
     { origin: "redundancy", text: "Sheffield" },
-    { origin: "pension", text: "Portsmouth" },
+    { origin: "pension", text: "Somewhere cold" },
     { origin: "running", text: "Nowhere I miss" },
     { origin: "pi", text: "Chicago" },
     { origin: "business", text: "Gold Coast" },

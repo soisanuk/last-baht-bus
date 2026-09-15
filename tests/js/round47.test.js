@@ -907,3 +907,46 @@ test("no bargirl weaves out of a shut Soi 6 door", () => {
   try { out = []; for (let i = 0; i < 6; i++) _maybeEncounter(); } finally { _rand = saved; }
   assert.doesNotMatch(text(), /weaves out of the nearest doorway/);
 });
+
+// ── Mario's rulings on the wave-two leftovers (2026-09-15) ──────────────────
+
+test("Beach Road is a long ride: riding THROUGH it costs a turn, arriving in it does not", () => {
+  assert.equal(_districtHops("Naklua", "Beach Road"), 1, "arriving in it is one hop");
+  assert.equal(_districtHops("Naklua", "Pratumnak"), 3, "Naklua to the hill spends the ride on an artery");
+  assert.equal(_districtHops("Naklua", "Walking Street"), 3);
+  const path = _districtPath("Naklua", "Walking Street");
+  assert.ok(path && path.includes("Beach Road"), "and the path says so");
+  // the ride reads the front, not a temple car park
+  G.room = "naklua_rd"; G.money = 5000; G.nightTurn = 30; G.motoRides = 5;
+  const saved = _rand; _rand = () => 0.99;
+  try { out = []; _doMotosai("walking street"); } finally { _rand = saved; }
+  if (G.room !== "naklua_rd")
+    assert.ok(_MOTO_RIDE_BEACH.some(l => text().includes(l.slice(0, 40))), "the scenic pool");
+});
+
+test("the un-adopted dog has a manor: the nudge fires where he was first seen", () => {
+  G.dog = null; G.dogRegion = null; G.day = 3;
+  const saved = _rand; _rand = () => 0.1;
+  try {
+    G.room = "naklua_rd"; G.dogNudgeDay = 0; out = []; _describeRoom(true);
+    assert.equal(G.dogRegion, "Naklua", "pinned on first sight");
+    G.room = "pratumnak_rd"; G.dogNudgeDay = 0; G.day = 4; out = []; _describeRoom(true);
+    assert.doesNotMatch(text(), /clipped[- ]ear/, "not on the hill");
+    G.room = "naklua_rd"; G.dogNudgeDay = 0; G.day = 5; out = []; _describeRoom(true);
+    assert.match(text(), /clipped[- ]ear/, "back on his own soi");
+  } finally { _rand = saved; }
+});
+
+test("after midnight TIME says whose small hours these are, and the pension's home chip is nobody's port", () => {
+  G.day = 3; G.nightTurn = 61; out = []; _doTime();
+  assert.match(text(), /Wednesday night, into Thursday/);
+  assert.ok(!ASK_REPLIES.home.some(r => /Portsmouth/.test(r.text || r)), "a French pensioner is not from Portsmouth");
+});
+
+test("the Owl's arrival slot has enough variants for a week without a rerun", () => {
+  assert.ok(_OWL_ARRIVED.length >= 7, `${_OWL_ARRIVED.length} variants`);
+  for (const f of _OWL_ARRIVED) { const t = f(); assert.ok(t.length > 300); }
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  const block = src.slice(src.indexOf("const _OWL_ARRIVED"), src.indexOf("const _OWL_LISTINGS"));
+  assert.doesNotMatch(block, /฿\d/, "prices are constants, never digits");
+});

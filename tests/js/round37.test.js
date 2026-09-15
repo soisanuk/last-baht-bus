@@ -234,7 +234,10 @@ test("a bike is one turn within the district or the next one over, and a turn mo
   assert.equal(_districtHops("Beach Road", "Beach Road"), 0);
   assert.equal(_districtHops("Beach Road", "Naklua"), 1);
   assert.equal(_districtHops("Beach Road", "Darkside"), 3);
-  assert.equal(_districtHops("Jomtien", "Darkside"), 4);
+  // Jomtien to the Darkside rides THROUGH an artery (Beach Road / Second Road are
+  // LONG_DISTRICTS since 2026-09-15 — a turn of their own when ridden through)
+  { const p = _districtPath("Jomtien", "Darkside"); const long = p.slice(1, -1).filter(x => LONG_DISTRICTS[x]).length;
+    assert.equal(_districtHops("Jomtien", "Darkside"), p.length - 1 + long); assert.ok(_districtHops("Jomtien", "Darkside") >= 4); }
   const saved = _rand;   // the far ride carries a crash roll — not what this pins (it crashed on CI's seed)
   const ride = (from, to) => {
     newGame(); _setFlag("act1Done"); G.money = 5000; G.soc.drunk = 0; G.dog = null; G.nightTurn = 30;

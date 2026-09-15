@@ -180,7 +180,9 @@ test("the Owl keeps a standing slot for the newly arrived, for the first week on
   G.vacation = 1; G.day = 3; G.battery = 50; G.room = "beach_rd_c";
   run("owl");
   assert.ok(_OWL_ARRIVED.some(f => text().includes(f().slice(0, 60))), "the five words, in his voice");
-  assert.match(text(), new RegExp(`฿${LADY_DRINK}|฿${BUS_FARE}|฿${BEER_PRICE}`), "prices are the constants");
+  // a variant may carry no price at all (manners, the curfew); one that does quotes a constant
+  { const v = _OWL_ARRIVED.map(f => f()).find(t => text().includes(t.slice(0, 60))) || "";
+    if (/฿/.test(v)) assert.match(v, new RegExp(`฿${LADY_DRINK}|฿${BUS_FARE}|฿${BEER_PRICE}|฿${ATM_FEE}`), "prices are the constants"); }
   G.day = 12; out = []; run("owl");
   assert.ok(!_OWL_ARRIVED.some(f => text().includes(f().slice(0, 60))), "a resident reads past it");
 });
