@@ -592,6 +592,41 @@ function _rand() {
 function _flag(f) { return !!G.flags[f]; }
 function _setFlag(f) { G.flags[f] = true; }
 
+// ── Named predicates for the questions the code keeps asking ────────────────
+// Class L (docs/persona-findings-systemic.md §3.4) is the right question asked
+// of the wrong field, and it is a NAMING problem: `G.known` and `G.talked` both
+// read as "knows her" at the call site, and `region !== "Jomtien"` reads as
+// "out of town" until you are standing in Thappraya. The names below are the
+// fix; the source lint in tests/js/templates.test.js keeps them the fix.
+
+// MET, not merely NAMED. `_learnNames` marks a character known the first time
+// their name PRINTS — a room description, a lead, somebody else's story — so
+// `G.known` means "the transcript has said this name", which is the right gate
+// for a SPOILER (`_topicKnown`, the flyout wheel's ask-topics) and the wrong
+// gate for anything that means acquaintance. Two shipped on it: Kruu Waen
+// texted homework to a stranger (Judith, round 47), and a bar manager could
+// never once say "new face", because his own room description had introduced
+// him one line before the welcome shot was poured.
+function _met(id) { return !!(G.talked && G.talked[id]); }
+
+// IN TOWN, as Tan means it when he says "walk, it is four minutes": the bar
+// districts you can actually walk between. Jomtien and Thappraya are the far
+// side of the bay, Pratumnak is the hill in between, and the Darkside is across
+// eight lanes of Sukhumvit — from any of the four that sentence is a lie, which
+// is what a stranded player on the hill was told (Judith, round 47).
+const _OUT_OF_TOWN = ["Jomtien", "Thappraya", "Pratumnak", "Darkside"];
+function _inTown(room) {
+  const r = ROOMS[room || G.room];
+  return !!r && _OUT_OF_TOWN.indexOf(r.region) < 0;
+}
+
+// A CONTACT WHO TEXTS YOU UNPROMPTED. `NPC_ROLES[id]` is "works a bar floor",
+// which is nearly the same set and not the same question: Priew, the girl from
+// the clinic queue, is a LINE contact with no bar and no role, and never once
+// sent a message in her life (Judith, round 47). Tan is deliberately outside it
+// — he answers, he does not chat.
+function _texts(id) { return !!(NPC_ROLES[id] || id === "priew"); }
+
 // Who the player chose to be in the taxi intro. Readable predicates for dialogue
 // gates (when(st,G) => _isOrigin("pi")) and courtship routing. Before the intro
 // runs they're null, so every check is false — a save with no identity behaves
@@ -1497,7 +1532,21 @@ const _PATRON_AGAIN = [
 // (The form dialogue gates want; Mort's Glam lead is offered mid-conversation,
 // never on the doorstep.) One permanent book since retells were retired.
 function _patronSeen(id) { return ((G.talked && G.talked[id]) || []).length > 0; }
-function _patronHis(id) { return NPCS[id] && NPCS[id].pronoun === "she" ? "her" : "his"; }
+// Subject / object / possessive for anybody, for class M
+// (docs/persona-findings-systemic.md §3.5): a template written for one person
+// and handed another. The mixed casts are the ones to watch — the managers are
+// all men, the floor is all women, and the bench is mostly men and three women:
+// Angela, Sandra and Josey are exactly who a hard-coded "he" gets wrong.
+// Reads world.js's `_pronoun(id)`, which is the ONE resolver (most role-carriers
+// carry no `pronoun` field at all and fall through its lady-role default — a
+// second copy of that rule here would read half the cast as men).
+function _pr(id) {
+  const p = typeof _pronoun === "function" ? _pronoun(id) : (NPCS[id] || {}).pronoun;
+  return p === "she" ? { s: "she", o: "her", p: "her" }
+    : p === "they" ? { s: "they", o: "them", p: "their" }
+    : { s: "he", o: "him", p: "his" };
+}
+function _patronHis(id) { return _pr(id).p; }
 function _patronAgain(id) {
   return _PATRON_AGAIN[Math.floor(_rand() * _PATRON_AGAIN.length)](NPCS[id].name, _patronHis(id));
 }
@@ -1662,10 +1711,10 @@ function _elsewhereLine(word) {
       // …and never name the bar the player is STANDING IN as the place to
       // find him — "The Sundowner, early doors, is where you'll find him",
       // delivered at the Sundowner, reads as a riddle (Gerry, round 34).
-      return `${NPCS[nid].name} ${notHere} — he'll have gone home for the night. ` +
+      return `${NPCS[nid].name} ${notHere} — ${_pr(nid).s}'ll have gone home for the night. ` +
         (NPCS[nid].room === G.room
-          ? `Back here early doors is when you'll catch him.`
-          : `${_barName(NPCS[nid].room)}${_dupeBar(NPCS[nid].room) ? " out in " + (ROOMS[NPCS[nid].room].region || "") : ""}, early doors, is where you'll find him.`);
+          ? `Back here early doors is when you'll catch ${_pr(nid).o}.`
+          : `${_barName(NPCS[nid].room)}${_dupeBar(NPCS[nid].room) ? " out in " + (ROOMS[NPCS[nid].room].region || "") : ""}, early doors, is where you'll find ${_pr(nid).o}.`);
     if (!_npcActive(nid)) return `${NPCS[nid].name} isn't around right now.`; // not in at this hour / not here at all
     const cur = _npcRoom(nid);
     // Point the player to her only when she's at one of HER OWN bars (a
@@ -1695,10 +1744,11 @@ function _elsewhereLine(word) {
         // the publican watched Doyle leave the Vic, then got told he "was" at
         // The Shady Lady while sitting in it — round 32, 2026-08-30). The hedge
         // belongs on the FUTURE (he may move before you arrive), not the present.
-        return `${NPCS[nid].name} ${notHere} — he's at ${_barName(cur)} right now, ` +
-          `but he drifts about his end of town before ten, so he may not still be ` +
-          `there by the time you are. Ask after him when you get there, or catch ` +
-          `him at ${_barName(NPCS[nid].room)} later on; he always ends up there.`;
+        const pr = _pr(nid);
+        return `${NPCS[nid].name} ${notHere} — ${pr.s}'s at ${_barName(cur)} right now, ` +
+          `but ${pr.s} drifts about ${pr.p} end of town before ten, so ${pr.s} may not still be ` +
+          `there by the time you are. Ask after ${pr.o} when you get there, or catch ` +
+          `${pr.o} at ${_barName(NPCS[nid].room)} later on; ${pr.s} always ends up there.`;
       }
       return `${NPCS[nid].name} ${notHere} tonight — try ${_barName(cur)}` +
         (unseen ? `, over in ${reg}.` : ".");
@@ -2155,7 +2205,7 @@ function _describeRoom(full, forceFull) {
   }
   _say(r.name, "room");
   if (raining) {
-    _say(_sheltered(G.room)
+    _say(_underRoof(G.room)
       ? "Rain hammers the roof — a proper rainy-season downpour outside, and nobody's " +
         "stepping into that until it eases."
       : "Rain is coming down in sheets; the awning overhead is the whole habitable " +

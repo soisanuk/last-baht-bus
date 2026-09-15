@@ -8176,7 +8176,9 @@ test("Tan calls a lost first-timer at the halfway mark", () => {
 test("with nothing on the books, the game names what's actually open", () => {
   newGame();
   state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
-  state().known = { bert: true };
+  // MET, not merely named in print — _leads() reads _met() (G.talked), because
+  // "worth another word" is a claim that you have had one (class L, §3.4).
+  state().known = { bert: true }; state().talked = { bert: [0] };
   state().soc.drinks = { lek: 3 };
   state().visited = { beach_rd_c: true };
   state().room = "beach_rd_c";
@@ -8192,7 +8194,7 @@ test("with nothing on the books, the game names what's actually open", () => {
   // a stranger's job is a spoiler, not a lead — only people you've met
   newGame();
   state().stage = "vacation"; state().flags.act1Done = true;
-  state().known = {}; state().soc.drinks = {}; state().room = "beach_rd_c";
+  state().known = {}; state().talked = {}; state().soc.drinks = {}; state().room = "beach_rd_c";
   out = []; run("quests");
   assert.doesNotMatch(out.join("\n"), /Bert has something going/,
     "you have not met him — naming him would be a spoiler");

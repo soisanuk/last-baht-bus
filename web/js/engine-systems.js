@@ -351,12 +351,14 @@ function _navEnter() {
 // the scene panel and the chip bar, and a wheel with one live arrow and three
 // dead ones reads as broken.
 function _navHere() {
-  // _sheltered() is the game's existing "indoors" test (rain uses it to decide
-  // what counts as diving inside), so reuse it rather than inventing a second
-  // definition that can drift from it. It misses the hotel rooms — they are
-  // neither bar nor shop — and they are exactly the case that motivated this:
-  // hotel_room lists BOTH `out` and `s` to the same soi, so a naive test lit
-  // one arrow and greyed three, which reads as a broken compass.
+  // _underRoof() is the game's "there is a roof over your head" test, so reuse
+  // it rather than inventing a second definition that can drift from it. (It
+  // was _sheltered() — "you can dive in HERE" — which is also true of the Soi 6
+  // pavement, so the game's most-walked street hid its own compass.) Both miss
+  // the hotel rooms — they are neither bar nor shop — and they are exactly the
+  // case that motivated this: hotel_room lists BOTH `out` and `s` to the same
+  // soi, so a naive test lit one arrow and greyed three, which reads as a
+  // broken compass; the Your Room check below is what catches them.
   const r = _room();
   // …with ONE exception: a torch still burning indoors. The compass is a street
   // tool and hides inside, which took the torch button with it — so a player
@@ -365,7 +367,7 @@ function _navHere() {
   // tappable way to obey. Three separate times she had to reach for a keyboard
   // she does not enjoy using (round 24, Pauline). The compass shows indoors
   // only while the light is on, and _navDirs greys the directions out.
-  if (!r || (typeof _sheltered === "function" && _sheltered(G.room)))
+  if (!r || (typeof _underRoof === "function" && _underRoof(G.room)))
     return !!(G && G.lightOn);
   if (/^Your Room/.test(r.name || "")) return false;
   return _navDirs().length > 0;
@@ -2330,7 +2332,10 @@ function _act1Progress() {
 // high-water mark of how far down the path you got, so each run measures against
 // your best. The mark is the one thing carried across the newGame().
 const _ACT1_FAIL_LEDE = {
-  dawn: "The gulf goes grey, then pink. 04:00. The baht buses are carrying home " +
+  // NO HOUR HERE — the sibling of the sandbox dawn line, and wrong for the same
+  // reason: it said 04:00 when the night ended at 04:00 and kept saying it after
+  // the night was lengthened to 06:00 (2026-09-07). The sky is the clock.
+  dawn: "The gulf goes grey, then pink. The baht buses are carrying home " +
     "everyone but you — you never made it back to 412, and the beach has you again.",
   collapse: "Your body files its objection before the bed ever gets a vote. You " +
     "fold up on the pavement, a long dark town short of room 412.",
@@ -2437,8 +2442,9 @@ function _questWhere(at) {
     // for two nights (Colin, round 37) — name the local, and the man who knows
     if (!room) {
       const local = _barName(NPCS[at].room);
-      return _fmt(" {who} isn't out tonight — {v} is his local. (ASK TAN ABOUT {WHO} knows his habits.)",
-        { who: NPCS[at].name, v: local || "his bar", WHO: NPCS[at].name.toUpperCase() });
+      const pr = _pr(at);   // three of the bench are women (Angela, Sandra, Josey)
+      return _fmt(" {who} isn't out tonight — {v} is {p} local. (ASK TAN ABOUT {WHO} knows {p} habits.)",
+        { who: NPCS[at].name, v: local || (pr.p + " bar"), p: pr.p, WHO: NPCS[at].name.toUpperCase() });
     }
     if (room === G.room || _regularsHere().includes(at)) return "";
     // A rail regular's location is true when it prints and can be false by the
@@ -2463,8 +2469,8 @@ function _questWhere(at) {
     const r = ROOMS[room];
     if (!r) return "";
     return _moves
-      ? _fmt(" {who} is at {v} in {r} right now — though he drifts, so ask after him when you get there.",
-          { who: NPCS[at].name, v: _barName(room), r: r.region })
+      ? _fmt(" {who} is at {v} in {r} right now — though {s} drifts, so ask after {o} when you get there.",
+          { who: NPCS[at].name, v: _barName(room), r: r.region, s: _pr(at).s, o: _pr(at).o })
       : _fmt(" {who} is at {v}, over in {r}.",
           { who: NPCS[at].name, v: _barName(room), r: r.region });
   }
@@ -2831,7 +2837,7 @@ function _leads() {
   //    naming a stranger is a spoiler, not a lead.
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (q.vignette || G.quests[qid] || !q.giver) continue;
-    if (!G.known || !G.known[q.giver] || !NPCS[q.giver]) continue;
+    if (!_met(q.giver) || !NPCS[q.giver]) continue;
     if (!_questAvailable(qid)) continue;
     const where = _questWhere(q.giver);
     out.push(_fmt("{who} has something going — worth another word.{where}",
@@ -3086,7 +3092,7 @@ function _tanAbout(topic) {
   // a person you do not find — one who finds you, by phone (Margarethe, round 47:
   // "Second Road (Central), every night" for a woman who is never on any street)
   if (NPCS[id].offmap) {
-    _say(`“${NPCS[id].name}.” Tan does not consider the mirror. “Not a person you find, my friend. A person who finds you — on the phone, when she wants to. That is the whole of what I know, and it is more than most.”`);
+    _say(`“${NPCS[id].name}.” Tan does not consider the mirror. “Not a person you find, my friend. A person who finds you — on the phone, when ${_pr(id).s} wants to. That is the whole of what I know, and it is more than most.”`);
     return true;
   }
   // An AUTHORED read outranks the locator: Tan had a whole node on Eddy that
@@ -3094,7 +3100,7 @@ function _tanAbout(topic) {
   // answered the name first (Pimmy, round 47).
   { const d = _pickDialogue("tan", t); if (d && d.topic) return false; }
   if (_TAN_READ[id]) {
-    if (!(G.known && G.known[id])) { _say("“Meet him first, my friend. Then I tell you who he is — and I will already know.”"); return true; }
+    if (!_met(id)) { _say("“Meet him first, my friend. Then I tell you who he is — and I will already know.”"); return true; }
     _say(`“${NPCS[id].name}.” The grin. “${_TAN_READ[id]}.”`);
     return true;
   }
@@ -3142,7 +3148,7 @@ function _tanAbout(topic) {
 function _tanOthers() {
   const cast = ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry", "kyle"]
     .filter(id => NPCS[id] && _npcActive(id));            // the one you ARE is not out there
-  const met = cast.filter(id => G.known && G.known[id] && (G.talked && G.talked[id]));
+  const met = cast.filter(_met);
   const rest = cast.filter(id => met.indexOf(id) < 0);
 
   // Too early: he doesn't hand a stranger the passenger list.
@@ -3547,7 +3553,7 @@ function _tanCall() {
         "one time tonight. The rest is legs.\" Click.");
       return;
     }
-    if (ROOMS[G.room] && !/^(Jomtien|Thappraya|Pratumnak)$/.test(ROOMS[G.room].region)) {   // Thappraya is not "in town" (Judith, round 47: ฿5 on the hill, told to walk)
+    if (_inTown()) {   // the named predicate — Thappraya, Pratumnak and the Darkside are not "in town" (Judith, round 47: ฿5 on the hill, told to walk)
       _say("\"You are already in town.\" A pause while he works out whether you know that. " +
         "\"Walk, my friend. It is four minutes and you will see something.\" Click.");
       return;
@@ -4430,7 +4436,7 @@ function _maybeIncomingText() {
   // ladies only: the unprompted-text machinery (invites, scam-asks, selfies) is
   // girl-voiced through and through — Tan (no NPC_ROLES entry) texts back when
   // texted, never into the mama-sick patter
-  let contacts = Object.keys(G.phone.contacts).filter(id => NPC_ROLES[id] || id === "priew");   // the girl from the clinic is a LINE contact who texts (Judith, round 47: four identical replies, nothing unprompted)
+  let contacts = Object.keys(G.phone.contacts).filter(_texts);   // "a contact who texts", not "works a bar floor" (Judith, round 47: Priew never sent one)
   // the affair's endings reach the phone too (Frank, 2026-08-26: the in-love
   // text pool kept sending the morning after she left). Gone is gone — silence
   // is her whole statement. Won gets its own register: Prachuap, not a barstool.
@@ -4890,7 +4896,7 @@ function _startRain(len) {
   if (G.dog) {
     if (_room().barType === "beer") {
       _say(_dogN(_DOG_RAIN_BAR[Math.floor(_rand() * _DOG_RAIN_BAR.length)]), "dim");
-    } else if (!_sheltered(G.room)) {
+    } else if (!_underRoof(G.room)) {
       _say(_dogN(_DOG_RAIN_STREET[Math.floor(_rand() * _DOG_RAIN_STREET.length)]), "dim");
     }
   }
@@ -7446,7 +7452,10 @@ const _SYN_FRICTION = [
   "The beer uncle's Hilux comes at eleven instead of nine. Not a problem, " +
     "except the fridges were empty until eleven.",
   "A crate you paid for isn't in the delivery. The uncle is genuinely sorry, " +
-    "rings somebody, shrugs. It arrives Thursday. It is Saturday.",
+    // THE WEEKDAYS ARE COMPUTED, not typed: the joke is that the day he names
+    // has already gone past, and a fixed pair of weekday names is only that joke
+    // five days in seven (class K — a claim the engine never made).
+    "rings somebody, shrugs. It arrives {gone}. It is {today}.",
   "One of the girls asks, very politely, whether the bar is going to be all " +
     "right. You say yes. She nods as though you had said something else.",
   "A form you have never seen before needs a stamp from an office that shuts " +
@@ -7465,7 +7474,8 @@ function _synFrictionTick() {
   // scales with how far outside you've stayed, and never becomes a drumbeat
   if (_rand() > Math.min(0.25 + st.friction * 0.12, 0.6)) return;
   st.frictionDay = G.day;
-  _say(_pickVary(_SYN_FRICTION, "synfriction"), "dim");
+  _say(_fmt(_pickVary(_SYN_FRICTION, "synfriction"),
+    { today: _weekday(), gone: WEEKDAYS[(G.day + 5) % 7] }), "dim");
 }
 
 // ── Dog-name easter eggs ─────────────────────────────────────────────────────
@@ -9267,7 +9277,7 @@ function _waenWord() {
   return pool[_hh("waen:" + G.vacation + ":" + G.day, 29) % pool.length];
 }
 function _waenTick() {
-  if (!G.phone || G.battery <= 0 || !G.talked || !G.talked.waen) return;   // met, not merely named in print (Judith, round 47: homework to a stranger)
+  if (!G.phone || G.battery <= 0 || !_met("waen")) return;   // met, not merely named in print (Judith, round 47: homework to a stranger)
   // the link, once, after the first hour she was actually paid for
   if (_flag("lessonTaken") && !_flag("waenLink")) {
     _setFlag("waenLink");

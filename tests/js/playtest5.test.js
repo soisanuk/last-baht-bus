@@ -942,11 +942,12 @@ test("a printed verbal-action hint parses after an intervening ask (the chips mo
 
 test("ASK TAN ABOUT <someone> places them: the manifest men get his read, anyone else a driver's placing", () => {
   G.room = _npcRoom("tan"); doCommand("talk to tan");
-  G.known.candy = true; out = [];
+  // his read is gated on having MET the man — his own line is "meet him first"
+  G.known.candy = true; G.talked.candy = [0]; out = [];
   doCommand("ask tan about candy");
   assert.doesNotMatch(text(), /That one I don't know|Not my story/);
   assert.match(text(), /Candy|Candy Bar/);
-  G.known.wayne = true; out = [];
+  G.known.wayne = true; G.talked.wayne = [0]; out = [];
   doCommand("ask tan about wayne");
   assert.match(text(), /Wayne/);
   assert.match(text(), new RegExp(_TAN_READ.wayne.slice(0, 20).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));

@@ -586,7 +586,7 @@ function _managerWelcome() {
   _addHappy(1);
   let pool = (NPCS[id].shot && NPCS[id].shot.length) ? NPCS[id].shot : _MGR_SHOT;
   // "New face" on a fifth visit read as amnesia (27-night playtest 2026-08-22)
-  if ((G.soc.manDrinks && G.soc.manDrinks[id]) || (G.known && G.known[id])) pool = pool.filter(s => !/New face/.test(s));
+  if ((G.soc.manDrinks && G.soc.manDrinks[id]) || _met(id)) pool = pool.filter(s => !/New face/.test(s));
   if (!pool.length) pool = _MGR_SHOT.filter(s => !/New face/.test(s));
   _say(_fmt(_pickVary(pool, "mgrshot:" + id), { n: NPCS[id].name, bar: _barName(G.room) || "the bar" }) +
     " (Stand him a BUY MAN DRINK when you've been bending his ear.)", "win");
@@ -766,7 +766,11 @@ const _LOCKIN_GAMES = [
     "the chorus two of the girls are on the bar and one of the girls is on the punter, and the " +
     "mamasan is refereeing with a wooden spoon.",
   "\"Ah,\" says the lifer at the end, watching the far corner with the fond, unfocused eye of " +
-    "a man who has seen it. \"The Thursday thing.\" He does not elaborate. It is not Thursday.",
+    // "It is not Thursday" was a claim about tonight that the line never checked —
+    // and a lock-in on a Thursday made the joke contradict the calendar. The
+    // vagueness IS the joke, so it keeps it and drops the day (class K).
+    "a man who has seen it. \"The Thursday thing.\" He does not elaborate, and nobody " +
+    "in the room asks him which Thursday.",
   "A shirt goes over the bell rope. A second shirt goes over the first. You are fairly sure " +
     "neither of them started the evening on the customer side of the bar.",
 ];
@@ -4244,8 +4248,12 @@ function _endNight(reason) {
   }
   switch (reason) {
     case "dawn":
+      // NO HOUR IN THIS LINE. It said 04:00 for the game's whole life and kept
+      // saying it after the night was lengthened to 06:00 (2026-09-07) — the
+      // clock moved and the prose didn't, which is the whole of class K. The sky
+      // is the time; nothing here needs a number.
       _say("The sky over the gulf goes grey, then pink, and even Pattaya blinks. " +
-        "04:00. The last bars stack their stools; the baht buses carry home the " +
+        "The last bars stack their stools; the baht buses carry home the " +
         "wreckage; somewhere a rooster who fears nothing starts up. You drift " +
         "back and let the day take you.", "room");
       break;
@@ -4267,7 +4275,7 @@ function _endNight(reason) {
           "into a Darkside dawn: dogs, roosters, one motorbike, and a sky already too " +
           "bright, and behind you the stools go up as if none of it happened.", "win");
       } else if (!_herDawn) {
-        _say(_pickVary(_inBar() ? _ALLNIGHTER_LINES : (_sheltered(G.room) ? _ALLNIGHTER_INDOORS : _ALLNIGHTER_STREET), _inBar() ? "allnighter" : (_sheltered(G.room) ? "allnighterin" : "allnighterst")), "win");
+        _say(_pickVary(_inBar() ? _ALLNIGHTER_LINES : (_underRoof(G.room) ? _ALLNIGHTER_INDOORS : _ALLNIGHTER_STREET), _inBar() ? "allnighter" : (_underRoof(G.room) ? "allnighterin" : "allnighterst")), "win");
       }
       if (!_herDawn) _addHappy(2); // the big night out is a WIN — the invoice is the morning (her goodbye paid its own)
       break;

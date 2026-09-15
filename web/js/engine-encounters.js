@@ -9,6 +9,12 @@
 
 const ENC_COOLDOWN = 12; // min turns between encounters
 const ENC_CHANCE = 0.2;  // roll per eligible arrival (dialled 0.3->0.2, ~a third fewer, 2026-08-22)
+// A bar-hop stop is an hour of the night, and the prose says so out loud ("her
+// friend's bar swallows an hour") while the clock moved six minutes — the
+// multi-stop half of class K (docs/persona-findings-systemic.md §3.3), the same
+// defect the night ride already fixed with RIDE_STOP_TURNS. Pinned in
+// tests/js/templates.test.js: every re-enterable step must cost more than a turn.
+const BFHOP_TURNS = 10;
 
 // Print an interactive encounter's prompt AND stash it on G, so restoring a
 // save (or UNDO) mid-encounter can redraw it. Without this the load shows only
@@ -1216,6 +1222,14 @@ const _ENC = {
     seq.spent += round;
     seq.stage = (seq.stage || 0) + 1;
     if (seq.stage === 1 && G.money > 0) {
+      // the hour her friend's bar swallows, actually swallowed. Offstage (you are
+      // in somebody else's bar, not yours), and capped short of dawn so a late
+      // detour can't fast-forward a paid LT into an involuntary rough wake — the
+      // same cap the on-site short time uses.
+      G.offstage = true;
+      const ended = _passTime(Math.min(BFHOP_TURNS, Math.max(0, NIGHT_TURNS - 1 - G.nightTurn)));
+      G.offstage = false;
+      if (ended) return;
       G.bfSeq = seq;
       G.pendingEnc = "bfhop";
       _encPrompt(

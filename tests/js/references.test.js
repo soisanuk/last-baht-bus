@@ -246,3 +246,76 @@ test("no revisit line claims a time of day it cannot know", () => {
         bad.push(`${id}.revisit[${i}]: "${t.slice(0, 90)}" — this prints at 03:00 too`);
   assert.deepEqual(bad, [], "a revisit line fires at any hour; move the clock into lateDesc");
 });
+
+// ── THE CLOCK IN PROSE (class K, docs/persona-findings-systemic.md §3.3) ─────
+// The hour-blind lint above reads `revisit` lines. This is the same rule over
+// the WHOLE corpus: a string may not assert an hour or a weekday the game did
+// not compute. The engine holds `G.nightTurn` and `G.day` and prints them
+// through `_clockStr()`, `_weekday()`, `_shiftPayday()` and `_leagueIn()` — any
+// other clock in the prose is a number somebody typed, and it goes wrong the
+// moment the calendar moves under it. It went wrong exactly that way when the
+// night was lengthened from 04:00 to 06:00 (2026-09-07): two dawn ledes kept
+// printing "04:00" for a night that now ran two hours past it.
+//
+// NARROW ON PURPOSE, the same call as the revisit lint. The broad form of these
+// regexes — any \d{1,2}(am|pm), any weekday, any "N nights" — flags 139 records
+// of which 136 are fine: a character's own past ("she put it to me straight, one
+// Tuesday"), her stated rota ("every Sunday I call him"), a plan ("I sign
+// Friday"), the idiom ("for us it is Tuesday"), a menu, a poster, the Owl
+// referring to its own bake's weekday. A lint whose every hit is benign teaches
+// people to skip it, so this one matches only the shape that is a claim about
+// NOW — "it is <weekday>", "it is gone <hour>", a bare clock standing as its own
+// sentence — which is the shape all three live defects had. The "N nights" arm
+// of the sweep is deliberately absent: every hit it produced was a counted
+// quantity the engine really had (`chamDays.length >= 3`, the Owl writing to a
+// reader), and a zero-finding regex is a regex people learn to ignore.
+//
+// Fixing one means either routing the day through a computed token (the
+// procurement-friction line says "{gone}"/"{today}" now) or making the sentence
+// clock-blind (the lock-in lifer no longer says which Thursday it isn't).
+test("no prose asserts a clock or a weekday the game never computed", () => {
+  // A record built from the calendar helpers is honest by construction.
+  const COMPUTED = /_clockStr\(|_weekday\(|_shiftPayday\(|_leagueIn\(|WEEKDAYS\[/;
+  const DAY = "(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day";
+  const PATTERNS = [
+    // "…then pink. 04:00. The baht buses…" — a clock used as narration
+    ["a bare clock stated as narration", /(?:^|[.!?—]\s*)\d{1,2}:\d{2}\s*[.!?—]/],
+    ["'it is <hour>'", /\b(?:it is|it's|it was)\s+(?:gone |just gone |nearly |almost |past )?\d{1,2}(?::\d{2})?\s?(?:a\.?m\.?|p\.?m\.?|o'clock)\b/i],
+    ["'it is <weekday>'", new RegExp(`\\b(?:it is|it's|it ain't|today is|tonight is|is not|isn't)\\s+(?:not\\s+)?${DAY}\\b`, "i")],
+    ["'<n> hours ago'", /\b\d+ hours? ago\b/i],
+    ["'morning already'", /\bmorning already\b/i],
+  ];
+  // Each keyed on a stable substring of the line, with the reason it is honest —
+  // in every case the engine DID compute the fact, at the gate rather than in
+  // the sentence, which is the one thing these regexes cannot see.
+  const OK = [
+    ["For us it is Tuesday",
+      "Somsak's idiom — the point is that the day is unremarkable, not which day it is."],
+    ["It is gone 1 a.m.",
+      "the booking encounter is gated on nightTurn >= 70 (01:00), so the hour is computed by the gate."],
+    ["Morning already",
+      "_endRide's dawn close, reached only past SUNRISE_TURN - 10; the earlier stop-cap branch " +
+      "deliberately says 'morning is coming' instead (Kenji, round 47)."],
+    ["Today is not Friday",
+      "_curryNote() is printed only when !_curryDay()."],
+    ["It is enormous and it is Sunday",
+      "_QV_ROAST_LINES print only while _roastOn() — the roast IS the day."],
+  ];
+  const bad = [];
+  for (const r of records) {
+    if (COMPUTED.test(r.text)) continue;
+    // an _fmt token or a template expression is a computed value, not a claim
+    const t = r.text.replace(/\$\{[^}]*\}/g, " ").replace(/\{\w+\}/g, " ");
+    if (OK.some(([sub]) => t.includes(sub))) continue;
+    for (const [what, re] of PATTERNS) {
+      const m = re.exec(t);
+      if (!m) continue;
+      bad.push(`${r.ref}: ${what} — "${t.slice(Math.max(0, m.index - 30), m.index + 70).trim()}"`);
+      break;
+    }
+  }
+  assert.deepEqual(bad, [],
+    "prose states a time the engine never computed — route it through _clockStr/_weekday/" +
+    "_shiftPayday (or an _fmt token fed by them), make the sentence clock-blind, or add it " +
+    "to this test's OK list with the gate that makes it honest");
+});
