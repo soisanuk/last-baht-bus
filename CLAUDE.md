@@ -22,6 +22,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   than duplicating. Anything it needs from us — today the one live item is that `G.ccibRadar`
   rides the full save but is **not** a `BATON_FIELDS` entry — is requested through the user.
 
+- **`~/projects/soundings`** — a DFIR / threat-hunting case-graph service (created
+  2026-09-15, concept + `HANDOFF.md` only) that ADOPTS the known-subgraph design from here
+  (`docs/known-subgraph.md`, `_frontier`, the world graph and its four tests). Same rule:
+  it treats this repo as **read-only upstream**; the design paper stays HERE; requests go
+  through the user.
+
 **`scripts/gen-portraits.py` REGENERATES EVERY PORTRAIT.** Running it rewrites all
 ~315 PNGs as pixel art, which silently clobbers the art agent's full-size SDXL
 renders. After adding a CHARS spec and running it, restore theirs immediately:
