@@ -18,9 +18,9 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "A trip to Khao Chi Chan near Pattaya is one that you should not skip",
-    "s": "Thaiger",
-    "d": "07 Sep 2026"
+    "t": "Pattaya’s never-ending fight for room on already narrow streets",
+    "s": "Pattaya Mail",
+    "d": "15 Sep 2026"
   },
   {
     "t": "Indian tourists allege theft after sexual services with Pattaya women",
@@ -38,7 +38,7 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "Pattaya businesses keep trading through rain, floods and changing weather",
+    "t": "Miss International Queen 2026 celebrates beauty, culture and equality",
     "s": "Pattaya Mail",
     "d": "15 Sep 2026"
   },
@@ -48,8 +48,13 @@ var NEWS_FEED = [
     "d": "14 Sep 2026"
   },
   {
-    "t": "Cambodia and Thailand begin UN-backed conciliation on maritime dispute",
-    "s": "Reuters",
+    "t": "Thailand and Cambodia begin UN conciliation process over disputed maritime claims",
+    "s": "AP News",
+    "d": "15 Sep 2026"
+  },
+  {
+    "t": "Thailand Seeks to Seal US Tariff Deal Before Anutin-Trump Talks",
+    "s": "bloomberg.com",
     "d": "15 Sep 2026"
   },
   {
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "Thailand: New Poll Shows Majority Calls For Tougher Action Over Behavior Of Some Israelis",
-    "s": "i24NEWS",
-    "d": "14 Sep 2026"
-  },
-  {
-    "t": "Thailand orders Jewish cemetery near Bangkok cleared, four graves moved",
-    "s": "Ynetnews",
+    "t": "Iran fuels anti-Israel sentiment in Thailand",
+    "s": "www.israelhayom.com",
     "d": "15 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-15","USD":33.3,"AUD":23.72,"GBP":44.88,"EUR":38.42};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-16","temp":28,"humid":82,"code":3,"hi":31,"rain":63};
+var WX_NOW = {"date":"2026-09-16","temp":30,"humid":72,"code":2,"hi":31,"rain":90};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4295,"date":"2026-09-15","baht":67650};
+var GOLD = {"usd":4324,"date":"2026-09-16","baht":68100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":75814,"thb":2521828};
+var BTC = {"usd":75903,"thb":2524965};
