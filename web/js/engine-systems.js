@@ -1710,10 +1710,7 @@ function _rideBike(id) {
     "Honda Wave with a milk crate bungeed on the back", "Click with a Doraemon sticker over the fuel cap"];
   return bikes[_hh(String(id) + ":bike", 23) % bikes.length];
 }
-function _rideNickname(id) {
-  const names = ["{{Nong}} Handsome", "Khun Big", "Farang Neung", "Papa Bear", "Mister Tomorrow", "Khun Slow"];
-  return names[_hh(String(id) + ":nick", 29) % names.length];
-}
+function _rideNickname(id) { return _herNameForYou(id); }   // one list, in engine-play, so the rail and the ride agree
 function _pickRideVenue(seen) {
   // Soi 6 mode fences Walking Street off entirely (the mode blocks you from walking
   // there and calls it off-map), so a ride that drops you in "Walking Street's big

@@ -3025,8 +3025,9 @@ const _REL_GREET = {
       "costs her something, and keeps your stool clear with a bag on it.",
   ],
   3: [
-    n => `${n} lights up like payday and calls you the name she uses for nobody else. She's told her ` +
-      "friends about you — you can tell by how they look over. Around here, that's as close to a " +
+    (n, k) => `${n} lights up like payday and calls you ${k} — the name she uses for nobody else, ` +
+      "decided one night without consulting you and never once dropped since. She's told her " +
+      "friends about you; you can tell by how they look over. Around here, that's as close to a " +
       "girlfriend as the arithmetic allows.",
     n => `${n} is across the room and under your arm before the door's shut, announcing you to the bar ` +
       "without a word. Whatever this is, she's stopped pretending it's business.",
@@ -3046,8 +3047,16 @@ function _relGreeting(id) {
   const t = _bondTier(id);
   if (t < 1) return;
   const pool = _REL_GREET[t];
-  _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name), t >= 2 ? "win" : "");
+  _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name, _herNameForYou(id)), t >= 2 ? "win" : "");
 }
+
+// The name she calls you and nobody else. It was only ever SPOKEN on a night
+// ride, while the her-farang greeting had been *describing* it — unsaid — every
+// time you walked in (Geraint, round 47: eleven nights at that tier and he never
+// once heard it). One list, keyed on HER, so the woman who named you on the back
+// of a bike is using the same name across the rail the next evening.
+const _HER_NAME_FOR_YOU = ["{{Nong}} Handsome", "Khun Big", "Farang Neung", "Papa Bear", "Mister Tomorrow", "Khun Slow"];
+function _herNameForYou(id) { return _HER_NAME_FOR_YOU[_hh(String(id) + ":nick", 29) % _HER_NAME_FOR_YOU.length]; }
 
 // Walking into a bar where you're still a stranger, your street reputation
 // arrives a half-step ahead of you — but only at the notable ends of the scale
@@ -3265,6 +3274,12 @@ const _OTHER_LEDGER = {
       `stamp, once. "Bar take most. I take ฿${LADY_CUT}." No complaint in it at all; she is ` +
       `explaining a system she has worked inside for years, to a man who has been inside it for a ` +
       `week. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
+    (n) => `${n} makes you watch the barman build her drink, because she tells you to. Ice to the top, ` +
+      `a short pour, tonic over it until the colour goes. "Lady drink," she says, and turns the glass ` +
+      `so the ice knocks. "Weak one. Must be." She has eight of these in her if the night goes well, ` +
+      `and a girl who cannot take eight is a girl who goes home early. It costs ฿${_ladyPrice()}, ` +
+      `of which ฿${LADY_CUT} is hers — she says it the way she'd tell you which songthaew goes to ` +
+      `Naklua, and asks whether you want another one.`,
   ],
   // tier 2 — the cost of you. Being liked is expensive: the seat she keeps is
   // the seats she doesn't fill, and the month is counted in drinks, not affection.
@@ -3286,6 +3301,12 @@ const _OTHER_LEDGER = {
       `more than man who spend big one time — for me, not for bar. Bar want big one time." A beat. ` +
       `"So when mama say why you no work the door tonight, I say: he come back. And she look at ` +
       `the book." The book, you now understand, does not have a column for that.`,
+    (n) => `A man at the far end has been talking to the mamasan for a while now and looking this way ` +
+      `while he does it. ${n} says something across the rail — pleasant, short, final — and the ` +
+      `mamasan spreads her hands at him and goes back to her phone. "He want take me out." ${n} ` +
+      `picks her glass back up. "I say I sit with my friend." She does not tell you what that was ` +
+      `worth and does not appear to want you to ask. The sum was done in front of you regardless, ` +
+      `and you are now a man who has watched it being done.`,
   ],
   // tier 3 — the arithmetic of a life. The month, the household, the years —
   // the figures the man across the table is one line item inside.
@@ -3307,6 +3328,11 @@ const _OTHER_LEDGER = {
       `"Depend." Down the bar somebody rings the bell and the room cheers, and she cheers too, on ` +
       `time, professionally, and then turns back to you and picks the sentence up exactly where ` +
       `she left it.`,
+    (n) => `You ask where she stays and get a longer answer than the question earned: a room off ` +
+      `Buakhao, ฿${ROOM_RENT} her share of it, two other girls, a rice cooker, one fan that works. ` +
+      `When the bar is near enough for walking she walks it, at three in the morning, rather than ` +
+      `pay the late fare — and says so without a flicker, because the late fare is the late fare ` +
+      `and she can count. "Is not far." She considers that. "Is far when rain."`,
   ],
 };
 // Fires when you sit down with a girl whose bond has crossed into a tier whose
@@ -3335,8 +3361,24 @@ function _otherLedger(id) {
   seen.push(due);
   G.ledgerSeen = (G.ledgerSeen || 0) + 1;   // how much of the other side you've been shown
   _say("");
-  _say(_pickVary(pool, "ledger" + due)(NPCS[id].name), "thai");
+  _say(_ledgerPick(id, due, pool)(NPCS[id].name), "thai");
   return true;
+}
+
+// The ledger book is PER WOMAN, so it could never repeat itself to you — and a
+// second woman handed you the first one's script anyway. Geraint (round 47,
+// eleven nights on four women) had Lek's folded-chit reveal come back verbatim
+// as Wilai's, and Nan's quota reveal again as Toey's: the tier is a thing the
+// TOWN shows you once, so the memory has to be town-wide. Pure hash, never dice
+// (a reveal must not depend on how many turns you took to reach it).
+function _ledgerPick(id, tier, pool) {
+  const heard = (G.soc.ledgerHeard = G.soc.ledgerHeard || {});
+  const told = heard[tier] = heard[tier] || [];
+  let pick = pool.map((_, i) => i).filter(i => !told.includes(i));
+  if (!pick.length) { told.length = 0; pick = pool.map((_, i) => i); }
+  const i = pick[_hh(id + ":ledger" + tier + ":" + told.length, 23) % pick.length];
+  told.push(i);
+  return pool[i];
 }
 
 function _bondTalk(id) {

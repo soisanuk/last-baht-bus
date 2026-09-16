@@ -1211,3 +1211,37 @@ test("the deepest-written woman is not the quietest: warmth outranks the ask-me-
   out = []; doCommand("talk to nan");
   assert.ok(!pool.some(l => text().includes(l.replace(/Lek/g, "Nan"))), "warmth is earned, not default");
 });
+
+test("a ledger reveal is a thing the TOWN shows you once, not a script each woman owns", () => {
+  // The book was per-woman, so it could never repeat itself — and the second
+  // woman handed over the first one's script anyway: Lek's folded-chit reveal
+  // came back verbatim as Wilai's (Geraint, round 48, four women in eleven nights).
+  const girls = Object.keys(NPC_ROLES).filter(id => NPC_ROLES[id] === "hostess").slice(0, 6);
+  const seen = [];
+  for (const id of girls) {
+    G.room = _npcRoom(id); G.soc.drinks[id] = 3;
+    out = []; _otherLedger(id);
+    const t = text().trim();
+    if (t) seen.push(t);
+  }
+  assert.ok(seen.length >= 3, "several women reach the first tier");
+  assert.equal(new Set(seen).size, seen.length, "no two women give the same tier-1 reveal while one is unheard");
+  // and the pools are deep enough that the town has more than a couple to show
+  for (const t of [1, 2, 3]) assert.ok(_OTHER_LEDGER[t].length >= 3, "tier " + t + " has depth");
+});
+
+test("the name she uses for nobody else is SAID, and it is the same name on the bike", () => {
+  // It was described on the rail every night and only ever spoken on a night
+  // ride, so eleven nights at her-farang tier never heard it (Geraint, round 48).
+  G.room = _npcRoom("lek"); G.soc.drinks.lek = 14;
+  const saved = _rand;
+  try {
+    _rand = () => 0.01;
+    out = []; _relGreeting("lek");
+  } finally { _rand = saved; }
+  const k = _herNameForYou("lek");
+  assert.ok(k && k.length, "she has a name for you");
+  assert.match(text(), new RegExp(k.replace(/[{}]/g, "").replace(/[.*+?^$()|[\]\\]/g, "\\$&")),
+    "the greeting says it out loud");
+  assert.equal(_rideNickname("lek"), k, "the rail and the ride agree");
+});

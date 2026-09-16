@@ -13974,6 +13974,7 @@ const LADY_CUT     = 60;   // her share of a LADY_DRINK — the bar keeps the re
 const BAR_QUOTA    = 30;   // lady drinks a month before the bonus starts
 const BAR_SALARY   = 9000; // the monthly base a Soi 6 bar pays; everything else is commission
 const HOME_SEND    = 7000; // what a month typically sends north — before she has eaten
+const ROOM_RENT    = 4000; // her share of a room off Buakhao — two or three girls to it
 
 // ── The staff affair ─────────────────────────────────────────────────────────
 // You can fall for a girl on your own floor — the classic bar-owner story, and
