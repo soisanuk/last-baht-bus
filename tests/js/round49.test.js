@@ -268,3 +268,99 @@ test("the killer table has a king, and he has to keep turning up", () => {
   assert.doesNotMatch(text(), /still on the chalk|cue is leaning against your stool/,
     "nobody is hunting a man who holds nothing");
 });
+
+test("the table signposts are derived, and name only bars you have found", () => {
+  // Two hard-coded lists named two different pairs of bars, neither matching the
+  // other and neither including the Lucky Tiger — of eight tables in town. Asked
+  // in the Blue Dog, the pool line sent a man to Walking Street and the Darkside
+  // and never mentioned the Stinky Pinky across the road (Kevin, round 50).
+  const tables = Object.keys(ROOMS).filter(id => ROOMS[id].pool);
+  assert.ok(tables.length >= 6, "there are plenty of tables");
+  G.room = "blue_dog"; G.visited = {}; G.heardOf = {};
+  out = []; doCommand("play pool");
+  assert.doesNotMatch(text(), /Midnight Sun|Daeng/, "it does not name bars you have never found");
+  assert.match(text(), /ask around for a table/i);
+  // …and once you know one, it is named
+  G.visited = { lucky_tiger: true };
+  out = []; doCommand("play pool");
+  assert.match(text(), /Lucky Tiger/, "a bar you have stood in is named");
+  out = []; doCommand("play killer");
+  assert.match(text(), /Lucky Tiger/, "and both signposts agree, because both are derived");
+});
+
+test("Bert hands back chalk only while it is still up", () => {
+  G.room = "stinky_bar"; _setFlag("wonLeague");
+  G.kpTitle = { stinky_bar: { since: 1, defended: 0 } };
+  out = []; doCommand("ask bert about league");
+  assert.match(text(), /name-chalk|King of the killer table/, "champion gets the champion's scene");
+  G.kpTitle = {}; G.talked = {};
+  out = []; doCommand("ask bert about league");
+  assert.doesNotMatch(text(), /name-chalk on the bar like evidence/, "…and the deposed do not");
+  assert.match(text(), /Held it, lost it/, "the man who crowned you noticed");
+});
+
+test("the slate is a thing in the room, not one line every third night", () => {
+  G.kpTitle = { stinky_bar: { since: 1, defended: 2 } };
+  G.room = "beach_rd_n";
+  out = []; doCommand("go stinky pinky");
+  assert.match(text(), /name is on the slate/, "the room carries standing state");
+  out = []; doCommand("examine chalk");
+  assert.match(text(), /your name/i);
+  assert.match(text(), /2 marks/, "the bar keeps the count for you");
+  G.kpTitle = {};
+  out = []; doCommand("examine chalk");
+  assert.match(text(), /not yours/, "…and when it is not yours it says so");
+});
+
+test("winner stays on, and losing the frame loses the table", () => {
+  // Won for the table four times in a week: no challenger, no hold, not a word.
+  G.room = "lucky_tiger"; G.money = 0; G.poolHold = {};
+  let held = false;
+  for (let i = 0; i < 40 && !held; i++) {
+    out = []; doCommand("play pool");
+    let guard = 0; while (G.game && guard++ < 90) doCommand("shot");
+    if (/You stay on/.test(text())) held = true;
+  }
+  assert.ok(held, "a frame played for nothing is played for the table");
+  assert.ok(G.poolHold.lucky_tiger >= 1, "and the hold is counted");
+  let lost = false;
+  for (let i = 0; i < 40 && !lost; i++) {
+    out = []; doCommand("play pool");
+    let guard = 0; while (G.game && guard++ < 90) doCommand("shot");
+    if (!/You stay on/.test(text())) lost = true;
+  }
+  assert.ok(!G.poolHold.lucky_tiger, "the table goes with the frame");
+});
+
+test("trying to start the game you are already playing is not a free shot", () => {
+  G.room = "stinky_bar"; G.money = 5000;
+  doCommand("play pool");
+  const before = { you: G.game.you, opp: G.game.opp };
+  out = []; doCommand("play pool");
+  assert.match(text(), /already on pool/i);
+  assert.deepEqual({ you: G.game.you, opp: G.game.opp }, before, "no ball moved");
+});
+
+test("a man who is out is not being let have the table", () => {
+  // "steps back to let you have the table" landed one line under "That was your
+  // last life" (Kevin, round 50).
+  assert.ok(_KP_POT_OUT.length >= 2, "the eliminated pool exists");
+  for (const line of _KP_POT_OUT)
+    assert.doesNotMatch(line, /let you have the table|steps back to let you|\byour shot\b/i,
+      "nothing in the out-pool hands the table to a man with no lives");
+  // and the live pool, which DOES address you, is only reachable while you are in
+  assert.ok(_KP_POT.some(l => /let you have the table/.test(l)), "the in-play pool still has it");
+});
+
+test("the room with the table can discuss the table", () => {
+  // `ask <anyone> about killer` answered everywhere; `about pool` — the word a
+  // player types, in the bar with the table in it — fell through to the greeting.
+  const miss2 = /not my story|wrong (girl|man|mama)|I don't know about that|That one I don't know|No idea, mate/i;
+  G.room = "lucky_tiger"; G.day = 2;
+  out = []; doCommand("ask ratana about pool");
+  assert.doesNotMatch(text(), miss2, "the mamasan whose floor it stands on");
+  assert.match(text(), /PLAY POOL/);
+  G.room = "candy_bar";
+  out = []; doCommand("ask candy about pool");
+  assert.doesNotMatch(text(), miss2, "a bar with no table says so");
+});

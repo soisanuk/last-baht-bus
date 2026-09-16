@@ -2509,6 +2509,14 @@ function _describeRoom(full, forceFull) {
   if (typeof _hasPoster === "function" && _hasPoster()) {
     _say("A promo poster of one of the girls hangs by the door. (POSTER)", "dim");
   }
+  // Your name on the slate is standing state, so the ROOM carries it — the title
+  // used to exist only in one arrival line on league nights, and the bar it hung
+  // in said nothing about it on any other night (Kevin, round 50).
+  if (G.kpTitle && G.kpTitle[G.room]) {
+    const _t = G.kpTitle[G.room];
+    _say("Your name is on the slate behind the till" +
+      (_t.defended ? `, with ${_t.defended === 1 ? "a mark" : _t.defended + " marks"} beside it` : "") + ".", "dim");
+  }
   if (_salengHere()) { // a parked cart re-announces itself so a reload isn't blind to it
     const c = _SALENG_CARTS[G.salengCart];
     _say(c.here + " " + c.hint, "dim");

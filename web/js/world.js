@@ -12366,12 +12366,22 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"The White Dish thing? Told the old man to hold, and he did. Gavin came back once, all " +
           "smiles, took the no like it was a delivery running late.\" A crooked grin. \"They'll be back — " +
           "they always are. But not tonight, and not while I'm behind this bar. Your beer's poured, bud.\"" },
-      { topic: "league", req: ["wonLeague"],
+      { topic: "league", req: ["wonLeague"], when: () => !!(G.kpTitle && G.kpTitle[G.room]),   // he was handing back chalk that came down twenty minutes ago (Kevin, round 50)
         text: "\"Here he is.\" Bert reaches under the till and sets your name-chalk on the bar like " +
         "evidence. \"King of the killer table. That goes up behind the till tonight — half the rail will be sick of " +
         "hearing about it by Sunday, other half wants a rematch with money on.\" He slides a Singha across, on the house, " +
         "which from Bert is a civic honour. \"Defend it next league night, or don't. Champions get to be busy.\"",
         short: "\"King of the killer table. Defend it next league night, or don't — champions get to be busy.\"" },
+      // …and the man who crowned you is the man who watched it come off you. A
+      // return channel: he handed the chalk back twenty minutes after it was
+      // wiped, because the node only asked whether you had EVER won (Kevin, round 50).
+      { topic: "league", req: ["wonLeague"], when: () => !(G.kpTitle && G.kpTitle[G.room]),
+        text: "Bert looks at the space behind the till where your chalk was, then at you, and " +
+          "does you the courtesy of not making a thing of it. \"Held it, lost it. That's the " +
+          "table.\" He wipes the same patch of bar he always wipes. \"Every man whose name has " +
+          "been up there has had it come down. The ones worth anything come back on the third " +
+          "night and put it up again.\" A shrug. \"Hundred baht. Same as it was.\"",
+        short: "\"Held it, lost it. That's the table. Come back on the third night — hundred baht, same as it was.\"" },
       { topic: "league", text: "\"Killer pool. Everybody's got three lives, pot or " +
         "you lose one, last man standing takes the pot. Every third night, right " +
         "here. Half the piwins in North Pattaya play. Bring your hundred baht and " +

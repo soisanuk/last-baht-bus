@@ -1698,7 +1698,7 @@ test("mini-games only where the furniture exists", () => {
   assert.match(lastOut(), /No Connect 4 board here/i);
   state().room = "candy_bar";
   run("play pool");
-  assert.match(lastOut(), /No pool table here/i);
+  assert.match(lastOut(), /No table in here|ask around for a table/i);
   assert.equal(state().game, null);
 });
 

@@ -1448,7 +1448,7 @@ function _bandNearby() {
 }
 
 function _startKiller() {
-  if (!_room().pool) { _say("Killer needs a real table. The Stinky Pinky's is the league's home felt."); return; }
+  if (!_room().pool) { _say("Killer needs a real table. " + _tableHint()); return; }
   if (!_leagueTonight()) {
     _say("No league tonight — killer runs every third night. " +
       (G.day % 3 === 2 ? "Tomorrow." : "Check back in a couple of days.") +
@@ -1476,10 +1476,39 @@ function _startKiller() {
     "grief). QUIT forfeits your lives.)", "dim");
 }
 
+// WHERE THE TABLES ARE, DERIVED. Two hard-coded signposts named two different
+// pairs of bars, neither list matching the other and neither including the Lucky
+// Tiger — of EIGHT tables in town. Asked in the Blue Dog, the pool line sent a
+// man to Walking Street and the Darkside and never mentioned the Stinky Pinky
+// across the road, which that room's own description can see (Kevin, round 50).
+// Derived from the rooms, nearest first, and it obeys the notebook's law: a
+// venue is named only once you have stood in it or heard its name.
+function _tableHint() {
+  const here = G.room;
+  const tables = Object.keys(ROOMS).filter(id => ROOMS[id].pool && id !== here);
+  const known = tables.filter(id => (G.visited && G.visited[id]) || (G.heardOf && G.heardOf[id]));
+  if (!known.length) return "You would have to ask around for a table — half the beer bars have one, and this is not one of them.";
+  const near = known.filter(id => ROOMS[id].region === _room().region);
+  const pick = (near.length ? near : known).slice(0, 3);
+  const names = pick.map(id => _barName(id) + (near.length ? "" : ", over in " + ROOMS[id].region));
+  const list = names.length === 1 ? names[0]
+    : names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
+  return (near.length ? "No table in here. Nearest you know of: " : "No table in here. The ones you know: ") + list + ".";
+}
+
 const _KP_POT = [
   "{who} pots, unhurried, and chalks up without looking at you.",
   "{who} takes his shot, drops it, and steps back to let you have the table like a man doing you a favour.",
   "{who} pots. The table goes quiet the way tables do when they were expecting you to.",
+];
+// …and none of those may be said to a man who is OUT: "steps back to let you
+// have the table" landed one line under "That was your last life" (Kevin, round
+// 50). Once you are eliminated the table stops addressing you, which is exactly
+// what being out feels like.
+const _KP_POT_OUT = [
+  "{who} pots, unhurried, and chalks up. Nobody is playing for your benefit now.",
+  "{who} drops it and the frame moves on without reference to you.",
+  "{who} pots. From a stool it is a different game, and a quieter one.",
 ];
 
 // A league frame runs a dozen shots and the pot line was ONE string, so it read
@@ -1516,7 +1545,10 @@ function _kpInput(input) {
     const r = kpShot(g.kp, _rand);
     if (r.out) _say(`${_ucfirst(r.player.name)} misses and is OUT. A moment of silence; the moment ends.`, "dim");
     else if (!r.potted) _say(`${_ucfirst(r.player.name)} rattles it — a life gone.`, "dim");
-    else if (kpAlive(g.kp).length <= 2) _say(_fmt(_pickVary(_KP_POT, "kppot"), { who: _ucfirst(r.player.name) }), "dim");
+    else if (kpAlive(g.kp).length <= 2) {
+      const _mine = kpAlive(g.kp).some(p => p.name === "You");   // out = the table stops addressing you
+      _say(_fmt(_pickVary(_mine ? _KP_POT : _KP_POT_OUT, "kppot" + (_mine ? "" : "out")), { who: _ucfirst(r.player.name) }), "dim");
+    }
   }
   if (kpOver(g.kp)) {
     const winner = kpAlive(g.kp)[0];
@@ -1569,7 +1601,7 @@ function _kpInput(input) {
 // ─ Pool ─
 
 function _startPool(w) {
-  if (!_room().pool) { _say("No pool table here. The Midnight Sun has one; so does Daeng's place out on Khao Talo."); return; }
+  if (!_room().pool) { _say(_tableHint()); return; }
   // PLAY POOL 500 silently racked for ฿50 and said nothing — Jackpot announces
   // its house max in exactly this situation and pool did not (Gerry, round 34).
   // The stake is the TABLE's, not yours: a bar table plays for what a bar table
@@ -1610,6 +1642,7 @@ function _poolStatus(g) {
 function _poolOppTurn(g) {
   const potted = poolOppVisit(g, _rand);
   if (g.oppWon) {
+    if (!g.stake && G.poolHold) delete G.poolHold[G.room];   // the table goes with the frame
     _endGame(false, 0, `${g.oppName} clears up like it's a chore and rolls the black in ` +
       `dead-weight. Game over${g.stake ? ` — your ฿${g.stake} slides off the cushion` : ""}.`);
     return;
@@ -1621,18 +1654,37 @@ function _poolOppTurn(g) {
 
 function _poolInput(input) {
   const g = G.game;
+  // losing the frame loses the table with it — "winner stays on" cuts both ways
+  const _dropHold = () => { if (!g.stake && G.poolHold) delete G.poolHold[G.room]; };
   const kind = /power|smash|break/.test(input) ? "power" :
     /safe|snook|tuck/.test(input) ? "safety" :
     /shot|pot|cut|hit|play|roll/.test(input) ? "shot" : null;
   if (!kind) { _gameBoard(); _say("(SHOT sensible · POWER greedy · SAFETY sneaky.)", "dim"); return; }
   const ev = poolShot(g, kind, _rand);
   switch (ev) {
-    case "pot8win":
+    case "pot8win": {
+      // "WINNER STAYS ON" WAS AN EMPTY PHRASE. Won for the table four times in a
+      // week and nothing followed it: no challenger, no hold, not a word (Kevin,
+      // round 50). A frame played for nothing is played for the table, so the
+      // table is what you win — and the next man is already chalking.
+      let _stay = "";
+      if (!g.stake) {
+        const _h = (G.poolHold = G.poolHold || {});
+        _h[G.room] = (_h[G.room] === undefined ? 0 : _h[G.room]) + 1;
+        const _n = _h[G.room];
+        _stay = " You stay on. " + (_n === 1
+          ? "Somebody is already chalking a cue without being asked, which is the whole of the arrangement. (PLAY POOL)"
+          : _n < 4
+          ? `That is ${_n} on the bounce. The next one racks without discussing it. (PLAY POOL)`
+          : `${_n} frames without losing the table. Men are arriving to watch now, which is a different kind of pressure. (PLAY POOL)`);
+      }
       _endGame(true, g.stake * 2, "The black glides in off the cushion like it was " +
         "always going there. You straighten up slowly, because legends move slowly." +
-        (g.stake ? ` ฿${g.stake * 2} from under the cushion.` : ""));
+        (g.stake ? ` ฿${g.stake * 2} from under the cushion.` : "") + _stay);
       return;
+    }
     case "sink8lose":
+      _dropHold();
       _endGame(false, 0, "POWER. The pack scatters gloriously — and the black wanders " +
         "across the table and drops. Silence. House rules are house rules" +
         (g.stake ? `; the stake stays under the cushion, which is no longer your cushion` : "") + ".");
@@ -1850,6 +1902,17 @@ function _gameQuit() {
 }
 
 function _gameInput(input) {
+  // TRYING TO START A GAME YOU ARE ALREADY PLAYING is not a move. `play pool` at
+  // a live pool table was executed as a SHOT, because "play" sits in the shot
+  // verb regex — a free stroke for a typo (Kevin, round 50). _doPlay already
+  // refuses this; the live-game router never reached it.
+  const _gi = String(input || "").trim().toLowerCase();
+  if (/^(play|start|join)\b/.test(_gi) || /^(pool|killer|connect ?4|connect four|jackpot|dice|darts)$/.test(_gi)) {
+    const _same = { pool: "pool", kp: "killer", c4: "connect 4", jp: "jackpot", darts: "darts", quiz: "the quiz", cli: "that" }[G.game.type];
+    _say(`You are already on ${_same}. One game at a time, champ. (QUIT to walk away.)`, "dim");
+    _gameBoard();
+    return;
+  }
   switch (G.game.type) {
     case "cli": return _cliInput(input);
     case "c4": return _c4Input(input);

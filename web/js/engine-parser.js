@@ -2060,6 +2060,21 @@ const _CAT_LINES = {
     ],
   };
 const _SCENERY = [
+  // YOUR NAME BEHIND THE TILL. The title existed only in one arrival line every
+  // third night: EXAMINE CHALK answered "Not here. Or not a thing." in the bar
+  // where it was hanging, and nobody in the room mentioned it (Kevin, round 50).
+  { key: "chalk", m: /\b(chalk|name ?chalk|till chalk|my name|the board)\b/, fn: () => {
+    const t = G.kpTitle && G.kpTitle[G.room];
+    if (!t) return _room().pool
+      ? "A stub of blue chalk and a slate behind the till with a name on it that is not yours. " +
+        "It changes on league nights, and only on league nights."
+      : null;
+    return "Behind the till, on the slate: your name, in somebody else's handwriting, spelled the way " +
+      "it sounded to them. " + (t.defended
+        ? `There are ${t.defended === 1 ? "one mark" : t.defended + " marks"} chalked beside it, which is the bar keeping count for you.`
+        : "No marks beside it yet. Marks are for defences.") +
+      " It stays up until somebody takes it down, and somebody always does.";
+  } },
   // the animals the prose names (dog-person playtest 2026-08-22): the tide-line dog
   // before you have one, the rats with routines, the Dolphin Bar's dolphin, Tree
   // Town's fish tank, the phakhama round his neck
@@ -3732,6 +3747,10 @@ function _doTalkBody(arg, topic) {
     }
     // the barfine BEFORE the drinks list: "how much to take a girl out" is a
     // price question whose answer is not a price list (Helen, round 49)
+    if (/\b(pool|table|frame|frames|felt|cue|snooker|billiards)\b/.test(_ct) && !/\bbar ?fine\b/.test(_ct)) {
+      const said = _poolTalk(npc);
+      if (said) { _say(said); return; }
+    }
     if (/\bbar ?fines?\b|\btake\b[^.]*\b(?:girl|her|lady)\b|\b(?:girl|lady|her) out\b|\b(?:go|come) with me\b|\b(?:short|long) time (?:price|cost|money)\b/.test(_ct)) {
       const said = _barfineTalk(npc);
       if (said) { _say(said); return; }
@@ -8871,6 +8890,36 @@ function _workTalk(npc, kind) {
   for (let k = 0; k < pool.length && used.includes(i); k++) i = (i + 1) % pool.length;
   if (!used.includes(i)) used.push(i);
   return pool[i](n);
+}
+
+// THE TABLE, ASKED ABOUT. `ask <anyone> about killer` and `about league` answer
+// everywhere, and `about pool` — the word a player actually types, in the bar
+// with the table in it — fell through to the greeting on the mamasan whose floor
+// it stands on (Kevin, round 50, who won four frames on it first). Class N: the
+// room knows it has a table, the stake, and which night the league runs.
+function _poolTalk(npc) {
+  const r = _room();
+  const reg = _hoursRegister(npc);
+  const n = npc ? NPCS[npc].name : "";
+  if (!r.pool) {
+    const hint = typeof _tableHint === "function" ? _tableHint() : "";
+    return reg === "floor"
+      ? `"No table here, tilac." ${n} tips her head at the room, which plainly has no room for one. "${hint}"`
+      : `"Not in here — no space for one, and the man who owns it likes it that way." ${hint}`;
+  }
+  const mine = G.kpTitle && G.kpTitle[G.room];
+  const stake = typeof POOL_STAKE !== "undefined" ? POOL_STAKE : null;
+  const when = typeof _leagueIn === "function" ? _leagueIn() : null;
+  const league = when === 0 ? "League night is tonight." :
+    when === 1 ? "League is tomorrow." :
+    when === 2 ? "League is the night after next." : "";
+  const champ = mine ? ` "And your name is on the slate, so you know all this already."` : "";
+  return reg === "floor"
+    ? `"The table?" ${n} looks at it with the fondness of somebody who has to clean around it. ` +
+      `"Is the real reason half these men come. ${stake ? "฿" + stake + " a rack" : "Money on it, always"}, and nobody play for fun after ten o'clock." ` +
+      `${league}${champ} (PLAY POOL)`
+    : `"The table." ${n ? n + " does not have to look at it. " : ""}"${stake ? "฿" + stake + " a rack" : "There is always money on it"}, ` +
+      `winner racks, and the standard after ten is higher than anybody warns you. ${league}"${champ} (PLAY POOL)`;
 }
 
 // THE BARFINE IS THE MAMASAN'S OWN NUMBER, and she was the one person on the
