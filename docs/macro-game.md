@@ -83,7 +83,7 @@ These describe a body in a night, and a macro turn has neither. The macro game
 should assert they're absent or zero them on load.
 
 **The macro game inherits the shared-world rules unchanged** — no wall-clock, no
-`Date`, all nondeterminism through `G.rng` (rules 1 and 2). If it breaks those,
+`Date`, all nondeterminism through `G.rng` (rules 1 and 3). If it breaks those,
 the save stops being replayable and both games lose it.
 
 ## What the macro game is actually about
