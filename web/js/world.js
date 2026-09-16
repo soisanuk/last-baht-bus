@@ -12464,7 +12464,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "once \"— not your fault. Some things end.\"" },
       { topic: "1998", text: "He sets the Singha down with the quiet authority of a " +
         "man who has heard this speech many times, from many Nigels. \"The baht was " +
-        "fifty to the dollar in '98, bud. Tom Yum Goong crash — half the Thai economy " +
+        "fifty to the dollar in '98, bud. {{Tom Yum Goong}} crash — half the Thai economy " +
         "went sideways overnight. Your British pensioner walking in with sterling felt " +
         "like a king because he was, arithmetically.\" He refills without ceremony. " +
         "\"That's point one. Point two: Nigel in 1998 was forty years old with a full " +
@@ -15155,19 +15155,33 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   dave: {
-    name: "Dave", emoji: "📋", age: 55, nat: "British",
+    name: "Tom", emoji: "📋", age: 55, nat: "British",
     pronoun: "he",
     patron: true, room: "stinky_bar", hops: true,
     desc: "Fifty-five, neat polo, shandy in front of him going flat. He drinks less " +
       "than anyone in whatever bar he's in and looks at the door more. His phone " +
       "sits face-up: a long list of names, a lot of them greyed out.",
     dialogue: [
-      { text: "\"Dave.\" A nod, an appraisal — not unfriendly, just thorough. \"New " +
+      { text: "\"Tom.\" A nod, an appraisal — not unfriendly, just thorough. \"New " +
         "face. You here long, or just passing through?\" He files your answer " +
         "somewhere. \"Either way — you ever see a bloke on his own looking wrong, " +
         "proper wrong, you tell someone. Tell me, tell Bert at the Stinky. We keep " +
         "a bit of an eye, us lot.\"",
         short: "\"See a bloke looking proper wrong, you tell me or Bert. We keep an eye.\"" },
+      // THE JOKE THEY ARE BOTH SICK OF. Mario, 2026-09-16 — the two of them
+      // drink at the same rail and are called Tom and Jerry, and the gag has to
+      // land differently on each or it is only a gag once. Neither node asserts
+      // the other man is in the room: Tom hops and Jerry drinks Mondays and
+      // Fridays, so a line that puts them side by side is false most nights.
+      { topic: "name|tom and jerry|cartoon|mouse|cat",
+        text: "\"Go on then.\" He does not look up from the beer mat. \"Get it out of " +
+          "your system.\" You don\'t say it. He nods very slightly, as though you have " +
+          "passed something. \"Every man who has ever sat down on that stool. Every " +
+          "one, and every one of them thinking he is the first.\" A mouthful of flat " +
+          "shandy. \"One clever sod worked out that in the cartoon it\'s the cat does " +
+          "all the chasing. Pleased with himself, he was.\" He straightens the mat, " +
+          "square to the edge. \"He wasn\'t wrong. That\'s the annoying part.\"",
+        short: "\"Get it out of your system.\" A mouthful of flat shandy. \"Every man who ever sat on that stool.\"" },
       { topic: "rounds", text: "\"I do a lap most nights — few bars, see who's " +
         "about, who's not.\" He says it like a man describing a hobby, but the " +
         "{{phone}} list is right there. \"Who's NOT is the important bit. Fella drops " +
@@ -15409,14 +15423,14 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "started on Canadians. Whole country's a passive-aggressive apology " +
         "with a flag on its backpack — and they're EVERYWHERE down here, being " +
         "POLITE at you.\" The volume has attracted the bartender's attention. " +
-        "\"Except Davey. Davey's the one good one. They made exactly one and " +
+        "\"Except Jerry. Jerry's the one good one. They made exactly one and " +
         "then they made the rest.\" He lights the successor Marlboro off the " +
         "first. \"A man needs a rule and a exception. That's mine.\"",
-        short: "\"Canadians. Don't start. Except Davey — they made exactly one good one.\"" },
+        short: "\"Canadians. Don't start. Except Jerry — they made exactly one good one.\"" },
       { topic: "danny", text: "The cigarette stops halfway. \"Do NOT.\" A long " +
         "drag, a visible decision not to raise his voice. \"Hundred and twenty " +
         "thousand baht. A CANADIAN — I broke my own rule for a Canadian because " +
-        "Davey vouched, and Davey vouches for weather.\" Smoke leaves him like " +
+        "Jerry vouched, and Jerry vouches for weather.\" Smoke leaves him like " +
         "pressure venting. \"'Illiquid.' You know what else is illiquid? My " +
         "hands around his neck, pending. He sees me come in a bar, he remembers " +
         "an appointment.\" He stubs the cigarette. \"The exception list stays " +
@@ -15442,7 +15456,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   david: {
-    name: "David", emoji: "🇨🇦", age: 52, nat: "Canadian",
+    name: "Jerry", emoji: "🇨🇦", age: 52, nat: "Canadian",
     pronoun: "he",
     patron: true, room: "stinky_bar", hops: false, days: [1, 5], // teacher's days off: Mon & Fri
     desc: "Fifty-two, ball cap gone soft with washing, the delighted open face of a " +
@@ -15450,13 +15464,23 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       "with the skill of a man who has budgeted exactly four. He is either " +
       "talking, about to talk, or dancing.",
     dialogue: [
-      { text: "\"Oh hey! Hi! David!\" He relocates to the stool next to yours in " +
+      { text: "\"Oh hey! Hi! Jerry!\" He relocates to the stool next to yours in " +
         "one motion, delighted. \"Saskatoon originally, but I teach English here " +
         "now — M3 and M4, great kids, terrible kids, same kids.\" The beer gets " +
         "a small tactical sip. \"Mondays and Fridays are my days off so those " +
         "are my beer days, and buddy, it is one of THOSE days.\" He beams like " +
         "this is the best news either of you has had all week.",
-        short: "\"David! Saskatoon! It's a beer day, buddy!\" He beams." },
+        short: "\"Jerry! Saskatoon! It's a beer day, buddy!\" He beams." },
+      { topic: "name|tom and jerry|cartoon|mouse|cat",
+        text: "\"TOM AND JERRY!\" He gets there first, both hands out, with the delight " +
+          "of a man who has been waiting all evening for someone to hand him this. " +
+          "\"Every time, buddy. Every single time — and I love it every single time, " +
+          "eh?\" He does not appear to be joking, because he is not. \"Tom hates it. " +
+          "Tom has hated it since—\" he starts counting on his fingers, loses " +
+          "confidence around the fourth one, and abandons the whole project. \"A " +
+          "while. Which is exactly why I do the voice.\" He does the voice. It is not " +
+          "a good voice. He knows it is not a good voice. That is the point of the voice.",
+        short: "\"TOM AND JERRY!\" Both hands out, delighted. \"Every time, buddy. That\'s why I do the voice.\"" },
       { topic: "teaching", text: "\"Thirty-two thousand baht a month and they " +
         "haven't done my visa paperwork right in three years, eh?\" He says it " +
         "cheerfully, like the score of a game he enjoys losing. \"But I got a " +
@@ -15478,7 +15502,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "goblin'.\" A happy pull of beer. \"Then we got talking about his dog — " +
         "he had this dog in Korea, and I had the same dog growing up, same " +
         "breed, same name even, and by closing time he says 'you're alright, " +
-        "Davey.'\" He grins. \"He pays for my beers when I run out. Don't tell " +
+        "Jerry.'\" He grins. \"He pays for my beers when I run out. Don't tell " +
         "him I told you. He'll deny it, eh?\"",
         short: "\"Drew's my best buddy. He'll deny everything. He pays for my beers.\"" },
       { topic: "dance", text: "He is already half off the stool. \"Okay so — two " +
@@ -15502,8 +15526,8 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "\"Vancouver, '96. Lost a bet, kept the winnings, eh?\" The bar's early-" +
         "warning system engages as one organism: two hostesses relocate with " +
         "practiced speed, the patron at the rail studies the ceiling, and Bert, " +
-        "without looking up from the felt, says \"FOURTH beer, Davey. House " +
-        "rule. And never near the table.\" David re-buckles, wholly unoffended, " +
+        "without looking up from the felt, says \"FOURTH beer, Jerry. House " +
+        "rule. And never near the table.\" Jerry re-buckles, wholly unoffended, " +
         "a man used to being rescheduled. \"After the next one, then. It's " +
         "TASTEFUL, buddy.\" He leans in, confidential, delighted: \"There's a " +
         "little maple leaf on it.\"",
@@ -15724,10 +15748,10 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "they're ILLIQUID.\" The word arrives polished from frequent use. \"Bert " +
         "gets his eighty back with interest when we relaunch. Drew's hundred-" +
         "twenty, same.\" A pause, the first unpolished thing about him: \"And " +
-        "Davey gets his fifteen back first. That one—\" he rolls a shoulder, " +
+        "Jerry gets his fifteen back first. That one—\" he rolls a shoulder, " +
         "uncomfortable inside his own tank top \"—that one I feel, bro. Guy " +
         "drinks four beers a week. Don't tell him I said that.\"",
-        short: "\"Not lost, bro. ILLIQUID.\" But Davey gets his fifteen back first." },
+        short: "\"Not lost, bro. ILLIQUID.\" But Jerry gets his fifteen back first." },
       { topic: "tattoos", text: "He rotates the sleeve like a dealer showing " +
         "trims. \"Full history, bro. The maple leaf — obviously. The tiger's " +
         "from the dealership days, 'Top Gun' underneath, that was my thing on " +

@@ -7617,7 +7617,7 @@ test("the bar's ambient regular is unreachable background, not an addressable NP
   assert.doesNotMatch(lastOut(), /welded|fixture|drones|holds court/i, "the flavour isn't a talkable character");
 });
 
-test("David only drinks on his days off: Mondays and Fridays", () => {
+test("Jerry only drinks on his days off: Mondays and Fridays", () => {
   state().nightTurn = 45;
   state().pendingEnc = null; state().lastPeddler = 99999;
   state().day = 1; // Monday
@@ -7628,12 +7628,12 @@ test("David only drinks on his days off: Mondays and Fridays", () => {
   assert.equal(_npcWhere("david"), null, "Tuesday he's marking homework");
   state().room = "stinky_bar";
   out = [];
-  run("talk to david");
+  run("talk to jerry");
   // He's a known regular who simply isn't out — say so, don't deny he exists.
   // (Since the patron fold the wording comes from _npcActive's absence branch:
   // the old "the regulars drift between bars" line went with the hop that
   // stopped happening. He isn't drifting; he's marking homework.)
-  assert.match(lastOut(), /David isn't around right now/,
+  assert.match(lastOut(), /Jerry isn't around right now/,
     "absent, not nonexistent — and not 'drifting' either");
 });
 

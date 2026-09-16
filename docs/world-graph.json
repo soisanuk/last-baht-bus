@@ -921,7 +921,7 @@
  ],
  "counts": {
   "constants": 153,
-  "dialogue": 2878,
+  "dialogue": 2880,
   "edges": 2867,
   "encounters": 23,
   "flags": 171,
@@ -7325,6 +7325,22 @@
    "index": 1,
    "key": "dave#1",
    "npc": "dave",
+   "topic": "name|tom and jerry|cartoon|mouse|cat",
+   "topics": [
+    "name",
+    "tom and jerry",
+    "cartoon",
+    "mouse",
+    "cat"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "dave#2",
+   "npc": "dave",
    "topic": "rounds",
    "topics": [
     "rounds"
@@ -7334,8 +7350,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "dave#2",
+   "index": 3,
+   "key": "dave#3",
    "npc": "dave",
    "topic": "simon",
    "topics": [
@@ -7346,8 +7362,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "dave#3",
+   "index": 4,
+   "key": "dave#4",
    "npc": "dave",
    "topic": "work|job|teaching|english|online|living|what do you do",
    "topics": [
@@ -7364,8 +7380,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "dave#4",
+   "index": 5,
+   "key": "dave#5",
    "npc": "dave",
    "topic": "flying club",
    "topics": [
@@ -7387,6 +7403,22 @@
    "index": 1,
    "key": "david#1",
    "npc": "david",
+   "topic": "name|tom and jerry|cartoon|mouse|cat",
+   "topics": [
+    "name",
+    "tom and jerry",
+    "cartoon",
+    "mouse",
+    "cat"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "david#2",
+   "npc": "david",
    "topic": "teaching",
    "topics": [
     "teaching"
@@ -7396,8 +7428,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "david#2",
+   "index": 3,
+   "key": "david#3",
    "npc": "david",
    "topic": "money",
    "topics": [
@@ -7408,8 +7440,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "david#3",
+   "index": 4,
+   "key": "david#4",
    "npc": "david",
    "topic": "drew",
    "topics": [
@@ -7420,8 +7452,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "david#4",
+   "index": 5,
+   "key": "david#5",
    "npc": "david",
    "topic": "dance",
    "topics": [
@@ -7432,8 +7464,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 5,
-   "key": "david#5",
+   "index": 6,
+   "key": "david#6",
    "npc": "david",
    "topic": "danny",
    "topics": [
@@ -7444,8 +7476,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "david#6",
+   "index": 7,
+   "key": "david#7",
    "npc": "david",
    "topic": "prince albert",
    "topics": [
@@ -56351,10 +56383,10 @@
    "th": "ดาว"
   },
   {
-   "dialogueCount": 5,
+   "dialogueCount": 6,
    "hops": true,
    "id": "dave",
-   "name": "Dave",
+   "name": "Tom",
    "patron": true,
    "pronoun": "he",
    "room": "stinky_bar",
@@ -56365,9 +56397,9 @@
     1,
     5
    ],
-   "dialogueCount": 7,
+   "dialogueCount": 8,
    "id": "david",
-   "name": "David",
+   "name": "Jerry",
    "patron": true,
    "pronoun": "he",
    "room": "stinky_bar",
