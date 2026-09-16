@@ -83,10 +83,22 @@ test("the bar-bore is never draped with a girl who is yours (Howard F5)", () => 
 
 // The morning-after ledger is a delta against a night-end snapshot; taken
 // across the vacation reset it reported the reset itself.
-test("the first morning of a new trip has no 'last night' (Howard F4)", () => {
+test("the first morning of a new trip does not report the flight (Howard F4)", () => {
   G.happy = 146; G.money = 5740; _nightSnapshot();
+  const before = { happy: G.happy, money: G.money };
   flyHomeAndBack();
-  assert.equal(G.lastNight, null, "the snapshot does not survive the flight");
+  // The OLD snapshot must not survive — that was Howard's finding, and a delta
+  // against it reported the reset ("−119 สนุก, down ฿5,740 for a month at home").
+  // But nulling it and stopping meant the first night of every new trip was then
+  // played against no baseline at all, so the morning said "nothing to measure
+  // against yet" over a night actually played (Brian, round 49). A FRESH
+  // baseline is taken after the reset: present, and post-reset, so the flight is
+  // never in the delta.
+  assert.ok(G.lastNight, "the new trip's first night has a baseline");
+  assert.notEqual(G.lastNight.happy, before.happy, "…and it is not the old one");
+  assert.equal(G.lastNight.happy, G.happy, "it is the state the new trip starts in");
+  assert.equal(G.lastNight.money, G.money);
+  assert.equal(G.lastNight.vacation, G.vacation);
 });
 
 // The last-bus dread does not apply from the pillion seat — that is the ride's

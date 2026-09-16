@@ -5070,6 +5070,11 @@ function _newVacation() {
   // across the vacation reset it reported the reset itself — "−119 สนุก · down
   // ฿5,740 on the night" for a month spent at home (Howard, round 35).
   G.lastNight = null;
+  // …and then a FRESH baseline for the night about to start, or the first
+  // morning of every new trip reports "nothing to measure against yet" over a
+  // night that was actually played (Brian, round 49, ฿860 down and told nothing).
+  // Taken AFTER the reset, so Howard's finding stands: the reset is never in the delta.
+  if (typeof _nightSnapshot === "function") _nightSnapshot();
   G.itemLoc.phone = "inventory";
   G.itemLoc.charger = "inventory";
   G.itemLoc.wallet = "inventory";

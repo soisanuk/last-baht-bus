@@ -834,10 +834,12 @@ test("Bill welcomes you to the club you are standing in", () => {
 test("staff answer the calendar they keep: closing and the league, in their own register", () => {
   G.room = "lucky_tiger";
   out = []; doCommand("ask lek about closing");
-  assert.match(text(), /Dawn|last man/, "an all-night beer bar");
+  // the pool, not a string: an all-night bar says it has no closing hour, in
+  // whichever of its variants (round 49 deepened this from one line to four)
+  assert.match(text(), /Dawn|dawn|last man|never close|no close|nobody sit/, "an all-night beer bar");
   G.room = "velvet_club"; const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
   out = []; doCommand(`ask ${NPCS[g].name} about closing`);
-  assert.match(text(), /Midnight/, "a gents' club shuts at twelve");
+  assert.match(text(), /Midnight|Twelve/, "a gents' club shuts at twelve");
   G.room = "lucky_tiger"; G.day = 3;
   out = []; doCommand("ask lek about league");
   assert.match(text(), /Tonight/); assert.match(text(), /PLAY KILLER/);
@@ -845,7 +847,7 @@ test("staff answer the calendar they keep: closing and the league, in their own 
   G.day = 5; out = []; doCommand("ask lek about league"); assert.match(text(), /tomorrow/);
   G.room = "queen_vic"; out = []; doCommand("ask terry about quiz");
   assert.doesNotMatch(text(), /\bna\b/, "a pensioner does not say na");
-  out = []; doCommand("ask aoy about closing"); assert.match(text(), /dawn/i);
+  out = []; doCommand("ask aoy about closing"); assert.match(text(), /dawn|last customer|last man|no closing time|whenever the room empties/i);
 });
 
 test("TIME says where in the count the league is, and a quiz you are sitting in is ON", () => {

@@ -68,6 +68,22 @@ const FACTS = [
     asks: ["closing", "what time do you close", "hours"],
     rooms: ["mikes_mall"], hour: 20 },
 
+  // CLOSING'S MIRROR. Every member of staff in town answered "closing" and not
+  // one could answer "what time do you open" — the fact is the VENUE'S CLASS,
+  // which the engine has had all along (Brian, round 49, whose hobby is
+  // punctuality; five nights, six kinds of mouth, one shrug each).
+  { fact: "opening", why: "the venue's class is the hour — a gogo opens with its first set, a beer bar with the ice",
+    asks: ["opening", "what time do you open", "opening time"],
+    rooms: ["stinky_bar", "orchid_room", "queen_vic", "thai_massage", "soi6_bar_a"], hour: 20 },
+  { fact: "opening", why: "opensAt — the one room in town with real shop hours",
+    asks: ["opening", "what time do you open"],
+    rooms: ["mikes_mall"], hour: 20 },
+  // the engine models prime time, the season and a thinning rail, prints all of
+  // it in TIME, and nobody in a room would say it out loud
+  { fact: "busy", why: "_seasonTier / _benchOut / prime time — computed every night",
+    asks: ["busy", "when does it get busy", "quiet"],
+    rooms: ["stinky_bar", "queen_vic", "lucky_tiger"], hour: 20 },
+
   { fact: "quiz", why: "_quizDay / _isQuizWindow / _quizBars — a fixed weekly rule",
     asks: ["quiz"],
     rooms: ["queen_vic", "stinky_bar", "lucky_tiger"], hour: 22, day: 4 },

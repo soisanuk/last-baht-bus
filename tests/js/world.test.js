@@ -229,7 +229,13 @@ test("patrons: real home bars, complete profiles, unconditional fallback", () =>
   let hoppers = 0, homebodies = 0;
   for (const [id, p] of bench) {
     assert.ok(ROOMS[p.room], `${id} home ${p.room} missing`);
-    assert.ok(ROOMS[p.room].barType, `${id} home ${p.room} is not a bar`);
+    // A REGULAR'S LOCAL IS WHERE HE SITS EVERY NIGHT, and for one of them that is
+    // a food court: Wilf gave up drinking ten years ago because he could not
+    // afford it, so the mall IS his bar. Requiring a barType here is presumably
+    // why he shipped without patron: true at all, which took him out of every
+    // query the flag drives (Brian, round 49). A room that serves him counts.
+    assert.ok(ROOMS[p.room].barType || ROOMS[p.room].food || ROOMS[p.room].water,
+      `${id} home ${p.room} serves nobody — a regular's local is a bar or a kitchen`);
     assert.ok(Number.isInteger(p.age) && p.age > 17 && p.age < 100, `${id} age`);
     assert.ok(p.nat && p.name && p.desc && p.emoji, `${id} profile incomplete`);
     assert.ok(p.dialogue.length > 0, `${id} has no dialogue`);

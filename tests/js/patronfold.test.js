@@ -39,7 +39,15 @@ beforeEach(() => sandbox());
 
 test("one entry per regular, reachable under either name, and no duplicates anywhere", () => {
   const bench = Object.entries(NPCS).filter(([, n]) => n.patron);
-  assert.equal(bench.length, 24, "the whole bench came across");
+  // DERIVED, never a number: `_REGULARS` is the authoring block and `patron` is
+  // the query, so a regular authored WITHOUT the flag is invisible to every
+  // piece of code that asks — the grizzled repeat voice, the miss pool, the rage
+  // pre-empt, `days`, and the season's bench-thinning. Wilf shipped without it
+  // and a hard-coded 24 recorded that as correct (Brian, round 49, who found him
+  // by asking the mall what time it opens).
+  const missing = Object.keys(_REGULARS).filter(id => !_REGULARS[id].patron);
+  assert.deepEqual(missing, [], "every _REGULARS entry carries patron: true — the flag IS the query");
+  assert.equal(bench.length, Object.keys(_REGULARS).length, "the whole bench came across");
   for (const [id] of bench) assert.ok(NPCS[id].room && ROOMS[NPCS[id].room], `${id}: homed in a real room`);
   G.room = "queen_vic";
   const here = _npcsHere();

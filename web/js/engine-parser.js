@@ -247,11 +247,25 @@ function _promptedFolk(arg, topic) {
   if (!a) return false;
   const t = String(topic || "").toLowerCase().trim();
   const wantsPrice = /\b(price|prices|price list|how much|cost|costs|tao ?rai|tariff|rates?|menu)\b/.test(t);
+  // THE HOURS BELONG TO THE ROOM, not to whoever happens to be standing in it, so
+  // the anonymous mouths answer them too — a shop with nobody named in it was the
+  // one place the question could not be put at all (Helen, round 49: "the people
+  // who actually hold the town up are scenery with lovely paint on them").
+  const _hoursSay = () => {
+    if (/\b(open|opens|opening|opening time)\b/.test(t) && !/\bopen till\b/.test(t)) return _openingTalk(null);
+    if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(t)) return _busyTalk(null);
+    if (/\b(closing|close|closed|closing time|shut|shutters|hours|last call|open till|what time)\b/.test(t)) return _closingTalk(null);
+    return null;
+  };
   if (/\b(motosai|piwin|driver|rider|bike ?boy)\b/.test(a) && r.motosai) {
     if (/^(?:the )?(?:bus|buses|busses|songthaews?|baht ?bus|blue trucks?|trucks?)$/.test(t)) { _say(_busTalk()); return true; }
     _say(_pickVary(_FOLK_MOTO, "folkmoto")); return true;
   }
   if (r.massage || r.soapy) {
+    if (/\b(masseuse|massuse|therapist|girl|girls|lady|ladies|woman|women|staff|her|them|manageress|mama|mamasan|owner)\b/.test(a)) {
+      const hrs = _hoursSay();
+      if (hrs) { _say(hrs); return true; }
+    }
     if (wantsPrice && /\b(masseuse|massuse|therapist|girl|girls|lady|ladies|woman|women|staff|her|them|manageress|mama|mamasan|owner)\b/.test(a)) {
       const said = _priceTalk(null);
       if (said) { _say(said); return true; }
@@ -3670,8 +3684,18 @@ function _doTalkBody(arg, topic) {
   // every night said "not my story"; thirteen people shrugged at "closing" while
   // the shutters came down behind them (Brenda, round 47). Staff and the house
   // answer the calendar they keep.
-  if (topic && !d.topic && (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house)) {
+  // …and the person whose OWN room IS this venue is the house in it, whatever
+  // the roster calls her: the masseuse who owns her shop, the woman on the lake
+  // bar. Pensri could not quote the ฿300 list on her own wall because she
+  // carries no NPC_ROLES entry (Helen, round 49). Scoped to rooms that ARE a
+  // venue (`bar` display name), so a driver standing on a street is not asked
+  // to answer for the pavement.
+  const _houses = NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house ||
+    (!NPCS[npc].patron && !NPCS[npc].filler && NPCS[npc].room === G.room && !!_room().bar);
+  if (topic && !d.topic && _houses) {
     const _ct = String(topic).toLowerCase();
+    if (/\b(open|opens|opening|opening time|open at|start)\b/.test(_ct) && !/\bopen till\b/.test(_ct)) { _say(_openingTalk(npc)); return; }
+    if (/\b(busy|rush|quiet|peak|packed|full|crowd|crowded)\b/.test(_ct)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc)); return; }
     if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct)) { _say(_leagueTalk(npc)); return; }
     if (/\b(price|prices|price list|how much|cost|costs|tao ?rai|tariff|rates?|menu)\b/.test(_ct)) {
@@ -3693,6 +3717,8 @@ function _doTalkBody(arg, topic) {
   if (topic && !d.topic && NPCS[npc].room === G.room &&
       !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house && !NPCS[npc].filler) {
     const _pt = String(topic).toLowerCase();
+    if (/\b(open|opens|opening|opening time|open at)\b/.test(_pt) && !/\bopen till\b/.test(_pt)) { _say(_openingTalk(npc)); return; }
+    if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(_pt)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_pt)) { _say(_closingTalk(npc)); return; }
     if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_pt)) { _say(_leagueTalk(npc)); return; }
     if (/\b(roast|sunday roast|kitchen|food|dinner|menu|card)\b/.test(_pt)) {
@@ -3735,11 +3761,33 @@ function _doTalkBody(arg, topic) {
         // one sentence in three cities (Margarethe, round 47): pooled by the speaker,
         // and the cashier does not glance at the till she is sitting at. The boss
         // "drinks his own stock" was said of two men who don't (Henri, round 47).
-        const _pk = _hh(npc + ":" + mate + ":review", 17);
+        // PER BAR, not per hash: two colleagues at one rail reviewed the same
+        // manager in the same sentence, in consecutive commands (Cake and Lamai,
+        // Helen round 49) — a hash keyed on the pair is free to collide, and at a
+        // three-handed bar it does. Walk to a line this room has not used.
+        const _rvBook = (G.soc.reviewSaid = G.soc.reviewSaid || {});
+        const _rvKey = G.room + ":" + mate;
+        const _rvUsed = _rvBook[_rvKey] = _rvBook[_rvKey] || [];
+        const _pkRaw = _hh(npc + ":" + mate + ":review", 17);
+        const _rvPick = (len) => {
+          let i = _pkRaw % len;
+          for (let k = 0; k < len && _rvUsed.includes(i); k++) i = (i + 1) % len;
+          if (!_rvUsed.includes(i)) _rvUsed.push(i);
+          return i;
+        };
+        const _pk = _pkRaw;
         const _mamaRev = me === "cashier"
           ? [`"Mama?" ${NPCS[npc].name} doesn't look up from the drawer. "Strict. Fair. She counts this after I do, and it has never once come out different."`,
              `"Mama runs the floor, I run the book." ${NPCS[npc].name} squares a stack of notes. "Twenty years. Ask her anything — she will tell you the answer and the price."`,
              `${NPCS[npc].name} tips her head at the floor without looking. "Mama? Nothing happen in this room she don't see. Nothing happen in this book she don't check."`]
+          : (NPCS[npc].manager || NPCS[npc].house)
+          // A MAN WRITTEN IN OHIO ENGLISH DOES NOT SPEAK TINGLISH. Bert gave back
+          // "You be nice to me, she know that too" — verbatim what a hostess had
+          // said two nights earlier, and it made the manager the one being nice to
+          // (Helen, round 49). The register belongs to the SPEAKER.
+          ? [`"${NPCS[mate].name}?" ${NPCS[npc].name} doesn't hesitate. "Runs that floor better than I run this bar, and she's been doing it longer. Ask her anything."`,
+             `"Mama?" A short laugh. "She knows who's drinking with who before they do. I find out when she decides I need to."`,
+             `"${NPCS[mate].name} and I have an arrangement. She doesn't tell me how to run the bar and I don't tell her how to run the girls." A shrug. "Works."`]
           : [`"Mama?" ${NPCS[npc].name} glances at the till before answering, which is the answer. "Strict. Fair. Don't tell her I said fair."`,
              `"Mama?" ${NPCS[npc].name} lowers her voice a notch. "She look after us. Also she look AT us, all night. Both true, tilac."`,
              `${NPCS[npc].name} laughs, short. "Mama know everything. Who you drink with, who you don't. You be nice to me, she know that too."`];
@@ -3751,9 +3799,14 @@ function _doTalkBody(arg, topic) {
           _aff ? (me === "mamasan" ? `"${n}?" Mama ${NPCS[npc].name} does not lower her voice. "Your girl. Everybody know, boss. I take her off the late rota myself." A look. "She is better than you. Be careful with her."`
                : me === "cashier" ? `"${n}." ${NPCS[npc].name} closes the book. "She is not on my page any more, boss. She is on yours. I don't count that one."`
                : `"${n}?" ${NPCS[npc].name} glances at the rail, then at you, and grins. "Boss. Everybody know. You think we blind? She happy. Don't make her not."`) :
-          them === "mamasan" ? _mamaRev[_pk % _mamaRev.length] :
-          them === "manager" ? `"The boss? Pays on time, doesn't touch the girls, and the till adds up. That is the whole review, and it is a good one."` :
-          them === "cashier" ? _cashRev[_pk % _cashRev.length] :
+          them === "mamasan" ? _mamaRev[_rvPick(_mamaRev.length)] :
+          them === "manager" ? [
+            `"The boss? Pays on time, doesn't touch the girls, and the till adds up. That is the whole review, and it is a good one."`,
+            `"${n}?" ${NPCS[npc].name} considers it. "He drink with everybody, every night, and still count right in the morning. I don't know how."`,
+            `"${n} been here long time." A small shrug. "He know which girl need go home early, he never ask why. Is enough."`,
+            `"The boss is the boss." ${NPCS[npc].name} tips her head. "He take the trouble before it reach us. You only notice that when he is not here."`,
+          ][_rvPick(4)] :
+          them === "cashier" ? _cashRev[_rvPick(_cashRev.length)] :
           me === "mamasan" ? `"${n}?" Mama ${NPCS[npc].name} weighs it. "Good girl. Sends money home, same as all of them, and works harder than she lets on. Ask her yourself — she will tell you a different version, and hers is also true."` :
           me === "cashier" ? `"${n} is on the book same as everybody." ${NPCS[npc].name} does not look up. "That is all the book says about anyone."` :
           me === "manager" ? `"${n}'s been here longer than me. Ask her — she runs me as much as I run her, and she'd say more."` :
@@ -3766,7 +3819,17 @@ function _doTalkBody(arg, topic) {
       if (/^(bar|here|this place|the place|place|business|the bar|your bar|this bar)$/.test(_rt) || (bn && _rt.length >= 4 && bn.toLowerCase().includes(_rt))) {
         const me = roleOf(npc);
         const line =
-          me === "mamasan" ? `"This bar?" A look down the rail that takes in every stool. "My bar. Every girl on it is my problem and my paycheque. You want to know how it runs, buy a drink and watch me."` :
+          // "MY BAR" IS AN OWNERSHIP CLAIM and it was in the mamasan's mouth —
+          // Candy (who owns two) and two mamasans who own nothing all said the
+          // identical sentence in one week (Helen, round 49). The owner keeps it;
+          // the woman who runs the floor says what she actually runs, and it is
+          // pooled, because it is the commonest question in the game.
+          me === "mamasan" ? (NPCS[npc].owner
+            ? `"This bar?" A look down the rail that takes in every stool. "My bar. Every girl on it is my problem and my paycheque. You want to know how it runs, buy a drink and watch me."`
+            : [`"This bar?" A look down the rail that takes in every stool. "Not mine — but the floor is. Every girl on it is my problem. The owner worries about the rent; I worry about the room."`,
+               `"Here?" ${NPCS[npc].name} shrugs at the room without affection or complaint. "Is a good bar. Clean, honest price, nobody make trouble. I keep it like that — is my job, na."`,
+               `"What you want to know?" She doesn't look down the rail; she has already counted it. "Who work tonight, who is late, who go home early. That is the bar. The rest is the owner's headache."`,
+              ][_hh(npc + ":thisbar", 19) % 3]) :
           me === "manager" ? `"The place?" He wipes the same patch of bar twice. "Runs itself on a good night and runs me on a bad one. Ask me anything about it except who owns it."` :
           me === "cashier" ? `"${bn || "This bar"}?" She taps the drawer. "Comes in here, goes out there. On a good night more comes in. That is the whole business, and I see all of it."` :
           `"Here? Is okay." She shrugs at the room. "Mama good, customer sometimes good. Better than the village — is what everybody say, and is true."`;
@@ -5834,6 +5897,20 @@ function _doBuy(arg) {
         .some(w => w.length > 3 && arg.includes(w))))) {
     const f = FOOD_STALLS[G.room];
     if (_fullNo()) return;
+    // A MEAL SAID TO BE ON THE HOUSE IS ON THE HOUSE. Duangjai says "tonight the
+    // fish is on the house, and I don't want to hear about it" and the till took
+    // ฿180 off the next EAT (Gary, round 49) — the promise lint can't see this
+    // one, because the sentence carries no tappable hint and BUY parses fine.
+    if (_flag("lakeFishFree") && !_flag("lakeFishEaten") && G.room === "lake_bar") {
+      _setFlag("lakeFishEaten");
+      G.hunger = Math.max(0, G.hunger - f.hunger);
+      if (f.thirst) G.thirst = Math.max(0, Math.min(100, G.thirst - f.thirst));
+      _say(`Duangjai puts ${f.name} in front of you and walks off before you can reach for ` +
+        `anything, which is the whole of the argument. It is the best thing you have eaten ` +
+        `on this trip. (Nothing to pay.)`, "win");
+      _addHappy(2);
+      return;
+    }
     if (G.money < f.price) { _say(`฿${f.price}, and you're short. The smell alone is worth half that, and free.`); return; }
     G.money -= f.price;
     G.hunger = Math.max(0, G.hunger - f.hunger);
@@ -8490,26 +8567,169 @@ function _minutesWord(n) {
 // and he answers because he has watched the shutters come down four hundred
 // times — thirteen people shrugged at "closing" and the ones a player actually
 // talks to all night were among them (Brenda, round 47; askable-audit).
+// THE HOUSE'S OWN CLOCK. Three registers (the floor's Tinglish, a customer's
+// English, the house's English), and each one POOLED — Brian and Helen (round
+// 49, independently, on the same night of testing) between them collected the
+// single closing sentence from eleven mouths in seven bars, word for word:
+// "Close? When last man go home. Dawn, sometimes." One string on a fact every
+// member of staff in town knows is the class-M defect in its purest form.
+// The venue answers as ITSELF, too — a massage shop was giving the bar's
+// "last man off the stool, and that's usually me", in a room with reclining
+// chairs and no stools (Helen, at Ruean Sabai).
+function _hoursRegister(npc) {
+  if (!npc) return "house";
+  if (NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house) return "floor";
+  if (NPCS[npc].manager || NPCS[npc].house) return "house";
+  // the woman whose one room this is RUNS it — she is the house, not a customer
+  // in her own shop (Pensri was answering about her own massage parlour in the
+  // voice of a man on a stool).
+  if (!NPCS[npc].patron && !NPCS[npc].filler && NPCS[npc].room === G.room && !!_room().bar) return "house";
+  return "punter";
+}
+const _HOUR_WORDS = ["midnight", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+  "midday", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven"];
+function _hourSay(h) { return _HOUR_WORDS[((h % 24) + 24) % 24]; }
+function _cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+function _hourWord(t) { return _hourSay(18 + Math.floor(t / 10)); }
 function _closingTalk(npc) {
   const r = _room();
-  const tinglish = !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
-  const punter = !!npc && !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
-  const hourOf = t => { const h = (18 + Math.floor(t / 10)) % 24; return `${h}:00`; };
-  if (r.closesAt != null) return tinglish
-    ? `“We close ${hourOf(r.closesAt)}, na. Same every night — not a bar, this.”`
-    : punter
-    ? `“${hourOf(r.closesAt)}. On the dot, every night — it's a shop, not a bar.”`
-    : `“${hourOf(r.closesAt)}, every night. It's not a bar.”`;
-  if (_closesMidnight(G.room)) return tinglish
-    ? "“Midnight, tilac. Last call half past eleven, then shutter come down — police, na. You come back tomorrow.”"
-    : punter
-    ? "“Midnight, and they mean it. Last call's half eleven — drink up or wear it.”"
-    : "“Midnight. Last call at half eleven and the shutters come down on the dot — that's the arrangement on this road, not my choice.”";
-  return tinglish
-    ? "“Close? When last man go home. Dawn, sometimes. You still here, we still open.”"
-    : punter
-    ? "“They don't, as such. Last man off the stool, and that's usually me — dawn, most nights.”"
-    : "“We don't. Not while there's a man on a stool — dawn, most nights, and the sunrise crowd after that.”";
+  const reg = _hoursRegister(npc);
+  const pick = (pools) => _pickVary(pools[reg] || pools.house, "closing" + reg);
+  // a parlour is not a bar and never was
+  if (r.massage || r.soapy) return pick({
+    floor: [
+      "“We close late, na — but not dawn. Last customer, then we clean, then we sleep. Is a shop.”",
+      "“When the last one finish, we finish. Not like the bar — nobody drink here, so nobody stay.”",
+      "“Late. Not all night. Girls go home to sleep, we open again tomorrow.”",
+    ],
+    punter: [
+      "“Late, but they shut. It's a shop, not a bar — nobody's sitting here till dawn.”",
+      "“Last customer and the shutter comes down. They keep proper hours, more or less.”",
+      "“Not a bar, this. They close, they sleep, they open again. Novel idea round here.”",
+    ],
+    house: [
+      "“Late — but we do close. This is a shop. The girls work a shift and then they go home.”",
+      "“When the last one on the table is finished. Then we clean, and that is the night.”",
+      "“We are not a bar. Nobody sits here drinking until the sun comes up, thank God.”",
+    ],
+  });
+  if (r.closesAt != null) { const h = _hourWord(r.closesAt), H = _cap(h); return pick({
+    floor: [
+      `“We close ${h}, na. Same every night — not a bar, this.”`,
+      `“${H}. Every night, no different. Then everybody go home, tilac.”`,
+      `“${H} the shutter come down. You want something, you come before.”`,
+    ],
+    punter: [
+      `“${H}. On the dot, every night — it's a shop, not a bar.”`,
+      `“${H} and they mean it. I've had the grille come down on me twice.”`,
+      `“${H}. Proper hours. You can set your watch, which is more than you can say for the rest of it.”`,
+    ],
+    house: [
+      `“${H}, every night. It's not a bar.”`,
+      `“${H}. The whole place, not just us — it shuts as one.”`,
+      `“${H}, and nobody argues with it. Come earlier.”`,
+    ],
+  }); }
+  if (_closesMidnight(G.room)) return pick({
+    floor: [
+      "“Midnight, tilac. Last call half past eleven, then shutter come down — police, na. You come back tomorrow.”",
+      "“Twelve o'clock. Not our choice — this road must close. Half eleven you order the last one.”",
+      "“Midnight! Every night, same. After that, you go find somewhere else, hahaha.”",
+    ],
+    punter: [
+      "“Midnight, and they mean it. Last call's half eleven — drink up or wear it.”",
+      "“Twelve. This end of town has to, and they don't bend it. I've been walked out of here.”",
+      "“Midnight. Which is either early or civilised, depending how the week's gone.”",
+    ],
+    house: [
+      "“Midnight. Last call at half eleven and the shutters come down on the dot — that's the arrangement on this road, not my choice.”",
+      "“Twelve, and it isn't negotiable. The road closes, we close. Half eleven I start taking glasses off you.”",
+      "“Midnight. Every place on this street, the same minute. You'll hear the shutters go along the row.”",
+    ],
+  });
+  return pick({
+    floor: [
+      "“Close? When last man go home. Dawn, sometimes. You still here, we still open.”",
+      "“No close time, na. Last customer decide. Sometime I see the sun, sometime I sleep at two.”",
+      "“We never close properly. Somebody always still drinking. Is Pattaya, tilac.”",
+      "“When nobody sit any more. Could be one, could be six. Depend on you, not on me.”",
+    ],
+    punter: [
+      "“They don't, as such. Last man off the stool, and that's usually me — dawn, most nights.”",
+      "“There's no closing time here. You leave when you've had enough, and the girls stay till you do.”",
+      "“It shuts when the last idiot goes home. I'm frequently the last idiot.”",
+      "“Never known it to close. I've walked out of here into daylight more than once.”",
+    ],
+    house: [
+      "“We don't. Not while there's a man on a stool — dawn, most nights, and the sunrise crowd after that.”",
+      "“There's no shutter on this one. Last customer sets the hour, and some of them set it very late.”",
+      "“Officially? There isn't a closing time. Practically, whenever the room empties.”",
+      "“When the last man goes. I've locked up at four and I've locked up at seven.”",
+    ],
+  });
+}
+// ITS MIRROR, WHICH NOBODY COULD ANSWER. Every member of staff in town answers
+// "closing" and not one of them answered "what time do you open" — asked of a
+// hostess, a cashier, a mamasan, a manager, a pub waitress and a masseuse over
+// five nights, in a room whose own description says "the kind that open at four"
+// (Brian, round 49, whose entire hobby is punctuality). The hour is the VENUE'S
+// CLASS, the same way closing is, so it needs no new data.
+function _openingTalk(npc) {
+  const r = _room();
+  const reg = _hoursRegister(npc);
+  const pick = (pools) => _pickVary(pools[reg] || pools.house, "opening" + reg);
+  if (r.opensAt != null) { const h = _hourSay(r.opensAt), H = _cap(h); return pick({
+    floor: [`“${H}, same every day. Before that, nothing here.”`, `“We open ${h}. Come early, is quiet, is nice.”`],
+    punter: [`“${H}. It's a shop — it keeps shop hours, unlike everything else round here.”`, `“${H} sharp. And it shuts on time as well, which shocks people.”`],
+    house: [`“${H}. Every day, including the ones nobody comes.”`, `“${H} — proper hours. We're not on Pattaya time in here.”`],
+  }); }
+  if (r.massage || r.soapy) return pick({
+    floor: ["“Morning, na — ten o'clock. Best time, nobody here, you get the good room.”", "“We open ten. All day, every day. Massage don't wait for dark, tilac.”"],
+    punter: ["“Ten in the morning. That's the thing about these places — they're the only shop in Pattaya open when you want a coffee.”", "“Mornings. Ten-ish. Best massage of the week is a Tuesday at eleven with nobody in.”"],
+    house: ["“Ten in the morning, seven days. The quiet hours are the good ones.”", "“From ten. Most of our regulars come before lunch — it's the evening crowd who think we're a night business.”"],
+  });
+  const t = r.barType;
+  if (t === "gents") return pick({
+    floor: ["“Afternoon, na. Two o'clock, three. Is cool inside, that why the men come.”", "“We open early — afternoon. Long day, tilac. You come any time.”"],
+    punter: ["“Early afternoon. It's the only air-conditioning on this road that doesn't charge you for the privilege.”", "“Two, three in the afternoon. Half the regulars in here have never seen it dark outside.”"],
+    house: ["“Early afternoon. We're open through the heat, which is rather the point of us.”", "“From about two. Our best trade is men avoiding the afternoon.”"],
+  });
+  if (t === "gogo") return pick({
+    floor: ["“Eight o'clock, when first show start. Before that, only music and nobody dancing.”", "“Eight, na. Girls come seven, make up, then we open.”"],
+    punter: ["“Eight, when the first set goes on. Turn up at seven and you'll watch them mopping.”", "“Around eight. There's nothing to see before that but the lighting rig warming up.”"],
+    house: ["“Eight — the first set. The girls are in from seven and the doors go back when they're ready.”", "“Eight o'clock. There's no point before; the room needs bodies in it to work.”"],
+  });
+  if (t === "soi6") return pick({
+    floor: ["“Afternoon we open, but nobody come before dark. I sit outside, I wait, I look at my phone.”", "“Early — one, two o'clock. Whole soi open, whole soi empty, hahaha. Come at nine, then is soi.”"],
+    punter: ["“Early afternoon, officially. The soi doesn't actually start until it's dark, whatever the doors say.”", "“They're open by two and dead until eight. Best hour on that street is about ten.”"],
+    house: ["“Doors go back in the afternoon. The soi itself doesn't open until dark, which is a different thing.”", "“Early. Whether that counts as open, with nobody on the street, is a philosophical question.”"],
+  });
+  return pick({
+    floor: ["“Four o'clock, na. Ice come at three, we open at four.”", "“Late afternoon. Four, five. Early is quiet — is nice, actually.”", "“We open four. First man usually come five, same man, every day.”"],
+    punter: ["“Four, five. The ice turns up at three and the first pint's poured shortly after.”", "“Late afternoon. There's a handful of us who make a point of the first hour — it's the best of the day.”", "“About four. Ask the fella who's on that stool at one minute past.”"],
+    house: ["“Four. The ice comes at three, the girls come at half three, and we're pouring by four.”", "“Late afternoon — four-ish. Quiet, and the regulars like it that way.”", "“We open at four and I'd rather the four o'clock crowd than the midnight one, frankly.”"],
+  });
+}
+// AND "WHEN DOES IT GET BUSY" — the game models prime time, the season and a
+// thinning rail, prints all of it in TIME, and nobody in a room would say it
+// out loud (Brian, round 49). Computed from the same season the takings use.
+function _busyTalk(npc) {
+  const reg = _hoursRegister(npc);
+  const tier = typeof _seasonTier === "function" ? _seasonTier() : "high";
+  const lean = tier === "low" || tier === "deeplow";
+  const peak = tier === "peak";
+  const hour = lean
+    ? { floor: "“Busy? Ha. This season, tilac, maybe ten o'clock, maybe never. You are the busy.”",
+        punter: "“This time of year? It doesn't. Ten, eleven you might get a few. Might not.”",
+        house: "“Not this month. Ten or eleven we'll get a handful, and that's the night.”" }
+    : peak
+    ? { floor: "“Every night busy now! From nine, all the stool full. You come early or you stand, na.”",
+        punter: "“This time of year, from about nine you'll not get a seat. Come at eight or don't bother.”",
+        house: "“From nine, and it doesn't let up. This is the month that pays for the wet one.”" }
+    : { floor: "“After ten, na. Before that quiet — good for talking, not good for me, hahaha.”",
+        punter: "“Ten, half ten. Before that it's the four of us and the fan.”",
+        house: "“Ten onwards. The first hours are for the regulars; the room fills after that.”" };
+  return hour[reg] || hour.house;
 }
 // The league: every third night, every table in town — a count, not a weekday.
 function _leagueTalk(npc) {

@@ -2195,7 +2195,8 @@ const ROOMS = {
   },
   // Down-market by design, and the food court upstairs is where the fixed-income
   // expats eat — the same men the girls call cheap charlies, seen from the other side.
-  mikes_mall: { closesAt: 30,   // 21:00 — a Thai mall shuts at nine, and so does his table water: true,
+  // 21:00 — a Thai mall shuts at nine, and so does the food court's table water.
+  mikes_mall: { closesAt: 30, opensAt: 11, water: true,
     name: "Mike's Mall",
     bar: "Mike's Mall",
     region: "Second Road",
@@ -11107,7 +11108,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         when: (st, G) => G.quests.rabbit_job === "active" && !_flag("rabbitPath"),
         fx: () => { if (typeof _rabbitInterview === "function") _rabbitInterview(); },
         text: "He looks at you for longer than is polite, the way a man looks at a used car." },
-      { topic: "job|heist|work|the job|rabbit job|your job|box job", when: (st, G) => !_flag("rabbitData") && G.quests.rabbit_job !== "offered",   // the post-job and the yes-or-no nudge live below this deflect (graph lifecycle audit, 2026-09-15), deflect: true,
+      // the post-job and the yes-or-no nudge live below this deflect (graph lifecycle audit, 2026-09-15)
+      { topic: "job|heist|work|the job|rabbit job|your job|box job", when: (st, G) => !_flag("rabbitData") && G.quests.rabbit_job !== "offered", deflect: true,
         text: "“Job.” He lets the word sit there and go flat. “Everybody's got a job for me, boss, " +
           "and I've got a soda water.” He turns the glass a quarter. “Drink here a while. " +
           "People who drink here a while sometimes hear things.”" },
@@ -11674,7 +11676,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "understand that this is now a standing arrangement between you and this woman: " +
           "you are the one who has seen him. “Sit. The view's free.”",
         short: "“He's well? Good. Sit.”" },      { topic: "offer", chip: false, req: ["tiffinDelivered"], notFlags: ["lakeErrandDone"],
-        sets: ["lakeErrandDone"],
+        sets: ["lakeErrandDone", "lakeFishFree"],   // the fish she says is on the house actually is (Gary, round 49)
         text: "You tell her what you saw: the table, the phones, the boy doing three things " +
           "at once and all of them well. That he ate standing up. That he read you before you " +
           "reached the table, and that somebody with sense keeps an eye on him — you " +
@@ -15899,11 +15901,13 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   // (Not "Reg" — Reginald is already on the bench, and _findNpc matches a regular by name-prefix.)
   wilf: {
     name: "Wilf", emoji: "🍛",
+    patron: true,   // the flag IS the query — without it he is not on the bench for any of the code that asks
     pronoun: "he",
     room: "mikes_mall",
     hops: false,
     until: 30,   // he is there from opening until the mall shuts at nine, and then he walks home
 
+    age: 78, nat: "English",   // the profile the bench invariant checks — he had none, having never been on the bench
     title: "the old man with the fifty-baht plate",
     look: "English man of seventy-eight, thin, white hair combed flat, sun-spotted, faded grey polo shirt, reading glasses on a cord",
     desc: "Seventy-eight, thin as a rail, white hair combed flat with water, in a grey polo shirt that " +

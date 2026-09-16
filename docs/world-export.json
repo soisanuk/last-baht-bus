@@ -23,8 +23,8 @@
  ],
  "counts": {
   "geolocated": 243,
-  "patrons": 24,
-  "people": 341,
+  "patrons": 25,
+  "people": 340,
   "portraits": 365,
   "renders": 365,
   "thumbs": 365,
@@ -273,6 +273,14 @@
    "home": "blue_dog",
    "name": "Superman",
    "nat": "American",
+   "pronoun": "he"
+  },
+  "wilf": {
+   "desc": "Seventy-eight, thin as a rail, white hair combed flat with water, in a grey polo shirt that was navy once. He has the corner seat at the long table — the one by the socket — and a fifty-baht plate he makes last the afternoon. Nottingham, thirty years ago. He is not counting anything out loud, and he is counting everything.",
+   "emoji": "🍛",
+   "home": "mikes_mall",
+   "name": "Wilf",
+   "nat": "English",
    "pronoun": "he"
   }
  },
@@ -3457,13 +3465,6 @@
    "pronoun": "she",
    "room": "eastern_seaboard",
    "th": "วิลาวัลย์"
-  },
-  "wilf": {
-   "desc": "Seventy-eight, thin as a rail, white hair combed flat with water, in a grey polo shirt that was navy once. He has the corner seat at the long table — the one by the socket — and a fifty-baht plate he makes last the afternoon. Nottingham, thirty years ago. He is not counting anything out loud, and he is counting everything.",
-   "emoji": "🍛",
-   "name": "Wilf",
-   "pronoun": "he",
-   "room": "mikes_mall"
   },
   "wimon": {
    "bars": [
