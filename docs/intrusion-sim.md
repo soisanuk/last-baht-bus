@@ -197,16 +197,29 @@ retrofitted, this question reopens exactly as written above.
 
 ## 6. Suggested build order
 
-1. **Make the existing terminal clock reactive.** `cli-sim` already carries `budget: 60`
-   with telegraphs at 15 and 5 — a flat command countdown. Make the cost per command differ
-   (`copy` and `unlock` spike, `ls` barely moves) so something is *looking* rather than
-   merely counting. Small change, contained, to a module built for extension, and it tests
-   whether the tension is fun before anything expensive is committed.
+1. **Make the existing terminal clock reactive — IN LBB** (Mario, 2026-09-16: the full
+   layer debuts in Bangkok, but *the CLI changes will likely debut in LBB*). `cli-sim`
+   already carries `budget: 60` with telegraphs at 15 and 5 — a flat command countdown. Make
+   the cost per command differ (`copy` and `unlock` spike, `ls` barely moves) so something is
+   *looking* rather than merely counting.
+
+   **This split is the good one**, and for a reason beyond convenience: `cli-sim` already
+   ships in LBB against a live scenario with real players, so Bangkok inherits a mechanic
+   that has been *proven in play* rather than designed in the abstract. It is also
+   consistent with the arc as written — a reactive trace is **pressure you pass through**,
+   not a climax, so it does not promise the heist-movie ending §5 says the arc refuses.
+
+   **Design `startingHeat` now, even though LBB has no approach phase**, because that
+   parameter is the seam Bangkok plugs into and retrofitting a seam is dearer than leaving
+   one. And LBB should feed it something real rather than zero — the wire you chose
+   (`_ccibWire`: SIM, burner, or your own phone), whether the dog walked it with you, how
+   the box path went. A man who came in loud starts the terminal hot, which is the same
+   sentence the full layer will make literally true.
 2. **Prototype the approach as a node graph** with one scenario and no watchers — movement,
    metres, minutes, and the options list. Prove the chips.
 3. **Add one watcher kind** (`schedule`), then the alert level shared into `cli-sim` as
    starting heat.
-4. Build it against a BANGKOK scenario, not a Pattaya one — the first scenario authored is
+4. Steps 2–3 are BANGKOK work. Build the node graph against a Bangkok scenario, not a Pattaya one — the first scenario authored is
    the one that shapes the schema, and authoring `kitten_office` first would quietly bake in
    a bar's back stairs. The §3 sketch is kept as an illustration only.
 
@@ -220,5 +233,6 @@ retrofitted, this question reopens exactly as written above.
 | 2026-09-16 | Minutes are TURNS. No wall clock, per `CLAUDE.md` rules 1–2. |
 | 2026-09-16 | **DECIDED: it debuts in Bangkok, not retrofitted into the Rabbit arc** (Mario) — an intrusion layer gives the follow-on focus where LBB is deliberately open-ended, and LBB's verb is TALK. §4. |
 | 2026-09-16 | **Consequently CLOSED:** the arc's centre of gravity does not move; the Rabbit climax stays an interruption. Reopens only if the layer is ever retrofitted. |
-| — | **OPEN:** one module or two; whether `cli-sim` takes a starting heat or the alert stays per-phase. |
+| 2026-09-16 | **The CLI changes debut in LBB** (Mario) — the full layer is Bangkok's, but the reactive trace lands here first, against a live scenario with real players. Bangkok then inherits a proven mechanic. Consistent with the arc: a trace is pressure, not a climax. |
+| 2026-09-16 | **Consequently CLOSED:** `cli-sim` does take a `startingHeat` — designed now as the seam, fed in LBB by the wire choice / the dog / how the box path went, rather than left at zero until Bangkok needs it. |
 | — | **OPEN (new):** what Bangkok's *rail* is — the place you return to between jobs, where the writing lives. Depth-beats-breadth says the game needs one. |
