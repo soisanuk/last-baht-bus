@@ -8,17 +8,17 @@ var NEWS_FEED = [
     "d": "14 Sep 2026"
   },
   {
-    "t": "Regents International School Pattaya embraces International Primary Curriculum",
-    "s": "Thaiger",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Red light, alcohol bottle and a violent crash at Pattaya intersection",
+    "t": "Pattaya’s never-ending fight for room on already narrow streets",
     "s": "Pattaya Mail",
     "d": "15 Sep 2026"
   },
   {
-    "t": "Pattaya’s never-ending fight for room on already narrow streets",
+    "t": "Pattaya teenager says foreigner punches him after he offers help",
+    "s": "Thaiger",
+    "d": "16 Sep 2026"
+  },
+  {
+    "t": "Red light, alcohol bottle and a violent crash at Pattaya intersection",
     "s": "Pattaya Mail",
     "d": "15 Sep 2026"
   },
@@ -33,55 +33,55 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "British man injured fighting off phone robbers in Pattaya",
+    "t": "Russian man attacked, robbed by 3 suspects in Pattaya",
     "s": "Thaiger",
     "d": "15 Sep 2026"
   },
   {
-    "t": "Miss International Queen 2026 celebrates beauty, culture and equality",
-    "s": "Pattaya Mail",
-    "d": "15 Sep 2026"
+    "t": "Sri Lankan tourist says he was pressured to buy herbs in Pattaya",
+    "s": "Thaiger",
+    "d": "16 Sep 2026"
   },
   {
     "t": "I moved my family from Utah to Thailand to work remotely. 8 months later, we came home.",
-    "s": "businessinsider.com",
+    "s": "Business Insider",
     "d": "14 Sep 2026"
   },
   {
-    "t": "Thailand and Cambodia begin UN conciliation process over disputed maritime claims",
-    "s": "AP News",
+    "t": "Cambodia and Thailand begin UN-backed conciliation on maritime dispute",
+    "s": "Reuters",
     "d": "15 Sep 2026"
   },
   {
+    "t": "Scammers ‘moving through Thailand to new base in Malaysia’",
+    "s": "Bangkok Post",
+    "d": "16 Sep 2026"
+  },
+  {
+    "t": "Ex-minister Vorapak named in US sanctions push",
+    "s": "Bangkok Post",
+    "d": "16 Sep 2026"
+  },
+  {
     "t": "Thailand Seeks to Seal US Tariff Deal Before Anutin-Trump Talks",
-    "s": "bloomberg.com",
+    "s": "Bloomberg.com",
     "d": "15 Sep 2026"
   },
   {
     "t": "Ambassador to Thailand plays down anti-Israeli protests, but urges cautionary action",
     "s": "The Times of Israel",
     "d": "15 Sep 2026"
-  },
-  {
-    "t": "Israeli ambassador to Thailand: Some tourists think ‘anything goes’",
-    "s": "Ynetnews",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Iran fuels anti-Israel sentiment in Thailand",
-    "s": "www.israelhayom.com",
-    "d": "15 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-15","USD":33.3,"AUD":23.72,"GBP":44.88,"EUR":38.42};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-16","temp":30,"humid":72,"code":2,"hi":31,"rain":90};
+var WX_NOW = {"date":"2026-09-16","temp":27,"humid":90,"code":55,"hi":31,"rain":94};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
-var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
+var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4324,"date":"2026-09-16","baht":68100};
+var GOLD = {"usd":4351,"date":"2026-09-16","baht":68500};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":75903,"thb":2524965};
+var BTC = {"usd":75913,"thb":2524038};
