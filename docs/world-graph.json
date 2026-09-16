@@ -921,7 +921,7 @@
  ],
  "counts": {
   "constants": 153,
-  "dialogue": 2877,
+  "dialogue": 2878,
   "edges": 2867,
   "encounters": 23,
   "flags": 171,
@@ -7348,6 +7348,24 @@
    "hasWhen": false,
    "index": 3,
    "key": "dave#3",
+   "npc": "dave",
+   "topic": "work|job|teaching|english|online|living|what do you do",
+   "topics": [
+    "work",
+    "job",
+    "teaching",
+    "english",
+    "online",
+    "living",
+    "what do you do"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 4,
+   "key": "dave#4",
    "npc": "dave",
    "topic": "flying club",
    "topics": [
@@ -56333,7 +56351,7 @@
    "th": "ดาว"
   },
   {
-   "dialogueCount": 4,
+   "dialogueCount": 5,
    "hops": true,
    "id": "dave",
    "name": "Dave",

@@ -15182,6 +15182,21 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "chillies, mate, endless photos of chillies.\" He smiles at his phone " +
         "like it owes him money. \"Best boring photos I ever got.\"",
         short: "\"Simon's in Ban Chang growing chillies. Best boring photos I ever got.\"" },
+      // WHAT HE DOES FOR A LIVING, and the reason the lap is possible at all: he
+      // works his students' afternoon, is finished by breakfast, and owns the
+      // rest of the day. Mario, 2026-09-16 — and deliberately NOT David's job,
+      // who teaches in a classroom for ฿32,000 and says so; Dave bills in dollars
+      // and does not name a figure, which is most of the difference between them.
+      { topic: "work|job|teaching|english|online|living|what do you do",
+        text: "\"Online English.\" He says it the way you'd name a bus route. " +
+          "\"Teenagers in Shenzhen mostly, couple in Seoul, one lad in Hanoi who's " +
+          "better at it than I am.\" He turns {{the phone}} face-down, which he does " +
+          "not often do. \"Six in the morning till about nine — their afternoon. " +
+          "Bills in dollars. That's the whole reason it works, and anyone who tells " +
+          "you different is teaching for baht and proud of it.\" A shrug, entirely " +
+          "without complaint. \"Done before breakfast. Leaves me the rest of the day.\" " +
+          "He does not say what for. The list of names on {{the phone}} says it for him.",
+        short: "\"Online English — Shenzhen mostly, six till nine, their afternoon. Done before breakfast. Leaves me the day.\"" },
       { topic: "flying club", text: "\"Heard the joke, have you.\" It isn't a " +
         "question and he isn't smiling. \"Every one of them had mates who said " +
         "afterwards, 'never saw it coming.' Saw it fine. Just didn't ring.\" He " +

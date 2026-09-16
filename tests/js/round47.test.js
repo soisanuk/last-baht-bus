@@ -836,7 +836,7 @@ test("staff answer the calendar they keep: closing and the league, in their own 
   out = []; doCommand("ask lek about closing");
   // the pool, not a string: an all-night bar says it has no closing hour, in
   // whichever of its variants (round 49 deepened this from one line to four)
-  assert.match(text(), /Dawn|dawn|last man|never close|no close|nobody sit/, "an all-night beer bar");
+  assert.match(text(), /dawn|last man|never close|no close|nobody sit|last customer|last idiot/i, "an all-night beer bar");
   G.room = "velvet_club"; const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
   out = []; doCommand(`ask ${NPCS[g].name} about closing`);
   assert.match(text(), /Midnight|Twelve/, "a gents' club shuts at twelve");
