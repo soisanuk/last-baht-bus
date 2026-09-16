@@ -1460,9 +1460,16 @@ function _startKiller() {
   const field = [];
   const used = new Set();
   const roster = _room().region === "Darkside" ? KP_FIELD_DARK : KP_FIELD; // one pool for both the draw and the pick (code review 2026-08-22)
-  while (field.length < 4) {
-    const i = Math.floor(_rand() * roster.length);
-    if (!used.has(i)) { used.add(i); field.push(roster[i]); }
+  // A CONSTANT rnd() PICKS ONE INDEX FOREVER. Re-rolling on a collision spins
+  // without end the moment the dice do not vary — and the project's own persona
+  // skill instructs `_rand = () => 0.99` for stubbing, so the documented testing
+  // practice hung the process (found 2026-09-17 as a wedged probe, three hours
+  // old). Walk to the next free seat instead of re-rolling: same distribution
+  // under real dice, terminates under any dice at all.
+  while (field.length < 4 && used.size < roster.length) {
+    let i = Math.floor(_rand() * roster.length) % roster.length;
+    for (let k = 0; k < roster.length && used.has(i); k++) i = (i + 1) % roster.length;
+    used.add(i); field.push(roster[i]);
   }
   const names = ["You", ...field.map(f => f[0])];
   const skills = [0, ...field.map(f => f[1])];
@@ -1540,8 +1547,10 @@ function _kpInput(input) {
     _say(`Miss. ${you.player.lives > 0 ? `Life gone (${you.player.lives} left).` :
       "That was your last life. You're out."}`, you.out ? "alert" : "");
   }
-  // the table plays around to you
-  while (!kpOver(g.kp) && g.kp.turn !== 0) {
+  // the table plays around to you — BOUNDED, because the exit condition is a miss
+  // and a non-varying rnd() never produces one (see the field builder above)
+  let _around = 0;
+  while (!kpOver(g.kp) && g.kp.turn !== 0 && _around++ < 400) {
     const r = kpShot(g.kp, _rand);
     if (r.out) _say(`${_ucfirst(r.player.name)} misses and is OUT. A moment of silence; the moment ends.`, "dim");
     else if (!r.potted) _say(`${_ucfirst(r.player.name)} rattles it — a life gone.`, "dim");
@@ -2589,7 +2598,7 @@ function _doSocial(kind, targetWord) {
   // flirt is the soft action: it has no tier-0/1 rejection pools (they're null),
   // so a very-low-favor flirt (e.g. a bad-rep stranger) must clamp UP to its lowest
   // defined tier — "filed under harmless" — rather than crash on a null pool.
-  while (!_SOCIAL_TEXT[kind][tier]) tier++;
+  while (tier < 4 && !_SOCIAL_TEXT[kind][tier]) tier++;   // bounded: tier 4 is always defined
   const fn = _pickVary(_SOCIAL_TEXT[kind][tier], "soc:" + kind + tier);
   _say(fn(name), tier === 0 ? "alert" : tier >= 3 ? "win" : "");
   if (braBump && tier >= 3) _say("(The bra you bought her is, as advertised, doing work.)", "dim");

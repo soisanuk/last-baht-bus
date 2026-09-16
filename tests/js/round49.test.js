@@ -364,3 +364,31 @@ test("the room with the table can discuss the table", () => {
   out = []; doCommand("ask candy about pool");
   assert.doesNotMatch(text(), miss2, "a bar with no table says so");
 });
+
+test("stubbed dice cannot hang the engine — the documented testing practice is safe", () => {
+  // Found as a WEDGED PROCESS, not by any instrument: a probe stubbing `_rand` at
+  // a constant 0.99 sat spinning for three hours (2026-09-17). Three unbounded
+  // loops only terminated because real dice vary — and the persona skill in this
+  // repo explicitly instructs `_rand = () => 0.99` for stubbing, so the
+  // documented practice was the thing that hung. Any constant must terminate.
+  for (const fixed of [0, 0.01, 0.5, 0.99, 1]) {
+    const saved = _rand;
+    try {
+      _rand = () => fixed;
+      G.room = "stinky_bar"; G.day = 3; G.money = 9000; G.game = null;
+      out = []; doCommand("play killer");
+      for (let i = 0; i < 60 && G.game; i++) doCommand("shot");
+    } finally { _rand = saved; }
+    assert.ok(true, `a constant rnd() of ${fixed} returns`);
+  }
+  // the field is still four distinct players under a constant
+  const saved2 = _rand;
+  try {
+    _rand = () => 0.99;
+    G.room = "stinky_bar"; G.day = 3; G.money = 9000; G.game = null;
+    out = []; doCommand("play killer");
+    const names = G.game.kp.players.map(p => p.name);
+    assert.equal(new Set(names).size, names.length, "no player is seated twice");
+  } finally { _rand = saved2; }
+  G.game = null;
+});
