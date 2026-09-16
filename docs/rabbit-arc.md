@@ -500,11 +500,15 @@ The contract, the prior art, the scenario schema and the build order live in
 
 - **The node graph beat the grid** partly because a floor plan of the Kitten Corner back
   office is code about Pattaya, and a node graph is data. Same reasoning as the filesystem.
-- **The open question is this arc's centre of gravity.** The climax here is deliberately an
-  interruption rather than a landing — the job completes and the variable is the radar. A
-  tense infiltration promises exactly the climax this arc refuses. Either the weight moves
-  forward into the job, or the action layer is pressure you pass through and the cost still
-  lands the morning after. Unresolved, and it is Mario's call.
+- **DECIDED the same day: the layer debuts in BANGKOK, not here** (Mario). An intrusion
+  mode gives the follow-on a focus where LBB is deliberately open-ended, and LBB's defining
+  verb is TALK — an action layer here is orthogonal rather than additive, and retrofitting
+  it risks LBB becoming two games sharing a save.
+- **So this arc keeps its shape, and its open question closes without being answered.** The
+  climax stays an interruption rather than a landing: the job completes, and the variable
+  stays whose name is on the radar the morning after. A tense infiltration would have
+  promised exactly the climax this arc refuses, and now nothing has to. If the layer is ever
+  retrofitted, that question reopens.
 
 ### The inversion — the crypto was never the jugular
 

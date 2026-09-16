@@ -368,11 +368,44 @@ the no-signpost test above.
 looking, to a terminal that is watched while you work — was proposed for LBB's Rabbit heist
 on 2026-09-16 and settled as **portable to here** in the same conversation.
 
-Spec: **`docs/intrusion-sim.md`**. It is the better fit for this game than for LBB — a
-cyberpunk Bangkok is the natural home of an intrusion mode, and one of the open questions
-is whether it debuts here rather than being retrofitted into the Rabbit arc. Note the
-scenario is DATA (nodes, metre costs, watchers), so a tower floor, a server room or a mall
-service corridor is new data, not new code.
+Spec: **`docs/intrusion-sim.md`**. **DECIDED the same day: it debuts HERE, not retrofitted
+into the Rabbit arc** — and the reason is about this game rather than about LBB. An
+intrusion layer gives this game a *focus*, where LBB is deliberately open-ended, and LBB's
+defining verb is TALK (three thousand dialogue nodes, the bond ladder, presence as the
+mechanic) so an action layer there is orthogonal rather than additive.
+
+**This is the missing middle of the concept.** As written, this document is strong on world
+and character and thin on the hour-to-hour loop: the thesis, the protagonist, the husk, the
+code-switching and the guardrails are all here, and what the player *does* between scenes is
+not. The pieces either side of the loop already exist — `cli-sim` is the terminal half, and
+`G.ccibRadar` arrives from LBB as **heat you already carry**, which is a stealth game's
+opening condition rather than a footnote.
+
+It also gives **code-switching something to bite on.** In a conversation game, switching
+register is flavour on a dialogue node. In an infiltration it is *operational*: which
+register gets you past a guard, whether a face reads as Thai or farang at a service door,
+who you talk through a checkpoint instead of going around it. That is a better home for the
+mechanic this concept already calls central.
+
+The scenario is DATA (nodes, metre costs, watchers), so a tower floor, a server room or a
+mall service corridor is new data, not new code.
+
+**Two commitments that come with taking the loop, both of them warnings:**
+
+1. **The thesis has to survive it.** "Reveal that Bangkok already is cyberpunk" is an
+   argument about a real city. A job-to-job stealth game can quietly become Uplink with Thai
+   names, where the setting is backdrop rather than claim. The jobs must be *about* the
+   thing — the compounds, the liability regime, the husk — not merely located near it.
+2. **Depth beats breadth**, which is LBB's hardest-won *measured* lesson: its unseen writing
+   sat in bond-gated nodes nobody reached, and one deepening relationship outperformed
+   churn. The equivalent here is a handful of jobs written deeply over a procedural mission
+   generator — **and it means this game still needs its RAIL**: somewhere you come back to
+   between jobs, where the writing lives. Without one it is a mission sequence with good
+   prose attached. What that place is, is an open question and probably an important one.
+
+The structural symmetry, and the reason the two games sit well together: **LBB is a sandbox
+whose tension is drift and which cannot be lost; this is a job game whose tension is
+exposure and which can.** The shared save is the hinge.
 
 ## What carries from LBB, and what doesn't
 

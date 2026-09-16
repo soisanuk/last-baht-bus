@@ -129,7 +129,47 @@ INTRUSION_SCENARIOS.kitten_office = {
 }
 ```
 
-## 4. The fiction question — unresolved, and it is Mario's
+## 4. Where it debuts — DECIDED: Bangkok (2026-09-16)
+
+**It debuts in the Bangkok follow-on rather than being retrofitted into LBB's Rabbit
+arc.** Mario's reasoning, and it is the stronger form of the argument: an intrusion layer
+gives the Bangkok game *focus*, where LBB is deliberately open-ended.
+
+The case, recorded because it should outlive the conversation:
+
+- **LBB's defining verb is TALK.** Nearly three thousand dialogue nodes, the bond ladder,
+  the ledger reveals, presence as the core mechanic. An action layer there is not bad, it
+  is **orthogonal** — and retrofitting it risks LBB becoming two games sharing a save.
+- **Bangkok is strong on world and character and thin on the hour-to-hour loop.** The
+  thesis, the protagonist, the husk, the code-switching and the guardrails are all written;
+  what the player *does* between scenes is not. This is the missing middle, and the pieces
+  either side of it already exist: `cli-sim` is the terminal half, and `G.ccibRadar` arrives
+  from LBB as **heat you already carry** — a stealth game's opening condition rather than a
+  footnote.
+- **It gives code-switching something to bite on.** In a conversation game, switching
+  register is flavour on a dialogue node. In an infiltration it is *operational*: which
+  register gets you past a guard, whether a face reads as Thai or farang at a service door,
+  who you talk through a checkpoint instead of going around. A far better home for the
+  mechanic the concept already calls central.
+
+### Two commitments that come with it
+
+1. **The thesis has to survive the loop.** "Reveal that Bangkok already is cyberpunk" is an
+   argument about a real city. A job-to-job stealth game can quietly become Uplink with Thai
+   names, where the setting is backdrop rather than claim. The jobs must be *about* the
+   thing — the compounds, the liability regime, the husk — not merely located near it.
+2. **Depth beats breadth, which is LBB's hardest-won measured lesson.** The unseen writing
+   here sat in bond-gated nodes nobody reached, and one deepening relationship outperformed
+   churn. The Bangkok equivalent is a handful of jobs written deeply over a procedural
+   mission generator — and it means **Bangkok still needs its rail**: somewhere you come
+   back to between jobs, where the writing lives. Without that it is a mission sequence with
+   good prose attached.
+
+The structural symmetry, which is the reason the two games sit well together: **LBB is a
+sandbox whose tension is drift and which cannot be lost; Bangkok is a job game whose tension
+is exposure and which can.** The shared save is the hinge.
+
+## 5. The fiction question — resolved as a consequence
 
 The Rabbit arc's current thesis is that **the climax is an interruption, not a landing**:
 WDG were already under CCIB investigation, the job *completes*, and the only real variable
@@ -148,10 +188,14 @@ give.** Two honest ways out, and they are different games:
    you changes. This preserves the arc as written.
 
 Option 2 is more consistent with everything else in this project, and option 1 is more
-likely to be what an action mode makes people want. **Decide before any code**, because it
-changes what the mode is *for*.
+likely to be what an action mode makes people want.
 
-## 5. Suggested build order
+**Debuting in Bangkok settles this by not asking it.** The Rabbit arc keeps its current
+design: the job completes, the climax stays an interruption rather than a landing, and the
+variable stays the radar. LBB's centre of gravity does not move. If the layer is ever
+retrofitted, this question reopens exactly as written above.
+
+## 6. Suggested build order
 
 1. **Make the existing terminal clock reactive.** `cli-sim` already carries `budget: 60`
    with telegraphs at 15 and 5 — a flat command countdown. Make the cost per command differ
@@ -162,7 +206,9 @@ changes what the mode is *for*.
    metres, minutes, and the options list. Prove the chips.
 3. **Add one watcher kind** (`schedule`), then the alert level shared into `cli-sim` as
    starting heat.
-4. Only then consider whether the Rabbit arc adopts it, or whether it debuts in Bangkok.
+4. Build it against a BANGKOK scenario, not a Pattaya one — the first scenario authored is
+   the one that shapes the schema, and authoring `kitten_office` first would quietly bake in
+   a bar's back stairs. The §3 sketch is kept as an illustration only.
 
 ## Decision log
 
@@ -172,5 +218,7 @@ changes what the mode is *for*.
 | 2026-09-16 | **Portable, like `cli-sim.js`** (Mario) — carries to the Bangkok follow-on. This makes the module contract in §3 binding rather than advisory. |
 | 2026-09-16 | **Node graph with metre edge costs, not a movement grid** — decided by portability first (a floor plan is code about Pattaya; a node graph is data) and by medium second. |
 | 2026-09-16 | Minutes are TURNS. No wall clock, per `CLAUDE.md` rules 1–2. |
-| — | **OPEN:** does the arc's centre of gravity move to the job (§4)? |
+| 2026-09-16 | **DECIDED: it debuts in Bangkok, not retrofitted into the Rabbit arc** (Mario) — an intrusion layer gives the follow-on focus where LBB is deliberately open-ended, and LBB's verb is TALK. §4. |
+| 2026-09-16 | **Consequently CLOSED:** the arc's centre of gravity does not move; the Rabbit climax stays an interruption. Reopens only if the layer is ever retrofitted. |
 | — | **OPEN:** one module or two; whether `cli-sim` takes a starting heat or the alert stays per-phase. |
+| — | **OPEN (new):** what Bangkok's *rail* is — the place you return to between jobs, where the writing lives. Depth-beats-breadth says the game needs one. |
