@@ -3620,7 +3620,10 @@ function _doTalkBody(arg, topic) {
   }
   // a regular you TALK to warms up: generic Tinglish register for the filler
   // girls, unless she has a more specific line (a topic, or a bond-gated entry
-  // that just fired). Hand-authored NPCs speak their own bond: lines instead.
+  // that just fired). Hand-authored NPCs speak their own bond: lines instead —
+  // and when those run out, the same register is their floor, in the repeat
+  // branch below (Geraint, round 48). It belongs THERE and not here: here it
+  // would fire instead of her own greeting, the first time you ever met her.
   if (!topic && NPCS[npc].filler && NPC_ROLES[npc] === "hostess" &&
       _bondTier(npc) >= 2 && !(d && d.bond)) {
     _bondTalk(npc);
@@ -3917,6 +3920,18 @@ function _doTalkBody(arg, topic) {
     G.soc.helloed = G.soc.helloed || {};
     G.soc.helloed[npc] = (G.soc.helloed[npc] || 0) + 1;
     if (G.soc.helloed[npc] >= 2) {
+      // …unless she is warm to you, in which case the warmth is the answer and
+      // the ask-me-something prompt is not. This fired ahead of the bond
+      // register, so the deepest-written woman in the game went quiet at her
+      // own top tier while a generated girl told you about her room (Geraint,
+      // round 48).
+      if (_bondTier(npc) >= 2 && NPC_ROLES[npc] === "hostess") {
+        _bondTalk(npc);
+        if (typeof _otherLedger === "function") _otherLedger(npc);
+        _questOffer(npc);
+        (G.seenDay = G.seenDay || {})[npc] = G.day;
+        return;
+      }
       _say(_fmt(_pickVary(_HELLO_AGAIN, "helloagain"), { n: NPCS[npc].name, N: NPCS[npc].name.toUpperCase() }), "dim");
       if (typeof _otherLedger === "function") _otherLedger(npc);
       _questOffer(npc);

@@ -125,8 +125,20 @@ test("the third TALK to a girl who has said hello is not a doorbell — but the 
   out = []; run("talk to lek"); const second = text();
   out = []; run("talk to lek"); const third = text();
   assert.ok(!_HELLO_AGAIN.some(l => second.includes(_fmt(l, { n: "Lek", N: "LEK" }))), "the second talk is her gist, not the wave-off");
-  assert.ok(_HELLO_AGAIN.some(l => third.includes(_fmt(l, { n: "Lek", N: "LEK" }))), "the third asks for a subject");
+  // …and the third is WARMTH, not the prompt, because she is her-farang to you:
+  // the ask-me-something line is for a woman who has nothing warmer (Geraint,
+  // round 48 — Lek at the top tier answered "a small smile, and nothing else"
+  // while a generated girl told you about her room). Frank's fix stands where it
+  // was aimed: the un-warm repeat, checked below.
+  assert.ok(!_HELLO_AGAIN.some(l => third.includes(_fmt(l, { n: "Lek", N: "LEK" }))), "warmth outranks the prompt");
+  const warm = [..._BOND_TALK[2], ..._BOND_TALK[3]].map(f => f("Lek"));
+  assert.ok(warm.some(l => third.includes(l)), "the third is one of her warm beats");
   assert.notEqual(third.split("\n")[0], second.split("\n")[0]);
+  // a girl you are NOT warm with still gets the doorbell fix — Frank's own case,
+  // the same woman before the drinks
+  G.soc.drinks.lek = 0; G.talked.lek = []; G.soc.helloed = {}; G.convo = null;
+  run("talk to lek"); out = []; run("talk to lek"); out = []; run("talk to lek");
+  assert.ok(_HELLO_AGAIN.some(l => text().includes(_fmt(l, { n: "Lek", N: "LEK" }))), "the third still asks a stranger for a subject");
 });
 
 test("the same texted selfie doesn't file twice; the wrong hotel's desk points you home; the dry ATM names the nearest (Frank)", () => {

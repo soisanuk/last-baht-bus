@@ -1192,3 +1192,22 @@ test("a butterfly is a man who does not come back, and Lek thanks you only for s
   out = []; doCommand("ask lek about sandals");
   assert.match(text(), /Nobody buy me shoes before/);
 });
+
+test("the deepest-written woman is not the quietest: warmth outranks the ask-me-something prompt", () => {
+  // Lek at her-farang tier answered "a small smile, and nothing else" while a
+  // GENERATED girl at the same tier told you about her room (Geraint, round 48).
+  // Her own bond: lines come first; the generic register is the floor under
+  // everyone, not a consolation for being filler.
+  G.room = "lucky_tiger"; G.soc.drinks.lek = 14; G.known.lek = true;
+  doCommand("talk to lek");
+  const said = [];
+  for (let i = 0; i < 4; i++) { out = []; doCommand("talk to lek"); said.push(text()); }
+  assert.ok(!said.some(l => /raises her glass an inch|this is the part where you say something/.test(l)),
+    "an authored regular does not fall to the prompt while she has warmth left");
+  const pool = [..._BOND_TALK[2], ..._BOND_TALK[3]].map(f => f("Lek"));
+  assert.ok(said.some(t => pool.some(l => t.includes(l))), "she reaches the bond register");
+  // …and a stranger still gets no warmth she has not earned you
+  G.room = "candy_bar"; G.soc.drinks.nan = 0; doCommand("talk to nan");
+  out = []; doCommand("talk to nan");
+  assert.ok(!pool.some(l => text().includes(l.replace(/Lek/g, "Nan"))), "warmth is earned, not default");
+});
