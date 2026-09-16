@@ -487,6 +487,25 @@ wants the mechanics portable, the CLI simulator especially. **So it is built to 
 This mirrors how `games.js` already stays free of `G` and output — follow that file
 as the template. See also the portability note in the follow-on-game section below.
 
+### The action layer is the SECOND portable module (2026-09-16)
+
+Mario raised reworking the heist from a modal scene into a minute-by-minute action mode —
+turns of one minute, distance in metres, navigate the approach, detection processes running
+while you are at the terminal — and settled in the same conversation that it is **portable
+like the CLI simulator**, carrying to the Bangkok follow-on. So the rule above is not
+specific to `cli-sim.js`; it is the pattern, and this is its second instance.
+
+The contract, the prior art, the scenario schema and the build order live in
+**`docs/intrusion-sim.md`**. Two things from it bear on THIS arc directly:
+
+- **The node graph beat the grid** partly because a floor plan of the Kitten Corner back
+  office is code about Pattaya, and a node graph is data. Same reasoning as the filesystem.
+- **The open question is this arc's centre of gravity.** The climax here is deliberately an
+  interruption rather than a landing — the job completes and the variable is the radar. A
+  tense infiltration promises exactly the climax this arc refuses. Either the weight moves
+  forward into the job, or the action layer is pressure you pass through and the cost still
+  lands the morning after. Unresolved, and it is Mario's call.
+
 ### The inversion — the crypto was never the jugular
 
 Both paths converge: Rabbit gets his data. Then the arc turns. **WDG's real

@@ -361,6 +361,19 @@ mother's fear, which keeps the quest real with every trace of sequel meaning str
 doneFlag design as usual (observe the world, don't own it). Build only after it's specced against
 the no-signpost test above.
 
+## The intrusion layer — the second thing built to carry (2026-09-16)
+
+`cli-sim.js` was built portable on purpose so this game could import it unchanged. A
+**minute-by-minute action layer** — navigate an approach in metres, past things that are
+looking, to a terminal that is watched while you work — was proposed for LBB's Rabbit heist
+on 2026-09-16 and settled as **portable to here** in the same conversation.
+
+Spec: **`docs/intrusion-sim.md`**. It is the better fit for this game than for LBB — a
+cyberpunk Bangkok is the natural home of an intrusion mode, and one of the open questions
+is whether it debuts here rather than being retrofitted into the Rabbit arc. Note the
+scenario is DATA (nodes, metre costs, watchers), so a tower floor, a server room or a mall
+service corridor is new data, not new code.
+
 ## What carries from LBB, and what doesn't
 
 - **Engine (Layer 1):** verbatim — parser, room graph, clock, rng, save, encounters/quest/
