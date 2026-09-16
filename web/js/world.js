@@ -5181,6 +5181,23 @@ const _KES_VET = [
       "bracelet turns. It just got colder in here." },
 ];
 
+// Lek's price story, hoisted because TWO nodes deliver it: the topicless beat
+// when you sit down with her on the wet night she named, and the `price` topic
+// on that same night — a player who met the stated condition and ASKED instead
+// of sitting got the deflection that sent her looking for it (Helen, round 49).
+const _LEK_PRICE_STORY = "Nobody is playing pool in this. Lek is on the plastic stool by the door, knees up, watching " +
+  "the flood carry a plastic bag past the step, and she starts talking without the " +
+  "hello — flat, like reading a receipt. \"Two year my price same-same. Everybody " +
+  "know. Fair.\" She turns {{her phone}} so you can see a chat: her message, a reply " +
+  "one minute later, then the grey nothing where a contact used to be. \"My friend " +
+  "say — everybody charge double now, know your worth, don't be cheap village girl. " +
+  "So I say the big number.\" A nod at the sofa, where a girl sleeps wrapped in a " +
+  "towel, vape on her chest rising and falling. \"He say, did I think this is Dubai. " +
+  "Then block. My one customer this week.\" She puts {{the phone}} face-down. \"My " +
+  "friend sleep good. Advice is free, na — for HER.\" The rain hits the roof. She " +
+  "hasn't eaten since two o'clock; you can hear it from here.";
+const _LEK_PRICE_SHORT = "\"I said the big number. He said, did I think this is Dubai. Then block.\" The friend sleeps on. \"Advice is free — for her.\"";
+
 const NPCS = {
 
   nok: {
@@ -5781,21 +5798,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // eaten since two o'clock", and both were disprovable by the transcript
       // two commands up (Frank, round 34). The scene is good; it just needs to
       // fire on a night it is true.
-      { bond: 1, when: (st, G) => (G.rain > 0 || (typeof _wxRainy === "function" && _wxRainy())) &&
-          !_flag("fed26") && !(G.game && G.game.type === "pool") && !_leagueTonight(),
+      { bond: 1, when: () => _lekPriceNight(),
         notFlags: ["heardPriceStory"], sets: ["heardPriceStory"],
-        text: "Nobody is playing pool in this. Lek is on the plastic stool by the door, knees up, watching " +
-          "the flood carry a plastic bag past the step, and she starts talking without the " +
-          "hello — flat, like reading a receipt. \"Two year my price same-same. Everybody " +
-          "know. Fair.\" She turns {{her phone}} so you can see a chat: her message, a reply " +
-          "one minute later, then the grey nothing where a contact used to be. \"My friend " +
-          "say — everybody charge double now, know your worth, don't be cheap village girl. " +
-          "So I say the big number.\" A nod at the sofa, where a girl sleeps wrapped in a " +
-          "towel, vape on her chest rising and falling. \"He say, did I think this is Dubai. " +
-          "Then block. My one customer this week.\" She puts {{the phone}} face-down. \"My " +
-          "friend sleep good. Advice is free, na — for HER.\" The rain hits the roof. She " +
-          "hasn't eaten since two o'clock; you can hear it from here.",
-        short: "\"I said the big number. He said, did I think this is Dubai. Then block.\" The friend sleeps on. \"Advice is free — for her.\"" },
+        text: _LEK_PRICE_STORY, short: _LEK_PRICE_SHORT },
       { req: ["knowMot"], notFlags: ["knowOyHasIt"], th: "อุ๊ยจริงหรอ", rom: "ui jing ro",
         text: "\"Mot?! That little— okay okay. This morning he come here all big smile, buy whisky-cola, PAY CASH. Say he 'do business' with Madam Oy at Rainbow Girls — Tree Town maze, top of Buakhao. Business!\" She snorts. \"Your wallet in Oy's safe before he sleep, guarantee.\"",
         sets: ["knowOyHasIt"],
@@ -5869,7 +5874,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // round 47). The condition it names is now the one that actually works:
       // sit down with her on a slow wet night and she starts talking without the
       // hello.
-      { topic: "price", notFlags: ["heardPriceStory"],
+      // …and on the night it named, ASKING reaches the same story rather than the
+      // deflection that sent you looking for it.
+      { topic: "price", notFlags: ["heardPriceStory"], when: () => _lekPriceNight(),
+        sets: ["heardPriceStory"], text: _LEK_PRICE_STORY, short: _LEK_PRICE_SHORT },
+      { topic: "price", notFlags: ["heardPriceStory"], when: () => !_lekPriceNight(),
         text: "\"Price?\" A look. \"Not standing up, and not asked. Come and sit with me on a night the rain has killed the pool and nobody wants anything. I tell you the whole thing then.\"",
         short: "\"Not asked, and not standing up. Sit with me on a wet night.\"" },
       // the after-hours question nobody would answer (Dex, round 38): where the night goes after two

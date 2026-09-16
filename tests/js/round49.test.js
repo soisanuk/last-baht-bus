@@ -120,3 +120,45 @@ test("Wilf is on the bench, and a regular's local may be a kitchen", () => {
   assert.ok(Number.isInteger(NPCS.wilf.age) && NPCS.wilf.nat, "the profile the bench invariant checks");
   assert.doesNotMatch(ask("mikes_mall", "wilf", "opening"), miss, "the one place in town with real hours can state them");
 });
+
+test("the mamasan quotes the number she sets — the cashiers promise she will", () => {
+  // Three cashiers say "ask Mama anything, she will tell you the answer and the
+  // price", and at three bars she could not discuss the barfine. Worse, the
+  // natural phrasing — "how much to take a girl out" — reached _priceTalk and
+  // came back with a list of drinks (Helen, round 49).
+  G.nightTurn = 40;
+  const mamas = Object.keys(NPC_ROLES).filter(id => NPC_ROLES[id] === "mamasan").slice(0, 4);
+  assert.ok(mamas.length >= 2);
+  for (const id of mamas) {
+    const room = _npcRoom(id);
+    if (!ROOMS[room] || !ROOMS[room].barType) continue;
+    const bf = _barfinePrices(ROOMS[room].barType);
+    for (const phrasing of ["barfine", "bar fine", "how much to take a girl out"]) {
+      G.room = room; out = []; doCommand(`ask ${id} about ${phrasing}`);
+      const said = text();
+      assert.doesNotMatch(said, miss, `${id} answers "${phrasing}"`);
+      assert.ok(said.includes("฿" + bf.st) || said.includes("฿" + bf.lt),
+        `${id} quotes what the till will charge ("${phrasing}")`);
+    }
+    // …and it is on her price list, because that is what the cashier promised
+    G.room = room; out = []; doCommand(`ask ${id} about price`);
+    assert.match(text(), /barfine|her own money/i, `${id}'s price list carries the fine`);
+  }
+});
+
+test("a promise that states its own condition opens when the condition is met", () => {
+  // "Come and sit with me on a night the rain has killed the pool and nobody
+  // wants anything. I tell you the whole thing then." Helen bought four lady
+  // drinks, sat through the rain, asked again — and got the deflection back,
+  // because the story is a topicless beat fired by TALK and she was ASKING.
+  G.room = "lucky_tiger"; G.soc.drinks.lek = 5; G.day = 2; G.rain = 0;
+  out = []; doCommand("ask lek about price");
+  assert.match(text(), /night the rain has killed the pool/, "a dry night still sends you looking");
+  assert.ok(!_flag("heardPriceStory"));
+  G.rain = 4;
+  out = []; doCommand("ask lek about price");
+  assert.match(text(), /did I think this is Dubai/, "the night she named opens it");
+  assert.ok(_flag("heardPriceStory"), "and it is heard exactly once");
+  out = []; doCommand("ask lek about price");
+  assert.match(text(), /Same as I tell you in the rain/, "afterwards she answers as somebody who told you");
+});

@@ -3140,6 +3140,18 @@ const _BOND_TALK = {
 // and then told again by a woman in another bar — the exact shape the floor
 // moments already solved with floorSaid (Geraint, round 48). Her own book comes
 // first; the town-wide one breaks a tie so two women do not share a confidence.
+// LEK'S PRICE STORY STATES ITS OWN CONDITION — "come and sit with me on a night
+// the rain has killed the pool" — and a player who met it, bought four lady
+// drinks and asked again got the deflection back (Helen, round 49). The story is
+// a TOPICLESS node fired by TALK, and she was ASKING, so the topic node answered
+// first, forever. One predicate, consulted by both: when the night she named has
+// arrived, the deflection stands down and the ask falls through to her.
+function _lekPriceNight() {
+  return !_flag("heardPriceStory") && _bondTier("lek") >= 1 &&
+    (G.rain > 0 || (typeof _wxRainy === "function" && _wxRainy())) &&
+    !_flag("fed26") && !(G.game && G.game.type === "pool") && !_leagueTonight();
+}
+
 function _bondPick(id, tier, pool) {
   const said = (G.soc.bondSaid = G.soc.bondSaid || {});
   const mine = said[id + ":" + tier] = said[id + ":" + tier] || [];

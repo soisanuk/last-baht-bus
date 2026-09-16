@@ -3492,6 +3492,11 @@ const _HELLO_AGAIN = [
 ];
 function _doTalkBody(arg, topic) {
   arg = (arg || "").trim();
+  // "BAR FINE" IS ONE WORD IN THIS TOWN. Spelled with the space it matched the
+  // `bar` topic by substring, so a mamasan answered a question about the fine
+  // with a description of her premises (Helen, round 49). Normalised before node
+  // selection, since the alias map only runs AFTER a literal match has failed.
+  if (topic) topic = String(topic).replace(/\bbar[ -]fine(s?)\b/gi, "barfine$1");
   let _retell = false;
   if (topic && _RETELL_RE.test(topic)) { _retell = true; topic = topic.replace(_RETELL_RE, "").trim(); }
   // The coconut bar (north_beach): the freelance ladies are the room's whole
@@ -3698,6 +3703,12 @@ function _doTalkBody(arg, topic) {
     if (/\b(busy|rush|quiet|peak|packed|full|crowd|crowded)\b/.test(_ct)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc)); return; }
     if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct)) { _say(_leagueTalk(npc)); return; }
+    // the barfine BEFORE the drinks list: "how much to take a girl out" is a
+    // price question whose answer is not a price list (Helen, round 49)
+    if (/\bbar ?fines?\b|\btake\b[^.]*\b(?:girl|her|lady)\b|\b(?:girl|lady|her) out\b|\b(?:go|come) with me\b|\b(?:short|long) time (?:price|cost|money)\b/.test(_ct)) {
+      const said = _barfineTalk(npc);
+      if (said) { _say(said); return; }
+    }
     if (/\b(price|prices|price list|how much|cost|costs|tao ?rai|tariff|rates?|menu)\b/.test(_ct)) {
       const said = _priceTalk(npc);
       if (said) { _say(said); return; }
@@ -8760,6 +8771,43 @@ function _leagueTalk(npc) {
 // say it). Figures come from the same helpers the till charges with, so the
 // quote can never drift from the charge — the rule the whole price-transparency
 // pass rests on.
+// THE BARFINE IS THE MAMASAN'S OWN NUMBER, and she was the one person on the
+// floor who would not say it. Three different cashiers promise "ask Mama
+// anything — she will tell you the answer and the price", and at three bars she
+// could not (Helen, round 49). Worse, the natural phrasing — "how much to take a
+// girl out" — reached _priceTalk and got a list of drinks. The engine has
+// computed this to the baht all along, tiered by venue and discounted after
+// midnight; she is simply quoting `_barfinePrices`, which is what the till will
+// actually charge.
+function _barfineTalk(npc) {
+  if (!_inBar()) return null;
+  const bt = _room().barType;
+  const p = typeof _barfinePrices === "function" ? _barfinePrices(bt) : null;
+  if (!p) return null;
+  const n = npc ? NPCS[npc].name : "";
+  const role = npc ? (NPCS[npc].manager ? "manager" : NPC_ROLES[npc]) : null;
+  const tinglish = !!npc && !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
+  // your own house does not sell you your own girls
+  if (typeof _atOwnBar === "function" && _atOwnBar()) return tinglish
+    ? `“Boss.” ${n} looks at you with enormous patience. “Cannot barfine your own bar. The money go from your pocket to your pocket, and I still lose a girl off the floor.”`
+    : `“You own the place.” A shrug. “There's no fine to pay and nobody to pay it to. You'd just be a girl short on the floor.”`;
+  // after midnight a beer bar closes its book: the BAR's fee is waived and hers
+  // is not, so the quote must never read as free (the two-fee doctrine)
+  if (p.herMoney) return tinglish
+    ? `“This hour? Bar finish already — no more fine, book is closed.” ${n} holds up one finger. “But her money is her money. Short time ฿${p.st}, long time ฿${p.lt}, and that go to HER, not to me.” A look that is not unfriendly and is not soft. “And I let a girl go for no fine only for a man I know, or a man who buy — one for himself, one for her. You buy nothing, you get a smile and goodnight.”`
+    : `“Past midnight the bar's fine comes off — the book's closed for the night.” A tilt of the head. “Her money doesn't. Short time ฿${p.st}, long time ฿${p.lt}, and every baht of that is hers. Mind, she only lets a girl walk for nothing if she knows you, or she's watched you buy a drink each. Turn up cold at one in the morning and you'll get a very polite no.”`;
+  const two = `The fine is the bar's; what you settle with her is hers, and they are two different monies.`;
+  if (role === "mamasan" || (npc && NPCS[npc].owner)) return tinglish
+    ? `“Barfine?” ${n} does not look anything up. “Short time ฿${p.st}. Long time ฿${p.lt}.” Two fingers, one folded down. “Is the BAR fine — for the girl not on the floor. What you give her after, that is you and her, not me. Same for everybody, tilac. Better you ask before, not after.” (BARFINE <name>)`
+    : `“Short time ฿${p.st}, long time ฿${p.lt}.” ${n ? n + " says it" : "It comes back"} flat, the way a number gets said by the person who set it. “${two} Ask before, not after — that's the only part that's ever a surprise.” (BARFINE <name>)`;
+  if (role === "cashier") return tinglish
+    ? `“Barfine go in the book, not in my drawer.” ${n} taps the page anyway. “Short time ฿${p.st}, long time ฿${p.lt} — that is the bar. Her money she keep. Two thing, always. You ask mama, she say same as me.” (BARFINE <name>)`
+    : `“It's ฿${p.st} short time, ฿${p.lt} long.” ${n ? n + " doesn't have to check" : "The answer comes from the till"}. “${two} People get that wrong and then they're cross about it later.” (BARFINE <name>)`;
+  if (role === "manager" || (npc && NPCS[npc].house)) return `“Fine's ฿${p.st} short time, ฿${p.lt} long.” A shrug. “${two} Mama handles the rest of it, and she's better at it than I am.” (BARFINE <name>)`;
+  return tinglish
+    ? `“Mamasan first, then me.” ${n ? n + " holds up two fingers." : ""} “Bar take ฿${p.st} short time, ฿${p.lt} long time. Me, we talk after.” (BARFINE <name>)`
+    : `“The bar wants ฿${p.st} short time, ฿${p.lt} long. ${two}” (BARFINE <name>)`;
+}
 function _priceTalk(npc) {
   const r = _room();
   const n = npc ? NPCS[npc].name : "";
@@ -8775,6 +8823,20 @@ function _priceTalk(npc) {
   if (!(typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar())) return null;
   const bits = [`beer ฿${_beerPrice()}`];
   if (_inBar()) bits.push(`lady drink ฿${_ladyPrice()}`);
+  // THE MONEY SIDE QUOTES THE FINE. Three cashiers promise "ask Mama anything —
+  // she will tell you the answer and the price", and the price list she recited
+  // was drinks only, in a trade whose largest number is the barfine (Helen,
+  // round 49). Scoped to the till side: a hostess still says "mama first, then
+  // me", which is hers to say and the honest answer from her.
+  const _till = npc && (NPC_ROLES[npc] === "mamasan" || NPC_ROLES[npc] === "cashier" ||
+    NPCS[npc].manager || NPCS[npc].house || NPCS[npc].owner);
+  if (_inBar() && _till && typeof _barfinePrices === "function" &&
+      !(typeof _atOwnBar === "function" && _atOwnBar())) {
+    const bf = _barfinePrices(r.barType);
+    if (bf) bits.push(bf.herMoney
+      ? `her own money ฿${bf.st} short time, ฿${bf.lt} long — the bar's fine comes off after midnight, hers does not`
+      : `barfine ฿${bf.st} short time, ฿${bf.lt} long — the bar's, and what you settle with her is separate`);
+  }
   bits.push(`water or soda ฿${_beerPrice()} — you pay for the seat, not the bottle`);
   if (_inBar() && r.barType && r.barType !== "pub") bits.push(`the bell ฿${_bellPrice(G.room)}`);
   const list = bits.join(" · ");

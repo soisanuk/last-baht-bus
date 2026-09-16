@@ -68,6 +68,14 @@ const FACTS = [
     asks: ["closing", "what time do you close", "hours"],
     rooms: ["mikes_mall"], hour: 20 },
 
+  // THE LARGEST NUMBER IN THE TRADE, and the woman who sets it would not say it —
+  // while three cashiers promise "ask Mama anything, she will tell you the answer
+  // and the price" (Helen, round 49). `roles` keeps it off the punter: the fine
+  // is the house's business, not a customer's.
+  { fact: "barfine", why: "_barfinePrices — tiered by venue and discounted after midnight, to the baht",
+    asks: ["barfine", "bar fine", "how much to take a girl out"],
+    rooms: ["lucky_tiger", "stinky_bar", "candy_bar"], roles: ["staff", "manager"], hour: 22 },
+
   // CLOSING'S MIRROR. Every member of staff in town answered "closing" and not
   // one could answer "what time do you open" — the fact is the VENUE'S CLASS,
   // which the engine has had all along (Brian, round 49, whose hobby is
