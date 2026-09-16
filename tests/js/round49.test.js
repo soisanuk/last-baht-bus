@@ -162,3 +162,62 @@ test("a promise that states its own condition opens when the condition is met", 
   out = []; doCommand("ask lek about price");
   assert.match(text(), /Same as I tell you in the rain/, "afterwards she answers as somebody who told you");
 });
+
+test("the town can say what its people do, who they answer to, and what it pays", () => {
+  // WORK, JOB, BOSS, PAY and SALARY were not words this town answered to — about
+  // thirty people asked, two could answer, while the same people answer `bar`,
+  // `hours`, `price` and `family` beautifully (Helen, round 49, an
+  // employment-rights caseworker). The content existed; the vocabulary did not
+  // reach it. Judged per character against a miss oracle built by RUNNING
+  // nonsense at that same character, because the miss pools branch by role.
+  const NONSENSE = ["photosynthesis", "wolverhampton", "quadratics", "a xylophone"];
+  const norm = t => String(t || "").split("\n").filter(l => !/^\s*·/.test(l)).join(" ").replace(/\s+/g, " ").trim();
+  const words = ["work", "job", "boss", "pay"];
+  const freeze = () => { G.nightTurn = 40; G.hunger = 10; G.thirst = 10; G.soc.drunk = 0; G.money = 9000; };
+  const sample = Object.keys(NPC_ROLES).filter(id => !NPCS[id].filler).slice(0, 12);
+  assert.ok(sample.length >= 6, "a sample of role-carriers");
+  let deaf = [];
+  for (const id of sample) {
+    const room = _npcWhere(id); if (!room || !ROOMS[room]) continue;
+    freeze(); G.room = room;
+    const oracle = new Set();
+    for (const q of NONSENSE) { freeze(); out = []; doCommand(`ask ${id} about ${q}`); oracle.add(norm(text())); }
+    if (oracle.size > 4) continue;
+    let hits = 0;
+    for (const w of words) { freeze(); out = []; doCommand(`ask ${id} about ${w}`); if (!oracle.has(norm(text()))) hits++; }
+    if (hits === 0) deaf.push(NPCS[id].name);
+  }
+  assert.deepEqual(deaf, [], "a member of staff can say what the job is");
+});
+
+test("a character's livelihood is filed under its own word, and `work:` points at it", () => {
+  // Jerry's is `teaching`, Danny's `crypto`, Neil's `clam`, Wilf's `pension` —
+  // all written, none reachable by the word a player types.
+  const mapped = Object.entries(NPCS).filter(([, n]) => n.work);
+  assert.ok(mapped.length >= 8, "the mapping exists");
+  for (const [id, n] of mapped) {
+    const d = _pickDialogue(id, n.work);
+    assert.ok(d && d.topic, `${n.name}: work: "${n.work}" names a topic he actually has`);
+  }
+  // …and it is reachable through the verb
+  G.day = 1; G.room = "stinky_bar";
+  out = []; doCommand("ask jerry about work");
+  assert.match(text(), /Thirty-two thousand|32k/, "his teaching node answers 'work'");
+});
+
+test("a stranger gets the SHAPE of the money, never the ledger's figures", () => {
+  // _OTHER_LEDGER is bond-gated on purpose — the cut, the quota, the sending
+  // north are hers to show you when she knows you. The generic work answer must
+  // not pre-empt them, or the reveal becomes a readout.
+  const girls = Object.keys(NPC_ROLES).filter(id => NPC_ROLES[id] === "hostess").slice(0, 8);
+  for (const id of girls) {
+    const room = _npcWhere(id); if (!room) continue;
+    G.room = room; G.soc.drinks[id] = 0;
+    for (const w of ["pay", "salary", "work"]) {
+      out = []; doCommand(`ask ${id} about ${w}`);
+      for (const n of [LADY_CUT, BAR_QUOTA, BAR_SALARY, HOME_SEND])
+        assert.ok(!text().includes("฿" + n) && !text().includes(String(n)),
+          `${NPCS[id].name} does not quote the ledger's ${n} to a stranger`);
+    }
+  }
+});

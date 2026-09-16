@@ -3625,6 +3625,17 @@ function _doTalkBody(arg, topic) {
     return;
   }
   let d = _pickDialogue(npc, topic || null);
+  // WHAT DO YOU DO FOR A LIVING. A character's livelihood is usually already
+  // written and filed under its own word — Jerry's is `teaching`, Danny's is
+  // `crypto`, Neil's is `clam`, Wilf's is `pension` — so the question came back
+  // a miss from men whose whole characterisation is how they afford to be here
+  // (Helen, round 49). `work:` on the NPC names the topic that answers it:
+  // declarative, one word per character, no prose duplicated.
+  if (topic && (!d || !d.topic) && NPCS[npc].work &&
+      /\b(work|job|living|career|do for a living|occupation|profession)\b/i.test(String(topic))) {
+    const dw = _pickDialogue(npc, NPCS[npc].work);
+    if (dw && dw.topic) d = dw;
+  }
   if (topic && (!d || !d.topic)) {
     const norm = _convoTopic(topic);
     if (norm !== topic) { const d2 = _pickDialogue(npc, norm); if (d2 && d2.topic) d = d2; }
@@ -3703,6 +3714,20 @@ function _doTalkBody(arg, topic) {
     if (/\b(busy|rush|quiet|peak|packed|full|crowd|crowded)\b/.test(_ct)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc)); return; }
     if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct)) { _say(_leagueTalk(npc)); return; }
+    // what she actually does here, who she answers to, and what it pays — the
+    // words a caseworker asks and the town could not hear (Helen, round 49)
+    if (/\bboss(es)?\b|\bwho (?:do you |)(?:work for|answer to)\b|\bmanager\b/.test(_ct)) {
+      const said = _workTalk(npc, "boss");
+      if (said) { _say(said); return; }
+    }
+    if (/\b(pay|paid|salary|wage|wages|earn|earnings|commission|income)\b/.test(_ct)) {
+      const said = _workTalk(npc, "pay");
+      if (said) { _say(said); return; }
+    }
+    if (/\b(work|job|shift|living|career|do here|do for a living)\b/.test(_ct)) {
+      const said = _workTalk(npc, "job");
+      if (said) { _say(said); return; }
+    }
     // the barfine BEFORE the drinks list: "how much to take a girl out" is a
     // price question whose answer is not a price list (Helen, round 49)
     if (/\bbar ?fines?\b|\btake\b[^.]*\b(?:girl|her|lady)\b|\b(?:girl|lady|her) out\b|\b(?:go|come) with me\b|\b(?:short|long) time (?:price|cost|money)\b/.test(_ct)) {
@@ -8771,6 +8796,81 @@ function _leagueTalk(npc) {
 // say it). Figures come from the same helpers the till charges with, so the
 // quote can never drift from the charge — the rule the whole price-transparency
 // pass rests on.
+// WHAT DO YOU ACTUALLY DO HERE. Helen (round 49, an employment-rights
+// caseworker) put the question to about thirty people and two could answer:
+// WORK, JOB, BOSS, PAY and SALARY are not words this town answered to, while the
+// same people answer `bar`, `hours`, `price`, `family` beautifully. The content
+// existed; the vocabulary did not reach it. Measured after her round: those five
+// words answered for three to six people in a judged cast of forty-one.
+//
+// DELIBERATELY SHALLOW ON MONEY. `_OTHER_LEDGER` is the deep version — the cut,
+// the quota, the sending north — and it is bond-gated on purpose, so this must
+// never quote LADY_CUT, BAR_QUOTA, BAR_SALARY or HOME_SEND. A stranger gets the
+// SHAPE of the arithmetic; the figures are still hers to show you when she knows
+// you. That separation is what keeps the ledger a reveal instead of a readout.
+const _WORK_JOB = {
+  hostess: [
+    n => `"What I do?" ${n} looks faintly amused that it needs saying. "I sit. I talk. I drink with customer, I laugh at joke not funny. Six night, sometime seven." A small shrug. "Is not hard work. Is long work. Not the same thing, na."`,
+    n => `"Job?" ${n} thinks about how to put it. "Make the man happy he came. That is all of it." She turns her glass a quarter turn. "Some night is easy. Some night is acting. You never know which one until you sit down."`,
+    n => `"I work the floor." ${n} says it plainly. "Come six, go when the last man go. Talk, drink, sometime dance if the song good." A beat. "Everybody think is party. Is a shift, tilac. Party is what the customer is having."`,
+  ],
+  cashier: [
+    n => `${n} taps the book without opening it. "Every drink, every chit, every name. In here." She does open it then, one page, and closes it again. "Nobody get a drink in this bar I don't know about. That is the job, and it is the whole job."`,
+    n => `"I keep the money and the book." ${n} does not look up. "Mama run the floor, I run the page. She never touch the drawer, I never touch the girls. Is cleaner that way, for everybody."`,
+    n => `"Me?" ${n} almost smiles. "I am the boring one. The girls have the stories, I have the arithmetic." She squares a stack of notes. "One of us goes home with a headache and it is not the girls."`,
+  ],
+  mamasan: [
+    n => `"I run the floor." ${n} lets her eyes go down the rail and back, and it takes about a second. "Who work tonight, who is late, who is crying in the toilet, who is drinking too much — customer AND girl." A shrug. "Mostly I see the trouble before it is trouble. That is the whole job."`,
+    n => `"What do I do?" A short laugh. "Everything nobody else want to do." ${n} counts it on her fingers without hurrying. "Rota. Fight. Police. The girl whose mother is sick — the real one and the other kind. Somebody must decide. I decide."`,
+    n => `"Thirty girl, one room, one night." ${n} says it like the setup to something and there is no punchline coming. "Make it work. Every night. That is the job."`,
+  ],
+};
+const _WORK_PAY = {
+  hostess: [
+    n => `"Small salary." ${n} makes a small gesture to go with it, thumb and finger nearly touching. "The rest is drink, and tip, and what a man decide to give me. So — depend on the month. Depend on YOU, little bit." She says the last part without any weight on it at all.`,
+    n => `"Bar pay me something." ${n} tilts her head. "Not enough by itself, never. Everything after that is what happen on the floor." A shrug, entirely factual. "Good week, I am fine. Bad week is also a real thing, na. Nobody ask about the bad week."`,
+  ],
+  cashier: [
+    n => `"A wage." ${n} says it flatly. "Same every month, which the girls think is lucky and is only sometimes lucky." She closes the drawer. "And if the book is short at the end of the night, it is short out of me. So I am careful. That is also part of the wage."`,
+    n => `"Enough, and the same amount of enough every month." ${n} does not look up. "No commission, no drink, no barfine. I am the only one here whose money does not move." A pause. "Some night I am glad. Some night I watch the floor and I am not."`,
+  ],
+  mamasan: [
+    n => `"I take a piece of the floor." ${n} says it without embarrassment, because there is none in it. "Bar does well, I do well. Bar is empty—" she opens one hand at the room "—then you are looking at it."`,
+    n => `"Enough that I care whether you come back." ${n} holds your eye for exactly as long as that takes. "That is the honest answer and it is a better answer than the number."`,
+  ],
+};
+function _workTalk(npc, kind) {
+  if (!npc) return null;
+  const role = NPC_ROLES[npc];
+  const n = NPCS[npc].name;
+  const mgr = NPCS[npc].manager || NPCS[npc].house;
+  if (kind === "boss") {
+    // the engine knows who runs this room; "who is your boss" should name them
+    const owner = typeof _barOwner === "function" ? _barOwner(G.room) : null;
+    const mama = _staffAt(G.room).find(x => NPC_ROLES[x] === "mamasan" && x !== npc);
+    const boss = (owner && owner !== npc) ? owner : (mama || null);
+    if (typeof _atOwnBar === "function" && _atOwnBar()) return role
+      ? `"You are, boss." ${n} says it with the smallest possible smile. "You want me to say something else?"`
+      : null;
+    if (boss) return role
+      ? `"${NPCS[boss].name}." ${n} says the name the way you say a fact. "She decide who work, who go home, who sit with who. I ask her, not the other way."`
+      : `"${NPCS[boss].name} runs this floor. I just work on it."`;
+    if (mgr) return null;    // a manager's boss is his own authored story
+    return role ? `"The owner." ${n} shrugs. "She is not here every night. Mostly the floor run itself, and when it don't, everybody find out at the same time."` : null;
+  }
+  const pools = kind === "pay" ? _WORK_PAY : _WORK_JOB;
+  const pool = pools[role];
+  if (!pool) return null;
+  // per ROOM, so two colleagues on one rail do not describe the job identically
+  const book = (G.soc.workSaid = G.soc.workSaid || {});
+  const key = G.room + ":" + role + ":" + (kind || "job");
+  const used = book[key] = book[key] || [];
+  let i = _hh(npc + ":" + key, 23) % pool.length;
+  for (let k = 0; k < pool.length && used.includes(i); k++) i = (i + 1) % pool.length;
+  if (!used.includes(i)) used.push(i);
+  return pool[i](n);
+}
+
 // THE BARFINE IS THE MAMASAN'S OWN NUMBER, and she was the one person on the
 // floor who would not say it. Three different cashiers promise "ask Mama
 // anything — she will tell you the answer and the price", and at three bars she

@@ -8074,6 +8074,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // tip, contact) ignores them entirely. They are staff, not the trade — which
   // is exactly what the Vic is, and why it has never had hostesses.
   nuch: {
+    work: "rooms",   // which of his own topics answers "what do you do"
     name: "Nuch", th: "\u0e19\u0e38\u0e0a", emoji: "\ud83e\uddfe",
     pronoun: "she",
     room: "queen_vic",
@@ -8815,6 +8816,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // deliberately never-obvious: on run 1 he's a helpful driver; on replay he's the
   // spider. Known from the intro (you rode in with him), so he shows as "Tan".
   tan: {
+    work: "drive",   // which of his own topics answers "what do you do"
     name: "Tan", th: "ต้น", emoji: "🚕", personality: "operator",
     pronoun: "he",
     room: "soi6_street",
@@ -14396,6 +14398,7 @@ const _REGULARS = {
     ],
   },
   dieter: {
+    work: "money",   // which of his own topics answers "what do you do"
     name: "Dieter", emoji: "🍺", age: 71, nat: "German", pronoun: "he",
     patron: true, room: "seabreeze", hops: false,
     look: "German man of seventy-one, silver hair, very clean glasses, pressed pale short-sleeve shirt, precise.",
@@ -14631,6 +14634,7 @@ const _REGULARS = {
   },
 
   fergie: {
+    work: "army",   // which of his own topics answers "what do you do"
     name: "Fergie", emoji: "🥃", age: 58, nat: "Northern Irish",
     pronoun: "he",
     patron: true, room: "gold_rush", hops: true, haunts: ["Soi Buakhao", "Tree Town"],
@@ -14736,6 +14740,7 @@ const _REGULARS = {
   // bars, two versions, no link between them; the player triangulates or never
   // knows. Isan stays offscreen: what was said in that house, he never asked.
   neil: {
+    work: "clam",   // which of his own topics answers "what do you do"
     name: "Neil", emoji: "🫖", age: 54, nat: "British", pronoun: "he",
     patron: true, room: "lake_beer", hops: false,
     look: "British man of fifty-four, heavy-shouldered, cropped greying hair, plain navy polo, one bottle of Leo, unhurried.",
@@ -15120,6 +15125,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   chuck: {
+    work: "money",   // which of his own topics answers "what do you do"
     name: "Chuck", emoji: "🤠", age: 58, nat: "American",
     pronoun: "he",
     patron: true, room: "tequila_queen", hops: true,
@@ -15274,6 +15280,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   somsak: {
+    work: "police",   // which of his own topics answers "what do you do"
     name: "Somsak", emoji: "🌇", age: 47, nat: "Thai",
     pronoun: "he",
     patron: true, room: "blue_dog", hops: false,
@@ -15391,6 +15398,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   drew: {
+    work: "korea",   // which of his own topics answers "what do you do"
     name: "Drew", emoji: "🚬", age: 53, nat: "American",
     pronoun: "he",
     patron: true, room: "stinky_bar", hops: true,
@@ -15459,6 +15467,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   david: {
+    work: "teaching",   // which of his own topics answers "what do you do"
     // id `david` deliberately — see the note on Tom above.
     name: "Jerry", emoji: "🇨🇦", age: 52, nat: "Canadian",
     pronoun: "he",
@@ -15719,6 +15728,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   danny: {
+    work: "crypto",   // which of his own topics answers "what do you do"
     name: "Danny", emoji: "💪", age: 50, nat: "Canadian",
     pronoun: "he",
     patron: true, room: "club_mirage", hops: true,
@@ -15788,6 +15798,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   josey: {
+    work: "content",   // which of his own topics answers "what do you do"
     name: "Josey", emoji: "🏋️", age: 32, nat: "Australian",
     pronoun: "she",
     patron: true, room: "rock_factory", hops: false,
@@ -15954,6 +15965,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   // there. No self-pity anywhere in it; the arithmetic is stated flat, like Lek's price story.
   // (Not "Reg" — Reginald is already on the bench, and _findNpc matches a regular by name-prefix.)
   wilf: {
+    work: "pension",   // which of his own topics answers "what do you do"
     name: "Wilf", emoji: "🍛",
     patron: true,   // the flag IS the query — without it he is not on the bench for any of the code that asks
     pronoun: "he",
