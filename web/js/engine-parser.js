@@ -852,6 +852,8 @@ function _arriveAt(to) {
   }
   _repArrival(); // your street name precedes you at a stranger bar (notable tiers only)
   _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
+  if (typeof _kpTitleNews === "function") _kpTitleNews();   // your name came off the chalk while you were elsewhere
+  if (typeof _kpChallenge === "function") _kpChallenge();   // …or it is still up, and league night has come for it
   if (typeof _priewReveal === "function") _priewReveal(); // the hospital mirage, scene two (once ever)
   _amuletNotice();   // a piwin reads the amulet you are wearing (once ever)
   _nokAmulet();      // Auntie Nok sees what you are wearing

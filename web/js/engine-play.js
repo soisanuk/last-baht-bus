@@ -1467,6 +1467,7 @@ function _startKiller() {
   const names = ["You", ...field.map(f => f[0])];
   const skills = [0, ...field.map(f => f[1])];
   G.game = { type: "kp", kp: kpNew(names, skills), stake: KP_ENTRY * names.length };
+  (G.kpPlayed = G.kpPlayed || {})[G.room] = true;   // you turned up: the title is defended by PLAYING, won or lost
   _say("League night. The ashtray fills with hundred-baht notes, the field chalks " +
     `up, and somebody racks. Five players, three lives each, ฿${G.game.stake} in ` +
     "the pot. Pot anything or lose a life; last cue standing takes the lot.");
@@ -1525,13 +1526,39 @@ function _kpInput(input) {
       // chalk went up behind his own till for a game he never saw (round 47
       // quest sweep). Killer runs everywhere; his league is his.
       if (QUESTS.league && G.room === _qAt(QUESTS.league)) _setFlag("wonLeague");   // his table is wherever the quest says it is
+      // THE NAME BEHIND THE TILL. Held, defended, and taken off you — the only
+      // persistence killer supports, because killer itself is a one-night
+      // knockout with no standings anywhere. See G.kpTitle in engine-core.
+      const _held = (G.kpTitle = G.kpTitle || {})[G.room];
+      let _crown;
+      if (_held) {
+        _held.defended = (_held.defended || 0) + 1;
+        _crown = _held.defended === 1
+          ? " Your name was already up behind the till. It stays up, and the man who came closest buys you one, which is the rule."
+          : _held.defended < 4
+          ? ` That is ${_held.defended} defences. The rail has started saying it out loud when you walk in, which is either a compliment or a target.`
+          : ` ${_held.defended} defences. Somewhere in this bar a man is practising specifically for you, and you will not know which one until he does it.`;
+      } else {
+        G.kpTitle[G.room] = { since: G.day, defended: 0 };
+        _crown = " Your name goes up behind the till, in chalk, spelled the way somebody thought it sounded.";
+      }
       _endGame(true, g.stake, `Last cue standing. The pot — ฿${g.stake} — is pushed ` +
         "across the felt with due ceremony, and " +
         ((typeof _tillKeeper === "function" && _tillKeeper(G.room)) ? `${NPCS[_tillKeeper(G.room)].name} rings the bell herself. ` : "the man behind the bar rings the bell himself. ") +
-        "League night belongs to you.");
+        "League night belongs to you." + _crown);
     } else {
-      _endGame(false, 0, `${winner ? winner.name : "The table"} takes the pot. You take ` +
-        "a stool, and the bar takes your name for next league night. That's killer.");
+      // …and losing it is how it comes off you. "The bar takes your name for next
+      // league night" was a promise nothing kept: no name was taken, and the next
+      // league night was identical.
+      const _was = (G.kpTitle = G.kpTitle || {})[G.room];
+      let _fall = " a stool, and the bar takes your name for next league night. That's killer.";
+      if (_was) {
+        delete G.kpTitle[G.room];
+        _fall = _was.defended
+          ? ` a stool. The chalk behind the till is wiped and rewritten in front of you, after ${_was.defended === 1 ? "one defence" : _was.defended + " defences"}. Nobody says anything about it. That is the worst part, and they know it.`
+          : " a stool, and your name comes down off the till about ninety seconds after it went up. The rail is magnificent about it, which is worse.";
+      }
+      _endGame(false, 0, `${winner ? winner.name : "The table"} takes the pot. You take` + _fall);
     }
     return;
   }
@@ -4509,6 +4536,12 @@ function _endNight(reason) {
   // so it is the first thing in a long night-end rather than the last, and the
   // wall-anchored scroll (term.js) lands the player on it.
   _nightDebrief(reason);
+  // A TITLE HELD BY A MAN WHO DOES NOT TURN UP IS NOT HELD. Bert's own line is
+  // "defend it next league night, or don't — champions get to be busy", so not
+  // showing has to cost the thing: on a league night at a bar where your name is
+  // behind the till, somebody else plays for it, and if you were not there they
+  // win it. Run BEFORE G.day++, because tonight is the night just played.
+  _kpTitleTick();
   G.day++;
   G.jaded = Math.max(0, G.jaded - 1); // a day cools the treadmill one notch
   if (G.stage !== "expat" && G.day > 7) {
@@ -4627,6 +4660,7 @@ function _endNight(reason) {
   G.pendingBf = null; // a barfine still mid-negotiation at the bell dies with the night
   G.selfBfId = null;
   G.quizPlayed = {};
+  G.kpPlayed = {};
   G.phone.msgCd = {};
   G.phone.invite = null;
   for (const id in ENCOUNTERS) if (ENCOUNTERS[id].nightly) delete G.encDone[id]; // the street restocks

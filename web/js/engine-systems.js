@@ -6997,6 +6997,50 @@ function _leaseTransfer() {
 }
 
 // what tonight's trade did. Called once from _endNight when you own the place.
+// KILLER IS A ONE-NIGHT KNOCKOUT, so the only thing a bar keeps is whose name is
+// on the chalk — and a name stays up only while its owner keeps turning up. On a
+// league night at a bar where you hold the table, the game is played whether you
+// are in the room or not; if you were not, the table has a new king by closing.
+// You are told when you next walk in, which is how you would actually find out.
+const _KP_LOST_AWAY = [
+  n => `The chalk behind the till at ${n} has a different name on it. Nobody makes anything of it, which is its own comment: league night came round, the table was played, and you were somewhere else.`,
+  n => `Somebody has wiped the till chalk at ${n} and written a shorter name. You were not here on league night; the table does not wait, and neither did they.`,
+  n => `Your name is gone off the till at ${n}. A man you do not recognise is being bought drinks at the end of the rail, and is being very gracious about it.`,
+];
+function _kpTitleTick() {
+  const held = G.kpTitle || {};
+  if (!Object.keys(held).length) return;
+  if (!_leagueTonight()) return;   // runs before G.day++, so this is the night just played
+  const played = G.kpPlayed || {};
+  for (const room of Object.keys(held)) {
+    if (played[room]) continue;             // you turned up and defended it
+    delete held[room];
+    (G.kpLost = G.kpLost || {})[room] = G.day;   // told when you next walk in
+  }
+}
+// …and the telling, on arrival, once.
+function _kpTitleNews() {
+  const lost = G.kpLost || {};
+  if (!lost[G.room]) return;
+  delete lost[G.room];
+  _say(_pickVary(_KP_LOST_AWAY, "kplost")(_barName(G.room) || "the bar"), "dim");
+}
+// THE PRESSURE, the other way: hold the table and league night comes to YOU.
+const _KP_CHALLENGE = [
+  (n, d) => `Your name is still on the chalk behind the till, and league night is on. Somebody has been practising${d ? ` — ${d === 1 ? "one man has taken a run at you already and it was closer than you would like" : "several men have taken a run at you now"}` : ""}. The table is waiting. (PLAY KILLER)`,
+  (n, d) => `A cue is leaning against your stool when you get to it, which is not an accident. The chalk says your name and the field would like that to change tonight. (PLAY KILLER)`,
+  (n, d) => `"He's here." Not said to you. Said across the room, to somebody who wanted to know. League night, your table, your name on the till. (PLAY KILLER)`,
+];
+function _kpChallenge() {
+  if (!(G.kpTitle && G.kpTitle[G.room])) return;
+  if (!_leagueTonight() || !_room().pool) return;
+  if ((G.kpPlayed || {})[G.room]) return;
+  const seen = (G.soc.kpChall = G.soc.kpChall || {});
+  if (seen[G.room]) return;
+  seen[G.room] = true;
+  _say(_pickVary(_KP_CHALLENGE, "kpchall")(_barName(G.room), G.kpTitle[G.room].defended || 0), "alert");
+}
+
 // settleDay is the day the night was PLAYED — _endNight runs this after G.day++,
 // so it passes G.day-1, and the graded takings read the month you actually
 // traded in rather than the morning-after one (the last night of a month was

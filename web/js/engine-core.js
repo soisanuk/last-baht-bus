@@ -416,6 +416,16 @@ function newGame() {
 
     quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
     quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
+    // KING OF THE TABLE. Killer is a one-night knockout — the pot IS the prize,
+    // and there are no rankings in it anywhere, in this town or any other. What a
+    // bar keeps is informal: whose name is behind the till until somebody takes it
+    // off them. Which is exactly what Bert's own prose promised and nothing
+    // delivered — 'that goes up behind the till tonight', 'defend it next league
+    // night' — while the loss line said 'the bar takes your name for next league
+    // night' and no name was taken (Mario asked, 2026-09-16). roomId →
+    // {since, defended}. Held until lost, never on a timer; cleared by a vacation,
+    // because a month away is how you stop being anybody's champion.
+    kpTitle: {},
     phone: {             // the other half of your most important possession
       contacts: {},      //   npcId → true (you have her number)
       inbox: [],         //   [{from, text, turn, read, gives}]

@@ -215,9 +215,56 @@ test("a stranger gets the SHAPE of the money, never the ledger's figures", () =>
     G.room = room; G.soc.drinks[id] = 0;
     for (const w of ["pay", "salary", "work"]) {
       out = []; doCommand(`ask ${id} about ${w}`);
-      for (const n of [LADY_CUT, BAR_QUOTA, BAR_SALARY, HOME_SEND])
-        assert.ok(!text().includes("฿" + n) && !text().includes(String(n)),
-          `${NPCS[id].name} does not quote the ledger's ${n} to a stranger`);
+      // the ฿-forms only: BAR_QUOTA is 30 and a bare "30" matches ฿300, a turn
+      // count and half the prices in town — the ledger quotes the quota in words
+      // ("Thirty drink a month"), which is checked separately below
+      for (const fig of [LADY_CUT, BAR_SALARY, HOME_SEND])
+        assert.ok(!text().includes("฿" + fig),
+          `${NPCS[id].name} does not quote the ledger's ฿${fig} to a stranger`);
+      assert.doesNotMatch(text(), /thirty drink|drink a month/i,
+        `${NPCS[id].name} does not state the quota to a stranger`);
     }
   }
+});
+
+test("the killer table has a king, and he has to keep turning up", () => {
+  // Nothing was tracked across the week. `wonLeague` is a one-shot quest flag,
+  // so a second win did nothing — while Bert promised "that goes up behind the
+  // till tonight" and "defend it next league night", and the LOSS line promised
+  // "the bar takes your name for next league night". None of it existed
+  // (Mario asked, 2026-09-16). Killer has no rankings anywhere — it is a
+  // one-night knockout — so what a bar keeps is the chalk, held until lost.
+  G.room = "stinky_bar"; G.day = 3; G.money = 20000;
+  assert.ok(_leagueTonight(), "day 3 is a league night");
+
+  // claiming, and defending, are different lines
+  G.kpTitle = {};
+  G.kpTitle[G.room] = { since: 1, defended: 0 };
+  assert.equal(G.kpTitle.stinky_bar.defended, 0);
+
+  // a league night you do not turn up for takes it off you
+  G.kpPlayed = {};
+  _kpTitleTick();
+  assert.deepEqual(G.kpTitle, {}, "the table does not wait for an absent champion");
+  assert.ok(G.kpLost && G.kpLost.stinky_bar, "…and you find out when you next walk in");
+  out = []; G.room = "beach_rd_n"; doCommand("go stinky pinky");
+  assert.match(text(), /chalk/i, "the news is delivered on arrival, once");
+  out = []; G.room = "beach_rd_n"; doCommand("go stinky pinky");
+  assert.doesNotMatch(text(), /wiped the till chalk|different name on it/i, "and only once");
+
+  // turning up and playing keeps it, win or lose — presence is the defence
+  G.kpTitle = { stinky_bar: { since: 1, defended: 0 } };
+  G.kpPlayed = { stinky_bar: true };
+  _kpTitleTick();
+  assert.ok(G.kpTitle.stinky_bar, "you played: it is still yours to lose at the table");
+
+  // and holding it is felt: league night comes looking for you
+  G.room = "beach_rd_n"; G.nightTurn = 20; G.soc.kpChall = {}; G.kpPlayed = {};
+  out = []; doCommand("go stinky pinky");
+  assert.match(text(), /PLAY KILLER/, "you are challenged for your own table");
+  // …but not when you do not hold it
+  G.kpTitle = {}; G.soc.kpChall = {}; G.room = "beach_rd_n";
+  out = []; doCommand("go stinky pinky");
+  assert.doesNotMatch(text(), /still on the chalk|cue is leaning against your stool/,
+    "nobody is hunting a man who holds nothing");
 });
