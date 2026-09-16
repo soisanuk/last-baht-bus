@@ -6002,7 +6002,13 @@ function _doBuy(arg) {
     // words are "you buy drink for how many girl tonight?". Its own book now.
     (G.soc.drinkNight = G.soc.drinkNight || {})[id] = true;
     (G.soc.drinkCount = G.soc.drinkCount || {})[id] = (G.soc.drinkCount[id] || 0) + 1;
-    if (Object.keys(G.soc.drinkNight).length >= 4 && !G.soc.butterflyTeased) {
+    // …and a BUTTERFLY is a man who spreads them across girls he does not come
+    // back to. Counting distinct girls called the single most loyal playstyle in
+    // the game a flapper: four women, every night, all of them his regulars
+    // (Geraint, round 48 — "take that flap flap line off the man who hasn't left
+    // the same four stools all week"). Only strangers and faces count.
+    const _flit = Object.keys(G.soc.drinkNight).filter(x => _bondTier(x) < 2).length;
+    if (_flit >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
       _say(_pickVary([
         `${NPCS[id].name} counts something on her fingers, eyes narrowing in delight: “Ohhh, I hear about you. BUTTERFLY!” She makes the wing motion. The whole bar makes the wing motion. This is your reputation now.`,

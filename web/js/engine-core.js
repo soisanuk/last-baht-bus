@@ -2063,7 +2063,13 @@ function _deliver(npcId, d, full, asNew) {
   // that deal on every repeated topic in the game, and nothing honoured it: a
   // completionist bought Terry a beer, asked again, and got the identical
   // brush-off (Soi 6, 2026-08-29). A drink now buys one telling, in full.
-  const bought = !!(G.soc && G.soc.roundFor && G.soc.roundFor[npcId]);
+  // …a STORY, though, never the hello. A lady drink sets roundFor, so buying a
+  // woman a drink un-tersed her topicless greeting and she introduced herself
+  // again — in full, with the Thai and "I no speak English good" — to a man who
+  // had bought her eighteen drinks. Buying the drink was what made her forget
+  // him, which is a cruel joke on the one playstyle the game rewards (Geraint,
+  // round 48). A repeat greeting falls through to _HELLO_AGAIN as it should.
+  const bought = !!(G.soc && G.soc.roundFor && G.soc.roundFor[npcId]) && !!d.topic;
   const terse = repeat && !full && !bought && (!!d.short || flavor);
   if (bought && !terse && G.soc.roundFor) delete G.soc.roundFor[npcId]; // spent
   const firstEver = !repeat && seen.length === 0;

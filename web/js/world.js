@@ -5979,7 +5979,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "\"Enough for the bus home at Songkran. Not enough for the shop. Nothing is " +
           "enough for the shop, that is why it is a plan and not a shop.\"",
         short: "\"Past thirty drinks Mamasan writes a star. The stars are enough for the bus home, not for the shop.\"" },
-      { topic: "sandals", bond: 1,
+      { topic: "sandals|shoes|heels", bond: 1, when: (st, G) => !(G.soc.given && G.soc.given.lek && G.soc.given.lek.length),
+        text: "\u201cShoes?\u201d Lek looks down at the heels like she had forgotten she was standing in them. " +
+          "\u201cThese are the bar shoes. They are not mine, not really \u2014 they are the job.\u201d She flexes one " +
+          "foot. \u201cSomewhere I have flip-flop. That is me. You never see that me, hansum \u2014 she is at home " +
+          "with her feet up and she is much better company.\u201d",
+        short: "\u201cThe heels are the job. The flip-flops are me. You never see that one.\u201d" },
+      { topic: "sandals", bond: 1, when: (st, G) => !!(G.soc.given && G.soc.given.lek && G.soc.given.lek.length),   // she thanks you for shoes you actually bought her (Geraint, round 48),
         text: "She looks down at them, then at you, and for a second forgets to be funny " +
           "about it. \"Nobody buy me shoes before. Drinks, yes. Flower, yes. A shoe is — \" " +
           "she hunts for it \"— a shoe is for walking somewhere.\" Then the grin comes " +

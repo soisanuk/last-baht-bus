@@ -5075,8 +5075,12 @@ test("The Regular: filler girls get a generic Tinglish register when you're a re
   out = []; run("talk to " + NPCS[filler].name);
   const said = lastOut();
   assert.ok(said.length > 0);
-  // the register is her voice, not the authorial narration — a broken-English tell
-  assert.match(said, /you no come|you eat already|not really customer|no price|make me liar|same same|off the clock/i);
+  // Against the POOL, never a remembered phrase: this asserted seven strings from
+  // a three-line tier, so deepening it to eight went red with the game correct
+  // (Geraint, round 48 — and the coupling CLAUDE.md warns about, in the suite).
+  const name = NPCS[filler].name;
+  const pool = [..._BOND_TALK[2], ..._BOND_TALK[3]].map(f => f(name));
+  assert.ok(pool.some(l => said.includes(l)), "her line comes from the bond pool");
 });
 
 test("The Regular: butterflying in front of your regular costs you her bond", () => {

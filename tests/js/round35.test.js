@@ -142,7 +142,7 @@ test("Lek answers for what she volunteers (Howard F6)", () => {
   G.room = "lucky_tiger"; G.known.lek = true; G.soc.drinks = { lek: 14 };
   run("talk to lek");
   for (const [t, want] of [["pool", /Seven year I play/], ["age", /Twenty-six/], ["shop", /my mother's house/],
-    ["cousin", /Noi/], ["salary", /nine thousand/i], ["bonus", /little star/], ["sandals", /shoe is for walking/]]) {
+    ["cousin", /Noi/], ["salary", /nine thousand/i], ["bonus", /little star/], ["sandals", /shoe is for walking|heels are the job|flip-flop/]]) {
     out = []; run("ask lek about " + t);
     assert.match(text(), want, "lek/" + t);
   }

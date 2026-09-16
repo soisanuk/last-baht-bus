@@ -3087,6 +3087,21 @@ const _BOND_TALK = {
     n => `${n} tells you a small true thing — her mama phone today, the new girl lazy, her feet ` +
       `hurt in the heels. "I no tell customer this," she says, then laughs. "But you — you not ` +
       `really customer now, na."`,
+    n => `${n} does the thing she does when the mamasan is not looking: kicks one heel off under ` +
+      `the rail and flexes her foot, and catches you seeing it, and does not put it back on. ` +
+      `"Eight hour," she says. "You no tell."`,
+    n => `"You want know something?" ${n} leans in like it is gossip and it is not. "The song. This ` +
+      `one, every night, four year." She tips her head at the speaker. "I hate it so much I love ` +
+      `it now. Is my song. Nobody know that."`,
+    n => `${n} eats. Properly — a bag of something from the cart, elbows on the bar, no performance ` +
+      `at all — and carries on the conversation round it. It takes you a second to notice that ` +
+      `she has stopped working while she is sitting with you.`,
+    n => `"My friend ask me today who is the farang I talk about," ${n} says, and then looks ` +
+      `absolutely horrified at herself, and busies herself with the ice. The subject is closed. ` +
+      `The subject is extremely not closed.`,
+    n => `${n} corrects you — gently, but she corrects you — on something you said two nights ago ` +
+      `and got wrong. Nobody in a bar corrects a customer. "Is not like that," she says. "I tell ` +
+      `you properly, you listen." And she does, and you do.`,
   ],
   3: [
     n => `${n} wants to say a thing bigger than her English can carry, so she types it into her ` +
@@ -3096,8 +3111,38 @@ const _BOND_TALK = {
       `pleased. "Tonight no price, no show. When it you, everything off the clock."`,
     n => `"I tell my mother about you," ${n} says, watching your face for how you take it. "She ask ` +
       `when you come back. I say soon. You make me liar, na?" Only half a joke.`,
+    n => `${n} shows you her {{phone}} without being asked: a photograph of a room. Bare, clean, a fan, ` +
+      `a folded mattress, one shelf. "My room," she says. "Nobody see this. You see this." Then ` +
+      `she takes the {{phone}} back, embarrassed, and talks about something else for ten minutes.`,
+    n => `She is quiet a while, which she never is. Then: "You know what is the hard part? Not the ` +
+      `work." ${n} turns the glass round on the mat. "Is that I am good at it. Ten year I am good ` +
+      `at it. What else I am good at, I never find out."`,
+    n => `"I have a bad day," ${n} says, flatly, like reporting weather, and does not decorate it ` +
+      `or ask you to fix it. She just sits with you and lets the bad day be in the room, which is ` +
+      `a thing she would not do in front of a customer, and you both know it.`,
+    n => `${n} takes your hand and turns it over, looking at the palm like she is reading it, and ` +
+      `is not reading it. "Farang hand. No work in it." No judgement — an observation, the way you ` +
+      `would notice the weather. "My papa hand, you can see everything. Rice, then the factory, ` +
+      `then nothing." A beat. "He was proud of the nothing. He earn it."`,
   ],
 };
+// Which lines a woman has already given YOU, and which you have heard from
+// anybody. Three lines a tier was a "small true thing" told five nights running
+// and then told again by a woman in another bar — the exact shape the floor
+// moments already solved with floorSaid (Geraint, round 48). Her own book comes
+// first; the town-wide one breaks a tie so two women do not share a confidence.
+function _bondPick(id, tier, pool) {
+  const said = (G.soc.bondSaid = G.soc.bondSaid || {});
+  const mine = said[id + ":" + tier] = said[id + ":" + tier] || [];
+  const heard = (G.soc.bondHeard = G.soc.bondHeard || {})[tier] = (G.soc.bondHeard[tier] || []);
+  let pick = pool.map((_, i) => i).filter(i => !mine.includes(i));
+  if (!pick.length) { mine.length = 0; pick = pool.map((_, i) => i); }   // she has told you everything: round again
+  const fresh = pick.filter(i => !heard.includes(i));
+  const i = (fresh.length ? fresh : pick)[_hh(id + ":bond" + tier + ":" + mine.length, 17) % (fresh.length ? fresh.length : pick.length)];
+  mine.push(i);
+  if (!heard.includes(i)) heard.push(i);
+  return pool[i];
+}
 // Your own staff, at the bar you own, talk to you as the guv'nor — not as a
 // walk-in to be greeted and pitched (Keith, 2026-08-26: a filler mamasan offered
 // to introduce the OWNER to his own girls; a hostess asked her employer "first
@@ -3302,7 +3347,7 @@ function _bondTalk(id) {
   // records the last day you sat with her; skip that variant if it was yesterday.
   const last = (G.seenDay || {})[id];
   if (t === 2 && last != null && last >= G.day - 1) pool = pool.filter((_, i) => i !== 0);
-  _say(_pickVary(pool, "bond" + t + ":" + id)(NPCS[id].name), t >= 3 ? "win" : "");   // the "door left open" beat, five nights verbatim (Graham, round 47)
+  _say(_bondPick(id, t, pool)(NPCS[id].name), t >= 3 ? "win" : "");   // hers first, then the town's — see _bondPick
 }
 
 // Diminishing returns on raw conquest — the hedonic treadmill (see the

@@ -1141,3 +1141,54 @@ test("Cream's door gets a hint after three nights at her table, and the Killer T
   out = []; _questOffer("bert");
   if (/Killer|league/i.test(text())) assert.match(text(), /last league night before you fly/);
 });
+
+// ── Round 48: Geraint, the regular (Opus) — the bond tiers, played at last ───
+
+test("buying her a drink does not make her introduce herself again", () => {
+  G.room = "candy_bar"; G.money = 9000; G.lastSaleng = G.lastPeddler = 99999; G.flowerNight = 2;
+  const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && NPCS[i].filler);
+  const n = NPCS[g].name;
+  doCommand("talk to " + n); out = []; doCommand("talk to " + n);
+  const terse = text();
+  G.soc.roundFor = { [g]: G.turns };            // what a lady drink sets
+  out = []; doCommand("talk to " + n);
+  assert.doesNotMatch(text(), /I no speak English good/, "the hello is not a story you buy back");
+  // …and the drink still buys a STORY in full (Terry's deal)
+  out = []; doCommand(`ask ${n} about family`); const first = text();
+  out = []; doCommand(`ask ${n} about family`);
+  assert.notEqual(text(), first, "a repeat is terse");
+  G.soc.roundFor = { [g]: G.turns };
+  out = []; doCommand(`ask ${n} about family`);
+  assert.equal(text().includes(first.split("\n").pop().slice(0, 40)), true, "a drink buys it back in full");
+});
+
+test("a woman's confidences are hers: no repeat to you, and she does not share them with the next woman", () => {
+  const lines = {};
+  for (const [g, room] of [["nan", "candy_bar"], ["toey", "rainbow_girls"]]) {
+    G.room = room; G.soc.drinks[g] = 8; lines[g] = [];
+    for (let i = 0; i < 5; i++) { out = []; _bondTalk(g); lines[g].push(text()); }
+  }
+  assert.equal(new Set(lines.nan).size, 5, "five nights, five different things");
+  const strip = s => s.replace(/Nan|Toey/g, "X");
+  const shared = lines.nan.map(strip).filter(l => lines.toey.map(strip).includes(l));
+  assert.ok(shared.length <= 2, `two women shared ${shared.length} of their first five confidences`);
+  assert.ok(_BOND_TALK[2].length >= 8 && _BOND_TALK[3].length >= 7, "the warmth pools are deep enough to be hers");
+});
+
+test("a butterfly is a man who does not come back, and Lek thanks you only for shoes you bought", () => {
+  // four regulars you return to every night is the OPPOSITE of butterflying
+  G.room = "las_vegas"; G.money = 9000; G.soc.drinkNight = {}; G.soc.butterflyTeased = false;
+  const girls = _npcsHere().filter(i => NPC_ROLES[i] === "hostess").slice(0, 4);
+  for (const g of girls) { G.soc.drinks[g] = 8; G.soc.drinkNight[g] = true; }   // all bonded regulars
+  out = []; _ladyDrinkCharge(girls[0]);
+  const g5 = girls[0];
+  assert.ok(!G.soc.butterflyTeased || !/BUTTERFLY|flap/i.test(text()), "your own regulars are not a flit");
+  // Lek: the thank-you waits for the gift; she still answers about shoes
+  G.room = "lucky_tiger"; G.soc.drinks.lek = 14; G.soc.given = {};
+  out = []; doCommand("ask lek about sandals");
+  assert.doesNotMatch(text(), /Nobody buy me shoes before/, "no thanks for a gift never given");
+  assert.match(text(), /heels are the job|flip-flop/, "…but she answers");
+  G.soc.given = { lek: ["lingerie"] };
+  out = []; doCommand("ask lek about sandals");
+  assert.match(text(), /Nobody buy me shoes before/);
+});

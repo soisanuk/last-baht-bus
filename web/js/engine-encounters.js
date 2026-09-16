@@ -350,6 +350,8 @@ function _startEnc(id) {
 // The purchase itself — buying from the parked cart (self or FOR <lady>).
 // The cart LINGERS after a buy (you can buy again); departure is purely on
 // its timer in _salengTick, so nothing here clears salengCart.
+// the cart type standing in this room, as a word a dialogue node can test
+function _salengCartItem() { return String(G.salengCart || "gift"); }
 function _salengBuy(input) {
     // parse optional "for [name]" suffix
     const forM = input.replace(/\bno\b|\bignore\b|\bleave\b|\bgo away\b/, "")
@@ -370,6 +372,10 @@ function _salengBuy(input) {
     }
     G.money -= price;
     if (forHer) {
+      // what she was actually given, so a bond node can thank you for a REAL
+      // gift. Lek thanked a man for sandals he had never bought her, because
+      // her node is bond-gated and nothing recorded the giving (Geraint, round 48).
+      (G.soc.given = G.soc.given || {})[forId] = [...new Set([...(G.soc.given[forId] || []), _salengCartItem()])];
       const name = NPCS[forId].name;
       _addBond(forId, 1);
       const REACTIONS = {
