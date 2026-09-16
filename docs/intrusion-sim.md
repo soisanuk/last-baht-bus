@@ -79,7 +79,7 @@ whether this is portable.
 
 ### 2.4 Minutes are turns, never seconds — hard constraint
 
-"Near real time" must mean **fine-grained turns**. `CLAUDE.md` rules 1 and 2 are
+"Near real time" must mean **fine-grained turns**. `CLAUDE.md` rules 1 and 3 (no wall clock; all nondeterminism through `G.rng`) are
 load-bearing: no wall clock in the core, all nondeterminism through `G.rng`. Real seconds
 would break the seeded daily, replay, save compatibility and the shared-world path in one
 change. A one-minute *turn* costs nothing; a one-minute *second hand* costs everything.
@@ -230,7 +230,7 @@ retrofitted, this question reopens exactly as written above.
 | 2026-09-16 | Raised as a possible rework of the Rabbit heist: minute turns, ~3m distance resolution, navigate the approach, detection processes running while at the terminal. |
 | 2026-09-16 | **Portable, like `cli-sim.js`** (Mario) — carries to the Bangkok follow-on. This makes the module contract in §3 binding rather than advisory. |
 | 2026-09-16 | **Node graph with metre edge costs, not a movement grid** — decided by portability first (a floor plan is code about Pattaya; a node graph is data) and by medium second. |
-| 2026-09-16 | Minutes are TURNS. No wall clock, per `CLAUDE.md` rules 1–2. |
+| 2026-09-16 | Minutes are TURNS. No wall clock, per `CLAUDE.md` rules 1 and 3. |
 | 2026-09-16 | **DECIDED: it debuts in Bangkok, not retrofitted into the Rabbit arc** (Mario) — an intrusion layer gives the follow-on focus where LBB is deliberately open-ended, and LBB's verb is TALK. §4. |
 | 2026-09-16 | **Consequently CLOSED:** the arc's centre of gravity does not move; the Rabbit climax stays an interruption. Reopens only if the layer is ever retrofitted. |
 | 2026-09-16 | **The CLI changes debut in LBB** (Mario) — the full layer is Bangkok's, but the reactive trace lands here first, against a live scenario with real players. Bangkok then inherits a proven mechanic. Consistent with the arc: a trace is pressure, not a climax. |
