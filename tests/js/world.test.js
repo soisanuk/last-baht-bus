@@ -219,6 +219,34 @@ test("the safe PIN's clue flags both exist in dialogue", () => {
   assert.ok(allSets.includes("pinPart9"), "nothing sets pinPart9");
 });
 
+// AN ID THAT IS NOT ITS NAME IS A TRAP, so each one is deliberate and says why.
+// The id is the durable key — it names the art file, the save's G.known, the
+// coverage records and the world graph — while the display name is prose and can
+// be rewritten. When they diverge, the OLD name keeps working as an invisible
+// alias (_findNpc matches an exact id), which is fine only if nobody is meant to
+// type it. Renaming an id instead would mean renaming files in web/portraits/,
+// which belong to the art agent and are requested through the user, and would
+// orphan every historical coverage record keyed on the old id.
+const ID_NOT_NAME = new Map([
+  ["dave", "renamed to Tom (Mario, 2026-09-16) — two men at one rail called Dave and David. " +
+    "Art is web/portraits/thumb/dave.webp and the coverage ledgers key on `dave`."],
+  ["david", "renamed to Jerry, same night, same reason."],
+]);
+test("an NPC id is derivable from its name, or the divergence is deliberate", () => {
+  const slug = x => String(x).toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+  const drift = [];
+  for (const [id, n] of Object.entries(NPCS)) {
+    if (n.filler) continue;
+    const sn = slug(n.name), parts = sn.split("_");
+    const derivable = id === sn || parts.includes(id) || sn.startsWith(id) || id.startsWith(parts[0]);
+    if (!derivable && !ID_NOT_NAME.has(id)) drift.push(`${id} → ${n.name}`);
+  }
+  assert.deepEqual(drift, [],
+    "an id that no longer matches its character's name: rename the id (and its portrait, " +
+    "via the art agent) or add it to ID_NOT_NAME with the reason");
+  for (const id of ID_NOT_NAME.keys()) assert.ok(NPCS[id], `${id} is still a character`);
+});
+
 test("patrons: real home bars, complete profiles, unconditional fallback", () => {
   // One cast since the patron fold: the bench is every NPC flagged patron:true,
   // homed via the ordinary `room` field. The schema invariants are unchanged —

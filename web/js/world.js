@@ -15155,6 +15155,8 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   dave: {
+    // id `dave` deliberately: the display name changed, the art file and every
+    // save's G.known did not. See ID_NOT_NAME in world.test.js.
     name: "Tom", emoji: "📋", age: 55, nat: "British",
     pronoun: "he",
     patron: true, room: "stinky_bar", hops: true,
@@ -15180,7 +15182,8 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
           "one, and every one of them thinking he is the first.\" A mouthful of flat " +
           "shandy. \"One clever sod worked out that in the cartoon it\'s the cat does " +
           "all the chasing. Pleased with himself, he was.\" He straightens the mat, " +
-          "square to the edge. \"He wasn\'t wrong. That\'s the annoying part.\"",
+          "square to the edge. \"He wasn\'t wrong. That\'s the annoying part.\" A pause, " +
+          "and something that is almost a warning. \"Jerry does a scream. You\'ll find out.\"",
         short: "\"Get it out of your system.\" A mouthful of flat shandy. \"Every man who ever sat on that stool.\"" },
       { topic: "rounds", text: "\"I do a lap most nights — few bars, see who's " +
         "about, who's not.\" He says it like a man describing a hobby, but the " +
@@ -15456,6 +15459,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   },
 
   david: {
+    // id `david` deliberately — see the note on Tom above.
     name: "Jerry", emoji: "🇨🇦", age: 52, nat: "Canadian",
     pronoun: "he",
     patron: true, room: "stinky_bar", hops: false, days: [1, 5], // teacher's days off: Mon & Fri
@@ -15473,14 +15477,16 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"Jerry! Saskatoon! It's a beer day, buddy!\" He beams." },
       { topic: "name|tom and jerry|cartoon|mouse|cat",
         text: "\"TOM AND JERRY!\" He gets there first, both hands out, with the delight " +
-          "of a man who has been waiting all evening for someone to hand him this. " +
+          "of a man who has been waiting all evening for somebody to hand him this. " +
           "\"Every time, buddy. Every single time — and I love it every single time, " +
-          "eh?\" He does not appear to be joking, because he is not. \"Tom hates it. " +
-          "Tom has hated it since—\" he starts counting on his fingers, loses " +
-          "confidence around the fourth one, and abandons the whole project. \"A " +
-          "while. Which is exactly why I do the voice.\" He does the voice. It is not " +
-          "a good voice. He knows it is not a good voice. That is the point of the voice.",
-        short: "\"TOM AND JERRY!\" Both hands out, delighted. \"Every time, buddy. That\'s why I do the voice.\"" },
+          "eh?\" He does not appear to be joking, because he is not. \"Here\'s the thing, " +
+          "though.\" He leans in, abruptly serious, a man about to share research. " +
+          "\"Neither of them TALKS. Whole cartoon, not one word out of either of them, " +
+          "ever. So what am I supposed to work with?\" He sits back, entirely satisfied " +
+          "with this. \"So I do the scream. You know the scream.\" He does the scream — " +
+          "Tom\'s, the long one, at a volume that is genuinely startling at this range. " +
+          "\"Tom says if I do it again he\'s changing bars. He\'s been saying that for years.\"",
+        short: "\"TOM AND JERRY!\" Delighted. \"Neither of them talks, buddy — not one word. So I do the scream.\" He does the scream." },
       { topic: "teaching", text: "\"Thirty-two thousand baht a month and they " +
         "haven't done my visa paperwork right in three years, eh?\" He says it " +
         "cheerfully, like the score of a game he enjoys losing. \"But I got a " +
