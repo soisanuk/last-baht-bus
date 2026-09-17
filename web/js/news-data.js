@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Chinese murder suspect held in Pattaya over alleged Thai ID fraud",
+    "t": "Thailand's DSI opens special case in Pattaya nominee crackdown",
     "s": "Nation Thailand",
-    "d": "14 Sep 2026"
+    "d": "15 Sep 2026"
   },
   {
     "t": "Pattaya and Bangkok brace for heavy rain and traffic chaos",
@@ -14,7 +14,7 @@ var NEWS_FEED = [
   },
   {
     "t": "Pattaya teenager says foreigner punches him after he offers help",
-    "s": "thethaiger.com",
+    "s": "Thaiger",
     "d": "16 Sep 2026"
   },
   {
@@ -23,8 +23,13 @@ var NEWS_FEED = [
     "d": "17 Sep 2026"
   },
   {
+    "t": "Thailand plans four systems to trace suspicious money flows faster",
+    "s": "Pattaya Mail",
+    "d": "16 Sep 2026"
+  },
+  {
     "t": "Scam victim says one cop slept, another played games as she sought help",
-    "s": "thethaiger.com",
+    "s": "Thaiger",
     "d": "17 Sep 2026"
   },
   {
@@ -33,12 +38,7 @@ var NEWS_FEED = [
     "d": "17 Sep 2026"
   },
   {
-    "t": "Sand, darkness and a 90-minute wait expose Pattaya safety concerns",
-    "s": "Pattaya Mail",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "Rayong entrepreneurs discover new paths to international markets",
+    "t": "Thai Travel Plus delayed as government weighs better timing for tourism",
     "s": "Pattaya Mail",
     "d": "16 Sep 2026"
   },
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "16 Sep 2026"
   },
   {
-    "t": "Thai monetary policy 'very, very accommodative', no change to growth outlook, central bank official says",
-    "s": "Reuters",
-    "d": "17 Sep 2026"
-  },
-  {
     "t": "World’s most visited city cuts visa-free stays for citizens from US, Canada, South Africa and Mauritius, while Morocco loses visa-free acces",
     "s": "Business Insider Africa",
     "d": "16 Sep 2026"
   },
   {
+    "t": "‘Gone too far’: Thai PM Anutin slams foreign lawbreakers as backlash builds",
+    "s": "South China Morning Post",
+    "d": "17 Sep 2026"
+  },
+  {
+    "t": "Thailand's PTTEP says every $3 rise in LNG prices could lift Thai power prices by 5%",
+    "s": "Reuters",
+    "d": "16 Sep 2026"
+  },
+  {
     "t": "Sacred Task Carried Out as Four Graves Relocated in Thailand",
-    "s": "Chabad.org",
+    "s": "chabad.org",
     "d": "16 Sep 2026"
   },
   {
     "t": "Samarkand R1 (open): Favourites win comfortably, Thailand's Laohawirapap upsets Erigaisi",
     "s": "Chess News | ChessBase",
     "d": "17 Sep 2026"
-  },
-  {
-    "t": "Thailand Sees Energy Transition as Shield Against Oil Volatility",
-    "s": "Bloomberg.com",
-    "d": "17 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-16","USD":33.26,"AUD":23.71,"GBP":44.74,"EUR":38.36};
+var FX_RATES = {"date":"2026-09-17","USD":33.3,"AUD":23.69,"GBP":44.54,"EUR":38.24};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-17","temp":28,"humid":82,"code":2,"hi":30,"rain":85};
+var WX_NOW = {"date":"2026-09-17","temp":27,"humid":89,"code":51,"hi":30,"rain":88};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4327,"date":"2026-09-17","baht":68050};
+var GOLD = {"usd":4362,"date":"2026-09-17","baht":68700};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":76167,"thb":2539902};
+var BTC = {"usd":76601,"thb":2549279};
