@@ -8,9 +8,9 @@ var NEWS_FEED = [
     "d": "14 Sep 2026"
   },
   {
-    "t": "Pattaya’s never-ending fight for room on already narrow streets",
+    "t": "Pattaya council takes aim at traffic, parks and toilet troubles",
     "s": "Pattaya Mail",
-    "d": "15 Sep 2026"
+    "d": "17 Sep 2026"
   },
   {
     "t": "Pattaya teenager says foreigner punches him after he offers help",
@@ -18,23 +18,18 @@ var NEWS_FEED = [
     "d": "16 Sep 2026"
   },
   {
-    "t": "Red light, alcohol bottle and a violent crash at Pattaya intersection",
+    "t": "British tourist attacked and slashed in Pattaya phone robbery attempt",
     "s": "Pattaya Mail",
-    "d": "15 Sep 2026"
+    "d": "17 Sep 2026"
   },
   {
-    "t": "Indian tourists allege theft after sexual services with Pattaya women",
-    "s": "Thaiger",
-    "d": "15 Sep 2026"
+    "t": "Chonburi fuel attendant wins hearts with simple acts of service",
+    "s": "Pattaya Mail",
+    "d": "17 Sep 2026"
   },
   {
-    "t": "Turkish tourist attacked during attempted phone robbery in Pattaya",
-    "s": "Thaiger",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Russian man attacked, robbed by 3 suspects in Pattaya",
-    "s": "Thaiger",
+    "t": "Rain falls but Pattaya stays hot, keeping ice sellers busy",
+    "s": "Pattaya Mail",
     "d": "15 Sep 2026"
   },
   {
@@ -43,45 +38,50 @@ var NEWS_FEED = [
     "d": "16 Sep 2026"
   },
   {
+    "t": "Thailand and Sweden look to unlock new trade and investment opportunities",
+    "s": "Pattaya Mail",
+    "d": "15 Sep 2026"
+  },
+  {
     "t": "I moved my family from Utah to Thailand to work remotely. 8 months later, we came home.",
     "s": "Business Insider",
     "d": "14 Sep 2026"
   },
   {
-    "t": "Cambodia and Thailand begin UN-backed conciliation on maritime dispute",
-    "s": "Reuters",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Thailand Seeks to Seal US Tariff Deal Before Anutin-Trump Talks",
-    "s": "Bloomberg.com",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Ambassador to Thailand plays down anti-Israeli protests, but urges cautionary action",
-    "s": "The Times of Israel",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Israeli ambassador to Thailand: Some tourists think ‘anything goes’",
-    "s": "Ynetnews",
-    "d": "14 Sep 2026"
-  },
-  {
-    "t": "Ambassador admits Israelis behaving badly in Thailand amid anti-tourism protests",
-    "s": "thejc.com",
+    "t": "Sacred Task Carried Out as Four Graves Relocated in Thailand",
+    "s": "Chabad.org",
     "d": "16 Sep 2026"
+  },
+  {
+    "t": "Thailand's PTTEP says every $3 rise in LNG prices could lift Thai power prices by 5%",
+    "s": "Reuters",
+    "d": "16 Sep 2026"
+  },
+  {
+    "t": "Scammers ‘moving through Thailand to new base in Malaysia’",
+    "s": "Bangkok Post",
+    "d": "16 Sep 2026"
+  },
+  {
+    "t": "'Left-field' life: Briton becomes Thailand's top foreign monk",
+    "s": "Yahoo",
+    "d": "17 Sep 2026"
+  },
+  {
+    "t": "Thailand and Cambodia begin UN conciliation process over disputed maritime claims",
+    "s": "apnews.com",
+    "d": "15 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-16","USD":33.26,"AUD":23.71,"GBP":44.74,"EUR":38.36};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-17","temp":27,"humid":86,"code":51,"hi":30,"rain":81};
+var WX_NOW = {"date":"2026-09-17","temp":30,"humid":75,"code":3,"hi":30,"rain":95};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4265,"date":"2026-09-16","baht":67100};
+var GOLD = {"usd":4298,"date":"2026-09-17","baht":67600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":76066,"thb":2538468};
+var BTC = {"usd":76413,"thb":2551171};
