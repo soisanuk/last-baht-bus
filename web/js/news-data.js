@@ -3,6 +3,11 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Australian suspect in Pattaya teen's murder denied bail",
+    "s": "Bangkok Post",
+    "d": "18 Sep 2026"
+  },
+  {
     "t": "Australian man accused of murdering Thai teenager and putting body in suitcase pleads not guilty",
     "s": "The Guardian",
     "d": "18 Sep 2026"
@@ -11,26 +16,6 @@ var NEWS_FEED = [
     "t": "Alleged suitcase killer pleads with Thai court",
     "s": "News.com.au",
     "d": "18 Sep 2026"
-  },
-  {
-    "t": "Australian man charged over death of 17-year-old Thai girl in Pattaya",
-    "s": "Pattaya Mail",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "Thailand digs into citizenship records over foreign nominee concerns",
-    "s": "Pattaya Mail",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "Suphajee maps Thailand’s path beyond the old economy",
-    "s": "Pattaya Mail",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "Thai Travel Plus delayed as government weighs better timing for tourism",
-    "s": "Pattaya Mail",
-    "d": "16 Sep 2026"
   },
   {
     "t": "Pattaya tunnel filled with smoke before dawn, forcing emergency closure",
@@ -43,18 +28,33 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
+    "t": "Pattaya teenager says foreigner punches him after he offers help",
+    "s": "Thaiger",
+    "d": "16 Sep 2026"
+  },
+  {
+    "t": "Rotary Club of Global Pattaya gala combines elegance with community service",
+    "s": "Pattaya Mail",
+    "d": "18 Sep 2026"
+  },
+  {
+    "t": "Ramon Jackson blends music and storytelling at Pattaya City Expats Club",
+    "s": "Pattaya Mail",
+    "d": "18 Sep 2026"
+  },
+  {
+    "t": "Australian man accused of teenage girl's murder appears in Thailand court",
+    "s": "ABC News - Breaking News, Latest News and Videos",
+    "d": "18 Sep 2026"
+  },
+  {
     "t": "Australian accused of murdering teenager in Thailand denied bail",
     "s": "ABC News & Headlines – Australian Broadcasting Corporation",
     "d": "18 Sep 2026"
   },
   {
-    "t": "Australian man accused of teenage girl’s murder appears in Thailand court",
+    "t": "Australian man accused of teenage girl’s murder pleads not guilty to a court in Thailand",
     "s": "AP News",
-    "d": "18 Sep 2026"
-  },
-  {
-    "t": "Australian man accused of teenage girl's murder pleads not guilty to a court in Thailand",
-    "s": "Newsday",
     "d": "18 Sep 2026"
   },
   {
@@ -63,25 +63,25 @@ var NEWS_FEED = [
     "d": "15 Sep 2026"
   },
   {
-    "t": "Thailand Sees Energy Transition as Shield Against Oil Volatility",
-    "s": "bloomberg.com",
-    "d": "17 Sep 2026"
+    "t": "The Rise and Rise and Rise of Jellyfish",
+    "s": "National Geographic",
+    "d": "18 Sep 2026"
   },
   {
-    "t": "FBI: Alabama fugitive accused of child sex crimes captured in Thailand",
-    "s": "abc3340.com",
-    "d": "17 Sep 2026"
+    "t": "'Go die in your own country': Thai PM comes down on foreigners wanting private cemeteries",
+    "s": "The Jerusalem Post",
+    "d": "18 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-17","USD":33.3,"AUD":23.69,"GBP":44.54,"EUR":38.24};
+var FX_RATES = {"date":"2026-09-18","USD":33.36,"AUD":23.75,"GBP":44.5,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-18","temp":29,"humid":77,"code":3,"hi":30,"rain":100};
+var WX_NOW = {"date":"2026-09-18","temp":27,"humid":88,"code":3,"hi":31,"rain":94};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4389,"date":"2026-09-18","baht":69150};
+var GOLD = {"usd":4371,"date":"2026-09-18","baht":68950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78076,"thb":2602812};
+var BTC = {"usd":81002,"thb":2701442};
