@@ -3,37 +3,17 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Huge update for alleged Aussie suitcase killer",
+    "t": "Australian man accused of murdering Thai teenager and putting body in suitcase pleads not guilty",
+    "s": "The Guardian",
+    "d": "18 Sep 2026"
+  },
+  {
+    "t": "Alleged suitcase killer pleads with Thai court",
     "s": "News.com.au",
-    "d": "17 Sep 2026"
+    "d": "18 Sep 2026"
   },
   {
-    "t": "Pattaya and Bangkok brace for heavy rain and traffic chaos",
-    "s": "Pattaya Mail",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "Thailand's DSI opens special case in Pattaya nominee crackdown",
-    "s": "nationthailand.com",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Pattaya teenager says foreigner punches him after he offers help",
-    "s": "thethaiger.com",
-    "d": "16 Sep 2026"
-  },
-  {
-    "t": "Japanese scam victims targeted from Bangkok luxury mansion",
-    "s": "Pattaya Mail",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "Pattaya footballer’s mother waits seven months for suspect to face justice",
-    "s": "Pattaya Mail",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "Police raid two warehouses holding counterfeit Thai and international cosmetics",
+    "t": "Australian man charged over death of 17-year-old Thai girl in Pattaya",
     "s": "Pattaya Mail",
     "d": "17 Sep 2026"
   },
@@ -43,45 +23,65 @@ var NEWS_FEED = [
     "d": "17 Sep 2026"
   },
   {
-    "t": "Thailand to replace names and addresses on parcels with a digital delivery code",
-    "s": "thethaiger.com",
+    "t": "Suphajee maps Thailand’s path beyond the old economy",
+    "s": "Pattaya Mail",
     "d": "17 Sep 2026"
   },
   {
-    "t": "Alabama man facing child torture, sex abuse extradited after Thailand arrest",
-    "s": "AL.com",
+    "t": "Thai Travel Plus delayed as government weighs better timing for tourism",
+    "s": "Pattaya Mail",
+    "d": "16 Sep 2026"
+  },
+  {
+    "t": "Pattaya tunnel filled with smoke before dawn, forcing emergency closure",
+    "s": "Pattaya Mail",
+    "d": "17 Sep 2026"
+  },
+  {
+    "t": "Thailand's DSI opens special case in Pattaya nominee crackdown",
+    "s": "Nation Thailand",
+    "d": "15 Sep 2026"
+  },
+  {
+    "t": "Australian accused of murdering teenager in Thailand denied bail",
+    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
+    "d": "18 Sep 2026"
+  },
+  {
+    "t": "Australian man accused of teenage girl’s murder appears in Thailand court",
+    "s": "AP News",
+    "d": "18 Sep 2026"
+  },
+  {
+    "t": "Australian man accused of teenage girl's murder pleads not guilty to a court in Thailand",
+    "s": "Newsday",
+    "d": "18 Sep 2026"
+  },
+  {
+    "t": "Thailand orders Jewish cemetery near Bangkok cleared, four graves moved",
+    "s": "Ynetnews",
+    "d": "15 Sep 2026"
+  },
+  {
+    "t": "Thailand Sees Energy Transition as Shield Against Oil Volatility",
+    "s": "bloomberg.com",
     "d": "17 Sep 2026"
   },
   {
     "t": "FBI: Alabama fugitive accused of child sex crimes captured in Thailand",
-    "s": "WBMA",
+    "s": "abc3340.com",
     "d": "17 Sep 2026"
-  },
-  {
-    "t": "Fugitive accused of child crimes returned to Alabama after fleeing to Thailand",
-    "s": "Yahoo",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "Thailand Sees Energy Transition as Shield Against Oil Volatility",
-    "s": "Bloomberg.com",
-    "d": "17 Sep 2026"
-  },
-  {
-    "t": "World’s most visited city cuts visa-free stays for citizens from US, Canada, South Africa and Mauritius, while Morocco loses visa-free acces",
-    "s": "africa.businessinsider.com",
-    "d": "16 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-17","USD":33.3,"AUD":23.69,"GBP":44.54,"EUR":38.24};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-18","temp":28,"humid":88,"code":80,"hi":29,"rain":100};
+var WX_NOW = {"date":"2026-09-18","temp":29,"humid":77,"code":3,"hi":30,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4361,"date":"2026-09-18","baht":68700};
+var GOLD = {"usd":4389,"date":"2026-09-18","baht":69150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77221,"thb":2569288};
+var BTC = {"usd":78076,"thb":2602812};
