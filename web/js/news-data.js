@@ -3,18 +3,18 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Australian suspect in Pattaya teen's murder denied bail",
-    "s": "Bangkok Post",
-    "d": "18 Sep 2026"
-  },
-  {
     "t": "Australian man accused of murdering Thai teenager and putting body in suitcase pleads not guilty",
     "s": "The Guardian",
     "d": "18 Sep 2026"
   },
   {
-    "t": "Alleged suitcase killer pleads with Thai court",
-    "s": "News.com.au",
+    "t": "The USS Abraham Lincoln Arrived In Pattaya, Thailand, For A Rest Stop Following The Longest Deployment In Modern Naval History",
+    "s": "Yahoo",
+    "d": "18 Sep 2026"
+  },
+  {
+    "t": "Australian suspect in Pattaya teen's murder denied bail",
+    "s": "Bangkok Post",
     "d": "18 Sep 2026"
   },
   {
@@ -23,23 +23,23 @@ var NEWS_FEED = [
     "d": "17 Sep 2026"
   },
   {
-    "t": "Thailand's DSI opens special case in Pattaya nominee crackdown",
-    "s": "Nation Thailand",
-    "d": "15 Sep 2026"
-  },
-  {
-    "t": "Pattaya teenager says foreigner punches him after he offers help",
-    "s": "Thaiger",
-    "d": "16 Sep 2026"
-  },
-  {
-    "t": "Rotary Club of Global Pattaya gala combines elegance with community service",
+    "t": "18-wheel truck overturns on Motorway 7 en route to Pattaya",
     "s": "Pattaya Mail",
     "d": "18 Sep 2026"
   },
   {
-    "t": "Ramon Jackson blends music and storytelling at Pattaya City Expats Club",
+    "t": "Japanese scam victims targeted from Bangkok luxury mansion",
     "s": "Pattaya Mail",
+    "d": "17 Sep 2026"
+  },
+  {
+    "t": "Pattaya footballer’s mother waits seven months for suspect to face justice",
+    "s": "Pattaya Mail",
+    "d": "17 Sep 2026"
+  },
+  {
+    "t": "Alleged suitcase killer pleads with Thai court",
+    "s": "News.com.au",
     "d": "18 Sep 2026"
   },
   {
@@ -53,19 +53,19 @@ var NEWS_FEED = [
     "d": "18 Sep 2026"
   },
   {
-    "t": "Australian man accused of teenage girl’s murder pleads not guilty to a court in Thailand",
-    "s": "AP News",
-    "d": "18 Sep 2026"
-  },
-  {
     "t": "Thailand orders Jewish cemetery near Bangkok cleared, four graves moved",
     "s": "Ynetnews",
     "d": "15 Sep 2026"
   },
   {
-    "t": "The Rise and Rise and Rise of Jellyfish",
-    "s": "National Geographic",
+    "t": "TMD SPACE Launches ThailandCompanyDocs.com to Support Global Businesses Working with Thai Companies",
+    "s": "markets.businessinsider.com",
     "d": "18 Sep 2026"
+  },
+  {
+    "t": "Alabama man facing child torture, sex abuse extradited after Thailand arrest",
+    "s": "AL.com",
+    "d": "17 Sep 2026"
   },
   {
     "t": "'Go die in your own country': Thai PM comes down on foreigners wanting private cemeteries",
@@ -76,7 +76,7 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-18","USD":33.36,"AUD":23.75,"GBP":44.5,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-18","temp":27,"humid":88,"code":3,"hi":31,"rain":94};
+var WX_NOW = {"date":"2026-09-19","temp":26,"humid":93,"code":3,"hi":30,"rain":99};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4371,"date":"2026-09-18","baht":68950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81002,"thb":2701442};
+var BTC = {"usd":81117,"thb":2702934};
