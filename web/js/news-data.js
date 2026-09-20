@@ -13,14 +13,14 @@ var NEWS_FEED = [
     "d": "19 Sep 2026"
   },
   {
-    "t": "18-wheel truck overturns on Motorway 7 en route to Pattaya",
-    "s": "Pattaya Mail",
-    "d": "18 Sep 2026"
+    "t": "Foreign tourist hurt in Pattaya motorbike crash after dog runs out",
+    "s": "Thaiger",
+    "d": "20 Sep 2026"
   },
   {
-    "t": "Foreign tourist hurt in Pattaya motorbike crash after dog runs out",
-    "s": "thethaiger.com",
-    "d": "20 Sep 2026"
+    "t": "Flash floods trap tourists and residents as Khao Sok rescue teams race to help",
+    "s": "Pattaya Mail",
+    "d": "19 Sep 2026"
   },
   {
     "t": "Sudden U-turn leaves 15-year-old student fighting for her life in Chiang Rai",
@@ -29,7 +29,7 @@ var NEWS_FEED = [
   },
   {
     "t": "Russian rider goes to help the other motorcyclist as his own Ducati burns",
-    "s": "thethaiger.com",
+    "s": "Thaiger",
     "d": "19 Sep 2026"
   },
   {
@@ -39,7 +39,12 @@ var NEWS_FEED = [
   },
   {
     "t": "Australian suspect in Pattaya murder pleads not guilty after indictment",
-    "s": "Bangkok Post",
+    "s": "bangkokpost.com",
+    "d": "18 Sep 2026"
+  },
+  {
+    "t": "Why Is Thailand Not Prosecuting Members of the Mauerberger Network?",
+    "s": "The Diplomat – Asia-Pacific Current Affairs Magazine",
     "d": "18 Sep 2026"
   },
   {
@@ -58,25 +63,20 @@ var NEWS_FEED = [
     "d": "20 Sep 2026"
   },
   {
-    "t": "Andros Townsend 'run over' in bizarre accident before match in Thailand",
-    "s": "The Mirror",
-    "d": "19 Sep 2026"
-  },
-  {
-    "t": "Why Is Thailand Not Prosecuting Members of the Mauerberger Network?",
-    "s": "The Diplomat – Asia-Pacific Current Affairs Magazine",
-    "d": "18 Sep 2026"
+    "t": "‘Gone too far’: Thai PM Anutin slams foreign lawbreakers as backlash builds",
+    "s": "CNA",
+    "d": "20 Sep 2026"
   },
   {
     "t": "MRT train services suspended, fire on track",
-    "s": "Bangkok Post",
+    "s": "bangkokpost.com",
     "d": "20 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-18","USD":33.36,"AUD":23.75,"GBP":44.5,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-20","temp":27,"humid":90,"code":80,"hi":31,"rain":98};
+var WX_NOW = {"date":"2026-09-20","temp":26,"humid":94,"code":53,"hi":31,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4379,"date":"2026-09-20","baht":69100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":80340,"thb":2683116};
+var BTC = {"usd":80837,"thb":2704198};
