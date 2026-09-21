@@ -8,7 +8,12 @@ var NEWS_FEED = [
     "d": "18 Sep 2026"
   },
   {
-    "t": "Foreign tourist hurt in Pattaya motorbike crash after dog runs out",
+    "t": "Pattaya Police Station becomes an unlikely stopover for lost dogs",
+    "s": "Pattaya Mail",
+    "d": "21 Sep 2026"
+  },
+  {
+    "t": "Woman gives birth beside dinosaur display outside Pattaya mall",
     "s": "Thaiger",
     "d": "20 Sep 2026"
   },
@@ -18,18 +23,18 @@ var NEWS_FEED = [
     "d": "20 Sep 2026"
   },
   {
-    "t": "Pattaya officials take man for medical assessment after beach threats",
-    "s": "pattayamail.com",
-    "d": "19 Sep 2026"
-  },
-  {
-    "t": "Sudden U-turn leaves 15-year-old student fighting for her life in Chiang Rai",
-    "s": "pattayamail.com",
-    "d": "19 Sep 2026"
-  },
-  {
-    "t": "Russian rider goes to help the other motorcyclist as his own Ducati burns",
+    "t": "Chon Buri flags 14,264 firms with foreign shareholders for nominee checks",
     "s": "Thaiger",
+    "d": "21 Sep 2026"
+  },
+  {
+    "t": "Anutin brings Thailand’s trade and investment agenda to global talks",
+    "s": "Pattaya Mail",
+    "d": "20 Sep 2026"
+  },
+  {
+    "t": "Khlong Toei Port set for phased relocation to Laem Chabang",
+    "s": "Pattaya Mail",
     "d": "19 Sep 2026"
   },
   {
@@ -38,14 +43,9 @@ var NEWS_FEED = [
     "d": "18 Sep 2026"
   },
   {
-    "t": "Woman gives birth beside dinosaur display outside Pattaya mall",
-    "s": "Thaiger",
-    "d": "20 Sep 2026"
-  },
-  {
-    "t": "Why Is Thailand Not Prosecuting Members of the Mauerberger Network?",
-    "s": "The Diplomat – Asia-Pacific Current Affairs Magazine",
-    "d": "18 Sep 2026"
+    "t": "Thailand fires back with evidence over Miss Universe Cambodia images",
+    "s": "khaosodenglish.com",
+    "d": "21 Sep 2026"
   },
   {
     "t": "Thailand Has Opened E-Gate Immigration To 33 Foreign Nationalities At Suvarnabhumi Airport",
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "20 Sep 2026"
   },
   {
-    "t": "Australian man accused of teenage girl's murder appears in Thailand court",
-    "s": "ABC News - Breaking News, Latest News and Videos",
-    "d": "18 Sep 2026"
+    "t": "Thailand considering oil tax cut, finance minister says",
+    "s": "Reuters",
+    "d": "21 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-18","USD":33.36,"AUD":23.75,"GBP":44.5,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-21","temp":28,"humid":81,"code":51,"hi":28,"rain":90};
+var WX_NOW = {"date":"2026-09-21","temp":28,"humid":83,"code":3,"hi":31,"rain":90};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4360,"date":"2026-09-21","baht":68800};
+var GOLD = {"usd":4361,"date":"2026-09-21","baht":68800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81430,"thb":2712429};
+var BTC = {"usd":85198,"thb":2831481};
