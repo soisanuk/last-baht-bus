@@ -4,13 +4,8 @@
 var NEWS_FEED = [
   {
     "t": "Australian man accused of murdering Thai teenager and putting body in suitcase pleads not guilty",
-    "s": "theguardian.com",
+    "s": "The Guardian",
     "d": "18 Sep 2026"
-  },
-  {
-    "t": "Newborn rescued after sudden birth outside Pattaya mall",
-    "s": "Khaosod English",
-    "d": "19 Sep 2026"
   },
   {
     "t": "Foreign tourist hurt in Pattaya motorbike crash after dog runs out",
@@ -23,8 +18,13 @@ var NEWS_FEED = [
     "d": "20 Sep 2026"
   },
   {
+    "t": "Pattaya officials take man for medical assessment after beach threats",
+    "s": "pattayamail.com",
+    "d": "19 Sep 2026"
+  },
+  {
     "t": "Sudden U-turn leaves 15-year-old student fighting for her life in Chiang Rai",
-    "s": "Pattaya Mail",
+    "s": "pattayamail.com",
     "d": "19 Sep 2026"
   },
   {
@@ -33,14 +33,14 @@ var NEWS_FEED = [
     "d": "19 Sep 2026"
   },
   {
-    "t": "Pattaya officials take man for medical assessment after beach threats",
-    "s": "Pattaya Mail",
-    "d": "19 Sep 2026"
-  },
-  {
     "t": "Australian suspect in Pattaya murder pleads not guilty after indictment",
     "s": "Bangkok Post",
     "d": "18 Sep 2026"
+  },
+  {
+    "t": "Woman gives birth beside dinosaur display outside Pattaya mall",
+    "s": "Thaiger",
+    "d": "20 Sep 2026"
   },
   {
     "t": "Why Is Thailand Not Prosecuting Members of the Mauerberger Network?",
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "20 Sep 2026"
   },
   {
-    "t": "Andros Townsend avoids injury after bizarre pitch roller incident in Thailand",
-    "s": "theguardian.com",
-    "d": "20 Sep 2026"
-  },
-  {
     "t": "Andros Townsend run over by pitch roller in Thailand",
     "s": "BBC",
-    "d": "20 Sep 2026"
-  },
-  {
-    "t": "Former England and Tottenham star Andros Townsend run over by pitch roller",
-    "s": "Al Jazeera",
     "d": "20 Sep 2026"
   },
   {
     "t": "Missing Thai woman found strangled in Taiwan freezer",
     "s": "Bangkok Post",
     "d": "20 Sep 2026"
+  },
+  {
+    "t": "Andros Townsend avoids injury after bizarre pitch roller incident in Thailand",
+    "s": "The Guardian",
+    "d": "20 Sep 2026"
+  },
+  {
+    "t": "Australian man accused of teenage girl's murder appears in Thailand court",
+    "s": "ABC News - Breaking News, Latest News and Videos",
+    "d": "18 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-18","USD":33.36,"AUD":23.75,"GBP":44.5,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-21","temp":26,"humid":97,"code":3,"hi":29,"rain":82};
+var WX_NOW = {"date":"2026-09-21","temp":28,"humid":81,"code":51,"hi":28,"rain":90};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4379,"date":"2026-09-20","baht":69100};
+var GOLD = {"usd":4360,"date":"2026-09-21","baht":68800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81183,"thb":2712012};
+var BTC = {"usd":81430,"thb":2712429};
