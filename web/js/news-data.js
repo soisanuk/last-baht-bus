@@ -3,7 +3,7 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "In Pattaya, the death of a teenage girl has exposed a party city's dark underbelly - ABC News & Headlines – Australian Broadcasting Corporat",
+    "t": "Teen’s body found in suitcase has some in notorious Thai party town on edge",
     "s": "ABC News & Headlines – Australian Broadcasting Corporation",
     "d": "21 Sep 2026"
   },
@@ -13,32 +13,32 @@ var NEWS_FEED = [
     "d": "21 Sep 2026"
   },
   {
-    "t": "Chon Buri flags 14,264 firms with foreign shareholders for nominee checks",
-    "s": "thethaiger.com",
+    "t": "Foreign tourist hurt in Pattaya motorbike crash after dog runs out",
+    "s": "Thaiger",
+    "d": "20 Sep 2026"
+  },
+  {
+    "t": "2,500 runners hit Jomtien Beach for Pattaya’s Loma Run On The Beach 2026",
+    "s": "Pattaya Mail",
     "d": "21 Sep 2026"
   },
   {
-    "t": "Driver falls asleep at wheel and flips car on South Pattaya Road",
+    "t": "Anutin signals full Thailand response to any Cambodia border move at UN",
     "s": "Pattaya Mail",
     "d": "21 Sep 2026"
+  },
+  {
+    "t": "Chon Buri flags 14,264 firms with foreign shareholders for nominee checks",
+    "s": "Thaiger",
+    "d": "21 Sep 2026"
+  },
+  {
+    "t": "Anutin brings Thailand’s trade and investment agenda to global talks",
+    "s": "Pattaya Mail",
+    "d": "20 Sep 2026"
   },
   {
     "t": "Pattaya wakes to a fresh rain alert with more storms coming",
-    "s": "Pattaya Mail",
-    "d": "21 Sep 2026"
-  },
-  {
-    "t": "Pattaya woman crashes through shop and sidecar, caught after 3-km chase",
-    "s": "Pattaya Mail",
-    "d": "21 Sep 2026"
-  },
-  {
-    "t": "Pattaya man with depression found dead after mother refused weed money",
-    "s": "Pattaya Mail",
-    "d": "21 Sep 2026"
-  },
-  {
-    "t": "Pattaya Police Station becomes an unlikely stopover for lost dogs",
     "s": "Pattaya Mail",
     "d": "21 Sep 2026"
   },
@@ -48,13 +48,8 @@ var NEWS_FEED = [
     "d": "21 Sep 2026"
   },
   {
-    "t": "S'porean man who moved to Thailand 14 years ago says he would never come back, kids are 'living a really good life' now",
-    "s": "Mothership",
-    "d": "18 Sep 2026"
-  },
-  {
-    "t": "Govt racing to conclude US tariff negotiations",
-    "s": "Bangkok Post",
+    "t": "Thailand fires back with evidence over Miss Universe Cambodia images",
+    "s": "Khaosod English",
     "d": "21 Sep 2026"
   },
   {
@@ -63,25 +58,30 @@ var NEWS_FEED = [
     "d": "20 Sep 2026"
   },
   {
+    "t": "S'porean man who moved to Thailand 14 years ago says he would never come back, kids are 'living a really good life' now",
+    "s": "Mothership",
+    "d": "18 Sep 2026"
+  },
+  {
     "t": "The Lever Is Price: China’s New Leverage Play in Thailand",
     "s": "orfonline.org",
     "d": "20 Sep 2026"
   },
   {
-    "t": "Thailand Inspires Travelers at Sawasdee DC Festival",
-    "s": "WJLA",
-    "d": "21 Sep 2026"
+    "t": "Thailand braces for LNG supply squeeze as prices near Russia–Ukraine war levels",
+    "s": "Nation Thailand",
+    "d": "22 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-21","USD":33.23,"AUD":23.72,"GBP":44.52,"EUR":38.18};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-22","temp":25,"humid":96,"code":80,"hi":30,"rain":82};
+var WX_NOW = {"date":"2026-09-22","temp":29,"humid":76,"code":51,"hi":29,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4345,"date":"2026-09-21","baht":68300};
+var GOLD = {"usd":4343,"date":"2026-09-22","baht":68250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":86604,"thb":2878713};
+var BTC = {"usd":85491,"thb":2841730};
