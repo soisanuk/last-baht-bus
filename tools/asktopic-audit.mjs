@@ -97,7 +97,7 @@ const STAGES = [
   }],
   ["sandbox", () => {
     _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation";
-    for (const f of ["expatLife", "barPremises", "barLicence", "wdgResolved", "nomineeWarned"]) _setFlag(f);
+    for (const f of ["expatLife", "barPremises", "barLicence", "plgResolved", "nomineeWarned"]) _setFlag(f);
   }],
 ];
 

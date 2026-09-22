@@ -231,6 +231,11 @@ const ID_NOT_NAME = new Map([
   ["dave", "renamed to Tom (Mario, 2026-09-16) — two men at one rail called Dave and David. " +
     "Art is web/portraits/thumb/dave.webp and the coverage ledgers key on `dave`."],
   ["david", "renamed to Jerry, same night, same reason."],
+  ["powers", "renamed to Duncan Ashcroft (2026-09-23) out of an identifiability risk — the old " +
+    "name was a derivation of a real person's (docs/guardrails.md). The id is kept because it names " +
+    "web/portraits/thumb/powers.*, a gen-portraits.py CHARS spec and every save's G.known; on its own " +
+    "it is an ordinary English word that appears elsewhere in this repo, and the derivation lived in " +
+    "the FULL name, which is gone."],
 ]);
 test("an NPC id is derivable from its name, or the divergence is deliberate", () => {
   const slug = x => String(x).toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");

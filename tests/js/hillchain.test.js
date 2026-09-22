@@ -103,7 +103,7 @@ test("hill chain: the deed moves BOTH factions up — the hill is where they get
   say("ask bob about order"); tick();
   assert.equal(G.faction.samson, before.samson + 1, "Bill's favour lands");
   assert.equal(G.faction.indie, before.indie + 1, "…and so does Bob's");
-  assert.equal(G.faction.wdg, before.wdg, "nobody else is touched");
+  assert.equal(G.faction.plg, before.plg, "nobody else is touched");
   assert.equal(G.faction.syndicate, before.syndicate);
 });
 

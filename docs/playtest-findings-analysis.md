@@ -387,7 +387,7 @@ One persona: Mick, 61, Sheffield — fifteen years of the street, drive = the
 grapevine audit (cross-reference every claim against another surface). Played a
 full 7-night week to สบายสบาย; zero console errors. His ledger's headline: the
 money layer reconciled to the baht across five night summaries, the share card
-was "a true sentence about your week", and White Dish held across four voices —
+was "a true sentence about your week", and Pattaya Leisure held across four voices —
 the failures were almost all at the seams.
 
 ## Fixed
@@ -402,7 +402,7 @@ the failures were almost all at the seams.
 | F6 | The Vic advertised a kitchen and sold no food | `_qvKitchen` on Aoy's stated hours: basket ฿160 till eleven, crisps ฿40 after; BUY/EAT both routed; an Aoy `kitchen` node |
 | F7 | Somo's own dare ("ask me the ninety-five squad") dead-ended | she delivers the squad, God himself included |
 | F9 | An unaffordable LT killed the whole negotiation with ST affordable on the same menu, and ate the next typed word | the ledger stays open on the line you can afford |
-| F10 | 12+ volunteered subjects missing; aliased asks at GATED nodes got "not my story" instead of "not yet" | nodes for barry/golf, preaw/saeng, toi/mercedes, wilai/plan (confirming Preaw's gossip), mort/soi 6; munich→german and white dish→ryan powers aliases; the gate probe now sees through the synonym map |
+| F10 | 12+ volunteered subjects missing; aliased asks at GATED nodes got "not my story" instead of "not yet" | nodes for barry/golf, preaw/saeng, toi/mercedes, wilai/plan (confirming Preaw's gossip), mort/soi 6; munich→german and pattaya leisure→duncan ashcroft aliases; the gate probe now sees through the synonym map |
 | F11 | Money sent to her phone forgotten at her rail | a send is remembered (`G.soc.given`) and answered in person |
 | F12 | Benz's "one or three" tariff didn't count | she names the real remaining count |
 | F13 | First-time asks hit "you already ask me this" for things she TOLD you | brush-offs reworded to "I tell you this already" — true in both cases |
@@ -469,7 +469,7 @@ was built to find.
 
 ## Design-accepted, recorded
 
-- **The chip reading `SWEAR YOURE NO WHITE DISH MAN`** — the apostrophe strip is
+- **The chip reading `SWEAR YOURE NO PATTAYA LEISURE MAN`** — the apostrophe strip is
   load-bearing: an apostrophe splits a CAPS-in-parens run into two dead keywords,
   and the matcher normalizes apostrophes away so the tap still fires. The code
   comment already documents the trade.

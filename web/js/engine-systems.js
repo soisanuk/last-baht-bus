@@ -487,13 +487,13 @@ function _doHire(arg) {
   _passTime(Math.min(6, Math.max(0, NIGHT_TURNS - 1 - G.nightTurn)));
 }
 
-// Bert's girls, closing ranks after you threw in with White Dish. {name} is the
+// Bert's girls, closing ranks after you threw in with Pattaya Leisure. {name} is the
 // girl you tried to barfine. Repeatable, so pooled.
 const _BERT_LOYAL = [
   "{name} starts to smile, then something shutters behind her eyes — she's clocked whose water you " +
     "carry now. \"You come to Bert's bar, after Bert?\" She steps back off the stool. \"No. Not me, not " +
     "any girl here.\" The whole rail has gone quiet and cold. Bert looks after his girls; his girls look " +
-    "after Bert. Not tonight, and not any night you're White Dish's man.",
+    "after Bert. Not tonight, and not any night you're Pattaya Leisure's man.",
   "You start the ask and {name} is already shaking her head, gently, finally. \"We know who buy our som " +
     "tam when it rain, tilac. Not the man with the QR code. Not you.\" She turns her shoulder; down the " +
     "bar another girl does the same, and another — a slow wave of no. Bert doesn't even look up from the felt.",
@@ -502,7 +502,7 @@ const _BERT_LOYAL = [
     "\"Every girl here heard what you did. The Stinky's closed to you, that way.\"",
   "{name} glances to Bert at the end of the bar, reads something in the set of his shoulders, and steps " +
     "back. \"Sorry, tilac. Not you. Not here.\" No anger — just a door quietly shut. Bert's girls don't " +
-    "cross Bert, not for you, not for all the baht in Ryan Powers' spreadsheet.",
+    "cross Bert, not for you, not for all the baht in Duncan Ashcroft' spreadsheet.",
 ];
 // The Peacock sells a show, not a night — no mamasan ledger, no fine, and Miss
 // Mala has retired the question so many times it has its own choreography.
@@ -574,10 +574,10 @@ function _doBarfine(arg) {
   if (role === "mamasan") { _say(`You cannot barfine ${name}. She IS the bar. She looks almost flattered. Almost.`); return; }
   // a ladyboy: for a straight player, a gracious pass; for a bi player, proceed normally
   if (_ladyboyGate(id)) return;
-  // Cross Bert (go WDG) and his whole bar closes to you — the girls run on his
-  // goodwill, not White Dish's, and none of them will go with the man who came
+  // Cross Bert (go PLG) and his whole bar closes to you — the girls run on his
+  // goodwill, not Pattaya Leisure's, and none of them will go with the man who came
   // in to sell him out. (See Bert's iced greeting; same trigger.)
-  if (G.room === "stinky_bar" && _faction("wdg") > 0) {
+  if (G.room === "stinky_bar" && _faction("plg") > 0) {
     _say(_pickVary(_BERT_LOYAL, "bertloyal").replace("{name}", name));
     return;
   }
@@ -627,10 +627,10 @@ function _doBarfine(arg) {
     return;
   }
   const bt = _room().barType;
-  // Do right by Bert (or spite White Dish) and his whole bar warms to you: his
+  // Do right by Bert (or spite Pattaya Leisure) and his whole bar warms to you: his
   // girls need less coaxing and won't turn a friend of Bert's down. The mirror
-  // of the WDG-stooge freeze-out above.
-  const bertAlly = G.room === "stinky_bar" && (_faction("indie") > 0 || _faction("wdg") < 0);
+  // of the PLG-stooge freeze-out above.
+  const bertAlly = G.room === "stinky_bar" && (_faction("indie") > 0 || _faction("plg") < 0);
   // HARD day-level refusals pre-empt the favor gate: a kept girl with her
   // sponsor in town (or a mama-held draw) was NEVER coming tonight, but the
   // favor gate spoke first — so a punter courted her ~฿1,050 deep before the
@@ -2516,7 +2516,7 @@ function _doHint() {
       return;
     }
     // the nudge never points at an alignment errand — "never push" is the doctrine,
-    // and HINT was recommending Gavin's WDG job three nights running (expat playtest)
+    // and HINT was recommending Gavin's PLG job three nights running (expat playtest)
     // the bar chain's one hidden step: bar_premises done, bar_licence not yet
     // reachable — the answer is a man you have to get to KNOW (27-night playtest
     // 2026-08-22: four weeks of "Signin' Friday" and nothing pointed at Wayne)
@@ -2710,7 +2710,7 @@ function _questOffer(npcId) {
   // unclear which thing to respond to). The offer surfaces next time you talk.
   if (G.convoQ) return;
   // a man who won't give you a stool won't give you his bar (completionist playtest 2026-08-22)
-  if (npcId === "bert" && typeof _faction === "function" && _faction("wdg") > 0) return;
+  if (npcId === "bert" && typeof _faction === "function" && _faction("plg") > 0) return;
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (_qGiver(q) !== npcId || !_questAvailable(qid)) continue;
     // A VIGNETTE is not a job. The seven origin scenes — the man whose life you
@@ -5034,7 +5034,7 @@ function _startRain(len) {
       "empties in five seconds flat. Nobody is going anywhere for a while.", "alert");
     _say("(Nowhere to be. Nothing to be done about it. สบาย.)", "dim");
     _addHappy(1);
-  } else if (_room().indoors) {   // windowless: you hear it, you don't see it (the WDG back office said "outside the glass" — Dougie, round 46)
+  } else if (_room().indoors) {   // windowless: you hear it, you don't see it (the PLG back office said "outside the glass" — Dougie, round 46)
     _say("Rain arrives on the roof like a verdict — a drumming that fills the room with no window " +
       "to watch it through. In here: dry, humming air-con, and the fridge light. Out there, everything.", "alert");
   } else if (_sheltered(G.room) && (_room().shop || G.room === "police_station" || G.room === "oy_office")) {
@@ -6334,7 +6334,7 @@ function _partnerYes() {
   _setFlag("barPartner");
   if (who === "tan") {
     _setFlag("partnerTan");
-    _align("indie", 1); _align("wdg", -1); _align("syndicate", 1);
+    _align("indie", 1); _align("plg", -1); _align("syndicate", 1);
     _say("\"Good.\" It is done by Tuesday, the way he said. It costs you nothing at " +
       "all \u2014 no lawyer, no signature you kept a copy of, no figure anywhere. " +
       "Just a land office that turned out to be his wife's cousin, and a lunch " +
@@ -6343,7 +6343,7 @@ function _partnerYes() {
       "has not yet named.", "win");
   } else {
     _setFlag("partnerCandy");
-    _align("indie", 2); _align("wdg", -2);
+    _align("indie", 2); _align("plg", -2);
     // "a lawyer, a real one, in Bangkok" — and it cost nothing (Des, round 41).
     // The account first, the pocket for the rest; what neither covers she pays
     // and never mentions, which is its own kind of paper.
@@ -6776,7 +6776,7 @@ function _sellBarYes() {
       "is the whole of the rule.\" It is the largest thing he has ever handed anybody, and it is " +
       "enormous."
     : "Candy runs the sale like the professional she has spent twenty years becoming: " +
-      "the lawyer, the letters, the note settled to the satang, White Dish paying the " +
+      "the lawyer, the letters, the note settled to the satang, Pattaya Leisure paying the " +
       "going-concern price because with Candy across the table there is no other price " +
       "available. At the signing she looks at the pair of you over her glasses. \"You " +
       "know how many times I see a man LEAVE this town rich in the right way?\" She " +
@@ -7266,7 +7266,7 @@ function _barLost(cause) {
       "fit-out you paid for stays with the shophouse, because that was always " +
       "the deal and you read it, or you were told you had.", "alert");
     _say("There is a queue for the room because there has been a company in it " +
-      "for two years, waiting, and a company pays on the first. White Dish take " +
+      "for two years, waiting, and a company pays on the first. Pattaya Leisure take " +
       "the lease and the old man's paper in the same week, for less than either " +
       "was worth, which is what patience buys.", "alert");
     _say(tan
@@ -7283,7 +7283,7 @@ function _barLost(cause) {
       "squared it with the old man. Whole thing, one payment.\" There is no " +
       "paperwork to look at. There was never any paperwork. \"He said to tell you " +
       "there's no hard feeling in it, and bud, I believe him, and that's the part " +
-      "I'd think about.\"\n\nBert turns the bottle a quarter turn. \"White Dish had " +
+      "I'd think about.\"\n\nBert turns the bottle a quarter turn. \"Pattaya Leisure had " +
       "a number in with the old man by the Tuesday. Your man moved on the Monday.\" " +
       "He lets that sit exactly as long as it needs. \"He didn't do it for you.\""
     : "Candy's lawyer sends a letter, because Candy's arrangements are the kind " +
@@ -7575,7 +7575,7 @@ function _barSettle(settleDay) {
 // corruption being discovered by a farang. It's how business is done here and
 // everywhere — the only local difference is that nobody troubles to pretend
 // otherwise. Nobody in the thread treats it as a scandal, and the words "bribe"
-// and "corruption" never appear. Gavin's "White Dish looks after its friends"
+// and "corruption" never appear. Gavin's "Pattaya Leisure looks after its friends"
 // is the same sentence in a British accent.
 //
 // NEUTRALITY IS ALWAYS AVAILABLE AND NOTHING IS EVER BLOCKED. Refuse and the
@@ -8718,7 +8718,7 @@ function _sha256(str) {
 // answers with the ordinary brush-off (the cover); this just arms a delayed text.
 //
 // The text is a canon-accurate Thai scam SMS from an IN-WORLD brand (never a
-// real bank/carrier — White Dish doctrine) carrying a link to Mario's own
+// real bank/carrier — Pattaya Leisure doctrine) carrying a link to Mario's own
 // domain, blacksite.org. That domain is where the un-greppable half of the
 // puzzle lives: the site itself just redirects (a taken-down scam page, to a
 // clicker), and the real clue is a DNS TXT record — which is what a security
@@ -9575,7 +9575,7 @@ function _rabbitInterview() {
   _say("Eddy sets the soda down and looks at you properly for the first time — not the " +
     "bar-owner's glance that prices a customer, the other one, the one that sizes up a " +
     "man for a job.", "alert");
-  _say("\"White Dish took my bar. Not in a fight — with paper, a lawyer, and a smile, which " +
+  _say("\"Pattaya Leisure took my bar. Not in a fight — with paper, a lawyer, and a smile, which " +
     "is how they take everything. I've got something that reads what's on their machines " +
     "from across a room, and I've got no way to walk it into a room, because every farang " +
     "they've got a photo of is me.\" He turns the glass. \"You they don't have a photo of. " +
@@ -9604,7 +9604,7 @@ function _rabbitJobAsk() {
 }
 
 // THE OPERATOR PATH — the fake-CLI set piece (cli-sim.js, a portable module;
-// CLI_SCENARIOS.wdg_office is the data). Same corridor, same gate, same office;
+// CLI_SCENARIOS.plg_office is the data). Same corridor, same gate, same office;
 // instead of a box on a shelf you sit at the laptop. Fork-not-filter: it is
 // offered to everybody and a determined non-expert can finish it (the puzzle is
 // navigation and noticing; HELP lists the verbs; every move is a tap).
@@ -9790,17 +9790,17 @@ function _boxBlown() {
     "hand like a woman reading a price tag. \"This is not yours.\" It isn't a question. " +
     "\"And you are not here.\"", "alert");
   _say("Nobody lays a hand on you. Two shirts walk you to the pavement and the corridor door " +
-    "shuts behind you, and that is the whole of it — except that White Dish now has a black " +
+    "shuts behind you, and that is the whole of it — except that Pattaya Leisure now has a black " +
     "box with a farang's evening attached to it, and Rabbit is down to nothing.", "alert");
   _kickOut();
 }
 
 // ── The CCIB landing (docs/rabbit-arc.md, "CCIB were already there") ────────
-// WDG was under investigation before the arc began; the heist nearly blows the
+// PLG was under investigation before the arc began; the heist nearly blows the
 // case, so CCIB interrupts the FOLLOW-THROUGH, not the job (both built paths
 // stand — rabbitData is set the moment the light goes green or the file lands).
 // The morning after, a plainclothes visit at the White Rabbit. The heat lands on
-// WDG regardless; the VARIABLE is the radar — who CCIB now has a file on. Three
+// PLG regardless; the VARIABLE is the radar — who CCIB now has a file on. Three
 // flat booleans on G.ccibRadar, set here from three legible facts and carried on
 // the export for the Bangkok game (docs/bangkok-concept.md).
 //
@@ -9925,14 +9925,14 @@ function _ccibVisit() {
 // TAN'S READ — the mechanic's real voice, delivered when you next reach him.
 // (His dialogue node, gated on ccibVisited && !ccibReadGiven, sets ccibReadGiven.)
 
-// the lay-low window, felt: a possible second look, and it lifts when the WDG
+// the lay-low window, felt: a possible second look, and it lifts when the PLG
 // case becomes the news. Called from _tick (cheap; guarded on the flag).
 function _ccibLowTick() {
   if (!_flag("ccibVisited") || _flag("ccibCleared")) return;
   if (G.day >= (G.ccibLowUntil || 0)) {
     _setFlag("ccibCleared");
     G.eddyBackDay = 0;   // Eddy resurfaces
-    _say("The White Dish thing is finally in the paper — a group of bars, an investigation, " +
+    _say("The Pattaya Leisure thing is finally in the paper — a group of bars, an investigation, " +
       "words like 'financial irregularities' doing a lot of polite work. No names you know, " +
       "and none of them yours. The footnote got left out, exactly as promised. Eddy's back on " +
       "his stool by the weekend, telling the story as though he planned it.", "win");

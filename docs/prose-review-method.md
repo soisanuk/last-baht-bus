@@ -64,7 +64,7 @@ character · a place whose strings aren't the same place at the same hour.
 
 ```sh
 node tools/prose-corpus.mjs --quests --taps      # every quest, its prose AND its wiring
-node tools/prose-corpus.mjs --quests white_dish  # one quest
+node tools/prose-corpus.mjs --quests plg_deal  # one quest
 ```
 
 The third pivot, and the only one whose contradictions break **play** rather than fiction.
@@ -105,7 +105,7 @@ Two things about it are worth copying exactly:
   batch lists back to the tool so the map records what was actually read, and reports the
   names that didn't resolve rather than swallowing them.
 
-Three agents flagged Ryan Powers independently, which is the signal worth watching for: an
+Three agents flagged Duncan Ashcroft independently, which is the signal worth watching for: an
 overlap between batches is not redundancy, it is corroboration, and the corroborated finding
 was the one worth fixing first.
 

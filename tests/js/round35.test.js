@@ -579,7 +579,7 @@ test("the deep corner's sign is the first door you can find by ear (Malcolm F12,
 
 test("Mort has a view on the biggest story on his own street (Malcolm F13)", () => {
   G.room = "queen_vic"; G.nightTurn = 20; G.known.mort = true;
-  out = []; run("ask mort about white dish");
+  out = []; run("ask mort about pattaya leisure");
   assert.match(text(), /rollup|who they pay/i);
   assert.doesNotMatch(text(), /Not one I know/, "the best-informed man on the coast");
 });
@@ -631,7 +631,7 @@ test("a CAPS hint teaches the name, so the bar can place Gavin on Soi 6 (Nige)",
   G.room = "stinky_bar"; out = []; run("talk to gavin");
   assert.match(text(), /Golden Dragon Bar.*Soi 6/, "placed, with the district");
   assert.match(NPCS.bert.dialogue.map(d => d.text).join(" "), /Golden Dragon, down on Soi 6/, "Bert's lead names the soi");
-  assert.match(QUESTS.white_dish.desc, /Golden Dragon on Soi 6/, "and so does the journal");
+  assert.match(QUESTS.plg_deal.desc, /Golden Dragon on Soi 6/, "and so does the journal");
 });
 
 test("your own remembered answer doesn't show twice for a trailing full stop (Nige)", () => {

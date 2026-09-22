@@ -100,7 +100,7 @@ const EXPAT_SAVINGS = 20000; // wired over when you make the move
 // is seven figures. So the sale is SELLER-FINANCED, which is what Bert's line
 // already implies — "he'll take a regular over a company… he'll lose money on
 // you, and he knows that too. For the lights staying on the way they are."
-// White Dish offers cash up front; you offer a promise over six years. He takes
+// Pattaya Leisure offers cash up front; you offer a promise over six years. He takes
 // the promise, because a company would gut the place in a season.
 //
 // BAR_DEPOSIT is deliberately the player's entire plausible ceiling: it empties
@@ -259,7 +259,7 @@ const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the sho
 // the only thing this game ever said about them on a pavement (Marco, r44).
 const SEAWALL_ONE = 1000, SEAWALL_TWO = 1800;
 // THE BOX — Rabbit's mule path (docs/rabbit-arc.md, Tier 2, phase 1). You carry
-// a black box into a WDG back office, PLACE it, and babysit it while it does
+// a black box into a PLG back office, PLACE it, and babysit it while it does
 // its work: BOX_TURNS clean ticks of counting, a BOX_FOOTSTEP chance per tick
 // that somebody comes down the corridor, BOX_HEAT_MAX strikes before Kesinee
 // finds you, and BOX_COUNT boxes before Rabbit is out of them. Reuses the
@@ -267,12 +267,12 @@ const SEAWALL_ONE = 1000, SEAWALL_TWO = 1800;
 const BOX_TURNS = 8, BOX_FOOTSTEP = 0.25, BOX_HEAT_MAX = 3, BOX_COUNT = 2;
 
 // ── The operator path's machine (docs/rabbit-arc.md; cli-sim.js is the engine) ─
-// DATA, not code: cli-sim.js knows nothing about WDG, baht or Rabbit; all of
+// DATA, not code: cli-sim.js knows nothing about PLG, baht or Rabbit; all of
 // that lives here. Keep it visibly fictional — no real tool names, nothing that
 // maps onto real exploitation. The realism is an unlocked machine and a file.
 const BOOK_TAKINGS = 1.06;   // Eddy's old regulars, run at YOUR bar — the European trade he survives on
 const CLI_SCENARIOS = {
-  wdg_office: {
+  plg_office: {
     prompt: "office-pc:~$",
     home: "/home/office",
     stick: "Rabbit's stick",
@@ -311,9 +311,9 @@ const CLI_SCENARIOS = {
       },
       "/home/office/vault/invoices": {
         files: {
-          "2023-09.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: White Dish Group (Thailand) — Kitten Corner\nFacilities management & consulting, Sept 2023 ...... ฿90,000\nPAID — bank transfer 03/10",
-          "2023-10.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: White Dish Group (Thailand) — Kitten Corner\nFacilities management & consulting, Oct 2023 ...... ฿90,000\nPAID — bank transfer 02/11",
-          "2023-11.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: White Dish Group (Thailand) — Kitten Corner\nFacilities management & consulting, Nov 2023 ...... ฿95,000\n(one line, the same line, every month, from a trading company with no goods that anybody has ever seen ship. Somebody paid a cleaner ninety thousand baht a month and the cleaner never came.)",
+          "2023-09.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: Pattaya Leisure Group (Thailand) — Kitten Corner\nFacilities management & consulting, Sept 2023 ...... ฿90,000\nPAID — bank transfer 03/10",
+          "2023-10.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: Pattaya Leisure Group (Thailand) — Kitten Corner\nFacilities management & consulting, Oct 2023 ...... ฿90,000\nPAID — bank transfer 02/11",
+          "2023-11.pdf": "EASTERN SEABOARD TRADING & FACILITIES CO., LTD.\nTo: Pattaya Leisure Group (Thailand) — Kitten Corner\nFacilities management & consulting, Nov 2023 ...... ฿95,000\n(one line, the same line, every month, from a trading company with no goods that anybody has ever seen ship. Somebody paid a cleaner ninety thousand baht a month and the cleaner never came.)",
           "ice_nov.pdf": "SIAM ICE — 22 sacks @ ฿190 ...... ฿4,180\nPAID cash",
         },
       },
@@ -3428,8 +3428,8 @@ const ROOMS = {
   pink_lotus: {
     name: "Pink Lotus Lounge",
     region: "Soi 6",
-    bar: "Pink Lotus Lounge", barType: "soi6", owner: "wdg",
-    desc: "White Dish's flagship, and the loudest argument for why the group should not be " +
+    bar: "Pink Lotus Lounge", barType: "soi6", owner: "plg",
+    desc: "Pattaya Leisure's flagship, and the loudest argument for why the group should not be " +
       "allowed nice things. The front is open to the street; half the bar is technically the " +
       "pavement. Neon tubes frame the sign in three colours simultaneously. Inside, the pink " +
       "is structural — walls, barstools, the girls' outfits, arguably the air itself. Joy is " +
@@ -3453,8 +3453,8 @@ const ROOMS = {
     invite: true,   // not a door you walk through: TRAVEL, the piwin and Tan all say so (Margarethe, round 47)
     name: "The Orchid Room",
     region: "Soi 6",
-    bar: "The Orchid Room", barType: "soi6", owner: "wdg", vip: true,
-    desc: "The name is the last classy thing about it. Ryan Powers wanted a members' club — " +
+    bar: "The Orchid Room", barType: "soi6", owner: "plg", vip: true,
+    desc: "The name is the last classy thing about it. Duncan Ashcroft wanted a members' club — " +
       "leather, low light, single malt, discretion — and got a bacchanal, because the room " +
       "curdled to match its owner. The 'hostesses' start the night topless and end it well " +
       "past that; the low light is a strobe; the discretion is a joke told at volume. The " +
@@ -3463,14 +3463,14 @@ const ROOMS = {
       "— a patched MC president holding court over a bottle of Blue Label, and, at the best " +
       "table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the " +
       "MC president included, is very careful to defer to. On a raised banquette at the back, " +
-      "filming himself over all of it, is Ryan Powers \u2014 down when he is in the " +
+      "filming himself over all of it, is Duncan Ashcroft \u2014 down when he is in the " +
       "country, which is not often, and never anywhere the soi itself can see him.",
     reads: {
       table: [
         { req: ["orchidReported"],
           text: "The good table, and now you can't unsee it: the quiet Thai man, the " +
             "envelopes that arrive and do not open here, the way Powers performs AT the " +
-            "table and never quite FOR it. This isn't WDG's power seat. It's their tribute " +
+            "table and never quite FOR it. This isn't PLG's power seat. It's their tribute " +
             "desk — the rent a foreign rollup pays to be tolerated, collected on the first of the month with " +
             "perfect manners. Everyone in the room knows except the man paying." },
         { text: "The best table in the room, back corner, sightlines to the door — a " +
@@ -3630,11 +3630,11 @@ const ROOMS = {
     },
     exits: { out: "soi6_deep", back: "kitten_office" },
   },
-  // WDG's Soi 6 back office, behind Kitten Corner's till (Mario, 2026-09-05:
-  // "pick a Soi 6 WDG bar, preferably one not already involved in other
-  // quests" — Kitten Corner is WDG by Kesinee's own line and carries one
+  // PLG's Soi 6 back office, behind Kitten Corner's till (Mario, 2026-09-05:
+  // "pick a Soi 6 PLG bar, preferably one not already involved in other
+  // quests" — Kitten Corner is PLG by Kesinee's own line and carries one
   // personal quest, where the Pink Lotus is the flagship and the Golden
-  // Dragon is where WDG's manager and nominee lawyer drink). Not a venue: no
+  // Dragon is where PLG's manager and nominee lawyer drink). Not a venue: no
   // `bar`, no barType, and _doGo refuses the corridor unless the box job is
   // live and the girl on the till has been bought off it.
   kitten_office: {
@@ -3644,7 +3644,7 @@ const ROOMS = {
     desc: "A windowless box behind the till, cold with aircon and lit like a fridge. Steel " +
       "shelving, the night's cash bags in a milk crate, a wall safe with a keypad, and a " +
       "laptop on a desk nobody sits at for long — the group's, not the bar's, with a " +
-      "sticker on the lid of a white dish and nothing else. A monitor above it cycles " +
+      "sticker on the lid of a pattaya leisure and nothing else. A monitor above it cycles " +
       "through six cameras, none of them pointing in here. Through the door the bar is " +
       "a muffled bass line and a laugh; the corridor outside is the only way anybody " +
       "comes, and the only way you leave.",
@@ -3655,7 +3655,7 @@ const ROOMS = {
       "The back office, and the small sound your own breathing makes in it.",
     ],
     reads: {
-      laptop: "The group's machine, not the bar's: a white-dish sticker on the lid, a lock " +
+      laptop: "The group's machine, not the bar's: a pattaya-leisure sticker on the lid, a lock " +
         "screen with a photo of a golf course, and a Post-it on the bezel with what is " +
         "almost certainly the password on it, because it is always the password on it. " +
         "Nothing here is yours to touch tonight.",
@@ -5002,12 +5002,12 @@ const ITEMS = {
   },
   trade_book: {
     name: "Rabbit's old regulars", aliases: ["book", "regulars", "spreadsheet", "the book", "customer book", "list"],
-    portable: true, location: null, // copied off the WDG office machine — the operator path's bonus
+    portable: true, location: null, // copied off the PLG office machine — the operator path's bonus
     keepsafe: true,
     desc: "Two hundred-odd rows on Rabbit's stick: name, country, drink, birthday, which girl, and " +
       "a notes column that reads like a man who loved his customers. Dirk from Rotterdam tips " +
       "well when he's losing. Sven comes in February and August. Klaus sends money in the wet " +
-      "season. White Dish took the bar and kept the book, and never used it, and never gave it " +
+      "season. Pattaya Leisure took the bar and kept the book, and never used it, and never gave it " +
       "back. (GIVE BOOK TO EDDY — or, at your own bar, READ BOOK.)",
   },
   data_stick: {
@@ -5158,23 +5158,23 @@ const ITEMS = {
 //   so re-talking gives the point, not the whole spiel again. Optional — an
 //   entry without one just repeats in full.
 
-// Kesinee's WDG-vetting choices, hoisted so they ride on whichever of her greetings
+// Kesinee's PLG-vetting choices, hoisted so they ride on whichever of her greetings
 // fires — her plain welcome OR an origin-gated one (a greeting node owns its choices,
 // so the origin reads would otherwise drop the trust-building fork).
 const _KES_VET = [
   { label: "Tell her Bert sent you",
-    when: (st, G) => st.trust < 2 && !_flag("heardWdgInside"),
+    when: (st, G) => st.trust < 2 && !_flag("heardPlgInside"),
     fx: (st) => { st.trust = Math.min(5, st.trust + 2); },
     text: "\"Bert.\" The name does more than any drink. \"He is a good man, that one — old soi, before " +
       "all this.\" The careful smile loosens into a real one. \"If Bert send you, maybe I talk. Ask me " +
-      "— White Dish — and this time I answer straight.\"" },
-  { label: "Swear you are no White Dish man",
-    when: (st, G) => st.trust < 2 && !_flag("heardWdgInside"),
+      "— Pattaya Leisure — and this time I answer straight.\"" },
+  { label: "Swear you are no Pattaya Leisure man",
+    when: (st, G) => st.trust < 2 && !_flag("heardPlgInside"),
     fx: (st) => { st.trust = Math.min(5, st.trust + 1); },
-    text: "You tell her plainly: nobody's boy, least of all Ryan Powers'. She weighs it against twenty " +
+    text: "You tell her plainly: nobody's boy, least of all Duncan Ashcroft'. She weighs it against twenty " +
       "years of faces. \"Maybe,\" she allows, and the eyes thaw a half-degree. \"We see.\"" },
   { label: "Press her for names",
-    when: (st, G) => st.trust < 3 && !_flag("heardWdgInside"),
+    when: (st, G) => st.trust < 3 && !_flag("heardPlgInside"),
     fx: (st) => { st.trust = Math.max(0, st.trust - 1); st.mood = "guarded"; },
     text: "You lean in and push for specifics. Bad move. The shutters come straight back down. \"You ask " +
       "like a policeman — or a man who works for them. Kesinee gives names to neither.\" The gold " +
@@ -5663,7 +5663,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   },
 
   // ── The Orchid Room floor ──────────────────────────────────────────────────
-  // WDG's flashiest room had an owner and nobody to work it (Mario, round 43).
+  // PLG's flashiest room had an owner and nobody to work it (Mario, round 43).
   // Three, and they are the three the room actually needs: the one who works
   // the corner tables and has learned to be furniture, the one who treats it as
   // a job with targets, and the one who came up from a beer bar last month and
@@ -6122,7 +6122,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); },
         asks: { key: "dream" } },
       // The earned beat: once she trusts you, the relentless present tense cracks
-      // for a second and you see WHY she doesn't plan — Pink Lotus is a White Dish
+      // for a second and you see WHY she doesn't plan — Pink Lotus is a Pattaya Leisure
       // bar, and the app moves the girls like stock (the cost Kesinee names, from
       // the girl's side). Then the smile comes straight back on.
       { topic: "future", when: (st) => st.trust >= 3,
@@ -6133,13 +6133,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "her.\" The smile switches back on, deliberate, a little tired around the edges. \"So I live today, " +
           "BIG. Today I am here, today I am Joy. Tomorrow up to the app, not up to me. Better I laugh, na?\"",
         short: "\"I no plan future — the app decide which bar, which night. Live today, big. Better I laugh, na?\"",
-        fx: (st) => { st.know.wdgCost = true; st.mood = "open"; },
+        fx: (st) => { st.know.plgCost = true; st.mood = "open"; },
         // She's shown you the real her for one second. Meeting it with warmth
         // deepens the bond (the Regular); letting her keep the joke is a kindness too,
         // just a lighter one.
         choices: [
           { label: "Tell her she deserves better",
-            when: (st, G) => st.know && st.know.wdgCost,
+            when: (st, G) => st.know && st.know.plgCost,
             fx: (st, G) => { st.trust = Math.min(5, st.trust + 1);
               G.soc.drinks.joy = (G.soc.drinks.joy || 0) + 1; _addHappy(1); },
             text: "You say it plainly — she deserves better than a tablet in Bangkok deciding her nights. Joy " +
@@ -6147,7 +6147,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
               "like the laugh, not the girl.\" She bumps your shoulder with hers, and the warmth in it is real, " +
               "not on the tab." },
           { label: "Let her keep the laugh",
-            when: (st, G) => st.know && st.know.wdgCost,
+            when: (st, G) => st.know && st.know.plgCost,
             text: "You don't push. You let her have the joke back, and the pink room, and the tonight-is-big of " +
               "it. She flashes the grin, grateful you didn't make her stay in the quiet. \"Good man. We drink, " +
               "we laugh, no think too much. Same same!\"" },
@@ -6155,7 +6155,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "future", text: "\"Five year?\" She waves it away cheerfully. \"Five year is VERY far. Tonight is already hard enough! Tonight I need: noodle, maybe one more drink, and—\" she tilts her head \"—maybe you stay a little longer? That is my five-year plan.\" Another collapse of giggles. \"Okay okay, three minutes plan. Same same.\"" },
     ],
   },
-  // Puu (Pink Lotus, WDG flagship) — volatile. type:"volatile" → barfine her and the
+  // Puu (Pink Lotus, PLG flagship) — volatile. type:"volatile" → barfine her and the
   // night can detonate into a jealousy scene (the "scene" vector: money gone, banged
   // up, barred). Her intensity IS the tell; the white knight reads the fire as love.
   puu: {
@@ -6180,7 +6180,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"You miss me so bad you cannot breathe — or you make me angry and you be sorry. One of two.\"" },
     ],
   },
-  // Belle (Pink Lotus, WDG flagship) — the moneypit. type:"moneypit" → she turns
+  // Belle (Pink Lotus, PLG flagship) — the moneypit. type:"moneypit" → she turns
   // nearly every text into an escalating ask (_moneypitText); money into her is water
   // in sand. Ambiguous, not a clean villain — she's drowning AND working it, and has
   // stopped being able to tell the difference. The white knight can't say no.
@@ -6409,12 +6409,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // Business ladies first, less volatile than the girls. Most are sharp operators —
   // type:"operator" adds a quiet house cut on the barfine (_roomMamaOperator) — and
   // their dialogue names the subtle extraction ("free is the most expensive word").
-  // The go-go/WDG mamas run hard; the beer-bar mamas (Bussaba/Sopha/Malila) run warm.
+  // The go-go/PLG mamas run hard; the beer-bar mamas (Bussaba/Sopha/Malila) run warm.
   nee: {
     name: "Nee", th: "หนี่", emoji: "👑", type: "operator",
     room: "pink_lotus",
     desc: "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink " +
-      "Lotus like the asset it is on White Dish's books, and she priced you before you sat down.",
+      "Lotus like the asset it is on Pattaya Leisure's books, and she priced you before you sat down.",
     dialogue: [
       // Nee reads your MANNER the instant you sit — the operator mama's whole craft.
       // One gated greeting per personality (a player always has exactly one after the
@@ -6455,14 +6455,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Welcome. The girls look after you; anything they cannot give is me.\"" },
       { topic: "girls", text: "\"Good girls, all of them — I choose careful.\" A precise nod. \"The customer " +
         "think he choose the girl. Mostly the mama choose the girl for the customer — the right one, for him, " +
-        "for the bill. He leave happy, I leave happy, White Dish leave happy. Everybody happy is only good " +
+        "for the bill. He leave happy, I leave happy, Pattaya Leisure leave happy. Everybody happy is only good " +
         "management.\"" },
       { topic: "free", text: "\"You wonder why the welcome drink is free.\" She does not wait for you to deny " +
         "it. \"Because free is the most expensive word in this bar. Free drink, you stay. You stay, you buy. " +
         "Small psychology, twenty year old, work every night.\" Fact, not confession. \"I tell you because " +
         "knowing does not stop it. You will still stay.\"",
         short: "\"Free is the most expensive word in this bar. Free drink, you stay; you stay, you buy.\"" },
-      { topic: "white dish", when: (st) => st.trust >= 2, text: "\"They own the paper. I run the room.\" " +
+      { topic: "pattaya leisure", when: (st) => st.trust >= 2, text: "\"They own the paper. I run the room.\" " +
         "Careful now. \"The app tell me the numbers — how many girl, how late, which one move where. I make the " +
         "numbers happen. Is a job. Good pay, and I do not ask what I do not need to know.\" The tablet glows. " +
         "\"You ask a great many questions, for a tourist.\"" },
@@ -6472,7 +6472,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     name: "Peung", th: "ผึ้ง", emoji: "👑", type: "operator",
     room: "golden_dragon",
     look: "Thai woman of fifty-five, steel-grey hair pinned up, reading glasses on a chain, dark blouse.",
-    desc: "Golden Dragon's mamasan since before White Dish bought the paper — and she stayed on when they did, " +
+    desc: "Golden Dragon's mamasan since before Pattaya Leisure bought the paper — and she stayed on when they did, " +
       "because the numbers didn't care who owned them, and neither, in the end, does she.",
     dialogue: [
       // Peung has worked this floor through three owners and can place a farang by the
@@ -6494,9 +6494,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
         text: "\"You are not here to drink.\" She prices the shoes, the watch, the wanting, in one pass. \"You " +
           "are here to BUY — a bar, a piece of something, a whole new life. Everybody like you end up across a " +
-          "table from White Dish sooner or later.\" A shrug that has watched it happen. \"Do yourself a " +
+          "table from Pattaya Leisure sooner or later.\" A shrug that has watched it happen. \"Do yourself a " +
           "kindness, tilac: drink first, sign later. Much later than they tell you.\"",
-        short: "\"You're not here to drink — you're here to buy. Everybody like you ends up across a table from White Dish. Drink first, sign much later.\"" },
+        short: "\"You're not here to drink — you're here to buy. Everybody like you ends up across a table from Pattaya Leisure. Drink first, sign much later.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pi"),
         text: "\"You watch the room like it owe you money.\" A long, level look, taken slowly. \"Or like " +
           "somebody pay you to watch it. ...Was pay you.\" She lets that go on purpose, and pours the beer she " +
@@ -6526,7 +6526,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "this floor through three owners. \"Old jukebox, new app, same job: keep the men happy and the till " +
           "full. Not so different.\"",
         short: "\"Same job through three owners — men happy, till full. Sit.\"" },
-      { topic: "white dish", text: "\"White Dish bought the bar. They did not buy me — they rent me, and I let " +
+      { topic: "pattaya leisure", text: "\"Pattaya Leisure bought the bar. They did not buy me — they rent me, and I let " +
         "them.\" A shrug that has seen everything. \"Better owner, worse owner, the girls still need the shift, " +
         "I still take my cut. You survive this business by not falling in love with who sign the cheque.\"" },
       { topic: "free", text: "\"The beer I send you — on the house.\" A dry look. \"On the house mean on your " +
@@ -7049,11 +7049,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     ],
   },
 
-  // ── Ladyboy hostesses at the WDG bars ────────────────────────────────────────
+  // ── Ladyboy hostesses at the PLG bars ────────────────────────────────────────
   // ladyboy:true → for a bi player they're full courtship options; for a straight
   // player, a gracious pass where SHE reads YOU and declines (agency intact — see
   // _ladyboyGate). Written as full people, never a gag. At the flagship it's on
-  // brand: "White Dish love a full menu."
+  // brand: "Pattaya Leisure love a full menu."
   pancake: {
     name: "Pancake", th: "แพนเค้ก", emoji: "💋", ladyboy: true, personality: "charmer",
     room: "katoeys",
@@ -7147,7 +7147,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "girls", text: "\"The real girls?\" Fond, and merciless. \"They love me and they hate me. I get " +
         "the customer who want the fantasy turn up to eleven — the show, the confidence, the mouth. They get " +
         "the boyfriend experience. Different product, same shop.\" A wink. \"I outsell half of them, and Nee " +
-        "know it. That is why the flagship keep a ladyboy. Variety, tilac — White Dish love a full menu.\"" },
+        "know it. That is why the flagship keep a ladyboy. Variety, tilac — Pattaya Leisure love a full menu.\"" },
       { topic: "smoke", text: "Her whole face closes like a shop at a raid. \"You smoke? Not near ME you " +
         "don't.\" The ยาดม is already at one nostril, then the other — a theatrical inhale, a shudder of " +
         "recovery. \"Cigarette is the ONE thing kill the glamour, tilac. It get in the hair, the dress, " +
@@ -7545,7 +7545,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "them out of ten, silently, and you will never know your score.",
     // The two-layer girl: the greeting is a wall a shallow player bounces off (fine
     // — barfine her and go). Look past it — ASK, and bond up — and a specific, dry,
-    // ten-years-in woman comes up through the deadpan. The WDG/jukebox line is a
+    // ten-years-in woman comes up through the deadpan. The PLG/jukebox line is a
     // thread the PI-origin can later pull (she remembers everything on this soi).
     selfies: [
       { cap: "dragon painting need repaint 🐉 ten year nobody notice" },
@@ -7559,11 +7559,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "The flat smile lasts exactly as long as it needs to.",
         short: "\"Jukebox die in 2019. We keep playlist. Nobody complain.\"",
         asks: { key: "why", q: "She sets your change down in a neat stack, not looking up. \"You come for girls, or you hiding? Everybody one or the other.\" Now she looks up, unhurried. \"Second drink, usually I know. You — I still not sure.\"" } },
-      // jukebox — the WDG thread: they bought the soi and made it all the same
-      { topic: "jukebox", text: "\"Broke since twenty-nineteen. Boss say fix it — then White Dish buy bar, put app, put " +
+      // jukebox — the PLG thread: they bought the soi and made it all the same
+      { topic: "jukebox", text: "\"Broke since twenty-nineteen. Boss say fix it — then Pattaya Leisure buy bar, put app, put " +
         "QR code.\" Her nose wrinkles a millimetre. \"Now {{phone}} pick song. Dead jukebox have better taste. " +
         "They buy everything this soi, make all same. Cleaner. Emptier.\"",
-        short: "\"White Dish put QR app in. Now {{phone}} pick song. Cleaner, emptier.\"" },
+        short: "\"Pattaya Leisure put QR app in. Now {{phone}} pick song. Cleaner, emptier.\"" },
       { topic: "music", text: "\"Vintage Thai pop. Loso, Bird, old one — my mother music.\" She almost smiles. " +
         "\"Farang think it romantic. For me, just Tuesday. But I let them think — better tip that way.\"" },
       // languages & the quiet flip — she juggles four badly, the punter has one
@@ -7817,13 +7817,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "the menu and a target on the till, and she is very careful who she says that to.",
     dialogue: [
       // Kesinee prices you before you sit (her desc) — the sharpest reader on the soi,
-      // an owner-turned-manager who reads your ORIGIN and, being WDG-wary, says the
+      // an owner-turned-manager who reads your ORIGIN and, being PLG-wary, says the
       // dangerous half of it only to the right man.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
         choices: _KES_VET,
         text: "\"Ah. A returner.\" Kesinee places you before you reach the stool, exactly as advertised. \"Not " +
           "this bar — this life. You know the dance, so I will not waste the music on you. Girls are good, price " +
-          "is White Dish's, and you know precisely what you came for. Refreshing, honestly.\"",
+          "is Pattaya Leisure's, and you know precisely what you came for. Refreshing, honestly.\"",
         short: "\"A returner — you know the dance, so I won't waste the music. You know exactly what you came for. Refreshing.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
         choices: _KES_VET,
@@ -7834,10 +7834,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
         choices: _KES_VET,
         text: "\"An investor.\" The smile cools by a precise, professional degree. \"Since I liked you for three " +
-          "whole seconds, tilac, I save you a conversation: whatever they offer, White Dish keep the paper and " +
+          "whole seconds, tilac, I save you a conversation: whatever they offer, Pattaya Leisure keep the paper and " +
           "you keep the risk. I ran this bar when it was mine. Now I rent my own eyes back from them.\" Quieter: " +
           "\"Ask me the rest in a corner, not at the door.\"",
-        short: "\"An investor — whatever they offer, White Dish keeps the paper and you keep the risk. I ran this bar when it was mine. Ask me the rest in a corner.\"" },
+        short: "\"An investor — whatever they offer, Pattaya Leisure keeps the paper and you keep the risk. I ran this bar when it was mine. Ask me the rest in a corner.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pi"),
         choices: _KES_VET,
         text: "\"You price the room, not the girls.\" Her gaze takes its usual extra beat, then one beat more. " +
@@ -7860,42 +7860,42 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
         choices: _KES_VET,
         text: "\"You are hiding.\" Flat, quiet, and not a threat at all. \"I know the look — I wore it myself, " +
-          "running from White Dish's lawyers inside my own bar. We do not ask the question here, tilac, and we " +
+          "running from Pattaya Leisure's lawyers inside my own bar. We do not ask the question here, tilac, and we " +
           "are very, very good at not asking. You are safe to be nobody. It is the one thing this soi sell " +
           "honest.\"",
-        short: "\"You are hiding — I know the look, I wore it running from White Dish's lawyers in my own bar. Here you're safe to be nobody.\"" },
+        short: "\"You are hiding — I know the look, I wore it running from Pattaya Leisure's lawyers in my own bar. Here you're safe to be nobody.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Come in, come in. My girls will not bite unless you tip for it.\" The practised smile " +
           "arrives on schedule; the eyes take a beat longer. \"You want a drink, a girl, a quiet corner — " +
           "Kesinee arrange. Anything except the price. The price is not mine to move any more.\"",
         short: "\"Anything except the price — that is not mine to move any more.\"",
-        // She won't talk White Dish until she trusts you (trust >= 2 opens the reveal).
+        // She won't talk Pattaya Leisure until she trusts you (trust >= 2 opens the reveal).
         // How you present yourself moves that — the vetting fork lives in _KES_VET so
         // it rides her origin greetings too (canon: "because Bert send you").
         choices: _KES_VET },
-      // Kesinee vets you before she'll talk White Dish — canon: "she'll talk
+      // Kesinee vets you before she'll talk Pattaya Leisure — canon: "she'll talk
       // straight if you are." A stranger gets the careful brush-off + a breadcrumb;
       // the real intel (and the quest flag) opens once you've earned a little trust.
       { topic: "bar", text: "\"My bar?\" The bracelet turns. \"The Kitten Corner. Small, clean, the girls " +
           "are mine and the roof is new.\" A glance along the rail. \"You want the real story of it, ask " +
           "me about the KITTENS. (ASK KESINEE ABOUT KITTENS)\"",
         short: "\"My bar is the Kitten Corner. Ask me about the KITTENS for the real story.\"" },
-      { topic: "white dish", when: (st) => st.trust < 2, deflect: true,
-        text: "The smile holds; the eyes go flat and careful. \"White Dish. Hm. Who send you to ask " +
-          "Kesinee that?\" She lets the question sit. \"Bert, maybe. Or maybe you are White Dish own boy, " +
+      { topic: "pattaya leisure", when: (st) => st.trust < 2, deflect: true,
+        text: "The smile holds; the eyes go flat and careful. \"Pattaya Leisure. Hm. Who send you to ask " +
+          "Kesinee that?\" She lets the question sit. \"Bert, maybe. Or maybe you are Pattaya Leisure own boy, " +
           "come see who talks.\" She turns the gold bracelet. \"Buy a girl a drink. Ask me about my bar. Let " +
           "me see your face is not a problem — then, maybe, we talk straight. Not before.\"",
         short: "\"Who sent you? Buy a girl a drink, come back, let me know your face. Then we talk. Not before.\"" },
-      { topic: "white dish", when: (st) => st.trust >= 2, sets: ["heardWdgInside"],
-        fx: (st) => { st.know.wdg = true; st.mood = "open"; st.trust = Math.min(5, st.trust + 1); },
-        text: "She studies you a long moment, deciding, then talks low under the music. \"White Dish buy " +
+      { topic: "pattaya leisure", when: (st) => st.trust >= 2, sets: ["heardPlgInside"],
+        fx: (st) => { st.know.plg = true; st.mood = "open"; st.trust = Math.min(5, st.trust + 1); },
+        text: "She studies you a long moment, deciding, then talks low under the music. \"Pattaya Leisure buy " +
           "this bar three year ago. I tell you straight, because Bert send you and Bert is a good man.\" She " +
           "turns a gold bracelet. \"The money — real. New aircon, new sign, the roof stop leaking. But now: " +
           "a target, every night. The tips go through the app and come back less. A boy in Bangkok I never " +
           "meet decide how many girls, which girls, how late. My girls used to stay five year, build " +
           "something. Now they last one season and the app move them to another bar like stock.\" A flat " +
           "look. \"The bar is cleaner. The girls are poorer. Both true. Tell Bert both.\"",
-        short: "\"White Dish bought us. Cleaner bar, poorer girls — both true. Tell Bert both.\"" },
+        short: "\"Pattaya Leisure bought us. Cleaner bar, poorer girls — both true. Tell Bert both.\"" },
       { topic: "kittens", text: "\"The posters, the paw? Not my idea — the brand.\" A dry glance at the " +
         "neon paw print. \"Before, it was my bar, my name over the door. Now it is a 'concept.' The concept " +
         "tips better than the name, they tell me.\" She does not sound convinced. \"Buy a girl a drink. That " +
@@ -7910,7 +7910,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         fx: (st) => { st.know.envelope = true; },
         text: "The smile stays; the voice drops under the bass. \"You see the checkpoint " +
         "down the road — the helmet, the fine, the tourist walked to the station? That is for outside.\" A " +
-        "small tilt of the head at her own bar. \"Inside a White Dish bar: never a raid, never a problem, " +
+        "small tilt of the head at her own bar. \"Inside a Pattaya Leisure bar: never a raid, never a problem, " +
         "never one girl asked for her book. You think that is luck?\" She turns the gold bracelet. \"Every " +
         "month there is an envelope, and a nice dinner for the men in brown and the men from immigration. I " +
         "do not see it. I only see that trouble comes to every bar on this soi except the ones with the " +
@@ -7925,7 +7925,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "British man in his fifties, thinning fair hair, discreet-logo golf shirt, mild pleasant face.",
     desc: "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking " +
       "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
-      "White Dish man. He is unfailingly pleasant, which is the unsettling part.",
+      "Pattaya Leisure man. He is unfailingly pleasant, which is the unsettling part.",
     dialogue: [
       // The other half of it. He is not scheming and there is nothing to expose —
       // he is a man who assesses bars for a living, being asked about a bar.
@@ -7935,44 +7935,44 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
 
       // Gavin's Errand paid out at the Stinky the moment Bert refused — a courier's fee at the
       // wrong counter (completionist playtest 2026-08-22). It lands here, from Gavin, once.
-      { req: ["wdgFlipTried"], notFlags: ["gavinPaid"], sets: ["gavinPaid"],
+      { req: ["plgFlipTried"], notFlags: ["gavinPaid"], sets: ["gavinPaid"],
         fx: (st, G) => { G.money += 2000; },
         text: "\"You had the word with him, then.\" Gavin doesn't ask how it went; the answer is on " +
           "your face and he has read faces for a living. \"Didn't think he'd bite. Doesn't matter — " +
-          "the ask was the job.\" An envelope slides across, flat. \"Two thousand, as said. White Dish " +
+          "the ask was the job.\" An envelope slides across, flat. \"Two thousand, as said. Pattaya Leisure " +
           "looks after its friends.\" (+฿2000.)",
         short: "\"The ask was the job. Two thousand, as said.\" (He has already paid you.)" },
-      { when: (st, G) => _faction("wdg") > 0,
+      { when: (st, G) => _faction("plg") > 0,
         text: "\"There's my man.\" The handshake runs a half-beat longer this time, warmer — an investment " +
-          "acknowledged. \"Bert being Bert about it, I hear. No matter. You did the asking, and White Dish " +
+          "acknowledged. \"Bert being Bert about it, I hear. No matter. You did the asking, and Pattaya Leisure " +
           "remembers who does the asking. Doors open for our friends, you'll find.\" The smile, for once, " +
           "reaches his eyes a little.",
-        short: "\"There's my man. You did the asking — White Dish remembers its friends. Doors open.\"" },
+        short: "\"There's my man. You did the asking — Pattaya Leisure remembers its friends. Doors open.\"" },
       { when: (st) => st.dstate !== "stranger",
         text: "\"Ah — back again.\" The same warm, brief handshake, filed and instantly retrieved. \"Good to " +
           "see you. Still turning it over, or just enjoying the room?\" The smile is patient. Gavin is always, " +
           "unnervingly, patient.",
         short: "\"Ah, back again.\" The handshake, filed and retrieved. Patient as ever.",
         // Once you've heard the pitch, where do you stand? Leaning in is a soft act
-        // of alignment (wdg+). Keeping it vague is declining — free, per the faction
+        // of alignment (plg+). Keeping it vague is declining — free, per the faction
         // contract; Gavin never holds it against you.
         choices: [
           { label: "Tell him you're in",
-            when: (st, G) => _flag("heardWdgPitch") && _faction("wdg") <= 0 &&
-              !_flag("wdgResolved") && !_flag("wdgFlipTried"),
-            fx: (st, G) => { _align("wdg", 1); },
+            when: (st, G) => _flag("heardPlgPitch") && _faction("plg") <= 0 &&
+              !_flag("plgResolved") && !_flag("plgFlipTried"),
+            fx: (st, G) => { _align("plg", 1); },
             text: "\"That's what I like to hear.\" The handshake finds you again, a shade warmer. \"A man " +
-              "who sees the shape of things. White Dish looks after its friends — you'll find that out.\"" },
+              "who sees the shape of things. Pattaya Leisure looks after its friends — you'll find that out.\"" },
           { label: "Keep it vague",
-            when: (st, G) => _flag("heardWdgPitch"),
+            when: (st, G) => _flag("heardPlgPitch"),
             text: "You keep it noncommittal. Gavin's smile doesn't flicker; he just files it and sips. \"No " +
               "rush at all. Long soi, patient man.\" Declining costs you nothing here — with Gavin it never does." },
         ] },
       { text: "\"Evening.\" The handshake is warm, brief, professionally sincere. \"Gavin. I look after a " +
-        "few rooms on the soi for the group — White Dish, you'll have heard. Consulting, mostly. Standards, " +
+        "few rooms on the soi for the group — Pattaya Leisure, you'll have heard. Consulting, mostly. Standards, " +
         "systems, that sort of thing.\" He glances round the Golden Dragon the way a man counts a room. " +
         "\"Lovely little bar, this. They all are, once they're run properly.\"" },
-      { topic: "offer", sets: ["heardWdgPitch"],
+      { topic: "offer", sets: ["heardPlgPitch"],
         text: "\"The pool bar? The Stinky, yes.\" He smiles like it's the most natural thing in the world. " +
           "\"The owner's unwell, God love him, and the manager — Bert — he's tired, whether he says so or " +
           "not. We'd take it off their hands at a fair price, freshen it up, put a proper till in. Bert " +
@@ -7980,24 +7980,24 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "sip he doesn't need. \"He'd answer to a number instead of a dying man, that's all. Same work, " +
           "steadier money. Where's the villainy in that?\" The smile holds a beat too long.",
         short: "\"We'd take the Stinky off their hands, freshen it up. Bert keeps his stool. Where's the villainy?\"" },
-      { topic: "white dish", sets: ["heardWdgPitch"],
-        text: "\"White Dish Group. We hold the paper on a handful of rooms up and down Soi 6 — six, going " +
-          "on seven if the numbers say so.\" He says it lightly. \"Ryan's vision, really. I just keep the " +
+      { topic: "pattaya leisure", sets: ["heardPlgPitch"],
+        text: "\"Pattaya Leisure Group. We hold the paper on a handful of rooms up and down Soi 6 — six, going " +
+          "on seven if the numbers say so.\" He says it lightly. \"Duncan's vision, really. I just keep the " +
           "lights on and the books tidy.\" A small, pleasant shrug. \"People make it sinister. It's " +
           "hospitality. We're only the ones who read the spreadsheet at the end of the night instead of " +
           "drinking through it.\"",
-        short: "\"White Dish. Six rooms, going on seven. Ryan's vision. It's just hospitality.\"" },
-      { topic: "ryan powers", text: "\"Ryan?\" For the first time the pleasantness has to work a little. " +
+        short: "\"Pattaya Leisure. Six rooms, going on seven. Duncan's vision. It's just hospitality.\"" },
+      { topic: "duncan ashcroft", text: "\"Duncan?\" For the first time the pleasantness has to work a little. " +
         "\"A visionary. He'll tell you so himself — he tells everyone, at length, usually to camera.\" A " +
         "diplomatic sip he doesn't need. \"Rarely down these days; he's 'building the brand' out of Dubai — " +
         "the videos, the podcast, the speaking gigs. Between us, that's for the best. Marvellous on a stage, " +
-        "our Ryan. A liability in a room.\" The smile reseals over it. \"I keep the lights on. He keeps the " +
+        "our Duncan. A liability in a room.\" The smile reseals over it. \"I keep the lights on. He keeps the " +
         "profile.\"" },
     ],
   },
 
   powers: {
-    name: "Ryan Powers", emoji: "🕶️",
+    name: "Duncan Ashcroft", emoji: "🕶️",
     pronoun: "he",
     room: "orchid_room",
     look: "British man of thirty-eight dressed younger, linen shirt open, big watch, sunglasses indoors.",
@@ -8008,29 +8008,29 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     dialogue: [
       { text: "\"You made it in.\" He doesn't get up; he does angle his phone so you're in frame. " +
           "\"That means somebody vouched, which means you're useful, which means we're basically " +
-          "FAMILY now.\" A grin with a tooth too many. \"Ryan Powers. But you knew that. Everyone " +
+          "FAMILY now.\" A grin with a tooth too many. \"Duncan Ashcroft. But you knew that. Everyone " +
           "knows that.\" He sweeps a hand at the room like a man showing off a yacht. \"The Orchid. " +
           "I built this. Well — I had the VISION. The vision did the rest.\"",
-        short: "\"You made it in — basically FAMILY now. Ryan Powers. I built this. Well, I had the VISION.\"",
-        // The boss laps up flattery (a soft WDG act) and bristles at the truth (an
-        // anti-WDG one). Needling him toward the corner table reuses his one honest,
+        short: "\"You made it in — basically FAMILY now. Duncan Ashcroft. I built this. Well, I had the VISION.\"",
+        // The boss laps up flattery (a soft PLG act) and bristles at the truth (an
+        // anti-PLG one). Needling him toward the corner table reuses his one honest,
         // frightened beat.
         choices: [
           { label: "Flatter the great man",
-            when: (st, G) => _faction("wdg") < 5,
-            fx: (st, G) => { _align("wdg", 1); },
+            when: (st, G) => _faction("plg") < 5,
+            fx: (st, G) => { _align("plg", 1); },
             text: "You tell him the Orchid's the best room on the soi and the VISION is undeniable. Powers glows " +
               "like a switched-on sign. \"See — YOU get it.\" The phone swings to include you; you've been " +
-              "promoted from useful to family. White Dish files you friendly." },
+              "promoted from useful to family. Pattaya Leisure files you friendly." },
           { label: "Call it a room full of criminals",
-            when: (st, G) => _faction("wdg") > -5,
-            fx: (st, G) => { _align("wdg", -1); },
+            when: (st, G) => _faction("plg") > -5,
+            fx: (st, G) => { _align("plg", -1); },
             text: "You say the quiet part out loud — six rooms of laundered fun. The grin freezes half a " +
               "second before the recovery. \"Bit RICH, coming from a man drinking in one.\" Still a smile. Not a " +
               "friendly one. Word of that travels the soi with the envelopes." },
           { label: "Ask about that quiet table", topic: "syndicate" },
         ] },
-      { topic: "white dish", text: "He lights up; the business is his favourite subject, narrowly ahead " +
+      { topic: "pattaya leisure", text: "He lights up; the business is his favourite subject, narrowly ahead " +
           "of himself. \"Six rooms and counting. I came here with six hundred quid and a laptop " +
           "and I OUT-HUSTLED an entire industry of lazy expats crying into their Changs.\" He says " +
           "'hustle' like a prayer. \"People call it ruthless. I call it standards. The soi had no " +
@@ -8038,12 +8038,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the brand is a topless strobe-lit room full of criminals.",
         short: "\"Six rooms. Came with six hundred quid, OUT-HUSTLED the whole soi. Not ruthless — standards.\"" },
       { topic: "bert", text: "\"The pool bar? The old fella?\" He waves it away with his phone. " +
-          "\"Sentiment. Sentiment doesn't scale, mate. He sells or he dies, and either way White Dish " +
+          "\"Sentiment. Sentiment doesn't scale, mate. He sells or he dies, and either way Pattaya Leisure " +
           "holds the paper on the building, so.\" A shrug that thinks it's charming. \"No hard feelings. " +
           "I don't do hard feelings. Hard feelings are a poor man's hobby.\"",
         short: "\"The pool bar? Sentiment doesn't scale. He sells or he dies; we hold the paper either way.\"" },
       { topic: "jail", text: "\"Jail?\" The laugh comes a shade too fast. \"Some blogger keeps writing " +
-          "that. White Dish this, corruption that. Let him.\" He leans back. \"I am not going to jail. " +
+          "that. Pattaya Leisure this, corruption that. Let him.\" He leans back. \"I am not going to jail. " +
           "You know who goes to jail? People who can't afford NOT to.\" He taps the table where the " +
           "arithmetic presumably happens. \"Everything here is looked after. Everything. That's not a " +
           "crime, that's OPERATIONS.\"",
@@ -8061,7 +8061,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // ── Origin archetype: THE DETECTIVE ──────────────────────────────────────
   // One of the seven "who are you?" origins, all present on Soi 6 as NPCs; the
   // one the player picked is deactivated (_npcActive → you ARE him). Doyle is the
-  // investigative spine into the WDG/syndicate thread: a semi-retired ex-homicide
+  // investigative spine into the PLG/syndicate thread: a semi-retired ex-homicide
   // detective, quietly asked to identify the MC president once word got out he'd be
   // in Thailand. His recon quest resolves toward the OTHER man at the good table —
   // the soft-spoken Thai everyone defers to (the syndicate seed), described in terms
@@ -8189,7 +8189,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // is the right man to start with — reading people is the job he retired from
       // and didn't stop doing, so every one of these is in character by construction.
       { topic: "terry",
-        text: "\u201cTerry.\u201d Doyle almost smiles. \u201cSixteen years, one stool, and he tells the White Dish story like it happened to him last Tuesday.\u201d He turns the soda water a quarter. \u201cIt didn't. He was here, he saw it, and every detail he gives you is true \u2014 I've checked two of them. But he's told it so many times the telling has its own shape now. Wears grooves.\u201d A shrug. \u201cThat's not lying. That's what a story does to a man who loves it.\u201d",
+        text: "\u201cTerry.\u201d Doyle almost smiles. \u201cSixteen years, one stool, and he tells the Pattaya Leisure story like it happened to him last Tuesday.\u201d He turns the soda water a quarter. \u201cIt didn't. He was here, he saw it, and every detail he gives you is true \u2014 I've checked two of them. But he's told it so many times the telling has its own shape now. Wears grooves.\u201d A shrug. \u201cThat's not lying. That's what a story does to a man who loves it.\u201d",
         short: "\u201cEvery detail's true. He's just told it so often the telling wears grooves.\u201d" },
       { topic: "mort",
         text: "\u201cThe notebook.\u201d Doyle's eyes go to the far end without his head following, which is a whole career in one movement. \u201cSeventy-four and the best-informed man on this coast. Knows it, too.\u201d A pause. \u201cI've sat in rooms with men who'd have paid serious money for what's in that book. He writes it down in a pub on Soi 6 with the cap off his biro and nobody has ever laid a finger on him.\u201d He looks genuinely pleased about it. \u201cSays something about the place, doesn't it.\u201d",
@@ -8277,11 +8277,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   },
 
   // ── Origin archetype: THE INVESTOR (the mark) ────────────────────────────
-  // Being love-bombed by WDG at the Golden Dragon. He thinks he's buying a bar;
+  // Being love-bombed by PLG at the Golden Dragon. He thinks he's buying a bar;
   // he's signing as the disposable farang face of one the "silent local partner"
   // actually controls — the nominee structure Tan (and the intro's business-origin
   // line, "which farang really owns his 'own' bar") already flagged. The PARTNER
-  // topic gushes the seed regardless; the warn only lands once you've seen how WDG
+  // topic gushes the seed regardless; the warn only lands once you've seen how PLG
   // works. Never names the partner.
   wayne: {
     name: "Wayne", th: "เวย์น", emoji: "🕶️",
@@ -8295,7 +8295,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "location.' The girls have his order memorised. So has the till.",
     dialogue: [
       // Wayne is buying a turnkey bar up the soi. Gavin buys bars up this soi for
-      // White Dish. They drink at the same rail and neither knew the other
+      // Pattaya Leisure. They drink at the same rail and neither knew the other
       // existed (round 23, and the persona called it the most obviously missing
       // edge in the cast). Wayne cannot know what Gavin is — that is the point.
       // DO NOT WIRE THE SILENT PARTNER TO TAN. Wayne's description of him — uni in
@@ -8332,22 +8332,22 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "that's not the cleanest deal you ever heard.\"",
         short: "\"Turnkey bar up the soi. My name on the lease, a silent local partner holds the company side. Signin' Friday.\"" },
 
-      // THE WARN — completes the quest. Gated on having seen how WDG actually works
+      // THE WARN — completes the quest. Gated on having seen how PLG actually works
       // (heard Gavin's pitch, or been inside the Orchid). You tell Wayne what the
       // 'clean deal' is; the silent partner is the whole point of it.
       { topic: "partner", when: (st, G) => G.quests.nominee_deal === "active" && !_flag("nomineeWarned") &&
-          (_flag("heardWdgPitch") || (G.visited && G.visited.orchid_room)),
+          (_flag("heardPlgPitch") || (G.visited && G.visited.orchid_room)),
         sets: ["nomineeWarned"],
         text: "You lay it out flat, because he needs it flat. The 'silent partner' owns the company outright — " +
           "his name's on the shares, Wayne's is on nothing but the lease and the risk. The capital goes in; the " +
-          "control never does. It's the White Dish move, run a hundred times up this soi: a cashed-up farang " +
+          "control never does. It's the Pattaya Leisure move, run a hundred times up this soi: a cashed-up farang " +
           "buys himself a job he can be sacked from, and one bad month later the partner buys the 'failing' bar " +
           "back for nothing.\n\nWayne's grin comes off in stages. \"...Nah. Nah, he's a good bloke. Drives " +
           "himself everywhere, shakes on it, none of your—\" He stops. Hears himself. Sets the glass down for the " +
           "first time all night. \"...Won't do it in writing, will he. Everything face to face.\" A long breath. " +
           "\"Aw, mate.\" Quieter: \"Twenty years I never signed a thing I didn't read. First week off the plane " +
           "and I nearly—\" He doesn't finish. \"...Yeah. Yeah. Ta. I owe ya more than a Sang Som for that one.\"",
-        short: "\"The silent partner owns everything, you own the risk — it's the White Dish move.\" Wayne sets the glass down. \"...Aw, mate. Ta.\"" },
+        short: "\"The silent partner owns everything, you own the risk — it's the Pattaya Leisure move.\" Wayne sets the glass down. \"...Aw, mate. Ta.\"" },
       // Before you can warn him — he gushes about the mysterious partner. THE TAN SEED,
       // landed regardless of the quest: a local who drives himself, fixes anything,
       // does everything in person, no paper. Never named.
@@ -8447,10 +8447,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
 
       { topic: "soi", text: "\"Changed? 'Course it's changed. Same as everywhere — the little fellas sold up " +
           "to the big fella, and now it's all one brand with a different sign out front.\" He shrugs, a man " +
-          "long past outrage. \"White Dish, they call it now. Used to be the mamasans' street. Now it's a " +
+          "long past outrage. \"Pattaya Leisure, they call it now. Used to be the mamasans' street. Now it's a " +
           "spreadsheet's street. But the tide still comes in at six and goes out at two, and the lonely still " +
           "come looking, so.\" He drinks. \"It's still Pattaya. It just costs more and means less.\"",
-        short: "\"The little fellas sold to the big fella — White Dish now. Still Pattaya. Costs more, means less.\"" },
+        short: "\"The little fellas sold to the big fella — Pattaya Leisure now. Still Pattaya. Costs more, means less.\"" },
     ],
   },
 
@@ -8479,7 +8479,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Eyyy! Macca — sparky, twenty-two year, made redundant, best thing ever happened. Look at this place!\"",
         asks: { key: "firsttime", q: "\"'Ere, straight up — is it always like this? Every night? 'Cause I keep thinkin' someone's gonna tap us on the shoulder an' say the party's over, go home.\"" } },
 
-      // THE PAYOUT — completion. Once you've clocked how the town works (seen WDG or
+      // THE PAYOUT — completion. Once you've clocked how the town works (seen PLG or
       // just spent a while here), he asks you straight if he's going too fast. He is.
       { topic: "payout", when: (st, G) => G.quests.easy_come === "active" && !_flag("payoutPaced"),
         sets: ["payoutPaced"],
@@ -8871,17 +8871,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "waiting precisely for you and precisely no time at all. \"You look like a man who lives " +
           "here. It suits you. It does not suit everybody.\"",
         short: "\"My friend. You look like a man who lives here.\"" },
-      { topic: "white dish|wdg|the group|white dish group",
-        text: "\"White Dish.\" No warmth and no heat either — a weather report. \"A foreign company " +
+      { topic: "pattaya leisure|plg|the group|pattaya leisure group",
+        text: "\"Pattaya Leisure.\" No warmth and no heat either — a weather report. \"A foreign company " +
           "buying bars on a soi where nobody sells to foreigners. You ask how. I tell you: they pay " +
           "to be allowed.\" He turns the glass a quarter. \"A Thai man in their position would be " +
           "owed favours. A farang cannot be owed. So he pays, every month, and calls it business, " +
           "and the men he pays call it tolerance. Tolerance, my friend, is a thing that can be " +
           "withdrawn.\" He does not say by whom.",
-        short: "\"White Dish pay to be allowed. Tolerance can be withdrawn.\"" },
+        short: "\"Pattaya Leisure pay to be allowed. Tolerance can be withdrawn.\"" },
       // EASTERN SEABOARD, after the heist (Mario, 2026-09-06). Not a warning — the
       // competent never make one — and not an answer. The syndicate's tolerance of
-      // WDG was paid THROUGH that shell; he declines to say whose company it is, and
+      // PLG was paid THROUGH that shell; he declines to say whose company it is, and
       // the declining is the answer. Before the heist a player has no reason to ask
       // and gets his ordinary "not my story", which is honest.
       { topic: "eastern seaboard|the trading company|trading company|the office on thappraya|the shophouse|facilities company|the facilities company|the company on the hill",
@@ -8988,7 +8988,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "\"He is good, that one. He told you everything and asked you for nothing, and now you " +
           "cannot sleep. That is the job, done properly.\" His hand makes the gesture — a cup turned a " +
           "quarter, though there is no cup — the one you saw the officer borrow, and you understand, " +
-          "too late, which way the borrowing went. \"White Dish has a problem coming. It has been coming since March. It " +
+          "too late, which way the borrowing went. \"Pattaya Leisure has a problem coming. It has been coming since March. It " +
           "is not your problem and it is not mine — but for some weeks, my friend, be boring. Not " +
           "afraid. Boring. They have a case to finish, and you are a footnote they would prefer " +
           "not to write. Footnotes that hold still get left out.\" A beat. \"Eddy thinks it is " +
@@ -9047,7 +9047,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "coffee", req: ["tanCoffee"],
         text: "\"The coffee.\" He takes it, which from Tan is a speech. \"Who really owns his own bar. " +
           "Bert does not — an American in Ohio does, a sick man, and Bert runs it better than an owner " +
-          "would. Gavin owns nothing; White Dish owns Gavin. Candy owns hers, both of them, and that is " +
+          "would. Gavin owns nothing; Pattaya Leisure owns Gavin. Candy owns hers, both of them, and that is " +
           "rarer than you think.\" He sips. \"The ones who say 'my bar' loudest are the ones whose " +
           "name is furthest from the paper. Remember that when somebody offers you one.\"",
         short: "\"Bert doesn't own the Stinky, Gavin owns nothing, Candy owns hers. The loudest 'my bar' is the furthest from the paper.\"" },
@@ -9156,7 +9156,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     pronoun: "he",
     room: "stinky_bar",
     desc: "Canadian, sixties, a golf tan gone patchy, nursing a rum-and-coke he makes last an hour. Two " +
-      "years ago he wired his retirement into 'the portfolio' — units in White Dish bars, guaranteed " +
+      "years ago he wired his retirement into 'the portfolio' — units in Pattaya Leisure bars, guaranteed " +
       "returns, a glossy PDF with a leaping logo. He has been drinking that decision at the Stinky ever " +
       "since. Bert runs him a tab he mostly settles.",
     dialogue: [
@@ -9171,32 +9171,32 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "be somebody else's department, which was rather the appeal.” The smile holds a beat too long. “I'll say this: it's doing exactly what it " +
           "was always going to do.”",
         short: "“The portfolio. Diversified, structured, doing exactly what it was always going to do.”" },
-      { topic: "white dish", text: "\"White Dish? Ho. Pour yourself something first.\" He turns the glass " +
+      { topic: "pattaya leisure", text: "\"Pattaya Leisure? Ho. Pour yourself something first.\" He turns the glass " +
           "slowly. \"Two years back a fella buys me a drink right at this bar — smooth, golf shirt, calls " +
           "himself an area consultant. Says the group's opening the portfolio to a few private investors. " +
           "Units in the bars. Eighteen percent, quarterly, all laid out in a lovely PDF with the little " +
           "logo.\" A dry laugh with no bottom to it. \"I wired four hundred grand. Got two statements, both " +
           "glowing. Then — nothing. Portal down, emails bouncing, my 'relationship manager' evaporated. " +
-          "Every dollar of it gone into Ryan Powers' brand, and I can't get so much as a {{phone}} call.\"",
+          "Every dollar of it gone into Duncan Ashcroft' brand, and I can't get so much as a {{phone}} call.\"",
         short: "\"Wired four hundred grand into 'the portfolio' — eighteen percent, quarterly. Two statements, then nothing. Gone.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
-      // The facts he'll give anyone; the raw part — Ryan himself — he saves for
+      // The facts he'll give anyone; the raw part — Duncan himself — he saves for
       // someone who's stuck around, not another stranger who'll vanish like the rest.
-      { topic: "ryan", when: (st) => st.trust < 2, deflect: true,
-        text: "The name lands and he looks at you properly for the first time. \"Ryan Powers. You a " +
+      { topic: "duncan|ashcroft", when: (st) => st.trust < 2, deflect: true,
+        text: "The name lands and he looks at you properly for the first time. \"Duncan Ashcroft. You a " +
           "reporter? A lawyer? One of his?\" He decides you're probably not — but not all the way. \"I've " +
           "poured this out to too many strangers already, and every one of 'em nodded and left and nothing " +
           "changed. Buy a round. Stick around. Prove you're just a guy at a bar. Then I'll tell you what he is.\"",
         short: "\"You a reporter? One of his? Stick around, prove you're just a guy at a bar. Then I'll tell you.\"" },
-      { topic: "ryan", when: (st) => st.trust >= 2,
-        text: "\"Ryan Powers.\" The glass goes down harder than he means. \"Only ever got him " +
+      { topic: "duncan|ashcroft", when: (st) => st.trust >= 2,
+        text: "\"Duncan Ashcroft.\" The glass goes down harder than he means. \"Only ever got him " +
           "on a video call — sunglasses on, indoors, rented Lambo out the window, 'we're a FAMILY, Doug, " +
           "trust the process.'\" He does the voice; it isn't kind. \"Now he posts investor-update reels to " +
           "the very people he hasn't paid. I left one polite comment asking where my money went — blocked " +
           "inside the hour, and a lawyer emailed me the word 'defamation.'\" A head-shake, almost admiring. " +
           "\"Four hundred grand, and the man's a coward with a ring light. I've got every email. I've got no " +
           "recourse. Bert lets me sit here and mostly not talk about it.\"",
-        short: "\"Only met Ryan on a video call — sunglasses indoors, rented Lambo, 'we're a FAMILY.' Blocked me, sent a lawyer. Coward with a ring light.\"" },
+        short: "\"Only met Duncan on a video call — sunglasses indoors, rented Lambo, 'we're a FAMILY.' Blocked me, sent a lawyer. Coward with a ring light.\"" },
     ],
   },
 
@@ -9209,7 +9209,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     hops: false,
     room: "queen_vic",
     desc: "Bald, red-faced, Chang vest, sixteen years of Pattaya compressed into a permanent corner-stool residency. He rents the same balcony room every high season. He was here " +
-      "before White Dish. He will tell you about it. He tells it well.",
+      "before Pattaya Leisure. He will tell you about it. He tells it well.",
     dialogue: [
       { topic: "terry",
         text: "\u201cMe?\u201d Terry looks briefly delighted and then suspicious of being delighted. \u201cSixteen years. Same stool, near enough, and the same room upstairs every high season \u2014 I pay the whole six months up front so nobody can let it over my head.\u201d He drinks. \u201cCame for a fortnight in \u201910 with a redundancy and a bad attitude. Spent the redundancy. Kept the attitude.\u201d A shrug that isn't quite a shrug. \u201cPeople ask what I do all day like it's a trap. I watch the soi. It's better than anything on the telly and it's never once repeated itself.\u201d",
@@ -9239,16 +9239,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "conversation, which is restful, frankly.” That is the entire briefing, and he returns to " +
           "the soi with the air of a man who has said more than the arrangement strictly allows.",
         short: "“She'll be in. Headphones. Doesn't want a conversation — restful, frankly.”" },
-      { topic: "white dish", sets: ["heardWdgHistory"],
-        text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here in the flesh, always in your feed — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
-        short: "\"White Dish. Ryan Powers. Six bars already, after another. Someone should do something.\"" },
-      { topic: "powers",
-        text: "\"Ryan Powers.\" Terry snorts into the Chang. \"British, though he's got a voice on now — half " +
+      { topic: "pattaya leisure", sets: ["heardPlgHistory"],
+        text: "\"Pattaya Leisure Group.\" He says it the way you say a diagnosis. \"Duncan Ashcroft. Never here in the flesh, always in your feed — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
+        short: "\"Pattaya Leisure. Duncan Ashcroft. Six bars already, after another. Someone should do something.\"" },
+      { topic: "ashcroft|duncan",
+        text: "\"Duncan Ashcroft.\" Terry snorts into the Chang. \"British, though he's got a voice on now — half " +
           "American, for the videos. You've not seen the videos? Blessed, you are. 'Hustle,' 'vision,' 'we're " +
           "a FAMILY,' him draped over a rented supercar he films from three angles.\" A slow head-shake. " +
           "\"Everyone wants him to be some cold operator out of a film. He's a gobby little self-promoter who " +
           "blocks you when you ask a straight question and screams 'defamation' when you ask it twice. The " +
-          "dangerous bit's the lawyer and the brown envelope. Ryan's just the one doing the podcast about it.\"",
+          "dangerous bit's the lawyer and the brown envelope. Duncan's just the one doing the podcast about it.\"",
         short: "\"Not a cold operator — a gobby self-promoter with a rented supercar and a podcast. The lawyer's the dangerous bit.\"" },
       { topic: "tiktok", text: "He gestures at the soi through the window without " +
         "looking. \"You see those lot? Ring light, selfie stick, little gimbal thing?\" " +
@@ -10829,7 +10829,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // ── bar-owning chain, step 1: premises ──────────────────────────────
       {
         // NOT part of the bar chain: the Shamrock is out on the Darkside, where
-        // neither WDG nor the Samsons have any reason to care. Planted here as a
+        // neither PLG nor the Samsons have any reason to care. Planted here as a
         // second-bar hook once you already run one — the pressure out this way
         // would come from local Thai interests, which is its own arc.
         topic: "shamrock", chip: "topics",
@@ -10992,9 +10992,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { when: (st, G) => _flag("ccibCleared") && !_flag("eddyBackSeen"), sets: ["eddyBackSeen"],
         text: "“You're still here.” He says it like a man who bet you wouldn't be and is pleased to " +
           "lose. “So am I. Funny how that works out when you know what you're doing.” He did not " +
-          "know what he was doing. He pours you one and himself nothing. “White Dish are in the " +
+          "know what he was doing. He pours you one and himself nothing. “Pattaya Leisure are in the " +
           "paper. Not us. Sit down.”",
-        short: "“You're still here. So am I. White Dish are in the paper — not us.”" },
+        short: "“You're still here. So am I. Pattaya Leisure are in the paper — not us.”" },
       { when: (st, G) => !!G.dog,
         text: "He's down off the stool before he's looked at you, one hand out flat, palm down, " +
           "and the dog decides in about a second that this is a man who has fed dogs. “Hello, " +
@@ -11027,15 +11027,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "too long. “Smartest thing I ever did. Everybody keeps telling me it was luck. " +
           "Everybody can get bent.”",
         short: "“Vegas oh-six — a wallet somebody left open. Best thing I ever did. Luck, they say. Bent, I say.”" },
-      { topic: "wdg|white dish|white dish group|the group", text: "“White Dish.” The warmth goes out of it. “I had a bar on Soi 6 — a " +
+      { topic: "plg|pattaya leisure|pattaya leisure group|the group", text: "“Pattaya Leisure.” The warmth goes out of it. “I had a bar on Soi 6 — a " +
           "good one, mine, paid for in Vegas money. Then the suit shows up, all handshakes and " +
           "PowerPoint, and somehow the rent's a problem, the license is a problem, the girls " +
           "get walked across the road one by one, and I'm selling at forty cents on the dollar " +
           "to the only buyer left. Which was them.” He turns his soda glass a slow quarter. " +
-          "“Ryan Powers. Never raised his voice at me once. Didn't have to. One day somebody's " +
+          "“Duncan Ashcroft. Never raised his voice at me once. Didn't have to. One day somebody's " +
           "going to open that whole operation up like a cheap padlock, and I would give a great " +
           "deal to be in the room.”",
-        short: "“White Dish took my Soi 6 bar at forty cents. Powers never raised his voice. Someone'll crack them open one day — I want to watch.”" },
+        short: "“Pattaya Leisure took my Soi 6 bar at forty cents. Powers never raised his voice. Someone'll crack them open one day — I want to watch.”" },
       { topic: "rabbit", text: "“The bar? Down-the-hole, through-the-glass, all that. Cute, " +
           "right.” A pause; he decides how much to hand you. “Used to be a handle, if you go " +
           "back far enough. Long time since anybody said it to my face and meant me.” He does " +
@@ -11067,7 +11067,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "job|heist|work|the job|rabbit job|your job|box job",
         when: (st, G) => _flag("rabbitBlown"),
         text: "“Two boxes.” He does not raise his voice, which is worse. “I had two, and I don't " +
-          "have three, and the second one is in a drawer in a WDG office with my fingerprints " +
+          "have three, and the second one is in a drawer in a PLG office with my fingerprints " +
           "on the inside.” He drinks the soda. “We're done with that. You're still welcome " +
           "at the bar. That's the difference between me and them.”",
         short: "“Two boxes, and you lost two. We're done with that.”" },
@@ -11230,7 +11230,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // Not staff in the bar sense: no NPC_ROLES, no manager flag, none of the
   // lady-logic. Evening hours (an office that keeps a clerk on because bars pay
   // at night); present all night and packing once the heist has happened; gone
-  // — the whole company gone — once the WDG case is the news (`hidden`).
+  // — the whole company gone — once the PLG case is the news (`hidden`).
   wilawan: {
     name: "Khun Wilawan", th: "วิลาวัลย์", emoji: "👩‍💼", pronoun: "she",
     room: "eastern_seaboard",
@@ -11263,7 +11263,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "hospitality sector.” Another stop. “Is there a particular service you require, sir?” " +
           "There is a kettle on the other desk and a plant, and that is the entire inventory.",
         short: "“Import, export, facilities, consulting. Clients in the hospitality sector.”" },
-      { topic: "invoices|invoice|consulting|kitten corner|white dish|the invoices|paperwork",
+      { topic: "invoices|invoice|consulting|kitten corner|pattaya leisure|the invoices|paperwork",
         req: ["invoicesCopied"],
         text: "The glasses come off, slowly, and go on the desk, and she looks at you with an " +
           "expression that has nothing of the receptionist left in it. “I don't know what you " +
@@ -11271,7 +11271,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "a company is.” She does not blink. “You should go now, sir. And you should think about " +
           "who you tell that you were here, because they will already know.”",
         short: "“A company sends invoices; clients pay them. You should go, and think about who you tell.”" },
-      { topic: "invoices|invoice|consulting|kitten corner|white dish|the invoices|paperwork",
+      { topic: "invoices|invoice|consulting|kitten corner|pattaya leisure|the invoices|paperwork",
         text: "“Kitten Corner?” She has to think about it, or performs having to. “We have many " +
           "clients in hospitality, sir. I do not discuss clients.” The glasses go back on. “That " +
           "is a bar, I think. On Soi 6. You would be better asking there.”",
@@ -11340,7 +11340,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "likes the look of you.",
     dialogue: [
       // Champa, Boua and Ampha each speak about Nuan at length \u2014 she called them
-      // when White Dish let them go \u2014 and Nuan knew none of the three by name
+      // when Pattaya Leisure let them go \u2014 and Nuan knew none of the three by name
       // (round 23). The one who did the calling should know who she called.
       { topic: "champa",
         text: "\u201cChampa.\u201d Nuan says it the way you say a name you have written on a rota a thousand times. \u201cShe was on the schedule the week they stopped putting her on the schedule. Nobody told her. She kept turning up for four days and standing at the back, in case it was a mistake.\u201d She wipes the bar that does not need wiping. \u201cIt was not a mistake. I called her on the fifth day.\u201d A look at you, level. \u201cShe still comes in early. Four years, and she is still fifteen minutes early, every night, in case.\u201d",
@@ -11364,7 +11364,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "not hire strangers when your own people need the work.” A beat. “And we needed the " +
           "work.”",
         short: "“Lao, from Savannakhet. All of us here are family — that's how a bar gets staffed out here.”" },
-      { topic: "wdg", text: "“You want the sad story? We all worked Soi 6 — all of us — back " +
+      { topic: "plg", text: "“You want the sad story? We all worked Soi 6 — all of us — back " +
           "when it was still ours to work.” Her voice doesn't rise; it flattens, which is " +
           "worse. “Then the company came, the bars changed hands, and one by one the older " +
           "girls were — let go is the polite word. So we came up here, to the last bar that " +
@@ -11436,7 +11436,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "bar, ha. You buy me a drink, I tell you the truth about everything. Cheaper than the " +
           "young ones and I actually talk to you.”",
         short: "“I am Champa — the flower, like the bar. Buy me a drink, I tell you the truth about everything.”" },
-      { topic: "wdg", text: "“Soi 6, twelve years. I was good, too — the wall by the door, that " +
+      { topic: "plg", text: "“Soi 6, twelve years. I was good, too — the wall by the door, that " +
           "was me.” She says it without much weight, an old ache walked off long ago. “Then the " +
           "company bought my bar and put in girls half my age with none of my mileage, and one " +
           "day the mama just — does not put me on the schedule. No fight, no shouting. You are " +
@@ -11468,13 +11468,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "off — sit with her if you want the show. Sit with me if you want it quiet.” It is " +
           "not unfriendly. It is a real choice, honestly offered.",
         short: "“I am Boua. Champa for the show, me for the quiet. Your choice.”" },
-      { topic: "wdg", text: "“Soi 6, yes. A long time.” She doesn't reach for the story the way " +
-          "Champa does. “When White Dish came, the smart move was to see it early and go quiet. " +
+      { topic: "plg", text: "“Soi 6, yes. A long time.” She doesn't reach for the story the way " +
+          "Champa does. “When Pattaya Leisure came, the smart move was to see it early and go quiet. " +
           "I saw it early.” She turns her phone face-down. “I don't hate them. Hating a company " +
           "is like hating the rain. But I remember every girl they put on the street pretending " +
           "it was her own idea, and I keep the names. Old habit. You never know when a list is " +
           "worth something.”",
-        short: "“Saw White Dish coming and went quiet. I don't hate them — like hating rain. But I keep the names. You never know when a list is worth something.”" },
+        short: "“Saw Pattaya Leisure coming and went quiet. I don't hate them — like hating rain. But I keep the names. You never know when a list is worth something.”" },
       { topic: "family", text: "“Nuan, Ampha, Champa, me — all Lao, all one family if you go " +
           "back far enough.” She says it plainly. “It is not sentiment. A woman alone out here " +
           "is prey. Four women who are family are a wall. Nuan understood that before the rest " +
@@ -11792,7 +11792,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // international school stopped with it — that is the age he starts earning, and it is
   // deliberately the age the tiffin beat sends him back to ("for one unguarded second
   // he's about twelve"). He ran Fast Eddy's till on Soi 6 from about then, and he was
-  // FOURTEEN on that till when White Dish bought the bar — eight years ago, which is
+  // FOURTEEN on that till when Pattaya Leisure bought the bar — eight years ago, which is
   // the one date the sale has anywhere. Nothing may put the father in Pattaya after
   // twelve, and nothing may put Nont in work before it.
   nont: {
@@ -11906,9 +11906,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the number because there isn't one, and that's worse than a number.” A beat. “I'd " +
           "have rather you paid me. But I'm not going anywhere, and neither is the file, so.”",
         short: "“Tan made a call. You'll owe him for me. I'd rather you'd paid.”" },
-      // WHITE DISH, from the kid who was on the premises when the paper came in
-      { topic: "white dish|wdg|the group|white dish group|the takeover|the sale",
-        text: "“White Dish.” He doesn't stop working, but the tweezers slow down. “I was there. " +
+      // PATTAYA LEISURE, from the kid who was on the premises when the paper came in
+      { topic: "pattaya leisure|plg|the group|pattaya leisure group|the takeover|the sale",
+        text: "“Pattaya Leisure.” He doesn't stop working, but the tweezers slow down. “I was there. " +
           "Fourteen, on the till, when the golf shirt came in with the lawyer — the one who does " +
           "the nominee paper, you'd know him if you've been on the 6 a week. They didn't shout. " +
           "They never shout. They bought the old man's debt, then they bought the lease, then one " +
@@ -12078,7 +12078,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "till, if it's had a night. Or there's a lad with a table in the Old Market turns bank into " +
           "notes for a cut — Tan knows him.\" (ASK TAN ABOUT NONT)",
         short: "\"The machine, the till, or the lad in the Old Market. Tan knows him.\" (ASK TAN ABOUT NONT)" },
-      // THE WHOLE WHITE DISH ARC IS MOOT ONCE THE BAR IS GONE. Gating his
+      // THE WHOLE PATTAYA LEISURE ARC IS MOOT ONCE THE BAR IS GONE. Gating his
       // greeting was only half of it: ASK BERT ABOUT GAVIN still handed the man
       // who had just lost the place the errand to go and gather the picture "so
       // I can advise the old man" (round 24, Keith — and found again on the
@@ -12093,23 +12093,23 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         short: "\u201cThey got it in the end. They don't beat you, bud. They outlast you.\u201d" },
       // the owner of the bar they tried to buy (Pri, r45: his cold-open fired at the man whose name is on the float)
       { when: (st, G) => _flag("barPaid") && !_flag("barLost"),
-        topic: "white dish|wdg|the group",
-        text: "\u201cWhite Dish.\u201d Bert chalks the cue, which is what he does instead of spitting. \u201cThey " +
+        topic: "pattaya leisure|plg|the group",
+        text: "\u201cPattaya Leisure.\u201d Bert chalks the cue, which is what he does instead of spitting. \u201cThey " +
           "wanted this bar. Sent a lad in a golf shirt to buy it off a dying man for a number that " +
           "sounded like a lot until you did the sums.\u201d He sights down the cue at nothing. \u201cYou've " +
-          "got it. They haven't. That's the whole story of White Dish on Beach Road, bud, and it's the " +
+          "got it. They haven't. That's the whole story of Pattaya Leisure on Beach Road, bud, and it's the " +
           "only one on this road that ends that way.\u201d",
         short: "\u201cThey wanted this bar. You've got it. Only story on this road that ends that way.\u201d" },
       // the quest is done and the bar is still the old man's: they wait
-      { when: (st, G) => G.quests.white_dish === "done" && !_flag("barPaid") && !_flag("barLost"),
-        topic: "white dish|wdg|the group",
+      { when: (st, G) => G.quests.plg_deal === "done" && !_flag("barPaid") && !_flag("barLost"),
+        topic: "pattaya leisure|plg|the group",
         text: "\u201cStill out there.\u201d Bert nods at the door as if they were standing in it. \u201cYou " +
           "put the old man off signing, and I'll thank you for that till one of us dies. But they " +
-          "don't go away, bud. They wait. Every bar on this road that's got a WDG logo on it had a " +
+          "don't go away, bud. They wait. Every bar on this road that's got a PLG logo on it had a " +
           "month it couldn't cover, and they were there that month with the paper ready.\u201d",
         short: "\u201cStill out there. They don't go away. They wait for the month you can't cover.\u201d" },
       { when: (st, G) => _flag("barLost"),
-        topic: "white dish",
+        topic: "pattaya leisure",
         text: "\u201cNot my fight any more, and not yours either.\u201d Bert turns the Singha a quarter. " +
           "\u201cI'd have told you a week ago that the answer was standing behind the rail more nights " +
           "than you were. I'd have been half right, which is the most annoying kind of right.\u201d",
@@ -12120,7 +12120,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // he sold it to. Above everything, because a man who has just watched you
       // lose the bar he ran for twenty years does not open with the welcome
       // speech, and he certainly does not pitch you the sale again (round 24:
-      // four days after White Dish took the lease, he was still saying "he'll
+      // four days after Pattaya Leisure took the lease, he was still saying "he'll
       // carry you — I told you that").
       { when: (st, G) => _flag("barLost"),
         text: "He is on a stool, on the wrong side of a bar, and he has somebody else's beer in front of him rather than his own Singha. " +
@@ -12198,11 +12198,11 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // the deed and declining is free, and a slight you can never work off is
       // neither. He does not pretend it didn't happen; that's the point of him.
       // Gated on the DEEDS, not on the standing number: putting it right by Bert
-      // is itself what drops your White Dish standing back to zero, so a `wdg > 0`
+      // is itself what drops your Pattaya Leisure standing back to zero, so a `plg > 0`
       // test here would make this node unreachable in the one path that earns it
       // — the player would silently get the ordinary warm hello, as though he
       // had never run the errand at all.
-      { when: (st, G) => _flag("wdgFlipTried") && _flag("wdgResolved"),
+      { when: (st, G) => _flag("plgFlipTried") && _flag("plgResolved"),
         text: "The welcome arrives about two seconds later than it used to, and Bert knows you " +
           "clocked the two seconds. \"Bud.\" A cold one, opened. \"You carried his water and " +
           "you carried mine, whichever way round, and I've been doing this long enough to know which of those a man " +
@@ -12213,10 +12213,10 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // to you, because taking a man's measure is what a publican does and it is
       // exactly what he'd do to somebody he has stopped trusting. Without an
       // `asks` here the greeting stack dead-ends at this node, trust can never
-      // reach 2, and `white_dish` — which `bar_premises` deps on — is silently
+      // reach 2, and `plg_deal` — which `bar_premises` deps on — is silently
       // unreachable forever. That is the whole expat stage, killed by an errand
       // the game explicitly says you may refuse (round 22, Priya).
-      { when: (st, G) => _faction("wdg") > 0,
+      { when: (st, G) => _faction("plg") > 0,
         text: "Bert clocks you and the welcome doesn't arrive — no beer opened, no stool offered. \"You. " +
           "Gavin's errand boy.\" He doesn't look up from the felt. \"Table's still true, beer's still cold. " +
           "But you drink it standing, and you drink it quiet.\" The silence does the rest.",
@@ -12229,25 +12229,25 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "since you left, funny enough. Table's true, beer's cold.\" A crooked grin. \"What's the good " +
           "word, bud?\"",
         short: "\"There he is.\" A cold one's open before you sit — on your tab, obviously. \"What's the good word, bud?\"",
-        // The WDG-flip fork, offered as pick-a-side action-choices during the live
+        // The PLG-flip fork, offered as pick-a-side action-choices during the live
         // decision window (was ASK BERT ABOUT SELLING / THE OFFER). Each jumps to
         // the existing resolution node, reusing its text/effects. The `when` gates
         // mean the choices vanish the moment the fork is closed out either way.
         choices: [
           { label: "Push him to sell",
-            when: (st, G) => G.quests.wdg_flip === "active" && !_flag("wdgFlipTried"),
+            when: (st, G) => G.quests.plg_flip === "active" && !_flag("plgFlipTried"),
             topic: "sell" },
           { label: "Give him the honest picture",
-            when: (st, G) => _flag("heardWdgHistory") && _flag("heardWdgInside") &&
-              _flag("heardWdgPitch") && !_flag("wdgResolved") && !_flag("wdgFlipTried"),
+            when: (st, G) => _flag("heardPlgHistory") && _flag("heardPlgInside") &&
+              _flag("heardPlgPitch") && !_flag("plgResolved") && !_flag("plgFlipTried"),
             topic: "offer" },
         ] },
       // Delivering Gavin's pitch is the deed — this is where alignment actually
       // lands (never on accepting the quest, only on going through with it). Bert
       // holds firm anyway; the cost is your standing and his regard.
-      { topic: "sell", chip: false, when: (st, G) => G.quests.wdg_flip === "active" && !_flag("wdgFlipTried"),
-        sets: ["wdgFlipTried"],
-        fx: (st, G) => { _align("wdg", 2); _align("indie", -1); },
+      { topic: "sell", chip: false, when: (st, G) => G.quests.plg_flip === "active" && !_flag("plgFlipTried"),
+        sets: ["plgFlipTried"],
+        fx: (st, G) => { _align("plg", 2); _align("indie", -1); },
         text: "You bring it round to selling — Gavin's word, friend to friend, everyone wins. Bert sets the " +
           "Singha down very slowly and looks at you the way he looks at a bad break. \"So that's the way " +
           "of it. He's got you carrying his water now.\" No heat, which is worse than heat. \"Answer's no, " +
@@ -12317,9 +12317,9 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night, every table in town — hundred baht in.\"",
         asks: { key: "why", q: "He racks the balls without hurry. \"So what's your story, bud? Everybody out here's running to something or from something. Which one's you?\"" } },
       // THE MAN WHO TRIED IT BOTH WAYS. Running Gavin's errand used to be
-      // TERMINAL: the resolution node below carries notFlags: ["wdgFlipTried"],
-      // and it is the only one, so a player who pitched for White Dish could
-      // never afterwards tell Bert the truth — while `white_dish` stayed
+      // TERMINAL: the resolution node below carries notFlags: ["plgFlipTried"],
+      // and it is the only one, so a player who pitched for Pattaya Leisure could
+      // never afterwards tell Bert the truth — while `plg_deal` stayed
       // offerable and acceptable, so he took a quest that could not be finished,
       // and `bar_premises` deps on it, so the entire expat bar chain quietly
       // died. All of that off an errand the game itself says you may refuse
@@ -12328,8 +12328,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // scene is better for the first visit having happened, because Bert knows
       // exactly what it cost the man to walk in twice.
       { topic: "offer", chip: false,
-        req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch", "wdgFlipTried"], notFlags: ["wdgResolved"],
-        sets: ["wdgResolved"],
+        req: ["heardPlgHistory", "heardPlgInside", "heardPlgPitch", "plgFlipTried"], notFlags: ["plgResolved"],
+        sets: ["plgResolved"],
         text: "\"Back again.\" Bert doesn't stop chalking. \"Last time you stood there you had " +
           "Gavin's words in your mouth.\" So you give him the rest of it — Terry's history, " +
           "Kesinee's straight talk, and what the pitch actually looked like once you'd been " +
@@ -12341,8 +12341,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "pretend I didn't hear the first version — but I'd sooner have a man who changes his " +
           "mind out loud than one who never had one.\"",
         short: "\"You carried it, then you looked, then you came back and told me. Most men never do the middle part.\"" },
-      { topic: "offer", chip: false, req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved", "wdgFlipTried"],
-        sets: ["wdgResolved"],
+      { topic: "offer", chip: false, req: ["heardPlgHistory", "heardPlgInside", "heardPlgPitch"], notFlags: ["plgResolved", "plgFlipTried"],
+        sets: ["plgResolved"],
         text: "You lay it all out — Terry's history, Kesinee's straight talk, Gavin's smiling pitch. Bert " +
           "listens without touching the Singha, which is how you know it lands. When you're done he's " +
           "quiet a while. \"Right,\" he says finally. \"So the money's real and the machine's real, and both " +
@@ -12351,19 +12351,19 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "girls last a season now. Mine's " +
           "been here since Candy ran the place. That's the whole difference, bud, and it's the only one that " +
           "matters.\" He finally lifts the Singha. \"I'll tell the old man to hold. He trusts me to keep the " +
-          "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Ryan Powers wants " +
+          "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Duncan Ashcroft wants " +
           "a pool bar, he can build his own — slap his little logo on it and film himself potting the black. " +
           "Let the market sort us out.\" He taps the bar once, done. " +
           "\"You did me a real turn tonight, bud. Bert doesn't forget a thing like that.\"",
         short: "\"Told the old man to hold — won't sell his soul to a spreadsheet while he's too sick to say no.\"",
-        fx: (st, G) => { _align("indie", 2); _align("wdg", -1); } },
-      { topic: "offer", chip: false, notFlags: ["wdgResolved"],
+        fx: (st, G) => { _align("indie", 2); _align("plg", -1); } },
+      { topic: "offer", chip: false, notFlags: ["plgResolved"],
         text: "\"Still chewing on it, bud. Get me the full picture before I advise the old man: Terry's " +
-          "watched White Dish work this soi for years, Kesinee runs one of their bars over at the Kitten " +
-          "Corner — she'll talk straight if you are — and the White Dish man himself, Gavin, he's usually " +
+          "watched Pattaya Leisure work this soi for years, Kesinee runs one of their bars over at the Kitten " +
+          "Corner — she'll talk straight if you are — and the Pattaya Leisure man himself, Gavin, he's usually " +
           "smiling into a lager at the Golden Dragon, down on Soi 6. Hear all three, then come tell me what you make of it.\"" },
-      { topic: "offer", chip: false, req: ["wdgResolved"],
-        text: "\"The White Dish thing? Told the old man to hold, and he did. Gavin came back once, all " +
+      { topic: "offer", chip: false, req: ["plgResolved"],
+        text: "\"The Pattaya Leisure thing? Told the old man to hold, and he did. Gavin came back once, all " +
           "smiles, took the no like it was a delivery running late.\" A crooked grin. \"They'll be back — " +
           "they always are. But not tonight, and not while I'm behind this bar. Your beer's poured, bud.\"" },
       { topic: "league", req: ["wonLeague"], when: () => !!(G.kpTitle && G.kpTitle[G.room]),   // he was handing back chalk that came down twenty minutes ago (Kevin, round 50)
@@ -12456,10 +12456,10 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "tease you for it, mamasans price you for it. Ain't a crime. Just don't " +
         "butterfly inside ONE bar, that's how a man loses a drink to the back of " +
         "the head.\"" },
-      { topic: "ryan powers", req: ["knowOyHasIt"],
+      { topic: "duncan ashcroft", req: ["knowOyHasIt"],
         text: "He lowers the Singha half an inch, which for Bert is a whisper. " +
-        "\"White Dish Group. Front company, owns most of the paper on Soi 6. Man behind " +
-        "it's a Brit, Ryan Powers — and don't go picturing some untouchable villain, bud. " +
+        "\"Pattaya Leisure Group. Front company, owns most of the paper on Soi 6. Man behind " +
+        "it's a Brit, Duncan Ashcroft — and don't go picturing some untouchable villain, bud. " +
         "He's a jumped-up little marketing lad who ghosts his own investors and hides " +
         "behind a lawyer.\" A shrug. \"Bars run clean enough on top. The books don't. It " +
         "isn't him you'd have to get past — it's the money and the envelope. Leave that one alone.\"" },
@@ -12519,11 +12519,11 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "call and you let them hang up on you. And then you call again.\"" },
     
       // ── bar-owning chain, step 1: the premises ──────────────────────────
-      // Only reachable once white_dish is resolved — you're the reason it wasn't
+      // Only reachable once plg_deal is resolved — you're the reason it wasn't
       // sold, which is the only reason this conversation happens at all.
       {
         topic: "buying", chip: false,
-        req: ["expatLife", "wdgResolved"], notFlags: ["barPremises"], sets: ["barPremises"],
+        req: ["expatLife", "plgResolved"], notFlags: ["barPremises"], sets: ["barPremises"],
         text: "Bert doesn't answer straight away. He looks down the bar — the " +
           "trophies, the brushed table, the girls who've been here since Candy " +
           "ran it.\n\n\"I told him to hold,\" he says. \"And he held. But " +
@@ -12547,7 +12547,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         topic: "opening", chip: false,
         req: ["expatLife", "barPartner", "barPaid", "partnerCandy"], notFlags: ["barOpen"],
         sets: ["barOpen"],
-        fx: (st, G) => { _align("indie", 2); _align("wdg", -1); },
+        fx: (st, G) => { _align("indie", 2); _align("plg", -1); },
         text: "Nothing changes, which is the point.\n\nThe sign stays. The trophies " +
           "stay. Bert is exactly where Bert has always been, except that tonight he " +
           "is working for a man who isn't selling, and it has taken ten years off " +
@@ -13433,34 +13433,34 @@ const QUESTS = {
     doneFlag: "photoBetSettled",
     reward: { money: 0, happy: 8 },
   },
-  white_dish: {
-    name: "The White Dish Offer",
+  plg_deal: {
+    name: "The Pattaya Leisure Offer",
     giver: "bert",
     trust: 2, // he won't ask a near-stranger to weigh in on selling his bar — earn a little rapport first
-    desc: "White Dish want to buy Bert's bar out from under its dying owner. Get him the " +
-      "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE ABOUT WHITE DISH, at the Kitten Corner), and the pitch (ASK GAVIN ABOUT THE OFFER), at the Golden Dragon on Soi 6 — then tell Bert (ASK BERT ABOUT THE OFFER). Kesinee talks straight to men she has seen spend: a drink for one of her girls first.",
+    desc: "Pattaya Leisure want to buy Bert's bar out from under its dying owner. Get him the " +
+      "real picture — the history (ASK TERRY ABOUT PATTAYA LEISURE), the inside view (ASK KESINEE ABOUT PATTAYA LEISURE, at the Kitten Corner), and the pitch (ASK GAVIN ABOUT THE OFFER), at the Golden Dragon on Soi 6 — then tell Bert (ASK BERT ABOUT THE OFFER). Kesinee talks straight to men she has seen spend: a drink for one of her girls first.",
     deps: [],
     at: "bert",
-    doneFlag: "wdgResolved",
+    doneFlag: "plgResolved",
     reward: { money: 0, happy: 5 },
   },
-  wdg_flip: {
+  plg_flip: {
     name: "Gavin's Errand",
     giver: "gavin",
     noNudge: true, // an alignment errand: HINT never recommends it (never push)
-    // the ฿2000 is paid by Gavin in person (his wdgFlipTried node), not at Bert's counter
-    // Gavin's counter to Bert's job: the WDG side of the same fork. Purely opt-in —
+    // the ฿2000 is paid by Gavin in person (his plgFlipTried node), not at Bert's counter
+    // Gavin's counter to Bert's job: the PLG side of the same fork. Purely opt-in —
     // decline it and nothing happens; even accept it and you can still walk away.
     // Alignment only lands if you actually carry the pitch to Bert (ASK BERT ABOUT
-    // SELLING). See wdgFlipTried in Bert's dialogue.
+    // SELLING). See plgFlipTried in Bert's dialogue.
     desc: "Gavin would like a quiet favour: have a word with Bert about selling the Stinky to " +
-      "White Dish. \"Friend to friend. Soften him up. Everyone wins, and White Dish looks after " +
+      "Pattaya Leisure. \"Friend to friend. Soften him up. Everyone wins, and Pattaya Leisure looks after " +
       "its friends.\" (Take it to Bert — ASK BERT ABOUT SELLING — or don't. No one's forcing you.)",
-    reqFlags: ["heardWdgPitch"],
+    reqFlags: ["heardPlgPitch"],
     deps: [],
     at: "bert",
-    doneFlag: "wdgFlipTried",
-    reward: { money: 0, happy: 0 }, // WDG pays for the errand; the real price is your standing
+    doneFlag: "plgFlipTried",
+    reward: { money: 0, happy: 0 }, // PLG pays for the errand; the real price is your standing
   },
   // Origin quest (the detective): recon the Orchid Room's good table for Doyle.
   // Completes by ASK DOYLE ABOUT THE TABLE once you've actually been inside the
@@ -13478,8 +13478,8 @@ const QUESTS = {
     doneFlag: "orchidReported",
     reward: { money: 1500, happy: 4 },
   },
-  // Origin quest (the investor): stop Wayne signing as a WDG nominee. Completes by
-  // ASK WAYNE ABOUT THE PARTNER once you've seen how White Dish operates (heard
+  // Origin quest (the investor): stop Wayne signing as a PLG nominee. Completes by
+  // ASK WAYNE ABOUT THE PARTNER once you've seen how Pattaya Leisure operates (heard
   // Gavin's pitch or been inside the Orchid — the warn node's `when`). Reward is
   // pure สนุก: you saved a man's life savings and got a Sang Som for it.
   nominee_deal: {
@@ -13725,13 +13725,13 @@ const QUESTS = {
   // owning a bar…" — so the chain exists to make it a door rather than a wink.
   //
   // The bar is THE STINKY PINKY, and that choice is the whole design. You already
-  // spent `white_dish` talking Bert out of selling it to Ryan Powers; the ailing
+  // spent `plg_deal` talking Bert out of selling it to Duncan Ashcroft; the ailing
   // American owner is still ailing, and holding is not a plan. So the arc pays
-  // off: the only buyer who isn't WDG is you. Gavin's smiling pitch loses to a
-  // regular, which is exactly the thing WDG cannot price.
+  // off: the only buyer who isn't PLG is you. Gavin's smiling pitch loses to a
+  // regular, which is exactly the thing PLG cannot price.
   //
   // (Soi Khao Talo's dead Shamrock is deliberately NOT this bar — it's the
-  // Darkside, and neither WDG nor the Samsons have any reason to care what
+  // Darkside, and neither PLG nor the Samsons have any reason to care what
   // happens out there. It's planted as a second-bar hook instead; the pressure
   // out there would come from local Thai interests, not the town rollups.)
   //
@@ -13740,12 +13740,12 @@ const QUESTS = {
   // THE RABBIT ARC, Tier 2, phase 1 — the interview and the mule path
   // (docs/rabbit-arc.md; decisions of 2026-09-05 in its log). Expat-only like
   // the bar chain: Rabbit does not recruit a man with a return ticket. Deps on
-  // white_dish because that is where a player learns what WDG IS.
+  // plg_deal because that is where a player learns what PLG IS.
   rabbit_job: {
     name: "Rabbit's Job",
     giver: "fast_eddy",
     reqFlags: ["expatLife"],
-    deps: ["white_dish"],
+    deps: ["plg_deal"],
     trust: 2,
     desc: "Rabbit has work, and he wants to look at you before he says what (ASK EDDY ABOUT THE JOB).",
     at: "fast_eddy",
@@ -13778,10 +13778,10 @@ const QUESTS = {
     giver: "bert",
     reqFlags: ["expatLife"],
     // you can only be offered the bar if you're the reason it wasn't sold
-    deps: ["white_dish"],
+    deps: ["plg_deal"],
     // The journal quoted Bert's COMPLETION line ("holding's not a plan, bud, it's
     // a stall") as the premise, one ask before he says it (round 47 quest sweep).
-    desc: "The old man's not getting better, and a bar that isn't sold to White Dish " +
+    desc: "The old man's not getting better, and a bar that isn't sold to Pattaya Leisure " +
       "still has to be sold to somebody. Ask Bert whether it could be you " +
       "(ASK BERT ABOUT BUYING).",
     at: "bert",
@@ -13971,7 +13971,7 @@ const WORK_NIGHTS = [
 // corruption being discovered. It is how business is done, here and everywhere
 // — the only local difference is that nobody troubles to pretend otherwise.
 // So no character treats it as a scandal, and the words "bribe" and
-// "corruption" never appear. Gavin's "White Dish looks after its friends" is
+// "corruption" never appear. Gavin's "Pattaya Leisure looks after its friends" is
 // the identical sentence in a British accent.
 //
 // Refusing is allowed and nothing is DONE to you. You simply stop being helped,
@@ -15027,14 +15027,14 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       // "The best-informed man on this coast" didn't know the biggest story on
       // his own street (Malcolm, round 36). The columnist has a view, and it is
       // the column's view: structural, nameless, about who pays whom.
-      { topic: "white dish", text: "\"White Dish.\" Mort caps the biro, which is how you know it's a real " +
+      { topic: "pattaya leisure", text: "\"Pattaya Leisure.\" Mort caps the biro, which is how you know it's a real " +
         "answer. \"A rollup, squire. Somebody with a spreadsheet buys the bars the old boys are too " +
         "tired to run, puts the same girls in matching shirts, and calls it a group. The town's seen " +
         "three of those. Two of them are a plaque now.\" He taps the pad. \"What the column says, " +
         "and what it doesn't: the interesting question isn't who owns the bars. It's who they pay to " +
         "be allowed to.\"",
         short: "\"A rollup. Buys the tired bars, matching shirts, calls it a group. The question is who THEY pay.\"" },
-      { topic: "ryan powers", text: "\"Powers.\" A pause you could set type in. \"I've met four men like " +
+      { topic: "duncan ashcroft", text: "\"Powers.\" A pause you could set type in. \"I've met four men like " +
         "him and written up three. Handsome, patient, always the first round. The fourth I did write up, and he sued.\" Mort looks at the window. \"You'll form your own view. Bert's is " +
         "worth hearing first.\"",
         short: "\"Met four like him, wrote up three. The fourth one sued. Ask Bert.\"" },

@@ -1966,7 +1966,7 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
 
 test("ladyboy hostesses: a bi player's real option, a straight player's gracious pass", () => {
   assert.ok(NPCS.bebe.ladyboy && NPCS.poy.ladyboy, "both flagged ladyboy");
-  assert.ok(!NPCS.bebe.filler, "authored, at a WDG bar");
+  assert.ok(!NPCS.bebe.filler, "authored, at a PLG bar");
   state().stage = "vacation"; state().room = "pink_lotus";
   // straight player: SHE reads him and passes — agency intact, never the punter rejecting her
   state().player.orientation = "straight";
@@ -2082,7 +2082,7 @@ test("recognition spreads across the soi — the main mamas + Bert read you", ()
   // ...and her Bert-vouch trust fork still rides the origin greeting
   const t0 = _npcState("kesinee").trust;
   run("tell her bert sent you");
-  assert.ok(_npcState("kesinee").trust >= t0 + 2, "the WDG vetting survives the origin read");
+  assert.ok(_npcState("kesinee").trust >= t0 + 2, "the PLG vetting survives the origin read");
   // Bert (Beach Road) clocks your origin on the first meeting
   assert.match(read("stinky_bar", "bert", () => state().player.origin = "married"),
     /real version/i, "Bert clocks the returner");
@@ -2203,7 +2203,7 @@ test("a girl busy with another customer can't be barfined either (Reg the public
 });
 
 test("Soi 6 mamas: sharp operators take a quiet house cut; beer-bar mamas run warm", () => {
-  assert.equal(NPCS.nee.type, "operator", "the WDG flagship mama is an operator");
+  assert.equal(NPCS.nee.type, "operator", "the PLG flagship mama is an operator");
   assert.ok(!NPCS.bussaba.type, "the beer-bar mama is not");
   assert.ok(!NPCS.nee.filler && !NPCS.bussaba.filler, "both promoted from filler");
   state().stage = "vacation"; state().nightTurn = 40;
@@ -2232,7 +2232,7 @@ test("the whole Soi 6 hostess cast is hand-authored — no procedural filler lef
   assert.ok(soi6Hostesses.length >= 20, "the full cast is present");
 });
 
-test("Pink Lotus (WDG flagship): volatile (Puu) & moneypit (Belle) — the crazy bar", () => {
+test("Pink Lotus (PLG flagship): volatile (Puu) & moneypit (Belle) — the crazy bar", () => {
   assert.equal(NPCS.puu.type, "volatile");
   assert.equal(NPCS.belle.type, "moneypit");
   assert.ok(!NPCS.puu.filler && !NPCS.belle.filler, "promoted from filler");
@@ -2349,7 +2349,7 @@ test("the in-prose reply prompt is trimmed: an answer cue for a question, choice
   assert.doesNotMatch(lastOut(), /GOODBYE\)/, "an ordinary turn leaves the options to the chip bar");
   // a live action-choice DOES earn the in-prose prompt
   out = []; state().room = "golden_dragon"; _convoEnd();
-  run("talk to gavin"); if (typeof _setFlag === "function") _setFlag("heardWdgPitch");
+  run("talk to gavin"); if (typeof _setFlag === "function") _setFlag("heardPlgPitch");
   out = []; run("talk to gavin");
   // apostrophe stripped so the CAPS run stays one tappable kw (tap still resolves)
   assert.match(lastOut(), /TELL HIM YOURE IN/, "a real fork is surfaced in the prose");
@@ -2359,35 +2359,35 @@ test("the in-prose reply prompt is trimmed: an answer cue for a question, choice
   assert.doesNotMatch(lastOut(), /GOODBYE\)/, "gone once you take your leave");
 });
 
-test("dialogue choices: Bert's WDG-flip is a pick-a-side fork; effects land, closes once taken", () => {
+test("dialogue choices: Bert's PLG-flip is a pick-a-side fork; effects land, closes once taken", () => {
   // (rely on the beforeEach's newGame — it also suppresses random saleng/peddler
   // events that would otherwise swallow the follow-up command mid-test)
-  state().room = "stinky_bar"; state().quests.wdg_flip = "active";
+  state().room = "stinky_bar"; state().quests.plg_flip = "active";
   run("talk bert"); run("talk bert"); // returning greeting carries the fork
   assert.ok(_convoChoices().some(c => /push him to sell/i.test(c.label)), "the sell choice is offered");
   run("push him to sell"); // exact typed label wins over the PUSH verb (pre-verb pick)
-  assert.equal(_faction("wdg"), 2, "carrying Gavin's pitch aligns you to WDG");
+  assert.equal(_faction("plg"), 2, "carrying Gavin's pitch aligns you to PLG");
   assert.equal(_faction("indie"), -1);
-  assert.ok(state().flags.wdgFlipTried);
+  assert.ok(state().flags.plgFlipTried);
   assert.ok(!_convoChoices().some(c => /sell/i.test(c.label)), "the fork closes once taken");
 });
 
 test("dialogue choices: the honest picture resolves the flip the other way", () => {
   state().room = "stinky_bar";
-  ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"].forEach(f => state().flags[f] = true);
+  ["heardPlgHistory", "heardPlgInside", "heardPlgPitch"].forEach(f => state().flags[f] = true);
   run("talk bert"); run("talk bert");
   assert.ok(_convoChoices().some(c => /honest picture/i.test(c.label)));
   run("give him the honest picture"); // number "2" or a chip tap would do the same
   assert.equal(_faction("indie"), 2);
-  assert.equal(_faction("wdg"), -1);
-  assert.ok(state().flags.wdgResolved);
+  assert.equal(_faction("plg"), -1);
+  assert.ok(state().flags.plgResolved);
 });
 
 test("flirt is orientation-aware: a man gets the awkward brush-off, no side effects", () => {
   state().room = "stinky_bar";
   run("flirt bert");
   assert.match(lastOut(), /not that way|wrong tree|steady on/i, "Bert deflects — awkward, not the favor tiers");
-  assert.equal(_faction("wdg"), 0, "a whiffed pass moves no standing");
+  assert.equal(_faction("plg"), 0, "a whiffed pass moves no standing");
   assert.ok(!state().soc.heat.stinky_bar, "awkward costs no heat");
 });
 
@@ -2403,23 +2403,23 @@ test("a saleng only interrupts a conversation if the partner bolts to it", () =>
   assert.equal(state().convo, null, "she bolted to the cart mid-sentence → conversation over");
 });
 
-test("WDG-cast choices move faction, NPC-trust, and bond from the player's response", () => {
-  // Gavin — leaning in is a WDG act (declining is free); apostrophe label typed plainly
-  state().room = "golden_dragon"; state().flags.heardWdgPitch = true;
+test("PLG-cast choices move faction, NPC-trust, and bond from the player's response", () => {
+  // Gavin — leaning in is a PLG act (declining is free); apostrophe label typed plainly
+  state().room = "golden_dragon"; state().flags.heardPlgPitch = true;
   run("talk gavin"); run("talk gavin");
   run("tell him youre in");
-  assert.equal(_faction("wdg"), 1, "playing along aligns you to WDG");
+  assert.equal(_faction("plg"), 1, "playing along aligns you to PLG");
   // Kesinee — Bert vouching earns the trust that unlocks her reveal
   state().room = "kitten_corner";
   run("talk kesinee");
   const t0 = _npcState("kesinee").trust;
   run("tell her bert sent you");
   assert.ok(_npcState("kesinee").trust >= t0 + 2, "Bert's name buys real trust");
-  // Powers — needling the boss costs you WDG standing
+  // Powers — needling the boss costs you PLG standing
   state().room = "orchid_room";
   run("talk powers");
   run("call it a room full of criminals");
-  assert.equal(_faction("wdg"), 0, "the needle undoes Gavin's +1");
+  assert.equal(_faction("plg"), 0, "the needle undoes Gavin's +1");
   // Joy — a warm response deepens the Regular bond
   state().room = "pink_lotus"; _npcState("joy").trust = 3;
   run("talk joy"); run("ask joy about future");
@@ -5590,10 +5590,10 @@ test("SLEEP: turn in from the room, or climb up from the pub below, to end the n
 test("Soi 6 mode won't offer a quest you can't finish in the pocket (Shamrock is out of bounds)", () => {
   startSoi6Mode();
   state().flags.hasDog = true;
-  _npcState("bert").trust = 2; // white_dish now needs a little rapport (trust>=2); this test is about geography, not trust
+  _npcState("bert").trust = 2; // plg_deal now needs a little rapport (trust>=2); this test is about geography, not trust
   const bertOffers = () => Object.keys(QUESTS).filter(q => QUESTS[q].giver === "bert" && _questAvailable(q));
   const offered = bertOffers();
-  assert.ok(offered.includes("white_dish"), "the in-pocket White Dish job still offers");
+  assert.ok(offered.includes("plg_deal"), "the in-pocket Pattaya Leisure job still offers");
   assert.ok(offered.includes("league"), "the in-pocket League job still offers");
   assert.ok(!offered.includes("shamrock"), "Shamrock (target on the Darkside) is suppressed in the confined week");
   // but the full game still offers it
@@ -5631,16 +5631,16 @@ test("dialogue state machine: Angela gates the heavy stuff behind trust, then op
   assert.equal(st().trust, t, "re-asking a warmed topic doesn't re-bump trust");
 });
 
-test("The Orchid Room: WDG's members-only back room, gated by standing, is the only place Powers is", () => {
+test("The Orchid Room: PLG's members-only back room, gated by standing, is the only place Powers is", () => {
   startSoi6Mode(); state().flags.act1Done = true;
   state().room = "pink_lotus";
   state().lastSaleng = 99999; state().lastPeddler = 99999;
   // the velvet rope holds for a non-member
   out = []; run("go back");
-  assert.match(lastOut(), /members|velvet rope|not tonight|White Dish|friends of the group/i, "the bouncer turns you away");
+  assert.match(lastOut(), /members|velvet rope|not tonight|Pattaya Leisure|friends of the group/i, "the bouncer turns you away");
   assert.equal(state().room, "pink_lotus", "you don't get in");
-  // once you're White Dish's man, the rope lifts
-  state().faction.wdg = 2;
+  // once you're Pattaya Leisure's man, the rope lifts
+  state().faction.plg = 2;
   out = []; run("go back");
   assert.equal(state().room, "orchid_room", "in you go");
   // Powers — never met anywhere else — holds court here, and fears only the syndicate
@@ -5656,25 +5656,25 @@ test("factions: Gavin's errand is opt-in — standing moves only on the deed, ne
   // hearing Gavin's pitch puts the errand on offer but changes nothing
   state().room = "golden_dragon";
   run("ask gavin about offer");
-  assert.equal(state().quests.wdg_flip, "offered", "the counter-quest is on the table");
-  assert.deepEqual(fac(), { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, "ignoring it costs nothing");
+  assert.equal(state().quests.plg_flip, "offered", "the counter-quest is on the table");
+  assert.deepEqual(fac(), { plg: 0, samson: 0, indie: 0, syndicate: 0 }, "ignoring it costs nothing");
   // even accepting is free — you can still walk away with no alignment
-  run("accept wdg_flip");
-  assert.equal(fac().wdg, 0, "accepting the job does not align you");
+  run("accept plg_flip");
+  assert.equal(fac().plg, 0, "accepting the job does not align you");
   // the deed does it: carry Gavin's pitch to Bert
   state().room = "stinky_bar";
   out = []; run("ask bert about selling");
   assert.match(lastOut(), /carrying his water|came for HIM/i, "Bert clocks the betrayal");
-  assert.ok(fac().wdg > 0 && fac().indie < 0, "now you've taken a side");
-  assert.equal(state().quests.wdg_flip, "done", "quest resolves (WDG pays the errand)");
-  // and standing drives dialogue: Bert ices a WDG stooge
+  assert.ok(fac().plg > 0 && fac().indie < 0, "now you've taken a side");
+  assert.equal(state().quests.plg_flip, "done", "quest resolves (PLG pays the errand)");
+  // and standing drives dialogue: Bert ices a PLG stooge
   out = []; run("talk bert");
   assert.match(lastOut(), /errand boy|drink it standing/i, "Bert ices you now");
   // the help-Bert-hold path is now closed — you can't do both
-  assert.ok(!state().flags.wdgResolved, "and you never helped him hold");
+  assert.ok(!state().flags.plgResolved, "and you never helped him hold");
 });
 
-test("factions: cross Bert (go WDG) and his girls close ranks — no barfine at the Stinky", () => {
+test("factions: cross Bert (go PLG) and his girls close ranks — no barfine at the Stinky", () => {
   startSoi6Mode(); state().flags.act1Done = true;
   state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
   state().room = "stinky_bar";
@@ -5683,8 +5683,8 @@ test("factions: cross Bert (go WDG) and his girls close ranks — no barfine at 
   // neutral: the usual barfine liturgy applies, not a loyalty block
   out = []; run("barfine " + nm);
   assert.doesNotMatch(lastOut(), /after Bert|closed to you|not here/i, "no loyalty block when you're neutral");
-  // once you're White Dish's man, none of Bert's girls will go with you
-  state().faction.wdg = 2;
+  // once you're Pattaya Leisure's man, none of Bert's girls will go with you
+  state().faction.plg = 2;
   out = []; run("barfine " + nm);
   assert.match(lastOut(), /Bert|closed to you/i, "his girls refuse the barfine");
   // and it's Bert's bar only — other bars are unaffected
@@ -5725,20 +5725,20 @@ test("factions: do right by Bert and his girls warm to you — an easy barfine a
   assert.ok(state().pendingBf, "the barfine proceeds to the number");
 });
 
-test("White Dish quest: Kesinee vets you before she talks — the quest flag is trust-gated", () => {
+test("Pattaya Leisure quest: Kesinee vets you before she talks — the quest flag is trust-gated", () => {
   startSoi6Mode(); state().flags.act1Done = true;
   state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
   state().room = "kitten_corner";
   // cold, she brushes you off and withholds the quest flag
-  out = []; run("ask kesinee about white dish");
+  out = []; run("ask kesinee about pattaya leisure");
   assert.match(lastOut(), /who send you|not before/i, "vetted, not spilled");
-  assert.ok(!state().flags.heardWdgInside, "quest flag withheld from a stranger");
+  assert.ok(!state().flags.heardPlgInside, "quest flag withheld from a stranger");
   // earn a little trust and she talks straight — the flag lands
   run("talk kesinee");
   run("ask kesinee about kittens");
-  out = []; run("ask kesinee about white dish");
-  assert.match(lastOut(), /cleaner.*poorer|White Dish buy this bar/i, "the real intel, once earned");
-  assert.ok(state().flags.heardWdgInside, "now the quest flag is set");
+  out = []; run("ask kesinee about pattaya leisure");
+  assert.match(lastOut(), /cleaner.*poorer|Pattaya Leisure buy this bar/i, "the real intel, once earned");
+  assert.ok(state().flags.heardPlgInside, "now the quest flag is set");
 });
 
 test("TALK TO PATRON resolves to a named regular present, not the faceless archetype", () => {

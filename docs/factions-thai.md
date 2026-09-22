@@ -3,8 +3,13 @@
 Written 2026-08-07, after the procurement system landed and raised the question
 of who, exactly, the player is dealing with.
 
-**Repo policy first:** no real families, names, or allegations in this
-repository, in prose or in comments — same rule as White Dish (fictionalised
+**Repo policy first — and see `docs/guardrails.md`, which is now the governing document:**
+no real families, names, or allegations in this repository, in prose or in comments. That
+rule was operating ONE LAYER TOO HIGH until 2026-09-23: it stopped real people being named
+*inside* the fiction while the fiction's own proper nouns did the identifying — the group
+and its owner carried names derived from a real Pattaya business and a real person, which
+is what identifiability turns on. Both were renamed; the trait budget is ONE. Same rule as
+Pattaya Leisure (fictionalised
 from a real group, kept unnamed). What follows is structural pattern only. The
 patterns below are ordinary sociology of the region and are not defamatory about
 anyone; specific people are not, and must not become, part of this game.
@@ -90,29 +95,29 @@ is permanent.
 **The envelope is what you pay when you cannot be owed a favour.**
 
 So the money on the good table is not the syndicate's income from its own
-people. It's what the White Dish Group pays to be *tolerated* — and that
+people. It's what the Pattaya Leisure Group pays to be *tolerated* — and that
 tolerance is the only reason a foreign rollup is allowed to operate on Soi 6 at
 all. Kesinee already says the true version out loud: *"the dangerous bit's the
-lawyer and the brown envelope. Ryan's just the one doing the podcast about it."*
+lawyer and the brown envelope. Duncan's just the one doing the podcast about it."*
 
 Two consequences worth having:
 
-**The Orchid Room's good table is not WDG's power seat. It is their tribute
+**The Orchid Room's good table is not PLG's power seat. It is their tribute
 desk.** They host, in their own members-only back room, the table at which they
 pay for permission to exist. That is why `orchid_recon` — *see who really holds
 it* — resolves to Tan, and why the answer is quietly devastating rather than
 exciting. The player thinks they're scouting the seat of power. They're
 watching rent get collected.
 
-**WDG is therefore structurally fragile in a way it does not look.** Its whole
+**PLG is therefore structurally fragile in a way it does not look.** Its whole
 position rests on continuing to pay. A rollup is cash-hungry by nature — it buys
 bars, refits them, runs them on volume — so a bad season, an over-leveraged
 acquisition or a spooked investor doesn't just hurt the P&L, it interrupts the
 tribute. And tolerance, unlike an obligation, can simply be withdrawn. Nobody
-would need to *do* anything to White Dish; they would only need to stop being
+would need to *do* anything to Pattaya Leisure; they would only need to stop being
 helped, exactly as the player does when they refuse the cleaning crew.
 
-That gives the faction a real, unforced vulnerability, and it means WDG's
+That gives the faction a real, unforced vulnerability, and it means PLG's
 smiling confidence is the confidence of a tenant who thinks he owns the
 building. Unbuilt, but the arc is sitting there.
 
@@ -179,7 +184,7 @@ Bert knows the room and the regulars but has never in his life paid *suay* — h
 is staff, and the arrangements went over his head to an owner who didn't
 understand them either. Candy knows all of it and assumes you know it too, so
 she explains the wrong half. Tan tells you exactly as much as is useful to Tan.
-Gavin's version is true and serves White Dish.
+Gavin's version is true and serves Pattaya Leisure.
 
 **The player is never given a briefing, and should never be.** The knowledge is
 not transferable; that's the point of the arc.
@@ -224,7 +229,7 @@ rest, and the player who hasn't just hears about a sad Irishman.
 
 ## Open
 
-- The Darkside faction has no `_align` key yet (`wdg`, `samson`, `indie`,
+- The Darkside faction has no `_align` key yet (`plg`, `samson`, `indie`,
   `syndicate` exist). It needs one, and it needs to not be a fifth flavour of
   the same mechanic.
 - The second-bar arc is hooked in Daeng's dialogue behind `barOpen` and has

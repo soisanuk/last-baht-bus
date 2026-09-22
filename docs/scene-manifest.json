@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-16",
+  "generated": "2026-09-22",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 243,
@@ -2530,7 +2530,7 @@
       "dark": false,
       "indoors": true,
       "people": [],
-      "desc": "A windowless box behind the till, cold with aircon and lit like a fridge. Steel shelving, the night's cash bags in a milk crate, a wall safe with a keypad, and a laptop on a desk nobody sits at for long — the group's, not the bar's, with a sticker on the lid of a white dish and nothing else. A monitor above it cycles through six cameras, none of them pointing in here. Through the door the bar is a muffled bass line and a laugh; the corridor outside is the only way anybody comes, and the only way you leave."
+      "desc": "A windowless box behind the till, cold with aircon and lit like a fridge. Steel shelving, the night's cash bags in a milk crate, a wall safe with a keypad, and a laptop on a desk nobody sits at for long — the group's, not the bar's, with a sticker on the lid of a pattaya leisure and nothing else. A monitor above it cycles through six cameras, none of them pointing in here. Through the door the bar is a muffled bass line and a laugh; the corridor outside is the only way anybody comes, and the only way you leave."
     },
     {
       "id": "orchid_room",
@@ -2542,16 +2542,16 @@
       "kind": "soi6",
       "dark": false,
       "people": [
+        "Ashcroft",
+        "Duncan",
+        "Duncan Ashcroft",
         "Gyp",
         "Kae",
         "Nune",
         "Pae",
-        "Powers",
-        "Ryan",
-        "Ryan Powers",
         "Sudjai"
       ],
-      "desc": "The name is the last classy thing about it. Ryan Powers wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Ryan Powers — down when he is in the country, which is not often, and never anywhere the soi itself can see him."
+      "desc": "The name is the last classy thing about it. Duncan Ashcroft wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Duncan Ashcroft — down when he is in the country, which is not often, and never anywhere the soi itself can see him."
     },
     {
       "id": "pink_lotus",
@@ -2571,7 +2571,7 @@
         "Nee",
         "Puu"
       ],
-      "desc": "White Dish's flagship, and the loudest argument for why the group should not be allowed nice things. The front is open to the street; half the bar is technically the pavement. Neon tubes frame the sign in three colours simultaneously. Inside, the pink is structural — walls, barstools, the girls' outfits, arguably the air itself. Joy is already talking before you sit down. A staircase at the back climbs to the short-time rooms; beside it, a velvet-roped, unmarked door leads to the ORCHID ROOM — the group's members-only back room, and very much not for tonight's walk-up trade. (GO BACK, if you think you're on the list.)"
+      "desc": "Pattaya Leisure's flagship, and the loudest argument for why the group should not be allowed nice things. The front is open to the street; half the bar is technically the pavement. Neon tubes frame the sign in three colours simultaneously. Inside, the pink is structural — walls, barstools, the girls' outfits, arguably the air itself. Joy is already talking before you sit down. A staircase at the back climbs to the short-time rooms; beside it, a velvet-roped, unmarked door leads to the ORCHID ROOM — the group's members-only back room, and very much not for tonight's walk-up trade. (GO BACK, if you think you're on the list.)"
     },
     {
       "id": "queen_vic",

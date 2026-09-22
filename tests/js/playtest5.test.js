@@ -413,10 +413,10 @@ test("the investor can still own a bar: Tan gives the licence answer when you AR
   assert.ok(_flag("barLicence"));
 });
 
-test("HINT never nudges the WDG errand; Tan's manifest names venues by their signs", () => {
-  G.quests.wdg_flip = "offered"; out = [];
+test("HINT never nudges the PLG errand; Tan's manifest names venues by their signs", () => {
+  G.quests.plg_flip = "offered"; out = [];
   _doHint();
-  assert.doesNotMatch(text(), /WDG_FLIP/);
+  assert.doesNotMatch(text(), /PLG_FLIP/);
   assert.match(_tanWhere("pete"), /Verandah/);
   assert.doesNotMatch(_tanWhere("pete"), /Sandy Toes/);
   assert.match(_tanWhere("doyle"), /Queen Vic/);
@@ -956,7 +956,7 @@ test("ASK TAN ABOUT <someone> places them: the manifest men get his read, anyone
 });
 
 test("Bert's grudge gates his offers; the Safe-Cracker's where-clause follows the step; Oy stops talking about a wallet she gave back", () => {
-  _align("wdg", 2); G.room = "stinky_bar"; out = [];
+  _align("plg", 2); G.room = "stinky_bar"; out = [];
   _questOffer("bert");
   assert.doesNotMatch(text(), /has a job for you/);
   assert.equal(typeof QUESTS.safecracker.at, "function");
@@ -994,7 +994,7 @@ test("Candy's Mot reveal answers ASK ABOUT WALLET; the Shamrock quest completes 
   doCommand("w");
   assert.equal(G.quests.shamrock, "done", "done on arrival, not one LOOK later");
   // Gavin
-  sandbox(); _setFlag("wdgFlipTried"); G.quests.wdg_flip = "active"; const m = G.money;
+  sandbox(); _setFlag("plgFlipTried"); G.quests.plg_flip = "active"; const m = G.money;
   _questTick();
   assert.equal(G.money, m, "the errand's fee isn't paid at Bert's counter");
   G.room = _npcRoom("gavin"); out = [];

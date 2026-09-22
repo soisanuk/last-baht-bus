@@ -89,7 +89,7 @@ stays with the prose review (§4) and the human (lbb-playtest).
 
 1. **Character creation Phase B** — origins become Soi 6 NPCs (the picked one
    deactivated — you ARE him), Tan the hidden hub, the PI origin's
-   investigative spine into WDG/Orchid, bi-routing opening Peacock/katoey
+   investigative spine into PLG/Orchid, bi-routing opening Peacock/katoey
    courtship. Deepens the existing cast before adding new systems; exercises
    the dialogue state machine already built. The replay-value feature.
 2. **Soi 6 share-card + seed-of-the-day** — best effort-to-fun on the board.
@@ -101,7 +101,7 @@ stays with the prose review (§4) and the human (lbb-playtest).
 3. **Bar-owning quest line** — the expat stage's missing pillar, built AS
    dep-chained quests per CLAUDE.md doctrine (premises → license → staff →
    opening night), reusing filler-hostess machinery for staff, cashier trust
-   for till risk, and factions for the WDG buyout pressure. Lands best *after*
+   for till risk, and factions for the PLG buyout pressure. Lands best *after*
    Phase B has made the factions felt.
 4. **Hygiene queue:** German-mode shakedown (tracked); Beach Road geography
    pass (unblocks WATCH POLICE); Dongtan/Pratumnak pass 2.

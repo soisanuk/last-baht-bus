@@ -136,12 +136,12 @@ test("reads: nodes can gate on live state, and the last one still cannot", () =>
   assert.ok(!last.req && !last.notFlags && !last.when, "the fallback stays ungated");
 });
 
-test("the White Dish payoff calls no roll of who is at the rail", () => {
+test("the Pattaya Leisure payoff calls no roll of who is at the rail", () => {
   // Bert's flagship speech named Dave "on his rounds", Phil on his stool and a
   // dog by the door — none of them guaranteed present, and Priya read it with
   // Dave demonstrably absent.
   const node = NPCS.bert.dialogue.find(d => d.topic === "offer" && d.sets &&
-    d.sets.includes("wdgResolved"));
+    d.sets.includes("plgResolved"));
   assert.ok(node, "premise: the payoff node");
   assert.doesNotMatch(node.text, /Dave|Phil on his stool|the dog by the door/,
     "he looks at his bar, not at a roster that may not be standing in it");
@@ -201,28 +201,28 @@ test("bare ACCEPT with two on the table asks which, and with one just takes it",
 test("running Gavin's errand does not end Bert, or the expat chain with him", () => {
   // The state Priya reached and could not get out of. Two blocks, one behind the
   // other: the freeze greeting had no `asks`, so trust could never reach the 2
-  // that `white_dish` needs; and the resolution node carried notFlags
-  // ["wdgFlipTried"], so a man who had pitched for White Dish could never
-  // afterwards tell Bert the truth. `bar_premises` deps on `white_dish`, so the
+  // that `plg_deal` needs; and the resolution node carried notFlags
+  // ["plgFlipTried"], so a man who had pitched for Pattaya Leisure could never
+  // afterwards tell Bert the truth. `bar_premises` deps on `plg_deal`, so the
   // whole expat bar stage died — off an errand the game says you may refuse.
   G.money = 9000; G.room = "stinky_bar";
-  _setFlag("heardWdgPitch"); G.quests.wdg_flip = "active";
+  _setFlag("heardPlgPitch"); G.quests.plg_flip = "active";
   doCommand("talk to bert");
   doCommand("running from an office and a mortgage");     // his question, answered
   doCommand("ask bert about selling");                    // the errand, run
-  assert.ok(_faction("wdg") > 0 && _flag("wdgFlipTried"), "premise: you carried his water");
+  assert.ok(_faction("plg") > 0 && _flag("plgFlipTried"), "premise: you carried his water");
 
   out = []; doCommand("talk to bert");
   assert.match(text(), /errand boy/, "he ices you, which is correct and stays");
 
-  assert.equal(_questAvailable("white_dish"), true,
+  assert.equal(_questAvailable("plg_deal"), true,
     "…but the door is not bolted: his question still builds the trust it needs");
-  doCommand("accept white dish");
-  _setFlag("heardWdgHistory"); _setFlag("heardWdgInside");
+  doCommand("accept pattaya leisure");
+  _setFlag("heardPlgHistory"); _setFlag("heardPlgInside");
   out = []; doCommand("ask bert about the offer");
   assert.match(text(), /middle part|came back/i, "and there is a scene for the man who came back");
-  assert.equal(_flag("wdgResolved"), true);
-  assert.equal(G.quests.white_dish, "done");
+  assert.equal(_flag("plgResolved"), true);
+  assert.equal(G.quests.plg_deal, "done");
 
   out = []; doCommand("talk to bert");
   assert.match(text(), /two seconds/, "thawed — and he does not pretend it never happened");
@@ -232,26 +232,26 @@ test("running Gavin's errand does not end Bert, or the expat chain with him", ()
 });
 
 test("the thaw is gated on the deeds, not on the standing it cancels", () => {
-  // Putting it right by Bert is itself what drops wdg back to zero, so gating
-  // the thawed greeting on `wdg > 0` made it unreachable in the only path that
+  // Putting it right by Bert is itself what drops plg back to zero, so gating
+  // the thawed greeting on `plg > 0` made it unreachable in the only path that
   // earns it — the player would get the ordinary warm hello as though he had
   // never run the errand at all.
   const thaw = NPCS.bert.dialogue.find(d => d.short && d.short.includes("We're square"));
   assert.ok(thaw, "the node exists");
-  _setFlag("wdgFlipTried"); _setFlag("wdgResolved");
-  assert.equal(_faction("wdg"), 0, "premise: the standing is gone");
+  _setFlag("plgFlipTried"); _setFlag("plgResolved");
+  assert.equal(_faction("plg"), 0, "premise: the standing is gone");
   assert.equal(thaw.when({}, G), true, "and he still knows what you did");
 });
 
 test("a manager who won't open you a beer doesn't drink your health either", () => {
   G.money = 9000; G.room = "stinky_bar";
-  _align("wdg", 1);
+  _align("plg", 1);
   const happy = G.happy;
   out = []; doCommand("buy man drink");
   assert.doesNotMatch(text(), /likes you|best friend/, "no line about a manager who likes you");
   assert.equal(G.happy, happy, "and no happiness from a gesture that wasn't accepted");
   assert.equal(G.money, 9000 - BEER_PRICE, "he takes the money — it is a bar");
-  _setFlag("wdgResolved");
+  _setFlag("plgResolved");
   out = []; doCommand("buy man drink");
   assert.match(text(), /speaking the language/, "square again, and the warmth comes back");
 });

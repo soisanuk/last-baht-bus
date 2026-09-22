@@ -376,7 +376,7 @@ test("de coverage: measure all four modes and record the gap", () => {
 // changing it would re-roll all four. --start is additive: the default walk is
 // untouched, and seeding runs inside the blind spot lifts union coverage from
 // 63% to 89%. What remains is mostly gated by design (oy_office needs the door
-// trick, orchid_room needs WDG standing) — a random walker SHOULD NOT reach
+// trick, orchid_room needs PLG standing) — a random walker SHOULD NOT reach
 // those.
 //
 // Two seeds per district, kept small so this stays cheap; the wide sweep (156

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-16",
+  "generated": "2026-09-22",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 154,
@@ -153,7 +153,7 @@
       "th": null,
       "room": "stinky_bar",
       "tags": [],
-      "desc": "Canadian, sixties, a golf tan gone patchy, nursing a rum-and-coke he makes last an hour. Two years ago he wired his retirement into 'the portfolio' — units in White Dish bars, guaranteed returns, a glossy PDF with a leaping logo. He has been drinking that decision at the Stinky ever since. Bert runs him a tab he mostly settles."
+      "desc": "Canadian, sixties, a golf tan gone patchy, nursing a rum-and-coke he makes last an hour. Two years ago he wired his retirement into 'the portfolio' — units in Pattaya Leisure bars, guaranteed returns, a glossy PDF with a leaping logo. He has been drinking that decision at the Stinky ever since. Bert runs him a tab he mostly settles."
     },
     {
       "id": "doyle",
@@ -237,7 +237,7 @@
       "th": null,
       "room": "golden_dragon",
       "tags": [],
-      "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the White Dish man. He is unfailingly pleasant, which is the unsettling part."
+      "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the Pattaya Leisure man. He is unfailingly pleasant, which is the unsettling part."
     },
     {
       "id": "kyle",
@@ -393,7 +393,7 @@
     },
     {
       "id": "powers",
-      "name": "Ryan Powers",
+      "name": "Duncan Ashcroft",
       "source": "NPCS",
       "role": "story",
       "sex": "m",
@@ -511,7 +511,7 @@
       "th": null,
       "room": "queen_vic",
       "tags": [],
-      "desc": "Bald, red-faced, Chang vest, sixteen years of Pattaya compressed into a permanent corner-stool residency. He rents the same balcony room every high season. He was here before White Dish. He will tell you about it. He tells it well."
+      "desc": "Bald, red-faced, Chang vest, sixteen years of Pattaya compressed into a permanent corner-stool residency. He rents the same balcony room every high season. He was here before Pattaya Leisure. He will tell you about it. He tells it well."
     },
     {
       "id": "thomas",
@@ -810,7 +810,7 @@
       "th": "หนี่",
       "room": "pink_lotus",
       "tags": [],
-      "desc": "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink Lotus like the asset it is on White Dish's books, and she priced you before you sat down."
+      "desc": "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink Lotus like the asset it is on Pattaya Leisure's books, and she priced you before you sat down."
     },
     {
       "id": "nuan",
@@ -851,7 +851,7 @@
       "th": "ผึ้ง",
       "room": "golden_dragon",
       "tags": [],
-      "desc": "Golden Dragon's mamasan since before White Dish bought the paper — and she stayed on when they did, because the numbers didn't care who owned them, and neither, in the end, does she."
+      "desc": "Golden Dragon's mamasan since before Pattaya Leisure bought the paper — and she stayed on when they did, because the numbers didn't care who owned them, and neither, in the end, does she."
     },
     {
       "id": "rose",

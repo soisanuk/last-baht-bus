@@ -428,19 +428,19 @@
   },
   {
    "file": "engine-core.js",
-   "line": 770,
+   "line": 794,
    "name": "HOP_CHANCE",
    "value": 10
   },
   {
    "file": "engine-core.js",
-   "line": 771,
+   "line": 795,
    "name": "HOP_SETTLE",
    "value": 4
   },
   {
    "file": "engine-core.js",
-   "line": 2688,
+   "line": 2712,
    "name": "HURT_CAP",
    "value": 3
   },
@@ -922,7 +922,7 @@
  "counts": {
   "constants": 153,
   "dialogue": 2881,
-  "edges": 2873,
+  "edges": 2878,
   "encounters": 23,
   "flags": 171,
   "items": 40,
@@ -3060,10 +3060,10 @@
    "index": 8,
    "key": "bert#8",
    "npc": "bert",
-   "topic": "white dish|wdg|the group",
+   "topic": "pattaya leisure|plg|the group",
    "topics": [
-    "white dish",
-    "wdg",
+    "pattaya leisure",
+    "plg",
     "the group"
    ]
   },
@@ -3074,10 +3074,10 @@
    "index": 9,
    "key": "bert#9",
    "npc": "bert",
-   "topic": "white dish|wdg|the group",
+   "topic": "pattaya leisure|plg|the group",
    "topics": [
-    "white dish",
-    "wdg",
+    "pattaya leisure",
+    "plg",
     "the group"
    ]
   },
@@ -3088,9 +3088,9 @@
    "index": 10,
    "key": "bert#10",
    "npc": "bert",
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -3219,7 +3219,7 @@
    "key": "bert#21",
    "npc": "bert",
    "sets": [
-    "wdgFlipTried"
+    "plgFlipTried"
    ],
    "topic": "sell",
    "topics": [
@@ -3309,17 +3309,17 @@
    "index": 30,
    "key": "bert#30",
    "notFlags": [
-    "wdgResolved"
+    "plgResolved"
    ],
    "npc": "bert",
    "req": [
-    "heardWdgHistory",
-    "heardWdgInside",
-    "heardWdgPitch",
-    "wdgFlipTried"
+    "heardPlgHistory",
+    "heardPlgInside",
+    "heardPlgPitch",
+    "plgFlipTried"
    ],
    "sets": [
-    "wdgResolved"
+    "plgResolved"
    ],
    "topic": "offer",
    "topics": [
@@ -3334,17 +3334,17 @@
    "index": 31,
    "key": "bert#31",
    "notFlags": [
-    "wdgFlipTried",
-    "wdgResolved"
+    "plgFlipTried",
+    "plgResolved"
    ],
    "npc": "bert",
    "req": [
-    "heardWdgHistory",
-    "heardWdgInside",
-    "heardWdgPitch"
+    "heardPlgHistory",
+    "heardPlgInside",
+    "heardPlgPitch"
    ],
    "sets": [
-    "wdgResolved"
+    "plgResolved"
    ],
    "topic": "offer",
    "topics": [
@@ -3359,7 +3359,7 @@
    "index": 32,
    "key": "bert#32",
    "notFlags": [
-    "wdgResolved"
+    "plgResolved"
    ],
    "npc": "bert",
    "topic": "offer",
@@ -3376,7 +3376,7 @@
    "key": "bert#33",
    "npc": "bert",
    "req": [
-    "wdgResolved"
+    "plgResolved"
    ],
    "topic": "offer",
    "topics": [
@@ -3574,9 +3574,9 @@
    "req": [
     "knowOyHasIt"
    ],
-   "topic": "ryan powers",
+   "topic": "duncan ashcroft",
    "topics": [
-    "ryan powers"
+    "duncan ashcroft"
    ]
   },
   {
@@ -3667,7 +3667,7 @@
    "npc": "bert",
    "req": [
     "expatLife",
-    "wdgResolved"
+    "plgResolved"
    ],
    "sets": [
     "barPremises"
@@ -4343,9 +4343,9 @@
    "index": 1,
    "key": "boua#1",
    "npc": "boua",
-   "topic": "wdg",
+   "topic": "plg",
    "topics": [
-    "wdg"
+    "plg"
    ]
   },
   {
@@ -6346,9 +6346,9 @@
    "index": 1,
    "key": "champa#1",
    "npc": "champa",
-   "topic": "wdg",
+   "topic": "plg",
    "topics": [
-    "wdg"
+    "plg"
    ]
   },
   {
@@ -8059,9 +8059,9 @@
    "index": 2,
    "key": "doug#2",
    "npc": "doug",
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -8072,9 +8072,10 @@
    "index": 3,
    "key": "doug#3",
    "npc": "doug",
-   "topic": "ryan",
+   "topic": "duncan|ashcroft",
    "topics": [
-    "ryan"
+    "duncan",
+    "ashcroft"
    ]
   },
   {
@@ -8084,9 +8085,10 @@
    "index": 4,
    "key": "doug#4",
    "npc": "doug",
-   "topic": "ryan",
+   "topic": "duncan|ashcroft",
    "topics": [
-    "ryan"
+    "duncan",
+    "ashcroft"
    ]
   },
   {
@@ -9457,11 +9459,11 @@
    "index": 5,
    "key": "fast_eddy#5",
    "npc": "fast_eddy",
-   "topic": "wdg|white dish|white dish group|the group",
+   "topic": "plg|pattaya leisure|pattaya leisure group|the group",
    "topics": [
-    "wdg",
-    "white dish",
-    "white dish group",
+    "plg",
+    "pattaya leisure",
+    "pattaya leisure group",
     "the group"
    ]
   },
@@ -10544,7 +10546,7 @@
    ],
    "npc": "gavin",
    "req": [
-    "wdgFlipTried"
+    "plgFlipTried"
    ],
    "sets": [
     "gavinPaid"
@@ -10582,7 +10584,7 @@
    "key": "gavin#5",
    "npc": "gavin",
    "sets": [
-    "heardWdgPitch"
+    "heardPlgPitch"
    ],
    "topic": "offer",
    "topics": [
@@ -10597,11 +10599,11 @@
    "key": "gavin#6",
    "npc": "gavin",
    "sets": [
-    "heardWdgPitch"
+    "heardPlgPitch"
    ],
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -10611,9 +10613,9 @@
    "index": 7,
    "key": "gavin#7",
    "npc": "gavin",
-   "topic": "ryan powers",
+   "topic": "duncan ashcroft",
    "topics": [
-    "ryan powers"
+    "duncan ashcroft"
    ]
   },
   {
@@ -14678,9 +14680,9 @@
    "index": 9,
    "key": "kesinee#9",
    "npc": "kesinee",
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -14691,11 +14693,11 @@
    "key": "kesinee#10",
    "npc": "kesinee",
    "sets": [
-    "heardWdgInside"
+    "heardPlgInside"
    ],
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -19426,9 +19428,9 @@
    "index": 17,
    "key": "mort#17",
    "npc": "mort",
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -19438,9 +19440,9 @@
    "index": 18,
    "key": "mort#18",
    "npc": "mort",
-   "topic": "ryan powers",
+   "topic": "duncan ashcroft",
    "topics": [
-    "ryan powers"
+    "duncan ashcroft"
    ]
   },
   {
@@ -21096,9 +21098,9 @@
    "index": 8,
    "key": "nee#8",
    "npc": "nee",
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -23082,12 +23084,12 @@
    "index": 13,
    "key": "nont#13",
    "npc": "nont",
-   "topic": "white dish|wdg|the group|white dish group|the takeover|the sale",
+   "topic": "pattaya leisure|plg|the group|pattaya leisure group|the takeover|the sale",
    "topics": [
-    "white dish",
-    "wdg",
+    "pattaya leisure",
+    "plg",
     "the group",
-    "white dish group",
+    "pattaya leisure group",
     "the takeover",
     "the sale"
    ]
@@ -23613,9 +23615,9 @@
    "index": 5,
    "key": "nuan#5",
    "npc": "nuan",
-   "topic": "wdg",
+   "topic": "plg",
    "topics": [
-    "wdg"
+    "plg"
    ]
   },
   {
@@ -25427,9 +25429,9 @@
    "index": 8,
    "key": "peung#8",
    "npc": "peung",
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -26533,9 +26535,9 @@
    "index": 1,
    "key": "powers#1",
    "npc": "powers",
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -31124,12 +31126,12 @@
    "index": 4,
    "key": "tan#4",
    "npc": "tan",
-   "topic": "white dish|wdg|the group|white dish group",
+   "topic": "pattaya leisure|plg|the group|pattaya leisure group",
    "topics": [
-    "white dish",
-    "wdg",
+    "pattaya leisure",
+    "plg",
     "the group",
-    "white dish group"
+    "pattaya leisure group"
    ]
   },
   {
@@ -31956,11 +31958,11 @@
    "key": "terry#7",
    "npc": "terry",
    "sets": [
-    "heardWdgHistory"
+    "heardPlgHistory"
    ],
-   "topic": "white dish",
+   "topic": "pattaya leisure",
    "topics": [
-    "white dish"
+    "pattaya leisure"
    ]
   },
   {
@@ -31970,9 +31972,10 @@
    "index": 8,
    "key": "terry#8",
    "npc": "terry",
-   "topic": "powers",
+   "topic": "ashcroft|duncan",
    "topics": [
-    "powers"
+    "ashcroft",
+    "duncan"
    ]
   },
   {
@@ -35869,13 +35872,13 @@
    "req": [
     "invoicesCopied"
    ],
-   "topic": "invoices|invoice|consulting|kitten corner|white dish|the invoices|paperwork",
+   "topic": "invoices|invoice|consulting|kitten corner|pattaya leisure|the invoices|paperwork",
    "topics": [
     "invoices",
     "invoice",
     "consulting",
     "kitten corner",
-    "white dish",
+    "pattaya leisure",
     "the invoices",
     "paperwork"
    ]
@@ -35887,13 +35890,13 @@
    "index": 4,
    "key": "wilawan#4",
    "npc": "wilawan",
-   "topic": "invoices|invoice|consulting|kitten corner|white dish|the invoices|paperwork",
+   "topic": "invoices|invoice|consulting|kitten corner|pattaya leisure|the invoices|paperwork",
    "topics": [
     "invoices",
     "invoice",
     "consulting",
     "kitten corner",
-    "white dish",
+    "pattaya leisure",
     "the invoices",
     "paperwork"
    ]
@@ -37042,7 +37045,7 @@
   "INTERPOLATES": 437,
   "LOCATED": 381,
   "READ_BY_DATA": 120,
-  "READ_BY_ENGINE": 311,
+  "READ_BY_ENGINE": 316,
   "REQUIRES": 165,
   "SETS": 82,
   "SET_BY_ENGINE": 139,
@@ -37194,6 +37197,18 @@
    "type": "AT"
   },
   {
+   "from": "plg_deal",
+   "kind": "npc",
+   "to": "bert",
+   "type": "AT"
+  },
+  {
+   "from": "plg_flip",
+   "kind": "npc",
+   "to": "bert",
+   "type": "AT"
+  },
+  {
    "from": "quiet_one",
    "kind": "npc",
    "to": "pete",
@@ -37257,18 +37272,6 @@
    "from": "taxi_debt",
    "kind": "npc",
    "to": "nira",
-   "type": "AT"
-  },
-  {
-   "from": "wdg_flip",
-   "kind": "npc",
-   "to": "bert",
-   "type": "AT"
-  },
-  {
-   "from": "white_dish",
-   "kind": "npc",
-   "to": "bert",
    "type": "AT"
   },
   {
@@ -37617,7 +37620,7 @@
   },
   {
    "from": "bar_premises",
-   "to": "white_dish",
+   "to": "plg_deal",
    "type": "DEPENDS"
   },
   {
@@ -37657,7 +37660,7 @@
   },
   {
    "from": "rabbit_job",
-   "to": "white_dish",
+   "to": "plg_deal",
    "type": "DEPENDS"
   },
   {
@@ -37776,6 +37779,16 @@
    "type": "DONE_BY"
   },
   {
+   "from": "plg_deal",
+   "to": "plgResolved",
+   "type": "DONE_BY"
+  },
+  {
+   "from": "plg_flip",
+   "to": "plgFlipTried",
+   "type": "DONE_BY"
+  },
+  {
    "from": "quiet_one",
    "to": "nameKept",
    "type": "DONE_BY"
@@ -37828,16 +37841,6 @@
   {
    "from": "taxi_debt",
    "to": "debtSettled",
-   "type": "DONE_BY"
-  },
-  {
-   "from": "wdg_flip",
-   "to": "wdgFlipTried",
-   "type": "DONE_BY"
-  },
-  {
-   "from": "white_dish",
-   "to": "wdgResolved",
    "type": "DONE_BY"
   },
   {
@@ -40605,22 +40608,22 @@
   },
   {
    "from": "bert#30",
-   "to": "wdgResolved",
+   "to": "plgResolved",
    "type": "FORBIDS"
   },
   {
    "from": "bert#31",
-   "to": "wdgFlipTried",
+   "to": "plgFlipTried",
    "type": "FORBIDS"
   },
   {
    "from": "bert#31",
-   "to": "wdgResolved",
+   "to": "plgResolved",
    "type": "FORBIDS"
   },
   {
    "from": "bert#32",
-   "to": "wdgResolved",
+   "to": "plgResolved",
    "type": "FORBIDS"
   },
   {
@@ -43019,6 +43022,16 @@
    "type": "GIVEN_BY"
   },
   {
+   "from": "plg_deal",
+   "to": "bert",
+   "type": "GIVEN_BY"
+  },
+  {
+   "from": "plg_flip",
+   "to": "gavin",
+   "type": "GIVEN_BY"
+  },
+  {
    "from": "quiet_one",
    "to": "pete",
    "type": "GIVEN_BY"
@@ -43071,16 +43084,6 @@
   {
    "from": "taxi_debt",
    "to": "bank",
-   "type": "GIVEN_BY"
-  },
-  {
-   "from": "wdg_flip",
-   "to": "gavin",
-   "type": "GIVEN_BY"
-  },
-  {
-   "from": "white_dish",
-   "to": "bert",
    "type": "GIVEN_BY"
   },
   {
@@ -43535,7 +43538,7 @@
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-core.js:2980",
+   "to": "engine-core.js:3004",
    "type": "INTERPOLATES"
   },
   {
@@ -43565,7 +43568,7 @@
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:2987",
+   "to": "engine-core.js:3011",
    "type": "INTERPOLATES"
   },
   {
@@ -44080,12 +44083,12 @@
   },
   {
    "from": "FULL_AT",
-   "to": "engine-core.js:988",
+   "to": "engine-core.js:1012",
    "type": "INTERPOLATES"
   },
   {
    "from": "FULL_AT",
-   "to": "engine-core.js:997",
+   "to": "engine-core.js:1021",
    "type": "INTERPOLATES"
   },
   {
@@ -44110,27 +44113,27 @@
   },
   {
    "from": "HOP_CHANCE",
-   "to": "engine-core.js:863",
+   "to": "engine-core.js:887",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_SETTLE",
-   "to": "engine-core.js:796",
+   "to": "engine-core.js:820",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_SETTLE",
-   "to": "engine-core.js:944",
+   "to": "engine-core.js:968",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:2690",
+   "to": "engine-core.js:2714",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:2691",
+   "to": "engine-core.js:2715",
    "type": "INTERPOLATES"
   },
   {
@@ -44145,7 +44148,7 @@
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-core.js:2490",
+   "to": "engine-core.js:2514",
    "type": "INTERPOLATES"
   },
   {
@@ -44200,7 +44203,7 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-core.js:2982",
+   "to": "engine-core.js:3006",
    "type": "INTERPOLATES"
   },
   {
@@ -44240,7 +44243,7 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-core.js:2457",
+   "to": "engine-core.js:2481",
    "type": "INTERPOLATES"
   },
   {
@@ -44620,7 +44623,7 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:2778",
+   "to": "engine-core.js:2802",
    "type": "INTERPOLATES"
   },
   {
@@ -45240,12 +45243,12 @@
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2118",
+   "to": "engine-core.js:2142",
    "type": "INTERPOLATES"
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2119",
+   "to": "engine-core.js:2143",
    "type": "INTERPOLATES"
   },
   {
@@ -47890,47 +47893,47 @@
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgHistory",
+   "from": "heardPlgHistory",
    "to": "world.js:12241",
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgInside",
+   "from": "heardPlgInside",
    "to": "world.js:12241",
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgInside",
+   "from": "heardPlgInside",
    "to": "world.js:5166",
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgInside",
+   "from": "heardPlgInside",
    "to": "world.js:5172",
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgInside",
+   "from": "heardPlgInside",
    "to": "world.js:5177",
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgPitch",
+   "from": "heardPlgPitch",
    "to": "world.js:12242",
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgPitch",
+   "from": "heardPlgPitch",
    "to": "world.js:7961",
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgPitch",
+   "from": "heardPlgPitch",
    "to": "world.js:7967",
    "type": "READ_BY_DATA"
   },
   {
-   "from": "heardWdgPitch",
+   "from": "heardPlgPitch",
    "to": "world.js:8339",
    "type": "READ_BY_DATA"
   },
@@ -48095,6 +48098,46 @@
    "type": "READ_BY_DATA"
   },
   {
+   "from": "plgFlipTried",
+   "to": "world.js:12205",
+   "type": "READ_BY_DATA"
+  },
+  {
+   "from": "plgFlipTried",
+   "to": "world.js:12238",
+   "type": "READ_BY_DATA"
+  },
+  {
+   "from": "plgFlipTried",
+   "to": "world.js:12242",
+   "type": "READ_BY_DATA"
+  },
+  {
+   "from": "plgFlipTried",
+   "to": "world.js:12248",
+   "type": "READ_BY_DATA"
+  },
+  {
+   "from": "plgFlipTried",
+   "to": "world.js:7962",
+   "type": "READ_BY_DATA"
+  },
+  {
+   "from": "plgResolved",
+   "to": "world.js:12205",
+   "type": "READ_BY_DATA"
+  },
+  {
+   "from": "plgResolved",
+   "to": "world.js:12242",
+   "type": "READ_BY_DATA"
+  },
+  {
+   "from": "plgResolved",
+   "to": "world.js:7962",
+   "type": "READ_BY_DATA"
+  },
+  {
    "from": "quietSideDone",
    "to": "world.js:14397",
    "type": "READ_BY_DATA"
@@ -48170,46 +48213,6 @@
    "type": "READ_BY_DATA"
   },
   {
-   "from": "wdgFlipTried",
-   "to": "world.js:12205",
-   "type": "READ_BY_DATA"
-  },
-  {
-   "from": "wdgFlipTried",
-   "to": "world.js:12238",
-   "type": "READ_BY_DATA"
-  },
-  {
-   "from": "wdgFlipTried",
-   "to": "world.js:12242",
-   "type": "READ_BY_DATA"
-  },
-  {
-   "from": "wdgFlipTried",
-   "to": "world.js:12248",
-   "type": "READ_BY_DATA"
-  },
-  {
-   "from": "wdgFlipTried",
-   "to": "world.js:7962",
-   "type": "READ_BY_DATA"
-  },
-  {
-   "from": "wdgResolved",
-   "to": "world.js:12205",
-   "type": "READ_BY_DATA"
-  },
-  {
-   "from": "wdgResolved",
-   "to": "world.js:12242",
-   "type": "READ_BY_DATA"
-  },
-  {
-   "from": "wdgResolved",
-   "to": "world.js:7962",
-   "type": "READ_BY_DATA"
-  },
-  {
    "from": "wrongShot",
    "to": "world.js:8705",
    "type": "READ_BY_DATA"
@@ -48231,42 +48234,42 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1024",
+   "to": "engine-core.js:1048",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1101",
+   "to": "engine-core.js:1125",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1195",
+   "to": "engine-core.js:1219",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2427",
+   "to": "engine-core.js:2451",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2717",
+   "to": "engine-core.js:2741",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2724",
+   "to": "engine-core.js:2748",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2800",
+   "to": "engine-core.js:2824",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2802",
+   "to": "engine-core.js:2826",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -49095,6 +49098,21 @@
    "type": "READ_BY_ENGINE"
   },
   {
+   "from": "heardPlgHistory",
+   "to": "engine-core.js:647",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "heardPlgInside",
+   "to": "engine-core.js:646",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "heardPlgPitch",
+   "to": "engine-core.js:646",
+   "type": "READ_BY_ENGINE"
+  },
+  {
    "from": "heardPriceStory",
    "to": "engine-parser.js:5445",
    "type": "READ_BY_ENGINE"
@@ -49126,7 +49144,7 @@
   },
   {
    "from": "hyperUpstairs",
-   "to": "engine-core.js:2483",
+   "to": "engine-core.js:2507",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -49361,7 +49379,7 @@
   },
   {
    "from": "orchidReported",
-   "to": "engine-core.js:2377",
+   "to": "engine-core.js:2401",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -49376,7 +49394,7 @@
   },
   {
    "from": "orchidSent",
-   "to": "engine-core.js:2377",
+   "to": "engine-core.js:2401",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -49391,7 +49409,7 @@
   },
   {
    "from": "orchidVouched",
-   "to": "engine-core.js:2377",
+   "to": "engine-core.js:2401",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -49517,6 +49535,21 @@
   {
    "from": "pinPart9",
    "to": "engine-systems.js:9115",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "plgFlipTried",
+   "to": "engine-core.js:645",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "plgResolved",
+   "to": "engine-core.js:645",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "plgResolved",
+   "to": "engine-play.js:5281",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -49651,7 +49684,7 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-core.js:1989",
+   "to": "engine-core.js:2013",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -49770,11 +49803,6 @@
    "type": "READ_BY_ENGINE"
   },
   {
-   "from": "wdgResolved",
-   "to": "engine-play.js:5281",
-   "type": "READ_BY_ENGINE"
-  },
-  {
    "from": "wrongNumberSent",
    "to": "engine-systems.js:8735",
    "type": "READ_BY_ENGINE"
@@ -49851,42 +49879,42 @@
   },
   {
    "from": "bert#30",
-   "to": "heardWdgHistory",
+   "to": "heardPlgHistory",
    "type": "REQUIRES"
   },
   {
    "from": "bert#30",
-   "to": "heardWdgInside",
+   "to": "heardPlgInside",
    "type": "REQUIRES"
   },
   {
    "from": "bert#30",
-   "to": "heardWdgPitch",
+   "to": "heardPlgPitch",
    "type": "REQUIRES"
   },
   {
    "from": "bert#30",
-   "to": "wdgFlipTried",
+   "to": "plgFlipTried",
    "type": "REQUIRES"
   },
   {
    "from": "bert#31",
-   "to": "heardWdgHistory",
+   "to": "heardPlgHistory",
    "type": "REQUIRES"
   },
   {
    "from": "bert#31",
-   "to": "heardWdgInside",
+   "to": "heardPlgInside",
    "type": "REQUIRES"
   },
   {
    "from": "bert#31",
-   "to": "heardWdgPitch",
+   "to": "heardPlgPitch",
    "type": "REQUIRES"
   },
   {
    "from": "bert#33",
-   "to": "wdgResolved",
+   "to": "plgResolved",
    "type": "REQUIRES"
   },
   {
@@ -49926,7 +49954,7 @@
   },
   {
    "from": "bert#55",
-   "to": "wdgResolved",
+   "to": "plgResolved",
    "type": "REQUIRES"
   },
   {
@@ -50206,7 +50234,7 @@
   },
   {
    "from": "gavin#1",
-   "to": "wdgFlipTried",
+   "to": "plgFlipTried",
    "type": "REQUIRES"
   },
   {
@@ -50415,6 +50443,11 @@
    "type": "REQUIRES"
   },
   {
+   "from": "plg_flip",
+   "to": "heardPlgPitch",
+   "type": "REQUIRES"
+  },
+  {
    "from": "ploy#0",
    "to": "somTamDelivered",
    "type": "REQUIRES"
@@ -50582,11 +50615,6 @@
   {
    "from": "wayne#7",
    "to": "nomineeWarned",
-   "type": "REQUIRES"
-  },
-  {
-   "from": "wdg_flip",
-   "to": "heardWdgPitch",
    "type": "REQUIRES"
   },
   {
@@ -51131,7 +51159,7 @@
   },
   {
    "from": "recceDone",
-   "to": "engine-core.js:2245",
+   "to": "engine-core.js:2269",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -51321,7 +51349,7 @@
   },
   {
    "from": "bert#21",
-   "to": "wdgFlipTried",
+   "to": "plgFlipTried",
    "type": "SETS"
   },
   {
@@ -51331,12 +51359,12 @@
   },
   {
    "from": "bert#30",
-   "to": "wdgResolved",
+   "to": "plgResolved",
    "type": "SETS"
   },
   {
    "from": "bert#31",
-   "to": "wdgResolved",
+   "to": "plgResolved",
    "type": "SETS"
   },
   {
@@ -51471,12 +51499,12 @@
   },
   {
    "from": "gavin#5",
-   "to": "heardWdgPitch",
+   "to": "heardPlgPitch",
    "type": "SETS"
   },
   {
    "from": "gavin#6",
-   "to": "heardWdgPitch",
+   "to": "heardPlgPitch",
    "type": "SETS"
   },
   {
@@ -51491,7 +51519,7 @@
   },
   {
    "from": "kesinee#10",
-   "to": "heardWdgInside",
+   "to": "heardPlgInside",
    "type": "SETS"
   },
   {
@@ -51691,7 +51719,7 @@
   },
   {
    "from": "terry#7",
-   "to": "heardWdgHistory",
+   "to": "heardPlgHistory",
    "type": "SETS"
   },
   {
@@ -52606,14 +52634,14 @@
     "world.js:8858"
    ],
    "readByEngine": [
-    "engine-core.js:1024",
-    "engine-core.js:1101",
-    "engine-core.js:1195",
-    "engine-core.js:2427",
-    "engine-core.js:2717",
-    "engine-core.js:2724",
-    "engine-core.js:2800",
-    "engine-core.js:2802",
+    "engine-core.js:1048",
+    "engine-core.js:1125",
+    "engine-core.js:1219",
+    "engine-core.js:2451",
+    "engine-core.js:2741",
+    "engine-core.js:2748",
+    "engine-core.js:2824",
+    "engine-core.js:2826",
     "engine-core.js:529",
     "engine-core.js:612",
     "engine-encounters.js:173",
@@ -53925,6 +53953,64 @@
    ]
   },
   {
+   "name": "heardPlgHistory",
+   "readByData": [
+    "world.js:12241"
+   ],
+   "readByEngine": [
+    "engine-core.js:647"
+   ],
+   "requiredBy": [
+    "bert#30",
+    "bert#31"
+   ],
+   "setByDialogue": [
+    "terry#7"
+   ]
+  },
+  {
+   "name": "heardPlgInside",
+   "readByData": [
+    "world.js:12241",
+    "world.js:5166",
+    "world.js:5172",
+    "world.js:5177"
+   ],
+   "readByEngine": [
+    "engine-core.js:646"
+   ],
+   "requiredBy": [
+    "bert#30",
+    "bert#31"
+   ],
+   "setByDialogue": [
+    "kesinee#10"
+   ]
+  },
+  {
+   "name": "heardPlgPitch",
+   "readByData": [
+    "world.js:12242",
+    "world.js:7961",
+    "world.js:7967",
+    "world.js:8339"
+   ],
+   "readByEngine": [
+    "engine-core.js:646"
+   ],
+   "reqFlagOf": [
+    "plg_flip"
+   ],
+   "requiredBy": [
+    "bert#30",
+    "bert#31"
+   ],
+   "setByDialogue": [
+    "gavin#5",
+    "gavin#6"
+   ]
+  },
+  {
    "forbiddenBy": [
     "lek#1",
     "lek#12",
@@ -53941,55 +54027,6 @@
    "setByDialogue": [
     "lek#1",
     "lek#12"
-   ]
-  },
-  {
-   "name": "heardWdgHistory",
-   "readByData": [
-    "world.js:12241"
-   ],
-   "requiredBy": [
-    "bert#30",
-    "bert#31"
-   ],
-   "setByDialogue": [
-    "terry#7"
-   ]
-  },
-  {
-   "name": "heardWdgInside",
-   "readByData": [
-    "world.js:12241",
-    "world.js:5166",
-    "world.js:5172",
-    "world.js:5177"
-   ],
-   "requiredBy": [
-    "bert#30",
-    "bert#31"
-   ],
-   "setByDialogue": [
-    "kesinee#10"
-   ]
-  },
-  {
-   "name": "heardWdgPitch",
-   "readByData": [
-    "world.js:12242",
-    "world.js:7961",
-    "world.js:7967",
-    "world.js:8339"
-   ],
-   "reqFlagOf": [
-    "wdg_flip"
-   ],
-   "requiredBy": [
-    "bert#30",
-    "bert#31"
-   ],
-   "setByDialogue": [
-    "gavin#5",
-    "gavin#6"
    ]
   },
   {
@@ -54052,7 +54089,7 @@
   {
    "name": "hyperUpstairs",
    "readByEngine": [
-    "engine-core.js:2483",
+    "engine-core.js:2507",
     "engine-systems.js:1418"
    ],
    "setByDialogue": [
@@ -54564,7 +54601,7 @@
     "world.js:9100"
    ],
    "readByEngine": [
-    "engine-core.js:2377",
+    "engine-core.js:2401",
     "engine-parser.js:739",
     "engine-play.js:2813"
    ],
@@ -54575,7 +54612,7 @@
   {
    "name": "orchidSent",
    "readByEngine": [
-    "engine-core.js:2377",
+    "engine-core.js:2401",
     "engine-parser.js:739",
     "engine-play.js:2812"
    ],
@@ -54592,7 +54629,7 @@
    ],
    "name": "orchidVouched",
    "readByEngine": [
-    "engine-core.js:2377",
+    "engine-core.js:2401",
     "engine-parser.js:739",
     "engine-play.js:2813"
    ],
@@ -54757,6 +54794,60 @@
    ]
   },
   {
+   "doneFlagOf": [
+    "plg_flip"
+   ],
+   "forbiddenBy": [
+    "bert#31"
+   ],
+   "name": "plgFlipTried",
+   "readByData": [
+    "world.js:12205",
+    "world.js:12238",
+    "world.js:12242",
+    "world.js:12248",
+    "world.js:7962"
+   ],
+   "readByEngine": [
+    "engine-core.js:645"
+   ],
+   "requiredBy": [
+    "bert#30",
+    "gavin#1"
+   ],
+   "setByDialogue": [
+    "bert#21"
+   ]
+  },
+  {
+   "doneFlagOf": [
+    "plg_deal"
+   ],
+   "forbiddenBy": [
+    "bert#30",
+    "bert#31",
+    "bert#32"
+   ],
+   "name": "plgResolved",
+   "readByData": [
+    "world.js:12205",
+    "world.js:12242",
+    "world.js:7962"
+   ],
+   "readByEngine": [
+    "engine-core.js:645",
+    "engine-play.js:5281"
+   ],
+   "requiredBy": [
+    "bert#33",
+    "bert#55"
+   ],
+   "setByDialogue": [
+    "bert#30",
+    "bert#31"
+   ]
+  },
+  {
    "name": "priewRevealed",
    "readByEngine": [
     "engine-parser.js:7260",
@@ -54892,7 +54983,7 @@
    ],
    "name": "recceDone",
    "setByEngine": [
-    "engine-core.js:2245"
+    "engine-core.js:2269"
    ]
   },
   {
@@ -55017,7 +55108,7 @@
    ],
    "name": "shamrockVisited",
    "readByEngine": [
-    "engine-core.js:1989",
+    "engine-core.js:2013",
     "engine-systems.js:7966"
    ],
    "requiredBy": [
@@ -55293,56 +55384,6 @@
    ],
    "setByDialogue": [
     "nit#5"
-   ]
-  },
-  {
-   "doneFlagOf": [
-    "wdg_flip"
-   ],
-   "forbiddenBy": [
-    "bert#31"
-   ],
-   "name": "wdgFlipTried",
-   "readByData": [
-    "world.js:12205",
-    "world.js:12238",
-    "world.js:12242",
-    "world.js:12248",
-    "world.js:7962"
-   ],
-   "requiredBy": [
-    "bert#30",
-    "gavin#1"
-   ],
-   "setByDialogue": [
-    "bert#21"
-   ]
-  },
-  {
-   "doneFlagOf": [
-    "white_dish"
-   ],
-   "forbiddenBy": [
-    "bert#30",
-    "bert#31",
-    "bert#32"
-   ],
-   "name": "wdgResolved",
-   "readByData": [
-    "world.js:12205",
-    "world.js:12242",
-    "world.js:7962"
-   ],
-   "readByEngine": [
-    "engine-play.js:5281"
-   ],
-   "requiredBy": [
-    "bert#33",
-    "bert#55"
-   ],
-   "setByDialogue": [
-    "bert#30",
-    "bert#31"
    ]
   },
   {
@@ -58181,7 +58222,7 @@
   {
    "dialogueCount": 5,
    "id": "powers",
-   "name": "Ryan Powers",
+   "name": "Duncan Ashcroft",
    "pronoun": "he",
    "room": "orchid_room"
   },
@@ -59295,7 +59336,7 @@
     "bert"
    ],
    "deps": [
-    "white_dish"
+    "plg_deal"
    ],
    "doneFlag": "barPremises",
    "giver": "bert",
@@ -59613,6 +59654,39 @@
    "trust": 2
   },
   {
+   "at": "bert",
+   "atTargets": [
+    "bert"
+   ],
+   "doneFlag": "plgResolved",
+   "giver": "bert",
+   "id": "plg_deal",
+   "name": "The Pattaya Leisure Offer",
+   "reward": {
+    "happy": 5,
+    "money": 0
+   },
+   "trust": 2
+  },
+  {
+   "at": "bert",
+   "atTargets": [
+    "bert"
+   ],
+   "doneFlag": "plgFlipTried",
+   "giver": "gavin",
+   "id": "plg_flip",
+   "name": "Gavin's Errand",
+   "noNudge": true,
+   "reqFlags": [
+    "heardPlgPitch"
+   ],
+   "reward": {
+    "happy": 0,
+    "money": 0
+   }
+  },
+  {
    "at": "pete",
    "atTargets": [
     "pete"
@@ -59688,7 +59762,7 @@
     "fast_eddy"
    ],
    "deps": [
-    "white_dish"
+    "plg_deal"
    ],
    "doneFlag": "rabbitPath",
    "giver": "fast_eddy",
@@ -59815,39 +59889,6 @@
     "happy": 5,
     "money": 0
    }
-  },
-  {
-   "at": "bert",
-   "atTargets": [
-    "bert"
-   ],
-   "doneFlag": "wdgFlipTried",
-   "giver": "gavin",
-   "id": "wdg_flip",
-   "name": "Gavin's Errand",
-   "noNudge": true,
-   "reqFlags": [
-    "heardWdgPitch"
-   ],
-   "reward": {
-    "happy": 0,
-    "money": 0
-   }
-  },
-  {
-   "at": "bert",
-   "atTargets": [
-    "bert"
-   ],
-   "doneFlag": "wdgResolved",
-   "giver": "bert",
-   "id": "white_dish",
-   "name": "The White Dish Offer",
-   "reward": {
-    "happy": 5,
-    "money": 0
-   },
-   "trust": 2
   },
   {
    "at": "barry",
@@ -61640,7 +61681,7 @@
    "id": "orchid_room",
    "invite": true,
    "name": "The Orchid Room",
-   "owner": "wdg",
+   "owner": "plg",
    "reads": [
     "table"
    ],
@@ -61760,7 +61801,7 @@
    ],
    "id": "pink_lotus",
    "name": "Pink Lotus Lounge",
-   "owner": "wdg",
+   "owner": "plg",
    "region": "Soi 6"
   },
   {

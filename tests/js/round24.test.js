@@ -38,7 +38,7 @@ beforeEach(() => sandbox());
 function atPartnerChoice() {
   sandbox();
   G.stage = "expat";
-  _setFlag("expatLife"); _setFlag("wdgResolved"); _setFlag("barPremises"); _setFlag("barLicence");
+  _setFlag("expatLife"); _setFlag("plgResolved"); _setFlag("barPremises"); _setFlag("barLicence");
   G.quests.bar_partner = "active"; G.money = 200000;
   G.room = _npcWhere("candy"); G.nightTurn = 30;
   doCommand("talk to candy");
@@ -281,7 +281,7 @@ test("PAY RENT is on three surfaces, and only when you owe", () => {
 });
 
 test("when the bar goes, the building knows", () => {
-  // Four days after White Dish took the lease, Bert was still on his stool
+  // Four days after Pattaya Leisure took the lease, Bert was still on his stool
   // telling the man who bought it and lost it that the old man would carry him.
   sandbox();
   G.stage = "expat"; _setFlag("expatLife"); _setFlag("barLost");

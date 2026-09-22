@@ -21,12 +21,12 @@ const text = () => out.map(o => o.text).join("\n");
 const run = (...cmds) => { for (const c of cmds) doCommand(c); };
 const nofoot = (fn) => { const s = _rand; _rand = () => 0.99; try { return fn(); } finally { _rand = s; } };
 
-// An expat who has done the White Dish quest — the arc's two gates.
+// An expat who has done the Pattaya Leisure quest — the arc's two gates.
 function fresh() {
   out = []; newGame();
   G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 9000;
-  _setFlag("white_dish"); G.quests.white_dish = "done";
+  _setFlag("plg_deal"); G.quests.plg_deal = "done";
   for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
   G.peddlerNight = 2;
   _npcState("fast_eddy").trust = 3;   // he sizes you up before he offers
@@ -46,17 +46,17 @@ function intoOffice() {
   run("buy drink for " + NPCS[till].name.toLowerCase(), "back", "place box");
 }
 
-test("the arc is expat-only and gated on the White Dish quest", () => {
-  // a tourist who has never heard of White Dish is not recruited
+test("the arc is expat-only and gated on the Pattaya Leisure quest", () => {
+  // a tourist who has never heard of Pattaya Leisure is not recruited
   out = []; newGame();
   G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); G.stage = "vacation"; G.money = 9000;
   _npcState("fast_eddy").trust = 3; G.room = "white_rabbit";
   assert.equal(_questAvailable("rabbit_job"), false, "no expatLife, no job");
   _setFlag("expatLife"); G.stage = "expat";
-  assert.equal(_questAvailable("rabbit_job"), false, "expat but no white_dish dep, still no job");
-  _setFlag("white_dish"); G.quests.white_dish = "done";
-  assert.equal(_questAvailable("rabbit_job"), true, "expat + white_dish done → the job is on offer");
+  assert.equal(_questAvailable("rabbit_job"), false, "expat but no plg_deal dep, still no job");
+  _setFlag("plg_deal"); G.quests.plg_deal = "done";
+  assert.equal(_questAvailable("rabbit_job"), true, "expat + plg_deal done → the job is on offer");
 });
 
 test("the interview offers, and never gates you out — declining is free and re-offerable", () => {
@@ -257,7 +257,7 @@ test("the bonus: Rabbit's old regulars — give them back, or run them at your o
   out = []; newGame();
   G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 9000;
-  _setFlag("white_dish"); G.quests.white_dish = "done";
+  _setFlag("plg_deal"); G.quests.plg_deal = "done";
   for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
   _npcState("fast_eddy").trust = 3;
   G.itemLoc.trade_book = "inventory"; G.room = "white_rabbit";
@@ -286,7 +286,7 @@ test("USE LAPTOP is refused everywhere it shouldn't work, with a voice", () => {
 
 test("running out the machine's clock locks it — not a loss of the arc, just not tonight", () => {
   recruitOperator(); toLaptop();
-  const budget = CLI_SCENARIOS.wdg_office.budget;
+  const budget = CLI_SCENARIOS.plg_office.budget;
   for (let i = 0; i < budget + 1 && G.game; i++) run("ls");
   assert.equal(G.game, null, "locked out");
   assert.ok(!_flag("rabbitData") && !_flag("rabbitBlown"), "neither done nor blown");
@@ -306,7 +306,7 @@ test("running out the machine's clock locks it — not a loss of the arc, just n
 });
 
 // ── The CCIB landing: the interruption, the radar, the lay-low ─────────────
-// docs/rabbit-arc.md — WDG was already under investigation; the heist nearly
+// docs/rabbit-arc.md — PLG was already under investigation; the heist nearly
 // blows the case, CCIB interrupts the follow-through, and the VARIABLE is who
 // they now have a file on (G.ccibRadar, the Bangkok export).
 
@@ -448,7 +448,7 @@ test("the SIM is the wire that names Nont — and ditching it clears the player,
   out = []; newGame();
   G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 9000;
-  _setFlag("white_dish"); G.quests.white_dish = "done";
+  _setFlag("plg_deal"); G.quests.plg_deal = "done";
   for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
   _npcState("fast_eddy").trust = 3;
   recruit();
@@ -486,7 +486,7 @@ test("Tan gives the read — and nobody warned the player", () => {
   assert.ok(_flag("ccibReadGiven"));
 });
 
-test("the lay-low window lifts when the WDG case is the news, and Eddy resurfaces", () => {
+test("the lay-low window lifts when the PLG case is the news, and Eddy resurfaces", () => {
   recruit(); intoOffice();
   nofoot(() => { for (let i = 0; i < BOX_TURNS + 1 && !_flag("rabbitData"); i++) run("wait"); });
   morningAfter();
@@ -537,7 +537,7 @@ test("the journal describes the way YOU took (kid and operator never see PLACE B
   out = []; newGame();
   G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); _setFlag("expatLife"); G.stage = "expat"; G.money = 9000;
-  _setFlag("white_dish"); G.quests.white_dish = "done";
+  _setFlag("plg_deal"); G.quests.plg_deal = "done";
   for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
   _npcState("fast_eddy").trust = 3;
   recruitOperator();
@@ -613,7 +613,7 @@ test("during the terminal the CHIP BAR carries every legal move — taps alone f
 
 test("the machine telegraphs its clock before it locks", () => {
   recruitOperator(); toLaptop();
-  const budget = CLI_SCENARIOS.wdg_office.budget;
+  const budget = CLI_SCENARIOS.plg_office.budget;
   for (let i = 0; i < budget - 16; i++) run("ls");
   out = []; run("ls");
   assert.match(text(), /changed the song|been in here a while/i, "a warning at 15 to go");
@@ -632,9 +632,9 @@ test("midnight in the office: OUT lets you out the back onto the soi", () => {
   assert.match(text(), /fire door|let yourself out/i);
 });
 
-test("Tan knows White Dish and knows who Rabbit is; Nont's Rabbit is history, not a ฿200 locate", () => {
+test("Tan knows Pattaya Leisure and knows who Rabbit is; Nont's Rabbit is history, not a ฿200 locate", () => {
   G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
-  out = []; run("ask tan about white dish");
+  out = []; run("ask tan about pattaya leisure");
   assert.match(text(), /pay to be allowed|tolerance/i);
   out = []; run("ask tan about rabbit");
   assert.match(text(), /Fast Eddy|Eddy/);
@@ -723,19 +723,19 @@ test("'l' inside the terminal is the terminal, not a bar game; the lost line kno
   assert.doesNotMatch(text(), /bar game/);
   assert.match(text(), /terminal/i);
   run("cd archive", "cd white_rabbit_2019", "copy regulars_2019.xls");
-  const budget = CLI_SCENARIOS.wdg_office.budget;
+  const budget = CLI_SCENARIOS.plg_office.budget;
   for (let i = 0; i < budget + 1 && G.game; i++) run("ls");
   assert.match(text(), /whatever is on the stick is on the stick/, "it does not call a loaded stick empty");
 });
 
 
-test("Bert has a White Dish answer for the man whose bar they tried to buy", () => {
+test("Bert has a Pattaya Leisure answer for the man whose bar they tried to buy", () => {
   G.room = "stinky_bar"; G.talked = {};
-  out = []; run("ask bert about white dish");
+  out = []; run("ask bert about pattaya leisure");
   assert.match(text(), /They wait|don't go away/, "post-quest: they wait");
   assert.doesNotMatch(text(), /Welcome to the Stinky/);
   _setFlag("barPaid"); G.bar.room = "stinky_bar"; G.talked = {};
-  out = []; run("ask bert about white dish");
+  out = []; run("ask bert about pattaya leisure");
   assert.match(text(), /You've got it|ends that way/, "owner: the only story on this road that ends that way");
 });
 
@@ -781,7 +781,7 @@ test("after the heist the office is packing; once you've read the invoices, she 
   assert.match(text(), /taping a box|tape/);
 });
 
-test("once the WDG case is the news, the company has ceased to be somewhere you can walk into", () => {
+test("once the PLG case is the news, the company has ceased to be somewhere you can walk into", () => {
   _setFlag("ccibCleared");
   G.room = "eastern_seaboard"; G.nightTurn = 20;
   assert.ok(!_npcActive("wilawan") && !_npcActive("tul"), "gone — the whole company");
@@ -818,9 +818,9 @@ test("Eastern Seaboard is a topic with Tan and Nont only once you've read the na
   assert.match(text(), /sells nothing, to people who buy nothing/);
 });
 
-test("Nont on White Dish: he was on the premises, fourteen, when the paper came in", () => {
+test("Nont on Pattaya Leisure: he was on the premises, fourteen, when the paper came in", () => {
   G.known.nont = true; G.room = _npcRoom("nont"); G.nightTurn = 25;
-  out = []; run("ask nont about white dish");
+  out = []; run("ask nont about pattaya leisure");
   assert.match(text(), /golf shirt came in with the lawyer|It's always paper/, "gossip plus the detail only he has");
 });
 

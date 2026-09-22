@@ -116,7 +116,7 @@ const _SOI6_BOUND = [
   "You could. You don't. For seven days Soi 6 is the entire world by your own decree — and there's plenty of world left in it.",
 ];
 // NOTTY'S PLACE (Naklua, an ordinary if exclusive gents villa) is a different
-// room from the Orchid ROOM below (White Dish's back table) — they used to share
+// room from the Orchid ROOM below (Pattaya Leisure's back table) — they used to share
 // a name, which sent players to the wrong district (round-46 sweep); the room id
 // was `orchid_club` for its whole life and two more personas conflated the two
 // on the id alone (round 47), so it is `nottys_place` now — deserializeGame
@@ -144,7 +144,7 @@ const _ORCHID_CLUB_UNKNOWN = [
 const _ORCHID_BOUNCER = [
   "A man the size of a doorway fills the doorway. He doesn't ask a question; he just looks at you until you understand the answer. \"Members,\" he says, once. You are not, yet, a member.",
   "The velvet rope stays hooked. The doorman glances at a phone, glances at you, and finds no match. \"Not tonight, boss.\" The 'boss' is doing a lot of work, and none of it is for you.",
-  "You reach for the rope and a hand the weight of a Chang crate settles on your shoulder. \"This one's White Dish's room. You White Dish?\" You are not, and he already knew it, and that was the whole conversation.",
+  "You reach for the rope and a hand the weight of a Chang crate settles on your shoulder. \"This one's Pattaya Leisure's room. You Pattaya Leisure?\" You are not, and he already knew it, and that was the whole conversation.",
   "The doorman doesn't move and doesn't blink. \"Friends of the group only.\" A beat. \"You want in, be a friend of the group. Everybody knows how that works.\" The rope does not lift.",
 ];
 const _NOT_CARRYING = [
@@ -730,10 +730,10 @@ function _arriveAt(to) {
     G.convoQ = null; G.convo = null; G.convoIdx = null;
     _say(_fmt("({who}'s question goes unanswered behind you — it will keep.)", { who: _who }), "dim");
   }
-  // The Orchid Room is White Dish's members-only back room — the velvet rope only
+  // The Orchid Room is Pattaya Leisure's members-only back room — the velvet rope only
   // lifts for a friend of the group (Gavin's "doors open for our friends"). Do the
-  // errand, earn the standing, get in. It's also the one place Ryan Powers ever is.
-  if (to === "orchid_room" && _faction("wdg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
+  // errand, earn the standing, get in. It's also the one place Duncan Ashcroft ever is.
+  if (to === "orchid_room" && _faction("plg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
   // sent by Candy, introduced to Rose, or arrived via Doyle's recon — any of the
   // three is a reason the wall has a door in it tonight
   if (to === "nottys_place" && !_flag("orchidSent") && !_flag("orchidVouched") && !_flag("orchidReported")) {
@@ -3333,7 +3333,7 @@ function _doResume() {
 // the sand on a snapped cord, so putting it on costs a trip to a 7-Eleven and
 // twenty baht. That is the whole design of the step — wearing it has to be a
 // DECISION ("this is mine now"), not a state that arrives with the pickup.
-// The operator's way in: sit at the WDG office laptop. Only on Rabbit's job, only
+// The operator's way in: sit at the PLG office laptop. Only on Rabbit's job, only
 // the keyboard way, only in the office — everywhere else it's a voiced no.
 function _doUseLaptop() {
   if (G.game) { _say("You're already at it."); return; }
@@ -3356,7 +3356,7 @@ function _doUseLaptop() {
       "thought, because they always do.", "alert");
     return;
   }
-  _startCli("wdg_office");
+  _startCli("plg_office");
 }
 
 function _doWear(arg) {
@@ -3459,7 +3459,7 @@ function _doRead(arg) {
 
 // The Orchid Room describes two untouchables at the corner tables — a patched MC
 // president and the silent Thai man everyone defers to (the real power behind
-// White Dish). They're scenery you can't approach: try, and the muscle (or a
+// Pattaya Leisure). They're scenery you can't approach: try, and the muscle (or a
 // suddenly-serious Powers) heads you off. Keeps the room's central menace intact
 // without dead-ending the player on "nobody by that name."
 const _ORCHID_DEFLECT = [
@@ -3495,7 +3495,7 @@ function _convoTopicHere(topic) {
 
 // Asking for it AGAIN — the one way back to a story you've already had. Repeats
 // are the gist by design (nobody retells unprompted), so this is how a player
-// who wants the whole thing says so: "ask terry about white dish again", "tell
+// who wants the whole thing says so: "ask terry about pattaya leisure again", "tell
 // me the whole story". Stripped off the topic here so the node lookup still
 // matches; the flag rides through to _deliver. Deliberately NOT the bare AGAIN
 // verb, which repeats your last command and must keep doing so.
@@ -4101,7 +4101,7 @@ const _CONVO_TOPIC_RULES = [
   [/\bphasa ?thai\b|\bthai language\b|\bspeak thai\b|\bmy thai\b|\bteach me\b|\blearn thai\b/, "thai"],
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
-  [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
+  [/\bpattaya leisure\b|\bwdg\b/,                                                  "duncan ashcroft"],
   [/\bvillage\b|\bhometown\b|\bsad story\b|\byour story\b/,                   "home"],
   // the after-hours question (Dex, round 38): "after", "late", "karaoke", "bike" all missed on the girl who then drove him there
   // THE BOLTED DOOR. Mama Yai points a player at Kratae for exactly this, the room
@@ -4179,8 +4179,8 @@ const _CONVO_TOPIC_RULES = [
   [/the ladies|working girls/,                                                   "girls"],
   [/love life|relationship|\bdating\b|you single|got a girl/,                    "girlfriend"],
   // The White Rabbit (Naklua) — Fast Eddy and his Lao family (docs/rabbit-arc.md)
-  // NB: not \bryan\b / \bpowers\b — doug owns the "ryan" topic and bert "ryan powers".
-  [/white dish|\bwdg\b|the rollup|soi ?6 bar/,                                   "wdg"],
+  // NB: not \bduncan\b / \bashcroft\b — doug owns the "duncan" topic and bert "duncan ashcroft".
+  [/pattaya leisure|\bwdg\b|the rollup|soi ?6 bar/,                                   "plg"],
   [/\bvegas\b|\bbitcoin\b|\bcrypto\b|the wallet|the coin|tumbl(e|ed|ing)/,       "vegas"],
   [/\bsober\b|don'?t (you )?drink|the wagon|drinking|year off|the incident/,     "sober"],
   [/the handle|your handle|nickname|real name|\bhacker\b/,                       "rabbit"],
@@ -4688,7 +4688,7 @@ function _convoResolve(lower) {
     if (words <= 2 || _partnerHasTopic(id, t) || _partnerHasTopic(id, bare)) {
       // pass the RAW words: _doTalkBody tries the literal topic first and falls
       // back to the synonym map itself. Normalising here killed every topic chip
-      // whose key is also a synonym input — Terry's "white dish" became "wdg" and
+      // whose key is also a synonym input — Terry's "pattaya leisure" became "plg" and
       // missed his own node (thumbs-only playtest 2026-08-22).
       _doTalk(_convoName(id), bare); return true;
     }
@@ -5547,7 +5547,7 @@ function _buyManDrink(id) {
   const name = NPCS[id].name;
   if (G.money < _beerPrice()) { _say(`A man drink runs ฿${_beerPrice()} and you're short. ${name} waves it off: “Next time, bud.”`); return; }
   // A MAN WHO WON'T OPEN YOU A BEER WON'T DRINK YOUR HEALTH EITHER. Bert ices a
-  // player who ran White Dish's errand — and the very same visit, BUY MAN DRINK
+  // player who ran Pattaya Leisure's errand — and the very same visit, BUY MAN DRINK
   // printed "a manager who likes you is the best friend a farang has out here",
   // +2 สนุก, one line before the freeze (round 22, Priya). Two surfaces, opposite
   // states, back to back: the state-blind-prose defect exactly. He takes the
@@ -7114,7 +7114,7 @@ function _doScore() {
   }
 }
 const _FACTION_LABELS = [
-  ["wdg", "White Dish"], ["samson", "the Samsons"], ["indie", "the independents"], ["syndicate", "the syndicate"],
+  ["plg", "Pattaya Leisure"], ["samson", "the Samsons"], ["indie", "the independents"], ["syndicate", "the syndicate"],
 ];
 
 // ── The Zork ledger ──────────────────────────────────────────────────────────
@@ -10606,7 +10606,7 @@ function doCommand(input) {
   }
 
   // A CHOICE THE GAME JUST PRINTED OUTRANKS A GLOBAL VERB. Mid-conversation the
-  // options are rendered as tappable CAPS commands — (SWEAR YOURE NO WHITE DISH
+  // options are rendered as tappable CAPS commands — (SWEAR YOURE NO PATTAYA LEISURE
   // MAN · PRESS HER FOR NAMES) — and a player who types one back got the SWEAR
   // verb (cursing at the street in a mamasan's face) or, for anything unmatched,
   // TRAVEL. The matcher was fine; it simply sat behind the verb switch and never
@@ -11149,7 +11149,7 @@ function doCommand(input) {
     case "close": case "shut": {
       // a live conversation CHOICE wins over the museum-verb refusal — Kesinee's
       // own "(TELL HER BERT SENT YOU)" chip was being answered by the TELL
-      // lecture, wedging the White Dish chain (critic playtest, 2026-08-22)
+      // lecture, wedging the Pattaya Leisure chain (critic playtest, 2026-08-22)
       const _cb = lower.replace(/[,.!?]+$/, "").trim();
       if (typeof _convoPickChoice === "function" && _convoActive() && _convoPickChoice(_cb)) break;
       _say(_MISC_VERBS[{ feel: "touch", lick: "taste", brief: "verbose", load: "restore", shut: "close" }[v] || v]);
@@ -11427,7 +11427,7 @@ function doCommand(input) {
   // something in a room — but the scoreboard, the clock, your pockets, the map
   // and the help are not things the night can charge you for.
   // NOT YOUR PHONE — Rabbit's first rule. Using your own registered number inside
-  // WDG's office while the job runs is the sloppy default the spec describes, and
+  // PLG's office while the job runs is the sloppy default the spec describes, and
   // it puts you on the file whatever wire the box used (docs/rabbit-arc.md).
   if (G.room === "kitten_office" && ((G.boxJob && !G.boxJob.done) || (G.game && G.game.type === "cli")) &&
       /^(message|msg|text|call|phone|send|photo|selfie|check)$/.test(v) && !_flag("ownPhoneUsed")) {

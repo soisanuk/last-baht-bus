@@ -120,7 +120,7 @@ test("the module reaches for no host global", () => {
   const src = readFileSync(fileURLToPath(new URL("../../web/js/cli-sim.js", import.meta.url)), "utf8");
   for (const bad of [/\bG\./, /\b_say\(/, /\bNPCS\b/, /\bROOMS\b/, /\bdocument\b/, /\bwindow\b/, /\blocalStorage\b/, /\bDate\b/, /Math\.random/])
     assert.doesNotMatch(src, bad, `portable: no ${bad}`);
-  for (const noun of [/baht/i, /สนุก/, /WDG/, /Naklua/, /Pattaya/, /Rabbit/])
+  for (const noun of [/baht/i, /สนุก/, /PLG/, /Naklua/, /Pattaya/, /Rabbit/])
     assert.doesNotMatch(src, noun, `no host noun ${noun} in the simulator`);
 });
 

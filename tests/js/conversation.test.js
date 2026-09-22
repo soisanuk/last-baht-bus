@@ -88,7 +88,7 @@ test("_convoTopic leaves already-matching phrasings alone (CONTAINS handles them
 });
 
 test("_convoTopic does not mis-map proper-noun topics", () => {
-  for (const name of ["candy", "ryan powers", "bert", "oy", "drew"]) {
+  for (const name of ["candy", "duncan ashcroft", "bert", "oy", "drew"]) {
     assert.match(_convoTopic(name), new RegExp(name.split(" ")[0]),
       `"${name}" should still route to itself, not a synonym`);
   }
@@ -322,17 +322,17 @@ test("a topic chip whose word is also a global verb still asks the person", () =
 
 // ── Bert: trust-gated quest + audit (slice follow-up) ────────────────────────
 
-test("Bert won't offer the White Dish job until he trusts you", () => {
+test("Bert won't offer the Pattaya Leisure job until he trusts you", () => {
   state().room = "stinky_bar";
-  assert.equal(_questAvailable("white_dish"), false, "a stranger doesn't get the serious ask");
+  assert.equal(_questAvailable("plg_deal"), false, "a stranger doesn't get the serious ask");
   run("bert"); // meeting grants only baseline trust (1) — still below the gate
-  assert.notEqual(state().quests.white_dish, "offered", "meeting alone isn't enough");
-  assert.equal(_questAvailable("white_dish"), false);
+  assert.notEqual(state().quests.plg_deal, "offered", "meeting alone isn't enough");
+  assert.equal(_questAvailable("plg_deal"), false);
   _npcState("bert").trust = 2; // rapport earned
-  assert.equal(_questAvailable("white_dish"), true, "now he'll bring it up");
+  assert.equal(_questAvailable("plg_deal"), true, "now he'll bring it up");
   out = [];
   run("bert");
-  assert.match(lastOut(), /White Dish/, "and talking surfaces the offer");
+  assert.match(lastOut(), /Pattaya Leisure/, "and talking surfaces the offer");
 });
 
 test("chatting Bert up builds trust toward the gate (pool talk warms him)", () => {
@@ -365,32 +365,32 @@ test("Bert guards the Candy topic until he trusts you (audit: deflect node)", ()
   assert.match(lastOut(), /his and not hers|whole of it/i, "opens up once earned");
 });
 
-test("Kesinee guards the White Dish intel until trust — no offer-then-refuse chip", () => {
+test("Kesinee guards the Pattaya Leisure intel until trust — no offer-then-refuse chip", () => {
   state().room = "kitten_corner";
-  run("kesinee"); // meet → trust 1, below her white-dish gate (2)
-  assert.ok(!_convoTopics("kesinee").includes("white dish"),
+  run("kesinee"); // meet → trust 1, below her pattaya-leisure gate (2)
+  assert.ok(!_convoTopics("kesinee").includes("pattaya leisure"),
     "at low trust she'd only brush you off — don't dangle it as a chip");
   assert.ok(!_convoTopics("kesinee").includes("police"),
     "same for the police/envelope intel (gated at trust 3)");
   _npcState("kesinee").trust = 2;
-  assert.ok(_convoTopics("kesinee").includes("white dish"),
+  assert.ok(_convoTopics("kesinee").includes("pattaya leisure"),
     "once she trusts you it's on the palette");
   // deflect only hides the chip — asking still delivers, so the quest still works
   out = [];
-  run("ask kesinee about white dish");
-  assert.ok(state().flags.heardWdgInside, "the quest flag still lands when asked");
+  run("ask kesinee about pattaya leisure");
+  assert.ok(state().flags.heardPlgInside, "the quest flag still lands when asked");
   assert.match(lastOut(), /cleaner|poorer/i);
 });
 
-test("Doug guards the raw Ryan Powers story until you've stuck around", () => {
+test("Doug guards the raw Duncan Ashcroft story until you've stuck around", () => {
   state().room = "stinky_bar";
   run("doug"); // meet → trust 1, below his gate
-  assert.ok(!_convoTopics("doug").includes("ryan"),
+  assert.ok(!_convoTopics("doug").includes("duncan"),
     "at trust<2 he'd only ask if you're a reporter — don't dangle it as a chip");
   _npcState("doug").trust = 2;
-  assert.ok(_convoTopics("doug").includes("ryan"), "once you've stuck around it surfaces");
+  assert.ok(_convoTopics("doug").includes("duncan"), "once you've stuck around it surfaces");
   out = [];
-  run("ask doug about ryan"); // deflect hides the chip, not the answer
+  run("ask doug about duncan"); // deflect hides the chip, not the answer
   assert.match(lastOut(), /ring light|coward|Lambo/i, "the raw version lands when asked");
 });
 
@@ -407,7 +407,7 @@ test("Joy: chatting builds trust, and her future cracks open once earned", () =>
   out = [];
   run("ask joy about future"); // the earned beat
   assert.match(lastOut(), /the app|up to the app/i, "once trusted, the present-tense cheer cracks");
-  assert.ok(_npcState("joy").know.wdgCost, "and she's let you see the cost from the girl's side");
+  assert.ok(_npcState("joy").know.plgCost, "and she's let you see the cost from the girl's side");
 });
 
 // ── NPCs drive the conversation: they ask, you answer, they remember ─────────
@@ -746,12 +746,12 @@ test("Mort's four-letter dare deflects in character and never spoils the puzzle"
 });
 
 test("an aliased ask to a GATED node gets 'not yet', never 'not my story'", () => {
-  // "ask bert about white dish" normalizes to his gated ryan-powers node; the
+  // "ask bert about pattaya leisure" normalizes to his gated ryan-powers node; the
   // gate probe used to test only the raw words, so his own story was disowned.
   newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
   for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
   G.room = "stinky_bar"; doCommand("talk to bert");
-  out = []; G.pendingEnc = null; doCommand("ask bert about white dish");
+  out = []; G.pendingEnc = null; doCommand("ask bert about pattaya leisure");
   assert.doesNotMatch(out.join("\n"), /above my pay grade|Not my story|No idea/i);
 });
 

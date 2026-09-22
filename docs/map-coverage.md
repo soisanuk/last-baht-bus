@@ -15,8 +15,8 @@ Five regions soak up almost every quest and nearly all the content:
 
 | Core region | authored NPCs | quests pointing there |
 |---|---|---|
-| **Soi 6** | 58 | ~9 (wdg_flip, orchid_recon, nominee_deal, old_days, easy_come, quiet_one, her_brother, wrong_shot, bar_licence) |
-| **Beach Road** | 6 (+6 patrons) | white_dish, league, bar_premises, bar_opening, shamrock (giver) |
+| **Soi 6** | 58 | ~9 (plg_flip, orchid_recon, nominee_deal, old_days, easy_come, quiet_one, her_brother, wrong_shot, bar_licence) |
+| **Beach Road** | 6 (+6 patrons) | plg_deal, league, bar_premises, bar_opening, shamrock (giver) |
 | **Thappraya** | 8 | the Glam saga (keys, quietmoney, family, scout) + hill_order |
 | **Walking Street** | 11 | taxi_debt, hill_photo, debtrun |
 | **Soi Buakhao** | 4 (+Candy) | bar_partner, recce, sangsom (giver) |

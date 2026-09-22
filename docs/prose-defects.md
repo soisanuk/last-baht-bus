@@ -143,7 +143,7 @@ makes a claim attachable at all.
 
 **A slot only works if its values are mutually exclusive AND the prose is
 reliably about the subject.** `nationality` was tried and dropped: characters
-describe each *other's* nationality constantly ("Ryan Powers. British, though
+describe each *other's* nationality constantly ("Duncan Ashcroft. British, though
 he's got a voice on now — half American"), so it fired on correct prose more
 often than wrong prose. Precision over ambition — two good slots beat five noisy
 ones, and a noisy check gets ignored, which is worse than no check.

@@ -102,7 +102,7 @@ keep the police away**.
 
 That last clause is *suay* — the levy paid to be left alone — which
 `docs/factions-thai.md` already establishes as the money on the good table at the
-Orchid. Candy's envelopes and White Dish's envelopes are the same institution at
+Orchid. Candy's envelopes and Pattaya Leisure's envelopes are the same institution at
 two different scales, and the prose should not explain it twice.
 
 **Care required:** Candy's `bars` rotation is `day % len` and Act One opens on

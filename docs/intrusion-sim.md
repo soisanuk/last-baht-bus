@@ -100,7 +100,7 @@ Mirrors `cli-sim.js` exactly — follow that file as the template.
   now. This is not a convenience: it is what makes the chip bar and autocomplete free, and
   it is what the **tap-reachability test** asserts by breadth-first search to a win. The
   iOS constraint (`docs/rabbit-arc.md`) makes it non-negotiable.
-- **No host nouns inside it.** No baht, no สนุก, no WDG, no Kesinee. Those live in the
+- **No host nouns inside it.** No baht, no สนุก, no PLG, no Kesinee. Those live in the
   scenario data and the host wiring. The module never learns what a quest is.
 - **A test that loads ONLY the module** — that is the portability assertion, and it is how
   `cli-sim.test.js` proves its own.
@@ -119,7 +119,7 @@ INTRUSION_SCENARIOS.kitten_office = {
                 lock: { kind: "padlock", minutes: 3, noise: 2 } },
     stair:    { name: "the back stair",    cover: "poor", exits: { door: 9, office: 12 } },
     office:   { name: "the office",        cover: "none", exits: { stair: 12 },
-                terminal: "wdg_office" }, // hands off to cli-sim with the current heat
+                terminal: "plg_office" }, // hands off to cli-sim with the current heat
   },
   watchers: [
     { id: "stock_count", kind: "schedule", at: [20, 40], path: ["stair", "office"] },
@@ -172,7 +172,7 @@ is exposure and which can.** The shared save is the hinge.
 ## 5. The fiction question — resolved as a consequence
 
 The Rabbit arc's current thesis is that **the climax is an interruption, not a landing**:
-WDG were already under CCIB investigation, the job *completes*, and the only real variable
+PLG were already under CCIB investigation, the job *completes*, and the only real variable
 is whose name is on the radar the morning after (`docs/rabbit-arc.md`, the CCIB section).
 That design deliberately refuses the heist-movie climax.
 

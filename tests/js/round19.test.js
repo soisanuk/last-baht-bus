@@ -207,13 +207,13 @@ test("the piwin's mercy is a way out, not a taxi service", () => {
 
 test("a choice the game just printed outranks a global verb", () => {
   // The options render as tappable CAPS commands. Typed back, "SWEAR YOURE NO
-  // WHITE DISH MAN" fired the SWEAR verb — cursing at the street in a mamasan's
+  // PATTAYA LEISURE MAN" fired the SWEAR verb — cursing at the street in a mamasan's
   // face — and anything unmatched fell through to TRAVEL. Doing something ELSE,
   // silently, is worse than not understanding.
   G.room = "kitten_corner";
   doCommand("talk to kesinee");
   out = [];
-  doCommand("swear you are no white dish man");
+  doCommand("swear you are no pattaya leisure man");
   assert.doesNotMatch(text(), /let fly at the night/, "that is the SWEAR verb, not her answer");
   assert.match(text(), /nobody's boy|Powers/i, "the printed option does what it says");
   out = [];

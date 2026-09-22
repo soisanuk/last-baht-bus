@@ -340,7 +340,7 @@ CHARS = {
     "wanida":   lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x303048), bg=BG_GOGO, mouth="neutral"),
     "nubnab":   lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0x1e2a5a), bg=BG_GOGO,
                      acc=["earrings"], mouth="neutral"),
-    # ladyboy hostesses (WDG bars): Bebe = glamour dialled up, Noon = soft, passes
+    # ladyboy hostesses (PLG bars): Bebe = glamour dialled up, Noon = soft, passes
     "bebe":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0xe01060), bg=BG_BAR,
                      acc=["earrings", "chain"], mouth="grin"),
     "poy":      lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xf0a0c0), bg=BG_BAR,
@@ -679,7 +679,7 @@ CHARS = {
     "sudjai":   lady(skin=THAI, hair="chignon", hc=GRBLK, shirt=C(0x2a1a2e), bg=BG_BAR,
                      mouth="neutral", acc=["earrings", "chain"]),
     "kae":      lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x1e2430), bg=BG_BAR, mouth="smile", acc=["earrings"]),
-    # --- the Orchid Room floor (authored; WDG's flashiest, dressier palette) ---
+    # --- the Orchid Room floor (authored; PLG's flashiest, dressier palette) ---
     "nune":     lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x1a1a24), bg=BG_BAR, mouth="neutral"),
     "pae":      lady(skin=THAI, hair="long", hc=C(0x6b3a1a), shirt=C(0x101014), bg=BG_BAR,
                      mouth="smile", acc=["earrings", "chain"], earc=C(0xffd24a)),

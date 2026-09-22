@@ -19,7 +19,7 @@
       "subject": "Candy",
       "finding": "Two Bert lines had the Stinky as a former Candy bar; three others plus Tan give it to the Ohio owner with Candy holding a quiet piece.",
       "ruled": "Mario, 2026-09-07",
-      "reason": "Resolved in prose rather than accepted: she never owned it outright, she ran it. Bert's two lines now say 'since Candy ran the place'. The Ohio owner and her silent minority stand, and the white_dish arc is unaffected."
+      "reason": "Resolved in prose rather than accepted: she never owned it outright, she ran it. Bert's two lines now say 'since Candy ran the place'. The Ohio owner and her silent minority stand, and the plg_deal arc is unaffected."
     },
     {
       "subject": "Kwan",
@@ -53,7 +53,7 @@
     },
     {
       "subject": "Gavin",
-      "finding": "wdg_flip declares reward money:0 while Gavin's line says (+฿2000).",
+      "finding": "plg_flip declares reward money:0 while Gavin's line says (+฿2000).",
       "ruled": "verified 2026-09-07",
       "reason": "Refuted: the ฿2000 is paid by the dialogue node's own fx, not by the quest reward, which is why the record reads zero. The money really moves."
     },
@@ -71,9 +71,9 @@
     },
     {
       "subject": "Wayne",
-      "finding": "Wayne's silent partner carries every one of Tan's identifying details while the narration files the arrangement under White Dish.",
+      "finding": "Wayne's silent partner carries every one of Tan's identifying details while the narration files the arrangement under Pattaya Leisure.",
       "ruled": "2026-09-07",
-      "reason": "Deliberate. The resonance is the point of the nominee arc — the reader is meant to half-recognise him — and canon puts White Dish on the paying side of Tan, which is exactly why the narrator's flat attribution is what a farang would assume and get wrong."
+      "reason": "Deliberate. The resonance is the point of the nominee arc — the reader is meant to half-recognise him — and canon puts Pattaya Leisure on the paying side of Tan, which is exactly why the narrator's flat attribution is what a farang would assume and get wrong."
     },
     {
       "subject": "The Bet on the Wall",

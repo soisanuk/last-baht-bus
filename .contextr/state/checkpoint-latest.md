@@ -44,7 +44,7 @@ cast + regenerating/committing those portraits.)
 ## In-Flight Work
 Nothing half-finished — every slice is committed, tested, and pushed (suite at 594 green).
 The overhaul's core is complete: slices 1-4 + scope/pronoun + audits (Angela, Bert, the
-WDG-quest NPCs Terry/Kesinee/Gavin, the Soi 6 roster) + NPC-driven Q&A + more asks +
+PLG-quest NPCs Terry/Kesinee/Gavin, the Soi 6 roster) + NPC-driven Q&A + more asks +
 callbacks. Natural next steps (not started): **reputation system** (needs a design
 decision from the user), richer/cross-NPC lie-catching, wiring `asks`/arcs onto more
 named NPCs, or wiring `%key%` callbacks onto more NPCs. Also unmerged-cleanup: local
@@ -64,13 +64,13 @@ named NPCs, or wiring `%key%` callbacks onto more NPCs. Also unmerged-cleanup: l
   (verbal, trust-based) + `_TALK_ACT_TEXT` pools + `_socialLedger` (per-day anti-farm).
 - `web/js/world.js` — NPC/patron dialogue. Arcs/asks on: angela (patron, queen_vic —
   home ask + `%home%` callback greeting), bert (stinky_bar — quest gated on trust>=2,
-  candy arc, `why` ask), kesinee (kitten_corner — white dish/police deflects),
+  candy arc, `why` ask), kesinee (kitten_corner — pattaya leisure/police deflects),
   doug/phil (stinky regulars; doug `invested` ask + `ryan` deflect), joy (pink_lotus —
   earned `future` beat + `dream` ask), and `_buildHostess` factory (shallow ask for all
   filler girls).
 - `tests/js/conversation.test.js` — 40 tests covering the whole layer (loads full engine
   via vm, drives `doCommand`). `tests/js/engine.test.js` — geo-suppression test bumps
-  Bert trust because white_dish now needs trust>=2.
+  Bert trust because plg_deal now needs trust>=2.
 
 ## Open Questions / Blockers
 - **Reputation design** — user: "probably will drive your reputation rating at some point
@@ -95,7 +95,7 @@ None (no sticky items exist).
 - 148da0a — more asks (nosy hostesses, probing expats) + callbacks that quote you back
 - 76719c3 — NPCs drive conversation: they ask, you answer, they remember
 - 8b5d930 — Soi 6 roster audit; fix Doug's leak; Joy's earned beat
-- 7c0cd43 — audit WDG-quest NPCs (Terry/Kesinee/Gavin)
+- 7c0cd43 — audit PLG-quest NPCs (Terry/Kesinee/Gavin)
 - 84f28db — Bert wired into trust; quest gated; audit Bert+Angela
 - 7abefcf — chips: no person/gossip topics; fix Angela's Drew geography
 - dddfc59 — Angela: gated-refusal topics off chips; Navy off the surface

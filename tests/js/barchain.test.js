@@ -1,9 +1,9 @@
 // The bar-owning chain: premises → licence → partner → opening night.
 //
 // The bar is THE STINKY PINKY, and that's the design. You already spent
-// `white_dish` talking Bert out of selling it to Ryan Powers; the ailing
+// `plg_deal` talking Bert out of selling it to Duncan Ashcroft; the ailing
 // American owner is still ailing, and holding isn't a plan. So the arc pays off
-// — the only buyer who isn't WDG is you, and Gavin loses a bar to a regular.
+// — the only buyer who isn't PLG is you, and Gavin loses a bar to a regular.
 //
 // The third step is a FORK, and it's the interesting one. Fifty-one percent has
 // to be a person. Candy's yes is slow, written, and costs a Bangkok lawyer.
@@ -53,8 +53,8 @@ const say = cmd => { out = []; doCommand(cmd); return out.join("\n"); };
 // command that arms it. So drain the gates immediately before anything we're
 // about to assert on. Found by a 1-in-20 flake, not by reasoning.
 const cmd = c => { G.pendingEnc = null; G.pendingChoice = null; G.game = null; return say(c); };
-// you saved the bar from White Dish — the precondition for being offered it
-const savedTheBar = () => { G.quests.white_dish = "done"; _setFlag("wdgResolved"); };
+// you saved the bar from Pattaya Leisure — the precondition for being offered it
+const savedTheBar = () => { G.quests.plg_deal = "done"; _setFlag("plgResolved"); };
 // walk the chain up to (not including) the partner fork
 function upToTheFork() {
   savedTheBar();
@@ -78,9 +78,9 @@ test("the chain is expat-only — a seven-day vacation doesn't buy a bar", () =>
   assert.equal(_questAvailable("bar_premises"), true, "the chain opens once you stay");
 });
 
-test("you're only offered the bar because you saved it from White Dish", () => {
+test("you're only offered the bar because you saved it from Pattaya Leisure", () => {
   assert.equal(_questAvailable("bar_premises"), false,
-    "without white_dish resolved, there's no reason Bert brings this to you");
+    "without plg_deal resolved, there's no reason Bert brings this to you");
   savedTheBar();
   assert.equal(_questAvailable("bar_premises"), true);
 });
@@ -135,7 +135,7 @@ test("the two routes leave you standing in different places", () => {
   const tanF = { ...G.faction };
 
   // Candy is the public, legible route: a hard shove away from the rollup.
-  assert.ok(candyF.wdg < tanF.wdg, "Candy's route costs you more with White Dish");
+  assert.ok(candyF.plg < tanF.plg, "Candy's route costs you more with Pattaya Leisure");
   // Tan's is quiet, and puts you inside somebody's web of favours.
   assert.ok((tanF.syndicate || 0) > (candyF.syndicate || 0),
     "the Tan route should register as an obligation the Candy route doesn't");
@@ -184,7 +184,7 @@ test("the givers hold their answers back until the step before is done", () => {
 });
 
 test("the dead Shamrock is a sequel hook, not part of this chain", () => {
-  // It's out on the Darkside, where neither WDG nor the Samsons have a reason to
+  // It's out on the Darkside, where neither PLG nor the Samsons have a reason to
   // care — a different set of powers, and a later arc. Daeng only raises it once
   // you already run a bar.
   savedTheBar();
@@ -296,7 +296,7 @@ test("saying no is free — the cost is a sentence, not a penalty", () => {
   assert.ok(_flag("tanFavourRefused"));
   assert.equal(G.faction.syndicate || 0, 0,
     "faction doctrine: standing moves on the deed, declining costs nothing");
-  assert.equal(G.faction.wdg || 0, 0, "…and triggers no reprisal anywhere else");
+  assert.equal(G.faction.plg || 0, 0, "…and triggers no reprisal anywhere else");
   // the sting is that he could have written the name himself and came and asked
   assert.match(no, /fifty-one percent|It is your bar/i);
 });
@@ -369,7 +369,7 @@ test("staying out is allowed, costs no standing, and blocks nothing", () => {
   const no = say("no");
   assert.equal(G.faction.syndicate || 0, 0,
     "declining is not a deed against anybody — no standing moves");
-  assert.equal(G.faction.wdg || 0, 0, "and nothing is done to you anywhere else");
+  assert.equal(G.faction.plg || 0, 0, "and nothing is done to you anywhere else");
   assert.ok(G.syn.friction >= 1, "what you lose is the frictionlessness");
   // the work still happens — neutrality is priced, never blocked
   assert.match(no, /you find somebody|hire two women|there are many people/i);

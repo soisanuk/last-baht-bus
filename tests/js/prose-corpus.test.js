@@ -66,9 +66,9 @@ test("a settled finding is printed at the head of its subject's dossier, so a re
 });
 
 test("--quests is the third pivot: a quest's prose AND its wiring in one place", () => {
-  const o = run("--quests", "white_dish");
+  const o = run("--quests", "plg_deal");
   assert.match(o, /giver: bert/);
-  assert.match(o, /doneFlag: wdgResolved — set by npc\.bert\.dialogue\[\d+\]/, "who actually sets the flag");
+  assert.match(o, /doneFlag: plgResolved — set by npc\.bert\.dialogue\[\d+\]/, "who actually sets the flag");
   assert.match(o, /at: bert/);
   assert.match(o, /reward:/);
   // the wiring is the point: a quest whose flag nothing sets is unfinishable, and

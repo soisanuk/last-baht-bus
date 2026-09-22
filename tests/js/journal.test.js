@@ -52,7 +52,7 @@ test("a fresh sandbox's frontier is exits only, and names nothing the transcript
 
 test("after a conversation the frontier has provenance, and still never spoils", () => {
   fresh(); G.room = "stinky_bar"; G.visited.stinky_bar = true;
-  doCommand("talk to bert"); doCommand("ask bert about white dish");
+  doCommand("talk to bert"); doCommand("ask bert about pattaya leisure");
   const fr = _frontier(8);
   const person = fr.find(f => f.kind === "person");
   assert.ok(person, "a name that printed and a face never met");
@@ -76,7 +76,7 @@ test("JOURNAL is three-surfaced and HINT falls through to the frontier", () => {
   assert.ok(_COMPLETE_VERBS.includes("journal"));
   assert.match(_helpFirstPage(), /JOURNAL/);
   assert.match(_HELP, /JOURNAL/);
-  fresh(); G.room = "stinky_bar"; doCommand("talk to bert"); doCommand("ask bert about white dish");
+  fresh(); G.room = "stinky_bar"; doCommand("talk to bert"); doCommand("ask bert about pattaya leisure");
   for (const q of Object.keys(QUESTS)) G.quests[q] = "done";   // nothing on the books
   out = []; doCommand("hint");
   assert.match(text(), /mentioned|never took|never found|never asked/, "the frontier is the hint when the books are empty");
@@ -94,7 +94,7 @@ test("a venue whose name printed before you found it is a frontier edge", () => 
 });
 
 test("Tan's stuck nudge texts the frontier, not a shrug", () => {
-  fresh(); G.room = "stinky_bar"; G.visited.stinky_bar = true; doCommand("talk to bert"); doCommand("ask bert about white dish");
+  fresh(); G.room = "stinky_bar"; G.visited.stinky_bar = true; doCommand("talk to bert"); doCommand("ask bert about pattaya leisure");
   G.phone.contacts.tan = true; G.phone.battery = 80; G.stuck = { noname: 0, parse: 0, terse: false }; G.stuckDay = 0;
   out = []; _tanUnstick();
   const msg = (G.phone.inbox || []).slice(-1)[0];
@@ -107,7 +107,7 @@ test("Tan's stuck nudge texts the frontier, not a shrug", () => {
 
 test("an unmet person's note carries provenance and never a location; Tan and Act One are excluded", () => {
   fresh(); G.room = "stinky_bar"; G.visited.stinky_bar = true;
-  doCommand("talk to bert"); doCommand("ask bert about white dish");
+  doCommand("talk to bert"); doCommand("ask bert about pattaya leisure");
   const people = _frontier(10).filter(f => f.kind === "person");
   assert.ok(people.length);
   for (const p of people) {
@@ -134,7 +134,7 @@ test("a venue whose door you stood at is found; a way refused tonight is not off
   G.exitTried["rainbow_girls:office"] = G.day;
   assert.ok(!_frontier(10).find(f => f.kind === "exit" && /OFFICE/.test(f.cmd || "")), "not offered again tonight" + (before ? "" : " (no office way listed at all)"));
   // Tan asked → the person note retires
-  G.room = "stinky_bar"; G.visited.stinky_bar = true; doCommand("talk to bert"); doCommand("ask bert about white dish");
+  G.room = "stinky_bar"; G.visited.stinky_bar = true; doCommand("talk to bert"); doCommand("ask bert about pattaya leisure");
   const id = _frontier(10).filter(f => f.kind === "person").length ? Object.keys(G.known).find(k => !_met(k) && NPCS[k] && !NPCS[k].filler && k !== "tan" && !NPCS[k].offmap) : null;
   if (id) { G.tanAsked[id] = G.day; assert.ok(!_frontier(10).some(f => f.kind === "person" && f.text.includes(NPCS[id].name)), "retired"); }
 });

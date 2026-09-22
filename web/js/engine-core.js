@@ -301,7 +301,7 @@ function newGame() {
     cliLockedDay: 0,     // the day the office laptop locked you out — not tonight means not tonight
     cliSat: 0,           // sittings at that laptop (the second gets a shorter paragraph)
     rabbitDataDay: 0,    // the day the data landed — the CCIB visit is the morning AFTER
-    rabbitWay: null,     // which way into the WDG office you took: "mule" | "operator" (see _rabbitJobYes/_rabbitJobKeyboard)
+    rabbitWay: null,     // which way into the PLG office you took: "mule" | "operator" (see _rabbitJobYes/_rabbitJobKeyboard)
     ccibRadar: null,     // who CCIB has a file on after the heist: {player,eddy,nont} — set at the morning scene, rides the export (docs/bangkok-concept.md)
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
     motoAsked: 0,        // the turn the piwin last asked "where to?" — a bare place typed next answers him
@@ -314,7 +314,7 @@ function newGame() {
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
-    faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
+    faction: { plg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
     dropped: {},         // keepsafe item ids the player DROPPED (vs spawned) — QUESTS surfaces these
@@ -623,6 +623,30 @@ function deserializeGame(s) {
   // the Naklua villa's room id was `orchid_club` until 2026-09-15 (renamed: it is
   // not the Orchid Room, and the id kept saying it was)
   if (G.room === "orchid_club") G.room = "nottys_place";
+  // THE PATTAYA LEISURE RENAME (2026-09-23). The group and its owner were renamed
+  // out of an identifiability risk — the old fictional names were derivations of a
+  // real Pattaya business and a real person, which is what defamation turns on here,
+  // not whether the real name was used (docs/guardrails.md). The DISPLAY names are
+  // prose, but the faction key, two quest ids and five flags ride the save, so a
+  // player mid-arc would silently lose their standing and their progress. Runs AFTER
+  // the merge, on G, so it is order-proof: a fresh skeleton has none of the old keys.
+  {
+    const f = G.faction;
+    // the faction skeleton already carries plg: 0, so an `=== undefined` guard
+    // would never fire here — the old key existing is the whole condition
+    if (isObj(f) && f.wdg !== undefined) { if (!f.plg) f.plg = f.wdg; delete f.wdg; }
+    const q = G.quests;
+    if (isObj(q)) {
+      if (q.white_dish !== undefined && q.plg_deal === undefined) { q.plg_deal = q.white_dish; delete q.white_dish; }
+      if (q.wdg_flip !== undefined && q.plg_flip === undefined) { q.plg_flip = q.wdg_flip; delete q.wdg_flip; }
+    }
+    const fl = G.flags;
+    if (isObj(fl)) for (const [was, now] of [
+      ["wdgResolved", "plgResolved"], ["wdgFlipTried", "plgFlipTried"],
+      ["heardWdgPitch", "heardPlgPitch"], ["heardWdgInside", "heardPlgInside"],
+      ["heardWdgHistory", "heardPlgHistory"],
+    ]) if (fl[was] !== undefined && fl[now] === undefined) { fl[now] = fl[was]; delete fl[was]; }
+  }
   if (G.visited && G.visited.orchid_club) { G.visited.nottys_place = true; delete G.visited.orchid_club; }
   if (!ROOMS[G.room]) G.room = "jomtien_beach";
   G.visited[G.room] = true;  // wherever the save stands, you've at least been HERE
@@ -1509,18 +1533,18 @@ function _convoTopics(id, opts) {
   return out;
 }
 
-// Faction standing with the powers of the night — WDG (Ryan Powers' Soi 6 rollup),
+// Faction standing with the powers of the night — PLG (Duncan Ashcroft' Soi 6 rollup),
 // samson (the brothers' Jomtien/Pratumnak takeover), indie (Bert & the holdouts),
 // syndicate (Tan's network — NOT muscle and not a jao pho: phu kwang khwang,
 // dealing in favours rather than cash. The envelopes on the good table are what
-// WDG pays to be tolerated, because a foreigner can't be owed a favour — see
+// PLG pays to be tolerated, because a foreigner can't be owed a favour — see
 // docs/factions-thai.md). Standing only moves
 // when the player ACTS on a faction (takes a job to its end, throws real weight
 // behind it) — never for declining or ignoring. Staying out of the politics
 // costs nothing, forever. Dialogue reads it via `when`; nodes move it via `_align`.
 function _faction(name) { return (G.faction && G.faction[name]) || 0; }
 function _align(name, delta) {
-  if (!G.faction) G.faction = { wdg: 0, samson: 0, indie: 0, syndicate: 0 };
+  if (!G.faction) G.faction = { plg: 0, samson: 0, indie: 0, syndicate: 0 };
   G.faction[name] = Math.max(-5, Math.min(5, (G.faction[name] || 0) + delta));
 }
 

@@ -28,7 +28,7 @@ also the theme, without announcing itself as a management game.
 - **The resource is trust, not money.** You cannot be behind two rails, so the
   question stops being *where do I stand tonight* and becomes *who stands there
   when I don't* — and what they take while they're there.
-- **Everyone has partners.** Standing with the syndicate, WDG, the Samsons and
+- **Everyone has partners.** Standing with the syndicate, PLG, the Samsons and
   the Darkside family is the strategic layer. Neutrality stays available and
   stays expensive, exactly as in LBB.
 - **The prose is still the soul.** A week comes back as three paragraphs. If
@@ -57,7 +57,7 @@ Three ways to drop in, and they are not the same game:
   drop-ins is deferred; rolled-fresh is the cheap first version.
 
 **Who you play at the macro level is also open.** An individual owner is the
-default, but a WDG-shaped rollup is a legitimate and very different game: more
+default, but a PLG-shaped rollup is a legitimate and very different game: more
 capital, more political exposure, the tribute at the good table, and the
 structural fragility already noted in `docs/factions-thai.md` — a cash-hungry
 acquirer whose position rests on continuing to pay.
@@ -99,7 +99,7 @@ exist. That is now part of the s0 go/no-go.
 4. **Second Road must stand alone.** Playable cold by someone who has never
    touched LBB, or it's DLC with extra steps and it dies of the coupling.
 5. **No real families, names, or allegations.** Structural pattern only, same
-   rule as White Dish.
+   rule as Pattaya Leisure.
 
 ## The go/no-go, before any mechanics
 
@@ -121,7 +121,7 @@ This is the first task and it costs a day. Nothing else starts until it's done.
 | **s2** | One bar, one season, no UI beyond text. The loop proven headless. **DONE 2026-08-08** — the Stinky, 52 weeks, 20 tests; generated weeks read | s1 |
 | **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. **DONE 2026-08-08** — 176 venues plotted, roster with real faces, 21 tests | s2 |
 | **s4** | Second bar, delegation, the trust mechanic. The actual game. **DONE 2026-08-08** — allocation across venues, managers, the ambiguous float; 30 tests | s3 |
-| **s5** | Factions as strategy: the Darkside family, WDG's fragility. **DONE 2026-08-08** | s4 |
+| **s5** | Factions as strategy: the Darkside family, PLG's fragility. **DONE 2026-08-08** | s4 |
 
 s2 before s3 is deliberate: prove the loop in text where it's cheap to change,
 and only then spend on pixels. The same discipline that kept LBB's engine
@@ -333,7 +333,7 @@ as prose.
 east, solid with Tan and nothing with the family — town costs ฿21,000, the
 Darkside ฿29,400. Reversing the standings reverses the numbers.
 
-**WDG's fragility is built** (2026-08-08), which completes s5. They decline
+**PLG's fragility is built** (2026-08-08), which completes s5. They decline
 structurally over about two years — flush → tight → stretched → going — and past
 that line it is **one-way**, because the tolerance they were renting has already
 been withdrawn and a strong December doesn't buy it back. You never see their

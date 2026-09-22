@@ -3046,8 +3046,8 @@ function _doPatron() {
       "ends with the phrase “and THAT is why I can't go back to Bristol.” " +
       "Solid company, this man.",
       "The regular leans in, quieter: “You drink on Soi 6, you're drinking with " +
-      "the White Dish Group, whoever's name is over the door. Front company. " +
-      "Fella called Ryan Powers behind it — Brit, never here, always here. Bars " +
+      "the Pattaya Leisure Group, whoever's name is over the door. Front company. " +
+      "Fella called Duncan Ashcroft behind it — Brit, never here, always here. Bars " +
       "run fine. Just don't go asking who owns what.”",
     ];
     // the white-knight gag only makes sense where there's a hostess to moon over
@@ -5274,11 +5274,11 @@ function _goExpat() {
 
 
 // A manager who is currently giving you the cold shoulder. Today that is Bert,
-// frozen while your White Dish standing is above zero and you have not yet put
+// frozen while your Pattaya Leisure standing is above zero and you have not yet put
 // it right by him — the same test his greeting node makes, in one place, so a
 // second surface cannot drift out of agreement with the first (round 22).
 function _mgrIced(id) {
-  return id === "bert" && _faction("wdg") > 0 && !_flag("wdgResolved");
+  return id === "bert" && _faction("plg") > 0 && !_flag("plgResolved");
 }
 
 // ─ The operator's terminal (cli-sim.js) ─

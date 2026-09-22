@@ -172,7 +172,7 @@ function oracleFor(room, who, hour, day) {
 const replyLines = reply => String(reply).split("\n")
   .map(l => l.trim()).filter(l => l && !/^[·•\s]*You asked /.test(l));
 // A miss if the reply ADDS NOTHING the nonsense probe didn't also produce. Not
-// `some`: a character with a standing chip line stapled under every reply (Ryan
+// `some`: a character with a standing chip line stapled under every reply (Duncan
 // Powers) shares that line with his own oracle, so `some` calls his real answer
 // a brush-off. `every` asks the right question — did anything new get said —
 // and it only works because the topic echo is stripped first.

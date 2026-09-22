@@ -251,7 +251,7 @@ test("the links the game already made in one direction now come back", () => {
 
 test("Wayne and Gavin can see each other across one rail", () => {
   // The most obviously missing edge in the cast: Wayne is buying a bar, Gavin
-  // buys bars up this soi for White Dish, and they drink in the same room.
+  // buys bars up this soi for Pattaya Leisure, and they drink in the same room.
   assert.equal(NPCS.wayne.room, NPCS.gavin.room, "premise: the same rail");
   sandbox();
   G.room = NPCS.wayne.room; G.nightTurn = 30;

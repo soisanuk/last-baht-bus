@@ -129,7 +129,7 @@ game shouldn't be built.
 
 The second bar should be the dead Shamrock, which Daeng already hooks behind
 `barOpen` and which is currently a promise with nothing behind it. Out there the
-pressure comes from a *jao pho* family rather than WDG (see
+pressure comes from a *jao pho* family rather than PLG (see
 `docs/factions-thai.md`), and that faction doesn't exist yet either.
 
 So the macro game, the second bar, and the Darkside faction are **one piece of

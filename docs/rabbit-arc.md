@@ -4,14 +4,14 @@ Design spec. Written 2026-08-13. **Nothing here is built yet** except where note
 Tier 0 (the bar and the man) follows this document. Update the decision log at the
 bottom as pieces land.
 
-This arc rubs against three things already in the game — the White Dish antagonist
+This arc rubs against three things already in the game — the Pattaya Leisure antagonist
 canon, the faction/`suay` doctrine (`docs/factions-thai.md`), and the hidden CTF
 (`docs/ctf.md`) — so read those first. The whole point of the arc is that it sits
 *on top of* existing canon rather than inventing a parallel one.
 
 ## The one-line thesis
 
-A washed-up farang hacker wants revenge on White Dish and is sure the jugular is
+A washed-up farang hacker wants revenge on Pattaya Leisure and is sure the jugular is
 the crypto they launder through. He is wrong in the exact way he has always been
 wrong, and the arc is about the player learning — faster than he ever will — that
 the thing you can hack was never the thing that matters.
@@ -27,13 +27,13 @@ which you learn sideways, the way you learn everything true about him.
 black hat when he was young. Ten years ago he lifted a bitcoin wallet off an
 unlocked laptop in a Las Vegas coffee shop, tumbled the coins, cashed out,
 abandoned the job and the family, and bought a bar on Soi 6. Most of the illicit
-money went into that bar; it was eventually sold to White Dish at a knock-down
-price, renamed and refitted. Bad blood with Ryan Powers over the sale left him
-*persona non grata* on the whole soi — even the non-WDG places refuse him service,
+money went into that bar; it was eventually sold to Pattaya Leisure at a knock-down
+price, renamed and refitted. Bad blood with Duncan Ashcroft over the sale left him
+*persona non grata* on the whole soi — even the non-PLG places refuse him service,
 because he brings trouble. He took what was left and opened the **White Rabbit** in
 Naklua, the only district he could both afford and get his paperwork cleared in
 (hinted: an illegal nominee company, since he has no Thai wife or partner). He is
-down on his luck again and wants WDG to burn.
+down on his luck again and wants PLG to burn.
 
 **What he IS, thematically — the anti-Tan and the living Shamrock.** The faction
 doctrine says a bar with no Thai partner has no cushion, which is *why the Shamrock
@@ -104,14 +104,14 @@ zeroes (a man who saw a film once), beer a note too cheap, and a tip jar fuller 
 the room can explain — the last being the only visible trace of the European trade
 that keeps the lights on (below).
 
-## The ensemble — a bar of WDG's castoffs
+## The ensemble — a bar of PLG's castoffs
 
-**The keystone: everyone at the White Rabbit ran afoul of White Dish.** Rabbit lost
+**The keystone: everyone at the White Rabbit ran afoul of Pattaya Leisure.** Rabbit lost
 his Soi 6 bar to them; Nuan and both hostesses are former Soi 6 girls the rollup spat
 out. The White Rabbit is not just Eddy's sad bar — it is **where the machine's
-rejects washed up**, out in Naklua where WDG doesn't bother to look. That thread ties
+rejects washed up**, out in Naklua where PLG doesn't bother to look. That thread ties
 the whole staff into one unit, hands the revenge arc a ready-made crew with real
-grievances and real intel, and is exactly why CCIB/WDG attention would land hard on
+grievances and real intel, and is exactly why CCIB/PLG attention would land hard on
 this particular bar later. It also reframes the bar: a refuge, not a joke.
 
 **The second keystone: the staff are one Laotian family.** Nuan, Ampha, Pooky and
@@ -137,7 +137,7 @@ Tier 3 black-market thread is *Rabbit's contacts*). The day that trade is worth 
 than the hassle of him, the call gets made. Until the wake-up incident a year ago he
 thought he was the big man in charge. Now he knows exactly whose bar it is, and can
 do nothing about it — which is half of why he wants out from under and dreams of the
-WDG score.
+PLG score.
 
 ### Nuan — mamasan, and the real power in the room
 
@@ -180,9 +180,9 @@ doesn't sit right, and leave the reveal for later.
 
 ### Pooky & Jinny — the hostesses who carry the thread
 
-Older former Soi 6 girls who ran afoul of WDG — the human face of the keystone. Their
+Older former Soi 6 girls who ran afoul of PLG — the human face of the keystone. Their
 grievances are the emotional fuel of the revenge arc and, later, a source of intel on
-how WDG actually runs. Written with the prose-voice rule ([[lbb-prose-voice-girls]]):
+how PLG actually runs. Written with the prose-voice rule ([[lbb-prose-voice-girls]]):
 women with real histories and real anger, not victims-as-scenery. Aged past the green
 Soi 6 tier by design.
 
@@ -196,7 +196,7 @@ player walks into the middle of it — a lone farang, like Rabbit, being read by
 whole clan.
 
 **Tier 0 vs. later.** Tier 0 *establishes the five characters* — surface, the
-WDG-castoff thread present in the prose, the threats and the romance seeded as
+PLG-castoff thread present in the prose, the threats and the romance seeded as
 characterisation. **Deferred, and spec'd as future work:** Nuan's leverage and the
 pay-rise drain as a *playable* pressure; the romance vector's mechanic; the Ampha
 reveal; the European-trade / black-market thread (Tier 3). Prose-promise discipline
@@ -246,7 +246,7 @@ interview is a `pendingChoice` modal that *offers*, and both branches reach the 
 
 ### Mule path (default, always available)
 
-You carry Rabbit's black box into WDG's back office, place it, and **babysit** it —
+You carry Rabbit's black box into PLG's back office, place it, and **babysit** it —
 stay in the room, keep it from being clocked. Rabbit is the brains, remote; you are
 the hands and the nerve. **Reuses existing machinery:** the go-go flashlight's
 *"the house assumes a camera"* suspicion escalation (`_gogoLightWarn`) is the exact
@@ -297,7 +297,7 @@ argument, which is the point.** Three beats, in order:
    the no-signpost test applies exactly as it does to the lake errand — the beat must
    be worth having if the follow-on is never built.
 3. **The kid lands on CCIB's radar, and it's the one outcome nobody in the arc can
-   allow.** (Revised 2026-09-06: CCIB were already inside WDG's case — see *CCIB* below —
+   allow.** (Revised 2026-09-06: CCIB were already inside PLG's case — see *CCIB* below —
    so nothing "lands" on Nont as heat; what happens is that a competent institution now
    has his name, which for the follow-on game is the point.) The three adults in his
    life collide over what to do about that:
@@ -318,7 +318,7 @@ argument, which is the point.** Three beats, in order:
    - **Duangjai never learns which.** The tiffin errand reads differently afterward,
      and nothing in her dialogue changes — the player carries that one alone.
 
-**Costs, per doctrine.** Aiding Rabbit already lowers `wdg` standing; bringing the kid
+**Costs, per doctrine.** Aiding Rabbit already lowers `plg` standing; bringing the kid
 in is a deed with a second bill — if Tan has to clean up, `syndicate` standing moves
 too (he did it; it cost him; you were the reason). Refusing THE KID at the interview
 costs nothing, ever. The mule and operator paths are untouched by this section.
@@ -480,7 +480,7 @@ wants the mechanics portable, the CLI simulator especially. **So it is built to 
   `input(line) → { output, done, won }`. The host game wires it to its own I/O and
   its own win-condition. LBB's engine is one such host; the cyberpunk game would be
   another, importing the same file unchanged.
-- **No LBB nouns inside it.** Baht, สนุก, WDG, Naklua all live in the *scenario data
+- **No LBB nouns inside it.** Baht, สนุก, PLG, Naklua all live in the *scenario data
   and the host wiring*, never in the simulator. The engine reads `won` and pays the
   quest; the simulator never knows what a quest is.
 
@@ -512,14 +512,14 @@ The contract, the prior art, the scenario schema and the build order live in
 
 ### The inversion — the crypto was never the jugular
 
-Both paths converge: Rabbit gets his data. Then the arc turns. **WDG's real
+Both paths converge: Rabbit gets his data. Then the arc turns. **PLG's real
 fragility is not its money — it is that it survives only by paying *suay* to Tan's
 syndicate, and tolerance can simply be withdrawn** (`docs/factions-thai.md`, "What is
 actually in the envelope"). The crypto is real and it is laundered, but touching it
 changes nothing structural. The gut-punch is the same one `orchid_recon` already
 delivers: you thought you were scouting the seat of power; you were watching rent
 get collected. Rabbit, a hacker to the marrow, is *constitutionally incapable* of
-seeing this — he thinks in exploits, and the lever that would actually move WDG is
+seeing this — he thinks in exploits, and the lever that would actually move PLG is
 not an exploit. The player who has run the town's procurement gauntlet knows better.
 
 ### CCIB — the fourth verse of Eddy's own song
@@ -541,11 +541,11 @@ is safe to name precisely because there is no allegation attached. No named offi
 no real cases — the institution and its reputation, nothing more. (Same spirit as
 using the *category* of the syndicate without naming a real family.)
 
-**WDG WAS ALREADY UNDER INVESTIGATION** (Mario, 2026-09-06 — this replaces the
+**PLG WAS ALREADY UNDER INVESTIGATION** (Mario, 2026-09-06 — this replaces the
 "who takes the heat" fork below). CCIB had the group's crypto laundering open for
 months before the player ever sat down at the White Rabbit. Rabbit does not know.
 Nobody on the soi knows, because that is what competent and unhurried looks like from
-the outside: nothing. So the heist is not the thing that brings CCIB to WDG. **The
+the outside: nothing. So the heist is not the thing that brings CCIB to PLG. **The
 heist is the thing that nearly blows the case CCIB already had** — two amateurs and a
 black box stumbling around inside a monitored machine — and CCIB's move is to
 *interrupt it*, quietly, so their own work isn't wrecked by the help. That is the
@@ -563,7 +563,7 @@ last night came to costing them the case. The data is theirs now; it always was.
 does not threaten anybody. He does not have to. He does, once, say the thing Mario
 gave him: that a mutual friend had mentioned the group might have a problem soon, and
 that a problem is only useful if nobody else is standing in it. **Then he leaves, and
-the case against WDG proceeds without you, exactly as it would have.**
+the case against PLG proceeds without you, exactly as it would have.**
 
 **Why the player lays low — three voices, one of them right (agreed 2026-09-06).**
 Nobody tells the player to lay low in so many words, because the two people who could
@@ -586,7 +586,7 @@ are the two who mustn't.
   one more time.
 - **Tan gives the read — and Tan is the mutual friend.** CANON: the syndicate has a
   working relationship with CCIB, favours both ways, exactly as `docs/factions-thai.md`
-  says influence works; withdrawing tolerance of WDG was never going to be a threat, it
+  says influence works; withdrawing tolerance of PLG was never going to be a threat, it
   was a coffee with someone who was already looking. Tan says so afterward, in his usual
   register, no favour with a number on it: *"For some weeks, my friend, be boring. It is
   not about you. They have a case to finish and you are a footnote they would prefer
@@ -596,10 +596,10 @@ are the two who mustn't.
 
 So the lay-low period is **Tan's read**, triggered by an officer who never warned, with
 Eddy's advice as the wrong-reason counterpoint. It ends the way Tan says it will: the
-WDG case breaks in the Owl, the footnote is left out, and the flag stays. Being off the
+PLG case breaks in the Owl, the footnote is left out, and the flag stays. Being off the
 news is not the same as being off the radar.
 
-**The variable is the RADAR, not the heat.** The heat lands on WDG regardless — they
+**The variable is the RADAR, not the heat.** The heat lands on PLG regardless — they
 are the real outsiders, the ones paying *suay* to be tolerated, and the case is
 already made. What the player's choices decide is **who CCIB now has a file on**, and
 that is the Bangkok seed (`docs/bangkok-concept.md`): a name on a competent
@@ -616,9 +616,9 @@ deportation, no cell, no ban — that would be a scandal and this town does not 
 scandals. You **lay low**: a `ccibRadar.player` flag, a period (weeks) in which a
 second plainclothes visit is possible, WORK at your own bar prints the awareness of
 being watched, Tan's read on it, and the Owl running a lead about the group's
-troubles with nobody's name in it. It lifts when the WDG investigation becomes the
+troubles with nobody's name in it. It lifts when the PLG investigation becomes the
 news — the focus was always elsewhere; you were only ever adjacent. Standing moves as
-before: aiding Rabbit against WDG still lowers `wdg`; nothing moves for a choice not
+before: aiding Rabbit against PLG still lowers `plg`; nothing moves for a choice not
 taken.
 
 **Portability note.** `G.ccibRadar = { player, eddy, nont }` is exactly the kind of
@@ -631,9 +631,9 @@ being the one person in the story who *wasn't in the way*.
 
 ### The betrayal fork (v1, tentative)
 
-"Curry favour with WDG" is a real branch: steer the heat toward Rabbit's operation
-and WDG is grateful (heat off them, a rival's scheme disrupted). You gain `wdg`
-faction standing — which opens the Orchid Room (`_faction("wdg")` gates
+"Curry favour with PLG" is a real branch: steer the heat toward Rabbit's operation
+and PLG is grateful (heat off them, a rival's scheme disrupted). You gain `plg`
+faction standing — which opens the Orchid Room (`_faction("plg")` gates
 `orchid_room`) — and lose Rabbit as an ally, but he walks, because he always does.
 **Marked v1-tentative:** in scope for the first build unless the shape argues
 otherwise once the straight arc exists. Revisit before committing.
@@ -641,8 +641,8 @@ otherwise once the straight arc exists. Revisit before committing.
 ### Faction consequences
 
 Helping Eddy is a *deed*, so per doctrine it moves standing (declining never does —
-`_align` is only called on an act). Aiding Rabbit against WDG plausibly *lowers*
-`wdg` standing (and may nudge `indie`); the betrayal path *raises* `wdg`. This is a
+`_align` is only called on an act). Aiding Rabbit against PLG plausibly *lowers*
+`plg` standing (and may nudge `indie`); the betrayal path *raises* `plg`. This is a
 felt consequence — Orchid Room access swings on it — and it is the correct use of the
 existing scalar. Keep it deed-gated; never move standing for a choice not taken.
 
@@ -653,8 +653,8 @@ existing scalar. Keep it deed-gated; never move standing for a choice not taken.
   navigation puzzle over a *fictional* filesystem; it must not read as a real
   exploitation how-to. "Unlocked machine, copied file" is the whole method, and that
   is a *deflation* of hacking mystique, not an instruction manual.
-- **White Dish stays fictional** — Ryan Powers / WDG only, never the real names the
-  faction is drawn from ([[lbb-white-dish-canon]]).
+- **Pattaya Leisure stays fictional** — Duncan Ashcroft / PLG only, never the real names the
+  faction is drawn from ([[lbb-pattaya-leisure-canon]]).
 - **PG-13 and morally grey, like the rest of the game.** A crypto heist against a
   fictional criminal rollup is fine as fiction; keep the tone the game's own.
 
@@ -758,27 +758,27 @@ argument for the firewall this arc already has.
 | 2026-09-04 | **The kid path**: Nont (built as the priced fixer) is the interview's third answer — the player who isn't technical and knows a kid who is. Rabbit can't ask; Nont names a price he doesn't want paid; the operator path runs offscreen through him; a fourth CCIB landing (on the kid) collides Rabbit's guilt, Tan's favour called in early, and the player's cash. Deed-gated costs; no Bangkok signposting. Rides with the heist build. |
 | 2026-08-13 | CLI simulator is a portable, data-driven, pure module (`games.js` doctrine) — built for reuse in a future cyberpunk game, no LBB nouns inside. |
 | 2026-08-13 | The inversion: crypto was never the jugular, the *suay* is; Rabbit can't see it. Canon-correct per factions doc. |
-| 2026-08-13 | CCIB named and never portrayed badly ("quietly, unhurriedly competent"); involved no matter what; the variable is who takes the heat — Rabbit (slips it, never jailed), you (sloppy play), or WDG (the elegant win). |
+| 2026-08-13 | CCIB named and never portrayed badly ("quietly, unhurriedly competent"); involved no matter what; the variable is who takes the heat — Rabbit (slips it, never jailed), you (sloppy play), or PLG (the elegant win). |
 | 2026-08-13 | Firewall: Rabbit fronts the CTF but the CTF never depends on Rabbit and no quest gates on the cipher. |
-| 2026-08-13 | The White Rabbit staff are an AUTHORED ensemble, not filler, unified by one keystone: everyone here is a WDG castoff (Rabbit lost his bar to them; Nuan + hostesses are ex-Soi-6). The bar is a refuge and the revenge crew. |
+| 2026-08-13 | The White Rabbit staff are an AUTHORED ensemble, not filler, unified by one keystone: everyone here is a PLG castoff (Rabbit lost his bar to them; Nuan + hostesses are ex-Soi-6). The bar is a refuge and the revenge crew. |
 | 2026-08-13 | Ownership trap: Rabbit doesn't control his own bar — the nominee structure means mamasan Nuan (Lao, 42, ex-Soi-6, first hire he trusted) is one call from removing him, is giving herself pay rises, and he survives only by the European trade he brings. Ampha the "innocent" cashier is the likely Thai nominee name (a threat in cover). Pay-rise drain + leverage = future quest. |
 | 2026-08-13 | Nuan takes a romantic liking to the PLAYER — a novel vector (she's management, not a barfinable hostess, so bond/barfine machinery doesn't apply). Tier 0 = characterisation only; the mechanic needs its own design pass. |
 | 2026-09-05 | **The dog is cover AND description**: if `G.dog` is owned, one property cutting both ways — a man walking a dog at 3am is invisible to the street and trivial to describe to an officer (the SIM is the paper trail, the dog is the witness trail). Rabbit names the second half out loud; a dog gets through his armour, which is free Tier-0 characterisation. The going-to-ground cost needs no invention: the Shamrock dog has already been left behind by a farang who had to go. He is never killed, lost or taken, and is never required by any path. |
 | 2026-09-04 | **The SIM is the wire**: Nont's Buriram SIM is a mule SIM (ซิมม้า); "not your phone" is Rabbit's first rule on every path; the wire you used decides where CCIB's thread leads (you / Rabbit / Buriram → the table → the kid); a farang caught still HOLDING a Thai's registered SIM is the heaviest "you take it" landing, so ditching it is a voiced choice the game makes tempting to skip. Never required; buying it stays innocent; no new system. |
-| 2026-09-05 | **Phase 1 built** (interview + mule path). Office = `kitten_office` behind Kitten Corner's till (WDG by Kesinee's own line; not the flagship or the ops bar). Expat-only, deps `white_dish`. Interview is a `pendingChoice="rabbitjob"` modal (CARRY IT / NOT ME / ASK), NOT ME free and re-offerable. Mule path: buy the till girl a drink to open the corridor (`_boxGirlPaid` via `_tillKeeper`), PLACE the box, WAIT `BOX_TURNS` clean ticks; a noisy command on a footstep turn spends heat (`_gogoLightWarn` shape), 3 strikes = Kesinee finds you = `rabbitBlown` + `_kickOut`; leaving mid-run refused, TAKE aborts clean. Two quests `rabbit_job`/`rabbit_heist`, doneFlags `rabbitPath`/`rabbitData`. Operator path, kid path, SIM/dog beats and the CCIB landings are the next phases. |
-| 2026-09-05 | **Landing decided** (Mario): CCIB's heat lands mostly on WDG no matter what — the real outsiders — and may even acknowledge the player's contribution as the excuse it needed to build the WDG case "for a mutual friend". The player is not scot-free but keeps visa/liberty: lay low until focus is elsewhere (the WDG investigation). The SIM DECIDES the landing (not a computed score). Betrayal fork IN for v1. Operator path yields a recoverable, player-useful thing (TBD in the operator build). |
-| 2026-09-05 | **Phase 2 built — the operator path, on a PORTABLE module.** `web/js/cli-sim.js` loads after `games.js` and follows its doctrine exactly: pure, no G/DOM/clock, injected rnd, plain-data state (lives in `G.game.cli`, so a save resumes the puzzle), data-driven (`CLI_SCENARIOS.wdg_office` in world.js holds every host noun), and **enumerable moves** — `cliOptions()` lists every legal command, a password only becoming a chip once READ. `tests/js/cli-sim.test.js` loads ONLY the module (the portability assertion) and proves tap-reachability by breadth-first search over the options to the win; it also greps the source for host nouns and globals. Host wiring: KEYBOARD at the interview → `G.rabbitWay="operator"` + Rabbit's stick (no item) → same corridor gate → USE/SIT AT LAPTOP → `G.game.type="cli"` through the real game router (`_gameInput/_gameBoard/_gameVerbs/_renderGame`, QUIT = EXIT, no stake). Won → `rabbitData`; budget lock → retry another night, no flag; EXIT keeps what was copied. **The reward decided (Mario: "something recoverable, interesting, useful"): Rabbit's old regulars** — `regulars_2019.xls` in the office archive, WDG lifted it with his bar and never used it. Copy it and it is an item (`trade_book`) with a fork: GIVE it to Eddy (trust +2, +2 สนุก, his best line) or READ it at your own bar (`barBook` → takings × `BOOK_TAKINGS` 1.06 — the European trade he survives on, now yours; he hears, and says so, and doesn't ask). Not the crypto, so the inversion stands. |
-| 2026-09-06 | **WDG was already under CCIB investigation** for crypto laundering before the arc begins. The heist doesn't bring CCIB — it nearly BLOWS their case, and CCIB interrupts it: the job completes (both built paths stand) but the follow-through is taken from Rabbit by a plainclothes visit the morning after, coffee not warrant, "a mutual friend mentioned the group might have a problem soon". The heat lands on WDG regardless. **The variable is the RADAR** — `G.ccibRadar = {player, eddy, nont}` — Eddy always; the player if operator / own phone / holding a Thai SIM; Nont if his SIM or the kid. No visa/deportation/jail: the player lays low for weeks (a second visit possible, WORK notes it, Tan reads it) until the WDG case is the news. The four-way "who takes the heat" fork is retired. The radar flags are the Bangkok seed and should ride the export. |
-| 2026-09-06 | **Tan is the mutual friend** (canon): the syndicate and CCIB have a working relationship, favours both ways; WDG's tolerance was withdrawn as a coffee with someone already looking. The lay-low is Tan's read, not a CCIB warning (they inform, never warn) and not Eddy's advice (he goes to ground for the wrong reason — he thinks it's about him). |
-| 2026-09-06 | **CCIB heat: CLOSED** — neither scripted-landing nor computed; the landing is fixed (WDG) and the radar is set by three legible facts (path, wire, SIM held). |
+| 2026-09-05 | **Phase 1 built** (interview + mule path). Office = `kitten_office` behind Kitten Corner's till (PLG by Kesinee's own line; not the flagship or the ops bar). Expat-only, deps `plg_deal`. Interview is a `pendingChoice="rabbitjob"` modal (CARRY IT / NOT ME / ASK), NOT ME free and re-offerable. Mule path: buy the till girl a drink to open the corridor (`_boxGirlPaid` via `_tillKeeper`), PLACE the box, WAIT `BOX_TURNS` clean ticks; a noisy command on a footstep turn spends heat (`_gogoLightWarn` shape), 3 strikes = Kesinee finds you = `rabbitBlown` + `_kickOut`; leaving mid-run refused, TAKE aborts clean. Two quests `rabbit_job`/`rabbit_heist`, doneFlags `rabbitPath`/`rabbitData`. Operator path, kid path, SIM/dog beats and the CCIB landings are the next phases. |
+| 2026-09-05 | **Landing decided** (Mario): CCIB's heat lands mostly on PLG no matter what — the real outsiders — and may even acknowledge the player's contribution as the excuse it needed to build the PLG case "for a mutual friend". The player is not scot-free but keeps visa/liberty: lay low until focus is elsewhere (the PLG investigation). The SIM DECIDES the landing (not a computed score). Betrayal fork IN for v1. Operator path yields a recoverable, player-useful thing (TBD in the operator build). |
+| 2026-09-05 | **Phase 2 built — the operator path, on a PORTABLE module.** `web/js/cli-sim.js` loads after `games.js` and follows its doctrine exactly: pure, no G/DOM/clock, injected rnd, plain-data state (lives in `G.game.cli`, so a save resumes the puzzle), data-driven (`CLI_SCENARIOS.plg_office` in world.js holds every host noun), and **enumerable moves** — `cliOptions()` lists every legal command, a password only becoming a chip once READ. `tests/js/cli-sim.test.js` loads ONLY the module (the portability assertion) and proves tap-reachability by breadth-first search over the options to the win; it also greps the source for host nouns and globals. Host wiring: KEYBOARD at the interview → `G.rabbitWay="operator"` + Rabbit's stick (no item) → same corridor gate → USE/SIT AT LAPTOP → `G.game.type="cli"` through the real game router (`_gameInput/_gameBoard/_gameVerbs/_renderGame`, QUIT = EXIT, no stake). Won → `rabbitData`; budget lock → retry another night, no flag; EXIT keeps what was copied. **The reward decided (Mario: "something recoverable, interesting, useful"): Rabbit's old regulars** — `regulars_2019.xls` in the office archive, PLG lifted it with his bar and never used it. Copy it and it is an item (`trade_book`) with a fork: GIVE it to Eddy (trust +2, +2 สนุก, his best line) or READ it at your own bar (`barBook` → takings × `BOOK_TAKINGS` 1.06 — the European trade he survives on, now yours; he hears, and says so, and doesn't ask). Not the crypto, so the inversion stands. |
+| 2026-09-06 | **PLG was already under CCIB investigation** for crypto laundering before the arc begins. The heist doesn't bring CCIB — it nearly BLOWS their case, and CCIB interrupts it: the job completes (both built paths stand) but the follow-through is taken from Rabbit by a plainclothes visit the morning after, coffee not warrant, "a mutual friend mentioned the group might have a problem soon". The heat lands on PLG regardless. **The variable is the RADAR** — `G.ccibRadar = {player, eddy, nont}` — Eddy always; the player if operator / own phone / holding a Thai SIM; Nont if his SIM or the kid. No visa/deportation/jail: the player lays low for weeks (a second visit possible, WORK notes it, Tan reads it) until the PLG case is the news. The four-way "who takes the heat" fork is retired. The radar flags are the Bangkok seed and should ride the export. |
+| 2026-09-06 | **Tan is the mutual friend** (canon): the syndicate and CCIB have a working relationship, favours both ways; PLG's tolerance was withdrawn as a coffee with someone already looking. The lay-low is Tan's read, not a CCIB warning (they inform, never warn) and not Eddy's advice (he goes to ground for the wrong reason — he thinks it's about him). |
+| 2026-09-06 | **CCIB heat: CLOSED** — neither scripted-landing nor computed; the landing is fixed (PLG) and the radar is set by three legible facts (path, wire, SIM held). |
 
-| 2026-09-06 | **Phase 3 built — the CCIB landing.** Arrival at the White Rabbit with `rabbitData` set (morning after) fires `_ccibVisit`: the plainclothes coffee, path/SIM-aware, no threat. `_ccibSet` writes `G.ccibRadar = {player, eddy, nont}` from three facts — Eddy always; player if operator OR own-phone wire (`!simUsed && !burnerUsed`) OR holding the SIM; Nont if `simUsed` or `kidPath`. `_ccibWire` marks the wire (`simUsed`) when the box is PLACED or the laptop opened. `BREAK SIM`/`THROW SIM` (`_doBreakSim`) clears the player off the file but not Nont (the road was paved) — the one deliberate act, made tempting to skip. Tan's read (two dialogue nodes, `ccibReadGiven`) is the "why am I laying low" voice; the officer informs and never warns (a test asserts no threat words); Eddy goes to ground for the wrong reason (`soc.hostOut`). `_ccibLowTick` runs the `CCIB_LOW_DAYS` (21) window — a rare second look, the WORK-shift awareness (`_ccibWorkLine`), and the lift when the WDG case is the news (`ccibCleared`, Eddy resurfaces). The radar rides the export for Bangkok. Guarded by 8 tests in rabbit.test.js across every wire. |
+| 2026-09-06 | **Phase 3 built — the CCIB landing.** Arrival at the White Rabbit with `rabbitData` set (morning after) fires `_ccibVisit`: the plainclothes coffee, path/SIM-aware, no threat. `_ccibSet` writes `G.ccibRadar = {player, eddy, nont}` from three facts — Eddy always; player if operator OR own-phone wire (`!simUsed && !burnerUsed`) OR holding the SIM; Nont if `simUsed` or `kidPath`. `_ccibWire` marks the wire (`simUsed`) when the box is PLACED or the laptop opened. `BREAK SIM`/`THROW SIM` (`_doBreakSim`) clears the player off the file but not Nont (the road was paved) — the one deliberate act, made tempting to skip. Tan's read (two dialogue nodes, `ccibReadGiven`) is the "why am I laying low" voice; the officer informs and never warns (a test asserts no threat words); Eddy goes to ground for the wrong reason (`soc.hostOut`). `_ccibLowTick` runs the `CCIB_LOW_DAYS` (21) window — a rare second look, the WORK-shift awareness (`_ccibWorkLine`), and the lift when the PLG case is the news (`ccibCleared`, Eddy resurfaces). The radar rides the export for Bangkok. Guarded by 8 tests in rabbit.test.js across every wire. |
 | 2026-09-06 | **Phase 4 built — the kid path, the wires, the dog.** THE KID at the interview (only once you've met Nont) → `_rabbitJobKid` (Rabbit goes still; you carry it) → Nont's `job` node arms `pendingChoice="kidprice"` (PAY ฿`KID_PRICE` 15,000 / NO / ASK — he'd rather you didn't) → PAY: the run is offscreen, his text lands next day (`_kidTick`) and sets `rabbitData`; NO is free and UNWINDS the fork (rabbitPath cleared, rabbit_job re-active, interview node forgotten) so the other two ways re-offer minus the kid. At the landing the officer names "a young man from the lake"; `ccibRadar.nont` is set; Tan's kid-path read arms `pendingChoice="kidfavour"` (YES → `tanKidFavour`, syndicate +1, you owe him for a boy; NO → free) and the cash door is `PAY NONT <KID_CLEAR 20,000>` at his table (`kidCleared`) — both set `kidHandled`, neither erases the file. Eddy's guilt line (`kid` topic) is said aloud only then; Duangjai's dialogue never changes. **The wires**: Rabbit hands a `burner` item when you've no Thai SIM ("not your phone"); `_ccibWire` reads SIM > burner > own at PLACE/USE LAPTOP; **the burner mule is the one clean player** (radar `{F,T,F}`, and the officer says there's nothing to write down); using your own phone in the office mid-job (`ownPhoneUsed`, MESSAGE/CALL/SEND/PHOTO/CHECK) puts you on the file whatever the box used. **The dog**: Rabbit says "he's also a description" at every path; a clean mule with a dog is on the file by the noodle woman's memory of a clipped ear. |
-| 2026-09-06 | **Round 45 — the arc's first blind play** (Ray/mule, Pri/operator, Declan/kid; seeded threshold saves through the real continue prompt). Verified and fixed: QUIET is a verb (it wasn't, and STAY QUIET sat the dog and charged a noise); the terminal's chip bar showed only QUIT (the BFS proved the module, not the surface — `_chipSet` now lists `_gameVerbs()` for `cli`); the visit fired the same night (`_ccibDue` needs `day > rabbitDataDay`, any hour, and a sitter gets it on the tick); Eddy's ground was a nightly soc flag (now `eddyBackDay`); the quest desc was mule-only on every path (`descBy[G.rabbitWay]`); the stick was a flag (now `data_stick` + READ STICK + GIVE); `payouts.csv` — the envelope ledger — was 'not worth the space' (now a bonus the officer knows about); the CLI's clock locked unwarned at 40 (60, telegraphed at 15/5); `cd ..` at top / `ls -la` / the prompt path; the noodle woman didn't exist (the till girl does); the burner couldn't be lost; Eddy had nothing on the policeman, the file, Kitten Corner after the job, or Nont before the coffee; Tan had no White Dish node and couldn't resolve 'rabbit'; Nont sold you the SIM you were holding and charged ฿200 to locate the man he has a history with; the footsteps got a door; walking out clean got a beat; midnight in the office got a fire door. LEFT as design: leaving the dog somewhere before the job (STAY is flavour — Ray/Bill), the betrayal fork. |
-| 2026-09-06 | **Round 45b — Pri's second visit, as a returning tester with her own nine claims.** Seven held, two partly. Fixed: the lockout was a screensaver (`use laptop` re-entered the same night — `G.cliLockedDay`, refused till tomorrow; a second sitting gets a shorter paragraph); ASK EDDY ABOUT THE FILE gave the box's answer on every path (split: per-path `file` nodes); READ BOOK promised 'BOOKS will show it' and it didn't (a BOOKS line); the lost line called a loaded stick empty; the officer said 'keep your copy' of a copy given to Eddy; the office had street weather and the street dog (`indoors: true`, honoured by `_sheltered`/`_sayDrizzle`/the nudge); `l` in the terminal printed 'a bar game is still in progress'; hard-coded 'last night'/'into the morning'/Tan's cup/the burner's drains; READ STICK's stale hint. The ledger got the minimum honest verb — `BURN LEDGER` — plus Eddy's and Tan's nodes on it (Tan: 'a receipt for tolerance… do not sell it'); a bigger use is a design call. Also: Eddy on Tan, Nuan on her vanished boss, CALL EDDY while away, Bert greets his own owner as 'Guv', the office chip offers the laptop, the visit's pointer names where Tan is. Left: Bert has no White Dish node at all (his cold-open fires) — content; the ledger's larger use. |
+| 2026-09-06 | **Round 45 — the arc's first blind play** (Ray/mule, Pri/operator, Declan/kid; seeded threshold saves through the real continue prompt). Verified and fixed: QUIET is a verb (it wasn't, and STAY QUIET sat the dog and charged a noise); the terminal's chip bar showed only QUIT (the BFS proved the module, not the surface — `_chipSet` now lists `_gameVerbs()` for `cli`); the visit fired the same night (`_ccibDue` needs `day > rabbitDataDay`, any hour, and a sitter gets it on the tick); Eddy's ground was a nightly soc flag (now `eddyBackDay`); the quest desc was mule-only on every path (`descBy[G.rabbitWay]`); the stick was a flag (now `data_stick` + READ STICK + GIVE); `payouts.csv` — the envelope ledger — was 'not worth the space' (now a bonus the officer knows about); the CLI's clock locked unwarned at 40 (60, telegraphed at 15/5); `cd ..` at top / `ls -la` / the prompt path; the noodle woman didn't exist (the till girl does); the burner couldn't be lost; Eddy had nothing on the policeman, the file, Kitten Corner after the job, or Nont before the coffee; Tan had no Pattaya Leisure node and couldn't resolve 'rabbit'; Nont sold you the SIM you were holding and charged ฿200 to locate the man he has a history with; the footsteps got a door; walking out clean got a beat; midnight in the office got a fire door. LEFT as design: leaving the dog somewhere before the job (STAY is flavour — Ray/Bill), the betrayal fork. |
+| 2026-09-06 | **Round 45b — Pri's second visit, as a returning tester with her own nine claims.** Seven held, two partly. Fixed: the lockout was a screensaver (`use laptop` re-entered the same night — `G.cliLockedDay`, refused till tomorrow; a second sitting gets a shorter paragraph); ASK EDDY ABOUT THE FILE gave the box's answer on every path (split: per-path `file` nodes); READ BOOK promised 'BOOKS will show it' and it didn't (a BOOKS line); the lost line called a loaded stick empty; the officer said 'keep your copy' of a copy given to Eddy; the office had street weather and the street dog (`indoors: true`, honoured by `_sheltered`/`_sayDrizzle`/the nudge); `l` in the terminal printed 'a bar game is still in progress'; hard-coded 'last night'/'into the morning'/Tan's cup/the burner's drains; READ STICK's stale hint. The ledger got the minimum honest verb — `BURN LEDGER` — plus Eddy's and Tan's nodes on it (Tan: 'a receipt for tolerance… do not sell it'); a bigger use is a design call. Also: Eddy on Tan, Nuan on her vanished boss, CALL EDDY while away, Bert greets his own owner as 'Guv', the office chip offers the laptop, the visit's pointer names where Tan is. Left: Bert has no Pattaya Leisure node at all (his cold-open fires) — content; the ledger's larger use. |
 | 2026-09-06 | **The ledger replaced** (Mario: 'too dangerous to be sitting in a file'). No bribe ledger; the vault holds the BORING evidence that would actually exist — `takings_2023.xlsx` (declared sales a twelve-stool bar could not pour) and `invoices/` (a monthly ฿90,000 'facilities & consulting' invoice from *Eastern Seaboard Trading & Facilities Co., Ltd.* — the import/export idea folded in as the invoicing shell's name, no system). Flag `invoicesCopied`; the officer's line is 'you read the invoices — most people would not know what they were looking at'; Eddy paid the same company ('a subscription, not a bribe'); Tan: 'how a favour is written down when the man cannot be owed one'. BURN PAPERWORK stays the disposal. The larger-use fork (Tan/Eddy/Nont) was built, questioned, and rolled back the same day — see docs/factions-thai.md 'Fronts'. |
 | 2026-09-06 | **Eastern Seaboard has a door.** `eastern_seaboard`, an office up a half-flight in the law-firm shophouse row on the Thappraya hill road (306 Thappraya, surveyed — the unit with the shutter half down), listed under the hill road's venues and reachable by OFFICE/ENTER. Two authored professionals, no roles: Khun Wilawan (office manager, signs things and reads them first) and Tul (evening clerk, bank runs, 'does not ask what is in the envelopes'). Before the heist: honest confusion — 'are you looking for the massage?' — and a receptionist's blank on Kitten Corner. After it (`rabbitData`): present all night, packing, 'there was never anything here'; once you have READ the invoices her `invoices` node has nothing of the receptionist left. After the news (`ccibCleared`): both gone via a new data-driven `hidden(G)` on the NPC, the brass plate down to four screw holes, FOR RENT in the window. Office hours by the same hook (gone at ten before the heist). A hook for later quests and the Bangkok link; no scene lives here yet. |
-| hook | **What happened to Eastern Seaboard** (Mario, 2026-09-06): a follow-on quest, after the WDG story breaks and blows over — the player asks Nont to find out where the company went (the empty office, the four screw holes, the two directors who are names). Nont is the right giver: he filed their invoices at fourteen, and finding out is his trade. Not designed yet; the office, the staff's disappearance and the Bangkok link are the pieces. |
+| hook | **What happened to Eastern Seaboard** (Mario, 2026-09-06): a follow-on quest, after the PLG story breaks and blows over — the player asks Nont to find out where the company went (the empty office, the four screw holes, the two directors who are names). Nont is the right giver: he filed their invoices at fourteen, and finding out is his trade. Not designed yet; the office, the staff's disappearance and the Bangkok link are the pieces. |
 | 2026-09-06 | **Dougie (round 46, lens lay-low-loud) played the teeth**: every loud act registered, the landing and Tan's cold read paid off, the dog line was his best of the run. Fixed from his report: Eddy's trust is now earned by presence and the man drink (the interview had only the verbal palette as a lever, and nothing at the Rabbit named it); past the landing a loud act says once that it no longer counts; the landing no longer claims Eddy's shutter is down (the bar is open — the man is not behind it); the office safe and the Kitten Corner corridor answer EXAMINE; the downpour reads the room class; TOPICS says ASK EDDY. Refuted: a ฿50k CASH after the landing is silent by the ceiling, not a threshold bug; Act One has scored on the wallet, wherever you stand, since the sandbox pivot (doc corrected; whether the race should end at the hotel is a design call). Unverified: his rep reading 0 the morning after a kick-out. |
 | 2026-09-14 | **Three open items ruled on (Mario).** (1) **The dog is not left behind — ever.** The leave-him-with-Nuan mechanic that round 45 deferred and the 2026-09-06 note said "can return on top of this" is closed: no leaving-the-dog beat gets built. STAY stays flavour; the dog walks the run or the player doesn't bring him, and `_ccibPointed` already keeps a clean mule clean either way. (2) **The betrayal fork can wait** — still tentative, still unbuilt, not next. (3) **Nont's Eastern Seaboard follow-on** — Mario will work it in later; not for an agent to start. |
 | 2026-09-06 | **The dog confirms, never accuses** (Mario: "how is having the dog a bad thing again?"): the 2026-09-05 rule put a burner mule on the radar for owning a dog he adopted weeks before the job, with no way to know the dog counted and no way to leave him home (that mechanic is deferred). Now `_ccibPointed()` is the run's own evidence (keyboard / own number / SIM held / own phone in the office) and the dog only sets `radar.described` when the run already pointed — the description that turns "one of Rabbit's mules" into a face, carried to Bangkok. The officer still looks at the dog on a clean run, and has nobody to attach it to. When the leave-him-with-Nuan option is built, the telegraphed version (option 1) can return on top of this. |

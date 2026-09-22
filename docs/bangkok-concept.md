@@ -142,7 +142,7 @@ Why this is a spine and not decoration:
 
 **Guardrail, stated before anyone gets attached.** Naming the game after a real canal whose real
 communities are being displaced *right now* is a heavier commitment than a setting detail, and
-heavier than White Dish (a fictionalised rollup). The repo rule holds — structural pattern only,
+heavier than Pattaya Leisure (a fictionalised rollup). The repo rule holds — structural pattern only,
 no real names, no allegations, and the residents quoted in that article are sources, not
 characters — but a title points at something specific and current and borrows its weight. That
 is a decision to take deliberately, which is why it is written down here rather than discovered
@@ -159,7 +159,7 @@ floor.** That death *is* the cyberpunk story: the authentic underground killed b
 and gentrified into a sanitized mall, with the operators who never left clinging to the dead
 floors and the after-hours. **The setting is the husk** — the gentrified lower floors, and
 above/below/after-dark, the grey-market ghost that refused to die. Fictionalized to a hair (a
-legendary dead IT mall, not the real branding), same doctrine as White Dish.
+legendary dead IT mall, not the real branding), same doctrine as Pattaya Leisure.
 
 **The economy — real, current, and central to Thailand.** The scam-compound / pig-butchering
 economy is the actual Southeast Asian cyber-crime epic. Thailand's own nine-month crackdown
@@ -198,11 +198,11 @@ design solution to "where do they fit," on three axes:
    and connected to a node in each — the only person who can move in both. Not a job they take;
    what they are.
 
-2. **The central tension is already LBB canon.** Eddy wants WDG *destroyed* (his Rabbit-arc
-   revenge — the laundered crypto is the target). Tan's syndicate collects *suay* **from** WDG
-   (the factions note: WDG only operates because it pays to be tolerated; `orchid_recon`
+2. **The central tension is already LBB canon.** Eddy wants PLG *destroyed* (his Rabbit-arc
+   revenge — the laundered crypto is the target). Tan's syndicate collects *suay* **from** PLG
+   (the factions note: PLG only operates because it pays to be tolerated; `orchid_recon`
    resolves to Tan as the tribute collector). So the protagonist is caught **between the man who
-   wants WDG dead and the world that profits from WDG alive** — two figures from their
+   wants PLG dead and the world that profits from PLG alive** — two figures from their
    childhood, pulling opposite ways, and they're the only one who can reach both. A whole spine,
    built entirely from established canon.
 
@@ -273,9 +273,9 @@ bar next door is **The Sundowner**, `lake_beer`.)
 
 `G.ccibRadar` carries a fourth field, `described` (2026-09-06): true only when a run that already pointed at the player was walked with the dog — the officer has a *face* for the name, not just a number. Never set on a clean run. Bangkok may read it as "they know what he looks like" — a bonus texture, never a key.
 
-The Rabbit arc's climax (`docs/rabbit-arc.md`, *CCIB — the fourth verse*) was reframed: WDG
+The Rabbit arc's climax (`docs/rabbit-arc.md`, *CCIB — the fourth verse*) was reframed: PLG
 was **already under CCIB investigation** for crypto laundering, the heist nearly blows that
-case, and CCIB interrupts the follow-through. The heat lands on WDG regardless. What LBB
+case, and CCIB interrupts the follow-through. The heat lands on PLG regardless. What LBB
 actually decides — and exports — is **who CCIB now has a file on**: `G.ccibRadar = { player,
 eddy, nont }`, three flat booleans on the baton. This is the single most important thing LBB
 hands this game, and it is Nont's origin story finishing.
@@ -414,10 +414,10 @@ exposure and which can.** The shared save is the hinge.
   (`docs/content-pack-refactor.md`) is designed *against* — it reuses L1 fully and only
   *selected* L3 (the CLI simulator, the modal-gate framework), while the nightlife economy
   (barfine, treadmill, venue tiers) does **not** come along.
-- **Canon bridges:** Eddy/Rabbit, Tan, WDG, *suay* — shared canon, and the CTF/CLI-sim work
+- **Canon bridges:** Eddy/Rabbit, Tan, PLG, *suay* — shared canon, and the CTF/CLI-sim work
   (`docs/ctf.md`, `docs/rabbit-arc.md`) is the thematic and mechanical seed already built.
 - **A second bridge, in a building:** *Eastern Seaboard Trading & Facilities Co., Ltd.* — the invoicing
-  shell on WDG's paperwork, built in LBB as an office you can walk into (306 Thappraya, two
+  shell on PLG's paperwork, built in LBB as an office you can walk into (306 Thappraya, two
   professionals, a company that ceases to exist when the case breaks). A trading company with a Thai
   registration and no goods is exactly the kind of thing that has a Bangkok end — a registered
   address in the capital, a director who is a name — and the LBB player who stood in that office
@@ -433,9 +433,9 @@ exposure and which can.** The shared save is the hinge.
 
 ## Guardrails (public repo)
 
-- **Fictionalize real entities:** the dead IT mall is not named as Pantip; WDG stays the LBB
+- **Fictionalize real entities:** the dead IT mall is not named as Pantip; PLG stays the LBB
   fiction; **no real families, names, or allegations** — structural pattern only, same rule as
-  the factions and White Dish notes.
+  the factions and Pattaya Leisure notes.
 - **The trafficking/scam-compound horror is PG-13, referenced-not-depicted** — same handling as
   the Itaewon camptown layer. It is the setting's dark gravity, not its spectacle.
 - **Real hacking is not a how-to:** the CLI sim is a navigation puzzle over fictional systems;
@@ -461,7 +461,7 @@ aren't listening" — an accessibility device dressed as a mechanic, which LBB's
 structurally cannot be. (4) The map is bounded — one vertical husk, not 238 rooms across
 fifteen districts.
 
-**Where it could fail.** (1) **The LBB canon load** — Eddy, Tan, WDG, *suay*, *sen*, the
+**Where it could fail.** (1) **The LBB canon load** — Eddy, Tan, PLG, *suay*, *sen*, the
 Rabbit arc, the Orchid's tribute desk — is a payoff for an LBB player and four proper nouns
 and two Thai words for everyone else. (2) **The code-switch as an opaque binary**: it is a
 great mechanic only if the player can predict roughly what changes; opaque, it is a coin flip
@@ -513,7 +513,7 @@ them see it; let the LBB player *recognise* it.
 |---|---|
 | 2026-08-13 | Concept committed to the repo (not siloed). Thesis: reveal Bangkok as already-cyberpunk, anti-fantasy per LBB doctrine. |
 | 2026-08-13 | Research killed the "living Pantip" assumption (it died / became a food-wholesale hub); the **husk** is the setting instead, and it's stronger. Scam/laundering economy, CCIB competence, and the liability/surveillance regime verified as real and current. |
-| 2026-08-13 | Protagonist = *luk khrueng*, Pattaya-raised, fluent both, knows Eddy and Tan → the broker between the farang cyber-underground and the Thai patronage web. Central tension (Eddy wants WDG dead / Tan's syndicate profits from WDG alive) is pre-existing LBB canon. Signature mechanic: code-switching. |
+| 2026-08-13 | Protagonist = *luk khrueng*, Pattaya-raised, fluent both, knows Eddy and Tan → the broker between the farang cyber-underground and the Thai patronage web. Central tension (Eddy wants PLG dead / Tan's syndicate profits from PLG alive) is pre-existing LBB canon. Signature mechanic: code-switching. |
 | 2026-09-06 | **Nont → CCIB HUMINT asset** (Mario's lean, adopted): leverage from what he did in LBB — mule SIMs, the CASH mule channel, the heist wire, the kid path — none charged, all kept. LBB exports `G.ccibRadar = {player, eddy, nont}`; a table maps each state to what CCIB holds and how the opening changes (no file → Tan's favour is the pull; SIM-only → he doesn't know, the opening is the tap on the shoulder; kid path → he knows, total leverage, Tan's hook reversed). Structural, never moral; reverse test holds (radar is a bonus, never a key); asks arrive as YES/NO/ASK modals from the other side of the wall. |
 | 2026-09-08 | **Naming opened and recorded, working title `khlong`.** The only one of the three projects with no title; both siblings name a street that does double duty. Shortlist: Saen Saep · A Face for the Name · Ground Floor Only · Din Daeng. Etymology of แสนแสบ noted as popular-but-contested and not to be asserted in prose; Pantip glossed as a given name (not a surname) so nobody re-derives it, with the no-real-families guardrail unchanged. |
 | 2026-09-08 | **"Two Saen Saeps" logged as a candidate SPINE** (Thai PBS source): the in-town canal and the out-of-town canal are the same water and not the same thing — black water and packed ferries downtown, ~50% of residents still living off it and 52 bird species at Minburi/Nong Chok. Argued as the honest form of the thesis, a map for the code-switch, the counterweight to scam-servers-and-a-dead-mall, and the *jao pho* land pattern in water. Guardrail attached: a title borrows the weight of a live displacement story, so it is a deliberate decision, not a default. |
