@@ -221,6 +221,18 @@ if (process.argv.includes("--audit")) {
 }
 
 /* Overpass refetch (either endpoint, POST data@file):
+   SET A USER-AGENT or you get 406. overpass-api.de's Apache rejects curl's default
+   `curl/x.y` with "406 Not Acceptable", which looks exactly like a malformed-query
+   error and is not — the request FORM is fine, so switching POST/GET or the
+   Content-Type changes nothing (cost another session several attempts, 2026-09-24):
+
+     curl -sS -A "lbb-map-tool/1.0 (contact: mario@rssec.net)" \
+       -X POST --data-binary @query.overpassql \
+       https://overpass-api.de/api/interpreter -o tools/map/pattaya-geom.json
+
+   Keep the contact in the UA — it is a donated public endpoint and that is the
+   convention its admins ask for.
+
 [out:json][timeout:120];
 (
   way["name:en"~"^(Pattaya Sai Nueng|Pattaya Sai Song Road|Soi Buakhao|Pattaya Klang Road|Pattaya Tai Road|Pattaya Nuea Road|Naklua Road|Thappraya Road|Jomtien Beach Road|Khao Talo Road|Soi LK Metro)"](12.86,100.85,12.99,100.95);
