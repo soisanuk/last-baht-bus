@@ -4,7 +4,7 @@
 var NEWS_FEED = [
   {
     "t": "Teen's body found in suitcase has some in notorious Thai party town on edge",
-    "s": "abc.net.au",
+    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
     "d": "21 Sep 2026"
   },
   {
@@ -13,14 +13,14 @@ var NEWS_FEED = [
     "d": "22 Sep 2026"
   },
   {
-    "t": "Mother seeks justice 7 months after Thai-Swedish son’s fatal crash in Pattaya",
-    "s": "South China Morning Post",
-    "d": "22 Sep 2026"
+    "t": "Pattaya races to prepare for 21,000+ runners this weekend",
+    "s": "Pattaya Mail",
+    "d": "23 Sep 2026"
   },
   {
-    "t": "Pattaya fines durian seller for turning pickup truck into roadside stall",
-    "s": "Pattaya Mail",
-    "d": "21 Sep 2026"
+    "t": "Man found hanging after mother refuses 20 baht for cannabis",
+    "s": "thethaiger.com",
+    "d": "22 Sep 2026"
   },
   {
     "t": "Chon Buri flags 14,264 firms with foreign shareholders for nominee checks",
@@ -33,12 +33,12 @@ var NEWS_FEED = [
     "d": "23 Sep 2026"
   },
   {
-    "t": "Man found hanging after mother refuses 20 baht for cannabis",
-    "s": "thethaiger.com",
-    "d": "22 Sep 2026"
+    "t": "Pattaya fines durian seller for turning pickup truck into roadside stall",
+    "s": "Pattaya Mail",
+    "d": "21 Sep 2026"
   },
   {
-    "t": "Pattaya races to prepare for 21,000+ runners this weekend",
+    "t": "12 workers injured after truck overturns on Route 36 in East Pattaya",
     "s": "Pattaya Mail",
     "d": "23 Sep 2026"
   },
@@ -49,12 +49,12 @@ var NEWS_FEED = [
   },
   {
     "t": "Hello, SaWaDiKa! Thailand expands Suvarnabhumi Airport auto gates to travellers from 33 nationalities",
-    "s": "timeout.com",
+    "s": "Time Out Worldwide",
     "d": "21 Sep 2026"
   },
   {
-    "t": "Iran Flights Head to China and Thailand in Defiance of US Sanctions",
-    "s": "Bloomberg.com",
+    "t": "Asian Games 2026 women's hockey: Deepika Sehrawat scores nine as India down Thailand 20-1",
+    "s": "olympics.com",
     "d": "23 Sep 2026"
   },
   {
@@ -63,25 +63,25 @@ var NEWS_FEED = [
     "d": "22 Sep 2026"
   },
   {
+    "t": "Iran Flights Head to China and Thailand in Defiance of US Sanctions",
+    "s": "Bloomberg.com",
+    "d": "23 Sep 2026"
+  },
+  {
     "t": "Asian Games: India, Thailand Surge into Semifinals",
     "s": "BWF",
     "d": "22 Sep 2026"
-  },
-  {
-    "t": "Asian Games 2026 women's hockey: Deepika Sehrawat scores nine as India down Thailand 20-1",
-    "s": "olympics.com",
-    "d": "23 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-22","USD":33.13,"AUD":23.56,"GBP":44.29,"EUR":37.99};
+var FX_RATES = {"date":"2026-09-23","USD":33.29,"AUD":23.53,"GBP":44.19,"EUR":37.99};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-23","temp":27,"humid":93,"code":53,"hi":30,"rain":98};
+var WX_NOW = {"date":"2026-09-23","temp":26,"humid":94,"code":55,"hi":30,"rain":98};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4303,"date":"2026-09-23","baht":67400};
+var GOLD = {"usd":4286,"date":"2026-09-23","baht":67450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":85509,"thb":2845340};
+var BTC = {"usd":83914,"thb":2807916};
