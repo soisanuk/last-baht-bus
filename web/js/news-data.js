@@ -3,13 +3,13 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Teen's body found in suitcase has some in notorious Thai party town on edge",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
-    "d": "21 Sep 2026"
+    "t": "Foreign tourist missing after falling into a Pattaya canal",
+    "s": "Thai PBS World",
+    "d": "24 Sep 2026"
   },
   {
-    "t": "Visitor goes missing in flooded Pattaya",
-    "s": "Bangkok Post",
+    "t": "Eight US sailors in USS Abraham Lincoln strike group attempted suicide, Navy says",
+    "s": "BBC",
     "d": "24 Sep 2026"
   },
   {
@@ -23,28 +23,28 @@ var NEWS_FEED = [
     "d": "23 Sep 2026"
   },
   {
-    "t": "Pattaya rocked by thunder, floods, blackouts and dangerous roads",
-    "s": "pattayamail.com",
-    "d": "23 Sep 2026"
+    "t": "Visitor goes missing in flooded Pattaya",
+    "s": "Bangkok Post",
+    "d": "24 Sep 2026"
   },
   {
-    "t": "All hands on deck to clean up Pattaya Beach after rough seas",
+    "t": "Pattaya’s Central Road swamped by overnight storm",
     "s": "pattayamail.com",
-    "d": "23 Sep 2026"
+    "d": "24 Sep 2026"
   },
   {
-    "t": "Typhoon Dujuan hits Japan, 1.67 million evacuated, Thailand travelers check flights",
+    "t": "Flooding slows traffic on Route 344 in Chonburi",
     "s": "pattayamail.com",
-    "d": "23 Sep 2026"
+    "d": "24 Sep 2026"
   },
   {
-    "t": "Foreign tourist missing after falling into a Pattaya canal",
-    "s": "Thai PBS World",
+    "t": "Pattaya floods leave one foreign man missing on Thursday",
+    "s": "Nation Thailand",
     "d": "24 Sep 2026"
   },
   {
     "t": "King of Thailand’s estranged son seeks return for urgent brain surgery",
-    "s": "SCMP",
+    "s": "South China Morning Post",
     "d": "22 Sep 2026"
   },
   {
@@ -53,13 +53,8 @@ var NEWS_FEED = [
     "d": "22 Sep 2026"
   },
   {
-    "t": "Thailand slams chaotic Asian Games organization as 'musical chairs'",
-    "s": "Japan Today",
-    "d": "24 Sep 2026"
-  },
-  {
-    "t": "Thailand Says Market Access Sticking Point in US Trade Talks",
-    "s": "Bloomberg.com",
+    "t": "Thailand’s Princess Sirivannavari Opens Up in a Rare Interview About Her Sister Princess Bajrakitiyabha’s Death",
+    "s": "Town & Country Magazine",
     "d": "24 Sep 2026"
   },
   {
@@ -68,20 +63,25 @@ var NEWS_FEED = [
     "d": "24 Sep 2026"
   },
   {
-    "t": "Thai teen Nene Royal wins US$1m on America’s Got Talent",
-    "s": "The Malaysian Reserve",
+    "t": "Thailand Says Market Access Sticking Point in US Trade Talks",
+    "s": "Bloomberg.com",
+    "d": "24 Sep 2026"
+  },
+  {
+    "t": "Thailand slams chaotic Asian Games organization as 'musical chairs'",
+    "s": "Japan Today",
     "d": "24 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-24","USD":33.48,"AUD":23.52,"GBP":44.27,"EUR":38.05};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-25","temp":27,"humid":86,"code":53,"hi":28,"rain":100};
+var WX_NOW = {"date":"2026-09-25","temp":26,"humid":89,"code":81,"hi":27,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4273,"date":"2026-09-24","baht":67650};
+var GOLD = {"usd":4275,"date":"2026-09-24","baht":67700};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":84448,"thb":2822605};
+var BTC = {"usd":84407,"thb":2823409};
