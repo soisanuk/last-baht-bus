@@ -4,23 +4,23 @@
 var NEWS_FEED = [
   {
     "t": "Thailand firefighters capture 13-foot snake with swollen belly at housing estate",
-    "s": "yahoo.com",
+    "s": "Yahoo",
     "d": "22 Sep 2026"
   },
   {
     "t": "Visitor goes missing in flooded Pattaya",
-    "s": "bangkokpost.com",
+    "s": "Bangkok Post",
     "d": "24 Sep 2026"
   },
   {
-    "t": "Pattaya raises red flags after six boats sink in rough seas",
-    "s": "Thaiger",
+    "t": "Sri Racha orders over 200 households to evacuate amid floods as Pattaya bans all boat departures on Sept 25",
+    "s": "Nation Thailand",
     "d": "25 Sep 2026"
   },
   {
-    "t": "Three Chinese women rescued from captivity in north Pattaya house",
-    "s": "Pattaya Mail",
-    "d": "23 Sep 2026"
+    "t": "Pattaya raises red flags after six boats sink in rough seas",
+    "s": "thethaiger.com",
+    "d": "25 Sep 2026"
   },
   {
     "t": "Pattaya’s Central Road swamped by overnight storm",
@@ -38,28 +38,28 @@ var NEWS_FEED = [
     "d": "24 Sep 2026"
   },
   {
-    "t": "Foreign tourist missing after falling into a Pattaya canal",
-    "s": "Thai PBS World",
-    "d": "24 Sep 2026"
+    "t": "Three Chinese women rescued from captivity in north Pattaya house",
+    "s": "Pattaya Mail",
+    "d": "23 Sep 2026"
   },
   {
     "t": "World Bank Urges Thailand to Build Network of Cities Beyond Bangkok",
-    "s": "nationthailand.com",
+    "s": "Nation Thailand",
     "d": "22 Sep 2026"
   },
   {
-    "t": "Thai teen phenom Nene Royal to open for US metal band after winning America’s Got Talent",
-    "s": "CNN",
+    "t": "Asian Games Aichi-Nagoya 2026: Puripol Boonson promised Thailand men's 100m gold. Then he delivered in Games-record time",
+    "s": "olympics.com",
     "d": "25 Sep 2026"
-  },
-  {
-    "t": "Thailand Says Market Access Sticking Point in US Trade Talks",
-    "s": "Bloomberg",
-    "d": "24 Sep 2026"
   },
   {
     "t": "Thailand’s Princess Sirivannavari Opens Up in a Rare Interview About Her Sister Princess Bajrakitiyabha’s Death",
     "s": "Town & Country Magazine",
+    "d": "24 Sep 2026"
+  },
+  {
+    "t": "Thailand Says Market Access Sticking Point in US Trade Talks",
+    "s": "Bloomberg.com",
     "d": "24 Sep 2026"
   },
   {
@@ -69,12 +69,12 @@ var NEWS_FEED = [
   },
   {
     "t": "Why the USS Abraham Lincoln Arrived in Thailand Looking Like a “Rust Bucket”",
-    "s": "yahoo.com",
+    "s": "Yahoo",
     "d": "24 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-24","USD":33.48,"AUD":23.52,"GBP":44.27,"EUR":38.05};
+var FX_RATES = {"date":"2026-09-25","USD":33.34,"AUD":23.44,"GBP":44.19,"EUR":38.02};
 // Pattaya right now — the other moaning index
 var WX_NOW = {"date":"2026-09-25","temp":26,"humid":87,"code":80,"hi":27,"rain":100};
 // the bar TV's one true channel
@@ -82,6 +82,6 @@ var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4304,"date":"2026-09-25","baht":68150};
+var GOLD = {"usd":4291,"date":"2026-09-25","baht":67650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":84649,"thb":2823053};
+var BTC = {"usd":83868,"thb":2799507};
