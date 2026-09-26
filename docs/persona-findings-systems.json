@@ -1,0 +1,4025 @@
+{
+"_about": "Which SYSTEM (docs/systems.json) each fixed finding lived in — the row of the coverage map. Tagged 2026-09-27 by four Sonnet judges from the pinned-test titles; findings written at triage from round 54 on carry `system` themselves.",
+"byClaim": {
+"The founder is recognisable on sight from the content-creator traits with the name already gone  — renamed AND every describing node rewritten (docs/guardrails.md, 2026-09-26)": {
+"system": "guardrails",
+"system2": "",
+"conf": "high"
+},
+"The column's title and signoff are a real columnist's, verbatim  — Last Orders / MIND THE STEP; cipher re-keyed; brass owl is the wink": {
+"system": "guardrails",
+"system2": "media",
+"conf": "low"
+},
+"Two real go-go signs on Soi Diamond appear as themselves  — The Gilt Cage / Twice Shy, ids kept": {
+"system": "guardrails",
+"system2": "",
+"conf": "high"
+},
+"Fast Eddy's Vegas story has crypto wallets in 2006  — the year moved": {
+"system": "heist",
+"system2": "",
+"conf": "low"
+},
+"ASK MORT ABOUT the founder opens with the OLD surname  — the surname sweep": {
+"system": "guardrails",
+"system2": "media",
+"conf": "low"
+},
+"PRESS HER FOR NAMES typed after the conversation lapsed falls to TRAVEL": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Crystal Palace advertises No. 71 and EXAMINE DANCERS / ASK RIN ABOUT 71 dead-end  — reads aliases + _fixtureTalk (class: staff point at the room's own reads)": {
+"system": "worldprose",
+"system2": "",
+"conf": "low"
+},
+"ASK DOUG ABOUT HIMSELF is a miss right after he introduced himself  — the hello, terse once heard": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"TRAVEL walked him through the Pratumnak dark, torch off, two bites, with only a parenthetical  — TRAVEL stops at the edge of the dark; the same order again walks it (third ruling on a twice-ruled behaviour)": {
+"system": "navigation",
+"system2": "darkness",
+"conf": "low"
+},
+"A stop typed off the bus's drop-list that the truck doesn't serve gets a parse failure  — the driver's head-shake": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"Soi 6's middle after midnight says the grilles are down either side of the Vic while three beer bars are open  — lateDesc rewritten": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"The manager's welcome shot is poured onto the meter on arrival, no offer, no refusal path  — I DON'T DRINK declares teetotal; _compDrink declines on his behalf; DECLINE hands a fresh comp back": {
+"system": "sobriety",
+"system2": "",
+"conf": "high"
+},
+"BUY BEER FOR <lady> / BUY <lady> A SPRITE pours the drink into the player  — a named drink for a named person is hers": {
+"system": "drinks",
+"system2": "",
+"conf": "low"
+},
+"Bare DRINK buys a Chang with no question  — soda for a declared teetotaller; the Zork default stays for everyone else": {
+"system": "sobriety",
+"system2": "",
+"conf": "high"
+},
+"The bell's bottle back across the rail lands on the meter with no NO  — declined for a teetotaller; DECLINE for anyone inside two turns": {
+"system": "sobriety",
+"system2": "bell",
+"conf": "low"
+},
+"Jackpot forfeit narrates a sober man drinking  — soda variant": {
+"system": "games",
+"system2": "sobriety",
+"conf": "low"
+},
+"WATCH SOI puts a pint in his hand  — a glass": {
+"system": "sobriety",
+"system2": "hotels",
+"conf": "low"
+},
+"DIAGNOSE calls sobriety 'fixable' every night  — 'as ordered' once declared": {
+"system": "body",
+"system2": "sobriety",
+"conf": "low"
+},
+"ASK anyone ABOUT SOBER/ALCOHOL/AA misses everywhere but Eddy  — _soberTalk by register; Eddy first": {
+"system": "sobriety",
+"system2": "conversation",
+"conf": "low"
+},
+"'i don't drink' / decline / refuse are parse failures  — the verbs": {
+"system": "sobriety",
+"system2": "",
+"conf": "high"
+},
+"'a man drinking soda at nine' printed at 00:06 and 01:06 (class K)  — the soft pool no longer tells the time": {
+"system": "worldprose",
+"system2": "sobriety",
+"conf": "low"
+},
+"7-Eleven Coke prints the bar's seat-price line  — _SOFT_SHOP": {
+"system": "food",
+"system2": "drinks",
+"conf": "low"
+},
+"Soft pool blind to the noun: BUY COKE gets a Sprite  — {d} slot": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"Kitten Corner's bell says 'the girls on stage' on a street with no stages  — _BELL_SOI6": {
+"system": "bell",
+"system2": "worldprose",
+"conf": "low"
+},
+"Queen Vic TAO RAI quotes a lady drink the pub doesn't sell": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"ENTER QUEEN VIC from Soi 6 says 'over in Soi 6' while standing in Soi 6  — 'on this side of town'": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"HELP never names a soft drink  — BUY SODA on the card": {
+"system": "presentation",
+"system2": "drinks",
+"conf": "low"
+},
+"Lock-in dare: 'a shot in each hand' then 'the girl with the cup'": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"Sobering fires on the wall clock's multiples of 20, not on time since the drink  — G.soc.soberNext from the first drink": {
+"system": "body",
+"system2": "",
+"conf": "high"
+},
+"EXAMINE ME ignores drunkenness at 7–8  — read G.drunk, a field that does not exist (class L)": {
+"system": "body",
+"system2": "",
+"conf": "high"
+},
+"EXAMINE ME ignores a single injury  — hurt 1 clause": {
+"system": "body",
+"system2": "",
+"conf": "high"
+},
+"The truck is milder than the bike (no injury, no สนุก)": {
+"system": "motosai",
+"system2": "bus",
+"conf": "low"
+},
+"DIAGNOSE never names the hangover": {
+"system": "body",
+"system2": "",
+"conf": "high"
+},
+"EXAMINE ME promises 'numbers' from DIAGNOSE, which has words  — the hint": {
+"system": "body",
+"system2": "",
+"conf": "high"
+},
+"'(-2 สนุก)' prints at 0 while nothing moves": {
+"system": "happiness",
+"system2": "",
+"conf": "high"
+},
+"REPLY PRIEW replies to Mort": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"CALL PRIEW finds nobody in the phone  — LINE-only voiced": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"MESSAGE PRIEW is one fixed string  — pooled": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"WHO says the black book is empty with two contacts in the phone": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"Tan doesn't answer about food, one command before FOLLOW TAN feeds you": {
+"system": "conversation",
+"system2": "food",
+"conf": "low"
+},
+"ENTER CLINIC says daytime while GET TESTED works from the same pavement; the test takes one turn  — the door is the test; three ticks": {
+"system": "clinic",
+"system2": "",
+"conf": "high"
+},
+"Beach Road: west is 'shophouses', SWIM offers a hotel pool, the motosai's sea is on the wrong side": {
+"system": "worldprose",
+"system2": "navigation",
+"conf": "low"
+},
+"Four foods the prose sells the till refuses (Tree Town moo ping, Cricketers pie, mall fruit, mall menu)  — three stalls + a menu read; the fruit cart names the open spit": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"Queen Vic crisps 'land on the bar' after eleven and are never charged  — the full-man check runs first; a landed bag is charged": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"Lucky Tiger revisit says YOU rack up on the table  — somebody does": {
+"system": "worldprose",
+"system2": "games",
+"conf": "low"
+},
+"LAST NIGHT omits the hospital  — the night's ending leads the ledger": {
+"system": "clock",
+"system2": "body",
+"conf": "low"
+},
+"Second complimentary bottle says the second one stands sentry": {
+"system": "sobriety",
+"system2": "",
+"conf": "high"
+},
+"'The roof has gone quiet' under an awning  — _underRoof": {
+"system": "weather",
+"system2": "",
+"conf": "high"
+},
+"Quiz: the same smirk five times  — _QUIZ_WRONG_TAIL": {
+"system": "calendar",
+"system2": "",
+"conf": "high"
+},
+"Bar water at ฿80 'worth ten times what it cost'": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"Crash card: 'the one journey in the game that can hurt you' is false now": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"SAFE/KEYPAD/PIN print Oy's keypad prompt from any room; CODE differs": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"TRAVEL refuses the room's own printed name": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"ASK anyone ABOUT HOTEL / a hotel by name gets nothing  — _hotelTalk + askable-audit row": {
+"system": "hotels",
+"system2": "conversation",
+"conf": "low"
+},
+"every item on the info… menu runs its verb — the chip's sentinel is stripped": {
+"system": "presentation",
+"system2": "",
+"conf": "high"
+},
+"the info menu is context-aware, and every verb it offers is one the parser answers": {
+"system": "presentation",
+"system2": "",
+"conf": "high"
+},
+"the bare sentinel means 'I want the readouts', so it answers rather than dying silently": {
+"system": "presentation",
+"system2": "",
+"conf": "high"
+},
+"a haggled peddler redraws the HAGGLED prices on a restore, not the opening pitch": {
+"system": "saveload",
+"system2": "encounters",
+"conf": "low"
+},
+"the price the redraw quotes is the price the till charges": {
+"system": "encounters",
+"system2": "saveload",
+"conf": "low"
+},
+"no armed encounter is left with a prompt a reload cannot redraw": {
+"system": "saveload",
+"system2": "",
+"conf": "high"
+},
+"DEBT joins the info menu when you owe somebody, and only then": {
+"system": "presentation",
+"system2": "money",
+"conf": "low"
+},
+"DRAW is offered where the till is, since that is the only place it works": {
+"system": "presentation",
+"system2": "barbooks",
+"conf": "low"
+},
+"the vacation-end redraw carries both options and the week's score, not two bare CAPS": {
+"system": "saveload",
+"system2": "vacation",
+"conf": "low"
+},
+"the live vacation-end prompt and its redraw are the same text (one source, no drift)": {
+"system": "saveload",
+"system2": "",
+"conf": "high"
+},
+"the checkout list keeps its prices on a redraw — three hotel names alone can't be chosen between": {
+"system": "saveload",
+"system2": "hotels",
+"conf": "low"
+},
+"a resumed bar game names the pot, so QUIT has a visible price": {
+"system": "saveload",
+"system2": "games",
+"conf": "low"
+},
+"the Thai lookup is keyed on the word tapped, not on whatever was tapped first": {
+"system": "presentation",
+"system2": "thai",
+"conf": "low"
+},
+"the compass is not offered in a hotel room at all — the stale buttons are unreachable": {
+"system": "presentation",
+"system2": "navigation",
+"conf": "low"
+},
+"an unknown topic is not a repeat: Lake Gary gets his greeting once, then a voiced miss in his own register": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a hostess's miss stays in her register; a true repeat keeps the Tinglish brush-off": {
+"system": "conversation",
+"system2": "filler",
+"conf": "low"
+},
+"patrons: the intro is met-once (not nightly), and a topic miss is a shrug, not 'You again'": {
+"system": "regulars",
+"system2": "conversation",
+"conf": "low"
+},
+"a pending question lapses OUT LOUD when you turn to someone else, and the cue prints once": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Fast Eddy stays dry: BUY MAN DRINK pours him a soda water": {
+"system": "heist",
+"system2": "sobriety",
+"conf": "low"
+},
+"Cream answers her own verbs — a civilian, not the rail and not the roster": {
+"system": "cream",
+"system2": "",
+"conf": "high"
+},
+"the Tree Town maze: bare HELP is the reaction the hint promised, not a re-render": {
+"system": "navigation",
+"system2": "presentation",
+"conf": "low"
+},
+"the booking app's NO reads where you are — no ceiling fan on Naklua Road": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"the last-bus warning counts the minutes it actually has left": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"motosai: the Darkside fare applies both ways, Second Road has stands, and HOTEL is a destination": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the bus: a stop typed without the 'soi', and a bare stop name straight off the drop-list": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"SLEEP tapped on waking asks once; SLEEP again (or a sleep after a sleep) goes through": {
+"system": "hotels",
+"system2": "clock",
+"conf": "low"
+},
+"in the opening quest a hospital night is a do-or-die fail like dawn, not a calendar day": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"EAT / MENU / BUY <dish> at a kitchen all reach the food; water sells where a cart is described": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"swim off any sand, charge at the 7-Eleven window, and your own room safe answers": {
+"system": "happiness",
+"system2": "money",
+"conf": "low"
+},
+"bare TALK names the room; bare NO is voiced; a wai on the sand is a wai on the sand": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the phone: offmap girls list as LINE only, and answer SEND in their own voices": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"weather flavour: a Darkside drizzle has no baht bus, and the pools are deeper than two": {
+"system": "weather",
+"system2": "bus",
+"conf": "low"
+},
+"Khao Talo after the shutters stops advertising the charcoal; a shut bar isn't offered as a destination": {
+"system": "worldprose",
+"system2": "navigation",
+"conf": "low"
+},
+"PLAY CONNECT 4 100 puts ฿100 on the table; the Anchor's barometer reads": {
+"system": "games",
+"system2": "weather",
+"conf": "low"
+},
+"no emergency stash on the Soi 6 week — the room safe beat is a full-game thing": {
+"system": "act1",
+"system2": "money",
+"conf": "low"
+},
+"the conversation layer only swallows a line as an ASK when it could be one": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a female patron goes back to HER glass": {
+"system": "regulars",
+"system2": "worldprose",
+"conf": "low"
+},
+"SAY GOODBYE is leave-taking; last call counts its minutes and says nothing at the shutters": {
+"system": "conversation",
+"system2": "bus",
+"conf": "low"
+},
+"Lek keeps the Mot gist; Oy's gated wallet topic is a 'not yet', not a 'not mine'": {
+"system": "conversation",
+"system2": "act1",
+"conf": "low"
+},
+"the dog survives the Act One reset, rides Tan's sedan out loud, and is a topic everyone has": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"dog verbs a dog person types are voiced, and the dog reads the room": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"animals the prose names can be examined; Nok greets the regular; Cheap Charlie's cooks; no phantom baht bus": {
+"system": "worldprose",
+"system2": "dog",
+"conf": "low"
+},
+"the investor can still own a bar: Tan gives the licence answer when you ARE Wayne": {
+"system": "act1",
+"system2": "barchain",
+"conf": "low"
+},
+"HINT never nudges the PLG errand; Tan's manifest names venues by their signs": {
+"system": "quests",
+"system2": "navigation",
+"conf": "low"
+},
+"TRAVEL won't walk you to shutters or into the dawn": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"own-prose instructions parse: Kesinee's bar, Nigel's bar(s), Tan's coffee; Bert and Candy answer the Shamrock and each other": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a lapsed question can be asked again next time the node lands": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a regular's 'yesterday you no come' only fires when you didn't come": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"her texts and refusals don't name a mama her own story put elsewhere": {
+"system": "filler",
+"system2": "phone",
+"conf": "low"
+},
+"she remembers you across vacations — once, with a head start, not the old ledger": {
+"system": "regulars",
+"system2": "ladydrinks",
+"conf": "low"
+},
+"Lek's wallet topic ticks the milestone the HINT points at": {
+"system": "quests",
+"system2": "conversation",
+"conf": "low"
+},
+"the rose seller lapses on an unrelated command instead of eating it": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"chips: a waived fine shows no number; the night ride has RIDE ON / call it": {
+"system": "presentation",
+"system2": "barfine",
+"conf": "low"
+},
+"MESSAGE her while she's three stools away; the quiz ignores digits inside commands; a toastie is a toastie": {
+"system": "phone",
+"system2": "calendar",
+"conf": "low"
+},
+"a night ride never repeats a venue while the pool lasts; the 6 a.m. coda is any girl's": {
+"system": "nightride",
+"system2": "",
+"conf": "high"
+},
+"Tan's sedan ends any game on the table; killer pool is tappable": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the Jackpot cap says so; PLAY CONNECT 4 WITH <mamasan> honours the opponent; a short stake is announced": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"REMATCH / DOUBLE / BET are the gambler's verbs; LOOK/TIME mid-game are free; a stray SHOT is pointed": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"quiz questions don't repeat within a night; QUIZ and DARTS are topics anyone answers": {
+"system": "calendar",
+"system2": "games",
+"conf": "low"
+},
+"the Connect 4 loss is a pool; the seated quiz entry is one line": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"typed Thai: polite particles match, a Thai listener understands, Thai digits read, a little Thai commands": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"Thai NPCs keep their register on a miss; Nok says ui, not aiyee; the jogger has no fixed hour": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the piwin can be wai'd and spoken to; Candy knows Lek; Lek points at the cage; the station has OUT": {
+"system": "conversation",
+"system2": "police",
+"conf": "low"
+},
+"the daily survives RESTART; LOOK is the full description; leads stay in the Soi 6 pocket": {
+"system": "saveload",
+"system2": "vacation",
+"conf": "low"
+},
+"a restore redraw must not move the dice: redraw, then reload the blob, and the roll is the same": {
+"system": "saveload",
+"system2": "",
+"conf": "high"
+},
+"WAIT stops when the world moves you; a pending question is redrawn on resume": {
+"system": "saveload",
+"system2": "",
+"conf": "high"
+},
+"poverty: SELL points at Jomtien, the pity ride is a sandbox mercy, CHECKOUT settles the book first, TIP 0 refused, BEG is voiced": {
+"system": "money",
+"system2": "motosai",
+"conf": "low"
+},
+"the loan: Nira speaks it, DEBT states it, and flying home is what she remembers": {
+"system": "loans",
+"system2": "",
+"conf": "high"
+},
+"OUT of your room after a respawn is your soi, and the stash pays on a respawn too": {
+"system": "clock",
+"system2": "money",
+"conf": "low"
+},
+"encounter chips come from the prompt's CAPS; the police wait on a non-answer; soft pitches pass a real command through": {
+"system": "encounters",
+"system2": "police",
+"conf": "low"
+},
+"bare PHOTO in a go-go is refused; the freelancer pays once; the honest LT gets the quiet coda": {
+"system": "encounters",
+"system2": "barfine",
+"conf": "low"
+},
+"a resident keeps a local: expat bonds cool every third night; the REP label fits any cause; the manager stops saying New face": {
+"system": "ladydrinks",
+"system2": "police",
+"conf": "low"
+},
+"HINT signposts the bar chain's hidden step; a typed choice label outlives the next ask; a forfeited question is un-spent": {
+"system": "quests",
+"system2": "barchain",
+"conf": "low"
+},
+"texts: no identical line twice running from one sender, the inbox is capped; the ledger nets out ATM cash; the violence refusal is a pool": {
+"system": "phone",
+"system2": "money",
+"conf": "low"
+},
+"review: a command that merely CONTAINS an answer word passes through a soft encounter": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"review: the Darkside league draws its own roster; the inbox is hard-capped read or unread": {
+"system": "calendar",
+"system2": "phone",
+"conf": "low"
+},
+"a printed verbal-action hint parses after an intervening ask (the chips moved on, the label didn't)": {
+"system": "presentation",
+"system2": "conversation",
+"conf": "low"
+},
+"ASK TAN ABOUT <someone> places them: the manifest men get his read, anyone else a driver's placing": {
+"system": "conversation",
+"system2": "regulars",
+"conf": "low"
+},
+"Bert's grudge gates his offers; the Safe-Cracker's where-clause follows the step; Oy stops talking about a wallet she gave back": {
+"system": "quests",
+"system2": "act1",
+"conf": "low"
+},
+"a non-move in killer pool / Connect 4 / the quiz costs no turn": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"Candy's Mot reveal answers ASK ABOUT WALLET; the Shamrock quest completes in the same breath; Gavin pays in person; Bee remembers her investor": {
+"system": "quests",
+"system2": "act1",
+"conf": "low"
+},
+"Wayne and Bert answer 'bar'; Notty's isn't on Naklua's door list until you've been sent": {
+"system": "conversation",
+"system2": "navigation",
+"conf": "low"
+},
+"UNDO is refused inside a live game or a pending answer — it was an oracle": {
+"system": "saveload",
+"system2": "",
+"conf": "high"
+},
+"bought สนุก tapers over an evening: a generous night pays in full, a grind does not": {
+"system": "happiness",
+"system2": "",
+"conf": "high"
+},
+"the scam post-mortem reads how the deal was struck": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"a slow payer still gets his ride — the depot no longer exists": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"Auntie Nok's bottles promise what the beach actually holds": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the bell goes through the spend-brake like every other bought สนุก": {
+"system": "bell",
+"system2": "happiness",
+"conf": "low"
+},
+"a rough wake takes a pocket, not an estate": {
+"system": "clock",
+"system2": "money",
+"conf": "low"
+},
+"money buys attention, not intimacy: a night's tips lift her a couple of notches and stop": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"TIP and BRIBE answer in the right voice; MONEY is a verb": {
+"system": "money",
+"system2": "",
+"conf": "high"
+},
+"Connect 4 says why the big money won't ride; charity and credit read the wallet": {
+"system": "games",
+"system2": "money",
+"conf": "low"
+},
+"the folio cannot slide under a door you didn't wake behind": {
+"system": "hotels",
+"system2": "",
+"conf": "high"
+},
+"DIAGNOSE's dawn warning states the cap, not your whole pocket": {
+"system": "body",
+"system2": "money",
+"conf": "low"
+},
+"a bar that keeps a cat lets you pet the cat": {
+"system": "dog",
+"system2": "",
+"conf": "low"
+},
+"TAKE something you already carry says so": {
+"system": "presentation",
+"system2": "",
+"conf": "low"
+},
+"a bus destination that isn't on this loop is refused, not silently swallowed": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"nobody narrates half an hour and then advances the clock by six minutes": {
+"system": "clock",
+"system2": "",
+"conf": "high"
+},
+"HIRE takes the host off the floor and costs the evening it narrates": {
+"system": "encounters",
+"system2": "",
+"conf": "low"
+},
+"bare BUY DRINK asks who it's for instead of spending ฿150 on a guess": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"a question you walked away from is put to you again": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"darts checks out from a real three-dart range and says when a command didn't land": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the dog settles where the room actually is, not where its flags suggest": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"feeding the dog doesn't invent a grill cart that isn't in the room": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"LOOK while a fare is pending says where you are, not where you boarded": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the no-dartboard line names boards that exist, and only ones you've found": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"a game move typed after the game is over isn't offered as a topic": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the Act One hint names the topic that actually holds the code": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"a quest pointer at a man who drifts says that he drifts": {
+"system": "quests",
+"system2": "regulars",
+"conf": "low"
+},
+"the rain doesn't call a bar empty while you're talking to somebody in it": {
+"system": "weather",
+"system2": "regulars",
+"conf": "low"
+},
+"your own door warns you about the unlit soi before you walk into it": {
+"system": "darkness",
+"system2": "",
+"conf": "high"
+},
+"the beach nobody works has nobody working it": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"something the room describes but doesn't sell gets a reason, not a shrug": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"quiz night exists inside the mode it is promised in": {
+"system": "calendar",
+"system2": "",
+"conf": "high"
+},
+"the piwin's menu and his mouth agree about the challenge": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the Vic's kitchen keeps Aoy's stated hours": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"an unaffordable long time leaves the ledger open on the line you can afford": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"her tariff is the tariff: the drink count she names is the count that opens the door": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"the soi6 short-time scene answers from a pool, not one string": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"the rose family's second visit reads as recognition, not a rerun": {
+"system": "conversation",
+"system2": "encounters",
+"conf": "low"
+},
+"a quest completes in the same breath as the move that wins it": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"midnight abandons a live game instead of continuing it on the pavement": {
+"system": "clock",
+"system2": "games",
+"conf": "low"
+},
+"midnight clears a pending street-offer instead of carrying it to the kerb": {
+"system": "clock",
+"system2": "encounters",
+"conf": "low"
+},
+"the shutters cannot walk out a man who already left on the back of her bike": {
+"system": "nightride",
+"system2": "",
+"conf": "high"
+},
+"the cheap-charlie refusal reads the ledger it cites": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"the jilted regular's next hello is cooler, once": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"the busy-regular line never seats a girl the room's own prose just featured": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"the small hours make you WAIT for the bus, and the kerb charges real turns": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the kerb can end the night — the physiological curfew enforcing itself": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"past drunk seven the bikes refuse you — and the bench still has you": {
+"system": "motosai",
+"system2": "bus",
+"conf": "low"
+},
+"TIME tells the truth about the small hours in all three windows": {
+"system": "clock",
+"system2": "bus",
+"conf": "low"
+},
+"the street hint at a dead-hour bus stop stays a live promise": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the balk is a balk, not a wall: insistence buys the ride the crash arc needs": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"standing at dawn is an all-nighter: home, solvent, billed to the morning": {
+"system": "clock",
+"system2": "",
+"conf": "high"
+},
+"Act One's dawn is still do-or-die — the all-nighter is a resident's privilege": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"TAKE HER OUT: she joins, every new door pays, and the club is her hour": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"two is a party, three is a tour group": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"with company on your arm, the ledger only sells another companion": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"SLEEP with company is the long-time close, paid up by the evening she spent on your arm": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"dawn with company: she pours you homeward and the week remembers a great night": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"the companion rescue: a blackout with her on your arm ends in your own bed": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"her whole night is priced like one: bond decides willingness, season decides the premium": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"the real negotiation carries the party price to every surface, and she says the math out loud": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"the girl on your arm exists to every verb, in every room": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"the companion on your arm doesn't greet you across the room she's standing in": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"BARFINE at the girl already on your arm has nothing to sell": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"one truck, one wait: answering the drop-off menu doesn't conjure a second kerb": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the full game shows its week: SHARE renders, including at the vacation-end gate": {
+"system": "vacation",
+"system2": "",
+"conf": "high"
+},
+"a shut barfine book names the act that shut it": {
+"system": "barfine",
+"system2": "act1",
+"conf": "low"
+},
+"EAT <named dish> orders the named dish, not the stall's special": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"one waiver, one reason: her-farang past midnight doesn't get the mamasan's second blessing": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"an in-character haggle at the ledger gets a voice, not a silent reprint": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"RIDE BUS in your own room knows there is no street in here": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the drink-snipe line is a pool, not a stamp": {
+"system": "barfine",
+"system2": "",
+"conf": "low"
+},
+"the shift-call prompt reads the YES action as YES, not as an annotation of NO": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"SCORE and QUESTS agree: a vignette quest shows on neither": {
+"system": "quests",
+"system2": "happiness",
+"conf": "low"
+},
+"WATCH SUNSET is a room verb, not a wristwatch — even with a peddler at your elbow": {
+"system": "clock",
+"system2": "encounters",
+"conf": "low"
+},
+"the quiz chalkboard names each bar once": {
+"system": "calendar",
+"system2": "",
+"conf": "high"
+},
+"the Owl no longer preaches the dead bus curfew": {
+"system": "media",
+"system2": "bus",
+"conf": "high"
+},
+"volunteered subjects answer: Daeng's dancer past, Kwang's son, Cream's coffee": {
+"system": "conversation",
+"system2": "cream",
+"conf": "low"
+},
+"Cream doesn't re-introduce herself to the man she went home with": {
+"system": "cream",
+"system2": "",
+"conf": "high"
+},
+"the dog is present in the newest content: dark warning, small-hours kerb, light rain": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"Fast Eddy owns his bar — the man-drink line doesn't call the owner a manager": {
+"system": "heist",
+"system2": "barbooks",
+"conf": "low"
+},
+"an ignored phone doesn't hoard: chatter caps at 3 unread per sender, and the read shows a dozen": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"the ended affair reaches the phone, the book, and the texting arm": {
+"system": "affair",
+"system2": "phone",
+"conf": "high"
+},
+"the early call's boy has ONE mother: a stable hostess, never the cashier": {
+"system": "barbooks",
+"system2": "filler",
+"conf": "low"
+},
+"your own hotel room has the two complimentary bottles — the rain-lock can't dehydrate you": {
+"system": "hotels",
+"system2": "body",
+"conf": "high"
+},
+"a resident reaches his own room whether or not Act One's wallet flag survived": {
+"system": "hotels",
+"system2": "act1",
+"conf": "high"
+},
+"the held cheap refusal is a meter, not a wall: progress is acknowledged": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"the column's own mystery answers at its author: personals and box 15 reach Mort's signoff": {
+"system": "media",
+"system2": "",
+"conf": "high"
+},
+"a money decision is legible: the rose pitch carries the numeral beside the Thai": {
+"system": "party",
+"system2": "",
+"conf": "low"
+},
+"asking for the 7-Eleven's toastie inside a bar points at the door, not a wall": {
+"system": "food",
+"system2": "navigation",
+"conf": "high"
+},
+"the goal word teaches its own pronunciation on the surfaces a cold player reads": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the nomad is a pickable origin: listed eighth, Tan reads him, WHO AM I knows": {
+"system": "identity",
+"system2": "",
+"conf": "high"
+},
+"Kyle is the you-ARE-him NPC: deactivated for the nomad, present for everyone else": {
+"system": "identity",
+"system2": "quests",
+"conf": "high"
+},
+"the glass-start vignette runs the real path: talk, answer, vouch at Bert, done": {
+"system": "quests",
+"system2": "identity",
+"conf": "low"
+},
+"Tan's manifest carries the eighth passenger": {
+"system": "identity",
+"system2": "",
+"conf": "high"
+},
+"the third answer to Tan's last question is taken at face value, not needled": {
+"system": "identity",
+"system2": "",
+"conf": "high"
+},
+"the other ledger: earned at bond tiers, told in order, once each, never again": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"being told the truth is not a prize: the ledger pays no สนุก and no bond": {
+"system": "ladydrinks",
+"system2": "happiness",
+"conf": "high"
+},
+"her numbers come from the constants, and they are HER numbers": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"the share card gained the social line: names, regulars, and the ledger": {
+"system": "vacation",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"the bonded treadmill bypass is a NIGHT-TO-NIGHT reward, not an all-night faucet": {
+"system": "happiness",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"…and tomorrow she is new again: depth across nights still pays full": {
+"system": "happiness",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"a short time uses a condom, because HELP says it does": {
+"system": "barfine",
+"system2": "clinic",
+"conf": "high"
+},
+"the black book is the DEPTH dashboard HELP claims: bonded girls appear, number or not": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"the bought-bond ceiling says itself out loud, once a night": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"the share card always shows the ledger count — a conspicuous zero is the point": {
+"system": "vacation",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"สนุก survives a save/restore — สบายสบาย is a milestone, not a ceiling": {
+"system": "happiness",
+"system2": "saveload",
+"conf": "high"
+},
+"a multi-leg quest shows its legs, and Tree Town's far end is either room": {
+"system": "quests",
+"system2": "worldprose",
+"conf": "low"
+},
+"an umbrella makes the rain negotiable — and only an umbrella": {
+"system": "weather",
+"system2": "",
+"conf": "high"
+},
+"EXITS names the doors, because bar doors hide on bare compass points": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"EXITS also names venues[] doors — the verb had gone blind to the very migration it exists for": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"TRAVEL into a venue remembers the door, same as ENTER does": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"a question you were asked doesn't strand itself on the street": {
+"system": "conversation",
+"system2": "navigation",
+"conf": "low"
+},
+"going home does not buy a curse: an encounter answer is a word you say, not a command containing one": {
+"system": "cons",
+"system2": "",
+"conf": "high"
+},
+"…but consenting to the reading still costs what it costs": {
+"system": "cons",
+"system2": "",
+"conf": "high"
+},
+"a man is stood what he actually drinks, and nobody repays it with Terry's anecdote": {
+"system": "regulars",
+"system2": "barbooks",
+"conf": "high"
+},
+"the stand-a-beer line is pooled, and none of it misgenders the women at the rail": {
+"system": "regulars",
+"system2": "worldprose",
+"conf": "high"
+},
+"the landlady is served, not denied — she is the house, not a punter": {
+"system": "regulars",
+"system2": "drinks",
+"conf": "high"
+},
+"a proper noun in a character's own mouth is a topic they answer": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"_selfNamedNode honours gates — a locked story stays locked": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"it does not hijack ordinary words — only capitalised proper nouns count": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Doyle's terse greeting does not re-introduce him": {
+"system": "regulars",
+"system2": "conversation",
+"conf": "high"
+},
+"An Introduction can actually be completed — being SENT opens the door": {
+"system": "regulars",
+"system2": "quests",
+"conf": "low"
+},
+"Tan advertises the locator himself, and the quest names the key not the door": {
+"system": "quests",
+"system2": "identity",
+"conf": "high"
+},
+"a dep chain is a chain — being an origin doesn't skip other people's jobs": {
+"system": "quests",
+"system2": "identity",
+"conf": "high"
+},
+"the hotel book stops when it stops — no charge is announced that isn't made": {
+"system": "hotels",
+"system2": "",
+"conf": "high"
+},
+"the piwin's mercy is a way out, not a taxi service": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"a choice the game just printed outranks a global verb": {
+"system": "conversation",
+"system2": "presentation",
+"conf": "low"
+},
+"…but a real verb still wins when no printed option matches it": {
+"system": "conversation",
+"system2": "presentation",
+"conf": "low"
+},
+"a round buys one telling, in full — the brush-off's own offer": {
+"system": "regulars",
+"system2": "conversation",
+"conf": "low"
+},
+"QUESTS does not say nobody has asked you for anything under an offer": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"the middle of Soi 6 does not claim shut bars you can walk into": {
+"system": "worldprose",
+"system2": "navigation",
+"conf": "high"
+},
+"a named regular at the rail means the rail is not empty": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"the challenge never recommends the vehicle it forbids": {
+"system": "motosai",
+"system2": "presentation",
+"conf": "high"
+},
+"BUY MAN DRINK where there is no manager does not recommend BUY MAN DRINK": {
+"system": "barbooks",
+"system2": "presentation",
+"conf": "high"
+},
+"the ten-o'clock homecoming is narrated, not silent": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"_canHop answers about the man, _hopsNow about the hour": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"the season never thins a regular off a night he told you he'd be there": {
+"system": "regulars",
+"system2": "weather",
+"conf": "high"
+},
+"a regular who names no nights is still thinnable — the season still bites": {
+"system": "regulars",
+"system2": "weather",
+"conf": "high"
+},
+"a close look at the notebook knows whether its owner is in": {
+"system": "worldprose",
+"system2": "regulars",
+"conf": "low"
+},
+"reads: nodes can gate on live state, and the last one still cannot": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the Pattaya Leisure payoff calls no roll of who is at the rail": {
+"system": "orchid",
+"system2": "regulars",
+"conf": "low"
+},
+"the pub's staff can be tipped, and are not stood a beer like customers": {
+"system": "filler",
+"system2": "ladydrinks",
+"conf": "low"
+},
+"a pub barmaid's refusal doesn't dangle a price": {
+"system": "filler",
+"system2": "drinks",
+"conf": "low"
+},
+"ACCEPT with a name that matches nothing takes nothing": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"bare ACCEPT with two on the table asks which, and with one just takes it": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"running Gavin's errand does not end Bert, or the expat chain with him": {
+"system": "barchain",
+"system2": "quests",
+"conf": "high"
+},
+"the thaw is gated on the deeds, not on the standing it cancels": {
+"system": "procurement",
+"system2": "",
+"conf": "high"
+},
+"a manager who won't open you a beer doesn't drink your health either": {
+"system": "barbooks",
+"system2": "presentation",
+"conf": "high"
+},
+"every honest phrasing of Mot's dinner buys Mot dinner": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"the dinner is once, is his price, and is not a hunger farm": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"the dinner doesn't leave you being mugged in the dark you just left": {
+"system": "food",
+"system2": "encounters",
+"conf": "high"
+},
+"Mot's dinner is on all three surfaces, and disappears once it's done": {
+"system": "food",
+"system2": "presentation",
+"conf": "high"
+},
+"you cannot eat when you are not hungry": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"a hungry man eats, and the happiness a meal can buy is bounded": {
+"system": "food",
+"system2": "happiness",
+"conf": "high"
+},
+"the guard covers every counter, not just the one he found": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"asking a man about himself never returns his opinion of somebody else": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"…and each of them has a real answer about himself": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Candy's own staff point at Candy, not at a map": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a girl at any OTHER bar still gives the directions, which is the point of the line": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Doyle names the door instead of gesturing at it": {
+"system": "navigation",
+"system2": "regulars",
+"conf": "high"
+},
+"the roast announces itself on the day, and quotes its price": {
+"system": "calendar",
+"system2": "food",
+"conf": "high"
+},
+"a room whose prose puts a food vendor in it can be bought from": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"Mama Yai's kitchen serves whether you say BUY or EAT": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"(BUY FOOD) is only promised where there is a till": {
+"system": "food",
+"system2": "presentation",
+"conf": "high"
+},
+"the links the game already made in one direction now come back": {
+"system": "worldprose",
+"system2": "",
+"conf": "low"
+},
+"Wayne and Gavin can see each other across one rail": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"the drummer is not a Soi 6 cashier": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"nothing I authored contradicts what the game already said": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the message Candy tells you to carry can be delivered": {
+"system": "quests",
+"system2": "conversation",
+"conf": "low"
+},
+"Rose says nothing about a lunch nobody has mentioned to her": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"BUY PIWIN A BEER survives you learning his name": {
+"system": "motosai",
+"system2": "conversation",
+"conf": "high"
+},
+"an instruction naming somebody is a promise, and there is a tool for it": {
+"system": "worldprose",
+"system2": "",
+"conf": "low"
+},
+"Tan does not describe forty women with one sentence": {
+"system": "identity",
+"system2": "conversation",
+"conf": "high"
+},
+"Tan's read on Mercedes does not contradict Mercedes": {
+"system": "identity",
+"system2": "conversation",
+"conf": "high"
+},
+"Tan's signoff is a pool, not a catchphrase": {
+"system": "identity",
+"system2": "worldprose",
+"conf": "high"
+},
+"Mort gets shorter about declining, and starts fresh tomorrow": {
+"system": "media",
+"system2": "conversation",
+"conf": "high"
+},
+"declining the 51% does not delete the expat endgame": {
+"system": "barchain",
+"system2": "",
+"conf": "high"
+},
+"both partners re-arm, and fxAlways is what makes an offer an offer": {
+"system": "barchain",
+"system2": "",
+"conf": "high"
+},
+"everyone can be waied, because Act One is solved with one": {
+"system": "social",
+"system2": "act1",
+"conf": "high"
+},
+"the fare chip pays the fare it advertises": {
+"system": "bus",
+"system2": "presentation",
+"conf": "high"
+},
+"reading your own scoreboard is free": {
+"system": "happiness",
+"system2": "presentation",
+"conf": "high"
+},
+"…but looking at the WORLD still costs a turn": {
+"system": "media",
+"system2": "",
+"conf": "low"
+},
+"a double-tapped SLEEP cannot eat a whole night": {
+"system": "clock",
+"system2": "",
+"conf": "high"
+},
+"the round on the house is the gamble its own prose describes": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the goodwill is not the gamble — the floor saw you do it either way": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"killer pool offers its moves, not just a way to forfeit": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the rain offers a way to wait it out": {
+"system": "weather",
+"system2": "",
+"conf": "high"
+},
+"the torch can be switched off in the room that tells you to": {
+"system": "darkness",
+"system2": "",
+"conf": "high"
+},
+"you can pay the landlord, and paying stops his clock": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"a part payment is taken, and honestly described": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the old man's note can be settled too, and he never chases it": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"PAY RENT is on three surfaces, and only when you owe": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"when the bar goes, the building knows": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"BOOKS and the ending agree about what the room became": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"a drink costs what the room costs": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"the quote and the charge are the same number": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"the share card gives the score something to be measured against": {
+"system": "vacation",
+"system2": "",
+"conf": "high"
+},
+"the three Soi 6 men know each other, and the girl who runs his own bar": {
+"system": "regulars",
+"system2": "barbooks",
+"conf": "high"
+},
+"EXAMINE POCKETS turns out your pockets — the opening tells you to (Col)": {
+"system": "act1",
+"system2": "presentation",
+"conf": "high"
+},
+"a word that is exactly somebody's name never resolves to a coincidence (Wes)": {
+"system": "presentation",
+"system2": "",
+"conf": "high"
+},
+"last call knows what kind of room it is in (Wes)": {
+"system": "bell",
+"system2": "barfine",
+"conf": "high"
+},
+"a new question answered by an old line is not an accusation (Wes)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the Sundowner's fridge is the fridge its own description leads with (Wes)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"Boonsri can discuss the photo Neil says she put up (Wes)": {
+"system": "conversation",
+"system2": "worldprose",
+"conf": "high"
+},
+"the lake stops claiming it is open once it shuts (Wes)": {
+"system": "worldprose",
+"system2": "calendar",
+"conf": "high"
+},
+"Soi Buakhao has the baht buses its own prose describes (Col + Mario)": {
+"system": "bus",
+"system2": "worldprose",
+"conf": "high"
+},
+"off the soi you negotiate, and the price is the whole truck (Mario)": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the Buakhao shuttle is never spliced into the town circuit": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"charm tapers across the RAIL — breadth pays less, depth does not (Yuki)": {
+"system": "happiness",
+"system2": "regulars",
+"conf": "high"
+},
+"a girl worked too hard gets annoyed, and it costs (Mario's call, round 33)": {
+"system": "ladydrinks",
+"system2": "social",
+"conf": "low"
+},
+"the safe route is walkable stony broke, and Pim says so (round 33)": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"no Act One safe-route clue is behind a paywall (round 33)": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"Lek stops sending you after a wallet you're already carrying (round 33)": {
+"system": "act1",
+"system2": "conversation",
+"conf": "high"
+},
+"DIAGNOSE only smells carts where there are carts (round 33)": {
+"system": "saleng",
+"system2": "body",
+"conf": "high"
+},
+"an out-of-range digit says why, and is never stored (round 33)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the night bazaar's stalls answer to a close look (round 33)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the architecture the rooms keep naming answers to a look (round 33)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"a metaphor is not a fixture (round 33)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"greedy matching doesn't answer 'cash machine' with your own cash (round 33)": {
+"system": "money",
+"system2": "conversation",
+"conf": "high"
+},
+"the literal hint-follower's strategy reaches the office (Marcus)": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"the wallet-topic route to the som tam is untouched (Marcus)": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"SHAKE HAND gets a voiced answer, not a parse miss (Marcus)": {
+"system": "social",
+"system2": "",
+"conf": "high"
+},
+"the chips are your memory, not a menu (Gerry)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"truth before tariff — the day refusal pre-empts the drink quote (Gerry)": {
+"system": "barfine",
+"system2": "drinks",
+"conf": "high"
+},
+"the charter can be declined, the bench fare cannot (Frank)": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the fare gate's LOOK names the kerb you are actually on (Frank)": {
+"system": "bus",
+"system2": "worldprose",
+"conf": "high"
+},
+"the ride's close varies, and 'the one' is one (Frank)": {
+"system": "nightride",
+"system2": "",
+"conf": "high"
+},
+"a door shown at night's end closes out loud (Gerry)": {
+"system": "bell",
+"system2": "",
+"conf": "low"
+},
+"the clam reaches the story it advertises — both of them (Gerry)": {
+"system": "worldprose",
+"system2": "",
+"conf": "low"
+},
+"the gone-home pointer never names the bar you're standing in (Gerry)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"your own room is not an audience for the torch (Frank)": {
+"system": "darkness",
+"system2": "",
+"conf": "high"
+},
+"the butterfly tease counts drinks, because that is what it says (Gerry)": {
+"system": "happiness",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"no social line names a role its target might hold (Gerry)": {
+"system": "social",
+"system2": "",
+"conf": "high"
+},
+"a failed command carries nobody's breadcrumb (Frank)": {
+"system": "quests",
+"system2": "conversation",
+"conf": "low"
+},
+"one inbox read never prints the same text twice (Gerry)": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"Myth Night is a motosai destination, not just a departure point (Gerry)": {
+"system": "motosai",
+"system2": "navigation",
+"conf": "high"
+},
+"nobody propositions you mid-party (Frank)": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"a lock-in dawn is a lock-in dawn (Gerry)": {
+"system": "bell",
+"system2": "clock",
+"conf": "high"
+},
+"the bar-bore isn't on a rail the room called empty (Gerry)": {
+"system": "regulars",
+"system2": "worldprose",
+"conf": "high"
+},
+"Gary answers for everything his own hello volunteers (Gerry)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Ron answers for his wife, and for the man he sends you to (Gerry)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Daeng knows the landowner her own key credits her with naming (Gerry)": {
+"system": "conversation",
+"system2": "worldprose",
+"conf": "low"
+},
+"Lek's personal topics exist, and deepen with the ledger (Frank)": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"Lek's hello is not frozen at night one (Frank)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a new question about an old line gets the gist, not the spiel (Gerry+Wes)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the padded door opens for a man it has locked in before (Gerry/Mario)": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"ROUND THE BACK answers to the words a player would use (Mario)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"the back door is knowledge, not signage (Mario)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"…and stays shut to everybody else (Gerry/Mario)": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"KNOCK is the one place the no-knocking rule bends (Gerry)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"the street names the door once it is yours (Gerry)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"the permanent lock-in record survives a save (Gerry/Mario)": {
+"system": "bell",
+"system2": "saveload",
+"conf": "high"
+},
+"walking out still doesn't buy you back in tonight (canon)": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"a bonded girl gets a goodbye, and it scales with the ledger (Frank)": {
+"system": "party",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"the goodbye costs nothing and pays nothing (Frank)": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"the goodbye reaches the player through the real vacation end (Frank)": {
+"system": "party",
+"system2": "vacation",
+"conf": "high"
+},
+"she texts while you're in the air — if she's yours (Frank)": {
+"system": "phone",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"the daily challenge keeps its own ending (Frank)": {
+"system": "vacation",
+"system2": "",
+"conf": "high"
+},
+"the TRAVEL refusal explains itself and names the ride (Gerry)": {
+"system": "navigation",
+"system2": "bus",
+"conf": "high"
+},
+"a stake you can't have is explained, not pocketed (Gerry)": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the bell's HELP line doesn't quote a price the till tiers past (Gerry)": {
+"system": "bell",
+"system2": "presentation",
+"conf": "high"
+},
+"a shut door is not an invitation (Gerry)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"Notty's is refused for standing, not for existing (Gerry)": {
+"system": "orchid",
+"system2": "navigation",
+"conf": "high"
+},
+"a woman the room has already placed isn't also busy elsewhere (Gerry)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Lek's rain vignette fires on a night it's true (Frank)": {
+"system": "weather",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"PLAY POOL WITH <her> racks against her (Frank)": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"_tillKeeper finds the money-holder, cashier or doubling mama (Mario)": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"an away owner leaves the till with somebody, and the room says who (Mario)": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"the cover girl is the same woman all night (Mario)": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"what she has told you survives the trip home (Howard F1)": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"the ledger she showed you is not shown again as news (Howard F2)": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"a short topic key never matches inside an unrelated word (Howard F7)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the bar-bore is never draped with a girl who is yours (Howard F5)": {
+"system": "regulars",
+"system2": "ladydrinks",
+"conf": "low"
+},
+"the first morning of a new trip does not report the flight (Howard F4)": {
+"system": "vacation",
+"system2": "",
+"conf": "high"
+},
+"the last-bus warning stays quiet on the back of her bike (Howard F11)": {
+"system": "nightride",
+"system2": "bus",
+"conf": "low"
+},
+"the act-one safe opens before the folio bills a man who just earned it (Howard F12)": {
+"system": "act1",
+"system2": "hotels",
+"conf": "low"
+},
+"the night ride remembers where it has taken you (Howard F8)": {
+"system": "nightride",
+"system2": "",
+"conf": "high"
+},
+"the LT coda invents no biography (Howard F10)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"Lek answers for what she volunteers (Howard F6)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"her hello at a tier is not one line (Howard F15)": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"Candy's plain hello IS the errand once she knows Oy has it (Declan)": {
+"system": "act1",
+"system2": "conversation",
+"conf": "low"
+},
+"the guard on the office door leaks the song on a second try (Declan)": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"the freelancer passthrough declines without a wai (Declan)": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"DEMAND is a voiced refusal, not an ASK in disguise (Declan)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the alley door is not a สนุก farm and honours the one-way rule (Stan 1/11)": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"the pocket flies home with you (Stan 2)": {
+"system": "bell",
+"system2": "money",
+"conf": "low"
+},
+"the Soi 6 drink tariff is measured in the unit it is quoted in (Stan 4)": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"you cannot buy a ride to the kerb you are standing on (Stan 5)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the quoted motosai fare is the charged one (Stan 6)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the piwin doesn't claim the buses are gone (Stan 7)": {
+"system": "motosai",
+"system2": "bus",
+"conf": "low"
+},
+"a room that claims cheaper beer charges cheaper beer (Stan 8)": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"the street does not reach inside a bolted door (Stan 10)": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"the after-hours pointer names the door on this street (Stan 12)": {
+"system": "conversation",
+"system2": "navigation",
+"conf": "low"
+},
+"the night ledger counts the ATM fee (Stan 14)": {
+"system": "money",
+"system2": "",
+"conf": "high"
+},
+"TIME keeps minutes (Stan 15)": {
+"system": "clock",
+"system2": "",
+"conf": "high"
+},
+"a bell is a round, and rounds are deeds (Stan 16)": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"Gary and Daeng answer for what Ron and the key put in your mouth (Stan 17)": {
+"system": "regulars",
+"system2": "conversation",
+"conf": "low"
+},
+"no double possessive on a bar whose name ends in s (Stan 18)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the ledger beat counts her real drinks (Stan 19)": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"EXAMINE the bar you're standing in is the bar (Stan 20)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"HELP's hotel list is the checkout's (Stan 22)": {
+"system": "hotels",
+"system2": "presentation",
+"conf": "low"
+},
+"SEND to a woman standing next to you says so (Stan 24)": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"no cashier is named where the bar has none (Stan 25)": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"the interior escalates by the stage the night has reached": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"the dare lands once, JOIN IN elides time and pays as company, keeping your seat is free": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"the party runs while the money does — and walks you out when it doesn't": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"the coda: the last punter leaves, and the room turns back into a workplace": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"nothing prints behind an unbolted door, and the dread stays outside a bolted one": {
+"system": "bell",
+"system2": "",
+"conf": "high"
+},
+"the register stays PG-13 — the narrator never looks directly": {
+"system": "bell",
+"system2": "worldprose",
+"conf": "low"
+},
+"a walk-up who has bought nothing is told the price of the closed book (Mario)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"a regular is let go without the drink gate, and her money is still hers (Mario)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"popular girls, draws, and the pre-midnight bundle are untouched (Mario)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"bare WAIT in the rain reads the sky (Ray)": {
+"system": "weather",
+"system2": "clock",
+"conf": "low"
+},
+"the month survives the Act One reset (Malcolm F1)": {
+"system": "weather",
+"system2": "act1",
+"conf": "low"
+},
+"the junction can see the junction (Malcolm F3)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"after the shutters, the window and the rail agree with the room (Malcolm F4)": {
+"system": "worldprose",
+"system2": "regulars",
+"conf": "low"
+},
+"Phil's visits square with any calendar (Malcolm F2)": {
+"system": "regulars",
+"system2": "calendar",
+"conf": "low"
+},
+"the foot of Soi 6 has no sunset baked into its revisits (Malcolm F7)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the Owl's banner doesn't call a nightly column weekly (Malcolm F5)": {
+"system": "media",
+"system2": "",
+"conf": "high"
+},
+"a chartered truck has no bench of passengers (Malcolm F10)": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the deep corner's sign is the first door you can find by ear (Malcolm F12, then lit 2026-09-04)": {
+"system": "darkness",
+"system2": "worldprose",
+"conf": "low"
+},
+"Mort has a view on the biggest story on his own street (Malcolm F13)": {
+"system": "media",
+"system2": "regulars",
+"conf": "low"
+},
+"Cheap Charlie's prices only the plate it sells (Malcolm F14)": {
+"system": "food",
+"system2": "drinks",
+"conf": "low"
+},
+"Aoy knows her own roast on a Tuesday (Malcolm F15)": {
+"system": "calendar",
+"system2": "food",
+"conf": "low"
+},
+"the beach doesn't keep your face in the sand for a week (Malcolm F16)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"common words are not topics: ASK CANDY ABOUT LAST NIGHT is her account (Malcolm)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the waving cat is the waving cat, and a tip box is a tip box (Malcolm)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"ENTER a namesake bar goes to the one in your own region (Malcolm)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"a CAPS hint teaches the name, so the bar can place Gavin on Soi 6 (Nige)": {
+"system": "presentation",
+"system2": "regulars",
+"conf": "low"
+},
+"your own remembered answer doesn't show twice for a trailing full stop (Nige)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"%home% replays a place title-cased and a sentence as said — never It'Ll (Nige)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Bank's helmet is a tracked quest — offered when he hands it over, done when Pim has it (Nige)": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"a question about the beach is not a favour: Tan's Beach Road node stays behind its own topic (Lionel)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"SWIM: your own hotel's pool, the sand a step away, and the old line only where true (Lionel)": {
+"system": "hotels",
+"system2": "worldprose",
+"conf": "low"
+},
+"the promenade agrees with itself: the sea is there to see, examine, and walk onto (Lionel)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"Soi 7 advertises the alley the IN exit leads to (Lionel)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"MOTOSAI TO HOTEL knows the Areca (Lionel)": {
+"system": "motosai",
+"system2": "hotels",
+"conf": "low"
+},
+"the desk runs your card before it posts your bag to Naklua (Lionel)": {
+"system": "hotels",
+"system2": "",
+"conf": "high"
+},
+"Somchith's rooms: alone is voiced, with company it is the short-time round, once a night (Lionel)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"every motel phrasing a man with a girl on his arm tried rents the room (Lionel)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"GOODBYE / SEND HER HOME parts with a companion on your terms (Lionel)": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"a bar girl answers the trade's own question — mama first, then her (Lionel)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"the room says who runs the floor and who keeps the till (Lionel)": {
+"system": "filler",
+"system2": "worldprose",
+"conf": "low"
+},
+"a draw's flat midnight menu explains itself (Lionel)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"from a Beach Road bar the short-time walk is to Somchith's (Lionel)": {
+"system": "barfine",
+"system2": "navigation",
+"conf": "low"
+},
+"TAKE on a fixture outside a bar doesn't blame the bar (Lionel)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"a name with NO in it is not a no to the rose seller — the flirt runs (Lionel)": {
+"system": "encounters",
+"system2": "saleng",
+"conf": "low"
+},
+"a soft pitch declined by an unrelated command says so BEFORE the decline prose (Lionel)": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"the Darkside is not an island: the crossing walks west to Soi Buakhao, and TRAVEL walks it (Darren)": {
+"system": "navigation",
+"system2": "worldprose",
+"conf": "low"
+},
+"Sukhumvit is a main road: the Pattaya Tai trucks stop at the crossing (Darren)": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"the drunk balk out east doesn't promise a bench that isn't there (Darren)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the pity ride is remembered, and the next paid fare settles it (Darren)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"no stand means no stand — even in the rain, even in your room; bare GRAB is the app (Darren)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"TAO RAI at a stand quotes the fares — and the quote is the charge (Darren)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the piwin knows where the trucks run (Darren)": {
+"system": "motosai",
+"system2": "bus",
+"conf": "low"
+},
+"the near-miss prints after you got on, never before (Darren)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"no downpour during the opening race (Darren)": {
+"system": "weather",
+"system2": "act1",
+"conf": "low"
+},
+"a downpour does not follow you through sleep; a lock-in has no cart fashion show (Darren/Gordon)": {
+"system": "weather",
+"system2": "bell",
+"conf": "low"
+},
+"the gallery files a photo where the shutter went (Gordon)": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"the phone learns what it is told: Tan has your number, Mort has a name, the Owl was read (Gordon)": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"Mort's invitation is honest about whether he is in tonight (Gordon)": {
+"system": "phone",
+"system2": "regulars",
+"conf": "low"
+},
+"charging takes the minutes it takes, and a bar's socket is for customers (Gordon)": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"the noodle girl's bar has a name, so ENTER can follow through (Gordon)": {
+"system": "navigation",
+"system2": "quests",
+"conf": "low"
+},
+"the booking pitch is pooled, and an encounter intro may be an array (Gordon)": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"the money-ask texts and the thank-yous are pools, not one template with the name swapped (Gordon)": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"both rooms say what the highway does to people on foot": {
+"system": "motosai",
+"system2": "worldprose",
+"conf": "low"
+},
+"the crossing on foot is a roll: clean, a clip, or the ward — bus and bike never roll (Mario)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"drink and the small hours raise the crossing's risk; TRAVEL through it pays the same roll": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"a bike is one turn within the district or the next one over, and a turn more per district beyond": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the ride is a pool: the weaving, the hands on the first ride, three-up with a girl, a second bike for two": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the beer names its price on the line that charges it, and the fifth one says why it cost สนุก (Colin)": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"TAO RAI in a bar is the price list nobody hands you (Colin)": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"the ATM says the fee before you commit, the piwin's rumour is a street thing, and a street with a 7-Eleven has no mamasan (Colin)": {
+"system": "money",
+"system2": "food",
+"conf": "low"
+},
+"bars whose own prose says cheap are cheaper at the till; ya dong is paint-stripper money (Colin)": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"a patron giver who isn't out: the journal names his local and the man who knows his habits (Colin)": {
+"system": "quests",
+"system2": "regulars",
+"conf": "low"
+},
+"the British woman's hint carries a verb, and TALK is decent (Colin)": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"SCORES reads the same bake as the telly: results, then fixtures (Colin)": {
+"system": "media",
+"system2": "",
+"conf": "high"
+},
+"drinks that are poured are on your tab — the prose stopped promising free ones (Colin)": {
+"system": "drinks",
+"system2": "sobriety",
+"conf": "low"
+},
+"Candy's som-tam errand greeting is Act One's — it stays behind hasWallet (Dex)": {
+"system": "act1",
+"system2": "",
+"conf": "high"
+},
+"the two junctions have a late face: no 'busiest crossroads at two' beside an empty bench (Dex)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the police modal reads whole words: WAIT is not WAI, BARFINE is not a FINE (Dex)": {
+"system": "police",
+"system2": "",
+"conf": "high"
+},
+"the smell refusal says the number it lifts at (Dex)": {
+"system": "social",
+"system2": "body",
+"conf": "low"
+},
+"standing at dawn on a pavement is not 'closing the place' (Dex)": {
+"system": "clock",
+"system2": "",
+"conf": "high"
+},
+"a club's floor heaves in its own words — no low-season bare-wood rail line there (Dex)": {
+"system": "weather",
+"system2": "worldprose",
+"conf": "low"
+},
+"the Japanese traveller fires on the street, and her intro stands outside (Dex)": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"the after-hours question has an answer: LATE / AFTER / KARAOKE land on 'late' for Lek and the filler girls (Dex)": {
+"system": "conversation",
+"system2": "filler",
+"conf": "low"
+},
+"ASK LEK ABOUT PRICE is her price story, remembered or not yet told (Frank)": {
+"system": "conversation",
+"system2": "drinks",
+"conf": "low"
+},
+"DIAGNOSE and the piwin agree on the number (Dex)": {
+"system": "body",
+"system2": "motosai",
+"conf": "low"
+},
+"the night ride's whisky sets are drinks; a ride that ends at dawn gets the quiet coda (Dex)": {
+"system": "nightride",
+"system2": "",
+"conf": "high"
+},
+"the morning summary never diffs against a previous vacation's snapshot (Frank)": {
+"system": "vacation",
+"system2": "",
+"conf": "high"
+},
+"the share card names the game you played (Frank)": {
+"system": "vacation",
+"system2": "",
+"conf": "high"
+},
+"the third TALK to a girl who has said hello is not a doorbell — but the second is the gist (Frank)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the same texted selfie doesn't file twice; the wrong hotel's desk points you home; the dry ATM names the nearest (Frank)": {
+"system": "phone",
+"system2": "hotels",
+"conf": "low"
+},
+"the ride line is one sentence after a seat sentence; the darts opponent gets a capital (Frank)": {
+"system": "nightride",
+"system2": "games",
+"conf": "low"
+},
+"Eddy's nudge is a soda; a cashier on the floor is the answer to 'who minds the shop' (Frank)": {
+"system": "heist",
+"system2": "filler",
+"conf": "low"
+},
+"a rotating owner's elsewhere line names the district — two bars are called the Sundowner (Hamish)": {
+"system": "regulars",
+"system2": "navigation",
+"conf": "low"
+},
+"a named exit typed into a soft pitch walks you off — the decline AND the move (Hamish)": {
+"system": "encounters",
+"system2": "navigation",
+"conf": "low"
+},
+"Tan says the one habit on the ride: this town, you ASK": {
+"system": "identity",
+"system2": "conversation",
+"conf": "low"
+},
+"the Owl keeps a standing slot for the newly arrived, for the first week only": {
+"system": "media",
+"system2": "identity",
+"conf": "low"
+},
+"no two filler girls at one bar share a look, a greeting, a family and a plan (Trevor)": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"a man who sits three hours on one stool is somebody: the presence bond offsets the cool-off (Trevor)": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"Nigel's sermon answers to the words a man types — topic aliases (Trevor / Hamish)": {
+"system": "conversation",
+"system2": "regulars",
+"conf": "low"
+},
+"the downpour's start and the saleng's departure are pools; a bar gets one cart a night (Trevor)": {
+"system": "weather",
+"system2": "saleng",
+"conf": "low"
+},
+"no phantom regular 'keeping her in colas' on a rail the season emptied (Trevor)": {
+"system": "regulars",
+"system2": "weather",
+"conf": "low"
+},
+"the league-night bell is rung by whoever keeps the till; the tier-one ledger beat doesn't assume a drink was just rung (Trevor)": {
+"system": "bell",
+"system2": "ladydrinks",
+"conf": "low"
+},
+"the charter prefers the stop you named over the first stop in its district (Trevor)": {
+"system": "bus",
+"system2": "",
+"conf": "high"
+},
+"plain English from a first-timer is pointed somewhere, never 'I didn't understand that' (Bronwyn)": {
+"system": "presentation",
+"system2": "conversation",
+"conf": "low"
+},
+"฿5 and a ฿15 fare on the opening night: the phone has one number in it (Bronwyn)": {
+"system": "act1",
+"system2": "phone",
+"conf": "low"
+},
+"a canned reply typed a beat late still answers the question that lapsed (Bronwyn)": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a quest with a thing to hand over is accepted where the giver is (Bronwyn)": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"the 7-Eleven has somebody in it (Bronwyn)": {
+"system": "food",
+"system2": "conversation",
+"conf": "low"
+},
+"Kitten Corner's prose and its roles line agree (Eamonn)": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"an authored girl without a home line answers from the trade's stock, not a stonewall (Eamonn)": {
+"system": "filler",
+"system2": "conversation",
+"conf": "low"
+},
+"HELP on the opening night lists the verbs that get you home and none of the sandbox's": {
+"system": "presentation",
+"system2": "act1",
+"conf": "low"
+},
+"HELP in the sandbox is the week's page; HELP MORE and VERBS are the whole card": {
+"system": "presentation",
+"system2": "",
+"conf": "high"
+},
+"no bar district has a dark room; Tree Town's lanes say why it feels like a maze": {
+"system": "darkness",
+"system2": "worldprose",
+"conf": "low"
+},
+"the name the room prints is the name ENTER takes — hyphens and all (Vic)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"every regular has a night that is his, whatever the season — and Tan names it (Vic)": {
+"system": "regulars",
+"system2": "weather",
+"conf": "low"
+},
+"TRAVEL through the dark with the torch off stops at its edge; the same order again walks it and says so (Vic, then Graham)": {
+"system": "darkness",
+"system2": "navigation",
+"conf": "low"
+},
+"staff talk about the people they work with, the room, and the wallet (Vic / Trevor)": {
+"system": "filler",
+"system2": "conversation",
+"conf": "low"
+},
+"the presence line is about TONIGHT — a night slept through in the hotel prints nothing (Keith)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the expat wire is not 'up ฿19,275 on the night', and 'already carrying' is the pre-wire figure (Keith)": {
+"system": "money",
+"system2": "vacation",
+"conf": "low"
+},
+"WORK declared and slept on settles as Bert's night (Keith)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"BOOKS itemises the night and tallies the shifts; TAKE 300 FROM TILL is DRAW at your own bar (Keith)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the piwin's power bank is a pitch — a direction typed into it passes through (Keith)": {
+"system": "encounters",
+"system2": "motosai",
+"conf": "low"
+},
+"G.bar.room is set by newGame, so _atOwnBar can be true in play — not only in tests that set it by hand (Keith)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"a lady drink on Kesinee's rail warms Kesinee — the first of the three things she asked for (Keith)": {
+"system": "ladydrinks",
+"system2": "filler",
+"conf": "low"
+},
+"Bert names the wet before the money moves, and the calendar makes no three-week claim (Keith)": {
+"system": "barchain",
+"system2": "weather",
+"conf": "low"
+},
+"the Candy route says out loud whose side of the paper supply sits on (Keith / Mario)": {
+"system": "barchain",
+"system2": "",
+"conf": "high"
+},
+"in a bar, water and a soda cost the beer — you are paying for the seat (Mario)": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"WAIT in a go-go stops at twenty minutes, in a bar at an hour; a bought drink resets it; your own bar and your room never nag (Mario)": {
+"system": "drinks",
+"system2": "clock",
+"conf": "low"
+},
+"the deposit clears by transfer from the account, the pocket topping up — never through the ATM (Mario)": {
+"system": "barchain",
+"system2": "",
+"conf": "high"
+},
+"expat mode opens a Thai account: no card fee, a resident's counter limit (Mario)": {
+"system": "money",
+"system2": "vacation",
+"conf": "low"
+},
+"signing in the wet: a rent-free month and a steep cash discount, and PAY KEY MONEY takes notes (Mario)": {
+"system": "barchain",
+"system2": "",
+"conf": "high"
+},
+"signing at peak: no discount, and LATER means the full figure rides on the first rent (Mario)": {
+"system": "barchain",
+"system2": "",
+"conf": "high"
+},
+"TRANSFER KEY MONEY pays the list price from the account; short of notes, PAY KEY MONEY says how to get them (Mario)": {
+"system": "barchain",
+"system2": "",
+"conf": "high"
+},
+"a dep chain names its next door when the last one closes (Des)": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"Bert points PARTNER at both names, and answers the money he briefed (Des)": {
+"system": "barchain",
+"system2": "",
+"conf": "high"
+},
+"going down behind your own rail: the floor gets you home, pockets intact (Des)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"'฿2,111 of it lifted' when the night's spend was ฿111 — the bigger theft is not 'of it' (Des)": {
+"system": "barbooks",
+"system2": "money",
+"conf": "low"
+},
+"the guv'nor drinks his own stock: nothing off the pocket, the wholesale share off the till (Des)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the night's own money is kept by sign and by name — a football finish and a round on the house are two lines, not ฿1,700 of luck (Des)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the Bangkok lawyer sends a bill, and Tan's coffee costs sixty baht once (Des)": {
+"system": "barchain",
+"system2": "barbooks",
+"conf": "low"
+},
+"PAY NOTE 5000 pays five thousand, not the till (Des)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"Nont's pitch changes for a man with a Thai bank book (Des)": {
+"system": "money",
+"system2": "barbooks",
+"conf": "low"
+},
+"the counter has people at it: the cook nods, the stools shuffle along (Des)": {
+"system": "food",
+"system2": "worldprose",
+"conf": "low"
+},
+"prose review: the 51% is not the bar, and peak season is two months (slice 4)": {
+"system": "barchain",
+"system2": "weather",
+"conf": "low"
+},
+"prose review: the own-bar rescue wakes you in YOUR hotel, not room 412 (slice 2)": {
+"system": "barbooks",
+"system2": "hotels",
+"conf": "low"
+},
+"prose review: 'nobody walks Sukhumvit' is no longer true, and 'what should I do' knows the stage (slice 5)": {
+"system": "worldprose",
+"system2": "presentation",
+"conf": "low"
+},
+"prose review: the roast doesn't decide where you grew up, and OUT is tappable in every sibling (slice 3)": {
+"system": "calendar",
+"system2": "presentation",
+"conf": "low"
+},
+"prose review slice 1: the claims the authored cast was making": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the signed photo behind the bottles answers a close look (slice 1)": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"no player-facing string is a piece of source code (Jacko)": {
+"system": "worldprose",
+"system2": "filler",
+"conf": "low"
+},
+"a massage shop's price list is not a drinks list (Hugo)": {
+"system": "massage",
+"system2": "drinks",
+"conf": "low"
+},
+"the drunk balk looks one room out for a bench before saying there isn't one (Jacko)": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"Nont has no running account with a man he has never done business with (Jacko)": {
+"system": "money",
+"system2": "",
+"conf": "high"
+},
+"one dawn, not two: her goodbye is the morning when you have company (Jacko)": {
+"system": "party",
+"system2": "clock",
+"conf": "low"
+},
+"a girl who asks you to barfine her cannot then call you a cheap charlie (Jacko)": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"the massage shop has somebody in it, and Auntie Nok sells the mango she offers (Roland)": {
+"system": "massage",
+"system2": "food",
+"conf": "low"
+},
+"the Thai a learner actually types (Hugo)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"somebody wais back, and the empty room is the room you are in (Hugo)": {
+"system": "thai",
+"system2": "worldprose",
+"conf": "low"
+},
+"everybody has a view on som tam, and the register is theirs (Hugo)": {
+"system": "thai",
+"system2": "conversation",
+"conf": "low"
+},
+"the streets know what time it is, in a pool (Jacko / Mario)": {
+"system": "worldprose",
+"system2": "clock",
+"conf": "low"
+},
+"WATCH SUNRISE is a real thing, it comes up behind the town, and it ENDS the night (Jacko; Mario 2026-09-07)": {
+"system": "clock",
+"system2": "worldprose",
+"conf": "low"
+},
+"the town's standard compliment: once per person, and never from Nont (Mario)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"adequate is not fluent, and fluency is a cost on the floor (Mario)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"no Thai the game prints leaves a lone letter on the word card": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the verbs a Thai speaker reaches for, in Thai (Hugo)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"Cloze is a real bar on Soi Diana, and Waen is in it": {
+"system": "thai",
+"system2": "worldprose",
+"conf": "high"
+},
+"the seventeen requested words reach the verbs they were requested for": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"Kruu Waen sells an hour, and an hour is not a promotion (Mario)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"Waen sends the app after the first hour, then a word a night, free (Mario)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"a lesson only sells what the parser takes (Anders)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the board is playable and the rule is enforced (Barry, Anders)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the taught phrase does what the taught verb does, and the game's own sentence is buyable (Anders)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the notebook shows what the counters knew (Anders)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"ASK ABOUT THAI means the language, and Tan is not a she (Anders)": {
+"system": "thai",
+"system2": "conversation",
+"conf": "high"
+},
+"fluency does not turn every gap in the writing into a refusal (Nok-Anne)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the game repeats what was said, particle and all (Nok-Anne)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"Thai typed at a pending question is an answer, not a vocabulary miss (Nok-Anne)": {
+"system": "thai",
+"system2": "conversation",
+"conf": "high"
+},
+"ซื้อ X ให้ Y buys it for HER (Nok-Anne)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the wai, yes and no are typeable in Thai; the arch claims no hour (Nok-Anne)": {
+"system": "thai",
+"system2": "worldprose",
+"conf": "low"
+},
+"Tan opens formal and lands familiar — the arc says whose week this is (Mario)": {
+"system": "conversation",
+"system2": "identity",
+"conf": "low"
+},
+"ค่ะ from a man: corrected twice, then never mentioned again (Mario's canon)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the sign is also the exercise, and answering IT is the reward (Mario)": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"teaching is not courting, and the bar is hers (Mario)": {
+"system": "thai",
+"system2": "ladydrinks",
+"conf": "high"
+},
+"the cabaret and the host club sell the drink their own prose orders": {
+"system": "drinks",
+"system2": "",
+"conf": "high"
+},
+"Thappraya is reachable by bike — the district TRAVEL points a motosai at": {
+"system": "motosai",
+"system2": "navigation",
+"conf": "low"
+},
+"Tan keeps the promise he makes in the taxi": {
+"system": "identity",
+"system2": "conversation",
+"conf": "low"
+},
+"a host who has left the floor is said to have left it, not offered as a choice": {
+"system": "barfine",
+"system2": "filler",
+"conf": "low"
+},
+"PLAY JACKPOT WITH <name> deals to the woman you named": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the killer-pool table has more than one way of saying you potted it": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the dog is filed in the gallery, and is not counted as a face": {
+"system": "dog",
+"system2": "phone",
+"conf": "high"
+},
+"PUT TAG ON HIM is the one thing anybody does with a dog tag": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"BUY <food> FOR <dog> feeds the dog": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"where the dog lies is true of the room he is in": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"the dog is in the goodbye, and in the decision to stay": {
+"system": "dog",
+"system2": "party",
+"conf": "high"
+},
+"eight lanes of Sukhumvit, crossed with a dog": {
+"system": "motosai",
+"system2": "dog",
+"conf": "high"
+},
+"a job you already did is settled, not offered": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"a companion in a massage shop is not drinking at a bar that isn't there": {
+"system": "massage",
+"system2": "party",
+"conf": "low"
+},
+"the hospital lesson teaches the transport rules the game actually runs": {
+"system": "motosai",
+"system2": "body",
+"conf": "low"
+},
+"the sea wall north of Soi 6 is the coconut bar's sibling, and its cast says so first": {
+"system": "encounters",
+"system2": "worldprose",
+"conf": "low"
+},
+"the sea wall never robs you — the pickpocket is the other encounter": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"saying no on the sea wall costs nothing and is not punished": {
+"system": "encounters",
+"system2": "",
+"conf": "high"
+},
+"the north corner only produces the wall once its own prose has changed": {
+"system": "encounters",
+"system2": "worldprose",
+"conf": "low"
+},
+"the chip bar carries the sea wall's three answers": {
+"system": "presentation",
+"system2": "encounters",
+"conf": "low"
+},
+"TOPICS lists only what the person will actually answer, right now": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the chip bar reaches every open topic, four at a time": {
+"system": "conversation",
+"system2": "presentation",
+"conf": "high"
+},
+"TOPICS is a readout: free, and it never lies about an empty book": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the page belongs to the partner, not to the bar": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"TOPICS is on all the surfaces a verb has to be on": {
+"system": "conversation",
+"system2": "presentation",
+"conf": "high"
+},
+"one life story per rail: no two girls at one bar share a family line or a plan line": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"an authored girl's fallback hometown is the province her own text names (Kai: Buriram, not Chaiyaphum)": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"a question dropped by a change of subject or a vanished partner still answers a late digit with the drift line": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Eddy's 'drink here a while' is kept: a man drink and a night on his stool each move his trust": {
+"system": "heist",
+"system2": "social",
+"conf": "low"
+},
+"TOPICS names the word the parser answers to: ASK EDDY, not ASK FAST": {
+"system": "conversation",
+"system2": "heist",
+"conf": "low"
+},
+"the downpour reads the room: a street with a 7-Eleven is not behind glass, a windowless office hears it on the roof": {
+"system": "weather",
+"system2": "",
+"conf": "high"
+},
+"the office safe and the corridor answer EXAMINE, and the corridor changes once you know what's behind it": {
+"system": "heist",
+"system2": "",
+"conf": "low"
+},
+"the manager's man-drink nudge holds while a modal is up": {
+"system": "social",
+"system2": "",
+"conf": "low"
+},
+"past the landing a loud act says once that it no longer counts; the landing never claims the Rabbit is shut": {
+"system": "heist",
+"system2": "",
+"conf": "high"
+},
+"the motel is indoors: the downpour is on the roof, and leaving it speaks from the doorway": {
+"system": "weather",
+"system2": "barfine",
+"conf": "low"
+},
+"the dolphins are the roundabout you are standing on": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"Mot will discuss the wallet he stole, and the cart he mentioned": {
+"system": "act1",
+"system2": "conversation",
+"conf": "low"
+},
+"TRAVEL stops where the rain catches it, like a typed step would": {
+"system": "weather",
+"system2": "navigation",
+"conf": "high"
+},
+"the Boardroom's absent owners are one line, and not 'over on Thappraya' to a man on Thappraya": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"dawn inside an office is not 'upright on the soi'": {
+"system": "clock",
+"system2": "worldprose",
+"conf": "low"
+},
+"a whole district is a bike ride: pratumnak is a piwin destination": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"the piwin's own menu parses as the answer: 'bali hai' after 'where to?'": {
+"system": "motosai",
+"system2": "",
+"conf": "high"
+},
+"a real building with no room behind it is refused as what it is": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"PRAY on Buddha Hill is the Buddha, not a spirit house by a doorway": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"the lake after midnight does not light a bar that has shut": {
+"system": "worldprose",
+"system2": "barfine",
+"conf": "low"
+},
+"Soi 9 sells the bowl its prose dares you to try": {
+"system": "food",
+"system2": "",
+"conf": "high"
+},
+"four massages are four massages": {
+"system": "massage",
+"system2": "",
+"conf": "high"
+},
+"the fixtures a walking man reaches for answer EXAMINE": {
+"system": "worldprose",
+"system2": "",
+"conf": "high"
+},
+"both faces of the mall keep the same hours": {
+"system": "worldprose",
+"system2": "navigation",
+"conf": "low"
+},
+"Nont knows Boonchu is a morning man, and charges nothing for it": {
+"system": "money",
+"system2": "conversation",
+"conf": "low"
+},
+"road travel is reversible: a cardinal step between two street rooms has the opposite cardinal back (or a junction's named connector where that slot is another road)": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"Pattaya Klang runs Beach Road → Second Road → Soi Buakhao → Sukhumvit, and Soi Buakhao terminates into it": {
+"system": "navigation",
+"system2": "",
+"conf": "high"
+},
+"the Areca Lodge's driveway is where its door is: Soi Diana middle, not the Buakhao end": {
+"system": "hotels",
+"system2": "navigation",
+"conf": "low"
+},
+"Wilf at Mike's Mall: thirty years, a pension the rate has been eating, one thing away, and not going back": {
+"system": "regulars",
+"system2": "worldprose",
+"conf": "high"
+},
+"Wilf gave up drinking ten years ago (the rate, not the doctor) and has no girlfriend by choice": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"Nont's arithmetic holds: father gone at twelve, on the till at fourteen, twenty-two now": {
+"system": "worldprose",
+"system2": "money",
+"conf": "low"
+},
+"Glam walks the crossing on somebody's arm, and comes back after an hour (Mario, 2026-09-07)": {
+"system": "regulars",
+"system2": "motosai",
+"conf": "low"
+},
+"Wimon says her own three errands out loud, and the closed door survives (round-46 quest sweep)": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"a two-leg errand points HINT at the leg you are on (Opus quest re-run)": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"Bert is American: no Guv, no pint, no bloody, no that lot (Mario, 2026-09-07)": {
+"system": "worldprose",
+"system2": "filler",
+"conf": "high"
+},
+"Wimon counts the same three beer bars twice": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"WAIT UNTIL reaches the whole night, and a refusal costs nothing (Kenji, round 47)": {
+"system": "clock",
+"system2": "",
+"conf": "high"
+},
+"the round on the house books the spend AND the return, never the net (Des, round 47)": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the next-door hand-off is one sentence, not a doubled name and two full stops": {
+"system": "worldprose",
+"system2": "quests",
+"conf": "low"
+},
+"LAST NIGHT reprints the morning ledger, word for word": {
+"system": "saveload",
+"system2": "clock",
+"conf": "low"
+},
+"the ledger survives the app being closed — which is the whole finding": {
+"system": "saveload",
+"system2": "",
+"conf": "high"
+},
+"the rough wake's missing money is in what LAST NIGHT reprints": {
+"system": "saveload",
+"system2": "clock",
+"conf": "low"
+},
+"LAST NIGHT costs no turn and has a truthful answer before you have slept": {
+"system": "saveload",
+"system2": "clock",
+"conf": "low"
+},
+"LAST NIGHT is reachable by thumb as well as by keyboard": {
+"system": "presentation",
+"system2": "saveload",
+"conf": "low"
+},
+"every label TOPICS can print is a phrase the parser takes": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"TOPICS answers for a woman the chip bar has nothing to show": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a person's name still waits on the transcript having printed it": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"the pager still counts what a thumb can reach, not what TOPICS printed": {
+"system": "conversation",
+"system2": "presentation",
+"conf": "high"
+},
+"no two till-keepers in different districts recite the same life": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"a mamasan's look line and her family answer are about the same woman": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"nobody sends you to Candy while Candy is standing there": {
+"system": "conversation",
+"system2": "act1",
+"conf": "low"
+},
+"a roof is a roof: the downpour never sends you out for an awning you're under": {
+"system": "weather",
+"system2": "",
+"conf": "high"
+},
+"nobody presses their own money on a man with thousands in his pocket": {
+"system": "money",
+"system2": "",
+"conf": "low"
+},
+"Auntie Nok only says 'enough for bus now' to somebody who hadn't got it": {
+"system": "money",
+"system2": "",
+"conf": "low"
+},
+"Mot's boots are a number the player can do something about": {
+"system": "act1",
+"system2": "quests",
+"conf": "low"
+},
+"the women at a lock-in bar can discuss the bolt": {
+"system": "bell",
+"system2": "conversation",
+"conf": "high"
+},
+"Ploy answers for the things two other people send you to her for": {
+"system": "conversation",
+"system2": "quests",
+"conf": "low"
+},
+"a bar with nobody in it still has somebody pouring": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"every modal redraw carries the money, the commands and the names its live prompt did": {
+"system": "saveload",
+"system2": "",
+"conf": "high"
+},
+"TOPICS never offers a node the author marked chip:false": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"chip:\\": {
+"system": "conversation",
+"system2": "",
+"conf": "low"
+},
+"a topic that is somebody's own name reads as herself, and answers to it": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a real venue is never refused as genre furniture": {
+"system": "navigation",
+"system2": "worldprose",
+"conf": "low"
+},
+"one woman is not 'the girls'": {
+"system": "filler",
+"system2": "social",
+"conf": "low"
+},
+"it rains once a night, and never twice (Mario, 2026-09-14)": {
+"system": "weather",
+"system2": "",
+"conf": "high"
+},
+"the morning ledger names the account on a night the machine was used": {
+"system": "money",
+"system2": "saveload",
+"conf": "low"
+},
+"a man holding ฿25 is short, not empty-handed": {
+"system": "money",
+"system2": "",
+"conf": "high"
+},
+"paying the note back by hand pays the principal, exactly as paying it on time does": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"PAY NOTE with nothing outstanding says where the money stayed": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"a floor moment that names ฿40 puts ฿40 in the books": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"every flat loss on a shift call carries its reason into BOOKS": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the room safe does not welcome an expat back to his vacation": {
+"system": "act1",
+"system2": "vacation",
+"conf": "low"
+},
+"LAST NIGHT on the first morning does not tell a man who just slept that he hasn't": {
+"system": "saveload",
+"system2": "clock",
+"conf": "low"
+},
+"the black book names its denominator as what it counts": {
+"system": "phone",
+"system2": "",
+"conf": "high"
+},
+"no modal answers to a bare letter or a prefix": {
+"system": "presentation",
+"system2": "saveload",
+"conf": "low"
+},
+"NO at Nont's price is a night, not forever": {
+"system": "money",
+"system2": "",
+"conf": "high"
+},
+"the wai comes back from a man as a man": {
+"system": "thai",
+"system2": "conversation",
+"conf": "high"
+},
+"TOPICS for somebody who is not here says where they are, not the partner's list": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"a bare ขอบคุณ is echoed without a particle the player never typed": {
+"system": "thai",
+"system2": "",
+"conf": "high"
+},
+"the other ledger is never told to the man who keeps it": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"a bonded employee never greets the owner as a new face": {
+"system": "barbooks",
+"system2": "ladydrinks",
+"conf": "low"
+},
+"the last-bus warning is not for a man standing his own rail": {
+"system": "bus",
+"system2": "barbooks",
+"conf": "low"
+},
+"a reveal is a reveal: an exhausted floor deals nobody's first confidence twice": {
+"system": "barbooks",
+"system2": "filler",
+"conf": "low"
+},
+"TALK TO MAMASAN / CASHIER addresses the role-carrier on the floor": {
+"system": "filler",
+"system2": "conversation",
+"conf": "high"
+},
+"the tab call's pay-day is never tonight, and the settle line names the same day": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the early call names the kin the girl actually has": {
+"system": "barbooks",
+"system2": "filler",
+"conf": "low"
+},
+"Tan's authored read on Eddy outranks the locator, and moves after the coffee": {
+"system": "heist",
+"system2": "money",
+"conf": "low"
+},
+"Tan's read on Nont moves with the file": {
+"system": "money",
+"system2": "conversation",
+"conf": "low"
+},
+"Bangkok is a subject three people answer, and Duangjai has a line on the Rabbit": {
+"system": "sao",
+"system2": "heist",
+"conf": "high"
+},
+"Nont tells his exit from the Rabbit one way": {
+"system": "heist",
+"system2": "money",
+"conf": "low"
+},
+"an authored girl's plan is a sentence, as a filler girl's is": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"a plain line to a partner whose question lapsed is the late answer, not a topic": {
+"system": "conversation",
+"system2": "",
+"conf": "high"
+},
+"Bill welcomes you to the club you are standing in": {
+"system": "filler",
+"system2": "worldprose",
+"conf": "low"
+},
+"staff answer the calendar they keep: closing and the league, in their own register": {
+"system": "calendar",
+"system2": "conversation",
+"conf": "high"
+},
+"TIME says where in the count the league is, and a quiz you are sitting in is ON": {
+"system": "calendar",
+"system2": "",
+"conf": "high"
+},
+"Mort stands behind his own copy, and the cipher's instruction is a door": {
+"system": "media",
+"system2": "conversation",
+"conf": "high"
+},
+"TAO RAI answers in a cabaret and a massage shop": {
+"system": "drinks",
+"system2": "massage",
+"conf": "high"
+},
+"the Stinky's ashtray reads; a late pie is an offer of crisps, not a charge": {
+"system": "worldprose",
+"system2": "food",
+"conf": "low"
+},
+"an absent owner's pronoun is his own; a filler girl's family line is not doubled": {
+"system": "filler",
+"system2": "",
+"conf": "high"
+},
+"Doyle's job waits on a face he knows; the order quest stops pitching once it is done": {
+"system": "quests",
+"system2": "regulars",
+"conf": "high"
+},
+"no bargirl weaves out of a shut Soi 6 door": {
+"system": "barfine",
+"system2": "worldprose",
+"conf": "low"
+},
+"Beach Road is a long ride: riding THROUGH it costs a turn, arriving in it does not": {
+"system": "navigation",
+"system2": "motosai",
+"conf": "high"
+},
+"the un-adopted dog has a manor: the nudge fires where he was first seen": {
+"system": "dog",
+"system2": "",
+"conf": "high"
+},
+"after midnight TIME says whose small hours these are, and the pension's home chip is nobody's port": {
+"system": "clock",
+"system2": "navigation",
+"conf": "low"
+},
+"the Owl's arrival slot has enough variants for a week without a rerun": {
+"system": "media",
+"system2": "",
+"conf": "high"
+},
+"Mort is a fixture: the season never keeps him in, whatever night you visit": {
+"system": "regulars",
+"system2": "weather",
+"conf": "high"
+},
+"the hospital queue only names money you'll never see when you actually sent some": {
+"system": "clinic",
+"system2": "phone",
+"conf": "low"
+},
+"the rose pitch takes only an answer to the rose: BUY BEER buys a beer": {
+"system": "encounters",
+"system2": "",
+"conf": "low"
+},
+"the girl on your arm is the party, not the jilted; the roster says she is with you": {
+"system": "party",
+"system2": "",
+"conf": "high"
+},
+"a shift stood into the small hours survives going home to bed": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the tab is one line in the books": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"the affair girl is not a customer: no barfine quote, her own texts, her own hello, and the staff know": {
+"system": "affair",
+"system2": "",
+"conf": "high"
+},
+"Jun answers to yourself and is nobody's lady drink; Tan reads a venue and a phone-only woman": {
+"system": "ladydrinks",
+"system2": "conversation",
+"conf": "low"
+},
+"a soapy has a price list, a street has no doorway, and the rain has an earliest hour": {
+"system": "massage",
+"system2": "weather",
+"conf": "high"
+},
+"a work event keeps its gap, and a birthday has more than one paragraph": {
+"system": "barbooks",
+"system2": "",
+"conf": "high"
+},
+"a ride stop takes the time a stop takes, the after-hours room's 'already paid' is paid, and she remembers": {
+"system": "nightride",
+"system2": "",
+"conf": "high"
+},
+"the self-barfine offer lapses honestly, and BUY ROSE FOR <her> buys the rose": {
+"system": "barfine",
+"system2": "encounters",
+"conf": "low"
+},
+"the saga's return channels: Wimon after the whole of it, Diamond on the keys, Mala on the scout, the giver's pronoun": {
+"system": "quests",
+"system2": "",
+"conf": "high"
+},
+"the clinic is a place, the squid man sells squid, the weekender comes in two, the catfish keeps a cadence": {
+"system": "clinic",
+"system2": "encounters",
+"conf": "low"
+},
+"Tan's call knows the hill is not town; Waen texts students she has met; Priew texts": {
+"system": "phone",
+"system2": "thai",
+"conf": "low"
+},
+"an old save standing in orchid_club wakes in nottys_place": {
+"system": "orchid",
+"system2": "saveload",
+"conf": "high"
+},
+"Cream's door gets a hint after three nights at her table, and the Killer Table warns when the week runs out": {
+"system": "cream",
+"system2": "games",
+"conf": "high"
+},
+"buying her a drink does not make her introduce herself again": {
+"system": "ladydrinks",
+"system2": "conversation",
+"conf": "low"
+},
+"a woman's confidences are hers: no repeat to you, and she does not share them with the next woman": {
+"system": "conversation",
+"system2": "filler",
+"conf": "low"
+},
+"a butterfly is a man who does not come back, and Lek thanks you only for shoes you bought": {
+"system": "ladydrinks",
+"system2": "conversation",
+"conf": "low"
+},
+"the deepest-written woman is not the quietest: warmth outranks the ask-me-something prompt": {
+"system": "conversation",
+"system2": "ladydrinks",
+"conf": "low"
+},
+"a ledger reveal is a thing the TOWN shows you once, not a script each woman owns": {
+"system": "ladydrinks",
+"system2": "",
+"conf": "high"
+},
+"the name she uses for nobody else is SAID, and it is the same name on the bike": {
+"system": "ladydrinks",
+"system2": "nightride",
+"conf": "high"
+},
+"a property is not a comment: nothing is swallowed by a trailing line comment": {
+"system": "worldprose",
+"system2": "",
+"conf": "low"
+},
+"the town can answer its own hours, and not in one voice": {
+"system": "conversation",
+"system2": "calendar",
+"conf": "high"
+},
+"a parlour answers as a parlour, and the woman who runs it is the house": {
+"system": "massage",
+"system2": "conversation",
+"conf": "high"
+},
+"a manager does not answer in a bar girl's Tinglish, and one boss gets more than one review": {
+"system": "filler",
+"system2": "conversation",
+"conf": "high"
+},
+"'my bar' is an ownership claim, and a mamasan does not own the bar": {
+"system": "barbooks",
+"system2": "filler",
+"conf": "high"
+},
+"a meal said to be on the house is on the house — once": {
+"system": "food",
+"system2": "",
+"conf": "low"
+},
+"the first morning of a new trip reports the night that was played": {
+"system": "vacation",
+"system2": "saveload",
+"conf": "high"
+},
+"Wilf is on the bench, and a regular's local may be a kitchen": {
+"system": "regulars",
+"system2": "",
+"conf": "high"
+},
+"the mamasan quotes the number she sets — the cashiers promise she will": {
+"system": "barfine",
+"system2": "filler",
+"conf": "low"
+},
+"a promise that states its own condition opens when the condition is met": {
+"system": "worldprose",
+"system2": "quests",
+"conf": "low"
+},
+"the town can say what its people do, who they answer to, and what it pays": {
+"system": "conversation",
+"system2": "worldprose",
+"conf": "low"
+},
+"a character's livelihood is filed under its own word, and `work:` points at it": {
+"system": "filler",
+"system2": "conversation",
+"conf": "low"
+},
+"a stranger gets the SHAPE of the money, never the ledger's figures": {
+"system": "ladydrinks",
+"system2": "conversation",
+"conf": "low"
+},
+"the killer table has a king, and he has to keep turning up": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the table signposts are derived, and name only bars you have found": {
+"system": "games",
+"system2": "",
+"conf": "low"
+},
+"Bert hands back chalk only while it is still up": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"the slate is a thing in the room, not one line every third night": {
+"system": "games",
+"system2": "worldprose",
+"conf": "low"
+},
+"winner stays on, and losing the frame loses the table": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"trying to start the game you are already playing is not a free shot": {
+"system": "games",
+"system2": "",
+"conf": "high"
+},
+"a man who is out is not being let have the table": {
+"system": "games",
+"system2": "regulars",
+"conf": "low"
+},
+"the room with the table can discuss the table": {
+"system": "games",
+"system2": "conversation",
+"conf": "low"
+},
+"stubbed dice cannot hang the engine — the documented testing practice is safe": {
+"system": "games",
+"system2": "",
+"conf": "low"
+},
+"a multi-word name is gated on BOTH halves, and town vocabulary is not": {
+"system": "conversation",
+"system2": "phone",
+"conf": "low"
+},
+"a new trip does not reprint the last trip's morning": {
+"system": "vacation",
+"system2": "saveload",
+"conf": "high"
+},
+"a barfine counteroffer keeps the fields the prompt reads": {
+"system": "barfine",
+"system2": "",
+"conf": "high"
+},
+"the people who hold the town up can be spoken to: vendor, DJ, greeter, band, cook": {
+"system": "conversation",
+"system2": "worldprose",
+"conf": "low"
+},
+"the men you played killer against are people for the rest of the night": {
+"system": "games",
+"system2": "conversation",
+"conf": "high"
+},
+"the piwin answers for his own job before he looks anyone up": {
+"system": "motosai",
+"system2": "conversation",
+"conf": "high"
+}
+}
+}

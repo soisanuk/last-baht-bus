@@ -1,0 +1,1075 @@
+{
+ "_about": "The systems the game is made of — the ROWS of the coverage map (tools/coverage-map.mjs). Hand-grouped, but the atoms are derived: every soak EFFECTS id, every pendingChoice modal, every QUESTS id and every ENCOUNTERS id must belong to exactly one system or the tool lists it as unmapped. verbs/rooms/npcs are the atoms a coverage record can touch (a persona 'walked' a system when their record intersects them). Grow the table when a system ships; the guard says when.",
+ "systems": [
+  {
+   "id": "act1",
+   "name": "Act One: the wallet race",
+   "verbs": [
+    "sell",
+    "wai",
+    "safe",
+    "keypad",
+    "code",
+    "pin",
+    "hint"
+   ],
+   "rooms": [
+    "jomtien_beach",
+    "oy_office",
+    "rainbow_girls",
+    "candy_bar"
+   ],
+   "npcs": [
+    "nok",
+    "candy",
+    "lek",
+    "oy",
+    "bank",
+    "mot",
+    "tan"
+   ],
+   "effects": [
+    "act1.completed",
+    "roomsafe.paid"
+   ],
+   "modals": [
+    "intro"
+   ],
+   "quests": [
+    "safecracker"
+   ],
+   "encounters": [],
+   "predicates": [],
+   "note": "the do-or-die opening; rough wakes are a resident mechanic"
+  },
+  {
+   "id": "identity",
+   "name": "Identity: the taxi intro, origins, WHO AM I",
+   "verbs": [
+    "who",
+    "identity"
+   ],
+   "rooms": [],
+   "npcs": [
+    "tan",
+    "kyle"
+   ],
+   "effects": [],
+   "modals": [
+    "intro"
+   ],
+   "quests": [
+    "taxi_debt",
+    "glass_start"
+   ],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "clock",
+   "name": "The clock: nights, dawn, sunrise, the all-nighter, WAIT",
+   "verbs": [
+    "wait",
+    "time",
+    "sleep",
+    "watch"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "night.ended"
+   ],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "body",
+   "name": "The body: hunger, thirst, drunk, hurt, hangover, DIAGNOSE",
+   "verbs": [
+    "diagnose",
+    "eat",
+    "drink",
+    "shower"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "sobriety",
+   "name": "Sobriety and comps: the welcome shot, the bell's bottle, I DON'T DRINK",
+   "verbs": [
+    "decline",
+    "refuse"
+   ],
+   "rooms": [],
+   "npcs": [
+    "fast_eddy",
+    "bert"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [
+    "teetotal",
+    "lastComp"
+   ],
+   "note": ""
+  },
+  {
+   "id": "bus",
+   "name": "Transport: the baht bus, the loop, fares, the small-hours wait",
+   "verbs": [
+    "ride",
+    "pay",
+    "wave"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "motosai",
+   "name": "Transport: the motosai, the piwin, the crash, the highway crossing",
+   "verbs": [
+    "motosai"
+   ],
+   "rooms": [
+    "sukhumvit_crossing",
+    "khao_talo_strip",
+    "sukhumvit_verge"
+   ],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "navigation",
+   "name": "Navigation: GO/ENTER/TRAVEL/EXITS/MAP, venue doors, closed doors",
+   "verbs": [
+    "go",
+    "enter",
+    "travel",
+    "exits",
+    "map"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "moved.room"
+   ],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": "TRAVEL stops at the dark since round 52"
+  },
+  {
+   "id": "darkness",
+   "name": "Darkness: the torch, battery, dark streets, dog bites",
+   "verbs": [
+    "light",
+    "charge"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "dog",
+   "name": "The soi dog: adoption, protection, transport, the Shamrock",
+   "verbs": [
+    "feed",
+    "pet",
+    "rename"
+   ],
+   "rooms": [
+    "khao_talo_strip"
+   ],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [
+    "shamrock"
+   ],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "money",
+   "name": "Money: the ATM, the bank, the Thai account, Nont's CASH, SEND",
+   "verbs": [
+    "withdraw",
+    "cash",
+    "send"
+   ],
+   "rooms": [],
+   "npcs": [
+    "nont"
+   ],
+   "effects": [
+    "money.spent"
+   ],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "drinks",
+   "name": "Drinks and the seat: BEER/WATER/SODA, TAO RAI, the price tiers, HAGGLE",
+   "verbs": [
+    "buy",
+    "tao",
+    "haggle"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "ladydrinks",
+   "name": "Lady drinks, tips and the bond ladder; the regular; the other ledger",
+   "verbs": [
+    "buy",
+    "tip",
+    "contact"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "bond.built",
+    "bond.regular.tier"
+   ],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "social",
+   "name": "FLIRT/KISS, heat, the bell's favour, THROW COVER, BRA",
+   "verbs": [
+    "flirt",
+    "kiss"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "bell",
+   "name": "The bell and the lock-in",
+   "verbs": [
+    "ring"
+   ],
+   "rooms": [
+    "night_heron",
+    "khao_talo_bar"
+   ],
+   "npcs": [],
+   "effects": [
+    "bell.rung"
+   ],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "barfine",
+   "name": "BARFINE: ST/LT, the two fees, refusals, draws, sponsors, scams, COMPLAIN, the motel",
+   "verbs": [
+    "barfine",
+    "complain"
+   ],
+   "rooms": [
+    "short_time_motel"
+   ],
+   "npcs": [
+    "somchith"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": "the negotiation modal"
+  },
+  {
+   "id": "party",
+   "name": "TAKE HER OUT: the companion, GOODBYE, the motel, the companion rescue",
+   "verbs": [
+    "goodbye"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [
+    "G.party"
+   ],
+   "note": ""
+  },
+  {
+   "id": "nightride",
+   "name": "The night ride: her bike, the stops, RIDE ON",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [
+    "nightride"
+   ],
+   "predicates": [
+    "_onRide()"
+   ],
+   "note": ""
+  },
+  {
+   "id": "encounters",
+   "name": "Street encounters: freelancers, tourists, the katoey, the peddler, the booking app",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [
+    "katoey",
+    "bargirl",
+    "brit",
+    "powerbank",
+    "freelancer",
+    "noodle",
+    "coconutbar",
+    "seawall",
+    "bkktourist",
+    "jptourist",
+    "britles",
+    "punterwife",
+    "pingpong",
+    "booking",
+    "clubpickup",
+    "freegift",
+    "condofarang",
+    "jogger",
+    "influencer",
+    "djslip",
+    "maze"
+   ],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "cons",
+   "name": "The cons: the tonic tout, the fortune teller, REPORT at the station",
+   "verbs": [
+    "report"
+   ],
+   "rooms": [
+    "police_station"
+   ],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [
+    "tonic",
+    "fortune"
+   ],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "phone",
+   "name": "The phone: texts, CALL, MESSAGE, contacts, WHO, photos, the gallery",
+   "verbs": [
+    "phone",
+    "message",
+    "call",
+    "contacts",
+    "who",
+    "blackbook",
+    "photo",
+    "gallery",
+    "photos",
+    "check"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "contact.swapped",
+    "photo.taken"
+   ],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "conversation",
+   "name": "Conversation: TALK/ASK, TOPICS, choices, the ask loop, retells, the miss path",
+   "verbs": [
+    "talk",
+    "ask",
+    "topics",
+    "say",
+    "again"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "quests",
+   "name": "Quests: offers, ACCEPT, HINT, the journal, _questWhere",
+   "verbs": [
+    "quests",
+    "accept",
+    "abandon",
+    "hint",
+    "journal"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "quest.accepted",
+    "quest.completed"
+   ],
+   "modals": [],
+   "quests": [
+    "kwan_crane",
+    "lake_errand",
+    "quietside",
+    "orchid_intro",
+    "hill_ice",
+    "hill_order",
+    "hill_photo",
+    "old_days",
+    "easy_come",
+    "quiet_one",
+    "her_brother",
+    "wrong_shot",
+    "helmet",
+    "sangsom",
+    "league",
+    "bee_number",
+    "oldrocker",
+    "keys",
+    "quietmoney",
+    "family",
+    "recce",
+    "scout",
+    "debtrun"
+   ],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "regulars",
+   "name": "The rail regulars: hops, anchor nights, days, the bench, cross-topics",
+   "verbs": [],
+   "rooms": [
+    "queen_vic"
+   ],
+   "npcs": [
+    "doyle",
+    "terry",
+    "mort",
+    "angela",
+    "pete",
+    "wilf"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "calendar",
+   "name": "The calendar: quiz night, the league, the Sunday roast, weekdays",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "games",
+   "name": "Bar games: Connect 4, Jackpot, pool, killer, darts",
+   "verbs": [
+    "play"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "thai",
+   "name": "Thai: typed Thai, the fluency ladder, lessons, Cloze, the notebook",
+   "verbs": [
+    "lesson",
+    "answer",
+    "notebook"
+   ],
+   "rooms": [
+    "cloze"
+   ],
+   "npcs": [
+    "waen"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "hotels",
+   "name": "Hotels: CHECKOUT, rent, debt, the perks, the joiner fee",
+   "verbs": [
+    "checkout",
+    "swim",
+    "balcony"
+   ],
+   "rooms": [
+    "hotel_room",
+    "qv_room",
+    "areca_room",
+    "metropole_room"
+   ],
+   "npcs": [],
+   "effects": [],
+   "modals": [
+    "checkout"
+   ],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "weather",
+   "name": "Weather and season: rain, drizzle, the season curve, bench thinning",
+   "verbs": [
+    "weather"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "media",
+   "name": "Media: TV, the paper, the column, SCORES, LOTTERY, the Box 15 cipher",
+   "verbs": [
+    "tv",
+    "column",
+    "owl",
+    "scores",
+    "lottery"
+   ],
+   "rooms": [],
+   "npcs": [
+    "mort"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "food",
+   "name": "Food: stalls, the 7-Eleven, the Vic's kitchen, Tan's cart, satiety",
+   "verbs": [
+    "eat",
+    "buy",
+    "follow"
+   ],
+   "rooms": [
+    "queen_vic",
+    "mikes_mall"
+   ],
+   "npcs": [
+    "aoy",
+    "tan"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "saleng",
+   "name": "The saleng carts",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "massage",
+   "name": "Massage, the soapies, the gents' clubs",
+   "verbs": [
+    "massage",
+    "special",
+    "soapy"
+   ],
+   "rooms": [
+    "the_boardroom",
+    "velvet_club",
+    "doghouse"
+   ],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "clinic",
+   "name": "The clinic: GET TESTED, condoms, Priew",
+   "verbs": [
+    "get",
+    "clinic"
+   ],
+   "rooms": [
+    "second_rd_c"
+   ],
+   "npcs": [
+    "priew"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "police",
+   "name": "The police modal, heat, kick-outs, reputation, STANDING",
+   "verbs": [
+    "standing",
+    "score"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "reputation.moved"
+   ],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "happiness",
+   "name": "สนุก: the treadmill, jaded, the levels, สบายสบาย",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "happy.gained",
+    "treadmill.jaded"
+   ],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "vacation",
+   "name": "The stages: vacation end, the new vacation, going expat, SHARE",
+   "verbs": [
+    "share"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [
+    "vacation_end"
+   ],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "barchain",
+   "name": "Buying the bar: premises, licence, the 51% fork, the deposit, the lease, Tan's favour",
+   "verbs": [
+    "transfer"
+   ],
+   "rooms": [
+    "stinky_bar"
+   ],
+   "npcs": [
+    "bert",
+    "wayne",
+    "gavin",
+    "candy",
+    "tan"
+   ],
+   "effects": [
+    "tan.favour.asked"
+   ],
+   "modals": [
+    "partner",
+    "tanfavour",
+    "sellbar"
+   ],
+   "quests": [
+    "plg_deal",
+    "plg_flip",
+    "orchid_recon",
+    "nominee_deal",
+    "bar_premises",
+    "bar_licence",
+    "bar_partner",
+    "bar_opening"
+   ],
+   "encounters": [],
+   "predicates": [
+    "_atOwnBar()"
+   ],
+   "note": ""
+  },
+  {
+   "id": "barbooks",
+   "name": "Running the bar: WORK, BOOKS, the floor, the shift calls, rent and the note, losing it",
+   "verbs": [
+    "work",
+    "books",
+    "draw"
+   ],
+   "rooms": [
+    "stinky_bar"
+   ],
+   "npcs": [],
+   "effects": [
+    "bar.night.settled",
+    "bar.night.worked",
+    "bar.shift.declared",
+    "bar.floor.moment",
+    "bar.shift.called",
+    "bar.shift.lapsed",
+    "bar.month.paid",
+    "bar.rent.missed",
+    "bar.lost"
+   ],
+   "modals": [
+    "shift"
+   ],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "procurement",
+   "name": "Procurement and friction: the syndicate jobs, the factions",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "procurement.asked"
+   ],
+   "modals": [
+    "synjob"
+   ],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "affair",
+   "name": "The staff affair",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [],
+   "effects": [
+    "affair.begun",
+    "affair.ended"
+   ],
+   "modals": [
+    "affair",
+    "affaircrisis"
+   ],
+   "quests": [],
+   "encounters": [],
+   "predicates": [
+    "_affairLive()"
+   ],
+   "note": ""
+  },
+  {
+   "id": "heist",
+   "name": "The Rabbit heist, the CLI sim, the CCIB radar, laying low",
+   "verbs": [
+    "use",
+    "place",
+    "break"
+   ],
+   "rooms": [
+    "white_rabbit",
+    "kitten_office"
+   ],
+   "npcs": [
+    "fast_eddy",
+    "nont",
+    "kesinee"
+   ],
+   "effects": [],
+   "modals": [
+    "rabbitjob",
+    "kidprice",
+    "kidfavour"
+   ],
+   "quests": [
+    "rabbit_job",
+    "rabbit_heist"
+   ],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "sao",
+   "name": "The Bangkok arc: Sao, the Sathorn dinner",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [
+    "sao"
+   ],
+   "effects": [],
+   "modals": [
+    "bkkdinner",
+    "bkkbill"
+   ],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "cream",
+   "name": "Cream, the chameleon economy",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [
+    "cream"
+   ],
+   "effects": [],
+   "modals": [
+    "cham",
+    "chamgift"
+   ],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "filler",
+   "name": "The generated cast: hostess/mama/cashier builders, twins, one story per rail",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "loans",
+   "name": "Nira's loan",
+   "verbs": [
+    "borrow",
+    "repay"
+   ],
+   "rooms": [
+    "neon_paradise"
+   ],
+   "npcs": [
+    "nira"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "orchid",
+   "name": "The Orchid Room and Notty's: PLG, Kesinee's vetting, the good table",
+   "verbs": [],
+   "rooms": [
+    "orchid_room",
+    "nottys_place"
+   ],
+   "npcs": [
+    "kesinee",
+    "gavin",
+    "powers"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "saveload",
+   "name": "Save, reload, UNDO, RESTART, the resume redraw",
+   "verbs": [
+    "save",
+    "load",
+    "undo",
+    "restart"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "presentation",
+   "name": "The frontend: taps, chips, the wheel, FABs, HELP, autocomplete",
+   "verbs": [
+    "help",
+    "verbs"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "worldprose",
+   "name": "World prose: room descs, revisits, lateDesc, geography, reversibility, the reads",
+   "verbs": [
+    "examine",
+    "look",
+    "read",
+    "smell",
+    "listen"
+   ],
+   "rooms": [],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  },
+  {
+   "id": "guardrails",
+   "name": "Real-world guardrails: identifiability, names, venues",
+   "verbs": [],
+   "rooms": [],
+   "npcs": [
+    "powers"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": ""
+  }
+ ]
+}

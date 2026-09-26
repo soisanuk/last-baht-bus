@@ -43,7 +43,7 @@ const all = rows.concat(derived);
 // a row written at triage may carry cls/sev/instrument itself and wins
 let classes = {};
 try { classes = JSON.parse(fs.readFileSync(path.join(root, "docs/persona-findings-classes.json"), "utf8")).byClaim; } catch (e) {}
-for (const r of all) { const c = classes[r.claim]; if (c) for (const k of ["cls", "cls2", "instrument", "why_none", "between", "sev", "conf"]) if (r[k] == null) r[k] = c[k]; }
+for (const r of all) { const c = classes[r.claim] || classes[r.claim + (r.note ? "  — " + r.note : "")]; if (c) for (const k of ["cls", "cls2", "instrument", "why_none", "between", "sev", "conf"]) if (r[k] == null) r[k] = c[k]; }
 const NAMES = { A: "composition", B: "absence", C: "reachability", D: "promise", E: "economy", F: "state-blind prose", G: "modal/input", H: "cross-surface",
   I: "edge-blind", J: "return-channel", K: "clock-in-prose", L: "wrong predicate", M: "one template", N: "town can't say", P: "parser/vocab", Q: "repetition",
   R: "world-claim", S: "save/reload", X: "design pin" };
