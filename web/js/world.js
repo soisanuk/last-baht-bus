@@ -2197,6 +2197,7 @@ const ROOMS = {
   // expats eat — the same men the girls call cheap charlies, seen from the other side.
   // 21:00 — a Thai mall shuts at nine, and so does the food court's table water.
   mikes_mall: { closesAt: 30, opensAt: 11, water: true,
+    reads: { menu: "The laminated photo menus, one per stall: khao man gai, a green curry with the chilli oil floating, pad kra pao with the egg the way it should be, a noodle soup in a bowl the size of a sink. Fifty baht the plate, sixty with the extra egg, and the pictures are honest to within a garnish. (BUY FOOD)" },
     name: "Mike's Mall",
     bar: "Mike's Mall",
     region: "Second Road",
@@ -3160,7 +3161,7 @@ const ROOMS = {
     revisit: [
       "Back into Lucky Tiger — tiger stripes down the bar top, the golden cat stopped mid-wave on dead batteries, the pool table with its ski-slope lean.",
       "The bar takes you back loud and friendly, and dangerous to your wallet in the normal, entirely voluntary way.",
-      "You rack up on the leaning table again. The waving cat keeps not waving; nobody's replaced the batteries in years.",
+      "Somebody's racking up on the leaning table again. The waving cat keeps not waving; nobody's replaced the batteries in years.",
       "Lucky Tiger again — stripes, that tilted table, and the cheerful certainty you'll leave lighter than you came.",
     ],
     exits: { out: "buakhao_n" },
@@ -8972,6 +8973,18 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "many times and not one of them has ever been afraid to get in the car. That " +
           "tells you the place.\u201d",
         short: "\u201cThe Adonis in Supertown. Nott runs it straight. \u0e3f" + HOST_DRINK + " a drink, the boy gets half.\u201d" },
+      // FOOD: his standing invitation is a real door (FOLLOW TAN), and ASK TAN ABOUT
+      // FOOD was a miss one command before it (Marek, round 53)
+      { topic: "food|eat|eating|hungry|noodles|dinner|lunch|breakfast|khao man gai|a place to eat|somewhere to eat", req: ["act1Done"],
+        text: "\u201cYou eat yet?\u201d It is not really a question; he has looked at you and decided. " +
+          "\u201cYou never eat. There is a cart round the corner \u2014 khao man gai, the old woman has " +
+          "done it thirty years and the chicken is the chicken. Come, I know a place. (FOLLOW TAN)\u201d",
+        short: "\u201cYou eat yet? Come. (FOLLOW TAN)\u201d" },
+      { topic: "food|eat|eating|hungry|noodles|dinner|lunch|breakfast|khao man gai|a place to eat|somewhere to eat",
+        text: "\u201cEat?\u201d Tan looks at you the way he looked at you at the airport. \u201cThe wallet first. " +
+          "A man with no money eats standing up at a cart he cannot pay for, and I have seen how that " +
+          "ends. Get it back. Then I feed you.\u201d",
+        short: "\u201cThe wallet first. Then I feed you.\u201d" },
       // TAN'S READ on the CCIB visit — the mechanic's real voice. Gated after the
       // morning scene, once; sets ccibReadGiven, which arms the second-look roll
       // and IS the "why am I laying low" answer. Tan is the mutual friend (canon).

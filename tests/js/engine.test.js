@@ -3273,7 +3273,7 @@ test("phone-Tan: texts and transfers stay fixer-voiced, and the girl machinery i
   assert.equal(state().phone.inbox.length, 0, "Tan never texts the mama-sick patter");
   // and the black book stays a book of girls
   out = []; run("blackbook");
-  assert.match(lastOut(), /book's empty/i, "the fixer doesn't rank on the bond ladder");
+  assert.match(lastOut(), /book's empty|No bar girls in the black book/i, "the fixer doesn't rank on the bond ladder");
 });
 
 test("the safe answers to what a player actually types at a keypad", () => {

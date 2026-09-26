@@ -68,6 +68,12 @@ const FACTS = [
     asks: ["closing", "what time do you close", "hours"],
     rooms: ["mikes_mall"], hour: 20 },
 
+  // the four beds: `_HOTELS` rates the desk bills to the baht, and a town this
+  // chatty had nothing to say about its own hotels (Clive, round 53)
+  { fact: "hotel", why: "_HOTELS / _hotelRate — four beds the engine bills to the baht",
+    asks: ["hotel", "where to stay", "sabai palms", "queen vic", "metropole", "areca lodge"],
+    rooms: ["queen_vic", "stinky_bar", "anchor_bar"], hour: 30 },
+
   // THE LARGEST NUMBER IN THE TRADE, and the woman who sets it would not say it —
   // while three cashiers promise "ask Mama anything, she will tell you the answer
   // and the price" (Helen, round 49). `roles` keeps it off the punter: the fine

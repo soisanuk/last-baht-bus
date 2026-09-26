@@ -643,8 +643,22 @@ const _COMP_PADDED = [
   "{n} arrives with her drink already in her hand and your name already on the chit. (-฿{p}, ฿{m} left.) You could argue it. Three drinks in, you don't.",
   "A hand on your shoulder, {n} on the next stool, the cashier writing. Lady drink, ฿{p}, yours. (฿{m} left.) That is what the free one was for.",
 ];
+// A comped drink is a drink (Mario, 2026-09-03) — but a man who has SAID he
+// doesn't drink is not poured one (Neville, round 53: eight units reached a
+// fourteen-years-sober man who ordered none of them, and the one barman in the
+// same club as him poured a free one without asking). I DON'T DRINK once, and the
+// house remembers: the shot goes back across the rail or to the next stool, the
+// meter is untouched. Anyone else can hand a comp back inside two turns.
+const _COMP_DECLINED = [
+  "The glass stops in front of you and goes no further. \"Soda water, slice,\" you say, and it's poured for the next stool instead; nobody minds and nobody remembers.",
+  "You leave it where it was put. The barman clocks it, says nothing, and it finds a hand that wanted it inside the minute.",
+  "\"Not for me.\" A nod, no argument — this town has seen every kind of man and the ones who don't drink are the least trouble it gets.",
+  "It sits there being a drink. You go on being a man with a soda, and somebody down the rail is a drink up on the night.",
+];
 function _compDrink(n) {
   n = n || 1;
+  if (G.player && G.player.teetotal) { _say(_pickVary(_COMP_DECLINED, "compdecl"), "dim"); return; }
+  G.lastComp = { turn: G.turns, room: G.room };
   const heavy = _pushyBar(G.room) && !_lockedIn();   // a bolted door is a bar that loves you, not one working you
   G.soc.drunk += n + (heavy ? 1 : 0);
   G.thirst = Math.max(0, G.thirst - 20 * n);
@@ -832,7 +846,7 @@ const _LOCKIN_DECLINE = [
     "memory at all for men who don't. The dice go on round without you; the party does not.",
   "You raise your bottle an inch in a gesture that means thank you and no, and the corner " +
     "accepts it with a cheer that is only slightly mocking. Your stool, at least, is safe.",
-  "\"Next time,\" you say, and the girl with the cup shrugs a shoulder that says there is " +
+  "\"Next time,\" you say, and the girl with the shots shrugs a shoulder that says there is " +
     "always a next time and you will always say that. The game moves on. So does the night.",
 ];
 const _LOCKIN_ROUND = [
@@ -1143,7 +1157,8 @@ function _jpFinish() {
       `${g.opp} pays triple with the face of a woman updating her opinion of you in real time.`);
     return;
   }
-  _say(`Your score: ${you}. House rules — you drink for ${you} seconds while the bar counts.`);
+  _say(`Your score: ${you}. House rules — you drink for ${you} seconds while the bar counts` +
+    (G.player && G.player.teetotal ? " — soda water, and they count anyway." : "."));
   _engineSpeak(thaiNum(you));
   const her = jpAutoRound(_rand);
   _say(`${g.opp} takes the cup. ${her.rolls.join(" · ")}.`, "dim");
@@ -1382,6 +1397,13 @@ function _quizAsk() {
   item.opts.forEach((o, i) => _say(`  ${i + 1}. ${o}`, "dim"));
 }
 
+const _QUIZ_WRONG_TAIL = [   // one sentence five times in a night (Marek, round 53)
+  "The table of teachers from Rayong smirks.",
+  "Somebody at the back says the right answer a beat too late, loudly, as if that counted.",
+  "The host taps the mic. \"Close. Not close enough for money.\"",
+  "A pen goes down on the next table with the satisfaction of a man who knew.",
+  "The quizmaster reads it again, slower, for the benefit of nobody.",
+];
 function _quizInput(input) {
   const g = G.game;
   const item = QUIZ_POOL[g.qs[g.at]];
@@ -1398,7 +1420,7 @@ function _quizInput(input) {
     _say(`“${item.opts[item.a]}” — CORRECT! The bar cheers like you cured something.`);
   } else {
     _say(`“${item.opts[pick]}”… the host winces on your behalf. It was ` +
-      `“${item.opts[item.a]}”. The table of teachers from Rayong smirks.`, "alert");
+      `“${item.opts[item.a]}”. ` + _pickVary(_QUIZ_WRONG_TAIL, "quizwrong"), "alert");
   }
   g.at++;
   if (g.at < 5) { _quizAsk(); return; }
@@ -2851,7 +2873,7 @@ function _doBell() {
   _say("You reach up and RING THE BELL.", "win");
   const bt = _room().barType;
   const pool = bt === "pub" ? _BELL_PUB
-    : (bt === "soi6" || bt === "gogo") ? _BELL_GOGO
+    : bt === "soi6" ? _BELL_SOI6 : bt === "gogo" ? _BELL_GOGO
     : _BELL_BEER; // beer bars, and any other bar-type, buy a round for the staff
   const _solo = _staffAt(G.room).length === 1 && bt !== "gogo";
   _say(`${_pickVary(_solo ? _BELL_SOLO : pool, _solo ? "bellsolo" : "bell:" + bt)} (-฿${price}, ฿${G.money} left — reign while it lasts.)`);
@@ -2875,6 +2897,13 @@ function _doBell() {
 // RING BELL means different things by venue. A go-go bell is a round for the
 // stage and the floor; a beer-bar bell is a round for the handful of staff; a
 // pub bell is the oldest magic there is — a round for the whole house.
+// Soi 6: a stool bar with the street for a stage — the go-go pool's "girls on stage
+// break character" rang on a street whose own desc says "no stages" (Neville, round 53)
+const _BELL_SOI6 = [
+  "The bell goes and the whole frontage turns round: the girls on the stools cheer, the ones out on the pavement come in to see who did it, and the cashier is already pouring. The street hears it two doors down.",
+  "You ring it and Soi 6 does what Soi 6 does with a bell — a cheer from the stools, a round down the rail, and a girl from the bar opposite shouting across that she heard that.",
+  "The bell, and a cheer like a goal: every stool, the mamasan, the tout at the door. Drinks go down the length of the bar and the pavement gets a look at the man who rang it.",
+];
 const _BELL_GOGO = [
   "The bar detonates. Cheering from the girls, a drum-roll on the counter from the cashier, " +
     "the mamasan's first fully unguarded smile of the night. Drinks materialise down the length " +
@@ -3667,11 +3696,14 @@ function _boughtHappy(n) {
 function _addHappy(n, why) {
   if (!n) return;
   const before = _happyLevel(G.happy);
+  const was = G.happy;
   G.happy = Math.max(0, G.happy + n);
+  const moved = G.happy - was;   // "(-2 สนุก)" printed at zero while nothing moved (Marek, round 53)
   // `why` names the cause when the change would otherwise be a bare, unexplained
   // dock — e.g. the meter penalty firing on the same command as a game loss, so
   // two identical "(-1 สนุก)" lines don't read as a double-charge.
-  _say(`(${n > 0 ? "+" : ""}${n} สนุก${why ? " — " + why : ""})`, "dim");
+  if (moved) _say(`(${moved > 0 ? "+" : ""}${moved} สนุก${why ? " — " + why : ""})`, "dim");
+  else if (n < 0) _say("(สนุก is already on the floor — it cannot go lower, only longer.)", "dim");
   const after = _happyLevel(G.happy);
   if (n > 0 && after !== before) {
     if (G.happy >= 100 && !_flag("sabaiSabai")) {
@@ -4162,7 +4194,7 @@ const _DEBRIEF = {
   }),
   accident: () => ({
     what: "The motorbike found the one bit of gravel it was looking for.",
-    why: "A late-hours motosai ride is the one journey in the game that can " +
+    why: "A motosai ride is the one RIDE in the game that can " +
       "hurt you, and drink makes it likelier.",
     next: "The baht bus is ฿" + BUS_FARE + " and cannot crash you. After two it goes " +
       "sparse rather than away — you wait at the kerb instead of riding straight off. " +
@@ -4260,6 +4292,13 @@ function _morningLedger() {
   }
   G.lastNight = null;
   const bits = [];
+  // the night's worst news first: LAST NIGHT after the bike crash read only the money
+  // and the สนุก, and after the truck read "+12 สนุก" (Marek, round 53)
+  const _lastEnd = (G.nightLog || []).slice(-1)[0];
+  const _endReason = _lastEnd && typeof _lastEnd === "object" ? _lastEnd.reason : _lastEnd;
+  const _ENDED = { accident: "the bike put you in the ward", roadhit: "the highway put you in the ward", hurt: "the ward, three strikes",
+    blackout: "blacked out — the town put you somewhere", collapse: "collapsed and woke wherever you fell", robbed: "robbed", bfscam: "her game, not yours" };
+  if (_endReason && _ENDED[_endReason]) bits.push(_ENDED[_endReason]);
   const dh = G.happy - b.happy;
   if (dh) bits.push((dh > 0 ? "+" : "") + dh + " \u0e2a\u0e19\u0e38\u0e01");
   const drawn = (G.atmTotal || 0) - (b.atm || 0); // ATM cash isn't "income" (27-night playtest: "up ฿18,880")
@@ -4527,6 +4566,8 @@ function _endNight(reason) {
       break;
     case "roadhit":
       _hospitalMorning("roadhit");  // the highway, on foot — the ward, insurance, no bill
+      _addHappy(-8);
+      G.crashInjury = true;         // a pickup is not milder than a scooter: wake banged up, same as the bike (Marek, round 53)
       break;
     case "accident":
       _hospitalMorning("accident"); // a road accident — the ward, insurance, no bill

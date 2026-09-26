@@ -3451,8 +3451,12 @@ function _doBlackbook() {
     if (NPC_ROLES[id] && NPCS[id] && _bondTier(id) >= 1 && !ids.includes(id)) ids.push(id);
   }
   if (!ids.length) {
-    _say("The black book's empty. You earn names the honest way out here — CONTACT a " +
-      "lady in her own bar once she likes you, and she goes in the book.");
+    const others = Object.keys(G.phone.contacts || {}).filter(k => G.phone.contacts[k] && NPCS[k]).length;
+    if (others)   // "empty" with Priew and Tan in the phone read as a lie (Marek, round 53)
+      _say(_fmt("No bar girls in the black book yet — the phone has {n} other number{s} (CONTACTS). You earn names the honest way out here — CONTACT a lady in her own bar once she likes you, and she goes in the book.", { n: others, s: others > 1 ? "s" : "" }));
+    else
+      _say("The black book's empty. You earn names the honest way out here — CONTACT a " +
+        "lady in her own bar once she likes you, and she goes in the book.");
     return;
   }
   ids.sort((a, b) => _bondTier(b) - _bondTier(a) || (G.soc.drinks[b] || 0) - (G.soc.drinks[a] || 0));
@@ -3561,8 +3565,13 @@ function _doMessage(arg) {
         "lunch still ok? i tell you first day — evening i work. you know now 555\" And that " +
         "is the whole of it: she never lied, and she is not going to start apologising for " +
         "your imagination."
-      : "\"555 the one with the eyes! ankle better na. lunch some day — only lunch, i work evening, " +
-        "every day until late 😊\" Cheerful, unhurried, exactly what she said at the clinic.");
+      : _pickVary([
+        "\"555 the one with the eyes! ankle better na. lunch some day — only lunch, i work evening, " +
+          "every day until late 😊\" Cheerful, unhurried, exactly what she said at the clinic.",
+        "\"you again 😊 ankle ok now, i walk to work. lunch one day na — day time only, evening i busy busy\" Same terms as the waiting room; she is nothing if not consistent.",
+        "\"hello mister eyes 555. today rain, no work? no — always work. lunch some day, i tell you where\" A promise with no date on it, which is the only kind she makes.",
+        "\"555 ok ok. eat already? me not yet. lunch next week maybe, i see my rota\" And a cat sticker, which is apparently the signature.",
+      ], "priewreply"));
     return;
   }
   if (w === "mort" && _flag("jokeWho")) {
@@ -5449,7 +5458,7 @@ const _BALCONY_SCENES = [
 const _PUB_SOI_SCENES = [
   "You take a stool by the window. On the far side of the glass Soi 6 goes about its business at eye level — a " +
     "tout's patter, a girl's laugh pitched to carry, a farang being steered by the elbow toward a doorway he is " +
-    "pretending to resist. In here: aircon, a dartboard, a pint going warm at exactly your own pace. The glass does " +
+    "pretending to resist. In here: aircon, a dartboard, a glass going warm at exactly your own pace. The glass does " +
     "the rest.",
   "Through the Vic's front window the soi plays as a silent film with the bass leaking under the door — a barfine " +
     "haggled in mime, a hen party spilling off the kerb, a soi dog trotting through the lot of it on business of his " +
@@ -8796,6 +8805,9 @@ const FOOD_STALLS = {
   pattaya_soi_9: { name: "a bowl at the noodle place that is very good and knows it", price: 60, hunger: 55, thirst: 5 },   // the soi's own prose promised it (Owen, round 46)
   jomtien_7eleven: { name: "a toastie, pressed while you wait", price: 35, hunger: 40, thirst: 0 },
   mikes_mall: { name: "the fifty-baht plate from the top-floor food court, honestly enough food", price: 50, hunger: 55, thirst: 0 },
+  // three carts the prose smokes, ices and chalks up and the till refused (Marek, round 53)
+  tt_lane_2: { name: "moo ping off the corner cart that smokes the whole junction, sticky rice in a bag", price: 40, hunger: 35, thirst: 0 },
+  cricketers: { name: "a pie off the Cricketers' board — proper gravy, as advertised, on a plate that has seen the Ashes", price: 180, hunger: 60, thirst: 0 },
   cheap_charlies: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },
   jomtien_soi_7_m: { name: "som tam off the lone cart doing quiet business, extra lime", price: 50, hunger: 50, thirst: -5 },
   cheap_charlies_jt: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },
@@ -8912,6 +8924,7 @@ function _qvKitchen(arg) {
       _say("Aoy doesn't look up. \u201cKitchen close, tilac. You had the crisp already.\u201d (BUY CRISPS, if you must.)");
       return;
     }
+    if (_fullNo()) return;   // a bag that "lands on the bar" and is never charged because you were full (Marek, round 53)
     G.soc.qvCrisped = true;
     _say("Aoy doesn't even reach for the pad. \u201cKitchen close, tilac \u2014 cook go " +
       "home eleven o'clock, same as England.\u201d A bag of crisps lands on the bar " +

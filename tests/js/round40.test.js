@@ -151,7 +151,7 @@ test("the Candy route says out loud whose side of the paper supply sits on (Keit
 test("in a bar, water and a soda cost the beer — you are paying for the seat (Mario)", () => {
   G.room = "candy_bar"; G.money = 5000; const p = _beerPrice();
   run("buy water"); assert.equal(G.money, 5000 - p);
-  out = []; run("buy coke"); assert.equal(G.money, 5000 - 2 * p); assert.ok(_SOFT_LINES.some(l => text().includes(l.slice(0, 30))));
+  out = []; run("buy coke"); assert.equal(G.money, 5000 - 2 * p); assert.ok(_SOFT_LINES.some(l => text().includes(_fmt(l, { d: "Coke", D: "Coke" }).slice(0, 30))));
   out = []; run("why so expensive"); assert.ok(_SEAT_LINES.some(l => text().includes(l.slice(0, 25))), text());
   out = []; run("tao rai"); assert.match(text(), new RegExp(`water or soda ฿${p}`));
   G.room = "beach_rd_c"; G.money = 5000; run("buy water"); assert.equal(G.money, 4990, "the shop sells the bottle");

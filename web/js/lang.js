@@ -463,8 +463,8 @@ const _CATALOGS = {
       "Eiskaltes Plastik, das dir in der Hand schwitzt; die Hälfte ist weg, bevor du die Flasche absetzt.",
     "Cold water straight down, and your body files a quiet note of thanks.":
       "Kaltes Wasser direkt runter, und dein Körper reicht ein leises Dankeschön ein.",
-    "You crack the cap and drink it where you stand — sweet, cold, worth ten times what it cost.":
-      "Du drehst den Deckel auf und trinkst im Stehen — süß, kalt, zehnmal so viel wert wie der Preis.",
+    "You crack the cap and drink it where you stand — sweet, cold, and worth it whatever it cost.":
+      "Du drehst den Deckel auf und trinkst im Stehen — süß, kalt, und den Preis wert, was immer er war.",
     "A litre of cold water vanishes and the heat loosens its grip a notch.":
       "Ein Liter kaltes Wasser verschwindet und die Hitze lockert ihren Griff eine Stufe.",
     "Frosted, capped, cracked, drained. The worst of the thirst just... stops.":

@@ -472,13 +472,24 @@ function _ownStock(price, what, line) {
   G.bar.cash -= cogs;
   _say((line ? line + " " : "") + `(${what[0].toUpperCase() + what.slice(1)} off your own stock — ฿${cogs} of wholesale off the till, nothing off your pocket. The house drinks free; the house pays the wholesaler.)`);
 }
+// {d} is the drink you actually asked for — the pool used to hand a Sprite to a
+// man who ordered a Coke, and told the time in one line (Neville, round 53)
 const _SOFT_LINES = [
-  "A Coke, in a glass, with a straw, the same price as the beer beside it. Nobody blinks. Nobody was ever going to.",
-  "A soda comes over with ice and a slice and a little paper doily under it, which is the bar's way of saying this drink costs what a drink costs.",
-  "You order the soft option and get it fast, cold, and priced like the beer — the seat under you is the thing on the bill.",
-  "A Sprite, sweating in a proper glass. The girl who brings it does not ask why; a man drinking soda at nine has his reasons, and the till doesn't care what they are.",
-  "Cola, ice, lime. The barman rings it up at the beer price without looking at the key, because there is only one key.",
+  "A {d}, in a glass, with a straw, the same price as the beer beside it. Nobody blinks. Nobody was ever going to.",
+  "A {d} comes over with ice and a slice and a little paper doily under it, which is the bar's way of saying this drink costs what a drink costs.",
+  "You order the {d} and get it fast, cold, and priced like the beer — the seat under you is the thing on the bill.",
+  "A {d}, sweating in a proper glass. The girl who brings it does not ask why; a man drinking soft has his reasons, and the till doesn't care what they are.",
+  "{D}, ice, lime. The barman rings it up at the beer price without looking at the key, because there is only one key.",
 ];
+const _SOFT_SHOP = [
+  "A cold {d} out of the fridge, ฿{p}, drunk on the pavement. No seat, no doily, no arithmetic.",
+  "The {d} is the price on the sticker, which is the price everywhere that isn't a bar. You drink it under the awning.",
+  "One {d}, sweating, the fridge door thumping shut behind it. Twenty baht of exactly what you wanted.",
+];
+function _softName(arg) {
+  const a = String(arg || "").toLowerCase();
+  return /sprite/.test(a) ? "Sprite" : /coke|cola|pepsi/.test(a) ? "Coke" : /juice/.test(a) ? "juice" : "soda water";
+}
 // What the house says when you query the price of a soft drink — the seat, said
 // by whoever is nearest the till.
 const _SEAT_LINES = [
@@ -491,7 +502,7 @@ const _WATER_LINES = [
   "A cold bottle of water, gone in one go. Civilisation.",
   "Ice-cold plastic, sweating in your hand; half of it's gone before you lower the bottle.",
   "Cold water straight down, and your body files a quiet note of thanks.",
-  "You crack the cap and drink it where you stand — sweet, cold, worth ten times what it cost.",
+  "You crack the cap and drink it where you stand — sweet, cold, and worth it whatever it cost.",
   "A litre of cold water vanishes and the heat loosens its grip a notch.",
   "Frosted, capped, cracked, drained. The worst of the thirst just... stops.",
 ];
@@ -631,6 +642,9 @@ function _doGo(dirWord) {
       !(_r.exits && (_r.exits.n || _r.exits.s || _r.exits.e || _r.exits.w));
     const _openAir = _inside && /market|bazaar|food court/i.test(_r.name || "");
     const _pool = _openAir ? _NO_EXIT_OPEN : _inside ? _NO_EXIT_IN : _NO_EXIT;
+    // west off Beach Road is the sand, not shophouses (Marek, round 53) — the beach
+    // is right there and the steps down are at the promenade
+    if (dir === "w" && /^beach_rd_/.test(G.room)) { _say("West is the sea — the wall, the palms, and the sand a long drop below the kerb. The steps down are at the promenade; walk to it."); return false; }
     _say(_pool[_hh(G.room + ":" + dir, 17) % _pool.length]); // the same wall answers the same way
     // A wall is not an action. Returning false lets the caller skip the tick —
     // the same contract _gameInput uses for "not a move". This mattered: walking
@@ -1085,11 +1099,16 @@ const _NOT_A_DOOR = [
   [/\b(print shop|printers?|photocop)/, [
     "A print shop with the shutter half down and a man inside feeding a machine. Passport copies, four baht a sheet, in the morning. Not a door for tonight.",
   ]],
-  [/\b(shophouses?|shop houses?|offices?|clinic|pharmacy|chemist)\b/, [
+  [/\b(shophouses?|shop houses?|offices?|pharmacy|chemist)\b/, [
     "A row of shophouses with the shutters down, a lit sign above one, a motorbike on the pavement outside another. Whatever they do, they do it in the daytime.",
   ]],
 ];
 function _notADoor(arg) {
+  // the clinic's glass door on Second Road is lit "because this town needs it late";
+  // ENTER CLINIC there answered "they do it in the daytime" while GET TESTED worked
+  // from the same pavement (Marek, round 53). The door IS the test.
+  if (/\bclinic\b/.test(arg) && G.room === "second_rd_c") { _doClinic(); return true; }
+  if (/\bclinic\b/.test(arg)) { _say("The clinic is on Second Road at the Central junction — a glass door between a pharmacy and a {{phone}} shop. (GET TESTED takes you there.)", "dim"); return true; }
   const w = String(arg || "").toLowerCase().replace(/^(the|a|an)\s+/, "");
   if (!w) return false;
   // A REAL PLACE IS NOT GENRE FURNITURE. These pools refuse the buildings the
@@ -1118,7 +1137,11 @@ function _roomByName(w) {
   return null;
 }
 function _doTravel(arg) {
-  const w = (arg || "").toLowerCase().replace(/^to (the )?/, "").trim();
+  let w = (arg || "").toLowerCase().replace(/^to (the )?/, "").trim();
+  // the list prints "Your Room — Sabai Palms Hotel"; a man who types that back
+  // (any dash) must get his room, not "you only know the way to bars" (Clive, round 53)
+  const _yr = w.replace(/^your room\s*[—–-]?\s*/, "").trim();
+  if (_yr && _yr !== w) w = _yr;
   const dests = _travelDests();
   if (!w) {
     // Only list places actually reachable on foot from here — at a dead-end like
@@ -1219,6 +1242,8 @@ function _doTravel(arg) {
           _say(`${_barName(named)} fronts the same soi as this bar — OUT, then ENTER ${_barName(named).toUpperCase()}.`);
         else if (ROOMS[named].invite)
           _say(`${_barName(named)} is not a door you walk through. Somebody takes you in there, or you are not in there — and nobody on this road drives you to it.`);
+        else if (((G.visited || {})[named] || (G.heardOf || {})[named]) && ROOMS[named].region === _room().region)
+          _say(`${_barName(named)} is on this side of town — somewhere along ${ROOMS[named].region}, and you haven't found the door yet. Walk the street and read the signs.`);   // "over in Soi 6" while standing on Soi 6 (Neville, round 53)
         else if ((G.visited || {})[named] || (G.heardOf || {})[named])
           _say(`${_barName(named)} is over in ${ROOMS[named].region} — you haven't found it yet, and TRAVEL only ` +
             "knows the places you've been. Walk it, or a MOTOSAI to the district.");
@@ -2235,7 +2260,7 @@ const _SCENERY = [
       "Sunburn on the tops of your feet in the shape of your sandals, a shirt that was fresh " +
         "four hours ago, and an expression you would describe as game. (DIAGNOSE for the honest version.)",
       "A man on holiday, doing holiday at the intensity of a job. The forearms are going brown " +
-        "and nothing else is. (DIAGNOSE if you want numbers.)",
+        "and nothing else is. (DIAGNOSE for the full reading.)",
       "You take stock. Everything is broadly where you left it, which at this hour is a win. " +
         "(DIAGNOSE for the unflattering detail.)",
       "Upright, solvent-ish, and pointed in a direction. Three out of three. (DIAGNOSE.)",
@@ -2243,7 +2268,8 @@ const _SCENERY = [
     // one honest clause when the numbers say so — worst condition wins
     if (G.hurt >= 2) return base + " Also: you are moving like furniture being carried, " +
       "and strangers have started offering you their seat. That is not a good sign.";
-    if (G.drunk >= 6) return base + " Although the evidence — the lean, the generous " +
+    if (G.hurt === 1) return base + " And a dressing somewhere under the shirt that you keep forgetting until you turn too fast.";   // one strike showed nothing (Marek, round 53)
+    if (G.soc.drunk >= 6) return base + " Although the evidence — the lean, the generous " +   // G.drunk does not exist; the meter is G.soc.drunk (Marek, round 53: three reads at 7–8, all sober prose)
       "focus, the affection for everyone — suggests the survey was conducted drunk.";
     if (G.jaded >= 4) return base + " And behind the eyes, if you're honest, that flat " +
       "coin-counting stare the long-termers get. The soi is winning. It always does.";
@@ -4124,6 +4150,14 @@ function _doTalkBody(arg, topic) {
     // the room's own furniture: a thing the desc advertises and EXAMINE answers is
     // not "not my story" from the woman who works under it — she points at it
     if (!gated && _fixtureTalk(npc, topic)) { _questOffer(npc); return; }
+    // …and the town's four beds: a rate the engine bills to the baht is a fact
+    // anyone on a stool can quote (Clive, round 53: the pub sits over one of them
+    // and its regulars had nothing to say about it)
+    if (!gated && _hotelTalk(npc, topic)) { _questOffer(npc); return; }
+    // …and the man who doesn't drink: every mouth in town had a miss for SOBER except
+    // Eddy's (authored, and still first) — the floor sells soda at the beer price and
+    // has an opinion about it (Neville, round 53)
+    if (!gated && _soberTalk(npc, topic)) { _questOffer(npc); return; }
     // A girl's standard deflection is the language itself, and at fluency it is
     // gone: she cannot say she does not understand a question she plainly did
     // (Mario, round 42). She still doesn't have to answer — but the refusal has
@@ -4760,6 +4794,118 @@ function _fixtureTalk(npc, topic) {
   const pool = reg === "floor" ? _FIXTURE_FLOOR : reg === "house" ? _FIXTURE_HOUSE : _FIXTURE_PUNTER;
   _say(_fmt(_pickVary(pool, "fixture:" + reg), { n: NPCS[npc].name, k: key }));
   _say(`(EXAMINE ${key.toUpperCase()})`, "dim");
+  return true;
+}
+
+// ASK <anyone> ABOUT HOTEL / WHERE TO STAY / <a hotel by name>: the four beds
+// are `_HOTELS`, priced by `_hotelRate`, and a town this chatty had nothing to
+// say about its own hotels (Clive, round 53 — the reviewer who slept in all
+// four). A named hotel answers for itself; a generic ask gets the one nearest
+// this stool (the pub answers for the rooms upstairs). Register by _hoursRegister.
+const _HOTEL_PERK = {
+  sabai:     "Naklua, cheap, on a dark soi with dogs on it",
+  queenvic:  "over the pub on Soi 6, with a balcony on the street",
+  areca:     "Soi Diana, a garden with a pool in it",
+  metropole: "the tower off LK Metro — a pool, and the fire stair comes out in the Metro",
+};
+const _HOTEL_NEAR = { "Naklua": "sabai", "Soi 6": "queenvic", "Beach Road": "queenvic", "Soi Diana": "areca",
+  "Tree Town": "areca", "Soi Buakhao": "metropole", "LK Metro": "metropole" };
+const _HOTEL_FLOOR = [
+  "\"{h}?\" {n} counts on her fingers. \"{r} baht one night, I think. {p}. My friend work there before.\"",
+  "{n} nods. \"{h}, {r} baht. {p}. Better than my room, hahaha.\"",
+  "\"Hotel?\" {n} points the way with her chin. \"{h}. {r} one night — {p}.\"",
+  "{n} thinks. \"{h}. {r} baht, and {p}. Farang like it.\"",
+];
+const _HOTEL_HOUSE = [
+  "\"{h}.\" {n} says it like a price, which it is: \"{r} a night. {p}.\"",
+  "{n} doesn't look up. \"{h}, {r} a night, {p}. The desk'll take a card.\"",
+  "\"Where you sleep is your business,\" {n} says, \"but if you're asking: {h}, {r} a night. {p}.\"",
+  "{n} gives it the one-line review. \"{h}: {r} a night, {p}. Clean enough.\"",
+];
+const _HOTEL_PUNTER = [
+  "\"{h}? {r} a night, last I heard. {p}.\" {n} shrugs. \"Beds are beds.\"",
+  "{n} considers it. \"{h}. {r}. {p}. I've slept worse.\"",
+  "\"{h},\" {n} says. \"{r} a night and {p}. Ask at the desk, they'll not bite.\"",
+  "{n} nods at the question. \"{h}. {r} a night. {p}. Don't lose the key card.\"",
+];
+function _hotelTalk(npc, topic) {
+  if (!topic || !NPCS[npc] || typeof _HOTELS === "undefined") return false;
+  const t = String(topic).toLowerCase();
+  let k = null;
+  if (/\bsabai( palms)?\b/.test(t)) k = "sabai";
+  else if (/\bqueen vic(toria)?( inn)?\b/.test(t)) k = "queenvic";
+  else if (/\bareca( lodge)?\b/.test(t)) k = "areca";
+  else if (/\b(lk )?metropole\b/.test(t)) k = "metropole";
+  else if (/\b(hotels?|guesthouse|accommodation|(where|somewhere|a place|place)( to)? (stay|sleep)|a bed for the night|the rooms upstairs|upstairs)\b/.test(t)) {   // the parser strips "to": "where stay"
+    if (/\bupstairs\b/.test(t) && G.room !== "queen_vic") return false;
+    k = G.room === "queen_vic" ? "queenvic" : (_HOTEL_NEAR[_room().region] || (_flag("act1Done") && G.hotel) || "sabai");
+  }
+  if (!k || !_HOTELS[k]) return false;
+  const reg = _hoursRegister(npc);
+  const pool = reg === "floor" ? _HOTEL_FLOOR : reg === "house" ? _HOTEL_HOUSE : _HOTEL_PUNTER;
+  _say(_fmt(_pickVary(pool, "hoteltalk:" + reg), { n: NPCS[npc].name, h: _HOTELS[k].name, r: _hotelRate(k), p: _HOTEL_PERK[k] }));
+  return true;
+}
+
+// "I DON'T DRINK" — the single sentence a sober man most wants to say had no
+// verb (Neville, round 53). Declaring it once is the whole mechanic: every house
+// comp from then on is declined by the game on your behalf (_compDrink), DIAGNOSE
+// stops calling sobriety fixable, and a bare DRINK means soda. Reversible by
+// ordering a beer — the game does not argue with a man about his own habits.
+const _TEETOTAL_SAID = [
+  "\"I don't drink.\" Said plainly, to nobody in particular and the whole room in general. The soi absorbs it the way it absorbs everything, and from here on what gets put in front of you is soda water and a slice.",
+  "You say it once, out loud, the way you've said it for years. Nobody makes a face. The next glass that comes your way has ice and a lime in it and nothing else.",
+];
+// a name in the PHONE, wherever its owner is tonight — _findNpc is room-scoped by design
+function _contactByName(nm) {
+  const w = String(nm || "").trim().toLowerCase();
+  if (!w || !G.phone || !G.phone.contacts) return null;
+  return Object.keys(G.phone.contacts).find(k => G.phone.contacts[k] && NPCS[k] &&
+    (k === w || NPCS[k].name.toLowerCase() === w || NPCS[k].name.toLowerCase().split(" ").pop() === w)) || null;
+}
+function _doTeetotal() {
+  if (G.player.teetotal) { _say("Already said, already understood. Soda water, slice — the town has it written down."); return; }
+  G.player.teetotal = true;
+  _say(_pickVary(_TEETOTAL_SAID, "teetotal"));
+}
+const _COMP_BACK = [
+  "You slide it back across. \"Not tonight.\" It goes to the next stool along, where it is very welcome, and your own count stays where it was.",
+  "\"Nah — you have it.\" The barman does, or somebody does; either way it isn't in you.",
+  "You push the glass an inch away with one finger, which is the whole conversation. Somebody else's night gets a drink better.",
+];
+function _doRefuseDrink() {
+  const fresh = G.lastComp && G.lastComp.room === G.room && G.turns - G.lastComp.turn <= 2;
+  if (fresh) {
+    G.lastComp = null;
+    G.soc.drunk = Math.max(0, G.soc.drunk - 1);
+    _say(_pickVary(_COMP_BACK, "compback"));
+    return;
+  }
+  _say("Nothing's been put in front of you to refuse. (TEETOTAL, if you mean in general — the town remembers.)", "dim");
+}
+
+const _SOBER_FLOOR = [
+  "\"No drink?\" {n} shrugs like it's weather. \"Up to you. Soda same price, tilac — the stool is the stool.\"",
+  "{n} nods. \"Have customer like you. Drink Coke all night, tip good, go home walking. Mama like him more than the drunk one.\"",
+  "\"Sober is okay.\" {n} means it. \"Drunk man forget my name. You remember, na?\"",
+  "{n} taps her own glass — cola, always was. \"Me too, working. Only the customer think it's whisky.\"",
+];
+const _SOBER_HOUSE = [
+  "\"Doesn't bother me,\" {n} says. \"A soda's a sale. A drunk's a mop.\"",
+  "{n} gives it half a nod. \"Seen a few. They tip better and they leave upright. I'd take a bar of them.\"",
+  "\"Not drinking?\" {n} doesn't push it. \"Then the seat's the thing you're paying for, same as everyone. Sit where you like.\"",
+];
+const _SOBER_PUNTER = [
+  "{n} looks at your glass, then at you, and decides not to make the joke. \"Fair play. Wish I could.\"",
+  "\"Sober, out here?\" {n} laughs, then stops. \"No, seriously — good on you. Half this bar's trying and none of us are managing.\"",
+  "{n} shrugs. \"Cheaper week, longer memory. I'd swap, some mornings.\"",
+];
+function _soberTalk(npc, topic) {
+  if (!topic || !NPCS[npc]) return false;
+  if (!/\b(sober|sobriety|teetotal(ler)?|alcohol|aa|don'?t drink|not drinking|no drink)\b/.test(String(topic).toLowerCase())) return false;
+  const reg = _hoursRegister(npc);
+  const pool = reg === "floor" ? _SOBER_FLOOR : reg === "house" ? _SOBER_HOUSE : _SOBER_PUNTER;
+  _say(_fmt(_pickVary(pool, "sobertalk:" + reg), { n: NPCS[npc].name }));
   return true;
 }
 
@@ -5920,7 +6066,7 @@ function _doBuy(arg) {
   }
   // The Vic's kitchen: Aoy advertises it with an order pad in her hand, and it
   // sold nothing (grapevine playtest F6, 2026-08-25). Hours are hers: basket
-  // till eleven, after that only crisp.
+  // till eleven, after that only crisp (and the crisps are ฿40, charged — Marek, round 53).
   // The kitchen. Routed off QV_MENU's own aliases plus the generic words, so a
   // dish added to the card is buyable the same day it is written — the card and
   // the till are one object (_qvMenu) by construction.
@@ -5943,6 +6089,25 @@ function _doBuy(arg) {
   // BUY MOO PING FOR SEAMUS bought a skewer and ate it yourself — the saleng's
   // own pitch prints "(BUY <item> FOR <lady>)" and a dog owner reads that as an
   // instruction (Bill, round 44). FEED and GIVE both worked; only BUY didn't.
+  // BUY BEER FOR DAO poured the beer into the buyer and Dao got nothing; only the
+  // generic "drink for" reached her (Neville, round 53 — a sober man buying a
+  // woman a beer and having it land on his own meter). A named drink for a named
+  // person in the room is a drink for THEM; the manager/host/regular routes below
+  // already know what to do with "drink for <name>".
+  {
+    const m = arg.match(/^(?:an? )?(beer|chang|leo|singha|sprite|coke|cola|soda|water|drink) for (?:the )?(.+)$/) ||
+      arg.match(/^(.+?) (?:an? )?(beer|chang|leo|singha|sprite|coke|cola|soda|water|drink)$/);   // the parser strips articles: "lek sprite"
+    if (m) {
+      const nm = (m[2] && /^(beer|chang|leo|singha|sprite|coke|cola|soda|water|drink)$/.test(m[1])) ? m[2] : m[1];
+      // an EXACT name only — _findNpc's prefix match turned "man drink" into a drink for Manow
+      const who = nm && !/^(man|lady|him|her|me|myself|round|drink)$/.test(nm) &&
+        !(typeof _isDogWord === "function" && G.dog && _isDogWord(nm)) ? _findNpc(nm) : null;
+      const exact = who && NPCS[who] && (who === nm || NPCS[who].name.toLowerCase() === nm || NPCS[who].name.toLowerCase().split(" ").pop() === nm);
+      // a manager's beer is the man-drink path below (it already reads "beer for bert");
+      // a host bar's drinks run on the host track — only the lady route is rewritten
+      if (exact && !NPCS[who].manager && !r.hostBar) arg = "drink for " + nm;
+    }
+  }
   if (G.dog && /\bfor\b|\bto\b/.test(arg) && typeof _isDogWord === "function" &&
       arg.split(/\bfor\b|\bto\b/).slice(1).some(t => _isDogWord(t.trim()))) {
     _doFeedDog(arg.replace(/.*\b(?:for|to)\b/, "").trim()); return;
@@ -6058,10 +6223,12 @@ function _doBuy(arg) {
       }
       G.roomWater = (G.roomWater || 0) + 1;
       G.thirst = Math.max(0, G.thirst - 45);
-      _say(_pickVary([
-        "One of the two complimentary bottles by the kettle — warm as soup, free as air, and exactly what the body wanted. Housekeeping will replace it tomorrow, the quiet daily kindness of every hotel in the kingdom.",
-        "You crack the seal on a house bottle from the tray. Not cold, not glamorous, entirely sufficient. The second one stands sentry for later.",
-      ], "roomwater"));
+      _say(G.roomWater === 1
+        ? _pickVary([
+          "One of the two complimentary bottles by the kettle — warm as soup, free as air, and exactly what the body wanted. Housekeeping will replace it tomorrow, the quiet daily kindness of every hotel in the kingdom.",
+          "You crack the seal on a house bottle from the tray. Not cold, not glamorous, entirely sufficient. The second one stands sentry for later.",
+        ], "roomwater")
+        : "The second bottle, the sentry, called up. Warm, sufficient, gone; the tray is empty until housekeeping.");   // it said "the second one stands sentry" while you drank the second one (Marek, round 53)
       return;
     }
     const canBuy = r.shop || r.seven || r.water || _servesDrinks() || FOOD_STALLS[G.room]; // r.water: a drinks cart in the desc
@@ -6080,7 +6247,11 @@ function _doBuy(arg) {
     G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
     _sevenIn();
     if (_inBar()) { (G.soc.softDrink = G.soc.softDrink || {})[G.room] = G.turns; _spentHere(); }
-    _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(soft ? _SOFT_LINES : _WATER_LINES, soft ? "soft" : "water")), p: price, m: G.money }));
+    const _sd = soft ? _softName(arg) : "";
+    const _line = soft
+      ? _fmt(_L(_pickVary(_servesDrinks() ? _SOFT_LINES : _SOFT_SHOP, _servesDrinks() ? "soft" : "softshop")), { d: _sd, D: _sd[0].toUpperCase() + _sd.slice(1), p: price })
+      : _L(_pickVary(_WATER_LINES, "water"));
+    _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _line, p: price, m: G.money }));
     return;
   }
   // seven:true marks a street with a 7-Eleven on it; the walk-in branches are
@@ -6479,6 +6650,9 @@ function _doBuy(arg) {
   })();
   if (_named) {
     _say(_pickVary(_NOT_TONIGHT, "nottonight"));
+    // …but a street with a stall still going says which one: "fruit on ice" got the
+    // shutters line two metres from a spit that was open (Marek, round 53)
+    if (FOOD_STALLS[G.room]) _say(`(The one still trading here is ${FOOD_STALLS[G.room].name.replace(/^(a |an |the )/, "")} — BUY FOOD.)`, "dim");
     return;
   }
   _say("Not for sale here.");
@@ -7313,6 +7487,7 @@ const _FACTION_LABELS = [
 
 function _doDrink(arg) {
   if (/water|nam/.test(arg)) { _doBuy("water"); return; }
+  if (!arg && G.player && G.player.teetotal) { _doBuy("soda"); return; }   // a declared sober man's bare DRINK is not a Chang (Neville, round 53)
   if (/ya ?dong|infusion|unlabelled bottle|moonshine|house shot/.test(arg) && G.room === "moonshine_bar") { _doBuy(arg); return; }
   const w = arg.match(/^with (.+)$/);
   if (w) { _doBuy("lady drink " + w[1]); return; }
@@ -7361,9 +7536,10 @@ function _doDiagnose() {
       G.thirst >= 40 ? "thirsty" : "watered"),
     d >= 6 ? _fmt("{d} bottles deep and navigating by neon", { d }) :
       d >= 3 ? _fmt("{d} bottles deep, the world pleasantly loose at the hinges", { d }) :
-      d >= 1 ? _fmt("{d} bottle{s} in", { d, s: d > 1 ? "s" : "" }) : _L("stone sober, which is fixable"),
+      d >= 1 ? _fmt("{d} bottle{s} in", { d, s: d > 1 ? "s" : "" }) : (G.player && G.player.teetotal ? _L("stone sober, as ordered") : _L("stone sober, which is fixable")),
   ];
   if (G.hurt) parts.push(_fmt("banged up ({h}/3 — a third strike ends the night)", { h: G.hurt }));
+  if ((G.hangover || 0) > 0) parts.push(_L(G.hangover >= 2 ? "hungover to the bone — last night is still being paid for" : "a hangover with the edges sanded off"));   // the wake prose named it and the readout never did (Marek, round 53)
   if (d >= 7) parts.push(_L("past what any piwin will carry"));
   else if (d >= 5) parts.push(_L("a pillion the piwins will still take — hold on"));
   if (_stdSymptomatic()) parts.push(_L("nursing a barfine souvenir that itches and burns — a clinic job (GET TESTED, it's free)"));
@@ -7401,7 +7577,9 @@ const _CLINIC_CLEAN = [
 function _doClinic() {
   // the clinic is a PLACE — GET TESTED ran from a bar stool and from a hotel bed
   // (Judith, round 47). It is on Second Road at the Central junction, and the
-  // waiting room is there.
+  // waiting room is there. And it takes the twenty minutes its own prose says
+  // (Marek, round 53: one turn against "twenty minutes of imagining the worst")
+  _passTime(3);
   if (G.room !== "second_rd_c" && G.mode !== "soi6") {
     _say("The clinic is on Second Road, at the Central junction — a glass door between a pharmacy and a " +
       "{{phone}} shop, open till late because this town needs it late. You take a bike there and sit in the " +
@@ -7692,6 +7870,7 @@ function _doSwim() {
     const ex = _room().exits || {};
     const dir = Object.keys(ex).find(d => (/beach/.test(ex[d]) && !/beach_rd|_rd\b/.test(ex[d])) || ex[d] === "promenade");
     if (dir) { _say(`The sand is one step ${_dirName(dir)} of here (${dir.toUpperCase()}). Swim from there, not from the kerb.`); return; }
+    if (/^beach_rd_/.test(G.room)) { _say("The Gulf is across the road and a wall away — the steps down to the sand are at the promenade. Swim from there."); return; }   // not "a hotel pool" with the sea in earshot (Marek, round 53)
     _say("The nearest swimmable water is a hotel pool you are not a guest of.");
     return;
   }
@@ -7986,7 +8165,7 @@ function _doWait(arg) {
         ? `You wait. Pattaya doesn't, and neither does the rain — it's set in, ${G.rain * 6} minutes ` +
           "of it at a guess. (WAIT 5 sits some of it out; a bar door sits all of it.)"
         : "You wait. Pattaya doesn't. The rain, though, is easing — the gutters are still " +
-          "running but the roof has gone quiet. A few more minutes. (WAIT 2)", "dim");
+          "running but " + (typeof _underRoof === "function" && _underRoof(G.room) ? "the roof has gone quiet" : "the awning has stopped drumming") + ". A few more minutes. (WAIT 2)", "dim");
       return;
     }
     _say("You wait. Pattaya doesn't."); return;
@@ -8458,9 +8637,13 @@ function _doCall(arg) {
     _say("The number you have for Eddy rings once and dies. New number. You don't have it. He said.", "dim");
     return;
   }
-  const id = _findNpc(arg);
+  const id = _findNpc(arg) || _contactByName(arg);   // a contact who is not in the room is still in the phone (Marek, round 53: CALL PRIEW)
   if (!id) { _say("Call who? Nobody by that name in your phone or your eyeline."); return; }
   if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
+  if (NPCS[id].offmap && G.phone.contacts[id]) {   // LINE only — there is no number to ring
+    _say(`${NPCS[id].name} is a LINE contact, not a number: there's nothing to ring. (MESSAGE ${NPCS[id].name.split(" ").pop().toUpperCase()})`, "dim");
+    return;
+  }
   const name = NPCS[id].name;
   _say(`You call ${name}. It rings out. Nine seconds later the phone buzzes in ` +
     `your hand: “ทำไมโทรมา 555 why you CALL???” — nobody in this town answers a ` +
@@ -8771,7 +8954,7 @@ const _MOTO_RIDE_LONG = [
 // the long way that is also the good way: the whole front, end to end
 const _MOTO_RIDE_BEACH = [
   "and he takes the front — the whole of Beach Road unrolling on the sea side, the promenade lamps going by like a metronome, the water black past them with one boat's light on it, the bars on the land side sliding past as one long lit sentence",
-  "and it's the scenic route because there is no other: Beach Road end to end, palms and lamps and the sea breathing on your left, girls on the wall watching the traffic like it's television, the wind doing what the aircon never does",
+  "and it's the scenic route because there is no other: Beach Road end to end, palms and lamps and the sea breathing on the seaward side, girls on the wall watching the traffic like it's television, the wind doing what the aircon never does",
   "and the ride is Beach Road, all of it — the roundabout, the long straight with the sea black on one side and the hotels lit on the other, a pause at the lights where a whole family goes past four-up, then the straight again, and he never once touches the brake",
   "and you get the whole front for your fare: the promenade at speed, the sea smell coming and going between the exhaust, the neon of the side sois flicking past like somebody thumbing a book, and at the far end the town turning inland and the ride turning with it",
 ];
@@ -9278,7 +9461,7 @@ function _doTaoRai() {
   if ((_inBar() || (typeof _servesDrinks === "function" && _servesDrinks(G.room))) && !G.pendingEnc) {
     const r = _room();
     const bits = [`beer ฿${_beerPrice()}`];
-    if (_inBar()) bits.push(`lady drink ฿${_ladyPrice()}`);
+    if (_inBar() && r.barType !== "pub") bits.push(`lady drink ฿${_ladyPrice()}`);   // the Vic has no bar-girl economy (Neville, round 53)
     bits.push(`water or soda ฿${_beerPrice()} (the seat, not the bottle)`);
     if (_inBar() && r.barType && r.barType !== "pub") bits.push(`the bell ฿${_bellPrice(G.room)}`);
     _say("“เท่าไหร่?” (tao rai — how much?) " + (_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name + " answers without looking up: " : "The answer comes from behind the till: ") +
@@ -9380,7 +9563,8 @@ THE WHOLE CARD (bare HELP is the short one):
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
-  FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK (for the bar manager)
+  FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY SODA (any soft drink; in a bar it costs the beer) · BUY MAN DRINK (for the bar manager)
+  I DON'T DRINK — say it once and the house stops pouring you free ones · DECLINE hands back a drink just poured
   RING BELL (฿300 in a beer bar, dearer in the fancy ones) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
@@ -10784,6 +10968,9 @@ function doCommand(input) {
   if (_convoPickChoice(lower.replace(/[,.!?]+$/, "").trim(), true)) {
     _tick(); return;
   }
+  // a sober man's sentence, and the hand that pushes a glass back (Neville, round 53)
+  if (/^(i (don'?t|do not|never) drink( alcohol)?|teetotal(ler)?|no alcohol( for me)?|i'?m sober|sober)[.!]?$/.test(lower)) { _doTeetotal(); _tick(); return; }
+  if (/^(decline|refuse( (it|that|the (shot|drink|beer)))?|push it back|send it back|(i )?don'?t want (it|that|the (shot|drink))|not for me|no thanks|no thank you)[.!]?$/.test(lower) && !G.pendingChoice && !G.pendingEnc && !G.game && !G.convoQ) { _doRefuseDrink(); _tick(); return; }
 
   // Bigotry in the queer venues short-circuits everything else: ejection, and
   // maybe the classic fight. Checked whatever verb it's dressed as.
@@ -11049,7 +11236,7 @@ function doCommand(input) {
       else if (/fridge|refrigerator|mini.?bar/.test(arg)) _doFridge();
       else _say("It doesn't open that way.");
       break;
-    case "press": case "type": case "code": _doEnter(arg); break;
+    case "press": case "type": _doEnter(arg); break;   // (CODE is a keypad word — below, with SAFE/KEYPAD/PIN)
     case "play": case "challenge": _doPlay(arg); break;
     // the gambler's vocabulary (2026-08-22): REMATCH / DOUBLE replay the last game
     // here; BET / WAGER <n> [ON <game>] is PLAY with a stake; stray shot-words
@@ -11405,7 +11592,11 @@ function doCommand(input) {
       if (G.room === "queen_vic") { _qvCard(); break; }
       _doRead("menu"); break; // the laminated card, by its own name
     case "stop": case "unsubscribe": _doJokeStop(); break;
-    case "reply": _doJokeReply(); break;
+    case "reply": {   // REPLY PRIEW went to Mort's number (Marek, round 53): a named contact is a MESSAGE to them
+      const nm = arg.replace(/^to\s+/, "").split(/\s+/)[0];
+      if (nm && _contactByName(nm)) { _doMessage(nm); break; }
+      _doJokeReply(); break;
+    }
     case "call": case "dial": _doCall(arg); break;
     case "share": _doShare(); break;
     case "follow": _doFollow(arg); break;
@@ -11414,7 +11605,15 @@ function doCommand(input) {
     // into "I didn't understand that" at the climax of the opening quest.
     case "safe": case "keypad": case "code": case "pin": {
       const n = _amount(arg);
-      if (n === null || Number.isNaN(n)) { _say("Three digits, on the keypad. (ENTER <digits>)"); break; }
+      if (n === null || Number.isNaN(n)) {
+        // the keypad prompt belongs to the one room with a keypad in it; a bare SAFE
+        // in your own hotel room is the shoebox, and anywhere else there is nothing
+        // in front of you that takes a code (Clive, round 53: the prompt printed in
+        // the Areca and the Metropole and implied a puzzle that wasn't there)
+        if (_isHotelRoom(G.room)) { _doSafe(null); break; }
+        if (G.room !== "oy_office") { _say("Nothing in front of you takes a code — no safe, no keypad, no lock with numbers on it."); break; }
+        _say("Three digits, on the keypad. (ENTER <digits>)"); break;
+      }
       _doSafe(n); break;
     }
     case "shower": case "wash": _doShower(); break;

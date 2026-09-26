@@ -329,6 +329,7 @@ function newGame() {
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
     motoAsked: 0,        // the turn the piwin last asked "where to?" — a bare place typed next answers him
     travelDark: null,    // {key, turn}: TRAVEL stopped at the edge of the dark; the same TRAVEL again walks it
+    lastComp: null,      // {turn, room}: the house just poured you one — a refusal in the next two turns hands it back
     lastNightSaid: null,   // the morning ledger, kept so LAST NIGHT can reprint it
     motBoots: 0,         // baht handed to Mot toward the football boots he named at dinner
     kyleVouchDay: 0,     // the day Bert agreed to give Kyle a shift; _kyleTick lands the shift after it
@@ -337,7 +338,7 @@ function newGame() {
     ccibLoudNight: {},   // {kind: day} — one count per kind per night
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
-    player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
+    player: { said: {}, lang: "en", origin: null, personality: null, orientation: null, teetotal: false },   // teetotal: I DON'T DRINK, declared once — the house stops pouring (Neville, round 53)// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { plg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
@@ -2800,7 +2801,15 @@ function _tick() {
   if (G.lightWarn.mark) G.lightWarn.mark = false;
   else if (G.lightOn && G.battery > 0 && _room().barType === "gogo") _gogoLightWarn();
   // the body keeps its own books
-  if (G.nightTurn % 20 === 0 && G.soc.drunk > 0) G.soc.drunk--;
+  // one unit per twenty turns from the first drink of the night — it used to fire on
+  // the wall clock's multiples of twenty, so a beer bought at 23:54 was gone by
+  // midnight and one bought at 00:06 lasted two hours (Marek, round 53). The clock
+  // starts when the meter leaves zero and is NOT reset by the next drink, or a
+  // steady drinker would never sober.
+  if (G.soc.drunk > 0) {
+    if (G.soc.soberNext == null) G.soc.soberNext = G.nightTurn + 20;
+    if (G.nightTurn >= G.soc.soberNext) { G.soc.drunk--; G.soc.soberNext = G.nightTurn + 20; }
+  } else G.soc.soberNext = null;
   if (G.nightTurn % 3 === 0) G.hunger++;
   if (G.nightTurn % 2 === 0) G.thirst++;
   // latched threshold warnings: hunger/thirst only tick up every 2-3 turns, so an
