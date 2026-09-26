@@ -1,0 +1,795 @@
+{
+ "_about": "One row per persona finding, written at triage. verdict: fixed | refuted (could not reproduce, or the game was right) | design (a call, not a bug; note says whose) | deferred (real, not yet done) | duplicate. Fixed rows before round 51 are NOT here — they are the pinned tests (tests/js/round*.test.js, playtest*.test.js); `node tools/findings-ledger.mjs --stats` merges both views.",
+ "rows": [
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "The founder is recognisable on sight from the content-creator traits with the name already gone",
+   "verdict": "fixed",
+   "note": "renamed AND every describing node rewritten (docs/guardrails.md, 2026-09-26)",
+   "pin": "f934506b"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "The column's title and signoff are a real columnist's, verbatim",
+   "verdict": "fixed",
+   "note": "Last Orders / MIND THE STEP; cipher re-keyed; brass owl is the wink",
+   "pin": "f934506b"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "Two real go-go signs on Soi Diamond appear as themselves",
+   "verdict": "fixed",
+   "note": "The Gilt Cage / Twice Shy, ids kept",
+   "pin": "f934506b"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "Fast Eddy's Vegas story has crypto wallets in 2006",
+   "verdict": "fixed",
+   "note": "the year moved",
+   "pin": "f529f158"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "ASK MORT ABOUT the founder opens with the OLD surname",
+   "verdict": "fixed",
+   "note": "the surname sweep",
+   "pin": "f529f158"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "PRESS HER FOR NAMES typed after the conversation lapsed falls to TRAVEL",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round52.test.js"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "EXAMINE QR at the LK Metro mouth dead-ends",
+   "verdict": "refuted",
+   "note": "works in every form tried (qr / qr code / sticker / trailing period)",
+   "pin": ""
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "Crystal Palace advertises No. 71 and EXAMINE DANCERS / ASK RIN ABOUT 71 dead-end",
+   "verdict": "fixed",
+   "note": "reads aliases + _fixtureTalk (class: staff point at the room's own reads)",
+   "pin": "round52.test.js"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "ASK DOUG ABOUT HIMSELF is a miss right after he introduced himself",
+   "verdict": "fixed",
+   "note": "the hello, terse once heard",
+   "pin": "round52.test.js"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "TRAVEL walked him through the Pratumnak dark, torch off, two bites, with only a parenthetical",
+   "verdict": "fixed",
+   "note": "TRAVEL stops at the edge of the dark; the same order again walks it (third ruling on a twice-ruled behaviour)",
+   "pin": "round52.test.js"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "A stop typed off the bus's drop-list that the truck doesn't serve gets a parse failure",
+   "verdict": "fixed",
+   "note": "the driver's head-shake",
+   "pin": "round52.test.js"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "Soi 6's middle after midnight says the grilles are down either side of the Vic while three beer bars are open",
+   "verdict": "fixed",
+   "note": "lateDesc rewritten",
+   "pin": "round52.test.js"
+  },
+  {
+   "round": "51",
+   "persona": "Graham",
+   "model": "fable",
+   "lens": "identifiability",
+   "claim": "Rock Factory / Cheap Charlie's / Queen Vic Inn / LK Metropole / Kinky — real venue names in the room list",
+   "verdict": "design",
+   "note": "public geography and street furniture; Mario's call was the two go-go signs only",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "The manager's welcome shot is poured onto the meter on arrival, no offer, no refusal path",
+   "verdict": "fixed",
+   "note": "I DON'T DRINK declares teetotal; _compDrink declines on his behalf; DECLINE hands a fresh comp back",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "BUY BEER FOR <lady> / BUY <lady> A SPRITE pours the drink into the player",
+   "verdict": "fixed",
+   "note": "a named drink for a named person is hers",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Bare DRINK buys a Chang with no question",
+   "verdict": "fixed",
+   "note": "soda for a declared teetotaller; the Zork default stays for everyone else",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "The bell's bottle back across the rail lands on the meter with no NO",
+   "verdict": "fixed",
+   "note": "declined for a teetotaller; DECLINE for anyone inside two turns",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Jackpot forfeit narrates a sober man drinking",
+   "verdict": "fixed",
+   "note": "soda variant",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "WATCH SOI puts a pint in his hand",
+   "verdict": "fixed",
+   "note": "a glass",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "DIAGNOSE calls sobriety 'fixable' every night",
+   "verdict": "fixed",
+   "note": "'as ordered' once declared",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "ASK anyone ABOUT SOBER/ALCOHOL/AA misses everywhere but Eddy",
+   "verdict": "fixed",
+   "note": "_soberTalk by register; Eddy first",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "'i don't drink' / decline / refuse are parse failures",
+   "verdict": "fixed",
+   "note": "the verbs",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "SELL BOTTLES contradicts itself about where Nok is",
+   "verdict": "refuted",
+   "note": "not reproducible: beach sells, Dongtan points at the beach, consistently",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "'a man drinking soda at nine' printed at 00:06 and 01:06 (class K)",
+   "verdict": "fixed",
+   "note": "the soft pool no longer tells the time",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "7-Eleven Coke prints the bar's seat-price line",
+   "verdict": "fixed",
+   "note": "_SOFT_SHOP",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Soft pool blind to the noun: BUY COKE gets a Sprite",
+   "verdict": "fixed",
+   "note": "{d} slot",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Kitten Corner's bell says 'the girls on stage' on a street with no stages",
+   "verdict": "fixed",
+   "note": "_BELL_SOI6",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Queen Vic TAO RAI quotes a lady drink the pub doesn't sell",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "ENTER QUEEN VIC from Soi 6 says 'over in Soi 6' while standing in Soi 6",
+   "verdict": "fixed",
+   "note": "'on this side of town'",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "HELP never names a soft drink",
+   "verdict": "fixed",
+   "note": "BUY SODA on the card",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Morning ledger tags the safe money on the wrong day",
+   "verdict": "deferred",
+   "note": "not reproducible from the report; the tag keys on the day the money landed",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "CHECK BALANCE works with no ATM in the room",
+   "verdict": "design",
+   "note": "it is the banking app on the phone",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Stinky's desc offers WATCH SUNSET at 01:30",
+   "verdict": "deferred",
+   "note": "desc is 'how the place usually is'; the hour-blind class is revisit/lateDesc — worth a look",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Lock-in dare: 'a shot in each hand' then 'the girl with the cup'",
+   "verdict": "fixed",
+   "note": "",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Sukhumvit crossing hint says MOTOSAI TO DARKSIDE on the town side",
+   "verdict": "deferred",
+   "note": "not verified",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "The intro premise has him blackout drunk on night one; nothing reconciles a sober week with it",
+   "verdict": "design",
+   "note": "the opening is the opening; the identity intro could carry a sober axis one day",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Comps should be a JOIN IN / keep-your-seat choice everywhere, like the lock-in dare",
+   "verdict": "design",
+   "note": "the declaration covers it without a modal on every arrival",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Neville",
+   "model": "fable",
+   "lens": "sober",
+   "claim": "Man drink 'racks up two more for the road' added +1",
+   "verdict": "refuted",
+   "note": "probed: the man drink adds nothing; the +1 was the bell",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Sobering fires on the wall clock's multiples of 20, not on time since the drink",
+   "verdict": "fixed",
+   "note": "G.soc.soberNext from the first drink",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "EXAMINE ME ignores drunkenness at 7–8",
+   "verdict": "fixed",
+   "note": "read G.drunk, a field that does not exist (class L)",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "EXAMINE ME ignores a single injury",
+   "verdict": "fixed",
+   "note": "hurt 1 clause",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "The truck is milder than the bike (no injury, no สนุก)",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "DIAGNOSE never names the hangover",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "EXAMINE ME promises 'numbers' from DIAGNOSE, which has words",
+   "verdict": "fixed",
+   "note": "the hint",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "'(-2 สนุก)' prints at 0 while nothing moves",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Food value is upside-down against price (toastie best calorie in town)",
+   "verdict": "design",
+   "note": "tuning — Mario's call",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "DIAGNOSE hunger words are coarse (one word for 0–39)",
+   "verdict": "design",
+   "note": "the readout is words by design; INVENTORY has the numbers",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "REPLY PRIEW replies to Mort",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "CALL PRIEW finds nobody in the phone",
+   "verdict": "fixed",
+   "note": "LINE-only voiced",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "MESSAGE PRIEW is one fixed string",
+   "verdict": "fixed",
+   "note": "pooled",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "WHO says the black book is empty with two contacts in the phone",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Tan doesn't answer about food, one command before FOLLOW TAN feeds you",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "ENTER CLINIC says daytime while GET TESTED works from the same pavement; the test takes one turn",
+   "verdict": "fixed",
+   "note": "the door is the test; three ticks",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "GET TESTED costs ฿0",
+   "verdict": "design",
+   "note": "the clinic's price was set at ฿0 when the thread shipped; untouched",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Beach Road: west is 'shophouses', SWIM offers a hotel pool, the motosai's sea is on the wrong side",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Four foods the prose sells the till refuses (Tree Town moo ping, Cricketers pie, mall fruit, mall menu)",
+   "verdict": "fixed",
+   "note": "three stalls + a menu read; the fruit cart names the open spit",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Queen Vic crisps 'land on the bar' after eleven and are never charged",
+   "verdict": "fixed",
+   "note": "the full-man check runs first; a landed bag is charged",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Lucky Tiger revisit says YOU rack up on the table",
+   "verdict": "fixed",
+   "note": "somebody does",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "LAST NIGHT omits the hospital",
+   "verdict": "fixed",
+   "note": "the night's ending leads the ledger",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "WITHDRAW worked at Beach Road Central with no ATM listed",
+   "verdict": "refuted",
+   "note": "the room lists an ATM",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Second complimentary bottle says the second one stands sentry",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "'The roof has gone quiet' under an awning",
+   "verdict": "fixed",
+   "note": "_underRoof",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Clock vs narrated time (Tan's rescue 1 turn, the verge 1 turn, 'an hour later' in 12 minutes)",
+   "verdict": "deferred",
+   "note": "class K instances; the verge's length is a design question",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Priew can never be met",
+   "verdict": "design",
+   "note": "a LINE contact by construction (hospital-mirage arc)",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "ASK PIWIN ABOUT FOOD is read as a name",
+   "verdict": "deferred",
+   "note": "",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "TAO RAI at the Central stalls gives the fare list",
+   "verdict": "deferred",
+   "note": "both are true there; order is a judgement",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "'One past the sweet spot' repeats on beers 5–9",
+   "verdict": "deferred",
+   "note": "pool it",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Quiz: the same smirk five times",
+   "verdict": "fixed",
+   "note": "_QUIZ_WRONG_TAIL",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "DANCE prints twice and pays +2 twice",
+   "verdict": "deferred",
+   "note": "not verified",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Saleng vignette printed twice in one WAIT",
+   "verdict": "deferred",
+   "note": "not verified",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Bar water at ฿80 'worth ten times what it cost'",
+   "verdict": "fixed",
+   "note": "",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Marek",
+   "model": "opus",
+   "lens": "body-ledger",
+   "claim": "Crash card: 'the one journey in the game that can hurt you' is false now",
+   "verdict": "fixed",
+   "note": "",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Clive",
+   "model": "sonnet",
+   "lens": "hotel-hopper",
+   "claim": "SAFE/KEYPAD/PIN print Oy's keypad prompt from any room; CODE differs",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Clive",
+   "model": "sonnet",
+   "lens": "hotel-hopper",
+   "claim": "TRAVEL refuses the room's own printed name",
+   "verdict": "fixed",
+   "note": "",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Clive",
+   "model": "sonnet",
+   "lens": "hotel-hopper",
+   "claim": "No in-room charging outlet mentioned",
+   "verdict": "design",
+   "note": "hotels recharge overnight; a charger works anywhere",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Clive",
+   "model": "sonnet",
+   "lens": "hotel-hopper",
+   "claim": "ASK anyone ABOUT HOTEL / a hotel by name gets nothing",
+   "verdict": "fixed",
+   "note": "_hotelTalk + askable-audit row",
+   "pin": "round53.test.js"
+  },
+  {
+   "round": "53",
+   "persona": "Clive",
+   "model": "sonnet",
+   "lens": "hotel-hopper",
+   "claim": "Sole-staff bars refuse BARFINE before 23:00 with no visible countdown",
+   "verdict": "design",
+   "note": "the refusal already says 'come back later' — it is a rota, not a mood",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Clive",
+   "model": "sonnet",
+   "lens": "hotel-hopper",
+   "claim": "TRAVEL offers only bars and hotels",
+   "verdict": "design",
+   "note": "",
+   "pin": ""
+  },
+  {
+   "round": "53",
+   "persona": "Clive",
+   "model": "sonnet",
+   "lens": "hotel-hopper",
+   "claim": "Only the Sabai charges a joiner fee",
+   "verdict": "design",
+   "note": "Mario, 2026-09-26: leave as is",
+   "pin": ""
+  }
+ ]
+}
