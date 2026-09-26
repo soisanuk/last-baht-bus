@@ -436,3 +436,85 @@ test("a barfine counteroffer keeps the fields the prompt reads", () => {
   assert.equal(G.pendingBf.herMoney, true, "and whose money it is");
   assert.equal(G.pendingBf.party, 1600);
 });
+
+test("the people who hold the town up can be spoken to: vendor, DJ, greeter, band, cook", () => {
+  // "Scenery with lovely paint on them. Not one of them can be asked a question."
+  // (Helen, round 49.) State-driven mouths in the _promptedFolk pattern — the
+  // saleng answers while parked, the band while playing — nobody invented.
+  const dead = /Nobody by that name|Nobody here goes by|doesn't land on anyone|No one here answers|didn't understand/i;
+  // the saleng vendor, while his cart is parked
+  G.room = "lucky_tiger"; G.salengCart = "food"; G.salengRoom = G.room; G.salengUntil = G.nightTurn + 8;
+  out = []; doCommand("talk to saleng");
+  assert.ok(_FOLK_SALENG.some(l => text().includes(l)), "the vendor speaks in his own voice");
+  out = []; doCommand("ask vendor about price");
+  assert.match(text(), /BUY MOO PING/, "and quotes his cart's own board");
+  G.salengUntil = 0; G.salengRoom = null;
+  // the DJ, in a go-go
+  G.room = "neon_paradise"; out = []; doCommand("talk to dj");
+  assert.ok(_FOLK_DJ.some(l => text().includes(l)), "the booth answers");
+  // the greeter, on a street whose prose names her
+  G.room = "beach_rd_c"; out = []; doCommand("talk to tout");
+  assert.ok(_FOLK_TOUT_STREET.some(l => text().includes(l)), "the tout on Beach Road answers");
+  // the cook reads her own stall: a spit at the crocodile, a wok elsewhere
+  assert.equal(_stallTool("second_rd_mall"), "spit");
+  G.room = "second_rd_mall"; out = []; doCommand("talk to woman");
+  assert.doesNotMatch(text(), /\bwok\b/, "she is not looking up from a wok she does not have");
+  // the band answers ASK as well as TALK, while playing
+  const stage = Object.keys(ROOMS).find(id => ROOMS[id].liveMusic && ROOMS[id].musicEveryNight);
+  G.room = stage; assert.ok(_bandHere(), "a room with music every night");
+  out = []; doCommand("ask band about work");
+  assert.match(text(), /Four years|Home is expensive/, "the guitarist answers what he does");
+  out = []; doCommand("ask band about song");
+  assert.match(text(), /REQUEST/, "a song is a request, and it says how");
+  // …and a stage with nobody on it says so, rather than denying the band exists
+  const stageOff = Object.keys(ROOMS).find(id => ROOMS[id].liveMusic && !ROOMS[id].musicEveryNight);
+  if (stageOff) {
+    G.room = stageOff;
+    for (let d = 1; d <= 7 && _bandHere(); d++) G.day = d;
+    if (!_bandHere()) { out = []; doCommand("talk to band"); assert.match(text(), /No band tonight/); }
+  }
+});
+
+test("the men you played killer against are people for the rest of the night", () => {
+  // Four frames past Big Kev, and `talk to big kev` was "That name doesn't land
+  // on anyone in the room" (Kevin, round 50). The field is remembered for the
+  // night and the room it was played in, with whether you won.
+  G.room = "stinky_bar"; G.day = 3; G.money = 9000; G.game = null;
+  out = []; doCommand("play killer");
+  let guard = 0; while (G.game && guard++ < 90) doCommand("shot");
+  assert.ok(G.lastKp && G.lastKp.room === "stinky_bar" && G.lastKp.day === 3, "the field is remembered");
+  assert.ok(G.lastKp.names.length >= 3);
+  // the not-found oracle is the POOL, never a transcription — a fifth variant
+  // ("No one here answers to that") went red on a hand-written regex
+  const dead = t => _NOBODY_NAME.some(l => t.includes(l));
+  // somebody who WAS at the table answers, in the register of who won
+  const present = G.lastKp.names.find(n => /Gop|Finn|Kev/.test(n));
+  if (present) {
+    const word = /Gop/.test(present) ? "gop" : /Finn/.test(present) ? "finn" : "big kev";
+    out = []; doCommand("talk to " + word);
+    const pool = G.lastKp.won ? _FOLK_KPFIELD_WON : _FOLK_KPFIELD_LOST;
+    assert.ok(pool.some(l => text().includes(l)), `${present} answers as a man who ${G.lastKp.won ? "lost" : "won"}`);
+  }
+  // …and a man who was NOT in tonight's field is honestly not here
+  const absent = ["big kev", "gop", "finn"].find(w => !G.lastKp.names.some(n => new RegExp(w.split(" ").pop(), "i").test(n)));
+  if (absent) { out = []; doCommand("talk to " + absent); assert.ok(dead(text()), `${absent} did not play tonight`); }
+  // …and it does not follow you to another bar
+  G.room = "lucky_tiger"; out = []; doCommand("talk to gop");
+  assert.ok(dead(text()), "the field is this room's");
+});
+
+test("the piwin answers for his own job before he looks anyone up", () => {
+  // Every non-person subject was "Who? Don't know this one" — from the one man on
+  // the corner all night (Brian and Helen, round 49, independently).
+  const stand = Object.keys(ROOMS).find(id => ROOMS[id].motosai);
+  G.room = stand;
+  for (const t of ["work", "fares", "vest", "rain", "police"]) {
+    out = []; doCommand("ask piwin about " + t);
+    assert.doesNotMatch(text(), /Who\? Don't know this one/, `he answers "${t}"`);
+  }
+  out = []; doCommand("ask piwin about fares");
+  assert.ok(text().includes("฿" + MOTOSAI_TOWN) && text().includes("฿" + MOTOSAI_FAR), "the fares are the constants");
+  // …and a person is still a person
+  G.known = {}; out = []; doCommand("ask piwin about lek");
+  assert.match(text(), /Lot of people|Who\?/, "an unmet name is still a lookup");
+});

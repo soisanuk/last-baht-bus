@@ -413,6 +413,21 @@ function _piwinAbout(who) {
       : "\"Bus? Not down here, boss. Highway.\" He points west, toward the sodium glow. \"Sukhumvit — the Pattaya Tai truck stop at the crossing. Or —\" a pat on the seat behind him \"— I take you.\"");
     return;
   }
+  // HIS OWN JOB, before the person lookup. Every non-person subject fell into
+  // "Who? Don't know this one" — work, the fares, the stand, the vest, the rain —
+  // from the one man on the corner all night who is the obvious person to ask
+  // (Brian and Helen, round 49, independently).
+  if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk)\b/.test(w)) {
+    const say =
+      /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
+      /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + MOTOSAI_TOWN, f: "฿" + MOTOSAI_FAR }) :
+      /\b(vest|jacket|number|queue|licen[cs]e)\b/.test(w) ? "\"The vest is the stand.\" He plucks the orange nylon. \"Number is my number. No vest, no stand — you ride from the side of the road, police take the bike. Vest cost more than the bike, some year.\"" :
+      /\b(rain)\b/.test(w) ? "\"Rain?\" He points at the plastic poncho folded under the seat. \"Rain is good. Nobody want to walk. Rain is money.\" A beat. \"Bad rain is bad. Bad rain, everybody home.\"" :
+      /\b(police|helmet)\b/.test(w) ? "\"Helmet for me, always.\" He taps it. \"For you — better yes. Police stand at the bottom of Soi 6, six to seven. Farang no helmet is the best money they make all day.\"" :
+      "\"Crash?\" He looks at you as if you have asked whether the sea is wet. \"Everybody crash. Little bit. I don\u2019t crash with a customer. Customer crash, no more customer.\"";
+    _say(say);
+    return;
+  }
   const id = byName(NPCS);
   if (!id) { _say("\"Who?\" He shrugs, entirely unbothered. \"Don't know this one.\""); return; }
   const label = NPCS[id].name;
@@ -1475,6 +1490,10 @@ function _startKiller() {
   const skills = [0, ...field.map(f => f[1])];
   G.game = { type: "kp", kp: kpNew(names, skills), stake: KP_ENTRY * names.length };
   (G.kpPlayed = G.kpPlayed || {})[G.room] = true;   // you turned up: the title is defended by PLAYING, won or lost
+  // the men you are about to play are people for the rest of the night — a
+  // player who has just put four frames past Big Kev could not say a word to
+  // him afterwards (Kevin, round 50). `won` is filled in at the end of the frame.
+  G.lastKp = { room: G.room, day: G.day, names: G.game.kp.players.filter(p => p.name !== "You").map(p => p.name), won: false };
   _say("League night. The ashtray fills with hundred-baht notes, the field chalks " +
     `up, and somebody racks. Five players, three lives each, ฿${G.game.stake} in ` +
     "the pot. Pot anything or lose a life; last cue standing takes the lot.");
@@ -1570,6 +1589,7 @@ function _kpInput(input) {
       // THE NAME BEHIND THE TILL. Held, defended, and taken off you — the only
       // persistence killer supports, because killer itself is a one-night
       // knockout with no standings anywhere. See G.kpTitle in engine-core.
+      if (G.lastKp && G.lastKp.room === G.room) G.lastKp.won = true;
       const _held = (G.kpTitle = G.kpTitle || {})[G.room];
       let _crown;
       if (_held) {

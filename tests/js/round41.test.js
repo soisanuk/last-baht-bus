@@ -111,7 +111,10 @@ test("the counter has people at it: the cook nods, the stools shuffle along (Des
   for (const id of ["cheap_charlies", "cheap_charlies_jt", "kiss", "kiss_jomtien", "soi_rompho"]) {
     G.room = id;
     out = []; run("talk to cook");
-    assert.ok(_FOLK_COOK.some(l => text().includes(l.slice(0, 40))), `${id}: the cook answers`);
+    // the pool carries a {tool} slot now (a spit at the crocodile, a wok here), so
+    // compare against the line as it is delivered, not the raw template
+    const cook = _FOLK_COOK.map(l => _fmt(l, { tool: _stallTool(id) }));
+    assert.ok(cook.some(l => text().includes(l.slice(0, 40))), `${id}: the cook answers`);
     out = []; run("talk to the regulars");
     assert.ok(_FOLK_COUNTER.some(l => text().includes(l.slice(0, 40))), `${id}: the counter answers`);
     assert.ok((ROOMS[id].revisit || []).length >= 4, `${id}: a second look is not the same paragraph`);
@@ -121,7 +124,7 @@ test("the counter has people at it: the cook nods, the stools shuffle along (Des
   assert.ok(!_FOLK_GENERIC.some(l => text().includes(l.slice(0, 40))));
   // a bar is not an eatery: the pool doesn't leak
   G.room = "candy_bar"; out = []; run("talk to cook");
-  assert.ok(!_FOLK_COOK.some(l => text().includes(l.slice(0, 40))));
+  assert.ok(!_FOLK_COOK.map(l => _fmt(l, { tool: "wok" })).some(l => text().includes(l.slice(0, 40))));
 });
 
 test("prose review: the 51% is not the bar, and peak season is two months (slice 4)", () => {

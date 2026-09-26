@@ -171,6 +171,42 @@ const _FOLK_SECURITY = [
   "He looks at you with the flat, entirely un-hostile attention of a man whose whole job is knowing which of tonight's problems you are. He has decided you are not one. That is the conversation.",
   "A nod, and nothing after it. Security here talks to two kinds of people and you are neither, which is the best outcome available.",
 ];
+// THE PEOPLE WHO HOLD THE TOWN UP WERE SCENERY WITH LOVELY PAINT ON THEM (Helen,
+// round 49; Kevin, round 50): the vendor who parks in the bar for twenty minutes
+// and pitches at you in his own voice, the DJ, the greeter outside every bar on
+// Beach Road, the man you just played four frames of killer against — named in
+// the room's own prose or the game's own transcript, and not one of them could
+// be spoken to. These are STATE-driven mouths in the _promptedFolk pattern: the
+// saleng answers while _salengHere(), the band while _bandHere(), the killer
+// field on the night and in the room it was played. Nobody is invented.
+const _FOLK_SALENG = [
+  "He does not stop the transaction for you — the girls come first, they are the customers — but he tips his head. “You want? Same price. Farang price is same price, I am not that kind.” Then back to counting coins into a tin.",
+  "“Sawatdee, boss.” It is aimed past your shoulder at whoever is behind you with money. He has been on this cart eleven years and can sell to a bar full of women without once looking at a man. “You want something, you say. I hear.”",
+  "He is happy to talk and does it without pausing the work: where he starts (Naklua, four in the afternoon), where he finishes (wherever the girls stop buying), what he makes on a good night (he tells you; it is less than you would guess and he is not embarrassed). “Is okay. Is my cart.”",
+  "“Every bar, every night.” He counts them off on the fingers not holding the tongs. “Girls know me. Mama know me. Farang no know me — farang look at girls, not at cart.” A grin with a gap in it. “You looking at cart. Strange farang.”",
+];
+const _FOLK_DJ = [
+  "One side of the headphones comes off. He looks at you, looks at the monitor, looks at you. “Request?” You have not said anything. “No request. Okay.” The headphone goes back on. That was the conversation, and by the standards of the booth it was a warm one.",
+  "The booth is a wall of light and one man in a black T-shirt who has not stopped moving since you walked in. He leans to the mic, says something in Thai that makes the stage laugh, and gives you a thumbs-up that means every possible thing at once.",
+  "“Same set every night, boss.” He says it without resentment, fading one track under the next with two fingers. “Girls know where the good song come. Customer know too, after one week.” He nods at the floor. “You here one week?”",
+  "He answers with the fader: the track drops, the room notices, the track comes back. A grin. “See? Everybody look.” It is the only sentence he offers and he plainly considers it complete.",
+];
+const _FOLK_TOUT_STREET = [
+  "“Handsome man! Come inside, come look, no pressure —” The pressure is entirely the point, and it evaporates the moment she sees you are talking rather than turning in. The smile stays professionally up. The eyes have already moved to the next pavement.",
+  "He has the laminated menu out before you have finished stopping. Beer, lady drink, the special. When it becomes clear you want a word and not a stool, the menu goes back under his arm and he gives you the truth for free: “Quiet tonight. Come back ten o’clock.”",
+  "She is nineteen, in the bar’s T-shirt, holding a sign with a price on it, and she has said ‘welcome’ four hundred times since six. She says it to you too, then, off-script, “You look tired, mister.” Then somebody else walks past and you are gone.",
+  "“Inside better. Air-con.” It is thirty-one degrees and the case is not a bad one. He does not push when you don’t move; pushing is for the ones who slow down. You did not slow down. You stopped, which is different, and he does not have a script for it.",
+];
+const _FOLK_KPFIELD_WON = [
+  "He is on a stool with a beer he did not want to be paying for. “Lucky.” A long swallow. “Next league night.” It is not a threat; it is a booking.",
+  "“You play before?” He asks it the way a man asks whether the fish he lost was really that big. You say something modest. “Mm.” He does not believe you, and he has decided to like you anyway, which is the rarer thing.",
+  "He chalks the cue he no longer needs, out of habit, and tells you where you went wrong on the frame you won. He is right about it. He will be back on the third night, and so should you be.",
+];
+const _FOLK_KPFIELD_LOST = [
+  "He is generous about it, which is worse. “Good game, boss.” The pot is in his shirt pocket; he touches it once, not showing off, checking. “You come back, yes? Third night.”",
+  "“The black. Always the black.” He says it with real sympathy, as a man who has lost on the black more times than he has won on it. Then he buys you the beer, because that is the rule, and it tastes exactly like ฿100.",
+  "He shrugs at your money in his pocket as though somebody else put it there. “Table is table.” A nod at the felt, where the next field is already chalking up. “No table like you, no table like me.”",
+];
 const _FOLK_TOUT = [
   "She has the professional smile up before you finish crossing the pavement and drops it the moment you turn out to be talking rather than coming in. Business, not rudeness.",
 ];
@@ -193,10 +229,19 @@ function _roomProse(r) {
 // "No one here answers to that" while the woman on the wok got the brush-off
 // pool written for strangers on a soi (Des, round 41). She is not a character
 // and is not going to be; she is the reason the room exists, and she nods.
+// {tool} is the stall's own instrument — a wok by default, a spit for the
+// crocodile stall, a grill for the skewers — because "she looks up from the wok"
+// printed at a woman turning a whole crocodile (Helen, round 49).
+function _stallTool(room) {
+  const n = String((FOOD_STALLS[room] || {}).name || "").toLowerCase();
+  if (/spit|crocodile|rotisserie/.test(n)) return "spit";
+  if (/skewer|grill|moo ping|satay|kebab/.test(n)) return "grill";
+  return "wok";
+}
 const _FOLK_COOK = [
-  "She looks up from the wok for exactly as long as the wok allows, which is not long, and gives you the nod that means sit down. The nod is the conversation. The plate is the rest of it.",
+  "She looks up from the {tool} for exactly as long as the {tool} allows, which is not long, and gives you the nod that means sit down. The nod is the conversation. The plate is the rest of it.",
   "\u201cKin khao mai?\u201d Eaten yet? It is not small talk here; it is the entire question, and she is already reaching for a plate before you answer it.",
-  "She has one hand on the wok and one on the ladle and no intention of putting either down for a chat. What you get is a glance, a grunt, and food faster than you expected \u2014 which is the local definition of good service.",
+  "She has one hand on the {tool} and one on the ladle and no intention of putting either down for a chat. What you get is a glance, a grunt, and food faster than you expected \u2014 which is the local definition of good service.",
   "A woman who has fed this street for twenty years does not need to be charming to you and is anyway, briefly, in the two seconds between one order and the next.",
 ];
 const _FOLK_COUNTER = [
@@ -257,6 +302,43 @@ function _promptedFolk(arg, topic) {
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|last call|open till|what time)\b/.test(t)) return _closingTalk(null);
     return null;
   };
+  // ── state-driven mouths: people the transcript itself put in the room ──
+  if (/\b(band|musicians?|guitarist|guitar|bassist|bass|drummer|vocalist|singer|keyboard)\b/.test(a)) {
+    if (_bandHere()) {
+      // ASK BAND ABOUT <x> reached here as a miss while TALK TO BAND worked — the
+      // TALK intercept lives in the parser and the ASK path never met it
+      if (/\b(work|job|home|money|pay|how long|years|live|philippines?|manila|cebu)\b/.test(t))
+        _say("The guitarist, between songs: “Four years. Six nights. Two sets, sometimes three.” A chord. “Go home? Home is expensive. Here is cheap and they clap.”");
+      else if (/\b(song|request|play|set|hotel california|despacito)\b/.test(t))
+        _say("“Request?” The vocalist points the mic stand at the tip box. “Box first, song after. Everybody know Hotel California.” (REQUEST <song>)");
+      else _doBandTalk();
+      return true;
+    }
+    if (r.liveMusic) { _say("No band tonight — the stage is a stage, the stools are on it, and the speakers are off."); return true; }
+  }
+  if (_salengHere() && /\b(saleng|vendor|cart|hawker|seller|cart ?man|the man|him|three-?wheeler)\b/.test(a)) {
+    const cart = _SALENG_CARTS[G.salengCart];
+    if (/\b(price|prices|how much|cost|tao ?rai|what|sell|selling|got|have)\b/.test(t) && cart)
+      _say("He tips the tin at you: " + cart.hint);
+    else _say(_pickVary(_FOLK_SALENG, "folksaleng"));
+    return true;
+  }
+  if ((r.barType === "gogo" || r.drinks === "club") && /\b(dj|deejay|the booth|sound ?guy|sound ?man)\b/.test(a)) {
+    if (/\b(song|request|play|track|music)\b/.test(t))
+      _say("One side of the headphones comes off. “Request? Girls choose.” He nods at the stage, which is the whole of the answer. The headphone goes back on.");
+    else _say(_pickVary(_FOLK_DJ, "folkdj"));
+    return true;
+  }
+  // the man you played killer against, on the night and in the room you played
+  if (G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day) {
+    const hit = (G.lastKp.names || []).find(n => {
+      const toks = String(n).toLowerCase().replace(/[^a-z ]/g, " ").split(/\s+/)
+        .filter(w => w.length > 2 && !/^(the|his|her|still|silent|cousin|nephew|piwin|vest|his|in)$/.test(w));
+      return toks.some(w => new RegExp("\\b" + w + "\\b").test(a)) ||
+        (/nephew/.test(n.toLowerCase()) && /nephew/.test(a)) || (/piwin/.test(n.toLowerCase()) && /piwin|vest/.test(a));
+    });
+    if (hit) { _say(_pickVary(G.lastKp.won ? _FOLK_KPFIELD_WON : _FOLK_KPFIELD_LOST, "folkkp")); return true; }
+  }
   if (/\b(motosai|piwin|driver|rider|bike ?boy)\b/.test(a) && r.motosai) {
     if (/^(?:the )?(?:bus|buses|busses|songthaews?|baht ?bus|blue trucks?|trucks?)$/.test(t)) { _say(_busTalk()); return true; }
     _say(_pickVary(_FOLK_MOTO, "folkmoto")); return true;
@@ -279,7 +361,7 @@ function _promptedFolk(arg, topic) {
   }
   if (FOOD_STALLS[G.room]) {
     if (/\b(cook|wok|woman|lady|auntie|pa|mae|chef|server|waitress|waiter|girl|owner|her)\b/.test(a)) {
-      _say(_pickVary(_FOLK_COOK, "folkcook")); return true;
+      _say(_fmt(_pickVary(_FOLK_COOK, "folkcook"), { tool: _stallTool(G.room) })); return true;
     }
     if (/\b(men|man|regulars?|locals?|lads?|diners?|customers?|crowd|farang|punters?|people|them|everyone|others?|stools?|counter)\b/.test(a)) {
       _say(_pickVary(_FOLK_COUNTER, "folkcounter")); return true;
@@ -305,6 +387,12 @@ function _promptedFolk(arg, topic) {
   }
   if (/\b(tout|greeter|hostess|girls?|women|ladies|masseuse)\b/.test(a) && (r.massage || r.soapy)) {
     _say(_pickVary(_FOLK_TOUT, "folktout")); return true;
+  }
+  // the greeter outside a bar: the prose names her on Beach Road, the Walking
+  // Street approach and the Tree Town arch, and _FOLK_TOUT was gated to parlours,
+  // so in every room that actually mentions a tout she could not be spoken to
+  if (/\b(touts?|greeters?|the girl outside|the man outside|doorman|the sign)\b/.test(a)) {
+    _say(_pickVary(_FOLK_TOUT_STREET, "folktoutstreet")); return true;
   }
   _say(_pickVary(_FOLK_GENERIC, "folkgen"));
   return true;

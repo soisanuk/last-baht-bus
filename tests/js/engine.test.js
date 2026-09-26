@@ -6654,7 +6654,9 @@ test("TALK TO BAND works when band is playing", () => {
   G.day = 2; // no band
   state().room = "lucky_tiger";
   run("talk to band");
-  assert.ok(_NOBODY_NAME.some(s => lastOut().includes(s)), "a plain deny (pooled)");
+  // a stage with nobody on it says so — the house rule is a voiced refusal, never
+  // a denial that the band exists (round 49: the anonymous mouths)
+  assert.match(lastOut(), /No band tonight/, "the stage is a stage tonight");
 });
 
 // ── QoL verbs: time, waiting, tipping, haggling, the bar-mat map ───────────

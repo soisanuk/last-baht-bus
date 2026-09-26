@@ -449,6 +449,7 @@ function newGame() {
     // {since, defended}. Held until lost, never on a timer; cleared by a vacation,
     // because a month away is how you stop being anybody's champion.
     kpTitle: {},
+    lastKp: null,        // {room, day, names, won}: tonight's killer field, so the men you played are people afterwards
     phone: {             // the other half of your most important possession
       contacts: {},      //   npcId → true (you have her number)
       inbox: [],         //   [{from, text, turn, read, gives}]
