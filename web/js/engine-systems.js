@@ -1273,6 +1273,7 @@ const _ST_SOI6_LINES = [
 
 function _bfResolve(kind) {
   const { id, st, lt, party } = G.pendingBf;
+  const bfWas = G.pendingBf;   // kept because the counteroffer below re-opens the ledger
   // With company already on your arm, the ledger only sells one thing: another
   // companion. An ST/LT mid-party would strand the girls you're out with.
   if (G.party && G.party.ids && G.party.ids.length && kind !== "party") {
@@ -1328,7 +1329,11 @@ function _bfResolve(kind) {
   if (G.money < price) {
     if ((kind === "lt" || kind === "party") && st <= G.money && st < price) {
       // the menu she quoted had a line you CAN afford — the ledger stays open
-      G.pendingBf = { id, st, lt, room: G.room };
+      // SPREAD, never rebuild: a bare literal dropped `mama`, `party` and
+      // `herMoney`, so after a counteroffer the redraw stopped naming who was
+      // waiting on the answer, and a post-midnight short time said the money
+      // went to the BAR when the book was shut and it was hers.
+      G.pendingBf = { ...bfWas, id, st, lt, room: G.room };
       _say(`The number is ฿${price}, and your pocket says ฿${G.money}. The mamasan ` +
         `reads the arithmetic off your face without embarrassment — hers or yours — ` +
         `and taps the other line of the ledger: short time, ฿${st}. That one you can do.`);

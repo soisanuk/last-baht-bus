@@ -5188,6 +5188,10 @@ function _newVacation() {
   // across the vacation reset it reported the reset itself — "−119 สนุก · down
   // ฿5,740 on the night" for a month spent at home (Howard, round 35).
   G.lastNight = null;
+  // …and the TEXT of it, or LAST NIGHT on day one of a fresh trip reprints the
+  // final morning of the trip before it — the snapshot was cleared and the
+  // sentence it produced was not.
+  G.lastNightSaid = null;
   // …and then a FRESH baseline for the night about to start, or the first
   // morning of every new trip reports "nothing to measure against yet" over a
   // night that was actually played (Brian, round 49, ฿860 down and told nothing).

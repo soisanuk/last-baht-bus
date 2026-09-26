@@ -392,3 +392,47 @@ test("stubbed dice cannot hang the engine — the documented testing practice is
   } finally { _rand = saved2; }
   G.game = null;
 });
+
+test("a multi-word name is gated on BOTH halves, and town vocabulary is not", () => {
+  // _topicKnown compared a topic only to the LAST word of a name, so "duncan"
+  // matched nothing, fell through to "not a person", and TOPICS listed Duncan
+  // Ashcroft before the player had met him — the one thing the gate exists to
+  // prevent. The naive fix (match any word) would hide the `lake` topic behind
+  // Lake Gary and `mama` behind Mama Yai, so a first word counts only when it is
+  // not town vocabulary, derived from room/bar names and NPC_ROLES.
+  G.known = {};
+  for (const w of ["duncan", "ashcroft", "duncan ashcroft"])
+    assert.equal(_topicKnown(w), false, `"${w}" is a person and waits to be met`);
+  for (const w of ["mama", "lake", "mamasan", "boss"])
+    assert.equal(_topicKnown(w), true, `"${w}" is town vocabulary, never gated`);
+  G.known.powers = true;
+  assert.equal(_topicKnown("duncan"), true, "…and opens once you have met him");
+  // the honorific cast still gates on the half that is actually the name
+  G.known = {};
+  assert.equal(_topicKnown("gary"), false, "Lake Gary gates on Gary");
+  assert.equal(_topicKnown("lake"), true, "…and never on the lake");
+});
+
+test("a new trip does not reprint the last trip's morning", () => {
+  G.lastNightSaid = ["Last night: up ฿740 on the night"];
+  G.day = 7; _newVacation();
+  out = []; doCommand("last night");
+  assert.doesNotMatch(text(), /up ฿740/, "the previous vacation's ledger is gone");
+  assert.match(text(), /Nothing to report|not slept/i, "and it says so honestly");
+});
+
+test("a barfine counteroffer keeps the fields the prompt reads", () => {
+  // The branch rebuilt G.pendingBf from a bare literal and dropped `mama`,
+  // `party` and `herMoney` — so the redraw stopped naming who was waiting, and a
+  // post-midnight short time said the money went to the BAR when the book was
+  // shut and it was hers.
+  G.nightTurn = 70; G.room = "lucky_tiger";
+  const girl = _npcsHere().find(x => NPC_ROLES[x] === "hostess");
+  G.pendingBf = { id: girl, st: 400, lt: 800, party: 1600, room: G.room, mama: "Ratana", herMoney: true };
+  G.money = 500;                       // affords ST, not LT → the counteroffer
+  out = []; _bfResolve("lt");
+  assert.ok(G.pendingBf, "the ledger stays open");
+  assert.equal(G.pendingBf.mama, "Ratana", "who is waiting survives");
+  assert.equal(G.pendingBf.herMoney, true, "and whose money it is");
+  assert.equal(G.pendingBf.party, 1600);
+});

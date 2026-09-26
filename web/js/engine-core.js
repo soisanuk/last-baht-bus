@@ -224,15 +224,38 @@ function _learnVenues(text) {
 // The gate itself: a topic that is somebody's name is only *offered* — by
 // the flyout wheel and the input autocomplete — once that character is
 // known. Topics that aren't names always pass.
+// A MULTI-WORD NAME IS GATED ON BOTH HALVES. This compared a topic only to the
+// LAST word of a name, so "duncan" matched nothing, fell through to "not a
+// person" and TOPICS listed Duncan Ashcroft before the player had met him — the
+// one thing the gate exists to prevent. A blanket any-word match is the wrong
+// fix: most multi-word names here are HONORIFIC + name (Auntie Nok, Mama Yai,
+// Madam Oy, Mamasan Mem, Lake Gary), where the last word already is the name and
+// gating the first would hide the `lake` topic behind Lake Gary and `mama`
+// behind Mama Yai. So a first word counts only when it is not town vocabulary —
+// DERIVED from room/bar names and NPC_ROLES, plus the four honorifics that no
+// room happens to contain. Built once; NPCS and ROOMS do not change at runtime.
+const _NAME_EPITHETS = new Set(["miss", "khun", "dj", "fast"]);
+let _gateWordMap = null;
+function _nameGateWords() {
+  if (_gateWordMap) return _gateWordMap;
+  const town = new Set(Object.values(typeof NPC_ROLES !== "undefined" ? NPC_ROLES : {}));
+  for (const r of Object.values(ROOMS))
+    for (const w of `${r.bar || ""} ${r.name || ""}`.toLowerCase().split(/[^a-z]+/))
+      if (w) town.add(w);
+  _gateWordMap = new Map();
+  for (const [id, n] of Object.entries(NPCS)) {
+    const full = String(n.name).toLowerCase(), parts = full.split(" ");
+    const forms = new Set([full, parts[parts.length - 1]]);
+    for (const w of parts.slice(0, -1))
+      if (w && !town.has(w) && !_NAME_EPITHETS.has(w)) forms.add(w);
+    for (const f of forms) if (!_gateWordMap.has(f)) _gateWordMap.set(f, id);
+  }
+  return _gateWordMap;
+}
 function _topicKnown(t) {
   if (!G || !G.known) return true; // save predates the gate: hide nothing
-  const rosters = [NPCS];
-  for (const roster of rosters) {
-    for (const [id, n] of Object.entries(roster)) {
-      if (n.name.split(" ").pop().toLowerCase() === t) return !!G.known[id];
-    }
-  }
-  return true;
+  const id = _nameGateWords().get(String(t).toLowerCase());
+  return id === undefined ? true : !!G.known[id];
 }
 
 // ── Game state ─────────────────────────────────────────────────────────────
