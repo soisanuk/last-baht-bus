@@ -1,0 +1,7223 @@
+{
+"_about": "Classification of every FIXED finding in the ledger (2026-09-27, four Sonnet judges over the pinned-test titles; 502 of 802 marked low-confidence because a title is the fix, not the claim). Keyed by the finding's claim text. cls: docs/persona-findings-ledger-analysis.md §1. instrument: the existing audit that could in principle see the class, or none. Findings written at triage from round 54 on carry these fields themselves.",
+"byClaim": {
+"The founder is recognisable on sight from the content-creator traits with the name already gone  — renamed AND every describing node rewritten (docs/guardrails.md, 2026-09-26)": {
+"cls": "R",
+"cls2": "",
+"instrument": "none",
+"why_none": "needs real-world identifiability judgment; no text-pattern lint checks it",
+"between": "",
+"sev": "severe",
+"conf": "low"
+},
+"The column's title and signoff are a real columnist's, verbatim  — Last Orders / MIND THE STEP; cipher re-keyed; brass owl is the wink": {
+"cls": "R",
+"cls2": "",
+"instrument": "none",
+"why_none": "verbatim real text needs human copyright/identifiability review, not a pattern match",
+"between": "",
+"sev": "severe",
+"conf": "low"
+},
+"Two real go-go signs on Soi Diamond appear as themselves  — The Gilt Cage / Twice Shy, ids kept": {
+"cls": "R",
+"cls2": "",
+"instrument": "none",
+"why_none": "real venue names need human judgment, not a pattern match",
+"between": "",
+"sev": "severe",
+"conf": "low"
+},
+"Fast Eddy's Vegas story has crypto wallets in 2006  — the year moved": {
+"cls": "R",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"ASK MORT ABOUT the founder opens with the OLD surname  — the surname sweep": {
+"cls": "R",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "stale name vs surname sweep",
+"sev": "ordinary",
+"conf": "medium"
+},
+"PRESS HER FOR NAMES typed after the conversation lapsed falls to TRAVEL": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "a specific mis-tokenized phrase; no vocabulary list enumerates every phrasing",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Crystal Palace advertises No. 71 and EXAMINE DANCERS / ASK RIN ABOUT 71 dead-end  — reads aliases + _fixtureTalk (class: staff point at the room's own reads)": {
+"cls": "D",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"ASK DOUG ABOUT HIMSELF is a miss right after he introduced himself  — the hello, terse once heard": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"TRAVEL walked him through the Pratumnak dark, torch off, two bites, with only a parenthetical  — TRAVEL stops at the edge of the dark; the same order again walks it (third ruling on a twice-ruled behaviour)": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument compares TRAVEL's routing safety against manual walking's",
+"between": "TRAVEL vs manual walk",
+"sev": "severe",
+"conf": "low"
+},
+"A stop typed off the bus's drop-list that the truck doesn't serve gets a parse failure  — the driver's head-shake": {
+"cls": "P",
+"cls2": "G",
+"instrument": "none",
+"why_none": "no lint enumerates every possible mistyped stop name",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Soi 6's middle after midnight says the grilles are down either side of the Vic while three beer bars are open  — lateDesc rewritten": {
+"cls": "F",
+"cls2": "K",
+"instrument": "corpus",
+"why_none": "",
+"between": "lateDesc vs actual bar state",
+"sev": "ordinary",
+"conf": "low"
+},
+"The manager's welcome shot is poured onto the meter on arrival, no offer, no refusal path  — I DON'T DRINK declares teetotal; _compDrink declines on his behalf; DECLINE hands a fresh comp back": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "teetotal predicate vs comp mechanic",
+"sev": "ordinary",
+"conf": "high"
+},
+"BUY BEER FOR <lady> / BUY <lady> A SPRITE pours the drink into the player  — a named drink for a named person is hers": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "BUY FOR target resolution",
+"sev": "severe",
+"conf": "medium"
+},
+"Bare DRINK buys a Chang with no question  — soda for a declared teetotaller; the Zork default stays for everyone else": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"The bell's bottle back across the rail lands on the meter with no NO  — declined for a teetotaller; DECLINE for anyone inside two turns": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"Jackpot forfeit narrates a sober man drinking  — soda variant": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"WATCH SOI puts a pint in his hand  — a glass": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"DIAGNOSE calls sobriety 'fixable' every night  — 'as ordered' once declared": {
+"cls": "I",
+"cls2": "F",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"ASK anyone ABOUT SOBER/ALCOHOL/AA misses everywhere but Eddy  — _soberTalk by register; Eddy first": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"'i don't drink' / decline / refuse are parse failures  — the verbs": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "no lint enumerates plausible refusal phrasings",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"'a man drinking soda at nine' printed at 00:06 and 01:06 (class K)  — the soft pool no longer tells the time": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"7-Eleven Coke prints the bar's seat-price line  — _SOFT_SHOP": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "shop vs bar seat-price context",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Soft pool blind to the noun: BUY COKE gets a Sprite  — {d} slot": {
+"cls": "L",
+"cls2": "M",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Kitten Corner's bell says 'the girls on stage' on a street with no stages  — _BELL_SOI6": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "venue class vs bell text",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Queen Vic TAO RAI quotes a lady drink the pub doesn't sell": {
+"cls": "N",
+"cls2": "L",
+"instrument": "askable",
+"why_none": "",
+"between": "pub vs lady-drink economy",
+"sev": "ordinary",
+"conf": "medium"
+},
+"ENTER QUEEN VIC from Soi 6 says 'over in Soi 6' while standing in Soi 6  — 'on this side of town'": {
+"cls": "F",
+"cls2": "R",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"HELP never names a soft drink  — BUY SODA on the card": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument diffs HELP's card against the parser's real verb set",
+"between": "HELP vs parser",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Lock-in dare: 'a shot in each hand' then 'the girl with the cup'": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Sobering fires on the wall clock's multiples of 20, not on time since the drink  — G.soc.soberNext from the first drink": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"EXAMINE ME ignores drunkenness at 7–8  — read G.drunk, a field that does not exist (class L)": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"EXAMINE ME ignores a single injury  — hurt 1 clause": {
+"cls": "L",
+"cls2": "B",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"The truck is milder than the bike (no injury, no สนุก)": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument compares magnitude/severity across separate encounter mechanics",
+"between": "truck vs bike injury",
+"sev": "ordinary",
+"conf": "low"
+},
+"DIAGNOSE never names the hangover": {
+"cls": "N",
+"cls2": "B",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"EXAMINE ME promises 'numbers' from DIAGNOSE, which has words  — the hint": {
+"cls": "D",
+"cls2": "H",
+"instrument": "promises",
+"why_none": "",
+"between": "EXAMINE ME hint vs DIAGNOSE output",
+"sev": "ordinary",
+"conf": "medium"
+},
+"'(-2 สนุก)' prints at 0 while nothing moves": {
+"cls": "F",
+"cls2": "D",
+"instrument": "none",
+"why_none": "no instrument checks a printed delta against the actual state change",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"REPLY PRIEW replies to Mort": {
+"cls": "L",
+"cls2": "H",
+"instrument": "none",
+"why_none": "",
+"between": "REPLY target resolution",
+"sev": "ordinary",
+"conf": "medium"
+},
+"CALL PRIEW finds nobody in the phone  — LINE-only voiced": {
+"cls": "P",
+"cls2": "G",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"MESSAGE PRIEW is one fixed string  — pooled": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no lint flags a single fixed string that should be a pool",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"WHO says the black book is empty with two contacts in the phone": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Tan doesn't answer about food, one command before FOLLOW TAN feeds you": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"ENTER CLINIC says daytime while GET TESTED works from the same pavement; the test takes one turn  — the door is the test; three ticks": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument compares ENTER against a stage-specific verb for the same door",
+"between": "ENTER CLINIC vs GET TESTED",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Beach Road: west is 'shophouses', SWIM offers a hotel pool, the motosai's sea is on the wrong side": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Four foods the prose sells the till refuses (Tree Town moo ping, Cricketers pie, mall fruit, mall menu)  — three stalls + a menu read; the fruit cart names the open spit": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "high"
+},
+"Queen Vic crisps 'land on the bar' after eleven and are never charged  — the full-man check runs first; a landed bag is charged": {
+"cls": "E",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Lucky Tiger revisit says YOU rack up on the table  — somebody does": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"LAST NIGHT omits the hospital  — the night's ending leads the ledger": {
+"cls": "B",
+"cls2": "D",
+"instrument": "none",
+"why_none": "no instrument checks the ledger covers every ending type",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"Second complimentary bottle says the second one stands sentry": {
+"cls": "Q",
+"cls2": "M",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"'The roof has gone quiet' under an awning  — _underRoof": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"Quiz: the same smirk five times  — _QUIZ_WRONG_TAIL": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Bar water at ฿80 'worth ten times what it cost'": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a ratio claim in prose against the actual constants",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Crash card: 'the one journey in the game that can hurt you' is false now": {
+"cls": "R",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"SAFE/KEYPAD/PIN print Oy's keypad prompt from any room; CODE differs": {
+"cls": "H",
+"cls2": "L",
+"instrument": "none",
+"why_none": "no instrument compares near-synonym commands' behavior",
+"between": "SAFE/KEYPAD/PIN vs CODE",
+"sev": "ordinary",
+"conf": "medium"
+},
+"TRAVEL refuses the room's own printed name": {
+"cls": "L",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"ASK anyone ABOUT HOTEL / a hotel by name gets nothing  — _hotelTalk + askable-audit row": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"every item on the info… menu runs its verb — the chip's sentinel is stripped": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks chip-sentinel stripping",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the info menu is context-aware, and every verb it offers is one the parser answers": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "menu offers vs parser accepts",
+"sev": "ordinary",
+"conf": "low"
+},
+"the bare sentinel means 'I want the readouts', so it answers rather than dying silently": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a haggled peddler redraws the HAGGLED prices on a restore, not the opening pitch": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument replays a save/restore cycle against live encounter state",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the price the redraw quotes is the price the till charges": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "redraw price vs till price",
+"sev": "ordinary",
+"conf": "low"
+},
+"no armed encounter is left with a prompt a reload cannot redraw": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"DEBT joins the info menu when you owe somebody, and only then": {
+"cls": "F",
+"cls2": "H",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"DRAW is offered where the till is, since that is the only place it works": {
+"cls": "D",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "menu offer vs actual usability",
+"sev": "ordinary",
+"conf": "low"
+},
+"the vacation-end redraw carries both options and the week's score, not two bare CAPS": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the live vacation-end prompt and its redraw are the same text (one source, no drift)": {
+"cls": "S",
+"cls2": "H",
+"instrument": "none",
+"why_none": "",
+"between": "live prompt vs redraw",
+"sev": "ordinary",
+"conf": "low"
+},
+"the checkout list keeps its prices on a redraw — three hotel names alone can't be chosen between": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a resumed bar game names the pot, so QUIT has a visible price": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Thai lookup is keyed on the word tapped, not on whatever was tapped first": {
+"cls": "L",
+"cls2": "",
+"instrument": "taps",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the compass is not offered in a hotel room at all — the stale buttons are unreachable": {
+"cls": "H",
+"cls2": "C",
+"instrument": "none",
+"why_none": "",
+"between": "menu buttons vs room type",
+"sev": "cosmetic",
+"conf": "low"
+},
+"an unknown topic is not a repeat: Lake Gary gets his greeting once, then a voiced miss in his own register": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no lint flags a greeting repeating instead of falling to a miss",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a hostess's miss stays in her register; a true repeat keeps the Tinglish brush-off": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"patrons: the intro is met-once (not nightly), and a topic miss is a shrug, not 'You again'": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a pending question lapses OUT LOUD when you turn to someone else, and the cue prints once": {
+"cls": "G",
+"cls2": "Q",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Fast Eddy stays dry: BUY MAN DRINK pours him a soda water": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Cream answers her own verbs — a civilian, not the rail and not the roster": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the Tree Town maze: bare HELP is the reaction the hint promised, not a re-render": {
+"cls": "D",
+"cls2": "H",
+"instrument": "promises",
+"why_none": "",
+"between": "HINT vs HELP behavior",
+"sev": "ordinary",
+"conf": "low"
+},
+"the booking app's NO reads where you are — no ceiling fan on Naklua Road": {
+"cls": "F",
+"cls2": "R",
+"instrument": "none",
+"why_none": "no instrument checks a room description's furniture against the location's actual class",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the last-bus warning counts the minutes it actually has left": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"motosai: the Darkside fare applies both ways, Second Road has stands, and HOTEL is a destination": {
+"cls": "C",
+"cls2": "B",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the bus: a stop typed without the 'soi', and a bare stop name straight off the drop-list": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"SLEEP tapped on waking asks once; SLEEP again (or a sleep after a sleep) goes through": {
+"cls": "G",
+"cls2": "Q",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"in the opening quest a hospital night is a do-or-die fail like dawn, not a calendar day": {
+"cls": "H",
+"cls2": "B",
+"instrument": "none",
+"why_none": "",
+"between": "hospital vs dawn/collapse handling",
+"sev": "severe",
+"conf": "low"
+},
+"EAT / MENU / BUY <dish> at a kitchen all reach the food; water sells where a cart is described": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"swim off any sand, charge at the 7-Eleven window, and your own room safe answers": {
+"cls": "C",
+"cls2": "D",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"bare TALK names the room; bare NO is voiced; a wai on the sand is a wai on the sand": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the phone: offmap girls list as LINE only, and answer SEND in their own voices": {
+"cls": "L",
+"cls2": "Q",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"weather flavour: a Darkside drizzle has no baht bus, and the pools are deeper than two": {
+"cls": "R",
+"cls2": "Q",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Khao Talo after the shutters stops advertising the charcoal; a shut bar isn't offered as a destination": {
+"cls": "F",
+"cls2": "C",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"PLAY CONNECT 4 100 puts ฿100 on the table; the Anchor's barometer reads": {
+"cls": "D",
+"cls2": "B",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"no emergency stash on the Soi 6 week — the room safe beat is a full-game thing": {
+"cls": "L",
+"cls2": "C",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the conversation layer only swallows a line as an ASK when it could be one": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a female patron goes back to HER glass": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"SAY GOODBYE is leave-taking; last call counts its minutes and says nothing at the shutters": {
+"cls": "P",
+"cls2": "K",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Lek keeps the Mot gist; Oy's gated wallet topic is a 'not yet', not a 'not mine'": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the dog survives the Act One reset, rides Tan's sedan out loud, and is a topic everyone has": {
+"cls": "S",
+"cls2": "B",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"dog verbs a dog person types are voiced, and the dog reads the room": {
+"cls": "P",
+"cls2": "L",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"animals the prose names can be examined; Nok greets the regular; Cheap Charlie's cooks; no phantom baht bus": {
+"cls": "D",
+"cls2": "R",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the investor can still own a bar: Tan gives the licence answer when you ARE Wayne": {
+"cls": "L",
+"cls2": "I",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"HINT never nudges the PLG errand; Tan's manifest names venues by their signs": {
+"cls": "B",
+"cls2": "L",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TRAVEL won't walk you to shutters or into the dawn": {
+"cls": "H",
+"cls2": "G",
+"instrument": "none",
+"why_none": "",
+"between": "TRAVEL vs curfew rules",
+"sev": "severe",
+"conf": "low"
+},
+"own-prose instructions parse: Kesinee's bar, Nigel's bar(s), Tan's coffee; Bert and Candy answer the Shamrock and each other": {
+"cls": "D",
+"cls2": "",
+"instrument": "errand",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a lapsed question can be asked again next time the node lands": {
+"cls": "G",
+"cls2": "Q",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a regular's 'yesterday you no come' only fires when you didn't come": {
+"cls": "F",
+"cls2": "L",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"her texts and refusals don't name a mama her own story put elsewhere": {
+"cls": "M",
+"cls2": "R",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"she remembers you across vacations — once, with a head start, not the old ledger": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Lek's wallet topic ticks the milestone the HINT points at": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "HINT vs TALK",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the rose seller lapses on an unrelated command instead of eating it": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"chips: a waived fine shows no number; the night ride has RIDE ON / call it": {
+"cls": "H",
+"cls2": "C",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"MESSAGE her while she's three stools away; the quiz ignores digits inside commands; a toastie is a toastie": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a night ride never repeats a venue while the pool lasts; the 6 a.m. coda is any girl's": {
+"cls": "Q",
+"cls2": "M",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Tan's sedan ends any game on the table; killer pool is tappable": {
+"cls": "G",
+"cls2": "C",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Jackpot cap says so; PLAY CONNECT 4 WITH <mamasan> honours the opponent; a short stake is announced": {
+"cls": "D",
+"cls2": "H",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"REMATCH / DOUBLE / BET are the gambler's verbs; LOOK/TIME mid-game are free; a stray SHOT is pointed": {
+"cls": "G",
+"cls2": "P",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"quiz questions don't repeat within a night; QUIZ and DARTS are topics anyone answers": {
+"cls": "Q",
+"cls2": "N",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Connect 4 loss is a pool; the seated quiz entry is one line": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"typed Thai: polite particles match, a Thai listener understands, Thai digits read, a little Thai commands": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Thai NPCs keep their register on a miss; Nok says ui, not aiyee; the jogger has no fixed hour": {
+"cls": "M",
+"cls2": "K",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the piwin can be wai'd and spoken to; Candy knows Lek; Lek points at the cage; the station has OUT": {
+"cls": "C",
+"cls2": "D",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the daily survives RESTART; LOOK is the full description; leads stay in the Soi 6 pocket": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a restore redraw must not move the dice: redraw, then reload the blob, and the roll is the same": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"WAIT stops when the world moves you; a pending question is redrawn on resume": {
+"cls": "G",
+"cls2": "S",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"poverty: SELL points at Jomtien, the pity ride is a sandbox mercy, CHECKOUT settles the book first, TIP 0 refused, BEG is voiced": {
+"cls": "D",
+"cls2": "",
+"instrument": "errand",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the loan: Nira speaks it, DEBT states it, and flying home is what she remembers": {
+"cls": "N",
+"cls2": "M",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"OUT of your room after a respawn is your soi, and the stash pays on a respawn too": {
+"cls": "L",
+"cls2": "S",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"encounter chips come from the prompt's CAPS; the police wait on a non-answer; soft pitches pass a real command through": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "low"
+},
+"bare PHOTO in a go-go is refused; the freelancer pays once; the honest LT gets the quiet coda": {
+"cls": "L",
+"cls2": "E",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a resident keeps a local: expat bonds cool every third night; the REP label fits any cause; the manager stops saying New face": {
+"cls": "M",
+"cls2": "E",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"HINT signposts the bar chain's hidden step; a typed choice label outlives the next ask; a forfeited question is un-spent": {
+"cls": "B",
+"cls2": "G",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"texts: no identical line twice running from one sender, the inbox is capped; the ledger nets out ATM cash; the violence refusal is a pool": {
+"cls": "Q",
+"cls2": "E",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"review: a command that merely CONTAINS an answer word passes through a soft encounter": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"review: the Darkside league draws its own roster; the inbox is hard-capped read or unread": {
+"cls": "L",
+"cls2": "S",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a printed verbal-action hint parses after an intervening ask (the chips moved on, the label didn't)": {
+"cls": "H",
+"cls2": "C",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"ASK TAN ABOUT <someone> places them: the manifest men get his read, anyone else a driver's placing": {
+"cls": "D",
+"cls2": "N",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Bert's grudge gates his offers; the Safe-Cracker's where-clause follows the step; Oy stops talking about a wallet she gave back": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a non-move in killer pool / Connect 4 / the quiz costs no turn": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Candy's Mot reveal answers ASK ABOUT WALLET; the Shamrock quest completes in the same breath; Gavin pays in person; Bee remembers her investor": {
+"cls": "J",
+"cls2": "H",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Wayne and Bert answer 'bar'; Notty's isn't on Naklua's door list until you've been sent": {
+"cls": "L",
+"cls2": "N",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"UNDO is refused inside a live game or a pending answer — it was an oracle": {
+"cls": "G",
+"cls2": "X",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "low"
+},
+"bought สนุก tapers over an evening: a generous night pays in full, a grind does not": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the scam post-mortem reads how the deal was struck": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a slow payer still gets his ride — the depot no longer exists": {
+"cls": "R",
+"cls2": "D",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Auntie Nok's bottles promise what the beach actually holds": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the bell goes through the spend-brake like every other bought สนุก": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "high"
+},
+"a rough wake takes a pocket, not an estate": {
+"cls": "E",
+"cls2": "L",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"money buys attention, not intimacy: a night's tips lift her a couple of notches and stop": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"TIP and BRIBE answer in the right voice; MONEY is a verb": {
+"cls": "P",
+"cls2": "M",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Connect 4 says why the big money won't ride; charity and credit read the wallet": {
+"cls": "D",
+"cls2": "N",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the folio cannot slide under a door you didn't wake behind": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"DIAGNOSE's dawn warning states the cap, not your whole pocket": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a bar that keeps a cat lets you pet the cat": {
+"cls": "D",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TAKE something you already carry says so": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a bus destination that isn't on this loop is refused, not silently swallowed": {
+"cls": "G",
+"cls2": "P",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"nobody narrates half an hour and then advances the clock by six minutes": {
+"cls": "K",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"HIRE takes the host off the floor and costs the evening it narrates": {
+"cls": "K",
+"cls2": "E",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"bare BUY DRINK asks who it's for instead of spending ฿150 on a guess": {
+"cls": "G",
+"cls2": "L",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a question you walked away from is put to you again": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"darts checks out from a real three-dart range and says when a command didn't land": {
+"cls": "G",
+"cls2": "E",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the dog settles where the room actually is, not where its flags suggest": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"feeding the dog doesn't invent a grill cart that isn't in the room": {
+"cls": "F",
+"cls2": "R",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"LOOK while a fare is pending says where you are, not where you boarded": {
+"cls": "L",
+"cls2": "G",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the no-dartboard line names boards that exist, and only ones you've found": {
+"cls": "L",
+"cls2": "R",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a game move typed after the game is over isn't offered as a topic": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Act One hint names the topic that actually holds the code": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "HINT vs actual milestone verb",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a quest pointer at a man who drifts says that he drifts": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the rain doesn't call a bar empty while you're talking to somebody in it": {
+"cls": "F",
+"cls2": "L",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"your own door warns you about the unlit soi before you walk into it": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the beach nobody works has nobody working it": {
+"cls": "F",
+"cls2": "R",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"something the room describes but doesn't sell gets a reason, not a shrug": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"quiz night exists inside the mode it is promised in": {
+"cls": "B",
+"cls2": "C",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the piwin's menu and his mouth agree about the challenge": {
+"cls": "H",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "piwin menu vs dialogue",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Vic's kitchen keeps Aoy's stated hours": {
+"cls": "F",
+"cls2": "N",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"an unaffordable long time leaves the ledger open on the line you can afford": {
+"cls": "E",
+"cls2": "G",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"her tariff is the tariff: the drink count she names is the count that opens the door": {
+"cls": "D",
+"cls2": "N",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the soi6 short-time scene answers from a pool, not one string": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the rose family's second visit reads as recognition, not a rerun": {
+"cls": "Q",
+"cls2": "M",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a quest completes in the same breath as the move that wins it": {
+"cls": "A",
+"cls2": "J",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"midnight abandons a live game instead of continuing it on the pavement": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "low"
+},
+"midnight clears a pending street-offer instead of carrying it to the kerb": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the shutters cannot walk out a man who already left on the back of her bike": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "high"
+},
+"the cheap-charlie refusal reads the ledger it cites": {
+"cls": "F",
+"cls2": "L",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the jilted regular's next hello is cooler, once": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the busy-regular line never seats a girl the room's own prose just featured": {
+"cls": "F",
+"cls2": "M",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the small hours make you WAIT for the bus, and the kerb charges real turns": {
+"cls": "K",
+"cls2": "E",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the kerb can end the night — the physiological curfew enforcing itself": {
+"cls": "X",
+"cls2": "G",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"past drunk seven the bikes refuse you — and the bench still has you": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TIME tells the truth about the small hours in all three windows": {
+"cls": "N",
+"cls2": "K",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the street hint at a dead-hour bus stop stays a live promise": {
+"cls": "D",
+"cls2": "H",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the balk is a balk, not a wall: insistence buys the ride the crash arc needs": {
+"cls": "C",
+"cls2": "X",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"standing at dawn is an all-nighter: home, solvent, billed to the morning": {
+"cls": "H",
+"cls2": "F",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Act One's dawn is still do-or-die — the all-nighter is a resident's privilege": {
+"cls": "L",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TAKE HER OUT: she joins, every new door pays, and the club is her hour": {
+"cls": "E",
+"cls2": "B",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"two is a party, three is a tour group": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"with company on your arm, the ledger only sells another companion": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"SLEEP with company is the long-time close, paid up by the evening she spent on your arm": {
+"cls": "E",
+"cls2": "A",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"dawn with company: she pours you homeward and the week remembers a great night": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the companion rescue: a blackout with her on your arm ends in your own bed": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"her whole night is priced like one: bond decides willingness, season decides the premium": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the real negotiation carries the party price to every surface, and she says the math out loud": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "price across surfaces",
+"sev": "ordinary",
+"conf": "low"
+},
+"the girl on your arm exists to every verb, in every room": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the companion on your arm doesn't greet you across the room she's standing in": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"BARFINE at the girl already on your arm has nothing to sell": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"one truck, one wait: answering the drop-off menu doesn't conjure a second kerb": {
+"cls": "G",
+"cls2": "S",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the full game shows its week: SHARE renders, including at the vacation-end gate": {
+"cls": "C",
+"cls2": "G",
+"instrument": "none",
+"why_none": "no instrument replays a global verb through every pendingChoice modal gate to check it still answers",
+"between": "SHARE verb vs vacation-end modal gate",
+"sev": "ordinary",
+"conf": "low"
+},
+"a shut barfine book names the act that shut it": {
+"cls": "N",
+"cls2": "F",
+"instrument": "askable",
+"why_none": "",
+"between": "bar's own book state vs the reason given for it",
+"sev": "cosmetic",
+"conf": "low"
+},
+"EAT <named dish> orders the named dish, not the stall's special": {
+"cls": "P",
+"cls2": "H",
+"instrument": "none",
+"why_none": "no instrument checks item-identity returned by BUY/EAT against the noun typed, only that some state changed",
+"between": "typed dish name vs stall's default-serve logic",
+"sev": "ordinary",
+"conf": "medium"
+},
+"one waiver, one reason: her-farang past midnight doesn't get the mamasan's second blessing": {
+"cls": "A",
+"cls2": "E",
+"instrument": "none",
+"why_none": "no instrument tests interaction of two independently-correct waiver rules stacking wrongly",
+"between": "her-farang waiver vs after-midnight waiver",
+"sev": "ordinary",
+"conf": "low"
+},
+"an in-character haggle at the ledger gets a voice, not a silent reprint": {
+"cls": "P",
+"cls2": "G",
+"instrument": "none",
+"why_none": "no instrument checks that every plausible in-scene verb gets a voiced reply rather than a silent reprint",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"RIDE BUS in your own room knows there is no street in here": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks room-type predicates against transport verbs typed indoors",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the drink-snipe line is a pool, not a stamp": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "high"
+},
+"the shift-call prompt reads the YES action as YES, not as an annotation of NO": {
+"cls": "G",
+"cls2": "P",
+"instrument": "none",
+"why_none": "no instrument replays modal prompt answers to check they aren't misread as an annotation",
+"between": "YES answer text vs annotation parsing",
+"sev": "ordinary",
+"conf": "low"
+},
+"SCORE and QUESTS agree: a vignette quest shows on neither": {
+"cls": "B",
+"cls2": "H",
+"instrument": "none",
+"why_none": "no instrument cross-checks SCORE against QUESTS for every quest type",
+"between": "SCORE vs QUESTS",
+"sev": "ordinary",
+"conf": "low"
+},
+"WATCH SUNSET is a room verb, not a wristwatch — even with a peddler at your elbow": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks room verbs against every live pendingEnc state",
+"between": "room verb vs pending peddler encounter",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the quiz chalkboard names each bar once": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the Owl no longer preaches the dead bus curfew": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "old Owl lore vs current bus-curfew mechanic",
+"sev": "cosmetic",
+"conf": "high"
+},
+"volunteered subjects answer: Daeng's dancer past, Kwang's son, Cream's coffee": {
+"cls": "D",
+"cls2": "N",
+"instrument": "none",
+"why_none": "a greeting-volunteered subject with no matching topic anywhere else can't be found by any vocabulary-bounded harvest (documented as resisting automation)",
+"between": "greeting-volunteered subject vs answerable topic list",
+"sev": "ordinary",
+"conf": "high"
+},
+"Cream doesn't re-introduce herself to the man she went home with": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks bond-gated greeting repetition against a specific companion history",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the dog is present in the newest content: dark warning, small-hours kerb, light rain": {
+"cls": "I",
+"cls2": "B",
+"instrument": "predicates",
+"why_none": "",
+"between": "new content path vs G.dog predicate",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Fast Eddy owns his bar — the man-drink line doesn't call the owner a manager": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "owner flag vs manager flag",
+"sev": "cosmetic",
+"conf": "high"
+},
+"an ignored phone doesn't hoard: chatter caps at 3 unread per sender, and the read shows a dozen": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument computes the magnitude of an unbounded counter over many turns/senders",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the ended affair reaches the phone, the book, and the texting arm": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "affair-ended flag vs phone/book/texting arm",
+"sev": "ordinary",
+"conf": "high"
+},
+"the early call's boy has ONE mother: a stable hostess, never the cashier": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"your own hotel room has the two complimentary bottles — the rain-lock can't dehydrate you": {
+"cls": "G",
+"cls2": "C",
+"instrument": "none",
+"why_none": "no instrument checks whether a world-state block (rain) can strand a player from a resource in their own room",
+"between": "rain-lock travel block vs own-room resource",
+"sev": "severe",
+"conf": "low"
+},
+"a resident reaches his own room whether or not Act One's wallet flag survived": {
+"cls": "L",
+"cls2": "S",
+"instrument": "none",
+"why_none": "no instrument checks a stage-transition predicate against a flag from a different stage",
+"between": "Act One wallet flag vs room reachability",
+"sev": "severe",
+"conf": "low"
+},
+"the held cheap refusal is a meter, not a wall: progress is acknowledged": {
+"cls": "F",
+"cls2": "E",
+"instrument": "none",
+"why_none": "no instrument checks a held refusal's wording against the player's actual progress toward the threshold",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the column's own mystery answers at its author: personals and box 15 reach Mort's signoff": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "column mystery vs box 15 vs Mort's signoff",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a money decision is legible: the rose pitch carries the numeral beside the Thai": {
+"cls": "N",
+"cls2": "D",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"asking for the 7-Eleven's toastie inside a bar points at the door, not a wall": {
+"cls": "H",
+"cls2": "L",
+"instrument": "errand",
+"why_none": "",
+"between": "bar location vs 7-Eleven redirect",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the goal word teaches its own pronunciation on the surfaces a cold player reads": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument measures onboarding legibility for a cold first-time reader",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the nomad is a pickable origin: listed eighth, Tan reads him, WHO AM I knows": {
+"cls": "B",
+"cls2": "M",
+"instrument": "none",
+"why_none": "no instrument checks a newly-added data entry (an origin) is threaded through every downstream reader (WHO AM I, Tan)",
+"between": "new origin vs WHO AM I / Tan's read",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Kyle is the you-ARE-him NPC: deactivated for the nomad, present for everyone else": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "origin selection vs Kyle deactivation",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the glass-start vignette runs the real path: talk, answer, vouch at Bert, done": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument reaches a quest through its real dialogue path rather than a hand-set flag",
+"between": "scripted flag-set vs real quest path",
+"sev": "severe",
+"conf": "medium"
+},
+"Tan's manifest carries the eighth passenger": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a hub NPC's manifest lists every playable origin",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the third answer to Tan's last question is taken at face value, not needled": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a dialogue reaction's tone against the specific answer given",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the other ledger: earned at bond tiers, told in order, once each, never again": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a per-tier reveal system never repeats a confidence",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"being told the truth is not a prize: the ledger pays no สนุก and no bond": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks that a reveal mechanic pays no reward where doctrine says it shouldn't",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"her numbers come from the constants, and they are HER numbers": {
+"cls": "R",
+"cls2": "M",
+"instrument": "references",
+"why_none": "",
+"between": "dialogue numbers vs world constants",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the share card gained the social line: names, regulars, and the ledger": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the bonded treadmill bypass is a NIGHT-TO-NIGHT reward, not an all-night faucet": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument computes the integral of a bonded-treadmill bypass across a single night",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"…and tomorrow she is new again: depth across nights still pays full": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a jaded/reset counter's magnitude across multiple nights",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a short time uses a condom, because HELP says it does": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "HELP claim vs ST mechanic",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the black book is the DEPTH dashboard HELP claims: bonded girls appear, number or not": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "HELP claim vs black-book dashboard",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the bought-bond ceiling says itself out loud, once a night": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the share card always shows the ledger count — a conspicuous zero is the point": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a zero-value edge case is still rendered rather than hidden",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"สนุก survives a save/restore — สบายสบาย is a milestone, not a ceiling": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument replays save/restore against a core happiness stat for exact preservation",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"a multi-leg quest shows its legs, and Tree Town's far end is either room": {
+"cls": "H",
+"cls2": "L",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "quest UI vs Tree Town room ambiguity",
+"sev": "ordinary",
+"conf": "low"
+},
+"an umbrella makes the rain negotiable — and only an umbrella": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks that only the correct item gates a weather-negotiation mechanic",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"EXITS names the doors, because bar doors hide on bare compass points": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks EXITS' listing logic against every door-naming convention (compass vs venue)",
+"between": "EXITS verb vs bar compass-only doors",
+"sev": "ordinary",
+"conf": "medium"
+},
+"EXITS also names venues[] doors — the verb had gone blind to the very migration it exists for": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks an old verb was updated alongside a schema migration it depends on",
+"between": "EXITS verb vs venues[] migration",
+"sev": "ordinary",
+"conf": "medium"
+},
+"TRAVEL into a venue remembers the door, same as ENTER does": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument cross-checks TRAVEL and ENTER for identical door-memory behaviour",
+"between": "TRAVEL vs ENTER",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a question you were asked doesn't strand itself on the street": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a pending conversation question survives a room change",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"going home does not buy a curse: an encounter answer is a word you say, not a command containing one": {
+"cls": "P",
+"cls2": "G",
+"instrument": "none",
+"why_none": "no instrument checks an encounter's word-match logic against commands that merely contain the trigger word",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"…but consenting to the reading still costs what it costs": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a consent action still charges its stated cost",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a man is stood what he actually drinks, and nobody repays it with Terry's anecdote": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "Terry's specific anecdote vs a generic stand-a-beer line",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the stand-a-beer line is pooled, and none of it misgenders the women at the rail": {
+"cls": "M",
+"cls2": "Q",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the landlady is served, not denied — she is the house, not a punter": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "house role vs punter role",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a proper noun in a character's own mouth is a topic they answer": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"_selfNamedNode honours gates — a locked story stays locked": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"it does not hijack ordinary words — only capitalised proper nouns count": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a self-named-node matcher only fires on capitalised proper nouns, not lowercase collisions",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Doyle's terse greeting does not re-introduce him": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a specific character's terse-greeting path against re-introduction",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"An Introduction can actually be completed — being SENT opens the door": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a dialogue completion condition is actually satisfiable by the described route",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Tan advertises the locator himself, and the quest names the key not the door": {
+"cls": "D",
+"cls2": "J",
+"instrument": "asktopic",
+"why_none": "",
+"between": "quest text (door) vs mechanic (key)",
+"sev": "ordinary",
+"conf": "low"
+},
+"a dep chain is a chain — being an origin doesn't skip other people's jobs": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "origin status vs dep-chain gating",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the hotel book stops when it stops — no charge is announced that isn't made": {
+"cls": "F",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "announced charge vs actual charge",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the piwin's mercy is a way out, not a taxi service": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument computes whether a mercy mechanic can be exploited as a repeatable free service",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a choice the game just printed outranks a global verb": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks precedence between a just-printed modal choice and the global verb table",
+"between": "printed modal choice vs global verb",
+"sev": "ordinary",
+"conf": "medium"
+},
+"…but a real verb still wins when no printed option matches it": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks the fallback path when no printed option matches a real verb",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a round buys one telling, in full — the brush-off's own offer": {
+"cls": "D",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a brush-off's own stated offer (buy a round, hear it fresh) is honoured by the mechanic it names",
+"between": "brush-off's own promise vs roundFor mechanic",
+"sev": "ordinary",
+"conf": "high"
+},
+"QUESTS does not say nobody has asked you for anything under an offer": {
+"cls": "F",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "QUESTS journal vs offered-not-accepted state",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the middle of Soi 6 does not claim shut bars you can walk into": {
+"cls": "F",
+"cls2": "R",
+"instrument": "references",
+"why_none": "",
+"between": "room prose (shut) vs walkable exit",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a named regular at the rail means the rail is not empty": {
+"cls": "F",
+"cls2": "L",
+"instrument": "predicates",
+"why_none": "",
+"between": "ambient empty-rail line vs named regular present",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the challenge never recommends the vehicle it forbids": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "hint recommendation vs forbidden vehicle rule",
+"sev": "ordinary",
+"conf": "medium"
+},
+"BUY MAN DRINK where there is no manager does not recommend BUY MAN DRINK": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "hint vs no-manager state",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the ten-o'clock homecoming is narrated, not silent": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"_canHop answers about the man, _hopsNow about the hour": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "_canHop (who) vs _hopsNow (when)",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the season never thins a regular off a night he told you he'd be there": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "anchor night vs season thinning",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a regular who names no nights is still thinnable — the season still bites": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a close look at the notebook knows whether its owner is in": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "EXAMINE reads: node vs live presence state",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"reads: nodes can gate on live state, and the last one still cannot": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a gated-reads-node invariant (last node ungated) against every authored entry",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Pattaya Leisure payoff calls no roll of who is at the rail": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the pub's staff can be tipped, and are not stood a beer like customers": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "pub staff vs customer TIP/BUY logic",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a pub barmaid's refusal doesn't dangle a price": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"ACCEPT with a name that matches nothing takes nothing": {
+"cls": "G",
+"cls2": "P",
+"instrument": "none",
+"why_none": "no instrument checks ACCEPT against every invalid-name input",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"bare ACCEPT with two on the table asks which, and with one just takes it": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks bare ACCEPT's disambiguation logic across 0/1/2-quest states",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"running Gavin's errand does not end Bert, or the expat chain with him": {
+"cls": "A",
+"cls2": "J",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "Gavin's errand vs Bert/expat quest chain",
+"sev": "severe",
+"conf": "medium"
+},
+"the thaw is gated on the deeds, not on the standing it cancels": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "thaw gate vs standing variable",
+"sev": "ordinary",
+"conf": "low"
+},
+"a manager who won't open you a beer doesn't drink your health either": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"every honest phrasing of Mot's dinner buys Mot dinner": {
+"cls": "P",
+"cls2": "",
+"instrument": "errand",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the dinner is once, is his price, and is not a hunger farm": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a once-only scene can't be farmed for a repeatable hunger benefit",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the dinner doesn't leave you being mugged in the dark you just left": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument tests interaction between a scene's ending state and an unrelated street-danger system",
+"between": "dinner scene vs dark/mugging encounter",
+"sev": "severe",
+"conf": "medium"
+},
+"Mot's dinner is on all three surfaces, and disappears once it's done": {
+"cls": "C",
+"cls2": "Q",
+"instrument": "none",
+"why_none": "no instrument checks a completed one-off offer stops being offered on all three surfaces",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"you cannot eat when you are not hungry": {
+"cls": "E",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a hungry man eats, and the happiness a meal can buy is bounded": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument computes the ceiling on happiness a repeatable food purchase can buy",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the guard covers every counter, not just the one he found": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a bugfix's guard was generalised rather than applied to only the reported instance",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"asking a man about himself never returns his opinion of somebody else": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"…and each of them has a real answer about himself": {
+"cls": "B",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Candy's own staff point at Candy, not at a map": {
+"cls": "D",
+"cls2": "L",
+"instrument": "askable",
+"why_none": "",
+"between": "staff-given directions vs map-style directions",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a girl at any OTHER bar still gives the directions, which is the point of the line": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Doyle names the door instead of gesturing at it": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the roast announces itself on the day, and quotes its price": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"a room whose prose puts a food vendor in it can be bought from": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"Mama Yai's kitchen serves whether you say BUY or EAT": {
+"cls": "P",
+"cls2": "H",
+"instrument": "errand",
+"why_none": "",
+"between": "BUY vs EAT verb",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"(BUY FOOD) is only promised where there is a till": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the links the game already made in one direction now come back": {
+"cls": "H",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "one-directional reference vs reciprocal",
+"sev": "ordinary",
+"conf": "low"
+},
+"Wayne and Gavin can see each other across one rail": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks two co-located NPCs have a cross-topic on each other",
+"between": "Wayne vs Gavin cross-topic",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the drummer is not a Soi 6 cashier": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "drummer role vs cashier role",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"nothing I authored contradicts what the game already said": {
+"cls": "X",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the message Candy tells you to carry can be delivered": {
+"cls": "D",
+"cls2": "",
+"instrument": "errand",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"Rose says nothing about a lunch nobody has mentioned to her": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks an NPC doesn't reference an event not yet reported to her",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"BUY PIWIN A BEER survives you learning his name": {
+"cls": "A",
+"cls2": "S",
+"instrument": "errand",
+"why_none": "",
+"between": "generic phrase target vs learned-name state",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"an instruction naming somebody is a promise, and there is a tool for it": {
+"cls": "X",
+"cls2": "",
+"instrument": "errand",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "high"
+},
+"Tan does not describe forty women with one sentence": {
+"cls": "Q",
+"cls2": "M",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Tan's read on Mercedes does not contradict Mercedes": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "Tan's dialogue vs Mercedes' own facts",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Tan's signoff is a pool, not a catchphrase": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "high"
+},
+"Mort gets shorter about declining, and starts fresh tomorrow": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a specific character's decline-repeat gets terser and resets daily",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"declining the 51% does not delete the expat endgame": {
+"cls": "A",
+"cls2": "C",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "declining the 51% vs the rest of the expat endgame",
+"sev": "severe",
+"conf": "medium"
+},
+"both partners re-arm, and fxAlways is what makes an offer an offer": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a re-offer flag (fxAlways) correctly re-arms after a decline",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"everyone can be waied, because Act One is solved with one": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a universal-gesture verb is reachable in the exact state that solves Act One",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"the fare chip pays the fare it advertises": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "fare chip's advertised amount vs paid amount",
+"sev": "ordinary",
+"conf": "medium"
+},
+"reading your own scoreboard is free": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a read-only info verb doesn't silently cost a turn",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"…but looking at the WORLD still costs a turn": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "a doctrine confirmation (LOOK costs a turn by design), not itself a defect",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a double-tapped SLEEP cannot eat a whole night": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a double-submitted command doesn't double-consume the tick/turn budget",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"the round on the house is the gamble its own prose describes": {
+"cls": "D",
+"cls2": "F",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the goodwill is not the gamble — the floor saw you do it either way": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a floor-visibility flag is set independent of a gamble's outcome",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"killer pool offers its moves, not just a way to forfeit": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a mini-game exposes its real move set rather than only a forfeit path",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the rain offers a way to wait it out": {
+"cls": "B",
+"cls2": "C",
+"instrument": "none",
+"why_none": "no instrument checks a blocking weather state offers a way to wait it out",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the torch can be switched off in the room that tells you to": {
+"cls": "D",
+"cls2": "C",
+"instrument": "promises",
+"why_none": "",
+"between": "room prose instruction vs torch-off mechanic",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"you can pay the landlord, and paying stops his clock": {
+"cls": "C",
+"cls2": "E",
+"instrument": "none",
+"why_none": "no instrument checks a payment action actually halts the arrears clock it targets",
+"between": "PAY RENT vs arrears clock",
+"sev": "severe",
+"conf": "medium"
+},
+"a part payment is taken, and honestly described": {
+"cls": "F",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the old man's note can be settled too, and he never chases it": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a stated debt can actually be settled by the player",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"PAY RENT is on three surfaces, and only when you owe": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a verb's three-surfaces presence is correctly gated on owing money",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"when the bar goes, the building knows": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a bar-lost flag propagates into the building's own room description",
+"between": "bar-lost state vs building description",
+"sev": "ordinary",
+"conf": "low"
+},
+"BOOKS and the ending agree about what the room became": {
+"cls": "H",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "BOOKS vs ending prose",
+"sev": "ordinary",
+"conf": "low"
+},
+"a drink costs what the room costs": {
+"cls": "R",
+"cls2": "F",
+"instrument": "references",
+"why_none": "",
+"between": "room-class price vs charged price",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the quote and the charge are the same number": {
+"cls": "D",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "TAO RAI quote vs actual charge",
+"sev": "ordinary",
+"conf": "high"
+},
+"the share card gives the score something to be measured against": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks the share card includes a comparison baseline for the score",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the three Soi 6 men know each other, and the girl who runs his own bar": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks cross-topics exist between every co-located named character pair",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"EXAMINE POCKETS turns out your pockets — the opening tells you to (Col)": {
+"cls": "D",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "opening prose instruction vs EXAMINE POCKETS mechanic",
+"sev": "ordinary",
+"conf": "high"
+},
+"a word that is exactly somebody's name never resolves to a coincidence (Wes)": {
+"cls": "P",
+"cls2": "",
+"instrument": "taps",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "high"
+},
+"last call knows what kind of room it is in (Wes)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a new question answered by an old line is not an accusation (Wes)": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks the leniency of the said-agrees catch mechanic against an evolving honest answer",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the Sundowner's fridge is the fridge its own description leads with (Wes)": {
+"cls": "R",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "Sundowner's own description vs its fridge detail",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Boonsri can discuss the photo Neil says she put up (Wes)": {
+"cls": "J",
+"cls2": "D",
+"instrument": "asktopic",
+"why_none": "",
+"between": "Neil's claim vs Boonsri's dialogue",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the lake stops claiming it is open once it shuts (Wes)": {
+"cls": "K",
+"cls2": "F",
+"instrument": "references",
+"why_none": "",
+"between": "lake's claimed hours vs actual closed state",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Soi Buakhao has the baht buses its own prose describes (Col + Mario)": {
+"cls": "D",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "prose description vs bus mechanic",
+"sev": "ordinary",
+"conf": "medium"
+},
+"off the soi you negotiate, and the price is the whole truck (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "a design-doctrine pin (Mario's call), not itself a defect",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the Buakhao shuttle is never spliced into the town circuit": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a new transport route is spliced into the global travel graph",
+"between": "shuttle route vs town travel graph",
+"sev": "ordinary",
+"conf": "medium"
+},
+"charm tapers across the RAIL — breadth pays less, depth does not (Yuki)": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument computes whether a taper mechanic applies at the wrong scope (whole rail vs per-person)",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a girl worked too hard gets annoyed, and it costs (Mario's call, round 33)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "a design call (Mario's), not itself a defect",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the safe route is walkable stony broke, and Pim says so (round 33)": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a critical-path route is walkable by a broke player",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"no Act One safe-route clue is behind a paywall (round 33)": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks an Act One safe-route clue isn't gated behind spending money",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"Lek stops sending you after a wallet you're already carrying (round 33)": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "quest hint vs already-carrying state",
+"sev": "ordinary",
+"conf": "medium"
+},
+"DIAGNOSE only smells carts where there are carts (round 33)": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a sensory verb (DIAGNOSE/SMELL) only reports objects actually present",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"an out-of-range digit says why, and is never stored (round 33)": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks an out-of-range modal answer is rejected with explanation rather than silently stored",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the night bazaar's stalls answer to a close look (round 33)": {
+"cls": "D",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "high"
+},
+"the architecture the rooms keep naming answers to a look (round 33)": {
+"cls": "D",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "high"
+},
+"a metaphor is not a fixture (round 33)": {
+"cls": "X",
+"cls2": "D",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"greedy matching doesn't answer 'cash machine' with your own cash (round 33)": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks greedy substring matching doesn't misresolve a compound noun to its prefix word",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the literal hint-follower's strategy reaches the office (Marcus)": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a literal hint-following strategy actually reaches the described outcome",
+"between": "",
+"sev": "severe",
+"conf": "low"
+},
+"the wallet-topic route to the som tam is untouched (Marcus)": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks an alternate route stays intact after related changes",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"SHAKE HAND gets a voiced answer, not a parse miss (Marcus)": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument enumerates plausible physical-gesture verbs the parser should voice-refuse rather than miss",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the chips are your memory, not a menu (Gerry)": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks the chip bar reflects actual conversation memory rather than a static menu",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"truth before tariff — the day refusal pre-empts the drink quote (Gerry)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks the order of two independent checks (day-refusal vs price-quote)",
+"between": "day-based refusal vs drink-price quote ordering",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the charter can be declined, the bench fare cannot (Frank)": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a fallback transport option survives declining its premium alternative",
+"between": "charter decline vs bench fare",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the fare gate's LOOK names the kerb you are actually on (Frank)": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a modal's LOOK response names the player's actual location",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the ride's close varies, and 'the one' is one (Frank)": {
+"cls": "Q",
+"cls2": "M",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"a door shown at night's end closes out loud (Gerry)": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a closing event is narrated rather than silent",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the clam reaches the story it advertises — both of them (Gerry)": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the gone-home pointer never names the bar you're standing in (Gerry)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "elsewhereLine logic vs current room",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"your own room is not an audience for the torch (Frank)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "torch social-notice logic vs private room",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the butterfly tease counts drinks, because that is what it says (Gerry)": {
+"cls": "R",
+"cls2": "L",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"no social line names a role its target might hold (Gerry)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a failed command carries nobody's breadcrumb (Frank)": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a stuck-nudge counter only increments on genuine misses, not any failed command",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"one inbox read never prints the same text twice (Gerry)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks an inbox re-read doesn't reprint an already-read text",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Myth Night is a motosai destination, not just a departure point (Gerry)": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a venue is reachable as a destination, not only as a departure point",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"nobody propositions you mid-party (Frank)": {
+"cls": "I",
+"cls2": "G",
+"instrument": "predicates",
+"why_none": "",
+"between": "party-companion state vs proposition encounter",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a lock-in dawn is a lock-in dawn (Gerry)": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks an ending label matches a concurrent lock-in state",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the bar-bore isn't on a rail the room called empty (Gerry)": {
+"cls": "F",
+"cls2": "L",
+"instrument": "predicates",
+"why_none": "",
+"between": "anonymous bar-bore ambient line vs named regulars present",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Gary answers for everything his own hello volunteers (Gerry)": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Ron answers for his wife, and for the man he sends you to (Gerry)": {
+"cls": "J",
+"cls2": "D",
+"instrument": "asktopic",
+"why_none": "",
+"between": "Ron's referenced wife/contact vs addressable topics",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Daeng knows the landowner her own key credits her with naming (Gerry)": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "key's own text vs Daeng's answerable topics",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Lek's personal topics exist, and deepen with the ledger (Frank)": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a character's personal topics deepen alongside a ledger/bond system",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Lek's hello is not frozen at night one (Frank)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a specific character's greeting evolves past night one",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"a new question about an old line gets the gist, not the spiel (Gerry+Wes)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a re-asked old question gets the terse gist rather than the full spiel",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the padded door opens for a man it has locked in before (Gerry/Mario)": {
+"cls": "S",
+"cls2": "A",
+"instrument": "none",
+"why_none": "no instrument replays a save/reload against a lock-in door's per-visit state",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"ROUND THE BACK answers to the words a player would use (Mario)": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument enumerates the phrasings a player would use for a specific back-door action",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the back door is knowledge, not signage (Mario)": {
+"cls": "L",
+"cls2": "N",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"…and stays shut to everybody else (Gerry/Mario)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"KNOCK is the one place the no-knocking rule bends (Gerry)": {
+"cls": "X",
+"cls2": "P",
+"instrument": "none",
+"why_none": "a documented doctrine exception (KNOCK bends the no-knocking rule), borderline defect",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the street names the door once it is yours (Gerry)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the permanent lock-in record survives a save (Gerry/Mario)": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument replays save/reload against a permanent lock-in record",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"walking out still doesn't buy you back in tonight (canon)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "a canon/doctrine confirmation, not itself a defect",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a bonded girl gets a goodbye, and it scales with the ledger (Frank)": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a farewell scene scales with the bond ledger",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the goodbye costs nothing and pays nothing (Frank)": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a stated free scene charges no cost and pays no reward",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the goodbye reaches the player through the real vacation end (Frank)": {
+"cls": "C",
+"cls2": "H",
+"instrument": "none",
+"why_none": "no instrument reaches a companion-goodbye scene through the real vacation-end path rather than a direct call",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"she texts while you're in the air — if she's yours (Frank)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the daily challenge keeps its own ending (Frank)": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument cross-checks the daily-challenge ending against the main-mode ending path",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the TRAVEL refusal explains itself and names the ride (Gerry)": {
+"cls": "D",
+"cls2": "N",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a stake you can't have is explained, not pocketed (Gerry)": {
+"cls": "F",
+"cls2": "E",
+"instrument": "none",
+"why_none": "no instrument checks an unpayable stake is refused with explanation rather than silently taken",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the bell's HELP line doesn't quote a price the till tiers past (Gerry)": {
+"cls": "D",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "HELP's quoted price vs tiered till price",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"a shut door is not an invitation (Gerry)": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Notty's is refused for standing, not for existing (Gerry)": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a refusal's wording distinguishes closed-for-now from doesn't-exist",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a woman the room has already placed isn't also busy elsewhere (Gerry)": {
+"cls": "A",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "room's placement of her vs a busy-elsewhere flag",
+"sev": "ordinary",
+"conf": "medium"
+},
+"PLAY POOL WITH <her> racks against her (Frank)": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"_tillKeeper finds the money-holder, cashier or doubling mama (Mario)": {
+"cls": "L",
+"cls2": "N",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"an away owner leaves the till with somebody, and the room says who (Mario)": {
+"cls": "L",
+"cls2": "N",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the cover girl is the same woman all night (Mario)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a determinism check that a pure per-night hash returns the same output at every call site",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"what she has told you survives the trip home (Howard F1)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a cross-vacation state persistence check (dialogue memory across a new trip)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the ledger she showed you is not shown again as news (Howard F2)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a short topic key never matches inside an unrelated word (Howard F7)": {
+"cls": "P",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the bar-bore is never draped with a girl who is yours (Howard F5)": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the first morning of a new trip does not report the flight (Howard F4)": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "a player-state-aware prose check (true in general, false for a returning player)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the last-bus warning stays quiet on the back of her bike (Howard F11)": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "low"
+},
+"the act-one safe opens before the folio bills a man who just earned it (Howard F12)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a cross-system sequencing check (safe opening vs folio billing order)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the night ride remembers where it has taken you (Howard F8)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the LT coda invents no biography (Howard F10)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Lek answers for what she volunteers (Howard F6)": {
+"cls": "N",
+"cls2": "",
+"instrument": "none",
+"why_none": "a check that an NPC's own volunteered subject is itself answerable in ASK",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"her hello at a tier is not one line (Howard F15)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Candy's plain hello IS the errand once she knows Oy has it (Declan)": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the guard on the office door leaks the song on a second try (Declan)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a puzzle-integrity check across repeated attempts at a gated secret",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the freelancer passthrough declines without a wai (Declan)": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"DEMAND is a voiced refusal, not an ASK in disguise (Declan)": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "a verb-semantics check that a distinct verb isn't silently aliased to another",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the alley door is not a สนุก farm and honours the one-way rule (Stan 1/11)": {
+"cls": "E",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"the pocket flies home with you (Stan 2)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a scene-exit money-persistence check",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Soi 6 drink tariff is measured in the unit it is quoted in (Stan 4)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"you cannot buy a ride to the kerb you are standing on (Stan 5)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a same-location-as-destination sanity check",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the quoted motosai fare is the charged one (Stan 6)": {
+"cls": "D",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"the piwin doesn't claim the buses are gone (Stan 7)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a room that claims cheaper beer charges cheaper beer (Stan 8)": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the street does not reach inside a bolted door (Stan 10)": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the after-hours pointer names the door on this street (Stan 12)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the night ledger counts the ATM fee (Stan 14)": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "a full-ledger reconciliation check (every fee accounted for)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TIME keeps minutes (Stan 15)": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a bell is a round, and rounds are deeds (Stan 16)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Gary and Daeng answer for what Ron and the key put in your mouth (Stan 17)": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"no double possessive on a bar whose name ends in s (Stan 18)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"the ledger beat counts her real drinks (Stan 19)": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "a ledger-accuracy check against actual drink events",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"EXAMINE the bar you're standing in is the bar (Stan 20)": {
+"cls": "H",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "TAKE vs EXAMINE",
+"sev": "ordinary",
+"conf": "medium"
+},
+"HELP's hotel list is the checkout's (Stan 22)": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "a cross-surface consistency check between HELP text and the live checkout hotel list",
+"between": "HELP vs checkout",
+"sev": "ordinary",
+"conf": "low"
+},
+"SEND to a woman standing next to you says so (Stan 24)": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"no cashier is named where the bar has none (Stan 25)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the interior escalates by the stage the night has reached": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the dare lands once, JOIN IN elides time and pays as company, keeping your seat is free": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the party runs while the money does — and walks you out when it doesn't": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the coda: the last punter leaves, and the room turns back into a workplace": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"nothing prints behind an unbolted door, and the dread stays outside a bolted one": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the register stays PG-13 — the narrator never looks directly": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a walk-up who has bought nothing is told the price of the closed book (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a regular is let go without the drink gate, and her money is still hers (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"popular girls, draws, and the pre-midnight bundle are untouched (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"bare WAIT in the rain reads the sky (Ray)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the month survives the Act One reset (Malcolm F1)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a stage-transition state check (season month across an Act1 reset)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the junction can see the junction (Malcolm F3)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"after the shutters, the window and the rail agree with the room (Malcolm F4)": {
+"cls": "H",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "window prose vs room state",
+"sev": "ordinary",
+"conf": "low"
+},
+"Phil's visits square with any calendar (Malcolm F2)": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the foot of Soi 6 has no sunset baked into its revisits (Malcolm F7)": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the Owl's banner doesn't call a nightly column weekly (Malcolm F5)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"a chartered truck has no bench of passengers (Malcolm F10)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the deep corner's sign is the first door you can find by ear (Malcolm F12, then lit 2026-09-04)": {
+"cls": "C",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Mort has a view on the biggest story on his own street (Malcolm F13)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Cheap Charlie's prices only the plate it sells (Malcolm F14)": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Aoy knows her own roast on a Tuesday (Malcolm F15)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the beach doesn't keep your face in the sand for a week (Malcolm F16)": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"common words are not topics: ASK CANDY ABOUT LAST NIGHT is her account (Malcolm)": {
+"cls": "P",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the waving cat is the waving cat, and a tip box is a tip box (Malcolm)": {
+"cls": "D",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"ENTER a namesake bar goes to the one in your own region (Malcolm)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a CAPS hint teaches the name, so the bar can place Gavin on Soi 6 (Nige)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"your own remembered answer doesn't show twice for a trailing full stop (Nige)": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "a string-normalization check for trailing punctuation in the remembered-answer matcher",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"%home% replays a place title-cased and a sentence as said — never It'Ll (Nige)": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"Bank's helmet is a tracked quest — offered when he hands it over, done when Pim has it (Nige)": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a question about the beach is not a favour: Tan's Beach Road node stays behind its own topic (Lionel)": {
+"cls": "P",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"SWIM: your own hotel's pool, the sand a step away, and the old line only where true (Lionel)": {
+"cls": "F",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the promenade agrees with itself: the sea is there to see, examine, and walk onto (Lionel)": {
+"cls": "H",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "desc vs EXAMINE vs movement",
+"sev": "ordinary",
+"conf": "low"
+},
+"Soi 7 advertises the alley the IN exit leads to (Lionel)": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"MOTOSAI TO HOTEL knows the Areca (Lionel)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the desk runs your card before it posts your bag to Naklua (Lionel)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a payment-before-action sequencing check",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Somchith's rooms: alone is voiced, with company it is the short-time round, once a night (Lionel)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"every motel phrasing a man with a girl on his arm tried rents the room (Lionel)": {
+"cls": "P",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"GOODBYE / SEND HER HOME parts with a companion on your terms (Lionel)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a bar girl answers the trade's own question — mama first, then her (Lionel)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the room says who runs the floor and who keeps the till (Lionel)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a draw's flat midnight menu explains itself (Lionel)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"from a Beach Road bar the short-time walk is to Somchith's (Lionel)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TAKE on a fixture outside a bar doesn't blame the bar (Lionel)": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a name with NO in it is not a no to the rose seller — the flirt runs (Lionel)": {
+"cls": "P",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a soft pitch declined by an unrelated command says so BEFORE the decline prose (Lionel)": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "an output-ordering check inside a soft-pitch decline",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Darkside is not an island: the crossing walks west to Soi Buakhao, and TRAVEL walks it (Darren)": {
+"cls": "B",
+"cls2": "R",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"Sukhumvit is a main road: the Pattaya Tai trucks stop at the crossing (Darren)": {
+"cls": "B",
+"cls2": "R",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the drunk balk out east doesn't promise a bench that isn't there (Darren)": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the pity ride is remembered, and the next paid fare settles it (Darren)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"no stand means no stand — even in the rain, even in your room; bare GRAB is the app (Darren)": {
+"cls": "P",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TAO RAI at a stand quotes the fares — and the quote is the charge (Darren)": {
+"cls": "D",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the piwin knows where the trucks run (Darren)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the near-miss prints after you got on, never before (Darren)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "an event-ordering check (near-miss prose vs boarding action)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"no downpour during the opening race (Darren)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"a downpour does not follow you through sleep; a lock-in has no cart fashion show (Darren/Gordon)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a cross-system state-bleed check (rain across sleep, a saleng cart inside a lock-in)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the gallery files a photo where the shutter went (Gordon)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the phone learns what it is told: Tan has your number, Mort has a name, the Owl was read (Gordon)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Mort's invitation is honest about whether he is in tonight (Gordon)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"charging takes the minutes it takes, and a bar's socket is for customers (Gordon)": {
+"cls": "D",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the noodle girl's bar has a name, so ENTER can follow through (Gordon)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the booking pitch is pooled, and an encounter intro may be an array (Gordon)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the money-ask texts and the thank-yous are pools, not one template with the name swapped (Gordon)": {
+"cls": "Q",
+"cls2": "M",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"both rooms say what the highway does to people on foot": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the crossing on foot is a roll: clean, a clip, or the ward — bus and bike never roll (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"drink and the small hours raise the crossing's risk; TRAVEL through it pays the same roll": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a bike is one turn within the district or the next one over, and a turn more per district beyond": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the ride is a pool: the weaving, the hands on the first ride, three-up with a girl, a second bike for two": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the beer names its price on the line that charges it, and the fifth one says why it cost สนุก (Colin)": {
+"cls": "D",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"TAO RAI in a bar is the price list nobody hands you (Colin)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the ATM says the fee before you commit, the piwin's rumour is a street thing, and a street with a 7-Eleven has no mamasan (Colin)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"bars whose own prose says cheap are cheaper at the till; ya dong is paint-stripper money (Colin)": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a patron giver who isn't out: the journal names his local and the man who knows his habits (Colin)": {
+"cls": "N",
+"cls2": "J",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the British woman's hint carries a verb, and TALK is decent (Colin)": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"SCORES reads the same bake as the telly: results, then fixtures (Colin)": {
+"cls": "H",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "SCORES vs TV",
+"sev": "ordinary",
+"conf": "low"
+},
+"drinks that are poured are on your tab — the prose stopped promising free ones (Colin)": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Candy's som-tam errand greeting is Act One's — it stays behind hasWallet (Dex)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the two junctions have a late face: no 'busiest crossroads at two' beside an empty bench (Dex)": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the police modal reads whole words: WAIT is not WAI, BARFINE is not a FINE (Dex)": {
+"cls": "G",
+"cls2": "P",
+"instrument": "none",
+"why_none": "a modal-input word-boundary check (police prompt vocabulary)",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"the smell refusal says the number it lifts at (Dex)": {
+"cls": "D",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"standing at dawn on a pavement is not 'closing the place' (Dex)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a club's floor heaves in its own words — no low-season bare-wood rail line there (Dex)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Japanese traveller fires on the street, and her intro stands outside (Dex)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the after-hours question has an answer: LATE / AFTER / KARAOKE land on 'late' for Lek and the filler girls (Dex)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"ASK LEK ABOUT PRICE is her price story, remembered or not yet told (Frank)": {
+"cls": "N",
+"cls2": "Q",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"DIAGNOSE and the piwin agree on the number (Dex)": {
+"cls": "H",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "DIAGNOSE vs piwin",
+"sev": "ordinary",
+"conf": "low"
+},
+"the night ride's whisky sets are drinks; a ride that ends at dawn gets the quiet coda (Dex)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a cross-system accounting check (ride drinks vs dawn ending)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the morning summary never diffs against a previous vacation's snapshot (Frank)": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "a cross-vacation snapshot-diff check",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the share card names the game you played (Frank)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the third TALK to a girl who has said hello is not a doorbell — but the second is the gist (Frank)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the same texted selfie doesn't file twice; the wrong hotel's desk points you home; the dry ATM names the nearest (Frank)": {
+"cls": "S",
+"cls2": "L",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the ride line is one sentence after a seat sentence; the darts opponent gets a capital (Frank)": {
+"cls": "M",
+"cls2": "Q",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Eddy's nudge is a soda; a cashier on the floor is the answer to 'who minds the shop' (Frank)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a rotating owner's elsewhere line names the district — two bars are called the Sundowner (Hamish)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a named exit typed into a soft pitch walks you off — the decline AND the move (Hamish)": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "a soft-pitch input-handling check for a named exit",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Tan says the one habit on the ride: this town, you ASK": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the Owl keeps a standing slot for the newly arrived, for the first week only": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"no two filler girls at one bar share a look, a greeting, a family and a plan (Trevor)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a man who sits three hours on one stool is somebody: the presence bond offsets the cool-off (Trevor)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Nigel's sermon answers to the words a man types — topic aliases (Trevor / Hamish)": {
+"cls": "P",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the downpour's start and the saleng's departure are pools; a bar gets one cart a night (Trevor)": {
+"cls": "Q",
+"cls2": "E",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"no phantom regular 'keeping her in colas' on a rail the season emptied (Trevor)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the league-night bell is rung by whoever keeps the till; the tier-one ledger beat doesn't assume a drink was just rung (Trevor)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the charter prefers the stop you named over the first stop in its district (Trevor)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"plain English from a first-timer is pointed somewhere, never 'I didn't understand that' (Bronwyn)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"฿5 and a ฿15 fare on the opening night: the phone has one number in it (Bronwyn)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a canned reply typed a beat late still answers the question that lapsed (Bronwyn)": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a quest with a thing to hand over is accepted where the giver is (Bronwyn)": {
+"cls": "C",
+"cls2": "",
+"instrument": "errand",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the 7-Eleven has somebody in it (Bronwyn)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Kitten Corner's prose and its roles line agree (Eamonn)": {
+"cls": "H",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "prose vs roles data",
+"sev": "ordinary",
+"conf": "low"
+},
+"an authored girl without a home line answers from the trade's stock, not a stonewall (Eamonn)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"HELP on the opening night lists the verbs that get you home and none of the sandbox's": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"HELP in the sandbox is the week's page; HELP MORE and VERBS are the whole card": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"no bar district has a dark room; Tree Town's lanes say why it feels like a maze": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the name the room prints is the name ENTER takes — hyphens and all (Vic)": {
+"cls": "P",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "medium"
+},
+"every regular has a night that is his, whatever the season — and Tan names it (Vic)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TRAVEL through the dark with the torch off stops at its edge; the same order again walks it and says so (Vic, then Graham)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"staff talk about the people they work with, the room, and the wallet (Vic / Trevor)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the presence line is about TONIGHT — a night slept through in the hotel prints nothing (Keith)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the expat wire is not 'up ฿19,275 on the night', and 'already carrying' is the pre-wire figure (Keith)": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "a player-state-aware prose check (true in general, false for this player's actual wealth)",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"WORK declared and slept on settles as Bert's night (Keith)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a real-path settlement check (declared shift vs asleep-through-it at settle time)",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"BOOKS itemises the night and tallies the shifts; TAKE 300 FROM TILL is DRAW at your own bar (Keith)": {
+"cls": "H",
+"cls2": "P",
+"instrument": "references",
+"why_none": "",
+"between": "TAKE vs DRAW",
+"sev": "ordinary",
+"conf": "low"
+},
+"the piwin's power bank is a pitch — a direction typed into it passes through (Keith)": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "a soft-pitch input-handling check for directional commands",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"G.bar.room is set by newGame, so _atOwnBar can be true in play — not only in tests that set it by hand (Keith)": {
+"cls": "A",
+"cls2": "",
+"instrument": "soak",
+"why_none": "a real-path check that a field set only by hand in tests is also set at runtime",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"a lady drink on Kesinee's rail warms Kesinee — the first of the three things she asked for (Keith)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Bert names the wet before the money moves, and the calendar makes no three-week claim (Keith)": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Candy route says out loud whose side of the paper supply sits on (Keith / Mario)": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"in a bar, water and a soda cost the beer — you are paying for the seat (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"WAIT in a go-go stops at twenty minutes, in a bar at an hour; a bought drink resets it; your own bar and your room never nag (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the deposit clears by transfer from the account, the pocket topping up — never through the ATM (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"expat mode opens a Thai account: no card fee, a resident's counter limit (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"signing in the wet: a rent-free month and a steep cash discount, and PAY KEY MONEY takes notes (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"signing at peak: no discount, and LATER means the full figure rides on the first rent (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"TRANSFER KEY MONEY pays the list price from the account; short of notes, PAY KEY MONEY says how to get them (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a dep chain names its next door when the last one closes (Des)": {
+"cls": "B",
+"cls2": "J",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Bert points PARTNER at both names, and answers the money he briefed (Des)": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"going down behind your own rail: the floor gets you home, pockets intact (Des)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "medium"
+},
+"'฿2,111 of it lifted' when the night's spend was ฿111 — the bigger theft is not 'of it' (Des)": {
+"cls": "M",
+"cls2": "E",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the guv'nor drinks his own stock: nothing off the pocket, the wholesale share off the till (Des)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the night's own money is kept by sign and by name — a football finish and a round on the house are two lines, not ฿1,700 of luck (Des)": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "a ledger line-item aggregation check (signed events kept separate, not summed as one luck figure)",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Bangkok lawyer sends a bill, and Tan's coffee costs sixty baht once (Des)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"PAY NOTE 5000 pays five thousand, not the till (Des)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"Nont's pitch changes for a man with a Thai bank book (Des)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the counter has people at it: the cook nods, the stools shuffle along (Des)": {
+"cls": "B",
+"cls2": "",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"prose review: the 51% is not the bar, and peak season is two months (slice 4)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"prose review: the own-bar rescue wakes you in YOUR hotel, not room 412 (slice 2)": {
+"cls": "F",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"prose review: 'nobody walks Sukhumvit' is no longer true, and 'what should I do' knows the stage (slice 5)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"prose review: the roast doesn't decide where you grew up, and OUT is tappable in every sibling (slice 3)": {
+"cls": "R",
+"cls2": "H",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"prose review slice 1: the claims the authored cast was making": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the signed photo behind the bottles answers a close look (slice 1)": {
+"cls": "C",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"no player-facing string is a piece of source code (Jacko)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a template-rendering check (a source-code literal leaking into printed prose)",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"a massage shop's price list is not a drinks list (Hugo)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the drunk balk looks one room out for a bench before saying there isn't one (Jacko)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Nont has no running account with a man he has never done business with (Jacko)": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"one dawn, not two: her goodbye is the morning when you have company (Jacko)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "a duplicate-narration check across two code paths for the same event",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a girl who asks you to barfine her cannot then call you a cheap charlie (Jacko)": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "medium"
+},
+"the massage shop has somebody in it, and Auntie Nok sells the mango she offers (Roland)": {
+"cls": "D",
+"cls2": "B",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Thai a learner actually types (Hugo)": {
+"cls": "P",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"somebody wais back, and the empty room is the room you are in (Hugo)": {
+"cls": "B",
+"cls2": "F",
+"instrument": "soak",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"everybody has a view on som tam, and the register is theirs (Hugo)": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the streets know what time it is, in a pool (Jacko / Mario)": {
+"cls": "N",
+"cls2": "Q",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"WATCH SUNRISE is a real thing, it comes up behind the town, and it ENDS the night (Jacko; Mario 2026-09-07)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the town's standard compliment: once per person, and never from Nont (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"no Thai the game prints leaves a lone letter on the word card": {
+"cls": "P",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the verbs a Thai speaker reaches for, in Thai (Hugo)": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument enumerates the vocabulary a native speaker would actually reach for",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Cloze is a real bar on Soi Diana, and Waen is in it": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "NPC's room vs canon bar location",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the seventeen requested words reach the verbs they were requested for": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks that a specific requested word maps to its intended verb, only that tokens exist",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Kruu Waen sells an hour, and an hour is not a promotion (Mario)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument cross-checks a purchasable mechanic against an unrelated status counter",
+"between": "lesson purchase vs fluency ladder",
+"sev": "ordinary",
+"conf": "low"
+},
+"Waen sends the app after the first hour, then a word a night, free (Mario)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks ordering between two same-tick writers to the same inbox",
+"between": "lesson flag vs nightly homework tick",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a lesson only sells what the parser takes (Anders)": {
+"cls": "D",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument cross-references purchasable in-game knowledge against the parser's accepted vocabulary",
+"between": "shop content vs parser vocabulary",
+"sev": "severe",
+"conf": "high"
+},
+"the board is playable and the rule is enforced (Barry, Anders)": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks that an in-world sign's advertised rule has a corresponding player verb",
+"between": "",
+"sev": "severe",
+"conf": "high"
+},
+"the taught phrase does what the taught verb does, and the game's own sentence is buyable (Anders)": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "SAY <phrase> vs the equivalent typed verb",
+"sev": "ordinary",
+"conf": "low"
+},
+"the notebook shows what the counters knew (Anders)": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument flags existing state with no verb to view it",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"ASK ABOUT THAI means the language, and Tan is not a she (Anders)": {
+"cls": "M",
+"cls2": "P",
+"instrument": "templates",
+"why_none": "",
+"between": "Tan's gender vs the pronoun used",
+"sev": "ordinary",
+"conf": "low"
+},
+"fluency does not turn every gap in the writing into a refusal (Nok-Anne)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument scopes a refusal rule to only the topics it should apply to",
+"between": "fluency register vs topic-miss handling",
+"sev": "severe",
+"conf": "high"
+},
+"the game repeats what was said, particle and all (Nok-Anne)": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "player's own line vs the particle echoed back",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Thai typed at a pending question is an answer, not a vocabulary miss (Nok-Anne)": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"ซื้อ X ให้ Y buys it for HER (Nok-Anne)": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the wai, yes and no are typeable in Thai; the arch claims no hour (Nok-Anne)": {
+"cls": "P",
+"cls2": "K",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Tan opens formal and lands familiar — the arc says whose week this is (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"ค่ะ from a man: corrected twice, then never mentioned again (Mario's canon)": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks that a nagging correction is capped after N repeats",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the sign is also the exercise, and answering IT is the reward (Mario)": {
+"cls": "X",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"teaching is not courting, and the bar is hers (Mario)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument cross-checks that one counter (lessons) doesn't feed another (barfine ladder)",
+"between": "teaching counter vs courting counter",
+"sev": "severe",
+"conf": "high"
+},
+"the cabaret and the host club sell the drink their own prose orders": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "_inBar used as the drinks gate for venues without barType",
+"sev": "severe",
+"conf": "high"
+},
+"Thappraya is reachable by bike — the district TRAVEL points a motosai at": {
+"cls": "C",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Tan keeps the promise he makes in the taxi": {
+"cls": "D",
+"cls2": "",
+"instrument": "none",
+"why_none": "the promise was plain prose with no parenthesized CAPS hint, so the promise lint's harvest couldn't see it",
+"between": "Tan's spoken invitation vs the FOLLOW mechanic",
+"sev": "ordinary",
+"conf": "high"
+},
+"a host who has left the floor is said to have left it, not offered as a choice": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "_npcActive gone vs still offered as a choice",
+"sev": "ordinary",
+"conf": "low"
+},
+"PLAY JACKPOT WITH <name> deals to the woman you named": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the killer-pool table has more than one way of saying you potted it": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the dog is filed in the gallery, and is not counted as a face": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "gallery entry vs face-count logic",
+"sev": "cosmetic",
+"conf": "low"
+},
+"PUT TAG ON HIM is the one thing anybody does with a dog tag": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"BUY <food> FOR <dog> feeds the dog": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "BUY FOR vs FEED verb",
+"sev": "ordinary",
+"conf": "low"
+},
+"where the dog lies is true of the room he is in": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "dog's described room vs actual room",
+"sev": "ordinary",
+"conf": "low"
+},
+"the dog is in the goodbye, and in the decision to stay": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"eight lanes of Sukhumvit, crossed with a dog": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a job you already did is settled, not offered": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "quest already done vs still offered",
+"sev": "ordinary",
+"conf": "low"
+},
+"a companion in a massage shop is not drinking at a bar that isn't there": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "companion predicate vs venue drinks gate",
+"sev": "ordinary",
+"conf": "low"
+},
+"the hospital lesson teaches the transport rules the game actually runs": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "hospital lesson's transport claim vs the actual reworked rules",
+"sev": "ordinary",
+"conf": "low"
+},
+"the sea wall north of Soi 6 is the coconut bar's sibling, and its cast says so first": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the sea wall never robs you — the pickpocket is the other encounter": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "sea-wall encounter vs pickpocket encounter",
+"sev": "ordinary",
+"conf": "low"
+},
+"saying no on the sea wall costs nothing and is not punished": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "declining an encounter vs its cost",
+"sev": "ordinary",
+"conf": "low"
+},
+"the north corner only produces the wall once its own prose has changed": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "room's own reveal state vs a sibling room's gating",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the chip bar carries the sea wall's three answers": {
+"cls": "C",
+"cls2": "",
+"instrument": "taps",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"TOPICS lists only what the person will actually answer, right now": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"the chip bar reaches every open topic, four at a time": {
+"cls": "C",
+"cls2": "",
+"instrument": "taps",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"TOPICS is a readout: free, and it never lies about an empty book": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"the page belongs to the partner, not to the bar": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "pager state scoped to bar vs to partner",
+"sev": "ordinary",
+"conf": "low"
+},
+"TOPICS is on all the surfaces a verb has to be on": {
+"cls": "H",
+"cls2": "",
+"instrument": "taps",
+"why_none": "",
+"between": "parser vs wheel vs autocomplete",
+"sev": "ordinary",
+"conf": "low"
+},
+"one life story per rail: no two girls at one bar share a family line or a plan line": {
+"cls": "Q",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"an authored girl's fallback hometown is the province her own text names (Kai: Buriram, not Chaiyaphum)": {
+"cls": "R",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "authored text's own claim vs generated fallback",
+"sev": "cosmetic",
+"conf": "high"
+},
+"a question dropped by a change of subject or a vanished partner still answers a late digit with the drift line": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Eddy's 'drink here a while' is kept: a man drink and a night on his stool each move his trust": {
+"cls": "D",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TOPICS names the word the parser answers to: ASK EDDY, not ASK FAST": {
+"cls": "P",
+"cls2": "D",
+"instrument": "asktopic",
+"why_none": "",
+"between": "printed label vs parseable key",
+"sev": "severe",
+"conf": "high"
+},
+"the downpour reads the room: a street with a 7-Eleven is not behind glass, a windowless office hears it on the roof": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "_sheltered vs street/indoor classification",
+"sev": "ordinary",
+"conf": "high"
+},
+"the office safe and the corridor answer EXAMINE, and the corridor changes once you know what's behind it": {
+"cls": "D",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the manager's man-drink nudge holds while a modal is up": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"past the landing a loud act says once that it no longer counts; the landing never claims the Rabbit is shut": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the motel is indoors: the downpour is on the roof, and leaving it speaks from the doorway": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"the dolphins are the roundabout you are standing on": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Mot will discuss the wallet he stole, and the cart he mentioned": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TRAVEL stops where the rain catches it, like a typed step would": {
+"cls": "H",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "TRAVEL vs typed movement",
+"sev": "ordinary",
+"conf": "low"
+},
+"the Boardroom's absent owners are one line, and not 'over on Thappraya' to a man on Thappraya": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "player's own location vs the line describing the owner as 'over there'",
+"sev": "ordinary",
+"conf": "high"
+},
+"dawn inside an office is not 'upright on the soi'": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "indoor flag vs street-outdoor prose",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a whole district is a bike ride: pratumnak is a piwin destination": {
+"cls": "C",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the piwin's own menu parses as the answer: 'bali hai' after 'where to?'": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a real building with no room behind it is refused as what it is": {
+"cls": "P",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"PRAY on Buddha Hill is the Buddha, not a spirit house by a doorway": {
+"cls": "L",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "PRAY resolution vs wrong fixture",
+"sev": "ordinary",
+"conf": "low"
+},
+"the lake after midnight does not light a bar that has shut": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "bar closed state vs lit-window prose",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Soi 9 sells the bowl its prose dares you to try": {
+"cls": "D",
+"cls2": "",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"four massages are four massages": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the fixtures a walking man reaches for answer EXAMINE": {
+"cls": "D",
+"cls2": "",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"both faces of the mall keep the same hours": {
+"cls": "H",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "two entrances of one building disagree on hours",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Nont knows Boonchu is a morning man, and charges nothing for it": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"road travel is reversible: a cardinal step between two street rooms has the opposite cardinal back (or a junction's named connector where that slot is another road)": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "high"
+},
+"Pattaya Klang runs Beach Road → Second Road → Soi Buakhao → Sukhumvit, and Soi Buakhao terminates into it": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"the Areca Lodge's driveway is where its door is: Soi Diana middle, not the Buakhao end": {
+"cls": "R",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "high"
+},
+"Wilf at Mike's Mall: thirty years, a pension the rate has been eating, one thing away, and not going back": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Wilf gave up drinking ten years ago (the rate, not the doctor) and has no girlfriend by choice": {
+"cls": "R",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Nont's arithmetic holds: father gone at twelve, on the till at fourteen, twenty-two now": {
+"cls": "R",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"Glam walks the crossing on somebody's arm, and comes back after an hour (Mario, 2026-09-07)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Wimon says her own three errands out loud, and the closed door survives (round-46 quest sweep)": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a two-leg errand points HINT at the leg you are on (Opus quest re-run)": {
+"cls": "H",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "HINT's step vs the actual current step",
+"sev": "severe",
+"conf": "high"
+},
+"Bert is American: no Guv, no pint, no bloody, no that lot (Mario, 2026-09-07)": {
+"cls": "R",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "character's nationality vs the voice given his lines",
+"sev": "cosmetic",
+"conf": "high"
+},
+"Wimon counts the same three beer bars twice": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "counting logic double-listing one bar",
+"sev": "ordinary",
+"conf": "low"
+},
+"WAIT UNTIL reaches the whole night, and a refusal costs nothing (Kenji, round 47)": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the round on the house books the spend AND the return, never the net (Des, round 47)": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the next-door hand-off is one sentence, not a doubled name and two full stops": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"LAST NIGHT reprints the morning ledger, word for word": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"the ledger survives the app being closed — which is the whole finding": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument tests that ephemeral post-night info survives an app close/reopen",
+"between": "",
+"sev": "severe",
+"conf": "high"
+},
+"the rough wake's missing money is in what LAST NIGHT reprints": {
+"cls": "B",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "severe",
+"conf": "high"
+},
+"LAST NIGHT costs no turn and has a truthful answer before you have slept": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"LAST NIGHT is reachable by thumb as well as by keyboard": {
+"cls": "C",
+"cls2": "",
+"instrument": "taps",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"every label TOPICS can print is a phrase the parser takes": {
+"cls": "P",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"TOPICS answers for a woman the chip bar has nothing to show": {
+"cls": "C",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "verb's answer set vs chip bar's set",
+"sev": "ordinary",
+"conf": "high"
+},
+"a person's name still waits on the transcript having printed it": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the pager still counts what a thumb can reach, not what TOPICS printed": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "pager count vs chip-bar count",
+"sev": "ordinary",
+"conf": "low"
+},
+"no two till-keepers in different districts recite the same life": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "two cashiers in different bars, one story",
+"sev": "ordinary",
+"conf": "high"
+},
+"a mamasan's look line and her family answer are about the same woman": {
+"cls": "M",
+"cls2": "R",
+"instrument": "corpus",
+"why_none": "",
+"between": "a woman's look line vs her own family answer",
+"sev": "ordinary",
+"conf": "high"
+},
+"nobody sends you to Candy while Candy is standing there": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "miss-path pointer vs Candy standing present",
+"sev": "ordinary",
+"conf": "high"
+},
+"a roof is a roof: the downpour never sends you out for an awning you're under": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"nobody presses their own money on a man with thousands in his pocket": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Auntie Nok only says 'enough for bus now' to somebody who hadn't got it": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Mot's boots are a number the player can do something about": {
+"cls": "D",
+"cls2": "",
+"instrument": "errand",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the women at a lock-in bar can discuss the bolt": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"Ploy answers for the things two other people send you to her for": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a bar with nobody in it still has somebody pouring": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"every modal redraw carries the money, the commands and the names its live prompt did": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument replays a modal's live prompt fields against its restore/redraw",
+"between": "live prompt vs resumed/redrawn prompt",
+"sev": "severe",
+"conf": "high"
+},
+"TOPICS never offers a node the author marked chip:false": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"chip:\\": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a topic that is somebody's own name reads as herself, and answers to it": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "a place-name that is also a person's name",
+"sev": "ordinary",
+"conf": "high"
+},
+"a real venue is never refused as genre furniture": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "_notADoor false positive on a real venue",
+"sev": "ordinary",
+"conf": "high"
+},
+"one woman is not 'the girls'": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"it rains once a night, and never twice (Mario, 2026-09-14)": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "rain cooldown vs trigger logic",
+"sev": "ordinary",
+"conf": "low"
+},
+"the morning ledger names the account on a night the machine was used": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a man holding ฿25 is short, not empty-handed": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"paying the note back by hand pays the principal, exactly as paying it on time does": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "two repayment paths, one broken",
+"sev": "ordinary",
+"conf": "low"
+},
+"PAY NOTE with nothing outstanding says where the money stayed": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a floor moment that names ฿40 puts ฿40 in the books": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "prose-named amount vs ledger entry",
+"sev": "ordinary",
+"conf": "low"
+},
+"every flat loss on a shift call carries its reason into BOOKS": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the room safe does not welcome an expat back to his vacation": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"LAST NIGHT on the first morning does not tell a man who just slept that he hasn't": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the black book names its denominator as what it counts": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "label's denominator vs what it counts",
+"sev": "cosmetic",
+"conf": "low"
+},
+"no modal answers to a bare letter or a prefix": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"NO at Nont's price is a night, not forever": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "refusal meant to be nightly vs applied permanently",
+"sev": "ordinary",
+"conf": "low"
+},
+"the wai comes back from a man as a man": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"TOPICS for somebody who is not here says where they are, not the partner's list": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "absent-partner fallback vs location line",
+"sev": "ordinary",
+"conf": "low"
+},
+"a bare ขอบคุณ is echoed without a particle the player never typed": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the other ledger is never told to the man who keeps it": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a bonded employee never greets the owner as a new face": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"the last-bus warning is not for a man standing his own rail": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"a reveal is a reveal: an exhausted floor deals nobody's first confidence twice": {
+"cls": "Q",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TALK TO MAMASAN / CASHIER addresses the role-carrier on the floor": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the tab call's pay-day is never tonight, and the settle line names the same day": {
+"cls": "K",
+"cls2": "",
+"instrument": "references",
+"why_none": "",
+"between": "the tab call's payday vs the settle line's day",
+"sev": "ordinary",
+"conf": "high"
+},
+"the early call names the kin the girl actually has": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"Tan's authored read on Eddy outranks the locator, and moves after the coffee": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "authored node vs the locator that pre-empted it",
+"sev": "severe",
+"conf": "high"
+},
+"Tan's read on Nont moves with the file": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Bangkok is a subject three people answer, and Duangjai has a line on the Rabbit": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Nont tells his exit from the Rabbit one way": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"an authored girl's plan is a sentence, as a filler girl's is": {
+"cls": "H",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "authored NPC vs filler NPC content parity",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a plain line to a partner whose question lapsed is the late answer, not a topic": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Bill welcomes you to the club you are standing in": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"staff answer the calendar they keep: closing and the league, in their own register": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"TIME says where in the count the league is, and a quiz you are sitting in is ON": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"Mort stands behind his own copy, and the cipher's instruction is a door": {
+"cls": "D",
+"cls2": "",
+"instrument": "asktopic",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"TAO RAI answers in a cabaret and a massage shop": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "_inBar/_servesDrinks gate",
+"sev": "severe",
+"conf": "high"
+},
+"the Stinky's ashtray reads; a late pie is an offer of crisps, not a charge": {
+"cls": "D",
+"cls2": "F",
+"instrument": "examine",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"an absent owner's pronoun is his own; a filler girl's family line is not doubled": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"Doyle's job waits on a face he knows; the order quest stops pitching once it is done": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"no bargirl weaves out of a shut Soi 6 door": {
+"cls": "F",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "closed venue state vs ambient exit prose",
+"sev": "ordinary",
+"conf": "low"
+},
+"Beach Road is a long ride: riding THROUGH it costs a turn, arriving in it does not": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "pass-through vs arrival time cost",
+"sev": "ordinary",
+"conf": "low"
+},
+"the un-adopted dog has a manor: the nudge fires where he was first seen": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"after midnight TIME says whose small hours these are, and the pension's home chip is nobody's port": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the Owl's arrival slot has enough variants for a week without a rerun": {
+"cls": "Q",
+"cls2": "",
+"instrument": "corpus",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Mort is a fixture: the season never keeps him in, whatever night you visit": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "_benchOut applied to a fixture NPC",
+"sev": "ordinary",
+"conf": "high"
+},
+"the hospital queue only names money you'll never see when you actually sent some": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the rose pitch takes only an answer to the rose: BUY BEER buys a beer": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "a generic BUY intercepted by an unrelated pitch",
+"sev": "severe",
+"conf": "high"
+},
+"the girl on your arm is the party, not the jilted; the roster says she is with you": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "companion state vs jilt/roster logic",
+"sev": "severe",
+"conf": "high"
+},
+"a shift stood into the small hours survives going home to bed": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the tab is one line in the books": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"the affair girl is not a customer: no barfine quote, her own texts, her own hello, and the staff know": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "affair-partner state vs customer machinery",
+"sev": "severe",
+"conf": "high"
+},
+"Jun answers to yourself and is nobody's lady drink; Tan reads a venue and a phone-only woman": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a soapy has a price list, a street has no doorway, and the rain has an earliest hour": {
+"cls": "N",
+"cls2": "K",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a work event keeps its gap, and a birthday has more than one paragraph": {
+"cls": "Q",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a ride stop takes the time a stop takes, the after-hours room's 'already paid' is paid, and she remembers": {
+"cls": "K",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"the self-barfine offer lapses honestly, and BUY ROSE FOR <her> buys the rose": {
+"cls": "G",
+"cls2": "H",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the saga's return channels: Wimon after the whole of it, Diamond on the keys, Mala on the scout, the giver's pronoun": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "quest saga's givers vs the return dialogue",
+"sev": "severe",
+"conf": "high"
+},
+"the clinic is a place, the squid man sells squid, the weekender comes in two, the catfish keeps a cadence": {
+"cls": "D",
+"cls2": "Q",
+"instrument": "afford",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"Tan's call knows the hill is not town; Waen texts students she has met; Priew texts": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"an old save standing in orchid_club wakes in nottys_place": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks a stale save's room id against removed/renamed rooms",
+"between": "",
+"sev": "severe",
+"conf": "high"
+},
+"Cream's door gets a hint after three nights at her table, and the Killer Table warns when the week runs out": {
+"cls": "D",
+"cls2": "",
+"instrument": "promises",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"buying her a drink does not make her introduce herself again": {
+"cls": "Q",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"a woman's confidences are hers: no repeat to you, and she does not share them with the next woman": {
+"cls": "Q",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"a butterfly is a man who does not come back, and Lek thanks you only for shoes you bought": {
+"cls": "F",
+"cls2": "L",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the deepest-written woman is not the quietest: warmth outranks the ask-me-something prompt": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "generic hello-again check vs bond-tier dialogue priority",
+"sev": "severe",
+"conf": "high"
+},
+"a ledger reveal is a thing the TOWN shows you once, not a script each woman owns": {
+"cls": "Q",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "per-woman script vs town-wide book",
+"sev": "ordinary",
+"conf": "high"
+},
+"the name she uses for nobody else is SAID, and it is the same name on the bike": {
+"cls": "D",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument compares a narrated claim about what a character says against whether that line is actually ever printed",
+"between": "greeting's claim vs the dialogue that actually says the name",
+"sev": "ordinary",
+"conf": "high"
+},
+"a property is not a comment: nothing is swallowed by a trailing line comment": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument statically detects a trailing // comment truncating an object literal property",
+"between": "source syntax vs intended data value",
+"sev": "severe",
+"conf": "high"
+},
+"the town can answer its own hours, and not in one voice": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"a parlour answers as a parlour, and the woman who runs it is the house": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"a manager does not answer in a bar girl's Tinglish, and one boss gets more than one review": {
+"cls": "M",
+"cls2": "",
+"instrument": "templates",
+"why_none": "",
+"between": "manager's register vs hostess's Tinglish; one boss vs many reviews",
+"sev": "ordinary",
+"conf": "low"
+},
+"'my bar' is an ownership claim, and a mamasan does not own the bar": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "ownership language vs role",
+"sev": "ordinary",
+"conf": "low"
+},
+"a meal said to be on the house is on the house — once": {
+"cls": "E",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the first morning of a new trip reports the night that was played": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "new trip's morning vs the prior trip's",
+"sev": "ordinary",
+"conf": "high"
+},
+"Wilf is on the bench, and a regular's local may be a kitchen": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument checks that a cast-count invariant is derived rather than hard-coded",
+"between": "hard-coded bench count vs derived flag query",
+"sev": "ordinary",
+"conf": "high"
+},
+"the mamasan quotes the number she sets — the cashiers promise she will": {
+"cls": "H",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "mamasan's quoted number vs cashier's promise",
+"sev": "ordinary",
+"conf": "low"
+},
+"a promise that states its own condition opens when the condition is met": {
+"cls": "J",
+"cls2": "",
+"instrument": "lifecycle",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the town can say what its people do, who they answer to, and what it pays": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"a character's livelihood is filed under its own word, and `work:` points at it": {
+"cls": "L",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "cosmetic",
+"conf": "low"
+},
+"a stranger gets the SHAPE of the money, never the ledger's figures": {
+"cls": "F",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the killer table has a king, and he has to keep turning up": {
+"cls": "Q",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the table signposts are derived, and name only bars you have found": {
+"cls": "L",
+"cls2": "D",
+"instrument": "predicates",
+"why_none": "",
+"between": "signpost name vs frontier-law (only found venues named)",
+"sev": "ordinary",
+"conf": "low"
+},
+"Bert hands back chalk only while it is still up": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the slate is a thing in the room, not one line every third night": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"winner stays on, and losing the frame loses the table": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"trying to start the game you are already playing is not a free shot": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"a man who is out is not being let have the table": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the room with the table can discuss the table": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"stubbed dice cannot hang the engine — the documented testing practice is safe": {
+"cls": "A",
+"cls2": "",
+"instrument": "none",
+"why_none": "no instrument tests loop termination under a constant-stubbed RNG except the pin itself",
+"between": "a re-roll loop vs a constant dice stub",
+"sev": "blocking",
+"conf": "high"
+},
+"a multi-word name is gated on BOTH halves, and town vocabulary is not": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "multi-word name matching vs single-word town vocabulary",
+"sev": "ordinary",
+"conf": "low"
+},
+"a new trip does not reprint the last trip's morning": {
+"cls": "S",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "new trip's morning vs prior trip's",
+"sev": "ordinary",
+"conf": "low"
+},
+"a barfine counteroffer keeps the fields the prompt reads": {
+"cls": "G",
+"cls2": "",
+"instrument": "none",
+"why_none": "",
+"between": "live prompt fields vs resumed modal fields",
+"sev": "ordinary",
+"conf": "low"
+},
+"the people who hold the town up can be spoken to: vendor, DJ, greeter, band, cook": {
+"cls": "N",
+"cls2": "",
+"instrument": "askable",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "high"
+},
+"the men you played killer against are people for the rest of the night": {
+"cls": "I",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "",
+"sev": "ordinary",
+"conf": "low"
+},
+"the piwin answers for his own job before he looks anyone up": {
+"cls": "L",
+"cls2": "",
+"instrument": "predicates",
+"why_none": "",
+"between": "piwin's own answer vs generic person lookup order",
+"sev": "ordinary",
+"conf": "low"
+}
+}
+}

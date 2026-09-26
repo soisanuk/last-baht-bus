@@ -39,6 +39,14 @@ for (const f of fs.readdirSync(path.join(root, "tests/js")).filter(f => /^(round
   }
 }
 const all = rows.concat(derived);
+// the classification (docs/persona-findings-classes.json), joined by claim text;
+// a row written at triage may carry cls/sev/instrument itself and wins
+let classes = {};
+try { classes = JSON.parse(fs.readFileSync(path.join(root, "docs/persona-findings-classes.json"), "utf8")).byClaim; } catch (e) {}
+for (const r of all) { const c = classes[r.claim]; if (c) for (const k of ["cls", "cls2", "instrument", "why_none", "between", "sev", "conf"]) if (r[k] == null) r[k] = c[k]; }
+const NAMES = { A: "composition", B: "absence", C: "reachability", D: "promise", E: "economy", F: "state-blind prose", G: "modal/input", H: "cross-surface",
+  I: "edge-blind", J: "return-channel", K: "clock-in-prose", L: "wrong predicate", M: "one template", N: "town can't say", P: "parser/vocab", Q: "repetition",
+  R: "world-claim", S: "save/reload", X: "design pin" };
 
 const count = (xs, k) => xs.reduce((a, r) => (a[k(r)] = (a[k(r)] || 0) + 1, a), {});
 const show = (title, obj) => { console.log(`\n${title}`); for (const [k, v] of Object.entries(obj).sort((a, b) => b[1] - a[1])) console.log(`  ${String(v).padStart(4)}  ${k}`); };
@@ -49,6 +57,22 @@ if (opt("--round")) {
   const key = "round" + r; if (pins[key]) { console.log(`\npinned in ${key}.test.js: ${pins[key].length} tests`); for (const t of pins[key]) console.log("  · " + t); }
   process.exit(0);
 }
+if (args.includes("--aim")) {
+  // WHERE TO POINT THE NEXT PERSONA: the classes that are severe AND that no instrument
+  // sees, with the lenses that have produced them (docs/persona-findings-ledger-analysis.md §4)
+  const fx = all.filter(r => r.verdict === "fixed" && r.cls && r.cls !== "X");
+  console.log("── aim ──  severe share and instrument coverage by class, with the lenses that found each");
+  const byC = {};
+  for (const r of fx) { const c = byC[r.cls] = byC[r.cls] || { n: 0, sev: 0, inst: 0, lens: {} }; c.n++; if (/severe|blocking/.test(r.sev)) c.sev++; if (r.instrument && r.instrument !== "none") c.inst++; if (r.lens) c.lens[r.lens] = (c.lens[r.lens] || 0) + 1; }
+  const rank = Object.entries(byC).sort((a, b) => (b[1].sev / b[1].n - b[1].inst / b[1].n) - (a[1].sev / a[1].n - a[1].inst / a[1].n));
+  for (const [c, v] of rank) {
+    const top = Object.entries(v.lens).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([l, n]) => `${l}×${n}`).join(" ");
+    console.log(`  ${c} ${NAMES[c].padEnd(18)} n=${String(v.n).padStart(3)}  severe ${String(Math.round(100 * v.sev / v.n)).padStart(3)}%  instrument ${String(Math.round(100 * v.inst / v.n)).padStart(3)}%   ${top}`);
+  }
+  console.log("\n  a class high on severe and low on instrument is where a persona still earns its keep;");
+  console.log("  the lenses listed are the ones that have produced it — pick one of those, or a new lens with the same shape");
+  process.exit(0);
+}
 if (opt("--verdict")) {
   for (const x of all.filter(x => x.verdict === opt("--verdict"))) console.log(`r${x.round} ${x.persona} (${x.model}, ${x.lens}): ${x.claim}${x.note ? "  — " + x.note : ""}`);
   process.exit(0);
@@ -56,6 +80,13 @@ if (opt("--verdict")) {
 console.log(`── persona findings ledger ──  ${all.length} rows: ${rows.length} written at triage (rounds ${[...new Set(rows.map(r => r.round))].join(", ")}) + ${derived.length} fixed findings derived from the pinned tests`);
 console.log(`   attributed to a persona: ${all.filter(r => r.persona).length} · to a round only: ${all.filter(r => !r.persona).length} · with a model: ${all.filter(r => r.model).length}`);
 show("by verdict", count(all, r => r.verdict));
+const cl = all.filter(r => r.cls);
+if (cl.length) {
+  show("by class (classified fixed findings)", Object.fromEntries(Object.entries(count(cl.filter(r => r.cls !== "X"), r => `${r.cls} ${NAMES[r.cls]}`))));
+  show("by severity", count(cl.filter(r => r.cls !== "X"), r => r.sev || "?"));
+  show("instrument that could have caught it", count(cl.filter(r => r.cls !== "X"), r => r.instrument || "?"));
+  console.log(`\n  design/doctrine pins counted as fixed rows (class X): ${cl.filter(r => r.cls === "X").length} — not findings; excluded above`);
+}
 show("by round (fixed findings)", count(all.filter(r => r.verdict === "fixed"), r => "r" + r.round));
 show("by persona (top)", Object.fromEntries(Object.entries(count(all.filter(r => r.persona), r => `${r.persona} (${r.model || "?"}, ${r.lens || "?"})`)).sort((a, b) => b[1] - a[1]).slice(0, 25)));
 const models = count(all.filter(r => r.model), r => r.model);
