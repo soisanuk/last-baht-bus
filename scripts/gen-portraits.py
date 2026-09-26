@@ -317,7 +317,7 @@ CHARS = {
                      mouth="neutral"),
     "joy":      lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=YELN, bg=BG_BAR,
                      mouth="grin", blush=True),
-    # Katoey's R Us (Soi Diamond) — the house is katoey and says so on the sign,
+    # Twice Shy (Soi Diamond) — the house is katoey and says so on the sign,
     # so these are FLAMBOYANT, not passing: the highest heels on the street and
     # the loudest glamour in the game. Everything dialled past Bebe, who was the
     # previous ceiling — hot pink and gold, full jewellery, big lip, wide grin.
@@ -333,7 +333,7 @@ CHARS = {
                      mouth="smile", mouthc=C(0xd02060)),
     "farida":   lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x2a1840), bg=BG_GOGO,
                      acc=["earrings", "glasses"], mouth="neutral"),
-    # The Windmill (Soi Diamond) — a loud straight go-go, ordinary glamour
+    # The Gilt Cage (Soi Diamond) — a loud straight go-go, ordinary glamour
     "naree":    lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xd02040), bg=BG_GOGO),
     "sasi":     lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0x30a0c0), bg=BG_GOGO, blush=True),
     "yada":     lady(skin=THAI2, hair="sleek", hc=BLACK, shirt=C(0xe0a020), bg=BG_GOGO, mouth="grin"),

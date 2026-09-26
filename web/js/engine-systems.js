@@ -502,7 +502,7 @@ const _BERT_LOYAL = [
     "\"Every girl here heard what you did. The Stinky's closed to you, that way.\"",
   "{name} glances to Bert at the end of the bar, reads something in the set of his shoulders, and steps " +
     "back. \"Sorry, tilac. Not you. Not here.\" No anger — just a door quietly shut. Bert's girls don't " +
-    "cross Bert, not for you, not for all the baht in Duncan Ashcroft' spreadsheet.",
+    "cross Bert, not for you, not for all the baht in Laurent Vasseur's spreadsheet.",
 ];
 // The Peacock sells a show, not a night — no mamasan ledger, no fine, and Miss
 // Mala has retired the question so many times it has its own choreography.
@@ -4061,8 +4061,8 @@ function _doPhoneScreen() {
     }
     _say("(READ PAPER for the rest, or WATCH TV.)", "dim");
   }
-  _say(G.owlRead ? "🦉 This week's Nite Owl is in your inbox — OWL." :
-    "🦉 The Nite Owl's weekly newsletter sits unread in your inbox — OWL.", "dim");
+  _say(G.owlRead ? "🦉 This week's Last Orders is in your inbox — OWL." :
+    "🦉 Last Orders, Mort's weekly newsletter, sits unread in your inbox — OWL.", "dim");
 }
 
 // Adopt a soi dog and the Soi Dog Foundation somehow has your number by the next
@@ -4210,7 +4210,7 @@ function _advancePicDeal(id) {
 // reply is the interesting one, because the number belongs to Mort.
 //
 // That is not a coincidence dressed as one: Mort is already the in-fiction
-// author of the Nite Owl column, already carries the spiral notebook, and the
+// author of the Last Orders column, already carries the spiral notebook, and the
 // game already has _OWL_JOKES as "the universe's own canon" in his voice. A
 // seventy-four-year-old columnist mass-texting gags to strangers to find out
 // which ones land is the most Mort thing available, and it costs no new canon.
@@ -8192,8 +8192,8 @@ function _doPaper() {
   _say("Somewhere in there, the fuel prices explain your bus fare.", "dim");
 }
 
-// ── The Nite Owl column ──────────────────────────────────────────────────────
-// The old back-page institution: Mort's weekly hoot (see NPCS.mort — he
+// ── Last Orders — Mort's column ──────────────────────────────────────────────────────
+// The old back-page institution: Mort's weekly back page (see NPCS.mort — he
 // writes it "to stay sane"). It's the canon dispenser — the scene's own hard-won
 // wisdom rendered as a columnist's dry copy: a lead opinion, a bar listing, a
 // reader letter with his reply, a joke, and the signoff. Day+vacation-stable
@@ -8356,15 +8356,15 @@ const _OWL_LETTERS = [
 ];
 const _OWL_JOKES = [
   "A constable pulls a weaving driver over. 'You drinking?' Driver: 'Depends — you buying?'",
-  "TIT, as the vendor said, flogging me the pirate Hannibal while swearing blind the pirate Thai film was illegal. This Is Thailand.",
+  "Thailand, as the vendor demonstrated, flogging me the pirate Hannibal while swearing blind the pirate Thai film was illegal. Both were on the same table.",
   "The rail, on ageing: 'Sixty's the worst — always need to pee and nothing comes.' The eighty-year-old: 'I pee at six sharp, like a racehorse.' 'Then what's wrong with eighty?' 'I don't wake till seven.'",
   "A reader lists why an aeroplane beats a woman: it comes with an operating manual, it flies any time of the month, and it has no in-laws. He is, one senses, single.",
-  "Weather: a low pressure off China, which means rain by the weekend. Buy a bumbershoot before you're wading, not after. 'Nuff said.",
+  "Weather: a low pressure off China, which means rain by the weekend. Buy a bumbershoot before you're wading, not after.",
   "Overheard, marketing seminar, a Sukhumvit hotel: 'Teamwork — a lot of people doing what I say.' They'll go far, that one.",
   "Public service warning: some of the sealed condom packets on sale are, on opening, entirely empty. In this town a man cannot trust even the packaging. Caveat emptor.",
   "A beer-bar owner, mournful into his till: 'sorriest crop of tourists I've ever seen.' The new coach parties buy their beer at the market, drink it on the department-store steps, and eat where it's cheapest. The street will survive them; it always has.",
   "A pack of local lads, puffed up and late-teens, jostling any farang with a Thai girl on his arm — 'you think you're better than us.' Nobody thinks anything, son. Go to bed. TAT, please note.",
-  "An oxymoron for the season, sent by a reader: fire water. 'Nuff said.",
+  "An oxymoron for the season, sent by a reader: fire water. Consider it filed.",
   "For the gentleman whose afternoons hang heavy: the town keeps a handful of go-go bars open in daylight — a pretty line-up, a cold room, hands to yourself. Want the hands-ON version? That's the gentleman's club's department, and it too opens when the golf finishes. Choose your afternoon accordingly.",
   "Soi 6 lately: ten ladies to every man, frontages flung open, and every bar's sound system turned past distortion into open warfare with its neighbour's. A party zone now, not the sneak-away it was. My hearing and I reached the halfway point and turned back. Bring earplugs, or a younger man's ears.",
   "A tip worth more than the nightlife: the six-table seafood shack out at Naklua — no reservations, no view, no service to speak of, and food from another planet at a price that shames the tourist traps. Nine dishes for three, two and a half thousand baht, and we over-ordered. Go hungry, go early.",
@@ -8470,7 +8470,7 @@ const _OWL_LISTINGS = [
 //      ever become a tappable keyword if a future filler girl is named ACHAL.
 //   3. No _rand(), so it consumes no dice and the soak transcripts are unmoved.
 //
-// The key is HOOT: four letters, printed at the foot of every column since the
+// The key is STEP: four letters, printed at the foot of every column since the
 // game shipped, and the ad says so if you read it as an instruction rather than
 // as an old man being arch. Solution and full chain: docs/ctf.md.
 // The noticer's reward: EXAMINE a distinctive fixture (an authored `reads:` —
@@ -8531,7 +8531,7 @@ const _OWL_BOX15 = [
   "seeks correspondent of the same. I have signed off with the same four letters " +
   "in every issue I have ever written and not one of you has asked me why. " +
   "Discretion assured. Reply in kind:",
-  "{{ACHAL GCECS FMLZZ MOSCP SMCNJ CIGAS RMOSV HVHG}}",
+  "{{LHXWW LSANX VIWEP BGKXN GNGDM GXTVM LTKMI EK}}",
 ];
 
 
@@ -8574,7 +8574,7 @@ function _owlPick(arr, salt) {
   for (const ch of String(G.day) + ":" + String(G.vacation)) h = (h * 31 + ch.charCodeAt(0)) % 100003;
   return arr[h % arr.length];
 }
-// The Nite Owl went digital years back — it lands as an email newsletter now,
+// Last Orders went digital years back — it lands as an email newsletter now,
 // read on the phone (battery-gated, like anything on the phone). The one holdout
 // is the Queen Vic, the Owl's home base (he's a patron there, not the guvnor),
 // where the pub still runs off a few hard copies for its columnist: read there it
@@ -8588,16 +8588,16 @@ function _doColumn() {
       "this week's:", "dim");
   } else {
     if (G.battery <= 0) {
-      _say("The Owl's an email newsletter these days — Mort folded the print run, kept the " +
+      _say("Last Orders is an email newsletter these days — Mort folded the print run, kept the " +
         "opinions — and your phone's a black mirror. Charge it, or grab a hard copy at the " +
         "Queen Vic, where he holds court.");
       return;
     }
-    _say("You pull up the Nite Owl in your inbox. Mort took it online years back, grousing the " +
+    _say("You pull up Last Orders in your inbox. Mort took it online years back, grousing the " +
       "whole way — 'the paper died, squire, not me' — and it lands most nights now, unasked, " +
       "in the mail of anyone who ever stood him a beer:", "dim");
   }
-  _say("── THE NITE OWL ── Mort's hoot, still going, out of spite ──", "win");
+  _say("── LAST ORDERS ── Mort's back page, still going, out of spite ──", "win");
   _say(_owlPick(_OWL_LEADS, 1));
   // the standing first-week slot: gone once you've been here a week (a resident reads past it)
   if ((G.vacation || 1) <= 1 && G.day <= 7) _say("• " + _owlPick(_OWL_ARRIVED, 53)(), "dim");
@@ -8628,7 +8628,7 @@ function _doColumn() {
   _say("• " + _owlPick(_OWL_JOKES, 29), "dim");
   _say(_OWL_BOX15[0], "dim");
   _say("  " + _OWL_BOX15[1], "dim");
-  _say("BUT, I DON'T GIVE A HOOT!", "win");
+  _say("MIND THE STEP.", "win");
 }
 
 // EXAMINE QR at the LK Metro mouth. Printed with its own "qr" class because it
@@ -8668,7 +8668,7 @@ function _owlBox15Answer() {
   } else {
     _say("Box 15 stays answered. He is still telling people about it.", "win");
   }
-  _say("sanuk{the_owl_gave_a_hoot_after_all}", "win");
+  _say("sanuk{somebody_was_counting_the_steps}", "win");
 }
 
 // ── SHA-256, pure JS, synchronous ─────────────────────────────────────────────

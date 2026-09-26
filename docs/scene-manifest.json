@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-22",
+  "generated": "2026-09-26",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 243,
@@ -432,7 +432,7 @@
       "sampleDescs": [
         "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes; CLUB MIRAGE shimmers a few doors along. The touts with the laminated menus are still here. A dark side-alley slinks off between them.",
         "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous enough that people photograph it before they've seen what's behind it. The strip runs south. It used to be louder. The gap between what this street was and what it is now is not visible from the gate, but you'll feel it by the time you reach the other end. RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded, right at the gate.",
-        "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE WINDMILL on one side, KATOEY'S R US on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far."
+        "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE GILT CAGE on one side, TWICE SHY on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far."
       ]
     }
   ],
@@ -2542,16 +2542,16 @@
       "kind": "soi6",
       "dark": false,
       "people": [
-        "Ashcroft",
-        "Duncan",
-        "Duncan Ashcroft",
         "Gyp",
         "Kae",
+        "Laurent",
+        "Laurent Vasseur",
         "Nune",
         "Pae",
-        "Sudjai"
+        "Sudjai",
+        "Vasseur"
       ],
-      "desc": "The name is the last classy thing about it. Duncan Ashcroft wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Duncan Ashcroft — down when he is in the country, which is not often, and never anywhere the soi itself can see him."
+      "desc": "The name is the last classy thing about it. Laurent Vasseur wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, above all of it and touching none of it, is Laurent Vasseur — down when he is in the country, which is not often, and never anywhere the soi itself can see him."
     },
     {
       "id": "pink_lotus",
@@ -3702,8 +3702,8 @@
     },
     {
       "id": "katoeys",
-      "name": "Katoey's R Us",
-      "bar": "Katoey's R Us",
+      "name": "Twice Shy",
+      "bar": "Twice Shy",
       "barType": "gogo",
       "region": "Walking Street",
       "regionSlug": "walking-street",
@@ -3798,7 +3798,7 @@
       "dark": false,
       "narrow": true,
       "people": [],
-      "desc": "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE WINDMILL on one side, KATOEY'S R US on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far."
+      "desc": "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE GILT CAGE on one side, TWICE SHY on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far."
     },
     {
       "id": "thai_massage",
@@ -3816,8 +3816,8 @@
     },
     {
       "id": "windmill",
-      "name": "The Windmill",
-      "bar": "The Windmill",
+      "name": "The Gilt Cage",
+      "bar": "The Gilt Cage",
       "barType": "gogo",
       "region": "Walking Street",
       "regionSlug": "walking-street",

@@ -2630,8 +2630,8 @@ const ROOMS = {
     region: "Walking Street",
     desc: "A short soi off the main strip, and louder than the main strip, which takes " +
       "doing. Two doors face each other across eight metres of wet concrete and " +
-      "spend the night trying to out-decibel one another: THE WINDMILL on one side, " +
-      "KATOEY'S R US on the other, both with their own doorman, their own flyer " +
+      "spend the night trying to out-decibel one another: THE GILT CAGE on one side, " +
+      "TWICE SHY on the other, both with their own doorman, their own flyer " +
       "girl, and their own idea of what a good time looks like. Between them the " +
       "soi is a corridor of noise you have to walk down sideways when it is busy. " +
       "It comes out on Second Road at the far end, if you get that far.",
@@ -2642,16 +2642,16 @@ const ROOMS = {
       "Somebody comes out of one door, thinks about it, and goes in the other.",
       "The bass from both sides meets in the middle of the soi and cancels into mush.",
     ],
-    // "in" used to shadow venues[] (bare ENTER silently always picked Windmill,
+    // "in" used to shadow venues[] (bare ENTER silently always picked Gilt Cage,
     // never offering the "which one?" prompt for Katoey's) — same landmine class
     // as the 2026-08-27 rollout, fixed in passing since Walking Street led here.
     exits: { w: "ws_north", s: "second_rd_diamond", out: "ws_north" },
     venues: ["windmill", "katoeys"],
   },
   windmill: {
-    name: "The Windmill",
+    name: "The Gilt Cage",
     region: "Walking Street",
-    bar: "The Windmill", barType: "gogo",
+    bar: "The Gilt Cage", barType: "gogo",
     pool: false,
     desc: "The house that decided restraint was somebody else's problem. Three tiers of " +
       "stage, a lighting rig with more ambition than the budget behind it, and a " +
@@ -2660,17 +2660,17 @@ const ROOMS = {
       "front row is a commitment, and the whole room runs on the understanding that " +
       "you knew exactly what this was when you came down the steps.",
     revisit: [
-      "Back into the Windmill. Whatever is happening on the middle tier has a crowd.",
+      "Back into the Gilt Cage. Whatever is happening on the middle tier has a crowd.",
       "The lighting rig attempts something beyond it and gets away with it anyway.",
       "A cheer goes up from the front row for reasons you are two beats behind on.",
-      "The Windmill, doing what the Windmill does, at volume.",
+      "The Gilt Cage, doing what the Gilt Cage does, at volume.",
     ],
     exits: { out: "soi_diamond" },
   },
   katoeys: {
-    name: "Katoey's R Us",
+    name: "Twice Shy",
     region: "Walking Street",
-    bar: "Katoey's R Us", barType: "gogo",
+    bar: "Twice Shy", barType: "gogo",
     desc: "Six feet of everything, all of it deliberate. The house is katoey and says " +
       "so on the sign, which is the point — nobody here is passing, or trying to, " +
       "and the room is funnier and sharper for it. The heels are higher than " +
@@ -2682,7 +2682,7 @@ const ROOMS = {
       "Back into Katoey's. Somebody on stage is doing Whitney and doing her justice.",
       "A punter two stools down is being taken apart, fondly, in two languages.",
       "The heels come past at eye level and somebody at the rail applauds.",
-      "Katoey's R Us, running at a pitch the rest of the soi cannot reach.",
+      "Twice Shy, running at a pitch the rest of the soi cannot reach.",
     ],
     exits: { out: "soi_diamond" },
   },
@@ -3454,7 +3454,7 @@ const ROOMS = {
     name: "The Orchid Room",
     region: "Soi 6",
     bar: "The Orchid Room", barType: "soi6", owner: "plg", vip: true,
-    desc: "The name is the last classy thing about it. Duncan Ashcroft wanted a members' club — " +
+    desc: "The name is the last classy thing about it. Laurent Vasseur wanted a members' club — " +
       "leather, low light, single malt, discretion — and got a bacchanal, because the room " +
       "curdled to match its owner. The 'hostesses' start the night topless and end it well " +
       "past that; the low light is a strobe; the discretion is a joke told at volume. The " +
@@ -3463,14 +3463,14 @@ const ROOMS = {
       "— a patched MC president holding court over a bottle of Blue Label, and, at the best " +
       "table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the " +
       "MC president included, is very careful to defer to. On a raised banquette at the back, " +
-      "filming himself over all of it, is Duncan Ashcroft \u2014 down when he is in the " +
+      "above all of it and touching none of it, is Laurent Vasseur \u2014 down when he is in the " +
       "country, which is not often, and never anywhere the soi itself can see him.",
     reads: {
       table: [
         { req: ["orchidReported"],
           text: "The good table, and now you can't unsee it: the quiet Thai man, the " +
-            "envelopes that arrive and do not open here, the way Ashcroft performs AT the " +
-            "table and never quite FOR it. This isn't PLG's power seat. It's their tribute " +
+            "envelopes that arrive and do not open here, the way Vasseur sits AT the " +
+            "table and never quite WITH it. This isn't PLG's power seat. It's their tribute " +
             "desk — the rent a foreign rollup pays to be tolerated, collected on the first of the month with " +
             "perfect manners. Everyone in the room knows except the man paying." },
         { text: "The best table in the room, back corner, sightlines to the door — a " +
@@ -3481,9 +3481,9 @@ const ROOMS = {
       ],
     },
     revisit: [
-      "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Ashcroft keeps calling classy while it proves him wrong in every direction at once.",
-      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and, on the nights he is in the country at all, Ashcroft on his banquette narrating himself to his own {{phone}}.",
-      "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and the banquette at the back is either empty or has a livestream running off it.",
+      "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Vasseur keeps calling classy while it proves him wrong in every direction at once.",
+      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and, on the nights he is in the country at all, Vasseur on his banquette watching his own room the way a man watches a share price.",
+      "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and the banquette at the back is either empty or has a bottle on it nobody is drinking.",
       "The back room again — topless going on nude, Blue Label going on trouble, and the one soft-spoken man everyone watches without looking at him. You've learned to sit where you can see the door.",
       "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and the man whose name is on the door mistakes the whole arrangement for something he built.",
     ],
@@ -5171,7 +5171,7 @@ const _KES_VET = [
   { label: "Swear you are no Pattaya Leisure man",
     when: (st, G) => st.trust < 2 && !_flag("heardPlgInside"),
     fx: (st) => { st.trust = Math.min(5, st.trust + 1); },
-    text: "You tell her plainly: nobody's boy, least of all Duncan Ashcroft'. She weighs it against twenty " +
+    text: "You tell her plainly: nobody's boy, least of all Laurent Vasseur's. She weighs it against twenty " +
       "years of faces. \"Maybe,\" she allows, and the eyes thaw a half-degree. \"We see.\"" },
   { label: "Press her for names",
     when: (st, G) => st.trust < 3 && !_flag("heardPlgInside"),
@@ -7982,36 +7982,36 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"We'd take the Stinky off their hands, freshen it up. Bert keeps his stool. Where's the villainy?\"" },
       { topic: "pattaya leisure", sets: ["heardPlgPitch"],
         text: "\"Pattaya Leisure Group. We hold the paper on a handful of rooms up and down Soi 6 — six, going " +
-          "on seven if the numbers say so.\" He says it lightly. \"Duncan's vision, really. I just keep the " +
+          "on seven if the numbers say so.\" He says it lightly. \"Laurent's money, really. I just keep the " +
           "lights on and the books tidy.\" A small, pleasant shrug. \"People make it sinister. It's " +
           "hospitality. We're only the ones who read the spreadsheet at the end of the night instead of " +
           "drinking through it.\"",
-        short: "\"Pattaya Leisure. Six rooms, going on seven. Duncan's vision. It's just hospitality.\"" },
-      { topic: "duncan ashcroft", text: "\"Duncan?\" For the first time the pleasantness has to work a little. " +
-        "\"A visionary. He'll tell you so himself — he tells everyone, at length, usually to camera.\" A " +
-        "diplomatic sip he doesn't need. \"Rarely down these days; he's 'building the brand' out of Dubai — " +
-        "the videos, the podcast, the speaking gigs. Between us, that's for the best. Marvellous on a stage, " +
-        "our Duncan. A liability in a room.\" The smile reseals over it. \"I keep the lights on. He keeps the " +
-        "profile.\"" },
+        short: "\"Pattaya Leisure. Six rooms, going on seven. Laurent's money. It's just hospitality.\"" },
+      { topic: "laurent vasseur", text: "\"Laurent?\" For the first time the pleasantness has to work a little. " +
+        "\"Rarely down these days. He bought the first room with money from somewhere else and has never " +
+        "once been curious what the rooms are.\" A diplomatic sip he doesn't need. \"Charming in a " +
+        "restaurant, our Laurent. A liability in a room. Between us, that's for the best.\" The smile " +
+        "reseals over it. \"I keep the lights on. He keeps his distance.\"" },
     ],
   },
 
   powers: {
-    name: "Duncan Ashcroft", emoji: "🕶️",
+    name: "Laurent Vasseur", emoji: "🕶️",
     pronoun: "he",
     room: "orchid_room",
-    look: "British man of thirty-eight dressed younger, linen shirt open, big watch, sunglasses indoors.",
-    desc: "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch " +
-      "that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he " +
-      "talks and talks more than he listens. Up close, the empire is just a man who has never once " +
-      "been told no by anyone he pays.",
+    look: "French man of forty, slim, good linen, signet ring, expensive watch, unhurried, politely bored.",
+    desc: "Forty, and dressed for the restaurant he would rather be in: linen that fits, a signet " +
+      "ring, a watch that costs more than this room takes in a month. He listens the way a man " +
+      "listens who has already decided, and he is unfailingly, uselessly polite. Up close, the " +
+      "empire is just a man who has never once been told no by anyone he pays.",
     dialogue: [
-      { text: "\"You made it in.\" He doesn't get up; he does angle his phone so you're in frame. " +
-          "\"That means somebody vouched, which means you're useful, which means we're basically " +
-          "FAMILY now.\" A grin with a tooth too many. \"Duncan Ashcroft. But you knew that. Everyone " +
-          "knows that.\" He sweeps a hand at the room like a man showing off a yacht. \"The Orchid. " +
-          "I built this. Well — I had the VISION. The vision did the rest.\"",
-        short: "\"You made it in — basically FAMILY now. Duncan Ashcroft. I built this. Well, I had the VISION.\"",
+      { text: "\"You made it in.\" He doesn't get up; he does turn the chair a few degrees, which " +
+          "from him is hospitality. \"That means somebody vouched, which means you are useful, which " +
+          "is the only kind of friend I keep.\" A smile that has been to better rooms than this one. " +
+          "\"Laurent Vasseur. You will have heard the name; people say it as if it explained " +
+          "something.\" A hand at the room, not quite a sweep. \"The Orchid. I bought it. The rest " +
+          "bought itself.\"",
+        short: "\"You made it in — useful, which is the only kind of friend I keep. Laurent Vasseur. I bought the Orchid; the rest bought itself.\"",
         // The boss laps up flattery (a soft PLG act) and bristles at the truth (an
         // anti-PLG one). Needling him toward the corner table reuses his one honest,
         // frightened beat.
@@ -8019,9 +8019,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           { label: "Flatter the great man",
             when: (st, G) => _faction("plg") < 5,
             fx: (st, G) => { _align("plg", 1); },
-            text: "You tell him the Orchid's the best room on the soi and the VISION is undeniable. Ashcroft glows " +
-              "like a switched-on sign. \"See — YOU get it.\" The phone swings to include you; you've been " +
-              "promoted from useful to family. Pattaya Leisure files you friendly." },
+            text: "You tell him the Orchid's the best room on the soi and that he saw it before anyone. " +
+              "Vasseur inclines his head a precise centimetre. \"Finally. Somebody with eyes.\" The chair " +
+              "turns another degree; you have been promoted from useful to amusing. Pattaya Leisure " +
+              "files you friendly." },
           { label: "Call it a room full of criminals",
             when: (st, G) => _faction("plg") > -5,
             fx: (st, G) => { _align("plg", -1); },
@@ -8030,13 +8031,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
               "friendly one. Word of that travels the soi with the envelopes." },
           { label: "Ask about that quiet table", topic: "syndicate" },
         ] },
-      { topic: "pattaya leisure", text: "He lights up; the business is his favourite subject, narrowly ahead " +
-          "of himself. \"Six rooms and counting. I came here with six hundred quid and a laptop " +
-          "and I OUT-HUSTLED an entire industry of lazy expats crying into their Changs.\" He says " +
-          "'hustle' like a prayer. \"People call it ruthless. I call it standards. The soi had no " +
-          "systems, no data, no BRAND. I gave it a brand.\" He does not notice, or does not care, that " +
-          "the brand is a topless strobe-lit room full of criminals.",
-        short: "\"Six rooms. Came with six hundred quid, OUT-HUSTLED the whole soi. Not ruthless — standards.\"" },
+      { topic: "pattaya leisure", text: "He warms by perhaps a degree; the business is his favourite subject, " +
+          "narrowly ahead of himself. \"Six rooms and counting. I came with a little money and a great " +
+          "deal of patience, and I bought from men who had neither.\" He says 'patience' the way other " +
+          "men say 'luck'. \"People call it ruthless. I call it arithmetic. The soi ran on handshakes " +
+          "and a shoebox; I gave it a ledger.\" He does not notice, or does not care, that the ledger " +
+          "is a topless strobe-lit room full of criminals.",
+        short: "\"Six rooms. A little money, a great deal of patience, and men who had neither. Not ruthless — arithmetic.\"" },
       { topic: "bert", text: "\"The pool bar? The old fella?\" He waves it away with his phone. " +
           "\"Sentiment. Sentiment doesn't scale, mate. He sells or he dies, and either way Pattaya Leisure " +
           "holds the paper on the building, so.\" A shrug that thinks it's charming. \"No hard feelings. " +
@@ -8383,8 +8384,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "actually looks at you \"—your name isn't on it at all. You're the manager. " +
           "You take a wage and a cut and you sleep at night, and the person whose " +
           "name IS on it has to be someone you'd hand your passport to.\" A pause. " +
-          "\"I was three days off signing the first one. You cost me a bar and saved " +
-          "me about four years. So: not the nominee. Pick a person, not a structure.\"",
+          "\"And the bit nobody says out loud, so I will. Your name can sit on the paper at forty-nine. " +
+          "Your HANDS can't be behind that bar without a work permit, and the permit wants a company " +
+          "with two million paid in. Two million, per farang. You've got a hundred and twenty. So on " +
+          "paper, the mama stands the rail.\" A beat. \"On paper. Everybody on this soi stands their " +
+          "own rail and nobody's stood it on paper since the law came in — until somebody asks.\" He " +
+          "turns the glass back. \"I was three days off signing the first one. You cost me a bar and " +
+          "saved me about four years. So: not the nominee. Pick a person, not a structure.\"",
         short: "\"Fifty-one percent Thai, and that's the law. Pick a person, not a structure.\"",
       },
     ],
@@ -9031,7 +9037,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "percent is Thai. Not a loophole — the law.\" He counts it on the wheel. \"A nominee is a " +
           "stranger. A company is real, and audited, and costs. Or your name is on nothing — you are " +
           "the manager, you take a wage and a cut, and somebody you trust holds the paper.\" The " +
-          "glance in the mirror. \"The question is never the percent, my friend. It is who the person is.\"",
+          "glance in the mirror. \"And the paper is not the permit. To work behind your own bar you need " +
+          "a permit, and a permit needs a company with two million in it — per farang. You do not have " +
+          "two million. So somebody Thai stands your rail on paper, and you stand it in fact, and you " +
+          "hope nobody with a clipboard is curious. Everybody hopes that. It is a whole town of hoping.\" " +
+          "\"The question is never the percent, my friend. It is who the person is.\"",
         short: "\"Fifty-one percent is Thai — the law. Nominee, company, or your name on nothing. The question is who the person is.\"" },
       // the promise in the taxi ("buy me a coffee — I'll tell you which farang really owns his 'own' bar")
       // — asked about the TRADE before the coffee, he points at the coffee (Des, round 41: "Not my story")
@@ -9177,26 +9187,26 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Units in the bars. Eighteen percent, quarterly, all laid out in a lovely PDF with the little " +
           "logo.\" A dry laugh with no bottom to it. \"I wired four hundred grand. Got two statements, both " +
           "glowing. Then — nothing. Portal down, emails bouncing, my 'relationship manager' evaporated. " +
-          "Every dollar of it gone into Duncan Ashcroft' brand, and I can't get so much as a {{phone}} call.\"",
+          "The PDF had the group's logo on it. The group says the man was never theirs. Maybe he wasn't. The logo was.\"",
         short: "\"Wired four hundred grand into 'the portfolio' — eighteen percent, quarterly. Two statements, then nothing. Gone.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
-      // The facts he'll give anyone; the raw part — Duncan himself — he saves for
+      // The facts he'll give anyone; the raw part — Laurent himself — he saves for
       // someone who's stuck around, not another stranger who'll vanish like the rest.
-      { topic: "duncan|ashcroft", when: (st) => st.trust < 2, deflect: true,
-        text: "The name lands and he looks at you properly for the first time. \"Duncan Ashcroft. You a " +
+      { topic: "laurent|vasseur", when: (st) => st.trust < 2, deflect: true,
+        text: "The name lands and he looks at you properly for the first time. \"Laurent Vasseur. You a " +
           "reporter? A lawyer? One of his?\" He decides you're probably not — but not all the way. \"I've " +
           "poured this out to too many strangers already, and every one of 'em nodded and left and nothing " +
           "changed. Buy a round. Stick around. Prove you're just a guy at a bar. Then I'll tell you what he is.\"",
         short: "\"You a reporter? One of his? Stick around, prove you're just a guy at a bar. Then I'll tell you.\"" },
-      { topic: "duncan|ashcroft", when: (st) => st.trust >= 2,
-        text: "\"Duncan Ashcroft.\" The glass goes down harder than he means. \"Only ever got him " +
-          "on a video call — sunglasses on, indoors, rented Lambo out the window, 'we're a FAMILY, Doug, " +
-          "trust the process.'\" He does the voice; it isn't kind. \"Now he posts investor-update reels to " +
-          "the very people he hasn't paid. I left one polite comment asking where my money went — blocked " +
-          "inside the hour, and a lawyer emailed me the word 'defamation.'\" A head-shake, almost admiring. " +
-          "\"Four hundred grand, and the man's a coward with a ring light. I've got every email. I've got no " +
-          "recourse. Bert lets me sit here and mostly not talk about it.\"",
-        short: "\"Only met Duncan on a video call — sunglasses indoors, rented Lambo, 'we're a FAMILY.' Blocked me, sent a lawyer. Coward with a ring light.\"" },
+      { topic: "laurent|vasseur", when: (st) => st.trust >= 2,
+        text: "\"Laurent Vasseur.\" The glass goes down harder than he means. \"Never met him. Never got " +
+          "him on a {{phone}}. I've written to the group eleven times and a very polite Frenchman I have never " +
+          "seen signs every reply, and every reply says the consultant was never theirs.\" A head-shake, " +
+          "almost admiring. \"Maybe he wasn't. It's a good structure — nobody at the top ever touched the " +
+          "money that went missing, so nobody at the top ever has to answer for it. Four hundred grand, and " +
+          "the only man I can name is the one who bought me a drink at this bar. Bert lets me sit here and " +
+          "mostly not talk about it.\"",
+        short: "\"Never met Laurent. Eleven letters, eleven polite replies: the consultant was never theirs. Nobody at the top touched the money, so nobody at the top answers for it.\"" },
     ],
   },
 
@@ -9240,16 +9250,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the soi with the air of a man who has said more than the arrangement strictly allows.",
         short: "“She'll be in. Headphones. Doesn't want a conversation — restful, frankly.”" },
       { topic: "pattaya leisure", sets: ["heardPlgHistory"],
-        text: "\"Pattaya Leisure Group.\" He says it the way you say a diagnosis. \"Duncan Ashcroft. Never here in the flesh, always in your feed — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
-        short: "\"Pattaya Leisure. Duncan Ashcroft. Six bars already, after another. Someone should do something.\"" },
-      { topic: "ashcroft|duncan",
-        text: "\"Duncan Ashcroft.\" Terry snorts into the Chang. \"British, though he's got a voice on now — half " +
-          "American, for the videos. You've not seen the videos? Blessed, you are. 'Hustle,' 'vision,' 'we're " +
-          "a FAMILY,' him draped over a rented supercar he films from three angles.\" A slow head-shake. " +
-          "\"Everyone wants him to be some cold operator out of a film. He's a gobby little self-promoter who " +
-          "blocks you when you ask a straight question and screams 'defamation' when you ask it twice. The " +
-          "dangerous bit's the lawyer and the brown envelope. Duncan's just the one doing the podcast about it.\"",
-        short: "\"Not a cold operator — a gobby self-promoter with a rented supercar and a podcast. The lawyer's the dangerous bit.\"" },
+        text: "\"Pattaya Leisure Group.\" He says it the way you say a diagnosis. \"Laurent Vasseur. Never here in the flesh, always in your feed — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
+        short: "\"Pattaya Leisure. Laurent Vasseur. Six bars already, after another. Someone should do something.\"" },
+      { topic: "vasseur|laurent",
+        text: "\"Laurent Vasseur.\" Terry snorts into the Chang. \"French, and he'd like you to know it. Never " +
+          "raises his voice, never in a hurry, never in the room when something happens in it.\" A slow " +
+          "head-shake. \"Everyone wants him to be some cold operator out of a film. He's a man with a good " +
+          "tailor and a better accountant who buys bars off dying men at forty cents. The dangerous bit's " +
+          "never him. It's the lawyer and the envelope. Laurent's just the one who gets photographed at the " +
+          "opening.\"",
+        short: "\"Not a cold operator — a good tailor and a better accountant, buying bars off dying men. The lawyer's the dangerous bit.\"" },
       { topic: "tiktok", text: "He gestures at the soi through the window without " +
         "looking. \"You see those lot? Ring light, selfie stick, little gimbal thing?\" " +
         "He doesn't wait for an answer. \"Walk the whole soi, grab every girl's hand, " +
@@ -11032,10 +11042,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "PowerPoint, and somehow the rent's a problem, the license is a problem, the girls " +
           "get walked across the road one by one, and I'm selling at forty cents on the dollar " +
           "to the only buyer left. Which was them.” He turns his soda glass a slow quarter. " +
-          "“Duncan Ashcroft. Never raised his voice at me once. Didn't have to. One day somebody's " +
+          "“Laurent Vasseur. Never raised his voice at me once. Didn't have to. One day somebody's " +
           "going to open that whole operation up like a cheap padlock, and I would give a great " +
           "deal to be in the room.”",
-        short: "“Pattaya Leisure took my Soi 6 bar at forty cents. Ashcroft never raised his voice. Someone'll crack them open one day — I want to watch.”" },
+        short: "“Pattaya Leisure took my Soi 6 bar at forty cents. Vasseur never raised his voice. Someone'll crack them open one day — I want to watch.”" },
       { topic: "rabbit", text: "“The bar? Down-the-hole, through-the-glass, all that. Cute, " +
           "right.” A pause; he decides how much to hand you. “Used to be a handle, if you go " +
           "back far enough. Long time since anybody said it to my face and meant me.” He does " +
@@ -12351,7 +12361,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "girls last a season now. Mine's " +
           "been here since Candy ran the place. That's the whole difference, bud, and it's the only one that " +
           "matters.\" He finally lifts the Singha. \"I'll tell the old man to hold. He trusts me to keep the " +
-          "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Duncan Ashcroft wants " +
+          "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Laurent Vasseur wants " +
           "a pool bar, he can build his own — slap his little logo on it and film himself potting the black. " +
           "Let the market sort us out.\" He taps the bar once, done. " +
           "\"You did me a real turn tonight, bud. Bert doesn't forget a thing like that.\"",
@@ -12456,12 +12466,12 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "tease you for it, mamasans price you for it. Ain't a crime. Just don't " +
         "butterfly inside ONE bar, that's how a man loses a drink to the back of " +
         "the head.\"" },
-      { topic: "duncan ashcroft", req: ["knowOyHasIt"],
+      { topic: "laurent vasseur", req: ["knowOyHasIt"],
         text: "He lowers the Singha half an inch, which for Bert is a whisper. " +
         "\"Pattaya Leisure Group. Front company, owns most of the paper on Soi 6. Man behind " +
-        "it's a Brit, Duncan Ashcroft — and don't go picturing some untouchable villain, bud. " +
-        "He's a jumped-up little marketing lad who ghosts his own investors and hides " +
-        "behind a lawyer.\" A shrug. \"Bars run clean enough on top. The books don't. It " +
+        "it's a Frenchman, Laurent Vasseur — and don't go picturing some untouchable villain, bud. " +
+        "He's a quiet fella with a good accountant who buys bars off men who can't say no " +
+        "any more.\" A shrug. \"Bars run clean enough on top. The books don't. It " +
         "isn't him you'd have to get past — it's the money and the envelope. Leave that one alone.\"" },
       { topic: "sponsor", text: "He refills without asking. \"See it every season. " +
         "Good man, sends the money, thinks he's the only one, thinks she thinks " +
@@ -13725,7 +13735,7 @@ const QUESTS = {
   // owning a bar…" — so the chain exists to make it a door rather than a wink.
   //
   // The bar is THE STINKY PINKY, and that choice is the whole design. You already
-  // spent `plg_deal` talking Bert out of selling it to Duncan Ashcroft; the ailing
+  // spent `plg_deal` talking Bert out of selling it to Laurent Vasseur; the ailing
   // American owner is still ailing, and holding is not a plan. So the arc pays
   // off: the only buyer who isn't PLG is you. Gavin's smiling pitch loses to a
   // regular, which is exactly the thing PLG cannot price.
@@ -13927,7 +13937,8 @@ const WORK_NIGHTS = [
     // thing in it.
     weightFn: G => 1 + (G.syn.friction || 0),
     text: "Two officers come in at eleven, entirely polite, and go through the " +
-      "licence, the staff list, the fire exit and the hours. Nothing is wrong. " +
+      "licence, the staff list, who is behind the bar and on what paper, the fire exit " +
+      "and the hours. Nothing is wrong. " +
       "Nothing is ever quite wrong. It takes ninety minutes on a Friday, the " +
       "room empties around them, and at the end there is a figure that is not " +
       "written down anywhere and is not negotiable and is not, in fairness, " +
@@ -14983,12 +14994,13 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
           "quite as light as he means it. \u201cA man my age either has a routine or he has " +
           "nothing at all going on. Mine sends jokes to strangers at nine every evening.\u201d",
         short: "\u201cThe column takes one a week. I write nine. The rest go to strangers.\u201d" },
-      { text: "\"Mort.\" He finishes the line before he looks up. \"I write the Nite " +
-        "Owl — the back-page column, the one your granddad read on the toilet. Retired " +
-        "twice, un-retired twice; a man needs a deadline or the days run together and " +
-        "the mind goes to soup.\" He clicks the pen. \"So I watch, I write it down, and " +
-        "I don't give a hoot who minds. READ THE COLUMN if you like — it's mostly true.\"",
-        short: "\"I write the Nite Owl. READ THE COLUMN — mostly true. Keeps me sane.\"" },
+      { text: "\"Mort.\" He finishes the line before he looks up. A small brass owl sits on the bar " +
+        "by the notebook, older than the notebook and better polished. \"I write Last Orders — the " +
+        "back page, the one your granddad read on the toilet. Retired twice, un-retired twice; a man " +
+        "needs a deadline or the days run together and the mind goes to soup.\" He clicks the pen. " +
+        "\"So I watch, I write it down, and I don't much mind who minds. READ THE COLUMN if you like " +
+        "— it's mostly true.\"",
+        short: "\"I write Last Orders. READ THE COLUMN — mostly true. Keeps me sane.\"" },
       { topic: "amulet", req: ["amuletReturned"],
         text: "\"The one off the far end of the beach.\" Mort does not ask how you know he " +
           "knows; he has been sitting in this window for twenty years. He clicks the biro " +
@@ -15034,7 +15046,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "and what it doesn't: the interesting question isn't who owns the bars. It's who they pay to " +
         "be allowed to.\"",
         short: "\"A rollup. Buys the tired bars, matching shirts, calls it a group. The question is who THEY pay.\"" },
-      { topic: "duncan ashcroft", text: "\"Ashcroft.\" A pause you could set type in. \"I've met four men like " +
+      { topic: "laurent vasseur", text: "\"Vasseur.\" A pause you could set type in. \"I've met four men like " +
         "him and written up three. Handsome, patient, always the first round. The fourth I did write up, and he sued.\" Mort looks at the window. \"You'll form your own view. Bert's is " +
         "worth hearing first.\"",
         short: "\"Met four like him, wrote up three. The fourth one sued. Ask Bert.\"" },

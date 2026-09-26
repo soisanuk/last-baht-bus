@@ -3067,7 +3067,7 @@ function _doPatron() {
       "Solid company, this man.",
       "The regular leans in, quieter: “You drink on Soi 6, you're drinking with " +
       "the Pattaya Leisure Group, whoever's name is over the door. Front company. " +
-      "Fella called Duncan Ashcroft behind it — Brit, never here, always here. Bars " +
+      "Fella called Laurent Vasseur behind it — Frenchman, never here, always here. Bars " +
       "run fine. Just don't go asking who owns what.”",
     ];
     // the white-knight gag only makes sense where there's a hostess to moon over

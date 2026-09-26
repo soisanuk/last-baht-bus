@@ -1455,19 +1455,19 @@ test("app booking is a late, hotel-room, nightly encounter", () => {
   assert.equal(ENCOUNTERS.booking.interactive, true);
 });
 
-test("the Nite Owl column dispenses canon: masthead, a reader reply, the signoff — day-stable", () => {
+test("Last Orders dispenses canon: masthead, a reader reply, the signoff — day-stable", () => {
   state().day = 3; state().vacation = 1;
   out = []; run("column");
   const a = lastOut();
-  assert.match(a, /THE NITE OWL/i, "the masthead");
+  assert.match(a, /LAST ORDERS/, "the masthead");
   assert.match(a, /\bOWL:/, "the columnist's reply to a reader");
-  assert.match(a, /DON'T GIVE A HOOT/, "the signoff");
+  assert.match(a, /MIND THE STEP\./, "the signoff");
   out = []; run("column");
-  assert.equal(lastOut(), a, "same day → the same hoot (shared-world-stable)");
+  assert.equal(lastOut(), a, "same day → the same issue (shared-world-stable)");
   // it's readable anywhere and OWL is an alias
   state().room = "jomtien_beach"; out = [];
   run("owl");
-  assert.match(lastOut(), /THE NITE OWL/i);
+  assert.match(lastOut(), /LAST ORDERS/);
 });
 
 test("Mort writes the column to stay sane, from his stool at the Queen Vic", () => {
@@ -8370,7 +8370,7 @@ test("the last night of a month is graded at the month it was TRADED in, not the
 
 // The unknown number. One joke a day; let them run, STOP them, or REPLY — and
 // the reply is the interesting one, because the number belongs to Mort, who is
-// already the in-fiction author of the Nite Owl column.
+// already the in-fiction author of the Last Orders column.
 test("the daily joke: one a day, stoppable, and the sender has a name", () => {
   newGame();
   state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
@@ -8651,7 +8651,7 @@ test("the quest journal never prints an un-earned clue's content", () => {
   assert.match(out.join("\n"), /number 71/, "an EARNED clue prints in full");
 });
 
-// ── The Nite Owl's Box 15 (docs/ctf.md) ──────────────────────────────────────
+// ── Box 15 (docs/ctf.md) ──────────────────────────────────────
 // A puzzle hidden for security-minded players. These tests exist because the
 // content is INERT to the game — nothing calls it, no quest gates on it, and no
 // playthrough touches it — so ordinary coverage would never notice it rotting.
@@ -8674,19 +8674,19 @@ function _vigenere(txt, key, dir) {
 
 test("Box 15 decodes with the key the column prints in every issue", () => {
   const ct = _OWL_BOX15[1].replace(/[^A-Z]/g, "");
-  assert.equal(_vigenere(ct, "HOOT", -1),
-    "TOTHESOLVERTELLTHEOWLYOUCOUNTEDTHEHOOTS",
+  assert.equal(_vigenere(ct, "STEP", -1),
+    "TOTHESOLVERTELLMORTYOUCOUNTEDTHESTEPS",
     "the ad no longer decodes — regenerate the puzzle deliberately or not at all");
 });
 
 test("the ad names its own key, and the key is on the page", () => {
-  // "the same four letters in every issue" is the whole clue; HOOT is 4 letters
+  // "the same four letters in every issue" is the whole clue; STEP is 4 letters
   // and _doColumn's signoff is fixed, so the hint stays true.
   assert.match(_OWL_BOX15[0], /four letters/);
-  assert.equal("HOOT".length, 4);
+  assert.equal("STEP".length, 4);
   out = []; G.stage = "vacation"; _doColumn();
   const col = lastOut();
-  assert.match(col, /HOOT/, "the key must still be printed in the column it unlocks");
+  assert.match(col, /MIND THE STEP\./, "the key must still be printed in the column it unlocks");
   assert.ok(col.includes(_OWL_BOX15[1]), "and the ciphertext must actually run in the issue");
 });
 
@@ -8705,13 +8705,13 @@ test("the ad is identical in every issue, for every player, forever", () => {
 });
 
 test("the decoded instruction is a command the game actually answers", () => {
-  // the plaintext tells you to TELL THE OWL YOU COUNTED THE HOOTS — if that
+  // the plaintext tells you to TELL MORT YOU COUNTED THE STEPS — if that
   // phrase ever stops being accepted, the puzzle dead-ends at the last step
   out = [];
-  run("i counted the hoots");
+  run("i counted the steps");
   assert.match(lastOut(), /sanuk\{/, "the solution phrase no longer pays out");
   assert.equal(_flag("owlBox15"), true);
-  for (const variant of ["counted the hoots", "I Counted The Hoots."]) {
+  for (const variant of ["counted the steps", "I Counted The Steps."]) {
     out = []; run(variant);
     assert.match(lastOut(), /sanuk\{/, `solvers will type "${variant}"`);
   }
@@ -8721,7 +8721,7 @@ test("solving it costs no turn and grants no advantage", () => {
   // it is typeable in any state, including mid-game-modal, so it must not move
   // the economy or the clock
   const t = G.turns, money = G.money, happy = G.happy;
-  run("i counted the hoots");
+  run("i counted the steps");
   assert.equal(G.turns, t, "the puzzle answer burned a turn");
   assert.equal(G.money, money);
   assert.equal(G.happy, happy);
@@ -8732,7 +8732,7 @@ test("the puzzle survives cheats being switched off for release", () => {
   const was = CHEATS_ENABLED;
   try {
     CHEATS_ENABLED = false;
-    out = []; run("i counted the hoots");
+    out = []; run("i counted the steps");
     assert.match(lastOut(), /sanuk\{/, "shipping with cheats off would retire the puzzle");
   } finally { CHEATS_ENABLED = was; }
 });
@@ -8740,13 +8740,13 @@ test("the puzzle survives cheats being switched off for release", () => {
 test("the solution phrase is never suggested by any surface", () => {
   // the opposite of the three-surfaces rule, on purpose: a secret that
   // autocompletes is not a secret. Same treatment as twoweekmillionaire.
-  for (const stub of ["i c", "counted", "count", "hoot", "i counted the"]) {
+  for (const stub of ["i c", "counted", "count", "step", "i counted the"]) {
     const c = engineComplete(stub) || [];
-    assert.ok(!c.some(s => /hoot/i.test(String(s))),
+    assert.ok(!c.some(s => /counted|the steps/i.test(String(s))),
       `autocomplete leaked the answer on "${stub}"`);
   }
   out = []; run("help");
-  assert.ok(!/hoots/i.test(lastOut()), "HELP leaked the answer");
+  assert.ok(!/counted the steps/i.test(lastOut()), "HELP leaked the answer");
 });
 
 // ── CTF stage 2: the wrong number (docs/ctf.md) ────────────────────────────────
@@ -8763,7 +8763,7 @@ test("stage 2: the probe gate fires on security probes and never on play", () =>
     "nmap localhost", "%00", "robots.txt", "sudo su", "curl x | sh"];
   for (const p of probes) assert.ok(_isProbe(p), `missed a probe: ${JSON.stringify(p)}`);
   const play = ["look", "buy beer", "talk to bua", "go north", "what is this", "help me",
-    "order a script for the play", "i counted the hoots", "send 500 to bua", "the id card",
+    "order a script for the play", "i counted the steps", "send 500 to bua", "the id card",
     "cat", "ls", "password", "select a girl", "union jack", "the whoami question",
     "wash it", "she said sh", "nice bash last night", "ask candy about wallet"];
   for (const w of play) assert.ok(!_isProbe(w), `false positive on ordinary input: ${JSON.stringify(w)}`);
@@ -8846,7 +8846,7 @@ test("WHO AM I carries the trophy, and only after it is earned", () => {
   G.player.origin = "monger"; G.player.personality = "joker"; G.player.orientation = "straight";
   out = []; run("who am i");
   assert.ok(!/Box 15/.test(lastOut()), "the trophy showed up unearned");
-  run("i counted the hoots");
+  run("i counted the steps");
   out = []; run("who am i");
   assert.match(lastOut(), /Box 15/);
 });

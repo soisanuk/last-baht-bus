@@ -61,8 +61,8 @@ const SLOTS = {
   dancerNumber: { n71: /\bnumber seventy-one\b|\bNo\. 71\b|\b71\b/, n72: /\bnumber seventy-two\b|\b72\b/ },
 };
 // NATIONALITY was tried and dropped, deliberately: characters describe each
-// OTHER's nationality constantly ("Duncan Ashcroft. British, though he's got a
-// voice on now — half American"), so the slot fires on correct prose more often
+// OTHER's nationality constantly ("Laurent Vasseur. French, and he'd like you
+// to know it"), so the slot fires on correct prose more often
 // than wrong prose. A slot only works when its values are mutually exclusive
 // AND the prose containing them is reliably about the subject. Don't re-add it
 // without solving attribution properly.

@@ -28,7 +28,7 @@ black hat when he was young. Ten years ago he lifted a bitcoin wallet off an
 unlocked laptop in a Las Vegas coffee shop, tumbled the coins, cashed out,
 abandoned the job and the family, and bought a bar on Soi 6. Most of the illicit
 money went into that bar; it was eventually sold to Pattaya Leisure at a knock-down
-price, renamed and refitted. Bad blood with Duncan Ashcroft over the sale left him
+price, renamed and refitted. Bad blood with Laurent Vasseur over the sale left him
 *persona non grata* on the whole soi — even the non-PLG places refuse him service,
 because he brings trouble. He took what was left and opened the **White Rabbit** in
 Naklua, the only district he could both afford and get his paperwork cleared in
@@ -653,7 +653,7 @@ existing scalar. Keep it deed-gated; never move standing for a choice not taken.
   navigation puzzle over a *fictional* filesystem; it must not read as a real
   exploitation how-to. "Unlocked machine, copied file" is the whole method, and that
   is a *deflation* of hacking mystique, not an instruction manual.
-- **Pattaya Leisure stays fictional** — Duncan Ashcroft / PLG only, never the real names the
+- **Pattaya Leisure stays fictional** — Laurent Vasseur / PLG only, never the real names the
   faction is drawn from ([[lbb-pattaya-leisure-canon]]).
 - **PG-13 and morally grey, like the rest of the game.** A crypto heist against a
   fictional criminal rollup is fine as fiction; keep the tone the game's own.

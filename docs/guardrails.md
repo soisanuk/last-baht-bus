@@ -36,7 +36,36 @@ nationality, that is identification several times over: four traits where the bu
 | was | is |
 |---|---|
 | White Dish Group / WDG | **Pattaya Leisure Group / PLG** |
-| Ryan Powers | **Duncan Ashcroft** |
+| Ryan Powers | Duncan Ashcroft (2026-09-23) → **Laurent Vasseur** (2026-09-26) |
+| The Nite Owl / *BUT, I DON'T GIVE A HOOT!* | **Last Orders** / *MIND THE STEP.* (2026-09-26) |
+| The Windmill · Katoey's R Us (two real signs) | **The Gilt Cage** · **Twice Shy** (2026-09-26) |
+
+## The 2026-09-26 rename: the name was fixed, the portrait was not
+
+Three days after the first rename, a persona whose whole drive was *who is this really?*
+identified the founder on sight from **the traits, with the name already gone**: the
+content-creator persona, the video calls, the rented supercar, the blocking-and-"defamation"
+reflex, the podcast, the investor-update reels — every one a specific real behaviour, and
+together a portrait that no name could disguise. **A rename addresses one trait of the
+five.** The 2026-09-23 fix spent the budget on the name and left the other four standing.
+
+So the founder is now **French**, and every node that described him — his own greeting,
+Gavin's, Doug's, Terry's, Bert's — was rewritten to a man with *no* real-world behaviours:
+a good tailor, a better accountant, unhurried, never in the room when something happens in
+it. The structure his story needs (he buys bars off dying men at forty cents; a consultant
+using the group's logo took Doug's money and the group says he was never theirs; the
+envelope, the lawyer) is all still there, because the structure was never the problem.
+
+The same persona found the columnist: the column's title and its signoff were a real
+columnist's, verbatim, and his greeting described the real man's career. Renamed — and
+the homage is now a **brass owl on Mort's bar**, the `OWL` verb and the `_OWL_*`
+identifiers, which is a wink and not a portrait. Two real go-go signs on Soi Diamond were
+also in the room list as themselves; renamed, ids kept (`windmill`, `katoeys` — art and
+saves, same reasoning as `powers`).
+
+**The rule this adds:** when a persona or a reader can name the referent, do not reach for
+the name field. **List the traits the identification actually used** — those are the ones
+to rewrite, and the name is usually not among them.
 
 **The replacement test, for anyone renaming again:** you must not be able to show the
 derivation from the real name on one line. Break the phonetic and the anagram link

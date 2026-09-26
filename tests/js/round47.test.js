@@ -861,7 +861,7 @@ test("Mort stands behind his own copy, and the cipher's instruction is a door", 
   G.room = "queen_vic"; G.day = 2;
   out = []; doCommand("ask mort about blue dog");
   assert.match(text(), /BLUE DOG/); assert.doesNotMatch(text(), /not my story|Search me/i);
-  out = []; doCommand("tell mort i counted the hoots");
+  out = []; doCommand("tell mort i counted the steps");
   assert.match(text(), /Box fifteen|Box 15/); assert.ok(_flag("owlBox15"));
 });
 

@@ -88,7 +88,7 @@ test("_convoTopic leaves already-matching phrasings alone (CONTAINS handles them
 });
 
 test("_convoTopic does not mis-map proper-noun topics", () => {
-  for (const name of ["candy", "duncan ashcroft", "bert", "oy", "drew"]) {
+  for (const name of ["candy", "laurent vasseur", "bert", "oy", "drew"]) {
     assert.match(_convoTopic(name), new RegExp(name.split(" ")[0]),
       `"${name}" should still route to itself, not a synonym`);
   }
@@ -382,16 +382,16 @@ test("Kesinee guards the Pattaya Leisure intel until trust — no offer-then-ref
   assert.match(lastOut(), /cleaner|poorer/i);
 });
 
-test("Doug guards the raw Duncan Ashcroft story until you've stuck around", () => {
+test("Doug guards the raw Laurent Vasseur story until you've stuck around", () => {
   state().room = "stinky_bar";
   run("doug"); // meet → trust 1, below his gate
-  assert.ok(!_convoTopics("doug").includes("duncan"),
+  assert.ok(!_convoTopics("doug").includes("laurent"),
     "at trust<2 he'd only ask if you're a reporter — don't dangle it as a chip");
   _npcState("doug").trust = 2;
-  assert.ok(_convoTopics("doug").includes("duncan"), "once you've stuck around it surfaces");
+  assert.ok(_convoTopics("doug").includes("laurent"), "once you've stuck around it surfaces");
   out = [];
-  run("ask doug about duncan"); // deflect hides the chip, not the answer
-  assert.match(lastOut(), /ring light|coward|Lambo/i, "the raw version lands when asked");
+  run("ask doug about laurent"); // deflect hides the chip, not the answer
+  assert.match(lastOut(), /eleven times|never theirs|nobody at the top/i, "the raw version lands when asked");
 });
 
 test("Joy: chatting builds trust, and her future cracks open once earned", () => {
@@ -741,8 +741,8 @@ test("Mort's four-letter dare deflects in character and never spoils the puzzle"
   out = []; doCommand("ask mort about four letters");
   const said = out.join("\n");
   assert.match(said, /back issues|cares to count/);
-  assert.doesNotMatch(said, /HOOT|hoot/, "the key stays a secret");
-  assert.doesNotMatch(said, /counted the hoots/i, "and so does the answer phrase");
+  assert.doesNotMatch(said, /STEP|step/, "the key stays a secret");
+  assert.doesNotMatch(said, /counted the steps/i, "and so does the answer phrase");
 });
 
 test("an aliased ask to a GATED node gets 'not yet', never 'not my story'", () => {

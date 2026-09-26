@@ -1,7 +1,7 @@
 // The bar-owning chain: premises → licence → partner → opening night.
 //
 // The bar is THE STINKY PINKY, and that's the design. You already spent
-// `plg_deal` talking Bert out of selling it to Duncan Ashcroft; the ailing
+// `plg_deal` talking Bert out of selling it to Laurent Vasseur; the ailing
 // American owner is still ailing, and holding isn't a plan. So the arc pays off
 // — the only buyer who isn't PLG is you, and Gavin loses a bar to a regular.
 //

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-22",
+  "generated": "2026-09-26",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 154,
@@ -393,17 +393,17 @@
     },
     {
       "id": "powers",
-      "name": "Duncan Ashcroft",
+      "name": "Laurent Vasseur",
       "source": "NPCS",
       "role": "story",
       "sex": "m",
-      "look": "British man of thirty-eight dressed younger, linen shirt open, big watch, sunglasses indoors.",
+      "look": "French man of forty, slim, good linen, signet ring, expensive watch, unhurried, politely bored.",
       "venueKind": "soi6",
       "emoji": "🕶️",
       "th": null,
       "room": "orchid_room",
       "tags": [],
-      "desc": "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he talks and talks more than he listens. Up close, the empire is just a man who has never once been told no by anyone he pays."
+      "desc": "Forty, and dressed for the restaurant he would rather be in: linen that fits, a signet ring, a watch that costs more than this room takes in a month. He listens the way a man listens who has already decided, and he is unfailingly, uselessly polite. Up close, the empire is just a man who has never once been told no by anyone he pays."
     },
     {
       "id": "priew",
@@ -2235,7 +2235,7 @@
       "th": "นารี",
       "room": "windmill",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of The Windmill's girls, from Amnat Charoen. She types more than she talks — and laughs at both."
+      "desc": "A crooked, disarming grin — one of The Gilt Cage's girls, from Amnat Charoen. She types more than she talks — and laughs at both."
     },
     {
       "id": "sasi",
@@ -2249,7 +2249,7 @@
       "th": "ศศิ",
       "room": "windmill",
       "tags": [],
-      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Windmill's girls, from Sisaket. Google Translate is open before you finish the sentence."
+      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Gilt Cage's girls, from Sisaket. Google Translate is open before you finish the sentence."
     },
     {
       "id": "yada",
@@ -2263,7 +2263,7 @@
       "th": "ญาดา",
       "room": "windmill",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of The Windmill's girls, from Buriram. She types more than she talks — and laughs at both."
+      "desc": "A crooked, disarming grin — one of The Gilt Cage's girls, from Buriram. She types more than she talks — and laughs at both."
     },
     {
       "id": "dao",
@@ -4237,7 +4237,7 @@
       "th": "วนิดา",
       "room": "windmill",
       "tags": [],
-      "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Windmill, from Sakon Nakhon. She came up from the rice fields and never once looked back."
+      "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came up from the rice fields and never once looked back."
     },
     {
       "id": "alisa",
@@ -4251,7 +4251,7 @@
       "th": "อลิสา",
       "room": "katoeys",
       "tags": [],
-      "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Katoey's R Us, from Yasothon. She started on the stage at seventeen and owns three of these stools now."
+      "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns three of these stools now."
     },
     {
       "id": "sunee",
@@ -4671,7 +4671,7 @@
       "th": "นับหนับ",
       "room": "windmill",
       "tags": [],
-      "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Windmill, from {{Nong Bua Lamphu}}."
+      "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Gilt Cage, from {{Nong Bua Lamphu}}."
     },
     {
       "id": "farida",
@@ -4685,7 +4685,7 @@
       "th": "ฟาริดา",
       "room": "katoeys",
       "tags": [],
-      "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Katoey's R Us, from Kalasin."
+      "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Twice Shy, from Kalasin."
     },
     {
       "id": "tukky",

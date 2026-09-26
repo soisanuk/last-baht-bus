@@ -132,7 +132,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "amuletSeen",     // a piwin read it (_amuletNotice)
     "nokSawAmulet",   // Nok clocked it on arrival (_nokAmulet)
     "amuletReturned", // handed back (_nokTakeAmulet)
-    "owlBox15",  // the Nite Owl's personals cipher was solved (_owlBox15Answer) — docs/ctf.md
+    "owlBox15",  // the column's personals cipher was solved (_owlBox15Answer) — docs/ctf.md
     "owlAmulet",      // the column printed its one-shot letter (_doColumn)
     "rabbitPath", "rabbitData", "rabbitBlown", // the Rabbit arc: interview + mule path (engine-set)
     "bookGiven", "barBook",                     // …and the operator path's bonus, given back or run at your own bar
@@ -231,7 +231,7 @@ const ID_NOT_NAME = new Map([
   ["dave", "renamed to Tom (Mario, 2026-09-16) — two men at one rail called Dave and David. " +
     "Art is web/portraits/thumb/dave.webp and the coverage ledgers key on `dave`."],
   ["david", "renamed to Jerry, same night, same reason."],
-  ["powers", "renamed to Duncan Ashcroft (2026-09-23) out of an identifiability risk — the old " +
+  ["powers", "renamed out of an identifiability risk (2026-09-23, and again 2026-09-26) — the old " +
     "name was a derivation of a real person's (docs/guardrails.md). The id is kept because it names " +
     "web/portraits/thumb/powers.*, a gen-portraits.py CHARS spec and every save's G.known; on its own " +
     "it is an ordinary English word that appears elsewhere in this repo, and the derivation lived in " +

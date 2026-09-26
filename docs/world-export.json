@@ -315,7 +315,7 @@
    "th": "แอร์"
   },
   "alisa": {
-   "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Katoey's R Us, from Yasothon. She started on the stage at seventeen and owns three of these stools now.",
+   "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns three of these stools now.",
    "emoji": "👑",
    "filler": true,
    "name": "Alisa",
@@ -1004,7 +1004,7 @@
    "th": "แฟง"
   },
   "farida": {
-   "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Katoey's R Us, from Kalasin.",
+   "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Twice Shy, from Kalasin.",
    "emoji": "🧾",
    "filler": true,
    "name": "Farida",
@@ -2064,7 +2064,7 @@
    "th": "นภา"
   },
   "naree": {
-   "desc": "A crooked, disarming grin — one of The Windmill's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of The Gilt Cage's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Naree",
@@ -2296,7 +2296,7 @@
    "room": "white_rabbit"
   },
   "nubnab": {
-   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Windmill, from {{Nong Bua Lamphu}}.",
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Gilt Cage, from {{Nong Bua Lamphu}}.",
    "emoji": "🧾",
    "filler": true,
    "name": "Nubnab",
@@ -2588,9 +2588,9 @@
    "th": "ป๊อป"
   },
   "powers": {
-   "desc": "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he talks and talks more than he listens. Up close, the empire is just a man who has never once been told no by anyone he pays.",
+   "desc": "Forty, and dressed for the restaurant he would rather be in: linen that fits, a signet ring, a watch that costs more than this room takes in a month. He listens the way a man listens who has already decided, and he is unfailingly, uselessly polite. Up close, the empire is just a man who has never once been told no by anyone he pays.",
    "emoji": "🕶️",
-   "name": "Duncan Ashcroft",
+   "name": "Laurent Vasseur",
    "pronoun": "he",
    "room": "orchid_room"
   },
@@ -2851,7 +2851,7 @@
    "th": "ซาร่า"
   },
   "sasi": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Windmill's girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Gilt Cage's girls, from Sisaket. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Sasi",
@@ -3411,7 +3411,7 @@
    "th": "วันดี"
   },
   "wanida": {
-   "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Windmill, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
+   "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
    "emoji": "👑",
    "filler": true,
    "name": "Wanida",
@@ -3489,7 +3489,7 @@
    "th": "วิน"
   },
   "yada": {
-   "desc": "A crooked, disarming grin — one of The Windmill's girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of The Gilt Cage's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Yada",
@@ -5536,13 +5536,13 @@
    "region": "Jomtien"
   },
   "katoeys": {
-   "bar": "Katoey's R Us",
+   "bar": "Twice Shy",
    "barType": "gogo",
    "geo": [
     12.92614,
     100.87397
    ],
-   "name": "Katoey's R Us",
+   "name": "Twice Shy",
    "region": "Walking Street"
   },
   "khao_talo": {
@@ -6828,13 +6828,13 @@
    "region": "Naklua"
   },
   "windmill": {
-   "bar": "The Windmill",
+   "bar": "The Gilt Cage",
    "barType": "gogo",
    "geo": [
     12.92598,
     100.8736
    ],
-   "name": "The Windmill",
+   "name": "The Gilt Cage",
    "region": "Walking Street"
   },
   "ws_alley": {

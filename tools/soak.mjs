@@ -347,8 +347,8 @@ function langLeak(line) {
 }
 
 const OFFPOCKET = /(Walking Street|Soi Buakhao|Buakhao|LK Metro|Tree Town|Myth Night|Jomtien)/;
-const OFFPOCKET_OK = ["in 2004", "Nite Owl", "DON'T GIVE A HOOT", "up-country"];
-// The town's media are canon-sanctioned reminiscence surfaces — the Nite Owl
+const OFFPOCKET_OK = ["in 2004", "Last Orders", "MIND THE STEP", "up-country"];
+// The town's media are canon-sanctioned reminiscence surfaces — Last Orders
 // column, the paper, the TV all speak town-wide by design (backlog §1: the
 // off-pocket grep excludes reminiscence). Suppress the check for lines those
 // verbs printed; per-line markers can't cover every letter/listing in a pool.

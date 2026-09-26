@@ -394,19 +394,19 @@ test("stubbed dice cannot hang the engine — the documented testing practice is
 });
 
 test("a multi-word name is gated on BOTH halves, and town vocabulary is not", () => {
-  // _topicKnown compared a topic only to the LAST word of a name, so "duncan"
-  // matched nothing, fell through to "not a person", and TOPICS listed Duncan
-  // Ashcroft before the player had met him — the one thing the gate exists to
+  // _topicKnown compared a topic only to the LAST word of a name, so "laurent"
+  // matched nothing, fell through to "not a person", and TOPICS listed Laurent
+  // Vasseur before the player had met him — the one thing the gate exists to
   // prevent. The naive fix (match any word) would hide the `lake` topic behind
   // Lake Gary and `mama` behind Mama Yai, so a first word counts only when it is
   // not town vocabulary, derived from room/bar names and NPC_ROLES.
   G.known = {};
-  for (const w of ["duncan", "ashcroft", "duncan ashcroft"])
+  for (const w of ["laurent", "vasseur", "laurent vasseur"])
     assert.equal(_topicKnown(w), false, `"${w}" is a person and waits to be met`);
   for (const w of ["mama", "lake", "mamasan", "boss"])
     assert.equal(_topicKnown(w), true, `"${w}" is town vocabulary, never gated`);
   G.known.powers = true;
-  assert.equal(_topicKnown("duncan"), true, "…and opens once you have met him");
+  assert.equal(_topicKnown("laurent"), true, "…and opens once you have met him");
   // the honorific cast still gates on the half that is actually the name
   G.known = {};
   assert.equal(_topicKnown("gary"), false, "Lake Gary gates on Gary");

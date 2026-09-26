@@ -34,17 +34,17 @@ cannot depend on source obscurity.
    people ever look for. It is a genuine, useful security.txt (real contact, real
    scope statement), and at the bottom it points at the column and names the flag
    format. This is the tell.
-2. **`READ COLUMN`** in game — the Nite Owl's classifieds carry **Box 15**, a
+2. **`READ COLUMN`** in game — the column's classifieds carry **Box 15**, a
    standing personal ad ending in eight groups of ciphertext.
 3. **The cipher** is Vigenère. The ad supplies the key as a riddle: *"I have
    signed off with the same four letters in every issue I have ever written and
-   not one of you has asked me why."* Every column ends `BUT, I DON'T GIVE A
-   HOOT!` → key **`HOOT`**.
-4. **Plaintext:** `TOTHESOLVERTELLTHEOWLYOUCOUNTEDTHEHOOTS`
-5. **The answer is a command.** Type `I COUNTED THE HOOTS` at the prompt (also
+   not one of you has asked me why."* Every column ends `MIND THE STEP.` → key
+   **`STEP`**.
+4. **Plaintext:** `TOTHESOLVERTELLMORTYOUCOUNTEDTHESTEPS`
+5. **The answer is a command.** Type `I COUNTED THE STEPS` at the prompt (also
    accepted without the "I", and with trailing punctuation).
-6. **Flag:** `sanuk{the_owl_gave_a_hoot_after_all}` — his catchphrase is that he
-   doesn't give one. Answering the ad in front of Mort himself, at the Queen Vic,
+6. **Flag:** `sanuk{somebody_was_counting_the_steps}` — the signoff was a warning
+   nobody read as an instruction. Answering the ad in front of Mort himself, at the Queen Vic,
    gets a different and better scene than answering it anywhere else.
 7. **Trophy:** `G.flags.owlBox15`, surfaced as one line in `WHO AM I` — the only
    line in the game that cannot be earned from inside the game.

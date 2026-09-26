@@ -226,7 +226,7 @@ function _learnVenues(text) {
 // known. Topics that aren't names always pass.
 // A MULTI-WORD NAME IS GATED ON BOTH HALVES. This compared a topic only to the
 // LAST word of a name, so "duncan" matched nothing, fell through to "not a
-// person" and TOPICS listed Duncan Ashcroft before the player had met him — the
+// person" and TOPICS listed Laurent Vasseur before the player had met him — the
 // one thing the gate exists to prevent. A blanket any-word match is the wrong
 // fix: most multi-word names here are HONORIFIC + name (Auntie Nok, Mama Yai,
 // Madam Oy, Mamasan Mem, Lake Gary), where the last word already is the name and
@@ -1557,7 +1557,7 @@ function _convoTopics(id, opts) {
   return out;
 }
 
-// Faction standing with the powers of the night — PLG (Duncan Ashcroft' Soi 6 rollup),
+// Faction standing with the powers of the night — PLG (Laurent Vasseur's Soi 6 rollup),
 // samson (the brothers' Jomtien/Pratumnak takeover), indie (Bert & the holdouts),
 // syndicate (Tan's network — NOT muscle and not a jao pho: phu kwang khwang,
 // dealing in favours rather than cash. The envelopes on the good table are what

@@ -139,7 +139,7 @@ test("the phone learns what it is told: Tan has your number, Mort has a name, th
   _setFlag("jokeWho"); G.phone.jokeDay = 0; G.room = "beach_rd_c"; _dailyJoke();
   assert.equal(G.phone.inbox[G.phone.inbox.length - 1].fromName, "Mort");
   G.owlRead = false; out = []; run("phone"); assert.match(text(), /sits unread/);
-  run("owl"); out = []; run("phone"); assert.match(text(), /This week's Nite Owl is in your inbox/);
+  run("owl"); out = []; run("phone"); assert.match(text(), /This week's Last Orders is in your inbox/);
 });
 
 test("Mort's invitation is honest about whether he is in tonight (Gordon)", () => {

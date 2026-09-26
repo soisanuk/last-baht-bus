@@ -820,7 +820,7 @@ function _arriveAt(to) {
   }
   // The Orchid Room is Pattaya Leisure's members-only back room — the velvet rope only
   // lifts for a friend of the group (Gavin's "doors open for our friends"). Do the
-  // errand, earn the standing, get in. It's also the one place Duncan Ashcroft ever is.
+  // errand, earn the standing, get in. It's also the one place Laurent Vasseur ever is.
   if (to === "orchid_room" && _faction("plg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
   // sent by Candy, introduced to Rose, or arrived via Doyle's recon — any of the
   // three is a reason the wall has a door in it tonight
@@ -3498,7 +3498,7 @@ function _doRead(arg) {
   if (/\b(book|regulars|spreadsheet|list)\b/.test(String(arg||"")) && G.itemLoc.trade_book === "inventory") { _readBook(); return; }
   if (/\b(stick|usb|thumb drive)\b/.test(String(arg||"")) && G.itemLoc.data_stick === "inventory") { _readStick(); return; }
   if (/news|paper/.test(arg)) return _doPaper();
-  if (/column|owl/.test(arg)) return _doColumn(); // READ (THE) COLUMN / NITE OWL
+  if (/column|owl/.test(arg)) return _doColumn(); // READ (THE) COLUMN / OWL
   // READ MENU and the bare MENU verb are separate paths and both have to reach
   // the Vic's generated card, or one of the two natural phrasings dead-ends.
   if (G.room === "queen_vic" && /menu|card|price|board/.test(arg || "")) { _qvCard(); return; }
@@ -3548,7 +3548,7 @@ function _doRead(arg) {
 // The Orchid Room describes two untouchables at the corner tables — a patched MC
 // president and the silent Thai man everyone defers to (the real power behind
 // Pattaya Leisure). They're scenery you can't approach: try, and the muscle (or a
-// suddenly-serious Ashcroft) heads you off. Keeps the room's central menace intact
+// suddenly-serious Vasseur) heads you off. Keeps the room's central menace intact
 // without dead-ending the player on "nobody by that name."
 const _ORCHID_DEFLECT = [
   "You take half a step toward the good table and a wall of a man in a too-tight polo is simply " +
@@ -3557,7 +3557,7 @@ const _ORCHID_DEFLECT = [
   "A hand the size of a dinner plate settles on your shoulder before you've finished turning, and " +
     "walks you back two steps, pleasant as a maître d'. \"Nobody at that table is taking meetings, " +
     "na. Drink, dance, spend — anything but that.\" The men in the corner never even look up.",
-  "Ashcroft clocks where you're looking and is beside you fast, steering you off by the elbow, the " +
+  "Vasseur clocks where you're looking and is beside you fast, steering you off by the elbow, the " +
     "party grin gone. \"Mate. MATE. You don't go over there. You don't LOOK over there. Have a drink " +
     "on me, yeah? Trust me on this one.\" For once he isn't performing.",
   "Two men you hadn't noticed peel off the wall and close the lane to the corner tables without a " +
@@ -3876,11 +3876,11 @@ function _doTalkBody(arg, topic) {
       /^(?:the )?(?:bus|buses|busses|songthaews?|baht ?bus|blue trucks?|trucks?)$/.test(String(topic).toLowerCase().trim())) {
     _say(_busTalk()); return;
   }
-  // The columnist answers for his column: any subject the Owl has printed, Mort
+  // The columnist answers for his column: any subject the column has printed, Mort
   // will stand behind to your face — he was a stranger to every word of it
   // (Desmond, round 47). Box 15's answer can also be handed to him as a topic.
   if (npc === "mort" && topic && !d.topic) {
-    if (/\bhoots?\b/.test(topic) && /count/.test(topic)) { _owlBox15Answer(); return; }
+    if (/\bsteps?\b/.test(topic) && /count/.test(topic)) { _owlBox15Answer(); return; }
     const said = _mortColumnTalk(topic);
     if (said) { _say(said); return; }
   }
@@ -4189,7 +4189,7 @@ const _CONVO_TOPIC_RULES = [
   [/\bphasa ?thai\b|\bthai language\b|\bspeak thai\b|\bmy thai\b|\bteach me\b|\blearn thai\b/, "thai"],
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
-  [/\bpattaya leisure\b|\bwdg\b/,                                                  "duncan ashcroft"],
+  [/\bpattaya leisure\b|\bwdg\b/,                                                  "laurent vasseur"],
   [/\bvillage\b|\bhometown\b|\bsad story\b|\byour story\b/,                   "home"],
   // the after-hours question (Dex, round 38): "after", "late", "karaoke", "bike" all missed on the girl who then drove him there
   // THE BOLTED DOOR. Mama Yai points a player at Kratae for exactly this, the room
@@ -4267,7 +4267,7 @@ const _CONVO_TOPIC_RULES = [
   [/the ladies|working girls/,                                                   "girls"],
   [/love life|relationship|\bdating\b|you single|got a girl/,                    "girlfriend"],
   // The White Rabbit (Naklua) — Fast Eddy and his Lao family (docs/rabbit-arc.md)
-  // NB: not \bduncan\b / \bashcroft\b — doug owns the "duncan" topic and bert "duncan ashcroft".
+  // NB: not \blaurent\b / \bvasseur\b — doug owns the "laurent" topic and bert "laurent vasseur".
   [/pattaya leisure|\bwdg\b|the rollup|soi ?6 bar/,                                   "plg"],
   [/\bvegas\b|\bbitcoin\b|\bcrypto\b|the wallet|the coin|tumbl(e|ed|ing)/,       "vegas"],
   [/\bsober\b|don'?t (you )?drink|the wagon|drinking|year off|the incident/,     "sober"],
@@ -9270,7 +9270,7 @@ THE WHOLE CARD (bare HELP is the short one):
   RIDE BUS TO <place> · RIDE THE LOOP (the whole circuit, for the breeze) · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars & your hotel room) · READ PAPER (on your phone) — the day's real headlines
-  OWL / COLUMN — the Nite Owl newsletter in your inbox (a hard copy still at the Queen Vic)
+  OWL / COLUMN — Last Orders, Mort's newsletter, in your inbox (a hard copy still at the Queen Vic)
   WATCH POLICE · WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
   WATCH SUNRISE (outside, at the far end of the night — the other one nobody sober sees)
   LESSON [phrases|reading|verbs] (Kruu Waen at Cloze, Soi Diana — ฿100 the hour, and she means it)
@@ -9375,7 +9375,7 @@ THE WHOLE CARD (bare HELP is the short one):
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
   TOPICS [person] — what they will actually talk about tonight (free, and it grows)
   WAI [person] · SAY <thai phrase> [TO <person>]
-  WATCH TV · READ PAPER — the day's real headlines · OWL — the Nite Owl newsletter · WEATHER · SCORES · LOTTERY
+  WATCH TV · READ PAPER — the day's real headlines · OWL — Last Orders, Mort's newsletter · WEATHER · SCORES · LOTTERY
   WATCH SUNSET (Blue Dog & Stinky Pinky, early evening) · WATCH SUNRISE (outside, at dawn)
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
@@ -10306,14 +10306,14 @@ function doCommand(input) {
     return;
   }
 
-  // Box 15 answered — the Nite Owl's personals cipher (docs/ctf.md). Same
+  // Box 15 answered — the column's personals cipher (docs/ctf.md). Same
   // unsurfaced treatment as the code above (no autocomplete, no wheel, no HELP,
   // no decoration) and the same shape: any state, no turn.
   //
   // Deliberately NOT behind CHEATS_ENABLED. That switch grants advantages and is
   // meant to ship false; this grants a line of prose and a trophy, and gating it
   // there would quietly retire the puzzle the moment the game is released.
-  if (/\bcount(ed)? the hoots\b/.test(lower)) { _owlBox15Answer(); return; }   // "tell mort i counted the hoots" is what the cipher says to do (Desmond, round 47)
+  if (/\bcount(ed)? the steps\b/.test(lower)) { _owlBox15Answer(); return; }   // "tell mort i counted the steps" is what the cipher says to do (Desmond, round 47)
   // CTF stage 2's close: hash-checked, the phrase is NOT in the source (docs/ctf.md)
   if (typeof _isRabbitKnock === "function" && _isRabbitKnock(lower)) { _whiteRabbitAnswer(lower); return; }
 

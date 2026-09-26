@@ -222,10 +222,10 @@ bearing):
   always 25% better when they moved out here. No runtime network, works
   from `file://` with the last bake. Flavor only — no game logic ever
   depends on a headline or a rate.
-- **The Nite Owl column**: `READ COLUMN` (or `OWL`) anywhere for the back-page
-  hoot of Mort, the old columnist who still files copy to keep the boredom and
-  the balcony at bay — a lead opinion, a bar listing, a reader's letter with
-  his dry reply, a joke, and the sign-off *BUT, I DON'T GIVE A HOOT!* Four
+- **Last Orders, Mort's column**: `READ COLUMN` (or `OWL` — the brass owl on his
+  bar) anywhere for the back page of the old columnist who still files copy to
+  keep the boredom and the balcony at bay — a lead opinion, a bar listing, a
+  reader's letter with his dry reply, a joke, and the sign-off *MIND THE STEP.* Four
   decades of the same story, and every word of it true-ish. It rotates daily.
 - **Street encounters**: the sois have their own weather — a two-handed
   pickpocket on Beach Road, a sentimental drunk bargirl, an angry Brit who's

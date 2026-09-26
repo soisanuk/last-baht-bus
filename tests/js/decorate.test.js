@@ -89,7 +89,7 @@ test("Box 15's ciphertext renders verbatim and taps nothing", () => {
   const html = _term.decorate("  " + _OWL_BOX15[1]);
   assert.equal(chips("  " + _OWL_BOX15[1]).length, 0, "the ciphertext sprouted a tappable word");
   assert.ok(!/\{\{|\}\}/.test(html), "the {{…}} markup leaked into the rendered page");
-  assert.match(html, /ACHAL GCECS FMLZZ MOSCP SMCNJ CIGAS RMOSV HVHG/,
+  assert.match(html, /LHXWW LSANX VIWEP BGKXN GNGDM GXTVM LTKMI EK/,
     "the letter groups must survive decoration byte-for-byte");
 });
 
