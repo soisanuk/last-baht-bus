@@ -3548,7 +3548,7 @@ function _doRead(arg) {
 // The Orchid Room describes two untouchables at the corner tables — a patched MC
 // president and the silent Thai man everyone defers to (the real power behind
 // Pattaya Leisure). They're scenery you can't approach: try, and the muscle (or a
-// suddenly-serious Powers) heads you off. Keeps the room's central menace intact
+// suddenly-serious Ashcroft) heads you off. Keeps the room's central menace intact
 // without dead-ending the player on "nobody by that name."
 const _ORCHID_DEFLECT = [
   "You take half a step toward the good table and a wall of a man in a too-tight polo is simply " +
@@ -3557,7 +3557,7 @@ const _ORCHID_DEFLECT = [
   "A hand the size of a dinner plate settles on your shoulder before you've finished turning, and " +
     "walks you back two steps, pleasant as a maître d'. \"Nobody at that table is taking meetings, " +
     "na. Drink, dance, spend — anything but that.\" The men in the corner never even look up.",
-  "Powers clocks where you're looking and is beside you fast, steering you off by the elbow, the " +
+  "Ashcroft clocks where you're looking and is beside you fast, steering you off by the elbow, the " +
     "party grin gone. \"Mate. MATE. You don't go over there. You don't LOOK over there. Have a drink " +
     "on me, yeah? Trust me on this one.\" For once he isn't performing.",
   "Two men you hadn't noticed peel off the wall and close the lane to the corner tables without a " +

@@ -3469,7 +3469,7 @@ const ROOMS = {
       table: [
         { req: ["orchidReported"],
           text: "The good table, and now you can't unsee it: the quiet Thai man, the " +
-            "envelopes that arrive and do not open here, the way Powers performs AT the " +
+            "envelopes that arrive and do not open here, the way Ashcroft performs AT the " +
             "table and never quite FOR it. This isn't PLG's power seat. It's their tribute " +
             "desk — the rent a foreign rollup pays to be tolerated, collected on the first of the month with " +
             "perfect manners. Everyone in the room knows except the man paying." },
@@ -3481,8 +3481,8 @@ const ROOMS = {
       ],
     },
     revisit: [
-      "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Powers keeps calling classy while it proves him wrong in every direction at once.",
-      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and, on the nights he is in the country at all, Powers on his banquette narrating himself to his own {{phone}}.",
+      "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Ashcroft keeps calling classy while it proves him wrong in every direction at once.",
+      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and, on the nights he is in the country at all, Ashcroft on his banquette narrating himself to his own {{phone}}.",
       "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and the banquette at the back is either empty or has a livestream running off it.",
       "The back room again — topless going on nude, Blue Label going on trouble, and the one soft-spoken man everyone watches without looking at him. You've learned to sit where you can see the door.",
       "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and the man whose name is on the door mistakes the whole arrangement for something he built.",
@@ -8019,7 +8019,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           { label: "Flatter the great man",
             when: (st, G) => _faction("plg") < 5,
             fx: (st, G) => { _align("plg", 1); },
-            text: "You tell him the Orchid's the best room on the soi and the VISION is undeniable. Powers glows " +
+            text: "You tell him the Orchid's the best room on the soi and the VISION is undeniable. Ashcroft glows " +
               "like a switched-on sign. \"See — YOU get it.\" The phone swings to include you; you've been " +
               "promoted from useful to family. Pattaya Leisure files you friendly." },
           { label: "Call it a room full of criminals",
@@ -11019,14 +11019,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "beer in Naklua, and I don't ask a man why he's up here instead of down there. Sit. " +
           "Tell me nothing. I love that.”",
         short: "“Fast Eddy. My place. Sit, tell me nothing — I love that.”" },
-      { topic: "vegas", text: "“Vegas, oh-six. Coffee shop off the Strip.” He settles in; this " +
+      { topic: "vegas", text: "“Vegas, thirteen. Coffee shop off the Strip.” He settles in; this " +
           "is the one he likes. “Some whale leaves his laptop open — wallet file just sitting " +
           "there, forty grand in coin nobody's watching yet. I tumbled it through three " +
           "exchanges before his latte went cold. Cashed out clean, walked away from a " +
           "government paycheck, bought a bar and a whole new life.” The grin holds a second " +
           "too long. “Smartest thing I ever did. Everybody keeps telling me it was luck. " +
           "Everybody can get bent.”",
-        short: "“Vegas oh-six — a wallet somebody left open. Best thing I ever did. Luck, they say. Bent, I say.”" },
+        short: "“Vegas, thirteen — a wallet somebody left open. Best thing I ever did. Luck, they say. Bent, I say.”" },
       { topic: "plg|pattaya leisure|pattaya leisure group|the group", text: "“Pattaya Leisure.” The warmth goes out of it. “I had a bar on Soi 6 — a " +
           "good one, mine, paid for in Vegas money. Then the suit shows up, all handshakes and " +
           "PowerPoint, and somehow the rent's a problem, the license is a problem, the girls " +
@@ -11035,7 +11035,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "“Duncan Ashcroft. Never raised his voice at me once. Didn't have to. One day somebody's " +
           "going to open that whole operation up like a cheap padlock, and I would give a great " +
           "deal to be in the room.”",
-        short: "“Pattaya Leisure took my Soi 6 bar at forty cents. Powers never raised his voice. Someone'll crack them open one day — I want to watch.”" },
+        short: "“Pattaya Leisure took my Soi 6 bar at forty cents. Ashcroft never raised his voice. Someone'll crack them open one day — I want to watch.”" },
       { topic: "rabbit", text: "“The bar? Down-the-hole, through-the-glass, all that. Cute, " +
           "right.” A pause; he decides how much to hand you. “Used to be a handle, if you go " +
           "back far enough. Long time since anybody said it to my face and meant me.” He does " +
@@ -15034,7 +15034,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "and what it doesn't: the interesting question isn't who owns the bars. It's who they pay to " +
         "be allowed to.\"",
         short: "\"A rollup. Buys the tired bars, matching shirts, calls it a group. The question is who THEY pay.\"" },
-      { topic: "duncan ashcroft", text: "\"Powers.\" A pause you could set type in. \"I've met four men like " +
+      { topic: "duncan ashcroft", text: "\"Ashcroft.\" A pause you could set type in. \"I've met four men like " +
         "him and written up three. Handsome, patient, always the first round. The fourth I did write up, and he sued.\" Mort looks at the window. \"You'll form your own view. Bert's is " +
         "worth hearing first.\"",
         short: "\"Met four like him, wrote up three. The fourth one sued. Ask Bert.\"" },
