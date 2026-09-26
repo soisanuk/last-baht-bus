@@ -1,0 +1,507 @@
+{
+ "_about": "Per pinned-test file: the round's personas with model and lens, so tools/findings-ledger.mjs can attribute each test title (a FIXED finding) to a persona. Hand-maintained from the round memory; an empty model means it was never recorded. Rounds 1–18 predate the roundNN convention and have no test file of their own.",
+ "rounds": {
+  "playtest5": {
+   "date": "2026-08-22",
+   "note": "round five, two Fable personas (desktop / mobile)",
+   "personas": [
+    {
+     "name": "Graham",
+     "model": "fable",
+     "lens": "the-settler"
+    },
+    {
+     "name": "Marcus",
+     "model": "fable",
+     "lens": "never-been"
+    }
+   ]
+  },
+  "playtest17": {
+   "date": "2026-08-24",
+   "note": "the mobile round, three personas (names not in the tests)",
+   "personas": []
+  },
+  "round19": {
+   "date": "2026-08-29",
+   "note": "the fabulist, soi 6 mode",
+   "personas": [
+    {
+     "name": "Ken",
+     "model": "fable",
+     "lens": "rail-regulars"
+    }
+   ]
+  },
+  "round22": {
+   "date": "2026-08-27",
+   "note": "three Opus personas on the merged movement build",
+   "personas": [
+    {
+     "name": "Eric",
+     "model": "opus",
+     "lens": "company-not-girls"
+    },
+    {
+     "name": "Priya",
+     "model": "opus",
+     "lens": "quest-completionist"
+    },
+    {
+     "name": "Derek",
+     "model": "opus",
+     "lens": "one-bar-week"
+    }
+   ]
+  },
+  "round23": {
+   "date": "2026-08-27",
+   "personas": [
+    {
+     "name": "Malcolm",
+     "model": "opus",
+     "lens": "prose-subeditor"
+    }
+   ]
+  },
+  "round24": {
+   "date": "2026-08-27",
+   "personas": [
+    {
+     "name": "Keith",
+     "model": "opus",
+     "lens": "owner-low-season"
+    }
+   ]
+  },
+  "round33": {
+   "date": "2026-08-30",
+   "personas": [
+    {
+     "name": "Col",
+     "model": "fable",
+     "lens": "cold-first-timer"
+    },
+    {
+     "name": "Wes",
+     "model": "fable",
+     "lens": "darkside-resident"
+    },
+    {
+     "name": "Yuki",
+     "model": "fable",
+     "lens": ""
+    }
+   ]
+  },
+  "round34": {
+   "date": "2026-09-01",
+   "note": "one each of Fable/Opus/Sonnet; which was which is not recorded",
+   "personas": [
+    {
+     "name": "Marcus",
+     "model": "",
+     "lens": "safe-route-blind"
+    },
+    {
+     "name": "Frank",
+     "model": "",
+     "lens": "one-girl-bond"
+    },
+    {
+     "name": "Gerry",
+     "model": "",
+     "lens": "after-midnight"
+    }
+   ]
+  },
+  "round35": {
+   "date": "2026-09-02",
+   "note": "one each of Fable/Opus/Sonnet; which was which is not recorded",
+   "personas": [
+    {
+     "name": "Declan",
+     "model": "",
+     "lens": "safe-route-blind"
+    },
+    {
+     "name": "Howard",
+     "model": "",
+     "lens": "returning-player"
+    },
+    {
+     "name": "Stan",
+     "model": "",
+     "lens": "lock-in"
+    },
+    {
+     "name": "Nige",
+     "model": "",
+     "lens": "quest-completionist"
+    },
+    {
+     "name": "Ray",
+     "model": "",
+     "lens": "safe-route-blind"
+    },
+    {
+     "name": "Malcolm",
+     "model": "",
+     "lens": "prose-subeditor"
+    }
+   ]
+  },
+  "round36": {
+   "date": "2026-09-03",
+   "personas": [
+    {
+     "name": "Lionel",
+     "model": "",
+     "lens": "fixed-habits-rooms"
+    },
+    {
+     "name": "Nige",
+     "model": "",
+     "lens": "quest-completionist"
+    },
+    {
+     "name": "Ray",
+     "model": "",
+     "lens": "safe-route-blind"
+    },
+    {
+     "name": "Malcolm",
+     "model": "",
+     "lens": "prose-subeditor"
+    }
+   ]
+  },
+  "round37": {
+   "date": "2026-09-03",
+   "personas": [
+    {
+     "name": "Colin",
+     "model": "",
+     "lens": "money-ledger"
+    },
+    {
+     "name": "Darren",
+     "model": "",
+     "lens": "commute-home"
+    },
+    {
+     "name": "Gordon",
+     "model": "",
+     "lens": "phone-object"
+    }
+   ]
+  },
+  "round38": {
+   "date": "2026-09-03",
+   "personas": [
+    {
+     "name": "Hamish",
+     "model": "",
+     "lens": "people-collector"
+    },
+    {
+     "name": "Frank",
+     "model": "",
+     "lens": "old-save-loader"
+    },
+    {
+     "name": "Dex",
+     "model": "",
+     "lens": "night-owl"
+    }
+   ]
+  },
+  "round39": {
+   "date": "2026-09-04",
+   "personas": [
+    {
+     "name": "Bronwyn",
+     "model": "",
+     "lens": "cold-first-timer"
+    },
+    {
+     "name": "Trevor",
+     "model": "",
+     "lens": "one-bar-week"
+    },
+    {
+     "name": "Eamonn",
+     "model": "",
+     "lens": "soi6-cast"
+    }
+   ]
+  },
+  "round40": {
+   "date": "2026-09-04",
+   "personas": [
+    {
+     "name": "Vic",
+     "model": "sonnet",
+     "lens": "venues-cast"
+    },
+    {
+     "name": "Piotr",
+     "model": "fable",
+     "lens": "priced-fixer"
+    },
+    {
+     "name": "Keith",
+     "model": "opus",
+     "lens": "owner-low-season"
+    }
+   ]
+  },
+  "round41": {
+   "date": "2026-09-04",
+   "personas": [
+    {
+     "name": "Des",
+     "model": "opus",
+     "lens": "owner-money-ledger"
+    }
+   ]
+  },
+  "round42": {
+   "date": "2026-09-04",
+   "personas": [
+    {
+     "name": "Hugo",
+     "model": "opus",
+     "lens": "thai-speaker"
+    },
+    {
+     "name": "Roland",
+     "model": "sonnet",
+     "lens": "no-bar-circuit"
+    },
+    {
+     "name": "Jacko",
+     "model": "opus",
+     "lens": "nine-am-survivor"
+    },
+    {
+     "name": "Anders",
+     "model": "opus",
+     "lens": "paying-student"
+    },
+    {
+     "name": "Barry",
+     "model": "sonnet",
+     "lens": "never-pays"
+    }
+   ]
+  },
+  "round44": {
+   "date": "2026-09-05",
+   "personas": [
+    {
+     "name": "Marco",
+     "model": "opus",
+     "lens": "bi-orientation"
+    },
+    {
+     "name": "Trev",
+     "model": "sonnet",
+     "lens": "bar-games"
+    },
+    {
+     "name": "Bill",
+     "model": "opus",
+     "lens": "dog-companion"
+    }
+   ]
+  },
+  "round46": {
+   "date": "2026-09-06",
+   "personas": [
+    {
+     "name": "Dougie",
+     "model": "fable",
+     "lens": "lay-low-loud"
+    },
+    {
+     "name": "Gareth",
+     "model": "sonnet",
+     "lens": "filler-girls"
+    },
+    {
+     "name": "Owen",
+     "model": "",
+     "lens": "every-door"
+    },
+    {
+     "name": "Kenji",
+     "model": "fable",
+     "lens": "night-ride-chased"
+    },
+    {
+     "name": "Des",
+     "model": "opus",
+     "lens": "owner-money-ledger"
+    },
+    {
+     "name": "Kai",
+     "model": "",
+     "lens": ""
+    }
+   ]
+  },
+  "round47": {
+   "date": "2026-09-07",
+   "note": "rounds 47, 47b, 47c, 47d and the four Fable waves share this file",
+   "personas": [
+    {
+     "name": "Stuart",
+     "model": "",
+     "lens": "old-save-loader"
+    },
+    {
+     "name": "Maureen",
+     "model": "fable",
+     "lens": "never-spoken-to"
+    },
+    {
+     "name": "Colm",
+     "model": "fable",
+     "lens": "topics-first"
+    },
+    {
+     "name": "Pimmy",
+     "model": "fable",
+     "lens": "bangkok-bridge"
+    },
+    {
+     "name": "Rhiannon",
+     "model": "fable",
+     "lens": "female-player"
+    },
+    {
+     "name": "Malcolm",
+     "model": "fable",
+     "lens": "expat-subeditor"
+    },
+    {
+     "name": "Lars",
+     "model": "fable",
+     "lens": "companion-night"
+    },
+    {
+     "name": "Graham",
+     "model": "fable",
+     "lens": "staff-affair"
+    },
+    {
+     "name": "Kenji",
+     "model": "fable",
+     "lens": "night-ride-chased"
+    },
+    {
+     "name": "Arturo",
+     "model": "fable",
+     "lens": "saga-to-the-end"
+    },
+    {
+     "name": "Judith",
+     "model": "fable",
+     "lens": "interrupted-reloads"
+    },
+    {
+     "name": "Henri",
+     "model": "fable",
+     "lens": "gents-club-notebook"
+    },
+    {
+     "name": "Brenda",
+     "model": "fable",
+     "lens": "town-calendar"
+    },
+    {
+     "name": "Desmond",
+     "model": "fable",
+     "lens": "owl-witness"
+    },
+    {
+     "name": "Ines",
+     "model": "fable",
+     "lens": "notes-first-timer"
+    },
+    {
+     "name": "Ruth",
+     "model": "sonnet",
+     "lens": "spoiler-hunter"
+    },
+    {
+     "name": "Geraint",
+     "model": "opus",
+     "lens": "the-regular"
+    },
+    {
+     "name": "Cake",
+     "model": "",
+     "lens": ""
+    }
+   ]
+  },
+  "round49": {
+   "date": "2026-09-16",
+   "note": "round 50 (Kevin, pool-shark) shares this file",
+   "personas": [
+    {
+     "name": "Brian",
+     "model": "opus",
+     "lens": "early-doors"
+    },
+    {
+     "name": "Gary",
+     "model": "sonnet",
+     "lens": "off-the-soi"
+    },
+    {
+     "name": "Helen",
+     "model": "opus",
+     "lens": "the-interviewer"
+    },
+    {
+     "name": "Kevin",
+     "model": "",
+     "lens": "pool-shark"
+    }
+   ]
+  },
+  "round52": {
+   "date": "2026-09-26",
+   "personas": [
+    {
+     "name": "Graham",
+     "model": "fable",
+     "lens": "identifiability"
+    }
+   ]
+  },
+  "round53": {
+   "date": "2026-09-26",
+   "personas": [
+    {
+     "name": "Neville",
+     "model": "fable",
+     "lens": "sober"
+    },
+    {
+     "name": "Marek",
+     "model": "opus",
+     "lens": "body-ledger"
+    },
+    {
+     "name": "Clive",
+     "model": "sonnet",
+     "lens": "hotel-hopper"
+    }
+   ]
+  }
+ }
+}
