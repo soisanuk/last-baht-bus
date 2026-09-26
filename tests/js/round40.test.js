@@ -41,11 +41,20 @@ test("every regular has a night that is his, whatever the season — and Tan nam
   assert.match(text(), new RegExp(_ANCHOR_NAMES[_anchorNight("randy")] + ", always"));
 });
 
-test("TRAVEL through the dark with the torch off says so first (Vic)", () => {
+test("TRAVEL through the dark with the torch off stops at its edge; the same order again walks it and says so (Vic, then Graham)", () => {
+  // Vic (round 40) got the warning; Lars (round 47) got an honest one; Graham (round 51)
+  // was still bitten twice on the Pratumnak hill "with only a parenthetical". A warning you
+  // cannot act on is a caption — so TRAVEL stops where LIGHT ON is possible, and insisting walks.
   G.room = "buakhao_pt"; G.visited.khao_talo_bar = true; G.lightOn = false; G.hunger = 0; G.thirst = 0;
   const saved = _rand; _rand = () => 0.99;
-  try { run("travel daeng's place"); } finally { _rand = saved; }
-  assert.match(text(), /The way runs through the dark and you're walking it without a light/);
+  try {
+    run("travel daeng's place");
+    assert.equal(G.room, "buakhao_pt", "the verge is the next step and it is dark: no step taken");
+    assert.match(text(), /LIGHT ON first/);
+    out = []; run("travel daeng's place");
+    assert.match(text(), /The way runs through the dark and you're walking it without a light/);
+    assert.equal(G.room, "khao_talo_bar", "insisting walks it");
+  } finally { _rand = saved; }
 });
 
 test("staff talk about the people they work with, the room, and the wallet (Vic / Trevor)", () => {

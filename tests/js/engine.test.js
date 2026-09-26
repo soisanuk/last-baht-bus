@@ -184,6 +184,7 @@ test("fast travel: discovered places only, at exact walking pace", () => {
   run("look"); // standing in it puts it on the list
   assert.ok(state().visited.candy_bar);
   state().room = "jomtien_beach";
+  state().lightOn = true; state().battery = 80;   // the Pratumnak hill is dark; a torch-off TRAVEL stops at its edge (round 52)
   const t0 = state().nightTurn;
   const hops = _hops("jomtien_beach", "candy_bar");
   assert.ok(hops > 1, "the trip is real");
@@ -195,7 +196,7 @@ test("fast travel: discovered places only, at exact walking pace", () => {
 test("fast travel: ENTER and GO route through it; rain blocks; bare TRAVEL lists", () => {
   state().room = "candy_bar";
   run("look");
-  state().room = "jomtien_beach";
+  state().room = "jomtien_beach"; state().lightOn = true; state().battery = 80;
   run("enter candy bar");
   assert.equal(state().room, "candy_bar", "ENTER falls back to fast travel");
   state().room = "jomtien_beach";
@@ -338,6 +339,7 @@ test("fast travel: your hotel needs no discovering, but the clerk still gates it
   assert.equal(state().room, "jomtien_beach");
   state().flags.hasWallet = true;
   state().itemLoc.wallet = "inventory";
+  state().lightOn = true; state().battery = 80;
   run("travel hotel");
   assert.equal(state().room, "hotel_room");
   assert.ok(state().flags.act1Done, "walking home with the wallet ends Act One");

@@ -328,6 +328,7 @@ function newGame() {
     ccibRadar: null,     // who CCIB has a file on after the heist: {player,eddy,nont} — set at the morning scene, rides the export (docs/bangkok-concept.md)
     ccibLowUntil: 0,     // the lay-low window end (G.day), see _ccibLowTick
     motoAsked: 0,        // the turn the piwin last asked "where to?" — a bare place typed next answers him
+    travelDark: null,    // {key, turn}: TRAVEL stopped at the edge of the dark; the same TRAVEL again walks it
     lastNightSaid: null,   // the morning ledger, kept so LAST NIGHT can reprint it
     motBoots: 0,         // baht handed to Mot toward the football boots he named at dinner
     kyleVouchDay: 0,     // the day Bert agreed to give Kyle a shift; _kyleTick lands the shift after it

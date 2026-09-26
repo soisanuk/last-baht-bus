@@ -2793,10 +2793,23 @@ const ROOMS = {
       "by someone who knew what they were looking at. Crystal Palace is older than most of " +
       "the girls in it, and carries itself accordingly.",
     reads: {
-      poster: "The faded poster: dancers in numbered order, feathered and rhinestoned, a " +
-        "lineup from a different decade. Nobody in it works here now. One of them, the " +
-        "regulars will tell you quietly, owns the place — and looking from the poster to " +
-        "the office door, you can believe it.",
+      // No. 71 is Madam Oy — the Gold Rush poster names her, Bee and Kesinee both
+      // danced beside her — so a man who has stood in her office reads the circle
+      // for what it is; before that it is a circle (Graham, round 51: EXAMINE
+      // DANCERS dead-ended under a desc that advertises them)
+      poster: [
+        { req: ["hasWallet"],
+          text: "The faded poster: dancers in numbered order, feathered and rhinestoned, a " +
+            "lineup from a different decade. Nobody in it works here now. No. 71, circled in " +
+            "red much later by somebody who knew: you have stood in her office. Madam Oy, " +
+            "before the teak set in — and looking from the poster to the office door here, " +
+            "you can believe the regulars' other story, that one of the girls in it owns this place." },
+        { text: "The faded poster: dancers in numbered order, feathered and rhinestoned, a " +
+            "lineup from a different decade. Nobody in it works here now. One of them, the " +
+            "regulars will tell you quietly, owns the place — and looking from the poster to " +
+            "the office door, you can believe it. No. 71 is circled in red marker, much later, " +
+            "by a hand that knew what it was looking at." },
+      ],
     },
     revisit: [
       "Back into Crystal Palace — rhinestones on everything that holds still, the cashier's cage glittering like a shrine.",
@@ -3569,7 +3582,7 @@ const ROOMS = {
       "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.",
       "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
     ],
-    lateDesc: "The middle of Soi 6 past midnight: the short-time places have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours and is most of the light left on this stretch; either side of it the grilles are down and the ice buckets are out on the pavement.",
+    lateDesc: "The middle of Soi 6 past midnight: the short-time places have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours, and the three beer bars either side of it keep the Vic's — this is the light left on Soi 6 now; past them the grilles are down and the ice buckets are out on the pavement.",
     exits: { w: "soi6_street", e: "soi6_deep" },
     venues: ["queen_vic", "sunset_rail", "bay_watch", "sandy_toes"],
   },

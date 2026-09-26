@@ -28,7 +28,7 @@ test("the Darkside is not an island: the crossing walks west to Soi Buakhao, and
   G.room = "sukhumvit_crossing"; run("w"); assert.equal(G.room, "sukhumvit_verge");
   assert.ok(ROOMS.sukhumvit_verge.dark, "and it is dark — the streak counts");
   run("w"); assert.equal(G.room, "buakhao_pt");
-  G.room = "khao_talo"; G.visited.stinky_bar = true; G.hunger = 0; G.thirst = 0; const t0 = G.turns;
+  G.room = "khao_talo"; G.visited.stinky_bar = true; G.hunger = 0; G.thirst = 0; G.lightOn = true; G.battery = 80; const t0 = G.turns;
   // the route crosses Sukhumvit on foot, which is a ROLL (4%+): the unidentified
   // flake of rounds 37–40 was the truck ending the night mid-assert
   const saved = _rand; _rand = () => 0.99;

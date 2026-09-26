@@ -1297,9 +1297,28 @@ function _doTravel(arg) {
   // with the torch off (Vic, round 40)
   // a line that says "LIGHT ON first" and then walks you into the dark anyway is
   // not a warning (Lars, round 47): say what is actually happening
-  if (!(G.lightOn && G.battery > 0) && route.some(r => ROOMS[r] && ROOMS[r].dark))
+  // …and a warning you cannot act on is a caption (Graham, round 51: TRAVEL from
+  // Jomtien at eleven walked him through the Pratumnak hill dark, torch off, two
+  // bites, "with only a parenthetical"). So TRAVEL now STOPS at the last lit room
+  // before the dark — where LIGHT ON is a thing you can do — the same shape as the
+  // rain pinning you where it catches you. Insisting is allowed: the same TRAVEL
+  // typed again from that spot walks the dark, blind, and says so (the piwin's
+  // balk-is-a-balk idiom). Starting already IN the dark, you get the line and walk.
+  const _noLight = !(G.lightOn && G.battery > 0);
+  const _darkAt = _noLight ? route.findIndex(r => ROOMS[r] && ROOMS[r].dark) : -1;
+  const _insist = G.travelDark && G.travelDark.key === G.room + ">" + dest && G.turns - G.travelDark.turn <= 3;
+  const _stopAt = (_darkAt >= 0 && !_room().dark && !_insist) ? _darkAt : -1;
+  if (_darkAt >= 0 && _stopAt < 0)
     _say("(The way runs through the dark and you're walking it without a light — the soi dogs pick the route. LIGHT ON next time.)", "dim");
+  const _darkStop = () => {
+    G.travelDark = { key: G.room + ">" + dest, turn: G.turns };   // keyed on where you STOPPED — the same order from here walks
+    const here = _barName(G.room) || _room().name;
+    _say(`(${_clockStr()} — you stop at ${here}. The way on to ${_barName(dest)} runs through the dark with no light on. ` +
+      (G.battery > 0 ? "LIGHT ON first, or TRAVEL <place> again to walk it blind and let the soi dogs pick the route.)"
+        : "Your phone is dead, so there is no light to turn on: TRAVEL <place> again to walk it blind, or find a bike.)"), "dim");
+  };
   for (let i = 0; i < hops - 1; i++) {
+    if (i === _stopAt) { _darkStop(); return; }
     if (route[i] && _footCrossing(G.room, route[i])) return;   // TRAVEL walks the real route, highway included
     if (route[i]) G.room = route[i];   // a step of actual soi, quietly walked
     _tick();
@@ -1321,6 +1340,7 @@ function _doTravel(arg) {
   // so OUT of a venue fronting more than one road (Take Care Me, on the
   // Jomtien/Thappraya corner) returns you to where you really were, not
   // wherever its static exits.out happens to point (Cartographer, 2026-08-27).
+  if (_stopAt === hops - 1) { _darkStop(); return; }   // the destination itself is the first dark room
   G.enteredVia = G.room;
   _arriveAt(dest);
 }
@@ -1641,7 +1661,7 @@ const _READ_NOUNS = {
   // the one `reads.board` in the game is Myth Night's DJ request sheet — the
   // tap-list aliases went with the craft-beer bars that never existed there
   board: ["chalkboard", "blackboard", "clipboard", "slip", "request", "requests", "request sheet"],
-  poster: ["flyer"],
+  poster: ["flyer", "dancers", "dancer", "lineup", "line-up", "numbered", "no. 71", "no 71", "number 71", "71", "seventy-one"],
   // "fridge" rides the photos key because the one room that authors both has
   // them on the same object — the Sundowner's fridge IS the photo wall, so a
   // player who examines either gets the story (Wes, round 33). Harmless in the
@@ -1792,7 +1812,15 @@ function _doExamine(arg) {
   }
   // A go-go's poster is generated (which girl depends on the bar and the trip),
   // so it is handled here rather than as a static room `reads` entry.
-  if (/\b(poster|flyer|promo)\b/.test(arg) && _hasPoster()) { _doPoster(); return; }
+  // …but a room whose OWN poster is authored — Crystal Palace's faded lineup on the
+  // back wall, the one the promo mechanic's comment cites — reads that first and the
+  // promo by the door second; the generic one was eating the distinctive one
+  // (Graham, round 51: EXAMINE POSTER never reached No. 71)
+  if (/\b(poster|flyer|promo)\b/.test(arg) && _hasPoster()) {
+    const own = _room().reads && _room().reads.poster ? _roomRead(arg, false) : null;
+    if (own) { _say(own); _say("The other poster, by the door, is newer.", "dim"); }
+    _doPoster(); return;
+  }
   // The sticker on the film poster at the LK Metro mouth (docs/ctf.md). Its own
   // branch rather than a `reads` entry because the QR needs a display class, and
   // `reads` prints unclassed prose.
@@ -3715,9 +3743,12 @@ function _doTalkBody(arg, topic) {
   // and good move (Angela's "What, the CV?"), and TOPICS lists it as "herself"
   // rather than as the schema word "angela" (Colm, round 47: five Queen Vic
   // regulars each offering their own name back). So the pronoun has to reach it.
+  let _selfAsk = false;
   if (topic && /^(her|him|them|your|it)self$|^you$/.test(String(topic).trim()) &&
-      !(NPCS[npc].dialogue || []).some(d => d.topic && _topicHits(d.topic, String(topic).trim())))   // Jun's "yourself" node (Margarethe, round 47)
+      !(NPCS[npc].dialogue || []).some(d => d.topic && _topicHits(d.topic, String(topic).trim()))) {   // Jun's "yourself" node (Margarethe, round 47)
     topic = NPCS[npc].name.split(" ").pop().toLowerCase();
+    _selfAsk = true;
+  }
   // the girl who took you on her bike remembers it — and "late" is not "you not
   // friend yet" to a man she has ridden three nights (Kenji, round 47)
   if (topic && G.rideLog && G.rideLog[npc] && /\b(late|late-late|after two|ride|the ride|bike|motorbike|your bike|last night|where we went|that night)\b/i.test(String(topic))) {
@@ -3745,6 +3776,10 @@ function _doTalkBody(arg, topic) {
     const norm = _convoTopic(topic);
     if (norm !== topic) { const d2 = _pickDialogue(npc, norm); if (d2 && d2.topic) d = d2; }
   }
+  // a man with no self-topic asked about himself gets his hello — the gist, once
+  // it has been heard — not "try somebody who was there" from the man himself a
+  // minute after he introduced himself (Graham, round 51: Doug)
+  if (_selfAsk && d && !d.topic) { _deliver(npc, d, false, false); _questOffer(npc); return; }
   // The girl you jilted tonight — walked out with somebody else in front of
   // her — gives one cooled hello before normal service resumes. The bond and
   // rep costs were already paid; this is the cost being VISIBLE.
@@ -4086,6 +4121,9 @@ function _doTalkBody(arg, topic) {
     const _n2 = _convoTopic(topic);
     const gated = NPCS[npc].dialogue.some(e => e.topic && String(e.topic).split("|").some(k => k === topic || topic.includes(k) ||
       (_n2 !== topic && (k === _n2 || _n2.includes(k)))));
+    // the room's own furniture: a thing the desc advertises and EXAMINE answers is
+    // not "not my story" from the woman who works under it — she points at it
+    if (!gated && _fixtureTalk(npc, topic)) { _questOffer(npc); return; }
     // A girl's standard deflection is the language itself, and at fluency it is
     // gone: she cannot say she does not understand a question she plainly did
     // (Mario, round 42). She still doesn't have to answer — but the refusal has
@@ -4638,7 +4676,11 @@ function _runChoice(id, c) {
 // strict so a real topic word doesn't get swallowed as a choice.
 function _convoPickChoice(bare, exactOnly) {
   const id = _convoActive();
-  if (!id) return false;
+  // the conversation LAPSED (she walked, you walked, the clock moved) and the label
+  // is still on the screen: "press her for names" fell all the way to TRAVEL's
+  // "you only know the way to bars" (Graham, round 51). A label the game printed
+  // is answered by the game, live partner or none.
+  if (!id) return _staleChoiceAnywhere(bare);
   let choices = _convoChoices();
   if (!choices.length) choices = _convoChoices(true); // the last offered set (a hint still on screen) — exact or loose
   if (!choices.length) return false;
@@ -4656,9 +4698,68 @@ function _convoPickChoice(bare, exactOnly) {
     // to the TELL verb (completionist playtest 2026-08-22)
     const stale = _convoChoices("raw").find(x => nm(x.label) === nb);
     if (stale) { _say(`(That moment's passed — ${_convoName(id)} is past needing it now.)`, "dim"); return true; }
-    return false;
+    return _staleChoiceAnywhere(bare);
   }
   _runChoice(id, c);
+  return true;
+}
+// Every label any partner ever printed (G.convoChoiceMemo keeps the node per
+// partner), so a lapsed conversation's chip still gets a sentence and not a verb.
+function _staleChoiceAnywhere(bare) {
+  const nm = s => s.toLowerCase().replace(/['’]/g, "").replace(/[.,!?]+/g, "").trim();
+  const nb = nm(bare);
+  if (nb.length < 4) return false;
+  for (const [who, idx] of Object.entries(G.convoChoiceMemo || {})) {
+    const d = ((NPCS[who] || {}).dialogue || [])[idx];
+    if (d && d.choices && d.choices.some(x => nm(x.label) === nb)) {
+      _say(`(That moment's passed — ${_convoName(who)} isn't in that conversation any more. TALK to ${NPCS[who].name.split(" ").pop().toUpperCase()} and see where it stands.)`, "dim");
+      return true;
+    }
+  }
+  return false;
+}
+
+// ASK <staff> ABOUT <a fixture of this room>: the poster, the bell, the tank —
+// anything the room's own `reads:` answers. The mamasan of Crystal Palace shrugged
+// at "71" and "poster" under a desc whose one distinctive object is that poster
+// (Graham, round 51). She doesn't tell the story — EXAMINE does — she points.
+// Register by _hoursRegister, same as the hours; pooled, because every bar has
+// furniture and every girl in it gets asked.
+const _FIXTURE_FLOOR = [
+  "\"That old thing?\" {n} nods at it without looking. \"Go look, na — it not going anywhere.\"",
+  "{n} tips her chin at it. \"Every customer ask. Look yourself, tilac, I working.\"",
+  "\"Mm, the {k}.\" {n} shrugs. \"Been here longer than me. You look, you tell me.\"",
+  "{n} laughs. \"You want story about {k}? Look first. Then maybe I tell.\"",
+  "\"Same {k} every night,\" {n} says. \"You want, you go see. I not going with you, I have stool.\"",
+];
+const _FIXTURE_HOUSE = [
+  "{n} glances at it the way you glance at furniture. \"It's there. Have a look — nobody's charging.\"",
+  "\"The {k}?\" {n} doesn't turn round. \"Go and read it. I've read it.\"",
+  "{n} lifts an eyebrow. \"You've got eyes. Use them on it, then ask me something I can't see from here.\"",
+  "\"Ask it yourself,\" {n} says, not unkindly. \"It's right there.\"",
+  "{n} nods at it. \"Came with the room. Everything you'd get out of me you'd get faster looking.\"",
+];
+const _FIXTURE_PUNTER = [
+  "{n} follows your eyes to it. \"Been there since before me. Go and have a look — I'll mind your stool.\"",
+  "\"That? Part of the wallpaper, mate. Go on, have a look at it.\"",
+  "{n} shrugs. \"Never looked at it properly myself. You look, you tell me.\"",
+  "\"It's not going anywhere,\" {n} says. \"Neither am I. Have a look.\"",
+];
+function _fixtureTalk(npc, topic) {
+  const reads = _room().reads;
+  if (!reads || !topic || !NPCS[npc]) return false;
+  const t = String(topic).toLowerCase();
+  let key = null;
+  for (const [k, aliases] of Object.entries(_READ_NOUNS)) {
+    if (!reads[k]) continue;
+    if (t === k || t.includes(k) || aliases.some(a => t === a || (a.length >= 3 && t.includes(a)))) { key = k; break; }
+  }
+  if (!key && reads[t]) key = t;
+  if (!key) return false;
+  const reg = _hoursRegister(npc);
+  const pool = reg === "floor" ? _FIXTURE_FLOOR : reg === "house" ? _FIXTURE_HOUSE : _FIXTURE_PUNTER;
+  _say(_fmt(_pickVary(pool, "fixture:" + reg), { n: NPCS[npc].name, k: key }));
+  _say(`(EXAMINE ${key.toUpperCase()})`, "dim");
   return true;
 }
 
@@ -10678,7 +10779,9 @@ function doCommand(input) {
   // (a chip tap submits the label), beats verb parsing — otherwise a choice like
   // "Hear him out" is eaten by the LISTEN verb before the conversation layer sees
   // it. Loose/partial typed matches still fall through to _convoResolve.
-  if (_convoActive() && _convoPickChoice(lower.replace(/[,.!?]+$/, "").trim(), true)) {
+  // (no _convoActive() guard here: with no live partner the matcher answers a
+  // LAPSED label — "that moment's passed" — instead of letting it reach a verb)
+  if (_convoPickChoice(lower.replace(/[,.!?]+$/, "").trim(), true)) {
     _tick(); return;
   }
 
@@ -11488,6 +11591,21 @@ function doCommand(input) {
           doCommand("ride bus to " + lower);
           return;
         }
+        // …and a PLACE that isn't on this truck's route gets the driver's head-shake,
+        // not "the soi blinks at you" (Graham, round 51: "soi buakhao" off a Beach Road list)
+        const _isPlace = toks.length && Object.values(ROOMS).some(r =>
+          (r.region && bn(r.region) === toks.join(" ")) || bn(r.name) === toks.join(" ") || (r.bar && bn(r.bar) === toks.join(" ")));
+        if (_isPlace) { doCommand("ride bus to " + lower); return; }
+      }
+      // a bare venue name — "queen vic", "stinky pinky" — is where you want to go
+      // (Graham, round 51). Its own door on this street is an ENTER; a bar you've
+      // found is a TRAVEL, which voices its own refusals. One unambiguous hit only.
+      if (lower.length >= 5 && typeof _travelDests === "function") {
+        const k = _pnm(lower);
+        const doors = _venuesHere(_room()).filter(id => _pnm(ROOMS[id].bar || ROOMS[id].name).includes(k));
+        const known = _travelDests().filter(id => _pnm(_barName(id) || "").includes(k));
+        if (doors.length === 1) { doCommand("enter " + lower); return; }
+        if (!doors.length && known.length === 1) { doCommand("travel " + lower); return; }
       }
       if (_politePhrase(lower)) break;
       if (_convoResolve(lower)) break;

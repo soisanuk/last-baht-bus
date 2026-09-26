@@ -577,7 +577,7 @@ test("the TRAVEL refusal explains itself and names the ride (Gerry)", () => {
   // tick, instead of refusing. The refusal path survives for a genuinely
   // disconnected pair; the walk is what the transport thesis promised.
   _setFlag("act1Done"); G.room = "buakhao_n"; G.visited.khao_talo_bar = true;
-  G.hunger = 0; G.thirst = 0; G.soc.drunk = 0; const t0 = G.turns;
+  G.hunger = 0; G.thirst = 0; G.soc.drunk = 0; G.lightOn = true; G.battery = 80; const t0 = G.turns;
   out = []; run("travel daengs place");
   assert.doesNotMatch(text(), /No walking route/, "there is one now");
   assert.equal(G.room, "khao_talo_bar", "walked all the way out east");
