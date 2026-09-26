@@ -13,14 +13,9 @@ var NEWS_FEED = [
     "d": "25 Sep 2026"
   },
   {
-    "t": "Pattaya cannabis farm fire leaves residents and rescuers dizzy",
+    "t": "Pattaya raises red flags after six boats sink in rough seas",
     "s": "Thaiger",
     "d": "25 Sep 2026"
-  },
-  {
-    "t": "Foreign tourist missing after falling into a Pattaya canal",
-    "s": "Thai PBS World",
-    "d": "24 Sep 2026"
   },
   {
     "t": "Pattaya floods leave one foreign man missing on Thursday",
@@ -28,9 +23,9 @@ var NEWS_FEED = [
     "d": "24 Sep 2026"
   },
   {
-    "t": "Pattaya’s beachfront economy battered by relentless monsoon weather",
-    "s": "Pattaya Mail",
-    "d": "25 Sep 2026"
+    "t": "Foreign tourist missing after falling into a Pattaya canal",
+    "s": "Thai PBS World",
+    "d": "24 Sep 2026"
   },
   {
     "t": "Pattaya crews clear storm damage and prepare for more rain",
@@ -43,13 +38,13 @@ var NEWS_FEED = [
     "d": "25 Sep 2026"
   },
   {
-    "t": "Heavy rain and flooding in Bangkok disrupts traffic and prompts evacuations",
-    "s": "AP News",
-    "d": "26 Sep 2026"
+    "t": "Over 21,000 runners flood into Pattaya for marathon weekend despite rain threat",
+    "s": "Pattaya Mail",
+    "d": "25 Sep 2026"
   },
   {
-    "t": "Pakistan open FIFA ASEAN Cup campaign with 4-0 defeat against Thailand",
-    "s": "Dawn",
+    "t": "Watch: Bangkok declared flood disaster zone",
+    "s": "BBC",
     "d": "26 Sep 2026"
   },
   {
@@ -63,20 +58,25 @@ var NEWS_FEED = [
     "d": "26 Sep 2026"
   },
   {
+    "t": "Thailand’s most unhinged ads (you won’t want to skip)",
+    "s": "Time Out Worldwide",
+    "d": "25 Sep 2026"
+  },
+  {
     "t": "City lashed by almost 300mm of rain in last 48 hours",
     "s": "Thai PBS World",
     "d": "26 Sep 2026"
   },
   {
-    "t": "Asian Games Aichi-Nagoya 2026: Puripol Boonson promised Thailand men's 100m gold. Then he delivered in Games-record time",
-    "s": "olympics.com",
-    "d": "25 Sep 2026"
+    "t": "Heavy rain to continue nationwide as Bangkok drowns",
+    "s": "Thaiger",
+    "d": "26 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-25","USD":33.34,"AUD":23.44,"GBP":44.19,"EUR":38.02};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-26","temp":25,"humid":94,"code":81,"hi":27,"rain":100};
+var WX_NOW = {"date":"2026-09-27","temp":24,"humid":95,"code":80,"hi":26,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4286,"date":"2026-09-26","baht":67600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":84098,"thb":2816622};
+var BTC = {"usd":84079,"thb":2813975};
