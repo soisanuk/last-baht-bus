@@ -2954,6 +2954,10 @@ const _DIRS_CARDINAL = new Set(["n", "s", "e", "w", "in", "out", "up", "down"]);
 // heard of, never stood in, and no street you have walked lists its door
 function _venueUnfound(rm) {
   if (!ROOMS[rm] || !ROOMS[rm].bar || ROOMS[rm].invite || (G.visited || {})[rm]) return false;
+  // the venue whose stairs lead to your own bed is found — CHECKOUT moves you in
+  // without walking, and JOURNAL called the Queen Vic a door never found from
+  // the room above it (Tomasz, round 54)
+  if (typeof _hotelRoomId === "function" && ROOMS[rm].exits && Object.values(ROOMS[rm].exits).includes(_hotelRoomId())) return false;
   if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(rm)) return false;
   for (const r of Object.keys(G.visited || {})) if (ROOMS[r] && (ROOMS[r].venues || []).includes(rm)) return false;
   return true;
@@ -4704,8 +4708,24 @@ function _maybeIncomingText() {
       "you sleep? cake say the fan in the back is dying. i say tell boss. so: telling boss 555",
     ], "afftext")); buzz(); return;
   }
+  // your OWN staff do not text the guv'nor a customer's invite — "when you come
+  // see me?? i keep you seat every night" to the man pouring her drinks, and "you
+  // go other bar?? i KNOW" after a night he stood his own rail (Rolf, round 54)
+  if (typeof _barOwned === "function" && _barOwned() && typeof _barStaff === "function" && _barStaff().includes(id) && t >= 2) {
+    _pushMsg(id, _pickVary([
+      "boss the ice man say tomorrow 5 not 4. i tell him 4. he say ok 555",
+      "cake count the float 3 time tonight. it is right. she still count 🙄",
+      "quiet tonight boss. i sit with old man from the pool table so he stay. he buy one more ❤️",
+      "you look tired today na boss. sleep. bar is fine. i am here",
+      "my mama ask what my boss is like. i say ok. she say only ok?? 555",
+      "the fan in the back is dying again. telling boss. telling boss twice 😤",
+    ], "stafftext")); buzz(); return;
+  }
+  // a woman you sat with TONIGHT does not text that you never come (Tomasz, round 54:
+  // "you no come i sad" twenty minutes after he left her bar with a drink bought)
+  const _sawYou = ((G.soc.drinkCount || {})[id] || 0) > 0 || ((G.soc.barTurns || {})[_npcRoom(id)] || 0) >= 6;
   if (t >= 3) { // her farang: longing, jealousy, the real ones — no scam game on you
-    if (roll < 0.45) { G.phone.invite = { id, day: G.day };
+    if (roll < 0.45 && !_sawYou) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, _pickVary([
         `when you come see me?? 🥺 i keep you seat every night, you no come i sad 💔`,
         `i tell mamasan tonight my farang come. dont make me liar na 😤❤️`,
@@ -4714,7 +4734,7 @@ function _maybeIncomingText() {
     else _pushMsg(id, ["i dream about you last night na 💭❤️", "you go other bar?? 😤 i see you i KNOW 👀",
       "miss you so much cannot sleep 😢", "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"][Math.floor(_rand() * 4)]);
   } else if (t >= 2) { // regular: invites and warmth, a little needy
-    if (roll < 0.45) { G.phone.invite = { id, day: G.day };
+    if (roll < 0.45 && !_sawYou) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, _pickVary([
         `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`,
         `you where na? 👀 come sit with ${name}, i save you the good stool`,
@@ -4914,6 +4934,9 @@ const _DRIZZLE_BAR = [
 ];
 function _sayDrizzle() {
   if (_room().indoors) return;   // a windowless back office has no weather (Pri, r45)
+  // a hotel room, a massage shop, a mall: the vignette is a street's ("the dog under
+  // the eaves"), and it printed in room 412 (Tomasz, round 54). A bar keeps its own.
+  if (!_inBar() && typeof _underRoof === "function" && _underRoof(G.room)) return;
   const alt = G.turns % 2 === 0; // variant by parity — no dice for flavor
   if (_inBar()) {
     // LOW SEASON'S OTHER REGISTER (monsoon-purgatory canon, 2026-08-22): when the
@@ -5475,7 +5498,7 @@ const _PUB_SOI_SCENES = [
     "doing the arithmetic, a mama watching her girls the way a cat watches a door. In the Vic it is just wood and " +
     "cold air and the low talk of men who found their stool and mean to keep it.",
   "The soi at arm's length through the glass — louder and grabbier down here than it ever looks from up top, every " +
-    "offer aimed at pavement height. You nurse the pint; the window holds. Terry lifts his without looking, a man who " +
+    "offer aimed at pavement height. You nurse {yours}; the window holds. Terry lifts his without looking, a man who " +
     "has watched this exact hundred metres longer than some of the girls out there have been alive.",
 ];
 // One spectator happy-point a night, shared across every vantage (balcony, pub
@@ -5587,7 +5610,7 @@ function _doWatchPubSoi() {
   // "the parade presses right up to the window" at 01:30, beside the room's
   // own "shutters down and its neon off")
   if (G.nightTurn >= 60) _say(_pickVary(_WATCH_SOI_LATE, "soilate"));
-  else _say(_pickVary(_PUB_SOI_SCENES, "pubsoi"));
+  else _say(_fmt(_pickVary(_PUB_SOI_SCENES, "pubsoi"), { yours: (G.player && G.player.teetotal) ? "the soda" : "the pint" }));   // a declared teetotaller nursed a pint (Joan, round 54)
   _soiSpectateHappy("(A pint, and the whole circus safely behind glass.)");
 }
 
@@ -5632,6 +5655,13 @@ function _doPet(arg) {
     _say(_dogN(outside
       ? _pickVary(_PET_OUTSIDE, "petout")
       : _pickVary(_PET_LINES, "pet")));
+    return;
+  }
+  if (G.itemLoc.soi_cats !== G.room && /\bcats?\b/i.test(String(arg || "")) &&
+      String(_room().region || "") === "Jomtien" && /beach|sand/i.test(String(_room().name || "")) && !_room().bar && !_room().barType) {
+    // the beach cats keep one lounger, at the south end — a beach room without them
+    // answered with the bar cats in the kitchen (Tomasz, round 54)
+    _say(`The two cats are further along the sand, at their own lounger — ${ROOMS[G.itemLoc.soi_cats] ? ROOMS[G.itemLoc.soi_cats].name : "the south end"}. They do not make house calls.`);
     return;
   }
   if (G.itemLoc.soi_cats !== G.room) {
@@ -5739,7 +5769,7 @@ function _tanFavour() {
     "and he waits at the end of the rail until Bert has finished pouring rather " +
     "than cutting in front of a customer.");
   _say("\"My friend.\" The same warmth. It is not a performance; it never was. " +
-    "\"The bar is good. Busy on a Tuesday — that is the real test, not " +
+    "\"The bar is good. Busy on a wet weeknight — that is the real test, not " +
     "Saturday.\" He turns down the beer Bert offers him, the way he turns down " +
     "everything.");
   _say("Then he puts a folded slip of paper on the bar, and does not push it " +
@@ -5918,7 +5948,7 @@ function _atOwnBar() { return _barOwned() && G.bar && G.room === G.bar.room; }
 // it's the first place faction standing changes a night rather than a label.
 const WORK_EVENT_ODDS = 0.42;   // the rest of the time, nothing worth reporting
 
-function _workNight() {
+function _workNight(defer) {
   if (_rand() > WORK_EVENT_ODDS) return null;
   const _evtDay = (G.bar && G.bar.evtDay) || {};
   const pool = WORK_NIGHTS.filter(e => (!e.when || e.when(G)) &&
@@ -5936,6 +5966,15 @@ function _workNight() {
   // millionaires rang the bell verbatim on consecutive nights). One reroll.
   if (pick.id === (G.bar && G.bar.lastWorkEvt) && pool.length > 1) pick = draw();
   if (G.bar) { G.bar.lastWorkEvt = pick.id; (G.bar.evtDay = G.bar.evtDay || {})[pick.id] = G.day; }
+  if (defer) return pick;   // _doWork stashes it; _workTell prints and pays it when the night has earned it
+  return _workTell(pick);
+}
+
+// The telling of a work event — the prose, the till, the happy, the seen-book.
+// Split from the roll so the roll can happen at WORK (dice order) and the
+// telling when the night it describes has actually been lived (Rolf, round 54).
+function _workTell(pick) {
+  if (!pick) return null;
   _say(Array.isArray(pick.text) ? _pickVary(pick.text, "work:" + pick.id) : pick.text, (pick.happy || 0) < 0 ? "alert" : "win");
   if (pick.money) {
     G.bar.cash += pick.money;
@@ -6016,18 +6055,28 @@ function _doWork() {
   G.bar.stoodTurns = 0;
   G.bar.floorN = 0; G.bar.floorTurn = -99;   // …and the floor's moments start with it
   G.bar.workedTurn = G.turns;        // the call needs the room to settle first
-  G.bar.worked = (G.bar.worked || 0) + 1;
+  // `worked` (the BOOKS "nights stood" figure) is counted at SETTLE, once the
+  // night has been stood — it counted declarations here, lapses included, and
+  // read "17 of 28" on a page that itemised seven of those as "declared, not
+  // stood" (Rolf, round 54)
   G.bar.away = 0;
+  G.bar.declared = (G.bar.declared || 0) + 1;   // declarations — what the soak's liveness ledger balances against
   _say(_pickVary(_WORK_SHIFT, "workshift"), "win");
   if (typeof _ccibWorkLine === "function") _ccibWorkLine();   // being watched runs the tidiest bar on the soi
-  _say(_pickVary(_WORK_SEEN, "workseen"));
-  _say(_pickVary(_WORK_MISSED, "workmissed"), "dim");
   _say("(You're working tonight. The takings will show it — and so will the " +
     "night you didn't have. TIME to check the hour, BOOKS for the damage.)", "dim");
   const streak = (G.bar.streak = (G.bar.streak || 0) + 1);
   // What you get out of a shift is WHAT HAPPENED, not the fact of working. Most
   // nights that's nothing — and the nothing is what makes the other two land.
-  _workNight();
+  // ROLLED now (the dice order is the determinism contract) and TOLD later:
+  // "the last bus goes past empty at gone two, and you watch it go" printed at
+  // 19:00, and a table that ran a tab "all evening" walked out at ten past
+  // seven (Rolf, round 54). The shift's tale is what the small hours saw —
+  // _workTaleTick tells it once they arrive, or the morning tells it if the
+  // night ended first. A shift you didn't stand has no tale for you.
+  const pick = _workNight(true);
+  G.bar.tale = { seen: _pickVary(_WORK_SEEN, "workseen"), missed: _pickVary(_WORK_MISSED, "workmissed"),
+    evt: pick ? pick.id : null, told: false };
   // …and a man who works every night in Pattaya has quietly stopped living in
   // Pattaya, however good the takings are.
   if (streak >= 10) {
@@ -6049,10 +6098,34 @@ const WORK_AWAY_BUDGET = 15;   // turns off your own floor before the shift laps
 // the premises settled at the full worked multiplier (Keith, round 40). A shift
 // is at least two hours stood; short of that the night is Bert's.
 const WORK_MIN_STOOD = 20;
+// The hour the shift's tale can be told standing up: past the last bus, which
+// is the latest clock the _WORK_SEEN pool names ("goes past empty at gone two").
+const WORK_TALE_TURN = 85;
+
+function _workTaleTick() {
+  const b = G.bar, t = b && b.tale;
+  if (!t || t.told) return;
+  if (G.nightTurn < WORK_TALE_TURN || (b.stoodTurns || 0) < WORK_MIN_STOOD) return;
+  _workTaleTell(b, "stood");
+}
+
+// `how`: "stood" — told at the rail in the small hours; "morning" — the night
+// ended before then (an LT, a collapse) and the ledger tells it instead.
+function _workTaleTell(b, how) {
+  const t = b.tale;
+  if (!t || t.told) return;
+  t.told = true;
+  if (how === "morning") _say("(The shift, as it went:)", "dim");
+  _say(t.seen);
+  _say(t.missed, "dim");
+  const evt = t.evt && typeof WORK_NIGHTS !== "undefined" && WORK_NIGHTS.find(e => e.id === t.evt);
+  if (evt) _workTell(evt);
+}
+
 function _workPresenceTick() {
   const b = G.bar;
   if (!_barOwned() || !b || b.workedDay !== G.day || !b.workedLast) return;
-  if (G.room === "stinky_bar") { b.stoodTurns = (b.stoodTurns || 0) + 1; return; }
+  if (G.room === "stinky_bar") { b.stoodTurns = (b.stoodTurns || 0) + 1; _workTaleTick(); return; }
   b.awayTurns = (b.awayTurns || 0) + 1;
   // a shift stood into the small hours is a shift stood, wherever the night then
   // ends (Graham, round 47: 45 turns, home to bed, "Bert ran it"); before
@@ -6237,8 +6310,10 @@ function _workFloor() {
   // A floor moment that NAMES money has to move it: "finds ฿40 you had already
   // written off … puts it in front of you" showed nowhere in the till or the
   // notes (assertion auditor, 2026-09-14). The forty lands, and BOOKS says so.
-  if (/written off/.test(linePool[pick]) && typeof _barEvent === "function")
+  if (/written off/.test(linePool[pick]) && typeof _barEvent === "function") {
+    G.bar.cash += 40;   // it LANDS — the note alone left the till ฿40 short of its own books (Rolf, round 54)
     _barEvent(40, `the forty ${_npcLabel(id)} found`);
+  }
   _addBond(id, 1);
 }
 
@@ -6442,7 +6517,9 @@ function _shiftYes() {
         "drinking somewhere he doesn't owe \u0e3f{amt}.)", { amt: SHIFT_TAB_TAKE }), "alert");
     } else {
       _shiftTake(SHIFT_TAB_TAKE, "a regular's slate, settled");
-      _say(`(He settles on ${_shiftPayday()}, in full, and stands you one out of it. The slate rides the books till then.)`, "dim");
+      // the books say "settled" TONIGHT, so the sentence does too — it promised
+      // payday while the ledger showed the money in (Rolf, round 54)
+      _say(`(He squares it before he goes — in full, out of the back pocket he said was empty — and stands you one out of it. One docket fewer under the till.)`, "dim");
     }
   } else if (call.id === "early") {
     _shiftTake(-SHIFT_EARLY_COST, "the floor one short");
@@ -7081,6 +7158,11 @@ function _barNight(settleDay) {
   let worked = !!b.workedLast && (b.workedDay === G.day || b.workedDay === G.day - 1);
   let declaredOnly = false;
   if (worked && (b.stoodTurns || 0) < WORK_MIN_STOOD) { worked = false; declaredOnly = true; b.lapses = (b.lapses || 0) + 1; }
+  if (worked) b.worked = (b.worked || 0) + 1;   // nights STOOD, counted where standing is judged (Rolf, round 54)
+  // a stood night whose small hours never came (an LT, a collapse) tells its
+  // tale here, before the books; a lapsed night has none for you
+  if (b.tale && !b.tale.told && worked) _workTaleTell(b, "morning");
+  b.tale = null;
   take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
   if (worked) take += BAR_PRESENT;
   // Rabbit's old regulars, run at your bar (the operator path's bonus, READ at your own rail)
@@ -7192,6 +7274,13 @@ function _barMonthly() {
   b.rentShort = rentDue > 0 ? (b.rentShort || 0) + 1 : 0;
 
   // ── the old man, with whatever is left ───────────────────────────────
+  // …unless there is nothing left to owe him: a note paid down to zero stops
+  // billing, rather than sending ฿25,000 a month to Ohio against a balance the
+  // books already print as ฿0 (Rolf, round 54)
+  if ((b.owed || 0) <= 0 && (b.arrears || 0) <= 0) {
+    return { paidFrom: [], short: 0, month: b.months, paid: 0, cleared: 0, noteDone: true,
+      rent, rentFrom, rentShort: rentDue, rentMonths: b.rentShort, rentPaid, waived, keyBilled };
+  }
   const owedNow = BAR_MONTHLY + b.arrears;
   let due = owedNow, paidFrom = [];
   const fromTill = Math.min(Math.max(b.cash, 0), due);
@@ -7422,9 +7511,9 @@ function _doBooks() {
   // The till reads as a state, not a raw negative: a bar whose drawer shows
   // "฿-12822" looks like an accounting error rather than a bar in trouble.
   _say(_fmt(b.cash < 0
-    ? "Till: empty, and ฿{short} behind it   ·   Owed to the old man: ฿{owed}"
-    : "Till: ฿{cash}   ·   Owed to the old man: ฿{owed}",
-    { cash: b.cash, short: -b.cash, owed: b.owed }));
+    ? "Till: empty, and ฿{short} behind it   ·   Owed to the old man: {owed}"
+    : "Till: ฿{cash}   ·   Owed to the old man: {owed}",
+    { cash: b.cash, short: -b.cash, owed: (b.owed || 0) > 0 ? "฿" + _num(b.owed) : _L("nothing — the note is paid") }));
   // `months` counts months ELAPSED, not months settled — a month you couldn't
   // cover rolls into arrears and leaves `owed` untouched, so labelling it "paid"
   // put two contradictory numbers on one screen (actuary playtest 2026-08-23).
@@ -7486,7 +7575,8 @@ function _sayLease() {
   _say(l.paid
     ? (l.how === "cash" ? _fmt("Key money: ฿{c} paid, in notes, off paper.", { c: l.cash })
       : l.how === "transfer" ? _fmt("Key money: ฿{k} paid, on the app.", { k: l.key })
-      : _fmt("Key money: ฿{k}, billed with the first rent.", { k: l.key }))
+      : l.how === "billed" ? _fmt("Key money: ฿{k}, billed with the first rent.", { k: l.key })
+      : "Key money: settled.")   // a lease marked paid with no route on it prints no raw token (Rolf, round 54)
     : _fmt("Key money: ฿{k} due with the first rent — or ฿{c} in notes before then (PAY KEY MONEY).", { k: l.key, c: l.cash }), "dim");
   if ((b.rentFree || 0) > 0) _say("First month's rent: off — you signed in the wet.", "dim");
 }
@@ -7569,7 +7659,10 @@ function _barSettle(settleDay) {
   }
   _barArrearsTick(m);
   if (_flag("barLost")) return;
-  if (m.short <= 0) {
+  if (m.noteDone) {
+    _say(_fmt("Month {n}: nothing to Ohio. The note is paid — it has been paid — and the " +
+      "old man neither knows nor would say so. The bar is yours on paper that nobody will ever read.", { n: m.month }), "dim");
+  } else if (m.short <= 0) {
     _say(_fmt("Month {n} to the old man: ฿{amt}, paid from {src}. He does not " +
       "acknowledge it. He never does; the money simply goes, and somewhere in " +
       "Ohio a man you have met once is still alive and still owns a little less " +
@@ -7603,6 +7696,12 @@ function _barSettle(settleDay) {
 // pressure test is low season, when the margin that absorbed it isn't there.
 function _synState() {
   if (!G.syn) G.syn = { done: {}, asked: {}, friction: 0 };
+  // a save (or a hand-built seed) that carries the meter and not the books:
+  // _synNextJob read `done.cleaning` off undefined and the throw killed every
+  // tick from 21:00 for the rest of the night (Rolf, round 54)
+  if (!G.syn.done) G.syn.done = {};
+  if (!G.syn.asked) G.syn.asked = {};
+  if (typeof G.syn.friction !== "number") G.syn.friction = 0;
   return G.syn;
 }
 

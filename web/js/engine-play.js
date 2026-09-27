@@ -417,11 +417,12 @@ function _piwinAbout(who) {
   // "Who? Don't know this one" — work, the fares, the stand, the vest, the rain —
   // from the one man on the corner all night who is the obvious person to ask
   // (Brian and Helen, round 49, independently).
-  if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk)\b/.test(w)) {
+  if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed)\b/.test(w)) {
     const say =
       /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
       /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + MOTOSAI_TOWN, f: "฿" + MOTOSAI_FAR }) :
       /\b(vest|jacket|number|queue|licen[cs]e)\b/.test(w) ? "\"The vest is the stand.\" He plucks the orange nylon. \"Number is my number. No vest, no stand — you ride from the side of the road, police take the bike. Vest cost more than the bike, some year.\"" :
+      /\b(hotels?|room|sleep|bed)\b/.test(w) ? "\"Hotel? Which one?\" He counts them on the handlebar. \"Sabai Palms up Naklua. The Queen Vic on Soi 6, over the pub. Areca on Diana, has the pool. Metropole, the tower by LK Metro.\" A shrug. \"Say which one, boss. You don't say, I choose, and the one I choose is the one that gives me twenty baht.\" He grins. \"So say.\"" :   // Joan, round 54: "hotel" got the stranger shrug
       /\b(rain)\b/.test(w) ? "\"Rain?\" He points at the plastic poncho folded under the seat. \"Rain is good. Nobody want to walk. Rain is money.\" A beat. \"Bad rain is bad. Bad rain, everybody home.\"" :
       /\b(police|helmet)\b/.test(w) ? "\"Helmet for me, always.\" He taps it. \"For you — better yes. Police stand at the bottom of Soi 6, six to seven. Farang no helmet is the best money they make all day.\"" :
       "\"Crash?\" He looks at you as if you have asked whether the sea is wet. \"Everybody crash. Little bit. I don\u2019t crash with a customer. Customer crash, no more customer.\"";
@@ -3891,7 +3892,13 @@ const _STD_MORNING = [
 ];
 function _stdBarfineRoll() {
   if (G.lastBfChaste) { G.lastBfChaste = false; return; } // reality-LT night was sexless — no condom used, no risk
-  if (G.condoms > 0) { G.condoms--; _say(_pickVary(_STD_SAFE, "stdsafe"), "dim"); return; }
+  if (G.condoms > 0) {
+    G.condoms--;
+    // "drunk-you actually used it" is a claim about the meter; a sober LT gets the
+    // other two (Tomasz, round 54: teetotal, and told drunk-him had done it)
+    const pool = G.soc.drunk >= 3 && !(G.player && G.player.teetotal) ? _STD_SAFE : _STD_SAFE.filter(s => !/drunk-you/.test(s));
+    _say(_pickVary(pool, "stdsafe"), "dim"); return;
+  }
   // no protection, and no immediate tell — the night keeps its secret a day or two
   if (!G.std && _rand() < STD_RISK) G.std = { day: G.day };
 }
@@ -4403,6 +4410,13 @@ const _SCAM_LEAVE = [
 ];
 
 // Dawn on your feet: the whole arc — and then the taxi home in the light.
+// dawn at the bar you OWN: nobody carries you home, you put the stools up
+const _ALLNIGHTER_OWN = [
+  "06:00 and the last customer is a man asleep with his cheek on the rail. You wake him kindly, put the stools up, count the float twice because your eyes have stopped agreeing with each other, and pull the shutter down on your own bar. The bike home is the coldest ten minutes in Pattaya.",
+  "Dawn comes in under the shutter you never quite closed. The girls are gone, the ice has been water for an hour, and the till is right, which is the only thing about the night that is. You lock your own door from the outside and go home in the light.",
+  "The sweepers are working Beach Road when you finally kill the lights. There is a particular quiet in an empty bar that is yours — the fans ticking down, a glass nobody claimed — and you stand in it for a minute before you lock up and let a piwin take you to bed.",
+  "You close your own bar at six in the morning, which is not a thing a customer ever has to do. Chairs up. Float in the bag. Shutter, padlock, the key that sticks. The street is pink and completely uninterested in how hard the night was.",
+];
 const _ALLNIGHTER_LINES = [
   "The music finally stops and the room is suddenly a room: strip lights, wet floor, chairs. The club empties into the soft light, the street sweepers work around the wreckage, and a taxi with its windows down carries you home through a town changing shifts — night people going to bed, monks already walking. You did the whole night. All of it.",
   "06:00 arrives and finds you still standing, which at this point feels like a citation for valour. You share a taxi with two strangers and a man asleep in a party hat, watch the neon give up section by section, and let yourself in as the breakfast carts light their first burners. The bed takes you like an old friend.",
@@ -4541,7 +4555,9 @@ function _endNight(reason) {
           "into a Darkside dawn: dogs, roosters, one motorbike, and a sky already too " +
           "bright, and behind you the stools go up as if none of it happened.", "win");
       } else if (!_herDawn) {
-        _say(_pickVary(_inBar() ? _ALLNIGHTER_LINES : (_underRoof(G.room) ? _ALLNIGHTER_INDOORS : _ALLNIGHTER_STREET), _inBar() ? "allnighter" : (_underRoof(G.room) ? "allnighterin" : "allnighterst")), "win");
+        // the guv'nor does not "share a taxi with two strangers" out of his own bar;
+        // he locks up (Rolf, round 54)
+        _say(_pickVary(typeof _atOwnBar === "function" && _atOwnBar() ? _ALLNIGHTER_OWN : _inBar() ? _ALLNIGHTER_LINES : (_underRoof(G.room) ? _ALLNIGHTER_INDOORS : _ALLNIGHTER_STREET), typeof _atOwnBar === "function" && _atOwnBar() ? "allnighterown" : _inBar() ? "allnighter" : (_underRoof(G.room) ? "allnighterin" : "allnighterst")), "win");
       }
       if (!_herDawn) _addHappy(2); // the big night out is a WIN — the invoice is the morning (her goodbye paid its own)
       break;

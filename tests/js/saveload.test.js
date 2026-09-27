@@ -133,7 +133,7 @@ test("G round-trips through serializeGame/deserializeGame as the identity, with 
   G.quests = { league: "active", sangsom: "done" }; G.talked = { bert: [0, 2] }; G.known = { bert: true, lek: true };
   G.kpTitle = { lucky_tiger: { day: G.day, name: "you" } }; G.lastKp = { room: "lucky_tiger", day: G.day, names: ["Aek"], won: true };
   G.travelDark = { key: "a>b", turn: G.turns }; G.lastComp = { turn: G.turns, room: G.room }; G.player.teetotal = true;
-  G.bar.cash = 1234; G.syn = { friction: 2, jobs: ["cleaning"] }; G.affair = { id: "lek", since: 1, strain: 3, floorSour: 1, crisSeen: ["rota"], warned: {} };
+  G.bar.cash = 1234; G.syn = { done: {}, asked: {}, friction: 2, jobs: ["cleaning"] }; G.affair = { id: "lek", since: 1, strain: 3, floorSour: 1, crisSeen: ["rota"], warned: {} };
   const before = JSON.parse(serializeGame());
   newGame(); deserializeGame(JSON.stringify(before));
   const after = JSON.parse(serializeGame());

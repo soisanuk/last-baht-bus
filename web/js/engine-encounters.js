@@ -176,6 +176,7 @@ function _flowerTick() {
   if (!open) return;
   const partner = typeof _convoActive === "function" && _convoActive();
   if (!partner || !NPC_ROLES[partner]) return;    // must be sitting with a working girl/ladyboy
+  if (NPC_ROLES[partner] === "mamasan" || NPC_ROLES[partner] === "cashier") return;   // the child does not pitch a rose for the mamasan (Rolf, round 54)
   if (!(G.soc.drinks && G.soc.drinks[partner] > 0)) return; // and actually courting her
   if (G.flowerDay === G.day) return;              // once a night
   if (_rand() >= 0.12) return;
@@ -221,6 +222,7 @@ function _salengTick() {
       !(G.soc.lockIn && G.soc.lockIn[G.room]) && // the cart can't get past the bolt
       _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 15 &&
       !((G.soc.salengBar || {})[G.room]) &&   // one cart per bar per night — three som-tam carts in one evening (Trevor, round 39)
+      !(G.rain > 0) &&   // a cart does not park in a downpour (Tomasz, round 54)
       _rand() < 0.10) {
     (G.soc.salengBar = G.soc.salengBar || {})[G.room] = true;
     _salengSpawn();

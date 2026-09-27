@@ -418,6 +418,12 @@ function newGame() {
       cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0,
       workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 },
     affair: null,        // the staff affair (engine-systems) — null until she stays after close
+    // procurement (engine-systems): the jobs put to you, the ones you took, the
+    // friction of the ones you didn't. It lived only in a lazy init, so a save
+    // that carried `syn` in any other shape threw inside _tick from 21:00 on —
+    // and everything after the dispatcher (the presence count, the affair's door,
+    // the floor) silently stopped for the night (Rolf, round 54).
+    syn: { done: {}, asked: {}, friction: 0 },
     affairCool: 0,       // day a STEP BACK was given; the door re-opens after a fortnight
     roomWater: 0,        // complimentary hotel bottles drunk today (2/day, housekeeping restocks)
     ledgerSeen: 0,       // how many of the other ledger's reveals you've been shown (engine-play)
@@ -2591,7 +2597,11 @@ function _describeRoom(full, forceFull) {
       // not a member of staff.
       const _staffed = _npcsHere().filter(id2 => NPC_ROLES[id2]).length > 1;
       _say(_pickVary(_staffed ? _BAR_THIN_STAFFED : _BAR_THIN, "barThin"), "dim");
-    } else if (G.soc.patronBusy[G.room]) {
+    } else if (G.soc.patronBusy[G.room] && !_railCrowd.length) {
+      // …and never beside a NAMED rail: "a red-faced fixture works the far
+      // stools" printed under a Here: line reading Doug, Phil and Dave, who are
+      // the fixture (Rolf and Tomasz, round 54, independently). The men on the
+      // rail are the cast; the anonymous lifer is for a rail with nobody on it.
       // name the SAME girl the snipe-jealousy keys on (parser); legacy `true`
       // falls back to the first hostess present
       const busyId = G.soc.patronBusy[G.room];

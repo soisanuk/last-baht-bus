@@ -377,7 +377,7 @@ const ROOMS = {
       "Nothing is open and the sand is better for it. The bay pushes the same four notes up the beach over and over. A man is asleep on a lounger further down and has clearly done this before.",
       "The sea does the only work left at this hour. The lights along the far curve of the bay are still on because nobody is paid to turn them off.",
     ],
-    desc: "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. " +
+    desc: "Soft sand, folded-up loungers, and the sea working away at the dark. " +
       "Two grey-and-white soi cats hold down the end of a lounger, the big one sitting slightly " +
       "in front of the small one, both watching the water. The beach road glows to the east; the " +
       "sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart " +
@@ -1853,7 +1853,7 @@ const ROOMS = {
       "sight. Two bars hold the corners of the junction and stare each other down: THE STINKY " +
       "PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one " +
       "side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either " +
-      "corner you can still catch the sun going down over the bay. For the first hour of the evening, six to seven, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang " +
+      "corner, if you are in early enough, you can catch the sun going down over the bay. For the first hour of the evening, six to seven, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang " +
       "for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars " +
       "first came in off the road ducking exactly that. Blue songthaews — the baht buses — " +
       "rattle past on the Beach Road run, headlights strung north toward the Dolphin and south " +
@@ -1938,6 +1938,7 @@ const ROOMS = {
     exits: { out: "soi6_mid" },
   },
   blue_dog: {
+    openFront: true,   // "no walls, no door" — a refused direction is the rail, not a wall (Rolf, round 54)
     name: "Blue Dog",
     region: "Beach Road",
     bar: "Blue Dog", barType: "beer",
@@ -1945,7 +1946,7 @@ const ROOMS = {
       "no door, just a tin roof, a long rail, and a line of plastic chairs facing out across " +
       "Beach Road to the bay. The Stinky Pinky glowers back from the opposite corner over the " +
       "mouth of the soi. At the Blue Dog the view IS the entertainment: the evening police " +
-      "checkpoint down the road to the south, the sunset out over the water and the sand, and " +
+      "checkpoint down the road to the south, the sun going down over the water if you are early for it, and " +
       "then whatever the junction decides to do about it. Half the regulars found the place " +
       "ducking in off a helmetless motorbike. (WATCH POLICE · WATCH SUNSET.)",
     revisit: [
@@ -1991,7 +1992,7 @@ const ROOMS = {
       "bottomless Singha and opinions on everyone's break. It holds the inland corner at the " +
       "foot of Soi 6; across the mouth of the soi the Blue Dog faces the water. From the open " +
       "front you can watch the evening checkpoint work the road to the south — half of Bert's " +
-      "regulars ducked in here to dodge it once and never left — and the sun go down over the " +
+      "regulars ducked in here to dodge it once and never left — and, early enough, the sun go down over the " +
       "bay between shots. (WATCH POLICE · WATCH SUNSET.)",
     reads: {
       ashtray: "The league ashtray: a heavy glass one, kept clean, that has never held a cigarette. " +
@@ -5256,6 +5257,9 @@ const NPCS = {
           "everything.\" (EXAMINE what's in your pockets. QUESTS shows what you're up against. TALK " +
           "to people and ASK them about your wallet — the soi always knows.)",
         short: "\"You sleep on beach like soi dog! I come feed my two, find you instead. Look what you still have, ask around — the soi always knows.\"" },
+      { topic: "wallet", req: ["hasWallet"],
+        text: "\"Wallet?\" She pats her own apron pocket, the universal sign. \"You have it back, na? Then you are the luckiest farang on this beach and I have seen many farang on this beach.\" A finger. \"Front pocket now. Not the back.\"",
+        short: "\"You have it back. Front pocket now, na.\"" },
       { topic: "wallet", text: "\"Wallet gone? Beach at night, tilac. You lucky they leave your shoes. Go town, ask the bar ladies — nothing happen in Pattaya they don't know.\"" },
       { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride. Stop just north, na — up the beach road, blue trucks, cannot miss.\"",
         short: "\"Baht bus fifteen baht. Stop just north, up the beach road.\"" },
@@ -5896,6 +5900,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Price?\" A look. \"Not standing up, and not asked. Come and sit with me on a night the rain has killed the pool and nobody wants anything. I tell you the whole thing then.\"",
         short: "\"Not asked, and not standing up. Sit with me on a wet night.\"" },
       // the after-hours question nobody would answer (Dex, round 38): where the night goes after two
+      // the door is hers to name once you ARE the friend: "you not friend yet" at
+      // fourteen drinks and her-farang tier (Tomasz, round 54)
+      { topic: "late", bond: 2,
+        text: "\"After two?\" Lek racks the balls without looking at them, and then does look — at you. \"You, " +
+          "I take. Thai place, my friend's bar, no farang, nobody sell you nothing. On the bike.\" The break. \"Not " +
+          "tonight, maybe. Some night you take me home properly, and it is late, and I still have the keys.\"",
+        short: "\"After two? You I take. Some night — on the bike, my friend's place.\"" },
       { topic: "late",
         text: "\"After two?\" Lek racks the balls without looking at them. \"Depends who ask. Customer — go home, " +
           "customer. Friend —\" the smallest shrug \"— maybe friend take you somewhere. On the bike. Thai place. " +
@@ -8847,6 +8858,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      // the man who holds fifty-one percent of your bar answers as the man who
+      // does — he was pitching the pre-purchase coffee to his own partner and
+      // "not yet, maybe later" to "partner" (Rolf, round 54)
+      { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan"],
+        text: "\"Our bar.\" He says it the way other men say the weather — a fact, no weight on it. \"Fifty-one is a " +
+          "name on a paper in a drawer at the land office where my wife's cousin works, and the paper has never " +
+          "been out of the drawer.\" The glance in the mirror. \"You run it. I do not come. If I come, it is because " +
+          "I am asking for something, and I will say so.\"",
+        short: "\"Our bar. The paper is in a drawer. You run it; if I come, I am asking for something.\"" },
       { topic: "debt", chip: false,
         when: (st, G) => !_flag("debtSettled") && _flag("act1Done"),
         sets: ["debtSettled", "owesTan"],
@@ -12085,6 +12105,21 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // Bert briefs you on rent, key money, the note and the wet at the deposit,
       // and then couldn't discuss a word of it — five topics he put in your
       // mouth, five misses (Des, round 41). And "partner" pointed at nobody.
+      // the barman knows whose name is on the fifty-one — "ask bert about tan"
+      // got "not my department" from the man who brokered it (Rolf, round 54)
+      { topic: "tan|candy|partner|partnership|fifty-one|51 percent|the partner|my partner", when: (st, G) => _flag("partnerTan"),
+        text: "\"Tan.\" Bert says the name like a man checking a tyre. \"Fifty-one on paper, nothing on the bar, and he's " +
+          "never once come in. Which is the bit I'd keep an eye on, bud — not the day he does, the day he ASKS.\"",
+        short: "\"Tan. Fifty-one on paper, never come in. Watch the day he asks.\"" },
+      { topic: "tan|candy|partner|partnership|fifty-one|51 percent|the partner|my partner", when: (st, G) => _flag("partnerCandy"),
+        text: "\"Candy.\" A nod down the soi. \"Fifty-one on paper, a lawyer's bill you'll have seen, and she's never once " +
+          "come in to look at it. That's what buying it properly looks like.\"",
+        short: "\"Candy. Fifty-one on paper, a lawyer's bill, never come in. Properly done.\"" },
+      { topic: "cleaning|procurement|contract|contracts|the screen|screen|the till job|suppliers|supplier", when: (st, G) => _flag("barOpen"),
+        text: "\"Not my department, and I'll tell you why it isn't.\" He wipes a glass that was dry. \"The man who does the " +
+          "cleaning was found by the man who found you the cleaner. That's Tan's side of the bar. I pour, I count, I " +
+          "tell you when the pool cushion's gone. Who empties the bins is above my pay grade and below my interest.\"",
+        short: "\"Not my department. Tan's side of the bar. I pour.\"" },
       { topic: "partner|partnership|fifty-one|51 percent|the partner", when: (st, G) => _flag("barLicence") && !_flag("barPartner"),   // both partner nodes need the licence too (prose review)
         text: "\"Fifty-one's not mine to give, bud — it's got to be a Thai name, and it's got to be a " +
           "PERSON.\" A nod down the soi. \"Candy'll tell you how she'd do it, and she's the one to ask " +

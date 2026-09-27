@@ -722,7 +722,7 @@ test("a year of unbroken shifts is rich and joyless — the grind is the cost", 
 test("what you get from a shift is what HAPPENED, not the fact of working", () => {
   running();
   const seen = new Set();
-  for (let i = 0; i < 400; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */ }
+  for (let i = 0; i < 400; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) *//* …and the night has to be LIVED: the tale is told at settle since round 54 */ _barSettle(); }
   for (const k of Object.keys(G.bar.seen || {})) seen.add(k);
   assert.ok(seen.size >= 4, `several kinds of night should turn up (saw ${[...seen].join(",")})`);
   assert.ok(seen.has("millionaires") || seen.has("allin"),
@@ -732,7 +732,7 @@ test("what you get from a shift is what HAPPENED, not the fact of working", () =
 test("faction standing is what keeps the police away — and nothing else does", () => {
   const policeNights = (friction, syndicate) => {
     running(friction); G.faction.syndicate = syndicate;
-    for (let i = 0; i < 300; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) */ }
+    for (let i = 0; i < 300; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); G.bar.stoodTurns = WORK_MIN_STOOD; /* a declared shift has to be STOOD (round 40) *//* …and settled (round 54) */ _barSettle(); }
     return (G.bar.seen || {}).police || 0;
   };
   assert.equal(policeNights(6, 3), 0,

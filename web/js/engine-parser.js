@@ -103,6 +103,21 @@ const _NO_EXIT_OPEN = [
   "Stalls, stalls, and then a wall of somebody's kitchen. The way you came in is the way there is. (OUT)",
   "You get three stalls further and find the whole thing backs onto a building. (OUT)",
 ];
+// the lady drink lands: pooled, because the warm-up is the most-repeated line a
+// courting man reads (Tomasz counted Lek's toast ten times in one night, round 54)
+const _TOAST_LINES = [
+  n => `${n} toasts you and the conversation gets noticeably warmer.`,
+  n => `${n} clinks the glass against your bottle, drinks a third of it, and asks you something she has not asked before.`,
+  n => `A small toast from ${n} — "chon" — and the stool moves an inch closer, which is the whole point of the drink.`,
+  n => `${n} lifts the glass, catches the cashier's eye for the chit, and gives you the rest of her attention with it.`,
+  n => `${n} takes the glass the way you take a good hand: quietly. The next ten minutes are warmer than the last ten.`,
+  n => `"Kop khun ka." ${n} says it to you and drinks it to the mamasan, and both of them mean it.`,
+];
+const _NO_EXIT_OPENFRONT = [
+  "No wall to stop you, only a rail, a row of chairs and the drop to the pavement. The way out is the way in: back to the road. (OUT)",
+  "You could step over the rail. You'd land on Beach Road either way — which is also what OUT does, with less spilt beer. (OUT)",
+  "Open on that side, and open onto nothing you can walk along: the bar's own chairs, then the kerb. Back out to the road. (OUT)",
+];
 const _NO_EXIT_IN = [
   "You're indoors. The only way out of here is back the way you came. (OUT)",
   "That's a wall with a beer fridge against it. The door is the way you came. (OUT)",
@@ -641,7 +656,9 @@ function _doGo(dirWord) {
     const _r = _room(), _inside = !!(_r.bar || _r.barType || _r.massage || _r.shop || _isHotelRoom(G.room)) &&
       !(_r.exits && (_r.exits.n || _r.exits.s || _r.exits.e || _r.exits.w));
     const _openAir = _inside && /market|bazaar|food court/i.test(_r.name || "");
-    const _pool = _openAir ? _NO_EXIT_OPEN : _inside ? _NO_EXIT_IN : _NO_EXIT;
+    // a bar whose own desc says "no walls, no door" cannot answer E with "that's a
+    // wall with a beer fridge against it" (Rolf, round 54): `openFront` on the room
+    const _pool = _openAir ? _NO_EXIT_OPEN : _inside && _r.openFront ? _NO_EXIT_OPENFRONT : _inside ? _NO_EXIT_IN : _NO_EXIT;
     // west off Beach Road is the sand, not shophouses (Marek, round 53) — the beach
     // is right there and the steps down are at the promenade
     if (dir === "w" && /^beach_rd_/.test(G.room)) { _say("West is the sea — the wall, the palms, and the sand a long drop below the kerb. The steps down are at the promenade; walk to it."); return false; }
@@ -2263,7 +2280,9 @@ const _SCENERY = [
         "and nothing else is. (DIAGNOSE for the full reading.)",
       "You take stock. Everything is broadly where you left it, which at this hour is a win. " +
         "(DIAGNOSE for the unflattering detail.)",
-      "Upright, solvent-ish, and pointed in a direction. Three out of three. (DIAGNOSE.)",
+      // "solvent-ish" is a claim about the pocket, and it printed at ฿0 (Tomasz, round 54)
+      G.money >= 300 ? "Upright, solvent-ish, and pointed in a direction. Three out of three. (DIAGNOSE.)"
+        : "Upright, skint, and pointed in a direction. Two out of three. (DIAGNOSE.)",
     ], "scn_me");
     // one honest clause when the numbers say so — worst condition wins
     if (G.hurt >= 2) return base + " Also: you are moving like furniture being carried, " +
@@ -4222,6 +4241,10 @@ function _doTalkBody(arg, topic) {
       return;
     }
   }
+  // a stranger's question gets her hello first (the _met gate above) — but at the
+  // bar you OWN the hello is the guv'nor's, not "New one… card or cash?" to the
+  // man who signs her wages (Rolf, round 54)
+  if (topic && !d.topic && typeof _ownBarTalk === "function" && _ownBarTalk(npc, null)) { _questOffer(npc); return; }
   _deliver(npc, d, _retell);
   if (NPCS[npc].manager) _managerChatTick(npc);
   // the other ledger: sitting with a girl you've earned a tier with, she shows
@@ -4867,6 +4890,12 @@ function _contactByName(nm) {
   return Object.keys(G.phone.contacts).find(k => G.phone.contacts[k] && NPCS[k] &&
     (k === w || NPCS[k].name.toLowerCase() === w || NPCS[k].name.toLowerCase().split(" ").pop() === w)) || null;
 }
+const _TEETOTAL_BROKEN = [
+  "(So much for that. Nobody says anything, which is its own kind of saying something; the town has updated its notes.)",
+  "(The soda-water man orders a beer, and the bar does the thing bars do, which is nothing at all. The declaration is off the books.)",
+  "(Sober-as-ordered lasted exactly as long as it lasted. The room does not judge; the room pours.)",
+];
+
 function _doTeetotal() {
   if (G.player.teetotal) { _say("Already said, already understood. Soda water, slice — the town has it written down."); return; }
   G.player.teetotal = true;
@@ -6436,7 +6465,12 @@ function _doBuy(arg) {
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
     _sevenIn();
-    if (_inBar()) { (G.soc.softDrink = G.soc.softDrink || {})[G.room] = G.turns; _spentHere(); }
+    if (_inBar()) {
+      (G.soc.softDrink = G.soc.softDrink || {})[G.room] = G.turns; _spentHere();
+      // priced like the beer, it IS a drink bought: the socket said "buy a drink" to
+      // a man who had just paid ฿80 for the water (Tomasz, round 54)
+      (G.soc.selfDrinks = G.soc.selfDrinks || {})[G.room] = (G.soc.selfDrinks[G.room] || 0) + 1;
+    }
     const _sd = soft ? _softName(arg) : "";
     const _line = soft
       ? _fmt(_L(_pickVary(_servesDrinks() ? _SOFT_LINES : _SOFT_SHOP, _servesDrinks() ? "soft" : "softshop")), { d: _sd, D: _sd[0].toUpperCase() + _sd.slice(1), p: price })
@@ -6585,6 +6619,13 @@ function _doBuy(arg) {
     // the price on the line that charges it: no bar quoted a beer before it was
     // in his hand, and a go-go's ฿140 Chang was only detectable by subtraction
     // (Colin, round 37) — and the −1 สนุก past four bottles gets its reason
+    if (G.player && G.player.teetotal) {
+      // the declaration is a thing you SAID; ordering a Chang un-says it, out loud,
+      // rather than DIAGNOSE reporting "stone sober, as ordered" the morning after
+      // nine of them and a blackout (Tomasz, round 54)
+      G.player.teetotal = false;
+      _say(_pickVary(_TEETOTAL_BROKEN, "teetotalbroke"), "dim");
+    }
     if (_ownBeer) _ownStock(_beerPrice(), "a beer", _L(_pickVary(_BEER_LINES, "beer")) + (_beerTail ? " " + _L(_beerTail) : ""));
     else _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_BEER_LINES, "beer")), p: _beerPrice(), m: G.money }) +
       (_beerTail ? " " + _L(_beerTail) : "") + (d > 4 ? " One past the sweet spot." : ""));
@@ -6738,7 +6779,8 @@ function _doBuy(arg) {
     // saves stored `true` — treat that as "any hostess" so old games don't crash.
     const busyId = G.soc.patronBusy[G.room];
     const sniped = busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId;
-    if (sniped && !G.soc.patronMiffed[G.room]) {
+    // the guv'nor buying his own girl a drink is not sniping a punter's (Rolf, round 54)
+    if (sniped && !G.soc.patronMiffed[G.room] && !(typeof _atOwnBar === "function" && _atOwnBar())) {
       G.soc.patronMiffed[G.room] = true;
       _say(_pickVary(_SNIPE_LINES, "snipe")(NPCS[id].name), "alert");
       _addHeat(1, _fmt("the man who was buying {n}'s drinks all evening", { n: NPCS[id].name }));
@@ -6750,7 +6792,7 @@ function _doBuy(arg) {
       _setFlag("helmetDelivered"); // she'll talk now regardless
       _deliver("pim", _pickDialogue("pim", "oy"));
     } else {
-      _say(`${NPCS[id].name} toasts you and the conversation gets noticeably warmer.`);
+      _say(_pickVary(_TOAST_LINES, "toast")(NPCS[id].name));   // one string, ten times a night (Tomasz, round 54)
     }
     _maybeSelfBarfine(id);
     return;
@@ -6843,6 +6885,16 @@ function _doBuy(arg) {
     // …but a street with a stall still going says which one: "fruit on ice" got the
     // shutters line two metres from a spit that was open (Marek, round 53)
     if (FOOD_STALLS[G.room]) _say(`(The one still trading here is ${FOOD_STALLS[G.room].name.replace(/^(a |an |the )/, "")} — BUY FOOD.)`, "dim");
+    return;
+  }
+  if (/\b(rose|roses|flower|flowers)\b/.test(String(arg || "").toLowerCase())) {
+    // the rose is the flower child's, not the bar's — "Not for sale here" after her
+    // round has moved on read as a bug (Tomasz, round 54)
+    _say(_pickVary([
+      "The rose bucket has moved on down the street with the girl who carries it. The bar sells beer; the bar has never sold a flower.",
+      "No roses without the rose child, and she is working somebody else's rail by now. Next time she reaches you, say yes faster.",
+      "The flower seller and her daughter do a round, not a shop. They were here; they aren't. The bar's stock is in bottles.",
+    ], "norose"));
     return;
   }
   _say("Not for sale here.");
@@ -7518,7 +7570,16 @@ function _lightNotice() {
   const _armGirl = G.party && G.party.ids && G.party.ids.find(id => npcs.includes(id));   // the girl on your arm is the one who reaches for the phone (registry, 2026-09-15)
   const girl = _armGirl || npcs.find(id => NPC_ROLES[id] === "hostess");
   let lines;
-  if (girl) {
+  if (girl && typeof _atOwnBar === "function" && _atOwnBar()) {
+    // your own staff do not tease the guv'nor about his money being gone — "You
+    // look for your money? it's gone" nightly, to the man who pays them (Rolf, round 54)
+    const name = NPCS[girl].name;
+    lines = [
+      `${name} looks at the beam, then at you. "Boss. The lights are on. You paid the bill, I saw you."`,
+      `${name} reaches over and turns the phone face-down on the rail, gently. "Customers think you are police, na. Off."`,
+      `"Boss lost something?" ${name} is already looking under the stools for you, which is worse than being teased.`,
+    ];
+  } else if (girl) {
     const name = NPCS[girl].name;
     lines = [
       `${name} shields her eyes theatrically. "Hansum, why you have the torch? ` +
@@ -8267,7 +8328,8 @@ function _doTime() {
     _say(inN === 0 ? "(League night: killer pool at every bar with a table, every third night — PLAY KILLER.)"
       : `(League night — killer pool, every third night — is ${inN === 1 ? "tomorrow" : "the night after next"}.)`, "dim");
   }
-  _say(t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
+  _say(typeof _atOwnBar === "function" && _atOwnBar() ? "(Your own rail: the barfine book is shut to you — the girls are staff, and the fee would be a fee to yourself.)" :   // the guv'nor was being quoted early-doors rates (Rolf, round 54)
+    t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
     t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine.)" :
     "(Prime time. Standard rates apply.)", "dim");
   // Soi 6 mode never leaves the street (the bus is refused), so the last-bus
@@ -9641,6 +9703,14 @@ function _doTaoRai() {
       _SOAPY_TIERS.map(t => `${t.label} ฿${t.price}`).join(" · ") + ". The number on the disc is the tier; the tier is the price. (SOAPY to choose.)", "dim");
     return;
   }
+  // an eatery's price list is the board, not the seat doctrine — Cheap Charlie's
+  // (Jomtien) answered TAO RAI with the bar-stool sermon (Tomasz, round 54)
+  if (!_inBar() && !G.pendingEnc && !(typeof _servesDrinks === "function" && _servesDrinks(G.room)) &&
+      typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room] && !_room().motosai) {
+    const st = FOOD_STALLS[G.room];
+    _say(`“เท่าไหร่?” (tao rai — how much?) ${st.name.replace(/^(a |an |the )/, "").replace(/^./, c => c.toUpperCase())}: ฿${st.price}, and a water is a water. That is the whole board. (BUY FOOD.)`, "dim");
+    return;
+  }
   if (!_inBar() && !G.pendingEnc && _room().massage) {
     const r = _room();
     _say("“เท่าไหร่?” (tao rai — how much?) " + (r.massage === "legit"
@@ -10969,6 +11039,10 @@ function doCommand(input) {
     G.pendingChoice = null;
     G.hotel = pick;
     G.room = _hotelRoomId();
+    // the move is instant, so the room and its hotel must be marked found by hand:
+    // JOURNAL said of the hotel he had just checked into "you have heard the name
+    // and never found the door" (Tomasz, round 54)
+    (G.visited = G.visited || {})[G.room] = true;
     _say(_HOTEL_ARRIVALS[pick], "win");
     _describeRoom(true);
     return;

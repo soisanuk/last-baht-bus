@@ -502,6 +502,27 @@
      "lens": "hotel-hopper"
     }
    ]
+  },
+  "round54": {
+   "date": "2026-09-27",
+   "note": "the first round aimed by the coverage map at its own dark cells (I and F at the bar you own); Rolf on a seeded owner save",
+   "personas": [
+    {
+     "name": "Rolf",
+     "model": "opus",
+     "lens": "owner-with-a-girl"
+    },
+    {
+     "name": "Tomasz",
+     "model": "fable",
+     "lens": "before-and-after"
+    },
+    {
+     "name": "Joan",
+     "model": "sonnet",
+     "lens": "returning-tester"
+    }
+   ]
   }
  }
 }

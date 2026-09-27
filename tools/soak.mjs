@@ -215,7 +215,7 @@ function liveSnap() {
   const drinks = soc.drinks || {};
   return {
     day: G.day, money: G.money, happy: G.happy, room: G.room,
-    barNights: b.nights || 0, barAway: b.away || 0, barWorked: b.worked || 0,
+    barNights: b.nights || 0, barAway: b.away || 0, barWorked: b.worked || 0, barDeclared: b.declared || 0,
     barLapses: b.lapses || 0,
     barMonths: b.months || 0, barCash: b.cash || 0,
     barRentOwed: b.rentOwed || 0, barLost: !!(G.flags && G.flags.barLost),
@@ -290,7 +290,7 @@ const EFFECTS = [
   // for a reason that has nothing to do with whether they work.
   { id: "bar.night.settled",  modes: ["barowner"], hit: (a, b) => b.barNights > a.barNights },
   { id: "bar.night.worked",   modes: ["barowner"], hit: (a, b) => b.barNights > a.barNights && b.barAway === 0 },
-  { id: "bar.shift.declared", modes: ["barowner"], hit: (a, b) => b.barWorked > a.barWorked },
+  { id: "bar.shift.declared", modes: ["barowner"], hit: (a, b) => b.barDeclared > a.barDeclared },   // `worked` counts nights STOOD since round 54; declarations have their own counter
   { id: "bar.floor.moment",   modes: ["barowner"], hit: (a, b) => b.barFloor > a.barFloor },
   { id: "bar.shift.called",   modes: ["barowner"], hit: (a, b) => !a.barShiftAsked && b.barShiftAsked },
   { id: "bar.shift.lapsed",   modes: ["barowner"], hit: (a, b) => b.barLapses > a.barLapses,
