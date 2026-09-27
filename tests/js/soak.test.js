@@ -71,6 +71,18 @@ test("liveness: a declared shift always reaches the books", () => {
     "not the game (check the engine-vocabulary channel and the owner's WORK/BOOKS nudge)");
 });
 
+test("economy: no command moves the pocket without printing a figure (class E, the silent-money invariant)", () => {
+  // Colin (round 37) made the rule — the beer names its price on the line that charges it —
+  // and the soak now checks it after every command of every seed. Its first run found
+  // TAKE HER OUT charging ฿2,000 under a line that said she "names the number plainly".
+  const hits = [];
+  for (const seed of [1, 2, 3, 4]) for (const mode of ["vacation", "expat", "barowner"]) {
+    const r = runSoak({ seed, nights: 6, mode });
+    for (const w of r.warns) if (w.kind === "silent-money") hits.push(`${mode}/${seed}: '${w.cmd}' in ${w.room} (${w.delta}) — ${w.line}`);
+  }
+  assert.deepEqual(hits, [], "money moved with no ฿ on the page");
+});
+
 test("liveness: the expat stage's own beats fire without being led there", () => {
   // Both were arrival-only until round 13 and never fired for an owner who
   // opened up early and stayed — 61 nights with G.syn untouched.

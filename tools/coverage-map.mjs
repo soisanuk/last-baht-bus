@@ -50,6 +50,11 @@ const INSTRUMENTS = [
   { name: "reachability.test", cls: ["C"], systems: ["navigation", "quests", "act1", "hotels", "darkness", "motosai", "bus", "worldprose", "orchid", "dog", "clinic", "food", "massage", "barchain", "heist", "cons", "encounters", "regulars", "calendar", "thai", "games", "loans", "money", "drinks", "bell", "barfine", "ladydrinks", "social", "media", "weather", "saleng", "phone"] },
   // the soak's night-boundary invariants (2026-09-27): what the wake may not carry — a drink,
   // the rain, a companion, a modal, a negative pocket — checked after every night of every seed
+  // the soak's silent-money invariant (2026-09-27): any command that moves the pocket prints a ฿ figure
+  { name: "soak silent-money", cls: ["E"], systems: ["money", "drinks", "ladydrinks", "bell", "barfine", "party", "nightride", "cons", "hotels", "food", "saleng", "massage", "loans", "barchain", "barbooks", "procurement", "bus", "motosai", "games", "encounters", "act1", "vacation", "heist", "phone", "thai", "clinic", "social", "sobriety", "affair", "cream", "happiness"] },
+  // the soak's near-repeat ledger (2026-09-27): the same sentence a third time within fifteen
+  // commands, room furniture and readouts excluded — reported per run, not gated (a prompt may repeat)
+  { name: "soak repeat ledger", cls: ["Q"], systems: SYS.filter(s => !["guardrails", "saveload", "presentation"].includes(s.id)).map(s => s.id) },
   { name: "soak night-boundary", cls: ["A"], systems: ["clock", "body", "weather", "party", "money", "hotels", "bell", "barfine", "nightride", "encounters", "games", "sobriety", "drinks", "ladydrinks", "vacation", "barbooks", "affair", "cream", "sao", "heist", "happiness", "police", "dog", "saveload", "act1", "cons", "loans", "phone", "quests", "conversation", "bus", "motosai", "navigation", "darkness"] },   // the whole of G is the identity through a save, every system in a non-default state
   { name: "saveload.test", cls: ["S", "G"], systems: SYS.filter(s => s.modals.length || s.encounters.length || ["games", "bus", "motosai", "barfine", "act1", "saveload", "massage", "identity", "vacation", "party", "nightride", "hotels", "cream", "sao", "heist", "barbooks", "procurement", "affair", "barchain"].includes(s.id)).map(s => s.id) },
 ];

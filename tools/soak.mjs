@@ -236,6 +236,13 @@ function liveSnap() {
     safeOpened: !!(G.flags || {}).roomSafeOpened,
     act1Done: !!(G.flags || {}).act1Done,
     barOpen: !!(G.flags || {}).barOpen,
+    // the systems the coverage map found without a liveness effect (2026-09-27)
+    loan: !!G.loan, std: !!G.std, metPriew: !!(G.flags || {}).metPriew,
+    owed: (G.tonicOwed || 0) + (G.curseOwed || 0), gameLive: !!G.game, owlRead: !!G.owlRead,
+    teetotal: !!(G.player && G.player.teetotal), lessonTaken: !!(G.flags || {}).lessonTaken,
+    salengTypes: Object.keys(G.salengSeen || {}).length, inOrchid: G.room === "orchid_room",
+    kpTitles: Object.keys(G.kpTitle || {}).length, rides: Object.keys(G.rideLog || {}).length,
+    quizzes: Object.keys(G.quizPlayed || {}).length, hospital: G.hospitalVisits || 0, drunk: soc.drunk || 0,
   };
 }
 
@@ -300,6 +307,22 @@ const EFFECTS = [
   { id: "affair.ended",       modes: ["barowner"], hit: (a, b) => !a.affairEnded && b.affairEnded,
     why: "an ending needs a beginning; see affair.begun" },
   { id: "procurement.asked",  modes: ["barowner"], hit: (a, b) => b.synAsked > a.synAsked },
+  // the systems the coverage map found without an effect (2026-09-27): each is a
+  // liveness question the map's B column had no instrument for
+  { id: "loan.taken",         modes: SANDBOX,   hit: (a, b) => !a.loan && b.loan },
+  { id: "clinic.tested",      modes: SANDBOX,   hit: (a, b) => (!a.metPriew && b.metPriew) || (a.std && !b.std) },
+  { id: "scam.reported",      modes: SANDBOX,   hit: (a, b) => a.owed > 0 && b.owed < a.owed },
+  { id: "game.started",       modes: ALL_MODES, hit: (a, b) => !a.gameLive && b.gameLive },
+  { id: "column.read",        modes: ALL_MODES, hit: (a, b) => !a.owlRead && b.owlRead },
+  { id: "sobriety.declared",  modes: ALL_MODES, hit: (a, b) => !a.teetotal && b.teetotal },
+  { id: "lesson.taken",       modes: SANDBOX,   hit: (a, b) => !a.lessonTaken && b.lessonTaken },
+  { id: "saleng.met",         modes: SANDBOX,   hit: (a, b) => b.salengTypes > a.salengTypes },
+  { id: "orchid.entered",     modes: SANDBOX,   hit: (a, b) => !a.inOrchid && b.inOrchid },
+  { id: "killer.title",       modes: SANDBOX,   hit: (a, b) => b.kpTitles > a.kpTitles },
+  { id: "nightride.taken",    modes: SANDBOX,   hit: (a, b) => b.rides > a.rides },
+  { id: "quiz.played",        modes: SANDBOX,   hit: (a, b) => b.quizzes > a.quizzes },
+  { id: "hospital.morning",   modes: SANDBOX,   hit: (a, b) => b.hospital > a.hospital },
+  { id: "blackout",           modes: SANDBOX,   hit: (a, b) => b.nights > a.nights && a.drunk >= 8 },
 ];
 const EFFECT_WHY = new Map(EFFECTS.filter(e => e.why).map(e => [e.id, e.why]));
 
@@ -347,6 +370,9 @@ function langLeak(line) {
 }
 
 const OFFPOCKET = /(Walking Street|Soi Buakhao|Buakhao|LK Metro|Tree Town|Myth Night|Jomtien)/;
+// class Q: a line that legitimately repeats — the clock, the stock refusals, the wait
+const REPEAT_AT = 3;   // the same sentence a third time within fifteen commands
+const REPEAT_OK = ["You wait. Pattaya doesn't", "Exits:", "Step inside:", "Here:", "(HELP lists commands.)", "You can't go that way", "Nobody's waiting to be paid"];
 const OFFPOCKET_OK = ["in 2004", "Last Orders", "MIND THE STEP", "up-country"];
 // The town's media are canon-sanctioned reminiscence surfaces — Last Orders
 // column, the paper, the TV all speak town-wide by design (backlog §1: the
@@ -414,6 +440,7 @@ export function runSoak(opts = {}) {
   const maxMs = opts.maxMs ?? 90_000;
   const t0 = Date.now();
   const failures = [], warns = [], transcript = [];
+  const lineCount = new Map(), furniture = new Set();   // class Q: near-verbatim repeats in this run; the room's own furniture excluded
   const liveness = {};                       // effect id → times observed
   // barowner is expat plus the bar, so it can reach everything expat can AND the
   // bar-only effects; the bar ones are tagged barowner-only because plain expat
@@ -495,6 +522,27 @@ export function runSoak(opts = {}) {
     const lines = buf.slice(mark);
     transcript.push("❯ " + cmd + "   [" + source + "]");
     for (const l of lines) transcript.push(l);
+    // CLASS E — money that moved without a figure on the page (Colin, round 37, made a rule:
+    // the beer names its price on the line that charges it). Any command that changes the
+    // pocket and prints no ฿ is a silent charge. (2026-09-27, the coverage map's E column)
+    try {
+      const la = liveSnap();
+      if (la.money !== liveBefore.money && !lines.some(l => /฿|baht|บาท/.test(String(l))))
+        warns.push({ kind: "silent-money", cmd, room: G.room, at: stats.commands, delta: la.money - liveBefore.money, line: String(lines[0] || "").slice(0, 120) });
+    } catch (err) { /* never kill a run */ }
+    // CLASS Q — a line printed verbatim over and over (the doorbell, Frank round 38; the
+    // smirk five times, Marek round 53). The defect shape is a NEAR repeat: the same
+    // sentence three times within a few commands. Room furniture (what LOOK and a room
+    // change print) legitimately repeats and is learned per run and excluded.
+    const roomChanged = liveSnap().room !== liveBefore.room;
+    for (const l of lines) {
+      const k = String(l); if (k.length < 28 || /^❯|^· /.test(k) || /^\(.*\)$/.test(k)) continue;   // a parenthetical prompt is UI, meant to be identical
+      // a READOUT repeats by construction when a random walker re-types it — those are not doorbells
+      if (roomChanged || /^(look|l|exits|map|help|help more|verbs|quests|hint|journal|notes|score|inventory|i|time|diagnose|who|contacts|phone|books|standing|rep|tao rai|last night|ledger|topics|gallery|photos|weather|scores|lottery|column|owl|notebook|words|who am i|identity|check messages|check balance)( .*)?$/.test(cmd)) { furniture.add(k); continue; }
+      if (furniture.has(k)) continue;
+      const seen = lineCount.get(k) || { last: -99, near: 0, n: 0 };
+      seen.n++; if (stats.commands - seen.last <= 15) seen.near++; seen.last = stats.commands; lineCount.set(k, seen);
+    }
 
     // harvest hints from THIS room's output (stale on room change)
     if (G.room !== hintRoom) { hintQueue = []; hintRoom = G.room; }
@@ -559,7 +607,7 @@ export function runSoak(opts = {}) {
       // CLASS A — composition across the night boundary (docs/persona-findings-ledger-analysis.md:
       // 17% severe, 10% instrumented before 2026-09-27). Two correct systems, one wrong handoff
       // at the one seam every system crosses: the wake. What the morning may not carry.
-      if (G.turns >= lastTurns && G.day === lastDay + 1) {
+      if (G.turns >= lastTurns && G.day === lastDay + 1 && G.pendingChoice !== "vacation_end") {   // the week's end pauses the night at its last turn until answered
         const bad = [];
         if (G.nightTurn > 2) bad.push("nightTurn " + G.nightTurn + " (a night starts at 18:00; the command that ended the last one pays its own tick)");
         if (G.soc && G.soc.drunk !== 0) bad.push("drunk " + G.soc.drunk + " carried through sleep (the hangover is the carry, not the drink)");
@@ -591,7 +639,13 @@ export function runSoak(opts = {}) {
 
   stats.roomsSeen = seen.size;
   stats.roomsTotal = Object.keys(ROOMS).length;
-  return { seed, mode, stats, failures, warns, transcript, seen, liveness };
+  // the repeat ledger is its own channel: a report, not a warning — a prompt or a
+  // refusal may legitimately repeat, so this never fails a run (unlike silent-money)
+  const repeats = [];
+  for (const [line, c] of lineCount) if (c.near >= REPEAT_AT && !REPEAT_OK.some(x => line.includes(x)))
+    repeats.push({ line: line.slice(0, 140), n: c.n, near: c.near });
+  repeats.sort((a, b) => b.near - a.near || b.n - a.n);
+  return { seed, mode, stats, failures, warns, transcript, seen, liveness, repeats };
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
@@ -624,6 +678,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       `rooms ${r.stats.roomsSeen}/${r.stats.roomsTotal} (${cov}%)`);
     for (const x of r.warns.slice(0, 8))
       console.log("  WARN " + x.kind + ": " + (x.line || (`'${x.cmd}'` + (x.room ? " in " + x.room : ""))));
+    for (const x of (r.repeats || []).slice(0, 5))
+      console.log(`  REPEAT ×${x.n} (${x.near} near): ` + x.line);
     for (const f of r.failures) {
       anyFail = true;
       console.log("  FAIL " + f.kind + " @cmd " + f.at + " (day " + f.day + ", nt " + f.nightTurn +

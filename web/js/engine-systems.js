@@ -1390,6 +1390,10 @@ function _bfResolve(kind) {
           : "FULL, and both of you know it \u2014 and names the number plainly. \u201cHigh season, tilac. Tonight this stool make money all night. You want my whole night, the number is the whole night.\u201d No apology in it. It is just the price of her time, told straight."),
         { n: name }), "dim");
     }
+    // she "names the number plainly" and the number was never on the page — ฿2,000
+    // left the pocket with no figure printed (the soak's silent-money invariant, its
+    // first catch, 2026-09-27; Colin's rule from round 37: the line that charges names it)
+    if (price > 0) _say(_fmt("(-฿{p} for her whole night, ฿{m} left.)", { p: price.toLocaleString(), m: G.money.toLocaleString() }), "dim");
     const p2 = (G.party && G.party.ids) ? G.party
       : (G.party = { ids: [], stops: 0, spent: 0, seen: {} });
     const second = p2.ids.length === 1;
