@@ -244,7 +244,7 @@ function liveSnap() {
     kpTitles: Object.keys(G.kpTitle || {}).length, rides: Object.keys(G.rideLog || {}).length,
     quizzes: Object.keys(G.quizPlayed || {}).length, hospital: G.hospitalVisits || 0, drunk: soc.drunk || 0,
     charmedN: soc.charmedN || 0, massaged: Object.keys(soc.massaged || {}).length, rabbitData: G.rabbitDataDay || 0,
-    chamNights: (G.chamDays || []).length, beers: Object.values(soc.selfDrinks || {}).reduce((a, n) => a + n, 0),
+    chamNights: (G.chamDays || []).length, bkkStage: (G.bkk && G.bkk.stage) || 0, beers: Object.values(soc.selfDrinks || {}).reduce((a, n) => a + n, 0),
   };
 }
 
@@ -331,6 +331,7 @@ const EFFECTS = [
   { id: "heist.data",         modes: ["barowner", "expat"], hit: (a, b) => !a.rabbitData && b.rabbitData },
   { id: "cream.night",        modes: ["barowner", "expat"], hit: (a, b) => b.chamNights > a.chamNights },
   { id: "beer.bought",        modes: ALL_MODES, hit: (a, b) => b.beers > a.beers },
+  { id: "sao.text",           modes: ["barowner", "expat"], hit: (a, b) => b.bkkStage > a.bkkStage },
 ];
 const EFFECT_WHY = new Map(EFFECTS.filter(e => e.why).map(e => [e.id, e.why]));
 

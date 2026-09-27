@@ -38,7 +38,7 @@ const INSTRUMENTS = [
   { name: "references.test", cls: ["K", "R"] },
   { name: "templates.test", cls: ["L", "M", "K"] },
   { name: "predicates.test", cls: ["I"], systems: ["party", "nightride", "affair", "barchain", "barbooks", "dog", "sobriety"] },
-  { name: "dialogue-lifecycle", cls: ["J"], systems: ["quests", "conversation", "barchain", "heist", "act1"] },
+  { name: "dialogue-lifecycle", cls: ["J"], systems: SYS.filter(s => s.quests.length).map(s => s.id).concat(["quests", "conversation", "barchain", "heist"]) },
   { name: "soak liveness", cls: ["B"], systems: SYS.filter(s => s.effects.length).map(s => s.id) },
   { name: "prose-corpus dossiers", cls: ["R", "F"], systems: ["worldprose", "filler", "regulars", "conversation"] },
   // the save/reload harness (2026-09-27): every modal state round-trips, redraws identically,
@@ -70,16 +70,19 @@ const instrumented = (sys, cls) => INSTRUMENTS.filter(i => i.cls.includes(cls) &
 // so the dark count is cells that COULD hold one. Exclusions per class.
 const NA = {
   S: ["guardrails", "worldprose", "filler", "media"],
-  G: s => !(s.modals.length || s.encounters.length || ["games", "bus", "motosai", "barfine", "conversation", "act1", "saveload", "presentation", "police", "quests", "phone"].includes(s.id)),
+  G: s => !(s.modals.length || s.encounters.length || ["games", "bus", "motosai", "barfine", "conversation", "act1", "saveload", "presentation", "police", "quests"].includes(s.id)),
   J: s => !(s.quests.length || ["conversation", "regulars", "act1", "heist", "barchain", "phone", "orchid"].includes(s.id)),
   I: ["guardrails", "presentation", "saveload", "media", "worldprose", "identity", "calendar", "weather"],
   N: ["guardrails", "presentation", "saveload", "worldprose", "filler", "identity", "happiness", "vacation"],
   E: s => !["money", "drinks", "ladydrinks", "bell", "barfine", "party", "nightride", "cons", "hotels", "food", "saleng", "massage", "loans", "barchain", "barbooks", "procurement", "bus", "motosai", "games", "encounters", "happiness", "act1", "vacation", "heist", "phone", "thai", "clinic", "social", "sobriety", "affair", "cream"].includes(s.id),
   K: ["guardrails", "saveload", "presentation", "identity"],
-  C: ["guardrails", "saveload", "presentation", "filler", "happiness"],
+  C: ["guardrails", "saveload", "presentation", "filler", "happiness", "body", "sobriety", "clock"],   // a meter is not a route
   R: ["saveload", "presentation"],
   P: ["guardrails", "filler", "happiness", "weather"],
   M: ["saveload", "presentation", "guardrails", "money", "clock"],
+  A: ["guardrails", "identity", "media"],   // nothing crosses a night boundary in a rename, an intro or a newsletter
+  B: ["guardrails"],
+  Q: ["guardrails", "saveload", "presentation"],
 };
 const applies = (s, cls) => { const r = NA[cls]; if (!r) return true; return typeof r === "function" ? !r(s) : !r.includes(s.id); };
 

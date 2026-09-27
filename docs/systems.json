@@ -954,7 +954,9 @@
    "npcs": [
     "sao"
    ],
-   "effects": [],
+   "effects": [
+    "sao.text"
+   ],
    "modals": [
     "bkkdinner",
     "bkkbill"
