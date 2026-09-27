@@ -6224,6 +6224,68 @@ function _floorPool(id) {
     : _FLOOR_HOSTESS;
 }
 
+// THE EVERYDAY FLOOR (Mario, 2026-09-27, after Rolf's floor went silent by night
+// 25): most moments on a shift are nothing much — a chit spiked, a fridge running
+// warm — and the reveals above are the occasional enhancement, not the diet. So a
+// floor moment is one of these by default, printed dim and short, and a reveal
+// only when she still has one and the hash says tonight (FLOOR_REVEAL_ODDS). The
+// weight on the page is the signal: a one-liner is the job, a paragraph is her.
+// Registers, not reveals, so they are shared by role and may come round again;
+// each woman just never gets the same one twice in a row.
+const FLOOR_REVEAL_ODDS = 0.3;
+const _FLOOR_EVERY_HOSTESS = [
+  "{who} restocks the Leo two bottles at a time and mentions, in passing, which fridge is running warm.",
+  "{who} wipes the rail where you just wiped it — not unkindly, the way people redo a thing they care about.",
+  "{who} has a clean glass in your hand the moment you reach for a dirty one.",
+  "Between customers {who} turns her phone round to show you somebody's dog doing something stupid, and turns it back.",
+  "A regular lifts an empty; {who} has the next one open before you've clocked him.",
+  "{who} sits on the cool-box for one minute, shoes off, and is on her feet again the second the door moves.",
+  "{who} says something to the girl beside her and they both look at your shirt. The verdict is not shared.",
+  "{who} swings the fan back round to face the rail. Somebody always turns it to face themselves.",
+  "{who} is singing along under her breath, a line behind the song, and doesn't stop when you notice.",
+  "{who} tops up the peanuts without being asked and eats three on the way back.",
+];
+const _FLOOR_EVERY_MAMA = [
+  "{who} counts heads on the rail with her eyes and gives you a small nod: good enough.",
+  "{who} sends one of the girls out front with a look, and the doorway fills itself.",
+  "{who} checks the ice, frowns once, and a bag is on its way before it is a problem.",
+  "{who} takes a call in Thai, laughs twice, and tells you nothing about it.",
+  "{who} turns every bottle on the back bar label-out. Ten seconds, and it holds all night.",
+  "\"Quiet one,\" {who} says of the night, the way a farmer says it of the weather, and goes back to watching the door.",
+  "{who} has a word with a punter at the end of the rail. He laughs; she doesn't; he orders another.",
+  "{who} tastes the som tam one of the girls brought in, adds lime from the bar, and hands it back improved.",
+  "{who} looks at the clock over the till, then at you, and that is the whole conversation.",
+  "An old man on the pavement wais {who} through the open front; she wais back, and neither of them breaks stride.",
+];
+const _FLOOR_EVERY_CASHIER = [
+  "{who} tears a chit off the pad and spikes it without looking.",
+  "The drawer sticks; {who} bumps it with a hip and it opens.",
+  "{who} has the change laid out in the dish, notes on top, before the customer has finished his sentence.",
+  "{who} writes a figure in the book, crosses it out, and writes the same figure again, neater.",
+  "{who} sends a girl's chit back to her with one tap of the pen: wrong table.",
+  "{who} fans the notes, counts under her breath, and snaps a rubber band round the thousands.",
+  "{who} asks whether you want the float topped up or left. You say left. She tops it up a little anyway.",
+  "{who} keeps the calculator out and never touches it; it is there for the customers to see.",
+  "{who} moves the tip jar a hand's width to the left, where the light catches it.",
+  "{who} slides a glass of water across the till to you without a word and goes back to the book.",
+];
+function _floorEveryPool(id) {
+  const role = NPC_ROLES[id];
+  return role === "mamasan" ? _FLOOR_EVERY_MAMA
+    : role === "cashier" ? _FLOOR_EVERY_CASHIER
+    : _FLOOR_EVERY_HOSTESS;
+}
+// Is tonight's moment with her a reveal? Only if she has one left, and then by a
+// pure hash of (her, the day, the moment) — never the dice, so a seeded night is
+// unchanged by reading the floor. Her FIRST moment ever is always a reveal: you
+// meet your staff properly before you start taking them for granted.
+function _floorReveal(id) {
+  const b = G.bar, heard = ((b.floorSaid || {})[id]) || [];
+  if (!_floorPool(id).some((_, i) => !heard.includes(i))) return false;
+  if (!heard.length) return true;
+  return (_hh(id + ":" + G.day + ":" + (b.floorN || 0), 5417) % 1000) < FLOOR_REVEAL_ODDS * 1000;
+}
+
 // One moment at a time, spaced out, and always to the person you know LEAST —
 // so a long run of shifts spreads across the floor instead of pouring into
 // whoever the sort happened to put first.
@@ -6286,21 +6348,27 @@ function _workFloor() {
   if (!staff.length) return;
   const seen = (b.floorSeen = b.floorSeen || []);
   const said = (b.floorSaid = b.floorSaid || {});
-  // A moment is a REVEAL, and a reveal can only happen once: a girl whose pool
-  // is dry is not dealt to again (Cake found the same ฿40 twice — Malcolm,
-  // 2026-09-14). When the whole floor has told you everything, the floor is an
-  // ordinary floor and the tick says nothing — a restart would hand you her
-  // first confidence back as news.
-  const fresh = id => _floorPool(id).some((_, i) => !(said[id] || []).includes(i));
-  staff = staff.filter(fresh);
-  if (!staff.length) return;
+  // A REVEAL can only happen once (Cake found the same ฿40 twice — Malcolm,
+  // 2026-09-14), so a woman with none left gives you the everyday floor instead;
+  // she is still there, still working, still worth standing next to.
   let pool = staff.filter(id => !seen.includes(id));
   if (!pool.length) { seen.length = 0; pool = staff; }
   pool.sort((a, c) => ((G.soc.drinks[a] || 0) - (G.soc.drinks[c] || 0)));
   const id = pool[0];
   seen.push(id);
+  const reveal = _floorReveal(id);
   b.floorTurn = G.turns;
   b.floorN = (b.floorN || 0) + 1;
+  if (!reveal) {
+    const every = _floorEveryPool(id);
+    const last = (b.floorEvery = b.floorEvery || {});
+    let k = _hh(id + ":" + G.day + ":" + b.floorN, 7919) % every.length;
+    if (k === last[id]) k = (k + 1) % every.length;   // never the same line twice running for her
+    last[id] = k;
+    _say(_fmt(every[k], { who: _npcLabel(id) }), "dim");
+    _addBond(id, 1);
+    return;
+  }
   const linePool = _floorPool(id);
   const heard = said[id] = said[id] || [];
   const idxPool = linePool.map((_, i) => i).filter(i => !heard.includes(i));

@@ -93,7 +93,9 @@ test("the forty she found lands in the till, and the books agree with the drawer
   assert.ok(idx >= 0, "the pool still carries the ฿40 line");
   G.bar.floorSaid = { [id]: pool.map((_, i) => i).filter(i => i !== idx) };   // only that line left unseen
   G.bar.workedDay = G.day; G.bar.workedLast = true; G.bar.floorN = 0; G.bar.floorTurn = -99; G.room = "stinky_bar";
-  out = []; _workFloor();
+  G.bar.floorSeen = _barStaff().filter(x => x !== id);   // she is the one the rotation reaches
+  const savedR = _floorReveal; _floorReveal = () => true;   // …and tonight's moment with her is a reveal
+  try { out = []; _workFloor(); } finally { _floorReveal = savedR; }
   assert.match(text(), /written off/);
   assert.equal(G.bar.cash, cash0 + 40, "the note said +฿40 while the drawer stayed put (Rolf, night 13)");
   assert.equal(G.bar.eventIn, 40);
@@ -295,4 +297,31 @@ test("the hour-blind descs: no sunset asserted as NOW at the foot of Soi 6, the 
     const d = String(ROOMS[r].desc);
     assert.doesNotMatch(d, /last smear of sunset|the sunset out over the water and the sand/, r);
   }
+});
+
+// ── Mario's call on the dry floor (2026-09-27) ──────────────────────────
+test("the floor is everyday by default, a reveal is the occasional enhancement, and it never goes silent", () => {
+  owner(); G.room = "stinky_bar";
+  const staff = _barStaff();
+  const nightsOf = [];   // per night: how many moments, how many reveals
+  for (let night = 0; night < 60; night++) {
+    G.day = 200 + night; G.bar.workedLast = true; G.bar.workedDay = G.day;
+    G.bar.floorN = 0; G.bar.floorTurn = -99;
+    let moments = 0, reveals = 0;
+    for (let t = 0; t < 40 && G.bar.floorN < WORK_FLOOR_MAX; t++) {
+      G.turns += WORK_FLOOR_GAP; out = []; _workFloor();
+      if (!out.length) continue;
+      moments++;
+      if (out.some(o => o.cls !== "dim")) reveals++;
+    }
+    nightsOf.push({ moments, reveals });
+  }
+  assert.ok(nightsOf.every(n => n.moments === WORK_FLOOR_MAX), "every stood night has its moments, however long you own the bar");
+  const early = nightsOf.slice(0, 5).reduce((a, n) => a + n.reveals, 0);
+  assert.ok(early < 5 * WORK_FLOOR_MAX, "the reveals do not arrive as the whole diet on the first nights");
+  const late = nightsOf.slice(10, 30).reduce((a, n) => a + n.reveals, 0);
+  assert.ok(late > 0, "…and they are still turning up weeks in, as the enhancement");
+  const total = staff.reduce((a, id) => a + _floorPool(id).length, 0);
+  const told = staff.reduce((a, id) => a + ((G.bar.floorSaid || {})[id] || []).length, 0);
+  assert.equal(told, total, "sixty nights on, every woman has told you everything she had");
 });

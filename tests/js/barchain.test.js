@@ -1408,9 +1408,11 @@ test("floor moments deepen instead of retelling — a reveal is once, then the n
     }
   }
   assert.ok(lines.length >= 8, "several floor moments landed");
-  // within each girl's own lines, no verbatim repeat until her pool is spent
+  // within each girl's own REVEALS, no verbatim repeat until her pool is spent —
+  // the everyday one-liners are a register and may come round (2026-09-27)
+  const isReveal = l => [_FLOOR_HOSTESS, _FLOOR_MAMA, _FLOOR_CASHIER].some(p => p.some(r => l.includes(r.split("{who}").pop().slice(0, 40))));
   const byGirl = {};
-  for (const l of lines) {
+  for (const l of lines.filter(isReveal)) {
     const who = ["Manow", "Lamai", "Cake"].find(n => l.includes(n)) || "?";
     (byGirl[who] = byGirl[who] || []).push(l);
   }

@@ -560,13 +560,14 @@ test("a floor moment that names ฿40 puts ฿40 in the books", () => {
   assert.ok(i >= 0, "the line exists");
   // deal her that exact line
   G.bar.floorSaid = { [cashier]: _FLOOR_CASHIER.map((_, k) => k).filter(k => k !== i) };
-  G.bar.floorN = 0; G.bar.floorTurn = -999; G.bar.workedDay = G.day; G.bar.declared = true;
+  G.bar.floorN = 0; G.bar.floorTurn = -999; G.bar.workedDay = G.day; G.bar.workedLast = true; G.bar.declared = true;
+  G.bar.floorSeen = _barStaff().filter(x => x !== cashier);
   const in0 = G.bar.eventIn || 0;
-  out = []; if (typeof _workFloorFor === "function") _workFloorFor(cashier); else { _doWork(); G.turns += 20; _workFloor(); }
-  if (/written off/.test(text())) {
-    assert.equal((G.bar.eventIn || 0) - in0, 40, "the forty landed");
-    assert.ok((G.bar.eventNotes || []).some(n => /forty/.test(n)), "and BOOKS will name it");
-  }
+  const savedR = _floorReveal; _floorReveal = () => true;   // reveals are the occasional moment since 2026-09-27; force this one
+  try { out = []; _workFloor(); } finally { _floorReveal = savedR; }
+  assert.match(text(), /written off/);
+  assert.equal((G.bar.eventIn || 0) - in0, 40, "the forty landed");
+  assert.ok((G.bar.eventNotes || []).some(n => /forty/.test(n)), "and BOOKS will name it");
 });
 
 test("every flat loss on a shift call carries its reason into BOOKS", () => {
@@ -700,7 +701,7 @@ test("the last-bus warning is not for a man standing his own rail", () => {
 
 // ── Fable wave two (Malcolm's stragglers) ────────────────────────────────────
 
-test("a reveal is a reveal: an exhausted floor deals nobody's first confidence twice", () => {
+test("a reveal is a reveal: an exhausted floor deals nobody's first confidence twice — it deals the everyday floor", () => {
   // Cake found the same ฿40 on two nights — the pool restarted when dry
   ownBar(); G.money = 5000;
   const staff = _barStaff();
@@ -710,8 +711,12 @@ test("a reveal is a reveal: an exhausted floor deals nobody's first confidence t
   G.bar.floorSeen = []; G.bar.floorN = 0; G.bar.floorTurn = -999;
   G.bar.workedDay = G.day; G.bar.declared = true;
   out = []; _workFloor();
-  assert.equal(text(), "", "an ordinary floor: nothing dealt");
-  assert.equal(G.bar.floorN || 0, 0, "no moment counted");
+  // a dry floor was SILENT until 2026-09-27, and Rolf's went quiet for good by
+  // night 25 (round 54); now it is the everyday floor, and still never a reveal
+  const said = text();
+  assert.ok(staff.some(id => _floorEveryPool(id).some(l => said.includes(l.replace("{who}", _npcLabel(id))))), "an everyday moment: " + said);
+  for (const id of staff) assert.ok(!_floorPool(id).some(l => said.includes(l.replace("{who}", _npcLabel(id)))), "no reveal came round again");
+  assert.equal(G.bar.floorN, 1, "the moment counts");
   for (const id of staff) assert.equal(G.bar.floorSaid[id].length, _floorPool(id).length, "no book was wiped");
 });
 
