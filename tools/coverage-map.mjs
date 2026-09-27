@@ -47,6 +47,10 @@ const INSTRUMENTS = [
   { name: "saveload.test (G round-trip)", cls: ["S"] },
   // the reachability harness (2026-09-27): one walk, every quest's `at`, TRAVEL HOME from every
   // crash spot broke on a low battery on the real path, every listed door opens and OUT works
+  // the arcs are REACHED by scripted real-path tests: the bar chain and everything behind it
+  // (barchain.test), the heist (rabbit.test), Cream (chameleon.test), the night ride (round35/47,
+  // wrongquestion.test) — each plays the real trigger, not a hand-set state
+  { name: "barchain.test / rabbit.test / chameleon.test / sao.test / nightride pins", cls: ["C"], systems: ["barchain", "barbooks", "affair", "procurement", "heist", "cream", "nightride", "sao"] },
   { name: "reachability.test", cls: ["C"], systems: ["navigation", "quests", "act1", "hotels", "darkness", "motosai", "bus", "worldprose", "orchid", "dog", "clinic", "food", "massage", "barchain", "heist", "cons", "encounters", "regulars", "calendar", "thai", "games", "loans", "money", "drinks", "bell", "barfine", "ladydrinks", "social", "media", "weather", "saleng", "phone"] },
   // the soak's night-boundary invariants (2026-09-27): what the wake may not carry — a drink,
   // the rain, a companion, a modal, a negative pocket — checked after every night of every seed
