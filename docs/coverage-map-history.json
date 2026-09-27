@@ -18,5 +18,45 @@
    "design": 12,
    "deferred": 9
   }
+ },
+ {
+  "date": "2026-09-27",
+  "latestRound": 53,
+  "systems": 51,
+  "cells": 790,
+  "lit": 381,
+  "hot": 45,
+  "instrumented": 156,
+  "dark": 253,
+  "systemsNeverWalked": 3,
+  "findingsClassified": 761,
+  "findingsUntagged": 0,
+  "strays": 0,
+  "verdicts": {
+   "fixed": 54,
+   "refuted": 4,
+   "design": 12,
+   "deferred": 9
+  }
+ },
+ {
+  "date": "2026-09-27",
+  "latestRound": 53,
+  "systems": 51,
+  "cells": 790,
+  "lit": 381,
+  "hot": 45,
+  "instrumented": 175,
+  "dark": 234,
+  "systemsNeverWalked": 3,
+  "findingsClassified": 761,
+  "findingsUntagged": 0,
+  "strays": 0,
+  "verdicts": {
+   "fixed": 54,
+   "refuted": 4,
+   "design": 12,
+   "deferred": 9
+  }
  }
 ]

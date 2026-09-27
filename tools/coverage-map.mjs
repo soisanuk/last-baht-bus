@@ -41,6 +41,11 @@ const INSTRUMENTS = [
   { name: "dialogue-lifecycle", cls: ["J"], systems: ["quests", "conversation", "barchain", "heist", "act1"] },
   { name: "soak liveness", cls: ["B"], systems: SYS.filter(s => s.effects.length).map(s => s.id) },
   { name: "prose-corpus dossiers", cls: ["R", "F"], systems: ["worldprose", "filler", "regulars", "conversation"] },
+  // the save/reload harness (2026-09-27): every modal state round-trips, redraws identically,
+  // forks identically on an answer, and is never silent or charged on junk — S wherever a
+  // modal, game or encounter can be live, and G's baseline (the junk sweep) for the same
+  { name: "saveload.test (G round-trip)", cls: ["S"] },   // the whole of G is the identity through a save, every system in a non-default state
+  { name: "saveload.test", cls: ["S", "G"], systems: SYS.filter(s => s.modals.length || s.encounters.length || ["games", "bus", "motosai", "barfine", "act1", "saveload", "massage", "identity", "vacation", "party", "nightride", "hotels", "cream", "sao", "heist", "barbooks", "procurement", "affair", "barchain"].includes(s.id)).map(s => s.id) },
 ];
 const instrumented = (sys, cls) => INSTRUMENTS.filter(i => i.cls.includes(cls) && (!i.systems || i.systems.includes(sys))).map(i => i.name);
 // not every class can occur in every system: a save/reload defect in the guardrails,
