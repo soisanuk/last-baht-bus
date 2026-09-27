@@ -824,6 +824,16 @@ function _doGo(dirWord) {
     }
   }
   _arriveAt(to);
+  _longWalk(to);
+}
+
+// A room that is LONG on foot (the Sukhumvit verge) costs its walk in turns, with
+// the exposure a walk has — the room said "long" while the clock gave it one turn.
+function _longWalk(to) {
+  const r = ROOMS[to];
+  if (!r || !r.walkTurns || G.room !== to) return;
+  if (r.walkLine) _say(r.walkLine, "dim");
+  _passTime(r.walkTurns);
 }
 
 // Arrival side-effects shared by _doGo and _doTravel: door policy, the room
@@ -1364,6 +1374,8 @@ function _doTravel(arg) {
     if (route[i] && _footCrossing(G.room, route[i])) return;   // TRAVEL walks the real route, highway included
     if (route[i]) G.room = route[i];   // a step of actual soi, quietly walked
     _tick();
+    // a long room is long on the way through too (the verge)
+    for (let w = 0; w < ((ROOMS[G.room] && ROOMS[G.room].walkTurns) || 0) && G === g0 && G.day === startDay; w++) _tick();
     // a downpour that starts mid-walk pins you where it finds you, same as a typed step
     // would — TRAVEL used to walk nine turns through weather that refuses S (Owen, round 46)
     if (G.rain > 0 && !_sheltered(G.room) && !(i === hops - 2 && _sheltered(dest))) {
@@ -1385,6 +1397,7 @@ function _doTravel(arg) {
   if (_stopAt === hops - 1) { _darkStop(); return; }   // the destination itself is the first dark room
   G.enteredVia = G.room;
   _arriveAt(dest);
+  _longWalk(dest);
 }
 
 // Venue-name comparison, apostrophe-proof: _norm strips quotes from typed input,
@@ -2274,8 +2287,12 @@ const _SCENERY = [
   } },
   { key: "me", m: /\b(me|myself|my ?self|my body)\b/, fn: () => {
     const base = _pickVary([
-      "Sunburn on the tops of your feet in the shape of your sandals, a shirt that was fresh " +
-        "four hours ago, and an expression you would describe as game. (DIAGNOSE for the honest version.)",
+      // "fresh four hours ago" read a minute after a shower (Tomasz, round 54)
+      G.showerTurn != null && G.turns - G.showerTurn < 40
+        ? "Clean, for the moment — the shower is still in your hair — sunburn on the tops of your feet " +
+          "in the shape of your sandals, and an expression you would describe as game. (DIAGNOSE for the honest version.)"
+        : "Sunburn on the tops of your feet in the shape of your sandals, a shirt that was fresh " +
+          "four hours ago, and an expression you would describe as game. (DIAGNOSE for the honest version.)",
       "A man on holiday, doing holiday at the intensity of a job. The forearms are going brown " +
         "and nothing else is. (DIAGNOSE for the full reading.)",
       "You take stock. Everything is broadly where you left it, which at this hour is a win. " +
@@ -4890,6 +4907,15 @@ function _contactByName(nm) {
   return Object.keys(G.phone.contacts).find(k => G.phone.contacts[k] && NPCS[k] &&
     (k === w || NPCS[k].name.toLowerCase() === w || NPCS[k].name.toLowerCase().split(" ").pop() === w)) || null;
 }
+// Past the sweet spot, counted: the fifth beer is one past it, the ninth is not.
+const _BEER_PAST = [
+  "One past the sweet spot.",
+  "Two past the sweet spot, which is now more of a rumour.",
+  "The sweet spot is somewhere behind you, waving.",
+  "Whatever the sweet spot was, this is not it.",
+  "You have stopped counting. The bar has not.",
+];
+
 const _TEETOTAL_BROKEN = [
   "(So much for that. Nobody says anything, which is its own kind of saying something; the town has updated its notes.)",
   "(The soda-water man orders a beer, and the bar does the thing bars do, which is nothing at all. The declaration is off the books.)",
@@ -6628,7 +6654,7 @@ function _doBuy(arg) {
     }
     if (_ownBeer) _ownStock(_beerPrice(), "a beer", _L(_pickVary(_BEER_LINES, "beer")) + (_beerTail ? " " + _L(_beerTail) : ""));
     else _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_BEER_LINES, "beer")), p: _beerPrice(), m: G.money }) +
-      (_beerTail ? " " + _L(_beerTail) : "") + (d > 4 ? " One past the sweet spot." : ""));
+      (_beerTail ? " " + _L(_beerTail) : "") + (d > 4 ? " " + _BEER_PAST[Math.min(d - 5, _BEER_PAST.length - 1)] : ""));   // counted, not repeated (Marek, round 53: "one past" on beers five to nine)
     _addHappy(d <= 4 ? 1 : -1);
     _checkDrunk();
     return;
@@ -8048,14 +8074,51 @@ const _SOUNDS = {
   "Darkside": "Cicadas, karaoke drifting across the lake, and geckos calling the odds on it.",
 };
 
+// The small hours smell and sound different, and a region that said one thing
+// every time you asked read as a caption (Rolf, round 54): after midnight each
+// region has its late register.
+const _SMELLS_LATE = {
+  "Jomtien": "Cold sand, wet rope, and the ghost of the squid cart. The sea has the place to itself now and smells like it.",
+  "Pratumnak": "Jasmine from a wall you can't see over, dew on the hill, and very faintly the town's exhaust drifting up to be forgiven.",
+  "Beach Road": "Salt and spilled beer drying on warm concrete, a street-sweeper's diesel, and the first charcoal of somebody's breakfast.",
+  "Second Road": "Cooling tarmac, a 7-Eleven's fried-chicken cabinet, and the drains having their say now the traffic has stopped arguing.",
+  "Soi Buakhao": "Stale beer, a noodle pot on its last boil, and a bin that has been waiting all night to be noticed.",
+  "Tree Town": "Charcoal gone to ash, bleach losing, and the drain winning at last.",
+  "LK Metro": "Hot concrete giving the day back, spilled mixer, and cigarettes smoked in doorways by women whose shift is over.",
+  "Walking Street": "Dry ice long gone, fryer oil, and the Gulf, which was there all along and has finally got a word in.",
+  "Soi 6": "Floor cleaner winning the argument with the perfume, and somebody's midnight moo ping burning to charcoal.",
+  "Myth Night": "Fryer oil and nothing else. The fresh paint has given up for the night.",
+  "Naklua": "Low tide, temple incense burned down to the stubs, and the fish market's first ice being broken.",
+  "Darkside": "Wet grass, lake mud, and a karaoke bar's last cigarette. Proper night, the kind the town proper forgot.",
+};
+const _SOUNDS_LATE = {
+  "Jomtien": "Just the sea now, and one beach dog who has decided the tide is a personal matter.",
+  "Pratumnak": "Geckos, a far-off motorbike climbing the hill in low gear, and below you the town turned right down.",
+  "Beach Road": "Waves, a single songthaew idling for nobody, and a broom working the promenade in long patient strokes.",
+  "Second Road": "The hum of the 7-Eleven, a motorbike every minute or so, and the traffic lights clicking through their cycle for no one.",
+  "Soi Buakhao": "One bar's jukebox outlasting the rest, dice on a Connect Four board, and a woman laughing at the end of a long night.",
+  "Tree Town": "Two sound systems now instead of three, and one of those is losing interest.",
+  "LK Metro": "Bass through a shutter, heels on concrete, somebody counting money out loud in Thai.",
+  "Walking Street": "The doof down to a thud behind closed doors, touts calling half-heartedly, glass being swept into a bin.",
+  "Soi 6": "Stools being stacked, a speaker switched off mid-chorus, and the soi's own voice for once — motorbikes and a cat fight.",
+  "Myth Night": "The band's gone. Somebody is still, somehow, playing the same four bars of that Scorpions song on a {{phone}}.",
+  "Naklua": "Long-tails starting up for the morning, temple dogs, and a monk's alarm clock two streets over.",
+  "Darkside": "Frogs in the lake, cicadas, and a single karaoke voice refusing to let the song end.",
+};
+const _BAR_SMELLS = [
+  "Perfume, cold Chang, cigarette ghosts in the upholstery, and the bleach that fights a nightly holding action against all three. Every bar in town, one smell.",
+  "Lime off the chopping board, ice melting in a bucket, and somebody's jasmine perfume doing a great deal of work.",
+  "Spilled beer on the rail, a mosquito coil smouldering under the bar, and the sweet chemical ghost of the floor cleaner.",
+  "Coconut oil, cigarettes, beer and the particular damp of a bar that has been open since four.",
+];
+
 function _doSmell() {
   if (_inBar()) {
-    _say("Perfume, cold Chang, cigarette ghosts in the upholstery, and the " +
-      "bleach that fights a nightly holding action against all three. Every " +
-      "bar in town, one smell.");
+    _say(_pickVary(_BAR_SMELLS, "barsmell"));
     return;
   }
-  _say(_SMELLS[_room().region] || "Pattaya. It's not describable, but it is memorable.");
+  const late = G.nightTurn >= 60 && _SMELLS_LATE[_room().region];
+  _say((late ? _SMELLS_LATE[_room().region] : _SMELLS[_room().region]) || "Pattaya. It's not describable, but it is memorable.");
 }
 
 function _doListen() {
@@ -8079,7 +8142,7 @@ function _doListen() {
         "chorus of “HELLO WELCOME” as somebody richer walks past outside.");
     return;
   }
-  _say(_SOUNDS[_room().region] || "Pattaya, idling.");
+  _say(((G.nightTurn >= 60 && _SOUNDS_LATE[_room().region]) || _SOUNDS[_room().region]) || "Pattaya, idling.");
 }
 
 // Is there anybody on this floor to dance with? Take Care Me's prose says no
@@ -8970,6 +9033,7 @@ function _doShower() {
     _say(`Your shower is back at the ${_HOTELS[G.hotel].name}, enjoying the solitude.`);
     return;
   }
+  G.showerTurn = G.turns;
   if (G.soc.drunk >= 3 || G.hurt) {
     _say("You stand under water of legendary pressure until the night stops " +
       "ringing. You emerge, if not a new man, at least a rinsed draft of one.");
@@ -9704,12 +9768,14 @@ function _doTaoRai() {
     return;
   }
   // an eatery's price list is the board, not the seat doctrine — Cheap Charlie's
-  // (Jomtien) answered TAO RAI with the bar-stool sermon (Tomasz, round 54)
+  // (Jomtien) answered TAO RAI with the bar-stool sermon (Tomasz, round 54). On a
+  // street with a stall AND a bike stand both are true, so both are said, the
+  // stall first because you are standing at it (Marek, round 53)
   if (!_inBar() && !G.pendingEnc && !(typeof _servesDrinks === "function" && _servesDrinks(G.room)) &&
-      typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room] && !_room().motosai) {
+      typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room]) {
     const st = FOOD_STALLS[G.room];
     _say(`“เท่าไหร่?” (tao rai — how much?) ${st.name.replace(/^(a |an |the )/, "").replace(/^./, c => c.toUpperCase())}: ฿${st.price}, and a water is a water. That is the whole board. (BUY FOOD.)`, "dim");
-    return;
+    if (!_room().motosai || _convoActive()) return;
   }
   if (!_inBar() && !G.pendingEnc && _room().massage) {
     const r = _room();
@@ -9733,7 +9799,7 @@ function _doTaoRai() {
     const late = G.nightTurn >= LAST_BUS_TURN;
     const fares = Object.entries(MOTOSAI_DESTS).filter(([, d]) => d.room !== G.room && !(ROOMS[d.room] && ROOMS[d.room].region === _room().region))   // "tree town ฿50" at the Tree Town arch (Lars, round 47)
       .map(([k, d]) => `${k} ฿${_motoFare(d)}`);   // the charged fare, gouge and all — quoted is charged
-    _say("“เท่าไหร่?” (tao rai — how much?) The piwin rattles it off without looking up" +
+    _say((FOOD_STALLS && FOOD_STALLS[G.room] ? "And the bikes: the piwin" : "“เท่าไหร่?” (tao rai — how much?) The piwin") + " rattles it off without looking up" +
       (late ? ", small-hours rate" : "") + ": " + fares.join(" · ") + ". (MOTOSAI TO <place>.)", "dim");
     return;
   }

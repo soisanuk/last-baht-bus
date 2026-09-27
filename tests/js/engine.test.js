@@ -6026,8 +6026,8 @@ test("freelancer: the risky kind robs you blind while you sleep", () => {
   state().room = "promenade";
   state().money = 2000;
   state().happy = 30;
-  state().rng = 40000; // big first roll → the robber
   _startEnc("freelancer");
+  state().rng = 40000; // big first roll → the robber (seeded AFTER the intro, which is a pool since round 54)
   run("yes");
   assert.equal(state().day, 3, "you still lost the night");
   assert.ok(state().money <= 500, `robbed of the rest (฿${state().money} left)`);
@@ -6506,7 +6506,7 @@ test("smell and listen know what district they're in", () => {
   assert.match(lastOut(), /some hero is buying a bar a round/);
   state().room = "candy_bar";
   run("smell", "listen");
-  assert.match(lastOut(), /Every bar in town, one smell/);
+  assert.ok(_BAR_SMELLS.some(l => lastOut().includes(l)), "a bar smells like a bar (pooled since round 54)");
   assert.match(lastOut(), /HELLO WELCOME/);
 });
 

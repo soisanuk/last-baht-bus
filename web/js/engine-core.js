@@ -289,7 +289,9 @@ function newGame() {
     rideLog: {},         // night rides per girl: {count, day, stops, great} — she remembers, and so does "late"
     lastRide: null,      // {id, day, stops} — the coda knows she has a bike
     selfBfHold: 0,       // the self-barfine offer stands for a command or two
-    safeMoneyDay: 0,     // the day Madam Oy's safe money landed — the next morning's ledger says so
+    safeMoneyDay: 0,     // the day Madam Oy's safe money landed
+    safeMoneyLedger: false,
+    metDay: {},          // id → the day you first spoke (a greeting that says "since you left" needs you to have LEFT)   // …and whether the NEXT ledger has netted it in yet (see _morningLedger)
     chamDays: [],        // the distinct nights you sat with Cream — after a few, CONTACT nudges toward the question
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
@@ -2189,7 +2191,7 @@ function _deliver(npcId, d, full, asNew) {
   if ((!repeat || d.fxAlways) && d.fx) d.fx(st, G);
   // first contact (any exchange) IS the meeting: advance the state and grant the
   // baseline trust here, so the meeting bonus never depends on which node fired.
-  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }
+  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); (G.metDay = G.metDay || {})[npcId] = G.day; }
   // this node is now the live one — its `choices` (if any) become the action-choices
   G.convoIdx = G.convo === npcId ? idx : G.convoIdx;
   if (d.choices && d.choices.length) (G.convoChoiceMemo = G.convoChoiceMemo || {})[npcId] = idx; // typed labels outlive the next ask (27-night playtest)

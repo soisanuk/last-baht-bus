@@ -325,3 +325,96 @@ test("the floor is everyday by default, a reveal is the occasional enhancement, 
   const told = staff.reduce((a, id) => a + ((G.bar.floorSaid || {})[id] || []).length, 0);
   assert.equal(told, total, "sixty nights on, every woman has told you everything she had");
 });
+
+// ── The deferred sweep (2026-09-27): rounds 53–54's leftovers ─────────────
+test("the safe-money tag lands on the ledger that netted it, on either route home", () => {
+  // route A: slept the wallet night in your room — the safe pays at the wake, before the ledger
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" };
+  _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation"; quiet();
+  G.room = _hotelRoomId(); G.act1SafeDue = true; G.money = 500; _nightSnapshot();
+  out = []; _endNight("sleep");
+  assert.ok(G.lastNightSaid.join(" ").includes("safe money netted in"), "the morning that counted it says so: " + G.lastNightSaid.join(" "));
+  out = []; _endNight("sleep");
+  assert.ok(!G.lastNightSaid.join(" ").includes("safe money"), "and the morning after does not");
+});
+
+test("a piwin knows where to eat; Bank does not open with Mot after the wallet night", () => {
+  G.room = "beach_rd_s"; G.nightTurn = 30;
+  out = []; _piwinAbout("food"); assert.match(text(), /Eat/); assert.doesNotMatch(text(), /Don't know this one/);
+  _setFlag("knowMot"); G.talked = {};
+  out = []; _doTalkBody("bank", null);
+  assert.doesNotMatch(text(), /Mot\? Little rat/); assert.match(text(), /helmet/);
+  assert.equal(G.itemLoc.helmet, "inventory", "and the favour hands the helmet over, as the old one did"); assert.ok(_flag("hasHelmet"));
+});
+
+test("Bert's 'since you left' waits until you have left; the fork rides both greetings", () => {
+  G.room = "stinky_bar"; G.nightTurn = 30; G.talked = {}; G.npc = {}; G.metDay = {};
+  out = []; doCommand("talk bert"); out = []; doCommand("talk bert");
+  assert.doesNotMatch(text(), /since you left/); assert.match(text(), /Back already/);
+  G.day++; out = []; doCommand("talk bert");
+  assert.match(text(), /There he is/);
+});
+
+test("Tan's sedan takes the road's time; the off-shift hour is an hour", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" }; quiet();
+  G.room = "jomtien_beach"; G.nightTurn = 55; G.phone.contacts.tan = true; G.battery = 50;
+  const want = Math.max(0, _districtHops(ROOMS.jomtien_beach.region, ROOMS.buakhao_n.region) - 1);
+  assert.ok(want > 0, "Jomtien is more than a district from Buakhao");
+  out = []; _tanRescue();
+  assert.equal(G.room, "buakhao_n"); assert.equal(G.nightTurn, 55 + want, "the drive is on the clock");
+});
+
+test("the Sukhumvit verge is long on foot, walked or TRAVELled", () => {
+  G.room = "buakhao_pt"; G.nightTurn = 30; G.lightOn = true; G.battery = 90;
+  const t0 = G.nightTurn; out = []; doCommand("e");
+  assert.equal(G.room, "sukhumvit_verge");
+  assert.ok(G.nightTurn - t0 >= 1 + ROOMS.sukhumvit_verge.walkTurns, `the walk took ${G.nightTurn - t0} turns`);
+  assert.ok(text().includes(ROOMS.sukhumvit_verge.walkLine));
+});
+
+test("past the sweet spot is counted, not repeated; the small hours smell and sound different", () => {
+  G.room = "candy_bar"; G.money = 9000;
+  const seen = [];
+  for (let d = 5; d <= 9; d++) { G.soc.drunk = d - 1; out = []; doCommand("buy beer"); seen.push(_BEER_PAST.find(l => text().includes(l))); G.soc.drunk = 0; }
+  assert.ok(seen.every(Boolean)); assert.ok(new Set(seen).size >= 4, "five beers past, at least four different lines");
+  G.room = "beach_rd_c"; G.nightTurn = 30; out = []; doCommand("smell"); const early = text();
+  G.nightTurn = 90; out = []; doCommand("smell"); assert.notEqual(text(), early, "the late smell is its own");
+  out = []; doCommand("listen"); assert.ok(text().includes(_SOUNDS_LATE["Beach Road"]));
+});
+
+test("EXAMINE ME knows you just showered", () => {
+  G.hotel = "sabai"; G.room = _hotelRoomId(); G.nightTurn = 5;
+  out = []; doCommand("shower");
+  for (let i = 0; i < 10; i++) { out = []; doCommand("examine me"); assert.doesNotMatch(text(), /fresh four hours ago/); }
+});
+
+test("the early call's girl is not sent home twice a fortnight, and her family answer knows who came", () => {
+  owner(); G.room = "stinky_bar";
+  const her = _earlyGirl(); assert.ok(her);
+  G.bar.earlyDay = { [her]: G.day - 3 };
+  assert.ok(!_shiftEligible().some(c => c.id === "early"), "not again inside a fortnight");
+  G.bar.earlyDay[her] = G.day - 15;
+  assert.ok(_shiftEligible().some(c => c.id === "early"), "…and back after it");
+  G.bar.earlyDay[her] = G.day - 1;
+  out = []; _doTalkBody(her, "family");
+  assert.doesNotMatch(text(), /not see them long time/); assert.match(text(), /Mama|boy|school/);
+});
+
+test("'us' before there is an us: a bonded own hostess answers with the position; Tan answers for the favour's name", () => {
+  owner(); G.room = "stinky_bar";
+  const her = _barStaff().find(x => NPC_ROLES[x] === "hostess");
+  G.soc.drinks[her] = 9;   // regular
+  for (const t of ["us", "love", "stay"]) { out = []; _doTalkBody(her, t); assert.match(text(), /boss|Boss/, t); }
+  _setFlag("tanFavourDone"); G.room = _npcRoom("tan");
+  out = []; _doTalkBody("tan", "the girl"); assert.match(text(), /on the list/);
+});
+
+test("TAO RAI at a stall on a bike street says both boards; drizzle on the sand is the sand's; the freelancer's lamp is a pool", () => {
+  const room = Object.keys(FOOD_STALLS).find(r => ROOMS[r] && ROOMS[r].motosai);
+  G.room = room; G.nightTurn = 30; out = []; doCommand("tao rai");
+  assert.match(text(), new RegExp("฿" + FOOD_STALLS[room].price)); assert.match(text(), /MOTOSAI TO/);
+  G.room = "jomtien_beach"; G.lastDrizzle = -99;
+  const saved = _wxRainy; try { _wxRainy = () => true; out = []; _sayDrizzle(); } finally { _wxRainy = saved; }
+  assert.ok(_DRIZZLE_SAND.some(l => text().includes(l)), "the sand's drizzle, not the street's: " + text());
+  assert.ok(Array.isArray(ENCOUNTERS.freelancer.intro) && ENCOUNTERS.freelancer.intro.length >= 4);
+});

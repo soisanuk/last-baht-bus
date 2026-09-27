@@ -417,11 +417,14 @@ function _piwinAbout(who) {
   // "Who? Don't know this one" — work, the fares, the stand, the vest, the rain —
   // from the one man on the corner all night who is the obvious person to ask
   // (Brian and Helen, round 49, independently).
-  if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed)\b/.test(w)) {
+  if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner)\b/.test(w)) {
     const say =
       /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
       /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + MOTOSAI_TOWN, f: "฿" + MOTOSAI_FAR }) :
       /\b(vest|jacket|number|queue|licen[cs]e)\b/.test(w) ? "\"The vest is the stand.\" He plucks the orange nylon. \"Number is my number. No vest, no stand — you ride from the side of the road, police take the bike. Vest cost more than the bike, some year.\"" :
+      /\b(food|eat|eating|hungry|noodles?|som tam|rice|dinner)\b/.test(w) ? (FOOD_STALLS[G.room]
+        ? _fmt("\"Eat? Right there, boss.\" A chin at the stall. \"{s}. I eat there every night — if it was bad I am dead already.\"", { s: FOOD_STALLS[G.room].name.replace(/^(a |an |the )/, "").replace(/,.*$/, "") })
+        : "\"Eat?\" He thinks about it properly. \"7-Eleven, toastie, if you are lazy. Buakhao market, the old one, if you are hungry — I take you, ten minutes.\" He pats the seat.") :   // "Who? Don't know this one" (Marek, round 53)
       /\b(hotels?|room|sleep|bed)\b/.test(w) ? "\"Hotel? Which one?\" He counts them on the handlebar. \"Sabai Palms up Naklua. The Queen Vic on Soi 6, over the pub. Areca on Diana, has the pool. Metropole, the tower by LK Metro.\" A shrug. \"Say which one, boss. You don't say, I choose, and the one I choose is the one that gives me twenty baht.\" He grins. \"So say.\"" :   // Joan, round 54: "hotel" got the stranger shrug
       /\b(rain)\b/.test(w) ? "\"Rain?\" He points at the plastic poncho folded under the seat. \"Rain is good. Nobody want to walk. Rain is money.\" A beat. \"Bad rain is bad. Bad rain, everybody home.\"" :
       /\b(police|helmet)\b/.test(w) ? "\"Helmet for me, always.\" He taps it. \"For you — better yes. Police stand at the bottom of Soi 6, six to seven. Farang no helmet is the best money they make all day.\"" :
@@ -3387,6 +3390,36 @@ function _ownBarTalk(id, topic) {
     return false;
   }
   const role = NPC_ROLES[id];
+  const _t = String(topic || "").toLowerCase();
+  // the family the shift call just put on a bus: Manow's mother came in on the
+  // overnight bus, and the next night her family answer was "I not see them long
+  // time" (Rolf, round 54). Five days of her knowing you know.
+  const _kin = G.bar && G.bar.earlyDay && G.bar.earlyDay[id];
+  if (_t && role === "hostess" && _kin != null && G.day - _kin <= 5 &&
+      /\b(family|mother|mama|mum|mom|home|kid|kids|son|boy|child)\b/.test(_t)) {
+    const boy = typeof _girlHasBoy === "function" && _girlHasBoy(id);
+    _say(_pickVary(boy ? [
+      n => `"My boy?" ${n} has her phone out before you finish the word. "Look — new school shoe. Too big. He grow into it." Another photo. Another.`,
+      n => `${n} laughs. "He sleep in my bed, I sleep on the floor. Is fine. He go back soon." She does not say how soon, and she does not look like she is counting.`,
+    ] : [
+      n => `${n} brightens. "Mama? She here! Sleep in my room, cook for me like I am twelve. I take her temple, then she go home." A roll of the eyes that fools nobody.`,
+      n => `"Mama see the bar," ${n} says. "She say: small. I say: my boss own it, not me." She seems very pleased with the answer.`,
+    ], "ownkin")(NPCS[id].name));
+    return true;
+  }
+  // "us", before there is an us: a bonded hostess of your own answers with the
+  // position, which is the antagonist of that story (Rolf, round 54, whose own
+  // girl had nothing to say to "us / love / stay"). Tier 2+ only — a girl who
+  // barely knows you has nothing to say to it either.
+  if (_t && role === "hostess" && _bondTier(id) >= 2 &&
+      /\b(us|love|stay|together|feelings?|you and me|girlfriend|after close)\b/.test(_t)) {
+    _say(_pickVary([
+      n => `${n} laughs, and then doesn't. "Boss. You are boss." She taps the bar between you. "Boss and girl — everybody know that story. Everybody know the end also." She goes back to the ice.`,
+      n => `"Love?" ${n} says it the way you would say a price you cannot afford. "I like you, boss. Liking is free. The other one cost the whole bar." A shrug. "Maybe. Not tonight."`,
+      n => `${n} looks at the mamasan, then at you. "Stay after, you mean?" Very quiet. "When I stay after, everybody see. Then you are not boss for them any more. You think about it, na."`,
+    ], "ownus")(NPCS[id].name));
+    return true;
+  }
   if (topic && _OWNER_PITCH_TOPICS.test(topic)) {
     const pool = _OWNER_PITCH[role]; if (!pool) return false;
     _say(_pickVary(pool, "ownerpitch:" + role)(NPCS[id].name)); return true;
@@ -4295,6 +4328,7 @@ function _morningLedger() {
     // hadn't (assertion auditor, 2026-09-14: a flat false negative, on the one
     // morning he was most likely to read it). Say what is true instead.
     G.lastNightSaid = ["(First morning in town — nothing to measure last night against yet. From tomorrow this is the night's ledger.)"];
+    G.safeMoneyLedger = false;
     return;
   }
   G.lastNight = null;
@@ -4320,9 +4354,14 @@ function _morningLedger() {
   // sentence was unsupported by its own wording.
   const via = drawn > 0 ? ` (across pocket and account \u2014 \u0e3f${_num(drawn)} came out of the machine` +
     (fees > 0 ? `, \u0e3f${_num(fees)} of that in fees` : "") + ")" : "";
-  if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via +
-    (G.safeMoneyDay === G.day - 1 ? " (with Madam Oy's safe money netted in)" : ""));   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
-  else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via);
+  // The safe tag goes on the ledger that actually netted the money, which is the
+  // NEXT ledger after it landed — keyed on the day it fired a morning late for a
+  // man who slept the wallet night in his own room, because the safe pays at that
+  // wake BEFORE the ledger runs (Tomasz and Joan, round 54)
+  const safeIn = !!G.safeMoneyLedger; G.safeMoneyLedger = false;
+  const safeTag = safeIn ? " (with Madam Oy's safe money netted in)" : "";
+  if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via + safeTag);   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
+  else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via + safeTag);
   // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
   const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);

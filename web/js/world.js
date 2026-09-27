@@ -3946,6 +3946,9 @@ const ROOMS = {
   // crossing. Long, dark (the streak counts), free — and the Pattaya Tai trucks
   // run it (BUS_LINES.sukhumvit), because Sukhumvit IS the main road.
   sukhumvit_verge: {
+    // it is LONG, and the room said so while the clock gave it one turn (Marek, round 53)
+    walkTurns: 2,
+    walkLine: "(The verge does not hurry for anybody: twenty minutes of gravel, ditch and lorry wind before either end of it.)",
     name: "Sukhumvit Road (the verge)",
     region: "Darkside",
     dark: true,
@@ -5213,6 +5216,18 @@ const _LEK_PRICE_STORY = "Nobody is playing pool in this. Lek is on the plastic 
   "hasn't eaten since two o'clock; you can hear it from here.";
 const _LEK_PRICE_SHORT = "\"I said the big number. He said, did I think this is Dubai. Then block.\" The friend sleeps on. \"Advice is free — for her.\"";
 
+// Bert's PLG-flip fork, carried by his returning greeting on either night
+// (hoisted so the same-night and later-night greetings cannot drift apart)
+const _BERT_FLIP_CHOICES = [
+  { label: "Push him to sell",
+    when: (st, G) => G.quests.plg_flip === "active" && !_flag("plgFlipTried"),
+    topic: "sell" },
+  { label: "Give him the honest picture",
+    when: (st, G) => _flag("heardPlgHistory") && _flag("heardPlgInside") &&
+      _flag("heardPlgPitch") && !_flag("plgResolved") && !_flag("plgFlipTried"),
+    topic: "offer" },
+];
+
 const NPCS = {
 
   nok: {
@@ -5351,12 +5366,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the last spare.",
         sets: ["hasHelmet"], gives: "helmet",
         short: "\"Starlight Bar, Tree Town. Tell her is the last spare.\" It is not the last spare." },
-      { req: ["knowMot"], notFlags: ["helmetDelivered", "hasHelmet"],
+      // after the wallet night, the pickpocket is old news — he greeted a man with
+      // "Mot? Little rat" on day 7 (Tomasz, round 54); the favour still stands
+      { req: ["knowMot", "act1Done"], notFlags: ["helmetDelivered", "hasHelmet"],
+        text: "\"You again, boss.\" He grins, then remembers something. \"Hey — favour, na? My girlfriend Pim, Starlight Bar, Tree Town — the maze off Buakhao. Take her my spare helmet, she forget it again. I no can leave the stand.\" He holds out a hot-pink helmet.", sets: ["hasHelmet"], gives: "helmet",
+        short: "\"Take my pink helmet to Pim — Starlight Bar, in Tree Town.\"" },
+      { req: ["knowMot"], notFlags: ["helmetDelivered", "hasHelmet", "act1Done"],
         text: "\"Mot? Little rat. He run, we watch. Hey — do me a favour, na? My girlfriend Pim, Starlight Bar, Tree Town — the maze off Buakhao. Take her my spare helmet, she forget again. I no can leave stand.\" He holds out a hot-pink helmet.", sets: ["hasHelmet"], gives: "helmet",
         short: "\"Take my pink helmet to Pim — Starlight Bar, in Tree Town.\"" },
       { th: "ไปไหนครับ", rom: "pai nai khrap",
-        text: "\"Where you go, boss? Motosai fifty baht in town, hundred to Darkside. Faster than bus, more fun than walking, safer than both — nobody touch you on Bank's bike.\"",
-        short: "\"Where you go, boss? Fifty baht in town, hundred to Darkside.\"" },
+        text: "\"Where you go, boss? Motosai " + MOTOSAI_TOWN + " baht in town, " + MOTOSAI_FAR + " to Darkside. Faster than bus, more fun than walking, safer than both — nobody touch you on Bank's bike.\"",
+        short: "\"Where you go, boss? " + MOTOSAI_TOWN + " baht in town, " + MOTOSAI_FAR + " to Darkside.\"" },
       { topic: "pim", text: "\"Pim my girlfriend. Starlight Bar. Smartest girl in Tree Town — five years there, know everybody's everything.\" He grins. \"Don't tell her I said 'girlfriend', she say we 'talking'.\"" },
       { topic: "darkside", text: "\"Darkside? Lake, family, old farang with fat dog. And Khao Talo — old-school soi. Hundred baht I take you. Bus charter more.\"" },
     ],
@@ -8858,6 +8878,18 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      // the favour's name: a man who said yes (or no) asked after her and got
+      // "not my story" (Rolf, round 54)
+      { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourDone"],
+        text: "\"She is on the list. Bert writes a very good capital letter.\" A small smile at the wheel. \"She has a bank account now. " +
+          "Last month she went to a hospital that asks questions, and they asked, and the answer was your bar.\" He does not say thank you " +
+          "a second time; he said it once. \"That is all a name is, my friend. A place for the questions to stop.\"",
+        short: "\"She is on the list. She has a bank account now. That is all a name is.\"" },
+      { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourRefused"],
+        text: "\"She is on somebody's list.\" No weight on it at all. \"Not yours. That is fine — I told you that was fine, and I do " +
+          "not say things twice to make them true.\" The eyes in the mirror, briefly. \"There is always a list. The question was only " +
+          "whose.\"",
+        short: "\"She is on somebody's list. Not yours. That is fine.\"" },
       // the man who holds fifty-one percent of your bar answers as the man who
       // does — he was pitching the pre-purchase coffee to his own partner and
       // "not yet, maybe later" to "partner" (Rolf, round 54)
@@ -12295,7 +12327,10 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         asks: { key: "why", q: "He racks the balls anyway, and doesn't offer you a cue. \"Go on then. " +
           "While you're standing there. What'd you come out here for, really?\" It is not friendly. " +
           "It is, unmistakably, a question." } },
-      { when: (st) => st.dstate !== "stranger",
+      // "since you left" needs you to have left: it answered the second TALK of the
+      // night you met him (Tomasz, round 54). Met on an earlier day, or a save from
+      // before metDay existed.
+      { when: (st, G) => st.dstate !== "stranger" && !(G.metDay && G.metDay.bert === G.day),
         text: "\"There he is.\" Bert's got a cold one open before you've sat. \"Not moved off this stool " +
           "since you left, funny enough. Table's true, beer's cold.\" A crooked grin. \"What's the good " +
           "word, bud?\"",
@@ -12304,15 +12339,14 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         // decision window (was ASK BERT ABOUT SELLING / THE OFFER). Each jumps to
         // the existing resolution node, reusing its text/effects. The `when` gates
         // mean the choices vanish the moment the fork is closed out either way.
-        choices: [
-          { label: "Push him to sell",
-            when: (st, G) => G.quests.plg_flip === "active" && !_flag("plgFlipTried"),
-            topic: "sell" },
-          { label: "Give him the honest picture",
-            when: (st, G) => _flag("heardPlgHistory") && _flag("heardPlgInside") &&
-              _flag("heardPlgPitch") && !_flag("plgResolved") && !_flag("plgFlipTried"),
-            topic: "offer" },
-        ] },
+        choices: _BERT_FLIP_CHOICES },
+      // …and the same night you met him, the same greeting without the lie in it
+      // (and the same fork, which the returning greeting has always carried)
+      { when: (st, G) => st.dstate !== "stranger",
+        text: "\"Back already.\" Bert tips the Singha at you. \"Table's still true, beer's still cold. " +
+          "What's the good word, bud?\"",
+        short: "\"Back already.\" He tips the Singha at you. \"What's the good word, bud?\"",
+        choices: _BERT_FLIP_CHOICES },
       // Delivering Gavin's pitch is the deed — this is where alignment actually
       // lands (never on accepting the quest, only on going through with it). Bert
       // holds firm anyway; the cost is your standing and his regard.
@@ -13082,10 +13116,25 @@ const ENCOUNTERS = {
     rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "buakhao_n", "north_beach"],
     interactive: true, nightly: true, // resets every night — Beach Road and band-night Buakhao restock
     th: "ไปไหนคะ", rom: "pai nai kha?",
-    intro: "She's leaning where the lamplight is kindest — no " +
-      "bar, no mamasan, freelance and unhurried. “Going where, hansum? Tonight I " +
-      "am also free.” A beat, then, nodding at a friend a few steps off pretending " +
-      "not to listen: “Ning also free. VERY boring night, na.”",
+    // pooled: the same lamp three nights running (Tomasz, round 54)
+    intro: [
+      "She's leaning where the lamplight is kindest — no " +
+        "bar, no mamasan, freelance and unhurried. “Going where, hansum? Tonight I " +
+        "am also free.” A beat, then, nodding at a friend a few steps off pretending " +
+        "not to listen: “Ning also free. VERY boring night, na.”",
+      "She falls into step beside you as if you had arranged it — no bar behind her, " +
+        "no mamasan, a small bag and all the time in the world. “You walk alone, hansum? " +
+        "Me also.” Over her shoulder, a friend on the sea wall waves without looking up " +
+        "from her phone: “That one Ning. Ning also alone. Very sad, na.”",
+      "Two of them on the sea wall, shoes off, sharing a bag of something from the 7. " +
+        "The nearer one stands, brushes off her skirt, and is suddenly in your path, smiling. " +
+        "“Where you go? I free tonight — no bar, no rule.” Behind her, Ning raises a hand " +
+        "and a crisp: “Me also free. Cheap cheap, because is Tuesday.” It is not necessarily Tuesday.",
+      "She is working the gap between two street lamps like a stage — freelance, no " +
+        "mamasan to answer to, which she tells you as if it were a feature. “You look like " +
+        "man who need company. Me? Company.” Her friend on the bench opposite: “Ning ALSO " +
+        "company. Two company, special price.”",
+    ],
     hint: "(Company is ฿700. Ning makes it ฿1400 — cheaper than a bar, but no " +
       "mamasan means nobody to complain to if it goes wrong. YES her · BOTH of them · NO.)",
   },

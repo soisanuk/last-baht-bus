@@ -2227,6 +2227,8 @@ function _doMeetOffShift(arg) {
   _conquestHappy(9, os.id); // the softer road pays better than the fantasy
   if (os.id) _addBond(os.id, 4);
   G.offShift = null;
+  // "an hour later" took one turn (Marek, round 53): the hour passes, offstage
+  G.offstage = true; _passTime(9); G.offstage = false;
 }
 
 // ── Soapy massage: the fishbowl (ab ob nuat) — a modal, like the barfine gate ──
@@ -3708,6 +3710,11 @@ function _tanRescue() {
     "opens on aircon and quiet, and he does not make a single joke about the state of you.", "win");
   if (typeof _abandonGame === "function") _abandonGame("Tan's sedan");
   G.pendingEnc = null;
+  // the drive takes the road's time (Marek, round 53: a cross-town ride in one
+  // turn). This runs inside _tick, so the minutes go on the clock directly —
+  // aircon and quiet, nothing happens to you in the back of Tan's sedan.
+  const _drive = Math.max(0, _districtHops(_room().region, ROOMS.buakhao_n.region) - 1);
+  G.nightTurn = Math.min(NIGHT_TURNS - 2, G.nightTurn + _drive);
   G.room = "buakhao_n";
   G.darkStreak = 0;
   if (G.dog) _say(_dogN("Sai Krok goes in the back like a dog who has been in sedans before, and " +
@@ -4983,7 +4990,10 @@ function _sayDrizzle() {
     // the turn, not _rand() — and no baht bus on the Darkside, where the songthaews
     // don't run (desktop playtest 2026-08-22)
     const dark = _room().region === "Darkside";
-    const pool = dark ? _DRIZZLE_DARK : _DRIZZLE_STREET;
+    // the sand is not a street: no awnings, no umbrella vendors, no baht bus
+    // (Tomasz, round 54, drizzle-on-the-beach reading like Second Road)
+    const sand = /\b(beach|sands?)\b/i.test(_room().name || "") && !/\broad\b|\brd\b/i.test(_room().name || "");
+    const pool = dark && !sand ? _DRIZZLE_DARK : sand ? _DRIZZLE_SAND : _DRIZZLE_STREET;
     _say(pool[(G.day * 7 + Math.floor(G.turns / 15)) % pool.length], "dim");
   }
   // The dog's rain repertoire lived only in _startRain (a full downpour, which
@@ -5000,6 +5010,12 @@ const _DOG_DRIZZLE = [
   "Sai Krok gives the drizzle exactly the attention it deserves, which is none, and keeps reading the street through it.",
   "A few drops darken Sai Krok's coat and he does not dignify them with a shake — this is not, in his professional judgement, weather.",
   "Sai Krok trots half a pace closer under the eaves with you, unbothered, a dog who has out-sat a thousand of these and expects to out-sit a thousand more.",
+];
+const _DRIZZLE_SAND = [
+  "A soft rain comes in off the Gulf and the sand goes from pale to dark in a single slow sweep, like a page turning. The sea does not notice.",
+  "Light rain on the beach: the loungers bead with it, a dog shakes itself with enormous ceremony, and the waves keep their own time underneath.",
+  "A fine rain, more mist than weather. Out on the water the squid boats' lights go soft at the edges and the whole bay looks drawn in pencil.",
+  "Drizzle, barely. It pocks the sand in tiny craters and stops before the pattern is finished, as though it lost interest.",
 ];
 const _DRIZZLE_STREET = [
   "A soft rain drifts in off the Gulf. Up the road a baht bus pulls over " +
@@ -6434,7 +6450,10 @@ function _earlyGirl() {
 // through the calendar seam, so the settle line names the same day.
 function _shiftPayday() { return WEEKDAYS[(G.day + 2) % 7]; }
 function _shiftEligible() {
-  return SHIFT_CALLS.filter(c => c.id !== "early" || !!_earlyGirl());
+  // the same girl's early bus not twice a fortnight: Manow's mother came in off
+  // the overnight bus twice in eight nights (Rolf, round 54)
+  const her = _earlyGirl(), last = her && ((G.bar && G.bar.earlyDay) || {})[her];
+  return SHIFT_CALLS.filter(c => c.id !== "early" || (!!her && !(last != null && G.day - last < 14)));
 }
 
 function _shiftDue() {
@@ -6458,6 +6477,7 @@ function _shiftAsk() {
   G.shiftWho = null;
   if (call.id === "early") {
     G.shiftWho = _earlyGirl();   // the boy has ONE mother — see _earlyGirl
+    if (G.shiftWho) ((G.bar.earlyDay = G.bar.earlyDay || {})[G.shiftWho] = G.day);
     if (!G.shiftWho) { G.pendingChoice = null; return; }
   }
   const who = G.shiftWho ? _npcLabel(G.shiftWho) : "";
@@ -9273,7 +9293,7 @@ function _roomSafeBeat() {
   if (G.room !== _hotelRoomId()) return;
   _setFlag("roomSafeOpened");
   G.act1SafeDue = false;
-  G.money += SAFE_CASH; G.safeMoneyDay = G.day;   // the next morning's ledger nets it and says so (Kenji, round 47)
+  G.money += SAFE_CASH; G.safeMoneyDay = G.day; G.safeMoneyLedger = true;   // the next ledger nets it and says so (Kenji, round 47)
   _say(`Your own room, and the key card works. The safe in the wardrobe opens on the ` +
     `second try: passport, return ticket \u2014 and the emergency stash you very nearly ` +
     `forgot you packed. \u0e3f${SAFE_CASH}. (\u0e3f${G.money} in pocket. ` +
