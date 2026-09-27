@@ -243,6 +243,8 @@ function liveSnap() {
     salengTypes: Object.keys(G.salengSeen || {}).length, inOrchid: G.room === "orchid_room",
     kpTitles: Object.keys(G.kpTitle || {}).length, rides: Object.keys(G.rideLog || {}).length,
     quizzes: Object.keys(G.quizPlayed || {}).length, hospital: G.hospitalVisits || 0, drunk: soc.drunk || 0,
+    charmedN: soc.charmedN || 0, massaged: Object.keys(soc.massaged || {}).length, rabbitData: G.rabbitDataDay || 0,
+    chamNights: (G.chamDays || []).length, beers: Object.values(soc.selfDrinks || {}).reduce((a, n) => a + n, 0),
   };
 }
 
@@ -323,6 +325,12 @@ const EFFECTS = [
   { id: "quiz.played",        modes: SANDBOX,   hit: (a, b) => b.quizzes > a.quizzes },
   { id: "hospital.morning",   modes: SANDBOX,   hit: (a, b) => b.hospital > a.hospital },
   { id: "blackout",           modes: SANDBOX,   hit: (a, b) => b.nights > a.nights && a.drunk >= 8 },
+  { id: "dog.adopted",        modes: SANDBOX,   hit: (a, b) => !a.dog && b.dog },
+  { id: "social.spark",       modes: SANDBOX,   hit: (a, b) => b.charmedN > a.charmedN },
+  { id: "massage.taken",      modes: SANDBOX,   hit: (a, b) => b.massaged > a.massaged },
+  { id: "heist.data",         modes: ["barowner", "expat"], hit: (a, b) => !a.rabbitData && b.rabbitData },
+  { id: "cream.night",        modes: ["barowner", "expat"], hit: (a, b) => b.chamNights > a.chamNights },
+  { id: "beer.bought",        modes: ALL_MODES, hit: (a, b) => b.beers > a.beers },
 ];
 const EFFECT_WHY = new Map(EFFECTS.filter(e => e.why).map(e => [e.id, e.why]));
 

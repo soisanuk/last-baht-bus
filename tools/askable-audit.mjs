@@ -78,6 +78,10 @@ const FACTS = [
     asks: ["clinic", "get tested", "the doctor"], rooms: ["lucky_tiger", "queen_vic"], hour: 30 },
   { fact: "police", why: "police_station's region; the ฿300 the police modal charges",
     asks: ["police", "the police station", "the fine"], rooms: ["lucky_tiger", "queen_vic", "khao_talo_bar"], hour: 30 },
+  { fact: "dark", why: "ROOMS[to].dark on the exits from here — which way has no lights",
+    asks: ["the dark", "is it safe", "dogs at night"], rooms: ["jomtien_beach_rd_n", "khao_talo_bar", "lucky_tiger"], hour: 30 },
+  { fact: "charge", why: "_doCharge: the 7-Eleven cable, a bar socket with a drink, Nont's ฿50",
+    asks: ["charge my phone", "charger", "battery"], rooms: ["lucky_tiger", "queen_vic"], hour: 30 },
   { fact: "cons", why: "TONIC_PRICE/FLEECE, FORTUNE_READ/RITUAL — the two Beach Road encounters, priced",
     asks: ["hair tonic", "fortune teller", "scams"], rooms: ["lucky_tiger", "queen_vic"], hour: 30 },
   // the four beds: `_HOTELS` rates the desk bills to the baht, and a town this

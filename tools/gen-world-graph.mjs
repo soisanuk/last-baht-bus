@@ -387,6 +387,8 @@ const PREDICATES = [
   { name: "G.party", match: "G.party", note: "a companion is on your arm (the party barfine)" },
   { name: "_affairLive()", match: "_affairLive()", note: "you are in the staff affair" },
   { name: "_atOwnBar()", match: "_atOwnBar()", note: "you are standing in the bar you own" },
+  { name: "G.dog", match: "G.dog", note: "the soi dog is yours (companion)" },
+  { name: "G.player.teetotal", match: "G.player.teetotal", note: "you have said you don't drink (round 53)" },
 ];
 const predicates = [];
 const fnNames = allFnNames();

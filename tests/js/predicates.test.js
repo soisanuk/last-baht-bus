@@ -124,6 +124,26 @@ const MUST_CONSULT = {
 
   // You are standing in the bar you own. Your staff do not work you like a
   // walk-in, and the house's angles are yours.
+  // The soi dog is yours. He rides, he guards, he is a subject — and every edge that
+  // forgets him is a man walking home alone with a dog at his heel (2026-09-27, the
+  // coverage map's I column: the newest predicates go in the day they ship).
+  "G.dog": [
+    { fn: "_endNight", why: "a rough wake does not empty the pockets he is watching" },
+    { fn: "_doMotosai", why: "one pillion seat: a saleng for him, ฿10 on top, waived on the pity ride" },
+    { fn: "_tonicShop", why: "the side-soi muscle stands down for a man with a dog" },
+    { fn: "_dogBarFavor", why: "under the rail in the open-air bars, a bond for a random staffer" },
+    { fn: "_soidogTick", why: "the dark streak is defused at his heel" },
+    { fn: "_doTalkBody", why: "the dog at your heel is a subject everyone has" },
+    { fn: "_tanFood", why: "the cart feeds two" },
+  ],
+  // You have said you don't drink (round 53). The house pours on your behalf everywhere
+  // it pours at all; every comp that forgets it is a unit on a sober man's meter.
+  "G.player.teetotal": [
+    { fn: "_compDrink", why: "every comp — the welcome shot, the bell's bottle, the lock-in — is declined here" },
+    { fn: "_doDrink", why: "a bare DRINK is a soda" },
+    { fn: "_doDiagnose", why: "stone sober, as ordered — not 'fixable'" },
+    { fn: "_jpFinish", why: "the forfeit is soda water, and they count anyway" },
+  ],
   "_atOwnBar()": [
     { fn: "_addHeat", why: "you cannot be thrown out of your own bar" },
     { fn: "_doBuy", why: "the lady-drink branch: busy/contested does not apply to your own girl" },

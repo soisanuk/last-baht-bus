@@ -34,10 +34,10 @@ const SEV = { S: .24, C: .21, A: .17, I: .14, G: .15, B: .12, E: .12, J: .11, H:
 // which classes an instrument covers, and for which systems (empty = every system)
 const INSTRUMENTS = [
   { name: "promises/afford/asktopic/errand/examine", cls: ["D"] },
-  { name: "askable-audit", cls: ["N"], systems: ["drinks", "calendar", "hotels", "barfine", "bell", "regulars", "navigation", "money", "clinic", "police", "cons", "dog", "sobriety"] },
+  { name: "askable-audit", cls: ["N"], systems: ["drinks", "calendar", "hotels", "barfine", "bell", "regulars", "navigation", "money", "clinic", "police", "cons", "dog", "sobriety", "barbooks", "darkness", "phone"] },
   { name: "references.test", cls: ["K", "R"] },
   { name: "templates.test", cls: ["L", "M", "K"] },
-  { name: "predicates.test", cls: ["I"], systems: ["party", "nightride", "affair", "barchain", "barbooks"] },
+  { name: "predicates.test", cls: ["I"], systems: ["party", "nightride", "affair", "barchain", "barbooks", "dog", "sobriety"] },
   { name: "dialogue-lifecycle", cls: ["J"], systems: ["quests", "conversation", "barchain", "heist", "act1"] },
   { name: "soak liveness", cls: ["B"], systems: SYS.filter(s => s.effects.length).map(s => s.id) },
   { name: "prose-corpus dossiers", cls: ["R", "F"], systems: ["worldprose", "filler", "regulars", "conversation"] },

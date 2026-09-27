@@ -4964,6 +4964,39 @@ const _TOWN = {
       "{n} grins. \"{p}. ฿{fine} is the going rate for walking like you've been drinking. Which you have.\"",
       "\"Station's {p}.\" {n} shrugs. \"฿{fine} and a wai. Cheaper than the argument.\""],
   },
+  books: {
+    floor: ["\"Boss ask ME about rent?\" {n} laughs. \"Okay: rent ฿{rent} a month, the old man's note ฿{note}, and us — ฿{wages} a night, all of us together. Mama know better.\"",
+      "{n} counts on her fingers. \"Rent ฿{rent}. Note ฿{note}. Girls ฿{wages} a night. BOOKS say the rest, boss.\"",
+      "\"Money talk.\" {n} makes a face. \"฿{rent} rent, ฿{note} for the old man, ฿{wages} for the floor. You want the take, ask BOOKS, not me.\""],
+    house: ["{n} gives it to you straight. \"Rent's ฿{rent} every thirty days from the day you opened, the note's ฿{note} on the same clock, wages ฿{wages} a night before you've sold a bottle. BOOKS has last night.\"",
+      "\"Three lines you can't move,\" {n} says. \"฿{rent} rent, ฿{note} note, ฿{wages} wages. The landlord's the one who can end you — pay him first.\"",
+      "{n} doesn't need the book. \"฿{rent} to the landlord, ฿{note} to the old man, ฿{wages} to the floor, nightly. Everything else is weather. BOOKS.\""],
+    punter: ["\"Your books? Ask your barman, guv.\" {n} grins. \"Rent's ฿{rent}, I'd guess, and the old boy's note ฿{note}. Wages ฿{wages}. Not my till.\"",
+      "{n} shrugs. \"Every bar on this soi: ฿{rent} rent or thereabouts, ฿{note} on the note, a couple of grand a night in wages. You know this. BOOKS.\"",
+      "\"Ask BOOKS, not a customer.\" {n} lifts the glass. \"But it's ฿{rent}, ฿{note} and ฿{wages}. Same as everyone's.\""],
+  },
+  dark: {
+    floor: ["\"Dark?\" {n} looks at the door. \"{d} Bring light. Soi dog bite in the dark, not joke.\" (LIGHT ON)",
+      "{n} points. \"{d} No light, no walk, na. Dogs.\" (LIGHT ON)",
+      "\"Dark side is {d}\" {n} says. \"Phone light, tilac. Then walk.\" (LIGHT ON)"],
+    house: ["\"{d}\" {n} says it flat. \"Torch on before you step out. The dogs work the dark end and they know a farang in the dark.\" (LIGHT ON)",
+      "{n} nods at the door. \"{d} Light on, walk in the middle, don't run. That's the whole of it.\" (LIGHT ON)",
+      "\"{d}\" {n} shrugs. \"A phone torch is enough. No torch is a bite.\" (LIGHT ON)"],
+    punter: ["\"{d}\" {n} says. \"Got bitten out there once. Light on, mate.\" (LIGHT ON)",
+      "{n} thinks. \"{d} I take a bike after midnight, myself. Or the torch.\" (LIGHT ON)",
+      "\"{d}\" {n} lifts his phone. \"This is the difference between a walk and a bite.\" (LIGHT ON)"],
+  },
+  charge: {
+    floor: ["\"Phone die?\" {n} tips her head. \"{c}\"",
+      "{n} points at the socket by the till. \"{c}\"",
+      "\"Battery.\" {n} nods, everybody's problem. \"{c}\""],
+    house: ["\"{c}\" {n} has a charger somewhere under the till and isn't lending it.",
+      "{n} answers without looking up. \"{c}\"",
+      "\"{c}\" {n} says. \"Every bar's the same on that.\""],
+    punter: ["\"{c}\" {n} shrugs. \"Mine's on twelve percent, if it helps.\"",
+      "{n} nods at the wall. \"{c}\"",
+      "\"{c}\" {n} says. \"Or buy a cable off the 7-Eleven and stop asking.\""],
+  },
   cons: {
     floor: ["\"The hair-tonic man? On Beach Road.\" {n} shakes her head. \"฿{t} for the bottle on the street, okay. He say come to shop — no. Shop is ฿{tf}. And the monk with the string — ฿{fr} for the palm, then he find a curse for ฿{fri}.\"",
       "{n} rolls her eyes. \"Tonic man, fortune man — same same. Small money first, ฿{t}, ฿{fr}. Then big: ฿{tf}, ฿{fri}. You want, ask TAO RAI first, then he cannot.\"",
@@ -4996,6 +5029,23 @@ function _townTalk(npc, topic) {
     pick("cons", { t: TONIC_PRICE, tf: TONIC_FLEECE.toLocaleString(), fr: FORTUNE_READ, fri: FORTUNE_RITUAL.toLocaleString() });
     _say("(TAO RAI at the pitch closes the account before it opens; if it's already gone, REPORT at the police station claws some of it back.)", "dim");
     return true;
+  }
+  // your own books, from your own staff: the three lines that never move
+  if (/\b(rent|the note|wages|the books|takings|the landlord|old man)\b/.test(t) && typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid"))
+    return pick("books", { rent: _barRent().toLocaleString(), note: BAR_MONTHLY.toLocaleString(), wages: BAR_WAGES.toLocaleString() });
+  // the dark: which way out of here has no lights, and the one rule
+  if (/\b(dark|the dark|unlit|safe to walk|dangerous|dogs at night|is it safe|lights?)\b/.test(t) && !/\b(light on|light off|torch)\b/.test(t)) {
+    const ex = _room().exits || {}, darkWays = Object.entries(ex).filter(([, to]) => ROOMS[to] && ROOMS[to].dark).map(([dir]) => _dirWord ? _dirWord(dir) : dir);
+    const d = darkWays.length ? `No lights ${darkWays.join(" and ")} of here.` : _room().dark ? "This stretch — you're standing in it." : "Lit from here, but the beach roads and the hill go dark.";
+    return pick("dark", { d });
+  }
+  // charging a phone: where, and what it costs
+  if (/\b(charge|charger|charging|battery|socket|plug|power bank|dead phone)\b/.test(t)) {
+    const c = _room().seven ? "The 7-Eleven sells the cable — CHARGE PHONE at the counter, three ticks."
+      : (typeof _nontHere === "function" && _nontHere()) ? "The kid at the table does it for ฿50, no cable needed — CHARGE PHONE."
+      : _inBar() ? "There's a socket behind the bar — buy a drink and CHARGE PHONE; the cable's ฿" + CHARGER_PRICE + " at any 7-Eleven if you haven't one."
+      : "Any 7-Eleven sells the cable, and any bar with a drink in front of you has a socket — CHARGE PHONE.";
+    return pick("charge", { c });
   }
   // a venue by name — the player typed it, so the town may place it: region and street
   if (t.length >= 4) {

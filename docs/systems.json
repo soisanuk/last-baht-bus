@@ -216,7 +216,9 @@
     "khao_talo_strip"
    ],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "dog.adopted"
+   ],
    "modals": [],
    "quests": [
     "shamrock"
@@ -256,7 +258,9 @@
    ],
    "rooms": [],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "beer.bought"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -292,7 +296,9 @@
    ],
    "rooms": [],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "social.spark"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -716,7 +722,9 @@
     "doghouse"
    ],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "massage.taken"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -922,7 +930,9 @@
     "nont",
     "kesinee"
    ],
-   "effects": [],
+   "effects": [
+    "heist.data"
+   ],
    "modals": [
     "rabbitjob",
     "kidprice",
@@ -962,7 +972,9 @@
    "npcs": [
     "cream"
    ],
-   "effects": [],
+   "effects": [
+    "cream.night"
+   ],
    "modals": [
     "cham",
     "chamgift"
