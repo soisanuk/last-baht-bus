@@ -4158,6 +4158,10 @@ function _doTalkBody(arg, topic) {
     // Eddy's (authored, and still first) — the floor sells soda at the beer price and
     // has an opinion about it (Neville, round 53)
     if (!gated && _soberTalk(npc, topic)) { _questOffer(npc); return; }
+    // …and the town's own furniture: where a bar is, the nearest cash machine and its
+    // fee, the clinic, the station and its ฿300, the two cons (the coverage map's N
+    // column, 2026-09-27 — facts the engine computes that nobody on a stool could say)
+    if (!gated && _townTalk(npc, topic)) { _questOffer(npc); return; }
     // A girl's standard deflection is the language itself, and at fluency it is
     // gone: she cannot say she does not understand a question she plainly did
     // (Mario, round 42). She still doesn't have to answer — but the refusal has
@@ -4907,6 +4911,105 @@ function _soberTalk(npc, topic) {
   const pool = reg === "floor" ? _SOBER_FLOOR : reg === "house" ? _SOBER_HOUSE : _SOBER_PUNTER;
   _say(_fmt(_pickVary(pool, "sobertalk:" + reg), { n: NPCS[npc].name }));
   return true;
+}
+
+// ASK <anyone> ABOUT <a thing the town is made of>: a venue by name, the ATM, the
+// clinic, the police, the cons on Beach Road. Each answer is COMPUTED from what the
+// engine already holds — the room's region and street, `atm: true`, `_atmFee()`,
+// the clinic's room, the ฿300 the police modal charges, the tonic and fortune
+// constants — in the three registers _hoursRegister gives. Written for the
+// coverage map's N column (2026-09-27); the askable-audit has a row per fact.
+const _TOWN = {
+  venue: {
+    floor: ["\"{v}?\" {n} points with her chin. \"{rs}. Not far, not near.\"",
+      "{n} knows it. \"{v} — {rs}. My friend work there before. You go, say I send you, hahaha.\"",
+      "\"Mm, {v}.\" {n} thinks. \"{rs}. Take motosai if you lazy.\""],
+    house: ["\"{v}.\" {n} nods toward the door. \"{rs}. You'll find it; everybody does eventually.\"",
+      "{n} doesn't need to think. \"{rs}. Tell them nothing about this place.\"",
+      "\"{v}? {rs}.\" {n} says it like a postcode. \"A bike'd have you there in ten minutes.\""],
+    punter: ["\"{v}? {rs}, mate.\" {n} shrugs. \"Same as here with different faces.\"",
+      "{n} points the bottle. \"{rs}. Been in once. Once was the number.\"",
+      "\"{rs},\" {n} says. \"Tell the piwin, he'll know. They all know.\""],
+  },
+  atm: {
+    floor: ["\"Cash machine?\" {n} points. \"{w}. {f}\"",
+      "{n} nods along the street. \"{w}. Take enough, na — machine eat card sometimes.\" {f}",
+      "\"ATM at {w}.\" {n} grins. \"Then come back, tilac.\" {f}"],
+    house: ["\"{w},\" {n} says. \"{f}\"",
+      "{n} has been asked this a thousand times. \"{w}. {f}\"",
+      "\"Nearest machine's at {w}.\" {n} doesn't look up. \"{f}\""],
+    punter: ["\"{w}, mate.\" {n} shrugs. \"{f}\"",
+      "{n} thinks a second. \"{w}. {f}\"",
+      "\"There's one at {w}.\" {n} taps his own wallet. \"{f}\""],
+  },
+  clinic: {
+    floor: ["\"Clinic?\" {n} doesn't blink. \"Second Road, by Central — glass door, next to pharmacy. Open late. Free. Everybody go.\" (GET TESTED)",
+      "{n} says it plainly, which is a kindness. \"Second Road, Central junction. Glass door. They open late for exactly this.\" (GET TESTED)",
+      "\"The clinic on Second Road, tilac. Near Central. Free, no shame.\" {n} means it. (GET TESTED)"],
+    house: ["\"Second Road at the Central junction — a glass door between a pharmacy and a phone shop. Open till late, and it costs nothing.\" {n} says it without a flicker. (GET TESTED)",
+      "{n} gives you the address like a taxi driver. \"Second Road, Central junction. Glass door. Late hours, no fee.\" (GET TESTED)",
+      "\"There's a clinic on Second Road by Central. Free. Go.\" {n} has said this before. (GET TESTED)"],
+    punter: ["\"Second Road, up by Central — glass door, pharmacy one side.\" {n} looks at his beer. \"Free. Been myself, if you want the truth.\" (GET TESTED)",
+      "{n} nods. \"Clinic by Central on Second Road. Open late. Doesn't cost a thing, which in this town is a miracle.\" (GET TESTED)",
+      "\"Central junction, Second Road. Glass door.\" {n} says it kindly. \"Everyone's been once.\" (GET TESTED)"],
+  },
+  police: {
+    floor: ["\"Police?\" {n} lowers her voice. \"Station is {p}. They stop you drunk on the road, it's ฿{fine} — pay, smile, go. Don't argue, na.\"",
+      "{n} makes a small face. \"Station {p}. If they stop you: ฿{fine}, polite, finish. Argue, more.\"",
+      "\"Tourist police {p}.\" {n} shrugs. \"You walk drunk, they want ฿{fine}. Everybody know the number.\""],
+    house: ["\"The station's {p}. A stop on the road is ฿{fine} and a wai, and it stays ฿{fine} if you keep your mouth shut.\" {n} has seen the other version.",
+      "{n} answers like a man who has paid it. \"{p}. ฿{fine}, on the spot, no receipt. It isn't a fine, it's a toll.\"",
+      "\"Station {p}. If it's a drunk stop, ฿{fine} ends it.\" {n} goes back to the till. \"Anything more than that, ask for a supervisor.\""],
+    punter: ["\"Cop shop's {p}, mate. Get pulled on the road drunk and it's ฿{fine} — pay it, don't be clever.\" {n} has been clever once.",
+      "{n} grins. \"{p}. ฿{fine} is the going rate for walking like you've been drinking. Which you have.\"",
+      "\"Station's {p}.\" {n} shrugs. \"฿{fine} and a wai. Cheaper than the argument.\""],
+  },
+  cons: {
+    floor: ["\"The hair-tonic man? On Beach Road.\" {n} shakes her head. \"฿{t} for the bottle on the street, okay. He say come to shop — no. Shop is ฿{tf}. And the monk with the string — ฿{fr} for the palm, then he find a curse for ฿{fri}.\"",
+      "{n} rolls her eyes. \"Tonic man, fortune man — same same. Small money first, ฿{t}, ฿{fr}. Then big: ฿{tf}, ฿{fri}. You want, ask TAO RAI first, then he cannot.\"",
+      "\"Don't follow anybody to a shop, tilac.\" {n} is serious for once. \"Bottle ฿{t}, fine. Shop ฿{tf}. Monk ฿{fr}, then curse ฿{fri}. If they take, go police — REPORT.\""],
+    house: ["\"Beach Road's two: the tonic tout and the robed man with the string. ฿{t} and ฿{fr} are the hooks; ฿{tf} and ฿{fri} are the shop and the ritual.\" {n} counts it off. \"Ask the price before you take anything. The station claws some of it back — REPORT.\"",
+      "{n} has watched it from the door for years. \"The bottle's ฿{t} and honest; the shop it leads to is ฿{tf} and isn't. Same shape with the palm reader: ฿{fr}, then a ฿{fri} curse. TAO RAI before you touch it.\"",
+      "\"Tonic, fortune — the pair of them work the promenade.\" {n} shrugs. \"฿{t} and ฿{fr} up front, ฿{tf} and ฿{fri} once you've followed. If you've paid, REPORT it — they give some back.\""],
+    punter: ["\"Hair tonic bloke? Bought the ฿{t} bottle, laughed, walked. Mate of mine went to the shop — ฿{tf}.\" {n} shakes his head. \"And the monk's ฿{fr} reading turns into a ฿{fri} curse. Ask the price first.\"",
+      "{n} laughs. \"Everyone gets the tonic man once. ฿{t} on the street is the honest end; ฿{tf} in the side soi is the other. Palm reader's ฿{fr}, then ฿{fri} to lift what he found.\"",
+      "\"Two cons on Beach Road and they've been the same two for twenty years.\" {n} lifts the bottle. \"฿{t} bottle, ฿{tf} shop. ฿{fr} palm, ฿{fri} curse. The police station takes a cut of getting it back — REPORT.\""],
+  },
+};
+function _townTalk(npc, topic) {
+  if (!topic || !NPCS[npc]) return false;
+  const t = String(topic).toLowerCase().trim();
+  const reg = _hoursRegister(npc), pick = (k, slots) => { _say(_fmt(_pickVary(_TOWN[k][reg], "town:" + k + ":" + reg), { n: NPCS[npc].name, ...slots })); return true; };
+  if (/^(the )?(atm|cash machine|cashpoint|machine|withdraw|money machine|cash point)$/.test(t) || /\b(an? |the )?atm\b/.test(t)) {
+    const here = _room().atm, near = here ? G.room : Object.keys(ROOMS).find(id => ROOMS[id].atm && ROOMS[id].region === _room().region);
+    const w = here ? "right here, against the wall" : near ? ROOMS[near].name : "the main drag of every nightlife area — Second Road, Soi Buakhao, the Walking Street gate";
+    const fee = _atmFee();
+    return pick("atm", { w, f: fee ? `Foreign card, ฿${fee} a go — take it in one pull.` : "No fee on a Thai book." });
+  }
+  if (/\b(clinic|tested|std|test|checkup|the doctor|a doctor)\b/.test(t) && !/\bdoctor (who|strange)\b/.test(t)) return pick("clinic", {});
+  if (/\b(police|cops?|the law|tourist police|station|fine|fined|bribe)\b/.test(t)) {
+    const st = ROOMS.police_station, p = st ? `on ${st.region}` : "on Second Road";
+    return pick("police", { p, fine: 300 });
+  }
+  if (/\b(tonic|hair tonic|tout|fortune|fortune teller|palm|monk|scams?|cons?|rip[- ]?offs?|scammers?)\b/.test(t))
+  {
+    pick("cons", { t: TONIC_PRICE, tf: TONIC_FLEECE.toLocaleString(), fr: FORTUNE_READ, fri: FORTUNE_RITUAL.toLocaleString() });
+    _say("(TAO RAI at the pitch closes the account before it opens; if it's already gone, REPORT at the police station claws some of it back.)", "dim");
+    return true;
+  }
+  // a venue by name — the player typed it, so the town may place it: region and street
+  if (t.length >= 4) {
+    const k = _pnm(t.replace(/^(where is|where's|the)\s+/, ""));
+    const hits = Object.keys(ROOMS).filter(id => ROOMS[id].bar && !ROOMS[id].invite && id !== G.room && _pnm(ROOMS[id].bar || ROOMS[id].name) === k);
+    if (hits.length === 1) {
+      const v = hits[0], street = Object.keys(ROOMS).find(s => (ROOMS[s].venues || []).includes(v));
+      // region, then the street — "Beach Road, foot of Soi 6" — and never the region twice
+      const r = ROOMS[v].region, sName = street ? ROOMS[street].name : "";
+      const m = sName.match(/^(.*?)\s*\((.*)\)$/), phrase = m && m[1].trim() === r ? m[2] : sName;
+      return pick("venue", { v: _barName(v), rs: r + (phrase && phrase !== r ? ", " + phrase : "") });
+    }
+  }
+  return false;
 }
 
 // Last-resort interpretation of an otherwise-unrecognized line. Returns true if

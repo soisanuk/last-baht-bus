@@ -68,6 +68,18 @@ const FACTS = [
     asks: ["closing", "what time do you close", "hours"],
     rooms: ["mikes_mall"], hour: 20 },
 
+  // the town's furniture (2026-09-27, the coverage map's N column): where a bar is, the
+  // cash machine and its fee, the clinic, the station's ฿300, the two Beach Road cons
+  { fact: "venue-where", why: "ROOMS[v].region and the street whose venues[] lists it — public geography",
+    asks: ["stinky pinky", "candy bar", "where is the queen vic inn"], rooms: ["lucky_tiger", "khao_talo_bar"], hour: 30 },
+  { fact: "atm", why: "atm: true on eleven rooms, _atmFee() — the machine the game sends you to",
+    asks: ["atm", "cash machine", "where is an atm"], rooms: ["lucky_tiger", "stinky_bar", "anchor_bar"], hour: 30 },
+  { fact: "clinic", why: "_doClinic: second_rd_c, free, open late",
+    asks: ["clinic", "get tested", "the doctor"], rooms: ["lucky_tiger", "queen_vic"], hour: 30 },
+  { fact: "police", why: "police_station's region; the ฿300 the police modal charges",
+    asks: ["police", "the police station", "the fine"], rooms: ["lucky_tiger", "queen_vic", "khao_talo_bar"], hour: 30 },
+  { fact: "cons", why: "TONIC_PRICE/FLEECE, FORTUNE_READ/RITUAL — the two Beach Road encounters, priced",
+    asks: ["hair tonic", "fortune teller", "scams"], rooms: ["lucky_tiger", "queen_vic"], hour: 30 },
   // the four beds: `_HOTELS` rates the desk bills to the baht, and a town this
   // chatty had nothing to say about its own hotels (Clive, round 53)
   { fact: "hotel", why: "_HOTELS / _hotelRate — four beds the engine bills to the baht",
