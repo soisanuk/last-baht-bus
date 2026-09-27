@@ -144,3 +144,19 @@ test("G round-trips through serializeGame/deserializeGame as the identity, with 
   newGame(); deserializeGame(JSON.stringify(after));
   assert.deepEqual(JSON.parse(serializeGame()), after);
 });
+
+// ── the night boundary: a room-bound modal does not follow you into the morning ──
+test("SOAPY (or a barfine) on the last turn of a night does not leave its menu pending in your hotel bed", () => {
+  // found by the soak's night-boundary invariant on its first run (2026-09-27)
+  const saved = _rand;
+  try {
+    _rand = () => 0.99;
+    base(); G.room = "emperor_soapy"; G.nightTurn = NIGHT_TURNS - 1; G.money = 9000;
+    const d0 = G.day; doCommand("soapy");
+    assert.equal(G.day, d0 + 1, "the night ended on that command");
+    assert.equal(G.pendingSoapy, null, "the laminated menu did not follow you home");
+    assert.equal(G.pendingBf, null);
+    out = []; doCommand("look");
+    assert.match(text(), /Your Room|Sabai|room/i, "the first command of the morning is yours, not the menu's");
+  } finally { _rand = saved; }
+});

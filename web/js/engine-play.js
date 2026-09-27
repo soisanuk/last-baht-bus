@@ -4492,6 +4492,11 @@ function _endNight(reason) {
       "and owes you nothing.)", "dim");
   }
   G.pendingEnc = null;
+  // the soapy's laminated menu and a barfine still on the table do not follow you
+  // into the morning: SOAPY typed on the last turn of a night left its menu pending
+  // in your own hotel bed, swallowing the day's first command (the soak's
+  // night-boundary invariant, 2026-09-27 — the first class-A catch it made)
+  G.pendingSoapy = null; G.pendingBf = null;
   G.encPrompt = null;
   G.pendingFare = null;
   // the week's spine, one entry per night — what the share card renders.

@@ -44,7 +44,13 @@ const INSTRUMENTS = [
   // the save/reload harness (2026-09-27): every modal state round-trips, redraws identically,
   // forks identically on an answer, and is never silent or charged on junk — S wherever a
   // modal, game or encounter can be live, and G's baseline (the junk sweep) for the same
-  { name: "saveload.test (G round-trip)", cls: ["S"] },   // the whole of G is the identity through a save, every system in a non-default state
+  { name: "saveload.test (G round-trip)", cls: ["S"] },
+  // the reachability harness (2026-09-27): one walk, every quest's `at`, TRAVEL HOME from every
+  // crash spot broke on a low battery on the real path, every listed door opens and OUT works
+  { name: "reachability.test", cls: ["C"], systems: ["navigation", "quests", "act1", "hotels", "darkness", "motosai", "bus", "worldprose", "orchid", "dog", "clinic", "food", "massage", "barchain", "heist", "cons", "encounters", "regulars", "calendar", "thai", "games", "loans", "money", "drinks", "bell", "barfine", "ladydrinks", "social", "media", "weather", "saleng", "phone"] },
+  // the soak's night-boundary invariants (2026-09-27): what the wake may not carry — a drink,
+  // the rain, a companion, a modal, a negative pocket — checked after every night of every seed
+  { name: "soak night-boundary", cls: ["A"], systems: ["clock", "body", "weather", "party", "money", "hotels", "bell", "barfine", "nightride", "encounters", "games", "sobriety", "drinks", "ladydrinks", "vacation", "barbooks", "affair", "cream", "sao", "heist", "happiness", "police", "dog", "saveload", "act1", "cons", "loans", "phone", "quests", "conversation", "bus", "motosai", "navigation", "darkness"] },   // the whole of G is the identity through a save, every system in a non-default state
   { name: "saveload.test", cls: ["S", "G"], systems: SYS.filter(s => s.modals.length || s.encounters.length || ["games", "bus", "motosai", "barfine", "act1", "saveload", "massage", "identity", "vacation", "party", "nightride", "hotels", "cream", "sao", "heist", "barbooks", "procurement", "affair", "barchain"].includes(s.id)).map(s => s.id) },
 ];
 const instrumented = (sys, cls) => INSTRUMENTS.filter(i => i.cls.includes(cls) && (!i.systems || i.systems.includes(sys))).map(i => i.name);
