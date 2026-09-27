@@ -51,6 +51,8 @@ const INSTRUMENTS = [
   // the soak's night-boundary invariants (2026-09-27): what the wake may not carry — a drink,
   // the rain, a companion, a modal, a negative pocket — checked after every night of every seed
   // the soak's silent-money invariant (2026-09-27): any command that moves the pocket prints a ฿ figure
+  // the soak's vocab-huh invariant (2026-09-27): every word engineComplete offers parses — one facet of H and P
+  { name: "soak vocab-huh", cls: ["H", "P"] },
   { name: "soak silent-money", cls: ["E"], systems: ["money", "drinks", "ladydrinks", "bell", "barfine", "party", "nightride", "cons", "hotels", "food", "saleng", "massage", "loans", "barchain", "barbooks", "procurement", "bus", "motosai", "games", "encounters", "act1", "vacation", "heist", "phone", "thai", "clinic", "social", "sobriety", "affair", "cream", "happiness"] },
   // the soak's near-repeat ledger (2026-09-27): the same sentence a third time within fifteen
   // commands, room furniture and readouts excluded — reported per run, not gated (a prompt may repeat)

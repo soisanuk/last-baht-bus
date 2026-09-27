@@ -97,7 +97,10 @@
    ],
    "rooms": [],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "blackout",
+    "hospital.morning"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -116,7 +119,9 @@
     "fast_eddy",
     "bert"
    ],
-   "effects": [],
+   "effects": [
+    "sobriety.declared"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -357,7 +362,9 @@
    "verbs": [],
    "rooms": [],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "nightride.taken"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [
@@ -413,7 +420,9 @@
     "police_station"
    ],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "scam.reported"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [
@@ -543,7 +552,9 @@
    "verbs": [],
    "rooms": [],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "quiz.played"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -558,7 +569,10 @@
    ],
    "rooms": [],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "game.started",
+    "killer.title"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -579,7 +593,9 @@
    "npcs": [
     "waen"
    ],
-   "effects": [],
+   "effects": [
+    "lesson.taken"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -639,7 +655,9 @@
    "npcs": [
     "mort"
    ],
-   "effects": [],
+   "effects": [
+    "column.read"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -675,7 +693,9 @@
    "verbs": [],
    "rooms": [],
    "npcs": [],
-   "effects": [],
+   "effects": [
+    "saleng.met"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -716,7 +736,9 @@
    "npcs": [
     "priew"
    ],
-   "effects": [],
+   "effects": [
+    "clinic.tested"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -976,7 +998,9 @@
    "npcs": [
     "nira"
    ],
-   "effects": [],
+   "effects": [
+    "loan.taken"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],
@@ -996,7 +1020,9 @@
     "gavin",
     "powers"
    ],
-   "effects": [],
+   "effects": [
+    "orchid.entered"
+   ],
    "modals": [],
    "quests": [],
    "encounters": [],

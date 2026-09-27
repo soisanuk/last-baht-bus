@@ -371,6 +371,9 @@ function langLeak(line) {
 
 const OFFPOCKET = /(Walking Street|Soi Buakhao|Buakhao|LK Metro|Tree Town|Myth Night|Jomtien)/;
 // class Q: a line that legitimately repeats — the clock, the stock refusals, the wait
+// class H/P: words the autocomplete offers that the ENGINE does not parse because the
+// FRONTEND owns them (main.js intercepts SAVE/LOAD before doCommand) — headless-only misses
+const VOCAB_HUH_OK = new Set(["save", "load"]);
 const REPEAT_AT = 3;   // the same sentence a third time within fifteen commands
 const REPEAT_OK = ["You wait. Pattaya doesn't", "Exits:", "Step inside:", "Here:", "(HELP lists commands.)", "You can't go that way", "Nobody's waiting to be paid"];
 const OFFPOCKET_OK = ["in 2004", "Last Orders", "MIND THE STEP", "up-country"];
@@ -558,6 +561,10 @@ export function runSoak(opts = {}) {
         if (!hintQueue.includes(h) && hintQueue.length < 12) hintQueue.push(h);
 
     // the promise-catcher: a played hint that the parser disowns
+    // CLASS H/P — a word the engine itself OFFERED (engineComplete's own candidates) that its
+    // parser then refused: the surfaces disagreeing with each other (2026-09-27)
+    if (source === "vocab" && !VOCAB_HUH_OK.has(cmd) && typeof _HUH !== "undefined" && lines.some(l => _HUH.includes(String(l))))
+      warns.push({ kind: "vocab-huh", cmd, room: G.room, at: stats.commands });
     if (source === "hint" && lines.some(l => /didn't understand/i.test(l))) {
       stats.understoodMisses++;
       warns.push({ kind: "hint-miss", cmd, room: G.room, at: stats.commands });

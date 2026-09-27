@@ -83,6 +83,16 @@ test("economy: no command moves the pocket without printing a figure (class E, t
   assert.deepEqual(hits, [], "money moved with no ฿ on the page");
 });
 
+test("surfaces: every word the autocomplete offers is a word the parser takes (class H/P, vocab-huh)", () => {
+  // the engine's own engineComplete candidates, typed back; a HUH is the surfaces disagreeing
+  const hits = [];
+  for (const seed of [1, 2, 3, 4]) for (const mode of ["vacation", "expat"]) {
+    const r = runSoak({ seed, nights: 6, mode });
+    for (const w of r.warns) if (w.kind === "vocab-huh") hits.push(`${mode}/${seed}: '${w.cmd}' in ${w.room}`);
+  }
+  assert.deepEqual(hits, [], "the autocomplete offered a word the parser refused");
+});
+
 test("liveness: the expat stage's own beats fire without being led there", () => {
   // Both were arrival-only until round 13 and never fired for an owner who
   // opened up early and stayed — 61 nights with G.syn untouched.
