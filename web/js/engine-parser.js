@@ -4997,6 +4997,28 @@ const _TOWN = {
       "{n} nods at the wall. \"{c}\"",
       "\"{c}\" {n} says. \"Or buy a cable off the 7-Eleven and stop asking.\""],
   },
+  heat: {
+    floor: ["{n} glances at the door. \"{h}\"",
+      "\"Security?\" {n} keeps her voice down. \"{h}\"",
+      "{n} makes a small warning face. \"{h}\""],
+    house: ["\"{h}\" {n} says, and goes back to the till.",
+      "{n} doesn't soften it. \"{h}\"",
+      "\"{h}\" {n} shrugs. \"House rule, not mine.\""],
+    punter: ["\"{h}\" {n} says. \"Seen it happen to better men.\"",
+      "{n} nods at the door. \"{h}\"",
+      "\"{h}\" {n} grins. \"Buy her a drink and keep your hands on the bar.\""],
+  },
+  saleng: {
+    floor: ["\"Saleng?\" {n} lights up. \"Food cart, shoe cart, lingerie cart, snack cart — one come every bar, one time a night, when he come. {c}\"",
+      "{n} grins. \"The carts! Moo ping, sandals, the pretty things. Come when they come, na. {c}\"",
+      "\"You wait, you see.\" {n} nods at the window. \"Four kind of cart. Girls buy, customer buy for girl. {c}\""],
+    house: ["\"The three-wheelers — food, shoes, lingerie, snacks. One per bar per night, on no timetable anyone has found.\" {n} shrugs. \"{c}\"",
+      "{n} answers like a man who has counted them. \"Four carts work the sois. They park, the girls swarm, they move on. {c}\"",
+      "\"Saleng. Four kinds. When it's here you'll know — the whole floor goes to the window.\" {n} adds: \"{c}\""],
+    punter: ["\"The carts? Food, shoes, knickers, crisps.\" {n} shrugs. \"They come when they come. {c}\"",
+      "{n} laughs. \"Buy a girl sandals off the cart and you're a regular for a week. {c}\"",
+      "\"Four kinds of cart, mate, and every girl in here wants the second one.\" {n} grins. \"{c}\""],
+  },
   cons: {
     floor: ["\"The hair-tonic man? On Beach Road.\" {n} shakes her head. \"฿{t} for the bottle on the street, okay. He say come to shop — no. Shop is ฿{tf}. And the monk with the string — ฿{fr} for the palm, then he find a curse for ฿{fri}.\"",
       "{n} rolls her eyes. \"Tonic man, fortune man — same same. Small money first, ฿{t}, ฿{fr}. Then big: ฿{tf}, ฿{fri}. You want, ask TAO RAI first, then he cannot.\"",
@@ -5038,6 +5060,21 @@ function _townTalk(npc, topic) {
     const ex = _room().exits || {}, darkWays = Object.entries(ex).filter(([, to]) => ROOMS[to] && ROOMS[to].dark).map(([dir]) => _dirWord ? _dirWord(dir) : dir);
     const d = darkWays.length ? `No lights ${darkWays.join(" and ")} of here.` : _room().dark ? "This stretch — you're standing in it." : "Lit from here, but the beach roads and the hill go dark.";
     return pick("dark", { d });
+  }
+  // the house's temper: heat, the ban, the shift security works
+  if (/\b(security|bouncer|thrown out|kicked out|banned|the ban|heat|trouble|hands)\b/.test(t) && _inBar()) {
+    const heat = (G.soc.heat || {})[G.room] || 0, ban = (G.soc.banned || {})[G.room];
+    const h = ban != null && G.turns - ban < BAN_TURNS ? `You're barred here for the shift — security's ${BAN_TURNS - (G.turns - ban)} turns from forgetting you.`
+      : heat >= 2 ? "One more wrong hand and security walks you out — three strikes is the whole rule, and you're on two."
+      : heat === 1 ? "You've a strike. Three and you're out on the pavement for the shift; the bell wipes it."
+      : "Keep your hands where the girls can see them and nobody counts anything. Three strikes and security walks you out; a ring of the bell buys the room's forgiveness.";
+    return pick("heat", { h });
+  }
+  // the carts
+  if (/\b(saleng|the cart|carts?|three-?wheeler|ซาเล้ง)\b/.test(t)) {
+    const here = typeof _salengHere === "function" && _salengHere();
+    const c = here ? `That's one outside now — ${_SALENG_CARTS[G.salengCart].hint}` : "Nothing outside right now.";
+    return pick("saleng", { c });
   }
   // charging a phone: where, and what it costs
   if (/\b(charge|charger|charging|battery|socket|plug|power bank|dead phone)\b/.test(t)) {

@@ -633,6 +633,9 @@ export function runSoak(opts = {}) {
         if (G.hurt < 0 || G.hurt > 3) bad.push("hurt " + G.hurt);
         if ((G.hangover || 0) < 0) bad.push("hangover " + G.hangover);
         if (G.money < 0) bad.push("woke with negative money " + G.money);
+        if (G.salengCart) bad.push("a saleng cart parked through the dawn (" + G.salengCart + " at " + G.salengRoom + ")");
+        if (Object.keys((G.soc && G.soc.heat) || {}).some(k => G.soc.heat[k] > 0)) bad.push("bar heat carried through sleep");
+        if (Object.keys((G.soc && G.soc.charmed) || {}).length) bad.push("last night's charm still on the meter");
         if (bad.length) fail("night-boundary", bad.join("; ") + " after '" + cmd + "'");
       }
       stats.nights++; lastDay = G.day; cmdsThisNight = 0; forcedWaits = 0;

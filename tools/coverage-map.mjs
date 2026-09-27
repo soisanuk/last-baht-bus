@@ -34,7 +34,7 @@ const SEV = { S: .24, C: .21, A: .17, I: .14, G: .15, B: .12, E: .12, J: .11, H:
 // which classes an instrument covers, and for which systems (empty = every system)
 const INSTRUMENTS = [
   { name: "promises/afford/asktopic/errand/examine", cls: ["D"] },
-  { name: "askable-audit", cls: ["N"], systems: ["drinks", "calendar", "hotels", "barfine", "bell", "regulars", "navigation", "money", "clinic", "police", "cons", "dog", "sobriety", "barbooks", "darkness", "phone"] },
+  { name: "askable-audit", cls: ["N"], systems: ["drinks", "calendar", "hotels", "barfine", "bell", "regulars", "navigation", "money", "clinic", "police", "cons", "dog", "sobriety", "barbooks", "darkness", "phone", "social", "saleng"] },
   { name: "references.test", cls: ["K", "R"] },
   { name: "templates.test", cls: ["L", "M", "K"] },
   { name: "predicates.test", cls: ["I"], systems: ["party", "nightride", "affair", "barchain", "barbooks", "dog", "sobriety"] },
@@ -57,7 +57,7 @@ const INSTRUMENTS = [
   // the soak's near-repeat ledger (2026-09-27): the same sentence a third time within fifteen
   // commands, room furniture and readouts excluded — reported per run, not gated (a prompt may repeat)
   { name: "soak repeat ledger", cls: ["Q"], systems: SYS.filter(s => !["guardrails", "saveload", "presentation"].includes(s.id)).map(s => s.id) },
-  { name: "soak night-boundary", cls: ["A"], systems: ["clock", "body", "weather", "party", "money", "hotels", "bell", "barfine", "nightride", "encounters", "games", "sobriety", "drinks", "ladydrinks", "vacation", "barbooks", "affair", "cream", "sao", "heist", "happiness", "police", "dog", "saveload", "act1", "cons", "loans", "phone", "quests", "conversation", "bus", "motosai", "navigation", "darkness"] },   // the whole of G is the identity through a save, every system in a non-default state
+  { name: "soak night-boundary", cls: ["A"], systems: ["clock", "body", "weather", "party", "money", "hotels", "bell", "barfine", "nightride", "encounters", "games", "sobriety", "drinks", "ladydrinks", "vacation", "barbooks", "affair", "cream", "sao", "heist", "happiness", "police", "dog", "saveload", "act1", "cons", "loans", "phone", "quests", "conversation", "bus", "motosai", "navigation", "darkness", "saleng", "social", "calendar"] },   // the whole of G is the identity through a save, every system in a non-default state
   { name: "saveload.test", cls: ["S", "G"], systems: SYS.filter(s => s.modals.length || s.encounters.length || ["games", "bus", "motosai", "barfine", "act1", "saveload", "massage", "identity", "vacation", "party", "nightride", "hotels", "cream", "sao", "heist", "barbooks", "procurement", "affair", "barchain"].includes(s.id)).map(s => s.id) },
 ];
 const instrumented = (sys, cls) => INSTRUMENTS.filter(i => i.cls.includes(cls) && (!i.systems || i.systems.includes(sys))).map(i => i.name);
