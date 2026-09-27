@@ -314,7 +314,10 @@ test("the slate is a thing in the room, not one line every third night", () => {
 
 test("winner stays on, and losing the frame loses the table", () => {
   // Won for the table four times in a week: no challenger, no hold, not a word.
-  G.room = "lucky_tiger"; G.money = 0; G.poolHold = {};
+  // newGame seeds the dice from Math.random, and this pin needs BOTH a win and a
+  // loss inside forty frames — pin the stream so the suite is not a coin (flaked
+  // twice in full runs, 2026-09-27)
+  G.room = "lucky_tiger"; G.money = 0; G.poolHold = {}; G.rng = 424242;
   let held = false;
   for (let i = 0; i < 40 && !held; i++) {
     out = []; doCommand("play pool");

@@ -4497,6 +4497,10 @@ function _endNight(reason) {
   // in your own hotel bed, swallowing the day's first command (the soak's
   // night-boundary invariant, 2026-09-27 — the first class-A catch it made)
   G.pendingSoapy = null; G.pendingBf = null;
+  // a saleng parked at a bar does not sit there through the dawn — it was still at
+  // Tequila Queen at 06:00 for a man who woke on Beach Road (the soak's night-boundary
+  // invariant, its second catch, 2026-09-27)
+  G.salengCart = null; G.salengRoom = null; G.salengUntil = 0;
   G.encPrompt = null;
   G.pendingFare = null;
   // the week's spine, one entry per night — what the share card renders.

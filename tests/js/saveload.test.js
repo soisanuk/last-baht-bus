@@ -152,10 +152,12 @@ test("SOAPY (or a barfine) on the last turn of a night does not leave its menu p
   try {
     _rand = () => 0.99;
     base(); G.room = "emperor_soapy"; G.nightTurn = NIGHT_TURNS - 1; G.money = 9000;
+    G.salengCart = "shoes"; G.salengRoom = "tequila_queen"; G.salengUntil = G.turns + 8;
     const d0 = G.day; doCommand("soapy");
     assert.equal(G.day, d0 + 1, "the night ended on that command");
     assert.equal(G.pendingSoapy, null, "the laminated menu did not follow you home");
     assert.equal(G.pendingBf, null);
+    assert.equal(G.salengCart, null, "a saleng cart does not park through the dawn (the invariant's second catch)");
     out = []; doCommand("look");
     assert.match(text(), /Your Room|Sabai|room/i, "the first command of the morning is yours, not the menu's");
   } finally { _rand = saved; }
