@@ -23,19 +23,14 @@ var NEWS_FEED = [
     "d": "26 Sep 2026"
   },
   {
-    "t": "Not over yet for Pattaya with heavy rain forecast through September 27",
-    "s": "Pattaya Mail",
-    "d": "25 Sep 2026"
-  },
-  {
-    "t": "Thailand tourism authorities alert travellers over heavy rain and flooding",
+    "t": "103 flights circle Suvarnabhumi as heavy rain disrupts air travel",
     "s": "Pattaya Mail",
     "d": "26 Sep 2026"
   },
   {
-    "t": "Dr Pat tells Pattaya City expats sleep and healthy habits prolong life",
+    "t": "Pattaya gives the beach time to recover after major floods",
     "s": "Pattaya Mail",
-    "d": "26 Sep 2026"
+    "d": "27 Sep 2026"
   },
   {
     "t": "Pattaya-bound traffic faces major flooding on Sukhumvit near Nong Mon",
@@ -43,9 +38,14 @@ var NEWS_FEED = [
     "d": "26 Sep 2026"
   },
   {
-    "t": "Bangkok’s flood disaster – in pictures | Thailand",
-    "s": "The Guardian",
+    "t": "Fisherman finds body feared to be missing Korean in east Pattaya canal",
+    "s": "Pattaya Mail",
     "d": "27 Sep 2026"
+  },
+  {
+    "t": "Thai capital Bangkok declared disaster zone amid widespread flooding",
+    "s": "CNN",
+    "d": "26 Sep 2026"
   },
   {
     "t": "Asian Games Aichi-Nagoya 2026: True to his word, Thailand's Puripol Boonson matches Asian record in men's 200m",
@@ -64,7 +64,7 @@ var NEWS_FEED = [
   },
   {
     "t": "Eurovision Asia 2026 Thailand: Mang & Daou - \"Glinratree\"",
-    "s": "Eurovisionworld",
+    "s": "eurovisionworld.com",
     "d": "23 Sep 2026"
   },
   {
@@ -76,7 +76,7 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-25","USD":33.34,"AUD":23.44,"GBP":44.19,"EUR":38.02};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-27","temp":24,"humid":94,"code":61,"hi":26,"rain":100};
+var WX_NOW = {"date":"2026-09-28","temp":25,"humid":94,"code":51,"hi":29,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4286,"date":"2026-09-27","baht":67600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":84397,"thb":2817298};
+var BTC = {"usd":84661,"thb":2827277};
