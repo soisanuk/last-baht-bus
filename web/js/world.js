@@ -8878,6 +8878,24 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      // Sao, and the dinner: the same line before and after it, and nothing for her
+      // father or the word that ended it (Sol, round 55). Tan drives to Bangkok twice
+      // a week; he knows the shape of that family without anybody's name in it.
+      { topic: "sao|her father|the father|hi-so|hiso|high society|sathorn|cartier|hobby|the dinner|bangkok family", when: (st, G) => !!(G.bkk && G.bkk.went),
+        text: "\"You went.\" Not a question; the grey sedan and the grey Alphard use the same car wash. \"The father pours his own " +
+          "whisky, yes? For men he likes. For men he is curious about.\" A glance in the mirror. \"A hobby is not an insult in " +
+          "that house, my friend. A hobby is a thing they keep. Be a good hobby — polite, not poor, never asking — and you will " +
+          "be invited again, one day, when you have stopped wanting to be.\"",
+        short: "\"The father pours for men he's curious about. A hobby is a thing they keep. Don't ask to be more.\"" },
+      { topic: "sao|her father|the father|hi-so|hiso|high society|sathorn|cartier|hobby|the dinner|bangkok family", when: (st, G) => !!(G.bkk && _flag("bkkArcDone") && !G.bkk.went),
+        text: "\"You said no to the car.\" He nods slowly, as though you had parked well. \"Some doors you only see from the " +
+          "street. That is not a loss. It is a view.\"",
+        short: "\"You said no to the car. Some doors are a view.\"" },
+      { topic: "sao|hi-so|hiso|high society|sathorn|bangkok family", when: (st, G) => !!(G.bkk && !_flag("bkkArcDone")),
+        text: "\"A Bangkok girl who gave you her number herself.\" The small smile at the wheel. \"Then she means coffee. When " +
+          "they mean coffee it is usually coffee — and when it is not coffee, it is dinner, with the whole family, and you wear " +
+          "a collar.\" He does not say more, which is how you know there is more.",
+        short: "\"She gave you her number herself. It is coffee, or it is the family. Wear a collar.\"" },
       // the favour's name: a man who said yes (or no) asked after her and got
       // "not my story" (Rolf, round 54)
       { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourDone"],
@@ -8890,6 +8908,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "not say things twice to make them true.\" The eyes in the mirror, briefly. \"There is always a list. The question was only " +
           "whose.\"",
         short: "\"She is on somebody's list. Not yours. That is fine.\"" },
+      // rent, the ice, the beer uncle: the partner's answer (Hennie, round 55 — every one
+      // of these got "no idea, mate" from the man who holds fifty-one percent)
+      { topic: "rent|the rent|landlord|the landlord|ice|the ice|delivery|deliveries|supplier|suppliers|beer uncle|the uncle|the beer", req: ["partnerTan"],
+        when: (st, G) => !(G.syn && G.syn.friction > 0),
+        text: "\"Bert's side. The landlord is the landlord, the ice is the ice man, the beer is the uncle.\" He says each one like a " +
+          "name on a list he has read. \"I am fifty-one on paper, my friend. Not behind the bar.\"",
+        short: "\"Bert's side. I am fifty-one on paper, not behind the bar.\"" },
+      { topic: "rent|the rent|landlord|the landlord|ice|the ice|delivery|deliveries|supplier|suppliers|beer uncle|the uncle|the beer", req: ["partnerTan"],
+        text: "\"The uncle is slow?\" No surprise in it at all. \"He is slow for everybody who pays list. That is not a punishment. " +
+          "That is list.\" He looks at the road. \"Nobody is doing anything to you. That is true, and I know it does not help.\"",
+        short: "\"Slow for everybody who pays list. That is not a punishment. That is list.\"" },
       // the man who holds fifty-one percent of your bar answers as the man who
       // does — he was pitching the pre-purchase coffee to his own partner and
       // "not yet, maybe later" to "partner" (Rolf, round 54)
@@ -12129,7 +12158,12 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
       "quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last three of them within nine feet of that pool table.",
     dialogue: [
-      { when: (st, G) => _flag("barPaid"),
+      // after the sale he is the new owner's manager, and says so without ceremony (Rolf, round 55)
+      { when: (st, G) => _flag("barSold"),
+        text: "\"Well, look who it is.\" Bert sets a Singha on the rail before you've sat, and doesn't ring it. \"New owner's a Swede. " +
+          "Pays on time, knows nothing, asks me everything. You'd hate him.\" He chalks the cue. \"How's the sea?\"",
+        short: "\"Look who it is. New owner's a Swede — knows nothing, asks me everything. How's the sea?\"" },
+      { when: (st, G) => _flag("barPaid") && !_flag("barSold"),
         text: "\"Boss.\" Bert doesn't look up from the cue he's chalking, which is how he says hello to " +
           "the man whose name is on the register. \"Till's honest, ice is in, Doug's on his third and " +
           "pretending it's his first. Anything you want to know, BOOKS knows it before I do.\"",
@@ -13198,11 +13232,11 @@ const ENCOUNTERS = {
     interactive: true, nightly: true,
     th: "รอเพื่อนอยู่ค่ะ", rom: "ror phuean yu kha",
     intro: [
-      "A young woman in good sneakers and a Bangkok-boutique dress is checking " +
-      "her phone against the crowd, plainly waiting for someone. No bar behind her, " +
+      "A young woman in good sneakers and a Bangkok-boutique dress, a thin gold bracelet you would put down " +
+      "as a market copy, is checking her phone against the crowd, plainly waiting for someone. No bar behind her, " +
       "no smile-for-hire — just a weekender killing five minutes. She catches you " +
       "noticing and returns a small, neutral nod.",
-      "A young woman in flat shoes and a Chatuchak tote is arguing gently with a map on her phone, plainly not from here and plainly not working — a weekender down from Bangkok whose friend is late again. She catches you looking and laughs first.",
+      "A young woman in flat shoes and a Chatuchak tote, a thin gold bracelet at her wrist that you take for a market copy, is arguing gently with a map on her phone, plainly not from here and plainly not working — a weekender down from Bangkok whose friend is late again. She catches you looking and laughs first.",
     ],
     hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here.)",
   },
@@ -14001,7 +14035,7 @@ const WORK_NIGHTS = [
       "in off the sea.",
   },
   {
-    id: "allin", weight: 4, happy: 5, when: G => !_lowSeason(),
+    id: "allin", weight: 4, happy: 5, when: G => !_lowSeason(), minGapDays: 10,   // three times in 22 nights (Rolf, round 55)
     text: "Every regular you have is in tonight. Not arranged, not a promotion — " +
       "they simply all came, the way a room sometimes decides to be full. Two of " +
       "them are arguing about a football match from 1998. Somebody's put the " +
@@ -14065,6 +14099,7 @@ const WORK_NIGHTS = [
   },
   {
     id: "noshow", weight: 3, happy: -2,
+    when: G => typeof _barStaff === "function" && _barStaff().filter(id => NPC_ROLES[id] === "hostess").length >= 2,   // "one of the girls" with one girl on the floor (Rolf, round 55)
     text: "One of the girls doesn't come in and doesn't answer her phone. Nobody " +
       "will say anything about it, which tells you it isn't an emergency and is " +
       "somebody's boyfriend. You cover her section yourself, badly, and she is " +
@@ -14160,7 +14195,7 @@ const AFFAIR_CRISES = [
   },
   {
     id: "mamasan",
-    lead: "{mama} closes out the till drawer, puts the key on the bar between you, and does not take her hand off it.",
+    lead: "{mama} waits for the till drawer to shut, puts the key on the bar between you, and does not take her hand off it.",
     ask: "\"Twenty year I run floors.\" It is not a complaint; it is a briefing. \"A floor has one voice. When you change what I tell her — the section, the customer, the shift — the girls hear TWO voices, and a floor with two voices is no floor.\" She slides the key an inch toward you. \"So. On my floor she is a hostess and I run her like one. Or she is your lady and she is not on my floor. You choose which. I am not angry. I am asking.\"",
     a: { label: "back the mamasan", text: "\"Your floor.\" She takes the key back and the relief in the room is almost audible. Your girl hears about it before close — of course she does — and says nothing, and pours herself the staff drink she is entitled to, and drinks it alone at the far end.", strain: 3 },
     b: { label: "back your girl", text: "You say, carefully, that you'll be the one who decides about her. The mamasan looks at you for a long moment — not hurt, older than hurt — and takes her hand off the key. \"Okay, boss.\" From that night the floor runs exactly as well as it must and not one degree better.", floor: 2 },
@@ -14175,7 +14210,7 @@ const AFFAIR_CRISES = [
   {
     id: "family",
     lead: "{her} sits with her phone for a long time after the call, then puts it face down, which is the loudest thing she has done all week.",
-    ask: "Her mother knows now — of course she knows; the village has known for a month — that her daughter's farang OWNS a bar. The ask, when she finally shows it to you, is the roof: ฿" + AFFAIR_FAMILY_ASK.toLocaleString() + ", before the rains. \"I not ask you,\" she says, holding the phone like it's hot. \"SHE ask you. Is different. I want it to be different.\"",
+    ask: "Her mother knows now — of course she knows; the village has known for a month — that her daughter's farang OWNS a bar. The ask, when she finally shows it to you, is the roof: ฿" + AFFAIR_FAMILY_ASK.toLocaleString() + ", {rains}. \"I not ask you,\" she says, holding the phone like it's hot. \"SHE ask you. Is different. I want it to be different.\"",
     a: { label: "pay for the roof", text: "You send it that night. Her mother's blessing arrives by return like a receipt, and somewhere in it you feel the shape of every sponsor who ever sat where you're sitting. The floor hears about the roof by Thursday. Floors always do.", floor: 1, money: AFFAIR_FAMILY_ASK },
     b: { label: "refuse", text: "You say the word no more carefully than you have ever said anything, and she takes it well — takes it, in fact, like a hostess absorbing a knock-back, professionally, which is the worst possible way she could take it. The roof does not come up again. It sits in every silence instead.", strain: 4 },
     c: { label: "half, and the truth", text: "You offer half — a real number, honestly reasoned: a roof, yes; a standing pipe, no. She translates the distinction for her mother with the phone pressed close. It costs you both something to have said out loud, and it is the only answer in the room that treats her like a partner.", strain: 1, money: 7500 },
@@ -14209,6 +14244,13 @@ const SHIFT_CALLS = [
       "\"Here's a thing.\" He turns his phone face-down, which tells you the " +
         "balance without him having to. \"Pay-day's {payday} and it is not {payday}. " +
         "Carry us till then?\" {tabrecord}",
+
+      "\"Awkward one, mate.\" He has the grace to look at the bar top. \"Wife's got the card " +
+        "this week, long story. {payday}, I'm good for it. Put it in the book?\" {tabrecord}",
+      "He waits till the rail is out of earshot, which tells you what it is before he says it. " +
+        "\"Run us a slate till {payday}? You know I'm here every night.\" {tabrecord}",
+      "\"Machine ate my card.\" He says it to the ceiling. \"Genuinely. {payday}, first thing, " +
+        "hand on heart. Can you carry it?\" {tabrecord}",
     ],
     yes: "You write his name on a docket and put it under the till, and he stays " +
       "another three hours and drinks like a man who has stopped counting, which " +
@@ -14301,7 +14343,7 @@ const SHIFT_CALLS = [
     ],
     yes: "You go down the bar yourself.",
     no: "You leave it to Bert, which is what Bert is for, and Bert does it the way " +
-      "he has done it for eleven years: no volume, one hand on the man's shoulder, " +
+      "he has done it for twenty-two years: no volume, one hand on the man's shoulder, " +
       "out through the front and pointed at a taxi before he has finished deciding " +
       "to argue.",
   },
@@ -14331,7 +14373,7 @@ const SYNDICATE_JOBS = [
     yes: "\"Good.\" That is the whole of his reaction; he is already texting " +
       "somebody.\n\nThey start Thursday. They are very good, the bar has never been " +
       "this clean, and Bert — who has opinions about most things — has none about this " +
-      "at all. \"Best cleaners on the Darkside, bud. Wouldn't ask where they came " +
+      "at all. \"Best cleaners on the soi, bud. Wouldn't ask where they came " +
       "from.\"",
     perk: "The bin men, who used to come when they came, now come. And the uncle who " +
       "brings the beer up from Sattahip in a Hilux with one working door starts quoting " +
@@ -15052,7 +15094,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
           "before you have said anything. \u201cThe one in forty.\u201d The notebook closes on " +
           "the biro. \u201cSit down, I said I would buy and I am a man of my word about beer " +
           "if nothing else.\u201d He signals two without asking what you drink. \u201cMort. " +
-          "You already know that, you have had my material all week.\u201d",
+          "You already know that, you have had my material.\u201d",
         short: "\u201cThe one in forty. Sit down \u2014 I said I would buy.\u201d" },
       // The Glam saga (oldrocker → keys → quietmoney → family) is the best chain
       // in the game and the easiest to never find: its giver is a mamasan on a

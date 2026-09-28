@@ -1407,6 +1407,12 @@ const _ENC = {
 
   booking(input) {
     if (_flag("catfishArrived")) { G.flags.catfishArrived = false; return _catfishDoor(input); }
+    // SLEEP is a no AND a sleep: it was eaten as NO and had to be typed twice (Rolf, round 55)
+    if (/^(sleep|turn in|go to bed|bed)\b/.test(input) && _isHotelRoom(G.room)) {
+      _say("You put the phone face-down and let the fan have the room.", "dim");
+      G.pendingEnc = null; G.encPrompt = null;
+      doCommand("sleep"); return;
+    }
     const yes = /yes|ok|sure|book|come|deal|why not|send her|yeah/.test(input) &&
       !/\bno\b|sleep|turn in|pass|not tonight/.test(input);
     if (!yes) {

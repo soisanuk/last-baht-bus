@@ -1,0 +1,77 @@
+{
+ "label": "persona-hennie-owner-who-refuses",
+ "lens": "owner-who-refuses",
+ "recorded": null,
+ "runs": 1,
+ "commands": 0,
+ "effectsTotal": 0,
+ "rooms": [
+  "beach_rd_c",
+  "beach_rd_n",
+  "blue_dog",
+  "hotel_room",
+  "hotel_soi",
+  "jomtien_beach",
+  "naklua_rd",
+  "soi6_deep",
+  "soi6_mid",
+  "soi6_street",
+  "stinky_bar"
+ ],
+ "npcs": [
+  "air",
+  "bert",
+  "ing",
+  "pen",
+  "tan"
+ ],
+ "patrons": [],
+ "enc": [
+  "katoey",
+  "tonic"
+ ],
+ "questsDone": [
+  "bar_licence",
+  "bar_opening",
+  "bar_partner",
+  "bar_premises",
+  "nominee_deal",
+  "plg_deal"
+ ],
+ "verbs": [
+  "3",
+  "ask",
+  "books",
+  "buy",
+  "diagnose",
+  "draw",
+  "e",
+  "enter",
+  "goto",
+  "light",
+  "look",
+  "map",
+  "motosai",
+  "no",
+  "out",
+  "s",
+  "step",
+  "travel",
+  "w",
+  "wait",
+  "withdraw",
+  "work",
+  "yes"
+ ],
+ "effects": [],
+ "dlg": [
+  "air#0",
+  "bert#3",
+  "bert#7",
+  "bert#8",
+  "ing#0",
+  "pen#0",
+  "tan#6"
+ ],
+ "patDlg": []
+}

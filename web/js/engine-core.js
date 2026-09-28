@@ -291,7 +291,11 @@ function newGame() {
     selfBfHold: 0,       // the self-barfine offer stands for a command or two
     safeMoneyDay: 0,     // the day Madam Oy's safe money landed
     safeMoneyLedger: false,
-    metDay: {},          // id → the day you first spoke (a greeting that says "since you left" needs you to have LEFT)   // …and whether the NEXT ledger has netted it in yet (see _morningLedger)
+    metDay: {},
+    metRoom: {},
+    ownRescueDay: 0,     // the morning after going down behind your own rail (the ledger says so)
+    tanFavourDay: 0,
+    shiftAskText: null, // the shift call's question, for the resume redraw     // the night Tan asked his favour — no job is put to you the same night         // …and where (JOURNAL RECORD said Candy Bar 2 of a woman met at Candy Bar)          // id → the day you first spoke (a greeting that says "since you left" needs you to have LEFT)   // …and whether the NEXT ledger has netted it in yet (see _morningLedger)
     chamDays: [],        // the distinct nights you sat with Cream — after a few, CONTACT nudges toward the question
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
@@ -427,6 +431,7 @@ function newGame() {
     // the floor) silently stopped for the night (Rolf, round 54).
     syn: { done: {}, asked: {}, friction: 0 },
     affairCool: 0,       // day a STEP BACK was given; the door re-opens after a fortnight
+    affairCoolWho: null, // …and to whom (her greeting knows, for a month)
     roomWater: 0,        // complimentary hotel bottles drunk today (2/day, housekeeping restocks)
     ledgerSeen: 0,       // how many of the other ledger's reveals you've been shown (engine-play)
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
@@ -2191,7 +2196,7 @@ function _deliver(npcId, d, full, asNew) {
   if ((!repeat || d.fxAlways) && d.fx) d.fx(st, G);
   // first contact (any exchange) IS the meeting: advance the state and grant the
   // baseline trust here, so the meeting bonus never depends on which node fired.
-  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); (G.metDay = G.metDay || {})[npcId] = G.day; }
+  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); (G.metDay = G.metDay || {})[npcId] = G.day; (G.metRoom = G.metRoom || {})[npcId] = G.room; }
   // this node is now the live one — its `choices` (if any) become the action-choices
   G.convoIdx = G.convo === npcId ? idx : G.convoIdx;
   if (d.choices && d.choices.length) (G.convoChoiceMemo = G.convoChoiceMemo || {})[npcId] = idx; // typed labels outlive the next ask (27-night playtest)
@@ -2230,6 +2235,14 @@ function _venuesHere(r) {
 // has to read as furniture-you-overhear, not an unmet character (an undelivered
 // promise otherwise). Pooled — it prints on every bar describe. The "busy" pool
 // takes the clause naming whichever hostess he's monopolising.
+// Walking back into the bar you OWN is not a customer's return — "the table's free,
+// the Singha's cold, and Bert has a theory about your last shot" (Rolf, round 55)
+const _OWNER_REVISIT = [
+  "Back behind your own sign. The till light is on, the ice is in, and the room does the small reorganisation a room does when the owner walks in.",
+  "Your bar. Bert lifts the chalk an inch in greeting and goes back to the cue. Somebody has swept; somebody always has, before you arrive.",
+  "The Stinky, from the owner's side of the door: you check the fridge light, the float, the fan, before you've decided to check anything.",
+  "In off the soi into your own room. The regulars nod the way men nod at the landlord of a pub, which you now are, near enough.",
+];
 const _BAR_REGULAR = [
   "Down the far end, a knot of regulars are welded to the bar, deep in an argument only they follow — part of the furniture, not the cast.",
   "A lifer holds down the corner stool, holding forth at the room in general; the kind of fixture you nod past, never actually meet.",
@@ -2321,7 +2334,7 @@ function _describeRoom(full, forceFull) {
   _say(r.name, "room");
   if (raining) {
     _say(_underRoof(G.room)
-      ? "Rain hammers the roof — a proper rainy-season downpour outside, and nobody's " +
+      ? "Rain hammers the roof — a proper " + (typeof _wetSeason === "function" && !_wetSeason() ? "out-of-season" : "rainy-season") + " downpour outside, and nobody's " +
         "stepping into that until it eases."
       : "Rain is coming down in sheets; the awning overhead is the whole habitable " +
         "world until it passes.", "alert");
@@ -2336,7 +2349,7 @@ function _describeRoom(full, forceFull) {
   // often than he reads the daytime paint.
   const late = r.lateDesc && typeof _closesMidnight === "function" && G.nightTurn >= 60;
   if (full) _say(late ? (Array.isArray(r.lateDesc) ? _pickVary(r.lateDesc, "late:" + G.room) : r.lateDesc)
-    : (!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc));
+    : (!firstTime && !forceFull && r.revisit ? _pickVary(typeof _atOwnBar === "function" && _atOwnBar() ? _OWNER_REVISIT : r.revisit, "rv:" + G.room) : r.desc));
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) {
     // An item may carry a `sight:` line that places it in the scene ("...at the

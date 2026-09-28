@@ -314,6 +314,7 @@ test("the floor is everyday by default, a reveal is the occasional enhancement, 
       moments++;
       if (out.some(o => o.cls !== "dim")) reveals++;
     }
+    G.nightTurn = WORK_TALE_TURN; _closeReveal(); G.nightTurn = 0;   // the close-of-night reveal belongs to the close (round 55)
     nightsOf.push({ moments, reveals });
   }
   assert.ok(nightsOf.every(n => n.moments === WORK_FLOOR_MAX), "every stood night has its moments, however long you own the bar");
@@ -333,9 +334,9 @@ test("the safe-money tag lands on the ledger that netted it, on either route hom
   _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation"; quiet();
   G.room = _hotelRoomId(); G.act1SafeDue = true; G.money = 500; _nightSnapshot();
   out = []; _endNight("sleep");
-  assert.ok(G.lastNightSaid.join(" ").includes("safe money netted in"), "the morning that counted it says so: " + G.lastNightSaid.join(" "));
+  assert.ok(G.lastNightSaid.join(" ").includes("safe's stash netted in"), "the morning that counted it says so: " + G.lastNightSaid.join(" "));
   out = []; _endNight("sleep");
-  assert.ok(!G.lastNightSaid.join(" ").includes("safe money"), "and the morning after does not");
+  assert.ok(!G.lastNightSaid.join(" ").includes("safe's stash"), "and the morning after does not");
 });
 
 test("a piwin knows where to eat; Bank does not open with Mot after the wallet night", () => {

@@ -338,6 +338,7 @@ test("procurement only comes to the Tan route, and only after the free favour", 
   assert.notEqual(G.pendingChoice, "synjob", "the small free ask precedes the priced one");
 
   _setFlag("tanAsked");
+  G.pendingChoice = null; G.day++;     // …on a later night: the favour's night is the favour's (Rolf, round 55)
   arriveAtBar();
   assert.equal(G.pendingChoice, "synjob", "then the jobs start");
 });

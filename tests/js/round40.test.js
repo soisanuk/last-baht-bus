@@ -76,7 +76,7 @@ function ownsBar() {
 const stub = (fn) => { const saved = _rand; _rand = () => 0.5; try { fn(); } finally { _rand = saved; } };
 
 test("the presence line is about TONIGHT — a night slept through in the hotel prints nothing (Keith)", () => {
-  ownsBar(); G.soc.barTurns = { stinky_bar: 40 };
+  ownsBar(); G.soc.barTurns = { lucky_tiger: 40 };   // a customer's stool: the owner's own rail says nothing since round 55
   stub(() => { G.room = "hotel_room"; run("sleep"); });
   assert.match(text(), /same stool/);
   out = []; G.nightTurn = 0; G.room = "hotel_room";

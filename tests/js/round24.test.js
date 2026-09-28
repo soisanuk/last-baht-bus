@@ -160,7 +160,7 @@ test("the round on the house is the gamble its own prose describes", () => {
       G.pendingChoice = "shift"; G.shiftCall = "round";
       const before = G.bar.cash;
       doCommand(ans);
-      outcomes[ans].add(G.bar.cash - before);
+      outcomes[ans].add(G.bar.cash - before - (G.bar.lostTake || 0));   // a refused round is takings never taken, booked at the settle (round 55)
     }
   }
   assert.ok(outcomes.yes.size > 1, `YES is a gamble, not a payout (${[...outcomes.yes]})`);

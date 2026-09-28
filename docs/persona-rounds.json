@@ -523,6 +523,27 @@
      "lens": "returning-tester"
     }
    ]
+  },
+  "round55": {
+   "date": "2026-09-29",
+   "note": "aimed at the three systems no persona had walked (the affair, procurement, the Bangkok arc), on seeds built by the game's own functions and replayed headlessly before launch",
+   "personas": [
+    {
+     "name": "Rolf",
+     "model": "opus",
+     "lens": "owner-with-a-girl"
+    },
+    {
+     "name": "Hennie",
+     "model": "sonnet",
+     "lens": "owner-who-refuses"
+    },
+    {
+     "name": "Sol",
+     "model": "opus",
+     "lens": "reverse-savior"
+    }
+   ]
   }
  }
 }

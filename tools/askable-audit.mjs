@@ -90,6 +90,10 @@ const FACTS = [
     asks: ["hair tonic", "fortune teller", "scams"], rooms: ["lucky_tiger", "queen_vic"], hour: 30 },
   // the four beds: `_HOTELS` rates the desk bills to the baht, and a town this
   // chatty had nothing to say about its own hotels (Clive, round 53)
+  // the season: BOOKS prints it as the headline every morning, and nobody on the floor
+  // could talk about it (Hennie, round 55)
+  { fact: "season", why: "_seasonTier / _SEASON_MONTHS — the month and the trade's state, computed",
+    asks: ["season", "low season", "the wet season"], rooms: ["lucky_tiger", "stinky_bar", "queen_vic"], hour: 30 },
   { fact: "hotel", why: "_HOTELS / _hotelRate — four beds the engine bills to the baht",
     asks: ["hotel", "where to stay", "sabai palms", "queen vic", "metropole", "areca lodge"],
     rooms: ["queen_vic", "stinky_bar", "anchor_bar"], hour: 30 },
