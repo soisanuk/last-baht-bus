@@ -4038,10 +4038,11 @@ test("the massage row spreads across town: generic parlors work like the flagshi
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().money = 5000;
-  // a generic oil parlor with no named masseuse still does the base + special
+  // every oil parlor has a named masseuse since round 57 (Buppha at Golden Touch), and
+  // the prose names her
   state().room = "buakhao_oil";
   run("massage");
-  assert.match(lastOut(), /the masseuse/i);
+  assert.match(lastOut(), /Buppha/);
   run("special");
   assert.match(lastOut(), /finish work|my place/i);
   // a generic legit parlor still heals

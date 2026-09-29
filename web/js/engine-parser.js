@@ -699,7 +699,7 @@ function _doGo(dirWord) {
         Object.keys(r.exits).map(d => d.toUpperCase()).join(" · ")})`);
       return false;
     }
-    // ALLEY is a real exit key elsewhere (the Metropole's fire stairs), so it
+    // ALLEY is a real exit key elsewhere (Buakhao into LK Metro, Walking Street's service alley), so it
     // reaches the wall handler here — but on a Darkside street with a back
     // door open to you it is the most natural word for the thing you were
     // just told to do. Route it rather than answering "that's a wall".
@@ -4938,7 +4938,7 @@ const _HOTEL_PERK = {
   sabai:     "Naklua, cheap, on a dark soi with dogs on it",
   queenvic:  "over the pub on Soi 6, with a balcony on the street",
   areca:     "Soi Diana, a garden with a pool in it",
-  metropole: "the tower off LK Metro — a pool, and the fire stair comes out in the Metro",
+  metropole: "the tower off LK Metro — a pool, and the alley lit up under the window",
 };
 const _HOTEL_NEAR = { "Naklua": "sabai", "Soi 6": "queenvic", "Beach Road": "queenvic", "Soi Diana": "areca",
   "Tree Town": "areca", "Soi Buakhao": "metropole", "LK Metro": "metropole" };
@@ -8945,7 +8945,7 @@ const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
        ~    │         SECOND  TREE TOWN (the fairy-lit maze)
        ~    │          RD C   │
        ~ CENTRAL Mall  │      BUAKHAO N ═ LK METRO
-      ~     │ (police) │      │  (Metropole up the alley)
+      ~     │ (police) │      │  (the Metropole over it)
       ~     │          │   BUAKHAO MARKET
       ~     │          │      │
       ~  BEACH RD S ─ SECOND RD S ─ BUAKHAO S
@@ -9253,7 +9253,7 @@ const _HOTEL_ARRIVALS = {
     "argument with itself.",
   metropole: "The Metropole lift hums you up the tower. Blackout curtains, " +
     "arctic aircon — and out the window, the LK Metro alley glowing below " +
-    "like a lit fuse. The bellboy mentions the fire stairs, with a wink.",
+    "like a lit fuse. The bellboy points out the lift, twice, as if you might forget it.",
   areca: "The Areca Lodge takes your bag with a smile that has checked in ten " +
     "thousand repeat visitors. A room over the garden pool, the whole racket of " +
     "Soi Diana thirty seconds out the door and none of it following you in. " +

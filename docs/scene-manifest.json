@@ -556,7 +556,9 @@
       "regionSlug": "beach-road",
       "kind": "massage",
       "dark": false,
-      "people": [],
+      "people": [
+        "Jintana"
+      ],
       "desc": "Wedged between a tailor and a currency booth on Beach Road, a narrow shop with a loud sign, a louder girl on the step, and a staircase to curtained rooms up top. The traffic roars past two feet away; inside, the mirror-and-sticker arrangement is exactly as advertised everywhere else in town."
     },
     {
@@ -672,7 +674,9 @@
       "regionSlug": "beach-road",
       "kind": "massage",
       "dark": false,
-      "people": [],
+      "people": [
+        "Oiy"
+      ],
       "desc": "At the south end of Beach Road, where the Walking Street crowd thins out toward the sea breeze — a pink-lit oil shop with the usual girls on the usual stools and the usual small sticker on the mirror. The sea air almost makes it feel wholesome. Almost."
     },
     {
@@ -1345,7 +1349,9 @@
       "regionSlug": "jomtien",
       "kind": "massage",
       "dark": false,
-      "people": [],
+      "people": [
+        "Joom"
+      ],
       "desc": "A pink-lit oil shop halfway down Soi 7, girls on the step, the small sticker on the mirror, and the beach breeze doing its best to keep it wholesome. It fails, pleasantly."
     },
     {
@@ -1844,7 +1850,9 @@
       "regionSlug": "naklua",
       "kind": "massage",
       "dark": false,
-      "people": [],
+      "people": [
+        "Orapin"
+      ],
       "desc": "Pink light, a beaded curtain, air-con bleeding cold onto the pavement, and the little NO SEX sticker on the mirror that the warm oil and the few questions rather contradict. Quieter than the town shops, and in less of a hurry."
     },
     {
@@ -2238,7 +2246,9 @@
       "regionSlug": "second-road",
       "kind": "massage",
       "dark": false,
-      "people": [],
+      "people": [
+        "Jiew"
+      ],
       "desc": "Pink strip light, a beaded curtain, and three girls on plastic stools out front who greet every passing farang with the same unhurried hello. Inside it is cold, dim and clean, and the traffic on Second Road becomes a rumour."
     },
     {
@@ -2801,7 +2811,9 @@
       "regionSlug": "soi-buakhao",
       "kind": "massage",
       "dark": false,
-      "people": [],
+      "people": [
+        "Buppha"
+      ],
       "desc": "One of a hundred pink-lit shopfronts on Buakhao, indistinguishable from its neighbours except that this one caught your eye. Girls in shorts on the step, a beaded curtain, air-con leaking cold onto the pavement, and the inevitable little sticker on the mirror inside. The oil is warm and the questions are few."
     },
     {
@@ -2929,7 +2941,7 @@
       "kind": "hotel_room",
       "dark": false,
       "people": [],
-      "desc": "A proper tower room at the LK Metropole: blackout curtains, aircon set to walk-in fridge, a shower with municipal water pressure. From the window, the LK Metro alley glows directly below like a lit fuse. The lift goes down to the lobby on Soi Buakhao — and the fire stairs, the bellboy mentions with a wink, come out in the alley itself."
+      "desc": "A proper tower room at the LK Metropole: blackout curtains, aircon set to walk-in fridge, a shower with municipal water pressure. From the window, the LK Metro alley glows directly below like a lit fuse. The lift goes down to the lobby on Soi Buakhao, and that is the only way down."
     },
     {
       "id": "myth_massage",
@@ -3271,7 +3283,9 @@
       "regionSlug": "thappraya",
       "kind": "massage",
       "dark": false,
-      "people": [],
+      "people": [
+        "Aey"
+      ],
       "desc": "A pink-lit oil shop right where the beach road turns into the strip, girls on the step catching the punters as they arrive, the small sticker on the mirror, the usual friendly arrangement."
     },
     {

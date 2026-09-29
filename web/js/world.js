@@ -173,6 +173,7 @@ const BAR_MGR_NIGHT = 700;     // …and Bert's shift on top, on the nights you 
 const BAR_COSTS    = 3000;     // legacy flat figure — kept only for saves written before the split
 const BAR_PRESENT  = 800;      // you behind your own rail sells drinks
 const BAR_FRICTION = 0.08;     // each refused procurement job adds this to costs
+const MASSAGE_LEGIT = 300, MASSAGE_OIL = 300, MASSAGE_SPECIAL = 1000;   // moved from engine-systems so the masseuses can quote their own board (round 57)
 const SYN_INSIDE_PRICE = 0.95;   // the cleaning job's perk: the beer uncle's inside price — 5% off stock (Mario, round 57: the prose promised it and the books didn't keep it)
 const SYN_JOB_NIGHT = 120;     // each ACCEPTED job is a standing cost — the invoice you pay for frictionlessness (~฿3.6k/mo). Refusing is cheaper on paper; what it buys you is the weather.
 const LOW_SEASON   = 0.55;     // takings multiplier at the trough (Sep–Oct); see SEASON_MULT
@@ -3788,9 +3789,11 @@ const ROOMS = {
     desc: "A proper tower room at the LK Metropole: blackout curtains, aircon set " +
       "to walk-in fridge, a shower with municipal water pressure. From the window, " +
       "the LK Metro alley glows directly below like a lit fuse. The lift goes down " +
-      "to the lobby on Soi Buakhao — and the fire stairs, the bellboy mentions " +
-      "with a wink, come out in the alley itself.",
-    exits: { out: "buakhao_n", alley: "lk_entrance" },
+      "to the lobby on Soi Buakhao, and that is the only way down.",
+    // the fire-stairs exit into LK Metro is gone (Mario, round 57): it was one-way — no way
+    // back up from the alley — and Helga walked down it into a room that said the hotel was
+    // "invisible from here"
+    exits: { out: "buakhao_n" },
   },
   qv_room: {
     name: "Your Room — Queen Vic Inn",
@@ -9786,9 +9789,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "you can point. \"Mm. This one from carry too much — not money, worry. Lie down.\" (MASSAGE)" },
       // the board she stands under (Terence, round 57: aloe and oil were "the wrong girl")
       { topic: "oil|aloe|sunburn|sunburned|price|prices|how much|herbal|compress|kinds",
-        text: "\"Oil, Thai, foot, herbal — all ฿\" + MASSAGE_LEGIT + \" the hour.\" Pensri points at the board. \"Aloe for the sunburn, free, " +
+        text: "\"Oil, Thai, foot, herbal — all ฿" + MASSAGE_LEGIT + " the hour.\" Pensri points at the board. \"Aloe for the sunburn, free, " +
           "if you are red like lobster. Most farang are red like lobster.\"",
-        short: "\"Oil, Thai, foot, herbal — ฿\" + MASSAGE_LEGIT + \" the hour. Aloe free for the lobster.\"" },
+        short: "\"Oil, Thai, foot, herbal — ฿" + MASSAGE_LEGIT + " the hour. Aloe free for the lobster.\"" },
     ],
   },
   waan: {
@@ -9798,6 +9801,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "Young, round-cheeked, shy until she isn't. Waan works the oil room at Smile and " +
       "has decided, for reasons of her own, that she likes you.",
     dialogue: [
+      // the shop's memory of you, in Waan's voice (round 57)
+      { when: (st, G) => !!(G.soc.special && G.soc.special["smile_massage"] === G.day), text: "Waan goes bashful all over again, which is somehow worse. \"You have my number, na.\" She tugs the curtain straight. \"Here, the sign. After work, no sign.\"", short: "\"You have my number. After work, no sign.\"" },
+      { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["smile_massage"] === G.day), text: "With the hour paid Waan sits cross-legged on the next bed and chatters. \"Roi Et, me. My little brother very clever — computer. University next year.\" She wiggles her oily fingers. \"These pay the book.\"", short: "\"Roi Et. My little brother's university — these hands pay the book.\"" },
+      { when: (st, G) => !!(G.massageLog && G.massageLog["smile_massage"] && G.massageLog["smile_massage"].last < G.day), text: "\"Heee — you come back!\" Waan claps once, then goes shy about having clapped. \"I think maybe you forget me. Come, come.\"", short: "\"You come back! Come, come.\"" },
       { rom: "sawatdee ka",
         text: "\"Heee, hello. You want massage? Come, come.\" Waan tugs your sleeve toward a " +
           "curtain, then goes suddenly bashful. \"I shy with you little bit — you handsome, I " +
@@ -9835,6 +9842,146 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "shop", text: "\"Smile good shop. Boss okay, not too strict — only the one " +
           "rule.\" She taps the sign and giggles. \"Every customer read it. Every customer " +
           "ask me anyway.\"" },
+    ],
+  },
+  // Joom — jomtien_soi_7_oil: one of the seven oil-shop masseuses named on Mario's call (round 57);
+  // the three when-nodes are the shop's memory of you, in her own voice (Terence)
+  joom: {
+    name: "Joom", th: "จุ๋ม", emoji: "💆", masseuse: true,
+    pronoun: "she",
+    room: "jomtien_soi_7_oil",
+    look: "Thai woman, late thirties, sun-browned, hair in a clip, pink massage polo, amused sideways smile.",
+    desc: "Late thirties, sun-browned from a life nearer the beach than the shop admits, hair in a clip and a pink polo with the shop's name coming off it. Joom has the step at Sunset and the sideways smile of somebody who has heard every line a farang has and rates them out of ten.",
+    dialogue: [
+      { when: (st, G) => !!(G.soc.special && G.soc.special["jomtien_soi_7_oil"] === G.day), text: "\"Shh.\" Joom taps the sticker on the mirror with one knuckle, amused. \"Here, massage. You have my number, na — after work I am not Sunset, I am Joom.\" She rates you, visibly, and keeps the score to herself.", short: "\"Here, massage. After work I am Joom.\"" },
+      { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["jomtien_soi_7_oil"] === G.day), text: "Joom wipes her hands and sits on the next bed, now that the hour is paid for. \"Chanthaburi, me. Fruit — durian, mangosteen, my family have the stall forty year.\" A shrug at the pink light. \"Stall pay the fruit. Here pay the school.\"", short: "\"Chanthaburi. The stall pays the fruit; here pays the school.\"" },
+      { when: (st, G) => !!(G.massageLog && G.massageLog["jomtien_soi_7_oil"] && G.massageLog["jomtien_soi_7_oil"].last < G.day), text: "\"You come back!\" Joom points at your shoulder like a teacher at a board. \"Six out of ten again. Beach Road undo all my work. Sit.\"", short: "\"Six out of ten again. Sit.\"" },
+      { text: "\"Massage? Sit, sit. You walk Jomtien all day, I can see from here — the legs tell me.\" Joom looks you over, openly scoring. \"Oil is good one. Six out of ten, your shoulder. I make it eight.\"", short: "\"Sit. Oil. I make your shoulder eight out of ten.\"" },
+      { topic: "name|your name", text: "\"Joom. Means small and round.\" She pats her own stomach, unbothered. \"My mother is very honest woman.\"", short: "\"Joom — small and round. My mother is honest.\"" },
+      { topic: "home|hometown|village|where are you from|chanthaburi", text: "\"Chanthaburi. East, three hour. Fruit and gems — the gems go to Bangkok, the fruit go to my uncle.\" She laughs. \"I go home for durian season. Nobody can stop me.\"", short: "\"Chanthaburi. Fruit and gems. Home for durian season.\"" },
+      { topic: "family|son|kids|children|mother", text: "\"One son. Twelve, school here in Jomtien, too clever for me.\" A proud grimace. \"He say, Mama, why you work massage? I say, why you eat rice?\"", short: "\"One son, twelve, too clever. Why you eat rice?\"" },
+      { topic: "plan|future|dream|next", text: "\"Plan?\" Joom considers the pink ceiling. \"Fruit stall, but on the beach. Mango sticky rice for the farang, cold coconut. Same farang, different menu.\"", short: "\"A fruit stall on the beach. Same farang, different menu.\"" },
+      { topic: "special|extra|happy ending", text: "\"Special?\" She rates the question. \"Seven out of ten, you ask nice.\" A nod at the sticker. \"Hand, mouth — can. {{Boom boom}} — boss say no, sticker say no. After work, different story.\"", short: "\"Hand, mouth — can. {{Boom boom}}, boss say no. After work, different story.\"" },
+    ],
+  },
+  // Aey — beach_turn_massage: one of the seven oil-shop masseuses named on Mario's call (round 57);
+  // the three when-nodes are the shop's memory of you, in her own voice (Terence)
+  aey: {
+    name: "Aey", th: "เอ๋", emoji: "💆", masseuse: true,
+    pronoun: "she",
+    room: "beach_turn_massage",
+    look: "Young Thai woman, mid twenties, ponytail, black tank top, phone in hand, quick businesslike smile.",
+    desc: "Mid-twenties, ponytail, a {{phone}} that never leaves her hand, and the quick eyes of whoever works the step where the beach road turns into the strip. Aey catches the punters as they arrive and prices them before they've stopped walking.",
+    dialogue: [
+      { when: (st, G) => !!(G.soc.special && G.soc.special["beach_turn_massage"] === G.day), text: "Aey is all business about it, which is its own kind of warmth. \"You have my number. Here is shop, shop have rule.\" A thumb at the sticker. \"After work — different rule.\"", short: "\"Here is shop, shop have rule. After work — different rule.\"" },
+      { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["beach_turn_massage"] === G.day), text: "With the hour paid, Aey puts the {{phone}} down for the first time. \"Sakon Nakhon. Very far, very quiet, no work.\" She flexes her hands. \"Here I do eight, nine massage a day. My hands are my salary.\"", short: "\"Sakon Nakhon. Eight massage a day — my hands are my salary.\"" },
+      { when: (st, G) => !!(G.massageLog && G.massageLog["beach_turn_massage"] && G.massageLog["beach_turn_massage"].last < G.day), text: "\"Heh — you again.\" Aey doesn't get off the step this time; she just holds up the curtain. \"Regular customer, one hundred baht discount — joke. Come.\"", short: "\"You again. Come.\"" },
+      { text: "\"Hello! Massage? Oil, three hundred, one hour — cold inside, very nice.\" Aey is off the step and holding the curtain before you've decided. \"You just arrive Pattaya, na? I can tell. Come.\"", short: "\"Oil, three hundred, one hour. Come.\"" },
+      { topic: "name|your name", text: "\"Aey. Easy for farang — like 'hey'.\" She demonstrates, waving. \"Everybody remember.\"", short: "\"Aey — like 'hey'. Everybody remember.\"" },
+      { topic: "home|hometown|village|where are you from|sakon nakhon", text: "\"Sakon Nakhon. Isan, near Laos. Very beautiful, very poor, very far.\" She shows you a lake on her {{phone}}. \"Next year I go back for my sister wedding. I pay the band.\"", short: "\"Sakon Nakhon, near Laos. I pay my sister's wedding band.\"" },
+      { topic: "family|sister|mother|parents", text: "\"Mama, papa, one sister. Papa drive truck, back is broken now.\" Flat, practical. \"So I do the backs here. Funny, na?\"", short: "\"Papa drove a truck; his back is broken. So I do backs here.\"" },
+      { topic: "plan|future|dream|next", text: "\"Nail shop.\" No hesitation. \"Nails, eyelash, small. Sitting down all day, no oil, no farang back.\" She looks at her short plain nails. \"First I need the money for the course.\"", short: "\"Nail shop. First the money for the course.\"" },
+      { topic: "special|extra|happy ending", text: "\"Special is seven hundred more — hand or mouth, your choice.\" Aey says it like the price of the oil. \"No boom boom here. Boss rule. You want more than that, you wait for me finish work.\"", short: "\"Seven hundred more. No boom boom here — boss rule.\"" },
+    ],
+  },
+  // Jiew — diana_oil: one of the seven oil-shop masseuses named on Mario's call (round 57);
+  // the three when-nodes are the shop's memory of you, in her own voice (Terence)
+  jiew: {
+    name: "Jiew", th: "จิ๋ว", emoji: "💆", masseuse: true,
+    pronoun: "she",
+    room: "diana_oil",
+    look: "Tiny Thai woman in her forties, short grey-streaked hair, strong forearms, plain blue massage shirt, calm face.",
+    desc: "The smallest of the three on the plastic stools out front of Bamboo, and the one the other two send the big farang to. Forties, grey coming in at the temples, forearms like cable. Jiew means tiny; her thumbs did not get the message.",
+    dialogue: [
+      { when: (st, G) => !!(G.soc.special && G.soc.special["diana_oil"] === G.day), text: "Jiew is unembarrassed and entirely private about it. \"You have my number. Here, the girls watch too much.\" A nod at the curtain. \"After work I have a kettle and no audience.\"", short: "\"After work I have a kettle and no audience.\"" },
+      { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["diana_oil"] === G.day), text: "After the hour Jiew sits back on her heels, not even breathing hard. \"Surin. We speak Khmer at home — my grandmother never learn Thai.\" She cracks her knuckles one at a time. \"Twenty year I do this. Before, rice. Rice is harder.\"", short: "\"Surin. Khmer at home. Twenty years of this; rice was harder.\"" },
+      { when: (st, G) => !!(G.massageLog && G.massageLog["diana_oil"] && G.massageLog["diana_oil"].last < G.day), text: "\"The big back come back.\" Jiew is already rolling her shoulders. \"Last time I find a knot here—\" a thumb lands on it exactly \"—still here. Sit. We finish.\"", short: "\"The big back come back. That knot is still here. Sit.\"" },
+      { text: "\"Big man. Good.\" Jiew looks you up and down with professional satisfaction. \"The small girls, they are scared of big back. Not me. Come — oil, one hour, you will say ow.\"", short: "\"Big back. Good. Come — you will say ow.\"" },
+      { topic: "name|your name", text: "\"Jiew. Means tiny.\" She holds up a thumb. \"Only name tiny.\"", short: "\"Jiew. Tiny. Only the name.\"" },
+      { topic: "home|hometown|village|where are you from|surin", text: "\"Surin. The elephants, you know? Every November, the elephant festival.\" A small smile. \"My brother's boy drive tourist on elephant. Better job than me — elephant do the work.\"", short: "\"Surin. My brother's boy drives tourists on an elephant.\"" },
+      { topic: "family|grandchildren|kids|children|husband", text: "\"Two grandchildren. My daughter work in a factory in Rayong.\" She says it with pride. \"I am grandmother with the strongest hands in Surin. Everybody know.\"", short: "\"Two grandchildren. The strongest hands in Surin.\"" },
+      { topic: "plan|future|dream|next", text: "\"Plan?\" Jiew looks at you as if you have asked the weather to make a plan. \"Work until the hands stop. Then go home, sit, watch the grandchildren. Is enough.\"", short: "\"Work until the hands stop. Then home. Is enough.\"" },
+      { topic: "special|extra|happy ending", text: "\"Special, yes. Seven hundred more, hand or mouth.\" She tips her head at the stools outside. \"The young girls do it also, but they laugh. I don't laugh. You choose.\"", short: "\"Seven hundred more. The young girls laugh; I don't. You choose.\"" },
+    ],
+  },
+  // Orapin — lotus_oil: one of the seven oil-shop masseuses named on Mario's call (round 57);
+  // the three when-nodes are the shop's memory of you, in her own voice (Terence)
+  orapin: {
+    name: "Orapin", th: "อรพิน", emoji: "💆", masseuse: true,
+    pronoun: "she",
+    room: "lotus_oil",
+    look: "Thai woman, early thirties, long hair tied low, soft calm face, white massage shirt, silver bracelet.",
+    desc: "Early thirties, hair tied low, the calm of a shop that is quieter than the town ones and in less of a hurry. Orapin doesn't work the step; she waits inside under the pink light, and the customers who find her tend to come back.",
+    dialogue: [
+      { when: (st, G) => !!(G.soc.special && G.soc.special["lotus_oil"] === G.day), text: "Orapin is quieter now, and nearer. \"You have my number, na.\" Not a question. \"Here, massage. After work, I am me.\" Somebody comes in through the beads, and she becomes massage again without moving.", short: "\"Here, massage. After work, I am me.\"" },
+      { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["lotus_oil"] === G.day), text: "With the hour paid, Orapin sits on the edge of the next bed and actually talks. \"Phetchabun. Mountains, cold in December, strawberries.\" She turns the bracelet on her wrist. \"I come here after the divorce. Naklua is quiet. I like quiet.\"", short: "\"Phetchabun. I came after the divorce. I like quiet.\"" },
+      { when: (st, G) => !!(G.massageLog && G.massageLog["lotus_oil"] && G.massageLog["lotus_oil"].last < G.day), text: "\"You come back.\" Orapin says it the way you say the weather came back. She is already warming the oil. \"Same shoulder. Same farang. Lie down.\"", short: "\"Same shoulder, same farang. Lie down.\"" },
+      { text: "\"Sawatdee ka.\" Orapin doesn't get up; she finishes folding the towel first. \"You want massage? Oil. One hour. No hurry here — Naklua is not Beach Road.\" The smallest smile. \"Lie down when you ready.\"", short: "\"Oil, one hour, no hurry. Lie down when you ready.\"" },
+      { topic: "name|your name", text: "\"Orapin. Farang say Pin, is okay.\" She writes it on your palm with one oiled finger, in Thai, which you cannot read. \"Now you know.\"", short: "\"Orapin. Pin is okay.\"" },
+      { topic: "home|hometown|village|where are you from|phetchabun", text: "\"Phetchabun. North, mountains. In December the farang from Bangkok come to see the fog.\" She almost laughs. \"We live in the fog. They pay to look at it.\"", short: "\"Phetchabun. They pay to look at the fog we live in.\"" },
+      { topic: "family|husband|divorce|kids|children|mother", text: "\"My mother keep my daughter, up-country. Eight years old.\" Orapin says it flat, folding. \"The husband — finish. Better finish. I send money on the first, every month. My mother say I am a good daughter. Is enough.\"", short: "\"My mother keeps my daughter up-country. The husband — finish.\"" },
+      { topic: "plan|future|dream|next", text: "\"Plan.\" Orapin considers it seriously. \"Strawberry farm. Small. My daughter, my mother, me. No farang shoulder.\" She glances at yours. \"Sorry.\"", short: "\"A small strawberry farm. No farang shoulder. Sorry.\"" },
+      { topic: "special|extra|happy ending", text: "\"Special.\" Orapin says the word quietly, as if it could wake someone. \"Seven hundred more. Hand, or mouth. The sticker say no boom boom — the sticker is right, here.\" A pause. \"Not every place is here.\"", short: "\"Seven hundred more. The sticker is right, here. Not every place is here.\"" },
+    ],
+  },
+  // Buppha — buakhao_oil: one of the seven oil-shop masseuses named on Mario's call (round 57);
+  // the three when-nodes are the shop's memory of you, in her own voice (Terence)
+  buppha: {
+    name: "Buppha", th: "บุปผา", emoji: "💆", masseuse: true,
+    pronoun: "she",
+    room: "buakhao_oil",
+    look: "Thai woman in her mid forties, bobbed hair, reading glasses on a cord, gold shirt, knowing look.",
+    desc: "Mid-forties, a bob and reading glasses on a cord, and the knowing look of somebody who has worked three of the hundred pink shopfronts on Buakhao and can tell you which ones water the oil. Buppha runs the step at Golden Touch like a woman who owns it, which she doesn't.",
+    dialogue: [
+      { when: (st, G) => !!(G.soc.special && G.soc.special["buakhao_oil"] === G.day), text: "Buppha is brisk about it, and kind. \"You have my number now. Don't lose it in the washing machine — farang always do.\" She taps the sticker with her glasses. \"Here, rule. After work, I am not in a hurry.\"", short: "\"Don't lose my number in the washing machine. After work, I am not in a hurry.\"" },
+      { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["buakhao_oil"] === G.day), text: "With the hour paid Buppha puts her glasses back on and becomes a person. \"Udon Thani. Eighteen years on Buakhao — three shops, same street.\" She counts them on oily fingers. \"The street change, the farang change, the price stay three hundred. Funny.\"", short: "\"Udon. Eighteen years, three shops, the price stays three hundred.\"" },
+      { when: (st, G) => !!(G.massageLog && G.massageLog["buakhao_oil"] && G.massageLog["buakhao_oil"].last < G.day), text: "\"Ah — the one who choose well.\" Buppha lowers the glasses. \"You try the next door? No. Good. Sit.\"", short: "\"The one who chose well. Sit.\"" },
+      { text: "\"You choose this one out of a hundred.\" Buppha lowers her glasses to look at you properly. \"Good choice. The next door water the oil and the one after the aircon is broken.\" A crisp nod at the curtain. \"Oil, three hundred. Come.\"", short: "\"Good choice out of a hundred. Oil, three hundred. Come.\"" },
+      { topic: "name|your name", text: "\"Buppha. Means flower.\" She lets that sit, then snorts. \"My mother hope. The hands say different.\"", short: "\"Buppha. Flower. My mother hoped.\"" },
+      { topic: "home|hometown|village|where are you from|udon", text: "\"Udon Thani. The American base was there, before — my auntie remember the GIs.\" A dry look. \"Same business, different uniform. Now is shorts and Chang singlet.\"", short: "\"Udon. My auntie remembers the GIs. Same business, different uniform.\"" },
+      { topic: "family|son|kids|children|husband", text: "\"Two boys, both grown. One is policeman in Khon Kaen.\" She enjoys your face. \"Yes. My son is police. He never ask where the school fee came from, and I never tell.\"", short: "\"Two boys. One is police. He never asks where the school fee came from.\"" },
+      { topic: "plan|future|dream|next", text: "\"My own shop.\" Buppha says it the way you'd say the sun will come up. \"Buakhao, number one hundred and one. The oil not watered. The aircon work. The sticker—\" a shrug \"—the sticker is the sticker.\"", short: "\"My own shop. Oil not watered, aircon working.\"" },
+      { topic: "special|extra|happy ending", text: "\"Special: seven hundred more, hand or mouth, no boom boom, the sticker is serious.\" Buppha recites it like a menu she wrote. \"Everybody ask. I answer everybody the same. Is fair.\"", short: "\"Seven hundred more, no boom boom. I answer everybody the same.\"" },
+    ],
+  },
+  // Jintana — beachrd_oil: one of the seven oil-shop masseuses named on Mario's call (round 57);
+  // the three when-nodes are the shop's memory of you, in her own voice (Terence)
+  jintana: {
+    name: "Jintana", th: "จินตนา", emoji: "💆", masseuse: true,
+    pronoun: "she",
+    room: "beachrd_oil",
+    look: "Thai woman, thirties, big curly hair, red lipstick, cherry-red polo, wide laughing mouth.",
+    desc: "The louder girl on the step, and loud on purpose: thirties, big curly hair, cherry-red polo, a laugh that carries over two lanes of Beach Road traffic. Jintana could sell a massage to a man running for a bus, and has.",
+    dialogue: [
+      { when: (st, G) => !!(G.soc.special && G.soc.special["beachrd_oil"] === G.day), text: "\"Heh.\" Jintana puts a finger to her red lips, the loudest shush on Beach Road. \"You have my number. Here, the sticker. After work, I sing you something, private.\"", short: "\"You have my number. After work, I sing you something, private.\"" },
+      { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["beachrd_oil"] === G.day), text: "After the hour Jintana is, astonishingly, quieter. \"Korat. Nakhon Ratchasima. Big city — not village girl.\" She fixes her lipstick in the mirror. \"Before this I sing in a luk thung band. Weddings, funerals. Funerals pay better.\"", short: "\"Korat. I sang luk thung at weddings and funerals. Funerals pay better.\"" },
+      { when: (st, G) => !!(G.massageLog && G.massageLog["beachrd_oil"] && G.massageLog["beachrd_oil"].last < G.day), text: "\"HE COME BACK!\" Jintana announces it to the street, the tailor and the currency booth. \"I tell you — best massage on Beach Road. Upstairs!\"", short: "\"HE COME BACK! Upstairs!\"" },
+      { text: "\"HANDSOME! Yes, you!\" Jintana is halfway across the pavement. \"Massage? Upstairs very private, very cold, very good. I sing for you also, free.\" She laughs at her own offer, enormously. \"Joke. Singing is extra.\"", short: "\"HANDSOME! Massage upstairs. Singing is extra.\"" },
+      { topic: "name|your name", text: "\"Jintana. Means imagination.\" She spreads her hands at the pink sign. \"Very good name for this job, na?\" Another enormous laugh.", short: "\"Jintana. Imagination. Very good name for this job.\"" },
+      { topic: "home|hometown|village|where are you from|korat", text: "\"Korat. Nakhon Ratchasima. Gateway of Isan, the sign say.\" She strikes a pose. \"I am the gateway of Beach Road.\"", short: "\"Korat, the gateway of Isan. I am the gateway of Beach Road.\"" },
+      { topic: "family|mother|kids|children|husband", text: "\"No husband, no kids, one cat.\" She shows you the cat on her {{phone}}; it is enormous and furious. \"My mother pray for me every Buddha day. The cat does not.\"", short: "\"No husband, no kids, one cat. My mother prays for me.\"" },
+      { topic: "plan|future|dream|next|sing|singing", text: "\"Plan? Karaoke bar. Mine. Red lights, good speaker, I sing every night and the customer pay ME to stop.\" The laugh again. \"Very good business plan.\"", short: "\"A karaoke bar. The customers pay me to stop.\"" },
+      { topic: "special|extra|happy ending", text: "\"Special!\" Jintana doesn't lower her voice at all. \"Seven hundred more, upstairs, hand or mouth, no boom boom — boss rule, sticker on the mirror.\" She winks at the whole of Beach Road. \"After work is after work.\"", short: "\"Seven hundred more, upstairs. After work is after work.\"" },
+    ],
+  },
+  // Oiy — papaya_massage: one of the seven oil-shop masseuses named on Mario's call (round 57);
+  // the three when-nodes are the shop's memory of you, in her own voice (Terence)
+  oiy: {
+    name: "Oiy", th: "อ้อย", emoji: "💆", masseuse: true,
+    pronoun: "she",
+    room: "papaya_massage",
+    look: "Young Thai woman, early twenties, round face, hair in two braids, pastel green polo, shy smile.",
+    desc: "Early twenties, two braids and a round face, new enough that she still reads the price list off the wall before she says it. Oiy sits on the end stool at Papaya, where the Walking Street crowd thins out, and practises her English on anybody who stops.",
+    dialogue: [
+      { when: (st, G) => !!(G.soc.special && G.soc.special["papaya_massage"] === G.day), text: "Oiy goes pink and very quiet. \"You have my number, na.\" A glance at the older girls on the stools. \"Here they tease me. After work, nobody tease.\"", short: "\"Here they tease me. After work, nobody tease.\"" },
+      { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["papaya_massage"] === G.day), text: "With the hour paid, Oiy is braver. \"Kalasin. The dinosaurs — you know? Dinosaur bones, museum.\" She beams. \"I live with my grandmother. She teach me massage first, on her legs. She is very old and very strict.\"", short: "\"Kalasin — dinosaur bones. My grandmother taught me, on her legs.\"" },
+      { when: (st, G) => !!(G.massageLog && G.massageLog["papaya_massage"] && G.massageLog["papaya_massage"].last < G.day), text: "\"You come back!\" Oiy is genuinely delighted, and then remembers to be professional. \"Oil, three hundred baht, one hour.\" A giggle. \"I know you know.\"", short: "\"You come back! Three hundred baht — I know you know.\"" },
+      { text: "\"Hello — massage?\" Oiy checks the price list on the wall before she says it. \"Oil, three hundred baht, one hour.\" She seems pleased to have got it right. \"My English not so good. You speak slow, I understand.\"", short: "\"Oil, three hundred baht, one hour. Speak slow, I understand.\"" },
+      { topic: "name|your name", text: "\"Oiy. Means sugarcane.\" She mimes chewing it. \"Very sweet. My grandmother name me.\"", short: "\"Oiy. Sugarcane. My grandmother named me.\"" },
+      { topic: "home|hometown|village|where are you from|kalasin", text: "\"Kalasin. Isan. Very small, very hot, and dinosaur.\" She holds her arms wide. \"Big one. In the ground, near my village. Farang come to look, one or two.\"", short: "\"Kalasin. Small, hot, and a dinosaur in the ground.\"" },
+      { topic: "family|grandmother|mother|parents", text: "\"My grandmother. My mother work in Bangkok, factory, I don't see much.\" Oiy counts on her fingers. \"I send money to grandmother on Friday. She buy medicine and lottery ticket. Mostly lottery ticket.\"", short: "\"My grandmother. I send money Fridays; she buys medicine and lottery.\"" },
+      { topic: "plan|future|dream|next|study|english", text: "\"I want to study. English, for hotel.\" She says the words carefully. \"Reception. Sit, smile, key card. No oil.\" A shy look at you. \"You help me practise, na? Is free.\"", short: "\"English, for a hotel reception. You help me practise?\"" },
+      { topic: "special|extra|happy ending", text: "Oiy goes very pink. \"Special… seven hundred more.\" She reads it off an invisible list. \"Hand, or mouth. Not boom boom — sticker say.\" She looks at the floor. \"The other girls say I must say it clear. So — clear.\"", short: "\"Seven hundred more. Not boom boom — sticker say. Clear.\"" },
     ],
   },
   toom: {

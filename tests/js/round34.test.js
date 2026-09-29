@@ -424,10 +424,11 @@ test("ROUND THE BACK answers to the words a player would use (Mario)", () => {
     out = []; run(cmd);
     assert.equal(G.room, "khao_talo_bar", cmd + " gets you in");
   }
-  // …and ALLEY is still a real exit where a real alley exists
-  newGame(); _setFlag("act1Done"); G.room = "metropole_room";
+  // …and ALLEY is still a real exit where a real alley exists (the Metropole's fire
+  // stairs were removed in round 57; Soi Buakhao's mouth of LK Metro is the real one)
+  newGame(); _setFlag("act1Done"); G.room = "buakhao_n";
   run("alley");
-  assert.equal(G.room, "lk_entrance", "the Metropole fire stairs are untouched");
+  assert.equal(G.room, "lk_entrance", "Buakhao's alley into LK Metro is untouched");
 });
 
 test("the back door is knowledge, not signage (Mario)", () => {

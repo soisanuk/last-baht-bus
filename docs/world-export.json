@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 243,
   "patrons": 25,
-  "people": 342,
-  "portraits": 367,
+  "people": 349,
+  "portraits": 374,
   "renders": 365,
   "thumbs": 365,
   "venues": 243
@@ -293,6 +293,14 @@
    "role": "cashier",
    "room": "midnight_sun",
    "th": "เอก"
+  },
+  "aey": {
+   "desc": "Mid-twenties, ponytail, a {{phone}} that never leaves her hand, and the quick eyes of whoever works the step where the beach road turns into the strip. Aey catches the punters as they arrive and prices them before they've stopped walking.",
+   "emoji": "💆",
+   "name": "Aey",
+   "pronoun": "she",
+   "room": "beach_turn_massage",
+   "th": "เอ๋"
   },
   "aim": {
    "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Firefly Bar, from Maha Sarakham.",
@@ -710,6 +718,14 @@
    "role": "hostess",
    "room": "dolphin_bar",
    "th": "บันนี่"
+  },
+  "buppha": {
+   "desc": "Mid-forties, a bob and reading glasses on a cord, and the knowing look of somebody who has worked three of the hundred pink shopfronts on Buakhao and can tell you which ones water the oil. Buppha runs the step at Golden Touch like a woman who owns it, which she doesn't.",
+   "emoji": "💆",
+   "name": "Buppha",
+   "pronoun": "she",
+   "room": "buakhao_oil",
+   "th": "บุปผา"
   },
   "bussaba": {
    "desc": "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night.",
@@ -1348,6 +1364,14 @@
    "room": "the_growler",
    "th": "จิ๊บ"
   },
+  "jiew": {
+   "desc": "The smallest of the three on the plastic stools out front of Bamboo, and the one the other two send the big farang to. Forties, grey coming in at the temples, forearms like cable. Jiew means tiny; her thumbs did not get the message.",
+   "emoji": "💆",
+   "name": "Jiew",
+   "pronoun": "she",
+   "room": "diana_oil",
+   "th": "จิ๋ว"
+  },
   "jinda": {
    "desc": "Bored until you try a word of Thai, then radiant — one of Notty's Place's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "🌷",
@@ -1358,6 +1382,14 @@
    "room": "nottys_place",
    "th": "จินดา"
   },
+  "jintana": {
+   "desc": "The louder girl on the step, and loud on purpose: thirties, big curly hair, cherry-red polo, a laugh that carries over two lanes of Beach Road traffic. Jintana could sell a massage to a man running for a bus, and has.",
+   "emoji": "💆",
+   "name": "Jintana",
+   "pronoun": "she",
+   "room": "beachrd_oil",
+   "th": "จินตนา"
+  },
   "jom": {
    "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Starlight Bar, from Nakhon Phanom. She came up from the rice fields and never once looked back.",
    "emoji": "👑",
@@ -1367,6 +1399,14 @@
    "role": "mamasan",
    "room": "starlight_bar",
    "th": "จอม"
+  },
+  "joom": {
+   "desc": "Late thirties, sun-browned from a life nearer the beach than the shop admits, hair in a clip and a pink polo with the shop's name coming off it. Joom has the step at Sunset and the sideways smile of somebody who has heard every line a farang has and rates them out of ten.",
+   "emoji": "💆",
+   "name": "Joom",
+   "pronoun": "she",
+   "room": "jomtien_soi_7_oil",
+   "th": "จุ๋ม"
   },
   "joon": {
    "desc": "Short hair, men's watch, a handshake instead of a wai, running Golden Dragon's till like a foreman. A tom, and entirely uninterested in being anything else for your benefit.",
@@ -2381,6 +2421,22 @@
    "role": "hostess",
    "room": "dollhouse",
    "th": "โอม"
+  },
+  "oiy": {
+   "desc": "Early twenties, two braids and a round face, new enough that she still reads the price list off the wall before she says it. Oiy sits on the end stool at Papaya, where the Walking Street crowd thins out, and practises her English on anybody who stops.",
+   "emoji": "💆",
+   "name": "Oiy",
+   "pronoun": "she",
+   "room": "papaya_massage",
+   "th": "อ้อย"
+  },
+  "orapin": {
+   "desc": "Early thirties, hair tied low, the calm of a shop that is quieter than the town ones and in less of a hurry. Orapin doesn't work the step; she waits inside under the pink light, and the customers who find her tend to come back.",
+   "emoji": "💆",
+   "name": "Orapin",
+   "pronoun": "she",
+   "room": "lotus_oil",
+   "th": "อรพิน"
   },
   "orm": {
    "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Gold Rush Lounge, from Loei. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
@@ -3594,6 +3650,7 @@
  },
  "portraits": [
   "aek",
+  "aey",
   "aim",
   "air",
   "alisa",
@@ -3638,6 +3695,7 @@
   "bua",
   "bum",
   "bunny",
+  "buppha",
   "bussaba",
   "cake",
   "candy",
@@ -3716,8 +3774,11 @@
   "jiab",
   "jiap",
   "jib",
+  "jiew",
   "jinda",
+  "jintana",
   "jom",
+  "joom",
   "joon",
   "josey",
   "joy",
@@ -3828,6 +3889,8 @@
   "nut",
   "oat",
   "ohm",
+  "oiy",
+  "orapin",
   "orm",
   "orn",
   "oy",

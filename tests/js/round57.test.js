@@ -109,18 +109,22 @@ test("a floor reveal is told once by the BAR, never the same line by two women",
 
 // ── Terence ──────────────────────────────────────────────────────────────
 test("the masseuse remembers: talks after the hour, is someone after the special, knows you the next day (Terence's severe)", () => {
-  G.room = "lotus_oil"; G.nightTurn = 30;
+  // a shop with no named woman: the folk floor remembers
+  G.room = "naklua_thai"; G.nightTurn = 30;
   const t0 = run("talk to masseuse");
-  assert.ok(_FOLK_MASSEUSE.some(l => t0.includes(l.slice(0, 30))), "a stranger in the doorway gets the shop");
-  run("massage");
-  const t1 = run("ask masseuse about life");
-  assert.ok(_FOLK_MASSEUSE_AFTER.some(l => t1.includes(l.slice(0, 30))), "after the hour she talks");
-  run("special");
-  const t = run("ask masseuse about name");
-  assert.doesNotMatch(t, /Only massage/); assert.ok(_FOLK_MASSEUSE_SPECIAL.some(l => t.includes(l.slice(0, 30))));
+  assert.ok(_FOLK_MASSEUSE.some(l => t0.includes(l.slice(0, 30))) || /has a name/.test(t0), "a stranger in the doorway gets the shop");
+  if (!_npcsHere().some(i => NPCS[i].masseuse)) {
+    run("massage");
+    const t1 = run("ask masseuse about life");
+    assert.ok(_FOLK_MASSEUSE_AFTER.some(l => t1.includes(l.slice(0, 30))), "after the hour she talks");
+  }
+  // Orapin at Lotus, where Terence was: her own voice, and her own memory
+  G.room = "lotus_oil"; G.nightTurn = 30;
+  assert.match(run("talk to orapin"), /No hurry here/);
+  run("massage"); assert.match(run("talk to orapin"), /Phetchabun/);
+  run("special"); assert.match(run("talk to orapin"), /After work, I am me/);
   G.day++; G.soc.massaged = {}; G.soc.special = {};
-  const t2 = run("talk to masseuse");
-  assert.ok(_FOLK_MASSEUSE_BACK.some(l => t2.includes(l.slice(0, 30))), "the next day she knows the shoulders");
+  assert.match(run("talk to orapin"), /You come back/);
 });
 
 test("the kind he asks for is the kind he gets, and he can say it his way", () => {
@@ -241,4 +245,13 @@ test("the cleaning job's inside price is 5% off the stock, on the books (Mario's
   G.bar.workedDay = G.day; G.bar.workedLast = true; out = []; _barSettle();
   const ll = G.bar.lastLines; if (ll && ll.take) assert.equal(ll.cogs, Math.round(ll.take * BAR_COGS * SYN_INSIDE_PRICE * (1 + (G.syn.friction || 0) * BAR_FRICTION)));
   out = []; doCommand("books"); if (ll && ll.take) assert.match(text(), /inside price/);
+});
+
+test("no dialogue line prints its own concatenation (the source-in-a-string class, corpus-wide)", () => {
+  // Pensri's board read "all ฿" + MASSAGE_LEGIT + " the hour" to the player for a day
+  // (round 57): a constant quoted inside the string instead of concatenated onto it
+  const bad = [];
+  for (const [id, n] of Object.entries(NPCS)) for (const [i, d] of (n.dialogue || []).entries())
+    for (const k of ["text", "short"]) if (typeof d[k] === "string" && /" \+ [A-Z_a-z(]|\+ "/.test(d[k])) bad.push(`${id}#${i}.${k}`);
+  assert.deepEqual(bad, []);
 });

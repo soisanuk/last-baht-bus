@@ -2092,7 +2092,7 @@ function _maybeSelfBarfine(id) {
 // rub, then the warmth-gated "special" (hand/mouth) — and the on-premises no-sex
 // rule sends full service off to after her shift. SOAPY is its own modal below.
 // These rooms have no barType on purpose, so no lady-drink/bell/barfine apparatus.
-const MASSAGE_LEGIT = 300, MASSAGE_OIL = 300, MASSAGE_SPECIAL = 1000;
+// MASSAGE_LEGIT / MASSAGE_OIL / MASSAGE_SPECIAL live in world.js now, so dialogue can quote them (round 57)
 
 function _doMassage(arg) {
   const r = _room();
@@ -2253,7 +2253,7 @@ function _doMeetOffShift(arg) {
   G.itemLoc.masseuse_note = null;
   _say(`${os.name} texts back inside a minute — “you come? real one 🙂” — and an hour later you're ` +
     `somewhere unmistakably a real room and not a short-time one: her kettle, her drying laundry, a ` +
-    `photo of a kid up-country turned face-down before you can ask. No mamasan, no barfine, no clock ` +
+    `framed photo turned face-down before you can ask. No mamasan, no barfine, no clock ` +
     `on the wall. Just ${os.name}, off the floor and entirely herself. ` +
     (cost ? `(฿${cost} for the taxi and a 7-Eleven raid — a fraction of the barfine you didn't pay.)` :
       `(Not a baht changes hands. Some nights the town forgets to charge you.)`), "win");

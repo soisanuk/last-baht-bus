@@ -2,9 +2,9 @@
   "generated": "2026-09-29",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 154,
+    "total": 161,
     "byRole": {
-      "story": 43,
+      "story": 50,
       "mamasan": 25,
       "hostess": 48,
       "cashier": 13,
@@ -13,6 +13,22 @@
     "filler": 213
   },
   "characters": [
+    {
+      "id": "aey",
+      "name": "Aey",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Young Thai woman, mid twenties, ponytail, black tank top, phone in hand, quick businesslike smile.",
+      "venueKind": null,
+      "emoji": "💆",
+      "th": "เอ๋",
+      "room": "beach_turn_massage",
+      "tags": [
+        "masseuse"
+      ],
+      "desc": "Mid-twenties, ponytail, a {{phone}} that never leaves her hand, and the quick eyes of whoever works the step where the beach road turns into the strip. Aey catches the punters as they arrive and prices them before they've stopped walking."
+    },
     {
       "id": "aoy",
       "name": "Aoy",
@@ -114,6 +130,22 @@
         "manager"
       ],
       "desc": "Seventy-six, American, behind his own bar on a stool worn to the shape of him. Reading glasses pushed up, a coffee going cold next to a beer he is not drinking, and forearms that were clearly once something. He first saw this coast in 1971, on seven days' leave, when it was a fishing village with a few huts rented to servicemen. He has been back more or less ever since."
+    },
+    {
+      "id": "buppha",
+      "name": "Buppha",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman in her mid forties, bobbed hair, reading glasses on a cord, gold shirt, knowing look.",
+      "venueKind": null,
+      "emoji": "💆",
+      "th": "บุปผา",
+      "room": "buakhao_oil",
+      "tags": [
+        "masseuse"
+      ],
+      "desc": "Mid-forties, a bob and reading glasses on a cord, and the knowing look of somebody who has worked three of the hundred pink shopfronts on Buakhao and can tell you which ones water the oil. Buppha runs the step at Golden Touch like a woman who owns it, which she doesn't."
     },
     {
       "id": "cream",
@@ -240,6 +272,54 @@
       "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the Pattaya Leisure man. He is unfailingly pleasant, which is the unsettling part."
     },
     {
+      "id": "jiew",
+      "name": "Jiew",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Tiny Thai woman in her forties, short grey-streaked hair, strong forearms, plain blue massage shirt, calm face.",
+      "venueKind": null,
+      "emoji": "💆",
+      "th": "จิ๋ว",
+      "room": "diana_oil",
+      "tags": [
+        "masseuse"
+      ],
+      "desc": "The smallest of the three on the plastic stools out front of Bamboo, and the one the other two send the big farang to. Forties, grey coming in at the temples, forearms like cable. Jiew means tiny; her thumbs did not get the message."
+    },
+    {
+      "id": "jintana",
+      "name": "Jintana",
+      "source": "NPCS",
+      "role": "story",
+      "sex": null,
+      "look": "Thai woman, thirties, big curly hair, red lipstick, cherry-red polo, wide laughing mouth.",
+      "venueKind": null,
+      "emoji": "💆",
+      "th": "จินตนา",
+      "room": "beachrd_oil",
+      "tags": [
+        "masseuse"
+      ],
+      "desc": "The louder girl on the step, and loud on purpose: thirties, big curly hair, cherry-red polo, a laugh that carries over two lanes of Beach Road traffic. Jintana could sell a massage to a man running for a bus, and has."
+    },
+    {
+      "id": "joom",
+      "name": "Joom",
+      "source": "NPCS",
+      "role": "story",
+      "sex": null,
+      "look": "Thai woman, late thirties, sun-browned, hair in a clip, pink massage polo, amused sideways smile.",
+      "venueKind": null,
+      "emoji": "💆",
+      "th": "จุ๋ม",
+      "room": "jomtien_soi_7_oil",
+      "tags": [
+        "masseuse"
+      ],
+      "desc": "Late thirties, sun-browned from a life nearer the beach than the shop admits, hair in a clip and a pink polo with the shop's name coming off it. Joom has the step at Sunset and the sideways smile of somebody who has heard every line a farang has and rates them out of ten."
+    },
+    {
       "id": "kyle",
       "name": "Kyle",
       "source": "NPCS",
@@ -348,6 +428,38 @@
       "room": "queen_vic",
       "tags": [],
       "desc": "Behind the till and the room keys both — the Vic is a pub downstairs and an inn upstairs, and Nuch runs the paperwork of both. Fifteen years of it. She knows which regulars are good for a tab and which rooms have the fan that rattles."
+    },
+    {
+      "id": "oiy",
+      "name": "Oiy",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Young Thai woman, early twenties, round face, hair in two braids, pastel green polo, shy smile.",
+      "venueKind": null,
+      "emoji": "💆",
+      "th": "อ้อย",
+      "room": "papaya_massage",
+      "tags": [
+        "masseuse"
+      ],
+      "desc": "Early twenties, two braids and a round face, new enough that she still reads the price list off the wall before she says it. Oiy sits on the end stool at Papaya, where the Walking Street crowd thins out, and practises her English on anybody who stops."
+    },
+    {
+      "id": "orapin",
+      "name": "Orapin",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman, early thirties, long hair tied low, soft calm face, white massage shirt, silver bracelet.",
+      "venueKind": null,
+      "emoji": "💆",
+      "th": "อรพิน",
+      "room": "lotus_oil",
+      "tags": [
+        "masseuse"
+      ],
+      "desc": "Early thirties, hair tied low, the calm of a shop that is quieter than the town ones and in less of a hurry. Orapin doesn't work the step; she waits inside under the pink light, and the customers who find her tend to come back."
     },
     {
       "id": "pensri",
