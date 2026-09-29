@@ -240,13 +240,13 @@ test("the phone: offmap girls list as LINE only, and answer SEND in their own vo
   G.phone.contacts.priew = true; G.phone.contacts.sao = true; G.phone.contacts.cream = true;
   doCommand("contacts");
   assert.match(text(), /Priew — LINE only/);
-  out = []; const m = G.money;
+  out = []; G.bank = 5000; const m = G.bank;   // SEND draws on the account (round 58)
   doCommand("send 500 to priew");
   assert.doesNotMatch(text(), /take care YOU/);
   const msgs = () => G.phone.inbox.map(x => x.text).join("\n");
   assert.match(msgs(), /i keep it for lunch|lunch is on me/);
   doCommand("send 500 to sao");
-  assert.equal(G.money, m - 500, "Sao's comes back — only Priew's left the account");
+  assert.equal(G.bank, m - 500, "Sao's comes back — only Priew's left the account");
   assert.match(msgs(), /Coffee's on me/);
   doCommand("send 500 to cream");
   assert.match(msgs(), /english course/);

@@ -905,6 +905,16 @@ function _doGo(dirWord) {
       "everything that happens in this town.)", "dim");
     return;
   }
+  // …and once the wallet is back, the office is Oy's again: the door stayed open for good after
+  // the first song, with nothing left behind it for you (Mario, round 58, after Declan)
+  if (to === "oy_office" && _flag("act1Done")) {
+    _say(_pickVary([
+      "One of the security men is already in the doorway before you reach it, arms folded, pleasant. \"Finish, na. Mamasan office.\" The ห้ามเข้า sign has its old meaning back.",
+      "The ห้ามเข้า door is shut, and a man in a black polo is leaning on it with the air of somebody who will be leaning on it all night. He shakes his head once. You had your song.",
+      "Security doesn't even stand up. A hand, flat, at the door. \"No, no. Office is office now.\" Whatever you came for, you already have.",
+    ], "officeshut"), "dim");
+    return;
+  }
   // office door: locked unless the DJ has security singing
   if (to === "oy_office" && !_flag("officeOpen")) {
     if (_flag("sabaiPlaying")) {

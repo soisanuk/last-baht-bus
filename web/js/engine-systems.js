@@ -4017,7 +4017,9 @@ function _doSendMoney(arg) {
     c === nameW || NPCS[c].name.toLowerCase().includes(nameW.split(" ")[0] || "~"));
   if (!id) { _say("Send to whom? The banking app only knows your contacts."); return; }
   if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
-  if (amt > G.money) { _say(_fmt("The app regrets to inform you: ฿{m} available, ฿{a} dreamed of.", { m: G.money, a: amt })); return; }
+  // the banking app draws on the ACCOUNT, not the notes in your pocket (Mario, round 58 —
+  // Priya's SEND 100 TO BEE came out of her pocket)
+  if (amt > (G.bank || 0)) { _say(_fmt("The app regrets to inform you: ฿{m} in the account, ฿{a} dreamed of.", { m: _num(G.bank || 0), a: amt })); return; }
   // Tan sends it straight back — his currency is favours, never baht
   if (id === "tan") {
     _say(_fmt("฿{a} crosses town in one green blink — and comes straight back in another, " +
@@ -4034,7 +4036,7 @@ function _doSendMoney(arg) {
     _say("(📱 CHECK MESSAGES.)", "dim");
     return;
   }
-  G.money -= amt;
+  G.bank -= amt;
   G.sentTotal = (G.sentTotal || 0) + amt;
   if (amt >= CCIB_LOUD_MONEY && typeof _ccibLoud === "function") _ccibLoud("money");
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amt; // toward a sponsor flip
@@ -4043,10 +4045,10 @@ function _doSendMoney(arg) {
   _addBond(id, bump);
   if (_npcsHere().includes(id))
     _say(_fmt("฿{a}, phone to phone across the width of a bar — her handset buzzes in her hand " +
-      "and she looks at it, then at you, and doesn't quite manage not to smile. (฿{m} left.)",
-      { a: amt, m: G.money }));
+      "and she looks at it, then at you, and doesn't quite manage not to smile. (฿{m} left in the account.)",
+      { a: amt, m: _num(G.bank) }));
   else
-    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left.)", { a: amt, m: G.money }));
+    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
   // the girls who aren't in the bar economy answer in their own voices, not the
   // hostess patter (mobile playtest 2026-08-22: Priew got "tonight I take care YOU")
   if (id === "priew") {

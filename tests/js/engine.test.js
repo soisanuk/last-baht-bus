@@ -5963,9 +5963,10 @@ test("banking app: SEND transfers, bumps favor, and completes Bee's quest", () =
   state().flags.act1Done = true;
   state().quests = { sangsom: "done", bee_number: "active" };
   state().phone.contacts.bee = true;
-  state().money = 500;
+  state().money = 500; state().bank = 1000;
   run("send 100 to bee");
-  assert.equal(state().money, 400);
+  assert.equal(state().bank, 900, "the banking app draws on the account (round 58)");
+  assert.equal(state().money, 500, "…not the pocket");
   assert.ok(state().flags.beeBanked);
   run("wait");
   assert.equal(state().quests.bee_number, "done");

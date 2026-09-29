@@ -139,3 +139,19 @@ test("a 7-Eleven door on the street sells water from the pavement", () => {
   G.room = "jomtien_beach_rd_s"; const m = G.money;
   run("buy water"); assert.ok(G.money < m);
 });
+
+// ── Mario's calls after round 58 ─────────────────────────────────────────
+test("SEND draws down the bank account, not the pocket", () => {
+  G.phone.contacts.bee = true; G.money = 500; G.bank = 1000;
+  run("send 200 to bee");
+  assert.equal(G.bank, 800); assert.equal(G.money, 500);
+  assert.match(run("send 5000 to bee"), /in the account/);
+  assert.equal(G.bank, 800, "a send the account can't cover moves nothing");
+});
+
+test("Oy's office is closed again once the wallet quest is done", () => {
+  G.room = "rainbow_girls"; _setFlag("officeOpen");
+  run("office");
+  assert.equal(G.room, "rainbow_girls", "security holds the door after Act One");
+  assert.ok(_pickVary && /Mamasan office|old meaning|Office is office|your song/.test(text()), text());
+});

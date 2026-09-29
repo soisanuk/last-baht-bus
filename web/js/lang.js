@@ -1069,8 +1069,8 @@ const _CATALOGS = {
       "555 dir ist langweilig. geh Sanuk machen, mein Freund — genau DAFÜR ist die Stadt da.",
     "฿{a} crosses town in one green blink — and comes straight back in another, before you've pocketed the phone.":
       "฿{a} fliegen in einem grünen Blinken durch die Stadt — und im nächsten schon wieder zurück, bevor du das Handy eingesteckt hast.",
-    "฿{a} crosses town in one green blink. (฿{m} left.)":
-      "฿{a} fliegen in einem grünen Blinken durch die Stadt. (฿{m} übrig.)",
+    "฿{a} crosses town in one green blink. (฿{m} left in the account.)":
+      "฿{a} fliegen in einem grünen Blinken durch die Stadt. (฿{m} noch auf dem Konto.)",
 
     // the saleng cart, arriving and being swarmed
     "A ซาเล้ง strung with lingerie idles up outside, and every girl in the place turns her head at once.":
@@ -1139,8 +1139,8 @@ const _CATALOGS = {
     // shops, the app, and walking there
     "A pack is ฿{p}. You have ฿{m}. The cashier slides it back with a knowing look.":
       "Eine Packung kostet ฿{p}. Du hast ฿{m}. An der Kasse schiebt man sie dir mit wissendem Blick zurück.",
-    "The app regrets to inform you: ฿{m} available, ฿{a} dreamed of.":
-      "Die App bedauert mitteilen zu müssen: ฿{m} verfügbar, ฿{a} erträumt.",
+    "The app regrets to inform you: ฿{m} in the account, ฿{a} dreamed of.":
+      "Die App bedauert mitteilen zu müssen: ฿{m} auf dem Konto, ฿{a} erträumt.",
     "You point yourself at {v} and let your feet do the remembering — one turn of soi, neon, and shortcuts.":
       "Du peilst {v} an und überlässt das Erinnern deinen Füßen — eine Ecke Soi, Neon und Abkürzungen.",
     "You point yourself at {v} and let your feet do the remembering — {n} turns of soi, neon, and shortcuts.":
