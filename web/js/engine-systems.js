@@ -7094,6 +7094,8 @@ function _sellBarYes() {
   if (G.affair) { G.affair.ended = true; G.affair.won = true; }
   const id = G.affair && G.affair.id;
   if (id) { G.phone.contacts[id] = true; G.soc.drinks[id] = 20; }
+  G.lifeStats = { day: G.day, nights: (G.bar && G.bar.nights) || 0, stood: (G.bar && G.bar.worked) || 0,
+    her: id, happy: G.happy, best: Math.max(G.bestHappy || 0, G.happy) };
   G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
     best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 };
   _say("");
@@ -7120,9 +7122,64 @@ function _sellBarYes() {
     "till and somebody else certain he is different.\n\nYou got out with the girl and " +
     "the money and the morning. Nobody does. You did.", { her }), "win");
   _addHappy(12);   // the biggest single happiness in the game, and it never touches the treadmill
-  _say("(สบายสบาย has a postcode now. The town is still yours — Pattaya is a long drive " +
-    "away and old habits keep a room ready — but the machine's claim on you is settled " +
-    "in full.)", "dim");
+  G.lifeStats.happy = G.happy; G.lifeStats.best = Math.max(G.lifeStats.best, G.happy);
+  _gameEnd();
+}
+
+// THE ENDING IS AN ENDING (Mario, 2026-09-29). The good ending says you left
+// Pattaya with her, and the sandbox used to carry on in your Pattaya hotel with
+// one parenthetical to square it; her "come home" texts pointed at a place the
+// game had no road to. So SELL UP closes the game the way the week closes a
+// vacation: an epilogue, the card, and a gate — VISIT PATTAYA (a week down from
+// Prachuap, the same calendar, and the bus home at the end of it) or START OVER.
+function _gameEnd() {
+  G.pendingChoice = "gameend";
+  G.visitUntil = 0;
+  _say("═══════════════════════════════════", "win");
+  _say(_fmt("Prachuap is five hours round the top of the Gulf and a different country: a sea that faces " +
+    "east, a noodle pot that starts at six in the morning, an auntie who calls you by the " +
+    "wrong name on purpose. {her} runs the front and you run the pot, badly at first and " +
+    "then not badly. Nobody asks you for a lady drink. Some nights you miss it, which is " +
+    "the last thing the town takes from you, and it takes a long time about it.", { her: _npcLabel(G.lifeStats && G.lifeStats.her || (G.affair && G.affair.id) || "") || "She" }), "win");
+  for (const l of _lifeCard()) _say(l, "win");
+  _gameEndPrompt();
+}
+function _gameEndPrompt() {
+  _say("(VISIT PATTAYA — a week up from Prachuap. The town has not changed; you have.)", "dim");
+  _say("(START OVER — a new first night, face down on a beach. SHARE — the card.)", "dim");
+}
+function _lifeCard() {
+  const L = G.lifeStats || {};
+  const her = L.her && NPCS[L.her] ? NPCS[L.her].name : "her";
+  return [
+    "🚌 THE LAST BAHT BUS — the long way round",
+    `🏝️ ${L.day || G.day} days in Pattaya · 🍺 ${L.stood || 0} of ${L.nights || 0} nights behind your own rail`,
+    `♥ ${her} — Prachuap, by the sea`,
+    `สนุก ${L.happy != null ? L.happy : G.happy}${(L.happy || G.happy) >= 100 ? " ★ สบายสบาย" : ""} · you got out`,
+    "soisanuk.github.io/last-baht-bus",
+  ];
+}
+// VISIT PATTAYA: the bus up from Prachuap, your old room, seven nights — then home.
+function _visitPattaya() {
+  G.pendingChoice = null;
+  G.visitUntil = G.day + 7;
+  G.room = _hotelRoomId(); G.nightTurn = 0;
+  G.hunger = 20; G.thirst = 30; G.hurt = 0; G.battery = 100;
+  const her = _npcLabel(G.lifeStats && G.lifeStats.her || "") || "She";
+  _say(_pickVary([
+    `The green bus up from Prachuap puts you down on Sukhumvit at dusk, and the town comes at you the way it always did, loud and friendly and adding it up. ${her} packed you rice and one sentence: "Come home ${WEEKDAYS[G.day % 7]}. Don't be a customer."`,
+    `Five hours round the top of the Gulf, a songthaew in from the highway, and your old room at the ${_HOTELS[G.hotel].name} with the same terrible bed. ${her} texts before you've unpacked: "you arrive? good. eat something. come home in one week na."`,
+  ], "visitin"), "win");
+  _say("(A week in Pattaya. On the seventh morning the bus takes you home.)", "dim");
+  _describeRoom(true);
+}
+function _visitHome() {
+  const her = _npcLabel(G.lifeStats && G.lifeStats.her || "") || "She";
+  _say(_pickVary([
+    `The week is up. The bus leaves from the same corner of Sukhumvit it arrived at, and the town does not come to see you off, which you had forgotten was how it works. ${her} is at the stop in Prachuap with the bike and a face that says she counted the days and will not admit it.`,
+    `Seven nights, and the green bus home. Somewhere past Bangkok you notice you have stopped adding things up. ${her} meets you with the auntie's scooter and news about the noodle pot, all of it urgent, none of it important.`,
+  ], "visitout"), "win");
+  _gameEnd();
 }
 function _sellBarNo() {
   G.pendingChoice = null;

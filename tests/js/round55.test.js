@@ -273,3 +273,38 @@ test("the Stinky has three girls on the floor now, so the colleague crisis has a
   G.affair.crisSeen = AFFAIR_CRISES.map(x => x.id).filter(id => id !== "colleague");
   const c = _affairCrisisDue(); assert.ok(c && c.id === "colleague", "the colleague crisis is dealt at the Stinky");
 });
+
+// ── The ending is an ending (Mario, 2026-09-29) ─────────────────────────
+test("SELL UP ends the game: an epilogue, the card, and a gate — VISIT PATTAYA or START OVER", () => {
+  const her = inAffair();
+  G.affair.since = G.day - 70; _setFlag("affairOffered");
+  G.pendingChoice = "sellbar"; out = []; doCommand("yes");
+  assert.equal(G.pendingChoice, "gameend");
+  assert.match(text(), /Prachuap is five hours round the top of the Gulf/); assert.match(text(), /the long way round/);
+  assert.doesNotMatch(text(), /old habits keep a room ready/, "no parenthetical pretending the sandbox carries on");
+  // the gate holds, redraws, and SHARE is the ending's card
+  out = []; doCommand("look"); assert.equal(G.pendingChoice, "gameend"); assert.match(text(), /VISIT PATTAYA/);
+  const blob = serializeGame(); newGame(); deserializeGame(blob);
+  out = []; _renderResume(); assert.match(text(), /VISIT PATTAYA/); assert.match(text(), /the long way round/);
+  assert.match(_shareCard().join("\n"), /the long way round/);
+  assert.deepEqual(_chipSet().map(c => c.cmd || c.c || c).filter(Boolean).length >= 2, true);
+});
+
+test("VISIT PATTAYA is a week down from Prachuap on the same calendar, and the bus takes you home to the gate", () => {
+  inAffair(); G.affair.since = G.day - 70; _setFlag("affairOffered");
+  G.pendingChoice = "sellbar"; doCommand("yes");
+  const d0 = G.day;
+  out = []; doCommand("visit pattaya");
+  assert.equal(G.pendingChoice, null); assert.equal(G.room, _hotelRoomId()); assert.equal(G.visitUntil, d0 + 7);
+  assert.ok(_pickVary && /Prachuap|round the top of the Gulf/.test(text()), text().slice(0, 160));
+  for (let n = 0; n < 7 && G.pendingChoice !== "gameend"; n++) { G.room = _hotelRoomId(); G.nightTurn = 30; out = []; _endNight("sleep"); }
+  assert.equal(G.pendingChoice, "gameend", "the seventh morning, the bus home and the gate again");
+  assert.match(text(), /bus/);
+});
+
+test("START OVER is a new first night on the beach", () => {
+  inAffair(); G.affair.since = G.day - 70; _setFlag("affairOffered");
+  G.pendingChoice = "sellbar"; doCommand("yes");
+  out = []; doCommand("start over");
+  assert.equal(G.pendingChoice === "gameend", false); assert.ok(!_flag("affairWon"), "a clean slate");
+});

@@ -4849,6 +4849,8 @@ function _endNight(reason) {
   _kpTitleTick();
   G.day++;
   G.jaded = Math.max(0, G.jaded - 1); // a day cools the treadmill one notch
+  // a visit from Prachuap ends at its week: the bus home, and the ending's gate again
+  if (G.visitUntil && G.day >= G.visitUntil) { _morningLedger(); _nightSnapshot(); _visitHome(); return; }
   if (G.stage !== "expat" && G.day > 7) {
     // The last night of the week used to be strictly free: this return sits
     // ABOVE the rough-wake block, so the debrief printed "not making it home

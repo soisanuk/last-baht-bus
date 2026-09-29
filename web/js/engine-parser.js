@@ -10168,6 +10168,7 @@ function _chipSet() {
     if (step) step.table().forEach((e, i) => add(String(i + 1), _L(e.label)));
     return chips;
   }
+  if (G.pendingChoice === "gameend") { add("visit pattaya", "visit Pattaya"); add("start over"); add("share", "share card"); return chips; }
   if (G.pendingChoice === "vacation_end") {
     if (G.mode === "soi6") { add("play again"); add("share", "share card"); return chips; }
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
@@ -10628,7 +10629,8 @@ function engineComplete(input) {
   const ctx = (endsSpace ? words : words.slice(0, -1))
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
-  if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
+  if (G.pendingChoice === "gameend") pool = ["visit pattaya", "start over", "share"];
+  else if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
   else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", ...(G.known && G.known.nont && _kidOpen() ? ["the kid"] : []), "not me", "ask"];
   else if (G.pendingChoice === "kidprice") pool = ["pay", "no", "ask"];
   else if (G.pendingChoice === "kidfavour") pool = ["yes", "no", "ask"];
@@ -10881,6 +10883,7 @@ function _renderResume() {
   }
   if (G.pendingChoice === "intro") { _introPrompt(); return; }
   if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
+  if (G.pendingChoice === "gameend") { for (const l of _lifeCard()) _say(l, "win"); _gameEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.pendingChoice === "rabbitjob") { _rabbitJobPrompt(); return; }
   if (G.pendingChoice === "kidprice") { _kidPricePrompt(); return; }
@@ -11029,6 +11032,12 @@ function doCommand(input) {
   if (G.pendingChoice === "intro") { _introAnswer(lower); return; }
 
   // the week is over: the airline needs an answer before anything else
+  if (G.pendingChoice === "gameend") {
+    if (/^share/.test(lower)) { _doShare(); _gameEndPrompt(); return; }
+    if (/^(visit|pattaya|go back|back|week|yes)\b/.test(lower)) { _visitPattaya(); return; }
+    if (/^(start over|restart|new game|over|again|begin)\b/.test(lower)) { newGame(); engineIntro(); return; }
+    _gameEndPrompt(); return;
+  }
   if (G.pendingChoice === "vacation_end") {
     if (G.mode === "soi6") {
       if (/^restart/.test(lower)) { G.player = null; startSoi6Mode(); return; } // RESTART re-picks identity (matches the verb everywhere else)
@@ -12395,6 +12404,7 @@ const _NIGHT_EMOJI = {
 // the frontend joins them for the clipboard). Un-played nights pad with "·"
 // so a mid-week share reads as a week in progress.
 function _shareCard() {
+  if (G.pendingChoice === "gameend" && typeof _lifeCard === "function") return _lifeCard();   // the ending's card, through the gate
   const log = G.nightLog || [];
   // the first vacation opens on day TWO (day one "went well"), so it has six
   // nights and the card padded a seventh forever (Lars, round 47)

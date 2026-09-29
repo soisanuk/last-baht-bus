@@ -49,6 +49,7 @@ const pending = () => !!(G.pendingChoice || G.pendingEnc || G.game || G.pendingB
 const MODALS = [
   { id: "intro", setup() { G.pendingChoice = "intro"; G.introStep = 0; G.introAfter = "beach"; }, answers: ["1", "3"] },
   { id: "vacation_end", setup() { G.day = 8; G.pendingChoice = "vacation_end"; }, answers: ["new vacation", "move to pattaya"] },
+  { id: "gameend", setup() { G.stage = "expat"; _setFlag("affairWon"); G.lifeStats = { day: 90, nights: 60, stood: 58, her: "manow", happy: 120, best: 120 }; G.pendingChoice = "gameend"; }, answers: ["visit pattaya"] },   // START OVER is newGame(), which reseeds from Math.random by design (as RESTART is left out of vacation_end); round55.test pins it
   { id: "checkout", setup() { G.room = _hotelRoomId(); G.nightTurn = 3; doCommand("checkout"); }, answers: ["queen vic", "2", "stay"] },
   { id: "rabbitjob", setup() { G.room = "white_rabbit"; _rabbitInterview(); }, answers: ["carry it", "keyboard", "not me"] },
   { id: "kidprice", setup() { G.known.nont = true; _kidPriceAsk(); }, answers: ["pay", "no", "ask"] },

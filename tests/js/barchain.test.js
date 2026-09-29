@@ -1143,6 +1143,8 @@ test("SELL UP through the door wins the game's biggest single happiness, and the
   assert.ok(!_barOwned(), "the bar is somebody else's problem");
   assert.ok(G.phone.contacts.manow && _bondTier("manow") >= 3, "she is yours, not staff");
   assert.ok(!_npcActive("manow"), "and off the Stinky's floor for good");
+  assert.equal(G.pendingChoice, "gameend", "and the game ends, with a gate (Mario, 2026-09-29)");
+  out = []; doCommand("visit pattaya");   // a week down from Prachuap
   out = []; doCommand("books");
   assert.match(out.join("\n"), /noodle-shop receipt/, "BOOKS knows he sold (state-blind-prose guard)");
   out = []; doCommand("work");

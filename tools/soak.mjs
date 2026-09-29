@@ -623,14 +623,14 @@ export function runSoak(opts = {}) {
       // CLASS A — composition across the night boundary (docs/persona-findings-ledger-analysis.md:
       // 17% severe, 10% instrumented before 2026-09-27). Two correct systems, one wrong handoff
       // at the one seam every system crosses: the wake. What the morning may not carry.
-      if (G.turns >= lastTurns && G.day === lastDay + 1 && G.pendingChoice !== "vacation_end") {   // the week's end pauses the night at its last turn until answered
+      if (G.turns >= lastTurns && G.day === lastDay + 1 && G.pendingChoice !== "vacation_end" && G.pendingChoice !== "gameend") {   // the week's end pauses the night at its last turn until answered
         const bad = [];
         if (G.nightTurn > 2) bad.push("nightTurn " + G.nightTurn + " (a night starts at 18:00; the command that ended the last one pays its own tick)");
         if (G.soc && G.soc.drunk !== 0) bad.push("drunk " + G.soc.drunk + " carried through sleep (the hangover is the carry, not the drink)");
         if (G.rain) bad.push("rain " + G.rain + " survived the night");
         if (G.party) bad.push("a companion survived the wake without a goodbye or a bed");
         if (G.pendingEnc || G.game || G.pendingBf || G.pendingSoapy || G.pendingFare) bad.push("a live modal survived the night: " + JSON.stringify({ enc: G.pendingEnc, game: G.game && G.game.type, bf: !!G.pendingBf, soapy: !!G.pendingSoapy, fare: !!G.pendingFare }));
-        if (G.pendingChoice && !["vacation_end", "chamgift", "bkkdinner", "kidfavour", "intro"].includes(G.pendingChoice)) bad.push("pendingChoice " + G.pendingChoice + " survived the night");
+        if (G.pendingChoice && !["vacation_end", "gameend", "chamgift", "bkkdinner", "kidfavour", "intro"].includes(G.pendingChoice)) bad.push("pendingChoice " + G.pendingChoice + " survived the night");
         if (G.hurt < 0 || G.hurt > 3) bad.push("hurt " + G.hurt);
         if ((G.hangover || 0) < 0) bad.push("hangover " + G.hangover);
         if (G.money < 0) bad.push("woke with negative money " + G.money);

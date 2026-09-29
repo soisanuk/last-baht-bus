@@ -295,7 +295,9 @@ function newGame() {
     metRoom: {},
     ownRescueDay: 0,     // the morning after going down behind your own rail (the ledger says so)
     tanFavourDay: 0,
-    shiftAskText: null, // the shift call's question, for the resume redraw     // the night Tan asked his favour — no job is put to you the same night         // …and where (JOURNAL RECORD said Candy Bar 2 of a woman met at Candy Bar)          // id → the day you first spoke (a greeting that says "since you left" needs you to have LEFT)   // …and whether the NEXT ledger has netted it in yet (see _morningLedger)
+    shiftAskText: null, // the shift call's question, for the resume redraw
+    lifeStats: null,    // the long game's figures, kept at SELL UP for the ending's card
+    visitUntil: 0,      // a week down from Prachuap after the good ending: the day the bus goes home     // the night Tan asked his favour — no job is put to you the same night         // …and where (JOURNAL RECORD said Candy Bar 2 of a woman met at Candy Bar)          // id → the day you first spoke (a greeting that says "since you left" needs you to have LEFT)   // …and whether the NEXT ledger has netted it in yet (see _morningLedger)
     chamDays: [],        // the distinct nights you sat with Cream — after a few, CONTACT nudges toward the question
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
