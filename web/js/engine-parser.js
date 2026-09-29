@@ -163,10 +163,12 @@ const _SOI6_BOUND = [
 const _ORCHID_CLUB_UNKNOWN = [
   "The wall gives you nothing: no sign, no handle, no window, and a brass bell you have " +
     "precisely no standing to ring. Places like this don't open to a man who walked up. " +
-    "Somebody sends you, or you spend the evening looking at render.",
+    "Somebody sends you, or you spend the evening looking at render — and the sending is " +
+    "done by the women who have owned bars here longest.",
   "You stand in front of it long enough to feel conspicuous. Whatever this place is, it is " +
     "not for people who arrive on their own initiative — and the one thing you'd need is a " +
-    "name to drop, which you haven't got.",
+    "name to drop, which you haven't got. Somebody who has run bars in this town long " +
+    "enough would know whose wall this is.",
 ];
 const _ORCHID_BOUNCER = [
   "A man the size of a doorway fills the doorway. He doesn't ask a question; he just looks at you until you understand the answer. \"Members,\" he says, once. You are not, yet, a member.",
@@ -5133,6 +5135,21 @@ const _TOWN = {
       "{n} points the bottle. \"{rs}. Been in once. Once was the number.\"",
       "\"{rs},\" {n} says. \"Tell the piwin, he'll know. They all know.\""],
   },
+  // Notty's is the one door in town you cannot walk through (the wall, the bell,
+  // "you get sent"), so the town does not give it an address like a beer bar —
+  // "same as here with different faces" was false of it (Mario, 2026-09-29). {x} is
+  // the tail: a hint at who sends people there, or, once somebody has, the nod.
+  sent: {
+    floor: ["\"Notty's?\" {n} makes a small shape with her mouth. \"Behind the wall in Naklua. Nobody find, tilac — somebody send.\" {x}",
+      "{n} shakes her head, not no but careful. \"Notty's not like here. You walk to the wall, wall say nothing.\" {x}",
+      "\"Rose place.\" {n} lowers her voice without meaning to. \"No sign. You need name.\" {x}"],
+    house: ["\"Notty's doesn't get found,\" {n} says. \"You get sent. And it's never somebody like me doing the sending.\" {x}",
+      "{n} gives it a moment. \"Naklua, behind a wall with a bell on it. The bell's not for ringing unless you've a name to give.\" {x}",
+      "\"Notty's is a door for people who were told about it,\" {n} says. \"Nobody tells you from behind a till.\" {x}"],
+    punter: ["\"Notty's?\" {n} snorts. \"Never been. Nobody I know has been who wasn't sent.\" {x}",
+      "{n} shakes his head. \"There's a wall in Naklua with a bell on it and a lot of blokes stood outside looking at it. Don't be one.\" {x}",
+      "\"You don't walk into Notty's,\" {n} says. \"Somebody walks you in.\" {x}"],
+  },
   atm: {
     floor: ["\"Cash machine?\" {n} points. \"{w}. {f}\"",
       "{n} nods along the street. \"{w}. Take enough, na — machine eat card sometimes.\" {f}",
@@ -5372,6 +5389,18 @@ function _townTalk(npc, topic) {
     const k = _pnm(t.replace(/^(where is|where's|the)\s+/, ""));
     const hits = Object.keys(ROOMS).filter(id => ROOMS[id].bar && !ROOMS[id].invite && id !== G.room && _pnm(ROOMS[id].bar || ROOMS[id].name) === k);
     if (hits.length === 1) {
+      if (hits[0] === "nottys_place") {
+        const sent = _flag("orchidSent") || _flag("orchidVouched") || _flag("orchidReported");
+        if (npc === "tan") {
+          _say(sent
+            ? "\"Notty's.\" Tan nods, and something in it says he already heard. \"So somebody sent you. Good. I take people places — that place, somebody else takes you.\""
+            : "\"Notty's.\" Tan looks up the road a long moment. \"I can drive you to the wall. The wall does not care who drove you.\" A shrug. \"That door opens on a name. Somebody who has run bars in this town long enough — she knows whose wall it is.\"");
+          return true;
+        }
+        return pick("sent", { x: sent
+          ? _pickVary(["You already have the name, which is the whole of it.", "You've been sent; that is the only map there is.", "The name you were given is the key, and there isn't another."], "nottys:sent")
+          : _pickVary(["The people who send people there, you gather, are the women who have run bars in this town longest.", "Whoever sends you, it will be somebody who has owned a bar here a long time.", "It is the old hands who do the sending — the women who have run a floor since before the Metro."], "nottys:hint") });
+      }
       const v = hits[0], street = Object.keys(ROOMS).find(s => (ROOMS[s].venues || []).includes(v));
       // region, then the street — "Beach Road, foot of Soi 6" — and never the region twice
       const r = ROOMS[v].region, sName = street ? ROOMS[street].name : "";

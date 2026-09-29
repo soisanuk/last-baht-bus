@@ -155,3 +155,27 @@ test("Oy's office is closed again once the wallet quest is done", () => {
   assert.equal(G.room, "rainbow_girls", "security holds the door after Act One");
   assert.ok(_pickVary && /Mamasan office|old meaning|Office is office|your song/.test(text()), text());
 });
+
+// Notty's is the one door you cannot walk through, and the town stopped giving it an
+// address like a beer bar (Mario, 2026-09-29): Tan said "Same as here with different
+// faces, mate" about a wall nobody gets past, and the wall itself pointed nowhere.
+test("Notty's: the town says you get sent, and the wall says who does the sending", () => {
+  G.room = _npcRoom("tan"); run("talk to tan"); out = [];
+  run("ask tan about notty's place");
+  let said = out.map(o => o.text).join("\n");
+  assert.doesNotMatch(said, /different faces|mate/, "not the generic venue line");
+  assert.match(said, /wall/i); assert.match(said, /run bars in this town/);
+  G.room = "stinky_bar"; run("talk to bert"); out = [];
+  run("ask bert about notty's place");
+  said = out.map(o => o.text).join("\n");
+  assert.ok(_TOWN.sent.house.some(l => said.includes(l.split("{n}")[1].slice(0, 20))), "the discreet pool"); assert.match(said, /owned a bar|run bars|run a floor/);
+  G.flags.orchidSent = true; out = [];
+  run("ask bert about notty's place AGAIN");
+  assert.doesNotMatch(out.map(o => o.text).join("\n"), /owned a bar here|run bars in this town longest|since before the Metro/, "once sent, no hint");
+  delete G.flags.orchidSent;
+  G.room = Object.keys(ROOMS).find(r => (ROOMS[r].venues || []).includes("nottys_place"));
+  G.encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  out = []; run("enter notty's place");
+  assert.notEqual(G.room, "nottys_place");
+  assert.ok(_ORCHID_CLUB_UNKNOWN.every(l => /bars? (in this town|here)/.test(l)), "every wall line names who sends");
+});
