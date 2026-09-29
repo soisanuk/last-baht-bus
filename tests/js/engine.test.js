@@ -5972,12 +5972,13 @@ test("banking app: SEND transfers, bumps favor, and completes Bee's quest", () =
   assert.equal(state().quests.bee_number, "done");
 });
 
-test("incoming texts arrive with a buzz; attached money credits on read", () => {
+test("incoming texts arrive with a buzz; attached money credits the account on read", () => {
   state().phone.contacts.fon = true;
   state().phone.inbox.push({ from: "fon", text: "lucky day!!", turn: 1, read: false, gives: 50 });
-  const cash = state().money;
+  const cash = state().money, bank = state().bank || 0;
   run("check messages");
-  assert.equal(state().money, cash + 50);
+  assert.equal(state().bank, bank + 50, "lands where SEND draws from");
+  assert.equal(state().money, cash, "not the pocket");
 });
 
 test("a texted invite pays off when you show up that night", () => {

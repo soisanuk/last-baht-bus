@@ -2196,11 +2196,11 @@ test("an ignored phone doesn't hoard: chatter caps at 3 unread per sender, and t
   // and a giant backlog reads as a dozen + a skim, with the money still banked
   G.phone.inbox = [];
   for (let i = 0; i < 20; i++) G.phone.inbox.push({ from: "manow", text: "t" + i, turn: i, read: false, gives: i === 0 ? 500 : 0 });
-  const m0 = G.money;
+  const m0 = G.bank || 0;
   out = []; _readMessages();
   assert.ok(out.join("\n").split("\n").filter(l => /📱/.test(l)).length <= 12, "at most a dozen shown");
   assert.match(out.join("\n"), /thumb past \d+ older/, "the rest skimmed, named");
-  assert.equal(G.money - m0, 500, "…and the skipped transfer still banked");
+  assert.equal(G.bank - m0, 500, "…and the skipped transfer still banked (to the account)");
 });
 
 test("the ended affair reaches the phone, the book, and the texting arm", () => {

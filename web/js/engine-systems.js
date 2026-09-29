@@ -3487,7 +3487,7 @@ function _pushMsg(from, text, gives, fromName, photo) {
   if (G.phone.inbox.length > 80) {
     for (const m of G.phone.inbox.slice(0, G.phone.inbox.length - 80)) {
       if (m.read) continue;
-      if (m.gives) G.money += m.gives;
+      if (m.gives) G.bank = (G.bank || 0) + m.gives;
       if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
     }
     G.phone.inbox = G.phone.inbox.slice(-80);
@@ -4112,7 +4112,7 @@ function _readMessages() {
     const dropped = show.slice(0, show.length - 12);
     for (const m of dropped) {
       m.read = true;
-      if (m.gives) { G.money += m.gives; _say(`(An older transfer surfaces in the scroll: +฿${m.gives}.)`, "win"); }
+      if (m.gives) { G.bank = (G.bank || 0) + m.gives; _say(`(An older transfer surfaces in the scroll: +฿${m.gives} to the account.)`, "win"); }
       if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
     }
     _say(_fmt("(You thumb past {n} older messages — the phone's way of telling you how long you've been gone.)", { n: dropped.length }), "dim");
@@ -4133,8 +4133,10 @@ function _readMessages() {
       _say(`📱 ${sender}: “${_L(msg.text)}”`, "thai");
     }
     if (!msg.read && msg.gives) {
-      G.money += msg.gives;
-      _say(`(She's transferred you ฿${msg.gives}. ฿${G.money} in pocket. This town.)`, "win");
+      // a transfer lands where SEND takes from — the account, not the pocket
+      // (Mario, 2026-09-29: the banking app works the same both ways)
+      G.bank = (G.bank || 0) + msg.gives;
+      _say(`(She's transferred you ฿${msg.gives}. ฿${G.bank} in the account. This town.)`, "win");
     }
     msg.read = true;
   }
