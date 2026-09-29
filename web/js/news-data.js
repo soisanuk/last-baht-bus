@@ -3,80 +3,80 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Flooded roadwork leaves drivers facing hidden danger in east Pattaya",
-    "s": "Pattaya Mail",
-    "d": "27 Sep 2026"
-  },
-  {
-    "t": "Brit stabbed in Pattaya fight with transwoman over crystal meth",
-    "s": "Thaiger",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "Pattaya suspends 3 officers over alleged tourist cash demands",
-    "s": "Thaiger",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "Flash floods sweep Koh Chang, trapping driver and disrupting tourist travel",
-    "s": "Pattaya Mail",
-    "d": "26 Sep 2026"
-  },
-  {
-    "t": "Pattaya gives the beach time to recover after major floods",
-    "s": "Pattaya Mail",
-    "d": "27 Sep 2026"
-  },
-  {
     "t": "American man arrested after secret drug lab found in Pattaya home",
-    "s": "Pattaya Mail",
+    "s": "pattayamail.com",
     "d": "26 Sep 2026"
   },
   {
-    "t": "Pattaya Marathon 2026 delivers a high-energy second day of racing",
-    "s": "Pattaya Mail",
-    "d": "27 Sep 2026"
-  },
-  {
-    "t": "Storm winds topple large trees across Sattahip, crews clear roads",
-    "s": "Pattaya Mail",
-    "d": "27 Sep 2026"
-  },
-  {
-    "t": "Watch: Bangkok locals create floating market during floods",
-    "s": "BBC",
+    "t": "Pattaya sanitation crews clear clogged drains to improve flood drainage",
+    "s": "pattayamail.com",
     "d": "29 Sep 2026"
   },
   {
-    "t": "volunteers in thailand hand-build school toilet from reclaimed wood",
-    "s": "Designboom",
+    "t": "Pattaya monorail plans face uncertainty if three-airport rail project stalls",
+    "s": "pattayamail.com",
     "d": "29 Sep 2026"
   },
   {
-    "t": "Thai Airways cuts flights, battles baggage chaos as Bangkok floods ease",
+    "t": "Pattaya apartment stabbing leaves British man seriously injured",
+    "s": "pattayamail.com",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Pattaya–Koh Larn boat trips under close watch amid unsettled seas",
+    "s": "pattayamail.com",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Rayong flooding forces rescue of residents and thousands of pigs",
+    "s": "pattayamail.com",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Old habits die hard in Pattaya’s battle against roadside parking claims",
+    "s": "pattayamail.com",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Pattaya races to remove parasailing and squid boats stranded on beach",
+    "s": "pattayamail.com",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "At least 23 dead in Thailand floods, Bangkok airport in chaos",
     "s": "Reuters",
     "d": "29 Sep 2026"
   },
   {
-    "t": "Thailand's government approves emergency funding after deadly floods that impacted millions",
-    "s": "abcnews.com",
-    "d": "29 Sep 2026"
+    "t": "Dozens killed as monsoon wreaks havoc across India, Nepal and Thailand",
+    "s": "NBC News",
+    "d": "28 Sep 2026"
   },
   {
     "t": "Thailand meets New Orleans in Thai Nola's delicious 'Souptember' dish",
-    "s": "WWLTV.com",
+    "s": "wwltv.com",
     "d": "29 Sep 2026"
   },
   {
-    "t": "At Least 23 Dead in Thailand Floods, Bangkok Airport in Chaos",
-    "s": "U.S. News & World Report",
+    "t": "Bangkok floodwaters begin to ease after torrential rains affect 700,000 people",
+    "s": "AP News",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "THA: Flood - 09-2026 - Heavy rainfall caused flooding (2026-09-29) - Thailand",
+    "s": "ReliefWeb",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Heavy rains in Thailand kill 23, cause airport chaos",
+    "s": "CBC",
     "d": "29 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-28","USD":33.57,"AUD":23.58,"GBP":44.52,"EUR":38.2};
+var FX_RATES = {"date":"2026-09-29","USD":33.51,"AUD":23.47,"GBP":44.4,"EUR":38.05};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-29","temp":27,"humid":84,"code":1,"hi":32,"rain":92};
+var WX_NOW = {"date":"2026-09-30","temp":26,"humid":93,"code":3,"hi":31,"rain":91};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
