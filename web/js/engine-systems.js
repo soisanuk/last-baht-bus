@@ -6782,7 +6782,7 @@ function _shiftYes() {
     if (_rand() < SHIFT_TAB_STIFF) {
       // the docket outlives the man. Not malice — he simply stops coming in,
       // which is how bar debts actually end.
-      const stiffCost = -Math.round(SHIFT_TAB_TAKE * BAR_COGS);
+      const stiffCost = -Math.round(SHIFT_TAB_TAKE * _barCogs());
       _shiftTake(stiffCost, "a regular's slate, stiffed — the stock he drank");
       G.bar.stiffed = (G.bar.stiffed || 0) + 1;
       // said TONIGHT, as the books book it tonight — "still under the till a week later" was the
@@ -7501,6 +7501,13 @@ function _kpChallenge() {
 // traded in rather than the morning-after one (the last night of a month was
 // settling at the next month's rate — Gordon, 2026-08-26). Defaults to G.day for
 // a direct call (a test settling "tonight").
+// The stock at the price the uncle quotes inside: the cleaning job's perk says he "starts
+// quoting you the price he quotes everybody inside", and for a round the books kept charging
+// the invoice price (Mick, round 57). Friction still loads it on top — a refused job is
+// still a refused job.
+function _insidePrice() { return !!(G.syn && G.syn.done && G.syn.done.cleaning); }
+function _barCogs() { return BAR_COGS * (_insidePrice() ? SYN_INSIDE_PRICE : 1); }
+
 function _barNight(settleDay) {
   const b = G.bar;
   const day = (settleDay != null) ? settleDay : G.day;
@@ -7558,7 +7565,7 @@ function _barNight(settleDay) {
   const friction = (G.syn && G.syn.friction) || 0;
   const supplyMult = 1 + friction * BAR_FRICTION;
   const nut = Math.round(BAR_NUT * supplyMult);
-  const cogs = Math.round(take * BAR_COGS * supplyMult);
+  const cogs = Math.round(take * _barCogs() * supplyMult);
   const wages = BAR_WAGES + (worked ? 0 : BAR_MGR_NIGHT);
   // Procurement you ACCEPTED is a standing cost — the invoice you pay for the
   // frictionlessness. Refusing is cheaper on paper (this line is ฿0) and buys the
@@ -7889,10 +7896,10 @@ function _doBooks() {
   _sayLease();
   const ll = b.lastLines;
   if (ll) {
-    _say(_fmt("Last night: ฿{take} in{evt}{lost}. Out: nut ฿{nut} · stock ฿{cogs} · wages ฿{wages}{mgr}{proc}{cost} — {who}.",
+    _say(_fmt("Last night: ฿{take} in{evt}{lost}. Out: nut ฿{nut} · stock ฿{cogs}{inside} · wages ฿{wages}{mgr}{proc}{cost} — {who}.",
       { take: ll.take, evt: ll.evtIn ? _fmt(" (฿{e} of it the night's luck)", { e: ll.evtIn }) : "",
         lost: ll.lost ? _fmt(", ฿{l} short of what it would have been ({w})", { l: ll.lost, w: (ll.lostNotes || []).join(" · ") }) : "",
-        nut: ll.nut, cogs: ll.cogs, wages: ll.wages,
+        nut: ll.nut, cogs: ll.cogs, wages: ll.wages, inside: _insidePrice() ? " (the uncle's inside price)" : "",
         mgr: ll.mgr ? _fmt(" · Bert ฿{m}", { m: ll.mgr }) : "",
         proc: ll.proc ? _fmt(" · the arrangements ฿{p}", { p: ll.proc }) : "",
         cost: ll.evtCost ? _fmt(" · the night's own bill ฿{c}", { c: ll.evtCost }) : "",

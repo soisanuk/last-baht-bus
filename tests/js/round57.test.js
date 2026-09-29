@@ -232,3 +232,13 @@ test("a killer-pool winner's name opens its sentence in capitals", () => {
   const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-play.js", import.meta.url)), "utf8");
   assert.match(src, /const _wn = winner \? winner\.name\.charAt\(0\)\.toUpperCase\(\)/);
 });
+
+test("the cleaning job's inside price is 5% off the stock, on the books (Mario's call)", () => {
+  owner(); G.bar.stoodTurns = 99;
+  assert.equal(_barCogs(), BAR_COGS);
+  G.syn.done.cleaning = true;
+  assert.equal(_barCogs(), BAR_COGS * SYN_INSIDE_PRICE);
+  G.bar.workedDay = G.day; G.bar.workedLast = true; out = []; _barSettle();
+  const ll = G.bar.lastLines; if (ll && ll.take) assert.equal(ll.cogs, Math.round(ll.take * BAR_COGS * SYN_INSIDE_PRICE * (1 + (G.syn.friction || 0) * BAR_FRICTION)));
+  out = []; doCommand("books"); if (ll && ll.take) assert.match(text(), /inside price/);
+});

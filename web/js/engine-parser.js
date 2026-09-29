@@ -538,7 +538,7 @@ function _sevenIn() {
 // off the till, and the books see it as stock (Des, round 41: his soda
 // evaporated while his hostess's drink rang into his own till).
 function _ownStock(price, what, line) {
-  const cogs = Math.round(price * BAR_COGS);
+  const cogs = Math.round(price * (typeof _barCogs === "function" ? _barCogs() : BAR_COGS));
   G.bar.cash -= cogs;
   _say((line ? line + " " : "") + `(${what[0].toUpperCase() + what.slice(1)} off your own stock — ฿${cogs} of wholesale off the till, nothing off your pocket. The house drinks free; the house pays the wholesaler.)`);
 }

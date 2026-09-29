@@ -173,6 +173,7 @@ const BAR_MGR_NIGHT = 700;     // …and Bert's shift on top, on the nights you 
 const BAR_COSTS    = 3000;     // legacy flat figure — kept only for saves written before the split
 const BAR_PRESENT  = 800;      // you behind your own rail sells drinks
 const BAR_FRICTION = 0.08;     // each refused procurement job adds this to costs
+const SYN_INSIDE_PRICE = 0.95;   // the cleaning job's perk: the beer uncle's inside price — 5% off stock (Mario, round 57: the prose promised it and the books didn't keep it)
 const SYN_JOB_NIGHT = 120;     // each ACCEPTED job is a standing cost — the invoice you pay for frictionlessness (~฿3.6k/mo). Refusing is cheaper on paper; what it buys you is the weather.
 const LOW_SEASON   = 0.55;     // takings multiplier at the trough (Sep–Oct); see SEASON_MULT
 
