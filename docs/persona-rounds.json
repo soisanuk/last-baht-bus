@@ -565,6 +565,27 @@
      "lens": "thai-speaker"
     }
    ]
+  },
+  "round57": {
+   "date": "2026-09-29",
+   "note": "aimed by the coverage map: procurement's dark cells (owner who says yes), the clinic and massage (body-care), and the uninstrumented modal class (interrupter)",
+   "personas": [
+    {
+     "name": "Mick",
+     "model": "fable",
+     "lens": "owner-inside"
+    },
+    {
+     "name": "Terence",
+     "model": "fable",
+     "lens": "body-care"
+    },
+    {
+     "name": "Helga",
+     "model": "opus",
+     "lens": "modal-interrupter"
+    }
+   ]
   }
  }
 }

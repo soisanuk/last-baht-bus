@@ -761,7 +761,11 @@ function _doBarfine(arg) {
       _npcsHere().find(n => NPC_ROLES[n] === "cashier");
     const who = stf ? NPCS[stf].name : "the mamasan";
     G.pendingBf.mama = who;      // …so a redraw can say who is waiting on the answer
-    _say(`${name} brightens and says nothing at all about money — that is not ` +
+    // past midnight the bar's fine is off the book and what is left is HERS, which she names —
+    // the mamasan's arithmetic line then contradicted the prompt under it (Helga, round 57)
+    if (G.pendingBf.herMoney) _say(`${name} glances at ${who}, who shakes her head: the book is closed at this hour, there is no fine to write. ` +
+      "What's left is between you and her, and she says it herself.");
+    else _say(`${name} brightens and says nothing at all about money — that is not ` +
       `her department, and the cut she gets from it is nobody's business. ` +
       `${who} materialises at your elbow with the pleasant, final air of ` +
       "someone who does this arithmetic all night.");
@@ -2044,7 +2048,9 @@ function _maybeGoWithYou(id) {
   _say(`${NPCS[id].name} leans in, suddenly and carefully casual: “I go with ` +
     "you, na? I want to go with you.” Which is as direct as it ever gets. " +
     // a woman alone behind her own rail has no mamasan to glance at (round 56)
-    (_npcsHere().some(i => NPC_ROLES[i] === "mamasan" && i !== id)
+    (G.nightTurn >= 60
+      ? "She glances at the till — the bar's book is closed at this hour, and what's left is between the two of you. "
+      : _npcsHere().some(i => NPC_ROLES[i] === "mamasan" && i !== id)
       ? "Her eyes flick to the till — the numbers are the mamasan's department, and mama counts the month's fines like a farmer counts rain. "
       : "She glances at her own till, where she is the one who counts the month's fines, like a farmer counts rain. ") +
     `(BARFINE ${NPCS[id].name.toUpperCase()})`, "win");
@@ -2116,6 +2122,8 @@ function _doMassage(arg) {
       return;
     }
     G.money -= MASSAGE_LEGIT;
+    (G.soc.massaged = G.soc.massaged || {})[G.room] = G.day;   // the table is paid: she talks now (Terence, round 57)
+    const _ml = (G.massageLog = G.massageLog || {}); _ml[G.room] = { last: G.day, n: ((_ml[G.room] || {}).n || 0) + 1 };
     const wasHurt = G.hurt, wasDrunk = G.soc.drunk;
     G.hurt = Math.max(0, G.hurt - 1);
     G.soc.drunk = Math.max(0, G.soc.drunk - 2);
@@ -2151,11 +2159,19 @@ function _doMassage(arg) {
   G.money -= MASSAGE_OIL;
   G.soc.drunk = Math.max(0, G.soc.drunk - 1);
   (G.soc.massaged = G.soc.massaged || {})[G.room] = G.day; // the base is done; special is on the table
+  { const _ml = (G.massageLog = G.massageLog || {}); _ml[G.room] = { last: G.day, n: ((_ml[G.room] || {}).n || 0) + 1 }; }
   if (she) _addBond(she, 1); // a soft, cheap bond — no drinks, no mama cut
   if (_passTime(5)) return;
-  _say(`฿${MASSAGE_OIL} and ${name} works warm oil down your back in the mirror-walled cubicle, ` +
+  // the kind he asked for: MASSAGE THAI at Papaya delivered warm oil (Terence, round 57)
+  const _kind = /foot|feet|reflex/.test(arg) ? "foot" : /thai|traditional/.test(arg) ? "thai" : "oil";
+  const _Name = name.charAt(0).toUpperCase() + name.slice(1);
+  _say((_kind === "foot"
+    ? `฿${MASSAGE_OIL}, a recliner and a bowl of warm water — ${name} does feet here too, and does them well, and somewhere around the ankle her thumbs still ask a question. `
+    : _kind === "thai"
+    ? `฿${MASSAGE_OIL}. ${_Name} does it Thai — elbows, thumbs, a knee you will describe to nobody — on the same mat under the same pink light, and near the end her thumbs ask a question. `
+    : `฿${MASSAGE_OIL} and ${name} works warm oil down your back in the mirror-walled cubicle, ` +
     "humming, in no hurry. It is a genuinely good massage. It is also, quite clearly, not the " +
-    "whole menu — somewhere around the base of your spine her thumbs ask a question. " +
+    "whole menu — somewhere around the base of your spine her thumbs ask a question. ") +
     `(SPECIAL, if you're answering — ฿${MASSAGE_SPECIAL - MASSAGE_OIL} more.)`, "win");
   _addHappy(1);
 }
@@ -2177,7 +2193,7 @@ function _massageSpecial(she, name) {
   (G.soc.special = G.soc.special || {})[G.room] = G.day;
   if (!hadBase && _passTime(3)) return;
   if (_passTime(3)) return;
-  _say(`${name} checks the curtain, turns the radio up a notch, and ` +
+  _say(`${name.charAt(0).toUpperCase() + name.slice(1)} checks the curtain, turns the radio up a notch, and ` +
     (hadBase ? "the massage quietly stops pretending to be only a massage" :
       "gives you the massage and the actual reason people come to Smile") +
     ". Hand and mouth, unhurried, her eyes finding yours in the wall of mirrors the whole time — " +
@@ -2202,7 +2218,7 @@ function _massageSpecial(she, name) {
       ghost: _hh((she || G.room) + ":" + G.day + ":offshift", 71) % 2 === 0 };
     _say(`Afterward she wipes her hands and tips her chin at the little NO SEX sign, rueful. ` +
       `“{{Boom boom}} no can here — boss rule, sticker everywhere. But when I finish work…” ` +
-      `${name} biros a number onto a beer mat, folds it into your hand, and holds on a beat too long. ` +
+      `${name.charAt(0).toUpperCase() + name.slice(1)} biros a number onto a beer mat, folds it into your hand, and holds on a beat too long. ` +
       `“You come, na. Real one, my place.” (You pocket her number — MEET her when the night's old, ` +
       `or bin it.)`, "dim");
   }
@@ -2246,6 +2262,9 @@ function _doMeetOffShift(arg) {
   G.offShift = null;
   // "an hour later" took one turn (Marek, round 53): the hour passes, offstage
   G.offstage = true; _passTime(9); G.offstage = false;
+  // …and the prose took him to her room while the game left him on the pavement (Terence,
+  // round 57): say how he gets back to where he stands
+  _say("Later she walks you down to the soi and flags a bike, and it drops you back where the night found you.", "dim");
 }
 
 // ── Soapy massage: the fishbowl (ab ob nuat) — a modal, like the barfine gate ──
@@ -4518,7 +4537,7 @@ function _chamTick() {
       "always say. i buy the book for my english course like you tell me ☕💚");
     _pushMsg("cream", "omg sorry!! wrong person 555 😳 that is my… uncle. how are you na? you sleep well?");
     G.phone.lastText = G.turns;
-    _say("(📱 Your phone buzzes twice — Cream. CHECK MESSAGES.)", "dim");
+    _say("(📱 Your phone buzzes — Cream. CHECK MESSAGES.)", "dim");
     return;
   }
   if (_rand() < 0.08 && _maybePhotoText("cream")) {
@@ -5165,7 +5184,7 @@ const _RAIN_INDOORS = [
 ];
 const _RAIN_YOUR_ROOM = [
   "Rain on the window, then rain on everything: the whole sky at once, hard enough that the glass hums with it. Your room is dry and slightly too cold, and the town has gone grey-white outside it.",
-  "The air-con is suddenly the second-loudest thing in the room. Out past the balcony the soi has turned to a river with headlights in it, and you are, for once, entirely on the right side of the glass.",
+  "The air-con is suddenly the second-loudest thing in the room. Out past the window the soi has turned to a river with headlights in it, and you are, for once, entirely on the right side of the glass.",
   "It comes down like the sky has been holding it in. Somewhere below, an awning gives up with a noise like a slap. You have a roof, a bed and nowhere to be.",
 ];
 
@@ -6219,6 +6238,9 @@ const WORK_MIN_STOOD = 20;
 function _isCloseLine(s) { return /^(At close|Close of night)\b|\bat close\b/i.test(String(s)); }
 
 // The first unseen close-of-night reveal on the floor (your girl's first), told once.
+// the bar-wide book keys a line by its text (a short hash), so two women with the same pool
+// line share one telling and two different lines never collide on an index (round 57)
+function _floorKey(line) { return String(_hh(String(line), 131)); }
 function _closeReveal() {
   const b = G.bar, said = (b.floorSaid = b.floorSaid || {});
   const af = (typeof _affairLive === "function" && _affairLive()) ? G.affair.id : null;
@@ -6228,9 +6250,9 @@ function _closeReveal() {
     if (i >= 0) { heard.push(i); _say(_fmt(_AFFAIR_FLOOR[i], { who: _npcLabel(af) })); return true; }
   }
   for (const id of _barStaff().filter(x => x !== af)) {
-    const pool = _floorPool(id), heard = said[id] = said[id] || [];
-    const i = pool.findIndex((l, k) => _isCloseLine(l) && !heard.includes(k));
-    if (i >= 0) { heard.push(i); _say(_fmt(pool[i], { who: _npcLabel(id) })); _addBond(id, 1); return true; }
+    const pool = _floorPool(id), heard = said[id] = said[id] || [], told = (b.floorTold = b.floorTold || []);
+    const i = pool.findIndex((l, k) => _isCloseLine(l) && !heard.includes(k) && !told.includes(_floorKey(l)));
+    if (i >= 0) { heard.push(i); told.push(_floorKey(pool[i])); _say(_fmt(pool[i], { who: _npcLabel(id) })); _addBond(id, 1); return true; }
   }
   return false;
 }
@@ -6520,8 +6542,18 @@ function _workFloor() {
     _say(_fmt(every[_hh(id + ":" + G.day + ":" + b.floorN, 7919) % every.length], { who: _npcLabel(id) }), "dim");
     _addBond(id, 1); return;
   }
-  const pick = idxPool[0];   // her reveals in order — each shift a new one, never the same one twice
-  heard.push(pick);
+  // a reveal is a thing the BAR shows you once: "the good ice" came from Jiap, Manow and Mew
+  // on two nights, and two girls taught you the same two words (Mick, round 57) — the
+  // _ledgerPick doctrine, bar-wide. Nothing fresh left for her → the everyday floor.
+  const told = (b.floorTold = b.floorTold || []), _tk = i => _floorKey(linePool[i]);
+  const fresh = idxPool.filter(i => !told.includes(_tk(i)));
+  if (!fresh.length) {
+    const every = _floorEveryPool(id);
+    _say(_fmt(every[_hh(id + ":" + G.day + ":" + b.floorN, 7919) % every.length], { who: _npcLabel(id) }), "dim");
+    _addBond(id, 1); return;
+  }
+  const pick = fresh[0];   // her reveals in order — each shift a new one, never the same one twice
+  heard.push(pick); told.push(_tk(pick));
   _say(_fmt(linePool[pick], { who: _npcLabel(id) }));
   // A floor moment that NAMES money has to move it: "finds ฿40 you had already
   // written off … puts it in front of you" showed nowhere in the till or the
@@ -6753,9 +6785,13 @@ function _shiftYes() {
       const stiffCost = -Math.round(SHIFT_TAB_TAKE * BAR_COGS);
       _shiftTake(stiffCost, "a regular's slate, stiffed — the stock he drank");
       G.bar.stiffed = (G.bar.stiffed || 0) + 1;
-      _say(_fmt("(The docket is still under the till a week later. He is not " +
-        "barred and nobody has said a word about it; he has simply started " +
-        "drinking somewhere he doesn't owe \u0e3f{amt}.)", { amt: SHIFT_TAB_TAKE }), "alert");
+      // said TONIGHT, as the books book it tonight — "still under the till a week later" was the
+      // same sentence at the moment of YES, twice (Mick, round 57)
+      _say(_fmt(_pickVary([
+        "(The docket goes under the till with the others. Pay-day, he says. The stock he drank on it is gone tonight either way, and the books say so.)",
+        "(He writes his name on the docket like a man signing for a parcel. Whether it comes back out from under the till is his business now; the ฿{amt} of stock is already down his neck.)",
+        "(Under the till it goes. Some dockets come back out on a Friday. Some turn into a man who starts drinking two bars up. Tonight's books count the stock, not the promise.)",
+      ], "tabstiff"), { amt: SHIFT_TAB_TAKE }), "alert");
     } else {
       _shiftTake(SHIFT_TAB_TAKE, "a regular's slate, settled");
       // the books say "settled" TONIGHT, so the sentence does too — it promised

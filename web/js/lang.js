@@ -755,7 +755,7 @@ const _CATALOGS = {
       "Zurück hoch in dein Balkonzimmer über der Queen Vic — der Ventilator wälzt seine Meinungen, Soi 6 heult noch immer über das Geländer zwei Stockwerke tiefer herauf.",
     "The room again: wood floors, the recliner on the balcony, the soi throwing its light and its bass up the wall like a fish tank with the volume left on.":
       "Das Zimmer wieder: Holzböden, der Liegestuhl auf dem Balkon, die Soi wirft ihr Licht und ihren Bass die Wand hoch wie ein Aquarium, bei dem die Lautstärke aufgedreht blieb.",
-    "You climb back to the balcony room. Somewhere below a girl is shrieking WHERE YOU GO SEXY MAN at a man who is, in fact, going. The blackout curtains will fix most of it.":
+    "You climb up to the balcony room. Somewhere below a girl is shrieking WHERE YOU GO SEXY MAN at a man who is, in fact, going. The blackout curtains will fix most of it.":
       "Du steigst zurück ins Balkonzimmer. Irgendwo unten kreischt ein Mädchen WHERE YOU GO SEXY MAN einen Mann an, der tatsächlich gerade geht. Die Verdunkelungsvorhänge werden das meiste davon regeln.",
     "Home, such as it is — one recliner, one small table, and the whole loud soi laid out below like it is putting on the show for you alone.":
       "Zuhause, so wie es eben ist — ein Liegestuhl, ein kleiner Tisch, und die ganze laute Soi liegt unten ausgebreitet, als würde sie die Show nur für dich allein abziehen.",
@@ -1416,8 +1416,8 @@ const _CATALOGS = {
       "Keine Nachrichten. Das Handy verurteilt dich sanft.",
 
     // the two massage shops the opening actually passes
-    "Reclining chairs, tiger balm, a price list on the wall. (MASSAGE — foot, Thai, or oil, the one honest kind in town.)":
-      "Liegesessel, Tigerbalsam, eine Preisliste an der Wand. (MASSAGE — Fuß, Thai oder Öl, die eine ehrliche Sorte in dieser Stadt.)",
+    "Reclining chairs, tiger balm, a price list on the wall. (MASSAGE — foot, Thai, oil or herbal; real massage only.)":
+      "Liegesessel, Tigerbalsam, eine Preisliste an der Wand. (MASSAGE — Fuß, Thai, Öl oder Kräuterstempel; nur echte Massage.)",
     "Curtained cubicles, a wall of mirrors, a small NO SEX sticker nobody quite believes. (MASSAGE — then SPECIAL, up to you.)":
       "Kabinen mit Vorhängen, eine Spiegelwand, ein kleiner NO SEX-Aufkleber, den niemand so recht glaubt. (MASSAGE — dann SPECIAL, wie du magst.)",
 

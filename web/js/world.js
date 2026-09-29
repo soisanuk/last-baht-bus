@@ -3811,7 +3811,7 @@ const ROOMS = {
     revisit: [
       "Back up to your balcony room over the Queen Vic — the fan turning its opinions over, Soi 6 still howling up over the rail two floors down.",
       "The room again: wood floors, the recliner on the balcony, the soi throwing its light and its bass up the wall like a fish tank with the volume left on.",
-      "You climb back to the balcony room. Somewhere below a girl is shrieking WHERE YOU GO SEXY MAN at a man who is, in fact, going. The blackout curtains will fix most of it.",
+      "You climb up to the balcony room. Somewhere below a girl is shrieking WHERE YOU GO SEXY MAN at a man who is, in fact, going. The blackout curtains will fix most of it.",
       "Home, such as it is — one recliner, one small table, and the whole loud soi laid out below like it is putting on the show for you alone.",
       "Back to the balcony. Six bars' worth of music arrives as one blurred throb, a hostess laughs like a car alarm, and none of it follows you past the blackout curtains.",
       "Up the stairs to the fan and the recliner. The soi does not quiet down for anyone — but draw the blackout curtains and it drops to a rumour you can sleep through.",
@@ -4477,7 +4477,7 @@ const ROOMS = {
       "฿300 flat, aloe for the sunburned — and the good sharp smell of tiger balm. The ladies " +
       "wear matching polo shirts and wais, are mostly old enough to be your aunt, and mean " +
       "every knuckle of it. Pensri runs the front. No short shorts, no barker, no nonsense — " +
-      "the one honest kind of massage in a town that sells nine.",
+      "an honest massage in a town that sells nine kinds of the other thing.",
     exits: { out: "ws_gate" },
   },
   smile_massage: {
@@ -4786,7 +4786,7 @@ const ROOMS = {
     bar: "Papaya Massage",
     region: "Beach Road",
     massage: "oil",
-    desc: "Just south of KISS, where Soi Diana's noise gives way to the Beach Road breeze — a " +
+    desc: "At the south end of Beach Road, where the Walking Street crowd thins out toward the sea breeze — a " +
       "pink-lit oil shop with the usual girls on the usual stools and the usual small sticker on " +
       "the mirror. The sea air almost makes it feel wholesome. Almost.",
     exits: { out: "beach_rd_s" },
@@ -5476,7 +5476,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Ploy — her cashier, the cage at Rainbow. Ploy stand there six hours hungry every " +
           "night. Feed her, and doors open.\"", sets: ["somTamAccepted"], gives: "som_tam",
         short: "\"Oy said no, of course. The door into her world is som tam — give it to Ploy in the cage, and doors open.\"" },
-      { notFlags: ["knowWasHere"], th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",
+      { notFlags: ["knowWasHere", "act1Done"], th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",   // not to a man who owns a bar (Mick, round 57)
         text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"",
         short: "\"Sit down, tilac. Talk to Candy — everybody's problems come to Candy.\"" },
       { text: "\"Back again, tilac.\" Candy counts the room without moving her eyes. \"You know the house now \u2014 sit, drink, don't be boring.\"",
@@ -8902,6 +8902,20 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "they mean coffee it is usually coffee — and when it is not coffee, it is dinner, with the whole family, and you wear " +
           "a collar.\" He does not say more, which is how you know there is more.",
         short: "\"She gave you her number herself. It is coffee, or it is the family. Wear a collar.\"" },
+      // the three jobs he brought, asked back (Mick, round 57: "cleaning / screen / till" all
+      // missed on the man who arranged them)
+      { topic: "cleaning|cleaners|the cleaners|the cleaning|burmese|the women", when: (st, G) => !!(G.syn && G.syn.done && G.syn.done.cleaning),
+        text: "\"The cleaning is fine.\" He says it the way you say a road is open. \"You have not seen them, yes? Good. That is the cleaning.\" " +
+          "A small movement of the hand. \"The bin men also come now. Nobody told them. They just come.\"",
+        short: "\"You have not seen them. That is the cleaning.\"" },
+      { topic: "screen|the screen|football|bracket|wiring|tv", when: (st, G) => !!(G.syn && G.syn.done && G.syn.done.screen),
+        text: "\"The screen?\" Tan looks pleased for the first time tonight. \"Two men, one morning, the wires in the trunking. Your regulars " +
+          "will watch Liverpool lose on it and blame you. This is how you know it is your bar.\"",
+        short: "\"Two men, one morning. They will blame you when Liverpool lose. That means it is your bar.\"" },
+      { topic: "till|the till|pos|the till man|contract|the box", when: (st, G) => !!(G.syn && G.syn.done && G.syn.done.pos),
+        text: "\"The till man comes first, now.\" A small, satisfied nod. \"When it dies on a Saturday — it will die on a Saturday — you {{phone}} one number " +
+          "and a man is standing in your bar before the ice melts. The order of the {{phone}} calls, my friend. That is what you bought.\"",
+        short: "\"When it dies, you {{phone}} one number. The order of the {{phone}} calls — that is what you bought.\"" },
       // the favour's name: a man who said yes (or no) asked after her and got
       // "not my story" (Rolf, round 54)
       { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourDone"],
@@ -9767,8 +9781,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "special", text: "\"Special?\" She laughs, not unkindly, and swats the idea " +
           "away like a fly. \"Wrong shop, tilac. Go down Second Road, plenty. Here we fix the " +
           "body, not sell it. You want strong, or soft?\"" },
-      { topic: "hurt", text: "\"Where you pain? Here?\" A thumb finds the exact knot before " +
-          "you can point. \"Mm. This one from carry too much — not money, worry. Lie down.\"" },
+      { topic: "hurt|pain|back|shoulder|neck", text: "\"Where you pain? Here?\" A thumb finds the exact knot before " +
+          "you can point. \"Mm. This one from carry too much — not money, worry. Lie down.\" (MASSAGE)" },
+      // the board she stands under (Terence, round 57: aloe and oil were "the wrong girl")
+      { topic: "oil|aloe|sunburn|sunburned|price|prices|how much|herbal|compress|kinds",
+        text: "\"Oil, Thai, foot, herbal — all ฿\" + MASSAGE_LEGIT + \" the hour.\" Pensri points at the board. \"Aloe for the sunburn, free, " +
+          "if you are red like lobster. Most farang are red like lobster.\"",
+        short: "\"Oil, Thai, foot, herbal — ฿\" + MASSAGE_LEGIT + \" the hour. Aloe free for the lobster.\"" },
     ],
   },
   waan: {
@@ -12189,6 +12208,22 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // mouth, five misses (Des, round 41). And "partner" pointed at nobody.
       // the barman knows whose name is on the fifty-one — "ask bert about tan"
       // got "not my department" from the man who brokered it (Rolf, round 54)
+      // once Tan has come in and asked, "watch the day he asks" is four nights stale (Mick,
+      // round 57) — and "candy" answered with Tan, the partner he picked instead of her
+      { topic: "tan|partner|partnership|fifty-one|51 percent|the partner|my partner", when: (st, G) => _flag("partnerTan") && (_flag("tanFavourDone") || _flag("tanFavourRefused") || Object.keys((G.syn && G.syn.done) || {}).length > 0),
+        text: "\"Tan.\" Bert wipes the same spot twice. \"Well — he came in, didn't he. And he asked.\" A nod at the book under the till. " +
+          "\"Nothing wrong with any of it, bud. That's the thing. Nothing you could point at. " +
+          "It's just that the bar's a bit more his every time he's in, and he's never once raised his voice.\"",
+        short: "\"He came in, and he asked. Nothing you could point at — the bar's just a bit more his each time.\"" },
+      { topic: "candy", when: (st, G) => _flag("partnerTan"),
+        text: "\"Candy?\" Bert snorts, fond. \"You went with Tan, bud. She'll not hold it against you. She'll just remember it, " +
+          "which with Candy is worse, and she'll still send you a girl when you're short.\"",
+        short: "\"You went with Tan. She'll not hold it against you — she'll remember it.\"" },
+      { topic: "the girl|the name|staff list|the book|labour office|her papers|papers|nong khai", req: ["tanFavourDone"],
+        text: "\"On the book, in capitals.\" Bert taps the ledger under the till. \"Comes in when she comes in, sits where she's " +
+          "told, and if anybody from the labour office ever asks, she's worked here since before the flood.\" He doesn't look up. " +
+          "\"I don't ask Tan where they come from and he doesn't ask me how the till balances.\"",
+        short: "\"On the book, in capitals. I don't ask Tan, he doesn't ask me.\"" },
       { topic: "tan|candy|partner|partnership|fifty-one|51 percent|the partner|my partner", when: (st, G) => _flag("partnerTan"),
         text: "\"Tan.\" Bert says the name like a man checking a tyre. \"Fifty-one on paper, nothing on the bar, and he's " +
           "never once come in. Which is the bit I'd keep an eye on, bud — not the day he does, the day he ASKS.\"",
@@ -13174,7 +13209,7 @@ const ENCOUNTERS = {
         "not to listen: “Ning also free. VERY boring night, na.”",
       "She falls into step beside you as if you had arranged it — no bar behind her, " +
         "no mamasan, a small bag and all the time in the world. “You walk alone, hansum? " +
-        "Me also.” Over her shoulder, a friend on the sea wall waves without looking up " +
+        "Me also.” Over her shoulder, a friend down the road waves without looking up " +
         "from her phone: “That one Ning. Ning also alone. Very sad, na.”",
       "Two of them on the sea wall, shoes off, sharing a bag of something from the 7. " +
         "The nearer one stands, brushes off her skirt, and is suddenly in your path, smiling. " +
@@ -13341,7 +13376,7 @@ const ENCOUNTERS = {
     rooms: ["hotel_room", "qv_room", "areca_room", "metropole_room", "naklua_rd"],
     interactive: true, nightly: true,
     intro: [
-      "Your phone buzzes — a girl off the apps — a match you barely remember making, " +
+      "Your phone buzzes — a message request from a stranger's profile, somebody who found your number the way numbers get found here, " +
         "the stunner from the photos, is suddenly awake " +
         "and suddenly free. “Hi baby, I finish work. I come you now? " + BOOK_PRICE + ", no bar, no " +
         "barfine, only you.” The photos are, it must be said, " +
@@ -14074,7 +14109,7 @@ const WORK_NIGHTS = [
         "does not agree, and the till is not invited.",
       "One of the girls turns thirty and has told nobody, and somebody's found " +
         "out anyway — a cake appears, candles that will not light in the fan, " +
-        "a chorus in three languages. Two thousand baht of the night goes on it. " +
+        "a chorus in three languages. A cake and a crate of the night go on it. " +
         "She spends the rest of the shift pretending to be annoyed and is not.",
     ],
   },
@@ -14374,7 +14409,7 @@ const SYNDICATE_JOBS = [
       "would tell you which road is shut — a thing already arranged, mentioned only " +
       "so you aren't surprised by it. \"I have three women. Good women, they do the " +
       "Orchid and two of the hotels. They will do your bar — morning, before you are " +
-      "awake, you never see them.\" He names a monthly figure that is neither cheap " +
+      "awake, you never see them.\" He names a monthly figure — ฿" + (SYN_JOB_NIGHT * 30) + " — that is neither cheap " +
       "nor a swindle; it is simply the number. \"You pay them direct, not me. I take " +
       "nothing, my friend, you know this.\"",
     whoLabel: "ask who they are",
@@ -14402,7 +14437,7 @@ const SYNDICATE_JOBS = [
   {
     id: "screen",
     lead: "\"The football. You need a screen.\"",
-    ask: "He has evidently already discussed this with Bert, and possibly with the " +
+    ask: "Tan has evidently already discussed this with Bert, and possibly with the " +
       "regulars. \"Big one, behind the bar, on the bracket — and the wiring done " +
       "properly, in the trunking, not taped along the beam like the Water Buffalo.\" " +
       "A number, again without any theatre about it. \"My wife brother-in-law does the " +
@@ -14444,7 +14479,7 @@ const SYNDICATE_JOBS = [
       "— or you are one of the four they come to first.\"\n\nHe opens the car door. " +
       "\"That is the only thing you ever buy in this country, my friend. Not the " +
       "thing. The order of the phone calls.\"",
-    yes: "It costs what he said it would cost, which is too much. In August it dies on " +
+    yes: "It costs what he said it would cost, which is too much. Months later it dies on " +
       "a Saturday at nine in the evening and a man is standing in your bar at ten past " +
       "with the replacement under his arm, and you understand exactly what you bought.",
     perk: "You are one of the four.",

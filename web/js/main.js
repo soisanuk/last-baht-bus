@@ -362,8 +362,11 @@ function _dispatch(cmd) {
     // — one wrong tap, UNDO, and the quiz is a guaranteed 5/5 (min-maxer
     // playtest 2026-08-22). QUIT concedes; that is the honest exit.
     if (typeof G !== "undefined" && G && (G.game || G.pendingBf || G.pendingEnc)) {
-      _term.print("⌫ Not mid-hand. Play it out, or QUIT and take the loss — the soi doesn't " +
-        "rewind, and neither does the box.", "dim");
+      // the dice line belongs to a game: at a barfine or a policeman it offered a QUIT that
+      // does nothing there (Helga, round 57)
+      _term.print(G.game
+        ? "⌫ Not mid-hand. Play it out, or QUIT and take the loss — the soi doesn't rewind, and neither does the box."
+        : "⌫ Not mid-answer. Somebody is waiting on you, and the soi doesn't rewind — answer it.", "dim");
       return;
     }
     if (_prevSnap) {

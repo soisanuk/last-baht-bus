@@ -5856,6 +5856,8 @@ test("public drunkenness summons the boy in brown; manners halve the damage", ()
   assert.equal(state().money, 200);
   state().pendingEnc = "police";
   run("absolutely not");
+  assert.equal(state().money, 200, "a soft no is warned once (round 57)");
+  run("absolutely not");
   assert.equal(state().money, 0, "arguing doubles it");
 });
 

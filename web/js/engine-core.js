@@ -296,6 +296,8 @@ function newGame() {
     safeMoneyDay: 0,     // the day Madam Oy's safe money landed
     safeMoneyLedger: false,
     metDay: {},
+    massageLog: {},     // room → {last, n}: the shop remembers you (round 57)
+    testedDays: [],     // clinic visits this vacation (round 57)
     metRoom: {},
     ownRescueDay: 0,     // the morning after going down behind your own rail (the ledger says so)
     tanFavourDay: 0,
@@ -779,7 +781,9 @@ function _roomFit(pool) {
   if (!roles.has("mamasan")) bad.push(_FIT_MAMA);
   if (!roles.has("cashier") && staff.length <= 1) bad.push(_FIT_TILL);
   if (!bad.length) return pool;
-  const txt = l => { if (typeof l === "string") return l; if (typeof l === "function") { try { return String(l("X", "X")); } catch (e) { return ""; } } return ""; };
+  // read a function line's SOURCE, never call it: a pool line may roll dice or touch state, and
+  // a filter that runs it shifts the seeded stream (round 57 found the soak's path had moved)
+  const txt = l => typeof l === "string" ? l : typeof l === "function" ? String(l) : "";
   const ok = pool.filter(l => { const s = txt(l); return !bad.some(r => r.test(s)); });
   return ok.length ? ok : pool;
 }
@@ -1918,6 +1922,9 @@ function _elsewhereLine(word) {
 function _topicHits(key, asked) {
   if (!key || !asked) return false;
   if (String(key).includes("|")) return String(key).split("|").some(k => _topicHits(k, asked));   // aliases: "1998|pattaya|beach road" (Hamish/Trevor, rounds 38–39)
+  // the parser strips articles, so an alias written "the name" could never be asked:
+  // the topics list printed "the name" for Tan, and asking him about it missed (Mick, round 57)
+  key = String(key).replace(/^(the|a|an) (?=\S)/, "");
   if (key === asked) return true;
   const esc = String(key).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp("(^|[^a-z0-9])" + esc + "[a-z]{0,3}([^a-z0-9]|$)", "i").test(String(asked));
@@ -2038,7 +2045,9 @@ function _thaiVoice(id) {
   return true;
 }
 function _askAgain(npcId) {
-  const pool = _thaiVoice(npcId) ? _ASK_AGAIN : _ASK_AGAIN_EN;
+  let pool = _thaiVoice(npcId) ? _ASK_AGAIN : _ASK_AGAIN_EN;
+  // a massage shop sells no drinks: "Buy a drink — maybe it come back" from Pensri (Terence, round 57)
+  if (_room() && (_room().massage || _room().soapy)) pool = pool.filter(f => !/drink/.test(String(f)));
   return pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name);
 }
 // An unknown topic is NOT a repeat: before this, a miss fell through to the
@@ -2336,6 +2345,13 @@ function _dogSpot(r) {
 }
 
 function _describeRoom(full, forceFull) {
+  // a pay-on-arrival fare has landed you already: a reload redrew the stop you LEFT, bars and
+  // exits and all, under a driver waiting at the other end (Helga, round 57)
+  if (G.pendingFare && !G.pendingFare.charter && G.pendingFare.dest && ROOMS[G.pendingFare.dest] && G.pendingFare.dest !== G.room) {
+    _say(_fmt("You are on the kerb at {where}, and the {who} is still leaning out of the window waiting to be paid.",
+      { where: ROOMS[G.pendingFare.dest].name, who: G.pendingFare.kind === "bus" ? "driver" : "piwin" }));
+    return;
+  }
   const r = _room();
   const firstTime = !G.visited[G.room]; // full desc on first arrival + LOOK; brief ambient on revisit
   G.visited[G.room] = true; // standing in it is how places join the fast-travel list
@@ -2571,8 +2587,10 @@ function _describeRoom(full, forceFull) {
       "where your eyes land. Buy a lady a drink and she'll settle in very close.", "dim");
   }
   if (r.massage === "legit") {
-    _say("Reclining chairs, tiger balm, a price list on the wall. (MASSAGE — foot, Thai, or oil, " +
-      "the one honest kind in town.)", "dim");
+    // every legit shop claimed to be THE one honest kind, and the hint left herbal off the
+    // board it stands under (Terence, round 57)
+    _say("Reclining chairs, tiger balm, a price list on the wall. (MASSAGE — foot, Thai, oil " +
+      "or herbal; real massage only.)", "dim");
   } else if (r.massage === "oil") {
     _say("Curtained cubicles, a wall of mirrors, a small NO SEX sticker nobody quite believes. " +
       "(MASSAGE — then SPECIAL, up to you.)", "dim");

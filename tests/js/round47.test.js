@@ -874,7 +874,7 @@ test("TAO RAI answers in a cabaret and a massage shop", () => {
   G.room = "peacock_cabaret"; out = []; _doTaoRai();
   assert.match(text(), /beer ฿/); assert.doesNotMatch(text(), /lady drink|the bell/);
   G.room = Object.keys(ROOMS).find(k => ROOMS[k].massage === "legit"); out = []; _doTaoRai();
-  assert.match(text(), new RegExp("Thai ฿" + MASSAGE_LEGIT));
+  assert.match(text(), new RegExp("Thai.*฿" + MASSAGE_LEGIT));   // one price for all four kinds (round 57)
 });
 
 test("the Stinky's ashtray reads; a late pie is an offer of crisps, not a charge", () => {
@@ -1109,6 +1109,7 @@ test("the saga's return channels: Wimon after the whole of it, Diamond on the ke
 
 test("the clinic is a place, the squid man sells squid, the weekender comes in two, the catfish keeps a cadence", () => {
   G.room = "stinky_bar"; out = []; doCommand("get tested"); assert.match(text(), /Second Road/); assert.equal(G.room, "second_rd_c", "the verb takes you to the clinic");
+  G.testedDays = [];   // the second visit the same night is refused now (round 57); this asks the place
   out = []; doCommand("get tested"); assert.match(text(), /negative|antibiotics|Clean/i); assert.doesNotMatch(text(), /take a bike/);
   out = []; doCommand("examine clinic"); assert.match(text(), /glass door/);
   G.room = "tt_deep"; G.money = 500; G.hunger = 60; out = []; doCommand("buy squid"); assert.equal(G.money, 460);

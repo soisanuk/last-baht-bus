@@ -417,6 +417,19 @@ function _piwinAbout(who) {
   // "Who? Don't know this one" — work, the fares, the stand, the vest, the rain —
   // from the one man on the corner all night who is the obvious person to ask
   // (Brian and Helen, round 49, independently).
+  // a subject is not a person: "Who? Don't know this one" to MASSAGE and SEASON (Terence and
+  // Mick, round 57). The piwin knows where the shops are and what month it is.
+  if (/\b(massage|massages|masseuse|spa|foot rub|back)\b/.test(w)) {
+    const legit = Object.keys(ROOMS).find(k => ROOMS[k].massage === "legit" && ROOMS[k].region === _room().region) || "thai_massage";
+    _say(_fmt("\"Massage? Real one or the other one?\" He grins at your face. \"Real one — {b}, {r}. Old lady hands, very strong. The other one, every street with pink light.\" A pat on the seat.", { b: _barName(legit), r: ROOMS[legit].region }));
+    return;
+  }
+  if (/\b(season|low season|high season|wet season|rainy season|monsoon|busy|quiet)\b/.test(w)) {
+    _say(_seasonTier() === "deeplow" || _seasonTier() === "low"
+      ? "\"Season?\" He looks at the empty road. \"No season. Rain season. Farang stay home, I sit here, I count the dogs.\""
+      : "\"Season good, boss.\" He counts the traffic with his chin. \"Everybody here, everybody want a bike. December I buy new tyre.\"");
+    return;
+  }
   if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner)\b/.test(w)) {
     const say =
       /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
@@ -1239,7 +1252,7 @@ function _newbieNudge() {
   // man carrying his girl's number (Frank, 2026-08-26 — a false claim, the class
   // the repo lints for)
   const _hasLadyNum = Object.keys(G.phone.contacts || {}).some(id => G.phone.contacts[id] && NPC_ROLES[id]);
-  if (!_flag("tipNumber") && !_hasLadyNum) {
+  if (!_flag("tipNumber") && !_hasLadyNum && G.stage !== "expat") {   // not to a man who owns a bar (Mick, round 57)
     _setFlag("tipNumber");
     _say("(A thought, since you're here: no bar girl's number is in your phone yet. Buy a lady a " +
       "drink or two until she's warm to you, then CONTACT her — that's how the rest of this " +
@@ -1648,7 +1661,8 @@ function _kpInput(input) {
           ? ` a stool. The chalk behind the till is wiped and rewritten in front of you, after ${_was.defended === 1 ? "one defence" : _was.defended + " defences"}. Nobody says anything about it. That is the worst part, and they know it.`
           : " a stool, and your name comes down off the till about ninety seconds after it went up. The rail is magnificent about it, which is worse.";
       }
-      _endGame(false, 0, `${winner ? winner.name : "The table"} takes the pot. You take` + _fall);
+      const _wn = winner ? winner.name.charAt(0).toUpperCase() + winner.name.slice(1) : "The table";   // "a piwin still in his vest" opened a sentence (Helga, round 57)
+      _endGame(false, 0, `${_wn} takes the pot. You take` + _fall);
     }
     return;
   }
@@ -1923,6 +1937,8 @@ function _endGame(won, payout, text) {
   G.game = null;
   _say(text, won === false ? "alert" : "win");
   if (won === true && payout) _say(`(฿${G.money} in pocket.)`, "dim");
+  // a push hands the stake back too, and said nothing (the soak's silent-money check, round 57)
+  else if (won === null && payout) _say(`(Your ฿${payout} back — ฿${G.money} in pocket.)`, "dim");
   if (won === true) _addHappy(3);
   else if (won === false) _addHappy(-1);
 }
@@ -4962,7 +4978,9 @@ function _endNight(reason) {
         _say(`(Three hours on the same stool at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
       // and the man behind the rail: presence is how a manager decides you're not a tourist
       const mgr = _staffAt(top).find(id => NPCS[id] && NPCS[id].manager);
-      if (mgr) { const mst = _npcState(mgr); if ((mst.trust || 0) < 3) { mst.trust = (mst.trust || 0) + 1; _say(`(${NPCS[mgr].name} will know it too.)`, "dim"); } }
+      // your own manager already knows your face — "(Bert will know it too.)" hung orphaned
+      // under a suppressed line, every night (Mick, round 57)
+      if (mgr && !(G.bar && top === G.bar.room && _flag("barOpen"))) { const mst = _npcState(mgr); if ((mst.trust || 0) < 3) { mst.trust = (mst.trust || 0) + 1; _say(`(${NPCS[mgr].name} will know it too.)`, "dim"); } }
     }
   }
   G.soc.barTurns = {};   // tonight's stools, not the vacation's — the line fired on a night slept through in the hotel (Keith, round 40)
@@ -5380,6 +5398,7 @@ function _suvarnabhumiScrub() {
 
 function _newVacation() {
   G.chamNight = false;   // a morning that did not happen does not happen a month later (Dieter, round 56)
+  G.testedDays = [];     // the day count restarts, so the clinic's memory does too (round 57)
   _suvarnabhumiScrub(); // kill "Sharky" and fly home — before the reset and the return
   G.stage = "vacation";
   G.vacation++;

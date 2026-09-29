@@ -322,9 +322,11 @@ test("the floor is everyday by default, a reveal is the occasional enhancement, 
   assert.ok(early < 5 * WORK_FLOOR_MAX, "the reveals do not arrive as the whole diet on the first nights");
   const late = nightsOf.slice(10, 30).reduce((a, n) => a + n.reveals, 0);
   assert.ok(late > 0, "…and they are still turning up weeks in, as the enhancement");
-  const total = staff.reduce((a, id) => a + _floorPool(id).length, 0);
-  const told = staff.reduce((a, id) => a + ((G.bar.floorSaid || {})[id] || []).length, 0);
-  assert.equal(told, total, "sixty nights on, every woman has told you everything she had");
+  // a reveal is a thing the BAR tells you once (round 57): every distinct line on the floor,
+  // told by somebody, and never the same line by two women
+  const total = new Set(staff.flatMap(id => _floorPool(id).map(_floorKey))).size;
+  assert.equal(new Set(G.bar.floorTold).size, G.bar.floorTold.length, "no line told twice");
+  assert.equal(G.bar.floorTold.length, total, "sixty nights on, the floor has told you everything it had");
 });
 
 // ── The deferred sweep (2026-09-27): rounds 53–54's leftovers ─────────────

@@ -334,7 +334,11 @@ function _startEnc(id) {
   const e = ENCOUNTERS[id];
   G.encDone[id] = true;
   G.lastEnc = G.turns;
-  const intro = Array.isArray(e.intro) ? _pickVary(e.intro, "encintro:" + id) : e.intro;
+  // an intro that puts the sea wall in the picture is not for a street with no sea (Terence,
+  // round 57: a friend "on the sea wall" waved on Soi Buakhao)
+  const _seaOk = /sea|beach|promenade|shore/i.test(String(_room().desc || "") + " " + (_room().region || ""));
+  const _intros = Array.isArray(e.intro) ? (_seaOk ? e.intro : (e.intro.filter(l => !/sea wall|the sea\b|the beach\b/.test(l)).length ? e.intro.filter(l => !/sea wall|the sea\b|the beach\b/.test(l)) : e.intro)) : null;
+  const intro = _intros ? _pickVary(_intros, "encintro:" + id) : e.intro;
   if (e.interactive) {
     G.pendingEnc = id;
     const lines = [[intro, "alert"]];
@@ -622,12 +626,22 @@ const _ENC = {
         "“Fine paid. No problem now. Sawatdee khrap.” The brown uniform strolls on, " +
         `scanning the crowd for the next swaying farang. (฿${G.money} left.)`, "alert");
       _addHappy(-2);
-    } else if (!/argue|no|refuse|won.t|what for|why|rubbish|bullshit|off|leave me|piss/.test(input)) {
+    } else if (!/\bargue|\brefuse|won.t pay|what for|\bwhy\b|rubbish|bullshit|leave me|piss|fuck/.test(input) &&
+               !(/\bno\b|\bnot\b|nope|thanks/.test(input) && G.soc.policeWarned != null && G.turns - G.soc.policeWarned <= 2)) {
       // a direction, a LOOK, a stray verb: he doesn't take it as an argument — he waits
-      // (the liability playtest's "s" cost ฿1000 and −4 สนุก he never chose)
+      // (the liability playtest's "s" cost ฿1000 and −4 สนุก he never chose). And a polite
+      // "no thanks" is not an argument either: it took the ฿1,000 branch (Helga, round 57).
       G.pendingEnc = "police";
-      _encPrompt(["You try to step round him. He steps too — not fast, not rough, just there. " +
-        "“Fine first, my friend.” (PAY · WAI · or ARGUE.)", "alert"]);
+      // said, not re-stashed: the stored prompt stays his introduction, so a reload
+      // redraws the officer and not "you try to step round HIM" (Helga, round 57)
+      // a soft no is warned once; the SAME no straight after is the argument (the piwin's
+      // balk-is-a-balk idiom — a vague answer never picks the ฿1,000 branch unasked)
+      const _soft = /\bno\b|\bnot\b|nope|thanks/.test(input);
+      if (_soft) G.soc.policeWarned = G.turns;
+      const _line = _soft
+        ? "“No” is not one of the options he recognises. He waits, pleasantly, in exactly the same place. “Fine first, my friend. You say no again, that is argue.” (PAY · WAI · or ARGUE.)"
+        : "You try to step round him. He steps too — not fast, not rough, just there. “Fine first, my friend.” (PAY · WAI · or ARGUE.)";
+      if (!Array.isArray(G.encPrompt) || !G.encPrompt.length) _encPrompt([_line, "alert"]); else _say(_line, "alert");
       return;
     } else {
       const f = Math.min(1000, G.money);
