@@ -617,7 +617,10 @@ const _SANE_SCALARS = [
   ["happy", 0, 1e6], ["bestHappy", 0, 1e6], ["jaded", 0, 100],
   ["hunger", 0, 100], ["thirst", 0, 100], ["hurt", 0, 3], ["battery", 0, 100],
   ["day", 1, 1e7], ["vacation", 1, 1e6], ["turns", 0, 1e9], ["score", 0, 1e6],
-  ["nightTurn", 0, (typeof NIGHT_TURNS !== "undefined" ? NIGHT_TURNS : 100)],
+  // resolved AT SANITIZE TIME: NIGHT_TURNS lives in engine-play, which loads after this file,
+  // so a value read here was always the fallback 100 — every continue after 04:00 wound the
+  // clock back to 04:00 and WATCH SUNRISE refused (Priya, round 58). Nights run to 120.
+  ["nightTurn", 0, () => (typeof NIGHT_TURNS !== "undefined" ? NIGHT_TURNS : 120)],
   ["soc.drunk", 0, 20], ["rep", -20, 20],
 ];
 const _SANE_ARRAYS = [["thaiSeen", 300], ["nightLog", 30]];
@@ -628,7 +631,8 @@ function _sanitizeState() {
     if (!obj) continue;
     const key = b || a;
     const v = obj[key];
-    obj[key] = Number.isFinite(v) ? Math.max(min, Math.min(max, Math.trunc(v))) : min;
+    const mx = typeof max === "function" ? max() : max;
+    obj[key] = Number.isFinite(v) ? Math.max(min, Math.min(mx, Math.trunc(v))) : min;
   }
   // rng: an integer seed in the LCG's live range, or reseed (the old guard
   // caught 0/NaN but not Infinity or a huge value that garbles the stream)
@@ -2383,6 +2387,8 @@ function _describeRoom(full, forceFull) {
     _say(_underRoof(G.room)
       ? "Rain hammers the roof — a proper " + (typeof _wetSeason === "function" && !_wetSeason() ? "out-of-season" : "rainy-season") + " downpour outside, and nobody's " +
         "stepping into that until it eases."
+      : /beach|sand|shore/i.test(String(r.name) + " " + (r.region || "")) && !(r.seven || r.venues)
+      ? "Rain is coming down in sheets on the open sand, and there is no awning on a beach — only the rain and you, until it passes."   // "no awning on a beach" live, "the awning overhead" on reload (Priya, round 58)
       : "Rain is coming down in sheets; the awning overhead is the whole habitable " +
         "world until it passes.", "alert");
   }
@@ -2654,13 +2660,16 @@ function _describeRoom(full, forceFull) {
     const _railCrowd = _npcsHere().filter(id2 =>
       !NPC_ROLES[id2] && !NPCS[id2].manager && !NPCS[id2].filler && !NPCS[id2].house);
     const _thin = typeof _lowSeason === "function" && _lowSeason() && !_railCrowd.length &&
+      !(typeof _lockedIn === "function" && _lockedIn()) &&   // "low season, bare wood" during a lock-in party (Declan, round 58)
       ["beer", "soi6", "gents", "pub"].includes(r.barType);   // a club's floor "heaves" in its own desc — no bare-wood rail there (Dex, round 38)
     if (_thin) {
       // "the girls have the far half of the bar to themselves" printed at Cloze,
       // which is one woman (Colm, round 47) — the staffed pool wants a FLOOR,
       // not a member of staff.
-      const _staffed = _npcsHere().filter(id2 => NPC_ROLES[id2]).length > 1;
-      _say(_pickVary(_staffed ? _BAR_THIN_STAFFED : _BAR_THIN, "barThin"), "dim");
+      const _nStaff = _npcsHere().filter(id2 => NPC_ROLES[id2]).length;
+      const _staffed = _nStaff > 1;
+      // "a hostess or two" under a Here: line of five named women (Priya, round 58)
+      if (_nStaff <= 3) _say(_pickVary(_staffed ? _BAR_THIN_STAFFED : _BAR_THIN, "barThin"), "dim");
     } else if (G.soc.patronBusy[G.room] && !_railCrowd.length) {
       // …and never beside a NAMED rail: "a red-faced fixture works the far
       // stools" printed under a Here: line reading Doug, Phil and Dave, who are

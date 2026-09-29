@@ -310,6 +310,21 @@ const _FOLK_SOAPY = [
 function _masseuseTalk(t) {
   const r = _room(), rm = G.room;
   if (r.soapy) return _pickVary(_FOLK_SOAPY, "folksoapy");
+  const sw = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[rm];
+  if (sw) {
+    // the shop's own woman, asked a real question, answers it — her name, her home, her
+    // people, her training — not the next line of a script (Graeme, round 58)
+    const q = String(t || "").toLowerCase();
+    if (/\b(name|your name|who are you|call you)\b/.test(q)) return `"${sw.name}." She says it the way you'd say the time. "${sw.yrs} in this shop, so everybody on the street know it already."`;
+    if (/\b(home|from|village|hometown|province|isan|north|where)\b/.test(q)) return `"${sw.from.charAt(0).toUpperCase() + sw.from.slice(1)}." ${sw.name} doesn't stop folding towels. "${sw.yrs} here. Home is for Songkran."`;
+    if (/\b(family|kids?|children|son|daughter|husband|mother|baby|grandchildren|people)\b/.test(q)) return `"${sw.kin}" ${sw.name} says it flat, a woman describing her week.`;
+    if (/\b(train|training|learn|school|wat pho|paper|certificate|hands|technique|how long)\b/.test(q)) return `"${sw.train}" ${sw.name} flexes her hands, which crack.`;
+    if (/\b(special|extra|happy|finish)\b/.test(q)) return `"Wrong shop." ${sw.name} doesn't even look up. "Here is massage. Pink light is down the road — you pass three."`;
+    if (G.soc.massaged && G.soc.massaged[rm] === G.day) return _fmt(_pickVary(_FOLK_SHOP_AFTER, "folkshopafter"), { n: sw.name, from: sw.from, yrs: sw.yrs });
+    const log = (G.massageLog || {})[rm];
+    if (log && log.last < G.day) return _fmt(_pickVary(_FOLK_SHOP_BACK, "folkshopback"), { n: sw.name });
+    return _fmt(_pickVary(_FOLK_SHOP_DOOR, "folkshopdoor"), { n: sw.name });
+  }
   if (G.soc.special && G.soc.special[rm] === G.day) return _pickVary(_FOLK_MASSEUSE_SPECIAL, "folkmassspecial");
   if (G.soc.massaged && G.soc.massaged[rm] === G.day) return _pickVary(_FOLK_MASSEUSE_AFTER, "folkmassafter");
   const log = (G.massageLog || {})[rm];
@@ -322,6 +337,23 @@ const _FOLK_NURSE = [
   "The nurse at the glass window doesn't look up from the form. \"Test? Take a number. Blood and urine, twenty minutes, results tonight. Free for the basic, the rest is on the list.\" She taps the laminated sheet. (GET TESTED)",
   "\"You come back?\" The nurse has a face for farang who come back, and it is neither judging nor surprised. \"Good. Every three month is sensible. Every night is not.\"",
   "The nurse slides a leaflet across the counter as a reflex. \"Condom is at the pharmacy next door. Cheaper than me.\" She almost smiles.",
+];
+// The honest shops' women, templated on the shop's own (SHOP_MASSEUSES) — never a biography
+// written once and worn by ten women
+const _FOLK_SHOP_DOOR = [
+  "The woman on the front chair looks up from her towels. \"{n},\" she says, tapping her own chest, and then the price list. \"Foot, Thai, oil, herbal. Sit when you ready.\"",
+  "\"Massage?\" The woman at the desk has the professional half-smile that goes with a fixed price. \"I am {n}. You sit, I look at the shoulder, we decide.\"",
+  "{n} is already watching the way you walk in. \"Back,\" she decides, before you say anything. \"Sit. One hour.\"",
+];
+const _FOLK_SHOP_AFTER = [
+  "With the hour paid, {n} sits back on her heels and talks, the way people talk to a back. \"{yrs} here. Before, home — {from}.\" She rolls her wrists. \"Better, na?\"",
+  "{n} wipes her hands on the towel. \"You hold everything here —\" a thumb at your neck, pointed \"— like farang always. Come again three day. Once is only the start.\"",
+  "\"Good hour.\" {n} says it like a verdict on both of you. \"You drink water now, a lot. Tomorrow you feel it, then you feel better.\"",
+];
+const _FOLK_SHOP_BACK = [
+  "\"You come back.\" {n} knows the shoulders before the face. \"Better? Worse? Sit, we see.\"",
+  "{n} points at the same chair as last time, which is how you know she remembers. \"Same farang, same knot. Sit.\"",
+  "\"Ah — the back.\" {n} gives a small, satisfied nod, as if you were a car that came back for the second service. \"Good. Sit.\"",
 ];
 const _FOLK_MASSEUSE = [
   "She looks up from folding towels, and what you get is the professional half-smile that goes with a fixed price. \"You want massage? Foot, Thai, oil.\" Whatever else you were going to ask can wait until you are face-down and paying.",
@@ -425,6 +457,13 @@ function _promptedFolk(arg, topic) {
       if (named) { _say(`The one on the floor tonight is ${NPCS[named].name} — she is right there, and she has a name. (TALK TO ${NPCS[named].name.toUpperCase()})`, "dim"); return true; }
       _say(_masseuseTalk(t)); return true;
     }
+  }
+  if (G.room === "pink_lotus" && /\b(doorman|door ?man|bouncer|the man at the door|security|rope)\b/.test(a)) {
+    // the man who read your face off a phone could not be spoken to (Declan, round 58)
+    _say(typeof _faction === "function" && _faction("plg") >= 2   // the same test the rope itself uses
+      ? "The doorman unhooks the rope without looking at his phone this time. \"Good evening.\" That is the whole conversation, and it is a warm one, for him."
+      : "The doorman looks at you, then at his phone, then back. \"Members, sir.\" Nothing else. There is no second sentence in his job.", "dim");
+    return true;
   }
   if (G.room === "second_rd_c" && /\b(nurse|doctor|receptionist|clinic|desk|window)\b/.test(a)) {
     _say(_pickVary(_FOLK_NURSE, "folknurse")); return true;
@@ -1814,6 +1853,9 @@ const _READ_NOUNS = {
   // The singleton-tail pass: distinctive one-room props. A key here does nothing
   // until a room's `reads:` opts in, so generic words are safe to register.
   shelf: ["back shelf", "shrine shelf"],
+  ledgers: ["ledger", "the ledgers", "books", "the books on the desk"],
+  president: ["the president", "patched vest", "the man in the vest", "biker", "mc president"],
+  envelope: ["envelopes", "the envelope", "the envelopes"],
   gecko: ["lizard"],
   guitar: ["acoustic"],
   bee: ["plywood bee"],
@@ -1978,6 +2020,7 @@ function _doExamine(arg) {
   }
   const id = _findItem(arg);
   if (id === "masseuse_note") { _readNote(); return; }
+  if (id === "safe" && _flag("hasWallet")) { _say("The safe hangs open and empty, the keypad dark. Whatever it kept, you have."); return; }   // after Act One (Declan, round 58)
   if (id) { _say(ITEMS[id].desc); return; }
   if (/dartboard|darts/.test(arg) && _room().darts) {
     _say("A bristle board on the wall, the treble-20 bed worn pale by decades of " +
@@ -4005,7 +4048,9 @@ function _doTalkBody(arg, topic) {
     }
     // the barfine BEFORE the drinks list: "how much to take a girl out" is a
     // price question whose answer is not a price list (Helen, round 49)
-    if (/\b(pool|table|frame|frames|felt|cue|snooker|billiards)\b/.test(_ct) && !/\bbar ?fine\b/.test(_ct)) {
+    // a room whose own fixture is a TABLE (the Orchid's good table) keeps the word (Declan, round 58)
+    const _roomTable = /\btable\b/.test(_ct) && !/\bpool\b/.test(_ct) && _room().reads && _room().reads.table;
+    if (!_roomTable && /\b(pool|table|frame|frames|felt|cue|snooker|billiards)\b/.test(_ct) && !/\bbar ?fine\b/.test(_ct)) {
       const said = _poolTalk(npc);
       if (said) { _say(said); return; }
     }
@@ -4788,6 +4833,10 @@ function _saidAgrees(a, b) {
   const ta = _saidTokens(a), tb = new Set(_saidTokens(b));
   // nothing substantive on either side ("dunno" vs "maybe") is not a lie
   if (!ta.length || !tb.size) return true;
+  // two NOs are the same answer: "no, nobody" and "No. Not for a while now" share no content
+  // words, and the check called an honest woman's question-answerer a liar (Priya, round 58)
+  const _neg = x => /\b(no|not|nobody|none|never|nope|nah|single|alone|nothing)\b/.test(x);
+  if (_neg(na) && _neg(nb)) return true;
   return ta.some(w => tb.has(w));
 }
 
@@ -5112,6 +5161,19 @@ const _TOWN = {
   // the baht (Hennie, round 55). Read off G.bar.lastLines, the same lines BOOKS prints.
   // the Stinky changed hands and nobody in town could say so — Doug asked the owner whether he
   // had "money in anything" from a stool in his own bar (Mick, round 57)
+  // "massage" had one answer in town, the piwin (Graeme, round 58: Tan, Nok, Nont, the
+  // bar staff and Pensri herself all said "not my story")
+  massage: {
+    floor: ["\"Massage?\" {n} laughs. \"Real one or pink one? Real one — {b}, {s}. Tell her {n} send you, she give you strong.\"",
+      "{n} rubs her own shoulder in sympathy. \"{b}, on {s}. Old lady, very good. The pink shops on every street — is different massage, na.\"",
+      "\"You want massage, go {b}, {s}.\" {n} points roughly the right way. \"Not the pink light. Pink light, they massage your wallet.\""],
+    house: ["\"{b}, on {s}.\" {n} says it without looking up. \"Honest shop, honest price. The pink-lit ones are a different trade with the same word on the door.\"",
+      "\"For your back or for your evening?\" {n} doesn't wait. \"Back: {b}, {s}. Evening: any door with a pink strip light.\"",
+      "{n} nods. \"{b}. {s}. You'll come out two inches taller and a stone lighter in the shoulders.\""],
+    punter: ["\"Proper massage? {b}, {s}.\" {n} rolls a shoulder. \"Best three hundred baht in this town, and I've spent a lot of three hundreds.\"",
+      "\"{b}, mate — on {s}. The one with the price list and the tiger balm. Not the one with the mirrors.\"",
+      "{n} considers it. \"If it's your back, {b} on {s}. If it isn't your back, you don't need me to tell you where.\""],
+  },
   owner: {
     floor: ["\"{b}? Is you, boss!\" {n} laughs at the question. \"Everybody know. The girls talk, the piwin talk. New farang boss, old farang bar.\"",
       "{n} looks at you like you are testing her. \"{b} is your bar. Tan is the paper. Bert is the till. You are the one who come every night, na.\"",
@@ -5234,6 +5296,11 @@ function _townTalk(npc, topic) {
     pick("cons", { t: TONIC_PRICE, tf: TONIC_FLEECE.toLocaleString(), fr: FORTUNE_READ, fri: FORTUNE_RITUAL.toLocaleString() });
     _say("(TAO RAI at the pitch closes the account before it opens; if it's already gone, REPORT at the police station claws some of it back.)", "dim");
     return true;
+  }
+  if (/\b(massage|massages|masseuse|spa|foot rub|foot massage|thai massage)\b/.test(t) && !_room().massage) {
+    const legit = Object.keys(ROOMS).filter(k => ROOMS[k].massage === "legit").sort((a, c) => (_hops(G.room, a) ?? 999) - (_hops(G.room, c) ?? 999))[0];
+    const st = legit && Object.keys(ROOMS).find(k => (ROOMS[k].venues || []).includes(legit));
+    if (legit) return pick("massage", { b: _barName(legit), s: st ? ROOMS[st].name : ROOMS[legit].region });
   }
   if (typeof _barOwned === "function" && _barOwned() && G.bar && G.bar.room) {
     const _bn = String(_barName(G.bar.room) || "").toLowerCase();
@@ -6352,6 +6419,7 @@ function _managerChatTick(id) {
   G.soc.mgrChat = G.soc.mgrChat || {};
   G.soc.mgrChat[id] = (G.soc.mgrChat[id] || 0) + 1;
   if (G.pendingChoice) return;   // a modal is up — a man mid-interview doesn't angle for a drink under his own prompt (Dougie, round 46)
+  if (typeof _mgrIced === "function" && _mgrIced(id)) return;   // he refused your drink; he does not ask for one (Declan, round 58)
   if (G.soc.mgrChat[id] === 3) {
     _say(NPCS[id].nudge || (`${NPCS[id].name} lets a beat hang, then taps the bar with two knuckles: “You're ` +
       "good company, bud — but a man gets thirsty holding up his end. Stand us one?” (BUY MAN DRINK.)"), "dim");
@@ -6657,7 +6725,11 @@ function _doBuy(arg) {
         : "The second bottle, the sentry, called up. Warm, sufficient, gone; the tray is empty until housekeeping.");   // it said "the second one stands sentry" while you drank the second one (Marek, round 53)
       return;
     }
-    const canBuy = r.shop || r.seven || r.water || _servesDrinks() || FOOD_STALLS[G.room]; // r.water: a drinks cart in the desc
+    // a 7-Eleven door on this street is a 7-Eleven (Graeme, round 58: "a 7-Eleven glows on the
+    // corner" and "no water for sale here" on the same pavement)
+    const _sevenDoor = typeof _venuesHere === "function" && _venuesHere(r).some(v => ROOMS[v] && (ROOMS[v].seven || /7-eleven/i.test(ROOMS[v].name || "")));
+    if (_sevenDoor && !(r.shop || r.seven || r.water || _servesDrinks() || FOOD_STALLS[G.room])) _say("(You nip into the 7-Eleven on the corner and back.)", "dim");
+    const canBuy = r.shop || r.seven || r.water || _servesDrinks() || FOOD_STALLS[G.room] || _sevenDoor; // r.water: a drinks cart in the desc
     if (!canBuy) { _say(soft ? "No soft drinks for sale here. 7-Elevens, bars, and the street carts all have them." : "No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
     // In a bar the water and the soda cost what the cheapest alcohol costs —
     // you are paying for the SEAT, and the seat is worth more than the bottle
@@ -7819,6 +7891,10 @@ function _lightNotice() {
       "\"Power cut is finish since 2015, boss,\" someone offers from the rail, " +
         "to general amusement.",
     ];
+  } else if (r.massage || r.soapy) {
+    // a shop is not a street "lit like a runway" (Graeme, round 58: Joom, in her own shop)
+    const name = NPCS[npcs[0]].name;
+    lines = [`${name} looks at the beam, then at you, and reaches past you to turn the lamp up a notch. "Here we have light, na. Put it away."`];
   } else {
     const name = NPCS[npcs[0]].name;
     lines = [
@@ -7930,7 +8006,9 @@ function _doScore() {
   // vignettes are hidden from the journal AND hint (they're quiet origin scenes,
   // not jobs) — SCORE was the one surface that leaked them, so it said "active"
   // while QUESTS said "nothing on the books" (civilian playtest F1, 2026-08-26)
-  const active = Object.entries(QUESTS).filter(([qid, q]) => G.quests[qid] === "active" && !q.vignette);
+  // …but a vignette that PAYS is a job, listed like one: Doyle's ฿1,500 recce was active,
+  // invisible, and ACCEPT said "already on it" (Declan, round 58)
+  const active = Object.entries(QUESTS).filter(([qid, q]) => G.quests[qid] === "active" && !_quietVignette(q));
   for (const [, q] of active) _say(_fmt("▶ {name}", { name: _L(q.name) }), "dim");
   // Faction standing — only surfaces once you've actually taken a side; a player
   // who stays out of the politics never sees this line, and pays nothing for it.
@@ -8340,6 +8418,11 @@ function _doListen() {
       "The drummer hits the downbeat like he's making a point to someone who isn't listening.",
     ];
     _say(lines[G.turns % lines.length]);
+    return;
+  }
+  if (_inBar() && G.rain > 0) {
+    // a downpour drowns the street's HELLO WELCOME (Priya, round 58)
+    _say("Rain on the roof like gravel on a drum, the fan losing the argument, and the whole street's usual noise gone under it. Somebody laughs at the far end just to hear themselves.");
     return;
   }
   if (_inBar()) {
@@ -9353,7 +9436,10 @@ function _doWithdrawInner(arg) {
         "by the beach-road junction. Head WEST.");
     else {
       if (typeof _nontHere === "function" && _nontHere()) { _say(`No machine here — but the kid at the table does cash, five percent, no card fee. (CASH <amount>)`); return; }
-      const near = Object.keys(ROOMS).find(id => ROOMS[id].atm && ROOMS[id].region === _room().region);
+      // nearest by the road, not the district's first entry: three streets away when the
+      // machine was one step west (Priya, round 58)
+      const near = Object.keys(ROOMS).filter(id => ROOMS[id].atm && ROOMS[id].region === _room().region)
+        .sort((a, b) => (_hops(G.room, a) ?? 999) - (_hops(G.room, b) ?? 999))[0];
       _say(near
         ? `No ATM here — the nearest machine is at ${ROOMS[near].name}, on this side of town.`
         : "No ATM here. There's one on the main drag of every nightlife area — Soi 6 has " +

@@ -74,7 +74,7 @@ test("the town knows who owns the Stinky — at your own rail and across town", 
 test("the piwin knows what month it is and where a massage is", () => {
   G.room = "soi6_street";
   assert.doesNotMatch(run("ask piwin about season"), /Who\?/);
-  assert.match(run("ask piwin about massage"), /Real one/);
+  assert.match(run("ask piwin about massage"), /[Rr]eal (one|massage)|real one/);
 });
 
 test("the season sits inside a sentence in lower case", () => {
@@ -112,12 +112,11 @@ test("the masseuse remembers: talks after the hour, is someone after the special
   // a shop with no named woman: the folk floor remembers
   G.room = "naklua_thai"; G.nightTurn = 30;
   const t0 = run("talk to masseuse");
-  assert.ok(_FOLK_MASSEUSE.some(l => t0.includes(l.slice(0, 30))) || /has a name/.test(t0), "a stranger in the doorway gets the shop");
-  if (!_npcsHere().some(i => NPCS[i].masseuse)) {
-    run("massage");
-    const t1 = run("ask masseuse about life");
-    assert.ok(_FOLK_MASSEUSE_AFTER.some(l => t1.includes(l.slice(0, 30))), "after the hour she talks");
-  }
+  // since round 58 the honest shop's woman has a name (SHOP_MASSEUSES)
+  assert.match(t0, new RegExp(SHOP_MASSEUSES.naklua_thai.name), "a stranger in the doorway meets the shop's own woman");
+  run("massage");
+  const t1 = run("ask masseuse about life");
+  assert.ok(_FOLK_SHOP_AFTER.some(l => t1.includes(_fmt(l, { n: SHOP_MASSEUSES.naklua_thai.name, from: "", yrs: "" }).slice(0, 20))), "after the hour she talks: " + t1);
   // Orapin at Lotus, where Terence was: her own voice, and her own memory
   G.room = "lotus_oil"; G.nightTurn = 30;
   assert.match(run("talk to orapin"), /No hurry here/);
@@ -130,7 +129,7 @@ test("the masseuse remembers: talks after the hour, is someone after the special
 test("the kind he asks for is the kind he gets, and he can say it his way", () => {
   G.room = "papaya_massage"; G.nightTurn = 30;
   const t = run("thai massage");
-  assert.match(t, /does it Thai/); assert.doesNotMatch(t, /warm oil down your back/);
+  assert.match(t, /does it Thai|folds you into shapes/); assert.doesNotMatch(t, /warm oil down your back/);
   assert.match(run("read price list"), /./); assert.doesNotMatch(text(), /don't have that to read/);
   G.room = "naklua_thai"; assert.match(run("tao rai"), /herbal/);
 });

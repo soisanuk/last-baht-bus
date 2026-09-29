@@ -421,7 +421,13 @@ function _piwinAbout(who) {
   // Mick, round 57). The piwin knows where the shops are and what month it is.
   if (/\b(massage|massages|masseuse|spa|foot rub|back)\b/.test(w)) {
     const legit = Object.keys(ROOMS).find(k => ROOMS[k].massage === "legit" && ROOMS[k].region === _room().region) || "thai_massage";
-    _say(_fmt("\"Massage? Real one or the other one?\" He grins at your face. \"Real one — {b}, {r}. Old lady hands, very strong. The other one, every street with pink light.\" A pat on the seat.", { b: _barName(legit), r: ROOMS[legit].region }));
+    // the street the door is on, not the district: "Second Road" sent Graeme up the wrong mile (round 58)
+    const _st = Object.keys(ROOMS).find(k => (ROOMS[k].venues || []).includes(legit));
+    _say(_fmt(_pickVary([
+      "\"Massage? Real one or the other one?\" He grins at your face. \"Real one — {b}, on {s}. Very strong hands. The other one, every street with pink light.\" A pat on the seat.",
+      "\"Real massage?\" He thinks about it properly. \"{b}. {s}. The lady there walk on your back — you cry, then you sleep.\" A pat on the seat. \"I take you.\"",
+      "\"The pink one or the real one?\" He laughs before you answer. \"Real one is {b}, {s}. Pink one, you find by yourself, everybody do.\"",
+    ], "piwinmassage"), { b: _barName(legit), s: _st ? ROOMS[_st].name : ROOMS[legit].region }));
     return;
   }
   if (/\b(season|low season|high season|wet season|rainy season|monsoon|busy|quiet)\b/.test(w)) {
@@ -1130,7 +1136,7 @@ function _jpTurn() {
       if (jpScore(g.tiles) === 0) { _jpFinish(); return; }
       continue;
     }
-    g.pending = moves;
+    g.pending = moves; g.roll = [d1, d2];   // the redraw names the roll it came from (Priya, round 58)
     _say(`You roll ${d1}+${d2}.   [ ${jpRender(g.tiles)} ]`);
     _jpTeach(g, moves);
     _say(_jpHint(moves), "dim");
@@ -1390,6 +1396,9 @@ function _quizHere() {
 
 function _startQuiz(seated) {
   G.quizPlayed[G.room] = true;
+  // Bert's numbered menu came back above quiz question 2 after a reload, and "2" answered the
+  // quiz; after the quiz, "2" answered Bert (Priya, round 58). The quiz takes the moment.
+  if (G.convoQ && typeof _convoDrop === "function") _convoDrop(true);
   // five questions, drawn without repeats
   // no question twice in one night — three bars run it, and Q1 at Candy Bar came
   // back as Q4 at the Lucky Tiger (gambler playtest 2026-08-22)
@@ -1719,7 +1728,7 @@ function _poolOppTurn(g) {
       `dead-weight. Game over${g.stake ? ` — your ฿${g.stake} slides off the cushion` : ""}.`);
     return;
   }
-  _say(potted === 0 ? `${g.oppName} rattles the jaws and swears softly. Your table.` :
+  _say(potted === 0 ? `${String(g.oppName).charAt(0).toUpperCase() + String(g.oppName).slice(1)} rattles the jaws and swears softly. Your table.` :
     `${_ucfirst(g.oppName)} pots ${potted}, then runs out of angle. Your table.`);
   _poolStatus(g);
 }
@@ -2042,6 +2051,7 @@ function _renderGame() {
     case "cli":  _say("(HELP lists what the machine does. Every command is a tap. EXIT leaves it as you found it.)", "dim"); break;
     case "c4":   _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim"); break;
     case "jp":
+      if (g.pending && g.roll) _say(`You rolled ${g.roll[0]}+${g.roll[1]}.   [ ${jpRender(g.tiles)} ]`);
       if (g.pending) _say(_jpHint(g.pending), "dim");
       else _say("(Flip the dice — type anything to roll.)", "dim");
       break;

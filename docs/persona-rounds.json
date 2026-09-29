@@ -586,6 +586,27 @@
      "lens": "modal-interrupter"
     }
    ]
+  },
+  "round58": {
+   "date": "2026-09-29",
+   "note": "aimed at the Orchid (dark in four classes), save/reload (20% severe, 8% instrumented), and the new masseuses",
+   "personas": [
+    {
+     "name": "Graeme",
+     "model": "fable",
+     "lens": "massage-circuit"
+    },
+    {
+     "name": "Declan",
+     "model": "fable",
+     "lens": "back-room"
+    },
+    {
+     "name": "Priya",
+     "model": "opus",
+     "lens": "five-minute-sessions"
+    }
+   ]
   }
  }
 }

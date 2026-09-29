@@ -3611,7 +3611,9 @@ test("every origin quest completes on ASK and pays its reward via _questTick", (
     // NO banner: these are vignettes, and the ✦ QUEST COMPLETE chrome is what
     // made a two-turn scene read as a task the player had somehow finished
     // without understanding it (playtest, 2026-08-11).
-    assert.doesNotMatch(lastOut(), /QUEST COMPLETE/, `${q.qid}: a vignette shouldn't print the quest banner`);
+    // …except a PAID one, which is a job and is written down like one (Declan, round 58)
+    if (!_quietVignette(QUESTS[q.qid])) assert.match(lastOut(), /QUEST COMPLETE/, `${q.qid}: a paid vignette is a job`);
+    else assert.doesNotMatch(lastOut(), /QUEST COMPLETE/, `${q.qid}: a vignette shouldn't print the quest banner`);
     const reward = QUESTS[q.qid].reward.money || 0;
     assert.equal(state().money, money0 + reward, `${q.qid}: paid its ฿${reward} reward`);
   }

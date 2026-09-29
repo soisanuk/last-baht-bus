@@ -2105,7 +2105,9 @@ function _doMassage(arg) {
   arg = (arg || "").replace(/^(a |for |the )/, "").trim();
   const wantsSpecial = /special|happy|extra|hand|mouth|boom|sex|sexy|finish/.test(arg);
   const she = _npcsHere().find(id => NPCS[id] && NPCS[id].masseuse);
-  const name = she ? NPCS[she].name : "the masseuse";
+  // the shop's own woman where there is no cast masseuse (Graeme, round 58)
+  const _sw = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[G.room];
+  const name = she ? NPCS[she].name : _sw ? _sw.name : "the masseuse";
 
   // ── Legit therapeutic: it heals, and it does not sell the other thing ──
   if (r.massage === "legit") {
@@ -2165,13 +2167,17 @@ function _doMassage(arg) {
   // the kind he asked for: MASSAGE THAI at Papaya delivered warm oil (Terence, round 57)
   const _kind = /foot|feet|reflex/.test(arg) ? "foot" : /thai|traditional/.test(arg) ? "thai" : "oil";
   const _Name = name.charAt(0).toUpperCase() + name.slice(1);
-  _say((_kind === "foot"
-    ? `฿${MASSAGE_OIL}, a recliner and a bowl of warm water — ${name} does feet here too, and does them well, and somewhere around the ankle her thumbs still ask a question. `
-    : _kind === "thai"
-    ? `฿${MASSAGE_OIL}. ${_Name} does it Thai — elbows, thumbs, a knee you will describe to nobody — on the same mat under the same pink light, and near the end her thumbs ask a question. `
-    : `฿${MASSAGE_OIL} and ${name} works warm oil down your back in the mirror-walled cubicle, ` +
-    "humming, in no hurry. It is a genuinely good massage. It is also, quite clearly, not the " +
-    "whole menu — somewhere around the base of your spine her thumbs ask a question. ") +
+  // pooled: five named women were one pair of hands, word for word (Graeme, round 58)
+  const _OIL_KIND = {
+    foot: [`฿${MASSAGE_OIL}, a recliner and a bowl of warm water — ${name} does feet here too, and does them well, and somewhere around the ankle her thumbs still ask a question. `,
+           `฿${MASSAGE_OIL}. ${_Name} takes your feet into her lap like parcels to be sorted, and sorts them, and on the way up the calf the question gets asked anyway. `],
+    thai: [`฿${MASSAGE_OIL}. ${_Name} does it Thai — elbows, thumbs, a knee you will describe to nobody — on the same mat under the same pink light, and near the end her thumbs ask a question. `,
+           `฿${MASSAGE_OIL}, and ${name} folds you into shapes the pink light was not built for, walks the length of your back, and then, in the last ten minutes, goes soft and asks the question with her hands. `],
+    oil:  [`฿${MASSAGE_OIL} and ${name} works warm oil down your back in the mirror-walled cubicle, humming, in no hurry. It is a genuinely good massage. It is also, quite clearly, not the whole menu — somewhere around the base of your spine her thumbs ask a question. `,
+           `฿${MASSAGE_OIL}. ${_Name} warms the oil in her palms before it touches you, which is the difference between a shop and a good shop, and works the shoulders down until they stop being shoulders. Low on the back, her thumbs slow, and ask. `,
+           `฿${MASSAGE_OIL}, a towel, the radio on low, and ${name} talking to somebody in the next cubicle through the curtain the whole hour without once losing the knot she found. Near the end the conversation stops, and her hands ask the other question. `],
+  };
+  _say(_pickVary(_OIL_KIND[_kind], "oilkind:" + _kind) +
     `(SPECIAL, if you're answering — ฿${MASSAGE_SPECIAL - MASSAGE_OIL} more.)`, "win");
   _addHappy(1);
 }
@@ -2555,7 +2561,7 @@ function _doHint() {
     // vignettes are excluded here too — HINT points at the next JOB, and an
     // origin scene is not one (it would also outrank real work forever,
     // since it stays "active" until you happen to ask the right topic).
-    const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active" && !QUESTS[q].vignette);
+    const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active" && !_quietVignette(QUESTS[q]));   // a paid vignette is a job (Declan, round 58)
     if (active.length) {
       const q = QUESTS[active[0]];
       _say(_fmt("On the books: {name} — {desc}{where}",
@@ -2751,6 +2757,11 @@ function _questHail() {
   }
 }
 
+// An origin vignette is a quiet scene, not a job — unless it PAYS: Doyle's ฿1,500 recce was
+// active, invisible to QUESTS and HINT, and ACCEPT said "already on it" (Declan, round 58).
+// A paid vignette is still activated by its scene rather than offered, but it is listed.
+function _quietVignette(q) { return !!(q && q.vignette && !(q.reward && q.reward.money)); }
+
 function _questOffer(npcId) {
   // Don't pile a job offer on top of a question the giver just put to you — let
   // the player answer first (it reads as one overwhelming turn otherwise, and it's
@@ -2767,7 +2778,14 @@ function _questOffer(npcId) {
     // said "I'm not even sure what that was about", which is what happens when
     // the frame promises a task and the content delivers a scene. So they open
     // silently the first time you get the giver talking, and end as a beat.
-    if (q.vignette) { if (!G.quests[qid]) G.quests[qid] = "active"; continue; }
+    if (q.vignette) {
+      if (!G.quests[qid]) {
+        G.quests[qid] = "active";
+        // a paid one is a job, and a job is written down where the player looks (Declan, round 58)
+        if (q.reward && q.reward.money) _say(_fmt("(✦ {n} — it's in your QUESTS now.)", { n: q.name }), "dim");
+      }
+      continue;
+    }
     if (G.quests[qid] === "offered") continue; // already on the table — surface the giver's NEXT job instead
     G.quests[qid] = "offered";
     // A quest's `desc` is the ACTIVE-quest instruction and its tappable command
@@ -3074,7 +3092,7 @@ function _doJournal(arg) {
   const a = String(arg || "").toLowerCase().trim();
   if (/record|done|history|so far|what i.ve done/.test(a)) { _journalRecord(); return; }
   _say((G.battery > 0 ? "Notes, on the phone" : "Notes, from memory — the phone is dead") + " — what is open, nearest first:", "win");
-  const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active" && !QUESTS[q].vignette);
+  const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active" && !_quietVignette(QUESTS[q]));
   for (const q of active.slice(0, 2)) {
     const Q = QUESTS[q];
     _say(_fmt("  · {name} — {desc}{where}", { name: _L(Q.name), desc: _L(_qDesc(Q)), where: _questWhere(_qAt(Q) === Q.giver ? _qGiver(Q) : _qAt(Q)) }), "dim");
@@ -3102,7 +3120,7 @@ function _journalRecord() {
   const vis = Object.keys(G.visited || {}).filter(r => ROOMS[r]).length;
   const heard = Object.keys(G.heardOf || {}).filter(_venueUnfound).length;
   _say(`  Places: ${vis} stood in, ${heard} heard of and never found.`, "dim");
-  const done = Object.keys(QUESTS).filter(q => G.quests[q] === "done" && !QUESTS[q].vignette);
+  const done = Object.keys(QUESTS).filter(q => G.quests[q] === "done" && !_quietVignette(QUESTS[q]));
   if (done.length) _say(`  Jobs done: ${done.map(q => _L(QUESTS[q].name)).join(" · ")}.`, "dim");
   const rides = Object.values(G.rideLog || {}).reduce((a, r) => a + (r.count || 0), 0);
   if (rides) _say(`  Nights on the back of a bike: ${rides}.`, "dim");
@@ -3139,7 +3157,7 @@ function _doQuests() {
     _say(`✓ The Last Baht Bus — Act One, scored ${G.score}`, "dim");
     shown++;
   }
-  const rows = Object.entries(QUESTS).filter(([qid, q]) => G.quests[qid] && !q.vignette);
+  const rows = Object.entries(QUESTS).filter(([qid, q]) => G.quests[qid] && !_quietVignette(q));
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
     if (st === "active") { _say(_fmt("▶ {name} — {desc}{where}",
@@ -3185,7 +3203,7 @@ function _questTick() {
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
     G.quests[qid] = "done";
-    if (!q.vignette) _say(`✦ QUEST COMPLETE: ${q.name}`, "win");
+    if (!_quietVignette(q)) _say(`✦ QUEST COMPLETE: ${q.name}`, "win");
     // A dep chain names its next door when the last one closes — the flagship
     // 51% decision was offered by nobody a money-driven publican thought to ask,
     // and he got there by guessing the quest id (Des, round 41).
@@ -3281,7 +3299,7 @@ const _TAN_SIGNOFF = [
   "\u201cI drive everybody, my friend. I do not drive their secrets.\u201d",
   "\u201cThat is what I have. The rest is theirs to tell you.\u201d",
   "\u201cI take people places. What they do there is not on the meter.\u201d",
-  "\u201cYou want more than that, you buy the drink, not me.\u201d",
+  "\u201cYou want more than that, you ask them yourself, not me.\u201d",   // a masseuse is not bought a drink (Graeme, round 58)
   "\u201cEverybody gets in my car. Nobody gets read out of it.\u201d",
 ];
 
@@ -3297,7 +3315,10 @@ function _tanAbout(topic) {
     null;
   // a VENUE by name: Tan knew Gift's bar and not "Crystal Palace" (Margarethe, round 47)
   // — unless he has an authored node on the word (the Peacock is his katoey read)
-  if (!id && !(() => { const d = _pickDialogue("tan", t); return d && d.topic; })()) {
+  // …but a venue asked for by its WHOLE name outranks his node on one of its words: CANDY BAR 2
+  // answered with his bar-ownership coffee through a mirror he was not sitting at (Priya, round 58)
+  const _fullVenue = (() => { const r0 = typeof _roomByName === "function" ? _roomByName(t) : null; return r0 && ROOMS[r0] && ROOMS[r0].bar && String(_barName(r0)).toLowerCase() === t; })();
+  if (!id && (_fullVenue || !(() => { const d = _pickDialogue("tan", t); return d && d.topic; })())) {
     let rid = typeof _roomByName === "function" ? _roomByName(t) : null;
     // one ordinary word is not a venue's name: asking Tan about "thai" read "Soi 7 Thai
     // Massage" (Nattapong, round 56). The whole name, or a word that begins it and isn't short.
@@ -5282,7 +5303,7 @@ const _DOG_RAIN_STREET = [
   "Sai Krok takes one look at your chosen shelter, dismisses it, and herds you two " +
     "doorways down to a dry spot he clearly already knew about. Dogs keep maps of " +
     "this town that men would pay real money for.",
-  "Sai Krok sits precisely at the awning's drip-line, nose out, letting the rain " +
+  "Sai Krok sits precisely at the edge of the dry, nose out, letting the rain " +
     "hammer his snout — some private annual ritual between him and the season. Then " +
     "one enormous shake, and he rejoins you as if nothing passed between them.",
 ];
@@ -5489,7 +5510,7 @@ const _SUNRISE = [
   "Dawn over Pattaya, which is to say dawn over the traffic: a fruit cart already moving, a night-shift nurse on the back of a motorbike taxi, the night's last two farang arguing gently about whose hotel is which. The sky is a colour with no name and it is already too warm.",
 ];
 const _SUNRISE_SOON = [
-  "Not yet. The sky is still doing its black-and-neon thing and the town is still trading. Give it until the small hours and stand somewhere with a bit of open in front of you.",
+  "Not yet. The sky is still doing its black-and-neon thing and the town is still trading. Give it until nearer five and stand somewhere with a bit of open in front of you.",
   "Too early for that. It comes up behind the town at the far end of the night — stay out, keep upright, and be outside when it does.",
 ];
 const _SUNRISE_INDOORS = [

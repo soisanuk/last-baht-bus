@@ -223,6 +223,7 @@ function _salengTick() {
       _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 15 &&
       !((G.soc.salengBar || {})[G.room]) &&   // one cart per bar per night — three som-tam carts in one evening (Trevor, round 39)
       !(G.rain > 0) &&   // a cart does not park in a downpour (Tomasz, round 54)
+      !_room().invite && !_room().indoors &&   // nor outside a windowless members' room (Declan, round 58)
       _rand() < 0.10) {
     (G.soc.salengBar = G.soc.salengBar || {})[G.room] = true;
     _salengSpawn();
@@ -1009,7 +1010,7 @@ const _ENC = {
     }
     _say("You give her a nod and let her be. Her friend arrives moments later in a " +
       "cloud of perfume and apology, and the two fold into the crowd. Not everything " +
-      "on this street is a transaction; some of it is just Saturday.");
+      "on this street is a transaction; some of it is just a night out.");
   },
 
   // The bi-curious Japanese traveller: read her right (no pitch, no wallet) and

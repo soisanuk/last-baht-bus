@@ -2064,7 +2064,7 @@ test("SCORE and QUESTS agree: a vignette quest shows on neither", () => {
   // civilian F1: SCORE listed the President's Table as active ▶ while QUESTS
   // said "nothing on the books" (it's a vignette — hidden from journal AND hint)
   newGame(); _setFlag("act1Done"); G.stage = "vacation";
-  const vig = Object.entries(QUESTS).find(([, q]) => q.vignette);
+  const vig = Object.entries(QUESTS).find(([, q]) => _quietVignette(q));   // a PAID vignette is a job and shows on both (round 58)
   if (vig) {
     G.quests[vig[0]] = "active";
     out = []; doCommand("score");

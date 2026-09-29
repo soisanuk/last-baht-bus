@@ -644,9 +644,16 @@ document.addEventListener("DOMContentLoaded", () => {
     let where = "";
     try {
       const sv = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}");
-      const room = sv.room && typeof ROOMS !== "undefined" && ROOMS[sv.room] ? (ROOMS[sv.room].bar || ROOMS[sv.room].name) : null;
+      // where you ARE, not where G.room last pointed: in Tan's taxi, on the kerb a bus just
+      // dropped you at, at the week's end (Priya, round 58)
+      const fareTo = sv.pendingFare && !sv.pendingFare.charter && sv.pendingFare.dest;
+      const rid = fareTo && ROOMS[fareTo] ? fareTo : sv.room;
+      let room = rid && typeof ROOMS !== "undefined" && ROOMS[rid] ? (ROOMS[rid].bar || ROOMS[rid].name) : null;
+      if (sv.pendingChoice === "intro") room = "in Tan's taxi from the airport";
+      else if (room) room = "at " + room;
       const mode = sv.mode === "soi6" ? (sv.dailyId ? `the ${sv.dailyId} daily` : "a Soi 6 week") : sv.stage === "expat" ? "Pattaya, home" : "a vacation";
-      if (sv.day) where = ` — ${mode}, day ${sv.day}${room ? ", at " + room : ""}`;
+      if (sv.pendingChoice === "vacation_end") where = ` — ${mode}, and the week is up`;
+      else if (sv.day) where = ` — ${mode}, day ${sv.day}${room ? ", " + room : ""}`;
     } catch (e) {}
     _term.print("A night in progress was found on this device" + where + ".");
     _term.print("Continue your night? (YES / NO)", "alert");

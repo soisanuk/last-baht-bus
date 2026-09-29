@@ -174,6 +174,23 @@ const BAR_COSTS    = 3000;     // legacy flat figure — kept only for saves wri
 const BAR_PRESENT  = 800;      // you behind your own rail sells drinks
 const BAR_FRICTION = 0.08;     // each refused procurement job adds this to costs
 const MASSAGE_LEGIT = 300, MASSAGE_OIL = 300, MASSAGE_SPECIAL = 1000;   // moved from engine-systems so the masseuses can quote their own board (round 57)
+// THE HONEST SHOPS' OWN WOMEN (Graeme, round 58): ten traditional shops with no named
+// masseuse shared one auntie from Udon with a son in Khon Kaen, word for word in three
+// towns, and she answered "name" with the next line of her script. Each shop keeps one
+// woman now — a name, a home, her people, her training — spoken through the parser's
+// folk pools. Not NPCs (no portraits): the room's own voice, with a name in it.
+const SHOP_MASSEUSES = {
+  naklua_thai: { name: "Duean", from: "Nakhon Phanom, on the Mekong — you can see Laos from my mother's house", yrs: "fifteen year", kin: "One son, in the navy at Sattahip. Very proud, very bad at writing to his mother.", train: "Wat Pho school, Bangkok, the paper on the wall. The rest my hands learn from farang backs." },
+  jomtien_thai: { name: "Lamyai", from: "Chiang Rai, up north — mountains, tea, cold in December", yrs: "eight year", kin: "Twin girls, ten years old, with my mother. One clever, one pretty, both expensive.", train: "The temple taught me, before the paper. Old monk, very strict, hands like wood." },
+  jomtien_soi_7_thai: { name: "Nongnuch", from: "Buriram — the football, the castle, the rice", yrs: "twenty year", kin: "Three grandchildren. I am grandmother with a job, very modern.", train: "My mother, on my father's legs. Then the paper, much later, to put on the wall." },
+  thappraya_massage: { name: "Kannika", from: "Phitsanulok, the middle — nobody visits, everybody drives through", yrs: "six year", kin: "My husband drive a songthaew, Beach Road loop. We see each other at the lights.", train: "Wat Pho paper, two months in Bangkok. The hardest two months, and the cheapest room." },
+  half_moon_massage: { name: "Siriporn", from: "Chumphon, the south — durian, the sea, my father's orchard", yrs: "ten year", kin: "My father, the orchard. I send money for the fertiliser; he send me durian I cannot eat in the shop.", train: "A spa in Bangkok first, very expensive, candles. Here is better. No candles, better hands." },
+  hillside_massage: { name: "Rattana", from: "Nan, in the north — very far, very green, very quiet", yrs: "twelve year", kin: "One daughter, university in Chiang Mai. First in the family. I say it to every customer.", train: "Wat Pho paper, and twelve years of the hill — the tourists walk up, then they need me." },
+  klang_massage: { name: "Wilaiwan", from: "Yasothon — the rocket festival, you know? Boom, up in the sky", yrs: "eighteen year", kin: "Two sons, grown, both in Bangkok. They phone on Sunday. Sometimes.", train: "Bangkok, a hotel spa, then here when the hotel close. Same hands, cheaper chair." },
+  myth_massage: { name: "Sukanya", from: "Sisaket, near the Cambodia border", yrs: "five year", kin: "A baby, one year, with my mother. I see her on the phone every night before work.", train: "The course at the community centre, three months. The paper is new; the hands are learning." },
+  second_thai: { name: "Porntip", from: "Ubon Ratchathani, the big river town in the east", yrs: "fourteen year", kin: "My husband pass away. My son finish college last year — I pay every baht. Now I pay for me.", train: "Wat Pho paper, like everybody honest. The difference is how many years after the paper." },
+  beachthai_massage: { name: "Anong", from: "Mukdahan, across the river from Laos", yrs: "nine year", kin: "My husband's mother live with me. She is eighty and she criticise my massage.", train: "Wat Pho paper. And my mother-in-law — she say I am too soft, every day." },
+};
 const SYN_INSIDE_PRICE = 0.95;   // the cleaning job's perk: the beer uncle's inside price — 5% off stock (Mario, round 57: the prose promised it and the books didn't keep it)
 const SYN_JOB_NIGHT = 120;     // each ACCEPTED job is a standing cost — the invoice you pay for frictionlessness (~฿3.6k/mo). Refusing is cheaper on paper; what it buys you is the weather.
 const LOW_SEASON   = 0.55;     // takings multiplier at the trough (Sep–Oct); see SEASON_MULT
@@ -1459,6 +1476,7 @@ const ROOMS = {
     motosai: true,
     name: "Beach Road (Soi 7)",
     region: "Beach Road",
+    lateDesc: ["Where Soi 7 comes down to the sea, late: the seafront empty but for a cleaner's cart and a couple arguing softly on the wall, and the odd songthaew going by fast with nobody on the bench.", "The foot of Soi 7 after midnight: the sea black, the promenade lamps doing their work for nobody, the soi behind you still going.", "Late on the seafront at Soi 7: the chestnut man long gone, one jogger who is either very early or very late, and the sound of the sea you could not hear at nine."],   // an evening desc printed at 03:00 (Graeme, round 58)
     desc: "Where Soi 7 comes down to the sea. The soi runs inland behind you, all beer " +
       "stools and laundry steam; out here it is the seafront doing its evening thing " +
       "— joggers who have misjudged the hour, a man selling roasted chestnuts nobody " +
@@ -2980,6 +2998,7 @@ const ROOMS = {
     name: "Soi Buakhao (Tree Town Arch)",
     region: "Soi Buakhao",
     busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
+    lateDesc: ["The Tree Town arch in the small hours, its fairy lights still on for nobody: the traffic down to a bike or two, the songthaews gone sparse, and the maze beyond it louder than the soi it opens off.", "Late at the arch: the lights stay on, the crowd has gone in or gone home, and a baht bus idles at the kerb with its bench empty, waiting on somebody who is still inside.", "Past three the arch is a doorway with the party still on the other side of it: a piwin asleep on his own seat, a noodle cart packing up, and the fairy lights doing their job for the three people left to see them."],   // an evening desc printed at 03:00 (Graeme, round 58)
     desc: "The TREE TOWN arch stands west off the soi, strung with fairy lights and " +
       "swallowing tourists at a steady rate. Out here the traffic has thickened to " +
       "a crawl — a baht bus stopped dead with its back step crowded, another behind " +
@@ -3399,6 +3418,9 @@ const ROOMS = {
       "photos: a farm gate in Isaan, a young dancer with a number pinned to her hip, " +
       "three condo lobbies. Bolted to the floor: a steel safe with a Thai-numeral keypad.",
     reads: {
+      shrine: "The shrine shelf is the one thing in the office that isn't filed: fresh marigolds, water changed today, the incense stubs cleared before they can pile. Whatever Oy squares with the world across that desk, this shelf is where she squares the rest of it.",
+      ledgers: "Ledgers squared to the desk edge, spines out, years on them in Thai numerals. Nothing you could read quickly, and nothing you should be reading at all. The pen lies across the top one, parallel.",
+      door: "The office door, heavy and self-closing, with ห้ามเข้า on the outside in red. From this side it is just a door, which is how every forbidden door looks once you are through it.",
       shelf: "The shrine shelf is the one thing in the office that isn't filed: fresh " +
         "marigolds, water changed today, the incense stubs cleared before they can pile. " +
         "Whatever Oy squares with the world across that desk, this shelf is where she " +
@@ -3464,6 +3486,9 @@ const ROOMS = {
       "Into the Pink Lotus, where nobody wastes your time or theirs: a lap, a hand, a mouth at your ear naming a number and a room, and the fairy lights doing their best to make it romantic.",
       "Back onto a pink stool with a girl already arranging herself across you. \"You think about me all day? Liar.\" She laughs, delighted. \"Okay — buy the drink, we go up, you think about me tomorrow.\"",
     ],
+    reads: {   // the fixtures its own prose names (Declan, round 58)
+      door: "Beside the stage stairs, an unmarked door behind a velvet rope, and a doorman who checks a {{phone}} against faces. Nothing about it says ORCHID; everything about the doorman does.",
+    },
     exits: { out: "soi6_street", back: "orchid_room" },
   },
   orchid_room: {
@@ -3483,6 +3508,8 @@ const ROOMS = {
       "above all of it and touching none of it, is Laurent Vasseur \u2014 down when he is in the " +
       "country, which is not often, and never anywhere the soi itself can see him.",
     reads: {
+      president: "The man in the patched vest holds court at volume — the laugh, the Blue Label, the arm round whichever girl is nearest. Loud men are easy to read. Watch who he keeps glancing at before he laughs.",
+      envelope: "No envelope is ever on the table long enough to look at. You see a hand, a jacket, a waiter who suddenly has somewhere to be. That is what the envelope looks like, here: an absence with good timing.",
       table: [
         { req: ["orchidReported"],
           text: "The good table, and now you can't unsee it: the quiet Thai man, the " +
@@ -4289,6 +4316,7 @@ const ROOMS = {
     venues: ["nottys_place"],
     busStop: "beachrd",
     reads: {
+      wall: "A high wall a little further on, whitewashed, with bougainvillea over the top and no sign at all — the kind of wall that is a door for the people who know which gate.",
       bell: "Notty's brass bell, on the wall by the gate, up the soi behind the bar corner: you can't see it from the road, but a man who has heard it rung knows exactly what it costs, and the road is quiet enough to hear it if somebody does.",
       letters: "S, A, gap, A, I, gap, P, A, gap, M, S — the dead tubes have been dead so long the long-stay guests give the taxi the wrong name on purpose and the drivers know it. Nobody is going to fix it. Fixing it would be a change.",
       guests: "The long-stay guests: men in their sixties on the hotel's plastic chairs by the soi mouth, one beer each, watching the road the way they watched it last year. They know which bike is the reliable one and which girl on the corner is somebody's cousin.",
@@ -4323,7 +4351,7 @@ const ROOMS = {
     bar: "The Anchor Bar", barType: "beer", pool: true, outlet: true,
     lateDesc: [
       "The Anchor at the end of the night: the ship's wheel throwing a long shadow, the glass floats gone dull, and the moorings mostly empty — two stools left occupied and both men are talking about somebody who isn't there.",
-      "Last ice, last round, and the barometer still not to be trusted. Namfon is wiping down the same stretch of bar she wiped an hour ago, which is how you can tell what time it is.",
+      "Late, and the barometer still not to be trusted. Namfon is wiping down the same stretch of bar she wiped an hour ago, which is how you can tell how late.",
       "The Anchor after midnight: quieter than the neon places, warmer than the pavement, and the crowd down to whoever has nothing to get up for.",
     ],
     desc: "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, " +
@@ -4490,7 +4518,7 @@ const ROOMS = {
     region: "Second Road",
     massage: "oil",
     desc: "Pink light and an open front, and a girl in very short shorts draped over one " +
-      "doorway chair, her colleague\'s phone glowing from the other who come alive the instant you slow down — “hello handsome, massaaage, " +
+      "doorway chair, her colleague\'s {{phone}} glowing from the other, both of whom come alive the instant you slow down — “hello handsome, massaaage, " +
       "you come!” The sign says massage; the shorts file a dissenting opinion. Inside is " +
       "cooler and dimmer: curtained cubicles, a wall of mirrors, and a small printed sign in " +
       "three languages you clock without meaning to — no sex. Waan is already smiling at you " +
@@ -8087,24 +8115,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "and a shoebox; I gave it a ledger.\" He does not notice, or does not care, that the ledger " +
           "is a topless strobe-lit room full of criminals.",
         short: "\"Six rooms. A little money, a great deal of patience, and men who had neither. Not ruthless — arithmetic.\"" },
-      { topic: "bert", text: "\"The pool bar? The old fella?\" He waves it away with his phone. " +
-          "\"Sentiment. Sentiment doesn't scale, mate. He sells or he dies, and either way Pattaya Leisure " +
-          "holds the paper on the building, so.\" A shrug that thinks it's charming. \"No hard feelings. " +
-          "I don't do hard feelings. Hard feelings are a poor man's hobby.\"",
-        short: "\"The pool bar? Sentiment doesn't scale. He sells or he dies; we hold the paper either way.\"" },
-      { topic: "jail", text: "\"Jail?\" The laugh comes a shade too fast. \"Some blogger keeps writing " +
-          "that. Pattaya Leisure this, corruption that. Let him.\" He leans back. \"I am not going to jail. " +
-          "You know who goes to jail? People who can't afford NOT to.\" He taps the table where the " +
-          "arithmetic presumably happens. \"Everything here is looked after. Everything. That's not a " +
-          "crime, that's OPERATIONS.\"",
-        short: "\"I'm not going to jail. Jail's for people who can't afford not to. It's not corruption, it's OPERATIONS.\"" },
-      { topic: "syndicate", text: "For the first time his phone goes down. \"Don't—\" He recovers, " +
-          "lowers his voice, leans in, and for one honest second is a real person and a frightened one. " +
-          "\"That table is not a topic. That gentleman is the reason everything here is 'looked after.' " +
-          "I write a number every month; he decides if it's the right number. I don't know his name. I " +
-          "don't WANT his name.\" The grin snaps back on like a switched light. \"Anyway! Drink? The " +
-          "girls? Whatever you want, it's handled — you're FAMILY.\"",
-        short: "(Phone down, voice low.) \"That table's not a topic. He decides if my number's the right number. I don't want his name.\"" },
+      // Rewritten 2026-09-29 (round 58, guardrails): three nodes still carried the old
+      // founder's register — the phone waved about, "mate", a blogger writing about
+      // corruption and jail — which is the critic-and-defamation trait that identified him.
+      // He is a tailor and an accountant with no real-world behaviours; the structure stays.
+      { topic: "bert", text: "\"The pool bar? The old gentleman?\" He sets his glass down precisely where the ring was. \"Sentiment. Sentiment does not compound. He sells or he dies, and the building's owner sells to somebody after that; we are always somebody.\" A shrug that is almost courteous. \"No hard feelings. I do not keep them. They are expensive to store.\"",
+        short: "\"The pool bar? Sentiment does not compound. He sells or he dies; we are always somebody.\"" },
+      { topic: "jail", text: "\"Jail?\" He looks faintly puzzled, then faintly amused, which is worse. \"I am an accountant who happens to own bars. The most dangerous thing I do each month is the VAT return.\" He turns his glass a quarter. \"Everything here is looked after. Looking after things is not a crime. It is simply more work than most people are prepared to do.\"",
+        short: "\"I am an accountant who owns bars. The most dangerous thing I do is the VAT return.\"" },
+      { topic: "syndicate|table|the table|good table|the good table|quiet table|that quiet table|the quiet table|president|the president|envelope|the envelope", text: "For the first time his hands go still on the table. \"Don't—\" He recovers, lowers his voice, leans in, and for one honest second is a real person and a frightened one. \"That table is not a topic. That gentleman is the reason everything here is 'looked after.' I write a number every month; he decides if it's the right number. I don't know his name. I don't WANT his name.\" The composure comes back as if it had never left. \"Another drink. Whatever you would like — it is looked after. You are a friend of the house.\"",
+        short: "(Hands still, voice low.) \"That table's not a topic. He decides if my number's the right number. I don't want his name.\"" },
     ],
   },
 
@@ -9782,6 +9802,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "business here, na; this one real massage.\" A crisp, kind smile. \"After, you feel " +
           "like new man.\"",
         short: "\"Sit. Foot, Thai, or oil — real massage only. After, new man.\"" },
+      // the best-described honest masseuse in town had nothing to say about herself (Graeme, round 58)
+      { topic: "name|your name", text: "\"Pensri.\" She taps the name on the laminated certificate behind her, which also says Wat Pho. \"Twenty year in this chair. The name is on the paper; the paper is on the wall; the wall is mine.\"", short: "\"Pensri. Twenty years in this chair.\"" },
+      { topic: "home|hometown|village|where are you from|lampang", text: "\"Lampang. North — the horse carts, the ceramic.\" She doesn't stop working your shoulder. \"I come for one season, thirty year ago. Long season.\"", short: "\"Lampang. One season, thirty years ago. Long season.\"" },
+      { topic: "family|kids|children|husband|daughter|son", text: "\"Two daughter. One is nurse in Chiang Mai. One is here—\" a nod at the chair beside hers \"—learning. Too soft still. Ten years, she will be good.\"", short: "\"Two daughters — a nurse, and one here learning. Too soft still.\"" },
+      { topic: "plan|future|dream|next|retire", text: "\"Plan?\" Pensri considers it the way she considers a knot. \"My daughter take the chair. I sit at the front and tell her she is too soft. Is good plan.\"", short: "\"My daughter takes the chair; I sit at the front and tell her she is too soft.\"" },
+      { topic: "training|learn|school|wat pho|paper|certificate|hands|technique", text: "\"Wat Pho, Bangkok. Three month, then twenty year.\" She holds up her thumbs. \"The school teach the map. The farang teach the thumbs.\"", short: "\"Wat Pho for the map. The farang taught the thumbs.\"" },
       { topic: "special", text: "\"Special?\" She laughs, not unkindly, and swats the idea " +
           "away like a fly. \"Wrong shop, tilac. Go down Second Road, plenty. Here we fix the " +
           "body, not sell it. You want strong, or soft?\"" },
@@ -9812,6 +9838,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "after… up to you, na.\" A flick of the eyes at the small NO SEX sign on the wall, " +
           "and a smaller, more private smile that files its own dissent.",
         short: "\"You want massage? Oil very good — and after, up to you, na.\"" },
+      { topic: "name|your name", text: "\"Waan.\" She goes pink. \"Means sweet. My mother say I was sweet baby.\" A beat. \"Now I am sweet massage.\"", short: "\"Waan. Sweet. Sweet massage.\"" },
       { topic: "special", text: "\"Special I can do, tilac — hand, mouth, you choose.\" She " +
           "lowers her voice and nods at the sign. \"But no boom boom HERE — boss rule, " +
           "sticker everywhere, you see. {{Boom boom}}…\" a shrug, a smile \"…when I finish work, " +
@@ -9858,7 +9885,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { when: (st, G) => !!(G.massageLog && G.massageLog["jomtien_soi_7_oil"] && G.massageLog["jomtien_soi_7_oil"].last < G.day), text: "\"You come back!\" Joom points at your shoulder like a teacher at a board. \"Six out of ten again. Beach Road undo all my work. Sit.\"", short: "\"Six out of ten again. Sit.\"" },
       { text: "\"Massage? Sit, sit. You walk Jomtien all day, I can see from here — the legs tell me.\" Joom looks you over, openly scoring. \"Oil is good one. Six out of ten, your shoulder. I make it eight.\"", short: "\"Sit. Oil. I make your shoulder eight out of ten.\"" },
       { topic: "name|your name", text: "\"Joom. Means small and round.\" She pats her own stomach, unbothered. \"My mother is very honest woman.\"", short: "\"Joom — small and round. My mother is honest.\"" },
-      { topic: "home|hometown|village|where are you from|chanthaburi", text: "\"Chanthaburi. East, three hour. Fruit and gems — the gems go to Bangkok, the fruit go to my uncle.\" She laughs. \"I go home for durian season. Nobody can stop me.\"", short: "\"Chanthaburi. Fruit and gems. Home for durian season.\"" },
+      { topic: "home|hometown|village|where are you from|chanthaburi|durian|fruit|stall|gems|mangosteen", text: "\"Chanthaburi. East, three hour. Fruit and gems — the gems go to Bangkok, the fruit go to my uncle.\" She laughs. \"I go home for durian season. Nobody can stop me.\"", short: "\"Chanthaburi. Fruit and gems. Home for durian season.\"" },
       { topic: "family|son|kids|children|mother", text: "\"One son. Twelve, school here in Jomtien, too clever for me.\" A proud grimace. \"He say, Mama, why you work massage? I say, why you eat rice?\"", short: "\"One son, twelve, too clever. Why you eat rice?\"" },
       { topic: "plan|future|dream|next", text: "\"Plan?\" Joom considers the pink ceiling. \"Fruit stall, but on the beach. Mango sticky rice for the farang, cold coconut. Same farang, different menu.\"", short: "\"A fruit stall on the beach. Same farang, different menu.\"" },
       { topic: "special|extra|happy ending", text: "\"Special?\" She rates the question. \"Seven out of ten, you ask nice.\" A nod at the sticker. \"Hand, mouth — can. {{Boom boom}} — boss say no, sticker say no. After work, different story.\"", short: "\"Hand, mouth — can. {{Boom boom}}, boss say no. After work, different story.\"" },
@@ -9919,7 +9946,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { text: "\"Sawatdee ka.\" Orapin doesn't get up; she finishes folding the towel first. \"You want massage? Oil. One hour. No hurry here — Naklua is not Beach Road.\" The smallest smile. \"Lie down when you ready.\"", short: "\"Oil, one hour, no hurry. Lie down when you ready.\"" },
       { topic: "name|your name", text: "\"Orapin. Farang say Pin, is okay.\" She writes it on your palm with one oiled finger, in Thai, which you cannot read. \"Now you know.\"", short: "\"Orapin. Pin is okay.\"" },
       { topic: "home|hometown|village|where are you from|phetchabun", text: "\"Phetchabun. North, mountains. In December the farang from Bangkok come to see the fog.\" She almost laughs. \"We live in the fog. They pay to look at it.\"", short: "\"Phetchabun. They pay to look at the fog we live in.\"" },
-      { topic: "family|husband|divorce|kids|children|mother", text: "\"My mother keep my daughter, up-country. Eight years old.\" Orapin says it flat, folding. \"The husband — finish. Better finish. I send money on the first, every month. My mother say I am a good daughter. Is enough.\"", short: "\"My mother keeps my daughter up-country. The husband — finish.\"" },
+      { topic: "family|husband|divorce|kids|children|mother|daughter|your daughter", text: "\"My mother keep my daughter, up-country. Eight years old.\" Orapin says it flat, folding. \"The husband — finish. Better finish. I send money on the first, every month. My mother say I am a good daughter. Is enough.\"", short: "\"My mother keeps my daughter up-country. The husband — finish.\"" },
       { topic: "plan|future|dream|next", text: "\"Plan.\" Orapin considers it seriously. \"Strawberry farm. Small. My daughter, my mother, me. No farang shoulder.\" She glances at yours. \"Sorry.\"", short: "\"A small strawberry farm. No farang shoulder. Sorry.\"" },
       { topic: "special|extra|happy ending", text: "\"Special.\" Orapin says the word quietly, as if it could wake someone. \"Seven hundred more. Hand, or mouth. The sticker say no boom boom — the sticker is right, here.\" A pause. \"Not every place is here.\"", short: "\"Seven hundred more. The sticker is right, here. Not every place is here.\"" },
     ],
@@ -9959,8 +9986,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { text: "\"HANDSOME! Yes, you!\" Jintana is halfway across the pavement. \"Massage? Upstairs very private, very cold, very good. I sing for you also, free.\" She laughs at her own offer, enormously. \"Joke. Singing is extra.\"", short: "\"HANDSOME! Massage upstairs. Singing is extra.\"" },
       { topic: "name|your name", text: "\"Jintana. Means imagination.\" She spreads her hands at the pink sign. \"Very good name for this job, na?\" Another enormous laugh.", short: "\"Jintana. Imagination. Very good name for this job.\"" },
       { topic: "home|hometown|village|where are you from|korat", text: "\"Korat. Nakhon Ratchasima. Gateway of Isan, the sign say.\" She strikes a pose. \"I am the gateway of Beach Road.\"", short: "\"Korat, the gateway of Isan. I am the gateway of Beach Road.\"" },
-      { topic: "family|mother|kids|children|husband", text: "\"No husband, no kids, one cat.\" She shows you the cat on her {{phone}}; it is enormous and furious. \"My mother pray for me every Buddha day. The cat does not.\"", short: "\"No husband, no kids, one cat. My mother prays for me.\"" },
-      { topic: "plan|future|dream|next|sing|singing", text: "\"Plan? Karaoke bar. Mine. Red lights, good speaker, I sing every night and the customer pay ME to stop.\" The laugh again. \"Very good business plan.\"", short: "\"A karaoke bar. The customers pay me to stop.\"" },
+      { topic: "family|mother|kids|children|husband|cat|your cat", text: "\"No husband, no kids, one cat.\" She shows you the cat on her {{phone}}; it is enormous and furious. \"My mother pray for me every Buddha day. The cat does not.\"", short: "\"No husband, no kids, one cat. My mother prays for me.\"" },
+      { topic: "plan|future|dream|next|sing|singing|band|luk thung|singer|funeral|funerals|wedding|weddings|karaoke", text: "\"Plan? Karaoke bar. Mine. Red lights, good speaker, I sing every night and the customer pay ME to stop.\" The laugh again. \"Very good business plan.\"", short: "\"A karaoke bar. The customers pay me to stop.\"" },
       { topic: "special|extra|happy ending", text: "\"Special!\" Jintana doesn't lower her voice at all. \"Seven hundred more, upstairs, hand or mouth, no boom boom — boss rule, sticker on the mirror.\" She winks at the whole of Beach Road. \"After work is after work.\"", short: "\"Seven hundred more, upstairs. After work is after work.\"" },
     ],
   },
