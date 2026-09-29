@@ -826,7 +826,8 @@
    "modals": [
     "partner",
     "tanfavour",
-    "sellbar"
+    "sellbar",
+    "gameend"
    ],
    "quests": [
     "plg_deal",

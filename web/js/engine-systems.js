@@ -1114,7 +1114,8 @@ function _nontLocate(topic) {
 function _nontCash(arg) {
   if (!_nontHere()) { _say("No Nont here. His table is at the Old Market on Soi Buakhao, most nights. (CASH is his verb, not the town's.)"); return; }
   if (!_flag("hasWallet")) { _say("“Cash from what account?” He's not wrong: your card was in the wallet."); return; }
-  const n = parseInt(String(arg || "").replace(/[^0-9]/g, ""), 10);
+  const _a = typeof _amount === "function" ? _amount(arg) : null;   // Thai numbers too: "cash พัน" (Nattapong, round 56)
+  const n = (_a && !Number.isNaN(_a)) ? _a : parseInt(String(arg || "").replace(/[^0-9]/g, ""), 10);
   if (!n || n < 500) { _say(`“Five hundred minimum, or it's not worth my thumbs.” (CASH <amount> — five percent, no card fee, no daily limit.)`); return; }
   if (n > (G.bank || 0)) { _say(`“The app says you haven't got that.” He turns the screen so you can see it: ฿${_num(G.bank || 0)}.`); return; }
   const cut = Math.round(n * NONT_CUT);
@@ -1242,7 +1243,10 @@ function _bfPrompt(fresh) {
   // so a price-shy player doesn't back out at a number that won't be charged
   // (Alan playtest, 2026-08-17: the lovely reveal only fired AFTER committing).
   if (id && typeof _bondTier === "function" && _bondTier(id) >= 3 && (st > 0 || lt > 0)) {
-    _say(`(The mamasan starts to name a number; ${NPCS[id].name} waves her quiet — ` +
+    const _mamaHere = _npcsHere().some(i => NPC_ROLES[i] === "mamasan" && i !== id);
+    _say((_mamaHere ? `(The mamasan starts to name a number; ${NPCS[id].name} waves her quiet — `
+      // a one-woman bar has nobody to name it: the two lines contradicted (Dieter, round 56)
+      : `(${NPCS[id].name} would be the one to name a number, and doesn't — `) +
       "for YOU there's no fine tonight, she'll square it herself. SHORT TIME · LONG " +
       "TIME — overnight · TAKE HER OUT — she parties with you · or NO.)", "dim");
     return;
@@ -2038,10 +2042,12 @@ function _maybeGoWithYou(id) {
   if (_rand() >= 0.25) return;
   (G.soc.goWith = G.soc.goWith || {})[id] = true;
   _say(`${NPCS[id].name} leans in, suddenly and carefully casual: “I go with ` +
-    "you, na? I want to go with you.” Which is as direct as it ever gets. Her " +
-    "eyes flick to the till — the numbers are the mamasan's department, and " +
-    `mama counts the month's fines like a farmer counts rain. (BARFINE ` +
-    `${NPCS[id].name.toUpperCase()})`, "win");
+    "you, na? I want to go with you.” Which is as direct as it ever gets. " +
+    // a woman alone behind her own rail has no mamasan to glance at (round 56)
+    (_npcsHere().some(i => NPC_ROLES[i] === "mamasan" && i !== id)
+      ? "Her eyes flick to the till — the numbers are the mamasan's department, and mama counts the month's fines like a farmer counts rain. "
+      : "She glances at her own till, where she is the one who counts the month's fines, like a farmer counts rain. ") +
+    `(BARFINE ${NPCS[id].name.toUpperCase()})`, "win");
 }
 
 // A regular's reward: late enough, liked enough, and she may pay her own
@@ -2062,11 +2068,14 @@ function _maybeSelfBarfine(id) {
   G.selfBfId = id;
   G.pendingEnc = "selfbf";
   const name = NPCS[id].name;
+  // a one-woman bar has no mamasan to call to and no other girls to go quiet (Dieter, round 56)
+  const _staff = _npcsHere().filter(i => NPC_ROLES[i] && i !== id);
+  const _mama = _staff.some(i => NPC_ROLES[i] === "mamasan");
   _encPrompt(
     [`${name} studies you for a long moment, does some private arithmetic, and ` +
-      `calls something to the mamasan in fast Thai. Then, to you: “I pay my own ` +
-      `barfine tonight. You don't tell anybody, na.” The other girls have gone ` +
-      "very quiet. This does not happen.", "win"],
+      (_mama ? `calls something to the mamasan in fast Thai. ` : `writes something in the chit book in fast Thai script. `) +
+      `Then, to you: “I pay my own barfine tonight. You don't tell anybody, na.” ` +
+      (_staff.length ? "The other girls have gone very quiet. " : "") + "This does not happen.", "win"],
     ["(YES / NO — she is not going to ask twice.)", "dim"]);
 }
 
@@ -3270,7 +3279,13 @@ function _tanAbout(topic) {
   // a VENUE by name: Tan knew Gift's bar and not "Crystal Palace" (Margarethe, round 47)
   // — unless he has an authored node on the word (the Peacock is his katoey read)
   if (!id && !(() => { const d = _pickDialogue("tan", t); return d && d.topic; })()) {
-    const rid = typeof _roomByName === "function" ? _roomByName(t) : null;
+    let rid = typeof _roomByName === "function" ? _roomByName(t) : null;
+    // one ordinary word is not a venue's name: asking Tan about "thai" read "Soi 7 Thai
+    // Massage" (Nattapong, round 56). The whole name, or a word that begins it and isn't short.
+    if (rid && ROOMS[rid] && ROOMS[rid].bar) {
+      const vn = String(_barName(rid) || "").toLowerCase();
+      if (vn !== t && !(vn.startsWith(t) && (t.includes(" ") || t.length >= 5))) rid = null;
+    }
     if (rid && ROOMS[rid] && ROOMS[rid].bar) {
       const r = ROOMS[rid];
       const cls = r.invite ? "the room you are taken into, not the one you walk into. I have driven men to that gate. I have never driven one in"
@@ -3282,8 +3297,10 @@ function _tanAbout(topic) {
         : r.soapy ? "a soapy. A fishbowl with numbers on the discs. I take men there and I take them home, and I do not ask"
         : r.massage ? "a massage shop. The board is the price; what is not on the board you ask inside"
         : r.hostBar ? "a host bar. The same trade, the sexes swapped, and better manners"
+        // KISS is a restaurant with a grill and paper menus (Dieter, round 56)
+        : (r.food || r.eatery) ? "somewhere to eat. Paper menus, a grill, families and farang at the same tables, and nobody working you"
         : "a beer bar. A stool, the street on one side and a girl on the other";
-      _say(`“${_barName(rid)}.” Tan does not need the mirror. “${r.region}. ${cls.charAt(0).toUpperCase() + cls.slice(1)}.” A shrug at the road.`);
+      _say(`“${_barName(rid)}.” ${_npcsHere().includes("tan") && !_room().barType ? "Tan does not need to think about it." : "Tan does not need the mirror."} “${r.region}. ${cls.charAt(0).toUpperCase() + cls.slice(1)}.” A shrug at the road.`);
       return true;
     }
   }
@@ -3345,7 +3362,9 @@ function _tanAbout(topic) {
       `Some nights a man stays home. Even here.”`);
     return true;
   }
-  _say(`“${n.name}?” Tan considers the mirror. “${where ? where + ". " : ""}${she ? "She" : "He"} ${clause}.” A shrug at the road. ${_pickVary(_TAN_SIGNOFF, "tansign")}`);
+  // the mirror is his car's; on the street he has none to consider (Dieter, round 56)
+  const _mirror = _npcsHere().includes("tan") && ROOMS[G.room] && !ROOMS[G.room].barType ? "Tan looks up the road" : "Tan considers the mirror";
+  _say(`“${n.name}?” ${_mirror}. “${where ? where + ". " : ""}${she ? "She" : "He"} ${clause}.” A shrug at the road. ${_pickVary(_TAN_SIGNOFF, "tansign")}`);
   return true;
 }
 function _tanOthers() {
@@ -3520,6 +3539,9 @@ function _doBlackbook() {
     _say(_fmt("({n} in the book ({p} number{s}) \u2014 out of {k} working girls you have actually met.)",   // the count is bar staff; "ladies" excluded Auntie Nok (auditor, 2026-09-14)
       { n: ids.length, p: nums, s: nums === 1 ? "" : "s", k: knownLadies }), "dim");
   }
+  // the book is bar staff; the other numbers were silently missing from the count (Dieter, round 56)
+  const _others = Object.keys(G.phone.contacts || {}).filter(k => G.phone.contacts[k] && NPCS[k] && !NPC_ROLES[k]).length;
+  if (_others) _say(_fmt("(The phone has {n} other number{s} besides — CONTACTS.)", { n: _others, s: _others === 1 ? "" : "s" }), "dim");
   _say("(A bond cools a notch a night — tend the ones you mean to keep. MESSAGE / SEND / CONTACT.)", "dim");
 }
 
@@ -3699,7 +3721,7 @@ const _TAN_HOME_LINES = [
 ];
 const _TAN_RIDE_LINES = [
   "He drives the way he talks — smooth, unhurried, nothing wasted. Somewhere on Second " +
-    "Road he asks, lightly, how the detective is finding his retirement, and you realise " +
+    "Road he asks, lightly, {tanask}, and you realise " +
     "you are paying the fare after all — just not in baht.",
   "The town slides past the windows, neon going out district by district. \"Good night?\" " +
     "he asks, and listens to your answer with slightly more attention than the question " +
@@ -3828,7 +3850,14 @@ function _tanCall() {
   _say("You say where you are. \"Stay in the light. Seven minutes.\" It is six: the grey " +
     "sedan comes around the corner with the calm of a vehicle that has never once " +
     "hurried, and the door opens on aircon and quiet.", "win");
-  _say(_pickVary(_TAN_RIDE_LINES, "tanride"));
+  // he asks after the life you told him about on the airport run — "how the detective is
+  // finding his retirement" went to a man who had said he'd rather not say (Dieter, round 56)
+  const _TAN_ASK = { pi: "how the detective is finding his retirement", pension: "how the pension is holding up against the rate",
+    redundancy: "whether the redundancy money is lasting", running: "whether the town is far enough away yet",
+    business: "how the investing is going, in a voice that has seen investors", married: "after your wife's family",
+    monger: "whether the town is still everything you remembered", nomad: "whether anybody has taken you seriously yet",
+    charmer: "how many hearts, roughly, and laughs before you can answer" };
+  _say(_fmt(_pickVary(_TAN_RIDE_LINES, "tanride"), { tanask: _TAN_ASK[(G.player || {}).origin] || "how the week is treating you" }));
   if (G.dog) _say(_dogN("Sai Krok gets the back seat without discussion, arranges himself " +
     "on the upholstery like a minor diplomat, and watches the town go by."), "dim");
   G.room = _hotelRoomId();
@@ -4321,7 +4350,8 @@ function _chamAsk() {
     _say("Somewhere behind your sternum a balloon inflates. Nobody has named a number, and " +
       "you notice — later, much later — that nobody is going to.", "dim");
   } else {
-    _say("You ask it again, a night later, and this time there is no pull-back: a small " +
+    // "a night later" when it was two (Dieter, round 56): the night is not counted, so say none
+    _say("You ask it again, and this time there is no pull-back: a small " +
       "smile into the glass, a look at the bar. \"You know already how it works na,\" she " +
       "says — which is true, and is also the only thing about it she has ever said plainly.");
   }
@@ -4404,14 +4434,16 @@ function _chamGo() {
   _say("You go. She puts her arm through yours on the soi like a civilian — no hand on " +
     "the wallet, no glance back at a mamasan, no mamasan to glance at — and in the " +
     "motosai's mirror she is looking at her phone with a small private smile. At the " +
-    "hotel she types her LINE into your phone unasked: \"so you can find me. Daytime. " +
-    "Coffee shop.\" In the lift she says it once more, to the floor indicator: \"I never " +
+    // her LINE is typed in once; the second night it was "unasked" again (Dieter, round 56)
+    (G.phone.contacts.cream ? "hotel she checks her own number is still in your phone, and says nothing about it. "
+      : "hotel she types her LINE into your phone unasked: \"so you can find me. Daytime. Coffee shop.\" ") +
+    "In the lift she says it once more, to the floor indicator: \"I never " +
     "do this.\"");
   G.phone.contacts.cream = true;
   G.known.cream = true;
   _setFlag("chamAsked");
   G.chamNight = true;
-  G.lastBfId = null;
+  G.lastBfId = null; G.lastNightWith = "cream";
   // the treadmill: whatever he tells himself, it's the same product
   _conquestHappy(8);
   _endNight("cham");
@@ -4426,7 +4458,7 @@ function _chamMorning() {
   _say("She is up before you, dressed, hair going up into a modest bun in the mirror " +
     "with three pins held in her teeth — the transformation is quick and unshowy and " +
     "complete. A folded green apron goes into the little bag. \"Bus ten to eight,\" she " +
-    "says round the pins. \"Naklua. I late, boss angry.\" She has asked for nothing. She " +
+    "says round the pins. \"I late, boss angry.\" She has asked for nothing. She " +
     "stands by the door a second longer than leaving takes.", "room");
   if (_pers("whiteknight")) {
     _say("(Your hand is already on your wallet. You notice it there — it arrived before " +
@@ -7757,7 +7789,8 @@ function _doDraw(arg) {
       : "The drawer is empty. A bar that has taken nothing tonight has nothing for you either.");
     return;
   }
-  let amount = /all|everything|lot/.test(arg) ? b.cash : parseInt(String(arg).replace(/[^\d]/g, ""), 10);
+  const _am = typeof _amount === "function" ? _amount(arg) : null;
+  let amount = /all|everything|lot/.test(arg) ? b.cash : (_am && !Number.isNaN(_am)) ? _am : parseInt(String(arg).replace(/[^\d]/g, ""), 10);
   if (!amount || amount <= 0) amount = b.cash;
   if (amount > b.cash) {
     _say(_fmt("There's ฿{cash} in the drawer. You can't take out what the night didn't put in.", { cash: b.cash }));
@@ -9973,7 +10006,7 @@ function _doNotebook() {
   _say(_fmt("Thai you have actually used: {n} different things{s}.",
     { n: said, s: script ? ", " + script + " of them typed in the script" : "" }));
   if (tiers.length) _say("Taught by Kruu Waen: " + tiers.map(([t, n]) => n + " " + t).join(" · ") + ".");
-  if (seen) _say(_fmt("Thai the town has said at you: {n} words and phrases, which is the real syllabus.", { n: seen }));
+  if (seen) _say(_fmt("Thai the town has shown you: {n} words and phrases, which is the real syllabus.", { n: seen }));
   const reg = typeof _thaiRegister === "function" ? _thaiRegister() : "novice";
   _say(reg === "fluent"
     ? "The soi has stopped telling you your Thai is good, which is the promotion."

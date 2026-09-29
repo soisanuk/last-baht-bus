@@ -544,6 +544,27 @@
      "lens": "reverse-savior"
     }
    ]
+  },
+  "round56": {
+   "date": "2026-09-29",
+   "note": "three unused lenses: the mark who says yes, the white knight looking for a civilian, and a Thai speaker typing script",
+   "personas": [
+    {
+     "name": "Barry",
+     "model": "sonnet",
+     "lens": "the-mark"
+    },
+    {
+     "name": "Dieter",
+     "model": "opus",
+     "lens": "civilian-seeker"
+    },
+    {
+     "name": "Nattapong",
+     "model": "opus",
+     "lens": "thai-speaker"
+    }
+   ]
   }
  }
 }

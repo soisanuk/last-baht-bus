@@ -59,7 +59,7 @@ const THAI_SIGNS = {
 // ── Phrases the player can say (typed Thai or romanisation both accepted) ──
 
 const THAI_PHRASES = [
-  { key: "hello",    th: "สวัสดีครับ",   rom: "sawatdee khrap",  match: ["สวัสดีครับ", "สวัสดี", "sawasdee", "sawaddee", "sawadee khrap", "sawatdee", "sawasdee", "sawadee", "wai"] },
+  { key: "hello",    th: "สวัสดีครับ",   rom: "sawatdee khrap",  match: ["สวัสดีครับ", "สวัสดี", "หวัดดี", "sawasdee", "sawaddee", "sawadee khrap", "sawatdee", "sawasdee", "sawadee", "wai"] },
   { key: "thanks",   th: "ขอบคุณครับ",  rom: "khop khun khrap", match: ["ขอบคุณครับ", "ขอบคุณ", "khop khun", "khopkhun", "kop khun"] },
   { key: "how_much", th: "เท่าไหร่",     rom: "thao rai",        match: ["เท่าไหร่", "thao rai", "taorai", "tao rai", "tao arai", "gee baht"] },
   { key: "no",       th: "ไม่เอา",       rom: "mai ao",          match: ["ไม่เอา", "mai ao", "maiao"] },

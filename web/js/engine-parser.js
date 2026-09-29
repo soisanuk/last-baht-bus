@@ -3895,7 +3895,12 @@ function _doTalkBody(arg, topic) {
   if (topic && !d.topic && /^(thai|language|thai language|phasa thai|teach|teaching|lessons?)$/.test(String(topic).toLowerCase().trim())) {
     _say(npc === "waen"
       ? "\"You are IN the lesson, khun. This is what it looks like.\" She taps the board. \"LESSON when you want the hour.\""
-      : _fmt(_pickVary(_THAI_POINTER, "thaipointer"), { n: NPCS[npc].name }));
+      : _hoursRegister(npc) === "floor"
+        ? _fmt(_pickVary(_THAI_POINTER, "thaipointer"), { n: NPCS[npc].name })
+        // a man on a stool, a manager, the house: their own English, their own pronoun —
+        // Nigel "shook her head" in Tinglish (Nattapong, round 56)
+        // …and a Thai man is not a farang with restaurant Thai: Tan got "I speak restaurant Thai"
+        : _fmt(_pickVary(_thaiVoice(npc) ? _THAI_POINTER_NATIVE : _THAI_POINTER_EN, _thaiVoice(npc) ? "thaipointernative" : "thaipointeren"), { n: NPCS[npc].name, p: _pr(npc).p }));
     return;
   }
   // the girl on your arm knows where the short-time motel is (Lars walked the
@@ -3924,6 +3929,10 @@ function _doTalkBody(arg, topic) {
   // to answer for the pavement.
   const _houses = NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house ||
     (!NPCS[npc].patron && !NPCS[npc].filler && NPCS[npc].room === G.room && !!_room().bar);
+  // "normal girls" missed on seventeen people in one week — the one question the white
+  // knight has, asked in every register, and the town had no answer to it (Dieter, round 56).
+  // It has one: there is no such category here, only the one you brought with you.
+  if (topic && !d.topic && _NORMAL_GIRL_RX.test(String(topic).toLowerCase())) { _say(_normalGirlTalk(npc)); return; }
   if (topic && !d.topic && _houses) {
     const _ct = String(topic).toLowerCase();
     if (/\b(open|opens|opening|opening time|open at|start)\b/.test(_ct) && !/\bopen till\b/.test(_ct)) { _say(_openingTalk(npc)); return; }
@@ -4318,6 +4327,9 @@ const _CONVO_TOPIC_RULES = [
   // including สนุก, the game's own score unit (Hugo, round 42). These map onto
   // subjects the cast already has, so the alias row is the whole fix.
   [/\bisan\b|\bisaan\b|\be-?san\b|\bupcountry\b|\bvillage\b/,                    "home"],
+  // the provinces a girl from Kalasin lives next door to: "udon" was "don't know about
+  // that" from every Isan woman in town (Nattapong, round 56)
+  [/\budon(?: thani)?\b|\bkhon kaen\b|\bkalasin\b|\broi et\b|\bsisaket\b|\bburiram\b|\bsurin\b|\bkorat\b|\bloei\b|\bnong khai\b|\byasothon\b|\bubon\b/, "home"],
   [/\bsin ?sot\b|\bdowry\b|\bbride ?price\b/,                                "family"],
   [/\bsom ?tam\b|\bsomtam\b|\bkhao ?niao\b|\bsticky rice\b/,                    "food"],
   [/\bsanuk\b|\bmai pen rai\b|\bjai yen\b|\bgreng ?jai\b/,                      "philosophy"],
@@ -4446,6 +4458,9 @@ const _CONVO_TOPIC_RULES = [
   // Cream (the chameleon economy) — the inevitable question, however it's dressed
   [/how much|take you|come with me|go with me|your price|my hotel|my room|short ?time|long ?time|\bbarfine\b|pay you/, "price"],
   [/your job|what.*you do|\bbarista\b|coffee shop|the shop|the apron|\bwork\b/,      "job"],
+  // what a woman volunteered in her own family answer: Jaja's husband and baby, both
+  // "you ask the wrong girl" one line later (Dieter, round 56)
+  [/\bbab(?:y|ies)\b|\bhusband\b|\bsons?\b|\bdaughters?\b|\bkids?\b|\bchild(?:ren)?\b|\bbuffalo\b/, "family"],   // LAST: every authored row above wins
 ];
 
 function _convoTopic(s) {
@@ -5266,10 +5281,15 @@ function _convoResolve(lower) {
     const isQuestion = /\?$/.test(lower.trim()) ||
       /^(what|where|who|whom|how|why|when|which|whats|whos|hows)\b/.test(bare) ||
       /^(do|does|did|are|is|was|were|can|could|will|would|have|has)\s+(you|u|she|they)\b/.test(bare);
+    // "I came to meet a normal woman, not a bar girl" is an ANSWER that happens to
+    // contain one of his topics, not a question about bars (Dieter, round 56): a
+    // first-person statement answers; a long line only changes the subject if it
+    // leads with the topic
+    const _firstPerson = /^(i|i'?m|im|i'?ve|ive|i'?d|my|me|we|we'?re|just|because|cause|to)\b/.test(bare);
     const changingSubject = isQuestion ||
       /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare) ||
       _findNpc(bare) ||
-      _partnerHasTopic(G.convoQ.id, _convoTopic(lower));
+      (!_firstPerson && _partnerHasTopic(G.convoQ.id, _convoTopic(lower)));
     if (!changingSubject) return _convoAnswer(lower);
     _convoDrop(true); // dodged (or a question back) — fall through; a late digit still gets the drift line, never "didn't understand" (Gareth, round 46)
   }
@@ -5421,7 +5441,7 @@ function _doWai(arg) {
 const _WAI_BACK = [
   "{n} returns it without thinking about it — palms up under the chin, a half-second, back to what {s} was doing. You were placed, and you passed.",
   "{n} wais back properly, which {s} does not do for everyone, and something in the room's temperature moves one degree in your favour.",
-  "{n} gets {p} in first the second time, which is the whole game and {s} knows you know it.",
+  "{n} gets {p} in first this time, which is the whole game and {s} knows you know it.",
   "The wai comes back a little higher than {s} owes you — a small joke about the fact that you know where it should be — and {s} laughs at your face.",
 ];   // pronoun tokens: Tan and Nont were "she" (Pimmy, round 47)
 const _WAI_BACK_MAMA = [
@@ -5537,6 +5557,15 @@ const _THAI_POINTER = [
   "\"I speak Thai, I not TEACH Thai.\" {n} shakes her head. \"Different job, na. Waen at Cloze — Soi Diana. She have the board.\"",
   "\"Ooh, my Thai teacher!\" {n} finds this very funny, and then is helpful about it. \"Cloze bar, Soi Diana. Ask for Kruu Waen. Everybody know her, nobody go, because is homework.\"",
 ];
+const _THAI_POINTER_NATIVE = [
+  "\"Teach?\" {n} laughs. \"I learned it the way you learned to walk — I cannot tell you how. Kruu Waen can. Cloze, Soi Diana, the board with a letter missing.\"",
+  "{n} shakes {p} head, amused. \"Native speaker is the worst teacher, my friend. We know it is right; we don't know why. Kruu Waen at Cloze knows why.\"",
+];
+const _THAI_POINTER_EN = [
+  "\"Teach you? God, no.\" {n} laughs. \"I've got enough to order a beer and apologise. Kruu Waen, Cloze, Soi Diana — she's the real thing. Board outside with a letter missing.\"",
+  "{n} shakes {p} head. \"Wrong man. Kruu Waen at Cloze on Soi Diana, if you're serious. Everybody means to go.\"",
+  "\"I speak restaurant Thai,\" {n} says. \"You want the grammar, it's Kruu Waen, the bar on Soi Diana with the gap in the sign.\"",
+];
 const _THAI_SWITCH = [
   "Somebody catches about half of it, decides that English will be quicker for both of you, and answers you in English before you have finished. Nobody means anything by it; it is simply the faster road, and you are not yet good enough to make it the slower one.",
   "The reply comes back in English. It always will, at this level — the moment a Thai speaker has to work to follow you, they stop making you work, and the kindness is indistinguishable from the dismissal.",
@@ -5544,7 +5573,7 @@ const _THAI_SWITCH = [
 ];
 const _THAI_SPY = [
   "{n} listens to you produce a whole sentence, and the smile stays exactly where it is while something behind it recalculates. \"You speak too good.\" A laugh, one beat late. \"You police? Spy?\" It is a joke. It is not only a joke, and she goes back to English for the rest of the night.",
-  "\"Ooh.\" {n} does not say geng this time. She looks at you for a second longer than the conversation needed and then answers in English, deliberately, the way you would put a lid back on something. \"English is okay. English more easy for me.\"",
+  "\"Ooh.\" {n} does not say geng. She looks at you for a second longer than the conversation needed and then answers in English, deliberately, the way you would put a lid back on something. \"English is okay. English more easy for me.\"",
   "{n} says something quick to the girl beside her, and the girl looks at you, and neither of them says anything else in Thai for the next hour. Whatever the sentence was, it was about the fact that you understood the last one.",
   "\"You understand everything?\" {n} asks it lightly, and waits for the answer properly. When you say yes she nods, thinks, and switches to English — not colder, just careful, the way you would be careful with somebody who has turned out to read your post.",
 ];
@@ -5597,8 +5626,8 @@ function _thaiPraise(key) {
   // the wariness (_THAI_SPY), because now you can hear the room.
   if (_thaiFluent()) {
     const girl = here.find(x => NPC_ROLES[x] === "hostess");
-    if (girl && !G.soc.thaiSpy) {
-      G.soc.thaiSpy = true;
+    if (girl && !G.thaiSpyDone) {   // ONCE: it was per-night soc state, and fired on nights two and four (Nattapong, round 56)
+      G.thaiSpyDone = true; G.soc.thaiSpy = true;
       _say(_fmt(_pickVary(_THAI_SPY, "thaispy"), { n: NPCS[girl].name }), "alert");
     }
     return;
@@ -5721,7 +5750,9 @@ function _doSay(arg, targetWord) {
   if (key === "hello") {
     for (const id of _here) _waiEffect(id);
     _say(_here.length
-      ? "Faces soften. One word of Thai buys more than a round of drinks here."
+      ? (typeof _thaiFluent === "function" && _thaiFluent()
+        ? "It is simply the greeting, and it gets simply answered — the novelty has worn off."
+        : "Faces soften. One word of Thai buys more than a round of drinks here.")
       : "You say it to nobody in particular, which is how most of the language gets practised.");
     if (_here.length) _waiBack(_here.find(id => NPC_ROLES[id]) || _here[0]);
   } else if (key === "thanks") {
@@ -5739,10 +5770,13 @@ function _doSay(arg, targetWord) {
     if ((_inBar() || r.motosai) && typeof _doTaoRai === "function") { _doTaoRai(); return; }
     if (r.busStop) _say(`A driver leans out: “${thaiBaht(BUS_FARE)}” (${thaiNumRoman(BUS_FARE)} baht).`, "thai");
     else if (r.motosai) _say(`A piwin grins: “${thaiBaht(MOTOSAI_TOWN)} in town, ${thaiBaht(MOTOSAI_FAR)} to Darkside.”`, "thai");
+    // Auntie Nok's cart has one price on it, and it's hers to pay (Nattapong, round 56)
+    else if (_npcsHere().includes("nok")) _say(`Auntie Nok taps the sign on her cart: “${thaiBaht(5)} one bottle — I pay YOU, tilac.” She finds this very funny.`, "thai");
     else _say("Nobody here is selling anything. Officially.");
   } else if (key === "no") {
-    _say("“ไม่เอา” — mai ao. You wave it off, whatever it was. The nearest vendor shrugs it back into the bag; " +
-      "the nearest girl laughs: “Ooh, he know this one.”");
+    _say("“ไม่เอา” — mai ao. You wave it off, whatever it was. The nearest vendor shrugs it back into the bag" +
+      // a laughing girl only where a girl is: Cloze has Kruu Waen (Nattapong, round 56)
+      (_npcsHere().filter(i => NPC_ROLES[i] === "hostess" && i !== "waen").length ? "; the nearest girl laughs: “Ooh, he know this one.”" : "."));
   } else if (_THAI_REPLY[key]) {
     _say(_THAI_REPLY[key](_here));
   } else {
@@ -5761,7 +5795,7 @@ const _THAI_REPLY = {
     ? "\"Chok dee!\" comes back doubled, from two directions, and somebody raises a glass on principle."
     : "Chok dee. The night does not answer, which is not the same as no.",
   howareyou: here => here.length
-    ? "\"Sabai dee kha!\" — and then the real answer, which is a laugh and a hand tipped side to side. Everyone is fine. Everyone is always fine."
+    ? "\"Sabai dee " + (here[0] && typeof _pr === "function" && _pr(here[0]).s === "he" ? "khrap" : "kha") + "!\" — and then the real answer, which is a laugh and a hand tipped side to side. Everyone is fine. Everyone is always fine."
     : "You ask the empty air how it is doing. It is doing fine.",
   sorry: here => here.length
     ? "The apology is accepted before it is finished, with the particular Thai speed that means it was never going to be a problem — and a look that says the language was the apology."
@@ -5796,7 +5830,12 @@ const _THAI_REPLY_TO = {
 // works like WAI FON; the rest are targeted flavor.
 function _sayDirectedReact(key, id, name) {
   const role = id ? NPC_ROLES[id] : null;
-  if (_THAI_REPLY_TO[key]) { _say(_THAI_REPLY_TO[key](name)); return; }
+  if (_THAI_REPLY_TO[key]) {
+    // a man does not answer ค่ะ — Nont said "Sabai dee kha" (Nattapong, round 56)
+    let line = _THAI_REPLY_TO[key](name);
+    if (id && typeof _pr === "function" && _pr(id).s === "he") line = line.replace(/\bkha\b/g, "khrap");
+    _say(line); return;
+  }
   if (key === "hello") {
     if (id) _waiEffect(id); // fires greetedFon / waiedOy / waiedPloy once
     _say(`${name} returns it — palms not quite together, but the warmth is real.`);
@@ -6111,6 +6150,12 @@ function _doGive(itemWord, npcWord) {
   // are worth ฿5 to Auntie Nok, so she points you there rather than a flat wave.
   if (/bottle|glass/.test(itemWord) && NPC_ROLES[npc]) {
     _say(_pickVary(_GIVE_EMPTY_LINES, "giveempty")(NPCS[npc].name));
+    return;
+  }
+  // a thing you want SEEN rather than kept: GIVE RECEIPT TO CANDY waved off with no hint,
+  // and SHOW worked at once (Barry, round 56)
+  if (ITEMS[id] && /receipt|photo|ticket|card|letter|note|tag|key/.test(itemWord)) {
+    _say(`${NPCS[npc].name} doesn't take it — ${_pr(npc).s} glances at it in your hand. (SHOW ${String(itemWord).toUpperCase()} TO ${NPCS[npc].name.toUpperCase()})`);
     return;
   }
   _say(`${NPCS[npc].name} waves it away with a smile.`);
@@ -7431,8 +7476,10 @@ function _doMotosai(arg) {
     // "empty hands" to a man holding ฿25 — merely short, not broke (Maureen and the
     // assertion auditor, round 47, independently). Name what he can see.
     const hands = G.money > 0 ? `the ฿${_num(G.money)} in your hand` : "your empty hands";
+    // name the fare he is refusing before the bus's: "Bus is ฿15" read as HIS price
+    // to a man ฿35 short of an ฿80 ride (Barry, round 56)
     _say(`The piwin looks at ${hands}, then down the road, then back. “${G.money > 0 ? "Not enough" : "No money"}, no ride, boss. ` +
-      `Bus is ${thaiBaht(BUS_FARE)}.” He is not unkind about it. He is just not a charity before you've ` +
+      `฿${total}, this one. Bus is ${thaiBaht(BUS_FARE)}.” He is not unkind about it. He is just not a charity before you've ` +
       "earned one.", "dim");
     return;
   }
@@ -7536,7 +7583,11 @@ function _doMotosai(arg) {
     seat = " " + _pickVary(_MOTO_HANDS_LATER, "motohandslater");
   }
   // a ride that runs the length of Beach Road gets the front, not a temple car park
-  const rideLine = _pickVary(extraTurns ? (_via.includes("Beach Road") ? _MOTO_RIDE_BEACH : _MOTO_RIDE_LONG) : _MOTO_RIDE_SHORT,
+  // the highway with the trucks is Sukhumvit, and a ride that doesn't cross it doesn't
+  // see it — Soi 6 to Buakhao did, twice (Dieter and Nattapong, round 56)
+  const _hwy = [G.room, d.room].some(r => ROOMS[r] && ROOMS[r].region === "Darkside");
+  const _long = _hwy ? _MOTO_RIDE_LONG : _MOTO_RIDE_LONG.filter(l => !/highway|lorries/.test(l));
+  const rideLine = _pickVary(extraTurns ? (_via.includes("Beach Road") ? _MOTO_RIDE_BEACH : _long) : _MOTO_RIDE_SHORT,
     extraTurns ? (_via.includes("Beach Road") ? "motobeach" : "motolong") : "motoshort");
   // with a seat sentence in between, the ride becomes its own sentence — "swing on
   // the back, There is the question of your hands… and the piwin" was two fragments
@@ -7672,6 +7723,9 @@ function _lightNotice() {
       `${name} reaches over and turns the phone face-down on the rail, gently. "Customers think you are police, na. Off."`,
       `"Boss lost something?" ${name} is already looking under the stools for you, which is worse than being teased.`,
     ];
+  } else if (girl === "waen") {
+    // a teacher, not a bar girl: "Hansum, why you have the torch? … it's gone" (Nattapong, round 56)
+    lines = [`Kruu Waen looks at the beam, then over her glasses at you. "The board is lit, na. You can read it without. Off."`];
   } else if (girl) {
     const name = NPCS[girl].name;
     lines = [
@@ -9412,6 +9466,23 @@ function _minutesWord(n) {
 // The venue answers as ITSELF, too — a massage shop was giving the bar's
 // "last man off the stool, and that's usually me", in a room with reclining
 // chairs and no stools (Helen, at Ruean Sabai).
+const _NORMAL_GIRL_RX = /\bnormal (?:girls?|wom[ae]n|lad(?:y|ies)|job)\b|\bcivilians?\b|\breal (?:girls?|wom[ae]n)\b|\bnot a bar ?girl\b|\boutside the bars?\b|\bnice girls?\b|\bgood girls?\b|\bgirlfriend material\b/;
+const _NORMAL_FLOOR = [
+  "{n} laughs, not unkindly. \"Normal girl? I AM normal girl. Daytime I sleep, I eat, I {{phone}} my mama. Night I work. You want the one who don't work? She work somewhere else, tilac — same town, same bus.\"",
+  "\"Normal girl.\" {n} tries the phrase out like a price she has been quoted. \"Every farang ask this. Seven-Eleven girl, coffee girl, massage girl — all have friend in the bar, all know how much. Nobody here is only one thing, na.\"",
+  "{n} looks at you for a long second. \"You want girl who never meet farang like you before.\" A small shrug. \"She don't live in Pattaya, hansum. She live in the village, and she don't want you.\"",
+  "\"Good girl, bad girl.\" {n} rolls her eyes up at the ceiling fan. \"Farang have two box. Thai have one: girl who need money, and girl who don't need money YET. Buy me drink, I tell you which one I am tonight.\"",
+];
+const _NORMAL_EN = [
+  "\"A normal girl.\" {n} lets that sit. \"Mate, there's girls who work the bars and girls who work somewhere else, and they're cousins. The category you're after is one you brought on the plane.\"",
+  "{n} laughs into the glass. \"Everybody's looking for the one who's different. The town's very good at producing her. Ask yourself why she found YOU.\"",
+  "\"Civilian?\" {n} shakes {p} head. \"The barista, the nurse, the girl in the {{phone}} shop — all lovely, all real, all know exactly what a farang with a hotel key is worth. That's not the same as dishonest. It's just not the fairy tale either.\"",
+  "\"You want one who isn't in the trade.\" {n} is quiet a moment. \"Then stop looking where the trade is, and stop being the thing the trade is for. Harder than it sounds, that second one.\"",
+];
+function _normalGirlTalk(npc) {
+  const floor = _hoursRegister(npc) === "floor" && _pr(npc).s === "she";
+  return _fmt(_pickVary(floor ? _NORMAL_FLOOR : _NORMAL_EN, floor ? "normalfloor" : "normalen"), { n: NPCS[npc].name, p: _pr(npc).p });
+}
 function _hoursRegister(npc) {
   if (!npc) return "house";
   if (NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house) return "floor";
@@ -10745,6 +10816,12 @@ const _THAI_CMD = [
   ["พูด", "talk"], ["กับ", "to"], ["นอน", "sleep"], ["ช่วยด้วย", "help"], ["ช่วย", "help"],
   ["เงิน", "money"], ["โทร", "call"], ["เวลา", "time"], ["กระเป๋า", "inventory"],
   ["รถ", "bus"], ["บาท", "baht"], ["ชื่ออะไร", "who"],
+  // Nattapong, round 56: ASK in script only worked topicless, because the connective
+  // and the nouns were not in the table — "ถามแคนดี้เรื่องกระเป๋าเงิน" (ask Candy
+  // about the wallet) failed while "ถามแคนดี้" worked. เรื่อง is the ABOUT.
+  ["เรื่อง", "about"], ["กระเป๋าเงิน", "wallet"], ["ส้มตำ", "som tam"], ["ครอบครัว", "family"],
+  ["แฟน", "boyfriend"], ["ภาษาไทย", "thai"], ["บ้าน", "home"], ["แม่", "mother"], ["พ่อ", "father"],
+  ["อ่าน", "read"], ["เดิน", "walk"], ["ชนแก้ว", "cheers"],
 ];
 // The table, plus every character's own Thai name — you cannot ask a woman
 // about anything in Thai if the parser has never heard of her (Hugo, round 42:
@@ -10765,12 +10842,25 @@ function _thaiToCmd(s) {
   while (rest.length) {
     if (/^\s/.test(rest)) { rest = rest.slice(1); continue; }
     if (!/^[\u0E00-\u0E7F]/.test(rest)) { const m = rest.match(/^[^\u0E00-\u0E7F\s]+/); out.push(m[0]); rest = rest.slice(m[0].length); continue; }
+    // a Thai NUMBER is read where it stands: "จ่ายสองร้อย" (pay 200) failed because
+    // the table has no ร้อย (Nattapong, round 56). Longest prefix that parses wins.
+    let num = null, numLen = 0;
+    if (typeof parseThaiWords === "function")
+      for (let k = Math.min(rest.length, 16); k >= 2 && num === null; k--) {
+        const sub = rest.slice(0, k);
+        if (/^[\u0E00-\u0E7F]+$/.test(sub) && /^(หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|สิบ|ยี่สิบ|ร้อย|พัน)/.test(sub)) {
+          const v = parseThaiWords(sub); if (v) { num = v; numLen = k; }
+        }
+      }
+    if (num !== null) { out.push(String(num)); rest = rest.slice(numLen); if (++i > 12) return false; continue; }
     const hit = _thaiCmdTable().find(([th]) => rest.startsWith(th));
     if (!hit) return false; // some Thai the game doesn't read
     out.push(hit[1]); rest = rest.slice(hit[0].length);
     if (++i > 12) return false;
   }
-  return out.join(" ");
+  // เข้า is IN on its own and ENTER with a place after it: "เข้า candy bar" came out
+  // "in candy bar" and then "I didn't understand that" (Nattapong, round 56)
+  return out.join(" ").replace(/^in (?=\S)/, "enter ").replace(/\s+baht\b/g, "");
 }
 function _norm(s) {
   return s.trim().replace(/\s+/g, " ")
@@ -11346,13 +11436,20 @@ function doCommand(input) {
   // refusal was impossible and the promise was false (Frank, round 34). Only
   // the charter declines: pre-ride, nothing consumed. The bench fare below
   // stays undeclinable — you already rode; nobody has ever not paid.
+  // the taught refusal and the Thai verb for walking, at the one prompt that offers both
+  // (Nattapong, round 56: ไม่เอาครับ and เดิน were rejected, WALK was not)
   if (G.pendingFare && G.pendingFare.charter &&
-      (["walk", "no", "nah", "decline", "refuse", "cancel"].includes(v) ||
+      (["walk", "no", "nah", "decline", "refuse", "cancel"].includes(v) || /^(ไม่เอา|เดิน)/.test(lower) ||
        ((v === "never" || v === "forget") && /mind|it/.test(arg || "")))) {
     G.pendingFare = null;
     _say("A shrug that has seen every farang decision ever made. \"Up to you, boss.\" The " +
       "truck grumbles off up the road, and the night hands you back your own two feet.", "dim");
     return;
+  }
+  // a fare said in Thai is a fare paid: bare สิบห้า / สิบห้าบาท at the prompt (Nattapong, round 56)
+  if (G.pendingFare && /^[\u0E00-\u0E7F]+$/.test(lower.replace(/\s+/g, "")) && typeof parseThaiWords === "function") {
+    const _tn = parseThaiWords(_stripPolite(lower).replace(/บาท$/, "").trim());
+    if (_tn) { doCommand("pay " + _tn); return; }
   }
   if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say", "journal", "notes", "diary", "quests", "hint", "time"].includes(v)) {   // the notes are the one thing you want mid-modal (Ines, round 47)
     _farePrompt();
@@ -12169,7 +12266,12 @@ function doCommand(input) {
       if (G.motoAsked && G.turns - G.motoAsked <= 1 && lower.length >= 3 && typeof MOTOSAI_DESTS !== "undefined" &&
           (lower === "hotel" || Object.keys(MOTOSAI_DESTS).some(k => lower === k || lower.includes(k)))) { G.motoAsked = 0; _doMotosai(lower); break; }
       // bare Thai phrase typed directly (polite particles allowed)
+      // intensifiers and repetition are still the phrase: อร่อยมาก, ใจเย็นๆ (Nattapong, round 56)
+      const _plain = lower.replace(/ๆ/g, "").replace(/มาก(?=\s*(ครับ|ค่ะ|คะ|นะ)?\s*$)/, "").trim();
       if (matchThaiPhrase(lower) || matchThaiPhrase(_stripPolite(lower))) { _doSay(lower); break; }
+      if (matchThaiPhrase(_plain) || matchThaiPhrase(_stripPolite(_plain))) { _doSay(_plain); break; }
+      // "แพงไป" — too expensive — is HAGGLE in any language (Nattapong, round 56)
+      if (/^แพง/.test(lower)) { doCommand("haggle"); return; }
       // "sawatdee fon" — a greeting with a trailing NAME, typed without the SAY
       // verb or "TO": the whole string never matches a phrase, so this fell
       // through to the conversation layer and misfired on whoever was last
@@ -12177,8 +12279,18 @@ function doCommand(input) {
       // gate was unreachable this way (NPC-completionist playtest 2026-08-22).
       {
         const _w = lower.trim().split(/\s+/);
+        // a Thai-script name is a name too, with or without พี่/น้อง/ครู/คุณ in front of
+        // it, and it may come first: "สวัสดีครับ เล็ก", "ครูแหวน สวัสดีครับ" (Nattapong, round 56)
+        const _thName = tok => {
+          const t = String(tok || "").replace(/^(พี่|น้อง|ครู|คุณ)/, "");
+          const row = /[\u0E00-\u0E7F]/.test(t) && _thaiCmdTable().find(([th, en]) => th === t && NPCS[Object.keys(NPCS).find(k => String(NPCS[k].name || "").toLowerCase().split(" ").pop() === en)]);
+          return row ? row[1] : null;
+        };
+        if (_w.length >= 2 && _thName(_w[0]) && matchThaiPhrase(_stripPolite(_w.slice(1).join(" ")))) {
+          _doSay(_w.slice(1).join(" "), _thName(_w[0])); break;
+        }
         if (_w.length >= 2) {
-          const _last = _w[_w.length - 1].replace(/[.,!?]+$/, "");
+          const _last = _thName(_w[_w.length - 1]) || _w[_w.length - 1].replace(/[.,!?]+$/, "");
           const _who = _findNpc(_last);
           if (_who) {
             const _phrase = _w.slice(0, -1).join(" ");
@@ -12199,8 +12311,10 @@ function doCommand(input) {
       // vocabulary miss — a Thai answer was eaten by the Thai gate while "Lyon" was
       // accepted instantly (Nok-Anne, round 43). Narrow on purpose: anything
       // else pending still resolves the normal way, topics included.
+      // …but Thai the parser READS is a command, not an answer: "ถาม" + a name (ask Tan) and
+      // "ไปเหนือ" (go north) were filed as the player's answer (Nattapong, round 56)
       if (G.convoQ && typeof _convoAnswer === "function" &&
-          (/[\u0E00-\u0E7F]/.test(lower) || _looksThai(lower))) { _convoAnswer(raw); return; }
+          (/[\u0E00-\u0E7F]/.test(lower) || _looksThai(lower)) && !(/[\u0E00-\u0E7F]/.test(lower) && _thaiToCmd(lower))) { _convoAnswer(raw); return; }
       if (!/[\u0E00-\u0E7F]/.test(lower) && _looksThai(lower) && _thaiRegister() === "adequate" && _npcsHere().some(_thaiVoice)) {
         _say(_pickVary(_THAI_SWITCH, "thaiswitch"), "dim");
         return;
@@ -12213,10 +12327,17 @@ function doCommand(input) {
       // a Thai line the parser can read becomes the English command; other Thai is voiced, not "didn't understand"
       if (/[\u0E00-\u0E7F]/.test(lower)) {
         const en = _thaiToCmd(lower);
+        // น้ำ / เบียร์ on its own, in a place that serves them, is an order — Waen's
+        // homework ("say น้ำ to the first person who serves you") had nowhere to land
+        if ((en === "water" || en === "beer") && typeof _servesDrinks === "function" && _servesDrinks(G.room)) {
+          _say(`(เข้าใจ — buy ${en})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1; doCommand("buy " + en); return;
+        }
         if (en) {
           // ซื้อเบียร์ให้กล้วย came out "buy beer give kluay" and silently dropped
           // the recipient, buying the player's own beer (Nok-Anne, round 43)
-          const en2 = /^buy .+ give /.test(en) ? en.replace(/^buy (.+) give /, "buy drink for ") : en;
+          // …and keeps what was bought: "ซื้อ som tam ให้ nan" bought her a LADY DRINK
+          // (Nattapong, round 56). A beer for her is still her drink (_doBuy's rewrite).
+          const en2 = /^buy .+ give /.test(en) ? en.replace(/^buy (.+) give /, "buy $1 for ") : en;
           _say(`(เข้าใจ — ${en2})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1;
           _thaiPraise("script:" + en2.split(" ")[0]); doCommand(en2); return;
         }
@@ -12426,7 +12547,9 @@ function _shareCard() {
   // THE GRID: "we'll chase anything you put on the card" (Vikram, 2026-08-27).
   // A conspicuous 📖 0 beside a big score is a gap a competitive player wants to
   // close, and closing it means sitting still long enough to be told something.
-  const names = Object.keys(G.known || {}).filter(id => NPCS[id]).length;
+  // PEOPLE YOU MET, not names the prose printed: "👥 83 names" to a man who had met
+  // about twenty (Nattapong, round 56) — every name in a bar sign's shadow counted
+  const names = Object.keys(G.talked || {}).filter(id => NPCS[id]).length;
   const bonds = Object.keys((G.soc && G.soc.drinks) || {}).filter(id => _bondTier(id) >= 2).length;
   const social = names ? `👥 ${names} name${names === 1 ? "" : "s"}` +
     (bonds ? ` · ♥ ${bonds} regular${bonds === 1 ? "" : "s"}` : "") +
@@ -12462,7 +12585,7 @@ function _doShare() {
   }
   for (const l of _shareCard()) _say(l, "win");
   _say(G.mode === "soi6" ? "(Post it wherever the lads compare weeks.)"
-    : "(The week so far, one glyph a night.)", "dim");
+    : (G.pendingChoice === "vacation_end" || G.day > 7 ? "(The week, one glyph a night.)" : "(The week so far, one glyph a night.)"), "dim");
 }
 
 // ── Boot text ──────────────────────────────────────────────────────────────
@@ -12653,7 +12776,9 @@ function _introPrompt() {
 
 function _introMatch(input, table) {
   const s = (input || "").trim().toLowerCase().replace(/[.,!?]+$/, "");
-  const n = parseInt(s, 10);
+  // หก is six as much as ๖ is (Nattapong, round 56)
+  let n = parseInt(s, 10);
+  if (!n && typeof parseThaiWords === "function" && /^[\u0E00-\u0E7F]+$/.test(s)) n = parseThaiWords(s) || 0;
   if (n >= 1 && n <= table.length) return table[n - 1];
   return table.find(e => e.id === s || e.label.toLowerCase() === s) ||
     (s.length >= 4 ? table.find(e => e.label.toLowerCase().includes(s) || e.id.includes(s)) : null) ||

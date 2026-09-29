@@ -3339,6 +3339,9 @@ function _bondPick(id, tier, pool) {
   const mine = said[id + ":" + tier] = said[id + ":" + tier] || [];
   const heard = (G.soc.bondHeard = G.soc.bondHeard || {})[tier] = (G.soc.bondHeard[tier] || []);
   let pick = pool.map((_, i) => i).filter(i => !mine.includes(i));
+  // the room's own cast: "the new girl lazy" from a woman who works alone (Dieter, round 56)
+  const _fit = new Set(_roomFit(pool).map(l => pool.indexOf(l)));
+  if (pick.some(i => _fit.has(i))) pick = pick.filter(i => _fit.has(i));
   if (!pick.length) { mine.length = 0; pick = pool.map((_, i) => i); }   // she has told you everything: round again
   const fresh = pick.filter(i => !heard.includes(i));
   const i = (fresh.length ? fresh : pick)[_hh(id + ":bond" + tier + ":" + mine.length, 17) % (fresh.length ? fresh.length : pick.length)];
@@ -4283,12 +4286,16 @@ function _cinderellaCoda() {
   _say(_CODA_CUT[G.codaSeen % _CODA_CUT.length], "dim");
   _say(_CODA_DECON[Math.floor(_rand() * _CODA_DECON.length)], "room");
   // she rode you home on her own bike; she is not climbing into a baht bus (Kenji, round 47)
-  _say((G.lastRide && G.lastRide.day === G.day - 1)
+  // the coda runs before the day turns, so the ride is TODAY's (Dieter, round 56: the bike
+  // line never fired, and she caught a baht bus home after driving him all night)
+  const _rode = !!(G.lastRide && G.lastRide.id === G.lastBfId && G.lastRide.day >= G.day - 1);
+  _say(_rode
     ? "6 a.m. on Second Road: exhaust and grilling moo ping and a yellow, sweaty light. She kicks the bike awake, " +
       "checks the mirror she does not need, and is gone into the traffic without looking back — a helmet she " +
       "did not wear all night now on, because the police are up. The receipt is her tail-light, then not even that."
     : _CODA_HOME[Math.floor(_rand() * _CODA_HOME.length)], "room");
-  _say(_CODA_CLOSE[G.codaSeen % _CODA_CLOSE.length], "dim");
+  const _close = _rode ? _CODA_CLOSE.filter(l => !/baht bus/.test(l)) : _CODA_CLOSE;
+  _say(_close[G.codaSeen % _close.length], "dim");
   G.codaSeen++;
 }
 
@@ -4868,6 +4875,14 @@ function _endNight(reason) {
       _say(`(Pockets turned out on the last night of the week — ฿${_num(G.roughLost)} ` +
         "gone. The town has no idea you had a flight, and would not have cared.)", "dim");
     }
+    // Cream's night was the last one: her morning happens here or never — it rode the
+    // flight home and fired a month later, after he slept alone (Dieter, round 56)
+    if (G.chamNight) {
+      G.chamNight = false;
+      _say("She is gone before you are properly awake — a bun, a bag, the door closing softly, " +
+        "\"bus ten to eight\" said to the room. There is a coffee on the side table she must have " +
+        "gone down for. She asked for nothing, and there is no morning left to offer her anything in.", "room");
+    }
     // the last night of the week still gets its ledger, and the next morning
     // does not net two nights into one (Kenji, round 47)
     _morningLedger();
@@ -5119,6 +5134,11 @@ function _endNight(reason) {
 // has her own week starting tomorrow and you are not the whole of it.
 // Pool index rides G.vacation like the airport scrub, so repeat trips differ.
 function _farewellGirl() {
+  // "Jaja put you in the taxi herself… the last night you saw her" — the last night was
+  // with somebody else (Dieter, round 56). The last night's woman, if she's a regular;
+  // if the last night was a woman off the floor, nobody from the floor claims it.
+  if (G.lastNightWith === "cream") return null;
+  if (G.lastBfId && NPCS[G.lastBfId] && NPC_ROLES[G.lastBfId] && _bondTier(G.lastBfId) >= 2) return G.lastBfId;
   let best = null, bestT = 0;
   for (const id of Object.keys(G.soc.drinks || {})) {
     if (!NPCS[id] || !NPC_ROLES[id]) continue;
@@ -5359,6 +5379,7 @@ function _suvarnabhumiScrub() {
 }
 
 function _newVacation() {
+  G.chamNight = false;   // a morning that did not happen does not happen a month later (Dieter, round 56)
   _suvarnabhumiScrub(); // kill "Sharky" and fly home — before the reset and the return
   G.stage = "vacation";
   G.vacation++;

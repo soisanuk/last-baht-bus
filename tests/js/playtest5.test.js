@@ -2474,7 +2474,7 @@ test("the share card gained the social line: names, regulars, and the ledger", (
   G.pendingChoice = null; G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   // an empty week has no social line — the card doesn't scold
   assert.ok(!_shareCard().some(l => /👥/.test(l)), "no names, no line");
-  (G.known = G.known || {}).lek = true;
+  (G.known = G.known || {}).lek = true; (G.talked = G.talked || {}).lek = [0];   // the card counts people MET (round 56)
   G.soc.drinks.lek = 8; G.ledgerSeen = 2;
   const card = _shareCard();
   const line = card.find(l => /👥/.test(l));
@@ -2586,7 +2586,7 @@ test("the share card always shows the ledger count — a conspicuous zero is the
   // points at it and an optimizer never finds it. Put it on the grid instead.
   startSoi6Mode();
   G.pendingChoice = null;
-  (G.known = G.known || {}).lek = true;
+  (G.known = G.known || {}).lek = true; (G.talked = G.talked || {}).lek = [0];
   const card = _shareCard().join("\n");
   assert.match(card, /📖 0 told true/, "an exploit week's card shows the gap it left");
   G.ledgerSeen = 3;

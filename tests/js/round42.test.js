@@ -480,7 +480,7 @@ test("ซื้อ X ให้ Y buys it for HER (Nok-Anne)", () => {
   G.room = "lucky_tiger"; G.money = 2000; const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
   const before = G.money;
   out = []; run("ซื้อเบียร์ให้" + NPCS[g].th);
-  assert.match(text(), /buy drink for/); assert.equal(before - G.money, _ladyPrice(), "her drink, not yours");
+  assert.match(text(), /buy (drink|beer) for/); assert.equal(before - G.money, _ladyPrice(), "her drink, not yours");
 });
 
 test("the wai, yes and no are typeable in Thai; the arch claims no hour (Nok-Anne)", () => {

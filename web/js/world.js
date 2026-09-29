@@ -5969,7 +5969,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "home",
         text: "\"Isaan.\" She waves the cue vaguely north-east, at eight hundred kilometres " +
           "of it. \"Same as her, and her, and her.\" The wave takes in the whole bar. " +
-          "\"You want the village name? Buy the girl a drink first, hansum, we are not " +
+          "\"You want the village name? Come back a few more nights, hansum — we are not " +
           "at the village-name part yet.\"",
         short: "\"Isaan — same as her, and her, and her. We're not at the village-name part yet.\"" },
       { topic: "plan", bond: 3,
@@ -8191,6 +8191,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "what I have for the table.\u201d She shrugs the tray. \u201cMy sister work Soi 6. She " +
           "make more. She is more tired.\u201d",
         short: "\u201cSame hours, same money, nobody asks me anything. My sister makes more.\u201d" },
+      // she named her sister and then didn't know her (Dieter, round 56)
+      { topic: "sister|your sister|soi 6",
+        text: "\u201cMy sister?\u201d Aoy balances the tray on one hip. \u201cSoi 6, three year. She send more " +
+          "home than me, and she sleep in the day, and when I see her she is tired in a different " +
+          "way from me.\u201d A shrug. \u201cWe don\u2019t talk about it. We talk about our mother.\u201d",
+        short: "\u201cSoi 6. She sends more home. We talk about our mother.\u201d" },
     ],
   },
   gaew: { house: true,
@@ -8679,7 +8685,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "\"Ask me when you know me. Or don't — safer, honestly.\"",
         short: "\"Family business. Ask me when you know me. Or don't — safer.\"" },
 
-      { topic: "married", text: "\"Nine years. Good ones, mostly — I'm not one of these blokes who'll tell " +
+      { topic: "married|wife|different|the different one|your wife", text: "\"Nine years. Good ones, mostly — I'm not one of these blokes who'll tell " +
           "you they're all liars, because mine wasn't, and it does her a disservice.\" He says it firmly, a " +
           "line he's decided to hold. \"We just wanted different endings to the same story. Her family were " +
           "decent to me the whole way — still are, which is its own complication.\" A wry tilt. \"Marriage out " +
@@ -9650,7 +9656,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the last inch. \"Town too expensive for you — or you just smart? Same " +
           "answer, usually.\"",
         short: "\"Town too expensive, or you just smart? Same answer.\"" },
-      { topic: "darkside", text: "\"I dance Walking Street ten year — Crystal Palace, " +
+      { topic: "darkside", text: "\"I dance Walking Street ten year — Club Mirage, " +
           "good money, young.\" She shrugs, easy, no wound in it. \"Out here nobody " +
           "pretend. No spotlight, no man think he my boyfriend after one drink. Older " +
           "lady, older farang, honest beer. I make more and I lie less. Better deal, na.\"" },
@@ -10568,7 +10574,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   },
 
   nott: {
-    name: "Nott", th: "นนท์", emoji: "🕴️",
+    name: "Nott", th: "น็อต", emoji: "🕴️",
     pronoun: "he",
     room: "adonis_club",
     look: "Thai man of forty-five, immaculate, silk shirt open at the collar, groomed, easy smile.",
@@ -11690,14 +11696,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "I work coffee shop, Naklua — you know the one near the temple? Big one, " +
           "air-con.\" She nods at the empty chair without quite offering it.",
         short: "\"I not work here na — just visit my friend. Cream. I work coffee shop, Naklua.\"" },
-      { topic: "job",
+      { topic: "job|barista|coffee|coffee shop|latte|cafe|apron|temple|work",
         text: "\"Barista.\" She says the word carefully, pleased with it. \"Eight in the " +
           "morning to four. Green apron, hair up — you not recognise me in the daytime, I " +
           "think.\" A small laugh. \"Twelve thousand baht a month. Is ok. Honest job. " +
           "Tired.\" She turns the cocktail glass a quarter-turn by the stem. \"Farang come " +
           "every morning for americano. Some of them nice. Some of them talk talk talk.\"",
         short: "\"Barista — eight to four, green apron, twelve thousand a month. Honest job. Tired.\"" },
-      { topic: "friend",
+      { topic: "friend|your friend|near|the friend",
         text: "\"My friend?\" A vague wave at the bar, at nobody in particular. \"She work " +
           "here. Long time. I come sit with her sometimes when I bored — my room is small, " +
           "the TV is small, 555.\" The glass turns. \"She tell me, Cream, you crazy, come " +
@@ -11716,7 +11722,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "face would break.\" A sip. \"You — you come here a lot? You look like a man who " +
           "know the place.\" Whether that is a compliment is left to you.",
         short: "\"The bar is ok for my friend. Not for me — I cannot smile at man I don't like all night.\"" },
-      { topic: "home",
+      { topic: "home|sisaket|mama|mother|family",
         text: "\"Me? Sisaket. Far.\" The standard shrug for the standard question. \"I come " +
           "Pattaya for work — REAL work na, coffee, not—\" a hand, flicked at the room. \"My " +
           "mama is proud. She tell the neighbour, my daughter make coffee for farang in the " +
@@ -11913,6 +11919,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // the one date the sale has anywhere. Nothing may put the father in Pattaya after
   // twelve, and nothing may put Nont in work before it.
   nont: {
+    th: "นนท์",   // Nont had no Thai name and Nott at the Adonis carried his (นนท์ is Nont; Nott is น็อต) — "ถามนนท์" found the wrong man (Nattapong, round 56)
     name: "Nont", emoji: "📱", pronoun: "he",
     room: "buakhao_market",
     // ≤29 words, front-loaded: the portrait prompt has ~39 CLIP tokens for a look and
@@ -11926,6 +11933,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "at home on this pavement. There's a {{phone}} open in front of him with the back off and " +
       "something delicate held in tweezers, and he doesn't stop working it while he talks.",
     dialogue: [
+      // "Farang get Alex, Thai get Nont" — and a fluent speaker got Alex (Nattapong, round 56)
+      { when: (st, G) => typeof _thaiFluent === "function" && _thaiFluent(),
+        text: "The kid glances up, clocks you as farang, opens his mouth for the English — and stops, " +
+          "because the soi has been talking about you. “You're the one who speaks Thai.” He " +
+          "looks at you properly. “Nont, then. The Alex is for people who need it to be Alex.” The " +
+          "tweezers go back to work. “Same menu. I find people — two hundred. I move money — five " +
+          "percent. I charge {{phones}}. Tan does favours. I do prices.” " +
+          "(ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)",
+        short: "“Nont — you don't need the Alex. People, money, {{phones}}. Tan does favours; I do prices.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE · BUY SIM)" },
       { text: "The kid glances up, clocks you as farang in about half a second, and switches to " +
           "easy, unaccented English. “Need something? Phones, money, people — or a Thai SIM " +
           "that isn't in your name.” A grin that's friendly and doesn't quite reach " +
@@ -13328,7 +13344,7 @@ const ENCOUNTERS = {
       "Your phone buzzes — a girl off the apps — a match you barely remember making, " +
         "the stunner from the photos, is suddenly awake " +
         "and suddenly free. “Hi baby, I finish work. I come you now? " + BOOK_PRICE + ", no bar, no " +
-        "barfine, only you.” It is gone 1 a.m. The photos are, it must be said, " +
+        "barfine, only you.” The photos are, it must be said, " +
         "extraordinary.",
       "The phone lights the ceiling. An app girl you'd written off three days ago — six " +
         "photos, two words, then silence — is suddenly all words. “Baby you sleep?? I free " +

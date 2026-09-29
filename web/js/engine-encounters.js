@@ -313,7 +313,7 @@ function _maybeEncounter() {
     !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
     !(withCompany && ENCOUNTERS[id].solo) &&
     (id !== "powerbank" || G.battery <= 30) &&
-    // 70 = 01:00, which is when her text claims she finishes ("It is gone 1 a.m.")
+    // 70 = 01:00, which is when she says she finishes (the text no longer asserts the hour — it printed "gone 1 a.m." at 04:45, Dieter, round 56)
     // — the old gate of 40 fired the "gone 1 a.m." prose at half past ten.
     (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70 && G.day - (G.bookingDay || -9) >= 3)) && // the apps come alive after 1 a.m. — and not every other night (Judith, round 47)
     (id !== "noodle" || G.nightTurn < 60) &&

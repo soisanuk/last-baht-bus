@@ -83,7 +83,9 @@ function _say(text, cls) {
   _learnNames(text); // name/Thai harvest run on the ENGLISH source (language-independent)
   // collect the Thai the night shows you (capped, deduped) — the trainer
   // (same origin) reads it out of lbb_save and offers "words from the bus"
-  if (G && G.thaiSeen) {
+  // your own sentence echoed back is not the town talking (Nattapong, round 56: NOTEBOOK
+  // filed his typed Thai under what the town had said at him)
+  if (G && G.thaiSeen && !/^You say( to [^:]+)?:/.test(text)) {
     for (const run of text.match(/[\u0E00-\u0E7F]{2,}/g) || []) {
       if (!G.thaiSeen.includes(run)) {
         G.thaiSeen.push(run);
@@ -169,7 +171,9 @@ function _learnNames(text) {
     const rosters = [NPCS];
     for (const roster of rosters) {
       for (const [id, n] of Object.entries(roster)) {
-        const last = n.name.split(" ").pop(); // "Madam Oy" → "Oy"
+        // "Madam Oy" → "Oy" — but DJ Beer is not "Beer": Auntie Nok's "Beer, whisky,
+        // soda — all same" filed him as somebody she mentioned (Dieter and Nattapong, round 56)
+        const last = /^(Beer)$/.test(n.name.split(" ").pop()) ? n.name : n.name.split(" ").pop();
         if (!/^[A-Z]/.test(last)) continue;   // "security" is nobody's name
         // …in prose case OR in the tappable-hint case: "(ASK GAVIN at the
         // Golden Dragon…)" printed his name and taught nobody it, so the
@@ -755,7 +759,32 @@ function _orient(id) { return G.player && G.player.orientation === id; }
 // default — pure random() clusters and droughts). `key` namespaces the one-deep
 // memory so different callers don't clobber each other. Pool depth scales with
 // how often the line is hit; the hottest loop actions get the deepest pools.
+// A pooled line in a bar may name people the bar does not have. Jaja's Mooring is one
+// woman, and the town's pools still sent her drink past a cashier, relayed a joke to "a
+// delighted jury of two", and had the mama send a boy for the umbrella (Dieter and
+// Nattapong, round 56 — eleven phantom colleagues at one bar, the same at Cloze and the
+// Metro Beer Garden). The class fix: inside a bar, a line naming a role nobody on this
+// floor holds is skipped, and the whole pool comes back if that leaves nothing, so no
+// pool can ever go silent. A pure filter — the dice still pick.
+const _FIT_NOBODY = /\b(girl beside (?:her|you)|nearest girl|other girls?|the girls|two of the girls|new girl|jury of two|down the rail|colleagues?|barman|waitress|sends a boy|a boy for)\b/i;
+const _FIT_MAMA = /\b(mamasan|the mama)\b/i;
+const _FIT_TILL = /\b(cashier|the till|on the till)\b/i;
+function _roomFit(pool) {
+  if (!pool || pool.length < 2 || !G || !G.room || !ROOMS[G.room] || !ROOMS[G.room].barType) return pool;
+  if (typeof _npcsHere !== "function" || typeof NPC_ROLES === "undefined") return pool;
+  const staff = _npcsHere().filter(i => NPC_ROLES[i]);
+  const roles = new Set(staff.map(i => NPC_ROLES[i]));
+  const bad = [];
+  if (staff.length <= 1) bad.push(_FIT_NOBODY);
+  if (!roles.has("mamasan")) bad.push(_FIT_MAMA);
+  if (!roles.has("cashier") && staff.length <= 1) bad.push(_FIT_TILL);
+  if (!bad.length) return pool;
+  const txt = l => { if (typeof l === "string") return l; if (typeof l === "function") { try { return String(l("X", "X")); } catch (e) { return ""; } } return ""; };
+  const ok = pool.filter(l => { const s = txt(l); return !bad.some(r => r.test(s)); });
+  return ok.length ? ok : pool;
+}
 function _pickVary(pool, key) {
+  pool = _roomFit(pool);
   if (!pool || pool.length < 2) return pool && pool[0];
   G._lastPick = G._lastPick || {};
   let i = Math.floor(_rand() * pool.length);
@@ -2908,7 +2937,9 @@ function _tick() {
   // any time before it moves on. All of that lives in _salengTick (encounters).
   if (!_onRide()) _salengTick();
   if (typeof _thaiOverheard === "function" && !_onRide()) _thaiOverheard();
-  if (_inBar()) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // presence, for the regular's bond (Trevor, round 39)
+  // her bike is not your stool: six minutes at the Mooring and a night ride read as
+  // "three hours on the same stool" (Dieter, round 56)
+  if (_inBar() && !(typeof _onRide === "function" && _onRide())) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // presence, for the regular's bond (Trevor, round 39)
   // the house's patience clock (_nursed): money spent in this bar since last tick,
   // or a fresh arrival, resets it — one hook, every till (Mario, 2026-09-04)
   if (_inBar() && (G.room !== G.soc.tickRoom || G.money < (G.soc.moneyTick == null ? G.money : G.soc.moneyTick)))
