@@ -4061,12 +4061,18 @@ function _doTalkBody(arg, topic) {
             `"${n}?" ${NPCS[npc].name} considers it. "He drink with everybody, every night, and still count right in the morning. I don't know how."`,
             `"${n} been here long time." A small shrug. "He know which girl need go home early, he never ask why. Is enough."`,
             `"The boss is the boss." ${NPCS[npc].name} tips her head. "He take the trouble before it reach us. You only notice that when he is not here."`,
-          ][_rvPick(4)] :
+            // five staff at the Stinky since round 55: the pool is deeper than the floor
+            `"${n}?" ${NPCS[npc].name} laughs. "He remember every regular's drink and nobody's name. Is fine. The drink is the important part."`,
+            `"Good manager." ${NPCS[npc].name} says it like a fact about the weather. "Drunk farang shout, ${n} don't shout back. He only get quieter. Then farang leave."`,
+          ][_rvPick(6)] :
           them === "cashier" ? _cashRev[_rvPick(_cashRev.length)] :
           me === "mamasan" ? `"${n}?" Mama ${NPCS[npc].name} weighs it. "Good girl. Sends money home, same as all of them, and works harder than she lets on. Ask her yourself — she will tell you a different version, and hers is also true."` :
           me === "cashier" ? `"${n} is on the book same as everybody." ${NPCS[npc].name} does not look up. "That is all the book says about anyone."` :
           me === "manager" ? `"${n}? Ask her — she runs me as much as I run her, and she'd say more."` :   // "been here longer than me" from a man twenty-two years behind this rail (Rolf, round 55)
-          `"${n}? My sister." A beat. "Not real sister. Bar sister. She take my customer, I take hers, we eat together after. Same same."`;
+          [`"${n}? My sister." A beat. "Not real sister. Bar sister. She take my customer, I take hers, we eat together after. Same same."`,
+           `"${n}?" ${NPCS[npc].name} rolls her eyes, fond. "She borrow my lipstick, she never give back. Good girl, bad lipstick."`,
+           `"${n} is okay." ${NPCS[npc].name} shrugs. "We share the cool-box and the complaining. That is friends, in a bar."`,
+          ][_rvPick(3)];   // three hostesses review each other now (round 55)
         _say(line);
         _questOffer(npc);
         return;

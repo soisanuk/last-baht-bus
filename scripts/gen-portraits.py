@@ -738,6 +738,9 @@ CHARS = {
     "khing":    lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0xff1493), bg=BG_BAR, mouth="grin", acc=["earrings", "flower"], earc=GOLD),
     "kwang":    lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xff1493), bg=BG_BAR, mouth="grin", acc=["earrings", "flower"], earc=CYAN),
     "manow":    lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x00e5ff), bg=BG_BAR, mouth="grin", acc=["earrings", "flower"], earc=CYAN),
+    # the Stinky's two new hostesses (round 55) — placeholders until the art agent renders them
+    "jiap":     lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0xff4fa3), bg=BG_BAR, mouth="grin", acc=["earrings"], earc=SILVER),
+    "mew":      lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0x7cff6b), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
     # --- Darkside strip staff (Water Buffalo / Firefly / Mama Yai's) ---
     "wandee":   lady(skin=THAI2, hair="bun", hc=GRBLK, shirt=C(0x2e5a3a), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
     "somjai":   lady(skin=THAI, hair="chignon", hc=GREY, shirt=C(0x5a1a4a), bg=BG_BAR, mouth="smile", acc=["earrings", "glasses", "glasschain"], framec=GOLD, earc=CYAN),

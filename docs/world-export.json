@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 243,
   "patrons": 25,
-  "people": 340,
-  "portraits": 365,
+  "people": 342,
+  "portraits": 367,
   "renders": 365,
   "thumbs": 365,
   "venues": 243
@@ -1328,6 +1328,16 @@
    "room": "honey_trap",
    "th": "เจี๊ยบ"
   },
+  "jiap": {
+   "desc": "Small and sharp, and misses nothing — one of The Stinky Pinky's girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Jiap",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "stinky_bar",
+   "th": "เจี๊ยบ"
+  },
   "jib": {
    "desc": "Tiny and loud, all elbows and energy — one of Coco Bar's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🦋",
@@ -1846,6 +1856,16 @@
    "role": "hostess",
    "room": "cherry_pop",
    "th": "เมอร์เซเดส"
+  },
+  "mew": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of The Stinky Pinky's girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Mew",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "stinky_bar",
+   "th": "มิว"
   },
   "mild": {
    "desc": "Tall and quiet, watching the door — one of Starlight Bar's girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
@@ -3693,6 +3713,7 @@
   "jeed",
   "jenny",
   "jiab",
+  "jiap",
   "jib",
   "jinda",
   "jom",
@@ -3747,6 +3768,7 @@
   "mek",
   "mem",
   "mercedes",
+  "mew",
   "mikkel",
   "mild",
   "milin",

@@ -262,3 +262,14 @@ test("SLEEP through the app's booking prompt sleeps; out-of-season rain says so;
   const d = G.day; out = []; doCommand("sleep");
   assert.ok(G.day === d + 1 || G.pendingChoice, "the night ended (or the bed asked if you mean it)");
 });
+
+test("the Stinky has three girls on the floor now, so the colleague crisis has a colleague (Mario, 2026-09-29)", () => {
+  owner(); G.room = "stinky_bar";
+  const girls = _barStaff().filter(id => NPC_ROLES[id] === "hostess");
+  assert.ok(girls.length >= 3, "Manow, Jiap and Mew: " + girls.join(","));
+  for (const id of ["jiap", "mew"]) assert.ok(girls.includes(id), id + " works the Stinky");
+  const her = inAffair();
+  G.affair.since = G.day - AFFAIR_HONEYMOON - 1; G.room = "stinky_bar"; G.nightTurn = 30;
+  G.affair.crisSeen = AFFAIR_CRISES.map(x => x.id).filter(id => id !== "colleague");
+  const c = _affairCrisisDue(); assert.ok(c && c.id === "colleague", "the colleague crisis is dealt at the Stinky");
+});

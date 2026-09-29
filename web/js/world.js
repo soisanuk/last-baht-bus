@@ -16964,6 +16964,10 @@ const _FILLER_HOSTESSES = [
   /* Kitten Corner, Cherry Pop, and Soi 6 beer-bar girls promoted to authored NPCs */
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
   ["Manow","มะนาว","stinky_bar"],
+  // the flagship bar had ONE hostess, so a colleague crisis, a no-show night and every
+  // "two of the girls" line either needed a guard or described women who were not
+  // there (Rolf, round 55). Mario, 2026-09-29: two more girls.
+  ["Jiap","เจี๊ยบ","stinky_bar"], ["Mew","มิว","stinky_bar"],
   ["Goong","กุ้ง","honey_trap"], ["Jiab","เจี๊ยบ","honey_trap"],
   ["Meen","มีน","queen_bee"], ["Yok","หยก","queen_bee"],
   ["Namphueng","น้ำผึ้ง","buzz_inn"], ["Gaem","แก้ม","buzz_inn"],

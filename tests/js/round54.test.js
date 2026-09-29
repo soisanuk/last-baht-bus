@@ -398,7 +398,8 @@ test("the early call's girl is not sent home twice a fortnight, and her family a
   assert.ok(_shiftEligible().some(c => c.id === "early"), "…and back after it");
   G.bar.earlyDay[her] = G.day - 1;
   out = []; _doTalkBody(her, "family");
-  assert.doesNotMatch(text(), /not see them long time/); assert.match(text(), /Mama|boy|school/);
+  assert.doesNotMatch(text(), /not see them long time/);
+  assert.ok((_girlHasBoy(her) ? /boy|school|He sleep|He go back/ : /Mama/).test(text()), "her kin, as her own story has it: " + text());
 });
 
 test("'us' before there is an us: a bonded own hostess answers with the position; Tan answers for the favour's name", () => {
