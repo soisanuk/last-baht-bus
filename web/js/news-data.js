@@ -13,9 +13,9 @@ var NEWS_FEED = [
     "d": "29 Sep 2026"
   },
   {
-    "t": "American man arrested after secret drug lab found in Pattaya home",
-    "s": "Pattaya Mail",
-    "d": "26 Sep 2026"
+    "t": "Pattaya suspends 3 officers over alleged tourist cash demands",
+    "s": "Thaiger",
+    "d": "29 Sep 2026"
   },
   {
     "t": "Flash floods sweep Koh Chang, trapping driver and disrupting tourist travel",
@@ -28,6 +28,11 @@ var NEWS_FEED = [
     "d": "27 Sep 2026"
   },
   {
+    "t": "American man arrested after secret drug lab found in Pattaya home",
+    "s": "Pattaya Mail",
+    "d": "26 Sep 2026"
+  },
+  {
     "t": "Pattaya Marathon 2026 delivers a high-energy second day of racing",
     "s": "Pattaya Mail",
     "d": "27 Sep 2026"
@@ -38,50 +43,45 @@ var NEWS_FEED = [
     "d": "27 Sep 2026"
   },
   {
-    "t": "Fisherman finds body feared to be missing Korean in east Pattaya canal",
-    "s": "Pattaya Mail",
-    "d": "27 Sep 2026"
-  },
-  {
-    "t": "Watch: Bangkok declared flood disaster zone",
+    "t": "Watch: Bangkok locals create floating market during floods",
     "s": "BBC",
-    "d": "26 Sep 2026"
+    "d": "29 Sep 2026"
   },
   {
-    "t": "Bangkok floodwaters recede as Thai Airways battles baggage chaos",
+    "t": "volunteers in thailand hand-build school toilet from reclaimed wood",
+    "s": "Designboom",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Thai Airways cuts flights, battles baggage chaos as Bangkok floods ease",
     "s": "Reuters",
     "d": "29 Sep 2026"
   },
   {
-    "t": "Dozens killed as monsoon wreaks havoc across India, Nepal and Thailand",
-    "s": "NBC News",
-    "d": "28 Sep 2026"
+    "t": "Thailand's government approves emergency funding after deadly floods that impacted millions",
+    "s": "abcnews.com",
+    "d": "29 Sep 2026"
   },
   {
-    "t": "Asian Games Aichi-Nagoya 2026: True to his word, Thailand's Puripol Boonson matches Asian record in men's 200m",
-    "s": "olympics.com",
-    "d": "27 Sep 2026"
+    "t": "Thailand meets New Orleans in Thai Nola's delicious 'Souptember' dish",
+    "s": "WWLTV.com",
+    "d": "29 Sep 2026"
   },
   {
-    "t": "US Tourist Returns To Her Hotel Room In Thailand And Finds Chaos Inside",
-    "s": "Yahoo",
-    "d": "27 Sep 2026"
-  },
-  {
-    "t": "Xi-Trump body language, Thailand’s tourist backlash: 5 weekend reads",
-    "s": "South China Morning Post",
-    "d": "28 Sep 2026"
+    "t": "At Least 23 Dead in Thailand Floods, Bangkok Airport in Chaos",
+    "s": "U.S. News & World Report",
+    "d": "29 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-28","USD":33.57,"AUD":23.58,"GBP":44.52,"EUR":38.2};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-29","temp":31,"humid":69,"code":51,"hi":31,"rain":86};
+var WX_NOW = {"date":"2026-09-29","temp":27,"humid":84,"code":1,"hi":32,"rain":92};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4136,"date":"2026-09-29","baht":65650};
+var GOLD = {"usd":4156,"date":"2026-09-29","baht":66000};
 // the coin, for the laser-eyed regular
 var BTC = {"usd":83087,"thb":2794517};
