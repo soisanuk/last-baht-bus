@@ -179,3 +179,20 @@ test("Notty's: the town says you get sent, and the wall says who does the sendin
   assert.notEqual(G.room, "nottys_place");
   assert.ok(_ORCHID_CLUB_UNKNOWN.every(l => /bars? (in this town|here)/.test(l)), "every wall line names who sends");
 });
+
+// Tan is not a man on a stool: _hoursRegister filed him as a punter, so the town's
+// answers had him look at his beer, lift the bottle, call you "mate" and look round
+// a rail from the mouth of the soi (Mario, 2026-09-29). _TAN_TOWN is his register.
+test("Tan answers the town in his own voice, never a punter's", () => {
+  G.room = _npcRoom("tan"); run("talk to tan");
+  const topics = ["the atm", "clinic", "massage", "season", "dark", "charge", "saleng", "cons",
+    "hotel", "where to stay", "closing", "opening", "busy", "sober"];
+  for (let pass = 0; pass < 3; pass++) for (const t of topics) {
+    out = []; run("ask tan about " + t);
+    const said = out.map(o => o.text).join("\n");
+    assert.doesNotMatch(said, /\bmate\b|his beer|lifts the bottle|round the rail|\bstool\b|\bguv\b|\bfella\b|that's usually me/i, t + ": " + said);
+  }
+  assert.ok(Object.values(_TAN_TOWN).every(p => p.length >= 3), "pooled");
+  // the here-ATM slot and a perk after a full stop open their sentences capitalised
+  assert.equal(_sentenceCase('"right here." A nod. "700. over the pub."'), '"Right here." A nod. "700. Over the pub."');
+});

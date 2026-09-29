@@ -5036,7 +5036,8 @@ function _hotelTalk(npc, topic) {
   if (!k || !_HOTELS[k]) return false;
   const reg = _hoursRegister(npc);
   const pool = reg === "floor" ? _HOTEL_FLOOR : reg === "house" ? _HOTEL_HOUSE : _HOTEL_PUNTER;
-  _say(_fmt(_pickVary(pool, "hoteltalk:" + reg), { n: NPCS[npc].name, h: _HOTELS[k].name, r: _hotelRate(k), p: _HOTEL_PERK[k] }));
+  const hs = { n: NPCS[npc].name, h: _HOTELS[k].name, r: _hotelRate(k), p: _HOTEL_PERK[k] };
+  _say(npc === "tan" ? _tanTown("hotel", hs) : _sentenceCase(_fmt(_pickVary(pool, "hoteltalk:" + reg), hs)));
   return true;
 }
 
@@ -5111,12 +5112,87 @@ const _SOBER_PUNTER = [
 function _soberTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   if (!/\b(sober|sobriety|teetotal(ler)?|alcohol|aa|don'?t drink|not drinking|no drink)\b/.test(String(topic).toLowerCase())) return false;
+  if (npc === "tan") { _say(_tanTown("sober")); return true; }
   const reg = _hoursRegister(npc);
   const pool = reg === "floor" ? _SOBER_FLOOR : reg === "house" ? _SOBER_HOUSE : _SOBER_PUNTER;
   _say(_fmt(_pickVary(pool, "sobertalk:" + reg), { n: NPCS[npc].name }));
   return true;
 }
 
+// TAN ANSWERS FOR THE TOWN IN HIS OWN VOICE (Mario, 2026-09-29). He carries no
+// NPC_ROLES and no `house`, so _hoursRegister filed him as a man on a stool: he
+// looked at his beer, lifted the bottle, called you "mate" and "looked round the
+// rail" while leaning on a sedan at the mouth of the soi. He is the driver-fixer —
+// flat, exact, "my friend", the road and the meter, coffee not beer — and he
+// answers for the TOWN, never for a room he is not in. Same slots as _TOWN.
+const _TAN_TOWN = {
+  venue: ["\"{v}. {rs}.\" Tan says it the way he says every address, as if reading it off a job sheet. \"I have dropped people there. What they do inside is not on the meter.\"",
+    "Tan does not need to think. \"{rs}. Tell the piwin {v} and he knows it. Or I drive you, my friend.\"",
+    "\"{v}?\" A glance down the road, as if it runs there from here. \"{rs}. Every bar in this town is somebody's. That one too.\""],
+  atm: ["\"{w}.\" Tan nods at it. \"{f} Once, not five times — the machine is the only one here who charges for nothing.\"",
+    "\"Money? {w}.\" A small shrug. \"{f}\"",
+    "Tan points with his chin. \"{w}. {f} And count it at the machine, not on the street.\""],
+  clinic: ["\"Second Road, by Central. A glass door beside the pharmacy.\" Tan says it with no expression at all, which is a courtesy. \"Free, and open late. I have driven many men there, my friend. Nobody says why, and nobody needs to.\" (GET TESTED)",
+    "\"The clinic on Second Road, at the Central junction.\" A small nod. \"Free. Go before you worry, not after.\" (GET TESTED)",
+    "Tan gives it like an address, because it is one. \"Second Road at Central. Glass door. No charge.\" (GET TESTED)"],
+  police: ["\"The station is {p}.\" Tan is careful here, the way a man is careful near a friend's dog. \"On the road, drunk, it is ฿{fine} and a wai, and then it is finished. Arguing is the expensive part.\"",
+    "\"{p}.\" Tan does not describe the building. \"If they stop you: ฿{fine}, polite, and go. That is not a fine, my friend. That is the price of the road.\"",
+    "\"Station is {p}. ฿{fine} ends a stop.\" A small shrug. \"The ones who pay more are the ones who explain.\""],
+  massage: ["\"For your back? {b}, {s}.\" Tan's eyes do not move. \"For anything else you do not need a driver to tell you.\"",
+    "\"{b}. {s}.\" He says it like a job he has done many times. \"The one with the price list on the wall. The price list is the honest part.\"",
+    "\"{b}, {s}.\" A small nod. \"She will find the knot you did not know you had.\""],
+  owner: ["\"{b}?\" Tan almost smiles. \"You bought it, my friend. The soi knew before the ink was dry.\"",
+    "\"{b}.\" Tan looks at you a moment. \"Whose it is on paper and whose it is on the rail — ask me that one over coffee.\"",
+    "\"You know who owns {b}.\" A shrug at the road. \"Everybody on this soi knows. That is how a soi works.\""],
+  lastnight: ["\"Numbers are Bert's side.\" Tan does not pretend otherwise. \"I know the landlord's name and the ice man's. The till I leave to the till.\" (BOOKS)",
+    "\"Your book, my friend, not mine.\" A small shrug. \"Ask the girl with the pen.\" (BOOKS)",
+    "Tan shakes his head, not unkindly. \"I drive. I do not count other men's baht.\" (BOOKS)"],
+  books: ["\"Numbers are Bert's side.\" Tan does not pretend otherwise. \"Rent ฿{rent}, the old man's note ฿{note}, wages ฿{wages} — that much the whole soi knows. The rest is the till.\"",
+    "\"Your books are Bert's books.\" A small shrug. \"I know the landlord and the ice man by name. The arithmetic I leave to people who enjoy it.\"",
+    "Tan shakes his head. \"I drive, my friend. I do not count other men's baht.\""],
+  season: ["\"{m}.\" Tan watches the road as if it were a gauge. \"{How}. I count it in fares, my friend — the most honest number in this town.\"",
+    "\"{How}.\" A small shrug. \"Twelve months I drive the same road. Only the faces in the back change, and how many.\"",
+    "\"{m}? {How}.\" Tan taps the roof of the sedan. \"The airport tells me first. The bars find out a week later.\""],
+  dark: ["\"{d}\" Tan says. \"Use the phone light, my friend. The dogs out there do not know you are a nice man.\" (LIGHT ON)",
+    "\"{d}\" A glance at your phone. \"This is one reason I drive.\" (LIGHT ON)",
+    "\"{d}\" He says it the way he says a fare. \"Light on, and walk where they can see you coming.\" (LIGHT ON)"],
+  charge: ["\"{c}\" Tan shows you his own phone, full. \"A driver's phone is never empty. It is the job.\"",
+    "\"{c}\" A small shrug. \"Keep it alive, my friend. Half of this town is a message.\"",
+    "Tan nods toward the corner. \"{c}\""],
+  heat: ["\"{h}\" Tan says, and leaves it there, which is the advice.",
+    "\"{h}\" A glance at the road. \"Quiet is cheap. For loud, somebody always sends a bill.\"",
+    "\"{h}\" He does not add anything. He does not need to."],
+  saleng: ["\"The carts?\" Tan knows them all by the horn. \"Food, shoes, underwear, a drink for the road. The girls know which one is coming before it turns the corner. {c}\"",
+    "\"Saleng.\" He says it properly. \"A shop with a motorbike on the front. Buy a girl sandals off one and she remembers your name for a week. {c}\"",
+    "Tan shrugs. \"They come when they come. {c}\""],
+  cons: ["\"Beach Road.\" Tan says it like a diagnosis. \"The hair-tonic man: ฿{t} for the bottle, ฿{tf} if you follow him to the shop. The monk who is not a monk: ฿{fr} for your palm, ฿{fri} for your curse. Ask the price first, my friend, every time.\"",
+    "\"Two men, twenty years, the same two tricks.\" Tan does not smile. \"฿{t} becomes ฿{tf}. ฿{fr} becomes ฿{fri}. If it happens, the station takes a cut of giving it back — REPORT.\"",
+    "\"Never follow anybody to a shop.\" Tan says it once, flat. \"The bottle is ฿{t}, the shop is ฿{tf}. The palm is ฿{fr}, the curse is ฿{fri}. The small number is the hook.\""],
+  hotel: ["\"{h}.\" Tan says it like a destination on a job sheet. \"{r} a night. {p}. I drop people there every week, and nobody complains to me after.\"",
+    "\"{h}, {r} baht, {p}.\" A shrug. \"Beds are beds, my friend. The difference is what is outside the window.\"",
+    "Tan knows the desk by name. \"{h}. {r} a night. {p}.\""],
+  sober: ["\"Good.\" Tan means it. \"I drive. I have watched the back seat at four in the morning, my friend. Sober is the cheapest thing in this town, and nobody buys it.\"",
+    "Tan nods, the smallest nod. \"Coffee is my drink. You will meet more men here trying to stop than trying to start.\"",
+    "\"No drink?\" A glance at you, weighing it. \"Then you will remember this town. That is a different holiday.\""],
+  closing: ["\"Close?\" Tan almost smiles. \"This soi, midnight — the gentlemen's clubs too. The beer bars and the go-go, when the last man goes home. The town, never. I am proof.\"",
+    "\"The town does not close, my friend. Only the soi does.\" A nod up it. \"Midnight here. Beach Road and the Walking Street, dawn.\"",
+    "\"Soi 6, midnight. The rest when the girls are tired and the men are broke — which is dawn, usually.\""],
+  opening: ["\"This soi works in daylight — afternoon, already open.\" Tan looks up it. \"The beer bars, four, five. The go-go later, when the lights mean something.\"",
+    "\"Four, five o'clock the shutters go up across town.\" A shrug. \"I bring the first ones. They are always the same men.\"",
+    "\"The early ones by four,\" Tan says. \"The go-go when it is dark enough that the signs mean something.\""],
+  busy: ["\"Ten, eleven.\" Tan checks nothing; he knows. \"That is when my phone starts. Before that the men are still deciding who they are tonight.\"",
+    "\"After ten.\" A small nod. \"The airport runs land at nine, the showers take an hour, then everybody is out at once.\"",
+    "\"Late.\" He says it like a fare. \"Busy is eleven. Too busy is one. After three it is only the serious ones, and me.\""],
+};
+function _sentenceCase(s) {
+  // a slot that opens a sentence arrives lowercase ("700. over the pub", "\"right here…")
+  return String(s).replace(/([.?!] )([a-z])/g, (m, a, b) => a + b.toUpperCase())
+    .replace(/(^|[.?!] |\s)"([a-z])/g, (m, a, b) => a + '"' + b.toUpperCase());
+}
+function _tanTown(kind, slots) {
+  const p = _TAN_TOWN[kind];
+  return p ? _sentenceCase(_fmt(_pickVary(p, "tantown:" + kind), { n: "Tan", ...(slots || {}) })) : null;
+}
 // ASK <anyone> ABOUT <a thing the town is made of>: a venue by name, the ATM, the
 // clinic, the police, the cons on Beach Road. Each answer is COMPUTED from what the
 // engine already holds — the room's region and street, `atm: true`, `_atmFee()`,
@@ -5306,10 +5382,14 @@ const _TOWN = {
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   const t = String(topic).toLowerCase().trim();
-  const reg = _hoursRegister(npc), pick = (k, slots) => { _say(_fmt(_pickVary(_TOWN[k][reg], "town:" + k + ":" + reg), { n: NPCS[npc].name, ...slots })); return true; };
+  const reg = _hoursRegister(npc), pick = (k, slots) => {
+    _say(npc === "tan" && _TAN_TOWN[k] ? _tanTown(k, slots)
+      : _sentenceCase(_fmt(_pickVary(_TOWN[k][reg], "town:" + k + ":" + reg), { n: NPCS[npc].name, ...slots })));
+    return true;
+  };
   if (/^(the )?(atm|cash machine|cashpoint|machine|withdraw|money machine|cash point)$/.test(t) || /\b(an? |the )?atm\b/.test(t)) {
     const here = _room().atm, near = here ? G.room : Object.keys(ROOMS).find(id => ROOMS[id].atm && ROOMS[id].region === _room().region);
-    const w = here ? "right here, against the wall" : near ? ROOMS[near].name : "the main drag of every nightlife area — Second Road, Soi Buakhao, the Walking Street gate";
+    const w = here ? "the wall right here" : near ? ROOMS[near].name : "the main drag of every nightlife area — Second Road, Soi Buakhao, the Walking Street gate";
     const fee = _atmFee();
     return pick("atm", { w, f: fee ? `Foreign card, ฿${fee} a go — take it in one pull.` : "No fee on a Thai book." });
   }
@@ -9711,6 +9791,7 @@ function _hourSay(h) { return _HOUR_WORDS[((h % 24) + 24) % 24]; }
 function _cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
 function _hourWord(t) { return _hourSay(18 + Math.floor(t / 10)); }
 function _closingTalk(npc) {
+  if (npc === "tan") return _tanTown("closing");
   const r = _room();
   const reg = _hoursRegister(npc);
   const pick = (pools) => _pickVary(pools[reg] || pools.house, "closing" + reg);
@@ -9794,6 +9875,7 @@ function _closingTalk(npc) {
 // (Brian, round 49, whose entire hobby is punctuality). The hour is the VENUE'S
 // CLASS, the same way closing is, so it needs no new data.
 function _openingTalk(npc) {
+  if (npc === "tan") return _tanTown("opening");
   const r = _room();
   const reg = _hoursRegister(npc);
   const pick = (pools) => _pickVary(pools[reg] || pools.house, "opening" + reg);
@@ -9833,6 +9915,7 @@ function _openingTalk(npc) {
 // thinning rail, prints all of it in TIME, and nobody in a room would say it
 // out loud (Brian, round 49). Computed from the same season the takings use.
 function _busyTalk(npc) {
+  if (npc === "tan") return _tanTown("busy");
   const reg = _hoursRegister(npc);
   const tier = typeof _seasonTier === "function" ? _seasonTier() : "high";
   const lean = tier === "low" || tier === "deeplow";
