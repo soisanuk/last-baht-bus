@@ -3,48 +3,63 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "American man arrested after secret drug lab found in Pattaya home",
-    "s": "pattayamail.com",
-    "d": "26 Sep 2026"
+    "t": "Flooded roadwork leaves drivers facing hidden danger in east Pattaya",
+    "s": "Pattaya Mail",
+    "d": "27 Sep 2026"
   },
   {
-    "t": "Pattaya sanitation crews clear clogged drains to improve flood drainage",
-    "s": "pattayamail.com",
-    "d": "29 Sep 2026"
+    "t": "Drug suspect holds toy shop worker hostage in Pattaya",
+    "s": "Thaiger",
+    "d": "30 Sep 2026"
   },
   {
     "t": "Pattaya monorail plans face uncertainty if three-airport rail project stalls",
-    "s": "pattayamail.com",
+    "s": "Pattaya Mail",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Pattaya skies stay cloudy while fierce winds batter the beach",
+    "s": "Pattaya Mail",
     "d": "29 Sep 2026"
   },
   {
     "t": "Pattaya apartment stabbing leaves British man seriously injured",
-    "s": "pattayamail.com",
+    "s": "Pattaya Mail",
     "d": "29 Sep 2026"
   },
   {
-    "t": "Pattaya–Koh Larn boat trips under close watch amid unsettled seas",
-    "s": "pattayamail.com",
+    "t": "Brit stabbed in Pattaya fight with transwoman over crystal meth",
+    "s": "Thaiger",
     "d": "29 Sep 2026"
   },
   {
-    "t": "Rayong flooding forces rescue of residents and thousands of pigs",
-    "s": "pattayamail.com",
+    "t": "Pattaya police seek suspect in 8,000-baht knife attack",
+    "s": "Thaiger",
+    "d": "28 Sep 2026"
+  },
+  {
+    "t": "Pattaya suspends three city officers over alleged tourist money demands",
+    "s": "Pattaya Mail",
     "d": "29 Sep 2026"
   },
   {
-    "t": "Old habits die hard in Pattaya’s battle against roadside parking claims",
-    "s": "pattayamail.com",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "Pattaya races to remove parasailing and squid boats stranded on beach",
-    "s": "pattayamail.com",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "At least 23 dead in Thailand floods, Bangkok airport in chaos",
+    "t": "NEWSLETTER: Fatal floods hit India, Nepal and Thailand",
     "s": "Reuters",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Watch: Bangkok locals create floating market during floods",
+    "s": "BBC",
+    "d": "29 Sep 2026"
+  },
+  {
+    "t": "Toyota car plants, Thai Airways cargo hit by Thailand floods",
+    "s": "Reuters",
+    "d": "30 Sep 2026"
+  },
+  {
+    "t": "How Blanch went from backyard court in Thailand to the biggest stages",
+    "s": "atptour.com",
     "d": "29 Sep 2026"
   },
   {
@@ -53,35 +68,20 @@ var NEWS_FEED = [
     "d": "28 Sep 2026"
   },
   {
-    "t": "Thailand meets New Orleans in Thai Nola's delicious 'Souptember' dish",
-    "s": "wwltv.com",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "Bangkok floodwaters begin to ease after torrential rains affect 700,000 people",
-    "s": "AP News",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "THA: Flood - 09-2026 - Heavy rainfall caused flooding (2026-09-29) - Thailand",
-    "s": "ReliefWeb",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "Heavy rains in Thailand kill 23, cause airport chaos",
-    "s": "CBC",
-    "d": "29 Sep 2026"
+    "t": "Asian Games Aichi-Nagoya 2026: True to his word, Thailand's Puripol Boonson matches Asian record in men's 200m",
+    "s": "olympics.com",
+    "d": "27 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-29","USD":33.51,"AUD":23.47,"GBP":44.4,"EUR":38.05};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-30","temp":26,"humid":93,"code":3,"hi":31,"rain":91};
+var WX_NOW = {"date":"2026-09-30","temp":30,"humid":77,"code":95,"hi":31,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4156,"date":"2026-09-29","baht":66000};
+var GOLD = {"usd":4176,"date":"2026-09-30","baht":66200};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":83087,"thb":2794517};
+var BTC = {"usd":83346,"thb":2798452};
