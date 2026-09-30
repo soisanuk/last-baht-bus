@@ -13,12 +13,12 @@ var NEWS_FEED = [
     "d": "30 Sep 2026"
   },
   {
-    "t": "Pattaya monorail plans face uncertainty if three-airport rail project stalls",
+    "t": "Pattaya suspends three city officers over alleged tourist money demands",
     "s": "Pattaya Mail",
     "d": "29 Sep 2026"
   },
   {
-    "t": "Pattaya skies stay cloudy while fierce winds batter the beach",
+    "t": "Pattaya monorail plans face uncertainty if three-airport rail project stalls",
     "s": "Pattaya Mail",
     "d": "29 Sep 2026"
   },
@@ -33,12 +33,12 @@ var NEWS_FEED = [
     "d": "29 Sep 2026"
   },
   {
-    "t": "Pattaya police seek suspect in 8,000-baht knife attack",
-    "s": "Thaiger",
-    "d": "28 Sep 2026"
+    "t": "Pattaya skies stay cloudy while fierce winds batter the beach",
+    "s": "Pattaya Mail",
+    "d": "29 Sep 2026"
   },
   {
-    "t": "Pattaya suspends three city officers over alleged tourist money demands",
+    "t": "Pattaya dries out after floods, from soaked homes to stripped-down cars",
     "s": "Pattaya Mail",
     "d": "29 Sep 2026"
   },
@@ -53,13 +53,8 @@ var NEWS_FEED = [
     "d": "29 Sep 2026"
   },
   {
-    "t": "Toyota car plants, Thai Airways cargo hit by Thailand floods",
-    "s": "Reuters",
-    "d": "30 Sep 2026"
-  },
-  {
     "t": "How Blanch went from backyard court in Thailand to the biggest stages",
-    "s": "atptour.com",
+    "s": "ATP Tour",
     "d": "29 Sep 2026"
   },
   {
@@ -68,20 +63,25 @@ var NEWS_FEED = [
     "d": "28 Sep 2026"
   },
   {
-    "t": "Asian Games Aichi-Nagoya 2026: True to his word, Thailand's Puripol Boonson matches Asian record in men's 200m",
-    "s": "olympics.com",
-    "d": "27 Sep 2026"
+    "t": "Thailand’s Demographic Crisis Arrives Early",
+    "s": "foreignpolicy.com",
+    "d": "30 Sep 2026"
+  },
+  {
+    "t": "Asian Games, Day 2: Japan wins again. Great delight for Thailand’s Narkprasert after injury",
+    "s": "International Padel Federation",
+    "d": "29 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-29","USD":33.51,"AUD":23.47,"GBP":44.4,"EUR":38.05};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-30","temp":30,"humid":77,"code":95,"hi":31,"rain":84};
+var WX_NOW = {"date":"2026-09-30","temp":27,"humid":92,"code":3,"hi":31,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4176,"date":"2026-09-30","baht":66200};
+var GOLD = {"usd":4216,"date":"2026-09-30","baht":66800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":83346,"thb":2798452};
+var BTC = {"usd":84367,"thb":2832668};
