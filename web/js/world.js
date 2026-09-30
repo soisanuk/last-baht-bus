@@ -1434,7 +1434,7 @@ const ROOMS = {
     region: "Beach Road",
     seven: true,
     lateDesc: [
-      "Mid-Beach-Road after the last bar: the tailor touts gone, the tour groups long back in their hotels, and CENTRAL a black glass cliff with its own reflection in it. The sea breathes on the far side of the promenade for an audience of nobody.",
+      "Mid-Beach-Road in the small hours: the tailor touts gone, the tour groups long back in their hotels, and CENTRAL a black glass cliff with its own reflection in it. The sea breathes on the far side of the promenade for an audience of nobody.",
       "Beach Road Central, small hours: taxis parked with drivers asleep across the front seats, a 7-Eleven glowing like an aquarium, and the whole width of the road available to anybody who wants to walk down the middle of it.",
       "The mall is dark, the pavement is empty, and the road is doing about a tenth of what it does at nine. It is, briefly, a nice place to stand.",
     ],
@@ -4317,7 +4317,7 @@ const ROOMS = {
     busStop: "beachrd",
     reads: {
       wall: "A high wall a little further on, whitewashed, with bougainvillea over the top and no sign at all — the kind of wall that is a door for the people who know which gate.",
-      bell: "Notty's brass bell, on the wall by the gate, up the soi behind the bar corner: you can't see it from the road, but a man who has heard it rung knows exactly what it costs, and the road is quiet enough to hear it if somebody does.",
+      bell: "Notty's brass bell, set into the whitewashed wall beside a gate with no handle: polished by thumbs, though not by many. There is no sign to tell you whose it is. A man who has been sent presses it once and is expected; a man who found it stands in the lane listening to nothing happen. (RING BELL)",
       letters: "S, A, gap, A, I, gap, P, A, gap, M, S — the dead tubes have been dead so long the long-stay guests give the taxi the wrong name on purpose and the drivers know it. Nobody is going to fix it. Fixing it would be a change.",
       guests: "The long-stay guests: men in their sixties on the hotel's plastic chairs by the soi mouth, one beer each, watching the road the way they watched it last year. They know which bike is the reliable one and which girl on the corner is somebody's cousin.",
       sign: "The SABAI PALMS sign, up close: half its letters dark, so the soi announces " +
@@ -5096,8 +5096,8 @@ const ITEMS = {
     portable: true, location: null,
     kind: "gift", // a present raises fondness when given to a working girl (GIVE)
     desc: "A 'Rolex' of tremendous confidence and negligible mass. The second hand " +
-      "moves in a way Rolex engineers would describe as 'jazz'. It has already " +
-      "started a conversation at every bar you've worn it to.",
+      "moves in a way Rolex engineers would describe as 'jazz'. It will start a " +
+      "conversation at every bar you wear it to.",
   },
   shades: {
     name: "designer sunglasses", aliases: ["sunglasses", "shades", "glasses"],
@@ -5401,7 +5401,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // after the wallet night, the pickpocket is old news — he greeted a man with
       // "Mot? Little rat" on day 7 (Tomasz, round 54); the favour still stands
       { req: ["knowMot", "act1Done"], notFlags: ["helmetDelivered", "hasHelmet"],
-        text: "\"You again, boss.\" He grins, then remembers something. \"Hey — favour, na? My girlfriend Pim, Starlight Bar, Tree Town — the maze off Buakhao. Take her my spare helmet, she forget it again. I no can leave the stand.\" He holds out a hot-pink helmet.", sets: ["hasHelmet"], gives: "helmet",
+        text: "\"Boss!\" He grins, then remembers something. \"Hey — favour, na? My girlfriend Pim, Starlight Bar, Tree Town — the maze off Buakhao. Take her my spare helmet, she forget it again. I no can leave the stand.\" He holds out a hot-pink helmet.", sets: ["hasHelmet"], gives: "helmet",
         short: "\"Take my pink helmet to Pim — Starlight Bar, in Tree Town.\"" },
       { req: ["knowMot"], notFlags: ["helmetDelivered", "hasHelmet", "act1Done"],
         text: "\"Mot? Little rat. He run, we watch. Hey — do me a favour, na? My girlfriend Pim, Starlight Bar, Tree Town — the maze off Buakhao. Take her my spare helmet, she forget again. I no can leave stand.\" He holds out a hot-pink helmet.", sets: ["hasHelmet"], gives: "helmet",
@@ -5457,7 +5457,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // unrelated recon quest (whose orchidReported also lifts the rope). Two
       // personas failed this quest from opposite sides before anyone noticed the
       // loop. Being SENT is its own flag now; being introduced is still hers.
-      { topic: "rose", notFlags: ["orchidVouched"], sets: ["orchidSent"],
+      { topic: "rose|notty|nottys place", notFlags: ["orchidVouched"], sets: ["orchidSent"],
         text: "“You want to know a place most people never find?” Candy weighs you a moment, then " +
           "decides. “Rose. Notty's Place, out in Naklua — behind a wall, no sign, aircon like a " +
           "morgue and about as quiet. Old friend of mine, from before either of us ran anything.” " +
@@ -5467,6 +5467,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "“Rose's place — Notty's, Naklua, behind a wall, no sign. Old friend of mine. You don't find it, you get sent. Tell her Candy vouches.”" },
       // …and the reply is a message the player is told to carry, so it has to be
       // carryable: the flag is what lets Rose know it arrived (round 23).
+      // report-back channels (Anand, round 59): the sender could not hear how it went
+      { topic: "notty|nottys place", req: ["orchidVouched"],
+        text: "\"Notty's.\" Candy looks pleased with herself, which she does not often allow. \"You went. And Rose let you sit — I know, because if she didn't you would not be standing here asking me nicely.\"",
+        short: "\"You went to Rose's. Good. She let you sit.\"" },
+      { topic: "tan",
+        text: "\"Tan.\" Candy says it the way you say the name of the weather. \"He drives. He knows who is lost before they do. When he sends me somebody, I help — that is the arrangement, and nobody ever wrote it down.\" A small shrug. \"Everybody on this soi has been in his car once.\"",
+        short: "\"Tan drives, and knows who is lost. When he sends me somebody, I help.\"" },
       { topic: "lunch", req: ["orchidVouched"], sets: ["candyLunch"],
         text: "\"Rose say I owe her LUNCH?\" Candy's laugh turns every head at the rail. \"Twenty " +
           "years she keep that account. Okay, okay — you tell Rose: som tam at Rompho, she pay " +
@@ -7953,6 +7960,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Kesinee vets you before she'll talk Pattaya Leisure — canon: "she'll talk
       // straight if you are." A stranger gets the careful brush-off + a breadcrumb;
       // the real intel (and the quest flag) opens once you've earned a little trust.
+      // report-back channels (Anand, round 59): the sender could not hear how it went
+      { topic: "gavin",
+        text: "\"Gavin.\" The bracelet turns once. \"He comes, he says the bar looks lovely. It does. Then he goes.\" A pause, calibrated. \"He is always pleasant. You learn what the pleasant means.\"",
+        short: "\"Gavin comes, says the bar looks lovely, goes. Always pleasant.\"" },
       { topic: "bar", text: "\"My bar?\" The bracelet turns. \"The Kitten Corner. Small, clean, the girls " +
           "are mine and the roof is new.\" A glance along the rail. \"You want the real story of it, ask " +
           "me about the KITTENS. (ASK KESINEE ABOUT KITTENS)\"",
@@ -9171,6 +9182,19 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "driver. But I drive everybody, and everybody, sooner or later, needs a small thing.\"",
         short: "\"A ride, a room, a visa man, a door that's closed to you and open to me. Small things. But everybody needs a small thing.\"" },
 
+      // "ask tan about a lift / ride / taxi" was "not my story" from the one man in town
+      // who drives you for nothing (Wiremu, round 59). The terms are _tanCall's: after
+      // the last bus or in the rain, once a trip.
+      { topic: "lift|a lift|ride|a ride|taxi|a taxi|drive me|take me home|pick me up|car|your car", req: ["act1Done"],
+        when: (st, G) => !(G.phone && G.phone.tanRideVac === G.vacation),
+        text: "\"A ride?\" Tan pats the roof of the sedan. \"You have my number. When the buses are gone, or the sky " +
+          "falls in, you call — once a trip, my friend, and I come. Before that the town has a thousand bikes and every " +
+          "one of them needs the money more than I do.\" (CALL TAN)",
+        short: "\"After the last bus, or in the rain. Once a trip. You have the number.\" (CALL TAN)" },
+      { topic: "lift|a lift|ride|a ride|taxi|a taxi|drive me|take me home|pick me up|car|your car", req: ["act1Done"],
+        text: "\"You had yours this trip.\" Tan says it kindly, which makes it final. \"Next time you land, I am at the " +
+          "airport. Tonight, the piwin on the corner. Tell him Tan says hello — he will charge you the same.\"",
+        short: "\"You had yours this trip, my friend. The piwin on the corner.\"" },
       { topic: "drive", text: "\"Six years in Ohio. Film school.\" He says the state like the punchline it " +
           "became. \"You learn to frame a shot, light a face, tell a lie the camera believes. Then you come " +
           "home and there is no film industry, so—\" the shrug \"—you drive. But you never stop seeing the " +
@@ -9245,6 +9269,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // early still gets this refusal — the ask-the-driver inference is earned.
       // The chip appears when the ≥3-fragments node below unlocks, so the topic
       // surfacing at all IS the telegraph that Tan is ready to say the real thing.
+      // report-back channels (Anand, round 59): the sender could not hear how it went
+      { topic: "wallet", req: ["act1Done"],
+        text: "\"The wallet.\" Tan glances at your pocket as if checking a job was done properly. \"Mostly all there, I think. Most men lose it twice in this town. The first time is the wallet. The second time is the one that teaches.\"",
+        short: "\"Mostly all there. The second time is the one that teaches.\"" },
       { topic: "table", deflect: true,
         when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length < 3,
@@ -9376,6 +9404,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\u201cMe?\u201d Terry looks briefly delighted and then suspicious of being delighted. \u201cSixteen years. Same stool, near enough, and the same room upstairs every high season \u2014 I pay the whole six months up front so nobody can let it over my head.\u201d He drinks. \u201cCame for a fortnight in \u201910 with a redundancy and a bad attitude. Spent the redundancy. Kept the attitude.\u201d A shrug that isn't quite a shrug. \u201cPeople ask what I do all day like it's a trap. I watch the soi. It's better than anything on the telly and it's never once repeated itself.\u201d",
         short: "\u201cSixteen years, same stool, same room upstairs. Came for a fortnight in \u201910. Spent the redundancy, kept the attitude.\u201d" },
 
+      // report-back channels (Anand, round 59): the sender could not hear how it went
+      { topic: "bert", notFlags: ["barPaid"],
+        text: "“Bert?” Terry considers it. “Runs the Stinky for a man who isn't well and isn't here. Knows everybody, tells nobody. Best barman I ever drank with, and he'd hate me saying it.” A pull on the Chang. “If Bert sent you, you're alright.”",
+        short: "“Bert. Knows everybody, tells nobody. If he sent you, you're alright.”" },
       { topic: "doyle",
         text: "\u201cThe American?\u201d Terry considers the ceiling. \u201cCopper. Was, anyway.\u201d He says it without dropping his voice, which tells you it isn't a secret. \u201cYou can tell because he sits facing the door and he has never once asked me a question he didn't already know the answer to.\u201d A pull on the Chang. \u201cGood company, mind. Drinks soda water and doesn't make a thing of it, which round here is practically a personality.\u201d",
         short: "\u201cCopper. Was, anyway. Sits facing the door, never asks a question he doesn't know the answer to.\u201d" },
@@ -10610,18 +10642,25 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         when: (st, G) => !_flag("debtSettled") && G.money >= TAXI_DEBT,
         sets: ["debtSettled"],
         fx: (st, G) => { G.money -= TAXI_DEBT; },
-        text: "\u201cTwelve thousand.\u201d No preamble, no discount, and no interest in why you are " +
+        text: "\u201cThe driver\u2019s? Twelve thousand.\u201d No preamble, no discount, and no interest in why you are " +
           "asking. She counts it twice because she counts everything twice, then draws one line " +
           "through one name in a book that has a great many names in it. \u201cFinish. Tell the " +
           "driver his cousin is lucky in his friends.\u201d She is already looking past you at the " +
           "door. \u201cYou want to borrow, you know where I sit.\u201d",
         short: "\u201cFinish. Twelve thousand.\u201d" },
       { topic: "debt", chip: false, when: (st, G) => !_flag("debtSettled"),
-        text: "\u201cTwelve thousand,\u201d she says, and waits, and the waiting is the whole " +
+        text: "\u201cThe driver\u2019s cousin? Twelve thousand,\u201d she says, and waits, and the waiting is the whole " +
           "sentence. When nothing lands on the bar she goes back to her book. \u201cCome back with " +
           "it, or come back with something else. I am not in a hurry \u2014 it grows while I sit " +
           "here.\u201d",
         short: "\u201cTwelve thousand. It grows while I sit here.\u201d" },
+      // the man she sends you to remind, and she had never heard of him (Malcolm, round 59)
+      { topic: "fergie", notFlags: ["fergieReminded"],
+        text: "\"Fergie.\" The pen stops. \"Irish, the north kind. Soi Buakhao, and the maze when he feels lucky. He borrowed like a gentleman and he forgets like a soldier.\" A small shrug. \"Remind him. No rough stuff — just ask him about the debt, and let him see who is asking.\"",
+        short: "\"Fergie. Buakhao, or the maze. Ask him about the debt.\"" },
+      { topic: "fergie",
+        text: "\"You reminded him.\" Nira turns a page. \"I know, because he came past this bar and did not look at it. With Fergie, that is a receipt.\"",
+        short: "\"He walked past without looking. With Fergie, that is a receipt.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit, sit. You look like a man who reads the menu before he orders — I like that.\" " +
           "Nira's English is easy, almost accentless, and her attention is total in a way that costs " +
@@ -10907,6 +10946,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Ungated + chip:false — it reads as quest-directed (nobody asks about "the
       // whispers" cold), and setting the flag early is harmless (it does nothing
       // until Oy's completion node and an active quest both agree).
+      // report-back channels (Anand, round 59): the sender could not hear how it went
+      { topic: "bank", req: ["helmetDelivered"],
+        text: "\"Bank.\" Pim almost smiles, which is rare enough to count. \"You brought the boy his helmet. Now every stand from here to Naklua knows your face, and he rides like his mother is watching. That's worth more than any fare, darling.\"",
+        short: "\"Bank. You did right by that boy, darling.\"" },
+      { topic: "bank",
+        text: "\"Bank? The stand at the south end of Beach Road — the one in the orange vest who waves at everybody.\" Pim polishes a glass. \"Sweet boy. Rides like his mother is watching.\"",
+        short: "\"Bank — south end of Beach Road. Sweet boy.\"" },
       { topic: "whispers", sets: ["heardWhispers"], chip: "topics",
         text: "\"The whispers.\" She stops polishing the glass, which from Pim is a full stop. \"For Oy, or for yourself? For Oy.\" A dry look. \"Somebody has been buying up the girls' debts. Quiet, cash, no name on it. And a girl who owes the wrong person does not work for the bar any more — she works for whoever holds the paper, and she just happens to stand behind the bar.\" She sets the glass down. \"Tell Oy it is new money, not an old face. Tell her to watch the ones who pay off a girl's debt like it is a kindness. That is the whisper, darling. Mind how you carry it.\"",
         short: "\"Somebody's quietly buying up the girls' debts — new money, no name. Tell Oy to watch the ones paying debts off like a kindness.\"" },
@@ -11091,6 +11137,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "เชิญค่ะ", rom: "choen kha",
         text: "\"Welcome to Rainbow Girls.\" Four words, and somehow you feel both invited and inventoried. \"Drink, or business?\"",
         short: "\"Drink, or business?\"" },
+      // report-back channels (Anand, round 59): the sender could not hear how it went
+      { topic: "pim", notFlags: ["heardWhispers"],
+        text: "\"Pim.\" Oy says it the way she would say the name of a good accountant. \"Starlight, in Tree Town. Five years behind that bar and she has never once told me a thing I already knew. Ask her the whispers. Then come back.\"",
+        short: "\"Pim, at the Starlight. Ask her the whispers.\"" },
+      { topic: "pim",
+        text: "\"Pim always talks to the right person.\" The faintest nod, as if a column has balanced. \"That is why I send people to her and not to anybody else. You carried it properly. I noticed.\"",
+        short: "\"Pim talks to the right person. So, it seems, do you.\"" },
+      { topic: "lek",
+        text: "\"Lek.\" Something that is not quite approval. \"The Lucky Tiger. Plays pool better than she pours. If she sent you to me with manners, she likes you — Lek does not waste a customer on me.\"",
+        short: "\"Lek, at the Lucky Tiger. If she sent you, she likes you.\"" },
       { topic: "isaan", req: ["waiedOy"],
         text: "Something crosses her face too quick to name. \"Roi Et province. Rice, buffalo, one road.\" A pause. \"Everyone on this soi is from somewhere like it. Remember that when you count your change, na.\"" },
     ],
@@ -13334,6 +13390,10 @@ const BOOK_PRICE = 2500;     // a freelancer booked "direct" off the apps — no
 const CLUB_TAXI = 2000;      // the morning-after "taxi money" — the back-loaded club-pickup fee
 const GIFT_DEBT = 500;       // the bun-khun a "free" gift calls in on the spot
 const GIFT_TIP = 100;        // paying tao-rai up front closes the account clean
+const TOASTIE_PRICE = 35;  // the 7-Eleven cheese toastie
+const POLICE_WAI = 300;     // the drunk stop: a wai and a sorry
+const POLICE_PAY = 500;     // …money out before the manners
+const POLICE_ARGUE = 1000;  // …an argument
 const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any recovery
 
 const ENCOUNTERS = {
@@ -13361,7 +13421,8 @@ const ENCOUNTERS = {
       "like a condemned building. “YOU. You’re the muppet who spilled my pint in " +
       "the Sailor’s Arms, aren’t ya?” He is enormous, very drunk, and about sixty " +
       "per cent sure.",
-    hint: "(Choose your next words carefully.)",
+    // the one encounter whose hint named no answer, so the chip bar offered the room (Malcolm, round 59)
+    hint: "(Choose your next words carefully — SORRY · CALM DOWN · or SQUARE UP.)",
   },
   powerbank: {
     rooms: ["jomtien_beach_rd", "beach_rd_s", "buakhao_s", "sukhumvit_crossing"],
@@ -13395,7 +13456,7 @@ const ENCOUNTERS = {
         "man who need company. Me? Company.” Her friend on the bench opposite: “Ning ALSO " +
         "company. Two company, special price.”",
     ],
-    hint: "(Company is ฿700. Ning makes it ฿1400 — cheaper than a bar, but no " +
+    hint: "(Company is ฿700 — the night is hers, and it starts now. Ning makes it ฿1400 — cheaper than a bar, but no " +
       "mamasan means nobody to complain to if it goes wrong. YES her · BOTH of them · NO.)",
   },
   noodle: {
@@ -13467,7 +13528,7 @@ const ENCOUNTERS = {
     hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here.)",
   },
   jptourist: { solo: true,
-    rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
+    rooms: ["ws_north", "ws_south", "beach_rd_c"],   // not the gate: her intro stands outside a go-go, and the gate has none (Malcolm, round 59)
     interactive: true, nightly: true,
     intro: "At the rail outside a go-go a sharply-dressed Japanese woman is watching the door swing on the dark inside " +
       "with the frank, appraising interest of someone shopping rather than spectating. " +
@@ -13644,11 +13705,23 @@ const ENCOUNTERS = {
   maze: {
     rooms: ["tt_entrance", "tt_lane_1", "tt_lane_2", "tt_lane_3"],
     interactive: true, nightly: true,
-    intro: "A man comes round the corner at the pace of somebody who has been round it before. Sunburn, " +
+    // a different lost man each night, the same fish tank — the maze keeps one
+    // legend and a supply of new victims (Anand, round 59: the same man, every night)
+    intro: [
+      "A man comes round the corner at the pace of somebody who has been round it before. Sunburn, " +
       "a lanyard from a hotel on the other side of town, one flip-flop wearing visibly faster than the " +
       "other. “Mate. Mate. The one with the fish tank. Big fish tank, out the front.” He looks at the " +
       "lane behind you, then the lane behind himself, and something goes out of him. “I've come past " +
       "the same mop twice.”",
+      "A tall man in a football shirt is standing at the crossing turning slowly on the spot, like a " +
+      "lighthouse that has lost its nerve. He sees you and brightens. “You look like you know. The bar with " +
+      "the fish tank — my mate's in it. He's been texting me a photo of the tank for forty minutes.” He " +
+      "shows you the photo. It is a fish tank. It could be anywhere.",
+      "An older man in a pressed shirt, the only pressed shirt in Tree Town, stops you with a raised " +
+      "finger and enormous politeness. “Forgive me. I was told — quite specifically — to meet my brother-in-law " +
+      "at the bar with the fish tank. I have now seen the same noodle cart three times, and it has started " +
+      "to recognise me.”",
+    ],
     hint: "(HELP him look · or leave him to it and WALK ON)",
   },
 };

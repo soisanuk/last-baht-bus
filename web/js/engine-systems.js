@@ -215,6 +215,7 @@ function _doBorrow(arg) {
   const owed = _loanTerms(amt);
   G.loan = { principal: amt, owed, dueDay: G.day + LOAN_DAYS, strikes: 0 };
   G.money += amt;
+  G.loanBorrowed = (G.loanBorrowed || 0) + amt;
   _say(`Nira counts out ฿${amt} without once breaking eye contact. "You pay back ฿${owed} by ` +
     `day ${G.loan.dueDay}. ยี่สิบ — twenty percent, like I said. After that day…" the smile ` +
     `stays warm and goes nowhere "…it grows, and my cousins get bored. Don't make them bored."`, "win");
@@ -240,6 +241,7 @@ function _doRepay(arg) {
   const late = G.loan.strikes > 0;
   G.money -= amt;
   G.loan.owed -= amt;
+  G.loanRepaid = (G.loanRepaid || 0) + amt;
   if (G.loan.owed <= 0) {
     G.loan = null;
     _say(`Nira takes the last of it and, for the first time, the calculator behind her eyes ` +
@@ -270,6 +272,7 @@ function _loanNightRoll() {
     const take = Math.min(G.money, G.loan.owed);
     G.money -= take;
     G.loan.owed -= take;
+    G.loanRepaid = (G.loanRepaid || 0) + take;
     _addHappy(-6);
     // A man with nothing, being carefully robbed of nothing, every dawn, was the
     // whole of the late-loan endgame: nine consecutive mornings printed the full
@@ -1650,7 +1653,7 @@ const _RIDE_VENUES = [
       `so pungent it arrives before the plate does. ${n} builds you the perfect bite and makes ` +
       `you eat it from her fingers, then howls at your tears. You've never been so awake.`,
   ]},
-  { key: "wsclub", lo: 700, hi: 1500, sanuk: 3, scenes: [
+  { key: "wsclub", after: 40, lo: 700, hi: 1500, sanuk: 3, scenes: [
     n => `Walking Street's big room — lasers, an imported DJ, ฿300 water. ${n} pulls you into ` +
       `the crush like she owns the floor, which for the next hour she does: a booth, bottle ` +
       `service you didn't quite agree to, the bass in your sternum, her mouthing the words with ` +
@@ -1693,7 +1696,7 @@ const _RIDE_VENUES = [
       `finds for you up here is a small, tired, fragile thing, and it is not for sale. It has ` +
       `never been for sale.`,
   ]},
-  { key: "ranlao", lo: 300, hi: 700, sanuk: 3, scenes: [
+  { key: "ranlao", after: 60, lo: 300, hi: 700, sanuk: 3, scenes: [
     n => `A ran lao off Pattaya Tai that a farang only ever sees from the back of a girl's bike — Thai live music, whisky sets, and a ` +
       `queue that ${n} walks straight past on somebody's nod. Inside, the mystery of the quiet ` +
       `strip solves itself: everyone is HERE. Half the rail crews of the beer bars, out of ` +
@@ -1705,7 +1708,7 @@ const _RIDE_VENUES = [
       `the second set she translates a lyric into your ear, gets it half right, and laughs too ` +
       `hard to finish.`,
   ]},
-  { key: "afterhours", lo: 200, hi: 500, sanuk: 3, scenes: [
+  { key: "afterhours", after: 70, lo: 200, hi: 500, sanuk: 3, scenes: [
     n => `An after-hours room where the blackout curtains are load-bearing: outside ${G.nightTurn >= 100 ? "the sky has " +
       "gone traitorously bright" : "the street is still doing its dark"}, inside it is packed and pretending otherwise. Time starts ` +
       `dropping frames. At some point you surface mid-sentence with a freshly poured beer in ` +
@@ -1741,7 +1744,9 @@ function _pickRideVenue(seen) {
   // there and calls it off-map), so a ride that drops you in "Walking Street's big
   // room" contradicts the pocket — drop it. Pratumnak stays: it's a hill overlook
   // she rides you up to, never a walkable pocket room.
-  let venues = _RIDE_VENUES;
+  // a stop keeps its hours: the after-hours room at 23:06 and the ran lao's "rail crews
+  // off the clock" at 21:36 were the same scenes at the wrong end of the night (Wiremu, round 59)
+  let venues = _RIDE_VENUES.filter(v => !v.after || G.nightTurn >= v.after);
   if (G.mode === "soi6") venues = venues.filter(v => v.key !== "wsclub");
   // Prefer a stop this player has never been taken to on ANY ride, then one
   // not seen this ride, then anything: the same three stops came round
@@ -1866,9 +1871,16 @@ function _endRide(seq, reason) {
   } else if (reason === "dawn" && G.nightTurn < SUNRISE_TURN - 10) {
     // the stop cap, reached with the sky still dark: she calls it, and does not say "morning" (Kenji, round 47)
     G.lastBfHonest = true;
-    close = `${name} kills the engine at a red light that nobody else is waiting at and looks at the sky, which is ` +
-      `still doing nothing. "Enough Pattaya," she says. "Morning is coming for us, na — I want to be asleep when it ` +
-      `does." She points the bike toward a bed, hers or yours, and the dark carries you there.`;
+    // …and "Morning is coming for us" at one o'clock still said it (Wiremu, round 59)
+    close = _pickVary([
+      `${name} kills the engine at a red light that nobody else is waiting at and looks at the sky, which is ` +
+        `still doing nothing. "Enough Pattaya," she says. "Tomorrow I work, na — you, I don't know." She points ` +
+        `the bike toward a bed, hers or yours, and the dark carries you there.`,
+      `At the next red light ${name} puts a foot down and doesn't take it up again when it goes green. "Enough, ` +
+        `tilac. Six place is enough for one night — more, and you want it every night." The dark carries you home.`,
+      `${name} yawns so hard the bike wobbles. "Okay. Finish. Plenty of dark left, and I want to sleep in it." ` +
+        `She points the bike toward a bed, hers or yours, and doesn't take the long way.`,
+    ], "ridedarkclose");
   } else if (reason === "dawn") {
     G.lastBfHonest = true;   // the quiet coda: the fun close's "khao man gai at 3 a.m." read backwards after "morning already" (Dex, round 38)
     close = `The sky over the gulf goes the colour of a bruise healing, and ${name} feels you ` +
@@ -3903,8 +3915,8 @@ function _tanCall() {
   G.room = _hotelRoomId();
   G.darkStreak = 0;
   _say("He sets you down at your own door. \"Friendship rate,\" he says, waving the money " +
-    "away before your hand reaches a pocket. \"The first one is free, my friend.\" You " +
-    "will work out later that there is never a second one — per trip, the arithmetic of " +
+    "away before your hand reaches a pocket. \"This one is on the friendship, my friend.\" You " +
+    "will work out later that it is one a trip — never a second, the arithmetic of " +
     "friendship. The taillights take the corner without hurry.", "win");
   _addHappy(1);
   _describeRoom(true);
@@ -4877,8 +4889,14 @@ function _maybeIncomingText() {
         `i tell mamasan tonight my farang come. dont make me liar na 😤❤️`,
         `bar so boring without you 😩 come, i already tell the girls you funny one`,
       ], "invite3")); }
-    else _pushMsg(id, ["i dream about you last night na 💭❤️", "you go other bar?? 😤 i see you i KNOW 👀",
-      "miss you so much cannot sleep 😢", "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"][Math.floor(_rand() * 4)]);
+    else {
+      // "you go other bar?? i see you" is an accusation: it wants another bar behind it
+      // tonight, not a night spent wholly with her (Wiremu, round 59)
+      const _elsewhere = Object.entries(G.soc.barTurns || {}).some(([rm, n]) => rm !== _npcRoom(id) && n >= 3 && ROOMS[rm] && ROOMS[rm].barType);
+      const _pool = ["i dream about you last night na 💭❤️", _elsewhere ? "you go other bar?? 😤 i see you i KNOW 👀" : "you tired today? 😴 i still smile from last night",
+        "miss you so much cannot sleep 😢", "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"];
+      _pushMsg(id, _pool[Math.floor(_rand() * 4)]);
+    }
   } else if (t >= 2) { // regular: invites and warmth, a little needy
     if (roll < 0.45 && !_sawYou) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, _pickVary([

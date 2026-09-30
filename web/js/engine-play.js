@@ -439,7 +439,9 @@ function _piwinAbout(who) {
   if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner)\b/.test(w)) {
     const say =
       /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
-      /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + MOTOSAI_TOWN, f: "฿" + MOTOSAI_FAR }) :
+      /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + MOTOSAI_TOWN, f: "฿" + MOTOSAI_FAR }) +
+        // the mates' rate is the fare he actually charges you (Wiremu, round 59)
+        (_flag("helmetDelivered") ? " A grin. \"For you, twenty. Every stand know the helmet man.\"" : "") :
       /\b(vest|jacket|number|queue|licen[cs]e)\b/.test(w) ? "\"The vest is the stand.\" He plucks the orange nylon. \"Number is my number. No vest, no stand — you ride from the side of the road, police take the bike. Vest cost more than the bike, some year.\"" :
       /\b(food|eat|eating|hungry|noodles?|som tam|rice|dinner)\b/.test(w) ? (FOOD_STALLS[G.room]
         ? _fmt("\"Eat? Right there, boss.\" A chin at the stall. \"{s}. I eat there every night — if it was bad I am dead already.\"", { s: FOOD_STALLS[G.room].name.replace(/^(a |an |the )/, "").replace(/,.*$/, "") })
@@ -452,6 +454,16 @@ function _piwinAbout(who) {
     return;
   }
   const id = byName(NPCS);
+  // a PLACE is the piwin's whole trade: "ask piwin about rainbow girls" got "Who?"
+  // from the man Nok says knows every door in town (Anand, round 59)
+  if (!id) {
+    const k = _pnm(w.replace(/^(the|a|an) /, ""));
+    const venue = k.length >= 3 && Object.keys(ROOMS).find(v => ROOMS[v].bar && [k, k + " bar"].includes(_pnm(ROOMS[v].bar)));
+    const region = k.length >= 3 && [...new Set(Object.values(ROOMS).map(r => r.region).filter(Boolean))].find(rg => _pnm(rg) === k);
+    if (venue === "nottys_place") { _say("\"Notty's?\" He grins. \"The wall, I know. The wall, I cannot open.\""); return; }
+    if (venue) { _say(_fmt("\"{v}? {r}.\" He pats the seat. \"Everybody know. Get on.\"", { v: _barName(venue), r: ROOMS[venue].region })); return; }
+    if (region) { _say(_fmt("\"{r}?\" As if you had asked him where the sea is. \"Get on, boss.\"", { r: region })); return; }
+  }
   if (!id) { _say("\"Who?\" He shrugs, entirely unbothered. \"Don't know this one.\""); return; }
   const label = NPCS[id].name;
   if (!(G.known && G.known[id])) {
@@ -2894,6 +2906,14 @@ function _doBell() {
   // …except the one the street itself names. Naklua Road's prose puts a brass
   // bell on Notty's wall, and RING BRASS BELL answered "no bell out here"
   // (Gerry, round 34). It exists; what you lack is the standing to use it.
+  // …and a man who HAS been sent presses it and is expected: the bell was the one
+  // door on the street that told the sent man "no bell out here" (Anand, round 59)
+  if (!_inBar() && G.room === "naklua_rd" && (_flag("orchidSent") || _flag("orchidVouched") || _flag("orchidReported"))) {
+    _say("You press the brass bell once, the way a man who has been sent presses it. Somewhere behind " +
+      "the wall a lock thinks about it, and then the gate is simply open.", "dim");
+    _doEnter("notty's place");
+    return;
+  }
   if (!_inBar() && G.room === "naklua_rd" && !_flag("orchidSent") &&
       !_flag("orchidVouched") && !_flag("orchidReported")) {
     _say("The brass bell on Notty's wall is the only bell out here, and it is not " +
@@ -4444,6 +4464,7 @@ function _nightSnapshot() {
     tillDrawn: (G.bar && G.bar.drawn) || 0,
     atm: G.atmTotal || 0,
     atmFees: G.atmFees || 0,
+    loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0,
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length,
     nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
@@ -4482,7 +4503,12 @@ function _morningLedger() {
   // a DRAW from your own till is your money moving pockets, not income: ฿10,000 out of
   // the drawer read "up ฿9,685 on the night" (Rolf, round 55)
   const tillDraw = Math.max(0, ((G.bar && G.bar.drawn) || 0) - (b.tillDrawn || 0));
-  const spent = b.money + drawn - G.money - barDraw + fees + tillDraw;
+  // borrowed money is a DEBT, not a good night: a ฿5,000 loan read "up ฿2,875 on the
+  // night" to a man who had spent ฿2,125 (Malcolm, round 59). Repayment is a real spend,
+  // but it is named, so the down figure is not a mystery.
+  const borrowed = (G.loanBorrowed || 0) - (b.loanB != null ? b.loanB : (G.loanBorrowed || 0));
+  const repaid = (G.loanRepaid || 0) - (b.loanR != null ? b.loanR : (G.loanRepaid || 0));
+  const spent = b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed;
   // THE FIGURE IS POCKET AND ACCOUNT TOGETHER, and on a night the machine was used
   // it has to SAY so: the assertion auditor (2026-09-14) withdrew ฿2,000, paid ฿400
   // rent, watched his pocket go UP ฿1,600 and was told "down ฿700" — which is
@@ -4500,6 +4526,8 @@ function _morningLedger() {
   if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via + safeTag);   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via + safeTag);
   if (tillDraw > 0) bits.push("\u0e3f" + _num(tillDraw) + " drawn from your own till");
+  if (borrowed > 0) bits.push("\u0e3f" + _num(borrowed) + " borrowed from Nira \u2014 a debt, not a win");
+  if (repaid > 0) bits.push("\u0e3f" + _num(repaid) + (spent >= repaid ? " of it" : "") + " paid to Nira");
   // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
   const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
@@ -4655,7 +4683,9 @@ function _endNight(reason) {
     for (const _pid of _pids) _addBond(_pid, 3);
     _say(_fmt(_pids.length > 1
       ? "The three of you fall through your door somewhere past the point of counting, still laughing at a thing none of you can remember. {who} claim the shower in shifts and the bed by consensus, and the night finishes the way the best ones do — off the clock, off the books, unhurried."
-      : "You bring {who} home the long way, through a town that has watched the two of you all evening and approves. The door closes on the last of the night, and what's left of it is nobody's business and unhurried about being so.",
+      : (_isHotelRoom(G.room) && G.party.stops === 0
+        ? "{who} kicks off her shoes by the door as if she has always kicked them off there. The last of the night is nobody's business and unhurried about being so."
+        : "You bring {who} home the long way, through a town that has watched the two of you all evening and approves. The door closes on the last of the night, and what's left of it is nobody's business and unhurried about being so."),
       { who: _partyLabel() }), "win");
     G.party = null;
     reason = "barfine";

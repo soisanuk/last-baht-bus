@@ -65,7 +65,7 @@ test("MOTOSAI TO HOTEL knows the Areca (Lionel)", () => {
   G.hotel = "areca"; G.room = "beach_rd_klang"; G.money = 2000;
   run("motosai to hotel");
   assert.doesNotMatch(text(), /where to\?/, "no re-prompt");
-  assert.equal(G.room, MOTOSAI_DESTS["soi buakhao"].room, "the nearest stand to Soi Diana");
+  assert.equal(G.room, "diana_mid", "the Areca's own door on Soi Diana (round 59: home is the door, not the stand)");
 });
 
 test("the desk runs your card before it posts your bag to Naklua (Lionel)", () => {

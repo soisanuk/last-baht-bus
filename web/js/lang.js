@@ -821,8 +821,8 @@ const _CATALOGS = {
       "Eine Hundemarke aus Messing, grün angelaufen nach vier Regenzeiten: SEAMUS — THE SHAMROCK — GOOD BOY. Der Pub ist verrammelt und der Ire, den die Soi Paddy nannte, längst zurück in der Heimat, aber irgendjemand hat einmal bezahlt, um GOOD BOY in Messing gravieren zu lassen, und er hatte recht.",
     "genuine Rolex (allegedly)":
       "echte Rolex (angeblich)",
-    "A 'Rolex' of tremendous confidence and negligible mass. The second hand moves in a way Rolex engineers would describe as 'jazz'. It has already started a conversation at every bar you've worn it to.":
-      "Eine 'Rolex' von enormem Selbstbewusstsein und verschwindend geringem Gewicht. Der Sekundenzeiger bewegt sich auf eine Weise, die Rolex-Ingenieure als 'Jazz' bezeichnen würden. Sie hat in jeder Bar, in der du sie getragen hast, schon für Gesprächsstoff gesorgt.",
+    "A 'Rolex' of tremendous confidence and negligible mass. The second hand moves in a way Rolex engineers would describe as 'jazz'. It will start a conversation at every bar you wear it to.":
+      "Eine 'Rolex' von enormem Selbstbewusstsein und verschwindend geringem Gewicht. Der Sekundenzeiger bewegt sich auf eine Weise, die Rolex-Ingenieure als 'Jazz' bezeichnen würden. Sie wird in jeder Bar, in der du sie trägst, für Gesprächsstoff sorgen.",
     "designer sunglasses":
       "Designer-Sonnenbrille",
     "RayBens. The B is doing a lot of work. Worn at night, indoors, they say either 'international man of mystery' or 'hungover' — both true.":

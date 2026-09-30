@@ -607,6 +607,27 @@
      "lens": "five-minute-sessions"
     }
    ]
+  },
+  "round59": {
+   "date": "2026-09-30",
+   "note": "aimed at the dark systems nobody had pushed: the cons, loans, police and clinic (a claims ledger with reloads mid-prompt), the introductions economy (Notty's, the report-back channels), and the ride-taking night (night ride, party, bikes)",
+   "personas": [
+    {
+     "name": "Malcolm",
+     "model": "opus",
+     "lens": "claims-ledger"
+    },
+    {
+     "name": "Anand",
+     "model": "fable",
+     "lens": "introductions-only"
+    },
+    {
+     "name": "Wiremu",
+     "model": "sonnet",
+     "lens": "the-passenger"
+    }
+   ]
   }
  }
 }

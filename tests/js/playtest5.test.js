@@ -155,7 +155,7 @@ test("motosai: the Darkside fare applies both ways, Second Road has stands, and 
   assert.equal(m - G.money, MOTOSAI_FAR, "back across the highway costs the Darkside rate");
   sandbox(); G.room = "second_rd_c"; G.nightTurn = 30;
   doCommand("motosai to hotel");
-  assert.equal(G.room, MOTOSAI_DESTS.naklua.room, "the piwin knows where you sleep");
+  assert.equal(G.room, "hotel_soi", "the piwin knows where you sleep — and takes you to the door (round 59)");
 });
 
 test("the bus: a stop typed without the 'soi', and a bare stop name straight off the drop-list", () => {
@@ -544,7 +544,7 @@ test("MESSAGE her while she's three stools away; the quiz ignores digits inside 
 });
 
 test("a night ride never repeats a venue while the pool lasts; the 6 a.m. coda is any girl's", () => {
-  const seen = [];
+  const seen = []; G.nightTurn = 100;   // every stop keeps hours now (round 59); the small hours have them all
   for (let i = 0; i < _RIDE_VENUES.length - 1; i++) { const v = _pickRideVenue(seen); assert.ok(!seen.includes(v.key)); seen.push(v.key); }
   assert.ok(_CODA_DECON.every(s => !/mile-long|untouchable VIP/.test(s)));
 });

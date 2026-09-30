@@ -290,6 +290,8 @@ function newGame() {
     dog: null,           // the accidentally-adopted soi dog: { since: day, name? } once you've fed him
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
+    loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
+    motoHomeDoor: null, // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
     rideLog: {},         // night rides per girl: {count, day, stops, great} — she remembers, and so does "late"
     lastRide: null,      // {id, day, stops} — the coda knows she has a bike
     selfBfHold: 0,       // the self-barfine offer stands for a command or two

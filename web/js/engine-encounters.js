@@ -611,7 +611,7 @@ const _ENC = {
       _say(_fmt("{who} says something to him fast and low in Thai before you have opened your mouth — " +
         "the register a woman uses on a nephew. He listens. The price is the price; the tone is not.", { who: _partyLabel() }), "dim");
     if (/\bwai\b|sorry|khrap|krub|apolog|sawatdee/.test(input)) {
-      const f = Math.min(300, G.money);
+      const f = Math.min(POLICE_WAI, G.money);
       G.money -= f;
       _say("You wai first and apologise second, in Thai, both hands steady-ish. " +
         "The officer's arithmetic visibly adjusts for manners. " +
@@ -619,7 +619,7 @@ const _ENC = {
         `“Drink water, my friend. Go home slow.” (฿${G.money} left.)`, "alert");
       _addHappy(-1);
     } else if (/\b(?:pay|fine|give|baht|ok|okay|yes|here)\b/.test(input)) {
-      const f = Math.min(500, G.money);
+      const f = Math.min(POLICE_PAY, G.money);
       G.money -= f;
       _say((f ? `฿${f} disappears into a shirt pocket with a receipt that will never ` +
         "exist. " : "He turns out your pockets, finds lint, and looks personally " +
@@ -645,7 +645,7 @@ const _ENC = {
       if (!Array.isArray(G.encPrompt) || !G.encPrompt.length) _encPrompt([_line, "alert"]); else _say(_line, "alert");
       return;
     } else {
-      const f = Math.min(1000, G.money);
+      const f = Math.min(POLICE_ARGUE, G.money);
       G.money -= f;
       _say("You argue. His smile does not move, but a second uniform materialises " +
         "at your elbow, and the fine develops a friend. " +
@@ -1403,10 +1403,13 @@ const _ENC = {
       G.money -= FORTUNE_READ;
       G.pendingEnc = "fortune";
       _setFlag("curseRitual");
+      // the payment is said once; only the DEMAND is the prompt a reload redraws —
+      // "You hand over ฿199" replayed on continue read as a second charge (Malcolm, round 59)
+      _say(`You hand over ฿${FORTUNE_READ}. He loops the red string around your wrist, ` +
+        "cradles your palm, hums, and writes a number on a scrap of paper — “your " +
+        "lucky number, keep always.”", "dim");
       _encPrompt(
-        [`You hand over ฿${FORTUNE_READ}. He loops the red string around your wrist, ` +
-          "cradles your palm, hums, and writes a number on a scrap of paper — “your " +
-          "lucky number, keep always.” Then the face changes. “But the string is not " +
+        ["Then the face changes. “But the string is not " +
           "enough, friend. The dark spirit is strong. Must do cleansing — incense, " +
           "prayer, full ritual.” He writes a second number under the first. It has " +
           "four figures. A hand settles warm and heavy on your shoulder, and two more " +
@@ -1788,7 +1791,7 @@ function _taxiAsk(input) {
 // to disengage) wins. Whatever they take is banked in G.curseOwed so a police
 // REPORT can claw most of it back. A stony-broke mark isn't worth the incense.
 function _curseRitual(input) {
-  const _outHint = "(You can REPORT this at the police station, north end of Beach Road.)";
+  const _outHint = "(You can REPORT this at the police station — Beach Road at Soi 9, a step north of Central.)";
   if (G.money <= 0) {
     _say("He lifts your wrist, finds the pulse of a man with nothing left to give, " +
       "and the grave concern evaporates like temple smoke. A last mutter, and the " +
@@ -1846,7 +1849,7 @@ function _curseRitual(input) {
 // Whatever they take is banked in G.tonicOwed so a police REPORT can claw most
 // of it back (minus the boys' cut). A stony-broke mark isn't worth the trouble.
 function _tonicShop(input) {
-  const _outHint = "(You can REPORT this at the police station, north end of Beach Road.)";
+  const _outHint = "(You can REPORT this at the police station — Beach Road at Soi 9, a step north of Central.)";
   if (G.money <= 0) {
     _say("They pat you down with their eyes, find a wallet as empty as their " +
       "promises, and lose interest all at once. A shove, the bead curtain, and " +

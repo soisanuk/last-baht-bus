@@ -157,7 +157,7 @@ test("Tan advertises the locator himself, and the quest names the key not the do
   // the Orchid quest pointed at Rose, behind a door only Candy opens
   assert.match(QUESTS.orchid_intro.desc, /ASK CANDY ABOUT ROSE/,
     "the hint has to name the step you can actually take");
-  const rose = NPCS.candy.dialogue.find(d => d.topic === "rose");
+  const rose = NPCS.candy.dialogue.find(d => _topicHits(d.topic, "rose"));
   assert.ok(rose && rose.chip !== false, "…and the node carrying the key is offerable on the chip bar");
 });
 
