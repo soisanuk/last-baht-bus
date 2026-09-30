@@ -254,7 +254,7 @@ function motBoots() {
   out = []; run("tip mot 200");
   assert.match(text(), /I do nothing for you yet/, "before dinner the subject does not exist");
   assert.equal(G.money, 3000, "and nothing moved");
-  _setFlag("motFed"); at();
+  _setFlag("motFed"); _setFlag("motBootsTold"); at();
   out = []; run("ask mot about boots");
   assert.match(text(), /studs one|640/i, "he will discuss them once he has raised them");
   at(); out = []; run("tip mot 200");

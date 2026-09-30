@@ -1328,7 +1328,7 @@ test("the calls trade money against people in both directions", () => {
   G.bar.shiftAsked = true; G.shiftCall = "early"; G.shiftWho = her; G.pendingChoice = "shift";
   const till0 = G.bar.cash, bond0 = G.soc.drinks[her];
   say("yes");
-  assert.ok(G.bar.cash < till0, "a floor one short takes less money");
+  assert.ok((G.bar.lostTake || 0) > 0, "a floor one short takes less money — takings never taken, counted at settle (round 60)");
   assert.ok(G.soc.drinks[her] > bond0, "and she remembers it");
 
   running(); G.room = "stinky_bar"; G.nightTurn = 20; cmd("work");

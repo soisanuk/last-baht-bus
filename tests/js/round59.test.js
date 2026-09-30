@@ -112,8 +112,8 @@ test("a piwin knows the town's doors by name", () => {
 test("MOTOSAI TO HOTEL ends at the hotel's door, and IN is the door", () => {
   G.hotel = "sabai"; G.room = Object.keys(ROOMS).find(r => ROOMS[r].motosai && ROOMS[r].region === "Beach Road");
   const saved = _rand; try { _rand = () => 0.99; run("motosai to hotel"); } finally { _rand = saved; }
-  assert.equal(G.room, "hotel_soi");
-  run("in"); assert.equal(G.room, "hotel_room");
+  assert.equal(G.room, "hotel_room", "the Sabai's soi is dark: the ride ends at the steps (round 60)");
+  G.room = "hotel_soi"; run("in"); assert.equal(G.room, "hotel_room");
 });
 test("the lost man in the maze is a different man on different nights", () => {
   assert.ok(Array.isArray(ENCOUNTERS.maze.intro) && ENCOUNTERS.maze.intro.length >= 3);

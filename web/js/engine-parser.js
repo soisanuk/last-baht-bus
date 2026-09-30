@@ -231,6 +231,11 @@ const _FOLK_KPFIELD_WON = [
   "“You play before?” He asks it the way a man asks whether the fish he lost was really that big. You say something modest. “Mm.” He does not believe you, and he has decided to like you anyway, which is the rarer thing.",
   "He chalks the cue he no longer needs, out of habit, and tells you where you went wrong on the frame you won. He is right about it. He will be back on the third night, and so should you be.",
 ];
+const _FOLK_KPFIELD_OUT = [
+  "“Out before you, boss.” He raises his glass to the felt with the dignity of a man who has made his peace with it. “Next time we both stay longer, na?”",
+  "He laughs at himself before you can. “Three lives, and I spend them like baht on Walking Street.” A nod at whoever took the pot. “He buy the beer. Not me. I am only the audience now.”",
+  "“Big field tonight.” He shrugs at the chalk. “I go out on the pink. You go out on the black. The pot go in somebody else pocket — same same as every third night.”",
+];
 const _FOLK_KPFIELD_LOST = [
   "He is generous about it, which is worse. “Good game, boss.” The pot is in his shirt pocket; he touches it once, not showing off, checking. “You come back, yes? Third night.”",
   "“The black. Always the black.” He says it with real sympathy, as a man who has lost on the black more times than he has won on it. Then he buys you the beer, because that is the rule, and it tastes exactly like ฿100.",
@@ -318,8 +323,8 @@ function _masseuseTalk(t) {
     // the shop's own woman, asked a real question, answers it — her name, her home, her
     // people, her training — not the next line of a script (Graeme, round 58)
     const q = String(t || "").toLowerCase();
-    if (/\b(name|your name|who are you|call you)\b/.test(q)) return `"${sw.name}." She says it the way you'd say the time. "${sw.yrs} in this shop, so everybody on the street know it already."`;
-    if (/\b(home|from|village|hometown|province|isan|north|where)\b/.test(q)) return `"${sw.from.charAt(0).toUpperCase() + sw.from.slice(1)}." ${sw.name} doesn't stop folding towels. "${sw.yrs} here. Home is for Songkran."`;
+    if (/\b(name|your name|who are you|call you)\b/.test(q)) return `"${sw.name}." She says it the way you'd say the time. "${_cap(sw.yrs)} in this shop, so everybody on the street know it already."`;
+    if (/\b(home|from|village|hometown|province|isan|north|where)\b/.test(q)) return `"${sw.from.charAt(0).toUpperCase() + sw.from.slice(1)}." ${sw.name} doesn't stop folding towels. "${_cap(sw.yrs)} here. Home is for Songkran."`;
     if (/\b(family|kids?|children|son|daughter|husband|mother|baby|grandchildren|people)\b/.test(q)) return `"${sw.kin}" ${sw.name} says it flat, a woman describing her week.`;
     if (/\b(train|training|learn|school|wat pho|paper|certificate|hands|technique|how long)\b/.test(q)) return `"${sw.train}" ${sw.name} flexes her hands, which crack.`;
     if (/\b(special|extra|happy|finish)\b/.test(q)) return `"Wrong shop." ${sw.name} doesn't even look up. "Here is massage. Pink light is down the road — you pass three."`;
@@ -439,13 +444,22 @@ function _promptedFolk(arg, topic) {
       return toks.some(w => new RegExp("\\b" + w + "\\b").test(a)) ||
         (/nephew/.test(n.toLowerCase()) && /nephew/.test(a)) || (/piwin/.test(n.toLowerCase()) && /piwin|vest/.test(a));
     });
-    if (hit) { _say(_pickVary(G.lastKp.won ? _FOLK_KPFIELD_WON : _FOLK_KPFIELD_LOST, "folkkp")); return true; }
+    if (hit) {
+      // the winner speaks as the winner; a man knocked out before you speaks as one of the losers
+      const isWinner = G.lastKp.winner && hit === G.lastKp.winner;
+      _say(_pickVary(G.lastKp.won ? _FOLK_KPFIELD_WON : (isWinner || !G.lastKp.winner) ? _FOLK_KPFIELD_LOST : _FOLK_KPFIELD_OUT, "folkkp"));
+      return true;
+    }
   }
   if (/\b(motosai|piwin|driver|rider|bike ?boy)\b/.test(a) && r.motosai) {
     if (/^(?:the )?(?:bus|buses|busses|songthaews?|baht ?bus|blue trucks?|trucks?)$/.test(t)) { _say(_busTalk()); return true; }
     _say(_pickVary(_FOLK_MOTO, "folkmoto")); return true;
   }
   if (r.massage || r.soapy) {
+    // the shop's own woman answers to her NAME: "talk to Sukanya" was "no one here answers
+    // to that" in the shop whose prose had just named her (Kwame, round 60)
+    const _sw = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[G.room];
+    if (_sw && _pnm(a) === _pnm(_sw.name)) { _say(_masseuseTalk(t)); return true; }
     if (/\b(masseuse|massuse|therapist|girl|girls|lady|ladies|woman|women|staff|her|them|manageress|mama|mamasan|owner)\b/.test(a)) {
       const hrs = _hoursSay();
       if (hrs) { _say(hrs); return true; }
@@ -456,8 +470,10 @@ function _promptedFolk(arg, topic) {
     }
     if (/\b(masseuse|massuse|therapist|girl|girls|lady|ladies|woman|women|staff|her|them|manageress|mama|mamasan|owner)\b/.test(a)) {
       // the shop that HAS a named woman sends you to her by name — she is right there
+      // …and asking for "the masseuse" where she has a name reaches HER, rather than a
+      // lecture about her having one (Kwame, round 60: refused at two shops)
       const named = _npcsHere().find(x => NPCS[x] && /^[A-Z]/.test(NPCS[x].name));
-      if (named) { _say(`The one on the floor tonight is ${NPCS[named].name} — she is right there, and she has a name. (TALK TO ${NPCS[named].name.toUpperCase()})`, "dim"); return true; }
+      if (named) { _doTalkBody(NPCS[named].name, topic); return true; }
       _say(_masseuseTalk(t)); return true;
     }
   }
@@ -3856,6 +3872,9 @@ function _doTalkBody(arg, topic) {
   }
   // the piwin at a stand is a real person in the fiction and not an NPCS entry
   if (/^(piwin|motosai|driver|bike ?boy|taxi)$/i.test(arg)) {
+    // …unless the piwin is the man in his vest who just took the killer pot off you (Fintan, round 60)
+    const _kpPiwin = G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day && (G.lastKp.names || []).some(n => /piwin|vest/i.test(n));
+    if (!_piwinHere() && _kpPiwin && _promptedFolk(arg, topic)) return;
     if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
     return topic ? _piwinAbout(topic) : _piwinTalk();
   }
@@ -3955,6 +3974,16 @@ function _doTalkBody(arg, topic) {
       !(NPCS[npc].dialogue || []).some(d => d.topic && _topicHits(d.topic, String(topic).trim()))) {   // Jun's "yourself" node (Margarethe, round 47)
     topic = NPCS[npc].name.split(" ").pop().toLowerCase();
     _selfAsk = true;
+  }
+  // the friend Cream says she is visiting is the woman working her bar, who is a generated
+  // hostess with no line about her (Fintan, round 60: "ask near about cream", twice, a miss)
+  if (topic && NPCS.cream && NPCS[npc] && NPCS[npc].filler && NPC_ROLES[npc] === "hostess" &&
+      _npcRoom(npc) === NPCS.cream.room && /\b(cream|friend|your friend|coffee shop|barista)\b/i.test(String(topic))) {
+    _say(_pickVary([
+      n => `"Cream?" ${n}'s face does something complicated and settles on fond. "My friend, long time. Coffee shop in the day. At night she come visit me." A pause exactly long enough. "Every night, visit me. Very good friend."`,
+      n => `${n} laughs into her glass. "Cream visit me. She say. Every night she visit me, and every night I am so surprise." She clinks your glass. "Is okay. Everybody need a friend to visit."`,
+    ], "nearcream")(NPCS[npc].name));
+    return;
   }
   // a man who OWES Nira and asks her about debt means his own: "Twelve thousand" — the
   // driver's cousin's debt — read as his ฿6,000 at twice the figure (Malcolm, round 59)
@@ -5470,14 +5499,30 @@ function _townTalk(npc, topic) {
     // "September is The dead season" (Mick, round 57): {How} opens a sentence, {how} sits inside one
     return pick("season", { m: _SEASON_MONTHS[_seasonMonth()], how: how.charAt(0).toLowerCase() + how.slice(1), How: how });
   }
-  if (/\b(the book|book|till|float|drawer|last night|crate|delivery|deliveries|slate|tab|comp|costs?|short|the 400|400|receipts?|the money)\b/.test(t) &&
+  // the arrangements you signed: your own staff pay them nightly and could not name them
+  // ("not my department", Kwame, round 60)
+  if (/\b(arrangements?|cleaning|cleaners|screen|pos|till man|jobs?|contracts?|procurement)\b/.test(t) &&
+      typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid")) {
+    const done = Object.keys((G.syn && G.syn.done) || {}).filter(k => G.syn.done[k]);
+    const nm = { cleaning: "the cleaners", screen: "the screen men", pos: "the till company" };
+    const list = done.map(k => nm[k] || k), n = NPCS[npc].name;
+    const L = list.length > 1 ? list.slice(0, -1).join(", ") + " and " + list[list.length - 1] : list[0];
+    _say(!list.length
+      ? (reg === "floor" ? `"Arrangement?" ${n} shakes her head. "No arrangement, boss. We do everything ourself — slow, but ours."`
+        : `"None," ${n} says. "Everything on this rail we sort ourselves. Slower, and nobody we owe."`)
+      : reg === "floor"
+        ? `"${_cap(L)}." ${n} counts them on her fingers. "฿${_num(done.length * SYN_JOB_NIGHT)} every night, boss, all together. On the book as the arrangements."`
+        : `"${_cap(L)}." ${n} doesn't need to look it up. "฿${_num(done.length * SYN_JOB_NIGHT)} a night between them — the arrangements line. Tan's people, and worth it, mostly."`);
+    return true;
+  }
+  if (/\b(the book|book|till|float|drawer|last night|crate|delivery|deliveries|slate|tab|comp|costs?|short|the 400|400|receipts?|the money|money)\b/.test(t) &&
       typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid")) {
     const ll = G.bar && G.bar.lastLines;
     if (!ll) return pick("books", { rent: _barRent().toLocaleString(), note: BAR_MONTHLY.toLocaleString(), wages: BAR_WAGES.toLocaleString() });
     const out = (ll.nut || 0) + (ll.cogs || 0) + (ll.wages || 0) + (ll.mgr || 0) + (ll.proc || 0) + (ll.evtCost || 0);
     const nts = [...(ll.notes || []), ...(ll.lostNotes || [])];
     return pick("lastnight", { take: _num(ll.take), out: _num(out), bert: ll.mgr ? `, Bert ฿${_num(ll.mgr)}` : "",
-      who: ll.declaredOnly ? "Your name on the shift, but Bert stood it" : ll.worked ? "You stood it" : "Bert stood it",
+      who: ll.declaredOnly ? "Your name on the shift, but Bert ran it" : ll.worked ? "You stood it" : "Bert ran it",   // "stood" is the owner's word (Kwame, round 60)
       notes: nts.length ? " And: " + nts.join("; ") + "." : "" });
   }
   // your own books, from your own staff: the three lines that never move
@@ -5533,6 +5578,10 @@ function _townTalk(npc, topic) {
       // region, then the street — "Beach Road, foot of Soi 6" — and never the region twice
       const r = ROOMS[v].region, sName = street ? ROOMS[street].name : "";
       const m = sName.match(/^(.*?)\s*\((.*)\)$/), phrase = m && m[1].trim() === r ? m[2] : sName;
+      // the street you are standing on (or drinking off) is not an address: "Naklua, Bar Corner"
+      // said inside the Anchor on Bar Corner (Fintan, round 60)
+      const hereSt = _room().venues ? G.room : Object.keys(ROOMS).find(k => (ROOMS[k].venues || []).includes(G.room));
+      if (street && street === hereSt) return pick("venue", { v: _barName(v), rs: "A few doors down, on this street" });
       return pick("venue", { v: _barName(v), rs: r + (phrase && phrase !== r ? ", " + phrase : "") });
     }
   }
@@ -6767,6 +6816,17 @@ function _doBuy(arg) {
       // a manager's beer is the man-drink path below (it already reads "beer for bert");
       // a host bar's drinks run on the host track — only the lady route is rewritten
       if (exact && !NPCS[who].manager && !r.hostBar) arg = "drink for " + nm;
+      // a named man who is NOT here: "buy nigel a beer" poured one for the buyer, took ฿80
+      // and paid สนุก, while TALK said he wasn't around (Dennis, round 60)
+      if (!who && nm && !/^(man|lady|him|her|me|myself|round|drink|cold|big|small|another|one|two)$/.test(nm)) {
+        const away = Object.keys(NPCS).find(k => !NPCS[k].filler && /^[A-Z]/.test(NPCS[k].name || "") &&
+          (NPCS[k].name.toLowerCase() === nm || NPCS[k].name.toLowerCase().split(" ").pop() === nm));
+        // a man who works THIS room and has left the floor has his own line (round 44's host)
+        if (away && !_npcsHere().includes(away) && NPCS[away].room !== G.room && !r.hostBar) {
+          _say(`${NPCS[away].name} isn't here to drink it. (BUY BEER, if the beer's for you.)`);
+          return;
+        }
+      }
     }
   }
   if (G.dog && /\bfor\b|\bto\b/.test(arg) && typeof _isDogWord === "function" &&
@@ -7751,7 +7811,9 @@ function _doMotosai(arg) {
     const _hr = { sabai: "hotel_room", queenvic: "qv_room", areca: "areca_room", metropole: "metropole_room" }[_named];
     G.motoHomeDoor = Object.keys(ROOMS).find(r => Object.values(ROOMS[r].exits || {}).includes(_hr)) || null;
   } else G.motoHomeDoor = null;
-  const destKey = Object.keys(MOTOSAI_DESTS).find(k => w.includes(k) || k.includes(w));
+  // the longest key that fits: "beach road south" took the "beach road" key (Fintan, round 60)
+  const destKey = Object.keys(MOTOSAI_DESTS).filter(k => w.includes(k)).sort((a, b) => b.length - a.length)[0] ||
+    Object.keys(MOTOSAI_DESTS).find(k => k.includes(w));
   if (!w || !destKey) {
     // The challenge frame: the same piwin who refuses a NAMED destination in
     // voice was offering the whole city as a menu one command earlier
@@ -7762,7 +7824,13 @@ function _doMotosai(arg) {
       Object.keys(MOTOSAI_DESTS).join(" · ") + " · hotel)", "dim");
     return;
   }
-  const d = MOTOSAI_DESTS[destKey];
+  let d = MOTOSAI_DESTS[destKey];
+  // "beach road south" rode to Central, with Bank at the south end (Fintan, round 60): the
+  // road's own ends are where you said
+  if (destKey === "beach road") {
+    const end = /\bsouth\b/.test(w) ? "beach_rd_s" : /\bnorth\b/.test(w) ? "beach_rd_n" : null;
+    if (end && ROOMS[end]) d = { ...d, room: end };
+  }
   // You cannot buy a ride to the kerb you are standing on. MOTOSAI TO KHAO TALO
   // from Khao Talo took ฿170 and re-described the room — "the fastest ฿170 of
   // your life" (Stan, round 35). TRAVEL already refuses this; so does the bike.
@@ -7873,7 +7941,11 @@ function _doMotosai(arg) {
   // the districts ridden THROUGH, read before the room changes under you
   const _via = (_districtPath(_room().region, ROOMS[d.room].region) || []).slice(1, -1);
   G.room = d.room;
-  if (G.motoHomeDoor && G.motoHomeDoor !== G.room && (_hops(G.room, G.motoHomeDoor) ?? 9) <= 3) G.room = G.motoHomeDoor;
+  if (G.motoHomeDoor && G.motoHomeDoor !== G.room && (_hops(G.room, G.motoHomeDoor) ?? 9) <= 3) {
+    // a dark hotel soi is the headlight's job, not yours: set down at the door he was
+    // bitten on the next step (Kwame, round 60), so the ride ends at the steps and you go in
+    G.room = ROOMS[G.motoHomeDoor].dark ? (_hotelRoomId() && Object.values(ROOMS[G.motoHomeDoor].exits || {}).includes(_hotelRoomId()) ? _hotelRoomId() : G.motoHomeDoor) : G.motoHomeDoor;
+  }
   G.motoHomeDoor = null;
   if (extraTurns) { G.offstage = true; const ended = _passTime(extraTurns); G.offstage = false; if (ended) return; }
   G.darkStreak = 0;
@@ -10023,6 +10095,15 @@ function _leagueTalk(npc) {
   const tinglish = !!NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
   const punter = !!npc && !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house;
   const inN = _leagueIn();
+  // the frame you just lost on her own table: "You play? (PLAY KILLER)" sixteen turns after
+  // (Fintan, round 60). Tonight's field is remembered — say who took it.
+  const kp = G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day ? G.lastKp : null;
+  if (kp) {
+    const w = kp.won ? "you" : kp.winner ? kp.winner : "somebody";
+    return kp.won
+      ? (tinglish ? "“You win tonight! The pot, the beer, the name behind the till. Everybody see.”" : "“You took it tonight. The pot and the chalk behind the till — enjoy it; they'll be after you now.”")
+      : (tinglish ? `“You play already, tilac — ${w} take the pot. Next league, every third night.”` : `“You've had your go tonight — ${w} took the pot. Next league's in three nights.”`);
+  }
   if (punter) {
     if (!_room().pool) return "“Not here — no table. Every bar that's got one plays the same night, every third night. You'll hear it before you see it.”";
     if (inN === 0) return `“Tonight, and I'd get your ฿${KP_ENTRY} in the ashtray now. Three lives each, pot or lose one, last cue standing. (PLAY KILLER)”`;
@@ -11537,8 +11618,22 @@ function doCommand(input) {
     }
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
     if (/^share/.test(lower)) { _doShare(); _vacationEndPrompt(); return; }
-    if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
-    if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
+    // A QUESTION IS NOT AN ANSWER (Dennis, round 60): "what happens if I move to pattaya?"
+    // made the permanent move, and "what does a new vacation mean?" flew him home — the
+    // choice matched anywhere in the sentence. A question gets the explanation; a choice
+    // has to START with the choice.
+    if (/\?|^(what|how|why|does|do|is|are|can|will|would|should|explain|tell me|difference|which|help)\b/.test(lower)) {
+      if (/^help$/.test(lower)) _doHelp && _doHelp("");
+      _say("NEW VACATION is a trip home and back: next month you land again for another week. The people you met " +
+        "remember you — a little cooler than you left them — your quests are still open, your standing on the soi " +
+        "starts over, and the town has the same map.", "dim");
+      _say("MOVE TO PATTAYA is permanent. You stop flying home: the week never ends, your savings come over, and the " +
+        "long game opens — a life here, and in time the chance of a bar of your own. There is no flight back from it.", "dim");
+      _vacationEndPrompt();
+      return;
+    }
+    if (/^(new vacation|new|vacation|another|again|fly back|fly home|holiday|next month|go home)\b/.test(lower)) { _newVacation(); return; }
+    if (/^(move to pattaya|move|expat|stay|live here|pattaya|remain)\b/.test(lower)) { _goExpat(); return; }
     _vacationEndPrompt();
     return;
   }
@@ -12296,7 +12391,10 @@ function doCommand(input) {
       // a SLEEP tapped right after waking burns the whole night with no warning
       // (mobile playtest 2026-08-22) — once per evening, the bed asks if you mean it
       else if (G.room === _hotelRoomId() && G.nightTurn < 10 && G.sleepWarnDay !== G.day &&
-               G.wakeTurn != null && G.turns - G.wakeTurn <= 1) {
+               ((G.wakeTurn != null && G.turns - G.wakeTurn <= 1) ||
+                // the LAST night of a week is always asked: a sleep at 18:00 ended the holiday
+                // with the whole of its final night unspent (Fintan, round 60)
+                (G.stage !== "expat" && G.day >= 7 && !G.visitUntil))) {
         // The _prevCmd test that used to sit here ("don't warn if he just typed
         // sleep") was both redundant and harmful: sleepWarnDay already lets a
         // genuine confirmation through, and the SLEEP THAT ENDED THE PREVIOUS
@@ -12306,7 +12404,9 @@ function doCommand(input) {
         // keystroke, and night one TRAINS the double-tap, because the first
         // SLEEP is swallowed by the app-girl modal (round 24, Jojo).
         G.sleepWarnDay = G.day;
-        _say(`It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it. ` +
+        _say(G.stage !== "expat" && G.day >= 7
+          ? `It's ${_clockStr()} on the last night of the trip. Sleep now and the week ends here, with its final night unspent. (SLEEP again if you mean it, or go OUT.)`
+          : `It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it. ` +
           "(SLEEP again if you mean it, or go OUT.)", "dim");
         return;
       }
@@ -13365,7 +13465,10 @@ function _motBoots(amount) {
       "“I HAVE the shoes. You want to buy me two shoes? What I do with four?”");
     return true;
   }
-  if (!_flag("motFed")) return false;      // the subject does not exist until he raises it
+  // the subject does not exist until he raises it — and the dinner raises it one time in
+  // three, so money given after a dinner about his mother read as a stranger's debt
+  // scoreboard, "฿680. Still ฿420" (Fintan, round 60)
+  if (!_flag("motFed") || !_flag("motBootsTold")) return false;
   const gap = _motBootsGap();
   const take = Math.min(amount, gap);
   const over = amount > gap;               // an overshoot always closes the gap, so it is ONE beat below
@@ -13410,7 +13513,9 @@ function _motDinner() {
   G.money -= MOT_DINNER;
   _setFlag("motFed");
   _say(_pickVary(_MOT_DINNER_LINES, "motdinner"), "win");
-  _say(_pickVary(_MOT_DINNER_TALK, "motdinnertalk"));
+  const _mt = _pickVary(_MOT_DINNER_TALK, "motdinnertalk");
+  _say(_mt);
+  if (/football boots/.test(_mt)) _setFlag("motBootsTold");
   if (G.dog) _say(_dogN("Sai Krok gets the chicken skin, which Mot removes from his own plate " +
     "first, without comment, as though this were simply the order of things."), "dim");
   G.hunger = Math.max(0, G.hunger - 45);

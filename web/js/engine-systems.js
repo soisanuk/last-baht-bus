@@ -247,7 +247,7 @@ function _doRepay(arg) {
     _say(`Nira takes the last of it and, for the first time, the calculator behind her eyes ` +
       `clicks off. "Paid." ` + (late
         ? `"Late — but paid. I remember both." A nod that is almost respect.`
-        : `"On time, even. You, I lend to again — better rate." That is a genuine smile.`), "win");
+        : `"On time, even. You, I lend to again — any time." That is a genuine smile.`), "win");
     _addBond("nira", late ? 1 : 2); // a man who pays earns her regard
     if (!late) _repGain(); // squaring a debt on time is good for your name; late is just even
   } else {
@@ -4893,7 +4893,7 @@ function _maybeIncomingText() {
       // "you go other bar?? i see you" is an accusation: it wants another bar behind it
       // tonight, not a night spent wholly with her (Wiremu, round 59)
       const _elsewhere = Object.entries(G.soc.barTurns || {}).some(([rm, n]) => rm !== _npcRoom(id) && n >= 3 && ROOMS[rm] && ROOMS[rm].barType);
-      const _pool = ["i dream about you last night na 💭❤️", _elsewhere ? "you go other bar?? 😤 i see you i KNOW 👀" : "you tired today? 😴 i still smile from last night",
+      const _pool = ["i dream about you last night na 💭❤️", _elsewhere ? "you go other bar?? 😤 i see you i KNOW 👀" : "you tired today? 😴 i still smile from the other night",
         "miss you so much cannot sleep 😢", "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"];
       _pushMsg(id, _pool[Math.floor(_rand() * 4)]);
     }
@@ -5141,7 +5141,9 @@ function _sayDrizzle() {
         "the aircon. One of the girls glances up; nobody moves.", "dim");
       return;
     }
-    _say(_DRIZZLE_BAR[(G.day * 7 + Math.floor(G.turns / 15)) % _DRIZZLE_BAR.length], "dim");
+    // through _roomFit: "one of the girls" in a one-woman bar (Fintan, round 60 — the drizzle bypassed it)
+    const _db = typeof _roomFit === "function" ? _roomFit(_DRIZZLE_BAR) : _DRIZZLE_BAR;
+    _say(_db[(G.day * 7 + Math.floor(G.turns / 15)) % _db.length], "dim");
   } else {
     // no dice for weather flavour: the variant is a function of the day and
     // the turn, not _rand() — and no baht bus on the Darkside, where the songthaews
@@ -5905,8 +5907,10 @@ function _dogName() { return (G.dog && G.dog.name) || "Sai Krok"; }
 function _dogN(s) { return _L(s).replace(/Sai Krok/g, () => _dogName()); }
 // does this word mean the dog? covers the defaults and whatever he's named now
 function _isDogWord(a) {
-  return /dog|sai|krok/.test(a) ||
-    !!(G.dog && G.dog.name && a.includes(G.dog.name.toLowerCase()));
+  // whole words: "sailor's arms" was the dog, because "sai" is a substring of it (Fintan, round 60)
+  const s = String(a || "").toLowerCase();
+  const nm = G.dog && G.dog.name ? G.dog.name.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : null;
+  return /\bdog\w*|\bsai\b|\bkrok\b|\bpuppy\b/.test(s) || !!(nm && new RegExp("\\b" + nm + "\\b").test(s));
 }
 
 // ── Tan calls the favour in ──────────────────────────────────────────────────
@@ -5981,19 +5985,20 @@ function _tanFavourAsk() {
 function _tanFavourYes() {
   G.pendingChoice = null;
   _setFlag("tanFavourDone");
+  G.tanFavourDay = G.day;   // her story moves at its own pace: "last month she went to a hospital" the next night (Kwame, round 60)
   _align("syndicate", 2);
   _say("You take the slip. Tan does not thank you extravagantly — a nod, the " +
     "way you would nod at a man who held a door — and that restraint is the " +
     "most eloquent thing about him.", "win");
-  _say("\"Good. Bert will put her on the book Monday.\" He is already half " +
+  _say("\"Good. Bert will put her on the book tomorrow.\" He is already half " +
     "turned toward the door and whatever is next. Then, without any change in " +
     "tone: \"And if anyone from the land office comes to the bar, or anyone " +
     "asking who owns what — you do not answer, you call me. Any hour. This is " +
     "not a worry, my friend. This is only how it works.\"");
-  _say("Nothing bad happens. Nothing bad happens all week, or the week after. " +
-    "The name sits on the staff list in Bert's neat capitals between two girls " +
-    "who actually exist, and the wage goes out and comes back, and the bar is " +
-    "busy on Tuesdays.");
+  // said as what WILL be, not a week narrated in advance (Kwame, round 60)
+  _say("The name will sit on the staff list in Bert's neat capitals between two girls " +
+    "who actually exist, and the wage will go out and come back, and — if Tan is " +
+    "right, and he usually is — nothing bad will happen at all.");
   _say("(★ You are inside somebody's web of favours now. It cost you nothing, " +
     "which is the part to think about.)", "dim");
   _addHappy(2);
@@ -6225,7 +6230,7 @@ function _doWork() {
   // _barNight consumes and clears it, so it cannot leak into a later night.
   G.bar.workedLast = true;
   G.bar.awayTurns = 0;               // the presence clock starts now (_workPresenceTick)
-  G.bar.stoodTurns = 0;
+  G.bar.stoodTurns = 0; G.bar.railTurn = 0;
   G.bar.floorN = 0; G.bar.floorTurn = -99;   // …and the floor's moments start with it
   G.bar.workedTurn = G.turns;        // the call needs the room to settle first
   // `worked` (the BOOKS "nights stood" figure) is counted at SETTLE, once the
@@ -6318,11 +6323,18 @@ function _workTaleTell(b, how) {
   if (!t || t.told) return;
   t.told = true;
   if (how === "morning") _say("(The shift, as it went:)", "dim");
-  _say(t.seen);
+  // a man who went home at eleven was not there for the last bus at two or the cash-out
+  // with Bert, and the morning told him about both (Kwame, round 60): the late half of
+  // the tale waits on his having been on the rail for it
+  const _late = s => _isCloseLine(s) || /\b(gone two|last bus|small hours|cash out|cash-out|the close|closing up)\b/i.test(String(s));
+  const _leftEarly = how === "morning" && (b.railTurn || 0) < LAST_BUS_TURN;
+  let seen = t.seen;
+  if (_leftEarly && _late(seen)) { const early = _WORK_SHIFT.filter(l => !_late(l)); if (early.length) seen = early[_hh("early:" + G.day, 79) % early.length]; }
+  _say(seen);
   _say(t.missed, "dim");
   // a close-of-night REVEAL is told here, at the close, or never — the floor's three
   // moments are all dealt before ten
-  if (!_closeReveal()) {
+  if (!_leftEarly && !_closeReveal()) {
     const _closes = _WORK_SHIFT.filter(_isCloseLine);
     if (_closes.length && _hh("close:" + G.day, 71) % 3 === 0) _say(_closes[_hh("closel:" + G.day, 73) % _closes.length]);
   }
@@ -6333,7 +6345,7 @@ function _workTaleTell(b, how) {
 function _workPresenceTick() {
   const b = G.bar;
   if (!_barOwned() || !b || b.workedDay !== G.day || !b.workedLast) return;
-  if (G.room === "stinky_bar") { b.stoodTurns = (b.stoodTurns || 0) + 1; _workTaleTick(); return; }
+  if (G.room === "stinky_bar") { b.stoodTurns = (b.stoodTurns || 0) + 1; b.railTurn = G.nightTurn; _workTaleTick(); return; }
   b.awayTurns = (b.awayTurns || 0) + 1;
   // a shift stood into the small hours is a shift stood, wherever the night then
   // ends (Graham, round 47: 45 turns, home to bed, "Bert ran it"); before
@@ -6696,7 +6708,13 @@ function _shiftAsk() {
   // same girl, same speech, across nights (Keith, 2026-08-26). Pick per call id.
   // "He has never once not paid you" on the first night you have owned a bar
   // (Malcolm, round 47): the record is yours only once there is one
-  const tabrecord = (b.nights || 0) >= 7
+  // …and the record is the one the books kept: "never once not paid you" three nights
+  // after he stiffed you (Kwame, round 60)
+  const tabrecord = (b.stiffed || 0) > 0
+    ? "There is a docket with his name on it under the till already. There are also nights he has squared it before he went. Nobody, including him, knows which this is."
+    : (b.tabPaidNight || 0) > 0
+    ? "He has paid you on the night before, once, which the whole rail still talks about."
+    : (b.nights || 0) >= 7
     ? "He has never once not paid you. He has also never once paid you on the night."
     : "Bert, without looking up: he has never once not paid. He has also never once paid on the night.";
   const pick = (f, k) => _fmt(Array.isArray(f) ? _pickVary(f, "shift:" + call.id + ":" + k) : f, { who, payday: _shiftPayday(), tabrecord });
@@ -6837,12 +6855,13 @@ function _shiftYes() {
       ], "tabstiff"), { amt: SHIFT_TAB_TAKE }), "alert");
     } else {
       _shiftTake(SHIFT_TAB_TAKE, "a regular's slate, settled");
+      G.bar.tabPaidNight = (G.bar.tabPaidNight || 0) + 1;
       // the books say "settled" TONIGHT, so the sentence does too — it promised
       // payday while the ledger showed the money in (Rolf, round 54)
       _say(`(He squares it before he goes — in full, out of the back pocket he said was empty — and stands you one out of it. One docket fewer under the till.)`, "dim");
     }
   } else if (call.id === "early") {
-    _shiftTake(-SHIFT_EARLY_COST, "the floor one short");
+    _shiftLost(SHIFT_EARLY_COST, "the floor one short");   // takings never taken, not a bill (Kwame, round 60)
     if (who) { _addBond(who, 2); (G.soc.leftEarly = G.soc.leftEarly || {})[who] = G.day; }
   } else if (call.id === "round") {
     // IT IS A GAMBLE, AND IT SAYS SO: "a round on the house here might buy the
@@ -6874,7 +6893,7 @@ function _shiftYes() {
     // occasionally it is not, and you own the bar either way.
     if (_rand() < 0.72) {
       _say("He looks at you, works out in about a second and a half that you are " +
-        "the one whose name is over the door, and lets himself be walked to the " +
+        "the one whose bar it is, and lets himself be walked to the " +
         "front like it was his idea. Bert says nothing at all, which from Bert is " +
         "a standing ovation.", "win");
       _repGain();
@@ -7629,6 +7648,7 @@ function _barNight(settleDay) {
     fromPocket = Math.min(G.money, -b.cash);
     G.money -= fromPocket;
     b.pocketDrawn = (b.pocketDrawn || 0) + fromPocket;   // the bar's own ledger, not the night's spending
+    b.pocketNight = (b.pocketNight || 0) + fromPocket;   // …but the till going under is the morning's news (Kwame, round 60)
     b.cash += fromPocket;
   }
   const underwater = b.cash < 0;
@@ -7645,7 +7665,7 @@ function _barNight(settleDay) {
   const evt = evtIn - evtCost;
   // the itemised night, for BOOKS — one "in" and one "out" hid a ฿400 gap a
   // twenty-year publican could not name (Keith, round 40)
-  b.lastLines = { day, take: take + evtIn, nut, cogs, wages: BAR_WAGES, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
+  b.lastLines = { day, inside: _insidePrice(), take: take + evtIn, nut, cogs, wages: BAR_WAGES, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
   return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
     worked, away: b.away, nut, cogs, wages, proc };
 }
@@ -7942,7 +7962,7 @@ function _doBooks() {
     _say(_fmt("Last night: ฿{take} in{evt}{lost}. Out: nut ฿{nut} · stock ฿{cogs}{inside} · wages ฿{wages}{mgr}{proc}{cost} — {who}.",
       { take: ll.take, evt: ll.evtIn ? _fmt(" (฿{e} of it the night's luck)", { e: ll.evtIn }) : "",
         lost: ll.lost ? _fmt(", ฿{l} short of what it would have been ({w})", { l: ll.lost, w: (ll.lostNotes || []).join(" · ") }) : "",
-        nut: ll.nut, cogs: ll.cogs, wages: ll.wages, inside: _insidePrice() ? " (the uncle's inside price)" : "",
+        nut: ll.nut, cogs: ll.cogs, wages: ll.wages, inside: (ll.inside != null ? ll.inside : _insidePrice()) ? " (the uncle's inside price)" : "",   // the price the night was billed at (Kwame, round 60)
         mgr: ll.mgr ? _fmt(" · Bert ฿{m}", { m: ll.mgr }) : "",
         proc: ll.proc ? _fmt(" · the arrangements ฿{p}", { p: ll.proc }) : "",
         cost: ll.evtCost ? _fmt(" · the night's own bill ฿{c}", { c: ll.evtCost }) : "",

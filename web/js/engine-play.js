@@ -436,7 +436,7 @@ function _piwinAbout(who) {
       : "\"Season good, boss.\" He counts the traffic with his chin. \"Everybody here, everybody want a bike. December I buy new tyre.\"");
     return;
   }
-  if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner)\b/.test(w)) {
+  if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner|wallet|pickpocket)\b/.test(w)) {
     const say =
       /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
       /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + MOTOSAI_TOWN, f: "฿" + MOTOSAI_FAR }) +
@@ -447,6 +447,7 @@ function _piwinAbout(who) {
         ? _fmt("\"Eat? Right there, boss.\" A chin at the stall. \"{s}. I eat there every night — if it was bad I am dead already.\"", { s: FOOD_STALLS[G.room].name.replace(/^(a |an |the )/, "").replace(/,.*$/, "") })
         : "\"Eat?\" He thinks about it properly. \"7-Eleven, toastie, if you are lazy. Buakhao market, the old one, if you are hungry — I take you, ten minutes.\" He pats the seat.") :   // "Who? Don't know this one" (Marek, round 53)
       /\b(hotels?|room|sleep|bed)\b/.test(w) ? "\"Hotel? Which one?\" He counts them on the handlebar. \"Sabai Palms up Naklua. The Queen Vic on Soi 6, over the pub. Areca on Diana, has the pool. Metropole, the tower by LK Metro.\" A shrug. \"Say which one, boss. You don't say, I choose, and the one I choose is the one that gives me twenty baht.\" He grins. \"So say.\"" :   // Joan, round 54: "hotel" got the stranger shrug
+      /\b(wallet|pickpocket|my money|money stolen)\b/.test(w) ? "\"Wallet?\" He pats his own front pocket, which is where his lives. \"Front pocket, boss. Walking Street, the back pocket is a donation.\"" :   // "who? don't know this one" (Fintan, round 60)
       /\b(rain)\b/.test(w) ? "\"Rain?\" He points at the plastic poncho folded under the seat. \"Rain is good. Nobody want to walk. Rain is money.\" A beat. \"Bad rain is bad. Bad rain, everybody home.\"" :
       /\b(police|helmet)\b/.test(w) ? "\"Helmet for me, always.\" He taps it. \"For you — better yes. Police stand at the bottom of Soi 6, six to seven. Farang no helmet is the best money they make all day.\"" :
       "\"Crash?\" He looks at you as if you have asked whether the sea is wet. \"Everybody crash. Little bit. I don\u2019t crash with a customer. Customer crash, no more customer.\"";
@@ -1468,6 +1469,7 @@ function _quizInput(input) {
   // scoring
   const right = g.right;
   G.game = null;
+  G.quizLast = { room: G.room, day: G.day, right };   // the town can say how it went (Fintan, round 60)
   _say(`Final score: ${right} of 5.`, "room");
   if (right === 5) {
     G.money += 500;
@@ -1643,6 +1645,8 @@ function _kpInput(input) {
   }
   if (kpOver(g.kp)) {
     const winner = kpAlive(g.kp)[0];
+    // who took the pot, so the man who went out before you does not talk like him (Fintan, round 60)
+    if (G.lastKp && G.lastKp.room === G.room) G.lastKp.winner = winner ? winner.name : null;
     if (winner && winner.name === "You") {
       // Bert's quest is King of the Killer TABLE — "every third night, RIGHT
       // HERE" — and the flag fired for a win at any pool bar in town, so his
@@ -3537,6 +3541,10 @@ function _ownBarTalk(id, topic) {
   }
   const role = NPC_ROLES[id];
   const _t = String(topic || "").toLowerCase();
+  // the books and the jobs before the customer pools: the cashier told her own boss
+  // "one for the bar, one for her" about MONEY (Kwame, round 60)
+  if (_t && /\b(money|till|takings|books?|float|arrangements?|cleaning|cleaners|screen|pos|till man|jobs?|contracts?|last night)\b/.test(_t) &&
+      typeof _townTalk === "function" && _townTalk(id, _t)) return true;
   // the family the shift call just put on a bus: Manow's mother came in on the
   // overnight bus, and the next night her family answer was "I not see them long
   // time" (Rolf, round 54). Five days of her knowing you know.
@@ -4456,7 +4464,7 @@ function _nightSnapshot() {
   // on the night" — a publican reading "down ฿290" the morning he handed over
   // ฿40k rent+note called the book a liar (Gordon, 2026-08-26). They belong to
   // the BAR ledger, not the night's personal spending, so track and exclude them.
-  if (G.bar) G.bar.pocketDrawn = 0;
+  if (G.bar) { G.bar.pocketDrawn = 0; G.bar.pocketNight = 0; }
   G.lastNight = {
     vacation: G.vacation,   // a snapshot from a previous vacation reported "-108 สนุก" on the best night of the next (Frank, round 38)
     happy: G.happy,
@@ -4526,8 +4534,12 @@ function _morningLedger() {
   if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via + safeTag);   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via + safeTag);
   if (tillDraw > 0) bits.push("\u0e3f" + _num(tillDraw) + " drawn from your own till");
+  // …and the other direction: a till that went under took the owner's own money, and
+  // "down ฿270" on those mornings left ฿1,478 unaccounted for (Kwame, round 60)
+  const topUp = (G.bar && G.bar.pocketNight) || 0;   // only the till's shortfall — rent and the note stay on the bar's page
+  if (topUp > 0) bits.push("\u0e3f" + _num(topUp) + " of your own money into the till when it went under");
   if (borrowed > 0) bits.push("\u0e3f" + _num(borrowed) + " borrowed from Nira \u2014 a debt, not a win");
-  if (repaid > 0) bits.push("\u0e3f" + _num(repaid) + (spent >= repaid ? " of it" : "") + " paid to Nira");
+  if (repaid > 0) bits.push("\u0e3f" + _num(repaid) + " repaid to Nira");
   // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
   const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
@@ -5276,7 +5288,10 @@ function _endVacation() {
   // "the city doesn't come to see you off" was printed to a man whose dog was
   // asleep against his door (Bill, round 44). The city doesn't. He does.
   const _dogBye = G.dog ? _dogN(_pickVary([
-    "Sai Krok is on the mat by the door when the taxi is called, and does not get up, and does not stop watching you. He has done this before, at a shuttered pub on the Darkside, and he knows how it goes.",
+    // the shuttered pub is the Shamrock reveal: only a man who has heard it may be told it (Dennis, round 60)
+    _flag("shamrockVisited")
+      ? "Sai Krok is on the mat by the door when the taxi is called, and does not get up, and does not stop watching you. He has done this before, at a shuttered pub on the Darkside, and he knows how it goes."
+      : "Sai Krok is on the mat by the door when the taxi is called, and does not get up, and does not stop watching you. Whatever he knows about people leaving, he learned before you, and he knows how it goes.",
     "You leave the last of the water down for Sai Krok. He drinks it, and then sits by the case, which is the argument he is able to make.",
     "Sai Krok walks you to the lobby doors and stops at the line where the aircon ends, because he has never once come further, and looks up at you with his whole plan showing.",
   ], "dogbye")) : null;
@@ -5474,6 +5489,10 @@ function _newVacation() {
   if (G.loan && G.loan.owed > 0) G.loanSkipped = true;
   G.loan = null;   // …but Nira's cousins do not forget; a month away writes it off all the same (for now)
   G.jaded = 0;     // a fresh trip, fresh enthusiasm — the treadmill resets
+  // a month's worth of old chatter does not arrive fresh on the plane home — "i still smile
+  // from last night" sat unread into the next trip (Dennis, round 60). Money and photos stay
+  // unread, so they still land when read.
+  if (G.phone && G.phone.inbox) for (const m of G.phone.inbox) if (!m.gives && !m.photo) m.read = true;
   G.rep = 0; G.repDay = null; // a month away and the soi's memory of your antics is a clean slate (expat keeps its rep — you live there)
   // The bond ledger resets per vacation by design — but a regular+ girl does not
   // forget a face in a month. Keep the peak tiers so her bar can greet you once.

@@ -552,9 +552,14 @@ const _ENC = {
         "rail already working the next stool.", "win");
       // route through the gift system so bond + the rose's own prose fire, and it's
       // consumed as given (kind:"gift"); she's present, so _doGive resolves her
-      if (id && _npcsHere && _npcsHere().includes(id)) {
+      // BUY ROSE FOR CREAM gave it to the girl the pitch named (Fintan, round 60): a name you
+      // typed, of a woman in the room, is who the rose is for
+      const _forM = input.match(/\bfor\s+(?:the\s+)?(.+)$/);
+      const _forId = _forM && typeof _findNpc === "function" ? _findNpc(_forM[1].trim()) : null;
+      const _to = _forId && _npcsHere().includes(_forId) ? _forId : id;
+      if (_to && _npcsHere && _npcsHere().includes(_to)) {
         G.itemLoc.rose = "inventory";
-        _doGive("rose", NPCS[id].name.toLowerCase());
+        _doGive("rose", NPCS[_to].name.toLowerCase());
       } else {
         G.itemLoc.rose = "inventory";
         _say("(You're holding the rose — GIVE ROSE TO <someone> when the moment's right.)", "dim");

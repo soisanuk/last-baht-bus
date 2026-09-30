@@ -6277,6 +6277,7 @@ test("sleep ends the night on your terms; day seven ends the vacation", () => {
   // the first moments after waking, which is how a double-tap used to eat a
   // whole night (round 24). This test is about turning in at the END of a day.
   state().wakeTurn = null;
+  state().nightTurn = 100;   // turning in late: at 18:00 the last night asks first (round 60)
   run("sleep");
   assert.equal(state().pendingChoice, "vacation_end");
   run("look"); // everything is gated on the answer — and the re-prompt states both options in full
@@ -6298,6 +6299,7 @@ test("MOVE TO PATTAYA: expat mode, endless days, savings wired over", () => {
   state().day = 7;
   state().room = "hotel_room";
   state().money = 1000;
+  state().nightTurn = 100;   // the last night asks at 18:00 (round 60)
   run("sleep", "move to pattaya");
   assert.equal(state().stage, "expat");
   assert.equal(state().money, 21000);

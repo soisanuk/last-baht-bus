@@ -155,7 +155,7 @@ test("motosai: the Darkside fare applies both ways, Second Road has stands, and 
   assert.equal(m - G.money, MOTOSAI_FAR, "back across the highway costs the Darkside rate");
   sandbox(); G.room = "second_rd_c"; G.nightTurn = 30;
   doCommand("motosai to hotel");
-  assert.equal(G.room, "hotel_soi", "the piwin knows where you sleep — and takes you to the door (round 59)");
+  assert.equal(G.room, "hotel_room", "the piwin knows where you sleep — and runs you down the dark soi to the steps (rounds 59–60)");
 });
 
 test("the bus: a stop typed without the 'soi', and a bare stop name straight off the drop-list", () => {

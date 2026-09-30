@@ -5471,6 +5471,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "notty|nottys place", req: ["orchidVouched"],
         text: "\"Notty's.\" Candy looks pleased with herself, which she does not often allow. \"You went. And Rose let you sit — I know, because if she didn't you would not be standing here asking me nicely.\"",
         short: "\"You went to Rose's. Good. She let you sit.\"" },
+      // the town can say what just happened (Fintan, round 60)
+      { topic: "mot", req: ["act1Done"],
+        text: "\"Mot?\" Candy snorts, not unkindly. \"You have your wallet, na — so for once he sell to the right person. Leave him be. He is a boy with no mother in this town and too many aunties.\"",
+        short: "\"You have your wallet. Leave the boy be.\"" },
+      { topic: "oy|madam oy", req: ["act1Done"],
+        text: "\"Oy give it back to you.\" Candy says it as a fact she already knew, because she did. \"She like manners more than money — that is the whole secret of Oy, and nobody believe me when I tell them.\"",
+        short: "\"Oy gave it back. She likes manners more than money.\"" },
       { topic: "tan",
         text: "\"Tan.\" Candy says it the way you say the name of the weather. \"He drives. He knows who is lost before they do. When he sends me somebody, I help — that is the arrangement, and nobody ever wrote it down.\" A small shrug. \"Everybody on this soi has been in his car once.\"",
         short: "\"Tan drives, and knows who is lost. When he sends me somebody, I help.\"" },
@@ -8954,6 +8961,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // the favour's name: a man who said yes (or no) asked after her and got
       // "not my story" (Rolf, round 54)
       { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourDone"],
+        when: (st, G) => G.tanFavourDay != null && G.day - G.tanFavourDay < 21,
+        text: "\"She is on the list. Bert writes a very good capital letter.\" A small smile at the wheel. \"Next she opens a bank account, " +
+          "and one day somebody at a hospital asks where she works, and there is an answer.\" He does not say thank you a second time; " +
+          "he said it once. \"That is all a name is, my friend. A place for the questions to stop.\"",
+        short: "\"She is on the list. One day somebody asks where she works, and there is an answer.\"" },
+      { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourDone"],
         text: "\"She is on the list. Bert writes a very good capital letter.\" A small smile at the wheel. \"She has a bank account now. " +
           "Last month she went to a hospital that asks questions, and they asked, and the answer was your bar.\" He does not say thank you " +
           "a second time; he said it once. \"That is all a name is, my friend. A place for the questions to stop.\"",
@@ -10946,6 +10959,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Ungated + chip:false — it reads as quest-directed (nobody asks about "the
       // whispers" cold), and setting the flag early is harmless (it does nothing
       // until Oy's completion node and an active quest both agree).
+      // the town can say what just happened (Fintan, round 60)
+      { topic: "helmet|the helmet|pink helmet", req: ["helmetDelivered"],
+        text: "\"The helmet.\" Pim gives it a quarter-turn on the shelf where it now lives. \"Pink. Bank think pink is romantic.\" A beat. \"It is. Don't tell him I said.\"",
+        short: "\"Pink. Bank think pink is romantic. It is.\"" },
       // report-back channels (Anand, round 59): the sender could not hear how it went
       { topic: "bank", req: ["helmetDelivered"],
         text: "\"Bank.\" Pim almost smiles, which is rare enough to count. \"You brought the boy his helmet. Now every stand from here to Naklua knows your face, and he rides like his mother is watching. That's worth more than any fare, darling.\"",
@@ -11137,6 +11154,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "เชิญค่ะ", rom: "choen kha",
         text: "\"Welcome to Rainbow Girls.\" Four words, and somehow you feel both invited and inventoried. \"Drink, or business?\"",
         short: "\"Drink, or business?\"" },
+      // the town can say what just happened (Fintan, round 60)
+      { topic: "debts|debt|the debts|bought debts|new money|the whisper", req: ["heardWhispers"],
+        text: "\"New money, not an old face.\" Oy repeats it to herself the way you'd repeat a {{phone}} number you intend to keep. \"Somebody buying my girls' paper quietly. So now I buy it first, louder.\" A glance at you. \"You carried it properly. That is rarer than the money.\"",
+        short: "\"New money. Now I buy the paper first, louder.\"" },
+      { topic: "safe|your safe|the safe", req: ["act1Done"],
+        text: "\"My safe is my business, farang.\" Almost a smile. \"Your wallet came out of it once. Once is a great deal, from that safe. Don't make it a habit.\"",
+        short: "\"Your wallet came out of it once. Once is a great deal.\"" },
       // report-back channels (Anand, round 59): the sender could not hear how it went
       { topic: "pim", notFlags: ["heardWhispers"],
         text: "\"Pim.\" Oy says it the way she would say the name of a good accountant. \"Starlight, in Tree Town. Five years behind that bar and she has never once told me a thing I already knew. Ask her the whispers. Then come back.\"",
@@ -12424,6 +12448,13 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
       "quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, the last three of them within nine feet of that pool table.",
     dialogue: [
+      // the town can say what just happened (Fintan, round 60)
+      { topic: "bell|the bell", when: (st, G) => !!(G.soc && G.soc.bells && G.soc.bells.stinky_bar),
+        text: "\"You rang it.\" Bert doesn't look up from the glass he's polishing. \"The whole rail had one on you and the girls will remember your face till the weekend. That's what the bell buys — not the beer. The face.\"",
+        short: "\"You rang it. The girls'll remember the face.\"" },
+      { topic: "bell|the bell",
+        text: "\"The bell?\" Bert nods at it. \"Ring it and the whole bar drinks on you. Expensive way to be liked, and the only one that works on the first night.\" (RING BELL)",
+        short: "\"Ring it and the whole bar drinks on you.\" (RING BELL)" },
       // after the sale he is the new owner's manager, and says so without ceremony (Rolf, round 55)
       { when: (st, G) => _flag("barSold"),
         text: "\"Well, look who it is.\" Bert sets a Singha on the rail before you've sat, and doesn't ring it. \"New owner's a Swede. " +
@@ -13275,7 +13306,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // He names the price and his own savings over dinner; before that the
       // subject does not exist, and asking about it out of nowhere would be a
       // stranger knowing something about his shoes.
-      { topic: "boots|shoes|football|studs", req: ["motFed"], notFlags: ["motBooted"],
+      { topic: "boots|shoes|football|studs", req: ["motFed"], notFlags: ["motBooted"], sets: ["motBootsTold"],
         text: "\u201cThe studs one,\u201d he says, as though you had asked which of two obvious things. " +
           "\u201cEleven hundred. I have \u0e3f640.\u201d He does not make it a request, and he does not " +
           "look away either. \u201cSaturday I go look at them. Just look, is free.\u201d",
@@ -14365,7 +14396,7 @@ const WORK_NIGHTS = [
     id: "footy", weight: 4, happy: 3, money: 2200,
     text: "A match nobody expected to matter goes to the last ten minutes with " +
       "the room split down the middle, and the bar makes more in that half hour " +
-      "than it did all Tuesday. Two men who were shouting at each other buy each " +
+      "than it did all the night before. Two men who were shouting at each other buy each " +
       "other beers afterwards, which is the entire case for football.",
   },
   // ── the bad ones ─────────────────────────────────────────────────────────
@@ -14670,7 +14701,7 @@ const SYNDICATE_JOBS = [
       "\"Anyway. They are reliable, they do not steal, and if you keep them then some " +
       "other things become easier for you also. Not from me. Just — easier.\"",
     yes: "\"Good.\" That is the whole of his reaction; he is already texting " +
-      "somebody.\n\nThey start Thursday. They are very good, the bar has never been " +
+      "somebody.\n\nThey start tomorrow. They will be very good, the bar has never been " +
       "this clean, and Bert — who has opinions about most things — has none about this " +
       "at all. \"Best cleaners on the soi, bud. Wouldn't ask where they came " +
       "from.\"",
@@ -14688,7 +14719,8 @@ const SYNDICATE_JOBS = [
     ask: "Tan has evidently already discussed this with Bert, and possibly with the " +
       "regulars. \"Big one, behind the bar, on the bracket — and the wiring done " +
       "properly, in the trunking, not taped along the beam like the Water Buffalo.\" " +
-      "A number, again without any theatre about it. \"My wife brother-in-law does the " +
+      "A number, again without any theatre about it — ฿" + (SYN_JOB_NIGHT * 30) + " a month, the same terms as the " +
+      "cleaners. \"My wife brother-in-law does the " +
       "hotels. Two men, one morning.\"",
     whoLabel: "ask why not do it yourself",
     // the rule stated by a character, not explained by the narrator
@@ -14719,17 +14751,18 @@ const SYNDICATE_JOBS = [
       "lose the whole night, and it will die on a Saturday, because that is when they " +
       "die.\" He does not oversell it; he never does. \"There is a company. They do " +
       "Notty's, the Golden Dragon, four hotels. They come out same day, always. It " +
-      "is not the cheapest and it is not close to the cheapest.\"",
+      "is not the cheapest and it is not close to the cheapest.\" He names it: ฿" + (SYN_JOB_NIGHT * 30) + " a month, " +
+      "and says it the way he says every number, as if it were the weather.",
     whoLabel: "ask what you're really paying for",
     who: "\"You are paying for same day.\" He says it as though it were obvious, " +
       "which it is. \"Anybody can sell you a till. On a Saturday in high season, when " +
       "every bar on this coast has the same problem, you are one of forty phone calls " +
-      "— or you are one of the four they come to first.\"\n\nHe opens the car door. " +
+      "— or you are one of the four they come to first.\"\n\nHe turns his coffee a quarter-turn on the bar. " +
       "\"That is the only thing you ever buy in this country, my friend. Not the " +
       "thing. The order of the phone calls.\"",
-    yes: "It costs what he said it would cost, which is too much. Months later it dies on " +
-      "a Saturday at nine in the evening and a man is standing in your bar at ten past " +
-      "with the replacement under his arm, and you understand exactly what you bought.",
+    yes: "It costs what he said it would cost, which is too much. One day it will die on " +
+      "a Saturday at nine in the evening and a man will be standing in your bar at ten past " +
+      "with the replacement under his arm, and you will understand exactly what you bought.",
     perk: "You are one of the four.",
     no: "\"Mm.\" He considers the street for a moment. \"Then I hope it does not " +
       // No sneer at the outside option: the whole discipline of this passage is

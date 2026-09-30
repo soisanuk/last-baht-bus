@@ -200,7 +200,9 @@ function _learnNames(text) {
       // provenance: the frontier HINT can say "Candy mentioned her, at Candy Bar"
       // instead of "somebody mentioned Bee" (design note, 2026-09-15)
       if (G.namedBy) {
-        const by = (typeof _convoActive === "function" && _convoActive()) || null;
+        // …and only a line with SPEECH in it is somebody mentioning: a quest's own text printed
+        // while you happened to be talking to Ploy credited her with naming Pim (Fintan, round 60)
+        const by = (/[“"]/.test(String(text)) && typeof _convoActive === "function" && _convoActive()) || null;
         // a name on the room's Here: line is a face you SAW, not somebody mentioned (Ines, round 47)
         G.namedBy[id] = { room: G.room, by, day: G.day, seen: !by && typeof _npcsHere === "function" && _npcsHere().includes(id) };
       }
@@ -291,7 +293,8 @@ function newGame() {
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
-    motoHomeDoor: null, // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
+    motoHomeDoor: null,
+    tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
     rideLog: {},         // night rides per girl: {count, day, stops, great} — she remembers, and so does "late"
     lastRide: null,      // {id, day, stops} — the coda knows she has a bike
     selfBfHold: 0,       // the self-barfine offer stands for a command or two
@@ -463,6 +466,7 @@ function newGame() {
     season0: SEASON_DEFAULT_M0,  // start month (0=Jan); the frontend re-seeds off the real calendar
 
     quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
+    quizLast: null,      // {room, day, right}: tonight's quiz, as the room remembers it
     quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
     // KING OF THE TABLE. Killer is a one-night knockout — the pot IS the prize,
     // and there are no rankings in it anywhere, in this town or any other. What a
@@ -1048,6 +1052,19 @@ function _railRoomAt(id, hour) {
   return hour >= HOP_SETTLE ? n.room : _hopRoom(id, hour);
 }
 
+// Auntie Nok's evening feed ends at 19:00 and she walks back to her cart — and a man
+// standing on the beach watched her vanish between two commands, told "isn't around
+// here tonight" about the woman he had been talking to (Anand, round 59). The move
+// is narrated once, the way the rail's is.
+function _nokLeavesTick() {
+  if (!G || G.offstage || G.room !== "jomtien_beach" || G.nightTurn !== 10 || G.convo === "nok") return;
+  if (typeof _npcActive === "function" && !_npcActive("nok")) return;
+  _say(_pickVary([
+    "Auntie Nok collects the cats' bowl, tells them something firm in Thai, and heads back up the sand toward her cart at Soi 7.",
+    "The cats have eaten; Auntie Nok is done. She rinses the bowl in the edge of the sea, waves it at you like a flag, and walks back to her cart at Soi 7.",
+    "Auntie Nok checks the sky as if it had a clock in it, and apparently it does. \"Cart, na — somebody steal my bottles.\" Back up the beach to Soi 7.",
+  ], "nokleaves"), "dim");
+}
 function _railTick() {
   if (!G || G.offstage || G.game || G.pendingEnc || G.pendingChoice) return;
   if (!_inBar()) return;
@@ -2090,6 +2107,10 @@ const _DOG_TALK_TH = [
   n => `“Him?” ${n} laughs. “He come every night now, I think. I save him the chicken bone.” She crouches to Sai Krok's level. “Na, handsome? You like me more than him.”`,
   n => `${n} says something to Sai Krok in Thai, soft, the way you talk to a child or a grandfather. “I tell him be good boy for you,” she says. “He say ok.”`,
 ];
+const _DOG_TALK_TH_HE = [
+  n => `${n} looks down at Sai Krok, then at you. “Soi dog. The best kind — already he know everything. He choose you, not the other way.”`,
+  n => `${n} says something short to Sai Krok in Thai, the way one old acquaintance greets another. “I tell him look after you,” he says. “He say he already does.”`,
+];
 const _DOG_TALK_EN = [
   n => `“Good-looking dog, that,” ${n} says. “Soi dogs make the best ones. They've already survived the worst of it before you turn up — anything after that is a bonus to them.”`,
   n => `${n} glances down at Sai Krok. “He picked you, didn't he. They do that. You don't get a say, and you wouldn't want one.”`,
@@ -2101,7 +2122,8 @@ function _dogTalk(npcId) {
       "waiting for the shutter go up. Now he walk with you.” She nods, once, as if a ledger " +
       "had balanced. “Good. He need somebody to walk with.”");
   }
-  const pool = _thaiVoice(npcId) ? _DOG_TALK_TH : _DOG_TALK_EN;
+  // the Thai pool crouches and says "she" — Tan got it (Fintan, round 60)
+  const pool = _thaiVoice(npcId) ? (_pr(npcId).s === "he" ? _DOG_TALK_TH_HE : _DOG_TALK_TH) : _DOG_TALK_EN;
   return _dogN(pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name));
 }
 // "ask <anyone> about quiz / darts": TIME knew, nobody else did (gambler playtest
@@ -2110,6 +2132,21 @@ function _quizTalk(npc) {
   const bars = (typeof _quizBars === "function") ? _quizBars().map(b => _barName(b)).filter(Boolean) : [];
   // an English pensioner does not say "na" (Brenda, round 47: eleven mouths, one hostess's sentence)
   const farang = npc && NPCS[npc] && (NPCS[npc].patron || NPCS[npc].manager || NPCS[npc].house || NPCS[npc].pronoun === "he");
+  // THE QUIZ YOU JUST PLAYED, and the one that is over: a perfect round at the Starlight, and
+  // the woman who chalked his name said "tonight, eight till ten, go" — as did ten others, some
+  // at a quarter to three (Fintan, round 60)
+  const q = G.quizLast && G.quizLast.day === G.day ? G.quizLast : null;
+  if (q && _npcRoom(npc) === q.room) {
+    return q.right === 5
+      ? (farang ? "“You were the one with all five. It's on the board — the whole bar watched it go up.”" : "“You! Five from five — your name is on the board, na. Everybody see.”")
+      : q.right >= 3
+        ? (farang ? `“${q.right} out of five. Respectable. The teachers from Rayong got more — they always do.”` : `“${q.right} from five! Not bad, tilac. The teacher table always win.”`)
+        : (farang ? `“${q.right} out of five.” A kind look. “It's a hard board. Next Thursday.”` : `“${q.right}...” A kind face. “Is okay. Next Thursday you study, na.”`);
+  }
+  if (typeof _quizDay === "function" && _quizDay() && G.nightTurn >= 40) {
+    return farang ? `“Done for tonight — it runs eight till ten.${q && q.right === 5 ? " Heard somebody cleaned a board, mind." : ""} Next one's next Thursday.”`
+      : `“Finish already, na — eight till ten only.${q && q.right === 5 ? " I hear somebody get five!" : ""} Next Thursday.”`;
+  }
   if (farang) {
     if (typeof _quizDay === "function" && _quizDay())
       return `“Quiz? Tonight — eight till ten. ${bars.join(", ")}. Five questions, prize on the board, teachers from Rayong marking it. No appeal.”`;
@@ -2718,7 +2755,7 @@ function _describeRoom(full, forceFull) {
     _say("Down the road, just south of the soi, the evening checkpoint is in session: " +
       "officers waving over every bare-headed farang on a motorbike with the bored " +
       "precision of toll collectors. Half the rail is a regular who ducked in here to " +
-      "dodge exactly that. (WATCH POLICE — or WATCH SUNSET, the bay's going gold too.)", "dim");
+      "dodge exactly that." + (G.rain > 0 ? " (WATCH POLICE.)" : " (WATCH POLICE — or WATCH SUNSET, the bay's going gold too.)"), "dim");
   }
   if (G.soc.lockIn && G.soc.lockIn[G.room]) {
     _say("The front door is bolted and the windows were always black. Inside is " +
@@ -2975,6 +3012,7 @@ function _tick() {
     (G.soc.spentTurn = G.soc.spentTurn || {})[G.room] = G.turns;
   G.soc.moneyTick = G.money; G.soc.tickRoom = G.room;
   if (!_onRide()) _railTick();     // the hour turns and somebody drains a glass and moves on
+  _nokLeavesTick();
   if (typeof _flowerTick === "function") _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
   if (typeof _lockInTick === "function") _lockInTick(); // …and behind a bolted door, the night has an interior

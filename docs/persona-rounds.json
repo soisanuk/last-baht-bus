@@ -628,6 +628,27 @@
      "lens": "the-passenger"
     }
    ]
+  },
+  "round60": {
+   "date": "2026-09-30",
+   "note": "aimed at composition (the owner's bar + procurement + massage + clinic + loan), the vacation turnover nobody had walked, and the town-can't-say class (the gossip carrying every event to three people)",
+   "personas": [
+    {
+     "name": "Kwame",
+     "model": "opus",
+     "lens": "owner-body"
+    },
+    {
+     "name": "Dennis",
+     "model": "sonnet",
+     "lens": "second-trip"
+    },
+    {
+     "name": "Fintan",
+     "model": "fable",
+     "lens": "the-gossip"
+    }
+   ]
   }
  }
 }

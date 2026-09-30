@@ -495,7 +495,7 @@ test("the men you played killer against are people for the rest of the night", (
   if (present) {
     const word = /Gop/.test(present) ? "gop" : /Finn/.test(present) ? "finn" : "big kev";
     out = []; doCommand("talk to " + word);
-    const pool = G.lastKp.won ? _FOLK_KPFIELD_WON : _FOLK_KPFIELD_LOST;
+    const pool = G.lastKp.won ? _FOLK_KPFIELD_WON : (!G.lastKp.winner || G.lastKp.winner === present) ? _FOLK_KPFIELD_LOST : _FOLK_KPFIELD_OUT;   // round 60: the other losers speak as losers
     assert.ok(pool.some(l => text().includes(l)), `${present} answers as a man who ${G.lastKp.won ? "lost" : "won"}`);
   }
   // …and a man who was NOT in tonight's field is honestly not here
