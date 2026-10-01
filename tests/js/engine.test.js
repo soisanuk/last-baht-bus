@@ -4372,11 +4372,11 @@ test("the club pickup: a free-feeling night, then the ฿2,000 taxi", () => {
   assert.ok(state().flags.taxiPending, "the night happened; the invoice is coming in the morning");
   const before = state().money; out = []; run("pay");
   assert.equal(before - state().money, 2000, "the morning 'taxi money'");
-  assert.match(lastOut(), /good man|see you tonight/i);
+  assert.match(lastOut(), /look after me|Tonight again/i);
   // and the other way: question it and the fantasy collapses
   state().money = 5000; state().room = "ws_south"; state().nightTurn = 45; state().encDone = {};
   _startEnc("clubpickup"); run("take her home"); out = []; run("bolt where do you live");
-  assert.match(lastOut(), /amateur|record scratch|accountant/i);
+  assert.match(lastOut(), /amateur|changes temperature|decided not to argue/i);
 });
 
 test("gift-as-contract: 'free' is a tab, and tao rai closes it", () => {

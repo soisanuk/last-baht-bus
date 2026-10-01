@@ -299,7 +299,7 @@ const _FOLK_COUNTER = [
 const _FOLK_MASSEUSE_AFTER = [
   "Now you have paid for the hour she talks, the way people talk to a back. \"Udon. Twelve year here. My hands know every farang shoulder in Pattaya — all same, too much {{phone}}.\" She wipes her palms on the towel.",
   "\"Better, na?\" She rolls her wrists, which crack. \"Thirty massage a week, my hands. Son in school in Khon Kaen — this chair pay the uniform.\" She says it like the weather.",
-  "She sits on the edge of the next chair with a glass of water. \"You come for the back, I can see. Farang back is a long story.\" A laugh. \"Come again three day — once is only the beginning.\"",
+  "She drops into the next chair with a glass of water. \"You come for the back, I can see. Farang back is a long story.\" A laugh. \"Come again three day — once is only the beginning.\"",
 ];
 const _FOLK_MASSEUSE_SPECIAL = [
   "She is quieter now, and nearer. \"You have my number, na.\" Not a question. \"Here I am massage. After work I am me.\" She nods at the curtain as somebody comes in, and becomes massage again.",

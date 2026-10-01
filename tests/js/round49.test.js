@@ -157,7 +157,7 @@ test("a promise that states its own condition opens when the condition is met", 
   assert.ok(!_flag("heardPriceStory"));
   G.rain = 4;
   out = []; doCommand("ask lek about price");
-  assert.match(text(), /did I think this is Dubai/, "the night she named opens it");
+  assert.match(text(), /wet-season Finn/, "the night she named opens it");
   assert.ok(_flag("heardPriceStory"), "and it is heard exactly once");
   out = []; doCommand("ask lek about price");
   assert.match(text(), /Same as I tell you in the rain/, "afterwards she answers as somebody who told you");

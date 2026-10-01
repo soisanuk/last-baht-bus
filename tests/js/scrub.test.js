@@ -39,7 +39,7 @@ test("flying home runs the scrub before the return, only on _newVacation", () =>
   G.vacation = 1; out = [];
   _newVacation();
   const text = out.join("\n");
-  assert.match(text, /illusion holds|scrub is complete|double life/i, "the departure ritual ran");
+  assert.match(text, /double life holds|scrub is complete|double life/i, "the departure ritual ran");
   assert.match(text, /VACATION 2|seatbelt|grey sky/i, "then the reset + the return");
 });
 

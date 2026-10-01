@@ -5235,15 +5235,16 @@ const _KES_VET = [
 const _LEK_PRICE_STORY = "Nobody is playing pool in this. Lek is on the plastic stool by the door, knees up, watching " +
   "the flood carry a plastic bag past the step, and she starts talking without the " +
   "hello — flat, like reading a receipt. \"Two year my price same-same. Everybody " +
-  "know. Fair.\" She turns {{her phone}} so you can see a chat: her message, a reply " +
-  "one minute later, then the grey nothing where a contact used to be. \"My friend " +
-  "say — everybody charge double now, know your worth, don't be cheap village girl. " +
-  "So I say the big number.\" A nod at the sofa, where a girl sleeps wrapped in a " +
-  "towel, vape on her chest rising and falling. \"He say, did I think this is Dubai. " +
-  "Then block. My one customer this week.\" She puts {{the phone}} face-down. \"My " +
-  "friend sleep good. Advice is free, na — for HER.\" The rain hits the roof. She " +
-  "hasn't eaten since two o'clock; you can hear it from here.";
-const _LEK_PRICE_SHORT = "\"I said the big number. He said, did I think this is Dubai. Then block.\" The friend sleeps on. \"Advice is free — for her.\"";
+  "know. Fair.\" She turns {{her phone}} so you can see a video: a girl in a Bangkok " +
+  "bar with better lighting than this one, telling the camera what she is worth. " +
+  "\"Everybody watch this now. Know your worth, don't be cheap village girl. So I " +
+  "say the big number to my Finn — my wet-season Finn, every August, six year.\" A " +
+  "nod at the corner, where a girl is counting coins out of a purse onto the table " +
+  "for the last bus. \"He say nothing. He pay the old price, like always. He not " +
+  "come back since. My one customer this month.\" She puts {{the phone}} face-down. " +
+  "\"The girl in the video has aircon. Advice is free, na — for HER.\" The rain hits " +
+  "the roof. She hasn't eaten since two o'clock; you can hear it from here.";
+const _LEK_PRICE_SHORT = "\"I said the big number to my wet-season Finn. He paid the old price, like always, and he hasn't been back.\" The coins go on the table. \"Advice is free — for her.\"";
 
 // Bert's PLG-flip fork, carried by his returning greeting on either night
 // (hoisted so the same-night and later-night greetings cannot drift apart)
@@ -12004,13 +12005,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   thomas: {
     name: "Thomas", emoji: "☕", pronoun: "he",
     room: "dongtan_beach_n",
-    look: "Farang man of seventy, lean and weathered, thin white hair, sun-dark skin, sweat-soaked polo, an iced coffee in each hand.",
-    desc: "Seventy, and lean the way only a man who walks ten kilometres a day in this heat gets " +
-      "lean. His polo shirt is soaked through and he does not seem to feel it. He sits on the low " +
-      "seawall under the casuarina with an iced coffee in his hand and a second one set on the " +
-      "concrete beside him — unopened, its ice long gone to water in the heat. He is looking at " +
-      "the sea, and he is a very long way away. The motorbike-taxi men up the road think he has " +
-      "lost his mind. They are wrong, but you can see why they'd think it.",
+    look: "Farang man of seventy, lean and weathered, thin white hair, sun-dark skin, sweat-soaked shirt, a flowered parasol folded across his knees.",
+    desc: "Seventy, and lean the way only a man who walks ten kilometres a day in this heat gets lean. His shirt is soaked " +
+      "through and he does not seem to feel it. He sits on the low seawall under the casuarina with a folded parasol across " +
+      "his knees — a woman's parasol, flowered, the kind nobody his size has ever held up — and two packets of sticky rice " +
+      "beside him, one unopened. He is looking at the sea, and he is a very long way away. The motorbike-taxi men up the " +
+      "road think he has lost his mind. They are wrong, but you can see why they'd think it.",
     dialogue: [
       { text: "He glances up, registers you as a farang and not a nuisance, and goes back to the " +
           "sea. “Evening.” A pause you could park a car in. “Good spot, this. Quiet. You'll not " +
@@ -12031,26 +12031,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "not mine.” He says it the way you'd state the weather. “Two large iced, every day, twenty " +
           "years. I buy hers, I set it there, I drink mine, we watch the sea.” A breath. “She never " +
           "liked the walk. But she liked this part — the sitting, the coffee, the sun going down.” " +
-          "He does not touch the second cup. “I don't drink it. That was never what it was for.”",
+          "He does not touch the second packet. “I don't drink it. That was never what it was for.”",
         short: "“That one's not mine. Two large iced, every day, twenty years — I buy hers, set it there, drink mine. I don't drink it. That was never what it was for.”" },
-      { topic: "wife", text: "“Som.” He says the name carefully, like something that might spill if " +
-          "he's not level with it. “Thirty years married. She thought I was a lunatic for walking " +
-          "in the heat, and she was right, and she came anyway — every day, dragging her feet under " +
-          "a parasol, complaining beautifully the whole way. 'Thai people only walk if the " +
-          "motorbike is broken,' she used to tell me.” The ghost of a smile. “Three years now. Went " +
-          "fast, at the end. A mercy, they say, as if that is a thing that helps.” He looks to the " +
-          "water. “People think I come here to be sad. I come here because for one hour, walking " +
-          "that path with her coffee waiting at the end of it, she isn't gone. She's just up ahead, " +
-          "or a step behind, telling me I'm mad. And she's right. And I would give anything to hear " +
-          "it one more time.”",
-        short: "“Som. Thirty years. Three now since she went. I come here because for one hour she isn't gone — just a step behind, telling me I'm mad.”" },
-      { topic: "vendor", text: "A cart squeaks past along the promenade, trailing the smell of " +
-          "roasted coconut and pandan. Thomas watches the old vendor go, hunched over the handles. " +
-          "“That fellow. Older than she ever got to be, and here he is, still pushing the cart.” " +
-          "There is no bitterness in it, only the arithmetic. “She bought sticky rice off him every " +
-          "single day. Twenty baht, a laugh, a banana leaf.” He shakes his head slowly. “You spend " +
-          "a while wondering how that's fair. Then you stop — because it isn't a question with an " +
-          "answer, and the wondering was eating the walk.”",
+      { topic: "wife",
+        text: "“Wan.” He says the name carefully, like something that might spill if he's not level with it. “Thirty years married. She thought I was a lunatic for walking in the heat, and she was right, and she came anyway — every day, under this parasol, two steps behind me, complaining beautifully the whole way. 'Walking is for people with no bike and no sense,' she used to tell me. 'You have a bike.'” The ghost of a smile. “Three years now. Went fast, at the end. A mercy, they say, as if that is a thing that helps.” He looks to the water. “People think I come here to be sad. I come here because for one hour, walking that path with her rice waiting at the end of it, she isn't gone. She's just up ahead, or a step behind, telling me I'm mad. And she's right. And I would give anything to hear it one more time.”",
+        short: "“Wan. Thirty years. Three now since she went. I come here because for one hour she isn't gone — just a step behind, telling me I'm mad.”" },
+      { topic: "vendor",
+        text: "A cart squeaks past along the promenade, trailing a smell of sugar and charcoal. Thomas watches the old vendor go, hunched over the handles. “That fellow. Older than she ever got to be, and here he is, still pushing the cart.” There is no bitterness in it, only the arithmetic. “She bought sticky rice off him every single day. Two packets, one for the walk back, and she never once finished the second.” He shakes his head slowly. “You spend a while wondering how that's fair. Then you stop — because it isn't a question with an answer, and the wondering was eating the walk.”",
         short: "“That vendor — older than she ever got, still pushing his cart. She bought off him every day. You wonder how it's fair, then you stop.”" },
     ],
   },
@@ -12805,30 +12792,12 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "The Singha goes up once, comes down. \"Man needed to know. Or he needed " +
         "not to know, and you made that call for him. Either way —\" he taps the bar " +
         "once \"— not your fault. Some things end.\"" },
-      { topic: "1998", text: "He sets the Singha down with the quiet authority of a " +
-        "man who has heard this speech many times, from many Nigels. \"The baht was " +
-        "fifty to the dollar in '98, bud. {{Tom Yum Goong}} crash — half the Thai economy " +
-        "went sideways overnight. Your British pensioner walking in with sterling felt " +
-        "like a king because he was, arithmetically.\" He refills without ceremony. " +
-        "\"That's point one. Point two: Nigel in 1998 was forty years old with a full " +
-        "head of hair and a functioning liver. He's sixty-eight now and his main topic " +
-        "is his prostate. The girls didn't change.\" He picks the Singha back up. " +
-        "\"Point three: before smartphones, this town ran on beautiful anonymity. You " +
-        "could reinvent yourself completely. No one Googled you. The girl couldn't " +
-        "see the Good Morning texts from the other three guys in Europe. Technology " +
-        "didn't kill the romance, bud. It killed the illusion.\" He drains it. " +
-        "\"The city never grew a conscience. Nigel just grew old.\"" },
-      { topic: "free drink", text: "He points the Singha at you. \"You know what I " +
-        "call it? The Oklahoma Trap. Guy walks in — plumber from Tulsa, first night " +
-        "in town — mamasan sends him a free shot. He thinks he beat the system.\" " +
-        "The Singha comes down. \"You ever go to Walmart back home and the promo " +
-        "girl gives you a sausage on a toothpick? Do you lose your mind? Do you go " +
-        "to the register and buy a thousand dollars of sausages for the cashier and " +
-        "the store manager just to prove what a great guy you are?\" He waits. \"No. " +
-        "But you put that same man under neon lights with loud music and a pretty girl " +
-        "telling him he's special — the receipt at two a.m. says thirty thousand baht " +
-        "and he can't tell you where it went.\" He drains the Singha. \"The free " +
-        "drink is a business investment, bud. The cheapest one they'll make all night.\"" },
+      { topic: "1998|good old days|the old days|back then",
+        text: "He sets the Singha down with the quiet authority of a man who has heard this speech many times, from many Nigels. \"Right. Ninety-eight.\" He holds up one finger. \"The pound bought you a week of this town for what a weekend costs now, and the man holding the pound felt like royalty because the arithmetic said he was.\" Two fingers. \"That man was forty. He could stand up from a stool without a noise. The girls were the same girls, bud — different names, same job.\" Three. \"And nobody had a camera in their pocket. You could be whoever you said you were on a Tuesday and somebody else on the Thursday. Now she can read your other three Tuesdays off a screen before you've sat down.\" He picks the Singha back up. \"The town didn't lose anything. The rate went, the knees went, and the phones came. Nigel calls that a soul.\"",
+        short: "\"The rate went, the knees went, and the phones came. Nigel calls that a soul.\"" },
+      { topic: "free drink|free shot|the shot|welcome shot",
+        text: "He points the Singha at you. \"The free one's the dearest drink in the house, bud, and I pour it myself.\" The Singha comes down. \"Your bank gives you a pen. You don't move your mortgage for the pen. But stand a man under the pink light with the music up and a girl telling him she's never met anyone like him, hand him one free shot — and at two in the morning he's signed for thirty thousand baht he can't account for, and he thinks he's had a lucky night.\" He drains it. \"It's not hospitality. It's the cheapest bit of advertising on the soi, and it works on every man who thinks it doesn't work on him.\"",
+        short: "\"The free one's the dearest drink in the house. It works on every man who thinks it doesn't work on him.\"" },
       { topic: "danny", text: "The Singha stops an inch off the bar. \"Danny " +
         "the Coin Guy.\" He sets it down with exaggerated care, the way you " +
         "handle something instead of someone. \"Eighty thousand baht of mine in " +
@@ -15346,11 +15315,8 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       "the fixed forward stare of a man permanently addressing an audience of " +
       "1998. Whatever bar he's in, he looks like he's comparing it to a better one.",
     dialogue: [
-      { text: "\"Nigel.\" He doesn't ask your name. \"You should've seen this town " +
-        "before, son. Beach Road had trees. TREES. A lady drink was fifty baht and " +
-        "the girls loved you for who you were.\" He takes a long, wounded pull of " +
-        "his lager. \"It's all gone corporate now. QR codes. No soul.\"",
-        short: "\"Trees on Beach Road, fifty-baht lady drinks. No soul now, son. No soul.\"" },
+      { text: "\"Nigel.\" He doesn't ask your name. \"You should've seen this town before, son. You could park on Beach Road. PARK. A lady drink was a round number and a girl remembered your name for a week on it.\" He takes a long, wounded pull of his lager. \"It's all gone corporate now. QR codes. No soul.\"",
+        short: "\"You could park on Beach Road, and a lady drink was a round number. No soul now, son. No soul.\"" },
       { topic: "1998|pattaya|beach road|good old days", text: "\"Best year of my life, 1998. Pound went twice as far — " +
         "I lived like a lord on a printer salesman's redundancy.\" He counts the " +
         "losses on his fingers: \"The Marine Bar. Gone. The old pier. Gone. My " +
@@ -15682,20 +15648,9 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "apology with it. These bars run on repeat customers, son. The mamas " +
         "know it better than anybody.\"",
         short: "\"Most girls are straight. The sharp ones read newbies like a menu — and the mama pays you back.\"" },
-      { topic: "girlfriend", text: "\"Fella I knew out here — pipeline money, " +
-        "patient sort — barfined the same girl twenty-one nights straight. " +
-        "Dinners. Beach walks. Coffee on the balcony of a mornin'.\" The bottle " +
-        "turns a slow quarter. \"Weren't a lie anywhere in it, that's the thing. " +
-        "He didn't look at nobody else. Neither did she.\" A pull, unhurried. " +
-        "\"Then one mornin' he tells her, darlin', you can quit the bar now — " +
-        "and she says, real sweet, real confused, okay... but send mama the fine " +
-        "by three. Or did he maybe wanna pay her salary by the month instead.\" " +
-        "He sets the bottle down soft, like it might bruise. \"Weren't nobody " +
-        "lyin', see. That's the part that'll get you. He was in love, and she " +
-        "was at work, and them two things look exactly the same from the " +
-        "outside. Every damn day of it.\" A beat. \"She told him he was special, " +
-        "and I believe she meant it. I believe that made it worse.\"",
-        short: "\"Twenty-one nights, same girl. He was in love; she was at work. Both true — that's the part that'll get you.\"" },
+      { topic: "girlfriend",
+        text: "\"Fella I knew out here — rig money, patient sort — paid the same girl's fine so long the mamasan stopped writing his name and just put a tick.\" The bottle turns a slow quarter. \"Weren't a lie anywhere in it, that's the thing. He didn't look at nobody else. Neither did she.\" A pull, unhurried. \"Then one evenin' he tells her, darlin', pack a bag, you're done with the bar — and she says, real sweet, real puzzled, okay... and who's gonna pay mama for the nights I'm not there?\" He sets the bottle down soft, like it might bruise. \"Weren't nobody lyin', see. That's the part that'll get you. He was courtin', and she was on shift, and you cannot tell them two things apart from a stool. Every damn night of it.\" A beat. \"She told him he was different, and I believe she meant it. I believe that made it worse.\"",
+        short: "\"He was courtin'; she was on shift. Both true — that's the part that'll get you.\"" },
     ],
   },
 
@@ -16255,8 +16210,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "clearly tried before. \"The old guys all do this speech, man. 'The " +
         "machine eats white knights,' whatever. Bert did like ten minutes.\" He " +
         "picks at a bracelet. \"But they don't KNOW her. And honestly — even if " +
-        "they were right?\" A very young shrug. \"It's the best thing that ever " +
-        "happened to me. So.\"",
+        "they were right?\" A very young shrug. \"She's the best thing in my life. So.\"",
         short: "\"They don't KNOW her, man. And even if they're right — so.\"" },
     ],
   },

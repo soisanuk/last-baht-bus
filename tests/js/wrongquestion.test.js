@@ -33,15 +33,15 @@ test("the question rides the real path once, and reads the real ledger", () => {
   G.rideSeq = { id: "lek", fine: 0, spent: 0, stops: 1, sanuk: 0, seen: [] };
   G.pendingEnc = "nightride";
   out = []; _nightRide("ride on");
-  assert.match(text(), /If you never meet me/, "she asks it over her shoulder");
+  assert.match(text(), /if I not come to work/, "she asks it over her shoulder");
   assert.match(text(), /3 names in the book the lady drinks kept/, "the cascade counts HIS record");
   assert.match(text(), /each round buying a little less/, "…including the treadmill's arithmetic");
-  assert.match(text(), /Still looking for you/, "the right answer, and not exactly a true one");
+  assert.match(text(), /wait for you/, "the right answer, and not exactly a true one");
   assert.match(text(), /she already had it/, "she never needed telling — the soi talks");
   assert.ok(_flag("rideQuestion"), "the flag is down");
   // and never again — not this ride, not any ride
   out = []; _nightRide("ride on");
-  assert.doesNotMatch(text(), /If you never meet me/, "a genuinely one-time beat");
+  assert.doesNotMatch(text(), /if I not come to work/, "a genuinely one-time beat");
 });
 
 test("a nearly-empty book gets the other branch — same question, different life", () => {
@@ -49,8 +49,8 @@ test("a nearly-empty book gets the other branch — same question, different lif
   G.jaded = 0;
   out = []; _rideQuestion({ stops: 2 }, "lek", "Lek");
   assert.match(text(), /she is most of what is written in it/);
-  assert.match(text(), /Wrong question, na/, "the title lands in her mouth");
-  assert.doesNotMatch(text(), /Still looking for you/, "no canned lie needed here");
+  assert.match(text(), /Not the question, na/, "the title lands in her mouth");
+  assert.doesNotMatch(text(), /wait for you/, "no canned lie needed here");
 });
 
 test("no meter moves in either branch — the other-ledger doctrine", () => {

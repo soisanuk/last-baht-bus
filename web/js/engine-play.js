@@ -4186,32 +4186,17 @@ function _motoCrashRisk(drunk, late, darkside, helmet) {
   return Math.min(risk, 0.22);
 }
 const _HOSP_SIGHTS = [
-  "Across the bay of curtained cubicles the night's other arrivals are still landing: a farang " +
-    "with a taped eyebrow and a police report he can't read, a lad two chairs down folded around " +
-    "a phone he keeps not answering.",
-  "Three girls off a late shift cluster at the desk, mascara gone to bruises under the strip " +
-    "light, one of them white-lipped over an ankle that met a wet soi at speed in the wrong heels.",
-  "A young man in the lab-test line can't keep his foot still, staring at the inside of his own " +
-    "arm as if he could argue that little constellation of spots back into an allergy by tomorrow.",
-  "Along the wall an old European folds and unfolds his hands in a wheelchair, long past " +
-    "pretending; the Thai woman beside him — no younger — wears the kind of tiredness that isn't " +
-    "from one night but from a hundred, the caregiving kind with no clocking-off.",
-  "A girl unmistakably off the bars sits with both hands on a belly that's started to show, her " +
-    "friend murmuring the encouragement you murmur when there's nothing else, and the room does " +
-    "the arithmetic it doesn't say aloud.",
-  "Two men in bleached Chang singlets and flip-flops stand where a queue used to be, holding a " +
-    "paper number and the expression of men waiting for something nobody has explained, least of " +
-    "all to them.",
+  "Across the bay of curtained cubicles the night's other arrivals are still landing: a farang holding a bag of ice to his jaw and a receipt he keeps re-reading, a lad two chairs down who has taken his shoes off for no reason anyone can see.",
+  "Two girls off a late shift sit either side of a third who is holding her wrist very still in her lap, the three of them sharing one bottle of water and nobody's phone, for once, lit.",
+  "A man in the lab-test line is explaining to the woman beside him, at length and in English, that it is nothing, and she is agreeing with him in the voice people use for children.",
+  "Along the wall an old European in a wheelchair has gone to sleep with his mouth open, and the Thai woman beside him — no younger — has her hand on his arm and her eyes on the number board, and has had them there for hours.",
+  "A girl who was plainly dancing somewhere two hours ago sits with a cardigan over the costume and both hands flat on her stomach, listening to her friend count the weeks on her fingers, twice, and get a different answer.",
+  "Two men in matching vests stand where a queue used to be, holding one paper number between them, with the faces of men who have been told to wait and not what for.",
 ];
 const _HOSP_THESIS = [
-  "No mamasan works this room. Nobody's buying, nobody's selling, nobody's in control. Everyone " +
-    "holds the same crumpled number, everyone sits the same plastic chair, everyone is — for once " +
-    "— on the same side of the counter.",
-  "It's the one address in this town with no VIP list: no sponsors, no working girls, no marks. " +
-    "Take away the neon and the drink and the money and Pattaya is just this — fragile people, " +
-    "scared and hopeful and hurt, waiting to hear a number called.",
-  "The marketplace, so loud out there, simply isn't in here. Strip the night off everyone and " +
-    "what's left is a waiting room full of the same animal, holding the same slip of paper, hoping.",
+  "Nobody is running this room. There is no mamasan, no number on a dress, no bell; a slip of paper from a machine decides the order, and the machine has never heard of any of you.",
+  "It is the one address in this town where the money stops working at the door. Inside, the night has been taken off everyone like a coat, and what is left is a row of plastic chairs and a board that calls numbers.",
+  "The trade is loud out there and simply absent in here. A farang, a dancer, a piwin and a grandmother hold the same kind of paper and wait for the same kind of voice, and for an hour the town has no sides.",
 ];
 // …and the same queue for a man with no debts in it — she still says the word
 const _HOSP_TOMORROW_CLEAN = [
@@ -5338,84 +5323,36 @@ function _endVacation() {
 // and nameless — the home life is generic archetype (a dog, a lawn, a cover story),
 // never a named partner, and no brands.
 const _SCRUB_OPEN = [
-  "The taxi drops you at Departures and you move through the terminal like a fugitive, because " +
-    "you are one. Over the next two hours the man Pattaya grew — the one who answered to a nickname, " +
-    "drank rum from a plastic bucket at 2 p.m., rode a scratched Click through the rain with no " +
-    "helmet — has to quietly die. You find the big handicap stall, lock the door, and begin the scrub.",
-  "You know this ritual; you'll perform it again next trip. In a locked airport toilet you kill the " +
-    "version of you the week grew and resurrect the one with the mortgage. Ninety minutes, and a " +
-    "suitcase full of evidence.",
-  "Departures again, and the fugitive's walk again — chin down, moving fast, a man carrying " +
-    "contraband that is mostly himself. The week's version of you doesn't get to board this plane. " +
-    "You find a stall, throw the bolt, and start taking him apart.",
-  "The gate's in ninety minutes, and the surgery can't be rushed. Somewhere between the taxi rank " +
-    "and seat 34K the man who sang Oasis flat at 3 a.m. has to become a man who files quarterly " +
-    "reports. The airport toilet is the operating theatre.",
+  "The taxi drops you at Departures and you move through the terminal like a man carrying something he shouldn't, because you are. Over the next two hours the man the week grew — the one who answered to a nickname, drank from a bucket before dark, rode pillion with no helmet and a girl's arms round him — has to quietly stop existing. You find the big accessible stall, lock the door, and begin.",
+  "You know this ritual; you'll perform it again next trip. In a locked airport toilet the version of you the week grew is taken apart and the one with the mortgage is reassembled from the clean side of the suitcase. Ninety minutes, and a bag full of evidence.",
+  "Departures again, and the same walk — chin down, moving fast, a man whose contraband is mostly himself. The week's version of you doesn't get to board this plane. You find a stall, throw the bolt, and start.",
+  "The gate's in ninety minutes, and the surgery can't be rushed. Somewhere between the taxi rank and seat 34K the man who sang the wrong words to every chorus at three in the morning has to become a man who files quarterly reports. The airport toilet is the operating theatre.",
 ];
 const _SCRUB_PHYSICAL = [
-  "First the body. The neon singlet comes off — it reeks of stale beer, grilled pork, cheap vanilla " +
-    "and decisions — rolled tight into a convenience-store bag and buried at the very bottom of the " +
-    "case under the dirty socks, where evidence goes. From the pristine, untouched half of the " +
-    "suitcase: a beige polo, sensible chinos, clean loafers. You brush your teeth like you're sanding " +
-    "off a crime and splash the last soi's humidity off your face.",
-  "You strip the beast and dress the accountant — the reeking singlet balled into plastic and sunk " +
-    "under the laundry, the crisp polo and pressed chinos pulled from the side of the case you never " +
-    "opened all week. In the mirror the tan almost passes for a golf tan, if you don't look too hard.",
-  "Off with the costume: the singlet that smells like a small war crime folded into plastic and " +
-    "pressed to the bottom of the bag, the flip-flops swapped for loafers that have never met a wet " +
-    "soi. The polo still holds the fold-lines from the shop. In the mirror, a man who had a quiet week.",
-  "You wash the city off in a steel sink — the humidity, the smoke, the faint sweetness of somebody " +
-    "else's perfume — and dress in the clothes of a man with a lawn to mow. The tan is the only " +
-    "witness left, and tans lie easily enough.",
+  "First the body. The bar's football shirt comes off — it smells of the rail, the grill, somebody's perfume and three decisions — goes into the plastic bag the toothbrush came in, and is pushed to the bottom of the case under the shoes. From the side of the suitcase you never opened all week: the collared shirt, the trousers with a crease, the watch you took off on the first night. You wash your face in a steel sink as if the week could be rinsed.",
+  "You strip the week and dress the man who went to a conference — the football shirt bagged and buried under the shoes, the collared shirt pulled from the side of the case you never opened. In the mirror the tan nearly passes for a golf tan, if nobody looks at the line where the singlet stopped.",
+  "Off with the costume: the shirt that smells like the inside of a bar folded into plastic and pressed to the bottom of the bag, the flip-flops swapped for shoes that have never met a wet soi. The collared shirt still holds the fold-lines from the shop. In the mirror, a man who had a quiet week.",
+  "You wash the town off in a steel sink — the smoke, the grill, the faint sweetness of somebody else's perfume — and dress as a man with a lawn to mow. The tan is the only witness left, and tans lie easily enough.",
 ];
 const _SCRUB_DIGITAL = [
-  "Then the phone, which is a bomb. The chat app first — forty messages an hour, crying bears, " +
-    "“miss you already na ka” — long-pressed and gone without a glance. Then the gallery: a " +
-    "hundred-odd blurry frames of buckets and neon and peace signs deleted, and then, because " +
-    "amateurs get caught here, Recently Deleted, Select All, gone forever. It never happened.",
-  "The lock screen is the last wire. You swap the red-lit selfie you don't quite remember taking for " +
-    "a bright, high-res photo of the dog and the tidy lawn and the life that must never know. Then you " +
-    "rehearse the lie about the cash you pulled out in three days: “the course only took cash, babe — " +
-    "total scam.” Perfect.",
-  "The phone is where careers die. You purge the chat threads unread — the crying bears, the " +
-    "“papa miss you,” the voice notes you'll never play — then the gallery, then the folder amateurs " +
-    "forget, until the device holds nothing but a man who went to a conference. Empty the trash. Twice.",
-  "You run the sweep in order, the way you've learned to: messages, gallery, deleted-items, banking " +
-    "history rehearsed into a story about greens fees and cash-only clubhouses. Last, the lock screen — " +
-    "the blurry red-lit stranger swapped for the dog, the lawn, the smiling proof of the life you're " +
-    "about to lie to.",
+  "Then the phone, which is the dangerous part. The chat app first — forty messages a day, hearts, a voice note you never played — long-pressed and gone without a glance. Then the gallery: a hundred-odd blurry frames of neon and raised glasses deleted, and then, because this is where men get caught, the folder the phone keeps for thirty days, emptied as well. It never happened.",
+  "The lock screen is the last wire. You swap the red-lit photo you don't quite remember taking for the dog on the lawn, and rehearse the story about the cash you drew in three days: the course took cash, the hotel took cash, the whole country takes cash. Perfect.",
+  "The phone is where careers end. You purge the threads unread — the hearts, the 'papa', the voice notes you'll never play — then the gallery, then the folder that keeps what you deleted, until the device holds nothing but a man who went to a conference. Empty it. Twice.",
+  "You run the sweep in order, the way you've learned to: messages, photos, the deleted-items folder, the banking app's history rehearsed into greens fees and a cash-only clubhouse. Last, the lock screen — the stranger under the red light swapped for the dog and the lawn and the life you are about to lie to.",
 ];
 const _SCRUB_CALL = [
-  "You walk out into the sterile, air-conditioned scent of Duty-Free, buy an apology-shaped bottle of " +
-    "perfume, and the phone buzzes right on cue. You clear your throat, drop into your most exhausted " +
-    "corporate register, and answer: “Hey babe. Honestly? Exhausting. So humid. Barely did anything but " +
-    "network and eat bad hotel food. Just ready to sleep in my own bed.” The performance of a lifetime, " +
-    "and it lands.",
-  "The call comes as you reach the gate, and you become, instantly and completely, a bored man who " +
-    "spent a week at conference tables. “Golf was alright. Bangkok traffic's a nightmare. Ready to be " +
-    "home, babe.” A sigh, precisely weighted. She believes every word, because you've made it easy to.",
-  "In the Duty-Free glare you buy the airport perfume that says sorry without saying why, and the " +
-    "call lands as you pay. You answer as a man bored to the marrow: “Yeah, fine. Long week. Too much " +
-    "networking, not enough sleep. Can't wait to be home.” Not a word of it true, every word believed.",
-  "The phone goes as you reach the seat, and you slide, seamless, into the other voice — flatter, " +
-    "wearier, entirely domestic. “Golf was okay. Weather was rough. Missed you, babe.” You've told " +
-    "this one so many times it's started to feel like a second first language.",
+  "You walk out into the cold scent of Duty-Free, buy the bottle of perfume that says sorry without saying why, and the phone rings on cue. You clear your throat, drop into the tired voice, and answer: “Hey. Honestly? Knackering. So humid. Meetings and bad hotel food. Just want my own bed.” The performance of a lifetime, and it lands.",
+  "The call comes as you reach the gate, and you become, instantly and completely, a bored man who spent a week at conference tables. “Golf was alright. Traffic was a nightmare. Ready to be home.” A sigh, precisely weighted. Every word believed, because you have made it so easy to.",
+  "In the Duty-Free glare you buy the apology in a bottle, and the call lands as you pay. You answer bored to the marrow: “Yeah, fine. Long week. Too many people, not enough sleep. Can't wait to be back.” Not a word of it true, every word believed.",
+  "The phone goes as you reach the seat, and you slide into the other voice — flatter, wearier, entirely domestic. “Golf was okay. Weather was rough. Missed you.” You've told this one so many times it has started to feel like a second first language.",
 ];
 const _SCRUB_CLOSE = [
-  "You pocket the phone and walk toward boarding. The double life is secured; the illusion holds. The " +
-    "city doesn't notice you leaving — it's already selling your booth to the next man who's sure he's different.",
-  "The scrub is complete: the nickname's under the socks, the accountant's at the gate. In a month the " +
-    "seatbelt sign will ping off over the gulf again, and you'll run the whole ritual in reverse.",
-  "Boarding call. You walk the jet bridge a respectable man with a clean phone and a duty-free bag, " +
-    "and behind you the city closes over the space where you stood without a ripple. Undefeated, as ever.",
-  "The performance holds all the way to the seat. The week is a story about golf and traffic now, " +
-    "filed and locked. Pattaya keeps the truth the way it keeps everyone's — cheaply, and forever.",
+  "You pocket the phone and walk toward boarding. The double life holds; nobody at the gate can see the week on you. The town doesn't notice you leaving — it is already pouring your stool's beer for the next man who's sure he's different.",
+  "The scrub is complete: the week's shirt is under the shoes, the man with the mortgage is at the gate. In a month the seatbelt sign will ping off over the gulf again, and you'll run the whole ritual in reverse.",
+  "Boarding call. You walk the jet bridge a respectable man with a clean phone and a duty-free bag, and behind you the town closes over the space where you stood without a ripple.",
+  "The performance holds all the way to the seat. The week is a story about golf and traffic now, filed and locked. Pattaya keeps the truth the way it keeps everyone's — cheaply, and forever.",
 ];
 
-// The man with nobody to perform for: the widower, the divorced returner, the
-// detective, the investor, the redundancy. The "hey babe" call and the lawn on
-// the lock screen belong to ONE origin — the golfer with the APAC team — and
-// were telling a widower he was cheating on a wife (one-girl playtest 2026-08-22).
 const _SCRUB_ALONE = [
   "The phone stays dark, which is its own kind of performance: no call to take in the other " +
     "voice, nobody waiting to be told about golf. You delete the photos anyway, out of a habit " +

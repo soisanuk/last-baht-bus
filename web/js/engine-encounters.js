@@ -1764,10 +1764,7 @@ function _taxiAsk(input) {
   if (!bolt && !refuse && G.money >= CLUB_TAXI) {
     // pay smiling — the fantasy stays intact; you're a "good man" (a returning account)
     G.money -= CLUB_TAXI;
-    _say(`You peel off two notes. The instant they leave your hand the sweet girlfriend snaps back on ` +
-      "like a light — the radiant, million-baht smile, a kiss on the cheek. “Thank you na ka! You are " +
-      "good man. See you tonight?” And she's gone, leaving you to work out, in the deafening quiet, that " +
-      `the free trial expired at 9 a.m. and you just upgraded to the standard package. (฿${G.money} left.)`, "");
+    _say(`You peel off two notes. The instant they leave your hand the girlfriend of last night is back like a light switched on — the whole-face smile, a quick hug. “Khop khun na! You look after me. Tonight again?” And she's gone, leaving you to work out, in the quiet, that the free night ended at nine and you have just paid the standing rate. (฿${G.money} left.)`, "");
     _addHappy(1);
     return;
   }
@@ -1775,8 +1772,8 @@ function _taxiAsk(input) {
     // question the taxi and the fiction shatters: girlfriend → corporate accountant
     const tip = Math.min(150, G.money); G.money -= tip;
     _say(`“It's an 80-baht Bolt,” you say, reaching for your phone — “where do you actually live?” ` +
-      "Record scratch. The warmth drains out of the room; the loving girlfriend becomes the cold, dead " +
-      `stare of an accountant reading an overdue invoice. She takes the ฿${tip} you end up pressing on ` +
+      `The room changes temperature. The girl who fell asleep on your arm is replaced, without a transition, ` +
+      `by somebody reading a bill she has decided not to argue. She takes the ฿${tip} you end up pressing on ` +
       "her without a flicker, files you under 'amateur', and is gone — no kiss, no “tonight”, no next " +
       `time. You saved ฿${CLUB_TAXI - tip} and something you can't name. (฿${G.money} left.)`, "alert");
     _addHappy(-1);

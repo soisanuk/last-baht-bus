@@ -1164,7 +1164,7 @@ const _MOTEL_AGAIN = [
 const _MOTEL_ROOM_LINES = [
   "฿{p} across the counter and Somchith unhooks a key without looking at which. {n} takes your hand up the stairs, kicks the shoes off inside the door, and the fan takes up its slow count. Later — a shower that runs cold, then colder, {n} fixing her hair in a mirror the size of a paperback, and the old man's nod as you pass the counter. (฿{m} left.)",
   "The key is warm from somebody else's pocket. Upstairs: a fan, a towel, a bottle of water sweating on the sill, and {n} being businesslike and fond in the same breath. Some time later you come down together, not quite together, and Somchith pours his coffee and does not look up. (-฿{p}, ฿{m} left.)",
-  "฿{p} to the old man. {n} goes up the stairs ahead of you as if she has done these particular stairs before, which she has. The room is a bed and a fan and a window painted shut. Afterward she sits on the edge of the mattress doing up a strap and tells you, kindly, that you are not as bad as most. (฿{m} left.)",
+  "฿{p} to the old man. {n} goes up the stairs ahead of you as if she has done these particular stairs before, which she has. The room is a bed and a fan and a window painted shut. Afterward she stands at the mirror re-pinning her number to the dress and tells you, over her shoulder and kindly, that she has had worse Tuesdays. (฿{m} left.)",
   "Up the stairs behind {n}, past a door with a shoe outside it, into a room that smells of lemongrass and the last hour. The fan counts the minutes. When you come down the alley has its lights on and Somchith has a fresh cup poured. \"Okay?\" Okay. (-฿{p}, ฿{m} left.)",
 ];
 function _motelRoom() {
@@ -1698,9 +1698,7 @@ const _RIDE_VENUES = [
   ]},
   { key: "ranlao", after: 60, lo: 300, hi: 700, sanuk: 3, scenes: [
     n => `A ran lao off Pattaya Tai that a farang only ever sees from the back of a girl's bike — Thai live music, whisky sets, and a ` +
-      `queue that ${n} walks straight past on somebody's nod. Inside, the mystery of the quiet ` +
-      `strip solves itself: everyone is HERE. Half the rail crews of the beer bars, out of ` +
-      `uniform and off the clock, and the room sings every chorus back at the band. You are the ` +
+      `queue that ${n} walks straight past on somebody's nod. Inside, you find out where Tuesday's beer-bar girls go on a Thursday: here, in their own clothes, at tables of six, and the room sings every chorus back at the band. You are the ` +
       `only farang in the building, and with her hand on your arm, nobody minds at all.`,
     n => `A Thai music hall, tables of whisky-soda, and a roll call at every second one — ${n} ` +
       `trades wais and shrieks of greeting the whole way to your seats. The girls who pour ` +
@@ -1822,7 +1820,7 @@ function _rideQuestion(seq, id, name) {
   const record = names >= 3 || G.jaded >= 2 || photos >= 4;
   _say(`The light at the big junction goes red — one of the three in this town anyone actually ` +
     `honours — and ${name} puts a foot down, engine muttering, and asks it over her shoulder, ` +
-    `casual as asking the time. "Tilac. If you never meet me — where you be now, you think?"`);
+    `casual as asking the time. "Tilac. Tonight, if I not come to work — what you do, you think?"`);
   if (record) {
     const bits = [];
     if (names) bits.push(`${names} name${names > 1 ? "s" : ""} in the book the lady drinks kept`);
@@ -1833,7 +1831,7 @@ function _rideQuestion(seq, id, name) {
       ? bits.slice(0, -1).join(", ") + ", and " + bits[bits.length - 1]
       : bits[0];
     _say(`And before you can build an answer, the ledger opens itself and answers first: ` +
-      `${cascade}. "Still looking for you," you say. It is the right answer. She lets ` +
+      `${cascade}. "Sit somewhere and wait for you," you say. It is the right answer. She lets ` +
       `it stand — a small "mm" into the wind, the light going green — and somewhere around third ` +
       `gear you understand that she didn't ask because she wanted the answer. She asked because ` +
       `she already had it.`, "dim");
@@ -1841,7 +1839,7 @@ function _rideQuestion(seq, id, name) {
     _say(`You look for the answer and find the book nearly empty — she is most of what is ` +
       `written in it. "Home, probably," you say, honestly. "Asleep. Bored." She laughs — the ` +
       `real one, not the working one — and kicks the bike into gear as the light goes. "Good ` +
-      `answer. Wrong question, na." And whatever she means by that rides with the two of you ` +
+      `answer. Not the question, na." And whatever she means by that rides with the two of you ` +
       `to the next place.`, "dim");
   }
 }
@@ -5063,18 +5061,10 @@ function _wxRainy() {
 // The empty-bar monsoon register: rain hammering a room with nobody in it. The
 // rule from the canon essay: low season has NO drama — the emptiness is the event.
 const _RAIN_EMPTY_BAR = [
-  "The rain owns the roof and the room belongs to nobody. The pool table is under its " +
-    "cover; two of the girls share a thin blanket on the corner sofa, faces lit blue by " +
-    "their phones; the speaker plays a DJ mix to an audience of stacked stools.",
-  "The girl nearest the door has pulled her bare feet up onto the plastic stool, chin " +
-    "on her knees, watching the street flood. Nobody has bought anything in an hour and " +
-    "nobody has said anything either. The rain is doing all the talking.",
-  "Somebody's soi dog has claimed the doorway step, shaking itself into a tight wet " +
-    "ball — a temporary truce with humanity, ratified without a word. The girls let it " +
-    "lie. In this weather everything gets to come in off the street except money.",
-  "The neon runs its colours into the puddle at the threshold. Behind the rail the " +
-    "cashier counts a drawer that doesn't need counting, twice, because the counting " +
-    "is something to do. The rain does not care whose rent is due.",
+  "The rain owns the roof and the room belongs to nobody. The pool table is under its cover; the girls have pulled three chairs into a row and are watching one phone between them, the sound off; the speaker plays to the stacked stools.",
+  "The girl nearest the door is painting a colleague's nails at the end of the rail, slowly, because slowly is the only speed there is tonight. Nobody has bought anything in an hour and nobody has said anything either. The rain is doing all the talking.",
+  "A moth the size of a thumb has come in off the street and the mamasan is shepherding it out with a menu, the first job anyone has had in an hour. In this weather everything gets to come in off the street except money.",
+  "The neon runs its colours into the puddle at the threshold. Behind the rail the cashier has the drawer open and is folding the notes the same way again, because the notes are the only thing in the room that will do what she wants. The rain does not care whose rent is due.",
 ];
 
 const _DRIZZLE_BAR = [
@@ -8786,10 +8776,10 @@ const _OWL_LEADS = [
     "The girls sit out the flood under thin blankets doing arithmetic you would not " +
     "wish on an accountant. Next time a barkeep looks pleased to see you in September, " +
     "understand that the pleasure is real.",
-  "A reader mourns that Pattaya 'lost its soul in 1998.' It didn't, squire. In 1998 the baht was fifty to the dollar and you had a full head of hair. The city is doing precisely what it always did — adapting faster than you can. The town never grew a conscience. You just grew old.",
+  "A reader mourns that Pattaya 'lost its soul in 1998.' It didn't, squire. In 1998 your pound was worth twice the holiday and your knees were worth four times the stairs. The town has one trick and it has never changed it: it finds out what you came for and sells it to you. What changed is the rate, and the man. Nobody misses the soul. They miss being forty.",
   "Newcomers keep asking why she wants money if she loves them. Wrong question. Liang du — to feed and care for — IS the love here, not a substitute for it. The man who says 'I love you' and won't pay the rent is, in the local accounting, useless. Learn the word before you learn her name.",
   "A gentleman panics: his lady had ฿180,000 last month and ฿5,000 this week. She isn't robbing you, chief. Money here is a river, not a reservoir — it flows through and does its job. Ask where it went and you may as well ask where the wind went.",
-  "Every season a man swears his cashier — his mamasan — his single mum — is 'different, not like the others.' She is exactly like the others; she simply has a chair. There are no diamonds in the rough on this street. Only levels of the game. And if you think you aren't playing, sir, you have already lost.",
+  "Every season a man swears his cashier — his mamasan — his single mum — is 'different, not like the others.' She is exactly like the others, squire; she simply sits down to do it. The Owl has watched forty seasons of men dig for the one honest woman in a street built to supply him, and what they find, every time, is a woman with a job and a man with a theory. The street has no exceptions. It has tiers. You are on one of them.",
   "The old boys grumble the pretty girls have vanished. They haven't, grandad — they've decamped to Bang Saen and Sri Racha, where the money is Thai and the exchange rate is nobody's problem. As one put it to me, sweetly: 'farang cannot afford us now.' Just need to earn more.",
   "Another one went off a balcony this week. It is never the woman that does it — it's the isolation, and the shame of a man who bragged too loud to ask for help. If your mate's gone quiet, don't send flowers. Buy him a beer and SIT with him. That is the entire cure, and it costs a beer.",
   "She forgives her jobless Thai boyfriend three days' cheating and screams at YOU for smelling of massage oil. You are not the villain, squire — you are the stable ATM, and one gets audited while the other gets forgiven. Do not audition for bad-boy on a sponsor's salary.",
@@ -8797,7 +8787,7 @@ const _OWL_LEADS = [
   "Every year a foreign paper 'discovers' the world's oldest profession in the Land of Smiles as though we invented it. I have watched it ply its trade in New York and London, Amsterdam and Hamburg, Rome and Tokyo — it is no more Thai than the moon is. Supply meets demand; it is here to stay; and the published figures should be taken with a barrel of salt and a slice of lime.",
   "Two gentlemen at the end of the rail last Thursday, squire, phones held low under the counter, filming the floor for the folks at home with the expressions of men inspecting a drain. The cashier clocked the phones in about a second and sent them a plate of fruit on the house, because they looked lost. She was right: they were. Here is the thing nobody films — the woman who runs the till at that bar has put two brothers through school and never once filmed a stranger. Point the camera where you like. Mind which way the lens is facing.",
   "Bars change names and the girls rotate street to street, but every door on this coast has its fixture, squire, and the fixture has a life you are not shown. The doorman at a certain beer bar was a provincial boxer — forty-one fights, he will tell you the number and nothing else — and the mamasan is his elder sister, which is why he is the one man on that soi who cannot be bought a drink. He opens the door, he closes it, he reads the rain. On a wet night he holds the umbrella for every girl from the bike to the step and for no customer at all. That is the whole of his politics, and it is more than most of us manage.",
-  "A reader walked the neon on a Friday night — thin crowds on the strip, empty stools in the maze — and pronounces the town dead. That same midnight, squire, there was a queue outside a ran lao off Pattaya Tai — the kind of place a farang only sees from the back of a girl's bike — and every second face at every table inside was one he'd have recognised from behind a bar. The pulse hasn't stopped. It clocked off, changed its clothes, and went out to spend its own money where the music is Thai and the prices are honest. The town is not dead. You are walking down the wrong streets.",
+  "A reader walked the neon on a Friday night — thin crowds on the strip, empty stools in the maze — and pronounces the town dead. That same midnight, squire, a music hall off Pattaya Tai had no table free and a girl at every one of them who had poured your beer on Tuesday, in her own clothes, drinking her own whisky. The town has two shifts. The one you can see ends when the shutters come down; the other one starts then, and you are not on the list. The town is not dead. It is busy, somewhere you are not invited.",
   "Rents rise, the tea money rises with every contract renewal, and so the price of your beer rises to meet them — that is the whole economics of this coast in one sentence. The bakshish never stops, no matter who sits in which chair. Only the ingenuous believe it can be halted, and the ingenuous don't last a season.",
   "They set a closing time and call it reform. It reforms nothing — the market wants four a.m., or six, and the market finds a way: a bolted door on the Darkside, a painted-out window, a party that closes for no clock. Business hours belong to business, not the almanac.",
   "Low season, and the town's a ghost of itself — a beach walk to yourself before noon, hotels checking in one guest a night. Which makes it, for the naughty boy, the finest season of all: bars crammed with ladies and empty of men, and the ladies keen. Not desperate, mind — they've the family money still — just keen to make more. There is no better time to be the only customer in the room.",
@@ -8835,15 +8825,16 @@ const _OWL_AMULET = [
 
 const _OWL_LETTERS = [
   ["A hostess writes (translated from the Thai by her cashier, who added commentary " +
-    "your columnist has removed): 'My friend tell me raise my price, everybody raise " +
-    "now, know your worth. I raise. My one customer of the week say did I think this " +
-    "is Dubai, and block. Now friend is asleep and I am hungry. What is my worth, Owl?'",
+    "your columnist has removed): 'A girl on the video say know your worth, everybody " +
+    "charge more now. I charge more. My customer of six wet seasons pay the old price " +
+    "like always and he not come back. Now the girl on the video has aircon and I have " +
+    "the bus fare. What is my worth, Owl?'",
    "Your worth, little sister, is not the number and never was — but the STREET sets " +
-    "the number, and the street does not read motivational posts. Your friend gave " +
+    "the number, and the street does not watch videos. The girl with the aircon gave " +
     "you advice she will never have to pay for; that is the cheapest thing on this " +
-    "soi and the most expensive to accept. Go back to your old price and eat. The " +
-    "Owl has held his rate card at these premises for forty years, and it has kept " +
-    "him fed if not rich."],
+    "coast and the most expensive to accept. Go back to your old price, and text your " +
+    "Finn that August is August. The Owl has charged the same for a column for forty " +
+    "years, and it has kept him fed if not rich."],
   ["A Thai wife writes: 'Met my farang on Beach Road in '89. Two children, a finance degree this year, maybe law school. Mixed marriage is hard and culture harder — but marriage is the START of the bumpy ride, not the happy ending.'",
    "I am happy for you, madam. Alas, you are in the minority."],
   ["'Relocating to Pattaya for work — what monthly income is normal living?'",
@@ -8876,11 +8867,11 @@ const _OWL_LETTERS = [
   ["A reader explains the arithmetic of a kept lady: 'Her sponsor flies in, so she's not working — he pays a generous remittance for exactly that. But today's a family day for him, penned in with the wife and kids, and a girl with a free evening…'",
    "…is a girl with a free evening. Everyone is discreet, everyone is paid, and nobody, technically, is doing anything wrong. This is not a scandal, squire. This is a calendar."],
   ["A hopeful reader asks: 'One reads about the girls who make it out — the house in the village, the flight to Europe, the snow. Has anyone actually SEEN a happy ending, or is it all forum talk?'",
-   "I have seen exactly one kind, squire, and it involves no snow. Drive twenty minutes into the Darkside, past the railway tracks: an open-air shophouse, six coin-op washing machines, a nail corner. The proprietor kept a notebook under her mattress for three years and banked a sponsor's allowance like a fund manager — rent, mother, and the rest into an account no boyfriend knew existed. One Tuesday she hit her number, paid her last 500-baht uniform fee, and walked out into the afternoon. The sponsor was blocked within the week; the contract was concluded, and he had received precisely what he paid for. She answers to no mamasan now and owns the lease. That is the real happy ending on this coast — a laundry bought in cash, by a woman who beat the house. Her old roommate, meanwhile, is still on the soi, waiting for the prince. The prince was never coming, madam. He was the seed capital."],
+   "I have seen exactly one kind, squire, and it involves no snow. Walk the ground floor of the IT mall on Pattaya Tai to the booth by the escalator: keys cut, screens replaced, a laminated price list in three languages. The woman behind it worked a go-go for four years with a number she has long since forgotten, and a figure she never did — a sum written on the inside cover of a school exercise book, and every month's money from a man in Perth went into it, minus her mother, minus the rent. The month the figure was reached she did not finish her shift. The man in Perth was told it was over by text, which is what he had paid for and precisely what he got. Nobody has ever barfined a key-cutter, and she owns the booth. That is the real happy ending on this coast. Her old roommate is still on the soi, waiting for the prince. The prince was never coming, madam. He was the deposit."],
   ["A regular writes, wounded: 'My girl of two seasons has left the bar — and not for a bigger wallet. Somebody saw her at a mookata place with a Thai fellow in an office shirt. I would have paid anything. What did he pay?'",
    "Nothing, squire, and that is the entire point. You never saw him coming because he does not come to the bar — he waits in the car park in a sensible Honda, and he knows every single thing you are afraid she is hiding, and he stays anyway. His mother is against it, his friends tell him to 'be careful', and he is paying in a currency you do not hold: face. Against that, your wallet is confetti. Wish her well, sir. This is the one way out of here that the town does not own."],
   ["A reader, nine months in, writes with some swagger: 'Took her out of a go-go and set her up in my condo. She threw out the bikinis, cooks every night, drinks nothing. The bitter old boys in the sports bars are simply doing it wrong — treat them like human beings and they change.'",
-   "Delighted for you, squire. Now a small prophecy, free of charge: one day the phone will ring from up-country — a brother, a motorbike, a hospital, a number with four zeros — and your answer will be worth more than nine months of home cooking. Pay it and you are her harbour. Explain about boundaries instead, and you will come home to a wardrobe of modest jeans and one suitcase gone. Nobody will have played you. The bar is not a place, sir. It is a survival mechanism, and it never closes."],
+   "Delighted for you, squire. Now a small prophecy, free of charge: one day the phone will ring from up-country — a brother, a motorbike, a hospital, a number with four zeros — and your answer will be worth more than nine months of home cooking. Pay it and you are the roof. Give her a lecture on budgeting instead, and you will come home one evening to a tidy flat with one drawer empty. Nobody will have played you. She did not leave the bar, sir. She left the bar's HOURS. The reason she was there is still up-country, and it still has a phone."],
   ["A reader writes, quietly: 'Three weeks now — same girl, every single night. Dinners, the beach, coffee on my balcony of a morning. Neither of us has so much as looked at anyone else. This morning I told her she could give the bar away, we'd make a weekend of the islands. She smiled and said lovely — but send mama the fine before three, or would I rather just cover her salary by the month?'",
    "Sit down, squire. For twenty-one days you were in a relationship and she was at work, and the terrible truth of this coast is that from the outside the two are indistinguishable — that is the entire product. Nobody cheated you. She kept her side flawlessly; by her lights 'special customer' is the warmest thing there is to be. Was any of it real? The coast declines to answer. It always declines. The only question it will price for you is the one she asked: by the night, or by the month."],
   ["A reader's ordeal: a massage shop by his hotel, oil at the board price. In the room she demands 'special'; he declines and asks for his money back — and she ERUPTS, screaming 'pervert', the mamasan hurling shoes and a flower vase, both daring him to call the police: 'many customers say that, nobody calls.' He fled. But his hotel manager heard, went white, and marched round with the bell boy and a guard — four men. The girls scattered; the ฿600 came back with ฿200 on top.'",
