@@ -483,7 +483,7 @@ test("she remembers you across vacations — once, with a head start, not the ol
   G.day = 7; G.room = "hotel_room";
   _newVacation();
   assert.equal(G.prevBond[girl], 2);
-  assert.equal(G.soc.drinks[girl] || 0, 0, "the ledger did reset");
+  assert.equal(G.soc.drinks[girl] || 0, 3, "the ledger cools by a tier, not to nothing (2026-10-01: the return is the moment)");
   G.room = "buakhao_n"; out = [];
   _arriveAt("lucky_tiger");
   assert.match(text(), /You come BACK|You COME|Now I keep again/);

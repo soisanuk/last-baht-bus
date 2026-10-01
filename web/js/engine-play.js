@@ -3212,7 +3212,7 @@ function _bondTier(id) {
   return d >= 13 ? 3 : d >= 7 ? 2 : d >= 3 ? 1 : 0; // stranger / face / regular / her farang
 }
 // WHAT SHE HAS TOLD YOU does not reset with the drinks book. _bondTier is THIS
-// week's warmth and it legitimately cools between trips — the barfine waiver,
+// week's warmth and it cools between trips — by a tier, not to nothing (2026-10-01) — the barfine waiver,
 // the favor bias, the kept seat all read it. But the bond-gated DIALOGUE was
 // reading it too, so a man who came back after a month to a woman who had
 // shown him her son's photo and named her village was told "we're not at the
@@ -5444,6 +5444,12 @@ function _newVacation() {
   const _told = G.soc.ledger || {};
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
     banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0, ledger: _told };
+  // THE RETURN IS THE MOMENT (essay ledger theme 3, 2026-10-01 — the most consistent
+  // claim in the source corpus, and the one the game contradicted): a man who went
+  // home and came back is not a stranger. Her-farang comes back a regular, a
+  // regular comes back a face; the return greeting's bump then carries her most
+  // of the way back. Below regular nothing carries — a face is a week's warmth.
+  for (const id of Object.keys(G.prevBond)) G.soc.drinks[id] = G.prevBond[id] >= 3 ? 7 : 3;
   // The share card's spine and its "told true" count are THIS week's, not a
   // lifetime tally — nightLog untouched here meant a fresh vacation's SHARE
   // showed the previous vacation's 7 nights and falsely declared "week

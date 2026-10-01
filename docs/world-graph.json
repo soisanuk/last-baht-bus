@@ -46630,27 +46630,27 @@
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5509",
+   "to": "engine-play.js:5515",
    "type": "INTERPOLATES"
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5510",
+   "to": "engine-play.js:5516",
    "type": "INTERPOLATES"
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5523",
+   "to": "engine-play.js:5529",
    "type": "INTERPOLATES"
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5530",
+   "to": "engine-play.js:5536",
    "type": "INTERPOLATES"
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5533",
+   "to": "engine-play.js:5539",
    "type": "INTERPOLATES"
   },
   {
@@ -47730,7 +47730,7 @@
   },
   {
    "from": "SAFE_CASH",
-   "to": "engine-play.js:5477",
+   "to": "engine-play.js:5483",
    "type": "INTERPOLATES"
   },
   {
@@ -52155,7 +52155,7 @@
   },
   {
    "from": "invoicesCopied",
-   "to": "engine-play.js:5596",
+   "to": "engine-play.js:5602",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -52580,7 +52580,7 @@
   },
   {
    "from": "plgResolved",
-   "to": "engine-play.js:5554",
+   "to": "engine-play.js:5560",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -53795,7 +53795,7 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5503",
+   "to": "engine-play.js:5509",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -53995,7 +53995,7 @@
   },
   {
    "from": "expatLife",
-   "to": "engine-play.js:5508",
+   "to": "engine-play.js:5514",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -54070,7 +54070,7 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-play.js:5504",
+   "to": "engine-play.js:5510",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -54095,7 +54095,7 @@
   },
   {
    "from": "invoicesCopied",
-   "to": "engine-play.js:5596",
+   "to": "engine-play.js:5602",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -54275,7 +54275,7 @@
   },
   {
    "from": "rabbitData",
-   "to": "engine-play.js:5610",
+   "to": "engine-play.js:5616",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -55906,7 +55906,7 @@
    "setByEngine": [
     "engine-parser.js:13167",
     "engine-play.js:5398",
-    "engine-play.js:5503",
+    "engine-play.js:5509",
     "engine-systems.js:9655",
     "engine-systems.js:9698"
    ]
@@ -56529,7 +56529,7 @@
     "wayne#7"
    ],
    "setByEngine": [
-    "engine-play.js:5508"
+    "engine-play.js:5514"
    ]
   },
   {
@@ -57130,7 +57130,7 @@
     "engine-parser.js:13166",
     "engine-parser.js:1641",
     "engine-play.js:5399",
-    "engine-play.js:5504"
+    "engine-play.js:5510"
    ]
   },
   {
@@ -57340,7 +57340,7 @@
    "name": "invoicesCopied",
    "readByEngine": [
     "engine-parser.js:4731",
-    "engine-play.js:5596",
+    "engine-play.js:5602",
     "engine-systems.js:10455"
    ],
    "requiredBy": [
@@ -57351,7 +57351,7 @@
     "wilawan#3"
    ],
    "setByEngine": [
-    "engine-play.js:5596"
+    "engine-play.js:5602"
    ]
   },
   {
@@ -58084,7 +58084,7 @@
    ],
    "readByEngine": [
     "engine-core.js:702",
-    "engine-play.js:5554"
+    "engine-play.js:5560"
    ],
    "requiredBy": [
     "bert#43",
@@ -58184,7 +58184,7 @@
     "fast_eddy#28"
    ],
    "setByEngine": [
-    "engine-play.js:5610",
+    "engine-play.js:5616",
     "engine-systems.js:10293",
     "engine-systems.js:10717"
    ]

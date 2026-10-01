@@ -35,7 +35,7 @@ beforeEach(() => {
 test("what she has told you survives the trip home (Howard F1)", () => {
   G.room = "lucky_tiger"; G.known.lek = true; G.soc.drinks = { lek: 14 }; G.phone.contacts = { lek: true };
   flyHomeAndBack();
-  assert.equal(_bondTier("lek"), 0, "premise: this week's warmth has cooled");
+  assert.equal(_bondTier("lek"), 2, "premise: this week's warmth has cooled by a tier (2026-10-01)");
   assert.equal(_knownTier("lek"), 3, "…but the tier she ever reached with you is kept");
   G.room = "lucky_tiger"; G.talked = {};
   out = []; run("ask lek about home");
