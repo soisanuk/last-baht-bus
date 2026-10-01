@@ -4317,7 +4317,7 @@ const _CODA_HOME = [
     // woman with her own authored canon a hospital bill and a kid "she sees
     // four times a year" that contradicted what she'd told him all week
     // (Howard, round 35). The image stays; the facts are hers to tell.
-    "ready is the last thing tonight she can decide. The notes are already in the zip at the " +
+    "ready is the last thing tonight she can decide, and home is forty minutes off. The notes are already in the zip at the " +
     "back of the {{phone}} case. That money has an address, and it isn't hers.",
   "She presses the buzzer at a lane off the top of Pattaya Tai, drops the coin on the tray, " +
     "and walks the last of it home past a woman sweeping. A shared room; a cousin who works days, " +

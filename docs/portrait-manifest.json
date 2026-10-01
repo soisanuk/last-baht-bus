@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-29",
+  "generated": "2026-10-01",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 161,
@@ -155,11 +155,11 @@
       "sex": "f",
       "look": "Thai woman, twenty-four, hair down for once, a stylish casual dress, a cocktail, no number — a customer, not staff.",
       "venueKind": "beer",
-      "emoji": "☕",
+      "emoji": "💊",
       "th": null,
       "room": "metro_garden",
       "tags": [],
-      "desc": "At a table, not a stool: twenty-four or so, hair down, a simple dress that is stylish without trying, a cocktail she's making last. No number, no uniform, no hustle — she's scrolling her phone between glances at the bar like someone waiting for a friend to finish a shift. She smells faintly, improbably, of coffee."
+      "desc": "At a table, not a stool: twenty-four or so, hair down, a simple dress that is stylish without trying, a cocktail she's making last. No number, no uniform, no hustle — she's scrolling her {{phone}} between glances at the bar like someone waiting for a friend to finish a shift. Her nails are short and very clean, the way a job makes them."
     },
     {
       "id": "dj_beer",
@@ -523,13 +523,13 @@
       "source": "NPCS",
       "role": "story",
       "sex": "f",
-      "look": "Thai woman, twenties, deep calm laughing eyes, elephant pants, a faded sequined cat t-shirt pressed immaculate.",
+      "look": "Thai woman, twenties, plain grey hoodie, hair tied back, a quick laugh, no make-up at all.",
       "venueKind": null,
       "emoji": "🐱",
       "th": "เปรี้ยว",
       "room": "second_rd_c",
       "tags": [],
-      "desc": "The girl from the clinic waiting room — you'd know the eyes anywhere, which turns out to be the whole story."
+      "desc": "The girl from the clinic waiting room — the one who laughed at the dead pen, which turns out to be the whole story."
     },
     {
       "id": "rob",
@@ -591,12 +591,13 @@
       "source": "NPCS",
       "role": "story",
       "sex": "m",
+      "lookNeeded": true,
       "venueKind": null,
       "emoji": "🔑",
       "th": "สมชิต",
       "room": "short_time_motel",
       "tags": [],
-      "desc": "Sixty-something, a weathered face that holds a permanent quiet warmth, the thermos of coffee always close. He keeps the keys, keeps the counter, keeps everything running on this shift without any fuss. The girls coming through treat him like a favourite uncle."
+      "desc": "Sixty-something, a face that has driven a lot of night road, a flask of cold tea and a radio turned down low to the lottery numbers. He keeps the keys, keeps the counter, keeps the place running without any fuss. The girls coming through treat him like a favourite uncle.thermos of coffee always close. He keeps the keys, keeps the counter, keeps everything running on this shift without any fuss. The girls coming through treat him like a favourite uncle."
     },
     {
       "id": "tan",

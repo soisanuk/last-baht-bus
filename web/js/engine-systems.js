@@ -3649,11 +3649,11 @@ const _MORT_TEXT_REPLIES = [
     "A: Deadline's the only wife who never went home to Udon.”",
 ];
 const _CHAM_TEXT_REPLIES = [
-  "\"hiii 😊 i at work na, boss watching. you come drink coffee? i make you good one ☕\"",
-  "\"555 you think about me? i think about SLEEP. finish 4pm then sleep sleep 🥱\"",
-  "\"cannot talk now, many customer 😩 farang all want oat milk. what is oat milk. talk later na 💚\"",
+  "\"hiii 😊 i at work na, boss watching. you come buy vitamin? i give you good price 💊\"",
+  "\"555 you think about me? i think about SLEEP. finish 5pm then sleep sleep 🥱\"",
+  "\"cannot talk now, many customer 😩 farang all want the blue pill, all shy. talk later na 🤍\"",
   "\"you free tonight? maybe i go see my friend again, maybe 😏 not sure. i tell you.\"",
-  "\"good morning ☀️ apron on, hair up, good girl 555. you be good too na\"",
+  "\"good morning ☀️ white coat on, hair up, good girl 555. you be good too na\"",
 ];
 function _doMessage(arg) {
   if (_phoneDead()) return;
@@ -3666,16 +3666,14 @@ function _doMessage(arg) {
   if (w === "priew" && G.phone.contacts.priew) {
     G.battery = Math.max(0, G.battery - 1);
     _say(_flag("priewRevealed")
-      ? "The reply comes fast, warm, entirely unembarrassed: \"you see me last night na 😊 " +
-        "lunch still ok? i tell you first day — evening i work. you know now 555\" And that " +
+      ? "The reply comes fast, warm, entirely unembarrassed: \"you see me with the tray na 😊 " +
+        "lunch still ok? i tell you first day — nights, hospitality. you know now 555\" And that " +
         "is the whole of it: she never lied, and she is not going to start apologising for " +
         "your imagination."
       : _pickVary([
-        "\"555 the one with the eyes! ankle better na. lunch some day — only lunch, i work evening, " +
-          "every day until late 😊\" Cheerful, unhurried, exactly what she said at the clinic.",
-        "\"you again 😊 ankle ok now, i walk to work. lunch one day na — day time only, evening i busy busy\" Same terms as the waiting room; she is nothing if not consistent.",
-        "\"hello mister eyes 555. today rain, no work? no — always work. lunch some day, i tell you where\" A promise with no date on it, which is the only kind she makes.",
-        "\"555 ok ok. eat already? me not yet. lunch next week maybe, i see my rota\" And a cat sticker, which is apparently the signature.",
+        "\"hiii 😊 brother hand ok now, he show everybody the bandage. lunch some day na, lunch only 🙏\"",
+        "\"i at work, cannot talk 😩 busy busy. you sleep already? good boy 555\"",
+        "\"you still in pattaya? i see farang with your walk today. not you. same walk 555\"",
       ], "priewreply"));
     return;
   }
@@ -3684,7 +3682,7 @@ function _doMessage(arg) {
     _say(_pickVary(_MORT_TEXT_REPLIES, "morttext"));
     return;
   }
-  // the barista texts like a barista — apron, boss, bus; never the bar (chameleon economy)
+  // the pharmacy girl texts like one — the coat, the boss, the bus; never the bar (chameleon economy)
   if (w === "cream" && G.phone.contacts.cream) {
     G.battery = Math.max(0, G.battery - 1);
     _say(_pickVary(_CHAM_TEXT_REPLIES, "chamtext"));
@@ -4399,10 +4397,10 @@ function _chamAsk() {
     _say("You ask it — the only question there is on this street, however you dress it. " +
       "Her eyes go wide. She actually pulls back in the chair, a hand flat on the table " +
       "between you, and the look on her face is shock with a little hurt folded into it.", "alert");
-    _say("\"How much?\" The voice is small. \"I don't know. I— I am a barista. I never go " +
-      "with a customer. Never.\" She looks at the cocktail, at the bar where her friend is " +
-      "working, back at you. \"I just talk to you because I like you. I just…\" The hand " +
-      "comes off the table. \"I just wanted to try.\"");
+    _say("\"Don't ask me that.\" The voice is small. \"Please. I work in a pharmacy. I am not " +
+      "that girl.\" She looks at the cocktail, at the bar where her friend is working, " +
+      "back at you. \"I sit with you because I like talking to you. That is all it is.\" " +
+      "The hand comes off the table. A long beat. \"…Ask me again outside.\"");
     _say("Somewhere behind your sternum a balloon inflates. Nobody has named a number, and " +
       "you notice — later, much later — that nobody is going to.", "dim");
   } else {
@@ -4463,7 +4461,7 @@ function _chamContact() {
         "ask. You know what they ask.\" She does not say it. She is waiting for you to.",
       "\"Maybe later na.\" Then, quieter, into the glass: \"You never ask me. Everybody ask me. I keep waiting for " +
         "it, so I can say no.\" A beat. \"I think.\"",
-      "\"LINE is for the coffee shop.\" A hand flat on the table between you. \"This — this is for the other " +
+      "\"LINE is for the pharmacy.\" A hand flat on the table between you. \"This — this is for the other " +
         "question. You know it. Ask it, or don't. But don't ask me for LINE instead of it.\"",
     ], "chamnudge"));
     return;
@@ -4472,15 +4470,15 @@ function _chamContact() {
     "doesn't give it either. \"Maybe later na. If you nice.\"");
 }
 function _chamPrompt() {
-  _say("She is already gathering her phone and her little bag, not looking at you, the way " +
-    "you don't look at a thing you've decided. (GO with her · NOT TONIGHT)", "dim");
+  _say("She is already gathering her {{phone}} and her little bag, not looking at you, the way " +
+    "a person avoids looking at a thing already decided. (GO with her · NOT TONIGHT)", "dim");
 }
 function _chamDecline() {
   G.pendingChoice = null;
   _say("You say not tonight, and mean something you couldn't spell out. She nods quickly, " +
     "relieved or disappointed or neither — the face gives you nothing to price. \"Ok na. " +
     "Maybe another time.\" She types something into your phone before you've offered it: " +
-    "her LINE. \"You come coffee shop. Daytime. I make you latte, good one.\"", "dim");
+    "her LINE. \"You come pharmacy. Daytime. I give you vitamin, good one.\"", "dim");
   G.phone.contacts.cream = true;
   G.known.cream = true;
   _setFlag("chamAsked");
@@ -4489,10 +4487,10 @@ function _chamGo() {
   G.pendingChoice = null;
   _say("You go. She puts her arm through yours on the soi like a civilian — no hand on " +
     "the wallet, no glance back at a mamasan, no mamasan to glance at — and in the " +
-    "motosai's mirror she is looking at her phone with a small private smile. At the " +
+    "motosai's mirror she is reading something on her {{phone}} with a small private smile. At the " +
     // her LINE is typed in once; the second night it was "unasked" again (Dieter, round 56)
     (G.phone.contacts.cream ? "hotel she checks her own number is still in your phone, and says nothing about it. "
-      : "hotel she types her LINE into your phone unasked: \"so you can find me. Daytime. Coffee shop.\" ") +
+      : "hotel she types her LINE into your phone unasked: \"so you can find me. Daytime. Pharmacy.\" ") +
     "In the lift she says it once more, to the floor indicator: \"I never " +
     "do this.\"");
   G.phone.contacts.cream = true;
@@ -4513,7 +4511,7 @@ function _chamMorning() {
   if (!G.chamNight) return;
   _say("She is up before you, dressed, hair going up into a modest bun in the mirror " +
     "with three pins held in her teeth — the transformation is quick and unshowy and " +
-    "complete. A folded green apron goes into the little bag. \"Bus ten to eight,\" she " +
+    "complete. A folded white coat goes into the little bag. \"Bus ten to eight,\" she " +
     "says round the pins. \"I late, boss angry.\" She has asked for nothing. She " +
     "stands by the door a second longer than leaving takes.", "room");
   if (_pers("whiteknight")) {
@@ -4542,7 +4540,7 @@ function _chamGift(amt) {
     G.money -= amt;
     _say(`You give her ฿${amt} — to help out, you say, and she looks at the notes and ` +
       "then at you and the thanks is shy and complete, eyes down, both hands. \"You so " +
-      "kind. Too kind.\" It goes into the little bag beside the apron. A kiss on the cheek " +
+      "kind. Too kind.\" It goes into the little bag beside the coat. A kiss on the cheek " +
       "that lands like a receipt nobody issued.", "win");
   } else if (amt > 0) {
     G.money -= amt;
@@ -4555,11 +4553,11 @@ function _chamGift(amt) {
       "was owed; nothing was asked; you are not sure, standing there, which of those two " +
       "sentences you are going to tell yourself.", "dim");
   }
-  _say("(At eight she'll tie on the green apron and steam milk for the next farang through " +
+  _say("(At eight she'll button the white coat and sell sunburn cream to the next farang through " +
     "the door, and smile. A week's wages in a night, or a bus fare, or a kiss — and if " +
-    "anyone asks, she's a barista. She is.)", "dim");
+    "anyone asks, she works at the pharmacy. She does.)", "dim");
 }
-// Her texts: apron selfies — proof of an honest life, manufactured daily for a
+// Her texts: white-coat selfies — proof of an honest life, manufactured daily for a
 // market of three — and, once, the slip: a message meant for another papa.
 function _chamTick() {
   if (!(G.phone && G.phone.contacts && G.phone.contacts.cream)) return;
@@ -4570,8 +4568,8 @@ function _chamTick() {
   if (!G.chamContactDay) G.chamContactDay = G.day;
   if (!_flag("chamSlip") && since >= 1 && _rand() < 0.12) {
     _setFlag("chamSlip");
-    _pushMsg("cream", "thank you for this month na papa 🙏 you different from other farang, i " +
-      "always say. i buy the book for my english course like you tell me ☕💚");
+    _pushMsg("cream", "the money come na papa 🙏 i pay the room already, you the only one who " +
+      "never forget. i buy the shoes for work like you tell me 💊🤍");
     _pushMsg("cream", "omg sorry!! wrong person 555 😳 that is my… uncle. how are you na? you sleep well?");
     G.phone.lastText = G.turns;
     _say("(📱 Your phone buzzes — Cream. CHECK MESSAGES.)", "dim");
@@ -4850,8 +4848,8 @@ function _maybeIncomingText() {
     if (G.day - (G.priewTextDay || -9) < 3) return;
     G.priewTextDay = G.day;
     _pushMsg("priew", _flag("priewRevealed")
-      ? _pickVary(["so now you know 😅 same me, same eyes. lunch still on, if you still want", "you come see the show or you come see me? both ok na 555", "i not lie you. evening shift, every day until late. you just not ask restaurant of WHAT 😏"], "priewtext2")
-      : _pickVary(["ankle ok now! you still in pattaya? lunch some day na, only lunch 🙏", "i see farang with your walk today on beach road. not you. same walk 555", "work busy busy. evening shift every day. you sleep early na, doctor say 😷"], "priewtext1"));
+      ? _pickVary(["so now you know 😅 same me, same laugh. lunch still on, if you still want", "you come for the drinks or you come for me? both ok na 555", "i not lie you. hospitality, every night until late. you just not ask hospitality of WHAT 😏"], "priewtext2")
+      : _pickVary(["brother hand ok now! you still in pattaya? lunch some day na, lunch only 🙏", "i see farang with your walk today on beach road. not you. same walk 555", "work busy busy. nights, every night. you sleep early na, doctor say 😷"], "priewtext1"));
     buzz(); return;
   }
   const name = NPCS[id].name, t = _bondTier(id), roll = _rand();
@@ -8774,17 +8772,10 @@ const _OWL_LEADS = [
     "drunk, the bikes run dark, the pickups do ninety, and you are a soft thing in a dark shirt " +
     "who has misjudged one distance. The piwins cross it forty times a night for a hundred baht. " +
     "Pay the hundred baht. The Owl is not being funny.",
-  "A reader of the dignified sort writes that he would never, ever date a bar girl — " +
-    "he has found a BARISTA, squire, green apron and all, met quite by chance at a table " +
-    "in LK Metro where she was visiting a friend, and she has never done anything like " +
-    "this before. The Owl has read this letter, near enough word for word, some forty " +
-    "times, and offers the dignified reader one thought and no comfort: demand creates " +
-    "supply. The coast noticed that men like you would pay a premium to not be customers, " +
-    "and it built the thing you asked for — an honest job for the alibi, and a table that " +
-    "isn't a stool. She is not lying to you, squire. She is a product. You wrote the spec.",
-  "A reader writes that he has found a NORMAL girl, squire — met her at the " +
-    "dentist, or the bank, or the immigration queue, somewhere daylight and " +
-    "respectable, and she has a normal job. The Owl wishes him joy and offers " +
+  "A reader of the dignified sort writes that he would never, ever date a bar girl — he has found a girl with a DAY JOB, squire, a white coat and a name badge, met quite by chance at a table in LK Metro where she was visiting a friend, and she is not that sort of girl at all. The Owl has read this letter, near enough word for word, some forty times, and offers the dignified reader one thought and no comfort: demand creates supply. The coast noticed that men like you would pay a premium to not be customers, and it built the thing you asked for — an honest job for the alibi, and a table that isn't a stool. She is not lying to you, squire. She is a product. You wrote the spec.",
+  "A reader writes that he has found a NORMAL girl, squire — met her somewhere " +
+    "with a ticket machine and a ceiling fan, nowhere near a bar, and she has " +
+    "a job with hours. The Owl wishes him joy and offers " +
     "one piece of arithmetic: half this town works evenings. The mirage was " +
     "never where she works. The mirage is the word 'normal' — there are only " +
     "people, squire, each with an economy, and yours is showing.",

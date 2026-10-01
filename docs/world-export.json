@@ -827,8 +827,8 @@
    "th": "ชมพู่"
   },
   "cream": {
-   "desc": "At a table, not a stool: twenty-four or so, hair down, a simple dress that is stylish without trying, a cocktail she's making last. No number, no uniform, no hustle — she's scrolling her phone between glances at the bar like someone waiting for a friend to finish a shift. She smells faintly, improbably, of coffee.",
-   "emoji": "☕",
+   "desc": "At a table, not a stool: twenty-four or so, hair down, a simple dress that is stylish without trying, a cocktail she's making last. No number, no uniform, no hustle — she's scrolling her {{phone}} between glances at the bar like someone waiting for a friend to finish a shift. Her nails are short and very clean, the way a job makes them.",
+   "emoji": "💊",
    "name": "Cream",
    "pronoun": "she",
    "room": "metro_garden"
@@ -2729,7 +2729,7 @@
    "th": "แพรว"
   },
   "priew": {
-   "desc": "The girl from the clinic waiting room — you'd know the eyes anywhere, which turns out to be the whole story.",
+   "desc": "The girl from the clinic waiting room — the one who laughed at the dead pen, which turns out to be the whole story.",
    "emoji": "🐱",
    "name": "Priew",
    "pronoun": "she",

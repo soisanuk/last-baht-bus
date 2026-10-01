@@ -2111,7 +2111,7 @@ test("volunteered subjects answer: Daeng's dancer past, Kwang's son, Cream's cof
     ["daeng", "the dancer", /seventy-two|Crystal Palace/],
     ["daeng", "walking street", /seventy-two|Crystal Palace|show/],
     ["kwang", "son", /sister|send|month|home|school/i],
-    ["cream", "coffee shop", /Barista|apron|twelve thousand/i],
+    ["cream", "pharmacy", /Pharmacy|white coat|eleven thousand/i],
   ]) {
     newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
     for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;

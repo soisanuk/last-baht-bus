@@ -1088,7 +1088,7 @@ function _arriveAt(to) {
   if (typeof _roomSafeBeat === "function") _roomSafeBeat();  // the stash, whenever you get to your room
   if (typeof _dailyJoke === "function") _dailyJoke();        // the unknown number, once a day
   if (typeof _bkkArcTick === "function") _bkkArcTick();      // Sao's texts, on a Bangkok clock
-  if (typeof _chamTick === "function") _chamTick();          // the barista's apron selfies, and the slip
+  if (typeof _chamTick === "function") _chamTick();          // the pharmacy girl's white-coat selfies, and the slip
   G.sevenAt = null;   // back on the pavement — the next buy walks you in again
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
@@ -3978,7 +3978,7 @@ function _doTalkBody(arg, topic) {
   // the friend Cream says she is visiting is the woman working her bar, who is a generated
   // hostess with no line about her (Fintan, round 60: "ask near about cream", twice, a miss)
   if (topic && NPCS.cream && NPCS[npc] && NPCS[npc].filler && NPC_ROLES[npc] === "hostess" &&
-      _npcRoom(npc) === NPCS.cream.room && /\b(cream|friend|your friend|coffee shop|barista)\b/i.test(String(topic))) {
+      _npcRoom(npc) === NPCS.cream.room && /\b(cream|friend|your friend|coffee shop|barista|pharmacy|white coat)\b/i.test(String(topic))) {
     _say(_pickVary([
       n => `"Cream?" ${n}'s face does something complicated and settles on fond. "My friend, long time. Coffee shop in the day. At night she come visit me." A pause exactly long enough. "Every night, visit me. Very good friend."`,
       n => `${n} laughs into her glass. "Cream visit me. She say. Every night she visit me, and every night I am so surprise." She clinks your glass. "Is okay. Everybody need a friend to visit."`,
@@ -4620,7 +4620,7 @@ const _CONVO_TOPIC_RULES = [
   [/\bfather\b|\bhusband\b|his dad|the dad/,                                     "father"],
   // Thomas, the ghost of Jomtien (jomtien_beach_s3) — the second coffee, the vendor
   [/second (cup|coffee|one)|the other (cup|coffee)|that cup|both coffee/,        "coffee"],
-  [/barista|coffee shop|the shop|day job|apron/,                                "job"],
+  [/barista|coffee shop|pharmacy|white coat|the counter|the shop|day job|apron/,                                "job"],
   [/\bdancer\b|number 72|number seventy|your dancing|walking street|\bphoto\b/,   "dancer"],
   [/\borchid\b/,                                                                "rose"],
   // Rose's reply — carried back to Candy — names "the photographs" as the
@@ -4640,7 +4640,7 @@ const _CONVO_TOPIC_RULES = [
   [/\bmot\b|the thief|pickpocket|who (took|lifted|stole)/,                        "wallet"],
   // Cream (the chameleon economy) — the inevitable question, however it's dressed
   [/how much|take you|come with me|go with me|your price|my hotel|my room|short ?time|long ?time|\bbarfine\b|pay you/, "price"],
-  [/your job|what.*you do|\bbarista\b|coffee shop|the shop|the apron|\bwork\b/,      "job"],
+  [/your job|what.*you do|\bbarista\b|coffee shop|pharmacy|white coat|the shop|the apron|\bwork\b/,      "job"],
   // what a woman volunteered in her own family answer: Jaja's husband and baby, both
   // "you ask the wrong girl" one line later (Dieter, round 56)
   [/\bbab(?:y|ies)\b|\bhusband\b|\bsons?\b|\bdaughters?\b|\bkids?\b|\bchild(?:ren)?\b|\bbuffalo\b/, "family"],   // LAST: every authored row above wins
@@ -8423,9 +8423,11 @@ function _doClinic() {
   _priewMeet(); // the waiting room has one more thing in it, once (hospital-mirage arc)
 }
 
-// ── The hospital mirage, scene one (canon 2026-08-22) ────────────────────────
-// The clinic's twenty-minute wait is where you meet her: mask, eyes, the ankle,
-// the lunch-only line — true in every particular. Once ever; sandbox only.
+// ── The hospital mirage, scene one ───────────────────────────────────────────
+// The clinic's twenty-minute wait is where you meet her: a kid brother with a cut
+// hand, a form filled in for him in neat capitals, "hospitality" — true in every
+// particular. Once ever; sandbox only. (Rebuilt 2026-10-01 under
+// docs/source-material-policy.md: pattern kept, every beat new.)
 function _priewMeet() {
   if (_flag("metPriew") || !_flag("act1Done")) return;
   _setFlag("metPriew");
@@ -8434,43 +8436,46 @@ function _priewMeet() {
   G.known.priew = true;
   _say("The waiting room does its slow business around you — a grandmother with a " +
     "numbered ticket, a ceiling fan, the smell of antiseptic and wet umbrellas. " +
-    "Across the aisle, a girl in a surgical mask: cheap elephant pants, a faded " +
-    "sequined cat t-shirt somehow pressed immaculate, and above the mask a pair of " +
-    "eyes — deep, calm, laughing at something, possibly the fan.", "win");
-  _say("Twisted her ankle, she says, when you trade small talk about the rain — the " +
-    "scooter, the flooded soi, everyone's story this month. You mention lunch, some " +
-    "day, the little place with the view. \"Why not,\" the eyes say, and the phone " +
-    "comes out for LINE before you've finished the sentence. \"But only lunch. I " +
-    "work evening shift at a restaurant — every day, until late.\" The nurse calls " +
-    "her number. She hops, once, entirely gracefully, and is gone.", "win");
-  _say("(Priew is in your phone now. A normal girl, with a normal job. All you had to " +
+    "Across the aisle a girl in a plain grey hoodie is filling in a form for the " +
+    "boy beside her — twelve, maybe, holding a tea towel round one hand with " +
+    "enormous dignity — in capitals so neat the nurse will comment on them. She " +
+    "tries the pen chained to the counter, finds it dead, and laughs at it, which " +
+    "is the first thing you notice about her and turns out to be the whole story.", "win");
+  _say("Her brother, she says, when the boy has been called through: a bicycle, a " +
+    "gate, a hand. You trade the small talk of a waiting room — the rain, the " +
+    "flooded soi, everyone's story this month. You mention lunch, some day, the " +
+    "little place with the view. \"Why not,\" she says, and her {{phone}} comes out for " +
+    "LINE before you've finished the sentence. \"But lunch only. I work nights — " +
+    "hospitality, on Second Road. Every night, until late.\" The boy comes back " +
+    "bandaged and proud; she takes his good hand and is gone.", "win");
+  _say("(Priew is in your phone now. A girl with a day job — nights, but a job. All you had to " +
     "do was go to the clinic.)", "dim");
 }
 
-// Scene two: the first go-go you enter, two or more nights later. The rotation
-// changes. Nobody lies here either — that's the entire point.
+// Scene two: the first go-go you enter, two or more nights later. Nobody lies
+// here either — that's the entire point.
 function _priewReveal() {
   if (!_flag("metPriew") || _flag("priewRevealed")) return;
   if (G.day < (G.priewDay || 0) + 2) return;
   if (_room().barType !== "gogo") return;
   _setFlag("priewRevealed");
-  _say("The music shifts. The rotation changes. And in the stage lights, in towering " +
-    "platform heels, a girl steps up whose face you know before you can say from " +
-    "where — and then the eyes find you through the strobes, deep and calm and " +
-    "laughing, and they smile at you EXACTLY the way they did across a clinic " +
-    "aisle, over a surgical mask, in another life entirely. Priew. Evening shift. " +
-    "Every day, until late. She never said restaurant of what.", "alert");
+  _say("A tray goes past your table at shoulder height — six lady drinks and a bucket " +
+    "of ice — carried by a girl in the house dress with a number pinned to it, and " +
+    "she is already past you when she turns, and the laugh you heard at a dead pen " +
+    "across a clinic aisle is on her face under a quite different amount of make-up. " +
+    "Priew. Nights. Hospitality, on Second Road. Every night, until late. She lifts " +
+    "the tray one centimetre, which is a greeting, and an answer, and the whole of " +
+    "the joke.", "alert");
   const her = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
   if (her) {
     _say(`${NPCS[her].name} follows your frozen stare with professional interest. ` +
-      "\"You know her? You want her? She have customer already — but I can tell " +
-      "her come to you after.\"", "dim");
+      "\"You know her? She drinks-girl only, no barfine — but I can tell her sit " +
+      "with you after she finish the round.\"", "dim");
   }
-  _say("Priew works the song to its end, steps down without hurry, walks past your " +
-    "table close enough to touch — and slides onto the lap of a large Korean " +
-    "tourist by the far rail, laughing at something he didn't say yet. Nothing " +
-    "she told you was untrue. The mirage was never her job. It was the word " +
-    "you put in front of 'girl'.", "alert");
+  _say("Priew sets the bucket down at a table of four Russians by the far rail, takes " +
+    "the chair they pull out for her, and is laughing at something before she has " +
+    "sat. Nothing she told you was untrue. Hospitality. The lie was yours, and it " +
+    "was one word long: normal.", "alert");
   _addHappy(-2);
 }
 

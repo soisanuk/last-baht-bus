@@ -46,8 +46,8 @@ test("the inevitable question is the scene, not a topic: BARFINE / ASK ABOUT PRI
   for (const cmd of ["barfine cream", "ask cream about price", "ask cream how much to take you with me"]) {
     sandbox(); G.room = "metro_garden"; G.nightTurn = 45;
     doCommand(cmd);
-    assert.match(text(), /I never go with a customer/, cmd);
-    assert.match(text(), /I just wanted to try/, cmd);
+    assert.match(text(), /I am not that girl/, cmd);
+    assert.match(text(), /Ask me again outside/, cmd);
     assert.equal(G.pendingChoice, "cham", cmd);
     assert.doesNotMatch(text(), /฿\s?\d/, "no price is ever named — " + cmd);
   }
@@ -80,7 +80,7 @@ test("GO: the night ends in the hotel, and the morning is the player's verb — 
   assert.equal(G.money, m - 3000);
   assert.equal(G.pendingChoice, null);
   assert.match(text(), /You so kind/);
-  assert.match(text(), /she's a barista\. She is\./);
+  assert.match(text(), /she works at the pharmacy\. She does\./);
   assert.ok(_flag("chamDone"));
 });
 
@@ -91,7 +91,7 @@ test("…and NOTHING is a real answer with the same shy thanks", () => {
   doCommand("nothing");
   assert.equal(G.money, m);
   assert.match(text(), /thanks you anyway/);
-  assert.match(text(), /she's a barista\. She is\./);
+  assert.match(text(), /she works at the pharmacy\. She does\./);
 });
 
 test("a white knight's hand is on the wallet before the decision is — the persona, not a charge", () => {
@@ -138,19 +138,19 @@ test("her texts: apron selfies, and once the slip meant for another papa", () =>
   while (!_flag("chamSlip") && tries++ < 200) { G.phone.lastText = -100; _chamTick(); }
   assert.ok(_flag("chamSlip"), "the slip fires");
   const msgs = G.phone.inbox.filter(m => m.from === "cream").map(m => m.text);
-  assert.ok(msgs.some(t => /this month na papa/.test(t)));
+  assert.ok(msgs.some(t => /na papa/.test(t)));
   assert.ok(msgs.some(t => /wrong person/.test(t)));
   // selfies come from her authored pool (the apron, never the bar)
   assert.ok(NPCS.cream.selfies.every(c => !/bar|stool|barfine/i.test(c)));
   doCommand("message cream");
-  assert.ok(_CHAM_TEXT_REPLIES.some(s => text().includes(s.replace(/\\"/g, '"'))) || /apron|coffee|boss|sleep/.test(text()));
+  assert.ok(_CHAM_TEXT_REPLIES.some(s => text().includes(s.replace(/\\"/g, '"'))) || /coat|vitamin|boss|sleep/.test(text()));
 });
 
 test("the sponsor side sits with Helmut, unlinked and unnamed", () => {
   G.room = NPCS.helmut.room;
   doCommand("ask helmut about his love life");
-  assert.match(text(), /barista, in Naklua/);
-  assert.match(text(), /green apron/);
+  assert.match(text(), /pharmacy, in Naklua/);
+  assert.match(text(), /white coat/);
   assert.doesNotMatch(text(), /Cream/, "he never names her — the apron is the only link");
 });
 
