@@ -8,8 +8,13 @@ var NEWS_FEED = [
     "d": "30 Sep 2026"
   },
   {
+    "t": "Iranian DJ seeks police help after losing essential gear in Pattaya",
+    "s": "Thaiger",
+    "d": "01 Oct 2026"
+  },
+  {
     "t": "Pattaya suspends three city officers over alleged tourist money demands",
-    "s": "pattayamail.com",
+    "s": "Pattaya Mail",
     "d": "29 Sep 2026"
   },
   {
@@ -18,39 +23,39 @@ var NEWS_FEED = [
     "d": "30 Sep 2026"
   },
   {
-    "t": "Pattaya sanitation crews clear clogged drains to improve flood drainage",
-    "s": "pattayamail.com",
-    "d": "29 Sep 2026"
+    "t": "Koh Larn plankton bloom turns sea green after heavy rain in Pattaya",
+    "s": "Thaiger",
+    "d": "01 Oct 2026"
+  },
+  {
+    "t": "Flooding hits 31 provinces and Bangkok, affecting nearly 3 million people",
+    "s": "Pattaya Mail",
+    "d": "30 Sep 2026"
+  },
+  {
+    "t": "Rayong’s Taphong hit by worst flooding in more than 50 years",
+    "s": "Pattaya Mail",
+    "d": "30 Sep 2026"
   },
   {
     "t": "Pattaya apartment stabbing leaves British man seriously injured",
-    "s": "pattayamail.com",
+    "s": "Pattaya Mail",
     "d": "29 Sep 2026"
   },
   {
-    "t": "Brit stabbed in Pattaya fight with transwoman over crystal meth",
-    "s": "Thaiger",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "Pattaya council pushes major redesign of Bali Hai Pier",
-    "s": "pattayamail.com",
-    "d": "30 Sep 2026"
-  },
-  {
-    "t": "Pattaya Mayor invites residents to fitness evening and community meet-up",
-    "s": "pattayamail.com",
-    "d": "30 Sep 2026"
-  },
-  {
-    "t": "Watch: Bangkok locals create floating market during floods",
-    "s": "BBC",
-    "d": "29 Sep 2026"
-  },
-  {
-    "t": "NEWSLETTER: Fatal floods hit India, Nepal and Thailand",
+    "t": "At least 23 dead in Thailand floods, Bangkok airport in chaos",
     "s": "Reuters",
-    "d": "29 Sep 2026"
+    "d": "30 Sep 2026"
+  },
+  {
+    "t": "Infineon Eyes Thailand as Potential Semiconductor Production Hub",
+    "s": "Bloomberg.com",
+    "d": "01 Oct 2026"
+  },
+  {
+    "t": "Infineon opens Thailand plant as country ramps up semiconductor push",
+    "s": "Reuters",
+    "d": "01 Oct 2026"
   },
   {
     "t": "Israeli murdered on Thailand’s Koh Phangan; motive under investigation",
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "30 Sep 2026"
   },
   {
-    "t": "Indonesia set to overtake Thailand as Southeast Asia's largest travel market",
-    "s": "PhocusWire",
-    "d": "30 Sep 2026"
-  },
-  {
-    "t": "Thailand rejects ballot secrecy challenge and upholds 2026 general election results",
-    "s": "Jurist.org",
-    "d": "30 Sep 2026"
+    "t": "Infineon Technologies: Thailand is an attractive location for semiconductor manufacturing",
+    "s": "CNBC",
+    "d": "01 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-30","USD":33.57,"AUD":23.39,"GBP":44.6,"EUR":38.11};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-01","temp":27,"humid":93,"code":2,"hi":32,"rain":100};
+var WX_NOW = {"date":"2026-10-01","temp":30,"humid":78,"code":51,"hi":32,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-16","first":"730640","last2":"64","front3":["060","521"],"back3":["041","266"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4157,"date":"2026-09-30","baht":66000};
+var GOLD = {"usd":4189,"date":"2026-10-01","baht":66500};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":83644,"thb":2807969};
+var BTC = {"usd":84253,"thb":2830053};
