@@ -186,7 +186,7 @@ test("topic aliases mirror the sponsor girls without stealing literal keys", () 
   assert.match(last(), /Dave/, "Baimon answers the canonical key");
   out = []; S().room = "cherry_pop";
   doCommand("ask mercedes about german");
-  assert.match(last(), /Munich/, "a literal node keyed on a synonym word still wins");
+  assert.match(last(), /Linz/, "a literal node keyed on a synonym word still wins");
 });
 
 test("the flip changes her greeting, buys honesty, and survives the drip crossing", () => {

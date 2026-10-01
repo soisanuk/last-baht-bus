@@ -9585,14 +9585,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"W-welcome to Gold Rush! First week— I mean, MY first week. The gold is paint. I'm not supposed to say that. Please don't tell.\"",
         short: "\"W-welcome to Gold Rush! Please — don't tell anyone about the paint.\"" },
-      { topic: "ring", text: "She turns the little gold ring on her finger — new, thin, " +
-        "the plating already going at the band. \"He buy me this. He say I don't belong " +
-        "in a bar. He say when he get home he fix everything, I come stay with him.\" " +
-        "Her phone is in her other hand, the chat open to one grey word: Read. Two days " +
-        "now. \"He is probably just very busy with work,\" she says — to the screen, not " +
-        "to you. \"His boss is very strict.\" The smile she puts on next is the bravest, " +
-        "worst thing on the whole soi tonight.",
-        short: "\"He is probably just very busy with work. His boss is very strict.\" The ring turns and turns." },
+      { topic: "ring|case|phone case|boyfriend|him",
+        text: "She turns her {{phone}} over to show you the case — clear plastic with a photo slid behind it: her and a sunburnt man at a beach bar, his arm round her, both squinting. \"He buy me this. He say I don't belong in a bar. He say when he come back we go to his country.\" She turns it back. The chat is open under her thumb: his last message is a photo of snow, eleven days old. \"He is on the boat now,\" she says — to the screen, not to you. \"No signal on the boat.\" The smile she puts on next is the bravest, worst thing on the whole soi tonight.",
+        short: "\"He buy me this case. He say when he come back we go to his country.\" The last message is a photo of snow, eleven days old. \"No signal on the boat.\"" },
     ],
   },
 
@@ -9605,86 +9600,37 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "do to a person. Her English is good, with a flat European edge the soi " +
       "doesn't usually carry.",
     dialogue: [
-      { bond: 3, text: "\"You keep coming back to Cherry Pop for ME — the neon is not " +
-          "that charming, we both know it.\" For once Mercedes lets the dry line land soft. " +
-          "\"After Munich I made myself one promise: no more man I have to manage. And here " +
-          "is you — needing no managing, buying the old girl at the loud bar her drink like it is " +
-          "Vienna. Don't make me like you, farang. I am badly out of practice.\"",
+      { bond: 3, text: "\"You keep coming back to Cherry Pop for ME — the neon is not that charming, we both know it.\" For once Mercedes lets the dry line land soft. \"After Linz I made myself one promise: no more man I have to manage. And here is you — needing no managing, buying the old girl at the loud bar her drink like it is Vienna. Don't make me like you, farang. I am badly out of practice.\"",
         short: "\"Don't make me like you, farang. I'm badly out of practice.\"" },
-      { bond: 2, text: "\"Sit — the good stool, I saved it.\" Mercedes slides your drink over " +
-          "without asking; she knows the order now. \"You are the only one in here who asks me " +
-          "a question and then waits for the answer. It is a low bar, I know. Munich was lower.\"",
-        short: "\"You ask a question and wait for the answer. Low bar. Munich was lower.\"" },
-      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Welcome to Cherry Pop.\" A small, real smile. \"Loud, pink, entirely " +
-          "a machine — but the drinks are cold and I do not lie to you, which on this soi " +
-          "is a luxury. Sit. I am Mercedes. Yes, like the car. I had one in the driveway " +
-          "in Munich and never once the keys. Now I keep the name and skip the car.\"",
-        short: "\"Mercedes — like the car. Kept the name, skipped the car. Sit, tilac.\"" },
-      { topic: "german", text: "\"Germany. Five years, Munich. Big house, a car, the " +
-          "health insurance — everything the brochure promise.\" She turns a coaster " +
-          "over. \"And I could not tell a joke. Could not argue, could not be a " +
-          "person — only 'Guten Tag, Danke', like a child with two words. His mother " +
-          "look at me: prostitute who steal my son. Never once she say it. Never once " +
-          "she hide it.\"",
-        short: "\"Munich: big house, no jokes. A mute child with a nice kitchen.\"" },
-      { topic: "husband", text: "\"My visa was married to him — you understand? Not to " +
-          "me. I leave, I am on a plane in one month. So I stay.\" A shrug with a whole " +
-          "country in it. \"Three hundred euro pocket money, and I must account for it. " +
-          "In Pattaya I made eighty thousand baht and sent half to my mother in Isaan. " +
-          "There, I cannot send one baht. A Thai daughter who cannot take care of her " +
-          "mother has lost everything. The house was warm. I was empty.\"",
-        short: "\"Visa tied to him, 300 euro to account for, could not send my mother a baht. Warm house, empty me.\"" },
-      { topic: "hans", text: "\"Hans was not cruel. That is the joke — no black eye, no " +
-          "drama.\" She almost laughs. \"My uncle die. I ask him to book the flight for " +
-          "the funeral. He open Excel. Excel! Turn the screen to me — 'too expensive " +
-          "right now' — and then so gentle: 'You know you have nothing without me.'\" " +
-          "She snaps the coaster flat. \"That night I pack. In Munich, zero friends. In " +
-          "Pattaya, one hundred people waiting for me. Which one is rich?\"",
-        short: "\"He opened a spreadsheet for my uncle's funeral. 'Nothing without me.' I packed that night.\"" },
-      { topic: "free", text: "\"People see an old girl back on the stool and they think " +
-          "— poor thing, could not keep him.\" The smile sharpens, not unkind. \"So let " +
-          "me give you the reality, tilac. In Germany: big house, car, insurance — and I " +
-          "ask permission to buy som tam, I beg to visit my own family. Here: a cheap " +
-          "room and a Honda Click. But I am free. I send my mother money when I want. I " +
-          "laugh loud with my friends. Which one is the real dream? I chose it. Nobody " +
-          "chose for me.\"",
-        short: "\"Big house and permission, or a Honda Click and freedom? I chose. That's the whole story.\"" },
-      { topic: "money", text: "\"Money?\" She waves a hand at the neon. \"It come, it " +
-          "go, like the rain. In Munich I learn the other way — everything counted, " +
-          "everything saved — and it made me small. Here, when I have it I send it " +
-          "home, I buy Nong her dinner; when it is zero, mai pen rai, I earn again. That " +
-          "is not being poor. That is being free of the counting.\"",
-        short: "\"Money is rain — comes, goes, I send it home. In Munich the counting made me small.\"" },
-      { topic: "nong", text: "\"Nong? The trembling one over at the Gold Rush.\" Something " +
-          "almost maternal crosses her face. \"I worked that bar before this one — first " +
-          "week she was, scared of the door, scared of Mamasan, scared of everything. I was " +
-          "her, twelve years ago, a go-go on Soi 6.\" A softer smile. \"Somebody should " +
-          "tell her the worst thing that happen is you go all the way to Munich and come " +
-          "back. Not so bad, in the end. I still keep an eye out, from here.\"",
+      { bond: 2, text: "\"Sit — the good stool, I saved it.\" Mercedes slides your drink over without asking; she knows the order now. \"You are the only one in here who asks me a question and then waits for the answer. It is a low bar, I know. Linz was lower.\"",
+        short: "\"You ask a question and wait for the answer. Low bar. Linz was lower.\"" },
+      { text: "\"Welcome to Cherry Pop.\" A small, real smile. \"Loud, pink, entirely a machine — but the drinks are cold and I do not lie to you, which on this soi is a luxury. Sit. I am Mercedes. Yes, like the car. In Linz we had one. I was allowed to wash it.\"",
+        short: "\"Mercedes — like the car. In Linz I was allowed to wash it. Sit, tilac.\"" },
+      { topic: "german|austria|austrian|linz|europe",
+        text: "\"Austria. Five years, Linz. Not Vienna — Linz. A house with a garden, a car, the insurance, everything the brochure promise.\" She turns a coaster over. \"And every Sunday his mother teach me to make Knödel. Five years of Sunday. She never once ask where I am from. Never once she need to.\"",
+        short: "\"Linz: a garden, a car, and five years of Sunday Knödel from a woman who never asked where I was from.\"" },
+      { topic: "husband",
+        text: "\"My visa was married to him — you understand? Not to me. I leave, I am on a plane in one month. So I stay.\" A shrug with a whole country in it. \"One bank account, both names, and the app on my {{phone}} so I can see every cent and move none of it. In Pattaya I sent my mother half of everything. There, I could send her a photo of the garden. A Thai daughter who cannot take care of her mother has lost everything. The house was warm. I was furniture.\"",
+        short: "\"Visa tied to him, an account I could see and not touch, nothing for my mother. Warm house; I was furniture.\"" },
+      { topic: "him|the austrian|the man|her husband|ex",
+        text: "\"I don't say his name. It is the one thing I took back.\" She almost laughs. \"He was not cruel. That is the joke — no black eye, no drama. My mother need her eyes done, the cataract, forty thousand baht. I ask. He says he will look into the exchange rate. Six weeks later he asks, so kindly, whether she still needs it.\" She snaps the coaster flat. \"She had it done already. On credit, from a cousin. The cousin's receipt came to my {{phone}} as a photo, and that night I pack. In Linz, zero friends. In Pattaya, a cousin who lends. Which one is rich?\"",
+        short: "\"My mother's eyes: he looked into the exchange rate for six weeks. A cousin paid. I packed that night.\"" },
+      { topic: "free",
+        text: "\"People see an old girl back on the stool and they think — poor thing, could not keep him.\" The smile sharpens, not unkind. \"So let me give you the reality, tilac. In Linz: a garden, a car, the insurance — and I ask before I buy a mango, I ask before I call my own mother. Here: a room over a laundry and a second-hand Yamaha I bought outright, cash, the first thing with my name on the paper. But I am free. Every morning I decide to be here. In Linz somebody decided for me, once, and it stayed decided.\"",
+        short: "\"A garden and permission, or a room over a laundry and my own name on a bike? Every morning I decide to be here.\"" },
+      { topic: "money",
+        text: "\"Money?\" She waves a hand at the neon. \"Three envelopes, the way my mother did it: mother, rent, me. Whatever is in the third one by Sunday is mine, and some weeks it is nothing, and nothing is fine. In Linz I had an app that showed me every cent and I was poorer than I have ever been with an empty envelope.\"",
+        short: "\"Three envelopes — mother, rent, me. In Linz I could see every cent and was poorer than ever.\"" },
+      { topic: "nong",
+        text: "\"Nong? The trembling one over at the Gold Rush.\" Something almost maternal crosses her face. \"I worked that bar before this one — first week she was, scared of the door, scared of Mamasan, scared of everything. I was her, twelve years ago, a go-go on Soi 6.\" A softer smile. \"Somebody should tell her the worst thing that happen is you go all the way to Austria and come back. Not so bad, in the end. I still keep an eye out, from here.\"",
         short: "\"Nong, over at the Gold Rush — I was her, twelve years ago. I keep an eye out.\"" },
-      { topic: "change", text: "\"Ah. You met one of the quiet ones. Jeans now, cooks " +
-        "every night, doesn't drink — and her man walks around proud like a doctor who " +
-        "cured something.\" She turns her glass slowly. \"I was the quiet one. Five " +
-        "years, Munich. I wore what that life needed — same as I wore the bikini " +
-        "before it, same as I wear this now.\" A shrug, not unkind. \"It is not a lie. " +
-        "It is a uniform. We are very good at uniforms; hungry teaches you " +
-        "tailoring.\" The glass comes down. \"You want to know if she changed? Wait " +
-        "for the first hospital bill from the village. If his love pays it, she stays " +
-        "soft. If he explains about boundaries...\" A small, cold smile. \"...she packs " +
-        "one suitcase. We always pack light. That is also from being hungry.\"",
-        short: "\"It is not a lie, it is a uniform — hungry teaches you tailoring. Wait for the first hospital bill from the village.\"" },
-      { topic: "warn", text: "\"You think somebody should tell her. How it goes. How " +
-        "the ring is hollow, how her phone stays quiet, how this soi files a girl " +
-        "down.\" Mercedes looks across the room for a long moment. \"Fifteen years ago " +
-        "a woman like me could have told a girl like me all of it, word for word. You " +
-        "know what I would have done? Hated her. The truth doesn't pay a mother's " +
-        "hospital bill — the warning changes nothing, the girl stays anyway, and now " +
-        "she also has an enemy.\" She turns her glass. \"Some lessons only bleed in. " +
-        "So no. I don't warn. When the som tam cart comes, I send a bowl over. I keep " +
-        "a tissue in my sleeve. That is the whole of what knowing is worth — and it " +
-        "took me years to learn even that.\"",
-        short: "\"The truth doesn't pay a mother's hospital bill. I don't warn — I send som tam over, and I keep a tissue in my sleeve.\"" },
+      { topic: "change",
+        text: "\"Ah. You met one of the quiet ones. Jeans now, cooks every night, doesn't drink — and her man walks around proud like a doctor who cured something.\" She turns her glass slowly. \"I was the quiet one. Five years. I made very good Knödel.\" A shrug, not unkind. \"A woman can learn any kitchen. Hungry is a good teacher.\" The glass comes down. \"You want to know if she changed? Ask who is paying for the gas on that stove, and what happens the month he can't.\"",
+        short: "\"I made very good Knödel for five years. Ask who pays for the gas on her stove, and what happens the month he can't.\"" },
+      { topic: "warn",
+        text: "\"You think somebody should tell her. How it goes. How the man goes quiet, how this soi files a girl down.\" Mercedes looks across the room for a long moment. \"Twelve years ago a woman like me could have told a girl like me all of it, word for word. You know what I would have done? Hated her. The truth doesn't pay a mother's hospital bill — the warning changes nothing, the girl stays anyway, and now she also has an enemy.\" She turns her glass. \"Some lessons only bleed in. So no. I don't warn. Her number is in my {{phone}} under 'little sister', and I answer it at four in the morning, and I never once say I told you.\"",
+        short: "\"The truth doesn't pay a mother's hospital bill. I don't warn — I answer at four in the morning and never say I told you.\"" },
+
     ],
   },
 

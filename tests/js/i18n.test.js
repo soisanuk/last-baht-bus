@@ -117,13 +117,13 @@ test("Taitch: Mercedes meets a German player in broken German, an English player
   state().player.lang = "de";
   out = []; run("ask mercedes about german");
   const de = lastOut();
-  assert.match(de, /Fünf Jahr, München/, "her Munich line comes through in German");
-  assert.match(de, /wie Kind mit zwei Wort/, "…and it's Taitch — dropped endings, no articles");
+  assert.match(de, /Fünf Jahr, Linz/, "her Linz line comes through in German");
+  assert.match(de, /Knödel mach/, "…and it's Taitch — dropped endings, no articles");
   assert.match(de, /Sie dreht einen Bierdeckel um/, "the narration around her speech is clean German");
   // English player → her voice is unchanged (only the catalogued lady is affected)
   state().player.lang = "en"; state().talked = {}; // reset the seen-book so the full line delivers again
   out = []; run("ask mercedes about german");
-  assert.match(lastOut(), /Germany\. Five years, Munich/, "an English player hears her English");
+  assert.match(lastOut(), /Austria\. Five years, Linz/, "an English player hears her English");
   assert.doesNotMatch(lastOut(), /Fünf Jahr/, "no German for the English player");
 });
 

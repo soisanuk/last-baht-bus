@@ -718,7 +718,7 @@ test("grapevine round: every volunteered subject now answers", () => {
     ["toi",   "cherry_pop", "mercedes",          /real thing|Best English/],
     ["preaw", "ruby_kiss",  "saeng",             /Thirty year|my aunt/i],
     ["wilai", "ruby_kiss",  "plan",              /my own bar|cover charge/],
-    ["mercedes", "cherry_pop", "munich",         /Munich|Germany/],
+    ["mercedes", "cherry_pop", "austria",        /Linz|Austria/],
   ];
   for (const [who, room, topic, want] of cases) {
     newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
