@@ -3653,6 +3653,10 @@ function _doBlackbook() {
       continue;
     }
     const bar = _barName(_npcRoom(id)) || "around";
+    if (typeof _exited === "function" && _exited(id)) {   // she left, and the book says for what (theme 11)
+      _say(`· ${n.emoji || ""} ${n.name} — gone home · ${_exited(id)}, the way she said`, "dim");
+      continue;
+    }
     if (_maiDee(id)) {   // the verdict has a row, because the book is honest (theme 6)
       _say(`✕ ${n.emoji || ""} ${n.name} — ${bar} · decided about you, in front of a room · nothing on this page reopens it`, "dim");
       continue;
@@ -4946,6 +4950,18 @@ function _maybeIncomingText() {
       return;
     }
   }
+  // a woman who left for the thing she said sends ONE text from it, then the number goes quiet (theme 11)
+  if (typeof _exited === "function") {
+    const gone = contacts.find(id => _exited(id) && !(G.phone.exitTexted && G.phone.exitTexted[id]));
+    if (gone && G.turns - G.phone.lastText >= 25) {
+      (G.phone.exitTexted = G.phone.exitTexted || {})[gone] = true;
+      G.phone.lastText = G.turns;
+      _pushMsg(gone, _fmt(_pickVary(_EXIT_TEXT, "exittext"), { p: _exited(gone) }));
+      _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
+      return;
+    }
+    contacts = contacts.filter(id => !_exited(id));
+  }
   if (!contacts.length) return;
   if (G.turns - G.phone.lastText < 25) return;
   const maxT = Math.max(0, ...contacts.map(_bondTier));
@@ -5263,6 +5279,13 @@ function _maiDeeFloor(to) {
   said[to] = true;
   _say(_pickVary(_MAI_DEE_FLOOR, "maideefloor"), "dim");
 }
+
+// the one text from home (Tinglish, hers; the plan is her own words from the floor)
+const _EXIT_TEXT = [
+  "i not work bar now na 🙏 i {p}!! at home. small small but mine. you come my province one day, i make you coffee 555 take care na",
+  "surprise 😊 i finish pattaya. i {p} now, in my village. mama help me. no more lady drink 555 if you come isan you find me. bye bye na, be good man",
+  "this my new number for business 🙏 i {p} — like i always say, remember?? you say \"sure sure\" 555 now is true. thank you for the drink, every one. chok dee na",
+];
 
 // THE SIGHTING (theme 5). You sent money on "mama sick, i go home", and tonight, in a
 // district that isn't hers, she is at a table outside a venue with another farang — not

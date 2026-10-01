@@ -16910,6 +16910,32 @@ function _badge(id) {
   }
   return null;
 }
+// THE EXITS THE WOMEN MAKE (essay ledger theme 11, 2026-10-01). Some of the floor's
+// stated plans are a TARGET — a shop, a salon, a stall, a laundry — and a woman who
+// states one can hit it. From the second trip, a stable share of those women are gone:
+// not to a farang, not to a worse bar, to the thing she said. The exit is quiet (one
+// morning the locker is empty) and the entrance was loud, which is the doctrine for
+// anyone writing one. Pure hash on (id) for the trip she leaves on; cumulative, so a
+// woman gone on trip three is gone on trip nine. Never your own bar's staff, never the
+// affair girl — those stories have their own endings.
+const _EXIT_PLANS = [0, 4, 5, 7, 9, 10, 13, 15, 16, 19];   // indices into _H_PLAN that name a thing you can open
+function _exited(id) {
+  const n = NPCS[id];
+  if (!n || !n.filler || !n.storyIdx || !_EXIT_PLANS.includes(n.storyIdx.plan)) return false;
+  if (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] !== "hostess") return false;
+  if (typeof G !== "undefined" && G) {
+    if (G.bar && G.bar.room === n.room) return false;
+    if (G.affair && G.affair.id === id) return false;
+    // a third of the women who name a target ever reach it — the rest are the floor's
+    // honest majority — and the ones who do go on some trip from the second to the
+    // eleventh. An expat has no trips: a quarter of a year counts as one.
+    if (_hh(id + ":exitever", 167) % 3 !== 0) return false;
+    const leaves = 2 + _hh(id + ":exitvac", 163) % 10;   // the trip she is first found gone on
+    const trip = (G.vacation || 1) + (G.stage === "expat" ? Math.floor((G.day || 1) / 90) : 0);
+    if (trip < leaves) return false;
+  } else return false;
+  return _H_PLAN[n.storyIdx.plan];
+}
 // THE DRINKS-ONLY CLASS (theme 12's sibling, from the lady-drink economics essays): the
 // bar runs on drinks, not barfines, and a growing share of the floor works drinks only —
 // the girl, not mama, decides whether she leaves, and this one has decided. ~15% of the

@@ -1154,6 +1154,7 @@ function _npcActive(id) {
   if (G.soc && G.soc.leftEarly && G.soc.leftEarly[id] === G.day) return false;
   // home for the harvest, or gone to Bangkok till the rain stops (essay ledger theme 8)
   if (typeof _awayForSeason === "function" && _awayForSeason(id)) return false;
+  if (typeof _exited === "function" && _exited(id)) return false;   // she hit the thing she said, and went (theme 11)
   // the affair's endings take her off the floor for good: gone home to Isaan
   // after a break, or by the sea in Prachuap after the earned ending
   if (G.affair && G.affair.ended && (G.affair.gone || G.affair.won) && id === G.affair.id) return false;
@@ -1902,6 +1903,9 @@ function _elsewhereLine(word) {
         (NPCS[nid].room === G.room
           ? `Back here early doors is when you'll catch ${_pr(nid).o}.`
           : `${_barName(NPCS[nid].room)}${_dupeBar(NPCS[nid].room) ? " out in " + (ROOMS[NPCS[nid].room].region || "") : ""}, early doors, is where you'll find ${_pr(nid).o}.`);
+    // gone for good comes before gone for the season (theme 11 before theme 8)
+    const _gone = typeof _exited === "function" && _exited(nid);
+    if (_gone) return `${NPCS[nid].name} ${notHere} — she isn't anywhere on the soi. She went home to ${_gone}, the way she always said she would, and the girls say it quietly, like good news they are not sure they are allowed.`;
     // an absence with a reason the floor can give (theme 8): the harvest, or Bangkok
     const _away = typeof _awayForSeason === "function" && _awayForSeason(nid);
     if (_away === "harvest") return `${NPCS[nid].name} ${notHere} — home for the rice harvest. Ten days, the girls say, and nobody argues with the rice.`;
@@ -2406,6 +2410,12 @@ function _dogSpot(r) {
   return "heel";
 }
 
+// the roster's one line about a woman who left (narration; the floor's words are hers)
+const _EXIT_ROSTER = [
+  "{n}'s stool has somebody else on it. When you ask, the girl beside you says it the way people say good news they are not sure they are allowed: “She go home. She {p} now. End of last month.” One morning the locker was empty, and that was the whole of the leaving.",
+  "No {n}. Not on a night off — gone. “She finish,” the woman on the till says, and then, because you keep looking at the stool: “She {p} now. Like she always say.” She says it flat, and then she says, “Good,” and goes back to the book.",
+  "You look for {n} and the girl who catches you looking shakes her head, smiling. “She not here, she go home. She {p} now — the thing she always talk about.” A pause. “She send photo. Small shop. Very small.” She holds her fingers an inch apart, pleased.",
+];
 function _describeRoom(full, forceFull) {
   // a pay-on-arrival fare has landed you already: a reload redrew the stop you LEFT, bars and
   // exits and all, under a driver waiting at the other end (Helga, round 57)
@@ -2532,6 +2542,19 @@ function _describeRoom(full, forceFull) {
         : away.map(a => `${a[1].name} is working ${where(a)}`).join(" and ");
       _say(`${line} tonight` + (cover ? `, and it is ${NPCS[cover].name} on the till — the one ${away.length === 1 ? ((NPCS[away[0][0]].pronoun === "he") ? "he" : "she") : "they"} leave${away.length === 1 ? "s" : ""} it with.`
                                        : `; the floor staff keep this one running.`), "dim");
+    }
+  }
+  // THE EXIT IS QUIET (theme 11): a girl you had spoken to is gone from this floor
+  // — not to a man, to the thing she said — and the room says so once a trip.
+  if (r.barType && typeof _exited === "function") {
+    const said = (G.exitSaid = G.exitSaid || {});
+    if (said[G.room] !== G.vacation) {
+      const gone = Object.keys(NPCS).find(id => NPCS[id].room === G.room && NPC_ROLES[id] === "hostess" &&
+        G.talked && G.talked[id] && _exited(id));
+      if (gone) {
+        said[G.room] = G.vacation;
+        _say(_fmt(_pickVary(_EXIT_ROSTER, "exitroster"), { n: NPCS[gone].name, p: _exited(gone) }), "dim");
+      }
     }
   }
   // The Orchid good table: once Tan's near-confirmation has armed it, walking in

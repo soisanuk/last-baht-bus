@@ -4207,6 +4207,13 @@ function _doTalkBody(arg, topic) {
       const roleOf = x => NPCS[x].manager ? "manager" : NPC_ROLES[x];
       const here = (typeof _staffAt === "function" ? _staffAt(G.room) : []).filter(x => x !== npc);
       for (const x of Object.keys(NPCS)) if (NPCS[x].bars && NPCS[x].bars.includes(G.room) && !here.includes(x) && x !== npc) here.push(x);
+      // a woman who left this floor for the thing she said (theme 11): her colleagues
+      // answer for her, and the answer is where she went, not where she is
+      if (typeof _exited === "function") {
+        const gone = Object.keys(NPCS).find(x => NPCS[x].room === G.room && NPC_ROLES[x] === "hostess" && x !== npc &&
+          (NPCS[x].name.toLowerCase() === _rt || x === _rt) && _exited(x));
+        if (gone) { _say(_goneTalk(npc, gone)); return; }
+      }
       const mate = here.filter(x => NPC_ROLES[x] || NPCS[x].manager || NPCS[x].house)   // "bar sister" was said of Cream, who is not staff (Judith, round 47)
         .find(x => NPCS[x].name.toLowerCase() === _rt || x === _rt || NPCS[x].name.toLowerCase().split(" ").pop() === _rt);
       if (mate) {
@@ -9982,6 +9989,20 @@ const _BADGE_NEAR = [
 ];
 function _badgeTalk(npc) {
   return _pickVary(_bondTier(npc) >= 2 ? _BADGE_NEAR : _BADGE_FAR, "badge:" + npc);
+}
+// where she went, in the speaker's register (theme 11): Tinglish from the floor, English from the house
+const _GONE_FLOOR = [
+  "“{n}? She go home, na.” A smile that is mostly for {n}. “She {p} — she talk about it every night, two years. Then one day she have the money, and she go. No party. She just not come.”",
+  "“{n} finish already.” She says it like a thing that happened to the weather. “She {p} now. Her village. She send picture to the group — small shop, her mama in front.” A beat. “I happy for her. Also, I want her stool, it is near the fan.”",
+];
+const _GONE_HOUSE = [
+  "“{n}'s gone home. Gone to {p} — exactly what she said she'd do, which makes her about one in fifty.” A shrug that is not unkind. “No speech, no leaving drink. Locker was empty one Tuesday. That's how the good ones go.”",
+  "“{n}? Left at the end of the month.” No looking up. “To {p}. She'd been putting it away for three years, by my count, and I count. Didn't tell anyone the day. They never do — the ones who actually go.”",
+];
+function _goneTalk(npc, gone) {
+  const plan = _exited(gone);
+  const house = _hoursRegister(npc) !== "floor";
+  return _fmt(_pickVary(house ? _GONE_HOUSE : _GONE_FLOOR, "gonetalk"), { n: NPCS[gone].name, p: plan });
 }
 function _closingTalk(npc) {
   if (npc === "tan") return _tanTown("closing");
