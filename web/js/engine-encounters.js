@@ -1752,8 +1752,7 @@ function _clubpickup(input) {
   G.pendingEnc = "clubpickup";
   _setFlag("taxiPending");
   _encPrompt(
-    ["Morning. She does her lipstick at the mirror, clicks the compact shut, swings a little bag onto " +
-      "her shoulder, and holds out one hand, palm up, entirely casual. “Okay baby, I go now. You give " +
+    ["Morning. She does her lipstick at the mirror, clicks the compact shut, swings a little bag onto her shoulder, and taps two fingers on the dresser, entirely casual. “Okay baby, I go now. You give " +
       "me 2,000 baht for taxi.”", "alert"],
     [`(PAY the ฿${CLUB_TAXI} · offer the ฿80 BOLT instead · REFUSE)`, "dim"]);
 }

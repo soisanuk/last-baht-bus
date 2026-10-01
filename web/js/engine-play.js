@@ -564,10 +564,10 @@ function _amuletNotice() {
 const _NOK_AMULET = [
   "Auntie Nok looks up from her phone with the bottle-price face on, and then she does " +
     "not. She has seen it. She puts the {{phone}} down — actually down, screen to the cart — " +
-    "and holds out her hand, palm up, and waits.",
+    "and opens her hand flat on the cart, and waits.",
   "She is halfway through telling you the price of a Leo when she stops. Her eyes go to " +
     "the amulet and stay there, and the whole cheerful machinery of the cart switches off. " +
-    "She holds out her hand and does not say anything at all.",
+    "She opens her hand on the cart and does not say anything at all.",
 ];
 function _nokAmulet() {
   if (!G.amuletWorn || _flag("amuletReturned")) return;
