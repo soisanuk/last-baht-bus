@@ -84,8 +84,8 @@ test("Tan has a read on Sao after the dinner that is not the one he had before i
   metSao(); G.room = _npcRoom("tan"); G.nightTurn = 30;
   out = []; _doTalkBody("tan", "sao"); const before = text();
   _setFlag("bkkArcDone"); G.bkk.went = true;
-  out = []; _doTalkBody("tan", "sao"); assert.notEqual(text(), before); assert.match(text(), /hobby/i);
-  out = []; _doTalkBody("tan", "her father"); assert.match(text(), /pours/);
+  out = []; _doTalkBody("tan", "sao"); assert.notEqual(text(), before); assert.match(text(), /guest/i);
+  out = []; _doTalkBody("tan", "her father"); assert.match(text(), /names/);
 });
 
 test("JOURNAL lists Sao's car; a met man is not told to come and find you; MOTOSAI TO QUEEN VIC is the pub", () => {
@@ -98,8 +98,8 @@ test("JOURNAL lists Sao's car; a met man is not told to come and find you; MOTOS
 });
 
 test("ASK MORT ABOUT HOBBY quotes the sentence with the word in it", () => {
-  const q = _mortColumnTalk("hobby");
-  assert.ok(q && /hobby/i.test(q), q);
+  const q = _mortColumnTalk("guest");
+  assert.ok(q && /guest/i.test(q), q);
 });
 
 // ── Hennie ───────────────────────────────────────────────────────────────

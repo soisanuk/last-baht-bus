@@ -10366,7 +10366,7 @@ function _mortColumnTalk(topic) {
   if (Object.keys(NPCS).some(i => i === t || String(NPCS[i].name || "").toLowerCase() === t ||
       String(NPCS[i].name || "").toLowerCase().split(" ").pop() === t)) return null;
   const pools = [];
-  // the LEAD first: "hobby" is the Sathorn lead's word, and a listing that happened to
+  // the LEAD first: "guest" is the across-the-river lead's word, and a listing that happened to
   // contain it was quoted instead (Sol, round 55)
   for (const p of [typeof _OWL_LEADS !== "undefined" ? _OWL_LEADS : [], typeof _OWL_LETTERS !== "undefined" ? _OWL_LETTERS : [],
                    typeof _OWL_LISTINGS !== "undefined" ? _OWL_LISTINGS : [], typeof _OWL_JOKES !== "undefined" ? _OWL_JOKES : [],

@@ -8926,13 +8926,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Sao, and the dinner: the same line before and after it, and nothing for her
       // father or the word that ended it (Sol, round 55). Tan drives to Bangkok twice
       // a week; he knows the shape of that family without anybody's name in it.
-      { topic: "sao|her father|the father|hi-so|hiso|high society|sathorn|cartier|hobby|the dinner|bangkok family", when: (st, G) => !!(G.bkk && G.bkk.went),
-        text: "\"You went.\" Not a question; the grey sedan and the grey Alphard use the same car wash. \"The father pours his own " +
-          "whisky, yes? For men he likes. For men he is curious about.\" A glance in the mirror. \"A hobby is not an insult in " +
-          "that house, my friend. A hobby is a thing they keep. Be a good hobby — polite, not poor, never asking — and you will " +
-          "be invited again, one day, when you have stopped wanting to be.\"",
-        short: "\"The father pours for men he's curious about. A hobby is a thing they keep. Don't ask to be more.\"" },
-      { topic: "sao|her father|the father|hi-so|hiso|high society|sathorn|cartier|hobby|the dinner|bangkok family", when: (st, G) => !!(G.bkk && _flag("bkkArcDone") && !G.bkk.went),
+      { topic: "sao|her father|the father|grandmother|hi-so|hiso|high society|the river|across the river|guest|the dinner|bangkok family", when: (st, G) => !!(G.bkk && G.bkk.went),
+        text: "\"You went across the river.\" Not a question; the grey sedan and the grey Alphard use the same car wash. \"They " +
+          "asked about your father, yes? And his father.\" A glance in the mirror. \"In that house a man is his names, my " +
+          "friend, and yours stop at one. That is not an insult. A guest is a thing they keep. Be a good guest — polite, not " +
+          "poor, never asking — and you will be invited again, one day, when you have stopped wanting to be.\"",
+        short: "\"They asked about your father, and his. A man is his names in that house. A guest is a thing they keep.\"" },
+      { topic: "sao|her father|the father|grandmother|hi-so|hiso|high society|the river|across the river|guest|the dinner|bangkok family", when: (st, G) => !!(G.bkk && _flag("bkkArcDone") && !G.bkk.went),
         text: "\"You said no to the car.\" He nods slowly, as though you had parked well. \"Some doors you only see from the " +
           "street. That is not a loss. It is a view.\"",
         short: "\"You said no to the car. Some doors are a view.\"" },
@@ -14944,12 +14944,14 @@ const _REGULARS = {
         short: "“Everything — that's the joy of the corner table. New girls, lonely old boys, Sumalee turning it all. Better than telly, new cast every season.”" },
     ],
   },
-  // Colin — the reverse-savior essay's patron who lived it (canon 2026-08-15).
-  // A hilltop regular who once had a Sathorn dinner and came down the hill a
+  // Colin — the reverse-savior pattern's patron who lived it (rebuilt 2026-10-01
+  // under the source-material policy: his version is a WEDDING and a seating
+  // plan, the player's is the family house across the river — same mechanic,
+  // two different evenings). A hilltop regular who came down the hill a
   // different size. Register rules: no villain (the father was warm — that's
   // the knife), nobody says "toy" (Colin implies it and won't finish the
   // sentence), and he tells it AGAINST himself, which is what makes him
-  // company rather than a warning. He is the "she paid for the lattes" line.
+  // company rather than a warning. He is the "she came on the bus" line.
   colin: {
     name: "Colin", emoji: "☕", age: 58, nat: "British", pronoun: "he",
     patron: true, room: "the_terrace", hops: false,
@@ -14982,56 +14984,58 @@ const _REGULARS = {
         short: "\"Nine years. Came for six months. Quiet bit — two beaches, no go-gos. " +
           "Everybody says they're moving up the hill. Almost nobody does.\"",
       },
-      { topic: "lattes",
-        text: "\"The lattes.\" He turns the cold cup a quarter-turn on the rail. \"There was " +
+      { topic: "bus|the bus|lattes",
+        text: "\"The bus.\" He turns the cold cup a quarter-turn on the rail. \"There was " +
           "a girl. Not from the bars — that was the whole point of her, I thought. Good " +
-          "English, laughed at the right bits, and every single time, she paid for the " +
-          "coffee. Wouldn't let me. I read that as pride.\" A short laugh with no bottom in " +
-          "it. \"It wasn't pride, squire. It was arithmetic. A woman who won't let you pay " +
-          "for a forty-baht coffee is not sizing you up as a provider. She's just — being " +
-          "nice to you. I should have known from the lattes. Everybody should. Nobody does.\"",
-        short: "\"She always paid for the coffee. I read it as pride. It was arithmetic. I should have known from the lattes.\"" },
-      { topic: "dinner", req: ["bkkArcDone"],
-        text: "You start to ask about the dinner and he holds up a hand — reading something " +
-          "in your face before you've said it. \"You've had one.\" Not a question. He turns " +
+          "English, laughed at the right bits, and every single time she came down to see " +
+          "me, she came on the bus. Baht bus, then the big bus from Ekkamai. I read that as " +
+          "modesty.\" A short laugh with no bottom in it. \"It wasn't modesty, squire. It was " +
+          "manners. A woman whose family has three drivers takes the bus so that you never " +
+          "have to see the car. She was coming down to where I could look at her level. I " +
+          "should have known from the bus. Everybody should. Nobody does.\"",
+        short: "\"She always came on the bus. I read it as modesty. It was manners — so I'd never see the car.\"" },
+      { topic: "dinner|wedding", req: ["bkkArcDone"],
+        text: "You start to ask about it and he holds up a hand — reading something " +
+          "in your face before you've said it. \"You've been.\" Not a question. He turns " +
           "the cold flat white a quarter-turn, studying you like a man checking a mirror for " +
-          "his own scar. \"Sathorn? Private room?\" You nod. \"Did he pour it himself?\" You " +
-          "nod. Colin exhales through his nose, almost a laugh. \"Then you know. Nobody can " +
-          "tell you and everybody who knows can tell THAT you know.\" He signals for two " +
+          "his own scar. \"The family? Across the river?\" You nod. \"Did they ask about your " +
+          "father?\" You nod. Colin exhales through his nose, almost a laugh. \"Then you know. " +
+          "Nobody can tell you and everybody who knows can tell THAT you know.\" He signals for two " +
           "beers without asking. \"Cheapest club in the world, this one. The dues are just—\" " +
           "he taps his own chest, once. \"Well. You've paid them.\"",
-        short: "\"You've had one. The dinner.\" He orders two beers. \"You've paid the dues.\"" },
-      { topic: "dinner",
-        text: "\"Sathorn.\" He says the district like it's a diagnosis. \"She invited me up to " +
-          "meet the family. I pictured a shophouse — you do, after enough time down there. " +
-          "Private room, thick carpet, her father pouring the Blue Label himself.\" He " +
-          "drinks a bit of the cold coffee, makes a face, drinks it anyway. \"I did the " +
-          "speech. You know the speech. Plans, the online business, how much I love the " +
-          "country. He listened to every word — properly listened, warmly — and then he " +
-          "said it was very nice for a young man to have a little hobby.\" A pause. \"Hobby. " +
-          "I've built two companies. Small ones. He wasn't wrong, though. That's what I " +
-          "couldn't get past for about a year. He wasn't wrong.\"",
-        short: "\"Sathorn. Her father poured the Blue Label himself, listened to my whole speech, and said it was nice for a young man to have a hobby. He wasn't wrong.\"" },
-      { topic: "bill",
-        text: "\"The bill came in one of those leather folders and I reached for it. Reflex — " +
-          "nine years of being the man who pays. He put a black card on it without looking, " +
-          "mid-sentence about golf in Japan, and my hand just… stopped over the table like " +
-          "it had forgotten what hands are for.\" He looks at his own hand on the rail. " +
-          "\"And she laughed at something he said — fond, you know, a daughter's laugh — and " +
-          "I looked at her wrist and the bracelet I'd had down as market tat was Cartier. " +
-          "Had been the whole time. I'd been looking at it for four months.\" He shakes his " +
-          "head. \"Nobody was unkind to me. Not once, not for a second. That's how you " +
-          "know. Warm as the whisky.\"",
-        short: "\"I reached for the bill. He put a black card on it without looking. Nobody was unkind to me once. That's how you know.\"" },
+        short: "\"You've been. They asked about your father.\" He orders two beers. \"You've paid the dues.\"" },
+      { topic: "dinner|wedding",
+        text: "\"A wedding.\" He says it like it's a diagnosis. \"Her cousin's. She invited me up — " +
+          "I pictured a marquee in a village, you do, after enough time down there. Hotel " +
+          "ballroom. Four hundred guests. A seating plan on an easel the size of a door.\" He " +
+          "drinks a bit of the cold coffee, makes a face, drinks it anyway. \"Table thirty-one. " +
+          "Of forty. I stood at that easel longer than I've stood anywhere, working out what " +
+          "thirty-one meant, and then I went and sat with the pleasant people from her mother's " +
+          "office, and they were lovely to me all night.\" A pause. \"Nobody put me at the back. " +
+          "That's what I couldn't get past for about a year. Thirty-one was fair. Thirty-one " +
+          "was exactly right.\"",
+        short: "\"Her cousin's wedding. Four hundred guests, and I was at table thirty-one of forty. Thirty-one was exactly right.\"" },
+      { topic: "bill|bottle",
+        text: "\"Halfway through I tried to put a bottle on the table. Reflex — nine years of " +
+          "being the man who pays. I got a waiter over and asked for the whisky, the good one, " +
+          "for the table, and he looked past me — not rudely — to her mother at the top table, " +
+          "and her mother gave him the smallest shake of the head you've ever seen, and the " +
+          "bottle came anyway, and it was never on anybody's bill.\" He looks at his own hand " +
+          "on the rail. \"And she laughed at something her cousin said — fond, you know, a " +
+          "family laugh — and I looked at the car keys on the table in front of her, which I'd " +
+          "had down as her brother's, and they weren't.\" He shakes his head. \"Nobody was " +
+          "unkind to me. Not once, not for a second. That's how you know. Warm as the whisky " +
+          "I didn't pay for.\"",
+        short: "\"I tried to buy the table a bottle. The waiter looked at her mother first. Nobody was unkind to me once. That's how you know.\"" },
       { topic: "her",
         text: "\"Do I miss her? Wrong question, and I'll tell you why for free.\" He finally " +
           "pushes the cold cup away. \"You can only miss somebody you actually had. What I " +
           "had was a very good idea of myself, with her in it — the man who'd found the one " +
           "outside the bars, the man who'd got it right. That's what went in the lift. She " +
-          "was lovely. She's still lovely, somewhere in Sathorn, being lovely to somebody " +
-          "her father doesn't have to be polite to.\" He signals for a beer, and it comes " +
+          "was lovely. She's still lovely, somewhere across the river, being lovely to somebody " +
+          "her mother doesn't have to seat at thirty-one.\" He signals for a beer, and it comes " +
           "cold. \"I'm not bitter, squire. I'm calibrated. This town spends years telling a " +
-          "man money buys anything. Bangkok took one dinner to tell me whose money it is. " +
+          "man he's the money in the room. One wedding told me I was the guest. " +
           "Cheapest lesson I ever bought — I didn't even pay for it.\"",
         short: "\"Wrong question. You can only miss what you had, and what I had was a very good idea of myself. I'm not bitter — I'm calibrated.\"" },
     ],

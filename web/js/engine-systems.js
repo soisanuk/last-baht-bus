@@ -4379,10 +4379,10 @@ const _JOKE_TEXTS = [
     "A: The one you buy at 4 a.m. because you don’t want the night to be over.",
 ];
 
-// ── The reverse savior: Sao, and the dinner in Sathorn ───────────────────────
-// Canon essay (2026-08-15): the farang savior complex Pattaya spends years
-// feeding, and its collapse when the girl he met OUTSIDE the bars turns out to
-// be hi-so. Expat-only (the resident is the man it's about; the two-week man
+// ── The reverse savior: Sao, and the dinner across the river ─────────────────
+// The pattern (rebuilt 2026-10-01 under docs/source-material-policy.md): the farang
+// savior complex Pattaya spends years feeding, and its collapse when the girl he
+// met OUTSIDE the bars turns out to be from money that has never needed his. Expat-only (the resident is the man it's about; the two-week man
 // never learns), once per game, on a REALISTIC clock: she has a life in
 // Bangkok, so weeks pass between beats and the player has time to build the
 // noodle-cart picture. G.bkk = { met, stage } — 1: number given, 2: coffee
@@ -4638,64 +4638,74 @@ function _bkkGo() {
   if (G.bkk) G.bkk.went = true;
   const wk = _pers("whiteknight");
   _say("The van's aircon is set to museum. Two hours of motorway, the driver silent " +
-    "and impeccable, and then Sathorn: towers, a hotel lobby the size of a bus " +
-    "station, and a lift that goes up without you feeling it. Not a street stall. " +
-    "A private room of a Chinese restaurant — thick carpet that eats your footsteps, " +
-    "cold as a bank, a heavy round table with a glass lazy susan, and Sao, in " +
-    "something simple that cost more than it looks, saying “You CAME” like it's " +
-    "a small victory.");
-  _say("The door opens and her father walks in. Tailored polo, the calm of a man who " +
-    "gives instructions for a living, and on his wrist a Rolex that is — you look " +
-    "twice — the real thing. Not awe, when he looks at you. Polite, clinical " +
-    "interest. A waiter sets a bottle of Blue Label on the table and the father " +
-    "waves him off and pours your glass himself, over ice, a splash, exactly right.");
-  _say("The lazy susan turns: lobster, abalone, things that cost more than your " +
-    "month's rent. You try to hold your end up. " +
+    "and impeccable, then Bangkok — and then, which you did not expect, across the " +
+    "river and away from the towers, into a district of khlongs and old walls. The " +
+    "van stops at a gate. Not a restaurant. A compound: an old teak house on stilts " +
+    "beside a newer concrete one, a long table laid on the veranda over the water, " +
+    "a cook already carrying things, and Sao coming down the steps in something " +
+    "simple that cost more than it looks, saying “You CAME” like it's a small victory.");
+  _say("The family is already at the table, and the table has a shape. Two cousins, " +
+    "an aunt, an uncle who pours, a father in a short-sleeved batik shirt who says " +
+    "almost nothing — and at the head, in a wheelchair, a grandmother who is " +
+    "plainly the authority in the house and plainly aware of it. Everyone is warm. " +
+    "Nobody is impressed. You have brought a bottle of duty-free whisky, the way you " +
+    "would bring one to a flat in Pattaya; Sao's mother thanks you for it beautifully " +
+    "and hands it, unopened, to the cook.");
+  _say("Dishes arrive with no menu and no prices — river fish, something with " +
+    "crab, a curry the grandmother watches you taste. " +
     (wk
       ? "You find yourself talking about Pattaya, about what you've SEEN there — the " +
         "girls, the families they send money to, the men who don't help and the ones " +
         "who do — and you hear yourself say, to this table, that you've always tried " +
-        "to be one of the ones who helps. It sounds noble on Beach Road. In this room it " +
-        "sounds like a man describing the pond he is king of."
+        "to be one of the ones who helps. It sounds noble on Beach Road. Sao translates " +
+        "it for her grandmother, carefully. The old woman nods. She says something back, " +
+        "and Sao's translation takes a moment to arrive: “She says it is good that " +
+        "somebody helps those girls. She asks whether their mothers know.”"
       : "You talk about the online work, the plans, how much you love Thailand — the " +
         "pitch that lands so cleanly in the bars off Beach Road, delivered here with " +
-        "the alpha volume slightly up."));
-  _say("The father listens to all of it, carefully, smiling warmly. He takes a sip of " +
-    "the Blue Label. “That is very nice,” he says. “It is good for a young man to " +
-    "have a little hobby, so he doesn't get bored.”", "alert");
-  _say("Hobby. The word goes off like a gunshot and nobody but you hears it. Sao " +
-    "laughs at something her father says next — sweetly, fondly, a daughter's laugh " +
-    "— and you look at her wrist and see, for the first time, that the bracelet you " +
-    "took for costume jewellery is Cartier, and always was.");
-  _say("The bill comes in a black leather folder. Your hand goes to your wallet on " +
-    "instinct — the Pattaya reflex, the one that shows the room your standing — and " +
-    "her father, mid-story about a golf trip to Japan, doesn't so much as glance at " +
-    "the numbers: he sets a black metal card on the folder and keeps talking.");
-  _say("(Reach for it anyway, or let it go. GRAB · LET)", "dim");
+        "the alpha volume slightly up. Sao translates some of it. The grandmother " +
+        "listens to all of it, and asks one question back."));
+  _say("What your father did. You tell her. She nods, and asks what HIS father " +
+    "did, and you tell her that too, and it takes less than a sentence. She nods " +
+    "again, kindly, the way you nod at a child who has finished reciting. Sao " +
+    "translates the verdict with great care. “She says: then you have come a long " +
+    "way. Eat.”", "alert");
+  _say("You eat. It is only on the way back down the lane, counting, that you work " +
+    "out what the ‘small family business’ is: the row of shophouses along the khlong " +
+    "with the same green shutters, twelve doors of them, and the pier, and probably " +
+    "the lane. Nobody mentioned it. Nobody needed to.");
+  _say("At the gate the van is waiting and Boy has the door open, and your hand " +
+    "goes to your pocket on instinct — the Pattaya reflex, two hours of a man's " +
+    "evening, you pay your way, you show the room your standing.");
+  _say("(Reach for it, or let it be. GRAB · LET)", "dim");
   G.pendingChoice = "bkkbill";
 }
 function _bkkBill(grab) {
   G.pendingChoice = null;
   if (grab) {
-    _say("You reach for it anyway — a farang gesture, loud in the quiet room. The " +
-      "father lifts one hand a centimetre off the tablecloth, and it is over. Not " +
-      "unkind. Simply not a question. Sao's eyes flick to you and away. Nobody says " +
-      "anything, which is worse than anything they could have said.", "alert");
+    _say("You get the notes out — a farang gesture, loud in the quiet lane. Sao's " +
+      "father, who has said perhaps nine words all evening, puts a hand on Boy's " +
+      "shoulder. “He is my sister's son.” That is all, and it is over. Not unkind. " +
+      "Simply not a transaction. Sao's eyes flick to you and away. Nobody says " +
+      "anything else, which is worse than anything they could have said.", "alert");
     _repHit(1);
     _addHappy(-2);
   } else {
-    _say("You let it go, and thank him, and mean it — the only move in the room that " +
-      "was yours to make well. He nods, once. It costs you nothing, and it is the one " +
-      "thing you did all evening that a man at that table would have done.");
+    _say("You let it be, and shake Boy's hand, and thank the father, and mean it — " +
+      "the only move at that gate that was yours to make well. He nods, once. It " +
+      "costs you nothing, and it is the one thing you did all evening that a man of " +
+      "that house would have done.");
     _repGain();
   }
-  _say("In the lift going down you understand, with the clarity of cold air, your " +
-    "place in the real hierarchy of this country — the one a farang never sees. " +
-    "You weren't the savior. You weren't pulling anyone out of anything. To this " +
-    "family you were their educated daughter's amusing, slightly poor, exotic " +
-    "friend — a nice boy she practises her English on. Nobody said so. Nobody had to.");
-  _say("Pattaya spends years teaching a man that money buys anything here. Bangkok " +
-    "takes one dinner to remind him whose money it is.", "win");
+  _say("Two hours back down the motorway to understand, with the clarity of cold " +
+    "air, what you were at that table. Not a prospect. Not a threat. Not the " +
+    "benefactor you have spent years in Pattaya being. A guest — the kind a family " +
+    "is warm to because warmth costs them nothing, in a house where your money was " +
+    "the one thing nobody needed. Three generations of names were asked for, and " +
+    "yours ran out at your father. Nobody said so. Nobody had to.");
+  _say("Pattaya spends years teaching a man that he is the money in the room. One " +
+    "dinner across the river, and he is the only person at the table who thought " +
+    "money was the point.", "win");
   if (_pers("whiteknight")) {
     // +2 so it survives the night's own -1 cooling: the mark is meant to last a
     // day past the dinner. Insight, not the treadmill — "the useful kind."
@@ -8809,7 +8819,7 @@ const _OWL_LEADS = [
   "A reader files a long-time night under 'remind me never again': he books a lovely girl overnight and gets — a girl. Thirty minutes of her life story before bed, tears over a father and a sister and a child he can't keep straight, a sulk when HE talks too much, a cold shoulder in the night, no morning cuddle. 'She acts like a five-year girlfriend, not the one-day girlfriend you want.' Precisely, squire. Short time sells you the fantasy; long time delivers the person — the whole weeping, needing, remembering person. Most men don't want a girlfriend. They want the FEELING of one, for an hour, credits rolled before the third act. Know which you're buying.",
   "A young buck asks how to keep three ladies from ever meeting. Wrong ambition, squire — you cannot; the coast is too small and the LINE app too fast. The trick was never secrecy, it is TRADECRAFT: pay cash, so no bank QR flashes your legal name across her screen like a wanted poster; never post the sunset while you are still sitting in it; and above all do not bring her to the room, where there is always one hair on the pillow that is not hers. Get any of it wrong and you become the one thing this town is genuinely merciless about — a free video. Nobody minds a butterfly, chief. They mind a clumsy one.",
   // The reverse savior (canon essay, 2026-08-15): the Orchid reveal turned on the reader's own ego
-  "This town spends years feeding a farang one idea about himself: benefactor. Every Thai family is a village, a leaning house, a sick buffalo and a Western Union counter, and the man on three thousand dollars a month remote is king of all he surveys. Then one day he meets a girl OUTSIDE the bars — good English, pays for her own coffee, 'family business in Bangkok' — and his Pattaya brain hears noodle cart. She takes him to dinner in Sathorn. Private room, thick carpet, a father in a tailored polo who pours the Blue Label himself and listens, warmly, to the online-business speech, and says: 'That is very nice. Good for a young man to have a little hobby.' HOBBY, squire. Like a gunshot. Pattaya teaches you money buys anything here. Bangkok reminds you the real money in this country was never yours to spend.",
+  "This town spends years feeding a farang one idea about himself: benefactor. Every Thai family is a village, a leaning house, a sick buffalo and a Western Union counter, and the man on three thousand dollars a month remote is king of all he surveys. Then one day he meets a girl OUTSIDE the bars — good English, her own money, 'a small family business' — and his Pattaya brain hears noodle cart. She takes him home to meet them, and home is a compound on a khlong with a grandmother at the head of the table, and the only question anybody asks him all evening is what his father did, and then what HIS father did. Three generations, squire. His run out at one. Nobody was unkind. They fed him. Pattaya teaches you that you are the money in the room. Across the river they let you find out you were the guest.",
 ];
 // The Owl's answer to the amulet, printed once and never again. Written as the
 // column would carry it: a reader's letter, third-hand, and a reply that
@@ -8886,8 +8896,8 @@ const _OWL_LETTERS = [
    "There's the whole coast in one story: a shop that will scream you into surrendering your own refund, and a hotel man who'll walk three of his staff round the corner to get it back for a guest. The town will rob you and the town will catch you, often on the same street. Tip the bell boy. Then tip him again."],
   ["A reader writes, singed: 'Brought last night's lady back to the condo and scrubbed the place spotless. This morning today's lady found ONE hairpin down the side of the sofa, and I have not known peace since.'",
    "One hairpin is a signed confession, squire, and your condo becomes an active crime scene the instant a second guest crosses the threshold. The old hands play away games only — her room, a short-time, anywhere but the one address a wronged woman can find again at three in the morning. A man who brings them home is not a butterfly. He is a defendant."],
-  ["A reader writes: 'Met a Bangkok girl on Second Road — no bar, no agenda, she paid for the lattes. Her family had a \"business.\" I pictured a noodle stall. Dinner turned out to be a private room in Sathorn, her father put a black metal card on the bill without looking at it, and I noticed, six months in, that her bracelet was real Cartier. I have felt about four inches tall since. Was I a fool?'",
-   "You were a tourist, chief, which is a fool on a schedule. Two lessons for the price of one dinner. First: the lattes were the tell — a woman who won't let you pay is not auditioning you for savior. Second, and mind this one: nobody in that room was unkind to you. Warm as the Blue Label. That is how you know exactly where you stood."],
+  ["A reader writes: 'Met a Bangkok girl on Second Road — no bar, no agenda, she came down on the BUS to see me, every time. Her family had a \"small business.\" I pictured a shophouse. I was invited to a cousin's wedding: a hotel ballroom, four hundred guests, and I was at table thirty-one. I worked out the rest from the seating plan. I have felt about four inches tall since. Was I a fool?'",
+   "You were a tourist, chief, which is a fool on a schedule. Two lessons for the price of one wedding. First: the bus was the tell — a woman with a driver who takes the bus to meet you is not auditioning you for provider; she is coming down to where you can see her. Second, and mind this one: nobody at table thirty-one was unkind to you. They put you with the pleasant people. That is how you know exactly where you stood."],
   ["A sports-bar regular writes, with some satisfaction: 'Mate of ours went native over the " +
     "Darkside years back — took a dancer home, we all told him. Then the money went, so she'll " +
     "have been gone inside the week. Nobody's seen him since. Another one for your ledger, Owl.'",
@@ -8922,7 +8932,7 @@ const _OWL_JOKES = [
   "For the specialist: the town keeps a fetish club or two — a grand entrance fee, more again for a private room, and a roster of older ladies who, be warned, mostly DOMINATE. Go to be dominated and you're in business; go to dominate and you'll find the market thin. Know your role before you pay at the door.",
   "A butterfly paid his lady's bar bill by QR to look the big man, and PromptPay did what PromptPay does — printed his full legal name across her screen like a wanted poster. He loves cash now. So, it turns out, does she; she looked him up.",
   "New spectator sport on the Beach Road promenade: two ladies who discovered over the same seafood platter that they share a boyfriend, and the boyfriend discovering that a man cannot outrun a flip-flop thrown sidearm. Admission, one phone. Streaming now.",
-  "Q: What does a Bangkok father call your online business? A: A hobby. Q: What does he call the bill? A: Nothing — he doesn't look at it.",
+  "Q: What does a Bangkok family ask about your business? A: Nothing. They ask about your father. Q: And then? A: About his.",
 ];
 // FOR THE NEWLY ARRIVED — the five words, in the Owl's voice, a standing slot
 // for a player's first week (accessibility pass, 2026-09-03: every one of these
