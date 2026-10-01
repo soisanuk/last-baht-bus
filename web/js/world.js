@@ -1417,7 +1417,7 @@ const ROOMS = {
       "its reputation travels by word of mouth and the direction of high heels. " +
       "A small reception counter lit by one fluorescent tube. A ring of numbered " +
       "keys on a nail. Two plastic stools. An older Thai man sits behind the " +
-      "counter, a thermos of coffee at his elbow, watching the alley with the " +
+      "counter, a flask of cold tea at his elbow, watching the alley with the " +
       "patient stillness of someone who has long stopped being surprised by anything.",
     reads: {
       keys: "A ring of numbered keys on a nail, each fob worn smooth. No computer, no " +
@@ -11279,69 +11279,30 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     name: "Somchith", th: "สมชิต", emoji: "🔑",
     pronoun: "he",
     room: "short_time_motel",
-    desc: "Sixty-something, a weathered face that holds a permanent quiet warmth, the " +
+    desc: "Sixty-something, a face that has driven a lot of night road, a flask of cold tea and a radio turned down low to the lottery numbers. He keeps the keys, keeps the counter, keeps the place running without any fuss. The girls coming through treat him like a favourite uncle." +
       "thermos of coffee always close. He keeps the keys, keeps the counter, keeps " +
       "everything running on this shift without any fuss. The girls coming through " +
       "treat him like a favourite uncle.",
     dialogue: [
-      { th: "สบายดีไหมครับ", rom: "sabai dee mai khrap",
-        text: "He nods a greeting — the measured nod of a man who has made peace with " +
-        "the night and what it carries. \"You lost? Or you just curious?\" No " +
-        "judgment in it. He pours from the thermos like he would for anyone. " +
-        "\"Sit down if you want. Nobody hurry here.\"",
-        short: "He nods and pours coffee. \"Nobody hurry here.\"" },
-      { topic: "work", text: "\"My wife say I should retire. She is probably right.\" He " +
-        "almost smiles. \"But I don't mind this place. These girls —\" he tilts his " +
-        "head toward the stairs \"— they come down after, they take off the shoes, " +
-        "they sit here and just... rest. Talk a little. Sometimes nothing. They need " +
-        "somewhere that is quiet and not judging them.\" He refills his own cup. " +
-        "\"I can be that place.\"" },
-      // The set had no play (Lionel, round 36): a man walked a barfined girl in
-      // and the old boy poured his coffee. Room / price / key / "short time" all
-      // land here (the global price rule covers the trade's own phrasing), and
-      // the hint is the verb that rents it.
-      { topic: "room", text: "\"Room?\" He does not look at the stairs. \"" + MOTEL_ROOM + " baht, two hours. " +
-        "Fan, towel, water in the fridge. Air-con room is more, but the fan is honest.\" He " +
-        "lifts the ring of keys an inch off the nail. \"You bring your company. I don't keep any.\" " +
-        "(GET ROOM, once you have somebody on your arm.)",
-        short: "\"" + MOTEL_ROOM + " baht, two hours, fan. You bring the company.\" (GET ROOM)" },
-      { topic: "price", text: "\"Same price for everybody: " + MOTEL_ROOM + " baht, two hours.\" He says it " +
-        "the way a man reads a bus timetable. \"What you pay HER is between you and her. I only " +
-        "rent the room.\" (GET ROOM)",
-        short: "\"" + MOTEL_ROOM + " baht the room. Her price is hers.\" (GET ROOM)" },
-      { topic: "key", text: "\"Key is for a room, room is for two.\" He taps the nail. \"" + MOTEL_ROOM + " baht. " +
-        "Come back with somebody.\" (GET ROOM)",
+      { text: "He nods a greeting — the measured nod of a man who has made peace with the night and what it carries. \"You lost? Or you just curious?\" No judgment in it. He pours cold tea from the flask like he would for anyone. \"Sit down if you want. Nobody hurry here.\"",
+        short: "He nods and pours tea. \"Nobody hurry here.\"" },
+      { topic: "work", text: "\"Thirty-one years I drive the night bus, Bangkok to Udon and back. Sleep in the day, work in the dark.\" He taps his own chest. \"The body learn it. Now the company retire me and I cannot sleep at night anyway, so —\" a hand at the counter, the keys, the stairs \"— here. Same hours. Nobody gets killed if I blink.\"",
+        short: "\"Thirty-one years on the night bus. The body learned it. So: here.\"" },
+      { topic: "room", text: "\"Room?\" He does not look at the stairs. \"300 baht, two hours. Fan, towel, water in the fridge. Air-con room is more, but the fan is honest.\" He lifts the ring of keys an inch off the nail. \"You bring your company. I don't keep any.\" (GET ROOM, once you have somebody on your arm.)",
+        short: "\"300 baht, two hours, fan. You bring the company.\" (GET ROOM)" },
+      { topic: "price", text: "\"Same price for everybody: 300 baht, two hours.\" He says it the way a man reads a bus timetable. \"What you pay HER is between you and her. I only rent the room.\" (GET ROOM)",
+        short: "\"300 baht the room. Her price is hers.\" (GET ROOM)" },
+      { topic: "key", text: "\"Key is for a room, room is for two.\" He taps the nail. \"300 baht. Come back with somebody.\" (GET ROOM)",
         short: "\"Room is for two. Come back with somebody.\" (GET ROOM)" },
-      { topic: "girls", text: "\"They call me Lung Somchith. Uncle Somchith. They bring me " +
-        "krating daeng, kanom — snacks, you know. They complain about the shoes.\" " +
-        "A small fond laugh. \"Same complaints every night. Too tight. Too high. " +
-        "But still they wear them. Because they have to look a certain way.\" He " +
-        "wraps both hands around his cup. \"I just make sure they can rest in " +
-        "between.\"" },
-      { topic: "trouble", text: "\"Big farang, last week. Very drunk, very loud. " +
-        "Upstairs.\" He doesn't elaborate on what happened upstairs. \"He say he " +
-        "will not pay. He say he will break the room.\" Somchith sips his coffee. " +
-        "\"I am not a young man. But I stand between him and the girl and I tell " +
-        "him: you pay what you agreed, then you leave.\" A pause. \"He paid. He " +
-        "left.\" Another pause. \"Nobody call the police in this place. Police make " +
-        "trouble for the girls. So we handle ourselves.\"" },
-      { topic: "daughter", text: "He is quiet long enough that you think he won't " +
-        "answer. Then: \"My daughter — she works Beach Road. She doesn't know I " +
-        "work here.\" He looks at the ring of keys on the nail. \"Sometimes she " +
-        "come through that door with a customer. Very beautiful. Eyes always so " +
-        "tired.\" He wraps his hands tighter around the cup. \"When I see her " +
-        "coming, I go in the back. The supply room. I wait there until the " +
-        "footsteps go upstairs.\" He does not cry. He has already cried this. " +
-        "\"I cannot stop her. I cannot pay for her life. But I can be here, in " +
-        "the dark, so that if anything goes wrong —\" he doesn't finish. " +
-        "He doesn't need to." },
-      { topic: "pattaya", text: "He thinks about this as if it is the first time " +
-        "anyone has asked, though it cannot be. \"In this city, no one is higher " +
-        "or lower. Everyone is just surviving their own story.\" He sets the cup " +
-        "down. \"The farang comes for escape from his life. The girl comes to " +
-        "feed her family. And me?\" A quiet exhale. \"I am just an old man with " +
-        "a ring of keys, hiding in a closet, to catch one look at my daughter " +
-        "and know she is still alive.\"" },
+      { topic: "girls", text: "\"They leave the {{phone}} with me to charge. Every night, six, seven phones on this counter.\" He nods at the row of cables. \"I know every ringtone. I know which one is the mother, which one is the boyfriend, which one she does not answer.\" A small shrug. \"I don't answer it either. I just make sure it has battery when she comes down.\"",
+        short: "\"Six, seven phones charging on my counter every night. I know every ringtone.\"" },
+      { topic: "trouble", text: "\"Trouble?\" He thinks about which one. \"A man go out the window once. Second floor, into the soi, no shoes. The girl still in the shower.\" He says it without heat. \"She come down, no money, no customer, one hour of her night gone. I put the room on my own book and she sit here till the first bus.\" He turns the radio down a notch it did not need. \"The window is nailed now.\"",
+        short: "\"A man went out the window once. The window is nailed now.\"" },
+      { topic: "tin|the tin|biscuit tin|lost property|left behind", text: "He reaches under the counter for a biscuit tin and opens it without ceremony: a hair clip, a charger, a child's photo gone soft at the corners, one earring, a key to something. \"What they leave in the room.\" He closes it. \"Nobody come back for it. One month I keep, then the temple. The monks don't ask whose.\"",
+        short: "\"What they leave in the room. One month I keep, then the temple.\"" },
+      { topic: "pattaya|this city|the city|town|this town", text: "He considers the stairs. \"On the way up, every man is a big man. On the way down, same man, small — looking for his shoes.\" He pours more tea. \"At this counter everybody is the same size. The girls know it. That is why they sit here after. Not for the tea.\"",
+        short: "\"At this counter everybody is the same size. Not for the tea.\"" },
+
     ],
   },
 

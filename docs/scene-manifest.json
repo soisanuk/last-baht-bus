@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-30",
+  "generated": "2026-10-01",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 243,
@@ -781,7 +781,7 @@
       "people": [
         "Somchith"
       ],
-      "desc": "A dark alley halfway up Soi 7 that smells of lemongrass floor cleaner and old air conditioning. The motel has no sign you could read from the street — its reputation travels by word of mouth and the direction of high heels. A small reception counter lit by one fluorescent tube. A ring of numbered keys on a nail. Two plastic stools. An older Thai man sits behind the counter, a thermos of coffee at his elbow, watching the alley with the patient stillness of someone who has long stopped being surprised by anything."
+      "desc": "A dark alley halfway up Soi 7 that smells of lemongrass floor cleaner and old air conditioning. The motel has no sign you could read from the street — its reputation travels by word of mouth and the direction of high heels. A small reception counter lit by one fluorescent tube. A ring of numbered keys on a nail. Two plastic stools. An older Thai man sits behind the counter, a flask of cold tea at his elbow, watching the alley with the patient stillness of someone who has long stopped being surprised by anything."
     },
     {
       "id": "stinky_bar",
