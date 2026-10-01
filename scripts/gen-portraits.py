@@ -762,6 +762,10 @@ CHARS = {
     "saifon":   lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0x00e5ff), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=CYAN, blush=True),
     "wanpen":   lady(skin=THAI2, hair="sleek", hc=GRBLK, shirt=C(0xd02040), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
     "kratae":   lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0xf05a30), bg=BG_BAR, mouth="grin", acc=["earrings", "nosering"], earc=YELN),
+    # Thip — Mama Yai's veteran; the regular as a retirement plan, from her side (hair pinned up, one gold bracelet)
+    "thip":     lady(skin=THAI2, hair="chignon", hc=GRBLK, shirt=C(0x202838), bg=BG_BAR, mouth="neutral", acc=["chain"], earc=GOLD),
+    # Preeda — the Lucky Charm; back from a Belgian winter (grey cardigan over the bar dress)
+    "preeda":   lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x8a8f96), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=GOLD),
     "tui":      lady(skin=THAI2, hair="chignon", hc=SILVER, shirt=C(0x181820), bg=BG_BAR, mouth="stern", acc=["earrings", "chain"], earc=GOLD),
     "mon":      lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x2a2a3a), collar=True, bg=BG_BAR, mouth="neutral", acc=["earrings", "ringchain"], earc=GOLD),
     "dokmai":   lady(skin=THAI2, hair="bun", hc=GRBLK, shirt=C(0x8a1030), bg=BG_BAR, mouth="grin", acc=["earrings", "flower", "chain"], earc=GOLD),

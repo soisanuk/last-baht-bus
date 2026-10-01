@@ -289,3 +289,33 @@ test("a woman who named a target can hit it: gone from the second trip, quietly,
   // never your own bar's floor, never the affair girl
   G.bar = { room }; assert.equal(_exited(g), false); G.bar = null; G.affair = { id: g }; assert.equal(_exited(g), false);
 });
+
+// ── Two characters from the ledger's top rows ────────────────────────────────
+test("Thip at Mama Yai's: the retirement plan from her side, told flat — and she knows a man who came back", () => {
+  G.room = "mama_yai"; G.nightTurn = 30; assert.ok(_npcsHere().includes("thip"));
+  out = []; run("talk to thip"); assert.match(said(), /Eleven years this bar/);
+  for (const [t, rx] of [["husband", /Danish man|every February/], ["airport", /arrivals|extra hour/], ["bracelet", /one baht weight/],
+      ["this year", /See you next year|Ninety-one days/], ["family", /Si Sa Ket/], ["plan", /one leg of a chair/], ["yai", /nine Februaries/i]]) {
+    out = []; run("ask thip about " + t); assert.match(said(), rx, t);
+  }
+  out = []; run("ask thip about work"); assert.doesNotMatch(said(), /forty-five thousand/, "the maths waits for a face");
+  G.soc.drinks.thip = 3; out = []; run("ask thip about work again"); assert.match(said(), /forty-five thousand/);
+  // the man who came back: only a player who left at regular+ and returned
+  G.talked.thip = []; G.soc.drinks.thip = 8; out = []; run("talk to thip"); assert.doesNotMatch(said(), /You come back/);
+  G.prevBond = { thip: 2 }; G.talked.thip = []; out = []; run("talk to thip"); assert.match(said(), /You come back.*I keep it/s);
+});
+test("Preeda at the Lucky Charm: back from a Belgian winter, and she chooses now; Helmut cannot find the error", () => {
+  G.room = "lucky_charm"; G.nightTurn = 30; assert.ok(_npcsHere().includes("preeda"));
+  out = []; run("talk to preeda"); assert.match(said(), /My rule/);
+  for (const [t, rx] of [["belgium", /Ghent|fourth snow/], ["husband", /Careful is a cage/], ["money", /Two hundred euro/],
+      ["work", /Nine hundred|nine hundred/], ["home", /Nakhon Phanom/], ["plan", /salon/], ["why", /price of a bus ticket/]]) {
+    out = []; run("ask preeda about " + t); assert.match(said(), rx, t);
+  }
+  out = []; run("ask preeda about funeral"); assert.doesNotMatch(said(), /eleven hundred euro/, "the funeral waits for a face");
+  G.soc.drinks.preeda = 3; out = []; run("ask preeda about funeral again"); assert.match(said(), /eleven hundred euro/);
+  out = []; run("ask preeda about choose"); assert.match(said(), /I choose/);
+  // nothing in either entry retells a source: the pattern is the unit (the names and the beats are ours)
+  for (const id of ["thip", "preeda"]) assert.ok(NPCS[id].look.split(/\s+/).length <= 20, id + " look ≤ 20 words");
+  G.room = _npcRoom("helmut"); G.day = 2; while (!_npcActive("helmut")) G.day++;
+  out = []; run("ask helmut about wife"); assert.match(said(), /I cannot find the error/);
+});

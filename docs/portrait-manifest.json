@@ -2,11 +2,11 @@
   "generated": "2026-10-01",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 161,
+    "total": 163,
     "byRole": {
       "story": 50,
       "mamasan": 25,
-      "hostess": 48,
+      "hostess": 50,
       "cashier": 13,
       "patron": 25
     },
@@ -1652,6 +1652,20 @@
       "desc": "Pretty and a little far away, like part of her is always on the bus back to a village you'll never see. Kind to you, and not quite here."
     },
     {
+      "id": "preeda",
+      "name": "Preeda",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "look": "Thai woman of thirty-six, calm direct gaze, shoulder-length hair, neat grey cardigan over a bar dress.",
+      "venueKind": "beer",
+      "emoji": "❄️",
+      "th": "ปรีดา",
+      "room": "lucky_charm",
+      "tags": [],
+      "desc": "Thirty-six, a grey cardigan over the bar dress as if the air-con were a Belgian November, and a way of looking straight at a man that the younger girls have not got yet and may never get. Her English is good — not bar-good, lived-in good — and she uses less of it than she has."
+    },
+    {
       "id": "pukky",
       "name": "Pukky",
       "source": "NPCS",
@@ -1703,6 +1717,20 @@
       "room": "cherry_pop",
       "tags": [],
       "desc": "Round-cheeked and permanently pleased, a half-step behind every joke and laughing at it anyway, on faith. Sweetest girl in the bar, and the bar knows it."
+    },
+    {
+      "id": "thip",
+      "name": "Thip",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "look": "Thai woman of forty-four, composed oval face, hair pinned up, thin gold bracelet, plain dark blouse.",
+      "venueKind": "beer",
+      "emoji": "🪷",
+      "th": "ทิพย์",
+      "room": "mama_yai",
+      "tags": [],
+      "desc": "Forty-four and not hiding it: hair pinned up with one clip, a plain dark blouse, a thin gold bracelet that is the only thing on her that shines. She sits the way the long-timers sit — back straight, drink untouched, the room in the corner of one eye — and when she laughs it is the real one, short, and gone again."
     },
     {
       "id": "waen",

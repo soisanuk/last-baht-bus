@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 243,
   "patrons": 25,
-  "people": 349,
-  "portraits": 374,
+  "people": 351,
+  "portraits": 376,
   "renders": 365,
   "thumbs": 365,
   "venues": 243
@@ -2728,6 +2728,15 @@
    "room": "ruby_kiss",
    "th": "แพรว"
   },
+  "preeda": {
+   "desc": "Thirty-six, a grey cardigan over the bar dress as if the air-con were a Belgian November, and a way of looking straight at a man that the younger girls have not got yet and may never get. Her English is good — not bar-good, lived-in good — and she uses less of it than she has.",
+   "emoji": "❄️",
+   "name": "Preeda",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "lucky_charm",
+   "th": "ปรีดา"
+  },
   "priew": {
    "desc": "The girl from the clinic waiting room — the one who laughed at the dead pen, which turns out to be the whole story.",
    "emoji": "🐱",
@@ -3270,6 +3279,15 @@
    "role": "mamasan",
    "room": "the_terrace",
    "th": "วันดี"
+  },
+  "thip": {
+   "desc": "Forty-four and not hiding it: hair pinned up with one clip, a plain dark blouse, a thin gold bracelet that is the only thing on her that shines. She sits the way the long-timers sit — back straight, drink untouched, the room in the corner of one eye — and when she laughs it is the real one, short, and gone again.",
+   "emoji": "🪷",
+   "name": "Thip",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "mama_yai",
+   "th": "ทิพย์"
   },
   "thomas": {
    "desc": "Seventy, and lean the way only a man who walks ten kilometres a day in this heat gets lean. His shirt is soaked through and he does not seem to feel it. He sits on the low seawall under the casuarina with a folded parasol across his knees — a woman's parasol, flowered, the kind nobody his size has ever held up — and two packets of sticky rice beside him, one unopened. He is looking at the sea, and he is a very long way away. The motorbike-taxi men up the road think he has lost his mind. They are wrong, but you can see why they'd think it.",
@@ -3922,6 +3940,7 @@
   "praewa",
   "pranee",
   "preaw",
+  "preeda",
   "priew",
   "prik",
   "proud",
@@ -3985,6 +4004,7 @@
   "the_terrace_kade",
   "the_terrace_namtip",
   "the_terrace_wandee",
+  "thip",
   "thomas",
   "tik",
   "tim",

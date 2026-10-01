@@ -7727,6 +7727,168 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"You see it. Straight price then — higher, na. The show was the discount.\"" },
     ],
   },
+  // Thip (Mama Yai's) — the regular as a retirement plan, from the woman's side
+  // (essay ledger theme 3/the 5s, 2026-10-01; pattern only, under docs/source-material-policy.md).
+  // A veteran of the Darkside floor whose whole stability was one man who came every
+  // February for two weeks; this year the text said "next year" and then nothing, and
+  // she did the arithmetic and put the dress back on. Told flat, never pitied — she is
+  // not a victim and he is not a villain; a plan had a single point of failure. The
+  // player can BE that man on a later trip (bonds survive the flight), and her gated
+  // greeting knows it.
+  thip: {
+    name: "Thip", th: "ทิพย์", emoji: "🪷",
+    room: "mama_yai",
+    look: "Thai woman of forty-four, composed oval face, hair pinned up, thin gold bracelet, plain dark blouse.",
+    desc: "Forty-four and not hiding it: hair pinned up with one clip, a plain dark blouse, a thin gold " +
+      "bracelet that is the only thing on her that shines. She sits the way the long-timers sit — " +
+      "back straight, drink untouched, the room in the corner of one eye — and when she laughs it is " +
+      "the real one, short, and gone again.",
+    dialogue: [
+      // the man who came back — only a player who left at regular+ and returned sees this
+      { bond: 2, when: (st, G) => !!(G.prevBond && G.prevBond.thip >= 2),
+        th: "กลับมาแล้ว", rom: "klap ma laeo",
+        text: "\"You come back.\" Not a question; a thing she is checking against a list. Thip looks at you " +
+          "for a long second and then, deliberately, at the door you came in by, as if to make sure of it. " +
+          "\"You know how many say they come back? Everybody. You know how many come?\" She holds up " +
+          "one finger, then folds it. \"I don't count any more. But I see you.\" The real laugh, short. " +
+          "\"Sit. Your stool. I keep it — I don't tell anybody I keep it, but I keep it.\"",
+        short: "\"You come back. I see you. Sit — your stool.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sawatdee kha.\" A nod, not a hello-handsome; Thip has been here long enough to let a man " +
+          "decide what he wants before she decides what he is. \"You new to Mama Yai? Sit anywhere. The " +
+          "som tam come whether you want or not.\" She turns her glass a quarter on the mat. \"I am Thip. " +
+          "Eleven years this bar. Ask Yai, she tell you I was here before the fan.\"",
+        short: "\"Thip. Eleven years this bar.\"" },
+      { topic: "husband|man|him|my man|farang|denmark|danish|boyfriend|sponsor",
+        text: "\"My husband?\" She says the word plainly and then corrects nothing about it. \"Not paper. " +
+          "Danish man. Nine years he come — February, two weeks, same hotel. I go Bangkok, meet him at " +
+          "airport, every time. He say, you don't have to. I go.\" The bracelet, turned once. \"When he " +
+          "here, I not work. When he go home, I work. He don't ask, I don't say. That is how it works. " +
+          "That is how it WORK,\" she says, past tense, and lets you hear it.",
+        short: "\"Danish man. Nine years, every February. I meet him at the airport. He never ask what I do the other fifty weeks.\"" },
+      { topic: "airport|bangkok|suvarnabhumi|meet|arrivals",
+        text: "\"Suvarnabhumi, arrivals, gate B.\" She can see it. \"Four hours on the bus for two minutes " +
+          "of him coming through the door. Every year I think, this year I don't go, is stupid. Every year I " +
+          "go.\" A shrug that costs her something. \"Last year I stand there one extra hour. In case. The " +
+          "board say the plane come. He not on it.\" She drinks, finally. \"I come home on the same bus.\"",
+        short: "\"Gate B, arrivals. Last year I waited an extra hour in case. He wasn't on it.\"" },
+      { topic: "bracelet|gold|chain|jewellery",
+        text: "\"This one? Second year.\" She does not take it off to show you; she turns her wrist. \"Gold " +
+          "shop on Buakhao, one baht weight. He say, so you have something if something happen. I say, " +
+          "nothing happen.\" The short laugh. \"Gold shop still there. Price go up every year. I check " +
+          "it like other people check weather.\"",
+        short: "\"Second year, one baht weight. I check the gold price like other people check the weather.\"" },
+      { topic: "year|this year|february|text|message|next year|see you|flights|came",
+        text: "\"This year he send one message. 'See you next year.' That's all.\" She shows you the " +
+          "{{phone}}, then puts it face-down. \"Ninety-one days now. Before, he text every Sunday. Now, " +
+          "nothing. Maybe he sick. Maybe his daughter say stop. Maybe he die — he is sixty-eight.\" " +
+          "She says all three the same way. \"I don't know, and I cannot know, and the rent is the " +
+          "same every month whether I know or not.\"",
+        short: "\"One message: see you next year. Ninety-one days now. I cannot know, and the rent does not care.\"" },
+      { topic: "work|maths|arithmetic|dress|floor|back|working again", bond: 1,
+        text: "\"So. I do the maths.\" Flat, a woman reading a bill out loud. \"Nine years, he send " +
+          "fifteen thousand a month. That is the room, Mama's medicine, my son's school. Ninety days of " +
+          "nothing is forty-five thousand of nothing.\" She smooths the dark blouse at the hip. \"So I " +
+          "put the dress on. Not this one — the other one. First night, two men ask my name like I am " +
+          "new.\" The laugh. \"Eleven years, and I am new.\"",
+        short: "\"Ninety days of nothing is forty-five thousand of nothing. So I put the dress back on. First night, two men asked my name like I was new.\"" },
+      { topic: "family|home|si sa ket|sisaket|isan|son|mama",
+        text: "\"Si Sa Ket. My mama, my son — he is fourteen, he think I work at a hotel reception. " +
+          "Maybe he know. Fourteen is old enough to know and young enough to let his mama think he " +
+          "don't.\" She sees your face. \"Don't. Everybody in this bar has a son who thinks something.\"",
+        short: "\"Si Sa Ket. A son of fourteen who thinks I work at a reception desk, or lets me think he thinks it.\"" },
+      { topic: "plan|future|next|later|retire",
+        text: "\"Plan.\" She considers the word like something somebody left on the bar. \"The plan was " +
+          "him. Nine years, one plan. Yai say, Thip, one man is one leg of a chair.\" The bracelet, " +
+          "once. \"Now I have a dress and a stool and eleven years of knowing which men pay. Is not a " +
+          "plan. But is tonight, and I am here.\"",
+        short: "\"The plan was him. One man is one leg of a chair, Yai says. Now it is tonight and I am here.\"" },
+      { topic: "yai|mama yai|the boss",
+        text: "\"Yai?\" Real warmth, finally. \"Yai keep my stool nine Februaries. Nine. Any other mama, " +
+          "you go two weeks, your stool is somebody's. Yai say, when he stop coming — she say WHEN, " +
+          "not if, nine years ago — you come back here.\" She lifts the glass an inch toward the kitchen. " +
+          "\"She was right. She hate being right. Eat the som tam, she watch you not eat it.\"",
+        short: "\"Yai kept my stool nine Februaries. She said WHEN he stops, not if. She hated being right.\"" },
+    ],
+  },
+  // Preeda (Lucky Charm) — the reverse escape (essay ledger, the 4s; pattern only). She
+  // married out of the trade and into a Belgian winter, and came back: the allowance,
+  // the cleaning job her certificate could not beat, the funeral flight he priced
+  // against a car. The game's doctrine for her is the flat line that she chooses now.
+  // Helmut, on another rail, cannot understand why a wife would leave; the two are
+  // never linked.
+  preeda: {
+    name: "Preeda", th: "ปรีดา", emoji: "❄️",
+    room: "lucky_charm",
+    look: "Thai woman of thirty-six, calm direct gaze, shoulder-length hair, neat grey cardigan over a bar dress.",
+    desc: "Thirty-six, a grey cardigan over the bar dress as if the air-con were a Belgian November, and a " +
+      "way of looking straight at a man that the younger girls have not got yet and may never get. Her " +
+      "English is good — not bar-good, lived-in good — and she uses less of it than she has.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello.\" Just that, in an English with corners on it. \"Preeda. You can sit. I don't do " +
+          "the hello-handsome, I did four years of hello-schat and it is enough for one life.\" A smile " +
+          "that arrives late and stays. \"Buy me a drink or don't; I will still talk to you. That is " +
+          "the new rule. My rule.\"",
+        short: "\"Preeda. Buy me a drink or don't; I will still talk to you. My rule.\"" },
+      { topic: "belgium|europe|abroad|ghent|flanders|snow|cold|winter|over there",
+        text: "\"Belgium. A town near Ghent you have never heard of; nobody has, including people in " +
+          "Ghent.\" She pulls the cardigan closer, a reflex. \"Four winters. The first snow I cried, I " +
+          "was so happy. The fourth snow I cried.\" A beat. \"Different reason. Same window.\"",
+        short: "\"Belgium, near Ghent. Four winters. The first snow I cried from happiness; the fourth, not.\"" },
+      { topic: "husband|him|engineer|marry|married|wedding|ex|belgian",
+        text: "\"He was an engineer — is an engineer; he is still there, he is still an engineer. He met me " +
+          "in a bar on Second Road and married me in a town hall with his mother not looking at me.\" She " +
+          "does not sound bitter; she sounds like a woman reading her own file. \"He was not cruel. I want " +
+          "to say that first, because people wait for cruel. He was CAREFUL. With money, with me, with " +
+          "what the neighbours saw. Careful is a cage with very good locks.\"",
+        short: "\"An engineer, still there. Not cruel — careful. Careful is a cage with very good locks.\"" },
+      { topic: "money|allowance|pocket money|euro|euros|cash|bank",
+        text: "\"Two hundred euro a month. Pocket money — his word.\" She lets it sit. \"I had to say " +
+          "what for. Not every time; enough times. A woman who sent money home for ten years, asking a " +
+          "man for forty euro for a coat.\" The late smile. \"Here, a bad night, I make more than that " +
+          "and nobody asks what for. Nobody here has ever asked me what for.\"",
+        short: "\"Two hundred euro a month, pocket money, and I had to say what for. Here nobody has ever asked me what for.\"" },
+      { topic: "work|job|cleaning|hotel|certificate|salon",
+        text: "\"I have a certificate — hair, make-up, two years, Bangkok. In Belgium it is a piece of " +
+          "paper in Thai.\" She shrugs. \"So: hotel, mornings, the rooms. Six years in a bar and I " +
+          "never cleaned a toilet that was not mine. Four years married, I cleaned nine hundred.\" She " +
+          "says the number carefully; she counted. \"I was good at it. That was the worst part.\"",
+        short: "\"A hair-and-make-up certificate that was a piece of paper in Thai. So: hotel rooms, mornings. Nine hundred toilets. I was good at it.\"" },
+      { topic: "funeral|papa|father|flight|ticket|died|death", bond: 1,
+        text: "\"My father died in the third winter.\" The cardigan again. \"The flight was eleven hundred " +
+          "euro. He had just bought a car — a good one, he showed me the brochure for three months. He " +
+          "said, you can't afford it, and he meant WE, and he meant him.\" She looks at you to see if you " +
+          "will say something; you don't, which is right. \"I lit a candle in a Catholic church. My papa " +
+          "would have laughed. He never laughed at anything else I did.\"",
+        short: "\"My father died in the third winter. The flight was eleven hundred euro; he had just bought a car. I lit a candle in a Catholic church instead.\"" },
+      { topic: "choose|pick|customer|customers|rule|no|say no|freedom|free", bond: 1,
+        text: "\"Here is the thing nobody in Belgium would believe.\" She leans in, the only time she does. " +
+          "\"I choose. Mama know it, the girls know it. A man I don't like — I say no, and it is no, and " +
+          "nobody at the next table has an opinion about my face.\" She sits back. \"Over there I had a " +
+          "husband, a house, a passport, and I could not say no to a Sunday lunch. I am not saying this " +
+          "is good. I am saying which one is mine.\"",
+        short: "\"Here, I choose. A man I don't like, I say no, and it is no. Over there I could not say no to a Sunday lunch.\"" },
+      { topic: "back|come back|return|why|pattaya|leave him|left",
+        text: "\"Why come back? Everybody ask it, like Pattaya is the bad place and Belgium is the good " +
+          "place and I walked the wrong way.\" She turns her glass. \"I came back because here I " +
+          "know the price of everything, including me, and over there I did not know the price of a " +
+          "bus ticket without asking. You can live not knowing. I tried. I am not built for it.\"",
+        short: "\"Here I know the price of everything, including me. Over there I didn't know the price of a bus ticket without asking.\"" },
+      { topic: "home|family|nakhon phanom|isan|village|mama|river",
+        text: "\"Nakhon Phanom. The river, the Lao side across it, the mountains behind that.\" She " +
+          "softens, which she does not do for Belgium. \"My mama has my sister's two. I send less than " +
+          "before. I send it myself, from my own {{phone}}, and nobody looks over my shoulder at the " +
+          "screen.\" The late smile. \"It is less money. It is more mine.\"",
+        short: "\"Nakhon Phanom, on the river. I send less home than before — but from my own {{phone}}, with nobody looking at the screen.\"" },
+      { topic: "plan|future|next|again|another farang|marry again",
+        text: "\"Plan?\" The corners on the English sharpen. \"The plan is no plan with a man in it. A " +
+          "salon, maybe, with my certificate that is worth something here. Two years of this, three.\" " +
+          "She looks down the rail. \"If a good man comes — and some are good, I am not stupid — he can " +
+          "come to the salon. He can buy a haircut. That is the queue now.\"",
+        short: "\"A salon, in two or three years. A good man can come to the salon and buy a haircut. That is the queue now.\"" },
+    ],
+  },
   // Nook (Golden Dragon) — the party girl. The honest anti-romanticization type:
   // look past the patter and there is no second layer, and that's fine. Harmless,
   // no punishment vector — just genuinely here for the music and the free drinks.
@@ -15536,6 +15698,13 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "stool. The staff do not ask what I want because it is not necessary. " +
         "This,\" he says, with the closest thing to warmth, \"is quality of life.\"",
         short: "\"Same stool, nineteen hundred, nobody asks. Quality of life.\"" },
+      { topic: "wife|wives|leave|leaving|left him|divorce|why she left|marriage|married",
+        text: "\"A wife who leaves.\" He takes the glasses off, which he does for problems. \"Colleague of mine, " +
+          "Böblingen, married a girl from here. House, car, residence permit, a bank account in her own name — " +
+          "I saw the paperwork, it was correct. Three years, she goes back.\" The glasses go on. \"I have " +
+          "thought about this. I cannot find the error. Every input was correct.\" He drinks, precisely. " +
+          "\"Perhaps she was the error. That is the only variable I did not check.\"",
+        short: "\"A colleague's wife went back after three years. Every input was correct. I cannot find the error.\"" },
       { topic: "stool", text: "\"The third stool. I evaluated all nine.\" He is " +
         "not joking. \"Best angle on the television, full coverage from fan " +
         "number two, and the rail does not wobble.\" A sip, precisely timed. " +
@@ -16687,6 +16856,7 @@ const NPC_ROLES = {
   pukky: "hostess", somo: "hostess", nina: "hostess", bebe: "hostess", poy: "hostess", aum: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
+  thip: "hostess", preeda: "hostess",   // the ledger's two (2026-10-01)
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess", chompoo: "hostess",
   yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan", sumalee: "mamasan",
   diamond: "mamasan", wimon: "mamasan", ampai: "mamasan", kesinee: "mamasan",
