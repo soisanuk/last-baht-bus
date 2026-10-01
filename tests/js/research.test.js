@@ -33,6 +33,21 @@ test("the return is the moment: her-farang comes back a regular, a regular a fac
   assert.ok(_bondTier("lek") >= 2 && (G.soc.drinks.lek || 0) >= 11, "one drink from her farang again");
 });
 
+test("the season never empties a floor: in the trough and the harvest every hostess bar keeps at least one woman (the Lucky 7 e2e break, 2026-10-01)", () => {
+  const bars = Object.keys(ROOMS).filter(r => ROOMS[r].barType && Object.keys(NPCS).some(i => NPCS[i].room === r && NPC_ROLES[i] === "hostess"));
+  for (const s0 of [8, 9, 10]) {
+    G.season0 = s0;
+    for (let day = 1; day <= 30; day += 7) {
+      G.day = day;
+      for (const r of bars) {
+        const girls = Object.keys(NPCS).filter(i => NPCS[i].room === r && NPC_ROLES[i] === "hostess" && _npcActive(i));
+        assert.ok(girls.length >= 1, `${r} has nobody on the floor (season0 ${s0}, day ${day})`);
+      }
+    }
+  }
+  G.season0 = 9; assert.ok(Object.keys(NPCS).some(i => _awayForSeason(i) === "bangkok"), "…and the desant still happens");
+});
+
 // ── Theme 2: cheap care beats money ─────────────────────────────────────────
 test("SEE <her> HOME at closing: presence, not purchase — bond through _addBond, once a night, she is off the floor after", () => {
   G.room = _npcRoom("lek"); G.soc.drinks.lek = 4; G.nightTurn = 30;
@@ -59,7 +74,7 @@ test("November's harvest and the trough thin the filler floor, day-stable, with 
   G.season0 = 10;   // November
   const ever = new Set();
   for (let d = 1; d <= 30; d++) { G.day = d; for (const id of fillers) if (_awayForSeason(id) === "harvest") ever.add(id); }
-  assert.ok(ever.size > fillers.length / 4 && ever.size < fillers.length / 2, "a third of the floor goes home at some point: " + ever.size);
+  assert.ok(ever.size > fillers.length / 5 && ever.size < fillers.length / 2, "a third of the floor goes home at some point, less the last woman on each floor: " + ever.size);
   G.day = 5;
   const away = fillers.filter(id => _awayForSeason(id) === "harvest");
   assert.ok(away.length >= 3 && away.length < fillers.length / 3, "on one night, some and not all: " + away.length);

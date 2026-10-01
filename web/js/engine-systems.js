@@ -7833,6 +7833,19 @@ function _awayForSeason(id) {
   if (!_flag("act1Done") || !NPCS[id] || !NPCS[id].filler || NPC_ROLES[id] !== "hostess") return false;
   if (G.bar && G.bar.room && NPCS[id].room === G.bar.room) return false;
   if (G.party && G.party.ids && G.party.ids.includes(id)) return false;
+  const away = _awayForSeasonRaw(id);
+  if (!away) return false;
+  // SOMEBODY HAS TO STAND THERE: the season never takes a floor's last woman. On a
+  // two-girl bar the hash sent both to Bangkok and five bars stood empty for two
+  // months — Lucky 7 first among them, which is the first bar the right-click e2e
+  // picks, and CI was red for eight commits while the local date sat on the other
+  // side of the month boundary (2026-10-01). The LAST hostess by sorted id stays.
+  const floor = Object.keys(NPCS).filter(x => NPCS[x].room === NPCS[id].room && NPC_ROLES[x] === "hostess" && !_exitedOrGone(x)).sort();
+  if (!floor.some(x => x !== id && !(NPCS[x].filler && _awayForSeasonRaw(x)))) return false;
+  return away;
+}
+function _exitedOrGone(id) { return !!((typeof _exited === "function" && _exited(id)) || (G.bar && G.bar.gone && G.bar.gone[id])); }
+function _awayForSeasonRaw(id) {
   const m = _seasonMonth();
   if (m === 10) {   // November: the harvest
     if (_hh(id + ":harvest:" + G.vacation, 101) % 3 !== 0) return false;   // a third of the floor goes home
