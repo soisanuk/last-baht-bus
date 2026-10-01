@@ -2348,7 +2348,7 @@
       "th": "นารี",
       "room": "windmill",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of The Gilt Cage's girls, from Amnat Charoen. She types more than she talks — and laughs at both."
+      "desc": "A crooked, disarming grin — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 53 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "sasi",
@@ -2362,7 +2362,7 @@
       "th": "ศศิ",
       "room": "windmill",
       "tags": [],
-      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Gilt Cage's girls, from Sisaket. Google Translate is open before you finish the sentence."
+      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Gilt Cage's girls, from Sisaket. The badge pinned at her hip says 100 — the number the floor knows her by. Google Translate is open before you finish the sentence."
     },
     {
       "id": "yada",
@@ -2376,7 +2376,7 @@
       "th": "ญาดา",
       "room": "windmill",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of The Gilt Cage's girls, from Buriram. She types more than she talks — and laughs at both."
+      "desc": "A crooked, disarming grin — one of The Gilt Cage's girls, from Buriram. The badge pinned at her hip says 183 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "dao",
@@ -2390,7 +2390,7 @@
       "th": "ดาว",
       "room": "tequila_queen",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of Tequila Queen A-Go-Go's girls, from Ubon. The {{phone}} never leaves her hand."
+      "desc": "Tall and quiet, watching the door — one of Tequila Queen A-Go-Go's girls, from Ubon. The badge pinned at her hip says 7 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "mook",
@@ -2404,7 +2404,7 @@
       "th": "มุก",
       "room": "tequila_queen",
       "tags": [],
-      "desc": "Small and sharp, and misses nothing — one of Tequila Queen A-Go-Go's girls, from Yasothon. Google Translate is open before you finish the sentence."
+      "desc": "Small and sharp, and misses nothing — one of Tequila Queen A-Go-Go's girls, from Yasothon. The badge pinned at her hip says 95 — the number the floor knows her by. Google Translate is open before you finish the sentence."
     },
     {
       "id": "ice",
@@ -2418,7 +2418,7 @@
       "th": "ไอซ์",
       "room": "tequila_queen",
       "tags": [],
-      "desc": "Long hair, longer eyelashes, a practised pout — one of Tequila Queen A-Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand."
+      "desc": "Long hair, longer eyelashes, a practised pout — one of Tequila Queen A-Go-Go's girls, from Roi Et. The badge pinned at her hip says 15 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "praew",
@@ -2432,7 +2432,7 @@
       "th": "แพรว",
       "room": "tequila_queen",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Tequila Queen A-Go-Go's girls, from Chaiyaphum. Google Translate is open before you finish the sentence."
+      "desc": "Older than the go-go average, and unhurried about it — one of Tequila Queen A-Go-Go's girls, from Chaiyaphum. The badge pinned at her hip says 37 — the number the floor knows her by. Google Translate is open before you finish the sentence."
     },
     {
       "id": "fah",
@@ -2446,7 +2446,7 @@
       "th": "ฟ้า",
       "room": "neon_paradise",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Neon Paradise A-Go-Go's girls, from Chaiyaphum. Google Translate is open before you finish the sentence."
+      "desc": "Older than the go-go average, and unhurried about it — one of Neon Paradise A-Go-Go's girls, from Chaiyaphum. The badge pinned at her hip says 158 — the number the floor knows her by. Google Translate is open before you finish the sentence."
     },
     {
       "id": "view",
@@ -2460,7 +2460,7 @@
       "th": "วิว",
       "room": "neon_paradise",
       "tags": [],
-      "desc": "Long hair, longer eyelashes, a practised pout — one of Neon Paradise A-Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand."
+      "desc": "Long hair, longer eyelashes, a practised pout — one of Neon Paradise A-Go-Go's girls, from Roi Et. The badge pinned at her hip says 74 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "sara",
@@ -2474,7 +2474,7 @@
       "th": "ซาร่า",
       "room": "neon_paradise",
       "tags": [],
-      "desc": "Tiny and loud, all elbows and energy — one of Neon Paradise A-Go-Go's girls, from Udon Thani. Google Translate is open before you finish the sentence."
+      "desc": "Tiny and loud, all elbows and energy — one of Neon Paradise A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 29 — the number the floor knows her by. Google Translate is open before you finish the sentence."
     },
     {
       "id": "bow",
@@ -2488,7 +2488,7 @@
       "th": "โบว์",
       "room": "club_mirage",
       "tags": [],
-      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen. She types more than she talks — and laughs at both."
+      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen. The badge pinned at her hip says 184 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "nam",
@@ -2502,7 +2502,7 @@
       "th": "น้ำ",
       "room": "club_mirage",
       "tags": [],
-      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen. She types more than she talks — and laughs at both."
+      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen. The badge pinned at her hip says 153 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "yui",
@@ -2516,7 +2516,7 @@
       "th": "ยุ้ย",
       "room": "club_mirage",
       "tags": [],
-      "desc": "Round-faced and quick to laugh — one of Club Mirage's girls, from Mukdahan. She types more than she talks — and laughs at both."
+      "desc": "Round-faced and quick to laugh — one of Club Mirage's girls, from Mukdahan. The badge pinned at her hip says 102 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "aof",
@@ -2530,7 +2530,7 @@
       "th": "อ๊อฟ",
       "room": "crystal_palace",
       "tags": [],
-      "desc": "Sleepy-eyed and entirely unbothered — one of Crystal Palace A-Go-Go's girls, from Loei. She types more than she talks — and laughs at both."
+      "desc": "Sleepy-eyed and entirely unbothered — one of Crystal Palace A-Go-Go's girls, from Loei. The badge pinned at her hip says 197 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "cherry",
@@ -2544,7 +2544,7 @@
       "th": "เชอรี่",
       "room": "crystal_palace",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of Crystal Palace A-Go-Go's girls, from Mukdahan. She types more than she talks — and laughs at both."
+      "desc": "A crooked, disarming grin — one of Crystal Palace A-Go-Go's girls, from Mukdahan. The badge pinned at her hip says 18 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "beam",
@@ -2558,7 +2558,7 @@
       "th": "บีม",
       "room": "crystal_palace",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. Google Translate is open before you finish the sentence."
+      "desc": "Older than the go-go average, and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 28 — the number the floor knows her by. Google Translate is open before you finish the sentence."
     },
     {
       "id": "boom",
@@ -2572,7 +2572,7 @@
       "th": "บูม",
       "room": "crystal_palace",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. Google Translate is open before you finish the sentence."
+      "desc": "Older than the go-go average, and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 156 — the number the floor knows her by. Google Translate is open before you finish the sentence."
     },
     {
       "id": "toey",
@@ -2586,7 +2586,7 @@
       "th": "เตย",
       "room": "rainbow_girls",
       "tags": [],
-      "desc": "New enough to still look a little nervous — one of Rainbow Girls Bar's girls, from Kalasin. The {{phone}} never leaves her hand."
+      "desc": "New enough to still look a little nervous — one of Rainbow Girls Bar's girls, from Kalasin. The badge pinned at her hip says 91 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "pang",
@@ -2600,7 +2600,7 @@
       "th": "แป้ง",
       "room": "rainbow_girls",
       "tags": [],
-      "desc": "Bored until you try a word of Thai, then radiant — one of Rainbow Girls Bar's girls, from Ubon. The {{phone}} never leaves her hand."
+      "desc": "Bored until you try a word of Thai, then radiant — one of Rainbow Girls Bar's girls, from Ubon. The badge pinned at her hip says 146 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "ploen",
@@ -2614,7 +2614,7 @@
       "th": "เพลิน",
       "room": "rainbow_girls",
       "tags": [],
-      "desc": "Sleepy-eyed and entirely unbothered — one of Rainbow Girls Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both."
+      "desc": "Sleepy-eyed and entirely unbothered — one of Rainbow Girls Bar's girls, from {{Nong Khai}}. The badge pinned at her hip says 98 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "sai",
@@ -2628,7 +2628,7 @@
       "th": "ทราย",
       "room": "rainbow_girls",
       "tags": [],
-      "desc": "Long hair, longer eyelashes, a practised pout — one of Rainbow Girls Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand."
+      "desc": "Long hair, longer eyelashes, a practised pout — one of Rainbow Girls Bar's girls, from Maha Sarakham. The badge pinned at her hip says 154 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "fang",
@@ -2642,7 +2642,7 @@
       "th": "แฟง",
       "room": "kinky",
       "tags": [],
-      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of KINKY Go-Go's girls, from Loei. She types more than she talks — and laughs at both."
+      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of KINKY Go-Go's girls, from Loei. The badge pinned at her hip says 47 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "gib",
@@ -2656,7 +2656,7 @@
       "th": "กิ๊บ",
       "room": "kinky",
       "tags": [],
-      "desc": "Small and sharp, and misses nothing — one of KINKY Go-Go's girls, from Yasothon. Google Translate is open before you finish the sentence."
+      "desc": "Small and sharp, and misses nothing — one of KINKY Go-Go's girls, from Yasothon. The badge pinned at her hip says 133 — the number the floor knows her by. Google Translate is open before you finish the sentence."
     },
     {
       "id": "nice",
@@ -2670,7 +2670,7 @@
       "th": "ไนซ์",
       "room": "kinky",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of KINKY Go-Go's girls, from Buriram. She types more than she talks — and laughs at both."
+      "desc": "A crooked, disarming grin — one of KINKY Go-Go's girls, from Buriram. The badge pinned at her hip says 15 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "tukta",
@@ -2684,7 +2684,7 @@
       "th": "ตุ๊กตา",
       "room": "slutty",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of Slutty Go-Go's girls, from Buriram. She types more than she talks — and laughs at both."
+      "desc": "A crooked, disarming grin — one of Slutty Go-Go's girls, from Buriram. The badge pinned at her hip says 160 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "jum",
@@ -2698,7 +2698,7 @@
       "th": "จุ๋ม",
       "room": "slutty",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of Slutty Go-Go's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand."
+      "desc": "Tall and quiet, watching the door — one of Slutty Go-Go's girls, from {{Nong Bua Lamphu}}. The badge pinned at her hip says 4 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "pop",
@@ -2712,7 +2712,7 @@
       "th": "ป๊อป",
       "room": "slutty",
       "tags": [],
-      "desc": "New enough to still look a little nervous — one of Slutty Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand."
+      "desc": "New enough to still look a little nervous — one of Slutty Go-Go's girls, from Roi Et. The badge pinned at her hip says 136 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "namwan",
@@ -2726,7 +2726,7 @@
       "th": "น้ำหวาน",
       "room": "las_vegas",
       "tags": [],
-      "desc": "Bored until you try a word of Thai, then radiant — one of Las Vegas Go-Go's girls, from Ubon. The {{phone}} never leaves her hand."
+      "desc": "Bored until you try a word of Thai, then radiant — one of Las Vegas Go-Go's girls, from Ubon. The badge pinned at her hip says 128 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "orn",
@@ -2740,7 +2740,7 @@
       "th": "อร",
       "room": "las_vegas",
       "tags": [],
-      "desc": "Long hair, longer eyelashes, a practised pout — one of Las Vegas Go-Go's girls, from Maha Sarakham. The {{phone}} never leaves her hand."
+      "desc": "Long hair, longer eyelashes, a practised pout — one of Las Vegas Go-Go's girls, from Maha Sarakham. The badge pinned at her hip says 169 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "gigi",
@@ -2754,7 +2754,7 @@
       "th": "กีกี้",
       "room": "las_vegas",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of Las Vegas Go-Go's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand."
+      "desc": "Tall and quiet, watching the door — one of Las Vegas Go-Go's girls, from {{Nong Bua Lamphu}}. The badge pinned at her hip says 90 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "near",
@@ -3860,7 +3860,7 @@
       "th": "อ้อย",
       "room": "hyper",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of Hyper A Go-Go's girls, from Amnat Charoen. She types more than she talks — and laughs at both."
+      "desc": "A crooked, disarming grin — one of Hyper A Go-Go's girls, from Amnat Charoen. The badge pinned at her hip says 93 — the number the floor knows her by. She types more than she talks — and laughs at both."
     },
     {
       "id": "noey",
@@ -3874,7 +3874,7 @@
       "th": "เนย",
       "room": "hyper",
       "tags": [],
-      "desc": "Long hair, longer eyelashes, a practised pout — one of Hyper A Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand."
+      "desc": "Long hair, longer eyelashes, a practised pout — one of Hyper A Go-Go's girls, from Roi Et. The badge pinned at her hip says 151 — the number the floor knows her by. The {{phone}} never leaves her hand."
     },
     {
       "id": "gig",

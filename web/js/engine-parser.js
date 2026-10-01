@@ -1183,6 +1183,7 @@ function _arriveAt(to) {
       "ever existed. Showing up counts double in this town.", "win");
     _addHappy(2);
   }
+  if (typeof _sightingDue === "function") { const _sid = _sightingDue(to); if (_sid) { _sighting(_sid); return; } }   // theme 5
   _maybeEncounter();
 }
 
@@ -2071,6 +2072,8 @@ function _doExamine(arg) {
     if ((role === "hostess" || role === "mamasan" || role === "cashier") && _bondTier(npc) >= 1) {
       _say(_pickVary(_BOND_LOOK[_bondTier(npc)], "xbond" + npc), "dim");
     }
+    if (typeof _badge === "function" && _badge(npc) && _bondTier(npc) >= 2)
+      _say("(The number is pinned at her hip the way it is pinned on all of them, and you have never once used it. She has noticed that.)", "dim");
     return;
   }
   const id = _findItem(arg);
@@ -4118,6 +4121,10 @@ function _doTalkBody(arg, topic) {
     if (/\b(busy|rush|quiet|peak|packed|full|crowd|crowded)\b/.test(_ct)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc)); return; }
     if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct)) { _say(_leagueTalk(npc)); return; }
+    // the badge: at a distance it is a number for the board; to somebody she knows it is armour (theme 12)
+    if (typeof _badge === "function" && _badge(npc) && /^(?:the |my |your |her )?(?:number|badge|tag|\d{1,3})$/.test(_ct)) {
+      _say(_badgeTalk(npc)); return;
+    }
     // what she actually does here, who she answers to, and what it pays — the
     // words a caseworker asks and the town could not hear (Helen, round 49)
     if (/\bboss(es)?\b|\bwho (?:do you |)(?:work for|answer to)\b|\bmanager\b/.test(_ct)) {
@@ -7239,7 +7246,7 @@ function _doBuy(arg) {
     // a lazy girl banks the drink but rarely the warmth — favor sticks only ~40%.
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)
     const _lazy = NPCS[id].type === "lazy";
-    if (!_lazy || _rand() < 0.4) _boughtBond(id, 1);   // capped per girl per night
+    if (!_lazy || _rand() < 0.4) _boughtBond(id, typeof _drinksOnly === "function" && _drinksOnly(id) ? 2 : 1);   // capped per girl per night; the drink IS the drinks-only girl's job (theme 12)
     const _warm = !_lazy && _bondTier(id) >= 2;
     const _pool = _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;
     const _pk = _lazy ? "lazydrink" : _warm ? "warmdrink" : "ladydrink";
@@ -9962,6 +9969,20 @@ const _HOUR_WORDS = ["midnight", "one", "two", "three", "four", "five", "six", "
 function _hourSay(h) { return _HOUR_WORDS[((h % 24) + 24) % 24]; }
 function _cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
 function _hourWord(t) { return _hourSay(18 + Math.floor(t / 10)); }
+// the number, in two registers: to a customer it is for the board; to a regular it is the
+// thing that takes the night so she does not have to (theme 12 — Tinglish, hers)
+const _BADGE_FAR = [
+  "\"Number?\" She touches it without looking. \"For the board, na. Mama see number, mama know who go, who stay. Customer see number, easy to remember.\" A shrug. \"Easier than my name.\"",
+  "\"This?\" The badge, tipped up for you. \"Everybody have. Mama give. You want remember me, remember the number — tomorrow maybe I forget you, but the number same same.\"",
+];
+const _BADGE_NEAR = [
+  "She looks at the badge for a second before she answers, which she did not do last time. \"You know why I like the number? When customer is — not nice. Hands, talking, you know — it happen to the number. Not to me.\" She unpins it, turns it over, pins it back. \"Morning, I take it off. Leave it in the locker. Everything stay in the locker with it.\"",
+  "\"The number is for the bar.\" Quieter than her bar voice. \"But also for me, na. Here I am the number. Outside I am me. Some girl, they forget which one go home.\" She taps it twice, like knocking on a door. \"I don't forget.\"",
+  "\"You never say my number. Other customer, they say the number — hey, forty-two, come. You say my name.\" She is not thanking you, exactly; she is reporting it. \"Is okay. The number is for them. It take the night, I go home.\"",
+];
+function _badgeTalk(npc) {
+  return _pickVary(_bondTier(npc) >= 2 ? _BADGE_NEAR : _BADGE_FAR, "badge:" + npc);
+}
 function _closingTalk(npc) {
   if (npc === "tan") return _tanTown("closing");
   const r = _room();
@@ -10730,6 +10751,7 @@ function _chipSet() {
   }
   if (G.pendingChoice === "kidfavour") { add("yes", "let him make the call"); add("no"); add("ask", "ask what it costs"); return chips;
   }
+  if (G.pendingChoice === "sighting") { add("raise your glass", "raise your glass, walk on"); add("go over"); return chips; }
   if (G.pendingChoice === "tanfavour") {
     add("yes"); add("no"); add("ask", "ask what it's for"); return chips;
   }
@@ -11185,6 +11207,7 @@ function engineComplete(input) {
   else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", ...(G.known && G.known.nont && _kidOpen() ? ["the kid"] : []), "not me", "ask"];
   else if (G.pendingChoice === "kidprice") pool = ["pay", "no", "ask"];
   else if (G.pendingChoice === "kidfavour") pool = ["yes", "no", "ask"];
+  else if (G.pendingChoice === "sighting") pool = ["raise your glass", "go over"];
   else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "bkkdinner") pool = ["go", "decline"];
   else if (G.pendingChoice === "bkkbill") pool = ["let", "grab"];
@@ -11458,6 +11481,7 @@ function _renderResume() {
   if (G.pendingChoice === "rabbitjob") { _rabbitJobPrompt(); return; }
   if (G.pendingChoice === "kidprice") { _kidPricePrompt(); return; }
   if (G.pendingChoice === "kidfavour") { _kidFavourPrompt(); return; }
+  if (G.pendingChoice === "sighting") { _sightingPrompt(); return; }
   if (G.pendingChoice === "tanfavour") { _tanFavourPrompt(); return; }
   if (G.pendingChoice === "bkkdinner") { _bkkDinnerPrompt(); return; }
   if (G.pendingChoice === "bkkbill") { _say("The bill sits in its black folder, his card on top. (GRAB · LET)", "dim"); return; }
@@ -11776,6 +11800,13 @@ function doCommand(input) {
     if (/^(no|nope|never|decline|refuse|pass|sorry|don'?t)\b/.test(lower)) { _kidPriceNo(); return; }
     _say("Nont waits, phone face-down. (PAY \u00b7 NO \u00b7 ASK.)", "dim");
     _kidPricePrompt();
+    return;
+  }
+  if (G.pendingChoice === "sighting") {
+    if (/^(raise|glass|cheers|walk|walk on|leave|ignore|nothing|no)\b/.test(lower)) { _sightRaise(); return; }
+    if (/^(go over|go|over|approach|confront|talk|walk over|say)\b/.test(lower)) { _sightOver(); return; }
+    _say("She has not seen you yet. Decide.", "dim");
+    _sightingPrompt();
     return;
   }
   if (G.pendingChoice === "kidfavour") {
@@ -12705,6 +12736,10 @@ function doCommand(input) {
     case "report": case "file": _doReport(arg); break;
     case "complain": _doComplain(); break;
     case "cheers": case "toast": case "chon": _doCheers(); break;
+    // RAISE YOUR GLASS is the sighting's manners (theme 5) and, anywhere else, a toast — a
+    // plausible verb never dead-ends in "didn't understand"
+    case "raise": if (/\b(glass|bottle|beer|toast|drink)\b/.test(arg)) { _doCheers(); break; }
+      _say("Raise what? A glass, a toast — or your voice, which this town charges for."); break;
     case "tao": case "taorai": _doTaoRai(); break;
     // A standing loan has to be readable. With ฿402,500 outstanding and the
     // cousins collecting every dawn, typing LOAN answered "Nobody here is

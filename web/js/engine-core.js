@@ -1149,6 +1149,7 @@ function _npcActive(id) {
   // best story on the lake is only there if you get out to it early.
   if (n && n.until != null && G.nightTurn >= n.until) return false;
   if (n && n.sandbox && !_flag("act1Done")) return false; // not part of the opening quest's street
+  if (G.soc && G.soc.sightedOff && G.soc.sightedOff[id] === G.day) return false;   // seen tonight at a table three districts from her stool (theme 5)
   // sent home early on a shift call — off the rail for the rest of the night
   if (G.soc && G.soc.leftEarly && G.soc.leftEarly[id] === G.day) return false;
   // home for the harvest, or gone to Bangkok till the rain stops (essay ledger theme 8)
@@ -1775,6 +1776,12 @@ function _titleNorm(s) {
 function _findNpc(word) {
   const w = word.toLowerCase();
   const here = _npcsHere();
+  // a bare number on a go-go floor is a badge (theme 12): BARFINE 42, EXAMINE 42
+  if (/^(?:no\.?\s*|number\s*|#)?(\d{1,3})$/.test(w) && typeof _badge === "function") {
+    const num = +w.match(/(\d{1,3})$/)[1];
+    const hit = here.find(id => _badge(id) === num);
+    if (hit) return hit;
+  }
   // exact id or exact name first (so "oy" is Madam Oy, not Pl-OY)
   for (const id of here) {
     if (id === w || NPCS[id].name.toLowerCase() === w) return id;
@@ -2482,7 +2489,9 @@ function _describeRoom(full, forceFull) {
   // a girl on your arm is not "on the floor" — the roster listed her back among
   // the staff in her own bar the moment after "one arm through yours" (Lars, round 47)
   const _onArm = id => G.party && G.party.ids && G.party.ids.includes(id);
-  const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}${_onArm(id) ? " (with you)" : ""}`);
+  const _badgeOf = id => typeof _badge === "function" && _room().barType === "gogo" ? _badge(id) : null;   // the floor knows her by the number (theme 12)
+  // a girl on your arm has unpinned the number — she is with you, not on the board
+  const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}${_onArm(id) ? " (with you)" : _badgeOf(id) ? " (" + _badgeOf(id) + ")" : ""}`);
   if (here.length) _say(_L("Here: ") + here.join(", ") + ".");
   // A punter knows the mama and the cashier the moment he sits down — the game
   // didn't say, and a man bought eight lady drinks for two cashiers and a

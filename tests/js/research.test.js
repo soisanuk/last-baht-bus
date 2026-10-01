@@ -192,3 +192,70 @@ test("money-asks with memory: an honest woman never asks for the same thing twic
   assert.equal(_askBias("pae"), Math.min(0.2, G.soc.given.pae / 5000)); G.soc.given.pae = 9000; assert.equal(_askBias("pae"), 0.2);
   out = []; run("who"); assert.match(said(), /Pae .*asked 2× \(฿\d+\), 1 answered/);
 });
+
+// ── Theme 12: the badge, and the drinks-only class ───────────────────────────
+test("go-go badge numbers: day-stable, unique per bar, in her desc and on the Here: line, a target the parser takes, and armour at close range", () => {
+  const badged = Object.keys(NPCS).filter(i => _badge(i));
+  assert.ok(badged.length >= 30 && badged.every(i => NPCS[i].filler && ROOMS[NPCS[i].room].barType === "gogo"));
+  const byRoom = {};
+  for (const i of badged) (byRoom[NPCS[i].room] = byRoom[NPCS[i].room] || []).push(_badge(i));
+  for (const r in byRoom) assert.equal(new Set(byRoom[r]).size, byRoom[r].length, "unique in " + r);
+  assert.ok(Object.keys(NPCS).every(i => _badge(i) === null || ROOMS[NPCS[i].room].barType === "gogo"), "beer bars have no badges");
+  const g = badged.find(i => _npcWhere(i) === NPCS[i].room); const b = _badge(g);
+  assert.match(NPCS[g].desc, new RegExp("badge pinned at her hip says " + b));
+  G.room = NPCS[g].room; G.nightTurn = 30; out = []; _describeRoom(true);
+  assert.match(said(), new RegExp("Here: .*" + NPCS[g].name + " \\(" + b + "\\)"));
+  assert.equal(_findNpc(String(b)), g); assert.equal(_findNpc("number " + b), g);
+  out = []; run("examine " + b); assert.match(said(), /badge pinned at her hip/);
+  out = []; run("ask " + g + " about number"); assert.ok(_BADGE_FAR.some(l => said().includes(l.slice(0, 30))), "for the board, to a stranger");
+  G.soc.drinks[g] = 8; out = []; run("ask " + g + " about " + b); assert.ok(_BADGE_NEAR.some(l => said().includes(l.slice(0, 30))), "armour, to a regular");
+});
+test("the drinks-only girl: ~15% of the floor by hash, her no is hers and voiced before the tariff, her drink credits double, her ledger says why", () => {
+  const fillers = Object.keys(NPCS).filter(i => NPCS[i].filler && NPC_ROLES[i] === "hostess");
+  const dOnly = fillers.filter(_drinksOnly);
+  const share = dOnly.length / fillers.length;
+  assert.ok(share > 0.08 && share < 0.24, "share " + share);
+  assert.ok(dOnly.every(i => !POPULAR_GIRLS.includes(i)));
+  const d = dOnly.find(i => _npcWhere(i) === NPCS[i].room && ROOMS[NPCS[i].room].barType === "beer");
+  G.room = NPCS[d].room; G.money = 9000; G.nightTurn = 30;
+  out = []; run("barfine " + d); assert.match(said(), /drink only/); assert.equal(G.soc.bfRefused[d].kind, "drinksonly"); assert.ok(!G.pendingBf);
+  out = []; run("ask " + d + " about price"); assert.match(said(), /Drink only|drink girl|not go/);
+  const saved = _rand; _rand = () => 0.99;
+  try {
+    const b0 = G.soc.drinks[d] || 0; out = []; run("buy lady drink for " + d);
+    assert.equal(G.soc.drinks[d], b0 + 2, "the drink is the whole job");
+  } finally { _rand = saved; }
+  G.soc.drinks[d] = 3; G.soc.ledger = {}; out = []; _otherLedger(d);
+  assert.ok(_LEDGER_DRINKS_ONLY.some(f => said().includes(f(NPCS[d].name).slice(0, 40))), said());
+  // she does not offer what she does not sell
+  G.nightTurn = 70; G.soc.goWith = {}; out = []; _maybeSelfBarfine(d); assert.ok(!G.pendingEnc && !(G.soc.goWith[d]));
+});
+
+// ── Theme 5: the sighting ────────────────────────────────────────────────────
+test("the sighting: money sent on 'mama sick', and tonight she is at a table in another district — raise your glass, or go over", () => {
+  G.phone.contacts = { noi: true }; G.phone.asks = { noi: [{ kind: "hospital", amt: 300, day: 1, paid: true, paidDay: 1 }] };
+  G.nightTurn = 40; G.soc.barTurns = {};
+  let day = null; for (let d = 2; d < 60; d++) if (_hh("noi:" + d + ":" + G.vacation + ":sight", 151) % 100 < 30) { day = d; break; }
+  G.day = 2; assert.equal(_sightingDue("buakhao_klang"), null, "a day she is at work");
+  // only inside the window after the money, and only kinds that put her up-country
+  G.day = day; G.phone.asks.noi[0].paidDay = day - 5; assert.equal(_sightingDue("buakhao_klang"), null, "the window closed");
+  G.phone.asks.noi[0].paidDay = day - 1; G.phone.asks.noi[0].kind = "rent"; assert.equal(_sightingDue("buakhao_klang"), null, "rent does not take her home");
+  G.phone.asks.noi[0].kind = "hospital";
+  assert.equal(_sightingDue(_npcRoom("noi")), null, "never in her own bar"); assert.equal(_sightingDue("ws_gate"), null, "nor her own district");
+  assert.equal(_sightingDue("buakhao_klang"), "noi");
+  G.soc.drinks.noi = 9; G.rep = 3; G.room = "buakhao_klang"; out = []; _arriveAt("buakhao_klang");
+  assert.equal(G.pendingChoice, "sighting"); assert.ok(_SIGHT_SCENE.some(l => said().includes(_fmt(l, { n: "Noi" }).slice(0, 40))));
+  assert.ok(!_npcActive("noi"), "not on her floor tonight");
+  assert.deepEqual(_chipSet().map(c => c.c || c), _chipSet().map(c => c.c || c));   // wired: chips exist
+  assert.ok(JSON.stringify(_chipSet()).includes("raise your glass") && JSON.stringify(_chipSet()).includes("go over"));
+  out = []; run("go over"); assert.equal(G.pendingChoice, null);
+  assert.ok(_SIGHT_OVER.some(l => said().includes(l.slice(0, 40)))); assert.equal(G.rep, 2); assert.equal(G.soc.drinks.noi, 6, "a face from here");
+  assert.equal(G.phone.cut.noi, G.vacation); assert.equal(_moneyAsk("noi"), null, "she never asks you again");
+  // the other move: nothing said, nothing lost but the asks
+  G.soc.sighting = null; G.pendingChoice = null; delete G.phone.cut.noi; delete G.phone.noAsk.noi; G.soc.drinks.noi = 9; G.rep = 3;
+  _sighting("noi"); out = []; run("raise your glass");
+  assert.ok(_SIGHT_RAISE.some(l => said().includes(l.slice(0, 40)))); assert.equal(G.rep, 3); assert.equal(G.soc.drinks.noi, 9);
+  assert.ok(G.phone.noAsk.noi && !G.phone.cut.noi);
+  // a reload redraws the question
+  _sighting("noi"); out = []; _renderResume(); assert.match(said(), /RAISE YOUR GLASS/);
+});

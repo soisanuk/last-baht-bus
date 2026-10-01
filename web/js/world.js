@@ -16890,6 +16890,40 @@ function _storyPick(room, axis, pool, start) {
   for (let n = 0; n < pool.length && taken.has(i); n++) i = (i + 1) % pool.length;
   return i;
 }
+// GO-GO BADGE NUMBERS (essay ledger theme 12, 2026-10-01). A go-go dancer wears a
+// number, and the number is not a brand — it is armour: what happens on the floor
+// happens to the number, and she unpins it at dawn. Day-stable per girl (pure hash),
+// unique within her bar (walk to the next free one, never re-roll), printed in her
+// desc and on the Here: line, and a target the parser takes (BARFINE 42, EXAMINE 42).
+function _badge(id) {
+  const n = NPCS[id];
+  if (!n || !n.filler || !ROOMS[n.room] || ROOMS[n.room].barType !== "gogo") return null;
+  if (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] !== "hostess") return null;
+  const used = new Set();
+  for (const g of Object.keys(NPCS)) {
+    const m = NPCS[g];
+    if (!m.filler || m.room !== n.room || (typeof NPC_ROLES !== "undefined" && NPC_ROLES[g] !== "hostess")) continue;
+    let b = 1 + _hh(g + ":badge", 139) % 199;
+    while (used.has(b)) b = b % 199 + 1;
+    used.add(b);
+    if (g === id) return b;
+  }
+  return null;
+}
+// THE DRINKS-ONLY CLASS (theme 12's sibling, from the lady-drink economics essays): the
+// bar runs on drinks, not barfines, and a growing share of the floor works drinks only —
+// the girl, not mama, decides whether she leaves, and this one has decided. ~15% of the
+// filler floor by pure hash, never a bar's draw. Her barfine is a voiced no that is HERS
+// (she is in the changing room by the time mama looks up), her lady drink credits double,
+// and her tier-one ledger reveal says why.
+function _drinksOnly(id) {
+  const n = NPCS[id];
+  if (!n || !n.filler || n.owner) return false;
+  if (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] !== "hostess") return false;
+  if (typeof POPULAR_GIRLS !== "undefined" && POPULAR_GIRLS.includes(id)) return false;
+  return _hh(id + ":drinksonly", 157) % 100 < 15;
+}
+
 function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(seed, salt) % arr.length];
@@ -16977,7 +17011,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
     name, th, emoji, room, filler: true, storyIdx: { family: famIdx, plan: planIdx },
     ...(green ? { c4: 2 } : {}),
     ...(selfies ? { selfies } : {}),
-    desc: `${look} — one of ${/s$/.test(bar) ? bar + "'" : bar + "'s"} girls, from ${from}. ${phone}`,   // "Mama Yai's' girls", not "Mama Yai's's" (Stan, r35)
+    desc: `${look} — one of ${/s$/.test(bar) ? bar + "'" : bar + "'s"} girls, from ${from}.${ROOMS[room] && ROOMS[room].barType === "gogo" ? " The badge pinned at her hip says " + (1 + _hh(id + ":badge", 139) % 199) + " — the number the floor knows her by." : ""} ${phone}`,   // "Mama Yai's' girls", not "Mama Yai's's" (Stan, r35)
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29),
         asks: idx(ASK, 47) },
@@ -17001,6 +17035,19 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
       // every bar on Beach Road (Lionel, round 36). The global rule folds how
       // much / take you / my hotel / short time / long time into "price"; the two-
       // fee canon in her own mouth: mama's fine, then hers.
+      // the drinks-only girl answers the trade's question with her own rule — hers, not mama's
+      { topic: "price", when: () => typeof _drinksOnly === "function" && _drinksOnly(id),
+        text: idx([
+          `"Take me?" A smile with the door shut behind it. "I not go, tilac. Drink only." She says it the ` +
+            `way you'd say your shoe size. "Mama know. Customer know after I tell them. Now you know." She ` +
+            `lifts her glass an inch. "This one is my work. All of it."`,
+          `"Barfine?" She shakes her head before the word is finished, not unkind. "Not me, na. I sit, I talk, ` +
+            `I drink with you — that is the job I do. Other girl go. I go home, alone, every night, same ` +
+            `same." A shrug. "Is good. Buy me one more and I tell you why."`,
+          `"No, na." Quick, pleasant, final. "I am drink girl. Mama has girl who go; I am not that girl." She ` +
+            `taps the rim of her glass. "This is my price. Only this."`,
+        ], 61),
+        short: `"I not go, tilac. Drink only. You know already."` },
       { topic: "price",
         text: idx([
           `"Take me?" She does not pretend to be surprised. "Ask Mamasan for the bar — the barfine, na. ` +

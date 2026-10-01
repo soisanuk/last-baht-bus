@@ -3732,6 +3732,18 @@ const _OTHER_LEDGER = {
 // ledger you have not been shown. Once per girl per tier, ever — it is a reveal,
 // not a repeatable line. Deliberately on TALK (you sat with her) rather than on
 // the bond crossing itself: an earned interstitial, in her mouth, in the room.
+// the drinks-only girl's tier-one reveal: the cut is the same, the conclusion is hers
+const _LEDGER_DRINKS_ONLY = [
+  (n) => `${n} folds your chit into her phone case with the others, and when you look at the stack ` +
+    `she fans it for you. "This is my money. ฿${LADY_CUT}, each." She counts, lips moving, stops. ` +
+    `"Eight tonight. Other girl, she go with customer, she get more — one time. Then he go home, ` +
+    `and she sit here same like me, with no chits." She taps the stack. "I like the small money that ` +
+    `come every night. Mama not like it. Mama not sit here."`,
+  (n) => `"You know why I not go?" ${n} turns the chit so you can see the stamp. "Barfine, the bar take. ` +
+    `Lady money, I take, one time. Lady DRINK, I take ฿${LADY_CUT} — every time." She lifts the glass. ` +
+    `"Every time is more than one time. I can count. Mama can count too, but mama count different ` +
+    `things."`,
+]
 function _otherLedger(id) {
   if (!NPC_ROLES[id] || !G.soc.drinks) return false;
   // THE OTHER LEDGER IS A CUSTOMER'S BEAT. All three tiers fired on the owner's own
@@ -3749,7 +3761,7 @@ function _otherLedger(id) {
   const due = [1, 2, 3].find(x => x <= t && !seen.includes(x));
   if (!due) return false;
   _ledgerFor = id;                       // the tier-2 beat reads tonight's real drink count (Stan, r35: "two" after eight)
-  const pool = _OTHER_LEDGER[due];
+  const pool = due === 1 && typeof _drinksOnly === "function" && _drinksOnly(id) ? _LEDGER_DRINKS_ONLY : _OTHER_LEDGER[due];
   if (!pool) return false;
   seen.push(due);
   G.ledgerSeen = (G.ledgerSeen || 0) + 1;   // how much of the other side you've been shown

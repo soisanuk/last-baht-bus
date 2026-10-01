@@ -866,6 +866,7 @@ function _bfDayRefusal(id) {
     return G.soc.bfRefused[id];
   };
   if (_maiDee(id)) return keep("maidee");   // the verdict comes before the calendar: a no with nothing in it to negotiate (theme 6)
+  if (typeof _drinksOnly === "function" && _drinksOnly(id)) return keep("drinksonly");   // hers, not mama's — and not the tariff's (theme 12)
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
   if (life < 10) return keep(life < 5 ? "period" : "temple");
@@ -884,6 +885,7 @@ function _bfRefusal(id, bt) {
     return G.soc.bfRefused[id];
   };
   if (_maiDee(id)) return keep("maidee");   // the verdict: a no with nothing in it to negotiate (theme 6)
+  if (typeof _drinksOnly === "function" && _drinksOnly(id)) return keep("drinksonly");
   // SOMEBODY HAS TO STAND HERE. A one-woman bar's owner cannot leave with you,
   // and the reason is a rota rather than a virtue: there is no mamasan to cover
   // and no cashier to hold the till (Mario, round 43 — "who runs the bar if that
@@ -966,6 +968,11 @@ function _bfRefusalSay(id, r) {
     sponsor: `${name} touches your arm, honestly sorry: “Cannot now, tilac. My ` +
       "friend — he take care me, I no working while he in town. You " +
       "understand, na?” Everyone understands. It's a calendar, not a heartbreak.",
+    drinksonly: `${name} is already off the stool — not to the till, to the changing room, with your ` +
+      "glass still half full on the bar — and the mamasan, looking up a beat later, finds the " +
+      "question with nobody to put it to. “That one, drink only,” she says, as if you had asked " +
+      "the price of the ceiling. “She decide. Not me.” A minute later " + name + " is back beside " +
+      "you, cheerful, and the subject has never existed. (She will take another drink.)",
     maidee: `${name} hears the question all the way to the end, politely, and says “No, ` +
       "thank you,” the way you would decline a second helping. No number, no mamasan, no " +
       "reason offered, because the reason was in front of a whole bar and everybody in it " +
@@ -2118,6 +2125,7 @@ function _maybeGoWithYou(id) {
   if (_atOwnBar()) return;                        // your own staff don't proposition you out of your own till
   if (G.party && G.party.ids && G.party.ids.includes(id)) return; // she's already yours tonight
   if (NPC_ROLES[id] !== "hostess") return;
+  if (typeof _drinksOnly === "function" && _drinksOnly(id)) return;   // she does not go, so she does not offer (theme 12)
   if (_hasSponsor(id) && _sponsorInTown(id)) return;   // "I go with you, na" from a girl who is not working this week (Lars, round 47)
   if ((G.soc.heat[G.room] || 0) > 0) return;
   if (G.soc.goWith && G.soc.goWith[id]) return;
@@ -2145,6 +2153,7 @@ function _maybeSelfBarfine(id) {
   if (G.party && G.party.ids && G.party.ids.includes(id)) return; // she is out with you, not on shift
   if (G.nightTurn < 60) return;                 // the thought arrives after midnight
   if (NPC_ROLES[id] !== "hostess") return;
+  if (typeof _drinksOnly === "function" && _drinksOnly(id)) return;   // theme 12
   if (_queerVenue()) return;                    // the cabaret has no barfine to self-pay
   if ((G.soc.heat[G.room] || 0) > 0) return;
   if (G.soc.selfBf) return;                     // one such offer per night, city-wide
@@ -4916,7 +4925,8 @@ function _maybeIncomingText() {
   // girl-voiced through and through — Tan (no NPC_ROLES entry) texts back when
   // texted, never into the mama-sick patter
   let contacts = Object.keys(G.phone.contacts).filter(_texts)   // "a contact who texts", not "works a bar floor" (Judith, round 47: Priew never sent one)
-    .filter(id => !_maiDee(id));   // …and never again from a woman who has decided (theme 6)
+    .filter(id => !_maiDee(id))   // …and never again from a woman who has decided (theme 6)
+    .filter(id => !(G.phone.cut && G.phone.cut[id] === G.vacation));   // …nor, this trip, from the one you went over to (theme 5)
   // the affair's endings reach the phone too (Frank, 2026-08-26: the in-love
   // text pool kept sending the morning after she left). Gone is gone — silence
   // is her whole statement. Won gets its own register: Prachuap, not a barstool.
@@ -5199,6 +5209,7 @@ const _ASK_KINDS = [
 function _askScripted(id) { return _hh(String(id) + ":script", 127) % 100 < 30; }
 function _askBias(id) { return Math.min(0.2, ((G.soc.given && G.soc.given[id]) || 0) / 5000); }   // the generous man is the first number called
 function _moneyAsk(id) {
+  if (G.phone.noAsk && G.phone.noAsk[id]) return null;   // the sighting ended that without a word (theme 5)
   const book = (G.phone.asks = G.phone.asks || {});
   const mine = (book[id] = book[id] || []);
   const scripted = _askScripted(id);
@@ -5222,7 +5233,7 @@ function _moneyAsk(id) {
 function _askPaid(id, amt) {   // the newest unpaid ask this money covers, marked
   const mine = (G.phone.asks && G.phone.asks[id]) || [];
   for (let i = mine.length - 1; i >= 0; i--) {
-    if (!mine[i].paid && amt >= mine[i].amt) { mine[i].paid = true; return mine[i]; }
+    if (!mine[i].paid && amt >= mine[i].amt) { mine[i].paid = true; mine[i].paidDay = G.day; return mine[i]; }
   }
   return null;
 }
@@ -5251,6 +5262,76 @@ function _maiDeeFloor(to) {
   if (said[to]) return;
   said[to] = true;
   _say(_pickVary(_MAI_DEE_FLOOR, "maideefloor"), "dim");
+}
+
+// THE SIGHTING (theme 5). You sent money on "mama sick, i go home", and tonight, in a
+// district that isn't hers, she is at a table outside a venue with another farang — not
+// at work, not at home. Placed by pure hash in a street room you walk into, prose only,
+// once a night, never while she is on your arm. Two moves and no third: RAISE YOUR
+// GLASS (nothing is said, and from here she never asks you for money again — the
+// contract ended without a word, which is how most of them end) or GO OVER (a blank
+// stare, the man beside her looking at you, your name on the soi a notch lower, the
+// bond down to a face, and her phone quiet for the rest of the trip). Neither is
+// moral-graded: one is the town's manners and the other is a man's, and the essays
+// are clear that the first costs less. A sighted woman is off her floor for the night.
+const _SIGHT_SCENE = [
+  "Outside a bar you were not going into, at a plastic table under the awning, {n}. Not her bar, not her district, not — as of a text two days ago — even her town: she was going home to her mother. She is in a dress you have not seen, and the farang across the table is somebody you have not seen either, and he is laughing at something she said.",
+  "You clock the laugh before the face. {n}, at the kerb table of a place three districts from her stool, hair down, a tall drink with fruit in it, a man's hand flat on the table near hers. Two days ago her mother was in hospital and you sent the money. Her mother is not here. Neither, exactly, is the woman you sent it to.",
+  "{n}. Here. Not in the bar you know her from and not up-country where the text said, but at a street table with a beer she is not working for and a farang who is not you, both of them easy in the way of people who have done this before. She has not seen you. She is going to.",
+];
+const _SIGHT_RAISE = [
+  "You lift your bottle an inch, from where you are. She sees it. For half a second her face does nothing at all, which is its own answer, and then she gives you the smallest nod a person can give and turns back to her table. Nobody says anything. Nobody ever will. (Whatever that was, it is over, and it ended politely.)",
+  "You raise your glass to her and keep walking. She returns it — one tilt of the tall drink, no smile, no alarm — and that is the entire conversation. Her mother is fine, probably. Yours would be too. (She will not ask you for money again. You will not ask her anything.)",
+];
+const _SIGHT_OVER = [
+  "You go over. She looks up as you arrive and her face is a locked door — not guilty, not caught, simply closed, the look a woman gives a stranger who has walked up to her table. The man beside her looks at you, then at her, then back at you, and puts his hand on the back of her chair. “Sorry?” she says, in the English she uses on first nights. Somebody at the next table has stopped talking to watch. You are the only person here who thinks anything has happened.",
+  "You walk up and say her name. She does not stand, does not smile, does not do the thing with her eyes. “You know me?” Pleasant, puzzled, in front of the man and in front of the whole kerb. The man half-rises. There is a way to leave this with your face and it is backwards, now, saying nothing — you take it, and the street watches you take it.",
+];
+function _sightingDue(to) {
+  if (!_flag("act1Done") || G.pendingChoice || G.pendingEnc || G.game) return null;
+  if (G.party && G.party.ids && G.party.ids.length) return null;
+  if (G.mode === "soi6") return null;
+  const r = ROOMS[to];
+  if (!r || r.barType || r.dark || !(r.venues || r.seven || r.motosai)) return null;
+  if (G.nightTurn < 20 || G.soc.sighting) return null;
+  for (const id of Object.keys(G.phone.contacts || {})) {
+    if (!G.phone.contacts[id] || !NPC_ROLES[id] || !NPCS[id] || _maiDee(id)) continue;
+    const asks = (G.phone.asks && G.phone.asks[id]) || [];
+    const paid = asks.find(a => a.paid && a.paidDay != null && G.day - a.paidDay >= 1 && G.day - a.paidDay <= 3 &&
+      /^(medicine|hospital|papa|buffalo)$/.test(a.kind));
+    if (!paid) continue;
+    const home = _npcRoom(id);
+    if (!ROOMS[home] || ROOMS[home].region === r.region) continue;
+    if ((G.soc.barTurns || {})[home]) continue;   // you sat in her bar tonight — she was there
+    if (_hh(id + ":" + G.day + ":" + G.vacation + ":sight", 151) % 100 >= 30) continue;
+    return id;
+  }
+  return null;
+}
+function _sighting(id) {
+  G.soc.sighting = id;
+  (G.soc.sightedOff = G.soc.sightedOff || {})[id] = G.day;   // not on her floor tonight — she is here
+  G.sighting = { id, room: G.room };
+  G.pendingChoice = "sighting";
+  _say(_fmt(_pickVary(_SIGHT_SCENE, "sightscene"), { n: NPCS[id].name }), "alert");
+  _sightingPrompt();
+}
+function _sightingPrompt() {
+  _say("(RAISE YOUR GLASS — and walk on · GO OVER.)", "dim");
+}
+function _sightRaise() {
+  const id = G.sighting.id; G.pendingChoice = null; G.sighting = null;
+  (G.phone.noAsk = G.phone.noAsk || {})[id] = true;
+  _say(_pickVary(_SIGHT_RAISE, "sightraise"));
+}
+function _sightOver() {
+  const id = G.sighting.id; G.pendingChoice = null; G.sighting = null;
+  (G.phone.noAsk = G.phone.noAsk || {})[id] = true;
+  (G.phone.cut = G.phone.cut || {})[id] = G.vacation;
+  G.soc.drinks[id] = Math.min(G.soc.drinks[id] || 0, 6);   // a face, from here
+  _repHit(1);
+  _say(_pickVary(_SIGHT_OVER, "sightover"), "alert");
+  _say("(The soi saw a man make a scene at a stranger's table. Her phone will be quiet for the rest of the trip.)", "dim");
 }
 
 // ── The news ─────────────────────────────────────────────────────────────────
