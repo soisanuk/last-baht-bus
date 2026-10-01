@@ -64,6 +64,49 @@ reliable place in the game to build bond", which makes it exactly the right plac
 one. A number leaving the roster is a spreadsheet; a woman you know giving you her notice is
 the scene. That is the whole reason this should hurt.
 
+### 3b. The floor is the asset, and the terms are the second lever (added 2026-10-01)
+
+A second essay from the same source (2026-10-01, "why Western KPIs fail here" — names
+nobody, structure only) sharpens phase 3 from the owner's side. **The bar's asset is not
+its punters; it is its women.** A good hostess is an independent channel with her own
+following — the regulars are hers before they are the bar's — and when she goes, she takes
+a share of the rail to the next door along. So the owner who manages by **quota, fine and
+price rise** (the imported playbook: sixty drinks a week or a deduction) drives out exactly
+the staff the takings came from, and reads the drop as a reason for a tighter quota. The
+owner who pays a **flat salary with no quota** keeps them, at a visible cost on the wages
+line.
+
+That makes the lever two-headed, which is what keeps it from being a button with one
+right answer: **prices** (phase 2) move the punters, **terms** move the women, and both are
+locally correct and globally fatal. The quota is the right call for one thin month — the
+numbers go up — and the reason two of the floor are at the bar opposite by the next.
+
+The pieces already exist as her ledger's numbers and nothing the owner decides touches
+them: `BAR_SALARY` and `BAR_QUOTA` are quoted in the tier-two reveal (the cost of you),
+`LADY_CUT` is the commission the whole floor lives on, and `_barStaff()`/`_npcActive` are
+where a departure lands. What a build adds:
+
+- **`G.bar.terms`** — `commission` (today's model: `BAR_SALARY` base, `LADY_CUT` a drink,
+  `BAR_QUOTA` before a bonus) or `salary` (a flat figure per woman per month on the wages
+  line, no quota, her lady drinks still ring to the till). Set by a verb at your own bar,
+  stated by Bert at the deposit the way the lease is stated, re-settable monthly.
+- **A quota the owner can tighten** (`G.bar.quota`), with the fine for a miss that the essay
+  names as the characteristic mistake — and the floor's reaction is the women's own
+  arithmetic, not a morale meter: a woman whose commission fell below what the bar opposite
+  pays leaves, after her notice (§3), and **takes a day-stable share of the rail with her**
+  — a named line in BOOKS ("Mew's regulars, three of them, drink across the road now") and a
+  takings drop the next settle, so the owner sees the mechanism and not a number.
+- **A woman with a following** — a stable hash-picked minority of the filler floor (the
+  essay's two-hundred-thousand-follower dancer is the extreme; most have a LINE group of
+  twenty regulars), readable in her desc and on her phone, worth more rail than the others
+  when she stays and more when she goes. The drinks-only girl (`_drinksOnly`) is already
+  the shape of this: her money is the drink, and she decides.
+
+Everything in **What NOT to build** applies. In particular the salary route must not be the
+answer: it is a bigger wages line every night of the wet, and an owner who pays it in the
+trough is the one in phase 4. The point is the same as the presence dilemma — you pay either
+way, and the only question is in which currency.
+
 ### 4. Money at a punitive rate (phase 4)
 
 Extend the existing shape rather than invent a lender. The note-holder will not; **Nont is
@@ -109,4 +152,5 @@ every player sees the same street.
 |---|---|
 | 2026-09-23 | Source read and checked against `docs/guardrails.md`: names nobody, describes no specific real event, structure only — safe to take. Prose is ours. |
 | 2026-09-23 | Scoped against the codebase: phases 1–3 missing, 4 partial, 5 built. The gap is the causal spine, not the ending. |
+| 2026-10-01 | Second essay read (the owner's KPIs): the floor is the asset, a leaving woman takes her regulars, and TERMS is the second lever beside prices — §3b. Names nobody; nothing of its prose taken. Still unbuilt, same go/no-go. |
 | — | **OPEN:** the four questions above, and whether this is built at all before the intrusion layer. |
