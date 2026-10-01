@@ -225,6 +225,39 @@ const SEASON_PARTY_BUMP = { peak: 0.75, high: 0.5, shoulder: 0, low: -0.5, deepl
 // สนุก, the encounters and the relationships live — and the hedonic treadmill
 // means a player who only ever works stops gaining happiness at all. A player
 // who never works watches the takings drift and the girls quietly leave.
+// THE BAR THAT CLOSED NEXT DOOR (docs/bar-failure-cycle.md, built 2026-10-01 on Mario's
+// "apply the numbers as you see fit"). Losing the bar was arithmetic; these make it a
+// decision. The landlord reassesses every BAR_RENT_REVIEW days against your trailing take
+// and raises on SUCCESS (never on failure, never lowers) by BAR_RENT_RISE, capped at
+// BAR_RENT_CAP so a good operator can live under it indefinitely. The owner's two levers:
+// PRICES (BAR_MARKUPS — the take per customer against the traffic through the door, and
+// the women's commission rides the traffic) and TERMS (commission, today's model, or a
+// flat salary at BAR_SALARY_NIGHT more on the wages line, under which nobody leaves over
+// the drinks). Under commission a woman whose month ran under BAR_FLOOR_FLOOR of a list
+// month gives notice, BAR_NOTICE_DAYS to change her mind, and when she goes she takes
+// BAR_RAIL_SHARE of the rail with her for BAR_RAIL_DAYS. Phase four is Nont's bar loan:
+// NONT_LOAN_RATE on the principal and NONT_LOAN_GARNISH of every night's take until it is
+// clear — he is the creditor who does chase. The bar opposite walks the whole cycle on
+// its own OPP_CYCLE-day clock, visible from your doorway, and starts again with a new man.
+const BAR_RENT_REVIEW  = 90;     // days between the landlord's looks at your frontage
+const BAR_RENT_RISE    = 0.15;   // what a good quarter costs you, each time
+const BAR_RENT_CAP     = 1.6;    // …and the most it can ever reach, over the base
+const BAR_RENT_GOOD    = 1.25;   // trailing nightly take over an ordinary half-stood list-price night that reads as success — the every-night man, or a raised board in season; never the alternating operator (a year at 1.08 lost the bar to three rises and the trough)
+const BAR_MARKUPS = {            // take per customer × punters through the door; her commission rides the second
+  cheap: { mult: 0.90, traffic: 1.08 },
+  list:  { mult: 1.00, traffic: 1.00 },
+  up:    { mult: 1.15, traffic: 0.90 },
+  steep: { mult: 1.30, traffic: 0.75 },
+};
+const BAR_SALARY_NIGHT = 500;    // flat terms: on the wages line every night, wet or dry
+const BAR_FLOOR_FLOOR  = 0.92;   // a month's traffic under this, on commission, and one of them gives notice
+const BAR_NOTICE_DAYS  = 7;      // the days she gives you to change her mind
+const BAR_RAIL_SHARE   = 0.07;   // the rail that drinks across the road with her
+const BAR_RAIL_DAYS    = 90;     // …until her regulars drift back, or don't
+const NONT_LOAN_RATE   = 0.10;   // Nont's money for the bar: ten percent on the day
+const NONT_LOAN_MAX    = 50000;
+const NONT_LOAN_GARNISH = 0.25;  // of every night's take, off the top, until he is paid
+const OPP_CYCLE        = 180;    // the bar opposite: five phases of thirty-six days, then a new man
 const WORK_TAKINGS = 1.35;     // your own rail, your own room
 const AWAY_TAKINGS = 0.72;     // Bert is good, but Bert is not the owner
 const WORK_SANUK   = 2;        // the satisfaction of a night's decent trade

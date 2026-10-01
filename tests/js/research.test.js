@@ -319,3 +319,94 @@ test("Preeda at the Lucky Charm: back from a Belgian winter, and she chooses now
   G.room = _npcRoom("helmut"); G.day = 2; while (!_npcActive("helmut")) G.day++;
   out = []; run("ask helmut about wife"); assert.match(said(), /I cannot find the error/);
 });
+
+// ── Theme 10: the bar that closed next door ──────────────────────────────────
+function _owner() {
+  G.stage = "expat"; for (const f of ["expatLife", "barPartner", "partnerCandy", "barPaid", "barOpen"]) _setFlag(f);
+  G.day = 10; G.bar.lastMonthDay = 10; G.bar.owed = 1680000; G.bar.cash = 30000; G.bar.lease = { paid: true }; G.money = 20000; G.bank = 50000;
+  Object.assign(G.bar, { rentUp: 0, takeLog: [], trafficLog: [], notice: null, gone: {}, months: 0, noticeDay: 0, markup: "list", terms: "commission", loan: null, arrears: 0, rentOwed: 0, rentShort: 0 });
+  G.room = "stinky_bar"; G.nightTurn = 30;
+}
+const _night = (stood) => { G.day++; if (stood) { G.bar.workedLast = true; G.bar.workedDay = G.day - 1; G.bar.stoodTurns = 40; } out = []; _barSettle(G.day - 1); return said(); };
+test("the landlord raises on success, never on a dead quarter, and the rise is capped", () => {
+  _owner(); const saved = _rand; _rand = () => 0.5;
+  try {
+    const base = _barRent();
+    let rose = null;
+    for (let i = 0; i < 95 && !rose; i++) { const t = _night(true); if (/from next month the room is/.test(t)) rose = { day: G.day, t }; }
+    assert.ok(rose, "a busy quarter, stood every night, and the daughter stays for a coffee");
+    assert.equal(G.bar.rentUp, BAR_RENT_RISE); assert.ok(_barRent() > base);
+    out = []; run("books"); assert.match(said(), /up 15% since you opened/);
+    // the alternating operator at list is NOT success — his rent never moves (the measured comfortable middle stays comfortable)
+    _owner(); for (let i = 0; i < 95; i++) _night(i % 2 === 0);
+    assert.equal(G.bar.rentUp, 0, "half the nights stood at list: ordinary, not busy");
+    _owner();
+    // a dead year never lowers it, and never raises it either
+    G.bar.rentUp = 0; G.bar.takeLog = []; G.season0 = 8; G.bar.cash = 400000;   // the trough, Bert's nights, a cushion so the quarter is dead and not fatal
+    for (let i = 0; i < 95; i++) _night(false);
+    assert.ok(!_flag("barLost")); assert.equal(G.bar.rentUp, 0, "nothing moves on a dead quarter");
+    // …and it caps
+    G.bar.rentUp = BAR_RENT_CAP - 1; G.bar.takeLog = new Array(60).fill(99999); G.bar.lastMonthDay = G.day - 30; G.bar.months = 2;
+    _night(true); assert.equal(G.bar.rentUp, BAR_RENT_CAP - 1, "a good operator lives under the cap");
+  } finally { _rand = saved; }
+});
+test("PRICES: the board moves the till and the traffic, the girls' money rides the traffic, and one of them gives notice — recoverable in her week, one-way after", () => {
+  _owner(); const saved = _rand; _rand = () => 0.5;
+  try {
+    out = []; run("prices"); assert.match(said(), /soi's own numbers/);
+    const beer0 = _beerPrice("stinky_bar"), lady0 = _ladyPrice("stinky_bar");
+    out = []; run("prices up"); assert.match(said(), /Fifteen on top/);
+    assert.ok(_beerPrice("stinky_bar") > beer0 && _ladyPrice("stinky_bar") > lady0, "the board moved");
+    assert.equal(_beerPrice("lucky_tiger"), beer0, "only your own board");
+    G.season0 = 3;   // the shoulder: no full rail to cover it
+    let noticed = null;
+    for (let i = 0; i < 70 && !noticed; i++) { _night(i % 2 === 0); if (G.bar.notice) noticed = G.bar.notice; }
+    assert.ok(noticed && NPCS[noticed.id].filler && NPC_ROLES[noticed.id] === "hostess", "a month under the floor on commission, and the one you know best says so");
+    // told on the floor, on a stood shift
+    G.bar.workedLast = true; G.bar.workedDay = G.day; G.bar.stoodTurns = 40; G.bar.floorTurn = -99; G.bar.floorN = 0; G.room = "stinky_bar";
+    out = []; _workFloor();
+    assert.ok(_NOTICE_FLOOR.some(l => said().includes(_fmt(l, { n: NPCS[noticed.id].name }).slice(0, 40))), said());
+    assert.ok(G.bar.notice.told);
+    out = []; run("books"); assert.match(said(), /has given notice/);
+    // the board back to list inside her week: she stays
+    out = []; run("prices list"); assert.match(said(), /does not say anything about her notice/);
+    for (let i = 0; i < BAR_NOTICE_DAYS; i++) _night(false);
+    assert.equal(G.bar.notice, null); assert.deepEqual(G.bar.gone, {}); assert.match(said(), /For now/);
+    // …and let run: she goes, and takes the rail with her
+    G.bar.noticeDay = 0; G.bar.markup = "steep"; G.bar.trafficLog = new Array(30).fill(0.75);
+    _night(false); G.bar.lastMonthDay = G.day - 30; _night(false);
+    assert.ok(G.bar.notice, "the next one"); const id = G.bar.notice.id;
+    for (let i = 0; i < BAR_NOTICE_DAYS + 1; i++) _night(false);
+    assert.ok(G.bar.gone[id], "gone"); assert.ok(!_npcActive(id)); assert.equal(_railLostOn(G.day), BAR_RAIL_SHARE);
+    out = []; run("books"); assert.match(said(), new RegExp("Across the road: " + NPCS[id].name));
+    out = []; run("prices list"); assert.ok(G.bar.gone[id], "one-way once she has gone");
+  } finally { _rand = saved; }
+});
+test("TERMS SALARY keeps the floor at a wage; Nont lends to the bar and takes it off the top; the bar opposite walks the cycle from your doorway; list prices in season are never a notice", () => {
+  _owner(); const saved = _rand; _rand = () => 0.5;
+  try {
+    out = []; run("terms salary"); assert.match(said(), /they stay/); assert.equal(_barTerms(), "salary");
+    G.bar.markup = "steep"; G.season0 = 3;
+    const wagesBefore = BAR_WAGES + BAR_MGR_NIGHT;
+    for (let i = 0; i < 70; i++) _night(false);
+    assert.equal(G.bar.notice, null, "nobody leaves over the drinks on a salary");
+    assert.equal(G.bar.lastLines.wages + (G.bar.lastLines.mgr || 0), wagesBefore, "BOOKS wages line (base)"); // the salary rides the night's `wages` return
+    // nothing unavoidable: list prices, commission, the cool months, half the nights stood — a season without a notice or a rise
+    _owner(); G.bar.terms = "commission"; G.bar.markup = "list"; G.season0 = 10;
+    for (let i = 0; i < 150; i++) _night(i % 2 === 0);
+    assert.ok(!G.bar.notice && !_flag("barLost")); assert.deepEqual(G.bar.gone, {}); assert.equal(G.bar.rentUp, 0);
+    // the bar opposite: five phases, one line each, then a new man
+    G.bar.oppStart = G.day; const seen = [];
+    for (let p = 0; p < 6; p++) { G.room = "stinky_bar"; out = []; _describeRoom(true); const t = said(); seen.push(t);
+      out = []; _describeRoom(true); assert.ok(!/Dane|Belgian/.test(said()), "once per phase"); G.day += OPP_CYCLE / 5; }
+    assert.ok(_OPP_LINES.every((pool, i) => pool.some(l => seen[i].includes(l.slice(0, 40)))), "each phase in order");
+    assert.ok(seen[5].includes(_OPP_NEW.slice(0, 40)), "then a new man, and the cycle again");
+    // Nont's money: ten percent on the day, a quarter of the take off the top
+    G.room = _npcRoom("nont"); G.nightTurn = 40; assert.ok(_nontHere());
+    const m0 = G.money; out = []; run("borrow 20000");
+    assert.equal(G.money, m0 + 20000); assert.equal(G.bar.loan.owed, 22000);
+    const t = _night(false); assert.match(t, /Nont's man took ฿\d+ off the top/); assert.ok(G.bar.loan.owed < 22000);
+    out = []; run("debt"); assert.match(said(), /Nont, for the bar/);
+    G.room = _npcRoom("nont"); G.money = 50000; out = []; run("repay"); assert.equal(G.bar.loan, null); assert.match(said(), /Square/);
+  } finally { _rand = saved; }
+});

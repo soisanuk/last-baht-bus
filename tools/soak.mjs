@@ -220,6 +220,8 @@ function liveSnap() {
     barMonths: b.months || 0, barCash: b.cash || 0,
     barRentOwed: b.rentOwed || 0, barLost: !!(G.flags && G.flags.barLost),
     barFloor: b.floorN || 0, barShiftAsked: !!b.shiftAsked,
+    barRentUp: b.rentUp || 0, barGone: Object.keys(b.gone || {}).length, barNotice: !!b.notice,
+    barOpp: Object.keys(b.oppSaid || {}).length, barNontLoan: !!(b.loan && b.loan.owed > 0),
     synAsked: Object.keys((G.syn && G.syn.asked) || {}).length,
     synDone: Object.keys((G.syn && G.syn.done) || {}).length,
     affairLive: !!(G.affair && !G.affair.ended),
@@ -293,6 +295,16 @@ const EFFECTS = [
   { id: "bar.shift.declared", modes: ["barowner"], hit: (a, b) => b.barDeclared > a.barDeclared },   // `worked` counts nights STOOD since round 54; declarations have their own counter
   { id: "bar.floor.moment",   modes: ["barowner"], hit: (a, b) => b.barFloor > a.barFloor },
   { id: "bar.shift.called",   modes: ["barowner"], hit: (a, b) => !a.barShiftAsked && b.barShiftAsked },
+  // the bar-failure cycle (docs/bar-failure-cycle.md, built 2026-10-01)
+  { id: "bar.opposite.seen",  modes: ["barowner"], hit: (a, b) => b.barOpp > a.barOpp },
+  { id: "bar.rent.rose",      modes: ["barowner"], hit: (a, b) => b.barRentUp > a.barRentUp,
+    why: "the landlord raises on SUCCESS — a trailing quarter over an ordinary list-price night — and a random walker stands too few shifts to post one inside ten nights" },
+  { id: "bar.notice.given",   modes: ["barowner"], hit: (a, b) => !a.barNotice && b.barNotice,
+    why: "a thin month on commission terms: the walker never sets PRICES, and at list in high season nobody gives notice — by design" },
+  { id: "bar.girl.gone",      modes: ["barowner"], hit: (a, b) => b.barGone > a.barGone,
+    why: "a notice let run its week: needs the board left up for a month and then seven more days" },
+  { id: "bar.nont.loan",      modes: ["barowner"], hit: (a, b) => !a.barNontLoan && b.barNontLoan,
+    why: "BORROW at Nont's Old Market table while owning the bar — two rooms and a verb the walker rarely lines up" },
   { id: "bar.shift.lapsed",   modes: ["barowner"], hit: (a, b) => b.barLapses > a.barLapses,
     why: "a shift declared and then not stood — correct behaviour, and the reason " +
       "declared and worked are allowed to differ" },

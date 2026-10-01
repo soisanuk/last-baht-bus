@@ -435,7 +435,9 @@ function newGame() {
     // from your pocket so a good week at the bar isn't the same as a good week.
     bar: { room: "stinky_bar",   // the bar you'd own — _atOwnBar compared G.room to a field nothing set, so every own-bar guard was dead in play (Keith, round 40)
       cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0,
-      workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 },
+      workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0,
+      // the bar-failure cycle (docs/bar-failure-cycle.md): the landlord's rises, your two levers, the women who left, Nont's money, the bar opposite
+      rentUp: 0, markup: "list", terms: "commission", gone: {}, notice: null, takeLog: [], trafficLog: [], loan: null, oppStart: 0, oppSaid: {} },
     affair: null,        // the staff affair (engine-systems) — null until she stays after close
     // procurement (engine-systems): the jobs put to you, the ones you took, the
     // friction of the ones you didn't. It lived only in a lazy init, so a save
@@ -1155,6 +1157,7 @@ function _npcActive(id) {
   // home for the harvest, or gone to Bangkok till the rain stops (essay ledger theme 8)
   if (typeof _awayForSeason === "function" && _awayForSeason(id)) return false;
   if (typeof _exited === "function" && _exited(id)) return false;   // she hit the thing she said, and went (theme 11)
+  if (G.bar && G.bar.gone && G.bar.gone[id]) return false;   // she gave you her notice, and you let it run (the bar-failure cycle)
   // the affair's endings take her off the floor for good: gone home to Isaan
   // after a break, or by the sea in Prachuap after the earned ending
   if (G.affair && G.affair.ended && (G.affair.gone || G.affair.won) && id === G.affair.id) return false;
@@ -2560,6 +2563,7 @@ function _describeRoom(full, forceFull) {
   // The Orchid good table: once Tan's near-confirmation has armed it, walking in
   // (or LOOKing) pays off the whole hidden-hub arc — see _tanOrchidReveal.
   if (G.room === "orchid_room") _tanOrchidReveal();
+  if (typeof _oppTick === "function") _oppTick();   // the bar opposite, seen from your own doorway
   const exits = Object.keys(r.exits);
   if (exits.length) _say(_L("Exits: ") + exits.join(", ") + ".", "dim");
   // A warning at the DOOR, not after you have walked through it. The only way
@@ -3193,7 +3197,8 @@ function _drinkMult(room) {
   // host club carry `drinks: <class>` instead of a barType, precisely so none
   // of the go-go apparatus (barfine, lady drinks, mamasan) reaches them.
   const t = r && (r.barType || r.drinks);
-  return (typeof DRINK_MULT !== "undefined" && DRINK_MULT[t]) || 1;
+  const base = (typeof DRINK_MULT !== "undefined" && DRINK_MULT[t]) || 1;
+  return base * (typeof _barMarkup === "function" ? _barMarkup(room || G.room) : 1);   // the owner's own board (the bar-failure cycle)
 }
 // `beerOff` is a room's authored discount — "the beer is ten baht cheaper than
 // town" was a claim two rooms made in their own prose while the till charged

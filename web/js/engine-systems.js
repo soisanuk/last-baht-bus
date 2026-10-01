@@ -13,7 +13,8 @@
 // except for the popular girls — and the flash joints just discount.
 function _barfinePrice(bt, id) {
   let base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : bt === "gents" ? BF_GENTS : BF_BEER;
-  const draw = _isDraw(id);
+  if (typeof _barMarkup === "function" && _barMarkup(G.room) !== 1) base = _round50(base * _barMarkup(G.room));   // the owner's board (the bar-failure cycle)
+  const draw = id ? _isDraw(id) : false;
   if (draw) base = _round50(base * 1.5); // a prized draw is worth more to the bar
   if (G.nightTurn < 30) return _round50(base * 1.5);
   if (G.nightTurn >= 60) {
@@ -160,6 +161,8 @@ function _doDebt() {
     lines.push(_fmt("The hotel: ฿{h} on the book. Nobody checks out of a debt.",
       { h: _num(G.hotelDebt) }));
   }
+  if (_barOwned() && G.bar && G.bar.loan && G.bar.loan.owed > 0)
+    lines.push(_fmt("Nont, for the bar: ฿{o}. He takes a quarter of every night off the top until it's square, and he does not need reminding.", { o: _num(G.bar.loan.owed) }));
   if (_barOwned() && G.bar && (G.bar.owed > 0 || G.bar.arrears > 0)) {
     lines.push(_fmt("The old man: ฿{o} left on the bar" +
       (G.bar.arrears > 0 ? ", and ฿{a} of it already late. He has not mentioned it." : "."),
@@ -176,6 +179,7 @@ function _doDebt() {
 }
 
 function _doBorrow(arg) {
+  if (_nontHere() && _barOwned()) { _nontLoan(arg); return; }   // the bar's money is Nont's register, not Nira's (phase 4)
   if (G.money > 100000 && G.room === _npcRoom("nira")) {
     // she counts money for a living (millionaire playtest 2026-08-22)
     _say("Nira's eyes go to your pocket before they go to your face, and the calculator " +
@@ -224,6 +228,7 @@ function _doBorrow(arg) {
 }
 
 function _doRepay(arg) {
+  if (_nontHere() && G.bar && G.bar.loan && G.bar.loan.owed > 0) { _nontRepay(arg); return; }
   if (!G.loan) { _say("You don't owe Nira a baht. Keep it that way.", "dim"); return; }
   if (!_withNira()) {
     _say(`You owe Nira ฿${G.loan.owed}${G.loan.strikes ? " (overdue)" : `, due day ${G.loan.dueDay}`}. ` +
@@ -254,6 +259,38 @@ function _doRepay(arg) {
     _say(`"฿${amt}." She marks it in a little book. "Still ฿${G.loan.owed}` +
       (late ? ` — and climbing." ` : `, by day ${G.loan.dueDay}." `) + `Back to the stage.`, "room");
   }
+}
+
+// NONT'S MONEY FOR THE BAR (phase 4 of docs/bar-failure-cycle.md). The note-holder will
+// not lend and the landlord does not; Nont is the priced fixer, so he does — ten
+// percent on the day, and a quarter of every night's take off the top until he is
+// paid, which he collects himself. Nothing moral in it: it is the money that is there
+// when the month is short, at the price money costs when you cannot be inside.
+function _nontLoan(arg) {
+  const b = G.bar;
+  if (b.loan && b.loan.owed > 0) { _say(_fmt("“One at a time.” Nont does not look up. “฿{o} still, and I'm taking it. Clear that.”", { o: _num(b.loan.owed) })); return; }
+  let amt = _parseBaht(arg);
+  if (!amt) { _say(_fmt("“For the bar?” He has already guessed. “Ten percent, on the day. I take a quarter of the nights until it's square — I don't wait for you to remember.” (BORROW <amount> — up to ฿{m}.)", { m: _num(NONT_LOAN_MAX) }), "dim"); return; }
+  amt = Math.round(amt / 1000) * 1000;
+  if (amt < 5000) { _say("“Five thousand or don't waste the chair.”", "dim"); return; }
+  if (amt > NONT_LOAN_MAX) { _say(_fmt("“฿{m}. That's the bar's number, not yours.”", { m: _num(NONT_LOAN_MAX) }), "dim"); return; }
+  b.loan = { principal: amt, owed: Math.round(amt * (1 + NONT_LOAN_RATE)), day: G.day };
+  G.money += amt;
+  G.loanBorrowed = (G.loanBorrowed || 0) + amt;
+  _say(_fmt("Nont counts ฿{a} off the roll without looking at it. “฿{o} back. I take it off the top, nightly, a quarter of the take, until it's gone — your man Bert will see me before you do.” " +
+    "He puts the folder away. “Everybody borrows from me eventually. The smart ones do it once.”", { a: _num(amt), o: _num(b.loan.owed) }), "win");
+  _say("(The bar owes Nont. He collects from the till himself. BOOKS.)", "dim");
+}
+function _nontRepay(arg) {
+  const b = G.bar;
+  let amt = arg ? _parseBaht(arg) : b.loan.owed;
+  if (amt == null) amt = b.loan.owed;
+  amt = Math.min(amt, b.loan.owed);
+  if (amt <= 0) { _say("“Pay me something real.”", "dim"); return; }
+  if (G.money < amt) { _say(_fmt("You're ฿{s} short of that. (You have ฿{h}; the bar owes ฿{o}.)", { s: amt - G.money, h: G.money, o: _num(b.loan.owed) }), "alert"); return; }
+  G.money -= amt; b.loan.owed -= amt; G.loanRepaid = (G.loanRepaid || 0) + amt;
+  if (b.loan.owed <= 0) { b.loan = null; _say("Nont takes the last of it and makes a mark in the folder you have never seen the inside of. “Square.” No warmth, no edge. “You know where the chair is.”", "win"); }
+  else _say(_fmt("“฿{a}.” A mark. “฿{o}, and the nights still pay me.”", { a: _num(amt), o: _num(b.loan.owed) }));
 }
 
 // Called from _endNight after the day rolls: overdue loans compound and the
@@ -6990,6 +7027,13 @@ function _workFloor() {
     }
     return;
   }
+  // a notice is the floor's own scene — she tells you, on a shift you stood, before Bert has to
+  if (b.notice && !b.notice.told && !b.gone[b.notice.id] && _npcActive(b.notice.id)) {
+    b.notice.told = true; b.floorTurn = G.turns; b.floorN = (b.floorN || 0) + 1;
+    _say(_fmt(_pickVary(_NOTICE_FLOOR, "noticefloor"), { n: NPCS[b.notice.id].name }), "alert");
+    _say(_fmt("({d} days. The board (PRICES) or the terms (TERMS) are what she is counting; a full rail is her money. BOOKS.)", { d: BAR_NOTICE_DAYS }), "dim");
+    return;
+  }
   let staff = _barStaff();
   if (afId) staff = staff.filter(id => id !== afId);
   if (!staff.length) return;
@@ -8066,6 +8110,17 @@ function _barNight(settleDay) {
   }
   // two months behind and the floor is thin — you can watch it happen in the till
   if (b.shortStaff) take = Math.round(take * BAR_SHORT_STAFF);
+  // the board you set: more per customer, fewer customers — and the girls' money is the customers
+  const mk = (typeof BAR_MARKUPS !== "undefined" && BAR_MARKUPS[b.markup || "list"]) || { mult: 1, traffic: 1 };
+  take = Math.round(take * mk.mult * mk.traffic);
+  // the women who left took their regulars across the road
+  const railLost = typeof _railLostOn === "function" ? _railLostOn(day) : 0;
+  if (railLost) take = Math.round(take * (1 - railLost));
+  (b.takeLog = b.takeLog || []).push(take); if (b.takeLog.length > BAR_RENT_REVIEW) b.takeLog.shift();   // the landlord's trailing look
+  // the girls' trailing month: the board's traffic, the thin floor, the rail that left — and a full
+  // season covers a modest rise (a peak rail drinks at fifteen over; a trough rail does not)
+  (b.trafficLog = b.trafficLog || []).push(mk.traffic * (b.shortStaff ? BAR_SHORT_STAFF : 1) * (1 - railLost) * (_seasonTakingsOn(day) >= 1 ? 1.06 : 1));
+  if (b.trafficLog.length > 30) b.trafficLog.shift();
   const lost = Math.min(b.lostTake || 0, take), lostNotes = b.lostNotes || [];
   take -= lost; b.lostTake = 0; b.lostNotes = [];
   // nights away pile up; the staff notice before the books do
@@ -8088,7 +8143,7 @@ function _barNight(settleDay) {
   const supplyMult = 1 + friction * BAR_FRICTION;
   const nut = Math.round(BAR_NUT * supplyMult);
   const cogs = Math.round(take * _barCogs() * supplyMult);
-  const wages = BAR_WAGES + (worked ? 0 : BAR_MGR_NIGHT);
+  const wages = BAR_WAGES + (worked ? 0 : BAR_MGR_NIGHT) + (b.terms === "salary" ? BAR_SALARY_NIGHT : 0);   // flat terms go on this line every night, wet or dry
   // Procurement you ACCEPTED is a standing cost — the invoice you pay for the
   // frictionlessness. Refusing is cheaper on paper (this line is ฿0) and buys the
   // weather instead; accepting is the same trade the other way (Keith, 2026-08-26:
@@ -8096,7 +8151,10 @@ function _barNight(settleDay) {
   const synJobs = (G.syn && G.syn.done) ? Object.keys(G.syn.done).filter(k => G.syn.done[k]).length : 0;
   const proc = synJobs * SYN_JOB_NIGHT;
   const costs = nut + cogs + wages + proc;
-  const net = take - costs;
+  // Nont's money comes off the top, nightly, until it is clear — he is the creditor who chases
+  let garnish = 0;
+  if (b.loan && b.loan.owed > 0) { garnish = Math.min(b.loan.owed, Math.round(take * NONT_LOAN_GARNISH)); b.loan.owed -= garnish; if (b.loan.owed <= 0) b.loan = null; }
+  const net = take - costs - garnish;
   b.cash += net;
   if (net > b.best) b.best = net;
   // a losing night is covered out of the till; when the till is empty the owner
@@ -8127,7 +8185,7 @@ function _barNight(settleDay) {
   // twenty-year publican could not name (Keith, round 40)
   b.lastLines = { day, inside: _insidePrice(), take: take + evtIn, nut, cogs, wages: BAR_WAGES, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
   return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
-    worked, away: b.away, nut, cogs, wages, proc };
+    worked, away: b.away, nut, cogs, wages, proc, garnish, markup: b.markup || "list", railLost };
 }
 
 // What the room costs, by what the room is. Reads the owned bar's own barType so
@@ -8135,8 +8193,159 @@ function _barNight(settleDay) {
 function _barRent() {
   const r = ROOMS[G.bar && G.bar.room ? G.bar.room : "stinky_bar"];
   const mult = (r && RENT_MULT[r.barType]) || 1;
-  return BAR_RENT * mult;
+  // the landlord's rises — success is what moves it, and only ever up (the bar-failure cycle)
+  return Math.round(BAR_RENT * mult * (1 + ((G.bar && G.bar.rentUp) || 0)) / 500) * 500;
 }
+
+// ── The bar that closed next door — the owner's two levers ──────────────────
+// (docs/bar-failure-cycle.md.) PRICES is the board at your own bar: BAR_MARKUPS scale
+// the take per customer AND the traffic through the door, and the women's money is
+// the traffic — their commission is per drink, so a quieter room is directly less for
+// them, and under commission terms a thin month is a woman giving notice. TERMS is
+// the other lever: a flat salary costs BAR_SALARY_NIGHT every night and nobody leaves
+// over the drinks. Both are locally correct and globally fatal, which is the design:
+// there must be months where UP is right (a peak rail, covering the note) and months
+// where it is the reason the floor is one short in the trough.
+function _barMarkup(room) {
+  if (!G.bar || !_flag("barOpen") || room !== G.bar.room) return 1;
+  const mk = (typeof BAR_MARKUPS !== "undefined" && BAR_MARKUPS[G.bar.markup || "list"]) || { mult: 1 };
+  return mk.mult;
+}
+function _barTerms() { return (G.bar && G.bar.terms) || "commission"; }
+const _PRICES_SET = {   // Bert, who has stood every rail on the soi and has a view
+  cheap: "Bert chalks the new board without comment, which is comment. “{{Cheap Charlie}} prices. You'll fill the stools and empty the till, and the girls'll love you — a full rail is drinks.” He steps back. “Somebody has to be the cheap bar. Doesn't have to be us.”",
+  list: "Bert rubs the board back to the soi's own numbers. “List. Same as the door either side. Nobody comes for the price and nobody leaves over it.” A nod. “Boring. Boring pays the rent.”",
+  up: "“Fifteen on top.” Bert writes it small, the way you write a thing you'd rather people found than read. “The regulars won't notice tonight. They'll notice in a month, and they'll notice by not being here — and the girls count the stools before you do, boss.”",
+  steep: "Bert looks at the number, then at you, then writes it. “Walking Street money, on Soi 6.” He does not say it is wrong. “You'll take more off fewer. Fewer is the bit the girls live on.” He caps the chalk. “Your bar.”",
+};
+const _PRICES_BOARD = (b) => `The board: beer ฿${_beerPrice(b.room)} · lady drink ฿${_ladyPrice(b.room)} · the fine from ฿${_barfinePrice(ROOMS[b.room].barType, null)} — ` +
+  ({ cheap: "ten under the soi", list: "the soi's own numbers", up: "fifteen over", steep: "thirty over" }[b.markup || "list"]) + ".";
+function _doPrices(arg) {
+  if (!_barOwned()) { _say("Prices are somebody else's to set. Yours is the stool."); return; }
+  const b = G.bar;
+  if (G.room !== b.room) { _say("The board is at your own bar. Set it there, in front of the people it costs."); return; }
+  const want = String(arg || "").toLowerCase().match(/\b(cheap|list|normal|same|up|higher|raise|steep|high)\b/);
+  if (!want) {
+    _say(_PRICES_BOARD(b));
+    _say("(PRICES CHEAP · PRICES LIST · PRICES UP · PRICES STEEP — the take per customer against the punters through the door, and the girls' money rides the second.)", "dim");
+    return;
+  }
+  const key = ({ normal: "list", same: "list", higher: "up", raise: "up", high: "steep" })[want[1]] || want[1];
+  if (key === b.markup) { _say("The board already says that."); return; }
+  b.markup = key;
+  _say(_PRICES_SET[key]);
+  _say(_PRICES_BOARD(b), "dim");
+  if (b.notice && !b.gone[b.notice.id] && BAR_MARKUPS[key].traffic >= 1)
+    _say(_fmt("({n} watches the board change. She does not say anything about her notice. She does not need to yet.)", { n: NPCS[b.notice.id].name }), "dim");
+}
+const _TERMS_SET = {
+  salary: "“Salary.” Bert says it like a word from another country. “Flat money, no quota, no fine for a quiet week — and they stay, boss, that's what it buys. The good ones especially.” He taps the wages line on the docket. “It also goes on here every night of the wet. Your bar.”",
+  commission: "“Back to the trade's way.” Bert shrugs. “Base and a cut of the drinks. Cheaper on a wet night, and the ones with a following know what they're worth to the bar across the road.” He does not say which ones. He does not have to.",
+};
+function _doTerms(arg) {
+  if (!_barOwned()) { _say("Terms are the owner's to set, and the owner is not you."); return; }
+  const b = G.bar;
+  if (G.room !== b.room) { _say("Set the girls' terms at your own bar, where the girls are."); return; }
+  const want = String(arg || "").toLowerCase().match(/\b(salary|flat|commission|cut|drinks)\b/);
+  if (!want) {
+    _say(_barTerms() === "salary"
+      ? _fmt("Terms: a flat salary, no quota — ฿{n} a night on the wages line, and nobody leaves over a quiet month.", { n: BAR_SALARY_NIGHT })
+      : _fmt("Terms: the trade's — ฿{s} a month base and ฿{c} a lady drink, which means a quiet month is her problem before it is yours.", { s: _num(BAR_SALARY), c: LADY_CUT }));
+    _say("(TERMS SALARY · TERMS COMMISSION.)", "dim");
+    return;
+  }
+  const key = want[1] === "salary" || want[1] === "flat" ? "salary" : "commission";
+  if (key === b.terms) { _say("That is the arrangement already."); return; }
+  b.terms = key;
+  _say(_TERMS_SET[key]);
+  if (key === "salary" && b.notice && !b.gone[b.notice.id]) {
+    _say(_fmt("{n} hears it from the other end of the bar, and the notice she gave you is, without a word said, withdrawn. She picks up a tray.", { n: NPCS[b.notice.id].name }), "win");
+    b.notice = null;
+  }
+}
+
+// THE NOTICE. Under commission a month that ran thin is her money gone, and the women
+// with a following know what the bar across the road pays. One of them tells you — as
+// a floor moment on a stood shift, which is where you know them; if you never stand
+// one, Bert tells you at the morning settle, which is the spreadsheet version and the
+// one an absent owner has earned. BAR_NOTICE_DAYS to put the board back; then she goes,
+// and her regulars drink across the road for BAR_RAIL_DAYS. Recoverable during the
+// notice, one-way after it (Mario's open call, answered: the drift is one-way once it
+// has happened, but she tells you first).
+const _NOTICE_FLOOR = [
+  "{n} waits until the ice man has gone and says it to the rail rather than to you: “Boss. End of the month, I finish.” She lets you take that in. “Not angry, na. The drink money — this month, half of last month. The bar on the corner pay same cut, more customer.” A shrug that is all arithmetic. “I have mama. You understand.”",
+  "{n} does the thing the good ones do, which is to say it straight and once. “I give notice, boss. One week.” She counts on her fingers what the month paid, and it does not take all of them. “The board,” she says, and nods at the chalk, and that is the whole of her analysis, and it is correct.",
+  "“Can I talk?” {n} never asks that. “My chits this month.” She fans them: thin. “Same girl, same smile, same hours. Less customer, less drink, less me.” She puts them away. “The Lucky Tiger ask me. I say I tell my boss first. So I tell you.”",
+];
+const _NOTICE_BERT = [
+  "Bert mentions it the way he mentions the ice. “{n}'s given her notice. Gave it to me, because you weren't here to give it to.” He lets that sit. “Drinks money's down and she can count. Week, she said.”",
+  "“{n}'s going, boss.” Bert, not looking up from the glass he is drying. “End of the week. Told me last night. The take's thin and her cut's thinner, and there's a bar on the corner that'll have her tomorrow.” He puts the glass down. “Thought you'd want to hear it from somebody.”",
+];
+const _NOTICE_STAYS = [
+  "{n} comes in, looks at the board, and hangs her bag on the hook she always uses. Nothing is said about the notice. She works the night like a woman who has decided something, and the thing she decided was to stay, for now, and you both know for how long “for now” is.",
+  "The week is up and {n} is on her stool. “The board is better,” is all she says about it, and then, because she is fair: “For now, boss.”",
+];
+const _NOTICE_GONE = [
+  "{n}'s hook is empty. Her glass, the one with the chip, is gone from the shelf. Bert says she came in at four for her things and left a bag of mangosteen on the till for the girls, and that three of her regulars asked after her last night and drank their second beer across the road.",
+  "The week ran out and so did {n}. No scene — she said goodbye to the girls, not to you, which is correct, and by nine she was on a stool at the bar on the corner with two of the men who used to drink here. The take will say so before anybody does.",
+];
+function _noticeTick() {   // daily, from _barSettle: a notice told, kept, or let run out
+  const b = G.bar;
+  if (!b.notice || b.gone[b.notice.id]) return;
+  const n = b.notice, id = n.id;
+  if (!n.told && G.day - n.day >= 2) { n.told = true; _say(_fmt(_pickVary(_NOTICE_BERT, "noticebert"), { n: NPCS[id].name }), "alert"); }
+  if (G.day - n.day < BAR_NOTICE_DAYS) return;
+  const mk = BAR_MARKUPS[b.markup || "list"];
+  if (mk.traffic >= 1 || _barTerms() === "salary") {
+    b.notice = null;
+    _say(_fmt(_pickVary(_NOTICE_STAYS, "noticestays"), { n: NPCS[id].name }), "win");
+    return;
+  }
+  b.notice = null;
+  b.gone[id] = { day: G.day };
+  _say(_fmt(_pickVary(_NOTICE_GONE, "noticegone"), { n: NPCS[id].name }), "alert");
+  _say(_fmt("({n}'s regulars drink across the road now — about {p}% of the rail, for a season or so. BOOKS names it.)", { n: NPCS[id].name, p: Math.round(BAR_RAIL_SHARE * 100) }), "dim");
+}
+function _railLostOn(day) {   // the share of the rail that left with the women who left
+  const b = G.bar; if (!b || !b.gone) return 0;
+  return Object.values(b.gone).filter(g => day - g.day < BAR_RAIL_DAYS).length * BAR_RAIL_SHARE;
+}
+
+// THE BAR OPPOSITE. Not "you fail": a man watching the bar across the street fail,
+// knowing he may be next. Five phases of OPP_CYCLE/5 days on a day-derived clock
+// (pure, shared-world-safe), one line each from your own doorway, then the For Rent
+// sign, then a new man and the cycle again. You watch it once before you are in it.
+const _OPP_LINES = [
+  ["The bar opposite has a new sign, lit, and a girl on every stool at eight. The owner — a big Dane, new this season — stands on the step with his arms folded, looking at a street that is looking at his bar.",
+   "Across the road they are turning people away at ten. The Dane has bought a second fridge. You can hear his bell from here."],
+  ["The landlord's daughter is across the road with her clipboard, the way she comes to you on the thirtieth. She stays longer than a receipt takes. The Dane walks her to her bike and does not fold his arms.",
+   "The Dane is on his step again, not looking at the street this time. Bert, passing with the ice: “Rent went up over there. Busy bar, busy landlord.”"],
+  ["The board across the road has been rubbed out and rewritten, and the new numbers are not smaller. A punter reads it, laughs, and comes in here instead.",
+   "Two of the Dane's girls are at a kerb table outside his bar, not working, because there is nobody to work. One of them is doing sums on her phone."],
+  ["There are three girls across the road where there were nine, and one of the three is new and does not know the regulars' names, because the regulars are here. The Dane has stopped standing on the step.",
+   "The man who brings Nont's money is across the road, at the Dane's table, with a folder. Bert sees you see it. “Ten percent, that'll be. Off the top, nightly.” He does not say any more."],
+  ["The shutters across the road are down at nine on a Saturday, and there is a sign on them you do not need to read. The Dane's second fridge is on the pavement with a price on it.",
+   "Nobody is across the road. The sign is up. A piwin uses the step to eat his noodles on, which is what a step is for, in the end."],
+];
+const _OPP_NEW = "There is a new man across the road — Belgian, shorter, with a plan — and a new sign going up over the old sign, and the same nine stools. He is standing on the step with his arms folded, looking at the street. Bert, beside you: “Here we go.”";
+function _oppPhase(day) {
+  const b = G.bar; if (!b || !_barOwned()) return null;
+  if (!b.oppStart) b.oppStart = day - (_hh("opp:" + G.vacation, 191) % 60);   // somewhere in his cycle when you opened
+  const t = day - b.oppStart;
+  return { cycle: Math.floor(t / OPP_CYCLE), phase: Math.floor((t % OPP_CYCLE) / (OPP_CYCLE / 5)) };
+}
+function _oppTick() {
+  if (!_barOwned() || G.room !== G.bar.room) return;
+  const o = _oppPhase(G.day); if (!o) return;
+  const key = o.cycle + ":" + o.phase;
+  const said = (G.bar.oppSaid = G.bar.oppSaid || {});
+  if (said[key]) return;
+  said[key] = true;
+  if (o.cycle > 0 && o.phase === 0 && !said["new:" + o.cycle]) { said["new:" + o.cycle] = true; _say(_OPP_NEW, "dim"); return; }
+  _say(_pickVary(_OPP_LINES[o.phase], "opp" + o.phase), "dim");
+}
+const _OPP_NAMES = ["doing well, and the landlord has seen it", "paying the rise, and about to pass it on", "dearer than the soi, and emptier", "three girls where there were nine, and a folder on his table", "shut"];
+
 
 // The month, in the order a publican actually pays it: the landlord first,
 // because he can re-let the room by Friday, and the old man second, because he
@@ -8164,6 +8373,32 @@ function _barMonthly() {
   const rentPaid = rentOwedNow - rentDue;
   b.rentOwed = rentDue;
   b.rentShort = rentDue > 0 ? (b.rentShort || 0) + 1 : 0;
+  // THE LANDLORD LOOKS AT YOUR FRONTAGE every BAR_RENT_REVIEW days. Success is what
+  // moves it: a trailing take over an ordinary list-price night and the rent goes up
+  // BAR_RENT_RISE from next month, capped at BAR_RENT_CAP. He never lowers it and he
+  // never raises it on a dead quarter — the rise alone is survivable; your answer to it
+  // is the thing that isn't (docs/bar-failure-cycle.md, phase 1).
+  let rentRise = null;
+  if (b.months % Math.max(1, Math.round(BAR_RENT_REVIEW / 30)) === 0 && (b.takeLog || []).length >= 20) {
+    const avg = b.takeLog.reduce((x, y) => x + y, 0) / b.takeLog.length;
+    const ordinary = (BAR_TAKINGS + BAR_SWING / 2) * ((WORK_TAKINGS + AWAY_TAKINGS) / 2);
+    if (avg >= ordinary * BAR_RENT_GOOD && (b.rentUp || 0) + 1e-9 < BAR_RENT_CAP - 1) {
+      const from = rent;
+      b.rentUp = Math.min(BAR_RENT_CAP - 1, (b.rentUp || 0) + BAR_RENT_RISE);
+      rentRise = { from, to: _barRent() };
+    }
+  }
+  // THE NOTICE: on commission, a month that ran thin — the board, the floor, the women
+  // who left — and one of the girls says so, after her own arithmetic (phase 3)
+  let notice = null;
+  if (_barTerms() === "commission" && !b.notice && (b.trafficLog || []).length >= 20 && G.day - (b.noticeDay || 0) >= 60) {
+    const tr = b.trafficLog.reduce((x, y) => x + y, 0) / b.trafficLog.length;
+    if (tr < BAR_FLOOR_FLOOR) {
+      const girls = _barStaff().filter(id => NPC_ROLES[id] === "hostess" && NPCS[id].filler && !(G.affair && G.affair.id === id))
+        .sort((x, y) => (G.soc.drinks[y] || 0) - (G.soc.drinks[x] || 0));   // the one you know best — a scene, not a spreadsheet
+      if (girls.length > 1) { b.notice = { id: girls[0], day: G.day, told: false }; b.noticeDay = G.day; notice = girls[0]; }
+    }
+  }
 
   // ── the old man, with whatever is left ───────────────────────────────
   // …unless there is nothing left to owe him: a note paid down to zero stops
@@ -8171,7 +8406,7 @@ function _barMonthly() {
   // books already print as ฿0 (Rolf, round 54)
   if ((b.owed || 0) <= 0 && (b.arrears || 0) <= 0) {
     return { paidFrom: [], short: 0, month: b.months, paid: 0, cleared: 0, noteDone: true,
-      rent, rentFrom, rentShort: rentDue, rentMonths: b.rentShort, rentPaid, waived, keyBilled };
+      rent, rentFrom, rentShort: rentDue, rentMonths: b.rentShort, rentPaid, waived, keyBilled, rentRise, notice };
   }
   const owedNow = BAR_MONTHLY + b.arrears;
   let due = owedNow, paidFrom = [];
@@ -8193,7 +8428,7 @@ function _barMonthly() {
   if (paid > 0) b.owed = Math.max(0, b.owed - paid);
   return { paidFrom, short: due, month: b.months, paid,
     cleared: Math.max(0, owedNow - BAR_MONTHLY - due),
-    rent, rentFrom, rentShort: rentDue, rentMonths: b.rentShort, rentPaid, waived, keyBilled };
+    rent, rentFrom, rentShort: rentDue, rentMonths: b.rentShort, rentPaid, waived, keyBilled, rentRise, notice };
 }
 
 // ── the note's teeth ────────────────────────────────────────────────────────
@@ -8415,7 +8650,16 @@ function _doBooks() {
     : "Months paid: {m} of {term}   ·   Nights open: {n}",
     { m: b.months, term: BAR_TERM, n: b.nights }));
   if (_flag("barBook")) _say(_fmt("Rabbit's regulars: running at your rail — the European trade, +{p}% on the take, every night.", { p: Math.round((BOOK_TAKINGS - 1) * 100) }), "dim");
-  _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened.", { r: _barRent() }), "dim");
+  _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened{up}.", { r: _num(_barRent()),
+    up: (b.rentUp || 0) > 0 ? _fmt(" — up {p}% since you opened, because he could see you were busy", { p: Math.round(b.rentUp * 100) }) : "" }), "dim");
+  if (G.room === b.room) _say(_PRICES_BOARD(b) + (b.terms === "salary" ? _fmt(" The girls are on a flat salary — ฿{n} a night on the wages line, and they stay.", { n: BAR_SALARY_NIGHT }) : " The girls are on the trade's cut, and a thin month is theirs before it is yours."), "dim");
+  if (b.notice && !b.gone[b.notice.id]) _say(_fmt("{n} has given notice — {d} day{s} left to change her mind. (PRICES · TERMS)", { n: NPCS[b.notice.id].name, d: Math.max(0, BAR_NOTICE_DAYS - (G.day - b.notice.day)), s: BAR_NOTICE_DAYS - (G.day - b.notice.day) === 1 ? "" : "s" }), "alert");
+  {
+    const gone = Object.keys(b.gone || {}).filter(id => G.day - b.gone[id].day < BAR_RAIL_DAYS);
+    if (gone.length) _say(_fmt("Across the road: {who} — and about {p}% of the rail with {pr}, for a season.", { who: gone.map(id => NPCS[id].name).join(" and "), p: Math.round(gone.length * BAR_RAIL_SHARE * 100), pr: gone.length === 1 ? "her" : "them" }), "alert");
+  }
+  if (b.loan && b.loan.owed > 0) _say(_fmt("Nont's money: ฿{o} still owed, {p}% of every night's take off the top until it isn't. (REPAY NONT <amount> at his table.)", { o: _num(b.loan.owed), p: Math.round(NONT_LOAN_GARNISH * 100) }), "alert");
+  { const o = _oppPhase(G.day); if (o) _say("The bar opposite: " + _OPP_NAMES[o.phase] + ".", "dim"); }
   _sayLease();
   const ll = b.lastLines;
   if (ll) {
@@ -8538,7 +8782,14 @@ function _barSettle(settleDay) {
       "finds out whether you have a cushion.)", "dim");
   }
   if (typeof _affairNight === "function") _affairNight(n);   // the affair's nightly account
+  if (n.garnish) _say(_fmt("(Nont's man took ฿{g} off the top before the till saw it. ฿{o} to go.)", { g: n.garnish, o: _num((G.bar.loan && G.bar.loan.owed) || 0) }), "alert");
+  _noticeTick();   // a notice told, kept, or let run out
   if (!m) return;
+  if (m.rentRise) {
+    _say(_fmt("The landlord's daughter stays for a coffee this month, which she has never done, and says it pleasantly: from next month the room is ฿{to}, not ฿{from}. " +
+      "“You are doing well. Everybody can see.” She means it as a compliment. It is also a bill.", { to: _num(m.rentRise.to), from: _num(m.rentRise.from) }), "alert");
+    _say("(The rent follows the frontage. It will not come down. BOOKS.)", "dim");
+  }
   // Rent reads first because it was paid first, and because a player who is
   // short needs to see which of the two shortfalls is the one that matters.
   if (m.waived) _say("(No rent this month — the wet-season month he gave you to get the door open.)", "dim");

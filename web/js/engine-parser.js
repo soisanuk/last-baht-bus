@@ -10602,6 +10602,8 @@ THE WHOLE CARD (bare HELP is the short one):
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   DEBT (every ledger with your name on it: Nira, the hotel book, the old man's note)
   Your own bar (once you own one): WORK / MIND (stand behind your own rail tonight) · BOOKS / TAKINGS
+    PRICES [cheap|list|up|steep] · TERMS [salary|commission] (your two levers: the board moves the punters, the terms move the girls — both cost you, in different currencies)
+    BORROW <amount> at Nont's table (the bar's money, ten percent, a quarter of every night off the top)
     DRAW [amount] (take your own money out of your own till — nobody else will do it for you)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
@@ -11086,6 +11088,8 @@ function _completePool(verb, ctx) {
         return o;
       }
       return [];
+    case "prices": case "board": return ctx.length >= 2 ? [] : ["cheap", "list", "up", "steep"];   // the owner's board
+    case "terms": return ctx.length >= 2 ? [] : ["salary", "commission"];
     case "borrow": case "repay": case "draw": case "cashup":
     case "withdraw": case "withdrawal": case "withdrawl":
       return ctx.length >= 2 ? [] : _cAmounts(verb);
@@ -11585,7 +11589,7 @@ const _GERMAN_QUIP = {
 const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health", "verbs", "ledger",
   "inventory", "inv", "i", "map", "help", "quests", "journal", "notes", "diary", "hint", "share",
   "who", "blackbook", "standing", "rep", "gallery", "photos", "album", "books",
-  "takings", "identity", "topics", "subjects"]);
+  "takings", "identity", "topics", "subjects", "prices", "terms"]);
 
 let _rawAnswer = null; // the raw-cased line, for _convoAnswer's quote-back memory
 function doCommand(input) {
@@ -12175,6 +12179,10 @@ function doCommand(input) {
       _doSendMoney(arg); break;
     case "work": case "mind": case "shift": _doWork(); break;
     case "books": case "takings": case "accounts": _doBooks(); break;
+    case "prices": case "price": case "board": _doPrices(arg); break;   // the owner's levers (docs/bar-failure-cycle.md)
+    case "terms": _doTerms(arg); break;
+    case "set": if (/\bprices?\b|\bboard\b/.test(arg)) { _doPrices(arg); break; } if (/\bterms\b|\bsalary\b|\bcommission\b/.test(arg)) { _doTerms(arg); break; }
+      _say("Set what? PRICES or TERMS, at your own bar."); break;
     case "draw": case "cashup": _doDraw(arg); break;
     case "quests": case "quest": case "adventures": _doQuests(); break;
     case "journal": case "notes": case "diary": _doJournal(arg); break;   // the phone's notes: the frontier, then the record
