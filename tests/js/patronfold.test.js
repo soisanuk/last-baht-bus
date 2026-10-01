@@ -86,7 +86,11 @@ test("low season thins the BENCH and never the staff", () => {
   assert.ok(out1.length > 0, "somebody stayed in tonight");
   const staff = Object.keys(NPCS).filter(id => NPC_ROLES[id] && !NPCS[id].patron);
   const thinned = staff.filter(id => !_npcActive(id));
-  assert.deepEqual(thinned, [], "a working girl is never season-thinned — she can't afford to be");
+  // the BENCH thins by _benchOut; the staff never do — the only staff absence the season
+  // makes is _awayForSeason's (the harvest, Bangkok in the trough — essay ledger theme 8,
+  // 2026-10-01), which is an absence with a reason the street gives, never a thinning
+  assert.deepEqual(thinned, staff.filter(id => _awayForSeason(id)), "a working girl is never season-thinned — she is home for the harvest or in Bangkok, and the floor says which");
+  assert.ok(thinned.every(id => NPCS[id].filler), "…and only the generated floor goes; nobody with a story disappears");
 });
 
 // ── the social wall: refused by guard, in the authored voices ──

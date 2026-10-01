@@ -376,6 +376,68 @@ function _navHere() {
   return _navDirs().length > 0;
 }
 
+// ── Cheap care beats money (essay ledger theme 2, 2026-10-01) ────────────────
+// The sources are consistent that courtship here is PRESENCE — being there to see
+// her to the bus at closing, remembering her order — and that it outranks the
+// drinks book. SEE <her> HOME is a bonded hostess's door at the end of her shift:
+// once a night, earned through _addBond (never _boughtBond), a sanuk point that
+// never jades, three ticks, and she is off the floor after it.
+const _SEE_HOME = [
+  "{n} takes exactly four minutes to square her section away and come out with her bag over her shoulder and the heels in it, in flip-flops now, a foot shorter and a decade younger. You walk her to the songthaew stop on the corner. She talks the whole way about nothing. At the truck she touches your arm once, gets in, and does not look back, which is how you know it counted.",
+  "She comes out the side in a hoodie over the dress, and the walk to her bike is two hundred metres of the soi being a different soi — the touts gone, the grill packing up, a dog asleep in a doorway. She kicks the bike awake and says the one thing she has not said all night, which is your name, and goes.",
+  "{n} lets you carry nothing, because she is not a customer's girl on this walk and does not want the street to read her as one. You stand at the 7-Eleven on the corner while she buys milk and a comb, and she walks you to the stop as much as you walk her. \"Tomorrow, na,\" she says, which is the whole of the contract.",
+  "The shutters are half down and {n} ducks under them with her shoes in her hand. You walk her to the bus. She tells you, on the way, which of the girls is leaving, which is pregnant, and which one owes her four hundred baht, and then says you did not hear any of it. The truck comes. She is gone.",
+  "Nobody on the soi looks twice at a farang walking a girl to the songthaew at closing; it is the one thing the street has seen more of than money. {n} walks with her hand through your arm until the corner and then takes it back, and the taking back is the part she means.",
+];
+const _SEE_HOME_EARLY = [
+  n => `${n} laughs. "Home? Three hours more, tilac. You want to see me home, you wait with me."`,
+  n => `"Now?" ${n} nods at the clock over the optics. "Mama would see me home before you did. Later, na."`,
+  n => `${n} shakes her head, pleased. "Finish first. Then yes." She goes back to her section with the yes in her walk.`,
+];
+function _seeHomeOpen(id) {
+  if (!id || !NPC_ROLES[id] || NPC_ROLES[id] !== "hostess" || !_flag("act1Done")) return false;
+  if (!_npcsHere().includes(id) || _bondTier(id) < 1) return false;
+  if (G.party && G.party.ids && G.party.ids.includes(id)) return false;   // she is already with you
+  if (G.soc.seenHome && G.soc.seenHome[id] === G.day) return false;
+  return typeof _closesMidnight === "function" && _closesMidnight(G.room) ? G.nightTurn >= 55 : G.nightTurn >= LAST_BUS_TURN;
+}
+function _doSeeHome(arg) {
+  const nm = String(arg || "").toLowerCase().replace(/\b(home|to the bus|to her bike|to the songthaew)\b/g, "").replace(/^(the |a )/, "").trim();
+  const id = _findNpc(nm) || Object.keys(NPCS).find(k => /^[A-Z]/.test(NPCS[k].name || "") &&
+    (NPCS[k].name.toLowerCase() === nm || NPCS[k].name.toLowerCase().split(" ").pop() === nm));
+  if (!id || !NPCS[id]) { _say("See whom home? Somebody on the floor, by name."); return; }
+  if (!NPC_ROLES[id] || NPC_ROLES[id] !== "hostess") { _say(`${NPCS[id].name} isn't going anywhere you can walk to.`); return; }
+  if (!_npcsHere().includes(id)) { _say(`${NPCS[id].name} isn't here to walk home.`); return; }
+  if (G.party && G.party.ids && G.party.ids.includes(id)) { _say(`${NPCS[id].name} is already with you — home is wherever you two end up.`); return; }
+  if (_bondTier(id) < 1) { _say(`${NPCS[id].name} looks at you the way you look at a stranger offering to carry your bag. "I'm okay, thank you na." Buy her a drink first; be a face.`); return; }
+  if (G.soc.seenHome && G.soc.seenHome[id] === G.day) { _say(`You already walked ${NPCS[id].name} to the stop tonight. She went.`); return; }
+  if (!_seeHomeOpen(id)) { _say(_pickVary(_SEE_HOME_EARLY, "seehomeearly")(NPCS[id].name)); return; }
+  (G.soc.seenHome = G.soc.seenHome || {})[id] = G.day;
+  (G.soc.leftEarly = G.soc.leftEarly || {})[id] = G.day;   // her shift is over; she is off the floor
+  _addBond(id, 2);   // presence, not a purchase: the lady-drink taper has nothing to say about it
+  G.offstage = true; const ended = _passTime(3); G.offstage = false;
+  if (ended) return;
+  _say(_fmt(_pickVary(_SEE_HOME, "seehome"), { n: NPCS[id].name }), "win");
+  _addHappy(1);
+  const street = ROOMS[G.room] && ROOMS[G.room].exits && ROOMS[G.room].exits.out;
+  if (street && ROOMS[street]) { G.room = street; _describeRoom(true); }
+}
+// …and the drink she has waiting: at regular tier she remembers your order, and the
+// first beer of the night at her bar is already on the mat (the anchored usual).
+const _USUAL_LINES = [
+  "{n} has it open and on the mat before you have sat down — the usual, no question asked, which is a thing a bar does for about one man in forty.",
+  "You open your mouth to order and {n} is already back with it, the right one, cold, the cap off. \"Same same,\" she says, which is the nicest thing anyone has said to you today.",
+  "The bottle arrives with the stool. {n} did not ask; she has not needed to ask for a week. There is a small vanity in being known, and you allow yourself it.",
+  "{n} puts your beer down and a coaster under it and your name, more or less, on top: she has your order the way the cashier has the float — as a fact about the room.",
+];
+function _usualHere() {
+  if (!_inBar() || !_flag("act1Done") || _atOwnBar()) return null;
+  if (G.soc.usualSaid && G.soc.usualSaid[G.room] === G.day) return null;
+  const her = _npcsHere().filter(n => NPC_ROLES[n] === "hostess" && _bondTier(n) >= 2).sort((a, b) => _bondTier(b) - _bondTier(a))[0];
+  if (!her) return null;
+  (G.soc.usualSaid = G.soc.usualSaid || {})[G.room] = G.day;
+  return her;
+}
 function _npcActions(id, full) {
   const isNpc = !!(typeof NPCS !== "undefined" && NPCS[id]);
   const role = isNpc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[id] : null;
@@ -413,6 +475,7 @@ function _npcActions(id, full) {
     // (parser + autocomplete + here). Hidden during Act One, when he refuses.
     if (id === "tan" && typeof _flag === "function" && _flag("act1Done")) acts.push("follow");
     if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) acts.push("gohome");
+    if (role === "hostess" && typeof _seeHomeOpen === "function" && _seeHomeOpen(id)) acts.push("seehome");   // cheap care: the wheel's door at closing
     if (id === "waen") acts.push("lesson");   // ฿100 the hour, the third surface
     if (id === "nont" && typeof _flag === "function" && _flag("hasWallet")) acts.push("cash");   // the priced fixer's verb on his own wheel
     // A WAI IS ALWAYS AVAILABLE TO A PERSON, and Act One is SOLVED with one:
@@ -4842,6 +4905,13 @@ function _maybeIncomingText() {
   // a moneypit contact turns nearly every text into an ask, and the numbers climb;
   // the white knight gets steered to the top of the list and can't say no.
   if (NPCS[id].type === "moneypit") { _moneypitText(id); buzz(); return; }
+  // a girl home for the harvest texts it once — the rice, and that it is true (theme 8)
+  if (typeof _awayForSeason === "function" && _awayForSeason(id) === "harvest" && !((G.phone.harvestTexted = G.phone.harvestTexted || {})[id] === G.vacation)) {
+    G.phone.harvestTexted[id] = G.vacation;
+    _pushMsg(id, _pickVary(["cutting rice 🌾 ten day, back soon na. you behave 😤", "home for harvest 🌾🌾 mama say i cut slow 555. back soon", "rice time 🌾 whole village in the field. i send you photo of my feet in the mud 😩 back ten day"], "harvesttext"));
+    _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
+    return;
+  }
   if (id === "priew") {
     if (G.day - (G.priewTextDay || -9) < 3) return;
     G.priewTextDay = G.day;
@@ -6141,7 +6211,11 @@ function _workNight(defer) {
   // not the same event two nights running (Keith, 2026-08-26: the two-week
   // millionaires rang the bell verbatim on consecutive nights). One reroll.
   if (pick.id === (G.bar && G.bar.lastWorkEvt) && pool.length > 1) pick = draw();
-  if (G.bar) { G.bar.lastWorkEvt = pick.id; (G.bar.evtDay = G.bar.evtDay || {})[pick.id] = G.day; }
+  if (G.bar) {
+    G.bar.lastWorkEvt = pick.id; (G.bar.evtDay = G.bar.evtDay || {})[pick.id] = G.day;
+    // a run of bad nights is what the floor reads as bad LUCK (the merit call)
+    G.bar.badRun = ((pick.happy || 0) < 0 || (pick.money || 0) < 0) ? (G.bar.badRun || 0) + 1 : 0;
+  }
   if (defer) return pick;   // _doWork stashes it; _workTell prints and pays it when the night has earned it
   return _workTell(pick);
 }
@@ -6630,6 +6704,7 @@ const SHIFT_EARLY_COST = 600;    // a floor one short
 const SHIFT_ROUND_COST = 500;    // what getting them in costs the till
 const SHIFT_ROUND_TAKE = 900;    // …and what the room does about it
 const SHIFT_FLAT_LOSS  = 400;    // a night nobody lifted
+const SHIFT_MERIT_LOSS = 1500;   // the night the floor made merit without you
 
 function _shiftCallById(id) { return SHIFT_CALLS.find(c => c.id === id) || null; }
 
@@ -6672,7 +6747,10 @@ function _shiftEligible() {
   // the same girl's early bus not twice a fortnight: Manow's mother came in off
   // the overnight bus twice in eight nights (Rolf, round 54)
   const her = _earlyGirl(), last = her && ((G.bar && G.bar.earlyDay) || {})[her];
-  return SHIFT_CALLS.filter(c => c.id !== "early" || (!!her && !(last != null && G.day - last < 14)));
+  const b = G.bar || {};
+  const meritOpen = (b.badRun || 0) >= 2 && !(b.meritDay != null && G.day - b.meritDay < 30);
+  return SHIFT_CALLS.filter(c => (c.id !== "early" || (!!her && !(last != null && G.day - last < 14))) &&
+    (c.id !== "merit" || meritOpen));
 }
 
 function _shiftDue() {
@@ -6886,6 +6964,11 @@ function _shiftYes() {
     _addHappy(2);                       // your room, your night — never jading
     _repGain();
     for (const id of _barStaff()) _addBond(id, 1);
+  } else if (call.id === "merit") {
+    _shiftTake(-MERIT_COST, "the merit ceremony — nine monks and a pig's head");
+    G.bar.meritDay = G.day; G.bar.badRun = 0;
+    for (const id of _barStaff()) _addBond(id, 1);
+    _addHappy(2);   // presence, never the treadmill
   } else if (call.id === "turning") {
     // The one with an actual downside. Most nights a publican's word is enough;
     // occasionally it is not, and you own the bar either way.
@@ -6926,6 +7009,10 @@ function _shiftNo() {
     if (_rand() < 0.65) _shiftLost(SHIFT_FLAT_LOSS, "the flat hour nobody bought a round for");   // every flat loss carries its reason (auditor, 2026-09-14)
     else _say("It picks up on its own, the way it sometimes does, and you saved the " +
       "money. You will never know whether the round would have done better.", "dim");
+  } else if (call.id === "merit") {
+    G.bar.meritDay = G.day; G.bar.badRun = 0;
+    _shiftLost(SHIFT_MERIT_LOSS, "the floor across the road at the spirit house");
+    for (const id of _barStaff()) _addBond(id, -1);
   } else if (call.id === "turning") {
     const rest = _barStaff();
     if (rest.length) _addBond(rest[0], -1);
@@ -7335,6 +7422,26 @@ function _sellBarNo() {
 function _season0() {
   const m = G.season0;
   return (typeof m === "number" && m >= 0 && m <= 11) ? m : SEASON_DEFAULT_M0;
+}
+// ── Absences that are true (essay ledger theme 8, 2026-10-01) ────────────────
+// The game's doctrine was that the staff never thin; the sources say they do, for
+// two reasons a colleague can name: the rice harvest in November takes a third of
+// a floor home for ten days, each girl her own window, and in the trough a fifth
+// of the smart ones go to Bangkok till the rain stops. Pure hash — day-stable, no
+// dice. The owner's own floor is exempt: its absences are shift CALLS, decisions
+// with a face, never weather.
+function _awayForSeason(id) {
+  if (!_flag("act1Done") || !NPCS[id] || !NPCS[id].filler || NPC_ROLES[id] !== "hostess") return false;
+  if (G.bar && G.bar.room && NPCS[id].room === G.bar.room) return false;
+  if (G.party && G.party.ids && G.party.ids.includes(id)) return false;
+  const m = _seasonMonth();
+  if (m === 10) {   // November: the harvest
+    if (_hh(id + ":harvest:" + G.vacation, 101) % 3 !== 0) return false;   // a third of the floor goes home
+    const dim = (Math.max(1, G.day) - 1) % SEASON_MONTH_DAYS, start = _hh(id + ":harvestwin:" + G.vacation, 97) % 18;   // each her own ten days
+    return dim >= start && dim < start + 10 ? "harvest" : false;
+  }
+  if (_seasonTier() === "deeplow") return _hh(id + ":desant:" + G.vacation, 103) % 5 === 0 ? "bangkok" : false;
+  return false;
 }
 function _seasonMonthOn(day) {   // 0 = Jan … 11 = Dec, for a given G.day value
   return (_season0() + Math.floor((Math.max(1, day) - 1) / SEASON_MONTH_DAYS)) % 12;

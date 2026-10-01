@@ -7133,6 +7133,9 @@ function _doBuy(arg) {
       G.player.teetotal = false;
       _say(_pickVary(_TEETOTAL_BROKEN, "teetotalbroke"), "dim");
     }
+    // the drink she has waiting (essay ledger theme 2): at regular tier she remembers the order
+    const _usual = typeof _usualHere === "function" ? _usualHere() : null;
+    if (_usual) _say(_fmt(_pickVary(_USUAL_LINES, "usual"), { n: NPCS[_usual].name }), "dim");
     // no gutter inside an air-conditioned pub (Helga, round 57)
     const _bl = (_room().barType === "pub" || _room().indoors || _room().barType === "gents" || _room().barType === "gogo") ? _BEER_LINES.filter(l => !/gutter|pavement|street/.test(l)) : _BEER_LINES;
     if (_ownBeer) _ownStock(_beerPrice(), "a beer", _L(_pickVary(_bl, "beer")) + (_beerTail ? " " + _L(_beerTail) : ""));
@@ -10673,7 +10676,7 @@ const _COMPLETE_VERBS = [
   // find for a player who goes looking.
   "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink", "lesson", "answer", "notebook",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
-  "photo", "gallery", "photos", "info", "call", "share", "follow", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
+  "photo", "gallery", "photos", "info", "call", "share", "follow", "see", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "journal", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
@@ -11016,6 +11019,7 @@ function _completePool(verb, ctx) {
     // TIP is not one of those: it takes a person AND THEN an amount
     case "tip": return ctx.length >= 2 ? _cAmounts("tip") : girls();
     case "follow": return ctx.length >= 2 ? [] : _cNpcsHere();
+    case "see": return ctx.length >= 2 ? ["home"] : _cNpcsHere().filter(n => typeof _seeHomeOpen === "function" && _seeHomeOpen(_findNpc(n)));
     case "cash": return _nontHere() ? _cAmounts("send") : [];
     // the amount verbs that take no target — offer the figures straight away
     case "pay":
@@ -12053,6 +12057,8 @@ function doCommand(input) {
     if (_mk && (_room().massage || _room().soapy)) { doCommand("massage " + _mk[1]); return; } }
   switch (v) {
     case "go": case "walk": case "head": {
+      // SEE/WALK <her> HOME, TAKE <her> TO THE BUS — cheap care's verb (essay ledger theme 2)
+      if (/\b(home|to the bus|to her bike|to the songthaew)\b/.test(arg) && _findNpc(arg.replace(/\b(home|to the bus|to her bike|to the songthaew)\b/g, "").trim())) { _doSeeHome(arg); break; }
       const gw = arg.replace(/^to (the )?/, "");
       // a direction alias OR one of this room's own exit keys (pub, hotel, …)
       if (!gw || _DIRS[gw] !== undefined || (_room().exits && _room().exits[gw])) _doGo(gw);
@@ -12664,6 +12670,10 @@ function doCommand(input) {
     case "call": case "dial": _doCall(arg); break;
     case "share": _doShare(); break;
     case "follow": _doFollow(arg); break;
+    case "escort": _doSeeHome(arg); break;
+    case "see":
+      if (/\b(home|to the bus|to her bike|to the songthaew)\b/.test(arg)) { _doSeeHome(arg); break; }
+      _doExamine(arg); break;
     // The keypad answers to the two things a player actually types at a safe.
     // ENTER <digits> was the only route, so SAFE 719 — and a bare 719 — fell
     // into "I didn't understand that" at the climax of the opening quest.

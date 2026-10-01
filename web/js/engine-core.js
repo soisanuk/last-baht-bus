@@ -1145,6 +1145,8 @@ function _npcActive(id) {
   if (n && n.sandbox && !_flag("act1Done")) return false; // not part of the opening quest's street
   // sent home early on a shift call — off the rail for the rest of the night
   if (G.soc && G.soc.leftEarly && G.soc.leftEarly[id] === G.day) return false;
+  // home for the harvest, or gone to Bangkok till the rain stops (essay ledger theme 8)
+  if (typeof _awayForSeason === "function" && _awayForSeason(id)) return false;
   // the affair's endings take her off the floor for good: gone home to Isaan
   // after a break, or by the sea in Prachuap after the earned ending
   if (G.affair && G.affair.ended && (G.affair.gone || G.affair.won) && id === G.affair.id) return false;
@@ -1887,6 +1889,10 @@ function _elsewhereLine(word) {
         (NPCS[nid].room === G.room
           ? `Back here early doors is when you'll catch ${_pr(nid).o}.`
           : `${_barName(NPCS[nid].room)}${_dupeBar(NPCS[nid].room) ? " out in " + (ROOMS[NPCS[nid].room].region || "") : ""}, early doors, is where you'll find ${_pr(nid).o}.`);
+    // an absence with a reason the floor can give (theme 8): the harvest, or Bangkok
+    const _away = typeof _awayForSeason === "function" && _awayForSeason(nid);
+    if (_away === "harvest") return `${NPCS[nid].name} ${notHere} — home for the rice harvest. Ten days, the girls say, and nobody argues with the rice.`;
+    if (_away === "bangkok") return `${NPCS[nid].name} ${notHere} — gone to Bangkok till the rain stops, the way the smart ones do in the trough. Back when the money is.`;
     if (!_npcActive(nid)) return `${NPCS[nid].name} isn't around right now.`; // not in at this hour / not here at all
     const cur = _npcRoom(nid);
     // Point the player to her only when she's at one of HER OWN bars (a

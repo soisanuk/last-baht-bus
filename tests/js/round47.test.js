@@ -1192,11 +1192,11 @@ test("a butterfly is a man who does not come back, and Lek thanks you only for s
   const g5 = girls[0];
   assert.ok(!G.soc.butterflyTeased || !/BUTTERFLY|flap/i.test(text()), "your own regulars are not a flit");
   // Lek: the thank-you waits for the gift; she still answers about shoes
-  G.room = "lucky_tiger"; G.soc.drinks.lek = 14; G.soc.given = {};
+  G.room = "lucky_tiger"; G.soc.drinks.lek = 14; G.soc.gifted = {};
   out = []; doCommand("ask lek about sandals");
   assert.doesNotMatch(text(), /Nobody buy me shoes before/, "no thanks for a gift never given");
   assert.match(text(), /heels are the job|flip-flop/, "…but she answers");
-  G.soc.given = { lek: ["lingerie"] };
+  G.soc.gifted = { lek: ["lingerie"] };
   out = []; doCommand("ask lek about sandals");
   assert.match(text(), /Nobody buy me shoes before/);
 });

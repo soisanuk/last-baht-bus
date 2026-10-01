@@ -382,7 +382,7 @@ function _salengBuy(input) {
       // what she was actually given, so a bond node can thank you for a REAL
       // gift. Lek thanked a man for sandals he had never bought her, because
       // her node is bond-gated and nothing recorded the giving (Geraint, round 48).
-      (G.soc.given = G.soc.given || {})[forId] = [...new Set([...(G.soc.given[forId] || []), _salengCartItem()])];
+      (G.soc.gifted = G.soc.gifted || {})[forId] = [...new Set([...(Array.isArray(G.soc.gifted[forId]) ? G.soc.gifted[forId] : []), _salengCartItem()])];   // the saleng's book, not the sponsor-flip baht (G.soc.given)
       const name = NPCS[forId].name;
       _addBond(forId, 1);
       const REACTIONS = {

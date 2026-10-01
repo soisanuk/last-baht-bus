@@ -6078,13 +6078,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "\"Enough for the bus home at Songkran. Not enough for the shop. Nothing is " +
           "enough for the shop, that is why it is a plan and not a shop.\"",
         short: "\"Past thirty drinks Mamasan writes a star. The stars are enough for the bus home, not for the shop.\"" },
-      { topic: "sandals|shoes|heels", bond: 1, when: (st, G) => !(G.soc.given && G.soc.given.lek && G.soc.given.lek.length),
+      { topic: "sandals|shoes|heels", bond: 1, when: (st, G) => !(G.soc.gifted && G.soc.gifted.lek && G.soc.gifted.lek.length),
         text: "\u201cShoes?\u201d Lek looks down at the heels like she had forgotten she was standing in them. " +
           "\u201cThese are the bar shoes. They are not mine, not really \u2014 they are the job.\u201d She flexes one " +
           "foot. \u201cSomewhere I have flip-flop. That is me. You never see that me, hansum \u2014 she is at home " +
           "with her feet up and she is much better company.\u201d",
         short: "\u201cThe heels are the job. The flip-flops are me. You never see that one.\u201d" },
-      { topic: "sandals", bond: 1, when: (st, G) => !!(G.soc.given && G.soc.given.lek && G.soc.given.lek.length),   // she thanks you for shoes you actually bought her (Geraint, round 48),
+      { topic: "sandals", bond: 1, when: (st, G) => !!(G.soc.gifted && G.soc.gifted.lek && G.soc.gifted.lek.length),   // she thanks you for shoes you actually bought her (Geraint, round 48),
         text: "She looks down at them, then at you, and for a second forgets to be funny " +
           "about it. \"Nobody buy me shoes before. Drinks, yes. Flower, yes. A shoe is — \" " +
           "she hunts for it \"— a shoe is for walking somewhere.\" Then the grin comes " +
@@ -14402,7 +14402,25 @@ const AFFAIR_CRISES = [
   },
 ];
 
+const MERIT_COST = 2500;   // nine monks, the food, the pig's head at the spirit house
 const SHIFT_CALLS = [
+  // After a run of bad nights the floor wants the ghosts paid (essay ledger, 2026-10-01:
+  // the one own-bar decision where culture beats arithmetic). Eligible only on a
+  // run of two or more bad WORK events, not twice in a month.
+  {
+    id: "merit",
+    yesLabel: "pay for the monks",
+    lead: [
+      "The mamasan waits until the rail has thinned and then comes down to your end with the face she uses for rent.",
+      "Three of the girls are talking at the end of the bar and stop when you look over, which means it is about you.",
+    ],
+    ask: [
+      "\"Boss. The bar has bad luck.\" She says it the way she would say the ice is late. The slip, the compressor, the quiet nights — she lists them without looking at the list. \"We make merit. Nine monks, morning, food, the pig head for the spirit house. Everybody do it.\" A number, flat, no theatre: ฿" + MERIT_COST + ". \"Then the luck change.\"",
+      "\"Boss.\" She has clearly been chosen to say it. \"Girls are not happy. Too many bad nights — they say the spirit house is angry, nobody feed it since the old owner.\" She does not say whether she believes it; she says what it costs. \"Nine monks, food for everybody, pig head. ฿" + MERIT_COST + ". Morning, before open.\"",
+    ],
+    yes: "You say yes, and something in the room unclenches that you had not known was clenched. The monks come at seven; the food goes round the floor afterwards; the pig's head sits at the spirit house with a cigarette in its mouth and a glass of red fizz, and every girl on the floor touches your arm once that night without a chit in it.",
+    no: "You say it is not a budget line, and the mamasan says \"ka\" the way she says it to customers. The girls make merit anyway, the next morning, with their own money — and that night, between nine and eleven, the floor is across the road at a som tam table in a row, and the room has nobody in it but you and Bert.",
+  },
   {
     id: "tab",
     yesLabel: "let him run one",
