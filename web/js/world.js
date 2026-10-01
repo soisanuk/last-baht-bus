@@ -4274,26 +4274,23 @@ const ROOMS = {
       "everybody involved seems relieved about the arrangement. The sunset over the water does " +
       "most of the marketing.",
     reads: {
-      // The tea-stand photograph (the Darkside counterweight). Ungated: a
-      // snapshot that doesn't match the wall. Once Neil has told you, it is
-      // the heaviest thing on the fridge.
+      // The price card (the Darkside counterweight). Ungated: a thing that doesn't
+      // belong on a photo wall. Once Neil has told you, it is the heaviest thing on the fridge.
       photos: [
         { req: ["neilStory"],
-          text: "The fridge again, and now the one that doesn't match the wall is the only " +
-            "one you look at. A lopsided stand of building-site planks on a corner of cracked " +
-            "concrete; a board with a number chalked on it; a young woman with a baby asleep " +
-            "in a sling across her front, handing a plastic cup to a motosai rider half out of " +
-            "frame. Behind her, a gate rusted open. You know the rest of it now — the bus, the " +
-            "three days, the sentence the whole thing is built on — and the snapshot doesn't " +
-            "change. It was never going to. It has been the heaviest thing on this fridge for " +
-            "years, and it weighs what a magnet weighs." },
+          text: "The fridge again, and now the one that isn't a photograph is the only thing you " +
+            "look at. A laminated price card, hand-lettered in two alphabets, the Thai steadier " +
+            "than the English: MANGOSTEEN 20, RAMBUTAN 15, ICE 10, and a price for something " +
+            "crossed out and written again lower. You know the rest of it now — the four a.m. " +
+            "market, the sidecar, the week at the cousin's, the sentence he has never finished — " +
+            "and the card doesn't change. It was never going to. It has been the heaviest thing on " +
+            "this fridge for years, and it weighs what a magnet weighs." },
         { text: "Regulars' snapshots, curling under fridge magnets: birthdays, a fish the size " +
           "of a child, the same four men at the same four stools across a decade of haircuts. " +
-          "One doesn't fit. Sun-bleached to blues, a crooked little wooden stand on a corner " +
-          "somewhere with the render coming off the wall behind it, a chalked board, a young " +
-          "woman with a baby in a sling handing a plastic cup to a motorbike rider. Nobody in " +
-          "it is drinking anything. Nobody you'd recognise. It's been up there longest, by the " +
-          "fading." },
+          "One thing on it isn't a photo at all. A laminated price card, hand-lettered in two " +
+          "alphabets — fruit, by the look, and ice — with prices from another decade and one " +
+          "line crossed out and done again. Nobody's name on it. It's been up there longest, by " +
+          "the yellowing." },
       ],
     },
     exits: { out: "lake_mabprachan" },
@@ -15199,14 +15196,16 @@ const _REGULARS = {
   // Neil — the Darkside counterweight (the couple who beat the machine by
   // LEAVING it). Every other layer in the canon is an illusion collapsing; this
   // is the one where it held, and it earns the right to exist by not being a
-  // fairy tale: the money went, she dug clams off the Naklua flats and stayed,
-  // the village nearly ended them, they crossed the highway into plain-rice
-  // years and a crooked tea stand. He tells it flat, like Lek tells hers. The
+  // fairy tale: the money went, she sold fruit off a borrowed sidecar at four in
+  // the morning and stayed, his own mouth nearly ended them, they crossed the
+  // highway into a rotting townhouse and a stall by the railway crossing. He
+  // tells it flat, like Lek tells hers. (Rebuilt 2026-10-01 under the
+  // source-material policy — pattern kept, every beat new.) The
   // town's veterans still tell his story WRONG (Nigel's "darkside" node) — two
   // bars, two versions, no link between them; the player triangulates or never
   // knows. Isan stays offscreen: what was said in that house, he never asked.
   neil: {
-    work: "clam",   // which of his own topics answers "what do you do"
+    work: "engineer",   // which of his own topics answers "what do you do"
     name: "Neil", emoji: "🫖", age: 54, nat: "British", pronoun: "he",
     patron: true, room: "lake_beer", hops: false,
     look: "British man of fifty-four, heavy-shouldered, cropped greying hair, plain navy polo, one bottle of Leo, unhurried.",
@@ -15218,119 +15217,30 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       "watches the road and the water with the settled, unperformed quiet of a man who " +
       "has done the heavy part of something and sees no reason to mention it.",
     dialogue: [
-      { text: "\"Neil.\" One hand off the bottle, a nod, and the hand goes back. \"One " +
-          "bottle, most nights, then home — ten minutes' walk past the railway, and she " +
-          "likes me in by nine.\" He tips the bottle at the lake, the road, the dark past " +
-          "it. \"Sixteen years. Not much of a talker, the town lads'll tell you. They'll " +
-          "tell you a fair bit else and all.\" He doesn't mind if you sit, and doesn't " +
-          "mind if you don't.",
+      { text: "\"Neil.\" One hand off the bottle, a nod, and the hand goes back. \"One bottle, most nights, then home — ten minutes' walk past the railway, and she likes me in by nine.\" He tips the bottle at the lake, the road, the dark past it. \"Sixteen years. Not much of a talker, the town lads'll tell you. They'll tell you a fair bit else and all.\" He doesn't mind if you sit, and doesn't mind if you don't.",
         short: "\"Neil. One bottle, then home past the railway. Sixteen years. Not much of a talker.\"" },
-      { topic: "wife",
-        text: "\"Her?\" The bottle stops halfway. \"You'll have heard how it started, or you " +
-          "can guess. Walking Street, a barfine, another one two nights on, and a suitcase " +
-          "in my condo inside the month. The lads in town did the chorus — meter's running, " +
-          "son, she's a pro. And I had the other thing going, the daft one. I can change " +
-          "her.\" He drinks. \"Then the money ran out. Properly. The work dried up and the " +
-          "account went to nothing, and the rule is dry wallet, empty bed. Everybody knows " +
-          "the rule.\" A pause you could park a bus in. \"She went out mornings instead. Came " +
-          "back smelling of mud and salt. Morning glory off the roadside, wild basil, and " +
-          "clams — dug off the Naklua flats at low tide, with her hands. She cooked them. " +
-          "We ate them. She stayed.\" He looks at the bottle as if it has said something. " +
-          "\"That's the whole of it. Everything after is just what happened next.\"",
-        short: "\"The money went, and instead of leaving she dug clams off the Naklua flats at low tide and cooked them. She stayed. Everything after is just what happened next.\"" },
-      // CLAM is the word the game keeps putting in the player's mouth — the
-      // Owl's column signposts "the quiet man on the end stool", and Boonsri
-      // says "He tell you about the clam? Of course he tell you" — while the
-      // story lived on `wife`, so the one word everybody hands you missed
-      // (Gerry, round 34). A literal key on HIM: the synonym was tried
-      // globally first and collided with every other character who has a wife
-      // (asking Lake Gary about clams answered with HIS marriage).
-      { topic: "clam",
-        text: "\"The clams.\" Neil turns the bottle a half-circle on the mat, which is what " +
-          "he does instead of starting. \"Somebody's told you, then. Boonsri, probably — " +
-          "she thinks it's the best thing about me, and she's right.\" A long look at the " +
-          "lake. \"Naklua flats, low tide, with her hands, in the months when I had nothing " +
-          "and the rule says a dry wallet gets an empty bed.\" He drinks. \"Ask me about my " +
-          "wife and I'll tell it properly. It's not a clam story. It's the only story I've " +
-          "got.\"",
-        short: "\"Naklua flats, low tide, with her hands, in the months I had nothing. Ask me about my wife for the whole of it.\"" },
-      { topic: "family", sets: ["neilStory"],
-        text: "\"The village.\" He says it like a man naming a wall he walked into. \"That's " +
-          "where I nearly lost it. Not the bars, not the money going — the money going HOME. " +
-          "A slice to Isan every month, and I couldn't stand it, not after the clams, not with " +
-          "a baby in the house. My money still bleeding up-country to people I'd never met.\" " +
-          "He turns the bottle. \"She put it to me straight, one Tuesday. The village needs " +
-          "help. Help me, or I go back to work. And I did what the lads would've done — I went " +
-          "off. Just like the rest of them, she said, and she wasn't wrong.\" Quiet. \"She " +
-          "walked out and left the baby in my arms. Town had a drink on it that night, I'm " +
-          "told. Back on the poles already, mate.\" One shake of the head. \"She'd got a " +
-          "third-class bus to Isan. Twelve hours. Gone three days, to face her own family with " +
-          "nothing in her hand.\" The bottle goes down. \"What was said in that house I don't " +
-          "know. Sixteen years, never asked. It isn't mine to know. Third night the door went, " +
-          "and she stood there with the road still on her, and she said: fine. Then we fight " +
-          "together.\" He picks the bottle back up. \"That's the sentence. Everything I've got " +
-          "is built on that sentence.\"",
-        short: "\"The family money nearly ended us. She went home to Isan on a third-class bus — what was said there I never asked — and came back and said: fine, then we fight together.\"" },
-      { topic: "darkside",
-        text: "\"Over the highway, aye. Had to — town rent was a joke by then and so were we.\" " +
-          "A small dry sound. \"East Pattaya. A concrete townhouse with the render coming off " +
-          "and a gate rusted in the one position. She scrounged planks off a building site and " +
-          "knocked up a stand on the corner — crooked as a dog's back leg — and sold Thai iced " +
-          "tea to the motosai lads, twenty-five baht a cup, with the baby asleep in a sling " +
-          "across her front.\" He nods past you at the bar. \"Boonsri's got the snap on her " +
-          "fridge somewhere. Plain-rice weeks, that was. Visa scares. A spell where my back went " +
-          "and I couldn't stand, and her doing two stalls. Grind, son. No glamour in it " +
-          "anywhere. But you grind together or you don't, and we did.\" A shrug. \"The stand's a " +
-          "bakery now. Her name over the door, not mine. Right and proper.\"",
-        short: "\"Over the highway — a rotting townhouse and a crooked tea stand on the corner, twenty-five baht a cup, the baby in a sling. Plain-rice years. It's a bakery now, her name over the door.\"" },
-      { topic: "mates",
-        text: "\"The lads? Cut them off. Had to.\" No heat in it. \"Every time I walked in it was " +
-          "has she left you yet, like a cheer. Same four blokes, same stools, same 1998. I don't " +
-          "blame them — they'd watched it go wrong a hundred times, and my first year looked " +
-          "the same as the hundred from where they sat. They weren't being cruel. They were being " +
-          "right, statistically.\" He lifts the empty an inch for Boonsri. \"That's what nobody " +
-          "tells you about the chorus. It's nearly always right. Nine in ten. I'm just not the " +
-          "nine.\"",
-        short: "\"Cut the town lads off — 'has she left you yet', every time. They weren't cruel. They were right, nine in ten. I'm the tenth.\"" },
-      { topic: "daughter",
-        text: "\"Fourteen.\" The first thing like a smile. \"Mall perfume, a new {{phone}} she didn't " +
-          "need, a Bolt to the mall with her mates like it's the bus. Thai school, English at " +
-          "home, better at both than me.\" He sets the bottle down square. \"She asked me the " +
-          "other week — followed my eye to the old photo we keep on the shelf — Pho, how did " +
-          "you and Mum actually meet?\" He lets it sit. \"Sixteen years I've had to think about " +
-          "that one.\" He looks at the lake. \"Well, I said. It all started at the beach.\" A " +
-          "beat. \"And it did, near enough. The rest she can have when she's older, or never. " +
-          "Her mum's call, that.\"",
-        short: "\"Fourteen, mall perfume, new {{phone}}. Asked me how her mum and I met. I said: it all started at the beach. Near enough.\"" },
-      { topic: "beach",
-        text: "\"The beach?\" He very nearly laughs. \"That's the version for the kid. You want " +
-          "the grown-up one, ask me about her. About my wife.\"",
-        short: "\"The beach is the kid's version. Ask me about my wife for the grown-up one.\"" },
-      { topic: "photo",
-        text: "\"That one on Boonsri's fridge? Hers. She stuck it up years back, when we were " +
-          "her only regulars and a regular meant one bottle split two ways.\" He doesn't look " +
-          "at it. \"The stand, the sling, the board. Twenty-five baht. Heaviest thing on that " +
-          "fridge, that is, and it's a snapshot on a magnet.\"",
-        short: "\"The snap on the fridge — the stand, the sling. Boonsri stuck it up years back. Heaviest thing on that fridge.\"" },
-      { topic: "boathouse",
-        text: "\"Next door?\" A nod toward the Boathouse. \"Her at the till, aye. Her fella was " +
-          "here a long time and then he went home, and she kept the house and the boy and the " +
-          "lot.\" He turns the bottle. \"Same story as ours, one line different — hers left, " +
-          "mine stayed. You don't get to pick which line you're in. I've never once thought I " +
-          "earned mine.\"",
+      { topic: "engineer|work|job|ships|navy|the yards", text: "\"Ship's engineer. Sunderland yards till they shut, then the merchant navy, then a contract out of Laem Chabang that paid for the first three years here.\" He turns the bottle. \"Then the agency went under owing me a quarter's money, and that is the whole of my career in one sentence.\" A glance at the lake. \"Now I fix the cold room at the shop when it sulks. Same trade, smaller boat.\"",
+        short: "\"Ship's engineer. The agency went under owing me a quarter. Now I fix the shop's cold room.\"" },
+      { topic: "wife", sets: ["neilStory"],
+        text: "\"Her?\" The bottle stops halfway. \"You'll have heard how it started, or you can guess. She had the till at a bar on Buakhao and I was the man who came in for the darts and never threw one. Three months and a suitcase in my condo, and the lads in town did the chorus — she's on the clock, son, they can all count.\" He drinks. \"Then the agency went under. Owing me. The rule is dry wallet, empty bed, and everybody knows the rule.\" A pause you could park a bus in. \"She started getting up at four. Came home at nine smelling of fruit and two-stroke. Two plastic tubs, the wholesale market at Rayong, and a borrowed sidecar — mangosteen, rambutan, whatever was cheap that week — sold outside the temple fair and the building sites while I sat in the condo being ashamed of a woman who was feeding me.\" He sets the bottle down. \"She stayed. Everything after is just what happened next.\"",
+        short: "\"The money went, and instead of leaving she got up at four and sold fruit off a borrowed sidecar. She stayed. Everything after is just what happened next.\"" },
+      { topic: "fruit|sidecar|mangosteen|rambutan|the market|wholesale", text: "\"The sidecar.\" Neil turns the bottle a half-circle on the mat, which is what he does instead of starting. \"Somebody's told you, then. Boonsri, probably — she thinks it's the best thing about me, and she's right that it isn't about me at all.\" A long look at the lake. \"Four in the morning, the Rayong wholesale, two tubs, in the months I had nothing. Ask me about my wife and I'll tell it properly. It's not a fruit story. It's the only story I've got.\"",
+        short: "\"Four in the morning, the Rayong wholesale, two tubs, in the months I had nothing. Ask me about my wife for the whole of it.\"" },
+      { topic: "darkside", text: "\"Over the highway, aye. Had to — town rent went up the week the money went, the way it does.\" A small dry sound. \"That's where I nearly lost it. Not the bars, not the money — my mouth. She said: over the railway, there's a townhouse, cheap. And I said I was not living past the railway like a —\" he stops, and doesn't finish it, sixteen years on. \"She took the boy to her cousin's for a week. I found the townhouse myself. Render off the walls, a gate rusted in the one position, and the sidecar parked in the front room.\" He drinks. \"The stall went by the railway crossing. The motosai lads at six, the builders at seven. It's a shop now, with a cold room I keep alive. Fruit and ice. Her name over the door, not mine.\"",
+        short: "\"Over the highway — a rotting townhouse by the railway, the sidecar in the front room. I said a thing about living past the railway I've not finished saying since. It's a shop now, her name over the door.\"" },
+      { topic: "mates|lads|the lads|sweepstake|the book", text: "\"The lads? Cut them off. Had to.\" No heat in it. \"They ran a book on it. Proper sweepstake, a hundred baht a slip, how long before she was gone with the lot — Nigel had three months. Every time I walked in somebody checked the date.\" He lifts the empty an inch for Boonsri. \"I don't blame them. They'd watched it go wrong for more men than I've met, and my first year looked the same from a stool. They weren't being cruel. They were being right, mostly.\" A beat. \"Nobody ever collected. That's the bit they don't tell on Buakhao.\"",
+        short: "\"The lads ran a book on how long she'd last. Nigel had three months. Nobody ever collected.\"" },
+      { topic: "son|boy|kid|the boy", text: "\"Twelve.\" The first thing like a smile. \"Football boots that cost more than my first car, Thai school, English at home, better at both than me.\" He sets the bottle down square. \"He asked me the other week — Pho, how did you and Mum actually meet?\" He lets it sit. \"Sixteen years I've had to think about that one.\" He looks at the lake. \"Over a dartboard, I said. Which is true. I never threw one.\" A beat. \"The rest he can have when he's older, or never. His mum's call, that.\"",
+        short: "\"Twelve, football boots dearer than my first car. Asked how his mum and I met. Over a dartboard, I said. Which is true.\"" },
+      { topic: "darts|dartboard", text: "\"The dartboard?\" He very nearly laughs. \"That's the version for the lad. You want the grown-up one, ask me about her. About my wife.\"",
+        short: "\"The dartboard is the kid's version. Ask me about my wife for the grown-up one.\"" },
+      { topic: "card|price card|the card|fridge", text: "\"That one on Boonsri's fridge? Hers. She kept it when we moved up to the shop and the stall came down — her idea, not ours.\" He doesn't look at it. \"Two alphabets, prices from another decade. Mangosteen twenty. Heaviest thing on that fridge, that is, and it's a bit of laminated card.\"",
+        short: "\"The price card on the fridge — Boonsri kept it when the stall came down. Heaviest thing on that fridge.\"" },
+      { topic: "boathouse", text: "\"Next door?\" A nod toward the Boathouse. \"Her at the till, aye. Her fella was here a long time and then he went home, and she kept the house and the boy and the lot.\" He turns the bottle. \"Same story as ours, one line different — hers left, mine stayed. You don't get to pick which line you're in. I've never once thought I earned mine.\"",
         short: "\"The woman at the Boathouse till — her fella went home. Same story as ours, one line different. I didn't earn mine.\"" },
-      // The triangulation payoff: only a player who heard Nigel's version in
-      // town can bring it here. No link points this way.
-      { topic: "nigel", req: ["heardNeilWrong"],
-        text: "\"Nigel.\" Not a flinch — he's had sixteen years. \"Still telling it, then. Has " +
-          "she left you yet.\" He says it without heat, like reading a bus number. \"They're " +
-          "not liars, the town lads. They watched it go wrong for a hundred blokes, and they " +
-          "watched the first year of mine, and from a stool it looked the same. Then we went " +
-          "over the highway and stopped being watchable.\" He finishes the bottle. \"He's " +
-          "right nine times in ten, Nigel. I'm not clever. I'm the tenth, and I did the same " +
-          "daft thing the other nine did. The difference was her, and she's the bit nobody on " +
-          "that soi ever got to see.\"",
-        short: "\"Nigel? Still telling it. They're right nine in ten — I'm the tenth, and I did the same daft thing. The difference was her.\"" },
+      { topic: "nigel", req: ["heardNeilWrong"], text: "\"Nigel.\" Not a flinch — he's had sixteen years. \"Still got his slip, has he. Three months.\" He says it without heat, like reading a bus number. \"They're not liars, the town lads. They watched it go wrong for a hundred blokes, and they watched the first year of mine, and from a stool it looked the same. Then we went over the highway and stopped being watchable.\" He finishes the bottle. \"He wasn't wrong to bet. I'm not clever; I did the same daft thing the other hundred did. The difference was her, and she's the bit nobody on that soi ever got to see.\"",
+        short: "\"Nigel? Still got his slip. They weren't wrong to bet — I did the same daft thing. The difference was her.\"" },
+
     ],
   },
 
@@ -15550,18 +15460,18 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       // player who has heard both gets the crack below (never a conversion — the
       // veterans' model is right nine nights in ten, and Nigel is not mocked).
       { topic: "darkside", req: ["neilStory"],
-        text: "\"Neil?\" Something passes over the fixed forward stare and is gone. \"Out at the " +
-          "lake. Still.\" He turns the glass a quarter-turn, and then another. \"And she's — " +
-          "still about, is she. And a kid.\" It is not a question and he doesn't make it one. " +
-          "\"Well.\" A long pull. \"Good luck to him. Doesn't change anything. Nine in ten, son, " +
-          "you mark me. Nine in ten.\" The performance is a beat late restarting, and when it " +
-          "does it is about the exchange rate.",
-        short: "\"Neil? Still out at the lake, is he. Good luck to him. Doesn't change anything — nine in ten, son.\"" },
+        text: "\"Neil?\" Something passes over the fixed forward stare and is gone. \"Out at the lake. Still.\" " +
+          "He turns the glass a quarter-turn, and then another. \"And she's — still about, is she. And a kid.\" " +
+          "It is not a question and he doesn't make it one. \"Well.\" A long pull. \"I had three months on him. " +
+          "Hundred baht a slip. Still got mine somewhere.\" He does not say whether that is a joke. \"Doesn't " +
+          "change anything, son. The book's right more than it's wrong.\" The performance is a beat late " +
+          "restarting, and when it does it is about the exchange rate.",
+        short: "\"Neil? Out at the lake, still. I had three months on him. The book's right more than it's wrong.\"" },
       { topic: "darkside", sets: ["heardNeilWrong"],
-        text: "\"The Darkside? Graveyard, son.\" He settles into it. \"Had a mate — Neil, sparky, " +
-          "sharp lad — took a dancer home off Walking Street, the full suitcase job. We all told " +
-          "him. Then the money went, and — well. You know what happens when the money goes.\" " +
-          "The glass comes down. \"She'll have had the lot off him and been back on a pole inside " +
+        text: "\"The Darkside? Graveyard, son.\" He settles into it. \"Had a mate — Neil, ship's engineer, " +
+          "sharp lad — took the till girl off a Buakhao bar home, the full suitcase job. We ran a book on " +
+          "it; I had three months. Then his money went, and — well. You know what happens when the money goes.\" " +
+          "The glass comes down. \"She'll have had the lot off him and been back behind a till inside " +
           "the week, and he went native over the highway, or home, or God knows. Never seen him " +
           "since. Nobody has.\" He looks at the door as if Neil might still come through it. " +
           "\"That's the Darkside for you. It's where the story ends, not where it goes.\"",
@@ -17642,16 +17552,16 @@ for (const [name, th, room] of _FILLER_MAMAS) {
 // not about their romance. Unshifted so the topic wins first-match; her
 // generated greeting and topics are untouched.
 if (NPCS.boonsri) NPCS.boonsri.dialogue.unshift({
-  topic: "photo",
-  text: "\"The little one, on the fridge?\" She doesn't turn to look; she knows which one. " +
-    "\"Is not their photo. Is mine.\" She says it flatly, the way you'd state a price. " +
+  topic: "photo|card|price card",
+  text: "\"The card, on the fridge?\" She doesn't turn to look; she knows which one. " +
+    "\"Is not their card. Is mine.\" She says it flatly, the way you'd state a price. " +
     "\"Nineteen year I have this bar. One year — bad year — I have two customer. Him, her. " +
     "Some night only them, one bottle, they split it and stay till close so the room is not " +
     "empty.\" A single pass of the cloth along the bar. \"I put it up for ME, na. To remember " +
     "the year I nearly lose this place. Not because is sweet.\" Then, dryly, without looking " +
-    "up: \"He tell you about the clam? Of course he tell you. Twenty year, he tell everybody " +
-    "about the clam.\"",
-  short: "\"Is not their photo, is mine — the year I had two customer and nearly lost the bar. " +
+    "up: \"He tell you about the sidecar? Of course he tell you. Sixteen year, he tell everybody " +
+    "about the sidecar.\"",
+  short: "\"Is not their card, is mine — the year I had two customer and nearly lost the bar. " +
     "I keep it for me, na.\"",
 });
 for (const [name, th, room] of _FILLER_CASHIERS) {

@@ -8892,9 +8892,9 @@ const _OWL_LETTERS = [
     "Darkside years back — took a dancer home, we all told him. Then the money went, so she'll " +
     "have been gone inside the week. Nobody's seen him since. Another one for your ledger, Owl.'",
    "The Owl keeps that ledger, squire, and this entry reads differently from the east side of " +
-    "the highway. Your mate's money went, and the lady went out at low tide and dug clams off " +
-    "the Naklua flats, and cooked them, and stayed. There was a tea stand after — lopsided, " +
-    "twenty-five baht a cup, a baby in a sling — and there is a bakery now, and the ledger says " +
+    "the highway. Your mate's money went, and the lady got up at four and sold fruit off a " +
+    "borrowed sidecar outside the building sites, and stayed. There was a stall by the railway " +
+    "crossing after, and there is a shop now with her name over it, and the ledger says " +
     "so in her handwriting. You are not wrong about the odds; nine times in ten the meter runs " +
     "dry and the bed is empty, and I have printed those nine without flinching. But a man who " +
     "only counts the ones who come back to the bar will never count the ones who didn't need " +
@@ -9025,8 +9025,8 @@ const _OWL_LISTINGS = [
 // exist only for these flagship fixtures — the map grows with the canon.
 const _OWL_NOTICED = {
   "lake_beer.photos": ["A reader out at the lake writes that among the birthdays and the fish on " +
-    "The Sundowner's fridge there is one snapshot that doesn't belong — a crooked tea stand, a " +
-    "baby in a sling — and asks whose it is.",
+    "The Sundowner's fridge there is one thing that isn't a photograph — a hand-lettered price " +
+    "card in two alphabets, fruit and ice, prices from another decade — and asks whose it is.",
     "Ask the quiet man on the end stool, squire, and buy him the one bottle he drinks. Or don't, " +
     "and leave it where it is. It has been the heaviest thing on that fridge for years, and it " +
     "weighs what a magnet weighs."],

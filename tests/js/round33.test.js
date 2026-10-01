@@ -119,7 +119,7 @@ test("Boonsri can discuss the photo Neil says she put up (Wes)", () => {
   // Neil's `photo` node: "That one on Boonsri's fridge? Hers. She stuck it up
   // years back" — and she answered "that one I don't know, na", being a filler
   // mamasan. The game named her as the custodian of the object.
-  const neil = NPCS.neil.dialogue.find(d => d.topic === "photo");
+  const neil = NPCS.neil.dialogue.find(d => d.topic && /\bcard\b/.test(d.topic));
   assert.match(neil.text, /Boonsri's fridge\? Hers/, "premise: he names her");
   _setFlag("act1Done"); G.room = "lake_beer";
   run("talk to boonsri");

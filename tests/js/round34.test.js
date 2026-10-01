@@ -176,8 +176,8 @@ test("a door shown at night's end closes out loud (Gerry)", () => {
 test("the clam reaches the story it advertises — both of them (Gerry)", () => {
   _setFlag("act1Done"); G.nightTurn = 20;
   G.room = NPCS.neil.room;
-  out = []; run("ask neil about clam");
-  assert.match(text(), /Her\?|Walking Street|wife/i, "Neil's clam is his wife's story");
+  out = []; run("ask neil about sidecar");
+  assert.match(text(), /Her\?|wife|sidecar/i, "Neil's sidecar is his wife's story");
   G.room = "khao_talo_bar";
   out = []; run("ask daeng about clams");
   assert.match(text(), /Covid/i, "Daeng's clam stays hers, by the literal-first rule");

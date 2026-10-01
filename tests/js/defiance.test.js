@@ -47,24 +47,23 @@ test("Nigel's Darkside version is the wrong one, and it sets the grapevine flag"
   assert.doesNotMatch(text(), /Good luck to him/);
 });
 
-test("Neil's own telling needs no flag — the clams, the sentence, the tea stand, the beach", () => {
+test("Neil's own telling needs no flag — the sidecar, the week at the cousin's, the railway shop, the dartboard", () => {
   G.room = "lake_beer";
   _doTalkBody("neil", "wife");
-  assert.match(text(), /clams/);
+  assert.match(text(), /sidecar/);
   assert.match(text(), /She stayed/);
-  out = [];
-  _doTalkBody("neil", "family");
-  assert.match(text(), /we fight together/i);
   assert.ok(_flag("neilStory"));
-  // Isan stays offscreen: what was said in that house is never narrated
-  assert.match(text(), /never asked/);
   out = [];
   _doTalkBody("neil", "darkside");
-  assert.match(text(), /twenty-five baht/);
-  assert.match(text(), /bakery/);
+  // the crisis is his own mouth, and the sentence stays unfinished sixteen years on
+  assert.match(text(), /doesn't finish it/);
   out = [];
-  _doTalkBody("neil", "daughter");
-  assert.match(text(), /started at the beach/);
+  _doTalkBody("neil", "darkside");
+  assert.match(text(), /railway/);
+  assert.match(text(), /shop now/);
+  out = [];
+  _doTalkBody("neil", "son");
+  assert.match(text(), /dartboard/i);
 });
 
 test("the triangulation payoff fires only for a player who heard both versions", () => {
@@ -75,24 +74,24 @@ test("the triangulation payoff fires only for a player who heard both versions",
   _setFlag("heardNeilWrong");
   out = [];
   _doTalkBody("neil", "nigel");
-  assert.match(text(), /Still telling it/);
-  assert.match(text(), /nine in ten|nine times in ten/i);
+  assert.match(text(), /Still got his slip/);
+  assert.match(text(), /three months|the book/i);
   // and back in town, Nigel cracks but does not convert
   _setFlag("neilStory");
   G.room = NPCS.nigel.room;
   out = [];
   _doTalkBody("nigel", "darkside");
-  assert.match(text(), /Good luck to him/);
-  assert.match(text(), /Nine in ten/);
+  assert.match(text(), /three months/);
+  assert.match(text(), /the book/i);
   assert.doesNotMatch(text(), /Graveyard/);
 });
 
-test("the tea-stand photograph on The Sundowner's fridge reads in two tiers", () => {
+test("the price card on The Sundowner's fridge reads in two tiers", () => {
   G.room = "lake_beer";
   out = [];
   doCommand("examine photos");
-  assert.match(text(), /baby in a sling/);
-  assert.match(text(), /Nobody you'd recognise/);
+  assert.match(text(), /price card/);
+  assert.match(text(), /Nobody's name on it/);
   _setFlag("neilStory");
   out = [];
   doCommand("examine photos");
@@ -118,7 +117,7 @@ test("patrons get the synonym retry too — ASK NIGEL ABOUT NEIL reaches his dar
 test("the Owl's ledger entry exists and keeps the odds honest", () => {
   const l = _OWL_LETTERS.find(([q]) => /went native over the Darkside/.test(q));
   assert.ok(l, "the has-she-left-you-yet letter");
-  assert.match(l[1], /clams/);
+  assert.match(l[1], /sidecar/);
   assert.match(l[1], /nine times in ten/);
   assert.match(l[1], /Fewer than you hope/);
 });
@@ -126,5 +125,5 @@ test("the Owl's ledger entry exists and keeps the odds honest", () => {
 test("register: no fairy tale, no grading — the cost stays in every telling", () => {
   const all = NPCS.neil.dialogue.map(d => d.text + " " + (d.short || "")).join(" ");
   assert.doesNotMatch(all, /happy ending|fairy ?tale|true love|soul ?mate/i);
-  assert.match(all, /plain-rice|Grind/);
+  assert.match(all, /ashamed|rusted|owing me/);
 });
