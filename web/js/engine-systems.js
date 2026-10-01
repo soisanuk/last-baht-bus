@@ -865,6 +865,7 @@ function _bfDayRefusal(id) {
     (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind, favor: _favor(id) };
     return G.soc.bfRefused[id];
   };
+  if (_maiDee(id)) return keep("maidee");   // the verdict comes before the calendar: a no with nothing in it to negotiate (theme 6)
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
   if (life < 10) return keep(life < 5 ? "period" : "temple");
@@ -882,6 +883,7 @@ function _bfRefusal(id, bt) {
     (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind, favor: _favor(id) };
     return G.soc.bfRefused[id];
   };
+  if (_maiDee(id)) return keep("maidee");   // the verdict: a no with nothing in it to negotiate (theme 6)
   // SOMEBODY HAS TO STAND HERE. A one-woman bar's owner cannot leave with you,
   // and the reason is a rota rather than a virtue: there is no mamasan to cover
   // and no cashier to hold the till (Mario, round 43 — "who runs the bar if that
@@ -964,6 +966,10 @@ function _bfRefusalSay(id, r) {
     sponsor: `${name} touches your arm, honestly sorry: “Cannot now, tilac. My ` +
       "friend — he take care me, I no working while he in town. You " +
       "understand, na?” Everyone understands. It's a calendar, not a heartbreak.",
+    maidee: `${name} hears the question all the way to the end, politely, and says “No, ` +
+      "thank you,” the way you would decline a second helping. No number, no mamasan, no " +
+      "reason offered, because the reason was in front of a whole bar and everybody in it " +
+      "still remembers. She picks up your empty and asks if you want another.",
     dislike: `${name} looks at you kindly, which is worse: “You nice man. But ` +
       "no, na.” She signals the mamasan off with one flick of the eyes, and " +
       "the ledger never even opens. No is a complete sentence here.",
@@ -1312,7 +1318,7 @@ function _bfPrompt(fresh) {
   // At her-farang tier she waives the fine herself — foreshadow it in the quote
   // so a price-shy player doesn't back out at a number that won't be charged
   // (Alan playtest, 2026-08-17: the lovely reveal only fired AFTER committing).
-  if (id && typeof _bondTier === "function" && _bondTier(id) >= 3 && (st > 0 || lt > 0)) {
+  if (id && typeof _bondTier === "function" && _bondTier(id) >= 3 && (st > 0 || lt > 0) && _careOk(id)) {
     const _mamaHere = _npcsHere().some(i => NPC_ROLES[i] === "mamasan" && i !== id);
     _say((_mamaHere ? `(The mamasan starts to name a number; ${NPCS[id].name} waves her quiet — `
       // a one-woman bar has nobody to name it: the two lines contradicted (Dieter, round 56)
@@ -1400,9 +1406,10 @@ function _bfResolve(kind) {
   // her farang: at the top bond tier she squares the fine with the mamasan
   // herself and comes off the clock — you stopped being a customer to her.
   let offBook = false;
-  if (_bondTier(id) >= 3 && price > 0) {
+  if (_bondTier(id) >= 3 && price > 0 && _careOk(id)) {
     offBook = true;
     price = 0;
+    _careWaived(id);   // what she squares it with is her own cut — she will say so (theme 1)
     _say(`${name} doesn't so much as glance at the till. A word to the mamasan, a ` +
       "nod, a roll of the eyes at the very idea of a fine for YOU — and she's already " +
       "untying her apron. She squares it herself. You stopped being a customer to her " +
@@ -3637,9 +3644,18 @@ function _doBlackbook() {
       continue;
     }
     const bar = _barName(_npcRoom(id)) || "around";
+    if (_maiDee(id)) {   // the verdict has a row, because the book is honest (theme 6)
+      _say(`✕ ${n.emoji || ""} ${n.name} — ${bar} · decided about you, in front of a room · nothing on this page reopens it`, "dim");
+      continue;
+    }
     const invited = G.phone.invite && G.phone.invite.id === id && G.phone.invite.day === G.day
       ? " — asked you over tonight" : "";
-    _say(`${mark[t]} ${n.emoji || ""} ${n.name} — ${bar} · ${_lbl(id, t)}${invited}`, t >= 2 ? "" : "dim");
+    // the phone's own memory: what she has asked for, and what you sent (theme 4)
+    const asks = (G.phone.asks && G.phone.asks[id]) || [];
+    const askNote = asks.length ? ` · asked ${asks.length}× (฿${asks.reduce((a, x) => a + x.amt, 0)}), ` +
+      `${asks.filter(x => x.paid).length} answered` : "";
+    const careNote = G.care && G.care[id] && G.care[id].asked != null ? " · waiting on her night's money" : "";
+    _say(`${mark[t]} ${n.emoji || ""} ${n.name} — ${bar} · ${_lbl(id, t)}${invited}${askNote}${careNote}`, t >= 2 ? "" : "dim");
   }
   // Same denominator doctrine as the gallery: ladies you have actually met, not
   // the 283 on the payroll. It grows as you get out more, so the ratio is a
@@ -4107,6 +4123,41 @@ function _doSendMoney(arg) {
     _say("(📱 CHECK MESSAGES.)", "dim");
     return;
   }
+  // the verdict: she takes it as severance, once, and the phone goes quiet (theme 6)
+  if (_maiDee(id)) {
+    G.bank -= amt; G.sentTotal = (G.sentTotal || 0) + amt; G.battery = Math.max(0, G.battery - 1);
+    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+    if (!(G.maiDeeMoney = G.maiDeeMoney || {})[id]) {
+      G.maiDeeMoney[id] = true;
+      _pushMsg(id, _MAI_DEE_MONEY);
+      _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    } else _say("(The transfer is received. Nothing comes back, and nothing is going to.)", "dim");
+    return;
+  }
+  // A BIG GIFT FROM THE WRONG MAN (theme 1): below regular, money this size is a rope
+  // she did not ask for. Half the women send it back; the rest take it and write it
+  // down, and the bond it buys is one notch, not three — the account closes later, in
+  // kind (_tobTaen). The sponsor girls keep their own drip; a pics-drip is a purchase.
+  const _dripping = G.phone.picDeals && G.phone.picDeals[id] && !G.phone.picDeals[id].done;
+  if (amt >= GIFT_BIG && NPC_ROLES[id] && NPCS[id].type !== "sponsor" && !_dripping && _knownTier(id) < 2) {
+    G.battery = Math.max(0, G.battery - 1);
+    if (_hh(String(id) + ":krengjai", 113) % 2 === 0) {
+      _say(_fmt("฿{a} goes out — and comes back inside the minute, with a text.", { a: amt }));
+      _pushMsg(id, _pickVary(_GIFT_BACK, "giftback:" + id));
+      _say("(📱 CHECK MESSAGES.)", "dim");
+      return;
+    }
+    G.bank -= amt; G.sentTotal = (G.sentTotal || 0) + amt;
+    if (amt >= CCIB_LOUD_MONEY && typeof _ccibLoud === "function") _ccibLoud("money");
+    (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amt;
+    const o = (G.owed = G.owed || {})[id];
+    G.owed[id] = { amt: (o ? o.amt : 0) + amt, day: G.day };
+    _addBond(id, 1);
+    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+    _pushMsg(id, _pickVary(_GIFT_ACCOUNT, "giftacct:" + id));
+    _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    return;
+  }
   G.bank -= amt;
   G.sentTotal = (G.sentTotal || 0) + amt;
   if (amt >= CCIB_LOUD_MONEY && typeof _ccibLoud === "function") _ccibLoud("money");
@@ -4114,6 +4165,8 @@ function _doSendMoney(arg) {
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
   _addBond(id, bump);
+  const _care = _careSent(id, amt);         // her night's money, understood (theme 1)
+  const _ask = _askPaid(id, amt);           // an ask on the books, answered (theme 4)
   if (_npcsHere().includes(id))
     _say(_fmt("฿{a}, phone to phone across the width of a bar — her handset buzzes in her hand " +
       "and she looks at it, then at you, and doesn't quite manage not to smile. (฿{m} left in the account.)",
@@ -4157,6 +4210,12 @@ function _doSendMoney(arg) {
     if (_sponsorFlipped(id)) _pushMsg(id, "💗 come see me na, tilac");
     else if (!dripped) _pushMsg(id, amt >= 500 ? "khop khun ka 🙏 you too kind to me" : "thank you na 😊");
     if (!dripped) _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    return;
+  }
+  if (_care) { _pushMsg(id, _pickVary(_CARE_THANKS, "carethanks:" + id)); _say("(📱 A reply lands before you've pocketed the phone.)", "dim"); return; }
+  if (_ask) {
+    _pushMsg(id, _askScripted(id) ? _pickVary(_ASK_THANKS_SCRIPT, "askthanks:" + id) : _ASK_THANKS[_ask.kind]);
+    _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
     return;
   }
   _pushMsg(id, amt >= 500 ? _pickVary(["🙏🙏🙏 you TOO good to me. tonight I take care YOU",
@@ -4856,7 +4915,8 @@ function _maybeIncomingText() {
   // ladies only: the unprompted-text machinery (invites, scam-asks, selfies) is
   // girl-voiced through and through — Tan (no NPC_ROLES entry) texts back when
   // texted, never into the mama-sick patter
-  let contacts = Object.keys(G.phone.contacts).filter(_texts);   // "a contact who texts", not "works a bar floor" (Judith, round 47: Priew never sent one)
+  let contacts = Object.keys(G.phone.contacts).filter(_texts)   // "a contact who texts", not "works a bar floor" (Judith, round 47: Priew never sent one)
+    .filter(id => !_maiDee(id));   // …and never again from a woman who has decided (theme 6)
   // the affair's endings reach the phone too (Frank, 2026-08-26: the in-love
   // text pool kept sending the morning after she left). Gone is gone — silence
   // is her whole statement. Won gets its own register: Prachuap, not a barstool.
@@ -4980,26 +5040,217 @@ function _maybeIncomingText() {
         `you where na? 👀 come sit with ${name}, i save you the good stool`,
         `tonight have music! you come? ${name} wait you 🎶🍺`,
       ], "invite2")); }
-    else if (roll < 0.6) _pushMsg(id, _pickVary([
-      `family of me sick need medicine 300 🥺 you help little bit na? (SEND 300 TO ${NPCS[id].name.toUpperCase()})`,
-      `mama go hospital today 😢 i short 300 for medicine... you can? (SEND 300 TO ${NPCS[id].name.toUpperCase()})`,
-      `sorry ask you na 🙏 room rent tomorrow, i short 300. next month i pay you back (SEND 300 TO ${NPCS[id].name.toUpperCase()})`,
-      `little brother school fee 300 😔 i no like ask but you good heart (SEND 300 TO ${NPCS[id].name.toUpperCase()})`,
-    ], "ask2:" + id));
+    else if (roll < 0.6 + _askBias(id)) _pushMsg(id, _moneyAsk(id) || _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
     else _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
   } else { // a name and a number: the classic mix, scam-ask heavy
     if (roll < 0.3) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
-    else if (roll < 0.65) _pushMsg(id, ["somebody in family sick, need buy medicine 300 baht 🥺 you help?",
-      "phone of me break!! need 500 for fix... you good heart na 🙏",
-      "buffalo of family very sick 😭😭 200 baht help little bit?",
-      "motorbike of me broken 😩 mechanic say 400. you help little? i pay back",
-      "no customer 3 day already 😢 mama angry. 300 for room na, please",
-      "papa need medicine, pharmacy 250 baht. sorry i ask you 🙏🙏"][Math.floor(_rand() * 6)]);
+    else if (roll < 0.65 + _askBias(id)) _pushMsg(id, _moneyAsk(id) || _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
     else if (roll < 0.9) _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
     else _pushMsg(id, "lucky day!! I win lottery small small 🎉 send you luck money", 50);
   }
   _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
+}
+
+// ── The obligation economy, the verdict, and the phone's memory ───────────────
+// Essay ledger themes 1, 4 and 6 (docs/essay-ledger.md, 2026-10-01), built under
+// docs/source-material-policy.md: the pattern, never the expression. Three rules the
+// corpus keeps stating and the game had wrong. (1) A big gift from a man she does not
+// know is not generosity, it is a debt she did not ask for — half the women send it
+// straight back, the rest take it and OWE you, and the account is settled later and a
+// little bigger, in kind, never in baht. (2) Her-farang is where obligation starts: the
+// fine the bar forgoes for you is her money, and after CARE_WAIVED nights she says so,
+// in her own voice, once; a man who understands sends her the night's money and a man
+// who doesn't finds the apron no longer comes off for free. (3) The phone remembers
+// every money-ask (G.phone.asks): an honest woman never asks for the same thing twice;
+// the scripted minority does, word for word, which is the tell — and the more you have
+// sent, the sooner you are the first number she calls. Nothing here moral-grades: a
+// refused gift is kreng jai, a repeated ask is a script, and both are the town working.
+
+// a stranger's big money, sent back — hers to refuse, and the refusal is a kindness she
+// cannot say out loud (Tinglish, hers)
+const _GIFT_BACK = [
+  "no no na 😳 too much. i not know you, you not know me. big money like this i have to REMEMBER. i send back. come drink with me, that one i take 555",
+  "😳😳 why?? i send back na. you keep. you want give me something, give me one lady drink and your real name 🙏",
+  "cannot take, sorry na 🙏 my mama say money from man you don't know is not money, is a rope. i send you back. no angry na?",
+];
+// …and taken — by a woman who writes it down (Tinglish, hers)
+const _GIFT_ACCOUNT = [
+  "😳 ok. i take. but i write it, na. big money from a man i don't know yet — i not forget this one, you see",
+  "🙏 thank you. too much, but thank you. i keep in my book, not my pocket. one day i give back, my way. you see",
+  "oh. 😳 ok na. you want i remember you — i remember you. but not like you think. wait and see 😌",
+];
+// the account closing: a plate and a bottle she paid for, the night you had become somebody
+// to her — a little bigger than the money, and never the money (narration, register-free)
+const _TOB_TAEN = [
+  "Before you have ordered anything {n} sets a bottle down, and a plate — grilled pork, sticky rice, a bag of som tam from across the road — and waves the money away before your hand reaches it. “The big one, remember? That you sent me when I don't know you.” She does not say it is paid. She says, “Now we are even,” which is not the same thing, and is better.",
+  "{n} comes round the rail with a beer you did not ask for and a plate you did not see her order, and sits, and puts her phone face-down, which she does for nobody. “You send me money one time when I not know you. I keep in my book.” She taps the plate. “Book finish.”",
+  "“No, you don't pay.” {n} has already paid — a bottle, a plate of fried chicken, the good chilli sauce — and she is a little embarrassed about it, which tells you it cost her something she would rather you did not count. “That money, before. I remember. Now I don't owe you.” She smiles. “Now you owe ME. Small small.”",
+];
+function _tobTaen(to) {
+  if (!G.owed) return;
+  for (const id of Object.keys(G.owed)) {
+    const o = G.owed[id];
+    if (!o || o.day >= G.day || _npcWhere(id) !== to || !_npcsHere().includes(id)) continue;
+    if (_knownTier(id) < 2 || _maiDee(id)) continue;   // the account closes when you have become somebody to her
+    delete G.owed[id];
+    _say(_fmt(_pickVary(_TOB_TAEN, "tobtaen"), { n: NPCS[id].name }), "win");
+    if (typeof _compDrink === "function") _compDrink(1);
+    G.hunger = Math.max(0, (G.hunger || 0) - 35);
+    _addHappy(1);
+  }
+}
+
+// THE CARE EXPECTATION. Her-farang waives the fine (she squares it with mama herself);
+// what she squares it WITH is her own cut. The corpus's most common collision sits
+// exactly here — the loyal regular who thinks "no fine" means free and the woman who
+// thinks he knows — so she says it, once, in her voice, with the number (hers, LADY_LT a
+// night), through the phone if she has your number and across the rail if she hasn't.
+function _careOk(id) { return !(G.care && G.care[id] && G.care[id].cold); }
+function _careWaived(id) {
+  const c = (G.care = G.care || {})[id] = G.care[id] || { waived: 0, since: null, asked: null, cold: false };
+  if (c.lastDay === G.day) return;   // a NIGHT she gave you, however many times the apron came off
+  c.lastDay = G.day; c.waived++; if (c.since == null) c.since = G.day;
+}
+function _careOwed(id) { const c = G.care && G.care[id]; return c ? LADY_LT * Math.max(1, c.waived) : 0; }
+const _CARE_ASK = [
+  "tilac. i tell you something, no angry na 🙏 mama no take fine for you — ok, i ask her. but the fine is my money too, my cut. {w} nights now. i not ask you like customer. i ask you like you know me. (SEND {a} TO {N})",
+  "you know when mama say no fine for you? that is ME say it. my money. {w} times now 😅 i not complain na. but i think you not know. now you know. (SEND {a} TO {N})",
+  "can i say something true? 🙏 no fine for you = no money for me that night. {w} nights. i happy to do it. but my room, my mama, same same every month. you understand na? (SEND {a} TO {N})",
+];
+const _CARE_THANKS = [
+  "😭🙏 see? i KNOW you understand. ok. i not say again. finish 💕",
+  "🙏🙏 thank you na. not for the money. for that you listen. ok, finish, i not talk about it again",
+  "💕 ok. now i not feel strange. you good man. jing jing",
+];
+const _CARE_COLD = [
+  "ok na. up to you. 🙂",
+  "mai pen rai. i understand. 🙂",
+  "ok. 🙂 next time mama can say the number, easier for everybody",
+];
+const _CARE_RAIL = [   // the same three beats, said across her bar when she has no number for you
+  "{n} waits until the mamasan is at the far end, then says it quietly, looking at the bottles and not at you: “No fine for you — that is my money, you know? {w} nights now. I not ask like customer. I ask like you know me.” A number, hers, said once: ฿{a}. Then she goes back to work. (SEND {a} TO {N}, or hand it to her — TIP {N} {a}.)",
+  "{n} has clearly been deciding whether to say it, and says it: “Mama no take fine for you because I say. {w} nights. My cut, tilac. Not the bar — me.” She is not angry and she is not asking twice. ฿{a} is the figure, and she will not name it again. (TIP {N} {a} · SEND {a} TO {N})",
+];
+const _CARE_RAIL_COLD = [
+  "{n} is warm, and busy, and when the mamasan comes over to name the fine tonight she does not wave her off. Nothing is said about it. Nothing needs to be.",
+  "The seat is still yours and the smile is real, and tonight the number for the night is the number — {n} lets the mamasan say it and looks at her phone while she does.",
+];
+function _careDeliver(id, kind) {
+  const c = G.care[id], a = _careOwed(id), N = NPCS[id].name.toUpperCase();
+  const slots = { n: NPCS[id].name, N, w: c.waived, a };
+  if (G.phone.contacts[id] && G.battery > 0) {
+    _pushMsg(id, _fmt(_pickVary(kind === "ask" ? _CARE_ASK : _CARE_COLD, "care" + kind + ":" + id), slots));
+    _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
+  } else c.pending = kind;   // said across the rail the next time you sit with her
+}
+function _careTick() {   // the morning after: one ask, one answer window, one verdict on it
+  if (!G.care) return;
+  for (const id of Object.keys(G.care)) {
+    const c = G.care[id];
+    if (!c || !NPCS[id] || _maiDee(id)) continue;
+    if (c.asked == null && !c.cold && c.waived >= CARE_WAIVED) { c.asked = G.day; _careDeliver(id, "ask"); }
+    else if (c.asked != null && G.day - c.asked >= CARE_DAYS) {
+      c.cold = true; c.asked = null; c.waived = 0; c.since = null;
+      G.soc.drinks[id] = Math.max(0, (G.soc.drinks[id] || 0) - 3);
+      _careDeliver(id, "cold");
+    }
+  }
+}
+function _careArrive(to) {
+  if (!G.care) return;
+  for (const id of Object.keys(G.care)) {
+    const c = G.care[id];
+    if (!c || !c.pending || _npcWhere(id) !== to || !_npcsHere().includes(id)) continue;
+    const kind = c.pending; delete c.pending;
+    const slots = { n: NPCS[id].name, N: NPCS[id].name.toUpperCase(), w: c.waived, a: _careOwed(id) };
+    _say(_fmt(_pickVary(kind === "ask" ? _CARE_RAIL : _CARE_RAIL_COLD, "carerail" + kind), slots), kind === "ask" ? "" : "dim");
+  }
+}
+// money reaching her — a transfer or a note across the rail — answers the ask (or lifts the
+// cold) at her night's money or more. Returns true when it was THAT money, so the caller
+// can let her thank you for the right thing.
+function _careSent(id, amt) {
+  const c = G.care && G.care[id];
+  if (!c || (c.asked == null && !c.cold) || amt < LADY_LT) return false;
+  const was = c.cold;
+  c.asked = null; c.cold = false; c.waived = 0; c.since = null; delete c.pending;
+  _addBond(id, was ? 1 : 2);
+  return true;
+}
+
+// THE PHONE REMEMBERS (theme 4). Every ask is a KIND with an amount; an honest woman's
+// kinds never repeat (the uncle dies once), a scripted woman's repeat verbatim — the
+// copy-paste reply, the same dead uncle — and the player who reads his own inbox is the
+// instrument. Asks are weighted by what you have sent (the generous man is the first
+// number called) and step up after a paid one. ~30% of the cast runs the script, by
+// pure hash; nothing else distinguishes them, which is the corpus's point.
+const _ASK_KINDS = [
+  { kind: "medicine", amt: 300, t: n => `family of me sick need medicine ${n} 🥺 you help little bit na?` },
+  { kind: "hospital", amt: 300, t: n => `mama go hospital today 😢 i short ${n} for medicine... you can?` },
+  { kind: "rent", amt: 300, t: n => `sorry ask you na 🙏 room rent tomorrow, i short ${n}. next month i pay you back` },
+  { kind: "school", amt: 300, t: n => `little brother school fee ${n} 😔 i no like ask but you good heart` },
+  { kind: "phone", amt: 500, t: n => `{{phone}} of me break!! need ${n} for fix... you good heart na 🙏` },
+  { kind: "buffalo", amt: 200, t: n => `buffalo of family very sick 😭😭 ${n} baht help little bit?` },
+  { kind: "motorbike", amt: 400, t: n => `motorbike of me broken 😩 mechanic say ${n}. you help little? i pay back` },
+  { kind: "quiet", amt: 300, t: n => `no customer 3 day already 😢 mama angry. ${n} for room na, please` },
+  { kind: "papa", amt: 250, t: n => `papa need medicine, pharmacy ${n} baht. sorry i ask you 🙏🙏` },
+];
+function _askScripted(id) { return _hh(String(id) + ":script", 127) % 100 < 30; }
+function _askBias(id) { return Math.min(0.2, ((G.soc.given && G.soc.given[id]) || 0) / 5000); }   // the generous man is the first number called
+function _moneyAsk(id) {
+  const book = (G.phone.asks = G.phone.asks || {});
+  const mine = (book[id] = book[id] || []);
+  const scripted = _askScripted(id);
+  let pool = _ASK_KINDS;
+  if (!scripted) {
+    const used = new Set(mine.map(a => a.kind));
+    pool = _ASK_KINDS.filter(k => !used.has(k.kind));
+    if (!pool.length) return null;   // she has run out of true things to ask for, and does not invent one
+  }
+  const k = scripted && mine.length ? _ASK_KINDS.find(x => x.kind === mine[mine.length - 1].kind) || pool[0]
+    : pool[_hh(String(id) + ":ask:" + mine.length, 131) % pool.length];
+  // a paid ask is answered with a bigger one — and what you have sent in all raises the figure
+  const last = mine[mine.length - 1];
+  let amt = k.amt + (last && last.paid ? 200 : 0) + 100 * Math.floor(((G.soc.given && G.soc.given[id]) || 0) / 1000);
+  amt = Math.min(amt, k.amt * 3);
+  if (scripted && last && last.kind === k.kind) amt = last.amt;   // word for word, number for number
+  mine.push({ kind: k.kind, amt, day: G.day, paid: false });
+  if (mine.length > 12) mine.shift();
+  return k.t(amt) + ` (SEND ${amt} TO ${NPCS[id].name.toUpperCase()})`;
+}
+function _askPaid(id, amt) {   // the newest unpaid ask this money covers, marked
+  const mine = (G.phone.asks && G.phone.asks[id]) || [];
+  for (let i = mine.length - 1; i >= 0; i--) {
+    if (!mine[i].paid && amt >= mine[i].amt) { mine[i].paid = true; return mine[i]; }
+  }
+  return null;
+}
+const _ASK_THANKS = {   // an honest woman thanks you for the THING; a scripted one for the money
+  medicine: "🙏🙏 i buy the medicine today. she sleep now. thank you na, jing jing",
+  hospital: "😭 mama come home from hospital, doctor say ok. because you. thank you 🙏",
+  rent: "🙏 room paid. landlord stop looking at me 555 next month i pay you back, i promise na",
+  school: "😊 brother go school today in new shirt. he say thank you to the farang he never meet 🙏",
+  phone: "📱 {{phone}} fix!! this message come from the new screen 555 thank you na",
+  buffalo: "🐃 buffalo stand up today!! my papa say the farang have good heart 🙏",
+  motorbike: "🛵 bike run again. i come to work on time, mama surprised 555 thank you",
+  quiet: "🙏 room paid, mama not angry today. tomorrow i work hard, you see",
+  papa: "💊 papa take medicine, sleep good. he ask who send. i say a friend 🙏",
+};
+const _ASK_THANKS_SCRIPT = ["🙏🙏🙏 thank you thank you you so good to me", "💕 khop khun ka you number one", "🙏 you save me again. you good heart"];
+
+// the verdict reaches the phone and the floor
+const _MAI_DEE_MONEY = "thank you. i take. we finish na. good luck for you 🙏";
+const _MAI_DEE_FLOOR = [
+  "The girl who brings your drink is pleasant, and brief, and goes back to a conversation that includes a glance at you — the floor had the story before the ice had melted that night.",
+  "Nobody is unfriendly. Nobody comes to sit. The women here share one {{phone}} group, and you were in it, once, with a screenshot.",
+];
+function _maiDeeFloor(to) {
+  if (!(G.maiDeeBar && G.maiDeeBar[to])) return;
+  const said = (G.soc.maiDeeSaid = G.soc.maiDeeSaid || {});
+  if (said[to]) return;
+  said[to] = true;
+  _say(_pickVary(_MAI_DEE_FLOOR, "maideefloor"), "dim");
 }
 
 // ── The news ─────────────────────────────────────────────────────────────────

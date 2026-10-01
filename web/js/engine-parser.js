@@ -1127,6 +1127,7 @@ function _arriveAt(to) {
       .sort((a, b) => _bondTier(b) - _bondTier(a))[0];
     if (her && _bondTier(her) >= 1) { (G.soc.greeted = G.soc.greeted || {})[to] = true; _relGreeting(her); }
   }
+  if (typeof _tobTaen === "function") { _tobTaen(to); _careArrive(to); _maiDeeFloor(to); }   // the obligation economy's three arrivals
   _repArrival(); // your street name precedes you at a stranger bar (notable tiers only)
   _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
   if (typeof _kpTitleNews === "function") _kpTitleNews();   // your name came off the chalk while you were elsewhere
@@ -9216,6 +9217,12 @@ function _doTip(arg) {
   G.money -= amount;
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amount; // toward a sponsor flip
   const name = NPCS[id].name;
+  // her night's money, handed across the rail — the care ask answered in notes (theme 1)
+  if (typeof _careSent === "function" && _careSent(id, amount)) {
+    _say(`฿${amount}, folded, and ${name} does not make it vanish the way a tip vanishes — she looks at it, and ` +
+      `then at you, and puts it away slowly. “Ok,” she says. “Now you know.” Nothing else about it, ever. (฿${G.money} left.)`, "win");
+    return;
+  }
   if (amount >= 100) {
     // Money buys attention, not intimacy: ฿20,000 of tips used to buy her-farang
     // tier in ten turns with no conversation at all (millionaire playtest

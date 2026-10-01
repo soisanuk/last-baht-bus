@@ -2152,6 +2152,7 @@ function _favor(id) {
     const rt = _repTier();               // ±1 only, never enough to override earned bond
     if (rt > 0) f += 1; else if (rt < 0) f -= 1;
   }
+  if (G.maiDeeBar && G.maiDeeBar[G.room]) f -= 1;   // the floor's group chat had it by the next shift
   return f;
 }
 
@@ -2208,9 +2209,15 @@ function _addHeat(n, why) {
 // APOLOGIZE / SAY SORRY: the wai-and-mean-it. Mollifies a miffed patron
 // outright (like standing him a beer does), and burns off one point of heat —
 // but only once per bar per night; after that the bar wants behavior, not words.
+const _MAI_DEE_SORRY = [
+  "{n} accepts the wai the way she would accept a bill — correctly, with a small nod, and nothing changes in her face at all. “Mai pen rai.” It is the most final thing anybody has said to you in this town.",
+  "You say it properly and she lets you finish. “Ok.” She even smiles. Then she goes to serve somebody, and you understand that the apology was received, and filed, and that the file is closed.",
+];
 function _doApologize() {
   const r = G.room, s = G.soc;
   if (_inBar()) {
+    const judged = _npcsHere().find(_maiDee);
+    if (judged) { _say(_fmt(_pickVary(_MAI_DEE_SORRY, "maideesorry"), { n: NPCS[judged].name })); return; }
     if (s.patronMiffed[r]) {
       delete s.patronMiffed[r];
       s.heat[r] = Math.max(0, (s.heat[r] || 0) - 1);
@@ -2259,8 +2266,33 @@ function _kickOut() {
   }
   _addHappy(-5);
   _repHit(3); // being walked out by security is public and reads the same however you got there
+  _maiDeeScene(_npcsHere());   // who WATCHED — read before the room changes
   G.room = r.exits.out || Object.values(r.exits)[0];
   _describeRoom(true);
+}
+
+// FACE-LOSS IS PERMANENT (essay ledger theme 6, 2026-10-01). A public scene in front of
+// a woman who had decided you were somebody — walked out by security while she watched —
+// is not a bad night; it is a reclassification. From here she is polite and exact and
+// nothing you buy moves her (the tier caps at a face in _bondTier/_knownTier), her
+// barfine is a no with nothing to negotiate, the money you send is taken as a goodbye,
+// and the women she works with heard about it the way floors do. There is no apology
+// that reaches it and no price, which is the whole point: the game has had souring you
+// could buy back, and the corpus is unanimous that this one you cannot. Keyed on the
+// bonded women PRESENT, never the room — a stranger's bar has no verdict to give.
+const _MAI_DEE_SCENE = [
+  "{n} watched the whole of it from behind the rail. She did not look away and she did not come over, and the look on her face is not anger. Anger you could work with.",
+  "Somewhere in the middle of being walked out you catch {n}'s eye, and it is already a different eye — level, polite, finished. Something that took weeks has just closed in a second, in front of everybody.",
+  "{n} does not say anything. She picks up a glass that does not need picking up and turns, deliberately, to the woman beside her, and that small turn is the sentence.",
+];
+function _maiDeeScene(here) {
+  if (!_flag("act1Done")) return;
+  for (const id of here) {
+    if (!NPC_ROLES[id] || _bondTier(id) < 2 || _maiDee(id)) continue;
+    (G.maiDee = G.maiDee || {})[id] = G.day;
+    (G.maiDeeBar = G.maiDeeBar || {})[G.room] = G.day;
+    _say(_fmt(_pickVary(_MAI_DEE_SCENE, "maideescene"), { n: NPCS[id].name }), "alert");
+  }
 }
 
 // Outcome text: [hard rebuff, soft rebuff, tolerate, lean in, reciprocate]
@@ -3209,8 +3241,12 @@ function _happyLevel(h) {
 // it or lose it), and a new vacation starts everyone a stranger again.
 function _bondTier(id) {
   const d = (G.soc.drinks && G.soc.drinks[id]) || 0;
-  return d >= 13 ? 3 : d >= 7 ? 2 : d >= 3 ? 1 : 0; // stranger / face / regular / her farang
+  const t = d >= 13 ? 3 : d >= 7 ? 2 : d >= 3 ? 1 : 0; // stranger / face / regular / her farang
+  // the verdict: a woman who has decided you are not a good man will still serve you, and
+  // remember your face, and nothing you buy climbs past that (essay ledger theme 6)
+  return _maiDee(id) ? Math.min(t, 1) : t;
 }
+function _maiDee(id) { return !!(G.maiDee && G.maiDee[id]); }
 // WHAT SHE HAS TOLD YOU does not reset with the drinks book. _bondTier is THIS
 // week's warmth and it cools between trips — by a tier, not to nothing (2026-10-01) — the barfine waiver,
 // the favor bias, the kept seat all read it. But the bond-gated DIALOGUE was
@@ -3220,7 +3256,8 @@ function _bondTier(id) {
 // 35). Her memory is not a meter. This is the tier she has ever reached with
 // you, and it is what her dialogue gates on.
 function _knownTier(id) {
-  return Math.max(_bondTier(id), (G.prevBond && G.prevBond[id]) || 0);
+  const t = Math.max(_bondTier(id), (G.prevBond && G.prevBond[id]) || 0);
+  return _maiDee(id) ? Math.min(t, 1) : t;   // what she told you once she will not tell you again
 }
 // Recognition on arrival — authorial narration (register-free; any quoted speech
 // obeys her English). Varied by tier so a regular's welcome doesn't loop.
@@ -3268,7 +3305,15 @@ const _REL_GREET_STEPPED = [
   n => `${n} is polite and quick and somewhere else, the way a person is with a door they closed on purpose.`,
   n => `${n} has your stool clear. She does not sit on the customer side any more; she didn't have to be asked.`,
 ];
+// The verdict's register: polite, exact, nothing to push against. She is not angry — anger
+// would be a door. Register-free narration; her one line obeys her English.
+const _REL_GREET_MAIDEE = [
+  n => `${n} sees you come in and serves you the way she serves anybody — the smile, the towel, the right change — and the seat she used to keep is somebody else's, and has been since that night.`,
+  n => `${n} says hello, and it is a complete hello with nothing after it. You could sit here all week and it would not get any longer.`,
+  n => `${n} looks up, places you, and goes back to her phone. Not a snub; a filing. Whatever you were to her was decided in front of a room, and rooms do not undecide.`,
+];
 function _relGreeting(id) {
+  if (_maiDee(id)) { _say(_pickVary(_REL_GREET_MAIDEE, "relmaidee")(NPCS[id].name), "dim"); return; }
   if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) {   // your girl, not "as close as the arithmetic allows" (Graham, round 47)
     _say(_pickVary(_REL_GREET_AFFAIR, "relaffair")(NPCS[id].name), "win"); return;
   }
@@ -5156,6 +5201,7 @@ function _endNight(reason) {
   }
   if (G.dog) _setFlag("hasDog");      // backfill for saves that adopted before the flag existed
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
+  if (typeof _careTick === "function") _careTick();   // the fines she waived have a number, and a morning she says it
   if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
   _stdMorningTick();                  // an untreated infection makes itself known each morning
   G.wakeTurn = G.turns;               // the SLEEP-on-waking guard reads this (engine-parser "sleep")
@@ -5435,6 +5481,7 @@ function _newVacation() {
     if (t >= 2) G.prevBond[id] = t;
   }
   G.returned = {};
+  G.care = {};   // the waiver tier does not survive the flight, so neither does its account; G.owed and G.maiDee do — one is a kindness she still owes, the other is permanent
   // What she has TOLD you survives the trip home. The other-ledger reveals
   // are once-per-girl-per-tier EVER by doctrine, and wiping the book with the
   // bonds replayed the ฿60 cut as news to "a man who has been inside it for a

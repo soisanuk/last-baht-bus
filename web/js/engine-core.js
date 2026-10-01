@@ -467,6 +467,11 @@ function newGame() {
 
     quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
     quizLast: null,      // {room, day, right}: tonight's quiz, as the room remembers it
+    // The obligation economy and the verdict (essay ledger themes 1 and 6, 2026-10-01)
+    owed: {},            // npcId → {amt, day}: a big gift she took from a man she didn't know yet — an account she settles later, a little bigger
+    care: {},            // npcId → {waived, since, asked, cold}: the fines she waived for her farang, and whether he understood what they cost her
+    maiDee: {},          // npcId → day: "you no good man" — a public scene in front of a bonded woman; permanent, money cannot reverse it
+    maiDeeBar: {},       // roomId → day: her bar's floor heard, the way floors do
     quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
     // KING OF THE TABLE. Killer is a one-night knockout — the pot IS the prize,
     // and there are no rankings in it anywhere, in this town or any other. What a
@@ -486,6 +491,7 @@ function newGame() {
       msgCd: {},         //   npcId → day you last sweet-talked her by text
       invite: null,      //   {id, day} — she asked you to drop by tonight
       photos: [],        //   [{id, cap?, turn}] — the gallery (portraits you took + selfies she sent)
+      asks: {},          //   npcId → [{kind, amt, day, paid}]: every money-ask she ever texted — the phone remembers, even when she hopes you don't
       picDeals: {},      //   npcId → {idx, ask} | {done} — the pay-per-photo drip, one slot per girl
                          //   (a single shared slot would let one finished drip permanently block
                          //   every other paidPics NPC — see engine-systems.js's _startPicDeal)

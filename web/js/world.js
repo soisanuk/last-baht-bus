@@ -14403,6 +14403,14 @@ const AFFAIR_CRISES = [
 ];
 
 const MERIT_COST = 2500;   // nine monks, the food, the pig's head at the spirit house
+// The obligation economy (essay ledger theme 1, 2026-10-01): a transfer this size from a
+// man she does not know is not a tip, it is a debt — one she may refuse, and one she
+// settles later and a little bigger if she takes it. And the her-farang waiver is where
+// obligation STARTS: the fine the bar forgoes for you is HER money, and after this many
+// waived nights she names it, in her own voice, never in the scam register.
+const GIFT_BIG = 1000;
+const CARE_WAIVED = 2;
+const CARE_DAYS = 3;       // nights she waits on the answer before the apron stops coming off for free
 const SHIFT_CALLS = [
   // After a run of bad nights the floor wants the ghosts paid (essay ledger, 2026-10-01:
   // the one own-bar decision where culture beats arithmetic). Eligible only on a
