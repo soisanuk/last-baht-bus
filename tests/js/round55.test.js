@@ -77,7 +77,7 @@ test("the dinner's prose fits an expat, and the bracelet is at her wrist from th
   metSao(); G.bkk.stage = 4; G.pendingChoice = "bkkdinner";
   out = []; doCommand("go"); out.push({ text: "" }); doCommand("let");
   assert.doesNotMatch(text(), /Jomtien|the tourist never sees|You tip him too much/);
-  for (const i of ENCOUNTERS.bkktourist.intro) assert.match(i, /bracelet/);
+  for (const i of ENCOUNTERS.bkktourist.intro) assert.match(i, /sneakers/);
 });
 
 test("Tan has a read on Sao after the dinner that is not the one he had before it", () => {

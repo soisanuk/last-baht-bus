@@ -13508,11 +13508,11 @@ const ENCOUNTERS = {
     interactive: true, nightly: true,
     th: "รอเพื่อนอยู่ค่ะ", rom: "ror phuean yu kha",
     intro: [
-      "A young woman in good sneakers and a Bangkok-boutique dress, a thin gold bracelet you would put down " +
-      "as a market copy, is checking her phone against the crowd, plainly waiting for someone. No bar behind her, " +
+      "A young woman in a Bangkok-boutique dress and plain white sneakers — the kind that cost nothing or " +
+      "a great deal, and you decide nothing — is checking her phone against the crowd, plainly waiting for someone. No bar behind her, " +
       "no smile-for-hire — just a weekender killing five minutes. She catches you " +
       "noticing and returns a small, neutral nod.",
-      "A young woman in flat shoes and a Chatuchak tote, a thin gold bracelet at her wrist that you take for a market copy, is arguing gently with a map on her phone, plainly not from here and plainly not working — a weekender down from Bangkok whose friend is late again. She catches you looking and laughs first.",
+      "A young woman in plain white sneakers and a Chatuchak tote — the shoes cost nothing or a great deal, and you decide nothing — is arguing gently with a map on her phone, plainly not from here and plainly not working — a weekender down from Bangkok whose friend is late again. She catches you looking and laughs first.",
     ],
     hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here.)",
   },
