@@ -4284,56 +4284,52 @@ function _hospitalMorning(reason) {
 
 // ── The dawn coda: her last baht bus ─────────────────────────────────────────
 // The game's title, made flesh. After a big-illusion night (a barfine) the camera
-// occasionally leaves YOU — passed out, sure you conquered the city — and follows
-// HER home at 6 a.m.: the queen taken off like a costume, the hard bench, the
-// coins, the money zipped away for a family this town never sees. A deliberate
-// POV cutaway. Fully fictionalised, nameless — the archetype, not a real person.
+// occasionally leaves YOU — asleep, sure you conquered the city — and follows
+// HER home at dawn: the night taken off piece by piece, the hard bench, the fare
+// ready in her hand, the money put away for people this town never sees. A
+// deliberate POV cutaway. Nameless — the archetype, not a person. (Rebuilt
+// 2026-10-01 under docs/source-material-policy.md: pattern kept, every beat new.)
 const _CODA_CUT = [
   "You are already asleep — face-down, victorious, certain you conquered the city. So you miss " +
-    "this part. Somewhere across town, under a lift's flat fluorescent light, the night is coming " +
-    "off like a costume.",
+    "this part. Across town the morning shift has started, and she is on it.",
   "You sleep the sleep of a man who won, and never see the other half of the night — the half " +
-    "that starts the moment the door clicks shut behind her.",
-  "The last thing you registered was the smoke machine and the bottle sparklers and how " +
-    "untouchable she looked. You sleep. She doesn't, not yet. Across the city the spell is quietly " +
-    "wearing off.",
+    "that belongs to her, and begins when yours is over.",
+  "The last thing you registered was how untouchable she looked under the lights. You sleep. " +
+    "She doesn't, not yet. The town is going from neon to daylight and she has to cross it.",
 ];
 const _CODA_DECON = [
-  "In a bathroom that isn't yours the queen comes apart into her pieces: the tight dress folded " +
-    "careful into a tote so it survives another night, the heels kicked off blistered feet, a wet " +
-    "wipe dragging the red mouth and the smoky eyes down the sink until they're gone.",
-  "Out of the bag comes the real uniform — a faded cartoon t-shirt gone soft with washing, grey " +
-    "sweatpants, fifty-baht rubber flip-flops. The bar-light version of her goes back to being a " +
-    "tired twenty-something's; whoever she was at the rail disappears with the makeup, down a " +
-    "drain, in a hotel that will forget her by checkout.",
-  "She scrubs it all off — the lipstick, the eyeshadow, the whole performance — and what's left " +
-    "in the mirror under the hard light is just a woman with dark circles who wants, more than " +
-    "anything she was offered tonight, to sleep.",
+  "She doesn't scrub anything off. She has learned the night comes off on its own by eight. " +
+    "What she does, on the pavement outside, is take the earrings out and put them in the " +
+    "{{phone}} case, where the money is, and unpin the number from her dress.",
+  "Out of the bag comes the day: a man's rain jacket over the dress, the heels into the bag " +
+    "heel-first the way she has done it a thousand times, a hair tie off her wrist. Whoever " +
+    "she was at the rail is folded up smaller than a towel.",
+  "At a cart on the corner she buys the first iced coffee of the day and drinks half of it " +
+    "standing up, with the market setting up around her, and nobody looks at her twice, " +
+    "which is the point of the cart and the hour.",
 ];
 const _CODA_HOME = [
-  "6 a.m. on Second Road: exhaust and grilling moo ping and a yellow, sweaty light. She climbs " +
-    "into the back of an empty baht bus — no leather, no laser, just a hard metal bench — and " +
-    "folds her knees up against the chilly morning.",
-  "In a small purse, past a broken lighter and a stub of lip gloss, she finds the notes and folds " +
+  "Dawn on the main road, the sky the colour of a weak tea and the first trucks already " +
+    "running. She swings up onto the bench of a baht bus with one other woman aboard, who is " +
+    "also not talking, and sits where the metal is warm from the engine.",
+  "The fare is ten baht and she has it ready before the truck stops, because having it " +
     // No biography here: this coda lands on ANY girl, and it used to give a
     // woman with her own authored canon a hospital bill and a kid "she sees
     // four times a year" that contradicted what she'd told him all week
     // (Howard, round 35). The image stays; the facts are hers to tell.
-    "them small into the hidden zip. That money isn't hers to spend — it is already spoken for, " +
-    "somewhere north, by people who have never seen this room. For the fare she digs out coins and " +
-    "holds them in her fist.",
-  "The baht bus screeches up to a dark, narrow soi in North Pattaya. She presses the buzzer, hands " +
-    "the driver a few coins, and walks the last of the way to a windowless room at four thousand a " +
-    "month — to sleep until three, then put the heels back on and do it again.",
+    "ready is the last thing tonight she can decide. The notes are already in the zip at the " +
+    "back of the {{phone}} case. That money has an address, and it isn't hers.",
+  "She presses the buzzer at a lane off the top of Pattaya Tai, drops the coin on the tray, " +
+    "and walks the last of it home past a woman sweeping. A shared room; a cousin who works days, " +
+    "so the one bed is always warm and never shared. Asleep by seven. The alarm is at three.",
 ];
 const _CODA_CLOSE = [
-  "Tourists fall in love with the 2 a.m. version and think the sparkle is the life. But the truest " +
-    "version of a Pattaya girl is the one on the back of a baht bus at dawn, in sweatpants, a fistful " +
-    "of coins, going home.",
-  "That's the fare the last baht bus really carries — not you, weaving back to your hotel, but her, " +
-    "going the other way: toward a room, a few hours' sleep, and a family that never sees this city.",
-  "You'll wake at noon sure you shared something. She's already asleep across the city — the makeup " +
-    "gone, the money hidden, an alarm set for the next performance. Only one of you was ever really there.",
+  "The last baht bus was never yours. It is hers — going the other way, at dawn, with the " +
+    "fare ready and the night folded up in a bag.",
+  "You'll wake at noon sure you shared something. She was asleep by seven, and you are the " +
+    "part of the night she will not mention to the cousin at three.",
+  "That is the whole of the trick. The town lights her up for you and then switches her off " +
+    "and sends her home on a bench, and only one of those two things costs money.",
 ];
 
 function _cinderellaCoda() {
@@ -4344,9 +4340,9 @@ function _cinderellaCoda() {
   // line never fired, and she caught a baht bus home after driving him all night)
   const _rode = !!(G.lastRide && G.lastRide.id === G.lastBfId && G.lastRide.day >= G.day - 1);
   _say(_rode
-    ? "6 a.m. on Second Road: exhaust and grilling moo ping and a yellow, sweaty light. She kicks the bike awake, " +
-      "checks the mirror she does not need, and is gone into the traffic without looking back — a helmet she " +
-      "did not wear all night now on, because the police are up. The receipt is her tail-light, then not even that."
+    ? "Dawn on the main road, the sky the colour of a weak tea. She kicks the bike awake, puts on the helmet " +
+      "she did not wear all night because the police are up now, and is gone into the first traffic without " +
+      "looking back. The receipt is her tail-light, then not even that."
     : _CODA_HOME[Math.floor(_rand() * _CODA_HOME.length)], "room");
   const _close = _rode ? _CODA_CLOSE.filter(l => !/baht bus/.test(l)) : _CODA_CLOSE;
   _say(_close[G.codaSeen % _close.length], "dim");
