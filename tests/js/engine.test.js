@@ -4494,12 +4494,13 @@ test("Diamond deflects about Glam until the money truth is known", () => {
 
 test("Candy's recce: eyes on all three new strips pays out", () => {
   state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
+  const bank0 = state().bank;
   state().room = NPCS.candy.room; run("talk candy"); run("accept recce");
   assert.equal(state().quests.recce, "active");
   for (const r of ["myth_rows", "tt_lane_3", "soi6_mid"]) { state().room = r; run("look"); }
   run("look");
   assert.equal(state().quests.recce, "done");
-  assert.equal(state().money, 1300, "Candy pays ฿300 for the intel");
+  assert.equal(state().money + state().bank - bank0, 1300, "Candy pays ฿300 for the intel");
 });
 
 test("the scout flyer and the collection run complete on their flags", () => {
@@ -4514,7 +4515,7 @@ test("the scout flyer and the collection run complete on their flags", () => {
   assert.equal(state().quests.scout, "done");
   // debtrun: Nira's ฿500 for jogging Fergie's memory
   state().room = "neon_paradise"; run("talk nira"); run("accept debtrun");
-  const before = state().money;
+  const before = state().money + state().bank;
   // find him where he actually drinks — one talk path since the patron fold, so
   // the collection run needs you in the room, which is the point of the errand
   state().nightTurn = 20;
@@ -4523,7 +4524,7 @@ test("the scout flyer and the collection run complete on their flags", () => {
   assert.match(lastOut(), /next week/i);
   run("look");
   assert.equal(state().quests.debtrun, "done");
-  assert.equal(state().money, before + 500, "Nira pays the runner");
+  assert.equal(state().money + state().bank, before + 500, "Nira pays the runner");
 });
 
 test("the Jomtien beach cats: Big One vets, Little One purrs, once a day pays", () => {
@@ -5921,12 +5922,12 @@ test("quest flow: offer via giver, accept, deliver, reward; dependency gates", (
   state().room = "candy_bar_2";
   run("talk to bee");
   assert.notEqual(state().quests.bee_number, "offered");
-  const cash = state().money;
+  const cash = state().money + state().bank;
   run("give sang som to bee");
   assert.ok(state().flags.sangsomDelivered);
   run("wait"); // questTick sweeps
   assert.equal(state().quests.sangsom, "done");
-  assert.equal(state().money, cash + 200, "reward paid");
+  assert.equal(state().money + state().bank, cash + 200, "reward paid");
   run("talk to bee");
   assert.equal(state().quests.bee_number, "offered", "dependency unlocked");
 });

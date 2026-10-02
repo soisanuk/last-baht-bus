@@ -157,6 +157,12 @@ function _doDebt() {
       : "Nira: ฿{o}, due on day {d}. Early is cheaper than late, and late is not the expensive part.",
       { o: _num(G.loan.owed), d: G.loan.dueDay }));
   }
+  // the loan you flew home with is not on any book, but it is on HERS (Anil, round 64:
+  // DEBT said nothing owed while BORROW refused him by name)
+  if (G.loanSkipped && !G.loan)
+    lines.push(G.loanSkippedOwed
+      ? _fmt("Nira: ฿{o} from a trip you flew home in the middle of. It is not on any paper. It is the reason she will not lend to you again.", { o: _num(G.loanSkippedOwed) })
+      : "Nira: the money you flew home with, last trip. It is not on any paper. It is the reason she will not lend to you again.");
   if (G.hotelDebt > 0) {
     lines.push(_fmt("The hotel: ฿{h} on the book. Nobody checks out of a debt.",
       { h: _num(G.hotelDebt) }));
@@ -268,7 +274,8 @@ function _doRepay(arg) {
     if (!late) _repGain(); // squaring a debt on time is good for your name; late is just even
   } else {
     _say(`"฿${amt}." She marks it in a little book. "Still ฿${G.loan.owed}` +
-      (late ? ` — and climbing." ` : `, by day ${G.loan.dueDay}." `) + `Back to the stage.`, "room");
+      (late ? ` — and climbing." ` : `, by day ${G.loan.dueDay}." `) +
+      (((G.party && G.party.ids) || []).includes("nira") ? `The book goes back in her bag, and she is your company again.` : `Back to the stage.`), "room");
   }
 }
 
@@ -692,7 +699,9 @@ function _doBarfine(arg) {
         "\u201cYou have company tonight already, tilac. She come TOO, or she don't come.\u201d",
         { who: NPCS[_other].name, her: _partyLabel() }), "dim");
       G.lastBfAsk = _other;
-      _say(_fmt("(TAKE {N} OUT adds her to the night, if she'll come.)", { N: NPCS[_other].name.toUpperCase() }), "dim");   // the hint is the verb (Ingrid, round 62: a tappable promise with no door)
+      // not offered for a woman who is busy or has already said no tonight (Anil, round 64)
+      if (!(typeof _girlBusy === "function" && _girlBusy(_other)) && !(G.soc.bfRefused || {})[_other] && !(typeof _drinksOnly === "function" && _drinksOnly(_other)))
+        _say(_fmt("(TAKE {N} OUT adds her to the night, if she'll come.)", { N: NPCS[_other].name.toUpperCase() }), "dim");   // the hint is the verb (Ingrid, round 62: a tappable promise with no door)
       return;
     }
     // "nan out" / "nan too" reached _findNpc whole and found nobody (Ingrid, round 62)
@@ -1152,7 +1161,7 @@ const _PARTY_ARRIVE = [
   "{who} clocks the room in one sweep — who's working, who's pretending to, which table is trouble — and parks you with your back to the wall like a professional. \u201cOkay. Here is good.\u201d It is.",
 ];
 const _PARTY_ARRIVE_CLUB = [
-  "The bass hits like weather and {who} comes ALIVE — this is her music, her floor, her hour. She hauls you into the lights and for a while nobody in the building is having a better night than the two of you, and everybody can tell.",
+  "The bass hits like weather and {who} comes ALIVE — this is her music and her hour, whoever owns the floor. She hauls you into the lights and for a while nobody in the building is having a better night than the two of you, and everybody can tell.",
   "Inside the club {who} stops being your companion and becomes the event: hands up, eyes shut, word-perfect on a song you've never heard. You hold the drinks. It is somehow the best job you've ever had.",
   "{who} surveys the club floor like a general given favourable terrain, picks the spot the speakers aim past rather than at, and dances you into the small hours one song at a time.",
 ];
@@ -1337,7 +1346,7 @@ const _MOTEL_AGAIN = [
 const _MOTEL_ROOM_LINES = [
   "฿{p} across the counter and Somchith unhooks a key without looking at which. {n} takes your hand up the stairs, kicks the shoes off inside the door, and the fan takes up its slow count. Later — a shower that runs cold, then colder, {n} fixing her hair in a mirror the size of a paperback, and the old man's nod as you pass the counter. (฿{m} left.)",
   "The key is warm from somebody else's pocket. Upstairs: a fan, a towel, a bottle of water sweating on the sill, and {n} being businesslike and fond in the same breath. Some time later you come down together, not quite together, and Somchith pours his coffee and does not look up. (-฿{p}, ฿{m} left.)",
-  "฿{p} to the old man. {n} goes up the stairs ahead of you as if she has done these particular stairs before, which she has. The room is a bed and a fan and a window painted shut. Afterward she stands at the mirror re-pinning her number to the dress and tells you, over her shoulder and kindly, that she has had worse Tuesdays. (฿{m} left.)",
+  "฿{p} to the old man. {n} goes up the stairs ahead of you as if she has done these particular stairs before, which she has. The room is a bed and a fan and a window painted shut. Afterward she stands at the mirror putting her face back on for the floor and tells you, over her shoulder and kindly, that she has had worse nights. (฿{m} left.)",
   "Up the stairs behind {n}, past a door with a shoe outside it, into a room that smells of lemongrass and the last hour. The fan counts the minutes. When you come down the alley has its lights on and Somchith has a fresh cup poured. \"Okay?\" Okay. (-฿{p}, ฿{m} left.)",
 ];
 function _motelRoom() {
@@ -1385,6 +1394,15 @@ const _PARTY_TALK = [
   (n, w) => `${n} leans in. "You tired? No? Good." She watches the room for a second — ${w} is somebody else's floor, and she reads it the way a chef reads another kitchen. "The girl by the door, she work hard. The one at the end, lazy." Then, fond: "Buy me one more and I stop."`,
   (n, w) => `${n} laughs at something that was not a joke, the way she does when she is happy, and puts her hand flat on your back. "Okay. Say something. I listen."`,
 ];
+// …and off a bar floor there is no glass to steal from and no girl by the door
+// (Anil, round 64: both printed on a street and in a 7-Eleven)
+const _PARTY_TALK_OUT = [
+  (n) => `${n} has your arm and is in no hurry to give it back. "Mm? Where we go now? You choose. Not too far — my shoe."`,
+  (n) => `"You talk to me like customer." ${n} bumps your shoulder. "Tonight I am company. Company talk about nothing, na. Say nothing to me."`,
+  (n) => `${n} laughs at something that was not a joke, the way she does when she is happy, and puts her hand flat on your back. "Okay. Say something. I listen."`,
+  (n) => `${n} checks her {{phone}}, laughs at something on it, and shows you a photo of somebody's cat you are evidently meant to have an opinion about. "Where next, tilac?"`,
+];
+function _partyTalkPool() { return (typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar()) ? _PARTY_TALK : _PARTY_TALK_OUT; }
 // a thing bought FOR her is hers — "buy toastie for lek" fed the buyer (Ingrid, round 62)
 function _companionEats(arg, what, price) {
   const m = String(arg || "").toLowerCase().match(/\bfor (\w+)/);
@@ -1437,6 +1455,7 @@ function _partyNightEnd(reason) {
     G.money -= fare;
     _say(_fmt(_pickVary(_PARTY_RESCUE, "partyrescue"), { who, c: fare }), "win");
     for (const id of p.ids) _addBond(id, 2);
+    G.partyRescued = who;   // the morning ledger names her, not "the town" (Anil, round 64)
   } else {
     _say(_fmt(_pickVary(_PARTY_SOFT_BYE, "partybye"), { who }), "dim");
   }
@@ -1516,6 +1535,7 @@ function _bfResolve(kind) {
     _say("(TAKE HER OUT \u00b7 or NO.)", "dim");
     return;
   }
+  if (id && NPCS[id]) _markHello(id);   // you have dealt with her face to face
   if (kind === "party" && G.party && G.party.ids && G.party.ids.length >= PARTY_MAX_GIRLS) {
     _say("The mamasan counts the company already hanging off you and laughs from " +
       "the belly. \u201cTwo is party, tilac. Three is TOUR GROUP \u2014 you need " +
@@ -2322,6 +2342,22 @@ function _maybeSelfBarfine(id) {
 // These rooms have no barType on purpose, so no lady-drink/bell/barfine apparatus.
 // MASSAGE_LEGIT / MASSAGE_OIL / MASSAGE_SPECIAL live in world.js now, so dialogue can quote them (round 57)
 
+// A WOMAN ON YOUR ARM does not wait in reception while you buy the other thing
+// (Anil, round 64: SPECIAL three times, a soapy and an off-shift meet with Lek
+// beside him, and not one of them noticed her). The ordinary massage is fine —
+// she has one too; the trade is not.
+const _PARTY_NO_TRADE = [
+  n => `${n} reads the price board, then you. "Special?" A short laugh with no fun in it. "I sit outside, you have special. Okay. Then I go home." She means it. (SEND ${n.toUpperCase()} HOME first, if that's the night you want.)`,
+  n => `${n}'s hand is off your arm before the word is finished. "You take me out and buy THAT in front of me?" The girls at the counter find something to look at. (SEND ${n.toUpperCase()} HOME first, if that's the night you want.)`,
+  n => `"No." ${n} doesn't raise her voice; she doesn't have to. "Tonight you are with me. Tomorrow you do what you want, I don't know about it." (SEND ${n.toUpperCase()} HOME first, if that's the night you want.)`,
+];
+function _partyBlocksTrade() {
+  const ids = (G.party && G.party.ids) || [];
+  if (!ids.length) return false;
+  const n = ids.map(i => NPCS[i] && NPCS[i].name).filter(Boolean).join(" and ");
+  _say(_pickVary(_PARTY_NO_TRADE, "partynotrade")(ids.length > 1 ? NPCS[ids[0]].name : n));
+  return true;
+}
 function _doMassage(arg) {
   const r = _room();
   if (r.soapy) { _doSoapy(); return; }   // wrong verb, right building — route it
@@ -2332,6 +2368,7 @@ function _doMassage(arg) {
   }
   arg = (arg || "").replace(/^(a |for |the )/, "").trim();
   const wantsSpecial = /special|happy|extra|hand|mouth|boom|sex|sexy|finish/.test(arg);
+  if (wantsSpecial && r.massage !== "legit" && _partyBlocksTrade()) return;
   const she = _npcsHere().find(id => NPCS[id] && NPCS[id].masseuse);
   // the shop's own woman where there is no cast masseuse (Graeme, round 58)
   const _sw = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[G.room];
@@ -2473,6 +2510,7 @@ function _doMeetOffShift(arg) {
     return;
   }
   const os = G.offShift;
+  if (_partyBlocksTrade()) return;
   if (G.nightTurn < OFFSHIFT_TURN) {
     _say(`Too early — ${os.name} is still on the shop floor. Her number's in your pocket; try when the night's old.`);
     return;
@@ -2523,6 +2561,7 @@ function _doSoapy() {
     _say("Four floors of soapy massage on a stolen-wallet budget? Sort the essentials first, Aquaman.");
     return;
   }
+  if (_partyBlocksTrade()) return;
   if (G.soc.soapyDone === G.day) {
     _say(`${_soapyBoss()} takes one look and laughs. “Again? Go home, sleep, eat something — tomorrow.” ` +
       "Once through the soap is plenty for one night.");
@@ -3444,12 +3483,15 @@ function _questTick() {
       _say(`(The next door: “${_L(nq.name)}” —${_questWhere(giver) || ` ${NPCS[giver].name} has it.`})`, "dim");
     }
     if (q.reward.money) {
-      G.money += q.reward.money;
+      // money sent through the bank app lands in the ACCOUNT, as every other
+      // transfer does (Joanne, round 64 — the line said bank app, the pocket grew)
+      const _gv0 = _qGiver(q), _byApp = !!(NPCS[_gv0] && !_npcsHere().includes(_gv0));
+      if (_byApp) G.bank += q.reward.money; else G.money += q.reward.money;
       // money with nobody handing it over (Arturo, round 47): name the giver, and
       // say how it reached you when the giver is not in the room
       const _gv = _qGiver(q), _gn = NPCS[_gv] ? NPCS[_gv].name : null;
       const _here = _gv && _npcsHere().includes(_gv);
-      _say(`(+฿${q.reward.money}${_gn ? (_here ? ` from ${_gn}` : ` — ${_gn}'s, sent through the bank app with a sticker on it`) : ""} — ฿${G.money} in pocket.)`, "dim");
+      _say(`(+฿${q.reward.money}${_gn ? (_here ? ` from ${_gn}` : ` — ${_gn}'s, sent through the bank app with a sticker on it`) : ""} — ${_byApp ? `฿${G.bank} in the account` : `฿${G.money} in pocket`}.)`, "dim");
     }
     if (q.reward.happy) _addHappy(q.reward.happy);
     _repGain(); // seeing a job through is the sort of thing that earns you a name (throttled)
@@ -3686,7 +3728,7 @@ function _phoneDead() {
 
 const _CHATTER = ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊", "last night SO funny 5555",
   "bar quiet 😴 boss angry at everybody", "i see a dog look like you today 555 🐕", "my friend ask who is the farang always smiling. i say mine 😏",
-  "rain rain rain ☔ nobody come", "you sleep?? it 9pm only, old man 555", "mama call, she say hello to you (she dont know you 555)"];
+  "rain rain rain ☔ nobody come", "you sleep?? night still young, old man 555", "mama call, she say hello to you (she dont know you 555)"];
 function _pushMsg(from, text, gives, fromName, photo) {
   // the same line twice running from the same sender reads as a bug (27-night
   // playtest) — and "running" was too narrow: the check only compared against
@@ -4551,7 +4593,11 @@ function _moneypitText(id) {
 function _maybePhotoText(id) {
   const caps = _selfiesFor(id);
   if (!caps.length) return false;
-  _pushMsg(id, "", 0, null, _selfieCap(caps[Math.floor(_rand() * caps.length)]));
+  // never the same frame twice: a selfie already in the gallery is not news (Joanne, round 64)
+  const had = new Set(_photoList().filter(p => p.id === id && p.cap).map(p => p.cap));
+  const fresh = caps.filter(c => !had.has(_selfieCap(c)));
+  if (!fresh.length) return false;
+  _pushMsg(id, "", 0, null, _selfieCap(fresh[Math.floor(_rand() * fresh.length)]));
   return true;
 }
 
@@ -5139,7 +5185,7 @@ function _maybeIncomingText() {
     }
   }
   // a lady who keeps photos sometimes just sends one, out of the blue
-  if (_selfiesFor(id).length && _rand() < 0.25) { _maybePhotoText(id); buzz(); return; }
+  if (_selfiesFor(id).length && _rand() < 0.25 && _maybePhotoText(id)) { buzz(); return; }
   // a moneypit contact turns nearly every text into an ask, and the numbers climb;
   // the white knight gets steered to the top of the list and can't say no.
   if (NPCS[id].type === "moneypit") { _moneypitText(id); buzz(); return; }
@@ -5192,6 +5238,29 @@ function _maybeIncomingText() {
       "you look tired today na boss. sleep. bar is fine. i am here",
       "new girl at the bar next door very loud. we are better 555",
     ], "stafftext:" + _role)); buzz(); return;
+  }
+  // the women who run a floor, and the one who lends to it, do not text in the
+  // hostess's register — Candy sent "you no come i sad" and a medicine ask, Nira
+  // (who lends) asked to borrow (Joanne, round 64). The house invites; it never asks.
+  if (NPC_ROLES[id] === "mamasan" || id === "nira") {
+    const _bar = _barName(_npcRoom(id)) || "the bar";
+    const _lend = id === "nira";
+    const _owe = _lend && G.loan && G.loan.owed > 0;
+    _pushMsg(id, _fmt(_pickVary(_owe ? [
+      "just a reminder na. the date is the date 🙂",
+      "you know where i dance. bring it when you come 💵",
+      "no stress. but the date don't move, same as me on the pole 555",
+    ] : _lend ? [
+      "quiet night at {bar}. the girls ask where is the farang who talk to me like a bank 555",
+      "if you short this week you know where i am. if you not short, come anyway 🙂",
+      "good night tonight. i dance well, nobody see. you should see 😏",
+    ] : [
+      "new girl start tonight at {bar}. nice one. you come say hello na 🙂",
+      "{bar} busy tonight. i keep a stool if you want",
+      "the girls ask after you. i say he is busy man 🙂",
+      "slow night at {bar}. come have one",
+    ], _lend ? (_owe ? "niraowe" : "niratext") : "mamatext"), { bar: _bar }));
+    buzz(); return;
   }
   // a woman you sat with TONIGHT does not text that you never come (Tomasz, round 54:
   // "you no come i sad" twenty minutes after he left her bar with a drink bought)
@@ -5371,7 +5440,7 @@ const _ASK_KINDS = [
   { kind: "school", amt: 300, t: n => `little brother school fee ${n} 😔 i no like ask but you good heart` },
   { kind: "phone", amt: 500, t: n => `{{phone}} of me break!! need ${n} for fix... you good heart na 🙏` },
   { kind: "buffalo", amt: 200, t: n => `buffalo of family very sick 😭😭 ${n} baht help little bit?` },
-  { kind: "motorbike", amt: 400, t: n => `motorbike of me broken 😩 mechanic say ${n}. you help little? i pay back` },
+  { kind: "motorbike", amt: 400, t: n => `motorbike of me broken 😩 mechanic say ${n}. you help little? 🙏` },
   { kind: "quiet", amt: 300, t: n => `no customer 3 day already 😢 mama angry. ${n} for room na, please` },
   { kind: "papa", amt: 250, t: n => `papa need medicine, pharmacy ${n} baht. sorry i ask you 🙏🙏` },
 ];
@@ -5412,7 +5481,7 @@ function _askPaid(id, amt) {   // the newest unpaid ask this money covers, marke
 const _ASK_THANKS = {   // an honest woman thanks you for the THING; a scripted one for the money
   medicine: "🙏🙏 i buy the medicine today. she sleep now. thank you na, jing jing",
   hospital: "😭 mama come home from hospital, doctor say ok. because you. thank you 🙏",
-  rent: "🙏 room paid. landlord stop looking at me 555 next month i pay you back, i promise na",
+  rent: "🙏 room paid. landlord stop looking at me 555 thank you thank you na",
   school: "😊 brother go school today in new shirt. he say thank you to the farang he never meet 🙏",
   phone: "📱 {{phone}} fix!! this message come from the new screen 555 thank you na",
   buffalo: "🐃 buffalo stand up today!! my papa say the farang have good heart 🙏",
@@ -5454,6 +5523,36 @@ const _MONEY_TALK = {
   ],
 };
 const _ASK_KIND_WORDS = { medicine: /\bmedicine\b|\bsick\b/, hospital: /\bhospital\b|\bmama sick\b|\bmother\b/, rent: /\brent\b|\broom\b|\blandlord\b/, school: /\bschool\b|\bbrother\b|\bfee\b/, phone: /\bphone\b|\bscreen\b/, buffalo: /\bbuffalo\b/, motorbike: /\bmotorbike\b|\bbike\b|\bmechanic\b/, quiet: /\bquiet\b|\bno customer\b/, papa: /\bpapa\b|\bfather\b|\bpharmacy\b/ };
+// WHAT SHE TEXTED YOU is something she can be asked about (Joanne, round 64:
+// "ask lek about the text" missed while the text sat in the inbox). The answer
+// quotes her own latest line back by register; a selfie is the photo.
+const _TEXT_TALK_FLOOR = [
+  (n, q) => `${n} laughs and covers her face. "“${q}” — aiy, you read it. I type it when I bored, na."`,
+  (n, q) => `"You see my message?" ${n} looks pleased you did. "“${q}”. I mean it. Mostly 555."`,
+  (n, q) => `${n} takes {{your phone}} off you, reads her own line — “${q}” — and hands it back. "Yes. That one me."`,
+  (n, q) => `"“${q}”?" ${n} shrugs, smiling. "Phone talk. Face talk better. You here now, so."`,
+];
+const _TEXT_TALK_HOUSE = [
+  (n, q) => `"“${q}”." ${n} nods. "I meant it. I don't send for nothing."`,
+  (n, q) => `${n} doesn't need reminding what she sent. "“${q}” — and here you are. Good."`,
+];
+const _TEXT_TALK_PHOTO = [
+  n => `"The photo?" ${n} grins. "Keep it. Is better than the real one at four in the morning."`,
+  n => `${n} pretends not to know which photo, then gives up. "Okay, okay. My friend take it. Good angle, na?"`,
+];
+function _textTalk(npc, topic) {
+  const t = String(topic || "").toLowerCase();
+  if (!/\b(texts?|messages?|sms|what (you|she) (sent|wrote|said)|your (text|message)|photo you sent|the (selfie|photo|picture|pic))\b/.test(t)) return false;
+  const m = (G.phone.inbox || []).slice().reverse().find(x => x.from === npc);
+  if (!m) return false;
+  const n = NPCS[npc].name;
+  if (m.photo && !m.text) { _say(_pickVary(_TEXT_TALK_PHOTO, "texttalkpic:" + npc)(n)); return true; }
+  const q = String(m.text || "").replace(/\s+/g, " ").trim();
+  const short = q.length > 70 ? q.slice(0, q.lastIndexOf(" ", 66)) + "…" : q;
+  const pool = _hoursRegister(npc) === "floor" ? _TEXT_TALK_FLOOR : _TEXT_TALK_HOUSE;
+  _say(_pickVary(pool, "texttalk:" + npc)(n, short));
+  return true;
+}
 function _moneyTalk(npc, topic) {
   const t = String(topic || "").toLowerCase();
   if (!NPC_ROLES[npc]) return false;

@@ -113,6 +113,12 @@ const _TOAST_LINES = [
   n => `${n} takes the glass the way you take a good hand: quietly. The next ten minutes are warmer than the last ten.`,
   n => `"Kop khun ka." ${n} says it to you and drinks it to the mamasan, and both of them mean it.`,
 ];
+// a mamasan does not drink the toast to the mamasan, nor a cashier catch the
+// cashier's eye — Candy toasted herself (Joanne, round 64)
+function _toastFor(id) {
+  const r = NPC_ROLES[id] || (NPCS[id] && NPCS[id].role);
+  return _TOAST_LINES.filter(f => !(r === "mamasan" && /mamasan/.test(f.toString())) && !(r === "cashier" && /cashier/.test(f.toString())));
+}
 // the guv'nor asking twice is not a punter to be sold a drink ("you forget so fast?
 // buy a drink — maybe it come back", to the owner, about her own mother — Rolf, round 55)
 const _OWN_ASK_AGAIN = [
@@ -1066,8 +1072,12 @@ function _arriveAt(to) {
       // ambient "laughing beside him" line and the drink-snipe jealousy both read
       // this, and a bare boolean let them name/blame different girls (Gaz
       // playtest, 2026-08-17: the room said Noi, buying Sara triggered "her").
+      // never the woman on your arm, nor one who already counts you a regular: a
+      // man buying her drinks all evening is a story about a stranger (Anil, round 64
+      // — the rail's regular was "attending" Lek while Lek was his companion)
       const hos = Object.keys(NPC_ROLES).filter(x =>
-        NPC_ROLES[x] === "hostess" && _npcRoom(x) === to);
+        NPC_ROLES[x] === "hostess" && _npcRoom(x) === to &&
+        !((G.party && G.party.ids) || []).includes(x) && _bondTier(x) < 2);
       // prefer a girl the room's own prose doesn't feature: the desc may have
       // just put her "in your lap", and this line would seat her with a regular
       // four lines later (fabulist playtest F5, 2026-08-25 — Praewa, both at once)
@@ -3883,9 +3893,15 @@ function _doTalkBody(arg, topic) {
   try { _doTalkCore(arg, topic); }
   finally {
     const id = _talkingTo; _talkingTo = null;
-    if (id && topic && NPCS[id] && !((G.talked && G.talked[id]) || []).length) {
-      const hello = _pickDialogue(id, null), k = hello ? NPCS[id].dialogue.indexOf(hello) : -1;
-      if (k >= 0) (G.talked[id] = G.talked[id] || []).push(k);
+    // A stranger who has answered you has met you, whether or not the answer was
+    // the first thing she ever said — Rose's vouch node was delivered, so the book
+    // was not empty, and her full welcome played the next night (Joanne, round 64).
+    // The test is "no greeting heard yet", not "nothing heard yet".
+    const seen = (G.talked && id && G.talked[id]) || [];
+    const dl = id && NPCS[id] && NPCS[id].dialogue || [];
+    if (id && topic && dl.length && !seen.some(i => dl[i] && !dl[i].topic)) {
+      const hello = _pickDialogue(id, null), k = hello ? dl.indexOf(hello) : -1;
+      if (k >= 0 && _plainHello(hello)) (G.talked[id] = G.talked[id] || []).push(k);
     }
   }
 }
@@ -4057,7 +4073,7 @@ function _doTalkCore(arg, topic) {
   // the woman on your arm, addressed with no subject, is with you — not behind her own rail
   // ("Ohhh, again! You have no other bar?" at Candy Bar with Lek on his arm — Ingrid, round 62)
   if (!topic && G.party && G.party.ids && G.party.ids.includes(npc)) {
-    _say(_pickVary(_PARTY_TALK, "partytalk:" + npc)(NPCS[npc].name, _barName(G.room) || "here"));
+    _say(_pickVary(_partyTalkPool(), "partytalk:" + npc)(NPCS[npc].name, _barName(G.room) || "here"));
     return;
   }
   // THE VERDICT CLOSES THE CONVERSATION TOO: the ride topic came back as an invitation
@@ -4184,7 +4200,8 @@ function _doTalkCore(arg, topic) {
   if (topic && !d.topic && _NORMAL_GIRL_RX.test(String(topic).toLowerCase())) { _say(_normalGirlTalk(npc)); return; }
   if (topic && !d.topic && npc === "nont" && typeof _nontLoanTalk === "function" && _nontLoanTalk(topic)) return;   // he offered BORROW; he answers it (Greta, round 61)
   if (topic && !d.topic && typeof _careTalk === "function" && _careTalk(npc, topic)) return;   // the words of her own money text (Marcus, round 61)
-  if (topic && !d.topic && typeof _moneyTalk === "function" && _moneyTalk(npc, topic)) return;   // the money you sent, and the thing it was for (Piet, round 62)
+  if (topic && !d.topic && typeof _moneyTalk === "function" && _moneyTalk(npc, topic)) return;
+  if (topic && !d.topic && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // the line she sent you (Joanne, round 64)   // the money you sent, and the thing it was for (Piet, round 62)
   if (topic && !d.topic && typeof _leavingTalk === "function" && _leavingTalk(npc, topic)) return;   // "i fly home tomorrow"
   if (topic && !d.topic && typeof _playerSaidTalk === "function" && _playerSaidTalk(npc, topic)) return;   // what you told her, and the name she calls you
   if (topic && !d.topic && typeof _drinksOnlyWhy === "function" && _drinksOnlyWhy(npc, topic)) return;   // she said she'd tell you why (Nadia, round 61)
@@ -4455,12 +4472,14 @@ function _doTalkCore(arg, topic) {
       const fi = _townPick(npc, "hfamily", _H_FAMILY.length, story.familyIdx, i => i === story.familyIdx || !tk.family.has(i));
       const pi = _townPick(npc, "hplan", _H_PLAN.length, story.planIdx, i => i === story.planIdx || !tk.plan.has(i));
       story.family = _H_FAMILY[fi].replace(/\{from\}/g, from); story.plan = _H_PLAN[pi]; }
-    const line = /home|village/.test(t) ? `"${from}, Isan side. Small village, big family." She says it like a postcode, and then, softer: "Very far."`
-      : /family/.test(t) ? `"${story.family}." She says it the way she would give you a phone number: a fact, not a plea.`
-      : `"Plan?" She thinks about it properly. "My dream is to ${story.plan}." A shrug, a grin. "Everybody say that one. Maybe me, I do it."`;
+    // through the floor's own wrappers and the town book — the old three fixed sentences were the
+    // same "like a postcode… very far" from eight women (Gerry, round 64)
+    const line = /home|village/.test(t) ? _H_HOME_WRAP[_townPick(npc, "hhomewrap", _H_HOME_WRAP.length, _hh(npc, 43) % _H_HOME_WRAP.length)](from)
+      : /family/.test(t) ? _H_FAMILY_WRAP[_townPick(npc, "hfamwrap", _H_FAMILY_WRAP.length, _hh(npc, 31) % _H_FAMILY_WRAP.length)](story.family)
+      : _H_PLAN_WRAP[_townPick(npc, "hplanwrap", _H_PLAN_WRAP.length, _hh(npc, 37) % _H_PLAN_WRAP.length)](story.plan);
     const _sk = npc + ":" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan");
     const _told = (G.soc.storyTold = G.soc.storyTold || {});
-    if (_told[_sk]) _say(`${NPCS[npc].name}: ` + (/home|village/.test(t) ? `"${from}. You know already."` : /family/.test(t) ? `"Same family, tilac. Nothing change since you ask."` : `"Same dream. Still a dream."`));   // told in full every time, six times (Piet, round 62)
+    if (_told[_sk] && !_retell) _say(`${NPCS[npc].name}: ` + (/home|village/.test(t) ? `"${from}. You know already."` : /family/.test(t) ? `"Same family, tilac. Nothing change since you ask."` : `"Same dream. Still a dream."`));   // …and ASK … AGAIN retells (Gerry, round 64)   // told in full every time, six times (Piet, round 62)
     else { _told[_sk] = true; _say(`${NPCS[npc].name}: ${line}`); }
     _questOffer(npc);
     return;
@@ -4472,9 +4491,15 @@ function _doTalkCore(arg, topic) {
     const t = _convoTopic(topic) || topic, from = _authoredStory(npc).from;
     const _sk = npc + ":m:" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan");
     const _told = (G.soc.storyTold = G.soc.storyTold || {});
-    if (_told[_sk]) { _say(_pickVary(_ASK_AGAIN_FLUENT, "mamaagain")(NPCS[npc].name)); _questOffer(npc); return; }
+    if (_told[_sk] && !_retell) { _say(_pickVary(_ASK_AGAIN_FLUENT, "mamaagain")(NPCS[npc].name)); _questOffer(npc); return; }
     _told[_sk] = true;
-    _say(/home|village/.test(t) ? `${NPCS[npc].name}: "${from}." She names it the way you would name a supplier you stopped using. "A long time ago now. This is home."`
+    const _mHome = [   // was one sentence for four mamasans (Gerry, round 64)
+      f => `"${f}." She names it the way you would name a supplier you stopped using. "A long time ago now. This is home."`,
+      f => `"${f}, up north-east." A small shrug. "I go back for funerals and Songkran. The rest of the year, my village is this street."`,
+      f => `"${f}. My mother still there, in the house I built." She taps the bar. "This paid for the roof."`,
+      f => `"${f}." She thinks about it. "I have been here longer than I was there. So — here, I think."`,
+    ];
+    _say(/home|village/.test(t) ? `${NPCS[npc].name}: ` + _mHome[_townPick(npc, "mhome", _mHome.length, _hh(npc, 47) % _mHome.length)](from)
       : /family/.test(t) ? `${NPCS[npc].name}: ` + _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, _hh(npc, 37) % _M_FAMILY.length)]
       : `${NPCS[npc].name}: ` + _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, _hh(npc, 41) % _M_PLAN.length)]);
     _questOffer(npc);
@@ -6967,6 +6992,16 @@ function _ladyDrinkCharge(id) {
 
 function _doBuy(arg) {
   const r = _room();
+  // BUY LEK A TOASTIE is BUY TOASTIE FOR LEK, and a plate for her is hers before
+  // any fullness of yours is consulted (Anil, round 64 — both fed the buyer)
+  {
+    const _m = String(arg || "").match(/^(\w+)\s+(?:(?:a|an|some|the|one)\s+)?(?!for\b)(.+)$/i);
+    const _who = _m && _findNpc(_m[1]);
+    if (_who && NPC_ROLES[_who] && _npcsHere().includes(_who) && !/\b(drinks?|beer|lady|shot|water|cola|coke|soda|juice|bra|rose|flower)\b/i.test(_m[2])) arg = _m[2] + " for " + _m[1];
+    if (/\bfor \w+/.test(arg) && FOOD_STALLS[G.room] && /\b(food|plate|meal|dinner|snack|eat|noodles?|rice|som ?tam)\b|\bfor\b/.test(arg) &&
+        !/\b(drinks?|beer|lady|water|cola|soda|bra|rose)\b/.test(arg) && typeof _companionEats === "function" &&
+        _companionEats(arg, FOOD_STALLS[G.room].name, FOOD_STALLS[G.room].price)) return;
+  }
   // Nont's SIM — "a Thai SIM that isn't in your name", promised in his own greeting
   if (/\blesson\b|\bhour\b|\bclass\b|\btuition\b/.test(arg) && typeof _doLesson === "function" && _waenHere()) { _doLesson(arg); return; }
   if (/\bsim\b/.test(arg) && typeof _nontHere === "function" && _nontHere()) {
@@ -7494,7 +7529,8 @@ function _doBuy(arg) {
     // drink-sniping the specific girl the regular was attending: bad form. Legacy
     // saves stored `true` — treat that as "any hostess" so old games don't crash.
     const busyId = G.soc.patronBusy[G.room];
-    const sniped = busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId;
+    const sniped = (busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId) &&
+      _bondTier(id) < 2 && !((G.party && G.party.ids) || []).includes(id);
     // the guv'nor buying his own girl a drink is not sniping a punter's (Rolf, round 54)
     if (sniped && !G.soc.patronMiffed[G.room] && !(typeof _atOwnBar === "function" && _atOwnBar())) {
       G.soc.patronMiffed[G.room] = true;
@@ -7508,7 +7544,7 @@ function _doBuy(arg) {
       _setFlag("helmetDelivered"); // she'll talk now regardless
       _deliver("pim", _pickDialogue("pim", "oy"));
     } else {
-      _say(_pickVary(typeof _affairLive === "function" && _affairLive() && G.affair.id === id ? _AFFAIR_TOAST : _TOAST_LINES, "toast")(NPCS[id].name));   // one string, ten times a night (Tomasz, round 54); her own for your girl (Rolf, round 55)
+      _say(_pickVary(typeof _affairLive === "function" && _affairLive() && G.affair.id === id ? _AFFAIR_TOAST : _toastFor(id), "toast")(NPCS[id].name));   // one string, ten times a night (Tomasz, round 54); her own for your girl (Rolf, round 55)
     }
     _maybeSelfBarfine(id);
     return;
@@ -7706,9 +7742,11 @@ function _rideLoop() {
     _addHappy(2); // non-jading — the spectator family (WATCH SOI, the cats, the hill)
   }
   G.pendingFare = { kind: "bus", price: BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0)), dest: G.room };   // her fare too (Ingrid, round 62)
-  _say(`Back where you flagged it, one whole town later. The driver leans out: “${thaiBaht(BUS_FARE)}”`, "thai");
-  _engineSpeak(thaiBaht(BUS_FARE));
-  _say(`(${thaiNumRoman(BUS_FARE)} … the ride's over, the fare isn't. PAY <amount>.)`, "dim");
+  // the quote is what he charges: two heads are two fares (Anil, round 64 — ฿15 said, ฿30 taken)
+  const _fq = G.pendingFare.price;
+  _say(`Back where you flagged it, one whole town later. The driver leans out: “${thaiBaht(_fq)}”` + (_fq > BUS_FARE ? ` — and nods at your company. One fare a head.` : ""), "thai");
+  _engineSpeak(thaiBaht(_fq));
+  _say(`(${thaiNumRoman(_fq)} … the ride's over, the fare isn't. PAY <amount>.)`, "dim");
 }
 
 // The small-hours kerb: the buses still run, sparse — the wait is the mechanic
@@ -7943,9 +7981,10 @@ function _doRideBus(arg) {
     _say("The blue songthaew rattles along with the flow of the one-way town, wind " +
       "through the rails, the streets sliding past in smears of neon…");
   }
-  _say(`You hop off. The driver leans out and says: “${thaiBaht(BUS_FARE)}”`, "thai");
-  _engineSpeak(thaiBaht(BUS_FARE));
-  _say(`(${thaiNumRoman(BUS_FARE)} … he wants paying. PAY <amount>.)`, "dim");
+  const _fq = G.pendingFare ? G.pendingFare.price : BUS_FARE;
+  _say(`You hop off. The driver leans out and says: “${thaiBaht(_fq)}”` + (_fq > BUS_FARE ? ` — and counts your company with one finger. One fare a head.` : ""), "thai");
+  _engineSpeak(thaiBaht(_fq));
+  _say(`(${thaiNumRoman(_fq)} … he wants paying. PAY <amount>.)`, "dim");
 }
 
 // ONE fare arithmetic, quoted and charged. The TRAVEL refusal quoted the
@@ -8346,6 +8385,9 @@ function _lightNotice() {
         `You look for your money? I save you time: it's gone."`,
       `${name} steps into the beam and strikes a pose. "Ooh, spotlight! You pay ` +
         `me like a star too, na?"` + (npcs.filter(id => NPC_ROLES[id] === "hostess").length > 1 ? " The other girls are already laughing." : " She is already laughing."),
+      `${name} squints into the light. "Aiyo. You are police, or dentist?"`,
+      `${name} puts her hand over the beam like it is a cigarette lighter in the wind. "Save battery, tilac. You need it to call me later."`,
+      `${name} waves at the torch as if it were a person. "Hello, torch. You buy me drink also?"`,
       `${name} leans over and gently pushes your phone hand down. "Tilac. The ` +
         `neon works fine. You look like you hunt ghosts."`,
     ];
@@ -12939,6 +12981,8 @@ function doCommand(input) {
     case "reply": {   // REPLY PRIEW went to Mort's number (Marek, round 53): a named contact is a MESSAGE to them
       // "reply sao: of course" kept the colon, so the name missed and Mort answered;
       // and a REPLY with no name answers whoever wrote last (Sol, round 55)
+      // the number with no name on it is the joker's — REPLY UNKNOWN / NUMBER / +66 (Joanne, round 64)
+      if (/^(to\s+)?(the\s+)?(unknown|stranger|number|anon\w*|\+?66|0\d)/i.test(arg)) { _doJokeReply(); break; }
       const nm = arg.replace(/^to\s+/, "").split(/\s+/)[0].replace(/[^a-z'-]/gi, "");
       if (nm && _contactByName(nm)) { _doMessage(nm); break; }
       const _last = (G.phone.inbox || []).slice().reverse().find(m => m.from && G.phone.contacts[m.from]);
@@ -13324,6 +13368,18 @@ function _tanFood() {
   G.soc.tanFedDay = G.day;
   _say(_pickVary(_TAN_FOOD, "tanfood"), "win");
   _say(_pickVary(_TAN_FOOD_TALK, "tanfoodtalk"));
+  // the woman on your arm eats too — Tan pulls up a third stool without asking (Anil, round 64)
+  {
+    const _ids = (G.party && G.party.ids) || [];
+    if (_ids.length) {
+      const _w = _partyLabel();
+      _say(_fmt(_pickVary([
+        "Tan pulls a third stool over for {w} before anybody asks, orders for her in Thai, and the two of them have a short, rapid conversation about you that ends in her laughing. You are not told what was said.",
+        "{w} and Tan know each other the way everybody in this town knows Tan — by sight, and by the car. He makes sure her bowl comes first.",
+      ], "tanfoodparty"), { w: _w }), "dim");
+      for (const id of _ids) _addBond(id, 1);
+    }
+  }
   if (G.dog) _say(_dogN("Sai Krok is served last and best — a bowl of broth and the good " +
     "trimmings, set down by the cart woman without a word to either of you."), "dim");
   G.hunger = Math.max(0, G.hunger - 55);

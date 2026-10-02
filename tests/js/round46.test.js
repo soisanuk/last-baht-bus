@@ -69,6 +69,7 @@ test("an authored girl's fallback hometown is the province her own text names (K
 });
 
 test("a question dropped by a change of subject or a vanished partner still answers a late digit with the drift line", () => {
+  G.rng = 424242;   // seeded: a stray roll (rain, a saleng) once took the first exchange off her (flaked 1 in ~40 full runs)
   G.room = "candy_bar"; G.nightTurn = 10;
   run("talk to bua"); assert.ok(G.convoQ, "she asked");
   run("do you like pattaya");         // a question back at her drops hers
@@ -78,7 +79,7 @@ test("a question dropped by a change of subject or a vanished partner still answ
   // partner gone
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; _setFlag("act1Done"); G.stage = "vacation";
   for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
-  G.room = "candy_bar"; G.nightTurn = 10; run("talk to bua"); assert.ok(G.convoQ);
+  G.rng = 424242; G.room = "candy_bar"; G.nightTurn = 10; run("talk to bua"); assert.ok(G.convoQ);
   G.room = "buakhao_s"; _convoActive();
   out = []; run("1");
   assert.match(text(), /drifted past/); assert.doesNotMatch(text(), /didn't understand/);

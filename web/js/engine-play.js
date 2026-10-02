@@ -4656,6 +4656,7 @@ function _morningLedger() {
   // down behind your own rail, the floor took you home: "woke wherever you fell" was
   // printed to a man who woke in his own bed (Rolf, round 55)
   if (_endReason && G.ownRescueDay === G.day && (_endReason === "collapse" || _endReason === "blackout")) bits.push("went down behind your own rail, and the floor took you home");
+  else if (_endReason && G.partyRescued && (_endReason === "collapse" || _endReason === "blackout")) bits.push(`went down, and ${G.partyRescued} got you home`);
   else if (_endReason && _ENDED[_endReason]) bits.push(_ENDED[_endReason]);
   const dh = G.happy - b.happy;
   if (dh) bits.push((dh > 0 ? "+" : "") + dh + " \u0e2a\u0e19\u0e38\u0e01");
@@ -4715,6 +4716,7 @@ function _morningLedger() {
   // round 47): black out, get your pockets emptied, close the app because you are not
   // proud of yourself, come back — and ฿1,181 is gone with the game saying nothing. Keep
   // what was said so LAST NIGHT can say it again.
+  G.partyRescued = null;
   G.lastNightSaid = [
     bits.length ? "Last night: " + bits.join(" \u00b7 ")
       : "(A quiet one. It happens, and the week is long enough to carry a few.)",
@@ -5145,6 +5147,7 @@ function _endNight(reason) {
   G.soc.bfBar = {};    // "a colleague already left with you" is a tonight thing — else one
                        // barfine locks every other girl at that bar for the whole vacation
   G.soc.bfRefused = {}; // life-refusals ("temple in the morning") are night-scoped
+  G.soc.helloed = {};   // "the hello lands once a night" — so it lands again tomorrow (Joanne, round 64)
   G.soc.goWith = {};   // the "I go with you, na" opener re-arms each night
   G.soc.lockIn = {};   // Darkside lock-ins are per-night (their own comment says so)
   G.soc.leftLockIn = {};        // …as is having walked out of one
@@ -5434,7 +5437,13 @@ function _lastGoodbye() {
   if (!id) return;
   const name = NPCS[id].name;
   const pool = _bondTier(id) >= 3 ? _GOODBYE_FARANG : _GOODBYE_REGULAR;
-  _say(pool[G.vacation % pool.length](name), "room");
+  // she cannot "find out from somebody else" if you told her, or if she spent
+  // the last night with you (Anil, round 64): skip the hearsay variant then
+  const _knows = ((G.soc.leavingSaid || {})[id] != null) || G.lastBfId === id ||
+    ((G.party && G.party.ids) || []).includes(id) || !!(G.rideLog && G.rideLog[id] && G.rideLog[id].day >= G.day - 1);
+  let _gi = G.vacation % pool.length;
+  if (_knows && pool === _GOODBYE_REGULAR && _gi === 1) _gi = 2;
+  _say(pool[_gi](name), "room");
   // …and she has a week of her own starting tomorrow. Stated once, without
   // sentiment, because the alternative is a woman who exists only while the
   // player is looking at her.
@@ -5609,7 +5618,7 @@ function _newVacation() {
   // remembered, and this is the branch where the player actually flew home with
   // her money, so this is where the flag belongs (it used to be set at the gate,
   // before the choice, and so fired on the MOVE TO PATTAYA path too).
-  if (G.loan && G.loan.owed > 0) G.loanSkipped = true;
+  if (G.loan && G.loan.owed > 0) { G.loanSkipped = true; G.loanSkippedOwed = G.loan.owed; }
   G.loan = null;   // …but Nira's cousins do not forget; a month away writes it off all the same (for now)
   G.jaded = 0;     // a fresh trip, fresh enthusiasm — the treadmill resets
   // a month's worth of old chatter does not arrive fresh on the plane home — "i still smile

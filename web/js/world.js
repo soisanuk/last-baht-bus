@@ -13660,7 +13660,7 @@ const ENCOUNTERS = {
         "and suddenly free. “Hi baby, I finish work. I come you now? " + BOOK_PRICE + ", no bar, no " +
         "barfine, only you.” The photos are, it must be said, " +
         "extraordinary.",
-      "The phone lights the ceiling. An app girl you'd written off three days ago — six " +
+      "The phone lights the ceiling. An app girl you'd written off — six " +
         "photos, two words, then silence — is suddenly all words. “Baby you sleep?? I free " +
         "now. Come you " + BOOK_PRICE + ", no bar. Only you, na.” It is late enough, and the photos have not " +
         "got any less extraordinary.",
@@ -17129,6 +17129,21 @@ const _H_GREET = [
   '"Hello mister. You sit here, close to the fan. Best seat — I test all of them."',
   '"You come in like you lose something. Sit, sit — I help you look. First we look in a beer."',
 ];
+// the short repeat of each greeting, index for index (the town book deals the greeting AND its gist)
+const _H_GREET_SHORT_OF = [
+  '"Sit sit! Talk slow for me na."',
+  '"You MORE handsome. Sit."',
+  '"Cola? Only cola... maybe."',
+  '"English small small, heart big big."',
+  '"Sit sit! No shy."',
+  '"Stool still warm. Sit."',
+  '"Water or beer? I take care."',
+  '"England. I win, you buy."',
+  '"You smile, I smile."',
+  '"Customer! Finally. Sit."',
+  '"Best seat, near the fan."',
+  '"Still lose something? Sit."',
+];
 const _H_GREET_SHORT = [
   '"Sit sit! Talk slow for me na."',
   '"You buy me cola? Only cola... maybe."',
@@ -17147,7 +17162,7 @@ const _H_PLAN_WRAP = [
   p => `You ask her something bigger and she holds up one finger — "wait wait" — thumbs it into the {{phone}} and turns the screen to you: "I WOULD LIKE TO ${p.toUpperCase()}." She beams. "Like that na. You understand?"`,
   p => `"Plan?" She types into Google Translate and reads the robot voice out, carefully: "My dream is to ${p}." A shrug, a grin. "Phone say it better than me."`,
   p => `"Big word! Wait wait." Tap tap tap. She shows you the translation: "SOMEDAY I ${p.toUpperCase()}, IF BUDDHA HELP." She laughs. "Buddha and good customer — same job."`,
-  p => `"My plan?" She doesn't need the phone for this one. "${_cap1(p)}. I say it every night before sleep, so I don't forget."`,
+  p => `"Plan?" No phone for this one; she has said it many times. "${_cap1(p)}. Every night I say before sleep, so I no forget."`,   // was fluent English in a Tinglish mouth (Gerry, round 64)
   p => `She writes it on a napkin in Thai, crosses it out, and tries English: "${p.toUpperCase()}." She folds the napkin small and keeps it.`,
   p => `"Plan is ${p}." A pause, honest. "Plan is also: no new boyfriend first." She laughs, and means both.`,
 ];
@@ -17165,6 +17180,12 @@ const _H_FREE = [
   '"Free drink is for customer. For me — lady drink." A sweet smile. "Not free."',
   '"Free is one time. Then you are friend, and friend buy." She clinks your glass to seal it.',
   '"My smile is free." A beat, perfectly timed. "My company is lady drink."',
+  '"Free? You want free, go sit on the beach." She grins. "Here is aircon."',
+  '"Ice is free. Napkin is free. Me—" she taps the empty glass "—not free, na."',
+  '"First drink free, they say?" She looks at the cashier. "Nobody say that to me."',
+  '"Free is word for farang. Thai word is \'already paid\'." She laughs at her own joke.',
+  '"Free? My mama say nothing free, only trouble. My mama is right always."',
+  '"Free, no. Cheap, maybe." A wink. "For you, special cheap. Same price."',
 ];
 function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const bar = _barName(room) || "the bar";
@@ -17225,7 +17246,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   _storyTaken(room).family.add(famIdx); _storyTaken(room).plan.add(planIdx);
   return {
     name, th, emoji, room, filler: true, storyIdx: { family: famIdx, plan: planIdx },
-    storyBits: { from, greet: greetIdx, family: famIdx, plan: planIdx, famWrap: famWrapIdx, planWrap: planWrapIdx, homeWrap: homeWrapIdx },
+    storyBits: { from, greet: greetIdx, family: famIdx, plan: planIdx, famWrap: famWrapIdx, planWrap: planWrapIdx, homeWrap: homeWrapIdx, free: _hh(seed, 53) % 4 },
     ...(green ? { c4: 2 } : {}),
     ...(selfies ? { selfies } : {}),
     desc: `${look} — one of ${/s$/.test(bar) ? bar + "'" : bar + "'s"} girls, from ${from}.${ROOMS[room] && ROOMS[room].barType === "gogo" ? " The badge pinned at her hip says " + (1 + _hh(id + ":badge", 139) % 199) + " — the number the floor knows her by." : ""} ${phone}`,   // "Mama Yai's' girls", not "Mama Yai's's" (Stan, r35)
@@ -17235,7 +17256,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
       { topic: "family", text: _H_FAMILY_WRAP[famWrapIdx](family), story: "family" },
       { topic: "home", text: _H_HOME_WRAP[homeWrapIdx](from), story: "home" },
       { topic: "plan", text: _H_PLAN_WRAP[planWrapIdx](plan), story: "plan" },
-      { topic: "free|free drink|the free drink|free shot", text: idx(_H_FREE, 53) },
+      { topic: "free|free drink|the free drink|free shot", text: _H_FREE[_hh(seed, 53) % 4], story: "free" },
       // A girl working one of Candy's own bars points AT her boss, not at a map.
       { topic: "wallet", notFlags: ["hasWallet"],
         when: (st, G) => typeof _npcWhere === "function" && _npcWhere("candy") === room,

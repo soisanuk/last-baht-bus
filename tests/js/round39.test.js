@@ -126,7 +126,7 @@ test("an authored girl without a home line answers from the trade's stock, not a
     !NPCS[id].dialogue.some(d => d.topic && /home|family/.test(d.topic)));
   assert.ok(g, "a Soi 6 girl with no home node");
   G.room = _npcRoom(g); run(`ask ${NPCS[g].name.toLowerCase()} about home`);
-  assert.match(text(), /Isan side/); assert.doesNotMatch(text(), /Not my story/);
+  assert.match(text(), new RegExp(_H_FROM.map(x => x.replace(/[{}]/g, "")).join("|"))); assert.doesNotMatch(text(), /Not my story/);   // her province, in one of the floor's wrappers (round 64)
   out = []; run(`ask ${NPCS[g].name.toLowerCase()} about family`);
   assert.doesNotMatch(text(), /Not my story|wrong girl/);
 });

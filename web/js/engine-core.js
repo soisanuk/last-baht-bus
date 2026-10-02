@@ -1989,6 +1989,20 @@ function _topicHits(key, asked) {
 }
 
 // a node's gates, exactly as the pick honours them
+// MARK A HELLO HEARD without delivering it — a woman you have negotiated a
+// night with has met you, and must not introduce herself the next time you
+// TALK (Anil, round 64: Lek's "Hello, welcome" after a night on her bike).
+function _markHello(id) {
+  const dl = NPCS[id] && NPCS[id].dialogue;
+  if (!dl || !G.talked) return;
+  const seen = G.talked[id] || [];
+  if (seen.some(i => dl[i] && !dl[i].topic)) return;
+  const hello = _pickDialogue(id, null), k = hello ? dl.indexOf(hello) : -1;
+  if (k >= 0 && _plainHello(hello)) (G.talked[id] = seen).push(k);
+}
+// only an UNGATED greeting is an introduction: a state-gated hello (Tan after the
+// reveal, a her-farang welcome) is news, and marking it heard would bury it
+function _plainHello(d) { return !!d && !d.topic && !d.req && !d.notFlags && !d.when && !d.bond; }
 function _nodeOpen(npcId, d, st) {
   if ((d.req || []).some(f => !_flag(f))) return false;
   if ((d.notFlags || []).some(f => _flag(f))) return false;
@@ -2258,7 +2272,9 @@ function _townStory(npc, d) {
     case "greet": {
       // "only my mama dangerous" from a woman who works a bar with no mamasan (Jaja, round 63)
       const noMama = !Object.keys(NPCS).some(id => NPC_ROLES[id] === "mamasan" && (NPCS[id].room === room || (NPCS[id].bars || []).includes(room)));
-      return { text: _H_GREET[_townPick(npc, "hgreet", _H_GREET.length, b.greet, c => !(noMama && /\bmama\b/i.test(_H_GREET[c])))] };
+      const gi = _townPick(npc, "hgreet", _H_GREET.length, b.greet, c => !(noMama && /\bmama\b/i.test(_H_GREET[c])));
+      // her short follows HER greeting: Bua's second night borrowed Oat's "heart big big" (Gerry, round 64)
+      return { text: _H_GREET[gi], short: typeof _H_GREET_SHORT_OF !== "undefined" ? _H_GREET_SHORT_OF[gi] : undefined };
     }
     case "family": {
       const c = _townPick(npc, "hfamily", _H_FAMILY.length, b.family, i => i === b.family || !taken("family").has(i));
@@ -2271,6 +2287,7 @@ function _townStory(npc, d) {
       return { text: _H_PLAN_WRAP[w](_H_PLAN[c]) };
     }
     case "home": return { text: _H_HOME_WRAP[_townPick(npc, "hhomewrap", _H_HOME_WRAP.length, b.homeWrap)](b.from) };
+    case "free": return { text: _H_FREE[_townPick(npc, "hfree", _H_FREE.length, b.free || 0)] };
     case "mgreet": { const i = _townPick(npc, "mgreet", _M_GREET.length, b.greet); return { text: _M_GREET[i], short: _M_GREET_SHORT[i] }; }
     case "mfamily": { const bad = (typeof _M_FAM_CLASH !== "undefined" && _M_FAM_CLASH[b.story]) || []; return { text: _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, b.family, i => !bad.includes(i))] }; }
     case "mplan": return { text: _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, b.plan)] };
