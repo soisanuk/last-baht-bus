@@ -3870,7 +3870,26 @@ const _HELLO_AGAIN = [
   "{n} tilts her head — the look of a woman who has been said hello to and is now waiting for the rest. (ASK {N} ABOUT <something>.)",
   "A small smile from {n}, and nothing else: you have her attention, and it wants a question. (ASK {N} ABOUT <something>.)",
 ];
+// AN ANSWER IS A MEETING. "Have you met?" is read off her own dialogue book (G.talked), and
+// a dozen paths answer before that book is written — Near on Cream, a held refusal, the money
+// and the leaving topics, the town's helpers — so a woman could answer two questions about
+// her friend and then, on the third, introduce herself ("I no speak English good", "first
+// time Pattaya?") as if you had just walked in (Desmond, round 63; Jiap and Kwang the same).
+// Whatever path answers, the person you were answering is met: her hello is marked heard,
+// so a later bare TALK gets her gist, not her first-meeting speech. Transient (never on G).
+let _talkingTo = null;
 function _doTalkBody(arg, topic) {
+  _talkingTo = null;
+  try { _doTalkCore(arg, topic); }
+  finally {
+    const id = _talkingTo; _talkingTo = null;
+    if (id && topic && NPCS[id] && !((G.talked && G.talked[id]) || []).length) {
+      const hello = _pickDialogue(id, null), k = hello ? NPCS[id].dialogue.indexOf(hello) : -1;
+      if (k >= 0) (G.talked[id] = G.talked[id] || []).push(k);
+    }
+  }
+}
+function _doTalkCore(arg, topic) {
   arg = (arg || "").trim();
   // "BAR FINE" IS ONE WORD IN THIS TOWN. Spelled with the space it matched the
   // `bar` topic by substring, so a mamasan answered a question about the fine
@@ -3956,6 +3975,7 @@ function _doTalkBody(arg, topic) {
     return;
   }
   _convoStart(npc); // this NPC is now the active conversation partner (bare topics aim here)
+  _talkingTo = npc;   // see _doTalkBody: whatever answers her, she is met
   _trace(topic ? "ask" : "talk", NPCS[npc].name, topic || ""); // breadcrumb
   // remember the last day you sat with her AFTER this turn's lines (so "yesterday"
   // claims read the previous visit, not this one) — see _bondTalk

@@ -108,3 +108,15 @@ test("a refusal holds when the same thing is asked as a topic", () => {
 test("Tan is staged at his parked car, not at the wheel, when you meet him on the soi", () => {
   assert.ok(!NPCS.tan.dialogue.some(d => /in the mirror|at the wheel|on the wheel/.test(String(d.text) + String(d.short || ""))));
 });
+test("an answer is a meeting: a woman who answered you does not introduce herself afterwards", () => {
+  G.stage = "expat"; G.room = NPCS.cream.room; G.nightTurn = 70;
+  out = []; run("ask near about cream"); assert.match(said(), /Cream/);
+  assert.ok((G.talked.near || []).length > 0, "her hello is marked heard");
+  out = []; run("ask near about photosynthesis");
+  const hello = NPCS.near.dialogue.find(d => !d.topic);
+  assert.ok(!said().includes(String(hello.text).slice(1, 30)), "no first-meeting speech after she has already answered");
+  // every helper path, one shape: a stranger answered by ANY path is met afterwards
+  const fresh = Object.keys(NPCS).find(i => NPCS[i].filler && NPC_ROLES[i] === "hostess" && NPCS[i].room !== G.room);
+  G.room = NPCS[fresh].room; G.soc.bfRefused = { [fresh]: { kind: "temple", favor: 0 } };
+  out = []; _doTalkBody(fresh, "long time"); assert.ok((G.talked[fresh] || []).length > 0);
+});

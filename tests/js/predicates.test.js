@@ -111,7 +111,7 @@ const MUST_CONSULT = {
     { fn: "_ownBarTalk", why: "the guv'nor register yields to her" },
     { fn: "_relGreeting", why: "she does not greet you as a returning customer" },
     { fn: "_maybeIncomingText", why: "her texts are not a contact's invites" },
-    { fn: "_doTalkBody", why: "the colleague-review block — the other girls know" },
+    { fn: "_doTalkCore", why: "the colleague-review block — the other girls know" },
     { fn: "_workFloor", why: "her beats replace the floor rotation's while it is live" },
     { fn: "_affairNight", needs: "G.affair",
       why: "the nightly account reads the object straight (`!a || a.ended` is _affairLive inlined)" },
@@ -133,7 +133,7 @@ const MUST_CONSULT = {
     { fn: "_tonicShop", why: "the side-soi muscle stands down for a man with a dog" },
     { fn: "_dogBarFavor", why: "under the rail in the open-air bars, a bond for a random staffer" },
     { fn: "_soidogTick", why: "the dark streak is defused at his heel" },
-    { fn: "_doTalkBody", why: "the dog at your heel is a subject everyone has" },
+    { fn: "_doTalkCore", why: "the dog at your heel is a subject everyone has" },
     { fn: "_tanFood", why: "the cart feeds two" },
   ],
   // You have said you don't drink (round 53). The house pours on your behalf everywhere
