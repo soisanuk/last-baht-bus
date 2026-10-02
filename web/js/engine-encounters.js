@@ -542,6 +542,14 @@ const _ENC = {
   flower(input) {
     const id = G.flowerFor; G.flowerFor = null;
     const her = (id && NPCS[id] && NPCS[id].name) || "her";
+    // the price asked is still the rose (Marta, round 63: "how much?" lapsed the pitch and
+    // the girl beside you read out the bar's drinks instead)
+    if (/^(how much|tao rai|thao rai|price|what does it cost|how much is it|how much for (?:a |the |one )?(?:rose|flower))\b/.test(input)) {
+      G.flowerFor = id; G.pendingEnc = "flower";
+      _encPrompt([`The mother holds up the fingers before you have finished asking: ${ROSE_PRICE} baht, one rose. The child holds the bucket a little higher.`, "dim"],
+        [id && NPCS[id] ? `(BUY ROSE FOR ${NPCS[id].name.toUpperCase()}) · or (WAVE) them gently on.` : "(BUY ROSE) · or (WAVE) them gently on.", "dim"]);
+      return;
+    }
     // not an answer to the child at all (a tip, a talk, a walk): the pitch lapses
     // quietly and the command runs — see the pendingEnc gate's passthrough
     // Anchored: the old unanchored /no|.../ read FLIRT NOEY as a "no" and ate the

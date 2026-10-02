@@ -7332,7 +7332,9 @@ function _workFloor() {
 // here is obviously correct, which is the point: each one trades money against
 // people, and the stage is about which of those you are actually here for.
 const SHIFT_TAB_TAKE   = 1200;   // what a tab is worth to a night
-const SHIFT_TAB_STIFF  = 0.35;   // …and how often it never comes back
+const SHIFT_TAB_STIFF  = 0.35;   // …and how often it never comes back: half go on the docket, and of those
+const SHIFT_TAB_DOCKET = 0.5;    // three in ten come back out on pay-day (0.5 × 0.7 = 0.35, the same rate)
+const SHIFT_TAB_DOCKET_PAYS = 0.3;
 const SHIFT_EARLY_COST = 600;    // a floor one short
 const SHIFT_ROUND_COST = 500;    // what getting them in costs the till
 const SHIFT_ROUND_TAKE = 900;    // …and what the room does about it
@@ -7566,12 +7568,13 @@ function _shiftYes() {
     // ONE line in the books, not "settled +฿1,200 · stiffed −฿1,200" for the same
     // slate (Graham, round 47): settled is the slate paid; stiffed is the stock
     // he drank on it, gone
-    if (_rand() < SHIFT_TAB_STIFF) {
-      // the docket outlives the man. Not malice — he simply stops coming in,
-      // which is how bar debts actually end.
+    if (_rand() < SHIFT_TAB_DOCKET) {
+      // THE DOCKET IS A PROMISE, AND PAY-DAY KEEPS IT OR DOESN'T (Marta, round 63: "till Monday",
+      // and BOOKS called it stiffed on the Sunday). Tonight the books carry the stock he drank;
+      // pay-day — _tabDueTick at that night's settle — decides whether the slate comes back.
       const stiffCost = -Math.round(SHIFT_TAB_TAKE * _barCogs());
-      _shiftTake(stiffCost, "a regular's slate, stiffed — the stock he drank");
-      G.bar.stiffed = (G.bar.stiffed || 0) + 1;
+      _shiftTake(stiffCost, "a regular's slate, on the book till " + _shiftPayday() + " — the stock he drank");
+      G.bar.tabDue = { day: G.day + 2, pays: _rand() < SHIFT_TAB_DOCKET_PAYS, amt: SHIFT_TAB_TAKE };
       // said TONIGHT, as the books book it tonight — "still under the till a week later" was the
       // same sentence at the moment of YES, twice (Mick, round 57)
       _say(_fmt(_pickVary([
@@ -8990,7 +8993,8 @@ function _doBooks() {
   const friction = (G.syn && G.syn.friction) || 0;
   if (friction) {
     _say(_fmt("Supply is costing you about {pct}% over the going rate — the jobs " +
-      "you didn't give out are on this line, every night, forever.",
+      "you didn't give out are on this line, every night, forever." +
+      (_insidePrice() ? " The beer still comes at the uncle's inside price; it is everything else that comes late and at list." : ""),
       { pct: Math.round(friction * BAR_FRICTION * 100) }), "dim");
   }
   _sayBarSeason();
@@ -9025,8 +9029,23 @@ function _sayBarSeason() {
   _say(line, "dim");
 }
 
+// pay-day for a docket under the till: he squares it, or he becomes a man who drinks two bars up
+function _tabDueTick() {
+  const td = G.bar && G.bar.tabDue;
+  if (!td || G.day < td.day) return;
+  G.bar.tabDue = null;
+  if (td.pays) {
+    _shiftTake(td.amt, "a regular's slate, squared on pay-day");
+    G.bar.tabPaidNight = (G.bar.tabPaidNight || 0) + 1;
+    _say(_fmt("(The docket comes back out from under the till: he squared it on pay-day, ฿{a}, exactly as he said, and looked faintly surprised at himself.)", { a: _num(td.amt) }), "dim");
+  } else {
+    G.bar.stiffed = (G.bar.stiffed || 0) + 1;
+    _say("(Pay-day came and went. The docket stays under the till, and he drinks two bars up now. The stock was booked the night he drank it.)", "dim");
+  }
+}
 function _barSettle(settleDay) {
   if (!_barOwned()) return;
+  _tabDueTick();
   const n = _barNight(settleDay);   // the night played (G.day-1 from _endNight); the monthly cycle stays on G.day
   const m = _barMonthly();
   // the nightly line is quiet; the monthly one is not
@@ -9069,7 +9088,8 @@ function _barSettle(settleDay) {
     _addHappy(-1);
   }
   if (n.friction && n.low) {
-    _say("(Low season, and you buy everything at list. This is the month that " +
+    _say((_insidePrice() ? "(Low season, and everything but the beer comes at list. This is the month that "
+      : "(Low season, and you buy everything at list. This is the month that ") +
       "finds out whether you have a cushion.)", "dim");
   }
   if (typeof _affairNight === "function") _affairNight(n);   // the affair's nightly account
@@ -9276,7 +9296,10 @@ function _synFrictionTick() {
   // scales with how far outside you've stayed, and never becomes a drumbeat
   if (_rand() > Math.min(0.25 + st.friction * 0.12, 0.6)) return;
   st.frictionDay = G.day;
-  _say(_fmt(_pickVary(_SYN_FRICTION, "synfriction"),
+  // the uncle's inside price is the cleaning job's perk — while you have it, he does not
+  // refuse you the better number (Marta, round 63: three stories about one price)
+  const _fr = _insidePrice() ? _SYN_FRICTION.filter(l => !/better number/.test(l)) : _SYN_FRICTION;
+  _say(_fmt(_pickVary(_fr, "synfriction"),
     { today: _weekday(), gone: WEEKDAYS[(G.day + 5) % 7] }), "dim");
 }
 

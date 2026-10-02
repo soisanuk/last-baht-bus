@@ -2014,6 +2014,15 @@ function _gameInput(input) {
     _gameBoard();
     return;
   }
+  // A QUESTION IS NOT A MOVE: "what if I flip 7?" flipped the 7 (Marta, round 63). Thinking
+  // out loud is free; the move is the plain command. Not the quiz or the terminal, where a
+  // question can be the answer.
+  if (!/^(quiz|cli)$/.test(G.game.type) && (/\?\s*$/.test(_gi) || /^(what if|what happens|should i|can i|could i|is it|which)\b/.test(_gi))) {
+    const opts = typeof _gameVerbs === "function" ? _gameVerbs().slice(0, 6).map(v => v.toUpperCase()) : [];
+    _say("Thinking out loud is free — the table waits for the move itself." + (opts.length ? ` (${opts.join(" · ")})` : ""), "dim");
+    _gameBoard();
+    return;
+  }
   switch (G.game.type) {
     case "cli": return _cliInput(input);
     case "c4": return _c4Input(input);
@@ -5285,7 +5294,11 @@ function _endNight(reason) {
   if (_quietHelped) _say("(Naklua quiet: the hangover wakes one size smaller.)", "dim");
   // Templated so one catalog entry covers every day of the week (the day number
   // was baked into the string, so `de` needed seven copies of the same sentence).
-  _say(_fmt("── DAY {d}{home} — you " +
+  // the morning she stayed has a 7:50 bus in it — "mid-afternoon" printed above it (Desmond, round 63)
+  if (G.chamNight) _say(_fmt("── DAY {d}{home} — grey light, far too early, and somebody else in the " +
+    "room is already dressed. The rest of the day you will sleep through ──",
+    { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
+  else _say(_fmt("── DAY {d}{home} — you " +
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──",
     { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");

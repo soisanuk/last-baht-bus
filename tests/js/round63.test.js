@@ -142,3 +142,31 @@ test("the witnesses answer: colleagues on the girl who is yours and on her ride;
 test("a detour you steered her out of is on the books: COMPLAIN refunds the round, not the fine", () => {
   assert.ok(String(_ENC.bfhop).includes('kind: "detour"'));
 });
+
+// ── The round's open list, closed ───────────────────────────────────────────────────
+test("supply tells one story: with the uncle's inside price, nobody says you buy everything at list", () => {
+  owner(); G.syn = G.syn || {}; G.syn.done = { cleaning: true }; G.syn.friction = 1;
+  assert.ok(_insidePrice());
+  const src = String(_synFrictionTick); assert.match(src, /better number/);   // the uncle's refusal is filtered while you have his price
+  out = []; _doBooks(); assert.match(said(), /inside price/); assert.doesNotMatch(said(), /buy everything at list/);
+});
+test("a docket is decided on pay-day, not booked as stiffed the next morning", () => {
+  owner(); const saved = _rand;
+  try {
+    _rand = () => 0.1;   // under SHIFT_TAB_DOCKET: on the book; and under DOCKET_PAYS: he pays on pay-day
+    G.shiftCall = "tab"; G.pendingChoice = "shift"; const st0 = G.bar.stiffed || 0;
+    _shiftYes(); assert.ok(G.bar.tabDue && G.bar.tabDue.day === G.day + 2); assert.equal(G.bar.stiffed || 0, st0, "not stiffed tonight");
+    const c0 = G.bar.cash; G.day += 2; out = []; _tabDueTick(); assert.equal(G.bar.cash, c0 + SHIFT_TAB_TAKE); assert.match(said(), /pay-day/);
+    G.bar.tabDue = { day: G.day, pays: false, amt: SHIFT_TAB_TAKE }; out = []; _tabDueTick(); assert.equal(G.bar.stiffed, st0 + 1);
+  } finally { _rand = saved; }
+});
+test("a question at a game table is not a move; the rose seller answers her price", () => {
+  G.room = "stinky_bar"; G.game = { type: "jp", stake: 0, tiles: [1, 2, 3, 4, 5, 6, 7, 8, 9], roll: [3, 4], opp: "Lek" };
+  const before = JSON.stringify(G.game); out = []; run("what if I flip 7?"); assert.equal(JSON.stringify(G.game), before); assert.match(said(), /Thinking out loud/);
+  G.game = null; G.pendingEnc = "flower"; G.flowerFor = null; out = []; run("how much?");
+  assert.match(said(), new RegExp(String(ROSE_PRICE))); assert.equal(G.pendingEnc, "flower");
+  G.pendingEnc = null;
+});
+test("the morning Cream stayed is not a mid-afternoon wake", () => {
+  assert.match(String(_endNight), /chamNight[\s\S]{0,200}grey light/);
+});
