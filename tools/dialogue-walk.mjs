@@ -285,6 +285,18 @@ if (args.includes("--shared")) {
       }
     });
   }
+  // the generated floor's POOLS count as one speaker each (round 63: the walker skipped the filler,
+  // which is where the worst repetition lived) — so an authored woman echoing a pool line shows up
+  const POOLS = ["_H_GREET", "_H_FAMILY", "_H_PLAN", "_H_FREE", "_H_SELFIES", "_M_GREET", "_M_FAMILY", "_M_PLAN", "_M_GIRLS", "_M_WALLET", "_C_GREET", "_C_FAMILY", "_C_MONEY", "_C_WALLET"];
+  for (const name of POOLS) {
+    let pool; try { pool = vm.runInThisContext(name); } catch (e) { continue; }
+    (pool || []).forEach((line, i) => {
+      if (typeof line !== "string") return;
+      const seen = new Set();
+      const w = stripMarkup(line).toLowerCase().replace(/[^a-z' ]+/g, " ").split(/\s+/).filter(Boolean);
+      for (let k = 0; k + N <= w.length; k++) { const g = w.slice(k, k + N).join(" "); if (seen.has(g)) continue; seen.add(g); (idx.get(g) || idx.set(g, new Set()).get(g)).add("pool:" + name + "#" + i); }
+    });
+  }
   const hits = [...idx].map(([g, ks]) => [g, [...ks], new Set([...ks].map(k => k.split("#")[0])).size]).filter(h => h[2] > 1).sort((a, b) => b[2] - a[2]);
   console.log(`shared ${N}-word runs across characters: ${hits.length}`);
   for (const [g, ks, n] of hits.slice(0, LINT_ALL ? 9999 : 60)) console.log(`  ${n}× "${g}" — ${ks.join(" ")}`);
