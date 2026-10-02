@@ -194,9 +194,13 @@ function walk(npc) {
     const r = deliverNow(npc, i);
     if (!r.ok) return false;
     delivered.add(i);
-    // the gist: the terse repeat, as the game prints it
+    // the gist: the terse repeat, as the game prints it — unless the node's own gate closed once it
+    // was heard (it set the flag that hid it), in which case a second ask reaches ANOTHER node, and
+    // three readers took that node's words for this one's repeat (2026-10-02)
+    const next = _pickDialogue(npc, topicOf(d));
+    const closedTo = next && next !== d ? nodes.indexOf(next) : null;
     out = []; const sv = _rand; _rand = () => 0.5; try { _doTalkBody(npc, topicOf(d)); } catch (e) {} _rand = sv;
-    const gist = out.map(o => o.text).join("\n");
+    const gist = closedTo != null ? `(no repeat: this node's gate closes once it is heard — a second ask reaches #${closedTo})` : out.map(o => o.text).join("\n");
     // a node's CHOICES are branches of their own: each is typed as its label, under its gate
     const choices = [];
     for (const c of d.choices || []) {

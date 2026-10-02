@@ -11399,8 +11399,7 @@ function _ccibVisit() {
     "not unfriendly. He is not anything — he is a man doing arithmetic out loud so you can " +
     "hear that it's already done.");
   const _nights = G.day - (G.rabbitDataDay || 0);
-  _say("\"That machine on Soi 6,\" he says, to his coffee. \"We have been reading it since " +
-    "March. Carefully. Quietly. It is a great deal of work, that kind of quiet.\" He turns the " +
+  _say("\"That machine on Soi 6,\" he says, to his coffee. \"We have been reading it for most of a year. Carefully. Quietly. It is a great deal of work, that kind of quiet.\" He turns the " +
     "cup a quarter, and it is Tan's exact gesture, and you notice it and wish you hadn't. " +
     "\"" + (_nights <= 1 ? "Last night" : "The other night") + " was not quiet. Amateurs in a room we were watching, nearly walking off with " +
     "the one thing that finishes a case that took a year to build.\"");
@@ -11431,7 +11430,7 @@ function _ccibVisit() {
   if (_flag("invoicesCopied"))
     _say("\"And you read the invoices.\" Almost approving. \"Most people would not know what they " +
       "were looking at. A cleaner at ninety thousand a month, and a bar that pours to nobody. " +
-      "We have had those since March; they are the case. " +
+      "We have had those for months; they are the case. " +
       (G.itemLoc.data_stick === "inventory" ? "Keep your copy — it is a useful thing to be known to be holding, and a dangerous one, and I leave it to you which."
                                             : "Your friend has the copy now. That is his to be known for.") + "\"", "alert");
   if (G.itemLoc.thai_sim === "inventory")

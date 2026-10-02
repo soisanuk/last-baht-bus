@@ -2385,7 +2385,7 @@ test("the glass-start vignette runs the real path: talk, answer, vouch at Bert, 
   assert.match(out.join("\n"), /never once checked his phone/, "Bert's verdict, after");
   G.room = "pink_lotus";
   out = []; doCommand("talk to kyle");
-  assert.match(out.join("\n"), /Tuesday happened/, "and Kyle's best day out here");
+  assert.match(out.join("\n"), /The shift happened/, "and Kyle's best day out here");
 });
 
 test("Tan's manifest carries the eighth passenger", () => {

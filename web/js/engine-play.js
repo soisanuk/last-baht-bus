@@ -3767,7 +3767,7 @@ const _OTHER_LEDGER = {
     (n) => `"You want to know something funny?" ${n} turns the chit over so you can see the bar's ` +
       `stamp. "Farang always say — I buy you drink, expensive one, good for you." She taps the ` +
       `stamp, once. "Bar take most. I take ฿${LADY_CUT}." No complaint in it at all; she is ` +
-      `explaining a system she has worked inside for years, to a man who has been inside it for a ` +
+      `explaining a system she lives inside, to a man who has been inside it for a ` +
       `week. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
     (n) => `${n} makes you watch the barman build her drink, because she tells you to. Ice to the top, ` +
       `a short pour, tonic over it until the colour goes. "Lady drink," she says, and turns the glass ` +

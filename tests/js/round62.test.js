@@ -204,3 +204,24 @@ test("only Tan and the officer turn a glass a quarter", () => {
     for (const m of src.matchAll(/^function (\w+)[\s\S]*?^}/gm)) if (RX.test(m[0].replace(/"\s*\+\s*"/g, ""))) assert.ok(["_ccibVisit", "_ccibCoffee"].includes(m[1]), f + ": " + m[1]);
   }
 });
+
+// ── The readers' deferred list (2026-10-02) ─────────────────────────────────────────
+test("Bert's procurement answer follows the partner: Tan's side on Tan's route, Candy's on hers", () => {
+  G.room = "stinky_bar"; G.nightTurn = 30; G.stage = "expat"; for (const f of ["expatLife", "barPartner", "barPaid", "barOpen", "tanFavourRefused"]) _setFlag(f);
+  _setFlag("partnerTan"); out = []; run("ask bert about cleaning"); assert.match(said(), /Tan's side of the bar/);
+  delete G.flags.partnerTan; _setFlag("partnerCandy"); G.talked.bert = []; G.pendingChoice = null; out = []; run("ask bert about cleaning"); assert.match(said(), /Candy's side of the bar/); assert.doesNotMatch(said(), /Tan's side/);
+});
+test("Bank works out the debt for himself — nobody carries Pim's secret to him", () => {
+  const d = NPCS.bank.dialogue.find(x => /operation/.test(String(x.text)) && x.topic === "debt");
+  assert.ok(d && /I can count/.test(d.text) && /don't tell her/i.test(d.text));
+});
+test("no line states a month, weekday or count the calendar can contradict", () => {
+  const all = Object.values(NPCS).flatMap(n => (n.dialogue || []).flatMap(d => [d.text, d.short])).join("\n");
+  for (const re of [/since March/, /Tuesday happened/, /\bTuesday\. Four o'clock/, /sign(?:in')?g? Friday/i, /Ninety-one days now/]) assert.doesNotMatch(all, re);
+  for (const id of ["jun", "malai"]) assert.ok(!NPCS[id].dialogue.some(d => /this month/.test(String(d.text))), id + ": 'this month' never changes");
+  assert.doesNotMatch(readFileSync(W + "engine-systems.js", "utf8"), /since March/);
+  assert.doesNotMatch(readFileSync(W + "engine-play.js", "utf8"), /worked inside for years/);
+});
+test("Bill angles for a man drink in his own English, not Bert's 'bud'", () => {
+  assert.ok(NPCS.bill.nudge && !/\bbud\b/.test(NPCS.bill.nudge));
+});
