@@ -133,3 +133,31 @@ test("the bar opposite is seen once per phase from your own doorway, and answers
   out = []; _oppTick(); assert.equal(said(), "", "not twice in the phase");
   out = []; run("examine the bar opposite"); assert.ok(said().length > 0);
 });
+
+// ── The dialogue walk (2026-10-02): what a machine finds before a reader is paid ─────
+test("no authored node is dead: an ungated earlier node never shadows a later one, and a printed label lands on its own node", () => {
+  const dead = [];
+  for (const id of Object.keys(NPCS)) {
+    const nodes = NPCS[id].dialogue || [];
+    nodes.forEach((d, i) => {
+      if (!d.topic || d.superseded) return;
+      const t = String(d.topic).split("|")[0].trim();
+      const shadow = nodes.slice(0, i).find(e => e.topic && !e.req?.length && !e.notFlags?.length && !e.when && !e.bond && _topicExact(e.topic, t));
+      if (shadow) dead.push(`${id}#${i} (${t}) behind #${nodes.indexOf(shadow)}`);
+    });
+  }
+  assert.deepEqual(dead, []);
+  G.room = _npcRoom("waen"); G.nightTurn = 30; _npcState("waen").trust = 3;
+  out = []; run("ask waen about teacher"); assert.match(said(), /Nine years/);
+  out = []; run("ask waen about two jobs"); assert.match(said(), /Which one pays/);
+});
+test("a hello that has been heard gives way to one that has not — but never to a plain fallback behind a warmer one", () => {
+  G.room = _npcRoom("bill"); G.nightTurn = 30;
+  run("talk to bill"); out = []; run("talk to bill"); assert.match(said(), /proper question/);
+  G.room = "lucky_tiger"; G.soc.drinks.lek = 14; G.talked.lek = []; G.soc.helloed = {};
+  for (let k = 0; k < 4; k++) { out = []; run("talk to lek"); assert.doesNotMatch(said(), /Hello handsome/, "talk " + (k + 1)); }
+});
+test("Nont's own words about Tan are heard, and cost nothing", () => {
+  G.room = _npcRoom("nont"); G.nightTurn = 40; const m = G.money;
+  out = []; run("ask nont about tan"); assert.match(said(), /single baht/); assert.equal(G.money, m);
+});

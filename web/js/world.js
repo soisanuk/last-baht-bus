@@ -9444,7 +9444,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Bert doesn't own the Stinky, Gavin owns nothing, Candy owns hers. The loudest 'my bar' is the furthest from the paper.\"" },
       { topic: "coffee", text: "\"You want to talk about coffee or you want to buy me one?\" The eyes in the mirror " +
           "are amused. \"" + COFFEE_PRICE + " baht at the stall behind you, and then I talk. (BUY TAN A COFFEE)\"" },
-      { topic: "others", when: (st, G) => ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
+      // SUPERSEDED by the generated roll-call (_tanOthers, which always answers "others" first).
+      // Kept, not deleted, because removing it would shift every later index in saved G.talked.tan.
+      { topic: "others", superseded: "_tanOthers", when: (st, G) => ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
           .filter(id => G.known && G.known[id]).length >= 2,
         text: "\"The others?\" A knowing tilt. \"The detective. The Australian with the bar he should not " +
           "buy. The old one who remembers too much. The quiet one who booked under a name that is not his. The " +

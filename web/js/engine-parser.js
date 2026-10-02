@@ -3975,7 +3975,7 @@ function _doTalkBody(arg, topic) {
   if (npc === "tan" && topic && typeof _tanAbout === "function" && _tanAbout(topic)) return; // "meet somebody, then ask me who they are" — honoured
   if (topic && typeof _ccibLoud === "function" && !["tan", "fast_eddy", "nont"].includes(npc) &&
       /\bccib\b|cyber ?police|\bpolice\b|\bheist\b|\bbox\b|eastern seaboard|invoices|rabbit'?s job|\bcoffee\b|\bofficer\b|polo shirt|laptop|kitten office/.test(topic)) _ccibLoud("asking");   // the article is stripped before we see it
-  if (npc === "nont" && topic && typeof _nontLocate === "function" && _nontLocate(topic)) return; // the priced locator: anybody, tonight, ฿200
+  if (npc === "nont" && topic && !(/^tan$/i.test(String(topic).trim()) && _pickDialogue("nont", "tan").topic) && typeof _nontLocate === "function" && _nontLocate(topic)) return;   // his own words about Tan outrank the locator's laugh (the dialogue walk) // the priced locator: anybody, tonight, ฿200
   // the civilian at the table: "how much" is not a topic she answers, it's the
   // scene (chameleon economy) — no dialogue node, so the wheel never advertises it
   if (npc === "cream" && topic && (topic === "price" || _convoTopic(topic) === "price") &&
@@ -4543,6 +4543,25 @@ function _doTalkBody(arg, topic) {
   // Scoped to the girls (a regular's gist is his character), and only to a hello
   // already SEEN — a new when-gated hello still lands; it is the repeat of a
   // repeat that becomes the doorbell.
+  // A HELLO THAT HAS BEEN HEARD gives way to one that has not: a later topicless node whose
+  // gates hold — Pancake's bond-two hello, Bill's "ask me a proper question" — could never
+  // be picked behind an ungated first greeting, so four characters' second hellos and two
+  // women's warmest were written and never said (the dialogue walk, 2026-10-02).
+  if (!topic && !d.topic && !_retell && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d))) {
+    const _all = NPCS[npc].dialogue, _st = _npcState(npc);
+    // …at least as warm, and never a plain fallback behind a gated greeting: Lek's list runs
+    // warmest-first down to "Hello handsome!", which a her-farang man must not get on his third talk
+    const _gated = x => !!(x.bond || x.when || (x.req || []).length || (x.notFlags || []).length);
+    const _next = _all.find((e, k) => !e.topic && e !== d && k > _all.indexOf(d) && !(G.talked[npc] || []).includes(k) &&
+      (e.bond || 0) >= (d.bond || 0) && (_gated(e) || !_gated(d)) && _nodeOpen(npc, e, _st));
+    if (_next) {
+      _deliver(npc, _next, false);
+      if (typeof _otherLedger === "function") _otherLedger(npc);
+      _questOffer(npc);
+      (G.seenDay = G.seenDay || {})[npc] = G.day;
+      return;
+    }
+  }
   const _helloSeen = !topic && !d.topic && !d.gives && !d.sets && !d.choices && !d.asks && !_retell &&
     NPC_ROLES[npc] && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d));
   if (_helloSeen) {

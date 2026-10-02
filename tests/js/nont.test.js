@@ -41,7 +41,8 @@ test("no charge for a no, a laugh for Tan, a refusal when broke", () => {
   const saved = _npcWhere; _npcWhere = id => id === "lek" ? null : saved(id);
   try { run("ask nont about lek"); assert.equal(G.money, 5000); assert.match(text(), /don't charge for a no/); }
   finally { _npcWhere = saved; }
-  out = []; run("ask nont about tan"); assert.equal(G.money, 5000); assert.match(text(), /Tan finds YOU/);
+  // his own words about Tan outrank the locator's laugh — the node that says why was never heard (the dialogue walk, 2026-10-02)
+  out = []; run("ask nont about tan"); assert.equal(G.money, 5000); assert.match(text(), /never asked me for a single baht|Tan kept me out/);
   G.money = 100; out = []; run("ask nont about candy"); assert.equal(G.money, 100); assert.match(text(), /haven't got it/);
   assert.match(text(), /ask Tan and owe him instead/, "the contrast is the design");
 });

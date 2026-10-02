@@ -1988,15 +1988,30 @@ function _topicHits(key, asked) {
   return new RegExp("(^|[^a-z0-9])" + esc + "[a-z]{0,3}([^a-z0-9]|$)", "i").test(String(asked));
 }
 
+// a node's gates, exactly as the pick honours them
+function _nodeOpen(npcId, d, st) {
+  if ((d.req || []).some(f => !_flag(f))) return false;
+  if ((d.notFlags || []).some(f => _flag(f))) return false;
+  if (d.bond && _knownTier(npcId) < d.bond) return false; // a warmer line only a regular unlocks (The Regular)
+  if (d.when && !d.when(st || _npcState(npcId), G)) return false;   // state-machine condition (trust/mood/dstate/know)
+  return true;
+}
+// an alias that IS the word asked, not merely a word inside it
+function _topicExact(key, asked) {
+  const a = String(asked || "").toLowerCase().trim();
+  return !!key && String(key).split("|").some(k => k.trim().replace(/^(the|a|an) (?=\S)/, "").toLowerCase() === a);
+}
 function _pickDialogue(npcId, topic) {
   const n = NPCS[npcId];
   const st = _npcState(npcId); // conversation state machine — see _npcState
+  // THE PRINTED LABEL LANDS ON ITS OWN NODE: TOPICS prints Waen's "teacher" and the ask
+  // landed on her lesson pitch, whose alias "teach" caught "teacher" one node earlier;
+  // "two jobs" landed on the career node through "job" (the dialogue walk, 2026-10-02).
+  // An exact alias wins before the fuzzy match is consulted.
+  if (topic) for (const d of n.dialogue) if (d.topic && _topicExact(d.topic, topic) && _nodeOpen(npcId, d, st)) return d;
   for (const d of n.dialogue) {
     if (topic ? !(d.topic && _topicHits(d.topic, topic)) : d.topic) continue;
-    if ((d.req || []).some(f => !_flag(f))) continue;
-    if ((d.notFlags || []).some(f => _flag(f))) continue;
-    if (d.bond && _knownTier(npcId) < d.bond) continue; // a warmer line only a regular unlocks (The Regular)
-    if (d.when && !d.when(st, G)) continue;            // state-machine condition (trust/mood/dstate/know)
+    if (!_nodeOpen(npcId, d, st)) continue;
     return d;
   }
   return topic ? _pickDialogue(npcId, null) : null;
