@@ -482,7 +482,7 @@ test("it rains once a night, and never twice (Mario, 2026-09-14)", () => {
   const savedR = _rand, savedS = _wxStormy;
   try {
     _rand = () => 0; _wxStormy = () => true;
-    G.room = "beach_rd_c"; G.nightTurn = 20; G.turns = 200; G.lastRain = -99; G.rain = 0;
+    G.room = "beach_rd_c"; G.nightTurn = 69; G.turns = 200; G.lastRain = -99; G.rain = 0;   // past every night's earliest (round 62: the day is mid-key now)
     _tick();
     assert.ok(G.rain > 0, "a stormy sky with the dice at zero starts a downpour");
     assert.equal(G.rainDay, G.day, "and the night is marked");

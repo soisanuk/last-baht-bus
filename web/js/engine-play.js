@@ -3273,7 +3273,9 @@ function _maiDee(id) { return !!(G.maiDee && G.maiDee[id]); }
 // 35). Her memory is not a meter. This is the tier she has ever reached with
 // you, and it is what her dialogue gates on.
 function _knownTier(id) {
-  const t = Math.max(_bondTier(id), (G.prevBond && G.prevBond[id]) || 0);
+  // the tier she EVER reached with you: Lek un-told her son on the fourth trip, once the
+  // week's warmth had cooled to nothing (Piet, round 62) — her memory is not a meter
+  const t = Math.max(_bondTier(id), (G.prevBond && G.prevBond[id]) || 0, (G.everBond && G.everBond[id]) || 0);
   return _maiDee(id) ? Math.min(t, 1) : t;   // what she told you once she will not tell you again
 }
 // Recognition on arrival — authorial narration (register-free; any quoted speech
@@ -3329,6 +3331,18 @@ const _REL_GREET_MAIDEE = [
   n => `${n} says hello, and it is a complete hello with nothing after it. You could sit here all week and it would not get any longer.`,
   n => `${n} looks up, places you, and goes back to her phone. Not a snub; a filing. Whatever you were to her was decided in front of a room, and rooms do not undecide.`,
 ];
+// the return greeting: per woman, and the town never hands two women one line on one trip
+// (Piet, round 62: Lek's and Nan's welcomes identical, word for word, twice)
+function _returnGreetPick(id, pool) {
+  const used = (G.returnGreetUsed = G.returnGreetUsed || {});
+  const town = (used["*"] = used["*"] || []), mine = (used[id] = used[id] || []);
+  let idx = pool.map((_, i) => i).filter(i => !mine.includes(i) && !town.includes(i));
+  if (!idx.length) idx = pool.map((_, i) => i).filter(i => !mine.includes(i));
+  if (!idx.length) idx = pool.map((_, i) => i);
+  const i = idx[_hh(id + ":return:" + (G.vacation || 1), 23) % idx.length];
+  mine.push(i); town.push(i); if (town.length > pool.length - 1) town.shift();
+  return pool[i];
+}
 function _relGreeting(id) {
   if (_maiDee(id)) { _say(_pickVary(_REL_GREET_MAIDEE, "relmaidee")(NPCS[id].name), "dim"); return; }
   if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) {   // your girl, not "as close as the arithmetic allows" (Graham, round 47)
@@ -3340,9 +3354,26 @@ function _relGreeting(id) {
   }
   const t = _bondTier(id);
   if (t < 1) return;
+  // four nights in the hotel and nobody said where you'd been (Piet, round 62): a regular notices a gap
+  const gap = (G.seenDay || {})[id] != null ? G.day - G.seenDay[id] : 0;
+  if (t >= 2 && gap >= 3 && (G.soc.awaySaid = G.soc.awaySaid || {})[id] !== G.day) {
+    G.soc.awaySaid[id] = G.day;
+    _say(_pickVary(_REL_GREET_AWAY, "relaway:" + id)(NPCS[id].name, gap), "win");
+    return;
+  }
   const pool = _REL_GREET[t];
   _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name, _herNameForYou(id)), t >= 2 ? "win" : "");
+  const _arm = G.party && G.party.ids && G.party.ids.find(p => p !== id && NPCS[p]);
+  if (_arm && t >= 2) _say(_pickVary([
+    (n, c) => `— and then ${n} sees who is on your arm. The towel goes back under the rail. ${c} gets the smile that is all teeth; you get the one that keeps the book.`,
+    (n, c) => `Then ${n} clocks ${c}'s hand in yours, and does not say a word about it, and the kept seat is, suddenly, just a stool.`,
+  ], "relarm")(NPCS[id].name, NPCS[_arm].name), "dim");   // the kept seat with another woman holding your hand (Ingrid, round 62)
 }
+const _REL_GREET_AWAY = [
+  (n, g) => `${n} sees you and does the arithmetic out loud. "${g} night you no come." Not angry; counting. "I think you go home. I think you find other bar." A beat, and the stool is wiped. "Sit. Tell me which one it was."`,
+  (n, g) => `"Where you GO?" ${n}, from across the room, before hello. "${g} night! I ask Tan, I ask everybody." She has not asked anybody. She has counted, which is worse. "Sit down. You look tired. Sit."`,
+  (n, g) => `${n} looks at you a second longer than the bar smile needs. "You sick? ${g} night I keep your seat, then I stop." She keeps it again, without saying so, by putting her bag on it.`,
+];
 
 // The name she calls you and nobody else. It was only ever SPOKEN on a night
 // ride, while the her-farang greeting had been *describing* it — unsaid — every
@@ -3418,7 +3449,7 @@ const _BOND_TALK = {
       `a folded mattress, one shelf. "My room," she says. "Nobody see this. You see this." Then ` +
       `she takes the {{phone}} back, embarrassed, and talks about something else for ten minutes.`,
     n => `She is quiet a while, which she never is. Then: "You know what is the hard part? Not the ` +
-      `work." ${n} turns the glass round on the mat. "Is that I am good at it. Ten year I am good ` +
+      `work." ${n} turns the glass round on the mat. "Is that I am good at it. Long time I am good ` +
       `at it. What else I am good at, I never find out."`,
     n => `"I have a bad day," ${n} says, flatly, like reporting weather, and does not decorate it ` +
       `or ask you to fix it. She just sits with you and lets the bad day be in the room, which is ` +
@@ -3442,7 +3473,7 @@ const _BOND_TALK = {
 // arrived, the deflection stands down and the ask falls through to her.
 function _lekPriceNight() {
   return !_flag("heardPriceStory") && _bondTier("lek") >= 1 &&
-    (G.rain > 0 || (typeof _wxRainy === "function" && _wxRainy())) &&
+    (G.rain > 0 || (G.lastRain >= 0 && G.turns - G.lastRain < 15)) &&   // rain you can see from the step, not the bake's odds — "the flood carries a plastic bag past" on a dry night (Piet, round 62)
     !_flag("fed26") && !(G.game && G.game.type === "pool") && !_leagueTonight();
 }
 
@@ -3823,6 +3854,7 @@ function _otherLedger(id) {
   // pays it (Malcolm, round 47, 26 nights). At your own bar the asymmetry is
   // yours to know from the other side, and it does not need explaining to you.
   if (typeof _ownBarStaff === "function" && _ownBarStaff(id)) return false;
+  if (!_inBar()) return false;   // "two men look along the rail" in a by-the-hour motel (Ingrid, round 62)
   const t = _bondTier(id);
   if (t < 1) return false;
   const book = (G.soc.ledger = G.soc.ledger || {});
@@ -4426,7 +4458,7 @@ const _CODA_HOME = [
   "Dawn on the main road, the sky the colour of a weak tea and the first trucks already " +
     "running. She swings up onto the bench of a baht bus with one other woman aboard, who is " +
     "also not talking, and sits where the metal is warm from the engine.",
-  "The fare is ten baht and she has it ready before the truck stops, because having it " +
+  "The fare is ฿" + BUS_FARE + " and she has it ready before the truck stops, because having it " +
     // No biography here: this coda lands on ANY girl, and it used to give a
     // woman with her own authored canon a hospital bill and a kid "she sees
     // four times a year" that contradicted what she'd told him all week
@@ -5354,7 +5386,7 @@ const _GOODBYE_REGULAR = [
     `eat somewhere not here." It is offered like a small business proposal, which is how ` +
     `she offers everything she means.`,
   n => `The last night is not a scene. ${n} pours, you drink, the football is on, and ` +
-    `somewhere around eleven she says "you fly tomorrow, na" to the glass she's polishing ` +
+    `at some point she says "you fly tomorrow, na" to the glass she's polishing ` +
     `rather than to you, and that is the entire acknowledgement either of you makes. At ` +
     `the door she squeezes your arm once, hard, and is already turning back to the room ` +
     `before you're through it.`,
@@ -5368,9 +5400,9 @@ const _GOODBYE_FARANG = [
     `arrangement.\n\n"I don't do this," she says. "Airport, crying, all that — no. ` +
     `Stupid." She hands you the coffee. "So I do it here instead, quick, and then I go ` +
     `sleep." She does it here instead. It is quick. Neither of you is any good at it.`,
-  n => `${n} does not come to see you off, and told you plainly why, the last night you saw her: ` +
-    `"Because then I stand there like idiot, and after you go I still stand there." She ` +
-    `says it flatly, the way she says the price of things. What she does instead is put ` +
+  n => `${n} does not come to see you off, and her text says plainly why: ` +
+    `"because then i stand there like idiot, and after you go i still stand there." She ` +
+    `writes it flatly, the way she says the price of things. What she does instead is put ` +
     `you in the taxi herself at the hotel, argue with the driver about the airport fare ` +
     `on your behalf, win, and walk back up the soi without looking round — which she has ` +
     `clearly decided in advance and executes exactly.`,
@@ -5512,11 +5544,15 @@ function _suvarnabhumiScrub() {
   const v = G.vacation;
   _say("═══════════════════════════════════", "dim");
   _say(_SCRUB_OPEN[v % _SCRUB_OPEN.length], "room");
-  _say(_SCRUB_PHYSICAL[Math.floor(_rand() * _SCRUB_PHYSICAL.length)]);
+  // the man at the gate is the one you chose in the taxi: a pensioner has no conference and no
+  // quarterly reports to dress for (Piet, round 62 — "a pension, and twenty years of coming back")
+  const _home = l => !(typeof _isOrigin === "function" && (_isOrigin("pension") || _isOrigin("redundancy") || _isOrigin("running"))) || !/conference|quarterly|careers|mortgage|lawn/i.test(l);
+  const _phys = _SCRUB_PHYSICAL.filter(_home), _dig = _SCRUB_DIGITAL.filter(_home), _call = _SCRUB_CALL.filter(_home), _close = _SCRUB_CLOSE.filter(_home);
+  _say((_phys.length ? _phys : _SCRUB_PHYSICAL)[Math.floor(_rand() * (_phys.length || _SCRUB_PHYSICAL.length))]);
   if (typeof _isOrigin === "function" && _isOrigin("monger")) {
-    _say(_SCRUB_DIGITAL[Math.floor(_rand() * _SCRUB_DIGITAL.length)]);
-    _say(_SCRUB_CALL[Math.floor(_rand() * _SCRUB_CALL.length)]);
-    _say(_SCRUB_CLOSE[v % _SCRUB_CLOSE.length], "dim");
+    _say((_dig.length ? _dig : _SCRUB_DIGITAL)[Math.floor(_rand() * (_dig.length || _SCRUB_DIGITAL.length))]);
+    _say((_call.length ? _call : _SCRUB_CALL)[Math.floor(_rand() * (_call.length || _SCRUB_CALL.length))]);
+    _say((_close.length ? _close : _SCRUB_CLOSE)[v % (_close.length || _SCRUB_CLOSE.length)], "dim");
   } else {
     _say(_SCRUB_ALONE[v % _SCRUB_ALONE.length]);
     _say(_SCRUB_CLOSE_ALONE[v % _SCRUB_CLOSE_ALONE.length], "dim");
@@ -5582,8 +5618,14 @@ function _newVacation() {
   // phone case (Howard, round 35). The share card's per-week COUNT still
   // resets below (ledgerSeen); only the memory of the telling is kept.
   const _told = G.soc.ledger || {};
+  // …and so do the confidence books: every bond line from the first trip was retold word
+  // for word on the second, sometimes by the other woman (Piet, round 62). What she has
+  // told you is not a meter and not a week's warmth.
+  const _bondSaid = G.soc.bondSaid || {}, _bondHeard = G.soc.bondHeard || {}, _ledgerHeard = G.soc.ledgerHeard || {}, _storyTold = G.soc.storyTold || {};
+  for (const id of Object.keys(G.soc.drinks || {})) { const t = typeof _bondTier === "function" ? _bondTier(id) : 0; if (t > ((G.everBond = G.everBond || {})[id] || 0)) G.everBond[id] = t; }
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
-    banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0, ledger: _told };
+    banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0, ledger: _told,
+    bondSaid: _bondSaid, bondHeard: _bondHeard, ledgerHeard: _ledgerHeard, storyTold: _storyTold };
   // THE RETURN IS THE MOMENT (essay ledger theme 3, 2026-10-01 — the most consistent
   // claim in the source corpus, and the one the game contradicted): a man who went
   // home and came back is not a stranger. Her-farang comes back a regular, a

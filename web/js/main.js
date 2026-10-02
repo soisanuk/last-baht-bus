@@ -473,7 +473,7 @@ function _dispatch(cmd) {
   // QUIT / END / LOGOUT — sign off for the night. Deferred while a mini-game or a
   // modal is live, so "quit" still concedes a game / answers a prompt as before.
   const busy = G.game || G.pendingEnc || G.pendingChoice || G.pendingBf || G.pendingSoapy || G.pendingFare;
-  if (!busy && /^(quit|end|logout|log ?out|sign ?off|goodnight|good night)$/.test(v)) {
+  if (!busy && !(G.party && G.party.ids && G.party.ids.length) && /^(quit|end|logout|log ?out|sign ?off|goodnight|good night)$/.test(v)) {   // GOODNIGHT with a girl on your arm is hers, not the session's (Ingrid, round 62)
     const lvl = typeof _happyLevel === "function" ? _happyLevel(G.happy) : "";
     _term.print("You settle up, such as it is, and step out into it. The soi roars on without you — " +
       "it always does.", "win");

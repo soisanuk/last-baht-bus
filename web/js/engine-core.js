@@ -474,6 +474,8 @@ function newGame() {
     care: {},            // npcId → {waived, since, asked, cold}: the fines she waived for her farang, and whether he understood what they cost her
     maiDee: {},          // npcId → day: "you no good man" — a public scene in front of a bonded woman; permanent, money cannot reverse it
     maiDeeBar: {},       // roomId → day: her bar's floor heard, the way floors do
+    everBond: {},        // npcId → the highest bond tier you ever reached with her — what she has told you is not a meter (Piet, round 62)
+    givenEver: {},       // npcId → every baht you ever sent or tipped her, across trips — remembered in person
     quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
     // KING OF THE TABLE. Killer is a one-night knockout — the pot IS the prize,
     // and there are no rankings in it anywhere, in this town or any other. What a
@@ -1475,7 +1477,12 @@ function _convoEnd(quiet) {
   G.convo = null;
   G.convoQ = null;
   G.convoIdx = null;
-  if (id && !quiet) _say(`You take your leave of ${_convoName(id)}.`, "dim");
+  if (id && !quiet) {
+    // "You take your leave of Fon" with Fon still on your arm (Ingrid, round 62): the chat
+    // ends, the company does not
+    if (G.party && G.party.ids && G.party.ids.includes(id)) _say(`${_convoName(id)} lets the subject go and keeps your arm.`, "dim");
+    else _say(`You take your leave of ${_convoName(id)}.`, "dim");
+  }
 }
 // Pull-away interrupt: the NPC or the player is yanked out of the conversation
 // (kickout, barfine, an encounter, night-end, the NPC bolting to a saleng cart).
@@ -1878,7 +1885,9 @@ function _elsewhereLine(word) {
   // NPC from the beach or the street too.
   const here = _room();
   const notHere = here.bar || here.barType ? "isn't at this bar" : "isn't around here";
-  const nid = Object.keys(NPCS).find(id => {
+  const _cands = Object.keys(NPCS).filter(id => String(NPCS[id].name || "").toLowerCase() === w)
+    .sort((a, b) => (((G.soc.drinks || {})[b] || 0) + (G.phone.contacts[b] ? 10 : 0) + ((G.everBond || {})[b] || 0) * 3) - (((G.soc.drinks || {})[a] || 0) + (G.phone.contacts[a] ? 10 : 0) + ((G.everBond || {})[a] || 0) * 3));
+  const nid = (_cands.length > 1 ? _cands[0] : null) || Object.keys(NPCS).find(id => {   // two Fons: the one you know is the one you mean (Ingrid, round 62)
     const nm = NPCS[id].name;
     // A regular is placed whether or not you've been introduced: his name is
     // painted on the room he drinks in, and the staff will tell you. The
@@ -2270,7 +2279,7 @@ function _deliver(npcId, d, full, asNew) {
   // legitimate Pattaya order of operations): the authored greeting reads
   // tone-deaf if it pretends the ledger is blank, so acknowledge it under the
   // intro rather than rewriting every intro (playtest #12).
-  if (firstEver && (G.soc.drinks[npcId] || 0) >= 2 &&
+  if (firstEver && (G.soc.drinks[npcId] || 0) >= 2 && ((G.soc.drinkCount || {})[npcId] || 0) >= 1 &&   // DRINKS bought, not the floor's bond (Hal, round 62: "several drinks after" to a girl he never bought one)
       ["hostess", "cashier", "mamasan"].includes(NPC_ROLES[npcId])) {
     _say(_pickVary([
       "(The introduction is a formality — the lady drinks got there first, and " +
@@ -2862,7 +2871,7 @@ function _districtHops(a, b) {
 // at one, some it never gets round to it.
 // on the back of her bike, between stops: the room you left is not the room you are in
 function _onRide() { return G.pendingEnc === "nightride" || !!G.rideSeq; }
-function _rainEarliest() { return _hh("rainstart:" + G.vacation + ":" + G.day, 41) % 70; }
+function _rainEarliest() { return _hh("rainstart:" + G.day + ":" + G.vacation + ":x", 41) % 70; }   // day MID-key: a trailing day clustered the first downpour at half past six five nights of seven (Ingrid, round 62)
 function _districtBuild() {
   if (!_districtAdj) {
     _districtAdj = {};
@@ -3038,7 +3047,7 @@ function _tick() {
   // couple of passes a night, not six (Frank, 2026-08-26: 4–6 identical visits
   // in one long evening on one stool)
   if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
-      G.turns - G.lastPeddler >= 20 && (G.peddlerNight || 0) < (typeof _atOwnBar === "function" && _atOwnBar() ? 1 : 2) && _rand() < 0.12) {   // he works YOUR rail once a night, not twice — thirty shifts of it (Keith, round 40)
+      G.turns - G.lastPeddler >= 20 && (G.peddlerNight || 0) < (typeof _atOwnBar === "function" && _atOwnBar() ? (G.day % 2 ? 1 : 0) : 2) && _rand() < 0.12) {   // your own rail every other night, not every night (Hal, round 62)   // he works YOUR rail once a night, not twice — thirty shifts of it (Keith, round 40)
     G.lastPeddler = G.turns;
     G.peddlerNight = (G.peddlerNight || 0) + 1;
     G.pendingEnc = "peddler";

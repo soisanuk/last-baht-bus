@@ -7068,7 +7068,7 @@ test("rain falls only out of a stormy bake, in 3–8 turn events", () => {
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
   state().room = "second_rd_c";
   for (let i = 0; i < 120; i++) {
-    state().hunger = 0; state().thirst = 0; state().nightTurn = 5;
+    state().hunger = 0; state().thirst = 0; state().nightTurn = Math.max(5, _rainEarliest() + 1);
     _tick();
   }
   assert.equal(state().rain, 0, "no bake, no rain — ever");
@@ -7077,7 +7077,7 @@ test("rain falls only out of a stormy bake, in 3–8 turn events", () => {
     state().lastRain = -99;
     let n = 0;
     while (!state().rain && n++ < 1000) {
-      state().hunger = 0; state().thirst = 0; state().nightTurn = 5;
+      state().hunger = 0; state().thirst = 0; state().nightTurn = Math.max(5, _rainEarliest() + 1);
       _tick();
     }
     assert.ok(state().rain >= 3 && state().rain <= 8, `event length ${state().rain} in 3–8`);
@@ -7116,7 +7116,7 @@ test("light rain is atmosphere only: vignettes, dialogue, zero mechanics", () =>
     state().lastDrizzle = -99;
     let n = 0;
     while (!/nit noi|rain guards|Umbrellas appear/.test(lastOut()) && n++ < 1000) {
-      state().hunger = 0; state().thirst = 0; state().nightTurn = 5;
+      state().hunger = 0; state().thirst = 0; state().nightTurn = Math.max(5, _rainEarliest() + 1);
       _tick();
     }
     assert.ok(n < 1000, "a drizzle vignette aired");
@@ -7214,14 +7214,14 @@ test("the calendar wet season amplifies the rain: a monsoon month opens a downpo
     // DRY season (November, the default): code 61 must never open a downpour
     state().season0 = 10; state().day = 1;
     state().rain = 0; state().lastRain = -99;
-    for (let i = 0; i < 400; i++) { state().hunger = 0; state().thirst = 0; state().nightTurn = 5; _tick(); }
+    for (let i = 0; i < 400; i++) { state().hunger = 0; state().thirst = 0; state().nightTurn = Math.max(5, _rainEarliest() + 1); _tick(); }
     assert.equal(state().rain, 0, "cool-season code-61 stays a rumour of rain, never a downpour");
     // WET season (September, the deep low): the same sky DOES open up
     state().season0 = 8; state().day = 1;   // September
     assert.ok(_wetSeason(), "September is the monsoon");
     state().rain = 0; state().lastRain = -99;
     let n = 0;
-    while (!state().rain && n++ < 2000) { state().hunger = 0; state().thirst = 0; state().nightTurn = 5; _tick(); }
+    while (!state().rain && n++ < 2000) { state().hunger = 0; state().thirst = 0; state().nightTurn = Math.max(5, _rainEarliest() + 1); _tick(); }
     assert.ok(state().rain >= 3 && state().rain <= 8, `the monsoon month opened up (rain ${state().rain})`);
   } finally {
     delete globalThis.WX_NOW;

@@ -1114,7 +1114,7 @@ function _arriveAt(to) {
     (G.returned = G.returned || {})[back] = true;
     (G.soc.greeted = G.soc.greeted || {})[to] = true;
     _addBond(back, G.prevBond[back] >= 3 ? 4 : 2);
-    _say(_pickVary([
+    _say(_returnGreetPick(back, [
       `${NPCS[back].name} looks up, and it takes her a second — then the whole face changes. ` +
         `"You come BACK!" She is round the rail before the mamasan can say anything, both hands on ` +
         `your arm, checking you're real. "I think maybe you forget. I think maybe everybody forget."`,
@@ -1124,7 +1124,7 @@ function _arriveAt(to) {
       `${NPCS[back].name} stops with a tray in her hands. "You." Not the bar voice. "How long you ` +
         `gone? One month? More?" She knows exactly how long. "I keep your seat one week, then I ` +
         `stop keep. Now I keep again, na."`,
-    ], "returnGreet"), "win");
+    ]), "win");
   } else if (ROOMS[to].barType && !(G.soc.greeted && G.soc.greeted[to]) && !_invHere) {
     const party = (G.party && G.party.ids) || [];   // she's on your arm — she doesn't "spot you across the room"
     const her = _npcsHere().filter(n => NPC_ROLES[n] === "hostess" && !party.includes(n))
@@ -1672,6 +1672,17 @@ const _ALREADY_HAVE = [
   "You have {it} on you already. You pat the pocket to check, which is how everybody checks.",
   "Got it already \u2014 {it}, right where you put it.",
 ];
+// TAKE <her> OUT / PARTY WITH <her>: the party barfine by its own name (Ingrid, round 62 —
+// the company refusal printed "(TAKE NAN OUT …)" and the verb fell to the item parser)
+function _takeOut(arg) {
+  let who = String(arg || "").replace(/\b(out|with|her|them|me|tonight)\b/g, " ").replace(/\s+/g, " ").trim();
+  if (!who && G.lastBfAsk) who = G.lastBfAsk;
+  if (!who) return false;
+  const id = _findNpc(who);
+  if (!id || !NPC_ROLES[id] || !_npcsHere().includes(id)) return false;
+  _doBarfine(who + " out");
+  return true;
+}
 function _doTake(arg) {
   if (!arg) { _say("Take what?"); return; }
   // TAKE WATER in your room pulls a free bottle from the minibar (not an item —
@@ -4020,6 +4031,15 @@ function _doTalkBody(arg, topic) {
     ], "ridememory:" + npc)(NPCS[npc].name));
     return;
   }
+  // the bar opposite is asked by its NAME, and Bert's own "this bar" node took the word first (Hal, round 62)
+  if (topic && typeof _oppTalk === "function" && _oppTalk(npc, topic)) return;
+  if (topic && npc === "bert" && typeof _bertLeverTalk === "function" && _bertLeverTalk(topic)) return;
+  // the woman on your arm, addressed with no subject, is with you — not behind her own rail
+  // ("Ohhh, again! You have no other bar?" at Candy Bar with Lek on his arm — Ingrid, round 62)
+  if (!topic && G.party && G.party.ids && G.party.ids.includes(npc)) {
+    _say(_pickVary(_PARTY_TALK, "partytalk:" + npc)(NPCS[npc].name, _barName(G.room) || "here"));
+    return;
+  }
   // THE VERDICT CLOSES THE CONVERSATION TOO: the ride topic came back as an invitation
   // from a woman whose page said nothing reopens it (Marcus, round 61). Polite, exact,
   // and nothing after it — every subject, every night.
@@ -4027,6 +4047,11 @@ function _doTalkBody(arg, topic) {
     _say(topic ? _pickVary(_MAI_DEE_TALK, "maideetalk")(NPCS[npc].name) : _pickVary(_REL_GREET_MAIDEE, "relmaidee")(NPCS[npc].name), "dim");
     return;
   }
+  // "my flight home" is the leaving, not her home — the synonym map read the second word
+  // and Lek told him about Ban Phai (Piet, round 62). An authored literal LEAVING node still wins.
+  if (topic && /\b(fly(?:ing)? home|my flight|flight home|go home tomorrow|tomorrow i (?:go|fly|leave)|airport tomorrow)\b/.test(String(topic).toLowerCase()) &&
+      !(NPCS[npc].dialogue || []).some(x => x.topic && /leav|flight/.test(x.topic)) &&
+      typeof _leavingTalk === "function" && _leavingTalk(npc, topic)) return;
   let d = _pickDialogue(npc, topic || null);
   // the one NAMED piwin answers for his own job the way any piwin at a stand does —
   // "ask bank about fare" was "not my story" while the anonymous man beside him
@@ -4133,6 +4158,9 @@ function _doTalkBody(arg, topic) {
   if (topic && !d.topic && _NORMAL_GIRL_RX.test(String(topic).toLowerCase())) { _say(_normalGirlTalk(npc)); return; }
   if (topic && !d.topic && npc === "nont" && typeof _nontLoanTalk === "function" && _nontLoanTalk(topic)) return;   // he offered BORROW; he answers it (Greta, round 61)
   if (topic && !d.topic && typeof _careTalk === "function" && _careTalk(npc, topic)) return;   // the words of her own money text (Marcus, round 61)
+  if (topic && !d.topic && typeof _moneyTalk === "function" && _moneyTalk(npc, topic)) return;   // the money you sent, and the thing it was for (Piet, round 62)
+  if (topic && !d.topic && typeof _leavingTalk === "function" && _leavingTalk(npc, topic)) return;   // "i fly home tomorrow"
+  if (topic && !d.topic && typeof _playerSaidTalk === "function" && _playerSaidTalk(npc, topic)) return;   // what you told her, and the name she calls you
   if (topic && !d.topic && typeof _drinksOnlyWhy === "function" && _drinksOnlyWhy(npc, topic)) return;   // she said she'd tell you why (Nadia, round 61)
   // the bar opposite, from anybody on your own rail (Greta: Bert answered "across the road" in the pre-purchase register)
   if (topic && !d.topic && typeof _oppTalk === "function" && _oppTalk(npc, topic)) return;
@@ -4372,7 +4400,10 @@ function _doTalkBody(arg, topic) {
     const line = /home|village/.test(t) ? `"${from}, Isan side. Small village, big family." She says it like a postcode, and then, softer: "Very far."`
       : /family/.test(t) ? `"${story.family}." She says it the way she would give you a phone number: a fact, not a plea.`
       : `"Plan?" She thinks about it properly. "My dream is to ${story.plan}." A shrug, a grin. "Everybody say that one. Maybe me, I do it."`;
-    _say(`${NPCS[npc].name}: ${line}`);
+    const _sk = npc + ":" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan");
+    const _told = (G.soc.storyTold = G.soc.storyTold || {});
+    if (_told[_sk]) _say(`${NPCS[npc].name}: ` + (/home|village/.test(t) ? `"${from}. You know already."` : /family/.test(t) ? `"Same family, tilac. Nothing change since you ask."` : `"Same dream. Still a dream."`));   // told in full every time, six times (Piet, round 62)
+    else { _told[_sk] = true; _say(`${NPCS[npc].name}: ${line}`); }
     _questOffer(npc);
     return;
   }
@@ -4617,7 +4648,7 @@ const _CONVO_TOPIC_RULES = [
   // family/plan nodes held the answers). NOTE the table is global first-match:
   // "coffee shop" stays with Cream's "job" rule below, so keep this one narrow.
   [/\bsisters?\b|\bbrothers?\b|\bson\b|\bher boy\b|\bkids?\b|\bchildren\b|school fees?|\bmama\b|her mother/, "family"],
-  [/\bdream\b|\bfuture\b|\bsavings?\b/, "plan"],
+  [/\bdream\b|\bfuture\b|\bsavings?\b|\bland\b|\brice\b|\bshop\b|\bsalon\b|\bstall\b|\blaundry\b|\bthe target\b/, "plan"],   // "BUY SOME LAND FOR RICE" was shown and unaskable (Piet, round 62)
   [/\bhosts?\b|\bhost bar\b|the boys\b/,                                      "scene"],
   [/\bsims?\b|\bunlock(ing|ed)?\b|screen fix|cracked screen/,                  "job"],
   [/house rules?|the rules\b|your rules/,                                       "rules"],
@@ -7103,6 +7134,7 @@ function _doBuy(arg) {
     return;
   }
   if (r.seven && (/toastie|cheese|sandwich/.test(arg) || (/food|snack/.test(arg) && !FOOD_STALLS[G.room]))) {
+    if (typeof _companionEats === "function" && _companionEats(arg, "a cheese toastie", TOASTIE_PRICE)) return;   // "buy toastie for lek" fed you (Ingrid, round 62)
     if (_fullNo()) return;
     if (G.money < TOASTIE_PRICE) { _say(_fmt("The toastie is ฿{p}. You have ฿{m}. The doorbell jingles in sympathy.", { p: TOASTIE_PRICE, m: G.money })); return; }
     G.money -= TOASTIE_PRICE;
@@ -7317,7 +7349,8 @@ function _doBuy(arg) {
     const _lazy = NPCS[id].type === "lazy";
     if (!_lazy || _rand() < 0.4) _boughtBond(id, typeof _drinksOnly === "function" && _drinksOnly(id) ? 2 : 1);   // capped per girl per night; the drink IS the drinks-only girl's job (theme 12)
     const _warm = !_lazy && _bondTier(id) >= 2;
-    const _pool = _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;
+    let _pool = _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;
+    if (!((G.soc.selfDrinks || {})[G.room])) { const _dry = _pool.filter(l => !/your (bottle|beer)\b/i.test(typeof l === "function" ? String(l) : l)); if (_dry.length) _pool = _dry; }   // "clinks the glass against your bottle" with no bottle (Piet, round 62)
     const _pk = _lazy ? "lazydrink" : _warm ? "warmdrink" : "ladydrink";
     _say(_fmt("{line} (฿{m} left.)", { line: _pickVary(_pool, _pk)(NPCS[id].name), m: G.money }));
     _boughtHappy(1); // bought สนุก tapers over an evening (see _boughtHappy)
@@ -7578,7 +7611,7 @@ function _rideLoop() {
     G.loopDay = G.day;
     _addHappy(2); // non-jading — the spectator family (WATCH SOI, the cats, the hill)
   }
-  G.pendingFare = { kind: "bus", price: BUS_FARE, dest: G.room };
+  G.pendingFare = { kind: "bus", price: BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0)), dest: G.room };   // her fare too (Ingrid, round 62)
   _say(`Back where you flagged it, one whole town later. The driver leans out: “${thaiBaht(BUS_FARE)}”`, "thai");
   _engineSpeak(thaiBaht(BUS_FARE));
   _say(`(${thaiNumRoman(BUS_FARE)} … the ride's over, the fare isn't. PAY <amount>.)`, "dim");
@@ -7786,7 +7819,7 @@ function _doRideBus(arg) {
         ? " (Your phone still has one number in it — CALL TAN.)" : ""));
     return;
   }
-  G.pendingFare = { kind: "bus", price: BUS_FARE, dest };
+  G.pendingFare = { kind: "bus", price: BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0)), dest };
   if (G.soc.drunk >= 7) _say(_pickVary(_BUS_DRUNK_BENCH, "busbench"), "dim");
   // Boarding: at a waiting area the queue is the system; mid-route he swerves in.
   if (_BUS_WAITING.has(G.room)) {
@@ -8286,6 +8319,7 @@ function _doCharge() {
     _say("100%. He hands it back without looking up. “Fifty well spent.”");
     return;
   }
+  if (G.battery >= 100) { _say("Already full. The phone has nothing to ask of you."); return; }   // "you need a charger" at 100% (Hal, round 62)
   if (!_inv().includes("charger")) { _say("You need a charger. 7-Elevens sell them."); return; }
   if (!_room().outlet && !_room().seven) { _say("No outlet here. 7-Eleven has one; so do a couple of friendly bars."); return; }
   if (G.battery >= 100) { _say("Already full. A rare feeling of complete adequacy."); return; }
@@ -8468,6 +8502,13 @@ const _CLINIC_CLEAN = [
     "news into your pocket — the cheapest peace of mind in Pattaya — and step back out free.",
 ];
 function _doClinic() {
+  {
+    const _c = G.party && G.party.ids && G.party.ids.find(p => NPCS[p] && _npcsHere().includes(p));
+    if (_c && G.soc.clinicCompany !== G.day) { G.soc.clinicCompany = G.day; _say(_fmt(_pickVary([
+      "{n} takes the plastic chair beside yours without being asked and reads her {{phone}}, entirely unbothered — she has been in this room before, and not with a customer.",
+      "{n} knows the nurse by name. They do not discuss why. She sits with you until your number comes up, and when it does she says only, \"Go, na. Is quick.\"",
+    ], "cliniccomp"), { n: NPCS[_c].name }), "dim"); }
+  }
   // the clinic is a PLACE — GET TESTED ran from a bar stool and from a hotel bed
   // (Judith, round 47). It is on Second Road at the Central junction, and the
   // waiting room is there. And it takes the twenty minutes its own prose says
@@ -8510,6 +8551,7 @@ function _doClinic() {
 // docs/source-material-policy.md: pattern kept, every beat new.)
 function _priewMeet() {
   if (_flag("metPriew") || !_flag("act1Done")) return;
+  if (G.party && G.party.ids && G.party.ids.length) return;   // you do not chat up the girl across the aisle with your companion on the next chair (Ingrid, round 62)
   _setFlag("metPriew");
   G.priewDay = G.day;
   G.phone.contacts.priew = true;
@@ -11726,6 +11768,7 @@ function doCommand(input) {
       : /^(books|takings|accounts)$/.test(lower) ? _doBooks   // the owner's own page, under the affair's question (Greta, round 61)
       : /^(who|blackbook|black book)$/.test(lower) ? _doBlackbook
       : /^(debt|debts)$/.test(lower) ? _doDebt
+      : /^(contacts?|phonebook|numbers)$/.test(lower) ? _doContacts
       : null;
     if (_free) { _free(); if (typeof _renderResume === "function") _renderResume(); return; }
   }
@@ -12268,6 +12311,7 @@ function doCommand(input) {
       else if (arg === "bus" || arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (arg.startsWith("motosai") || arg.startsWith("bike")) _doMotosai(arg.replace(/^\S+\s*/, ""));
       else if (/^(tested|checked|test|checkup|screen)\b/.test(arg)) _doClinic();
+      else if (/\bout\b/.test(arg) && _flag("act1Done") && _takeOut(arg)) {}   // TAKE NAN OUT — the refusal's own hint (Ingrid, round 62; a second case "take" lower down was dead)
       else _doTake(arg.replace(/^up /, ""));
       break;
     // LAST NIGHT reprints the morning ledger — the one frame that carries a rough wake's
@@ -12808,6 +12852,9 @@ function doCommand(input) {
     case "share": _doShare(); break;
     case "follow": _doFollow(arg); break;
     case "escort": _doSeeHome(arg); break;
+    case "party":
+      if (_takeOut(arg)) break;
+      _say("Party with whom? (TAKE <her> OUT puts a girl on your arm for the night.)"); break;
     case "see":
       if (/\b(home|to the bus|to her bike|to the songthaew)\b/.test(arg)) { _doSeeHome(arg); break; }
       _doExamine(arg); break;

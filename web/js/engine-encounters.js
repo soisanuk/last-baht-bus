@@ -170,6 +170,7 @@ function _salengMatchItem(input) {
 // offers a rose to give to whoever you're talking to. Once per night.
 function _flowerTick() {
   if (!G || G.over || G.pendingEnc || G.game || G.pendingChoice) return;
+  if (typeof _onRide === "function" && _onRide()) return;   // "stands the wrapped bloom next to your beer" at the hill viewpoint (Piet, round 62)
   if (!_flag("act1Done")) return;                 // sandbox flavour, not the wallet night
   if (!_inBar()) return;
   const open = _room().barType === "beer" || G.room === "lake_bar"; // open-front only
@@ -330,9 +331,16 @@ function _maybeEncounter() {
   _startEnc(eligible[Math.floor(_rand() * eligible.length)]);
 }
 
+const _COMPANION_TELL = [
+  "{n}'s hand finds your wrist, and stays there. \"Up to you, na.\" She does not look at the man. She is looking at you, and it is the Thai no, and it is the only one you will get.",
+  "{n} says one word to him in Thai, quietly, and he does not stop smiling and does not step closer either. \"Up to you,\" she tells you, which in this town is a whole paragraph.",
+  "{n} goes very still beside you, the stillness of a woman who has watched this exact thing done to twenty men. \"You want? Up to you.\" Her thumb presses once on the inside of your arm.",
+];
 function _startEnc(id) {
   if (id === "booking") G.bookingDay = G.day;
   const e = ENCOUNTERS[id];
+  const _withCompany = !!(G.party && G.party.ids && G.party.ids.length);
+  if (_withCompany && e.solo) return;   // belt to _maybeEncounter's braces: nobody propositions a man holding somebody's hand (Ingrid, round 62)
   G.encDone[id] = true;
   G.lastEnc = G.turns;
   // an intro that puts the sea wall in the picture is not for a street with no sea (Terence,
@@ -343,6 +351,13 @@ function _startEnc(id) {
   if (e.interactive) {
     G.pendingEnc = id;
     const lines = [[intro, "alert"]];
+    // THE COMPANION TELL: a woman on your arm knows the fortune-teller and the tonic man by
+    // heart, and says it the Thai way — "up to you" is the no (Ingrid, round 62: Lek mute
+    // through ฿2,099 of curse removal, then explained the con when asked after)
+    if (_withCompany && (id === "fortune" || id === "tonic")) {
+      const c = G.party.ids.find(p => NPCS[p]) || G.party.ids[0];
+      lines.push([_fmt(_pickVary(_COMPANION_TELL, "comptell:" + id), { n: NPCS[c].name }), "dim"]);
+    }
     if (e.th) lines.push([`“${e.th}” (${e.rom})`, "thai"]);
     if (e.hint) lines.push([e.hint, "dim"]);
     _encPrompt(...lines);
@@ -612,9 +627,11 @@ const _ENC = {
     // a girl on your arm is in the conversation: she talks to him first, and the
     // price does not change but the tone does (Lars, round 47: "no word about the
     // girl beside me")
-    if (G.party && G.party.ids && G.party.ids.length)
+    if (G.party && G.party.ids && G.party.ids.length && (G.soc.policeTell = G.soc.policeTell || {})[G.day] !== true) {   // once — it reprinted on every re-prompt and on the wai (Ingrid, round 62)
+      G.soc.policeTell[G.day] = true;
       _say(_fmt("{who} says something to him fast and low in Thai before you have opened your mouth — " +
         "the register a woman uses on a nephew. He listens. The price is the price; the tone is not.", { who: _partyLabel() }), "dim");
+    }
     if (/\bwai\b|sorry|khrap|krub|apolog|sawatdee/.test(input)) {
       const f = Math.min(POLICE_WAI, G.money);
       G.money -= f;
@@ -1804,6 +1821,7 @@ function _curseRitual(input) {
     !/\bno\b|leave|out|refuse|go|walk|away/.test(input);
   if (pay) {
     const took = Math.min(FORTUNE_RITUAL, G.money);
+    if (G.party && G.party.ids && G.party.ids.length) _say(_fmt("({n} says nothing while the notes change hands. That was the no, and you heard it as a maybe.)", { n: NPCS[G.party.ids[0]].name }), "dim");
     G.money -= took;
     G.curseOwed = (G.curseOwed || 0) + took;
     _say(`Out comes the incense, then a little brass bowl, then a chant that lasts ` +
@@ -1863,6 +1881,7 @@ function _tonicShop(input) {
     !/\bno\b|leave|out|refuse|go|push/.test(input);
   if (pay) {
     const took = Math.min(TONIC_FLEECE, G.money);
+    if (G.party && G.party.ids && G.party.ids.length) _say(_fmt("({n} looks at the bottles, then at the door, then at nothing. She said up to you. It was up to you.)", { n: NPCS[G.party.ids[0]].name }), "dim");
     G.money -= took;
     G.tonicOwed = (G.tonicOwed || 0) + took;
     G.itemLoc.hair_tonic = "inventory";
