@@ -73,6 +73,9 @@ const seeds = {
   rolf: expatOwner({ day: 14, money: 9000, bank: 60000, bonds: { manow: 15, lamai: 6, cake: 5, tan: 3 } }),
   hennie: expatOwner({ season0: 8, day: 12, money: 4000, bank: 25000, bonds: { tan: 3 } }),
   saoling: saoSeed(),
+  // greta (round 61): an owner at the top of the shoulder — March, the rail thinning, the
+  // note due — with the two levers in front of her (docs/bar-failure-cycle.md)
+  greta: expatOwner({ season0: 2, day: 16, money: 12000, bank: 40000, bonds: { manow: 8, jiap: 4, lamai: 5, tan: 3 } }),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -106,6 +109,12 @@ try {
   }
   console.log("hennie:", JSON.stringify(h));
   if (!h.favour || !h.job || !/low/.test(h.tier)) throw new Error("hennie seed cannot reach its drive");
+  // Greta: the board goes up, and inside two months of Bert's nights in the shoulder a woman gives notice
+  reload(seeds.greta); G.room = "stinky_bar"; G.nightTurn = 30; out = []; doCommand("prices up");
+  let g = { board: /Fifteen on top/.test(out.join(" ")), notice: null, tier: _seasonTier() };
+  for (let n = 0; n < 60 && !g.notice; n++) { G.day++; _barSettle(G.day - 1); if (G.bar.notice) g.notice = G.bar.notice.id; }
+  console.log("greta:", JSON.stringify(g), "rent", _barRent());
+  if (!g.board || !g.notice || g.tier !== "shoulder") throw new Error("greta seed cannot reach its drive");
   // Sao: answered kindly, she leaves her number
   reload(seeds.saoling); out = []; doCommand("hello");
   console.log("saoling:", !!G.phone.contacts.sao, JSON.stringify(G.bkk));
