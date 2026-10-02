@@ -11,7 +11,7 @@
 //
 // Consumed by ../portrait_gen (the SDXL portrait generator) via manifest.py.
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import vm from "node:vm";
@@ -131,13 +131,22 @@ chars.sort((a, b) => (roleOrder[a.role] - roleOrder[b.role]) || a.id.localeCompa
 const byRole = {};
 for (const c of chars) byRole[c.role] = (byRole[c.role] || 0) + 1;
 
+// RENDERED is a pure function of the art directory, so the manifest stays last-writer-correct:
+// whoever regenerates after a render ships writes the queue shorter.
+const THUMB = join(ROOT, "web", "portraits", "thumb");
+for (const c of [...chars, ...filler]) c.rendered = existsSync(join(THUMB, c.id + ".webp"));
+const unrendered = [...chars, ...filler].filter(c => !c.rendered).map(c => c.id);
 const manifest = {
   generated: new Date().toISOString().slice(0, 10),
   note: "Distinct, hand-authored characters with a portrait (excludes the 181 " +
     "generic `filler` NPCs). Derived from web/js/world.js — regenerate with " +
     "scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are " +
     "generator heuristics for portrait archetype selection, not game canon.",
-  counts: { total: chars.length, byRole, filler: filler.length },
+  counts: { total: chars.length, byRole, filler: filler.length, unrendered: unrendered.length },
+  // the WORK QUEUE, derived from the art directory: an id with no thumb/<id>.webp is still on
+  // a pixel placeholder and needs a render. The roster alone could not say so (the art agent,
+  // 2026-10-02: "the manifest doesn't reflect any needed work").
+  unrendered,
   characters: chars,
   filler,
 };
