@@ -579,14 +579,19 @@ test("the TRAVEL refusal explains itself and names the ride (Gerry)", () => {
   // disconnected pair; the walk is what the transport thesis promised.
   _setFlag("act1Done"); G.room = "buakhao_n"; G.visited.khao_talo_bar = true;
   G.hunger = 0; G.thirst = 0; G.soc.drunk = 0; G.lightOn = true; G.battery = 80; const t0 = G.turns;
-  out = []; run("travel daengs place");
-  assert.doesNotMatch(text(), /No walking route/, "there is one now");
-  assert.equal(G.room, "khao_talo_bar", "walked all the way out east");
-  assert.ok(G.turns - t0 >= 6, "…and it cost the hops: " + (G.turns - t0));
-  // walking WITHIN the Darkside still works
-  G.room = "khao_talo"; G.visited.night_heron = true;
-  run("travel night heron");
-  assert.equal(G.room, "night_heron", "the far side is walkable once you're on it");
+  // the walk crosses Sukhumvit on foot, which is a roll (_footCrossing, 4% the truck) —
+  // unstubbed it ended the night in the hotel room about one CI run in twenty-five (2026-10-01)
+  const saved = _rand; _rand = () => 0.99;
+  try {
+    out = []; run("travel daengs place");
+    assert.doesNotMatch(text(), /No walking route/, "there is one now");
+    assert.equal(G.room, "khao_talo_bar", "walked all the way out east");
+    assert.ok(G.turns - t0 >= 6, "…and it cost the hops: " + (G.turns - t0));
+    // walking WITHIN the Darkside still works
+    G.room = "khao_talo"; G.visited.night_heron = true;
+    run("travel night heron");
+    assert.equal(G.room, "night_heron", "the far side is walkable once you're on it");
+  } finally { _rand = saved; }
 });
 
 test("a stake you can't have is explained, not pocketed (Gerry)", () => {
