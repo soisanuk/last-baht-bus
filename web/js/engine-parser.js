@@ -4195,7 +4195,7 @@ function _doTalkCore(arg, topic) {
     if (/\b(open|opens|opening|opening time|open at|start)\b/.test(_ct) && !/\bopen till\b/.test(_ct)) { _say(_openingTalk(npc)); return; }
     if (/\b(busy|rush|quiet|peak|packed|full|crowd|crowded)\b/.test(_ct)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc)); return; }
-    if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct)) { _say(_leagueTalk(npc)); return; }
+    if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct) || (G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day && /\b(who won|winner|the pot|the final|last frame|the finn)\b/.test(_ct))) { _say(_leagueTalk(npc)); return; }   // the man who runs the league can say who won it (Desmond, round 63)
     // the badge: at a distance it is a number for the board; to somebody she knows it is armour (theme 12)
     if (typeof _badge === "function" && _badge(npc) && /^(?:the |my |your |her )?(?:number|badge|tag|\d{1,3})$/.test(_ct)) {
       _say(_badgeTalk(npc)); return;
@@ -4259,7 +4259,7 @@ function _doTalkCore(arg, topic) {
     if (/\b(open|opens|opening|opening time|open at)\b/.test(_pt) && !/\bopen till\b/.test(_pt)) { _say(_openingTalk(npc)); return; }
     if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(_pt)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_pt)) { _say(_closingTalk(npc)); return; }
-    if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_pt)) { _say(_leagueTalk(npc)); return; }
+    if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_pt) || (G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day && /\b(who won|winner|the pot|the final|last frame)\b/.test(_pt))) { _say(_leagueTalk(npc)); return; }
     if (/\b(roast|sunday roast|kitchen|food|dinner|menu|card)\b/.test(_pt)) {
       const said = _kitchenTalk(npc);
       if (said) { _say(said); return; }
@@ -4321,6 +4321,33 @@ function _doTalkCore(arg, topic) {
       }
       const mate = here.filter(x => NPC_ROLES[x] || NPCS[x].manager || NPCS[x].house)   // "bar sister" was said of Cream, who is not staff (Judith, round 47)
         .find(x => NPCS[x].name.toLowerCase() === _rt || x === _rt || NPCS[x].name.toLowerCase().split(" ").pop() === _rt);
+      // THE WITNESS RULE (round 63; tools/witness-audit.mjs): the bonded greeting says the whole
+      // bar clocks it and "you're spoken for in here, and everyone knows it" — so the people who
+      // work beside her can say so. Her colleagues on her, or on "the ride" when one of them took
+      // you round town on the back of her bike in the last three nights (Desmond: they shrugged).
+      {
+        const _rodeRecently = x => G.rideLog && G.rideLog[x] && G.day - G.rideLog[x].day <= 3;
+        const _her = (mate && NPC_ROLES[mate] === "hostess" && !(typeof _affairLive === "function" && _affairLive() && G.affair.id === mate)) ? mate
+          : (!mate && /\b(the ride|ride|her bike|bike|last night|motorbike|after two)\b/.test(_rt) ? here.find(x => NPC_ROLES[x] === "hostess" && _rodeRecently(x)) : null);
+        if (_her && (_rodeRecently(_her) || _bondTier(_her) >= 2)) {
+          const n = NPCS[_her].name, house = _hoursRegister(npc) !== "floor";
+          const kind = _rodeRecently(_her) ? "ride" : _bondTier(_her) >= 3 ? "hers" : "likes";
+          const P = {
+            ride: house ? [`"${n} came back at dawn on her own bike, looking like a woman who had a good night and isn't going to discuss it." A look at you. "Neither am I."`,
+                           `"The ride." The smallest smile. "${n} took you round the town that isn't on the map. Most men she doesn't. Mind you remember that."`]
+                        : [`"${n}?" A look that is all eyebrow. "You go on her bike, na. Everybody see her come back with the smile. She say nothing. Nothing is the loudest thing."`,
+                           `"You and ${n} — vroom." She mimes the throttle, delighted. "She never take customer on the bike. Never. So." She lets "so" do the rest.`],
+            hers: house ? [`"Your girl, as far as this floor is concerned." Said without judgement. "She keeps your stool. The new ones learn not to sit on it."`,
+                           `"${n}?" A level look. "Everybody here knows whose she is when you walk in. She'd want me to say nothing, so I've said it."`]
+                        : [`"${n}?" She laughs. "Your girl. Everybody know, tilac. She keep your stool, she shout at the new girl who sit on it."`,
+                           `"${n} is yours, na — whole bar know. When you not here she check the door like a dog waiting." A grin. "Don't tell her I say."`],
+            likes: house ? [`"${n}? She likes you. She wouldn't tell you, so I will — she watches the door."`]
+                         : [`"${n} like you. She say no, but she watch the door when you not here."`],
+          }[kind];
+          _say(_pickVary(P, "witness:" + kind + ":" + npc));
+          return;
+        }
+      }
       if (mate) {
         const me = roleOf(npc), them = roleOf(mate), n = NPCS[mate].name;
         // one sentence in three cities (Margarethe, round 47): pooled by the speaker,

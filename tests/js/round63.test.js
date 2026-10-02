@@ -120,3 +120,25 @@ test("an answer is a meeting: a woman who answered you does not introduce hersel
   G.room = NPCS[fresh].room; G.soc.bfRefused = { [fresh]: { kind: "temple", favor: 0 } };
   out = []; _doTalkBody(fresh, "long time"); assert.ok((G.talked[fresh] || []).length > 0);
 });
+
+// ── The witness rule (2026-10-02): prose that says the town saw it is a promise ─────────
+test("every witness claim in the corpus is classed: general, kept by a mechanic, or answered by a witness", async () => {
+  const { witnessClaims } = await import("../../tools/witness-audit.mjs");
+  const un = witnessClaims().filter(c => !c.cls).map(c => c.key);
+  assert.deepEqual(un, [], "class it in tools/witness-audit.mjs CLASS — and if it is a witness, wire the mouth and test it here");
+});
+test("the witnesses answer: colleagues on the girl who is yours and on her ride; the man who runs the league on who won it", () => {
+  G.room = "stinky_bar"; G.nightTurn = 30; G.day = 5;
+  const staff = _npcsHere().filter(i => NPC_ROLES[i]);
+  const girl = staff.find(i => NPC_ROLES[i] === "hostess"), mate = staff.find(i => i !== girl);
+  for (const id of staff.concat("bert")) G.talked[id] = [0];
+  G.soc.drinks[girl] = 14;
+  out = []; run("ask " + NPCS[mate].name + " about " + NPCS[girl].name); assert.match(said(), /yours|Your girl|whose she is|Everybody know/i);
+  G.soc.drinks[girl] = 0; G.rideLog = { [girl]: { day: 4, stops: 4, great: true } };
+  out = []; run("ask bert about the ride"); assert.match(said(), new RegExp(NPCS[girl].name));
+  G.day = 3; G.lastKp = { room: "stinky_bar", day: 3, names: ["Gop", "the Finn"], won: false, winner: "the Finn" };
+  out = []; run("ask bert about who won"); assert.match(said(), /the Finn/);
+});
+test("a detour you steered her out of is on the books: COMPLAIN refunds the round, not the fine", () => {
+  assert.ok(String(_ENC.bfhop).includes('kind: "detour"'));
+});

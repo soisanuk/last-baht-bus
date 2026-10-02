@@ -2182,6 +2182,7 @@ function _doComplain() {
   const detail = inc.kind === "runner" ? "the emergency that put her back on a stool within the hour" :
     inc.kind === "mao" ? "the mao mak mak performance" :
     inc.kind === "barhop" ? "the guided tour of her friends' tills" :
+    inc.kind === "detour" ? "the one round at her friend's bar before you steered her back" :
     inc.kind === "wsparty" ? "the three-girl Walking Street benefit night" :
     "the lady-time reveal, timed to the second the fine hit the ledger";
   if (strikes >= 2) {

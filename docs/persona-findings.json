@@ -11222,13 +11222,13 @@
    "model": "opus",
    "lens": "the-town-explains",
    "claim": "Nobody in town can talk about Sao, the night ride's venues, Bangkok, or what happened last night",
-   "verdict": "deferred",
-   "note": "the class-N gap Desmond's table maps — a town-talk row per event; the piwin and Tan already answer some",
-   "pin": "",
+   "verdict": "fixed",
+   "note": "re-scoped as THE WITNESS RULE: only those who could have seen it speak. Sao and Bangkok shrugs are honest; the bonded greeting's 'everyone knows' is answered by her colleagues, the ride by them, the league winner by Bert; a refused detour is on the books. tools/witness-audit.mjs gates every witness claim in the corpus",
+   "pin": "tests/js/round63.test.js",
    "cls": "N",
    "sev": "high",
    "system": "conversation",
-   "instrument": "",
+   "instrument": "tools/witness-audit.mjs",
    "between": ""
   },
   {

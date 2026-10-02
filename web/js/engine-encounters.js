@@ -1256,6 +1256,9 @@ const _ENC = {
       !/\bno\b|straight|hotel|home/.test(input);
     if (!yes) {
       G.bfSeq = null;
+      // the round her friend's bar already took is on the books (Desmond, round 63: COMPLAIN said
+      // "nothing on the books" the morning after a detour) — the drinks, not the fine
+      if (seq.spent > 0 && seq.id) G.bfIncident = { id: seq.id, room: seq.room || G.room, kind: "detour", fine: seq.spent, day: G.day };
       _say(`You steer back, gently, toward the night as negotiated. ${gn} pouts ` +
         "for exactly three steps — a professional pout, quickly retired — and " +
         "then the evening becomes what you paid for after all.", "win");
