@@ -9,6 +9,21 @@
 //   node tools/art-progress.mjs soi-6     # the rooms of one region, listed
 //   node tools/art-progress.mjs --todo    # bare ids still needing art, space-separated
 //
+// And the same question for the CAST (added 2026-10-02, at the LBB session's
+// request): which characters are still on my pixel placeholder rather than an
+// SDXL render.
+//
+//   node tools/art-progress.mjs --portraits          # by role, + the unrendered list
+//   node tools/art-progress.mjs --portraits --todo    # bare ids, for a gen batch
+//
+// docs/portrait-manifest.json carries the same answer as of 2026-10-02 (`rendered`
+// per character plus an `unrendered` queue, added by the LBB session). This reads
+// the art directory at CALL time instead, which is the difference that matters on
+// the art machine: between a render landing and the next regeneration, the
+// manifest's queue is stale and this is not. Use the manifest to see the queue
+// from anywhere; use this to batch, since it also says whether a face has an
+// authored `look` line or comes from the procedural path.
+//
 // Run it at the start of a session, after any compaction or restart, and
 // between regions. The filesystem can't be wrong and can't forget.
 
@@ -17,6 +32,48 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+// ── The cast: rendered (a 384px WebP thumb) vs my placeholder bust ────────────
+// gen_thumbs.py only converts generated portraits, so a character with no
+// thumb/<id>.webp has never been rendered — the ~370-byte web/portraits/<id>.png
+// is the placeholder that keeps portraits.test.js green in the gap.
+if (process.argv.includes("--portraits")) {
+  const PM = join(ROOT, "docs", "portrait-manifest.json");
+  if (!existsSync(PM)) {
+    console.error("no docs/portrait-manifest.json — run: node scripts/gen-portrait-manifest.mjs");
+    process.exit(1);
+  }
+  const pm = JSON.parse(readFileSync(PM, "utf8"));
+  const cast = [...(pm.characters || []), ...(pm.filler || [])];
+  const rendered = c => existsSync(join(ROOT, "web", "portraits", "thumb", c.id + ".webp"));
+  const todo = cast.filter(c => !rendered(c));
+
+  if (process.argv.includes("--todo")) {
+    console.log(todo.map(c => c.id).join(" "));
+    process.exit(0);
+  }
+
+  const by = new Map();
+  for (const c of cast) {
+    const key = (c.filler ? "filler " : "") + c.role;
+    const g = by.get(key) || { key, n: 0, done: 0 };
+    g.n++; if (rendered(c)) g.done++;
+    by.set(key, g);
+  }
+  console.log("role                  cast   rendered   placeholder");
+  for (const g of [...by.values()].sort((a, b) => a.done / a.n - b.done / b.n || b.n - a.n))
+    console.log(g.key.padEnd(20), String(g.n).padStart(5), String(g.done).padStart(10),
+      String(g.n - g.done).padStart(14));
+  console.log("-".repeat(56));
+  console.log(`${cast.length} characters: ${cast.length - todo.length} rendered, ${todo.length} on a placeholder`);
+  if (todo.length) {
+    console.log("\nstill to render (a `look` line means it's authored, not generated):");
+    for (const c of todo)
+      console.log(`  ${c.id.padEnd(12)} ${(c.filler ? "filler" : "authored").padEnd(9)} ${c.look ? "look ✓" : "look ––"}  ${c.room || ""}`);
+  }
+  process.exit(0);
+}
+
 const MANIFEST = join(ROOT, "docs", "scene-manifest.json");
 if (!existsSync(MANIFEST)) {
   console.error("no docs/scene-manifest.json — run: node scripts/gen-scene-manifest.mjs");
