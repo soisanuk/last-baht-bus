@@ -10174,7 +10174,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     name: "Oiy", th: "อ้อย", emoji: "💆", masseuse: true,
     pronoun: "she",
     room: "papaya_massage",
-    look: "Young Thai woman, early twenties, round face, hair in two braids, pastel green polo, shy smile.",
+    look: "Fresh-faced Thai woman of twenty-one, soft round face, two braids, pastel green polo, eyes lowered, shy embarrassed smile.",
     desc: "Early twenties, two braids and a round face, new enough that she still reads the price list off the wall before she says it. Oiy sits on the end stool at Papaya, where the Walking Street crowd thins out, and practises her English on anybody who stops.",
     dialogue: [
       { when: (st, G) => !!(G.soc.special && G.soc.special["papaya_massage"] === G.day), text: "Oiy goes pink and very quiet. \"You have my number, na.\" A glance at the older girls on the stools. \"Here they tease me. After work, nobody tease.\"", short: "\"Here they tease me. After work, nobody tease.\"" },
@@ -17421,6 +17421,16 @@ for (const [name, th, room] of _FILLER_HOSTESSES) {
   NPCS[id] = _buildHostess(name, th, room, id);
   NPC_ROLES[id] = "hostess";
 }
+// PORTRAIT LINES FOR GENERATED GIRLS (2026-10-02). A filler's desc is assembled from pools and
+// rarely carries a face: Jiap's reached the portrait model as "Small and sharp, and misses
+// nothing", with no age, hair or clothes, and she came back a generic face. A look line here
+// is read ONLY by the portrait manifest — the engine never prints `look` — and must agree with
+// the generated desc (check it with `node tools/portrait-prompt.mjs <id>`).
+const _FILLER_LOOKS = {
+  jiap: "Small slight Thai woman, mid twenties, short bob, sharp watchful eyes, fitted black top, small knowing half-smile.",
+  mew: "Thai woman, early twenties, very long straight hair, long false eyelashes, glossy practised pout, pink satin top, phone in hand.",
+};
+for (const [id, look] of Object.entries(_FILLER_LOOKS)) if (NPCS[id]) NPCS[id].look = look;
 
 // ── Generic (filler) mamasans and cashiers ──────────────────────────────────
 // Every hostess bar needs a mamasan who runs the floor and a cashier who runs

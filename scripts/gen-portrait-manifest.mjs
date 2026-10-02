@@ -100,6 +100,7 @@ for (const id of Object.keys(NPCS)) {
       sex: deriveSex(id, n.desc) || (FEMALE_ROLES.has(role) ? "f" : null),
       venueKind: venueKind(n.room),
       emoji: n.emoji, th: n.th || null, room: n.room, tags: [], desc: n.desc,
+      ...(n.look ? { look: n.look } : {}),   // _FILLER_LOOKS in world.js: a generated girl whose desc has no face
     });
     continue;
   }

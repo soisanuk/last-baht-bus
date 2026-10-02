@@ -466,7 +466,7 @@
       "source": "NPCS",
       "role": "story",
       "sex": "f",
-      "look": "Young Thai woman, early twenties, round face, hair in two braids, pastel green polo, shy smile.",
+      "look": "Fresh-faced Thai woman of twenty-one, soft round face, two braids, pastel green polo, eyes lowered, shy embarrassed smile.",
       "venueKind": null,
       "emoji": "💆",
       "th": "อ้อย",
@@ -3804,6 +3804,7 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Small and sharp, and misses nothing — one of The Stinky Pinky's girls, from Sisaket. Google Translate is open before you finish the sentence.",
+      "look": "Small slight Thai woman, mid twenties, short bob, sharp watchful eyes, fitted black top, small knowing half-smile.",
       "rendered": true
     },
     {
@@ -3819,6 +3820,7 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Long hair, longer eyelashes, a practised pout — one of The Stinky Pinky's girls, from Roi Et. The {{phone}} never leaves her hand.",
+      "look": "Thai woman, early twenties, very long straight hair, long false eyelashes, glossy practised pout, pink satin top, phone in hand.",
       "rendered": true
     },
     {
