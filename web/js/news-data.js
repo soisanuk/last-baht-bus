@@ -13,34 +13,34 @@ var NEWS_FEED = [
     "d": "01 Oct 2026"
   },
   {
+    "t": "German tourist seriously injured after falling from second-floor Pattaya hotel balcony",
+    "s": "Pattaya Mail",
+    "d": "02 Oct 2026"
+  },
+  {
     "t": "Pattaya prosecutors indict 2 in Russian siblings murder case",
     "s": "Thaiger",
     "d": "01 Oct 2026"
   },
   {
-    "t": "Thai Airways cancels 37 more flights through October 1 amid flood disruption",
+    "t": "Thailand struggles to reach 3% growth while Pattaya expands events and new tourism markets",
     "s": "Pattaya Mail",
-    "d": "29 Sep 2026"
+    "d": "02 Oct 2026"
   },
   {
-    "t": "Drug suspect holds toy shop worker hostage in Pattaya",
-    "s": "Thaiger",
-    "d": "30 Sep 2026"
-  },
-  {
-    "t": "Koh Larn plankton bloom turns sea green after heavy rain in Pattaya",
-    "s": "Thaiger",
+    "t": "New ISOC Region 4 director takes command in Pattani",
+    "s": "Pattaya Mail",
     "d": "01 Oct 2026"
   },
   {
-    "t": "Pattaya council pushes major redesign of Bali Hai Pier",
+    "t": "Bangkok expands water retention network to manage floodwater",
     "s": "Pattaya Mail",
-    "d": "30 Sep 2026"
+    "d": "01 Oct 2026"
   },
   {
-    "t": "Pattaya Mayor invites residents to fitness evening and community meet-up",
+    "t": "Thailand’s changing elevations explain why high ground can still flood",
     "s": "Pattaya Mail",
-    "d": "30 Sep 2026"
+    "d": "02 Oct 2026"
   },
   {
     "t": "Infineon opens $1.4 billion Thailand plant as country ramps up semiconductor push",
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "01 Oct 2026"
   },
   {
-    "t": "At least 23 dead in Thailand floods, Bangkok airport in chaos",
-    "s": "Reuters",
-    "d": "30 Sep 2026"
+    "t": "Thailand raids another Jewish venue, probes foreign ownership and religious activity",
+    "s": "Ynetnews",
+    "d": "02 Oct 2026"
   },
   {
-    "t": "Thailand’s Demographic Crisis Arrives Early",
-    "s": "Foreign Policy",
-    "d": "30 Sep 2026"
+    "t": "Thailand’s army receives new US-built helicopters",
+    "s": "Asian Military Review",
+    "d": "02 Oct 2026"
+  },
+  {
+    "t": "Plankton bloom turns Thai island waters a bright, smelly green",
+    "s": "Reuters",
+    "d": "02 Oct 2026"
   },
   {
     "t": "Thailand truck driver blocks flood to save 5 in pickup",
     "s": "The Weather Channel",
-    "d": "30 Sep 2026"
-  },
-  {
-    "t": "Israeli murdered on Thailand’s Koh Phangan; motive under investigation",
-    "s": "Ynetnews",
     "d": "30 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-01","USD":33.66,"AUD":23.39,"GBP":44.54,"EUR":38.02};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-02","temp":27,"humid":84,"code":3,"hi":31,"rain":92};
+var WX_NOW = {"date":"2026-10-02","temp":30,"humid":79,"code":95,"hi":31,"rain":92};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4177,"date":"2026-10-01","baht":66500};
+var GOLD = {"usd":4189,"date":"2026-10-02","baht":66700};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":84746,"thb":2853821};
+var BTC = {"usd":86285,"thb":2898297};
