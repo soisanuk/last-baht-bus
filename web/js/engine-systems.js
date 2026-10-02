@@ -8767,7 +8767,7 @@ function _barLost(cause) {
       "squared it with the old man. Whole thing, one payment.\" There is no " +
       "paperwork to look at. There was never any paperwork. \"He said to tell you " +
       "there's no hard feeling in it, and bud, I believe him, and that's the part " +
-      "I'd think about.\"\n\nBert turns the bottle a quarter turn. \"Pattaya Leisure had " +
+      "I'd think about.\"\n\nBert peels the label off the bottle in one long strip. \"Pattaya Leisure had " +
       "a number in with the old man by the Tuesday. Your man moved on the Monday.\" " +
       "He lets that sit exactly as long as it needs. \"He didn't do it for you.\""
     : "Candy's lawyer sends a letter, because Candy's arrangements are the kind " +
@@ -11615,8 +11615,7 @@ function _rabbitJobKid() {
     "something under it. He wants this more than the box, more than the file, and he knows " +
     "exactly why he mustn't ask for it, and he is not going to ask for it, and he is going to " +
     "let you.", "alert");
-  _say("\"He's at the market. Old Market, the table with the phones.\" He turns the soda a " +
-    "quarter and does not drink it. \"I can't go to him. You can. Tell him it's me and let him " +
+  _say("\"He's at the market. Old Market, the table with the phones.\" He moves the soda an inch and does not drink it. \"I can't go to him. You can. Tell him it's me and let him " +
     "name it — he'll name it. He doesn't do favours. Tan taught him that, and Tan was right.\" " +
     "A beat. \"Don't tell him I said that either.\"", "win");
   _say("(Find NONT at his table in the Old Market and ASK NONT ABOUT THE JOB. QUESTS if you lose the thread.)", "dim");

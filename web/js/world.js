@@ -6152,8 +6152,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Sit, sit. No barfine, just talk — talking is free.\"" },
       { topic: "mikkel", req: ["knowMikkel"],
         text: "You mention the Danish boy. Something crosses her face — not guilt, quite; more the " +
-          "weight of a kindness that has gotten heavy. \"Mikkel. He is sweet boy. Too sweet.\" She turns " +
-          "her glass a quarter turn. \"He think he save me. My mother farm is real, the money is real — but " +
+          "weight of a kindness that has gotten heavy. \"Mikkel. He is sweet boy. Too sweet.\" She sets her glass down very carefully. \"He think he save me. My mother farm is real, the money is real — but " +
           "Denmark?\" A small shake of the head. \"Is winter there. He go home in spring, he cry one week, " +
           "then he okay. They are always okay.\" It isn't cruel. It is arithmetic she has done before.",
         short: "\"Mikkel is sweet boy. Too sweet. He go home spring, cry one week, then okay.\"" },
@@ -7787,7 +7786,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sawatdee kha.\" A nod, not a hello-handsome; Thip has been here long enough to let a man " +
           "decide what he wants before she decides what he is. \"You new to Mama Yai? Sit anywhere. The " +
-          "som tam come whether you want or not.\" She turns her glass a quarter on the mat. \"I am Thip. " +
+          "som tam come whether you want or not.\" She squares her glass on the mat. \"I am Thip. " +
           "Eleven years this bar. Ask Yai, she tell you I was here before the fan.\"",
         short: "\"Thip. Eleven years this bar.\"" },
       { topic: "husband|man|him|my man|farang|denmark|danish|boyfriend|sponsor",
@@ -8216,7 +8215,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // The other half of it. He is not scheming and there is nothing to expose —
       // he is a man who assesses bars for a living, being asked about a bar.
       { topic: "wayne",
-        text: "Gavin's lager stays where it is. \u201cThe Australian.\u201d A small, not unkind pause. \u201cWe looked at that unit in March. Walked the books, walked the kitchen, walked away \u2014 the lease has four years to run and the landlord's son wants it back for a coffee shop.\u201d He turns the glass a quarter. \u201cI did tell him what we found. He heard the part where a company with our money had looked at it, and stopped listening at that.\u201d A shrug that costs him nothing. \u201cIt happens. Everyone thinks the survey is the OTHER man's problem.\u201d",
+        text: "Gavin's lager stays where it is. \u201cThe Australian.\u201d A small, not unkind pause. \u201cWe looked at that unit in March. Walked the books, walked the kitchen, walked away \u2014 the lease has four years to run and the landlord's son wants it back for a coffee shop.” He moves the glass an inch, as if it had been in the way. \u201cI did tell him what we found. He heard the part where a company with our money had looked at it, and stopped listening at that.\u201d A shrug that costs him nothing. \u201cIt happens. Everyone thinks the survey is the OTHER man's problem.\u201d",
         short: "\u201cWe looked at that unit in March and walked away \u2014 four years on the lease and the landlord's son wants a coffee shop.\u201d" },
 
       // Gavin's Errand paid out at the Stinky the moment Bert refused — a courier's fee at the
@@ -8328,7 +8327,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // He is a tailor and an accountant with no real-world behaviours; the structure stays.
       { topic: "bert", text: "\"The pool bar? The old gentleman?\" He sets his glass down precisely where the ring was. \"Sentiment. Sentiment does not compound. He sells or he dies, and the building's owner sells to somebody after that; we are always somebody.\" A shrug that is almost courteous. \"No hard feelings. I do not keep them. They are expensive to store.\"",
         short: "\"The pool bar? Sentiment does not compound. He sells or he dies; we are always somebody.\"" },
-      { topic: "jail", text: "\"Jail?\" He looks faintly puzzled, then faintly amused, which is worse. \"I am an accountant who happens to own bars. The most dangerous thing I do each month is the VAT return.\" He turns his glass a quarter. \"Everything here is looked after. Looking after things is not a crime. It is simply more work than most people are prepared to do.\"",
+      { topic: "jail", text: "\"Jail?\" He looks faintly puzzled, then faintly amused, which is worse. \"I am an accountant who happens to own bars. The most dangerous thing I do each month is the VAT return.\" He sets his glass back exactly on its own ring. \"Everything here is looked after. Looking after things is not a crime. It is simply more work than most people are prepared to do.\"",
         short: "\"I am an accountant who owns bars. The most dangerous thing I do is the VAT return.\"" },
       { topic: "syndicate|table|the table|good table|the good table|quiet table|that quiet table|the quiet table|president|the president|envelope|the envelope", text: "For the first time his hands go still on the table. \"Don't—\" He recovers, lowers his voice, leans in, and for one honest second is a real person and a frightened one. \"That table is not a topic. That gentleman is the reason everything here is 'looked after.' I write a number every month; he decides if it's the right number. I don't know his name. I don't WANT his name.\" The composure comes back as if it had never left. \"Another drink. Whatever you would like — it is looked after. You are a friend of the house.\"",
         short: "(Hands still, voice low.) \"That table's not a topic. He decides if my number's the right number. I don't want his name.\"" },
@@ -8472,7 +8471,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // is the right man to start with — reading people is the job he retired from
       // and didn't stop doing, so every one of these is in character by construction.
       { topic: "terry",
-        text: "\u201cTerry.\u201d Doyle almost smiles. \u201cSixteen years, one stool, and he tells the Pattaya Leisure story like it happened to him last Tuesday.\u201d He turns the soda water a quarter. \u201cIt didn't. He was here, he saw it, and every detail he gives you is true \u2014 I've checked two of them. But he's told it so many times the telling has its own shape now. Wears grooves.\u201d A shrug. \u201cThat's not lying. That's what a story does to a man who loves it.\u201d",
+        text: "\u201cTerry.\u201d Doyle almost smiles. \u201cSixteen years, one stool, and he tells the Pattaya Leisure story like it happened to him last Tuesday.\u201d He tips the soda water and watches the bubbles come up. \u201cIt didn't. He was here, he saw it, and every detail he gives you is true \u2014 I've checked two of them. But he's told it so many times the telling has its own shape now. Wears grooves.\u201d A shrug. \u201cThat's not lying. That's what a story does to a man who loves it.\u201d",
         short: "\u201cEvery detail's true. He's just told it so often the telling wears grooves.\u201d" },
       { topic: "mort",
         text: "\u201cThe notebook.\u201d Doyle's eyes go to the far end without his head following, which is a whole career in one movement. \u201cSeventy-four and the best-informed man on this coast. Knows it, too.\u201d A pause. \u201cI've sat in rooms with men who'd have paid serious money for what's in that book. He writes it down in a pub on Soi 6 with the cap off his biro and nobody has ever laid a finger on him.\u201d He looks genuinely pleased about it. \u201cSays something about the place, doesn't it.\u201d",
@@ -8490,7 +8489,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "learn more about a man from where he sits than anything he tells you.\" He tips the glass at the " +
           "stool beside him — the one with a sightline to the door. \"Sit. I don't bite. Not for boring people.\"",
         short: "He reads you head to foot out of habit, and tips the soda water an inch at the stool with the sightline. \"Sit.\"",
-        asks: { key: "here", q: "\"So.\" He turns the glass a slow quarter-turn. \"Everybody out here's answering a question they won't say out loud. What brought YOU — the girls, the money, or the getting-away?\"" } },
+        asks: { key: "here", q: "\"So.\" He sets the glass down square to the edge of the bar. \"Everybody out here's answering a question they won't say out loud. What brought YOU — the girls, the money, or the getting-away?\"" } },
 
       { topic: "doyle", text: "\"Homicide, mostly. Big-city, the kind that makes the papers and then makes " +
           "you old.\" He says it flat, a man reporting weather. \"Put in my twenty-six, took the pension, " +
@@ -8657,8 +8656,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         req: ["expatLife", "barPremises", "nomineeWarned"],
         notFlags: ["barLicence"], sets: ["barLicence"],
         text: "Wayne laughs, once, with no humour in it at all. \"You want to know " +
-          "how it's really done. Right.\" He turns his glass a quarter turn — Bert's " +
-          "tell, you notice; they all pick it up eventually. \"Fifty-one percent is " +
+          "how it's really done. Right.\" He drums two fingers on the bar, once. \"Fifty-one percent is " +
           "Thai. That's not a loophole, that's the law, and every farang who thinks " +
           "he's clever about it is the story somebody tells in this bar later.\" He " +
           "counts it off. \"Nominee is a stranger holding your life. Company is real " +
@@ -8670,8 +8668,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Your HANDS can't be behind that bar without a work permit, and the permit wants a company " +
           "with two million paid in. Two million, per farang. You've got a hundred and twenty. So on " +
           "paper, the mama stands the rail.\" A beat. \"On paper. Everybody on this soi stands their " +
-          "own rail and nobody's stood it on paper since the law came in — until somebody asks.\" He " +
-          "turns the glass back. \"I was three days off signing the first one. You cost me a bar and " +
+          "own rail and nobody's stood it on paper since the law came in — until somebody asks.\" He stops drumming. \"I was three days off signing the first one. You cost me a bar and " +
           "saved me about four years. So: not the nominee. Pick a person, not a structure.\"",
         short: "\"Fifty-one percent Thai, and that's the law. Pick a person, not a structure.\"",
       },
@@ -10672,7 +10669,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "welcome to it. There's a kind of fella who wants a basement with no clocks, " +
           "and a kind who wants somebody to remember his name. Not usually the same " +
           "fella.\"" },
-      { text: "Bob turns his coffee cup a quarter-turn and waits, entirely content to. " +
+      { text: "Bob sets his coffee cup square on its saucer and waits, entirely content to. " +
           "\"Go on.\"" },
     ],
   },
@@ -11086,7 +11083,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // until Oy's completion node and an active quest both agree).
       // the town can say what just happened (Fintan, round 60)
       { topic: "helmet|the helmet|pink helmet", req: ["helmetDelivered"],
-        text: "\"The helmet.\" Pim gives it a quarter-turn on the shelf where it now lives. \"Pink. Bank think pink is romantic.\" A beat. \"It is. Don't tell him I said.\"",
+        text: "\"The helmet.\" Pim straightens it on the shelf where it now lives. \"Pink. Bank think pink is romantic.\" A beat. \"It is. Don't tell him I said.\"",
         short: "\"Pink. Bank think pink is romantic. It is.\"" },
       // report-back channels (Anand, round 59): the sender could not hear how it went
       { topic: "bank", req: ["helmetDelivered"],
@@ -11513,7 +11510,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "plg|pattaya leisure|pattaya leisure group|the group", text: "“Pattaya Leisure.” The warmth goes out of it. “I had a bar on Soi 6 — a " +
           "good one, mine, paid for in Vegas money. Then the golf shirt shows up, all handshakes and PowerPoint, and somehow the rent's a problem, the license is a problem, the girls " +
           "get walked across the road one by one, and I'm selling at forty cents on the dollar " +
-          "to the only buyer left. Which was them.” He turns his soda glass a slow quarter. " +
+          "to the only buyer left. Which was them.” He presses the lime down into his soda with one finger. " +
           "“Laurent Vasseur's name on the paper. The man himself never raised his voice at me once — never had to be in the room to do it. One day somebody's " +
           "going to open that whole operation up like a cheap padlock, and I would give a great " +
           "deal to be in the room.”",
@@ -11583,7 +11580,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         when: (st, G) => _flag("barBook") && !_flag("bookGiven"),
         text: "“Funny thing.” He doesn't look up from the soda. “Three of my old Dutchmen turned " +
           "up at YOUR bar last week. Knew the drink, knew the birthday, the girl had a card " +
-          "ready.” He turns the glass a quarter. “Good for you. That's how it's done here — I " +
+          "ready.” He wipes the ring the glass has left. “Good for you. That's how it's done here — I " +
           "should know, I taught them.” Nothing else. He doesn't ask. He doesn't have to.",
         short: "“My old Dutchmen at your bar. Good for you.”" },
       { topic: "book|regulars|spreadsheet|customer book|list", deflect: true,
@@ -11604,7 +11601,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // the post-job and the yes-or-no nudge live below this deflect (graph lifecycle audit, 2026-09-15)
       { topic: "job|heist|work|the job|rabbit job|your job|box job", when: (st, G) => !_flag("rabbitData") && G.quests.rabbit_job !== "offered", deflect: true,
         text: "“Job.” He lets the word sit there and go flat. “Everybody's got a job for me, boss, " +
-          "and I've got a soda water.” He turns the glass a quarter. “Drink here a while. " +
+          "and I've got a soda water.” He lifts the soda an inch and sets it back in its own ring. “Drink here a while. " +
           "People who drink here a while sometimes hear things.”" },
       // after the job the box is a thing that happened, not a thing to place (Ray, r45)
       { topic: "file|the file|wallet|data|stick|the stick|wallet.dat", req: ["rabbitData"],
@@ -11620,7 +11617,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the way it was done.”",
         short: "“The boy's business how it got here. Yours, nothing.”" },
       { topic: "file|the file|wallet|data|stick|the stick|wallet.dat", req: ["rabbitData"],
-        text: "“The file.” A quarter-turn of the soda. “A copy of their money doing what it does. That's " +
+        text: "“The file.” The lime goes round the soda once. “A copy of their money doing what it does. That's " +
           "all I ever wanted — not a baht of it, the shape of it.” He lifts the glass an inch. “The box " +
           "did the clever part. You did the other part. Nobody talks about either part in here.”",
         short: "“A copy of their money doing what it does. Nobody talks about it in here.”" },
@@ -12045,7 +12042,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { text: "\"Oh — hi.\" She puts the {{phone}} face-down and gives you a small, surprised smile, as if being spoken to was not on tonight's list. \"I not work here na! I just visit my friend — she work here, she busy.\" A shrug at the bar. \"Cream. I work pharmacy, Naklua — you know the one by the market? Big one, air-con.\" She nods at the empty chair without quite offering it.",
         short: "\"I not work here na — just visit my friend. Cream. I work pharmacy, Naklua.\"" },
       { topic: "job|pharmacy|counter|white coat|chemist|market|work",
-        text: "\"Pharmacy.\" She says the word carefully, pleased with it. \"Eight in the morning to five. White coat, hair up — you not recognise me in the daytime, I think.\" A small laugh. \"Eleven thousand baht a month. Is ok. Honest job. Tired.\" She turns the cocktail glass a quarter-turn by the stem. \"Farang come every morning for the stomach, for the sunburn, for the other thing. Some of them nice. Some of them talk talk talk.\"",
+        text: "\"Pharmacy.\" She says the word carefully, pleased with it. \"Eight in the morning to five. White coat, hair up — you not recognise me in the daytime, I think.\" A small laugh. \"Eleven thousand baht a month. Is ok. Honest job. Tired.\" She twirls the cocktail glass by the stem. \"Farang come every morning for the stomach, for the sunburn, for the other thing. Some of them nice. Some of them talk talk talk.\"",
         short: "\"Pharmacy — eight to five, white coat, eleven thousand a month. Honest job. Tired.\"" },
       { topic: "friend|your friend|near|the friend",
         text: "\"My friend?\" A vague wave at the bar, at nobody in particular. \"She work here. Long time. I come sit with her sometimes when I bored — my room is small, the TV is small, 555.\" The glass turns. \"She tell me, Cream, you crazy, come sit in bar for nothing. But I like to see people. I like to talk.\"",
@@ -12602,7 +12599,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         short: "\u201cStill out there. They don't go away. They wait for the month you can't cover.\u201d" },
       { when: (st, G) => _flag("barLost"),
         topic: "pattaya leisure",
-        text: "\u201cNot my fight any more, and not yours either.\u201d Bert turns the Singha a quarter. " +
+        text: "\u201cNot my fight any more, and not yours either.\u201d Bert picks at the corner of the Singha label. " +
           "\u201cI'd have told you a week ago that the answer was standing behind the rail more nights " +
           "than you were. I'd have been half right, which is the most annoying kind of right.\u201d",
         short: "\u201cNot my fight any more, and not yours. The answer was more nights behind the rail, and I'd only have been half right.\u201d" },
@@ -13004,7 +13001,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "trophies, the brushed table, the girls who've been here since Candy " +
           "ran it.\n\n\"I told him to hold,\" he says. \"And he held. But " +
           "holding's not a plan, bud, it's a stall, and the old man's running out " +
-          "of stall.\" He turns the Singha a quarter turn. \"Doctors want another " +
+          "of stall.\" He peels a strip off the Singha label. \"Doctors want another " +
           "go at his ticker. He's not coming back out here. He knows it, I know " +
           "it, and Gavin knows it, which is why those people are being so damn patient.\"\n\nHe finally looks at you.\n\n\"So it sells. That's not " +
           "the question. The question's who to.\" A pause. \"He'll take a regular " +
@@ -15074,7 +15071,7 @@ const _REGULARS = {
           "Everybody says they're moving up the hill. Almost nobody does.\"",
       },
       { topic: "bus|the bus|lattes",
-        text: "\"The bus.\" He turns the cold cup a quarter-turn on the rail. \"There was " +
+        text: "\"The bus.\" He nudges the cold cup along the rail. \"There was " +
           "a girl. Not from the bars — that was the whole point of her, I thought. Good " +
           "English, laughed at the right bits, and every single time she came down to see " +
           "me, she came on the bus. Baht bus, then the big bus from Ekkamai. I read that as " +
@@ -15085,8 +15082,7 @@ const _REGULARS = {
         short: "\"She always came on the bus. I read it as modesty. It was manners — so I'd never see the car.\"" },
       { topic: "dinner|wedding", req: ["bkkArcDone"],
         text: "You start to ask about it and he holds up a hand — reading something " +
-          "in your face before you've said it. \"You've been.\" Not a question. He turns " +
-          "the cold flat white a quarter-turn, studying you like a man checking a mirror for " +
+          "in your face before you've said it. \"You've been.\" Not a question. He pushes the cold flat white an inch away, studying you like a man checking a mirror for " +
           "his own scar. \"The family? Across the river?\" You nod. \"Did they ask about your " +
           "father?\" You nod. Colin exhales through his nose, almost a laugh. \"Then you know. " +
           "Nobody can tell you and everybody who knows can tell THAT you know.\" He signals for two " +
@@ -15524,7 +15520,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"1998. Lived like a lord. All gone now.\"" },
       { topic: "home", text: "For a second the performance stops. \"Maidstone. Sold " +
         "the bungalow in 2009 — split it with the wife, hers by rights, most of " +
-        "it.\" He turns the glass a quarter-turn. \"Nothing to go back for. My " +
+        "it.\" He rolls the glass between his palms. \"Nothing to go back for. My " +
         "daughter sends photos at Christmas. The grandkids are... big now.\" The " +
         "performance resumes: \"Anyway. This town's finished. Same again, love!\"",
         short: "\"Maidstone. Nothing to go back for. Anyway — this town's finished.\"" },
@@ -15551,7 +15547,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       // veterans' model is right nine nights in ten, and Nigel is not mocked).
       { topic: "darkside", req: ["neilStory"],
         text: "\"Neil?\" Something passes over the fixed forward stare and is gone. \"Out at the lake. Still.\" " +
-          "He turns the glass a quarter-turn, and then another. \"And she's — still about, is she. And a kid.\" " +
+          "He rolls the glass between his palms, and then stops. \"And she's — still about, is she. And a kid.\" " +
           "It is not a question and he doesn't make it one. \"Well.\" A long pull. \"I had three months on him. " +
           "Hundred baht a slip. Still got mine somewhere.\" He does not say whether that is a joke. \"Doesn't " +
           "change anything, son. The book's right more than it's wrong.\" The performance is a beat late " +
@@ -15854,7 +15850,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "know it better than anybody.\"",
         short: "\"Most girls are straight. The sharp ones read newbies like a menu — and the mama pays you back.\"" },
       { topic: "girlfriend",
-        text: "\"Fella I knew out here — rig money, patient sort — paid the same girl's fine so long the mamasan stopped writing his name and just put a tick.\" The bottle turns a slow quarter. \"Weren't a lie anywhere in it, that's the thing. He didn't look at nobody else. Neither did she.\" A pull, unhurried. \"Then one evenin' he tells her, darlin', pack a bag, you're done with the bar — and she says, real sweet, real puzzled, okay... and who's gonna pay mama for the nights I'm not there?\" He sets the bottle down soft, like it might bruise. \"Weren't nobody lyin', see. That's the part that'll get you. He was courtin', and she was on shift, and you cannot tell them two things apart from a stool. Every damn night of it.\" A beat. \"She told him he was different, and I believe she meant it. I believe that made it worse.\"",
+        text: "\"Fella I knew out here — rig money, patient sort — paid the same girl's fine so long the mamasan stopped writing his name and just put a tick.\" The bottle goes slowly round in his big hand. \"Weren't a lie anywhere in it, that's the thing. He didn't look at nobody else. Neither did she.\" A pull, unhurried. \"Then one evenin' he tells her, darlin', pack a bag, you're done with the bar — and she says, real sweet, real puzzled, okay... and who's gonna pay mama for the nights I'm not there?\" He sets the bottle down soft, like it might bruise. \"Weren't nobody lyin', see. That's the part that'll get you. He was courtin', and she was on shift, and you cannot tell them two things apart from a stool. Every damn night of it.\" A beat. \"She told him he was different, and I believe she meant it. I believe that made it worse.\"",
         short: "\"He was courtin'; she was on shift. Both true — that's the part that'll get you.\"" },
     ],
   },
@@ -16082,14 +16078,14 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       "window for the view of Soi 6 — the chaos observed from the calm side of the glass.",
     dialogue: [
       { topic: "angela",
-        text: "The headphone comes off, all the way, which has not happened before. \u201cWhat, the résumé?\u201d She turns the Singha a quarter. \u201cForty-seven. Twelve years navy, six years not coping with having left the navy, and then this.\u201d A pause exactly long enough to notice. \u201cI'm not going to do the bit where it turns out to be sad. It was sad. It's less sad now. I sit by a window in a warm place and nobody needs anything from me before noon.\u201d The headphone goes back. \u201cAsk me about the navy if you actually want the long one.\u201d",
+        text: "The headphone comes off, all the way, which has not happened before. \u201cWhat, the résumé?” She thumbs the Discman's lid shut. \u201cForty-seven. Twelve years navy, six years not coping with having left the navy, and then this.\u201d A pause exactly long enough to notice. \u201cI'm not going to do the bit where it turns out to be sad. It was sad. It's less sad now. I sit by a window in a warm place and nobody needs anything from me before noon.\u201d The headphone goes back. \u201cAsk me about the navy if you actually want the long one.\u201d",
         short: "\u201cForty-seven. Twelve years navy, six not coping with having left it, then this. Ask about the NAVY for the long one.\u201d" },
 
       { topic: "doyle",
         text: "She lifts one headphone. \u201cDoyle's fine.\u201d Which, from Angela, is a character reference with a seal on it. \u201cHe clocked the Discman the first night and didn't say anything clever about it. Do you know how rare that is? Every guy in here has a bit about the Discman. They've all got a bit.\u201d The headphone goes back. \u201cHe noted it and left it alone. That's a man trained not to touch the evidence.\u201d",
         short: "\u201cHe clocked the Discman and didn't say anything clever about it. Nobody else manages that.\u201d" },
       { topic: "terry",
-        text: "\u201cTerry talks.\u201d A pause you could park a bus in. \u201cNot a complaint. I don't, and it turns out a room needs one of each.\u201d She turns the Singha a quarter. \u201cHe has never once asked me why I'm here. Sixteen years of asking everybody everything, and never that.\u201d She almost smiles. \u201cI don't think it's tact. I think he's decided he already knows, and he's wrong, and I'm going to let him have it.\u201d",
+        text: "“Terry talks.” A long, considered pause. \u201cNot a complaint. I don't, and it turns out a room needs one of each.” She taps the Discman once. \u201cHe has never once asked me why I'm here. Sixteen years of asking everybody everything, and never that.\u201d She almost smiles. \u201cI don't think it's tact. I think he's decided he already knows, and he's wrong, and I'm going to let him have it.\u201d",
         short: "\u201cHe's never asked me why I'm here. He thinks he knows. He's wrong. He can have it.\u201d" },
       { topic: "mort",
         text: "\u201cThe old man writes it down properly.\u201d She says it like a verdict. \u201cI wrote in once and corrected him, and he printed it. Didn't hedge, didn't make a joke of it, printed the correction like it mattered.\u201d The Discman gets a look. \u201cI'd assumed he'd be a jerk about it. Most of them are, about being wrong.\u201d A beat. \u201cSo now I read the whole thing every night it lands, which I imagine was the plan.\u201d",
@@ -16124,8 +16120,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         asks: { key: "home", q: "She studies you a moment, unhurried. \"So where's home, before all this? Humour me.\"" } },
       { topic: "drew", text: "\"Drew. Yeah.\" The tone of a fact being filed. \"Same " +
         "schoolhouse at DLI — Korean, he was a class ahead. We weren't friends. We " +
-        "just conjugated the same verbs in the same hallways.\" She turns the " +
-        "Singha a quarter. \"Twenty-five years later his Facebook is all neon and " +
+        "just conjugated the same verbs in the same hallways.\" She thumbs the Discman's lid. \"Twenty-five years later his Facebook is all neon and " +
         "beach bars, and he looked — unstuck. I'd been stuck a long time. So.\" A " +
         "small shrug at the enormity of the decision. \"I was here four months " +
         "before I told him. He said 'huh.' We nod now, down the soi. That's the " +
@@ -16445,8 +16440,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"Wilf. Nottingham. Came for a fortnight in ninety-six. Fortnight's not finished.\"" },
       { topic: "pension|money|budget|cheap|afford|poor|broke|pension day|monthly|exchange rate|the rate|pound",
         text: "\"State pension and a bit of a works one, paid into a Nottingham account, drawn here at " +
-          "whatever the rate's doing. Which since twenty-thirteen has been *taking*.\" He turns the " +
-          "plate a quarter. \"Room's four thousand. Plate's fifty. Beer's nothing, because I don't. " +
+          "whatever the rate's doing. Which since twenty-thirteen has been *taking*.\" He squares the plate to the table edge. \"Room's four thousand. Plate's fifty. Beer's nothing, because I don't. " +
           "I don't do the sums where you can see them and I don't need to.\" A nod down the " +
           "table. \"Nobody here does. We all know what everybody's monthly is. It's never mentioned.\"",
         short: "\"Pension, drawn at whatever the rate's doing — since twenty-thirteen, taking. Room four thousand, plate fifty. Never mentioned.\"" },

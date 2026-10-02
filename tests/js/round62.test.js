@@ -185,3 +185,22 @@ test("facts the readers caught stay caught", () => {
   assert.ok(!t("macca", /full fare/), "Tan takes no fare");
   assert.ok(!t("superman", /The bay is going gold/), "no sunset asserted at any hour");
 });
+
+// ── The quarter-turned glass is Tan's (Mario, 2026-10-02) ───────────────────────────
+// The officer's coffee cup turned a quarter is "Tan's exact gesture" — the one reveal that the
+// officer learned something from Tan — and nineteen other characters did it first, so it could
+// not land. Tan and the officer only; everybody else has business of their own with a glass.
+test("only Tan and the officer turn a glass a quarter", () => {
+  const RX = /(?:turns?|spins?|gives? it)\b[^.!?]{0,40}\ba (?:slow |friendly )?quarter(?![- ]inch)|quarter-turn of\b/i;
+  const off = [];
+  for (const id of Object.keys(NPCS)) {
+    if (id === "tan") continue;
+    const n = NPCS[id];
+    for (const s of [n.desc, ...(n.dialogue || []).flatMap(d => [d.text, d.short])]) if (s && RX.test(String(s))) off.push(id);
+  }
+  assert.deepEqual([...new Set(off)], []);
+  for (const f of ["engine-core", "engine-encounters", "engine-play", "engine-systems", "engine-parser"]) {
+    const src = readFileSync(W + f + ".js", "utf8");
+    for (const m of src.matchAll(/^function (\w+)[\s\S]*?^}/gm)) if (RX.test(m[0].replace(/"\s*\+\s*"/g, ""))) assert.ok(["_ccibVisit", "_ccibCoffee"].includes(m[1]), f + ": " + m[1]);
+  }
+});

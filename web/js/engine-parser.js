@@ -5973,7 +5973,7 @@ const _THAI_WORD_TALK = {
   },
   sanuk: {
     thai: n => `"Sanuk?" ${n} laughs, because the question is the answer. "Everything must be sanuk. Work must be sanuk, or why work? If not sanuk, we go home." A shrug that has closed more arguments than it sounds like.`,
-    farang: n => `"Sanuk." ${n} turns the glass a quarter turn. "It's the whole country in five letters. If a thing stops being fun they'll stop doing it, and no amount of your shouting changes that. Took me about six years to stop shouting."`,
+    farang: n => `"Sanuk." ${n} taps the rim of the glass. \"It's the whole country in five letters. If a thing stops being fun they'll stop doing it, and no amount of your shouting changes that. Took me about six years to stop shouting."`,
   },
   maipenrai: {
     thai: n => `"Mai pen rai." ${n} says it the way you would say 'of course' — and then, seeing that you want more: "Is finish. No problem. Why you carry it?"`,
@@ -10323,7 +10323,7 @@ function _leagueTalk(npc) {
 const _WORK_JOB = {
   hostess: [
     n => `"What I do?" ${n} looks faintly amused that it needs saying. "I sit. I talk. I drink with customer, I laugh at joke not funny. Six night, sometime seven." A small shrug. "Is not hard work. Is long work. Not the same thing, na."`,
-    n => `"Job?" ${n} thinks about how to put it. "Make the man happy he came. That is all of it." She turns her glass a quarter turn. "Some night is easy. Some night is acting. You never know which one until you sit down."`,
+    n => `"Job?" ${n} thinks about how to put it. "Make the man happy he came. That is all of it." She runs a finger round the rim of her glass. \"Some night is easy. Some night is acting. You never know which one until you sit down."`,
     n => `"I work the floor." ${n} says it plainly. "Come six, go when the last man go. Talk, drink, sometime dance if the song good." A beat. "Everybody think is party. Is a shift, tilac. Party is what the customer is having."`,
   ],
   cashier: [

@@ -2465,7 +2465,7 @@ const _LADYBOY_PASS = [
 // SHE reads HIM, and the room loves them both for it.
 const _LADYBOY_PASS_CAB = [
   n => _fmt("{n} receives the flirt, holds it up to the light like a tipped note, and hands it to the room: \"He is FLIRTING with me, everybody!\" The crowd roars. \"Tilac, you are adorable, and you are also a tourist in more ways than one, na.\" She pats your cheek, precise as choreography. \"Stay for the show. THAT part is for you.\"", { n }),
-  n => _fmt("A beat, an eyebrow, and {n} reads you all the way down — the curiosity, the beer, the vacation — and grades it kindly. \"You don't want what you think you might want, tilac. Is okay. Half this room came in not sure and they are having the best night of the year.\" She spins your drink a quarter-turn like a compass. \"Watch. Cheer. Tip. That is your part, and you will be wonderful at it.\"", { n }),
+  n => _fmt("A beat, an eyebrow, and {n} reads you all the way down — the curiosity, the beer, the vacation — and grades it kindly. \"You don't want what you think you might want, tilac. Is okay. Half this room came in not sure and they are having the best night of the year.\" She points your drink at the stage like a compass needle. \"Watch. Cheer. Tip. That is your part, and you will be wonderful at it.\"", { n }),
 ];
 function _ladyboyGate(id) {
   if (!NPCS[id] || !NPCS[id].ladyboy) return false; // not a ladyboy → proceed
