@@ -11723,6 +11723,9 @@ function doCommand(input) {
       : /^(journal|notes|diary)$/.test(lower) ? () => _doJournal("")
       : /^((check |read )?messages|msgs|inbox|check phone)$/.test(lower) ? _readMessages
       : /^(diagnose|how am i|status)$/.test(lower) ? _doDiagnose
+      : /^(books|takings|accounts)$/.test(lower) ? _doBooks   // the owner's own page, under the affair's question (Greta, round 61)
+      : /^(who|blackbook|black book)$/.test(lower) ? _doBlackbook
+      : /^(debt|debts)$/.test(lower) ? _doDebt
       : null;
     if (_free) { _free(); if (typeof _renderResume === "function") _renderResume(); return; }
   }

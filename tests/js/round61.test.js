@@ -150,3 +150,19 @@ test("every dancer wears a number; the house answers for them; TRAVEL pockets th
   G.room = NPCS[away].room; const col = _npcsHere().find(i => NPC_ROLES[i] && i !== away); assert.ok(col);
   out = []; run("ask " + col + " about " + away); assert.match(said(), /Bangkok/);
 });
+
+// ── the deferred three ───────────────────────────────────────────────────────
+test("a confidence is told once by her and once by the town; a stepped-back girl keeps her distance for the month; BOOKS answers under a prompt", () => {
+  G.soc.drinks = { lek: 9, noi: 9, fon: 9 };
+  const pool = _BOND_TALK[2]; const seen = new Set();
+  for (let k = 0; k < pool.length + 6; k++) { const l = _bondPick(["lek", "noi", "fon"][k % 3], 2, pool); if (l) { assert.ok(!seen.has(l), "the town tells a secret once"); seen.add(l); } }
+  assert.equal(seen.size, pool.length, "every line went out once, and then nothing");
+  G.room = _npcRoom("lek"); out = []; _bondTalk("lek"); assert.ok(_BOND_SPENT.some(f => said().includes(f("Lek").slice(0, 30))), said());
+  // the stepped-back affair girl
+  G.stage = "expat"; for (const f of ["expatLife", "barPartner", "partnerCandy", "barPaid", "barOpen"]) _setFlag(f);
+  G.room = "stinky_bar"; G.soc.drinks.manow = 14; G.affairCool = G.day; G.affairCoolWho = "manow"; G.talked.manow = [0];
+  out = []; assert.ok(_ownBarTalk("manow", null)); assert.ok(_REL_GREET_STEPPED.some(f => said().includes(f("Manow").slice(0, 30))), said());
+  // BOOKS under a prompt
+  G.pendingChoice = "affair"; out = []; run("books"); assert.match(said(), /THE STINKY PINKY/); assert.equal(G.pendingChoice, "affair");
+  G.pendingChoice = null;
+});

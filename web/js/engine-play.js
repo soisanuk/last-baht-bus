@@ -3446,21 +3446,33 @@ function _lekPriceNight() {
     !_flag("fed26") && !(G.game && G.game.type === "pool") && !_leagueTonight();
 }
 
-function _bondPick(id, tier, pool) {
+function _bondPick(id, tier, pool, skip) {
   const said = (G.soc.bondSaid = G.soc.bondSaid || {});
   const mine = said[id + ":" + tier] = said[id + ":" + tier] || [];
   const heard = (G.soc.bondHeard = G.soc.bondHeard || {})[tier] = (G.soc.bondHeard[tier] || []);
-  let pick = pool.map((_, i) => i).filter(i => !mine.includes(i));
+  // `skip` is a set of INDICES into the full pool — the caller used to hand in a filtered copy,
+  // which shifted every index the books were keeping (the "yesterday you no come" variant was
+  // marked told when its neighbour was)
+  let pick = pool.map((_, i) => i).filter(i => !mine.includes(i) && !(skip && skip.includes(i)));
   // the room's own cast: "the new girl lazy" from a woman who works alone (Dieter, round 56)
   const _fit = new Set(_roomFit(pool).map(l => pool.indexOf(l)));
   if (pick.some(i => _fit.has(i))) pick = pick.filter(i => _fit.has(i));
-  if (!pick.length) { mine.length = 0; pick = pool.map((_, i) => i); }   // she has told you everything: round again
+  // A CONFIDENCE IS TOLD ONCE — by her, and by the town. The old fallbacks ("round again"
+  // for her, the heard list for the town) handed Greta one secret from three women in a
+  // fortnight (round 61). Nothing fresh means nothing: the caller prints the everyday line.
   const fresh = pick.filter(i => !heard.includes(i));
-  const i = (fresh.length ? fresh : pick)[_hh(id + ":bond" + tier + ":" + mine.length, 17) % (fresh.length ? fresh.length : pick.length)];
+  if (!fresh.length) return null;
+  const i = fresh[_hh(id + ":bond" + tier + ":" + mine.length, 17) % fresh.length];
   mine.push(i);
-  if (!heard.includes(i)) heard.push(i);
+  heard.push(i);
   return pool[i];
 }
+// a bonded woman with no confidence left tonight — warm, ordinary, and nobody else's line
+const _BOND_SPENT = [
+  n => `${n} is glad to see you in the plain way, which is the real way: a hand on your arm, your drink before you ask, and nothing to tell you tonight because she has told you the things, and that is what being told things buys.`,
+  n => `${n} sits, and does not perform, and asks about your day as if your day were a thing. It is quieter than the first nights. It is better than the first nights.`,
+  n => `${n} leans on the rail beside you and watches the room with you instead of working you, which is the most expensive thing on the menu and is not on it.`,
+];
 // Your own staff, at the bar you own, talk to you as the guv'nor — not as a
 // walk-in to be greeted and pitched (Keith, 2026-08-26: a filler mamasan offered
 // to introduce the OWNER to his own girls; a hostess asked her employer "first
@@ -3685,7 +3697,12 @@ function _ownBarTalk(id, topic) {
   // bonded employee to _deliver's topicless node — "New face. Good. I am the
   // mamasan" from the woman who had called him boss for three weeks, with the
   // first-names tag under it (Malcolm, round 47, nights 22–23).
-  if (!topic && _bondTier(id) >= 2) { _bondTalk(id); return true; }
+  if (!topic && _bondTier(id) >= 2) {
+    // a STEP BACK holds for the month in her hello too — four nights after it Manow had her head on
+    // his shoulder, "my farang… everything off the clock" (Greta, round 61)
+    if (G.affairCool && G.affairCoolWho === id && G.day - G.affairCool < 30) { _say(_pickVary(_REL_GREET_STEPPED, "relstepped")(NPCS[id].name), "dim"); return true; }
+    _bondTalk(id); return true;
+  }
   return false;
 }
 
@@ -3847,8 +3864,9 @@ function _bondTalk(id) {
   // spent the previous night WITH her (one-girl playtest 2026-08-22). G.seenDay
   // records the last day you sat with her; skip that variant if it was yesterday.
   const last = (G.seenDay || {})[id];
-  if (t === 2 && last != null && last >= G.day - 1) pool = pool.filter((_, i) => i !== 0);
-  _say(_bondPick(id, t, pool)(NPCS[id].name), t >= 3 ? "win" : "");   // hers first, then the town's — see _bondPick
+  const skip = (t === 2 && last != null && last >= G.day - 1) ? [0] : [];
+  const line = _bondPick(id, t, pool, skip);   // hers first, then the town's — see _bondPick
+  _say((line || _pickVary(_BOND_SPENT, "bondspent:" + id))(NPCS[id].name), line && t >= 3 ? "win" : "");
 }
 
 // Diminishing returns on raw conquest — the hedonic treadmill (see the
