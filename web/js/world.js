@@ -6336,15 +6336,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "see. Kind to you, and not quite here.",
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Hello ka.\" A soft, real smile that doesn't quite reach wherever she's gone. \"You want " +
-          "company? I sit. I not so good talking tonight, but I sit nice.\" And she does — a warm, quiet " +
+        text: "A soft, real smile that doesn't quite reach wherever she's gone. She moves her bag off the next stool without being asked. \"Sit, na. I not so good talking tonight, but I sit nice.\" And she does — a warm, quiet " +
           "presence with the volume of the room turned down around her.",
         short: "\"I not so good talking tonight, but I sit nice.\"",
         asks: { key: "home", q: "\"You far from home too?\" She asks it like it matters. \"Everybody here far from home. Some people it don't bother. Me—\" a small shrug \"—me it bother.\"" } },
       { topic: "home", text: "\"Loei. By the river.\" Her whole face changes — softer, younger. \"My " +
         "grandmother house, the mango tree, the morning cold. Real cold, you see your breath. Here never " +
         "cold.\" The smile fades to the middle distance. \"Two more year. Then home. I count the month.\"" },
-      { topic: "sad", bond: 2, text: "\"You are kind to ask.\" She looks at you properly for the first time. " +
+      { topic: "sad", bond: 2, text: "\"You are kind to ask.\" She comes back from wherever she was, and looks at you. " +
         "\"Not sad exactly. Just — I am here, but I am there. All the time, both. Ten hour I smile, and in my " +
         "head I am picking mango.\" A tired little laugh. \"Homesick don't kill nobody. Just make the night " +
         "long.\"",
@@ -6392,9 +6391,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "plan", text: "\"Plan is...\" Deep thought. \"...be happy? Yes. Plan: happy.\" A satisfied nod, " +
         "the philosophy complete. \"My friend Nangfah, she have the big plan, the book, the number — make my " +
         "head hurt. Me, I do the happy. Somebody have to do the happy, na.\"" },
-      { topic: "money", text: "\"I don't count good.\" Cheerfully, no shame. \"Mama keep my money. She honest, " +
-        "she love me, she give me when I need. I keep it myself, gone in one day. I know myself!\" She beams, " +
-        "genuinely proud of the self-knowledge, which is, in fairness, more than some manage." },
+      { topic: "money", text: "\"Gold.\" She says it like a secret she is pleased to share. \"Every month, one small piece — one salueng, from the shop by the market. Money in my hand, gone in one day. Gold in the drawer, it stay.\" She beams. \"My grandmother do the same. She have a whole necklace now.\"" },
     ],
   },
   // Chaba (Cherry Pop) — the glorious-hurricane drunk. type:"drunk" → the mao vector.
@@ -6413,9 +6410,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "water, pretend. Not Chaba. I give the customer real party, so they buy real bottle. Good for " +
         "business.\" Already three ahead of you. \"Bad for—\" she waves vaguely at all of herself, laughing " +
         "\"—this. Cheers!\"" },
-      { topic: "okay", text: "\"Aiy, you sound like my mama.\" Sharp for a flash, then swallowed in a big " +
-        "laugh. \"I am FINE, I am the best! Tomorrow I feel like dying — but tomorrow is not invited to " +
-        "tonight. You worry too much. DRINK.\"" },
+      { topic: "okay", text: "\"Aiy, you sound like my mama.\" Sharp for a flash, then swallowed in a big laugh. \"Okay? I am top seller three month running, tilac. Tomorrow I feel like dying — but tomorrow does not sell bottle. You worry too much. DRINK.\"" },
     ],
   },
   // Pukky (The Shady Lady, beer) — the good egg; beer-bar warmth, the honest slow lane.
@@ -6435,9 +6430,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "beer bar", text: "\"Go-go is a show. Here is a bar.\" No judgement either way. \"Some man want " +
         "the lights and the loud. Some man just want a cold one and somebody nice to drink it with, no games. " +
         "Those men, they come here. They come back, too.\"" },
-      { topic: "money", text: "\"I make less than the go-go girl, sure.\" A comfortable shrug. \"But I sleep at " +
-        "night, I don't do the games, nobody scam nobody. Slow money, clean money. I send home a little less, I " +
-        "keep my—\" she taps her chest \"—this. Fair trade, for me.\"" },
+      { topic: "money", text: "\"I make less than the go-go girl, sure.\" A comfortable shrug. \"But the go-go girl buy a new {{phone}} every month to look busy, and I buy one every three year. My sister's fees come out the same either way.\" She taps her chest. \"And I keep this. Fair trade, for me.\"" },
       // Courtship arc (playtest 2026-08-22: the flagship Soi-6 beer-bar girl had
       // fewer personal topics than a filler hostess). Bond-gated, in her calm,
       // no-hustle register — the deeper "home" node (bond 2) is ordered before the
@@ -6477,7 +6470,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Alright.\" A nod, like to a mate. \"Sit, watch the game. Fair warning — I don't do the " +
           "sweetheart thing, I'm rubbish at it, and you look like you got enough people lying to you already.\" " +
-          "She turns back to the TV. \"United? Please tell me you are not United.\"",
+          "She turns back to the TV. \"Who you support? Wrong answer gets a warm one.\"",
         short: "\"Sit, watch the game. I don't do the sweetheart thing — I'm rubbish at it.\"" },
       { topic: "football", text: "\"Liverpool, since I am small.\" She lights up, all business. \"My uncle " +
         "drive taxi Bangkok, always the match on the radio. I learn English from the football commentary " +
@@ -6621,23 +6614,20 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "whole product. Watch all you like. Just tip while you do it.\"",
         short: "\"You watch the room like somebody pays you to. ...Was pay you. Not my business. Watch all you like — tip while you do.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
-        text: "\"A regular. A proper one.\" Approval, rare from her. \"Fixed money, long memory, no surprises — " +
-          "my favourite kind of farang.\" She tips her chin down the rail. \"The old ones there will adopt you " +
+        text: "\"A regular. A proper one.\" Approval, rare from her. \"The kind who come the same night every week, because it is that night. My accountant love you, and he never meet you.\" She tips her chin down the rail. \"The old ones there will adopt you " +
           "before your first beer go warm. Go sit with them, tilac. They tip in stories, and the stories at " +
           "least are free.\"",
-        short: "\"A regular, proper one — fixed money, long memory. The old ones will adopt you; they tip in stories, and those are free.\"" },
+        short: "\"A regular, proper one — same night every week. The old ones will adopt you; they tip in stories, and those are free.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
-        text: "\"First real freedom, and money in the pocket the first time in your life — I see it, tilac, you " +
-          "are lit up like the sign outside.\" Not unkind. A warning folded into it. \"So I tell you one time, " +
+        text: "\"You are lit up like the sign outside, tilac — new money, and nobody at home to ask where it go. I see it from here.\" Not unkind. A warning folded into it. \"So I tell you one time, " +
           "for free, because you remind me of my first year here too: this town LOVE exactly you. The happy " +
           "one who cannot believe his luck. Spend slow. The luck is the bar's, not yours.\"",
         short: "\"Lit up like the sign outside — first freedom, money in the pocket. This town loves exactly you. Spend slow; the luck is the bar's.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
         text: "\"You are not really here for the girls.\" Gentle, for Peung. \"You are here to be somewhere that " +
           "is not THERE. Wherever there is.\" She sets the beer down without a bill on it, this once. \"Is " +
-          "okay, tilac. Half my customer the same. We don't ask the question in here — that is the product. " +
-          "Sit. Be nobody a while. Nobody is very comfortable, if you let it.\"",
-        short: "\"You're not here for the girls — you're here to be somewhere that is not there. Half my customer the same. Sit. Be nobody a while.\"" },
+          "okay, tilac. Half my customer the same. Nobody here ask where, and I don't sell the answer. Sit. In here you are the man on stool six, and stool six has no past.\"",
+        short: "\"You're not here for the girls — you're here to be somewhere that is not there. Half my customer the same. Stool six has no past.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit, sit. Cold beer coming — you didn't ask, is fine.\" Brisk, unbothered, a woman who has run " +
           "this floor through three owners. \"Old jukebox, new app, same job: keep the men happy and the till " +
@@ -6731,18 +6721,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "money. I tell you this as a FRIEND, and I never tell customer that.\"",
         short: "\"Investor face — you look at my bar like you want to own one. Buy a drink first, tilac, much cheaper than a bar.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pi"),
-        text: "\"You watching the room, not the girls.\" A shrewd flash under all the loud. \"Police eyes. " +
+        text: "\"You look at the door every time it open.\" A shrewd flash under all the loud. \"Police eyes. " +
           "Ex-police, maybe. Relax, tilac — nothing happen in MY bar the envelope don't already know about. " +
           "Drink. Watch. Whatever make you happy. Just tip the girl for standing in your eyeline.\"",
         short: "\"You watching the room, not the girls — police eyes. Nothing happens in my bar the envelope don't know. Watch all you like.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
-        text: "\"A regular! A REAL one!\" Toi beams like you're family. \"Fixed money, good manner, no drama — " +
-          "you, I keep the cold beer special. Sit by the rail with the old boys, tilac. They so boring you will " +
+        text: "\"A regular! A REAL one!\" Toi beams like you're family. \"Same stool every trip, same beer, never one problem — you, I keep the cold beer special. Sit by the rail with the old boys, tilac. They so boring you will " +
           "fit right in — ha! I love them. Don't tell them.\"",
-        short: "\"A REAL regular — fixed money, no drama. Sit with the old boys by the rail, tilac, you'll fit right in.\"" },
+        short: "\"A REAL regular — same stool every trip. Sit with the old boys by the rail, tilac, you'll fit right in.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
         text: "\"First big trip! I see it, tilac — you SHINE.\" She loves it and warns it in the same breath. " +
-          "\"Money in the pocket, no boss, whole town saying yes to you. Enjoy, enjoy — but slow, na? The shine, " +
+          "\"No boss, no wife's sister, whole town saying yes to you. Enjoy, enjoy — but slow, na? The shine, " +
           "the bar want to buy it off you cheap. Grandma Toi telling you free.\"",
         short: "\"First big trip — you SHINE. Money in the pocket, no boss. Enjoy, but slow, na — the bar wants to buy that shine off you cheap.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
@@ -6781,12 +6770,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Saeng watches and counts — she reads your MANNER dry and unhurried, from the
       // till, having already priced you against tonight's take.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("charmer"),
-        text: "\"A charmer.\" Saeng barely lifts her eyes from the till, unimpressed and unbothered. \"Save it " +
-          "for the girls, tilac — I already counted you. The charm work on them. On me, it just make the " +
+        text: "\"Save it, tilac.\" Saeng barely lifts her eyes from the till, unimpressed and unbothered. \"The smile is for the girls — I already counted you. The charm work on them. On me, it just make the " +
           "evening pleasant while you spend.\"",
         short: "\"A charmer — save it for the girls, I already counted you. On me it just makes the evening pleasant while you spend.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
-        text: "\"Funny man.\" A small, economical smile that costs her nothing. \"Wilai will play with you — she " +
+        text: "\"You smile before you sit.\" A small, economical smile back that costs her nothing. \"Wilai will play with you — she " +
           "like a live one. Me, I laugh when the till laugh. So far tonight, tilac, we both very quiet.\"",
         short: "\"Funny man. Wilai will play with you. Me, I laugh when the till laughs — so far tonight we're both quiet.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
@@ -6795,10 +6783,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the way you like it.\"",
         short: "\"Straight talker — then straight: Wilai's the show, the show's not free, I count what it earns. Enjoy her, pay me.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
-        text: "\"Mm.\" Saeng finally looks up, and something behind her eyes recalculates. \"You watch the room " +
-          "the way I watch the room. An operator.\" A dry beat. \"Then you already see it — Wilai is the bait, " +
-          "the bar is the hook. Knowing never once stopped a hungry man. Sit. Be hungry professionally.\"",
-        short: "\"You watch the room the way I do — an operator. Then you see it: Wilai's the bait, the bar's the hook. Knowing never stopped a hungry man.\"" },
+        text: "\"Mm.\" Saeng finally looks up, and something behind her eyes recalculates. \"You count the bar the way I count the bar — the doors, the girls, who is paying. An operator.\" A dry beat. \"Then you already see it — Wilai is the bait, the bar is the hook. Seeing the hook is free, tilac. The bait still cost. Sit. Be hungry professionally.\"",
+        short: "\"You count the bar the way I do — an operator. Then you see it: Wilai's the bait, the bar's the hook. Seeing the hook is free; the bait still cost.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("whiteknight"),
         text: "\"Ohh. A careful one, this.\" She says it almost to herself, almost a sigh. \"The good heart. " +
           "Wilai eat the good hearts for breakfast, tilac, and I count what she leave on the plate.\" A shrug, " +
@@ -6834,7 +6820,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "take it from you here.\"",
         short: "\"A regular — you sit like a man who owns the stool. Keep the chair all night, nobody takes it here.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
-        text: "\"First time with money in the pocket and nobody telling you no.\" She reads the shine, and " +
+        text: "\"You read my price board like you cannot believe it. First time with money and no boss, I think.\" She reads the shine, and " +
           "unlike the go-go mamas she only wants to keep it safe. \"You come to the right bar to start, tilac. " +
           "Nobody scam you here. Learn the soi slow, from a place that won't rob you first.\"",
         short: "\"First money in the pocket, nobody telling you no. Right bar to start — learn the soi slow, from a place that won't rob you first.\"" },
@@ -6864,7 +6850,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Football-bar mama, drama kept outside — a few signature PERSONALITY reads
       // framed through the match; everyone else gets the plain kickoff welcome.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
-        text: "\"Ha — a funny one. Good, we need the noise.\" Half an eye stays on the screen. \"You'll fit the " +
+        text: "\"Ha — good, a loud one. We need the noise.\" Half an eye stays on the screen. \"You'll fit the " +
           "Saturday crowd fine, tilac. One rule: no jokes during a penalty. That, even I cannot forgive.\"",
         short: "\"A funny one — you'll fit the Saturday crowd. One rule: no jokes during a penalty.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
@@ -6872,7 +6858,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "nod. \"You'll do fine here, tilac. Beer's cold, ref's blind, sit down.\"",
         short: "\"Straight talker — football people, no soft-soap. You'll do fine. Beer's cold, ref's blind, sit down.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
-        text: "\"You're watching the room and the match both.\" She half-approves, half-warns. \"Careful man. " +
+        text: "\"Your eyes keep leaving the match.\" She half-approves, half-warns. \"Careful man. " +
           "But nothing to work in here, tilac — just football and cold beer. Switch it off a while. Even the " +
           "angles take a night off for a good game.\"",
         short: "\"Watching the room and the match both — careful man. Nothing to work here, just football. Switch it off a while.\"" },
@@ -7048,7 +7034,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "sponsor", when: () => _sponsorFlipped("baimon"),
         text: "The photo is turned face-down now; she did it herself, earlier, and hasn't turned it back. " +
           "\"Don't. Whatever you going to say — don't.\" Quiet, not looking at you. \"You have more money than " +
-          "Dave. I found that out tonight, and now I cannot un-know it, and Dave is in Perth and you are " +
+          "Dave. I found that out tonight, and now it is in my head and it does not go out, and Dave is in Perth and you are " +
           "here.\" Her hands are very still on the till. \"He said a good girl deserve better. Turn out " +
           "'better' just mean 'more'. Okay. Okay.\"",
         short: "\"You have more money than Dave. A good girl deserve better — turn out 'better' just mean 'more'.\"" },
@@ -7119,9 +7105,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "allow it, and honestly nobody bother. You relax.\"",
         short: "\"Cold one? I'll ring it in. Small numbers, honest customers — you relax.\"" },
       { topic: "money", text: "\"No games here.\" She taps the till, content. \"The go-go till, aiyo — the " +
-        "markup, the padded bill, the mama cut, the fine that move. So much arithmetic, so much watching. Here, " +
-        "a beer is a beer, the price on the board is the price. I sleep at night. Small money, clean " +
-        "conscience. My kind of maths.\"" },
+        "markup, the padded bill, the mama cut, the fine that move. So much arithmetic, so much watching. Here, a beer is a beer, the price on the board is the price. Boring, na? Boring is how the till balance at the end of the night.\"" },
     ],
   },
   nu: {
@@ -7595,7 +7579,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "the edge of things. Great fun for exactly ninety minutes.",
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"YOU. I like you — come, sit, we drink!\" Magnetic, and already three ahead of you. \"Tonight " +
+        text: "\"YOU. I like you — come, sit, we drink!\" Magnetic, and her glass already empty. \"Tonight " +
           "we have fun, BIG fun, no sad face allow at my table.\" It is genuinely a good time. It will stay a " +
           "good time for about an hour.",
         short: "\"You! Sit, we drink, big fun — no sad face at my table.\"" },
@@ -7625,9 +7609,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "plan", bond: 2, text: "\"My dream small — I know people say too small.\" A shy smile. \"I want " +
         "marry a good man, have one baby, little house, my mama close. That is all.\" She shrugs, content. \"Not " +
         "exciting, na. But I sleep good when the thing I want is simple.\"" },
-      { topic: "family", text: "\"I send home every month, never miss. My little sister, she in school — first " +
-        "one in my family.\" Her whole face lights. \"She going to be teacher. I work here, she read book. Good " +
-        "trade, na.\"" },
+      { topic: "family", text: "\"I send home every month, never miss. My little brother, he learn aircon repair in Udon. Aircon, in Isan, is gold mine.\" Her whole face lights. \"He fix, I pay. Good trade, na.\"" },
     ],
   },
   // Dear (Sunset Dreams) — genuinely dim, and written with affection, never mockery.
@@ -7710,8 +7692,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "I start now, because you ask nice?\"" },
       // farang-tier — one real, undramatic thing, then done
       { topic: "family", bond: 3, text: "She decides you've earned a straight answer. \"I have one boy. Nine " +
-        "year. He live with my mother, Sisaket. He think I work in hotel — one day he grow up, he know I lie. " +
-        "That day I don't look forward.\" She wipes a bar that is already clean. \"That everything. Don't make " +
+        "year. He live with my mother, Sisaket. He think I work in restaurant. I send him photo from the kitchen here — the plate, never me. One day he grow up, he know I lie. That day I don't look forward.\" She wipes a bar that is already clean. \"That everything. Don't make " +
         "sorry face.\"" },
       { topic: "family", text: "\"My family my business, not bar business.\" She refills your water without " +
         "being asked. \"Nice try, though.\"" },
@@ -7935,7 +7916,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "plan", text: "\"Plan?\" The word does not land. \"Tonight, I plan to have fun. Tomorrow—\" a " +
         "shrug, a grin, gone already \"—tomorrow is tomorrow, na. You think too much, handsome. Dance!\"" },
       { topic: "family", text: "\"I send my mama money when I have it. Sometime I forget.\" No guilt, no drama " +
-        "— she is simply not built for it. \"She understand. I am the fun one. Every family have one fun one.\" " +
+        "— she is simply not built for it. \"She understand. Every family need one who is not serious, and my sister already take the serious job.\" " +
         "She's already watching the door for the next friend." },
       { topic: "home", text: "\"Ubon. Boring! Here is not boring.\" She waves the whole subject away. \"Why you " +
         "want talk boring thing? Buy me one more, we dance, you forget your problem, I forget your name — " +
@@ -8104,9 +8085,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"A returner — you know the dance, so I won't waste the music. You know exactly what you came for. Refreshing.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
         choices: _KES_VET,
-        text: "\"You wore a ring here once.\" She notes it without judgement — a fact for the ledger. \"A man " +
-          "who married one holds his money like he learned the hard way, and says thank you like he means it. " +
-          "Then I will not need to explain anything to you. Sit where you like, tilac.\"",
+        text: "\"You wore a ring here once.\" She notes it without judgement — a fact for the ledger. \"A man who married one here has read the menu from the other side of the table. Then I will not need to explain anything to you. Sit where you like, tilac.\"",
         short: "\"You wore a ring here once — a man who married one learned the hard way. I won't need to explain anything. Sit.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
         choices: _KES_VET,
@@ -8129,7 +8108,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Twenty years of you, maybe — you remember when I was owner, not manager. You're a witness. I keep witnesses close.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
         choices: _KES_VET,
-        text: "\"First real freedom, money you never had before — I see it in one pass.\" The gaze softens a " +
+        text: "\"A severance. I can always tell — you spend like the money has a date on it.\" The gaze softens a " +
           "fraction and prices you anyway. \"A thousand of you walk in lit up and walk out lighter, tilac. " +
           "Spend careful. The bar will not love you back — but I tell you that honestly, which is more than most " +
           "on this soi will bother to.\"",
@@ -8137,10 +8116,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
         choices: _KES_VET,
         text: "\"You are hiding.\" Flat, quiet, and not a threat at all. \"I know the look — I wore it myself, " +
-          "running from Pattaya Leisure's lawyers inside my own bar. We do not ask the question here, tilac, and we " +
-          "are very, very good at not asking. You are safe to be nobody. It is the one thing this soi sell " +
-          "honest.\"",
-        short: "\"You are hiding — I know the look, I wore it running from Pattaya Leisure's lawyers in my own bar. Here you're safe to be nobody.\"" },
+          "running from Pattaya Leisure's lawyers inside my own bar. We do not ask the question here, tilac, and we are very, very good at not asking. That one thing, this soi sells honest.\"",
+        short: "\"You are hiding — I know the look, I wore it running from Pattaya Leisure's lawyers in my own bar. Here we're very good at not asking.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Come in, come in. My girls will not bite unless you tip for it.\" The practised smile " +
           "arrives on schedule; the eyes take a beat longer. \"You want a drink, a girl, a quiet corner — " +
@@ -8592,7 +8569,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "ask me about the PARTNER. Better: buy me a beer and ask me both.\"",
         short: "\"Turnkey, up the soi, signing end of the week. Ask me about the DEAL or the PARTNER.\"" },
       { text: "\"Mate! Siddown, siddown — oi, one for my friend here.\" A bottle of Sang Som and a fresh glass " +
-          "arrive before you can decline. Wayne is three ahead of you and delighted about everything. \"Wayne. " +
+          "arrive before you can decline. Wayne is several rounds ahead of you and delighted about everything. \"Wayne. " +
           "Earthmoving, twenty years, sold the lot. Now I'm gettin' INTO something out here — proper business, " +
           "not this—\" a magnanimous wave at the bar keeping him \"—the OWNERSHIP side.\" He taps the bar. \"You " +
           "want in on the ground floor of anything, this town, you come see Wayne.\"",
@@ -9169,7 +9146,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // does — he was pitching the pre-purchase coffee to his own partner and
       // "not yet, maybe later" to "partner" (Rolf, round 54)
       { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan"],
-        text: "\"Our bar.\" He says it the way other men say the weather — a fact, no weight on it. \"Fifty-one is a " +
+        text: "\"Our bar.\" He says it flat — a fact, no weight on it. \"Fifty-one is a " +
           "name on a paper in a drawer at the land office where my wife's cousin works, and the paper has never " +
           "been out of the drawer.\" The glance in the mirror. \"You run it. I do not come. If I come, it is because " +
           "I am asking for something, and I will say so.\"",
@@ -9555,7 +9532,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // The facts he'll give anyone; the raw part — Laurent himself — he saves for
       // someone who's stuck around, not another stranger who'll vanish like the rest.
       { topic: "laurent|vasseur", when: (st) => st.trust < 2, deflect: true,
-        text: "The name lands and he looks at you properly for the first time. \"Laurent Vasseur. You a " +
+        text: "The name lands, and he stops performing. \"Laurent Vasseur. You a " +
           "reporter? A lawyer? One of his?\" He decides you're probably not — but not all the way. \"I've " +
           "poured this out to too many strangers already, and every one of 'em nodded and left and nothing " +
           "changed. Buy a round. Stick around. Prove you're just a guy at a bar. Then I'll tell you what he is.\"",
@@ -9932,17 +9909,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "need somewhere to be. By dark, same chair, same men. Home away from home. " +
           "The home they wanted, na.\"" },
       { topic: "wife", text: "\"Every man here have a wife somewhere — Naklua, " +
-          "Jomtien, Manchester.\" She examines a nail. \"I know all the name. I never " +
-          "say them. That is the business, tilac — not the girls. The quiet. A man pay " +
-          "more for quiet than for anything a girl can do.\"" },
+          "Jomtien, Manchester.\" She examines a nail. \"I know all the name. I never say them. That is the business, tilac — not the girls. The quiet is what they come back for. The girls, they can get anywhere.\"" },
       { topic: "orchid room|the orchid room|good room|the good room|nune|pae|gyp|the good table",
         text: "\"The good room.\" Rose does not look toward any door. \"There is a room in this town that is not mine to " +
-          "talk about, and you have just named it. I keep witnesses close, I do not keep that.\" She refills your " +
+          "talk about, and you have just named it. Some things I keep. That one I do not.\" She refills your " +
           "glass. \"Ask the man who drives you. He knows which rooms he has never been in.\"",
         short: "\"Not mine to talk about. Ask the man who drives you.\"" },
       { topic: "girls", text: "\"My ladies are older, clever, and they do not chase — " +
-          "you buy a drink, they sit close, and after that it is between you and the " +
-          "curtain.\" She tilts her head. \"Behave like a gentleman and they are very " +
+          "you buy a drink, they sit close, and what happen after is their business, not the bar's.\" She tilts her head. \"Behave like a gentleman and they are very " +
           "warm. Forget your manners and Rose will remember for a long time.\"" },
     ],
   },
@@ -11380,7 +11354,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "here I know every face by ten o'clock, and if I don't, I lock the door.\"",
         short: "\"Twelve year, bought the lease off a Dutchman who cried when he signed. Not much, and mine.\"" },
       { topic: "rattana",
-        text: "\"Khun Rattana.\" Daeng says the name the way you'd say the weather. \"Not " +
+        text: "\"Khun Rattana.\" Daeng says the name the way you'd read it off a receipt. \"Not " +
           "a bar person. LAND person. Three shophouse on this soi, the empty lot behind, " +
           "and I don't know what else and I don't ask.\" She wipes the same clean spot on " +
           "the bar. \"Old money out here, quiet money. Sons at university in Bangkok, one " +
@@ -11601,7 +11575,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // after the job the box is a thing that happened, not a thing to place (Ray, r45)
       { topic: "file|the file|wallet|data|stick|the stick|wallet.dat", req: ["rabbitData"],
         when: (st, G) => G.rabbitWay === "operator",
-        text: "“The file.” He says it the way other men say a woman's name. “It's mine now — what's on " +
+        text: "“The file.” He says it softly, like a name he isn't allowed to use. “It's mine now — what's on " +
           "it, what I do with it. The machine never knew it had a visitor.” The nearest thing to a " +
           "smile. “You were never in that office.”",
         short: "“The file's mine now. You were never in that office.”" },
@@ -15411,7 +15385,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
           // he offers the lead once you're actually talking, not on hello
           _patronSeen("mort"),
         sets: ["mortGlam"],
-        text: "He taps the biro twice and looks at you properly for the first time. \u201cSince " +
+        text: "He taps the biro twice and takes his eyes off the soi. \u201cSince " +
           "you\u2019re here \u2014 do something for an old man. There\u2019s a German drinks at " +
           "the Cheeky Monkey \u2014 down in Jomtien, the Thappraya strip. Seventy-odd, silk " +
           "shirt, hair like a dandelion in a wind tunnel. " +
@@ -15579,8 +15553,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       { topic: "sponsor", text: "\"Ah. The one behind the till who won't come out to play.\" He " +
         "nods slow, an old campaigner reading the ground. \"Kept girl, son. Some fella back home — " +
         "Germany, Australia, wherever — wires her every month to stay off the floor. She'll turn you down like she's reading it off a contract, because she is.\" The glass turns. \"One lever only, and it's an " +
-        "ugly one: you outbid him. Not the barfine — HER. Send it, gift it, week on week, till your " +
-        "number's the bigger one and she can't un-see it. Costs a fortune, and it's not a nice thing " +
+        "ugly one: you outbid him. Not the barfine — HER. Send it, gift it, week on week, till your number's the bigger one and she can't pretend she didn't notice. Costs a fortune, and it's not a nice thing " +
         "you're doing — you're buying a person off another man, and she knows it, and takes it anyway. " +
         "That's the part nobody warns you about.\"",
         short: "\"A kept girl? One lever: outbid her sponsor — send her money, week on week, till your number's bigger. Costs a fortune, and it isn't clean.\"" },
@@ -16026,7 +15999,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"They call me Superman.\" He doesn't look away from the water." },
       { topic: "sunset", text: "\"I've watched it from this chair every day for " +
         "four years. Missed twice — once for a funeral, once for the cath lab.\" " +
-        "He says it the way other men talk about a grandchild. \"People ask why I don't travel, " +
+        "He says it without a flicker of self-pity. \"People ask why I don't travel, " +
         "see other sunsets. Boys —\" he opens both hands at the entire sky \"— " +
         "this is the same sun that sets everywhere, and I've got the best seat " +
         "on earth, and I don't know how many tickets I got left.\" He goes " +

@@ -225,3 +225,17 @@ test("no line states a month, weekday or count the calendar can contradict", () 
 test("Bill angles for a man drink in his own English, not Bert's 'bud'", () => {
   assert.ok(NPCS.bill.nudge && !/\bbud\b/.test(NPCS.bill.nudge));
 });
+
+// ── The mamasan voice pass (2026-10-02): one woman's line in one woman's mouth ───────
+// A player's origin and personality are constants, so each mamasan's read of him is the line
+// he hears in every bar — and five of them were reading him in the same words.
+test("a signature line belongs to one character", () => {
+  const owners = (re) => new Set(Object.keys(NPCS).filter(id => !NPCS[id].filler &&
+    (NPCS[id].dialogue || []).some(d => re.test(stripMarkup(String(d.text) + " " + String(d.short || ""))))));
+  for (const re of [/fixed money/i, /first real freedom/i, /\bbe nobody\b/i, /^"A charmer\."/, /watch the room the way/i,
+    /keep witnesses close/i, /between you and the curtain/i, /un-(?:know|see)/i, /I am the fun one/i, /three ahead of you/i,
+    /nobody scam nobody/i, /first one in (?:my|the) family/i, /Mama keep my money/i, /says it the way other men/i,
+    /looks at you properly for the first time/i, /knowing never/i]) {
+    assert.ok(owners(re).size <= (/other men/.test(re.source) ? 3 : 1), re + ": " + [...owners(re)].join(","));
+  }
+});

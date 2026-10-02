@@ -8,6 +8,7 @@
 //   node tools/dialogue-walk.mjs --only lek,bert       # a few characters
 //   node tools/dialogue-walk.mjs --filler              # include the generated cast (one of each role per bar is plenty)
 //   node tools/dialogue-walk.mjs --json                # the summary as JSON (what docs/dialogue-walk.json holds)
+//   node tools/dialogue-walk.mjs --shared [--all]      # six-word runs two characters share (a report, not a gate)
 //   node tools/dialogue-walk.mjs --lint [--all]        # the mechanical checks, run BEFORE paying a reader:
 //        dead (shadowed by an ungated earlier node), preempt (the engine answers the ask first),
 //        residue (a template or a constant's name in the RENDERED text), fact (a character
@@ -266,6 +267,28 @@ function walk(npc) {
   result.unreached = result.unreached.filter((u, k, all) => !delivered.has(+u.key.split("#")[1]) && all.findIndex(v => v.key === u.key) === k);
   result.reached.sort((a, b) => a.index - b.index);
   return result;
+}
+// --shared: six-word runs that two or more CHARACTERS share, read off the data (no walk needed).
+// A REPORT, not a gate: on 2026-10-02 it found 170 runs, most of them narrator constructions
+// ("he says it the way other men…" in six mouths) — worth a sub-editor's eye, too noisy to fail on.
+// The voice pass's real finds were all of this shape: "fixed money, long memory", "first real
+// freedom", "be nobody", "I keep witnesses close" — one woman's line in five women's mouths.
+if (args.includes("--shared")) {
+  const N = +(opt("--shared-n") || 6), idx = new Map();
+  for (const id of Object.keys(NPCS)) {
+    if (NPCS[id].filler) continue;
+    (NPCS[id].dialogue || []).forEach((d, i) => {
+      const seen = new Set();
+      for (const s of [d.text, d.short]) {
+        const w = stripMarkup(String(s || "")).toLowerCase().replace(/[^a-z' ]+/g, " ").split(/\s+/).filter(Boolean);
+        for (let k = 0; k + N <= w.length; k++) { const g = w.slice(k, k + N).join(" "); if (seen.has(g)) continue; seen.add(g); (idx.get(g) || idx.set(g, new Set()).get(g)).add(id + "#" + i); }
+      }
+    });
+  }
+  const hits = [...idx].map(([g, ks]) => [g, [...ks], new Set([...ks].map(k => k.split("#")[0])).size]).filter(h => h[2] > 1).sort((a, b) => b[2] - a[2]);
+  console.log(`shared ${N}-word runs across characters: ${hits.length}`);
+  for (const [g, ks, n] of hits.slice(0, LINT_ALL ? 9999 : 60)) console.log(`  ${n}× "${g}" — ${ks.join(" ")}`);
+  process.exit(0);
 }
 const cast = Object.keys(NPCS).filter(id => (NPCS[id].dialogue || []).length && (FILLER || !NPCS[id].filler) && (!ONLY.length || ONLY.includes(id)));
 const results = cast.map(walk);

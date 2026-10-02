@@ -3762,7 +3762,7 @@ const _OTHER_LEDGER = {
       `times without once reading it: she takes the chit, folds it, and tucks it into the band of ` +
       `her phone case with the others. Not a keepsake — a tally. "For counting, end of month." ` +
       `She fans them like a small hand of cards, unembarrassed. "This one, I get ฿${LADY_CUT}." ` +
-      `The drink was ฿${_ladyPrice()}. She says the difference the way you'd say the weather, and ` +
+      `The drink was ฿${_ladyPrice()}. She says the difference like a sum she checked years ago, and ` +
       `goes back to the story she was telling.`,
     (n) => `"You want to know something funny?" ${n} turns the chit over so you can see the bar's ` +
       `stamp. "Farang always say — I buy you drink, expensive one, good for you." She taps the ` +

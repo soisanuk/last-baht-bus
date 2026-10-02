@@ -2075,7 +2075,7 @@ test("recognition spreads across the soi — the main mamas + Bert read you", ()
   assert.match(read("sunset_dreams", "malai", () => state().player.personality = "whiteknight"),
     /good heart/i, "Malai prices the white knight");
   assert.match(read("ruby_kiss", "saeng", () => state().player.personality = "operator"),
-    /watch the room the way i/i, "Saeng clocks a fellow operator");
+    /count the bar the way i/i, "Saeng clocks a fellow operator");
   // origin readers
   assert.match(read("cherry_pop", "toi", () => state().player.origin = "pi"),
     /police eyes/i, "Toi spots the ex-cop");
