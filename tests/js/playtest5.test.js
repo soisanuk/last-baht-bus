@@ -37,7 +37,7 @@ test("an unknown topic is not a repeat: Lake Gary gets his greeting once, then a
   out = [];
   doCommand("ask gary about visa");             // a miss, now that he's said hello
   assert.doesNotMatch(text(), /you ask me that already|Farang memory|tilac|Aiyah/);
-  assert.match(text(), /Not my department|above my pay grade|No idea, mate/);
+  assert.match(text(), /Not my department|above my pay grade|No idea, mate|No idea\. Try somebody/);
   out = [];
   doCommand("ask gary about sabai");            // a real topic still answers
   assert.match(text(), /Now you are here/);
@@ -49,7 +49,7 @@ test("a hostess's miss stays in her register; a true repeat keeps the Tinglish b
   doCommand("talk to " + NPCS[girl].name.toLowerCase()); out = [];
   doCommand(`ask ${NPCS[girl].name.toLowerCase()} about cryptocurrency`);
   assert.match(text(), /I don't know|wrong girl|Not my story|Ask me something/);
-  assert.doesNotMatch(text(), /pay grade|No idea, mate/);
+  assert.doesNotMatch(text(), /pay grade|No idea, mate|No idea\. Try somebody/);
 });
 
 test("patrons: the intro is met-once (not nightly), and a topic miss is a shrug, not 'You again'", () => {

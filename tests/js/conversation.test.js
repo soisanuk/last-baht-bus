@@ -609,7 +609,7 @@ test("the tease chip is gated on trust; compliment/joke always offered", () => {
 // them (see tools/asktopic-audit.mjs's header). So they get pinned by hand as
 // each one is found — persona reports A#18 / B#4, 2026-08-23.
 test("subjects a character volunteers about themselves resolve", () => {
-  const miss = /above my pay grade|Not my story|I don't know about that|That one I don't know|No idea, mate|Search me|Not one I know|wrong girl|Couldn't tell you/i;
+  const miss = /above my pay grade|Not my story|I don't know about that|That one I don't know|No idea, mate|No idea\. Try somebody|Not a thing I know|cannot help you with|wrong woman|Search me|Not one I know|wrong girl|Couldn't tell you/i;
   const cases = [
     ["bob",     "succubus",                 "wife",        /Thirty-one years|runs the floor/],
     ["bob",     "succubus",                 "kinnaree",    /Thirty-one years|runs the floor/],

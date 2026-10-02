@@ -5666,6 +5666,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "So the answer from me is yes \u2014 if the answer from you is yes.\"",
         short: "\"Fifty-one is my name on your bar. Lawyer in Bangkok, everything written. Yes from me, if yes from you.\"",
       },
+      // her own past, asked plainly — she stonewalled family/home/plan for the game's whole life
+      // (Wendell, round 63). Appended, so saved indices hold. Canon: thirty-eight, Isaan, one bar at eighteen.
+      { topic: "family|my family|your family|mother|mama", text: "\"Family?\" Candy wipes the bar where it is already clean. \"My mama, up in Isaan, who tells the neighbours I own restaurants. Half true.\" A shrug. \"No husband, no children. At eighteen I had one bar and a choice, and I chose the bar. Some nights I think about the other one. Then the bar calls me.\"",
+        short: "\"Mama in Isaan thinks I own restaurants. No husband, no children — I chose the bar.\"" },
+      { topic: "home|hometown|village|isaan|isan", text: "\"Isaan. A village with one shop and one road, and I was on that road at seventeen with one bag, same as every girl in here.\" She nods down the rail. \"That is why I hire them. I know the bag.\"",
+        short: "\"Isaan, one shop, one road. I know the bag.\"" },
+      { topic: "plan|future|dream", text: "\"Plan?\" A short laugh. \"I am thirty-eight, tilac. Two bars, no boss, nobody's name on my paper but mine. The next plan is a girl I trust with one of them.\" She looks down the rail. \"I am still looking.\"",
+        short: "\"Two bars, no boss. Next: a girl I trust with one of them. Still looking.\"" },
     ],
   },
 
@@ -6614,7 +6622,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "whole product. Watch all you like. Just tip while you do it.\"",
         short: "\"You watch the room like somebody pays you to. ...Was pay you. Not my business. Watch all you like — tip while you do.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
-        text: "\"A regular. A proper one.\" Approval, rare from her. \"The kind who come the same night every week, because it is that night. My accountant love you, and he never meet you.\" She tips her chin down the rail. \"The old ones there will adopt you " +
+        text: "\"A regular of this town — a proper one. Not of my bar. Not yet.\" Approval, rare from her. \"The kind who come the same night every week, because it is that night. My accountant love you, and he never meet you.\" She tips her chin down the rail. \"The old ones there will adopt you " +
           "before your first beer go warm. Go sit with them, tilac. They tip in stories, and the stories at " +
           "least are free.\"",
         short: "\"A regular, proper one — same night every week. The old ones will adopt you; they tip in stories, and those are free.\"" },
@@ -6815,7 +6823,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // wants to look after them. Signature ORIGIN reads; everyone else gets the warm
       // welcome below.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
-        text: "\"A regular — I can tell, you sit like a man who owns the stool.\" The weathered smile deepens. " +
+        text: "\"A regular somewhere — I can tell, you sit like a man who owns a stool.\" The weathered smile deepens. " +
           "\"Fixed money, long memory, no drama. My favourite kind. Keep the chair all night, tilac. Nobody " +
           "take it from you here.\"",
         short: "\"A regular — you sit like a man who owns the stool. Keep the chair all night, nobody takes it here.\"" },
@@ -7116,11 +7124,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "five-a-side team — one on the beer, one on the money, both shouting at the ref.",
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Alright mate, what you having?\" Brisk, cheerful, football on three screens behind her. \"Me " +
-          "and Somo run this place — she pour, I count, we both scream at the telly. Best job on the soi: no " +
+        text: "\"Alright mate, what you having?\" Brisk, cheerful, football on three screens behind her. \"" +
+          "Sopha runs the floor, Somo pours, I count, and we all scream at the telly. Best job on the soi: no " +
           "drama, all football.\" A grin. \"You're not United, are you? Had to bar a bloke last week. Joking. " +
           "Mostly.\"",
-        short: "\"What you having? Me and Somo run this — she pour, I count, we scream at the telly.\"" },
+        short: "\"What you having? Sopha runs the floor, Somo pours, I count, we all scream at the telly.\"" },
       { topic: "somo", text: "\"Somo? Nah, we're not together — everybody ask.\" She laughs. \"Two toms in one " +
         "bar, must be dating, ha. No. She's my best mate. We just both like football more than most people.\" A " +
         "shrug. \"Found the one bar on Soi 6 where nobody expect us to flirt with the customers. Paradise, " +
@@ -9086,7 +9094,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // a week; he knows the shape of that family without anybody's name in it.
       { topic: "sao|her father|the father|grandmother|hi-so|hiso|high society|the river|across the river|guest|the dinner|bangkok family", when: (st, G) => !!(G.bkk && G.bkk.went),
         text: "\"You went across the river.\" Not a question; the grey sedan and the grey Alphard use the same car wash. \"They " +
-          "asked about your father, yes? And his father.\" A glance in the mirror. \"In that house a man is his names, my " +
+          "asked about your father, yes? And his father.\" A glance down the soi. \"In that house a man is his names, my " +
           "friend, and yours stop at one. That is not an insult. A guest is a thing they keep. Be a good guest — polite, not " +
           "poor, never asking — and you will be invited again, one day, when you have stopped wanting to be.\"",
         short: "\"They asked about your father, and his. A man is his names in that house. A guest is a thing they keep.\"" },
@@ -9095,7 +9103,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "street. That is not a loss. It is a view.\"",
         short: "\"You said no to the car. Some doors are a view.\"" },
       { topic: "sao|hi-so|hiso|high society|sathorn|bangkok family", when: (st, G) => !!(G.bkk && !_flag("bkkArcDone")),
-        text: "\"A Bangkok girl who gave you her number herself.\" The small smile at the wheel. \"Then she means coffee. When " +
+        text: "\"A Bangkok girl who gave you her number herself.\" The small smile over the car roof. \"Then she means coffee. When " +
           "they mean coffee it is usually coffee — and when it is not coffee, it is dinner, with the whole family, and you wear " +
           "a collar.\" He does not say more, which is how you know there is more.",
         short: "\"She gave you her number herself. It is coffee, or it is the family. Wear a collar.\"" },
@@ -9117,18 +9125,18 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // "not my story" (Rolf, round 54)
       { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourDone"],
         when: (st, G) => G.tanFavourDay != null && G.day - G.tanFavourDay < 21,
-        text: "\"She is on the list. Bert writes a very good capital letter.\" A small smile at the wheel. \"Next she opens a bank account, " +
+        text: "\"She is on the list. Bert writes a very good capital letter.\" A small smile over the car roof. \"Next she opens a bank account, " +
           "and one day somebody at a hospital asks where she works, and there is an answer.\" He does not say thank you a second time; " +
           "he said it once. \"That is all a name is, my friend. A place for the questions to stop.\"",
         short: "\"She is on the list. One day somebody asks where she works, and there is an answer.\"" },
       { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourDone"],
-        text: "\"She is on the list. Bert writes a very good capital letter.\" A small smile at the wheel. \"She has a bank account now. " +
+        text: "\"She is on the list. Bert writes a very good capital letter.\" A small smile over the car roof. \"She has a bank account now. " +
           "Last month she went to a hospital that asks questions, and they asked, and the answer was your bar.\" He does not say thank you " +
           "a second time; he said it once. \"That is all a name is, my friend. A place for the questions to stop.\"",
         short: "\"She is on the list. She has a bank account now. That is all a name is.\"" },
       { topic: "the name|her name|the girl|lao girl|the lao girl|nong khai|staff list|the staff list|the favour|favour|favor|the favor", req: ["tanFavourRefused"],
         text: "\"She is on somebody's list.\" No weight on it at all. \"Not yours. That is fine — I told you that was fine, and I do " +
-          "not say things twice to make them true.\" The eyes in the mirror, briefly. \"There is always a list. The question was only " +
+          "not say things twice to make them true.\" His eyes on you, briefly. \"There is always a list. The question was only " +
           "whose.\"",
         short: "\"She is on somebody's list. Not yours. That is fine.\"" },
       // rent, the ice, the beer uncle: the partner's answer (Hennie, round 55 — every one
@@ -9148,7 +9156,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan"],
         text: "\"Our bar.\" He says it flat — a fact, no weight on it. \"Fifty-one is a " +
           "name on a paper in a drawer at the land office where my wife's cousin works, and the paper has never " +
-          "been out of the drawer.\" The glance in the mirror. \"You run it. I do not come. If I come, it is because " +
+          "been out of the drawer.\" The glance down the soi. \"You run it. I do not come. If I come, it is because " +
           "I am asking for something, and I will say so.\"",
         short: "\"Our bar. The paper is in a drawer. You run it; if I come, I am asking for something.\"" },
       { topic: "debt", chip: false,
@@ -9228,14 +9236,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "or be a man who understood.\"",
         short: "\"A company that sells nothing to people who buy nothing. How a favour is written down when the man cannot be owed one.\"" },
       { topic: "rabbit|the rabbit|fast eddy|eddy", when: (st, G) => _flag("ccibVisited"),
-        text: "\"Fast Eddy.\" Tan does not look at the mirror this time. \"He has gone to ground, and he " +
+        text: "\"Fast Eddy.\" Tan does not look down the soi this time. \"He has gone to ground, and he " +
           "thinks it is because of the coffee. It is not. It is because for the first time in his life a " +
           "thing he did worked, and he does not know what to do with that.\" A shrug at the road. \"He is on " +
           "a list. He was on a list before you met him. The list is not the danger — the danger is a man " +
           "who reads his own name on it and starts making calls.\"",
         short: "\"Eddy is on a list, and was before you met him. The danger is a man who starts making calls.\"" },
       { topic: "rabbit|the rabbit|fast eddy|eddy",
-        text: "\"Fast Eddy.\" Tan considers the mirror. \"He had a bar and now he has a smaller one, " +
+        text: "\"Fast Eddy.\" Tan considers the roof of the car. \"He had a bar and now he has a smaller one, " +
           "and he thinks the difference is bad luck. It was never luck. He is a man who learned " +
           "everything about this town except the one thing, and the one thing is that you cannot " +
           "buy your way inside — you can only be let.\" A small shrug. \"I like him. He makes a " +
@@ -9373,10 +9381,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // QUESTS.bar_licence.giverIfSelf). Same facts as Wayne's node, Tan's register.
       { topic: "licence", when: (st, G) => G.quests.bar_licence === "active", sets: ["barLicence"],
         text: "\"The licence.\" Tan almost smiles. \"You heard the other version, I think — Wayne's, the one where a stranger's name holds your life. I said so in the car: coffee first. So — the rule. Fifty-one " +
-          "percent is Thai. Not a loophole — the law.\" He counts it on the wheel. \"A nominee is a " +
+          "percent is Thai. Not a loophole — the law.\" He counts it on the roof of the car. \"A nominee is a " +
           "stranger. A company is real, and audited, and costs. Or your name is on nothing — you are " +
           "the manager, you take a wage and a cut, and somebody you trust holds the paper.\" The " +
-          "glance in the mirror. \"And the paper is not the permit. To work behind your own bar you need " +
+          "glance down the soi. \"And the paper is not the permit. To work behind your own bar you need " +
           "a permit, and a permit needs a company with two million in it — per farang. You do not have " +
           "two million. So somebody Thai stands your rail on paper, and you stand it in fact, and you " +
           "hope nobody with a clipboard is curious. Everybody hopes that. It is a whole town of hoping.\" " +
@@ -9385,11 +9393,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // the promise in the taxi ("buy me a coffee — I'll tell you which farang really owns his 'own' bar")
       // — asked about the TRADE before the coffee, he points at the coffee (Des, round 41: "Not my story")
       { topic: "bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade", notFlags: ["tanCoffee"],
-        text: "\"A bar.\" The glance in the mirror, the small smile. \"The same thing I would have told you in the car, if you had asked: before you sign " +
+        text: "\"A bar.\" The glance down the soi, the small smile. \"The same thing I would have told you in the car, if you had asked: before you sign " +
           "your name to anything, buy me a coffee. I meant the coffee. (BUY TAN A COFFEE)\"",
         short: "\"Coffee first. I said so in the car. (BUY TAN A COFFEE)\"" },
       { topic: "bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade", req: ["tanCoffee"],
-        text: "\"You had the coffee, so you know who owns what.\" A shrug at the wheel. \"The rest is " +
+        text: "\"You had the coffee, so you know who owns what.\" A shrug against the car door. \"The rest is " +
           "only one question, and it is not the price. It is whose name goes on the fifty-one — " +
           "somebody you would hand your passport to. There are not many of those in any town.\"",
         short: "\"Who owns what, you know. Whose name goes on the fifty-one is the only question.\"" },
@@ -9400,7 +9408,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "rarer than you think.\" He sips. \"The ones who say 'my bar' loudest are the ones whose " +
           "name is furthest from the paper. Remember that when somebody offers you one.\"",
         short: "\"Bert doesn't own the Stinky, Gavin owns nothing, Candy owns hers. The loudest 'my bar' is the furthest from the paper.\"" },
-      { topic: "coffee", text: "\"You want to talk about coffee or you want to buy me one?\" The eyes in the mirror " +
+      { topic: "coffee", text: "\"You want to talk about coffee or you want to buy me one?\" The eyes over the car roof " +
           "are amused. \"" + COFFEE_PRICE + " baht at the stall behind you, and then I talk. (BUY TAN A COFFEE)\"" },
       // SUPERSEDED by the generated roll-call (_tanOthers, which always answers "others" first).
       // Kept, not deleted, because removing it would shift every later index in saved G.talked.tan.
@@ -11264,6 +11272,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Lek, at the Lucky Tiger. If she sent you, she likes you.\"" },
       { topic: "isaan", req: ["waiedOy"],
         text: "Something crosses her face too quick to name. \"Roi Et province. Rice, buffalo, one road.\" A pause. \"Everyone on this soi is from somewhere like it. Remember that when you count your change, na.\"" },
+      // Wendell, round 63: the town's best-known mamasan answered family, home and plan with
+      // "not my story". The warm versions wait on the wai, like her Roi Et; a customer gets the door.
+      { topic: "family|my family|your family|mother|mama|husband", req: ["waiedOy"], text: "\"My mother is still in Roi Et. I built her the house with the tiled roof, the biggest in the village, and she still sleeps on the floor of the old one.\" Dry. \"No husband. Twenty years I watch husbands from this end of the bar. I kept the bar.\"",
+        short: "\"My mother in Roi Et, in the house I built and won't sleep in. No husband — I kept the bar.\"" },
+      { topic: "family|my family|your family|mother|mama|husband", text: "\"My family?\" A look that grades the question. \"My family is three bars and forty girls, tilac. The other one you can ask about when you have learned to say hello.\"" },
+      { topic: "plan|future|dream", req: ["waiedOy"], text: "\"Plan? I am the plan.\" She taps the bar once. \"Every girl who walks in from a village like mine with one bag — I was that girl. The plan is that one of them stands here when I don't.\"",
+        short: "\"I was the girl with one bag. The plan is one of them stands here when I don't.\"" },
+      { topic: "plan|future|dream", text: "\"My plan is tonight's till.\" She does not look up from it. \"Tomorrow I make tomorrow's.\"" },
+      { topic: "home|hometown|village", text: "\"Isaan.\" That is all a customer gets. \"Say hello to me properly one day, and maybe I tell you the rest.\"" },
     ],
   },
 
@@ -13198,7 +13215,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { th: "หนูมาแล้วเหรอ", rom: "nuu maa laeo rer",
         text: "\"New face! Sit, na. Tequila Queen is OLDEST go-go in Pattaya — " +
         "before Walking Street have arch, before Central have escalator, we have " +
-        "this stage. My girls not young like Soi 6.\" A magnificent shrug. \"Wine " +
+        "this stage. My girls not all young like Soi 6.\" A magnificent shrug. \"Wine " +
         "also not young. Somehow everybody still order wine.\"" },
       { topic: "girls", text: "\"My girls dance here ten, twenty year. They know " +
         "every song, every trick, every kind of man who walk in that door — " +
@@ -17092,6 +17109,63 @@ function _drinksOnly(id) {
   return _hh(id + ":drinksonly", 157) % 100 < 15;
 }
 
+// THE FLOOR'S STOCK ANSWERS, hoisted so the engine's TOWN BOOK (_townStory, engine-core)
+// can deal from them at delivery: a woman tells you the next story nobody in town has told
+// you yet. The FIRST entries of each are the baked defaults the builder has always used
+// (index modulo the old length), so the generated cast's text, twins and portraits are
+// unchanged; the rest exist only for the town book to deal (Wendell, round 63: "Oh! Farang
+// come my table" from four women, one husband who left three of them the motorbike loan).
+const _H_GREET = [
+  '"Hello hello! You sit na. I no speak English good — talk slow for me, okay?"',
+  '"Welcome ka! You handsome — I say to everybody, but you MORE." She laughs at her own line.',
+  '"Oh! Farang come my table. Lucky me na." She pats the stool. "You buy me cola? Only cola, promise... maybe."',
+  '"Sawatdee ka~ You want talk? I try. My English small small, my heart big big."',
+  '"You sit sit sit! No shy. I not dangerous — only my mama dangerous."',
+  '"Hi hi! You come, you come. I keep this stool warm for you — long time already, ten minute!"',
+  '"You look tired, tilac. Sit. First thing — water or beer? I take care."',
+  '"Hello! You from where? No — wait — I guess." She squints. "England. Always England. I win, you buy."',
+  '"Sawatdee ka. You smile, I smile. Easy job tonight, na?"',
+  '"Aiyo, finally! Customer! I so bored I count the ice." She pats the stool twice.',
+  '"Hello mister. You sit here, close to the fan. Best seat — I test all of them."',
+  '"You come in like you lose something. Sit, sit — I help you look. First we look in a beer."',
+];
+const _H_GREET_SHORT = [
+  '"Sit sit! Talk slow for me na."',
+  '"You buy me cola? Only cola... maybe."',
+  '"English small small, heart big big."',
+];
+const _H_FAMILY_WRAP = [
+  f => `"${f}.${/send/i.test(f) ? "" : " Every month I send money — school, rice, everything."} This why I working, not for me." She turns the {{phone}} to you: a photo, everyone squinting in the sun.`,
+  f => `"You ask my family? Aiyo." She goes soft. "${f}. I not see them long time. Money go home, I stay here. Same same every girl."`,
+  f => `"${f}." A proud, tired little smile, and a photo held up. "I work, they eat. Simple. Farang always think complicated — no complicated."`,
+  f => `"${f}." She shows you a video, not a photo: a kitchen, too loud, everybody talking at once. "This. Every Sunday I call, this."`,
+  f => `"Family?" She counts on her fingers before she starts. "${f}." The fingers stop. "Okay. That is everybody."`,
+  f => `"${f}." She says it fast, and then asks about your drink, the way you close a drawer.`,
+];
+const _cap1 = t => t.charAt(0).toUpperCase() + t.slice(1);
+const _H_PLAN_WRAP = [
+  p => `You ask her something bigger and she holds up one finger — "wait wait" — thumbs it into the {{phone}} and turns the screen to you: "I WOULD LIKE TO ${p.toUpperCase()}." She beams. "Like that na. You understand?"`,
+  p => `"Plan?" She types into Google Translate and reads the robot voice out, carefully: "My dream is to ${p}." A shrug, a grin. "Phone say it better than me."`,
+  p => `"Big word! Wait wait." Tap tap tap. She shows you the translation: "SOMEDAY I ${p.toUpperCase()}, IF BUDDHA HELP." She laughs. "Buddha and good customer — same job."`,
+  p => `"My plan?" She doesn't need the phone for this one. "${_cap1(p)}. I say it every night before sleep, so I don't forget."`,
+  p => `She writes it on a napkin in Thai, crosses it out, and tries English: "${p.toUpperCase()}." She folds the napkin small and keeps it.`,
+  p => `"Plan is ${p}." A pause, honest. "Plan is also: no new boyfriend first." She laughs, and means both.`,
+];
+const _H_HOME_WRAP = [
+  fr => `"Home? ${fr}. Isan! You know Isan? Very hot, very poor, very happy." She grins. "Rice, buffalo, my mama, som tam every day. I miss, but no money there. Pattaya have money, no buffalo."`,
+  fr => `"I from ${fr}, Isan side. Small village, everybody know everybody. Here nobody know me — sometime good, sometime lonely na." A little shrug.`,
+  fr => `"${fr}. Long bus, ten hour, aircon too cold." She mimes shivering. "I go home Songkran, Buddha day, when mama call. Rest of time — here, working."`,
+  fr => `"${fr}. You never hear, I know." She draws the map on the bar with a wet finger: here Bangkok, here Pattaya, way up here — home.`,
+  fr => `"${fr}. My mama house, rice behind, chicken in front, dog everywhere." A grin. "Here, I have one fan and a window to a wall."`,
+  fr => `"Up north-east. ${fr}. Very quiet, only frogs at night." She listens to the bar's speakers a second. "Here, no frogs."`,
+];
+// FREE, asked of a girl: only the mamasans answered it (Wendell, round 63)
+const _H_FREE = [
+  '"Free?" She laughs. "Nothing free, tilac. The till count everything, even the ice."',
+  '"Free drink is for customer. For me — lady drink." A sweet smile. "Not free."',
+  '"Free is one time. Then you are friend, and friend buy." She clinks your glass to seal it.',
+  '"My smile is free." A beat, perfectly timed. "My company is lady drink."',
+];
 function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(seed, salt) % arr.length];
@@ -17105,33 +17179,6 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const emoji = idx(_H_EMOJI, 13);
   const phone = idx(_H_PHONE, 19);
 
-  const GREET = [
-    '"Hello hello! You sit na. I no speak English good — talk slow for me, okay?"',
-    '"Welcome ka! You handsome — I say to everybody, but you MORE." She laughs at her own line.',
-    '"Oh! Farang come my table. Lucky me na." She pats the stool. "You buy me cola? Only cola, promise... maybe."',
-    '"Sawatdee ka~ You want talk? I try. My English small small, my heart big big."',
-    '"You sit sit sit! No shy. I not dangerous — only my mama dangerous."',
-  ];
-  const GREET_SHORT = [
-    '"Sit sit! Talk slow for me na."',
-    '"You buy me cola? Only cola... maybe."',
-    '"English small small, heart big big."',
-  ];
-  const FAMILY = [
-    `"${family}.${/send/i.test(family) ? "" : " Every month I send money — school, rice, everything."} This why I working, not for me." She turns the {{phone}} to you: a photo, everyone squinting in the sun.`,
-    `"You ask my family? Aiyo." She goes soft. "${family}. I not see them long time. Money go home, I stay here. Same same every girl."`,
-    `"${family}." A proud, tired little smile, and a photo held up. "I work, they eat. Simple. Farang always think complicated — no complicated."`,
-  ];
-  const PLAN = [
-    `You ask her something bigger and she holds up one finger — "wait wait" — thumbs it into the {{phone}} and turns the screen to you: "I WOULD LIKE TO ${plan.toUpperCase()}." She beams. "Like that na. You understand?"`,
-    `"Plan?" She types into Google Translate and reads the robot voice out, carefully: "My dream is to ${plan}." A shrug, a grin. "Phone say it better than me."`,
-    `"Big word! Wait wait." Tap tap tap. She shows you the translation: "SOMEDAY I ${plan.toUpperCase()}, IF BUDDHA HELP." She laughs. "Buddha and good customer — same job."`,
-  ];
-  const HOME = [
-    `"Home? ${from}. Isan! You know Isan? Very hot, very poor, very happy." She grins. "Rice, buffalo, my mama, som tam every day. I miss, but no money there. Pattaya have money, no buffalo."`,
-    `"I from ${from}, Isan side. Small village, everybody know everybody. Here nobody know me — sometime good, sometime lonely na." A little shrug.`,
-    `"${from}. Long bus, ten hour, aircon too cold." She mimes shivering. "I go home Songkran, Buddha day, when mama call. Rest of time — here, working."`,
-  ];
   // EVERY ONE OF THESE POINTS AT CANDY — which is the whole job of the line, and
   // was catastrophic for the three girls who WORK for her: a persona asked Nan,
   // Bua and Gam about the wallet while standing in Candy Bar with Candy three
@@ -17170,22 +17217,25 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const selfies = hasPics
     ? [0, 1, 2].map(k => _H_SELFIES[_hh(id, 51 + k * 17) % _H_SELFIES.length])
     : null;
-  const _sig = [look, idx(GREET, 23)].join("|");   // look + greeting alone: family is deduped per rail now, so it must not mask a twin
+  const greetIdx = _hh(seed, 23) % 5, famWrapIdx = _hh(seed, 31) % 3, planWrapIdx = _hh(seed, 37) % 3, homeWrapIdx = _hh(seed, 43) % 3;   // the original pool lengths: baked text unchanged
+  const _sig = [look, _H_GREET[greetIdx]].join("|");   // look + greeting alone: family is deduped per rail now, so it must not mask a twin
   if (!_hostessSigs[room]) _hostessSigs[room] = new Set();
   if (_hostessSigs[room].has(_sig) && seed.length < id.length + 3) return _buildHostess(name, th, room, id, seed + "~");
   _hostessSigs[room].add(_sig);
   _storyTaken(room).family.add(famIdx); _storyTaken(room).plan.add(planIdx);
   return {
     name, th, emoji, room, filler: true, storyIdx: { family: famIdx, plan: planIdx },
+    storyBits: { from, greet: greetIdx, family: famIdx, plan: planIdx, famWrap: famWrapIdx, planWrap: planWrapIdx, homeWrap: homeWrapIdx },
     ...(green ? { c4: 2 } : {}),
     ...(selfies ? { selfies } : {}),
     desc: `${look} — one of ${/s$/.test(bar) ? bar + "'" : bar + "'s"} girls, from ${from}.${ROOMS[room] && ROOMS[room].barType === "gogo" ? " The badge pinned at her hip says " + (1 + _hh(id + ":badge", 139) % 199) + " — the number the floor knows her by." : ""} ${phone}`,   // "Mama Yai's' girls", not "Mama Yai's's" (Stan, r35)
     dialogue: [
-      { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29),
-        asks: idx(ASK, 47) },
-      { topic: "family", text: idx(FAMILY, 31) },
-      { topic: "home", text: idx(HOME, 43) },
-      { topic: "plan", text: idx(PLAN, 37) },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: _H_GREET[greetIdx], short: idx(_H_GREET_SHORT, 29),
+        asks: idx(ASK, 47), story: "greet" },
+      { topic: "family", text: _H_FAMILY_WRAP[famWrapIdx](family), story: "family" },
+      { topic: "home", text: _H_HOME_WRAP[homeWrapIdx](from), story: "home" },
+      { topic: "plan", text: _H_PLAN_WRAP[planWrapIdx](plan), story: "plan" },
+      { topic: "free|free drink|the free drink|free shot", text: idx(_H_FREE, 53) },
       // A girl working one of Candy's own bars points AT her boss, not at a map.
       { topic: "wallet", notFlags: ["hasWallet"],
         when: (st, G) => typeof _npcWhere === "function" && _npcWhere("candy") === room,
@@ -17461,6 +17511,10 @@ const _M_GREET = [
   '"Evening." She marks something in a book and closes it. "Rules here are short: pay what you agreed, and nobody touches anybody who hasn\'t said yes. Do those two and this is the easiest bar in Pattaya."',
   '"You look like a man who has been walked at all night." She says it without pity. "Sit. Nobody will bother you unless you want bothering — I will see to it either way."',
   '"Welcome ka." The smile is real and it is also her job, and she has long since stopped separating the two. "First time here? Then I tell you the price of everything before you ask. Saves us both the argument later."',
+  '"Good evening." She does not hurry over; she arrives. "Beer is cold, girls are kind, prices are on the wall. Anything not on the wall, ask me first."',
+  '"You came in from a worse bar, I can tell." She hands you a napkin. "Sit. This one is better."',
+  '"Ah. Welcome." A small nod over the top of her reading glasses. "I am the one who says yes or no here. Mostly yes."',
+  '"Come in, come in, do not stand in the door — the door is for leaving." She laughs at her own house rule. "Sit."',
 ];
 const _M_GREET_SHORT = [
   '"Sit anywhere. Be polite, buy a lady drink, mind the stage."',
@@ -17471,6 +17525,10 @@ const _M_GREET_SHORT = [
   '"Ice water\'s free. Everything else is on the board."',
   '"Nobody bothers you here unless you want bothering."',
   '"Prices before you ask. Saves the argument."',
+  '"Prices on the wall. Anything else, ask me."',
+  '"Sit. This one is better."',
+  '"I say yes or no here. Mostly yes."',
+  '"The door is for leaving. Sit."',
 ];
 const _M_GIRLS = [
   '"My girls are good girls — most from Isaan, like me a long time ago. They work hard, send the money home, and they won\'t cheat you if you don\'t cheat them." A level look. "Treat them nice, I treat you nice. Same-same."',
@@ -17491,6 +17549,10 @@ const _M_FAMILY = [
   `"Two sisters. One married a policeman, one married nobody and is happier." A shrug. "Both of them ask me for money and both of them tell the neighbours I sell insurance."`,
   `"My mother is eighty-one and still gets up at four to cook for people who do not need it." Fondly exasperated. "I built her a kitchen with a tiled floor and she still does it outside. You cannot buy anybody a different life, only a better floor."`,
   `"I raised my brother's boy when my brother could not. He is a chef in Bangkok now, a good one." The pride is in how carefully she does not show it. "He sends ME money at New Year, which I make him take back, and next year he sends it again."`,
+  `"No children. I had nieces instead — six of them — and I paid for four weddings." Dry. "The other two are clever."`,
+  `"My father fished out of Sattahip forty years. He thinks a bar is a kind of boat: you keep it floating, you don't ask what is under it." A small smile. "He is not wrong."`,
+  `"One son, in the army. A sergeant now." She straightens the book on the bar. "He knows exactly what I do. He sends me photos in uniform anyway."`,
+  `"My mother raised me and two cousins on a noodle cart in Khorat. I learned the till at seven." A shrug. "Everything since is the same cart, bigger."`,
 ];
 const _M_PLAN = [
   `"A plan? I already did my plan, tilac — poor girl from the field, now I run the bar." She taps the till. "My plan now is the girls' plan: get out smarter than I did. Save it, don't drink it, don't marry the first farang who cries."`,
@@ -17570,8 +17632,8 @@ const _M_FAM_CLASH = {
 function _mamaFamilyIdx(id) {
   const story = _hh(id, 7) % _M_STORY.length;
   const bad = _M_FAM_CLASH[story] || [];
-  let i = _hh(id, 37) % _M_FAMILY.length;
-  for (let n = 0; n < _M_FAMILY.length && bad.includes(i); n++) i = (i + 1) % _M_FAMILY.length;
+  let i = _hh(id, 37) % 8;   // the original eight: the baked family is unchanged; the town book deals the rest
+  for (let n = 0; n < 8 && bad.includes(i); n++) i = (i + 1) % 8;
   return i;
 }
 
@@ -17583,13 +17645,14 @@ function _buildMama(name, th, room, id = name.toLowerCase()) {
   const story = idx(_M_STORY, 7);
   return {
     name, th, emoji: "\ud83d\udc51", room, filler: true,
+    storyBits: { greet: _hh(id, 23) % 8, family: _mamaFamilyIdx(id), plan: _hh(id, 41) % _M_PLAN.length, story: _hh(id, 7) % _M_STORY.length },
     desc: `${look} \u2014 the mamasan of ${bar}, from ${from}. She ${story}.`,
     dialogue: [
-      { th: "\u0e40\u0e0a\u0e34\u0e0d\u0e04\u0e48\u0e30", rom: "chern kha", text: idx(_M_GREET, 23), short: idx(_M_GREET_SHORT, 23) },
+      { th: "\u0e40\u0e0a\u0e34\u0e0d\u0e04\u0e48\u0e30", rom: "chern kha", text: _M_GREET[_hh(id, 23) % 8], short: _M_GREET_SHORT[_hh(id, 23) % 8], story: "mgreet" },
       { topic: "girls", text: idx(_M_GIRLS, 31) },
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_M_LOCKIN, 47) }] : []),
-      { topic: "family", text: _M_FAMILY[_mamaFamilyIdx(id)] },
-      { topic: "plan", text: idx(_M_PLAN, 41) },
+      { topic: "family", text: _M_FAMILY[_mamaFamilyIdx(id)], story: "mfamily" },
+      { topic: "plan", text: idx(_M_PLAN, 41), story: "mplan" },
       // Candy standing six feet away while her own colleague says "ask Candy on
       // Buakhao" (Maureen, round 47 — Bua in the same bar gets it right).
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
@@ -17606,6 +17669,7 @@ function _buildCashier(name, th, room, id = name.toLowerCase()) {
   const look = idx(_C_LOOK, 5);
   return {
     name, th, emoji: "\ud83e\uddfe", room, filler: true,
+    storyBits: { from, family: _hh(id, 37) % _C_FAMILY.length },
     desc: `${look} \u2014 the cashier at ${bar}, from ${from}.`,
     dialogue: [
       { th: "\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35\u0e04\u0e48\u0e30", rom: "sawatdee kha", text: idx(_C_GREET, 23), short: idx(_C_GREET_SHORT, 23) },
@@ -17613,7 +17677,7 @@ function _buildCashier(name, th, room, id = name.toLowerCase()) {
       // gave the same paragraph twice (Maureen, round 47).
       { topic: "money|tab|bill|price", text: idx(_C_MONEY, 31) },
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_C_LOCKIN, 47) }] : []),
-      { topic: "family", text: idx(_C_FAMILY, 37).replace(/\{from\}/g, from) },
+      { topic: "family", text: idx(_C_FAMILY, 37).replace(/\{from\}/g, from), story: "cfamily" },
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
         text: '"Not through my till." She nods along the bar without looking up. "But Candy is in tonight \u2014 ask her, not me. She is the one who hears."' },
       { topic: "wallet", notFlags: ["hasWallet"], text: idx(_C_WALLET, 43) },

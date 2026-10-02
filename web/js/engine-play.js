@@ -1064,6 +1064,7 @@ function _c4Input(input) {
   c4Drop(g.board, ai, 2);
   _say(c4Render(g.board));
   if (c4Win(g.board) === 2) {
+    if (g.stake && typeof _atOwnBar === "function" && _atOwnBar() && G.bar) G.bar.cash += g.stake;   // "joins the till" — your own (Marta, round 63)
     _endGame(false, 0, _pickVary(_C4_LOSS, "c4loss")(g.opp, ai + 1) +
       (g.stake ? ` Your ฿${g.stake} joins the till.` : ""));
     return;
@@ -1535,6 +1536,7 @@ function _startKiller() {
       " The table's free for a regular frame (PLAY POOL).", "dim");
     return;
   }
+  if (G.lastKp && G.lastKp.day === G.day && G.lastKp.room === G.room) { _say("The league's played for tonight — the chalk's wiped and the field has gone back to its beers. Next league night, same table. (PLAY POOL for a frame.)", "dim"); return; }   // the same field, a second entry, a second pot (Marta, round 63)
   if (G.money < KP_ENTRY) { _say(`Entry's ฿${KP_ENTRY} in the ashtray. You have ฿${G.money}. Spectating is free.`); return; }
   G.money -= KP_ENTRY;
   const field = [];
@@ -4981,8 +4983,8 @@ function _endNight(reason) {
       break;
     case "bkkdinner":
       _say("The van brings you back at one in the morning through a town that has been " +
-        "loud without you. Boy says goodnight in English. You try to tip him and he will not take it, which " +
-        "he accepts with the exact expression his employer used on the bill.", "dim");
+        "loud without you. Boy says goodnight in English. You reach for your wallet out of habit, and he is " +
+        "already shaking his head, with the exact expression his employer used on the bill.", "dim");
       break;
     case "barfine":
       _say(G.lastBfHonest

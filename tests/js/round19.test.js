@@ -17,7 +17,7 @@ for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-en
 let out = [];
 engineInit(t => out.push(String(t)), null, () => {});
 const text = () => out.join("\n");
-const MISS = /Not one I know|Search me|Couldn't tell you|above my pay grade|No idea, mate|Not my department|Not my story|don't know about that/i;
+const MISS = /Not one I know|Search me|Couldn't tell you|above my pay grade|No idea, mate|No idea\. Try somebody|Not my department|Not my story|don't know about that/i;
 
 function sandbox() {
   newGame();

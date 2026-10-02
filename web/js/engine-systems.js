@@ -227,17 +227,27 @@ function _doBorrow(arg) {
     `pay whole, whatever you like.)`, "dim");
 }
 
+// the amount wherever it sits in the sentence: "repay nont 5000" read as no amount and took
+// the whole ฿19,377 (Marta, round 63). A name and no number is the whole debt; a number is that.
+function _repayAmount(arg, owed) {
+  const a = String(arg || "").replace(/\b(nont|nira|him|her|the|bar|loan|debt|to|back)\b/gi, " ").trim();
+  if (!a) return owed;
+  const m = a.replace(/,/g, "").match(/\d+(?:\.\d+)?\s*k?\b/i);
+  if (m) return Math.round(parseFloat(m[0]) * (/k/i.test(m[0]) ? 1000 : 1));
+  const p = _parseBaht(a);
+  return p == null ? owed : p;
+}
 function _doRepay(arg) {
   if (_nontHere() && G.bar && G.bar.loan && G.bar.loan.owed > 0) { _nontRepay(arg); return; }
   if (!G.loan && G.bar && G.bar.loan && G.bar.loan.owed > 0) { _say(_fmt("The bar owes Nont ฿{o}, and Nont is paid at his table — the Old Market, Soi Buakhao. (Or let the nights pay him.)", { o: _num(G.bar.loan.owed) }), "dim"); return; }   // "you don't owe Nira" with ฿5,774 on the books (Hal, round 62)
+  if (!G.loan && /\bnont\b/i.test(String(arg || ""))) { _say("You don't owe Nont a baht. He would remember if you did.", "dim"); return; }   // "you don't owe Nira" for the wrong lender (Marta, round 63)
   if (!G.loan) { _say("You don't owe Nira a baht. Keep it that way.", "dim"); return; }
   if (!_withNira()) {
     _say(`You owe Nira ฿${G.loan.owed}${G.loan.strikes ? " (overdue)" : `, due day ${G.loan.dueDay}`}. ` +
       `Pay her at Neon Paradise on Walking Street.`, "dim");
     return;
   }
-  let amt = arg ? _parseBaht(arg) : G.loan.owed;
-  if (amt == null) amt = G.loan.owed;
+  let amt = _repayAmount(arg, G.loan.owed);
   amt = Math.min(amt, G.loan.owed);
   if (amt <= 0) { _say('"Pay me something real."', "dim"); return; }
   if (G.money < amt) {
@@ -315,8 +325,7 @@ function _nontLoan(arg) {
 }
 function _nontRepay(arg) {
   const b = G.bar;
-  let amt = arg ? _parseBaht(arg) : b.loan.owed;
-  if (amt == null) amt = b.loan.owed;
+  let amt = _repayAmount(arg, b.loan.owed);
   amt = Math.min(amt, b.loan.owed);
   if (amt <= 0) { _say("“Pay me something real.”", "dim"); return; }
   if (G.money < amt) { _say(_fmt("You're ฿{s} short of that. (You have ฿{h}; the bar owes ฿{o}.)", { s: amt - G.money, h: G.money, o: _num(b.loan.owed) }), "alert"); return; }
@@ -1215,8 +1224,9 @@ function _partyArrive(to) {
   const names = { who, a: NPCS[p.ids[0]].name, b: pair ? NPCS[p.ids[1]].name : "" };
   _say(_fmt(_pickVary(pair ? (club ? _PARTY_ARRIVE_CLUB_PAIR : _PARTY_ARRIVE_PAIR) : (club ? _PARTY_ARRIVE_CLUB : _PARTY_ARRIVE), "partyarr"), names));
   const dcost = _ladyPrice() * p.ids.length;
+  const _ownTill = typeof _atOwnBar === "function" && _atOwnBar();   // at your own bar her drink rings into your own till (Marta, round 63: ฿150 out of the pocket and into nowhere)
   if (G.money >= dcost) {
-    G.money -= dcost;
+    G.money -= dcost; if (_ownTill && G.bar) G.bar.cash += dcost;
     p.spent += dcost;
     for (const id of p.ids) _boughtBond(id, 1);
     _say(_fmt(_pickVary(pair ? _PARTY_DRINKS_PAIR : _PARTY_DRINKS, "partydrink"), { who, c: dcost }), "dim");
@@ -1830,7 +1840,7 @@ const _RIDE_HOP = [
     "Then she cuts down a soi you'd never have found alone and kills the engine.",
   "You hold on. She rides like the traffic laws are a rumour she's heard about — a gap here, " +
     "a red light treated as advisory there, laughing at your grip on her waist — and drops " +
-    "you somewhere the guidebooks have never heard of.",
+    "you somewhere she has decided you need to see.",
   "The bike coughs, catches, and carries the two of you off into the dark between the bright " +
     "places. She sings along to whatever's in her head. Ten wrong-way minutes later she pulls " +
     "up, kills the light, and grins over her shoulder: here.",
@@ -2116,7 +2126,7 @@ function _endRide(seq, reason) {
   if (great && !_flag("rideHaunt")) {
     _setFlag("rideHaunt");
     _say(`(This is the one — the night with no plan that becomes the whole reason you keep coming ` +
-      `back, the one you'll chase on every trip after and never quite catch again. ${name} won't ` +
+      `back, the one you'll chase ${G.stage === "expat" ? "for years after" : "on every trip after"} and never quite catch again. ${name} won't ` +
       `remember it as anything special, or she might — that's hers, not yours, and that's the part that'll haunt you.)`, "dim");
   }
   // the dog kept the door all night — and gets an opinion about who you brought home
@@ -3873,11 +3883,11 @@ const _MORT_TEXT_REPLIES = [
     "A: Deadline's the only wife who never went home to Udon.”",
 ];
 const _CHAM_TEXT_REPLIES = [
-  "\"hiii 😊 i at work na, boss watching. you come buy vitamin? i give you good price 💊\"",
+  "\"hiii 😊 tomorrow i at work, boss watching all day. you come buy vitamin? i give you good price 💊\"",
   "\"555 you think about me? i think about SLEEP. finish 5pm then sleep sleep 🥱\"",
-  "\"cannot talk now, many customer 😩 farang all want the blue pill, all shy. talk later na 🤍\"",
+  "\"today so many customer 😩 farang all want the blue pill, all shy. now i rest. talk later na 🤍\"",
   "\"you free tonight? maybe i go see my friend again, maybe 😏 not sure. i tell you.\"",
-  "\"good morning ☀️ white coat on, hair up, good girl 555. you be good too na\"",
+  "\"tomorrow 8am white coat on, hair up, good girl 555. tonight you be good too na\"",
 ];
 function _doMessage(arg) {
   if (_phoneDead()) return;
@@ -5070,7 +5080,8 @@ function _maybeIncomingText() {
   // texted, never into the mama-sick patter
   let contacts = Object.keys(G.phone.contacts).filter(_texts)   // "a contact who texts", not "works a bar floor" (Judith, round 47: Priew never sent one)
     .filter(id => !_maiDee(id))   // …and never again from a woman who has decided (theme 6)
-    .filter(id => !(G.phone.cut && G.phone.cut[id] === G.vacation));   // …nor, this trip, from the one you went over to (theme 5)
+    .filter(id => !(G.phone.cut && G.phone.cut[id] === G.vacation))   // …nor, this trip, from the one you went over to (theme 5)
+    .filter(id => !_npcsHere().includes(id));   // nobody texts you from across the table (Desmond, round 63: Cream's "you sleep well?" while you sat with her)
   // the affair's endings reach the phone too (Frank, 2026-08-26: the in-love
   // text pool kept sending the morning after she left). Gone is gone — silence
   // is her whole statement. Won gets its own register: Prachuap, not a barstool.
@@ -5196,7 +5207,7 @@ function _maybeIncomingText() {
       // tonight, not a night spent wholly with her (Wiremu, round 59)
       const _elsewhere = Object.entries(G.soc.barTurns || {}).some(([rm, n]) => rm !== _npcRoom(id) && n >= 3 && ROOMS[rm] && ROOMS[rm].barType);
       const _pool = ["i dream about you last night na 💭❤️", _elsewhere ? "you go other bar?? 😤 i see you i KNOW 👀" : "you tired today? 😴 i still smile from the other night",
-        "miss you so much cannot sleep 😢", "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"];
+        "miss you so much cannot sleep 😢", G.stage === "expat" ? "my farang 🥰 you live here now, no excuse. come see me 555" : "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"];   // a resident is not 'still in pattaya' (Desmond, round 63)
       _pushMsg(id, _pool[Math.floor(_rand() * 4)]);
     }
   } else if (t >= 2) { // regular: invites and warmth, a little needy
@@ -6683,6 +6694,7 @@ function _tanFavourNo() {
   _say("He shakes your hand, tells Bert the table is looking well, and is out " +
     "the door and into the grey sedan inside a minute. He texts you two days " +
     "later about nothing in particular, exactly as he always has.");
+  G.tanNoteDay = G.day + 2;   // …and he does: the promise was a sentence and no text ever came (Marta, round 63)
   _say("It is a while before it occurs to you that the bar is fifty-one percent " +
     "his, and that he could simply have written the name on the list himself, " +
     "and that he came in and asked instead.", "dim");
@@ -6720,6 +6732,16 @@ const _WORK_SHIFT = [
   "When the rail finally empties you cash up, and stand in the quiet afterward " +
     "not saying much, the way people do who have got a room through a night together. " +
     "It is the most companionable silence you have had in a long time.",
+];
+// THE DECLARATION: the start of a shift, said at the start of it. The _WORK_SHIFT pool is
+// the tale told afterwards, and half of it looks back on a finished night.
+const _WORK_DECLARE = [
+  "You take the end of the bar Bert has kept for you without being asked, and the room registers that the owner is in.",
+  "You put a coin in the jukebox yourself, which every publican knows is how you tell a room the night has started.",
+  "Bert hands you the cloth. It is not a gesture; the bar is wet.",
+  "You check the ice, the float and the toilets, in that order, which is the order that matters.",
+  "The first regular in says \"evening, boss\" without any irony at all, and you find you have stopped noticing.",
+  "Lights, fan, the first cold one poured for somebody else. The shift starts the way they all do: slowly, then all at once.",
 ];
 const _WORK_SEEN = [
   "A regular you have never spoken to asks whether you're the new owner, is told " +
@@ -6911,7 +6933,7 @@ function _doWork() {
   G.bar.declared = (G.bar.declared || 0) + 1;   // declarations — what the soak's liveness ledger balances against
   // "At close you cash out with Bert" at 19:24 (Rolf, round 55): at the declaration,
   // the lines that are not about the close; the close is the tale's
-  _say(_pickVary(_WORK_SHIFT.filter(l => !_isCloseLine(l)), "workshift"), "win");
+  _say(_pickVary(_WORK_DECLARE, "workdeclare"), "win");   // the shift's TALE is told later; this is the start of the night (Marta, round 63: "when the rail finally empties" at 18:00)
   if (typeof _ccibWorkLine === "function") _ccibWorkLine();   // being watched runs the tidiest bar on the soi
   _say("(You're working tonight. The takings will show it — and so will the " +
     "night you didn't have. TIME to check the hour, BOOKS for the damage.)", "dim");
@@ -7075,7 +7097,8 @@ const WORK_FLOOR_MAX = 3;    // …and how many a night can hold
 function _barStaff() {
   const room = (G.bar && G.bar.room) || "stinky_bar";
   return Object.keys(NPCS)
-    .filter(id => _npcRoom(id) === room && NPC_ROLES[id] && !NPCS[id].manager && _npcActive(id))
+    .filter(id => _npcRoom(id) === room && NPC_ROLES[id] && !NPCS[id].manager && _npcActive(id) &&
+      (NPCS[id].room === room || (NPCS[id].bars || []).includes(room)))   // a girl you brought in on your arm is not your staff (Marta, round 63)
     .sort();
 }
 
@@ -7389,6 +7412,7 @@ function _shiftAsk() {
     if (!G.shiftWho) { G.pendingChoice = null; return; }
   }
   const who = G.shiftWho ? _npcLabel(G.shiftWho) : "";
+  G.shiftLeadText = null;
   // lead/ask may be a POOL (array) — the flagship publican beats retold verbatim
   // same girl, same speech, across nights (Keith, 2026-08-26). Pick per call id.
   // "He has never once not paid you" on the first night you have owned a bar
@@ -7404,7 +7428,8 @@ function _shiftAsk() {
     : "Bert, without looking up: he has never once not paid. He has also never once paid on the night.";
   const pick = (f, k) => _fmt(Array.isArray(f) ? _pickVary(f, "shift:" + call.id + ":" + k) : f, { who, payday: _shiftPayday(), tabrecord });
   _say("");
-  _say(pick(call.lead, "lead"), "alert");
+  G.shiftLeadText = pick(call.lead, "lead");   // kept: a reload lost the line that names her (Marta, round 63)
+  _say(G.shiftLeadText, "alert");
   const askPool = (call.id === "early" && call.askKin && !_girlHasBoy(G.shiftWho)) ? call.askKin : call.ask;
   // kept, so a reload redraws the question and not only its options — the names and
   // the money are in the question (round 55: the redraw audit caught "Bert")
@@ -7477,7 +7502,22 @@ function _partnerNo() {
 }
 
 function _shiftResume() {
+  if (G.shiftLeadText) _say(G.shiftLeadText, "alert");
   if (G.shiftAskText) _say(G.shiftAskText);
+  _shiftPrompt();
+}
+// what a call COSTS, said when asked — the money only ever appeared in the next morning's BOOKS
+// (Marta, round 63: "how much is the slate?" got "it is still standing there")
+function _shiftStakes() {
+  const id = G.shiftCall;
+  const line = {
+    tab: `About ฿${_num(SHIFT_TAB_TAKE)} on a bit of paper, Bert reckons. Most nights it comes back; some nights it is the stock he drank, and no more.`,
+    early: `A floor one short is about ฿${_num(SHIFT_EARLY_COST)} off the night, by Bert's arithmetic. No is free, and she will work the shift.`,
+    round: `Getting them in costs the till ฿${_num(SHIFT_ROUND_COST)}. What the room does with it is the room's business — usually more than that.`,
+    turning: `If he is put out, his night goes elsewhere — a few hundred baht. If you have a word yourself, you might be the one he turns on.`,
+    merit: `Nine monks, the food and the pig's head: ฿${_num(MERIT_COST)}. Bert says nothing, which is his opinion.`,
+  }[id];
+  _say(line || "Bert shrugs: your bar, your call.", "dim");
   _shiftPrompt();
 }
 function _shiftPrompt() {
@@ -9140,6 +9180,18 @@ function _synAsk() {
   _say(job.ask);
   _synPrompt();
 }
+// a reload kept only "(YES · NO · ASK — ask who they are)": no Tan, no job, no figure (Marta, round 63)
+function _synResume() {
+  const job = _synJobById(G.synJob);
+  if (job) { _say("Tan is at the end of your rail, waiting on your answer.", "dim"); _say(job.lead, "alert"); _say(job.ask); }
+  _synPrompt();
+}
+function _synRestate() {   // "what happens if I say no?" — the question back, with its figure in it
+  const job = _synJobById(G.synJob);
+  if (job) _say(job.ask);
+  _say("No is free. Nothing is done to you for it — the work happens anyway, just not through him.", "dim");
+  _synPrompt();
+}
 
 function _synJobById(id) { return SYNDICATE_JOBS.find(j => j.id === id) || null; }
 
@@ -10621,7 +10673,7 @@ function _roomSafeBeat() {
   G.act1SafeDue = false;
   G.money += SAFE_CASH; G.safeMoneyDay = G.day; G.safeMoneyLedger = true;   // the next ledger nets it and says so (Kenji, round 47)
   _say(`Your own room, and the key card works. The safe in the wardrobe opens on the ` +
-    `second try: passport, ` + (G.stage === "expat" ? "" : "return ticket, ") + `\u2014 and the emergency stash you very nearly ` +
+    `second try: passport, ` + (G.stage === "expat" ? "the spare card " : "return ticket, ") + `\u2014 and the emergency stash you very nearly ` +
     `forgot you packed. \u0e3f${SAFE_CASH}. (\u0e3f${G.money} in pocket. ` +
     (G.stage === "expat" ? "You live here." : "The vacation is officially back on.") + ")", "win");   // "the vacation" printed to an expat (auditor, 2026-09-14)
 }
@@ -11035,6 +11087,18 @@ function _waenWord() {
     .concat((typeof _LESSON_READING !== "undefined" ? _LESSON_READING : []).map(r => ({ th: r[0], rom: r[1] })));
   if (!pool.length) return null;
   return pool[_hh("waen:" + G.vacation + ":" + G.day, 29) % pool.length];
+}
+// Tan's text two days after a NO to his favour — about nothing in particular, as promised
+const _TAN_NOTE = [
+  "the durian man on Soi Buakhao has a new umbrella. very proud of it. 🙂",
+  "rain at four today. take a shirt.",
+  "you eat yet?",
+  "traffic on Sukhumvit like a parking lot. I am in it. 🙂",
+];
+function _tanNoteTick() {
+  if (!G.tanNoteDay || G.day < G.tanNoteDay || !G.phone || G.battery <= 0) return;
+  G.tanNoteDay = 0;
+  _pushMsg("tan", _TAN_NOTE[_hh("tannote:" + G.day, 61) % _TAN_NOTE.length]);
 }
 function _waenTick() {
   if (!G.phone || G.battery <= 0 || !_met("waen")) return;   // met, not merely named in print (Judith, round 47: homework to a stranger)

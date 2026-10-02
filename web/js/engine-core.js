@@ -2146,7 +2146,7 @@ const _TOPIC_MISS_TH = [
 const _TOPIC_MISS_EN = [
   n => `${n} shakes his head. “Can't help you there. Not my department.”`,
   n => `“That one's above my pay grade,” ${n} says. “Ask me something I'd actually know.”`,
-  n => `${n} turns a hand over: nothing in it. “No idea, mate. Try somebody who was there.”`,
+  n => `${n} turns a hand over: nothing in it. “No idea. Try somebody who was there.”`,   // Bert is American: no "mate" (Desmond, round 63)
 ];
 const _TOPIC_LOCKED_TH = [
   n => `${n} looks at you a moment, then lets it go. “Not yet, na. Maybe later.”`,
@@ -2229,6 +2229,62 @@ function _dartsTalk() {
   const where = Object.keys(ROOMS).filter(r => ROOMS[r].darts).map(r => _barName(r)).filter(Boolean).slice(0, 5);
   return `“Not here — no board.” A shrug at the town. “${where.join(", ")} keep one. Ask for the chalk.”`;
 }
+// THE TOWN BOOK (Wendell, round 63 — twenty bars, the same five questions, and two
+// mamasans with one son of twenty-four who thinks the money comes from a hotel, three
+// women with one husband who left the baby and the motorbike loan). The generated floor
+// draws its stories from shared pools, deduplicated per BAR at build time; across a town
+// of 213 women that cannot hold. So the story is dealt when it is TOLD: a woman tells you
+// the next story in the pool nobody in town has told you yet, and that is her story to
+// you from then on (G.storyOf). The _bondPick / _ledgerPick doctrine: a pool shared
+// across a cast and remembered per person reads as one woman with several faces.
+// Player-local (rule 8), like the bond books. The baked node text is the default and
+// what the corpus reviews; delivery is where the book is consulted.
+function _townPick(npc, axis, len, base, ok) {
+  const book = (G.townTold = G.townTold || {}), mine = ((G.storyOf = G.storyOf || {})[npc] = G.storyOf[npc] || {});
+  if (mine[axis] != null && mine[axis] < len) return mine[axis];
+  const told = (book[axis] = book[axis] || {});
+  let found = null;
+  for (let k = 0; k < len; k++) { const c = (base + k) % len; if ((told[c] == null || told[c] === npc) && (!ok || ok(c))) { found = c; break; } }
+  if (found == null) found = base % len;   // the town has told you all of them: her own, then
+  told[found] = npc; mine[axis] = found;
+  return found;
+}
+function _townStory(npc, d) {
+  const n = NPCS[npc];
+  if (!d || !d.story || !n || !n.storyBits) return null;
+  const b = n.storyBits, room = n.room;
+  const taken = axis => (typeof _storyTaken === "function" ? _storyTaken(room)[axis] : new Set());
+  switch (d.story) {
+    case "greet": {
+      // "only my mama dangerous" from a woman who works a bar with no mamasan (Jaja, round 63)
+      const noMama = !Object.keys(NPCS).some(id => NPC_ROLES[id] === "mamasan" && (NPCS[id].room === room || (NPCS[id].bars || []).includes(room)));
+      return { text: _H_GREET[_townPick(npc, "hgreet", _H_GREET.length, b.greet, c => !(noMama && /\bmama\b/i.test(_H_GREET[c])))] };
+    }
+    case "family": {
+      const c = _townPick(npc, "hfamily", _H_FAMILY.length, b.family, i => i === b.family || !taken("family").has(i));
+      const w = _townPick(npc, "hfamwrap", _H_FAMILY_WRAP.length, b.famWrap);
+      return { text: _H_FAMILY_WRAP[w](_H_FAMILY[c].replace(/\{from\}/g, b.from)) };
+    }
+    case "plan": {
+      const c = _townPick(npc, "hplan", _H_PLAN.length, b.plan, i => i === b.plan || !taken("plan").has(i));
+      const w = _townPick(npc, "hplanwrap", _H_PLAN_WRAP.length, b.planWrap);
+      return { text: _H_PLAN_WRAP[w](_H_PLAN[c]) };
+    }
+    case "home": return { text: _H_HOME_WRAP[_townPick(npc, "hhomewrap", _H_HOME_WRAP.length, b.homeWrap)](b.from) };
+    case "mgreet": { const i = _townPick(npc, "mgreet", _M_GREET.length, b.greet); return { text: _M_GREET[i], short: _M_GREET_SHORT[i] }; }
+    case "mfamily": { const bad = (typeof _M_FAM_CLASH !== "undefined" && _M_FAM_CLASH[b.story]) || []; return { text: _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, b.family, i => !bad.includes(i))] }; }
+    case "mplan": return { text: _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, b.plan)] };
+    case "cfamily": return { text: _C_FAMILY[_townPick(npc, "cfamily", _C_FAMILY.length, b.family)].replace(/\{from\}/g, b.from) };
+  }
+  return null;
+}
+// a mamasan or cashier answers a miss in the English she uses for everything else, not the
+// floor's "na" (Wendell, round 63: Jom, Orm, Jeab and Da fluent in every answer but the miss)
+const _TOPIC_MISS_HOUSE = [
+  n => `${n} considers it and sets it aside. “Not a thing I know, tilac. Ask me about the bar, or the girls.”`,
+  n => `“That one, I cannot help you with.” ${n} is perfectly pleasant about it. “Ask me something on my side of the counter.”`,
+  n => `${n} gives a small, practised shrug. “You ask the wrong woman. Ask me about this bar and I know everything.”`,
+];
 function _topicMiss(npcId) {
   const n = NPCS[npcId];
   // The rail keeps its own voice. A regular's "not my story" is a man turning a
@@ -2237,8 +2293,9 @@ function _topicMiss(npcId) {
   // both casts.
   if (n.patron) return _PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](n.name, _patronHis(npcId));
   const she = n.pronoun === "she" || NPC_ROLES[npcId] || n.filler;
-  const pool = _thaiVoice(npcId) ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;
-  let line = pool[Math.floor(_rand() * pool.length)](n.name);
+  const house = /^(mamasan|cashier)$/.test(NPC_ROLES[npcId] || "") || (typeof _FLUENT_THAI !== "undefined" && _FLUENT_THAI.has(npcId));
+  const pool = house && she ? _TOPIC_MISS_HOUSE : _thaiVoice(npcId) ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;
+  let line = _pickVary(pool, "miss:" + npcId)(n.name);   // not the same brush-off twice running from one mouth (Desmond, round 63)
   if (!she && pool === _TOPIC_MISS_TH) line = line.replace("her head", "his head").replace("the wrong girl", "the wrong man");
   if (she && NPC_ROLES[npcId] === "mamasan") line = line.replace("the wrong girl", "the wrong mama");   // Candy is nobody's girl (Margarethe, round 47)
   if (she && pool === _TOPIC_MISS_EN) line = line.replace("shakes his head", "shakes her head");
@@ -2298,9 +2355,11 @@ function _deliver(npcId, d, full, asNew) {
   // regular, the soi's fond one for everyone else — and says how to get the rest
   // …and on the asNew path a node with no `short` gives its TEXT rather than a
   // brush-off: the gist is fine (it still answers), the brush-off is not.
+  const _ts = typeof _townStory === "function" ? _townStory(npcId, d) : null;   // the town book — see _townPick
+  const _txt = (_ts && _ts.text) || d.text, _sh = (_ts && _ts.short) || d.short;
   _say(_fillSaid(terse
-    ? (d.short || (asNew ? d.text : (n.patron ? _patronAgain(npcId) : _askAgain(npcId))))
-    : d.text));
+    ? (_sh || (asNew ? _txt : (n.patron ? _patronAgain(npcId) : _askAgain(npcId))))
+    : _txt));
   // Courted before you ever talked (drinks first, introductions after — a
   // legitimate Pattaya order of operations): the authored greeting reads
   // tone-deaf if it pretends the ledger is blank, so acknowledge it under the
@@ -2508,7 +2567,8 @@ function _describeRoom(full, forceFull) {
   // often than he reads the daytime paint.
   const late = r.lateDesc && typeof _closesMidnight === "function" && G.nightTurn >= 60;
   if (full) _say(late ? (Array.isArray(r.lateDesc) ? _pickVary(r.lateDesc, "late:" + G.room) : r.lateDesc)
-    : (!firstTime && !forceFull && r.revisit ? _pickVary(typeof _atOwnBar === "function" && _atOwnBar() ? _OWNER_REVISIT : r.revisit, "rv:" + G.room) : r.desc));
+    : (!firstTime && !forceFull && r.revisit ? _pickVary(typeof _atOwnBar === "function" && _atOwnBar() ? _OWNER_REVISIT : r.revisit, "rv:" + G.room)
+      : (typeof _atOwnBar === "function" && _atOwnBar() ? String(r.desc).replace(/^An American-run beer bar/, "Your beer bar — the old man's name still over the door —") : r.desc)));   // owned, it is not "American-run" (Marta, round 63)
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) {
     // An item may carry a `sight:` line that places it in the scene ("...at the
@@ -3073,7 +3133,8 @@ function _tick() {
   // couple of passes a night, not six (Frank, 2026-08-26: 4–6 identical visits
   // in one long evening on one stool)
   if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
-      G.turns - G.lastPeddler >= 20 && (G.peddlerNight || 0) < (typeof _atOwnBar === "function" && _atOwnBar() ? (G.day % 2 ? 1 : 0) : 2) && _rand() < 0.12) {   // your own rail every other night, not every night (Hal, round 62)   // he works YOUR rail once a night, not twice — thirty shifts of it (Keith, round 40)
+      // not on the back of her bike (Desmond, round 63)
+      G.turns - G.lastPeddler >= 20 && !(typeof _onRide === "function" && _onRide()) && (G.peddlerNight || 0) < (typeof _atOwnBar === "function" && _atOwnBar() ? (G.day % 2 ? 1 : 0) : 2) && _rand() < 0.12) {   // your own rail every other night, not every night (Hal, round 62)   // he works YOUR rail once a night, not twice — thirty shifts of it (Keith, round 40)
     G.lastPeddler = G.turns;
     G.peddlerNight = (G.peddlerNight || 0) + 1;
     G.pendingEnc = "peddler";
@@ -3133,7 +3194,8 @@ function _tick() {
   _maybeIncomingText();
   if (typeof _wrongNumberTick === "function") _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it
   _soidogTick();   // the day after you adopt the soi dog, the Foundation texts for a donation
-  if (typeof _waenTick === "function") _waenTick();   // Kruu Waen's homework, free, once a day
+  if (typeof _waenTick === "function") _waenTick();
+  if (typeof _tanNoteTick === "function") _tanNoteTick();   // Kruu Waen's homework, free, once a day
   if (typeof _boxTick === "function") _boxTick();      // Rabbit's box, while it's live and you're in the office
   if (typeof _ccibLowTick === "function") _ccibLowTick();  // the lay-low window: a second look, and the day it lifts
   if (typeof _kidTick === "function") _kidTick();          // the kid's offscreen run lands as a text the next day

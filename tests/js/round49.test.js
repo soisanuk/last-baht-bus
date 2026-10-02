@@ -22,7 +22,7 @@ beforeEach(() => {
   G.peddlerNight = 2;
 });
 const ask = (room, who, topic) => { G.room = room; out = []; doCommand(`ask ${who} about ${topic}`); return text(); };
-const miss = /not my story|wrong (girl|man|mama)|I don't know about that|That one I don't know|No idea, mate|doesn't land on anyone|Can't help you there/i;
+const miss = /not my story|wrong (girl|man|mama)|I don't know about that|That one I don't know|No idea, mate|No idea\. Try somebody|Not a thing I know|cannot help you with|wrong woman|doesn't land on anyone|Can't help you there/i;
 
 test("a property is not a comment: nothing is swallowed by a trailing line comment", () => {
   // `water: true` and a dialogue node's `deflect: true` had each been absorbed into
@@ -358,7 +358,7 @@ test("a man who is out is not being let have the table", () => {
 test("the room with the table can discuss the table", () => {
   // `ask <anyone> about killer` answered everywhere; `about pool` — the word a
   // player types, in the bar with the table in it — fell through to the greeting.
-  const miss2 = /not my story|wrong (girl|man|mama)|I don't know about that|That one I don't know|No idea, mate/i;
+  const miss2 = /not my story|wrong (girl|man|mama)|I don't know about that|That one I don't know|No idea, mate|No idea\. Try somebody|Not a thing I know|cannot help you with|wrong woman/i;
   G.room = "lucky_tiger"; G.day = 2;
   out = []; doCommand("ask ratana about pool");
   assert.doesNotMatch(text(), miss2, "the mamasan whose floor it stands on");
@@ -378,7 +378,7 @@ test("stubbed dice cannot hang the engine — the documented testing practice is
     const saved = _rand;
     try {
       _rand = () => fixed;
-      G.room = "stinky_bar"; G.day = 3; G.money = 9000; G.game = null;
+      G.room = "stinky_bar"; G.day = 3; G.money = 9000; G.game = null; G.lastKp = null;   // one league a night (round 63)
       out = []; doCommand("play killer");
       for (let i = 0; i < 60 && G.game; i++) doCommand("shot");
     } finally { _rand = saved; }
@@ -388,7 +388,7 @@ test("stubbed dice cannot hang the engine — the documented testing practice is
   const saved2 = _rand;
   try {
     _rand = () => 0.99;
-    G.room = "stinky_bar"; G.day = 3; G.money = 9000; G.game = null;
+    G.room = "stinky_bar"; G.day = 3; G.money = 9000; G.game = null; G.lastKp = null;
     out = []; doCommand("play killer");
     const names = G.game.kp.players.map(p => p.name);
     assert.equal(new Set(names).size, names.length, "no player is seated twice");

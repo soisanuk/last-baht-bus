@@ -4004,7 +4004,7 @@ function _doTalkBody(arg, topic) {
   if (topic && NPCS.cream && NPCS[npc] && NPCS[npc].filler && NPC_ROLES[npc] === "hostess" &&
       _npcRoom(npc) === NPCS.cream.room && /\b(cream|friend|your friend|coffee shop|barista|pharmacy|white coat)\b/i.test(String(topic))) {
     _say(_pickVary([
-      n => `"Cream?" ${n}'s face does something complicated and settles on fond. "My friend, long time. Coffee shop in the day. At night she come visit me." A pause exactly long enough. "Every night, visit me. Very good friend."`,
+      n => `"Cream?" ${n}'s face does something complicated and settles on fond. "My friend, long time. Pharmacy in the day — white coat, very serious. At night she come visit me." A pause exactly long enough. "Every night, visit me. Very good friend."`,
       n => `${n} laughs into her glass. "Cream visit me. She say. Every night she visit me, and every night I am so surprise." She clinks your glass. "Is okay. Everybody need a friend to visit."`,
     ], "nearcream")(NPCS[npc].name));
     return;
@@ -4025,7 +4025,7 @@ function _doTalkBody(arg, topic) {
   if (topic && G.rideLog && G.rideLog[npc] && /\b(late|late-late|after two|after[- ]?hours|ride|the ride|bike|motorbike|your bike|last night|where we went|that night)\b/i.test(String(topic))) {
     const r = G.rideLog[npc], ago = G.day - r.day;
     _say(_pickVary([
-      n => `${n} grins without looking up. "You want the bike again, na? ${ago <= 1 ? "Last night" : ago + " nights ago"} you eat som tam from my hand and cry. ${r.stops} place. I remember. You remember?"`,
+      n => `${n} grins without looking up. "You want the bike again, na? ${ago <= 1 ? "Last night" : ago + " nights ago"} you hold on so tight I have bruise. ${r.stops} place. I remember. You remember?"`,
       n => `"After two?" ${n} laughs. "You KNOW after two. You sit on the back of my bike, you see the real one." A shrug that is not a shrug. "Maybe again. Maybe tonight. Depends how you drink."`,
       n => `${n} tips her head toward the street. "The ride. Mm. ${r.great ? "That was a good one — I say to my friend, this farang, he can sit on a bike." : "Small one. Next time we go longer, if you don't fall off."}"`,
     ], "ridememory:" + npc)(NPCS[npc].name));
@@ -4052,6 +4052,12 @@ function _doTalkBody(arg, topic) {
   if (topic && /\b(fly(?:ing)? home|my flight|flight home|go home tomorrow|tomorrow i (?:go|fly|leave)|airport tomorrow)\b/.test(String(topic).toLowerCase()) &&
       !(NPCS[npc].dialogue || []).some(x => x.topic && /leav|flight/.test(x.topic)) &&
       typeof _leavingTalk === "function" && _leavingTalk(npc, topic)) return;
+  // she said no to the barfine; the same no answers "long time" asked as a topic, not her
+  // "you want go with me? okay" (Desmond, round 63: Manow refused and accepted in one breath)
+  { const _held = G.soc.bfRefused && G.soc.bfRefused[npc];
+    if (topic && _held && /\b(long time|short time|barfine|bar fine|go with|take (?:you|her) out|come with me|tonight)\b/i.test(String(topic)) && typeof _bfRefusalSay === "function") {
+      _bfRefusalSay(npc, Object.assign({}, _held, { again: true })); return;
+    } }
   let d = _pickDialogue(npc, topic || null);
   // the one NAMED piwin answers for his own job the way any piwin at a stand does —
   // "ask bank about fare" was "not my story" while the anonymous man beside him
@@ -4397,6 +4403,11 @@ function _doTalkBody(arg, topic) {
     const t = _convoTopic(topic) || topic;
     const story = _authoredStory(npc);   // her own province if her text names one; family/plan nobody else at her bar tells
     const from = story.from;
+    // …and nobody else in TOWN has told you (the town book, round 63)
+    { const rm = NPCS[npc].room || (NPCS[npc].bars || [])[0], tk = _storyTaken(rm);
+      const fi = _townPick(npc, "hfamily", _H_FAMILY.length, story.familyIdx, i => i === story.familyIdx || !tk.family.has(i));
+      const pi = _townPick(npc, "hplan", _H_PLAN.length, story.planIdx, i => i === story.planIdx || !tk.plan.has(i));
+      story.family = _H_FAMILY[fi].replace(/\{from\}/g, from); story.plan = _H_PLAN[pi]; }
     const line = /home|village/.test(t) ? `"${from}, Isan side. Small village, big family." She says it like a postcode, and then, softer: "Very far."`
       : /family/.test(t) ? `"${story.family}." She says it the way she would give you a phone number: a fact, not a plea.`
       : `"Plan?" She thinks about it properly. "My dream is to ${story.plan}." A shrug, a grin. "Everybody say that one. Maybe me, I do it."`;
@@ -4404,6 +4415,21 @@ function _doTalkBody(arg, topic) {
     const _told = (G.soc.storyTold = G.soc.storyTold || {});
     if (_told[_sk]) _say(`${NPCS[npc].name}: ` + (/home|village/.test(t) ? `"${from}. You know already."` : /family/.test(t) ? `"Same family, tilac. Nothing change since you ask."` : `"Same dream. Still a dream."`));   // told in full every time, six times (Piet, round 62)
     else { _told[_sk] = true; _say(`${NPCS[npc].name}: ${line}`); }
+    _questOffer(npc);
+    return;
+  }
+  // An authored MAMASAN asked the same three questions answered "not my story" (Wendell,
+  // round 63: Sumalee, Bussaba, Sopha, Mem). The house's stock answers, through the town book;
+  // Candy and Oy have their own nodes and never reach here.
+  if (topic && !d.topic && NPC_ROLES[npc] === "mamasan" && !NPCS[npc].filler && /^(home|hometown|village|family|plan|future|dream)$/.test(_convoTopic(topic) || topic)) {
+    const t = _convoTopic(topic) || topic, from = _authoredStory(npc).from;
+    const _sk = npc + ":m:" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan");
+    const _told = (G.soc.storyTold = G.soc.storyTold || {});
+    if (_told[_sk]) { _say(_pickVary(_ASK_AGAIN_FLUENT, "mamaagain")(NPCS[npc].name)); _questOffer(npc); return; }
+    _told[_sk] = true;
+    _say(/home|village/.test(t) ? `${NPCS[npc].name}: "${from}." She names it the way you would name a supplier you stopped using. "A long time ago now. This is home."`
+      : /family/.test(t) ? `${NPCS[npc].name}: ` + _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, _hh(npc, 37) % _M_FAMILY.length)]
+      : `${NPCS[npc].name}: ` + _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, _hh(npc, 41) % _M_PLAN.length)]);
     _questOffer(npc);
     return;
   }
@@ -4461,7 +4487,9 @@ function _doTalkBody(arg, topic) {
         G.mortDeclined = (G.mortDeclinedDay === G.day) ? G.mortDeclined + 1 : 1;
         G.mortDeclinedDay = G.day;
         const nm = NPCS[known].name;
-        if (G.mortDeclined === 1) {
+        if (NPCS[known].offmap && G.mortDeclined === 1) {   // a Bangkok visitor is not somebody forty years of this soi taught him (Desmond, round 63)
+          _say(`Mort's biro stops. \u201c${nm}?\u201d He considers it honestly. \u201cNo. Not one of ours \u2014 a visitor, by the sound of it, the same as you were once. I would not put her in the column if I did know her.\u201d The biro starts again.`, "dim");
+        } else if (G.mortDeclined === 1) {
           _say(`Mort's biro stops. He looks at you over the horn-rims, and for a second ` +
             `you see forty years of watching behind them. \u201c${nm}.\u201d He does not write ` +
             `it down; he already has, somewhere. \u201cI know exactly who that is. But I do not ` +
@@ -9206,6 +9234,7 @@ function _doWait(arg) {
   // accept 20:00 too — the game prints times that way (mobile playtest 2026-08-17)
   const until = arg.match(/^(?:until |till |for )?(?:(\d+)(?::\d\d)?|midnight)\s*(am|pm)?$/);
   if (/midnight/.test(arg)) target = _hourToTurn(0);
+  else if (/^(?:until |till )?(?:dawn|sunrise|morning|first light)$/.test(arg)) target = SUNRISE_TURN;   // "WAIT UNTIL DAWN" was invalid (Wendell, round 63)
   else if (until && until[1]) {
     let h = parseInt(until[1], 10);
     if (/^(?:until|till)/.test(arg)) {
@@ -11641,7 +11670,7 @@ function _renderResume() {
     if (G.convoQ.q) _say(G.convoQ.q);
     G.convoQ.shown = false; _convoPrompt(G.convoQ.id);
   }
-  if (G.pendingChoice === "synjob") { _synPrompt(); return; }
+  if (G.pendingChoice === "synjob") { _synResume(); return; }
   if (G.pendingChoice === "shift") { _shiftResume(); return; }
   if (G.pendingChoice === "partner") { _partnerPrompt(); return; }
   if (G.pendingChoice === "affair") { _affairPrompt(); return; }
@@ -11848,6 +11877,7 @@ function doCommand(input) {
   if (G.pendingChoice === "shift") {
     if (/^(yes|ok|okay|sure|go on|aye|do it|let|have|get|put|write)\b/.test(lower)) { _shiftYes(); return; }
     if (/^(no|nope|leave|not|refuse|decline|bert)\b/.test(lower)) { _shiftNo(); return; }
+    if (/\?|^(how|what|who|why|cost|price|how much)\b/.test(lower)) { _shiftStakes(); return; }
     _say("It is still standing there waiting on you, which is most of what " +
       "owning a bar turns out to be.", "dim");
     _shiftPrompt();
@@ -11891,6 +11921,7 @@ function doCommand(input) {
   // procurement: stated, not asked
   if (G.pendingChoice === "synjob") {
     if (/^ask\s+(?!tan\b|him\b|what\b|why\b|who\b|about it\b|for\b)\S/.test(lower)) { _say("Tan's question is on the bar first. Answer him, then ask whoever you like.", "dim"); _synPrompt(); return; }
+    if (/^(what|how|so)\b.*\b(no|refuse|say no|cost|much|price|pay|happens)\b/.test(lower)) { _synRestate(); return; }   // not "who they are" (Marta, round 63)
     if (/^(ask|who|what|why|explain|tell)\b/.test(lower)) { _synWho(); return; }
     if (/^(yes|ok|okay|sure|fine|deal|agree|hire)\b/.test(lower)) { _synYes(); return; }
     if (/^(no|refuse|decline|nope|never)\b/.test(lower)) { _synNo(); return; }

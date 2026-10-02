@@ -1011,7 +1011,7 @@ const _ENC = {
     }
     if (/hi|hello|sawat|wai|chat|talk|nice|friend|wait|who|from|smile|drink|coffee/.test(input)) {
       _say("You keep it light — a wai, a where-you-from, no agenda. She thaws: Bangkok, " +
-        "down for the weekend with a girlfriend who is, as ever, late. You trade the " +
+        "down for a few days with a girlfriend who is, as ever, late. You trade the " +
         "small nothings of two people not trying to sell each other anything. Then a " +
         "voice shrieks her name — the friend, at last — and she's gone with a real " +
         "smile and a “bye khaaa~”. You spent nothing and somehow feel richer.", "win");
