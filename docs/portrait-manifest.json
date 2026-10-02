@@ -11,21 +11,9 @@
       "patron": 25
     },
     "filler": 213,
-    "unrendered": 11
+    "unrendered": 0
   },
-  "unrendered": [
-    "aey",
-    "buppha",
-    "jiew",
-    "jintana",
-    "joom",
-    "oiy",
-    "orapin",
-    "preeda",
-    "thip",
-    "jiap",
-    "mew"
-  ],
+  "unrendered": [],
   "characters": [
     {
       "id": "aey",
@@ -42,7 +30,7 @@
         "masseuse"
       ],
       "desc": "Mid-twenties, ponytail, a {{phone}} that never leaves her hand, and the quick eyes of whoever works the step where the beach road turns into the strip. Aey catches the punters as they arrive and prices them before they've stopped walking.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "aoy",
@@ -168,7 +156,7 @@
         "masseuse"
       ],
       "desc": "Mid-forties, a bob and reading glasses on a cord, and the knowing look of somebody who has worked three of the hundred pink shopfronts on Buakhao and can tell you which ones water the oil. Buppha runs the step at Golden Touch like a woman who owns it, which she doesn't.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "cream",
@@ -318,7 +306,7 @@
         "masseuse"
       ],
       "desc": "The smallest of the three on the plastic stools out front of Bamboo, and the one the other two send the big farang to. Forties, grey coming in at the temples, forearms like cable. Jiew means tiny; her thumbs did not get the message.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "jintana",
@@ -335,7 +323,7 @@
         "masseuse"
       ],
       "desc": "The louder girl on the step, and loud on purpose: thirties, big curly hair, cherry-red polo, a laugh that carries over two lanes of Beach Road traffic. Jintana could sell a massage to a man running for a bus, and has.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "joom",
@@ -352,7 +340,7 @@
         "masseuse"
       ],
       "desc": "Late thirties, sun-browned from a life nearer the beach than the shop admits, hair in a clip and a pink polo with the shop's name coming off it. Joom has the step at Sunset and the sideways smile of somebody who has heard every line a farang has and rates them out of ten.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "kyle",
@@ -487,7 +475,7 @@
         "masseuse"
       ],
       "desc": "Early twenties, two braids and a round face, new enough that she still reads the price list off the wall before she says it. Oiy sits on the end stool at Papaya, where the Walking Street crowd thins out, and practises her English on anybody who stops.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "orapin",
@@ -504,7 +492,7 @@
         "masseuse"
       ],
       "desc": "Early thirties, hair tied low, the calm of a shop that is quieter than the town ones and in less of a hurry. Orapin doesn't work the step; she waits inside under the pink light, and the customers who find her tend to come back.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "pensri",
@@ -1795,7 +1783,7 @@
       "room": "lucky_charm",
       "tags": [],
       "desc": "Thirty-six, a grey cardigan over the bar dress as if the air-con were a Belgian November, and a way of looking straight at a man that the younger girls have not got yet and may never get. Her English is good — not bar-good, lived-in good — and she uses less of it than she has.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "pukky",
@@ -1867,7 +1855,7 @@
       "room": "mama_yai",
       "tags": [],
       "desc": "Forty-four and not hiding it: hair pinned up with one clip, a plain dark blouse, a thin gold bracelet that is the only thing on her that shines. She sits the way the long-timers sit — back straight, drink untouched, the room in the corner of one eye — and when she laughs it is the real one, short, and gone again.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "waen",
@@ -3816,7 +3804,7 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Small and sharp, and misses nothing — one of The Stinky Pinky's girls, from Sisaket. Google Translate is open before you finish the sentence.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "mew",
@@ -3831,7 +3819,7 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Long hair, longer eyelashes, a practised pout — one of The Stinky Pinky's girls, from Roi Et. The {{phone}} never leaves her hand.",
-      "rendered": false
+      "rendered": true
     },
     {
       "id": "goong",
