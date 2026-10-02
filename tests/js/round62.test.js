@@ -161,3 +161,27 @@ test("Nont's own words about Tan are heard, and cost nothing", () => {
   G.room = _npcRoom("nont"); G.nightTurn = 40; const m = G.money;
   out = []; run("ask nont about tan"); assert.match(said(), /single baht/); assert.equal(G.money, m);
 });
+
+// ── The dialogue walk's readers (2026-10-02): subeditors on every authored node ──────
+test("the repeat brush-off follows the speaker's English: fluent Thai, Tinglish, farang", () => {
+  const n = "Tan";
+  assert.ok(_ASK_AGAIN_FLUENT.every(f => !/tilac|same-same|talk to the wall/i.test(f(n))));
+  for (const id of ["tan", "nont", "jun"]) { for (let k = 0; k < 6; k++) { out = []; _say(_askAgain(id)); assert.ok(_ASK_AGAIN_FLUENT.some(f => said().includes(f(NPCS[id].name))), id); } }
+  assert.ok(!_PATRON_AGAIN.some(f => /goldfish|memory/i.test(f("Glam", "his"))), "no memory joke reaches a man with dementia");
+});
+test("the massage special stays PG-13 in every shop", () => {
+  for (const id of Object.keys(NPCS)) for (const d of NPCS[id].dialogue || []) {
+    assert.doesNotMatch(String(d.text || "") + " " + String(d.short || ""), /hand,? (or )?mouth/i, id);
+  }
+});
+test("facts the readers caught stay caught", () => {
+  const t = (id, re) => NPCS[id].dialogue.some(d => re.test(String(d.text) + " " + String(d.short || "")));
+  assert.ok(!t("mort", /The fourth I did write up/), "Mort's three and four");
+  assert.ok(!t("daeng", /better knees/), "Daeng's own knee story");
+  assert.ok(!t("toi", /Germany, the husband/), "Mercedes married in Austria");
+  assert.ok(!t("drew", /Twenty years Navy/), "Drew's years add up to DLI");
+  assert.ok(!t("terry", /in your feed/) && !t("bert", /film himself/), "Vasseur has no content-creator trait");
+  assert.ok(!t("nok", /Iran war/), "no dated real event");
+  assert.ok(!t("macca", /full fare/), "Tan takes no fare");
+  assert.ok(!t("superman", /The bay is going gold/), "no sunset asserted at any hour");
+});

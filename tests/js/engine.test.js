@@ -686,7 +686,7 @@ test("rail regulars brush off repeats too (their own grizzled voice)", () => {
   out = [];
   _doTalkBody(pid, topic);
   assert.notEqual(lastOut(), first);
-  assert.match(lastOut(), /told you|goldfish|same story/i, "a regular's brush-off");
+  assert.match(lastOut(), /told you|had that one|same story/i, "a regular's brush-off");
 });
 
 test("candy withholds until the receipt proves your night", () => {

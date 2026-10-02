@@ -1709,8 +1709,8 @@ const _PATRON_MISS = [
   (n, his) => `${n} turns a hand over on the bar: nothing in it. “Couldn't tell you. Not my story.”`,
 ];
 const _PATRON_AGAIN = [
-  (n, his) => `${n} gives you a flat look over ${his} Chang. “Already told you that one, mate.”`,
-  (n, his) => `“You asked me that,” ${n} says. “Memory like a goldfish. Get a round in and I might go again.”`,
+  (n, his) => `${n} gives you a flat look over ${his} glass. “Already told you that one.”`,
+  (n, his) => `“You've had that one,” ${n} says. “It doesn't improve with telling.”`,
   (n, his) => `${n} waves a hand. “Same story, same ending. Ask me something I haven't done to death.”`,
 ];
 // THE RAIL'S NIGHTLY BOOK, with its day-reset in exactly one place. A regular's
@@ -2117,8 +2117,19 @@ function _thaiVoice(id) {
   if (n.patron && n.nat && n.nat !== "Thai") return false;
   return true;
 }
+// THE FLUENT THAI REGISTER (the dialogue walk's readers, 2026-10-02): Tan went to film
+// school in Ohio, Nont speaks unaccented English, Jun reads at university, and all of them
+// were brushing a repeat off in Tinglish — "or you talk to the wall". Their own voices are
+// fluent, so their repeat is too. Named, like _FARANG_NPCS, because no field marks fluency.
+const _FLUENT_THAI = new Set(["tan", "nont", "jun", "wilawan", "rose", "ampai", "gift", "nangfah", "mala",
+  "duangjai", "pae", "mercedes", "chompoo", "somchith", "nit", "tul", "waen", "kesinee", "wimon", "preeda", "thip"]);
+const _ASK_AGAIN_FLUENT = [
+  n => `“You asked me that one already,” ${n} says, with a small smile. “Same answer. Ask me something new.”`,
+  n => `“We have done that one.” ${n} lets it rest there. “I don't mind saying it twice. It won't be better the second time.”`,
+  n => `${n} gives you a patient look. “I told you. Try me on something I haven't answered.”`,
+];
 function _askAgain(npcId) {
-  let pool = _thaiVoice(npcId) ? _ASK_AGAIN : _ASK_AGAIN_EN;
+  let pool = _FLUENT_THAI.has(npcId) ? _ASK_AGAIN_FLUENT : _thaiVoice(npcId) ? _ASK_AGAIN : _ASK_AGAIN_EN;
   // a massage shop sells no drinks: "Buy a drink — maybe it come back" from Pensri (Terence, round 57)
   if (_room() && (_room().massage || _room().soapy)) pool = pool.filter(f => !/drink/.test(String(f)));
   return pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name);

@@ -12,7 +12,7 @@
 //        dead (shadowed by an ungated earlier node), preempt (the engine answers the ask first),
 //        residue (a template or a constant's name in the RENDERED text), fact (a character
 //        stating two ages or two home provinces), duplicate (one text, two characters),
-//        register (a Tinglish speaker's clean-English node, or the reverse), gist (a short
+//        register (--register only: advisory, see lint()), gist (a short
 //        no shorter than its text), pronoun, opener, quotes, spacing
 //
 // THE ORDER COMES FROM THE GRAPH, THE PROOF FROM THE ENGINE. docs/world-graph.json knows
@@ -40,7 +40,7 @@ for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-enc
 const GRAPH = JSON.parse(readFileSync(REPO + "docs/world-graph.json", "utf8"));
 const args = process.argv.slice(2);
 const opt = k => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
-const NO_STUB = args.includes("--no-stub"), LINT = args.includes("--lint"), LINT_ALL = args.includes("--all");
+const REGISTER = args.includes("--register"), NO_STUB = args.includes("--no-stub"), LINT = args.includes("--lint"), LINT_ALL = args.includes("--all");
 const SCRIPT_DIR = opt("--script"), ONLY = (opt("--only") || "").split(",").filter(Boolean), FILLER = args.includes("--filler"), JSON_OUT = args.includes("--json");
 let out = [];
 engineInit((t, c) => out.push({ text: String(t), cls: c }));
@@ -110,6 +110,14 @@ function applyAtoms(npc, atoms, invert) {
   }
 }
 function gatesOf(d) { return { req: d.req || [], notFlags: d.notFlags || [], bond: d.bond || 0, when: d.when ? String(d.when).replace(/\s+/g, " ").slice(0, 140) : null, sets: d.sets || [] }; }
+// a repeat that came from a SHARED pool, not an authored short: one pool line printed for every
+// man on the rail read to the first readers as fourteen authored gists (2026-10-02)
+function poolGist(npc, gist) {
+  const n = NPCS[npc].name, his = (typeof _pr === "function" ? _pr(npc).p : "his");
+  const pools = [typeof _ASK_AGAIN !== "undefined" ? _ASK_AGAIN : [], typeof _ASK_AGAIN_EN !== "undefined" ? _ASK_AGAIN_EN : [],
+    typeof _ASK_AGAIN_FLUENT !== "undefined" ? _ASK_AGAIN_FLUENT : [], typeof _PATRON_AGAIN !== "undefined" ? _PATRON_AGAIN : []];
+  return pools.some(p => p.some(f => { try { return gist.includes(f(n, his)); } catch (e) { return false; } }));
+}
 function topicOf(d) { return d.topic ? String(d.topic).split("|")[0].trim() : null; }
 function sameTopic(a, b) {   // would node a be offered the topic that reaches node b?
   const t = topicOf(b);
@@ -274,7 +282,7 @@ if (SCRIPT_DIR) {
       lines.push(`## [${x.key}] ${x.topic ? "ASK ABOUT " + String(x.topic).split("|")[0] : "(hello)"}${x.topic && String(x.topic).includes("|") ? "  (aliases: " + x.topic + ")" : ""}`);
       if (g.length) lines.push("_gates: " + g.join(" · ") + "_");
       if (x.forced.length) lines.push(`_${x.stubbed ? "⚠ " : ""}reached by forcing: ${x.forced.join("; ")}_`);
-      lines.push("", x.text, "", `> gist: ${x.gist.replace(/\n/g, " ")}`, "");
+      lines.push("", x.text, "", `> gist${x.gist && poolGist(r.npc, x.gist) ? " (a line from the shared repeat pool — this node has no authored short)" : ""}: ${x.gist.replace(/\n/g, " ")}`, "");
       for (const c of x.choices || []) lines.push(`### choice: "${c.label}"${c.when ? "  _(when " + c.when + ")_" : ""}`, "", c.text, "");
     }
     if (r.unreached.length) { lines.push("## UNREACHED", ""); for (const u of r.unreached) lines.push(`- ${u.key}${u.topic ? " (" + u.topic + ")" : ""}: ${u.why}`); }
@@ -334,7 +342,10 @@ function lint(results) {
     if (provs.size > 1) add("fact", r.npc, `${n.name} places home in ${provs.size} provinces: ` + [...provs].map(([v, k]) => v + " (" + k.join(",") + ")").join("; "), "warn");
     for (const [o, ks] of openers) if (ks.length >= 3) add("opener", r.npc, `${ks.length} nodes open "${o}…": ${ks.join(", ")}`, "low");
     // register outliers: a Tinglish speaker with a long node of clean English, or an English speaker who suddenly isn't
-    if (speechNodes >= 4) {
+    // ADVISORY ONLY (--register): its first run flagged 23 nodes and three readers kept all 23 —
+    // light Tinglish reads as clean English to a marker count, and the real slips it missed
+    // (Tan, Kwan, Ploy) needed a reader. A lint whose every hit is benign teaches people to skip it.
+    if (REGISTER && speechNodes >= 4) {
       const share = tingNodes / speechNodes;
       for (const p of perNode) {
         if (share >= 0.6 && !p.hits && p.words >= 25) add("register", p.key, `${n.name} speaks Tinglish in ${Math.round(share * 100)}% of ${fem === "he" ? "his" : "her"} speaking nodes; this one is ${p.words} words of clean English`);
