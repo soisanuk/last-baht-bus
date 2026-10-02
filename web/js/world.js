@@ -8716,8 +8716,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "mamasans who ran the street better than any council, the farang who came and stayed and are under " +
           "the wat now.\n\nThen, unprompted, his voice drops a register. \"Funny thing the money never " +
           "changes, though. Back table at the flash bar — always was a quiet fella at it. Thai, but he'd talk " +
-          "like a Yank when he talked, which weren't often. Young, back then. Drove one of the big men about — " +
-          "and here's the thing stuck with me forty year—\" he taps the bar \"—everyone deferred to the " +
+          "like a Yank when he talked, which weren't often. Young, back then — or he looked it; I never could tell with the Thai fellas, the fit ones. Drove one of the big men about — and here's the thing stuck with me fifteen year—\" he taps the bar \"—everyone deferred to the " +
           "DRIVER. Not the big man. The driver. And not a soul could tell you why.\" A dry sip. \"Same sort's " +
           "still out there, I'd wager. Men like that don't age. They just get quieter.\"",
         short: "\"Always a quiet US-sounding Thai at the good table — drove the big men about, and everyone deferred to the DRIVER. Nobody could say why.\"" },
@@ -9489,16 +9488,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length >= 3,
         sets: ["tanSuspected"],
-        text: "For a long moment Tan simply looks at you, and the airport grin is nowhere to be found. \"You " +
-          "have been busy. The Orchid. The old man's stories. A name a driver had no way to know.\" He counts " +
-          "your evenings back to you without hurry, and you understand, with a small cold drop, that he has " +
-          "known each piece as you gathered it. \"You are asking about a quiet man. A man the whole room bends " +
-          "toward and no one can name.\" He leans in, still perfectly pleasant, and that is the most " +
-          "frightening thing about him. \"So here is the one piece of advice I will ever give you for nothing: " +
-          "quiet men stay quiet for a reason. And some of them—\" he pats the roof of his very ordinary car, " +
-          "twice \"—drive taxis.\" Then the grin snaps back on like a switched light. \"ANYWAY. You need a " +
+        text: "For a long moment Tan simply looks at you, and the airport grin takes a rest. \"You " +
+          "have been busy. The Orchid. The old man's stories. A name a driver had no way to know.\" He counts your evenings back to you without hurry; he has known each piece as you gathered it, and he does not pretend otherwise. \"You are asking about a quiet man. A man the whole room bends " +
+          "toward and no one can name.\" He leans back, perfectly pleasant. \"So here is the one piece of advice I will ever give you for nothing: quiet men stay quiet because it is good for everybody, and the polite thing is to let them. Some of them even drive taxis.\" He pats the roof of his very ordinary car, twice, and the grin comes back. \"ANYWAY. You need a " +
           "ride, any hour, you call me. But you knew that already.\"",
-        short: "\"You are asking about a quiet man the whole room bends toward and no one can name. Quiet men stay quiet for a reason — and some of them drive taxis.\" The grin snaps back." },
+        short: "\"You are asking about a quiet man the whole room bends toward and no one can name. Quiet men stay quiet because it is good for everybody; the polite thing is to let them. Some of them even drive taxis.\" The grin comes back." },
     
       // ── bar-owning chain, step 3 (the OTHER route): Tan as the 51% ──────
       // The fork's whole point. Candy's yes is slow, written, and costs a
@@ -11753,12 +11747,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "“Import, export, facilities, consulting. Clients in the hospitality sector.”" },
       { topic: "invoices|invoice|consulting|kitten corner|pattaya leisure|the invoices|paperwork",
         req: ["invoicesCopied"],
-        text: "The glasses come off, slowly, and go on the desk, and she looks at you with an " +
-          "expression that has nothing of the receptionist left in it. “I don't know what you " +
-          "think you have read.” Quiet. “A company sends invoices. Clients pay them. That is what " +
-          "a company is.” She does not blink. “You should go now, sir. And you should think about " +
-          "who you tell that you were here, because they will already know.”",
-        short: "“A company sends invoices; clients pay them. You should go, and think about who you tell.”" },
+        text: "The glasses come off, slowly, and go on the desk. “I don't know what you think you have read.” Quiet, and not unkind. “A company sends invoices. Clients pay them. That is what " +
+          "a company is.” The glasses go back on. “This is a private office, sir. Visitors make an appointment. The door is behind you.”",
+        short: "“A company sends invoices; clients pay them. This is a private office, sir — visitors make an appointment.”" },
       { topic: "invoices|invoice|consulting|kitten corner|pattaya leisure|the invoices|paperwork",
         text: "“Kitten Corner?” She has to think about it, or performs having to. “We have many " +
           "clients in hospitality, sir. I do not discuss clients.” The glasses go back on. “That " +
