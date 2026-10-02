@@ -102,15 +102,25 @@ function _updateScene() {
       box.appendChild(_sceneArt());
       box.appendChild(_sceneCast());
     }
-    box.appendChild(_sceneHud());
+    const hud = _sceneHud();
+    box.appendChild(hud);
     const exits = _sceneExits();
-    if (off && !modalFold) {
-      // folded: the toggle is the first "button" on the exits rail (which already
-      // scrolls sideways) instead of floating over the HUD — the HUD can't widen
+    if (off && !modalFold && _sceneNarrow()) {
+      // folded on a phone: the toggle leads the HUD row and the exits rail goes —
+      // every exit on it is already on screen in the prose, on the compass and in
+      // the chip bar (Mario, 2026-10-03: "Mobile UI is pretty cluttered" — the same
+      // W and E were printed five times on one screen)
       tog.classList.add("inline");
-      exits.insertBefore(tog, exits.firstChild);
+      hud.insertBefore(tog, hud.firstChild);
+    } else {
+      if (off && !modalFold) {
+        // folded: the toggle is the first "button" on the exits rail (which already
+        // scrolls sideways) instead of floating over the HUD — the HUD can't widen
+        tog.classList.add("inline");
+        exits.insertBefore(tog, exits.firstChild);
+      }
+      box.appendChild(exits);
     }
-    box.appendChild(exits);
     const notes = _sceneNotes();
     if (notes) box.appendChild(notes);
     // One-time tip the first time the panel renders folded by default (phones):

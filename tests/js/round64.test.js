@@ -144,3 +144,18 @@ test("Tan feeds the company too", () => {
   out = []; _tanFood();
   assert.match(said(), /Lek/); assert.ok((G.soc.drinks.lek || 0) > b);
 });
+
+// ── Mario, 2026-10-03: "an indicator … when locked into dialogue mode" ─────────
+test("the conversation card names who you are talking to and how well she knows you, and is pure", () => {
+  G.room = _npcRoom("lek"); G.nightTurn = 20;
+  assert.equal(_convoCard(), null);
+  run("talk to lek");
+  const c = _convoCard();
+  assert.equal(c.id, "lek"); assert.equal(c.name, "Lek");
+  assert.match(c.line, new RegExp(_barName(G.room)));
+  assert.equal(c.tier, "a stranger to her");
+  party("lek"); assert.equal(_convoCard().tier, "with you tonight");
+  G.party = null;
+  G.room = "beach_rd_c";   // she is not here: no card, and reading it clears nothing
+  assert.equal(_convoCard(), null); assert.equal(G.convo, "lek");
+});

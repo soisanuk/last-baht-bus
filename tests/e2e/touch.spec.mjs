@@ -225,3 +225,46 @@ test.describe("touch device", () => {
     expect(shadows, "the chip bar carries scroll shadows").toBe(true);
   });
 });
+
+// ── 2026-10-03: "Mobile UI is pretty cluttered" (Mario) ─────────────────────
+// The floating stack reserved a 134px right margin on a 390px screen whenever
+// the compass was up, and the exits were printed five times. On a phone the
+// buttons now dock in a row above the chips; and a conversation shows a card.
+test.describe("phone dock and the conversation card", () => {
+  test.use(IPHONE);
+  const run = async (page, c) => { await page.fill("#term-in", c); await page.press("#term-in", "Enter"); await page.waitForTimeout(200); };
+
+  test("on the street the transcript keeps its full width and the compass sits above the chips", async ({ page }) => {
+    await bootIntoGame(page, INDEX_URL);
+    await run(page, "down"); await run(page, "out");
+    await expect(page.locator("#nav-fab")).toBeVisible();
+    const r = await page.evaluate(() => {
+      const out = document.getElementById("term-out"), nav = document.getElementById("nav-fab");
+      return { pr: parseFloat(getComputedStyle(out).paddingRight), outBottom: out.getBoundingClientRect().bottom,
+        navTop: nav.getBoundingClientRect().top, chipsTop: document.getElementById("chips").getBoundingClientRect().top,
+        navBottom: nav.getBoundingClientRect().bottom, exitsRail: !!document.getElementById("scene-exits") };
+    });
+    expect(r.pr, "no right margin reserved for floating buttons").toBeLessThan(30);
+    expect(r.navTop, "the compass is below the transcript").toBeGreaterThanOrEqual(r.outBottom - 1);
+    expect(r.navBottom).toBeLessThanOrEqual(r.chipsTop + 1);
+    expect(r.exitsRail, "folded on a phone, the exits rail is not printed a fifth time").toBe(false);
+  });
+
+  test("talking to somebody shows who, and the ✕ ends it", async ({ page }) => {
+    await bootIntoGame(page, INDEX_URL);
+    // a street encounter on the way out would eat the next command (seeded off Math.random)
+    await page.evaluate(() => { for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2; G.lastSaleng = 9e9; });
+    await run(page, "down"); await run(page, "out"); await run(page, "enter shady lady");
+    const nm = await page.evaluate(() => NPCS[_npcsHere().find(i => NPC_ROLES[i] === "hostess")].name);
+    await run(page, "talk to " + nm);
+    const card = page.locator("#convo-card");
+    await expect(card).toBeVisible();
+    await expect(card).toContainText(nm);
+    await expect(page.locator("#term-in")).toHaveAttribute("placeholder", new RegExp(nm));
+    await card.locator("button").click();
+    await page.waitForTimeout(200);
+    await expect(card).toBeHidden();
+    expect(await page.evaluate(() => G.convo)).toBeFalsy();
+    await expect(page.locator("#term-in")).toHaveAttribute("placeholder", "what do you do?");
+  });
+});

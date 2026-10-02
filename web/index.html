@@ -482,6 +482,7 @@
     flex-shrink: 0;
   }
   #ad-mini b { color: var(--cyan); }
+  header #ad-mini { border-bottom: 0; padding: .2rem .5rem 0; }
   @media (min-width: 1220px) { #ad-mini { display: none; } }
 
   /* ── Start menu / mode-select overlay ─────────────────────────────────── */
@@ -906,9 +907,8 @@
 #scene-toggle.inline { position: static; margin-right: 2px; flex: 0 0 auto; align-self: center; }
 /* folded on a phone: the HUD row is the panel's top band, where the bell/message
    FABs float — keep the meters clear of them */
-@media (max-width: 767px) {
-  #scene.collapsed #scene-hud, #scene #scene-hud { padding-right: 72px; } /* the bell/msg FABs own the top-right band */
-}
+/* the HUD keeps to one line (DAY 1 wrapped onto two on a phone) */
+#scene-hud { white-space: nowrap; }
 @media (pointer: coarse) {
   #scene-toggle { min-height: 30px; padding: 3px 12px; font-size: 12px; }
 }
@@ -926,6 +926,58 @@
 .hotspot:hover .hs-label, .hotspot:focus-visible .hs-label,
 #scene-art.hs-pulse .hotspot { opacity: 1; }
 #scene-art.hs-pulse .hotspot { border-color: #00e5ff66; }
+
+/* ── The dock and the conversation card (2026-10-03) ─────────────────────────
+   Mario: "Mobile UI is pretty cluttered" — measured at 390x664 the transcript
+   had 53% of the height and, whenever the compass was up, 66% of the width:
+   the floating stack (compass + messages + notes, 108x240) reserved a 134px
+   right margin so no tappable word could scroll under it, and the exits were on
+   screen five times (the prose, the exits rail, the compass, the chip bar, the
+   Step-inside line). On a phone the buttons now DOCK in one row above the
+   chips instead of floating, so the transcript gets the full width back.
+   Wider screens keep the floating stack exactly as it was. */
+#dock { display: contents; }
+#convo-card { display: none; }
+#convo-card.show { display: flex; align-items: center; gap: 9px; padding: 6px 12px;
+  border-top: 1px solid #ff149340; background: #0d0420; min-width: 0; flex-shrink: 0; }
+#convo-card img { width: 40px; height: 40px; border-radius: 9px; object-fit: cover;
+  border: 1px solid #ff149366; background: #140a2e; flex: 0 0 auto; }
+#convo-card .who { flex: 1; min-width: 0; line-height: 1.25; }
+#convo-card .who b { color: var(--yellow); font-size: .9rem; }
+#convo-card .who .line, #convo-card .who .tier { display: block; font-size: .7rem; color: #9a86b8;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#convo-card .who .tier { color: var(--cyan); }
+#convo-card .who .tier.cold { color: #ff6b81; }
+#convo-card .who .tier.ask { color: var(--pink); }
+#convo-card button { flex: 0 0 auto; min-width: 44px; min-height: 40px; border-radius: 9px;
+  border: 1px solid #ff149366; background: #12001e; color: var(--pink); font: inherit;
+  font-size: .8rem; cursor: pointer; padding: 0 10px; }
+@media (max-width: 767px) {
+  header { padding: .45rem 3.6rem .35rem; }
+  header .sub { display: none; }
+  #ad-mini .tag { display: none; }
+  #ad-mini { font-size: .72rem; }
+  #scene-hud { gap: 6px; padding: 6px 10px; }
+  #scene-hud .sep { font-size: 0; }   /* the dot goes, the flex gap stays between figures */
+  #scene-hud .bar { width: 15px; }
+  #scene-hud #scene-toggle.inline { min-height: 30px; padding: 2px 7px; font-size: 11px; }
+  #dock { display: flex; align-items: center; gap: 8px; padding: 6px 10px;
+    border-top: 1px solid #ff149330; flex-shrink: 0; min-width: 0; }
+  #dock:not(:has(.show)) { display: none; }
+  #convo-card.show { flex: 1; padding: 0; border: 0; background: none; }
+  #fab-stack { position: static; flex-direction: row; align-items: center; gap: 8px;
+    margin-left: auto; min-height: 0; min-width: 0; }
+  #bell-fab, #msg-fab, #notes-fab { width: 44px; height: 44px; font-size: 1.25rem; }
+  #nav-fab.show { display: flex; gap: 5px; }
+  #nav-fab button { width: 38px; height: 40px; grid-area: auto !important; font-size: .82rem; }
+  #nav-fab [data-nav="w"] { order: 1; } #nav-fab [data-nav="n"] { order: 2; }
+  #nav-fab [data-nav="in"] { order: 3; } #nav-fab [data-nav="s"] { order: 4; }
+  #nav-fab [data-nav="e"] { order: 5; } #nav-fab [data-nav="light"] { order: 6; }
+  /* talking to somebody: the card takes the compass's place — walking off still
+     works (a typed direction), the row just stops offering it */
+  #dock.talking #nav-fab { display: none !important; }
+  #dock.talking #notes-fab { display: none; }
+}
 </style>
 </head>
 <body>
@@ -935,12 +987,30 @@
     <button id="mute-btn" title="Toggle music">🔊</button>
     <div class="title">THE LAST BAHT BUS</div>
     <div class="sub">a Pattaya misadventure · ❖ Soi Sanuk ❖</div>
+    <a id="ad-mini" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
+      😘 <span class="tag">The girls speak two languages. You barely speak one.</span> <b>Learn Thai →</b>
+    </a>
   </header>
-  <a id="ad-mini" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
-    😘 The girls speak two languages. You barely speak one. <b>Learn Thai →</b>
-  </a>
   <div id="scene" hidden></div>
   <div id="term-out" role="log" aria-live="polite" aria-atomic="false" aria-label="Game text"></div>
+  <!-- the dock: on a phone a row above the chips (the conversation card, the compass,
+       the bell / messages / notes); wider screens keep the floating stack. -->
+  <div id="dock">
+    <div id="convo-card" hidden></div>
+    <div id="fab-stack">
+      <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
+      <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
+      <button id="notes-fab" title="Your notes — what's open" aria-label="Your notes">📓</button>
+      <div id="nav-fab" role="group" aria-label="Compass">
+        <button data-nav="n" aria-label="Go north">N</button>
+        <button data-nav="w" aria-label="Go west">W</button>
+        <button data-nav="in" aria-label="Go inside — hold for the list">IN</button>
+        <button data-nav="e" aria-label="Go east">E</button>
+        <button data-nav="s" aria-label="Go south">S</button>
+        <button data-nav="light" aria-label="Toggle the flashlight">🔦</button>
+      </div>
+    </div>
+  </div>
   <!-- context chips are rendered per-turn by term.js _renderChips() from the engine's _chipSet() -->
   <div id="chips"></div>
   <div id="term-suggest"></div>
@@ -950,19 +1020,6 @@
            autocorrect="off" spellcheck="false" placeholder="what do you do?"
            aria-label="Type a command">
   <button id="term-send" title="Send" aria-label="Send command">➤</button>
-  </div>
-  <div id="fab-stack">
-    <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
-    <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
-    <button id="notes-fab" title="Your notes — what's open" aria-label="Your notes">📓</button>
-    <div id="nav-fab" role="group" aria-label="Compass">
-      <button data-nav="n" aria-label="Go north">N</button>
-      <button data-nav="w" aria-label="Go west">W</button>
-      <button data-nav="in" aria-label="Go inside — hold for the list">IN</button>
-      <button data-nav="e" aria-label="Go east">E</button>
-      <button data-nav="s" aria-label="Go south">S</button>
-      <button data-nav="light" aria-label="Toggle the flashlight">🔦</button>
-    </div>
   </div>
 </div>
 <a id="ad" href="https://soisanuk.github.io/" target="_blank" rel="noopener">

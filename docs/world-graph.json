@@ -518,7 +518,7 @@
   },
   {
    "file": "engine-core.js",
-   "line": 3020,
+   "line": 3045,
    "name": "HURT_CAP",
    "value": 3
   },
@@ -1090,7 +1090,7 @@
  "counts": {
   "constants": 181,
   "dialogue": 3342,
-  "edges": 3190,
+  "edges": 3193,
   "encounters": 23,
   "flags": 172,
   "items": 40,
@@ -43708,7 +43708,7 @@
  ],
  "edgeCounts": {
   "AT": 38,
-  "CONSULTS": 146,
+  "CONSULTS": 149,
   "DEPENDS": 13,
   "DONE_BY": 37,
   "EXIT": 437,
@@ -43990,6 +43990,12 @@
    "type": "CONSULTS"
   },
   {
+   "file": "engine-core.js",
+   "from": "_affairLive()",
+   "to": "_convoCard",
+   "type": "CONSULTS"
+  },
+  {
    "file": "engine-systems.js",
    "from": "_affairLive()",
    "to": "_doBarfine",
@@ -44095,6 +44101,12 @@
    "file": "engine-systems.js",
    "from": "_atOwnBar()",
    "to": "_ccibCoffee",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-core.js",
+   "from": "_atOwnBar()",
+   "to": "_convoCard",
    "type": "CONSULTS"
   },
   {
@@ -44527,6 +44539,12 @@
    "file": "engine-parser.js",
    "from": "G.party",
    "to": "_chipSet",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-core.js",
+   "from": "G.party",
+   "to": "_convoCard",
    "type": "CONSULTS"
   },
   {
@@ -51053,7 +51071,7 @@
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-core.js:3326",
+   "to": "engine-core.js:3351",
    "type": "INTERPOLATES"
   },
   {
@@ -51083,7 +51101,7 @@
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:3333",
+   "to": "engine-core.js:3358",
    "type": "INTERPOLATES"
   },
   {
@@ -51678,12 +51696,12 @@
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3022",
+   "to": "engine-core.js:3047",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3023",
+   "to": "engine-core.js:3048",
    "type": "INTERPOLATES"
   },
   {
@@ -51698,7 +51716,7 @@
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-core.js:2815",
+   "to": "engine-core.js:2840",
    "type": "INTERPOLATES"
   },
   {
@@ -51778,7 +51796,7 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-core.js:3328",
+   "to": "engine-core.js:3353",
    "type": "INTERPOLATES"
   },
   {
@@ -51818,7 +51836,7 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-core.js:2780",
+   "to": "engine-core.js:2805",
    "type": "INTERPOLATES"
   },
   {
@@ -52248,7 +52266,7 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:3118",
+   "to": "engine-core.js:3143",
    "type": "INTERPOLATES"
   },
   {
@@ -53138,12 +53156,12 @@
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2401",
+   "to": "engine-core.js:2426",
    "type": "INTERPOLATES"
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2402",
+   "to": "engine-core.js:2427",
    "type": "INTERPOLATES"
   },
   {
@@ -56305,27 +56323,27 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2750",
+   "to": "engine-core.js:2775",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3049",
+   "to": "engine-core.js:3074",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3056",
+   "to": "engine-core.js:3081",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3140",
+   "to": "engine-core.js:3165",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3142",
+   "to": "engine-core.js:3167",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57305,7 +57323,7 @@
   },
   {
    "from": "hyperUpstairs",
-   "to": "engine-core.js:2808",
+   "to": "engine-core.js:2833",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57545,7 +57563,7 @@
   },
   {
    "from": "orchidReported",
-   "to": "engine-core.js:2700",
+   "to": "engine-core.js:2725",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57570,7 +57588,7 @@
   },
   {
    "from": "orchidSent",
-   "to": "engine-core.js:2700",
+   "to": "engine-core.js:2725",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57595,7 +57613,7 @@
   },
   {
    "from": "orchidVouched",
-   "to": "engine-core.js:2700",
+   "to": "engine-core.js:2725",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57880,7 +57898,7 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-core.js:2194",
+   "to": "engine-core.js:2219",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59485,7 +59503,7 @@
   },
   {
    "from": "recceDone",
-   "to": "engine-core.js:2549",
+   "to": "engine-core.js:2574",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -60976,11 +60994,11 @@
     "engine-core.js:1155",
     "engine-core.js:1237",
     "engine-core.js:1331",
-    "engine-core.js:2750",
-    "engine-core.js:3049",
-    "engine-core.js:3056",
-    "engine-core.js:3140",
-    "engine-core.js:3142",
+    "engine-core.js:2775",
+    "engine-core.js:3074",
+    "engine-core.js:3081",
+    "engine-core.js:3165",
+    "engine-core.js:3167",
     "engine-core.js:592",
     "engine-core.js:679",
     "engine-encounters.js:174",
@@ -62489,7 +62507,7 @@
   {
    "name": "hyperUpstairs",
    "readByEngine": [
-    "engine-core.js:2808",
+    "engine-core.js:2833",
     "engine-systems.js:1681"
    ],
    "setByDialogue": [
@@ -63014,7 +63032,7 @@
     "world.js:9463"
    ],
    "readByEngine": [
-    "engine-core.js:2700",
+    "engine-core.js:2725",
     "engine-parser.js:1026",
     "engine-parser.js:5782",
     "engine-play.js:2975",
@@ -63027,7 +63045,7 @@
   {
    "name": "orchidSent",
    "readByEngine": [
-    "engine-core.js:2700",
+    "engine-core.js:2725",
     "engine-parser.js:1026",
     "engine-parser.js:5782",
     "engine-play.js:2975",
@@ -63046,7 +63064,7 @@
    ],
    "name": "orchidVouched",
    "readByEngine": [
-    "engine-core.js:2700",
+    "engine-core.js:2725",
     "engine-parser.js:1026",
     "engine-parser.js:5782",
     "engine-play.js:2975",
@@ -63416,7 +63434,7 @@
    ],
    "name": "recceDone",
    "setByEngine": [
-    "engine-core.js:2549"
+    "engine-core.js:2574"
    ]
   },
   {
@@ -63541,7 +63559,7 @@
    ],
    "name": "shamrockVisited",
    "readByEngine": [
-    "engine-core.js:2194",
+    "engine-core.js:2219",
     "engine-play.js:5468",
     "engine-systems.js:9665"
    ],
@@ -67751,6 +67769,7 @@
     "_bfRefusalSay",
     "_bfResolve",
     "_chipSet",
+    "_convoCard",
     "_convoEnd",
     "_curseRitual",
     "_describeRoom",
@@ -67805,6 +67824,7 @@
     "_barNight",
     "_closeReveal",
     "_conquestHappy",
+    "_convoCard",
     "_doBarfine",
     "_doBuy",
     "_doDance",
@@ -67829,6 +67849,7 @@
     "_barfineTalk",
     "_c4Input",
     "_ccibCoffee",
+    "_convoCard",
     "_describeRoom",
     "_doBarfine",
     "_doBuy",

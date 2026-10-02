@@ -738,7 +738,58 @@ const _term = (() => {
       notes.classList.toggle("open", open);
     }
     _updateNavFab();
+    _updateConvoCard();
     _parkFabs();
+  }
+
+  // The conversation card: who you are talking to, while you are (Mario,
+  // 2026-10-03 — "an indicator of some sort when locked into dialogue mode",
+  // "show portrait thumbnail and basic info"). What goes on it is the engine's
+  // (_convoCard); this only draws it. ✕ submits BYE, the verb that ends a chat.
+  let _cardFor = null;
+  function _updateConvoCard() {
+    const card = document.getElementById("convo-card");
+    const dock = document.getElementById("dock");
+    if (!card) return;
+    let c = null;
+    try { c = typeof _convoCard === "function" ? _convoCard() : null; } catch (e) { c = null; }
+    card.classList.toggle("show", !!c);
+    card.hidden = !c;
+    if (dock) dock.classList.toggle("talking", !!c);
+    // the prompt says who is listening (and goes back when nobody is)
+    if (_input) _input.placeholder = c ? "say something to " + c.name + "…" : "what do you do?";
+    if (!c) { _cardFor = null; card.innerHTML = ""; return; }
+    const key = JSON.stringify(c);
+    if (key === _cardFor) return;
+    _cardFor = key;
+    card.innerHTML = "";
+    card.setAttribute("aria-label", "Talking to " + c.name);
+    card.appendChild(_avatar(c.id, "cc-av"));
+    const who = document.createElement("div");
+    who.className = "who";
+    const b = document.createElement("b");
+    b.textContent = c.name;
+    who.appendChild(b);
+    if (c.line) {
+      const l = document.createElement("span");
+      l.className = "line";
+      l.textContent = c.line;
+      who.appendChild(l);
+    }
+    if (c.asking || c.tier) {
+      // a question waiting on you outranks how well she knows you
+      const t = document.createElement("span");
+      t.className = "tier" + (c.asking ? " ask" : c.cold ? " cold" : "");
+      t.textContent = c.asking ? "waiting on your answer" : c.tier;
+      who.appendChild(t);
+    }
+    card.appendChild(who);
+    const bye = document.createElement("button");
+    bye.textContent = "✕";
+    bye.title = "End the conversation (BYE)";
+    bye.setAttribute("aria-label", "End the conversation");
+    bye.addEventListener("click", () => { if (_onCmd) { _input.value = "bye"; submit(_onCmd); } });
+    card.appendChild(bye);
   }
 
   // Sit the floating buttons just above the chip bar, measured rather than
@@ -752,9 +803,21 @@ const _term = (() => {
     const stack = document.getElementById("fab-stack");
     const chips = document.getElementById("chips");
     if (!stack || !chips) return;
+    // docked (a phone): the buttons sit in their own row above the chips and
+    // float over nothing, so there is nothing to park and nothing to reserve
+    if (getComputedStyle(stack).position === "static") {
+      stack.style.bottom = "";
+      const out0 = document.getElementById("term-out");
+      if (out0) { out0.style.paddingBottom = ""; out0.style.paddingRight = ""; }
+      return;
+    }
     // Measure to the chip bar's TOP, not its height: below it sits the input
     // row too, and offsetting by the bar alone parked the bell inside the chips.
-    const top = chips.getBoundingClientRect().top;
+    // …or to the conversation card's, when one is up: it sits on the chips, and
+    // the stack parked on the chips covered the card's ✕
+    const card = document.getElementById("convo-card");
+    const cardUp = card && card.classList.contains("show");
+    const top = cardUp ? card.getBoundingClientRect().top : chips.getBoundingClientRect().top;
     stack.style.bottom = Math.round(window.innerHeight - top + 12) + "px";
     // …and RESERVE the strip rather than float over it. Moving these buttons
     // was only half the fix: anywhere they sit, they sit on top of a scrolling

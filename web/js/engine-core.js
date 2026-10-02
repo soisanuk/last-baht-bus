@@ -1452,6 +1452,31 @@ function _convoActive() {
 // site that clears convoQ without an answer goes through here (Gareth, round 46).
 // `dodged`: you changed the subject (or she left) — remembered for the digit
 // courtesy only, never re-asked; a walk-away (dodged=false) is re-asked next talk.
+// WHAT A FRONTEND SHOWS WHILE YOU ARE TALKING TO SOMEBODY (Mario, 2026-10-03:
+// "an indicator of some sort when locked into dialogue mode … show portrait
+// thumbnail and basic info"). Pure — it reads G and never clears it; the
+// partner-left cleanup stays _convoActive's, on the next command. Engine-side so
+// a 2D or served frontend draws the same card without knowing the rules.
+const _CARD_TIER = ["a stranger to her", "knows your face", "you're a regular", "her farang"];
+function _convoCard() {
+  const id = G && G.convo;
+  if (!id || !NPCS[id] || !_npcsHere().includes(id)) return null;
+  const n = NPCS[id], role = NPC_ROLES[id];
+  const where = (typeof _barName === "function" && _barName(G.room)) || (_room() && _room().name) || "";
+  const job = role === "mamasan" ? "mamasan" : role === "cashier" ? "on the till" : role === "hostess" ? "on the floor"
+    : n.manager ? "runs the bar" : n.patron ? (n.room === G.room ? "drinks here" : "a regular") : n.masseuse ? "masseuse" : "";
+  const badge = typeof _badge === "function" ? _badge(id) : null;
+  const line = [job + (badge ? " #" + badge : ""), where].filter(Boolean).join(" · ");
+  let tier = null, cold = false;
+  if (role && typeof _bondTier === "function") {
+    if (typeof _maiDee === "function" && _maiDee(id)) { tier = "she has made up her mind about you"; cold = true; }
+    else if (typeof _affairLive === "function" && _affairLive() && G.affair.id === id) tier = "your girl";
+    else if (typeof _atOwnBar === "function" && _atOwnBar()) tier = "your staff";
+    else if (G.party && (G.party.ids || []).includes(id)) tier = "with you tonight";
+    else tier = _CARD_TIER[_bondTier(id)];
+  }
+  return { id, name: n.name, line, tier, cold, asking: !!(G.convoQ && G.convoQ.id === id) };
+}
 function _convoDrop(dodged) {
   if (G.convoQ && G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, dodged: !!dodged };
   G.convoQ = null;
