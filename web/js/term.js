@@ -358,6 +358,19 @@ const _term = (() => {
         av.addEventListener("click", e => { e.stopPropagation(); _openPic(av.getAttribute("src"), cap); });
       }
       kw.insertBefore(av, kw.firstChild);
+      // a go-go badge after the name on the Here: line taps as the woman it belongs to
+      // ("(53)" was dead to a thumb while EXAMINE 53 worked — Nadia, round 61)
+      if (!enlargeable) {
+        const nx = kw.nextSibling;
+        const m = nx && nx.nodeType === 3 && /^ \((\d{1,3})\)/.exec(nx.nodeValue);
+        if (m) {
+          const b = document.createElement("b");
+          b.className = kw.className; b.dataset.k = kw.dataset.k; b.dataset.v = kw.dataset.v; b.textContent = "(" + m[1] + ")";
+          nx.nodeValue = nx.nodeValue.slice(m[0].length);
+          kw.parentNode.insertBefore(document.createTextNode(" "), nx);
+          kw.parentNode.insertBefore(b, nx);
+        }
+      }
     }
   }
 

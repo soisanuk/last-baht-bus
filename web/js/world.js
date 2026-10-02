@@ -14408,7 +14408,7 @@ const WORK_NIGHTS = [
       "in off the sea.",
   },
   {
-    id: "allin", weight: 4, happy: 5, when: G => !_lowSeason(), minGapDays: 10,   // three times in 22 nights (Rolf, round 55)
+    id: "allin", weight: 4, happy: 5, money: 1500, when: G => !_lowSeason(), minGapDays: 10,   // three times in 22 nights (Rolf, round 55); it pays, and the docket names it (Greta, round 61)
     text: "Every regular you have is in tonight. Not arranged, not a promotion — " +
       "they simply all came, the way a room sometimes decides to be full. Two of " +
       "them are arguing about a football match from 1998. Somebody's put the " +
@@ -17100,12 +17100,12 @@ function _storyPick(room, axis, pool, start) {
 // desc and on the Here: line, and a target the parser takes (BARFINE 42, EXAMINE 42).
 function _badge(id) {
   const n = NPCS[id];
-  if (!n || !n.filler || !ROOMS[n.room] || ROOMS[n.room].barType !== "gogo") return null;
+  if (!n || !ROOMS[n.room] || ROOMS[n.room].barType !== "gogo") return null;   // every dancer wears one, authored or filler (Nadia, round 61)
   if (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] !== "hostess") return null;
   const used = new Set();
   for (const g of Object.keys(NPCS)) {
     const m = NPCS[g];
-    if (!m.filler || m.room !== n.room || (typeof NPC_ROLES !== "undefined" && NPC_ROLES[g] !== "hostess")) continue;
+    if (m.room !== n.room || (typeof NPC_ROLES !== "undefined" && NPC_ROLES[g] !== "hostess")) continue;
     let b = 1 + _hh(g + ":badge", 139) % 199;
     while (used.has(b)) b = b % 199 + 1;
     used.add(b);

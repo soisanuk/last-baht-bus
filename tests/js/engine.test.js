@@ -5311,7 +5311,7 @@ test("refusals: customer-stealing, the honest lady-time, temple, and the recover
   assert.match(lastOut(), /ask EARLY/i, "the rail's advice rides along");
   out = [];
   run("barfine nan"); // held for the night
-  assert.match(lastOut(), /under four, she looks again/i);
+  assert.match(lastOut(), /not tonight, not from this floor/i);   // restated by its KIND — "N deep" is the drunk's line (Nadia, round 61)
   // the honest upfront lady-time (aom's life-hash, day 1) — BEFORE any money
   newGame(); state().lastSaleng = 99999;
   state().flags.act1Done = true; state().flags.hasWallet = true;

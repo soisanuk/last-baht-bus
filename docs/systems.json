@@ -242,7 +242,9 @@
    "effects": [
     "money.spent"
    ],
-   "modals": [],
+   "modals": [
+    "sighting"
+   ],
    "quests": [],
    "encounters": [],
    "predicates": [],
@@ -851,7 +853,9 @@
    "verbs": [
     "work",
     "books",
-    "draw"
+    "draw",
+    "prices",
+    "terms"
    ],
    "rooms": [
     "stinky_bar"
@@ -866,7 +870,12 @@
     "bar.shift.lapsed",
     "bar.month.paid",
     "bar.rent.missed",
-    "bar.lost"
+    "bar.lost",
+    "bar.opposite.seen",
+    "bar.rent.rose",
+    "bar.notice.given",
+    "bar.girl.gone",
+    "bar.nont.loan"
    ],
    "modals": [
     "shift"

@@ -52,7 +52,7 @@ test("the season never empties a floor: in the trough and the harvest every host
 test("SEE <her> HOME at closing: presence, not purchase — bond through _addBond, once a night, she is off the floor after", () => {
   G.room = _npcRoom("lek"); G.soc.drinks.lek = 4; G.nightTurn = 30;
   out = []; run("see lek home");
-  assert.ok(_SEE_HOME_EARLY.some(f => said().includes(f("Lek"))), "not before closing");
+  assert.ok(_SEE_HOME_EARLY.some(f => said().includes(f("Lek", "5 hours").slice(0, 12))), "not before closing"); assert.match(said(), /hours? more|minutes more|Finish first|Later, na/);
   G.nightTurn = 85; const b = G.soc.drinks.lek, bought = (G.soc.bondNight || {}).lek || 0;   // a beer bar lets her go after the last bus
   assert.ok(_npcActions("lek", true).includes("seehome"), "on the wheel at closing");
   const saved = _rand; _rand = () => 0.99;   // no saleng, no encounter inside the three ticks
@@ -190,19 +190,20 @@ test("walked out in front of a woman who had decided you were somebody: the verd
 // ── Theme 4: the phone remembers ─────────────────────────────────────────────
 test("money-asks with memory: an honest woman never asks for the same thing twice, a scripted one asks word for word, and the generous man is the first number called", () => {
   assert.ok(!_askScripted("nune") && _askScripted("chaba"));
-  const honest = []; for (let i = 0; i < _ASK_KINDS.length; i++) honest.push(_moneyAsk("nune"));
+  G.room = "jomtien_beach";
+  const honest = []; for (let i = 0; i < _ASK_KINDS.length; i++) { G.day += 3; honest.push(_moneyAsk("nune")); }   // not twice inside three days (Marcus, round 61)
   assert.equal(new Set(G.phone.asks.nune.map(a => a.kind)).size, _ASK_KINDS.length, "every kind once");
-  assert.equal(_moneyAsk("nune"), null, "and then she has nothing true left to ask for");
-  const script = [1, 2, 3].map(() => _moneyAsk("chaba"));
+  G.day += 3; assert.equal(_moneyAsk("nune"), null, "and then she has nothing true left to ask for");
+  const script = [1, 2, 3].map(() => { G.day += 3; return _moneyAsk("chaba"); });
   assert.equal(new Set(script).size, 1, "the same dead uncle, verbatim");
   // a paid ask is answered with a bigger one, and thanked for the THING
   G.bank = 20000; G.phone.contacts = { chaba: true, pae: true }; G.phone.asks = {};
   assert.ok(!_askScripted("pae"));
-  const first = _moneyAsk("pae"); const a0 = G.phone.asks.pae[0];
+  G.day += 3; const first = _moneyAsk("pae"); const a0 = G.phone.asks.pae[0];
   out = []; run("send " + a0.amt + " to pae");
   assert.ok(a0.paid); assert.ok(G.phone.inbox.some(m => m.from === "pae" && m.text === _ASK_THANKS[a0.kind]), "the medicine, not the money");
-  _moneyAsk("pae"); assert.equal(G.phone.asks.pae[1].amt, _ASK_KINDS.find(k => k.kind === G.phone.asks.pae[1].kind).amt + 200);
-  _moneyAsk("chaba"); const c0 = G.phone.asks.chaba[0]; out = []; run("send " + c0.amt + " to chaba");
+  G.day += 3; _moneyAsk("pae"); assert.equal(G.phone.asks.pae[1].amt, _ASK_KINDS.find(k => k.kind === G.phone.asks.pae[1].kind).amt + 200);
+  G.day += 3; _moneyAsk("chaba"); const c0 = G.phone.asks.chaba[0]; out = []; run("send " + c0.amt + " to chaba");
   assert.ok(G.phone.inbox.some(m => m.from === "chaba" && _ASK_THANKS_SCRIPT.includes(m.text)), "a script thanks you for the money");
   assert.equal(_askBias("pae"), Math.min(0.2, G.soc.given.pae / 5000)); G.soc.given.pae = 9000; assert.equal(_askBias("pae"), 0.2);
   out = []; run("who"); assert.match(said(), /Pae .*asked 2× \(฿\d+\), 1 answered/);
@@ -211,12 +212,13 @@ test("money-asks with memory: an honest woman never asks for the same thing twic
 // ── Theme 12: the badge, and the drinks-only class ───────────────────────────
 test("go-go badge numbers: day-stable, unique per bar, in her desc and on the Here: line, a target the parser takes, and armour at close range", () => {
   const badged = Object.keys(NPCS).filter(i => _badge(i));
-  assert.ok(badged.length >= 30 && badged.every(i => NPCS[i].filler && ROOMS[NPCS[i].room].barType === "gogo"));
+  assert.ok(badged.length >= 30 && badged.every(i => NPC_ROLES[i] === "hostess" && ROOMS[NPCS[i].room].barType === "gogo"));
+  assert.ok(badged.some(i => !NPCS[i].filler), "the authored dancers wear one too (Nadia, round 61)");
   const byRoom = {};
   for (const i of badged) (byRoom[NPCS[i].room] = byRoom[NPCS[i].room] || []).push(_badge(i));
   for (const r in byRoom) assert.equal(new Set(byRoom[r]).size, byRoom[r].length, "unique in " + r);
   assert.ok(Object.keys(NPCS).every(i => _badge(i) === null || ROOMS[NPCS[i].room].barType === "gogo"), "beer bars have no badges");
-  const g = badged.find(i => _npcWhere(i) === NPCS[i].room); const b = _badge(g);
+  const g = badged.find(i => NPCS[i].filler && _npcWhere(i) === NPCS[i].room); const b = _badge(g);
   assert.match(NPCS[g].desc, new RegExp("badge pinned at her hip says " + b));
   G.room = NPCS[g].room; G.nightTurn = 30; out = []; _describeRoom(true);
   assert.match(said(), new RegExp("Here: .*" + NPCS[g].name + " \\(" + b + "\\)"));

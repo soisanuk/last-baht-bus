@@ -615,7 +615,11 @@ function _sevenIn() {
 // off the till, and the books see it as stock (Des, round 41: his soda
 // evaporated while his hostess's drink rang into his own till).
 function _ownStock(price, what, line) {
-  const cogs = Math.round(price * (typeof _barCogs === "function" ? _barCogs() : BAR_COGS));
+  // the wholesaler does not read your chalkboard: the stock cost is on the LIST price,
+  // whatever the board says tonight (Greta, round 61 — her own water's wholesale moved with the markup)
+  const mk = typeof _barMarkup === "function" ? _barMarkup(G.room) : 1;
+  const listPrice = Math.round(price / (mk || 1) / 10) * 10;   // back to the ฿10-rounded list figure, so ฿100 at steep is ฿80's stock, not ฿77's
+  const cogs = Math.round(listPrice * (typeof _barCogs === "function" ? _barCogs() : BAR_COGS));
   G.bar.cash -= cogs;
   _say((line ? line + " " : "") + `(${what[0].toUpperCase() + what.slice(1)} off your own stock — ฿${cogs} of wholesale off the till, nothing off your pocket. The house drinks free; the house pays the wholesaler.)`);
 }
@@ -1553,6 +1557,7 @@ function _doTravel(arg) {
   // wherever its static exits.out happens to point (Cartographer, 2026-08-27).
   if (_stopAt === hops - 1) { _darkStop(); return; }   // the destination itself is the first dark room
   G.enteredVia = G.room;
+  if (G.lightOn && ROOMS[dest] && ROOMS[dest].barType === "gogo") { G.lightOn = false; _say("(You pocket the torch at the door — a go-go assumes a camera.)", "dim"); }   // TRAVEL dropped a man inside Las Vegas with it lit, and the house banned him (Nadia, round 61)
   _arriveAt(dest);
   _longWalk(dest);
 }
@@ -1981,6 +1986,8 @@ function _roomRead(arg, peek) {
 
 function _doExamine(arg) {
   if (!arg) return _describeRoom(true, true); // LOOK always gives the full desc
+  // the bar across the road, from your own doorway (Greta, round 61: "look at the dane" shrugged)
+  if (typeof _oppExamine === "function" && _oppExamine(arg)) return;
 
   // EXAMINE PHONE opens the home screen (battery, flashlight, messages, weather,
   // headlines), not the flat item blurb — only "phone"/"mobile", so torch/light
@@ -2072,6 +2079,8 @@ function _doExamine(arg) {
     if ((role === "hostess" || role === "mamasan" || role === "cashier") && _bondTier(npc) >= 1) {
       _say(_pickVary(_BOND_LOOK[_bondTier(npc)], "xbond" + npc), "dim");
     }
+    if (typeof _badge === "function" && _badge(npc) && !NPCS[npc].filler)
+      _say(`The badge pinned at her hip says ${_badge(npc)} — the number the floor knows her by.`);   // the authored dancers wear one too (Nadia, round 61)
     if (typeof _badge === "function" && _badge(npc) && _bondTier(npc) >= 2)
       _say("(The number is pinned at her hip the way it is pinned on all of them, and you have never once used it. She has noticed that.)", "dim");
     return;
@@ -4011,6 +4020,13 @@ function _doTalkBody(arg, topic) {
     ], "ridememory:" + npc)(NPCS[npc].name));
     return;
   }
+  // THE VERDICT CLOSES THE CONVERSATION TOO: the ride topic came back as an invitation
+  // from a woman whose page said nothing reopens it (Marcus, round 61). Polite, exact,
+  // and nothing after it — every subject, every night.
+  if (typeof _maiDee === "function" && _maiDee(npc)) {
+    _say(topic ? _pickVary(_MAI_DEE_TALK, "maideetalk")(NPCS[npc].name) : _pickVary(_REL_GREET_MAIDEE, "relmaidee")(NPCS[npc].name), "dim");
+    return;
+  }
   let d = _pickDialogue(npc, topic || null);
   // the one NAMED piwin answers for his own job the way any piwin at a stand does —
   // "ask bank about fare" was "not my story" while the anonymous man beside him
@@ -4115,6 +4131,11 @@ function _doTalkBody(arg, topic) {
   // knight has, asked in every register, and the town had no answer to it (Dieter, round 56).
   // It has one: there is no such category here, only the one you brought with you.
   if (topic && !d.topic && _NORMAL_GIRL_RX.test(String(topic).toLowerCase())) { _say(_normalGirlTalk(npc)); return; }
+  if (topic && !d.topic && npc === "nont" && typeof _nontLoanTalk === "function" && _nontLoanTalk(topic)) return;   // he offered BORROW; he answers it (Greta, round 61)
+  if (topic && !d.topic && typeof _careTalk === "function" && _careTalk(npc, topic)) return;   // the words of her own money text (Marcus, round 61)
+  if (topic && !d.topic && typeof _drinksOnlyWhy === "function" && _drinksOnlyWhy(npc, topic)) return;   // she said she'd tell you why (Nadia, round 61)
+  // the bar opposite, from anybody on your own rail (Greta: Bert answered "across the road" in the pre-purchase register)
+  if (topic && !d.topic && typeof _oppTalk === "function" && _oppTalk(npc, topic)) return;
   if (topic && !d.topic && _houses) {
     const _ct = String(topic).toLowerCase();
     if (/\b(open|opens|opening|opening time|open at|start)\b/.test(_ct) && !/\bopen till\b/.test(_ct)) { _say(_openingTalk(npc)); return; }
@@ -4124,6 +4145,17 @@ function _doTalkBody(arg, topic) {
     // the badge: at a distance it is a number for the board; to somebody she knows it is armour (theme 12)
     if (typeof _badge === "function" && _badge(npc) && /^(?:the |my |your |her )?(?:number|badge|tag|\d{1,3})$/.test(_ct)) {
       _say(_badgeTalk(npc)); return;
+    }
+    // the house answers for the numbers it hands out (Nadia, round 61: "you ask the wrong mama")
+    if (_room().barType === "gogo" && (NPC_ROLES[npc] === "mamasan" || NPC_ROLES[npc] === "cashier") && /\b(numbers?|badges?|tags?)\b/.test(_ct)) {
+      _say(_pickVary(NPC_ROLES[npc] === "mamasan" ? [
+        `"The numbers?" She taps the board behind the till without looking at it. "I give them. The board runs on them — who go, who stay, who is on which stool. A name you can forget. A number is on the board."`,
+        `"Everybody wear one." A shrug that has run this floor for years. "Customer remember a number. Easier than a name — for him, and for her."`,
+      ] : [
+        `"Numbers?" She turns the book an inch so you can see the column. "Barfine goes against the number, not the name. Mama give the number, I write it. That is the whole system."`,
+        `"The badge." She does not look up from the float. "I settle the book by number at close. Names change. Numbers don't."`,
+      ], "badgehouse:" + NPC_ROLES[npc]));
+      return;
     }
     // what she actually does here, who she answers to, and what it pays — the
     // words a caseworker asks and the town could not hear (Helen, round 49)
@@ -4213,6 +4245,25 @@ function _doTalkBody(arg, topic) {
         const gone = Object.keys(NPCS).find(x => NPCS[x].room === G.room && NPC_ROLES[x] === "hostess" && x !== npc &&
           (NPCS[x].name.toLowerCase() === _rt || x === _rt) && _exited(x));
         if (gone) { _say(_goneTalk(npc, gone)); return; }
+        // …and a woman home for the harvest or gone to Bangkok till the rain stops: her
+        // colleagues could name the reason while TALK already did (Nadia, round 61: Ploen)
+        const away = Object.keys(NPCS).find(x => NPCS[x].room === G.room && NPC_ROLES[x] === "hostess" && x !== npc &&
+          (NPCS[x].name.toLowerCase() === _rt || x === _rt) && typeof _awayForSeason === "function" && _awayForSeason(x));
+        if (away) {
+          const why = _awayForSeason(away), n = NPCS[away].name, house = _hoursRegister(npc) !== "floor";
+          _say(_pickVary(why === "harvest" ? (house ? [
+              `"${n}? Home for the rice. Ten days, every November — half this soi's floors are in a paddy right now." A shrug. "She'll be back with blisters and a bag of sticky rice for the girls."`,
+            ] : [
+              `"${n} go home, cut rice. Ten day." She mimes a sickle, laughing. "Every year same. Her mama need hands. You come back, she come back."`,
+              `"Rice, na." A nod north, as if ${n}'s village were over the road. "Everybody go. Not me — my family have no rice. I have no excuse." She laughs.`,
+            ]) : (house ? [
+              `"${n}'s in Bangkok till the rain stops. The smart ones go when the soi goes quiet — a cousin's shop, a friend's floor, something that pays in the trough." A glance at the empty stools. "Back when the money is."`,
+            ] : [
+              `"${n} go Bangkok. Rain time, no customer here — she have friend there, work there small small." A shrug. "She come back when the farang come back."`,
+              `"Bangkok, till rain finish." She counts the empty stools with her eyes. "Maybe I go too, next month. Don't tell mama."`,
+            ]), "awaytalk:" + why));
+          return;
+        }
       }
       const mate = here.filter(x => NPC_ROLES[x] || NPCS[x].manager || NPCS[x].house)   // "bar sister" was said of Cream, who is not staff (Judith, round 47)
         .find(x => NPCS[x].name.toLowerCase() === _rt || x === _rt || NPCS[x].name.toLowerCase().split(" ").pop() === _rt);
@@ -6761,8 +6812,19 @@ const _SNIPE_LINES = [
 
 // A lady drink leaves your pocket; at the bar you OWN it also rings INTO your own
 // till, instead of vanishing from the economy (Ronnie, 2026-08-26).
+const _PARTY_JEALOUS = [
+  (c, o) => `${c} watches the drink go to ${o} and says nothing, which from a woman on your arm is a paragraph. She moves her stool an inch closer to yours. An inch is a statement.`,
+  (c, o) => `"You buy for her?" ${c}, lightly, with her hand still on your arm. "Ok. Ok, tilac." She says it to ${o}, not to you, and ${o} laughs, and something is agreed between them that you were not party to.`,
+  (c, o) => `${c} leans over and clinks ${o}'s new glass with her own. "My farang, generous." A smile at ${o} with teeth in it. "Tonight only, na."`,
+];
 function _ladyDrinkCharge(id) {
   G.money -= _ladyPrice();
+  // the woman on your arm has an opinion about the drink you just bought another one
+  // (Marcus, round 61: Lek stood silent through two lady drinks for Nan and Mild)
+  {
+    const comp = G.party && G.party.ids && G.party.ids.find(p => p !== id && NPCS[p] && _npcsHere().includes(p));
+    if (comp && id && NPCS[id] && NPC_ROLES[id] === "hostess" && id !== comp) _say(_pickVary(_PARTY_JEALOUS, "partyjealous")(NPCS[comp].name, NPCS[id].name), "dim");
+  }
   // "Buy a girl a drink. Ask me about my bar. Let me see your face." — the first
   // of the three moved nothing (Keith, round 40). An authored mamasan on this
   // floor warms one notch, once a night, when you buy a round on her rail.
@@ -8136,7 +8198,7 @@ function _lightNotice() {
   if (_armGirl) _tn["arm:" + _armGirl] = true;
   else if (_tn[G.room]) return;   // a room notices the torch once a night, not at every step in and out
   else _tn[G.room] = true;
-  const girl = _armGirl || npcs.find(id => NPC_ROLES[id] === "hostess");
+  const girl = _armGirl || npcs.find(id => NPC_ROLES[id] === "hostess" && !(typeof _maiDee === "function" && _maiDee(id)));
   let lines;
   if (girl && typeof _atOwnBar === "function" && _atOwnBar()) {
     // your own staff do not tease the guv'nor about his money being gone — "You
@@ -12106,11 +12168,14 @@ function doCommand(input) {
   }
   // TAKE HER HOME / GO HOME WITH MANOW / BRING HER BACK: the phrasings a man with a
   // girlfriend types, each answered "you don't see that here" (Rolf, round 55)
-  if (typeof _affairLive === "function" && _affairLive()) {
+  {
     const _hm = lower.match(/^(?:go (?:home|back) with|take|bring|walk) (\w+)(?: (?:home|back|with (?:you|me)))?$/);
     if (_hm && (/^(go|walk)/.test(lower) || / (home|back|with)/.test(lower))) {
       const _who = _resolveActor(_hm[1], _addressable());
-      if (_who === G.affair.id) { _affairHome(); _flushTrace(_room0); _tick(); _checkAct1(); return; }
+      if (typeof _affairLive === "function" && _affairLive() && _who === G.affair.id) { _affairHome(); _flushTrace(_room0); _tick(); _checkAct1(); return; }
+      // the woman on your arm: "home together ends it her way" promised a phrasing the parser
+      // refused — GO HOME WITH LEK was a TRAVEL miss, TAKE LEK HOME "you don't see that here" (Marcus, round 61)
+      if (_who && G.party && G.party.ids && G.party.ids.includes(_who) && typeof _partyHome === "function") { _partyHome(_who); _flushTrace(_room0); _checkAct1(); return; }
     }
   }
 
@@ -12241,7 +12306,9 @@ function doCommand(input) {
       if (/\bband\b|\bmusicians?\b|\bguitar|\bbass|\bdrummer|\bvocalist|\bsinger/.test(arg) && _bandHere()) {
         _doBandTalk();
       } else {
-        _doTalk(arg.replace(/^with /, ""), null);
+        // TALK TO BERT ABOUT RENT is an ASK — it read "bert about rent" as a name (Greta, round 61)
+        const _ta = arg.replace(/^with /, "").match(/^(.+?) about (.+)$/);
+        if (_ta) _doTalk(_ta[1], _ta[2]); else _doTalk(arg.replace(/^with /, ""), null);
       }
       break;
     }

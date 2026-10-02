@@ -2209,6 +2209,16 @@ function _addHeat(n, why) {
 // APOLOGIZE / SAY SORRY: the wai-and-mean-it. Mollifies a miffed patron
 // outright (like standing him a beer does), and burns off one point of heat —
 // but only once per bar per night; after that the bar wants behavior, not words.
+const _MAI_DEE_TALK = [
+  n => `${n} answers the way a ticket window answers — a sentence, correct, with the shutter half down behind it. "Mm. Ask mama." Then she is serving somebody else.`,
+  n => `"That one?" ${n} considers whether it is worth a sentence, and gives you a short one, in the bar voice, and the bar voice is all you are getting from now on.`,
+  n => `${n} is polite about it. She is polite about everything now; it is the most expensive thing anyone has ever done to you, and it costs her nothing.`,
+];
+const _MAI_DEE_SOCIAL = [
+  n => `${n} lets the line land, and looks at you the way a receptionist looks at a man who has made a joke at the desk: pleasantly, briefly, and without any of it going in.`,
+  n => `${n} smiles, exactly as much as the job requires, and moves your empty an inch to the left. That is the whole of her reply, and it is complete.`,
+  n => `"Mm." ${n} does not stop wiping the rail. Nothing warms, nothing cools; there is simply nobody at the other end of it any more.`,
+];
 const _MAI_DEE_SORRY = [
   "{n} accepts the wai the way she would accept a bill — correctly, with a small nod, and nothing changes in her face at all. “Mai pen rai.” It is the most final thing anybody has said to you in this town.",
   "You say it properly and she lets you finish. “Ok.” She even smiles. Then she goes to serve somebody, and you understand that the apology was received, and filed, and that the file is closed.",
@@ -2253,6 +2263,7 @@ function _kickOut() {
   if (typeof _ccibLoud === "function") _ccibLoud("incident");
   G.soc.banned[here] = G.turns;
   G.soc.heat[here] = 0;
+  (G.soc.heatWhy = G.soc.heatWhy || {})[here] = "walked out of here by security, in front of the whole bar";   // the shut book on re-entry names THIS, not a stale drinks-buying man (Marcus, round 61)
   G.game = null; // any live game dies with your welcome
   _say("The decision is made somewhere above your pay grade. Security appears at " +
     "your elbow — polite, enormous, terribly final — and you are walked out and " +
@@ -2723,6 +2734,12 @@ function _doSocial(kind, targetWord) {
   // Placed after every special-case early return above, so it only ever
   // touches the ordinary tier-resolution path below — the only path that can
   // set `charmed` in the first place.
+  // THE VERDICT CLOSES THE VERBS: the page said "nothing reopens it" and FLIRT still
+  // poured a free drink and +3 สนุก the next night (Marcus, round 61)
+  if (typeof _maiDee === "function" && _maiDee(id)) {
+    _say(_pickVary(_MAI_DEE_SOCIAL, "maideesocial")(NPCS[id].name), "dim");
+    return;
+  }
   if (kind === "flirt" && G.soc.charmed && G.soc.charmed[id]) kind = "kiss";
   // the bra you bought her makes fondling "more interesting" — one tier warmer
   const braBump = (kind === "fondle" && G.soc.bra && G.soc.bra[id]) ? 2 : 0;
@@ -3586,6 +3603,43 @@ function _ownBarTalk(id, topic) {
   }
   const role = NPC_ROLES[id];
   const _t = String(topic || "").toLowerCase();
+  // THE TERMS AND THE BOARD are the owner's own decisions, and his staff answer them as
+  // staff — Lamai answered her salary in the customer register ("enough that I care
+  // whether you come back") and Cake said the price never changes the night the board
+  // moved (Greta, round 61)
+  if (_t && /\b(salary|salaries|commission|cut|quota|wages?|terms|flat money|flat salary)\b/.test(_t)) {
+    const sal = typeof _barTerms === "function" && _barTerms() === "salary";
+    _say(_pickVary(role === "hostess" ? (sal ? [
+        n => `${n} shrugs, pleased and a little embarrassed about being pleased. "Flat money, no quota. Quiet night, same money. First time in this town I know what I get on the first." She taps the bar. "Other bar, the girls ask me how. I say, ask my boss."`,
+        n => `"Salary?" ${n} says it carefully, like a word she is still trying on. "Good for me, boss. Not so good for you, maybe, on a quiet month — I can count." A beat. "I stay. That is what it buys you."`,
+      ] : [
+        n => `${n} fans the chits in her phone case without being asked. "The cut, boss. ฿${LADY_CUT} a drink, same as every bar. Full rail, good month. Thin rail—" she closes the case "—thin month. You know that. You set the board."`,
+        n => `"Commission." ${n} does the arithmetic on her fingers, quickly, and stops. "Same as the trade. Is fair when the room is full. When it is not full, is fair for the bar." She says it without heat. "I count the stools. Everybody count the stools."`,
+      ]) : role === "mamasan" ? (sal ? [
+        n => `${n} nods at the floor. "Flat money suits them. It suits me — nobody cries over a quiet Tuesday. It does not suit the wages line on a wet one, and you will see that before I do."`,
+        n => `"Salary." ${n} approves of it the way she approves of anything: by not objecting. "They stay. The good ones especially. You are paying for that every night, boss, including the nights nobody comes."`,
+      ] : [
+        n => `${n} flicks a nail at the board. "They live on the cut, boss. A full rail is their money; a dear board is your money and their quiet month. Nobody has to say it. They can all count."`,
+        n => `"The trade's terms." ${n} shrugs. "Base and the drinks. It is how every bar on this soi pays, and it is why every girl on this soi knows what the bar across the road pays."`,
+      ]) : (sal ? [
+        n => `${n} turns the wages line round for you. "Flat salary, ฿${BAR_SALARY_NIGHT} a night on top, every night. I write it whether they sold a drink or not." She does not editorialise. She never does.`,
+      ] : [
+        n => `${n} squares the chits. "Base and the cut. I pay the cut on what they sold, end of the month. A thin board is a thin envelope; they open it in front of me."`,
+      ]), "ownterms:" + role)(NPCS[id].name));
+    return true;
+  }
+  if (_t && /\b(board|prices?|the chalk|dear|expensive|cheap)\b/.test(_t) && G.bar) {
+    const mk = G.bar.markup || "list";
+    const word = { cheap: "ten under the soi", list: "the soi's own numbers", up: "fifteen over", steep: "thirty over" }[mk];
+    _say(_pickVary(role === "cashier" ? [
+      n => `${n} glances at the board without turning her head. "${word.charAt(0).toUpperCase() + word.slice(1)}. I charge what the chalk says, boss. Ask the girls what it costs them."`,
+      n => `"The board?" ${n} taps the till. "I ring what it says. ${word.charAt(0).toUpperCase() + word.slice(1)}, since you wrote it." A pause. "The old regulars read it before they sit down now."`,
+    ] : [
+      n => `${n} looks at the board, then at you, and says only: "${word.charAt(0).toUpperCase() + word.slice(1)}, boss." It is not a complaint. It is an inventory.`,
+      n => `"The chalk." ${n} shrugs. "You write it, I sell it. ${mk === "list" || mk === "cheap" ? "Customer happy, I happy." : "Customer read it twice. Some sit down. Some don't."}"`,
+    ], "ownboard:" + role)(NPCS[id].name));
+    return true;
+  }
   // the books and the jobs before the customer pools: the cashier told her own boss
   // "one for the bar, one for her" about MONEY (Kwame, round 60)
   if (_t && /\b(money|till|takings|books?|float|arrangements?|cleaning|cleaners|screen|pos|till man|jobs?|contracts?|last night)\b/.test(_t) &&
@@ -4511,6 +4565,7 @@ function _nightSnapshot() {
     atm: G.atmTotal || 0,
     atmFees: G.atmFees || 0,
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0,
+    nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length,
     nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
@@ -4578,6 +4633,14 @@ function _morningLedger() {
   if (topUp > 0) bits.push("\u0e3f" + _num(topUp) + " of your own money into the till when it went under");
   if (borrowed > 0) bits.push("\u0e3f" + _num(borrowed) + " borrowed from Nira \u2014 a debt, not a win");
   if (repaid > 0) bits.push("\u0e3f" + _num(repaid) + " repaid to Nira");
+  const nontB = (G.nontBorrowed || 0) - (b.nontB != null ? b.nontB : (G.nontBorrowed || 0));
+  const nontR = (G.nontRepaid || 0) - (b.nontR != null ? b.nontR : (G.nontRepaid || 0));
+  if (nontB > 0) bits.push("\u0e3f" + _num(nontB) + " borrowed from Nont for the bar \u2014 a debt, not a win");
+  if (nontR > 0) bits.push("\u0e3f" + _num(nontR) + " repaid to Nont");
+  // a SEND leaves the account, which "pocket and account together" has to show — ฿1,500 to
+  // a woman was invisible on the one figure a man keeping books reads (Marcus, round 61)
+  const sentN = (G.sentTotal || 0) - (b.sentB != null ? b.sentB : (G.sentTotal || 0));
+  if (sentN > 0) bits.push("\u0e3f" + _num(sentN) + " sent from the account through the banking app");
   // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
   const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
@@ -4667,7 +4730,7 @@ const _SCAM_LEAVE = [
 // Dawn on your feet: the whole arc — and then the taxi home in the light.
 // dawn at the bar you OWN: nobody carries you home, you put the stools up
 const _ALLNIGHTER_OWN = [
-  "06:00 and the last customer is a man asleep with his cheek on the rail. You wake him kindly, put the stools up, count the float twice because your eyes have stopped agreeing with each other, and pull the shutter down on your own bar. The bike home is the coldest ten minutes in Pattaya.",
+  "06:00 and the last customer is a man asleep with his cheek on the rail. You wake him kindly, put the stools up, count the float twice because your eyes have stopped agreeing with each other, and pull the shutter down on your own bar. The bike home is the longest ten minutes in Pattaya.",
   "Dawn comes in under the shutter you never quite closed. The girls are gone, the ice has been water for an hour, and the till is right, which is the only thing about the night that is. You lock your own door from the outside and go home in the light.",
   "The sweepers are working Beach Road when you finally kill the lights. There is a particular quiet in an empty bar that is yours — the fans ticking down, a glass nobody claimed — and you stand in it for a minute before you lock up and let a piwin take you to bed.",
   "You close your own bar at six in the morning, which is not a thing a customer ever has to do. Chairs up. Float in the bag. Shutter, padlock, the key that sticks. The street is pink and completely uninterested in how hard the night was.",

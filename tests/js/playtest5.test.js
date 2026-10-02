@@ -2565,7 +2565,7 @@ test("the black book is the DEPTH dashboard HELP claims: bonded girls appear, nu
   assert.doesNotMatch(said, /black book's empty/, "it is not empty — you have two regulars");
   assert.match(said, /Manow/, "your her-farang girl is in the book");
   assert.match(said, /Lek/, "…and the one who knows your face");
-  assert.match(said, /\(2 in the book \(0 numbers\)/, "and the footer counts entries vs numbers honestly");
+  assert.match(said, /\(2 in the book \(0 phone numbers\)/, "and the footer counts entries vs numbers honestly");
 });
 
 test("the bought-bond ceiling says itself out loud, once a night", () => {
