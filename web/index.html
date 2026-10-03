@@ -395,6 +395,11 @@
     font: inherit;
     caret-color: var(--pink);
   }
+  /* iOS Safari zooms the page in when a text field under 16px takes focus, and
+     the game focuses its input as it boots — so the start screen opened a little
+     zoomed and off-centre until a pinch (Mario, 2026-10-03). 16px on a touch
+     screen stops the zoom; the larger Aa settings are bigger anyway. */
+  @media (pointer: coarse) { #term-in { font-size: max(16px, 1em); } }
   #term-send {
     flex-shrink: 0;
     background: #12001e;

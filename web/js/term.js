@@ -1203,7 +1203,11 @@ const _term = (() => {
           !e.target.closest("#nav-fab")) _closeFly();
     });
 
-    _input.focus();
+    // not on a touch screen: focusing at boot raises the keyboard over the start
+    // screen and, on iOS, zooms the page off-centre (Mario, 2026-10-03)
+    let _touch = false;
+    try { _touch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches; } catch (e) {}
+    if (!_touch) _input.focus();
     _wireNavFab();
     _updateFabs(); // in case we boot straight into a bar / with unread texts (restored save)
     if (typeof _updateScene === "function") _updateScene(); // v0 scene panel

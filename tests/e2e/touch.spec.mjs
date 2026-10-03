@@ -298,4 +298,13 @@ test.describe("phone dock and the conversation card", () => {
     await page.evaluate(() => { G.game = { type: "c4" }; _term.updateFabs(); });
     await expect(page.locator("#convo-card")).toBeHidden();
   });
+
+  test("iOS never zooms the page: the input is 16px on touch and is not focused at boot (Mario, 2026-10-03)", async ({ page }) => {
+    await page.goto(INDEX_URL);
+    await page.waitForTimeout(300);
+    const r = await page.evaluate(() => ({ fs: parseFloat(getComputedStyle(document.getElementById("term-in")).fontSize),
+      focused: document.activeElement && document.activeElement.id }));
+    expect(r.fs).toBeGreaterThanOrEqual(16);
+    expect(r.focused).not.toBe("term-in");
+  });
 });
