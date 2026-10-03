@@ -267,4 +267,35 @@ test.describe("phone dock and the conversation card", () => {
     expect(await page.evaluate(() => G.convo)).toBeFalsy();
     await expect(page.locator("#term-in")).toHaveAttribute("placeholder", "what do you do?");
   });
+
+  // ── round 65: three personas on phones ──
+  test("a new chip set starts at its first chip, not where the last one was scrolled to", async ({ page }) => {
+    await bootIntoGame(page, INDEX_URL);
+    await page.evaluate(() => { for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2; });
+    await page.evaluate(() => { document.getElementById("chips").scrollLeft = 300; });
+    await run(page, "down");
+    expect(await page.evaluate(() => document.getElementById("chips").scrollLeft)).toBe(0);
+  });
+
+  test("indoors the dock offers the way out as a button, and a woman on your arm has a card", async ({ page }) => {
+    await bootIntoGame(page, INDEX_URL);
+    await page.evaluate(() => { for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2; });
+    await run(page, "look");   // upstairs at the Queen Vic: DOWN is the only way
+    await expect(page.locator("#nav-extra button")).toHaveText(["DOWN"]);
+    await page.evaluate(() => { G.room = "pink_lotus"; G.visited.pink_lotus = true;
+      const id = _npcsHere().find(i => NPC_ROLES[i] === "hostess"); G.party = { ids: [id], stops: 0, spent: 0, seen: {} }; });
+    await run(page, "look");
+    await expect(page.locator("#convo-card")).toBeVisible();
+    await expect(page.locator("#convo-card")).toContainText(/out with you/);
+  });
+
+  test("the conversation card stands down while a game owns the input", async ({ page }) => {
+    await bootIntoGame(page, INDEX_URL);
+    await page.evaluate(() => { for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2; G.room = "pink_lotus"; G.money = 5000; });
+    const nm = await page.evaluate(() => NPCS[_npcsHere().find(i => NPC_ROLES[i] === "hostess")].name);
+    await run(page, "talk to " + nm);
+    await expect(page.locator("#convo-card")).toBeVisible();
+    await page.evaluate(() => { G.game = { type: "c4" }; _term.updateFabs(); });
+    await expect(page.locator("#convo-card")).toBeHidden();
+  });
 });

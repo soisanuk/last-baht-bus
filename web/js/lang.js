@@ -1127,7 +1127,7 @@ const _CATALOGS = {
       "{n} liest dir den Blick vom Gesicht ab und grinst. „Erstes Mal, na? Okay — ich zeig dir. Langsam-langsam. Heute Abend klappst du jede Klappe selbst um; so lernst du schneller.“ Sie würfelt für dich.",
     "{n} leans in. \"Two ways here, na. Flip the two dice numbers — or flip their sum, one tile. Never both — though if one of the pair is already down, the other on its own is fine. Whatever's still standing at the end is your score, and low wins. You choose.\"":
       "{n} beugt sich vor. „Zwei Wege, na. Klapp die beiden Würfelzahlen um — oder ihre Summe, eine Klappe. Nie beides — wenn aber eine der beiden schon unten ist, geht die andere auch allein. Was am Ende noch steht, ist dein Ergebnis, und wenig gewinnt. Du entscheidest.“",
-    "{n} taps the felt. \"This roll, only one way to play it — so play it. Type the flip. The box doesn't move itself… not until you know it does.\"":
+    "{n} taps the felt. \"This roll, only one way to play it — so play it. Make the flip — tap it or type it. The box doesn't move itself… not until you know it does.\"":
       "{n} tippt auf den Filz. „Dieser Wurf, nur ein Weg — also spiel ihn. Tipp den Flip ein. Der Kasten bewegt sich nicht von allein… jedenfalls nicht, bevor du weißt, dass er es doch tut.“",
     "You rack. {n} breaks — dry. Seven balls each, then the black.":
       "Du baust auf. {n} breakt — nichts fällt. Sieben Kugeln für jeden, dann die Schwarze.",

@@ -217,7 +217,9 @@
   .t-line.t-map { color: var(--violet); white-space: pre; word-break: normal;
                   overflow-x: auto; -webkit-overflow-scrolling: touch;
                   font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
-                  font-size: clamp(.45rem, 1.95vw, .8rem); line-height: 1.25; }
+                  /* at a larger text setting the floor rises with it and the map pans
+                     sideways instead of shrinking to 6px (Margaret, round 65) */
+                  font-size: clamp(calc(.45rem * var(--fscale, 1)), 1.95vw, calc(.8rem * var(--fscale, 1))); line-height: 1.25; }
   .t-line.t-map::-webkit-scrollbar { height: 4px; }
   /* The QR sticker (EXAMINE QR at the LK Metro mouth). Three things here are
      load-bearing rather than decorative, because this block has to survive being
@@ -323,7 +325,7 @@
     border: 1px solid #00e5ff50;
     border-radius: 14px;
     font: inherit;
-    font-size: .78rem;
+    font-size: calc(.78rem * var(--fscale, 1));
     padding: .22rem .7rem;
     cursor: pointer;
   }
@@ -364,6 +366,12 @@
     font-size: .85em;
   }
   #term-suggest span:active { background: #2a0040; }
+  @media (pointer: coarse) {
+    /* the name suggestions after MESSAGE / BUY … FOR were 50x33 (Margaret, round 65) */
+    #term-suggest span { min-height: 40px; display: inline-flex; align-items: center; padding: .1rem .8rem; }
+    /* an answer in your own words can be a sentence: wrap it rather than run 370px wide */
+    .chip.chip-reply { max-width: 72vw; white-space: normal; text-align: left; line-height: 1.25; }
+  }
   #input-row {
     display: flex;
     align-items: center;
@@ -890,7 +898,7 @@
 /* the notes row: the frontier as taps — what's open, nearest first (design note 2026-09-15) */
 #scene-notes { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 10px; align-items: center; }
 #scene-notes .lbl { font-size: 10px; color: #9a86b8; flex: 0 0 100%; }
-#scene-notes button, #scene-notes span.plain { font: inherit; font-size: 11px; color: var(--cyan); background: #1c0f3a;
+#scene-notes button, #scene-notes span.plain { font: inherit; font-size: calc(11px * var(--fscale, 1)); color: var(--cyan); background: #1c0f3a;
   border: 1px solid #3a2560; border-radius: 8px; padding: 4px 8px; text-align: left; max-width: 100%; }
 #scene-notes span.plain { color: #cbb8e8; }
 #scene-notes button:hover { border-color: var(--cyan); }
@@ -934,6 +942,11 @@
    button that closes the notes off-screen with it. Both are capped to a share of
    the height and scroll inside themselves, so the input is always on screen. */
 @media (max-height: 640px) {
+  /* the title is a name he already knows (Kurt): on a short screen it goes, and the
+     header keeps the Aa, the sound and the Learn Thai link on one 44px row */
+  header .title { display: none; }
+  header { min-height: 44px; display: flex; align-items: center; justify-content: center; padding-top: 0; padding-bottom: 0; }
+  header #ad-mini { padding: 0; }
   #scene-notes { max-height: 26vh; overflow-y: auto; }
   #scene:not(.collapsed) #scene-art { height: 22vh; }
   #scene:not(.collapsed) #scene-cast { padding-top: 4px; }
@@ -949,14 +962,15 @@
    chips instead of floating, so the transcript gets the full width back.
    Wider screens keep the floating stack exactly as it was. */
 #dock { display: contents; }
+#nav-extra { display: none; }
 #convo-card { display: none; }
 #convo-card.show { display: flex; align-items: center; gap: 9px; padding: 6px 12px;
   border-top: 1px solid #ff149340; background: #0d0420; min-width: 0; flex-shrink: 0; }
 #convo-card img { width: 40px; height: 40px; border-radius: 9px; object-fit: cover;
   border: 1px solid #ff149366; background: #140a2e; flex: 0 0 auto; }
 #convo-card .who { flex: 1; min-width: 0; line-height: 1.25; }
-#convo-card .who b { color: var(--yellow); font-size: .9rem; }
-#convo-card .who .line, #convo-card .who .tier { display: block; font-size: .7rem; color: #9a86b8;
+#convo-card .who b { color: var(--yellow); font-size: calc(.9rem * var(--fscale, 1)); }
+#convo-card .who .line, #convo-card .who .tier { display: block; font-size: calc(.7rem * var(--fscale, 1)); color: #9a86b8;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #convo-card .who .tier { color: var(--cyan); }
 #convo-card .who .tier.cold { color: #ff6b81; }
@@ -980,11 +994,22 @@
   #dock { display: flex; align-items: center; gap: 8px; padding: 6px 10px;
     border-top: 1px solid #ff149330; flex-shrink: 0; min-width: 0; }
   #dock:not(:has(.show)) { display: none; }
+  /* the companion card rides above the compass on its own slim row */
+  #dock { flex-wrap: wrap; }
+  #convo-card.companion.show { flex: 1 0 100%; order: -1; }
+  #convo-card.companion img { width: 32px; height: 32px; }
+  #convo-card.companion .who { display: flex; align-items: baseline; gap: 6px; overflow: hidden; }
+  #convo-card.companion .who .line { flex: 1; min-width: 0; }
   #convo-card.show { flex: 1; padding: 0; border: 0; background: none; }
   #fab-stack { position: static; flex-direction: row; align-items: center; gap: 8px;
     margin-left: auto; min-height: 0; min-width: 0; }
   #bell-fab, #msg-fab, #notes-fab { width: 44px; height: 44px; font-size: 1.25rem; }
   #nav-fab.show { display: flex; gap: 5px; }
+  #nav-extra.show { display: flex; gap: 5px; }
+  #nav-extra button { min-width: 52px; height: 40px; border-radius: 9px; border: 1px solid #ff149366;
+    background: radial-gradient(circle at 50% 38%, #2a0040, #100019); color: var(--pink);
+    font: 700 .78rem/1 inherit; cursor: pointer; padding: 0 8px; }
+  #nav-extra button:active { background: #46006b; }
   #nav-fab button { width: 38px; height: 40px; grid-area: auto !important; font-size: .82rem; }
   #nav-fab [data-nav="w"] { order: 1; } #nav-fab [data-nav="n"] { order: 2; }
   #nav-fab [data-nav="in"] { order: 3; } #nav-fab [data-nav="s"] { order: 4; }
@@ -998,6 +1023,9 @@
      works (a typed direction), the row just stops offering it */
   #dock.talking #nav-fab { display: none !important; }
   #dock.talking #notes-fab { display: none; }
+  /* talking: the buttons go to the LEFT and the card's "bye" sits at the right
+     edge, so the bell is the width of the card away from it (round 65) */
+  #dock.talking #fab-stack { order: -1; margin-left: 0; }
 }
 /* five-digit money ran the battery bar off the edge at 375px */
 @media (max-width: 400px) {   /* after the ≤767px block, so it wins */
@@ -1033,7 +1061,8 @@
       <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
       <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
       <button id="notes-fab" title="Your notes — what's open" aria-label="Your notes">📓</button>
-      <div id="nav-fab" role="group" aria-label="Compass">
+      <div id="nav-extra" role="group" aria-label="Ways out"></div>
+    <div id="nav-fab" role="group" aria-label="Compass">
         <button data-nav="n" aria-label="Go north">N</button>
         <button data-nav="w" aria-label="Go west">W</button>
         <button data-nav="in" aria-label="Go inside — hold for the list">IN</button>

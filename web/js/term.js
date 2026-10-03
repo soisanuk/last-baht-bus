@@ -768,16 +768,18 @@ const _term = (() => {
     let c = null;
     try { c = typeof _convoCard === "function" ? _convoCard() : null; } catch (e) { c = null; }
     card.classList.toggle("show", !!c);
+    card.classList.toggle("companion", !!(c && c.companion));
     card.hidden = !c;
-    if (dock) dock.classList.toggle("talking", !!c);
+    const talking = !!c && !c.companion;
+    if (dock) dock.classList.toggle("talking", talking);
     // the prompt says who is listening (and goes back when nobody is)
-    if (_input) _input.placeholder = c ? "say something to " + c.name + "…" : "what do you do?";
+    if (_input) _input.placeholder = talking ? "say something to " + c.name + "…" : "what do you do?";
     if (!c) { _cardFor = null; card.innerHTML = ""; return; }
     const key = JSON.stringify(c);
     if (key === _cardFor) return;
     _cardFor = key;
     card.innerHTML = "";
-    card.setAttribute("aria-label", "Talking to " + c.name);
+    card.setAttribute("aria-label", (c.companion ? "Out with " : "Talking to ") + c.name);
     card.appendChild(_avatar(c.id, "cc-av"));
     const who = document.createElement("div");
     who.className = "who";
@@ -800,10 +802,12 @@ const _term = (() => {
     card.appendChild(who);
     const bye = document.createElement("button");
     bye.className = "bye";
-    bye.textContent = "bye";
-    bye.title = "End the conversation (BYE)";
-    bye.setAttribute("aria-label", "End the conversation");
-    bye.addEventListener("click", () => { if (_onCmd) { _input.value = "bye"; submit(_onCmd); } });
+    // the companion card's button opens a chat with her; the conversation card's ends one
+    const cmd = c.companion ? "talk to " + c.name.split(" & ")[0] : "bye";
+    bye.textContent = c.companion ? "talk" : "bye";
+    bye.title = c.companion ? "Talk to her" : "End the conversation (BYE)";
+    bye.setAttribute("aria-label", c.companion ? "Talk to " + c.name : "End the conversation");
+    bye.addEventListener("click", () => { if (_onCmd) { _input.value = cmd; submit(_onCmd); } });
     card.appendChild(bye);
   }
 
@@ -866,7 +870,28 @@ const _term = (() => {
   // _navDirs() — term.js renders the wheel and must not know the map (rail 1).
   // Dead directions are DIMMED rather than removed, so the rose keeps its shape
   // and your thumb learns one position per direction.
+  // OUT / UP / DOWN beside the compass on a phone — the engine says which (rail 1)
+  let _extraKey = null;
+  function _updateNavExtra() {
+    const box = document.getElementById("nav-extra");
+    if (!box) return;
+    let ways = [];
+    try { ways = typeof _navExtra === "function" && !(G.game || G.pendingEnc || G.pendingChoice || G.pendingBf || G.pendingFare) ? _navExtra() : []; } catch (e) { ways = []; }
+    box.classList.toggle("show", ways.length > 0);
+    const key = ways.map(w => w.cmd).join(",");
+    if (key === _extraKey) return;
+    _extraKey = key;
+    box.innerHTML = "";
+    for (const w of ways) {
+      const b = document.createElement("button");
+      b.textContent = w.label;
+      b.setAttribute("aria-label", "Go " + w.cmd);
+      b.addEventListener("click", () => { if (_onCmd) { _input.value = w.cmd; submit(_onCmd); } });
+      box.appendChild(b);
+    }
+  }
   function _updateNavFab() {
+    _updateNavExtra();
     const nav = document.getElementById("nav-fab");
     if (!nav) return;
     let show = false, dirs = [], lit = false;

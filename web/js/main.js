@@ -139,6 +139,9 @@ function _fontStep() {
 function _applyFontSize() {
   const f = _FONT_STEPS[_fontStep()];
   document.body.style.fontSize = f.px === 15 ? "" : f.px + "px";
+  // the things you READ and TAP grow with the story — at "largest" the chips, the
+  // notes and the card stayed at 11-12px beside 21px prose (Margaret, round 65)
+  document.documentElement.style.setProperty("--fscale", String(f.px / 15));
   const btn = document.getElementById("font-fab");
   if (btn) btn.title = "Text size: " + f.name;
 }

@@ -126,7 +126,8 @@ function _updateScene() {
     // One-time tip the first time the panel renders folded by default (phones):
     // six blind rounds never found the fold, so say it once. A display pref,
     // never game state; printed through the terminal like any presentation line.
-    if (off && typeof _term !== "undefined" && _term && _term.print) {
+    // not mid-taxi: there is no scene yet and the tip interrupted Tan (Margaret, round 65)
+    if (off && G.pendingChoice !== "intro" && typeof _term !== "undefined" && _term && _term.print) {
       try {
         if (!localStorage.getItem("lbb_scene_tip")) {
           localStorage.setItem("lbb_scene_tip", "1");

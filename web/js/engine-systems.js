@@ -414,6 +414,17 @@ function _navDirs() {
   return _NAV_DIRS.filter(d => !!ex[d] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(ex[d])));
 }
 
+// The ways out that aren't on the compass — OUT of a bar, UP or DOWN the stairs —
+// as {cmd,label}, for a frontend's dock (Margaret, round 65: in the room and in a
+// bar the phone's button row held nothing but the notebook, so leaving was a typed
+// word or a chip that had scrolled away). Only the three verbs every building uses;
+// the named connectors (soi5, pier, office…) stay words in the prose and the chips.
+function _navExtra() {
+  const ex = (_room() && _room().exits) || {};
+  return ["out", "up", "down"].filter(d => ex[d] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(ex[d])))
+    .map(d => ({ cmd: d, label: d.toUpperCase() }));
+}
+
 // What you can step INTO from here, as ready-made commands. Two shapes exist in
 // the world data and the player shouldn't have to know which is which: a room
 // with one door carries `in: <room>`, a soi lined with bars carries `venues: []`
@@ -3969,9 +3980,16 @@ function _doMessage(arg) {
   }
   const _judged = Object.keys(G.phone.contacts).find(c => (c === w || (NPCS[c] && NPCS[c].name.toLowerCase() === w)) && typeof _maiDee === "function" && _maiDee(c));
   if (_judged) { G.battery = Math.max(0, G.battery - 1); _say(`Read. No reply. The two blue ticks sit there like a closed door with a window in it, and that is the whole of ${NPCS[_judged].name}'s answer, tonight and after.`, "dim"); return; }   // Marcus, round 61: "miss you na" thirty seconds after "we finish"
-  const id = Object.keys(G.phone.contacts).find(c =>
+  // an EMPTY name matched every contact ("".includes) and texted whoever was first —
+  // Tan, then called "her" (Margaret, round 65)
+  const id = w && Object.keys(G.phone.contacts).find(c =>
     c === w || NPCS[c].name.toLowerCase().includes(w.split(" ")[0]));
-  if (!id) { _say(w ? "No such number in your phone. (CONTACT a girl in her bar first.)" : "Message whom?"); return; }
+  if (!id) {
+    const names = Object.keys(G.phone.contacts).filter(c => NPCS[c]).map(c => NPCS[c].name);
+    _say(w ? "No such number in your phone. (CONTACT a girl in her bar first.)"
+      : names.length ? "Message whom? (" + names.map(n => "MESSAGE " + n.toUpperCase()).join(" · ") + ")" : "Message whom? Your phone has nobody's number yet.");
+    return;
+  }
   G.battery = Math.max(0, G.battery - 1);
   // after the affair's endings she doesn't text like a hostess (Frank, 2026-08-26:
   // "come see me tonight!!" the morning after the bag by the door)
@@ -3998,7 +4016,7 @@ function _doMessage(arg) {
   G.phone.msgCd[id] = G.day;
   _addBond(id, 1); // charm counts toward favor
   _say(`You send ${NPCS[id].name} something short and sweet with one emoji too many.`);
-  if (_npcRoom(id) === G.room && _npcsHere().includes(id)) {
+  if (NPC_ROLES[id] && _npcRoom(id) === G.room && _npcsHere().includes(id)) {
     // she is three stools away — "come see me tonight" read absurd (playtest 2026-08-22)
     _pushMsg(id, ["555 you text me?? i am HERE na 🙈", "tilac… look up 😂", "you shy? i sit RIGHT here 555 💕"][Math.floor(_rand() * 3)]);
     _say("(📱 Her phone buzzes in her hand. She reads it, looks up at you, and laughs. CHECK MESSAGES.)", "dim");

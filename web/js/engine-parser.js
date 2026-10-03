@@ -11513,7 +11513,9 @@ function engineComplete(input) {
   } else if (G.pendingBf) pool = ["short time", "long time", "take her out", "no"];
   else if (G.pendingSoapy) pool = [..._SOAPY_TIERS.map(t => String(t.num)), "star", "super star", "model", "no"];
   else if (raw === "__info " || raw === "__info") {
-    pool = ["quests", "hint", "time", "who", "contacts", "gallery", "standing", "diagnose", "score", "last night", "map", "help"];
+    // the column Mort keeps telling you to read, an hour's WAIT and the inbox were
+    // typed-only for a thumb (Margaret, round 65)
+    pool = ["quests", "hint", "time", "who", "contacts", "messages", "gallery", "column", "wait 10", "standing", "diagnose", "score", "last night", "map", "help"];
     if (G.mode === "soi6") pool.push("share");
     if (G.stage === "expat") pool.push("books");
     // DEBT and DRAW are readouts about YOUR money, and they were the two verbs a

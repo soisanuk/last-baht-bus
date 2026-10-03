@@ -154,7 +154,7 @@ test("the conversation card names who you are talking to and how well she knows 
   assert.equal(c.id, "lek"); assert.equal(c.name, "Lek");
   assert.match(c.line, new RegExp(_barName(G.room)));
   assert.equal(c.tier, "just met");
-  party("lek"); assert.equal(_convoCard().tier, "with you tonight");
+  party("lek"); assert.match(_convoCard().line, /out with you/);
   G.party = null;
   G.room = "beach_rd_c";   // she is not here: no card, and reading it clears nothing
   assert.equal(_convoCard(), null); assert.equal(G.convo, "lek");

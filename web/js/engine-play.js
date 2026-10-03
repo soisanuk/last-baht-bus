@@ -1128,7 +1128,7 @@ function _jpTeach(g, moves) {
   } else if (moves.length === 1 && !g.taught.single) {
     g.taught.single = true;
     _say(_fmt("{n} taps the felt. \"This roll, only one way to play it — so play it. " +
-      "Type the flip. The box doesn't move itself… not until you know it does.\"", { n: g.opp }));
+      "Make the flip — tap it or type it. The box doesn't move itself… not until you know it does.\"", { n: g.opp }));
   }
 }
 

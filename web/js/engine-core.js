@@ -1461,20 +1461,33 @@ function _convoActive() {
 // read as a slap after three drinks, a number swap and her own flirting text (Dev, round 65)
 const _CARD_TIER = ["just met", "knows your face", "you're a regular", "her farang"];
 function _convoCard() {
-  const id = G && G.convo;
+  if (!G) return null;
+  // a quiz, a game, an encounter or a modal question owns the input: the card's
+  // "bye" went to the quiz as a wrong answer (Margaret, round 65)
+  if (G.game || G.pendingEnc || G.pendingBf || G.pendingFare || (G.pendingChoice && G.pendingChoice !== "intro")) return null;
+  const _pids = (G.party && G.party.ids) || [];
+  let id = G.convo;
+  // not talking to anybody, but a woman is on your arm: the card says so — after
+  // TAKE HER OUT nothing on screen showed she was with you (Margaret, round 65)
+  const companion = !(id && NPCS[id] && _npcsHere().includes(id)) && _pids.length ? _pids[0] : null;
+  if (companion) id = companion;
   if (!id || !NPCS[id] || !_npcsHere().includes(id)) return null;
   const n = NPCS[id], role = NPC_ROLES[id];
-  const where = (typeof _barName === "function" && _barName(G.room)) || (_room() && _room().name) || "";
+  const out = _pids.includes(id);
+  // a companion works somewhere else: her own bar, not the one you are standing in
+  // ("on the floor · Front Row Bar" for a Pink Lotus girl — Margaret, round 65)
+  const where = out ? "out with you" + ((typeof _barName === "function" && _barName(NPCS[id].room)) ? " · from " + _barName(NPCS[id].room) : "")
+    : (typeof _barName === "function" && _barName(G.room)) || (_room() && _room().name) || "";
+  if (companion) return { id, name: _pids.length > 1 ? _pids.map(p => NPCS[p].name).join(" & ") : n.name, line: where, tier: null, cold: false, asking: false, companion: true };
   const job = role === "mamasan" ? "mamasan" : role === "cashier" ? "on the till" : role === "hostess" ? "on the floor"
     : n.manager ? "runs the bar" : n.patron ? (n.room === G.room ? "drinks here" : "a regular") : n.masseuse ? "masseuse" : "";
   const badge = typeof _badge === "function" ? _badge(id) : null;
-  const line = [job + (badge ? " #" + badge : ""), where].filter(Boolean).join(" · ");
+  const line = out ? where : [job + (badge ? " #" + badge : ""), where].filter(Boolean).join(" · ");
   let tier = null, cold = false;
   if (role && typeof _bondTier === "function") {
     if (typeof _maiDee === "function" && _maiDee(id)) { tier = "she has made up her mind about you"; cold = true; }
     else if (typeof _affairLive === "function" && _affairLive() && G.affair.id === id) tier = "your girl";
     else if (typeof _atOwnBar === "function" && _atOwnBar()) tier = "your staff";
-    else if (G.party && (G.party.ids || []).includes(id)) tier = "with you tonight";
     else {
       const k = typeof _knownTier === "function" ? _knownTier(id) : _bondTier(id);
       tier = k === 0 && G.phone && G.phone.contacts && G.phone.contacts[id] ? "has your number" : _CARD_TIER[k];
