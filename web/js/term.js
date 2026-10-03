@@ -745,7 +745,7 @@ const _term = (() => {
   // The conversation card: who you are talking to, while you are (Mario,
   // 2026-10-03 — "an indicator of some sort when locked into dialogue mode",
   // "show portrait thumbnail and basic info"). What goes on it is the engine's
-  // (_convoCard); this only draws it. ✕ submits BYE, the verb that ends a chat.
+  // (_convoCard); this only draws it. Its "bye" chip submits BYE, the verb that ends a chat.
   let _cardFor = null;
   function _updateConvoCard() {
     const card = document.getElementById("convo-card");
@@ -785,7 +785,8 @@ const _term = (() => {
     }
     card.appendChild(who);
     const bye = document.createElement("button");
-    bye.textContent = "✕";
+    bye.className = "bye";
+    bye.textContent = "bye";
     bye.title = "End the conversation (BYE)";
     bye.setAttribute("aria-label", "End the conversation");
     bye.addEventListener("click", () => { if (_onCmd) { _input.value = "bye"; submit(_onCmd); } });

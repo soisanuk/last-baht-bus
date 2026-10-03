@@ -949,9 +949,13 @@
 #convo-card .who .tier { color: var(--cyan); }
 #convo-card .who .tier.cold { color: #ff6b81; }
 #convo-card .who .tier.ask { color: var(--pink); }
-#convo-card button { flex: 0 0 auto; min-width: 44px; min-height: 40px; border-radius: 9px;
-  border: 1px solid #ff149366; background: #12001e; color: var(--pink); font: inherit;
-  font-size: .8rem; cursor: pointer; padding: 0 10px; }
+/* the way out is the verb it sends, as a chip — a boxed ✕ read as a broken
+   window control wedged between her name and the round buttons (Mario) */
+#convo-card button.bye { flex: 0 0 auto; align-self: center; background: #12001e; color: var(--cyan);
+  border: 1px solid #00e5ff50; border-radius: 14px; font: inherit; font-size: .78rem;
+  padding: .22rem .8rem; cursor: pointer; }
+#convo-card button.bye:active { background: #1e0030; }
+@media (pointer: coarse) { #convo-card button.bye { min-height: 44px; } }
 @media (max-width: 767px) {
   header { padding: .45rem 3.6rem .35rem; }
   header .sub { display: none; }
