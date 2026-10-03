@@ -4,7 +4,8 @@
 // plumbing — every agent in the 2026-08-17 rounds hand-built (and mis-built)
 // exactly this at ~50-80k tokens a time. Not part of any test suite.
 //
-//   node tools/playtest-driver.mjs start --dir <sessionDir> [--mobile] [--fresh] [--url <url>]
+//   node tools/playtest-driver.mjs start --dir <sessionDir> [--mobile] [--size 375x420] [--fresh] [--url <url>]
+//     (--size sets the mobile viewport: 375x667 is an iPhone SE; ~375x420 is a phone with its keyboard up)
 //   node tools/playtest-driver.mjs cmd   --dir <sessionDir> "beer" "talk to lek" ...
 //   node tools/playtest-driver.mjs tap   --dir <sessionDir> "Pinky"        # chip/keyword/button by visible text
 //   node tools/playtest-driver.mjs wheel --dir <sessionDir> "Lek" [n]     # open flyout on a keyword; list or pick action n
@@ -62,7 +63,8 @@ if (verb === "serve") {
     "file://" + fileURLToPath(new URL("../web/index.html", import.meta.url)));
   const browser = await chromium.launch();
   const ctxOpts = mobile
-    ? { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true }
+    ? { viewport: (() => { const m = /^(\d+)x(\d+)$/.exec(opt("size", "") || ""); return m ? { width: +m[1], height: +m[2] } : { width: 390, height: 844 }; })(),
+        deviceScaleFactor: 3, isMobile: true, hasTouch: true }
     : { viewport: { width: 1280, height: 900 } };
   const context = await browser.newContext(ctxOpts);
   const page = await context.newPage();
@@ -401,6 +403,7 @@ if (verb === "serve") {
     [fileURLToPath(import.meta.url), "serve", "--dir", dir,
      ...(args.includes("--mobile") ? ["--mobile"] : []),
      ...(args.includes("--fresh") ? ["--fresh"] : []),
+     ...(opt("size") ? ["--size", opt("size")] : []),
      ...(opt("url") ? ["--url", opt("url")] : [])],
     { detached: true, stdio: "ignore" });
   child.unref();
