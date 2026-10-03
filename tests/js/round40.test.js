@@ -159,6 +159,7 @@ test("in a bar, water and a soda cost the beer — you are paying for the seat (
 
 test("WAIT in a go-go stops at twenty minutes, in a bar at an hour; a bought drink resets it; your own bar and your room never nag (Mario)", () => {
   const saved = _rand; _rand = () => 0.99;
+  _setFlag("jokeStop");   // the unknown number interrupts a WAIT on the tick now, as any text does
   try {
     G.room = "tequila_queen"; G.money = 5000; G.nightTurn = 30; doCommand("look"); const t0 = G.nightTurn;
     out = []; run("wait until midnight");

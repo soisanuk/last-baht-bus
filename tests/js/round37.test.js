@@ -136,7 +136,7 @@ test("the gallery files a photo where the shutter went (Gordon)", () => {
 test("the phone learns what it is told: Tan has your number, Mort has a name, the Owl was read (Gordon)", () => {
   G.phone.contacts = { tan: true }; G.phone.inbox = []; run("phone");
   assert.match(text(), /No messages yet/); assert.doesNotMatch(text(), /nobody has your number/);
-  _setFlag("jokeWho"); G.phone.jokeDay = 0; G.room = "beach_rd_c"; _dailyJoke();
+  _setFlag("jokeWho"); G.phone.jokeDay = 0; G.room = "beach_rd_c"; G.nightTurn = 80; _dailyJoke();
   assert.equal(G.phone.inbox[G.phone.inbox.length - 1].fromName, "Mort");
   G.owlRead = false; out = []; run("phone"); assert.match(text(), /sits unread/);
   run("owl"); out = []; run("phone"); assert.match(text(), /This week's Last Orders is in your inbox/);

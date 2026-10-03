@@ -3234,6 +3234,7 @@ function _tick() {
   if (typeof _workFloor === "function") _workFloor();          // …and a stood shift is where your own staff live
   if (!_onRide()) _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
+  if (typeof _dailyJoke === "function") _dailyJoke();   // the unknown number keeps its own hour, not your first step outside
   if (typeof _wrongNumberTick === "function") _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it
   _soidogTick();   // the day after you adopt the soi dog, the Foundation texts for a donation
   if (typeof _waenTick === "function") _waenTick();

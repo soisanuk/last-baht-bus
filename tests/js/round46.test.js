@@ -389,7 +389,7 @@ test("Wimon counts the same three beer bars twice", () => {
 });
 
 test("WAIT UNTIL reaches the whole night, and a refusal costs nothing (Kenji, round 47)", () => {
-  vac(); _setFlag("act1Done"); G.room = "beach_rd_c";
+  vac(); _setFlag("act1Done"); _setFlag("jokeStop"); G.room = "beach_rd_c";   // a text interrupts a WAIT
   // the night moved to 06:00 and this was capped at the old 04:00 — the one command a man
   // staying up for the sunrise types was refused with a clock that had stopped two hours back
   G.nightTurn = 100; out = []; run("wait until 5");

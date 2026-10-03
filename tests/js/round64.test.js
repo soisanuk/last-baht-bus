@@ -159,3 +159,15 @@ test("the conversation card names who you are talking to and how well she knows 
   G.room = "beach_rd_c";   // she is not here: no card, and reading it clears nothing
   assert.equal(_convoCard(), null); assert.equal(G.convo, "lek");
 });
+
+// ── Mario, 2026-10-03: "the mystery message from Mort as soon as I step out of the QV" ──
+test("the unknown number keeps its own hour, not your first step out of Mort's pub", () => {
+  G.day = 3; G.nightTurn = 0; G.room = "queen_vic";
+  run("w");   // out of the pub at six
+  assert.ok(!(G.phone.inbox || []).some(m => m.from === "unknown"), "nothing on the first step outside");
+  assert.ok(_jokeAt() >= 20 && _jokeAt() < 70);
+  G.room = "beach_rd_c"; G.nightTurn = _jokeAt(); _tick();
+  assert.ok(G.phone.inbox.some(m => m.from === "unknown"), "it arrives on the tick, at its hour");
+  G.phone.jokeDay = 0; G.phone.inbox = []; G.room = NPCS.mort.room; _tick();
+  assert.equal(G.phone.inbox.length, 0, "never while he is in the room with you");
+});

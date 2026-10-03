@@ -5045,14 +5045,20 @@ function _bkkBill(grab) {
   _endNight("bkkdinner");
 }
 
+function _jokeAt() { return 20 + _hh("jokeAt" + G.vacation + "_" + G.day, 37) % 50; }
 function _dailyJoke() {
-  if (!_flag("act1Done") || G.battery <= 0) return;
+  if (!_flag("act1Done") || G.battery <= 0 || G.game || G.pendingEnc) return;
   if (_flag("jokeStop")) return;                 // he took the hint
   if (G.phone.jokeDay === G.day) return;         // one a day, like a vitamin
   // Not while you're in the room with him — a man texting gags to a stranger
-  // he can see reads wrong (playtest #6). Tomorrow's joke waits for tomorrow;
-  // tonight's just waits for you to leave the pub.
-  if (G.room === "queen_vic") return;
+  // he can see reads wrong (playtest #6).
+  if (G.room === "queen_vic" || _npcsHere().includes("mort")) return;
+  // …and not the moment you walk out of his pub either: the old gate held the
+  // joke only while you stood in the Queen Vic, so on the Soi 6 week (which
+  // starts upstairs) it landed on the first step outside, every night, and the
+  // timing told you who it was (Mario, 2026-10-03). A day-stable hour instead,
+  // 20:00 to 00:50, checked on the tick as well as on arrival.
+  if (G.nightTurn < _jokeAt()) return;
   G.phone.jokeDay = G.day;
   const n = (G.phone.jokeN = (G.phone.jokeN || 0) + 1);
   const body = _JOKE_TEXTS[_hh("joke" + G.vacation + "_" + n, 41) % _JOKE_TEXTS.length]
@@ -5064,6 +5070,7 @@ function _dailyJoke() {
     text: body + (n === 1 ? "  (You have no idea who this is. REPLY, or STOP them.)" : ""),
     read: false,
   });
+  _say(_flag("jokeWho") ? "(📱 Your phone buzzes — Mort. CHECK MESSAGES.)" : "(📱 Your phone buzzes — an unknown number. CHECK MESSAGES.)", "dim");
 }
 
 // STOP / UNSUBSCRIBE — he is old, not rude. One text and it is over.

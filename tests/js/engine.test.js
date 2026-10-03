@@ -8193,7 +8193,7 @@ test("Tan calls a lost first-timer at the halfway mark", () => {
 // named them.
 test("with nothing on the books, the game names what's actually open", () => {
   newGame();
-  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3; state().nightTurn = 80; state().room = "beach_rd_c";
   // MET, not merely named in print — _leads() reads _met() (G.talked), because
   // "worth another word" is a claim that you have had one (class L, §3.4).
   state().known = { bert: true }; state().talked = { bert: [0] };
@@ -8296,7 +8296,7 @@ test("SCORE headings the Act One checklist, and drops it once it's redundant (Re
 // what the night had been. Failure explained itself and success didn't.
 test("the morning says what last night was, as deltas", () => {
   newGame();
-  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3; state().nightTurn = 80; state().room = "beach_rd_c";
   state().happy = 12; state().money = 5000;
   state().known = { lek: true }; state().phone.contacts = {};
   state().talked = { lek: [0] };   // "met" counts conversations now, not names in prose
@@ -8385,7 +8385,7 @@ test("the last night of a month is graded at the month it was TRADED in, not the
 // already the in-fiction author of the Last Orders column.
 test("the daily joke: one a day, stoppable, and the sender has a name", () => {
   newGame();
-  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3; state().nightTurn = 80; state().room = "beach_rd_c";
 
   _dailyJoke();
   assert.equal(state().phone.inbox.length, 1, "one text");
@@ -8402,11 +8402,11 @@ test("the daily joke: one a day, stoppable, and the sender has a name", () => {
 
   // STOP ends it, and it stays ended
   newGame();
-  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3; state().nightTurn = 80; state().room = "beach_rd_c";
   _dailyJoke();
   out = []; run("stop");
   assert.ok(_flag("jokeStop"));
-  state().day = 4; _dailyJoke();
+  state().day = 4; state().nightTurn = 80; _dailyJoke();
   assert.equal(state().phone.inbox.length, 1, "no more after STOP");
 
   // and nothing arrives during the opening — the wallet comes first
@@ -8419,7 +8419,7 @@ test("the daily joke: one a day, stoppable, and the sender has a name", () => {
 // stranger, the invitation was a lie the game told.
 test("Mort knows you answered his text when you walk in", () => {
   newGame();
-  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3; state().nightTurn = 80; state().room = "beach_rd_c";
   _dailyJoke(); run("reply");
   state().room = "queen_vic"; out = [];
   run("talk to mort");
@@ -8435,7 +8435,7 @@ test("Mort knows you answered his text when you walk in", () => {
 
   // and telling him to STOP is not the same as replying
   newGame();
-  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3; state().nightTurn = 80; state().room = "beach_rd_c";
   _dailyJoke(); run("stop");
   state().room = "queen_vic"; out = [];
   run("talk to mort");
