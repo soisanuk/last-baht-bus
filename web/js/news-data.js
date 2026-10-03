@@ -8,37 +8,37 @@ var NEWS_FEED = [
     "d": "29 Sep 2026"
   },
   {
-    "t": "Pattaya City Expats Club briefed on medical charity challenges and trauma care for intra-familial abuse",
+    "t": "German man seriously injured in Pattaya hotel balcony fall",
+    "s": "thethaiger.com",
+    "d": "02 Oct 2026"
+  },
+  {
+    "t": "2 Pattaya men admit most of Russian siblings case but deny premeditation",
+    "s": "thethaiger.com",
+    "d": "02 Oct 2026"
+  },
+  {
+    "t": "Royal Cliff continues annual giving at Pattaya School for the Blind",
     "s": "Pattaya Mail",
     "d": "02 Oct 2026"
   },
   {
-    "t": "German tourist seriously injured after falling from second-floor Pattaya hotel balcony",
+    "t": "Motorcycle rider injured after collision with pedestrian on Jomtien Beach Road",
     "s": "Pattaya Mail",
     "d": "02 Oct 2026"
   },
   {
-    "t": "Thailand struggles to reach 3% growth while Pattaya expands events and new tourism markets",
+    "t": "Pattaya police hunt driver after Chinese tourist reports roadside assault",
     "s": "Pattaya Mail",
     "d": "02 Oct 2026"
   },
   {
-    "t": "Thai Airways mobilizes for full flight operations after recent disruptions",
+    "t": "Pattaya Court denies bail for two men in Russian siblings case",
     "s": "Pattaya Mail",
     "d": "02 Oct 2026"
   },
   {
-    "t": "Thailand launches disaster insurance covering 30 million households",
-    "s": "Pattaya Mail",
-    "d": "01 Oct 2026"
-  },
-  {
-    "t": "Hua Hin–Cha Am joins Thailand’s MICE city network",
-    "s": "Pattaya Mail",
-    "d": "01 Oct 2026"
-  },
-  {
-    "t": "Koh Larn waters turn crystal clear and welcome visitors back",
+    "t": "Pattaya City and Immigration close gaps in tourist services and safety",
     "s": "Pattaya Mail",
     "d": "02 Oct 2026"
   },
@@ -53,6 +53,11 @@ var NEWS_FEED = [
     "d": "30 Sep 2026"
   },
   {
+    "t": "At least 23 dead in Thailand floods, Bangkok airport in chaos",
+    "s": "Reuters",
+    "d": "30 Sep 2026"
+  },
+  {
     "t": "Thailand’s soft power play: Culture as global currency",
     "s": "CNN",
     "d": "02 Oct 2026"
@@ -64,24 +69,19 @@ var NEWS_FEED = [
   },
   {
     "t": "Canadian diver Erik Brown, who helped in 2018 Thai cave rescue, dies at 44",
-    "s": "The Straits Times",
+    "s": "straitstimes.com",
     "d": "02 Oct 2026"
-  },
-  {
-    "t": "Thailand’s Demographic Crisis Arrives Early",
-    "s": "Foreign Policy",
-    "d": "30 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-02","USD":33.59,"AUD":23.31,"GBP":44.35,"EUR":37.71};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-03","temp":27,"humid":95,"code":3,"hi":32,"rain":95};
+var WX_NOW = {"date":"2026-10-03","temp":31,"humid":74,"code":95,"hi":31,"rain":95};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4142,"date":"2026-10-02","baht":65800};
+var GOLD = {"usd":4142,"date":"2026-10-03","baht":65800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":84470,"thb":2824188};
+var BTC = {"usd":84559,"thb":2827158};
