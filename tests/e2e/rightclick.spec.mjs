@@ -121,6 +121,6 @@ test("HELP tells a desktop player the gesture exists", async ({ page }) => {
   await bootIntoGame(page, INDEX_URL);
   await page.fill("#term-in", "help");
   await page.press("#term-in", "Enter");
-  await expect(page.locator("#term-out")).toContainText(/RIGHT-CLICK/);
-  await expect(page.locator("#term-out")).toContainText(/press and hold/i);
+  await expect(page.locator("#term-out")).toContainText(/right-click/i);
+  await expect(page.locator("#term-out")).toContainText(/press and hold/i);   // the phone's gesture leads now (round 65)
 });

@@ -1457,7 +1457,9 @@ function _convoActive() {
 // thumbnail and basic info"). Pure — it reads G and never clears it; the
 // partner-left cleanup stays _convoActive's, on the next command. Engine-side so
 // a 2D or served frontend draws the same card without knowing the rules.
-const _CARD_TIER = ["a stranger to her", "knows your face", "you're a regular", "her farang"];
+// what she REMEMBERS of you (_knownTier), not this week's warmth — and "a stranger"
+// read as a slap after three drinks, a number swap and her own flirting text (Dev, round 65)
+const _CARD_TIER = ["just met", "knows your face", "you're a regular", "her farang"];
 function _convoCard() {
   const id = G && G.convo;
   if (!id || !NPCS[id] || !_npcsHere().includes(id)) return null;
@@ -1473,7 +1475,10 @@ function _convoCard() {
     else if (typeof _affairLive === "function" && _affairLive() && G.affair.id === id) tier = "your girl";
     else if (typeof _atOwnBar === "function" && _atOwnBar()) tier = "your staff";
     else if (G.party && (G.party.ids || []).includes(id)) tier = "with you tonight";
-    else tier = _CARD_TIER[_bondTier(id)];
+    else {
+      const k = typeof _knownTier === "function" ? _knownTier(id) : _bondTier(id);
+      tier = k === 0 && G.phone && G.phone.contacts && G.phone.contacts[id] ? "has your number" : _CARD_TIER[k];
+    }
   }
   return { id, name: n.name, line, tier, cold, asking: !!(G.convoQ && G.convoQ.id === id) };
 }

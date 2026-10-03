@@ -34,7 +34,10 @@ test("bar bell FAB: hidden outside bars, taps to ring inside, clang fires", asyn
     const orig = _audio.sfx.bind(_audio);
     _audio.sfx = n => { window.__sfx.push(n); return orig(n); };
   });
-  await fab.click();
+  await fab.click();                        // the first tap names the price…
+  await expect(fab).toHaveText(/฿\d+\?/);
+  expect(await page.evaluate(() => window.__sfx.includes("bell"))).toBe(false);
+  await fab.click();                        // …the second rings it
   await expect(page.locator("#term-out")).toContainText(/RING THE BELL/i);
   expect(await page.evaluate(() => window.__sfx.includes("bell"))).toBe(true);
 

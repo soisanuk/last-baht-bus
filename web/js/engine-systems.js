@@ -409,7 +409,9 @@ const _NAV_DIRS = ["n", "e", "s", "w"];
 
 function _navDirs() {
   const ex = (_room() && _room().exits) || {};
-  return _NAV_DIRS.filter(d => !!ex[d]);
+  // the Soi 6 week's fence is a refusal, not a road: a lit E at the east end that
+  // always says "back into Soi 6" is a button that lies (Dev, round 65)
+  return _NAV_DIRS.filter(d => !!ex[d] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(ex[d])));
 }
 
 // What you can step INTO from here, as ready-made commands. Two shapes exist in

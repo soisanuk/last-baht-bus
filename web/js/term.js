@@ -671,7 +671,6 @@ const _term = (() => {
   // commands in a row could behave completely differently depending on how much
   // the game happened to print — which reads as the scrollback moving on its
   // own. The anchor is now reserved for output that is unambiguously a wall.
-  const WALL_SCREENS = 1.5;
   function _scrollToNew(anchor) {
     if (!_out) return;
     const bottom = _out.scrollHeight - _out.clientHeight;
@@ -679,7 +678,22 @@ const _term = (() => {
     const delta = anchor.getBoundingClientRect().top - _out.getBoundingClientRect().top;
     const top = _out.scrollTop + delta;      // the scrollTop that puts the echo at the top
     const fresh = _out.scrollHeight - top;   // everything printed this turn
-    if (fresh < _out.clientHeight * WALL_SCREENS) { _out.scrollTop = bottom; return; }
+    // "Merely tips past" is measured in LINES, not screens (round 65, Kurt — a
+    // phone with its keyboard up leaves the story 140px, so a reply 1.4 screens
+    // long was pinned to its end and lost its first line, which is usually the
+    // answer: TIME's clock, the quiz's question, Connect 4's board, the morning's
+    // DAY banner). Pin to the bottom only when what scrolls off the top is the
+    // echo and a line or two; otherwise put the start of the reply in view.
+    // …unless the reply ENDS in a question you must answer (an encounter, a modal,
+    // a game, her question): then the question is what you need, and a long
+    // arrival anchored at its start hid the noodle girl's YES/NO under the fold
+    // with only the chips showing (Dev, round 65)
+    let asking = false;
+    try { asking = typeof G !== "undefined" && !!G && !!(G.pendingEnc || G.pendingBf || G.pendingFare || G.game ||
+      (G.pendingChoice && G.pendingChoice !== "intro") || G.convoQ); } catch (e) {}
+    if (asking) { _out.scrollTop = bottom; return; }
+    const line = parseFloat(getComputedStyle(_out).lineHeight) || 22;
+    if (fresh <= _out.clientHeight + 2 * line) { _out.scrollTop = bottom; return; }
     _out.scrollTop = Math.min(top, bottom);
   }
 
@@ -952,6 +966,11 @@ const _term = (() => {
     if (!set) { try { set = typeof _chipSet === "function" ? _chipSet() : []; } catch (e) { set = []; } }
     if (!custom) set = _foldAtmChips(_dropCompassChips(set)); // wheel + ATM folding
     box.innerHTML = "";
+    // a new set starts at its first chip: the bar kept the old sideways scroll,
+    // so after one swipe every later screen opened part-way along with its first
+    // chips off the left edge — a barfine's SHORT TIME, a girl's topics, "look"
+    // (Dev, round 65, measured scrollLeft 167 on a fresh set)
+    box.scrollLeft = 0;
     for (const { cmd, label, kind } of set) {
       const b = document.createElement("button");
       b.className = kind === "reply" ? "chip chip-reply" : "chip";
@@ -1069,7 +1088,24 @@ const _term = (() => {
 
     // the bar bell: tap to ring, no keyboard needed
     const bellFab = document.getElementById("bell-fab");
+    // …on a SECOND tap: it spends the price of a round for the whole bar, and on a
+    // phone it sits a thumb's width from the conversation card's "bye" (Dev,
+    // round 65 — ฿300 on his first tap, thinking it called the barmaid). The first
+    // tap shows the price for three seconds; a typed RING BELL needs no confirming.
+    let bellArmed = 0;
     if (bellFab) bellFab.addEventListener("click", () => {
+      if (Date.now() - bellArmed > 3000) {
+        bellArmed = Date.now();
+        let price = null;
+        try { price = typeof _bellPrice === "function" ? _bellPrice(G.room) : null; } catch (e) {}
+        bellFab.classList.add("armed");
+        bellFab.textContent = price ? "฿" + price + "?" : "ring?";
+        bellFab.title = "Tap again to ring it — the whole bar drinks on you";
+        setTimeout(() => { if (Date.now() - bellArmed >= 2900) { bellFab.classList.remove("armed"); bellFab.textContent = "🔔"; bellFab.title = "Ring the bell"; } }, 3000);
+        return;
+      }
+      bellArmed = 0;
+      bellFab.classList.remove("armed"); bellFab.textContent = "🔔"; bellFab.title = "Ring the bell";
       _input.value = "ring bell";
       submit(onCommand);
     });

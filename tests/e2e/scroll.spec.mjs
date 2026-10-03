@@ -65,8 +65,24 @@ test("output that merely tips past the viewport still pins to the bottom", async
     return { newH: out.scrollHeight - top, view: out.clientHeight,
              gap: out.scrollHeight - out.clientHeight - out.scrollTop };
   });
-  // only meaningful while LOOK is under the wall threshold — assert the rule it lands on
-  if (fresh.newH < fresh.view * 1.5) {
-    expect(fresh.gap, "sub-wall output stays pinned to the bottom").toBeLessThanOrEqual(2);
+  // the threshold is two LINES past the viewport, not half a screen (round 65)
+  const line = await page.evaluate(() => parseFloat(getComputedStyle(document.getElementById("term-out")).lineHeight) || 22);
+  if (fresh.newH <= fresh.view + 2 * line) {
+    expect(fresh.gap, "output that tips past by a line or two stays pinned to the bottom").toBeLessThanOrEqual(2);
   }
+});
+
+test("on a short screen a reply longer than the view shows its START, not its tail (Kurt, round 65)", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 420 });
+  await bootIntoGame(page, INDEX_URL);
+  for (const c of ["down", "out", "time"]) { await page.fill("#term-in", c); await page.press("#term-in", "Enter"); }
+  const r = await page.evaluate(() => {
+    const out = document.getElementById("term-out");
+    const es = out.querySelectorAll(".t-echo"), last = es[es.length - 1];
+    const top = out.scrollTop + (last.getBoundingClientRect().top - out.getBoundingClientRect().top);
+    const line = parseFloat(getComputedStyle(out).lineHeight) || 22;
+    return { newH: out.scrollHeight - top, view: out.clientHeight, line,
+             echoTop: Math.round(last.getBoundingClientRect().top - out.getBoundingClientRect().top) };
+  });
+  if (r.newH > r.view + 2 * r.line) expect(Math.abs(r.echoTop), "the command's own echo is at the top").toBeLessThanOrEqual(4);
 });

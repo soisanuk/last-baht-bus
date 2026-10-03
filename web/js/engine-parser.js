@@ -1451,6 +1451,19 @@ function _doTravel(arg) {
       }
     }
     if (_notADoor(arg)) return;   // the mall, the temple, the bank: real buildings this game has no room behind (Owen, round 46)
+    // GO TO JOY: a woman you have met is at a bar — if it is a bar you have found,
+    // that is where you are going (Dev, round 65: she texted "come see me tonight"
+    // and GO TO JOY was told the way to bars only). Only a door you already know;
+    // her bar's name never prints for a man who has not found it.
+    {
+      const _pw = w.replace(/^(see |find |meet )/, "").toLowerCase();
+      const _pc = _pw && Object.keys(NPCS).filter(id => String(NPCS[id].name || "").toLowerCase() === _pw && _met(id));
+      const _pid = _pc && _pc.length ? _pc[0] : null;   // a woman you have met, by her name — anywhere in town
+      const _pr = _pid && _met(_pid) && _npcWhere(_pid);
+      if (_pr && _pr !== G.room && (G.visited || {})[_pr] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(_pr))) {
+        _doTravel(_barName(_pr) || ROOMS[_pr].name); return;
+      }
+    }
     _say("You only know the way to bars and hotels you've already found. (Bare TRAVEL lists them.)");
     return;
   }
@@ -7401,6 +7414,9 @@ function _doBuy(arg) {
     // and _findNpc missed her (Gaz playtest, 2026-08-17)
     const nameW = arg.replace(/\blady\b|\bdrinks?\b|\bfor\b|\banother\b|\bmore\b|\bagain\b|\bsame\b/g, " ").replace(/\s+/g, " ").trim();
     const girlsHere = _npcsHere().filter(id => NPC_ROLES[id]);
+    // mid-conversation, "buy drink" is for HER — the chip says so, the typed word asked who (Dev, round 65)
+    const _partner = typeof _convoActive === "function" ? _convoActive() : null;
+    if (!nameW && _partner && NPC_ROLES[_partner] && girlsHere.includes(_partner)) { doCommand("buy drink for " + NPCS[_partner].name); return; }
     if (!nameW && girlsHere.length) {
       _say(_fmt("A drink for who? Yours is a BEER (\u0e3f{b}); hers is \u0e3f{l} and goes on " +
         "her tally. (BUY BEER \u00b7 BUY WATER \u00b7 BUY DRINK FOR {who})",
@@ -10853,8 +10869,8 @@ THE WHOLE CARD (bare HELP is the short one):
   BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
     "…" chip fans out into a menu — this list needs no typing to use
-  Highlighted words in the story are tappable: tap for the quick menu, RIGHT-CLICK (or
-    press and hold) for the full one — a person's ask-topics, and the actions a tap shouldn't fire
+  Highlighted words in the story are tappable: tap for the quick menu, PRESS AND HOLD (or
+    right-click with a mouse) for the full one — a person's ask-topics, and the actions a tap shouldn't fire
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // HELP is layered the way parser IF settled on (ABOUT / HELP / HINT, and the
@@ -10864,7 +10880,7 @@ THE WHOLE CARD (bare HELP is the short one):
 // that listed BARFINE, BUY CONDOM and SOAPY on turn three of the opening
 // (Bronwyn, round 39: "a menu in a language I don't speak").
 const _HELP_HEAD = "The point of it all: สนุก (“sanuk” — fun) is the score; สบายสบาย (“sabai sabai” — easy-easy, the good life) is the summit.";
-const _HELP_TAPS = "Highlighted words in the story are tappable: tap for the quick menu, RIGHT-CLICK or press and hold for the full one.";
+const _HELP_TAPS = "Highlighted words in the story are tappable: tap for the quick menu, PRESS AND HOLD (or right-click with a mouse) for the full one.";
 function _helpFirstPage() {
   const soi6 = G.mode === "soi6";
   const opening = !_flag("act1Done");
@@ -10941,8 +10957,8 @@ THE WHOLE CARD (bare HELP is the short one):
   PLAY AGAIN (once the week's up — another seven days on the soi)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
     "…" chip fans out into a menu — this list needs no typing to use
-  Highlighted words in the story are tappable: tap for the quick menu, RIGHT-CLICK (or
-    press and hold) for the full one — a person's ask-topics, and the actions a tap shouldn't fire
+  Highlighted words in the story are tappable: tap for the quick menu, PRESS AND HOLD (or
+    right-click with a mouse) for the full one — a person's ask-topics, and the actions a tap shouldn't fire
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // ── Autocomplete ─────────────────────────────────────────────────────────────
@@ -11190,7 +11206,9 @@ function _chipSet() {
   if (_isDarkHere()) add("light");
   add("look");
   if (G.room === "kitten_office" && G.rabbitWay === "operator" && !_flag("rabbitData") && !G.game) add("use laptop", "use the laptop");
-  if (G.room === _hotelRoomId() && _flag("act1Done")) add("sleep", "sleep — end the night");
+  // not on the chip bar at 18:00, one fat finger from losing a night you have just woken
+  // into (Kurt, round 65) — SLEEP is still a verb any time, it just isn't offered
+  if (G.room === _hotelRoomId() && _flag("act1Done") && G.nightTurn >= 40) add("sleep", "sleep — end the night");
   // The readout verbs live only in HELP, which is itself untappable — a thumb
   // player could not reach QUESTS/HINT/TIME/WHO/GALLERY at all (thumbs-only
   // playtest 2026-08-22). One chip, fanned out like the ATM.
@@ -12368,6 +12386,19 @@ function doCommand(input) {
   // and it was "I didn't understand that" (Terence, round 57)
   { const _mk = lower.match(/^(?:a |an |get (?:a |an )?|have (?:a |an )?)?(thai|foot|oil|herbal|aroma|traditional|swedish)\s+massage$/);
     if (_mk && (_room().massage || _room().soapy)) { doCommand("massage " + _mk[1]); return; } }
+  // the ways people actually sign off — "see ya" was SEE <ya> and the chat stayed open (Dev, round 65)
+  if (typeof _convoActive === "function" && _convoActive() &&
+      /^(see ?ya|see you( later| around| tomorrow| soon)?|cya|catch (you|ya) later|gotta go|got to go|i'?m off|night night)[.!]*$/.test(lower)) {
+    doCommand("bye"); return;
+  }
+  // A WORD ON HER CHIP BAR, TYPED, IS THE CHIP: tapping "Football" asked Sopha and
+  // typing it printed the league table (Dev, round 65). The soft verbs — the ones
+  // that read a feed or the town rather than act — yield to the person you are
+  // talking to when she has that very topic; every acting verb keeps first refusal.
+  if (!arg && /^(football|footy|scores|match|weather|forecast|news|lottery|lotto|tv|column|owl)$/.test(v) &&
+      typeof _convoActive === "function" && _convoActive() && _convoTopicHere(v)) {
+    doCommand("ask " + NPCS[G.convo].name + " about " + v); return;   // the whole ask, tick and all
+  }
   switch (v) {
     case "go": case "walk": case "head": {
       // SEE/WALK <her> HOME, TAKE <her> TO THE BUS — cheap care's verb (essay ledger theme 2)
@@ -12420,6 +12451,8 @@ function doCommand(input) {
     case "blackbook": case "little black book": case "ladies": _doBlackbook(); break;
     case "identity": case "me": case "self": _doWhoAmI(); break;
     case "contact": case "number":
+      // mid-conversation with a woman on the floor, CONTACT is her number, as the chip is (Dev, round 65)
+      if (!arg && _convoActive() && NPC_ROLES[G.convo]) { _doContact(NPCS[G.convo].name); break; }
       if (!arg) _doContacts(); // bare CONTACT reads as "show my contacts"
       else _doContact(arg.replace(/^(with |for )/, ""));
       break;
@@ -12760,6 +12793,8 @@ function doCommand(input) {
     // bare beer nouns are taps waiting to happen — KISS's menu advertises
     // ('BIG BEER'), and a tapped noun must never dead-end in "didn't understand"
     case "beer": case "chang": case "leo": case "singha": _doBuy("beer"); break;
+    // a bare WATER is the same order a bare BEER is (Dev, round 65: "No idea what you're after")
+    case "water": case "soda": case "coke": _doBuy(v + (arg ? " " + arg : "")); break;
     case "big": case "large":
       if (/beer|chang|leo|singha/.test(arg)) { _doBuy("beer"); break; }
       _say("Big what? The night is full of options."); break;
@@ -13555,6 +13590,9 @@ function _soi6Opening() {
   // Only DOWN is a live exit from the room — keep OUT out of the tap-hint (it's a
   // step you take FROM the pub, not the room; a tappable OUT here just dead-ends).
   _say("(HELP lists commands. Your night is DOWN the stairs — the pub first, then out into the soi.)", "dim");
+  // the first night of the week is measured from here, or the first morning
+  // reports "nothing to measure" over a night that was played (Kurt, round 65)
+  if (typeof _nightSnapshot === "function") _nightSnapshot();
 }
 
 function engineIntro() {

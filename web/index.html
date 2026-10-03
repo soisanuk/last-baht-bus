@@ -99,6 +99,7 @@
   #bell-fab:active, #msg-fab:active, #notes-fab:active { background: #46006b; transform: scale(0.94); }
   #notes-fab { animation: none; }   /* the notes are always there; only the bell and the inbox pulse */
   #notes-fab.open { border-color: var(--cyan); color: var(--cyan); }
+  #bell-fab.armed { font-size: .8rem; font-weight: 700; color: var(--yellow); border-color: var(--yellow); animation: none; }
   @keyframes fab-pulse {
     0%   { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149366; }
     70%  { box-shadow: 0 0 11px 2px #ff149377, 0 0 0 13px #ff149300; }
@@ -881,7 +882,7 @@
 #scene-hud b { color: var(--green); }
 #scene-hud .sep { color: #9a86b8; }
 #scene-hud .grow { flex: 1; }
-#scene-hud .m { display: flex; align-items: center; gap: 3px; font-size: 10px; }
+#scene-hud .m { display: flex; align-items: center; gap: 3px; font-size: 10px; cursor: pointer; }
 #scene-hud .bar { display: inline-block; width: 22px; height: 5px; background: #1c0f3a;
   border-radius: 3px; overflow: hidden; }
 #scene-hud .bar i { display: block; height: 100%; }
@@ -927,6 +928,17 @@
 #scene-art.hs-pulse .hotspot { opacity: 1; }
 #scene-art.hs-pulse .hotspot { border-color: #00e5ff66; }
 
+/* ── A short screen (a phone with its keyboard up — Kurt, round 65) ──────────
+   The notes row opened at 317px and the scene panel at 372px on a 420px view:
+   the transcript fell to 38px and the input went off the bottom, with the
+   button that closes the notes off-screen with it. Both are capped to a share of
+   the height and scroll inside themselves, so the input is always on screen. */
+@media (max-height: 640px) {
+  #scene-notes { max-height: 26vh; overflow-y: auto; }
+  #scene:not(.collapsed) #scene-art { height: 22vh; }
+  #scene:not(.collapsed) #scene-cast { padding-top: 4px; }
+  #scene:not(.collapsed) #scene-cast .bust img { width: 38px; height: 38px; }
+}
 /* ── The dock and the conversation card (2026-10-03) ─────────────────────────
    Mario: "Mobile UI is pretty cluttered" — measured at 390x664 the transcript
    had 53% of the height and, whenever the compass was up, 66% of the width:
@@ -977,10 +989,26 @@
   #nav-fab [data-nav="w"] { order: 1; } #nav-fab [data-nav="n"] { order: 2; }
   #nav-fab [data-nav="in"] { order: 3; } #nav-fab [data-nav="s"] { order: 4; }
   #nav-fab [data-nav="e"] { order: 5; } #nav-fab [data-nav="light"] { order: 6; }
+  /* a row of letters read as a code (Dev, round 65): the arrows say they are directions */
+  #nav-fab [data-nav="w"]::before { content: "← "; } #nav-fab [data-nav="e"]::after { content: " →"; }
+  #nav-fab [data-nav="n"]::before { content: "↑"; display: block; line-height: .8; font-size: .7rem; }
+  #nav-fab [data-nav="s"]::after { content: "↓"; display: block; line-height: .8; font-size: .7rem; }
+  #nav-fab [data-nav="w"], #nav-fab [data-nav="e"] { width: 44px; }
   /* talking to somebody: the card takes the compass's place — walking off still
      works (a typed direction), the row just stops offering it */
   #dock.talking #nav-fab { display: none !important; }
   #dock.talking #notes-fab { display: none; }
+}
+/* five-digit money ran the battery bar off the edge at 375px */
+@media (max-width: 400px) {   /* after the ≤767px block, so it wins */
+  #scene-hud .bar { width: 11px; }
+  #scene-hud .m { gap: 2px; }
+  /* the compass row and two buttons must fit 375px */
+  #nav-fab.show { gap: 4px; }
+  #nav-fab button { width: 34px; }
+  #nav-fab [data-nav="w"], #nav-fab [data-nav="e"] { width: 40px; }
+  #bell-fab, #msg-fab, #notes-fab { width: 40px; height: 40px; }
+  #dock, #fab-stack { gap: 6px; }
 }
 </style>
 </head>

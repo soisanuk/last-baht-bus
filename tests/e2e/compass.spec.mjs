@@ -8,7 +8,8 @@ import { bootIntoGame } from "./_helpers.mjs";
 const INDEX_URL = new URL("../../web/index.html", import.meta.url).href;
 
 const goTo = async (page, room) => {
-  await page.evaluate(r => { G.room = r; G.visited[r] = true; }, room);
+  // the full town's streets: the Soi 6 week's fence dims every exit out of the pocket (round 65)
+  await page.evaluate(r => { G.room = r; G.visited[r] = true; G.mode = "full"; }, room);
   await page.fill("#term-in", "look");
   await page.press("#term-in", "Enter");
 };

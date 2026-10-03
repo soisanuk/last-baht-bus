@@ -354,18 +354,22 @@ function _sceneHud() {
   hud.id = "scene-hud";
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const day = typeof _L === "function" ? _L("DAY") : "DAY";
-  const meter = (icon, pct, color) =>
-    `<span class="m">${icon}<i class="bar"><i style="width:${Math.max(0, Math.min(100, pct))}%;background:${color}"></i></i></span>`;
+  // each meter says what it measures, and a tap reads the body (DIAGNOSE) — the
+  // bars had no label and did nothing, and an orange thirst bar was a riddle (Dev, round 65)
+  const meter = (icon, pct, color, what) =>
+    `<span class="m" role="button" tabindex="0" title="${what} — tap for how you are" aria-label="${what}">${icon}<i class="bar"><i style="width:${Math.max(0, Math.min(100, pct))}%;background:${color}"></i></i></span>`;
   const lowGood = v => v < 50 ? "var(--green)" : v < 80 ? "#ffb84d" : "#ff5a5a";
   const drunkPct = Math.min(100, Math.round((G.soc.drunk || 0) / 9 * 100)); // blackout at 9
   const battColor = G.battery >= 50 ? "var(--green)" : G.battery >= 20 ? "#ffb84d" : "#ff5a5a";
   hud.innerHTML =
     `<b>฿${_num(G.money || 0)}</b><span class="sep">·</span>${esc(_clockStr())}` +
     `<span class="sep">·</span>${esc(day)} ${G.day}<span class="grow"></span>` +
-    meter("🍺", drunkPct, lowGood(drunkPct)) +
-    meter("🍜", G.hunger || 0, lowGood(G.hunger || 0)) +
-    meter("💧", G.thirst || 0, lowGood(G.thirst || 0)) +
-    meter("🔋", G.battery || 0, battColor);
+    meter("🍺", drunkPct, lowGood(drunkPct), "drunk") +
+    meter("🍜", G.hunger || 0, lowGood(G.hunger || 0), "hunger") +
+    meter("💧", G.thirst || 0, lowGood(G.thirst || 0), "thirst") +
+    meter("🔋", G.battery || 0, battColor, "phone battery");
+  for (const m of hud.querySelectorAll(".m"))
+    m.addEventListener("click", () => { if (typeof _term !== "undefined" && _term && _term.submitCmd) _term.submitCmd("diagnose"); });
   return hud;
 }
 
