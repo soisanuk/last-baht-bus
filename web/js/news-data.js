@@ -13,12 +13,12 @@ var NEWS_FEED = [
     "d": "03 Oct 2026"
   },
   {
-    "t": "Pattaya councilors investigate construction encroachment complaint behind temple",
+    "t": "Bus and minibus services return to normal on Pattaya and Eastern routes",
     "s": "Pattaya Mail",
     "d": "03 Oct 2026"
   },
   {
-    "t": "Bus and minibus services return to normal on Pattaya and Eastern routes",
+    "t": "Pattaya councilors investigate construction encroachment complaint behind temple",
     "s": "Pattaya Mail",
     "d": "03 Oct 2026"
   },
@@ -33,33 +33,18 @@ var NEWS_FEED = [
     "d": "03 Oct 2026"
   },
   {
-    "t": "German man seriously injured in Pattaya hotel balcony fall",
-    "s": "Thaiger",
-    "d": "02 Oct 2026"
+    "t": "Fire breaks out at prayer hall in Sing Buri temple",
+    "s": "Pattaya Mail",
+    "d": "03 Oct 2026"
   },
   {
-    "t": "Pattaya enjoys brief sunshine before more wet days arrive",
+    "t": "Baht slides to two-month low, faces more pressure next week",
     "s": "Pattaya Mail",
     "d": "03 Oct 2026"
   },
   {
     "t": "Bangkok at breaking point as floods turn streets into stagnant lakes",
     "s": "The Guardian",
-    "d": "03 Oct 2026"
-  },
-  {
-    "t": "Thailand truck driver blocks flood to save 5 in pickup",
-    "s": "The Weather Channel",
-    "d": "30 Sep 2026"
-  },
-  {
-    "t": "Flooding persists in 26 provinces and Bangkok",
-    "s": "Bangkok Post",
-    "d": "03 Oct 2026"
-  },
-  {
-    "t": "Thailand revokes citizenship of Israeli naturalized in 2019",
-    "s": "The Jerusalem Post",
     "d": "03 Oct 2026"
   },
   {
@@ -71,12 +56,27 @@ var NEWS_FEED = [
     "t": "USS George H.W. Bush anchors in Thailand for recreational visit after Middle East deployment",
     "s": "The Jerusalem Post",
     "d": "04 Oct 2026"
+  },
+  {
+    "t": "US warships arrive in Phuket for 6-day visit",
+    "s": "Bangkok Post",
+    "d": "04 Oct 2026"
+  },
+  {
+    "t": "1,200 Miles From Singapore to Bangkok Before a Historic Shuttle Closes",
+    "s": "The New York Times",
+    "d": "04 Oct 2026"
+  },
+  {
+    "t": "Thailand’s soft power play: Culture as global currency",
+    "s": "CNN",
+    "d": "02 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-02","USD":33.59,"AUD":23.31,"GBP":44.35,"EUR":37.71};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-04","temp":28,"humid":87,"code":0,"hi":32,"rain":87};
+var WX_NOW = {"date":"2026-10-05","temp":26,"humid":90,"code":3,"hi":31,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4142,"date":"2026-10-04","baht":65800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":85241,"thb":2856992};
+var BTC = {"usd":85825,"thb":2876316};
