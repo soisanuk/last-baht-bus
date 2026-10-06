@@ -13,7 +13,7 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
-    "t": "Amata industrial estate floodwater recedes, Chonburi accelerates drainage work",
+    "t": "Pattaya Mayor welcomes UK ambassador for talks on tourist safety",
     "s": "Pattaya Mail",
     "d": "05 Oct 2026"
   },
@@ -38,8 +38,8 @@ var NEWS_FEED = [
     "d": "04 Oct 2026"
   },
   {
-    "t": "Pattaya Russian siblings’ mother says police kept her in the dark",
-    "s": "Thaiger",
+    "t": "Pattaya International Fireworks Festival returns on November 27–28",
+    "s": "Pattaya Mail",
     "d": "05 Oct 2026"
   },
   {
@@ -63,25 +63,25 @@ var NEWS_FEED = [
     "d": "04 Oct 2026"
   },
   {
-    "t": "Malaysia offers Chinese buyers Singapore’s comfort at prices lower than Thailand",
-    "s": "South China Morning Post",
-    "d": "04 Oct 2026"
+    "t": "Death toll from Thailand floods rises to 31, interior ministry says",
+    "s": "Reuters",
+    "d": "05 Oct 2026"
   },
   {
-    "t": "Thailand’s soft power play: Culture as global currency",
-    "s": "CNN",
-    "d": "02 Oct 2026"
+    "t": "Thailand braces for more rain as death toll from recent flooding hits 31",
+    "s": "ABC News - Breaking News, Latest News and Videos",
+    "d": "05 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-05","USD":33.69,"AUD":23.45,"GBP":44.56,"EUR":37.75};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-05","temp":27,"humid":88,"code":2,"hi":32,"rain":98};
+var WX_NOW = {"date":"2026-10-06","temp":25,"humid":94,"code":51,"hi":31,"rain":96};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4136,"date":"2026-10-05","baht":65900};
+var GOLD = {"usd":4137,"date":"2026-10-06","baht":65900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":85506,"thb":2880271};
+var BTC = {"usd":85785,"thb":2890943};
