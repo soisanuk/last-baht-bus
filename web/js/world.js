@@ -3031,7 +3031,7 @@ const ROOMS = {
     name: "Soi Buakhao (Tree Town Arch)",
     region: "Soi Buakhao",
     busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
-    lateDesc: ["The Tree Town arch in the small hours, its fairy lights still on for nobody: the traffic down to a bike or two, the songthaews gone sparse, and the maze beyond it louder than the soi it opens off.", "Late at the arch: the lights stay on, the crowd has gone in or gone home, and a baht bus idles at the kerb with its bench empty, waiting on somebody who is still inside.", "Past three the arch is a doorway with the party still on the other side of it: a piwin asleep on his own seat, a noodle cart packing up, and the fairy lights doing their job for the three people left to see them."],   // an evening desc printed at 03:00 (Graeme, round 58)
+    lateDesc: ["The Tree Town arch in the small hours, its fairy lights still on for nobody: the traffic down to a bike or two, the songthaews gone sparse, and the maze beyond it louder than the soi it opens off.", "Late at the arch: the lights stay on, the crowd has gone in or gone home, and a baht bus idles at the kerb with its bench empty, waiting on somebody who is still inside.", "In the small hours the arch is a doorway with the party still on the other side of it: a piwin asleep on his own seat, a noodle cart packing up, and the fairy lights doing their job for the three people left to see them."],   // an evening desc printed at 03:00 (Graeme, round 58)
     desc: "The TREE TOWN arch stands west off the soi, strung with fairy lights and " +
       "swallowing tourists at a steady rate. Out here the traffic has thickened to " +
       "a crawl — a baht bus stopped dead with its back step crowded, another behind " +
@@ -5485,7 +5485,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // unrelated recon quest (whose orchidReported also lifts the rope). Two
       // personas failed this quest from opposite sides before anyone noticed the
       // loop. Being SENT is its own flag now; being introduced is still hers.
-      { topic: "rose|notty|nottys place", notFlags: ["orchidVouched"], sets: ["orchidSent"],
+      { topic: "rose|notty|nottys place|club|the club|orchid club", notFlags: ["orchidVouched"], sets: ["orchidSent"],
         text: "“You want to know a place most people never find?” Candy weighs you a moment, then " +
           "decides. “Rose. Notty's Place, out in Naklua — behind a wall, no sign, aircon like a " +
           "morgue and about as quiet. Old friend of mine, from before either of us ran anything.” " +
@@ -7865,7 +7865,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "man for forty euro for a coat.\" The late smile. \"Here, a bad night, I make more than that " +
           "and nobody asks what for. Nobody here has ever asked me what for.\"",
         short: "\"Two hundred euro a month, pocket money, and I had to say what for. Here nobody has ever asked me what for.\"" },
-      { topic: "work|job|cleaning|hotel|certificate|salon",
+      { topic: "work|job|cleaning|hotel|certificate",
         text: "\"I have a certificate — hair, make-up, two years, Bangkok. In Belgium it is a piece of " +
           "paper in Thai.\" She shrugs. \"So: hotel, mornings, the rooms. Six years in a bar and I " +
           "never cleaned a toilet that was not mine. Four years married, I cleaned nine hundred.\" She " +
@@ -7897,7 +7897,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "before. I send it myself, from my own {{phone}}, and nobody looks over my shoulder at the " +
           "screen.\" The late smile. \"It is less money. It is more mine.\"",
         short: "\"Nakhon Phanom, on the river. I send less home than before — but from my own {{phone}}, with nobody looking at the screen.\"" },
-      { topic: "plan|future|next|again|another farang|marry again",
+      { topic: "plan|future|next|again|another farang|marry again|salon|shop",
         text: "\"Plan?\" The corners on the English sharpen. \"The plan is no plan with a man in it. A " +
           "salon, maybe, with my certificate that is worth something here. Two years of this, three.\" " +
           "She looks down the rail. \"If a good man comes — and some are good, I am not stupid — he can " +
@@ -9154,6 +9154,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // the man who holds fifty-one percent of your bar answers as the man who
       // does — he was pitching the pre-purchase coffee to his own partner and
       // "not yet, maybe later" to "partner" (Rolf, round 54)
+      // the night after he came and asked, "I do not come" is a rule stated to a man who watched it bend (Lothar, round 67)
+      { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan", "tanAsked"],
+        text: "\"Our bar.\" He says it flat — a fact, no weight on it. \"Fifty-one is a name on a paper in a drawer, and the paper has not " +
+          "moved.\" The glance down the soi. \"I came once, and I said what I came for, and you answered. That is the arrangement working, " +
+          "my friend — not failing. I will not come again until there is a reason, and then I will say the reason.\"",
+        short: "\"I came once and said why. That is the arrangement working.\"" },
       { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan"],
         text: "\"Our bar.\" He says it flat — a fact, no weight on it. \"Fifty-one is a " +
           "name on a paper in a drawer at the land office where my wife's cousin works, and the paper has never " +
@@ -9824,7 +9830,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "kratae", text: "\"Kratae my right hand. Dance in town ten year, come " +
           "here, never look back. Sharp — she keep the young one honest and the old " +
           "one paying. You be nice to her, or you answer to my spoon.\"" },
-    ],
+      // Thip's own text makes Yai the witness — "Yai keep my stool nine Februaries" — and Yai could
+      // not discuss the Dane or the month (Marguerite, round 67). Only once Thip has told you herself.
+      { topic: "thip|danish|dane|denmark|february|the stool|her man|her farang",
+        when: (st, G) => !!(G.talked && G.talked.thip && G.talked.thip.length),
+        text: "\"Thip.\" Mama Yai says the name the way you set a glass down carefully. \"Nine Februaries I keep that stool. He come, he sit, he pay for the month like a gentleman, he go. " +
+          "This year a text. I keep the stool anyway — not for him. For her, so she don't have to watch me not keep it.\" She wipes the bar where nothing is spilt. \"She do the maths now. Good. Maths don't fly home.\"",
+        short: "\"Nine Februaries, one text. I keep the stool for her, not for him.\"" },
+],
   },
 
   kratae: {
@@ -13209,7 +13222,17 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "she's actually tracking something. \"Here: three month and I open a LINE " +
         "shop selling skincare. Good margin. Khun Candy say I have business brain.\" " +
         "She tilts the screen away. \"She is correct.\"" },
-    ],
+      // the bottle she just received is a topic, before and after (Jens, round 67: "ask bee about
+      // sang som" the minute after she shelved it dead centre was "you ask the wrong girl")
+      { topic: "sang som|sangsom|bottle|the bottle|whisky|the whisky", req: ["beeBanked"],
+        text: "\"My bottle!\" Bee turns to look at it on the shelf, dead centre, label out, like a trophy. \"Khun Candy send, you carry. " +
+          "I don't open it. First customer of MY bar drink it — that is the plan. Until then it sit there and make the other bottles jealous.\"",
+        short: "\"The bottle stay closed until my bar. Plan.\"" },
+      { topic: "sang som|sangsom|bottle|the bottle|whisky|the whisky",
+        text: "\"Sang Som?\" Bee's eyes go to the shelf, where there is a gap. \"Khun Candy say she send me one. Say. " +
+          "A bottle from Candy is a promise and a joke in one, na — if it come, it go THERE.\" She points at the gap.",
+        short: "\"The bottle from Candy? Not yet. The gap is waiting.\"" },
+],
   },
 
   mem: {
@@ -14767,7 +14790,8 @@ const SYNDICATE_JOBS = [
       "properly, in the trunking, not taped along the beam like the Water Buffalo.\" " +
       "A number, again without any theatre about it — ฿" + (SYN_JOB_NIGHT * 30) + " a month, the same terms as the " +
       "cleaners. \"My wife brother-in-law does the " +
-      "hotels. Two men, one morning.\"",
+      "hotels. Two men, one morning — and then every month, like the cleaners, because a screen in a bar " +
+      "dies, and a man who comes when it dies is the thing you are paying for.\"",
     whoLabel: "ask why not do it yourself",
     // the rule stated by a character, not explained by the narrator
     who: "You mention, mildly, that you could put a bracket up yourself and save the " +
@@ -17542,7 +17566,7 @@ const _FILLER_HOSTESSES = [
   // the flagship bar had ONE hostess, so a colleague crisis, a no-show night and every
   // "two of the girls" line either needed a guard or described women who were not
   // there (Rolf, round 55). Mario, 2026-09-29: two more girls.
-  ["Jiap","เจี๊ยบ","stinky_bar"], ["Mew","มิว","stinky_bar"],
+  ["Jiap","จิ๊บ","stinky_bar"], ["Mew","มิว","stinky_bar"],
   ["Goong","กุ้ง","honey_trap"], ["Jiab","เจี๊ยบ","honey_trap"],
   ["Meen","มีน","queen_bee"], ["Yok","หยก","queen_bee"],
   ["Namphueng","น้ำผึ้ง","buzz_inn"], ["Gaem","แก้ม","buzz_inn"],

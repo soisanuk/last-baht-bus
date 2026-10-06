@@ -108,6 +108,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "wonLeague",   // set by _endGame on a killer-pool league win (Bert's champion node)
     "barPartner", "partnerCandy", "partnerTan",  // set by _partnerYes on the 51% fork confirm (was in dialogue sets before the confirmation modal)
     "chamDone",    // set by _chamGo (chameleon economy) — gates Cream's post-arc greeting
+    "tanAsked",   // set by _tanFavour — Tan's bar node the night after he came (round 67)
     "tanFavourDone", "tanFavourRefused",   // set by _tanFavourYes/_tanFavourNo — Tan answers after the favour's name (round 54)
     "hasWallet", "gotBusFare", "somTamDelivered", "officeOpen",
     "act1Done",  // engine-set by _checkAct1 — gates sandbox-only quests (The Safe-Cracker)

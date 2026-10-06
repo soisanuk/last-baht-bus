@@ -212,6 +212,7 @@ function _learnNames(text) {
 // A venue whose NAME printed before you stood in it is a frontier edge — "you've
 // heard the name, never been". Same harvest as names, over the display names.
 let _venueRx = null;
+let _regionRx = null;
 function _learnVenues(text) {
   if (!G || !G.heardOf) return;
   if (!_venueRx) {
@@ -225,6 +226,10 @@ function _learnVenues(text) {
   for (const [id, rx] of _venueRx) {
     if (!G.heardOf[id] && !(G.visited && G.visited[id]) && rx.test(text)) G.heardOf[id] = true;
   }
+  // …and a REGION said aloud ("my Sang Som girl at Myth Night") is heard too (Jens, round 67)
+  if (!_regionRx) _regionRx = [...new Set(Object.values(ROOMS).map(r => r.region).filter(Boolean))].map(rg => [rg, new RegExp("\\b" + rg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b")]);
+  G.heardRegion = G.heardRegion || {};
+  for (const [rg, rx] of _regionRx) if (!G.heardRegion[rg] && rx.test(text)) G.heardRegion[rg] = true;
 }
 
 // The gate itself: a topic that is somebody's name is only *offered* — by
@@ -803,6 +808,7 @@ function _roomFit(pool) {
   if (staff.length <= 1) bad.push(_FIT_NOBODY);
   if (!roles.has("mamasan")) bad.push(_FIT_MAMA);
   if (!roles.has("cashier") && staff.length <= 1) bad.push(_FIT_TILL);
+  if (ROOMS[G.room].barType === "gents" || ROOMS[G.room].indoors) bad.push(/open[- ]front/i);   // "the whole open front a few degrees warmer" in an aircon villa (Marguerite, round 67)
   if (!bad.length) return pool;
   // read a function line's SOURCE, never call it: a pool line may roll dice or touch state, and
   // a filter that runs it shifts the seeded stream (round 57 found the soak's path had moved)
@@ -1204,7 +1210,9 @@ function _mamaRef(cap) {
   // second member of staff who has never worked there (round 43, the one-person
   // bar audit — sixteen bars of eighty-eight are somebody on her own).
   const cashier = _npcsHere().some(x => NPC_ROLES[x] === "cashier");
-  const s = _L(_mamaHere() ? "the mamasan" : cashier ? "the cashier" : "the girl on the till");
+  // …and on a two-girl floor the money is kept by one of the two, not by a till girl nobody has met (Marguerite, round 67)
+  const tk = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
+  const s = _L(_mamaHere() ? "the mamasan" : cashier ? "the cashier" : tk && NPCS[tk] && _npcsHere().includes(tk) ? NPCS[tk].name : "the house");
   return cap ? s[0].toUpperCase() + s.slice(1) : s;
 }
 

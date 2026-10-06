@@ -459,7 +459,11 @@ function _piwinAbout(who) {
   // from the man Nok says knows every door in town (Anand, round 59)
   if (!id) {
     const k = _pnm(w.replace(/^(the|a|an) /, ""));
-    const venue = k.length >= 3 && Object.keys(ROOMS).find(v => ROOMS[v].bar && [k, k + " bar"].includes(_pnm(ROOMS[v].bar)));
+    // the whole name, or a name that BEGINS with what he was asked and isn't short — "neon paradise" for
+    // Neon Paradise A-Go-Go got "Who?" from the man who drives there nightly (Jens, round 67; _tanAbout's rule)
+    const venue = k.length >= 3 && (Object.keys(ROOMS).find(v => ROOMS[v].bar && [k, k + " bar"].includes(_pnm(ROOMS[v].bar))) ||
+      (k.length >= 5 && Object.keys(ROOMS).find(v => ROOMS[v].bar && _pnm(ROOMS[v].bar).startsWith(k))));
+    if (/\b(clinic|tested|std|the doctor)\b/.test(w)) { _say("\"Clinic?\" He knows the one you mean without asking which. \"Second Road, by Central — glass door, next to the pharmacy. Free. I take you, nobody look.\""); return; }
     const region = k.length >= 3 && [...new Set(Object.values(ROOMS).map(r => r.region).filter(Boolean))].find(rg => _pnm(rg) === k);
     if (venue === "nottys_place") { _say("\"Notty's?\" He grins. \"The wall, I know. The wall, I cannot open.\""); return; }
     if (venue) { _say(_fmt("\"{v}? {r}.\" He pats the seat. \"Everybody know. Get on.\"", { v: _barName(venue), r: ROOMS[venue].region })); return; }
@@ -1452,7 +1456,9 @@ function _quizInput(input) {
   const item = QUIZ_POOL[g.qs[g.at]];
   let pick = null;
   const m = input.trim().match(/^(?:answer\s*)?([1-3])$/i); // a bare digit — not "tip rung 100" (playtest 2026-08-22)
+  const _tw = !m && typeof parseThaiWords === "function" ? parseThaiWords(input.trim()) : null;   // หนึ่ง / สอง / สาม (Jens, round 67)
   if (m) pick = +m[1] - 1;
+  else if (_tw >= 1 && _tw <= 3) pick = _tw - 1;
   else {
     const idx = item.opts.findIndex(o => o.toLowerCase().includes(input.trim()));
     if (idx >= 0 && input.trim().length > 1) pick = idx;
@@ -2288,7 +2294,8 @@ function _kickOut() {
   if (typeof _ccibLoud === "function") _ccibLoud("incident");
   G.soc.banned[here] = G.turns;
   G.soc.heat[here] = 0;
-  (G.soc.heatWhy = G.soc.heatWhy || {})[here] = "walked out of here by security, in front of the whole bar";   // the shut book on re-entry names THIS, not a stale drinks-buying man (Marcus, round 61)
+  (G.soc.heatWhy = G.soc.heatWhy || {})[here] = "walked out of here by security, in front of the whole bar";   // the shut book on re-entry names THIS, not a stale drinks
+  G.kickedTonight = { n: ((G.kickedTonight || {}).n || 0) + 1, where: _barName(here) || r.name };   // the morning ledger names it (Lothar, round 67: "−3 สนุก" with no reason)-buying man (Marcus, round 61)
   G.game = null; // any live game dies with your welcome
   _say("The decision is made somewhere above your pay grade. Security appears at " +
     "your elbow — polite, enormous, terribly final — and you are walked out and " +
@@ -4662,6 +4669,7 @@ function _nightSnapshot() {
     tillDrawn: (G.bar && G.bar.drawn) || 0,
     atm: G.atmTotal || 0,
     atmFees: G.atmFees || 0,
+    bank: G.bank || 0,   // so the morning can name what ARRIVED in the account (Marguerite, round 67)
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0,
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
@@ -4708,7 +4716,11 @@ function _morningLedger() {
   // but it is named, so the down figure is not a mystery.
   const borrowed = (G.loanBorrowed || 0) - (b.loanB != null ? b.loanB : (G.loanBorrowed || 0));
   const repaid = (G.loanRepaid || 0) - (b.loanR != null ? b.loanR : (G.loanRepaid || 0));
-  const spent = b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed;
+  // money that ARRIVED in the account — a quest reward, a gift by text — nets against the night,
+  // and is named: "down ฿825" ignored Candy's ฿300 recce (Marguerite, round 67)
+  const sentNight = (G.sentTotal || 0) - (b.sentB != null ? b.sentB : (G.sentTotal || 0));
+  const received = b.bank != null ? Math.max(0, ((G.bank || 0) - b.bank) + drawn + fees + sentNight) : 0;
+  const spent = b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed - received;
   // THE FIGURE IS POCKET AND ACCOUNT TOGETHER, and on a night the machine was used
   // it has to SAY so: the assertion auditor (2026-09-14) withdrew ฿2,000, paid ฿400
   // rent, watched his pocket go UP ฿1,600 and was told "down ฿700" — which is
@@ -4753,6 +4765,9 @@ function _morningLedger() {
   // round 47): black out, get your pockets emptied, close the app because you are not
   // proud of yourself, come back — and ฿1,181 is gone with the game saying nothing. Keep
   // what was said so LAST NIGHT can say it again.
+  if (received > 0) bits.push(`฿${_num(received)} arrived in the account`);
+  if (G.lastNightWas && G.lastNightWas.day === G.day - 1 && G.lastNightWas.kicked)
+    bits.push(`walked out of ${G.lastNightWas.kicked.where} by security${G.lastNightWas.kicked.n > 1 ? ", twice" : ""} — the night's bad news, and the สนุก it cost`);
   G.partyRescued = null;
   G.lastNightSaid = [
     bits.length ? "Last night: " + bits.join(" \u00b7 ")
@@ -4923,7 +4938,8 @@ function _endNight(reason) {
   {
     const _bt = G.soc && G.soc.barTurns ? Object.entries(G.soc.barTurns).sort((a, b) => b[1] - a[1])[0] : null;
     G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0,
-      with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room };
+      with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room, kicked: G.kickedTonight || null };
+    G.kickedTonight = null;
   }
   if (!_flag("act1Done") && ["dawn", "collapse", "blackout", "hurt", "accident", "roadhit"].includes(reason)) {
     _act1Fail(reason);
@@ -4982,7 +4998,10 @@ function _endNight(reason) {
     case "sunrise":
       // You stayed out for it deliberately, which is the difference: the all-nighter
       // is what happens to you, this is what you did. Same body cost, more สนุก.
-      _say(_pickVary(_SUNRISE_END, "sunriseEnd"), "win");
+      { let _l = _pickVary(_SUNRISE_END, "sunriseEnd");   // "you get a bike home" charged nothing (Marguerite, round 67)
+        if (/\bbike\b/.test(_l) && G.money < MOTOSAI_TOWN) _l = _pickVary(_SUNRISE_END.filter(x => !/\bbike\b/.test(x)), "sunriseEnd");
+        if (/\bbike\b/.test(_l)) { G.money -= MOTOSAI_TOWN; _l += ` (฿${MOTOSAI_TOWN} for the bike — ฿${_num(G.money)} left.)`; }
+        _say(_l, "win"); }
       _addHappy(3);
       break;
     case "allnighter":
