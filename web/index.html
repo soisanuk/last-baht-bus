@@ -115,25 +115,33 @@
     position: absolute;
     left: .7rem;
     top: .55rem;
-    /* above the start overlay (z 100) so a reader who needs big text can hit Aa
+    /* above the start overlay (z 100) so a reader who needs big text can hit it
        BEFORE reading the splash — the overlay used to eat the tap (Alan, the
        widower who needs large text, 2026-08-17) */
     z-index: 101;
-    background: none;
+    display: flex;
     border: 1px solid #ff149340;
     border-radius: 8px;
+    overflow: hidden;
+  }
+  #font-fab button {
+    background: none;
+    border: none;
     color: var(--pink);
-    font-size: 1rem;
+    font: inherit;
+    font-size: .95rem;
     font-weight: 700;
-    padding: .15rem .4rem;
+    padding: .15rem .45rem;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     /* 44px floor: the accessibility control was the smallest target on the
        screen (35x25 at 390px — mobile playtest 2026-08-17), for the exact
        audience that needs it most */
-    min-width: 44px; min-height: 40px;
+    min-width: 40px; min-height: 40px;
   }
-  #font-fab:active { background: #46006b; }
+  #font-fab button + button { border-left: 1px solid #ff149340; }
+  #font-fab button:disabled { opacity: .3; cursor: default; }
+  #font-fab button:not(:disabled):active { background: #46006b; }
   /* The street compass. Same stack slot as the bell — the bell shows inside a
      venue and this shows outside one, so they are never both up. No pulse: the
      bell is a prompt ("you could ring me"), this is furniture. */
@@ -1048,7 +1056,7 @@
 <body>
 <div id="shell">
   <header>
-  <button id="font-fab" title="Text size" aria-label="Text size">Aa</button>
+  <div id="font-fab" role="group" aria-label="Text size"><button id="font-down" title="Smaller text" aria-label="Smaller text">A−</button><button id="font-up" title="Bigger text" aria-label="Bigger text">A+</button></div>
     <button id="mute-btn" title="Toggle music">🔊</button>
     <div class="title">THE LAST BAHT BUS</div>
     <div class="sub">a Pattaya misadventure · ❖ Soi Sanuk ❖</div>

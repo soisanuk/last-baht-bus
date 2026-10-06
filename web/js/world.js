@@ -16943,6 +16943,28 @@ const _H_FAMILY = [
   "My son stay with his papa family in {from}; I send, they let me see him",
   "My papa have the buffalo and the rice and the debt — the debt is mine now",
   "Two nephew, my sister cannot work — so their school shoes come from here",
+  // Round 65 (Mario, 2026-10-06: "go deeper, text is cheap" — Gerry's forty-woman
+  // survey ran the pool dry). Dealt by the town book only; the baked twenty are unchanged.
+  "My twin sister have the baby, I have the job — we share, like one person in two place",
+  "Four brother, all older, all lazy — I am the youngest and the only one who send",
+  "My mama cook for the monk every morning; the rice for that come from here, she don't know",
+  "I have girl, four year, she call me on video and ask why the room behind me so loud",
+  "Grandfather, he was a soldier long time ago, now only his pension and me",
+  "Mama and papa divorce, both of them call me — two family, one salary",
+  "My daughter stay with my aunt in {from}, because my mama already have my sister's two",
+  "One baby boy, eight month — my mama send photo every morning, I look before I sleep",
+  "My brother have the accident on the motorbike; the hospital bill is my name",
+  "Only my mama. Papa die when I small. She never ask, so I send more",
+  "My son, fifteen, want a {{phone}} like the farang {{phone}} — that is this month",
+  "Big sister marry already, little sister study — so the middle one come to Pattaya, na",
+  "My papa cannot walk good now; my mama lift him, and I pay the one who help her lift",
+  "Two girl, six and nine. Every Sunday I call and they fight about who talk first",
+  "My mama grow mushroom now, small business — I buy the shed; she buy the dream",
+  "I pay the school for my cousin, because her mama paid mine when I was small",
+  "The baby daddy is in Bangkok, 'working'. Working at what, nobody know. So I work",
+  "My mama raise six of us alone; now six of us send, and she still say not enough — joking, I think",
+  "Grandma, mama, me, my daughter — four women in one house in {from}, no man, no problem",
+  "My husband is a soldier, far away, small money — the baby and the rice is me",
 ];
 const _H_PLAN = [
   "open a small clothes shop",
@@ -16965,6 +16987,27 @@ const _H_PLAN = [
   "buy a rubber plantation — small one",
   "study accounting at the open university",
   "have a food truck at the night market",
+  // round 65: dealt by the town book; the baked twenty are unchanged
+  "open a small bakery in the market",
+  "buy a second-hand tuk-tuk for my papa",
+  "send my daughter to the English school in town",
+  "open a small massage shop — real massage, with the certificate",
+  "buy a fishing boat for my brother",
+  "build a shop-house with the shop downstairs and us upstairs",
+  "open a small noodle shop near the school",
+  "learn to drive and buy a car for hire",
+  "buy a water-buffalo pair and rent them out",
+  "open a small {{phone}}-repair shop",
+  "study English properly, in a real school",
+  "open a small mini-mart in my village",
+  "buy the land next to my mama's and plant fruit trees",
+  "open a small ice-cream stall outside the temple",
+  "get the certificate and be a kindergarten teacher",
+  "open a small flower shop for the temple days",
+  "buy a sewing machine and take in work at home",
+  "open a karaoke room in my village, small one",
+  "pay off the land and never borrow again",
+  "open a small guesthouse by the river at home",
 ];
 const _H_EMOJI = ["🌸", "🌺", "💐", "🌷", "🌼", "🌻", "💫", "✨", "🌙", "💕", "🦋", "🍒"];
 const _H_PHONE = [
@@ -17032,7 +17075,7 @@ function _authoredStory(npc) {
   const peers = Object.keys(NPCS).filter(id => id !== npc && id < npc && !NPCS[id].filler &&
     NPC_ROLES[id] === "hostess" && (NPCS[id].room === room || (NPCS[id].bars || []).includes(room)));
   for (const id of peers) { const st = _authoredStory(id); taken.family.add(st.familyIdx); taken.plan.add(st.planIdx); }
-  const pick = (axis, pool, start) => { let i = start % pool.length; for (let k = 0; k < pool.length && taken[axis].has(i); k++) i = (i + 1) % pool.length; return i; };
+  const pick = (axis, pool, start) => { const L = Math.min(pool.length, _H_BAKED); let i = start % L; for (let k = 0; k < L && taken[axis].has(i); k++) i = (i + 1) % L; return i; };
   const familyIdx = pick("family", _H_FAMILY, _hh(npc, 7)), planIdx = pick("plan", _H_PLAN, _hh(npc, 11));
   return { from, familyIdx, planIdx, family: _H_FAMILY[familyIdx].replace(/\{from\}/g, from), plan: _H_PLAN[planIdx] };
 }
@@ -17043,10 +17086,14 @@ const _hostessSigs = {};
 // filled as the bar is built; the authored fallback (_authoredStory) reads them too.
 const _hostessStories = {};
 function _storyTaken(room) { return _hostessStories[room] || (_hostessStories[room] = { family: new Set(), plan: new Set() }); }
-function _storyPick(room, axis, pool, start) {
+// `len` is the BAKED pool length (the first twenty of each): the builder never picks past
+// it, so deepening a pool (round 65) changes no woman's baked text — the town book deals
+// the rest at delivery (_townStory).
+const _H_BAKED = 20;
+function _storyPick(room, axis, pool, start, len = pool.length) {
   const taken = _storyTaken(room)[axis];
-  let i = start % pool.length;
-  for (let n = 0; n < pool.length && taken.has(i); n++) i = (i + 1) % pool.length;
+  let i = start % len;
+  for (let n = 0; n < len && taken.has(i); n++) i = (i + 1) % len;
   return i;
 }
 // GO-GO BADGE NUMBERS (essay ledger theme 12, 2026-10-01). A go-go dancer wears a
@@ -17077,7 +17124,7 @@ function _badge(id) {
 // anyone writing one. Pure hash on (id) for the trip she leaves on; cumulative, so a
 // woman gone on trip three is gone on trip nine. Never your own bar's staff, never the
 // affair girl — those stories have their own endings.
-const _EXIT_PLANS = [0, 4, 5, 7, 9, 10, 13, 15, 16, 19];   // indices into _H_PLAN that name a thing you can open
+const _EXIT_PLANS = [0, 4, 5, 7, 9, 10, 13, 15, 16, 19, 20, 23, 26, 29, 31, 33, 35, 37, 39];   // indices into _H_PLAN that name a thing you can open
 function _exited(id) {
   const n = NPCS[id];
   if (!n || !n.filler || !n.storyIdx || !_EXIT_PLANS.includes(n.storyIdx.plan)) return false;
@@ -17128,6 +17175,19 @@ const _H_GREET = [
   '"Aiyo, finally! Customer! I so bored I count the ice." She pats the stool twice.',
   '"Hello mister. You sit here, close to the fan. Best seat — I test all of them."',
   '"You come in like you lose something. Sit, sit — I help you look. First we look in a beer."',
+  // round 65: twelve more for the town book to deal
+  '"Oh, you! I see you walk past two time already. Third time, you sit." She pulls the stool out herself.',
+  '"Hello na. Tonight I am the one who smile the most, so you come to the right stool."',
+  '"You want quiet or you want fun? I can do quiet." A pause. "Okay, I cannot do quiet. Sit anyway."',
+  '"Sawatdee ka! My friend say farang like the girl who talk small. So I talk small: hello. Sit."',
+  '"Hello hello. You hungry? You look hungry. First the drink, then I tell you where to eat."',
+  '"Ah, a new one! Don\'t worry, I am new also — only three year." She laughs. "Sit, we are new together."',
+  '"Hi! You walk fast for a man on holiday. Slow down here, na — this stool is for slow."',
+  '"Welcome! I speak English, Thai, and little bit Russian — but only the bad words." A grin. "Sit."',
+  '"You again? No — you new. Everybody have the same face after midnight, sorry na." She pats the stool.',
+  '"Sit here, tilac — this seat see the whole street, and the whole street see you. Good for both."',
+  '"Hello! I am the quiet one." The girl beside her snorts. "Okay, the second quiet one. Sit."',
+  '"Sawatdee kaaa. Long day? Me too. We can be tired together, you buy the drink."',
 ];
 // the short repeat of each greeting, index for index (the town book deals the greeting AND its gist)
 const _H_GREET_SHORT_OF = [
@@ -17143,6 +17203,18 @@ const _H_GREET_SHORT_OF = [
   '"Customer! Finally. Sit."',
   '"Best seat, near the fan."',
   '"Still lose something? Sit."',
+  '"Third time, you sit."',
+  '"Right stool. Sit."',
+  '"I cannot do quiet. Sit anyway."',
+  '"I talk small: hello. Sit."',
+  '"You look hungry. Drink first."',
+  '"We are new together. Sit."',
+  '"This stool is for slow."',
+  '"Only the bad words in Russian. Sit."',
+  '"Same face after midnight. Sit."',
+  '"This seat see the whole street."',
+  '"The second quiet one. Sit."',
+  '"Tired together. You buy."',
 ];
 const _H_GREET_SHORT = [
   '"Sit sit! Talk slow for me na."',
@@ -17156,6 +17228,10 @@ const _H_FAMILY_WRAP = [
   f => `"${f}." She shows you a video, not a photo: a kitchen, too loud, everybody talking at once. "This. Every Sunday I call, this."`,
   f => `"Family?" She counts on her fingers before she starts. "${f}." The fingers stop. "Okay. That is everybody."`,
   f => `"${f}." She says it fast, and then asks about your drink, the way you close a drawer.`,
+  f => `"${f}." She says it to the {{phone}}, not to you, scrolling for a photo she does not find. "Anyway. That is them."`,
+  f => `"Who I send to?" She brightens — this one she can answer. "${f}. Everybody at home know my salary better than me."`,
+  f => `"${f}." She holds up the {{phone}} and a small face fills the screen, mid-shout. "Hear? Always like this. I miss the loud."`,
+  f => `"${f}." Flat, practical, the way you'd read a shopping list. Then, softer: "Is okay. Is why I am strong."`,
 ];
 const _cap1 = t => t.charAt(0).toUpperCase() + t.slice(1);
 const _H_PLAN_WRAP = [
@@ -17165,6 +17241,10 @@ const _H_PLAN_WRAP = [
   p => `"Plan?" No phone for this one; she has said it many times. "${_cap1(p)}. Every night I say before sleep, so I no forget."`,   // was fluent English in a Tinglish mouth (Gerry, round 64)
   p => `She writes it on a napkin in Thai, crosses it out, and tries English: "${p.toUpperCase()}." She folds the napkin small and keeps it.`,
   p => `"Plan is ${p}." A pause, honest. "Plan is also: no new boyfriend first." She laughs, and means both.`,
+  p => `"Plan?" She draws it in the wet ring from her glass: a square. "${_cap1(p)}. This is the door. This is me inside." She wipes it away before it dries.`,
+  p => `"When I have the money — ${p}." She says it quickly, like a password. "Every girl have one. Mine is real."`,
+  p => `"Two plan." She holds up two fingers. "One: ${p}. Two: no more Pattaya." She folds the second finger down. "Two need one."`,
+  p => `She looks at the ceiling for the English. "${_cap1(p)}. Small, but mine." A nod to herself, as if she just agreed to it.`,
 ];
 const _H_HOME_WRAP = [
   fr => `"Home? ${fr}. Isan! You know Isan? Very hot, very poor, very happy." She grins. "Rice, buffalo, my mama, som tam every day. I miss, but no money there. Pattaya have money, no buffalo."`,
@@ -17173,6 +17253,10 @@ const _H_HOME_WRAP = [
   fr => `"${fr}. You never hear, I know." She draws the map on the bar with a wet finger: here Bangkok, here Pattaya, way up here — home.`,
   fr => `"${fr}. My mama house, rice behind, chicken in front, dog everywhere." A grin. "Here, I have one fan and a window to a wall."`,
   fr => `"Up north-east. ${fr}. Very quiet, only frogs at night." She listens to the bar's speakers a second. "Here, no frogs."`,
+  fr => `"${fr}." She says the name like a song. "You go there, you see nothing — rice, road, temple. But the nothing is mine."`,
+  fr => `"Isan — ${fr}. Everybody here is from somewhere up there." She points past the ceiling. "The bus come down full every month, go back up empty."`,
+  fr => `"${fr}. My village is one road and the road is mud when it rain." A grin. "Here, the road is mud when it rain also. Same same, more neon."`,
+  fr => `"Home?" A small pause, as if checking the word is still true. "${fr}. I go back one time a year, and every year the children are taller and the house is the same."`,
 ];
 // FREE, asked of a girl: only the mamasans answered it (Wendell, round 63)
 const _H_FREE = [
@@ -17186,6 +17270,12 @@ const _H_FREE = [
   '"Free is word for farang. Thai word is \'already paid\'." She laughs at her own joke.',
   '"Free? My mama say nothing free, only trouble. My mama is right always."',
   '"Free, no. Cheap, maybe." A wink. "For you, special cheap. Same price."',
+  '"Free?" She looks at the glass like it insulted her. "Even the straw have a price, tilac."',
+  '"Free is what the sign say outside. Inside, everything have a number." She smiles. "Small number, for you."',
+  '"The music is free. You can dance. Me — I come with a drink."',
+  '"Last customer ask free. I give him free advice: go home." She laughs. "You stay. Buy."',
+  '"Free, free — farang word number one." A sigh, fond. "Thai word number one is \'buy me drink\'. Same conversation."',
+  '"Nothing free. But I give you free smile, and that one is real." It is.',
 ];
 function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const bar = _barName(room) || "the bar";
@@ -17193,8 +17283,8 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const from = idx(_H_FROM, 3);
   const darkside = ROOMS[room] && ROOMS[room].region === "Darkside";
   const look = idx(darkside ? _H_LOOK_DARK : _H_LOOK, 5);
-  const famIdx = _storyPick(room, "family", _H_FAMILY, _hh(seed, 7));
-  const planIdx = _storyPick(room, "plan", _H_PLAN, _hh(seed, 11));
+  const famIdx = _storyPick(room, "family", _H_FAMILY, _hh(seed, 7), _H_BAKED);
+  const planIdx = _storyPick(room, "plan", _H_PLAN, _hh(seed, 11), _H_BAKED);
   const family = _H_FAMILY[famIdx].replace(/\{from\}/g, from);
   const plan = _H_PLAN[planIdx];
   const emoji = idx(_H_EMOJI, 13);
@@ -17536,6 +17626,15 @@ const _M_GREET = [
   '"You came in from a worse bar, I can tell." She hands you a napkin. "Sit. This one is better."',
   '"Ah. Welcome." A small nod over the top of her reading glasses. "I am the one who says yes or no here. Mostly yes."',
   '"Come in, come in, do not stand in the door — the door is for leaving." She laughs at her own house rule. "Sit."',
+  // round 65: eight more, dealt by the town book
+  '"Come in. You are early, which I like, and sober, which I like more." She gestures at the empty rail. "Pick a stool before the choice is made for you."',
+  '"Good evening. Twenty-two years on this soi and I have never once lost a customer to a better bar." A beat. "To a worse one, many times. Sit."',
+  '"Welcome." She slides a coaster across without looking at it. "My girls are kind, my prices are honest, and my patience is famous. Test the first two."',
+  '"Ah, come, come." She touches your elbow the way a landlady does. "One rule in my bar: you leave happier than you came in. I enforce it personally."',
+  '"Sit. You have the face of a man who has been told this soi is dangerous." A dry smile. "It is. Mostly to your wallet, and only with your permission."',
+  '"Welcome, welcome. I remember faces, not names — so next time I will know you, and I will not know what to call you. Help me with that." She waits.',
+  '"Evening. The ice is fresh, the girls are awake, and the football is on with the sound off, which is the only civilised way." She points you at a stool.',
+  '"Come in. Nobody here will lie to you about anything that costs money." The smile is slow. "Everything else, we are Thai."',
 ];
 const _M_GREET_SHORT = [
   '"Sit anywhere. Be polite, buy a lady drink, mind the stage."',
@@ -17550,6 +17649,14 @@ const _M_GREET_SHORT = [
   '"Sit. This one is better."',
   '"I say yes or no here. Mostly yes."',
   '"The door is for leaving. Sit."',
+  '"Early and sober. Pick a stool."',
+  '"Never lost a man to a better bar. Sit."',
+  '"Kind girls, honest prices. Test those two."',
+  '"You leave happier than you came. My rule."',
+  '"Dangerous to the wallet, with permission. Sit."',
+  '"Faces, not names. Help me with yours."',
+  '"Fresh ice, football with the sound off. Sit."',
+  '"No lies about money. Everything else, we are Thai."',
 ];
 const _M_GIRLS = [
   '"My girls are good girls — most from Isaan, like me a long time ago. They work hard, send the money home, and they won\'t cheat you if you don\'t cheat them." A level look. "Treat them nice, I treat you nice. Same-same."',
@@ -17560,6 +17667,13 @@ const _M_GIRLS = [
   '"If a girl says no to you, she said no. I don\'t make her explain and neither do you." Perfectly pleasant, entirely final. "There are plenty of bars. There is only one of her."',
   '"You want to know who is new? The one who still counts her drinks out loud." A flick of the eyes. "Be gentle with that one. Six months and she will be counting yours."',
   '"They fight, they make up, they lend each other money they will never see again. It is a family, and I am the one who has to be fair to all of them." A dry look. "Which is why I am nobody\'s favourite."',
+  // round 65
+  '"The new one is from my own village. Her mother asked me to watch her, so I watch her harder than the rest, and she hates it." A level look. "She will thank me in a year. They always do, in a year."',
+  '"Most of my girls are sending money somewhere. One or two are saving instead, and those are the ones who will own a bar before thirty." A small nod. "I know, because I was one."',
+  '"They call me mae on the good nights and the old woman on the bad ones. Both are correct." The faintest smile. "A mother who is not strict is only a landlady."',
+  '"You want to know which one is honest? All of them, about everything except their age." She shrugs. "Same as you, I expect."',
+  '"I had a girl last year who was a nurse before this. Better money here, she said, and worse hours." A pause. "She went back to the nursing. Some of them do. I keep the uniform photo in my {{phone}} to show the new ones there is a door."',
+  '"The rule I tell them on the first night: nobody leaves with a man you would not leave with yourself." She taps the bar. "I have been wrong about a man maybe twice in twenty years. Both times I remembered his face."',
 ];
 const _M_FAMILY = [
   `"Me? My children are grown now. One in a Bangkok office, one still study. I built my mama a house — concrete, real bathroom, not the old wood." Quiet pride. "This bar paid for all of it. People look down on the work; the house is still real."`,
@@ -17574,6 +17688,19 @@ const _M_FAMILY = [
   `"My father fished out of Sattahip forty years. He thinks a bar is a kind of boat: you keep it floating, you don't ask what is under it." A small smile. "He is not wrong."`,
   `"One son, in the army. A sergeant now." She straightens the book on the bar. "He knows exactly what I do. He sends me photos in uniform anyway."`,
   `"My mother raised me and two cousins on a noodle cart in Khorat. I learned the till at seven." A shrug. "Everything since is the same cart, bigger."`,
+  // round 65 (indices 12–23; the clash map below knows which carry a husband or a count)
+  `"A daughter who teaches in Khon Kaen and does not approve of me, and a son who does and is useless." Perfectly even. "I send to both. Love is not a referendum."`,
+  `"My husband runs the farm. I run this. We see each other in April and we are very fond of each other in April." A shrug. "Longer than that and we would argue about the roof."`,
+  `"I never married. I bought my mother a house instead, and she tells the village I married a Chinese." She laughs. "A house is a better husband. It does not drink."`,
+  `"Three of us came down from Sakon Nakhon in one minibus, twenty years ago. One went home, one married a German, one has this bar." She taps the counter. "Guess."`,
+  `"My boy is nine. He was a surprise, and a late one, and he is the reason I stopped dancing and started counting." A quick glance at the {{phone}}. "He is asleep. Good."`,
+  `"Mother, father, both still alive, both still in the field, both still refusing the house I built." Half a laugh. "They sleep in it when it rains. That is as far as we have got."`,
+  `"I have a nephew I raised as my own after my sister went to Bangkok and did not come back." Said plainly. "He drives a delivery bike in Chonburi. He calls me mae. That is my family."`,
+  `"Grown children, two, and the grandchildren come at Songkran and eat everything." A warm, tired grin. "My daughter married well. My son married twice. I built the house between them."`,
+  `"My younger brother is a monk now. Twelve years in the robe." A small, proud nod. "He says the bar is bad karma and the money is good rice. We agree about the rice."`,
+  `"A husband in the ground these six years, and a daughter who looks exactly like him, which is a mercy and a punishment." A sip of water. "She is at the university. He would have been unbearable about it."`,
+  `"Everyone at home thinks I own a restaurant." Dry. "In a way I do. The food is terrible and the service is excellent."`,
+  `"My father drank the first farm. My mother held onto the second. I have bought a third, in my name, and nobody drinks in it but the frogs."`,
 ];
 const _M_PLAN = [
   `"A plan? I already did my plan, tilac — poor girl from the field, now I run the bar." She taps the till. "My plan now is the girls' plan: get out smarter than I did. Save it, don't drink it, don't marry the first farang who cries."`,
@@ -17584,6 +17711,15 @@ const _M_PLAN = [
   `"The land, tilac. Everything goes into the land." A small definite nod. "Money you can drink. A rai of land near the road, nobody can drink that."`,
   `"Honestly? I would like one year where nothing happens." She laughs at herself. "No fire, no flood, no girl running off with the till. One boring year and I would take up gardening."`,
   `"My plan is that the girls who leave here leave with something." She squares a stack of chits that did not need squaring. "Some of them do. Not all. You would want me to say all."`,
+  // round 65
+  `"My plan is a girl I trained, who can now do everything I do except shout at a drunk." A small smile. "When she can shout, I go home and she gets the keys."`,
+  `"Retire? To what?" Genuine puzzlement. "My mother retired and was dead in two years of nothing to do. I will die behind this counter at ninety, mid-sentence, and the sentence will be a price."`,
+  `"A room upstairs with a bed and a fan, so the walk home is a staircase." She says it like a luxury, because it is. "That is the plan. Everything else is already done."`,
+  `"I am sending a niece to study hotel management in Chiang Mai, so that one of us runs the kind of bar with a lobby." A flat smile. "The plan is her. I am the money."`,
+  `"The plan was always a shop-house in Khorat with my name over the door." She shrugs. "The shop-house exists. The name is over the door. I rent it to a man who sells tyres, and I am still here. Plans are like that."`,
+  `"Every year I say this is the last high season." She counts on her fingers, loses count, stops. "Say it enough and one year it will be true. That is the whole plan."`,
+  `"I want to be the one who lends, not the one who borrows." Said quietly, with a glance at the till. "Three more seasons and the whole soi owes me something. Then I am safe."`,
+  `"A plan? I have a girl at the university, a mother with a bad hip, and a lease that comes up at the end of the year." A dry look. "The plan is the end of the year."`,
 ];
 const _M_WALLET = [
   '"You lost your wallet? Aiyo. Not in my bar — we don\'t do that here, bad for business, bad for luck." She considers. "Ask Candy, on Soi Buakhao. If it moved through this area, Candy heard about it."',
@@ -17600,6 +17736,13 @@ const _C_GREET = [
   '"You want the good news or the price list?" A very small, very dry smile. "They are the same list."',
   '"Welcome." She takes you in — shoes, watch, how you came through the door — in about a second and a half, and files it. "Anything you need that involves money, that\'s me."',
   '"New one." Said to herself, not unkindly, while she makes a note. "Card or cash? I ask now because the machine sulks after midnight and I would rather you knew."',
+  // round 65
+  '"Hello. Tab, cash or card — decide now and I will not ask again." Her pen is already moving. "Most men say tab and mean card."',
+  '"Welcome." She does not stop counting. "The girls will tell you what everything costs and they will be right, because I told them."',
+  '"Sit down, order anything, and if a number sounds wrong, say so before you pay, not after." A brisk nod. "After, it is a story. Before, it is arithmetic."',
+  '"Evening. I run the money and the floor runs the mood, and we do not swap." The shortest possible smile. "What can I put on your paper?"',
+  '"New face. Good shoes." She writes something that is probably not about your shoes. "Beer is cold, change is exact, and the clock on the wall is the right one, whatever the girls say."',
+  '"Hi." A glance, a decision, a receipt pad turned toward you. "Everything you drink lands on this. Everything she drinks lands on this. Read it whenever you like — I prefer customers who read."',
 ];
 const _C_GREET_SHORT = [
   '"Drinks at the bar, tab with me. Welcome."',
@@ -17610,6 +17753,12 @@ const _C_GREET_SHORT = [
   '"Good news and the price list are the same list."',
   '"Anything involving money, that\'s me."',
   '"Cash after midnight. The machine sulks."',
+  '"Tab, cash or card. Decide now."',
+  '"The girls quote my prices. They\'re right."',
+  '"Query the number before, not after."',
+  '"Money is mine. What goes on your paper?"',
+  '"The clock on the wall is the right one."',
+  '"Everything lands on the pad. Read it whenever."',
 ];
 const _C_MONEY = [
   '"Everything goes through this book." She pats the ledger. "Your drink, her drink, the barfine — I write it, you pay it. Watch me write and there\'s no surprise. The farang who don\'t watch, they get the surprise. Not my problem, na."',
@@ -17620,6 +17769,13 @@ const _C_MONEY = [
   '"I take cash. I take a card if I must, and the fee is on the wall in letters that size for a reason." A flick of the eyes at a sign. "You would be amazed what men do not read."',
   '"I have never once been wrong about a tab." Perfectly matter-of-fact. "I have been shouted at about forty times. Those are different things, and I am polite about both."',
   '"Barfine and drinks are separate money and they go in separate places, so ask me twice, not once." She holds up two fingers, patient. "One for the bar. One for her. Anybody who tells you it is one number is doing you or doing her."',
+  // round 65
+  '"The chits are the whole truth and the only truth." She fans a few. "A girl says you bought her three. The cup says two. I believe the cup. The cup has no feelings."',
+  '"Change is counted twice: once into my hand, once into yours." She demonstrates with air. "If you leave without the second count, that is your decision and your money."',
+  '"I have seen men argue a bill of two beers for half an hour and pay a barfine without reading it." Her pen does not pause. "Priorities. Not mine to fix."',
+  '"People like round numbers. I give them exact ones." The smallest shrug. "Nobody has ever thanked me for exact. The book has."',
+  '"When the machine dies after midnight, I take cash and I write you a paper that says so." She shows you the paper. "In the morning the paper becomes a receipt. Lose it and it becomes a memory."',
+  '"Every bar on this soi runs on the same three numbers: the beer, the lady drink, the fine." She holds up three fingers. "Only the beer is on the wall. Ask me the other two now, while you can still do the sum."',
 ];
 const _C_FAMILY = [
   `"My family? Isaan, like everyone here. I send money every month — same as the girls, only I get to sit down to do it." A small dry smile. "Cashier is better than dance, for me. My boyfriend prefers it too."`,
@@ -17630,6 +17786,15 @@ const _C_FAMILY = [
   `"I am the one in my family who is good at numbers, so I am the one who pays for everything." She says it as arithmetic, not grievance. "Older brother, younger sister, mother, and a roof in {from} that eats money every wet season."`,
   `"My father was a rice trader and he taught me to count before I could read." A rare, real smile. "He would hate this bar and he would be proud of the book. Both things are true."`,
   `"No children." She closes the ledger on her finger. "Which people here find strange and I find restful. I send money to my sister's three instead, and I get to hand them back."`,
+  // round 65
+  `"A son of fourteen who is better at maths than me and knows it." A sigh that is also pride. "He checks my photographs of the book for mistakes. He has found one."`,
+  `"My parents are in {from}, and they are the kind who answer the {{phone}} on the first ring and have nothing to say." A fond look at the till. "I call anyway. The silence is the news."`,
+  `"Husband, two kids, a house half-built in {from}, and a mother-in-law who keeps the receipts." A quick, dry smile. "I married into a family of cashiers. We are very happy and nobody is ever overcharged."`,
+  `"I send to my little brother, who is at a technical college learning air conditioning." She nods at the unit over the door. "Next year he fixes that for free. That is my pension plan."`,
+  `"My daughter is seven and lives with me, here, in town." Unusual, and she knows it. "A cousin sleeps at ours and does the mornings. The bar does the school fees. It works, and I do not explain it to anyone in {from}."`,
+  `"Both parents gone, a sister in Bangkok who married money and forgot the number." Flat, not bitter. "So the money I count here goes mostly to me, which my mother would have found scandalous and I find sensible."`,
+  `"My father ran the village lottery for thirty years, which is how I learned that the house always balances." A thin smile. "He never got rich and he was never short. I inherited the second part."`,
+  `"One boy, grown, a mechanic in Chonburi, and a granddaughter I see on the {{phone}} every single night." She tilts the screen: a toddler, furious about something. "The till pays for her. Everything else is extra."`,
 ];
 const _C_WALLET = [
   '"Lost a wallet? Not here — I count everything, I\'d know." She tips her head toward the door. "Ask the mamasan, or ask Candy on Buakhao. They keep track of what walks through."',
@@ -17646,9 +17811,9 @@ const _C_WALLET = [
 // family answers a given _M_STORY forbids; the builder walks to the next one
 // that fits, which keeps it pure and day-stable.
 const _M_FAM_CLASH = {
-  3: [1, 4],   // buried a husband, raised two kids → not a living husband, not grandchildren-only
-  4: [4],      // married a farang and buried the marriage → not a twenty-one-year husband
-  6: [0, 3],   // four kids through school → not "one in an office, one still studying", not one daughter
+  3: [1, 4, 8, 13, 14],              // buried a husband, raised two kids → not a living husband (4, 13), not never-married (14), not childless (8)
+  4: [4, 13, 14, 21],                // married a farang and buried the marriage → not a living husband, not never-married, not a husband in the ground
+  6: [0, 3, 8, 10, 12, 16, 19, 21],  // four kids through school → not a count that isn't four (one, two, none, one son)
 };
 function _mamaFamilyIdx(id) {
   const story = _hh(id, 7) % _M_STORY.length;
@@ -17666,14 +17831,14 @@ function _buildMama(name, th, room, id = name.toLowerCase()) {
   const story = idx(_M_STORY, 7);
   return {
     name, th, emoji: "\ud83d\udc51", room, filler: true,
-    storyBits: { greet: _hh(id, 23) % 8, family: _mamaFamilyIdx(id), plan: _hh(id, 41) % _M_PLAN.length, story: _hh(id, 7) % _M_STORY.length },
+    storyBits: { greet: _hh(id, 23) % 8, family: _mamaFamilyIdx(id), plan: _hh(id, 41) % 8, girls: _hh(id, 31) % 8, story: _hh(id, 7) % _M_STORY.length },   // the original eight of each: baked text unchanged, the town book deals the rest
     desc: `${look} \u2014 the mamasan of ${bar}, from ${from}. She ${story}.`,
     dialogue: [
       { th: "\u0e40\u0e0a\u0e34\u0e0d\u0e04\u0e48\u0e30", rom: "chern kha", text: _M_GREET[_hh(id, 23) % 8], short: _M_GREET_SHORT[_hh(id, 23) % 8], story: "mgreet" },
-      { topic: "girls", text: idx(_M_GIRLS, 31) },
+      { topic: "girls", text: _M_GIRLS[_hh(id, 31) % 8], story: "mgirls" },
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_M_LOCKIN, 47) }] : []),
       { topic: "family", text: _M_FAMILY[_mamaFamilyIdx(id)], story: "mfamily" },
-      { topic: "plan", text: idx(_M_PLAN, 41), story: "mplan" },
+      { topic: "plan", text: _M_PLAN[_hh(id, 41) % 8], story: "mplan" },
       // Candy standing six feet away while her own colleague says "ask Candy on
       // Buakhao" (Maureen, round 47 — Bua in the same bar gets it right).
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
@@ -17690,15 +17855,15 @@ function _buildCashier(name, th, room, id = name.toLowerCase()) {
   const look = idx(_C_LOOK, 5);
   return {
     name, th, emoji: "\ud83e\uddfe", room, filler: true,
-    storyBits: { from, family: _hh(id, 37) % _C_FAMILY.length },
+    storyBits: { from, family: _hh(id, 37) % 8, greet: _hh(id, 23) % 8, money: _hh(id, 31) % 8 },   // the original eight: baked text unchanged
     desc: `${look} \u2014 the cashier at ${bar}, from ${from}.`,
     dialogue: [
-      { th: "\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35\u0e04\u0e48\u0e30", rom: "sawatdee kha", text: idx(_C_GREET, 23), short: idx(_C_GREET_SHORT, 23) },
+      { th: "\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35\u0e04\u0e48\u0e30", rom: "sawatdee kha", text: _C_GREET[_hh(id, 23) % 8], short: _C_GREET_SHORT[_hh(id, 23) % 8], story: "cgreet" },
       // one answer, so one topic with two keys — TOPICS listed "money · tab" and
       // gave the same paragraph twice (Maureen, round 47).
-      { topic: "money|tab|bill|price", text: idx(_C_MONEY, 31) },
+      { topic: "money|tab|bill|price", text: _C_MONEY[_hh(id, 31) % 8], story: "cmoney" },
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_C_LOCKIN, 47) }] : []),
-      { topic: "family", text: idx(_C_FAMILY, 37).replace(/\{from\}/g, from), story: "cfamily" },
+      { topic: "family", text: _C_FAMILY[_hh(id, 37) % 8].replace(/\{from\}/g, from), story: "cfamily" },
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
         text: '"Not through my till." She nods along the bar without looking up. "But Candy is in tonight \u2014 ask her, not me. She is the one who hears."' },
       { topic: "wallet", notFlags: ["hasWallet"], text: idx(_C_WALLET, 43) },

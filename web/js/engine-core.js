@@ -2335,6 +2335,9 @@ function _townStory(npc, d) {
     case "mfamily": { const bad = (typeof _M_FAM_CLASH !== "undefined" && _M_FAM_CLASH[b.story]) || []; return { text: _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, b.family, i => !bad.includes(i))] }; }
     case "mplan": return { text: _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, b.plan)] };
     case "cfamily": return { text: _C_FAMILY[_townPick(npc, "cfamily", _C_FAMILY.length, b.family)].replace(/\{from\}/g, b.from) };
+    case "mgirls": return { text: _M_GIRLS[_townPick(npc, "mgirls", _M_GIRLS.length, b.girls || 0)] };
+    case "cgreet": { const i = _townPick(npc, "cgreet", _C_GREET.length, b.greet || 0); return { text: _C_GREET[i], short: _C_GREET_SHORT[i] }; }
+    case "cmoney": return { text: _C_MONEY[_townPick(npc, "cmoney", _C_MONEY.length, b.money || 0)] };
   }
   return null;
 }

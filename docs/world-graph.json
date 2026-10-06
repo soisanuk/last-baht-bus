@@ -518,7 +518,7 @@
   },
   {
    "file": "engine-core.js",
-   "line": 3063,
+   "line": 3066,
    "name": "HURT_CAP",
    "value": 3
   },
@@ -51071,7 +51071,7 @@
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-core.js:3370",
+   "to": "engine-core.js:3373",
    "type": "INTERPOLATES"
   },
   {
@@ -51101,7 +51101,7 @@
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:3377",
+   "to": "engine-core.js:3380",
    "type": "INTERPOLATES"
   },
   {
@@ -51696,12 +51696,12 @@
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3065",
+   "to": "engine-core.js:3068",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3066",
+   "to": "engine-core.js:3069",
    "type": "INTERPOLATES"
   },
   {
@@ -51716,7 +51716,7 @@
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-core.js:2858",
+   "to": "engine-core.js:2861",
    "type": "INTERPOLATES"
   },
   {
@@ -51796,7 +51796,7 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-core.js:3372",
+   "to": "engine-core.js:3375",
    "type": "INTERPOLATES"
   },
   {
@@ -51836,7 +51836,7 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-core.js:2823",
+   "to": "engine-core.js:2826",
    "type": "INTERPOLATES"
   },
   {
@@ -52266,7 +52266,7 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:3161",
+   "to": "engine-core.js:3164",
    "type": "INTERPOLATES"
   },
   {
@@ -53156,12 +53156,12 @@
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2444",
+   "to": "engine-core.js:2447",
    "type": "INTERPOLATES"
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2445",
+   "to": "engine-core.js:2448",
    "type": "INTERPOLATES"
   },
   {
@@ -56323,27 +56323,27 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2793",
+   "to": "engine-core.js:2796",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3092",
+   "to": "engine-core.js:3095",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3099",
+   "to": "engine-core.js:3102",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3183",
+   "to": "engine-core.js:3186",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3185",
+   "to": "engine-core.js:3188",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57323,7 +57323,7 @@
   },
   {
    "from": "hyperUpstairs",
-   "to": "engine-core.js:2851",
+   "to": "engine-core.js:2854",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57568,7 +57568,7 @@
   },
   {
    "from": "orchidReported",
-   "to": "engine-core.js:2743",
+   "to": "engine-core.js:2746",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57593,7 +57593,7 @@
   },
   {
    "from": "orchidSent",
-   "to": "engine-core.js:2743",
+   "to": "engine-core.js:2746",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -57618,7 +57618,7 @@
   },
   {
    "from": "orchidVouched",
-   "to": "engine-core.js:2743",
+   "to": "engine-core.js:2746",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59508,7 +59508,7 @@
   },
   {
    "from": "recceDone",
-   "to": "engine-core.js:2592",
+   "to": "engine-core.js:2595",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -60999,11 +60999,11 @@
     "engine-core.js:1155",
     "engine-core.js:1237",
     "engine-core.js:1331",
-    "engine-core.js:2793",
-    "engine-core.js:3092",
-    "engine-core.js:3099",
-    "engine-core.js:3183",
-    "engine-core.js:3185",
+    "engine-core.js:2796",
+    "engine-core.js:3095",
+    "engine-core.js:3102",
+    "engine-core.js:3186",
+    "engine-core.js:3188",
     "engine-core.js:592",
     "engine-core.js:679",
     "engine-encounters.js:174",
@@ -62512,7 +62512,7 @@
   {
    "name": "hyperUpstairs",
    "readByEngine": [
-    "engine-core.js:2851",
+    "engine-core.js:2854",
     "engine-systems.js:1694"
    ],
    "setByDialogue": [
@@ -63038,7 +63038,7 @@
     "world.js:9463"
    ],
    "readByEngine": [
-    "engine-core.js:2743",
+    "engine-core.js:2746",
     "engine-parser.js:1026",
     "engine-parser.js:5795",
     "engine-play.js:2975",
@@ -63051,7 +63051,7 @@
   {
    "name": "orchidSent",
    "readByEngine": [
-    "engine-core.js:2743",
+    "engine-core.js:2746",
     "engine-parser.js:1026",
     "engine-parser.js:5795",
     "engine-play.js:2975",
@@ -63070,7 +63070,7 @@
    ],
    "name": "orchidVouched",
    "readByEngine": [
-    "engine-core.js:2743",
+    "engine-core.js:2746",
     "engine-parser.js:1026",
     "engine-parser.js:5795",
     "engine-play.js:2975",
@@ -63440,7 +63440,7 @@
    ],
    "name": "recceDone",
    "setByEngine": [
-    "engine-core.js:2592"
+    "engine-core.js:2595"
    ]
   },
   {

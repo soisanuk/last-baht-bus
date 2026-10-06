@@ -1029,7 +1029,18 @@ const _term = (() => {
     _tabBase = null;
     _tabIdx = -1;
     _refreshSuggest();
+    let _roomBefore = null;
+    try { _roomBefore = typeof G !== "undefined" && G ? G.room : null; } catch (e) {}
     onCommand(cmd);
+    // ON A PHONE THE NOTES CLOSE WHEN YOU MOVE (Mario, 2026-10-06): the row is a
+    // saved preference, so once opened it rode every room change and took up to
+    // 40% of a phone's screen until somebody found the glyph again (Margaret and
+    // Kurt, round 65). A display pref, never game state. Desktop keeps it open —
+    // the panel has the room there.
+    try {
+      const narrow = window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
+      if (narrow && _roomBefore && G && G.room !== _roomBefore && localStorage.getItem("lbb_notes_on") === "1") localStorage.setItem("lbb_notes_on", "0");
+    } catch (e) {}
     _updateFabs(); // the room/inbox may have changed — show/hide the bell & message glyphs
     if (typeof _updateScene === "function") _updateScene(); // v0 scene panel
     _renderChips(); // …and re-match the quick-command chips to the new context

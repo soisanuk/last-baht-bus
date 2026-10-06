@@ -812,7 +812,10 @@ test("Nont tells his exit from the Rabbit one way", () => {
 test("an authored girl's plan is a sentence, as a filler girl's is", () => {
   G.day = 3; G.room = "candy_bar_2"; doCommand("talk to bee");
   out = []; doCommand("ask bee about plan");
-  assert.match(text(), /My dream is to .+\./, "wrapped, not a bare fragment");
+  // any of the plan wrappers (the pool is ten deep since round 65), never the bare infinitive
+  const plan = _H_PLAN.find(p => text().toLowerCase().includes(p.replace(/[{}]/g, "").toLowerCase()));
+  assert.ok(plan, "her plan is in the answer");
+  assert.ok(_H_PLAN_WRAP.some(w => text().includes(w(plan).replace(/[{}]/g, "").slice(0, 30)) || text().includes(w(plan).slice(0, 30))), "wrapped, not a bare fragment: " + text());
 });
 
 test("a plain line to a partner whose question lapsed is the late answer, not a topic", () => {

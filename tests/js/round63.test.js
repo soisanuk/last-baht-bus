@@ -24,7 +24,9 @@ const ask = (id, topic) => { G.room = NPCS[id].room; G.nightTurn = 30; out = [];
 
 // ── Wendell: the town book ───────────────────────────────────────────────────────────
 test("no two women in town tell you the same family story while unheard ones remain", () => {
-  const girls = Object.keys(NPCS).filter(id => NPCS[id].filler && NPC_ROLES[id] === "hostess").slice(0, _H_FAMILY.length);
+  // present women only: the pool is forty deep now (round 65), and the forty-first filler
+  // girl in id order is home for November's harvest
+  const girls = Object.keys(NPCS).filter(id => NPCS[id].filler && NPC_ROLES[id] === "hostess" && _npcActive(id)).slice(0, _H_FAMILY.length);
   const heard = new Set();
   for (const id of girls) { ask(id, "family"); heard.add(G.storyOf[id].hfamily); }
   assert.equal(heard.size, girls.length, "every family line distinct across " + girls.length + " women");

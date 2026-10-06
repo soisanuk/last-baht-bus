@@ -137,7 +137,10 @@ function _fontStep() {
   return i >= 0 ? i : 0;
 }
 function _applyFontSize() {
-  const f = _FONT_STEPS[_fontStep()];
+  const i = _fontStep(), f = _FONT_STEPS[i];
+  const down = document.getElementById("font-down"), up = document.getElementById("font-up");
+  if (down) down.disabled = i === 0;
+  if (up) up.disabled = i === _FONT_STEPS.length - 1;
   document.body.style.fontSize = f.px === 15 ? "" : f.px + "px";
   // the things you READ and TAP grow with the story — at "largest" the chips, the
   // notes and the card stayed at 11-12px beside 21px prose (Margaret, round 65)
@@ -145,15 +148,21 @@ function _applyFontSize() {
   const btn = document.getElementById("font-fab");
   if (btn) btn.title = "Text size: " + f.name;
 }
-function _cycleFontSize() {
-  const next = _FONT_STEPS[(_fontStep() + 1) % _FONT_STEPS.length];
+// A− / A+ step the size and STOP at each end — the one Aa button cycled, so the
+// reader who wanted "largest" and tapped once more was back at "standard" (Margaret,
+// round 65; Mario: "shouldn't overshoot on either end"). The typed FONT verb steps up
+// and stops too; FONT DOWN / FONT SMALL steps down.
+function _stepFontSize(dir) {
+  const i = _fontStep(), j = Math.max(0, Math.min(_FONT_STEPS.length - 1, i + dir));
+  const next = _FONT_STEPS[j];
   try { localStorage.setItem("lbb_font_px", String(next.px)); } catch (e) {}
   _applyFontSize();
-  _term.print("▦ Text size: " + next.name + ".", "dim");
+  const atEnd = j === i;
+  const label = next.name + (j === _FONT_STEPS.length - 1 ? " ✓ (biggest)" : j === 0 ? " ✓ (smallest)" : "");
+  if (!atEnd) _term.print("▦ Text size: " + next.name + ".", "dim");
   // On the splash the terminal (and that print) is hidden behind the overlay,
-  // so the tap looked like it did nothing (Mario, 2026-08-26) — even with the
-  // splash prose now scaling, "standard" back to itself is invisible. A small
-  // toast under the button names the step, always.
+  // so the tap looked like it did nothing (Mario, 2026-08-26) — a small toast
+  // under the buttons names the step, always, and says when there is no further.
   let t = document.getElementById("font-toast");
   if (!t) {
     t = document.createElement("div");
@@ -164,7 +173,7 @@ function _cycleFontSize() {
       "transition:opacity .4s;box-shadow:0 0 12px #ff149333;";
     document.getElementById("shell").appendChild(t);
   }
-  t.textContent = "Aa " + next.name;
+  t.textContent = "Aa " + label;
   t.style.opacity = "1";
   clearTimeout(t._hide);
   t._hide = setTimeout(() => { t.style.opacity = "0"; }, 1400);
@@ -448,7 +457,7 @@ function _dispatch(cmd) {
   // FONT / TEXT SIZE cycles the reading size — same unsurfaced treatment as the
   // display toggles (no autocomplete, no HELP): the Aa button is the surface,
   // this is the keyboard path.
-  if (/^(font( size)?|text ?size)$/.test(v)) { _cycleFontSize(); return; }
+  if (/^(font( size)?|text ?size)$/.test(v)) { _stepFontSize(1); return; }
 
   // RESET wipes the save — a destructive one-way door, so it takes a confirmation.
   if (_awaitingReset) {
@@ -602,7 +611,8 @@ document.addEventListener("DOMContentLoaded", () => {
   _term.init(_dispatch);
 
   _applyFontSize();
-  document.getElementById("font-fab").addEventListener("click", () => _cycleFontSize());
+  document.getElementById("font-down").addEventListener("click", () => _stepFontSize(-1));
+  document.getElementById("font-up").addEventListener("click", () => _stepFontSize(1));
   _splashInit();
 
   const muteBtn = document.getElementById("mute-btn");

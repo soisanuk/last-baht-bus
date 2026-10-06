@@ -1,5 +1,5 @@
 // The text-size control (docs/voice-narration.md's first lever): the Aa FAB
-// cycles body font-size 15 → 17 → 19 → 21 → 15, persists in localStorage
+// steps body font-size 15 → 17 → 19 → 21 and stops at each end, persists in localStorage
 // (lbb_font_px), and must scale ONLY the reading surfaces — the prose and the
 // input inherit body, while the rem-based chrome (header, the ASCII map's
 // clamp) never moves. Pure presentation, so the vm suite can't see it; this
@@ -9,13 +9,14 @@ import { bootIntoGame } from "./_helpers.mjs";
 
 const INDEX_URL = new URL("../../web/index.html", import.meta.url).href;
 
-test("Aa FAB: cycles sizes, persists across reload, leaves the chrome alone", async ({ page }) => {
+test("text size: A+ and A− step, persist across reload, stop at both ends, and leave the chrome alone", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
   await bootIntoGame(page, INDEX_URL);
 
-  const fab = page.locator("#font-fab");
-  await expect(fab).toBeVisible(); // always-on furniture, unlike the bell
+  const up = page.locator("#font-up"), down = page.locator("#font-down");
+  await expect(up).toBeVisible(); // always-on furniture, unlike the bell
+  await expect(down).toBeDisabled(); // nothing smaller than standard
 
   const bodyPx = () => page.evaluate(() =>
     parseFloat(getComputedStyle(document.body).fontSize));
@@ -30,11 +31,9 @@ test("Aa FAB: cycles sizes, persists across reload, leaves the chrome alone", as
   await page.evaluate(() => _dispatch("font"));
   expect(await bodyPx()).toBe(17);
 
-  await fab.click();
+  await up.click();
   expect(await bodyPx()).toBe(19);
   expect(await headerPx()).toBe(chromeBefore); // chrome untouched at any size
-
-  // the cycle announces itself in the scrollback (instant feedback at new size)
   await expect(page.locator("#term-out")).toContainText("Text size: larger");
 
   // persists: reload and the saved size re-applies at boot
@@ -43,12 +42,15 @@ test("Aa FAB: cycles sizes, persists across reload, leaves the chrome alone", as
   await page.waitForFunction(() => typeof G !== "undefined");
   expect(await bodyPx()).toBe(19);
 
-  // wraps back to standard (19 → 21 → 15), clearing the inline override —
-  // the FAB works even while the continue-prompt is up (it bypasses _dispatch)
-  await fab.click();
+  // stops at largest instead of wrapping (round 65) — the button works even while
+  // the continue-prompt is up (it bypasses _dispatch)
+  await up.click();
   expect(await bodyPx()).toBe(21);
-  await fab.click();
-  expect(await bodyPx()).toBe(15);
+  await expect(up).toBeDisabled();
+  await page.evaluate(() => _stepFontSize(1));   // a stray extra step changes nothing
+  expect(await bodyPx()).toBe(21);
+  await down.click();
+  expect(await bodyPx()).toBe(19);
 
   expect(pageErrors).toEqual([]);
 });
