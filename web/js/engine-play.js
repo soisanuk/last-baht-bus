@@ -4917,6 +4917,14 @@ function _endNight(reason) {
     G.party = null;
     reason = "barfine";
   }
+  // what the town could have SEEN of your night — the stool you sat longest on, who you left
+  // with, how it ended — for LAST NIGHT asked of a witness the morning after (class N, 2026-10-07:
+  // Desmond asked three people about everything that happened to him and nobody could say)
+  {
+    const _bt = G.soc && G.soc.barTurns ? Object.entries(G.soc.barTurns).sort((a, b) => b[1] - a[1])[0] : null;
+    G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0,
+      with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room };
+  }
   if (!_flag("act1Done") && ["dawn", "collapse", "blackout", "hurt", "accident", "roadhit"].includes(reason)) {
     _act1Fail(reason);
     return;

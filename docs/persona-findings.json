@@ -12760,6 +12760,21 @@
    "system": "barfine",
    "instrument": "none",
    "between": ""
+  },
+  {
+   "round": "63",
+   "persona": "Desmond",
+   "model": "fable",
+   "lens": "the-town-explains",
+   "claim": "Nobody in town can discuss Sao, the night ride's venues, Bangkok or last night",
+   "verdict": "fixed",
+   "note": "deferred at round 63 as its own pass; built 2026-10-07 — Bangkok is a _townTalk row in three registers (Tan's own node outranks it), LAST NIGHT is a witness question read off G.lastNightWas (the bar you sat in, who you left with; Tan knows how it ended; another bar says you weren't there), the ride girl answers each stop by name from rideLog.seen, Tan has a read on Sao once you have met her",
+   "pin": "tests/js/towntalk.test.js",
+   "cls": "N",
+   "sev": "medium",
+   "system": "conversation",
+   "instrument": "askable",
+   "between": ""
   }
  ]
 }

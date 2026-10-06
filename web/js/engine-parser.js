@@ -4103,8 +4103,15 @@ function _doTalkCore(arg, topic) {
   }
   // the girl who took you on her bike remembers it — and "late" is not "you not
   // friend yet" to a man she has ridden three nights (Kenji, round 47)
-  if (topic && G.rideLog && G.rideLog[npc] && /\b(late|late-late|after two|after[- ]?hours|ride|the ride|bike|motorbike|your bike|last night|where we went|that night)\b/i.test(String(topic))) {
+  if (topic && G.rideLog && G.rideLog[npc] && (/\b(late|late-late|after two|after[- ]?hours|ride|the ride|bike|motorbike|your bike|last night|where we went|that night)\b/i.test(String(topic)) || _rideStopKey(topic))) {
     const r = G.rideLog[npc], ago = G.day - r.day;
+    // a stop by NAME: the disco, the som tam cart, her friend's bar (class N, 2026-10-07 — the
+    // ride's venues were a thing nobody in town could discuss, least of all the woman who drove)
+    const _sk = _rideStopKey(topic);
+    if (_sk) {
+      _say(((r.seen || []).includes(_sk) ? _pickVary(_RIDE_STOP_MEMORY[_sk], "ridestop:" + npc + ":" + _sk) : _RIDE_STOP_NOT)(NPCS[npc].name));
+      return;
+    }
     _say(_pickVary([
       n => `${n} grins without looking up. "You want the bike again, na? ${ago <= 1 ? "Last night" : ago + " nights ago"} you hold on so tight I have bruise. ${r.stops} place. I remember. You remember?"`,
       n => `"After two?" ${n} laughs. "You KNOW after two. You sit on the back of my bike, you see the real one." A shrug that is not a shrug. "Maybe again. Maybe tonight. Depends how you drink."`,
@@ -5479,6 +5486,12 @@ function _soberTalk(npc, topic) {
 // flat, exact, "my friend", the road and the meter, coffee not beer — and he
 // answers for the TOWN, never for a room he is not in. Same slots as _TOWN.
 const _TAN_TOWN = {
+  bangkok: ["\"Bangkok.\" Tan says it the way a pilot says the sea. \"Two hours up the motorway if the road is empty, which it is not. I drive men there when the airport is the other end. {d}\"",
+    "\"The capital.\" A small shrug at the windscreen. \"Everything in this town comes from there — the money, the police, the girls in the wet season. Nothing goes back except the money. {d}\"",
+    "Tan considers. \"Bangkok is a different animal, my friend. Here everybody knows everybody. There nobody knows anybody, which some men prefer. {d}\""],
+  saw: ["\"Last night.\" Tan does not smile. \"{how}\"",
+    "Tan looks at you the way he looked at you at the airport. \"{how} I hear things, my friend. I do not go looking for them.\"",
+    "\"{how}\" Tan turns his cup. \"This is a small town with a long memory and a short road.\""],
   venue: ["\"{v}. {rs}.\" Tan says it the way he says every address, as if reading it off a job sheet. \"I have dropped people there. What they do inside is not on the meter.\"",
     "Tan does not need to think. \"{rs}. Tell the piwin {v} and he knows it. Or I drive you, my friend.\"",
     "\"{v}?\" A glance down the road, as if it runs there from here. \"{rs}. Every bar in this town is somebody's. That one too.\""],
@@ -5658,6 +5671,39 @@ const _TOWN = {
   },
   // the season, which the bar's own ledger prints as its headline every morning and
   // nobody on the floor could talk about (Hennie, round 55)
+  bangkok: {
+    floor: ["\"Bangkok?\" {n} makes a face. \"Two hour on the bus from the North station, three if rain. I go there when here is dead — work a bar on Sukhumvit, same job, more traffic, no sea. Come back December.\"",
+      "{n} shrugs. \"Bangkok have everything and I like nothing. Too big, too fast, nobody say hello. But when the rail is empty here, Bangkok still pay. So.\"",
+      "\"Krung Thep.\" {n} says the real name. \"My cousin work there in a shop. Money okay, room small small. Here I see the sea every day. In Bangkok you see the back of a bus.\""],
+    house: ["\"Bangkok.\" {n} says it like a competitor's name. \"Two hours up the motorway and a different country. Half my floor goes there when the wet comes and the smart ones come back. The others I see on their phones.\"",
+      "{n} nods north. \"The bus leaves from the North station every half hour or so, a couple of hundred baht, two hours if the road's kind. Everything in that city costs double and tips half. That's why they're here.\"",
+      "\"Bangkok is where the money is and this is where the money comes to spend itself,\" {n} says. \"Both towns know which one they are.\""],
+    punter: ["\"Bangkok?\" {n} pulls a face into the glass. \"Did my time there. Traffic, air you can chew, and a beer costs what it costs at home. Two hours on the bus and I never went back.\"",
+      "{n} shrugs. \"Nice for a weekend. The bars, the malls — then you remember you can't see the sea and you're on the bus home by Sunday.\"",
+      "\"The bus goes from the North station, every half hour or so, a couple of hundred baht,\" {n} says. \"Go for the food. Come back for everything else.\""],
+  },
+  saw: {
+    floor: ["\"Last night?\" {n} laughs. \"You sit here {h}, boss. {W}You tip okay. That is what I see — after you go out that door, I see nothing.\"",
+      "{n} counts on her fingers. \"You come, you drink, you stay {h}. {W}Then you go. What happen after, you tell ME, na.\"",
+      "\"Mm, last night.\" {n} grins. \"Here you were a gentleman, {h}. {W}Outside — I don't know. The soi knows. Ask the soi.\""],
+    house: ["\"You were on that stool {h},\" {n} says. \"{W}Behaved yourself, as far as this room's concerned. Where you went after is between you and the street.\"",
+      "{n} doesn't need the book. \"{H} in here, then out. {W}I can tell you what you drank; what you did after is the one thing a barman never knows.\"",
+      "\"Last night you were in here {h}, {W}and you left upright. That's a good night by this room's standards.\""],
+    punter: ["\"You? You were here {h}, mate. {W}After that I'd stopped counting — anybody's night, after that.\"",
+      "{n} squints. \"Here, {h}, then gone. {W}Don't ask me where. I was watching the football.\"",
+      "\"Last night you sat there and I sat here, {h} of it. {W}Then you went out and I didn't. That's the whole report.\""],
+  },
+  saw_not: {
+    floor: ["\"Last night? You not here, boss.\" {n} shrugs. \"I only see my own bar.\"",
+      "{n} shakes her head. \"Not here last night. Ask where you were, not me.\"",
+      "\"Here? No.\" {n} laughs. \"I would remember. I remember everybody who buy me a drink.\""],
+    house: ["\"You weren't in here last night,\" {n} says. \"Whatever happened, it happened in somebody else's room.\"",
+      "{n} shakes the head. \"Not this room. I only answer for the stools in front of me.\"",
+      "\"Last night you were somebody else's customer,\" {n} says. \"Ask them.\""],
+    punter: ["\"Weren't here, were you? Can't help you, mate.\"",
+      "{n} shrugs. \"Not on this rail. The soi's a small place — somebody saw you.\"",
+      "\"Last night I was here and you weren't,\" {n} says. \"That's all I know about it.\""],
+  },
   season: {
     floor: ["\"{m}?\" {n} looks at the empty stools. \"{How}. You see the rail, boss. Same same every year — then December, everybody come back.\"",
       "{n} counts the customers with her chin. \"{m}. {How}. Girls go home to see mama in {m}, because here is nothing.\"",
@@ -5736,6 +5782,54 @@ const _TOWN = {
       "\"Two cons on Beach Road and they've been the same two for twenty years.\" {n} lifts the bottle. \"฿{t} bottle, ฿{tf} shop. ฿{fr} palm, ฿{fri} curse. The police station takes a cut of getting it back — REPORT.\""],
   },
 };
+// ── the night ride's stops, by name ─────────────────────────────────────────
+const _RIDE_STOP_WORDS = [
+  ["disco", /thai disco|\bdisco\b/i], ["somtam", /som ?tam|papaya salad|the cart/i], ["wsclub", /\bclub\b|superclub|walking street/i],
+  ["karaoke", /karaoke|host bar|\bsing(ing)?\b/i], ["friendbar", /friend'?s? bar|your friend|her friend/i],
+  ["viewpoint", /viewpoint|view ?point|\bthe view\b|\bhill\b|pratumnak/i], ["ranlao", /ran ?lao|lao bar|whisky bar/i],
+  ["afterhours", /after[- ]?hours|nine in the morning|morning room/i], ["market", /\bmarket\b/i],
+];
+function _rideStopKey(topic) { const t = String(topic || ""); const hit = _RIDE_STOP_WORDS.find(([, re]) => re.test(t)); return hit ? hit[0] : null; }
+const _RIDE_STOP_MEMORY = {
+  disco: [n => `${n} laughs. "The Thai disco! You dance like a farang — everybody love it. Loud, na? My ears still ring."`,
+    n => `"Disco." ${n} grins. "You the only farang in there and you buy the table whisky. They still talk about you, I think."`],
+  somtam: [n => `"Som tam at two in the morning." ${n} rubs her stomach. "Best one in Pattaya, my friend's auntie make it. You cry from the chili and eat all of it."`,
+    n => `${n} smiles. "The som tam cart. You say too spicy, then you finish mine too. Hungry man."`],
+  wsclub: [n => `"The club?" ${n} rolls her eyes. "Too loud, too many people, drink too expensive. But you want to see, so I show. Now you know."`,
+    n => `${n} shrugs. "Walking Street club. I go there only with a farang — alone they don't let me in. You see how they look at me? Now you know that too."`],
+  karaoke: [n => `"Karaoke!" ${n} covers her face. "You sing SO bad. The host boys laugh behind the hand. I sing good — you say so, I remember."`,
+    n => `${n} grins. "The host bar. The boys are pretty, na? Pretty and expensive. Same same us, only the mirror is turned round."`],
+  friendbar: [n => `"My friend's bar." ${n} softens. "Small, no sign. She make the food herself. That is the real one — not here. You see the difference now."`,
+    n => `${n} nods. "My friend. Her bar is for us, not for farang. I take you because you don't act like farang there. Mostly."`],
+  viewpoint: [n => `"The view." ${n} goes quiet a second. "The whole town small small down there, and the sea. I go there alone sometimes. Now you know where I go."`,
+    n => `${n} smiles at nothing. "Pratumnak. All the lights, and so quiet. You not talk for ten minutes. First time I see you not talk."`],
+  ranlao: [n => `"The ran lao." ${n} laughs low. "Thai whisky, Thai music, nobody speak English and nobody care. You hold the glass wrong and three men fix it for you."`,
+    n => `${n} grins. "Ran lao. That is where the floor goes after the floor. You the first farang they see in a month. They were polite. Mostly."`],
+  afterhours: [n => `"After-hours." ${n} shrugs. "Nine in the morning and the curtains closed and the music still going. You see where the night goes to hide. Not pretty, na? But true."`,
+    n => `${n} looks at you sideways. "That room. Everybody there finished work and nobody want to sleep. You fit in better than I think."`],
+  market: [n => `"The night market." ${n} smiles. "Grilled squid, the {{phone}}-case man, the fried-insect lady who make you try one. You eat it! I take photo. I keep it."`,
+    n => `${n} laughs. "Market. You buy me the little elephant keyring. Cheap, ugly. I still have it on my key."`],
+};
+const _RIDE_STOP_NOT = n => `${n} shakes her head. "We no go there. Next time, maybe — if you sit on the bike right."`;
+
+// LAST NIGHT is a witness question (class N, 2026-10-07): the bar you sat longest in saw you
+// on its stool and saw who you left with; a bar you were not in says so; Tan knows how the
+// night ENDED, which nobody on a stool can.
+const _LASTNIGHT_TAN_HOW = (w) => {
+  const who = w.with && NPCS[w.with] ? NPCS[w.with].name : "somebody", from = w.bar && _barName(w.bar) ? " from " + _barName(w.bar) : "";
+  const where = w.endRoom && ROOMS[w.endRoom] ? ROOMS[w.endRoom].name : "the street";
+  switch (w.reason) {
+    case "barfine": return `You went home with ${who}${from}. The soi noticed; it notices everything that leaves on a bike.`;
+    case "sleep": return "You went home on your own feet. In this town that is a result.";
+    case "allnighter": return "You were still standing when the sky went grey over Sukhumvit. A big night. Your body will send the bill this evening.";
+    case "sunrise": return "You went to watch the sun come up behind the town. The men who do that on purpose are the ones who last here.";
+    case "blackout": case "collapse": case "dawn": return `You did not make it home. Somebody found you on ${where}. I did not drive you, and I wish I had.`;
+    case "robbed": case "bfscam": return "You left with somebody and came back lighter. I will not say who told me.";
+    case "hurt": case "roadhit": case "accident": case "hospital": return "The hospital had you. I know the nurse on that desk. You are lucky in the way that costs money.";
+    case "cham": case "bkkdinner": return "You were somewhere I did not drive you, and that is rare. I will leave it there.";
+    default: return "A night. You are standing here asking, so it ended well enough.";
+  }
+};
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   const t = String(topic).toLowerCase().trim();
@@ -5778,6 +5872,23 @@ function _townTalk(npc, topic) {
       low: "Low season — slow", deeplow: "The dead season, the bottom of the year" }[tier] || "Middling";
     // "September is The dead season" (Mick, round 57): {How} opens a sentence, {how} sits inside one
     return pick("season", { m: _SEASON_MONTHS[_seasonMonth()], how: how.charAt(0).toLowerCase() + how.slice(1), How: how });
+  }
+  // Bangkok: two hours up the motorway, where the floor goes in the wet and the money comes from
+  if (/\b(bangkok|krung ?thep|bkk|the capital|the big city)\b/.test(t))
+    return pick("bangkok", { d: G.bkk && G.bkk.went ? "You have seen the Sathorn side of it, with a driver. Most men only ever see the bus station."
+      : "The bus from the North station is fine. Or I drive you, when there is a reason." });
+  // LAST NIGHT — a witness question; your own bar's book answers it below when you own one
+  if (/\b(last night|yesterday|the night before|did you see me|how was i)\b/.test(t) && G.lastNightWas && G.lastNightWas.day === G.day - 1 &&
+      !(typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid"))) {
+    const w = G.lastNightWas;
+    if (npc === "tan") return pick("saw", { how: _LASTNIGHT_TAN_HOW(w) });
+    if (w.with === npc) { _say(`"Last night?" ${NPCS[npc].name} looks at you. "You were there, tilac. You know."`); return true; }
+    const here = w.bar && (w.bar === G.room || (NPCS[npc].room === w.bar) || (Array.isArray(NPCS[npc].bars) && NPCS[npc].bars.includes(w.bar)));
+    if (!here) return pick("saw_not", {});
+    const hrs = Math.max(1, Math.round((w.barTurns || 0) / 10));
+    const withHere = w.with && NPCS[w.with] && (typeof _npcRoom === "function" ? _npcRoom(w.with) === w.bar : NPCS[w.with].room === w.bar) ? NPCS[w.with].name : null;
+    const W = !withHere ? "" : reg === "floor" ? `You leave with ${withHere} — everybody see. ` : reg === "house" ? `You left with ${withHere}, and the room noticed. ` : `You left with ${withHere}; we all saw. `;
+    return pick("saw", { h: reg === "floor" ? `${hrs} hour` : `${hrs} hour${hrs > 1 ? "s" : ""}`, H: (reg === "floor" ? `${hrs} hour` : `${hrs} hour${hrs > 1 ? "s" : ""}`).replace(/^\d/, m => m), W });
   }
   // the arrangements you signed: your own staff pay them nightly and could not name them
   // ("not my department", Kwame, round 60)

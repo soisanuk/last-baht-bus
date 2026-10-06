@@ -2187,7 +2187,7 @@ function _endRide(seq, reason) {
   _addBond(id, (great ? 4 : 2)); // on top of the per-stop bumps
   // she remembers the ride tomorrow, and so does the "late" question (Kenji, round 47:
   // "you not friend yet" after three nights on her bike)
-  (G.rideLog = G.rideLog || {})[id] = { count: ((G.rideLog[id] || {}).count || 0) + 1, day: G.day, stops: seq.stops, great: !!great };
+  (G.rideLog = G.rideLog || {})[id] = { count: ((G.rideLog[id] || {}).count || 0) + 1, day: G.day, stops: seq.stops, great: !!great, seen: (seq.seen || []).slice() };   // the stops by name, so she can be asked about the disco (class N, 2026-10-07)
   G.lastRide = { id, day: G.day, stops: seq.stops };
   G.lastBfId = id;
   G.lastBfBase = 10 + Math.min(4, seq.stops); // a bigger night → a bigger memory at the payout
@@ -3652,6 +3652,13 @@ function _tanAbout(topic) {
   { const d0 = _pickDialogue("tan", t); if (d0 && d0.topic) return false; }
   // a person you do not find — one who finds you, by phone (Margarethe, round 47:
   // "Second Road (Central), every night" for a woman who is never on any street)
+  // Sao is a Bangkok visitor and nobody's business on Soi 6 — except Tan's, who knows her
+  // father's driver. Only once you have met her; before that she is nobody he will name.
+  if (id === "sao" && (G.phone.contacts.sao || (G.bkk && G.bkk.stage))) {
+    _say("“Sao.” Tan looks at the mirror, not at you. “Somebody's daughter, in Sathorn. The man who drives her is a man I know — Boy, a good driver, a careful one. That is the whole of what I will say about a family like that, my friend, and it is already more than I should.”" +
+      (G.bkk && G.bkk.went ? " A beat. “You ate at that table. Then you know more than I do.”" : ""));
+    return true;
+  }
   if (NPCS[id].offmap) {
     _say(`“${NPCS[id].name}.” Tan does not consider the mirror. “Not a person you find, my friend. A person who finds you — on the phone, when ${_pr(id).s} wants to. That is the whole of what I know, and it is more than most.”`);
     return true;

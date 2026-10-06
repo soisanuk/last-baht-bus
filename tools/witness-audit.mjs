@@ -35,6 +35,11 @@ const RX = new RegExp("\\b((the whole|half the|all the|the entire|every(?:one|bo
 const G_ = "general", C_ = "consequence", W_ = "witness";
 const CLASS = {
   // ── witness: people answer for it (tested) ─────────────────────────────────────────
+  "engine-parser.js:_TAN_TOWN|everybody knows": [G_, "a fact about the town, not about you: Pattaya knows everybody, Bangkok nobody (class-N pass, 2026-10-07)"],
+  "engine-parser.js:_TOWN|the soi knows": [G_, "idiom — the hostess's shrug at what happens outside her door; the witness of your night IS this line's speaker (LAST NIGHT, towntalk.test)"],
+  "engine-parser.js:_LASTNIGHT_TAN_HOW|the soi noticed": [W_, "Tan answering LAST NIGHT off G.lastNightWas — he is the mouth; towntalk.test"],
+  "engine-parser.js:_townTalk|everybody see": [W_, "her colleague answering LAST NIGHT off G.lastNightWas.with — she is the mouth; towntalk.test"],
+  "engine-parser.js:_townTalk|the room noticed": [W_, "the house answering LAST NIGHT off G.lastNightWas.with — the mouth itself; towntalk.test"],
   "engine-systems.js:_affairCaught|the floor sees": [C_, "G.affair.discovered/soured — the floor seeing it IS the discovery, and every later verb reads it (round 66)"],
   "world.js:_H_GREET|the whole street see": [G_, "a seat with a view: idiom about the stool, not a report on you (round 65)"],
   "engine-play.js:_REL_GREET|the whole bar clocks": [W_, "her colleagues answer about her as yours, and about a recent ride (_doTalkCore, the witness rule; round63.test)"],

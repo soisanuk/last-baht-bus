@@ -90,6 +90,14 @@ const FACTS = [
     asks: ["hair tonic", "fortune teller", "scams"], rooms: ["lucky_tiger", "queen_vic"], hour: 30 },
   // the four beds: `_HOTELS` rates the desk bills to the baht, and a town this
   // chatty had nothing to say about its own hotels (Clive, round 53)
+  // Bangkok and LAST NIGHT (class N, 2026-10-07 — the gap Desmond mapped in round 63): the
+  // capital is town furniture anybody answers; last night is a WITNESS question, so only the
+  // bar you sat in and Tan are asked — `pre` plants the snapshot the fresh game lacks
+  { fact: "bangkok", why: "two hours up the motorway, where the floor goes in the wet — _TOWN.bangkok / _TAN_TOWN.bangkok",
+    asks: ["bangkok", "the capital"], rooms: ["stinky_bar", "queen_vic", "lucky_tiger"], tan: ["bangkok"], hour: 30 },
+  { fact: "lastnight", why: "G.lastNightWas — the stool you sat longest on and who you left with, kept at _endNight",
+    asks: ["last night", "did you see me last night"], rooms: ["lucky_tiger"], roles: ["staff", "manager"], tan: ["last night"], hour: 30,
+    pre: function lastNight() { G.lastNightWas = { day: G.day - 1, reason: "barfine", bar: "lucky_tiger", barTurns: 25, with: "lek", endRoom: "lucky_tiger" }; } },
   // the season: BOOKS prints it as the headline every morning, and nobody on the floor
   // could talk about it (Hennie, round 55)
   { fact: "season", why: "_seasonTier / _SEASON_MONTHS — the month and the trade's state, computed",
@@ -180,12 +188,12 @@ function fresh(room, hour, day) {
 // exhaust its own pools, and the comparison is exact.
 const NONSENSE = ["quantumfrogsalad", "zephyrquokka", "brontovaccine", "gralthumpery"];
 const _oracles = new Map();
-function oracleFor(room, who, hour, day) {
-  const key = room + "|" + who.name;
+function oracleFor(room, who, hour, day, pre) {
+  const key = room + "|" + who.name + (pre ? "|" + pre.name : "");
   if (_oracles.has(key)) return _oracles.get(key);
   const lines = new Set();
   for (let i = 0; i < 80; i++)
-    for (const l of replyLines(ask(room, who, NONSENSE[i % NONSENSE.length], hour, day)))
+    for (const l of replyLines(ask(room, who, NONSENSE[i % NONSENSE.length], hour, day, pre)))
       lines.add(l.slice(0, 40));
   // the parser's own last resorts, which are not topic misses at all
   for (const s of ["I didn't understand", "That one didn't parse", "Nobody by that name",
@@ -242,8 +250,9 @@ function mouths(roles) {
   return picked;
 }
 
-function ask(room, who, topic, hour, day) {
+function ask(room, who, topic, hour, day, pre) {
   fresh(room, hour, day);
+  if (pre) pre();   // a fact that lives in state the fresh game lacks (last night's snapshot, a ride) — set after fresh, before the question
   if (who.id) (G.known = G.known || {})[who.id] = true;
   const name = who.name.toLowerCase();
   out.length = 0; doCommand("talk to " + name);
@@ -274,8 +283,8 @@ for (const f of FACTS) {
     if (!room) { skipped++; continue; }
     played++;
     const tan = { id: "tan", name: "Tan" };
-    const reply = ask(room, tan, venue, f.hour);
-    if (isMiss(reply, oracleFor(room, tan, f.hour)))
+    const reply = ask(room, tan, venue, f.hour, undefined, f.pre);
+    if (isMiss(reply, oracleFor(room, tan, f.hour, undefined, f.pre)))
       findings.push({ fact: f.fact, why: f.why, who: "Tan", role: "the fixer",
         room, cmd: `ask tan about ${venue.toLowerCase()}`, reply: reply.slice(0, 120) });
   }
@@ -301,11 +310,11 @@ for (const f of FACTS) {
       const key = f.fact + "|" + m.role;
       // EVERY phrasing must miss before it is a finding: a player types one of
       // them, and the fact is answerable if any of them lands.
-      const oracle = oracleFor(room, m, f.hour, f.day);
+      const oracle = oracleFor(room, m, f.hour, f.day, f.pre);
       let landed = null, last = "";
       for (const topic of f.asks) {
         played++;
-        const reply = ask(room, m, topic, f.hour, f.day);
+        const reply = ask(room, m, topic, f.hour, f.day, f.pre);
         last = reply;
         if (SHOW) console.log(`  [${f.fact}] ${room} / ${m.name} / ${topic} -> ` +
           (isMiss(reply, oracle) ? "MISS " : "ok   ") + reply.replace(/\n/g, " ").slice(0, 140));

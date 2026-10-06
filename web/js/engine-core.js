@@ -321,6 +321,7 @@ function newGame() {
     known: {},           // charId → true once their name has printed (ask-topic gate)
     namedBy: {},         // charId → {room, by, day} the first time the name printed — the frontier says who mentioned them, and where
     heardOf: {},         // roomId → true once a venue's display name printed before you stood in it (the frontier's "heard the name, never been")
+    lastNightWas: null,  // {day, reason, bar, barTurns, with, endRoom} — what the town could have seen of your night (LAST NIGHT asked of a witness)
     lastGate: null,      // {cmds, turn} — the chips the last modal offered, so its labels typed late are 'that moment has passed' (_staleModalAnswer)
     endWarn: null,       // {kind, day, turn} — a night-ending choice asked once, armed for the next command (_endConfirm)
     tanAsked: {},        // charId → day you asked Tan about them (the frontier retires the "ask Tan" note)
