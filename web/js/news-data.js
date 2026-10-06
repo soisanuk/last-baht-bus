@@ -13,7 +13,7 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
-    "t": "Pattaya Mayor welcomes UK ambassador for talks on tourist safety",
+    "t": "Pattaya mayor welcomes British ambassador for tourist safety talks",
     "s": "Pattaya Mail",
     "d": "05 Oct 2026"
   },
@@ -23,22 +23,22 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
-    "t": "Heavy rain warning for Pattaya, with risk of flash floods",
-    "s": "Thaiger",
+    "t": "Pattaya extends opening hours at Chaiyapruek 2 public park",
+    "s": "Pattaya Mail",
     "d": "05 Oct 2026"
   },
   {
-    "t": "Flood-hit motorists can replace lost plates without original registration book",
-    "s": "Pattaya Mail",
-    "d": "04 Oct 2026"
-  },
-  {
-    "t": "Heavy rain forecast across Thailand, flood risks remain in several provinces",
-    "s": "Pattaya Mail",
-    "d": "04 Oct 2026"
-  },
-  {
     "t": "Pattaya International Fireworks Festival returns on November 27–28",
+    "s": "Pattaya Mail",
+    "d": "05 Oct 2026"
+  },
+  {
+    "t": "Pattaya police shoot at fleeing car near school, seize gun and drugs",
+    "s": "Pattaya Mail",
+    "d": "05 Oct 2026"
+  },
+  {
+    "t": "Giant Thai flag to take to the skies over Pattaya in world record attempt",
     "s": "Pattaya Mail",
     "d": "05 Oct 2026"
   },
@@ -48,18 +48,18 @@ var NEWS_FEED = [
     "d": "04 Oct 2026"
   },
   {
-    "t": "USS George H.W. Bush anchors in Thailand for recreational visit after Middle East deployment",
-    "s": "The Jerusalem Post",
-    "d": "04 Oct 2026"
+    "t": "Carrier USS George H.W. Bush Makes Port Call in Thailand",
+    "s": "USNI News",
+    "d": "05 Oct 2026"
+  },
+  {
+    "t": "USS George H.W. Bush stops in Thailand after unannounced departure from Middle East",
+    "s": "stripes.com",
+    "d": "05 Oct 2026"
   },
   {
     "t": "US carrier George H.W. Bush visits Thailand after six-month Middle East deployment",
     "s": "Reuters",
-    "d": "04 Oct 2026"
-  },
-  {
-    "t": "USS George HW Bush stops in Thailand after leaving the Middle East",
-    "s": "Task & Purpose",
     "d": "04 Oct 2026"
   },
   {
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
-    "t": "Thailand braces for more rain as death toll from recent flooding hits 31",
-    "s": "ABC News - Breaking News, Latest News and Videos",
+    "t": "Man admits cannabis smuggling plan after teens arrested in Thailand",
+    "s": "BBC",
     "d": "05 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-05","USD":33.69,"AUD":23.45,"GBP":44.56,"EUR":37.75};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-06","temp":25,"humid":94,"code":51,"hi":31,"rain":96};
+var WX_NOW = {"date":"2026-10-06","temp":27,"humid":89,"code":80,"hi":30,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4137,"date":"2026-10-06","baht":65900};
+var GOLD = {"usd":4127,"date":"2026-10-06","baht":65750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":85785,"thb":2890943};
+var BTC = {"usd":85203,"thb":2869201};
