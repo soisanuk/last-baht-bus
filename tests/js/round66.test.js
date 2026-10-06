@@ -180,3 +180,36 @@ test("the chip bar offers no bus on the Soi 6 week and no shuttered bar", () => 
   assert.ok(!chips.includes("ride bus"));
   for (const v of ROOMS.soi6_mid.venues || []) if (_closedNow(v)) assert.ok(!chips.some(c => c === "enter " + (ROOMS[v].bar || ROOMS[v].name).toLowerCase()));
 });
+
+// ── Mario, 2026-10-07: any player choice that ends a night asks once ──────────
+test("SLEEP at any hour asks once, and the second SLEEP ends the night", () => {
+  G.room = _hotelRoomId(); G.nightTurn = 50; const day = G.day;
+  out = []; run("sleep"); assert.match(said(), /SLEEP again if you mean it/); assert.equal(G.day, day);
+  out = []; run("sleep"); assert.equal(G.day, day + 1, "the second SLEEP is the night");
+});
+test("SLEEP with a girl on your arm names the long-time close before it happens", () => {
+  G.room = _hotelRoomId(); G.nightTurn = 50; G.party = { ids: ["lek"], stops: 1, spent: 0, seen: {} };
+  out = []; run("sleep"); assert.match(said(), /Lek comes up with you, and that is the long-time close/);
+});
+test("LONG TIME asks twice: the first answer says it is the night, the second commits", () => {
+  G.room = "candy_bar"; G.nightTurn = 40; G.money = 20000; G.soc.drinks.nan = 8;
+  G.pendingBf = { id: "nan", st: 600, lt: 1000 }; const day = G.day;
+  out = []; run("long time"); assert.match(said(), /that is your night/); assert.ok(G.pendingBf && G.pendingBf.ltAsked, "still on the table"); assert.equal(G.day, day);
+  assert.ok(_chipSet().some(c => /long time — that is the night/.test(c.label || c.l || JSON.stringify(c))), JSON.stringify(_chipSet()));
+  const saved = _rand; try { _rand = () => 0.99; out = []; run("long time"); } finally { _rand = saved; }
+  assert.equal(G.pendingBf, null); assert.equal(G.day, day + 1, "the second LONG TIME is the night");
+});
+test("WATCH SUNRISE asks once; a WAIT into the dawn asks once", () => {
+  G.room = "beach_rd_c"; G.nightTurn = 112; const day = G.day;
+  out = []; run("watch sunrise"); assert.match(said(), /WATCH SUNRISE again/); assert.equal(G.day, day);
+  out = []; run("watch sunrise"); assert.equal(G.day, day + 1);
+  G.room = "stinky_bar"; G.nightTurn = 100; const d2 = G.day;
+  out = []; run("wait 60"); assert.match(said(), /WAIT again if you mean it/); assert.equal(G.day, d2);
+});
+test("the prompts that end a night say so", () => {
+  assert.match(String(_chamPrompt), /the night goes with her/);
+  assert.match(String(_bkkDinnerPrompt), /dinner is the whole night/);
+  assert.match(String(_maybeSelfBarfine), /the night is hers from here/);
+  assert.match(ENCOUNTERS.booking.hint, /that is the night/);
+  assert.match(ENCOUNTERS.freelancer.hint, /the night is hers/);
+});

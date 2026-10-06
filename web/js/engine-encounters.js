@@ -1086,7 +1086,7 @@ const _ENC = {
           "likes you. She tilts her head at a dancer working the pole like it owes her " +
           "money. “That one. I like her. You like her.” The smile widens. “Maybe… we " +
           "like her together?”", "win"],
-        ["(YES — and you cover the dancer's barfine. NO — no hard feelings.)", "dim"]);
+        ["(YES — you cover the dancer's barfine, and the three of you take the rest of the night. NO — no hard feelings.)", "dim"]);
       return;
     }
     _say("You hesitate a half-second too long. “Too slow, cutie.” She glides off " +

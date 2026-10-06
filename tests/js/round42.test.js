@@ -165,7 +165,7 @@ test("the streets know what time it is, in a pool (Jacko / Mario)", () => {
 
 test("WATCH SUNRISE is a real thing, it comes up behind the town, and it ENDS the night (Jacko; Mario 2026-09-07)", () => {
   G.room = "jomtien_beach"; G.nightTurn = SUNRISE_TURN + 2; const h = G.happy, d = G.day;
-  out = []; run("watch sunrise");
+  out = []; run("watch sunrise"); run("watch sunrise");
   assert.ok(_SUNRISE.some(l => text().includes(l.slice(0, 40))), "the sky");
   assert.ok(_SUNRISE_END.some(l => text().includes(l.slice(0, 40))), "and then you go home on it");
   assert.equal(G.happy, h + 5, "+2 for the sky, +3 for having waited for it");

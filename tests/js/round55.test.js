@@ -259,7 +259,7 @@ test("the shift calls are not a fixed rotation; the early call never draws your 
 
 test("SLEEP through the app's booking prompt sleeps; out-of-season rain says so; staff texts are their own", () => {
   G.hotel = "sabai"; G.room = _hotelRoomId(); G.nightTurn = 50; _startEnc("booking");
-  const d = G.day; out = []; doCommand("sleep");
+  const d = G.day; out = []; doCommand("sleep"); doCommand("sleep");
   assert.ok(G.day === d + 1 || G.pendingChoice, "the night ended (or the bed asked if you mean it)");
 });
 

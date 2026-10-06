@@ -26,7 +26,7 @@ function expat() {
 // because her clock moves on ARRIVAL (_arriveAt calls _bkkArcTick), not on the tick
 function sleepNight() {
   G.room = _hotelRoomId(); G.hunger = 10; G.thirst = 10; G.soc.drunk = 0; G.battery = 90;
-  const d = G.day; doCommand("sleep");
+  const d = G.day; doCommand("sleep"); doCommand("sleep");
   assert.equal(G.day, d + 1, "SLEEP in your room ends the night");
   G.nightTurn = 20; G.battery = 90; G.hunger = 10; G.thirst = 10;
   doCommand("out"); doCommand("travel home");

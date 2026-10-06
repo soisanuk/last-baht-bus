@@ -154,7 +154,8 @@ test("the rewind buffer outlives a reload, but never outlives the night", async 
   // did, and it passed the wrong way).
   await page.evaluate(() => { G.room = _hotelRoomId(); G.nightTurn = 50; });
   const dayBefore = await page.evaluate(() => G.day);
-  await send(page, "sleep");
+  await send(page, "sleep");                      // the bed asks once (Mario, 2026-10-07)…
+  await send(page, "sleep");                      // …and the second SLEEP is the night
   expect(await page.evaluate(() => G.day), "the night really ended").toBe(dayBefore + 1);
   await send(page, "undo");
   await expect(page.locator("#term-out")).toContainText(/A night ends where it ends/);

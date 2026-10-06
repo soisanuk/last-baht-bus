@@ -4862,6 +4862,19 @@ const _ALLNIGHTER_STREET = [
   "06:00 finds you on the pavement, which at this point counts as an achievement. The shutters are down the length of the street and the first monks are out. You share a taxi home with a man who says nothing and a woman who says everything.",
   "Dawn on the kerb. The neon has been off long enough that you'd forgotten the street had a colour. A songthaew with three sleeping girls in the back takes you most of the way for the day rate, and the driver does not ask.",
 ];
+// ANY PLAYER CHOICE THAT ENDS THE NIGHT ASKS ONCE (Mario, 2026-10-07 — Darren typed a
+// label and the night went with it; the early-sleep confirm was the only one). The first
+// time prints what goes with the night and arms G.endWarn for the NEXT command only; the
+// same choice typed again inside that window goes through. Returns true to proceed. The
+// modals (LONG TIME, the encounters' YES, Cream's GO, Sao's car) carry the warning in
+// their own prompt instead — a modal is already a question — and LONG TIME asks twice.
+function _endConfirm(kind, text) {
+  const w = G.endWarn;
+  if (w && w.kind === kind && w.day === G.day && G.turns - w.turn <= 1) { G.endWarn = null; return true; }
+  G.endWarn = { kind, day: G.day, turn: G.turns };
+  _say(text, "dim");
+  return false;
+}
 function _endNight(reason) {
   // Idempotency: a mid-command multi-tick (WAIT through dawn) or a collapse on the
   // last night could re-enter here after the week's already ended — don't run the

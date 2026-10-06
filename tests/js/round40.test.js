@@ -77,10 +77,10 @@ const stub = (fn) => { const saved = _rand; _rand = () => 0.5; try { fn(); } fin
 
 test("the presence line is about TONIGHT — a night slept through in the hotel prints nothing (Keith)", () => {
   ownsBar(); G.soc.barTurns = { lucky_tiger: 40 };   // a customer's stool: the owner's own rail says nothing since round 55
-  stub(() => { G.room = "hotel_room"; run("sleep"); });
+  stub(() => { G.room = "hotel_room"; run("sleep"); run("sleep"); });
   assert.match(text(), /same stool/);
   out = []; G.nightTurn = 0; G.room = "hotel_room";
-  stub(() => run("sleep"));
+  stub(() => { run("sleep"); run("sleep"); });
   assert.doesNotMatch(text(), /same stool/, "the count was never cleared");
 });
 
@@ -96,7 +96,7 @@ test("the expat wire is not 'up ฿19,275 on the night', and 'already carrying' 
 test("WORK declared and slept on settles as Bert's night (Keith)", () => {
   ownsBar(); stub(() => run("work")); assert.equal(G.bar.workedLast, true);
   G.room = "hotel_room"; out = [];
-  stub(() => run("sleep"));
+  stub(() => { run("sleep"); run("sleep"); });
   assert.match(text(), /Bert ran it/); assert.match(text(), /put your name on the shift/);
   assert.equal(G.bar.lastLines.declaredOnly, true);
   // …and a stood shift still counts

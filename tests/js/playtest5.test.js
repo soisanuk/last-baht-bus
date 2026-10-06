@@ -172,7 +172,7 @@ test("the bus: a stop typed without the 'soi', and a bare stop name straight off
 
 test("SLEEP tapped on waking asks once; SLEEP again (or a sleep after a sleep) goes through", () => {
   G.room = "hotel_room"; G.nightTurn = 50;
-  doCommand("sleep");                    // ends the night → wake, G.wakeTurn set
+  doCommand("sleep"); doCommand("sleep");                    // ends the night → wake, G.wakeTurn set
   const d = G.day;
   out = [];
   doCommand("look"); doCommand("sleep");  // wake + one command, then sleep: guard fires

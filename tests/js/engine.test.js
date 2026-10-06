@@ -1419,7 +1419,7 @@ test("diminishing returns: each barfine buys less สนุก, cools a notch a 
 test("diminishing returns: a night's sleep cools it, a new vacation clears it", () => {
   state().flags.act1Done = true; state().flags.hasWallet = true;
   state().room = "hotel_room"; state().jaded = 3;
-  run("sleep");                  // ends the night → day roll
+  run("sleep", "sleep");                  // ends the night → day roll
   assert.equal(state().jaded, 2, "one notch cooler after a day");
   state().jaded = 5;
   _newVacation();
@@ -2707,7 +2707,7 @@ test("a resident who SLEEPs at his hotel wakes home with his money and a full ch
   state().room = "hotel_room";
   state().money = 900;
   state().battery = 40;
-  run("sleep");
+  run("sleep", "sleep");
   assert.equal(state().day, 3);
   assert.equal(state().room, "hotel_room", "made it home");
   assert.equal(state().battery, 100, "charged overnight");
@@ -3892,7 +3892,7 @@ test("barfine needs a room, then favor — then ends the night grandly", () => {
   run("barfine fon");
   assert.ok(state().pendingBf, "the negotiation opens — the mamasan does the numbers");
   assert.match(lastOut(), /SHORT TIME .* LONG TIME/);
-  run("long time");
+  run("long time", "long time");
   assert.equal(state().day, 3, "night over");
   assert.equal(state().room, "hotel_room");
   assert.ok(state().happy >= h + 9, `happy ${state().happy}`);
@@ -4814,7 +4814,7 @@ test("after midnight the beer-bar FINE is waived — her money is not (favor sti
   assert.equal(_barfinePrice("beer", "lek"), 0, "the BAR's fee is nothing");
   assert.equal(state().pendingBf.lt, LADY_LT, "…and the quote is HER money");
   assert.match(lastOut(), /HER money|No bar fine past midnight/i, "the prompt says which is which");
-  run("long time");
+  run("long time", "long time");
   assert.equal(state().money, 5000 - LADY_LT, "her money changed hands");
   assert.equal(state().day, 3, "and the night still ends grandly");
 });
@@ -4876,7 +4876,7 @@ test("long time can hand you the whole person: less สนุก, deeper bond", 
   state().soc.drinks.lek = 6;
   const bond = state().soc.drinks.lek;
   run("barfine lek");
-  run("long time");
+  run("long time", "long time");
   assert.equal(state().day, 3, "the night still ends");
   assert.match(lastOut(), /five-year|really know her/i, "the reality prose, not the fantasy");
   // +6 for the reality beat, less the −1 nightly bond decay = net +5 (a plain
@@ -5024,7 +5024,7 @@ test("The Regular: bond tiers derive from cumulative favor, and cool a notch a n
   // a night's sleep cools every bond by one — tend it or lose it
   state().flags.act1Done = true; state().flags.hasWallet = true;
   state().room = "hotel_room"; state().soc.drinks[id] = 10;
-  run("sleep");
+  run("sleep", "sleep");
   assert.equal(state().soc.drinks[id], 9, "bonds cool a notch a night");
 });
 
@@ -5578,14 +5578,14 @@ test("SLEEP: turn in from the room, or climb up from the pub below, to end the n
   assert.match(lastOut(), /SLEEP/i, "the bed advertises how to use it");
   // from the pub under your room, SLEEP walks you up and ends the night
   state().room = "queen_vic";
-  out = []; run("sleep");
+  out = []; run("sleep", "sleep");
   assert.match(lastOut(), /climb the stairs|fall into bed/i, "you're walked up, not scolded");
   assert.equal(state().room, "qv_room", "and land in your room");
   assert.equal(state().day, 2, "the night is over");
   // and directly from the room
   state().wakeTurn = null;   // turning in at the end of a day, not the instant
                              // you woke — the guard is for the double-tap only
-  out = []; run("sleep");
+  out = []; run("sleep", "sleep");
   assert.equal(state().day, 3, "SLEEP in the room ends the night too");
   // from a bar with no bed above, a clear pointer instead
   state().room = "pink_lotus"; out = [];
@@ -6269,7 +6269,7 @@ test("sleep ends the night on your terms; day seven ends the vacation", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().room = "hotel_room";
-  run("sleep");
+  run("sleep", "sleep");
   assert.equal(state().day, 3);
   state().day = 7;
   state().room = "hotel_room";
@@ -6280,7 +6280,7 @@ test("sleep ends the night on your terms; day seven ends the vacation", () => {
   // whole night (round 24). This test is about turning in at the END of a day.
   state().wakeTurn = null;
   state().nightTurn = 100;   // turning in late: at 18:00 the last night asks first (round 60)
-  run("sleep");
+  run("sleep", "sleep");
   assert.equal(state().pendingChoice, "vacation_end");
   run("look"); // everything is gated on the answer — and the re-prompt states both options in full
   assert.match(lastOut(), /NEW VACATION — fly back next month/);
@@ -6302,11 +6302,11 @@ test("MOVE TO PATTAYA: expat mode, endless days, savings wired over", () => {
   state().room = "hotel_room";
   state().money = 1000;
   state().nightTurn = 100;   // the last night asks at 18:00 (round 60)
-  run("sleep", "move to pattaya");
+  run("sleep", "sleep", "move to pattaya");
   assert.equal(state().stage, "expat");
   assert.equal(state().money, 21000);
   assert.match(lastOut(), /EXPAT MODE/);
-  run("sleep");
+  run("sleep", "sleep");
   assert.equal(state().day, 9, "no seven-day wall anymore");
   assert.equal(state().pendingChoice, null);
 });
@@ -7812,7 +7812,7 @@ test("CHECKOUT: swap hotels at the start of an evening; the old key stops workin
   // sleep works at the new place and you wake there
   state().room = "qv_room";
   const day0 = state().day;
-  run("sleep");
+  run("sleep", "sleep");
   assert.equal(state().day, day0 + 1);
   assert.equal(state().room, "qv_room", "woke at the Queen Vic");
 
@@ -7854,14 +7854,14 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   state().hotel = "metropole";
   state().room = "metropole_room";
   state().money = 5000;
-  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
+  state().wakeTurn = null; run("sleep", "sleep");   // advancing to a rent morning
   assert.equal(state().money, 3700, "the folio slides under the door");
   assert.equal(state().hotel, "metropole");
 
   // ฿500 in pocket: can't make the Metropole, can make the Sabai — the ladder
   state().money = 500;
   state().room = "metropole_room";
-  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
+  state().wakeTurn = null; run("sleep", "sleep");   // advancing to a rent morning
   assert.equal(state().hotel, "sabai", "stepped down toward the Sabai Palms");
   assert.equal(state().room, "hotel_room");
   assert.equal(state().money, 100, "and paid the ฿400 there");
@@ -7870,11 +7870,11 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   state().money = 0;
   state().happy = 10; // off the floor so the pinch is measurable
   const h0 = state().happy;
-  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
+  state().wakeTurn = null; run("sleep", "sleep");   // advancing to a rent morning
   assert.equal(state().hotelDebt, 400, "on the book");
   assert.equal(state().happy, h0 - 1, "the clerk's kindness weighs");
   state().hotelDebt = 1900;
-  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
+  state().wakeTurn = null; run("sleep", "sleep");   // advancing to a rent morning
   assert.equal(state().hotelDebt, 2000, "the book caps — no spiral");
 
   // the town catches you: Bert settles a heavy book, once
@@ -7893,7 +7893,7 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   state().hotelDebt = 600;
   state().money = 5000;
   state().room = "hotel_room";
-  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
+  state().wakeTurn = null; run("sleep", "sleep");   // advancing to a rent morning
   assert.equal(state().hotelDebt, 0, "debt cleared on the way past the desk");
   assert.equal(state().money, 5000 - 600 - 400);
 
@@ -7902,7 +7902,7 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   state().money = 5000;
   state().soc.drunk = 3;
   state().room = "hotel_room";
-  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
+  state().wakeTurn = null; run("sleep", "sleep");   // advancing to a rent morning
   assert.equal(state().thirst, 40 + 2 * 6, "one size off the morning after");
 
   // Queen Vic balcony: WATCH SOI pays once a night

@@ -1490,6 +1490,16 @@ function _partyNightEnd(reason) {
 // re-derive their whole prompt, and the test beside this measures the
 // INFORMATION a redraw carries — money, commands, names — rather than its lines,
 // because a line-by-line comparison called five correct redraws broken.
+// LONG TIME is the night (Mario, 2026-10-07 — Darren typed the label and the night went
+// with it): the first answer says so and the modal waits; the second commits. Drawn again
+// by the resume redraw while G.pendingBf.ltAsked holds.
+function _bfLtWarn() {
+  const { lt, id, herMoney } = G.pendingBf;
+  const n = id && NPCS[id] ? NPCS[id].name : "her";
+  const waived = id && typeof _bondTier === "function" && _bondTier(id) >= 3 && _careOk(id);
+  const price = waived ? "no fine for you" : lt > 0 ? `฿${lt}${herMoney ? ", her money" : ""}` : "no fine past midnight";
+  _say(`(Long time — ${price}, and that is your night: the rest of it is ${n}'s, and the next thing is the morning. LONG TIME again to confirm · SHORT TIME keeps the night going · NO.)`, "dim");
+}
 function _bfPrompt(fresh) {
   const { st, lt, id } = G.pendingBf;
   if (!fresh && id && NPCS[id])
@@ -2349,7 +2359,7 @@ function _maybeSelfBarfine(id) {
       (_mama ? `calls something to the mamasan in fast Thai. ` : `writes something in the chit book in fast Thai script. `) +
       `Then, to you: “I pay my own barfine tonight. You don't tell anybody, na.” ` +
       (_staff.length ? "The other girls have gone very quiet. " : "") + "This does not happen.", "win"],
-    ["(YES / NO — she is not going to ask twice.)", "dim"]);
+    ["(YES — and the night is hers from here · NO — she is not going to ask twice.)", "dim"]);
 }
 
 // ── Massage (three of the town's nine kinds) ─────────────────────────────────
@@ -4827,7 +4837,7 @@ function _chamContact() {
 }
 function _chamPrompt() {
   _say("She is already gathering her {{phone}} and her little bag, not looking at you, the way " +
-    "a person avoids looking at a thing already decided. (GO with her · NOT TONIGHT)", "dim");
+    "a person avoids looking at a thing already decided. (GO with her — and the night goes with her · NOT TONIGHT)", "dim");
 }
 function _chamDecline() {
   G.pendingChoice = null;
@@ -4975,7 +4985,7 @@ function _bkkDinnerPrompt() {
   _say(late
     ? "Your phone: “Car's outside AGAIN 😅 Boy says he waited last night too. Grey Alphard. Dad eats late, come anyway 🚗” — and outside, a grey van idles under the porch light with the patience of something that is paid by the day."
     : "Your phone: “Car's outside. Grey Alphard, driver's called Boy. Dad eats late, don't worry about the time 🚗” — and outside, sure enough, a grey van idles under the porch light with the patience of something that is paid by the day.", "alert");
-  _say("(GO to Bangkok · DECLINE and stay on the soi)", "dim");
+  _say("(GO to Bangkok — dinner is the whole night · DECLINE and stay on the soi)", "dim");
 }
 function _bkkDecline() {
   G.pendingChoice = null;
@@ -6368,6 +6378,8 @@ function _doWatchSunrise() {
   if (indoors && !balcony) { _say(_pickVary(_SUNRISE_INDOORS, "sunriseIn"), "dim"); return; }
   // 05:00. Before that the sky is not doing anything yet and he says so.
   if (G.nightTurn < SUNRISE_TURN) { _say(_pickVary(_SUNRISE_SOON, "sunriseSoon"), "dim"); return; }
+  // the sky is the end of the night — asked once (Mario, 2026-10-07)
+  if (G.sunriseDay !== G.day && !_endConfirm("sunrise", "The sky is going grey behind the town, over Sukhumvit. Watch it, and the night ends with it — there is nothing after the sunrise. (WATCH SUNRISE again to stay for it.)")) return;
   _say(_pickVary(_SUNRISE, "sunrise"), "win");
   if (G.sunriseDay === G.day) return;               // one sky a night
   G.sunriseDay = G.day;

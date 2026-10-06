@@ -132,7 +132,7 @@ test("a double-tapped SLEEP cannot eat a whole night", () => {
   // seven-night daily to one keystroke, and night one trains the double-tap
   // because the first SLEEP is swallowed by a modal.
   G.room = "hotel_room"; G.nightTurn = 85; G.wakeTurn = G.turns;
-  doCommand("sleep");
+  doCommand("sleep"); doCommand("sleep");
   const day = G.day;
   G.wakeTurn = G.turns;                    // freshly woken, as you are
   out = []; doCommand("sleep");

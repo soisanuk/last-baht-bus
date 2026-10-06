@@ -9412,6 +9412,9 @@ function _doWait(arg) {
   }
   if (target === null) { _say("WAIT <turns>, or WAIT UNTIL <hour> (say, MIDNIGHT)."); return; }
   if (target <= G.nightTurn) { _waitRefused = true; _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
+  // a wait that runs into the dawn ends the night inside it — asked once (Mario, 2026-10-07)
+  const _dawnStr = _clockStr(NIGHT_TURNS);
+  if (target >= NIGHT_TURNS && !_endConfirm("wait", `That wait runs to ${_dawnStr} — the night ends inside it, wherever you are standing. (WAIT again if you mean it.)`)) { _waitRefused = true; return; }
   const startDay = G.day, inbox0 = G.phone.inbox.length, g0 = G, room0 = G.room;
   const body0 = { t: G.thirst, h: G.hunger };
   // leave one turn for the tick every command pays at the bottom of doCommand
@@ -11167,7 +11170,7 @@ function _chipSet() {
   if (G.pendingBf) {
     const waived = G.pendingBf.id && typeof _bondTier === "function" && _bondTier(G.pendingBf.id) >= 3;
     add("short time", waived ? "short time (no fine)" : `short time ฿${G.pendingBf.st}`);
-    add("long time", waived ? "long time (no fine)" : `long time ฿${G.pendingBf.lt}`);
+    add("long time", G.pendingBf.ltAsked ? "long time — that is the night" : waived ? "long time (no fine)" : `long time ฿${G.pendingBf.lt}`);
     add("take her out", waived ? "take her out (no fine)"
       : `take her out ฿${G.pendingBf.party != null ? G.pendingBf.party : G.pendingBf.lt}`);
     add("no", "no, thanks");
@@ -11843,7 +11846,7 @@ function _renderResume() {
   if (G.pendingChoice === "sellbar") { _sellBarPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
-  if (G.pendingBf) { _bfPrompt(); return; }
+  if (G.pendingBf) { _bfPrompt(); if (G.pendingBf.ltAsked) _bfLtWarn(); return; }
   if (G.pendingSoapy) { _soapyPrompt(); return; }
   if (G.pendingFare) { _farePrompt(); return; }
 }
@@ -12292,7 +12295,12 @@ function doCommand(input) {
     // the party barfine — bfparty's honest mirror: take her (or them) OUT
     if (/^(take|party)/.test(lower) || /\b(her|them) out\b/.test(lower)) { _bfResolve("party"); _tick(); return; }
     if (/^(st\b|short)/.test(lower)) { _bfResolve("st"); _tick(); return; }
-    if (/^(lt\b|long|overnight|all night)/.test(lower)) { _bfResolve("lt"); _tick(); return; }
+    if (/^(lt\b|long|overnight|all night)/.test(lower)) {
+      // LONG TIME is the night: the first answer says so, the second commits (Mario, 2026-10-07)
+      const _withParty = !!(G.party && G.party.ids && G.party.ids.length);   // the ledger refuses an LT mid-party itself — no confirm on a refusal
+      if (!_withParty && !G.pendingBf.ltAsked) { G.pendingBf.ltAsked = true; _bfLtWarn(); return; }
+      _bfResolve("lt"); _tick(); return;
+    }
     if (/^(no\b|cancel|never|forget|back out|walk)/.test(lower)) {
       G.pendingBf = null;
       _say("You ease back off the ledge. The mamasan closes the ledger without " +
@@ -12826,34 +12834,26 @@ function doCommand(input) {
     case "checkout": case "check-out": _doCheckout(); break;
     case "sleep": case "bed": case "crash":
       if (!_flag("act1Done")) _say("Sleep where? The beach already had you once tonight. Get the wallet, get the room.");
-      // a SLEEP tapped right after waking burns the whole night with no warning
-      // (mobile playtest 2026-08-22) — once per evening, the bed asks if you mean it
-      else if (G.room === _hotelRoomId() && G.nightTurn < 10 && !(G.sleepWarnDay === G.day && G.turns - (G.sleepWarnTurn || 0) <= 1) &&
-               ((G.wakeTurn != null && G.turns - G.wakeTurn <= 1) ||
-                // the LAST night of a week is always asked: a sleep at 18:00 ended the holiday
-                // with the whole of its final night unspent (Fintan, round 60)
-                (G.stage !== "expat" && G.day >= 7 && !G.visitUntil))) {
-        // The _prevCmd test that used to sit here ("don't warn if he just typed
-        // sleep") was both redundant and harmful: sleepWarnDay already lets a
-        // genuine confirmation through, and the SLEEP THAT ENDED THE PREVIOUS
-        // NIGHT counted as the previous command — so the new night's sleep was
-        // read as confirming a warning nobody had given, and a double-tap ate a
-        // whole night. A persona lost a seventh of a seven-night daily to one
-        // keystroke, and night one TRAINS the double-tap, because the first
-        // SLEEP is swallowed by the app-girl modal (round 24, Jojo).
-        G.sleepWarnDay = G.day; G.sleepWarnTurn = G.turns;   // armed for the NEXT command only — five inputs later it still ended the week (Darren, round 66)
-        _say(G.stage !== "expat" && G.day >= 7
-          ? `It's ${_clockStr()} on the last night of the trip. Sleep now and the week ends here, with its final night unspent. (SLEEP again if you mean it, or go OUT.)`
-          : `It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it. ` +
-          "(SLEEP again if you mean it, or go OUT.)", "dim");
-        return;
-      }
-      else if (G.room === _hotelRoomId()) { _endNight("sleep"); return; }
-      // one flight below your own bed (the pub under the Queen Vic, a lobby):
-      // turning in should just walk you up, not scold you for being close.
-      else if (_room().exits && _room().exits.up === _hotelRoomId()) {
-        _say("You climb the stairs to your room and fall into bed.");
-        G.room = _hotelRoomId();
+      // The bed ALWAYS asks once (Mario, 2026-10-07: any player choice that ends a night
+      // warns first). It used to ask only on a sleep tapped right after waking (mobile
+      // playtest 2026-08-22) and on the last night of a week (Fintan, round 60) — those two
+      // keep their own sentences. The _prevCmd test that once sat here was harmful: the
+      // SLEEP THAT ENDED THE PREVIOUS NIGHT counted as the previous command, and a
+      // double-tap ate a whole night (round 24, Jojo). _endConfirm arms for the NEXT
+      // command only — five inputs later it still ended the week (Darren, round 66).
+      else if (G.room === _hotelRoomId() || (_room().exits && _room().exits.up === _hotelRoomId())) {
+        const _upstairs = G.room !== _hotelRoomId();
+        const _last = G.stage !== "expat" && G.day >= 7 && !G.visitUntil;
+        const _who = G.party && G.party.ids && G.party.ids.length && typeof _partyLabel === "function" ? _partyLabel() : null;
+        const _warn = _last
+          ? `It's ${_clockStr()} on the last night of the trip. Sleep now and the week ends here, with its final night unspent.`
+          : G.nightTurn < 10 ? `It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it.`
+          : _who ? `It's ${_clockStr()}. Sleep now and the night ends here — ${_who} comes up with you, and that is the long-time close.`
+          : `It's ${_clockStr()}. Sleep now and the night ends here; whatever is still open on the soi stays open without you.`;
+        if (!_endConfirm("sleep", _warn + " (SLEEP again if you mean it, or go OUT.)")) return;
+        // one flight below your own bed (the pub under the Queen Vic, a lobby):
+        // turning in should just walk you up, not scold you for being close.
+        if (_upstairs) { _say("You climb the stairs to your room and fall into bed."); G.room = _hotelRoomId(); }
         _endNight("sleep"); return;
       }
       else _say(`Your bed's up in your room at the ${_HOTELS[G.hotel].name} — get there and SLEEP.`);

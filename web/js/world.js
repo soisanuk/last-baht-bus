@@ -13677,7 +13677,7 @@ const ENCOUNTERS = {
         "barfine 💋”. It is late enough that this is either the best idea of the week or " +
         "the worst, and the photos argue hard for the first.",
     ],
-    hint: "(YES, book her — she'll be a while — or NO and turn in.)",
+    hint: "(YES, book her — she'll be a while, and that is the night · NO and turn in.)",
   },
   clubpickup: { solo: true,
     // The back-loaded transaction (from a canon essay): you pull a girl on a
