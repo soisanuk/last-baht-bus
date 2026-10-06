@@ -580,7 +580,12 @@ function _naturalHelp(lower) {
 // both ask this first.
 const _STALE_ANSWER_RE = /^(\d+|short ?time|long ?time|take her out|calm down|square up|flip( \d+)*|yes|no|nope|yeah|yep|stay|ride on|no thanks)$/;
 function _staleModalAnswer(lower) {
-  if (!_STALE_ANSWER_RE.test(lower)) return false;
+  // …and the labels the LAST gate offered, whatever they were: the checkout's hotel names,
+  // the Rabbit's CARRY IT, the terminal's ls, the lock-in's JOIN IN (modal-audit, 2026-10-07).
+  // G.lastGate is written at the top of doCommand while a gate owns the input.
+  const lg = G.lastGate;
+  const late = lg && G.turns - lg.turn <= 3 && lg.cmds.includes(lower.trim());
+  if (!late && !_STALE_ANSWER_RE.test(lower)) return false;
   _say("(That moment has passed — nobody is asking you that now.)", "dim");
   return true;
 }
@@ -11920,6 +11925,11 @@ function doCommand(input) {
   // — arms the wrong-number text and then falls through to the ordinary
   // brush-off. The cover IS the answer.
   if (typeof _isProbe === "function" && typeof input === "string" && _isProbe(input)) _probeSeen();
+  // while a gate owns the input, remember what it offered — its labels typed the turn after
+  // it closes are "that moment has passed", never a parse failure (_staleModalAnswer)
+  if (G.pendingChoice || G.game || G.pendingEnc || G.pendingBf || G.pendingSoapy || G.pendingFare) {
+    try { G.lastGate = { cmds: _chipSet().map(c => String(c.cmd).trim().toLowerCase()), turn: G.turns }; } catch (e) { /* a chip set that cannot render must not block the command */ }
+  }
   let raw = _norm(input);
   // The chip bar's `info…` fanout prefills a SENTINEL ("__info ") so engineComplete
   // can answer with a menu of the readout verbs instead of a prefix completion —
@@ -11990,6 +12000,13 @@ function doCommand(input) {
     // "what?" at a tout or a drunk is not a reaction — the Brit wandered off on it, the
     // noodle girl took it as NO (Darren, round 66). The prompt is put again, no turn.
     if (G.pendingEnc && /^(what|wha|huh|eh|pardon|sorry|say again|hm+)\??$/.test(lower)) { _renderEncounter(); return; }
+    // …and neither is a QUESTION: "what happens if i say yes?" said yes to every tout in town,
+    // because the reaction regexes read the word (modal-audit, 2026-10-07). The price question
+    // stays an answer — TAO RAI at the tonic man and the fortune-teller is the honest close.
+    if (G.pendingEnc && !/tao ?rai|how much|price/.test(lower) &&
+        /^(what|why|will|would|does|do i|is (it|she|he|that|this)|can i|could i|should i|who|where|when|how (do|does|will|would|long|far))\b/.test(lower)) {
+      _say("(A question isn't a reaction. The moment is still waiting on one.)", "dim"); _renderEncounter(); return;
+    }
   }
   // the taxi ride owns input until you've said who you are
   if (G.pendingChoice === "intro") { _introAnswer(lower); return; }

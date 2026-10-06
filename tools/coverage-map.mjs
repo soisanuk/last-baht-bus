@@ -45,6 +45,10 @@ const INSTRUMENTS = [
   // forks identically on an answer, and is never silent or charged on junk — S wherever a
   // modal, game or encounter can be live, and G's baseline (the junk sweep) for the same
   { name: "saveload.test (G round-trip)", cls: ["S"] },
+  // the modal audit (2026-10-07): every gate the SOURCE knows is armed through its real setter and
+  // typed at — a question-shaped non-answer, the read-only verbs, its own labels the turn after it
+  // closed, a reload mid-modal, every chip it offers — judged against the live _HUH pool
+  { name: "modal-audit", cls: ["G", "S"], systems: SYS.filter(s => s.modals.length || s.encounters.length || ["games", "bus", "barfine", "act1", "massage", "vacation", "hotels", "heist", "cream", "sao", "affair", "procurement", "barchain", "barbooks", "cons", "police", "saleng"].includes(s.id)).map(s => s.id) },
   // the reachability harness (2026-09-27): one walk, every quest's `at`, TRAVEL HOME from every
   // crash spot broke on a low battery on the real path, every listed door opens and OUT works
   // the arcs are REACHED by scripted real-path tests: the bar chain and everything behind it

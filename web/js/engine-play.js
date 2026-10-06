@@ -2017,6 +2017,10 @@ function _gameInput(input) {
   // A QUESTION IS NOT A MOVE: "what if I flip 7?" flipped the 7 (Marta, round 63). Thinking
   // out loud is free; the move is the plain command. Not the quiz or the terminal, where a
   // question can be the answer.
+  if (G.game.type === "cli" && (/^(what|wha|huh|eh|pardon|sorry|say again|hm+)\??$/.test(_gi) || /^(what if|what happens|should i|can i|could i|is it|which)\b/.test(_gi))) {
+    _say("(The terminal doesn't do questions. HELP lists its commands; EXIT walks away.)", "dim");   // a shrug typed at the prompt is not a minute of the trace (modal-audit, 2026-10-07)
+    return false;
+  }
   if (!/^(quiz|cli)$/.test(G.game.type) && (/\?\s*$/.test(_gi) || /^(what if|what happens|should i|can i|could i|is it|which)\b/.test(_gi))) {
     const opts = typeof _gameVerbs === "function" ? _gameVerbs().slice(0, 6).map(v => v.toUpperCase()) : [];
     _say("Thinking out loud is free — the table waits for the move itself." + (opts.length ? ` (${opts.join(" · ")})` : ""), "dim");
