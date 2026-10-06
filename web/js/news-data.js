@@ -10,7 +10,7 @@ var NEWS_FEED = [
   {
     "t": "Pattaya vendor reports gunfire after sexual advance rejected",
     "s": "Thaiger",
-    "d": "05 Oct 2026"
+    "d": "06 Oct 2026"
   },
   {
     "t": "Pattaya mayor welcomes British ambassador for tourist safety talks",
@@ -23,12 +23,12 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
-    "t": "Pattaya extends opening hours at Chaiyapruek 2 public park",
+    "t": "Prachin Buri officials investigate oil contamination near flooded factories",
     "s": "Pattaya Mail",
     "d": "05 Oct 2026"
   },
   {
-    "t": "Pattaya International Fireworks Festival returns on November 27–28",
+    "t": "Pattaya extends opening hours at Chaiyapruek 2 public park",
     "s": "Pattaya Mail",
     "d": "05 Oct 2026"
   },
@@ -38,7 +38,7 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
-    "t": "Giant Thai flag to take to the skies over Pattaya in world record attempt",
+    "t": "Pattaya International Fireworks Festival returns on November 27–28",
     "s": "Pattaya Mail",
     "d": "05 Oct 2026"
   },
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "04 Oct 2026"
   },
   {
+    "t": "Cardiff man admits cannabis smuggling plan after teenagers arrested in Thailand",
+    "s": "BBC",
+    "d": "05 Oct 2026"
+  },
+  {
+    "t": "A Second U.S. Navy Aircraft Carrier Making A Port Call In Thailand",
+    "s": "Forbes",
+    "d": "05 Oct 2026"
+  },
+  {
     "t": "Carrier USS George H.W. Bush Makes Port Call in Thailand",
     "s": "USNI News",
     "d": "05 Oct 2026"
   },
   {
     "t": "USS George H.W. Bush stops in Thailand after unannounced departure from Middle East",
-    "s": "stripes.com",
+    "s": "Stars and Stripes",
     "d": "05 Oct 2026"
-  },
-  {
-    "t": "US carrier George H.W. Bush visits Thailand after six-month Middle East deployment",
-    "s": "Reuters",
-    "d": "04 Oct 2026"
   },
   {
     "t": "Death toll from Thailand floods rises to 31, interior ministry says",
     "s": "Reuters",
     "d": "05 Oct 2026"
-  },
-  {
-    "t": "Man admits cannabis smuggling plan after teens arrested in Thailand",
-    "s": "BBC",
-    "d": "05 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-10-05","USD":33.69,"AUD":23.45,"GBP":44.56,"EUR":37.75};
+var FX_RATES = {"date":"2026-10-06","USD":33.58,"AUD":23.44,"GBP":44.58,"EUR":37.84};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-06","temp":27,"humid":89,"code":80,"hi":30,"rain":100};
+var WX_NOW = {"date":"2026-10-07","temp":24,"humid":96,"code":55,"hi":31,"rain":67};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4127,"date":"2026-10-06","baht":65750};
+var GOLD = {"usd":4172,"date":"2026-10-06","baht":66250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":85203,"thb":2869201};
+var BTC = {"usd":85716,"thb":2880407};
