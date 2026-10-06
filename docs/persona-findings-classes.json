@@ -490,7 +490,7 @@
 "every item on the info… menu runs its verb — the chip's sentinel is stripped": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "no instrument checks chip-sentinel stripping",
 "between": "",
 "sev": "ordinary",
@@ -508,7 +508,7 @@
 "the bare sentinel means 'I want the readouts', so it answers rather than dying silently": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -517,7 +517,7 @@
 "a haggled peddler redraws the HAGGLED prices on a restore, not the opening pitch": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "no instrument replays a save/restore cycle against live encounter state",
 "between": "",
 "sev": "ordinary",
@@ -526,7 +526,7 @@
 "the price the redraw quotes is the price the till charges": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "redraw price vs till price",
 "sev": "ordinary",
@@ -535,7 +535,7 @@
 "no armed encounter is left with a prompt a reload cannot redraw": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -562,7 +562,7 @@
 "the vacation-end redraw carries both options and the week's score, not two bare CAPS": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -571,7 +571,7 @@
 "the live vacation-end prompt and its redraw are the same text (one source, no drift)": {
 "cls": "S",
 "cls2": "H",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "live prompt vs redraw",
 "sev": "ordinary",
@@ -580,7 +580,7 @@
 "the checkout list keeps its prices on a redraw — three hotel names alone can't be chosen between": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -589,7 +589,7 @@
 "a resumed bar game names the pot, so QUIT has a visible price": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -841,7 +841,7 @@
 "the dog survives the Act One reset, rides Tan's sedan out loud, and is a topic everyone has": {
 "cls": "S",
 "cls2": "B",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -931,7 +931,7 @@
 "she remembers you across vacations — once, with a head start, not the old ledger": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -1003,7 +1003,7 @@
 "REMATCH / DOUBLE / BET are the gambler's verbs; LOOK/TIME mid-game are free; a stray SHOT is pointed": {
 "cls": "G",
 "cls2": "P",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -1057,7 +1057,7 @@
 "the daily survives RESTART; LOOK is the full description; leads stay in the Soi 6 pocket": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -1066,7 +1066,7 @@
 "a restore redraw must not move the dice: redraw, then reload the blob, and the roll is the same": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "severe",
@@ -1075,7 +1075,7 @@
 "WAIT stops when the world moves you; a pending question is redrawn on resume": {
 "cls": "G",
 "cls2": "S",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -1111,7 +1111,7 @@
 "encounter chips come from the prompt's CAPS; the police wait on a non-answer; soft pitches pass a real command through": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "",
 "between": "",
 "sev": "severe",
@@ -1201,7 +1201,7 @@
 "a non-move in killer pool / Connect 4 / the quiz costs no turn": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -1444,7 +1444,7 @@
 "a game move typed after the game is over isn't offered as a topic": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -2182,7 +2182,7 @@
 "สนุก survives a save/restore — สบายสบาย is a milestone, not a ceiling": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "no instrument replays save/restore against a core happiness stat for exact preservation",
 "between": "",
 "sev": "severe",
@@ -2371,7 +2371,7 @@
 "a choice the game just printed outranks a global verb": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "no instrument checks precedence between a just-printed modal choice and the global verb table",
 "between": "printed modal choice vs global verb",
 "sev": "ordinary",
@@ -2380,7 +2380,7 @@
 "…but a real verb still wins when no printed option matches it": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "no instrument checks the fallback path when no printed option matches a real verb",
 "between": "",
 "sev": "ordinary",
@@ -3163,7 +3163,7 @@
 "an out-of-range digit says why, and is never stored (round 33)": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "no instrument checks an out-of-range modal answer is rejected with explanation rather than silently stored",
 "between": "",
 "sev": "ordinary",
@@ -3442,7 +3442,7 @@
 "the padded door opens for a man it has locked in before (Gerry/Mario)": {
 "cls": "S",
 "cls2": "A",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "no instrument replays a save/reload against a lock-in door's per-visit state",
 "between": "",
 "sev": "ordinary",
@@ -3496,7 +3496,7 @@
 "the permanent lock-in record survives a save (Gerry/Mario)": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "no instrument replays save/reload against a permanent lock-in record",
 "between": "",
 "sev": "ordinary",
@@ -4729,7 +4729,7 @@
 "the morning summary never diffs against a previous vacation's snapshot (Frank)": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "a cross-vacation snapshot-diff check",
 "between": "",
 "sev": "ordinary",
@@ -6340,7 +6340,7 @@
 "every modal redraw carries the money, the commands and the names its live prompt did": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "no instrument replays a modal's live prompt fields against its restore/redraw",
 "between": "live prompt vs resumed/redrawn prompt",
 "sev": "severe",
@@ -6484,7 +6484,7 @@
 "no modal answers to a bare letter or a prefix": {
 "cls": "G",
 "cls2": "",
-"instrument": "none",
+"instrument": "modal-audit",
 "why_none": "",
 "between": "",
 "sev": "ordinary",
@@ -6898,7 +6898,7 @@
 "an old save standing in orchid_club wakes in nottys_place": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "no instrument checks a stale save's room id against removed/renamed rooms",
 "between": "",
 "sev": "severe",
@@ -7024,7 +7024,7 @@
 "the first morning of a new trip reports the night that was played": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "new trip's morning vs the prior trip's",
 "sev": "ordinary",
@@ -7177,7 +7177,7 @@
 "a new trip does not reprint the last trip's morning": {
 "cls": "S",
 "cls2": "",
-"instrument": "none",
+"instrument": "saveload.test",
 "why_none": "",
 "between": "new trip's morning vs prior trip's",
 "sev": "ordinary",

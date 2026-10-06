@@ -818,7 +818,7 @@
    "cls": "S",
    "sev": "high",
    "system": "procurement",
-   "instrument": "",
+   "instrument": "soak",
    "between": ""
   },
   {
@@ -833,7 +833,7 @@
    "cls": "S",
    "sev": "high",
    "system": "affair",
-   "instrument": "",
+   "instrument": "soak",
    "between": ""
   },
   {
@@ -848,7 +848,7 @@
    "cls": "S",
    "sev": "med",
    "system": "clock",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -1163,7 +1163,7 @@
    "cls": "G",
    "sev": "med",
    "system": "hotels",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -1193,7 +1193,7 @@
    "cls": "S",
    "sev": "low",
    "system": "vacation",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -2033,7 +2033,7 @@
    "cls": "G",
    "sev": "low",
    "system": "sao",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -2108,7 +2108,7 @@
    "cls": "S",
    "sev": "low",
    "system": "identity",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -2288,7 +2288,7 @@
    "cls": "S",
    "sev": "low",
    "system": "money",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -2618,7 +2618,7 @@
    "cls": "G",
    "sev": "low",
    "system": "procurement",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -2633,7 +2633,7 @@
    "cls": "G",
    "sev": "low",
    "system": "encounters",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -2723,7 +2723,7 @@
    "cls": "G",
    "sev": "low",
    "system": "encounters",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -2753,7 +2753,7 @@
    "cls": "S",
    "sev": "med",
    "system": "barchain",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -2783,7 +2783,7 @@
    "cls": "G",
    "sev": "low",
    "system": "encounters",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -2858,7 +2858,7 @@
    "cls": "G",
    "sev": "med",
    "system": "conversation",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -3548,7 +3548,7 @@
    "cls": "G",
    "sev": "med",
    "system": "conversation",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -3818,7 +3818,7 @@
    "cls": "G",
    "sev": "low",
    "system": "bus",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -3878,7 +3878,7 @@
    "cls": "G",
    "sev": "low",
    "system": "bus",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -4943,7 +4943,7 @@
    "cls": "G",
    "sev": "high",
    "system": "police",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -4958,7 +4958,7 @@
    "cls": "G",
    "sev": "med",
    "system": "barfine",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -4988,7 +4988,7 @@
    "cls": "S",
    "sev": "med",
    "system": "hotels",
-   "instrument": "",
+   "instrument": "none",
    "between": "vacation"
   },
   {
@@ -5003,7 +5003,7 @@
    "cls": "G",
    "sev": "low",
    "system": "saveload",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -5213,7 +5213,7 @@
    "cls": "S",
    "sev": "med",
    "system": "bus",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -5228,7 +5228,7 @@
    "cls": "S",
    "sev": "med",
    "system": "police",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -5243,7 +5243,7 @@
    "cls": "G",
    "sev": "low",
    "system": "police",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -5258,7 +5258,7 @@
    "cls": "G",
    "sev": "low",
    "system": "cons",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -5273,7 +5273,7 @@
    "cls": "G",
    "sev": "med",
    "system": "saveload",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -5348,7 +5348,7 @@
    "cls": "S",
    "sev": "low",
    "system": "identity",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -5393,7 +5393,7 @@
    "cls": "S",
    "sev": "low",
    "system": "games",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -5633,7 +5633,7 @@
    "cls": "G",
    "sev": "low",
    "system": "conversation",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -6083,7 +6083,7 @@
    "cls": "S",
    "sev": "high",
    "system": "saveload",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": "clock"
   },
   {
@@ -6113,7 +6113,7 @@
    "cls": "G",
    "sev": "low",
    "system": "conversation",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -6128,7 +6128,7 @@
    "cls": "S",
    "sev": "med",
    "system": "weather",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -6143,7 +6143,7 @@
    "cls": "G",
    "sev": "med",
    "system": "games",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": "conversation"
   },
   {
@@ -6308,7 +6308,7 @@
    "cls": "S",
    "sev": "low",
    "system": "saveload",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -6323,7 +6323,7 @@
    "cls": "S",
    "sev": "low",
    "system": "games",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -7043,7 +7043,7 @@
    "cls": "S",
    "sev": "low",
    "system": "cons",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -7058,7 +7058,7 @@
    "cls": "G",
    "sev": "med",
    "system": "encounters",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -7268,7 +7268,7 @@
    "cls": "G",
    "sev": "high",
    "system": "vacation",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -7283,7 +7283,7 @@
    "cls": "G",
    "sev": "low",
    "system": "vacation",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -7703,7 +7703,7 @@
    "cls": "G",
    "sev": "med",
    "system": "vacation",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -8333,7 +8333,7 @@
    "cls": "G",
    "sev": "low",
    "system": "affair",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -8873,7 +8873,7 @@
    "cls": "G",
    "sev": "low",
    "system": "hotel",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -9263,7 +9263,7 @@
    "cls": "G",
    "sev": "high",
    "system": "filler",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -10838,7 +10838,7 @@
    "cls": "S",
    "sev": "high",
    "system": "procurement",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -10853,7 +10853,7 @@
    "cls": "S",
    "sev": "med",
    "system": "barbooks",
-   "instrument": "",
+   "instrument": "saveload.test",
    "between": ""
   },
   {
@@ -10868,7 +10868,7 @@
    "cls": "G",
    "sev": "med",
    "system": "barbooks",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -10883,7 +10883,7 @@
    "cls": "G",
    "sev": "med",
    "system": "procurement",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -10988,7 +10988,7 @@
    "cls": "G",
    "sev": "low",
    "system": "games",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -11303,7 +11303,7 @@
    "cls": "S",
    "sev": "med",
    "system": "dialogue",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -11528,7 +11528,7 @@
    "cls": "S",
    "sev": "med",
    "system": "companion",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -12308,7 +12308,7 @@
    "cls": "S",
    "sev": "low",
    "system": "conversation",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -12608,7 +12608,7 @@
    "cls": "G",
    "sev": "severe",
    "system": "vacation",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -12623,7 +12623,7 @@
    "cls": "G",
    "sev": "medium",
    "system": "conversation",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -12638,7 +12638,7 @@
    "cls": "G",
    "sev": "medium",
    "system": "encounters",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -12653,7 +12653,7 @@
    "cls": "G",
    "sev": "medium",
    "system": "body",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -12668,7 +12668,7 @@
    "cls": "G",
    "sev": "low",
    "system": "games",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -12683,7 +12683,7 @@
    "cls": "G",
    "sev": "medium",
    "system": "conversation",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": "the modal vs the turn after it"
   },
   {
@@ -12698,7 +12698,7 @@
    "cls": "G",
    "sev": "low",
    "system": "saleng",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -12713,7 +12713,7 @@
    "cls": "G",
    "sev": "low",
    "system": "games",
-   "instrument": "",
+   "instrument": "modal-audit",
    "between": ""
   },
   {
@@ -12743,7 +12743,7 @@
    "cls": "G",
    "sev": "low",
    "system": "presentation",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   },
   {
@@ -12758,7 +12758,7 @@
    "cls": "G",
    "sev": "medium",
    "system": "barfine",
-   "instrument": "",
+   "instrument": "none",
    "between": ""
   }
  ]
