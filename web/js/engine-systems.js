@@ -728,9 +728,11 @@ function _doBarfine(arg) {
   if (typeof _atOwnBar === "function" && _atOwnBar()) {
     // your girl is not a transaction, and not "the long way round, same as any
     // regular" either (Rolf, round 55)
-    const _tgt = typeof _findNpc === "function" && arg ? _findNpc(String(arg)) : null;
+    const _tgt = typeof _findNpc === "function" && arg ? _findNpc(String(arg).replace(/\b(out|with|her|tonight)\b/g, " ").trim()) : null;   // TAKE MANOW OUT reached here as "manow out" and found nobody (round 66)
     if (typeof _affairLive === "function" && _affairLive() && (!arg || _tgt === G.affair.id)) {
-      _say(_fmt("{n} looks at the book, then at you. \"Barfine me?\" She shakes her head slowly. \"I am the only girl in this bar you cannot buy, and the only one who go home with you.\" (FOLLOW {N} after close.)", { n: _affairHer(), N: _affairHer().toUpperCase() }));
+      _say(_fmt(/\bout\b/.test(String(arg || "")) && !/^\s*out\s*$/.test(String(arg || ""))
+        ? "\"Out?\" {n} looks at the room she is working, then at you. \"I work here, boss. Who stand here if I go out? Cake? Bert?\" She puts a water on your stool. \"After close, I come. That is our out.\" (FOLLOW {N} after close.)"
+        : "{n} looks at the book, then at you. \"Barfine me?\" She shakes her head slowly. \"I am the only girl in this bar you cannot buy, and the only one who go home with you.\" (FOLLOW {N} after close.)", { n: _affairHer(), N: _affairHer().toUpperCase() }));
       return;
     }
     _say(_pickVary(_OWN_BARFINE_NO, "ownbf"), "alert");
@@ -1241,6 +1243,9 @@ function _partyArrive(to) {
   if (p.seen[to]) return;
   p.seen[to] = true;
   const who = _partyLabel();
+  // the affair girl works this floor, and the woman on your arm is not her (Rolf, round 66)
+  if (typeof _affairLive === "function" && _affairLive() && typeof _atOwnBar === "function" && _atOwnBar() &&
+      !p.ids.includes(G.affair.id) && _npcsHere().includes(G.affair.id) && G.affair.caughtDay !== G.day) _affairCaught("bar");
   const club = r.barType === "club" || r.barType === "gogo";
   const pair = p.ids.length > 1;
   const names = { who, a: NPCS[p.ids[0]].name, b: pair ? NPCS[p.ids[1]].name : "" };
@@ -1705,6 +1710,7 @@ function _bfResolve(kind) {
       // Beach Road bar that IS the short walk (Lionel, round 36)
       const motel = _room().region === "Beach Road"
         ? "short walk up the unlit alley off Soi 7 to Somchith's, the motel with no sign, where a ceiling fan is"
+        : _room().barType === "soi6" ? "short climb up the stairs at the back of the bar to the room above it, where a ceiling fan is"   // Soi 6 is upstairs (Darren, round 66)
         : "short walk to a short-time hotel with a ceiling fan";
       _say((price ? `฿${price} to the ledger, and a` : "A") +
         ` ${motel} doing its slow count over the ` +
@@ -7146,7 +7152,8 @@ function _workTaleTell(b, how) {
   // with Bert, and the morning told him about both (Kwame, round 60): the late half of
   // the tale waits on his having been on the rail for it
   const _late = s => _isCloseLine(s) || /\b(gone two|last bus|small hours|cash out|cash-out|the close|closing up)\b/i.test(String(s));
-  const _leftEarly = how === "morning" && (b.railTurn || 0) < LAST_BUS_TURN;
+  const _closeAt = (typeof _closesMidnight === "function" && _closesMidnight(b.room || (G.bar && G.bar.room))) ? 60 : 100;   // a beer bar closes near dawn: a man who left at two was not there for it (Rolf, round 66)
+  const _leftEarly = how === "morning" && (b.railTurn || 0) < Math.min(_closeAt, LAST_BUS_TURN + 20);
   let seen = t.seen;
   if (_leftEarly && _late(seen)) { const early = _WORK_SHIFT.filter(l => !_late(l)); if (early.length) seen = early[_hh("early:" + G.day, 79) % early.length]; }
   _say(seen);
@@ -7825,9 +7832,35 @@ function _affairHome() {
     `${n} nods at the door. "You go first. Everybody see us go together, tomorrow everybody talk. I come after Cake count."`,
   ], "affairhome"));
 }
+// SHE SEES IT (Rolf, round 66): a girl from another bar slept in your bed, and the affair
+// girl "came in with the float counted and was asleep before you had said anything";
+// a girl from another bar sat on your own rail and nobody on it saw her. Discovery by
+// the soi's gossip takes days (_affairNight); discovery by her own eyes is now.
+function _affairCaught(where) {
+  const a = G.affair; if (!a || a.ended) return;
+  const her = _affairHer(), who = typeof _partyLabel === "function" ? _partyLabel() : "the girl";
+  if (a.slipDay == null) a.slipDay = G.day;
+  a.homeDay = null;   // she is not coming
+  const first = !a.discovered;
+  a.discovered = true; a.soured = true; a.strain += first ? 8 : 3; a.caughtDay = G.day;
+  if (where === "bed") _say(_fmt(first
+    ? "{her} let herself in some time after five, the way she does. The light was off. There were two pairs of shoes by the door and she knew the second pair; the key went on the kettle and the door closed very quietly behind her, which is the loudest thing a door can do. She will be on the floor tonight. That is all she will be."
+    : "{her} came as far as the door and saw the shoes. The key is on the kettle again. She did not come in.", { her }), "alert");
+  else _say(_fmt(first
+    ? "{her} sees {who} on your arm before you have reached the rail, and does the one thing nobody can argue with: nothing. She serves. She counts. When {who} laughs she wipes a clean glass. The floor sees her see it, and the floor goes quiet in the way a floor does when the owner has made a mistake it will remember."
+    : "{her} sees {who} and goes back to the glasses. The floor does not need telling twice.", { her, who }), "alert");
+  if (first) _say("(Whatever the two of you salvage from here, one thing is gone for good: the version where you leave this town together.)", "dim");
+}
 function _affairMorning() {
   const a = G.affair;
   if (!a || a.ended || a.homeDay !== G.day - 1) return;
+  if (a.soured) {   // the tender line printed in the same frame as the folded apron (Rolf, round 66)
+    _say(_pickVary([
+      `${_affairHer()} did not come. The note on the kettle is in Cake's handwriting: "ice 4." Nothing under it.`,
+      `${_affairHer()} came, and slept on the far side of the bed with her back to you, and was gone before the fan clicked off.`,
+    ], "affairmorningsour"), "dim");
+    return;
+  }
   _say(_pickVary([
     `${_affairHer()} came in with the float counted and her shoes in her hand, and was asleep before you had said anything. She is gone again when you wake, a note on the kettle: "ice man 4 o'clock. you go."`,
     `She let herself in some time after five. You remember the fan, and her telling you who was drunk and who was only pretending, and then nothing. The pillow still smells of the bar.`,
@@ -7955,6 +7988,7 @@ function _affairCrisisAnswer(k) {
 // threshold-crossing lines, once each — the meters made audible without a HUD
 function _affairWarn() {
   const a = G.affair; if (!a || a.ended) return;
+  a.warned = a.warned || {};   // a hand-built affair (a seed, a test) has no book yet
   if (a.strain >= 9 && !a.warned.s9) { a.warned.s9 = true;
     _say(_fmt("({her} has started sleeping at her cousin's two nights a week. Nobody has said the word for what is happening, which is how it happens.)", { her: _affairHer() }), "alert");
   } else if (a.strain >= 6 && !a.warned.s6) { a.warned.s6 = true;
@@ -8564,6 +8598,7 @@ function _barNight(settleDay) {
   }
   const underwater = b.cash < 0;
   b.lastOwnDrinks = b.ownDrinks || 0; b.ownDrinks = 0;   // your own girls' drinks, on your chit, into the till — BOOKS names them
+  b.lastGuestDrinks = b.guestDrinks || 0; b.guestDrinks = 0;   // …and the drinks of a girl you brought in from another bar (Rolf, round 66)
   b.workedLast = false;   // consumed: tomorrow starts unworked
   // The till already moved by the event money during the night. Categorise it by
   // SIGN, not lump it into the take: a bell-millionaire (+) is income and rides
@@ -9093,6 +9128,7 @@ function _doBooks() {
         who: ll.declaredOnly ? "declared, not stood" : ll.worked ? "you stood it" : "Bert ran it" }), "dim");
     if (ll.notes && ll.notes.length) _say(`(The night's own money: ${ll.notes.join(" · ")}.)`, "dim");
     if (b.lastOwnDrinks) _say(`(Your own girls' drinks, on your chit and into the till: ฿${b.lastOwnDrinks}.)`, "dim");
+    if (b.lastGuestDrinks) _say(`(The drinks of the girl you brought in from another bar, on your chit and into the till: ฿${b.lastGuestDrinks}.)`, "dim");
   }
   _say(_fmt("Nights stood: {w} of {n}. A stood night takes about a third more over the rail and saves Bert's ฿{m}.", { w: b.worked || 0, n: b.nights || 0, m: BAR_MGR_NIGHT }), "dim");
   if (b.drawn) _say(_fmt("Taken out by you, all told: ฿{d}.", { d: b.drawn }), "dim");

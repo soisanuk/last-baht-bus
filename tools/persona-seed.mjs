@@ -49,7 +49,9 @@ function expatOwner({ season0, day, money, bank, bonds }) {
   for (const id of Object.keys(bonds)) G.phone.contacts[id] = true;
   G.money = money; G.bank = bank; G.room = _hotelRoomId(); G.nightTurn = 0; G.battery = 100;
   G.hunger = 10; G.thirst = 10; G.soc.drunk = 0; G.hurt = 0; G.pendingChoice = null;
+  _setFlag("roomSafeOpened"); G.act1SafeDue = false;   // the vacation's stash fired on a day-14 expat (Rolf, round 66)
   quiet(); G.encDone = {};   // the town comes back on for the persona
+  _nightSnapshot();   // the first morning's ledger measures from here, not from nothing ("up ฿8,350 · met 2")
   return serializeGame();
 }
 

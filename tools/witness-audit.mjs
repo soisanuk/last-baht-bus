@@ -35,6 +35,7 @@ const RX = new RegExp("\\b((the whole|half the|all the|the entire|every(?:one|bo
 const G_ = "general", C_ = "consequence", W_ = "witness";
 const CLASS = {
   // ── witness: people answer for it (tested) ─────────────────────────────────────────
+  "engine-systems.js:_affairCaught|the floor sees": [C_, "G.affair.discovered/soured — the floor seeing it IS the discovery, and every later verb reads it (round 66)"],
   "world.js:_H_GREET|the whole street see": [G_, "a seat with a view: idiom about the stool, not a report on you (round 65)"],
   "engine-play.js:_REL_GREET|the whole bar clocks": [W_, "her colleagues answer about her as yours, and about a recent ride (_doTalkCore, the witness rule; round63.test)"],
   "engine-play.js:_REL_GREET|spoken for": [W_, "the same: 'Your girl. Everybody know, tilac.'"],

@@ -574,6 +574,16 @@ function _naturalHelp(lower) {
   }
   return false;
 }
+// A modal's answer typed after the modal closed is "that moment has passed", never a parse
+// failure — "1", "short time", "calm down" all fell through (Darren, round 66). Two sites
+// print the parse miss (the verb switch's default and the venue-name fallback below it);
+// both ask this first.
+const _STALE_ANSWER_RE = /^(\d+|short ?time|long ?time|take her out|calm down|square up|flip( \d+)*|yes|no|nope|yeah|yep|stay|ride on|no thanks)$/;
+function _staleModalAnswer(lower) {
+  if (!_STALE_ANSWER_RE.test(lower)) return false;
+  _say("(That moment has passed — nobody is asking you that now.)", "dim");
+  return true;
+}
 const _HUH = [
   "I didn't understand that. (HELP lists commands.)",
   "That one didn't parse. (HELP lists commands.)",
@@ -1712,6 +1722,20 @@ function _doTake(arg) {
   // it goes straight down, like a bought one, and cuts thirst).
   if (/water|\bnam\b/.test(arg) && _isHotelRoom(G.room)) { _takeFridgeWater(); return; }
   if (_isDarkHere()) { _say("You grope around in the dark and find nothing but regret. (LIGHT ON)"); return; }
+  { // TAKE <her> FOR DINNER / TO THE BEACH / SOMEWHERE — the night out is the verb the game has
+    const _m = String(arg).match(/^(\w+)\s+(?:out\s+)?(?:for|to)\s+(.+)$/i);
+    const _who = _m && _findNpc(_m[1]);
+    if (_who && NPC_ROLES[_who] && _npcsHere().includes(_who)) {
+      const n = NPCS[_who].name;
+      if (typeof _affairLive === "function" && _affairLive() && _who === G.affair.id)
+        _say(`"${_m[2]}?" ${n} laughs, not unkindly. "Boss, I work here. Who stand here if I go? After close, I come. That is our dinner." (FOLLOW ${n.toUpperCase()} after close.)`);
+      else if (((G.party && G.party.ids) || []).includes(_who))
+        _say(`${n} is already on your arm — lead, and she comes. ${/beach|sea|sand/i.test(_m[2]) ? "Beach Road runs the length of the sand." : /dinner|eat|food|restaurant/i.test(_m[2]) ? "The stalls and the 7-Eleven feed two as easily as one (BUY <food> FOR " + n.toUpperCase() + ")." : "Walk, and the town comes with you."}`);
+      else
+        _say(`"${_m[2]}?" ${n} smiles at the idea. "First you take me OUT, tilac — then I go where you go." (TAKE ${n.toUpperCase()} OUT)`);
+      return;
+    }
+  }
   // "take 300 from till" at your OWN bar is DRAW — "fixtures, not luggage" was said
   // to the man whose name is on the paperwork (Keith, round 40)
   if (typeof _atOwnBar === "function" && _atOwnBar() && /\b(money|cash|till|baht|wages|drawer|\d+)\b/.test(arg)) { _doDraw(arg); return; }
@@ -2143,6 +2167,9 @@ function _doExamine(arg) {
     if (a.length >= 4 && [r.bar, r.name].some(nm => nm && norm(nm) === a))
       return _describeRoom(true, true);
   }
+  { const _w = String(arg || "").toLowerCase().replace(/^(the|a|an)\s+/, "").trim();
+    const _kid = _w && Object.keys(NPCS).find(id => String(NPCS[id].name || "").toLowerCase() === _w && _met(id));
+    if (_kid && typeof _elsewhereLine === "function") { const l = _elsewhereLine(_w); if (l) { _say(l); return; } } }   // "examine may" after the shutters (Gwen, round 66)
   _say(_pickVary(_NO_SUCH_THING, "xnothing"));
 }
 
@@ -4418,9 +4445,15 @@ function _doTalkCore(arg, topic) {
           `"${n} never leave that stool." ${NPCS[npc].name} says it fondly. "Never miss a chit either. You want to know the bar, you ask the book."`];
         const _aff = typeof _affairLive === "function" && _affairLive() && mate === G.affair.id;
         const line =
+          _aff && G.affair.soured ? (me === "mamasan"
+              ? `"${n}?" Mama ${NPCS[npc].name} lowers her voice this time. "Your girl, boss. Still. But she is not happy, and the floor know why, and I am not going to say it for you."`
+              : me === "cashier" ? `"${n}." ${NPCS[npc].name} does not open the book. "She is on your page and she is not happy there. I count money, boss, not that."`
+              : `"${n}?" ${NPCS[npc].name} does not grin this time. "Boss. Everybody know that too. She not happy. You know why, so I don't say."`) :
           _aff ? (me === "mamasan" ? `"${n}?" Mama ${NPCS[npc].name} does not lower her voice. "Your girl. Everybody know, boss. ${G.affair && (G.affair.crisSeen || []).includes("rota") ? "The rota is yours now — you made it yours." : "I take her off the late rota myself."}" A look. "She is better than you. Be careful with her."`
                : me === "cashier" ? `"${n}." ${NPCS[npc].name} closes the book. "She is not on my page any more, boss. She is on yours. I don't count that one."`
-               : `"${n}?" ${NPCS[npc].name} glances at the rail, then at you, and grins. "Boss. Everybody know. You think we blind? She happy. Don't make her not."`) :
+               : (G.affair && G.affair.soured
+                 ? `"${n}." ${NPCS[npc].name} looks at the rail instead of you. "Boss. She not happy. You know why. I don't say it for you."`
+                 : `"${n}?" ${NPCS[npc].name} glances at the rail, then at you, and grins. "Boss. Everybody know. You think we blind? She happy. Don't make her not."`)) :
           them === "mamasan" ? _mamaRev[_rvPick(_mamaRev.length)] :
           them === "manager" ? [
             `"The boss? Pays on time, doesn't touch the girls, and the till adds up. That is the whole review, and it is a good one."`,
@@ -4487,9 +4520,11 @@ function _doTalkCore(arg, topic) {
       story.family = _H_FAMILY[fi].replace(/\{from\}/g, from); story.plan = _H_PLAN[pi]; }
     // through the floor's own wrappers and the town book — the old three fixed sentences were the
     // same "like a postcode… very far" from eight women (Gerry, round 64)
-    const line = /home|village/.test(t) ? _H_HOME_WRAP[_townPick(npc, "hhomewrap", _H_HOME_WRAP.length, _hh(npc, 43) % _H_HOME_WRAP.length)](from)
-      : /family/.test(t) ? _H_FAMILY_WRAP[_townPick(npc, "hfamwrap", _H_FAMILY_WRAP.length, _hh(npc, 31) % _H_FAMILY_WRAP.length)](story.family)
-      : _H_PLAN_WRAP[_townPick(npc, "hplanwrap", _H_PLAN_WRAP.length, _hh(npc, 37) % _H_PLAN_WRAP.length)](story.plan);
+    // a girl written in good English keeps it on question two (Nira, Pim — Gwen, round 66)
+    const _en = !!NPCS[npc].fluent, HW = _en ? _H_HOME_WRAP_EN : _H_HOME_WRAP, FW = _en ? _H_FAMILY_WRAP_EN : _H_FAMILY_WRAP, PW = _en ? _H_PLAN_WRAP_EN : _H_PLAN_WRAP;
+    const line = /home|village/.test(t) ? HW[_townPick(npc, _en ? "hhomewrapen" : "hhomewrap", HW.length, _hh(npc, 43) % HW.length)](from)
+      : /family/.test(t) ? FW[_townPick(npc, _en ? "hfamwrapen" : "hfamwrap", FW.length, _hh(npc, 31) % FW.length)](story.family)
+      : PW[_townPick(npc, _en ? "hplanwrapen" : "hplanwrap", PW.length, _hh(npc, 37) % PW.length)](story.plan);
     const _sk = npc + ":" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan");
     const _told = (G.soc.storyTold = G.soc.storyTold || {});
     if (_told[_sk] && !_retell) _say(`${NPCS[npc].name}: ` + (/home|village/.test(t) ? `"${from}. You know already."` : /family/.test(t) ? `"Same family, tilac. Nothing change since you ask."` : `"Same dream. Still a dream."`));   // …and ASK … AGAIN retells (Gerry, round 64)   // told in full every time, six times (Piet, round 62)
@@ -4500,21 +4535,32 @@ function _doTalkCore(arg, topic) {
   // An authored MAMASAN asked the same three questions answered "not my story" (Wendell,
   // round 63: Sumalee, Bussaba, Sopha, Mem). The house's stock answers, through the town book;
   // Candy and Oy have their own nodes and never reach here.
-  if (topic && !d.topic && NPC_ROLES[npc] === "mamasan" && !NPCS[npc].filler && /^(home|hometown|village|family|plan|future|dream)$/.test(_convoTopic(topic) || topic)) {
+  if (topic && !d.topic && NPC_ROLES[npc] === "mamasan" && !NPCS[npc].filler && /^(home|hometown|village|family|plan|future|dream|girls|the girls|my girls|your girls|ladies)$/.test(_convoTopic(topic) || topic)) {
     const t = _convoTopic(topic) || topic, from = _authoredStory(npc).from;
-    const _sk = npc + ":m:" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan");
+    const _sk = npc + ":m:" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan").replace(/the girls|my girls|your girls|ladies/, "girls");
     const _told = (G.soc.storyTold = G.soc.storyTold || {});
     if (_told[_sk] && !_retell) { _say(_pickVary(_ASK_AGAIN_FLUENT, "mamaagain")(NPCS[npc].name)); _questOffer(npc); return; }
     _told[_sk] = true;
-    const _mHome = [   // was one sentence for four mamasans (Gerry, round 64)
-      f => `"${f}." She names it the way you would name a supplier you stopped using. "A long time ago now. This is home."`,
-      f => `"${f}, up north-east." A small shrug. "I go back for funerals and Songkran. The rest of the year, my village is this street."`,
-      f => `"${f}. My mother still there, in the house I built." She taps the bar. "This paid for the roof."`,
-      f => `"${f}." She thinks about it. "I have been here longer than I was there. So — here, I think."`,
-    ];
-    _say(/home|village/.test(t) ? `${NPCS[npc].name}: ` + _mHome[_townPick(npc, "mhome", _mHome.length, _hh(npc, 47) % _mHome.length)](from)
+    // the house's own pools (world.js), through the town book — Candy and Peung missed GIRLS with a
+    // line that invited the question just asked (Gwen, round 66)
+    _say(/home|village/.test(t) ? `${NPCS[npc].name}: ` + _M_HOME[_townPick(npc, "mhome", _M_HOME.length, _hh(npc, 47) % _M_HOME.length)](from)
       : /family/.test(t) ? `${NPCS[npc].name}: ` + _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, _hh(npc, 37) % _M_FAMILY.length)]
+      : /girls|ladies/.test(t) ? `${NPCS[npc].name}: ` + _M_GIRLS[_townPick(npc, "mgirls", _M_GIRLS.length, _hh(npc, 31) % _M_GIRLS.length)]
       : `${NPCS[npc].name}: ` + _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, _hh(npc, 41) % _M_PLAN.length)]);
+    _questOffer(npc);
+    return;
+  }
+  // …and an authored CASHIER (Jenny, Joon, Jun, Ampha — four misses out of four, MONEY among them,
+  // from the women who keep it; Gwen, round 66)
+  if (topic && !d.topic && NPC_ROLES[npc] === "cashier" && !NPCS[npc].filler && /^(home|hometown|village|family|money|tab|bill|price|prices|the till|till)$/.test(_convoTopic(topic) || topic)) {
+    const t = _convoTopic(topic) || topic, from = _authoredStory(npc).from;
+    const _sk = npc + ":c:" + t.replace(/hometown|village/, "home").replace(/tab|bill|prices?|the till|till/, "money");
+    const _told = (G.soc.storyTold = G.soc.storyTold || {});
+    if (_told[_sk] && !_retell) { _say(_pickVary(_ASK_AGAIN_FLUENT, "cashagain")(NPCS[npc].name)); _questOffer(npc); return; }
+    _told[_sk] = true;
+    _say(/home|village/.test(t) ? `${NPCS[npc].name}: ` + _C_HOME[_townPick(npc, "chome", _C_HOME.length, _hh(npc, 47) % _C_HOME.length)](from)
+      : /family/.test(t) ? `${NPCS[npc].name}: ` + _C_FAMILY[_townPick(npc, "cfamily", _C_FAMILY.length, _hh(npc, 37) % _C_FAMILY.length)].replace(/\{from\}/g, from)
+      : `${NPCS[npc].name}: ` + _C_MONEY[_townPick(npc, "cmoney", _C_MONEY.length, _hh(npc, 31) % _C_MONEY.length)]);
     _questOffer(npc);
     return;
   }
@@ -5863,6 +5909,11 @@ function _convoResolve(lower) {
     // an answer to HER question — capturing it stored a question mark of a
     // sentence as the player's identity and grapevine-checked it forever (Alan
     // playtest, 2026-08-17). Let it lapse the pending Q and fall through to ASK.
+    // a bare "what?" / "how much?" / "pardon?" is asking her to say it again — it was
+    // stored as the player's ANSWER and grapevine-checked (Darren, round 66)
+    if (/^(what|wha|huh|eh|pardon|sorry|say again|come again|again|hm+)\??$/.test(bare)) {
+      _say(G.convoQ.q || "(She waits for your answer.)"); _convoPrompt(G.convoQ.id); return true;
+    }
     const isQuestion = /\?$/.test(lower.trim()) ||
       /^(what|where|who|whom|how|why|when|which|whats|whos|hows)\b/.test(bare) ||
       /^(do|does|did|are|is|was|were|can|could|will|would|have|has)\s+(you|u|she|they)\b/.test(bare);
@@ -7000,7 +7051,11 @@ function _ladyDrinkCharge(id) {
   }
   // a drink buys one telling in full — the brush-off pools promise it (see _deliver)
   if (id) (G.soc.roundFor = G.soc.roundFor || {})[id] = G.turns;
-  if (typeof _atOwnBar === "function" && _atOwnBar() && G.bar) { G.bar.cash += _ladyPrice(); G.bar.ownDrinks = (G.bar.ownDrinks || 0) + _ladyPrice(); }   // and BOOKS names it (Graham, round 47)
+  if (typeof _atOwnBar === "function" && _atOwnBar() && G.bar) {   // and BOOKS names it (Graham, round 47)
+    G.bar.cash += _ladyPrice();
+    if (((G.party && G.party.ids) || []).includes(id)) G.bar.guestDrinks = (G.bar.guestDrinks || 0) + _ladyPrice();   // a Blue Dog girl on your arm is not "your own girls'" (Rolf, round 66)
+    else G.bar.ownDrinks = (G.bar.ownDrinks || 0) + _ladyPrice();
+  }
 }
 
 function _doBuy(arg) {
@@ -11248,11 +11303,12 @@ function _chipSet() {
   }
   if (G.room === "qv_room") add("balcony"); // the room's own verb (playtest #2/#4)
   for (const id of (r.venues || [])) {
+    if (typeof _closedNow === "function" && _closedNow(id)) continue;   // shutters down: not a chip (Darren, round 66)
     const label = (ROOMS[id].bar || ROOMS[id].name).replace(/\s*\(.*\)$/, "");
     add("enter " + label.toLowerCase(), label);
   }
   if (r.motosai) add("motosai to ", "motosai…");
-  if (r.busStop) add("ride bus", "bus");
+  if (r.busStop && G.mode !== "soi6") add("ride bus", "bus");   // the week's frame refuses every bus
   if (r.atm) { add("withdraw 1000", "฿1k"); add("withdraw 5000", "฿5k"); add("withdraw 10000", "฿10k"); add("check balance", "balance"); }
 
   add("i", "inv"); add("map"); add("help");
@@ -11928,6 +11984,9 @@ function doCommand(input) {
       : /^(contacts?|phonebook|numbers)$/.test(lower) ? _doContacts
       : null;
     if (_free) { _free(); if (typeof _renderResume === "function") _renderResume(); return; }
+    // "what?" at a tout or a drunk is not a reaction — the Brit wandered off on it, the
+    // noodle girl took it as NO (Darren, round 66). The prompt is put again, no turn.
+    if (G.pendingEnc && /^(what|wha|huh|eh|pardon|sorry|say again|hm+)\??$/.test(lower)) { _renderEncounter(); return; }
   }
   // the taxi ride owns input until you've said who you are
   if (G.pendingChoice === "intro") { _introAnswer(lower); return; }
@@ -11943,7 +12002,16 @@ function doCommand(input) {
     if (G.mode === "soi6") {
       if (/^restart/.test(lower)) { G.player = null; startSoi6Mode(); return; } // RESTART re-picks identity (matches the verb everywhere else)
       if (/^share/.test(lower)) { _doShare(); return; } // the week card stays reachable through the gate
-      if (/again|play|more|^yes|soi/.test(lower)) { startSoi6Mode(); return; }  // PLAY AGAIN keeps who you are
+      // A QUESTION IS NOT THE CHOICE — the full game's gate learned this in round 60 and
+      // this one didn't: "what happens if i play again?" threw a week away unshared
+      // (Darren, round 66). A question gets the explanation; the choice has to START it.
+      if (/\?|^(what|how|why|does|do|is|are|can|will|would|should|explain|tell me|difference|which|help)\b/.test(lower)) {
+        _say("PLAY AGAIN starts another week on Soi 6 — same street, fresh dice, the same you. This week's card and its " +
+          "number are gone once the new week starts, so SHARE first if you want to keep it.", "dim");
+        _say("SHARE prints this week's card (and copies it) without ending anything. RESTART picks a new identity.", "dim");
+        _vacationEndPrompt(); return;
+      }
+      if (/^(play|again|another|more|yes|soi|new week)\b/.test(lower)) { startSoi6Mode(); return; }  // PLAY AGAIN keeps who you are
       _vacationEndPrompt(); return;
     }
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
@@ -12492,7 +12560,11 @@ function doCommand(input) {
     // missing money, and the easiest thing in the game to miss by locking your phone.
     case "ledger": _doLastNight(); break;
     case "clinic": case "tested": case "screening": _doClinic(); break;
-    case "drop": _doDrop(arg); break;
+    case "drop":
+      // a column number after the game has ended is a stale move, not your pockets —
+      // DROP 7 reached for the 7-Eleven receipt (Darren, round 66)
+      if (/^\d+$/.test(arg) && !G.game) { _say("(No board in front of you — that game is over. DROP is for what's in your pockets.)", "dim"); break; }
+      _doDrop(arg); break;
     case "inv": case "inventory": _doInventory(); break;
     case "what": case "im": case "i'm": case "have":
       if (_naturalHelp(lower)) break;
@@ -12756,7 +12828,7 @@ function doCommand(input) {
       if (!_flag("act1Done")) _say("Sleep where? The beach already had you once tonight. Get the wallet, get the room.");
       // a SLEEP tapped right after waking burns the whole night with no warning
       // (mobile playtest 2026-08-22) — once per evening, the bed asks if you mean it
-      else if (G.room === _hotelRoomId() && G.nightTurn < 10 && G.sleepWarnDay !== G.day &&
+      else if (G.room === _hotelRoomId() && G.nightTurn < 10 && !(G.sleepWarnDay === G.day && G.turns - (G.sleepWarnTurn || 0) <= 1) &&
                ((G.wakeTurn != null && G.turns - G.wakeTurn <= 1) ||
                 // the LAST night of a week is always asked: a sleep at 18:00 ended the holiday
                 // with the whole of its final night unspent (Fintan, round 60)
@@ -12769,7 +12841,7 @@ function doCommand(input) {
         // whole night. A persona lost a seventh of a seven-night daily to one
         // keystroke, and night one TRAINS the double-tap, because the first
         // SLEEP is swallowed by the app-girl modal (round 24, Jojo).
-        G.sleepWarnDay = G.day;
+        G.sleepWarnDay = G.day; G.sleepWarnTurn = G.turns;   // armed for the NEXT command only — five inputs later it still ended the week (Darren, round 66)
         _say(G.stage !== "expat" && G.day >= 7
           ? `It's ${_clockStr()} on the last night of the trip. Sleep now and the week ends here, with its final night unspent. (SLEEP again if you mean it, or go OUT.)`
           : `It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it. ` +
@@ -12943,6 +13015,9 @@ function doCommand(input) {
         _arriveAt(bar);
         break;
       }
+      // a modal's answer typed after the modal closed is "that moment has passed", never a parse
+      // failure — "1", "short time", "calm down" all fell through (Darren, round 66)
+      if (_staleModalAnswer(lower)) { _traceCancel(); return; }
       _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse"); _traceCancel();
       return;
     case "touch": case "feel": case "taste": case "lick": case "tell":
@@ -13272,6 +13347,7 @@ function doCommand(input) {
       }
       if (_politePhrase(lower)) break;
       if (_convoResolve(lower)) break;
+      if (_staleModalAnswer(lower)) { _traceCancel(); return; }
       _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse");
       // …and drop any breadcrumb still pending. This path returns WITHOUT
       // _flushTrace, so a trace stranded by an earlier early-return survived

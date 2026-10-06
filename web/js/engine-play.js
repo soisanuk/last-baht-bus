@@ -2021,7 +2021,7 @@ function _gameInput(input) {
     const opts = typeof _gameVerbs === "function" ? _gameVerbs().slice(0, 6).map(v => v.toUpperCase()) : [];
     _say("Thinking out loud is free — the table waits for the move itself." + (opts.length ? ` (${opts.join(" · ")})` : ""), "dim");
     _gameBoard();
-    return;
+    return false;   // free means free: it cost a turn (Darren, round 66)
   }
   switch (G.game.type) {
     case "cli": return _cliInput(input);
@@ -2236,6 +2236,16 @@ const _MAI_DEE_SORRY = [
 ];
 function _doApologize() {
   const r = G.room, s = G.soc;
+  // the woman who found out is in the room: the apology is hers to take or not (Rolf, round 66 — "Nothing to apologize for. Tonight.")
+  if (typeof _affairLive === "function" && _affairLive() && G.affair.soured && _npcsHere().includes(G.affair.id)) {
+    const a = G.affair, n = NPCS[a.id].name;
+    if (a.sorryDay === G.day) { _say(`${n} heard you the first time. "Okay," she said. It is still okay, in the sense that nothing has changed.`); return; }
+    a.sorryDay = G.day; a.strain = Math.max(0, a.strain - 1);
+    _say(_pickVary([
+      `${n} lets you finish. "Okay," she says, and goes back to the glasses. "Sorry is a word. I have a lot of words from men." A beat. "Tomorrow, be here. That is not a word."`,
+      `"Sorry." ${n} tries the word out. "In Thai we don't say it so much. We just don't do the thing again." She looks at you. "So. Don't do the thing again."`,
+    ], "affairsorry")); return;
+  }
   if (_inBar()) {
     const judged = _npcsHere().find(_maiDee);
     if (judged) { _say(_fmt(_pickVary(_MAI_DEE_SORRY, "maideesorry"), { n: NPCS[judged].name })); return; }
@@ -3317,6 +3327,12 @@ const _REL_GREET = {
       "other girls give you. You're spoken for in here, and everyone knows it but you.",
   ],
 };
+// after she found out: the rail is still yours, she is still on it, and that is the whole greeting
+const _REL_GREET_AFFAIR_SOUR = [
+  n => `${n} is behind the rail. She does not look up when you come in, and she does not need to; the water is on your stool because that is the job. The rest of it is not.`,
+  n => `${n} says "boss" the way Cake says it. Nobody on the floor looks at either of you, which takes some arranging.`,
+  n => `${n} has your stool clear. She wipes the one next to it too, slowly, as if to say that both are for customers now.`,
+];
 const _REL_GREET_AFFAIR = [
   n => `${n} does not come to the door, because she is already behind the rail and the rail is yours; she looks up, once, the look that is not for customers, and goes back to the glass she was polishing. That is the whole greeting. It is enough.`,
   n => `${n} clocks you in and says nothing to the room about it, which in this bar is the loudest thing she could do. The girls have stopped looking over. They know.`,
@@ -3357,6 +3373,8 @@ function _returnGreetPick(id, pool) {
 function _relGreeting(id) {
   if (_maiDee(id)) { _say(_pickVary(_REL_GREET_MAIDEE, "relmaidee")(NPCS[id].name), "dim"); return; }
   if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) {   // your girl, not "as close as the arithmetic allows" (Graham, round 47)
+    // …unless she has found out (Rolf, round 66: "the small nod that means she missed you" the evening after the apron came off)
+    if (G.affair.soured) { _say(_pickVary(_REL_GREET_AFFAIR_SOUR, "relaffairsour")(NPCS[id].name), "dim"); return; }
     _say(_pickVary(_REL_GREET_AFFAIR, "relaffair")(NPCS[id].name), "win"); return;
   }
   if (typeof _atOwnBar === "function" && _atOwnBar() && typeof _barStaff === "function" && _barStaff().includes(id)) {
@@ -3553,8 +3571,12 @@ const _OWNER_PITCH = {
   ],
 };
 function _ownBarStaff(id) {
+  // her HOME room, not where she is standing: _npcRoom puts a companion in your room,
+  // so a Blue Dog girl on your arm got the "fetch the ice" greeting (Rolf, round 66)
+  const home = NPCS[id] && (NPCS[id].room || (NPCS[id].bars || [])[0]);
   return typeof _atOwnBar === "function" && _atOwnBar() && G.bar &&
-    NPCS[id] && NPCS[id].filler && NPC_ROLES[id] && _npcRoom(id) === G.bar.room;
+    NPCS[id] && NPCS[id].filler && NPC_ROLES[id] && home === G.bar.room &&
+    !((G.party && G.party.ids) || []).includes(id);
 }
 // topic null → the greeting; a customer-pitch topic → the redirect. Personal
 // topics (family, plan, home) return false and fall through to normal dialogue —
@@ -3588,10 +3610,17 @@ function _affairTalk(id, tt) {
     b: [`${n} does not look at you. "The roof is fine. My brother fix with plastic. Is Thai roof now." She says it lightly, and the lightness is the whole of it.`],
     c: [`"Half roof." ${n} almost laughs. "Mama tell everybody: the farang pay half and tell the truth. In the village this is very strange man." A pause. "She like you more, I think. Don't tell her I say."`],
   }[chose.family || "a"] || [`"The roof is okay now."`]);
-  if (/\b(mother|mama|mum|mom|papa|father|dad|family|village|brother|sister|home)\b/.test(tt)) return pick("family", [
+  if (/\b(tan|partner|fifty|51|the other owner)\b/.test(tt)) return pick("tan", [
+    `"Khun Tan?" ${n} does not lower her voice, which is its own answer. "He own half the paper and none of the floor. He never look at me twice, and I am glad. A man who look at you twice in this town want something."`,
+    `${n} wipes the same glass again. "Tan is your business. Tan is also the reason nobody ask the owner for his work permit." A shrug. "So I say nothing bad about Tan. Not even quietly."`,
+  ]);
+  if (/\b(village|home|hometown|where you from)\b/.test(tt)) return pick("home", [
+    `"Home?" ${n} names the village like a place on a bus timetable. "Five hours. The bus is terrible. One day I show you, and you will hate it, and you will say it is beautiful to be polite."`,
+    `"Up north-east. You know it already — I say it the first night." ${n} almost smiles. "Now it is where the money go. Here is where I am."`,
+  ]);
+  if (/\b(mother|mama|mum|mom|papa|father|dad|family|brother|sister)\b/.test(tt)) return pick("family", [
     `"Mama?" ${n} laughs. "Mama ask about you every call. What you eat, if you are fat yet. I say not yet."`,
     `"Papa fix motorbikes in the village. He not say much about you. He say one thing: a farang with a bar is still a farang." A shrug. "He will like you. Slowly. Like Papa like everything."`,
-    `"Home?" ${n} names the village like a place on a bus timetable. "Five hours. The bus is terrible. One day I show you, and you will hate it, and you will say it is beautiful to be polite."`,
   ]);
   if (/\b(rota|late shift|friday|shift|schedule)\b/.test(tt)) return seen.includes("rota")
     ? pick("rota", [`"The rota." ${n} makes a face. "You fix it, now everybody see you fix it. Next time I ask Mama, not you. Is better for both."`])
@@ -3640,6 +3669,10 @@ function _ownBarTalk(id, topic) {
     }
     const _said = _affairTalk(id, tt);
     if (_said) { _say(_said); return true; }
+    // TOPICS promised late and free and both missed (Rolf, round 66): a topic HER OWN
+    // node answers is hers to answer, in her own words — only the pitch is replaced
+    { const own = tt && _pickDialogue(id, tt);
+      if (own && own.topic && typeof _topicHits === "function" && _topicHits(own.topic, tt)) return false; }
     if (tt && /\b(cousin|formal|goodnight|us|strain|distance|what is wrong|what's wrong|angry|sleeping)\b/.test(tt)) {
       const a = G.affair;
       _say(_pickVary(a.strain >= 6 ? [
@@ -4851,8 +4884,9 @@ function _endNight(reason) {
   // SLEEP with company IS the long-time ending — taking her home was the whole
   // point of taking her out, and the close pays for the evening she spent on
   // your arm (stops feed the base, the pair adds its premium).
+  let _bedIds = null;   // who was in the bed when SLEEP converted to the LT close (read by the affair's morning)
   if (reason === "sleep" && G.party && G.party.ids && G.party.ids.length) {
-    const _pids = G.party.ids;
+    const _pids = G.party.ids; _bedIds = _pids.slice();
     G.lastBfId = _pids[0];
     G.lastBfHonest = false;   // the fun close: khao man gai at 3 a.m., fondly
     G.lastBfBase = Math.min(14, 10 + Math.floor(G.party.stops / 2) + (_pids.length > 1 ? 2 : 0));
@@ -5291,7 +5325,8 @@ function _endNight(reason) {
   // unnecessary (Howard, round 35). The safe pays first; the later call no-ops.
   if (!crash && G.act1SafeDue && G.room === _hotelRoomId() && typeof _roomSafeBeat === "function")
     _roomSafeBeat();
-  if (!crash && typeof _affairMorning === "function") _affairMorning();   // she came home with you (Rolf, round 55)
+  if (!crash && (_hadParty || _bedIds) && typeof _affairLive === "function" && _affairLive() && !(_bedIds || (G.party && G.party.ids) || []).includes(G.affair.id) && typeof _affairCaught === "function") _affairCaught("bed");   // two women in one bed and neither saw the other (Rolf, round 66)
+  else if (!crash && typeof _affairMorning === "function") _affairMorning();   // she came home with you (Rolf, round 55)
   _chargeRent(!!crash);              // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
   if (_quietHelped) _say("(Naklua quiet: the hangover wakes one size smaller.)", "dim");

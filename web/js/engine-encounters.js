@@ -173,6 +173,7 @@ function _flowerTick() {
   if (typeof _onRide === "function" && _onRide()) return;   // "stands the wrapped bloom next to your beer" at the hill viewpoint (Piet, round 62)
   if (!_flag("act1Done")) return;                 // sandbox flavour, not the wallet night
   if (!_inBar()) return;
+  if (typeof _atOwnBar === "function" && _atOwnBar()) return;   // the rose family does not pitch the owner his own girl, two nights running (Rolf, round 66)
   const open = _room().barType === "beer" || G.room === "lake_bar"; // open-front only
   if (!open) return;
   const partner = typeof _convoActive === "function" && _convoActive();
@@ -210,7 +211,7 @@ function _salengTick() {
   // A modal is framing the moment (vacation-end epilogue, checkout, an intro) —
   // a lingerie cart pitch interleaving with the airport goodbye read as a bug
   // (Gaz playtest, 2026-08-17). Carts hold until the modal clears.
-  if (G.pendingChoice) return;
+  if (G.pendingChoice || G.pendingBf || G.pendingFare || G.game) return;   // …and a barfine on the table: the cart's "(BUY MOO PING)" printed under the ST/LT line and the gate swallowed it (Darren, round 66)
   if (G.salengCart && G.turns >= G.salengUntil) { // its time is up — it moves on
     const here = G.salengRoom === G.room;
     G.salengCart = null; G.salengRoom = null; G.salengUntil = 0;

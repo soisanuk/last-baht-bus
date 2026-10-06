@@ -376,8 +376,13 @@ function _dispatch(cmd) {
     if (typeof G !== "undefined" && G && (G.game || G.pendingBf || G.pendingEnc)) {
       // the dice line belongs to a game: at a barfine or a policeman it offered a QUIT that
       // does nothing there (Helga, round 57)
+      // in the game's own words: the quiz was told about a dice box (Darren, round 66)
+      const _gt = G.game && G.game.type;
       _term.print(G.game
-        ? "⌫ Not mid-hand. Play it out, or QUIT and take the loss — the soi doesn't rewind, and neither does the box."
+        ? (_gt === "quiz" ? "⌫ Not mid-question. The microphone doesn't rewind — answer it, or QUIT and sit the rest out."
+          : _gt === "c4" ? "⌫ Not mid-game. The disc is in the frame — play it out, or QUIT and lose the stake."
+          : _gt === "cli" ? "⌫ Not mid-session. The terminal keeps its log — EXIT walks away with what you copied."
+          : "⌫ Not mid-hand. Play it out, or QUIT and take the loss — the soi doesn't rewind, and neither does the box.")
         : "⌫ Not mid-answer. Somebody is waiting on you, and the soi doesn't rewind — answer it.", "dim");
       return;
     }
@@ -387,7 +392,8 @@ function _dispatch(cmd) {
       deserializeGame(snap);
       _prevSnap = null;
       _term.print("⌫ Rewound one command.", "dim");
-      _describeRoom(true, true); // restore / rewind: re-orient with the full desc
+      // not in the taxi: an UNDO at Tan's questions painted the hotel room you had not reached (Darren, round 66)
+      if (!(G.pendingChoice === "intro")) _describeRoom(true, true); // restore / rewind: re-orient with the full desc
       _renderResume(); // rewound into a modal state — redraw its prompt (see engine _renderResume)
       deserializeGame(snap); // the redraw consumed dice; UNDO must not reroll (replayer playtest 2026-08-22)
       _saveUndo();           // spent — and a reload must not resurrect it

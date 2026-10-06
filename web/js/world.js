@@ -6702,6 +6702,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "let you decide, all by yourself, after the tea make you comfortable.\" A grandmother's smile. " +
         "\"Clever, na? I am a nice lady. Nice ladies are the most expensive.\"",
         short: "\"The soft things are free — they keep you in the chair. Nice ladies are the most expensive.\"" },
+      { topic: "family", text: `"My daughter is on the till." Malai says it before you can look, so that you look. "Jun. Home from a college in Bangkok for the season, counting other people's money so that one day she never has to. My son is in Khorat with a wife who does not approve of me, which I take as a sign he chose well." She pours. "That is my family. The rest of it is this room."`, short: `"Jun on the till is my daughter. A son in Khorat. The rest is this room."` },
     ],
   },
   toi: {
@@ -10715,7 +10716,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     ],
   },
   nira: {
-    name: "Nira", th: "นิรา", emoji: "💵",
+    name: "Nira", th: "นิรา", emoji: "💵", fluent: true,
     room: "neon_paradise",
     look: "Thai woman of twenty-seven, watchful eyes, glossy dark hair, stage bikini, measuring smile.",
     desc: "A dancer who watches the room the way the mamasan does — the best English on the stage and a " +
@@ -10996,7 +10997,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   },
 
   pim: {
-    name: "Pim", th: "พิม", emoji: "💋",
+    name: "Pim", fluent: true, th: "พิม", emoji: "💋",
     room: "starlight_bar",
     desc: "Five years behind this bar and never once paid for her own drink. She looks " +
       "you over like a customs officer with a sense of humour.",
@@ -11281,6 +11282,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"I was the girl with one bag. The plan is one of them stands here when I don't.\"" },
       { topic: "plan|future|dream", text: "\"My plan is tonight's till.\" She does not look up from it. \"Tomorrow I make tomorrow's.\"" },
       { topic: "home|hometown|village", text: "\"Isaan.\" That is all a customer gets. \"Say hello to me properly one day, and maybe I tell you the rest.\"" },
+      { topic: "girls|my girls|the girls|your girls", text: `"My girls." Madam Oy lets the possessive sit there a moment, because it is accurate. "Nineteen on the roster, eleven on tonight, every one of them chosen by me and none of them kept by force — a girl who wants to leave Rainbow Girls leaves, and tells the next bar how the money was. They are the best-paid floor on this road and they know it, which is why they behave like it." A glance down the rail. "Treat them as professionals and they will treat you as a guest. Treat them as anything else and you will be treated as a lesson."`, short: `"Nineteen on the roster, chosen by me, kept by nobody. Professionals. Behave like a guest."` },
     ],
   },
 
@@ -11853,6 +11855,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "do about it?” She lets that sit, then moves off to the till before you can decide it " +
           "was a real question.",
         short: "“Why am I nice to you? A face I've seen on a better man. Or I'm bored on the edge of Naklua. Does the reason change what you do about it?”" },
+      { topic: "family", text: `"Family is this bar." She nods at Ampha's till, at Champa and Boua on the floor. "Cousins, a niece, a woman I grew up next door to. My mother is in Savannakhet with my son, and the son thinks his mother runs a restaurant in Thailand." The smallest pause. "In a way she does."`, short: `"Family is this bar. My mother and my son are across the river."` },
     ],
   },
   ampha: {
@@ -11881,6 +11884,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "that is best for his blood pressure.” The smile is perfect. “I keep them very " +
           "careful. Somebody should know where every baht is, na? In case anyone ever asks.”",
         short: "“The books are fine. Mr Eddy doesn't read them. I keep them careful — somebody should know where every baht is. In case anyone asks.”" },
+      { topic: "home|hometown|village|where you from|lao|laos", text: `"Savannakhet, same as Nuan. I am her cousin's girl." Ampha counts while she says it. "I came over when I was nineteen to do the books for a year. It is not a year any more."`, short: `"Savannakhet. Nuan's cousin's girl. A year that isn't a year."` },
+      { topic: "money|tab|bill|price", text: `"Everything goes through this book, and the book goes through me." She slides it round so you can read the running figure. "Nuan sets the prices. I make them true. Ask me the number before you drink it, and you will never argue with me after."`, short: `"Nuan sets the prices; I make them true. Ask before, not after."` },
     ],
   },
   champa: {
@@ -11912,6 +11917,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the thousandth time, we all laugh in the right place.” She leans in. “He needs us " +
           "to. You did not hear that from me.”",
         short: "“A clown, but our clown, and he pays double — only reason a girl my age has a stool. So we laugh in the right places. He needs us to.”" },
+      { topic: "home|hometown|village|where you from|lao|laos", text: `"Lao. Over the river from Nakhon Phanom, a village you would need a boat and a reason for." Champa smiles. "I did my years on Soi 6 saying I was from Isan, because it was simpler. Nuan does not let us say that here."`, short: `"Lao, across from Nakhon Phanom. Soi 6 heard Isan. Nuan doesn't allow that."` },
+      { topic: "family", text: `"A daughter, fourteen, with my mother, across the river. She is clever and she is embarrassed by me and both of those are my doing." A flower adjusted behind one ear. "I pay for the school that makes her embarrassed. That is the deal."`, short: `"A daughter of fourteen over the river. I pay for the school that embarrasses her."` },
     ],
   },
   boua: {
@@ -11942,6 +11949,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "is prey. Four women who are family are a wall. Nuan understood that before the rest " +
           "of us, which is why Nuan is the mama and not me.”",
         short: "“All Lao, all family. Not sentiment — a woman alone is prey, four who are family are a wall. Nuan understood first.”" },
+      { topic: "home|hometown|village|where you from|lao|laos", text: `"Lao, like all of us here." Boua takes the reading glasses off to say it. "The village is on the river and it floods every year and nobody leaves except to come here. I came here."`, short: `"Lao. A river village that floods. Nobody leaves except to come here."` },
     ],
   },
 
@@ -17124,6 +17132,19 @@ function _badge(id) {
 // anyone writing one. Pure hash on (id) for the trip she leaves on; cumulative, so a
 // woman gone on trip three is gone on trip nine. Never your own bar's staff, never the
 // affair girl — those stories have their own endings.
+// A FAMILY LINE AND A PLAN ARE TWO CLAIMS ABOUT ONE WOMAN (Gwen, round 66: Dew buried her papa
+// and bought him a tuk-tuk in the next breath). The town book never deals a plan that needs a
+// relative her family line has already denied, nor a family that denies the plan she gave.
+const _H_PLAN_NEEDS = { 21: "papa", 1: "mama", 11: "mama", 32: "mama", 22: "daughter", 3: "brother", 14: "brother", 24: "brother", 16: "sister" };
+const _H_FAMILY_DENIES = {
+  10: ["papa"], 29: ["papa"], 38: ["papa", "brother"],                 // papa gone; papa died; four women, no man
+  2: ["daughter"], 4: ["daughter"], 5: ["daughter", "sister"], 21: ["daughter", "sister"], 27: ["daughter"], 30: ["daughter"],   // one boy / only a brother / four brothers
+  9: ["daughter"],
+};
+function _storyClash(famIdx, planIdx) {
+  const need = _H_PLAN_NEEDS[planIdx]; if (!need) return false;
+  return (_H_FAMILY_DENIES[famIdx] || []).includes(need);
+}
 const _EXIT_PLANS = [0, 4, 5, 7, 9, 10, 13, 15, 16, 19, 20, 23, 26, 29, 31, 33, 35, 37, 39];   // indices into _H_PLAN that name a thing you can open
 function _exited(id) {
   const n = NPCS[id];
@@ -17226,14 +17247,54 @@ const _H_FAMILY_WRAP = [
   f => `"You ask my family? Aiyo." She goes soft. "${f}. I not see them long time. Money go home, I stay here. Same same every girl."`,
   f => `"${f}." A proud, tired little smile, and a photo held up. "I work, they eat. Simple. Farang always think complicated — no complicated."`,
   f => `"${f}." She shows you a video, not a photo: a kitchen, too loud, everybody talking at once. "This. Every Sunday I call, this."`,
-  f => `"Family?" She counts on her fingers before she starts. "${f}." The fingers stop. "Okay. That is everybody."`,
+  f => `"Family?" She counts on her fingers before she starts. "${f}." The fingers stop. "Okay. That is the ones who matter."`,
   f => `"${f}." She says it fast, and then asks about your drink, the way you close a drawer.`,
   f => `"${f}." She says it to the {{phone}}, not to you, scrolling for a photo she does not find. "Anyway. That is them."`,
   f => `"Who I send to?" She brightens — this one she can answer. "${f}. Everybody at home know my salary better than me."`,
   f => `"${f}." She holds up the {{phone}} and a small face fills the screen, mid-shout. "Hear? Always like this. I miss the loud."`,
   f => `"${f}." Flat, practical, the way you'd read a shopping list. Then, softer: "Is okay. Is why I am strong."`,
+  // round 66: fourteen more, most of them light — nine wrappers over forty women put one
+  // paragraph in every mouth on a floor (Gwen: "a press release with the name field filled in")
+  f => `"${f}."`,
+  f => `"${f}." That is all she says about it, and it is plenty.`,
+  f => `"${f}." A nod, as if agreeing with herself.`,
+  f => `"${f}." She picks at the label on her bottle while she says it.`,
+  f => `"${f}. You want to see?" She does not wait: the {{phone}}, a face, a thumb over half of it.`,
+  f => `"Family." She thinks about where to start and starts in the middle. "${f}."`,
+  f => `"${f}." Then, because you are still listening: "You have family? Same?"`,
+  f => `"${f}." She says the number of people like a price she has paid before.`,
+  f => `A quick look round the room first — the floor's habit — then, quieter: "${f}."`,
+  f => `"${f}." She taps the bar twice, which is how she ends a sentence she does not want to continue.`,
+  f => `"${f}. Everybody same, na. Only the name of the village change."`,
+  f => `She laughs before she answers, not at the question. "${f}."`,
+  f => `"${f}." The ice in her glass has melted while she talked; she drinks it anyway.`,
+  f => `"${f}." She says it to the mirror behind the bottles, where her own face is.`,
 ];
 const _cap1 = t => t.charAt(0).toUpperCase() + t.slice(1);
+// THE ENGLISH-SPEAKER'S WRAPPERS: an authored girl marked `fluent: true` (Nira, "the best
+// English on the stage"; Pim, "a customs officer with a sense of humour") fell into the
+// floor's Tinglish on question two (Gwen, round 66). Same seeds, her own register.
+const _H_FAMILY_WRAP_EN = [
+  f => `"${f.replace(/\bmama\b/g, "mother").replace(/\bpapa\b/g, "father")}." She says it plainly, the way you'd answer a form, and watches to see what you do with it.`,
+  f => `"${f.replace(/\bmama\b/g, "mother").replace(/\bpapa\b/g, "father")}." A small shrug. "Everyone in here has a version of that sentence. Mine is accurate."`,
+  f => `She considers how much to tell you and tells you the facts. "${f.replace(/\bmama\b/g, "mother").replace(/\bpapa\b/g, "father")}." The feelings she keeps.`,
+  f => `"${f.replace(/\bmama\b/g, "mother").replace(/\bpapa\b/g, "father")}." She turns her glass a quarter. "That is the money. The rest you would need another drink for, and you still would not get it."`,
+  f => `"${f.replace(/\bmama\b/g, "mother").replace(/\bpapa\b/g, "father")}. Next question." Not unkind; efficient.`,
+];
+const _H_PLAN_WRAP_EN = [
+  p => `"${_cap1(p)}." She says it without the apology most people put in front of a plan.`,
+  p => `"The plan is to ${p}. The timetable is a separate conversation." A dry look. "With my bank, not with you."`,
+  p => `"${_cap1(p)}." She lets you react. "Yes. In English it sounds small. In baht it is a mountain."`,
+  p => `"${_cap1(p)} — and to be forty with my own name on something." She taps the bar. "This name is the owner's."`,
+  p => `"${_cap1(p)}." A beat. "Most girls tell you a plan. I am telling you a date I don't say out loud."`,
+];
+const _H_HOME_WRAP_EN = [
+  fr => `"${fr}. North-east." She watches you not know it. "Nobody does. That is rather the point of it."`,
+  fr => `"${fr}." Said the way you'd name a school you left. "I visit. I don't live there any more, whatever my mother's neighbours think."`,
+  fr => `"${fr}, which is rice and a temple and a bus that leaves at six." A shrug. "I took the bus."`,
+  fr => `"${fr}." She lets the province sit there. "You'll have met six girls from it tonight. We are not a club."`,
+  fr => `"${fr}. Isan." A small, exact smile. "The part of the map people here only know as 'where the girls are from'."`,
+];
 const _H_PLAN_WRAP = [
   p => `You ask her something bigger and she holds up one finger — "wait wait" — thumbs it into the {{phone}} and turns the screen to you: "I WOULD LIKE TO ${p.toUpperCase()}." She beams. "Like that na. You understand?"`,
   p => `"Plan?" She types into Google Translate and reads the robot voice out, carefully: "My dream is to ${p}." A shrug, a grin. "Phone say it better than me."`,
@@ -17245,6 +17306,21 @@ const _H_PLAN_WRAP = [
   p => `"When I have the money — ${p}." She says it quickly, like a password. "Every girl have one. Mine is real."`,
   p => `"Two plan." She holds up two fingers. "One: ${p}. Two: no more Pattaya." She folds the second finger down. "Two need one."`,
   p => `She looks at the ceiling for the English. "${_cap1(p)}. Small, but mine." A nod to herself, as if she just agreed to it.`,
+  // round 66
+  p => `"${_cap1(p)}."`,
+  p => `"${_cap1(p)}." Said like a thing already decided, only the date missing.`,
+  p => `"Plan is ${p}." She shrugs. "Plan was also plan last year."`,
+  p => `"${_cap1(p)}. Small." She measures small with two fingers. "Small is okay."`,
+  p => `She says it in Thai first, then for you: "${_cap1(p)}."`,
+  p => `"${_cap1(p)}." A pause. "You think is stupid?" She does not wait to be told it isn't.`,
+  p => `"Me? ${_cap1(p)}." Then, pointing down the rail: "Her, same. Everybody have one."`,
+  p => `"One day — ${p}." The one day is somewhere past the door; she looks at it.`,
+  p => `"${_cap1(p)}." She counts something on her fingers, nods at the total, and does not share it.`,
+  p => `"${_cap1(p)}. Then I stop." She means stop this. She does not say this.`,
+  p => `"${_cap1(p)}." She has clearly said it before, to somebody who laughed; she watches you not laugh.`,
+  p => `"${_cap1(p)}." A grin. "You can be first customer."`,
+  p => `"Ask my mama, she tell you my plan: come home." A shrug. "My plan: ${p}. Then come home."`,
+  p => `"${_cap1(p)}." She touches the little gold Buddha at her neck when she says it, without noticing she has.`,
 ];
 const _H_HOME_WRAP = [
   fr => `"Home? ${fr}. Isan! You know Isan? Very hot, very poor, very happy." She grins. "Rice, buffalo, my mama, som tam every day. I miss, but no money there. Pattaya have money, no buffalo."`,
@@ -17257,6 +17333,21 @@ const _H_HOME_WRAP = [
   fr => `"Isan — ${fr}. Everybody here is from somewhere up there." She points past the ceiling. "The bus come down full every month, go back up empty."`,
   fr => `"${fr}. My village is one road and the road is mud when it rain." A grin. "Here, the road is mud when it rain also. Same same, more neon."`,
   fr => `"Home?" A small pause, as if checking the word is still true. "${fr}. I go back one time a year, and every year the children are taller and the house is the same."`,
+  // round 66
+  fr => `"${fr}."`,
+  fr => `"${fr}." She waits to see if the name means anything to you. It does not. "Far," she adds, kindly.`,
+  fr => `"${fr}, Isan side." A shrug that covers five hundred kilometres.`,
+  fr => `"${fr}. Rice." That is the whole description, and from her it is a complete one.`,
+  fr => `"${fr}." She points, roughly north-east, through the wall and a long way past it.`,
+  fr => `"Isan. ${fr}." She says the province louder than the region, the way people do about home.`,
+  fr => `"${fr}. You go there, you are the only farang. Everybody look. Everybody feed you." A grin. "Then everybody ask money."`,
+  fr => `"${fr}." The bus number comes to her lips out of habit and she does not say it.`,
+  fr => `"${fr} — small place, big sky." She has clearly said that line before and still likes it.`,
+  fr => `"Home is ${fr}. Here is work." She separates the two words with her hands on the bar, a foot apart.`,
+  fr => `"${fr}." A beat. "Hot. More hot than here. You don't believe, but yes."`,
+  fr => `"${fr}. My mama still there." That is where the sentence ends, every time she says it.`,
+  fr => `"${fr}." She spells it for you on the bar with a wet finger, gives up at the fourth letter, laughs.`,
+  fr => `"${fr}. Four hour by bus, if the bus come." She holds up four fingers, then folds one. "Three, if the driver is crazy."`,
 ];
 // FREE, asked of a girl: only the mamasans answered it (Wendell, round 63)
 const _H_FREE = [
@@ -17702,6 +17793,26 @@ const _M_FAMILY = [
   `"Everyone at home thinks I own a restaurant." Dry. "In a way I do. The food is terrible and the service is excellent."`,
   `"My father drank the first farm. My mother held onto the second. I have bought a third, in my name, and nobody drinks in it but the frogs."`,
 ];
+// HOME, from the women on the money — fourteen of fourteen missed it with the province in their
+// own description (Gwen, round 66). The mamasan's register; the cashier's below.
+const _M_HOME = [
+  f => `"${f}." She names it like a supplier she stopped using. "A long time ago now. This is home."`,
+  f => `"${f}, up north-east." A small shrug. "I go back for funerals and Songkran. The rest of the year, my village is this street."`,
+  f => `"${f}. My mother still there, in the house I built." She taps the bar. "This paid for the roof."`,
+  f => `"${f}." She thinks about it. "I have been here longer than I was there. So — here, I think."`,
+  f => `"${f}. I came down on the bus with one bag and a cousin's address." A dry look at the room. "The cousin is long gone. The bag I still have."`,
+  f => `"${f}." She says the province the way you'd say a maiden name. "I send a quarter of what this bar makes up that road every month, and they still ask when I am coming home."`,
+  f => `"Isan — ${f}. Same as half my girls, twenty years earlier." A level look. "Which is why I know exactly what they are not telling you."`,
+  f => `"${f}. A village you will never see, with a temple I paid for a wall of." Fondly. "The abbot sends me a blessing at New Year and a bill in March."`,
+];
+const _C_HOME = [
+  f => `"${f}." She does not look up from the count. "Six hours on the bus. I do the sums on the way. It passes the time."`,
+  f => `"${f}, north-east." A brisk nod. "My mother keeps the house and my transfers. She is a better cashier than I am."`,
+  f => `"${f}." The pen pauses. "I go back twice a year and come back twice a year with less money than I left with. That is what home is for."`,
+  f => `"${f}." She closes the book on her finger. "Everybody here is from somewhere up there. I am from the bit with the good market."`,
+  f => `"${f}. Rice, a river, a school I was top of." A small, dry smile. "Top of the school and counting other people's drinks. Life."`,
+  f => `"${f}." A shrug. "They know the money comes on the first. They don't ask what the job is called, and I don't volunteer."`,
+];
 const _M_PLAN = [
   `"A plan? I already did my plan, tilac — poor girl from the field, now I run the bar." She taps the till. "My plan now is the girls' plan: get out smarter than I did. Save it, don't drink it, don't marry the first farang who cries."`,
   `"Big questions, ha." She thumbs her phone a moment, then just talks — she doesn't really need it. "I want to keep the bar honest and the girls safe. Not so romantic, but it is the plan that pays."`,
@@ -17811,9 +17922,9 @@ const _C_WALLET = [
 // family answers a given _M_STORY forbids; the builder walks to the next one
 // that fits, which keeps it pure and day-stable.
 const _M_FAM_CLASH = {
-  3: [1, 4, 8, 13, 14],              // buried a husband, raised two kids → not a living husband (4, 13), not never-married (14), not childless (8)
+  3: [1, 4, 8, 13, 14, 18],          // buried a husband, raised two kids → not a living husband (4, 13), not never-married (14), not childless (8)
   4: [4, 13, 14, 21],                // married a farang and buried the marriage → not a living husband, not never-married, not a husband in the ground
-  6: [0, 3, 8, 10, 12, 16, 19, 21],  // four kids through school → not a count that isn't four (one, two, none, one son)
+  6: [0, 3, 8, 10, 12, 16, 18, 19, 21],  // four kids through school → not a count that isn't four (one, two, none, one son)
 };
 function _mamaFamilyIdx(id) {
   const story = _hh(id, 7) % _M_STORY.length;
@@ -17831,7 +17942,7 @@ function _buildMama(name, th, room, id = name.toLowerCase()) {
   const story = idx(_M_STORY, 7);
   return {
     name, th, emoji: "\ud83d\udc51", room, filler: true,
-    storyBits: { greet: _hh(id, 23) % 8, family: _mamaFamilyIdx(id), plan: _hh(id, 41) % 8, girls: _hh(id, 31) % 8, story: _hh(id, 7) % _M_STORY.length },   // the original eight of each: baked text unchanged, the town book deals the rest
+    storyBits: { from, greet: _hh(id, 23) % 8, family: _mamaFamilyIdx(id), plan: _hh(id, 41) % 8, girls: _hh(id, 31) % 8, home: _hh(id, 47) % _M_HOME.length, story: _hh(id, 7) % _M_STORY.length },   // the original eight of each: baked text unchanged, the town book deals the rest
     desc: `${look} \u2014 the mamasan of ${bar}, from ${from}. She ${story}.`,
     dialogue: [
       { th: "\u0e40\u0e0a\u0e34\u0e0d\u0e04\u0e48\u0e30", rom: "chern kha", text: _M_GREET[_hh(id, 23) % 8], short: _M_GREET_SHORT[_hh(id, 23) % 8], story: "mgreet" },
@@ -17839,6 +17950,7 @@ function _buildMama(name, th, room, id = name.toLowerCase()) {
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_M_LOCKIN, 47) }] : []),
       { topic: "family", text: _M_FAMILY[_mamaFamilyIdx(id)], story: "mfamily" },
       { topic: "plan", text: _M_PLAN[_hh(id, 41) % 8], story: "mplan" },
+      { topic: "home|hometown|village|where you from", text: _M_HOME[_hh(id, 47) % _M_HOME.length](from), story: "mhome" },   // round 66
       // Candy standing six feet away while her own colleague says "ask Candy on
       // Buakhao" (Maureen, round 47 — Bua in the same bar gets it right).
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
@@ -17855,7 +17967,7 @@ function _buildCashier(name, th, room, id = name.toLowerCase()) {
   const look = idx(_C_LOOK, 5);
   return {
     name, th, emoji: "\ud83e\uddfe", room, filler: true,
-    storyBits: { from, family: _hh(id, 37) % 8, greet: _hh(id, 23) % 8, money: _hh(id, 31) % 8 },   // the original eight: baked text unchanged
+    storyBits: { from, family: _hh(id, 37) % 8, greet: _hh(id, 23) % 8, money: _hh(id, 31) % 8, home: _hh(id, 47) % _C_HOME.length },   // the original eight: baked text unchanged
     desc: `${look} \u2014 the cashier at ${bar}, from ${from}.`,
     dialogue: [
       { th: "\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35\u0e04\u0e48\u0e30", rom: "sawatdee kha", text: _C_GREET[_hh(id, 23) % 8], short: _C_GREET_SHORT[_hh(id, 23) % 8], story: "cgreet" },
@@ -17864,6 +17976,7 @@ function _buildCashier(name, th, room, id = name.toLowerCase()) {
       { topic: "money|tab|bill|price", text: _C_MONEY[_hh(id, 31) % 8], story: "cmoney" },
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_C_LOCKIN, 47) }] : []),
       { topic: "family", text: _C_FAMILY[_hh(id, 37) % 8].replace(/\{from\}/g, from), story: "cfamily" },
+      { topic: "home|hometown|village|where you from", text: _C_HOME[_hh(id, 47) % _C_HOME.length](from), story: "chome" },   // round 66
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
         text: '"Not through my till." She nods along the bar without looking up. "But Candy is in tonight \u2014 ask her, not me. She is the one who hears."' },
       { topic: "wallet", notFlags: ["hasWallet"], text: idx(_C_WALLET, 43) },

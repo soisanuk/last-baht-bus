@@ -2001,7 +2001,7 @@ function _elsewhereLine(word) {
           `${pr.o} at ${_barName(NPCS[nid].room)} later on; ${pr.s} always ends up there.`;
       }
       return `${NPCS[nid].name} ${notHere} tonight — try ${_barName(cur)}` +
-        (unseen ? `, over in ${reg}.` : ".");
+        (unseen && reg !== (_room() && _room().region) ? `, over in ${reg}.` : ".");   // not "over in Soi 6" said on Soi 6 (Rolf, round 66)
     }
     return `${NPCS[nid].name} isn't here right now.`;
   }
@@ -2186,7 +2186,10 @@ const _ASK_AGAIN_FLUENT = [
   n => `${n} gives you a patient look. “I told you. Try me on something I haven't answered.”`,
 ];
 function _askAgain(npcId) {
-  let pool = _FLUENT_THAI.has(npcId) ? _ASK_AGAIN_FLUENT : _thaiVoice(npcId) ? _ASK_AGAIN : _ASK_AGAIN_EN;
+  // a mamasan or a cashier repeats herself in her own English, not "Farang memory, na"
+  // (Gwen, round 66: Madam Oy, undefeated since 2009, in a floor girl's brush-off)
+  const _house = typeof NPC_ROLES !== "undefined" && (NPC_ROLES[npcId] === "mamasan" || NPC_ROLES[npcId] === "cashier");
+  let pool = _FLUENT_THAI.has(npcId) ? _ASK_AGAIN_FLUENT : (_thaiVoice(npcId) && !_house) ? _ASK_AGAIN : _ASK_AGAIN_EN;
   // a massage shop sells no drinks: "Buy a drink — maybe it come back" from Pensri (Terence, round 57)
   if (_room() && (_room().massage || _room().soapy)) pool = pool.filter(f => !/drink/.test(String(f)));
   return pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name);
@@ -2302,7 +2305,14 @@ function _townPick(npc, axis, len, base, ok) {
   const told = (book[axis] = book[axis] || {});
   let found = null;
   for (let k = 0; k < len; k++) { const c = (base + k) % len; if ((told[c] == null || told[c] === npc) && (!ok || ok(c))) { found = c; break; } }
-  if (found == null) found = base % len;   // the town has told you all of them: her own, then
+  if (found == null) {
+    // the town has told you all of them: then one nobody at HER bar has told, walking from
+    // her own (Gwen, round 66 — Orn and Gigi, consecutive stools, one paragraph)
+    const myRoom = NPCS[npc] && (NPCS[npc].room || (NPCS[npc].bars || [])[0]);
+    const roomOf = id => NPCS[id] && (NPCS[id].room || (NPCS[id].bars || [])[0]);
+    for (let k = 0; k < len; k++) { const c = (base + k) % len; if ((!ok || ok(c)) && roomOf(told[c]) !== myRoom) { found = c; break; } }
+    if (found == null) found = base % len;
+  }
   told[found] = npc; mine[axis] = found;
   return found;
 }
@@ -2320,12 +2330,14 @@ function _townStory(npc, d) {
       return { text: _H_GREET[gi], short: typeof _H_GREET_SHORT_OF !== "undefined" ? _H_GREET_SHORT_OF[gi] : undefined };
     }
     case "family": {
-      const c = _townPick(npc, "hfamily", _H_FAMILY.length, b.family, i => i === b.family || !taken("family").has(i));
+      const _pl = (G.storyOf && G.storyOf[npc] && G.storyOf[npc].hplan != null) ? G.storyOf[npc].hplan : null;
+      const c = _townPick(npc, "hfamily", _H_FAMILY.length, b.family, i => (i === b.family || !taken("family").has(i)) && !(typeof _storyClash === "function" && _pl != null && _storyClash(i, _pl)));
       const w = _townPick(npc, "hfamwrap", _H_FAMILY_WRAP.length, b.famWrap);
       return { text: _H_FAMILY_WRAP[w](_H_FAMILY[c].replace(/\{from\}/g, b.from)) };
     }
     case "plan": {
-      const c = _townPick(npc, "hplan", _H_PLAN.length, b.plan, i => i === b.plan || !taken("plan").has(i));
+      const _fa = (G.storyOf && G.storyOf[npc] && G.storyOf[npc].hfamily != null) ? G.storyOf[npc].hfamily : b.family;
+      const c = _townPick(npc, "hplan", _H_PLAN.length, b.plan, i => (i === b.plan || !taken("plan").has(i)) && !(typeof _storyClash === "function" && _storyClash(_fa, i)));
       const w = _townPick(npc, "hplanwrap", _H_PLAN_WRAP.length, b.planWrap);
       return { text: _H_PLAN_WRAP[w](_H_PLAN[c]) };
     }
@@ -2336,6 +2348,8 @@ function _townStory(npc, d) {
     case "mplan": return { text: _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, b.plan)] };
     case "cfamily": return { text: _C_FAMILY[_townPick(npc, "cfamily", _C_FAMILY.length, b.family)].replace(/\{from\}/g, b.from) };
     case "mgirls": return { text: _M_GIRLS[_townPick(npc, "mgirls", _M_GIRLS.length, b.girls || 0)] };
+    case "mhome": return { text: _M_HOME[_townPick(npc, "mhome", _M_HOME.length, b.home || 0)](b.from) };
+    case "chome": return { text: _C_HOME[_townPick(npc, "chome", _C_HOME.length, b.home || 0)](b.from) };
     case "cgreet": { const i = _townPick(npc, "cgreet", _C_GREET.length, b.greet || 0); return { text: _C_GREET[i], short: _C_GREET_SHORT[i] }; }
     case "cmoney": return { text: _C_MONEY[_townPick(npc, "cmoney", _C_MONEY.length, b.money || 0)] };
   }
@@ -2344,9 +2358,10 @@ function _townStory(npc, d) {
 // a mamasan or cashier answers a miss in the English she uses for everything else, not the
 // floor's "na" (Wendell, round 63: Jom, Orm, Jeab and Da fluent in every answer but the miss)
 const _TOPIC_MISS_HOUSE = [
-  n => `${n} considers it and sets it aside. “Not a thing I know, tilac. Ask me about the bar, or the girls.”`,
+  n => `${n} considers it and sets it aside. “Not a thing I know. Ask me about this bar.”`,
   n => `“That one, I cannot help you with.” ${n} is perfectly pleasant about it. “Ask me something on my side of the counter.”`,
-  n => `${n} gives a small, practised shrug. “You ask the wrong woman. Ask me about this bar and I know everything.”`,
+  n => `${n} gives a small, practised shrug. “You ask the wrong woman. This bar, I know everything about.”`,
+  n => `“No.” ${n} says it the way she says a price: flat, final, not unfriendly. “Not mine to know.”`,
 ];
 function _topicMiss(npcId) {
   const n = NPCS[npcId];
