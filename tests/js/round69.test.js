@@ -124,3 +124,28 @@ test("Danny knows the bar he drifts into early, and the joke", () => {
   assert.match(ask("danny", "gilt cage"), /warm-up/); assert.doesNotMatch(said(), /Been in once/);
   assert.match(ask("danny", "ping pong"), /Pong/);
 });
+test("the more-chip turns the page in one line, and every topic is reachable at either page size", () => {
+  G.room = "stinky_bar"; G.known.bert = true; run("talk to bert");
+  const open = _convoTopics("bert"); assert.ok(open.length > 4);
+  out = []; run("topics more");
+  assert.equal(out.length, 1, "one line, not the whole list again"); assert.match(said(), /^\(Bert, 2 of \d+:/);
+  const saved = _convoChoices;
+  try {
+    for (const choices of [() => [], () => [{ label: "Yes" }]]) {   // four a page, and two while a reply chip is up
+      _convoChoices = choices; G.convoPage = 0;
+      const seen = new Set();
+      for (let i = 0; i < open.length; i++) {
+        for (const c of _chipSet()) { const m = /^ask bert about (.+)$/.exec(c.cmd); if (m) seen.add(m[1]); }
+        run("topics more");
+      }
+      assert.equal(seen.size, open.length);
+    }
+  } finally { _convoChoices = saved; }
+});
+test("a reply chip appearing does not move the topics already on the bar off it", () => {
+  G.room = "stinky_bar"; G.known.bert = true; run("talk to bert"); run("topics more");
+  const before = _topicWindow("bert").shown;
+  const saved = _convoChoices;
+  try { _convoChoices = () => [{ label: "Yes" }]; assert.deepEqual(_topicWindow("bert").shown, before.slice(0, 2)); }
+  finally { _convoChoices = saved; }
+});

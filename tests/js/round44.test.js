@@ -365,7 +365,7 @@ test("the chip bar reaches every open topic, four at a time", () => {
   assert.equal(seen.size, open.length,
     `every one of Bert's ${open.length} open topics is tappable across ${pages} pages`);
   // and the pager itself is on the bar, so a thumb knows there is more
-  assert.ok(_chipSet().some(c => c.cmd === "topics"), "the more-chip is offered");
+  assert.ok(_chipSet().some(c => c.cmd === "topics more"), "the more-chip is offered");
 });
 
 test("TOPICS is a readout: free, and it never lies about an empty book", () => {
@@ -399,5 +399,5 @@ test("TOPICS is on all the surfaces a verb has to be on", () => {
   assert.match(_HELP, /TOPICS/, "the full card");
   assert.match(_HELP_SOI6, /TOPICS/, "and the soi6 card");
   G.room = "stinky_bar"; G.known.bert = true; run("talk to bert");
-  assert.ok(_chipSet().some(c => c.cmd === "topics"), "the chip bar");
+  assert.ok(_chipSet().some(c => c.cmd === "topics more"), "the chip bar");
 });

@@ -5182,9 +5182,30 @@ function _readBook() {
   _say("(The book runs at your bar now — BOOKS will show it. Rabbit doesn't know. Yet.)", "dim");
 }
 
+// The chip bar's window onto a partner's open topics. G.convoPage is the OFFSET of
+// the first topic shown, not a page number: the bar shows four, or two while she
+// waits on your answer, and a page number counted in one size and read in the other
+// left pages nobody could reach and moved a topic off the bar when a compliment
+// put a reply chip beside it (Henrik, round 69). The offset keeps the window where it was.
+function _topicWindow(id) {
+  const open = _convoTopics(id), per = _convoChoices().length ? 2 : 4;
+  let start = G.convoPage || 0;
+  if (start < 0 || start >= open.length) start = 0;
+  return { open, per, start, shown: open.slice(start, start + per),
+    page: Math.floor(start / per) + 1, pages: Math.max(1, Math.ceil(open.length / per)) };
+}
+function _turnTopicPage(id) {
+  const w = _topicWindow(id);
+  G.convoPage = w.start + w.per >= w.open.length ? 0 : w.start + w.per;
+  return _topicWindow(id);
+}
 function _doTopics(arg) {
   let id = _convoActive();
-  const a = String(arg || "").replace(/^(about|to|with|for)\s+/, "").trim();
+  let a = String(arg || "").replace(/^(about|to|with|for)\s+/, "").trim();
+  // the chip's "more": turn the page and say what is on it, without reprinting the
+  // whole list every tap (Henrik, round 69)
+  const more = /^(more|next|page|rest|the rest)$/.test(a);
+  if (more) a = "";
   if (a) {
     const named = _findNpc(a);
     // TOPICS TAN at Nont's table printed NONT's list under Tan's name (Pimmy, round
@@ -5203,6 +5224,12 @@ function _doTopics(arg) {
   const open = _convoTopics(id, { all: true });   // the ANSWERABLE list, not the chip bar's
   const chips = _convoTopics(id);                // what a thumb can actually reach
   const who = _convoName(id);
+  if (more && chips.length && id === _convoActive()) {
+    const w = _turnTopicPage(id);
+    _say(`(${who}, ${w.page} of ${w.pages}: ` + w.shown.map(t => _topicLabel(t).toLowerCase()).join(" \u00b7 ") +
+      ". TOPICS prints the whole list.)", "dim");
+    return;
+  }
   if (!open.length) { _say(_fmt(_pickVary(_TOPICS_NONE, "topicsnone"), { n: who })); return; }
   const self = String(NPCS[id].name).split(" ").pop().toLowerCase();
   const refl = { he: "himself", she: "herself", they: "themselves" }[_pr(id).s];
@@ -5210,9 +5237,8 @@ function _doTopics(arg) {
     open.map(t => (t.toLowerCase() === self ? refl : _topicLabel(t).toLowerCase())).join(" \u00b7 ") + ".", "room");
   // Turn the page too, so the four the chip bar is showing are not the four it
   // was showing a moment ago — the thumb player's only route to the rest.
-  const per = 4;
-  if (chips.length > per) {
-    G.convoPage = ((G.convoPage || 0) + 1) % Math.ceil(chips.length / per);
+  if (chips.length > _topicWindow(id).per) {
+    if (id === _convoActive()) _turnTopicPage(id);   // the bar shows the partner's window, nobody else's
     _say("(Tapping cycles the rest onto the chip bar. ASK " + who.split(" ").pop().toUpperCase() +   // the last word is the one the parser answers to ("Fast Eddy" → EDDY, "Madam Oy" → OY; Dougie, round 46)
       " ABOUT <topic> works for any of them.)", "dim");
   }
@@ -11839,13 +11865,9 @@ function _chipSet() {
     // topics were unreachable by thumb and invisible to everybody else. Same
     // four at a time — a wall of chips buries the social moves below it — but
     // TOPICS turns the page, so the whole list is reachable by tapping.
-    const _open = _convoTopics(partner);
-    const _per = acts.length ? 2 : 4;
-    const _pages = Math.max(1, Math.ceil(_open.length / _per));
-    const _pg = ((G.convoPage || 0) % _pages + _pages) % _pages;
-    for (const t of _open.slice(_pg * _per, _pg * _per + _per))
-      add(`ask ${_who} about ${t}`, _topicLabel(t));
-    if (_open.length > _per) add("topics", `more (${_pg + 1}/${_pages})`);
+    const _w = _topicWindow(partner);
+    for (const t of _w.shown) add(`ask ${_who} about ${t}`, _topicLabel(t));
+    if (_w.open.length > _w.per) add("topics more", `more (${_w.page}/${_w.pages})`);
     add("compliment", "compliment");
     add("joke", "joke");
     if (_npcState(partner).trust >= 3) add("tease", "tease"); // banter unlocks once you're close
