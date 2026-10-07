@@ -109,3 +109,25 @@ test("the German easter egg no longer asks what language the player reads in", (
   run("guten abend");
   assert.match(said(), /German|Englisch|English/i, "it fires for everybody now — there is no de player to exclude");
 });
+
+// ── Yusuf: the quick tap is the whole interface for a thumb ──────────────────
+// He could not reach WAI by tapping — and WAI is how Act One's peaceful route is
+// solved. The fix for exactly that player was written in round 24 (Pauline, who
+// plays on a phone because her thumbs hurt) and its comment says "A WAI IS ALWAYS
+// AVAILABLE TO A PERSON… Everyone gets it" — but the push landed INSIDE the `full`
+// block, so for four rounds it only ever reached a long-press.
+test("WAI is on the QUICK tap for everybody, not only the long-press", () => {
+  for (const [id, room] of [["oy", "oy_office"], ["bert", "stinky_bar"], ["lamai", "stinky_bar"], ["tan", "soi6_west"]]) {
+    G.room = room;
+    const quick = _npcActions(id, false);
+    assert.ok(quick.includes("wai"), `${id}: a thumb must be able to wai (round 24's fix, finally outside the full block)`);
+  }
+});
+test("the full menu still offers wai exactly once — the move didn't duplicate it", () => {
+  G.room = "oy_office";
+  const full = _npcActions("oy", true);
+  assert.equal(full.filter(a => a === "wai").length, 1);
+});
+test("a name nobody has is still not waiable", () => {
+  assert.ok(!_npcActions("nobody-by-this-id", false).includes("wai"));
+});

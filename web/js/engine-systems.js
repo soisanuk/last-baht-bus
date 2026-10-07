@@ -586,16 +586,19 @@ function _npcActions(id, full) {
     if (role === "hostess" && typeof _seeHomeOpen === "function" && _seeHomeOpen(id)) acts.push("seehome");   // cheap care: the wheel's door at closing
     if (id === "waen") acts.push("lesson");   // ฿100 the hour, the third surface
     if (id === "nont" && typeof _flag === "function" && _flag("hasWallet")) acts.push("cash");   // the priced fixer's verb on his own wheel
-    // A WAI IS ALWAYS AVAILABLE TO A PERSON, and Act One is SOLVED with one:
-    // the game says "(Manners might open it. A proper wai.)" and Madam Oy's
-    // menu offered talk / examine / buy her a drink. A player who taps rather
-    // than types could not finish the opening quest of the game (round 24,
-    // Pauline, who plays on a phone because her thumbs hurt). Everyone gets it.
-    if (NPCS[id] && !acts.includes("wai")) acts.push("wai");   // …but not at a name nobody has
     // Mot's dinner, same three-surface treatment: the wheel is where a player
     // who never guesses "buy mot dinner" finds it. Only while it's undone.
     if (id === "mot" && typeof _flag === "function" && !_flag("motFed")) acts.push("motdinner");
   }
+  // A WAI IS ALWAYS AVAILABLE TO A PERSON, and Act One is SOLVED with one: the game
+  // says "(Manners might open it. A proper wai.)" and Madam Oy's menu offered talk /
+  // examine / buy her a drink. A player who taps rather than types could not finish
+  // the opening quest (round 24, Pauline, who plays on a phone because her thumbs
+  // hurt). THAT FIX LANDED INSIDE THE `full` BLOCK, so it only ever reached a
+  // long-press and the comment's "everyone gets it" was false for four rounds —
+  // Yusuf rediscovered Pauline's finding from scratch in round 68. It is outside
+  // now, which is what "always" has to mean: the quick tap gets it too.
+  if (NPCS[id] && !acts.includes("wai")) acts.push("wai");   // …but not at a name nobody has
   return acts;
 }
 
