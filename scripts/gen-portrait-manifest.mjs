@@ -135,19 +135,31 @@ for (const c of chars) byRole[c.role] = (byRole[c.role] || 0) + 1;
 // RENDERED is a pure function of the art directory, so the manifest stays last-writer-correct:
 // whoever regenerates after a render ships writes the queue shorter.
 const THUMB = join(ROOT, "web", "portraits", "thumb");
-for (const c of [...chars, ...filler]) c.rendered = existsSync(join(THUMB, c.id + ".webp"));
+// …except that a thumb existing does not mean it shows THIS look: when a character's look (the
+// portrait prompt) changes after her render shipped, docs/portrait-relook.json names her, and she
+// goes back on the queue as `relook` until the new render ships and the art agent drops her id.
+let RELOOK = {};
+try { RELOOK = JSON.parse(readFileSync(join(ROOT, "docs", "portrait-relook.json"), "utf8")).ids || {}; } catch (e) { /* none pending */ }
+for (const c of [...chars, ...filler]) {
+  c.rendered = existsSync(join(THUMB, c.id + ".webp")) && !RELOOK[c.id];
+  if (RELOOK[c.id]) { c.relook = true; c.relookWas = RELOOK[c.id].was; }
+}
 const unrendered = [...chars, ...filler].filter(c => !c.rendered).map(c => c.id);
+const relook = Object.keys(RELOOK).filter(id => [...chars, ...filler].some(c => c.id === id));
 const manifest = {
   generated: new Date().toISOString().slice(0, 10),
   note: "Distinct, hand-authored characters with a portrait (excludes the 181 " +
     "generic `filler` NPCs). Derived from web/js/world.js — regenerate with " +
     "scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are " +
     "generator heuristics for portrait archetype selection, not game canon.",
-  counts: { total: chars.length, byRole, filler: filler.length, unrendered: unrendered.length },
+  counts: { total: chars.length, byRole, filler: filler.length, unrendered: unrendered.length, relook: relook.length },
   // the WORK QUEUE, derived from the art directory: an id with no thumb/<id>.webp is still on
   // a pixel placeholder and needs a render. The roster alone could not say so (the art agent,
   // 2026-10-02: "the manifest doesn't reflect any needed work").
   unrendered,
+  // the subset of the queue that HAS a thumb, drawn from an older look — re-render, then remove
+  // the id from docs/portrait-relook.json (more faces, Mario 2026-10-07)
+  relook,
   characters: chars,
   filler,
 };

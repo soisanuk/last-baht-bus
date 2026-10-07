@@ -1806,7 +1806,8 @@ test("connect 4 skill ladder: mamasans 8, floor girls 6, new girls 2", () => {
   assert.equal(_c4Depth("nan"), 6, "the rank and file one step down");
   assert.equal(_c4Depth("lek"), 6);
   assert.equal(_c4Depth("nong"), 2, "first week on the soi — beatable");
-  assert.equal(_c4Depth("mai"), 2, "a filler girl whose desc says she's new");
+  { const newGirl = Object.keys(NPCS).find(id => NPCS[id].filler && /^(New enough|Baby-faced)/.test(NPCS[id].desc));   // by her desc, not her name: the looks were re-dealt (2026-10-07)
+    assert.equal(_c4Depth(newGirl), 2, "a filler girl whose desc says she's new"); }
   assert.equal(_c4Depth(null), 6, "'the hostess on shift' fallback");
   // every filler newbie desc carries the beatable tier, and only those
   for (const [id, n] of Object.entries(NPCS)) {

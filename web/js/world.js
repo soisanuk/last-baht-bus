@@ -16994,6 +16994,16 @@ const _H_LOOK_DARK = [
   "Pouring out here since the lake road was dirt; minds her regulars like livestock",
   "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room",
   "Somebody's mother, twice over, and nobody's fool ever",
+  // more faces (Mario, 2026-10-07: "we can always use more new faces") — each is a portrait prompt
+  // too, so face, hair and build come first
+  "Fifties, reading glasses on a cord, and a laugh like a door banging shut",
+  "A grey streak worn proudly at the front, tiger balm on her wrists, kind eyes",
+  "Heavy-set and unhurried, a gold tooth and a market auntie's arms",
+  "Thin as wire, hair dyed jet black, an old dancer's posture she has kept",
+  "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields",
+  "Silver hoops, careful make-up, the calm of a woman who has heard every line twice",
+  "Short permed hair, a cardigan in any weather, the steadiest hands on the strip",
+  "A broad smile with a gap at the back, first up to dance when the old songs come on",
 ];
 const _H_LOOK = [
   "Round-faced and quick to laugh",
@@ -17008,6 +17018,31 @@ const _H_LOOK = [
   "Baby-faced, chewing gum, thumbing her phone under the bar",
   "Long hair, longer eyelashes, a practised pout",
   "Small and sharp, and misses nothing",
+  // more faces (Mario, 2026-10-07) — portrait prompts first, prose second
+  "Short hair dyed copper, a nose stud, and a laugh you hear before you see her",
+  "Round glasses and a cardigan over the bar dress, like a librarian on a dare",
+  "Freckled from the sun, hair in a high ponytail, sneakers under the stool",
+  "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile",
+  "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
+  "Broad-shouldered and easy, a volleyball player's posture and handshake",
+  "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
+  "Soft-spoken, a mole above her lip, looks down whenever she laughs",
+  "Cropped jacket, high bun, the poise of somebody who once danced properly",
+  "A wide slow smile, a gap in her front teeth, nowhere she would rather be",
+  "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face",
+  "Lean and angular, cheekbones like a blade, eyes that weigh you",
+  "Plump and cheerful, a jade bangle on each wrist, quick hands",
+  "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is",
+  "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist",
+  "A scar through one eyebrow and a grin that dares you to ask about it",
+  "Straight hair to her hips, a silver anklet, perfectly still until she isn't",
+  "Athletic, a sunburnt nose, a sports watch she checks between customers",
+  "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
+  "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear",
+  "Neat side parting, pearl studs, a bank teller on her night off",
+  "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her",
+  "Round cheeks, sharp eyes, keeping score of something on a beer mat",
+  "Tanned arms, a vine tattoo up one wrist, hair in a loose knot"
 ];
 const _H_FAMILY = [
   "I have two baby, they stay with my mama, {from}",
@@ -17181,6 +17216,10 @@ function _authoredStory(npc) {
   return { from, familyIdx, planIdx, family: _H_FAMILY[familyIdx].replace(/\{from\}/g, from), plan: _H_PLAN[planIdx] };
 }
 const _hostessSigs = {};
+// how many women already wear each look — a hash alone put one face on ten women; this caps it,
+// walking to the next free look, and is only counted once a woman is ACCEPTED (a twin reroll
+// builds her again with a bumped seed). Pure and order-stable: the build order is the table's.
+const _lookCount = {};
 // ONE LIFE STORY PER RAIL (Gareth, round 46): family and plan are picked by hash, then
 // advanced past any line another girl at the same bar already tells — a punter who
 // interviews the whole rail must never hear the same coffee shop twice. Per-room sets,
@@ -17466,7 +17505,10 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const idx = (arr, salt) => arr[_hh(seed, salt) % arr.length];
   const from = idx(_H_FROM, 3);
   const darkside = ROOMS[room] && ROOMS[room].region === "Darkside";
-  const look = idx(darkside ? _H_LOOK_DARK : _H_LOOK, 5);
+  const _lp = darkside ? _H_LOOK_DARK : _H_LOOK, _lk = darkside ? "d" : "m", _lcap = darkside ? 2 : 6;
+  let _li = _hh(seed, 5) % _lp.length;
+  for (let k = 0; k < _lp.length && (_lookCount[_lk + _li] || 0) >= _lcap; k++) _li = (_li + 1) % _lp.length;   // walk, never re-roll
+  const look = _lp[_li];
   const famIdx = _storyPick(room, "family", _H_FAMILY, _hh(seed, 7), _H_BAKED);
   const planIdx = _storyPick(room, "plan", _H_PLAN, _hh(seed, 11), _H_BAKED);
   const family = _H_FAMILY[famIdx].replace(/\{from\}/g, from);
@@ -17531,6 +17573,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   if (!_hostessSigs[room]) _hostessSigs[room] = new Set();
   if (_hostessSigs[room].has(_sig) && seed.length < id.length + 3) return _buildHostess(name, th, room, id, seed + "~");
   _hostessSigs[room].add(_sig);
+  _lookCount[_lk + _li] = (_lookCount[_lk + _li] || 0) + 1;
   _storyTaken(room).family.add(famIdx); _storyTaken(room).plan.add(planIdx);
   return {
     name, th, emoji, room, filler: true, storyIdx: { family: famIdx, plan: planIdx },
