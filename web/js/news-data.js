@@ -8,39 +8,39 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
+    "t": "Pattaya opens more public spaces to street performers",
+    "s": "Thaiger",
+    "d": "07 Oct 2026"
+  },
+  {
+    "t": "Pattaya parasailing platform remains stranded on beach 11 days after storm",
+    "s": "Pattaya Mail",
+    "d": "06 Oct 2026"
+  },
+  {
+    "t": "Gunmen raid foreigner’s Pattaya home, steal nearly 30m baht",
+    "s": "Thaiger",
+    "d": "07 Oct 2026"
+  },
+  {
     "t": "Pattaya vendor reports gunfire after sexual advance rejected",
     "s": "Thaiger",
     "d": "06 Oct 2026"
   },
   {
-    "t": "Pattaya mayor welcomes British ambassador for tourist safety talks",
+    "t": "Pattaya jazz festival is coming soon with global stars and free concerts",
     "s": "Pattaya Mail",
-    "d": "05 Oct 2026"
+    "d": "06 Oct 2026"
   },
   {
-    "t": "Pattaya rider returns Indian tourist’s wallet with 16,000 baht",
-    "s": "Thaiger",
-    "d": "05 Oct 2026"
+    "t": "Thailand monitors plague reports in Russia with no cases detected",
+    "s": "Pattaya Mail",
+    "d": "06 Oct 2026"
   },
   {
-    "t": "Prachin Buri officials investigate oil contamination near flooded factories",
+    "t": "British ambassador Nicola Pollitt builds community ties at Pattaya consular reception",
     "s": "Pattaya Mail",
-    "d": "05 Oct 2026"
-  },
-  {
-    "t": "Pattaya extends opening hours at Chaiyapruek 2 public park",
-    "s": "Pattaya Mail",
-    "d": "05 Oct 2026"
-  },
-  {
-    "t": "Pattaya police shoot at fleeing car near school, seize gun and drugs",
-    "s": "Pattaya Mail",
-    "d": "05 Oct 2026"
-  },
-  {
-    "t": "Pattaya International Fireworks Festival returns on November 27–28",
-    "s": "Pattaya Mail",
-    "d": "05 Oct 2026"
+    "d": "06 Oct 2026"
   },
   {
     "t": "As Thailand Cracks Down on Foreigners, a Tourist Paradise Reconsiders Its Welcome",
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
-    "t": "A Second U.S. Navy Aircraft Carrier Making A Port Call In Thailand",
-    "s": "Forbes",
-    "d": "05 Oct 2026"
-  },
-  {
-    "t": "Carrier USS George H.W. Bush Makes Port Call in Thailand",
-    "s": "USNI News",
-    "d": "05 Oct 2026"
-  },
-  {
-    "t": "USS George H.W. Bush stops in Thailand after unannounced departure from Middle East",
-    "s": "Stars and Stripes",
+    "t": "Thailand braces for more rain as death toll from recent flooding hits 31",
+    "s": "ABC News - Breaking News, Latest News and Videos",
     "d": "05 Oct 2026"
   },
   {
     "t": "Death toll from Thailand floods rises to 31, interior ministry says",
     "s": "Reuters",
     "d": "05 Oct 2026"
+  },
+  {
+    "t": "Heavy rain forecast across Thailand as authorities monitor flood risks",
+    "s": "Khaosod English",
+    "d": "06 Oct 2026"
+  },
+  {
+    "t": "Carrier USS George H.W. Bush Makes Port Call in Thailand",
+    "s": "USNI News",
+    "d": "05 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-06","USD":33.58,"AUD":23.44,"GBP":44.58,"EUR":37.84};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-07","temp":24,"humid":96,"code":55,"hi":31,"rain":67};
+var WX_NOW = {"date":"2026-10-07","temp":31,"humid":67,"code":51,"hi":31,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4172,"date":"2026-10-06","baht":66250};
+var GOLD = {"usd":4134,"date":"2026-10-07","baht":65650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":85716,"thb":2880407};
+var BTC = {"usd":84273,"thb":2836971};
