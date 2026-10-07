@@ -4898,6 +4898,18 @@ function _endConfirm(kind, text) {
   _say(text, "dim");
   return false;
 }
+const _JOINER_LINES = [
+  "(Under the Sabai Palms' one working porch light, the night clerk produces the joiner ledger: ฿{f}, and a look with footnotes.)",
+  "(The night clerk doesn't ask who she is. The joiner ledger has one column, and it says ฿{f}.)",
+  "(The Sabai's desk: the joiner book slides across without the clerk looking up — ฿{f}, her ID, your room number. He has never once asked anybody what they do for a living.)",
+];
+// any woman who goes up to your room at the Sabai, once a night — the clerk charges the guest, not the trade
+function _joinerFee() {
+  if (!_flag("act1Done") || G.stage === "act1" || G.hotel !== "sabai") return;
+  if (G.joinerDay === G.day || G.money < JOINER_FEE) return;
+  G.joinerDay = G.day; G.money -= JOINER_FEE;
+  _say(_fmt(_pickVary(_JOINER_LINES, "joiner"), { f: JOINER_FEE }), "dim");
+}
 function _endNight(reason) {
   // Idempotency: a mid-command multi-tick (WAIT through dawn) or a collapse on the
   // last night could re-enter here after the week's already ended — don't run the
@@ -5073,6 +5085,7 @@ function _endNight(reason) {
         "falls asleep with her phone under the pillow. You lie there a long time feeling " +
         "like a man who has won something nobody else in this town even knew was on " +
         "offer.", "win");
+      _joinerFee();   // the clerk cannot tell a pharmacist from a bar girl
       break;
     case "bkkdinner":
       _say("The van brings you back at one in the morning through a town that has been " +
@@ -5089,11 +5102,7 @@ function _endNight(reason) {
           "nothing. What happens in Pattaya has already forgotten your name by " +
           "morning, fondly.", "win");
       G.lastBfHonest = false;
-      if (_flag("act1Done") && G.stage !== "act1" && G.hotel === "sabai" && G.money >= 300) {
-        G.money -= 300;
-        _say("(Under the Sabai Palms' one working porch light, the night clerk " +
-          "produces the joiner ledger: ฿300, and a look with footnotes.)", "dim");
-      }
+      _joinerFee();
       _stdBarfineRoll();   // protection used if carried; else the night may keep a secret
       _conquestHappy(G.lastBfBase || 10, G.lastBfId); // reality-LT sets a lower base
       if (_flag("act1Done") && _rand() < 0.35) _cinderellaCoda(); // her 6 a.m., occasionally

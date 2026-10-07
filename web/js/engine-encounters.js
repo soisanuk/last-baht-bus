@@ -1494,6 +1494,7 @@ const _ENC = {
       _say(`Forty minutes later she is at the door and — for once — she is exactly ` +
         "the photos. Better, even: funny, unhurried, delighted by your terrible " +
         `Thai. Some nights the app pays out, and it pays out like this. (฿${G.money} left.)`, "win");
+      if (G.room === _hotelRoomId()) _joinerFee();
       _conquestHappy(8);
       return;
     }
@@ -1754,6 +1755,7 @@ function _catfishDoor(input) {
       `฿${BOOK_PRICE}, the lights stay low, and you spend the whole time quietly ` +
       "editing her back into the photograph in your head. It is fine. Fine is " +
       `precisely the word. (฿${G.money} left.)`, "");
+    if (G.room === _hotelRoomId()) _joinerFee();
     _conquestHappy(2);
     return;
   }
@@ -1784,6 +1786,7 @@ function _clubpickup(input) {
     "you, a late-night mookata, and hours of talk that feels like the realest thing to happen to you in " +
     "this town. She comes back to your room like it's the most natural thing in the world. It is a " +
     "wonderful night. You are, briefly, and against all your better judgement, in love.", "win");
+  _joinerFee();   // "she comes back to your room"
   _conquestHappy(8);
   G.pendingEnc = "clubpickup";
   _setFlag("taxiPending");

@@ -7994,6 +7994,7 @@ function _affairMorning() {
     ], "affairmorningsour"), "dim");
     return;
   }
+  _joinerFee();   // she came up — the clerk charges her like anybody
   _say(_pickVary([
     `${_affairHer()} came in with the float counted and her shoes in her hand, and was asleep before you had said anything. She is gone again when you wake, a note on the kettle: "ice man 4 o'clock. you go."`,
     `She let herself in some time after five. You remember the fan, and her telling you who was drunk and who was only pretending, and then nothing. The pillow still smells of the bar.`,

@@ -302,6 +302,11 @@ const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 // what she wants when the bar wants nothing.
 const LADY_ST = 300, LADY_LT = 500;
 const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the short-time motel off Soi 7
+// The Sabai's joiner fee is charged on the GUEST, not on the trade: the night clerk sees a woman
+// going up the stairs and cannot tell a bar girl from a pharmacist, and was never asked to
+// (Mario, 2026-10-07 — it was charged only on barfine endings, so Cream, the app girl, a club
+// pickup and the affair girl all went up free).
+const JOINER_FEE = 300;
 // THE SEA WALL, north of Soi 6 — the coconut bar's sibling pitch, and the town's
 // katoey freelancers (Mario, 2026-09-05). Priced ABOVE the dark sand on purpose:
 // these three are regulars on a known corner within sight of the hotels, they

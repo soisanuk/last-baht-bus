@@ -248,3 +248,17 @@ test("L616 the floor's reviews of each other are deep enough not to read as one 
   assert.doesNotMatch(NPCS.dieter.desc, /pressed short-sleeve shirt|squared/);
   assert.ok(!NPCS.dieter.dialogue.some(d => /aligns the mat|precise sigh/i.test(d.text || "")));
 });
+test("L233 the Sabai's joiner fee is on the guest, not the trade — the clerk cannot tell who she is (Mario)", () => {
+  G.hotel = "sabai"; G.room = _hotelRoomId();
+  // Cream's night
+  let m0 = G.money; G.chamNight = true; G.lastBfId = null; stub(0.99, () => _endNight("cham"));
+  assert.equal(m0 - G.money >= JOINER_FEE, true, "Cream went up the stairs too");
+  // once a night, however many ways she arrived
+  G.room = _hotelRoomId(); m0 = G.money; _joinerFee(); _joinerFee(); assert.equal(m0 - G.money, JOINER_FEE);
+  // the affair girl coming home after close
+  G.joinerDay = -1; G.affair = { id: "manow", homeDay: G.day - 1, strain: 0, crisSeen: [], crisChose: {}, warned: {} };
+  m0 = G.money; out = []; _affairMorning(); assert.equal(m0 - G.money, JOINER_FEE);
+  // not at the other hotels, and not before the opening is done
+  G.joinerDay = -1; G.hotel = "queenvic"; m0 = G.money; _joinerFee(); assert.equal(G.money, m0);
+  assert.equal(String(_endNight).match(/G\.money -= 300/), null, "no hard-coded fee left in the barfine ending");
+});
