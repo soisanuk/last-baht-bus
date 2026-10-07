@@ -3138,7 +3138,7 @@ function _questOffer(npcId) {
     _say(_fmt(_lived ? "✦ {who} owes you for one already done: “{name}”"
                      : "✦ {who} has a job for you: “{name}” — {desc}",
       { who: NPCS[npcId].name, name: _L(q.name), desc: _questPitch(_L(_qDesc(q))) }), "win");
-    _say(_lived ? `(ACCEPT ${qid.toUpperCase()} — you have already done the thing; this is ${(NPCS[_qGiver(QUESTS[qid])] || {}).pronoun === "she" ? "her" : "him"} settling up.)`
+    _say(_lived ? `(ACCEPT ${qid.toUpperCase()} — you have already done the thing; this is ${_pr(_qGiver(QUESTS[qid])).o} settling up.)`
                 : `(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
     // a league night is every third night, and a week is seven: say when the
     // next one is after your flight (Arturo, round 47 — offered on the last
@@ -3158,7 +3158,7 @@ function _findQuest(word) {
   // Job", so ACCEPT RABBIT JOB — the thing a player types after reading either —
   // matched nothing at the one modal that starts the arc. Same fix the venue
   // matcher already carries: normalise the typed word AND the stored name.
-  const norm = t => String(t).toLowerCase().replace(/[’'`]/g, "").replace(/_/g, " ").replace(/\s+/g, " ").trim();
+  const norm = t => String(t).toLowerCase().replace(/[\u2019\u0027\u0060]/g, "")   /* ’ ' ` — escaped so no source scanner reads a quote here */.replace(/_/g, " ").replace(/\s+/g, " ").trim();
   const w = norm(word);
   if (!w) return null;
   return Object.keys(QUESTS).find(qid =>
@@ -3192,7 +3192,7 @@ function _doAccept(arg) {
       _npcRoom(QUESTS[qid].giver) !== G.room && !_npcsHere().includes(QUESTS[qid].giver)) {
     const gv = NPCS[QUESTS[qid].giver];
     const where = typeof _npcWhere === "function" && _npcWhere(QUESTS[qid].giver);
-    _say(`${gv.name} isn't here to hand it over` + (where && _barName(where) ? ` — ${gv.pronoun === "he" ? "he's" : "she's"} at ${_barName(where)} tonight.` : "."));
+    _say(`${gv.name} isn't here to hand it over` + (where && _barName(where) ? " — " + _pr(QUESTS[qid].giver).s + " is at " + _barName(where) + " tonight." : "."));
     return;
   }
   if (G.quests[qid] !== "offered" && !_questAvailable(qid)) {
@@ -3303,8 +3303,8 @@ function _frontier(max) {
       else if (rm && ROOMS[rm].bar && (G.visited || {})[rm]) cmd = `TRAVEL ${cap(ROOMS[rm].bar)}`;
     } else {
       if (asked) continue;   // Tan gave you the habit; the note has done its job
-      text = who ? `${who} mentioned ${NPCS[id].name}${at ? `, at ${at}` : ""}. You have not met ${NPCS[id].pronoun === "he" ? "him" : "her"}.`
-                 : `Somebody mentioned ${NPCS[id].name}${at ? ` — at ${at}` : ""}. You have not met ${NPCS[id].pronoun === "he" ? "him" : "her"}.`;
+      text = who ? `${who} mentioned ${NPCS[id].name}${at ? `, at ${at}` : ""}. You have not met ${_pr(id).o}.`
+                 : `Somebody mentioned ${NPCS[id].name}${at ? ` — at ${at}` : ""}. You have not met ${_pr(id).o}.`;
       // no door, even one on this street: ENTER NOTTY'S PLACE under "you have not met
       // her" told Ruth exactly where Rose was (round 47) — meeting her is the edge
       if (rm === here) cmd = `TALK TO ${cap(NPCS[id].name.split(" ").pop())}`;

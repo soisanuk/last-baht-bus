@@ -166,6 +166,8 @@ function stripMarkup(text) {
 
 let _nameRx = null; // [id, /\bName\b/] pairs, built once from the rosters
 
+const _NOT_A_NAME = /\bmoo ping\b|\bping[- ]?pong\b|\bsom tam\b|\bsang ?som\b/gi;
+const _NOT_A_NAME_CAPS = /\b(?:BUY|GIVE|HOLD|HOLDING)\s+(?:A\s+)?ROSES?\b|\bROSES?\s+(?:FOR|TO)\b|\bGIFT\s+(?=[<$\d])|\bABOUT ICE\b/g;
 function _learnNames(text) {
   if (!G || !G.known) return;
   if (!_nameRx) {
@@ -195,6 +197,11 @@ function _learnNames(text) {
     const esc = vname.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     scan = scan.replace(new RegExp("\\b(?:" + esc + "|" + esc.toUpperCase() + "|" + esc.replace(/ Bar$/i, "").toUpperCase() + ")\\b", "g"), m => " ".repeat(m.length));
   }
+  // A word that is somebody's name is not always somebody: MOO PING taught the journal two Pings
+  // (Lennart, round 68 — the Gilt Cage twins met the saleng's hint), and BUY ROSE, GIFT <amount>,
+  // SOM TAM and ABOUT ICE are the same shape. Blanked before the scan; a hint that means the
+  // person ("ASK CANDY ABOUT ROSE") still teaches her.
+  scan = scan.replace(_NOT_A_NAME, m => " ".repeat(m.length)).replace(_NOT_A_NAME_CAPS, m => " ".repeat(m.length));
   const parens = (scan.match(/\([^)]*\)/g) || []).join(" ");
   for (const [id, rx, rxCaps] of _nameRx) {
     if (!G.known[id] && (rx.test(scan) || rxCaps.test(parens))) {

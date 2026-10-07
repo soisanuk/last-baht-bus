@@ -92,3 +92,27 @@ test("a namesake never leaks a stranger's whereabouts: two Pings, and you have m
   G.known.ping = true; out = []; run("talk to ping");
   assert.match(said(), new RegExp(_barName(NPCS.ping.room)));
 });
+
+test("a name that is also a word teaches nobody: MOO PING is pork, not the twins (Lennart, round 68)", () => {
+  const learns = text => { G.known = {}; _say(text); return Object.keys(G.known).sort(); };
+  assert.deepEqual(learns("(BUY MOO PING ฿40 · BUY NOODLES ฿40)"), [], "the saleng's skewer");
+  assert.deepEqual(learns("A tout outside: PING PONG SHOW, upstairs."), []);
+  assert.deepEqual(learns("(BUY SOM TAM ฿50)"), []);
+  assert.deepEqual(learns("(GIFT 3000 · NOTHING)"), [], "Cream's verb, not Gift at Crystal Palace");
+  assert.ok(!learns("(GIVE ROSE TO PIM)").includes("rose"), "the flower, not the mamasan");
+  assert.ok(!learns("(ASK BILL ABOUT ICE)").includes("ice"), "the delivery, not the dancer");
+  // …and a hint that means the person still teaches her
+  assert.ok(learns("(ASK CANDY ABOUT ROSE)").includes("rose"));
+  assert.ok(learns("Ping watches her sister.").includes("naree"));
+});
+
+test("a portrait line names only what a head-and-shoulders crop can show (the art agent: three passes on Kaew's heels)", () => {
+  for (const [id, r] of Object.entries(FLOOR_STAFF))
+    assert.doesNotMatch(r.look, /\b(feet|foot|heels?|shoes?|legs?|knees?|ankles?|sandals?|stool|barstool)\b/i, `${id}: "${r.look}"`);
+  // …and the character the line carried stays in her desc, where it is read rather than drawn
+  assert.match(FLOOR_STAFF.kaew.desc, /sore feet/);
+  // a pronoun is the helper's, never the raw field with a default (Diamond was "him", round 68)
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /\.pronoun === "(?:he|she)" \? "(?:him|her|he's|she's)"/);
+  assert.equal(_pr("diamond").o, "her");
+});
