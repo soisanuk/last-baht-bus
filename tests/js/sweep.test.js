@@ -218,3 +218,33 @@ test("L327 last night's killer field the morning after; L480 introductions; L846
   G.room = "stinky_bar"; assert.match(ask("bert", "who else should i meet"), /ASK BERT ABOUT/);
   G.room = NPCS.somo.room; run("talk to somo"); assert.ok(G.convoQ && G.convoQ.key === "team");
 });
+test("L268 the home answer is booked per province; L251 the work answers are booked town-wide", () => {
+  assert.match(String(_townStory), /hhomewrap:" \+ b\.from/);
+  const hs = Object.keys(NPCS).filter(i => NPCS[i].filler && NPC_ROLES[i] === "hostess" && _npcActive(i)).slice(0, 12);
+  const said = new Map(); let dup = 0;
+  for (const id of hs) { const l = _workTalk(id, "job"); if (said.has(l)) dup++; said.set(l, id); }
+  assert.ok(dup <= Math.max(0, hs.length - _WORK_JOB.hostess.length), `dup ${dup} of ${hs.length}`);
+});
+test("L288 READ BOARD at Cloze is tonight's word, and the romanisation is not printed under it", () => {
+  G.room = NPCS.waen.room; out = []; run("read board");
+  const w = _boardWord(); assert.match(said(), new RegExp(w.th)); assert.ok(!said().includes("(" + w.rom + ")"));
+});
+test("L406 a shop woman you spoke to is somebody you met; L421 speak of the devil", () => {
+  G.room = Object.keys(SHOP_MASSEUSES)[0]; _masseuseTalk("home"); assert.ok(G.shopMet[G.room]);
+  assert.match(String(_railTick), /Speak of the devil/);
+});
+test("L499 the street's keepsakes are carried; L915 the plate goes to the woman you named", () => {
+  G.room = "beach_rd_c"; G.nightTurn = 50; _startEnc("fortune"); run("tao rai");
+  assert.equal(G.itemLoc.red_string, "inventory"); assert.equal(G.itemLoc.lucky_number, "inventory");
+  G.pendingEnc = null; G.room = "mama_yai"; G.known.thip = true; const h0 = G.hunger; out = []; run("buy som tam for thip");
+  assert.match(said(), /Thip/); assert.equal(G.hunger, h0, "you did not eat it");
+});
+test("L641 a regular greets the guv'nor at the bar you own; L933 the bars' Thai names are typeable", () => {
+  owner(); G.room = "stinky_bar"; const reg = _npcsHere().find(i => NPCS[i].patron);
+  if (reg) { delete G.talked[reg]; out = []; run(`talk to ${reg}`); assert.ok(_RAIL_GUVNOR.some(f => said().includes(f(NPCS[reg].name).slice(0, 25))), said()); }
+  assert.match(String(_thaiToCmd("เข้าเรนโบว์")), /enter rainbow girls/);
+});
+test("L616 the floor's reviews of each other are deep enough not to read as one voice; L660 Dieter is not Helmut", () => {
+  assert.doesNotMatch(NPCS.dieter.desc, /pressed short-sleeve shirt|squared/);
+  assert.ok(!NPCS.dieter.dialogue.some(d => /aligns the mat|precise sigh/i.test(d.text || "")));
+});

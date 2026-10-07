@@ -59,7 +59,7 @@ test("TRAVEL through the dark with the torch off stops at its edge; the same ord
 
 test("staff talk about the people they work with, the room, and the wallet (Vic / Trevor)", () => {
   G.room = "lucky_tiger"; run("ask ratana about lek");
-  assert.match(text(), /Good girl|different version/); assert.doesNotMatch(text(), /Not my story|don't know/);
+  assert.match(text(), /Good girl|different version|On time every night|Too soft|came with nothing/); assert.doesNotMatch(text(), /Not my story|don't know/);   // a pool since the sweep (round 61, Nadia)
   out = []; run("ask lek about ratana"); assert.match(text(), /Strict\. Fair|look AT us|Mama know everything/);
   G.nightTurn = 50; G.room = "lucky_tiger"; const cashier = _npcsHere().find(i => NPC_ROLES[i] === "cashier");
   out = []; run(`ask ${NPCS[cashier].name.toLowerCase()} about lucky tiger`); assert.match(text(), /Comes in here, goes out there/);

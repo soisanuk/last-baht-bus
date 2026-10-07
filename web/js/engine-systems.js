@@ -10934,6 +10934,14 @@ function _doEat(arg) {
       return;
     }
     G.mamaYaiDay = G.day;
+    // "som tam for thip" fed YOU and dropped her name (Marguerite, round 67)
+    { const _fm = String(typeof _rawAnswer === "string" ? _rawAnswer : arg || "").toLowerCase().match(/\bfor ([a-z]+)/);
+      const _fid = _fm && typeof _findNpc === "function" ? _findNpc(_fm[1]) : null;
+      if (_fid && _npcsHere().includes(_fid)) {
+        _addBond(_fid, 1); (G.soc.given = G.soc.given || {})[_fid] = (G.soc.given[_fid] || 0) + 1;
+        _say(`The plate arrives and you push it across to ${NPCS[_fid].name}. She looks at it, then at you, and eats without a word — which, from a woman who has fed half this bar, is the whole of the thank-you. Mama Yai, passing, says nothing either, and approves.`, "win");
+        return;
+      } }
     G.hunger = Math.max(0, G.hunger - 30);
     _say("Nobody took your order. A plate of som tam just arrives, pounded to order, " +
       "correct in every way — fish sauce, lime, the chilli count of someone who trusts " +
@@ -11295,10 +11303,11 @@ function _boardWord() {
 }
 function _boardShow() {
   const w = _boardWord();
-  _say("The board, in her hand: a Thai word, the romanisation under it, and a sentence with the " +
-    "word taken out of it.", "dim");
-  _say("   " + w.th + "   ______   (" + w.rom + ")", "thai");
-  _say("(ANSWER <the romanisation, or the English> — first one right drinks half price here tonight.)", "dim");
+  // the romanisation printed under the word WAS the answer (Nattapong, round 56): the board
+  // shows the Thai and a sentence with the English taken out of it
+  _say("Tonight's word is on the board in her careful hand: the Thai, and under it a sentence with the English taken out.", "dim");
+  _say("   " + w.th + "   —   “in English, this is ______”", "thai");
+  _say("(ANSWER <the English, or the romanisation if you can read it> — first one right drinks half price here tonight.)", "dim");
 }
 function _doAnswer(arg) {
   if (!_waenHere()) { _say("Nothing here to answer. The board is Kruu Waen's, at Cloze on Soi Diana."); return; }

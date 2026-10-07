@@ -281,6 +281,11 @@ function _stallTool(room) {
   if (/som ?tam|papaya|mortar/.test(n)) return "mortar";   // a som tam cart has no wok (Anand, round 59)
   return "wok";
 }
+const _RAIL_GUVNOR = [
+  n => `${n} looks up from the paper. "You're the new owner, then. Bert said." A nod at the beer. "Keep it cold and keep the price where it is, and you'll last longer than the last one."`,
+  n => `"Evening, guv'nor." ${n} raises the glass an inch. "Don't change anything. That's all any of us want from an owner."`,
+  n => `${n} sizes you up the way a regular sizes up a new landlord. "So it's yours now. Same stool, same drink — I'm not difficult. Just don't go putting the TV on the shopping channel."`,
+];
 const _FOLK_SERVER = [
   "The waitress has a pad, a pen behind her ear and four tables in her head. \"You order?\" She is not unfriendly; she is busy, which in a restaurant is the same as friendly.",
   "\"Menu, sir.\" It is already in your hand. She points at three things with the end of her pen — the ones the kitchen does best, or the ones it has most of. \"Spicy?\"",
@@ -333,6 +338,7 @@ function _masseuseTalk(t) {
   const r = _room(), rm = G.room;
   if (r.soapy) return _pickVary(_FOLK_SOAPY, "folksoapy");
   const sw = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[rm];
+  if (sw) (G.shopMet = G.shopMet || {})[rm] = true;   // "met 4" after Joom, Duean and the rest (Graeme, round 58)
   if (sw) {
     // the shop's own woman, asked a real question, answers it — her name, her home, her
     // people, her training — not the next line of a script (Graeme, round 58)
@@ -3854,6 +3860,8 @@ const _WEAR_NO = [
 ];
 
 function _doRead(arg) {
+  // READ BOARD at Cloze is tonight's word, not the board's furniture (Nattapong, round 56)
+  if (/\b(black)?board\b/.test(String(arg || "")) && typeof _waenHere === "function" && _waenHere() && typeof _boardShow === "function") { _boardShow(); return; }
   if (/\b(book|regulars|spreadsheet|list)\b/.test(String(arg||"")) && G.itemLoc.trade_book === "inventory") { _readBook(); return; }
   if (/\b(stick|usb|thumb drive)\b/.test(String(arg||"")) && G.itemLoc.data_stick === "inventory") { _readStick(); return; }
   if (/news|paper/.test(arg)) return _doPaper();
@@ -4064,6 +4072,7 @@ function _doTalkCore(arg, topic) {
     // gets a voiced refusal (thorough-player playtest B#3, 2026-08-23).
     if (_promptedFolk(arg, topic)) return;
     _say(_pickVary(_NOBODY_NAME, "noname")); _noteMiss("noname", arg);
+    G.missTarget = { w: String(arg || "").toLowerCase().trim(), turn: G.turns };   // the rail tick may bring him in on this very turn (Declan, round 58)
     return;
   }
   _convoStart(npc); // this NPC is now the active conversation partner (bare topics aim here)
@@ -4096,6 +4105,12 @@ function _doTalkCore(arg, topic) {
   // you your own girls — the customer register is wrong once you sign the lease.
   // Personal topics fall through to normal dialogue (an owner asks after her kids).
   if (topic && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // Lamai's crates, Cake's fan: the text she sent (Lothar, round 67)
+  // a regular at the bar you own greets the guv'nor, not a new face (Piet, round 62: "New face. You here long?")
+  if (!topic && NPCS[npc].patron && typeof _atOwnBar === "function" && _atOwnBar() && !(G.talked && G.talked[npc])) {   // not _met(): this function has its own _met further down
+    _say(_pickVary(_RAIL_GUVNOR, "railguv")(NPCS[npc].name));
+    if (typeof _markHello === "function") _markHello(npc); else (G.talked = G.talked || {})[npc] = [];
+    return;
+  }
   if (typeof _ownBarTalk === "function" && _ownBarTalk(npc, topic || null)) return;
   // Some regulars have a sore subject that turns them belligerent (Fergie: Bert,
   // Candy, their bars). It PRE-EMPTS the node lookup — you don't get a story
@@ -4537,13 +4552,24 @@ function _doTalkCore(arg, topic) {
             `"Good manager." ${NPCS[npc].name} says it like a fact about the weather. "Drunk farang shout, ${n} don't shout back. He only get quieter. Then farang leave."`,
           ][_rvPick(6)] :
           them === "cashier" ? _cashRev[_rvPick(_cashRev.length)] :
-          me === "mamasan" ? `"${n}?" ${_mamaLabel(NPCS[npc].name)} weighs it. "Good girl. Sends money home, same as all of them, and works harder than she lets on. Ask her yourself — she will tell you a different version, and hers is also true."` :
+          me === "mamasan" ? [
+            `"${n}?" ${_mamaLabel(NPCS[npc].name)} weighs it. "Good girl. Sends money home, same as all of them, and works harder than she lets on. Ask her yourself — she will tell you a different version, and hers is also true."`,
+            `"${n}." ${_mamaLabel(NPCS[npc].name)} doesn't look at her. "On time every night. Never sick when it rains. You know how rare that is? No — you don't. I do."`,
+            `"${n}?" ${_mamaLabel(NPCS[npc].name)} considers the far end of the rail. "Too soft with the old men. They come back for her, so I say nothing. Soft is a business too."`,
+            `${_mamaLabel(NPCS[npc].name)} gives it a moment. "${n} came with nothing and a cousin. Now the cousin works somewhere else and ${n} is still here. That is the whole review."`,
+          ][_rvPick(4)] :
           me === "cashier" ? `"${n} is on the book same as everybody." ${NPCS[npc].name} does not look up. "That is all the book says about anyone."` :
           me === "manager" ? `"${n}? Ask her — she runs me as much as I run her, and she'd say more."` :   // "been here longer than me" from a man twenty-two years behind this rail (Rolf, round 55)
           [`"${n}? My sister." A beat. "Not real sister. Bar sister. She take my customer, I take hers, we eat together after. Same same."`,
            `"${n}?" ${NPCS[npc].name} rolls her eyes, fond. "She borrow my lipstick, she never give back. Good girl, bad lipstick."`,
            `"${n} is okay." ${NPCS[npc].name} shrugs. "We share the cool-box and the complaining. That is friends, in a bar."`,
-          ][_rvPick(3)];   // three hostesses review each other now (round 55)
+           // the same three lines in every bar read as one voice (Nadia, round 61)
+           `"${n}?" ${NPCS[npc].name} glances down the rail. "She sing karaoke after close like she is on TV. Very bad. Everybody love it."`,
+           `"${n} help me with my {{phone}} when it break. She know phones better than the shop." A shrug. "So I buy her som tam. That is how we pay, us."`,
+           `"${n} is the clever one." ${NPCS[npc].name} says it without any envy at all. "She save money. Real saving, in the bank. The rest of us — " she waves a hand at the whole idea.`,
+           `"${n}?" ${NPCS[npc].name} laughs. "She tell every customer she is twenty-five. She is twenty-five for three years now. We let her."`,
+           `"Me and ${n}, same village nearly. Same bus home at Songkran." ${NPCS[npc].name} smiles. "Twelve hours together, no air-con. After that you are family or you are enemy."`,
+          ][_rvPick(8)];   // three hostesses review each other now (round 55)
         _say(line);
         _questOffer(npc);
         return;
@@ -10924,16 +10950,23 @@ const _WORK_JOB = {
     n => `"What I do?" ${n} looks faintly amused that it needs saying. "I sit. I talk. I drink with customer, I laugh at joke not funny. Six night, sometime seven." A small shrug. "Is not hard work. Is long work. Not the same thing, na."`,
     n => `"Job?" ${n} thinks about how to put it. "Make the man happy he came. That is all of it." She runs a finger round the rim of her glass. \"Some night is easy. Some night is acting. You never know which one until you sit down."`,
     n => `"I work the floor." ${n} says it plainly. "Come six, go when the last man go. Talk, drink, sometime dance if the song good." A beat. "Everybody think is party. Is a shift, tilac. Party is what the customer is having."`,
+    n => `"My job?" ${n} counts on her fingers. "Smile. Remember name. Remember what he drink. Remember what he tell me last time — that one is the hard one." She taps her temple. "Everything in here."`,
+    n => `${n} considers the question like it might be a trick. "I am the reason you stay one more beer." A shrug. "Is a real job. Ask the bar what happen when I go home early."`,
+    n => `"Hostess." ${n} says the English word carefully, as if it belonged to somebody else. "In Thai is not so nice word. I like the English one. It sound like a hotel."`,
   ],
   cashier: [
     n => `${n} taps the book without opening it. "Every drink, every chit, every name. In here." She does open it then, one page, and closes it again. "Nobody get a drink in this bar I don't know about. That is the job, and it is the whole job."`,
     n => `"I keep the money and the book." ${n} does not look up. "Mama run the floor, I run the page. She never touch the drawer, I never touch the girls. Is cleaner that way, for everybody."`,
     n => `"Me?" ${n} almost smiles. "I am the boring one. The girls have the stories, I have the arithmetic." She squares a stack of notes. "One of us goes home with a headache and it is not the girls."`,
+    n => `"Cashier." ${n} turns a chit round so you can read it. "Every drink is a piece of paper. Every piece of paper is money. I make sure the paper and the money agree."`,
+    n => `${n} doesn't look up from the float. "I count. Then I count again. The girls trust me because I am boring, and boring is the right word for the person with the drawer."`,
   ],
   mamasan: [
     n => `"I run the floor." ${n} lets her eyes go down the rail and back, and it takes about a second. "Who work tonight, who is late, who is crying in the toilet, who is drinking too much — customer AND girl." A shrug. "Mostly I see the trouble before it is trouble. That is the whole job."`,
     n => `"What do I do?" A short laugh. "Everything nobody else want to do." ${n} counts it on her fingers without hurrying. "Rota. Fight. Police. The girl whose mother is sick — the real one and the other kind. Somebody must decide. I decide."`,
     n => `"Thirty girl, one room, one night." ${n} says it like the setup to something and there is no punchline coming. "Make it work. Every night. That is the job."`,
+    n => `"I am the mother of the room." ${n} says it without a smile, which is how you know she means it. "Sometimes the mother is kind. Most nights the mother is just awake."`,
+    n => `${n} watches a girl at the far end fix her hair and file it away. "I decide. Who sit where, who go out, who go home. Then I take the blame for all of it. That is the job."`,
   ],
 };
 const _WORK_PAY = {
@@ -10972,13 +11005,16 @@ function _workTalk(npc, kind) {
   const pools = kind === "pay" ? _WORK_PAY : _WORK_JOB;
   const pool = pools[role];
   if (!pool) return null;
-  // per ROOM, so two colleagues on one rail do not describe the job identically
+  // TOWN-WIDE, so two bars do not describe the job identically ("Party is what the customer is
+  // having" from Toey and Jaja — Dieter, round 56); her own line, once dealt, stays hers
+  const mine = ((G.storyOf = G.storyOf || {})[npc] = G.storyOf[npc] || {}), ak = "work:" + role + ":" + (kind || "job");
+  if (mine[ak] != null && mine[ak] < pool.length) return pool[mine[ak]](n);
   const book = (G.soc.workSaid = G.soc.workSaid || {});
-  const key = G.room + ":" + role + ":" + (kind || "job");
-  const used = book[key] = book[key] || [];
-  let i = _hh(npc + ":" + key, 23) % pool.length;
+  const used = book[ak] = book[ak] || [];
+  let i = _hh(npc + ":" + ak, 23) % pool.length;
   for (let k = 0; k < pool.length && used.includes(i); k++) i = (i + 1) % pool.length;
   if (!used.includes(i)) used.push(i);
+  mine[ak] = i;
   return pool[i](n);
 }
 
@@ -12111,6 +12147,8 @@ function _thaiCmdTable() {
   const rows = _THAI_CMD.slice();
   for (const [id, n] of Object.entries(NPCS))
     if (n.th && /[\u0E00-\u0E7F]/.test(n.th)) rows.push([n.th, String(n.name || id).toLowerCase().split(" ").pop()]);
+  for (const [id, r] of Object.entries(ROOMS))   // a bar's own Thai name (the maze signs): เข้าเรนโบว์ (Jens, round 67)
+    if (r.th && /[\u0E00-\u0E7F]/.test(r.th)) rows.push([r.th, String(_barName(id) || r.name).toLowerCase()]);
   rows.sort((a, b) => b[0].length - a[0].length);
   return (_thaiCmdAll = rows);
 }

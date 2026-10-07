@@ -4674,7 +4674,7 @@ function _nightSnapshot() {
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0,
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
-    talked: Object.keys(G.talked || {}).length,
+    talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
     nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
     faces: new Set((_photoList() || []).map(p => p.id)).size,
   };
@@ -4756,7 +4756,8 @@ function _morningLedger() {
   if (sentN > 0) bits.push("\u0e3f" + _num(sentN) + " sent from the account through the banking app");
   // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
-  const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
+  const _metNow = Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length;
+  const dk = _metNow - (b.talked != null ? b.talked : _metNow);
   if (dk > 0) bits.push("met " + dk);
   const dn = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length - b.nums;
   if (dn > 0) bits.push(dn + " new number" + (dn > 1 ? "s" : ""));

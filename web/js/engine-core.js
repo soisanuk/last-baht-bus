@@ -1108,7 +1108,7 @@ function _railTick() {
       if (n.shuttle) _say(_pickVary(_GLAM_COMES, "glamIn"), "dim");
       else if (typeof _isQuizHour === "function" && _isQuizHour(hour) &&
                _quizBars().indexOf(to) >= 0) _say(_pickVary(_RAIL_QUIZ, "railQuiz")(name), "dim");
-      else _say(_pickVary(_RAIL_ARRIVES, "railIn")(name), "dim");
+      else _say((G.missTarget && G.turns - G.missTarget.turn <= 1 && G.missTarget.w && String(name).toLowerCase().includes(G.missTarget.w) ? "Speak of the devil — " : "") + _pickVary(_RAIL_ARRIVES, "railIn")(name), "dim");
     } else if (from === G.room) {
       said++;
       if (n.shuttle) _say(_pickVary(_GLAM_GOES, "glamOut"), "dim");
@@ -2363,7 +2363,7 @@ function _townStory(npc, d) {
       const w = _townPick(npc, "hplanwrap", _H_PLAN_WRAP.length, b.planWrap);
       return { text: _H_PLAN_WRAP[w](_H_PLAN[c]) };
     }
-    case "home": return { text: _H_HOME_WRAP[_townPick(npc, "hhomewrap", _H_HOME_WRAP.length, b.homeWrap)](b.from) };
+    case "home": return { text: _H_HOME_WRAP[_townPick(npc, "hhomewrap:" + b.from, _H_HOME_WRAP.length, b.homeWrap)](b.from) };   // keyed by province: two Buriram women, one sentence (Nattapong, round 56)
     case "free": return { text: _H_FREE[_townPick(npc, "hfree", _H_FREE.length, b.free || 0)] };
     case "mgreet": { const i = _townPick(npc, "mgreet", _M_GREET.length, b.greet); return { text: _M_GREET[i], short: _M_GREET_SHORT[i] }; }
     case "mfamily": { const bad = (typeof _M_FAM_CLASH !== "undefined" && _M_FAM_CLASH[b.story]) || []; return { text: _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, b.family, i => !bad.includes(i))] }; }

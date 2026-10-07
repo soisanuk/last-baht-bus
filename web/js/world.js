@@ -3407,6 +3407,7 @@ const ROOMS = {
     exits: { out: "tt_lane_1" },
   },
   starlight_bar: {
+    th: "สตาร์ไลท์",   // the maze sign names it in Thai; typeable since round 67 (Jens)
     name: "Starlight Bar",
     region: "Tree Town",
     bar: "Starlight Bar", barType: "beer",
@@ -3422,6 +3423,7 @@ const ROOMS = {
     exits: { out: "tt_lane_2" },
   },
   rainbow_girls: {
+    th: "เรนโบว์",   // the maze sign names it in Thai; typeable since round 67 (Jens)
     name: "Rainbow Girls Bar",
     region: "Tree Town",
     bar: "Rainbow Girls Bar", barType: "gogo",
@@ -4730,8 +4732,8 @@ const ROOMS = {
         "C L _ Z E. The bracket for the missing letter is still there, and so is the wiring, and " +
         "the gap has been part of the name for so long that the regulars would complain if it " +
         "came back.",
-      board: "Tonight's word is chalked in three lines: the Thai, the romanisation with the tone " +
-        "marks done properly, and a sentence with a hole in it. Underneath, in smaller writing: " +
+      board: "Tonight's word is chalked in two lines: the Thai, with the tone " +
+        "marks done properly, and a sentence with a hole where the English goes. Underneath, in smaller writing: " +
         "FIRST CORRECT ANSWER DRINKS FOR HALF PRICE. The rule appears to be enforced.",
     },
     revisit: [
@@ -4956,6 +4958,14 @@ const ITEMS = {
   // "a former bar girl gf on Soi 6 who he ghosted; she wants you to take something
   // to her 'brother'; whatever it is upsets him"). Folded from the one photograph
   // she has of the two of them, with two Thai words on the back.
+  // the fortune-teller's string and number, and the "free gift" amulet: the prose put them on you and
+  // INVENTORY never had them (Malcolm, round 59). Separate ids from Nok's amulet, which other code reads.
+  red_string: { name: "a red string on your wrist", aliases: ["string", "red string", "bracelet"], portable: true, location: null,
+    desc: "A loop of red cotton, knotted twice by a man in a robe who read your palm for money. It is supposed to keep the bad luck off. It is definitely keeping the cotton on." },
+  lucky_number: { name: "a lucky number on a scrap of paper", aliases: ["number", "lucky number", "scrap", "paper scrap"], portable: true, location: null,
+    desc: "Four digits in biro on the corner of a flyer. \"Keep always,\" he said. You could buy a lottery ticket with it. People do." },
+  street_amulet: { name: "a street amulet", aliases: ["street amulet", "gift amulet", "charm"], portable: true, location: null,
+    desc: "A small clay Buddha in a plastic case on a cord — the 'free gift' you paid for anyway. Cheap, and not nothing: somebody pressed it out by hand." },
   thai_sim: {
     name: "a Thai SIM (not in your name)",
     aliases: ["sim", "thai sim", "sim card", "the sim"],
@@ -14998,23 +15008,24 @@ const _REGULARS = {
     name: "Dieter", emoji: "🍺", age: 71, nat: "German", pronoun: "he",
     patron: true, room: "seabreeze", hops: false,
     look: "German man of seventy-one, silver hair, very clean glasses, pressed pale short-sleeve shirt, precise.",
-    desc: "Seventy-one, a pressed short-sleeve shirt, a beer mat squared to the table edge, and twenty " +
-      "years of Jomtien behind a pair of very clean glasses. He drinks precisely two Chang a night, no " +
+    // his own man, not Helmut's twin: the shirt, the squared mat and "precise" were both of theirs (reader-rail, round 62)
+    desc: "Seventy-one, a straw hat on the stool beside him like a second customer, and twenty " +
+      "years of Jomtien in a face that has stopped being surprised by prices. He drinks two Chang a night, no " +
       "more, and can quote you the price of everything on this soi across three different decades.",
     dialogue: [
-      { text: "“Guten Abend.” Dieter does not move his beer mat. “You may sit. I am Dieter. Twenty " +
+      { text: "“Guten Abend.” Dieter lifts the hat off the stool beside him. “You may sit. I am Dieter. Twenty " +
           "years here — I remember when this soi was sand and one bar and the beer was forty baht, and " +
           "now the beer is” — he taps the menu — “well. You see. Everything changes and gets more " +
           "expensive and nobody asks the Germans.”",
         short: "“Dieter. Twenty years here. When this soi was sand and one bar. Everything changes, nobody asks the Germans.”" },
       { topic: "jomtien", text: "“Jomtien is correct for a pensioner. Quiet, orderly, the hospital is " +
-          "good, the flight to Frankfurt is direct.” He aligns the mat again. “Pattaya I go maybe twice " +
+          "good, the flight to Frankfurt is direct.” He sets the hat on his knee. “Pattaya I go maybe twice " +
           "a year, for the paperwork, and I come home tired and poorer. Here I know the price of my beer " +
           "and the name of the lady who pours it. At my age this is enough. More than enough. It is " +
           "comfortable.”",
         short: "“Jomtien is correct for a pensioner: quiet, orderly, the hospital good. I know the price of my beer and the lady who pours it. Enough.”" },
       { topic: "money", text: "“The pension is the pension — it does not grow. But the baht, it moves.” " +
-          "A precise sigh. “When I came, one euro was fifty baht. Now?” He does not say the number; it " +
+          "A long Bavarian sigh. “When I came, one euro was fifty baht. Now?” He does not say the number; it " +
           "offends him. “So I drink two beer, not three, and I do not complain, because complaining is " +
           "also not free. This is why the Germans last out here and the English” — the smallest dry look " +
           "toward the English end of the rail — “do not.”",

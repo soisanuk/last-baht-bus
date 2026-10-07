@@ -1417,6 +1417,7 @@ const _ENC = {
     // dark spirit, the robed men waiting in the wings all need you NOT to ask.
     if (/tao ?rai|how much|price/.test(input)) {
       const tip = Math.min(FORTUNE_READ, G.money); G.money -= tip;
+      G.itemLoc.red_string = "inventory"; G.itemLoc.lucky_number = "inventory";   // the string and the number are on you now (Malcolm, round 59)
       _say(`"เท่าไหร่?" you ask, before he can loop the red string on. He reads your palm for the ` +
         `฿${FORTUNE_READ} it actually costs, scrawls the "lucky number, keep always" — and there is ` +
         `no dark spirit, no cleansing, no ฿${FORTUNE_RITUAL} ritual, because you closed the account ` +
@@ -1444,6 +1445,7 @@ const _ENC = {
       _setFlag("curseRitual");
       // the payment is said once; only the DEMAND is the prompt a reload redraws —
       // "You hand over ฿199" replayed on continue read as a second charge (Malcolm, round 59)
+      G.itemLoc.red_string = "inventory"; G.itemLoc.lucky_number = "inventory";   // the string and the number are on you now (Malcolm, round 59)
       _say(`You hand over ฿${FORTUNE_READ}. He loops the red string around your wrist, ` +
         "cradles your palm, hums, and writes a number on a scrap of paper — “your " +
         "lucky number, keep always.”", "dim");
@@ -1719,7 +1721,7 @@ function _freegift(input) {
   if (price) {
     const tip = Math.min(GIFT_TIP, G.money); G.money -= tip;
     _say(`“Tao rai?” you say, already reaching for your wallet. Something shifts in her face — respect, ` +
-      `almost disappointment. ฿${tip} changes hands, the amulet is yours clean, the account closed before ` +
+      `almost disappointment. ฿${tip} changes hands, the amulet is yours clean, the account closed before ` + ((G.itemLoc.street_amulet = "inventory"), "") +
       "it ever opened. “You not new here,” she says, half a smile, and drifts off toward easier prey. " +
       `(฿${G.money} left.)`, "");
     _addHappy(1);
