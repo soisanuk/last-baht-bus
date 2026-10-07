@@ -52,10 +52,13 @@ test("a woman with her own lines speaks them, and no shared line on a subject sh
 test("the twins: one face in the portrait prompt, the differences their story gives them, and each names the other", () => {
   const a = NPCS.naree, b = NPCS.yada;
   assert.equal(a.twin, "yada"); assert.equal(b.twin, "naree");
-  const face = "Thai woman, mid twenties, big dark eyes, round face";
-  assert.ok(a.look.startsWith(face) && b.look.startsWith(face), "the same face, word for word");
-  assert.match(a.look, /Buddha/); assert.doesNotMatch(b.look, /Buddha/, "Yada lost hers");
-  assert.ok(a.look.split(/\s+/).length <= 20 && b.look.split(/\s+/).length <= 20);
+  // ONE render, mirrored (Mario, 2026-10-08): the same look, and her record names whose to flip
+  assert.equal(b.look, a.look); assert.equal(b.mirrorOf, "naree");
+  // nothing the mirror would copy may contradict the story: no pendant (Pong lost hers) and no
+  // haircut that isn't the other's — the difference the portrait shows is the parting
+  assert.doesNotMatch(a.look, /Buddha|pendant|crop/i);
+  assert.match(b.desc, /parts it on the other side/); assert.doesNotMatch(b.desc, /cropped/);
+  assert.doesNotMatch(NPCS.naree.dialogue.map(d => d.text).join(" "), /different haircut/);
   // Ping and Pong (Mario, 2026-10-07): Thai twins get a matched pair of nicknames. Ids stay naree/yada.
   assert.equal(a.name, "Ping"); assert.equal(b.name, "Pong");
   assert.equal(_findNpc("ping"), "naree", "in the Gilt Cage, Ping is the twin, not the Ping across town");
@@ -65,6 +68,7 @@ test("the twins: one face in the portrait prompt, the differences their story gi
   assert.equal(FLOOR_STAFF.yada.from, FLOOR_STAFF.naree.from, "one hometown");
   const man = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/portrait-manifest.json", import.meta.url)), "utf8"));
   assert.deepEqual(man.filler.filter(f => f.twin).map(f => f.id + ">" + f.twin).sort(), ["naree>yada", "yada>naree"]);
+  assert.deepEqual(man.filler.filter(f => f.mirrorOf).map(f => f.id + ">" + f.mirrorOf), ["yada>naree"]);
 });
 
 test("her own plan is the exit the town quotes, and a woman with no thing to open never leaves", () => {

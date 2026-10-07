@@ -101,7 +101,8 @@ for (const id of Object.keys(NPCS)) {
       venueKind: venueKind(n.room),
       emoji: n.emoji, th: n.th || null, room: n.room, tags: [], desc: n.desc,
       ...(n.look ? { look: n.look } : {}),   // her stored portrait prompt (FLOOR_STAFF in world.js)
-      ...(n.twin ? { twin: n.twin } : {}),   // identical twins: render one face, vary only what the two looks say differs
+      ...(n.twin ? { twin: n.twin } : {}),   // identical twins
+      ...(n.mirrorOf ? { mirrorOf: n.mirrorOf } : {}),   // no render of her own: flip that one's (the twins, Mario 2026-10-08)
     });
     continue;
   }
