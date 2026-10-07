@@ -1076,13 +1076,15 @@ function _railRoomAt(id, hour) {
 // here tonight" about the woman he had been talking to (Anand, round 59). The move
 // is narrated once, the way the rail's is.
 function _nokLeavesTick() {
-  if (!G || G.offstage || G.room !== "jomtien_beach" || G.nightTurn !== 10 || G.convo === "nok") return;
+  // the first tick from seven, once a day — a conversation running across 19:00 had her vanish without a word (Priya, round 58)
+  if (!G || G.offstage || G.room !== "jomtien_beach" || G.nightTurn < 10 || G.nokLeftDay === G.day || G.convo === "nok") return;
   if (typeof _npcActive === "function" && !_npcActive("nok")) return;
   _say(_pickVary([
     "Auntie Nok collects the cats' bowl, tells them something firm in Thai, and heads back up the sand toward her cart at Soi 7.",
     "The cats have eaten; Auntie Nok is done. She rinses the bowl in the edge of the sea, waves it at you like a flag, and walks back to her cart at Soi 7.",
     "Auntie Nok checks the sky as if it had a clock in it, and apparently it does. \"Cart, na — somebody steal my bottles.\" Back up the beach to Soi 7.",
   ], "nokleaves"), "dim");
+  G.nokLeftDay = G.day;
 }
 function _railTick() {
   if (!G || G.offstage || G.game || G.pendingEnc || G.pendingChoice) return;
@@ -1984,6 +1986,9 @@ function _elsewhereLine(word) {
     const own = NPCS[nid].bars ? NPCS[nid].bars.includes(cur) : true;
     if (own && _barName(cur)) {
       // her bar has shut for the night: don't send the player to a padlock
+      // a door you were walked out of is shut to you too — TRAVEL walked 11 turns to the doorman's arm (Fintan, round 60)
+      if (G.soc && G.soc.banned && G.soc.banned[cur] !== undefined && G.turns - G.soc.banned[cur] < BAN_TURNS)
+        return `${NPCS[nid].name} is at ${_barName(cur)}, but that door isn't open to you tonight.`;
       if (typeof _closedNow === "function" && _closedNow(cur)) {
         return `${NPCS[nid].name} ${notHere} — ${_barName(cur)} has shut for the night. Tomorrow.`;
       }
@@ -2039,7 +2044,10 @@ function _topicHits(key, asked) {
   key = String(key).replace(/^(the|a|an) (?=\S)/, "");
   if (key === asked) return true;
   const esc = String(key).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return new RegExp("(^|[^a-z0-9])" + esc + "[a-z]{0,3}([^a-z0-9]|$)", "i").test(String(asked));
+  const m = new RegExp("(^|[^a-z0-9])" + esc + "[a-z]{0,3}([^a-z0-9]|$)", "i").exec(String(asked));
+  if (!m) return false;
+  // "women who don't WORK" is not the job topic (Desmond, round 63)
+  return !/\b(don'?t|doesn'?t|do not|not|never|no)\s+$/i.test(String(asked).slice(0, m.index + m[1].length));
 }
 
 // a node's gates, exactly as the pick honours them
@@ -2116,7 +2124,8 @@ function _selfNamedNode(npcId, topic) {
   // names Bank's stand (Lionel, round 36 — a favour fired by a question about sand)
   const _FURNITURE = new Set(["night", "last", "tonight", "girl", "girls", "drink", "drinks", "money",
     "time", "here", "there", "come", "back", "good", "little", "thing", "things", "about", "some", "more",
-    "beach", "road", "street", "town", "city", "hotel", "market", "pattaya", "jomtien", "naklua", "bangkok"]);
+    "beach", "road", "street", "town", "city", "hotel", "market", "pattaya", "jomtien", "naklua", "bangkok",
+    "thai", "thailand", "farang", "english", "isan"]);   // asking Tan about speaking thai got the PLG speech through "A Thai man" (Nattapong, round 56)
   let words = String(topic).toLowerCase().split(/[^a-z0-9']+/)
     .filter(w => w.length >= 4 && !_STOP.has(w) && !_FURNITURE.has(w));
   // A MAN'S OWN NAME IN HIS OWN NODE IS A STAGE DIRECTION, NOT A TOPIC. Prose
@@ -2432,9 +2441,11 @@ function _deliver(npcId, d, full, asNew) {
   // had bought her eighteen drinks. Buying the drink was what made her forget
   // him, which is a cruel joke on the one playstyle the game rewards (Geraint,
   // round 48). A repeat greeting falls through to _HELLO_AGAIN as it should.
-  const bought = !!(G.soc && G.soc.roundFor && G.soc.roundFor[npcId]) && !!d.topic;
+  const _rtKey = npcId + ":" + idx;
+  const bought = !!(G.soc && G.soc.roundFor && G.soc.roundFor[npcId]) && !!d.topic &&
+    !((G.soc.roundTold || {})[_rtKey]);   // four drinks were four full retellings of one story (Dieter, round 56)
   const terse = repeat && !full && !bought && (!!d.short || flavor);
-  if (bought && !terse && G.soc.roundFor) delete G.soc.roundFor[npcId]; // spent
+  if (bought && !terse && G.soc.roundFor) { delete G.soc.roundFor[npcId]; if (repeat) (G.soc.roundTold = G.soc.roundTold || {})[_rtKey] = true; } // spent
   const firstEver = !repeat && seen.length === 0;
   if (!repeat) seen.push(idx);
   if (terse && !asNew) { if (typeof _noteMiss === "function") _noteMiss("terse"); }
@@ -2470,7 +2481,7 @@ function _deliver(npcId, d, full, asNew) {
     // article-aware: "your wallet" must not become "the your wallet"
     _say(`(You now have ${/^(your|the|a|an)\b/i.test(ITEMS[d.gives].name) ? "" : "the "}${ITEMS[d.gives].name}.)`, "dim");
     if (d.gives === "wallet") {
-      G.money += WALLET_CASH;
+      G.money += WALLET_CASH; G.walletLedger = true;
       _say(`(Most of the cash is still in it — ฿${WALLET_CASH} back in play.)`, "dim");
     }
   }
@@ -2760,8 +2771,9 @@ function _describeRoom(full, forceFull) {
     const darkOut = Object.values(r.exits).some(to => ROOMS[to] && ROOMS[to].dark);
     if (darkOut) {
       G.darkDoorDay = G.day;
-      _say("(The soi outside has no working lights, and it has dogs. LIGHT ON " +
-        "before you step out — the phone does it, and it costs almost nothing.)", "dim");
+      _say(G.dog ? _dogN("(The soi outside has no working lights. Sai Krok knows every dog on it, but you still have to see the kerb — LIGHT ON " +
+        "before you step out.)") : "(The soi outside has no working lights, and it has dogs. LIGHT ON " +
+        "before you step out — the phone does it, and it costs almost nothing.)", "dim");   // a dog warning to a man whose dog is on the mat (Priya, round 58)
     }
   }
   // Buildings fronting this block: entered by name or a tap, not by a compass

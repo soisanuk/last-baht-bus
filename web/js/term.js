@@ -155,6 +155,7 @@ const _term = (() => {
         html = html.replace(/^[1-7](?: +[1-7]){6}$/m, row =>
           row.replace(/[1-7]/g, d => _wrap("cmd", d)));
         html = html.replace(/\bQ\b/g, _wrap("cmd", "Q"));
+        html = html.replace(/●/g, '<span class="c4-you">●</span>').replace(/○/g, '<span class="c4-her">○</span>');   // hard to tell apart (Margaret, round 65)
       }
     } catch (e) { /* pre-boot: no game, nothing to decorate */ }
     // Thai runs: tokenise against the vendored vocab (plus NPC Thai names,

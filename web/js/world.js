@@ -429,7 +429,7 @@ const ROOMS = {
       "Nothing is open and the sand is better for it. The bay pushes the same four notes up the beach over and over. A man is asleep on a lounger further down and has clearly done this before.",
       "The sea does the only work left at this hour. The lights along the far curve of the bay are still on because nobody is paid to turn them off.",
     ],
-    desc: "Soft sand, folded-up loungers, and the sea working away at the dark. " +
+    desc: "Soft sand, folded-up loungers, and the sea working away at the shore. " +
       "Two grey-and-white soi cats hold down the end of a lounger, the big one sitting slightly " +
       "in front of the small one, both watching the water. The beach road glows to the east; the " +
       "sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart " +
@@ -1938,10 +1938,10 @@ const ROOMS = {
       "asked and misses nothing that happens on the pavement.",
     revisit: [
       "Back to the Shady Lady, set back under its awning, the rail facing the soi so you can watch the circus without joining it.",
-      "Pukky has your bottle open before you've picked a stool. Out front the soi does its thing; in here nobody makes you part of it.",
+      "Your bottle is open before you've picked a stool. Out front the soi does its thing; in here nobody makes you part of it.",
       "You settle back onto the rail in the shade. The parade grinds past a few feet away, and the whole pleasure is being just outside it.",
       "The Shady Lady again — potted palms, low awning, cold Chang, and the best seat on the soi for watching other men get pulled into bars.",
-      "Back under the awning where the noise softens by half. Pukky nods, pours, and goes back to reading the pavement like a form guide.",
+      "Back under the awning where the noise softens by half. Somebody pours, and the rail goes back to reading the pavement like a form guide.",
       "The shaded rail takes you back. A go-go tout two doors down loses a customer; the Shady Lady's regulars rate the technique and drink on.",
       "Back to the quiet middle and the shade, a cold one sweating on the rail, the soi safely at arm's length where you like it.",
     ],
@@ -5633,6 +5633,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "order you pay them is the whole trade. I have two bars. I did not get them by being nice " +
           "about the order.\"",
         short: "\"The building is never yours. Pay the landlord on time, the old man when you can. Fifty-one is a person.\"" },
+      // the Tan route: "ask me another time" to the owner of a bar she did not partner (Mick, round 57)
+      { topic: "partner|partnership|fifty-one|51 percent|fifty one percent|the partner|the paper",   // "partner" first: round24 finds the PITCH node by its leading word
+        req: ["barPartner", "partnerTan"],
+        text: "\"Tan.\" Candy says the name without any weight on it, which is how you know it weighs something. \"Fast, free, and his " +
+          "wife's cousin at the land office. I would have been slow, and you would have had paper.\" A shrug. \"You chose. Rent on the day, " +
+          "and if he ever asks you for something, say yes or say no — but say it to his face. That is the whole advice.\"",
+        short: "\"You chose Tan. If he asks for something, answer him to his face.\"" },
       { topic: "stinky|the stinky|our bar|the bar|partnership|partner|fifty-one|51 percent|business|takings|the books",
         req: ["partnerCandy"],
         text: "\"Our bar.\" Candy says it without irony, which from Candy is a gift. \"The paper is behind your till and " +
@@ -6102,14 +6109,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "and I am so jealous I could cry.\" She laughs at herself. \"That is the dream, " +
           "tilac. Fat and bored. Don't tell the men.\"",
         short: "\"{{Noi}} in Chum Phae did it — fat and bored now, shouting at her husband. I'm so jealous I could cry.\"" },
-      { topic: "salary", bond: 2,
+      { topic: "salary|quota|thirty drinks|nine thousand", bond: 2,
         text: "\"Salary is nine thousand. That is the number on the paper.\" She says it like " +
           "reading a receipt, the way she said the price of things once. \"Nine thousand " +
           "for thirty night — is the seat, not the work. The work is the drink. Thirty " +
           "drink a month is the quota; after that, a little bonus, and the drinks are " +
           "where the money is, if the money is anywhere.\" A glance at your glass. \"So.\"",
         short: "\"Nine thousand on the paper, for the seat. The work is the drinks — thirty a month, then bonus.\"" },
-      { topic: "bonus", bond: 2,
+      { topic: "bonus|commission", bond: 2,
         text: "\"Bonus.\" A short laugh. \"Thirty drink is the quota. Thirty-one, thirty-two, " +
           "Mamasan write a little star. At the end of the month the stars are — \" she " +
           "rubs two fingers together, and then opens the hand to show how little is in it. " +
@@ -9952,6 +9959,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "Fifty-odd, iron thumbs, reading glasses on a beaded chain. Pensri has run the " +
       "front of this shop twenty years and can tell where you hurt before you sit down.",
     dialogue: [
+      // the shop's memory of you, like Joom's and Waan's (Terence, round 57: no word for a repeat customer)
+      { when: (st, G) => !!(G.massageLog && G.massageLog["thai_massage"] && G.massageLog["thai_massage"].last < G.day),
+        text: "\"Ah — same shoulder.\" Pensri doesn't ask; she points at it. \"Left one. You sit too long on bar stool, I can tell from here. Lie down, we finish what we start.\"",
+        short: "\"Same shoulder. Lie down.\"" },
       { rom: "sawatdee kha",
         text: "\"Welcome, welcome. You sit.\" Pensri looks you over the way a mechanic looks " +
           "at a car that made a noise. \"Farang shoulder, always same — too much {{phone}}, too " +
@@ -10806,13 +10817,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "school fee, the fertiliser, the funeral. We charge…\" she taps the bar twice \"…ยี่สิบ, " +
           "twenty percent, pay back in a few days. Everybody happy.\" A beat. \"You think the bar owns " +
           "me. The bar RENTS me. Different thing, na.\"" },
-      { topic: "loan", when: (st, G) => !!(G.loan && G.day > G.loan.dueDay),
+      { topic: "loan|borrow|lend|borrowing", when: (st, G) => !!(G.loan && G.day > G.loan.dueDay),
         text: "\"Late.\" Nira says it before you do, and does not stop counting. \"You know the number — " +
           "it went up last night and it goes up tonight. I don't shout. I don't need to.\" She looks at " +
           "you once, level. \"REPAY what you can. The cousins are patient men, and patience is the " +
           "expensive kind.\"",
         short: "\"Late. You know the number. REPAY what you can — the cousins are patient, and patience is expensive.\"" },
-      { topic: "loan", when: (st, G) => !!(G.loan && G.day <= G.loan.dueDay),
+      { topic: "loan|borrow|lend|borrowing", when: (st, G) => !!(G.loan && G.day <= G.loan.dueDay),
         // The concatenation used to be written INSIDE the string literal, so this
         // node printed `"Day " + String(G.loan.dueDay) + " it is due.` verbatim to
         // any player who borrowed and then asked before the due date (debt playtest
@@ -10824,7 +10835,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "ask for one are telling me something.\" The smile stays put. \"REPAY early and I think " +
           "well of you. REPAY late and I think about you — which is worse.\"",
         short: "\"You know the day. I know the day.\" A shrug. \"Early is good. Late is… memorable.\"" },
-      { topic: "loan", text: "\"You want to borrow?\" The smile sharpens by exactly one degree. \"From " +
+      { topic: "loan|borrow|lend|borrowing", text: "\"You want to borrow?\" The smile sharpens by exactly one degree. \"From " +
           "ME — not the family; family rate is for family. For you: twenty percent, pay back in three " +
           "days. But understand one thing: I always, always get paid back. Ask anybody in my village. " +
           "Ask the ones who tried not to.\" (BORROW <amount> here — REPAY here too, early if you're wise.)" },
@@ -11234,6 +11245,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   },
 
   oy: {
+    ownsBar: true,   // "Madam Oy's flagship" — and she said "not mine" (round 57)
     name: "Madam Oy", th: "ออย", emoji: "👑",
     room: "rainbow_girls",
     desc: "The Mamasan. Undefeated since 2009. She surveys her flagship from the end of " +
@@ -12025,6 +12037,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // Nothing she says is false. She is the product the white knight ordered.
   // Sandbox-only, late window (`from` is a nightTurn), see _npcActive.
   cream: {
+    tinglish: true,   // the town rows answer in her register, never the house's (round 56)
     name: "Cream", emoji: "💊", pronoun: "she",
     room: "metro_garden", from: 40, sandbox: true,
     look: "Thai woman, twenty-four, hair down for once, a stylish casual dress, a cocktail, no number — a customer, not staff.",
@@ -13534,6 +13547,7 @@ const ENCOUNTERS = {
       "mamasan means nobody to complain to if it goes wrong. YES her · BOTH of them · NO.)",
   },
   noodle: {
+    solo: true,   // she pulled a man walking with a Soi 6 girl (Ingrid, round 62)
     rooms: ["soi6_street", "soi6_deep"],
     interactive: true, nightly: true, // the loud ends re-arm their noodle patrol each night
     th: "ไปไหนคะ", rom: "pai nai kha?",
@@ -13608,7 +13622,7 @@ const ENCOUNTERS = {
       "with the frank, appraising interest of someone shopping rather than spectating. " +
       "A cocktail, an amused mouth. She clocks you clocking her — and clocking what " +
       "she's looking at — and the smile says: game recognises game. “Konbanwa.”",
-    hint: "(She isn't working, and she isn't shy. Read it right — money is the wrong move.)",
+    hint: "(She isn't working, and she isn't shy. KONBANWA · CHEERS · or NO — money is the wrong move.)",
   },
   britles: { solo: true,
     rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
@@ -14673,7 +14687,7 @@ const SHIFT_CALLS = [
         "him. She does not say any of this as a hardship. She says it as a timetable, " +
         "and waits.",
       "Her mother has the boy tonight and her mother is tired, and the last " +
-        "songthaew to her room goes at half past. She lays it out flat, no plea in " +
+        "van her neighbour drives home goes without her if she is late. She lays it out flat, no plea in " +
         "it — a timetable, same as a beer order — and leaves the deciding to you.",
     ],
     // for a girl whose own family story has no child in it (Manow's three
@@ -14685,15 +14699,15 @@ const SHIFT_CALLS = [
         "as a timetable, not a plea, and waits.",
       "Her mother is on the overnight bus from the province and it gets in at six, " +
         "and somebody has to be at the station with a motorbike and a face she knows, " +
-        "and the last songthaew to that end goes at half past. No hardship in it — a " +
+        "and her cousin's van leaves when it leaves. No hardship in it — a " +
         "timetable, same as a beer order — and she leaves the deciding to you.",
     ],
     yes: "\"Kop khun ka.\" She is gone in four minutes, having first squared her own " +
       "section away so completely that nobody else has to touch it. The floor runs " +
       "one short and the room can tell.",
     no: "She says \"ka\" and goes back to her section and works the rest of the " +
-      "night without a flicker, which is worse than if she had sulked. The bus goes " +
-      "at eleven. You both hear it not happening.",
+      "night without a flicker, which is worse than if she had sulked. Her ride goes " +
+      "without her. You both hear it not happening.",
   },
   {
     id: "round",
@@ -16746,6 +16760,15 @@ const ASK_REPLIES = {
     { pers: "blunt", text: "The girls. Let's not dress it up" },
     { pers: "operator", text: "Opportunity. Same as everybody" },
     { pers: "whiteknight", text: "Something that felt real, I suppose" },
+    // an origin is a reason too: "Running from it" got the joker's line (Helga, round 57)
+    { origin: "running", text: "Getting away. That's the whole of it" },
+    { origin: "redundancy", text: "Twenty-two years and a cardboard box. This was the box" },
+    { origin: "pension", text: "The pension goes further and the winters don't come" },
+    { origin: "married", text: "A week off from being somebody's husband" },
+    { origin: "business", text: "A meeting in Bangkok, and then not going home" },
+    { origin: "pi", text: "Work, officially. Ask me again later" },
+    { origin: "monger", text: "Same reason as last time" },
+    { origin: "nomad", text: "Cheap rent and a laptop. Then I stayed" },
   ],
   finding: [
     { pers: "charmer", text: "Better than I came for" },
@@ -17427,6 +17450,20 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   // Naturally nosy, but the English caps how far the questions reach — small,
   // stock openers, one per girl (deterministic via idx). Answers feed the same
   // G.player.said memory the expats tap; see _convoAsk / _convoAnswer.
+  const _ASK_PHRASINGS = {
+    home: ['"You from where? England? America? Australia?" Bright, practised, already guessing.',
+      '"Where you from? No — let me guess." She studies your shirt like it has a flag on it. "England."',
+      '"Your country cold now? Where you from?" She asks it the way you ask the weather.'],
+    stay: ['"How long you stay Pattaya? Short time or looong time?" She giggles at her own joke.',
+      '"You stay how many day?" She counts on her fingers before you answer, to save time.',
+      '"Holiday? How long holiday?" A look that has already worked out whether it is long enough.'],
+    girlfriend: ['"You have girlfriend? Wife? Nooo, really?" A delighted, skeptical squint.',
+      '"Handsome man like you — wife at home, na?" She is fishing and does not mind you knowing.',
+      '"You have lady in your country? Tell true." A finger pointed at your chest, for honesty.'],
+    trips: ['"First time Pattaya, or you come back? Come back for somebody, maybe na?"',
+      '"You come here before? I think I see you before." She almost certainly has not, and it is still nice.',
+      '"New in Pattaya, or old man of Pattaya?" A grin. "Old man of Pattaya know where everything is."'],
+  };
   const ASK = [
     { key: "home", q: '"You from where? England? America? Australia?" Bright, practised, already guessing.' },
     { key: "stay", q: '"How long you stay Pattaya? Short time or looong time?" She giggles at her own joke.' },
@@ -17457,7 +17494,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
     desc: `${look} — one of ${/s$/.test(bar) ? bar + "'" : bar + "'s"} girls, from ${from}.${ROOMS[room] && ROOMS[room].barType === "gogo" ? " The badge pinned at her hip says " + (1 + _hh(id + ":badge", 139) % 199) + " — the number the floor knows her by." : ""} ${phone}`,   // "Mama Yai's' girls", not "Mama Yai's's" (Stan, r35)
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: _H_GREET[greetIdx], short: idx(_H_GREET_SHORT, 29),
-        asks: idx(ASK, 47), story: "greet" },
+        asks: (() => { const a = idx(ASK, 47), qs = _ASK_PHRASINGS[a.key]; return qs ? { key: a.key, q: qs[_hh(seed, 53) % qs.length] } : a; })(), story: "greet" },   // three women, one question, word for word (Gwen, round 66)
       { topic: "family", text: _H_FAMILY_WRAP[famWrapIdx](family), story: "family" },
       { topic: "home", text: _H_HOME_WRAP[homeWrapIdx](from), story: "home" },
       { topic: "plan", text: _H_PLAN_WRAP[planWrapIdx](plan), story: "plan" },

@@ -69,6 +69,7 @@ test("a quest reward sent through the bank app lands in the account", () => {
   assert.match(said(), /in the account/);
 });
 test("a mamasan's toast is never drunk to the mamasan", () => {
+  (G.soc.selfDrinks = G.soc.selfDrinks || {})[G.room] = 1;   // a drink in front of you: round 67's dry filter is a different rule
   const pool = _toastFor("candy");
   assert.ok(pool.length >= 4 && pool.every(f => !/mamasan/.test(f.toString())));
   assert.equal(_toastFor("lek").length, _TOAST_LINES.length);

@@ -165,8 +165,8 @@ const _CATALOGS = {
     "Jomtien Beach (South)": "Jomtien Beach (Süd)",
     "The balcony room over the Queen Vic: wood floors, a ceiling fan with strong opinions, and the balcony itself — a recliner, a small table, and the whole of Soi 6 performing below like a fish tank somebody dropped a radio into. A firm double bed fills the rest of the room — the neon never quite lets go of it, but the blackout curtains and the aircon get you there. A flatscreen on the wall and a mini-fridge in the corner — two free waters a day, housekeeping's one kindness — round out the luxuries. (SLEEP to turn in and end the night · WATCH TV · OPEN FRIDGE · or step onto the BALCONY.)":
       "Das Balkonzimmer über dem Queen Vic: Holzböden, ein Deckenventilator mit starken Meinungen, und der Balkon selbst — ein Liegestuhl, ein kleiner Tisch und die ganze Soi 6, die unten aufführt wie ein Aquarium, in das jemand ein Radio geworfen hat. Ein festes Doppelbett füllt den Rest des Zimmers — das Neon lässt nie ganz von ihm ab, aber die Verdunklungsvorhänge und die Klimaanlage bringen dich hin. Ein Flachbildschirm an der Wand und ein Minikühlschrank in der Ecke — zwei kostenlose Wasser am Tag, die eine Freundlichkeit des Zimmerservice — runden den Luxus ab. (SLEEP zum Schlafengehen und die Nacht beenden · WATCH TV · OPEN FRIDGE · oder tritt auf den BALCONY.)",
-    "Soft sand, folded-up loungers, and the sea working away at the dark. Two grey-and-white soi cats hold down the end of a lounger, the big one sitting slightly in front of the small one, both watching the water. The beach road glows to the east; the sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart is parked.":
-      "Weicher Sand, zusammengeklappte Liegen und der letzte Streifen Sonnenuntergang, der überm Meer verglüht. Zwei grau-weiße Soi-Katzen halten das Ende einer Liege besetzt, die große sitzt ein Stück vor der kleinen, beide beobachten das Wasser. Die Strandstraße glüht im Osten; der Sand zieht sich nach Norden die Küste hinauf und verengt sich südlich zum Soi-7-Ende, wo ein Getränkewagen parkt.",
+    "Soft sand, folded-up loungers, and the sea working away at the shore. Two grey-and-white soi cats hold down the end of a lounger, the big one sitting slightly in front of the small one, both watching the water. The beach road glows to the east; the sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart is parked.":
+      "Weicher Sand, zusammengeklappte Liegen und das Meer, das sich am Ufer abarbeitet. Zwei grau-weiße Soi-Katzen halten das Ende einer Liege besetzt, die große sitzt ein Stück vor der kleinen, beide beobachten das Wasser. Die Strandstraße glüht im Osten; der Sand zieht sich nach Norden die Küste hinauf und verengt sich südlich zum Soi-7-Ende, wo ein Getränkewagen parkt.",
 
     // ── the tap interface: chip + flyout-wheel LABELS (display only) ──────────
     // These are keyed by the exact English chip/wheel label; term.js renders
@@ -545,14 +545,14 @@ const _CATALOGS = {
     // ── Soi 6 revisit pools + item names/descs (workflow-translated, Opus-reviewed) ──
     "Back to the Shady Lady, set back under its awning, the rail facing the soi so you can watch the circus without joining it.":
       "Zurück zur Shady Lady, zurückgesetzt unter ihre Markise, die Theke zur Soi hin ausgerichtet, sodass du den Zirkus beobachten kannst, ohne mitzumachen.",
-    "Pukky has your bottle open before you've picked a stool. Out front the soi does its thing; in here nobody makes you part of it.":
-      "Pukky hat deine Flasche schon geöffnet, bevor du dir einen Hocker ausgesucht hast. Draußen macht die Soi ihr Ding; hier drin zwingt dich niemand, mitzumachen.",
+    "Your bottle is open before you've picked a stool. Out front the soi does its thing; in here nobody makes you part of it.":
+      "Deine Flasche ist schon geöffnet, bevor du dir einen Hocker ausgesucht hast. Draußen macht die Soi ihr Ding; hier drin zwingt dich niemand, mitzumachen.",
     "You settle back onto the rail in the shade. The parade grinds past a few feet away, and the whole pleasure is being just outside it.":
       "Du lässt dich wieder an der Theke im Schatten nieder. Die Parade zieht ein paar Schritte entfernt vorbei, und das ganze Vergnügen besteht darin, knapp außerhalb davon zu sein.",
     "The Shady Lady again — potted palms, low awning, cold Chang, and the best seat on the soi for watching other men get pulled into bars.":
       "Wieder die Shady Lady — Palmen in Kübeln, niedrige Markise, kaltes Chang, und der beste Platz auf der Soi, um zuzusehen, wie andere Männer in Bars gezogen werden.",
-    "Back under the awning where the noise softens by half. Pukky nods, pours, and goes back to reading the pavement like a form guide.":
-      "Zurück unter die Markise, wo der Lärm um die Hälfte leiser wird. Pukky nickt, schenkt ein und liest weiter den Gehweg wie eine Formtabelle.",
+    "Back under the awning where the noise softens by half. Somebody pours, and the rail goes back to reading the pavement like a form guide.":
+      "Zurück unter die Markise, wo der Lärm um die Hälfte leiser wird. Jemand schenkt ein, und die Theke liest weiter den Gehweg wie eine Formtabelle.",
     "The shaded rail takes you back. A go-go tout two doors down loses a customer; the Shady Lady's regulars rate the technique and drink on.":
       "Die schattige Theke nimmt dich wieder auf. Zwei Türen weiter verliert ein Go-Go-Anwerber einen Kunden; die Stammgäste der Shady Lady bewerten die Technik und trinken weiter.",
     "Back to the quiet middle and the shade, a cold one sweating on the rail, the soi safely at arm's length where you like it.":

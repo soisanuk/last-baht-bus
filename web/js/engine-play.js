@@ -1276,7 +1276,7 @@ function _newbieNudge() {
   // man carrying his girl's number (Frank, 2026-08-26 — a false claim, the class
   // the repo lints for)
   const _hasLadyNum = Object.keys(G.phone.contacts || {}).some(id => G.phone.contacts[id] && NPC_ROLES[id]);
-  if (!_flag("tipNumber") && !_hasLadyNum && G.stage !== "expat") {   // not to a man who owns a bar (Mick, round 57)
+  if (!_flag("tipNumber") && !_hasLadyNum && G.stage !== "expat" && G.money >= _ladyPrice(G.room)) {   // not at ฿0 (Malcolm, round 59)   // not to a man who owns a bar (Mick, round 57)
     _setFlag("tipNumber");
     _say("(A thought, since you're here: no bar girl's number is in your phone yet. Buy a lady a " +
       "drink or two until she's warm to you, then CONTACT her — that's how the rest of this " +
@@ -3722,7 +3722,7 @@ function _ownBarTalk(id, topic) {
       ]) : (sal ? [
         n => `${n} turns the wages line round for you. "Flat salary, ฿${BAR_SALARY_NIGHT} a night on top, every night. I write it whether they sold a drink or not." She does not editorialise. She never does.`,
       ] : [
-        n => `${n} squares the chits. "Base and the cut. I pay the cut on what they sold, end of the month. A thin board is a thin envelope; they open it in front of me."`,
+        n => `${n} squares the chits. "Base and the cut — ฿${_num(BAR_WAGES)} a night for the floor before a drink is sold, and the cut on what they sold, end of the month. A thin board is a thin envelope; they open it in front of me."`,   // no figure (Hal, round 62)
       ]), "ownterms:" + role)(NPCS[id].name));
     return true;
   }
@@ -4094,6 +4094,7 @@ function _boughtHappy(n) {
   if (!n) return;
   const c = (G.soc.bought = (G.soc.bought || 0) + 1);
   if (c <= 6) return _addHappy(n);                        // an ordinary generous night: full value
+  if (c === 7) _say("(Past six bought tonight, a drink stops paying you in สนุก every time — it still pays her.)", "dim");   // the silent taper (Marguerite, round 67)
   if (c <= 14) { if (c % 2 === 0) _addHappy(n); return; } // half rate
   if (c % 3 === 0) _addHappy(n);                          // a grind: a third, and it stays a third
 }
@@ -4734,7 +4735,8 @@ function _morningLedger() {
   // man who slept the wallet night in his own room, because the safe pays at that
   // wake BEFORE the ledger runs (Tomasz and Joan, round 54)
   const safeIn = !!G.safeMoneyLedger; G.safeMoneyLedger = false;
-  const safeTag = safeIn ? " (with the room safe's stash netted in)" : "";   // it was never Madam Oy's money (Rolf, round 55)
+  const walletIn = !!G.walletLedger; G.walletLedger = false;   // the wallet's ฿500 netted in unnamed (Terence, round 57)
+  const safeTag = safeIn ? " (with the room safe's stash netted in)" : walletIn ? ` (with the wallet's ฿${WALLET_CASH} back in it)` : "";   // it was never Madam Oy's money (Rolf, round 55)
   if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via + safeTag);   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via + safeTag);
   if (tillDraw > 0) bits.push("\u0e3f" + _num(tillDraw) + " drawn from your own till");
@@ -4766,6 +4768,7 @@ function _morningLedger() {
   // proud of yourself, come back — and ฿1,181 is gone with the game saying nothing. Keep
   // what was said so LAST NIGHT can say it again.
   if (received > 0) bits.push(`฿${_num(received)} arrived in the account`);
+  if (G.bruise && G.bruise.day === G.day - 1) { bits.push("nursing " + G.bruise.what); G.bruise = null; }
   if (G.lastNightWas && G.lastNightWas.day === G.day - 1 && G.lastNightWas.kicked)
     bits.push(`walked out of ${G.lastNightWas.kicked.where} by security${G.lastNightWas.kicked.n > 1 ? ", twice" : ""} — the night's bad news, and the สนุก it cost`);
   G.partyRescued = null;
