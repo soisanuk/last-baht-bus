@@ -68,6 +68,18 @@ function saoSeed() {
   return serializeGame();
 }
 
+// gilt (2026-10-08): a holidaymaker on night three, standing at the door of The Gilt Cage —
+// the first floor written woman by woman (FLOOR_OWN). The opening quest is done so the
+// persona's tokens go to the bar, not the wallet.
+function giltSeed() {
+  newGame();
+  G.player = { origin: "pension", personality: "blunt", orientation: "straight", said: {}, lang: "en", teetotal: false };
+  G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3;
+  G.money = 15000; G.bank = 120000; G.battery = 95;
+  G.room = "soi_diamond"; G.visited.soi_diamond = true; G.nightTurn = 8;
+  quiet(); G.encDone = {};
+  return serializeGame();
+}
 function reload(blob) { newGame(); deserializeGame(blob); }
 
 // ── build ──
@@ -75,6 +87,7 @@ const seeds = {
   rolf: expatOwner({ day: 14, money: 9000, bank: 60000, bonds: { manow: 15, lamai: 6, cake: 5, tan: 3 } }),
   hennie: expatOwner({ season0: 8, day: 12, money: 4000, bank: 25000, bonds: { tan: 3 } }),
   saoling: saoSeed(),
+  gilt: giltSeed(),
   // greta (round 61): an owner at the top of the shoulder — March, the rail thinning, the
   // note due — with the two levers in front of her (docs/bar-failure-cycle.md)
   greta: expatOwner({ season0: 2, day: 16, money: 12000, bank: 40000, bonds: { manow: 8, jiap: 4, lamai: 5, tan: 3 } }),
@@ -117,6 +130,11 @@ try {
   for (let n = 0; n < 60 && !g.notice; n++) { G.day++; _barSettle(G.day - 1); if (G.bar.notice) g.notice = G.bar.notice.id; }
   console.log("greta:", JSON.stringify(g), "rent", _barRent());
   if (!g.board || !g.notice || g.tier !== "shoulder") throw new Error("greta seed cannot reach its drive");
+  // Gilt: through the door, the twins and Sasi answer in their own words
+  reload(seeds.gilt); out = []; doCommand("enter gilt cage");
+  const gilt = { room: G.room, ping: /twenty minute younger/.test((doCommand("ask ping about pong"), out.join(" "))) };
+  console.log("gilt:", JSON.stringify(gilt));
+  if (gilt.room !== "windmill" || !gilt.ping) throw new Error("gilt seed cannot reach its drive");
   // Sao: answered kindly, she leaves her number
   reload(seeds.saoling); out = []; doCommand("hello");
   console.log("saoling:", !!G.phone.contacts.sao, JSON.stringify(G.bkk));
