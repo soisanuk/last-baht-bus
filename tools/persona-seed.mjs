@@ -93,6 +93,9 @@ const seeds = {
   // greta (round 61): an owner at the top of the shoulder — March, the rail thinning, the
   // note due — with the two levers in front of her (docs/bar-failure-cycle.md)
   greta: expatOwner({ season0: 2, day: 16, money: 12000, bank: 40000, bonds: { manow: 8, jiap: 4, lamai: 5, tan: 3 } }),
+  // ossie (round 70, composition): an October owner on the Tan route — procurement live,
+  // a girl on his floor he likes, money for the massage shops, the clinic and the Orchid
+  ossie: expatOwner({ season0: 9, day: 13, money: 15000, bank: 45000, bonds: { manow: 9, lamai: 4, tan: 3 } }),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -132,6 +135,19 @@ try {
   for (let n = 0; n < 60 && !g.notice; n++) { G.day++; _barSettle(G.day - 1); if (G.bar.notice) g.notice = G.bar.notice.id; }
   console.log("greta:", JSON.stringify(g), "rent", _barRent());
   if (!g.board || !g.notice || g.tier !== "shoulder") throw new Error("greta seed cannot reach its drive");
+  // Ossie: a procurement job on a wet evening at his own rail, and a massage shop takes his money
+  reload(seeds.ossie); G.room = "stinky_bar"; G.nightTurn = 20;
+  let o = { job: false, tier: _seasonTier() };
+  for (let night = 0; night < 4 && !o.job; night++) {
+    for (let i = 0; i < 40; i++) {
+      out = []; doCommand("wait");
+      if (G.pendingChoice === "synjob") { o.job = true; break; }
+      if (G.pendingChoice) doCommand("no");
+    }
+    if (!o.job) { G.room = _hotelRoomId(); _endNight("sleep"); G.room = "stinky_bar"; G.nightTurn = 20; }
+  }
+  console.log("ossie:", JSON.stringify(o));
+  if (!o.job || !/low/.test(o.tier)) throw new Error("ossie seed cannot reach its drive");
   // Gilt: through the door, the twins and Sasi answer in their own words
   reload(seeds.gilt); out = []; doCommand("enter gilt cage");
   const gilt = { room: G.room, ping: /twenty minute younger/.test((doCommand("ask ping about pong"), out.join(" "))) };

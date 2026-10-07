@@ -120,3 +120,44 @@ test("a portrait line names only what a head-and-shoulders crop can show (the ar
   assert.doesNotMatch(src, /\.pronoun === "(?:he|she)" \? "(?:him|her|he's|she's)"/);
   assert.equal(_pr("diamond").o, "her");
 });
+
+// ── The Silk Rose (2026-10-08): the second floor written woman by woman ──────────────────────
+const SILK = ["ton", "nid", "wa", "waew", "grace"];
+test("every written floor: no shared line shadows a woman's own, and every subject the shared set had she still answers", () => {
+  for (const id of Object.keys(FLOOR_OWN)) {
+    const own = FLOOR_OWN[id].nodes, keys = d => String(d.topic || "").split("|");
+    for (const d of NPCS[id].dialogue.slice(own.length))
+      assert.ok(!own.some(n => d.topic ? keys(n).includes(keys(d)[0]) : !n.topic && !n.bond && !n.when), `${id}: a shared "${d.topic || "greeting"}" shadows her own`);
+    // an ungated line for every subject she covers, so a gate never leaves the subject silent
+    for (const k of new Set(own.filter(n => n.topic).map(n => keys(n)[0])))
+      assert.ok(own.some(n => keys(n)[0] === k && !n.bond && !n.when && !n.req) || ["salary", "quota", "real mother"].includes(k), `${id}: "${k}" only behind a gate`);
+  }
+});
+test("the Silk Rose: everyone on the floor answers for everyone else on it, and for the man on the third stool", () => {
+  G.season0 = 2; G.room = "silk_rose";   // March: nobody home for the harvest
+  for (const id of SILK) run("talk to " + id);
+  for (const a of SILK) for (const b of [...SILK.filter(x => x !== a), "helmut"]) {
+    const name = b === "helmut" ? "helmut" : NPCS[b].name.toLowerCase();
+    const r = ask(a, name);
+    assert.match(r, b === "helmut" ? /Helmut/ : new RegExp(NPCS[b].name), `${a} on ${b}: ${r.slice(0, 80)}`);
+  }
+  run("talk to helmut"); assert.match(ask("helmut", "nid"), /thirteen years/);
+});
+test("the Silk Rose's own subjects, and nobody wears another woman's detail", () => {
+  G.season0 = 2; G.room = "silk_rose";
+  for (const id of SILK) run("talk to " + id);
+  assert.match(ask("ton", "football"), /referee/);
+  assert.match(ask("nid", "pension"), /cannot sell/);
+  assert.match(ask("wa", "factory"), /Vietnam/);
+  assert.match(ask("waew", "son"), /police sergeant/);
+  assert.match(ask("grace", "headset"), /homestay/);
+  assert.match(ask("grace", "spend"), /\(CHECK BIN\)/);
+  assert.doesNotMatch(NPCS.ton.desc, /Bangkok Sunset/, "Ping's nails are Ping's");
+  assert.doesNotMatch(NPCS.nid.desc, /go-go/, "a beer bar's woman is not measured against a go-go");
+  assert.equal(FLOOR_OWN.ton.exit, null); assert.match(FLOOR_OWN.wa.exit, /Eastern Seaboard/);
+});
+test("a two-letter topic is a whole word: Wa is not water, and Preeda's ex is not an expat", () => {
+  assert.equal(_topicHits("wa", "water"), false); assert.equal(_topicHits("wa", "wa"), true);
+  assert.equal(_topicHits("ex", "expat"), false); assert.equal(_topicHits("ex", "my ex"), true);
+  assert.equal(_topicHits("no", "nont"), false); assert.equal(_topicHits("oy", "madam oy"), true);
+});

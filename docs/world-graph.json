@@ -518,7 +518,7 @@
   },
   {
    "file": "engine-core.js",
-   "line": 3138,
+   "line": 3141,
    "name": "HURT_CAP",
    "value": 3
   },
@@ -1095,8 +1095,8 @@
  ],
  "counts": {
   "constants": 182,
-  "dialogue": 3476,
-  "edges": 3224,
+  "dialogue": 3506,
+  "edges": 3219,
   "encounters": 23,
   "flags": 172,
   "items": 43,
@@ -13886,10 +13886,82 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "grace#1",
+   "npc": "grace",
+   "topic": "name|your name|grace",
+   "topics": [
+    "name",
+    "your name",
+    "grace"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "grace#2",
+   "npc": "grace",
+   "topic": "headset|homestay|side business|bookings",
+   "topics": [
+    "headset",
+    "homestay",
+    "side business",
+    "bookings"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 3,
+   "key": "grace#3",
+   "npc": "grace",
+   "topic": "sudoku|puzzle",
+   "topics": [
+    "sudoku",
+    "puzzle"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 4,
+   "key": "grace#4",
+   "npc": "grace",
+   "topic": "family",
+   "topics": [
+    "family"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 5,
+   "key": "grace#5",
+   "npc": "grace",
+   "topic": "home|hometown|village|where you from|loei|mountains|fog",
+   "topics": [
+    "home",
+    "hometown",
+    "village",
+    "where you from",
+    "loei",
+    "mountains",
+    "fog"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "grace#6",
    "npc": "grace",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -13901,37 +13973,27 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "grace#2",
+   "index": 7,
+   "key": "grace#7",
    "npc": "grace",
-   "topic": "family",
+   "topic": "spend|spent|what i spent|how much i spent|my spend|my chits",
    "topics": [
-    "family"
+    "spend",
+    "spent",
+    "what i spent",
+    "how much i spent",
+    "my spend",
+    "my chits"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "grace#3",
-   "npc": "grace",
-   "topic": "home|hometown|village|where you from",
-   "topics": [
-    "home",
-    "hometown",
-    "village",
-    "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 4,
-   "key": "grace#4",
+   "index": 8,
+   "key": "grace#8",
    "notFlags": [
     "hasWallet"
    ],
@@ -13943,17 +14005,64 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "grace#5",
-   "notFlags": [
-    "hasWallet"
-   ],
+   "index": 9,
+   "key": "grace#9",
    "npc": "grace",
-   "topic": "wallet",
+   "topic": "ton",
    "topics": [
-    "wallet"
+    "ton"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 10,
+   "key": "grace#10",
+   "npc": "grace",
+   "topic": "nid",
+   "topics": [
+    "nid"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 11,
+   "key": "grace#11",
+   "npc": "grace",
+   "topic": "wa",
+   "topics": [
+    "wa"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 12,
+   "key": "grace#12",
+   "npc": "grace",
+   "topic": "waew|mama|mamasan",
+   "topics": [
+    "waew",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 13,
+   "key": "grace#13",
+   "npc": "grace",
+   "topic": "helmut",
+   "topics": [
+    "helmut"
    ]
   },
   {
@@ -14259,6 +14368,27 @@
    "topic": "barhop",
    "topics": [
     "barhop"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "helmut#6",
+   "npc": "helmut",
+   "topic": "staff|the staff|the girls|nid|waew|grace|ton|wa|mamasan|cashier",
+   "topics": [
+    "staff",
+    "the staff",
+    "the girls",
+    "nid",
+    "waew",
+    "grace",
+    "ton",
+    "wa",
+    "mamasan",
+    "cashier"
    ]
   },
   {
@@ -26403,56 +26533,91 @@
    ]
   },
   {
-   "asks": "girlfriend",
+   "bond": 2,
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
    "index": 0,
    "key": "nid#0",
    "npc": "nid"
   },
   {
+   "asks": "trips",
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "nid#1",
-   "npc": "nid",
-   "topic": "family",
-   "topics": [
-    "family"
-   ]
+   "npc": "nid"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "nid#2",
    "npc": "nid",
-   "topic": "home",
+   "topic": "family|daughter|husband",
    "topics": [
-    "home"
+    "family",
+    "daughter",
+    "husband"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 3,
    "key": "nid#3",
    "npc": "nid",
-   "topic": "plan",
+   "topic": "home|hometown|surin|village|where you from|elephant|elephants",
    "topics": [
-    "plan"
+    "home",
+    "hometown",
+    "surin",
+    "village",
+    "where you from",
+    "elephant",
+    "elephants"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 4,
    "key": "nid#4",
+   "npc": "nid",
+   "topic": "plan|future|dream",
+   "topics": [
+    "plan",
+    "future",
+    "dream"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 5,
+   "key": "nid#5",
+   "npc": "nid",
+   "topic": "pension|gold|chain|savings|saving",
+   "topics": [
+    "pension",
+    "gold",
+    "chain",
+    "savings",
+    "saving"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "nid#6",
    "npc": "nid",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -26464,51 +26629,23 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "nid#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "nid",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 6,
-   "key": "nid#6",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "nid",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "bond": 1,
-   "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
    "index": 7,
    "key": "nid#7",
+   "notFlags": [
+    "hasWallet"
+   ],
    "npc": "nid",
-   "topic": "salary",
+   "topic": "wallet",
    "topics": [
-    "salary"
+    "wallet"
    ]
   },
   {
    "hasFx": false,
    "hasShort": true,
-   "hasWhen": true,
+   "hasWhen": false,
    "index": 8,
    "key": "nid#8",
    "npc": "nid",
@@ -26524,21 +26661,22 @@
    "index": 9,
    "key": "nid#9",
    "npc": "nid",
-   "topic": "price",
+   "topic": "late",
    "topics": [
-    "price"
+    "late"
    ]
   },
   {
+   "bond": 1,
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
    "index": 10,
    "key": "nid#10",
    "npc": "nid",
-   "topic": "late",
+   "topic": "salary",
    "topics": [
-    "late"
+    "salary"
    ]
   },
   {
@@ -26552,6 +26690,69 @@
    "topic": "quota",
    "topics": [
     "quota"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 12,
+   "key": "nid#12",
+   "npc": "nid",
+   "topic": "ton",
+   "topics": [
+    "ton"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 13,
+   "key": "nid#13",
+   "npc": "nid",
+   "topic": "wa",
+   "topics": [
+    "wa"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 14,
+   "key": "nid#14",
+   "npc": "nid",
+   "topic": "waew|mama|mamasan",
+   "topics": [
+    "waew",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 15,
+   "key": "nid#15",
+   "npc": "nid",
+   "topic": "grace|cashier",
+   "topics": [
+    "grace",
+    "cashier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 16,
+   "key": "nid#16",
+   "npc": "nid",
+   "topic": "helmut",
+   "topics": [
+    "helmut"
    ]
   },
   {
@@ -41496,56 +41697,93 @@
    ]
   },
   {
-   "asks": "home",
+   "bond": 2,
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
    "index": 0,
    "key": "ton#0",
    "npc": "ton"
   },
   {
+   "asks": "team",
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "ton#1",
-   "npc": "ton",
-   "topic": "family",
-   "topics": [
-    "family"
-   ]
+   "npc": "ton"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "ton#2",
    "npc": "ton",
-   "topic": "home",
+   "topic": "football|soccer|the football|penalty|premier league|the match|the game",
    "topics": [
-    "home"
+    "football",
+    "soccer",
+    "the football",
+    "penalty",
+    "premier league",
+    "the match",
+    "the game"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 3,
    "key": "ton#3",
    "npc": "ton",
-   "topic": "plan",
+   "topic": "family|papa|sister|brother",
    "topics": [
-    "plan"
+    "family",
+    "papa",
+    "sister",
+    "brother"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 4,
    "key": "ton#4",
+   "npc": "ton",
+   "topic": "home|hometown|mukdahan|mekong|village|where you from",
+   "topics": [
+    "home",
+    "hometown",
+    "mukdahan",
+    "mekong",
+    "village",
+    "where you from"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 5,
+   "key": "ton#5",
+   "npc": "ton",
+   "topic": "plan|future|dream",
+   "topics": [
+    "plan",
+    "future",
+    "dream"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "ton#6",
    "npc": "ton",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -41557,51 +41795,23 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "ton#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "ton",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 6,
-   "key": "ton#6",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "ton",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "bond": 1,
-   "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
    "index": 7,
    "key": "ton#7",
+   "notFlags": [
+    "hasWallet"
+   ],
    "npc": "ton",
-   "topic": "salary",
+   "topic": "wallet",
    "topics": [
-    "salary"
+    "wallet"
    ]
   },
   {
    "hasFx": false,
    "hasShort": true,
-   "hasWhen": true,
+   "hasWhen": false,
    "index": 8,
    "key": "ton#8",
    "npc": "ton",
@@ -41617,21 +41827,22 @@
    "index": 9,
    "key": "ton#9",
    "npc": "ton",
-   "topic": "price",
+   "topic": "late",
    "topics": [
-    "price"
+    "late"
    ]
   },
   {
+   "bond": 1,
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
    "index": 10,
    "key": "ton#10",
    "npc": "ton",
-   "topic": "late",
+   "topic": "salary",
    "topics": [
-    "late"
+    "salary"
    ]
   },
   {
@@ -41645,6 +41856,69 @@
    "topic": "quota",
    "topics": [
     "quota"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 12,
+   "key": "ton#12",
+   "npc": "ton",
+   "topic": "nid",
+   "topics": [
+    "nid"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 13,
+   "key": "ton#13",
+   "npc": "ton",
+   "topic": "wa",
+   "topics": [
+    "wa"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 14,
+   "key": "ton#14",
+   "npc": "ton",
+   "topic": "waew|mama|mamasan",
+   "topics": [
+    "waew",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 15,
+   "key": "ton#15",
+   "npc": "ton",
+   "topic": "grace|cashier",
+   "topics": [
+    "grace",
+    "cashier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 16,
+   "key": "ton#16",
+   "npc": "ton",
+   "topic": "helmut",
+   "topics": [
+    "helmut"
    ]
   },
   {
@@ -42845,56 +43119,111 @@
    ]
   },
   {
-   "asks": "stay",
+   "bond": 2,
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
    "index": 0,
    "key": "wa#0",
    "npc": "wa"
   },
   {
+   "asks": "job",
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "wa#1",
-   "npc": "wa",
-   "topic": "family",
-   "topics": [
-    "family"
-   ]
+   "npc": "wa"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "wa#2",
    "npc": "wa",
-   "topic": "home",
+   "topic": "family|mama|papa|brother",
    "topics": [
-    "home"
+    "family",
+    "mama",
+    "papa",
+    "brother"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 3,
    "key": "wa#3",
    "npc": "wa",
-   "topic": "plan",
+   "topic": "home|hometown|yasothon|village|where you from|rocket|rocket festival",
    "topics": [
-    "plan"
+    "home",
+    "hometown",
+    "yasothon",
+    "village",
+    "where you from",
+    "rocket",
+    "rocket festival"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 4,
    "key": "wa#4",
+   "npc": "wa",
+   "topic": "factory|before|qc|electronics|eastern seaboard|rayong|work|job",
+   "topics": [
+    "factory",
+    "before",
+    "qc",
+    "electronics",
+    "eastern seaboard",
+    "rayong",
+    "work",
+    "job"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 5,
+   "key": "wa#5",
+   "npc": "wa",
+   "topic": "plan|future|dream|course|supervisor",
+   "topics": [
+    "plan",
+    "future",
+    "dream",
+    "course",
+    "supervisor"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "wa#6",
+   "npc": "wa",
+   "topic": "translate|google translate|phone",
+   "topics": [
+    "translate",
+    "google translate",
+    "phone"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 7,
+   "key": "wa#7",
    "npc": "wa",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -42906,57 +43235,17 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "wa#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "wa",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 6,
-   "key": "wa#6",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "wa",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "bond": 1,
-   "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "wa#7",
-   "npc": "wa",
-   "topic": "salary",
-   "topics": [
-    "salary"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": true,
    "index": 8,
    "key": "wa#8",
+   "notFlags": [
+    "hasWallet"
+   ],
    "npc": "wa",
-   "topic": "price",
+   "topic": "wallet",
    "topics": [
-    "price"
+    "wallet"
    ]
   },
   {
@@ -42991,9 +43280,85 @@
    "index": 11,
    "key": "wa#11",
    "npc": "wa",
+   "topic": "salary",
+   "topics": [
+    "salary"
+   ]
+  },
+  {
+   "bond": 1,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 12,
+   "key": "wa#12",
+   "npc": "wa",
    "topic": "quota",
    "topics": [
     "quota"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 13,
+   "key": "wa#13",
+   "npc": "wa",
+   "topic": "ton",
+   "topics": [
+    "ton"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 14,
+   "key": "wa#14",
+   "npc": "wa",
+   "topic": "nid",
+   "topics": [
+    "nid"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 15,
+   "key": "wa#15",
+   "npc": "wa",
+   "topic": "waew|mama|mamasan",
+   "topics": [
+    "waew",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 16,
+   "key": "wa#16",
+   "npc": "wa",
+   "topic": "grace|cashier",
+   "topics": [
+    "grace",
+    "cashier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 17,
+   "key": "wa#17",
+   "npc": "wa",
+   "topic": "helmut",
+   "topics": [
+    "helmut"
    ]
   },
   {
@@ -43340,73 +43705,84 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "waew#1",
    "npc": "waew",
-   "topic": "girls",
+   "topic": "girls|the girls|your girls|introduce",
    "topics": [
-    "girls"
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "waew#2",
    "npc": "waew",
-   "topic": "family",
+   "topic": "family|husband|children|son|daughter",
    "topics": [
-    "family"
+    "family",
+    "husband",
+    "children",
+    "son",
+    "daughter"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 3,
    "key": "waew#3",
    "npc": "waew",
-   "topic": "plan",
-   "topics": [
-    "plan"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 4,
-   "key": "waew#4",
-   "npc": "waew",
-   "topic": "home|hometown|village|where you from",
+   "topic": "home|hometown|village|where you from|khon kaen|house|concrete house",
    "topics": [
     "home",
     "hometown",
     "village",
-    "where you from"
+    "where you from",
+    "khon kaen",
+    "house",
+    "concrete house"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 4,
+   "key": "waew#4",
+   "npc": "waew",
+   "topic": "plan|future|retire",
+   "topics": [
+    "plan",
+    "future",
+    "retire"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
    "index": 5,
    "key": "waew#5",
-   "notFlags": [
-    "hasWallet"
-   ],
    "npc": "waew",
-   "topic": "wallet",
+   "topic": "barfine|price|fine",
    "topics": [
-    "wallet"
+    "barfine",
+    "price",
+    "fine"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 6,
    "key": "waew#6",
@@ -43417,6 +43793,67 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 7,
+   "key": "waew#7",
+   "npc": "waew",
+   "topic": "ton",
+   "topics": [
+    "ton"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 8,
+   "key": "waew#8",
+   "npc": "waew",
+   "topic": "nid",
+   "topics": [
+    "nid"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 9,
+   "key": "waew#9",
+   "npc": "waew",
+   "topic": "wa",
+   "topics": [
+    "wa"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 10,
+   "key": "waew#10",
+   "npc": "waew",
+   "topic": "grace|cashier",
+   "topics": [
+    "grace",
+    "cashier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 11,
+   "key": "waew#11",
+   "npc": "waew",
+   "topic": "helmut",
+   "topics": [
+    "helmut"
    ]
   },
   {
@@ -45771,7 +46208,7 @@
   "DEPENDS": 13,
   "DONE_BY": 37,
   "EXIT": 437,
-  "FORBIDS": 491,
+  "FORBIDS": 486,
   "GIVEN_BY": 38,
   "GIVES": 15,
   "INTERPOLATES": 580,
@@ -50573,12 +51010,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "grace#4",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "grace#5",
+   "from": "grace#8",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -51308,12 +51740,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "nid#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "nid#6",
+   "from": "nid#7",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52078,12 +52505,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "ton#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "ton#6",
+   "from": "ton#7",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52178,17 +52600,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "wa#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "wa#6",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "waew#5",
+   "from": "wa#8",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -53169,7 +53581,7 @@
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-core.js:3445",
+   "to": "engine-core.js:3448",
    "type": "INTERPOLATES"
   },
   {
@@ -53199,7 +53611,7 @@
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:3452",
+   "to": "engine-core.js:3455",
    "type": "INTERPOLATES"
   },
   {
@@ -53799,12 +54211,12 @@
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3140",
+   "to": "engine-core.js:3143",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3141",
+   "to": "engine-core.js:3144",
    "type": "INTERPOLATES"
   },
   {
@@ -53834,7 +54246,7 @@
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-core.js:2933",
+   "to": "engine-core.js:2936",
    "type": "INTERPOLATES"
   },
   {
@@ -53919,7 +54331,7 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-core.js:3447",
+   "to": "engine-core.js:3450",
    "type": "INTERPOLATES"
   },
   {
@@ -53959,7 +54371,7 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-core.js:2898",
+   "to": "engine-core.js:2901",
    "type": "INTERPOLATES"
   },
   {
@@ -54414,7 +54826,7 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:3236",
+   "to": "engine-core.js:3239",
    "type": "INTERPOLATES"
   },
   {
@@ -55319,12 +55731,12 @@
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2518",
+   "to": "engine-core.js:2521",
    "type": "INTERPOLATES"
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2519",
+   "to": "engine-core.js:2522",
    "type": "INTERPOLATES"
   },
   {
@@ -58491,27 +58903,27 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2868",
+   "to": "engine-core.js:2871",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3167",
+   "to": "engine-core.js:3170",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3174",
+   "to": "engine-core.js:3177",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3258",
+   "to": "engine-core.js:3261",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3260",
+   "to": "engine-core.js:3263",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59506,7 +59918,7 @@
   },
   {
    "from": "hyperUpstairs",
-   "to": "engine-core.js:2926",
+   "to": "engine-core.js:2929",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59756,7 +60168,7 @@
   },
   {
    "from": "orchidReported",
-   "to": "engine-core.js:2818",
+   "to": "engine-core.js:2821",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59781,7 +60193,7 @@
   },
   {
    "from": "orchidSent",
-   "to": "engine-core.js:2818",
+   "to": "engine-core.js:2821",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59806,7 +60218,7 @@
   },
   {
    "from": "orchidVouched",
-   "to": "engine-core.js:2818",
+   "to": "engine-core.js:2821",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60091,7 +60503,7 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-core.js:2291",
+   "to": "engine-core.js:2294",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61726,7 +62138,7 @@
   },
   {
    "from": "recceDone",
-   "to": "engine-core.js:2666",
+   "to": "engine-core.js:2669",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -63217,11 +63629,11 @@
     "engine-core.js:1188",
     "engine-core.js:1272",
     "engine-core.js:1366",
-    "engine-core.js:2868",
-    "engine-core.js:3167",
-    "engine-core.js:3174",
-    "engine-core.js:3258",
-    "engine-core.js:3260",
+    "engine-core.js:2871",
+    "engine-core.js:3170",
+    "engine-core.js:3177",
+    "engine-core.js:3261",
+    "engine-core.js:3263",
     "engine-core.js:611",
     "engine-core.js:698",
     "engine-encounters.js:174",
@@ -64203,8 +64615,7 @@
     "golf#5",
     "goong#5",
     "goong#6",
-    "grace#4",
-    "grace#5",
+    "grace#8",
     "guitar#5",
     "guitar#6",
     "hong#4",
@@ -64344,8 +64755,7 @@
     "neon_palm_toey#6",
     "nice#5",
     "nice#6",
-    "nid#5",
-    "nid#6",
+    "nid#7",
     "nim#5",
     "nim#6",
     "nittaya#5",
@@ -64479,8 +64889,7 @@
     "tim#6",
     "toey#5",
     "toey#6",
-    "ton#5",
-    "ton#6",
+    "ton#7",
     "toon#5",
     "toon#6",
     "tui#6",
@@ -64499,9 +64908,7 @@
     "two_stools_ratree#6",
     "view#5",
     "view#6",
-    "wa#5",
-    "wa#6",
-    "waew#5",
+    "wa#8",
     "waew#6",
     "wandee#5",
     "wandee#6",
@@ -64732,7 +65139,7 @@
   {
    "name": "hyperUpstairs",
    "readByEngine": [
-    "engine-core.js:2926",
+    "engine-core.js:2929",
     "engine-systems.js:1750"
    ],
    "setByDialogue": [
@@ -65262,7 +65669,7 @@
     "world.js:9518"
    ],
    "readByEngine": [
-    "engine-core.js:2818",
+    "engine-core.js:2821",
     "engine-parser.js:1067",
     "engine-parser.js:6296",
     "engine-play.js:2996",
@@ -65275,7 +65682,7 @@
   {
    "name": "orchidSent",
    "readByEngine": [
-    "engine-core.js:2818",
+    "engine-core.js:2821",
     "engine-parser.js:1067",
     "engine-parser.js:6296",
     "engine-play.js:2996",
@@ -65294,7 +65701,7 @@
    ],
    "name": "orchidVouched",
    "readByEngine": [
-    "engine-core.js:2818",
+    "engine-core.js:2821",
     "engine-parser.js:1067",
     "engine-parser.js:6296",
     "engine-play.js:2996",
@@ -65666,7 +66073,7 @@
    ],
    "name": "recceDone",
    "setByEngine": [
-    "engine-core.js:2666"
+    "engine-core.js:2669"
    ]
   },
   {
@@ -65791,7 +66198,7 @@
    ],
    "name": "shamrockVisited",
    "readByEngine": [
-    "engine-core.js:2291",
+    "engine-core.js:2294",
     "engine-play.js:5572",
     "engine-systems.js:9898"
    ],
@@ -67629,7 +68036,7 @@
    "th": "กุ้ง"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 14,
    "filler": true,
    "id": "grace",
    "name": "Grace",
@@ -67663,7 +68070,7 @@
    "th": "หาด"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 7,
    "id": "helmut",
    "name": "Helmut",
    "patron": true,
@@ -68592,7 +68999,7 @@
    "th": "ไนซ์"
   },
   {
-   "dialogueCount": 12,
+   "dialogueCount": 17,
    "filler": true,
    "id": "nid",
    "name": "Nid",
@@ -69721,7 +70128,7 @@
    "th": "ต้อย"
   },
   {
-   "dialogueCount": 12,
+   "dialogueCount": 17,
    "filler": true,
    "id": "ton",
    "name": "Ton",
@@ -69828,7 +70235,7 @@
    "th": "วิว"
   },
   {
-   "dialogueCount": 12,
+   "dialogueCount": 18,
    "filler": true,
    "id": "wa",
    "name": "Wa",
@@ -69854,7 +70261,7 @@
    "th": "แหวน"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 12,
    "filler": true,
    "id": "waew",
    "name": "Waew",

@@ -2075,7 +2075,10 @@ function _topicHits(key, asked) {
   key = String(key).replace(/^(the|a|an) (?=\S)/, "");
   if (key === asked) return true;
   const esc = String(key).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const m = new RegExp("(^|[^a-z0-9])" + esc + "[a-z]{0,3}([^a-z0-9]|$)", "i").exec(String(asked));
+  // a key of two letters takes no slack: "wa" + three letters is water, watch and wai,
+  // Preeda's "ex" was answering EXPAT and her "no" NONT and NOTE (Silk Rose floor, 2026-10-08)
+  const slack = key.length <= 2 ? "" : "[a-z]{0,3}";
+  const m = new RegExp("(^|[^a-z0-9])" + esc + slack + "([^a-z0-9]|$)", "i").exec(String(asked));
   if (!m) return false;
   // "women who don't WORK" is not the job topic (Desmond, round 63)
   return !/\b(don'?t|doesn'?t|do not|not|never|no)\s+$/i.test(String(asked).slice(0, m.index + m[1].length));
