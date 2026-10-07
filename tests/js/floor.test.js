@@ -59,7 +59,7 @@ test("the twins: one face in the portrait prompt, the differences their story gi
   // Ping and Pong (Mario, 2026-10-07): Thai twins get a matched pair of nicknames. Ids stay naree/yada.
   assert.equal(a.name, "Ping"); assert.equal(b.name, "Pong");
   assert.equal(_findNpc("ping"), "naree", "in the Gilt Cage, Ping is the twin, not the Ping across town");
-  assert.match(ask("yada", "ping pong"), /destiny/); assert.match(ask("naree", "ping pong"), /river/);
+  assert.match(ask("yada", "ping pong"), /Ping serve —.*Pong return/); assert.match(ask("naree", "ping pong"), /river[\s\S]*the thing with the pen/);   // one hams it up, one disowns her
   assert.match(ask("naree", "pong"), /twenty minute younger/);
   assert.match(ask("yada", "ping"), /temple/);
   assert.equal(FLOOR_STAFF.yada.from, FLOOR_STAFF.naree.from, "one hometown");

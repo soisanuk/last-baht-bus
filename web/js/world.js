@@ -17906,8 +17906,8 @@ const FLOOR_OWN = {
         text: '"Quota, every month — drink and barfine." She does not need her fingers. "I am over. Pong is under. Together we are fine." She does not seem to find this funny.',
         short: '"I am over, Pong is under. Together we are fine."' },
       { topic: "ping pong|ping-pong|pingpong|ping pong show|the show|your name|your names",
-        text: '"Every night one man think he is the first to make that joke." She does not smile. "Ping is the river in Chiang Mai. Mama never see it — she like the sound. Pong is only so we match." A pause she has timed before. "Make the joke now, if you want. Then it is finished."',
-        short: '"The river, and a name to match. Make the joke once."' },
+        text: '"Every night one man think he is the first to make that joke." She does not smile. "Ping is the river in Chiang Mai. Mama never see it — she like the sound. Pong is only so we match." She does not look along the bar. "If my sister do the thing with the pen, I don\'t know her. Make your joke now, if you want. Then it is finished."',
+        short: '"The river, and a name to match. If she does the paddle, I don\'t know her."' },
     ],
   },
   yada: {
@@ -17960,8 +17960,8 @@ const FLOOR_OWN = {
         text: '"Quota!" She groans. "Every month a number. I am under, always under — I talk too long with one customer." A grin. "Ping is over. Wanida say, Pong, be more like Ping. I say, then you have two Ping. Very boring bar."',
         short: '"Always under. Two Pings would be a very boring bar."' },
       { topic: "ping pong|ping-pong|pingpong|ping pong show|the show|your name|your names",
-        text: '"Ping pong!" She gets there before you do. "Yes yes, the show, ha ha." The hoarse laugh is genuinely amused. "Mama name us in the village — she never hear of Walking Street. Then we come here and —" she spreads her hands — "destiny."',
-        short: '"Ping pong, yes, the show. Mama never heard of Walking Street."' },
+        text: '"Ping pong!" She gets there before you do, and she is thrilled about it. The pen comes out from behind her ear and becomes a paddle. "Ping serve —" a flick of the wrist toward her sister\'s stool — "Pong return!" She mimes a smash, nearly takes out a lady drink, and points the pen at you like a referee. "Best act on Walking Street, tilac. Twenty-six year, we never drop the ball." The hoarse laugh, enormous. "Mama name us in the village. She never hear of this street. Is destiny."',
+        short: '"Ping serve, Pong return! Never drop the ball." The pen is a paddle again.' },
     ],
   },
   sasi: {
