@@ -8248,6 +8248,7 @@ test("the collections show what's left, measured against people you've MET", () 
   newGame();
   state().stage = "vacation"; state().flags.act1Done = true;
   state().known = { lek: true, candy: true, bert: true, nong: true, fon: true };
+  state().talked = { lek: [0], candy: [0], bert: [0], nong: [0], fon: [0] };   // MET is talked to, not heard of (round 69)
   state().phone.photos = [{ id: "lek", turn: 1 }, { id: "candy", turn: 2 }];
   state().phone.contacts = { lek: true };
 

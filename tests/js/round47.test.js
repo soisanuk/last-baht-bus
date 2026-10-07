@@ -596,7 +596,7 @@ test("LAST NIGHT on the first morning does not tell a man who just slept that he
 });
 
 test("the black book names its denominator as what it counts", () => {
-  G.room = "candy_bar"; for (const id of _npcsHere()) G.known[id] = true;
+  G.room = "candy_bar"; for (const id of _npcsHere()) { G.known[id] = true; G.talked[id] = [0]; }   // met = talked to (round 69)
   G.known.nok = true;   // met, talked to, not bar staff — and not in the count
   G.soc.drinks[_npcsHere().find(i => NPC_ROLES[i] === "hostess")] = 3;   // somebody in the book, or WHO stops before the denominator
   out = []; run("who");

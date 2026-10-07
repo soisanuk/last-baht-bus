@@ -77,7 +77,9 @@ function giltSeed() {
   G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3;
   G.money = 15000; G.bank = 120000; G.battery = 95;
   G.room = "soi_diamond"; G.visited.soi_diamond = true; G.nightTurn = 8;
+  _setFlag("roomSafeOpened");   // a day-three man opened his room safe on night two (round 69: the stash was paid to Henrik on night three)
   quiet(); G.encDone = {};
+  _nightSnapshot();             // the night's ledger baseline, which the real path takes at every wake (round 69: "first morning in town" on day four)
   return serializeGame();
 }
 function reload(blob) { newGame(); deserializeGame(blob); }

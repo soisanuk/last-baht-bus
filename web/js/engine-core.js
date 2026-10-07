@@ -2243,7 +2243,7 @@ function _askAgain(npcId) {
   let pool = _FLUENT_THAI.has(npcId) ? _ASK_AGAIN_FLUENT : (_thaiVoice(npcId) && !_house) ? _ASK_AGAIN : _ASK_AGAIN_EN;
   // a massage shop sells no drinks: "Buy a drink — maybe it come back" from Pensri (Terence, round 57)
   if (_room() && (_room().massage || _room().soapy)) pool = pool.filter(f => !/drink/.test(String(f)));
-  return pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name);
+  return _pickVary(pool, "askagain:" + G.room)(NPCS[npcId].name);   // two regulars said "Told you already, tilac" in the same minute (Henrik, round 69): a room does not repeat itself
 }
 // An unknown topic is NOT a repeat: before this, a miss fell through to the
 // topicless greeting, whose repeat path then told the player "you asked me

@@ -3189,8 +3189,9 @@ function _doPatron() {
     const golden = Math.round(rate * 1.25);
     _say(`The regular taps his phone calculator like it owes him money. ` +
       `“฿${_num(rate)}. That's what ${name} gets you now — ${sym}1, ฿${_num(rate)}. When I ` +
-      `moved out here it was ฿${_num(golden)}. THIS TOWN USED TO BE CHEAP.” The girls ` +
-      `mouth the speech along with him, word for word, nightly for nine years.`);
+      `moved out here it was ฿${_num(golden)}. THIS TOWN USED TO BE CHEAP.” ` + (_room().barType === "gogo"
+        ? `Nobody on the stage can hear him, which he has never once noticed.`   // the rail's ritual, not a go-go's (Henrik, round 69)
+        : `The girls mouth the speech along with him, word for word, nightly for nine years.`));
     return;
   }
   // the other liturgy: no expat has ever been the right temperature
@@ -3822,8 +3823,8 @@ const _OTHER_LEDGER = {
     (n) => `"You want to know something funny?" ${n} turns the chit over so you can see the bar's ` +
       `stamp. "Farang always say — I buy you drink, expensive one, good for you." She taps the ` +
       `stamp, once. "Bar take most. I take ฿${_num(LADY_CUT)}." No complaint in it at all; she is ` +
-      `explaining a system she lives inside, to a man who has been inside it for a ` +
-      `week. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
+      `explaining a system she lives inside, to a man who has only ever ` +
+      `seen it from the customer's side. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
     (n) => (_isGogo() ? `${n} makes you look at her drink when the waitress sets it down, because she tells you to. Ice to the top, ` +
       `a short pour, tonic over it until the colour went.` : `${n} makes you watch the barman build her drink, because she tells you to. Ice to the top, ` +
       `a short pour, tonic over it until the colour goes.`) + ` "Lady drink," she says, and turns the glass ` +

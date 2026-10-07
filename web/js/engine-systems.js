@@ -270,7 +270,7 @@ function _doRepay(arg) {
   _loanPrincipal(G.loan, amt, "loanPrin");
   if (G.loan.owed <= 0) {
     G.loan = null;
-    _say(`Nira takes the last of it and, for the first time, the calculator behind her eyes ` +
+    _say(`Nira takes the last of it — ฿${_num(amt)} — and, for the first time, the calculator behind her eyes ` +
       `clicks off. "Paid." ` + (late
         ? `"Late — but paid. I remember both." A nod that is almost respect.`
         : `"On time, even. You, I lend to again — any time." That is a genuine smile.`), "win");
@@ -3952,7 +3952,7 @@ function _doBlackbook() {
   // Same denominator doctrine as the gallery: ladies you have actually met, not
   // the 283 on the payroll. It grows as you get out more, so the ratio is a
   // reason to walk somewhere rather than a scolding.
-  const knownLadies = Object.keys(G.known || {}).filter(id => NPC_ROLES[id] && NPCS[id]).length;
+  const knownLadies = Object.keys(NPCS).filter(id => NPC_ROLES[id] && _met(id)).length;   // MET, not heard of: "12 you have actually met" after meeting three (Henrik, round 69)
   if (knownLadies > ids.length) {
     // "numbers" was accurate while the book was contacts-only; it now carries
     // bonded girls whose number you never asked for, so it counts entries

@@ -179,7 +179,9 @@ test("no filler NPC's generated prose taps a character it doesn't mean to", () =
   };
   for (const [id, n] of Object.entries(NPCS)) {
     if (!n.filler) continue;
-    allow = new Set(["Candy", ...(FLOOR_OWN[id] ? Object.keys(NPCS).filter(x => NPCS[x].room === n.room).map(x => NPCS[x].name) : [])]);
+    // …and anybody she has a line ABOUT (a topic keyed on their name — Danny, the regular who drifts in)
+    const _about = FLOOR_OWN[id] ? new Set(FLOOR_OWN[id].nodes.flatMap(d => String(d.topic || "").split("|"))) : new Set();
+    allow = new Set(["Candy", ...(FLOOR_OWN[id] ? Object.keys(NPCS).filter(x => NPCS[x].room === n.room || _about.has(x) || _about.has(NPCS[x].name.toLowerCase())).map(x => NPCS[x].name) : [])]);
     scan(`NPC ${id} desc`, n.desc);
     (n.dialogue || []).forEach((d, i) => { scan(`NPC ${id} #${i}`, d.text); scan(`NPC ${id} short#${i}`, d.short); });
   }
