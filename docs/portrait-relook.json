@@ -1,13 +1,4 @@
 {
  "_about": "Characters whose portrait PROMPT changed after their render shipped. The prompt is the character's `look` field — appearance only, kept apart from the desc (Mario, 2026-10-07), so deepening a desc never sends anyone here. gen-portrait-manifest marks them rendered:false / relook:true; the art agent's ship path removes an id once its new render is in web/portraits/thumb/.",
- "ids": {
-  "naree": {
-   "was": "A crooked, disarming grin",
-   "now": "Thai woman, mid twenties, big dark eyes, round face, long hair tied back, solemn"
-  },
-  "yada": {
-   "was": "A crooked, disarming grin",
-   "now": "(no render of her own: naree's portrait, mirrored left to right)"
-  }
- }
+ "ids": {}
 }

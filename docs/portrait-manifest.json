@@ -11,17 +11,11 @@
       "patron": 25
     },
     "filler": 213,
-    "unrendered": 2,
-    "relook": 2
+    "unrendered": 0,
+    "relook": 0
   },
-  "unrendered": [
-    "naree",
-    "yada"
-  ],
-  "relook": [
-    "naree",
-    "yada"
-  ],
+  "unrendered": [],
+  "relook": [],
   "characters": [
     {
       "id": "aey",
@@ -2556,9 +2550,7 @@
       "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 53 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
       "look": "Thai woman, mid twenties, big dark eyes, round face, long hair tied back, solemn",
       "twin": "yada",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "A crooked, disarming grin"
+      "rendered": true
     },
     {
       "id": "sasi",
@@ -2592,9 +2584,7 @@
       "look": "Thai woman, mid twenties, big dark eyes, round face, long hair tied back, solemn",
       "twin": "naree",
       "mirrorOf": "naree",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "A crooked, disarming grin"
+      "rendered": true
     },
     {
       "id": "dao",
