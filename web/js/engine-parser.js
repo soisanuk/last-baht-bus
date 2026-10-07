@@ -541,6 +541,8 @@ function _promptedFolk(arg, topic) {
   if (/\b(clerk|cashier|staff|lad|counter|shop ?(girl|boy|assistant))\b/.test(a) && r.seven) {
     _say(_pickVary(_FOLK_SEVEN, "folkseven")); return true;   // three refusals for a lad the receipt named (Bronwyn, round 39)
   }
+  // the doorman a club's rope implies (Declan, round 58: "No one here answers to that")
+  if (/\b(bouncer|doorman|door ?man)\b/.test(a) && (r.barType === "club" || /velvet rope/i.test(String(r.desc)))) { _say(_pickVary(_FOLK_SECURITY, "folksec")); return true; }
   // the greeter of a massage shop whose door is on this street answers on the street (Graeme, round 58)
   if (/\b(tout|greeter)\b/.test(a) && (r.venues || []).some(v => ROOMS[v] && ROOMS[v].massage)) { _say(_pickVary(_FOLK_TOUT_STREET, "folktoutstreet")); return true; }
   const prose = _roomProse(r);
@@ -2141,6 +2143,15 @@ function _doExamine(arg) {
   // Water Buffalo" through the one for a tree. Authored room detail still wins,
   // because a room may describe its own neighbour better than this can.
   if (_venueLook(arg)) return;
+  // EXAMINE MASSEUSE in a shop with a named woman (Graeme, round 58: "isn't here" in all 19 shops)
+  if (/^(the )?(masseuse|masseur|therapist|massage lady)$/.test(arg) && _room().massage) {
+    const m = _npcsHere().find(id => NPCS[id].masseuse);
+    if (m) { _doExamine(NPCS[m].name.toLowerCase()); return; }
+    const sm = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[G.room];
+    _say(sm ? `${sm.name}: ${sm.yrs || "years"} at this, and it shows in the hands before anything else — short nails, strong thumbs, a way of looking at your shoulders like a mechanic at an engine.`
+      : "The woman on the front step is somewhere past forty, in the shop's polo, with thumbs that have done this for longer than you have been coming here.");
+    return;
+  }
   const npc = _findNpc(arg);
   if (npc) {
     // _findNpc's fuzzy prefix/substring match can pick up a same-prefixed NPC
@@ -3534,7 +3545,7 @@ const _SCENERY = [
       "where the catch is better.";
   } },
 
-  { key: "rope", m: /\bvelvet rope\b|\bwristbands?\b/, lines: {
+  { key: "rope", m: /\b(?:velvet )?rope\b|\bwristbands?\b/, lines: {   // EXAMINE ROPE in a club whose prose sells one (Declan, round 58)
     any: [
       "The velvet rope is doing what velvet ropes do everywhere: converting a doorway " +
         "into a judgement. It has no opinion of you personally. That's the doorman's job.",
@@ -4186,6 +4197,14 @@ function _doTalkCore(arg, topic) {
     const _k = (typeof _hasSponsor === "function" && _hasSponsor(npc) && typeof _sponsorInTown === "function" && _sponsorInTown(npc) &&
          !(typeof _sponsorFamilyDay === "function" && _sponsorFamilyDay(npc))) ? "sponsor" : null;   // the drinks-only girl's price node already says it in her voice
     if (_k) { _bfRefusalSay(npc, { kind: _k }); return; }
+  }
+  // a venue by its WHOLE name is the place, not her "bar" node: "ask kesinee about candy bar" got "My bar?" (Mick, round 57)
+  if (topic && typeof _roomByName === "function") {
+    const _tl = String(topic).toLowerCase().replace(/^the /, "");
+    const _vr = Object.keys(ROOMS).find(r => ROOMS[r].bar && String(_barName(r) || "").toLowerCase().replace(/^the /, "") === _tl);   // exact: _roomByName("candy bar") is Candy Bar 2
+    if (_vr && _vr !== _npcRoom(npc) && NPC_ROLES[npc] &&   // staff with a "bar" node of their own; Mort's column and the regulars keep their words
+        !(NPCS[npc].dialogue || []).some(x => x.topic && String(x.topic).split("|").some(k => k === _tl)) &&
+        typeof _townTalk === "function" && _townTalk(npc, topic)) { _questOffer(npc); return; }
   }
   let d = _pickDialogue(npc, topic || null);
   // the one NAMED piwin answers for his own job the way any piwin at a stand does —
@@ -5712,6 +5731,86 @@ const _TOWN = {
   },
   // the season, which the bar's own ledger prints as its headline every morning and
   // nobody on the floor could talk about (Hennie, round 55)
+  kpyesterday: {
+    floor: ["\"Last night killer?\" {n} laughs. \"{w} win. {m} still talking about it, very loud. Next time you play, I watch.\""],
+    house: ["\"Last night's killer?\" {n} says. \"{w} took it. {m} are still explaining how it should have gone.\""],
+    punter: ["\"Last night?\" {n} puts the glass down. \"{w} won it. {m} — don't get them started. I'd have had it if the cushion on table two wasn't dead.\""],
+  },
+  intro: {
+    floor: ["\"Who to meet?\" {n} thinks. \"{a}.{rest} Ask me — I tell you about them.\" (ASK {N} ABOUT {A})"],
+    house: ["{n} considers it. \"{a}.{rest} Ask me and I'll tell you why.\" (ASK {N} ABOUT {A})"],
+    punter: ["\"Who should you meet?\" {n} grins. \"{a}, for a start.{rest} Ask me about them.\" (ASK {N} ABOUT {A})"],
+  },
+  intro_none: {
+    floor: ["\"You know everybody I know already,\" {n} says. \"Now you need new friends, not from me.\""],
+    house: ["\"You've met everyone I'd send you to,\" {n} says. \"The rest you find on your own.\""],
+    punter: ["\"You've met everyone worth meeting in here,\" {n} says. \"Try another rail.\""],
+  },
+  loan: {
+    floor: ["\"Borrow?\" {n} lowers her voice. \"Nira, at Neon Paradise — on the stage, the one with the calculator. Twenty percent, three days. She is fair. She is not your friend.\"",
+      "{n} shakes her head slowly. \"Nira lend. Walking Street, Neon Paradise. Three days, twenty percent, and if you late her cousins come say hello. Better you don't.\""],
+    house: ["\"Nira, at Neon Paradise on Walking Street,\" {n} says. \"Twenty per cent for three days, and she means the days. My advice is free: don't.\"",
+      "{n} doesn't need to think about it. \"There's a dancer at Neon Paradise who lends — Nira. Fair terms, short fuse. Ask her, not me.\""],
+    punter: ["\"Nira at Neon Paradise,\" {n} says. \"Twenty per cent, three days, and her cousins do the reminding. I've seen men leave town owing her. Haven't seen them come back.\"",
+      "{n} snorts into the glass. \"Borrow? There's a girl on Walking Street with a calculator and relatives. Nira. Don't.\""],
+  },
+  back: {
+    floor: ["\"Your back?\" {n} winces for you. \"Massage — real one, Thai, ฿{p} one hour. Not the oil shop, the real shop. They walk on you, you cry, you sleep.\"",
+      "{n} points vaguely north. \"Thai massage, ฿{p}. Old lady with strong thumbs. If very bad, the clinic on Second Road. Don't lift the beer crate, na.\""],
+    house: ["\"A proper Thai massage, ฿{p} the hour — the real shops, not the oil ones,\" {n} says. \"If it's worse than that, the clinic by Central.\"",
+      "{n} has heard this before. \"Thai massage. ฿{p}. Not the oil places — a real one. And sleep on your back, not on a stool.\""],
+    punter: ["\"The back?\" {n} rolls a shoulder in sympathy. \"Thai massage, ฿{p}, a woman who's been doing it thirty years. Best money in this town, and I've spent most of it.\"",
+      "{n} nods. \"Every man over fifty here has the same back. ฿{p} at the Thai shops. Go before it's a clinic job.\""],
+  },
+  priew: {
+    floor: ["\"Priew? She is on the round.\" {n} nods at the far table. \"Drink-girl only, that one — she sit with you after, one drink. Not before. The tray first.\"",
+      "{n} glances at the Russians' table. \"Busy. After the round I tell her you here. She come, or she don't — her choice, na.\""],
+    house: ["\"Priew's working,\" {n} says. \"She'll sit after the round, if she wants to. Drinks only, that one.\""],
+    punter: ["\"The girl with the tray? Working,\" {n} says. \"After the round, mate, if she fancies it.\""],
+  },
+  chit: {
+    floor: ["\"The chit.\" {n} taps the cup. \"฿{c} for me from every ฿{p} you spend on me. I show you already — you remember. The rest is the bar.\"",
+      "{n} smiles a small, tired smile. \"฿{c}. Always ฿{c}. The stamp is the bar's, the ฿{c} is mine. You know now; most farang never know.\""],
+    house: ["\"฿{c} of every ฿{p},\" {n} says. \"You've seen the chit. It doesn't change because you asked.\""],
+    punter: ["\"฿{c} of every ฿{p},\" {n} says. \"You've seen the chit.\""],
+  },
+  placed: {
+    floor: ["\"{w}? Here every night.\" {n} points with her chin. \"Ask her yourself.\""],
+    house: ["\"{w}? Here every night.\" {n} nods along the rail. \"Ask her yourself — she's better at the answers than I am.\""],
+    punter: ["\"{w}?\" {n} nods down the rail without looking. \"Here most nights. Ask her yourself, mate — she'll tell you more than I can, and nicer.\"",
+      "{n} doesn't turn round. \"{w}'s at the far end most nights. Good girl. Buy her a drink and ask her, not me.\""],
+  },
+  regular: {
+    floor: ["\"{r}?\" {n} laughs. \"Our regular. Same stool, same drink, same joke. He tip okay. He is part of the furniture, but nice furniture.\"",
+      "{n} glances at the stool. \"{r} — every night, nearly. He tell the same story, we laugh every time. Is our job, and also he is funny sometimes.\""],
+    house: ["\"{r}'s one of ours,\" {n} says. \"Same stool, pays his tab, causes no trouble. A bar's built on men like that.\""],
+    punter: ["\"{r}? Drinks here,\" {n} says."],
+  },
+  me_new: {
+    floor: ["\"You?\" {n} laughs. \"New face. Ask me again next week, I tell you who you are.\""],
+    house: ["\"I don't know you yet,\" {n} says. \"Give it a few nights.\""],
+    punter: ["\"Never seen you before, mate.\""],
+  },
+  me_seen: {
+    floor: ["\"I know you.\" {n} points. \"You sit there, you buy one, you look at everything. Now you look at me.\""],
+    house: ["\"I know your face,\" {n} says. \"Not much else yet.\""],
+    punter: ["\"Seen you about,\" {n} says."],
+  },
+  me_known: {
+    floor: ["\"You?\" {n} rolls her eyes. \"Everybody here know you. You think we don't talk?\""],
+    house: ["\"Everybody on this floor knows you,\" {n} says. \"That's a compliment. Mostly.\""],
+    punter: ["\"Everyone knows you, mate.\""],
+  },
+  me_back: {
+    floor: ["\"You come BACK!\" {n} looks along the rail. \"{g} say you come back, nobody believe her. Now she don't stop talking.\""],
+    house: ["\"You're back,\" {n} says. \"{g} said you would. I didn't bet on it.\""],
+    punter: ["\"You're back, then.\""],
+  },
+  me_hers: {
+    floor: ["\"Remember?\" {n} gives you a look. \"You think I forget? I count the months. Is a habit.\""],
+    house: ["\"I remember,\" {n} says. \"You sat there. You're sitting there again.\""],
+    punter: ["\"I remember you.\""],
+  },
   bangkok: {
     floor: ["\"Bangkok?\" {n} makes a face. \"Two hour on the bus from the North station, three if rain. I go there when here is dead — work a bar on Sukhumvit, same job, more traffic, no sea. Come back December.\"",
       "{n} shrugs. \"Bangkok have everything and I like nothing. Too big, too fast, nobody say hello. But when the rail is empty here, Bangkok still pay. So.\"",
@@ -5937,6 +6036,47 @@ function _townTalk(npc, topic) {
       low: "Low season — slow", deeplow: "The dead season, the bottom of the year" }[tier] || "Middling";
     // "September is The dead season" (Mick, round 57): {How} opens a sentence, {how} sits inside one
     return pick("season", { m: _SEASON_MONTHS[_seasonMonth()], how: how.charAt(0).toLowerCase() + how.slice(1), How: how });
+  }
+  // L327 — last night's killer field, the morning after (Mick, round 57: nobody would discuss Gop or the ruck)
+  if (/\b(killer|league|pool night|the pool|who won|last night'?s game|the game last night)\b/.test(t) && G.lastKp && G.lastKp.day === G.day - 1 && G.lastKp.room === G.room)
+    return pick("kpyesterday", { w: G.lastKp.winner === "You" ? "you" : (G.lastKp.winner || "nobody, in the end"), m: (G.lastKp.names || []).filter(x => x !== G.lastKp.winner).slice(0, 2).join(" and ") || "the usual" });
+  // L480 — "who else should I meet?" names people this mouth already talks about (Anand, round 59)
+  if (/\bwho (else )?(should|do|can) i (meet|know|talk to)\b|\bintroduc|\banyone (i|worth)\b/.test(t)) {
+    const ppl = [...new Set((NPCS[npc].dialogue || []).flatMap(x => String(x.topic || "").split("|")).filter(k => NPCS[k] && k !== npc && !(G.talked || {})[k] && _npcActive(k)))].slice(0, 2);
+    if (!ppl.length) return pick("intro_none", {});
+    return pick("intro", { a: NPCS[ppl[0]].name, rest: ppl[1] ? ` And ${NPCS[ppl[1]].name}.` : "", A: NPCS[ppl[0]].name.split(" ").pop().toUpperCase(), N: NPCS[npc].name.split(" ").pop().toUpperCase() });
+  }
+  // L562 — the town's lender and the town's back (Kwame, round 60: BORROW and BACK missed everywhere)
+  if (/\b(loan|borrow|borrowing|lend|lender|money lender|need money)\b/.test(t) && npc !== "nira" && npc !== "nont") {
+    pick("loan", {});
+    if (typeof _barOwned === "function" && _barOwned()) _say("(For the bar, Nont lends — BORROW at his table in the Old Market.)", "dim");
+    return true;
+  }
+  if (/^(my |a |bad )?back$|\b(back pain|bad back|my back|backache|sore back)\b/.test(t)) return pick("back", { p: MASSAGE_LEGIT });
+  // L925 — Priew on her round, asked of the room she is working
+  if (/\bpriew\b/.test(t) && G.priewSeen && G.priewSeen.day === G.day && G.priewSeen.room === G.room) return pick("priew", {});
+  // L912 — the chit she showed you is a thing she can be asked about
+  if (NPC_ROLES[npc] === "hostess" && (G.soc.ledger || {})[npc] && G.soc.ledger[npc].includes(1) &&
+      /\b(chit|chits|cut|stamp|share|commission|her money|your money|60|sixty)\b/.test(t))
+    return pick("chit", { c: LADY_CUT, p: _ladyPrice() });
+  // L916 — a man at his own local can place the women who work it
+  if (NPCS[npc].patron && _npcRoom(npc) === G.room) {
+    const w = Object.keys(NPCS).find(id => NPC_ROLES[id] && _npcsHere().includes(id) && (id === t || NPCS[id].name.toLowerCase() === t));
+    if (w) return pick("placed", { w: NPCS[w].name });
+  }
+  // L533 — staff know their own rail
+  if (NPC_ROLES[npc] && !NPCS[npc].patron) {
+    const p = Object.keys(NPCS).find(id => NPCS[id].patron && (id === t || NPCS[id].name.toLowerCase() === t || NPCS[id].name.toLowerCase().split(" ").pop() === t) &&
+      (NPCS[id].room === G.room || _npcRoom(id) === G.room));
+    if (p) return pick("regular", { r: NPCS[p].name });
+  }
+  // L620 — "do you remember me?" is a question the floor can answer
+  if (NPC_ROLES[npc] && /^(me|myself|about me|remember me|do you remember me|you remember me|who am i)$/.test(t)) {
+    const back = G.prevBond && Object.keys(G.prevBond).find(id => id !== npc && G.prevBond[id] >= 2 && _npcsHere().includes(id));
+    if (G.prevBond && G.prevBond[npc] >= 2) return pick("me_hers", {});
+    if (back) return pick("me_back", { g: NPCS[back].name });
+    const k = _knownTier(npc);
+    return pick(k >= 2 ? "me_known" : k >= 1 ? "me_seen" : "me_new", {});
   }
   // Bangkok: two hours up the motorway, where the floor goes in the wet and the money comes from
   if (/\b(bangkok|krung ?thep|bkk|the capital|the big city)\b/.test(t))
@@ -8353,7 +8493,21 @@ function _doMotosai(arg) {
   // the longest key that fits: "beach road south" took the "beach road" key (Fintan, round 60)
   const destKey = Object.keys(MOTOSAI_DESTS).filter(k => w.includes(k)).sort((a, b) => b.length - a.length)[0] ||
     Object.keys(MOTOSAI_DESTS).find(k => k.includes(w));
-  if (!w || !destKey) {
+  // a BAR you know by name: the piwin takes you to the street its door is on (Priya, round 58:
+  // "motosai to lucky tiger" got the menu while "lk metro" worked)
+  let _venueRide = null;
+  if (w && !destKey && typeof _roomByName === "function") {
+    const rid = _roomByName(w);
+    if (rid && ROOMS[rid] && ROOMS[rid].bar) {
+      const st = Object.keys(ROOMS).find(r => (ROOMS[r].venues || []).includes(rid));
+      if (!((G.visited || {})[rid] || (G.heardOf || {})[rid])) { _say("“That one?” The piwin shakes his head. “Don't know it, boss. Tell me a street.”"); return; }
+      if (st) {
+        _venueRide = { room: st, price: ROOMS[st].region === "Darkside" ? MOTOSAI_FAR : MOTOSAI_TOWN };
+        _say(`“${_barName(rid)}?” He knows it. “${ROOMS[st].name} — the door is right there.”`, "dim");
+      }
+    }
+  }
+  if (!w || (!destKey && !_venueRide)) {
     // The challenge frame: the same piwin who refuses a NAMED destination in
     // voice was offering the whole city as a menu one command earlier
     // (grapevine playtest F4, 2026-08-25). His menu and his mouth agree now.
@@ -8363,10 +8517,10 @@ function _doMotosai(arg) {
       Object.keys(MOTOSAI_DESTS).join(" · ") + " · hotel)", "dim");
     return;
   }
-  let d = MOTOSAI_DESTS[destKey];
+  let d = destKey ? MOTOSAI_DESTS[destKey] : _venueRide;
   // "beach road south" rode to Central, with Bank at the south end (Fintan, round 60): the
   // road's own ends are where you said
-  if (destKey === "beach road") {
+  if (destKey && destKey === "beach road") {
     const end = /\bsouth\b/.test(w) ? "beach_rd_s" : /\bnorth\b/.test(w) ? "beach_rd_n" : null;
     if (end && ROOMS[end]) d = { ...d, room: end };
   }
@@ -9020,6 +9174,7 @@ function _priewReveal() {
     "the tray one centimetre, which is a greeting, and an answer, and the whole of " +
     "the joke.", "alert");
   const her = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
+  G.priewSeen = { room: G.room, day: G.day, by: her || null };   // she is in the room tonight, on the clock (Jens, round 67)
   if (her) {
     _say(`${NPCS[her].name} follows your frozen stare with professional interest. ` +
       "\"You know her? She drinks-girl only, no barfine — but I can tell her sit " +
@@ -10717,6 +10872,11 @@ function _leagueTalk(npc) {
   // the frame you just lost on her own table: "You play? (PLAY KILLER)" sixteen turns after
   // (Fintan, round 60). Tonight's field is remembered — say who took it.
   const kp = G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day ? G.lastKp : null;
+  // …and LAST night's field, the morning after: nobody would discuss Gop or the ruck (Mick, round 57)
+  const kpY = !kp && G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day - 1 ? G.lastKp : null;
+  if (kpY && typeof _TOWN !== "undefined" && _TOWN.kpyesterday)
+    _say(_sentenceCase(_fmt(_pickVary(_TOWN.kpyesterday[_hoursRegister(npc)], "town:kpy"), { n: NPCS[npc].name,
+      w: kpY.winner === "You" ? "you" : (kpY.winner || "nobody, in the end"), m: (kpY.names || []).filter(x => x !== kpY.winner).slice(0, 2).join(" and ") || "the usual" })));
   if (kp) {
     const w = kp.won ? "you" : kp.winner ? kp.winner : "somebody";
     return kp.won
@@ -12890,7 +13050,9 @@ function doCommand(input) {
     // dog tag reaches for landed on "The soi blinks at you" (Bill, round 44).
     case "set": if (/box|device/.test(arg||"")) { _doPlaceBox(arg); break; }  // SET DOWN THE BOX
       _say(_pickVary(_WEAR_NO, "wearno")); break;
+    case "float": if (typeof _atOwnBar === "function" && _atOwnBar()) { _putInTill(arg); break; } _say("Float what, and where? (At your own bar: FLOAT <amount>.)"); break;
     case "put": if (/\bdown\b/.test(arg||"") && /box|device/.test(arg||"")) { _doPlaceBox(arg); break; }
+      if (typeof _atOwnBar === "function" && _atOwnBar() && /\b(till|float|drawer)\b/.test(arg || "") && /\d|thousand|hundred/.test(arg || "")) { _putInTill(arg); break; }   // "You could. You are not going to." (Kwame, round 60)
       _doWear(String(arg || "").replace(/\bon\b.*$/, "").trim() ||
       String(arg || "")); break;
     case "read": _doRead(arg); break;

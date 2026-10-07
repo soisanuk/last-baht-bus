@@ -6485,7 +6485,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Alright.\" A nod, like to a mate. \"Sit, watch the game. Fair warning — I don't do the " +
           "sweetheart thing, I'm rubbish at it, and you look like you got enough people lying to you already.\" " +
-          "She turns back to the TV. \"Who you support? Wrong answer gets a warm one.\"",
+          "She turns back to the TV.",
+        asks: { key: "team", q: "\"Who you support? Wrong answer gets a warm one.\"" },   // "arsenal" was a topic miss (Dev, round 65)
         short: "\"Sit, watch the game. I don't do the sweetheart thing — I'm rubbish at it.\"" },
       { topic: "football", text: "\"Liverpool, since I am small.\" She lights up, all business. \"My uncle " +
         "drive taxi Bangkok, always the match on the radio. I learn English from the football commentary " +
@@ -8265,7 +8266,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "once been curious what the rooms are.\" A diplomatic sip he doesn't need. \"Charming in a " +
         "restaurant, our Laurent. A liability in a room. Between us, that's for the best.\" The smile " +
         "reseals over it. \"I keep the lights on. He keeps his distance.\"" },
-    ],
+      // "above my pay grade" about his own group's back room (Declan, round 58)
+      { topic: "orchid|orchid room|the orchid|orchid club|back room|the back room|the club|members",
+        text: "\"The Orchid Room.\" Gavin smiles the smile of a man who has been asked this at a dinner before. \"Members. A different side " +
+          "of the business — hospitality, not bars. I do bars.\" He turns his glass a few degrees, then thinks better of it. \"If you're asking, you're not a member. That's not a criticism. It's the whole design.\"",
+        short: "\"Members. A different side of the business. I do bars.\"" },],
   },
 
   powers: {
@@ -8516,7 +8521,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "president, the patch, the whole loud room bending a careful half-inch toward him without seeming to.\n\n" +
           "Doyle goes very still. \"Say that again. The one nobody looks straight at.\" He sets the glass down. " +
           "\"That's the man. The president's a mascot — that one's the reason the lights stay on.\" He turns it " +
-          "over. \"Educated voice, you said. American vowels under the Thai. Watches the door same as me.\" A short, " +
+          "over. \"Quiet, you said. Nothing on him anybody would remember. Watches the door same as me.\" A short, " +
           "unamused breath. \"Men like that don't sit in rooms like that unless they own the room. And the soi. " +
           "And the police who'd raid it.\" He slides folded notes across. \"You did good work. Forget his face — " +
           "I mean it. That's not a man you investigate. That's a man who investigates you.\"",
@@ -11188,7 +11193,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "something they have not told anybody about.\" The counting never stops. " +
           "\"I do not talk about that with customers. I am telling you that I could.\"",
         short: "\"I pay them, so I know all of it. I am telling you that I could talk.\"" },
-    ],
+      // she told you the trick and denied it the next breath (Declan, round 58)
+      { req: ["knowDoorTrick"], topic: "song|the song|music|dj|dj beer|trick|the trick|door trick|the door|lock",
+        text: "\"Shh!\" Ploy doesn't look at the booth, which is how you know she is thinking about it. \"Sabai Sabai. DJ Beer plays it, security walk the floor, the door forgets. You request — I know nothing. I am counting.\"",
+        short: "\"Sabai Sabai, from DJ Beer. I know nothing. I am counting.\"" },],
   },
 
   dj_beer: {
@@ -16853,6 +16861,11 @@ const ASK_REPLIES = {
     { pers: "blunt", text: "Nobody. I'm nobody" },
     { pers: "operator", text: "Nobody sends me anywhere" },
     { text: "Nobody sent me. Just being friendly" },
+  ],
+  team: [
+    { text: "Liverpool" },
+    { text: "Arsenal" },
+    { text: "Nobody — I came for the beer" },
   ],
   dream: [
     { pers: "charmer", text: "Right now? This chair, this conversation" },

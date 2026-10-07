@@ -5666,6 +5666,18 @@ function _staffTextPick(id, pool) {
   sent.push(pi); town.push(pool[pi]); if (town.length > 40) town.shift();
   return pool[pi];
 }
+// PUT <n> IN THE TILL — the owner's own money into the float. It is the bar's from then on,
+// counted like the other pocket-to-bar bills so the morning ledger does not call it a spend.
+function _putInTill(arg) {
+  const m = String(arg || "").replace(/,/g, "").match(/\d+/);
+  const want = m ? parseInt(m[0], 10) : (typeof _amount === "function" ? _amount(arg) : 0);
+  const n = Math.min(want || 0, G.money);
+  if (!n) { _say(G.money ? "How much? (PUT <amount> IN TILL.)" : "Your pocket is empty — nothing to put in the drawer."); return; }
+  G.money -= n; G.bar.cash = (G.bar.cash || 0) + n;
+  G.bar.pocketDrawn = (G.bar.pocketDrawn || 0) + n; G.bar.floated = (G.bar.floated || 0) + n;
+  const tk = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
+  _say(`${tk && NPCS[tk] ? NPCS[tk].name : "The till"} counts it in twice — ฿${_num(n)} of your own into the float. The drawer stands at ฿${_num(G.bar.cash)}. (฿${_num(G.money)} left in your pocket.)`);
+}
 function _textTalk(npc, topic) {
   const t = String(topic || "").toLowerCase();
   const inbox = (G.phone.inbox || []).slice().reverse().filter(x => x.from === npc);

@@ -177,3 +177,44 @@ test("L933 + L935 บาร์ and a classifier after a number", () => {
   assert.equal(_thaiToCmd("ซื้อเบียร์สองขวด"), "buy beer");
   assert.match(String(_thaiToCmd("เข้าแคนดี้บาร์")), /enter candy bar/);
 });
+
+// ── part 2: the larger items ─────────────────────────────────────────────────
+test("L418 Ploy answers the song; L420 Doyle draws his own conclusion; L429 Gavin on the Orchid", () => {
+  _setFlag("somTamDelivered"); _setFlag("knowDoorTrick"); G.room = NPCS.ploy.room; assert.match(ask("ploy", "the song"), /Sabai Sabai/);
+  assert.ok(!JSON.stringify(NPCS.doyle.dialogue).includes("American vowels"));
+  G.room = _npcRoom("gavin"); assert.match(ask("gavin", "orchid room"), /Members/);
+});
+test("L430 the club's doorman and rope; L400 EXAMINE MASSEUSE", () => {
+  G.room = "paradise_nights"; out = []; run("talk to bouncer"); assert.ok(_FOLK_SECURITY.some(l => said().includes(l)));
+  out = []; run("examine rope"); assert.match(said(), /rope/i); assert.doesNotMatch(said(), /declines to elaborate/);
+  G.room = Object.keys(ROOMS).find(r => ROOMS[r].massage === "legit"); out = []; run("examine masseuse"); assert.doesNotMatch(said(), /isn't here|declines/);
+});
+test("L562 the town knows its lender and its back; L620 the floor answers 'do you remember me'", () => {
+  G.room = "stinky_bar"; assert.match(ask("bert", "loan"), /Nira/);
+  G.room = "lucky_tiger"; assert.match(ask("lek", "my back"), new RegExp("฿" + MASSAGE_LEGIT));
+  assert.match(ask("rung", "me"), /New face|know you/);
+});
+test("L533 staff know their own rail; L916 a regular places a woman at his local; L912 the chit is askable", () => {
+  const reg = Object.keys(NPCS).find(id => NPCS[id].patron && NPCS[id].room && Object.keys(NPCS).some(s => NPC_ROLES[s] && _npcRoom(s) === NPCS[id].room && _npcActive(s)));
+  G.room = NPCS[reg].room; const st = _npcsHere().find(s => NPC_ROLES[s]);
+  assert.match(ask(st, NPCS[reg].name.toLowerCase()), new RegExp(NPCS[reg].name));
+  G.room = "mama_yai"; assert.match(ask("ron", "thip"), /Thip/); assert.doesNotMatch(said(), /^Ron:/);
+  G.room = "lucky_tiger"; G.soc.ledger = { lek: [1] }; assert.match(ask("lek", "chit"), new RegExp("฿" + LADY_CUT));
+});
+test("L925 Priew on her round is placed, not 'not around'", () => {
+  G.room = "neon_paradise"; G.priewSeen = { room: G.room, day: G.day, by: null }; G.known.priew = true;
+  out = []; run("talk to priew"); assert.match(said(), /far table|on the clock/);
+});
+test("L451 MOTOSAI TO a bar you know; L561 PUT <n> IN THE TILL; L312 a venue's whole name is the place", () => {
+  G.visited.lucky_tiger = true; G.room = "ws_gate"; stub(0.99, () => run("motosai to lucky tiger"));
+  assert.equal(G.room, Object.keys(ROOMS).find(r => (ROOMS[r].venues || []).includes("lucky_tiger")));
+  owner(); G.room = "stinky_bar"; const c0 = G.bar.cash, m0 = G.money; out = []; run("put 3000 in till");
+  assert.equal(G.bar.cash, c0 + 3000); assert.equal(G.money, m0 - 3000);
+  G.stage = "vacation"; G.room = _npcRoom("kesinee"); assert.doesNotMatch(ask("kesinee", "candy bar"), /My bar\?/);
+});
+test("L327 last night's killer field the morning after; L480 introductions; L846 Somo's question is a question", () => {
+  G.room = "kingfisher"; G.lastKp = { room: "kingfisher", day: G.day - 1, names: ["Gop", "Dave"], winner: "Gop" };
+  const st = _npcsHere().find(i => NPC_ROLES[i]); assert.match(ask(st, "killer"), /Gop/);
+  G.room = "stinky_bar"; assert.match(ask("bert", "who else should i meet"), /ASK BERT ABOUT/);
+  G.room = NPCS.somo.room; run("talk to somo"); assert.ok(G.convoQ && G.convoQ.key === "team");
+});
