@@ -56,8 +56,12 @@ test("the twins: one face in the portrait prompt, the differences their story gi
   assert.ok(a.look.startsWith(face) && b.look.startsWith(face), "the same face, word for word");
   assert.match(a.look, /Buddha/); assert.doesNotMatch(b.look, /Buddha/, "Yada lost hers");
   assert.ok(a.look.split(/\s+/).length <= 20 && b.look.split(/\s+/).length <= 20);
-  assert.match(ask("naree", "yada"), /twenty minute younger/);
-  assert.match(ask("yada", "naree"), /temple/);
+  // Ping and Pong (Mario, 2026-10-07): Thai twins get a matched pair of nicknames. Ids stay naree/yada.
+  assert.equal(a.name, "Ping"); assert.equal(b.name, "Pong");
+  assert.equal(_findNpc("ping"), "naree", "in the Gilt Cage, Ping is the twin, not the Ping across town");
+  assert.match(ask("yada", "ping pong"), /destiny/); assert.match(ask("naree", "ping pong"), /river/);
+  assert.match(ask("naree", "pong"), /twenty minute younger/);
+  assert.match(ask("yada", "ping"), /temple/);
   assert.equal(FLOOR_STAFF.yada.from, FLOOR_STAFF.naree.from, "one hometown");
   const man = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/portrait-manifest.json", import.meta.url)), "utf8"));
   assert.deepEqual(man.filler.filter(f => f.twin).map(f => f.id + ">" + f.twin).sort(), ["naree>yada", "yada>naree"]);
@@ -69,7 +73,7 @@ test("her own plan is the exit the town quotes, and a woman with no thing to ope
   for (let v = 2; v <= 12 && !gone; v++) { G.vacation = v; if (_exited("naree")) gone = v; }
   if (gone) {
     assert.equal(_exited("naree"), FLOOR_OWN.naree.exit);
-    assert.match(ask("yada", "naree"), /One chair empty/);
+    assert.match(ask("yada", "ping"), /One chair empty/);
   } else assert.equal(_exited("naree"), false);
   assert.ok(FLOOR_OWN.sasi.exit && /children's home/.test(FLOOR_OWN.sasi.exit));
 });
@@ -78,4 +82,13 @@ test("a bonded regular hears her own warm greeting, not the floor's generic one"
   G.soc.drinks.sasi = 9; G.talked = {}; out = [];
   run("talk to sasi");
   assert.match(said(), /nobody come back|You again/);
+});
+
+test("a namesake never leaks a stranger's whereabouts: two Pings, and you have met neither", () => {
+  // _elsewhereLine picked the likelier of two namesakes before checking that you may be told
+  // where she works; the twin taking the name Ping placed the other Ping for a man who never met her
+  G.room = "queen_vic"; G.known = {}; out = []; run("talk to ping");
+  assert.doesNotMatch(said(), /Paradise Nights|Gilt Cage/);
+  G.known.ping = true; out = []; run("talk to ping");
+  assert.match(said(), new RegExp(_barName(NPCS.ping.room)));
 });

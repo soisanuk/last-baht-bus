@@ -1943,7 +1943,13 @@ function _elsewhereLine(word) {
   const notHere = here.bar || here.barType ? "isn't at this bar" : "isn't around here";
   const _cands = Object.keys(NPCS).filter(id => String(NPCS[id].name || "").toLowerCase() === w)
     .sort((a, b) => (((G.soc.drinks || {})[b] || 0) + (G.phone.contacts[b] ? 10 : 0) + ((G.everBond || {})[b] || 0) * 3) - (((G.soc.drinks || {})[a] || 0) + (G.phone.contacts[a] ? 10 : 0) + ((G.everBond || {})[a] || 0) * 3));
-  const nid = (_cands.length > 1 ? _cands[0] : null) || Object.keys(NPCS).find(id => {   // two Fons: the one you know is the one you mean (Ingrid, round 62)
+  // two Fons: the one you know is the one you mean (Ingrid, round 62) — but only among namesakes
+  // you may be TOLD about: picking the likelier of two strangers placed an unmet story character the
+  // moment a second woman took her name (the Gilt Cage twins, 2026-10-07).
+  const _placeable = id => /^[A-Z]/.test(NPCS[id].name || "") && (NPCS[id].patron || (G.known && G.known[id]) ||
+    (G.phone && G.phone.contacts[id]) || ((G.soc.drinks || {})[id] > 0) || (G.talked && G.talked[id]));   // her number, a drink, a word: you know her
+  const _known = _cands.length > 1 ? _cands.filter(_placeable) : [];
+  const nid = (_known.length ? _known[0] : null) || Object.keys(NPCS).find(id => {
     const nm = NPCS[id].name;
     // A regular is placed whether or not you've been introduced: his name is
     // painted on the room he drinks in, and the staff will tell you. The

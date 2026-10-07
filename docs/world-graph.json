@@ -518,7 +518,7 @@
   },
   {
    "file": "engine-core.js",
-   "line": 3106,
+   "line": 3112,
    "name": "HURT_CAP",
    "value": 3
   },
@@ -1095,7 +1095,7 @@
  ],
  "counts": {
   "constants": 182,
-  "dialogue": 3436,
+  "dialogue": 3439,
   "edges": 3223,
   "encounters": 23,
   "flags": 172,
@@ -25113,9 +25113,9 @@
    "index": 7,
    "key": "naree#7",
    "npc": "naree",
-   "topic": "yada|sister|twin|twins|your sister",
+   "topic": "pong|sister|twin|twins|your sister",
    "topics": [
-    "yada",
+    "pong",
     "sister",
     "twin",
     "twins",
@@ -25129,9 +25129,9 @@
    "index": 8,
    "key": "naree#8",
    "npc": "naree",
-   "topic": "yada|sister|twin|twins|your sister",
+   "topic": "pong|sister|twin|twins|your sister",
    "topics": [
-    "yada",
+    "pong",
     "sister",
     "twin",
     "twins",
@@ -25231,6 +25231,24 @@
    "topic": "quota",
    "topics": [
     "quota"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 16,
+   "key": "naree#16",
+   "npc": "naree",
+   "topic": "ping pong|ping-pong|pingpong|ping pong show|the show|your name|your names",
+   "topics": [
+    "ping pong",
+    "ping-pong",
+    "pingpong",
+    "ping pong show",
+    "the show",
+    "your name",
+    "your names"
    ]
   },
   {
@@ -28397,11 +28415,11 @@
    "index": 1,
    "key": "nubnab#1",
    "npc": "nubnab",
-   "topic": "twins|naree|yada|handwriting",
+   "topic": "twins|ping|pong|handwriting",
    "topics": [
     "twins",
-    "naree",
-    "yada",
+    "ping",
+    "pong",
     "handwriting"
    ]
   },
@@ -43292,6 +43310,23 @@
    ]
   },
   {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 7,
+   "key": "wanida#7",
+   "npc": "wanida",
+   "topic": "ping pong|ping-pong|pingpong|ping pong show|their names|the names",
+   "topics": [
+    "ping pong",
+    "ping-pong",
+    "pingpong",
+    "ping pong show",
+    "their names",
+    "the names"
+   ]
+  },
+  {
    "asks": "home",
    "hasFx": false,
    "hasShort": true,
@@ -44382,9 +44417,9 @@
    "index": 6,
    "key": "yada#6",
    "npc": "yada",
-   "topic": "naree|sister|twin|twins|your sister",
+   "topic": "ping|sister|twin|twins|your sister",
    "topics": [
-    "naree",
+    "ping",
     "sister",
     "twin",
     "twins",
@@ -44398,9 +44433,9 @@
    "index": 7,
    "key": "yada#7",
    "npc": "yada",
-   "topic": "naree|sister|twin|twins|your sister",
+   "topic": "ping|sister|twin|twins|your sister",
    "topics": [
-    "naree",
+    "ping",
     "sister",
     "twin",
     "twins",
@@ -44414,9 +44449,9 @@
    "index": 8,
    "key": "yada#8",
    "npc": "yada",
-   "topic": "naree|sister|twin|twins|your sister",
+   "topic": "ping|sister|twin|twins|your sister",
    "topics": [
-    "naree",
+    "ping",
     "sister",
     "twin",
     "twins",
@@ -44501,6 +44536,24 @@
    "topic": "quota",
    "topics": [
     "quota"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 15,
+   "key": "yada#15",
+   "npc": "yada",
+   "topic": "ping pong|ping-pong|pingpong|ping pong show|the show|your name|your names",
+   "topics": [
+    "ping pong",
+    "ping-pong",
+    "pingpong",
+    "ping pong show",
+    "the show",
+    "your name",
+    "your names"
    ]
   },
   {
@@ -52101,7 +52154,7 @@
   },
   {
    "from": "BAN_TURNS",
-   "to": "engine-core.js:1992",
+   "to": "engine-core.js:1998",
    "type": "INTERPOLATES"
   },
   {
@@ -52606,7 +52659,7 @@
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-core.js:3413",
+   "to": "engine-core.js:3419",
    "type": "INTERPOLATES"
   },
   {
@@ -52636,7 +52689,7 @@
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:3420",
+   "to": "engine-core.js:3426",
    "type": "INTERPOLATES"
   },
   {
@@ -53236,12 +53289,12 @@
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3108",
+   "to": "engine-core.js:3114",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3109",
+   "to": "engine-core.js:3115",
    "type": "INTERPOLATES"
   },
   {
@@ -53271,7 +53324,7 @@
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-core.js:2901",
+   "to": "engine-core.js:2907",
    "type": "INTERPOLATES"
   },
   {
@@ -53356,7 +53409,7 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-core.js:3415",
+   "to": "engine-core.js:3421",
    "type": "INTERPOLATES"
   },
   {
@@ -53396,7 +53449,7 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-core.js:2866",
+   "to": "engine-core.js:2872",
    "type": "INTERPOLATES"
   },
   {
@@ -53851,7 +53904,7 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:3204",
+   "to": "engine-core.js:3210",
    "type": "INTERPOLATES"
   },
   {
@@ -54756,12 +54809,12 @@
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2486",
+   "to": "engine-core.js:2492",
    "type": "INTERPOLATES"
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2487",
+   "to": "engine-core.js:2493",
    "type": "INTERPOLATES"
   },
   {
@@ -57928,27 +57981,27 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2836",
+   "to": "engine-core.js:2842",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3135",
+   "to": "engine-core.js:3141",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3142",
+   "to": "engine-core.js:3148",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3226",
+   "to": "engine-core.js:3232",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3228",
+   "to": "engine-core.js:3234",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -58938,7 +58991,7 @@
   },
   {
    "from": "hyperUpstairs",
-   "to": "engine-core.js:2894",
+   "to": "engine-core.js:2900",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59188,7 +59241,7 @@
   },
   {
    "from": "orchidReported",
-   "to": "engine-core.js:2786",
+   "to": "engine-core.js:2792",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59213,7 +59266,7 @@
   },
   {
    "from": "orchidSent",
-   "to": "engine-core.js:2786",
+   "to": "engine-core.js:2792",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59238,7 +59291,7 @@
   },
   {
    "from": "orchidVouched",
-   "to": "engine-core.js:2786",
+   "to": "engine-core.js:2792",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59523,7 +59576,7 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-core.js:2262",
+   "to": "engine-core.js:2268",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61158,7 +61211,7 @@
   },
   {
    "from": "recceDone",
-   "to": "engine-core.js:2634",
+   "to": "engine-core.js:2640",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62649,11 +62702,11 @@
     "engine-core.js:1166",
     "engine-core.js:1250",
     "engine-core.js:1344",
-    "engine-core.js:2836",
-    "engine-core.js:3135",
-    "engine-core.js:3142",
-    "engine-core.js:3226",
-    "engine-core.js:3228",
+    "engine-core.js:2842",
+    "engine-core.js:3141",
+    "engine-core.js:3148",
+    "engine-core.js:3232",
+    "engine-core.js:3234",
     "engine-core.js:600",
     "engine-core.js:687",
     "engine-encounters.js:174",
@@ -64163,7 +64216,7 @@
   {
    "name": "hyperUpstairs",
    "readByEngine": [
-    "engine-core.js:2894",
+    "engine-core.js:2900",
     "engine-systems.js:1729"
    ],
    "setByDialogue": [
@@ -64693,7 +64746,7 @@
     "world.js:9502"
    ],
    "readByEngine": [
-    "engine-core.js:2786",
+    "engine-core.js:2792",
     "engine-parser.js:1066",
     "engine-parser.js:6202",
     "engine-play.js:2996",
@@ -64706,7 +64759,7 @@
   {
    "name": "orchidSent",
    "readByEngine": [
-    "engine-core.js:2786",
+    "engine-core.js:2792",
     "engine-parser.js:1066",
     "engine-parser.js:6202",
     "engine-play.js:2996",
@@ -64725,7 +64778,7 @@
    ],
    "name": "orchidVouched",
    "readByEngine": [
-    "engine-core.js:2786",
+    "engine-core.js:2792",
     "engine-parser.js:1066",
     "engine-parser.js:6202",
     "engine-play.js:2996",
@@ -65097,7 +65150,7 @@
    ],
    "name": "recceDone",
    "setByEngine": [
-    "engine-core.js:2634"
+    "engine-core.js:2640"
    ]
   },
   {
@@ -65222,7 +65275,7 @@
    ],
    "name": "shamrockVisited",
    "readByEngine": [
-    "engine-core.js:2262",
+    "engine-core.js:2268",
     "engine-play.js:5560",
     "engine-systems.js:9866"
    ],
@@ -67942,13 +67995,13 @@
    "th": "นภา"
   },
   {
-   "dialogueCount": 16,
+   "dialogueCount": 17,
    "filler": true,
    "id": "naree",
-   "name": "Naree",
+   "name": "Ping",
    "role": "hostess",
    "room": "windmill",
-   "th": "นารี"
+   "th": "ปิง"
   },
   {
    "dialogueCount": 12,
@@ -69311,7 +69364,7 @@
    "th": "วันดี"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 8,
    "filler": true,
    "id": "wanida",
    "name": "Wanida",
@@ -69397,13 +69450,13 @@
    "th": "วิน"
   },
   {
-   "dialogueCount": 15,
+   "dialogueCount": 16,
    "filler": true,
    "id": "yada",
-   "name": "Yada",
+   "name": "Pong",
    "role": "hostess",
    "room": "windmill",
-   "th": "ญาดา"
+   "th": "ปอง"
   },
   {
    "dialogueCount": 6,
