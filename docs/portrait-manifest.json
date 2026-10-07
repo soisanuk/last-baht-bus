@@ -11,30 +11,16 @@
       "patron": 25
     },
     "filler": 213,
-    "unrendered": 9,
-    "relook": 9
+    "unrendered": 2,
+    "relook": 2
   },
   "unrendered": [
     "naree",
-    "yada",
-    "kaew",
-    "jib",
-    "yaya",
-    "jiab",
-    "bpom",
-    "pen",
-    "koi"
+    "yada"
   ],
   "relook": [
     "naree",
-    "yada",
-    "kaew",
-    "yaya",
-    "jiab",
-    "bpom",
-    "jib",
-    "pen",
-    "koi"
+    "yada"
   ],
   "characters": [
     {
@@ -3087,9 +3073,7 @@
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Paradise Nights Club's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
       "look": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her"
+      "rendered": true
     },
     {
       "id": "meaw",
@@ -3265,9 +3249,7 @@
       "tags": [],
       "desc": "Freckled from the sun, hair in a high ponytail, sneakers under the stool — one of Coco Bar's girls, from Chaiyaphum. She laughs before the joke is finished, which is either kindness or experience.",
       "look": "Freckled from the sun, hair in a high ponytail, a faded sports vest, a laugh that arrives early",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Freckled from the sun, hair in a high ponytail, sneakers under the stool"
+      "rendered": true
     },
     {
       "id": "toon",
@@ -3299,9 +3281,7 @@
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Sunflower Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
       "look": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her"
+      "rendered": true
     },
     {
       "id": "ann",
@@ -3973,9 +3953,7 @@
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Honey Trap Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
       "look": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her"
+      "rendered": true
     },
     {
       "id": "meen",
@@ -4183,9 +4161,7 @@
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Lucky 7 Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
       "look": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her"
+      "rendered": true
     },
     {
       "id": "proud",
@@ -4953,9 +4929,7 @@
       "tags": [],
       "desc": "Sits like she owns the stool, because she does — the mamasan of Blue Dog, from Maha Sarakham. She has run this floor longer than most of the girls have been alive.",
       "look": "Thai woman in her fifties, hair in a tight bun, reading glasses on a chain, a level, unimpressed look",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Sits like she owns the stool, because she does"
+      "rendered": true
     },
     {
       "id": "muay",
@@ -5067,9 +5041,7 @@
       "tags": [],
       "desc": "Sits like she owns the stool, because she does — the mamasan of Midnight Sun Bar, from Maha Sarakham. She puts four kids through school on other men's lonely nights.",
       "look": "Thai woman in her late forties, round face, short permed hair, a gold necklace, a tired, shrewd smile",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Sits like she owns the stool, because she does"
+      "rendered": true
     },
     {
       "id": "ratana",
