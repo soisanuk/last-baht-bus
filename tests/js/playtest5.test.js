@@ -2464,9 +2464,9 @@ test("her numbers come from the constants, and they are HER numbers", () => {
   // HOME_SEND — concatenated, never typed (the references-lint doctrine)
   assert.ok(LADY_CUT < LADY_DRINK, "the share is less than the price — that IS the reveal");
   const t1 = _OTHER_LEDGER[1].map(f => f("X")).join(" ");
-  assert.ok(t1.includes("฿" + LADY_CUT) && t1.includes("฿" + LADY_DRINK), "tier 1 states both sides of the drink");
+  assert.ok(t1.includes("฿" + _num(LADY_CUT)) && t1.includes("฿" + _num(LADY_DRINK)), "tier 1 states both sides of the drink");
   const t3 = _OTHER_LEDGER[3].map(f => f("X")).join(" ");
-  assert.ok(t3.includes("฿" + HOME_SEND) && t3.includes("฿" + BAR_SALARY), "tier 3 states the month");
+  assert.ok(t3.includes("฿" + _num(HOME_SEND)) && t3.includes("฿" + _num(BAR_SALARY)), "tier 3 states the month");   // money prints with its separator (round 68)
 });
 
 test("the share card gained the social line: names, regulars, and the ledger", () => {

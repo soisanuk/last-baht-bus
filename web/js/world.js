@@ -15249,11 +15249,11 @@ const _REGULARS = {
         "laugh. \"I gave them the bar money — every mark of it, the last of the good years — and they think that bought the whole TASTE — the stools, the building work, every bar with the name on it. It bought the first one. " +
         "What came after, the growing, the seven bars: that is other men's money, and I do " +
         "not know their names and neither do the boys, not really.\" The amusement goes out " +
-        "of him for exactly one beat. \"They are waiting for the rest, liebchen. The inheritance.\" He " +
+        "of him for exactly one beat. \"They are waiting for the rest, mein Junge. The inheritance.\" He " +
         "leans in, delighted, conspiratorial, dying. \"There is no rest. I spent it. On the town, on " +
         "the envelope nobody knows about, on the SHIRTS. A man should go out like a good bottle — " +
         "empty, and having been a party.\" And the fog rolls back in, gently, like a tide.",
-        short: "\"They are waiting for the inheritance, liebchen. There is no inheritance. A man " +
+        short: "\"They are waiting for the inheritance, mein Junge. There is no inheritance. A man " +
         "should go out like a good bottle — empty.\"" },
       { topic: "diamond", text: "\"Diamant...\" His eyes go soft, and for a moment, terribly clear. " +
         "\"You have seen her? The tall one, at the boys' bar. The most finished thing in any room — " +
@@ -15267,6 +15267,13 @@ const _REGULARS = {
         "sense, hm?\" And he's off again, telling one of the girls something in three languages that " +
         "has her genuinely crying with laughter.",
         short: "\"They understand me. You — not so much.\" A fond pat, and he is off again in three languages." },
+      // he is from Cologne, and nobody had ever spoken his language to him in this game (Lennart, round 68)
+      { topic: "german|deutsch|germany|sprichst du deutsch|sprechen sie deutsch|cologne|koeln|köln",
+        text: "\"Deutsch!\" Glam's face opens like a door somebody has finally knocked on. \"Ach, endlich — " +
+        "Köln, Junge, Köln! Kennst du den Dom? Wir haben im Hinterhof gespielt, neunzehnhundert...\" He keeps " +
+        "going, faster, a city's worth of names you will never be able to check, and holds your hand the whole " +
+        "way through. Then, mid-sentence and in English, kindly, to your left ear: \"You would have liked the countess.\"",
+        short: "\"Deutsch! Köln, Junge — kennst du den Dom?\" And then the countess again." },
     ],
   },
 

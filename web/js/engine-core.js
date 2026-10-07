@@ -307,6 +307,7 @@ function newGame() {
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
+    loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0,   // principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
     rideLog: {},         // night rides per girl: {count, day, stops, great} — she remembers, and so does "late"
@@ -1270,24 +1271,24 @@ function _chargeRent(rough) {
   if (!_flag("act1Done") || G.stage === "act1") return;
   if (G.hotelDebt && G.money >= G.hotelDebt + _hotelRate(G.hotel)) {
     G.money -= G.hotelDebt;
-    _say(`(You settle the ฿${G.hotelDebt} on the book on your way past the desk. ` +
+    _say(`(You settle the ฿${_num(G.hotelDebt)} on the book on your way past the desk. ` +
       "The ledger closes with real warmth.)", "dim");
     G.hotelDebt = 0;
   }
   if (G.money >= _hotelRate(G.hotel)) {
     G.money -= _hotelRate(G.hotel);
     _say(`(${rough ? "The folio is waiting at the desk when you finally get back" :
-      "The folio slides under the door"}: ฿${_hotelRate(G.hotel)}` +
+      "The folio slides under the door"}: ฿${_num(_hotelRate(G.hotel))}` +
       (G.stage === "expat" ? " — the long-stay rate" : "") +
-      `, the ${_HOTELS[G.hotel].name}. ฿${G.money} left.)`, "dim");
+      `, the ${_HOTELS[G.hotel].name}. ฿${_num(G.money)} left.)`, "dim");
     return;
   }
   // A guest with ฿94,700 in the account and ฿450 in his pocket had his bag posted
   // to Naklua (Lionel, round 36). The desk runs the card before it runs you out.
   if ((G.bank || 0) >= _hotelRate(G.hotel)) {
     G.bank -= _hotelRate(G.hotel);
-    _say(`(Light pockets; the desk runs your card instead. ฿${_hotelRate(G.hotel)}, the ` +
-      `${_HOTELS[G.hotel].name}, off the account — ฿${G.bank} in the bank.)`, "dim");
+    _say(`(Light pockets; the desk runs your card instead. ฿${_num(_hotelRate(G.hotel))}, the ` +
+      `${_HOTELS[G.hotel].name}, off the account — ฿${_num(G.bank)} in the bank.)`, "dim");
     return;
   }
   // step down toward the Sabai Palms — but NOT in the Soi 6 challenge, whose whole
@@ -1309,7 +1310,7 @@ function _chargeRent(rough) {
   const rate = _hotelRate(G.hotel);
   if (G.money >= rate) {
     G.money -= rate;
-    _say(`(฿${rate} for the night. ฿${G.money} left — thin, but paid.)`, "dim");
+    _say(`(฿${_num(rate)} for the night. ฿${_num(G.money)} left — thin, but paid.)`, "dim");
   } else {
     const owedBefore = G.hotelDebt;
     G.hotelDebt = Math.min(_DEBT_CAP, G.hotelDebt + rate);
@@ -1537,8 +1538,9 @@ function _convoDrop(dodged) {
 function _sheHe(id) {
   const n = NPCS[id];
   if (!n) return { s: "they", o: "them", p: "their" };
-  const she = n.pronoun === "she" || !!NPC_ROLES[id] || !!n.filler;
-  const he = n.pronoun === "he";
+  const pn = typeof _pronoun === "function" ? _pronoun(id) : n.pronoun;   // the field wins, then the role default (a man on a role is "he")
+  const she = pn === "she" || (!pn && !!n.filler);
+  const he = pn === "he";
   return she ? { s: "she", o: "her", p: "her" } :
     he ? { s: "he", o: "him", p: "his" } : { s: "they", o: "them", p: "their" };
 }
@@ -2300,7 +2302,7 @@ function _dogTalk(npcId) {
 function _quizTalk(npc) {
   const bars = (typeof _quizBars === "function") ? _quizBars().map(b => _barName(b)).filter(Boolean) : [];
   // an English pensioner does not say "na" (Brenda, round 47: eleven mouths, one hostess's sentence)
-  const farang = npc && NPCS[npc] && (NPCS[npc].patron || NPCS[npc].manager || NPCS[npc].house || NPCS[npc].pronoun === "he");
+  const farang = npc && NPCS[npc] && (NPCS[npc].patron || NPCS[npc].manager || NPCS[npc].house || _pronoun(npc) === "he");
   // THE QUIZ YOU JUST PLAYED, and the one that is over: a perfect round at the Starlight, and
   // the woman who chalked his name said "tonight, eight till ten, go" — as did ten others, some
   // at a quarter to three (Fintan, round 60)
@@ -2421,7 +2423,7 @@ function _topicMiss(npcId) {
   // authored separately and worth keeping distinct now that one function serves
   // both casts.
   if (n.patron) return _PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](n.name, _patronHis(npcId));
-  const she = n.pronoun === "she" || NPC_ROLES[npcId] || n.filler;
+  const she = _pronoun(npcId) === "she" || (!_pronoun(npcId) && !!n.filler);
   const house = /^(mamasan|cashier)$/.test(NPC_ROLES[npcId] || "") || (typeof _FLUENT_THAI !== "undefined" && _FLUENT_THAI.has(npcId));
   const pool = house && she ? _TOPIC_MISS_HOUSE : _thaiVoice(npcId) ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;
   let line = _pickVary(pool, "miss:" + npcId)(n.name);   // not the same brush-off twice running from one mouth (Desmond, round 63)
@@ -2513,7 +2515,7 @@ function _deliver(npcId, d, full, asNew) {
     _say(`(You now have ${/^(your|the|a|an)\b/i.test(ITEMS[d.gives].name) ? "" : "the "}${ITEMS[d.gives].name}.)`, "dim");
     if (d.gives === "wallet") {
       G.money += WALLET_CASH; G.walletLedger = true;
-      _say(`(Most of the cash is still in it — ฿${WALLET_CASH} back in play.)`, "dim");
+      _say(`(Most of the cash is still in it — ฿${_num(WALLET_CASH)} back in play.)`, "dim");
     }
   }
   const st = _npcState(npcId);
@@ -2769,7 +2771,7 @@ function _describeRoom(full, forceFull) {
       const sameBar = away.length > 1 && away.every(a => _npcRoom(a[0]) === _npcRoom(away[0][0]));
       const line = sameBar ? `${away.map(a => a[1].name).join(" and ")} are both working ${where(away[0])}`
         : away.map(a => `${a[1].name} is working ${where(a)}`).join(" and ");
-      _say(`${line} tonight` + (cover ? `, and it is ${NPCS[cover].name} on the till — the one ${away.length === 1 ? ((NPCS[away[0][0]].pronoun === "he") ? "he" : "she") : "they"} leave${away.length === 1 ? "s" : ""} it with.`
+      _say(`${line} tonight` + (cover ? `, and it is ${NPCS[cover].name} on the till — the one ${away.length === 1 ? _pr(away[0][0]).s : "they"} leave${away.length === 1 ? "s" : ""} it with.`
                                        : `; the floor staff keep this one running.`), "dim");
     }
   }
@@ -2927,7 +2929,7 @@ function _describeRoom(full, forceFull) {
   }
   if (r.pool) {
     _say("A pool table waits under a low lamp (PLAY POOL)." +
-      (_leagueTonight() ? ` Tonight is LEAGUE NIGHT (PLAY KILLER, ฿${KP_ENTRY} in the ashtray).` : ""), "dim");
+      (_leagueTonight() ? ` Tonight is LEAGUE NIGHT (PLAY KILLER, ฿${_num(KP_ENTRY)} in the ashtray).` : ""), "dim");
   }
   if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).", "dim");
   if (_quizDay() && !r.barType) {
@@ -3038,11 +3040,11 @@ function _describeRoom(full, forceFull) {
       "fact. (OUT gets you unbolted — one way.)", "dim");
   }
   if (G.room === "police_station" && G.tonicOwed > 0) {
-    _say(`You are still out ฿${G.tonicOwed} to the hair-tonic shop. (REPORT it here — ` +
+    _say(`You are still out ฿${_num(G.tonicOwed)} to the hair-tonic shop. (REPORT it here — ` +
       "for what that's worth.)", "dim");
   }
   if (G.room === "police_station" && G.curseOwed > 0) {
-    _say(`You are still out ฿${G.curseOwed} to the beach fortune-teller. (REPORT it ` +
+    _say(`You are still out ฿${_num(G.curseOwed)} to the beach fortune-teller. (REPORT it ` +
       "here to claw most of it back.)", "dim");
   }
   // Nok buys glass — say so, tappably, whenever you're holding some near her.
@@ -3398,7 +3400,7 @@ function _tick() {
         // and it matters, because you can be bounced dark-to-dark and take
         // consecutive bites toward the three-strike reset.
         _say("A soi dog bites you! You flee blindly, shedding " +
-          (bitten ? `฿${bitten} in dropped coins` : "what remains of your dignity") +
+          (bitten ? `฿${_num(bitten)} in dropped coins` : "what remains of your dignity") +
           (_toDark
             ? ", and fetch up somewhere no better lit than the last one."
             : ", and fetch up somewhere lit."), "alert");

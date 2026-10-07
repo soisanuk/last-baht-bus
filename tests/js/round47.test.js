@@ -1058,7 +1058,7 @@ test("Jun answers to yourself and is nobody's lady drink; Tan reads a venue and 
 });
 
 test("a soapy has a price list, a street has no doorway, and the rain has an earliest hour", () => {
-  G.room = "poseidon_soapy"; out = []; doCommand("tao rai"); assert.match(text(), new RegExp("star ฿" + _SOAPY_TIERS[0].price));
+  G.room = "poseidon_soapy"; out = []; doCommand("tao rai"); assert.match(text(), new RegExp("star ฿" + _num(_SOAPY_TIERS[0].price)));
   out = []; doCommand("read menu"); assert.match(text(), /model ฿/);
   out = []; doCommand("examine fish"); assert.match(text(), /real fish/);
   for (let d = 2; d < 30; d++) { G.day = d; const e = _rainEarliest(); assert.ok(e >= 0 && e < 70); }

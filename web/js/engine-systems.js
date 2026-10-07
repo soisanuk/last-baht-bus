@@ -208,31 +208,31 @@ function _doBorrow(arg) {
     return;
   }
   if (G.loan) {
-    _say(`"One loan at a time." Nira taps the bar. "You owe ฿${G.loan.owed}, due day ` +
+    _say(`"One loan at a time." Nira taps the bar. "You owe ฿${_num(G.loan.owed)}, due day ` +
       `${G.loan.dueDay}. REPAY that, then we talk about more."`, "alert");
     return;
   }
   let amt = _parseBaht(arg);
   if (!amt) {
-    _say(`"How much?" Her pen hovers. (BORROW <amount> — up to ฿${LOAN_MAX}, pay back +20% ` +
+    _say(`"How much?" Her pen hovers. (BORROW <amount> — up to ฿${_num(LOAN_MAX)}, pay back +20% ` +
       `in ${LOAN_DAYS} days.)`, "dim");
     return;
   }
   amt = Math.round(amt / 100) * 100;
-  if (amt < LOAN_MIN) { _say(`"Under ฿${LOAN_MIN}? Ask your mother, not me."`, "dim"); return; }
+  if (amt < LOAN_MIN) { _say(`"Under ฿${_num(LOAN_MIN)}? Ask your mother, not me."`, "dim"); return; }
   if (amt > LOAN_MAX) {
-    _say(`"฿${LOAN_MAX} is your ceiling — I already worked out what you earn and rounded it ` +
+    _say(`"฿${_num(LOAN_MAX)} is your ceiling — I already worked out what you earn and rounded it ` +
       `down." She will not be moved.`, "dim");
     return;
   }
   const owed = _loanTerms(amt);
-  G.loan = { principal: amt, owed, dueDay: G.day + LOAN_DAYS, strikes: 0 };
+  G.loan = { principal: amt, left: amt, owed, dueDay: G.day + LOAN_DAYS, strikes: 0 };   // `left`: principal not yet repaid — repayment pays principal first, and only the rest is the loan's cost on the morning ledger
   G.money += amt;
   G.loanBorrowed = (G.loanBorrowed || 0) + amt;
-  _say(`Nira counts out ฿${amt} without once breaking eye contact. "You pay back ฿${owed} by ` +
+  _say(`Nira counts out ฿${_num(amt)} without once breaking eye contact. "You pay back ฿${_num(owed)} by ` +
     `day ${G.loan.dueDay}. ยี่สิบ — twenty percent, like I said. After that day…" the smile ` +
     `stays warm and goes nowhere "…it grows, and my cousins get bored. Don't make them bored."`, "win");
-  _say(`(You owe Nira ฿${owed}, due day ${G.loan.dueDay}. REPAY at Neon Paradise — pay early, ` +
+  _say(`(You owe Nira ฿${_num(owed)}, due day ${G.loan.dueDay}. REPAY at Neon Paradise — pay early, ` +
     `pay whole, whatever you like.)`, "dim");
 }
 
@@ -252,7 +252,7 @@ function _doRepay(arg) {
   if (!G.loan && /\bnont\b/i.test(String(arg || ""))) { _say("You don't owe Nont a baht. He would remember if you did.", "dim"); return; }   // "you don't owe Nira" for the wrong lender (Marta, round 63)
   if (!G.loan) { _say("You don't owe Nira a baht. Keep it that way.", "dim"); return; }
   if (!_withNira()) {
-    _say(`You owe Nira ฿${G.loan.owed}${G.loan.strikes ? " (overdue)" : `, due day ${G.loan.dueDay}`}. ` +
+    _say(`You owe Nira ฿${_num(G.loan.owed)}${G.loan.strikes ? " (overdue)" : `, due day ${G.loan.dueDay}`}. ` +
       `Pay her at Neon Paradise on Walking Street.`, "dim");
     return;
   }
@@ -260,13 +260,14 @@ function _doRepay(arg) {
   amt = Math.min(amt, G.loan.owed);
   if (amt <= 0) { _say('"Pay me something real."', "dim"); return; }
   if (G.money < amt) {
-    _say(`You're ฿${amt - G.money} short of that. (You have ฿${G.money}; you owe ฿${G.loan.owed}.)`, "alert");
+    _say(`You're ฿${_num(amt - G.money)} short of that. (You have ฿${_num(G.money)}; you owe ฿${_num(G.loan.owed)}.)`, "alert");
     return;
   }
   const late = G.loan.strikes > 0;
   G.money -= amt;
   G.loan.owed -= amt;
   G.loanRepaid = (G.loanRepaid || 0) + amt;
+  _loanPrincipal(G.loan, amt, "loanPrin");
   if (G.loan.owed <= 0) {
     G.loan = null;
     _say(`Nira takes the last of it and, for the first time, the calculator behind her eyes ` +
@@ -276,7 +277,7 @@ function _doRepay(arg) {
     _addBond("nira", late ? 1 : 2); // a man who pays earns her regard
     if (!late) _repGain(); // squaring a debt on time is good for your name; late is just even
   } else {
-    _say(`"฿${amt}." She marks it in a little book. "Still ฿${G.loan.owed}` +
+    _say(`"฿${_num(amt)}." She marks it in a little book. "Still ฿${_num(G.loan.owed)}` +
       (late ? ` — and climbing." ` : `, by day ${G.loan.dueDay}." `) +
       (((G.party && G.party.ids) || []).includes("nira") ? `The book goes back in her bag, and she is your company again.` : `Back to the stage.`), "room");
   }
@@ -318,6 +319,16 @@ function _nontLoanTalk(topic) {   // ASK NONT ABOUT LOAN/BORROW — he offered i
     : _fmt("“For the bar.” Nont turns a page in the folder you have never seen the inside of. “Ten percent on the day. I take a quarter of every night's trade off the top until it's square — I don't wait, and I don't ask Bert's permission. Up to ฿{m}.” (BORROW <amount>.)", { m: _num(NONT_LOAN_MAX) }));
   return true;
 }
+// Repayment pays PRINCIPAL first; what is paid past it is the loan's cost. The morning ledger
+// counts only that cost as spending, because the principal was never counted as income: a
+// borrow-and-repay week read "down ฿40,200" on a real loss of ฿10,700 (Clifford, round 68).
+function _loanPrincipal(loan, amt, book) {
+  if (!loan) return;
+  const left = loan.left != null ? loan.left : 0;   // a pre-2026-10-08 loan: treat it all as cost, as before
+  const p = Math.min(amt, Math.max(0, left));
+  loan.left = left - p;
+  G[book] = (G[book] || 0) + p;
+}
 function _nontLoan(arg) {
   const b = G.bar;
   if (b.loan && b.loan.owed > 0) { _say(_fmt("“One at a time.” Nont does not look up. “฿{o} still, and I'm taking it. Clear that.”", { o: _num(b.loan.owed) })); return; }
@@ -326,7 +337,7 @@ function _nontLoan(arg) {
   amt = Math.round(amt / 1000) * 1000;
   if (amt < 5000) { _say("“Five thousand or don't waste the chair.”", "dim"); return; }
   if (amt > NONT_LOAN_MAX) { _say(_fmt("“฿{m}. That's the bar's number, not yours.”", { m: _num(NONT_LOAN_MAX) }), "dim"); return; }
-  b.loan = { principal: amt, owed: Math.round(amt * (1 + NONT_LOAN_RATE)), day: G.day };
+  b.loan = { principal: amt, left: amt, owed: Math.round(amt * (1 + NONT_LOAN_RATE)), day: G.day };
   G.money += amt;
   G.nontBorrowed = (G.nontBorrowed || 0) + amt;   // the ledger names the lender (Greta, round 61: "borrowed from Nira")
   _say(_fmt("Nont counts ฿{a} off the roll without looking at it. “฿{o} back. I take it off the top, nightly, a quarter of the take, until it's gone — your man Bert will see me before you do.” " +
@@ -339,7 +350,7 @@ function _nontRepay(arg) {
   amt = Math.min(amt, b.loan.owed);
   if (amt <= 0) { _say("“Pay me something real.”", "dim"); return; }
   if (G.money < amt) { _say(_fmt("You're ฿{s} short of that. (You have ฿{h}; the bar owes ฿{o}.)", { s: amt - G.money, h: G.money, o: _num(b.loan.owed) }), "alert"); return; }
-  G.money -= amt; b.loan.owed -= amt; G.nontRepaid = (G.nontRepaid || 0) + amt;
+  G.money -= amt; b.loan.owed -= amt; G.nontRepaid = (G.nontRepaid || 0) + amt; _loanPrincipal(b.loan, amt, "nontPrin");
   if (b.loan.owed <= 0) { b.loan = null; _say("Nont takes the last of it and makes a mark in the folder you have never seen the inside of. “Square.” No warmth, no edge. “You know where the chair is.”", "win"); }
   else _say(_fmt("“฿{a}.” A mark. “฿{o}, and the nights still pay me.”", { a: _num(amt), o: _num(b.loan.owed) }));
 }
@@ -351,16 +362,17 @@ function _loanNightRoll() {
   G.loan.strikes = (G.loan.strikes || 0) + 1;
   G.loan.owed = _loanRound(G.loan.owed * 1.2); // overdue: +20% a night
   if (G.loan.strikes === 1) {
-    _say(`(A text from a number you don't have: "You are late, na. It is ฿${G.loan.owed} now, ` +
+    _say(`(A text from a number you don't have: "You are late, na. It is ฿${_num(G.loan.owed)} now, ` +
       `and it only goes up. Come see me. — N")`, "alert");
   } else if (G.loan.strikes === 2) {
     _say(`(Two men you've never met were asking the bar staff about you last night — polite, ` +
-      `patient, unhurried. You owe Nira ฿${G.loan.owed}. This is the last quiet night you get.)`, "alert");
+      `patient, unhurried. You owe Nira ฿${_num(G.loan.owed)}. This is the last quiet night you get.)`, "alert");
   } else {
     const take = Math.min(G.money, G.loan.owed);
     G.money -= take;
     G.loan.owed -= take;
     G.loanRepaid = (G.loanRepaid || 0) + take;
+    _loanPrincipal(G.loan, take, "loanPrin");
     _addHappy(-6);
     // A man with nothing, being carefully robbed of nothing, every dawn, was the
     // whole of the late-loan endgame: nine consecutive mornings printed the full
@@ -424,8 +436,12 @@ function _navDirs() {
 // the named connectors (soi5, pier, office…) stay words in the prose and the chips.
 function _navExtra() {
   const ex = (_room() && _room().exits) || {};
-  return ["out", "up", "down"].filter(d => ex[d] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(ex[d])))
-    .map(d => ({ cmd: d, label: d.toUpperCase() }));
+  // …and a NAMED way out (Naklua Road's "spa", an office, a pier): on a phone the exits rail is
+  // not printed, so a named exit had no button anywhere but a word in the paragraph (Yusuf, round 68)
+  const CARD = new Set(["n", "s", "e", "w", "ne", "nw", "se", "sw", "in", "out", "up", "down"]);
+  const named = Object.keys(ex).filter(d => !CARD.has(d));
+  return ["out", "up", "down", ...named].filter(d => ex[d] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(ex[d])))
+    .map(d => ({ cmd: CARD.has(d) ? d : "go " + d, label: d.toUpperCase() }));
 }
 
 // What you can step INTO from here, as ready-made commands. Two shapes exist in
@@ -624,13 +640,13 @@ function _doHostDrink(arg) {
       "? (BUY DRINK FOR " + NPCS[here[0]].name.toUpperCase() + ".)"); return;
   }
   if (G.money < HOST_DRINK) {
-    _say(`A host drink is ฿${HOST_DRINK} — twice a lady drink, the premium end. You have ฿${G.money}.`);
+    _say(`A host drink is ฿${_num(HOST_DRINK)} — twice a lady drink, the premium end. You have ฿${_num(G.money)}.`);
     return;
   }
   G.money -= HOST_DRINK;
   _addBond(id, 1);
-  _say(`฿${HOST_DRINK} for a host drink — twice what the girl bars charge, and ${NPCS[id].name} settles ` +
-    `in warm and close and turns his whole attention on you like a spotlight. (฿${G.money} left.)`);
+  _say(`฿${_num(HOST_DRINK)} for a host drink — twice what the girl bars charge, and ${NPCS[id].name} settles ` +
+    `in warm and close and turns his whole attention on you like a spotlight. (฿${_num(G.money)} left.)`);
   _addHappy(1);
 }
 
@@ -640,21 +656,21 @@ function _doHire(arg) {
   if (!id) { _say("Hire which host — ARM (number 4) or WIN (number 9)? (HIRE WIN.)"); return; }
   if (!_flag("act1Done")) { _say("Not tonight — you've a wallet to find first."); return; }
   if (G.money < HOST_OFF) {
-    _say(`The club "off" fee is ฿${HOST_OFF} — double a go-go barfine — before whatever you two settle ` +
-      `after. You have ฿${G.money}.`);
+    _say(`The club "off" fee is ฿${_num(HOST_OFF)} — double a go-go barfine — before whatever you two settle ` +
+      `after. You have ฿${_num(G.money)}.`);
     return;
   }
   G.money -= HOST_OFF;
   const bonded = (G.soc.drinks[id] || 0) >= 3;
   if (id === "win") {
-    _say(`฿${HOST_OFF} to Nott, and Win — who isn't pretending, and you both know it — takes you out into ` +
+    _say(`฿${_num(HOST_OFF)} to Nott, and Win — who isn't pretending, and you both know it — takes you out into ` +
       `the warm Jomtien night. Whatever you are, he meets it head-on and without a single performance note. ` +
-      `Nott will scold him in the morning for how much he meant it. (฿${G.money} left.)`, "win");
+      `Nott will scold him in the morning for how much he meant it. (฿${_num(G.money)} left.)`, "win");
   } else {
-    _say(`฿${HOST_OFF} to Nott, and Arm trades the club grin for something easier the moment you're out the ` +
+    _say(`฿${_num(HOST_OFF)} to Nott, and Arm trades the club grin for something easier the moment you're out the ` +
       `door. He's a professional and honest about it — gay-for-pay, a good night's work, nobody lied to ` +
       `anybody — which makes it, in its clean way, one of the more comfortable transactions in this town. ` +
-      `(฿${G.money} left.)`, "win");
+      `(฿${_num(G.money)} left.)`, "win");
   }
   _addHappy(bonded ? 8 : 5);
   // The prose says you left the building; the game left you standing in it for a
@@ -1330,7 +1346,7 @@ function _nontLocate(topic) {
   }
   G.money -= NONT_LOCATE;
   G.soc.nontTold[id] = G.day;
-  _say(_fmt(_pickVary(_NONT_LOCATE, "nontlocate"), { n: name, where }) + ` (-฿${NONT_LOCATE}, ฿${G.money} left.)`);
+  _say(_fmt(_pickVary(_NONT_LOCATE, "nontlocate"), { n: name, where }) + ` (-฿${_num(NONT_LOCATE)}, ฿${_num(G.money)} left.)`);
   return true;
 }
 function _nontCash(arg) {
@@ -1342,6 +1358,7 @@ function _nontCash(arg) {
   if (n > (G.bank || 0)) { _say(`“The app says you haven't got that.” He turns the screen so you can see it: ฿${_num(G.bank || 0)}.`); return; }
   const cut = Math.round(n * NONT_CUT);
   G.bank -= n;
+  G.nontCut = (G.nontCut || 0) + cut;   // his five percent leaves the account and never reaches the pocket: the morning ledger books it (Clifford, round 68)
   if (n >= CCIB_LOUD_MONEY && typeof _ccibLoud === "function") _ccibLoud("money");   // a big move through a mule account, inside the window
   G.nontCashCount = (G.nontCashCount || 0) + 1;
   const stuck = _hh("nontstuck:" + G.vacation + ":" + G.day + ":" + G.nontCashCount, 71) % 6 === 0;   // pure hash, no dice
@@ -1355,8 +1372,9 @@ function _nontCash(arg) {
   G.money += n - cut;
   G.nontCashed = true;   // he has an account with you now, and only now (Jacko, round 42)
   G.atmTotal = (G.atmTotal || 0) + (n - cut);   // your own money moving pocketward is not "up on the night" (Piotr, round 40)
+  G.nontOut = (G.nontOut || 0) + (n - cut);   // …and the ledger names him, not "the machine"
   _say(`You send ฿${_num(n)} to a name you don't recognise; he counts ฿${_num(n - cut)} into your hand off a roll from the table drawer before the app has finished spinning. ` +
-    `“Five percent.” No fee, no limit, no question. (฿${G.money} in pocket, ฿${_num(G.bank)} in the bank.)`);
+    `“Five percent.” No fee, no limit, no question. (฿${_num(G.money)} in pocket, ฿${_num(G.bank)} in the bank.)`);
 }
 
 // ── Somchith's rooms ─────────────────────────────────────────────────────────
@@ -1512,7 +1530,7 @@ function _bfLtWarn() {
   const { lt, id, herMoney } = G.pendingBf;
   const n = id && NPCS[id] ? NPCS[id].name : "her";
   const waived = id && typeof _bondTier === "function" && _bondTier(id) >= 3 && _careOk(id);
-  const price = waived ? "no fine for you" : lt > 0 ? `฿${lt}${herMoney ? ", her money" : ""}` : "no fine past midnight";
+  const price = waived ? "no fine for you" : lt > 0 ? `฿${_num(lt)}${herMoney ? ", her money" : ""}` : "no fine past midnight";
   _say(`(Long time — ${price}, and that is your night: the rest of it is ${n}'s, and the next thing is the morning. LONG TIME again to confirm · SHORT TIME keeps the night going · NO.)`, "dim");
 }
 // who takes the fine: the mamasan if one is on the floor, else the woman on the money, else her
@@ -1639,13 +1657,13 @@ function _bfResolve(kind) {
       // waiting on the answer, and a post-midnight short time said the money
       // went to the BAR when the book was shut and it was hers.
       G.pendingBf = { ...bfWas, id, st, lt, room: G.room };
-      _say(`The number is ฿${price}, and your pocket says ฿${G.money}. The mamasan ` +
+      _say(`The number is ฿${_num(price)}, and your pocket says ฿${_num(G.money)}. The mamasan ` +
         `reads the arithmetic off your face without embarrassment — hers or yours — ` +
-        `and taps the other line of the ledger: short time, ฿${st}. That one you can do.`);
+        `and taps the other line of the ledger: short time, ฿${_num(st)}. That one you can do.`);
       _say("(SHORT TIME · NO.)", "dim");
       return;
     }
-    _say(`The number is ฿${price}. Your pocket says ฿${G.money}. The ledger ` +
+    _say(`The number is ฿${_num(price)}. Your pocket says ฿${_num(G.money)}. The ledger ` +
       "closes with a soft, final flap, and the negotiation is over without " +
       "anyone saying so.");
     return;
@@ -1673,7 +1691,7 @@ function _bfResolve(kind) {
       "soon anyway; only the famous ones stay on the book all night.", "dim");
   } else if (G.nightTurn >= 60 && POPULAR_GIRLS.includes(id)) {
     _say(`Past midnight the book usually closes — but not for ${name}. The mamasan ` +
-      `taps the fee, unbudging: for HER, any hour is peak. ฿${price}.`, "dim");
+      `taps the fee, unbudging: for HER, any hour is peak. ฿${_num(price)}.`, "dim");
   }
   // ── TAKE HER OUT: the night CONTINUES, with her in it ──────────────────────
   // The honest mirror of the bfparty scam, the same way the night ride mirrors
@@ -1715,27 +1733,27 @@ function _bfResolve(kind) {
   // ── SHORT TIME: one round, off she goes, the night carries on ──
   if (kind === "st") {
     if (bt === "soi6") {
-      _say((price ? `฿${price} to the till and ${name} takes` :
+      _say((price ? `฿${_num(price)} to the till and ${name} takes` :
         `No fee crosses the till — she squared it with the mama herself — and ${name} takes`) +
         " your hand " + _pickVary(_ST_SOI6_LINES, "stsoi6") +
-        ` (฿${G.money} left.)`, "win");
+        ` (฿${_num(G.money)} left.)`, "win");
       _conquestHappy(6, id);
     } else if (bt === "gents") {
-      _say((price ? `฿${price} to Rose, discreetly, and ${name} takes` :
+      _say((price ? `฿${_num(price)} to Rose, discreetly, and ${name} takes` :
         `No fee to Rose tonight — she squared it herself — and ${name} takes`) +
         " your hand and walks you " +
         "to one of the deep couches along the wall. The curtain draws around it with " +
         "a soft brass rattle, the cold gold room carries on without you for a while, " +
         `and then you are back in your seat with a fresh drink you don't remember ` +
-        `ordering. Nobody looked up. Nobody ever does. (฿${G.money} left.)`, "win");
+        `ordering. Nobody looked up. Nobody ever does. (฿${_num(G.money)} left.)`, "win");
       _conquestHappy(6, id);
     } else if (G.room === "hyper" && _flag("hyperUpstairs")) {
       // the Samson brothers' secret: the old short-time rooms upstairs — no take-out,
       // for the regulars Diamond trusts. A go-go that plays like Soi 6 for a friend.
-      _say(`฿${price}, and instead of a taxi ${name} takes your hand and leads you up the back stair ` +
+      _say(`฿${_num(price)}, and instead of a taxi ${name} takes your hand and leads you up the back stair ` +
         "the menu doesn't mention — to one of the old rooms the brothers lived in while they built the " +
         "place. Diamond watches you go with the small nod she keeps for the house's friends. Some time " +
-        `later you are back on your stool and the night has not even noticed you left. (฿${G.money} left.)`, "win");
+        `later you are back on your stool and the night has not even noticed you left. (฿${_num(G.money)} left.)`, "win");
       _conquestHappy(6, id);
     } else {
       const bar = _barName(G.room) || "the bar";
@@ -1745,11 +1763,11 @@ function _bfResolve(kind) {
         ? "short walk up the unlit alley off Soi 7 to Somchith's, the motel with no sign, where a ceiling fan is"
         : _room().barType === "soi6" ? "short climb up the stairs at the back of the bar to the room above it, where a ceiling fan is"   // Soi 6 is upstairs (Darren, round 66)
         : "short walk to a short-time hotel with a ceiling fan";
-      _say((price ? `฿${price} to the ledger, and a` : "A") +
+      _say((price ? `฿${_num(price)} to the ledger, and a` : "A") +
         ` ${motel} doing its slow count over the ` +
         `proceedings. ${name} is businesslike and cheerful and gone within the hour — a kiss at ` +
         `the door, and she's back on her stool at ${bar} before the song you left on has come round again. You amble ` +
-        `back a few minutes behind her, and the night picks you up where it left off. (฿${G.money} left.)`, "win");
+        `back a few minutes behind her, and the night picks you up where it left off. (฿${_num(G.money)} left.)`, "win");
       _conquestHappy(5, id);
       G.offstage = true; // the hour away — the bar's ambient (saleng, etc.) isn't your scene
       // cap the skip so a late-night ST doesn't fast-forward you PAST dawn into an
@@ -1826,12 +1844,12 @@ function _bfResolve(kind) {
   if (scam) { // runner | mao | leaveAfter — plays out across the night's end
     G.bfIncident = { id, room: G.room, kind: scam, fine: price, day: G.day };
     _say((price ?
-      (G.pendingBf && G.pendingBf.herMoney ? `฿${price} to her — the book is closed, this is her money — and she folds it away ` : `฿${price} to ${_bfPayee()}, who enters it in the ledger with ceremony and `) +
+      (G.pendingBf && G.pendingBf.herMoney ? `฿${_num(price)} to her — the book is closed, this is her money — and she folds it away ` : `฿${_num(price)} to ${_bfPayee()}, who enters it in the ledger with ceremony and `) +
       `gives ${name} a nod that means back by opening, mind. ` :
       `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
       `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
       "and lovely — and takes your arm like you're the one being rented." +
-      (price ? ` (฿${G.money} left.)` : ""), "win");
+      (price ? ` (฿${_num(G.money)} left.)` : ""), "win");
     _endNight("bfscam");
     return;
   }
@@ -1858,7 +1876,7 @@ function _bfResolve(kind) {
         `want hotel yet. Come — I show you MY Pattaya, the real one. Hold me tight, na, I ` +
         `drive little bit crazy."`;
     _encPrompt(
-      [(price ? (G.pendingBf && G.pendingBf.herMoney ? `฿${price} to her, and ` : `฿${price} to ${_bfPayee()}, and `) : "") + offer + ` (฿${G.money} left.)`, "win"],
+      [(price ? (G.pendingBf && G.pendingBf.herMoney ? `฿${_num(price)} to her, and ` : `฿${_num(price)} to ${_bfPayee()}, and `) : "") + offer + ` (฿${_num(G.money)} left.)`, "win"],
       [`(RIDE with her into the night · or JUST the hotel — up to you.)`, "dim"]);
     return;
   }
@@ -1868,13 +1886,13 @@ function _bfResolve(kind) {
   // but a deeper bond: you saw the real her. "Remind me not to do LT again."
   // Day-stable hash (like _bfShark) so the same girl the same night is consistent.
   if (_hh(id + ":" + G.day + ":real", 41) % 100 < 30) {
-    _say((price ? `฿${price} to ${_bfPayee()}, and ` : "") +
+    _say((price ? `฿${_num(price)} to ${_bfPayee()}, and ` : "") +
       `${name} comes home with you — and stays home, in every sense. Somewhere before ` +
       "midnight she stops being a fantasy and becomes a person: the whole life story, the " +
       "father, the sister, the kid up-country, thirty minutes of it, then tears you didn't " +
       "order over something you can't quite follow. You fall asleep before the sex. In the " +
       "morning she's dressed and cool and kisses your cheek at the door like a wife who's " +
-      `decided something. You wanted a one-day girlfriend; you got a five-year one. (฿${G.money} left.)`, "");
+      `decided something. You wanted a one-day girlfriend; you got a five-year one. (฿${_num(G.money)} left.)`, "");
     _say("(Long time is like that — you paid for the fantasy and she handed you the reality. " +
       "But you know her now, really know her. Some men call that the good part.)", "dim");
     G.lastBfPreTier = _bondTier(id); // the treadmill reads the tier SHE EARNED BEFORE tonight
@@ -1886,12 +1904,12 @@ function _bfResolve(kind) {
     return;
   }
   _say((price ?
-    `฿${price} to ${_bfPayee()}, who enters it in the ledger with ceremony and ` +
+    `฿${_num(price)} to ${_bfPayee()}, who enters it in the ledger with ceremony and ` +
     `gives ${name} a nod that means back by opening, mind. ` :
     `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
     `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
     `and lovely — and takes your arm like you're the one being rented.` +
-    (price ? ` (฿${G.money} left.)` : ""), "win");
+    (price ? ` (฿${_num(G.money)} left.)` : ""), "win");
   G.lastBfPreTier = _bondTier(id); // pre-accrual tier for the treadmill (see _conquestHappy)
   _addBond(id, 3); // a whole night together deepens the bond
   _endNight("barfine");
@@ -2072,7 +2090,7 @@ function _nightRide(input) {
   if (!/viewpoint|market|somtam/.test(venue.key)) G.soc.drunk++;   // a whisky set is a drink (Dex woke "stone sober" after six stops)
   _addBond(id, 1); // every stop deepens the bond
   _say(`${hop}\n\n${scene.replace(/\s*\[free\]/, "")}` +
-    (paid ? ` (฿${paid}. ฿${G.money} left.)` : " (Free. The best things here are.)"), "win");
+    (paid ? ` (฿${_num(paid)}. ฿${_num(G.money)} left.)` : " (Free. The best things here are.)"), "win");
   _addHappy(venue.sanuk); // does NOT jade — a bonded night is the one that keeps giving
   // a stop is an hour of the night, not a turn of it: six stops used to fit in 36
   // minutes of clock and the close said "morning already" at 00:48 (Kenji, round 47).
@@ -2261,7 +2279,7 @@ function _doComplain() {
     const purse = inc.fine > 0
       ? "counting your refund out of her OWN purse note by note"
       : "wai-ing an apology she clearly means — there was no fine to give back, she'd waived it herself";
-    const tail = inc.fine > 0 ? `(฿${inc.fine} back — ฿${G.money}.)`
+    const tail = inc.fine > 0 ? `(฿${_num(inc.fine)} back — ฿${_num(G.money)}.)`
       : "(No baht to refund — she'd squared the fine herself — but the second strike is on the record now.)";
     _say(`You lay it out — ${detail}. ${mn}'s face does not change, which is how ` +
       `you know it's serious. One syllable across the room and ${gn} is standing ` +
@@ -2271,7 +2289,7 @@ function _doComplain() {
       `whose stool is already empty. ${tail}`, "win");
   } else {
     const line = inc.fine > 0
-      ? `The refund appears from the till without ceremony. “Not morality, tilac. Business.” (฿${inc.fine} back — ฿${G.money}.)`
+      ? `The refund appears from the till without ceremony. “Not morality, tilac. Business.” (฿${_num(inc.fine)} back — ฿${_num(G.money)}.)`
       : "There's nothing in the till to give back — you never paid, she'd waived the fine — but the note goes in the book all the same. “Not morality, tilac. Business.” (No baht changed hands; the wrong is logged.)";
     _say(`You lay it out — ${detail}. ${mn} listens with the stillness of a ` +
       "woman doing damage arithmetic: one unhappy farang tells ten, and “bad " +
@@ -2454,16 +2472,16 @@ function _doMassage(arg) {
     // the price list names four and all four printed the Thai one (Owen, round 46)
     const kind = /foot|feet|reflex/.test(arg) ? "foot" : /herbal|compress|ball|steam/.test(arg) ? "herbal" : /oil|aroma|swedish/.test(arg) ? "oil" : "thai";
     const MASSAGE_KIND = {
-      thai: [`฿${MASSAGE_LEGIT}, and ${name} goes to work like she has a personal grudge against the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and walking two inches taller.`,
-             `฿${MASSAGE_LEGIT}. ${name} folds you like a deckchair, walks on you, and at one point uses a knee in a way you will describe to nobody. An hour later every joint has been reintroduced to its neighbour.`],
-      foot: [`฿${MASSAGE_LEGIT}, a recliner, a bowl of warm water, and ${name} with a wooden stick and a chart of the sole that maps every organ you have to a place she can hurt. Forty minutes of that and the walk home is a different walk.`,
-             `฿${MASSAGE_LEGIT}. ${name} takes your feet as if they have been handed in lost. Thumbs, knuckles, the stick, the one spot near the heel that makes you grip the chair — and then the thing where the calves stop belonging to a man who has walked Beach Road twice.`],
-      herbal: [`฿${MASSAGE_LEGIT}. The compress comes out of the steamer smelling of lemongrass and something medicinal, wrapped in muslin, too hot for the first minute and exactly right for the next fifty; ${name} presses it down the spine in a line and the day comes out of you like steam.`,
-               `฿${MASSAGE_LEGIT}, and the room fills with the smell of the herb ball — turmeric, kaffir, camphor — before ${name} has laid a hand on you. The compress does most of the work. She does the rest, unhurried, and you leave smelling like a temple kitchen.`],
-      oil: [`฿${MASSAGE_LEGIT}. Warm oil, dim light, a towel, and ${name} working long strokes down the back with the radio on low. Nothing alarming happens to your spine. An hour later you are loose, slightly shiny, and asleep on your feet.`,
-            `฿${MASSAGE_LEGIT}, and the oil is warm from a bottle on the water heater. ${name} does the shoulders until they drop, the legs until they give, and says nothing at all for an hour, which is the luxury.`],
+      thai: [`฿${_num(MASSAGE_LEGIT)}, and ${name} goes to work like she has a personal grudge against the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and walking two inches taller.`,
+             `฿${_num(MASSAGE_LEGIT)}. ${name} folds you like a deckchair, walks on you, and at one point uses a knee in a way you will describe to nobody. An hour later every joint has been reintroduced to its neighbour.`],
+      foot: [`฿${_num(MASSAGE_LEGIT)}, a recliner, a bowl of warm water, and ${name} with a wooden stick and a chart of the sole that maps every organ you have to a place she can hurt. Forty minutes of that and the walk home is a different walk.`,
+             `฿${_num(MASSAGE_LEGIT)}. ${name} takes your feet as if they have been handed in lost. Thumbs, knuckles, the stick, the one spot near the heel that makes you grip the chair — and then the thing where the calves stop belonging to a man who has walked Beach Road twice.`],
+      herbal: [`฿${_num(MASSAGE_LEGIT)}. The compress comes out of the steamer smelling of lemongrass and something medicinal, wrapped in muslin, too hot for the first minute and exactly right for the next fifty; ${name} presses it down the spine in a line and the day comes out of you like steam.`,
+               `฿${_num(MASSAGE_LEGIT)}, and the room fills with the smell of the herb ball — turmeric, kaffir, camphor — before ${name} has laid a hand on you. The compress does most of the work. She does the rest, unhurried, and you leave smelling like a temple kitchen.`],
+      oil: [`฿${_num(MASSAGE_LEGIT)}. Warm oil, dim light, a towel, and ${name} working long strokes down the back with the radio on low. Nothing alarming happens to your spine. An hour later you are loose, slightly shiny, and asleep on your feet.`,
+            `฿${_num(MASSAGE_LEGIT)}, and the oil is warm from a bottle on the water heater. ${name} does the shoulders until they drop, the legs until they give, and says nothing at all for an hour, which is the luxury.`],
     };
-    _say(_pickVary(MASSAGE_KIND[kind], "massage:" + kind) + ` (฿${G.money} left.)`, "win");
+    _say(_pickVary(MASSAGE_KIND[kind], "massage:" + kind) + ` (฿${_num(G.money)} left.)`, "win");
     if (wasHurt > G.hurt) _say("(The banged-up ache eases a notch — this is the one place in " +
       "town that actually mends you, not just numbs you.)", "dim");
     if (wasDrunk > G.soc.drunk) _say("(And the Chang fog thins; she pressed something behind " +
@@ -2490,18 +2508,18 @@ function _doMassage(arg) {
   const _Name = name.charAt(0).toUpperCase() + name.slice(1);
   // pooled: five named women were one pair of hands, word for word (Graeme, round 58)
   const _OIL_KIND = {
-    foot: [`฿${MASSAGE_OIL}, a recliner and a bowl of warm water — ${name} does feet here too, and does them well, and somewhere around the ankle her thumbs still ask a question. `,
-           `฿${MASSAGE_OIL}. ${_Name} takes your feet into her lap like parcels to be sorted, and sorts them, and on the way up the calf the question gets asked anyway. `],
-    thai: [`฿${MASSAGE_OIL}. ${_Name} does it Thai — elbows, thumbs, a knee you will describe to nobody — on the same mat under the same pink light, and near the end her thumbs ask a question. `,
-           `฿${MASSAGE_OIL}, and ${name} folds you into shapes the pink light was not built for, walks the length of your back, and then, in the last ten minutes, goes soft and asks the question with her hands. `],
-    oil:  [`฿${MASSAGE_OIL} and ${name} works warm oil down your back in the mirror-walled cubicle, humming, in no hurry. It is a genuinely good massage. It is also, quite clearly, not the whole menu — somewhere around the base of your spine her thumbs ask a question. `,
-           `฿${MASSAGE_OIL}. ${_Name} warms the oil in her palms before it touches you, which is the difference between a shop and a good shop, and works the shoulders down until they stop being shoulders. Low on the back, her thumbs slow, and ask. `,
-           `฿${MASSAGE_OIL}, a towel, the radio on low, and ${name} talking to somebody in the next cubicle through the curtain the whole hour without once losing the knot she found. Near the end the conversation stops, and her hands ask the other question. `],
+    foot: [`฿${_num(MASSAGE_OIL)}, a recliner and a bowl of warm water — ${name} does feet here too, and does them well, and somewhere around the ankle her thumbs still ask a question. `,
+           `฿${_num(MASSAGE_OIL)}. ${_Name} takes your feet into her lap like parcels to be sorted, and sorts them, and on the way up the calf the question gets asked anyway. `],
+    thai: [`฿${_num(MASSAGE_OIL)}. ${_Name} does it Thai — elbows, thumbs, a knee you will describe to nobody — on the same mat under the same pink light, and near the end her thumbs ask a question. `,
+           `฿${_num(MASSAGE_OIL)}, and ${name} folds you into shapes the pink light was not built for, walks the length of your back, and then, in the last ten minutes, goes soft and asks the question with her hands. `],
+    oil:  [`฿${_num(MASSAGE_OIL)} and ${name} works warm oil down your back in the mirror-walled cubicle, humming, in no hurry. It is a genuinely good massage. It is also, quite clearly, not the whole menu — somewhere around the base of your spine her thumbs ask a question. `,
+           `฿${_num(MASSAGE_OIL)}. ${_Name} warms the oil in her palms before it touches you, which is the difference between a shop and a good shop, and works the shoulders down until they stop being shoulders. Low on the back, her thumbs slow, and ask. `,
+           `฿${_num(MASSAGE_OIL)}, a towel, the radio on low, and ${name} talking to somebody in the next cubicle through the curtain the whole hour without once losing the knot she found. Near the end the conversation stops, and her hands ask the other question. `],
   };
   const _comp = G.party && G.party.ids && G.party.ids.find(p => _npcsHere().includes(p));
   _say(_pickVary(_OIL_KIND[_kind], "oilkind:" + _kind) +
     (_comp ? `(Not tonight: ${NPCS[_comp].name} is on the next mat, reading her {{phone}} through the hour, and the thumbs' question goes politely unasked.)`   // (Ingrid, round 62)
-      : `(SPECIAL, if you're answering — ฿${MASSAGE_SPECIAL - MASSAGE_OIL} more.)`), "win");
+      : `(SPECIAL, if you're answering — ฿${_num(MASSAGE_SPECIAL - MASSAGE_OIL)} more.)`), "win");
   if (!_comp) G.soc.specialAsk = { room: G.room, turn: G.turns };   // a NO in the next breath is an answer, not "nobody had asked" (Jens, round 67)
   _addHappy(1);
 }
@@ -2515,7 +2533,7 @@ function _massageSpecial(she, name) {
   const hadBase = G.soc.massaged && G.soc.massaged[G.room] === G.day;
   const price = hadBase ? MASSAGE_SPECIAL - MASSAGE_OIL : MASSAGE_SPECIAL;
   if (G.money < price) {
-    _say(`The special runs ฿${price}${hadBase ? " on top" : ""}; you have ฿${G.money}. ${name} ` +
+    _say(`The special runs ฿${_num(price)}${hadBase ? " on top" : ""}; you have ฿${_num(G.money)}. ${name} ` +
       "is sweet about it, but the oil stays strictly therapeutic.");
     return;
   }
@@ -2527,7 +2545,7 @@ function _massageSpecial(she, name) {
     (hadBase ? "the massage quietly stops pretending to be only a massage" :
       "gives you the massage and the actual reason people come to Smile") +
     ". Hand and mouth, unhurried, her eyes finding yours in the wall of mirrors the whole time — " +
-    `the “I like you” she led with turns out to be at least half true. (฿${G.money} left.)`, "win");
+    `the “I like you” she led with turns out to be at least half true. (฿${_num(G.money)} left.)`, "win");
   _conquestHappy(4, she);        // a real release — feeds the hedonic treadmill, lightly
   if (she) _addBond(she, 1);
   // the on-premises wall, and the door it leaves open: her number, once per girl,
@@ -2586,7 +2604,7 @@ function _doMeetOffShift(arg) {
     `somewhere unmistakably a real room and not a short-time one: her kettle, her drying laundry, a ` +
     `framed photo turned face-down before you can ask. No mamasan, no barfine, no clock ` +
     `on the wall. Just ${os.name}, off the floor and entirely herself. ` +
-    (cost ? `(฿${cost} for the taxi and a 7-Eleven raid — a fraction of the barfine you didn't pay.)` :
+    (cost ? `(฿${_num(cost)} for the taxi and a 7-Eleven raid — a fraction of the barfine you didn't pay.)` :
       `(Not a baht changes hands. Some nights the town forgets to charge you.)`), "win");
   _conquestHappy(9, os.id); // the softer road pays better than the fantasy
   if (os.id) _addBond(os.id, 4);
@@ -2643,7 +2661,7 @@ function _soapyBoss() {
 // redraw (see _renderResume — a new modal gate must redraw or the load is blind).
 function _soapyPrompt() {
   _say(`${_ucfirst(_soapyBoss())} slides the laminated menu across and nods at the glass. Pick a number:`, "dim");
-  for (const t of _SOAPY_TIERS) _say(`  [${thaiDigits(t.num)}]  ${t.label} — ฿${t.price}`, "dim");
+  for (const t of _SOAPY_TIERS) _say(`  [${thaiDigits(t.num)}]  ${t.label} — ฿${_num(t.price)}`, "dim");
   _say(`(Say a number — ${_SOAPY_TIERS.map(t => t.num).join(" · ")} — or the tier name. NO backs out.)`, "dim");
 }
 
@@ -2666,8 +2684,8 @@ function _soapyResolve(input) {
   if (!tier) { _say(`${_ucfirst(_soapyBoss())} taps the glass, patient: “That number not here, tilac.”`, "dim"); _soapyPrompt(); return false; }
   if (G.money < tier.price) {
     G.pendingSoapy = null;
-    _say(`Number ${thaiDigits(tier.num)} is the ${tier.label} tier — ฿${tier.price}. Your pocket says ` +
-      `฿${G.money}. ${_ucfirst(_soapyBoss())} closes the menu with a kind, final click: “Maybe the star, next time.”`);
+    _say(`Number ${thaiDigits(tier.num)} is the ${tier.label} tier — ฿${_num(tier.price)}. Your pocket says ` +
+      `฿${_num(G.money)}. ${_ucfirst(_soapyBoss())} closes the menu with a kind, final click: “Maybe the star, next time.”`);
     return true;
   }
   G.pendingSoapy = null;
@@ -2678,7 +2696,7 @@ function _soapyResolve(input) {
     `${tier.label} — collects you with a professional smile and a numbered locker key. Upstairs: a warm ` +
     "tiled room, a bath the size of a small car, an air mattress, and no clock anywhere. She baths you " +
     "like it's a vocation, and the set package delivers precisely what the laminated menu promised — " +
-    `everything, unhurried, on the premises. (฿${G.money} left.)`, "win");
+    `everything, unhurried, on the premises. (฿${_num(G.money)} left.)`, "win");
   _conquestHappy(tier.key === "model" ? 7 : tier.key === "super" ? 6 : 5);
   return true;
 }
@@ -2947,8 +2965,8 @@ function _doHint() {
   if (_stuckSouth) {
     const _phoneDead = G.battery <= 0;
     _say("The soi whispers, and for once it isn't about the wallet: you are on the " +
-      "wrong side of the bay with " + (G.money ? `฿${G.money}` : "nothing") +
-      ` in your pocket, and the fare is ฿${BUS_FARE}. ` +
+      "wrong side of the bay with " + (G.money ? `฿${_num(G.money)}` : "nothing") +
+      ` in your pocket, and the fare is ฿${_num(BUS_FARE)}. ` +
       (_phoneDead
         ? "Your phone is dead, so the easy way out is shut. Empty bottles are ฿5 " +
           "each to Auntie Nok at the Soi 7 end of the sand — the beach leaves them " +
@@ -3558,7 +3576,7 @@ function _questTick() {
       // say how it reached you when the giver is not in the room
       const _gv = _qGiver(q), _gn = NPCS[_gv] ? NPCS[_gv].name : null;
       const _here = _gv && _npcsHere().includes(_gv);
-      _say(`(+฿${q.reward.money}${_gn ? (_here ? ` from ${_gn}` : ` — ${_gn}'s, sent through the bank app with a sticker on it`) : ""} — ${_byApp ? `฿${G.bank} in the account` : `฿${G.money} in pocket`}.)`, "dim");
+      _say(`(+฿${_num(q.reward.money)}${_gn ? (_here ? ` from ${_gn}` : ` — ${_gn}'s, sent through the bank app with a sticker on it`) : ""} — ${_byApp ? `฿${_num(G.bank)} in the account` : `฿${_num(G.money)} in pocket`}.)`, "dim");
     }
     if (q.reward.happy) _addHappy(q.reward.happy);
     _repGain(); // seeing a job through is the sort of thing that earns you a name (throttled)
@@ -3719,7 +3737,7 @@ function _tanAbout(topic) {
   }
   const room = n.patron ? _npcWhere(id) : NPCS[id] ? _npcRoom(id) : _npcWhere(id);
   const where = room && _barName(room) ? _barName(room) + (ROOMS[room] && ROOMS[room].invite ? " — and you do not walk in there; you are taken" : "") : null;
-  const she = n.pronoun === "she" || (NPCS[id] && NPC_ROLES[id]);
+  const she = _pronoun(id) === "she";
   // role-accurate: Tan is the hub who reads the real structure of the soi — so
   // he must not call a mamasan a rail girl (Settler playtest, 2026-08-26: "ask
   // tan about candy/oy" said "she works the rail there" of two owners).
@@ -3926,7 +3944,7 @@ function _doBlackbook() {
       ? " — asked you over tonight" : "";
     // the phone's own memory: what she has asked for, and what you sent (theme 4)
     const asks = (G.phone.asks && G.phone.asks[id]) || [];
-    const askNote = asks.length ? ` · asked ${asks.length}× (฿${asks.reduce((a, x) => a + x.amt, 0)}), ` +
+    const askNote = asks.length ? ` · asked ${asks.length}× (฿${_num(asks.reduce((a, x) => a + x.amt, 0))}), ` +
       `${asks.filter(x => x.paid).length} answered` : "";
     const careNote = G.care && G.care[id] && G.care[id].asked != null ? " · waiting on her night's money" : "";
     _say(`${mark[t]} ${n.emoji || ""} ${n.name} — ${bar} · ${_lbl(id, t)}${invited}${askNote}${careNote}`, t >= 2 ? "" : "dim");
@@ -4094,7 +4112,7 @@ function _doMessage(arg) {
   _pushMsg(id, ["555+ you funny", "miss you na 🥺", "come see me tonight!!",
     "work boring... you come make sanuk"][Math.floor(_rand() * 4)]);
   _say(_fmt("(📱 {who} replies almost instantly. CHECK MESSAGES.)",
-    { who: (NPCS[id] && NPCS[id].pronoun === "he") || !NPC_ROLES[id] ? NPCS[id].name : "She" }), "dim");   // Tan was a "she" (Anders, round 43)
+    { who: _pronoun(id) === "she" ? "She" : NPCS[id].name }), "dim");   // Tan was a "she" (Anders, round 43)
 }
 
 // ── Phone-Tan: the fixer in your contacts ───────────────────────────────────
@@ -4392,7 +4410,7 @@ function _doSendMoney(arg) {
   if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
   // the banking app draws on the ACCOUNT, not the notes in your pocket (Mario, round 58 —
   // Priya's SEND 100 TO BEE came out of her pocket)
-  if (amt > (G.bank || 0)) { _say(_fmt("The app regrets to inform you: ฿{m} in the account, ฿{a} dreamed of.", { m: _num(G.bank || 0), a: amt })); return; }
+  if (amt > (G.bank || 0)) { _say(_fmt("The app regrets to inform you: ฿{m} in the account, ฿{a} dreamed of.", { m: _num(G.bank || 0), a: _num(amt) })); return; }
   // Tan sends it straight back — his currency is favours, never baht
   if (id === "tan") {
     _say(_fmt("฿{a} crosses town in one green blink — and comes straight back in another, " +
@@ -4481,7 +4499,7 @@ function _doSendMoney(arg) {
   if (deal && !deal.done && deal.idx != null) {
     if (amt >= deal.ask) _advancePicDeal(id);
     else {
-      _pushMsg(id, `😏 not quite na... ฿${deal.ask} then i send. this one i keep for tips 555`);
+      _pushMsg(id, `😏 not quite na... ฿${_num(deal.ask)} then i send. this one i keep for tips 555`);
       _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
     }
     return;
@@ -4532,7 +4550,7 @@ function _readMessages() {
     const dropped = show.slice(0, show.length - 12);
     for (const m of dropped) {
       m.read = true;
-      if (m.gives) { G.bank = (G.bank || 0) + m.gives; _say(`(An older transfer surfaces in the scroll: +฿${m.gives} to the account.)`, "win"); }
+      if (m.gives) { G.bank = (G.bank || 0) + m.gives; _say(`(An older transfer surfaces in the scroll: +฿${_num(m.gives)} to the account.)`, "win"); }
       if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
     }
     _say(_fmt("(You thumb past {n} older messages — the phone's way of telling you how long you've been gone.)", { n: dropped.length }), "dim");
@@ -4556,7 +4574,7 @@ function _readMessages() {
       // a transfer lands where SEND takes from — the account, not the pocket
       // (Mario, 2026-09-29: the banking app works the same both ways)
       G.bank = (G.bank || 0) + msg.gives;
-      _say(`(She's transferred you ฿${msg.gives}. ฿${G.bank} in the account. This town.)`, "win");
+      _say(`(She's transferred you ฿${_num(msg.gives)}. ฿${_num(G.bank)} in the account. This town.)`, "win");
     }
     msg.read = true;
   }
@@ -4733,7 +4751,7 @@ function _startPicDeal(id) {
   _pushMsg(id, pics[0].words || "hi handsome 😘 i take picture just for you...", 0, null, pics[0].cap);
   if (pics.length > 1) {
     G.phone.picDeals[id] = { idx: 1, ask: pics[1].ask };
-    _pushMsg(id, `😏 you like?? more sexy waiting... only ฿${pics[1].ask} i send next one 💸`);
+    _pushMsg(id, `😏 you like?? more sexy waiting... only ฿${_num(pics[1].ask)} i send next one 💸`);
   } else {
     G.phone.picDeals[id] = { done: true };
   }
@@ -4746,7 +4764,7 @@ function _advancePicDeal(id) {
   const next = deal.idx + 1;
   if (next < pics.length) {
     G.phone.picDeals[id] = { idx: next, ask: pics[next].ask };
-    _pushMsg(id, `like?? 😏 next one better... ฿${pics[next].ask} 💸`);
+    _pushMsg(id, `like?? 😏 next one better... ฿${_num(pics[next].ask)} 💸`);
   } else {
     G.phone.picDeals[id] = { done: true };
     _pushMsg(id, `that ALL i got here na 🙈 rest you come ${_barName(_npcRoom(id)) || "see me"} see LIVE 😘`);
@@ -4838,16 +4856,16 @@ function _chamSeen() {
 }
 function _chamDrink() {
   _chamSeen();
-  if (G.money < _beerPrice()) { _say(`A drink for Cream runs ฿${_beerPrice()}, and you're short. She waves it off: "Next time na."`); return; }
+  if (G.money < _beerPrice()) { _say(`A drink for Cream runs ฿${_num(_beerPrice())}, and you're short. She waves it off: "Next time na."`); return; }
   G.money -= _beerPrice();
   G.soc.chamDrinks = (G.soc.chamDrinks || 0) + 1;
   _say(_pickVary([
     `She puts a hand up — "No no, I have—" — looks at her glass, which is mostly ice, and lets you. ` +
-      `"Ok. One." A cocktail arrives that nobody calls a lady drink, because it isn't one. (฿${G.money} left.)`,
+      `"Ok. One." A cocktail arrives that nobody calls a lady drink, because it isn't one. (฿${_num(G.money)} left.)`,
     `"You don't have to—" she says, and then, when it comes, "…ok, thank you na," and clinks it against ` +
-      `yours with a small conspiratorial face, like two people getting away with something. (฿${G.money} left.)`,
+      `yours with a small conspiratorial face, like two people getting away with something. (฿${_num(G.money)} left.)`,
     `She lets you, after the correct amount of not letting you. No bell, no ledger, no mamasan ` +
-      `counting — just a drink, bought for a girl at a table, like anywhere. (฿${G.money} left.)`,
+      `counting — just a drink, bought for a girl at a table, like anywhere. (฿${_num(G.money)} left.)`,
   ], "chamdrink"));
   _addHappy(1);
 }
@@ -4943,7 +4961,7 @@ function _chamGiftPrompt() {
 }
 function _chamGift(amt) {
   if (amt > 0 && amt > G.money) {
-    _say(`You haven't got ฿${amt} on you. (GIFT <amount> · NOTHING)`, "dim");
+    _say(`You haven't got ฿${_num(amt)} on you. (GIFT <amount> · NOTHING)`, "dim");
     return;
   }
   G.pendingChoice = null;
@@ -4952,13 +4970,13 @@ function _chamGift(amt) {
   _setFlag("chamDone");
   if (amt >= CHAM_GIFT) {
     G.money -= amt;
-    _say(`You give her ฿${amt} — to help out, you say, and she looks at the notes and ` +
+    _say(`You give her ฿${_num(amt)} — to help out, you say, and she looks at the notes and ` +
       "then at you and the thanks is shy and complete, eyes down, both hands. \"You so " +
       "kind. Too kind.\" It goes into the little bag beside the coat. A kiss on the cheek " +
       "that lands like a receipt nobody issued.", "win");
   } else if (amt > 0) {
     G.money -= amt;
-    _say(`You give her ฿${amt} — for the bus, for breakfast, for nothing in particular. ` +
+    _say(`You give her ฿${_num(amt)} — for the bus, for breakfast, for nothing in particular. ` +
       "She folds it small and the thanks is shy and exactly the same size as the note, " +
       "which you notice and decide not to. A kiss on the cheek; the door.", "dim");
   } else {
@@ -5280,7 +5298,7 @@ function _maybeIncomingText() {
   {
     const deal = G.phone.picDeals && G.phone.picDeals[id];
     if (deal && !deal.done) {
-      _pushMsg(id, `you see my photo?? 😏 more waiting for you... ฿${deal.ask} 💸`);
+      _pushMsg(id, `you see my photo?? 😏 more waiting for you... ฿${_num(deal.ask)} 💸`);
       buzz(); return;
     }
   }
@@ -5886,7 +5904,7 @@ const _FX_CURRENCIES = [
 function _fxLine() {
   const fx = _fxRates();
   if (!fx) return null;
-  return _FX_CURRENCIES.map(([c, sym]) => `${sym}1 = ฿${fx[c]}`).join(" · ");
+  return _FX_CURRENCIES.map(([c, sym]) => `${sym}1 = ฿${_num(fx[c])}`).join(" · ");
 }
 
 function _wxNow() { return typeof WX_NOW === "undefined" ? null : WX_NOW; }
@@ -8788,7 +8806,7 @@ const _PRICES_SET = {   // Bert, who has stood every rail on the soi and has a v
   up: "“Fifteen on top.” Bert writes it small, the way you write a thing you'd rather people found than read. “The regulars won't notice tonight. They'll notice in a month, and they'll notice by not being here — and the girls count the stools before you do, boss.”",
   steep: "Bert looks at the number, then at you, then writes it. “Walking Street money, on Soi 6.” He does not say it is wrong. “You'll take more off fewer. Fewer is the bit the girls live on.” He caps the chalk. “Your bar.”",
 };
-const _PRICES_BOARD = (b) => `The board: beer ฿${_beerPrice(b.room)} · lady drink ฿${_ladyPrice(b.room)} · the fine ฿${_round50(({ soi6: BF_SOI6, gogo: BF_GOGO, gents: BF_GENTS }[ROOMS[b.room].barType] || BF_BEER) * _barMarkup(b.room))} (half again before nine, the book shut after midnight) — ` +
+const _PRICES_BOARD = (b) => `The board: beer ฿${_num(_beerPrice(b.room))} · lady drink ฿${_num(_ladyPrice(b.room))} · the fine ฿${_num(_round50(({ soi6: BF_SOI6, gogo: BF_GOGO, gents: BF_GENTS }[ROOMS[b.room].barType] || BF_BEER) * _barMarkup(b.room)))} (half again before nine, the book shut after midnight) — ` +
   ({ cheap: "ten under the soi", list: "the soi's own numbers", up: "fifteen over", steep: "thirty over" }[b.markup || "list"]) + ".";
 function _doPrices(arg) {
   if (!_barOwned()) { _say("Prices are somebody else's to set. Yours is the stool."); return; }
@@ -9271,9 +9289,9 @@ function _doBooks() {
         cost: ll.evtCost ? _fmt(" · the night's own bill ฿{c}", { c: ll.evtCost }) : "",
         who: ll.declaredOnly ? "declared, not stood" : ll.worked ? "you stood it" : "Bert ran it" }), "dim");
     if (ll.notes && ll.notes.length) _say(`(The night's own money: ${ll.notes.join(" · ")}.)`, "dim");
-    if (b.lastOwnDrinks) _say(`(Your own girls' drinks, on your chit and into the till: ฿${b.lastOwnDrinks}.)`, "dim");
-    if (b.lastGuestDrinks) _say(`(The drinks of the girl you brought in from another bar, on your chit and into the till: ฿${b.lastGuestDrinks}.)`, "dim");
-    if (b.lastOwnStock) _say(`(Your own glass: ฿${b.lastOwnStock} of wholesale off the till, nothing off your pocket.)`, "dim");
+    if (b.lastOwnDrinks) _say(`(Your own girls' drinks, on your chit and into the till: ฿${_num(b.lastOwnDrinks)}.)`, "dim");
+    if (b.lastGuestDrinks) _say(`(The drinks of the girl you brought in from another bar, on your chit and into the till: ฿${_num(b.lastGuestDrinks)}.)`, "dim");
+    if (b.lastOwnStock) _say(`(Your own glass: ฿${_num(b.lastOwnStock)} of wholesale off the till, nothing off your pocket.)`, "dim");
   }
   _say(_fmt("Nights stood: {w} of {n}. A stood night takes about a third more over the rail and saves Bert's ฿{m}.", { w: b.worked || 0, n: b.nights || 0, m: BAR_MGR_NIGHT }), "dim");
   if (b.drawn) _say(_fmt("Taken out by you, all told: ฿{d}.", { d: b.drawn }), "dim");
@@ -9754,12 +9772,12 @@ function _doFeedDog(arg) {
       G.money -= 20;
       _say(_dogN(`฿20 to the kitchen for a skewer, passed down under the rail. Sai Krok takes it ` +
         `off the plate with great delicacy and eats it under your stool, and the bar ` +
-        `pretends not to notice, warmly. (฿${G.money} left.)`));
+        `pretends not to notice, warmly. (฿${_num(G.money)} left.)`));
     } else if (G.money >= 20) {
       G.money -= 20;
       _say(_dogN(`฿20 to a grill cart for a chicken skewer, which Sai Krok receives like a ` +
         `salary — owed, not begged. He eats, checks the street both ways, and falls ` +
-        `back in at your heel. (฿${G.money} left.)`));
+        `back in at your heel. (฿${_num(G.money)} left.)`));
     } else {
       _say(_dogN("You have nothing for him. Sai Krok reads your empty hands, forgives you " +
         "instantly and completely, and keeps walking with you anyway. Dogs are better " +
@@ -9808,7 +9826,7 @@ function _doFeedDog(arg) {
     _say(`${approach}. There is always somebody grilling something within twenty ` +
       "metres in this town, and ฿20 is a chicken skewer wherever it is. He takes it " +
       "with shocking gentleness, eats it in one movement, and then — this is the part " +
-      `nobody warns you about — looks at you. Properly. Files something away. (฿${G.money} left.)`, "win");
+      `nobody warns you about — looks at you. Properly. Files something away. (฿${_num(G.money)} left.)`, "win");
   }
   G.dog = { since: G.day };
   _setFlag("hasDog"); // quest gate — see QUESTS reqFlags
@@ -10286,10 +10304,10 @@ const _OWL_ARRIVED = [
     "A BARFINE is two fees, squire, and the second is the one you'll forget: the bar's, to let " +
     "her leave her stool, and then hers, agreed between the two of you and never written on any " +
     "board. SHORT TIME is one round and she's back on the stool; LONG TIME is the night. A LADY " +
-    `DRINK is ฿${LADY_DRINK} for a glass of something coloured, of which she keeps a cut — it is ` +
+    `DRINK is ฿${_num(LADY_DRINK)} for a glass of something coloured, of which she keeps a cut — it is ` +
     "the rent on her attention and the only honest price in the room. The MAMASAN runs the floor " +
     "and the CASHIER runs the money; in a small bar they are one woman who has not had a night " +
-    `off since the war. The blue trucks are SONGTHAEWS — ฿${BUS_FARE}, sit, hop off, pay at the ` +
+    `off since the war. The blue trucks are SONGTHAEWS — ฿${_num(BUS_FARE)}, sit, hop off, pay at the ` +
     "back — and the lads on the corner in the vests are PIWINS, motorbike taxis, who will take " +
     "you anywhere for a price that goes up after two. That's the vocabulary. The grammar you " +
     "learn on a stool.",
@@ -10299,7 +10317,7 @@ const _OWL_ARRIVED = [
     "buys the room a round; a GENTLEMAN'S CLUB is a sofa behind a curtain in a villa with " +
     `the air-con set to Norway. A CABARET is a show and a chair, where you tip rather than `+
     "buy, and a HOST BAR is the same trade with the sexes swapped and better manners. A beer " +
-    `is ฿${BEER_PRICE} at the cheapest and climbs by ` +
+    `is ฿${_num(BEER_PRICE)} at the cheapest and climbs by ` +
     "the class of the room, and the number is there if you ask for it, and most men do not ask — ask " +
     "(tao rai, squire: how much) before the glass lands. And one more: everybody in every one " +
     "of these rooms would rather you ASKED than looked. This is a town that talks. Use it.",
@@ -10311,7 +10329,7 @@ const _OWL_ARRIVED = [
     "be told you are. And CHEAP CHARLIE is what they call the man who read this column and " +
     "still didn't buy her the drink. Don't be him. Don't be the other one either.",
   () => "ON MONEY, for the newly landed, because the first three questions the Owl gets are all " +
-    `the same question. The machine on the street takes your foreign card and ฿${ATM_FEE} for the ` +
+    `the same question. The machine on the street takes your foreign card and ฿${_num(ATM_FEE)} for the ` +
     "privilege, every time, so pull once and pull enough; the girl at the till does not take " +
     "cards and never will. The CHIT CUP is how a bar keeps score — every drink a slip of paper " +
     "in a pot in front of you, and CHECK BIN (chek bin, squire: the bill) is how you ask for " +
@@ -10341,7 +10359,7 @@ const _OWL_ARRIVED = [
     "been offended by a question, only by silence. Buy one beer and sit with it; the room " +
     "will come to you. Get a number (CONTACT, once she likes you — she'll say) and the town " +
     "starts texting you invitations, which is how a stranger becomes a regular in a week. " +
-    `And the bus: ฿${BUS_FARE}, flag it down, sit at the back, pay when you hop off. That is ` +
+    `And the bus: ฿${_num(BUS_FARE)}, flag it down, sit at the back, pay when you hop off. That is ` +
     "the whole first night. The second one you'll work out yourself.",
 ];
 const _OWL_LISTINGS = [
@@ -11030,7 +11048,7 @@ function _checkAct1() {
   lines.push("✓ Wallet recovered (+50)");
   if (_flag("oyGaveWallet")) { score += 15; lines.push("✓ ...earned back with manners, not burglary (+15)"); }
   if (G.battery > 0) { score += 10; lines.push(`✓ Phone survived at ${G.battery}% (+10)`); }
-  if (G.money > 0) { score += Math.min(20, G.money); lines.push(`✓ ฿${G.money} still in pocket (+${Math.min(20, G.money)})`); }
+  if (G.money > 0) { score += Math.min(20, G.money); lines.push(`✓ ฿${_num(G.money)} still in pocket (+${Math.min(20, G.money)})`); }
   for (const [f, label] of [
     ["helmetDelivered", "Did Bank a solid"],
     ["somTamDelivered", "Fed Ploy the good som tam"],

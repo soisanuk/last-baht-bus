@@ -393,7 +393,7 @@ function _salengBuy(input) {
         "without embarrassing you and putters on.", { p: price, item: _L(item), m: G.money }));
       return;
     }
-    G.money -= price;
+    G.money -= price; G.offTill = (G.offTill || 0) + price;   // not on the bar's slips (CHECK BIN)
     if (forHer) {
       // what she was actually given, so a bond node can thank you for a REAL
       // gift. Lek thanked a man for sandals he had never bought her, because
@@ -420,9 +420,9 @@ function _salengBuy(input) {
         "fruit": `${name} peels the mango with a knife from her bag — fast, professional — ` +
           `and gives you the first slice. The bar gets the rest.`,
       };
-      _say(`฿${price} for the ${item}. ` +
+      _say(`฿${_num(price)} for the ${item}. ` +
         (REACTIONS[item] || `${name} takes it with a wai. "Khob khun kha~"`) +
-        ` (฿${G.money} left.)`, "win");
+        ` (฿${_num(G.money)} left.)`, "win");
       _addHappy(1);
       _maybeSelfBarfine(forId);
     } else {
@@ -435,33 +435,33 @@ function _salengBuy(input) {
       if (INV_ITEMS[item]) {
         const iid = INV_ITEMS[item];
         if (G.itemLoc[iid] === "inventory") {
-          G.money += price; // refund — already have one
+          G.money += price; G.offTill = (G.offTill || 0) - price; // refund — already have one
           _say(_fmt("You already have one. The driver shrugs and keeps the change for your " +
             "indecision. Just kidding — ฿{p} back.", { p: price }));
           return;
         }
         G.itemLoc[iid] = "inventory";
         const INV_TEXT = {
-          "sandals": `฿${price} for the sandals, tucked under your arm. Not your size, ` +
-            `not your shoes. GIVE SANDALS TO <lady> when you've found the right person. (฿${G.money} left.)`,
-          "heels": `฿${price} for the heels, carried in the bag. You have absolutely no ` +
-            `use for these. GIVE HEELS TO <lady>. (฿${G.money} left.)`,
-          "lingerie": `฿${price}. The lingerie goes in the bag; the bag goes under your arm; ` +
-            `the whole bar approves of the logic. GIVE LINGERIE TO <lady>. (฿${G.money} left.)`,
+          "sandals": `฿${_num(price)} for the sandals, tucked under your arm. Not your size, ` +
+            `not your shoes. GIVE SANDALS TO <lady> when you've found the right person. (฿${_num(G.money)} left.)`,
+          "heels": `฿${_num(price)} for the heels, carried in the bag. You have absolutely no ` +
+            `use for these. GIVE HEELS TO <lady>. (฿${_num(G.money)} left.)`,
+          "lingerie": `฿${_num(price)}. The lingerie goes in the bag; the bag goes under your arm; ` +
+            `the whole bar approves of the logic. GIVE LINGERIE TO <lady>. (฿${_num(G.money)} left.)`,
         };
         _say(INV_TEXT[item]);
       } else {
         const SELF = {
-          "moo ping": `Three skewers of moo ping, ฿${price}, eaten at the bar. Charcoal does ` +
-            `something to pork that a kitchen can't quite manage. (฿${G.money} left.)`,
-          "noodles": `A bowl of ba mee from the window, ฿${price}. You eat it at the bar ` +
-            `because inside is better than the kerb. (฿${G.money} left.)`,
-          "som tam": `฿${price} for a box of som tam — lime, dried shrimp, the good kind ` +
-            `of dangerous. (฿${G.money} left.)`,
-          "fruit": `฿${price} for a bag of cut fruit. You eat it at the bar feeling virtuous ` +
-            `relative to your surroundings. (฿${G.money} left.)`,
+          "moo ping": `Three skewers of moo ping, ฿${_num(price)}, eaten at the bar. Charcoal does ` +
+            `something to pork that a kitchen can't quite manage. (฿${_num(G.money)} left.)`,
+          "noodles": `A bowl of ba mee from the window, ฿${_num(price)}. You eat it at the bar ` +
+            `because inside is better than the kerb. (฿${_num(G.money)} left.)`,
+          "som tam": `฿${_num(price)} for a box of som tam — lime, dried shrimp, the good kind ` +
+            `of dangerous. (฿${_num(G.money)} left.)`,
+          "fruit": `฿${_num(price)} for a bag of cut fruit. You eat it at the bar feeling virtuous ` +
+            `relative to your surroundings. (฿${_num(G.money)} left.)`,
         };
-        _say(SELF[item] || `฿${price} for the ${item}. (฿${G.money} left.)`);
+        _say(SELF[item] || `฿${_num(price)} for the ${item}. (฿${_num(G.money)} left.)`);
         _addHappy(1);
       }
     }
@@ -619,7 +619,7 @@ const _ENC = {
   police(input) {
     // "give me a receipt" paid ฿500 through the word "give" (Malcolm, round 59)
     if (/\breceipt\b/.test(input)) {
-      _say(`“Receipt?” He looks at you with real interest for the first time. “Receipt is at the station, Second Road. ฿${_num(POLICE_ARGUE)}, paperwork, all night.” He waits. Here, he means, is cheaper. (WAI and say sorry · PAY ฿${POLICE_PAY} · or argue it)`);
+      _say(`“Receipt?” He looks at you with real interest for the first time. “Receipt is at the station, Second Road. ฿${_num(POLICE_ARGUE)}, paperwork, all night.” He waits. Here, he means, is cheaper. (WAI and say sorry · PAY ฿${_num(POLICE_PAY)} · or argue it)`);
       G.pendingEnc = "police"; return;
     }
     const barRoom = _venuesHere(_room()).find(to => ROOMS[to].barType && G.soc.mamaTreat[to]);
@@ -651,17 +651,17 @@ const _ENC = {
       G.money -= f;
       _say("You wai first and apologise second, in Thai, both hands steady-ish. " +
         "The officer's arithmetic visibly adjusts for manners. " +
-        (f ? `฿${f} changes hands inside a handshake old as the force itself. ` : "") +
-        `“Drink water, my friend. Go home slow.” (฿${G.money} left.)`, "alert");
+        (f ? `฿${_num(f)} changes hands inside a handshake old as the force itself. ` : "") +
+        `“Drink water, my friend. Go home slow.” (฿${_num(G.money)} left.)`, "alert");
       _addHappy(-1);
     } else if (/\b(?:pay|fine|give|baht|ok|okay|yes|here)\b/.test(input)) {
       const f = Math.min(POLICE_PAY, G.money);
       G.money -= f;
-      _say((f ? `฿${f} disappears into a shirt pocket with a receipt that will never ` +
+      _say((f ? `฿${_num(f)} disappears into a shirt pocket with a receipt that will never ` +
         "exist. " : "He turns out your pockets, finds lint, and looks personally " +
         "offended. ") +
         "“Fine paid. No problem now. Sawatdee khrap.” The brown uniform strolls on, " +
-        `scanning the crowd for the next swaying farang. (฿${G.money} left.)`, "alert");
+        `scanning the crowd for the next swaying farang. (฿${_num(G.money)} left.)`, "alert");
       _addHappy(-2);
     } else if (!/\bargue|\brefuse|won.t pay|what for|\bwhy\b|rubbish|bullshit|leave me|piss|fuck/.test(input) &&
                !(/\bno\b|\bnot\b|nope|thanks/.test(input) && G.soc.policeWarned != null && G.turns - G.soc.policeWarned <= 2)) {
@@ -685,9 +685,9 @@ const _ENC = {
       G.money -= f;
       _say("You argue. His smile does not move, but a second uniform materialises " +
         "at your elbow, and the fine develops a friend. " +
-        (f ? `฿${f} lighter, ` : "Pockets already empty, you are ") +
+        (f ? `฿${_num(f)} lighter, ` : "Pockets already empty, you are ") +
         "you are released into the night with a pat on the shoulder that means " +
-        `it could always be worse. (฿${G.money} left.)`, "alert");
+        `it could always be worse. (฿${_num(G.money)} left.)`, "alert");
       _addHappy(-4);
     }
   },
@@ -716,9 +716,9 @@ const _ENC = {
       const lost = Math.min(G.money, 40);
       G.money -= lost;
       _say("By the time you finish formulating a reply she is gone — melted into " +
-        `the crowd, along with ฿${lost} from your pocket. The oldest two-handed ` +
+        `the crowd, along with ฿${_num(lost)} from your pocket. The oldest two-handed ` +
         "trick on Beach Road, performed by a true professional. " +
-        `(฿${G.money} left.)`, "alert");
+        `(฿${_num(G.money)} left.)`, "alert");
       _addHappy(-2);
     }
   },
@@ -756,7 +756,7 @@ const _ENC = {
       "into your hands, pats your cheek with tremendous sincerity, and says you " +
       "look EXACTLY like her mom's ex-boyfriend, who was a good man, jing jing, " +
       "and also always have bad night. Her friends drag her back inside, waving " +
-      `apologies. (฿${G.money} — and dinner.)`);
+      `apologies. (฿${_num(G.money)} — and dinner.)`);
     _say("(You now have the moo ping skewer.)", "dim");
     _addHappy(2);
   },
@@ -768,7 +768,7 @@ const _ENC = {
         "fast as it arrived, replaced by the crushing sentimentality of the very " +
         "drunk. “Sorry mate. Been a mad one.” He presses ฿50 into your hand — " +
         "“get yourself a beer, yeah?” — hugs you briefly but completely, and " +
-        `lurches off toward the neon. (฿${G.money}.)`);
+        `lurches off toward the neon. (฿${_num(G.money)}.)`);
       _addHappy(1);
     } else if (/fight|punch|hit|swing|shove|push|square|come on|idiot|wanker|muppet yourself/.test(input)) {
       const lost = Math.min(G.money, 30);
@@ -776,9 +776,9 @@ const _ENC = {
       _say("A mistake. There is a brief, undignified tangle — and then two piwins " +
         "materialise out of nowhere, peel him off you with practised ease, and " +
         "walk him away like a wardrobe. In the shuffle you’ve shed " +
-        (lost ? `฿${lost} in coins` : "nothing but your composure") +
+        (lost ? `฿${_num(lost)} in coins` : "nothing but your composure") +
         ". A piwin looks back at you: “No fighting, boss. Bad for everybody.”" +
-        (lost ? ` (฿${G.money} left.)` : ""), "alert");
+        (lost ? ` (฿${_num(G.money)} left.)` : ""), "alert");
       _addHappy(-2);
       G.hurt++;
       if (G.hurt >= 3) _endNight("hurt");
@@ -844,7 +844,7 @@ const _ENC = {
     // makes it a touch safer; two of them are known to each other).
     const price = both ? 1400 : 700;
     if (G.money < price) {
-      _say(`The number is ฿${price}. Your pocket says ฿${G.money}. She pats your ` +
+      _say(`The number is ฿${_num(price)}. Your pocket says ฿${_num(G.money)}. She pats your ` +
         "cheek — “ATM broken? Sad story” — and turns back to the rail.");
       return;
     }
@@ -854,7 +854,7 @@ const _ENC = {
     const safe = _rand() < (both ? 0.78 : 0.6);
     if (!safe) { _endNight("robbed"); return; }
     if (both) {
-      _say(`฿${price}, and Ning stops pretending not to listen. What follows — the ` +
+      _say(`฿${_num(price)}, and Ning stops pretending not to listen. What follows — the ` +
         "motosai ride three-up (illegal, hilarious), the night bazaar snacks, the " +
         "hotel corridor shushing, and the rest of it — will be retold by you, " +
         "badly, for the rest of your life, to anyone who asks and several who " +
@@ -866,7 +866,7 @@ const _ENC = {
         "na” — freelance but not foolish. " :
         "Turns out she cashiers at a 7-Eleven in Naklua by day and does this for " +
         "the school fees; you get the whole life story on the walk over. ";
-      _say(`฿${price} settles it — no ledger, no mamasan, the commission all hers. ` +
+      _say(`฿${_num(price)} settles it — no ledger, no mamasan, the commission all hers. ` +
         flavor + "She takes your arm; the promenade approves.", "win");
     }
     // (the BOTH path's +7 is the threesome PREMIUM on top of the LT night's own
@@ -912,7 +912,7 @@ const _ENC = {
     // the dark sand makes every version of this riskier than the promenade rail.
     const price = both ? 900 : 500;
     if (G.money < price) {
-      _say(`She names ฿${price} without a flicker. Your pocket says ฿${G.money}. “Coconut ` +
+      _say(`She names ฿${_num(price)} without a flicker. Your pocket says ฿${_num(G.money)}. “Coconut ` +
         "bar no give credit, tilac.” She turns her shoulder, and the dark under the palms " +
         "takes her back.");
       return;
@@ -923,10 +923,10 @@ const _ENC = {
     const safe = _rand() < (both ? 0.68 : 0.48); // no rail, no mama, no witnesses — the odds bite hardest here
     if (!safe) { _endNight("robbed"); return; }
     if (both) {
-      _say(`฿${price}, and Muk stubs out her cigarette and stops pretending she wasn't in on ` +
+      _say(`฿${_num(price)}, and Muk stubs out her cigarette and stops pretending she wasn't in on ` +
         "it from the first word. The rest happens off the sand and out of the lamplight, three " +
         "shadows and a motosai and a hotel corridor, and none of it will ever appear in a " +
-        `story you tell your mother. (฿${G.money} left, and cheap at the price.)`, "win");
+        `story you tell your mother. (฿${_num(G.money)} left, and cheap at the price.)`, "win");
       _conquestHappy(6);
     } else {
       const flavor = _rand() < 0.5 ?
@@ -934,7 +934,7 @@ const _ENC = {
         "— coconut bar but not careless. " :
         "She does hair in a Naklua salon by day, she says, and this three nights a week for " +
         "the room rent; you get the arithmetic of her whole life on the walk off the beach. ";
-      _say(`฿${price} settles it in the dark — no ledger, no mama, every baht of it hers. ` +
+      _say(`฿${_num(price)} settles it in the dark — no ledger, no mama, every baht of it hers. ` +
         flavor + "She takes your arm and steers you off the sand toward the lights.", "win");
     }
     _endNight("barfine");
@@ -1062,7 +1062,7 @@ const _ENC = {
       const fee = 1000; // she pays her own way; the dancer's barfine is on you
       if (G.money < fee) {
         _say(`She glances at your wallet. “I don't pay the bar for her — that part is ` +
-          `you, and that part is ฿${fee}.” Your pocket says ฿${G.money}. “Cash first, ` +
+          `you, and that part is ฿${_num(fee)}.” Your pocket says ฿${_num(G.money)}. “Cash first, ` +
           "romance second,” she shrugs, and the moment closes.");
         return;
       }
@@ -1071,7 +1071,7 @@ const _ENC = {
       _say("You settle the dancer's barfine; the Japanese lady settles everything " +
         "else with a look. What follows is a blur of a taxi, a rooftop bar she " +
         "somehow already knows, and a night that quietly rearranges your sense of " +
-        `your own luck. (-฿${fee}. ฿${G.money} left, and every baht irrelevant.)`, "win");
+        `your own luck. (-฿${_num(fee)}. ฿${_num(G.money)} left, and every baht irrelevant.)`, "win");
       _addHappy(8);
       _endNight("barfine");
       return;
@@ -1139,7 +1139,7 @@ const _ENC = {
       _say("You put a hand where a hand should never go. Her husband is not slow and " +
         "the piwins are slower only than him. It is brief, it is one-sided, and it is " +
         "educational. You are on the pavement before the apology forms" +
-        (lost ? `, ฿${lost} lighter and a rib unhappier` : ", a rib unhappier") +
+        (lost ? `, ฿${_num(lost)} lighter and a rib unhappier` : ", a rib unhappier") +
         ". “Not in my town, sunshine.”", "alert");
       _addHappy(-4);
       _hurt(1);
@@ -1187,8 +1187,8 @@ const _ENC = {
       "are suddenly numerous, and you pay what it takes to leave.", "alert");
     const gouge = Math.min(400, G.money);
     G.money -= gouge;
-    _say(`(฿${600 + gouge} total for the famous scam of Walking Street. Every farang ` +
-      `pays the tuition exactly once. ฿${G.money} left.)`, "dim");
+    _say(`(฿${_num(600 + gouge)} total for the famous scam of Walking Street. Every farang ` +
+      `pays the tuition exactly once. ฿${_num(G.money)} left.)`, "dim");
     _addHappy(-3);
   },
 
@@ -1205,7 +1205,7 @@ const _ENC = {
       if (deal) {
         _encPrompt(["He clutches his chest — the international sign for “you are killing " +
           "me and my family”. The floor has been reached. " +
-          `(WATCH ฿${px.watch} · SUNGLASSES ฿${px.shades} · VITAMINS ฿${px.vits} · or NO.)`]);
+          `(WATCH ฿${_num(px.watch)} · SUNGLASSES ฿${_num(px.shades)} · VITAMINS ฿${_num(px.vits)} · or NO.)`]);
         return;
       }
       G.flags.peddlerDeal = true;
@@ -1215,7 +1215,7 @@ const _ENC = {
       _encPrompt(["You name a lower number in the local fashion — pained, apologetic, as " +
         "though the price wounded you both. A beat. Then the smile of a man " +
         "meeting a worthy opponent: “Okayyy. For you, special.” " +
-        `(WATCH ฿${dx.watch} · SUNGLASSES ฿${dx.shades} · VITAMINS ฿${dx.vits} · or NO.)`]);
+        `(WATCH ฿${_num(dx.watch)} · SUNGLASSES ฿${_num(dx.shades)} · VITAMINS ฿${_num(dx.vits)} · or NO.)`]);
       _addHappy(1);
       return;
     }
@@ -1230,26 +1230,26 @@ const _ENC = {
       return;
     }
     if (/\brolex\b/.test(input) || /\bwatch\b/.test(input)) {
-      if (G.money < px.watch) { _say(`฿${px.watch} for the 'Rolex'. He inspects your ฿` + G.money + " and moves along, unoffended."); return; }
+      if (G.money < px.watch) { _say(`฿${_num(px.watch)} for the 'Rolex'. He inspects your ฿` + G.money + " and moves along, unoffended."); return; }
       G.money -= px.watch;
       G.itemLoc.fake_rolex = "inventory";
-      _say(`฿${px.watch}, and the 'Rolex' is yours — fitted on your wrist with jeweller's ` +
-        `ceremony and a squeeze of the forearm. (฿${G.money} left.)`);
+      _say(`฿${_num(px.watch)}, and the 'Rolex' is yours — fitted on your wrist with jeweller's ` +
+        `ceremony and a squeeze of the forearm. (฿${_num(G.money)} left.)`);
       _say("(You now have the genuine Rolex (allegedly).)", "dim");
       _addHappy(1);
     } else if (/glass|shade|sun/.test(input)) {
-      if (G.money < px.shades) { _say(`฿${px.shades} for the RayBens, and you haven't got it. He tips an invisible hat.`); return; }
+      if (G.money < px.shades) { _say(`฿${_num(px.shades)} for the RayBens, and you haven't got it. He tips an invisible hat.`); return; }
       G.money -= px.shades;
       G.itemLoc.shades = "inventory";
-      _say(`฿${px.shades}. The RayBens go on immediately, indoors, at night. Perfect. (฿${G.money} left.)`);
+      _say(`฿${_num(px.shades)}. The RayBens go on immediately, indoors, at night. Perfect. (฿${_num(G.money)} left.)`);
       _say("(You now have the designer sunglasses.)", "dim");
       _addHappy(1);
     } else if (/vitamin|pill|med|blue/.test(input)) {
-      if (G.money < px.vits) { _say(`฿${px.vits} for the 'vitamins'. Your pockets decline on your behalf.`); return; }
+      if (G.money < px.vits) { _say(`฿${_num(px.vits)} for the 'vitamins'. Your pockets decline on your behalf.`); return; }
       G.money -= px.vits;
       G.itemLoc.vitamin_v = "inventory";
-      _say(`฿${px.vits} changes hands with the discretion of a state secret, which fools ` +
-        `no one — the whole bar saw, and the whole bar is delighted. (฿${G.money} left.)`);
+      _say(`฿${_num(px.vits)} changes hands with the discretion of a state secret, which fools ` +
+        `no one — the whole bar saw, and the whole bar is delighted. (฿${_num(G.money)} left.)`);
       _say("(You now have the packet of 'vitamins'. The hostesses will NEVER let this go.)", "dim");
       _addHappy(1);
     } else {
@@ -1296,17 +1296,17 @@ const _ENC = {
       G.pendingEnc = "bfhop";
       _encPrompt(
         [`Her friend's bar swallows an hour. The drinks arrive in pairs without ` +
-          `being ordered — hers at lady-drink rates, naturally — and ฿${round} ` +
+          `being ordered — hers at lady-drink rates, naturally — and ฿${_num(round)} ` +
           `leaves quietly. (${gn} and the cashier share a look you're not ` +
           "supposed to price.) Then, sweetly: “One more bar, na? My OTHER " +
-          `friend—” (฿${G.money} left.)`, "alert"],
+          `friend—” (฿${_num(G.money)} left.)`, "alert"],
         ["(YES, one more · NO — enough detours.)", "dim"]);
       return;
     }
     // second yes (or broke): the tour ends the way tours end
     G.bfSeq = null;
     G.bfIncident = { id: seq.id, room: seq.room || G.room, kind: "barhop", fine: seq.fine, day: G.day };
-    _say(`Another bar, another pair of unordered drinks, another ฿${round} — ` +
+    _say(`Another bar, another pair of unordered drinks, another ฿${_num(round)} — ` +
       "and somewhere in the third round of hellos the evening's centre of " +
       "gravity quietly stops being you. By the time you surface, " +
       `${gn} is “mao mak mak, tilac — cannot boom boom,” and asleep before ` +
@@ -1337,9 +1337,9 @@ const _ENC = {
     _say("Walking Street receives the three of you — then four of you — like a " +
       "tide taking back a beach. The friends are funny, ferocious, and " +
       `magnificently thirsty; the bills arrive addressed to you by unspoken ` +
-      `treaty, ฿${bill} in tequila rounds and lady drinks for ladies who are ` +
+      `treaty, ฿${_num(bill)} in tequila rounds and lady drinks for ladies who are ` +
       "not, tonight, working for anyone but themselves. It is, in fairness, a " +
-      `great party. (฿${G.money} left.)`, "alert");
+      `great party. (฿${_num(G.money)} left.)`, "alert");
     _addHappy(2);
     _say(`It ends the way the rail could have told you it ends: ${gn}, glorious ` +
       "and sideways, “mao maaaak mak, tilac,” asleep in the taxi with her " +
@@ -1362,9 +1362,9 @@ const _ENC = {
       const tip = Math.min(TONIC_PRICE, G.money); G.money -= tip;
       _say(`"เท่าไหร่?" you ask, flat, wallet already out. The whole warm patter — the free ` +
         `sample, the friendly cousin, the VIP course — has nowhere to go against a man who just ` +
-        `wants the number and will pay it. He names ฿${TONIC_PRICE}, you pay ฿${tip}, take the one ` +
+        `wants the number and will pay it. He names ฿${_num(TONIC_PRICE)}, you pay ฿${_num(tip)}, take the one ` +
         `honest bottle, and you're back on Beach Road before any side-soi could open. "You not ` +
-        `new," he says, almost fond. (฿${G.money} left.)`, "");
+        `new," he says, almost fond. (฿${_num(G.money)} left.)`, "");
       G.itemLoc.hair_tonic = "inventory";
       _addHappy(1);
       return;
@@ -1388,16 +1388,16 @@ const _ENC = {
     // The ฿99 street bottle — the soft, "harmless" version that never needed a shop.
     if (/yes|buy|ok|sure|deal|take it|fine|bottle|ninety|99|tonic/.test(input)) {
       if (G.money < TONIC_PRICE) {
-        _say(`You turn out your pockets: ฿${G.money}. He closes the briefcase with ` +
+        _say(`You turn out your pockets: ฿${_num(G.money)}. He closes the briefcase with ` +
           "the quiet disappointment of a man who has badly misjudged his mark, " +
           "and evaporates.");
       } else {
         G.money -= TONIC_PRICE;
         G.itemLoc.hair_tonic = "inventory";
-        _say(`Somehow — you will replay this moment for years — you hand over ฿${TONIC_PRICE} ` +
+        _say(`Somehow — you will replay this moment for years — you hand over ฿${_num(TONIC_PRICE)} ` +
           "and receive one brown bottle. He shakes your hand with both of his, " +
           "wishes your family long life, and is gone before the receipt (there is " +
-          `no receipt) hits the ground. (฿${G.money} left.)`);
+          `no receipt) hits the ground. (฿${_num(G.money)} left.)`);
         _say("(You now have the bottle of hair tonic.)", "dim");
         _addHappy(-1);
       }
@@ -1419,9 +1419,9 @@ const _ENC = {
       const tip = Math.min(FORTUNE_READ, G.money); G.money -= tip;
       G.itemLoc.red_string = "inventory"; G.itemLoc.lucky_number = "inventory";   // the string and the number are on you now (Malcolm, round 59)
       _say(`"เท่าไหร่?" you ask, before he can loop the red string on. He reads your palm for the ` +
-        `฿${FORTUNE_READ} it actually costs, scrawls the "lucky number, keep always" — and there is ` +
-        `no dark spirit, no cleansing, no ฿${FORTUNE_RITUAL} ritual, because you closed the account ` +
-        `before he could open it. "Bad luck no follow you," he says, disappointed. (฿${G.money} left.)`, "");
+        `฿${_num(FORTUNE_READ)} it actually costs, scrawls the "lucky number, keep always" — and there is ` +
+        `no dark spirit, no cleansing, no ฿${_num(FORTUNE_RITUAL)} ritual, because you closed the account ` +
+        `before he could open it. "Bad luck no follow you," he says, disappointed. (฿${_num(G.money)} left.)`, "");
       _addHappy(1);
       return;
     }
@@ -1436,7 +1436,7 @@ const _ENC = {
     if (/^(?:read|yes|yeah|ok|okay|sure|palm|fine|199|sit|deal|hand|go on|why not)\b/.test(input) &&
         !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
       if (G.money < FORTUNE_READ) {
-        _say(`He turns your empty palm over, reads the ฿${G.money} future written ` +
+        _say(`He turns your empty palm over, reads the ฿${_num(G.money)} future written ` +
           "there instantly, and is gone before you can close your hand.");
         return;
       }
@@ -1446,7 +1446,7 @@ const _ENC = {
       // the payment is said once; only the DEMAND is the prompt a reload redraws —
       // "You hand over ฿199" replayed on continue read as a second charge (Malcolm, round 59)
       G.itemLoc.red_string = "inventory"; G.itemLoc.lucky_number = "inventory";   // the string and the number are on you now (Malcolm, round 59)
-      _say(`You hand over ฿${FORTUNE_READ}. He loops the red string around your wrist, ` +
+      _say(`You hand over ฿${_num(FORTUNE_READ)}. He loops the red string around your wrist, ` +
         "cradles your palm, hums, and writes a number on a scrap of paper — “your " +
         "lucky number, keep always.”", "dim");
       _encPrompt(
@@ -1454,8 +1454,8 @@ const _ENC = {
           "enough, friend. The dark spirit is strong. Must do cleansing — incense, " +
           "prayer, full ritual.” He writes a second number under the first. It has " +
           "four figures. A hand settles warm and heavy on your shoulder, and two more " +
-          `robed men have drifted in at the edge of the lamplight. (฿${G.money} left.)`, "alert"],
-        [`(PAY the ฿${FORTUNE_RITUAL} “cleansing”, or refuse and try to LEAVE.)`, "dim"]);
+          `robed men have drifted in at the edge of the lamplight. (฿${_num(G.money)} left.)`, "alert"],
+        [`(PAY the ฿${_num(FORTUNE_RITUAL)} “cleansing”, or refuse and try to LEAVE.)`, "dim"]);
       return;
     }
     // You wave him off before he even starts.
@@ -1483,7 +1483,7 @@ const _ENC = {
       return;
     }
     if (G.money < BOOK_PRICE) {
-      _say(`You do the sums — ฿${BOOK_PRICE} you do not have — and type the saddest ` +
+      _say(`You do the sums — ฿${_num(BOOK_PRICE)} you do not have — and type the saddest ` +
         "three words in Pattaya: “maybe next time.” Read at once. Never answered.");
       return;
     }
@@ -1493,7 +1493,7 @@ const _ENC = {
       G.money -= BOOK_PRICE;
       _say(`Forty minutes later she is at the door and — for once — she is exactly ` +
         "the photos. Better, even: funny, unhurried, delighted by your terrible " +
-        `Thai. Some nights the app pays out, and it pays out like this. (฿${G.money} left.)`, "win");
+        `Thai. Some nights the app pays out, and it pays out like this. (฿${_num(G.money)} left.)`, "win");
       if (G.room === _hotelRoomId()) _joinerFee();
       _conquestHappy(8);
       return;
@@ -1507,7 +1507,7 @@ const _ENC = {
         "heavier, older, the cute face filtered off somebody else — and in the " +
         "heels a clear head taller than the profile ever admitted. She is already " +
         "stepping past you into the room.", "alert"],
-      [`(STAY — go through with it, ฿${BOOK_PRICE} — or SEND her off with a token.)`, "dim"]);
+      [`(STAY — go through with it, ฿${_num(BOOK_PRICE)} — or SEND her off with a token.)`, "dim"]);
   },
 
   clubpickup(input) { return _clubpickup(input); },
@@ -1722,9 +1722,9 @@ function _freegift(input) {
   if (price) {
     const tip = Math.min(GIFT_TIP, G.money); G.money -= tip;
     _say(`“Tao rai?” you say, already reaching for your wallet. Something shifts in her face — respect, ` +
-      `almost disappointment. ฿${tip} changes hands, the amulet is yours clean, the account closed before ` + ((G.itemLoc.street_amulet = "inventory"), "") +
+      `almost disappointment. ฿${_num(tip)} changes hands, the amulet is yours clean, the account closed before ` + ((G.itemLoc.street_amulet = "inventory"), "") +
       "it ever opened. “You not new here,” she says, half a smile, and drifts off toward easier prey. " +
-      `(฿${G.money} left.)`, "");
+      `(฿${_num(G.money)} left.)`, "");
     _addHappy(1);
     return;
   }
@@ -1737,9 +1737,9 @@ function _freegift(input) {
   const owed = Math.min(GIFT_DEBT, G.money); G.money -= owed;
   _say("“Thank you,” you say, and she ties it around your wrist, delighted — and just like that you are " +
     "friends, which is the whole problem. The beam doesn't drop so much as sharpen. “My friend, you so " +
-    `kind — my mother, she sick, the hospital…” and somehow you are ฿${owed} lighter, holding a ฿20 ` +
+    `kind — my mother, she sick, the hospital…” and somehow you are ฿${_num(owed)} lighter, holding a ฿20 ` +
     "amulet and a lesson: the instant you took the 'free' thing, you signed for it. (Next time — tao rai: " +
-    `ask the price, pay it, close the tab.) (฿${G.money} left.)`, "alert");
+    `ask the price, pay it, close the tab.) (฿${_num(G.money)} left.)`, "alert");
   _addHappy(-1);
 }
 
@@ -1752,18 +1752,18 @@ function _catfishDoor(input) {
   if (stay && G.money >= BOOK_PRICE) {
     G.money -= BOOK_PRICE;
     _say(`You are a coward about doorway confrontations, so you don't have one. ` +
-      `฿${BOOK_PRICE}, the lights stay low, and you spend the whole time quietly ` +
+      `฿${_num(BOOK_PRICE)}, the lights stay low, and you spend the whole time quietly ` +
       "editing her back into the photograph in your head. It is fine. Fine is " +
-      `precisely the word. (฿${G.money} left.)`, "");
+      `precisely the word. (฿${_num(G.money)} left.)`, "");
     if (G.room === _hotelRoomId()) _joinerFee();
     _conquestHappy(2);
     return;
   }
   const tip = Math.min(300, G.money);
   G.money -= tip;
-  _say(`You do the Pattaya-polite thing: ฿${tip} “for the taxi, sorry, I not feel ` +
+  _say(`You do the Pattaya-polite thing: ฿${_num(tip)} “for the taxi, sorry, I not feel ` +
     "good tonight,” a wai, and the door. She takes it without a flicker — she has " +
-    `heard it before, from better liars — and is gone. (฿${G.money} left.)`, "dim");
+    `heard it before, from better liars — and is gone. (฿${_num(G.money)} left.)`, "dim");
   _addHappy(-1);
 }
 
@@ -1793,7 +1793,7 @@ function _clubpickup(input) {
   _encPrompt(
     ["Morning. She does her lipstick at the mirror, clicks the compact shut, swings a little bag onto her shoulder, and taps two fingers on the dresser, entirely casual. “Okay baby, I go now. You give " +
       "me 2,000 baht for taxi.”", "alert"],
-    [`(PAY the ฿${CLUB_TAXI} · offer the ฿80 BOLT instead · REFUSE)`, "dim"]);
+    [`(PAY the ฿${_num(CLUB_TAXI)} · offer the ฿80 BOLT instead · REFUSE)`, "dim"]);
 }
 
 function _taxiAsk(input) {
@@ -1802,7 +1802,7 @@ function _taxiAsk(input) {
   if (!bolt && !refuse && G.money >= CLUB_TAXI) {
     // pay smiling — the fantasy stays intact; you're a "good man" (a returning account)
     G.money -= CLUB_TAXI;
-    _say(`You peel off two notes. The instant they leave your hand the girlfriend of last night is back like a light switched on — the whole-face smile, a quick hug. “Khop khun na! You look after me. Tonight again?” And she's gone, leaving you to work out, in the quiet, that the free night ended at nine and you have just paid the standing rate. (฿${G.money} left.)`, "");
+    _say(`You peel off two notes. The instant they leave your hand the girlfriend of last night is back like a light switched on — the whole-face smile, a quick hug. “Khop khun na! You look after me. Tonight again?” And she's gone, leaving you to work out, in the quiet, that the free night ended at nine and you have just paid the standing rate. (฿${_num(G.money)} left.)`, "");
     _addHappy(1);
     return;
   }
@@ -1811,9 +1811,9 @@ function _taxiAsk(input) {
     const tip = Math.min(150, G.money); G.money -= tip;
     _say(`“It's an 80-baht Bolt,” you say, reaching for your phone — “where do you actually live?” ` +
       `The room changes temperature. The girl who fell asleep on your arm is replaced, without a transition, ` +
-      `by somebody reading a bill she has decided not to argue. She takes the ฿${tip} you end up pressing on ` +
+      `by somebody reading a bill she has decided not to argue. She takes the ฿${_num(tip)} you end up pressing on ` +
       "her without a flicker, files you under 'amateur', and is gone — no kiss, no “tonight”, no next " +
-      `time. You saved ฿${CLUB_TAXI - tip} and something you can't name. (฿${G.money} left.)`, "alert");
+      `time. You saved ฿${_num(CLUB_TAXI - tip)} and something you can't name. (฿${_num(G.money)} left.)`, "alert");
     _addHappy(-1);
     return;
   }
@@ -1847,9 +1847,9 @@ function _curseRitual(input) {
     G.money -= took;
     G.curseOwed = (G.curseOwed || 0) + took;
     _say(`Out comes the incense, then a little brass bowl, then a chant that lasts ` +
-      `exactly as long as it takes to count your notes. ฿${took} lifts the curse — ` +
+      `exactly as long as it takes to count your notes. ฿${_num(took)} lifts the curse — ` +
       "and the grave concern switches off the instant the cash is folded away. “Now " +
-      `you very lucky, friend. Very lucky.” (฿${G.money} left.)`, "alert");
+      `you very lucky, friend. Very lucky.” (฿${_num(G.money)} left.)`, "alert");
     _say(_outHint, "dim");
     _addHappy(-3);
     return;
@@ -1877,8 +1877,8 @@ function _curseRitual(input) {
     G.curseOwed = (G.curseOwed || 0) + took;
     _say(`The hand on your shoulder tightens by one honest degree. “Small merit ` +
       "then, friend — for the temple, for your luck. Then you go.” The other two " +
-      `have quietly closed the gap. You drop ฿${took} in the brass bowl to buy back ` +
-      `your evening, and the pressure releases you into the lamplight. (฿${G.money} left.)`, "alert");
+      `have quietly closed the gap. You drop ฿${_num(took)} in the brass bowl to buy back ` +
+      `your evening, and the pressure releases you into the lamplight. (฿${_num(G.money)} left.)`, "alert");
     _say(_outHint, "dim");
     _addHappy(-2);
   }
@@ -1908,9 +1908,9 @@ function _tonicShop(input) {
     G.tonicOwed = (G.tonicOwed || 0) + took;
     G.itemLoc.hair_tonic = "inventory";
     _say(`You cave. Of course you cave — everyone caves, that is the entire ` +
-      `business model. ฿${took} changes hands for a carrier bag of “premium” bottles ` +
+      `business model. ฿${_num(took)} changes hands for a carrier bag of “premium” bottles ` +
       "you will never open, and the smiles switch off the instant the cash is " +
-      `counted. The bead curtain spits you back onto Beach Road. (฿${G.money} left.)`, "alert");
+      `counted. The bead curtain spits you back onto Beach Road. (฿${_num(G.money)} left.)`, "alert");
     _say(_outHint, "dim");
     _addHappy(-3);
     return;
@@ -1932,8 +1932,8 @@ function _tonicShop(input) {
     G.itemLoc.hair_tonic = "inventory";
     _say("You raise your voice, loudly, and step toward the curtain like you mean " +
       "it — and a Thai security guard from the shop next door glances in. The " +
-      `temperature drops just enough. You buy ONE bottle to save everyone's face — ฿${took} — ` +
-      `and walk out on your own feet, pulse hammering. (฿${G.money} left.)`);
+      `temperature drops just enough. You buy ONE bottle to save everyone's face — ฿${_num(took)} — ` +
+      `and walk out on your own feet, pulse hammering. (฿${_num(G.money)} left.)`);
     _addHappy(-1);
   } else {
     const took = Math.min(TONIC_SHAKEDOWN, G.money);
@@ -1943,8 +1943,8 @@ function _tonicShop(input) {
     _say("A shoulder settles against the doorframe. A hand lands on your arm, " +
       "friendly as a handshake and just as impossible to leave. “One box, big " +
       "discount, then you go, my friend. Then you go.” The three smiles do not " +
-      `reach anyone's eyes. You pay ฿${took} to become their friend again, and the ` +
-      `arm releases you into the soi. (฿${G.money} left.)`, "alert");
+      `reach anyone's eyes. You pay ฿${_num(took)} to become their friend again, and the ` +
+      `arm releases you into the soi. (฿${_num(G.money)} left.)`, "alert");
     _say(_outHint, "dim");
     _addHappy(-2);
   }

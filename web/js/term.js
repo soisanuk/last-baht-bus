@@ -460,8 +460,10 @@ const _term = (() => {
       }
       if (k === "bar") return [{ t: "enter " + v, c: "enter " + lo, go: true }];
       if (k === "item") {
-        let id = null;
-        for (const [iid, it] of Object.entries(ITEMS)) if (it.name === v) id = iid;
+        // two items can share a name (two empty Singha bottles): the one HERE, then the one in your
+        // pocket — the last one in the table offered TAKE only on the promenade (Yusuf, round 68)
+        const same = Object.keys(ITEMS).filter(iid => ITEMS[iid].name === v);
+        const id = same.find(iid => G.itemLoc[iid] === G.room) || same.find(iid => G.itemLoc[iid] === "inventory") || same[0] || null;
         const loc = id ? G.itemLoc[id] : null;
         if (loc === G.room) a.push({ t: "take", c: "take " + lo, go: true });
         a.push({ t: "examine", c: "x " + lo, go: true });

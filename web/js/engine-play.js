@@ -42,7 +42,7 @@ function _gameHostess(pref) {
 // Broke players play "for sanuk" — no baht either way, pride still on the line.
 function _takeStake(want) {
   const stake = Math.min(want, G.money);
-  if (stake > 0 && stake < want) _say(`(Short stake — she takes what's there: ฿${stake} against the table's ฿${want}.)`, "dim");
+  if (stake > 0 && stake < want) _say(`(Short stake — she takes what's there: ฿${_num(stake)} against the table's ฿${_num(want)}.)`, "dim");
   G.money -= stake;
   return stake;
 }
@@ -135,7 +135,7 @@ function _startC4(want, vs) {
   const cap = depth >= 8 ? 500 : depth >= 6 ? 200 : 20;
   if (want && want > cap) {
     _say(`${_ucfirst(name)} looks at the money and laughs, not unkindly. "Too much, tilac. ` +
-      `My table is ฿${cap}." She is not negotiating; a bigger board is a bigger opponent.`, "dim");
+      `My table is ฿${_num(cap)}." She is not negotiating; a bigger board is a bigger opponent.`, "dim");
   }
   const stake = _takeStake(Math.min(want || C4_STAKE, cap));
   G.game = { type: "c4", board: c4New(), opp: name, oppId: id, depth, stake };
@@ -1070,7 +1070,7 @@ function _c4Input(input) {
   if (c4Win(g.board) === 2) {
     if (g.stake && typeof _atOwnBar === "function" && _atOwnBar() && G.bar) G.bar.cash += g.stake;   // "joins the till" — your own (Marta, round 63)
     _endGame(false, 0, _pickVary(_C4_LOSS, "c4loss")(g.opp, ai + 1) +
-      (g.stake ? ` Your ฿${g.stake} joins the till.` : ""));
+      (g.stake ? ` Your ฿${_num(g.stake)} joins the till.` : ""));
     return;
   }
   if (c4Full(g.board)) {
@@ -1087,7 +1087,7 @@ function _startJackpot(w) {
   const betM = w.match(/\d+/);
   const asked = betM ? parseInt(betM[0], 10) : JP_DEFAULT;
   const want = Math.max(JP_MIN, Math.min(JP_MAX, asked));
-  if (asked > JP_MAX) _say(`(House max on the Jackpot is ฿${JP_MAX} — the rest stays in your pocket.)`, "dim");
+  if (asked > JP_MAX) _say(`(House max on the Jackpot is ฿${_num(JP_MAX)} — the rest stays in your pocket.)`, "dim");
   // Connect 4 honoured "with <name>" and Jackpot silently ignored it, so a man
   // who asked for the mamasan by name got dealt to a floor girl with no comment
   // (Trev, round 44). Dice carry no skill tier — but who shakes the cup at you
@@ -1205,10 +1205,10 @@ function _jpFinish() {
   _say(`${g.opp} takes the cup. ${her.rolls.join(" · ")}.`, "dim");
   if (her.score === 0) {
     _endGame(false, 0, `Every tile down — JACKPOT, hers. The bar erupts. You drink again, ` +
-      `on principle${g.stake ? `, and your ฿${g.stake} stays with the till` : ""}.`);
+      `on principle${g.stake ? `, and your ฿${_num(g.stake)} stays with the till` : ""}.`);
   } else if (her.score < you) {
     _endGame(false, 0, `Her score: ${her.score}. Low wins — she wins.` +
-      (g.stake ? ` Your ฿${g.stake} vanishes into the bra of commerce.` : " Sanuk, they said."));
+      (g.stake ? ` Your ฿${_num(g.stake)} vanishes into the bra of commerce.` : " Sanuk, they said."));
   } else if (her.score > you) {
     _endGame(true, g.stake * 2, `Her score: ${her.score}. Low wins — YOU win. ` +
       `${g.opp} pays up with a wai and the sideways look reserved for lucky farang.`);
@@ -1483,12 +1483,12 @@ function _quizInput(input) {
     _setFlag("quizChamp");
     _say("A PERFECT ROUND. The host demands a bow; the bar demands a speech; the " +
       `board demands your name in chalk. First prize: ฿500 off the till. ` +
-      `(฿${G.money} in pocket.)`, "win");
+      `(฿${_num(G.money)} in pocket.)`, "win");
     _addHappy(5);
   } else if (right === 4) {
     G.money += 200;
     _say(`Second place overall — ฿200 and a round of applause you'll remember ` +
-      `longer than the money. (฿${G.money}.)`, "win");
+      `longer than the money. (฿${_num(G.money)}.)`, "win");
     _addHappy(3);
   } else if (right === 3) {
     G.soc.drunk++;
@@ -1543,7 +1543,7 @@ function _startKiller() {
     return;
   }
   if (G.lastKp && G.lastKp.day === G.day && G.lastKp.room === G.room) { _say("The league's played for tonight — the chalk's wiped and the field has gone back to its beers. Next league night, same table. (PLAY POOL for a frame.)", "dim"); return; }   // the same field, a second entry, a second pot (Marta, round 63)
-  if (G.money < KP_ENTRY) { _say(`Entry's ฿${KP_ENTRY} in the ashtray. You have ฿${G.money}. Spectating is free.`); return; }
+  if (G.money < KP_ENTRY) { _say(`Entry's ฿${_num(KP_ENTRY)} in the ashtray. You have ฿${_num(G.money)}. Spectating is free.`); return; }
   G.money -= KP_ENTRY;
   const field = [];
   const used = new Set();
@@ -1568,7 +1568,7 @@ function _startKiller() {
   // him afterwards (Kevin, round 50). `won` is filled in at the end of the frame.
   G.lastKp = { room: G.room, day: G.day, names: G.game.kp.players.filter(p => p.name !== "You").map(p => p.name), won: false };
   _say("League night. The ashtray fills with hundred-baht notes, the field chalks " +
-    `up, and somebody racks. Five players, three lives each, ฿${G.game.stake} in ` +
+    `up, and somebody racks. Five players, three lives each, ฿${_num(G.game.stake)} in ` +
     "the pot. Pot anything or lose a life; last cue standing takes the lot.");
   _say(kpRender(G.game.kp), "dim");
   _say("(Your shot each round: SHOT (safe, 60%) or POWER (flashy, 45% — glory or " +
@@ -1678,7 +1678,7 @@ function _kpInput(input) {
         G.kpTitle[G.room] = { since: G.day, defended: 0 };
         _crown = " Your name goes up behind the till, in chalk, spelled the way somebody thought it sounded.";
       }
-      _endGame(true, g.stake, `Last cue standing. The pot — ฿${g.stake} — is pushed ` +
+      _endGame(true, g.stake, `Last cue standing. The pot — ฿${_num(g.stake)} — is pushed ` +
         "across the felt with due ceremony, and " +
         ((typeof _tillKeeper === "function" && _tillKeeper(G.room)) ? `${NPCS[_tillKeeper(G.room)].name} rings the bell herself. ` : "the man behind the bar rings the bell himself. ") +
         "League night belongs to you." + _crown);
@@ -1714,7 +1714,7 @@ function _startPool(w) {
   // here wants. Say so, rather than quietly pocketing the difference.
   const askedM = String(w || "").match(/\d+/);
   if (askedM && parseInt(askedM[0], 10) !== POOL_STAKE)
-    _say(`(The table plays for ฿${POOL_STAKE}, same as it always has. Nobody here is ` +
+    _say(`(The table plays for ฿${_num(POOL_STAKE)}, same as it always has. Nobody here is ` +
       "interested in a bigger number — that's a different kind of evening.)", "dim");
   // PLAY POOL WITH <her> — Connect 4 has taken a named opponent since the
   // gambler playtest and pool never did, so Lek's own hello ("You play pool?")
@@ -1749,7 +1749,7 @@ function _poolOppTurn(g) {
   if (g.oppWon) {
     if (!g.stake && G.poolHold) delete G.poolHold[G.room];   // the table goes with the frame
     _endGame(false, 0, `${g.oppName} clears up like it's a chore and rolls the black in ` +
-      `dead-weight. Game over${g.stake ? ` — your ฿${g.stake} slides off the cushion` : ""}.`);
+      `dead-weight. Game over${g.stake ? ` — your ฿${_num(g.stake)} slides off the cushion` : ""}.`);
     return;
   }
   _say(potted === 0 ? `${String(g.oppName).charAt(0).toUpperCase() + String(g.oppName).slice(1)} rattles the jaws and swears softly. Your table.` :
@@ -1785,7 +1785,7 @@ function _poolInput(input) {
       }
       _endGame(true, g.stake * 2, "The black glides in off the cushion like it was " +
         "always going there. You straighten up slowly, because legends move slowly." +
-        (g.stake ? ` ฿${g.stake * 2} from under the cushion.` : "") + _stay);
+        (g.stake ? ` ฿${_num(g.stake * 2)} from under the cushion.` : "") + _stay);
       return;
     }
     case "sink8lose":
@@ -1908,7 +1908,7 @@ function _dartsStatus(g) { _say(`(You: ${g.you} · ${g.oppName}: ${g.opp}.)`, "d
 function _dartsOppTurn(g) {
   if (_dartsFinish(g.opp, g.oppSkill, _rand)) {
     _endGame(false, 0, `${g.oppName} steps to the oche, barely sights it, and buries the double. ` +
-      `Game. ${g.stake ? `Your ฿${g.stake} leaves the shelf.` : `"Bad luck, boss."`}`);
+      `Game. ${g.stake ? `Your ฿${_num(g.stake)} leaves the shelf.` : `"Bad luck, boss."`}`);
     return;
   }
   const { score } = _dartsVisit(g.opp <= 80 ? "steady" : "big", g.oppSkill, _rand);
@@ -1937,7 +1937,7 @@ function _dartsInput(input) {
       _say(`No checkout on ${g.you} — score first: GO BIG or STEADY.`, "dim"); return; }
     if (_dartsFinish(g.you, aim, _rand)) {
       _endGame(true, g.stake * 2, "You call the double, take your time in a suddenly quiet bar, and post it " +
-        `dead centre. ${g.stake ? `฿${g.stake * 2} off the shelf, and a nod from the old boy.` : "The bar erupts. Priceless."}`);
+        `dead centre. ${g.stake ? `฿${_num(g.stake * 2)} off the shelf, and a nod from the old boy.` : "The bar erupts. Priceless."}`);
       return;
     }
     _say(aim < 0.6 ? "The dart sails wide — the arm just isn't yours tonight. No score." :
@@ -1969,9 +1969,9 @@ function _endGame(won, payout, text) {
   if (G.game) G.lastGame = { type: G.game.type, stake: G.game.stake || 0, room: G.room }; // REMATCH / DOUBLE
   G.game = null;
   _say(text, won === false ? "alert" : "win");
-  if (won === true && payout) _say(`(฿${G.money} in pocket.)`, "dim");
+  if (won === true && payout) _say(`(฿${_num(G.money)} in pocket.)`, "dim");
   // a push hands the stake back too, and said nothing (the soak's silent-money check, round 57)
-  else if (won === null && payout) _say(`(Your ฿${payout} back — ฿${G.money} in pocket.)`, "dim");
+  else if (won === null && payout) _say(`(Your ฿${_num(payout)} back — ฿${_num(G.money)} in pocket.)`, "dim");
   if (won === true) _addHappy(3);
   else if (won === false) _addHappy(-1);
 }
@@ -1983,7 +1983,7 @@ function _abandonGame(why) {
   const g = G.game;
   G.game = null;
   _say(`(${why} — the ${g.type === "c4" ? "Connect 4" : g.type === "jp" ? "Jackpot" : g.type === "quiz" ? "quiz" : "game"} dies with the stool you left` +
-    (g.stake ? `; the ฿${g.stake} stays with the house` : "") + ".)", "dim");
+    (g.stake ? `; the ฿${_num(g.stake)} stays with the house` : "") + ".)", "dim");
 }
 const _C4_LOSS = [
   (o, c) => `${o} drops column ${c} without breaking eye contact. Four in a row. She was three moves ahead the whole time, and you both know it.`,
@@ -2004,7 +2004,7 @@ function _gameQuit() {
     _describeRoom(true);
     return;
   }
-  _say(g.stake ? `You concede. The stake stays where stakes stay. (฿${G.money} left.)` :
+  _say(g.stake ? `You concede. The stake stays where stakes stay. (฿${_num(G.money)} left.)` :
     "You concede with what dignity remains.");
 }
 
@@ -2674,7 +2674,7 @@ function _doSocial(kind, targetWord) {
       _say(`You attempt it. ${name} removes your hand, folds it carefully back ` +
         "into your own pocket, and explains — kindly, the way you'd explain to a " +
         "child — what happens to farang who try that on the street. " +
-        (lost ? `Somewhere in the lesson, ฿${lost} becomes a tuition fee.` :
+        (lost ? `Somewhere in the lesson, ฿${_num(lost)} becomes a tuition fee.` :
           "The lesson is free, this once."), "alert");
       return;
     }
@@ -2804,7 +2804,7 @@ function _doSocial(kind, targetWord) {
   if (kind === "fondle" && tier === 4 && G.money >= _ladyPrice()) {
     G.money -= _ladyPrice();
     _addBond(id, 1);
-    _say(`(-฿${_ladyPrice()} for her drink. ฿${G.money} left, and worth it.)`, "dim");
+    _say(`(-฿${_num(_ladyPrice())} for her drink. ฿${_num(G.money)} left, and worth it.)`, "dim");
   }
 }
 
@@ -3024,7 +3024,7 @@ function _doBell() {
     : bt === "soi6" ? _BELL_SOI6 : bt === "gogo" ? _BELL_GOGO
     : _BELL_BEER; // beer bars, and any other bar-type, buy a round for the staff
   const _solo = _staffAt(G.room).length === 1 && bt !== "gogo";
-  _say(`${_pickVary(_solo ? _BELL_SOLO : pool, _solo ? "bellsolo" : "bell:" + bt)} (-฿${price}, ฿${G.money} left — reign while it lasts.)`);
+  _say(`${_pickVary(_solo ? _BELL_SOLO : pool, _solo ? "bellsolo" : "bell:" + bt)} (-฿${_num(price)}, ฿${_num(G.money)} left — reign while it lasts.)`);
   if (pool === _BELL_BEER) _compDrink(1);      // every line in that pool hands one back across the rail
   const rings = G.soc.bells[r];
   if (rings === 2) {
@@ -3188,8 +3188,8 @@ function _doPatron() {
     const rate = _fxRates()[code];
     const golden = Math.round(rate * 1.25);
     _say(`The regular taps his phone calculator like it owes him money. ` +
-      `“฿${rate}. That's what ${name} gets you now — ${sym}1, ฿${rate}. When I ` +
-      `moved out here it was ฿${golden}. THIS TOWN USED TO BE CHEAP.” The girls ` +
+      `“฿${_num(rate)}. That's what ${name} gets you now — ${sym}1, ฿${_num(rate)}. When I ` +
+      `moved out here it was ฿${_num(golden)}. THIS TOWN USED TO BE CHEAP.” The girls ` +
       `mouth the speech along with him, word for word, nightly for nine years.`);
     return;
   }
@@ -3711,7 +3711,7 @@ function _ownBarTalk(id, topic) {
         n => `${n} shrugs, pleased and a little embarrassed about being pleased. "Flat money, no quota. Quiet night, same money. First time in this town I know what I get on the first." She taps the bar. "Other bar, the girls ask me how. I say, ask my boss."`,
         n => `"Salary?" ${n} says it carefully, like a word she is still trying on. "Good for me, boss. Not so good for you, maybe, on a quiet month — I can count." A beat. "I stay. That is what it buys you."`,
       ] : [
-        n => `${n} fans the chits in her phone case without being asked. "The cut, boss. ฿${LADY_CUT} a drink, same as every bar. Full rail, good month. Thin rail—" she closes the case "—thin month. You know that. You set the board."`,
+        n => `${n} fans the chits in her phone case without being asked. "The cut, boss. ฿${_num(LADY_CUT)} a drink, same as every bar. Full rail, good month. Thin rail—" she closes the case "—thin month. You know that. You set the board."`,
         n => `"Commission." ${n} does the arithmetic on her fingers, quickly, and stops. "Same as the trade. Is fair when the room is full. When it is not full, is fair for the bar." She says it without heat. "I count the stools. Everybody count the stools."`,
       ]) : role === "mamasan" ? (sal ? [
         n => `${n} nods at the floor. "Flat money suits them. It suits me — nobody cries over a quiet Tuesday. It does not suit the wages line on a wet one, and you will see that before I do."`,
@@ -3720,7 +3720,7 @@ function _ownBarTalk(id, topic) {
         n => `${n} flicks a nail at the board. "They live on the cut, boss. A full rail is their money; a dear board is your money and their quiet month. Nobody has to say it. They can all count."`,
         n => `"The trade's terms." ${n} shrugs. "Base and the drinks. It is how every bar on this soi pays, and it is why every girl on this soi knows what the bar across the road pays."`,
       ]) : (sal ? [
-        n => `${n} turns the wages line round for you. "Flat salary, ฿${BAR_SALARY_NIGHT} a night on top, every night. I write it whether they sold a drink or not." She does not editorialise. She never does.`,
+        n => `${n} turns the wages line round for you. "Flat salary, ฿${_num(BAR_SALARY_NIGHT)} a night on top, every night. I write it whether they sold a drink or not." She does not editorialise. She never does.`,
       ] : [
         n => `${n} squares the chits. "Base and the cut — ฿${_num(BAR_WAGES)} a night for the floor before a drink is sold, and the cut on what they sold, end of the month. A thin board is a thin envelope; they open it in front of me."`,   // no figure (Hal, round 62)
       ]), "ownterms:" + role)(NPCS[id].name));
@@ -3816,20 +3816,20 @@ const _OTHER_LEDGER = {
     (n) => `The next lady drink that goes on your chit, ${n} does a thing you have seen her do twenty ` +
       `times without once reading it: she takes the chit, folds it, and tucks it into the band of ` +
       `her phone case with the others. Not a keepsake — a tally. "For counting, end of month." ` +
-      `She fans them like a small hand of cards, unembarrassed. "This one, I get ฿${LADY_CUT}." ` +
-      `The drink was ฿${_ladyPrice()}. She says the difference like a sum she checked years ago, and ` +
+      `She fans them like a small hand of cards, unembarrassed. "This one, I get ฿${_num(LADY_CUT)}." ` +
+      `The drink was ฿${_num(_ladyPrice())}. She says the difference like a sum she checked years ago, and ` +
       `goes back to the story she was telling.`,
     (n) => `"You want to know something funny?" ${n} turns the chit over so you can see the bar's ` +
       `stamp. "Farang always say — I buy you drink, expensive one, good for you." She taps the ` +
-      `stamp, once. "Bar take most. I take ฿${LADY_CUT}." No complaint in it at all; she is ` +
+      `stamp, once. "Bar take most. I take ฿${_num(LADY_CUT)}." No complaint in it at all; she is ` +
       `explaining a system she lives inside, to a man who has been inside it for a ` +
       `week. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
     (n) => (_isGogo() ? `${n} makes you look at her drink when the waitress sets it down, because she tells you to. Ice to the top, ` +
       `a short pour, tonic over it until the colour went.` : `${n} makes you watch the barman build her drink, because she tells you to. Ice to the top, ` +
       `a short pour, tonic over it until the colour goes.`) + ` "Lady drink," she says, and turns the glass ` +
       `so the ice knocks. "Weak one. Must be." She has eight of these in her if the night goes well, ` +
-      `and a girl who cannot take eight is a girl who goes home early. It costs ฿${_ladyPrice()}, ` +
-      `of which ฿${LADY_CUT} is hers — she says it the way she'd tell you which songthaew goes to ` +
+      `and a girl who cannot take eight is a girl who goes home early. It costs ฿${_num(_ladyPrice())}, ` +
+      `of which ฿${_num(LADY_CUT)} is hers — she says it the way she'd tell you which songthaew goes to ` +
       `Naklua, and asks whether you want another one.`,
   ],
   // tier 2 — the cost of you. Being liked is expensive: the seat she keeps is
@@ -3863,8 +3863,8 @@ const _OTHER_LEDGER = {
   // the figures the man across the table is one line item inside.
   3: [
     (n) => `${n} shows you her phone: a bank app, an amount, a date. "Every month, same day." ` +
-      `฿${HOME_SEND} goes north — her mother, somebody's school fees, a roof somebody keeps meaning ` +
-      `to finish. The bar's salary is ฿${BAR_SALARY}; the rest is drinks, and drinks are you and ` +
+      `฿${_num(HOME_SEND)} goes north — her mother, somebody's school fees, a roof somebody keeps meaning ` +
+      `to finish. The bar's salary is ฿${_num(BAR_SALARY)}; the rest is drinks, and drinks are you and ` +
       `men like you. "So." She locks the {{phone}} and puts it face-down, the way she does. "Now you ` +
       `know all my number. Nobody know all my number." It is not said as a burden. It is said as ` +
       `an accounting, handed over.`,
@@ -3880,7 +3880,7 @@ const _OTHER_LEDGER = {
       `time, professionally, and then turns back to you and picks the sentence up exactly where ` +
       `she left it.`,
     (n) => `You ask where she stays and get a longer answer than the question earned: a room off ` +
-      `Buakhao, ฿${ROOM_RENT} her share of it, two other girls, a rice cooker, one fan that works. ` +
+      `Buakhao, ฿${_num(ROOM_RENT)} her share of it, two other girls, a rice cooker, one fan that works. ` +
       `When the bar is near enough for walking she walks it, at three in the morning, rather than ` +
       `pay the late fare — and says so without a flicker, because the late fare is the late fare ` +
       `and she can count. "Is not far." She considers that. "Is far when rain."`,
@@ -3893,12 +3893,12 @@ const _OTHER_LEDGER = {
 // the drinks-only girl's tier-one reveal: the cut is the same, the conclusion is hers
 const _LEDGER_DRINKS_ONLY = [
   (n) => `${n} folds your chit into her phone case with the others, and when you look at the stack ` +
-    `she fans it for you. "This is my money. ฿${LADY_CUT}, each." She counts, lips moving, stops. ` +
+    `she fans it for you. "This is my money. ฿${_num(LADY_CUT)}, each." She counts, lips moving, stops. ` +
     `"Eight tonight. Other girl, she go with customer, she get more — one time. Then he go home, ` +
     `and she sit here same like me, with no chits." She taps the stack. "I like the small money that ` +
     `come every night. Mama not like it. Mama not sit here."`,
   (n) => `"You know why I not go?" ${n} turns the chit so you can see the stamp. "Barfine, the bar take. ` +
-    `Lady money, I take, one time. Lady DRINK, I take ฿${LADY_CUT} — every time." She lifts the glass. ` +
+    `Lady money, I take, one time. Lady DRINK, I take ฿${_num(LADY_CUT)} — every time." She lifts the glass. ` +
     `"Every time is more than one time. I can count. Mama can count too, but mama count different ` +
     `things."`,
 ]
@@ -4672,7 +4672,8 @@ function _nightSnapshot() {
     atm: G.atmTotal || 0,
     atmFees: G.atmFees || 0,
     bank: G.bank || 0,   // so the morning can name what ARRIVED in the account (Marguerite, round 67)
-    loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0,
+    loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
+    nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
@@ -4722,22 +4723,31 @@ function _morningLedger() {
   // and is named: "down ฿825" ignored Candy's ฿300 recce (Marguerite, round 67)
   const sentNight = (G.sentTotal || 0) - (b.sentB != null ? b.sentB : (G.sentTotal || 0));
   const received = b.bank != null ? Math.max(0, ((G.bank || 0) - b.bank) + drawn + fees + sentNight) : 0;
-  const spent = b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed - received;
+  // a loan is net on both sides: the principal is not income coming in, and paying it back is
+  // not spending going out — only what is paid past the principal is (Clifford, round 68)
+  const since = (k, now) => now - (b[k] != null ? b[k] : now);
+  const nontBn = since("nontB", G.nontBorrowed || 0);
+  const prinN = since("loanP", G.loanPrin || 0), nontPrinN = since("nontP", G.nontPrin || 0);
+  const nontCutN = since("nontCut", G.nontCut || 0), nontOutN = since("nontOut", G.nontOut || 0);
+  const spent = b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed + nontBn - prinN - nontPrinN + nontCutN - received;
   // THE FIGURE IS POCKET AND ACCOUNT TOGETHER, and on a night the machine was used
   // it has to SAY so: the assertion auditor (2026-09-14) withdrew ฿2,000, paid ฿400
   // rent, watched his pocket go UP ฿1,600 and was told "down ฿700" — which is
   // right (rent plus the ฿300 fee, the draw not being income) and reads as a lie
   // to anybody watching the notes in his hand. The arithmetic was never wrong; the
   // sentence was unsupported by its own wording.
-  const via = drawn > 0 ? ` (across pocket and account \u2014 \u0e3f${_num(drawn)} came out of the machine` +
-    (fees > 0 ? `, \u0e3f${_num(fees)} of that in fees` : "") + ")" : "";
+  const machine = drawn - nontOutN, _via = [];
+  if (machine > 0) _via.push(`\u0e3f${_num(machine)} came out of the machine` + (fees > 0 ? `, \u0e3f${_num(fees)} of that in fees` : ""));
+  if (nontOutN > 0) _via.push(`\u0e3f${_num(nontOutN)} through Nont, \u0e3f${_num(nontCutN)} his cut`);
+  else if (nontCutN > 0) _via.push(`Nont's \u0e3f${_num(nontCutN)} cut, the rest held in his account overnight`);
+  const via = _via.length ? ` (across pocket and account \u2014 ${_via.join("; ")})` : "";
   // The safe tag goes on the ledger that actually netted the money, which is the
   // NEXT ledger after it landed — keyed on the day it fired a morning late for a
   // man who slept the wallet night in his own room, because the safe pays at that
   // wake BEFORE the ledger runs (Tomasz and Joan, round 54)
   const safeIn = !!G.safeMoneyLedger; G.safeMoneyLedger = false;
   const walletIn = !!G.walletLedger; G.walletLedger = false;   // the wallet's ฿500 netted in unnamed (Terence, round 57)
-  const safeTag = safeIn ? " (with the room safe's stash netted in)" : walletIn ? ` (with the wallet's ฿${WALLET_CASH} back in it)` : "";   // it was never Madam Oy's money (Rolf, round 55)
+  const safeTag = safeIn ? " (with the room safe's stash netted in)" : walletIn ? ` (with the wallet's ฿${_num(WALLET_CASH)} back in it)` : "";   // it was never Madam Oy's money (Rolf, round 55)
   if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via + safeTag);   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via + safeTag);
   if (tillDraw > 0) bits.push("\u0e3f" + _num(tillDraw) + " drawn from your own till");
@@ -4746,11 +4756,11 @@ function _morningLedger() {
   const topUp = (G.bar && G.bar.pocketNight) || 0;   // only the till's shortfall — rent and the note stay on the bar's page
   if (topUp > 0) bits.push("\u0e3f" + _num(topUp) + " of your own money into the till when it went under");
   if (borrowed > 0) bits.push("\u0e3f" + _num(borrowed) + " borrowed from Nira \u2014 a debt, not a win");
-  if (repaid > 0) bits.push("\u0e3f" + _num(repaid) + " repaid to Nira");
+  if (repaid > 0) bits.push("\u0e3f" + _num(repaid) + " repaid to Nira" + (repaid - prinN > 0 ? ` (\u0e3f${_num(repaid - prinN)} of it interest)` : ""));
   const nontB = (G.nontBorrowed || 0) - (b.nontB != null ? b.nontB : (G.nontBorrowed || 0));
   const nontR = (G.nontRepaid || 0) - (b.nontR != null ? b.nontR : (G.nontRepaid || 0));
   if (nontB > 0) bits.push("\u0e3f" + _num(nontB) + " borrowed from Nont for the bar \u2014 a debt, not a win");
-  if (nontR > 0) bits.push("\u0e3f" + _num(nontR) + " repaid to Nont");
+  if (nontR > 0) bits.push("\u0e3f" + _num(nontR) + " repaid to Nont" + (nontR - nontPrinN > 0 ? ` (\u0e3f${_num(nontR - nontPrinN)} of it interest)` : ""));
   // a SEND leaves the account, which "pocket and account together" has to show — ฿1,500 to
   // a woman was invisible on the one figure a man keeping books reads (Marcus, round 61)
   const sentN = (G.sentTotal || 0) - (b.sentB != null ? b.sentB : (G.sentTotal || 0));
@@ -5017,7 +5027,7 @@ function _endNight(reason) {
       // is what happens to you, this is what you did. Same body cost, more สนุก.
       { let _l = _pickVary(_SUNRISE_END, "sunriseEnd");   // "you get a bike home" charged nothing (Marguerite, round 67)
         if (/\bbike\b/.test(_l) && G.money < MOTOSAI_TOWN) _l = _pickVary(_SUNRISE_END.filter(x => !/\bbike\b/.test(x)), "sunriseEnd");
-        if (/\bbike\b/.test(_l)) { G.money -= MOTOSAI_TOWN; _l += ` (฿${MOTOSAI_TOWN} for the bike — ฿${_num(G.money)} left.)`; }
+        if (/\bbike\b/.test(_l)) { G.money -= MOTOSAI_TOWN; _l += ` (฿${_num(MOTOSAI_TOWN)} for the bike — ฿${_num(G.money)} left.)`; }
         _say(_l, "win"); }
       _addHappy(3);
       break;
@@ -5155,7 +5165,7 @@ function _endNight(reason) {
         "isn't. You surface at some colourless hour to an empty pillow, the door " +
         "on the latch, and the specific silence of a room that has been quietly, " +
         "expertly emptied. " +
-        (lost ? `฿${lost} gone` : "Nothing left worth taking") +
+        (lost ? `฿${_num(lost)} gone` : "Nothing left worth taking") +
         (took ? `, and your ${took} with it` : "") + ". No bar, no mamasan, no one " +
         "to complain to — freelance cut the other way. You didn't even hear her leave.",
         "alert");
@@ -5589,7 +5599,7 @@ function _endVacation() {
     // never boarded, and was still being garnished nightly — told to his face
     // that he "flew home with her money" (debt playtest 2026-08-24). _newVacation
     // sets it, because that is the branch on which he actually leaves.
-    _say(`(You owe Nira ฿${G.loan.owed}. The airport is the one place her cousins don't come, and she ` +
+    _say(`(You owe Nira ฿${_num(G.loan.owed)}. The airport is the one place her cousins don't come, and she ` +
       "knows it, and she will remember the face. Pattaya keeps its books.)", "alert");
   }
   _lastGoodbye();
@@ -5779,7 +5789,7 @@ function _newVacation() {
   _say("");
   _say("A month of grey sky and greyer meetings, and then the seatbelt sign " +
     "pings off over the gulf. Same Sabai Palms. Same terrible, perfect bed. Room 412 " +
-    `keeps your secrets. ฿${SAFE_CASH} in the safe, seven nights on the clock.`, "win");
+    `keeps your secrets. ฿${_num(SAFE_CASH)} in the safe, seven nights on the clock.`, "win");
   _say(`── VACATION ${G.vacation} · DAY 1 of 7 ──`, "win");
   // …and the other half of the goodbye: she texted while you were in the air.
   // G.prevBond was just computed from the week you flew home from, and her
