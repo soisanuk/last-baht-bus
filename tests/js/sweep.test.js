@@ -262,3 +262,10 @@ test("L233 the Sabai's joiner fee is on the guest, not the trade — the clerk c
   G.joinerDay = -1; G.hotel = "queenvic"; m0 = G.money; _joinerFee(); assert.equal(G.money, m0);
   assert.equal(String(_endNight).match(/G\.money -= 300/), null, "no hard-coded fee left in the barfine ending");
 });
+test("L246 Tan closes his home life politely, in his own voice; L848 the hostess desc varies after the sentence her portrait was drawn from", () => {
+  G.room = _npcWhere("tan") || NPCS.tan.room; const a = ask("tan", "your wife");
+  assert.match(a, /family is at home/); assert.doesNotMatch(a, /don't know about that/);
+  assert.ok(_H_PHONE.length >= 10);
+  const hs = Object.values(NPCS).filter(n => n.filler && n.storyBits);
+  assert.ok(new Set(hs.map(n => n.desc.split(/(?<=\.)\s/).slice(1).join(" "))).size > 40, "the tails vary");
+});

@@ -9117,6 +9117,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      // his home life is not yours to ask about (Mario, 2026-10-07) — but a miss line read as
+      // though he had none; he closes it, politely, in his own voice
+      { topic: "wife|your wife|married|are you married|girlfriend|your girlfriend|love life|kids|children|your family|your home|where do you live",
+        text: "Tan smiles, and it is a perfectly friendly smile, and it is also a door closing. \"My family is at home, my friend, which is where a family should be.\" He turns his cup. \"Ask me about the town. The town I will tell you everything.\"",
+        short: "\"My family is at home, where a family should be. Ask me about the town.\"" },
       // Sao, and the dinner: the same line before and after it, and nothing for her
       // father or the word that ended it (Sol, round 55). Tan drives to Bangkok twice
       // a week; he knows the shape of that family without anybody's name in it.
@@ -17094,10 +17099,22 @@ const _H_PLAN = [
   "open a small guesthouse by the river at home",
 ];
 const _H_EMOJI = ["🌸", "🌺", "💐", "🌷", "🌼", "🌻", "💫", "✨", "🌙", "💕", "🦋", "🍒"];
+// The sentence AFTER her look. Not the portrait prompt (portrait_gen reads the desc's first
+// sentence only), so this pool can grow without a single face changing. It was three lines
+// across 140 women, which is most of why three of them read as one paragraph (Gwen, round 66).
 const _H_PHONE = [
   "The {{phone}} never leaves her hand.",
   "Google Translate is open before you finish the sentence.",
   "She types more than she talks — and laughs at both.",
+  "She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+  "She laughs before the joke is finished, which is either kindness or experience.",
+  "There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+  "She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+  "She counts the room's empty glasses without seeming to look at them.",
+  "Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+  "She hums along to whatever is playing and knows about half of the words in English.",
+  "She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+  "A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
 ];
 // Texted-selfie captions for filler hostesses who keep photos on their phone
 // (about two in five do — see _buildHostess). PG-13 Tinglish, same voice as theirs.
