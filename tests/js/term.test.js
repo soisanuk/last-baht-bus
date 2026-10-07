@@ -167,7 +167,9 @@ test("no filler NPC's generated prose taps a character it doesn't mean to", () =
   // Som → Aof was, "Sang Som"/"som tam" being unavoidable). This catches the
   // whole class — ordinary words, place names, and story-name overlaps — with
   // no hand-maintained wordlist. `_H_FROM` provinces reach here via `${from}`.
-  const allow = new Set(["Candy"]);
+  // A floor woman with her OWN lines (FLOOR_OWN) may name herself and the women she works with —
+  // that is authored, not a collision.
+  let allow = new Set(["Candy"]);
   const bad = [];
   const scan = (label, text) => {
     if (!text) return;
@@ -177,6 +179,7 @@ test("no filler NPC's generated prose taps a character it doesn't mean to", () =
   };
   for (const [id, n] of Object.entries(NPCS)) {
     if (!n.filler) continue;
+    allow = new Set(["Candy", ...(FLOOR_OWN[id] ? Object.keys(NPCS).filter(x => NPCS[x].room === n.room).map(x => NPCS[x].name) : [])]);
     scan(`NPC ${id} desc`, n.desc);
     (n.dialogue || []).forEach((d, i) => { scan(`NPC ${id} #${i}`, d.text); scan(`NPC ${id} short#${i}`, d.short); });
   }

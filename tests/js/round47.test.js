@@ -179,10 +179,9 @@ test("a mamasan's look line and her family answer are about the same woman", () 
   // has had for twenty-one years. The co-location defect, built in at the factory.
   for (const id of Object.keys(NPCS)) {
     if (!NPCS[id].filler || NPC_ROLES[id] !== "mamasan") continue;
-    const story = _hh(id, 7) % _M_STORY.length;
-    const fam = _mamaFamilyIdx(id);
+    const { story, family: fam } = FLOOR_STAFF[id].pick;
     assert.ok(!(_M_FAM_CLASH[story] || []).includes(fam),
-      `${NPCS[id].name}: "${_M_STORY[story]}" does not sit with "${_M_FAMILY[fam].slice(0, 50)}…"`);
+      `${NPCS[id].name}: "${NPCS[id].desc}" does not sit with "${_M_FAMILY[fam].slice(0, 50)}…"`);
   }
 });
 

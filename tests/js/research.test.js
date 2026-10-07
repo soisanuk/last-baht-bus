@@ -280,13 +280,13 @@ test("the sighting: money sent on 'mama sick', and tonight she is at a table in 
 // ── Theme 11: the exits the women make ───────────────────────────────────────
 test("a woman who named a target can hit it: gone from the second trip, quietly, and the town says for what", () => {
   const fillers = Object.keys(NPCS).filter(i => NPCS[i].filler && NPC_ROLES[i] === "hostess");
-  const target = fillers.filter(i => _EXIT_PLANS.includes(NPCS[i].storyIdx.plan));
+  const target = fillers.filter(i => NPCS[i].exitPlan === undefined && _EXIT_PLANS.includes(NPCS[i].storyIdx.plan));   // the pooled floor; a woman with her own lines has her own target
   assert.ok(target.length > 40 && target.every(i => /open|shop|salon|stall|laundry|truck/.test(_H_PLAN[NPCS[i].storyIdx.plan])));
   G.vacation = 1; assert.equal(target.filter(_exited).length, 0, "nobody is gone on the first trip");
   G.vacation = 2; const g2 = target.filter(_exited); assert.ok(g2.length >= 1 && g2.length <= target.length * 0.1, "a few, trip two: " + g2.length);
   G.vacation = 6; const g6 = target.filter(_exited); assert.ok(g6.length > g2.length && g2.every(i => g6.includes(i)), "cumulative");
   G.vacation = 12; assert.ok(target.filter(_exited).length <= target.length * 0.45, "most of the floor stays — the honest majority");
-  assert.ok(fillers.every(i => _EXIT_PLANS.includes(NPCS[i].storyIdx.plan) || !_exited(i)), "no exit without a stated target");
+  assert.ok(fillers.every(i => (NPCS[i].exitPlan !== undefined ? NPCS[i].exitPlan : _EXIT_PLANS.includes(NPCS[i].storyIdx.plan)) || !_exited(i)), "no exit without a stated target");
   G.vacation = 2; const g = g2.find(i => ROOMS[NPCS[i].room].barType === "beer") || g2[0]; const room = NPCS[g].room, plan = _exited(g);
   assert.ok(!_npcActive(g)); assert.ok(!_npcsHere.call(null) || true);
   G.talked[g] = [0]; G.phone.contacts[g] = true; G.room = room; G.nightTurn = 30;

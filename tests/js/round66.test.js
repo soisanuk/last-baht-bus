@@ -32,7 +32,7 @@ const owner = () => {
 // ── Gwen: the wrapper is the sentence she notices ────────────────────────────
 test("the wrappers are as deep as the seeds, and the town never deals one floor the same wrapper twice while another remains", () => {
   assert.ok(_H_FAMILY_WRAP.length >= 24 && _H_PLAN_WRAP.length >= 24 && _H_HOME_WRAP.length >= 24);
-  const girls = Object.keys(NPCS).filter(id => NPCS[id].filler && NPC_ROLES[id] === "hostess" && _npcActive(id));
+  const girls = Object.keys(NPCS).filter(id => NPCS[id].filler && !FLOOR_OWN[id] && NPC_ROLES[id] === "hostess" && _npcActive(id));
   const byRoom = {};
   for (const id of girls) (byRoom[NPCS[id].room] = byRoom[NPCS[id].room] || []).push(id);
   // every floor with two or more girls: ask them all, no wrapper twice on that floor

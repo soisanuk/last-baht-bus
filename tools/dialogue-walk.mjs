@@ -276,7 +276,7 @@ function walk(npc) {
 if (args.includes("--shared")) {
   const N = +(opt("--shared-n") || 6), idx = new Map();
   for (const id of Object.keys(NPCS)) {
-    if (NPCS[id].filler) continue;
+    if (NPCS[id].filler && !(typeof FLOOR_OWN !== "undefined" && FLOOR_OWN[id])) continue;
     (NPCS[id].dialogue || []).forEach((d, i) => {
       const seen = new Set();
       for (const s of [d.text, d.short]) {
@@ -287,7 +287,7 @@ if (args.includes("--shared")) {
   }
   // the generated floor's POOLS count as one speaker each (round 63: the walker skipped the filler,
   // which is where the worst repetition lived) — so an authored woman echoing a pool line shows up
-  const POOLS = ["_H_GREET", "_H_FAMILY", "_H_PLAN", "_H_FREE", "_H_SELFIES", "_M_GREET", "_M_FAMILY", "_M_PLAN", "_M_GIRLS", "_M_WALLET", "_C_GREET", "_C_FAMILY", "_C_MONEY", "_C_WALLET"];
+  const POOLS = ["_H_GREET", "_H_FAMILY", "_H_PLAN", "_H_FREE", "_M_GREET", "_M_FAMILY", "_M_PLAN", "_M_GIRLS", "_M_WALLET", "_C_GREET", "_C_FAMILY", "_C_MONEY", "_C_WALLET"];
   for (const name of POOLS) {
     let pool; try { pool = vm.runInThisContext(name); } catch (e) { continue; }
     (pool || []).forEach((line, i) => {
@@ -302,7 +302,9 @@ if (args.includes("--shared")) {
   for (const [g, ks, n] of hits.slice(0, LINT_ALL ? 9999 : 60)) console.log(`  ${n}× "${g}" — ${ks.join(" ")}`);
   process.exit(0);
 }
-const cast = Object.keys(NPCS).filter(id => (NPCS[id].dialogue || []).length && (FILLER || !NPCS[id].filler) && (!ONLY.length || ONLY.includes(id)));
+// a floor woman with her OWN lines (FLOOR_OWN) is walked like any authored character
+const ownLines = id => typeof FLOOR_OWN !== "undefined" && !!FLOOR_OWN[id];
+const cast = Object.keys(NPCS).filter(id => (NPCS[id].dialogue || []).length && (FILLER || !NPCS[id].filler || ownLines(id)) && (!ONLY.length || ONLY.includes(id)));
 const results = cast.map(walk);
 const summary = { date: "2026-10-02", cast: results.length, nodes: results.reduce((a, r) => a + r.total, 0), reached: results.reduce((a, r) => a + r.reached.length, 0),
   stubbed: results.reduce((a, r) => a + r.reached.filter(x => x.stubbed).length, 0),

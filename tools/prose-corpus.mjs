@@ -124,7 +124,12 @@ for (const [id, n] of Object.entries(NPCS)) {
   // A floor woman is a stored record now (FLOOR_STAFF, 2026-10-07): her desc is her own text and is
   // reviewed with her. Her dialogue lines are the shared pools, reviewed once there (pool group) —
   // walking them here would file every pooled line 213 times.
-  if (n.filler) { add("npc", `npc.${id}.desc`, n.name, n.desc); continue; }
+  if (n.filler) {
+    add("npc", `npc.${id}.desc`, n.name, n.desc);
+    // her OWN lines (FLOOR_OWN) are hers to review; they lead her dialogue, so the indices match
+    if (typeof FLOOR_OWN !== "undefined" && FLOOR_OWN[id]) walk("npc", `npc.${id}`, n.name, { dialogue: n.dialogue.slice(0, FLOOR_OWN[id].nodes.length) });
+    continue;
+  }
   walk("npc", `npc.${id}`, n.name, n);
 }
 // The `patron.<id>` ref prefix is PERSISTED in docs/prose-review-ledger.json

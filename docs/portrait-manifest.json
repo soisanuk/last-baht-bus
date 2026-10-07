@@ -2824,7 +2824,8 @@
       "room": "windmill",
       "tags": [],
       "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 53 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
-      "look": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
+      "look": "Thai woman, mid twenties, big dark eyes, round face, long hair tied back, solemn, small gold Buddha pendant",
+      "twin": "yada",
       "rendered": false,
       "relook": true,
       "relookWas": "A crooked, disarming grin"
@@ -2859,8 +2860,9 @@
       "th": "ญาดา",
       "room": "windmill",
       "tags": [],
-      "desc": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of The Gilt Cage's girls, from Buriram. The badge pinned at her hip says 183 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
-      "look": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear",
+      "desc": "Big-eyed, a solemn face that breaks into a hoarse laugh, hair cropped to the jaw, a pen behind one ear — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 183 — the number the floor knows her by. Her twin wears fifty-three; Wanida gave them numbers a long way apart, on purpose.",
+      "look": "Thai woman, mid twenties, big dark eyes, round face, laughing, hair cropped to the jaw, pen behind one ear",
+      "twin": "naree",
       "rendered": false,
       "relook": true,
       "relookWas": "A crooked, disarming grin"
@@ -5403,7 +5405,7 @@
       "th": "วนิดา",
       "room": "windmill",
       "tags": [],
-      "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
+      "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came down from the rice fields at seventeen and has run floors on this street for twenty years.",
       "look": "Elegant, weathered, and plainly the last word on everything in the room",
       "rendered": true
     },

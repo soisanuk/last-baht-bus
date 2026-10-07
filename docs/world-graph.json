@@ -1095,8 +1095,8 @@
  ],
  "counts": {
   "constants": 182,
-  "dialogue": 3427,
-  "edges": 3228,
+  "dialogue": 3436,
+  "edges": 3223,
   "encounters": 23,
   "flags": 172,
   "items": 43,
@@ -25015,20 +25015,29 @@
    ]
   },
   {
-   "asks": "home",
+   "bond": 2,
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
    "index": 0,
    "key": "naree#0",
    "npc": "naree"
   },
   {
+   "asks": "home",
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "naree#1",
+   "npc": "naree"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "naree#2",
    "npc": "naree",
    "topic": "family",
    "topics": [
@@ -25037,10 +25046,10 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "naree#2",
+   "index": 3,
+   "key": "naree#3",
    "npc": "naree",
    "topic": "home",
    "topics": [
@@ -25048,23 +25057,108 @@
    ]
   },
   {
+   "bond": 1,
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "naree#3",
+   "index": 4,
+   "key": "naree#4",
    "npc": "naree",
-   "topic": "plan",
+   "topic": "plan|dream|future|salon|nail salon",
    "topics": [
-    "plan"
+    "plan",
+    "dream",
+    "future",
+    "salon",
+    "nail salon"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "naree#4",
+   "index": 5,
+   "key": "naree#5",
+   "npc": "naree",
+   "topic": "plan|dream|future|salon|nail salon",
+   "topics": [
+    "plan",
+    "dream",
+    "future",
+    "salon",
+    "nail salon"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "naree#6",
+   "npc": "naree",
+   "topic": "nails|nail|colour|color|bangkok sunset",
+   "topics": [
+    "nails",
+    "nail",
+    "colour",
+    "color",
+    "bangkok sunset"
+   ]
+  },
+  {
+   "bond": 2,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": true,
+   "index": 7,
+   "key": "naree#7",
+   "npc": "naree",
+   "topic": "yada|sister|twin|twins|your sister",
+   "topics": [
+    "yada",
+    "sister",
+    "twin",
+    "twins",
+    "your sister"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 8,
+   "key": "naree#8",
+   "npc": "naree",
+   "topic": "yada|sister|twin|twins|your sister",
+   "topics": [
+    "yada",
+    "sister",
+    "twin",
+    "twins",
+    "your sister"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 9,
+   "key": "naree#9",
+   "npc": "naree",
+   "topic": "buddha|amulet|necklace|gold buddha",
+   "topics": [
+    "buddha",
+    "amulet",
+    "necklace",
+    "gold buddha"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 10,
+   "key": "naree#10",
    "npc": "naree",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -25076,10 +25170,10 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "naree#5",
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 11,
+   "key": "naree#11",
    "notFlags": [
     "hasWallet"
    ],
@@ -25091,38 +25185,10 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 6,
-   "key": "naree#6",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "naree",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "bond": 1,
-   "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "naree#7",
-   "npc": "naree",
-   "topic": "salary",
-   "topics": [
-    "salary"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": true,
-   "index": 8,
-   "key": "naree#8",
+   "index": 12,
+   "key": "naree#12",
    "npc": "naree",
    "topic": "price",
    "topics": [
@@ -25133,20 +25199,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "naree#9",
-   "npc": "naree",
-   "topic": "price",
-   "topics": [
-    "price"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
-   "index": 10,
-   "key": "naree#10",
+   "index": 13,
+   "key": "naree#13",
    "npc": "naree",
    "topic": "late",
    "topics": [
@@ -25158,8 +25212,21 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "naree#11",
+   "index": 14,
+   "key": "naree#14",
+   "npc": "naree",
+   "topic": "salary",
+   "topics": [
+    "salary"
+   ]
+  },
+  {
+   "bond": 1,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 15,
+   "key": "naree#15",
    "npc": "naree",
    "topic": "quota",
    "topics": [
@@ -28325,22 +28392,22 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "nubnab#1",
    "npc": "nubnab",
-   "topic": "money|tab|bill|price",
+   "topic": "twins|naree|yada|handwriting",
    "topics": [
-    "money",
-    "tab",
-    "bill",
-    "price"
+    "twins",
+    "naree",
+    "yada",
+    "handwriting"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "nubnab#2",
@@ -28352,7 +28419,7 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 3,
    "key": "nubnab#3",
@@ -28367,25 +28434,38 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
+   "hasShort": true,
+   "hasWhen": false,
    "index": 4,
    "key": "nubnab#4",
-   "notFlags": [
-    "hasWallet"
-   ],
    "npc": "nubnab",
-   "topic": "wallet",
+   "topic": "calculator|sticker",
    "topics": [
-    "wallet"
+    "calculator",
+    "sticker"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 5,
    "key": "nubnab#5",
+   "npc": "nubnab",
+   "topic": "money|tab|bill|price",
+   "topics": [
+    "money",
+    "tab",
+    "bill",
+    "price"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "nubnab#6",
    "notFlags": [
     "hasWallet"
    ],
@@ -35515,32 +35595,46 @@
    ]
   },
   {
-   "asks": "trips",
+   "bond": 2,
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
    "index": 0,
    "key": "sasi#0",
    "npc": "sasi"
   },
   {
+   "asks": "stay",
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "sasi#1",
+   "npc": "sasi"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "sasi#2",
    "npc": "sasi",
-   "topic": "family",
+   "topic": "family|mother|father|parents|orphan|orphanage",
    "topics": [
-    "family"
+    "family",
+    "mother",
+    "father",
+    "parents",
+    "orphan",
+    "orphanage"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "sasi#2",
+   "index": 3,
+   "key": "sasi#3",
    "npc": "sasi",
    "topic": "home",
    "topics": [
@@ -35549,22 +35643,56 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "sasi#3",
+   "index": 4,
+   "key": "sasi#4",
    "npc": "sasi",
-   "topic": "plan",
+   "topic": "plan|dream|future",
    "topics": [
-    "plan"
+    "plan",
+    "dream",
+    "future"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "sasi#4",
+   "index": 5,
+   "key": "sasi#5",
+   "npc": "sasi",
+   "topic": "watch|sports watch|running|run|beach",
+   "topics": [
+    "watch",
+    "sports watch",
+    "running",
+    "run",
+    "beach"
+   ]
+  },
+  {
+   "bond": 2,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "sasi#6",
+   "npc": "sasi",
+   "topic": "real mother|your mother|your real mother|birth mother",
+   "topics": [
+    "real mother",
+    "your mother",
+    "your real mother",
+    "birth mother"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 7,
+   "key": "sasi#7",
    "npc": "sasi",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -35576,57 +35704,17 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "sasi#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "sasi",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 6,
-   "key": "sasi#6",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "sasi",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "bond": 1,
-   "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "sasi#7",
-   "npc": "sasi",
-   "topic": "salary",
-   "topics": [
-    "salary"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": true,
    "index": 8,
    "key": "sasi#8",
+   "notFlags": [
+    "hasWallet"
+   ],
    "npc": "sasi",
-   "topic": "price",
+   "topic": "wallet",
    "topics": [
-    "price"
+    "wallet"
    ]
   },
   {
@@ -35660,6 +35748,19 @@
    "hasWhen": false,
    "index": 11,
    "key": "sasi#11",
+   "npc": "sasi",
+   "topic": "salary",
+   "topics": [
+    "salary"
+   ]
+  },
+  {
+   "bond": 1,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 12,
+   "key": "sasi#12",
    "npc": "sasi",
    "topic": "quota",
    "topics": [
@@ -43109,22 +43210,38 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "wanida#1",
    "npc": "wanida",
-   "topic": "girls",
+   "topic": "girls|the girls|your girls|introduce",
    "topics": [
-    "girls"
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "wanida#2",
+   "npc": "wanida",
+   "topic": "twins|the twins",
+   "topics": [
+    "twins",
+    "the twins"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 3,
+   "key": "wanida#3",
    "npc": "wanida",
    "topic": "family",
    "topics": [
@@ -43133,22 +43250,23 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "wanida#3",
+   "index": 4,
+   "key": "wanida#4",
    "npc": "wanida",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "wanida#4",
+   "index": 5,
+   "key": "wanida#5",
    "npc": "wanida",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -43160,22 +43278,7 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "wanida#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "wanida",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 6,
    "key": "wanida#6",
@@ -44201,20 +44304,29 @@
    ]
   },
   {
-   "asks": "home",
+   "bond": 2,
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
    "index": 0,
    "key": "yada#0",
    "npc": "yada"
   },
   {
+   "asks": "trips",
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "yada#1",
+   "npc": "yada"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "yada#2",
    "npc": "yada",
    "topic": "family",
    "topics": [
@@ -44223,10 +44335,10 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "yada#2",
+   "index": 3,
+   "key": "yada#3",
    "npc": "yada",
    "topic": "home",
    "topics": [
@@ -44235,22 +44347,88 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "yada#3",
+   "index": 4,
+   "key": "yada#4",
    "npc": "yada",
-   "topic": "plan",
+   "topic": "plan|dream|future",
    "topics": [
-    "plan"
+    "plan",
+    "dream",
+    "future"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "yada#4",
+   "index": 5,
+   "key": "yada#5",
+   "npc": "yada",
+   "topic": "pen|chit|chits|ransom note",
+   "topics": [
+    "pen",
+    "chit",
+    "chits",
+    "ransom note"
+   ]
+  },
+  {
+   "bond": 2,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": true,
+   "index": 6,
+   "key": "yada#6",
+   "npc": "yada",
+   "topic": "naree|sister|twin|twins|your sister",
+   "topics": [
+    "naree",
+    "sister",
+    "twin",
+    "twins",
+    "your sister"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": true,
+   "index": 7,
+   "key": "yada#7",
+   "npc": "yada",
+   "topic": "naree|sister|twin|twins|your sister",
+   "topics": [
+    "naree",
+    "sister",
+    "twin",
+    "twins",
+    "your sister"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 8,
+   "key": "yada#8",
+   "npc": "yada",
+   "topic": "naree|sister|twin|twins|your sister",
+   "topics": [
+    "naree",
+    "sister",
+    "twin",
+    "twins",
+    "your sister"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 9,
+   "key": "yada#9",
    "npc": "yada",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -44262,77 +44440,37 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "yada#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "yada",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 6,
-   "key": "yada#6",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "yada",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "bond": 1,
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
-   "index": 7,
-   "key": "yada#7",
-   "npc": "yada",
-   "topic": "salary",
-   "topics": [
-    "salary"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": true,
-   "index": 8,
-   "key": "yada#8",
-   "npc": "yada",
-   "topic": "price",
-   "topics": [
-    "price"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
-   "index": 9,
-   "key": "yada#9",
-   "npc": "yada",
-   "topic": "price",
-   "topics": [
-    "price"
-   ]
-  },
-  {
-   "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
    "index": 10,
    "key": "yada#10",
+   "notFlags": [
+    "hasWallet"
+   ],
+   "npc": "yada",
+   "topic": "wallet",
+   "topics": [
+    "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 11,
+   "key": "yada#11",
+   "npc": "yada",
+   "topic": "price",
+   "topics": [
+    "price"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 12,
+   "key": "yada#12",
    "npc": "yada",
    "topic": "late",
    "topics": [
@@ -44344,8 +44482,21 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "yada#11",
+   "index": 13,
+   "key": "yada#13",
+   "npc": "yada",
+   "topic": "salary",
+   "topics": [
+    "salary"
+   ]
+  },
+  {
+   "bond": 1,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 14,
+   "key": "yada#14",
    "npc": "yada",
    "topic": "quota",
    "topics": [
@@ -45057,7 +45208,7 @@
   "DEPENDS": 13,
   "DONE_BY": 37,
   "EXIT": 437,
-  "FORBIDS": 496,
+  "FORBIDS": 491,
   "GIVEN_BY": 38,
   "GIVES": 15,
   "INTERPOLATES": 580,
@@ -50529,12 +50680,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "naree#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "naree#6",
+   "from": "naree#11",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -50674,12 +50820,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "nubnab#4",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "nubnab#5",
+   "from": "nubnab#6",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -51059,12 +51200,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "sasi#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "sasi#6",
+   "from": "sasi#8",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -51509,11 +51645,6 @@
    "type": "FORBIDS"
   },
   {
-   "from": "wanida#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
    "from": "wanida#6",
    "to": "hasWallet",
    "type": "FORBIDS"
@@ -51549,12 +51680,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "yada#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "yada#6",
+   "from": "yada#10",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -63636,8 +63762,7 @@
     "nan#6",
     "napa#4",
     "napa#5",
-    "naree#5",
-    "naree#6",
+    "naree#11",
     "near#5",
     "near#6",
     "neon_palm_bee#5",
@@ -63662,8 +63787,7 @@
     "noon#6",
     "noot#4",
     "noot#5",
-    "nubnab#4",
-    "nubnab#5",
+    "nubnab#6",
     "nut#5",
     "nut#6",
     "oat#5",
@@ -63726,8 +63850,7 @@
     "saifon#6",
     "sara#5",
     "sara#6",
-    "sasi#5",
-    "sasi#6",
+    "sasi#8",
     "sea_wall_duang#5",
     "sea_wall_duang#6",
     "sea_wall_fon#5",
@@ -63813,14 +63936,12 @@
     "waew#6",
     "wandee#5",
     "wandee#6",
-    "wanida#5",
     "wanida#6",
     "wanpen#5",
     "wanpen#6",
     "wassana#5",
     "wassana#6",
-    "yada#5",
-    "yada#6",
+    "yada#10",
     "yaya#5",
     "yaya#6",
     "ying#5",
@@ -67821,7 +67942,7 @@
    "th": "นภา"
   },
   {
-   "dialogueCount": 12,
+   "dialogueCount": 16,
    "filler": true,
    "id": "naree",
    "name": "Naree",
@@ -68053,7 +68174,7 @@
    "room": "white_rabbit"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 7,
    "filler": true,
    "id": "nubnab",
    "name": "Nubnab",
@@ -68649,7 +68770,7 @@
    "th": "ซาร่า"
   },
   {
-   "dialogueCount": 12,
+   "dialogueCount": 13,
    "filler": true,
    "id": "sasi",
    "name": "Sasi",
@@ -69276,7 +69397,7 @@
    "th": "วิน"
   },
   {
-   "dialogueCount": 12,
+   "dialogueCount": 15,
    "filler": true,
    "id": "yada",
    "name": "Yada",

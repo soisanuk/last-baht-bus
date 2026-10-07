@@ -16983,66 +16983,6 @@ const _H_LOCKIN = [
 const _H_FROM = ["Udon Thani", "Khon Kaen", "Roi Et", "Sisaket", "Buriram", "Ubon",
   "Surin", "{{Nong Khai}}", "Kalasin", "Yasothon", "Mukdahan", "Nakhon Phanom",
   "Chaiyaphum", "Loei", "Maha Sarakham", "Sakon Nakhon", "Amnat Charoen", "{{Nong Bua Lamphu}}"];
-// The Darkside register: the ladies out here are older but better at this
-// than anyone in town, and they are here to make money. No nervous new girls
-// on this side of Sukhumvit.
-const _H_LOOK_DARK = [
-  "Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match",
-  "Grey at the temples, a red silk blouse, older than the town girls and better at this",
-  "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening",
-  "Bone-thin, a fisherman's hat indoors, pouring out here since the lake road was dirt",
-  "Big-boned, a floral blouse, a veteran's patience — she will out-sit and out-earn the room",
-  "Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool",
-  // more faces (Mario, 2026-10-07: "we can always use more new faces") — each is a portrait prompt
-  // too, so face, hair and build come first
-  "Fifties, reading glasses on a cord, and a laugh like a door banging shut",
-  "A grey streak worn proudly at the front, tiger balm on her wrists, kind eyes",
-  "Heavy-set and unhurried, a gold tooth and a market auntie's arms",
-  "Thin as wire, hair dyed jet black, an old dancer's posture she has kept",
-  "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields",
-  "Silver hoops, careful make-up, the calm of a woman who has heard every line twice",
-  "Short permed hair, a cardigan in any weather, the steadiest hands on the strip",
-  "A broad smile with a gap at the back, first up to dance when the old songs come on",
-];
-const _H_LOOK = [
-  "Round-faced and quick to laugh",
-  "Tall and quiet, a long plait and a plain black dress, watching the door",
-  "Tiny and loud, all elbows and energy",
-  "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered",
-  "New enough to still look a little nervous, in a borrowed dress a size too big",
-  "Gold everywhere — earrings, chain, {{phone}} case",
-  "Pixie cut, small gold hoops, a crooked, disarming grin",
-  "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant",
-  "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it",
-  "Baby-faced, chewing gum, thumbing her phone under the bar",
-  "Long hair, longer eyelashes, a practised pout",
-  "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing",
-  // more faces (Mario, 2026-10-07) — portrait prompts first, prose second
-  "Short hair dyed copper, a nose stud, and a laugh you hear before you see her",
-  "Round glasses and a cardigan over the bar dress, like a librarian on a dare",
-  "Freckled from the sun, hair in a high ponytail, sneakers under the stool",
-  "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile",
-  "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
-  "Broad-shouldered and easy, a volleyball player's posture and handshake",
-  "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
-  "Soft-spoken, a mole above her lip, looks down whenever she laughs",
-  "Cropped jacket, high bun, the poise of somebody who once danced properly",
-  "A wide slow smile, a gap in her front teeth, nowhere she would rather be",
-  "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face",
-  "Lean and angular, cheekbones like a blade, eyes that weigh you",
-  "Plump and cheerful, a jade bangle on each wrist, quick hands",
-  "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is",
-  "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist",
-  "A scar through one eyebrow and a grin that dares you to ask about it",
-  "Straight hair to her hips, a silver anklet, perfectly still until she isn't",
-  "Athletic, a sunburnt nose, a sports watch she checks between customers",
-  "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
-  "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear",
-  "Neat side parting, pearl studs, a bank teller on her night off",
-  "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her",
-  "Round cheeks, sharp eyes, keeping score of something on a beer mat",
-  "Tanned arms, a vine tattoo up one wrist, hair in a loose knot"
-];
 const _H_FAMILY = [
   "I have two baby, they stay with my mama, {from}",
   "My papa sick — my mama look after him, so only me can send money",
@@ -17131,32 +17071,6 @@ const _H_PLAN = [
   "open a karaoke room in my village, small one",
   "pay off the land and never borrow again",
   "open a small guesthouse by the river at home",
-];
-const _H_EMOJI = ["🌸", "🌺", "💐", "🌷", "🌼", "🌻", "💫", "✨", "🌙", "💕", "🦋", "🍒"];
-// The sentence AFTER her look. Not the portrait prompt (portrait_gen reads the desc's first
-// sentence only), so this pool can grow without a single face changing. It was three lines
-// across 140 women, which is most of why three of them read as one paragraph (Gwen, round 66).
-const _H_PHONE = [
-  "The {{phone}} never leaves her hand.",
-  "Google Translate is open before you finish the sentence.",
-  "She types more than she talks — and laughs at both.",
-  "She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-  "She laughs before the joke is finished, which is either kindness or experience.",
-  "There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
-  "She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
-  "She counts the room's empty glasses without seeming to look at them.",
-  "Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
-  "She hums along to whatever is playing and knows about half of the words in English.",
-  "She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
-  "A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
-];
-// Texted-selfie captions for filler hostesses who keep photos on their phone
-// (about two in five do — their FLOOR_STAFF record lists them). PG-13 Tinglish, same voice as theirs.
-const _H_SELFIES = [
-  "new dress 👗 you like?? 😊", "beach today 🏖️ miss you na", "me eat somtam 🥵🌶️ so spicy 555",
-  "new hair 💇‍♀️ good mai??", "waiting work 💕 think about you", "my cat 🐈 cute like me na 😽",
-  "market this morning 🛵 buy food mama", "new nail 💅 pink na", "so hot today 🥵 i melt 555",
-  "friend birthday 🎂 we sing loud loud", "rainy 🌧️ i stay home lonely 🥺", "gym 💪 strong for you",
 ];
 
 function _hh(s, salt) {
@@ -17267,7 +17181,10 @@ function _storyClash(famIdx, planIdx) {
 const _EXIT_PLANS = [0, 4, 5, 7, 9, 10, 13, 15, 16, 19, 20, 23, 26, 29, 31, 33, 35, 37, 39];   // indices into _H_PLAN that name a thing you can open
 function _exited(id) {
   const n = NPCS[id];
-  if (!n || !n.filler || !n.storyIdx || !_EXIT_PLANS.includes(n.storyIdx.plan)) return false;
+  if (!n || !n.filler || !n.storyIdx) return false;
+  // her own words where she has them (FLOOR_OWN's `exit`: null for a woman with no thing to open)
+  const target = n.exitPlan !== undefined ? n.exitPlan : (_EXIT_PLANS.includes(n.storyIdx.plan) ? _H_PLAN[n.storyIdx.plan] : null);
+  if (!target) return false;
   if (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] !== "hostess") return false;
   if (typeof G !== "undefined" && G) {
     if (G.bar && G.bar.room === n.room) return false;
@@ -17280,7 +17197,7 @@ function _exited(id) {
     const trip = (G.vacation || 1) + (G.stage === "expat" ? Math.floor((G.day || 1) / 90) : 0);
     if (trip < leaves) return false;
   } else return false;
-  return _H_PLAN[n.storyIdx.plan];
+  return target;
 }
 // THE DRINKS-ONLY CLASS (theme 12's sibling, from the lady-drink economics essays): the
 // bar runs on drinks, not barfines, and a growing share of the floor works drinks only —
@@ -17543,17 +17460,34 @@ const _H_LATE = [
           `"Late-late?" She thinks about whether to tell you. "Have place. Thai disco, ran lao. Girl go after work with friend. If girl like you, maybe she take you on motorbike." She does not say which girl.`,
           `"After two, everybody go eat. Khao tom, som tam, sit on the floor." She pats the stool. "You want see? Be nice to somebody who like you. Then she drive."`,
         ];
+// HER OWN LINES (FLOOR_OWN, 2026-10-07): a floor woman with authored dialogue speaks it first, and a
+// shared line on the same subject (greeting, family, home, plan, the free drink, the mamasan's girls)
+// is dropped rather than shadowed, so the town book never deals over her. Lines with no own version —
+// the wallet, the price, salary, quota — stay shared.
+function _floorOwn(id, dialogue) {
+  const own = typeof FLOOR_OWN !== "undefined" && FLOOR_OWN[id];
+  if (!own) return dialogue;
+  const keys = d => String(d.topic || "").split("|");
+  const plain = n => !n.bond && !n.when && !n.req && !n.notFlags;
+  const covered = d => own.nodes.some(n => d.topic ? keys(n).includes(keys(d)[0]) : (!n.topic && plain(n)));
+  return [...own.nodes, ...dialogue.filter(d => !covered(d))];
+}
+function _floorExit(id) {
+  const own = typeof FLOOR_OWN !== "undefined" && FLOOR_OWN[id];
+  return own && "exit" in own ? { exitPlan: own.exit } : {};
+}
 // A hostess from her record: everything about her is stored, nothing is hashed at load.
 function _floorHostess(id, r) {
   const k = r.pick, room = r.room;
   return {
-    name: r.name, th: r.th, emoji: r.emoji, room, filler: true, storyIdx: { family: k.family, plan: k.plan },
+    name: r.name, th: r.th, emoji: r.emoji, room, filler: true, ..._floorExit(id), storyIdx: { family: k.family, plan: k.plan },
     storyBits: { from: r.from, greet: k.greet, family: k.family, plan: k.plan, famWrap: k.famWrap, planWrap: k.planWrap, homeWrap: k.homeWrap, free: k.free },
     ...(r.c4 ? { c4: r.c4 } : {}),
     ...(r.selfies ? { selfies: r.selfies } : {}),
+    ...(r.twin ? { twin: r.twin } : {}),   // her twin's id: the portrait model draws both from ONE face
     look: r.look,   // her portrait prompt, apart from the desc: only a change to THIS re-renders her
     desc: r.desc,
-    dialogue: [
+    dialogue: _floorOwn(id, [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: _H_GREET[k.greet], short: _H_GREET_SHORT[k.short],
         asks: (() => { const a = _H_ASK[k.ask], qs = _H_ASK_PHRASINGS[a.key]; return qs ? { key: a.key, q: qs[k.askQ % qs.length] } : a; })(), story: "greet" },
       { topic: "family", text: _H_FAMILY_WRAP[k.famWrap](_H_FAMILY[k.family].replace(/\{from\}/g, r.from)), story: "family" },
@@ -17587,7 +17521,7 @@ function _floorHostess(id, r) {
           `her fingers and stops before she gets to the end. "I am under. Is early in the month." ` +
           `It is not early in the month.`,
         short: `"Every girl have a number for the month. I am under. Is early in the month." It isn't.` },
-    ],
+    ]),
   };
 }
 
@@ -17627,46 +17561,6 @@ function _pronoun(id) {
 // businesslike and mostly fluent, the mamasan is the most fluent of all — each
 // still drops a Thai particle or leans on the phone now and then. Canon-plain:
 // no plot flags, no gives. Named, story-bearing mamas/cashiers stay in NPCS above.
-const _M_LOOK = [
-  "Immaculate, unhurried, and missing nothing",
-  "A former headliner's posture and a gaze like a cash register",
-  "Gold at the wrist and throat, reading glasses pushed up into her hair",
-  "Warm to your face, ice at the till, and fluent in both",
-  "Sits like she owns the stool, because she does",
-  "Older, sharper, and entirely done being impressed by farang",
-  "Silk blouse, jade bangle, and the calm of a woman who has heard every line",
-  "A cloud of perfume and authority, hair lacquered against the fans",
-  "Half-moon glasses down her nose, appraising you over the top of them",
-  "Broad, motherly, and entirely able to have you removed by smiling",
-  "Rings on every finger and a voice that cuts the music when she wants it",
-  "Elegant, weathered, and plainly the last word on everything in the room",
-];
-const _M_STORY = [
-  "danced this same street before you were her problem",
-  "came up from the rice fields and never once looked back",
-  "has run this floor longer than most of the girls have been alive",
-  "buried a husband, raised two kids, and built a concrete house on lady drinks",
-  "married a farang, buried the marriage, and kept the house",
-  "started on the stage at seventeen and owns three of these stools now",
-  "puts four kids through school on other men's lonely nights",
-  "has watched the soi flood, burn, and rebuild, and outlasted all three",
-];
-// Kept deliberately deep: Soi 6 alone puts six cashiers within a short walk, so
-// a shallow pool reads as copy-paste bar to bar (see the prose-review notes).
-const _C_LOOK = [
-  "In a cage of fairy lights, counting notes faster than the eye follows",
-  "Black polo, a lanyard of too many keys, a calculator she never needs",
-  "Neat bun, neat ledger, an engagement ring worn on a chain",
-  "Headset on one ear, {{phone}} in one hand, the till in perfect order",
-  "Quiet and quick, the still point the whole loud room pays into",
-  "Fingers flying over a calculator app, eyes never leaving the cash",
-  "Reading glasses, a receipt spike, and no patience for a disputed tab",
-  "A note-counting machine at her elbow and a faster one behind her eyes",
-  "A blunt bob, red lipstick, and a stare that reconciles you at a glance",
-  "Perched above the till like a lifeguard watching a pool of drunks",
-  "Cash drawer open, {{phone}} face-down, all of her attention on the maths",
-  "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
-];
 
 // ── The till-keepers' own stories ───────────────────────────────────────────
 // Maureen (round 47, the never-spoken-to cast) spent a week deliberately talking
@@ -17897,30 +17791,23 @@ const _C_WALLET = [
 // whose look-line says she buried a husband next to a family answer about the
 // husband she has had for twenty-one years. This is the co-location defect the
 // prose corpus exists to catch, built in at the factory. The map says which
-// family answers a given _M_STORY forbids; the builder walks to the next one
-// that fits, which keeps it pure and day-stable.
+// family answers a given mamasan back-story (her record's pick.story) forbids; the stored
+// records were built to respect it, and the town book still reads it when it deals a family.
 const _M_FAM_CLASH = {
   3: [1, 4, 8, 13, 14, 18],          // buried a husband, raised two kids → not a living husband (4, 13), not never-married (14), not childless (8)
   4: [4, 13, 14, 21],                // married a farang and buried the marriage → not a living husband, not never-married, not a husband in the ground
   6: [0, 3, 8, 10, 12, 16, 18, 19, 21],  // four kids through school → not a count that isn't four (one, two, none, one son)
 };
-function _mamaFamilyIdx(id) {
-  const story = _hh(id, 7) % _M_STORY.length;
-  const bad = _M_FAM_CLASH[story] || [];
-  let i = _hh(id, 37) % 8;   // the original eight: the baked family is unchanged; the town book deals the rest
-  for (let n = 0; n < 8 && bad.includes(i); n++) i = (i + 1) % 8;
-  return i;
-}
 
 // A mamasan from her record (FLOOR_STAFF).
 function _floorMama(id, r) {
   const k = r.pick, room = r.room, from = r.from;
   return {
-    name: r.name, th: r.th, emoji: "\ud83d\udc51", room, filler: true,
+    name: r.name, th: r.th, emoji: "\ud83d\udc51", room, filler: true, ..._floorExit(id),
     storyBits: { from, greet: k.greet, family: k.family, plan: k.plan, girls: k.girls, home: k.home, story: k.story },   // the original eight of each: baked text unchanged, the town book deals the rest
     look: r.look,   // the portrait prompt, apart from the desc
     desc: r.desc,
-    dialogue: [
+    dialogue: _floorOwn(id, [
       { th: "\u0e40\u0e0a\u0e34\u0e0d\u0e04\u0e48\u0e30", rom: "chern kha", text: _M_GREET[k.greet], short: _M_GREET_SHORT[k.greet], story: "mgreet" },
       { topic: "girls", text: _M_GIRLS[k.girls], story: "mgirls" },
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: _M_LOCKIN[k.lockin] }] : []),
@@ -17932,7 +17819,7 @@ function _floorMama(id, r) {
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
         text: '"Your wallet?" A tilt of the head down the bar. "Then you are in luck and you are also standing next to the answer \u2014 Candy is in tonight. Ask her, tilac. She hears about these before I do."' },
       { topic: "wallet", notFlags: ["hasWallet"], text: _M_WALLET[k.wallet] },
-    ],
+    ]),
   };
 }
 
@@ -17940,11 +17827,11 @@ function _floorMama(id, r) {
 function _floorCashier(id, r) {
   const k = r.pick, room = r.room, from = r.from;
   return {
-    name: r.name, th: r.th, emoji: "\ud83e\uddfe", room, filler: true,
+    name: r.name, th: r.th, emoji: "\ud83e\uddfe", room, filler: true, ..._floorExit(id),
     storyBits: { from, family: k.family, greet: k.greet, money: k.money, home: k.home },   // the original eight: baked text unchanged
     look: r.look,   // the portrait prompt, apart from the desc
     desc: r.desc,
-    dialogue: [
+    dialogue: _floorOwn(id, [
       { th: "\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35\u0e04\u0e48\u0e30", rom: "sawatdee kha", text: _C_GREET[k.greet], short: _C_GREET_SHORT[k.greet], story: "cgreet" },
       // one answer, so one topic with two keys — TOPICS listed "money · tab" and
       // gave the same paragraph twice (Maureen, round 47).
@@ -17955,9 +17842,214 @@ function _floorCashier(id, r) {
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
         text: '"Not through my till." She nods along the bar without looking up. "But Candy is in tonight \u2014 ask her, not me. She is the one who hears."' },
       { topic: "wallet", notFlags: ["hasWallet"], text: _C_WALLET[k.wallet] },
-    ],
+    ]),
   };
 }
+
+// THE FLOOR'S OWN WORDS (Mario, 2026-10-07: give each floor woman her own backstory and dialogue,
+// a bar at a time; The Gilt Cage first). A woman listed here speaks these lines first, and the shared
+// line on the same subject is dropped for her (_floorOwn). `exit` is the thing she would leave to
+// open (null: she isn't going anywhere); the exits mechanic quotes it back when she goes.
+// Written as one floor, so the women know each other: Naree and Yada are twins (Naree older by
+// twenty minutes), Sasi grew up in a temple children's home outside Sisaket, Wanida runs the
+// floor and Nubnab keeps the book.
+const FLOOR_OWN = {
+  naree: {
+    exit: "open a two-chair nail salon in Amnat Charoen",
+    nodes: [
+      { bond: 2, text: '"You come back." Not a question; the stool beside her is already empty, and she does not say how. "Yada say you come back for her. I say you come back for me. We bet fifty baht." She does not tell you who won.' },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: '"Sawatdee ka." A small wai, very correct. "I am Naree. Number fifty-three." A glance along the stage at a woman with her face and a different haircut. "That one is my sister. She talk enough for two. I talk for one."',
+        short: '"Naree. Fifty-three. The quiet one."',
+        asks: { key: "home", q: '"You from where? Somewhere cold, I think." She studies you seriously. "You have cold-country face."' } },
+      { topic: "family",
+        text: '"Mama in Amnat Charoen, and one little brother, M5 — very lazy, very clever." She holds up two fingers pressed together. "Papa go when we are three. Mama say he cannot tell us apart, so he decide not to try." She has told it as a joke before, and it nearly is one.',
+        short: '"Mama, one lazy clever brother. Papa go when we are three."' },
+      { topic: "home",
+        text: '"Amnat Charoen. Small province, nobody know it — you say Ubon, then they know." The faintest smile. "Mekong very close. When we are small, Yada swim, I watch her shoes."',
+        short: '"Amnat Charoen, by the Mekong. Yada swim, I watch the shoes."' },
+      { bond: 1, topic: "plan|dream|future|salon|nail salon",
+        text: '"Nail salon, at home. Two chair." She has clearly said the number many times. "One chair for me, one for Yada." A pause long enough to mean something. "Yada not say yes yet about her chair."',
+        short: '"Two chairs. One is Yada\'s, if she want it."' },
+      { topic: "plan|dream|future|salon|nail salon",
+        text: '"Plan?" She considers whether you have earned it, and decides on the outline. "Small shop, at home. Something with my hands." She looks at her nails rather than at you. "Not this forever."',
+        short: '"Small shop, at home. Not this forever."' },
+      { topic: "nails|nail|colour|color|bangkok sunset",
+        text: 'She holds her hand out flat on the bar, the way a woman in a salon does. "Bangkok Sunset. Number fourteen in the book." She turns it to the light. "I do myself, every Monday. Yada nails I do also, when she sit still, which is never."',
+        short: '"Bangkok Sunset. I do them myself, every Monday."' },
+      { bond: 2, topic: "yada|sister|twin|twins|your sister",
+        when: () => !(typeof _exited === "function" && _exited("naree")),
+        text: '"Everybody think I come to Pattaya first and Yada follow." She keeps her eyes on the middle tier. "No. Yada come first. I come six month later because Mama cannot sleep." She turns the little Buddha over at her throat. "Now Mama sleep. I don\'t."',
+        short: '"Yada come first. I come because Mama cannot sleep."' },
+      { topic: "yada|sister|twin|twins|your sister",
+        text: '"Yada is twenty minute younger. She act like twenty year." Naree watches her sister on the middle tier without expression. "Customer ask me which one is which. I say: the one laughing is Yada. Always correct."',
+        short: '"Twenty minutes younger. The one laughing is Yada."' },
+      { topic: "buddha|amulet|necklace|gold buddha",
+        text: 'She touches the little gold Buddha at her throat. "Mama give one to me, one to Yada — same day, same monk." A beat. "Yada lose hers in one year. I wear this one for both."',
+        short: '"Same day, same monk. I wear it for both of us."' },
+      { topic: "free|free drink|the free drink|free shot",
+        text: '"Free?" She gives you the look she gives a chit that does not add up. "First drink, maybe. After, everything in this room have a price — me also." Not unkindly. "Better you know now."',
+        short: '"Everything here has a price. Better you know now."' },
+      { topic: "wallet", notFlags: ["hasWallet"],
+        text: '"Wallet?" She frowns, genuinely sorry. "Walking Street, nobody give back. You go Soi Buakhao, ask Khun Candy at Candy Bar. Everybody trouble go to Candy. She know who."',
+        short: '"Soi Buakhao. Ask Candy. She knows who."' },
+      { topic: "price",
+        text: '"Take me?" She does not hurry the answer. "First you pay the bar — barfine, Wanida say how much. Then my part, we agree before. Not after." She holds your eye. "I like before. After is where people forget." (BARFINE <name>)',
+        short: '"The bar first, then me. Agreed before, not after." (BARFINE <name>)' },
+      { topic: "late",
+        text: '"After close?" She thinks about it honestly. "Khao tom with Yada, go home, sleep. Very boring." A pause. "Sometime Yada go out after — ran lao, Thai place. I go too, to bring her home."',
+        short: '"Khao tom, home, sleep. Unless Yada goes out."' },
+      { topic: "salary", bond: 1,
+        text: '"Salary is small. Is for come every night." She sets it out precisely. "Real money is the drink, the barfine. I write every one in my book, same as Nubnab write in hers." A thin smile. "My book and her book, always same. I check."',
+        short: '"Salary is small. I keep my own book and it matches hers."' },
+      { topic: "quota", bond: 1,
+        text: '"Quota, every month — drink and barfine." She does not need her fingers. "I am over. Yada is under. Together we are fine." She does not seem to find this funny.',
+        short: '"I am over, Yada is under. Together we are fine."' },
+    ],
+  },
+  yada: {
+    exit: null,
+    nodes: [
+      { bond: 2, text: '"You! Sit sit." She is already writing your name on a chit and spelling it wrong with total confidence. "Naree say you come back for her. I tell her nobody come back for the quiet one." A wicked look. "She bet me fifty baht. Don\'t tell her."' },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: '"Hello hello! You find the good twin." A hoarse laugh, too big for the room, and she does not care. "I am Yada. That one —" a pen pointed at the solemn copy of her face further along — "is Naree. She will tell you she is the good twin. She lie."',
+        short: '"Yada! The good twin. Don\'t believe the other one."',
+        asks: { key: "trips", q: '"First time Walking Street? Your face say first time." She grins. "Is okay. Everybody first time one time."' } },
+      { topic: "family",
+        text: '"Mama, Amnat Charoen. Brother in school, he want be engineer, we pay." She ticks it off with the pen. "Papa —" a flick of the wrist, gone. "Papa is old news. Naree still read old news. Me, I read new news."',
+        short: '"Mama, the engineer brother. Papa is old news."' },
+      { topic: "home",
+        text: '"Amnat Charoen. Very quiet. Too quiet." She laughs. "Naree like quiet. Me, three day at home, I want Walking Street back."',
+        short: '"Amnat Charoen. Three days and I want Walking Street back."' },
+      { topic: "plan|dream|future",
+        text: '"Plan?" She takes the pen from behind her ear and draws on a beer mat: three tiers, little stick dancers. "This is my plan. Mamasan, one day. Not the nail salon." She draws a small chair and puts a line through it. "Naree plan have two chair. I never say yes to the second chair."',
+        short: '"Mamasan one day. Not the second chair."' },
+      { topic: "pen|chit|chits|ransom note",
+        text: '"{{Pen}}? For the chit — I write my number myself." She shows you: 183, enormous, slanting off the edge. "Nubnab say my writing look like ransom note. Naree write like schoolteacher. Same face, different hand."',
+        short: '"For the chit. My number, my handwriting."' },
+      { bond: 2, topic: "naree|sister|twin|twins|your sister",
+        when: () => !(typeof _exited === "function" && _exited("naree")),
+        text: '"You want know a secret?" She lowers the hoarse voice, which only makes it carry. "If I go home, Naree go home. She open the salon, she is happy, she is finish." She taps the pen on your knuckles. "Then she stop watching me. I don\'t know who I am, nobody watching."',
+        short: '"If I go home, she stops watching me. I don\'t know who I am then."' },
+      { topic: "naree|sister|twin|twins|your sister",
+        when: () => typeof _exited === "function" && _exited("naree"),
+        text: '"Naree go home." Yada says it to the stage, not to you. "She open the salon. Two chair." The laugh comes, a size smaller than it used to be. "One chair empty. She keep it for me anyway. That is Naree."',
+        short: '"She went home. She keeps the second chair anyway."' },
+      { topic: "naree|sister|twin|twins|your sister",
+        text: '"Naree?" A sideways look up the bar, fond and fed up at once. "She sit like temple. Customer think she is sad. She is not sad, she is counting." The laugh again. "She count for both of us. Somebody have to."',
+        short: '"She sits like a temple. She is counting, not sad."' },
+      { topic: "free|free drink|the free drink|free shot",
+        text: '"Free!" She cackles. "Free is the stage — look, look, free." She waves at the middle tier. "Sit here with Yada, not free. But more fun."',
+        short: '"The stage is free. I am more fun."' },
+      { topic: "wallet", notFlags: ["hasWallet"],
+        text: '"Aiyo, poor you!" A pat on the arm, loud enough for the next table. "You go Buakhao, find Candy — Candy Bar, ask anybody. That woman know every pickpocket by first name."',
+        short: '"Buakhao. Candy. She knows every pickpocket by name."' },
+      { topic: "price",
+        text: '"You want take me out? Ha!" Delighted. "Okay — barfine to the bar, Wanida say how much. Then my money is my money, we talk." She waggles the pen. "And I write it down. Ransom note, remember." (BARFINE <name>)',
+        short: '"Barfine to the bar, then my money. I write it down." (BARFINE <name>)' },
+      { topic: "late",
+        text: '"After close? Party, na!" The laugh. "Thai disco, ran lao — farang cannot find it alone." She leans in. "If a girl like you, she take you on the bike. If Naree like you, she buy you khao tom and tell you go home. Very different night."',
+        short: '"Ran lao, on the bike — if a girl likes you."' },
+      { topic: "salary", bond: 1,
+        text: '"Salary? Pfff." She blows it away. "Salary is for the bus. Money is the stage — customer happy, customer buy drink." A dancer\'s arm, flexed. "I am very good at customer happy."',
+        short: '"Salary is for the bus. The money is the stage."' },
+      { topic: "quota", bond: 1,
+        text: '"Quota!" She groans. "Every month a number. I am under, always under — I talk too long with one customer." A grin. "Naree is over. Wanida say, Yada, be more like Naree. I say, then you have two Naree. Very boring bar."',
+        short: '"Always under. Two Narees would be a very boring bar."' },
+    ],
+  },
+  sasi: {
+    exit: "go back to Sisaket and teach sport at the children's home",
+    nodes: [
+      { bond: 2, text: '"You again." A real smile, not the stage one. "In the home, nobody come back. Volunteer come, take photo, go. You come back." She says it plainly and then orders, as if it were nothing.' },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: '"Hello! Sit, sit." She glances at the sports watch, then at you, as if you are a split time. "I am Sasi. I run on the beach every morning, six o\'clock. Nobody from this bar run. Only me." She seems proud of it and slightly baffled.',
+        short: '"Sasi. The one who runs."',
+        asks: { key: "stay", q: '"How long you stay?" She checks the watch out of habit. "I like to know how long. Then I can count."' } },
+      { topic: "family|mother|father|parents|orphan|orphanage",
+        text: '"Family?" She thinks about how to say it. "I grow up in children home — temple one, outside Sisaket. Maybe forty kid. Somebody leave me at the gate when I am baby." A shrug that is not sad. "The monk is my papa, the cook auntie is my mama. So the money I send, I send there. New roof last year." She is very pleased about the roof. "My roof."',
+        short: '"I grew up in the temple children\'s home. I send the money there. New roof last year."' },
+      { topic: "home",
+        text: '"Sisaket. The home is by the rice, next to the temple — I go back every Songkran." She grins. "The little kids call me pee Sasi from Pattaya. They think Pattaya is like TV."',
+        short: '"Sisaket, the home by the temple. Every Songkran."' },
+      { topic: "plan|dream|future",
+        text: '"I want go back and teach sport at the home. Volleyball, running." She taps the watch. "Two more year. I count." She means it literally: the number of days is on the watch\'s lock screen.',
+        short: '"Back to the home, to teach sport. Two more years. I count."' },
+      { topic: "watch|sports watch|running|run|beach",
+        text: '"Watch?" She holds out her wrist like a nurse taking a pulse. "Steps, heart, sleep." A rueful look. "Sleep is terrible. Steps is very good — go-go stage is many, many step."',
+        short: '"Steps very good. Sleep terrible."' },
+      { bond: 2, topic: "real mother|your mother|your real mother|birth mother",
+        text: '"My real mama?" Sasi turns the watch round on her wrist. "Sometime in the market I look at a woman, same age, same face shape. Maybe." A shrug. "Then I stop. Forty brother sister is enough family. More is greedy."',
+        short: '"Sometimes I look at faces in the market. Then I stop. Forty is enough."' },
+      { topic: "free|free drink|the free drink|free shot",
+        text: '"Nothing free, na. In the home the rice is free, and you thank the monk." She smiles. "Here you say thank you with a lady drink. Same idea, different monk."',
+        short: '"Same idea as the rice. Different monk."' },
+      { topic: "wallet", notFlags: ["hasWallet"],
+        text: '"Lose wallet?" She thinks about it like a coach. "First, breathe. Second, Soi Buakhao — Candy Bar, ask Candy. Third, when you find it, buy me drink." A grin. "Order important."',
+        short: '"Breathe. Buakhao. Candy. Then the drink."' },
+      { topic: "price",
+        text: '"Go with you?" She glances at the watch out of habit. "Barfine first, to the bar — that is Wanida. Then mine, separate." She holds up two fingers. "Two price, always. I count both." (BARFINE <name>)',
+        short: '"Two prices. The bar, then me." (BARFINE <name>)' },
+      { topic: "late",
+        text: '"After close I sleep. Six o\'clock I run." She shrugs at the arithmetic. "Other girl go ran lao, motorbike, everything. Me, I am the grandmother of this bar. Twenty-six year old grandmother."',
+        short: '"I sleep. I run at six. The bar\'s grandmother."' },
+      { topic: "salary", bond: 1,
+        text: '"Salary is very small, but it always come — like the rice in the home." She approves of it for that alone. "Drink money go up, go down. Salary I can count."',
+        short: '"Small, but it always comes. I can count it."' },
+      { topic: "quota", bond: 1,
+        text: '"Quota, na. I hit it every month. I am a runner — I like a number to chase." A small shrug. "Some girl hate the number. For me the number is the one thing in Pattaya that make sense."',
+        short: '"I hit it every month. I like a number to chase."' },
+    ],
+  },
+  wanida: {
+    nodes: [
+      { text: '"Good evening." She looks you over once, the way she checks a costume for loose sequins. "I am Wanida. I run this floor. If a girl is rude to you, tell me. If you are rude to a girl, I will already know."',
+        short: '"Wanida. This floor is mine. Be nice to it."' },
+      { topic: "girls|the girls|your girls|introduce",
+        text: '"You want an introduction? Ask me, not the stage." She nods along the tiers. "Naree and Yada are sisters — twins. Sasi runs on the beach at six in the morning, which I do not understand and do not stop. Choose with your eyes, then ask with your manners."',
+        short: '"Naree, Yada, Sasi. Choose with your eyes, ask with your manners."' },
+      { topic: "twins|the twins",
+        text: '"Customers ask for \'the twins\' like ordering a set menu." A thin smile. "I tell them: two girls, two names, two prices. Naree and Yada. If you cannot tell which is which, you are not looking, and that is your problem, not theirs."',
+        short: '"Two girls, two names. Look properly."' },
+      { topic: "family",
+        text: '"No husband, no children, one sister in Sakon Nakhon who prays for me loudly at every festival." A dry look. "I send her money for the temple. She tells the temple it comes from a restaurant."',
+        short: '"One sister, who prays for me loudly. I pay for the temple."' },
+      { topic: "plan|future",
+        text: '"Ten more years on my feet, then a stool behind the till of my own bar." She says it as a schedule, not a hope. "Somewhere small. No three tiers. I am tired of stairs."',
+        short: '"Ten more years, then my own small bar. No stairs."' },
+      { topic: "home|hometown|village|where you from",
+        text: '"Sakon Nakhon. Lakes, rice, and my sister\'s opinions." A small shrug. "I go back at Songkran to be disapproved of. It keeps me young."',
+        short: '"Sakon Nakhon. I go back to be disapproved of."' },
+      { topic: "wallet", notFlags: ["hasWallet"],
+        text: '"Your wallet." She does not ask how; she has heard it a thousand times. "Not in my bar — I would know. Go to Soi Buakhao and ask for Candy at Candy Bar. If anyone in this town can turn it up, she can."',
+        short: '"Soi Buakhao. Ask Candy."' },
+    ],
+  },
+  nubnab: {
+    nodes: [
+      { text: '"Evening." Her eyes stay on the book. "Chit in the cup. You drink, I write, you sign at the end. Nobody argues." The calculator at her elbow has a sticker over its screen.',
+        short: '"Chit in the cup. Sign at the end."' },
+      { topic: "twins|naree|yada|handwriting",
+        text: '"The twins?" She almost smiles. "Customers mix them up. I never do. Naree writes her number like a schoolteacher, Yada writes hers like a ransom note." She taps two chits in the cup. "Same face. Different hand. The book knows."',
+        short: '"Same face, different hand. The book knows."' },
+      { topic: "family",
+        text: '"My mother and my son, in {{Nong Bua Lamphu}}. He is nine and he wants to be a pilot." She enters a figure without looking at it. "Pilot school is in this book somewhere. Page by page."',
+        short: '"My son wants to be a pilot. It is in this book, page by page."' },
+      { topic: "home|hometown|village|where you from",
+        text: '"{{Nong Bua Lamphu}}. The province people forget when they list Isan." A brisk nod. "Fine by me. Nobody from home has ever walked down those steps."',
+        short: '"{{Nong Bua Lamphu}}. Nobody from home has walked down those steps."' },
+      { topic: "calculator|sticker",
+        text: 'She glances at the calculator as if she had forgotten it. "The owner gave it to me my first week. I put the sticker over the screen my second." A shrug. "It was slower than me."',
+        short: '"It was slower than me."' },
+      { topic: "money|tab|bill|price",
+        text: '"The board is the board, and the barfine is Wanida\'s word." She turns the book so you can read it. "What you agree with a girl is between you and her — get it in words before the drinks. I only write what the bar charges."',
+        short: '"Board, barfine, and whatever you agreed. Only the first two are mine."' },
+      { topic: "wallet", notFlags: ["hasWallet"],
+        text: '"Nothing goes through my till that is not yours to pay." A short look over the book. "For a wallet, Candy, on Soi Buakhao — Candy Bar. People bring her their losses the way they bring me their chits."',
+        short: '"Candy, on Soi Buakhao. She collects losses."' },
+    ],
+  },
+};
 
 // THE FLOOR STAFF (Mario, 2026-10-07: "consolidate them all as NPCs"). Every hostess, mamasan and
 // cashier on a bar floor is an ordinary NPC with her own record: name, bar, look (her portrait
@@ -17970,9 +18062,9 @@ function _floorCashier(id, r) {
 const FLOOR_STAFF = {
   ratsamee: {"role":"hostess","name":"Ratsamee","th":"รัศมี","room":"lake_beer","emoji":"🌷","look":"Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool","from":"Ubon","desc":"Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool — one of The Sundowner's girls, from Ubon. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","pick":{"greet":0,"short":1,"ask":1,"askQ":2,"family":1,"plan":1,"famWrap":1,"planWrap":1,"homeWrap":0,"free":3,"wallet":0,"drinksOnly":2,"price":2,"late":2,"lockin":1}},
   kwanjai: {"role":"hostess","name":"Kwanjai","th":"ขวัญใจ","room":"lake_beer","emoji":"🌸","look":"Heavy-set and unhurried, a gold tooth and a market auntie's arms","from":"Surin","desc":"Heavy-set and unhurried, a gold tooth and a market auntie's arms — one of The Sundowner's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":4,"short":1,"ask":2,"askQ":0,"family":6,"plan":14,"famWrap":2,"planWrap":0,"homeWrap":0,"free":0,"wallet":2,"drinksOnly":2,"price":0,"late":0,"lockin":1}},
-  naree: {"role":"hostess","name":"Naree","th":"นารี","room":"windmill","emoji":"💐","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Amnat Charoen","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 53 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","selfies":["waiting work 💕 think about you","new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555"],"pick":{"greet":1,"short":0,"ask":0,"askQ":0,"family":0,"plan":4,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  naree: {"role": "hostess", "name": "Naree", "th": "นารี", "room": "windmill", "emoji": "💐", "look": "Thai woman, mid twenties, big dark eyes, round face, long hair tied back, solemn, small gold Buddha pendant", "from": "Amnat Charoen", "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 53 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.", "selfies": ["waiting work 💕 think about you", "new hair 💇‍♀️ good mai??", "me eat somtam 🥵🌶️ so spicy 555"], "pick": {"greet": 1, "short": 0, "ask": 0, "askQ": 0, "family": 0, "plan": 4, "famWrap": 2, "planWrap": 2, "homeWrap": 2, "free": 2, "wallet": 0, "drinksOnly": 2, "price": 0, "late": 0, "lockin": 0}, "twin": "yada"},
   sasi: {"role":"hostess","name":"Sasi","th":"ศศิ","room":"windmill","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sisaket","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Gilt Cage's girls, from Sisaket. The badge pinned at her hip says 100 — the number the floor knows her by. She counts the room's empty glasses without seeming to look at them.","pick":{"greet":0,"short":2,"ask":3,"askQ":2,"family":19,"plan":3,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
-  yada: {"role":"hostess","name":"Yada","th":"ญาดา","room":"windmill","emoji":"💐","look":"Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear","from":"Buriram","desc":"Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of The Gilt Cage's girls, from Buriram. The badge pinned at her hip says 183 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":3,"short":0,"ask":0,"askQ":0,"family":12,"plan":16,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  yada: {"role": "hostess", "name": "Yada", "th": "ญาดา", "room": "windmill", "emoji": "💐", "look": "Thai woman, mid twenties, big dark eyes, round face, laughing, hair cropped to the jaw, pen behind one ear", "from": "Amnat Charoen", "desc": "Big-eyed, a solemn face that breaks into a hoarse laugh, hair cropped to the jaw, a pen behind one ear — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 183 — the number the floor knows her by. Her twin wears fifty-three; Wanida gave them numbers a long way apart, on purpose.", "pick": {"greet": 3, "short": 0, "ask": 0, "askQ": 0, "family": 12, "plan": 16, "famWrap": 2, "planWrap": 2, "homeWrap": 2, "free": 2, "wallet": 0, "drinksOnly": 2, "price": 0, "late": 0, "lockin": 0}, "twin": "naree"},
   dao: {"role":"hostess","name":"Dao","th":"ดาว","room":"tequila_queen","emoji":"💕","look":"Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is","from":"Ubon","desc":"Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of Tequila Queen A-Go-Go's girls, from Ubon. The badge pinned at her hip says 7 — the number the floor knows her by. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","selfies":["gym 💪 strong for you","rainy 🌧️ i stay home lonely 🥺","friend birthday 🎂 we sing loud loud"],"pick":{"greet":1,"short":1,"ask":3,"askQ":1,"family":15,"plan":19,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
   mook: {"role":"hostess","name":"Mook","th":"มุก","room":"tequila_queen","emoji":"✨","look":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot","from":"Yasothon","desc":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of Tequila Queen A-Go-Go's girls, from Yasothon. The badge pinned at her hip says 95 — the number the floor knows her by. Google Translate is open before you finish the sentence.","selfies":["friend birthday 🎂 we sing loud loud","me eat somtam 🥵🌶️ so spicy 555","new nail 💅 pink na"],"pick":{"greet":1,"short":2,"ask":1,"askQ":2,"family":5,"plan":9,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   ice: {"role":"hostess","name":"Ice","th":"ไอซ์","room":"tequila_queen","emoji":"💫","look":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face","from":"Roi Et","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Tequila Queen A-Go-Go's girls, from Roi Et. The badge pinned at her hip says 15 — the number the floor knows her by. The {{phone}} never leaves her hand.","pick":{"greet":3,"short":1,"ask":0,"askQ":1,"family":12,"plan":16,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
@@ -18115,7 +18207,7 @@ const FLOOR_STAFF = {
   mint: {"role":"hostess","name":"Mint","th":"มิ้นท์","room":"the_bucket","emoji":"🌷","look":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant","from":"{{Nong Bua Lamphu}}","desc":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of The Bucket's girls, from {{Nong Bua Lamphu}}. She hums along to whatever is playing and knows about half of the words in English.","pick":{"greet":3,"short":1,"ask":1,"askQ":1,"family":17,"plan":1,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
   sudjai: {"role":"mamasan","name":"Sudjai","th":"สุดใจ","room":"orchid_room","look":"Older, sharper, and entirely done being impressed by farang","from":"Sakon Nakhon","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Orchid Room, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":5,"plan":1,"home":7,"wallet":3,"story":7}},
   boonsri: {"role":"mamasan","name":"Boonsri","th":"บุญศรี","room":"lake_beer","look":"Older, sharper, and entirely done being impressed by farang","from":"Khon Kaen","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Sundowner, from Khon Kaen. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":1,"plan":5,"home":7,"wallet":3,"story":7}},
-  wanida: {"role":"mamasan","name":"Wanida","th":"วนิดา","room":"windmill","look":"Elegant, weathered, and plainly the last word on everything in the room","from":"Sakon Nakhon","desc":"Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came up from the rice fields and never once looked back.","pick":{"greet":1,"girls":1,"lockin":1,"family":7,"plan":3,"home":1,"wallet":1,"story":1}},
+  wanida: {"role": "mamasan", "name": "Wanida", "th": "วนิดา", "room": "windmill", "look": "Elegant, weathered, and plainly the last word on everything in the room", "from": "Sakon Nakhon", "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came down from the rice fields at seventeen and has run floors on this street for twenty years.", "pick": {"greet": 1, "girls": 1, "lockin": 1, "family": 7, "plan": 3, "home": 1, "wallet": 1, "story": 1}},
   alisa: {"role":"mamasan","name":"Alisa","th":"อลิสา","room":"katoeys","look":"Elegant, weathered, and plainly the last word on everything in the room","from":"Yasothon","desc":"Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns three of these stools now.","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":3,"home":5,"wallet":1,"story":5}},
   sunee: {"role":"mamasan","name":"Sunee","th":"สุนีย์","room":"doghouse","look":"Warm to your face, ice at the till, and fluent in both","from":"Khon Kaen","desc":"Warm to your face, ice at the till, and fluent in both — the mamasan of The Doghouse, from Khon Kaen. She started on the stage at seventeen and owns three of these stools now.","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":3,"home":5,"wallet":1,"story":5}},
   pen: {"role":"mamasan","name":"Pen","th":"เพ็ญ","room":"blue_dog","look":"Sits like she owns the stool, because she does","from":"Maha Sarakham","desc":"Sits like she owns the stool, because she does — the mamasan of Blue Dog, from Maha Sarakham. She has run this floor longer than most of the girls have been alive.","pick":{"greet":2,"girls":2,"lockin":2,"family":4,"plan":0,"home":2,"wallet":2,"story":2}},

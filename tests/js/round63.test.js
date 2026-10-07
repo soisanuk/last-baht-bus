@@ -26,7 +26,7 @@ const ask = (id, topic) => { G.room = NPCS[id].room; G.nightTurn = 30; out = [];
 test("no two women in town tell you the same family story while unheard ones remain", () => {
   // present women only: the pool is forty deep now (round 65), and the forty-first filler
   // girl in id order is home for November's harvest
-  const girls = Object.keys(NPCS).filter(id => NPCS[id].filler && NPC_ROLES[id] === "hostess" && _npcActive(id)).slice(0, _H_FAMILY.length);
+  const girls = Object.keys(NPCS).filter(id => NPCS[id].filler && !FLOOR_OWN[id] && NPC_ROLES[id] === "hostess" && _npcActive(id)).slice(0, _H_FAMILY.length);
   const heard = new Set();
   for (const id of girls) { ask(id, "family"); heard.add(G.storyOf[id].hfamily); }
   assert.equal(heard.size, girls.length, "every family line distinct across " + girls.length + " women");
@@ -34,7 +34,7 @@ test("no two women in town tell you the same family story while unheard ones rem
   const first = girls[0], k = G.storyOf[first].hfamily; ask(first, "family"); assert.equal(G.storyOf[first].hfamily, k);
 });
 test("the mamasans do not share a son: family stories are dealt once across the town's mamas", () => {
-  const mamas = Object.keys(NPCS).filter(id => NPCS[id].filler && NPC_ROLES[id] === "mamasan").slice(0, 8);
+  const mamas = Object.keys(NPCS).filter(id => NPCS[id].filler && !FLOOR_OWN[id] && NPC_ROLES[id] === "mamasan").slice(0, 8);
   const ks = mamas.map(id => { ask(id, "family"); return G.storyOf[id].mfamily; });
   assert.equal(new Set(ks).size, ks.length);
 });
