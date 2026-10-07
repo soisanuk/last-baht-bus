@@ -2617,7 +2617,7 @@ function _doSoapy() {
   }
   if (_partyBlocksTrade()) return;
   if (G.soc.soapyDone === G.day) {
-    _say(`${_soapyBoss()} takes one look and laughs. “Again? Go home, sleep, eat something — tomorrow.” ` +
+    _say(`${_ucfirst(_soapyBoss())} takes one look and laughs. “Again? Go home, sleep, eat something — tomorrow.” ` +
       "Once through the soap is plenty for one night.");
     return;
   }
@@ -2627,6 +2627,10 @@ function _doSoapy() {
 
 // The manageress of the soapy you're standing in (Poseidon's Toom, or a generic
 // one at a filler soapland) — so the prose isn't hardwired to one venue.
+// Returns a NAME where the shop has one, else the lowercase role noun — so every
+// caller that starts a sentence with it must _ucfirst() it. A shop with no named
+// manageress opened its menu line in lower case for the game's whole life
+// (Clifford, round 68).
 function _soapyBoss() {
   const id = _npcsHere().find(n => NPCS[n] && NPCS[n].soapyBoss);
   return id ? NPCS[id].name : "the manageress";
@@ -2635,7 +2639,7 @@ function _soapyBoss() {
 // Single source for the live menu, the invalid-pick reprompt, and the resume
 // redraw (see _renderResume — a new modal gate must redraw or the load is blind).
 function _soapyPrompt() {
-  _say(`${_soapyBoss()} slides the laminated menu across and nods at the glass. Pick a number:`, "dim");
+  _say(`${_ucfirst(_soapyBoss())} slides the laminated menu across and nods at the glass. Pick a number:`, "dim");
   for (const t of _SOAPY_TIERS) _say(`  [${thaiDigits(t.num)}]  ${t.label} — ฿${t.price}`, "dim");
   _say(`(Say a number — ${_SOAPY_TIERS.map(t => t.num).join(" · ")} — or the tier name. NO backs out.)`, "dim");
 }
@@ -2646,7 +2650,7 @@ function _soapyResolve(input) {
   if (/^(no\b|cancel|never|forget|leave|out|nothing|maybe|nvm)/.test(input)) {
     G.pendingSoapy = null;
     _say("You take one more look at the glass and decide your wallet has strong opinions. " +
-      `${_soapyBoss()} shrugs, entirely unoffended — the fish keep swimming.`);
+      `${_ucfirst(_soapyBoss())} shrugs, entirely unoffended — the fish keep swimming.`);
     return true;
   }
   const thai = parseThaiDigits(input);
@@ -2656,11 +2660,11 @@ function _soapyResolve(input) {
     input.includes(t.key) || input.includes(t.label) ||
     (t.key === "super" && /\bsuper\b/.test(input)) || (t.key === "model" && /\bmodel\b/.test(input)));
   if (!tier && /\bstar\b/.test(input)) tier = _SOAPY_TIERS[0]; // bare "star" → the entry tier
-  if (!tier) { _say(`${_soapyBoss()} taps the glass, patient: “That number not here, tilac.”`, "dim"); _soapyPrompt(); return false; }
+  if (!tier) { _say(`${_ucfirst(_soapyBoss())} taps the glass, patient: “That number not here, tilac.”`, "dim"); _soapyPrompt(); return false; }
   if (G.money < tier.price) {
     G.pendingSoapy = null;
     _say(`Number ${thaiDigits(tier.num)} is the ${tier.label} tier — ฿${tier.price}. Your pocket says ` +
-      `฿${G.money}. ${_soapyBoss()} closes the menu with a kind, final click: “Maybe the star, next time.”`);
+      `฿${G.money}. ${_ucfirst(_soapyBoss())} closes the menu with a kind, final click: “Maybe the star, next time.”`);
     return true;
   }
   G.pendingSoapy = null;
@@ -11487,8 +11491,11 @@ function _doNotebook() {
     return;
   }
   _say("── THE BACK OF YOUR NOTEBOOK ──", "win");
-  _say(_fmt("Thai you have actually used: {n} different things{s}.",
-    { n: said, s: script ? ", " + script + " of them typed in the script" : "" }));
+  // {script} is NOT named {s}: that is _plural's slot by convention, and naming a
+  // whole clause {s} is how "1 different things" survived (Clifford, round 68).
+  _say(_fmt("Thai you have actually used: {n} different thing{p}{script}.",
+    { n: said, p: _plural(said),
+      script: script ? ", " + script + " of them typed in the script" : "" }));
   if (tiers.length) _say("Taught by Kruu Waen: " + tiers.map(([t, n]) => n + " " + t).join(" · ") + ".");
   if (seen) _say(_fmt("Thai the town has shown you: {n} words and phrases, which is the real syllabus.", { n: seen }));
   const reg = typeof _thaiRegister === "function" ? _thaiRegister() : "novice";

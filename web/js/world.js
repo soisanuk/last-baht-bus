@@ -6995,6 +6995,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "drinks and I count the days. Good deal. Better than the floor.\" She tries it in his " +
         "language, the way she practises it at him: \"Ich bin vergeben.\" A small proud nod at having got " +
         "it out whole. \"Spoken-for. Klaus teach me that word first. Before please, before thank you.\"" },
+      // She is one of three women in town who answer in German, so GERMAN has to be a
+      // topic on her: a German speaker asks her language before he asks her sponsor
+      // (Lennart, round 68 — he stood in her bar for a night and got her hello).
+      { topic: "german|deutsch|germany|german language",
+        text: "\"Ah — Deutsch!\" The till face drops for a second and something younger comes up behind it. " +
+          "\"Klaus teach me. Two year, on the {{phone}}, every Sunday.\" She counts it off on her fingers, pleased " +
+          "with herself. \"Guten Morgen. Ich bin vergeben. Wie viel. Mein Schatz.\" A small shrug at the end of " +
+          "the list, where the German runs out. \"Is not so much, I know. But he say my accent better than his " +
+          "Thai, and his Thai is...\" She pulls a face that finishes the sentence. \"I learn the words he need me " +
+          "to have. Not the other ones.\"",
+        short: "\"Klaus teach me, two year on the {{phone}}. Guten Morgen, ich bin vergeben, wie viel. The words he need me to have.\"" },
       { topic: "ring", text: "\"Not married. Not yet.\" She turns it. \"Promise ring. He say when he retire he " +
         "take me Germany, we marry proper. I believe him. Mostly.\" The 'mostly' escapes before she can stop " +
         "it, and she files it away, embarrassed. \"He is a good man. Really. Two year, always the money come.\"" },
