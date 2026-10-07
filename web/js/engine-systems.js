@@ -1097,8 +1097,8 @@ function _bfRefusalSay(id, r) {
     sponsor: `${name} touches your arm, honestly sorry: “Cannot now, tilac. My ` +
       "friend — he take care me, I no working while he in town. You " +
       "understand, na?” Everyone understands. It's a calendar, not a heartbreak.",
-    drinksonly: `${name} is already off the stool — not to the till, to the changing room, with your ` +
-      "glass still half full on the bar — and " + (_npcsHere().some(n => NPC_ROLES[n] === "mamasan") ? "the mamasan, looking up a beat later, finds the " +
+    drinksonly: `${name} is already off the ${_seat()} — not to the till, to the changing room, with your ` +
+      `glass still half full on ${_ledge()} — and ` + (_npcsHere().some(n => NPC_ROLES[n] === "mamasan") ? "the mamasan, looking up a beat later, finds the " +
       "question with nobody to put it to. “That one, drink only,” she says, as if you had asked " +
       "the price of the ceiling. “She decide. Not me.”" : "the stool beside you is simply empty, with your question still on it.") + " A minute later " + name + " is back beside " +
       "you, cheerful, and the subject has never existed. (She will take another drink.)",

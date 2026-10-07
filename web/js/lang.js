@@ -904,10 +904,10 @@ const _CATALOGS = {
       "{n} lässt es zu — und lässt sich dabei Zeit. Irgendwer klingelt die Kasse, nur um Lärm zu machen.",
     "{n} meets you halfway and holds it a beat past friendly. When she pulls back she's smiling at something she's decided not to tell you.":
       "{n} kommt dir auf halbem Weg entgegen und hält ihn einen Moment länger, als freundlich wäre. Als sie sich zurückzieht, lächelt sie über etwas, das sie beschlossen hat, dir nicht zu verraten.",
-    "{n} kisses YOU, decisively, to a smattering of applause from the far end of the bar. You are now, officially, sitting with her.":
-      "{n} küsst DICH, entschlossen, begleitet von vereinzeltem Applaus vom anderen Ende der Bar. Du sitzt jetzt, ganz offiziell, bei ihr.",
-    "{n} takes your face in both hands and kisses you like she means the version of it she's selling. A glass goes up down the bar. You're hers for the night.":
-      "{n} nimmt dein Gesicht in beide Hände und küsst dich, als meinte sie die Version davon, die sie verkauft. Weiter unten an der Bar hebt sich ein Glas. Du gehörst ihr für heute Nacht.",
+    "{n} kisses YOU, decisively, to a smattering of applause from across the room. You are now, officially, sitting with her.":
+      "{n} küsst DICH, entschlossen, begleitet von vereinzeltem Applaus von der anderen Seite des Raums. Du sitzt jetzt, ganz offiziell, bei ihr.",
+    "{n} takes your face in both hands and kisses you like she means the version of it she's selling. Somebody across the room raises a glass. You're hers for the night.":
+      "{n} nimmt dein Gesicht in beide Hände und küsst dich, als meinte sie die Version davon, die sie verkauft. Auf der anderen Seite des Raums hebt jemand ein Glas. Du gehörst ihr für heute Nacht.",
     "{n} catches your wrist mid-air with a speed that suggests long practice, and the look she gives you drops the bar five degrees. Somewhere behind you, security uncrosses its arms.":
       "{n} fängt dein Handgelenk mitten in der Luft ab, mit einer Schnelligkeit, die auf lange Übung schließen lässt, und der Blick, den sie dir zuwirft, kühlt die Bar um fünf Grad. Irgendwo hinter dir löst der Türsteher die verschränkten Arme.",
     "Your hand doesn't get halfway. {n} steps out of range without appearing to move, and the temperature around you drops. A large man near the door stops chewing.":
@@ -983,8 +983,8 @@ const _CATALOGS = {
       "Du gibst eine Strophe zum Besten. Drei Hostessen steigen in den Refrain ein, ohne zu fragen, welches Lied es ist. Das hat noch nie eine Rolle gespielt.",
     "A peddler drifts in off the street with a display board of watches, a fan of sunglasses, and — produced from an inner pocket with a meaningful eyebrow — certain 'vitamins'. He stations himself at your elbow, patient as weather.":
       "Ein fliegender Händler treibt von der Straße herein, mit einem Brett voller Uhren, einem Fächer Sonnenbrillen und — aus der Innentasche gezogen, mit einer bedeutungsvollen Augenbraue dazu — gewissen „Vitaminen“. Er bezieht Stellung an deinem Ellbogen, geduldig wie das Wetter.",
-    "A slow head-shake. He re-shoulders the display board — watches swinging like wind chimes — and moves down the bar to a man who has already made eye contact, the fatal error.":
-      "Ein langsames Kopfschütteln. Er schultert das Brett wieder — die Uhren schaukeln wie Windspiele — und zieht den Tresen entlang zu einem Mann, der schon Blickkontakt aufgenommen hat: der fatale Fehler.",
+    "A slow head-shake. He re-shoulders the display board — watches swinging like wind chimes — and moves along to a man who has already made eye contact, the fatal error.":
+      "Ein langsames Kopfschütteln. Er schultert das Brett wieder — die Uhren schaukeln wie Windspiele — und zieht weiter zu einem Mann, der schon Blickkontakt aufgenommen hat: der fatale Fehler.",
     "A soi dog with one clipped ear falls in beside you for half a block, matching your pace with off-duty professionalism, then peels away at the soi mouth with one look back. (FEED DOG, if you'd like that to go differently.)":
       "Ein Soi-Hund mit gestutztem Ohr schließt für einen halben Block zu dir auf, hält mit dienstfreier Professionalität dein Tempo und schert mit einem letzten Blick zurück an der Soi-Mündung aus. (FEED DOG, wenn das anders ausgehen soll.)",
     "You concede with what dignity remains.":

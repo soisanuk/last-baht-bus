@@ -2386,8 +2386,8 @@ const _SOCIAL_TEXT = {
       n => _fmt("{n} meets you halfway and holds it a beat past friendly. When she pulls back she's smiling at something she's decided not to tell you.", { n }),
     ],
     [
-      n => _fmt("{n} kisses YOU, decisively, to a smattering of applause from the far end of the bar. You are now, officially, sitting with her.", { n }),
-      n => _fmt("{n} takes your face in both hands and kisses you like she means the version of it she's selling. A glass goes up down the bar. You're hers for the night.", { n }),
+      n => _fmt("{n} kisses YOU, decisively, to a smattering of applause from across the room. You are now, officially, sitting with her.", { n }),
+      n => _fmt("{n} takes your face in both hands and kisses you like she means the version of it she's selling. Somebody across the room raises a glass. You're hers for the night.", { n }),
     ],
   ],
   spank: [
@@ -2628,7 +2628,7 @@ function _doSocial(kind, targetWord) {
   const here = _npcsHere().filter(x => !NPCS[x].patron);
   const pat = w && !_PRONOUN.test(w.toLowerCase()) ? _findNpc(w) : null;
   if (pat && NPCS[pat].patron) {
-    _say(`${_npcLabel(pat)} is a regular at the rail, not one of the girls — ` +
+    _say(`${_npcLabel(pat)} is a regular ${_isGogo() ? "here" : "at the rail"}, not one of the girls — ` +
       "the look you get back ends the idea before it finishes forming.");
     return;
   }
@@ -3057,7 +3057,7 @@ const _BELL_GOGO = [
     "the mamasan's first fully unguarded smile of the night. Drinks materialise down the length " +
     "of the bar and every lady in the room now knows your name.",
   "You ring it and the whole floor turns: the girls on stage break character to cheer, the ones " +
-    "off it swarm the rail, the mamasan's guard drops for exactly one smile. A round for everyone " +
+    "off it swarm the front row, the mamasan's guard drops for exactly one smile. A round for everyone " +
     "working tonight — and everyone working tonight now knows your name.",
   "The bell goes and the place ignites — a round for the stage and the floor both. Cheers over " +
     "the bass, a drum-roll from the cashier's cage, hands on your shoulders you didn't invite and " +
@@ -3824,8 +3824,9 @@ const _OTHER_LEDGER = {
       `stamp, once. "Bar take most. I take ฿${LADY_CUT}." No complaint in it at all; she is ` +
       `explaining a system she lives inside, to a man who has been inside it for a ` +
       `week. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
-    (n) => `${n} makes you watch the barman build her drink, because she tells you to. Ice to the top, ` +
-      `a short pour, tonic over it until the colour goes. "Lady drink," she says, and turns the glass ` +
+    (n) => (_isGogo() ? `${n} makes you look at her drink when the waitress sets it down, because she tells you to. Ice to the top, ` +
+      `a short pour, tonic over it until the colour went.` : `${n} makes you watch the barman build her drink, because she tells you to. Ice to the top, ` +
+      `a short pour, tonic over it until the colour goes.`) + ` "Lady drink," she says, and turns the glass ` +
       `so the ice knocks. "Weak one. Must be." She has eight of these in her if the night goes well, ` +
       `and a girl who cannot take eight is a girl who goes home early. It costs ฿${_ladyPrice()}, ` +
       `of which ฿${LADY_CUT} is hers — she says it the way she'd tell you which songthaew goes to ` +
@@ -3834,7 +3835,7 @@ const _OTHER_LEDGER = {
   // tier 2 — the cost of you. Being liked is expensive: the seat she keeps is
   // the seats she doesn't fill, and the month is counted in drinks, not affection.
   2: [
-    (n) => `Two men come in, look along the rail, and settle at the far end with somebody else. ` +
+    (n) => `Two men come in, look the room over, and settle at the far end with somebody else. ` +
       `${n} watches them go with an expression that is not jealousy and not regret — it is ` +
       `arithmetic. "Thirty drink a month," she says, when she catches you noticing. "After that, ` +
       `bonus." Tonight she has sat with you, only you, most of the evening, and you have bought her ` +
@@ -3852,7 +3853,7 @@ const _OTHER_LEDGER = {
       `"So when mama say why you no work the door tonight, I say: he come back. And she look at ` +
       `the book." The book, you now understand, does not have a column for that.`,
     (n) => `A man at the far end has been talking to the mamasan for a while now and looking this way ` +
-      `while he does it. ${n} says something across the rail — pleasant, short, final — and the ` +
+      `while he does it. ${n} says something across the room — pleasant, short, final — and the ` +
       `mamasan spreads her hands at him and goes back to her phone. "He want take me out." ${n} ` +
       `picks her glass back up. "I say I sit with my friend." She does not tell you what that was ` +
       `worth and does not appear to want you to ask. The sum was done in front of you regardless, ` +
@@ -3875,7 +3876,7 @@ const _OTHER_LEDGER = {
     (n) => `"How old you think I am?" You are wise enough not to answer. ${n} tells you anyway, ` +
       `and then tells you how long she has done this, and the second number is most of the first ` +
       `one's adult life. "Girl come nineteen, twenty. Go home when?" She lifts a shoulder. ` +
-      `"Depend." Down the bar somebody rings the bell and the room cheers, and she cheers too, on ` +
+      `"Depend." Across the room somebody rings the bell and the room cheers, and she cheers too, on ` +
       `time, professionally, and then turns back to you and picks the sentence up exactly where ` +
       `she left it.`,
     (n) => `You ask where she stays and get a longer answer than the question earned: a room off ` +
@@ -5283,7 +5284,7 @@ function _endNight(reason) {
       // …and nothing at all to the owner after a stood shift: twelve hours behind his own
       // rail is not "three hours on the same stool" (Rolf, round 55)
       if (girls.length && !(G.bar && top === G.bar.room && _flag("barOpen")))
-        _say(`(Three hours on the same stool at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
+        _say(`(Three hours on the same ${_seat(top)} at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
       // and the man behind the rail: presence is how a manager decides you're not a tourist
       const mgr = _staffAt(top).find(id => NPCS[id] && NPCS[id].manager);
       // your own manager already knows your face — "(Bert will know it too.)" hung orphaned

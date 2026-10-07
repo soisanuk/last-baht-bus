@@ -1254,7 +1254,7 @@ const _ENC = {
       _addHappy(1);
     } else {
       _say("A slow head-shake. He re-shoulders the display board — watches swinging " +
-        "like wind chimes — and moves down the bar to a man who has already made " +
+        "like wind chimes — and moves along to a man who has already made " +
         "eye contact, the fatal error.");
     }
   },

@@ -734,7 +734,7 @@ const _STALL_EAT_LINES = [
 const _GOGO_UPSTAIRS = [
   "A hand lands on your chest before your foot finds the first stair — the mamasan, all smile, no give. \"Upstairs later, tilac. First you choose a lady, buy her a drink, pay her barfine — THEN up. Not before.\"",
   "The mamasan slides between you and the staircase like she teleported there. \"Ah-ah. No lady, no upstairs. Find one you like, take care of her proper, and the stairs are yours. Backwards no good, na.\"",
-  "You get one hand on the rail. The mamasan clears her throat and the rail is suddenly hers. \"Nothing up there for a man on his own, handsome. BARFINE a girl, do it right — then I show you up myself.\"",
+  "You get one hand on the handrail. The mamasan clears her throat and the handrail is suddenly hers. \"Nothing up there for a man on his own, handsome. BARFINE a girl, do it right — then I show you up myself.\"",
   "The staircase is right there and entirely off-limits: the mamasan plants herself on the bottom step. \"You want to go up? Buy a lady, pay her fine, she takes you. Only way the stairs work here.\"",
 ];
 
@@ -1013,7 +1013,7 @@ function _doGo(dirWord) {
     if (_flag("sabaiPlaying")) {
       _setFlag("officeOpen");
       _say("Security are mid-chorus with their backs turned and their hearts full. " +
-        "You slide behind the bar; the ห้ามเข้า door is unlocked, exactly as Ploy promised.");
+        "You slip past the cashier's cage; the ห้ามเข้า door is unlocked, exactly as Ploy promised.");
     } else {
       _deliver("security", _pickDialogue("security"));
       G.officeTries = (G.officeTries || 0) + 1;   // the guard talks on the second try
@@ -1167,9 +1167,9 @@ function _arriveAt(to) {
     _addBond(back, G.prevBond[back] >= 3 ? 4 : 2);
     _say(_returnGreetPick(back, [
       `${NPCS[back].name} looks up, and it takes her a second — then the whole face changes. ` +
-        `"You come BACK!" She is round the rail before the mamasan can say anything, both hands on ` +
+        `"You come BACK!" She is ${_isGogo(to) ? "down the stage steps" : "round the rail"} before the mamasan can say anything, both hands on ` +
         `your arm, checking you're real. "I think maybe you forget. I think maybe everybody forget."`,
-      `A stool scrapes. ${NPCS[back].name} has seen you from the far end and is not pretending ` +
+      `${_isGogo(to) ? "A bench creaks." : "A stool scrapes."} ${NPCS[back].name} has seen you from the far end and is not pretending ` +
         `otherwise. "Ohhh. Tilac. You COME." She says it twice more on the way over, and your seat ` +
         `— it is still, somehow, your seat — is wiped without a word.`,
       `${NPCS[back].name} stops with a tray in her hands. "You." Not the bar voice. "How long you ` +
@@ -1811,7 +1811,7 @@ function _doTake(arg) {
       const s = _sceneryMatch(arg);
       if (!s) return false;
       const ctx = _sceneryCtx();
-      return s.fn ? !!s.fn(ctx) : !!(s.lines[ctx] || (ctx === "pub" && s.lines.bar) || s.lines.any);
+      return s.fn ? !!s.fn(ctx) : !!(s.lines[ctx] || ((ctx === "pub" || ctx === "gogo") && s.lines.bar) || s.lines.any);
     })();
     if (/bottle/.test(arg) && !_inBar()) {
       _say("No bottle worth the bending here tonight — they come and go with the drinkers and the tide."); return;
@@ -2347,6 +2347,7 @@ function _sceneryCtx() {
   // fall back to `any` rather than to a rail they haven't got.
   if (r.massage || r.soapy) return "parlour";
   if (r.food && !r.barType) return "eatery";
+  if (r.barType === "gogo") return "gogo";   // seats round a stage, no bar to lean on (2026-10-07)
   if (r.bar) return "bar";
   if (/beach|promenade/i.test(r.name) && !/\b(road|rd)\b/i.test(r.name)) return "sand";
   return "street";
@@ -2377,7 +2378,7 @@ function _doScenery(arg) {
     if (line) { _say(line); return true; }
     if (!e.lines) return false;
   }
-  const pool = e.lines[ctx] || (ctx === "pub" && e.lines.bar) || e.lines.any;
+  const pool = e.lines[ctx] || ((ctx === "pub" || ctx === "gogo") && e.lines.bar) || e.lines.any;
   if (!pool) return false;
   _say(_pickVary(pool, "scn_" + e.key + "_" + ctx));
   return true;
@@ -2643,6 +2644,12 @@ const _SCENERY = [
         "current management.",
       "Tile, going up at one corner, with a bar mat over the worst of it. Somebody's flip-flop " +
         "is under the stool and its owner is still here.",
+    ],
+    gogo: [
+      "Black tile that throws the stage lights back up at you, swept between sets and sticky again " +
+        "by midnight. Somebody's discarded heel strap has found a corner under the benches.",
+      "Dark, polished, and loud: the bass comes up through it into your shoes. The only clean stretch " +
+        "is the run between the changing room and the stage steps.",
     ],
     street: [
       "Concrete slabs of four different vintages, a drain grate you would not want to be " +
@@ -4584,10 +4591,10 @@ function _doTalkCore(arg, topic) {
           // the woman who runs the floor says what she actually runs, and it is
           // pooled, because it is the commonest question in the game.
           me === "mamasan" ? ((NPCS[npc].owner || NPCS[npc].ownsBar)   // ownsBar: hers, without the one-woman-bar branches `owner` drives (Helga, round 57)
-            ? `"This bar?" A look down the rail that takes in every stool. "My bar. Every girl on it is my problem and my paycheque. You want to know how it runs, buy a drink and watch me."`
-            : [`"This bar?" A look down the rail that takes in every stool. "Not mine — but the floor is. Every girl on it is my problem. The owner worries about the rent; I worry about the room."`,
+            ? `"This bar?" ${_isGogo() ? "A look round the room that takes in every seat" : "A look down the rail that takes in every stool"}. "My bar. Every girl on it is my problem and my paycheque. You want to know how it runs, buy a drink and watch me."`
+            : [`"This bar?" ${_isGogo() ? "A look round the room that takes in every seat" : "A look down the rail that takes in every stool"}. "Not mine — but the floor is. Every girl on it is my problem. The owner worries about the rent; I worry about the room."`,
                `"Here?" ${NPCS[npc].name} shrugs at the room without affection or complaint. "Is a good bar. Clean, honest price, nobody make trouble. I keep it like that — is my job, na."`,
-               `"What you want to know?" She doesn't look down the rail; she has already counted it. "Who work tonight, who is late, who go home early. That is the bar. The rest is the owner's headache."`,
+               `"What you want to know?" She doesn't look ${_isGogo() ? "round the room" : "down the rail"}; she has already counted it. "Who work tonight, who is late, who go home early. That is the bar. The rest is the owner's headache."`,
               ][_hh(npc + ":thisbar", 19) % 3]) :
           me === "manager" ? `"The place?" He wipes the same patch of bar twice. "Runs itself on a good night and runs me on a bad one. Ask me anything about it except who owns it."` :
           me === "cashier" ? `"${bn || "This bar"}?" She taps the drawer. "Comes in here, goes out there. On a good night more comes in. That is the whole business, and I see all of it."` :
@@ -4612,17 +4619,19 @@ function _doTalkCore(arg, topic) {
     const story = _authoredStory(npc);   // her own province if her text names one; family/plan nobody else at her bar tells
     const from = story.from;
     // …and nobody else in TOWN has told you (the town book, round 63)
-    { const rm = NPCS[npc].room || (NPCS[npc].bars || [])[0], tk = _storyTaken(rm);
-      const fi = _townPick(npc, "hfamily", _H_FAMILY.length, story.familyIdx, i => i === story.familyIdx || !tk.family.has(i));
-      const pi = _townPick(npc, "hplan", _H_PLAN.length, story.planIdx, i => i === story.planIdx || !tk.plan.has(i));
+    const _ggRoom = NPCS[npc].room || (NPCS[npc].bars || [])[0];
+    const gf = pool => i => !(typeof _isGogo === "function" && _isGogo(_ggRoom)) || !_FIT_GOGO.test(String(pool[i]));   // no stool lines in a go-go (2026-10-07)
+    { const rm = _ggRoom, tk = _storyTaken(rm);
+      const fi = _townPick(npc, "hfamily", _H_FAMILY.length, story.familyIdx, i => (i === story.familyIdx || !tk.family.has(i)) && gf(_H_FAMILY)(i));
+      const pi = _townPick(npc, "hplan", _H_PLAN.length, story.planIdx, i => (i === story.planIdx || !tk.plan.has(i)) && gf(_H_PLAN)(i));
       story.family = _H_FAMILY[fi].replace(/\{from\}/g, from); story.plan = _H_PLAN[pi]; }
     // through the floor's own wrappers and the town book — the old three fixed sentences were the
     // same "like a postcode… very far" from eight women (Gerry, round 64)
     // a girl written in good English keeps it on question two (Nira, Pim — Gwen, round 66)
     const _en = !!NPCS[npc].fluent, HW = _en ? _H_HOME_WRAP_EN : _H_HOME_WRAP, FW = _en ? _H_FAMILY_WRAP_EN : _H_FAMILY_WRAP, PW = _en ? _H_PLAN_WRAP_EN : _H_PLAN_WRAP;
-    const line = /home|village/.test(t) ? HW[_townPick(npc, _en ? "hhomewrapen" : "hhomewrap", HW.length, _hh(npc, 43) % HW.length)](from)
-      : /family/.test(t) ? FW[_townPick(npc, _en ? "hfamwrapen" : "hfamwrap", FW.length, _hh(npc, 31) % FW.length)](story.family)
-      : PW[_townPick(npc, _en ? "hplanwrapen" : "hplanwrap", PW.length, _hh(npc, 37) % PW.length)](story.plan);
+    const line = /home|village/.test(t) ? HW[_townPick(npc, _en ? "hhomewrapen" : "hhomewrap", HW.length, _hh(npc, 43) % HW.length, gf(HW))](from)
+      : /family/.test(t) ? FW[_townPick(npc, _en ? "hfamwrapen" : "hfamwrap", FW.length, _hh(npc, 31) % FW.length, gf(FW))](story.family)
+      : PW[_townPick(npc, _en ? "hplanwrapen" : "hplanwrap", PW.length, _hh(npc, 37) % PW.length, gf(PW))](story.plan);
     const _sk = npc + ":" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan");
     const _told = (G.soc.storyTold = G.soc.storyTold || {});
     if (_told[_sk] && !_retell) _say(`${NPCS[npc].name}: ` + (/home|village/.test(t) ? `"${from}. You know already."` : /family/.test(t) ? `"Same family, tilac. Nothing change since you ask."` : `"Same dream. Still a dream."`));   // …and ASK … AGAIN retells (Gerry, round 64)   // told in full every time, six times (Piet, round 62)
@@ -4641,10 +4650,10 @@ function _doTalkCore(arg, topic) {
     _told[_sk] = true;
     // the house's own pools (world.js), through the town book — Candy and Peung missed GIRLS with a
     // line that invited the question just asked (Gwen, round 66)
-    _say(/home|village/.test(t) ? `${NPCS[npc].name}: ` + _M_HOME[_townPick(npc, "mhome", _M_HOME.length, _hh(npc, 47) % _M_HOME.length)](from)
-      : /family/.test(t) ? `${NPCS[npc].name}: ` + _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, _hh(npc, 37) % _M_FAMILY.length)]
-      : /girls|ladies/.test(t) ? `${NPCS[npc].name}: ` + _M_GIRLS[_townPick(npc, "mgirls", _M_GIRLS.length, _hh(npc, 31) % _M_GIRLS.length)]
-      : `${NPCS[npc].name}: ` + _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, _hh(npc, 41) % _M_PLAN.length)]);
+    _say(/home|village/.test(t) ? `${NPCS[npc].name}: ` + _M_HOME[_townPick(npc, "mhome", _M_HOME.length, _hh(npc, 47) % _M_HOME.length, (i => !(typeof _isGogo === "function" && _isGogo(NPCS[npc].room)) || !_FIT_GOGO.test(String(_M_HOME[i]))))](from)
+      : /family/.test(t) ? `${NPCS[npc].name}: ` + _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, _hh(npc, 37) % _M_FAMILY.length, (i => !(typeof _isGogo === "function" && _isGogo(NPCS[npc].room)) || !_FIT_GOGO.test(String(_M_FAMILY[i]))))]
+      : /girls|ladies/.test(t) ? `${NPCS[npc].name}: ` + _M_GIRLS[_townPick(npc, "mgirls", _M_GIRLS.length, _hh(npc, 31) % _M_GIRLS.length, (i => !(typeof _isGogo === "function" && _isGogo(NPCS[npc].room)) || !_FIT_GOGO.test(String(_M_GIRLS[i]))))]
+      : `${NPCS[npc].name}: ` + _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, _hh(npc, 41) % _M_PLAN.length, (i => !(typeof _isGogo === "function" && _isGogo(NPCS[npc].room)) || !_FIT_GOGO.test(String(_M_PLAN[i]))))]);
     _questOffer(npc);
     return;
   }
@@ -5802,14 +5811,17 @@ const _TOWN = {
   },
   placed: {
     floor: ["\"{w}? Here every night.\" {n} points with her chin. \"Ask her yourself.\""],
-    house: ["\"{w}? Here every night.\" {n} nods along the rail. \"Ask her yourself — she's better at the answers than I am.\""],
+    house: ["\"{w}? Here every night.\" {n} nods along the rail. \"Ask her yourself — she's better at the answers than I am.\"",
+      "\"{w}? Here most nights.\" {n} tips her head toward the stage. \"Ask her yourself. She knows her own business better than I do.\""],
     punter: ["\"{w}?\" {n} nods down the rail without looking. \"Here most nights. Ask her yourself, mate — she'll tell you more than I can, and nicer.\"",
       "{n} doesn't turn round. \"{w}'s at the far end most nights. Good girl. Buy her a drink and ask her, not me.\""],
   },
   regular: {
     floor: ["\"{r}?\" {n} laughs. \"Our regular. Same stool, same drink, same joke. He tip okay. He is part of the furniture, but nice furniture.\"",
-      "{n} glances at the stool. \"{r} — every night, nearly. He tell the same story, we laugh every time. Is our job, and also he is funny sometimes.\""],
-    house: ["\"{r}'s one of ours,\" {n} says. \"Same stool, pays his tab, causes no trouble. A bar's built on men like that.\""],
+      "{n} glances at the stool. \"{r} — every night, nearly. He tell the same story, we laugh every time. Is our job, and also he is funny sometimes.\"",
+      "\"{r}?\" {n} laughs. \"Our regular. Same seat every night, same drink, same joke. Nice man. He tip okay.\""],
+    house: ["\"{r}'s one of ours,\" {n} says. \"Same stool, pays his tab, causes no trouble. A bar's built on men like that.\"",
+      "\"{r}'s one of ours,\" {n} says. \"Same seat, pays his tab, causes no trouble. Every room needs a few.\""],
     punter: ["\"{r}? Drinks here,\" {n} says."],
   },
   me_new: {
@@ -5828,7 +5840,8 @@ const _TOWN = {
     punter: ["\"Everyone knows you, mate.\""],
   },
   me_back: {
-    floor: ["\"You come BACK!\" {n} looks along the rail. \"{g} say you come back, nobody believe her. Now she don't stop talking.\""],
+    floor: ["\"You come BACK!\" {n} looks along the rail. \"{g} say you come back, nobody believe her. Now she don't stop talking.\"",
+      "\"You come BACK!\" {n} looks round the room for her. \"{g} say you come back, nobody believe her. Now she don't stop talking.\""],
     house: ["\"You're back,\" {n} says. \"{g} said you would. I didn't bet on it.\""],
     punter: ["\"You're back, then.\""],
   },
@@ -7873,7 +7886,7 @@ function _doBuy(arg) {
           (_tk ? ` — ${NPCS[_tk].name} keeps the till, and hers is a lady drink.` : " — the till here is somebody else's problem.") +
           " (Stand one of the regulars a beer instead, or BUY DRINK FOR <lady>.)");
       } else if (nameW) {
-        _say("She's not working this bar — nobody here by that name. (Buy a drink for one of the girls on the rail, or BUY MAN DRINK.)");
+        _say("She's not working this bar — nobody here by that name. (Buy a drink for one of the girls here, or BUY MAN DRINK.)");
       } else _say("Nobody here to buy one for.");
       return;
     }
@@ -9585,6 +9598,14 @@ const _SIT_LINES = {
     "You park yourself at the rail. Nobody looks up, which is its own kind of welcome.",
     "The stool wobbles once, introduces itself, and holds. You're in.",
   ],
+  // a go-go has three kinds of seat and no bar (Mario, 2026-10-07): the front row at the stage,
+  // where a man is expected to tip; the benches along the walls with small tables; a VIP gallery
+  gogo: [
+    "You take a seat on the bench along the wall, a small table in front of you. A waitress has your order before you have decided it.",
+    "You sit in the front row at the edge of the stage. The view is excellent, and the dancer above you has already noticed you haven't tipped.",
+    "You find a gap on the wall bench. The bass comes up through the cushion; a coaster lands on the little table like a dealt card.",
+    "You take a stage-side seat. Up here a man is expected to tip, and the girls on the stage have excellent memories.",
+  ],
   beach: [
     "You sit on the sand, which is free, and watch the sea, which is also free. The town will correct this imbalance the moment you stand up.",
     "You drop onto the sand. The Gulf carries on with its one long exhale.",
@@ -9768,9 +9789,9 @@ function _nursed() {
   return t != null && G.turns - t >= lim;
 }
 const _NURSE_GOGO = [
-  "{n} is at your elbow before the song changes. \"You buy drink, na? Buy me drink?\" The smile is fixed and the mamasan behind it is not. In here the stool is rented by the bottle, and yours is due.",
-  "The bottle in front of you has been empty long enough to be noticed, and it has been noticed. {n} slides onto the next stool: \"Lonely? Buy lady drink, I sit with you.\" Twenty minutes is what a go-go gives a man for free.",
-  "A tap on the shoulder that is friendlier than it will be next time. {n}: \"One more? Or lady drink?\" Behind the rail, mama is not looking at you in the way that means she is.",
+  "{n} is at your elbow before the song changes. \"You buy drink, na? Buy me drink?\" The smile is fixed and the mamasan behind it is not. In here the seat is rented by the bottle, and yours is due.",
+  "The bottle in front of you has been empty long enough to be noticed, and it has been noticed. {n} slides onto the bench beside you: \"Lonely? Buy lady drink, I sit with you.\" Twenty minutes is what a go-go gives a man for free.",
+  "A tap on the shoulder that is friendlier than it will be next time. {n}: \"One more? Or lady drink?\" Across the room, mama is not looking at you in the way that means she is.",
   "Mama herself. \"Handsome man, you drink nothing.\" Not a question. The girls are turning on the stage and the seats are for people who buy. \"One more, or you want the door? Both fine.\"",
 ];
 const _NURSE_BAR = [
@@ -10145,7 +10166,7 @@ const _PHOTO_GOGO_NO = [
   `The mamasan is at your elbow before the screen even lights. “No camera, na.” Not a request. You put it away.`,
 ];
 const _PHOTO_GOGO_YES = [
-  (nm) => `${nm} palms your phone under the rail, out of the mamasan's sightline, and pulls you in cheek-to-cheek. One quick frame, then it's back in your pocket. (GALLERY)`,
+  (nm) => `${nm} palms your phone under the table, out of the mamasan's sightline, and pulls you in cheek-to-cheek. One quick frame, then it's back in your pocket. (GALLERY)`,
   (nm) => `“Only you, na. Don't show nobody.” ${nm} angles the phone low, throws a quick pout, and the shutter's done before anyone looks up. (GALLERY)`,
 ];
 
@@ -10962,7 +10983,7 @@ const _WORK_JOB = {
     n => `${n} doesn't look up from the float. "I count. Then I count again. The girls trust me because I am boring, and boring is the right word for the person with the drawer."`,
   ],
   mamasan: [
-    n => `"I run the floor." ${n} lets her eyes go down the rail and back, and it takes about a second. "Who work tonight, who is late, who is crying in the toilet, who is drinking too much — customer AND girl." A shrug. "Mostly I see the trouble before it is trouble. That is the whole job."`,
+    n => `"I run the floor." ${n} lets her eyes go round the room and back, and it takes about a second. "Who work tonight, who is late, who is crying in the toilet, who is drinking too much — customer AND girl." A shrug. "Mostly I see the trouble before it is trouble. That is the whole job."`,
     n => `"What do I do?" A short laugh. "Everything nobody else want to do." ${n} counts it on her fingers without hurrying. "Rota. Fight. Police. The girl whose mother is sick — the real one and the other kind. Somebody must decide. I decide."`,
     n => `"Thirty girl, one room, one night." ${n} says it like the setup to something and there is no punchline coming. "Make it work. Every night. That is the job."`,
     n => `"I am the mother of the room." ${n} says it without a smile, which is how you know she means it. "Sometimes the mother is kind. Most nights the mother is just awake."`,
@@ -13031,7 +13052,8 @@ function doCommand(input) {
     case "books": case "takings": case "accounts": _doBooks(); break;
     case "prices": case "price": case "board": _doPrices(arg); break;   // the owner's levers (docs/bar-failure-cycle.md)
     case "terms": _doTerms(arg); break;
-    case "set": if (/\bprices?\b|\bboard\b/.test(arg)) { _doPrices(arg); break; } if (/\bterms\b|\bsalary\b|\bcommission\b/.test(arg)) { _doTerms(arg); break; }
+    case "set": if (/box|device/.test(arg || "")) { _doPlaceBox(arg); break; }   // SET DOWN THE BOX (its own case below was dead code until 2026-10-07)
+      if (/\bprices?\b|\bboard\b/.test(arg)) { _doPrices(arg); break; } if (/\bterms\b|\bsalary\b|\bcommission\b/.test(arg)) { _doTerms(arg); break; }
       _say("Set what? PRICES or TERMS, at your own bar."); break;
     case "draw": case "cashup": _doDraw(arg); break;
     case "quests": case "quest": case "adventures": _doQuests(); break;
@@ -13080,14 +13102,21 @@ function doCommand(input) {
     case "handover": case "baton": _doHandover(); return;
     case "resume": _doResume(); return;
     case "place": case "plant": _doPlaceBox(arg); break;
-    case "sit": if (/laptop|computer|machine|desk|terminal|keyboard/.test(arg || "")) { _doUseLaptop(); break; }
-      _say(_pickVary(["You sit. The world declines to notice.", "You take a seat, which changes nothing and is nice.", "Sat. Now what?"], "sit"), "dim"); break;
+    case "sit": case "sit down": {
+      if (/laptop|computer|machine|desk|terminal|keyboard/.test(arg || "")) { _doUseLaptop(); break; }
+      // The soi invites it constantly ("Sit. Talk to Candy.") — it must never dead-end in
+      // didn't-parse (both playtests, 2026-08-17). Flavor only. (A second `case "sit"` lower in this
+      // switch held these lines and was dead code until 2026-10-07: the first label always won.)
+      if (_isGogo()) _say(_pickVary(_SIT_LINES.gogo, "sitgogo"));
+      else if (_inBar()) _say(_pickVary(_SIT_LINES.bar, "sitbar"));
+      else if (/beach/i.test(_room().name)) _say(_pickVary(_SIT_LINES.beach, "sitbeach"));
+      else _say(_pickVary(_SIT_LINES.street, "sitstreet"));
+      break;
+    }
     case "hack": case "login": case "log": _doUseLaptop(); break;
     case "wear": case "put on": _doWear(arg); break;
     // PUT TAG ON HIM. Bare PUT was an unknown verb, so the one act a man with a
     // dog tag reaches for landed on "The soi blinks at you" (Bill, round 44).
-    case "set": if (/box|device/.test(arg||"")) { _doPlaceBox(arg); break; }  // SET DOWN THE BOX
-      _say(_pickVary(_WEAR_NO, "wearno")); break;
     case "float": if (typeof _atOwnBar === "function" && _atOwnBar()) { _putInTill(arg); break; } _say("Float what, and where? (At your own bar: FLOAT <amount>.)"); break;
     case "put": if (/\bdown\b/.test(arg||"") && /box|device/.test(arg||"")) { _doPlaceBox(arg); break; }
       if (typeof _atOwnBar === "function" && _atOwnBar() && /\b(till|float|drawer)\b/.test(arg || "") && /\d|thousand|hundred/.test(arg || "")) { _putInTill(arg); break; }   // "You could. You are not going to." (Kwame, round 60)
@@ -13160,7 +13189,7 @@ function doCommand(input) {
       if (/^(up|bar|the bar|the stinky|stinky)$/.test((arg || "").trim())) _doSellBar();
       else _doSellBottles(arg);
       break;
-    case "buy": case "order": _doBuy(arg); break;
+    case "buy": _doBuy(arg); break;   // ORDER is the demand case below: a beer is a purchase, "order him" is not
     case "pay": _doPay(arg); break;
     case "wai": _doWai(arg); break;
     case "say": case "speak": {
@@ -13386,6 +13415,7 @@ function doCommand(input) {
       ], "demand"), "dim");
       break;
     case "kill": case "attack": case "hit": case "punch": case "fight": case "strangle":
+      if (v === "kill" && /\bsim\b|sim ?card|burner/.test(arg || "")) { if (/burner/.test(arg)) _doDitchBurner(); else _doBreakSim(); break; }
       _doViolence(arg); break;
     case "xyzzy": case "plugh": case "pray": _doMagic(v); break;
     case "hello": case "hi": case "howdy": _doHello(arg); break;
@@ -13397,14 +13427,6 @@ function doCommand(input) {
     case "swim": _doSwim(); break;
     case "dance": _doDance(arg); break;
     case "sing": _doSing(); break;
-    case "sit": case "sit down": {
-      // The soi invites it constantly ("Sit. Talk to Candy.") — it must never
-      // dead-end in didn't-parse (both playtests, 2026-08-17). Flavor only.
-      if (_inBar()) _say(_pickVary(_SIT_LINES.bar, "sitbar"));
-      else if (/beach/i.test(_room().name)) _say(_pickVary(_SIT_LINES.beach, "sitbeach"));
-      else _say(_pickVary(_SIT_LINES.street, "sitstreet"));
-      break;
-    }
     case "toilet": case "loo": case "wc": case "restroom": case "bathroom":
     case "pee": case "piss": case "urinate": {
       // A beer-bar sim for gentlemen of a certain age: this WILL be typed.
@@ -13444,10 +13466,11 @@ function doCommand(input) {
     case "burn": case "shred":
       if (/ledger|payouts|invoices?|takings|paperwork|csv|stick/.test(arg || "")) { _doBurnLedger(); break; }
       _say("Nothing here you'd burn.", "dim"); break;
-    case "break": case "snap": case "destroy": case "ditch": case "kill": case "lose": case "bin":
+    case "break": case "snap": case "destroy": case "ditch": case "lose": case "bin":
       if (/\bsim\b|sim ?card/.test(arg || "")) { _doBreakSim(); break; }
       if (/ledger|payouts|invoices?|takings|paperwork/.test(arg || "")) { _doBurnLedger(); break; }
       if (/burner|rabbit'?s phone/.test(arg || "")) { _doDitchBurner(); break; }
+      if (v === "snap") { _doPhoto(arg); break; }   // SNAP is a photo unless it's the SIM (the photo case's own "snap" label was dead code)
       _say(_pickVary(["Nothing here to break — and the impulse passes.", "You break nothing. The night is fragile enough."], "breakno"), "dim"); break;
     case "throw": case "toss": case "chuck": case "fling":
       // THROW SIM (into the sea off Bali Hai) is the one deliberate act that
@@ -13462,7 +13485,7 @@ function doCommand(input) {
       else _say(_MISC_VERBS["throw"]);
       break;
     case "jump": case "climb": case "push": case "pull":
-    case "knock": case "shout": case "yell":
+    case "knock":   // SHOUT / YELL are the swear case above, which knows who heard you
       // "Nobody knocks in this town" is a good line and stays the rule — but a
       // man standing outside the ONE door that would open for him, knocking on
       // it, is the exception the rule exists to make land. He tried exactly
@@ -13572,7 +13595,7 @@ function doCommand(input) {
     case "wave": _doWave(arg); break;
     case "map": _doMap(); break;
     case "exits": case "out?": _doExits(); break;
-    case "photo": case "selfie": case "photograph": case "snap": _doPhoto(arg); break;
+    case "photo": case "selfie": case "photograph": _doPhoto(arg); break;   // SNAP arrives via the break case
     case "gallery": case "photos": case "album": _doGallery(); break;
     case "menu":
       // At the Vic the card is generated, not authored: prices come from the

@@ -11,10 +11,11 @@
       "patron": 25
     },
     "filler": 213,
-    "unrendered": 135,
-    "relook": 135
+    "unrendered": 136,
+    "relook": 136
   },
   "unrendered": [
+    "jane",
     "ratsamee",
     "kwanjai",
     "naree",
@@ -286,7 +287,8 @@
     "mint",
     "jeed",
     "mon",
-    "the_terrace_kade"
+    "the_terrace_kade",
+    "jane"
   ],
   "characters": [
     {
@@ -1291,7 +1293,7 @@
       "th": "ออย",
       "room": "rainbow_girls",
       "tags": [],
-      "desc": "The Mamasan. Undefeated since 2009. She surveys her flagship from the end of the bar with the stillness of someone who owns the building, two more like it, and three condos. You have the sudden feeling your posture is being graded.",
+      "desc": "The Mamasan. Undefeated since 2009. She surveys her flagship from her table by the cashier's cage with the stillness of someone who owns the building, two more like it, and three condos. You have the sudden feeling your posture is being graded.",
       "rendered": true
     },
     {
@@ -1471,7 +1473,7 @@
       "th": "ใบเตย",
       "room": "katoeys",
       "tags": [],
-      "desc": "Long, lean and built for the stage, with an actual voice under the lip-sync and a habit of using it when the room has thinned out enough to deserve it. Gold everything tonight — hoops, chain, a dress that is mostly intention. Between shows she sits at the end of the rail with her heels off, entirely unglamorous, eating som tam out of a bag.",
+      "desc": "Long, lean and built for the stage, with an actual voice under the lip-sync and a habit of using it when the room has thinned out enough to deserve it. Gold everything tonight — hoops, chain, a dress that is mostly intention. Between shows she sits at the end of a wall bench with her heels off, entirely unglamorous, eating som tam out of a bag.",
       "rendered": true
     },
     {
@@ -1668,14 +1670,16 @@
       "source": "NPCS",
       "role": "hostess",
       "sex": "f",
-      "look": "Thai woman of twenty-eight, legs crossed on a barstool, hair down, cocktail in hand, unhurried.",
+      "look": "Thai woman of twenty-eight, legs crossed on a velvet bench, hair down, cocktail in hand, unhurried.",
       "venueKind": "gogo",
       "emoji": "⭐",
       "th": "เจน",
       "room": "las_vegas",
       "tags": [],
-      "desc": "A hostess at Las Vegas, sitting on the end of the bar with her legs crossed and a cocktail she's been nursing since before you arrived. She has the relaxed energy of someone who has already decided tonight will be fine.",
-      "rendered": true
+      "desc": "A hostess at Las Vegas, sitting at the end of a wall bench with her legs crossed and a cocktail she's been nursing since before you arrived. She has the relaxed energy of someone who has already decided tonight will be fine.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Thai woman of twenty-eight, legs crossed on a barstool, hair down, cocktail in hand, unhurried."
     },
     {
       "id": "joy",
@@ -3129,7 +3133,7 @@
       "th": "เตย",
       "room": "rainbow_girls",
       "tags": [],
-      "desc": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of Rainbow Girls Bar's girls, from Kalasin. The badge pinned at her hip says 91 — the number the floor knows her by. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "desc": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of Rainbow Girls Bar's girls, from Kalasin. The badge pinned at her hip says 91 — the number the floor knows her by. She sits sideways on the edge of the bench, ready to stand, the way people do who stand up a lot.",
       "look": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
       "rendered": false,
       "relook": true,
@@ -3291,7 +3295,7 @@
       "th": "ป๊อป",
       "room": "slutty",
       "tags": [],
-      "desc": "New enough to still look a little nervous, in a borrowed dress a size too big — one of Slutty Go-Go's girls, from Roi Et. The badge pinned at her hip says 136 — the number the floor knows her by. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "desc": "New enough to still look a little nervous, in a borrowed dress a size too big — one of Slutty Go-Go's girls, from Roi Et. The badge pinned at her hip says 136 — the number the floor knows her by. She sits sideways on the edge of the bench, ready to stand, the way people do who stand up a lot.",
       "look": "New enough to still look a little nervous, in a borrowed dress a size too big",
       "rendered": false,
       "relook": true,
@@ -5421,7 +5425,7 @@
       "th": "อลิสา",
       "room": "katoeys",
       "tags": [],
-      "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns three of these stools now.",
+      "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns a share of the place now.",
       "look": "Elegant, weathered, and plainly the last word on everything in the room",
       "rendered": true
     },

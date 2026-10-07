@@ -799,6 +799,16 @@ function _orient(id) { return G.player && G.player.orientation === id; }
 const _FIT_NOBODY = /\b(girl beside (?:her|you)|nearest girl|other girls?|the girls|two of the girls|new girl|jury of two|down the rail|colleagues?|barman|waitress|sends a boy|a boy for)\b/i;
 const _FIT_MAMA = /\b(mamasan|the mama)\b/i;
 const _FIT_TILL = /\b(cashier|the till|on the till)\b/i;
+// A GO-GO HAS NO BAR TO LEAN ON (Mario, 2026-10-07): seating is the stage-side seats (tip if you sit
+// there), the wall benches with small tables, and a VIP area or gallery; drinks come from the
+// waitresses. The women dance, sit with customers, work the door, or are on a break. So in a go-go a
+// pooled line that puts anybody on a stool, at the rail or along a bar is skipped.
+const _FIT_GOGO = /\b(bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end) of the bar|bar[- ]?top|belly up|bartenders?|barm[ae]n)\b/i;
+function _isGogo(room) { const r = ROOMS[room || G.room]; return !!(r && r.barType === "gogo"); }
+// the room's furniture in one word, for a line that must print in a bar AND a go-go: a beer bar keeps
+// its stools and its bar top, a go-go has seats and small tables (Mario, 2026-10-07)
+function _seat(room) { return _isGogo(room) ? "seat" : "stool"; }
+function _ledge(room) { return _isGogo(room) ? "the table" : "the bar"; }
 function _roomFit(pool) {
   if (!pool || pool.length < 2 || !G || !G.room || !ROOMS[G.room] || !ROOMS[G.room].barType) return pool;
   if (typeof _npcsHere !== "function" || typeof NPC_ROLES === "undefined") return pool;
@@ -808,7 +818,8 @@ function _roomFit(pool) {
   if (staff.length <= 1) bad.push(_FIT_NOBODY);
   if (!roles.has("mamasan")) bad.push(_FIT_MAMA);
   if (!roles.has("cashier") && staff.length <= 1) bad.push(_FIT_TILL);
-  if (ROOMS[G.room].barType === "gents" || ROOMS[G.room].indoors) bad.push(/open[- ]front/i);   // "the whole open front a few degrees warmer" in an aircon villa (Marguerite, round 67)
+  if (ROOMS[G.room].barType === "gents" || ROOMS[G.room].indoors) bad.push(/open[- ]front/i);
+  if (_isGogo()) bad.push(_FIT_GOGO);   // "the whole open front a few degrees warmer" in an aircon villa (Marguerite, round 67)
   if (!bad.length) return pool;
   // read a function line's SOURCE, never call it: a pool line may roll dice or touch state, and
   // a filter that runs it shifts the seeded stream (round 57 found the soak's path had moved)
@@ -1762,7 +1773,7 @@ function _patronRage(id) {
 const _PATRON_MISS = [
   (n, his) => `${n} shrugs. “Not one I know anything about, mate.”`,
   (n, his) => `“Search me,” ${n} says, and goes back to ${his} glass. “Ask me something I've actually got an opinion on.”`,
-  (n, his) => `${n} turns a hand over on the bar: nothing in it. “Couldn't tell you. Not my story.”`,
+  (n, his) => `${n} turns a hand over: nothing in it. “Couldn't tell you. Not my story.”`,
 ];
 const _PATRON_AGAIN = [
   (n, his) => `${n} gives you a flat look over ${his} glass. “Already told you that one.”`,
@@ -2348,38 +2359,41 @@ function _townStory(npc, d) {
   const n = NPCS[npc];
   if (!d || !d.story || !n || !n.storyBits) return null;
   const b = n.storyBits, room = n.room;
+  // a go-go has no bar to lean on: never deal a woman there a line that puts her on a stool (2026-10-07)
+  const _gg = typeof _isGogo === "function" && _isGogo(room);
+  const fit = (pool, ok) => i => (!_gg || !_FIT_GOGO.test(String(pool[i]))) && (!ok || ok(i));
   const taken = axis => (typeof _storyTaken === "function" ? _storyTaken(room)[axis] : new Set());
   switch (d.story) {
     case "greet": {
       // "only my mama dangerous" from a woman who works a bar with no mamasan (Jaja, round 63)
       const noMama = !Object.keys(NPCS).some(id => NPC_ROLES[id] === "mamasan" && (NPCS[id].room === room || (NPCS[id].bars || []).includes(room)));
-      const gi = _townPick(npc, "hgreet", _H_GREET.length, b.greet, c => !(noMama && /\bmama\b/i.test(_H_GREET[c])));
+      const gi = _townPick(npc, "hgreet", _H_GREET.length, b.greet, fit(_H_GREET, c => !(noMama && /\bmama\b/i.test(_H_GREET[c]))));
       // her short follows HER greeting: Bua's second night borrowed Oat's "heart big big" (Gerry, round 64)
       return { text: _H_GREET[gi], short: typeof _H_GREET_SHORT_OF !== "undefined" ? _H_GREET_SHORT_OF[gi] : undefined };
     }
     case "family": {
       const _pl = (G.storyOf && G.storyOf[npc] && G.storyOf[npc].hplan != null) ? G.storyOf[npc].hplan : null;
-      const c = _townPick(npc, "hfamily", _H_FAMILY.length, b.family, i => (i === b.family || !taken("family").has(i)) && !(typeof _storyClash === "function" && _pl != null && _storyClash(i, _pl)));
-      const w = _townPick(npc, "hfamwrap", _H_FAMILY_WRAP.length, b.famWrap);
+      const c = _townPick(npc, "hfamily", _H_FAMILY.length, b.family, fit(_H_FAMILY, i => (i === b.family || !taken("family").has(i)) && !(typeof _storyClash === "function" && _pl != null && _storyClash(i, _pl))));
+      const w = _townPick(npc, "hfamwrap", _H_FAMILY_WRAP.length, b.famWrap, fit(_H_FAMILY_WRAP, null));
       return { text: _H_FAMILY_WRAP[w](_H_FAMILY[c].replace(/\{from\}/g, b.from)) };
     }
     case "plan": {
       const _fa = (G.storyOf && G.storyOf[npc] && G.storyOf[npc].hfamily != null) ? G.storyOf[npc].hfamily : b.family;
-      const c = _townPick(npc, "hplan", _H_PLAN.length, b.plan, i => (i === b.plan || !taken("plan").has(i)) && !(typeof _storyClash === "function" && _storyClash(_fa, i)));
-      const w = _townPick(npc, "hplanwrap", _H_PLAN_WRAP.length, b.planWrap);
+      const c = _townPick(npc, "hplan", _H_PLAN.length, b.plan, fit(_H_PLAN, i => (i === b.plan || !taken("plan").has(i)) && !(typeof _storyClash === "function" && _storyClash(_fa, i))));
+      const w = _townPick(npc, "hplanwrap", _H_PLAN_WRAP.length, b.planWrap, fit(_H_PLAN_WRAP, null));
       return { text: _H_PLAN_WRAP[w](_H_PLAN[c]) };
     }
-    case "home": return { text: _H_HOME_WRAP[_townPick(npc, "hhomewrap:" + b.from, _H_HOME_WRAP.length, b.homeWrap)](b.from) };   // keyed by province: two Buriram women, one sentence (Nattapong, round 56)
-    case "free": return { text: _H_FREE[_townPick(npc, "hfree", _H_FREE.length, b.free || 0)] };
-    case "mgreet": { const i = _townPick(npc, "mgreet", _M_GREET.length, b.greet); return { text: _M_GREET[i], short: _M_GREET_SHORT[i] }; }
-    case "mfamily": { const bad = (typeof _M_FAM_CLASH !== "undefined" && _M_FAM_CLASH[b.story]) || []; return { text: _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, b.family, i => !bad.includes(i))] }; }
-    case "mplan": return { text: _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, b.plan)] };
-    case "cfamily": return { text: _C_FAMILY[_townPick(npc, "cfamily", _C_FAMILY.length, b.family)].replace(/\{from\}/g, b.from) };
-    case "mgirls": return { text: _M_GIRLS[_townPick(npc, "mgirls", _M_GIRLS.length, b.girls || 0)] };
-    case "mhome": return { text: _M_HOME[_townPick(npc, "mhome", _M_HOME.length, b.home || 0)](b.from) };
-    case "chome": return { text: _C_HOME[_townPick(npc, "chome", _C_HOME.length, b.home || 0)](b.from) };
-    case "cgreet": { const i = _townPick(npc, "cgreet", _C_GREET.length, b.greet || 0); return { text: _C_GREET[i], short: _C_GREET_SHORT[i] }; }
-    case "cmoney": return { text: _C_MONEY[_townPick(npc, "cmoney", _C_MONEY.length, b.money || 0)] };
+    case "home": return { text: _H_HOME_WRAP[_townPick(npc, "hhomewrap:" + b.from, _H_HOME_WRAP.length, b.homeWrap, fit(_H_HOME_WRAP, null))](b.from) };   // keyed by province: two Buriram women, one sentence (Nattapong, round 56)
+    case "free": return { text: _H_FREE[_townPick(npc, "hfree", _H_FREE.length, b.free || 0, fit(_H_FREE, null))] };
+    case "mgreet": { const i = _townPick(npc, "mgreet", _M_GREET.length, b.greet, fit(_M_GREET, null)); return { text: _M_GREET[i], short: _M_GREET_SHORT[i] }; }
+    case "mfamily": { const bad = (typeof _M_FAM_CLASH !== "undefined" && _M_FAM_CLASH[b.story]) || []; return { text: _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, b.family, fit(_M_FAMILY, i => !bad.includes(i)))] }; }
+    case "mplan": return { text: _M_PLAN[_townPick(npc, "mplan", _M_PLAN.length, b.plan, fit(_M_PLAN, null))] };
+    case "cfamily": return { text: _C_FAMILY[_townPick(npc, "cfamily", _C_FAMILY.length, b.family, fit(_C_FAMILY, null))].replace(/\{from\}/g, b.from) };
+    case "mgirls": return { text: _M_GIRLS[_townPick(npc, "mgirls", _M_GIRLS.length, b.girls || 0, fit(_M_GIRLS, null))] };
+    case "mhome": return { text: _M_HOME[_townPick(npc, "mhome", _M_HOME.length, b.home || 0, fit(_M_HOME, null))](b.from) };
+    case "chome": return { text: _C_HOME[_townPick(npc, "chome", _C_HOME.length, b.home || 0, fit(_C_HOME, null))](b.from) };
+    case "cgreet": { const i = _townPick(npc, "cgreet", _C_GREET.length, b.greet || 0, fit(_C_GREET, null)); return { text: _C_GREET[i], short: _C_GREET_SHORT[i] }; }
+    case "cmoney": return { text: _C_MONEY[_townPick(npc, "cmoney", _C_MONEY.length, b.money || 0, fit(_C_MONEY, null))] };
   }
   return null;
 }
