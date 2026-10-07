@@ -893,7 +893,7 @@ const ROOMS = {
   },
   hyper: {
     name: "Hyper A Go-Go",
-    bar: "Hyper A Go-Go", barType: "gogo",
+    bar: "Hyper A Go-Go", barType: "gogo", indoors: true,
     region: "Thappraya",
     desc: "The strip's one go-go, and its jewel: mirrored, chromed, a fog of aircon and bass, a stage " +
       "of numbered dancers under lights that cost more than the old place ever made, a ring of seats at " +
@@ -1490,7 +1490,7 @@ const ROOMS = {
   tequila_queen: {
     name: "Tequila Queen A-Go-Go",
     region: "Beach Road",
-    bar: "Tequila Queen A-Go-Go", barType: "gogo",
+    bar: "Tequila Queen A-Go-Go", barType: "gogo", indoors: true,
     desc: "The oldest go-go in Pattaya, and proudly unrestored: red velvet benches gone bald in " +
       "patches, a mirror ball missing a continent of tiles, and dancers with seniority " +
       "no mamasan would dare question. What the ladies concede in years they repay in " +
@@ -2622,7 +2622,7 @@ const ROOMS = {
   neon_paradise: {
     name: "Neon Paradise A-Go-Go",
     region: "Walking Street",
-    bar: "Neon Paradise A-Go-Go", barType: "gogo",
+    bar: "Neon Paradise A-Go-Go", barType: "gogo", indoors: true,
     desc: "Chrome poles, mirror walls, a sound system you feel in your fillings. The dancers " +
       "rotate with the unhurried confidence of professionals — fewer of them than there used " +
       "to be, and the room notices, but the ones here are good. Security by the door: two " +
@@ -2638,7 +2638,7 @@ const ROOMS = {
   club_mirage: {
     name: "Club Mirage",
     region: "Walking Street",
-    bar: "Club Mirage", barType: "gogo",
+    bar: "Club Mirage", barType: "gogo", indoors: true,
     desc: "Dry ice at ankle height, violet lasers cutting through it in thin lines. Everything " +
       "in here looks better than it is — that was always the business model, and the model is " +
       "holding. The crowd is a mix: tourists who found their way in, freelancers working the " +
@@ -2712,7 +2712,7 @@ const ROOMS = {
   windmill: {
     name: "The Gilt Cage",
     region: "Walking Street",
-    bar: "The Gilt Cage", barType: "gogo",
+    bar: "The Gilt Cage", barType: "gogo", indoors: true,
     pool: false,
     desc: "The house that decided restraint was somebody else's problem. Three tiers of " +
       "stage, a lighting rig with more ambition than the budget behind it, and a " +
@@ -2731,7 +2731,7 @@ const ROOMS = {
   katoeys: {
     name: "Twice Shy",
     region: "Walking Street",
-    bar: "Twice Shy", barType: "gogo",
+    bar: "Twice Shy", barType: "gogo", indoors: true,
     desc: "Six feet of everything, all of it deliberate. The house is katoey and says " +
       "so on the sign, which is the point — nobody here is passing, or trying to, " +
       "and the room is funnier and sharper for it. The heels are higher than " +
@@ -2847,7 +2847,7 @@ const ROOMS = {
   crystal_palace: {
     name: "Crystal Palace A-Go-Go",
     region: "Walking Street",
-    bar: "Crystal Palace A-Go-Go", barType: "gogo",
+    bar: "Crystal Palace A-Go-Go", barType: "gogo", indoors: true,
     desc: "Rhinestones on everything that holds still. The DJ booth rules a wall of subs; " +
       "the cashier's cage glitters like a shrine. On the back wall, a faded poster of " +
       "numbered dancers from a different decade — No. 71 circled in red marker, much later, " +
@@ -3432,7 +3432,7 @@ const ROOMS = {
     th: "เรนโบว์",   // the maze sign names it in Thai; typeable since round 67 (Jens)
     name: "Rainbow Girls Bar",
     region: "Tree Town",
-    bar: "Rainbow Girls Bar", barType: "gogo",
+    bar: "Rainbow Girls Bar", barType: "gogo", indoors: true,
     desc: "Madam Oy's flagship: the best-run go-go in the maze. A DJ booth with actual " +
       "taste, a cashier's cage strung with fairy lights, and past it a door " +
       "marked ห้ามเข้า — guarded by security who look extremely employed. " +
@@ -3982,7 +3982,7 @@ const ROOMS = {
   kinky: {
     name: "KINKY Go-Go",
     region: "LK Metro",
-    bar: "KINKY Go-Go", barType: "gogo",
+    bar: "KINKY Go-Go", barType: "gogo", indoors: true,
     desc: "KINKY in hot pink and black, chrome poles catching the light in a room that's " +
       "working with what it's got. Good what-it's-got. The dancers are on their game and " +
       "they know it; the crowd is almost entirely men who've been here before, which is its " +
@@ -3992,7 +3992,7 @@ const ROOMS = {
   slutty: {
     name: "Slutty Go-Go",
     region: "LK Metro",
-    bar: "Slutty Go-Go", barType: "gogo",
+    bar: "Slutty Go-Go", barType: "gogo", indoors: true,
     desc: "The name is the entire marketing budget and it works. SLUTTY is smaller than it " +
       "looks from the door, warmer, fuller — every bench along the walls taken most nights. The " +
       "stage is close enough to the front row that the dividing line is mainly theoretical, and " +
@@ -4002,7 +4002,7 @@ const ROOMS = {
   las_vegas: {
     name: "Las Vegas Go-Go",
     region: "LK Metro",
-    bar: "Las Vegas Go-Go", barType: "gogo",
+    bar: "Las Vegas Go-Go", barType: "gogo", indoors: true,
     desc: "The signage budget of a casino, the floor plan of a go-go: LAS VEGAS in letters " +
       "you can probably read from Soi Buakhao. Inside it earns it — the lights are right, " +
       "the DJ is good, and the room has the particular buzz of a place that's been doing " +

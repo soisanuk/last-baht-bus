@@ -6207,11 +6207,18 @@ const _SEVEN_RAIN = [
   "The heavens open and the 7-Eleven's awning fills up like a bus stop — two schoolgirls in uniform at this hour, a man in a " +
     "golf shirt pretending he planned it, and you. The street outside stops being a street.",
 ];
+const _RAIN_GOGO = [
+  "Somewhere above the music the roof starts to roar. Nobody in here can see it; you know it from the next man down the steps, soaked to the knee and grinning like he has been let in out of a war.",
+  "The rain arrives as a rumour — a doorman's umbrella going past the door, wet footprints on the steps — and the room, sealed and air-conditioned, carries on exactly as it was.",
+  "A drumming comes through the ceiling, under the bass, and for a minute it is the better rhythm. The girls on the stage do not miss a step. Nobody is leaving for a while.",
+];
 function _startRain(len) {
   G.rain = len;
   G.lastRain = G.turns;
   G.rainDay = G.day;   // one a night (Mario, 2026-09-14)
-  if (_inBar()) {
+  if (_room().barType === "gogo") {   // an enclosed go-go: no street to empty, no awning (Henrik, round 69: rain on the tin, the sandwich board dragged in)
+    _say(_pickVary(_RAIN_GOGO, "raingogo"), "alert");
+  } else if (_inBar()) {
     _say(_pickVary(_RAIN_START, "rainstart") + " The street " +
       "empties in five seconds flat. Nobody is going anywhere for a while.", "alert");
     _say("(Nowhere to be. Nothing to be done about it. สบาย.)", "dim");
@@ -10032,9 +10039,50 @@ function _doWatchDrag() {
   }
 }
 
+// THE GO-GO SHOW (Henrik, round 69: "nobody can tell me a thing about the show the first
+// paragraph sold me"). A go-go IS its stage, and the stage has a shape by the hour: one table,
+// read by WATCH SHOW and by the staff (_showSchedule in the TOWN rows), so the two never
+// disagree. Phases by the clock: before 21:00, to midnight, after. PG-13, like everything else.
+const _GOGO_SHOW = {
+  _default: {
+    sched: "the stage turns over every song, the busy hour is after ten, and the last hour is the slow one",
+    warm: ["Early yet: half the poles idle, the girls on stage dancing for each other and for the mirror, the music louder than the room. The front row is empty, and the girls know it costs nothing to look.",
+      "The early rotation: numbers on every hip, one song each, the dancers chatting across the poles as if the stage were a bus stop. Nobody is selling anything yet; the front row is three men pretending not to choose."],
+    mid: ["The stage is full now. The rotation clicks over with every song, and a man in the front row folds a hundred into a garter and three girls remember his face at once.",
+      "Prime time: every pole taken, the mirrors doubling it, the front row two-deep. A dancer catches your eye in the mirror instead of directly — the house style, and it works."],
+    late: ["The last hour's stage: the dancers slower, the front row thinned to the committed, the lights still behaving as if this were the most important room in Thailand, which for the men left in it, it is.",
+      "Late: half the numbers have gone home or gone out, and the girls still up are dancing the way you walk the last kilometre — beautifully, and counting."],
+  },
+  windmill: {
+    sched: "the lowest tier from the door opening, the middle tier at nine, the top tier at midnight — the regulars set their watches by it",
+    warm: ["The Gilt Cage opens on its lowest tier: two girls and a pole, the rig at half power, the routine the regulars call the overture. Nothing is happening yet, and every man in the room is watching it not happen."],
+    mid: ["The middle tier is lit. The act there is louder and closer, and the front row pays for it in hundreds folded into garters; up on the top tier the girls are still only dancing, and that is the point — the evening is a staircase, and everybody knows which step it is on."],
+    late: ["Midnight, and the top tier: the show this house is named for in every forum thread. The rig finally does what it was bought for, the front row is on its feet, and you understand the room's first rule — that you knew what this was when you came down the steps."],
+  },
+  katoeys: {
+    sched: "the small show whenever the girls feel like it, and the big show at eleven — six feet of everything in a line, and the compère takes the front row apart",
+    warm: ["The small show: whoever's feet allow it, lip-syncing to whatever the DJ dares them, the compère warming up on the front row like a comedian on a heckler she's chosen."],
+    mid: ["The small show again, louder now — a Whitney done better than it needed to be, and the front row tipping because it has been told, in two languages, that it will."],
+    late: ["Eleven o'clock, the big show: a line of six-foot girls in sequins doing a power ballad better than the record, the compère tearing the front row to pieces, and then one voice — real, not lip-synced — on the last verse, and the room goes quiet for it."],
+  },
+};
+function _showPhase(room) {
+  const big = room === "katoeys" ? 50 : 60;   // Twice Shy's big show is eleven (Baitoey said so first)
+  return G.nightTurn >= big ? "late" : G.nightTurn >= 30 ? "mid" : "warm";
+}
+function _showSchedule(room) { return (_GOGO_SHOW[room] || _GOGO_SHOW._default).sched; }
+function _doWatchShow() {
+  const sh = _GOGO_SHOW[G.room] || _GOGO_SHOW._default;
+  _say(_pickVary(sh[_showPhase(G.room)], "show:" + G.room + ":" + _showPhase(G.room)));
+  if (G.showDay !== G.day) {
+    G.showDay = G.day; _addHappy(1);
+    _say("(The stage is the whole point of the room. +1 สนุก. The front row is expected to TIP <dancer>; the benches are not.)", "win");
+  }
+}
 function _doTv() {
   const inRoom = _isHotelRoom(G.room);
   if (!_inBar() && !inRoom) { _say("No TV out here. The street is the channel."); return; }
+  if (_room().barType === "gogo") { _say("No telly in a go-go — the stage is the only channel, and it is always on. (WATCH SHOW)"); return; }
   _say(inRoom ?
     "You thumb the room's TV on. A wall-mounted flatscreen, the hotel's welcome " +
     "channel giving up to actual programming: the news, sound low, Thai subtitles racing." :

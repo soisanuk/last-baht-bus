@@ -114,6 +114,7 @@ const CLASS = {
   "room.kiss.desc|everyone knows": [G_], "room.neon_paradise.desc|the room notices": [G_],
   "room.orchid_room.reads.table|everyone in the room knows": [G_], "room.orchid_room.revisit|everyone watches": [G_],
   "room.pattaya_soi_7.reads.alley|the soi knows": [G_],
+  "engine-systems.js:_GOGO_SHOW|the room is watching": [G_, "the stage, not you"], "engine-systems.js:_GOGO_SHOW|everybody knows": [G_, "the house schedule"],
 };
 // A claim shared by a whole tier of stored records is classed once by pattern, not per woman: every
 // go-go dancer's desc says her badge is "the number the floor knows her by" — a fact about the trade.

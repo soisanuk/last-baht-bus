@@ -298,6 +298,7 @@ function newGame() {
     thaiSeen: [],        // Thai runs the transcript has shown (the trainer's cross-app deck)
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     dragDay: 0,          // last day the Peacock Cabaret drag revue paid its happy point
+    showDay: 0,          // …and a go-go's stage (WATCH SHOW, round 69)
     catDay: 0,           // last day the Jomtien beach cats paid theirs
     buddhaDay: 0,        // last day you took the quiet at the Buddha Hill viewpoint
     loopDay: 0,          // last day riding the loop for its own sake paid its happy
@@ -813,7 +814,7 @@ const _FIT_TILL = /\b(cashier|the till|on the till)\b/i;
 // there), the wall benches with small tables, and a VIP area or gallery; drinks come from the
 // waitresses. The women dance, sit with customers, work the door, or are on a break. So in a go-go a
 // pooled line that puts anybody on a stool, at the rail or along a bar is skipped.
-const _FIT_GOGO = /\b(bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end) of the bar|bar[- ]?top|belly up|bartenders?|barm[ae]n)\b/i;
+const _FIT_GOGO = /\b(bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end) of the bar|bar[- ]?top|belly up|bartenders?|barm[ae]n|football|the telly|the tv|pours|polish(?:es|ing)|wip(?:es|ing) (?:the|a|her) glass|on the mat|the rail is)\b/i;   // …nor the beer bar's texture: the match on, a dancer pouring, the usual on the mat (Henrik, round 69)
 function _isGogo(room) { const r = ROOMS[room || G.room]; return !!(r && r.barType === "gogo"); }
 // the room's furniture in one word, for a line that must print in a bar AND a go-go: a beer bar keeps
 // its stools and its bar top, a go-go has seats and small tables (Mario, 2026-10-07)

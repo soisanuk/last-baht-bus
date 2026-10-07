@@ -1812,7 +1812,7 @@ function _doTake(arg) {
       const s = _sceneryMatch(arg);
       if (!s) return false;
       const ctx = _sceneryCtx();
-      return s.fn ? !!s.fn(ctx) : !!(s.lines[ctx] || ((ctx === "pub" || ctx === "gogo") && s.lines.bar) || s.lines.any);
+      return s.fn ? !!s.fn(ctx === "gogo" ? "bar" : ctx) : !!(s.lines[ctx] || ((ctx === "pub" || ctx === "gogo") && s.lines.bar) || s.lines.any);   // an fn written for bars sees a go-go as a bar (it asks _isGogo() itself when it cares)
     })();
     if (/bottle/.test(arg) && !_inBar()) {
       _say("No bottle worth the bending here tonight — they come and go with the drinkers and the tide."); return;
@@ -2375,7 +2375,7 @@ function _doScenery(arg) {
   // falls through to the pooled lines rather than abandoning the noun. An entry
   // with fn and no lines behaves exactly as before.
   if (e.fn) {
-    const line = e.fn(ctx);
+    const line = e.fn(ctx === "gogo" ? "bar" : ctx);   // the bell, the shrine, the socket: written for "bar", true of a go-go (Henrik, round 69: EXAMINE BELL said "not a thing" under the bell)
     if (line) { _say(line); return true; }
     if (!e.lines) return false;
   }
@@ -3234,6 +3234,7 @@ const _SCENERY = [
   } },
 
   { key: "football", m: /\bfootball\b|\bthe match\b|\bpremier league\b/, lines: {
+    gogo: ["No telly in here, and nobody missing one: the screens in a go-go are the mirrors, and the only fixture is on the stage. (SCORES, on your own phone.)"],   // a go-go has no telly (Henrik, round 69)
     bar: [
       "Up on the corner telly, mostly unwatched until it suddenly, loudly, isn't. " +
         "(SCORES for the day's results.)",
@@ -3643,6 +3644,7 @@ const _SCENERY = [
   } },
 
   { key: "tv", m: /\btelly\b|\btv\b|\btelevision\b|\bscreens?\b/, lines: {
+    gogo: ["No screen in here but the mirrors, and they are all showing the same thing — the stage, twice over. A go-go does not compete with itself. (SCORES for the football.)"],   // a go-go has no telly (Henrik, round 69)
     bar: [
       "The corner telly, on with the sound down, the way bar tellies live. Football, " +
         "muay thai, the news nobody reads out loud. (WATCH TV)",
@@ -5662,6 +5664,18 @@ function _tanTown(kind, slots) {
 // constants — in the three registers _hoursRegister gives. Written for the
 // coverage map's N column (2026-09-27); the askable-audit has a row per fact.
 const _TOWN = {
+  // a go-go's stage, by its own schedule (_GOGO_SHOW) — Henrik, round 69
+  show: {
+    floor: ["\"Show?\" {n} counts it off on her fingers. \"Here: {s}.\" She nods at the stage. \"WATCH, tilac. Free to look.\"",
+      "{n} grins. \"You want know the show? {s}. Sit front, you tip. Sit bench, you look only.\"",
+      "\"The show is {s}.\" {n} shrugs, proud of it anyway. \"Same every night. Customer still surprise.\""],
+    house: ["\"The stage runs to a clock,\" {n} says. \"{s}. Sit in the front row if you mean to tip; the benches are for watching.\"",
+      "{n} doesn't need to think. \"{s}. It has been like that longer than most of the girls on it.\"",
+      "\"Here?\" {n} says. \"{s}. Watch it — that is what the room is for.\""],
+    punter: ["\"The show?\" {n} leans back. \"{s}. I've seen it a hundred times and I still watch.\"",
+      "{n} points his bottle at the stage. \"{s}. Sit up front and you'll be tipping, mind.\"",
+      "\"{s},\" {n} says. \"Set your watch by it.\""],
+  },
   venue: {
     floor: ["\"{v}?\" {n} points with her chin. \"{rs}. Not far, not near.\"",
       "{n} knows it. \"{v} — {rs}. My friend work there before. You go, say I send you, hahaha.\"",
@@ -6070,6 +6084,8 @@ function _townTalk(npc, topic) {
     if (_here || (_bn && (t.includes(_bn) || t.includes(_bn.replace(/^the /, "")) || /\bstinky\b/.test(t))) || /\b(new owner|the owner|who owns|owner|changed hands|your bar|my bar)\b/.test(t))
       return pick("owner", { b: _barName(G.bar.room) });
   }
+  if (_isGogo() && /\b(the )?(show|shows|schedule|stage|big show|the act|tiers?|rotation|front row|tipping|tips?)\b/.test(t) && typeof _showSchedule === "function")
+    return pick("show", { s: _showSchedule(G.room) });
   if (/\b(season|low season|high season|the wet|wet season|rainy season|monsoon|dead season|quiet season)\b/.test(t)) {
     const tier = _seasonTier();
     const how = { peak: "Busy, the best of the year", high: "Good, the high season", shoulder: "Hot, and thinning out",
@@ -10755,6 +10771,9 @@ function _normalGirlTalk(npc) {
 function _hoursRegister(npc) {
   if (!npc) return "house";
   if (NPCS[npc] && NPCS[npc].tinglish) return "floor";   // a civilian in a bar is not its house (Cream's fluent hotel prices — Dieter, round 56)
+  // the English steps up by role (CLAUDE.md): the floor is Tinglish, the till and the mamasan are fluent —
+  // Nubnab answered the show in "You want know the show?" (Henrik, round 69)
+  if (NPC_ROLES[npc] === "mamasan" || NPC_ROLES[npc] === "cashier") return "house";
   if (NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house) return "floor";
   if (NPCS[npc].manager || NPCS[npc].house) return "house";
   // the woman whose one room this is RUNS it — she is the house, not a customer
@@ -13618,6 +13637,7 @@ function doCommand(input) {
           (!arg || /sunset|bay|sea|view|sun\b|water|waves?|horizon|boats?/.test(arg)))
         _say(_pickVary(_WATCH_SEA, "watchsea"));
       else if (/sunrise|dawn|sun ?up|first light|daybreak|morning/.test(arg)) _doWatchSunrise();
+      else if (_isGogo() && (!arg || /\b(show|stage|dancers?|girls|poles?|tiers?|podium|act|rotation)\b/.test(arg))) _doWatchShow();   // a go-go IS its stage (Henrik, round 69)
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
       else if (/police|checkpoint|shakedown/.test(arg))
         _say("No checkpoint from here — that's the junction outside the Blue Dog or the Stinky Pinky, on Beach Road. (WATCH POLICE, once you're there.)");
