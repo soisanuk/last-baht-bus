@@ -4632,7 +4632,7 @@ function _soidogTick() {
 // ("when you come see me?") rather than the mama-sick game she'd never run on her
 // own farang. New/face contacts still send the classic scam-ask mix.
 // A lady's texted selfies. Story girls author their own `selfies` for character;
-// filler hostesses get a small hash-picked pool in _buildHostess. PG-13, Tinglish,
+// floor hostesses carry theirs on their FLOOR_STAFF record. PG-13, Tinglish,
 // Google-Translate-and-emoji — the same voice they text in.
 const _SELFIE_CAPS = [
   "new dress 👗 you like?? 😊", "beach today 🏖️ miss you na",

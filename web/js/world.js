@@ -6356,7 +6356,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Sometime I lie, sometime true — I stop knowing which. Money into me is water in sand.\"" },
     ],
   },
-  // ── The rest of the Soi 6 cast, promoted from _FILLER_HOSTESSES ──────────────
+  // ── The rest of the Soi 6 cast, promoted from the generated floor ──────────────
   // Praewa (Kitten Corner) — homesick-simple, kind, half on the bus home. No vector.
   praewa: {
     name: "Praewa", th: "แพรวา", emoji: "🌷",
@@ -6546,7 +6546,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     ],
   },
 
-  // ── Soi 6 mamasans (promoted from _FILLER_MAMAS) ─────────────────────────────
+  // ── Soi 6 mamasans (promoted from the generated floor) ────────────────────────
   // Business ladies first, less volatile than the girls. Most are sharp operators —
   // type:"operator" adds a quiet house cut on the barfine (_roomMamaOperator) — and
   // their dialogue names the subtle extraction ("free is the most expensive word").
@@ -6947,7 +6947,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     ],
   },
 
-  // ── Soi 6 cashiers (promoted from _FILLER_CASHIERS) ──────────────────────────
+  // ── Soi 6 cashiers (promoted from the generated floor) ───────────────────────
   // Businesslike, fluent. Three seams: TOMS (orientation:"gay" → flirt hits the
   // wrong-team refusal; barfine a hard no); the MAMA'S KIN (type:"kin" → family, not
   // floor, at any price); and the GOOD-GIRL-WITH-A-SPONSOR (type:"sponsor" → off-limits,
@@ -16954,11 +16954,10 @@ const NPC_ROLES = {
 // The rank and file. Canon: most girls on the soi are from Isan, in Pattaya to
 // feed a family back home, with broken English ("Tinglish") — and the phone /
 // Google Translate comes out the moment talk gets past small. Rather than hand-
-// write sixty near-identical entries, each is a compact [name, th, room] tuple
-// expanded by _buildHostess with flavour hash-picked from the id, so a bar reads
-// populated, each girl is stable (same id → same backstory), and the store stays
-// tiny. The named, story-bearing hostesses stay in NPCS above; these are added
-// to it below. Keep authored, plot-relevant dialogue OUT of here.
+// write sixty near-identical entries, each woman is a stored record in FLOOR_STAFF
+// (below) that indexes these shared pools for her lines. The named, story-bearing
+// hostesses stay in NPCS above; these are added to it below. Keep authored,
+// plot-relevant dialogue OUT of the pools — give it to one woman on her own entry.
 // What the women at a lock-in bar say about the bolt. Only two bars carry
 // `lockIn`, and it is the single most distinctive thing about either of them —
 // the mamasan decides, the cashier does the arithmetic on it, the girls get the
@@ -16988,12 +16987,12 @@ const _H_FROM = ["Udon Thani", "Khon Kaen", "Roi Et", "Sisaket", "Buriram", "Ubo
 // than anyone in town, and they are here to make money. No nervous new girls
 // on this side of Sukhumvit.
 const _H_LOOK_DARK = [
-  "Twenty seasons of soi behind her eyes and a laugh that got louder every one",
-  "Older than the town girls and visibly better at this than any of them",
+  "Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match",
+  "Grey at the temples, a red silk blouse, older than the town girls and better at this",
   "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening",
-  "Pouring out here since the lake road was dirt; minds her regulars like livestock",
-  "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room",
-  "Somebody's mother, twice over, and nobody's fool ever",
+  "Bone-thin, a fisherman's hat indoors, pouring out here since the lake road was dirt",
+  "Big-boned, a floral blouse, a veteran's patience — she will out-sit and out-earn the room",
+  "Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool",
   // more faces (Mario, 2026-10-07: "we can always use more new faces") — each is a portrait prompt
   // too, so face, hair and build come first
   "Fifties, reading glasses on a cord, and a laugh like a door banging shut",
@@ -17007,17 +17006,17 @@ const _H_LOOK_DARK = [
 ];
 const _H_LOOK = [
   "Round-faced and quick to laugh",
-  "Tall and quiet, watching the door",
+  "Tall and quiet, a long plait and a plain black dress, watching the door",
   "Tiny and loud, all elbows and energy",
-  "Sleepy-eyed and entirely unbothered",
-  "New enough to still look a little nervous",
+  "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered",
+  "New enough to still look a little nervous, in a borrowed dress a size too big",
   "Gold everywhere — earrings, chain, {{phone}} case",
-  "A crooked, disarming grin",
-  "Bored until you try a word of Thai, then radiant",
-  "Older than the go-go average, and unhurried about it",
+  "Pixie cut, small gold hoops, a crooked, disarming grin",
+  "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant",
+  "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it",
   "Baby-faced, chewing gum, thumbing her phone under the bar",
   "Long hair, longer eyelashes, a practised pout",
-  "Small and sharp, and misses nothing",
+  "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing",
   // more faces (Mario, 2026-10-07) — portrait prompts first, prose second
   "Short hair dyed copper, a nose stud, and a laugh you hear before you see her",
   "Round glasses and a cardigan over the bar dress, like a librarian on a dare",
@@ -17152,7 +17151,7 @@ const _H_PHONE = [
   "A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
 ];
 // Texted-selfie captions for filler hostesses who keep photos on their phone
-// (about two in five do — see _buildHostess). PG-13 Tinglish, same voice as theirs.
+// (about two in five do — their FLOOR_STAFF record lists them). PG-13 Tinglish, same voice as theirs.
 const _H_SELFIES = [
   "new dress 👗 you like?? 😊", "beach today 🏖️ miss you na", "me eat somtam 🥵🌶️ so spicy 555",
   "new hair 💇‍♀️ good mai??", "waiting work 💕 think about you", "my cat 🐈 cute like me na 😽",
@@ -17215,27 +17214,15 @@ function _authoredStory(npc) {
   const familyIdx = pick("family", _H_FAMILY, _hh(npc, 7)), planIdx = pick("plan", _H_PLAN, _hh(npc, 11));
   return { from, familyIdx, planIdx, family: _H_FAMILY[familyIdx].replace(/\{from\}/g, from), plan: _H_PLAN[planIdx] };
 }
-const _hostessSigs = {};
-// how many women already wear each look — a hash alone put one face on ten women; this caps it,
-// walking to the next free look, and is only counted once a woman is ACCEPTED (a twin reroll
-// builds her again with a bumped seed). Pure and order-stable: the build order is the table's.
-const _lookCount = {};
 // ONE LIFE STORY PER RAIL (Gareth, round 46): family and plan are picked by hash, then
 // advanced past any line another girl at the same bar already tells — a punter who
 // interviews the whole rail must never hear the same coffee shop twice. Per-room sets,
 // filled as the bar is built; the authored fallback (_authoredStory) reads them too.
 const _hostessStories = {};
 function _storyTaken(room) { return _hostessStories[room] || (_hostessStories[room] = { family: new Set(), plan: new Set() }); }
-// `len` is the BAKED pool length (the first twenty of each): the builder never picks past
-// it, so deepening a pool (round 65) changes no woman's baked text — the town book deals
-// the rest at delivery (_townStory).
+// `_H_BAKED`: the authored-hostess fallback (_authoredStory) picks only from the first twenty of
+// each pool, so deepening a pool changes nobody's stored story — the town book deals the rest.
 const _H_BAKED = 20;
-function _storyPick(room, axis, pool, start, len = pool.length) {
-  const taken = _storyTaken(room)[axis];
-  let i = start % len;
-  for (let n = 0; n < len && taken.has(i); n++) i = (i + 1) % len;
-  return i;
-}
 // GO-GO BADGE NUMBERS (essay ledger theme 12, 2026-10-01). A go-go dancer wears a
 // number, and the number is not a brand — it is armour: what happens on the floor
 // happens to the number, and she unpins it at dawn. Day-stable per girl (pure hash),
@@ -17500,142 +17487,100 @@ const _H_FREE = [
   '"Free, free — farang word number one." A sigh, fond. "Thai word number one is \'buy me drink\'. Same conversation."',
   '"Nothing free. But I give you free smile, and that one is real." It is.',
 ];
-function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
-  const bar = _barName(room) || "the bar";
-  const idx = (arr, salt) => arr[_hh(seed, salt) % arr.length];
-  const from = idx(_H_FROM, 3);
-  const darkside = ROOMS[room] && ROOMS[room].region === "Darkside";
-  const _lp = darkside ? _H_LOOK_DARK : _H_LOOK, _lk = darkside ? "d" : "m", _lcap = darkside ? 2 : 6;
-  let _li = _hh(seed, 5) % _lp.length;
-  for (let k = 0; k < _lp.length && (_lookCount[_lk + _li] || 0) >= _lcap; k++) _li = (_li + 1) % _lp.length;   // walk, never re-roll
-  const look = _lp[_li];
-  const famIdx = _storyPick(room, "family", _H_FAMILY, _hh(seed, 7), _H_BAKED);
-  const planIdx = _storyPick(room, "plan", _H_PLAN, _hh(seed, 11), _H_BAKED);
-  const family = _H_FAMILY[famIdx].replace(/\{from\}/g, from);
-  const plan = _H_PLAN[planIdx];
-  const emoji = idx(_H_EMOJI, 13);
-  const phone = idx(_H_PHONE, 19);
-
-  // EVERY ONE OF THESE POINTS AT CANDY — which is the whole job of the line, and
-  // was catastrophic for the three girls who WORK for her: a persona asked Nan,
-  // Bua and Gam about the wallet while standing in Candy Bar with Candy three
-  // feet away, and all three sent her across town to Candy (round 23, and she
-  // called it the loudest immersion break she hit — on the Act One critical
-  // path, where a player is following exactly this pointer). A girl points at
-  // her own boss by pointing at her, not at a map. _buildHostess picks the
-  // room-aware line for anyone working one of Candy's bars.
-  const WALLET_HERE = [
-    '"Wallet? Aiyo." She tips her head at the woman at the end of the bar without looking at her. "You ask Khun Candy. She there. She the boss of boss — she fix, or nobody fix."',
-    '"You lose wallet?" She pats your arm, then points with her chin. "Candy. HER. You talk to her nice, na — she know everything happen on this road."',
-    '"Not here, nobody steal here — bad luck for the bar." A glance down the rail. "But Candy is in tonight. You want to know something, is her you ask."',
+// THE FLOOR STAFF'S SHARED LINES. Every woman on the floor is an ordinary NPC with her own stored
+// record (FLOOR_STAFF, below); these are the lines her record's `pick` indexes into. Editing a line
+// here edits it for every woman holding that index, on purpose; adding lines moves nobody.
+const _H_WALLET_HERE = [
+  '"Wallet? Aiyo." She tips her head at the woman at the end of the bar without looking at her. "You ask Khun Candy. She there. She the boss of boss — she fix, or nobody fix."',
+  '"You lose wallet?" She pats your arm, then points with her chin. "Candy. HER. You talk to her nice, na — she know everything happen on this road."',
+  '"Not here, nobody steal here — bad luck for the bar." A glance down the rail. "But Candy is in tonight. You want to know something, is her you ask."',
+];
+const _H_WALLET = [
+  '"Wallet? Aiyo, not here — nobody steal here, bad luck for the bar. You go Buakhao, ask Candy. Candy know everything, everybody."',
+  '"You lose wallet?? Poor you." She pats your arm. "I no see. Go Candy Bar, talk to Candy — she the boss of boss. She fix."',
+  '"No no, not my bar. Try Candy, Soi Buakhao side. Everybody problem go to Candy, my mama say."',
+];
+const _H_ASK_PHRASINGS = {
+  home: ['"You from where? England? America? Australia?" Bright, practised, already guessing.',
+    '"Where you from? No — let me guess." She studies your shirt like it has a flag on it. "England."',
+    '"Your country cold now? Where you from?" She asks it the way you ask the weather.'],
+  stay: ['"How long you stay Pattaya? Short time or looong time?" She giggles at her own joke.',
+    '"You stay how many day?" She counts on her fingers before you answer, to save time.',
+    '"Holiday? How long holiday?" A look that has already worked out whether it is long enough.'],
+  girlfriend: ['"You have girlfriend? Wife? Nooo, really?" A delighted, skeptical squint.',
+    '"Handsome man like you — wife at home, na?" She is fishing and does not mind you knowing.',
+    '"You have lady in your country? Tell true." A finger pointed at your chest, for honesty.'],
+  trips: ['"First time Pattaya, or you come back? Come back for somebody, maybe na?"',
+    '"You come here before? I think I see you before." She almost certainly has not, and it is still nice.',
+    '"New in Pattaya, or old man of Pattaya?" A grin. "Old man of Pattaya know where everything is."'],
+};
+const _H_ASK = [
+  { key: "home", q: '"You from where? England? America? Australia?" Bright, practised, already guessing.' },
+  { key: "stay", q: '"How long you stay Pattaya? Short time or looong time?" She giggles at her own joke.' },
+  { key: "girlfriend", q: '"You have girlfriend? Wife? Nooo, really?" A delighted, skeptical squint.' },
+  { key: "trips", q: '"First time Pattaya, or you come back? Come back for somebody, maybe na?"' },
+];
+const _H_DRINKS_ONLY = [
+    `"Take me?" A smile with the door shut behind it. "I not go, tilac. Drink only." She says it the ` +
+      `way you'd say your shoe size. "Mama know. Customer know after I tell them. Now you know." She ` +
+      `lifts her glass an inch. "This one is my work. All of it."`,
+    `"Barfine?" She shakes her head before the word is finished, not unkind. "Not me, na. I sit, I talk, ` +
+      `I drink with you — that is the job I do. Other girl go. I go home, alone, every night, same ` +
+      `same." A shrug. "Is good. Buy me one more and I tell you why."`,
+    `"No, na." Quick, pleasant, final. "I am drink girl. Mama has girl who go; I am not that girl." She ` +
+      `taps the rim of her glass. "This is my price. Only this."`,
   ];
-  const WALLET = [
-    '"Wallet? Aiyo, not here — nobody steal here, bad luck for the bar. You go Buakhao, ask Candy. Candy know everything, everybody."',
-    '"You lose wallet?? Poor you." She pats your arm. "I no see. Go Candy Bar, talk to Candy — she the boss of boss. She fix."',
-    '"No no, not my bar. Try Candy, Soi Buakhao side. Everybody problem go to Candy, my mama say."',
-  ];
-
-  // Naturally nosy, but the English caps how far the questions reach — small,
-  // stock openers, one per girl (deterministic via idx). Answers feed the same
-  // G.player.said memory the expats tap; see _convoAsk / _convoAnswer.
-  const _ASK_PHRASINGS = {
-    home: ['"You from where? England? America? Australia?" Bright, practised, already guessing.',
-      '"Where you from? No — let me guess." She studies your shirt like it has a flag on it. "England."',
-      '"Your country cold now? Where you from?" She asks it the way you ask the weather.'],
-    stay: ['"How long you stay Pattaya? Short time or looong time?" She giggles at her own joke.',
-      '"You stay how many day?" She counts on her fingers before you answer, to save time.',
-      '"Holiday? How long holiday?" A look that has already worked out whether it is long enough.'],
-    girlfriend: ['"You have girlfriend? Wife? Nooo, really?" A delighted, skeptical squint.',
-      '"Handsome man like you — wife at home, na?" She is fishing and does not mind you knowing.',
-      '"You have lady in your country? Tell true." A finger pointed at your chest, for honesty.'],
-    trips: ['"First time Pattaya, or you come back? Come back for somebody, maybe na?"',
-      '"You come here before? I think I see you before." She almost certainly has not, and it is still nice.',
-      '"New in Pattaya, or old man of Pattaya?" A grin. "Old man of Pattaya know where everything is."'],
-  };
-  const ASK = [
-    { key: "home", q: '"You from where? England? America? Australia?" Bright, practised, already guessing.' },
-    { key: "stay", q: '"How long you stay Pattaya? Short time or looong time?" She giggles at her own joke.' },
-    { key: "girlfriend", q: '"You have girlfriend? Wife? Nooo, really?" A delighted, skeptical squint.' },
-    { key: "trips", q: '"First time Pattaya, or you come back? Come back for somebody, maybe na?"' },
-  ];
-
-  // a girl whose desc says she's new plays Connect 4 like she's new — the
-  // tier the player can actually beat, signalled by what they read of her
-  const green = look.startsWith("New enough") || look.startsWith("Baby-faced");
-  // about two in five keep photos on the phone and will text one to a contact —
-  // three captions, hash-picked so she's stable (see _selfiesFor / _maybePhotoText)
-  const hasPics = _hh(id, 37) % 5 < 2;
-  const selfies = hasPics
-    ? [0, 1, 2].map(k => _H_SELFIES[_hh(id, 51 + k * 17) % _H_SELFIES.length])
-    : null;
-  const greetIdx = _hh(seed, 23) % 5, famWrapIdx = _hh(seed, 31) % 3, planWrapIdx = _hh(seed, 37) % 3, homeWrapIdx = _hh(seed, 43) % 3;   // the original pool lengths: baked text unchanged
-  const _sig = [look, _H_GREET[greetIdx]].join("|");   // look + greeting alone: family is deduped per rail now, so it must not mask a twin
-  if (!_hostessSigs[room]) _hostessSigs[room] = new Set();
-  if (_hostessSigs[room].has(_sig) && seed.length < id.length + 3) return _buildHostess(name, th, room, id, seed + "~");
-  _hostessSigs[room].add(_sig);
-  _lookCount[_lk + _li] = (_lookCount[_lk + _li] || 0) + 1;
-  _storyTaken(room).family.add(famIdx); _storyTaken(room).plan.add(planIdx);
-  return {
-    name, th, emoji, room, filler: true, storyIdx: { family: famIdx, plan: planIdx },
-    storyBits: { from, greet: greetIdx, family: famIdx, plan: planIdx, famWrap: famWrapIdx, planWrap: planWrapIdx, homeWrap: homeWrapIdx, free: _hh(seed, 53) % 4 },
-    ...(green ? { c4: 2 } : {}),
-    ...(selfies ? { selfies } : {}),
-    desc: `${look} — one of ${/s$/.test(bar) ? bar + "'" : bar + "'s"} girls, from ${from}.${ROOMS[room] && ROOMS[room].barType === "gogo" ? " The badge pinned at her hip says " + (1 + _hh(id + ":badge", 139) % 199) + " — the number the floor knows her by." : ""} ${phone}`,   // "Mama Yai's' girls", not "Mama Yai's's" (Stan, r35)
-    dialogue: [
-      { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: _H_GREET[greetIdx], short: idx(_H_GREET_SHORT, 29),
-        asks: (() => { const a = idx(ASK, 47), qs = _ASK_PHRASINGS[a.key]; return qs ? { key: a.key, q: qs[_hh(seed, 53) % qs.length] } : a; })(), story: "greet" },   // three women, one question, word for word (Gwen, round 66)
-      { topic: "family", text: _H_FAMILY_WRAP[famWrapIdx](family), story: "family" },
-      { topic: "home", text: _H_HOME_WRAP[homeWrapIdx](from), story: "home" },
-      { topic: "plan", text: _H_PLAN_WRAP[planWrapIdx](plan), story: "plan" },
-      { topic: "free|free drink|the free drink|free shot", text: _H_FREE[_hh(seed, 53) % 4], story: "free" },
-      // A girl working one of Candy's own bars points AT her boss, not at a map.
-      { topic: "wallet", notFlags: ["hasWallet"],
-        when: (st, G) => typeof _npcWhere === "function" && _npcWhere("candy") === room,
-        text: idx(WALLET_HERE, 41) },
-      { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 41) },
-      // the ledger reveals put "salary" and "quota" in the player's mouth, and
-      // the girl who said them couldn't be asked (Stan, round 35). Generic on
-      // purpose — the numbers are the trade's, not hers; her SHARE is the reveal.
-      { topic: "salary", bond: 1,
-        text: `"Salary?" A laugh with no bottom in it. "Salary is small-small, tilac — is for sit here. ` +
-          `The money is the drink. No drink, no money. So." She lifts her empty glass an inch, not ` +
-          `quite asking.`,
-        short: `"Salary is small-small — for sit here. The money is the drink."` },
-      // "Short time?" is the most on-topic question in the trade and it missed at
-      // every bar on Beach Road (Lionel, round 36). The global rule folds how
-      // much / take you / my hotel / short time / long time into "price"; the two-
-      // fee canon in her own mouth: mama's fine, then hers.
-      // the drinks-only girl answers the trade's question with her own rule — hers, not mama's
-      { topic: "price", when: () => typeof _drinksOnly === "function" && _drinksOnly(id),
-        text: idx([
-          `"Take me?" A smile with the door shut behind it. "I not go, tilac. Drink only." She says it the ` +
-            `way you'd say your shoe size. "Mama know. Customer know after I tell them. Now you know." She ` +
-            `lifts her glass an inch. "This one is my work. All of it."`,
-          `"Barfine?" She shakes her head before the word is finished, not unkind. "Not me, na. I sit, I talk, ` +
-            `I drink with you — that is the job I do. Other girl go. I go home, alone, every night, same ` +
-            `same." A shrug. "Is good. Buy me one more and I tell you why."`,
-          `"No, na." Quick, pleasant, final. "I am drink girl. Mama has girl who go; I am not that girl." She ` +
-            `taps the rim of her glass. "This is my price. Only this."`,
-        ], 61),
-        short: `"I not go, tilac. Drink only. You know already."` },
-      { topic: "price",
-        text: idx([
+const _H_PRICE = [
           `"Take me?" She does not pretend to be surprised. "Ask Mamasan for the bar — the barfine, na. ` +
             `My part we talk after, you and me." A wink that is mostly business. (BARFINE <name>)`,
           `"Short time, long time — first you pay the bar, tilac. Then me." She holds up two fingers, ` +
             `then folds one down. "Two prices. Everybody forget the second one." (BARFINE <name>)`,
           `"You want go with me? Okay, but Mamasan first." She nods at the till without looking at ` +
             `it. "After that, my price is my price. Not the bar's." (BARFINE <name>)`,
-        ], 47),
-        short: `"Mamasan first, then me. Two prices." (BARFINE <name>)` },
-      { topic: "late",
-        text: idx([
+        ];
+const _H_LATE = [
           `"After bar close?" She laughs. "Go home, sleep, wake up, same same. Sometimes friend of me have party — Thai place, karaoke, you know? Farang cannot come." A pause. "Cannot come ALONE."`,
           `"Late-late?" She thinks about whether to tell you. "Have place. Thai disco, ran lao. Girl go after work with friend. If girl like you, maybe she take you on motorbike." She does not say which girl.`,
           `"After two, everybody go eat. Khao tom, som tam, sit on the floor." She pats the stool. "You want see? Be nice to somebody who like you. Then she drive."`,
-        ], 53),
+        ];
+// A hostess from her record: everything about her is stored, nothing is hashed at load.
+function _floorHostess(id, r) {
+  const k = r.pick, room = r.room;
+  return {
+    name: r.name, th: r.th, emoji: r.emoji, room, filler: true, storyIdx: { family: k.family, plan: k.plan },
+    storyBits: { from: r.from, greet: k.greet, family: k.family, plan: k.plan, famWrap: k.famWrap, planWrap: k.planWrap, homeWrap: k.homeWrap, free: k.free },
+    ...(r.c4 ? { c4: r.c4 } : {}),
+    ...(r.selfies ? { selfies: r.selfies } : {}),
+    look: r.look,   // her portrait prompt, apart from the desc: only a change to THIS re-renders her
+    desc: r.desc,
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: _H_GREET[k.greet], short: _H_GREET_SHORT[k.short],
+        asks: (() => { const a = _H_ASK[k.ask], qs = _H_ASK_PHRASINGS[a.key]; return qs ? { key: a.key, q: qs[k.askQ % qs.length] } : a; })(), story: "greet" },
+      { topic: "family", text: _H_FAMILY_WRAP[k.famWrap](_H_FAMILY[k.family].replace(/\{from\}/g, r.from)), story: "family" },
+      { topic: "home", text: _H_HOME_WRAP[k.homeWrap](r.from), story: "home" },
+      { topic: "plan", text: _H_PLAN_WRAP[k.planWrap](_H_PLAN[k.plan]), story: "plan" },
+      { topic: "free|free drink|the free drink|free shot", text: _H_FREE[k.free], story: "free" },
+      // a girl working one of Candy's own bars points AT her boss, not at a map (round 23)
+      { topic: "wallet", notFlags: ["hasWallet"],
+        when: (st, G) => typeof _npcWhere === "function" && _npcWhere("candy") === room,
+        text: _H_WALLET_HERE[k.wallet] },
+      { topic: "wallet", notFlags: ["hasWallet"], text: _H_WALLET[k.wallet] },
+      // the ledger reveals put "salary" and "quota" in the player's mouth (Stan, round 35)
+      { topic: "salary", bond: 1,
+        text: `"Salary?" A laugh with no bottom in it. "Salary is small-small, tilac — is for sit here. ` +
+          `The money is the drink. No drink, no money. So." She lifts her empty glass an inch, not ` +
+          `quite asking.`,
+        short: `"Salary is small-small — for sit here. The money is the drink."` },
+      // the drinks-only girl answers the trade's question with her own rule — hers, not mama's
+      { topic: "price", when: () => typeof _drinksOnly === "function" && _drinksOnly(id),
+        text: _H_DRINKS_ONLY[k.drinksOnly],
+        short: `"I not go, tilac. Drink only. You know already."` },
+      // the two-fee canon in her own mouth: mama's fine, then hers (Lionel, round 36)
+      { topic: "price", text: _H_PRICE[k.price],
+        short: `"Mamasan first, then me. Two prices." (BARFINE <name>)` },
+      { topic: "late", text: _H_LATE[k.late],
         short: `"After two? Thai place, on the bike — if somebody like you."` },
-      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_H_LOCKIN, 59) }] : []),
+      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: _H_LOCKIN[k.lockin] }] : []),
       { topic: "quota", bond: 1,
         text: `"Quota, na. Every girl have number for the month — drink, and the other thing. Under ` +
           `the number, Mamasan not happy; over the number, small bonus." She counts something on ` +
@@ -17646,107 +17591,10 @@ function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   };
 }
 
-// [name, Thai nickname, room]. Distribution: go-gos busiest, beer/Soi 6/club
-// modest, expat & live-music bars light — Queen Vic is a pub, so none.
-const _FILLER_HOSTESSES = [
-  ["Ratsamee","รัศมี","lake_beer"], ["Kwanjai","ขวัญใจ","lake_beer"],
-  ["Naree","นารี","windmill"], ["Sasi","ศศิ","windmill"], ["Yada","ญาดา","windmill"],
-  ["Dao","ดาว","tequila_queen"], ["Mook","มุก","tequila_queen"], ["Ice","ไอซ์","tequila_queen"], ["Praew","แพรว","tequila_queen"],
-  ["Fah","ฟ้า","neon_paradise"], ["View","วิว","neon_paradise"], ["Sara","ซาร่า","neon_paradise"],
-  ["Bow","โบว์","club_mirage"], ["Nam","น้ำ","club_mirage"], ["Yui","ยุ้ย","club_mirage"],
-  ["Aof","อ๊อฟ","crystal_palace"], ["Cherry","เชอรี่","crystal_palace"], ["Beam","บีม","crystal_palace"], ["Boom","บูม","crystal_palace"],
-  ["Toey","เตย","rainbow_girls"], ["Pang","แป้ง","rainbow_girls"], ["Ploen","เพลิน","rainbow_girls"], ["Sai","ทราย","rainbow_girls"],
-  ["Fang","แฟง","kinky"], ["Gib","กิ๊บ","kinky"], ["Nice","ไนซ์","kinky"],
-  ["Tukta","ตุ๊กตา","slutty"], ["Jum","จุ๋ม","slutty"], ["Pop","ป๊อป","slutty"],
-  ["Namwan","น้ำหวาน","las_vegas"], ["Orn","อร","las_vegas"], ["Gigi","กีกี้","las_vegas"],
-  ["Near","เนียร์","metro_garden"], ["Milin","มิลิน","pit_stop"],
-  ["Kaew","แก้ว","paradise_nights"], ["Meaw","เหมียว","paradise_nights"],
-  ["Nan","แนน","candy_bar"], ["Bua","บัว","candy_bar"],
-  ["Fern","เฟิร์น","candy_bar_2"], ["Mai","ใหม่","candy_bar_2"],
-  ["Ju","จู","amp_room"], ["Pat","แพท","feedback_bar"], ["Pun","ปั้น","encore_bar"], ["Som","ส้ม","soundcheck_bar"],
-  ["Mam","แหม่ม","craft_cargo"], ["Jib","จิ๊บ","the_growler"], ["Toon","ตูน","container_8"], ["Yaya","ยาย่า","reload_bar"],
-  ["Ann","แอน","midnight_sun"], ["Nut","นัท","midnight_sun"],
-  ["Rung","รุ้ง","lucky_tiger"], ["Oat","โอ๊ต","lucky_tiger"],
-  ["Ton","ต้น","silk_rose"], ["Nid","นิด","silk_rose"], ["Wa","หว้า","silk_rose"],
-  ["Noon","นุ่น","jasmine_garden"], ["Prae","แพร","jasmine_garden"],
-  ["Taan","ตาล","gold_rush"], ["Tik","ติ๊ก","gold_rush"],
-  ["Pui","ปุ้ย","starlight_bar"], ["Mild","มายด์","starlight_bar"],
-  ["Aump","อั้ม","rabbit_hole"], ["Guitar","กีตาร์","rabbit_hole"],
-  ["Namtip","น้ำทิพย์","lucky_charm"], ["Bella","เบลล่า","lucky_charm"],
-  ["Prik","พริก","moonshine_bar"], ["Mek","เมฆ","moonshine_bar"],
-  ["Namtan","น้ำตาล","khao_talo_bar"], ["Ying","หญิง","khao_talo_bar"],
-  /* Golden Dragon girls (Kai, Nook, Dew) promoted to authored NPCs */
-  /* Pink Lotus girls (Puu, Belle) promoted to authored NPCs */
-  /* Sunset Dreams girls (Kat, May, Dear) promoted to authored NPCs */
-  /* Ruby Kiss girls (Kluay, Benz) promoted to authored NPCs */
-  ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
-  ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
-  ["Wanpen","วันเพ็ญ","mama_yai"],
-  ["Pear","แพร์","nottys_place"], ["Jinda","จินดา","nottys_place"],
-  ["Namfon","น้ำฝน","anchor_bar"], ["Bunny","บันนี่","dolphin_bar"], ["Jaja","จาจา","mooring_bar"],
-  ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
-  ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
-  /* Kitten Corner, Cherry Pop, and Soi 6 beer-bar girls promoted to authored NPCs */
-  ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
-  ["Manow","มะนาว","stinky_bar"],
-  // the flagship bar had ONE hostess, so a colleague crisis, a no-show night and every
-  // "two of the girls" line either needed a guard or described women who were not
-  // there (Rolf, round 55). Mario, 2026-09-29: two more girls.
-  ["Jiap","จิ๊บ","stinky_bar"], ["Mew","มิว","stinky_bar"],
-  ["Goong","กุ้ง","honey_trap"], ["Jiab","เจี๊ยบ","honey_trap"],
-  ["Meen","มีน","queen_bee"], ["Yok","หยก","queen_bee"],
-  ["Namphueng","น้ำผึ้ง","buzz_inn"], ["Gaem","แก้ม","buzz_inn"],
-  ["Bum","บุ๋ม","dollhouse"], ["Ohm","โอม","dollhouse"],
-  ["Fasai","ฟ้าใส","sapphire"], ["Tarn","ธาร","sapphire"],
-  ["Pao","เป้า","sundowner"], ["Poom","ภูมิ","sundowner"],
-  ["Bright","ไบรท์","cricketers"], ["Lukkade","ลูกเกด","cricketers"],
-  ["Bpom","บอม","lucky7"], ["Proud","พราว","lucky7"],
-  ["Namo","นะโม","seabreeze"], ["Somruedee","สมฤดี","seabreeze"],
-  ["Ratchada","รัชฎา","coconut"], ["Nittaya","นิตยา","coconut"],
-  ["Duang","ดวง","sandbar"], ["Mookda","มุกดา","sandbar"],
-  ["Aoi","อ้อย","hyper"], ["Noey","เนย","hyper"],
-  ["Gig","กิ๊ก","arrow_bar"], ["Kade","เกด","arrow_bar"],
-  ["Pinky","พิงกี้","cheeky_monkey"], ["Mona","โมนา","cheeky_monkey"],
-  ["Gina","จีน่า","the_office"], ["Bpaeng","แป้ง","the_office"],
-  ["Tim","ทิม","the_boardroom"], ["Min","มิน","the_boardroom"],
-  ["Tar","ตาล","doghouse"], ["Gof","กอฟ","doghouse"], ["Wassana","วาสนา","doghouse"],
-  ["Bow","โบว์","doghouse"], // a SECOND Bow (Club Mirage has one) — see _fillerId
-  ["Sroy","สร้อย","succubus"], ["Chom","ชม","succubus"], ["Pranee","ปราณี","succubus"],
-  ["Milk","มิ้ลค์","velvet_club"], ["June","จูน","velvet_club"],
-  // appended, never inserted — see _fillerId
-  ["Fah","ฟ้า","the_terrace"], ["Namtip","น้ำทิพย์","the_terrace"],
-  ["Praew","แพรว","kingfisher"], ["Kaew","แก้ว","kingfisher"],
-  ["Meaw","แมว","two_stools"], ["Jinda","จินดา","two_stools"],
-  ["Duan","เดือน","the_gecko"], ["Yok","หยก","the_gecko"],
-  ["Fon","ฝน","sea_wall"], ["Kwang","กวาง","sea_wall"],
-  ["Mook","มุก","breakwater"], ["Jib","จิ๊บ","breakwater"],
-  ["Bee","บี","neon_palm"], ["Toey","เต้ย","neon_palm"],
-  ["Pang","แป้ง","the_bucket"], ["Mint","มิ้นท์","the_bucket"],
-];
 
-// A filler girl's id used to be just her nickname lowercased, which quietly made
-// every Thai nickname single-use across the whole town — and reusing one did not
-// error, it OVERWROTE: the later row won and the earlier girl silently moved bars.
-// Five of them relocated out of Club Mirage, Candy Bar 2, Las Vegas and Jasmine
-// Garden that way before anyone noticed.
-//
-// That scarcity was invented by the code, not by Thailand — the country is full of
-// girls called Bow and Fern and Ploy, and two bars each having one is MORE true,
-// not less. So the bare nickname is still the id when it is free, and a taken one
-// falls back to <room>_<name>. Existing ids are untouched (no portrait renames, no
-// save breakage), and because _buildHostess hashes the ID to pick her hometown,
-// look and story, the second Bow gets a different life for free.
-// ORDER MATTERS, and it bit immediately: the bare id goes to whichever row the
-// loop reaches FIRST, so a duplicate INSERTED above an existing row steals her
-// id — and with it her portrait, since portraits are keyed on the id. Four
-// mamasans (Water Buffalo, KINKY, Las Vegas, Firefly) were silently re-keyed
-// that way within minutes of this landing. New rows go at the END of the table.
-//
-// The guard is portraits.test.js, and it is a real one rather than a convention:
-// portraits are committed per id, so a stolen id leaves the original with no
-// PNG and fails loudly. (A test that recomputes expected ids from the tables
-// CANNOT catch this — it derives its expectation from the thing it is checking
-// and passes on any ordering. One was written, and deleted for that reason.)
+// IDS. A floor woman's id is her record's key in FLOOR_STAFF: the bare nickname where it was free
+// when she was made, <room>_<name> where another character already had it (Thailand has many girls
+// called Bow). Ids are keyed to portraits and saves, so an id is never renamed or reused.
 // ── pronouns ────────────────────────────────────────────────────────────────
 // Requested by the Second Road agent (2026-08-09) via Mario, which is the
 // protocol: the export is this repo's, so the field is added here rather than
@@ -17770,26 +17618,6 @@ function _pronoun(id) {
   return c.pronoun || (_SHE_ROLES.has(NPC_ROLES[id]) ? "she" : undefined);
 }
 
-function _fillerId(name, room) {
-  const bare = name.toLowerCase();
-  return NPCS[bare] ? room + "_" + bare : bare;
-}
-
-for (const [name, th, room] of _FILLER_HOSTESSES) {
-  const id = _fillerId(name, room);
-  NPCS[id] = _buildHostess(name, th, room, id);
-  NPC_ROLES[id] = "hostess";
-}
-// PORTRAIT LINES FOR GENERATED GIRLS (2026-10-02). A filler's desc is assembled from pools and
-// rarely carries a face: Jiap's reached the portrait model as "Small and sharp, and misses
-// nothing", with no age, hair or clothes, and she came back a generic face. A look line here
-// is read ONLY by the portrait manifest — the engine never prints `look` — and must agree with
-// the generated desc (check it with `node tools/portrait-prompt.mjs <id>`).
-const _FILLER_LOOKS = {
-  jiap: "Small slight Thai woman, mid twenties, short bob, sharp watchful eyes, fitted black top, small knowing half-smile.",
-  mew: "Thai woman, early twenties, very long straight hair, long false eyelashes, glossy practised pout, pink satin top, phone in hand.",
-};
-for (const [id, look] of Object.entries(_FILLER_LOOKS)) if (NPCS[id]) NPCS[id].look = look;
 
 // ── Generic (filler) mamasans and cashiers ──────────────────────────────────
 // Every hostess bar needs a mamasan who runs the floor and a cashier who runs
@@ -18084,102 +17912,280 @@ function _mamaFamilyIdx(id) {
   return i;
 }
 
-function _buildMama(name, th, room, id = name.toLowerCase()) {
-  const bar = _barName(room) || "the bar";
-  const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
-  const from = idx(_H_FROM, 3);
-  const look = idx(_M_LOOK, 5);
-  const story = idx(_M_STORY, 7);
+// A mamasan from her record (FLOOR_STAFF).
+function _floorMama(id, r) {
+  const k = r.pick, room = r.room, from = r.from;
   return {
-    name, th, emoji: "\ud83d\udc51", room, filler: true,
-    storyBits: { from, greet: _hh(id, 23) % 8, family: _mamaFamilyIdx(id), plan: _hh(id, 41) % 8, girls: _hh(id, 31) % 8, home: _hh(id, 47) % _M_HOME.length, story: _hh(id, 7) % _M_STORY.length },   // the original eight of each: baked text unchanged, the town book deals the rest
-    desc: `${look} \u2014 the mamasan of ${bar}, from ${from}. She ${story}.`,
+    name: r.name, th: r.th, emoji: "\ud83d\udc51", room, filler: true,
+    storyBits: { from, greet: k.greet, family: k.family, plan: k.plan, girls: k.girls, home: k.home, story: k.story },   // the original eight of each: baked text unchanged, the town book deals the rest
+    look: r.look,   // the portrait prompt, apart from the desc
+    desc: r.desc,
     dialogue: [
-      { th: "\u0e40\u0e0a\u0e34\u0e0d\u0e04\u0e48\u0e30", rom: "chern kha", text: _M_GREET[_hh(id, 23) % 8], short: _M_GREET_SHORT[_hh(id, 23) % 8], story: "mgreet" },
-      { topic: "girls", text: _M_GIRLS[_hh(id, 31) % 8], story: "mgirls" },
-      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_M_LOCKIN, 47) }] : []),
-      { topic: "family", text: _M_FAMILY[_mamaFamilyIdx(id)], story: "mfamily" },
-      { topic: "plan", text: _M_PLAN[_hh(id, 41) % 8], story: "mplan" },
-      { topic: "home|hometown|village|where you from", text: _M_HOME[_hh(id, 47) % _M_HOME.length](from), story: "mhome" },   // round 66
+      { th: "\u0e40\u0e0a\u0e34\u0e0d\u0e04\u0e48\u0e30", rom: "chern kha", text: _M_GREET[k.greet], short: _M_GREET_SHORT[k.greet], story: "mgreet" },
+      { topic: "girls", text: _M_GIRLS[k.girls], story: "mgirls" },
+      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: _M_LOCKIN[k.lockin] }] : []),
+      { topic: "family", text: _M_FAMILY[k.family], story: "mfamily" },
+      { topic: "plan", text: _M_PLAN[k.plan], story: "mplan" },
+      { topic: "home|hometown|village|where you from", text: _M_HOME[k.home](from), story: "mhome" },   // round 66
       // Candy standing six feet away while her own colleague says "ask Candy on
       // Buakhao" (Maureen, round 47 — Bua in the same bar gets it right).
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
         text: '"Your wallet?" A tilt of the head down the bar. "Then you are in luck and you are also standing next to the answer \u2014 Candy is in tonight. Ask her, tilac. She hears about these before I do."' },
-      { topic: "wallet", notFlags: ["hasWallet"], text: idx(_M_WALLET, 43) },
+      { topic: "wallet", notFlags: ["hasWallet"], text: _M_WALLET[k.wallet] },
     ],
   };
 }
 
-function _buildCashier(name, th, room, id = name.toLowerCase()) {
-  const bar = _barName(room) || "the bar";
-  const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
-  const from = idx(_H_FROM, 3);
-  const look = idx(_C_LOOK, 5);
+// A cashier from her record (FLOOR_STAFF).
+function _floorCashier(id, r) {
+  const k = r.pick, room = r.room, from = r.from;
   return {
-    name, th, emoji: "\ud83e\uddfe", room, filler: true,
-    storyBits: { from, family: _hh(id, 37) % 8, greet: _hh(id, 23) % 8, money: _hh(id, 31) % 8, home: _hh(id, 47) % _C_HOME.length },   // the original eight: baked text unchanged
-    desc: `${look} \u2014 the cashier at ${bar}, from ${from}.`,
+    name: r.name, th: r.th, emoji: "\ud83e\uddfe", room, filler: true,
+    storyBits: { from, family: k.family, greet: k.greet, money: k.money, home: k.home },   // the original eight: baked text unchanged
+    look: r.look,   // the portrait prompt, apart from the desc
+    desc: r.desc,
     dialogue: [
-      { th: "\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35\u0e04\u0e48\u0e30", rom: "sawatdee kha", text: _C_GREET[_hh(id, 23) % 8], short: _C_GREET_SHORT[_hh(id, 23) % 8], story: "cgreet" },
+      { th: "\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35\u0e04\u0e48\u0e30", rom: "sawatdee kha", text: _C_GREET[k.greet], short: _C_GREET_SHORT[k.greet], story: "cgreet" },
       // one answer, so one topic with two keys — TOPICS listed "money · tab" and
       // gave the same paragraph twice (Maureen, round 47).
-      { topic: "money|tab|bill|price", text: _C_MONEY[_hh(id, 31) % 8], story: "cmoney" },
-      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: idx(_C_LOCKIN, 47) }] : []),
-      { topic: "family", text: _C_FAMILY[_hh(id, 37) % 8].replace(/\{from\}/g, from), story: "cfamily" },
-      { topic: "home|hometown|village|where you from", text: _C_HOME[_hh(id, 47) % _C_HOME.length](from), story: "chome" },   // round 66
+      { topic: "money|tab|bill|price", text: _C_MONEY[k.money], story: "cmoney" },
+      ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: _C_LOCKIN[k.lockin] }] : []),
+      { topic: "family", text: _C_FAMILY[k.family].replace(/\{from\}/g, from), story: "cfamily" },
+      { topic: "home|hometown|village|where you from", text: _C_HOME[k.home](from), story: "chome" },   // round 66
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
         text: '"Not through my till." She nods along the bar without looking up. "But Candy is in tonight \u2014 ask her, not me. She is the one who hears."' },
-      { topic: "wallet", notFlags: ["hasWallet"], text: idx(_C_WALLET, 43) },
+      { topic: "wallet", notFlags: ["hasWallet"], text: _C_WALLET[k.wallet] },
     ],
   };
 }
 
-// [name, Thai nickname, room]. One mamasan per bar (a chain shares hers, so the
-// Candy Bars are absent here) and one cashier per bar. Distribution mirrors the
-// hostesses': every hostess venue gets both; the Queen Vic pub gets neither.
-const _FILLER_MAMAS = [
-  ["Sudjai","สุดใจ","orchid_room"],
-  ["Boonsri","บุญศรี","lake_beer"],
-  ["Wanida","วนิดา","windmill"], ["Alisa","อลิสา","katoeys"],
-  ["Sunee","สุนีย์","doghouse"],
-  ["Pen","เพ็ญ","blue_dog"], ["Muay","หมวย","rock_factory"], ["Lamai","ละมัย","stinky_bar"],
-  ["Jeab","เจี๊ยบ","neon_paradise"], ["Da","ดา","club_mirage"], ["Rin","ริน","crystal_palace"],
-  ["Kob","กบ","paradise_nights"], ["Koi","ก้อย","midnight_sun"], ["Ratana","รัตนา","lucky_tiger"],
-  ["Waew","แวว","silk_rose"], ["Ple","เปิ้ล","jasmine_garden"], ["Orm","อ้อม","gold_rush"],
-  ["Jom","จอม","starlight_bar"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
-  ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"],
-  ["Tui","ตุ่ย","night_heron"],
-  
-  ["Wandee","วันดี","the_terrace"], ["Somsri","สมศรี","kingfisher"],
-  ["Ratree","ราตรี","two_stools"], ["Somjai","สมใจ","the_gecko"],
-  ["Duang","ดวง","sea_wall"], ["Mookda","มุกดา","breakwater"],
-  ["Nittaya","นิตยา","neon_palm"], ["Ratchada","รัชดา","the_bucket"],
-];
-const _FILLER_CASHIERS = [
-  ["Kae","แก้ว","orchid_room"],
-  ["Napa","นภา","lake_beer"],
-  ["Nubnab","นับหนับ","windmill"], ["Farida","ฟาริดา","katoeys"],
-  ["Tukky","ตุ๊กกี้","doghouse"], ["Noot","นุช","succubus"],
-  ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
-  ["Cake","เค้ก","stinky_bar"], ["Care","แคร์","candy_bar_2"], ["Cartoon","การ์ตูน","neon_paradise"],
-  ["Earn","เอิร์น","club_mirage"], ["Eye","อาย","crystal_palace"], ["Fai","ฝ้าย","paradise_nights"],
-  ["Gam","แก้ม","candy_bar"], ["Ging","กิ่ง","lucky_tiger"], ["Grace","เกรซ","silk_rose"],
-  ["Hong","ห่อง","jasmine_garden"], ["Jah","จ๊ะ","gold_rush"], ["Jeed","จี๊ด","starlight_bar"],
-  ["Kaimook","ไข่มุก","slutty"], ["Kanom","ขนม","las_vegas"], ["Keng","เก่ง","khao_talo_bar"],
-  ["Best","เบสท์","water_buffalo"], ["Aim","เอม","firefly_bar"], ["Tangmo","แตงโม","mama_yai"],
-  ["Kanya","กัญญา","nottys_place"],
-  ["Mon","มล","night_heron"],
-  
-  ["Kade","เกด","the_terrace"], ["Noey","เนย","kingfisher"],
-  ["Orm","ออม","two_stools"], ["Ple","เปิ้ล","the_gecko"],
-  ["Gig","กิ๊ก","sea_wall"], ["Kade","เกด","breakwater"],
-  ["Noey","เนย","neon_palm"], ["Fai","ฝ้าย","the_bucket"],
-];
-
-for (const [name, th, room] of _FILLER_MAMAS) {
-  const id = _fillerId(name, room);
-  NPCS[id] = _buildMama(name, th, room, id);
-  NPC_ROLES[id] = "mamasan";
+// THE FLOOR STAFF (Mario, 2026-10-07: "consolidate them all as NPCs"). Every hostess, mamasan and
+// cashier on a bar floor is an ordinary NPC with her own record: name, bar, look (her portrait
+// prompt), hometown, desc, and the index of each shared line she speaks (`pick`). Nothing about her
+// is hashed at load any more, so adding a line to a pool, or editing one woman, moves nobody else.
+// They were generated once from the pools by builders that dealt looks and stories per bar; that
+// result is what is stored here. Edit a woman here; give her an authored node by adding it to her
+// NPCS entry after the fold, as Boonsri's photo node does. `filler: true` still marks the floor
+// tier (pooled dialogue, badge numbers, the town book), not how she was made.
+const FLOOR_STAFF = {
+  ratsamee: {"role":"hostess","name":"Ratsamee","th":"รัศมี","room":"lake_beer","emoji":"🌷","look":"Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool","from":"Ubon","desc":"Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool — one of The Sundowner's girls, from Ubon. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","pick":{"greet":0,"short":1,"ask":1,"askQ":2,"family":1,"plan":1,"famWrap":1,"planWrap":1,"homeWrap":0,"free":3,"wallet":0,"drinksOnly":2,"price":2,"late":2,"lockin":1}},
+  kwanjai: {"role":"hostess","name":"Kwanjai","th":"ขวัญใจ","room":"lake_beer","emoji":"🌸","look":"Heavy-set and unhurried, a gold tooth and a market auntie's arms","from":"Surin","desc":"Heavy-set and unhurried, a gold tooth and a market auntie's arms — one of The Sundowner's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":4,"short":1,"ask":2,"askQ":0,"family":6,"plan":14,"famWrap":2,"planWrap":0,"homeWrap":0,"free":0,"wallet":2,"drinksOnly":2,"price":0,"late":0,"lockin":1}},
+  naree: {"role":"hostess","name":"Naree","th":"นารี","room":"windmill","emoji":"💐","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Amnat Charoen","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 53 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","selfies":["waiting work 💕 think about you","new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555"],"pick":{"greet":1,"short":0,"ask":0,"askQ":0,"family":0,"plan":4,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  sasi: {"role":"hostess","name":"Sasi","th":"ศศิ","room":"windmill","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sisaket","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Gilt Cage's girls, from Sisaket. The badge pinned at her hip says 100 — the number the floor knows her by. She counts the room's empty glasses without seeming to look at them.","pick":{"greet":0,"short":2,"ask":3,"askQ":2,"family":19,"plan":3,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  yada: {"role":"hostess","name":"Yada","th":"ญาดา","room":"windmill","emoji":"💐","look":"Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear","from":"Buriram","desc":"Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of The Gilt Cage's girls, from Buriram. The badge pinned at her hip says 183 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":3,"short":0,"ask":0,"askQ":0,"family":12,"plan":16,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  dao: {"role":"hostess","name":"Dao","th":"ดาว","room":"tequila_queen","emoji":"💕","look":"Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is","from":"Ubon","desc":"Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of Tequila Queen A-Go-Go's girls, from Ubon. The badge pinned at her hip says 7 — the number the floor knows her by. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","selfies":["gym 💪 strong for you","rainy 🌧️ i stay home lonely 🥺","friend birthday 🎂 we sing loud loud"],"pick":{"greet":1,"short":1,"ask":3,"askQ":1,"family":15,"plan":19,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  mook: {"role":"hostess","name":"Mook","th":"มุก","room":"tequila_queen","emoji":"✨","look":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot","from":"Yasothon","desc":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of Tequila Queen A-Go-Go's girls, from Yasothon. The badge pinned at her hip says 95 — the number the floor knows her by. Google Translate is open before you finish the sentence.","selfies":["friend birthday 🎂 we sing loud loud","me eat somtam 🥵🌶️ so spicy 555","new nail 💅 pink na"],"pick":{"greet":1,"short":2,"ask":1,"askQ":2,"family":5,"plan":9,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  ice: {"role":"hostess","name":"Ice","th":"ไอซ์","room":"tequila_queen","emoji":"💫","look":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face","from":"Roi Et","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Tequila Queen A-Go-Go's girls, from Roi Et. The badge pinned at her hip says 15 — the number the floor knows her by. The {{phone}} never leaves her hand.","pick":{"greet":3,"short":1,"ask":0,"askQ":1,"family":12,"plan":16,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  praew: {"role":"hostess","name":"Praew","th":"แพรว","room":"tequila_queen","emoji":"🌼","look":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it","from":"Chaiyaphum","desc":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of Tequila Queen A-Go-Go's girls, from Chaiyaphum. The badge pinned at her hip says 37 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","selfies":["market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽","waiting work 💕 think about you"],"pick":{"greet":1,"short":2,"ask":2,"askQ":2,"family":10,"plan":14,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  fah: {"role":"hostess","name":"Fah","th":"ฟ้า","room":"neon_paradise","emoji":"🌼","look":"Neat side parting, pearl studs, a bank teller on her night off","from":"Chaiyaphum","desc":"Neat side parting, pearl studs, a bank teller on her night off — one of Neon Paradise A-Go-Go's girls, from Chaiyaphum. The badge pinned at her hip says 158 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","selfies":["market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽","waiting work 💕 think about you"],"pick":{"greet":1,"short":2,"ask":2,"askQ":2,"family":10,"plan":14,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  view: {"role":"hostess","name":"View","th":"วิว","room":"neon_paradise","emoji":"💫","look":"Long hair, longer eyelashes, a practised pout","from":"Roi Et","desc":"Long hair, longer eyelashes, a practised pout — one of Neon Paradise A-Go-Go's girls, from Roi Et. The badge pinned at her hip says 74 — the number the floor knows her by. The {{phone}} never leaves her hand.","selfies":["so hot today 🥵 i melt 555","beach today 🏖️ miss you na","market this morning 🛵 buy food mama"],"pick":{"greet":1,"short":1,"ask":0,"askQ":1,"family":0,"plan":4,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  sara: {"role":"hostess","name":"Sara","th":"ซาร่า","room":"neon_paradise","emoji":"🦋","look":"Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist","from":"Udon Thani","desc":"Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Neon Paradise A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 29 — the number the floor knows her by. She laughs before the joke is finished, which is either kindness or experience.","selfies":["new dress 👗 you like?? 😊","my cat 🐈 cute like me na 😽","rainy 🌧️ i stay home lonely 🥺"],"pick":{"greet":1,"short":2,"ask":0,"askQ":2,"family":1,"plan":5,"famWrap":1,"planWrap":1,"homeWrap":1,"free":2,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  bow: {"role":"hostess","name":"Bow","th":"โบว์","room":"club_mirage","emoji":"🌻","look":"A wide slow smile, a gap in her front teeth, nowhere she would rather be","from":"Khon Kaen","desc":"A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Club Mirage's girls, from Khon Kaen. The badge pinned at her hip says 184 — the number the floor knows her by. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","selfies":["new nail 💅 pink na","market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽"],"pick":{"greet":1,"short":0,"ask":3,"askQ":0,"family":15,"plan":19,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  nam: {"role":"hostess","name":"Nam","th":"น้ำ","room":"club_mirage","emoji":"🌻","look":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face","from":"Khon Kaen","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Club Mirage's girls, from Khon Kaen. The badge pinned at her hip says 153 — the number the floor knows her by. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":4,"short":0,"ask":3,"askQ":0,"family":3,"plan":7,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  yui: {"role":"hostess","name":"Yui","th":"ยุ้ย","room":"club_mirage","emoji":"🌙","look":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her","from":"Mukdahan","desc":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Club Mirage's girls, from Mukdahan. The badge pinned at her hip says 102 — the number the floor knows her by. She types more than she talks — and laughs at both.","selfies":["rainy 🌧️ i stay home lonely 🥺","friend birthday 🎂 we sing loud loud","so hot today 🥵 i melt 555"],"pick":{"greet":1,"short":0,"ask":2,"askQ":0,"family":10,"plan":14,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  aof: {"role":"hostess","name":"Aof","th":"อ๊อฟ","room":"crystal_palace","emoji":"🍒","look":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile","from":"Loei","desc":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Crystal Palace A-Go-Go's girls, from Loei. The badge pinned at her hip says 197 — the number the floor knows her by. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","pick":{"greet":3,"short":0,"ask":1,"askQ":0,"family":17,"plan":1,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  cherry: {"role":"hostess","name":"Cherry","th":"เชอรี่","room":"crystal_palace","emoji":"💫","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Mukdahan","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Crystal Palace A-Go-Go's girls, from Mukdahan. The badge pinned at her hip says 18 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":1,"short":1,"ask":0,"askQ":2,"family":8,"plan":12,"famWrap":2,"planWrap":1,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":2,"price":0,"late":2,"lockin":1}},
+  beam: {"role":"hostess","name":"Beam","th":"บีม","room":"crystal_palace","emoji":"🌼","look":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it","from":"Udon Thani","desc":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 28 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":3,"short":2,"ask":2,"askQ":2,"family":2,"plan":6,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  boom: {"role":"hostess","name":"Boom","th":"บูม","room":"crystal_palace","emoji":"🌼","look":"Baby-faced, chewing gum, thumbing her phone under the bar","from":"Udon Thani","desc":"Baby-faced, chewing gum, thumbing her phone under the bar — one of Crystal Palace A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 156 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","c4":2,"selfies":["market this morning 🛵 buy food mama","gym 💪 strong for you","waiting work 💕 think about you"],"pick":{"greet":2,"short":2,"ask":2,"askQ":2,"family":6,"plan":10,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  toey: {"role":"hostess","name":"Toey","th":"เตย","room":"rainbow_girls","emoji":"🌸","look":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder","from":"Kalasin","desc":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of Rainbow Girls Bar's girls, from Kalasin. The badge pinned at her hip says 91 — the number the floor knows her by. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","selfies":["me eat somtam 🥵🌶️ so spicy 555","new nail 💅 pink na","new dress 👗 you like?? 😊"],"pick":{"greet":2,"short":1,"ask":2,"askQ":1,"family":6,"plan":10,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  pang: {"role":"hostess","name":"Pang","th":"แป้ง","room":"rainbow_girls","emoji":"🌷","look":"Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear","from":"Ubon","desc":"Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of Rainbow Girls Bar's girls, from Ubon. The badge pinned at her hip says 146 — the number the floor knows her by. She hums along to whatever is playing and knows about half of the words in English.","pick":{"greet":0,"short":1,"ask":1,"askQ":1,"family":9,"plan":13,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  ploen: {"role":"hostess","name":"Ploen","th":"เพลิน","room":"rainbow_girls","emoji":"🌷","look":"Soft-spoken, a mole above her lip, looks down whenever she laughs","from":"Ubon","desc":"Soft-spoken, a mole above her lip, looks down whenever she laughs — one of Rainbow Girls Bar's girls, from Ubon. The badge pinned at her hip says 98 — the number the floor knows her by. She hums along to whatever is playing and knows about half of the words in English.","pick":{"greet":0,"short":1,"ask":1,"askQ":1,"family":10,"plan":14,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  sai: {"role":"hostess","name":"Sai","th":"ทราย","room":"rainbow_girls","emoji":"💫","look":"Round cheeks, sharp eyes, keeping score of something on a beer mat","from":"Maha Sarakham","desc":"Round cheeks, sharp eyes, keeping score of something on a beer mat — one of Rainbow Girls Bar's girls, from Maha Sarakham. The badge pinned at her hip says 154 — the number the floor knows her by. The {{phone}} never leaves her hand.","pick":{"greet":0,"short":1,"ask":0,"askQ":1,"family":4,"plan":8,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  fang: {"role":"hostess","name":"Fang","th":"แฟง","room":"kinky","emoji":"🌻","look":"A wide slow smile, a gap in her front teeth, nowhere she would rather be","from":"Loei","desc":"A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of KINKY Go-Go's girls, from Loei. The badge pinned at her hip says 47 — the number the floor knows her by. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":0,"short":0,"ask":3,"askQ":0,"family":19,"plan":3,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  gib: {"role":"hostess","name":"Gib","th":"กิ๊บ","room":"kinky","emoji":"✨","look":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing","from":"Yasothon","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of KINKY Go-Go's girls, from Yasothon. The badge pinned at her hip says 133 — the number the floor knows her by. Google Translate is open before you finish the sentence.","pick":{"greet":4,"short":2,"ask":1,"askQ":2,"family":13,"plan":17,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  nice: {"role":"hostess","name":"Nice","th":"ไนซ์","room":"kinky","emoji":"💐","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Buriram","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of KINKY Go-Go's girls, from Buriram. The badge pinned at her hip says 15 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":3,"short":0,"ask":0,"askQ":0,"family":12,"plan":16,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  tukta: {"role":"hostess","name":"Tukta","th":"ตุ๊กตา","room":"slutty","emoji":"💐","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Buriram","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of Slutty Go-Go's girls, from Buriram. The badge pinned at her hip says 160 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","selfies":["waiting work 💕 think about you","new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555"],"pick":{"greet":1,"short":0,"ask":0,"askQ":0,"family":0,"plan":4,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  jum: {"role":"hostess","name":"Jum","th":"จุ๋ม","room":"slutty","emoji":"💕","look":"Tall and quiet, a long plait and a plain black dress, watching the door","from":"{{Nong Bua Lamphu}}","desc":"Tall and quiet, a long plait and a plain black dress, watching the door — one of Slutty Go-Go's girls, from {{Nong Bua Lamphu}}. The badge pinned at her hip says 4 — the number the floor knows her by. She counts the room in drinks, not heads, and is usually right.","pick":{"greet":0,"short":1,"ask":3,"askQ":1,"family":19,"plan":3,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  pop: {"role":"hostess","name":"Pop","th":"ป๊อป","room":"slutty","emoji":"🌸","look":"New enough to still look a little nervous, in a borrowed dress a size too big","from":"Roi Et","desc":"New enough to still look a little nervous, in a borrowed dress a size too big — one of Slutty Go-Go's girls, from Roi Et. The badge pinned at her hip says 136 — the number the floor knows her by. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","c4":2,"pick":{"greet":3,"short":1,"ask":2,"askQ":1,"family":2,"plan":6,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  namwan: {"role":"hostess","name":"Namwan","th":"น้ำหวาน","room":"las_vegas","emoji":"✨","look":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant","from":"Ubon","desc":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of Las Vegas Go-Go's girls, from Ubon. The badge pinned at her hip says 128 — the number the floor knows her by. She hums along to whatever is playing and knows about half of the words in English.","selfies":["beach today 🏖️ miss you na","market this morning 🛵 buy food mama","new nail 💅 pink na"],"pick":{"greet":0,"short":2,"ask":1,"askQ":0,"family":17,"plan":5,"famWrap":0,"planWrap":2,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":0,"price":1,"late":0,"lockin":2}},
+  orn: {"role":"hostess","name":"Orn","th":"อร","room":"las_vegas","emoji":"💫","look":"Round cheeks, sharp eyes, keeping score of something on a beer mat","from":"Maha Sarakham","desc":"Round cheeks, sharp eyes, keeping score of something on a beer mat — one of Las Vegas Go-Go's girls, from Maha Sarakham. The badge pinned at her hip says 169 — the number the floor knows her by. The {{phone}} never leaves her hand.","pick":{"greet":3,"short":1,"ask":0,"askQ":1,"family":12,"plan":16,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  gigi: {"role":"hostess","name":"Gigi","th":"กีกี้","room":"las_vegas","emoji":"💕","look":"Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is","from":"{{Nong Bua Lamphu}}","desc":"Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of Las Vegas Go-Go's girls, from {{Nong Bua Lamphu}}. The badge pinned at her hip says 90 — the number the floor knows her by. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":4,"short":1,"ask":3,"askQ":1,"family":3,"plan":7,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  near: {"role":"hostess","name":"Near","th":"เนียร์","room":"metro_garden","emoji":"💕","look":"Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is","from":"{{Nong Bua Lamphu}}","desc":"Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of The Metro Beer Garden's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":0,"short":1,"ask":3,"askQ":1,"family":19,"plan":3,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  milin: {"role":"hostess","name":"Milin","th":"มิลิน","room":"pit_stop","emoji":"🌼","look":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it","from":"Chaiyaphum","desc":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of The Pit Stop's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":0,"short":2,"ask":2,"askQ":2,"family":14,"plan":18,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  kaew: {"role":"hostess","name":"Kaew","th":"แก้ว","room":"paradise_nights","emoji":"🌻","look":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her","from":"{{Nong Khai}}","desc":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Paradise Nights Club's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","selfies":["new nail 💅 pink na","new dress 👗 you like?? 😊","my cat 🐈 cute like me na 😽"],"pick":{"greet":2,"short":0,"ask":3,"askQ":0,"family":11,"plan":15,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  meaw: {"role":"hostess","name":"Meaw","th":"เหมียว","room":"paradise_nights","emoji":"✨","look":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing","from":"Sisaket","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of Paradise Nights Club's girls, from Sisaket. Google Translate is open before you finish the sentence.","pick":{"greet":4,"short":2,"ask":1,"askQ":2,"family":13,"plan":17,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  nan: {"role":"hostess","name":"Nan","th":"แนน","room":"candy_bar","emoji":"💫","look":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face","from":"Roi Et","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Candy Bar's girls, from Roi Et. The {{phone}} never leaves her hand.","pick":{"greet":0,"short":1,"ask":0,"askQ":1,"family":4,"plan":8,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  bua: {"role":"hostess","name":"Bua","th":"บัว","room":"candy_bar","emoji":"🌺","look":"Gold everywhere — earrings, chain, {{phone}} case","from":"Sisaket","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.","pick":{"greet":0,"short":2,"ask":3,"askQ":2,"family":19,"plan":3,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  fern: {"role":"hostess","name":"Fern","th":"เฟิร์น","room":"candy_bar_2","emoji":"🌙","look":"Round-faced and quick to laugh","from":"Mukdahan","desc":"Round-faced and quick to laugh — one of Candy Bar 2's girls, from Mukdahan. She types more than she talks — and laughs at both.","pick":{"greet":0,"short":0,"ask":2,"askQ":0,"family":14,"plan":18,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  mai: {"role":"hostess","name":"Mai","th":"ใหม่","room":"candy_bar_2","emoji":"🌸","look":"Straight hair to her hips, a silver anklet, perfectly still until she isn't","from":"Kalasin","desc":"Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of Candy Bar 2's girls, from Kalasin. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":4,"short":1,"ask":2,"askQ":1,"family":18,"plan":2,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  ju: {"role":"hostess","name":"Ju","th":"จู","room":"amp_room","emoji":"🌙","look":"Round-faced and quick to laugh","from":"Buriram","desc":"Round-faced and quick to laugh — one of The Amp Room's girls, from Buriram. She types more than she talks — and laughs at both.","selfies":["rainy 🌧️ i stay home lonely 🥺","new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555"],"pick":{"greet":1,"short":0,"ask":2,"askQ":0,"family":10,"plan":14,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  pat: {"role":"hostess","name":"Pat","th":"แพท","room":"feedback_bar","emoji":"💐","look":"Pixie cut, small gold hoops, a crooked, disarming grin","from":"Buriram","desc":"Pixie cut, small gold hoops, a crooked, disarming grin — one of Chok Dee Bar's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":3,"short":0,"ask":0,"askQ":0,"family":12,"plan":16,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  pun: {"role":"hostess","name":"Pun","th":"ปั้น","room":"encore_bar","emoji":"🌼","look":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it","from":"Surin","desc":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of Sawasdee Bar's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","selfies":["market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽","waiting work 💕 think about you"],"pick":{"greet":2,"short":2,"ask":2,"askQ":2,"family":6,"plan":10,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  som: {"role":"hostess","name":"Som","th":"ส้ม","room":"soundcheck_bar","emoji":"🌸","look":"New enough to still look a little nervous, in a borrowed dress a size too big","from":"Roi Et","desc":"New enough to still look a little nervous, in a borrowed dress a size too big — one of Butterfly Bar's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","c4":2,"pick":{"greet":3,"short":1,"ask":2,"askQ":1,"family":2,"plan":6,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  mam: {"role":"hostess","name":"Mam","th":"แหม่ม","room":"craft_cargo","emoji":"🌼","look":"Neat side parting, pearl studs, a bank teller on her night off","from":"Chaiyaphum","desc":"Neat side parting, pearl studs, a bank teller on her night off — one of Number One Bar's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":3,"short":2,"ask":2,"askQ":2,"family":2,"plan":6,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  jib: {"role":"hostess","name":"Jib","th":"จิ๊บ","room":"the_growler","emoji":"🦋","look":"Freckled from the sun, hair in a high ponytail, sneakers under the stool","from":"Chaiyaphum","desc":"Freckled from the sun, hair in a high ponytail, sneakers under the stool — one of Coco Bar's girls, from Chaiyaphum. She laughs before the joke is finished, which is either kindness or experience.","selfies":["new dress 👗 you like?? 😊","gym 💪 strong for you","rainy 🌧️ i stay home lonely 🥺"],"pick":{"greet":2,"short":2,"ask":0,"askQ":2,"family":16,"plan":0,"famWrap":1,"planWrap":1,"homeWrap":1,"free":2,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  toon: {"role":"hostess","name":"Toon","th":"ตูน","room":"container_8","emoji":"🍒","look":"A scar through one eyebrow and a grin that dares you to ask about it","from":"Khon Kaen","desc":"A scar through one eyebrow and a grin that dares you to ask about it — one of Venus Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","selfies":["beach today 🏖️ miss you na","market this morning 🛵 buy food mama","gym 💪 strong for you"],"pick":{"greet":1,"short":0,"ask":1,"askQ":0,"family":5,"plan":9,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  yaya: {"role":"hostess","name":"Yaya","th":"ยาย่า","room":"reload_bar","emoji":"🌻","look":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her","from":"{{Nong Khai}}","desc":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Sunflower Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":4,"short":0,"ask":3,"askQ":0,"family":3,"plan":7,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  ann: {"role":"hostess","name":"Ann","th":"แอน","room":"midnight_sun","emoji":"🌸","look":"Straight hair to her hips, a silver anklet, perfectly still until she isn't","from":"Kalasin","desc":"Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of Midnight Sun Bar's girls, from Kalasin. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":0,"short":1,"ask":2,"askQ":1,"family":14,"plan":18,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  nut: {"role":"hostess","name":"Nut","th":"นัท","room":"midnight_sun","emoji":"🌙","look":"Round-faced and quick to laugh","from":"Amnat Charoen","desc":"Round-faced and quick to laugh — one of Midnight Sun Bar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.","selfies":["rainy 🌧️ i stay home lonely 🥺","friend birthday 🎂 we sing loud loud","so hot today 🥵 i melt 555"],"pick":{"greet":1,"short":0,"ask":2,"askQ":0,"family":10,"plan":14,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  rung: {"role":"hostess","name":"Rung","th":"รุ้ง","room":"lucky_tiger","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sisaket","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  oat: {"role":"hostess","name":"Oat","th":"โอ๊ต","room":"lucky_tiger","emoji":"🌺","look":"Broad-shouldered and easy, a volleyball player's posture and handshake","from":"Sakon Nakhon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":12,"plan":16,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  ton: {"role":"hostess","name":"Ton","th":"ต้น","room":"silk_rose","emoji":"💐","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Mukdahan","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Silk Rose Bar's girls, from Mukdahan. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":0,"short":0,"ask":0,"askQ":0,"family":4,"plan":8,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  nid: {"role":"hostess","name":"Nid","th":"นิด","room":"silk_rose","emoji":"🌼","look":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it","from":"Surin","desc":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of Silk Rose Bar's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":3,"short":2,"ask":2,"askQ":2,"family":2,"plan":6,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  wa: {"role":"hostess","name":"Wa","th":"หว้า","room":"silk_rose","emoji":"✨","look":"Lean and angular, cheekbones like a blade, eyes that weigh you","from":"Yasothon","desc":"Lean and angular, cheekbones like a blade, eyes that weigh you — one of Silk Rose Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.","pick":{"greet":4,"short":2,"ask":1,"askQ":2,"family":13,"plan":17,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  noon: {"role":"hostess","name":"Noon","th":"นุ่น","room":"jasmine_garden","emoji":"🌻","look":"A wide slow smile, a gap in her front teeth, nowhere she would rather be","from":"Loei","desc":"A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Jasmine Garden Bar's girls, from Loei. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":0,"short":0,"ask":3,"askQ":0,"family":19,"plan":3,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  prae: {"role":"hostess","name":"Prae","th":"แพร","room":"jasmine_garden","emoji":"🍒","look":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile","from":"{{Nong Khai}}","desc":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Jasmine Garden Bar's girls, from {{Nong Khai}}. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","selfies":["beach today 🏖️ miss you na","market this morning 🛵 buy food mama","gym 💪 strong for you"],"pick":{"greet":2,"short":0,"ask":1,"askQ":0,"family":1,"plan":5,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  taan: {"role":"hostess","name":"Taan","th":"ตาล","room":"gold_rush","emoji":"✨","look":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot","from":"Yasothon","desc":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of Gold Rush Lounge's girls, from Yasothon. Google Translate is open before you finish the sentence.","pick":{"greet":3,"short":2,"ask":1,"askQ":2,"family":17,"plan":1,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  tik: {"role":"hostess","name":"Tik","th":"ติ๊ก","room":"gold_rush","emoji":"🌻","look":"A wide slow smile, a gap in her front teeth, nowhere she would rather be","from":"Khon Kaen","desc":"A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Gold Rush Lounge's girls, from Khon Kaen. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","selfies":["new nail 💅 pink na","market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽"],"pick":{"greet":1,"short":0,"ask":3,"askQ":0,"family":15,"plan":19,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  pui: {"role":"hostess","name":"Pui","th":"ปุ้ย","room":"starlight_bar","emoji":"🍒","look":"Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered","from":"Khon Kaen","desc":"Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of Starlight Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","selfies":["beach today 🏖️ miss you na","new dress 👗 you like?? 😊","gym 💪 strong for you"],"pick":{"greet":2,"short":0,"ask":1,"askQ":0,"family":1,"plan":5,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  mild: {"role":"hostess","name":"Mild","th":"มายด์","room":"starlight_bar","emoji":"💕","look":"Tall and quiet, a long plait and a plain black dress, watching the door","from":"Nakhon Phanom","desc":"Tall and quiet, a long plait and a plain black dress, watching the door — one of Starlight Bar's girls, from Nakhon Phanom. When she does talk it is short, dry and worth waiting for.","pick":{"greet":0,"short":1,"ask":3,"askQ":1,"family":19,"plan":3,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  aump: {"role":"hostess","name":"Aump","th":"อั้ม","room":"rabbit_hole","emoji":"🌼","look":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it","from":"Udon Thani","desc":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of The Rabbit Hole's girls, from Udon Thani. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":3,"short":2,"ask":2,"askQ":2,"family":2,"plan":6,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  guitar: {"role":"hostess","name":"Guitar","th":"กีตาร์","room":"rabbit_hole","emoji":"🍒","look":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot","from":"Sakon Nakhon","desc":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of The Rabbit Hole's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.","selfies":["my cat 🐈 cute like me na 😽","rainy 🌧️ i stay home lonely 🥺","gym 💪 strong for you"],"pick":{"greet":0,"short":0,"ask":1,"askQ":1,"family":17,"plan":1,"famWrap":1,"planWrap":0,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":0}},
+  namtip: {"role":"hostess","name":"Namtip","th":"น้ำทิพย์","room":"lucky_charm","emoji":"💐","look":"Tiny and loud, all elbows and energy","from":"Udon Thani","desc":"Tiny and loud, all elbows and energy — one of Lucky Charm Bar's girls, from Udon Thani. She laughs before the joke is finished, which is either kindness or experience.","pick":{"greet":2,"short":0,"ask":0,"askQ":1,"family":4,"plan":12,"famWrap":1,"planWrap":0,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":0}},
+  bella: {"role":"hostess","name":"Bella","th":"เบลล่า","room":"lucky_charm","emoji":"💕","look":"Round glasses and a cardigan over the bar dress, like a librarian on a dare","from":"{{Nong Bua Lamphu}}","desc":"Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of Lucky Charm Bar's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":0,"short":1,"ask":3,"askQ":1,"family":19,"plan":3,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  prik: {"role":"hostess","name":"Prik","th":"พริก","room":"moonshine_bar","emoji":"🌺","look":"Broad-shouldered and easy, a volleyball player's posture and handshake","from":"Yasothon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","beach today 🏖️ miss you na"],"pick":{"greet":1,"short":2,"ask":3,"askQ":2,"family":15,"plan":19,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  mek: {"role":"hostess","name":"Mek","th":"เมฆ","room":"moonshine_bar","emoji":"💫","look":"Long hair, longer eyelashes, a practised pout","from":"Kalasin","desc":"Long hair, longer eyelashes, a practised pout — one of Moonshine Bar's girls, from Kalasin. The {{phone}} never leaves her hand.","pick":{"greet":0,"short":1,"ask":0,"askQ":1,"family":4,"plan":8,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  namtan: {"role":"hostess","name":"Namtan","th":"น้ำตาล","room":"khao_talo_bar","emoji":"🌼","look":"Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match","from":"Roi Et","desc":"Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match — one of Daeng's Place's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":2,"short":2,"ask":2,"askQ":0,"family":14,"plan":2,"famWrap":0,"planWrap":2,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":0,"price":1,"late":0,"lockin":2}},
+  ying: {"role":"hostess","name":"Ying","th":"หญิง","room":"khao_talo_bar","emoji":"💐","look":"Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields","from":"Amnat Charoen","desc":"Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields — one of Daeng's Place's girls, from Amnat Charoen. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","selfies":["waiting work 💕 think about you","friend birthday 🎂 we sing loud loud","me eat somtam 🥵🌶️ so spicy 555"],"pick":{"greet":2,"short":0,"ask":0,"askQ":0,"family":16,"plan":0,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  lin: {"role":"hostess","name":"Lin","th":"หลิน","room":"water_buffalo","emoji":"🌸","look":"Fifties, reading glasses on a cord, and a laugh like a door banging shut","from":"Roi Et","desc":"Fifties, reading glasses on a cord, and a laugh like a door banging shut — one of The Water Buffalo's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","selfies":["me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na","new dress 👗 you like?? 😊"],"pick":{"greet":1,"short":1,"ask":2,"askQ":1,"family":10,"plan":14,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  nim: {"role":"hostess","name":"Nim","th":"นิ่ม","room":"water_buffalo","emoji":"🌺","look":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept","from":"Sakon Nakhon","desc":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  duan: {"role":"hostess","name":"Duan","th":"เดือน","room":"firefly_bar","emoji":"🍒","look":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept","from":"{{Nong Khai}}","desc":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of Firefly Bar's girls, from {{Nong Khai}}. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","selfies":["beach today 🏖️ miss you na","market this morning 🛵 buy food mama","gym 💪 strong for you"],"pick":{"greet":2,"short":0,"ask":1,"askQ":0,"family":1,"plan":5,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  saifon: {"role":"hostess","name":"Saifon","th":"สายฝน","room":"firefly_bar","emoji":"🍒","look":"Grey at the temples, a red silk blouse, older than the town girls and better at this","from":"Yasothon","desc":"Grey at the temples, a red silk blouse, older than the town girls and better at this — one of Firefly Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.","pick":{"greet":3,"short":0,"ask":1,"askQ":1,"family":5,"plan":13,"famWrap":1,"planWrap":0,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":0}},
+  wanpen: {"role":"hostess","name":"Wanpen","th":"วันเพ็ญ","room":"mama_yai","emoji":"💐","look":"Fifties, reading glasses on a cord, and a laugh like a door banging shut","from":"Udon Thani","desc":"Fifties, reading glasses on a cord, and a laugh like a door banging shut — one of Mama Yai's' girls, from Udon Thani. She laughs before the joke is finished, which is either kindness or experience.","pick":{"greet":2,"short":0,"ask":0,"askQ":1,"family":4,"plan":12,"famWrap":1,"planWrap":0,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":2}},
+  pear: {"role":"hostess","name":"Pear","th":"แพร์","room":"nottys_place","emoji":"🍒","look":"A scar through one eyebrow and a grin that dares you to ask about it","from":"Khon Kaen","desc":"A scar through one eyebrow and a grin that dares you to ask about it — one of Notty's Place's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","selfies":["beach today 🏖️ miss you na","market this morning 🛵 buy food mama","gym 💪 strong for you"],"pick":{"greet":2,"short":0,"ask":1,"askQ":0,"family":1,"plan":5,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  jinda: {"role":"hostess","name":"Jinda","th":"จินดา","room":"nottys_place","emoji":"🌷","look":"Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear","from":"{{Nong Bua Lamphu}}","desc":"Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of Notty's Place's girls, from {{Nong Bua Lamphu}}. She hums along to whatever is playing and knows about half of the words in English.","selfies":["my cat 🐈 cute like me na 😽","waiting work 💕 think about you","new hair 💇‍♀️ good mai??"],"pick":{"greet":1,"short":1,"ask":1,"askQ":1,"family":5,"plan":9,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  namfon: {"role":"hostess","name":"Namfon","th":"น้ำฝน","room":"anchor_bar","emoji":"🌼","look":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder","from":"Maha Sarakham","desc":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Anchor Bar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":2,"short":2,"ask":2,"askQ":0,"family":14,"plan":2,"famWrap":0,"planWrap":2,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":0,"price":1,"late":0,"lockin":2}},
+  bunny: {"role":"hostess","name":"Bunny","th":"บันนี่","room":"dolphin_bar","emoji":"🌻","look":"A wide slow smile, a gap in her front teeth, nowhere she would rather be","from":"{{Nong Khai}}","desc":"A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Dolphin Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":4,"short":0,"ask":3,"askQ":0,"family":3,"plan":7,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  jaja: {"role":"hostess","name":"Jaja","th":"จาจา","room":"mooring_bar","emoji":"🍒","look":"Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered","from":"Loei","desc":"Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of The Mooring's girls, from Loei. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","pick":{"greet":4,"short":0,"ask":1,"askQ":0,"family":13,"plan":17,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  dokmai: {"role":"hostess","name":"Dokmai","th":"ดอกไม้","room":"night_heron","emoji":"💫","look":"Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields","from":"Buriram","desc":"Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields — one of The Night Heron's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":2,"short":1,"ask":0,"askQ":2,"family":4,"plan":8,"famWrap":2,"planWrap":1,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":2,"price":0,"late":2,"lockin":1}},
+  jampa: {"role":"hostess","name":"Jampa","th":"จำปา","room":"night_heron","emoji":"💫","look":"A gold tooth, a sharper tongue, and drink arithmetic you can watch happening","from":"Maha Sarakham","desc":"A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of The Night Heron's girls, from Maha Sarakham. The {{phone}} never leaves her hand.","pick":{"greet":4,"short":1,"ask":0,"askQ":1,"family":8,"plan":12,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  ing: {"role":"hostess","name":"Ing","th":"อิง","room":"blue_dog","emoji":"🌺","look":"Gold everywhere — earrings, chain, {{phone}} case","from":"Sisaket","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":1,"short":2,"ask":3,"askQ":2,"family":15,"plan":19,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  khing: {"role":"hostess","name":"Khing","th":"ขิง","room":"blue_dog","emoji":"🌙","look":"Round-faced and quick to laugh","from":"Buriram","desc":"Round-faced and quick to laugh — one of Blue Dog's girls, from Buriram. She types more than she talks — and laughs at both.","selfies":["rainy 🌧️ i stay home lonely 🥺","friend birthday 🎂 we sing loud loud","so hot today 🥵 i melt 555"],"pick":{"greet":2,"short":0,"ask":2,"askQ":0,"family":6,"plan":10,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  bam: {"role":"hostess","name":"Bam","th":"บาม","room":"rock_factory","emoji":"🌻","look":"Baby-faced, chewing gum, thumbing her phone under the bar","from":"{{Nong Khai}}","desc":"Baby-faced, chewing gum, thumbing her phone under the bar — one of Rock Factory's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","c4":2,"selfies":["new nail 💅 pink na","market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽"],"pick":{"greet":2,"short":0,"ask":3,"askQ":0,"family":11,"plan":15,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  kwang: {"role":"hostess","name":"Kwang","th":"กวาง","room":"rock_factory","emoji":"💕","look":"Round glasses and a cardigan over the bar dress, like a librarian on a dare","from":"{{Nong Bua Lamphu}}","desc":"Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of Rock Factory's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":4,"short":1,"ask":3,"askQ":1,"family":3,"plan":7,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  manow: {"role":"hostess","name":"Manow","th":"มะนาว","room":"stinky_bar","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sakon Nakhon","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.","pick":{"greet":4,"short":2,"ask":3,"askQ":2,"family":3,"plan":7,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  jiap: {"role":"hostess","name":"Jiap","th":"จิ๊บ","room":"stinky_bar","emoji":"✨","look":"Small slight Thai woman, mid twenties, short bob, sharp watchful eyes, fitted black top, small knowing half-smile.","from":"Sisaket","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of The Stinky Pinky's girls, from Sisaket. Google Translate is open before you finish the sentence.","pick":{"greet":3,"short":2,"ask":1,"askQ":2,"family":17,"plan":1,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  mew: {"role":"hostess","name":"Mew","th":"มิว","room":"stinky_bar","emoji":"💫","look":"Thai woman, early twenties, very long straight hair, long false eyelashes, glossy practised pout, pink satin top, phone in hand.","from":"Roi Et","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of The Stinky Pinky's girls, from Roi Et. The {{phone}} never leaves her hand.","selfies":["so hot today 🥵 i melt 555","new nail 💅 pink na","market this morning 🛵 buy food mama"],"pick":{"greet":2,"short":1,"ask":0,"askQ":1,"family":16,"plan":0,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  goong: {"role":"hostess","name":"Goong","th":"กุ้ง","room":"honey_trap","emoji":"🍒","look":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile","from":"Khon Kaen","desc":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Honey Trap Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","selfies":["beach today 🏖️ miss you na","new dress 👗 you like?? 😊","gym 💪 strong for you"],"pick":{"greet":1,"short":0,"ask":1,"askQ":0,"family":5,"plan":9,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  jiab: {"role":"hostess","name":"Jiab","th":"เจี๊ยบ","room":"honey_trap","emoji":"🌻","look":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her","from":"{{Nong Khai}}","desc":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Honey Trap Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":4,"short":0,"ask":3,"askQ":0,"family":3,"plan":7,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  meen: {"role":"hostess","name":"Meen","th":"มีน","room":"queen_bee","emoji":"💐","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Mukdahan","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Hive's girls, from Mukdahan. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":4,"short":0,"ask":0,"askQ":0,"family":8,"plan":12,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  yok: {"role":"hostess","name":"Yok","th":"หยก","room":"queen_bee","emoji":"🌼","look":"Baby-faced, chewing gum, thumbing her phone under the bar","from":"Surin","desc":"Baby-faced, chewing gum, thumbing her phone under the bar — one of The Hive's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","c4":2,"selfies":["market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽","waiting work 💕 think about you"],"pick":{"greet":2,"short":2,"ask":2,"askQ":2,"family":6,"plan":10,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  namphueng: {"role":"hostess","name":"Namphueng","th":"น้ำผึ้ง","room":"buzz_inn","emoji":"💐","look":"Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist","from":"Surin","desc":"Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Buzz Inn's girls, from Surin. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":1,"short":0,"ask":0,"askQ":2,"family":0,"plan":16,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":1,"price":1,"late":2,"lockin":2}},
+  gaem: {"role":"hostess","name":"Gaem","th":"แก้ม","room":"buzz_inn","emoji":"🌷","look":"Soft-spoken, a mole above her lip, looks down whenever she laughs","from":"Nakhon Phanom","desc":"Soft-spoken, a mole above her lip, looks down whenever she laughs — one of Buzz Inn's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.","pick":{"greet":3,"short":1,"ask":1,"askQ":1,"family":17,"plan":1,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  bum: {"role":"hostess","name":"Bum","th":"บุ๋ม","room":"dollhouse","emoji":"🌺","look":"Broad-shouldered and easy, a volleyball player's posture and handshake","from":"Sakon Nakhon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  ohm: {"role":"hostess","name":"Ohm","th":"โอม","room":"dollhouse","emoji":"✨","look":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing","from":"Yasothon","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of The Dollhouse's girls, from Yasothon. Google Translate is open before you finish the sentence.","selfies":["friend birthday 🎂 we sing loud loud","so hot today 🥵 i melt 555","new nail 💅 pink na"],"pick":{"greet":2,"short":2,"ask":1,"askQ":2,"family":1,"plan":5,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  fasai: {"role":"hostess","name":"Fasai","th":"ฟ้าใส","room":"sapphire","emoji":"✨","look":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing","from":"Sakon Nakhon","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of Sapphire Bar's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.","pick":{"greet":4,"short":2,"ask":1,"askQ":2,"family":13,"plan":17,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  tarn: {"role":"hostess","name":"Tarn","th":"ธาร","room":"sapphire","emoji":"💫","look":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face","from":"Maha Sarakham","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Sapphire Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.","pick":{"greet":0,"short":1,"ask":0,"askQ":1,"family":4,"plan":8,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  pao: {"role":"hostess","name":"Pao","th":"เป้า","room":"sundowner","emoji":"💕","look":"Tall and quiet, a long plait and a plain black dress, watching the door","from":"{{Nong Bua Lamphu}}","desc":"Tall and quiet, a long plait and a plain black dress, watching the door — one of Sundowner Bar's girls, from {{Nong Bua Lamphu}}. She has heard every opening line on this road and grades them, silently, out of ten.","pick":{"greet":3,"short":1,"ask":3,"askQ":1,"family":7,"plan":11,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  poom: {"role":"hostess","name":"Poom","th":"ภูมิ","room":"sundowner","emoji":"💫","look":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face","from":"Maha Sarakham","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Sundowner Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.","selfies":["so hot today 🥵 i melt 555","beach today 🏖️ miss you na","market this morning 🛵 buy food mama"],"pick":{"greet":1,"short":1,"ask":0,"askQ":1,"family":0,"plan":4,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  bright: {"role":"hostess","name":"Bright","th":"ไบรท์","room":"cricketers","emoji":"🍒","look":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot","from":"Sakon Nakhon","desc":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of The Cricketers' girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.","pick":{"greet":3,"short":0,"ask":1,"askQ":1,"family":5,"plan":9,"famWrap":1,"planWrap":0,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":0}},
+  lukkade: {"role":"hostess","name":"Lukkade","th":"ลูกเกด","room":"cricketers","emoji":"🌙","look":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her","from":"Roi Et","desc":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of The Cricketers' girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":0,"short":0,"ask":2,"askQ":2,"family":2,"plan":10,"famWrap":1,"planWrap":1,"homeWrap":2,"free":0,"wallet":1,"drinksOnly":1,"price":1,"late":2,"lockin":2}},
+  bpom: {"role":"hostess","name":"Bpom","th":"บอม","room":"lucky7","emoji":"🌻","look":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her","from":"{{Nong Khai}}","desc":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Lucky 7 Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":3,"short":0,"ask":3,"askQ":0,"family":7,"plan":11,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  proud: {"role":"hostess","name":"Proud","th":"พราว","room":"lucky7","emoji":"🌷","look":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant","from":"Nakhon Phanom","desc":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of Lucky 7 Bar's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.","selfies":["my cat 🐈 cute like me na 😽","waiting work 💕 think about you","new hair 💇‍♀️ good mai??"],"pick":{"greet":2,"short":1,"ask":1,"askQ":1,"family":1,"plan":5,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  namo: {"role":"hostess","name":"Namo","th":"นะโม","room":"seabreeze","emoji":"💐","look":"Pixie cut, small gold hoops, a crooked, disarming grin","from":"Amnat Charoen","desc":"Pixie cut, small gold hoops, a crooked, disarming grin — one of Sea Breeze Bar's girls, from Amnat Charoen. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":0,"short":0,"ask":0,"askQ":0,"family":4,"plan":8,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  somruedee: {"role":"hostess","name":"Somruedee","th":"สมฤดี","room":"seabreeze","emoji":"💐","look":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant","from":"Buriram","desc":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of Sea Breeze Bar's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","selfies":["new dress 👗 you like?? 😊","new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555"],"pick":{"greet":0,"short":1,"ask":0,"askQ":2,"family":5,"plan":4,"famWrap":0,"planWrap":0,"homeWrap":1,"free":2,"wallet":1,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  ratchada: {"role":"hostess","name":"Ratchada","th":"รัชฎา","room":"coconut","emoji":"🌺","look":"Tall and quiet, a long plait and a plain black dress, watching the door","from":"Yasothon","desc":"Tall and quiet, a long plait and a plain black dress, watching the door — one of Coconut Bar's girls, from Yasothon. Her laugh, when it finally comes, is louder than anyone expects.","pick":{"greet":4,"short":2,"ask":3,"askQ":0,"family":15,"plan":15,"famWrap":2,"planWrap":2,"homeWrap":1,"free":1,"wallet":1,"drinksOnly":0,"price":0,"late":0,"lockin":2}},
+  nittaya: {"role":"hostess","name":"Nittaya","th":"นิตยา","room":"coconut","emoji":"💕","look":"Tiny and loud, all elbows and energy","from":"Yasothon","desc":"Tiny and loud, all elbows and energy — one of Coconut Bar's girls, from Yasothon. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":0,"short":0,"ask":3,"askQ":0,"family":11,"plan":16,"famWrap":1,"planWrap":2,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":1,"price":2,"late":0,"lockin":0}},
+  duang: {"role":"hostess","name":"Duang","th":"ดวง","room":"sandbar","emoji":"🌸","look":"Straight hair to her hips, a silver anklet, perfectly still until she isn't","from":"Maha Sarakham","desc":"Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of The Sandbar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":0,"short":1,"ask":2,"askQ":1,"family":14,"plan":18,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  mookda: {"role":"hostess","name":"Mookda","th":"มุกดา","room":"sandbar","emoji":"🌸","look":"Round-faced and quick to laugh","from":"Amnat Charoen","desc":"Round-faced and quick to laugh — one of The Sandbar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.","pick":{"greet":3,"short":1,"ask":2,"askQ":2,"family":10,"plan":19,"famWrap":2,"planWrap":1,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":2,"price":0,"late":2,"lockin":1}},
+  aoi: {"role":"hostess","name":"Aoi","th":"อ้อย","room":"hyper","emoji":"💐","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Amnat Charoen","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of Hyper A Go-Go's girls, from Amnat Charoen. The badge pinned at her hip says 93 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","selfies":["waiting work 💕 think about you","new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555"],"pick":{"greet":1,"short":0,"ask":0,"askQ":0,"family":0,"plan":4,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  noey: {"role":"hostess","name":"Noey","th":"เนย","room":"hyper","emoji":"💫","look":"Long hair, longer eyelashes, a practised pout","from":"Roi Et","desc":"Long hair, longer eyelashes, a practised pout — one of Hyper A Go-Go's girls, from Roi Et. The badge pinned at her hip says 151 — the number the floor knows her by. The {{phone}} never leaves her hand.","selfies":["so hot today 🥵 i melt 555","beach today 🏖️ miss you na","market this morning 🛵 buy food mama"],"pick":{"greet":1,"short":1,"ask":0,"askQ":1,"family":1,"plan":5,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  gig: {"role":"hostess","name":"Gig","th":"กิ๊ก","room":"arrow_bar","emoji":"🌸","look":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder","from":"Maha Sarakham","desc":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of Arrow Bar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":4,"short":1,"ask":2,"askQ":1,"family":18,"plan":2,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  kade: {"role":"hostess","name":"Kade","th":"เกด","room":"arrow_bar","emoji":"🌼","look":"Cropped jacket, high bun, the poise of somebody who once danced properly","from":"Chaiyaphum","desc":"Cropped jacket, high bun, the poise of somebody who once danced properly — one of Arrow Bar's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":3,"short":2,"ask":2,"askQ":2,"family":2,"plan":6,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  pinky: {"role":"hostess","name":"Pinky","th":"พิงกี้","room":"cheeky_monkey","emoji":"🦋","look":"Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist","from":"Chaiyaphum","desc":"Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Cheeky Monkey Bar's girls, from Chaiyaphum. She laughs before the joke is finished, which is either kindness or experience.","pick":{"greet":3,"short":2,"ask":0,"askQ":2,"family":12,"plan":16,"famWrap":1,"planWrap":1,"homeWrap":1,"free":2,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  mona: {"role":"hostess","name":"Mona","th":"โมนา","room":"cheeky_monkey","emoji":"💐","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Buriram","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Cheeky Monkey Bar's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":0,"short":0,"ask":0,"askQ":0,"family":4,"plan":8,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  gina: {"role":"hostess","name":"Gina","th":"จีน่า","room":"the_office","emoji":"💐","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Mukdahan","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Office Bar's girls, from Mukdahan. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":3,"short":0,"ask":0,"askQ":0,"family":12,"plan":16,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  bpaeng: {"role":"hostess","name":"Bpaeng","th":"แป้ง","room":"the_office","emoji":"🌼","look":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder","from":"Maha Sarakham","desc":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Office Bar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","selfies":["rainy 🌧️ i stay home lonely 🥺","new hair 💇‍♀️ good mai??","waiting work 💕 think about you"],"pick":{"greet":4,"short":2,"ask":2,"askQ":0,"family":6,"plan":10,"famWrap":0,"planWrap":2,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":0,"price":1,"late":0,"lockin":2}},
+  tim: {"role":"hostess","name":"Tim","th":"ทิม","room":"the_boardroom","emoji":"✨","look":"Lean and angular, cheekbones like a blade, eyes that weigh you","from":"Sisaket","desc":"Lean and angular, cheekbones like a blade, eyes that weigh you — one of The Boardroom's girls, from Sisaket. Google Translate is open before you finish the sentence.","pick":{"greet":3,"short":2,"ask":1,"askQ":2,"family":17,"plan":1,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  min: {"role":"hostess","name":"Min","th":"มิน","room":"the_boardroom","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Yasothon","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  tar: {"role":"hostess","name":"Tar","th":"ตาล","room":"doghouse","emoji":"🌼","look":"Neat side parting, pearl studs, a bank teller on her night off","from":"Chaiyaphum","desc":"Neat side parting, pearl studs, a bank teller on her night off — one of The Doghouse's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":0,"short":2,"ask":2,"askQ":2,"family":14,"plan":18,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  gof: {"role":"hostess","name":"Gof","th":"กอฟ","room":"doghouse","emoji":"🌻","look":"A wide slow smile, a gap in her front teeth, nowhere she would rather be","from":"Khon Kaen","desc":"A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of The Doghouse's girls, from Khon Kaen. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":4,"short":0,"ask":3,"askQ":0,"family":3,"plan":7,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
+  wassana: {"role":"hostess","name":"Wassana","th":"วาสนา","room":"doghouse","emoji":"🌺","look":"Gold everywhere — earrings, chain, {{phone}} case","from":"Loei","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of The Doghouse's girls, from Loei. A small Buddha on a cord sits outside her collar, and she touches it when she thinks nobody is looking.","selfies":["new hair 💇‍♀️ good mai??","rainy 🌧️ i stay home lonely 🥺","my cat 🐈 cute like me na 😽"],"pick":{"greet":1,"short":1,"ask":3,"askQ":1,"family":7,"plan":11,"famWrap":0,"planWrap":0,"homeWrap":1,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":1,"lockin":1}},
+  doghouse_bow: {"role":"hostess","name":"Bow","th":"โบว์","room":"doghouse","emoji":"🌙","look":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder","from":"Udon Thani","desc":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Doghouse's girls, from Udon Thani. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","selfies":["market this morning 🛵 buy food mama","gym 💪 strong for you","waiting work 💕 think about you"],"pick":{"greet":3,"short":2,"ask":2,"askQ":1,"family":15,"plan":6,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":0,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  sroy: {"role":"hostess","name":"Sroy","th":"สร้อย","room":"succubus","emoji":"💫","look":"Lean and angular, cheekbones like a blade, eyes that weigh you","from":"Maha Sarakham","desc":"Lean and angular, cheekbones like a blade, eyes that weigh you — one of Succubus' girls, from Maha Sarakham. The {{phone}} never leaves her hand.","pick":{"greet":4,"short":1,"ask":0,"askQ":1,"family":8,"plan":12,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  chom: {"role":"hostess","name":"Chom","th":"ชม","room":"succubus","emoji":"🌼","look":"Neat side parting, pearl studs, a bank teller on her night off","from":"Surin","desc":"Neat side parting, pearl studs, a bank teller on her night off — one of Succubus' girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","selfies":["market this morning 🛵 buy food mama","gym 💪 strong for you","waiting work 💕 think about you"],"pick":{"greet":1,"short":2,"ask":2,"askQ":2,"family":10,"plan":14,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  pranee: {"role":"hostess","name":"Pranee","th":"ปราณี","room":"succubus","emoji":"🌸","look":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her","from":"Mukdahan","desc":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Succubus' girls, from Mukdahan. She types more than she talks — and laughs at both.","pick":{"greet":3,"short":1,"ask":2,"askQ":2,"family":11,"plan":18,"famWrap":2,"planWrap":1,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":2,"price":0,"late":2,"lockin":1}},
+  milk: {"role":"hostess","name":"Milk","th":"มิ้ลค์","room":"velvet_club","emoji":"🌼","look":"Baby-faced, chewing gum, thumbing her phone under the bar","from":"Udon Thani","desc":"Baby-faced, chewing gum, thumbing her phone under the bar — one of The Velvet Club's girls, from Udon Thani. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","c4":2,"selfies":["market this morning 🛵 buy food mama","gym 💪 strong for you","waiting work 💕 think about you"],"pick":{"greet":2,"short":2,"ask":2,"askQ":2,"family":6,"plan":10,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  june: {"role":"hostess","name":"June","th":"จูน","room":"velvet_club","emoji":"🌷","look":"Soft-spoken, a mole above her lip, looks down whenever she laughs","from":"Nakhon Phanom","desc":"Soft-spoken, a mole above her lip, looks down whenever she laughs — one of The Velvet Club's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.","selfies":["my cat 🐈 cute like me na 😽","rainy 🌧️ i stay home lonely 🥺","new hair 💇‍♀️ good mai??"],"pick":{"greet":2,"short":1,"ask":1,"askQ":1,"family":1,"plan":5,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  the_terrace_fah: {"role":"hostess","name":"Fah","th":"ฟ้า","room":"the_terrace","emoji":"💕","look":"Broad-shouldered and easy, a volleyball player's posture and handshake","from":"Nakhon Phanom","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Terrace's girls, from Nakhon Phanom. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":3,"short":2,"ask":3,"askQ":2,"family":3,"plan":11,"famWrap":2,"planWrap":0,"homeWrap":0,"free":1,"wallet":0,"drinksOnly":2,"price":1,"late":2,"lockin":2}},
+  the_terrace_namtip: {"role":"hostess","name":"Namtip","th":"น้ำทิพย์","room":"the_terrace","emoji":"🌻","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Nakhon Phanom","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Terrace's girls, from Nakhon Phanom. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","my cat 🐈 cute like me na 😽"],"pick":{"greet":2,"short":1,"ask":3,"askQ":2,"family":15,"plan":7,"famWrap":0,"planWrap":1,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":0,"price":1,"late":2,"lockin":0}},
+  kingfisher_praew: {"role":"hostess","name":"Praew","th":"แพรว","room":"kingfisher","emoji":"🌷","look":"Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered","from":"Ubon","desc":"Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of The Kingfisher's girls, from Ubon. Google Translate is open before you finish the sentence.","selfies":["my cat 🐈 cute like me na 😽","me eat somtam 🥵🌶️ so spicy 555","new nail 💅 pink na"],"pick":{"greet":3,"short":2,"ask":1,"askQ":0,"family":1,"plan":13,"famWrap":0,"planWrap":1,"homeWrap":2,"free":3,"wallet":1,"drinksOnly":0,"price":2,"late":0,"lockin":1}},
+  kingfisher_kaew: {"role":"hostess","name":"Kaew","th":"แก้ว","room":"kingfisher","emoji":"🦋","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Surin","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Kingfisher's girls, from Surin. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":4,"short":0,"ask":0,"askQ":0,"family":0,"plan":12,"famWrap":0,"planWrap":1,"homeWrap":2,"free":2,"wallet":2,"drinksOnly":1,"price":2,"late":0,"lockin":1}},
+  two_stools_meaw: {"role":"hostess","name":"Meaw","th":"แมว","room":"two_stools","emoji":"🌺","look":"Lean and angular, cheekbones like a blade, eyes that weigh you","from":"Sakon Nakhon","desc":"Lean and angular, cheekbones like a blade, eyes that weigh you — one of Two Stools Bar's girls, from Sakon Nakhon. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":0,"short":0,"ask":3,"askQ":0,"family":15,"plan":3,"famWrap":0,"planWrap":1,"homeWrap":2,"free":1,"wallet":1,"drinksOnly":1,"price":2,"late":0,"lockin":1}},
+  two_stools_jinda: {"role":"hostess","name":"Jinda","th":"จินดา","room":"two_stools","emoji":"🌻","look":"Gold everywhere — earrings, chain, {{phone}} case","from":"{{Nong Khai}}","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of Two Stools Bar's girls, from {{Nong Khai}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":4,"short":1,"ask":3,"askQ":2,"family":7,"plan":19,"famWrap":2,"planWrap":0,"homeWrap":1,"free":1,"wallet":0,"drinksOnly":1,"price":1,"late":2,"lockin":0}},
+  the_gecko_duan: {"role":"hostess","name":"Duan","th":"เดือน","room":"the_gecko","emoji":"🍒","look":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile","from":"Yasothon","desc":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of The Gecko's girls, from Yasothon. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","pick":{"greet":1,"short":1,"ask":1,"askQ":2,"family":13,"plan":17,"famWrap":1,"planWrap":2,"homeWrap":0,"free":3,"wallet":0,"drinksOnly":0,"price":1,"late":2,"lockin":2}},
+  the_gecko_yok: {"role":"hostess","name":"Yok","th":"หยก","room":"the_gecko","emoji":"🌼","look":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder","from":"Buriram","desc":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Gecko's girls, from Buriram. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":3,"short":0,"ask":2,"askQ":0,"family":6,"plan":6,"famWrap":0,"planWrap":0,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":0,"price":0,"late":0,"lockin":1}},
+  sea_wall_fon: {"role":"hostess","name":"Fon","th":"ฝน","room":"sea_wall","emoji":"💕","look":"Round glasses and a cardigan over the bar dress, like a librarian on a dare","from":"Sakon Nakhon","desc":"Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of The Sea Wall's girls, from Sakon Nakhon. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":0,"ask":3,"askQ":1,"family":3,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":0,"price":1,"late":1,"lockin":2}},
+  sea_wall_kwang: {"role":"hostess","name":"Kwang","th":"กวาง","room":"sea_wall","emoji":"💐","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Chaiyaphum","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Sea Wall's girls, from Chaiyaphum. The {{phone}} never leaves her hand.","selfies":["waiting work 💕 think about you","my cat 🐈 cute like me na 😽","market this morning 🛵 buy food mama"],"pick":{"greet":0,"short":1,"ask":0,"askQ":2,"family":12,"plan":16,"famWrap":1,"planWrap":2,"homeWrap":0,"free":2,"wallet":0,"drinksOnly":0,"price":1,"late":2,"lockin":0}},
+  breakwater_mook: {"role":"hostess","name":"Mook","th":"มุก","room":"breakwater","emoji":"🌸","look":"Cropped jacket, high bun, the poise of somebody who once danced properly","from":"Maha Sarakham","desc":"Cropped jacket, high bun, the poise of somebody who once danced properly — one of The Breakwater's girls, from Maha Sarakham. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":0,"short":2,"ask":2,"askQ":2,"family":10,"plan":2,"famWrap":0,"planWrap":0,"homeWrap":1,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":2,"lockin":0}},
+  breakwater_jib: {"role":"hostess","name":"Jib","th":"จิ๊บ","room":"breakwater","emoji":"🌻","look":"Tall and quiet, a long plait and a plain black dress, watching the door","from":"Yasothon","desc":"Tall and quiet, a long plait and a plain black dress, watching the door — one of The Breakwater's girls, from Yasothon. She notices whose glass is empty before anyone behind the bar does.","pick":{"greet":3,"short":1,"ask":3,"askQ":2,"family":15,"plan":19,"famWrap":1,"planWrap":2,"homeWrap":0,"free":1,"wallet":0,"drinksOnly":0,"price":1,"late":2,"lockin":0}},
+  neon_palm_bee: {"role":"hostess","name":"Bee","th":"บี","room":"neon_palm","emoji":"🌻","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sisaket","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of Neon Palm's girls, from Sisaket. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":2,"short":2,"ask":3,"askQ":1,"family":15,"plan":15,"famWrap":1,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":1,"price":1,"late":1,"lockin":2}},
+  neon_palm_toey: {"role":"hostess","name":"Toey","th":"เต้ย","room":"neon_palm","emoji":"🌙","look":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her","from":"Surin","desc":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Neon Palm's girls, from Surin. She types more than she talks — and laughs at both.","pick":{"greet":3,"short":1,"ask":2,"askQ":1,"family":10,"plan":14,"famWrap":1,"planWrap":2,"homeWrap":0,"free":0,"wallet":0,"drinksOnly":0,"price":1,"late":1,"lockin":2}},
+  the_bucket_pang: {"role":"hostess","name":"Pang","th":"แป้ง","room":"the_bucket","emoji":"🌼","look":"Round-faced and quick to laugh","from":"Kalasin","desc":"Round-faced and quick to laugh — one of The Bucket's girls, from Kalasin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","selfies":["me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na","new dress 👗 you like?? 😊"],"pick":{"greet":3,"short":2,"ask":2,"askQ":2,"family":18,"plan":10,"famWrap":0,"planWrap":0,"homeWrap":1,"free":0,"wallet":1,"drinksOnly":0,"price":2,"late":2,"lockin":0}},
+  mint: {"role":"hostess","name":"Mint","th":"มิ้นท์","room":"the_bucket","emoji":"🌷","look":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant","from":"{{Nong Bua Lamphu}}","desc":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of The Bucket's girls, from {{Nong Bua Lamphu}}. She hums along to whatever is playing and knows about half of the words in English.","pick":{"greet":3,"short":1,"ask":1,"askQ":1,"family":17,"plan":1,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
+  sudjai: {"role":"mamasan","name":"Sudjai","th":"สุดใจ","room":"orchid_room","look":"Older, sharper, and entirely done being impressed by farang","from":"Sakon Nakhon","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Orchid Room, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":5,"plan":1,"home":7,"wallet":3,"story":7}},
+  boonsri: {"role":"mamasan","name":"Boonsri","th":"บุญศรี","room":"lake_beer","look":"Older, sharper, and entirely done being impressed by farang","from":"Khon Kaen","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Sundowner, from Khon Kaen. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":1,"plan":5,"home":7,"wallet":3,"story":7}},
+  wanida: {"role":"mamasan","name":"Wanida","th":"วนิดา","room":"windmill","look":"Elegant, weathered, and plainly the last word on everything in the room","from":"Sakon Nakhon","desc":"Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came up from the rice fields and never once looked back.","pick":{"greet":1,"girls":1,"lockin":1,"family":7,"plan":3,"home":1,"wallet":1,"story":1}},
+  alisa: {"role":"mamasan","name":"Alisa","th":"อลิสา","room":"katoeys","look":"Elegant, weathered, and plainly the last word on everything in the room","from":"Yasothon","desc":"Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns three of these stools now.","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":3,"home":5,"wallet":1,"story":5}},
+  sunee: {"role":"mamasan","name":"Sunee","th":"สุนีย์","room":"doghouse","look":"Warm to your face, ice at the till, and fluent in both","from":"Khon Kaen","desc":"Warm to your face, ice at the till, and fluent in both — the mamasan of The Doghouse, from Khon Kaen. She started on the stage at seventeen and owns three of these stools now.","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":3,"home":5,"wallet":1,"story":5}},
+  pen: {"role":"mamasan","name":"Pen","th":"เพ็ญ","room":"blue_dog","look":"Sits like she owns the stool, because she does","from":"Maha Sarakham","desc":"Sits like she owns the stool, because she does — the mamasan of Blue Dog, from Maha Sarakham. She has run this floor longer than most of the girls have been alive.","pick":{"greet":2,"girls":2,"lockin":2,"family":4,"plan":0,"home":2,"wallet":2,"story":2}},
+  muay: {"role":"mamasan","name":"Muay","th":"หมวย","room":"rock_factory","look":"Older, sharper, and entirely done being impressed by farang","from":"Yasothon","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of Rock Factory, from Yasothon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":5,"plan":1,"home":7,"wallet":3,"story":7}},
+  lamai: {"role":"mamasan","name":"Lamai","th":"ละมัย","room":"stinky_bar","look":"Elegant, weathered, and plainly the last word on everything in the room","from":"Sakon Nakhon","desc":"Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Stinky Pinky, from Sakon Nakhon. She came up from the rice fields and never once looked back.","pick":{"greet":1,"girls":1,"lockin":1,"family":3,"plan":7,"home":1,"wallet":1,"story":1}},
+  jeab: {"role":"mamasan","name":"Jeab","th":"เจี๊ยบ","room":"neon_paradise","look":"Older, sharper, and entirely done being impressed by farang","from":"Sakon Nakhon","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of Neon Paradise A-Go-Go, from Sakon Nakhon. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":2,"plan":5,"home":3,"wallet":3,"story":3}},
+  da: {"role":"mamasan","name":"Da","th":"ดา","room":"club_mirage","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Maha Sarakham","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Club Mirage, from Maha Sarakham. She married a farang, buried the marriage, and kept the house.","pick":{"greet":4,"girls":4,"lockin":0,"family":2,"plan":6,"home":4,"wallet":0,"story":4}},
+  rin: {"role":"mamasan","name":"Rin","th":"ริน","room":"crystal_palace","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Kalasin","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Crystal Palace A-Go-Go, from Kalasin. She danced this same street before you were her problem.","pick":{"greet":0,"girls":0,"lockin":0,"family":2,"plan":6,"home":0,"wallet":0,"story":0}},
+  kob: {"role":"mamasan","name":"Kob","th":"กบ","room":"paradise_nights","look":"Broad, motherly, and entirely able to have you removed by smiling","from":"{{Nong Khai}}","desc":"Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Paradise Nights Club, from {{Nong Khai}}. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":1,"plan":5,"home":7,"wallet":3,"story":7}},
+  koi: {"role":"mamasan","name":"Koi","th":"ก้อย","room":"midnight_sun","look":"Sits like she owns the stool, because she does","from":"Maha Sarakham","desc":"Sits like she owns the stool, because she does — the mamasan of Midnight Sun Bar, from Maha Sarakham. She puts four kids through school on other men's lonely nights.","pick":{"greet":6,"girls":6,"lockin":2,"family":1,"plan":4,"home":6,"wallet":2,"story":6}},
+  ratana: {"role":"mamasan","name":"Ratana","th":"รัตนา","room":"lucky_tiger","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Surin","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Lucky Tiger Bar, from Surin. She puts four kids through school on other men's lonely nights.","pick":{"greet":6,"girls":6,"lockin":2,"family":4,"plan":0,"home":6,"wallet":2,"story":6}},
+  waew: {"role":"mamasan","name":"Waew","th":"แวว","room":"silk_rose","look":"Broad, motherly, and entirely able to have you removed by smiling","from":"Khon Kaen","desc":"Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Silk Rose Bar, from Khon Kaen. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":2,"plan":5,"home":3,"wallet":3,"story":3}},
+  ple: {"role":"mamasan","name":"Ple","th":"เปิ้ล","room":"jasmine_garden","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Surin","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Jasmine Garden Bar, from Surin. She has run this floor longer than most of the girls have been alive.","pick":{"greet":2,"girls":2,"lockin":2,"family":4,"plan":0,"home":2,"wallet":2,"story":2}},
+  orm: {"role":"mamasan","name":"Orm","th":"อ้อม","room":"gold_rush","look":"Broad, motherly, and entirely able to have you removed by smiling","from":"Loei","desc":"Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Gold Rush Lounge, from Loei. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":5,"plan":1,"home":3,"wallet":3,"story":3}},
+  jom: {"role":"mamasan","name":"Jom","th":"จอม","room":"starlight_bar","look":"A cloud of perfume and authority, hair lacquered against the fans","from":"Nakhon Phanom","desc":"A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Starlight Bar, from Nakhon Phanom. She came up from the rice fields and never once looked back.","pick":{"greet":1,"girls":1,"lockin":1,"family":3,"plan":7,"home":1,"wallet":1,"story":1}},
+  somsri: {"role":"mamasan","name":"Somsri","th":"สมศรี","room":"kinky","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Maha Sarakham","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of KINKY Go-Go, from Maha Sarakham. She danced this same street before you were her problem.","pick":{"greet":0,"girls":0,"lockin":0,"family":6,"plan":2,"home":0,"wallet":0,"story":0}},
+  ratree: {"role":"mamasan","name":"Ratree","th":"ราตรี","room":"las_vegas","look":"Gold at the wrist and throat, reading glasses pushed up into her hair","from":"Chaiyaphum","desc":"Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Las Vegas Go-Go, from Chaiyaphum. She married a farang, buried the marriage, and kept the house.","pick":{"greet":4,"girls":4,"lockin":0,"family":2,"plan":6,"home":4,"wallet":0,"story":4}},
+  wandee: {"role":"mamasan","name":"Wandee","th":"วันดี","room":"water_buffalo","look":"Older, sharper, and entirely done being impressed by farang","from":"Sakon Nakhon","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Water Buffalo, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":5,"plan":1,"home":7,"wallet":3,"story":7}},
+  somjai: {"role":"mamasan","name":"Somjai","th":"สมใจ","room":"firefly_bar","look":"Gold at the wrist and throat, reading glasses pushed up into her hair","from":"Udon Thani","desc":"Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Firefly Bar, from Udon Thani. She danced this same street before you were her problem.","pick":{"greet":0,"girls":0,"lockin":0,"family":6,"plan":2,"home":0,"wallet":0,"story":0}},
+  tui: {"role":"mamasan","name":"Tui","th":"ตุ่ย","room":"night_heron","look":"A cloud of perfume and authority, hair lacquered against the fans","from":"Nakhon Phanom","desc":"A cloud of perfume and authority, hair lacquered against the fans — the mamasan of The Night Heron, from Nakhon Phanom. She came up from the rice fields and never once looked back.","pick":{"greet":1,"girls":1,"lockin":1,"family":3,"plan":7,"home":1,"wallet":1,"story":1}},
+  the_terrace_wandee: {"role":"mamasan","name":"Wandee","th":"วันดี","room":"the_terrace","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Kalasin","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of The Terrace, from Kalasin. She has run this floor longer than most of the girls have been alive.","pick":{"greet":2,"girls":2,"lockin":2,"family":0,"plan":4,"home":2,"wallet":2,"story":2}},
+  kingfisher_somsri: {"role":"mamasan","name":"Somsri","th":"สมศรี","room":"kingfisher","look":"Elegant, weathered, and plainly the last word on everything in the room","from":"Ubon","desc":"Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Kingfisher, from Ubon. She started on the stage at seventeen and owns three of these stools now.","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":3,"home":5,"wallet":1,"story":5}},
+  two_stools_ratree: {"role":"mamasan","name":"Ratree","th":"ราตรี","room":"two_stools","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Mukdahan","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Two Stools Bar, from Mukdahan. She has run this floor longer than most of the girls have been alive.","pick":{"greet":2,"girls":2,"lockin":2,"family":4,"plan":0,"home":2,"wallet":2,"story":2}},
+  the_gecko_somjai: {"role":"mamasan","name":"Somjai","th":"สมใจ","room":"the_gecko","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Kalasin","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Gecko, from Kalasin. She married a farang, buried the marriage, and kept the house.","pick":{"greet":4,"girls":4,"lockin":0,"family":2,"plan":6,"home":4,"wallet":0,"story":4}},
+  sea_wall_duang: {"role":"mamasan","name":"Duang","th":"ดวง","room":"sea_wall","look":"Broad, motherly, and entirely able to have you removed by smiling","from":"Yasothon","desc":"Broad, motherly, and entirely able to have you removed by smiling — the mamasan of The Sea Wall, from Yasothon. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":2,"plan":5,"home":3,"wallet":3,"story":3}},
+  breakwater_mookda: {"role":"mamasan","name":"Mookda","th":"มุกดา","room":"breakwater","look":"Older, sharper, and entirely done being impressed by farang","from":"Khon Kaen","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Breakwater, from Khon Kaen. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":5,"plan":1,"home":3,"wallet":3,"story":3}},
+  neon_palm_nittaya: {"role":"mamasan","name":"Nittaya","th":"นิตยา","room":"neon_palm","look":"A former headliner's posture and a gaze like a cash register","from":"Sisaket","desc":"A former headliner's posture and a gaze like a cash register — the mamasan of Neon Palm, from Sisaket. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":5,"plan":1,"home":3,"wallet":3,"story":3}},
+  the_bucket_ratchada: {"role":"mamasan","name":"Ratchada","th":"รัชดา","room":"the_bucket","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Roi Et","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Bucket, from Roi Et. She married a farang, buried the marriage, and kept the house.","pick":{"greet":4,"girls":4,"lockin":0,"family":6,"plan":2,"home":4,"wallet":0,"story":4}},
+  kae: {"role":"cashier","name":"Kae","th":"แก้ว","room":"orchid_room","look":"Cash drawer open, {{phone}} face-down, all of her attention on the maths","from":"Kalasin","desc":"Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at The Orchid Room, from Kalasin.","pick":{"greet":0,"money":0,"lockin":1,"family":2,"home":4,"wallet":0}},
+  napa: {"role":"cashier","name":"Napa","th":"นภา","room":"lake_beer","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"Ubon","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Sundowner, from Ubon.","pick":{"greet":3,"money":3,"lockin":1,"family":1,"home":1,"wallet":3}},
+  nubnab: {"role":"cashier","name":"Nubnab","th":"นับหนับ","room":"windmill","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"{{Nong Bua Lamphu}}","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Gilt Cage, from {{Nong Bua Lamphu}}.","pick":{"greet":3,"money":3,"lockin":1,"family":1,"home":1,"wallet":3}},
+  farida: {"role":"cashier","name":"Farida","th":"ฟาริดา","room":"katoeys","look":"Quiet and quick, the still point the whole loud room pays into","from":"Kalasin","desc":"Quiet and quick, the still point the whole loud room pays into — the cashier at Twice Shy, from Kalasin.","pick":{"greet":6,"money":6,"lockin":1,"family":4,"home":4,"wallet":2}},
+  tukky: {"role":"cashier","name":"Tukky","th":"ตุ๊กกี้","room":"doghouse","look":"Headset on one ear, {{phone}} in one hand, the till in perfect order","from":"Khon Kaen","desc":"Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at The Doghouse, from Khon Kaen.","pick":{"greet":1,"money":1,"lockin":0,"family":3,"home":3,"wallet":1}},
+  noot: {"role":"cashier","name":"Noot","th":"นุช","room":"succubus","look":"Headset on one ear, {{phone}} in one hand, the till in perfect order","from":"Khon Kaen","desc":"Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Succubus, from Khon Kaen.","pick":{"greet":5,"money":5,"lockin":0,"family":3,"home":3,"wallet":1}},
+  golf: {"role":"cashier","name":"Golf","th":"กอล์ฟ","room":"tequila_queen","look":"Headset on one ear, {{phone}} in one hand, the till in perfect order","from":"Loei","desc":"Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Tequila Queen A-Go-Go, from Loei.","pick":{"greet":1,"money":1,"lockin":0,"family":7,"home":3,"wallet":1}},
+  air: {"role":"cashier","name":"Air","th":"แอร์","room":"blue_dog","look":"Perched above the till like a lifeguard watching a pool of drunks","from":"Khon Kaen","desc":"Perched above the till like a lifeguard watching a pool of drunks — the cashier at Blue Dog, from Khon Kaen.","pick":{"greet":3,"money":3,"lockin":0,"family":5,"home":3,"wallet":3}},
+  apple: {"role":"cashier","name":"Apple","th":"แอปเปิ้ล","room":"rock_factory","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"Nakhon Phanom","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Rock Factory, from Nakhon Phanom.","pick":{"greet":3,"money":3,"lockin":1,"family":5,"home":1,"wallet":3}},
+  cake: {"role":"cashier","name":"Cake","th":"เค้ก","room":"stinky_bar","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"Ubon","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Stinky Pinky, from Ubon.","pick":{"greet":7,"money":7,"lockin":1,"family":5,"home":1,"wallet":3}},
+  care: {"role":"cashier","name":"Care","th":"แคร์","room":"candy_bar_2","look":"Neat bun, neat ledger, an engagement ring worn on a chain","from":"Surin","desc":"Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Candy Bar 2, from Surin.","pick":{"greet":0,"money":0,"lockin":2,"family":6,"home":2,"wallet":0}},
+  cartoon: {"role":"cashier","name":"Cartoon","th":"การ์ตูน","room":"neon_paradise","look":"Fingers flying over a calculator app, eyes never leaving the cash","from":"Loei","desc":"Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Neon Paradise A-Go-Go, from Loei.","pick":{"greet":7,"money":7,"lockin":0,"family":1,"home":3,"wallet":3}},
+  earn: {"role":"cashier","name":"Earn","th":"เอิร์น","room":"club_mirage","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"{{Nong Bua Lamphu}}","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Club Mirage, from {{Nong Bua Lamphu}}.","pick":{"greet":7,"money":7,"lockin":1,"family":5,"home":1,"wallet":3}},
+  eye: {"role":"cashier","name":"Eye","th":"อาย","room":"crystal_palace","look":"Quiet and quick, the still point the whole loud room pays into","from":"Kalasin","desc":"Quiet and quick, the still point the whole loud room pays into — the cashier at Crystal Palace A-Go-Go, from Kalasin.","pick":{"greet":2,"money":2,"lockin":1,"family":4,"home":4,"wallet":2}},
+  fai: {"role":"cashier","name":"Fai","th":"ฝ้าย","room":"paradise_nights","look":"Perched above the till like a lifeguard watching a pool of drunks","from":"Loei","desc":"Perched above the till like a lifeguard watching a pool of drunks — the cashier at Paradise Nights Club, from Loei.","pick":{"greet":7,"money":7,"lockin":0,"family":1,"home":3,"wallet":3}},
+  gam: {"role":"cashier","name":"Gam","th":"แก้ม","room":"candy_bar","look":"Neat bun, neat ledger, an engagement ring worn on a chain","from":"Surin","desc":"Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Candy Bar, from Surin.","pick":{"greet":4,"money":4,"lockin":2,"family":6,"home":2,"wallet":0}},
+  ging: {"role":"cashier","name":"Ging","th":"กิ่ง","room":"lucky_tiger","look":"In a cage of fairy lights, counting notes faster than the eye follows","from":"Amnat Charoen","desc":"In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Lucky Tiger Bar, from Amnat Charoen.","pick":{"greet":2,"money":2,"lockin":0,"family":0,"home":0,"wallet":2}},
+  grace: {"role":"cashier","name":"Grace","th":"เกรซ","room":"silk_rose","look":"Headset on one ear, {{phone}} in one hand, the till in perfect order","from":"Loei","desc":"Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Silk Rose Bar, from Loei.","pick":{"greet":1,"money":1,"lockin":0,"family":3,"home":3,"wallet":1}},
+  hong: {"role":"cashier","name":"Hong","th":"ห่อง","room":"jasmine_garden","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"Ubon","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Jasmine Garden Bar, from Ubon.","pick":{"greet":7,"money":7,"lockin":1,"family":5,"home":1,"wallet":3}},
+  jah: {"role":"cashier","name":"Jah","th":"จ๊ะ","room":"gold_rush","look":"In a cage of fairy lights, counting notes faster than the eye follows","from":"Buriram","desc":"In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Gold Rush Lounge, from Buriram.","pick":{"greet":2,"money":2,"lockin":0,"family":4,"home":0,"wallet":2}},
+  jeed: {"role":"cashier","name":"Jeed","th":"จี๊ด","room":"starlight_bar","look":"Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here","from":"Sakon Nakhon","desc":"Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at Starlight Bar, from Sakon Nakhon.","pick":{"greet":1,"money":1,"lockin":2,"family":7,"home":5,"wallet":1}},
+  kaimook: {"role":"cashier","name":"Kaimook","th":"ไข่มุก","room":"slutty","look":"A blunt bob, red lipstick, and a stare that reconciles you at a glance","from":"Amnat Charoen","desc":"A blunt bob, red lipstick, and a stare that reconciles you at a glance — the cashier at Slutty Go-Go, from Amnat Charoen.","pick":{"greet":2,"money":2,"lockin":0,"family":4,"home":0,"wallet":2}},
+  kanom: {"role":"cashier","name":"Kanom","th":"ขนม","room":"las_vegas","look":"Fingers flying over a calculator app, eyes never leaving the cash","from":"Sakon Nakhon","desc":"Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Las Vegas Go-Go, from Sakon Nakhon.","pick":{"greet":7,"money":7,"lockin":2,"family":1,"home":5,"wallet":3}},
+  keng: {"role":"cashier","name":"Keng","th":"เก่ง","room":"khao_talo_bar","look":"In a cage of fairy lights, counting notes faster than the eye follows","from":"Mukdahan","desc":"In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Daeng's Place, from Mukdahan.","pick":{"greet":2,"money":2,"lockin":0,"family":0,"home":0,"wallet":2}},
+  best: {"role":"cashier","name":"Best","th":"เบสท์","room":"water_buffalo","look":"Perched above the till like a lifeguard watching a pool of drunks","from":"{{Nong Khai}}","desc":"Perched above the till like a lifeguard watching a pool of drunks — the cashier at The Water Buffalo, from {{Nong Khai}}.","pick":{"greet":3,"money":3,"lockin":0,"family":1,"home":3,"wallet":3}},
+  aim: {"role":"cashier","name":"Aim","th":"เอม","room":"firefly_bar","look":"Quiet and quick, the still point the whole loud room pays into","from":"Maha Sarakham","desc":"Quiet and quick, the still point the whole loud room pays into — the cashier at Firefly Bar, from Maha Sarakham.","pick":{"greet":6,"money":6,"lockin":1,"family":0,"home":4,"wallet":2}},
+  tangmo: {"role":"cashier","name":"Tangmo","th":"แตงโม","room":"mama_yai","look":"Fingers flying over a calculator app, eyes never leaving the cash","from":"Sisaket","desc":"Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Mama Yai's, from Sisaket.","pick":{"greet":7,"money":7,"lockin":2,"family":5,"home":5,"wallet":3}},
+  kanya: {"role":"cashier","name":"Kanya","th":"กัญญา","room":"nottys_place","look":"Headset on one ear, {{phone}} in one hand, the till in perfect order","from":"{{Nong Khai}}","desc":"Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}.","pick":{"greet":1,"money":1,"lockin":0,"family":3,"home":3,"wallet":1}},
+  mon: {"role":"cashier","name":"Mon","th":"มล","room":"night_heron","look":"Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here","from":"Sakon Nakhon","desc":"Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Night Heron, from Sakon Nakhon.","pick":{"greet":5,"money":5,"lockin":2,"family":7,"home":5,"wallet":1}},
+  the_terrace_kade: {"role":"cashier","name":"Kade","th":"เกด","room":"the_terrace","look":"Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here","from":"Loei","desc":"Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Terrace, from Loei.","pick":{"greet":1,"money":1,"lockin":1,"family":7,"home":1,"wallet":1}},
+  kingfisher_noey: {"role":"cashier","name":"Noey","th":"เนย","room":"kingfisher","look":"A note-counting machine at her elbow and a faster one behind her eyes","from":"Khon Kaen","desc":"A note-counting machine at her elbow and a faster one behind her eyes — the cashier at The Kingfisher, from Khon Kaen.","pick":{"greet":1,"money":1,"lockin":0,"family":3,"home":3,"wallet":1}},
+  two_stools_orm: {"role":"cashier","name":"Orm","th":"ออม","room":"two_stools","look":"A note-counting machine at her elbow and a faster one behind her eyes","from":"Loei","desc":"A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Two Stools Bar, from Loei.","pick":{"greet":5,"money":5,"lockin":2,"family":3,"home":5,"wallet":1}},
+  the_gecko_ple: {"role":"cashier","name":"Ple","th":"เปิ้ล","room":"the_gecko","look":"Quiet and quick, the still point the whole loud room pays into","from":"Buriram","desc":"Quiet and quick, the still point the whole loud room pays into — the cashier at The Gecko, from Buriram.","pick":{"greet":6,"money":6,"lockin":0,"family":0,"home":0,"wallet":2}},
+  sea_wall_gig: {"role":"cashier","name":"Gig","th":"กิ๊ก","room":"sea_wall","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"Yasothon","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Sea Wall, from Yasothon.","pick":{"greet":7,"money":7,"lockin":1,"family":5,"home":1,"wallet":3}},
+  breakwater_kade: {"role":"cashier","name":"Kade","th":"เกด","room":"breakwater","look":"Fingers flying over a calculator app, eyes never leaving the cash","from":"{{Nong Bua Lamphu}}","desc":"Fingers flying over a calculator app, eyes never leaving the cash — the cashier at The Breakwater, from {{Nong Bua Lamphu}}.","pick":{"greet":7,"money":7,"lockin":1,"family":1,"home":1,"wallet":3}},
+  neon_palm_noey: {"role":"cashier","name":"Noey","th":"เนย","room":"neon_palm","look":"Reading glasses, a receipt spike, and no patience for a disputed tab","from":"Udon Thani","desc":"Reading glasses, a receipt spike, and no patience for a disputed tab — the cashier at Neon Palm, from Udon Thani.","pick":{"greet":0,"money":0,"lockin":1,"family":6,"home":4,"wallet":0}},
+  the_bucket_fai: {"role":"cashier","name":"Fai","th":"ฝ้าย","room":"the_bucket","look":"In a cage of fairy lights, counting notes faster than the eye follows","from":"Surin","desc":"In a cage of fairy lights, counting notes faster than the eye follows — the cashier at The Bucket, from Surin.","pick":{"greet":6,"money":6,"lockin":0,"family":4,"home":0,"wallet":2}},
+};
+for (const [id, r] of Object.entries(FLOOR_STAFF)) {
+  NPCS[id] = r.role === "hostess" ? _floorHostess(id, r) : r.role === "mamasan" ? _floorMama(id, r) : _floorCashier(id, r);
+  NPC_ROLES[id] = r.role;
+  if (r.role === "hostess") { _storyTaken(r.room).family.add(r.pick.family); _storyTaken(r.room).plan.add(r.pick.plan); }   // one life story per rail
 }
 
 // ONE AUTHORED NODE ON A GENERATED CHARACTER — because the game names her.
@@ -18207,11 +18213,6 @@ if (NPCS.boonsri) NPCS.boonsri.dialogue.unshift({
   short: "\"Is not their card, is mine — the year I had two customer and nearly lost the bar. " +
     "I keep it for me, na.\"",
 });
-for (const [name, th, room] of _FILLER_CASHIERS) {
-  const id = _fillerId(name, room);
-  NPCS[id] = _buildCashier(name, th, room, id);
-  NPC_ROLES[id] = "cashier";
-}
 
 // The girls every bar knows by name — their barfine never gets waived,
 // whatever the hour. Everyone else's quietly comes off the book after

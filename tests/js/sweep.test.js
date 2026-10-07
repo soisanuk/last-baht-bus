@@ -271,10 +271,11 @@ test("L246 Tan closes his home life politely, in his own voice; L848 the hostess
 });
 test("more new faces: the hostess looks run 50 deep, no look on more than six women, and every changed face is back on the render queue", () => {
   assert.ok(_H_LOOK.length >= 36 && _H_LOOK_DARK.length >= 14);
-  const hs = Object.values(NPCS).filter(n => n.filler && n.storyBits);
-  const first = hs.map(n => n.desc.split(/(?<=\.)\s/)[0]);
-  const by = {}; for (const f of first) by[f] = (by[f] || 0) + 1;
+  const hs = Object.values(FLOOR_STAFF).filter(r => r.role === "hostess");
+  const by = {}; for (const r of hs) by[r.look] = (by[r.look] || 0) + 1;
   assert.ok(Math.max(...Object.values(by)) <= 6, "a look worn by more than six women");
+  const bar = {}; for (const r of hs) { const k = r.room + "|" + r.look; bar[k] = (bar[k] || 0) + 1; }
+  assert.deepEqual(Object.keys(bar).filter(k => bar[k] > 1), [], "two women at one bar share a face");
   const relook = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/portrait-relook.json", import.meta.url)), "utf8")).ids;
   const man = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/portrait-manifest.json", import.meta.url)), "utf8"));
   for (const id of Object.keys(relook)) assert.ok(NPCS[id], `${id} is a character`);

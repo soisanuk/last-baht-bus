@@ -1,417 +1,545 @@
 {
- "_about": "Characters whose portrait PROMPT (the look, i.e. the first sentence of a generated desc) changed after their render shipped. gen-portrait-manifest marks them rendered:false / relook:true so the render queue picks them up. The art agent's ship path removes an id once its new render is in web/portraits/thumb/. Written 2026-10-07 when the look pools went from 18 to 50 lines (Mario: 'we can always use more new faces').",
+ "_about": "Characters whose portrait PROMPT changed after their render shipped. The prompt is the character's `look` field — appearance only, kept apart from the desc (Mario, 2026-10-07), so deepening a desc never sends anyone here. gen-portrait-manifest marks them rendered:false / relook:true; the art agent's ship path removes an id once its new render is in web/portraits/thumb/.",
  "ids": {
   "ratsamee": {
-   "was": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of The Sundowner's girls, from Ubon.",
-   "now": "Somebody's mother, twice over, and nobody's fool ever — one of The Sundowner's girls, from Ubon."
+   "was": "Pouring out here since the lake road was dirt; minds her regulars like livestock",
+   "now": "Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool"
   },
   "kwanjai": {
-   "was": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of The Sundowner's girls, from Surin.",
-   "now": "Heavy-set and unhurried, a gold tooth and a market auntie's arms — one of The Sundowner's girls, from Surin."
+   "was": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening",
+   "now": "Heavy-set and unhurried, a gold tooth and a market auntie's arms"
   },
   "naree": {
-   "was": "A crooked, disarming grin — one of The Gilt Cage's girls, from Amnat Charoen.",
-   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Amnat Charoen."
+   "was": "A crooked, disarming grin",
+   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks"
   },
   "sasi": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of The Gilt Cage's girls, from Sisaket.",
-   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Gilt Cage's girls, from Sisaket."
+   "was": "Gold everywhere",
+   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers"
   },
   "yada": {
-   "was": "A crooked, disarming grin — one of The Gilt Cage's girls, from Buriram.",
-   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Buriram."
+   "was": "A crooked, disarming grin",
+   "now": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear"
   },
   "dao": {
-   "was": "Tall and quiet, watching the door — one of Tequila Queen A-Go-Go's girls, from Ubon.",
-   "now": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of Tequila Queen A-Go-Go's girls, from Ubon."
+   "was": "Tall and quiet, watching the door",
+   "now": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is"
   },
   "mook": {
-   "was": "Small and sharp, and misses nothing — one of Tequila Queen A-Go-Go's girls, from Yasothon.",
-   "now": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of Tequila Queen A-Go-Go's girls, from Yasothon."
+   "was": "Small and sharp, and misses nothing",
+   "now": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot"
   },
   "ice": {
-   "was": "Long hair, longer eyelashes, a practised pout — one of Tequila Queen A-Go-Go's girls, from Roi Et.",
-   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Tequila Queen A-Go-Go's girls, from Roi Et."
+   "was": "Long hair, longer eyelashes, a practised pout",
+   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face"
+  },
+  "praew": {
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it"
   },
   "fah": {
-   "was": "Older than the go-go average, and unhurried about it — one of Neon Paradise A-Go-Go's girls, from Chaiyaphum.",
-   "now": "Neat side parting, pearl studs, a bank teller on her night off — one of Neon Paradise A-Go-Go's girls, from Chaiyaphum."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Neat side parting, pearl studs, a bank teller on her night off"
   },
   "sara": {
-   "was": "Tiny and loud, all elbows and energy — one of Neon Paradise A-Go-Go's girls, from Udon Thani.",
-   "now": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Neon Paradise A-Go-Go's girls, from Udon Thani."
+   "was": "Tiny and loud, all elbows and energy",
+   "now": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist"
   },
   "bow": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen.",
-   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Club Mirage's girls, from Khon Kaen."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be"
   },
   "nam": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen.",
-   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Club Mirage's girls, from Khon Kaen."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face"
   },
   "yui": {
-   "was": "Round-faced and quick to laugh — one of Club Mirage's girls, from Mukdahan.",
-   "now": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Club Mirage's girls, from Mukdahan."
+   "was": "Round-faced and quick to laugh",
+   "now": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her"
   },
   "aof": {
-   "was": "Sleepy-eyed and entirely unbothered — one of Crystal Palace A-Go-Go's girls, from Loei.",
-   "now": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Crystal Palace A-Go-Go's girls, from Loei."
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile"
   },
   "cherry": {
-   "was": "A crooked, disarming grin — one of Crystal Palace A-Go-Go's girls, from Mukdahan.",
-   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Crystal Palace A-Go-Go's girls, from Mukdahan."
+   "was": "A crooked, disarming grin",
+   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks"
+  },
+  "beam": {
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it"
+  },
+  "boom": {
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Baby-faced, chewing gum, thumbing her phone under the bar"
   },
   "toey": {
-   "was": "New enough to still look a little nervous — one of Rainbow Girls Bar's girls, from Kalasin.",
-   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of Rainbow Girls Bar's girls, from Kalasin."
+   "was": "New enough to still look a little nervous",
+   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder"
   },
   "pang": {
-   "was": "Bored until you try a word of Thai, then radiant — one of Rainbow Girls Bar's girls, from Ubon.",
-   "now": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of Rainbow Girls Bar's girls, from Ubon."
+   "was": "Bored until you try a word of Thai, then radiant",
+   "now": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear"
   },
   "ploen": {
-   "was": "Sleepy-eyed and entirely unbothered — one of Rainbow Girls Bar's girls, from {{Nong Khai}}.",
-   "now": "Soft-spoken, a mole above her lip, looks down whenever she laughs — one of Rainbow Girls Bar's girls, from Ubon."
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "Soft-spoken, a mole above her lip, looks down whenever she laughs"
   },
   "sai": {
-   "was": "Long hair, longer eyelashes, a practised pout — one of Rainbow Girls Bar's girls, from Maha Sarakham.",
-   "now": "Round cheeks, sharp eyes, keeping score of something on a beer mat — one of Rainbow Girls Bar's girls, from Maha Sarakham."
+   "was": "Long hair, longer eyelashes, a practised pout",
+   "now": "Round cheeks, sharp eyes, keeping score of something on a beer mat"
   },
   "fang": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of KINKY Go-Go's girls, from Loei.",
-   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of KINKY Go-Go's girls, from Loei."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be"
+  },
+  "gib": {
+   "was": "Small and sharp, and misses nothing",
+   "now": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing"
   },
   "nice": {
-   "was": "A crooked, disarming grin — one of KINKY Go-Go's girls, from Buriram.",
-   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of KINKY Go-Go's girls, from Buriram."
+   "was": "A crooked, disarming grin",
+   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks"
   },
   "tukta": {
-   "was": "A crooked, disarming grin — one of Slutty Go-Go's girls, from Buriram.",
-   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of Slutty Go-Go's girls, from Buriram."
+   "was": "A crooked, disarming grin",
+   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw"
+  },
+  "jum": {
+   "was": "Tall and quiet, watching the door",
+   "now": "Tall and quiet, a long plait and a plain black dress, watching the door"
+  },
+  "pop": {
+   "was": "New enough to still look a little nervous",
+   "now": "New enough to still look a little nervous, in a borrowed dress a size too big"
+  },
+  "namwan": {
+   "was": "Bored until you try a word of Thai, then radiant",
+   "now": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant"
   },
   "orn": {
-   "was": "Long hair, longer eyelashes, a practised pout — one of Las Vegas Go-Go's girls, from Maha Sarakham.",
-   "now": "Round cheeks, sharp eyes, keeping score of something on a beer mat — one of Las Vegas Go-Go's girls, from Maha Sarakham."
+   "was": "Long hair, longer eyelashes, a practised pout",
+   "now": "Round cheeks, sharp eyes, keeping score of something on a beer mat"
   },
   "gigi": {
-   "was": "Tall and quiet, watching the door — one of Las Vegas Go-Go's girls, from {{Nong Bua Lamphu}}.",
-   "now": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of Las Vegas Go-Go's girls, from {{Nong Bua Lamphu}}."
+   "was": "Tall and quiet, watching the door",
+   "now": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is"
   },
   "near": {
-   "was": "Tall and quiet, watching the door — one of The Metro Beer Garden's girls, from {{Nong Bua Lamphu}}.",
-   "now": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of The Metro Beer Garden's girls, from {{Nong Bua Lamphu}}."
+   "was": "Tall and quiet, watching the door",
+   "now": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is"
+  },
+  "milin": {
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it"
   },
   "kaew": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Paradise Nights Club's girls, from {{Nong Khai}}.",
-   "now": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Paradise Nights Club's girls, from {{Nong Khai}}."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her"
+  },
+  "meaw": {
+   "was": "Small and sharp, and misses nothing",
+   "now": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing"
   },
   "nan": {
-   "was": "Long hair, longer eyelashes, a practised pout — one of Candy Bar's girls, from Roi Et.",
-   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Candy Bar's girls, from Roi Et."
+   "was": "Long hair, longer eyelashes, a practised pout",
+   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face"
+  },
+  "bua": {
+   "was": "Gold everywhere",
+   "now": "Gold everywhere — earrings, chain, {{phone}} case"
   },
   "mai": {
-   "was": "New enough to still look a little nervous — one of Candy Bar 2's girls, from Kalasin.",
-   "now": "Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of Candy Bar 2's girls, from Kalasin."
+   "was": "New enough to still look a little nervous",
+   "now": "Straight hair to her hips, a silver anklet, perfectly still until she isn't"
+  },
+  "pat": {
+   "was": "A crooked, disarming grin",
+   "now": "Pixie cut, small gold hoops, a crooked, disarming grin"
+  },
+  "pun": {
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it"
+  },
+  "som": {
+   "was": "New enough to still look a little nervous",
+   "now": "New enough to still look a little nervous, in a borrowed dress a size too big"
   },
   "mam": {
-   "was": "Older than the go-go average, and unhurried about it — one of Number One Bar's girls, from Chaiyaphum.",
-   "now": "Neat side parting, pearl studs, a bank teller on her night off — one of Number One Bar's girls, from Chaiyaphum."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Neat side parting, pearl studs, a bank teller on her night off"
   },
   "jib": {
-   "was": "Tiny and loud, all elbows and energy — one of Coco Bar's girls, from Chaiyaphum.",
-   "now": "Freckled from the sun, hair in a high ponytail, sneakers under the stool — one of Coco Bar's girls, from Chaiyaphum."
+   "was": "Tiny and loud, all elbows and energy",
+   "now": "Freckled from the sun, hair in a high ponytail, sneakers under the stool"
   },
   "toon": {
-   "was": "Sleepy-eyed and entirely unbothered — one of Venus Bar's girls, from Khon Kaen.",
-   "now": "A scar through one eyebrow and a grin that dares you to ask about it — one of Venus Bar's girls, from Khon Kaen."
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "A scar through one eyebrow and a grin that dares you to ask about it"
   },
   "yaya": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Sunflower Bar's girls, from {{Nong Khai}}.",
-   "now": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Sunflower Bar's girls, from {{Nong Khai}}."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her"
   },
   "ann": {
-   "was": "New enough to still look a little nervous — one of Midnight Sun Bar's girls, from Kalasin.",
-   "now": "Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of Midnight Sun Bar's girls, from Kalasin."
+   "was": "New enough to still look a little nervous",
+   "now": "Straight hair to her hips, a silver anklet, perfectly still until she isn't"
   },
   "rung": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of Lucky Tiger Bar's girls, from Sisaket.",
-   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket."
+   "was": "Gold everywhere",
+   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers"
   },
   "oat": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of Lucky Tiger Bar's girls, from Sakon Nakhon.",
-   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon."
+   "was": "Gold everywhere",
+   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake"
   },
   "ton": {
-   "was": "A crooked, disarming grin — one of Silk Rose Bar's girls, from Mukdahan.",
-   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Silk Rose Bar's girls, from Mukdahan."
+   "was": "A crooked, disarming grin",
+   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks"
+  },
+  "nid": {
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it"
   },
   "wa": {
-   "was": "Small and sharp, and misses nothing — one of Silk Rose Bar's girls, from Yasothon.",
-   "now": "Lean and angular, cheekbones like a blade, eyes that weigh you — one of Silk Rose Bar's girls, from Yasothon."
+   "was": "Small and sharp, and misses nothing",
+   "now": "Lean and angular, cheekbones like a blade, eyes that weigh you"
   },
   "noon": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Jasmine Garden Bar's girls, from Loei.",
-   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Jasmine Garden Bar's girls, from Loei."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be"
   },
   "prae": {
-   "was": "Sleepy-eyed and entirely unbothered — one of Jasmine Garden Bar's girls, from {{Nong Khai}}.",
-   "now": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Jasmine Garden Bar's girls, from {{Nong Khai}}."
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile"
   },
   "taan": {
-   "was": "Small and sharp, and misses nothing — one of Gold Rush Lounge's girls, from Yasothon.",
-   "now": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of Gold Rush Lounge's girls, from Yasothon."
+   "was": "Small and sharp, and misses nothing",
+   "now": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot"
   },
   "tik": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Gold Rush Lounge's girls, from Khon Kaen.",
-   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Gold Rush Lounge's girls, from Khon Kaen."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be"
+  },
+  "pui": {
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered"
+  },
+  "mild": {
+   "was": "Tall and quiet, watching the door",
+   "now": "Tall and quiet, a long plait and a plain black dress, watching the door"
   },
   "aump": {
-   "was": "Older than the go-go average, and unhurried about it — one of The Rabbit Hole's girls, from Udon Thani.",
-   "now": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Rabbit Hole's girls, from Udon Thani."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it"
   },
   "guitar": {
-   "was": "Small and sharp, and misses nothing — one of The Rabbit Hole's girls, from Sakon Nakhon.",
-   "now": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of The Rabbit Hole's girls, from Sakon Nakhon."
+   "was": "Small and sharp, and misses nothing",
+   "now": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot"
   },
   "bella": {
-   "was": "Tall and quiet, watching the door — one of Lucky Charm Bar's girls, from {{Nong Bua Lamphu}}.",
-   "now": "Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of Lucky Charm Bar's girls, from {{Nong Bua Lamphu}}."
+   "was": "Tall and quiet, watching the door",
+   "now": "Round glasses and a cardigan over the bar dress, like a librarian on a dare"
   },
   "prik": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of Moonshine Bar's girls, from Yasothon.",
-   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon."
+   "was": "Gold everywhere",
+   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake"
   },
   "namtan": {
-   "was": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of Daeng's Place's girls, from Roi Et.",
-   "now": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of Daeng's Place's girls, from Roi Et."
+   "was": "A veteran's easy patience",
+   "now": "Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match"
   },
   "ying": {
-   "was": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of Daeng's Place's girls, from Amnat Charoen.",
-   "now": "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields — one of Daeng's Place's girls, from Amnat Charoen."
+   "was": "Twenty seasons of soi behind her eyes and a laugh that got louder every one",
+   "now": "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields"
   },
   "lin": {
-   "was": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of The Water Buffalo's girls, from Roi Et.",
-   "now": "Fifties, reading glasses on a cord, and a laugh like a door banging shut — one of The Water Buffalo's girls, from Roi Et."
+   "was": "A veteran's easy patience",
+   "now": "Fifties, reading glasses on a cord, and a laugh like a door banging shut"
   },
   "nim": {
-   "was": "Somebody's mother, twice over, and nobody's fool ever — one of The Water Buffalo's girls, from Sakon Nakhon.",
-   "now": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon."
+   "was": "Somebody's mother, twice over, and nobody's fool ever",
+   "now": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept"
   },
   "duan": {
-   "was": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of Firefly Bar's girls, from {{Nong Khai}}.",
-   "now": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of Firefly Bar's girls, from {{Nong Khai}}."
+   "was": "Pouring out here since the lake road was dirt; minds her regulars like livestock",
+   "now": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept"
   },
   "saifon": {
-   "was": "Somebody's mother, twice over, and nobody's fool ever — one of Firefly Bar's girls, from Yasothon.",
-   "now": "Older than the town girls and visibly better at this than any of them — one of Firefly Bar's girls, from Yasothon."
+   "was": "Somebody's mother, twice over, and nobody's fool ever",
+   "now": "Grey at the temples, a red silk blouse, older than the town girls and better at this"
   },
   "wanpen": {
-   "was": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of Mama Yai's' girls, from Udon Thani.",
-   "now": "Fifties, reading glasses on a cord, and a laugh like a door banging shut — one of Mama Yai's' girls, from Udon Thani."
+   "was": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening",
+   "now": "Fifties, reading glasses on a cord, and a laugh like a door banging shut"
   },
   "pear": {
-   "was": "Sleepy-eyed and entirely unbothered — one of Notty's Place's girls, from Khon Kaen.",
-   "now": "A scar through one eyebrow and a grin that dares you to ask about it — one of Notty's Place's girls, from Khon Kaen."
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "A scar through one eyebrow and a grin that dares you to ask about it"
   },
   "jinda": {
-   "was": "Bored until you try a word of Thai, then radiant — one of Notty's Place's girls, from {{Nong Bua Lamphu}}.",
-   "now": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of Notty's Place's girls, from {{Nong Bua Lamphu}}."
+   "was": "Bored until you try a word of Thai, then radiant",
+   "now": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear"
   },
   "namfon": {
-   "was": "New enough to still look a little nervous — one of The Anchor Bar's girls, from Maha Sarakham.",
-   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Anchor Bar's girls, from Maha Sarakham."
+   "was": "New enough to still look a little nervous",
+   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder"
   },
   "bunny": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Dolphin Bar's girls, from {{Nong Khai}}.",
-   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Dolphin Bar's girls, from {{Nong Khai}}."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be"
+  },
+  "jaja": {
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered"
   },
   "dokmai": {
-   "was": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of The Night Heron's girls, from Buriram.",
-   "now": "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields — one of The Night Heron's girls, from Buriram."
+   "was": "Twenty seasons of soi behind her eyes and a laugh that got louder every one",
+   "now": "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields"
   },
   "jampa": {
-   "was": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of The Night Heron's girls, from Maha Sarakham.",
-   "now": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of The Night Heron's girls, from Maha Sarakham."
+   "was": "A veteran's easy patience",
+   "now": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening"
+  },
+  "ing": {
+   "was": "Gold everywhere",
+   "now": "Gold everywhere — earrings, chain, {{phone}} case"
   },
   "kwang": {
-   "was": "Tall and quiet, watching the door — one of Rock Factory's girls, from {{Nong Bua Lamphu}}.",
-   "now": "Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of Rock Factory's girls, from {{Nong Bua Lamphu}}."
+   "was": "Tall and quiet, watching the door",
+   "now": "Round glasses and a cardigan over the bar dress, like a librarian on a dare"
   },
   "manow": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of The Stinky Pinky's girls, from Sakon Nakhon.",
-   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon."
-  },
-  "mew": {
-   "was": "Long hair, longer eyelashes, a practised pout — one of The Stinky Pinky's girls, from Roi Et.",
-   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of The Stinky Pinky's girls, from Roi Et."
+   "was": "Gold everywhere",
+   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers"
   },
   "goong": {
-   "was": "Sleepy-eyed and entirely unbothered — one of Honey Trap Bar's girls, from Khon Kaen.",
-   "now": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Honey Trap Bar's girls, from Khon Kaen."
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile"
   },
   "jiab": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Honey Trap Bar's girls, from {{Nong Khai}}.",
-   "now": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Honey Trap Bar's girls, from {{Nong Khai}}."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her"
   },
   "meen": {
-   "was": "A crooked, disarming grin — one of The Hive's girls, from Mukdahan.",
-   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Hive's girls, from Mukdahan."
+   "was": "A crooked, disarming grin",
+   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw"
   },
   "yok": {
-   "was": "Older than the go-go average, and unhurried about it — one of The Hive's girls, from Surin.",
-   "now": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Hive's girls, from Surin."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Baby-faced, chewing gum, thumbing her phone under the bar"
   },
   "namphueng": {
-   "was": "Tiny and loud, all elbows and energy — one of Buzz Inn's girls, from Surin.",
-   "now": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Buzz Inn's girls, from Surin."
+   "was": "Tiny and loud, all elbows and energy",
+   "now": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist"
   },
   "gaem": {
-   "was": "Bored until you try a word of Thai, then radiant — one of Buzz Inn's girls, from Nakhon Phanom.",
-   "now": "Soft-spoken, a mole above her lip, looks down whenever she laughs — one of Buzz Inn's girls, from Nakhon Phanom."
+   "was": "Bored until you try a word of Thai, then radiant",
+   "now": "Soft-spoken, a mole above her lip, looks down whenever she laughs"
   },
   "bum": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of The Dollhouse's girls, from Sakon Nakhon.",
-   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon."
+   "was": "Gold everywhere",
+   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake"
+  },
+  "ohm": {
+   "was": "Small and sharp, and misses nothing",
+   "now": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing"
+  },
+  "fasai": {
+   "was": "Small and sharp, and misses nothing",
+   "now": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing"
   },
   "tarn": {
-   "was": "Long hair, longer eyelashes, a practised pout — one of Sapphire Bar's girls, from Maha Sarakham.",
-   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Sapphire Bar's girls, from Maha Sarakham."
+   "was": "Long hair, longer eyelashes, a practised pout",
+   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face"
+  },
+  "pao": {
+   "was": "Tall and quiet, watching the door",
+   "now": "Tall and quiet, a long plait and a plain black dress, watching the door"
   },
   "poom": {
-   "was": "Long hair, longer eyelashes, a practised pout — one of Sundowner Bar's girls, from Maha Sarakham.",
-   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Sundowner Bar's girls, from Maha Sarakham."
+   "was": "Long hair, longer eyelashes, a practised pout",
+   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face"
   },
   "bright": {
-   "was": "Small and sharp, and misses nothing — one of The Cricketers' girls, from Sakon Nakhon.",
-   "now": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of The Cricketers' girls, from Sakon Nakhon."
+   "was": "Small and sharp, and misses nothing",
+   "now": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot"
   },
   "lukkade": {
-   "was": "Round-faced and quick to laugh — one of The Cricketers' girls, from Roi Et.",
-   "now": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of The Cricketers' girls, from Roi Et."
+   "was": "Round-faced and quick to laugh",
+   "now": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her"
   },
   "bpom": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Lucky 7 Bar's girls, from {{Nong Khai}}.",
-   "now": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Lucky 7 Bar's girls, from {{Nong Khai}}."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her"
+  },
+  "proud": {
+   "was": "Bored until you try a word of Thai, then radiant",
+   "now": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant"
+  },
+  "namo": {
+   "was": "A crooked, disarming grin",
+   "now": "Pixie cut, small gold hoops, a crooked, disarming grin"
   },
   "somruedee": {
-   "was": "Older than the go-go average, and unhurried about it — one of Sea Breeze Bar's girls, from Surin.",
-   "now": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Sea Breeze Bar's girls, from Surin."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant"
+  },
+  "ratchada": {
+   "was": "Tall and quiet, watching the door",
+   "now": "Tall and quiet, a long plait and a plain black dress, watching the door"
+  },
+  "nittaya": {
+   "was": "Tall and quiet, watching the door",
+   "now": "Tiny and loud, all elbows and energy"
   },
   "duang": {
-   "was": "New enough to still look a little nervous — one of The Sandbar's girls, from Maha Sarakham.",
-   "now": "Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of The Sandbar's girls, from Maha Sarakham."
+   "was": "New enough to still look a little nervous",
+   "now": "Straight hair to her hips, a silver anklet, perfectly still until she isn't"
   },
   "aoi": {
-   "was": "A crooked, disarming grin — one of Hyper A Go-Go's girls, from Amnat Charoen.",
-   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of Hyper A Go-Go's girls, from Amnat Charoen."
+   "was": "A crooked, disarming grin",
+   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw"
   },
   "gig": {
-   "was": "New enough to still look a little nervous — one of Arrow Bar's girls, from Maha Sarakham.",
-   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of Arrow Bar's girls, from Maha Sarakham."
+   "was": "New enough to still look a little nervous",
+   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder"
   },
   "kade": {
-   "was": "Older than the go-go average, and unhurried about it — one of Arrow Bar's girls, from Chaiyaphum.",
-   "now": "Cropped jacket, high bun, the poise of somebody who once danced properly — one of Arrow Bar's girls, from Chaiyaphum."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Cropped jacket, high bun, the poise of somebody who once danced properly"
   },
   "pinky": {
-   "was": "Tiny and loud, all elbows and energy — one of Cheeky Monkey Bar's girls, from Chaiyaphum.",
-   "now": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Cheeky Monkey Bar's girls, from Chaiyaphum."
+   "was": "Tiny and loud, all elbows and energy",
+   "now": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist"
   },
   "mona": {
-   "was": "A crooked, disarming grin — one of Cheeky Monkey Bar's girls, from Buriram.",
-   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Cheeky Monkey Bar's girls, from Buriram."
+   "was": "A crooked, disarming grin",
+   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks"
   },
   "gina": {
-   "was": "A crooked, disarming grin — one of The Office Bar's girls, from Mukdahan.",
-   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Office Bar's girls, from Mukdahan."
+   "was": "A crooked, disarming grin",
+   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw"
   },
   "bpaeng": {
-   "was": "New enough to still look a little nervous — one of The Office Bar's girls, from Maha Sarakham.",
-   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Office Bar's girls, from Maha Sarakham."
+   "was": "New enough to still look a little nervous",
+   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder"
   },
   "tim": {
-   "was": "Small and sharp, and misses nothing — one of The Boardroom's girls, from Sisaket.",
-   "now": "Lean and angular, cheekbones like a blade, eyes that weigh you — one of The Boardroom's girls, from Sisaket."
+   "was": "Small and sharp, and misses nothing",
+   "now": "Lean and angular, cheekbones like a blade, eyes that weigh you"
   },
   "min": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of The Boardroom's girls, from Yasothon.",
-   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon."
+   "was": "Gold everywhere",
+   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers"
   },
   "tar": {
-   "was": "Older than the go-go average, and unhurried about it — one of The Doghouse's girls, from Chaiyaphum.",
-   "now": "Neat side parting, pearl studs, a bank teller on her night off — one of The Doghouse's girls, from Chaiyaphum."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Neat side parting, pearl studs, a bank teller on her night off"
   },
   "gof": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Doghouse's girls, from Khon Kaen.",
-   "now": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of The Doghouse's girls, from Khon Kaen."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "A wide slow smile, a gap in her front teeth, nowhere she would rather be"
+  },
+  "wassana": {
+   "was": "Gold everywhere",
+   "now": "Gold everywhere — earrings, chain, {{phone}} case"
   },
   "doghouse_bow": {
-   "was": "New enough to still look a little nervous — one of The Doghouse's girls, from Udon Thani.",
-   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Doghouse's girls, from Udon Thani."
+   "was": "New enough to still look a little nervous",
+   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder"
   },
   "sroy": {
-   "was": "Long hair, longer eyelashes, a practised pout — one of Succubus' girls, from Maha Sarakham.",
-   "now": "Lean and angular, cheekbones like a blade, eyes that weigh you — one of Succubus' girls, from Maha Sarakham."
+   "was": "Long hair, longer eyelashes, a practised pout",
+   "now": "Lean and angular, cheekbones like a blade, eyes that weigh you"
   },
   "chom": {
-   "was": "Older than the go-go average, and unhurried about it — one of Succubus' girls, from Surin.",
-   "now": "Neat side parting, pearl studs, a bank teller on her night off — one of Succubus' girls, from Surin."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Neat side parting, pearl studs, a bank teller on her night off"
   },
   "pranee": {
-   "was": "Round-faced and quick to laugh — one of Succubus' girls, from Mukdahan.",
-   "now": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Succubus' girls, from Mukdahan."
+   "was": "Round-faced and quick to laugh",
+   "now": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her"
   },
   "milk": {
-   "was": "Older than the go-go average, and unhurried about it — one of The Velvet Club's girls, from Udon Thani.",
-   "now": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Velvet Club's girls, from Udon Thani."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Baby-faced, chewing gum, thumbing her phone under the bar"
   },
   "june": {
-   "was": "Bored until you try a word of Thai, then radiant — one of The Velvet Club's girls, from Nakhon Phanom.",
-   "now": "Soft-spoken, a mole above her lip, looks down whenever she laughs — one of The Velvet Club's girls, from Nakhon Phanom."
+   "was": "Bored until you try a word of Thai, then radiant",
+   "now": "Soft-spoken, a mole above her lip, looks down whenever she laughs"
   },
   "the_terrace_fah": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of The Terrace's girls, from Nakhon Phanom.",
-   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Terrace's girls, from Nakhon Phanom."
+   "was": "Gold everywhere",
+   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake"
   },
   "the_terrace_namtip": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of The Terrace's girls, from Nakhon Phanom.",
-   "now": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Terrace's girls, from Nakhon Phanom."
+   "was": "Gold everywhere",
+   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw"
+  },
+  "kingfisher_praew": {
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered"
   },
   "kingfisher_kaew": {
-   "was": "A crooked, disarming grin — one of The Kingfisher's girls, from Surin.",
-   "now": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of The Kingfisher's girls, from Surin."
+   "was": "A crooked, disarming grin",
+   "now": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks"
   },
   "two_stools_meaw": {
-   "was": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Two Stools Bar's girls, from Sakon Nakhon.",
-   "now": "Lean and angular, cheekbones like a blade, eyes that weigh you — one of Two Stools Bar's girls, from Sakon Nakhon."
+   "was": "Baby-faced, chewing gum, thumbing her phone under the bar",
+   "now": "Lean and angular, cheekbones like a blade, eyes that weigh you"
+  },
+  "two_stools_jinda": {
+   "was": "Gold everywhere",
+   "now": "Gold everywhere — earrings, chain, {{phone}} case"
   },
   "the_gecko_duan": {
-   "was": "Sleepy-eyed and entirely unbothered — one of The Gecko's girls, from Yasothon.",
-   "now": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of The Gecko's girls, from Yasothon."
+   "was": "Sleepy-eyed and entirely unbothered",
+   "now": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile"
   },
   "the_gecko_yok": {
-   "was": "New enough to still look a little nervous — one of The Gecko's girls, from Buriram.",
-   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Gecko's girls, from Buriram."
+   "was": "New enough to still look a little nervous",
+   "now": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder"
   },
   "sea_wall_fon": {
-   "was": "Tall and quiet, watching the door — one of The Sea Wall's girls, from Sakon Nakhon.",
-   "now": "Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of The Sea Wall's girls, from Sakon Nakhon."
+   "was": "Tall and quiet, watching the door",
+   "now": "Round glasses and a cardigan over the bar dress, like a librarian on a dare"
   },
   "sea_wall_kwang": {
-   "was": "A crooked, disarming grin — one of The Sea Wall's girls, from Chaiyaphum.",
-   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Sea Wall's girls, from Chaiyaphum."
+   "was": "A crooked, disarming grin",
+   "now": "Hair bleached at the ends, a row of ear piercings, chewing on a straw"
   },
   "breakwater_mook": {
-   "was": "Older than the go-go average, and unhurried about it — one of The Breakwater's girls, from Maha Sarakham.",
-   "now": "Cropped jacket, high bun, the poise of somebody who once danced properly — one of The Breakwater's girls, from Maha Sarakham."
+   "was": "Older than the go-go average, and unhurried about it",
+   "now": "Cropped jacket, high bun, the poise of somebody who once danced properly"
+  },
+  "breakwater_jib": {
+   "was": "Tall and quiet, watching the door",
+   "now": "Tall and quiet, a long plait and a plain black dress, watching the door"
   },
   "neon_palm_bee": {
-   "was": "Gold everywhere — earrings, chain, {{phone}} case — one of Neon Palm's girls, from Sisaket.",
-   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of Neon Palm's girls, from Sisaket."
+   "was": "Gold everywhere",
+   "now": "Athletic, a sunburnt nose, a sports watch she checks between customers"
   },
   "neon_palm_toey": {
-   "was": "Round-faced and quick to laugh — one of Neon Palm's girls, from Surin.",
-   "now": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Neon Palm's girls, from Surin."
+   "was": "Round-faced and quick to laugh",
+   "now": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her"
+  },
+  "mint": {
+   "was": "Bored until you try a word of Thai, then radiant",
+   "now": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant"
+  },
+  "jeed": {
+   "was": "Sleeve of faded tattoos and an abacus brain",
+   "now": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here"
+  },
+  "mon": {
+   "was": "Sleeve of faded tattoos and an abacus brain",
+   "now": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here"
+  },
+  "the_terrace_kade": {
+   "was": "Sleeve of faded tattoos and an abacus brain",
+   "now": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here"
   }
  }
 }

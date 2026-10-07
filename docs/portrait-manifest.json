@@ -11,8 +11,8 @@
       "patron": 25
     },
     "filler": 213,
-    "unrendered": 103,
-    "relook": 103
+    "unrendered": 135,
+    "relook": 135
   },
   "unrendered": [
     "ratsamee",
@@ -23,6 +23,7 @@
     "dao",
     "mook",
     "ice",
+    "praew",
     "fah",
     "sara",
     "bow",
@@ -30,19 +31,31 @@
     "yui",
     "aof",
     "cherry",
+    "beam",
+    "boom",
     "toey",
     "pang",
     "ploen",
     "sai",
     "fang",
+    "gib",
     "nice",
     "tukta",
+    "jum",
+    "pop",
+    "namwan",
     "orn",
     "gigi",
     "near",
+    "milin",
     "kaew",
+    "meaw",
     "nan",
+    "bua",
     "mai",
+    "pat",
+    "pun",
+    "som",
     "mam",
     "jib",
     "toon",
@@ -51,11 +64,14 @@
     "rung",
     "oat",
     "ton",
+    "nid",
     "wa",
     "noon",
     "prae",
     "taan",
     "tik",
+    "pui",
+    "mild",
     "aump",
     "guitar",
     "bella",
@@ -71,11 +87,12 @@
     "jinda",
     "namfon",
     "bunny",
+    "jaja",
     "dokmai",
     "jampa",
+    "ing",
     "kwang",
     "manow",
-    "mew",
     "goong",
     "jiab",
     "meen",
@@ -83,12 +100,19 @@
     "namphueng",
     "gaem",
     "bum",
+    "ohm",
+    "fasai",
     "tarn",
+    "pao",
     "poom",
     "bright",
     "lukkade",
     "bpom",
+    "proud",
+    "namo",
     "somruedee",
+    "ratchada",
+    "nittaya",
     "duang",
     "aoi",
     "gig",
@@ -101,6 +125,7 @@
     "min",
     "tar",
     "gof",
+    "wassana",
     "doghouse_bow",
     "sroy",
     "chom",
@@ -109,15 +134,22 @@
     "june",
     "the_terrace_fah",
     "the_terrace_namtip",
+    "kingfisher_praew",
     "kingfisher_kaew",
     "two_stools_meaw",
+    "two_stools_jinda",
     "the_gecko_duan",
     "the_gecko_yok",
     "sea_wall_fon",
     "sea_wall_kwang",
     "breakwater_mook",
+    "breakwater_jib",
     "neon_palm_bee",
-    "neon_palm_toey"
+    "neon_palm_toey",
+    "mint",
+    "jeed",
+    "mon",
+    "the_terrace_kade"
   ],
   "relook": [
     "ratsamee",
@@ -128,6 +160,7 @@
     "dao",
     "mook",
     "ice",
+    "praew",
     "fah",
     "sara",
     "bow",
@@ -135,19 +168,31 @@
     "yui",
     "aof",
     "cherry",
+    "beam",
+    "boom",
     "toey",
     "pang",
     "ploen",
     "sai",
     "fang",
+    "gib",
     "nice",
     "tukta",
+    "jum",
+    "pop",
+    "namwan",
     "orn",
     "gigi",
     "near",
+    "milin",
     "kaew",
+    "meaw",
     "nan",
+    "bua",
     "mai",
+    "pat",
+    "pun",
+    "som",
     "mam",
     "jib",
     "toon",
@@ -156,11 +201,14 @@
     "rung",
     "oat",
     "ton",
+    "nid",
     "wa",
     "noon",
     "prae",
     "taan",
     "tik",
+    "pui",
+    "mild",
     "aump",
     "guitar",
     "bella",
@@ -176,11 +224,12 @@
     "jinda",
     "namfon",
     "bunny",
+    "jaja",
     "dokmai",
     "jampa",
+    "ing",
     "kwang",
     "manow",
-    "mew",
     "goong",
     "jiab",
     "meen",
@@ -188,12 +237,19 @@
     "namphueng",
     "gaem",
     "bum",
+    "ohm",
+    "fasai",
     "tarn",
+    "pao",
     "poom",
     "bright",
     "lukkade",
     "bpom",
+    "proud",
+    "namo",
     "somruedee",
+    "ratchada",
+    "nittaya",
     "duang",
     "aoi",
     "gig",
@@ -206,6 +262,7 @@
     "min",
     "tar",
     "gof",
+    "wassana",
     "doghouse_bow",
     "sroy",
     "chom",
@@ -214,15 +271,22 @@
     "june",
     "the_terrace_fah",
     "the_terrace_namtip",
+    "kingfisher_praew",
     "kingfisher_kaew",
     "two_stools_meaw",
+    "two_stools_jinda",
     "the_gecko_duan",
     "the_gecko_yok",
     "sea_wall_fon",
     "sea_wall_kwang",
     "breakwater_mook",
+    "breakwater_jib",
     "neon_palm_bee",
-    "neon_palm_toey"
+    "neon_palm_toey",
+    "mint",
+    "jeed",
+    "mon",
+    "the_terrace_kade"
   ],
   "characters": [
     {
@@ -2723,10 +2787,11 @@
       "th": "รัศมี",
       "room": "lake_beer",
       "tags": [],
-      "desc": "Somebody's mother, twice over, and nobody's fool ever — one of The Sundowner's girls, from Ubon. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "desc": "Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool — one of The Sundowner's girls, from Ubon. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "Plump, short grey-streaked hair, somebody's mother twice over and nobody's fool",
       "rendered": false,
       "relook": true,
-      "relookWas": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of The Sundowner's girls, from Ubon."
+      "relookWas": "Pouring out here since the lake road was dirt; minds her regulars like livestock"
     },
     {
       "id": "kwanjai",
@@ -2741,9 +2806,10 @@
       "room": "lake_beer",
       "tags": [],
       "desc": "Heavy-set and unhurried, a gold tooth and a market auntie's arms — one of The Sundowner's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Heavy-set and unhurried, a gold tooth and a market auntie's arms",
       "rendered": false,
       "relook": true,
-      "relookWas": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of The Sundowner's girls, from Surin."
+      "relookWas": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening"
     },
     {
       "id": "naree",
@@ -2758,9 +2824,10 @@
       "room": "windmill",
       "tags": [],
       "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Amnat Charoen. The badge pinned at her hip says 53 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of The Gilt Cage's girls, from Amnat Charoen."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "sasi",
@@ -2775,9 +2842,10 @@
       "room": "windmill",
       "tags": [],
       "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Gilt Cage's girls, from Sisaket. The badge pinned at her hip says 100 — the number the floor knows her by. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Athletic, a sunburnt nose, a sports watch she checks between customers",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of The Gilt Cage's girls, from Sisaket."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "yada",
@@ -2791,10 +2859,11 @@
       "th": "ญาดา",
       "room": "windmill",
       "tags": [],
-      "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Gilt Cage's girls, from Buriram. The badge pinned at her hip says 183 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "desc": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of The Gilt Cage's girls, from Buriram. The badge pinned at her hip says 183 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of The Gilt Cage's girls, from Buriram."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "dao",
@@ -2809,9 +2878,10 @@
       "room": "tequila_queen",
       "tags": [],
       "desc": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of Tequila Queen A-Go-Go's girls, from Ubon. The badge pinned at her hip says 7 — the number the floor knows her by. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+      "look": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tall and quiet, watching the door — one of Tequila Queen A-Go-Go's girls, from Ubon."
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "mook",
@@ -2826,9 +2896,10 @@
       "room": "tequila_queen",
       "tags": [],
       "desc": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of Tequila Queen A-Go-Go's girls, from Yasothon. The badge pinned at her hip says 95 — the number the floor knows her by. Google Translate is open before you finish the sentence.",
+      "look": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot",
       "rendered": false,
       "relook": true,
-      "relookWas": "Small and sharp, and misses nothing — one of Tequila Queen A-Go-Go's girls, from Yasothon."
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "ice",
@@ -2843,9 +2914,10 @@
       "room": "tequila_queen",
       "tags": [],
       "desc": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Tequila Queen A-Go-Go's girls, from Roi Et. The badge pinned at her hip says 15 — the number the floor knows her by. The {{phone}} never leaves her hand.",
+      "look": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face",
       "rendered": false,
       "relook": true,
-      "relookWas": "Long hair, longer eyelashes, a practised pout — one of Tequila Queen A-Go-Go's girls, from Roi Et."
+      "relookWas": "Long hair, longer eyelashes, a practised pout"
     },
     {
       "id": "praew",
@@ -2859,8 +2931,11 @@
       "th": "แพรว",
       "room": "tequila_queen",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Tequila Queen A-Go-Go's girls, from Chaiyaphum. The badge pinned at her hip says 37 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
-      "rendered": true
+      "desc": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of Tequila Queen A-Go-Go's girls, from Chaiyaphum. The badge pinned at her hip says 37 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "fah",
@@ -2875,9 +2950,10 @@
       "room": "neon_paradise",
       "tags": [],
       "desc": "Neat side parting, pearl studs, a bank teller on her night off — one of Neon Paradise A-Go-Go's girls, from Chaiyaphum. The badge pinned at her hip says 158 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Neat side parting, pearl studs, a bank teller on her night off",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of Neon Paradise A-Go-Go's girls, from Chaiyaphum."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "view",
@@ -2892,6 +2968,7 @@
       "room": "neon_paradise",
       "tags": [],
       "desc": "Long hair, longer eyelashes, a practised pout — one of Neon Paradise A-Go-Go's girls, from Roi Et. The badge pinned at her hip says 74 — the number the floor knows her by. The {{phone}} never leaves her hand.",
+      "look": "Long hair, longer eyelashes, a practised pout",
       "rendered": true
     },
     {
@@ -2907,9 +2984,10 @@
       "room": "neon_paradise",
       "tags": [],
       "desc": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Neon Paradise A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 29 — the number the floor knows her by. She laughs before the joke is finished, which is either kindness or experience.",
+      "look": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tiny and loud, all elbows and energy — one of Neon Paradise A-Go-Go's girls, from Udon Thani."
+      "relookWas": "Tiny and loud, all elbows and energy"
     },
     {
       "id": "bow",
@@ -2924,9 +3002,10 @@
       "room": "club_mirage",
       "tags": [],
       "desc": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Club Mirage's girls, from Khon Kaen. The badge pinned at her hip says 184 — the number the floor knows her by. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "A wide slow smile, a gap in her front teeth, nowhere she would rather be",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "nam",
@@ -2940,10 +3019,11 @@
       "th": "น้ำ",
       "room": "club_mirage",
       "tags": [],
-      "desc": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Club Mirage's girls, from Khon Kaen. The badge pinned at her hip says 153 — the number the floor knows her by. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "desc": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Club Mirage's girls, from Khon Kaen. The badge pinned at her hip says 153 — the number the floor knows her by. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "yui",
@@ -2958,9 +3038,10 @@
       "room": "club_mirage",
       "tags": [],
       "desc": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Club Mirage's girls, from Mukdahan. The badge pinned at her hip says 102 — the number the floor knows her by. She types more than she talks — and laughs at both.",
+      "look": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her",
       "rendered": false,
       "relook": true,
-      "relookWas": "Round-faced and quick to laugh — one of Club Mirage's girls, from Mukdahan."
+      "relookWas": "Round-faced and quick to laugh"
     },
     {
       "id": "aof",
@@ -2975,9 +3056,10 @@
       "room": "crystal_palace",
       "tags": [],
       "desc": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Crystal Palace A-Go-Go's girls, from Loei. The badge pinned at her hip says 197 — the number the floor knows her by. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile",
       "rendered": false,
       "relook": true,
-      "relookWas": "Sleepy-eyed and entirely unbothered — one of Crystal Palace A-Go-Go's girls, from Loei."
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "cherry",
@@ -2992,9 +3074,10 @@
       "room": "crystal_palace",
       "tags": [],
       "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Crystal Palace A-Go-Go's girls, from Mukdahan. The badge pinned at her hip says 18 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of Crystal Palace A-Go-Go's girls, from Mukdahan."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "beam",
@@ -3008,8 +3091,11 @@
       "th": "บีม",
       "room": "crystal_palace",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 28 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
-      "rendered": true
+      "desc": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 28 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "boom",
@@ -3023,8 +3109,11 @@
       "th": "บูม",
       "room": "crystal_palace",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 156 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
-      "rendered": true
+      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Crystal Palace A-Go-Go's girls, from Udon Thani. The badge pinned at her hip says 156 — the number the floor knows her by. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Baby-faced, chewing gum, thumbing her phone under the bar",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "toey",
@@ -3039,9 +3128,10 @@
       "room": "rainbow_girls",
       "tags": [],
       "desc": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of Rainbow Girls Bar's girls, from Kalasin. The badge pinned at her hip says 91 — the number the floor knows her by. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of Rainbow Girls Bar's girls, from Kalasin."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "pang",
@@ -3056,9 +3146,10 @@
       "room": "rainbow_girls",
       "tags": [],
       "desc": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of Rainbow Girls Bar's girls, from Ubon. The badge pinned at her hip says 146 — the number the floor knows her by. She hums along to whatever is playing and knows about half of the words in English.",
+      "look": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear",
       "rendered": false,
       "relook": true,
-      "relookWas": "Bored until you try a word of Thai, then radiant — one of Rainbow Girls Bar's girls, from Ubon."
+      "relookWas": "Bored until you try a word of Thai, then radiant"
     },
     {
       "id": "ploen",
@@ -3073,9 +3164,10 @@
       "room": "rainbow_girls",
       "tags": [],
       "desc": "Soft-spoken, a mole above her lip, looks down whenever she laughs — one of Rainbow Girls Bar's girls, from Ubon. The badge pinned at her hip says 98 — the number the floor knows her by. She hums along to whatever is playing and knows about half of the words in English.",
+      "look": "Soft-spoken, a mole above her lip, looks down whenever she laughs",
       "rendered": false,
       "relook": true,
-      "relookWas": "Sleepy-eyed and entirely unbothered — one of Rainbow Girls Bar's girls, from {{Nong Khai}}."
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "sai",
@@ -3090,9 +3182,10 @@
       "room": "rainbow_girls",
       "tags": [],
       "desc": "Round cheeks, sharp eyes, keeping score of something on a beer mat — one of Rainbow Girls Bar's girls, from Maha Sarakham. The badge pinned at her hip says 154 — the number the floor knows her by. The {{phone}} never leaves her hand.",
+      "look": "Round cheeks, sharp eyes, keeping score of something on a beer mat",
       "rendered": false,
       "relook": true,
-      "relookWas": "Long hair, longer eyelashes, a practised pout — one of Rainbow Girls Bar's girls, from Maha Sarakham."
+      "relookWas": "Long hair, longer eyelashes, a practised pout"
     },
     {
       "id": "fang",
@@ -3107,9 +3200,10 @@
       "room": "kinky",
       "tags": [],
       "desc": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of KINKY Go-Go's girls, from Loei. The badge pinned at her hip says 47 — the number the floor knows her by. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "A wide slow smile, a gap in her front teeth, nowhere she would rather be",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of KINKY Go-Go's girls, from Loei."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "gib",
@@ -3123,8 +3217,11 @@
       "th": "กิ๊บ",
       "room": "kinky",
       "tags": [],
-      "desc": "Small and sharp, and misses nothing — one of KINKY Go-Go's girls, from Yasothon. The badge pinned at her hip says 133 — the number the floor knows her by. Google Translate is open before you finish the sentence.",
-      "rendered": true
+      "desc": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of KINKY Go-Go's girls, from Yasothon. The badge pinned at her hip says 133 — the number the floor knows her by. Google Translate is open before you finish the sentence.",
+      "look": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "nice",
@@ -3139,9 +3236,10 @@
       "room": "kinky",
       "tags": [],
       "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of KINKY Go-Go's girls, from Buriram. The badge pinned at her hip says 15 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of KINKY Go-Go's girls, from Buriram."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "tukta",
@@ -3156,9 +3254,10 @@
       "room": "slutty",
       "tags": [],
       "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of Slutty Go-Go's girls, from Buriram. The badge pinned at her hip says 160 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of Slutty Go-Go's girls, from Buriram."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "jum",
@@ -3172,8 +3271,11 @@
       "th": "จุ๋ม",
       "room": "slutty",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of Slutty Go-Go's girls, from {{Nong Bua Lamphu}}. The badge pinned at her hip says 4 — the number the floor knows her by. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "rendered": true
+      "desc": "Tall and quiet, a long plait and a plain black dress, watching the door — one of Slutty Go-Go's girls, from {{Nong Bua Lamphu}}. The badge pinned at her hip says 4 — the number the floor knows her by. She counts the room in drinks, not heads, and is usually right.",
+      "look": "Tall and quiet, a long plait and a plain black dress, watching the door",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "pop",
@@ -3187,8 +3289,11 @@
       "th": "ป๊อป",
       "room": "slutty",
       "tags": [],
-      "desc": "New enough to still look a little nervous — one of Slutty Go-Go's girls, from Roi Et. The badge pinned at her hip says 136 — the number the floor knows her by. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
-      "rendered": true
+      "desc": "New enough to still look a little nervous, in a borrowed dress a size too big — one of Slutty Go-Go's girls, from Roi Et. The badge pinned at her hip says 136 — the number the floor knows her by. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "New enough to still look a little nervous, in a borrowed dress a size too big",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "namwan",
@@ -3202,8 +3307,11 @@
       "th": "น้ำหวาน",
       "room": "las_vegas",
       "tags": [],
-      "desc": "Bored until you try a word of Thai, then radiant — one of Las Vegas Go-Go's girls, from Ubon. The badge pinned at her hip says 128 — the number the floor knows her by. She hums along to whatever is playing and knows about half of the words in English.",
-      "rendered": true
+      "desc": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of Las Vegas Go-Go's girls, from Ubon. The badge pinned at her hip says 128 — the number the floor knows her by. She hums along to whatever is playing and knows about half of the words in English.",
+      "look": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Bored until you try a word of Thai, then radiant"
     },
     {
       "id": "orn",
@@ -3218,9 +3326,10 @@
       "room": "las_vegas",
       "tags": [],
       "desc": "Round cheeks, sharp eyes, keeping score of something on a beer mat — one of Las Vegas Go-Go's girls, from Maha Sarakham. The badge pinned at her hip says 169 — the number the floor knows her by. The {{phone}} never leaves her hand.",
+      "look": "Round cheeks, sharp eyes, keeping score of something on a beer mat",
       "rendered": false,
       "relook": true,
-      "relookWas": "Long hair, longer eyelashes, a practised pout — one of Las Vegas Go-Go's girls, from Maha Sarakham."
+      "relookWas": "Long hair, longer eyelashes, a practised pout"
     },
     {
       "id": "gigi",
@@ -3235,9 +3344,10 @@
       "room": "las_vegas",
       "tags": [],
       "desc": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of Las Vegas Go-Go's girls, from {{Nong Bua Lamphu}}. The badge pinned at her hip says 90 — the number the floor knows her by. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+      "look": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tall and quiet, watching the door — one of Las Vegas Go-Go's girls, from {{Nong Bua Lamphu}}."
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "near",
@@ -3252,9 +3362,10 @@
       "room": "metro_garden",
       "tags": [],
       "desc": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is — one of The Metro Beer Garden's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+      "look": "Shoulder-length bob, bright red lipstick, a voice two sizes bigger than she is",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tall and quiet, watching the door — one of The Metro Beer Garden's girls, from {{Nong Bua Lamphu}}."
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "milin",
@@ -3268,8 +3379,11 @@
       "th": "มิลิน",
       "room": "pit_stop",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of The Pit Stop's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
-      "rendered": true
+      "desc": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of The Pit Stop's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "kaew",
@@ -3284,9 +3398,10 @@
       "room": "paradise_nights",
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Paradise Nights Club's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Paradise Nights Club's girls, from {{Nong Khai}}."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "meaw",
@@ -3300,8 +3415,11 @@
       "th": "เหมียว",
       "room": "paradise_nights",
       "tags": [],
-      "desc": "Small and sharp, and misses nothing — one of Paradise Nights Club's girls, from Sisaket. Google Translate is open before you finish the sentence.",
-      "rendered": true
+      "desc": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of Paradise Nights Club's girls, from Sisaket. Google Translate is open before you finish the sentence.",
+      "look": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "nan",
@@ -3316,9 +3434,10 @@
       "room": "candy_bar",
       "tags": [],
       "desc": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Candy Bar's girls, from Roi Et. The {{phone}} never leaves her hand.",
+      "look": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face",
       "rendered": false,
       "relook": true,
-      "relookWas": "Long hair, longer eyelashes, a practised pout — one of Candy Bar's girls, from Roi Et."
+      "relookWas": "Long hair, longer eyelashes, a practised pout"
     },
     {
       "id": "bua",
@@ -3333,7 +3452,10 @@
       "room": "candy_bar",
       "tags": [],
       "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
-      "rendered": true
+      "look": "Gold everywhere — earrings, chain, {{phone}} case",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "fern",
@@ -3348,6 +3470,7 @@
       "room": "candy_bar_2",
       "tags": [],
       "desc": "Round-faced and quick to laugh — one of Candy Bar 2's girls, from Mukdahan. She types more than she talks — and laughs at both.",
+      "look": "Round-faced and quick to laugh",
       "rendered": true
     },
     {
@@ -3363,9 +3486,10 @@
       "room": "candy_bar_2",
       "tags": [],
       "desc": "Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of Candy Bar 2's girls, from Kalasin. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Straight hair to her hips, a silver anklet, perfectly still until she isn't",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of Candy Bar 2's girls, from Kalasin."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "ju",
@@ -3380,6 +3504,7 @@
       "room": "amp_room",
       "tags": [],
       "desc": "Round-faced and quick to laugh — one of The Amp Room's girls, from Buriram. She types more than she talks — and laughs at both.",
+      "look": "Round-faced and quick to laugh",
       "rendered": true
     },
     {
@@ -3394,8 +3519,11 @@
       "th": "แพท",
       "room": "feedback_bar",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of Chok Dee Bar's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
-      "rendered": true
+      "desc": "Pixie cut, small gold hoops, a crooked, disarming grin — one of Chok Dee Bar's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Pixie cut, small gold hoops, a crooked, disarming grin",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "pun",
@@ -3409,8 +3537,11 @@
       "th": "ปั้น",
       "room": "encore_bar",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Sawasdee Bar's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
-      "rendered": true
+      "desc": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of Sawasdee Bar's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "som",
@@ -3424,8 +3555,11 @@
       "th": "ส้ม",
       "room": "soundcheck_bar",
       "tags": [],
-      "desc": "New enough to still look a little nervous — one of Butterfly Bar's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
-      "rendered": true
+      "desc": "New enough to still look a little nervous, in a borrowed dress a size too big — one of Butterfly Bar's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "New enough to still look a little nervous, in a borrowed dress a size too big",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "mam",
@@ -3440,9 +3574,10 @@
       "room": "craft_cargo",
       "tags": [],
       "desc": "Neat side parting, pearl studs, a bank teller on her night off — one of Number One Bar's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Neat side parting, pearl studs, a bank teller on her night off",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of Number One Bar's girls, from Chaiyaphum."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "jib",
@@ -3457,9 +3592,10 @@
       "room": "the_growler",
       "tags": [],
       "desc": "Freckled from the sun, hair in a high ponytail, sneakers under the stool — one of Coco Bar's girls, from Chaiyaphum. She laughs before the joke is finished, which is either kindness or experience.",
+      "look": "Freckled from the sun, hair in a high ponytail, sneakers under the stool",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tiny and loud, all elbows and energy — one of Coco Bar's girls, from Chaiyaphum."
+      "relookWas": "Tiny and loud, all elbows and energy"
     },
     {
       "id": "toon",
@@ -3474,9 +3610,10 @@
       "room": "container_8",
       "tags": [],
       "desc": "A scar through one eyebrow and a grin that dares you to ask about it — one of Venus Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "A scar through one eyebrow and a grin that dares you to ask about it",
       "rendered": false,
       "relook": true,
-      "relookWas": "Sleepy-eyed and entirely unbothered — one of Venus Bar's girls, from Khon Kaen."
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "yaya",
@@ -3491,9 +3628,10 @@
       "room": "reload_bar",
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Sunflower Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Sunflower Bar's girls, from {{Nong Khai}}."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "ann",
@@ -3508,9 +3646,10 @@
       "room": "midnight_sun",
       "tags": [],
       "desc": "Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of Midnight Sun Bar's girls, from Kalasin. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Straight hair to her hips, a silver anklet, perfectly still until she isn't",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of Midnight Sun Bar's girls, from Kalasin."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "nut",
@@ -3525,6 +3664,7 @@
       "room": "midnight_sun",
       "tags": [],
       "desc": "Round-faced and quick to laugh — one of Midnight Sun Bar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+      "look": "Round-faced and quick to laugh",
       "rendered": true
     },
     {
@@ -3540,9 +3680,10 @@
       "room": "lucky_tiger",
       "tags": [],
       "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Athletic, a sunburnt nose, a sports watch she checks between customers",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of Lucky Tiger Bar's girls, from Sisaket."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "oat",
@@ -3557,9 +3698,10 @@
       "room": "lucky_tiger",
       "tags": [],
       "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Broad-shouldered and easy, a volleyball player's posture and handshake",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of Lucky Tiger Bar's girls, from Sakon Nakhon."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "ton",
@@ -3574,9 +3716,10 @@
       "room": "silk_rose",
       "tags": [],
       "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Silk Rose Bar's girls, from Mukdahan. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of Silk Rose Bar's girls, from Mukdahan."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "nid",
@@ -3590,8 +3733,11 @@
       "th": "นิด",
       "room": "silk_rose",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Silk Rose Bar's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
-      "rendered": true
+      "desc": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of Silk Rose Bar's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "wa",
@@ -3606,9 +3752,10 @@
       "room": "silk_rose",
       "tags": [],
       "desc": "Lean and angular, cheekbones like a blade, eyes that weigh you — one of Silk Rose Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.",
+      "look": "Lean and angular, cheekbones like a blade, eyes that weigh you",
       "rendered": false,
       "relook": true,
-      "relookWas": "Small and sharp, and misses nothing — one of Silk Rose Bar's girls, from Yasothon."
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "noon",
@@ -3623,9 +3770,10 @@
       "room": "jasmine_garden",
       "tags": [],
       "desc": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Jasmine Garden Bar's girls, from Loei. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "A wide slow smile, a gap in her front teeth, nowhere she would rather be",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Jasmine Garden Bar's girls, from Loei."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "prae",
@@ -3640,9 +3788,10 @@
       "room": "jasmine_garden",
       "tags": [],
       "desc": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Jasmine Garden Bar's girls, from {{Nong Khai}}. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile",
       "rendered": false,
       "relook": true,
-      "relookWas": "Sleepy-eyed and entirely unbothered — one of Jasmine Garden Bar's girls, from {{Nong Khai}}."
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "taan",
@@ -3657,9 +3806,10 @@
       "room": "gold_rush",
       "tags": [],
       "desc": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of Gold Rush Lounge's girls, from Yasothon. Google Translate is open before you finish the sentence.",
+      "look": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot",
       "rendered": false,
       "relook": true,
-      "relookWas": "Small and sharp, and misses nothing — one of Gold Rush Lounge's girls, from Yasothon."
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "tik",
@@ -3674,9 +3824,10 @@
       "room": "gold_rush",
       "tags": [],
       "desc": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Gold Rush Lounge's girls, from Khon Kaen. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "A wide slow smile, a gap in her front teeth, nowhere she would rather be",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Gold Rush Lounge's girls, from Khon Kaen."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "pui",
@@ -3690,8 +3841,11 @@
       "th": "ปุ้ย",
       "room": "starlight_bar",
       "tags": [],
-      "desc": "Sleepy-eyed and entirely unbothered — one of Starlight Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
-      "rendered": true
+      "desc": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of Starlight Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "mild",
@@ -3705,8 +3859,11 @@
       "th": "มายด์",
       "room": "starlight_bar",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of Starlight Bar's girls, from Nakhon Phanom. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "rendered": true
+      "desc": "Tall and quiet, a long plait and a plain black dress, watching the door — one of Starlight Bar's girls, from Nakhon Phanom. When she does talk it is short, dry and worth waiting for.",
+      "look": "Tall and quiet, a long plait and a plain black dress, watching the door",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "aump",
@@ -3720,10 +3877,11 @@
       "th": "อั้ม",
       "room": "rabbit_hole",
       "tags": [],
-      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Rabbit Hole's girls, from Udon Thani. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "desc": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it — one of The Rabbit Hole's girls, from Udon Thani. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of The Rabbit Hole's girls, from Udon Thani."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "guitar",
@@ -3738,9 +3896,10 @@
       "room": "rabbit_hole",
       "tags": [],
       "desc": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of The Rabbit Hole's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+      "look": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot",
       "rendered": false,
       "relook": true,
-      "relookWas": "Small and sharp, and misses nothing — one of The Rabbit Hole's girls, from Sakon Nakhon."
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "namtip",
@@ -3755,6 +3914,7 @@
       "room": "lucky_charm",
       "tags": [],
       "desc": "Tiny and loud, all elbows and energy — one of Lucky Charm Bar's girls, from Udon Thani. She laughs before the joke is finished, which is either kindness or experience.",
+      "look": "Tiny and loud, all elbows and energy",
       "rendered": true
     },
     {
@@ -3770,9 +3930,10 @@
       "room": "lucky_charm",
       "tags": [],
       "desc": "Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of Lucky Charm Bar's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+      "look": "Round glasses and a cardigan over the bar dress, like a librarian on a dare",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tall and quiet, watching the door — one of Lucky Charm Bar's girls, from {{Nong Bua Lamphu}}."
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "prik",
@@ -3787,9 +3948,10 @@
       "room": "moonshine_bar",
       "tags": [],
       "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Broad-shouldered and easy, a volleyball player's posture and handshake",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of Moonshine Bar's girls, from Yasothon."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "mek",
@@ -3804,6 +3966,7 @@
       "room": "moonshine_bar",
       "tags": [],
       "desc": "Long hair, longer eyelashes, a practised pout — one of Moonshine Bar's girls, from Kalasin. The {{phone}} never leaves her hand.",
+      "look": "Long hair, longer eyelashes, a practised pout",
       "rendered": true
     },
     {
@@ -3818,10 +3981,11 @@
       "th": "น้ำตาล",
       "room": "khao_talo_bar",
       "tags": [],
-      "desc": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of Daeng's Place's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "desc": "Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match — one of Daeng's Place's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match",
       "rendered": false,
       "relook": true,
-      "relookWas": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of Daeng's Place's girls, from Roi Et."
+      "relookWas": "A veteran's easy patience"
     },
     {
       "id": "ying",
@@ -3836,9 +4000,10 @@
       "room": "khao_talo_bar",
       "tags": [],
       "desc": "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields — one of Daeng's Place's girls, from Amnat Charoen. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields",
       "rendered": false,
       "relook": true,
-      "relookWas": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of Daeng's Place's girls, from Amnat Charoen."
+      "relookWas": "Twenty seasons of soi behind her eyes and a laugh that got louder every one"
     },
     {
       "id": "lin",
@@ -3853,9 +4018,10 @@
       "room": "water_buffalo",
       "tags": [],
       "desc": "Fifties, reading glasses on a cord, and a laugh like a door banging shut — one of The Water Buffalo's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Fifties, reading glasses on a cord, and a laugh like a door banging shut",
       "rendered": false,
       "relook": true,
-      "relookWas": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of The Water Buffalo's girls, from Roi Et."
+      "relookWas": "A veteran's easy patience"
     },
     {
       "id": "nim",
@@ -3870,9 +4036,10 @@
       "room": "water_buffalo",
       "tags": [],
       "desc": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept",
       "rendered": false,
       "relook": true,
-      "relookWas": "Somebody's mother, twice over, and nobody's fool ever — one of The Water Buffalo's girls, from Sakon Nakhon."
+      "relookWas": "Somebody's mother, twice over, and nobody's fool ever"
     },
     {
       "id": "duan",
@@ -3887,9 +4054,10 @@
       "room": "firefly_bar",
       "tags": [],
       "desc": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of Firefly Bar's girls, from {{Nong Khai}}. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept",
       "rendered": false,
       "relook": true,
-      "relookWas": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of Firefly Bar's girls, from {{Nong Khai}}."
+      "relookWas": "Pouring out here since the lake road was dirt; minds her regulars like livestock"
     },
     {
       "id": "saifon",
@@ -3903,10 +4071,11 @@
       "th": "สายฝน",
       "room": "firefly_bar",
       "tags": [],
-      "desc": "Older than the town girls and visibly better at this than any of them — one of Firefly Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.",
+      "desc": "Grey at the temples, a red silk blouse, older than the town girls and better at this — one of Firefly Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.",
+      "look": "Grey at the temples, a red silk blouse, older than the town girls and better at this",
       "rendered": false,
       "relook": true,
-      "relookWas": "Somebody's mother, twice over, and nobody's fool ever — one of Firefly Bar's girls, from Yasothon."
+      "relookWas": "Somebody's mother, twice over, and nobody's fool ever"
     },
     {
       "id": "wanpen",
@@ -3921,9 +4090,10 @@
       "room": "mama_yai",
       "tags": [],
       "desc": "Fifties, reading glasses on a cord, and a laugh like a door banging shut — one of Mama Yai's' girls, from Udon Thani. She laughs before the joke is finished, which is either kindness or experience.",
+      "look": "Fifties, reading glasses on a cord, and a laugh like a door banging shut",
       "rendered": false,
       "relook": true,
-      "relookWas": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of Mama Yai's' girls, from Udon Thani."
+      "relookWas": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening"
     },
     {
       "id": "pear",
@@ -3938,9 +4108,10 @@
       "room": "nottys_place",
       "tags": [],
       "desc": "A scar through one eyebrow and a grin that dares you to ask about it — one of Notty's Place's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "A scar through one eyebrow and a grin that dares you to ask about it",
       "rendered": false,
       "relook": true,
-      "relookWas": "Sleepy-eyed and entirely unbothered — one of Notty's Place's girls, from Khon Kaen."
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "jinda",
@@ -3955,9 +4126,10 @@
       "room": "nottys_place",
       "tags": [],
       "desc": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of Notty's Place's girls, from {{Nong Bua Lamphu}}. She hums along to whatever is playing and knows about half of the words in English.",
+      "look": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear",
       "rendered": false,
       "relook": true,
-      "relookWas": "Bored until you try a word of Thai, then radiant — one of Notty's Place's girls, from {{Nong Bua Lamphu}}."
+      "relookWas": "Bored until you try a word of Thai, then radiant"
     },
     {
       "id": "namfon",
@@ -3972,9 +4144,10 @@
       "room": "anchor_bar",
       "tags": [],
       "desc": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Anchor Bar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of The Anchor Bar's girls, from Maha Sarakham."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "bunny",
@@ -3989,9 +4162,10 @@
       "room": "dolphin_bar",
       "tags": [],
       "desc": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of Dolphin Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "A wide slow smile, a gap in her front teeth, nowhere she would rather be",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Dolphin Bar's girls, from {{Nong Khai}}."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "jaja",
@@ -4005,8 +4179,11 @@
       "th": "จาจา",
       "room": "mooring_bar",
       "tags": [],
-      "desc": "Sleepy-eyed and entirely unbothered — one of The Mooring's girls, from Loei. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
-      "rendered": true
+      "desc": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of The Mooring's girls, from Loei. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "dokmai",
@@ -4021,9 +4198,10 @@
       "room": "night_heron",
       "tags": [],
       "desc": "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields — one of The Night Heron's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields",
       "rendered": false,
       "relook": true,
-      "relookWas": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of The Night Heron's girls, from Buriram."
+      "relookWas": "Twenty seasons of soi behind her eyes and a laugh that got louder every one"
     },
     {
       "id": "jampa",
@@ -4038,9 +4216,10 @@
       "room": "night_heron",
       "tags": [],
       "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of The Night Heron's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+      "look": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening",
       "rendered": false,
       "relook": true,
-      "relookWas": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of The Night Heron's girls, from Maha Sarakham."
+      "relookWas": "A veteran's easy patience"
     },
     {
       "id": "ing",
@@ -4055,7 +4234,10 @@
       "room": "blue_dog",
       "tags": [],
       "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
-      "rendered": true
+      "look": "Gold everywhere — earrings, chain, {{phone}} case",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "khing",
@@ -4070,6 +4252,7 @@
       "room": "blue_dog",
       "tags": [],
       "desc": "Round-faced and quick to laugh — one of Blue Dog's girls, from Buriram. She types more than she talks — and laughs at both.",
+      "look": "Round-faced and quick to laugh",
       "rendered": true
     },
     {
@@ -4085,6 +4268,7 @@
       "room": "rock_factory",
       "tags": [],
       "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Rock Factory's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Baby-faced, chewing gum, thumbing her phone under the bar",
       "rendered": true
     },
     {
@@ -4100,9 +4284,10 @@
       "room": "rock_factory",
       "tags": [],
       "desc": "Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of Rock Factory's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+      "look": "Round glasses and a cardigan over the bar dress, like a librarian on a dare",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tall and quiet, watching the door — one of Rock Factory's girls, from {{Nong Bua Lamphu}}."
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "manow",
@@ -4117,9 +4302,10 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Athletic, a sunburnt nose, a sports watch she checks between customers",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of The Stinky Pinky's girls, from Sakon Nakhon."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "jiap",
@@ -4133,7 +4319,7 @@
       "th": "จิ๊บ",
       "room": "stinky_bar",
       "tags": [],
-      "desc": "Small and sharp, and misses nothing — one of The Stinky Pinky's girls, from Sisaket. Google Translate is open before you finish the sentence.",
+      "desc": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of The Stinky Pinky's girls, from Sisaket. Google Translate is open before you finish the sentence.",
       "look": "Small slight Thai woman, mid twenties, short bob, sharp watchful eyes, fitted black top, small knowing half-smile.",
       "rendered": true
     },
@@ -4151,9 +4337,7 @@
       "tags": [],
       "desc": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of The Stinky Pinky's girls, from Roi Et. The {{phone}} never leaves her hand.",
       "look": "Thai woman, early twenties, very long straight hair, long false eyelashes, glossy practised pout, pink satin top, phone in hand.",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Long hair, longer eyelashes, a practised pout — one of The Stinky Pinky's girls, from Roi Et."
+      "rendered": true
     },
     {
       "id": "goong",
@@ -4168,9 +4352,10 @@
       "room": "honey_trap",
       "tags": [],
       "desc": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Honey Trap Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile",
       "rendered": false,
       "relook": true,
-      "relookWas": "Sleepy-eyed and entirely unbothered — one of Honey Trap Bar's girls, from Khon Kaen."
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "jiab",
@@ -4185,9 +4370,10 @@
       "room": "honey_trap",
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Honey Trap Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Honey Trap Bar's girls, from {{Nong Khai}}."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "meen",
@@ -4202,9 +4388,10 @@
       "room": "queen_bee",
       "tags": [],
       "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Hive's girls, from Mukdahan. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of The Hive's girls, from Mukdahan."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "yok",
@@ -4219,9 +4406,10 @@
       "room": "queen_bee",
       "tags": [],
       "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Hive's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Baby-faced, chewing gum, thumbing her phone under the bar",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of The Hive's girls, from Surin."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "namphueng",
@@ -4236,9 +4424,10 @@
       "room": "buzz_inn",
       "tags": [],
       "desc": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Buzz Inn's girls, from Surin. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tiny and loud, all elbows and energy — one of Buzz Inn's girls, from Surin."
+      "relookWas": "Tiny and loud, all elbows and energy"
     },
     {
       "id": "gaem",
@@ -4253,9 +4442,10 @@
       "room": "buzz_inn",
       "tags": [],
       "desc": "Soft-spoken, a mole above her lip, looks down whenever she laughs — one of Buzz Inn's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.",
+      "look": "Soft-spoken, a mole above her lip, looks down whenever she laughs",
       "rendered": false,
       "relook": true,
-      "relookWas": "Bored until you try a word of Thai, then radiant — one of Buzz Inn's girls, from Nakhon Phanom."
+      "relookWas": "Bored until you try a word of Thai, then radiant"
     },
     {
       "id": "bum",
@@ -4270,9 +4460,10 @@
       "room": "dollhouse",
       "tags": [],
       "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Broad-shouldered and easy, a volleyball player's posture and handshake",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of The Dollhouse's girls, from Sakon Nakhon."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "ohm",
@@ -4286,8 +4477,11 @@
       "th": "โอม",
       "room": "dollhouse",
       "tags": [],
-      "desc": "Small and sharp, and misses nothing — one of The Dollhouse's girls, from Yasothon. Google Translate is open before you finish the sentence.",
-      "rendered": true
+      "desc": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of The Dollhouse's girls, from Yasothon. Google Translate is open before you finish the sentence.",
+      "look": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "fasai",
@@ -4301,8 +4495,11 @@
       "th": "ฟ้าใส",
       "room": "sapphire",
       "tags": [],
-      "desc": "Small and sharp, and misses nothing — one of Sapphire Bar's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
-      "rendered": true
+      "desc": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of Sapphire Bar's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+      "look": "Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "tarn",
@@ -4317,9 +4514,10 @@
       "room": "sapphire",
       "tags": [],
       "desc": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Sapphire Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+      "look": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face",
       "rendered": false,
       "relook": true,
-      "relookWas": "Long hair, longer eyelashes, a practised pout — one of Sapphire Bar's girls, from Maha Sarakham."
+      "relookWas": "Long hair, longer eyelashes, a practised pout"
     },
     {
       "id": "pao",
@@ -4333,8 +4531,11 @@
       "th": "เป้า",
       "room": "sundowner",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of Sundowner Bar's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "rendered": true
+      "desc": "Tall and quiet, a long plait and a plain black dress, watching the door — one of Sundowner Bar's girls, from {{Nong Bua Lamphu}}. She has heard every opening line on this road and grades them, silently, out of ten.",
+      "look": "Tall and quiet, a long plait and a plain black dress, watching the door",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "poom",
@@ -4349,9 +4550,10 @@
       "room": "sundowner",
       "tags": [],
       "desc": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Sundowner Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+      "look": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face",
       "rendered": false,
       "relook": true,
-      "relookWas": "Long hair, longer eyelashes, a practised pout — one of Sundowner Bar's girls, from Maha Sarakham."
+      "relookWas": "Long hair, longer eyelashes, a practised pout"
     },
     {
       "id": "bright",
@@ -4366,9 +4568,10 @@
       "room": "cricketers",
       "tags": [],
       "desc": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of The Cricketers' girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+      "look": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot",
       "rendered": false,
       "relook": true,
-      "relookWas": "Small and sharp, and misses nothing — one of The Cricketers' girls, from Sakon Nakhon."
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "lukkade",
@@ -4383,9 +4586,10 @@
       "room": "cricketers",
       "tags": [],
       "desc": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of The Cricketers' girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her",
       "rendered": false,
       "relook": true,
-      "relookWas": "Round-faced and quick to laugh — one of The Cricketers' girls, from Roi Et."
+      "relookWas": "Round-faced and quick to laugh"
     },
     {
       "id": "bpom",
@@ -4400,9 +4604,10 @@
       "room": "lucky7",
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Lucky 7 Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Lucky 7 Bar's girls, from {{Nong Khai}}."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "proud",
@@ -4416,8 +4621,11 @@
       "th": "พราว",
       "room": "lucky7",
       "tags": [],
-      "desc": "Bored until you try a word of Thai, then radiant — one of Lucky 7 Bar's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.",
-      "rendered": true
+      "desc": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of Lucky 7 Bar's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.",
+      "look": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Bored until you try a word of Thai, then radiant"
     },
     {
       "id": "namo",
@@ -4431,8 +4639,11 @@
       "th": "นะโม",
       "room": "seabreeze",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of Sea Breeze Bar's girls, from Amnat Charoen. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
-      "rendered": true
+      "desc": "Pixie cut, small gold hoops, a crooked, disarming grin — one of Sea Breeze Bar's girls, from Amnat Charoen. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Pixie cut, small gold hoops, a crooked, disarming grin",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "somruedee",
@@ -4442,14 +4653,15 @@
       "filler": true,
       "sex": "f",
       "venueKind": "beer",
-      "emoji": "🌸",
+      "emoji": "💐",
       "th": "สมฤดี",
       "room": "seabreeze",
       "tags": [],
-      "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Sea Breeze Bar's girls, from Surin. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "desc": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of Sea Breeze Bar's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of Sea Breeze Bar's girls, from Surin."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "ratchada",
@@ -4463,8 +4675,11 @@
       "th": "รัชฎา",
       "room": "coconut",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of Coconut Bar's girls, from Yasothon. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "rendered": true
+      "desc": "Tall and quiet, a long plait and a plain black dress, watching the door — one of Coconut Bar's girls, from Yasothon. Her laugh, when it finally comes, is louder than anyone expects.",
+      "look": "Tall and quiet, a long plait and a plain black dress, watching the door",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "nittaya",
@@ -4478,8 +4693,11 @@
       "th": "นิตยา",
       "room": "coconut",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of Coconut Bar's girls, from Yasothon. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "rendered": true
+      "desc": "Tiny and loud, all elbows and energy — one of Coconut Bar's girls, from Yasothon. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+      "look": "Tiny and loud, all elbows and energy",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "duang",
@@ -4494,9 +4712,10 @@
       "room": "sandbar",
       "tags": [],
       "desc": "Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of The Sandbar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Straight hair to her hips, a silver anklet, perfectly still until she isn't",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of The Sandbar's girls, from Maha Sarakham."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "mookda",
@@ -4511,6 +4730,7 @@
       "room": "sandbar",
       "tags": [],
       "desc": "Round-faced and quick to laugh — one of The Sandbar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+      "look": "Round-faced and quick to laugh",
       "rendered": true
     },
     {
@@ -4526,9 +4746,10 @@
       "room": "hyper",
       "tags": [],
       "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of Hyper A Go-Go's girls, from Amnat Charoen. The badge pinned at her hip says 93 — the number the floor knows her by. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of Hyper A Go-Go's girls, from Amnat Charoen."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "noey",
@@ -4543,6 +4764,7 @@
       "room": "hyper",
       "tags": [],
       "desc": "Long hair, longer eyelashes, a practised pout — one of Hyper A Go-Go's girls, from Roi Et. The badge pinned at her hip says 151 — the number the floor knows her by. The {{phone}} never leaves her hand.",
+      "look": "Long hair, longer eyelashes, a practised pout",
       "rendered": true
     },
     {
@@ -4558,9 +4780,10 @@
       "room": "arrow_bar",
       "tags": [],
       "desc": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of Arrow Bar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of Arrow Bar's girls, from Maha Sarakham."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "kade",
@@ -4575,9 +4798,10 @@
       "room": "arrow_bar",
       "tags": [],
       "desc": "Cropped jacket, high bun, the poise of somebody who once danced properly — one of Arrow Bar's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Cropped jacket, high bun, the poise of somebody who once danced properly",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of Arrow Bar's girls, from Chaiyaphum."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "pinky",
@@ -4592,9 +4816,10 @@
       "room": "cheeky_monkey",
       "tags": [],
       "desc": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Cheeky Monkey Bar's girls, from Chaiyaphum. She laughs before the joke is finished, which is either kindness or experience.",
+      "look": "Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tiny and loud, all elbows and energy — one of Cheeky Monkey Bar's girls, from Chaiyaphum."
+      "relookWas": "Tiny and loud, all elbows and energy"
     },
     {
       "id": "mona",
@@ -4609,9 +4834,10 @@
       "room": "cheeky_monkey",
       "tags": [],
       "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Cheeky Monkey Bar's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of Cheeky Monkey Bar's girls, from Buriram."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "gina",
@@ -4626,9 +4852,10 @@
       "room": "the_office",
       "tags": [],
       "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Office Bar's girls, from Mukdahan. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of The Office Bar's girls, from Mukdahan."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "bpaeng",
@@ -4643,9 +4870,10 @@
       "room": "the_office",
       "tags": [],
       "desc": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Office Bar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of The Office Bar's girls, from Maha Sarakham."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "tim",
@@ -4660,9 +4888,10 @@
       "room": "the_boardroom",
       "tags": [],
       "desc": "Lean and angular, cheekbones like a blade, eyes that weigh you — one of The Boardroom's girls, from Sisaket. Google Translate is open before you finish the sentence.",
+      "look": "Lean and angular, cheekbones like a blade, eyes that weigh you",
       "rendered": false,
       "relook": true,
-      "relookWas": "Small and sharp, and misses nothing — one of The Boardroom's girls, from Sisaket."
+      "relookWas": "Small and sharp, and misses nothing"
     },
     {
       "id": "min",
@@ -4677,9 +4906,10 @@
       "room": "the_boardroom",
       "tags": [],
       "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Athletic, a sunburnt nose, a sports watch she checks between customers",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of The Boardroom's girls, from Yasothon."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "tar",
@@ -4694,9 +4924,10 @@
       "room": "doghouse",
       "tags": [],
       "desc": "Neat side parting, pearl studs, a bank teller on her night off — one of The Doghouse's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Neat side parting, pearl studs, a bank teller on her night off",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of The Doghouse's girls, from Chaiyaphum."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "gof",
@@ -4710,10 +4941,11 @@
       "th": "กอฟ",
       "room": "doghouse",
       "tags": [],
-      "desc": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of The Doghouse's girls, from Khon Kaen. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "desc": "A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of The Doghouse's girls, from Khon Kaen. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "A wide slow smile, a gap in her front teeth, nowhere she would rather be",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Doghouse's girls, from Khon Kaen."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "wassana",
@@ -4727,8 +4959,11 @@
       "th": "วาสนา",
       "room": "doghouse",
       "tags": [],
-      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Doghouse's girls, from Loei. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
-      "rendered": true
+      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Doghouse's girls, from Loei. A small Buddha on a cord sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Gold everywhere — earrings, chain, {{phone}} case",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "doghouse_bow",
@@ -4743,9 +4978,10 @@
       "room": "doghouse",
       "tags": [],
       "desc": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Doghouse's girls, from Udon Thani. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
+      "look": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of The Doghouse's girls, from Udon Thani."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "sroy",
@@ -4760,9 +4996,10 @@
       "room": "succubus",
       "tags": [],
       "desc": "Lean and angular, cheekbones like a blade, eyes that weigh you — one of Succubus' girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+      "look": "Lean and angular, cheekbones like a blade, eyes that weigh you",
       "rendered": false,
       "relook": true,
-      "relookWas": "Long hair, longer eyelashes, a practised pout — one of Succubus' girls, from Maha Sarakham."
+      "relookWas": "Long hair, longer eyelashes, a practised pout"
     },
     {
       "id": "chom",
@@ -4777,9 +5014,10 @@
       "room": "succubus",
       "tags": [],
       "desc": "Neat side parting, pearl studs, a bank teller on her night off — one of Succubus' girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Neat side parting, pearl studs, a bank teller on her night off",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of Succubus' girls, from Surin."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "pranee",
@@ -4794,9 +5032,10 @@
       "room": "succubus",
       "tags": [],
       "desc": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Succubus' girls, from Mukdahan. She types more than she talks — and laughs at both.",
+      "look": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her",
       "rendered": false,
       "relook": true,
-      "relookWas": "Round-faced and quick to laugh — one of Succubus' girls, from Mukdahan."
+      "relookWas": "Round-faced and quick to laugh"
     },
     {
       "id": "milk",
@@ -4811,9 +5050,10 @@
       "room": "velvet_club",
       "tags": [],
       "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Velvet Club's girls, from Udon Thani. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Baby-faced, chewing gum, thumbing her phone under the bar",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of The Velvet Club's girls, from Udon Thani."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "june",
@@ -4828,9 +5068,10 @@
       "room": "velvet_club",
       "tags": [],
       "desc": "Soft-spoken, a mole above her lip, looks down whenever she laughs — one of The Velvet Club's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.",
+      "look": "Soft-spoken, a mole above her lip, looks down whenever she laughs",
       "rendered": false,
       "relook": true,
-      "relookWas": "Bored until you try a word of Thai, then radiant — one of The Velvet Club's girls, from Nakhon Phanom."
+      "relookWas": "Bored until you try a word of Thai, then radiant"
     },
     {
       "id": "the_terrace_fah",
@@ -4845,9 +5086,10 @@
       "room": "the_terrace",
       "tags": [],
       "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Terrace's girls, from Nakhon Phanom. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+      "look": "Broad-shouldered and easy, a volleyball player's posture and handshake",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of The Terrace's girls, from Nakhon Phanom."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "the_terrace_namtip",
@@ -4861,10 +5103,11 @@
       "th": "น้ำทิพย์",
       "room": "the_terrace",
       "tags": [],
-      "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Terrace's girls, from Nakhon Phanom. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Terrace's girls, from Nakhon Phanom. She counts the room's empty glasses without seeming to look at them.",
+      "look": "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of The Terrace's girls, from Nakhon Phanom."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "kingfisher_praew",
@@ -4878,8 +5121,11 @@
       "th": "แพรว",
       "room": "kingfisher",
       "tags": [],
-      "desc": "Sleepy-eyed and entirely unbothered — one of The Kingfisher's girls, from Ubon. Google Translate is open before you finish the sentence.",
-      "rendered": true
+      "desc": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of The Kingfisher's girls, from Ubon. Google Translate is open before you finish the sentence.",
+      "look": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "kingfisher_kaew",
@@ -4893,10 +5139,11 @@
       "th": "แก้ว",
       "room": "kingfisher",
       "tags": [],
-      "desc": "Curly hair she has stopped fighting, a hoarse laugh, a pen tucked behind one ear — one of The Kingfisher's girls, from Surin. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "desc": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Kingfisher's girls, from Surin. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.",
+      "look": "Big-eyed and solemn, a little gold Buddha at her throat, older than she looks",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of The Kingfisher's girls, from Surin."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "two_stools_meaw",
@@ -4911,9 +5158,10 @@
       "room": "two_stools",
       "tags": [],
       "desc": "Lean and angular, cheekbones like a blade, eyes that weigh you — one of Two Stools Bar's girls, from Sakon Nakhon. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Lean and angular, cheekbones like a blade, eyes that weigh you",
       "rendered": false,
       "relook": true,
-      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Two Stools Bar's girls, from Sakon Nakhon."
+      "relookWas": "Baby-faced, chewing gum, thumbing her phone under the bar"
     },
     {
       "id": "two_stools_jinda",
@@ -4928,7 +5176,10 @@
       "room": "two_stools",
       "tags": [],
       "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Two Stools Bar's girls, from {{Nong Khai}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "rendered": true
+      "look": "Gold everywhere — earrings, chain, {{phone}} case",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "the_gecko_duan",
@@ -4943,9 +5194,10 @@
       "room": "the_gecko",
       "tags": [],
       "desc": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of The Gecko's girls, from Yasothon. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
+      "look": "Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile",
       "rendered": false,
       "relook": true,
-      "relookWas": "Sleepy-eyed and entirely unbothered — one of The Gecko's girls, from Yasothon."
+      "relookWas": "Sleepy-eyed and entirely unbothered"
     },
     {
       "id": "the_gecko_yok",
@@ -4960,9 +5212,10 @@
       "room": "the_gecko",
       "tags": [],
       "desc": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Gecko's girls, from Buriram. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Petite and dimpled, a braid to her waist she keeps flicking over one shoulder",
       "rendered": false,
       "relook": true,
-      "relookWas": "New enough to still look a little nervous — one of The Gecko's girls, from Buriram."
+      "relookWas": "New enough to still look a little nervous"
     },
     {
       "id": "sea_wall_fon",
@@ -4977,9 +5230,10 @@
       "room": "sea_wall",
       "tags": [],
       "desc": "Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of The Sea Wall's girls, from Sakon Nakhon. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
+      "look": "Round glasses and a cardigan over the bar dress, like a librarian on a dare",
       "rendered": false,
       "relook": true,
-      "relookWas": "Tall and quiet, watching the door — one of The Sea Wall's girls, from Sakon Nakhon."
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "sea_wall_kwang",
@@ -4994,9 +5248,10 @@
       "room": "sea_wall",
       "tags": [],
       "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Sea Wall's girls, from Chaiyaphum. The {{phone}} never leaves her hand.",
+      "look": "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
       "rendered": false,
       "relook": true,
-      "relookWas": "A crooked, disarming grin — one of The Sea Wall's girls, from Chaiyaphum."
+      "relookWas": "A crooked, disarming grin"
     },
     {
       "id": "breakwater_mook",
@@ -5011,9 +5266,10 @@
       "room": "breakwater",
       "tags": [],
       "desc": "Cropped jacket, high bun, the poise of somebody who once danced properly — one of The Breakwater's girls, from Maha Sarakham. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Cropped jacket, high bun, the poise of somebody who once danced properly",
       "rendered": false,
       "relook": true,
-      "relookWas": "Older than the go-go average, and unhurried about it — one of The Breakwater's girls, from Maha Sarakham."
+      "relookWas": "Older than the go-go average, and unhurried about it"
     },
     {
       "id": "breakwater_jib",
@@ -5027,8 +5283,11 @@
       "th": "จิ๊บ",
       "room": "breakwater",
       "tags": [],
-      "desc": "Tall and quiet, watching the door — one of The Breakwater's girls, from Yasothon. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "rendered": true
+      "desc": "Tall and quiet, a long plait and a plain black dress, watching the door — one of The Breakwater's girls, from Yasothon. She notices whose glass is empty before anyone behind the bar does.",
+      "look": "Tall and quiet, a long plait and a plain black dress, watching the door",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall and quiet, watching the door"
     },
     {
       "id": "neon_palm_bee",
@@ -5043,9 +5302,10 @@
       "room": "neon_palm",
       "tags": [],
       "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of Neon Palm's girls, from Sisaket. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
+      "look": "Athletic, a sunburnt nose, a sports watch she checks between customers",
       "rendered": false,
       "relook": true,
-      "relookWas": "Gold everywhere — earrings, chain, {{phone}} case — one of Neon Palm's girls, from Sisaket."
+      "relookWas": "Gold everywhere"
     },
     {
       "id": "neon_palm_toey",
@@ -5060,9 +5320,10 @@
       "room": "neon_palm",
       "tags": [],
       "desc": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Neon Palm's girls, from Surin. She types more than she talks — and laughs at both.",
+      "look": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her",
       "rendered": false,
       "relook": true,
-      "relookWas": "Round-faced and quick to laugh — one of Neon Palm's girls, from Surin."
+      "relookWas": "Round-faced and quick to laugh"
     },
     {
       "id": "the_bucket_pang",
@@ -5077,6 +5338,7 @@
       "room": "the_bucket",
       "tags": [],
       "desc": "Round-faced and quick to laugh — one of The Bucket's girls, from Kalasin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.",
+      "look": "Round-faced and quick to laugh",
       "rendered": true
     },
     {
@@ -5091,8 +5353,11 @@
       "th": "มิ้นท์",
       "room": "the_bucket",
       "tags": [],
-      "desc": "Bored until you try a word of Thai, then radiant — one of The Bucket's girls, from {{Nong Bua Lamphu}}. She hums along to whatever is playing and knows about half of the words in English.",
-      "rendered": true
+      "desc": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of The Bucket's girls, from {{Nong Bua Lamphu}}. She hums along to whatever is playing and knows about half of the words in English.",
+      "look": "Hair scraped back, no make-up, bored until you try a word of Thai, then radiant",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Bored until you try a word of Thai, then radiant"
     },
     {
       "id": "sudjai",
@@ -5107,6 +5372,7 @@
       "room": "orchid_room",
       "tags": [],
       "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Orchid Room, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+      "look": "Older, sharper, and entirely done being impressed by farang",
       "rendered": true
     },
     {
@@ -5122,6 +5388,7 @@
       "room": "lake_beer",
       "tags": [],
       "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Sundowner, from Khon Kaen. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+      "look": "Older, sharper, and entirely done being impressed by farang",
       "rendered": true
     },
     {
@@ -5137,6 +5404,7 @@
       "room": "windmill",
       "tags": [],
       "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
+      "look": "Elegant, weathered, and plainly the last word on everything in the room",
       "rendered": true
     },
     {
@@ -5152,6 +5420,7 @@
       "room": "katoeys",
       "tags": [],
       "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns three of these stools now.",
+      "look": "Elegant, weathered, and plainly the last word on everything in the room",
       "rendered": true
     },
     {
@@ -5167,6 +5436,7 @@
       "room": "doghouse",
       "tags": [],
       "desc": "Warm to your face, ice at the till, and fluent in both — the mamasan of The Doghouse, from Khon Kaen. She started on the stage at seventeen and owns three of these stools now.",
+      "look": "Warm to your face, ice at the till, and fluent in both",
       "rendered": true
     },
     {
@@ -5182,6 +5452,7 @@
       "room": "blue_dog",
       "tags": [],
       "desc": "Sits like she owns the stool, because she does — the mamasan of Blue Dog, from Maha Sarakham. She has run this floor longer than most of the girls have been alive.",
+      "look": "Sits like she owns the stool, because she does",
       "rendered": true
     },
     {
@@ -5197,6 +5468,7 @@
       "room": "rock_factory",
       "tags": [],
       "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of Rock Factory, from Yasothon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+      "look": "Older, sharper, and entirely done being impressed by farang",
       "rendered": true
     },
     {
@@ -5212,6 +5484,7 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Stinky Pinky, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
+      "look": "Elegant, weathered, and plainly the last word on everything in the room",
       "rendered": true
     },
     {
@@ -5227,6 +5500,7 @@
       "room": "neon_paradise",
       "tags": [],
       "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of Neon Paradise A-Go-Go, from Sakon Nakhon. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+      "look": "Older, sharper, and entirely done being impressed by farang",
       "rendered": true
     },
     {
@@ -5242,6 +5516,7 @@
       "room": "club_mirage",
       "tags": [],
       "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Club Mirage, from Maha Sarakham. She married a farang, buried the marriage, and kept the house.",
+      "look": "Rings on every finger and a voice that cuts the music when she wants it",
       "rendered": true
     },
     {
@@ -5257,6 +5532,7 @@
       "room": "crystal_palace",
       "tags": [],
       "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Crystal Palace A-Go-Go, from Kalasin. She danced this same street before you were her problem.",
+      "look": "Rings on every finger and a voice that cuts the music when she wants it",
       "rendered": true
     },
     {
@@ -5272,6 +5548,7 @@
       "room": "paradise_nights",
       "tags": [],
       "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Paradise Nights Club, from {{Nong Khai}}. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+      "look": "Broad, motherly, and entirely able to have you removed by smiling",
       "rendered": true
     },
     {
@@ -5287,6 +5564,7 @@
       "room": "midnight_sun",
       "tags": [],
       "desc": "Sits like she owns the stool, because she does — the mamasan of Midnight Sun Bar, from Maha Sarakham. She puts four kids through school on other men's lonely nights.",
+      "look": "Sits like she owns the stool, because she does",
       "rendered": true
     },
     {
@@ -5302,6 +5580,7 @@
       "room": "lucky_tiger",
       "tags": [],
       "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Lucky Tiger Bar, from Surin. She puts four kids through school on other men's lonely nights.",
+      "look": "Half-moon glasses down her nose, appraising you over the top of them",
       "rendered": true
     },
     {
@@ -5317,6 +5596,7 @@
       "room": "silk_rose",
       "tags": [],
       "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Silk Rose Bar, from Khon Kaen. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+      "look": "Broad, motherly, and entirely able to have you removed by smiling",
       "rendered": true
     },
     {
@@ -5332,6 +5612,7 @@
       "room": "jasmine_garden",
       "tags": [],
       "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Jasmine Garden Bar, from Surin. She has run this floor longer than most of the girls have been alive.",
+      "look": "Half-moon glasses down her nose, appraising you over the top of them",
       "rendered": true
     },
     {
@@ -5347,6 +5628,7 @@
       "room": "gold_rush",
       "tags": [],
       "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Gold Rush Lounge, from Loei. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+      "look": "Broad, motherly, and entirely able to have you removed by smiling",
       "rendered": true
     },
     {
@@ -5362,6 +5644,7 @@
       "room": "starlight_bar",
       "tags": [],
       "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Starlight Bar, from Nakhon Phanom. She came up from the rice fields and never once looked back.",
+      "look": "A cloud of perfume and authority, hair lacquered against the fans",
       "rendered": true
     },
     {
@@ -5377,6 +5660,7 @@
       "room": "kinky",
       "tags": [],
       "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of KINKY Go-Go, from Maha Sarakham. She danced this same street before you were her problem.",
+      "look": "Rings on every finger and a voice that cuts the music when she wants it",
       "rendered": true
     },
     {
@@ -5392,6 +5676,7 @@
       "room": "las_vegas",
       "tags": [],
       "desc": "Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Las Vegas Go-Go, from Chaiyaphum. She married a farang, buried the marriage, and kept the house.",
+      "look": "Gold at the wrist and throat, reading glasses pushed up into her hair",
       "rendered": true
     },
     {
@@ -5407,6 +5692,7 @@
       "room": "water_buffalo",
       "tags": [],
       "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Water Buffalo, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+      "look": "Older, sharper, and entirely done being impressed by farang",
       "rendered": true
     },
     {
@@ -5422,6 +5708,7 @@
       "room": "firefly_bar",
       "tags": [],
       "desc": "Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Firefly Bar, from Udon Thani. She danced this same street before you were her problem.",
+      "look": "Gold at the wrist and throat, reading glasses pushed up into her hair",
       "rendered": true
     },
     {
@@ -5437,6 +5724,7 @@
       "room": "night_heron",
       "tags": [],
       "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of The Night Heron, from Nakhon Phanom. She came up from the rice fields and never once looked back.",
+      "look": "A cloud of perfume and authority, hair lacquered against the fans",
       "rendered": true
     },
     {
@@ -5452,6 +5740,7 @@
       "room": "the_terrace",
       "tags": [],
       "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of The Terrace, from Kalasin. She has run this floor longer than most of the girls have been alive.",
+      "look": "Half-moon glasses down her nose, appraising you over the top of them",
       "rendered": true
     },
     {
@@ -5467,6 +5756,7 @@
       "room": "kingfisher",
       "tags": [],
       "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Kingfisher, from Ubon. She started on the stage at seventeen and owns three of these stools now.",
+      "look": "Elegant, weathered, and plainly the last word on everything in the room",
       "rendered": true
     },
     {
@@ -5482,6 +5772,7 @@
       "room": "two_stools",
       "tags": [],
       "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Two Stools Bar, from Mukdahan. She has run this floor longer than most of the girls have been alive.",
+      "look": "Half-moon glasses down her nose, appraising you over the top of them",
       "rendered": true
     },
     {
@@ -5497,6 +5788,7 @@
       "room": "the_gecko",
       "tags": [],
       "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Gecko, from Kalasin. She married a farang, buried the marriage, and kept the house.",
+      "look": "Rings on every finger and a voice that cuts the music when she wants it",
       "rendered": true
     },
     {
@@ -5512,6 +5804,7 @@
       "room": "sea_wall",
       "tags": [],
       "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of The Sea Wall, from Yasothon. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+      "look": "Broad, motherly, and entirely able to have you removed by smiling",
       "rendered": true
     },
     {
@@ -5527,6 +5820,7 @@
       "room": "breakwater",
       "tags": [],
       "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Breakwater, from Khon Kaen. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+      "look": "Older, sharper, and entirely done being impressed by farang",
       "rendered": true
     },
     {
@@ -5542,6 +5836,7 @@
       "room": "neon_palm",
       "tags": [],
       "desc": "A former headliner's posture and a gaze like a cash register — the mamasan of Neon Palm, from Sisaket. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+      "look": "A former headliner's posture and a gaze like a cash register",
       "rendered": true
     },
     {
@@ -5557,6 +5852,7 @@
       "room": "the_bucket",
       "tags": [],
       "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Bucket, from Roi Et. She married a farang, buried the marriage, and kept the house.",
+      "look": "Rings on every finger and a voice that cuts the music when she wants it",
       "rendered": true
     },
     {
@@ -5572,6 +5868,7 @@
       "room": "orchid_room",
       "tags": [],
       "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at The Orchid Room, from Kalasin.",
+      "look": "Cash drawer open, {{phone}} face-down, all of her attention on the maths",
       "rendered": true
     },
     {
@@ -5587,6 +5884,7 @@
       "room": "lake_beer",
       "tags": [],
       "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Sundowner, from Ubon.",
+      "look": "Black polo, a lanyard of too many keys, a calculator she never needs",
       "rendered": true
     },
     {
@@ -5602,6 +5900,7 @@
       "room": "windmill",
       "tags": [],
       "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Gilt Cage, from {{Nong Bua Lamphu}}.",
+      "look": "Black polo, a lanyard of too many keys, a calculator she never needs",
       "rendered": true
     },
     {
@@ -5617,6 +5916,7 @@
       "room": "katoeys",
       "tags": [],
       "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Twice Shy, from Kalasin.",
+      "look": "Quiet and quick, the still point the whole loud room pays into",
       "rendered": true
     },
     {
@@ -5632,6 +5932,7 @@
       "room": "doghouse",
       "tags": [],
       "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at The Doghouse, from Khon Kaen.",
+      "look": "Headset on one ear, {{phone}} in one hand, the till in perfect order",
       "rendered": true
     },
     {
@@ -5647,6 +5948,7 @@
       "room": "succubus",
       "tags": [],
       "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Succubus, from Khon Kaen.",
+      "look": "Headset on one ear, {{phone}} in one hand, the till in perfect order",
       "rendered": true
     },
     {
@@ -5662,6 +5964,7 @@
       "room": "tequila_queen",
       "tags": [],
       "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Tequila Queen A-Go-Go, from Loei.",
+      "look": "Headset on one ear, {{phone}} in one hand, the till in perfect order",
       "rendered": true
     },
     {
@@ -5677,6 +5980,7 @@
       "room": "blue_dog",
       "tags": [],
       "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at Blue Dog, from Khon Kaen.",
+      "look": "Perched above the till like a lifeguard watching a pool of drunks",
       "rendered": true
     },
     {
@@ -5692,6 +5996,7 @@
       "room": "rock_factory",
       "tags": [],
       "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Rock Factory, from Nakhon Phanom.",
+      "look": "Black polo, a lanyard of too many keys, a calculator she never needs",
       "rendered": true
     },
     {
@@ -5707,6 +6012,7 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Stinky Pinky, from Ubon.",
+      "look": "Black polo, a lanyard of too many keys, a calculator she never needs",
       "rendered": true
     },
     {
@@ -5722,6 +6028,7 @@
       "room": "candy_bar_2",
       "tags": [],
       "desc": "Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Candy Bar 2, from Surin.",
+      "look": "Neat bun, neat ledger, an engagement ring worn on a chain",
       "rendered": true
     },
     {
@@ -5737,6 +6044,7 @@
       "room": "neon_paradise",
       "tags": [],
       "desc": "Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Neon Paradise A-Go-Go, from Loei.",
+      "look": "Fingers flying over a calculator app, eyes never leaving the cash",
       "rendered": true
     },
     {
@@ -5752,6 +6060,7 @@
       "room": "club_mirage",
       "tags": [],
       "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Club Mirage, from {{Nong Bua Lamphu}}.",
+      "look": "Black polo, a lanyard of too many keys, a calculator she never needs",
       "rendered": true
     },
     {
@@ -5767,6 +6076,7 @@
       "room": "crystal_palace",
       "tags": [],
       "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Crystal Palace A-Go-Go, from Kalasin.",
+      "look": "Quiet and quick, the still point the whole loud room pays into",
       "rendered": true
     },
     {
@@ -5782,6 +6092,7 @@
       "room": "paradise_nights",
       "tags": [],
       "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at Paradise Nights Club, from Loei.",
+      "look": "Perched above the till like a lifeguard watching a pool of drunks",
       "rendered": true
     },
     {
@@ -5797,6 +6108,7 @@
       "room": "candy_bar",
       "tags": [],
       "desc": "Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Candy Bar, from Surin.",
+      "look": "Neat bun, neat ledger, an engagement ring worn on a chain",
       "rendered": true
     },
     {
@@ -5812,6 +6124,7 @@
       "room": "lucky_tiger",
       "tags": [],
       "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Lucky Tiger Bar, from Amnat Charoen.",
+      "look": "In a cage of fairy lights, counting notes faster than the eye follows",
       "rendered": true
     },
     {
@@ -5827,6 +6140,7 @@
       "room": "silk_rose",
       "tags": [],
       "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Silk Rose Bar, from Loei.",
+      "look": "Headset on one ear, {{phone}} in one hand, the till in perfect order",
       "rendered": true
     },
     {
@@ -5842,6 +6156,7 @@
       "room": "jasmine_garden",
       "tags": [],
       "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Jasmine Garden Bar, from Ubon.",
+      "look": "Black polo, a lanyard of too many keys, a calculator she never needs",
       "rendered": true
     },
     {
@@ -5857,6 +6172,7 @@
       "room": "gold_rush",
       "tags": [],
       "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Gold Rush Lounge, from Buriram.",
+      "look": "In a cage of fairy lights, counting notes faster than the eye follows",
       "rendered": true
     },
     {
@@ -5872,7 +6188,10 @@
       "room": "starlight_bar",
       "tags": [],
       "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at Starlight Bar, from Sakon Nakhon.",
-      "rendered": true
+      "look": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleeve of faded tattoos and an abacus brain"
     },
     {
       "id": "kaimook",
@@ -5887,6 +6206,7 @@
       "room": "slutty",
       "tags": [],
       "desc": "A blunt bob, red lipstick, and a stare that reconciles you at a glance — the cashier at Slutty Go-Go, from Amnat Charoen.",
+      "look": "A blunt bob, red lipstick, and a stare that reconciles you at a glance",
       "rendered": true
     },
     {
@@ -5902,6 +6222,7 @@
       "room": "las_vegas",
       "tags": [],
       "desc": "Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Las Vegas Go-Go, from Sakon Nakhon.",
+      "look": "Fingers flying over a calculator app, eyes never leaving the cash",
       "rendered": true
     },
     {
@@ -5917,6 +6238,7 @@
       "room": "khao_talo_bar",
       "tags": [],
       "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Daeng's Place, from Mukdahan.",
+      "look": "In a cage of fairy lights, counting notes faster than the eye follows",
       "rendered": true
     },
     {
@@ -5932,6 +6254,7 @@
       "room": "water_buffalo",
       "tags": [],
       "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at The Water Buffalo, from {{Nong Khai}}.",
+      "look": "Perched above the till like a lifeguard watching a pool of drunks",
       "rendered": true
     },
     {
@@ -5947,6 +6270,7 @@
       "room": "firefly_bar",
       "tags": [],
       "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Firefly Bar, from Maha Sarakham.",
+      "look": "Quiet and quick, the still point the whole loud room pays into",
       "rendered": true
     },
     {
@@ -5962,6 +6286,7 @@
       "room": "mama_yai",
       "tags": [],
       "desc": "Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Mama Yai's, from Sisaket.",
+      "look": "Fingers flying over a calculator app, eyes never leaving the cash",
       "rendered": true
     },
     {
@@ -5977,6 +6302,7 @@
       "room": "nottys_place",
       "tags": [],
       "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}.",
+      "look": "Headset on one ear, {{phone}} in one hand, the till in perfect order",
       "rendered": true
     },
     {
@@ -5992,7 +6318,10 @@
       "room": "night_heron",
       "tags": [],
       "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Night Heron, from Sakon Nakhon.",
-      "rendered": true
+      "look": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleeve of faded tattoos and an abacus brain"
     },
     {
       "id": "the_terrace_kade",
@@ -6007,7 +6336,10 @@
       "room": "the_terrace",
       "tags": [],
       "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Terrace, from Loei.",
-      "rendered": true
+      "look": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleeve of faded tattoos and an abacus brain"
     },
     {
       "id": "kingfisher_noey",
@@ -6022,6 +6354,7 @@
       "room": "kingfisher",
       "tags": [],
       "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at The Kingfisher, from Khon Kaen.",
+      "look": "A note-counting machine at her elbow and a faster one behind her eyes",
       "rendered": true
     },
     {
@@ -6037,6 +6370,7 @@
       "room": "two_stools",
       "tags": [],
       "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Two Stools Bar, from Loei.",
+      "look": "A note-counting machine at her elbow and a faster one behind her eyes",
       "rendered": true
     },
     {
@@ -6052,6 +6386,7 @@
       "room": "the_gecko",
       "tags": [],
       "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at The Gecko, from Buriram.",
+      "look": "Quiet and quick, the still point the whole loud room pays into",
       "rendered": true
     },
     {
@@ -6067,6 +6402,7 @@
       "room": "sea_wall",
       "tags": [],
       "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Sea Wall, from Yasothon.",
+      "look": "Black polo, a lanyard of too many keys, a calculator she never needs",
       "rendered": true
     },
     {
@@ -6082,6 +6418,7 @@
       "room": "breakwater",
       "tags": [],
       "desc": "Fingers flying over a calculator app, eyes never leaving the cash — the cashier at The Breakwater, from {{Nong Bua Lamphu}}.",
+      "look": "Fingers flying over a calculator app, eyes never leaving the cash",
       "rendered": true
     },
     {
@@ -6097,6 +6434,7 @@
       "room": "neon_palm",
       "tags": [],
       "desc": "Reading glasses, a receipt spike, and no patience for a disputed tab — the cashier at Neon Palm, from Udon Thani.",
+      "look": "Reading glasses, a receipt spike, and no patience for a disputed tab",
       "rendered": true
     },
     {
@@ -6112,6 +6450,7 @@
       "room": "the_bucket",
       "tags": [],
       "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at The Bucket, from Surin.",
+      "look": "In a cage of fairy lights, counting notes faster than the eye follows",
       "rendered": true
     }
   ]

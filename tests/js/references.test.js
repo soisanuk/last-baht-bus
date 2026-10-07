@@ -46,6 +46,8 @@ test("every venue-shaped name in prose is a real venue", () => {
       if (bars.has(v) || names.has(v) || FICTIONAL.has(v)) continue;
       // an article in front of a real venue is just English
       if (bars.has(v.replace(/^The /, "")) || names.has(v.replace(/^The /, ""))) continue;
+      // so is an imperative: Tinglish "Go Candy Bar" is the floor's own grammar, not a new venue
+      if (bars.has(v.replace(/^(Go|Try) /, "")) || names.has(v.replace(/^(Go|Try) /, ""))) continue;
       bad.push(`${r.ref}: "${v}"`);
     }
   }

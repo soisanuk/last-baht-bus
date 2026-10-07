@@ -115,6 +115,11 @@ const CLASS = {
   "room.orchid_room.reads.table|everyone in the room knows": [G_], "room.orchid_room.revisit|everyone watches": [G_],
   "room.pattaya_soi_7.reads.alley|the soi knows": [G_],
 };
+// A claim shared by a whole tier of stored records is classed once by pattern, not per woman: every
+// go-go dancer's desc says her badge is "the number the floor knows her by" — a fact about the trade.
+const CLASS_RX = [
+  [/^npc\.[a-z0-9_]+\.desc\|the floor knows$/, [G_, "the badge sentence on a go-go dancer's stored desc"]],
+];
 
 export function witnessClaims() {
   const raw = execFileSync("node", [REPO + "tools/prose-corpus.mjs", "--json"], { encoding: "utf8", maxBuffer: 1 << 28 });
@@ -124,7 +129,7 @@ export function witnessClaims() {
     const r = JSON.parse(line), m = RX.exec(String(r.text || ""));
     if (!m) continue;
     const key = r.ref.replace(/\[\d+\]/g, "") + "|" + m[0].toLowerCase();
-    out.push({ key, ref: r.ref, phrase: m[0], cls: CLASS[key] || null, text: r.text });
+    out.push({ key, ref: r.ref, phrase: m[0], cls: CLASS[key] || (CLASS_RX.find(([rx]) => rx.test(key)) || [])[1] || null, text: r.text });
   }
   return out;
 }
