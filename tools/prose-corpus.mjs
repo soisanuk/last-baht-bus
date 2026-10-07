@@ -158,7 +158,7 @@ for (const [id, e] of Object.entries(ENCOUNTERS)) walk("enc", `enc.${id}`, id, e
 for (const [id, q] of Object.entries(QUESTS)) {
   add("quest", `quest.${id}.desc`, q.name, q.desc);
 }
-for (const [tbl, name] of [[LANGUAGES, "lang"], [ORIGINS, "origin"],
+for (const [tbl, name] of [[ORIGINS, "origin"],
   [PERSONALITIES, "personality"], [ORIENTATIONS, "orientation"]])
   for (const e of tbl) walk("intro", `intro.${name}.${e.id}`, "Tan", e);
 // the player's own canned answers (ASK_REPLIES) — short, but player-facing and

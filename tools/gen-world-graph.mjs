@@ -41,10 +41,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "docs", "world-graph.json");
 
 // Same load order as tools/probe.mjs — the engine is classic scripts sharing
-// globals, so order is load-bearing and `lang.js` sits where index.html puts it.
+// globals, so order is load-bearing.
 const ENGINE_FILES = ["engine-core.js", "engine-encounters.js", "engine-play.js",
   "engine-systems.js", "engine-parser.js"];
-const FILES = ["thai.js", "world.js", "games.js", "cli-sim.js", "lang.js", ...ENGINE_FILES];
+const FILES = ["thai.js", "world.js", "games.js", "cli-sim.js", ...ENGINE_FILES];
 const SRC = {};
 for (const f of FILES) {
   const code = readFileSync(join(ROOT, "web", "js", f), "utf8");

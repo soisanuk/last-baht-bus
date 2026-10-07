@@ -60,7 +60,7 @@ import vm from "node:vm";
 import fs from "node:fs";
 
 const JS = new URL("../web/js/", import.meta.url);
-for (const f of ["thai", "world", "games", "cli-sim", "lang", "engine-core", "engine-encounters",
+for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-encounters",
   "engine-play", "engine-systems", "engine-parser"])
   vm.runInThisContext(fs.readFileSync(new URL(f + ".js", JS), "utf8"), { filename: f });
 

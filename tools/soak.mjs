@@ -25,11 +25,10 @@
 // the Darkside), and VENUES — 52 of those 74 are rooms you have to go inside,
 // so even on a street the walker walks, it stays on the street.
 //
-// Deliberately NOT fixed by making the walker explore harder. Every de ceiling
-// in tests/js/soak.test.js is calibrated against the current movement policy,
-// so changing it would re-roll all four and destroy the one measurement that
-// tracks the German gap. The honest move is to print the number and let a
-// reader discount the result accordingly.
+// Deliberately NOT fixed by making the walker explore harder. Several checks in
+// tests/js/soak.test.js are calibrated against the current movement policy, so
+// changing it would re-roll every seeded run. The honest move is to print the
+// number and let a reader discount the result accordingly.
 //
 // Debugging a finding: SOAK_TRACE=1 prints each command pre/post; SOAK_PIN=<file>
 // persists {phase, cmd, save} before every step, so a kill -9 mid-hang leaves a
@@ -52,7 +51,7 @@ import { fileURLToPath } from "node:url";
 // ── engine load (probe.mjs pattern: import.meta-relative, cwd-proof) ─────────
 if (typeof globalThis.newGame === "undefined") {
   const JS = new URL("../web/js/", import.meta.url);
-  for (const f of ["thai", "world", "games", "cli-sim", "lang", "engine-core", "engine-encounters",
+  for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-encounters",
     "engine-play", "engine-systems", "engine-parser"])
     vm.runInThisContext(fs.readFileSync(new URL(f + ".js", JS), "utf8"), { filename: f });
 }
@@ -371,23 +370,14 @@ function deepEq(a, b, path = "") {
   return null;
 }
 
-// ── language-leak heuristic (the de sweep) ───────────────────────────────────
-// Deliberately English things: CAPS command tokens, paren hint groups, venue/brand
-// names, Thai script + romanisations, ฿ amounts. Strip those, then vote with
-// language-distinctive stopwords — a line that still reads as English prose in a
-// de run is a catalog coverage gap. Precision over recall: 3+ EN votes, EN > 2x DE.
-const _EN_STOP = /\b(the|and|you|your|of|with|she|he|his|they|that|this|from|have|are|was|what|into|but|not|it's|its|her)\b/gi;
-const _DE_STOP = /\b(und|nicht|das|der|die|ist|ein|eine|einen|mit|für|auf|aus|sich|dich|dir|du|zu|dem|den|im|ich|es|wie|noch|schon|kein|keine|mehr|aber|oder|wenn|dann|nur|auch|jetzt|hier|schon)\b/gi;
-function langLeak(line) {
-  let t = String(line).replace(/\{\{[^{}]*\}\}/g, " ");  // {{…}} is decorate-suppression markup, not _fmt
-  if (/\{[a-z_]+\}/.test(t)) return "defmt";           // an unfilled _fmt placeholder reached the player
-  t = t.replace(/\([^()]*\)/g, " ")                    // hint groups are English by design
-       .replace(/[A-Z]{2,}[A-Z0-9 ]*/g, " ")            // CAPS command tokens
-       .replace(/[\u0E00-\u0E7F]+/g, " ")              // Thai stays Thai
-       .replace(/฿[\d,]+/g, " ");
-  if (t.length < 30) return null;
-  const en = (t.match(_EN_STOP) || []).length, de = (t.match(_DE_STOP) || []).length;
-  return en >= 3 && en > de * 2 ? "langleak" : null;
+// ── unfilled-template check ───────────────────────────────────────────────────
+// Promoted out of the removed German sweep's langLeak() (which gated this check
+// on a German run being active, so it almost never ran): a `_fmt()` template
+// whose `{placeholder}` was never filled and reached the player is a real
+// defect regardless of language, so it now runs unconditionally on every line.
+function unfilledTemplate(line) {
+  const t = String(line).replace(/\{\{[^{}]*\}\}/g, " ");  // {{…}} is decorate-suppression markup, not _fmt
+  return /\{[a-z_]+\}/.test(t) ? "defmt" : null;           // an unfilled _fmt placeholder reached the player
 }
 
 const OFFPOCKET = /(Walking Street|Soi Buakhao|Buakhao|LK Metro|Tree Town|Myth Night|Jomtien)/;
@@ -409,7 +399,6 @@ export function runSoak(opts = {}) {
   const nights = opts.nights ?? 5;
   const mode = opts.mode ?? "vacation";
   const maxCommands = opts.maxCommands ?? nights * 300 + 500;
-  const lang = opts.lang || null;  // e.g. "de": force G.player.lang each turn (survives intro/resets)
   _pseed = (seed * 2654435761 % 2147483646) + 1;
   _triedVerbs = new Set();          // coverage-guided verb picking is per-run
 
@@ -451,10 +440,10 @@ export function runSoak(opts = {}) {
   // which re-seeds G.rng from Math.random and silently broke soi6 determinism.
   G.rng = (seed * 48271 % 2147483646) + 1;
   // --start <room>: drop the walker somewhere specific. Purely ADDITIVE — the
-  // default is unchanged, so every de ceiling stays calibrated against the same
-  // walk. This exists because the walker's centre of gravity leaves 74 rooms
-  // unentered by any run, so the only way to soak an outlying district (or a
-  // block of new venues) is to begin inside it.
+  // default walk is unchanged, so every other calibrated check still tracks
+  // the same movement policy. This exists because the walker's centre of
+  // gravity leaves 74 rooms unentered by any run, so the only way to soak an
+  // outlying district (or a block of new venues) is to begin inside it.
   if (opts.start) {
     if (!ROOMS[opts.start]) throw new Error("--start: no such room " + opts.start);
     G.room = opts.start;
@@ -486,10 +475,6 @@ export function runSoak(opts = {}) {
   while (stats.commands < maxCommands && stats.nights < nights && !failures.length) {
     if (Date.now() - t0 > maxMs) { stats.truncated = true; break; }  // wall-clock cap
     if (++spins > maxCommands * 4) { fail("spin", "policy can't produce commands"); break; }
-    if (lang) {  // the de-sweep: language pinned no matter what the intro picked or a reset cleared
-      if (!G.player) G.player = { origin: "monger", personality: "joker", orientation: "straight" };
-      G.player.lang = lang;
-    }
     // choose
     if (process.env.SOAK_PIN) fs.writeFileSync(process.env.SOAK_PIN,
       JSON.stringify({ phase: "select", save: serializeGame() }));
@@ -593,8 +578,8 @@ export function runSoak(opts = {}) {
     if (mode === "soi6" && !OFFPOCKET_MEDIA_CMD.test(cmd)) for (const l of lines)
       if (OFFPOCKET.test(l) && !OFFPOCKET_OK.some(s => l.includes(s)))
         warns.push({ kind: "offpocket", line: String(l).slice(0, 140), at: stats.commands });
-    if (lang && G.player && G.player.lang === lang) for (const l of lines) {
-      const kind = langLeak(l);
+    for (const l of lines) {
+      const kind = unfilledTemplate(l);
       if (kind) warns.push({ kind, line: String(l).slice(0, 400), at: stats.commands, cmd });
     }
 
@@ -688,17 +673,16 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const seeds = String(arg("seed", "1")).split(",").map(Number);
   const nights = Number(arg("nights", 5));
   const mode = arg("mode", "vacation");
-  const lang = arg("lang", null);
-  const leakTally = new Map();  // normalised line → count, across all seeds
+  const defmtTally = new Map();  // normalised line → count, across all seeds
   const liveTally = new Map();  // effect id → times observed, across all seeds
   const tPath = arg("transcript", null);
   let anyFail = false;
 
   for (const seed of seeds) {
-    const r = runSoak({ seed, nights, mode, lang, start: arg("start", null) });
-    for (const x of r.warns) if (x.kind === "langleak" || x.kind === "defmt") {
-      const key = (x.kind === "defmt" ? "⚠ {unfilled} " : "") + x.line.slice(0, 400);
-      leakTally.set(key, (leakTally.get(key) || 0) + 1);
+    const r = runSoak({ seed, nights, mode, start: arg("start", null) });
+    for (const x of r.warns) if (x.kind === "defmt") {
+      const key = "⚠ {unfilled} " + x.line.slice(0, 400);
+      defmtTally.set(key, (defmtTally.get(key) || 0) + 1);
     }
     const w = {};
     for (const x of r.warns) w[x.kind] = (w[x.kind] || 0) + 1;
@@ -722,9 +706,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     if (tPath) fs.writeFileSync(tPath.replace(/(\.\w+)?$/, m => "-" + seed + (m || ".txt")),
       r.transcript.join("\n"));
   }
-  if (leakTally.size) {
-    console.log("\n── language-leak report (unique lines × occurrences across seeds) ──");
-    for (const [line, n] of [...leakTally].sort((a, b) => b[1] - a[1]))
+  if (defmtTally.size) {
+    console.log("\n── unfilled-template report (unique lines × occurrences across seeds) ──");
+    for (const [line, n] of [...defmtTally].sort((a, b) => b[1] - a[1]))
       console.log(String(n).padStart(4) + "×  " + line);
   }
   if (liveTally.size) {

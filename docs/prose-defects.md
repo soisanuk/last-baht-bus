@@ -176,10 +176,13 @@ Three findings from the first run, none of which any static check could see:
   The harness now uses `stripMarkup`, like any non-decorate consumer.
 
 Worth noting what the transcript ALSO revealed and didn't need fixing here: a
-German-language run shows English seams (the `CALL TAN` hint, MAP, the stat
-line) — the localization gap that `docs/i18n-de-gaps.md` already tracks. New
-prose widens that gap by default, which is the argument for finishing de
-coverage before adding much more.
+German-language run showed English seams (the `CALL TAN` hint, MAP, the stat
+line) — a coverage gap, not a translation bug. That German catalog was retired
+2026-10-07 at ~11% coverage, unreachable by any player (`docs/i18n-seam.md`),
+so the gap itself no longer exists to track. The lesson outlives the catalog:
+new prose widens any translation layer's coverage by default, so a revived one
+needs its own tracker kept current rather than a shortfall discovered in a
+transcript.
 
 ### A door nobody was watching — translation (found 2026-08-07)
 

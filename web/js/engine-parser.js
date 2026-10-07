@@ -12344,10 +12344,12 @@ function _renderResume() {
 }
 
 // ── The German-phrase Easter egg ─────────────────────────────────────────────
-// An English-speaking punter trying out schoolbook German at one of the three
-// German-speaking ladies (Mercedes/Jenny/Chompoo) gets a witty brush-off, IN
-// character, telling him to stick to English. Typed-only flavour; EN players only
-// (a de-player IS German — he just talks to her, no gag). One-off per attempt.
+// A punter trying out schoolbook German at one of the three German-speaking
+// ladies (Mercedes/Jenny/Chompoo) gets a witty brush-off, IN character, telling
+// him to stick to English. Typed-only flavour, one-off per attempt — and the
+// place their three registers are actually demonstrated to a player: Mercedes's
+// hard-won Taitch, Jenny's phrasebook German off Klaus, Chompoo's fluent Berlin
+// German grading your dative case. (Their own nodes carry a line of each.)
 const _GERMAN_TRY = new RegExp("\\b(" + [
   "hallo", "guten\\s+(tag|morgen|abend)", "wie\\s+geht('?s|\\s+es\\s+dir)?",
   "ich\\s+(liebe|mag|heiße|heisse|bin|möchte|moechte|will|komme|spreche)",
@@ -12912,10 +12914,9 @@ function doCommand(input) {
     if (n !== null && !Number.isNaN(n)) { _doSafe(n); _tick(); return; }
   }
 
-  // Easter egg: an English-speaking punter trying German at one of the three
-  // German-speaking ladies gets a witty, in-character "stick to English." A de
-  // player IS German, so it never fires for him. Costs a normal turn.
-  if ((!G.player || G.player.lang !== "de") && _GERMAN_TRY.test(lower)) {
+  // Easter egg: a punter trying German at one of the three German-speaking
+  // ladies gets a witty, in-character "stick to English." Costs a normal turn.
+  if (_GERMAN_TRY.test(lower)) {
     const gl = _germanLadyHere();
     if (gl) { _say(_pickVary(_GERMAN_QUIP[gl], "germanquip_" + gl)(NPCS[gl].name)); _tick(); return; }
   }
@@ -14249,11 +14250,10 @@ function _beachOpening(withTitle) {
 // from the airport (a pendingChoice modal: origin → personality → orientation),
 // then drops you on Soi 6 and the day-two beach opening follows. Picks land in
 // G.player and persist across resets (set once — see _act1Fail / RESTART).
-// The language step is OUT while German is a frozen proof of concept (see
-// docs/i18n-de-gaps.md): offering a choice that delivers 11% coverage is worse
-// than not offering it. The machinery — LANGUAGES, G.player.lang, _L, the
-// catalog — is all still here and untouched; this is one table entry away from
-// coming back the day the translation is real.
+// There is no language step: the German translation was retired in 2026-10 (see
+// docs/i18n-seam.md). The SEAM survives — _L on the output path, _fmt/_num/
+// _plural, G.player.lang — so restoring a language means writing a catalog and
+// adding one entry back to this table, not re-plumbing the engine.
 const _INTRO_STEPS = [
   { field: "origin", table: () => ORIGINS,
     q: "\"So — what's the story back home, sir?\" A glance in the mirror. \"Everybody on this drive is leaving something behind. What's yours?\"" },

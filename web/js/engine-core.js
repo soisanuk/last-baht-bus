@@ -32,13 +32,16 @@ function engineInit(printFn, speakFn, sfxFn) {
 }
 
 // say(text, cls) — cls hints the renderer: "room", "thai", "dim", "alert", "win"
-// Localization: translate an English source string to the player's language, with
-// English fallback for any un-catalogued string. The catalog lives in lang.js
-// (`_CATALOGS`, loaded before the engine); it may be absent (tests/headless), so
-// guard for it. When lang === "en" (the default, ~all players) this is a no-op —
-// zero cost on the hot output path. Only whole FIXED strings match; interpolated
-// composites fall back to English until their pieces are wrapped in _L() (which is
-// why the catalog is keyed by exact English source, mirroring the th/rom pattern).
+// THE LOCALIZATION SEAM, DORMANT (see docs/i18n-seam.md). _L translates an English
+// source string to the player's language with English fallback; it reads a catalog
+// global `_CATALOGS` that NO FILE DEFINES TODAY — the German translation was retired
+// in 2026-10 because a catalog keyed by exact English source has to be re-keyed every
+// time a line of prose moves, and it was. So this is identity for every player, and
+// the `typeof` guard is what makes that safe rather than a crash.
+// It is kept, with its ~80 call sites, because the seam is the cheap part and the
+// marked strings are the expensive part: reviving a language means writing a catalog
+// and restoring one LANGUAGES entry, not re-plumbing the engine. Only whole FIXED
+// strings match — interpolated composites go through _fmt below.
 function _L(s) {
   const lang = G && G.player && G.player.lang;
   if (!lang || lang === "en" || typeof _CATALOGS === "undefined" || !_CATALOGS[lang]) return s;
@@ -46,37 +49,36 @@ function _L(s) {
   return hit != null ? hit : s;
 }
 
-// Localised string interpolation: for a line whose values are spliced in at
-// runtime (money, clock, counts), a flat source-string catalog can't match the
-// composed result. Author it as an English TEMPLATE with {named} placeholders,
-// catalogue that template (the German value can reorder the placeholders for word
-// order), and fill it here. English fallback when the template isn't catalogued.
+// String interpolation: for a line whose values are spliced in at runtime (money,
+// clock, counts), author it as a TEMPLATE with {named} placeholders and fill it
+// here, rather than concatenating. Named slots are why this is worth a helper —
+// they can be reordered by a translation without touching the call site, which is
+// the seam's half of _fmt (docs/i18n-seam.md); the other half is simply that a
+// template reads better than a string built with +. Unfilled slots are a bug the
+// soak catches (its `defmt` warning).
 //   _say(_fmt("day {day} of 7.", { day: G.day }))
 function _fmt(en, params) {
   return _L(en).replace(/\{(\w+)\}/g, (m, k) => (params && params[k] != null) ? params[k] : m);
 }
 
-// Locale-aware thousands formatting for a money/count figure — every call site
-// that priced something used to hardcode .toLocaleString("en-US") (or the bare
-// form, which defaults to the runtime's locale, not the player's), so ฿150,000
-// printed with English comma separators even in German mode, contradicting
-// lang.js's own header claim that German gets ฿100.000-style separators (the
-// Collector — German round, 2026-08-27). de-DE gives the period-thousands,
-// comma-decimal grouping that convention actually promises.
+// Thousands formatting for a money/count figure. Call this rather than
+// .toLocaleString() at the call site: the bare form defaults to the RUNTIME's
+// locale, not the game's, so a machine set to de-DE used to print ฿150.000 in an
+// English game. Pinning the locale here is what keeps every price identical for
+// every player on every machine. Part of the dormant seam (docs/i18n-seam.md):
+// a revived language picks its locale here, in one place.
 function _num(n) {
-  const lang = G && G.player && G.player.lang;
-  return Number(n).toLocaleString(lang === "de" ? "de-DE" : "en-US");
+  return Number(n).toLocaleString("en-US");
 }
 
-// English and German pluralize differently (stem+"s" vs. usually stem+"e"),
-// so a single {s} template placeholder can't carry a suffix that's correct in
-// both languages at once — a call site that computed only the English "s"
-// baked it into the German catalog line too ("3 Kondoms" instead of the
-// correct "3 Kondome"; the German round, 2026-08-27). Call with the German
-// plural suffix for this particular noun (defaults to "e", the common case).
-function _plural(n, deSuffix) {
-  if (n === 1) return "";
-  return (G && G.player && G.player.lang === "de") ? (deSuffix != null ? deSuffix : "e") : "s";
+// Plural suffix for an {s} slot in an _fmt template, so a count and its noun
+// agree without the call site branching. English-only, which is the whole game
+// today. Worth knowing if a language ever comes back (docs/i18n-seam.md): a
+// language that pluralizes differently cannot share one {s} placeholder, and
+// this needs a per-noun suffix argument again — "3 Kondoms" for "3 Kondome" was
+// the bug that proved it.
+function _plural(n) {
+  return n === 1 ? "" : "s";
 }
 
 function _say(text, cls) {
@@ -365,7 +367,7 @@ function newGame() {
     ccibLoudNight: {},   // {kind: day} — one count per kind per night
     kidJobDay: 0,        // the day you paid Nont; his text lands the day after (see _kidTick)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
-    player: { said: {}, lang: "en", origin: null, personality: null, orientation: null, teetotal: false },   // teetotal: I DON'T DRINK, declared once — the house stops pouring (Neville, round 53)// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
+    player: { said: {}, lang: "en", origin: null, personality: null, orientation: null, teetotal: false },   // lang: the dormant localization seam's switch — nothing sets it off "en" today (docs/i18n-seam.md)   // teetotal: I DON'T DRINK, declared once — the house stops pouring (Neville, round 53)// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { plg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),

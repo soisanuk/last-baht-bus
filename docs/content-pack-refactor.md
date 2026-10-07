@@ -90,10 +90,17 @@ functions the engine drives.
    containing prose; they emit a **key + params**, and the pack's `prose` catalog renders it
    (with `_pickVary` variant pools living in the catalog). **This is the pivot where three
    roadmaps converge** — content-pack (prose becomes pack data), **i18n** (the `_L`/`_CATALOGS`
-   seam in `engine-core.js`/`lang.js` is *already the beachhead* — same key-indexed catalog
-   idea), and the **2D event layer** (handlers emit events, prose becomes one renderer). Design
-   the catalog to serve all three; do it file-by-file, `tools/prose-corpus.mjs` tracks
-   coverage, and the transcript invariant proves each move is behaviour-preserving.
+   seam in `engine-core.js` is a working example of the pattern — the German *catalog* that
+   exercised it was retired 2026-10-07 at ~11% coverage, but the seam itself was kept,
+   deliberately dormant; see `docs/i18n-seam.md`), and the **2D event layer** (handlers emit
+   events, prose becomes one renderer). The convergence argument is weaker without a shipping
+   catalog to point at, but it isn't void: prose externalisation would still make a future
+   language cheap, the same way it makes a pack cheap. **Key the catalog by a stable id, never
+   by exact English source string** — that's the one hard-won rule out of the German attempt
+   (every prose edit anywhere orphaned a key two files away) and it is exactly the mistake this
+   stage would repeat if its ids tracked source text instead. Design the catalog to serve all
+   three; do it file-by-file, `tools/prose-corpus.mjs` tracks coverage, and the transcript
+   invariant proves each move is behaviour-preserving.
 
 3. **Systems registry** (extract the domain from `engine-play`/`engine-systems`). Barfine,
    the treadmill, hotels, the phone, quests-as-content, encounters-as-content become registered
@@ -191,5 +198,6 @@ maintainability even if Itaewon never ships.
 | 2026-08-13 | Spec written. Pure refactor, in-place, transcript-invariant as the oracle. Interface designed against Bangkok (hardest case), not Itaewon. |
 | 2026-08-13 | Prose externalisation (Stage 3) is the convergence point of content-pack + i18n + 2D; the existing `_L`/`_CATALOGS` seam is the beachhead. |
 | 2026-08-13 | Keep the single global `G`; isolation stays vm-context-per-session (do not refactor to instances). |
+| 2026-10-07 | The German i18n catalog that made Stage 3's "beachhead" concrete was retired (~11% coverage, unreachable by any player); the `_L`/`_CATALOGS` seam itself stayed, dormant, in `engine-core.js` (`docs/i18n-seam.md`). The convergence argument still holds, just without a shipping example to point at — cite `_L` as the surviving pattern, not a catalog. |
 | open | Whether to start (this is a weeks-long effort); if so, Stages 0–2 are the low-risk beachhead worth doing first. |
 | open | Exact shape of the prose-key scheme (must serve engine render, i18n `_L`, and 2D events at once). |

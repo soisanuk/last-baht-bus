@@ -6992,7 +6992,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "sponsor", text: "\"Klaus. Germany.\" She says the name like an anchor. \"Two year now. He send " +
         "money every month, I keep clean, I stay off the floor, I go with nobody. That is the deal, I keep my " +
         "side.\" A steadiness that is mostly real. \"He come Pattaya twice a year. In between, I count the " +
-        "drinks and I count the days. Good deal. Better than the floor.\"" },
+        "drinks and I count the days. Good deal. Better than the floor.\" She tries it in his " +
+        "language, the way she practises it at him: \"Ich bin vergeben.\" A small proud nod at having got " +
+        "it out whole. \"Spoken-for. Klaus teach me that word first. Before please, before thank you.\"" },
       { topic: "ring", text: "\"Not married. Not yet.\" She turns it. \"Promise ring. He say when he retire he " +
         "take me Germany, we marry proper. I believe him. Mostly.\" The 'mostly' escapes before she can stop " +
         "it, and she files it away, embarrassed. \"He is a good man. Really. Two year, always the money come.\"" },
@@ -7379,8 +7381,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "polished it. Long story, expensive city. Buy me a drink and I might tell you a little of it — auf " +
           "Englisch, don't worry, Schatz.\"",
         short: "\"Yes, ladyboy — saves us the detective work. My English got polished in Berlin. Buy me a drink and I tell you a little — auf Englisch, don't worry.\"" },
-      { topic: "ladyboy", text: "\"In Pattaya it is a category. In Berlin it was just Tuesday.\" She says it " +
-        "without heat, filing her nail. \"Five years in a city that had genuinely seen everything cured me of " +
+      { topic: "ladyboy", text: "\"In Pattaya ist es eine Kategorie. In Berlin war es einfach Dienstag.\" " +
+        "Fully conjugated, unhurried — nothing dropped, nothing assembled. \"In Pattaya it is a category. " +
+        "In Berlin it was just Tuesday.\" She says it without heat, filing her nail. \"Five years in a city that had genuinely seen everything cured me of " +
         "flinching about it. I came back unshockable, Schatz — do you know how restful that is? The men here who " +
         "think they are being daring...\" A small, delighted laugh. \"Süß. I have been to parties that would " +
         "stop their hearts.\"",
@@ -9806,7 +9809,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { text: "\"Welcome to Cherry Pop.\" A small, real smile. \"Loud, pink, entirely a machine — but the drinks are cold and I do not lie to you, which on this soi is a luxury. Sit. I am Mercedes. Yes, like the car. In Linz we had one. I was allowed to wash it.\"",
         short: "\"Mercedes — like the car. In Linz I was allowed to wash it. Sit, tilac.\"" },
       { topic: "german|austria|austrian|linz|europe",
-        text: "\"Austria. Five years, Linz. Not Vienna — Linz. A house with a garden, a car, the insurance, everything the brochure promise.\" She turns a coaster over. \"And every Sunday his mother teach me to make Knödel. Five years of Sunday. She never once ask where I am from. Never once she need to.\"",
+        text: "\"Austria. Five years, Linz. Not Vienna — Linz. A house with a garden, a car, the insurance, everything the brochure promise.\" She turns a coaster over. \"And every Sunday his mother teach me to make Knödel. Five years of Sunday. She never once ask where I am from. Never once she need to.\" Then something shifts and the English goes. \"Fünf Jahr. Warmes Haus —\" she hunts for the word and takes the shortest one there is \"— ich war Möbel.\" The endings are gone and the articles with them: German assembled by Thai hands. \"Warm house. I was furniture. Is better in German, na. Shorter.\"",
         short: "\"Linz: a garden, a car, and five years of Sunday Knödel from a woman who never asked where I was from.\"" },
       { topic: "husband",
         text: "\"My visa was married to him — you understand? Not to me. I leave, I am on a plane in one month. So I stay.\" A shrug with a whole country in it. \"One bank account, both names, and the app on my {{phone}} so I can see every cent and move none of it. In Pattaya I sent my mother half of everything. There, I could send her a photo of the garden. A Thai daughter who cannot take care of her mother has lost everything. The house was warm. I was furniture.\"",
@@ -16624,20 +16627,6 @@ for (const [id, p] of Object.entries(_REGULARS)) NPCS[id] = p;
 // (Phase B) — the one you pick is deactivated (you ARE him). `pick` is the line
 // Tan hears; `tan` is his read on you. Voice: wry US-inflected English, the odd
 // Thai particle, sees every farang clearly by the second traffic light.
-// The narration language — the first thing Tan settles on the ride in. Picked in
-// English (he's the lingua-franca contact); from the pick onward the game renders
-// in the chosen tongue (Thai stays Thai). Endonym labels (English/Deutsch) are not
-// translated; the `tan` reaction for a non-English pick renders in that language
-// (it fires after G.player.lang is set — see _introAnswer / _L). Ships en + de.
-const LANGUAGES = [
-  { id: "en", label: "English",
-    pick: "English is fine.",
-    tan: "\"English — easy, half my job is English.\" He settles back into the drive." },
-  { id: "de", label: "Deutsch",
-    pick: "Deutsch. (German)",
-    tan: "\"Deutsch — gut.\" Something in his patter loosens, like a channel he prefers. \"From here it's your language, my friend. The town stays foreign. That's the fun of it.\"" },
-];
-
 const ORIGINS = [
   { id: "redundancy", label: "Redundancy",
     pick: "A redundancy cheque and a trade nobody's hiring for anymore.",

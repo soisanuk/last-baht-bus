@@ -35,7 +35,7 @@ const SRC = p => readFileSync(fileURLToPath(new URL(p, import.meta.url)), "utf8"
 const ENGINE = ["engine-core.js", "engine-encounters.js", "engine-play.js",
   "engine-systems.js", "engine-parser.js"];
 
-for (const f of ["thai.js", "world.js", "games.js", "lang.js", ...ENGINE])
+for (const f of ["thai.js", "world.js", "games.js", ...ENGINE])
   vm.runInThisContext(SRC("../../web/js/" + f), { filename: f });
 
 let out = [];

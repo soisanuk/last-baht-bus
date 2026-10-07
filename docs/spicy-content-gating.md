@@ -66,14 +66,18 @@ Reuse the patterns already in the engine; do NOT invent a parallel content syste
 
 ## Moddable content packs — the overlay pattern
 
-**Model it on the localization seam (`_L` / `lang.js`), which already solves this exact
-problem: an optional overlay keyed by a stable id, English/tame fallback, zero hard
-dependency.**
+**Model it on the localization seam (`_L` in `engine-core.js`), which demonstrates the
+pattern: an optional overlay accessor with English/tame fallback and zero hard dependency
+when the overlay file is absent.** Key the `_SPICE` overlay by a **stable content id, never
+by exact English source string** — the German catalog that exercised this seam *did* key by
+source text, and that was the defect that got it retired (`docs/i18n-seam.md`): every prose
+edit anywhere in the game orphaned a key two files away. Don't repeat that mistake here.
 
 - An explicit pack is a separate classic script (e.g. `web/js/spice.js`, git-ignorable /
   distributable separately) exposing a data table `_SPICE` keyed by a **stable content id**
-  (dialogue-entry id, pool key, encounter id, photo caption). Load order: after
-  `world.js`/`lang.js`, before the engine parts — same slot `lang.js` occupies.
+  (dialogue-entry id, pool key, encounter id, photo caption). Load order: after `world.js`,
+  before the engine parts — the same slot a revived language catalog would occupy
+  (`docs/i18n-seam.md`); nothing currently loads there.
 - A single accessor `_spice(id, tier)` returns the pack's payload for that id at/below the
   active tier, or **null** → caller renders the tame in-repo content. So:
   - Pack absent entirely → `typeof _SPICE === "undefined"` → every lookup is null →
@@ -99,7 +103,7 @@ dependency.**
 | Photos | `_picFor(id,cap)` (already multi-pool) | add pack stems, tier select, tame fallback |
 | Player state | `G.player` (lang/origin) | `+spice`, `+ageOk`; deserialize merge, no backfill |
 | Verb/UI | three-surfaces rule | `SPICE` verb + a HELP line, gated on `ageOk` |
-| Content overlay | `_L`/`lang.js` seam (the template) | new optional `_SPICE`/`spice.js` + `_spice()` accessor |
+| Content overlay | `_L` seam in `engine-core.js` (the template; `docs/i18n-seam.md`) | new optional `_SPICE`/`spice.js` + `_spice()` accessor |
 
 ## Legal / commercial isolation (why separable matters beyond the AI boundary)
 
@@ -130,5 +134,7 @@ dependency.**
 - **P2** — extend to pools/encounters/photos; document the `_SPICE` schema.
 - **P3** — the `"explicit"` pack itself (author-supplied, out of this repo's authored scope).
 
-Related: the localization seam (`_L`/`lang.js`) is the structural template; the disposable-
-frontend and shared-world rules in `CLAUDE.md` govern determinism/save-compat/render-only.
+Related: the localization seam (`_L` in `engine-core.js`, documented in `docs/i18n-seam.md`)
+is the structural template — the seam survives even though the German catalog that proved it
+out didn't; the disposable-frontend and shared-world rules in `CLAUDE.md` govern
+determinism/save-compat/render-only.
