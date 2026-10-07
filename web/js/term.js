@@ -575,6 +575,26 @@ const _term = (() => {
       b.addEventListener("click", e => { e.stopPropagation(); _runAct(act); });
       _fly.appendChild(b);
     }
+    // THE SECOND PAGE, SAID OUT LOUD (Yusuf, round 68: nothing told a thumb that a long-press holds
+    // more — WAI, the topics, half of what you can do with a woman). When the full menu has more
+    // than this one, the last button opens it; the first time, one line says the hold exists too.
+    if (!full) {
+      let more = 0;
+      try { more = _kwActions(kwEl.dataset.k, kwEl.dataset.v, true).length - acts.length; } catch (e) { more = 0; }
+      if (more > 0) {
+        const b = document.createElement("button");
+        b.className = "fly-more";
+        b.textContent = "more… (" + more + ")";
+        b.addEventListener("click", e => { e.stopPropagation(); _openFly(kwEl, true); });
+        _fly.appendChild(b);
+        try {
+          if (!localStorage.getItem("lbb_more_tip")) {
+            localStorage.setItem("lbb_more_tip", "1");
+            print("(A lit word has more to it than the first menu: tap “more…”, or hold the word, for every option.)", "dim");
+          }
+        } catch (e) { /* no storage: no tip */ }
+      }
+    }
     document.body.appendChild(_fly);
     const r = kwEl.getBoundingClientRect();
     const fw = _fly.offsetWidth, fh = _fly.offsetHeight;

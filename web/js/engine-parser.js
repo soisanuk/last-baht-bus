@@ -11792,9 +11792,11 @@ function _chipSet() {
     add("light on", "🔦 light on — dark ahead");
   add("look");
   if (G.room === "kitten_office" && G.rabbitWay === "operator" && !_flag("rabbitData") && !G.game) add("use laptop", "use the laptop");
-  // not on the chip bar at 18:00, one fat finger from losing a night you have just woken
-  // into (Kurt, round 65) — SLEEP is still a verb any time, it just isn't offered
-  if (G.room === _hotelRoomId() && _flag("act1Done") && G.nightTurn >= 40) add("sleep", "sleep — end the night");
+  // It was off the chip bar before 22:00 — one fat finger from losing a night you had just woken
+  // into (Kurt, round 65). Since 2026-10-07 any SLEEP that ends a night asks once (_endConfirm),
+  // so the fat finger costs a question, not the night, and the chip is offered at any hour (Mario,
+  // 2026-10-08). Your own room only: SLEEP anywhere else is "get there and SLEEP".
+  if (G.room === _hotelRoomId() && _flag("act1Done")) add("sleep", G.nightTurn < 40 ? "sleep — end the night early" : "sleep — end the night");
   // The readout verbs live only in HELP, which is itself untappable — a thumb
   // player could not reach QUESTS/HINT/TIME/WHO/GALLERY at all (thumbs-only
   // playtest 2026-08-22). One chip, fanned out like the ATM.
