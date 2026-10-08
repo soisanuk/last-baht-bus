@@ -133,7 +133,7 @@ function _traceLine(t) {
   if (t.verb === "ask")
     return `· You asked ${target}${extra ? ` about ${extra}` : ""}`.trimEnd();
   if (t.verb === "give")
-    return `· You gave ${target}${extra ? (/^(a|an|the|your|his|her|their)\b/i.test(extra) ? ` ${extra}` : ` the ${extra}`) : ""}`.trimEnd();
+    return `· You gave ${target}${extra ? (/^(a|an|the|your|his|her|their)\b/i.test(extra) || /^\w+'s\b/.test(extra) ? ` ${extra}` : ` the ${extra}`) : ""}`.trimEnd();
   const v = _TRACE_VERBS[t.verb] || t.verb;
   return `· You ${v}${target ? ` ${target}` : ""}`.trimEnd();
 }
@@ -865,32 +865,53 @@ function _pickVary(pool, key) {
 // name turns up on four unrelated bars across town, which is the research's nominee test made into a hidden job.
 const BENJAWAN_BARS = ["the_bucket", "gold_rush", "water_buffalo", "two_stools"];
 const _LICENCE_CO = [["Siam Neon", "Entertainment"], ["Golden Orchid", "Entertainment"], ["Blue Marlin", "Leisure"], ["Eastern Star", "Entertainment"], ["Sunrise Coast", "Leisure"], ["Lotus Night", "Entertainment"], ["Pattaya Dream", "Leisure"], ["Thai Smile", "Entertainment"]];
+// the Thai name on 51.00 of a company: the nominees the lawyers send farang to. Orathai is three of the eight —
+// the research's nominee test (one person, many venues, no apparent means), there to be noticed (Graham, round 74:
+// "a Thai name on 51.00 … that I am never given")
+const _LICENCE_NOMINEE = ["Orathai Wongsuwan", "Supaporn Kaewmanee", "Orathai Wongsuwan", "Wanpen Chaiyasit", "Kanya Boonmee", "Orathai Wongsuwan", "Rattana Saetang", "Siriluk Thongdee"];
+const _PLG_ROOMS = ["pink_lotus", "kitten_corner", "golden_dragon", "orchid_room"];   // the group's own rooms by the game's own prose: Kesinee "runs one of their bars", the Dragon's "new owners", the flagship, the back room
+function _licenceNominee(room) { return _LICENCE_NOMINEE[_hh("nom:" + room, 29) % _LICENCE_NOMINEE.length]; }
+// THE OWNER, NOT THE ROTA (Graham, round 74: the Hive's frame changed its name between Wednesday and Sunday): the woman
+// whose name is on a registration is the mamasan whose bar it is — her `room` or one of her `bars` — wherever she is tonight
+function _licenceOwner(room) {
+  const mama = Object.keys(NPCS).find(i => NPC_ROLES[i] === "mamasan" && (NPCS[i].room === room || (NPCS[i].bars || []).includes(room)));
+  if (mama) return mama;
+  const staff = Object.keys(NPCS).filter(i => NPC_ROLES[i] && (NPCS[i].room === room || (NPCS[i].bars || []).includes(room)));
+  return staff.length === 1 ? staff[0] : null;
+}
 function _licenceOf(room) {
   const r = ROOMS[room]; if (!r || !r.bar) return null;
   const fmt = n => "\u0e3f" + _num(n);
   const samson = [...(NPCS.bill && NPCS.bill.bars || []), ...(NPCS.wimon && NPCS.wimon.bars || []), "hyper"];
-  if (typeof _barOwned === "function" && _barOwned() && G.bar && room === G.bar.room) {
-    const tan = _flag("partnerTan");
-    return { kind: "company", name: "Stinky Pinky Beach Bar Co., Ltd.", capital: 2000000,
-      line: `A company, capital ${fmt(2000000)} — one work permit's worth, which is one more than you hold. Shareholders, to the share: ${tan ? "Thanakorn Srisawat" : "Kanokwan Pholsiri"} — ${tan ? "Tan" : "Candy"}, by a name you have never once heard anyone use — 51.00, and a farang name that is yours, 49.00. The building is on none of it.` };
+  const nom = _licenceNominee(room);
+  if (room === "stinky_bar") {
+    if (typeof _barOwned === "function" && _barOwned() && G.bar && room === G.bar.room) {
+      const tan = _flag("partnerTan");
+      return { kind: "company", name: "Stinky Pinky Beach Bar Co., Ltd.", capital: 2000000, nominee: tan ? "Thanakorn Srisawat" : "Kanokwan Pholsiri",
+        line: `A company, capital ${fmt(2000000)} — one work permit's worth, which is one more than you hold. Shareholders, to the share: ${tan ? "Thanakorn Srisawat" : "Kanokwan Pholsiri"} — ${tan ? "Tan" : "Candy"}, by a name you have never once heard anyone use — 51.00, and a farang name that is yours, 49.00. The building is on none of it.` };
+    }
+    return { kind: "company", name: "Stinky Pinky Co., Ltd.", capital: 2000000, nominee: nom,
+      line: `Stinky Pinky Co., Ltd., capital ${fmt(2000000)} — one work permit's worth, an American's, issued years ago to the owner Bert talks about and has not seen behind this rail since his heart started arguing with him. On 51.00 of it, in smaller type, ${nom.toUpperCase()}.` };
   }
-  if (r.plg || r.group === "plg" || r.owner === "plg" || r.faction === "plg") return { kind: "company", name: "Pattaya Leisure (Holdings) Co., Ltd.", capital: 4000000, line: `Pattaya Leisure (Holdings) Co., Ltd., capital ${fmt(4000000)} — two permits' worth. It is the same paper, the same name and the same number in every room the group runs, which makes them the only bars on the soi where the sign and the registration agree.` };
-  if (samson.includes(room)) return { kind: "company", name: "Samson Brothers Hospitality Co., Ltd.", capital: 4000000, line: `Samson Brothers Hospitality Co., Ltd., capital ${fmt(4000000)}: two work permits, one of them Bill's. Three beer bars, three clubs and a go-go on one company — the brothers bought the paperwork once and have been adding rooms to it since.` };
-  if (room === "queen_vic") return { kind: "company", name: "Mind The Step Co., Ltd.", capital: 2000000, line: `Mind The Step Co., Ltd., capital ${fmt(2000000)}, one permit — the pub's, since a farang pulls the pints. Somebody on this rail named the company, and the same somebody signs a column the same way.` };
-  if (room === "cloze") return { kind: "company", name: "Soi Sanuk Language Co., Ltd.", capital: 1000000, line: `Soi Sanuk Language Co., Ltd., capital ${fmt(1000000)} — a school's paper, not a bar's, because the bar is the classroom. The licence to sell beer hangs beside it, in Kruu Waen's own name.` };
-  if (room === "succubus") return { kind: "company", name: "Kinnaree Hospitality Ltd., Part.", capital: 1000000, line: `Kinnaree Hospitality Ltd., Part., capital ${fmt(1000000)} — the married man's permit, half price, and her name first because it has to be. Thirty years on the hill on exactly that paper.` };
-  if (room === "sandy_toes") return { kind: "registration", name: "Last Baht Beach Bar", line: "A commercial registration — no capital, no accounts — in the name LAST BAHT BEACH BAR, which is not what the sign says and never was. Whoever registered it had a sense of humour about the hour, or about the money." };
-  if (BENJAWAN_BARS.includes(room)) return { kind: "registration", name: "Benjawan Srisuk", line: "A commercial registration — no capital, no accounts, no permit — in the name of one BENJAWAN SRISUK, dated 2019. Nobody on the floor is called Benjawan." };
-  const gogo = r.barType === "gogo" || r.barType === "gents";
-  if (gogo) {
+  if (_PLG_ROOMS.includes(room) || r.owner === "plg" || r.plg) return { kind: "company", name: "Pattaya Leisure (Holdings) Co., Ltd.", capital: 4000000, nominee: null, line: `Pattaya Leisure (Holdings) Co., Ltd., capital ${fmt(4000000)} — two permits' worth. The group's own name, which is not on the sign either, and the same paper in every room the group runs: one company, so that the whole of it opens or shuts at once.` };
+  if (samson.includes(room)) return { kind: "company", name: "Samson Brothers Hospitality Co., Ltd.", capital: 4000000, nominee: null, line: `Samson Brothers Hospitality Co., Ltd., capital ${fmt(4000000)}: two work permits, one of them Bill's. Three beer bars, three clubs and a go-go on one company — the brothers bought the paperwork once and have been adding rooms to it since.` };
+  if (room === "white_rabbit") return { kind: "company", name: "White Rabbit Naklua Co., Ltd.", capital: 2000000, nominee: NPCS.nuan ? NPCS.nuan.name : nom, line: `White Rabbit Naklua Co., Ltd., capital ${fmt(2000000)} — one permit, the manager's, so Eddy is on the paper as the one farang this room is allowed. On 51.00 of it: ${NPCS.nuan ? NPCS.nuan.name.toUpperCase() : nom.toUpperCase()}, which is what "he signs the papers" meant, word for word.` };
+  if (room === "queen_vic") return { kind: "company", name: "Mind The Step Co., Ltd.", capital: 2000000, nominee: nom, line: `Mind The Step Co., Ltd., capital ${fmt(2000000)}, one permit — the pub's, since a farang pulls the pints. Somebody on this rail named the company, and the same somebody signs a column the same way.` };
+  if (room === "cloze") return { kind: "company", name: "Soi Sanuk Language Co., Ltd.", capital: 1000000, nominee: null, line: `Soi Sanuk Language Co., Ltd., capital ${fmt(1000000)} — a school's paper, not a bar's, because the bar is the classroom. The licence to sell beer hangs beside it, in Kruu Waen's own name.` };
+  if (room === "succubus") return { kind: "company", name: "Kinnaree Hospitality Ltd., Part.", capital: 1000000, nominee: null, line: `Kinnaree Hospitality Ltd., Part., capital ${fmt(1000000)} — the married man's permit, half price, and her name first because it has to be. Thirty years on the hill on exactly that paper.` };
+  if (room === "sandy_toes") return { kind: "registration", name: "Last Baht Beach Bar", owner: null, line: "A commercial registration — no capital, no accounts — in the name LAST BAHT BEACH BAR, which is not what the sign says and never was. Whoever registered it had a sense of humour about the hour, or about the money." };
+  if (BENJAWAN_BARS.includes(room)) return { kind: "registration", name: "Benjawan Srisuk", owner: null, line: "A commercial registration — no capital, no accounts, no permit — in the name of one BENJAWAN SRISUK, dated 2019. Nobody on the floor is called Benjawan." };
+  if (r.barType === "gogo" || r.barType === "gents" || r.barType === "club") {
     const [a, b] = _LICENCE_CO[_hh("lic:" + room, 23) % _LICENCE_CO.length];
-    return { kind: "company", name: `${a} ${b} Co., Ltd.`, capital: 2000000, line: `${a} ${b} Co., Ltd., capital ${fmt(2000000)} — exactly one work permit's worth, for a farang who is not on the floor tonight and whose name is not on the sign either. Below it, smaller, a Thai name on 51.00 of it that nobody in the room would recognise.` };
+    return { kind: "company", name: `${a} ${b} Co., Ltd.`, capital: 2000000, nominee: nom, line: `${a} ${b} Co., Ltd., capital ${fmt(2000000)} — exactly one work permit's worth, for a farang who is not on the floor tonight and whose name is not on the sign either. On 51.00 of it, in smaller type: ${nom.toUpperCase()}.` };
   }
-  const mama = Object.keys(NPCS).find(i => NPC_ROLES[i] === "mamasan" && _npcRoom(i) === room);
-  const solo = !mama && Object.keys(NPCS).filter(i => NPC_ROLES[i] && (NPCS[i].room === room || (NPCS[i].bars || []).includes(room)));
-  const who = mama ? NPCS[mama].name : (solo && solo.length === 1 ? NPCS[solo[0]].name : null);
-  if (who) return { kind: "registration", name: who, line: `A commercial registration — no capital, no accounts, no permit, the cheapest kind of bar there is to lose — in the name of ${who}, which is how you learn, in a frame by the till, who actually owns this place.` };
-  return { kind: "registration", name: "a name that is not the sign's", line: "A commercial registration — no capital, no accounts — in a Thai name that is not the sign's and not anybody's you have met. On this soi that is the usual arrangement, not the unusual one." };
+  const own = _licenceOwner(room);
+  if (own) {
+    const n = NPCS[own].name, title = /^mama\b/i.test(n);
+    const shown = title ? "her own name, which is not the one the soi calls her — the registrar does not take 'Mama' as a first name" : `the name of ${n}`;
+    return { kind: "registration", name: title ? "Khun " + n.replace(/^mama\s+/i, "") : n, owner: own, line: `A commercial registration — no capital, no accounts, no permit, the cheapest kind of bar there is to lose — in ${shown}${(NPCS[own].bars || []).length > 1 ? `, who owns ${["", "one", "two", "three", "four", "five", "six"][NPCS[own].bars.length] || NPCS[own].bars.length} of these and works them in turn` : ""}.` };
+  }
+  return { kind: "registration", name: "a name that is not the sign's", owner: null, line: "A commercial registration — no capital, no accounts — in a Thai name that is not the sign's and belongs to nobody working this floor: an owner who does not come in." };
 }
 function _inv() {
   return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === "inventory");

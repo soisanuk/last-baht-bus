@@ -2552,56 +2552,64 @@ const _SCENERY = [
   // THE PAPER BY THE TILL (the laundering material, 2026-10-08): every bar hangs a licence and a commercial
   // registration nobody reads — the sign is never the operator. _licenceOf derives it from the data; reading
   // it is logged, and the one name that is on four unrelated bars across town is a hidden job once seen twice.
-  { key: "licence", m: /\b(licen[cs]e|registration|permit|certificate|the paper on the wall|the paper by the till|the frame by the till|paperwork on the wall|the paperwork)\b/, fn: (ctx) => {
+  { key: "licence", m: /\b(licen[cs]e|registration|permit|certificate|frame|the frame|the paper on the wall|the paper by the till|the frame by the till|paperwork on the wall|the paperwork)\b/, fn: (ctx) => {
     if (ctx === "parlour") { const sw = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[G.room]; return `A massage-establishment licence in a cheap frame, the photograph of the licensee curling at one corner: ${sw ? sw.name + "'s" : "a woman's"} name, the shop's address, a stamp. The honest shops hang theirs where you can read them; that is most of what honest means on this street.`; }
     const lic = typeof _licenceOf === "function" ? _licenceOf(G.room) : null;
     if (!lic) return null;
     const book = (G.licencesRead = G.licencesRead || {}); book[G.room] = lic.name;
+    const noms = (G.licNominees = G.licNominees || {}); if (lic.nominee) noms[G.room] = lic.nominee;
     let tail = "";
     if (BENJAWAN_BARS.includes(G.room)) {
       const others = Object.keys(book).filter(r => r !== G.room && book[r] === lic.name);
       if (others.length && !_flag("benjawanSeen")) { _setFlag("benjawanSeen"); tail = ` (The same name as on the wall at ${_barName(others[0])}${others.length > 1 ? " and " + _barName(others[1]) : ""} — a different soi, a different sign, a different woman on the floor, and one Benjawan on the paper. ${_met("orathai") ? "The woman who signs at the Old Market would know who she is. (ASK ORATHAI ABOUT BENJAWAN)" : "Somebody who signs these for a living would know who she is."})`; }
       else if (others.length) tail = ` (The same Benjawan as at ${_barName(others[0])}.)`;
     }
-    // THE DETECTIVE'S EYE (Mario, 2026-10-08): the retired detective reads a frame the way he read a desk for
-    // thirty years — the stamp, the date, the number, and what each connects to
+    // the nominee seen on more than one company: the research's test — one person, several venues, no apparent means
+    if (lic.nominee) {
+      const also = Object.keys(noms).filter(r => r !== G.room && noms[r] === lic.nominee);
+      if (also.length) tail += ` (${lic.nominee} again — the same 51.00 as at ${_barName(also[0])}${also.length > 1 ? ` and ${also.length - 1} more` : ""}.${/Orathai/.test(lic.nominee) && _met("orathai") ? " The woman with the folder at the Old Market, who signs for a thousand baht." : ""})`;
+    }
+    // THE DETECTIVE'S EYE (Mario, 2026-10-08): the stamp, the date, the number, and what each connects to
     let eye = "";
     if (typeof _isOrigin === "function" && _isOrigin("pi")) {
       const r = _room(), others = Object.keys(book).filter(x => x !== G.room && book[x] === lic.name);
-      if (BENJAWAN_BARS.includes(G.room)) eye = others.length >= 2 ? "Four frames would make it a case; three makes it a pattern. One name, one stamp — a lawyer's, Second Road — one year, 2019, and not one of them re-filed since. Somebody stopped signing in 2019 and nobody with a key to the register noticed, because nobody was paid to."
+      const stampSeen = Object.keys(book).some(x => BENJAWAN_BARS.includes(x)) || Object.keys(noms).some(x => x !== G.room);
+      const stamp = stampSeen ? "the same Second Road lawyer's stamp you have seen on other walls" : "a lawyer's stamp, Second Road, that you file without meaning to";
+      if (BENJAWAN_BARS.includes(G.room)) eye = others.length >= 2 ? "Four frames would make it a case; three makes it a pattern. One name, one stamp — the Second Road lawyer's — one year, 2019, and not one of them re-filed since. Somebody stopped signing in 2019 and nobody with a key to the register noticed, because nobody was paid to."
         : others.length ? `The stamp in the corner is the same Second Road lawyer's as at ${_barName(others[0])}, and the date is the same year. Two frames is a coincidence, which is the word you used for thirty years right up until the third.`
         : "The stamp in the corner is a lawyer's, Second Road; the date is 2019. You file both without meaning to, the way you filed everything for thirty years, and you will know the stamp again when you see it.";
-      else if (lic.kind === "company" && (r.plg || r.owner === "plg")) eye = "One company, every room, the same number: a structure a man builds when he intends to be TOLERATED rather than to last — because one audit, one unpaid envelope, and the same paper shuts every door at once. You have seen that shape before, on better letterhead.";
-      else if (lic.kind === "company" && /Samson/.test(lic.name)) eye = "Seven rooms on one company and two permits' worth of capital: two farang on paper, and five rooms run by people on none at all. Bill is one of the two. You would have wanted to know who the other was, once, and you would have found out by lunch.";
-      else if (lic.kind === "company" && /Stinky/.test(lic.name)) eye = `Your partner's full name, which nobody on this soi has ever used in your hearing, and a land-office stamp dated the week you shook hands — ${_flag("partnerTan") ? "the cousin's, you would bet, if you still bet" : "a Bangkok firm's, on a Friday, which is when things get signed"}. The thing a detective notices about his own paper is that it reads exactly like everybody else's.`;
-      else if (lic.kind === "company" && /Mind The Step/.test(lic.name)) eye = "The company is named for a column's signoff, which means the man who signs the column also signed the company, which means the horn-rimmed man at the end of the bar with the notebook is on the register as a director of the pub he drinks in. You would have enjoyed interviewing him.";
-      else if (lic.kind === "company" && /Kinnaree/.test(lic.name)) eye = "Her name first, one million, the married man's permit: the only structure on this hill the law would let a farang keep, built by the one farang who bothered to read the law. You note, professionally, that the registered partner runs the floor and the licensed one runs the coffee machine.";
-      else if (lic.kind === "company") eye = "Two million, to the baht: the permit's number, not the business's. Somewhere there is one farang on a work permit for this room whose name is not on the sign, and a Thai name on fifty-one of it that you could put a face to inside ten minutes with a registry login you no longer have. You read the Thai name twice anyway. Habit.";
-      else eye = `No capital, no accounts, no permit, a woman's name: the cheapest paper in the trade and the most honest, because there is nothing on it to lie about. ${lic.name && lic.name !== "a name that is not the sign's" ? "The name on it is the name running the floor tonight, which is rarer than it sounds." : "The name on it is not anybody in the room, which in your experience means either a relative or a lawyer, and a lawyer costs more."}`;
+      else if (/Pattaya Leisure/.test(lic.name)) eye = "One company, every room, the same number: a structure a man builds when he intends to be TOLERATED rather than to last — because one audit, one unpaid envelope, and the same paper shuts every door at once. You have seen that shape before, on better letterhead.";
+      else if (/Samson/.test(lic.name)) eye = "Seven rooms on one company and two permits' worth of capital: two farang on paper, and five rooms run by people on none at all. Bill is one of the two. You would have wanted to know who the other was, once, and you would have found out by lunch.";
+      else if (/Stinky Pinky Beach Bar/.test(lic.name)) eye = `Your partner's full name, which nobody on this soi has ever used in your hearing, and a land-office stamp dated the week you shook hands — ${_flag("partnerTan") ? "the cousin's, you would bet, if you still bet" : "a Bangkok firm's, on a Friday, which is when things get signed"}. The thing a detective notices about his own paper is that it reads exactly like everybody else's.`;
+      else if (/White Rabbit/.test(lic.name)) eye = "One permit, the manager's; her name on the fifty-one; and the manager is the one who told you the place is his. Both of them were telling the truth, which in your experience is the rarest arrangement on any wall.";
+      else if (/Mind The Step/.test(lic.name)) eye = "The company is named for a column's signoff, which means the man who signs the column also signed the company, which means the horn-rimmed man with the notebook is on the register as a director of the pub he drinks in. You would have enjoyed interviewing him. (ASK MORT ABOUT THE COMPANY)";
+      else if (/Kinnaree/.test(lic.name)) eye = "Her name first, one million, the married man's permit: the only structure on this hill the law would let a farang keep, built by the one farang who bothered to read the law.";
+      else if (/Soi Sanuk/.test(lic.name)) eye = "One million and a school's objects clause: a teacher's permit, not a barman's — the beer licence in her own name beside it so that nobody can say the classroom is a bar. It is the most carefully drawn paper you have read in this town, and it belongs to a woman who corrects your vowels.";
+      else if (/Last Baht/.test(lic.name)) eye = "Registered under a name that is a joke about the hour or the money, by somebody who expected nobody to read it. Somebody did. You make a note of the date the way you used to make a note of a man who was too pleased with himself.";
+      else if (lic.kind === "company") eye = `Two million, to the baht: the permit's number, not the business's. ${stamp}, and a nominee on 51.00 — ${lic.nominee} — whose face you could put to the name inside ten minutes with a registry login you no longer have.`;
+      else if (lic.owner) eye = `The name on it is the woman who owns it, and on a small bar here the owner, the mamasan and the cashier are one woman — the usual arrangement, not the rare one. ${(NPCS[lic.owner].bars || []).length > 1 ? `She owns ${["", "one", "two", "three", "four", "five", "six"][NPCS[lic.owner].bars.length] || NPCS[lic.owner].bars.length} of these; you would find her name on every one of their walls, whichever of them she is standing in tonight.` : "No company, nothing to audit, nothing on it to lie about."}`;
+      else eye = "A name that belongs to nobody working this floor: an owner who does not come in. In your experience that is either a relative or a lawyer, and a lawyer costs more.";
       eye = "\n\n" + eye;
     }
-    // THE HOUSE NOTICES (Mario, 2026-10-08): a man reading the frame by the till is a thing the woman who keeps the
-    // till sees, and what she says depends on what she thinks of him — once a bar a night
+    // THE HOUSE NOTICES (Mario, 2026-10-08): whoever keeps the paper sees a man reading it, and answers by what she thinks of him — once a bar a night
     let seen = "";
     const keeper = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
-    const owner = Object.keys(NPCS).find(i => NPCS[i].owner && _npcRoom(i) === G.room);
-    const named = lic.kind === "registration" ? Object.keys(NPCS).find(i => NPC_ROLES[i] && NPCS[i].name === lic.name && _npcsHere().includes(i)) : null;   // the woman whose name is on the paper notices first
-    const who = [named, owner, keeper].find(i => i && _npcsHere().includes(i));
+    const ownerHere = lic.owner && _npcsHere().includes(lic.owner) ? lic.owner : null;
+    const who = [ownerHere, keeper].find(i => i && _npcsHere().includes(i));
     if (who) {
       const key = (G.soc.licLook = G.soc.licLook || {});
       if (!key[G.room]) {
         key[G.room] = who;
         const n = NPCS[who].name, reg = typeof _hoursRegister === "function" ? _hoursRegister(who) : "house", tier = typeof _knownTier === "function" ? _knownTier(who) : 0;
         const own = typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid");
-        const mine = lic.kind === "registration" && lic.name === n;
         let line;
         if (typeof _maiDee === "function" && _maiDee(who)) line = `${n} watches you read it and says nothing at all, which is her whole policy where you are concerned.`;
-        else if (own) line = NPCS[who].manager ? `"Reading your own paper, boss?" ${n} doesn't look up. "Tan's name's on it. Yours isn't. Don't lose sleep — nobody who matters reads it, and the ones who do already know."` : `"Boss read the paper!" ${n} is delighted. "Nobody read it. Not even the police. Only you." She means it as a compliment, mostly.`;
-        else if (_room().plg || _room().owner === "plg") line = reg === "floor" ? `${n} sees you reading it and her smile goes professional. "Company paper, tilac. Same in every bar. You want drink, or you want read?"` : `${n} sees you at the frame and does not move, which in this room is a kind of moving. "The group's paper. Reading it is the group's business, and the group is not here. A drink?"`;
-        else if (mine) line = tier >= 2 ? `"That is my name." ${n} says it the way you say a house is yours. "Twelve years. The sign was somebody's joke; the paper is mine. You are the first customer who has read it, and you did not need to — you already knew."` : `"My name." ${n} has come over without your noticing. "Mine, the bar. The sign is for the farang. The paper is for me." A look that is not quite a question. "You want to buy? Everybody want to buy. Nobody want to pay."`;
-        else if (tier >= 2) line = reg === "floor" ? `"You read that?" ${n} laughs. "Mama's name. Mama own. Everybody know, nobody read — only you." She pats your arm. "Regular know too much, na."` : `${n} glances at the frame and back at you with something like respect. "Most men read the price list. You read the owner. A regular's privilege — ask me what you want to know; it's cheaper than the registry."`;
-        else if (tier >= 1) line = reg === "floor" ? `${n} notices, and does not mind. "The paper? Is mama's name. Everybody know. You can ask her — she like to say it."` : `"Looking at the paper?" ${n} says it without weight. "Everybody's name is on something in this town. That one's ours. Drink while you read."`;
-        else line = reg === "floor" ? `${n} sees you reading the frame and the smile tightens half a size. "You police? Spy?" A laugh that is not entirely a laugh. "Only joking. Buy drink, forget paper."` : `${n} watches you read the frame the way a cashier watches a man count her float. "It's a registration. Everyone has one." A pause exactly long enough. "Were you looking for somebody in particular?"`;
+        else if (own) line = NPCS[who].manager ? `"Reading your own paper, boss?" ${n} doesn't look up. "Your partner's name's on it. Yours is the small one. Don't lose sleep — nobody who matters reads it, and the ones who do already know."` : `"Boss read the paper!" ${n} is delighted. "Nobody read it. Not even the police. Only you." She means it as a compliment, mostly.`;
+        else if (/Pattaya Leisure/.test(lic.name)) line = _pickVary(reg === "floor" ? [`${n} sees you reading it and her smile goes professional. "Company paper, tilac. Same in every bar. You want drink, or you want read?"`, `"The group." ${n} says it the way you say the weather in another country. "Their paper, their bar. I only work here." She does not look at the frame.`] : [`${n} sees you at the frame and does not move, which in this room is a kind of moving. "The group's paper. Reading it is the group's business, and the group is not here. A drink?"`, `"Pattaya Leisure." ${n} nods at the frame as if introducing it. "It is the same in every room. If you have a question, the office is not here and it is never open." A pause. "A drink, though, I can do."`], "licplg" + reg);
+        else if (who === ownerHere) line = _pickVary(tier >= 2 ? [`"That is my name." ${n} says it the way you say a house is yours. "The sign was somebody's joke; the paper is mine. You are the first customer who has read it, and you did not need to — you already knew."`, `${n} comes over and reads it with you, as if checking it is still true. "Mine. Twelve year in that frame. You are a regular — you can read it. Strangers, I watch."`, `"Still my name," ${n} says, pleased, as if it might have changed while you were away. "Every year I pay the fee and every year it stay."`] : [`"My name." ${n} has come over without your noticing. "Mine, the bar. The sign is for the farang. The paper is for me." A look that is not quite a question. "You want to buy? Everybody want to buy. Nobody want to pay."`, `${n} taps the glass of the frame with one nail. "Me. Every bar on this soi is somebody's mother. This one is mine." She does not explain which she means.`, `"Is mine." ${n} says it flatly, then smiles to take the edge off. "Not the company, not the farang, not the boyfriend. Mine. Why you read?"`, `${n} watches you finish reading. "Yes, that one is me. Twenty year to get my name in a frame." She goes back to the till. "Drink, now."`], "licowner" + tier);
+        else if (tier >= 2) line = reg === "floor" ? `"You read that?" ${n} laughs. "Boss's name. Everybody know, nobody read — only you." She pats your arm. "Regular know too much, na."` : `${n} glances at the frame and back at you with something like respect. "Most men read the price list. You read the owner. A regular's privilege — ask me what you want to know; it's cheaper than the registry."`;
+        else if (tier >= 1) line = reg === "floor" ? `${n} notices, and does not mind. "The paper? Is the boss's name. Everybody know. You can ask."` : `"Looking at the paper?" ${n} says it without weight. "Everybody's name is on something in this town. Drink while you read."`;
+        else line = _pickVary(reg === "floor" ? [`${n} sees you reading the frame and the smile tightens half a size. "You police? Spy?" A laugh that is not entirely a laugh. "Only joking. Buy drink, forget paper."`, `"Hey — that one is not menu." ${n} taps the bar in front of you. "Menu is here. Paper is for the police."`, `${n} watches you read it and decides to find it funny. "You want to buy the bar? Everybody want to buy. Sit, first, buy drink."`] : [`${n} watches you read the frame the way a cashier watches a man count her float. "It's a registration. Everyone has one." A pause exactly long enough. "Were you looking for somebody in particular?"`, `"The paper's in order," ${n} says, before you have asked anything. "It always is. It's the people who come in asking about it who usually aren't."`, `${n} lets you finish. "Most men read the price list." She slides one across. "That one's for customers."`], "licstranger" + reg);
         seen = "\n\n" + line;
       }
     }
@@ -6324,6 +6332,23 @@ function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
   if (/\bmy bar\b/.test(t) && typeof _barOwned === "function" && _barOwned() && G.bar && G.bar.room) t = t.replace(/\bmy bar\b/g, String(_barName(G.bar.room) || "").toLowerCase());   // "my bar" answered about HER bar (László, round 73)
+  // THE PAPER, ASKED (Graham, round 74: "licence / registration / company / owner is a miss for everyone whose name is
+  // on the paper" — Candy said "Mine, the bar" at the frame and "you ask the wrong woman" to the word). The staff of
+  // this room answer from the same _licenceOf the frame prints; an authored node on the word still wins upstream.
+  if (/\b(licen[cs]e|registration|registered|the paper|paperwork|company|who owns|owner|owns (this|the) (bar|place)|the frame|fifty-one|51)\b/.test(t) &&
+      typeof _licenceOf === "function" && typeof _inBar === "function" && _inBar() && (NPC_ROLES[npc] || NPCS[npc].manager) &&
+      (NPCS[npc].room === G.room || (NPCS[npc].bars || []).includes(G.room)) && !(typeof _atOwnBar === "function" && _atOwnBar())) {
+    const lic = _licenceOf(G.room), n = NPCS[npc].name, floor = _hoursRegister(npc) === "floor";
+    if (lic) {
+      let line;
+      if (lic.owner === npc) line = _pickVary([`"Mine." ${n} says it without looking at the frame. "My name on the paper${(NPCS[npc].bars || []).length > 1 ? `, and on the other ${NPCS[npc].bars.length - 1} too` : ""}. No company, no farang, no partner. Cheaper, and nobody can take it from me except the landlord."`, `"Is me." ${n} taps the counter. "Registration, my name, every year the fee. The sign is for the customers. The paper is for me."`], "licaskowner");
+      else if (lic.owner) line = floor ? `"The paper? Is ${NPCS[lic.owner].name}'s name. She own. Everybody know — nobody read."` : `"${NPCS[lic.owner].name} owns it — her name's on the registration by the till. No company. On a bar this size there never is."`;
+      else if (/Pattaya Leisure/.test(lic.name)) line = floor ? `"Company paper. The group." ${n} shrugs. "I work for the group. I never meet the group."` : `"Pattaya Leisure (Holdings)." ${n} says the whole name, carefully. "Same paper in every room they run. Questions go to the office, and the office is not here."`;
+      else if (lic.kind === "company") line = floor ? `"Company paper." ${n} shrugs. "Farang boss on the permit, Thai lady on fifty-one. I never meet her. Nobody meet her."` : `"A company — two million, one farang's permit, and ${lic.nominee || "a Thai name"} on the fifty-one." ${n} says it the way she would read a menu. "I've never met her. I don't know anybody who has."`;
+      else line = floor ? `"Paper? Some name, not ours. The owner never come in."` : `"A registration in a name that isn't anybody here. The owner doesn't come in; the money goes to her on the first."`;
+      _say(line); return true;
+    }
+  }
   // THE CHORUS (Henrik, round 69): the women at one bar share these pools, and a man who asks
   // every woman the same question heard one sentence from three mouths. A line is HERS for the
   // night once she has said it; another speaker here is dealt a different one while one remains.
@@ -7361,6 +7386,7 @@ function _doGive(itemWord, npcWord) {
   _trace("give", NPCS[npc].name, ITEMS[id].name); // breadcrumb
   // THE LAUNDERING QUESTS (2026-10-08): the share papers to the woman who signs; the listing is a question, not a hand-over
   if (id === "share_papers" && npc === "orathai") return _giveShares();
+  if (id === "share_papers" && npc === "reginald" && _flag("fiftyoneSigned")) { doCommand("ask reginald about the papers"); return; }   // signed, the folder goes home (Vince, round 74)
   if (id === "share_papers") { _say(`${NPCS[npc].name} looks at the folder and does not touch it. "Khun Orathai, at the market. Not me."`); return; }
   if (id === "bar_listing" && npc === "nigel") { doCommand("ask nigel about the listing"); return; }
   if (id === "bar_listing") { _say(`${NPCS[npc].name} glances at the sheet. "Show it to a till, or to the man who wants a bar. I am neither." (ASK <WHO> ABOUT THE LISTING)`); return; }
@@ -12903,6 +12929,9 @@ function doCommand(input) {
   _waitRefused = false; _moveRefused = false;
   // "last night" is the natural two-word form of the ledger verb (Stuart, round 47)
   if (/^\s*last night\b/i.test(raw)) raw = "ledger";
+  // YES at "SLEEP again if you mean it" is meaning it — "that moment has passed" for the one word a man types at a question (Graham, round 74)
+  if (G.endWarn && G.endWarn.day === G.day && G.turns - G.endWarn.turn <= 1 && /^(y|yes|yeah|yep|ok|okay|sure|do it|confirm|i mean it)[.!]*$/i.test(raw.trim()))
+    raw = { sleep: "sleep", sunrise: "watch sunrise" }[G.endWarn.kind] || raw;
   // THAI AT A PROMPT (Pieter, round 73: Cream's GO ignored ไป, the GIFT ignored สามร้อย, the police ignored ไม่).
   // The gates below read the English they were written for, and the script translation used to run only after
   // all of them. While a gate owns the input, a line of pure Thai script that the command table reads is answered
@@ -13465,6 +13494,18 @@ function doCommand(input) {
       /^(see ?ya|see you( later| around| tomorrow| soon)?|cya|catch (you|ya) later|gotta go|got to go|i'?m off|night night)[.!]*$/.test(lower)) {
     doCommand("bye"); return;
   }
+  // COUNT THE STOOLS (Vince, round 74: "count stools" was a parse failure on the one job that is counting). Counting
+  // is sitting — the job's tally is _questTick's; this says what the room holds right now, and where the count stands.
+  if (/^count( the)? (stools|men|customers|heads|people|the room|room|punters|the bar)$/.test(lower) || (lower === "count" && !(typeof _convoActive === "function" && _convoActive()))) {
+    if (!_inBar()) { _say("Nothing here worth counting except the bikes, and they don't stay still."); return; }
+    const men = 2 + _regularsHere().length + (G.nightTurn >= 40 ? 2 : 0) + (_hh("count:" + G.room + ":" + G.day, 5) % 3);
+    let line = `You count without moving your head, the way you were never taught: ${men} men on the stools, ${_npcsHere().filter(i => NPC_ROLES[i] === "hostess").length} women working them.`;
+    if (G.quests.covers === "active" && G.room === "jasmine_garden") {
+      const nights = Object.keys(G.coversNights || {}).length, here = (G.soc.barTurns || {}).jasmine_garden || 0;
+      line += _flag("coversCounted") ? " You have your three nights already. (ASK HONG ABOUT THE COUNT)" : ` The count that matters takes the evening, not a glance: two hours on this stool tonight (${Math.min(120, here * 6)} minutes of them so far), and ${COVERS_NIGHTS - nights} night${COVERS_NIGHTS - nights === 1 ? "" : "s"} of it to go.`;
+    }
+    _say(line); _tick(); return;
+  }
   // A WORD ON HER CHIP BAR, TYPED, IS THE CHIP: tapping "Football" asked Sopha and
   // typing it printed the league table (Dev, round 65). The soft verbs — the ones
   // that read a feed or the town rather than act — yield to the person you are
@@ -13602,6 +13643,7 @@ function doCommand(input) {
           : "You sit on the third stool. It is exactly like the others, and you feel faintly as if you have taken somebody's coat.");
         break;
       }
+      if (G.room === _hotelRoomId() || /^Your Room/.test(_room().name || "")) { _say(_pickVary(["You sit on the edge of the bed. The air-con considers you and carries on.", "You sit. The room is exactly as far from the soi as it was a minute ago, which is the point of a room."], "sitroom")); break; }   // "you perch on the kerb" in room 412 (Vince, round 74)
       if (_isGogo()) _say(_pickVary(_SIT_LINES.gogo, "sitgogo"));
       else if (_inBar()) _say(_pickVary(_SIT_LINES.bar, "sitbar"));
       else if (/beach/i.test(_room().name)) _say(_pickVary(_SIT_LINES.beach, "sitbeach"));
@@ -14046,6 +14088,7 @@ function doCommand(input) {
       // lecture, wedging the Pattaya Leisure chain (critic playtest, 2026-08-22)
       const _cb = lower.replace(/[,.!?]+$/, "").trim();
       if (typeof _convoPickChoice === "function" && _convoActive() && _convoPickChoice(_cb)) break;
+      if (typeof _staleChoiceAnywhere === "function" && _staleChoiceAnywhere(_cb)) break;   // a lapsed TELL HIM … chip is "that moment's passed", not the verb lecture (Graham, round 74)
       _say(_MISC_VERBS[{ feel: "touch", lick: "taste", brief: "verbose", load: "restore", shut: "close" }[v] || v]);
       break;
     }

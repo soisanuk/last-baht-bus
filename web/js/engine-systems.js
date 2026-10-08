@@ -3256,7 +3256,7 @@ function _doAccept(arg) {
   _say(_qDesc(q), "dim");
   if (q.item && G.itemLoc[q.item] === null) {
     G.itemLoc[q.item] = "inventory";
-    _say(`(You now have the ${ITEMS[q.item].name}.)`, "dim");
+    _say(`(You now have ${/^(your|the|a|an)\b/i.test(ITEMS[q.item].name) || /^\w+'s\b/.test(ITEMS[q.item].name) ? "" : "the "}${ITEMS[q.item].name}.)`, "dim");
   }
 }
 
@@ -3588,13 +3588,32 @@ function _doQuests() {
 
 // Reward sweep — runs every turn; any active quest whose doneFlag has been
 // set (by give/win/bank, wherever) completes here.
-// FIFTY-ONE: Khun Orathai signs (the laundering quests, 2026-10-08)
+// FIFTY-ONE: Khun Orathai signs and hands the folder back (the laundering quests, 2026-10-08)
 function _giveShares() {
-  G.itemLoc.share_papers = "gone";
-  _setFlag("fiftyoneSigned");
+  if (_flag("fiftyoneSigned")) { _say("\"Already signed.\" Orathai does not reach for the folder. \"Khun Reginald's now. Take them to him.\""); return; }
+  _setFlag("fiftyoneSigned");   // the folder comes back signed: Reginald takes it (Vince, round 74 — "slides it back" and the papers were gone)
   _say("Orathai takes the folder, reads the one line that matters, signs where the fifty-one is blank with a pen she keeps in the folder for the purpose, dates it, and slides it back across the table in under a minute. \"One thousand baht,\" she says, \"from Khun Reginald, not from you — he knows.\" She returns to her lemon water. \"Tell him it is done. And tell him the second paper, if he wants one, costs the same.\" (ASK REGINALD ABOUT ORATHAI)", "win");
 }
 function _questTick() {
+  // THE JOBS' MONEY ARRIVES WHEN THE PROSE SAYS IT DOES (Vince, round 74: "every envelope landed before the bloke
+  // who was meant to deliver it had got his shoes on"). Nont's three thousand is a text two days on; Hong's
+  // envelope waits at her till for the first visit after.
+  if (Array.isArray(G.jobPay) && G.jobPay.length) {
+    G.jobPay = G.jobPay.filter(p => {
+      if (G.day < p.due) return true;
+      if (p.kind === "nont") { _pushMsg("nont", "he bit. 3k sent. — N.", p.amt); G.jobPaid = (G.jobPaid || 0) + 0; return false; }   // a message's money lands in the account on read (_bankIn names it)
+      if (p.kind === "hong" && G.room === "jasmine_garden" && _npcsHere().includes("hong")) {
+        G.money += p.amt; G.jobPaid = (G.jobPaid || 0) + p.amt;
+        _say(`Hong slides an envelope across the till without looking at it. "A boy bring this for you. For the count." ฿${_num(p.amt)}, in old notes. She goes back to her book before your hand has closed on it.`, "dim");
+        return false;
+      }
+      return true;
+    });
+  }
+  // PRE-SALE: slips held a fortnight and placed nowhere — the lad gets on a plane (Vince, round 74: KEEP THEM led nowhere)
+  if (_flag("presaleSlips") && !_flag("presaleDone") && G.presaleSlipsDay != null && G.day - G.presaleSlipsDay >= 14) {
+    _setFlag("presaleLapsed"); _setFlag("presaleDone");
+  }
   // THE COVERS (2026-10-08): the count is the player's own — twenty turns on a Jasmine Garden stool counts the
   // men for him in the only unit Hong trusts, and A PATTERN IS THREE NIGHTS (Mario: "a single night is not
   // enough"): one busy Friday proves nothing; three nights against a till that says forty every night does

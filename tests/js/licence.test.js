@@ -35,12 +35,12 @@ test("the sign is never the operator: a small bar is a registration in the woman
   assert.equal(_licenceOf("beach_rd_c"), null); G.room = "klang_massage"; out = []; run("examine licence"); assert.match(said(), /massage-establishment licence/);
 });
 test("the house notices, by what it thinks of you — once a bar a night", () => {
-  look("lucky_tiger"); assert.match(said(), /You police\? Spy\?|Were you looking for somebody|You want to buy\? Everybody want to buy/, "a stranger is suspected");
-  out = []; run("examine licence"); assert.doesNotMatch(said(), /You police|looking for somebody|Everybody want to buy/, "once a night");
-  G.soc.licLook = {}; G.room = "tequila_queen"; out = []; run("examine licence"); assert.match(said(), /You police\? Spy\?|Were you looking for somebody/, "a stranger at a go-go till");
-  G.soc.licLook = {}; G.soc.drinks.ratana = 8; look("lucky_tiger"); assert.match(said(), /Regular know too much|A regular's privilege|first customer|That is my name|My name/);
+  look("lucky_tiger"); assert.match(said(), /You police\? Spy\?|Were you looking for somebody|Everybody want to buy|somebody's mother|Is mine|that one is me/, "a stranger is suspected, or the owner says so");
+  out = []; run("examine licence"); assert.doesNotMatch(said(), /You police|looking for somebody|Everybody want to buy|somebody's mother|Is mine|that one is me/, "once a night");
+  G.soc.licLook = {}; G.room = "tequila_queen"; out = []; run("examine licence"); assert.match(said(), /You police\? Spy\?|Were you looking for somebody|not menu|want to buy the bar|paper's in order|price list/, "a stranger at a go-go till");
+  G.soc.licLook = {}; G.soc.drinks.ratana = 8; look("lucky_tiger"); assert.match(said(), /Regular know too much|A regular's privilege|first customer|That is my name|Still my name|Mine\. Twelve year/);
   G.soc.licLook = {}; G.maiDee = { ratana: G.day }; look("lucky_tiger"); assert.match(said(), /says nothing at all/);
-  G.maiDee = {}; G.soc.licLook = {}; look("pink_lotus"); assert.match(said(), /Company paper, tilac|The group's paper/);
+  G.maiDee = {}; G.soc.licLook = {}; look("pink_lotus"); assert.match(said(), /Company paper, tilac|The group's paper|"The group."|Pattaya Leisure."/);
   owner(); G.room = "stinky_bar"; run("look"); while (G.pendingChoice) run("no"); G.soc.licLook = {}; look("stinky_bar"); assert.match(said(), /Reading your own paper, boss|Boss read the paper/);
 });
 test("the retired detective reads the stamp, the date, the number and what they connect to", () => {

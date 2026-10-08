@@ -145,7 +145,7 @@ test("the soi names the woman: a gossip catch souring the affair knows who, and 
 });
 test("CALL TAN from his partner is about the bar, not a lift; TRAVEL announces only when it sets off", () => {
   owner(); G.phone.contacts.tan = true; G.room = "beach_rd_c"; G.nightTurn = 30; out = []; run("call tan");
-  assert.match(said(), /Partner|fifty-one|You own a bar/); assert.doesNotMatch(said(), /last-option man/);
+  assert.match(said(), /Partner|fifty-one|you own a bar/i); assert.doesNotMatch(said(), /last-option man/);
   G.stage = "vacation"; G.flags.barOpen = false; G.flags.barPaid = false; G.bar.owner = false;
   G.room = "jomtien_beach_rd"; G.lightOn = false; G.visited.hotel_room = true; G.nightTurn = 30;
   const path = _path(G.room, "pratumnak_clubs") || [];

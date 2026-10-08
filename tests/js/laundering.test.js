@@ -39,7 +39,8 @@ test("THE COVERS: the count is yours, the signature is Hong's — told, she init
   G.room = "silk_rose"; assert.match(ask("grace", "hong"), /stopped signing/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" }; G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.season0 = 2; G.money = 7000;
   offer("grace", "covers"); for (let n = 0; n < COVERS_NIGHTS; n++) { G.day++; G.soc.barTurns = { jasmine_garden: 20 }; G.room = "jasmine_garden"; run("wait"); }
-  const m0 = G.money; G.convoQ = null; run("ask hong about the count"); out = []; run("2"); assert.ok(_flag("coversFaked")); assert.equal(G.money, m0 + 2000); assert.equal(G.quests.covers, "done");
+  const m0 = G.money; G.convoQ = null; run("ask hong about the count"); out = []; run("2"); assert.ok(_flag("coversFaked")); assert.equal(G.money, m0, "the envelope comes later, as the prose says"); assert.equal(G.quests.covers, "done");
+  G.day += 2; G.room = "jasmine_garden"; G.nightTurn = 50; out = []; run("wait"); assert.equal(G.money, m0 + 2000); assert.match(said(), /For the count/);
   G.room = "silk_rose"; assert.match(ask("grace", "hong"), /I did not ask you what you counted/);
 });
 
@@ -48,9 +49,10 @@ test("FIFTY-ONE: the papers walk to the woman who signs; Reginald hears who she 
   G.room = "buakhao_market"; run("talk to orathai");
   assert.match(ask("orathai", "the companies"), /Eleven companies|I own nothing/);
   assert.match(ask("nont", "orathai"), /Eleven this year|never owned a stool/);
-  out = []; run("give papers to orathai"); assert.ok(_flag("fiftyoneSigned")); assert.equal(G.itemLoc.share_papers, "gone"); assert.match(said(), /ASK REGINALD ABOUT ORATHAI/);
+  out = []; run("give papers to orathai"); assert.ok(_flag("fiftyoneSigned")); assert.equal(G.itemLoc.share_papers, "inventory", "the folder comes back signed"); assert.match(said(), /ASK REGINALD ABOUT ORATHAI/);
   stand("reginald"); G.convoQ = null; out = []; run("ask reginald about orathai"); assert.match(said(), /something about the lady/);
-  out = []; run("1"); assert.ok(_flag("fiftyoneTold")); assert.equal(G.quests.fiftyone, "done"); assert.match(said(), /sleeping partner/);
+  out = []; run("1"); assert.ok(_flag("fiftyoneTold")); assert.equal(G.quests.fiftyone, "done"); assert.match(said(), /sleeping partner/); assert.equal(G.itemLoc.share_papers, "gone");
+  assert.doesNotMatch(ask("reginald", "the bar"), /Walk the papers/, "the offer stops once the papers are signed");
   assert.match(ask("reginald", "orathai"), /second paper/);
   // the other door
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" }; G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.season0 = 2; G.money = 7000;
@@ -67,8 +69,11 @@ test("UNDER VERIFICATION: the tills remember the unit; Nigel is warned, or buys 
   G.room = "buakhao_market"; assert.match(ask("nont", "nigel"), /You told him/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" }; G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.season0 = 2; G.money = 7000;
   offer("nont", "verification"); G.room = "lucky_tiger"; G.nightTurn = 50; run("talk to nigel"); const m0 = G.money; G.convoQ = null; run("give listing to nigel"); out = []; run("2");
-  assert.ok(_flag("verifSold")); assert.equal(G.money, m0 + 3000); assert.equal(G.quests.verification, "done");
-  assert.match(ask("nigel", "your bar"), /Fourth name/); G.room = "buakhao_market"; assert.match(ask("nont", "nigel"), /He bit/);
+  assert.ok(_flag("verifSold")); assert.equal(G.money, m0, "Nont pays in two days"); assert.equal(G.quests.verification, "done"); assert.notEqual(G.itemLoc.bar_listing, "inventory");
+  assert.match(ask("nigel", "your bar"), /Lawyer's drawing it up/);
+  const b0 = G.bank; G.day += 2; run("wait"); out = []; run("check messages"); assert.match(said(), /3k sent/); assert.equal(G.bank, b0 + 3000);
+  stand("nigel"); G.questDoneDay.verification = G.day - 2; assert.match(ask("nigel", "your bar"), /Fourth name/); G.room = "buakhao_market"; assert.match(ask("nont", "verification"), /He bit/);
+  stand("nigel"); G.questDoneDay.verification = G.day - 31; assert.match(ask("nigel", "your bar"), /Closed/); G.room = "lucky_tiger"; G.nightTurn = 50; assert.match(ask("ging", "nigel"), /Shutter down/);
 });
 
 test("PRE-SALE: the chat was a bank — the slips go to Eddy's thread, or the twelve names go to Nont", () => {
@@ -77,7 +82,8 @@ test("PRE-SALE: the chat was a bank — the slips go to Eddy's thread, or the tw
   run("accept presale"); assert.equal(G.quests.presale, "active"); assert.match(ask("colin", "the slips"), /It was never a chat. It was a bank/); assert.ok(_flag("presaleSlips"));
   G.room = "white_rabbit"; G.nightTurn = 30; run("talk to eddy"); G.convoQ = null; out = []; run("ask eddy about the slips"); assert.match(said(), /a case.*Tuesday/s);
   out = []; run("1"); assert.ok(_flag("presaleReported")); assert.equal(G.quests.presale, "done");
-  G.room = "the_terrace"; G.nightTurn = 50; assert.match(ask("colin", "the slips"), /a case with a number/);
+  const d0 = G.day; stand("colin"); G.questDoneDay.presale = G.day; assert.match(ask("colin", "the slips"), /Eddy said a week/);
+  G.questDoneDay.presale = G.day - 7; assert.match(ask("colin", "the slips"), /a case with a number/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" }; G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.season0 = 2; G.money = 7000;
   G.room = "the_terrace"; G.nightTurn = 50; run("talk to colin"); run("accept presale"); G.convoQ = null; run("ask colin about the slips"); assert.ok(_flag("presaleSlips"));
   G.room = "buakhao_market"; run("talk to nont"); const m0 = G.money; G.convoQ = null; out = []; run("ask nont about the list"); assert.match(said(), /Three thousand|three thousand/); out = []; run("1");
@@ -92,4 +98,18 @@ test("declining is free, and the four are well-formed", () => {
   }
   assert.equal(NPCS.orathai.room, "buakhao_market"); assert.equal(_npcRoom("orathai"), "buakhao_market");
   offer("grace", "covers"); const h = G.happy, r = G.rep; out = []; run("abandon covers"); assert.notEqual(G.quests.covers, "active"); assert.equal(G.happy, h); assert.equal(G.rep, r);
+});
+
+// ── round 74 (Vince, 2026-10-08): the loop, the plane, the names, the stools ─────────────────
+test("Pre-Sale: no loop between the slips and the pre-sale; the slips held a fortnight lapse; the call takes its week", () => {
+  G.room = "the_terrace"; G.nightTurn = 50; run("talk to colin"); run("accept presale"); run("ask colin about the slips");
+  for (let i = 0; i < 2; i++) assert.doesNotMatch(ask("colin", "the slips"), /Ask me about the pre-sale first/);
+  assert.doesNotMatch(ask("colin", "the pre-sale"), /ASK COLIN ABOUT THE SLIPS/);
+  G.day += 14; run("wait"); assert.ok(_flag("presaleLapsed")); assert.equal(G.quests.presale, "done"); assert.match(ask("colin", "the slips"), /He's gone/);
+});
+test("COUNT is a verb; the job's title is a topic; SIT in your room is a room; the article is right", () => {
+  G.room = "lucky_tiger"; G.nightTurn = 50; out = []; run("count stools"); assert.match(said(), /men on the stools/);
+  G.room = "silk_rose"; run("talk to grace"); assert.doesNotMatch(ask("grace", "covers"), /Not my story|wrong/);
+  G.room = _hotelRoomId(); out = []; run("sit"); assert.doesNotMatch(said(), /kerb/);
+  stand("reginald"); run("talk to reginald"); run("accept fiftyone"); assert.doesNotMatch(said(), /the Reginald's|the a /);
 });
