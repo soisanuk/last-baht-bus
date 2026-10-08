@@ -48,6 +48,8 @@ const CLASS = {
   "engine-parser.js:_TOWN|everybody see": [W_, "the turned-out punter and the walk-out, answered by the room that saw them (G.bar.calls, G.lastNightWas.kicked; round73.test)"],
   "npc.tar.dialogue.short|the whole room hears": [G_, "idiom — Tar on Sunee's quiet voice: a fact about the mamasan, not a report on you (the Doghouse floor, 2026-10-08)"],
   "npc.sunee.dialogue.text|everybody knows": [G_, "the midnight lights going up one level: a fact about the room's closing, not about you (the Doghouse floor, 2026-10-08)"],
+  "npc.nigel.dialogue.text|the girls knew": [G_, "ninety-eight, a Swedish bar: Nigel's own past, not a report on you (the laundering quests, 2026-10-08)"],
+  "patron.nigel.dialogue.text|the girls knew": [G_, "the same record under the patron harvest"],
   "engine-play.js:_REL_GREET|the whole bar clocks": [W_, "her colleagues answer about her as yours, and about a recent ride (_doTalkCore, the witness rule; round63.test)"],
   "engine-play.js:_REL_GREET|spoken for": [W_, "the same: 'Your girl. Everybody know, tilac.'"],
   "engine-core.js:_quizTalk|the whole bar watched": [W_, "this IS the witness's answer (G.quizLast)"],

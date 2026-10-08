@@ -2,19 +2,21 @@
   "generated": "2026-10-08",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 163,
+    "total": 164,
     "byRole": {
-      "story": 50,
+      "story": 51,
       "mamasan": 25,
       "hostess": 50,
       "cashier": 13,
       "patron": 25
     },
     "filler": 213,
-    "unrendered": 0,
+    "unrendered": 1,
     "relook": 0
   },
-  "unrendered": [],
+  "unrendered": [
+    "orathai"
+  ],
   "relook": [],
   "characters": [
     {
@@ -495,6 +497,21 @@
       ],
       "desc": "Early thirties, hair tied low, the calm of a shop that is quieter than the town ones and in less of a hurry. Orapin doesn't work the step; she waits inside under the pink light, and the customers who find her tend to come back.",
       "rendered": true
+    },
+    {
+      "id": "orathai",
+      "name": "Orathai",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman in her fifties, neat grey-streaked hair in a clip, reading glasses, a plain blouse, a plastic document folder on the table.",
+      "venueKind": null,
+      "emoji": "📁",
+      "th": "อรทัย",
+      "room": "buakhao_market",
+      "tags": [],
+      "desc": "Fifties, neat, reading glasses on a cord, a plain blouse that could belong to a teacher or a clerk, and a clear plastic folder squared on the table in front of her. She drinks hot water with a slice of lemon in it and has the stillness of somebody who is paid by the signature and never by the hour. The folder is the business.",
+      "rendered": false
     },
     {
       "id": "pensri",

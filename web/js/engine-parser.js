@@ -4144,7 +4144,7 @@ function _doTalkCore(arg, topic) {
   if (npc === "tan" && topic && typeof _tanAbout === "function" && _tanAbout(topic)) return; // "meet somebody, then ask me who they are" — honoured
   if (topic && typeof _ccibLoud === "function" && !["tan", "fast_eddy", "nont"].includes(npc) &&
       /\bccib\b|cyber ?police|\bpolice\b|\bheist\b|\bbox\b|eastern seaboard|invoices|rabbit'?s job|\bcoffee\b|\bofficer\b|polo shirt|laptop|kitten office/.test(topic)) _ccibLoud("asking");   // the article is stripped before we see it
-  if (npc === "nont" && topic && !(/^tan$/i.test(String(topic).trim()) && _pickDialogue("nont", "tan").topic) && typeof _nontLocate === "function" && _nontLocate(topic)) return;   // his own words about Tan outrank the locator's laugh (the dialogue walk) // the priced locator: anybody, tonight, ฿200
+  if (npc === "nont" && topic && !(_pickDialogue("nont", String(topic).trim()) || {}).topic && typeof _nontLocate === "function" && _nontLocate(topic)) return;   // his own words about Tan outrank the locator's laugh (the dialogue walk) // the priced locator: anybody, tonight, ฿200
   // the civilian at the table: "how much" is not a topic she answers, it's the
   // scene (chameleon economy) — no dialogue node, so the wheel never advertises it
   // CREAM REMEMBERS THE NIGHT, in the act's own register (Gordie, round 72: the evening after she slept in
@@ -7298,6 +7298,11 @@ function _doGive(itemWord, npcWord) {
     ITEMS[i].aliases.some(a => a.includes(itemWord)));
   if (!id) { _say(_pickVary(_NOT_CARRYING, "notcarry")); return; }
   _trace("give", NPCS[npc].name, ITEMS[id].name); // breadcrumb
+  // THE LAUNDERING QUESTS (2026-10-08): the share papers to the woman who signs; the listing is a question, not a hand-over
+  if (id === "share_papers" && npc === "orathai") return _giveShares();
+  if (id === "share_papers") { _say(`${NPCS[npc].name} looks at the folder and does not touch it. "Khun Orathai, at the market. Not me."`); return; }
+  if (id === "bar_listing" && npc === "nigel") { doCommand("ask nigel about the listing"); return; }
+  if (id === "bar_listing") { _say(`${NPCS[npc].name} glances at the sheet. "Show it to a till, or to the man who wants a bar. I am neither." (ASK <WHO> ABOUT THE LISTING)`); return; }
   if (id === "helmet" && npc === "pim") {
     G.itemLoc.helmet = null;
     const d = _pickDialogue("pim"); // helmet entry matches on hasHelmet

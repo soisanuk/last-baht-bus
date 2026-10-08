@@ -766,6 +766,8 @@ CHARS = {
     "thip":     lady(skin=THAI2, hair="chignon", hc=GRBLK, shirt=C(0x202838), bg=BG_BAR, mouth="neutral", acc=["chain"], earc=GOLD),
     # Preeda — the Lucky Charm; back from a Belgian winter (grey cardigan over the bar dress)
     "preeda":   lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x8a8f96), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=GOLD),
+    # Orathai — the woman with the folder at the Old Market (the laundering quests, 2026-10-08)
+    "orathai": lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0xd8d2c4), bg=BG_BAR, mouth="neutral", acc=["glasses", "glasschain"], earc=GOLD),
     "tui":      lady(skin=THAI2, hair="chignon", hc=SILVER, shirt=C(0x181820), bg=BG_BAR, mouth="stern", acc=["earrings", "chain"], earc=GOLD),
     "mon":      lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x2a2a3a), collar=True, bg=BG_BAR, mouth="neutral", acc=["earrings", "ringchain"], earc=GOLD),
     "dokmai":   lady(skin=THAI2, hair="bun", hc=GRBLK, shirt=C(0x8a1030), bg=BG_BAR, mouth="grin", acc=["earrings", "flower", "chain"], earc=GOLD),

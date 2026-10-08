@@ -1345,6 +1345,7 @@ function _nontLocate(topic) {
     NPCS[i].name.toLowerCase().split(" ").pop() === t));
   if (!id) return false;
   if (id === "fast_eddy") return false;   // the history, not the locate: his `rabbit|eddy` node answers (Declan, r45)
+  if (id === "orathai") return false;   // the woman three tables along: his own node points, for nothing (the laundering quests, 2026-10-08)
   if (id === "tan") {
     // "the first laugh you've had out of him" was printing on the third night (Declan, r45)
     if (_flag("nontTanLaugh")) _say("“Tan finds you. Keep your money.” He doesn't look up this time.");
@@ -3587,7 +3588,20 @@ function _doQuests() {
 
 // Reward sweep — runs every turn; any active quest whose doneFlag has been
 // set (by give/win/bank, wherever) completes here.
+// FIFTY-ONE: Khun Orathai signs (the laundering quests, 2026-10-08)
+function _giveShares() {
+  G.itemLoc.share_papers = "gone";
+  _setFlag("fiftyoneSigned");
+  _say("Orathai takes the folder, reads the one line that matters, signs where the fifty-one is blank with a pen she keeps in the folder for the purpose, dates it, and slides it back across the table in under a minute. \"One thousand baht,\" she says, \"from Khun Reginald, not from you — he knows.\" She returns to her lemon water. \"Tell him it is done. And tell him the second paper, if he wants one, costs the same.\" (ASK REGINALD ABOUT ORATHAI)", "win");
+}
 function _questTick() {
+  // THE COVERS (2026-10-08): the count is the player's own — twenty turns on a Jasmine Garden stool, and the
+  // stools are counted for him in the only unit Hong trusts
+  if (G.quests.covers === "active" && G.room === "jasmine_garden" && !_flag("coversCounted") && ((G.soc.barTurns || {}).jasmine_garden || 0) >= 20) {
+    _setFlag("coversCounted");
+    const men = 6 + _regularsHere().length + (G.nightTurn >= 40 ? 2 : 0);
+    _say(`(Two hours on the stool, and you have counted. ${men} men through the door tonight, Randy included, most of them one drink and gone. Hong's till will say forty thousand. ASK HONG ABOUT THE COUNT.)`, "dim");
+  }
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
     G.quests[qid] = "done";

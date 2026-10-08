@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 243,
   "patrons": 25,
-  "people": 351,
-  "portraits": 376,
+  "people": 352,
+  "portraits": 377,
   "renders": 376,
   "thumbs": 376,
   "venues": 243
@@ -2438,6 +2438,15 @@
    "room": "lotus_oil",
    "th": "อรพิน"
   },
+  "orathai": {
+   "desc": "Fifties, neat, reading glasses on a cord, a plain blouse that could belong to a teacher or a clerk, and a clear plastic folder squared on the table in front of her. She drinks hot water with a slice of lemon in it and has the stillness of somebody who is paid by the signature and never by the hour. The folder is the business.",
+   "emoji": "📁",
+   "name": "Orathai",
+   "personality": "dry",
+   "pronoun": "she",
+   "room": "buakhao_market",
+   "th": "อรทัย"
+  },
   "orm": {
    "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Gold Rush Lounge, from Loei. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
    "emoji": "👑",
@@ -3909,6 +3918,7 @@
   "ohm",
   "oiy",
   "orapin",
+  "orathai",
   "orm",
   "orn",
   "oy",

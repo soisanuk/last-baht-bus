@@ -106,6 +106,7 @@ test("room signs reference real sign entries", () => {
 test("gossip chain flags connect: every required flag is set somewhere", () => {
   const settable = new Set(["knowWasHere", "waiedOy", "waiedPloy", "greetedFon",
     "wonLeague",   // set by _endGame on a killer-pool league win (Bert's champion node)
+    "coversCounted", "fiftyoneSigned",   // the laundering quests: _questTick counts the stools; _giveShares signs (2026-10-08)
     "barPartner", "partnerCandy", "partnerTan",  // set by _partnerYes on the 51% fork confirm (was in dialogue sets before the confirmation modal)
     "chamDone",    // set by _chamGo (chameleon economy) — gates Cream's post-arc greeting
     "tanAsked",   // set by _tanFavour — Tan's bar node the night after he came (round 67)
@@ -147,6 +148,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
   for (const npc of Object.values(NPCS)) {
     for (const d of npc.dialogue) {
       for (const f of d.sets || []) settable.add(f);
+      for (const c of d.choices || []) for (const f of c.sets || []) settable.add(f);   // a choice sets flags too (_runChoice; the laundering quests, 2026-10-08)
     }
   }
   for (const [id, npc] of Object.entries(NPCS)) {

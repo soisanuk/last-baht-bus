@@ -123,7 +123,7 @@ test("a venue placed in a district by prose is actually IN that district", () =>
 test("every character named in an instruction is somebody you can address", () => {
   // "ask Candy", "give it to Ploy" — an instruction pointing at a person who
   // doesn't exist is a dead end the player can't act on.
-  const last = new Set([...world.matchAll(/name: "([^"]+)"/g)].map(m => m[1].split(" ").pop()));
+  const last = new Set([...world.matchAll(/"?name"?:\s*"([^"]+)"/g)].map(m => m[1].split(" ").pop()));   // FLOOR_STAFF records are JSON-shaped ("name":"Hong") and addressable (2026-10-08)
   const NOT_PEOPLE = new Set(["The", "Pattaya", "Thai", "Soi", "Beach", "Walking", "Second",
     "Naklua", "Jomtien", "Bangkok", "Buakhao", "God", "Mama", "Madam", "Miss", "Khun",
     "Lady", "Sang", "Sabai", "Jack"]);

@@ -183,7 +183,7 @@ for (const id of Object.keys(NPCS).sort()) {
       req: (d.req || []).slice().sort(),
       notFlags: (d.notFlags || []).slice().sort(),
       hasWhen: !!d.when, bond: d.bond || null,
-      sets: (d.sets || []).slice().sort(),
+      sets: [...(d.sets || []), ...(d.choices || []).flatMap(c => c.sets || [])].sort(),   // a choice sets flags too (_runChoice; the laundering quests, 2026-10-08)
       gives: d.gives || null,
       asks: d.asks && d.asks.key ? d.asks.key : null,
       chip: d.chip === false ? false : null,

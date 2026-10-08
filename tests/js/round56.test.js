@@ -177,7 +177,7 @@ test("Thai the parser reads is not swallowed as an answer to a pending question"
 
 test("a man answers khrap: สบายดีไหม to Nont", () => {
   G.room = _npcRoom("nont");
-  assert.doesNotMatch(run("สบายดีไหมครับ"), /Sabai dee kha/);
+  assert.doesNotMatch(run("say สบายดีไหมครับ to nont"), /Sabai dee kha/);   // said TO him: the market has a woman at a table now (Siriwan, 2026-10-08)
 });
 
 test("a man who asks ABOUT THAI hears his own register, and his own pronoun", () => {

@@ -135,7 +135,8 @@ function stand(npc) {
   return false;
 }
 function force(flag, on, log) {
-  if (on && !_flag(flag)) { _setFlag(flag); const s = flagSetters[flag] || {}; log.push(`+${flag} (${s.dialogue.length ? "set by " + s.dialogue.slice(0, 2).join(", ") : s.engine.length ? "engine: " + s.engine[0] : s.reads.length ? "reads: " + s.reads[0] : "no known setter"})`); }
+  // a flag set only by a CHOICE has no node setter (the laundering quests, 2026-10-08)
+  if (on && !_flag(flag)) { _setFlag(flag); const s = flagSetters[flag] || { dialogue: [], engine: [], reads: [] }; log.push(`+${flag} (${s.dialogue.length ? "set by " + s.dialogue.slice(0, 2).join(", ") : s.engine.length ? "engine: " + s.engine[0] : s.reads.length ? "reads: " + s.reads[0] : "no known setter"})`); }
   if (!on && _flag(flag)) { delete G.flags[flag]; log.push(`−${flag}`); }
 }
 // the oracle: would THIS node be the one _pickDialogue hands back right now?

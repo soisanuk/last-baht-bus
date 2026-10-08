@@ -491,7 +491,7 @@ if (has("quests")) {
         // (`_setFlag("x")` in source) — the second path was dead in the first cut,
         // its outer test gated an inner test that only ever read `sets` (ultrareview)
         const fxSrc = typeof d.fx === "function" ? String(d.fx) : "";
-        const viaSets = (d.sets || []).includes(q.doneFlag);
+        const viaSets = (d.sets || []).includes(q.doneFlag) || (d.choices || []).some(c => (c.sets || []).includes(q.doneFlag));   // a choice sets the doneFlag too (the laundering quests, 2026-10-08)
         const viaFx = fxSrc.includes(`"${q.doneFlag}"`) || fxSrc.includes(`'${q.doneFlag}'`);
         if (viaSets || viaFx) { setters.push(ref + (viaSets ? "" : " (fx)")); extra.add(ref); }
         const reads = (d.req || []).includes(q.doneFlag) ||
