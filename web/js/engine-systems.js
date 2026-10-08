@@ -8243,6 +8243,24 @@ function _affairCrisisPrompt() {
     .map((o, i) => (i + 1) + " — " + o.label.toUpperCase());
   _say("(" + opts.join(" · ") + ".)", "dim");
 }
+// WHO PAYS, never a number: every crisis option debits her (strain) or the floor (floorSour), and
+// asking says which — the trade made legible, the decision left a judgement (Callum, round 71: "what
+// happens if I say 2?" only reprinted the question).
+function _affairCrisisStakes() {
+  const c = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
+  if (!c) return;
+  const her = _affairHer();
+  const how = n => n >= 4 ? " dearly" : n <= 1 ? ", a little" : "";
+  const parts = [c.a, c.b, c.c].filter(Boolean).map((o, i) => {
+    const who = [];
+    if (o.strain) who.push(`${her} pays for it${how(o.strain)}`);
+    if (o.floor) who.push(`the floor pays for it${how(o.floor)}`);
+    const money = o.money ? `฿${_num(o.money)}, and ` : "";
+    return `${i + 1} — ${o.label}: ${money}${who.join(", and ") || "nobody pays"}`;
+  });
+  _say("(" + parts.join(". ") + ". Nothing here is free; that is the point of it.)", "dim");
+  _affairCrisisPrompt();
+}
 function _affairCrisisAnswer(k) {
   const c = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
   const a = G.affair;

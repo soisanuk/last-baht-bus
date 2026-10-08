@@ -15303,13 +15303,13 @@
       "lens": "affair-night-out",
       "instrument": "",
       "claim": "The crisis gives no stakes on 'what happens if I say 2?'",
-      "verdict": "deferred",
-      "note": "The modal redraws by design; stating each option's meter is a design change.",
+      "verdict": "fixed",
+      "note": "Mario, 2026-10-08: a question at an affair crisis is answered with WHO PAYS under each option (her, or the floor; the money where there is money), never a meter's number; and a question that names an option's words no longer commits it.",
       "cls": "G",
       "sev": "low",
       "system": "affair",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "71",

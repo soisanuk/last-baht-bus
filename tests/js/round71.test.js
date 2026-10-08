@@ -107,3 +107,14 @@ test("a regular's miss is not 'mate' from a Stuttgart toolmaker; WHO does not ca
   const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
   assert.doesNotMatch(src, /working girls you have actually met/);
 });
+test("an affair crisis answers 'what happens if…' with who pays, and a question naming an option does not commit it", () => {
+  affair({ strain: 2 });
+  _affairCrisisAsk(AFFAIR_CRISES.find(c => c.id === "rota"));
+  const s0 = G.affair.strain, f0 = G.affair.floorSour;
+  out = []; run("what happens if I choose 2?"); assert.match(said(), /the rota stands: Manow pays for it/); assert.match(said(), /the floor pays for it/);
+  out = []; run("what if the rota stands?");
+  assert.equal(G.pendingChoice, "affaircrisis", "the question did not choose");
+  assert.equal(G.affair.strain, s0); assert.equal(G.affair.floorSour, f0);
+  assert.doesNotMatch(said(), /฿?\d+ (strain|floor)/, "who pays, never a number");
+  out = []; run("2"); assert.notEqual(G.pendingChoice, "affaircrisis");
+});

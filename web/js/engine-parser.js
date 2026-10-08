@@ -12837,6 +12837,9 @@ function doCommand(input) {
   // …and its crises, numbered because none of the answers is a plain yes
   if (G.pendingChoice === "affaircrisis") {
     const _cc = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
+    // a question is not the choice: "what happens if I say the rota stands?" carries the option's
+    // own words and committed it; now it is answered with who pays (Mario, 2026-10-08)
+    if (_cc && (/\?/.test(lower) || /^(what|how|why|which|if|who|does|will|would|should)\b/.test(lower))) { _affairCrisisStakes(); return; }
     if (_cc) {
       const _keys = [["1", "a"], ["2", "b"], ["3", "c"]].filter(([, k]) => _cc[k]);
       for (const [num, k] of _keys) {
