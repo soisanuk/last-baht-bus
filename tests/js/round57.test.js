@@ -94,7 +94,7 @@ test("Candy does not greet a bar owner as the man with no wallet", () => {
 
 test("the cleaners' monthly figure is named from the constant", () => {
   const job = SYNDICATE_JOBS.find(j => j.id === "cleaning");
-  assert.match(job.ask, new RegExp("฿" + SYN_JOB_NIGHT * 30));
+  assert.match(job.ask, new RegExp("฿" + (SYN_JOB_NIGHT * 30).toLocaleString("en-US")));
 });
 
 test("a floor reveal is told once by the BAR, never the same line by two women", () => {

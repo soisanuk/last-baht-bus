@@ -646,6 +646,9 @@ const _ENC = {
       _say(_fmt("{who} says something to him fast and low in Thai before you have opened your mouth — " +
         "the register a woman uses on a nephew. He listens. The price is the price; the tone is not.", { who: _partyLabel() }), "dim");
     }
+    // ไม่ได้เมาครับ ("I am NOT drunk, sir") paid as an apology on the strength of its ครับ — the particle was the
+    // whole detector (Pieter, round 73). A Thai no, without a sorry in it, is the soft no, warned once.
+    if (/ไม่|\bmai\b/.test(input) && !/ขอโทษ|kh?or? ?thot|sorry|apolog|ไหว้|\bwai\b/.test(input)) input = "no";
     if (/\bwai\b|sorry|khrap|krub|krap|apolog|sawatdee|kh?or? ?thot|ขอโทษ|ไหว้|ครับ/.test(input)) {   // the apology the wai's own text says you make, in Thai (Gordie, round 72)
       const f = Math.min(POLICE_WAI, G.money);
       G.money -= f; G.policePaid = (G.policePaid || 0) + f;   // named on the morning ledger (Gordie, round 72)

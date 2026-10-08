@@ -436,6 +436,7 @@ function _piwinAbout(who) {
       : "\"Season good, boss.\" He counts the traffic with his chin. \"Everybody here, everybody want a bike. December I buy new tyre.\"");
     return;
   }
+  if (/\borchid\b/.test(w)) { _say("\"The Orchid?\" He does not pat the seat. \"Nobody drive you there, boss. That one, you get taken. Ask the man who takes you.\""); return; }   // "room" read as the hotel (László, round 73)
   if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner|wallet|pickpocket)\b/.test(w)) {
     const say =
       /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
@@ -466,6 +467,7 @@ function _piwinAbout(who) {
     if (/\b(clinic|tested|std|the doctor)\b/.test(w)) { _say("\"Clinic?\" He knows the one you mean without asking which. \"Second Road, by Central — glass door, next to the pharmacy. Free. I take you, nobody look.\""); return; }
     const region = k.length >= 3 && [...new Set(Object.values(ROOMS).map(r => r.region).filter(Boolean))].find(rg => _pnm(rg) === k);
     if (venue === "nottys_place") { _say("\"Notty's?\" He grins. \"The wall, I know. The wall, I cannot open.\""); return; }
+    if (venue && ROOMS[venue].invite) { _say(_fmt("\"{v}?\" He does not pat the seat. \"Nobody drive you there, boss. That one, you get taken.\"", { v: _barName(venue) })); return true; }   // the piwin placed the Orchid Room and then re-asked where to (László, round 73)
     if (venue) { _say(_fmt("\"{v}? {r}.\" He pats the seat. \"Everybody know. Get on.\"", { v: _barName(venue), r: ROOMS[venue].region })); return; }
     if (region) { _say(_fmt("\"{r}?\" As if you had asked him where the sea is. \"Get on, boss.\"", { r: region })); return; }
   }
@@ -711,6 +713,7 @@ function _compDrink(n) {
 function _pushyUpsell() {
   G.soc.padded = G.soc.padded || {};
   if (G.soc.padded[G.room]) return;
+  if (G.party && G.party.ids && G.party.ids.length) return;   // her drink would be chalked with another woman on your arm (composition audit, 2026-10-08)
   if (G.soc.drunk < 3) return;                 // sober, you'd notice — and she knows it
   if (G.money < _ladyPrice()) return;
   const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
@@ -2606,6 +2609,11 @@ const _OWN_BARFINE_NO = [
   "You catch yourself and stop. These are your employees, and \"barfining\" one is just moving your own money in a circle while the whole floor pretends not to notice. Whatever this is, it isn't a transaction — not at your own bar. Talk to her like a person; the rest is between the two of you.",
 ];
 
+const _OWN_STAFF_FLIRT = [
+  "{n} laughs, the real one. \"Boss. Save it for the customers — they pay for it.\"",
+  "\"Flirt with me? I work for you.\" {n} pats your cheek like an auntie. \"Flirt with the farang at the end. He has money and no wife.\"",
+  "{n} looks at the rail, where two customers are watching. \"Not in front of the stools, boss. Very bad for business.\" She is smiling.",
+];
 function _doSocial(kind, targetWord) {
   // not a pickup room — the girls are the power players', and you're here on business
   if (G.room === "orchid_room") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
@@ -2631,6 +2639,8 @@ function _doSocial(kind, targetWord) {
   // guard's job.
   const here = _npcsHere().filter(x => !NPCS[x].patron);
   const pat = w && !_PRONOUN.test(w.toLowerCase()) ? _findNpc(w) : null;
+  // your own staff: the boss gets no customer register — "Buy me drink, funny man" from the woman on his payroll
+  // (composition audit, 2026-10-08)
   if (pat && NPCS[pat].patron) {
     _say(`${_npcLabel(pat)} is a regular ${_isGogo() ? "here" : "at the rail"}, not one of the girls — ` +
       "the look you get back ends the idea before it finishes forming.");
@@ -2639,6 +2649,12 @@ function _doSocial(kind, targetWord) {
   // Pronoun/default resolution: "flirt with her" → whoever you're dealing with;
   // bare "flirt" → the conversation partner, or the sole girl in scope.
   const id = _resolveActor(w, here);
+  // your own staff: the boss gets no customer register on a FLIRT — "Buy me drink, funny man" from the woman on
+  // his payroll (composition audit, 2026-10-08). FLIRT only: a kiss still runs the tiers, and the heat they carry.
+  if (kind === "flirt" && id && typeof _ownBarStaff === "function" && _ownBarStaff(id) && !(typeof _affairLive === "function" && _affairLive() && id === G.affair.id)) {
+    _say(_fmt(_pickVary(_OWN_STAFF_FLIRT, "ownflirt"), { n: NPCS[id].name }));
+    return;
+  }
   if (!id) {
     if (!w) { _say(`You ${kind} the ambience. The neon flickers back, noncommittally.`); return; }
     // a pronoun the scope couldn't pin down → ask, rather than a flat refusal
@@ -4725,6 +4741,7 @@ function _nightSnapshot() {
     bank: G.bank || 0, held: G.nontStuck || 0, bankIn: G.bankIn || 0,   // the account, Nont's overnight hold, and what ARRIVED (Marguerite, round 67; the money audit)
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
+    spcB: G.massageSpend || 0, joinB: G.joinerPaid || 0,
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
@@ -4816,6 +4833,10 @@ function _morningLedger() {
   if (borrowed > 0) bits.push("\u0e3f" + _num(borrowed) + " borrowed from Nira \u2014 a debt, not a win");
   const polN = (G.policePaid || 0) - (b.polB != null ? b.polB : (G.policePaid || 0));
   if (polN > 0) bits.push("\u0e3f" + _num(polN) + " of it to the police");   // a fine was lumped into "down" (Gordie, round 72)
+  const spcN = (G.massageSpend || 0) - (b.spcB != null ? b.spcB : (G.massageSpend || 0));   // the specials and the joiner fee were in "down" and nowhere else (László, round 73)
+  if (spcN > 0) bits.push("\u0e3f" + _num(spcN) + " of it on the massage table");
+  const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
+  if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
   const bookN = (G.hotelDebt || 0) - (b.bookB != null ? b.bookB : (G.hotelDebt || 0));
   if (bookN > 0) bits.push("\u0e3f" + _num(bookN) + " more on the hotel book (\u0e3f" + _num(G.hotelDebt) + " in all)");
   const skipR = (G.skipRepaid || 0) - (b.skipR != null ? b.skipR : (G.skipRepaid || 0));
@@ -4987,7 +5008,7 @@ function _joinerFee(night = G.day) {   // the NIGHT she came up: a fee charged a
     _say(_fmt("(The night clerk writes the joiner fee in the book instead — ฿{f}, on top of whatever else is in there. ฿{d} on the book now.)", { f: _num(JOINER_FEE), d: _num(G.hotelDebt) }), "dim");
     return;
   }
-  G.joinerDay = night; G.money -= JOINER_FEE;
+  G.joinerDay = night; G.money -= JOINER_FEE; G.joinerPaid = (G.joinerPaid || 0) + JOINER_FEE;   // named on the morning ledger (László, round 73)
   _say(_fmt(_pickVary(_JOINER_LINES, "joiner"), { f: JOINER_FEE }), "dim");
 }
 function _endNight(reason) {
@@ -5044,7 +5065,7 @@ function _endNight(reason) {
   // Desmond asked three people about everything that happened to him and nobody could say)
   {
     const _bt = G.soc && G.soc.barTurns ? Object.entries(G.soc.barTurns).sort((a, b) => b[1] - a[1])[0] : null;
-    G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0,
+    G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, leftFrom: G.soc.leftFrom || null,
       with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room, kicked: G.kickedTonight || null };
     G.kickedTonight = null;
   }
@@ -5757,7 +5778,8 @@ function _suvarnabhumiScrub() {
   // the man at the gate is the one you chose in the taxi: a pensioner has no conference and no
   // quarterly reports to dress for (Piet, round 62 — "a pension, and twenty years of coming back")
   const _home = l => !(typeof _isOrigin === "function" && (_isOrigin("pension") || _isOrigin("redundancy") || _isOrigin("running"))) || !/conference|quarterly|careers|mortgage|lawn/i.test(l);
-  const _phys = _SCRUB_PHYSICAL.filter(_home), _dig = _SCRUB_DIGITAL.filter(_home), _call = _SCRUB_CALL.filter(_home), _close = _SCRUB_CLOSE.filter(_home);
+  const _hasNumbers = Object.keys(G.phone.contacts || {}).some(k => G.phone.contacts[k] && NPC_ROLES[k]);   // no hearts to purge with nobody's number (Pieter, round 73)
+  const _phys = _SCRUB_PHYSICAL.filter(_home), _dig = _SCRUB_DIGITAL.filter(_home).filter(l => _hasNumbers || !/hearts|papa|voice note/.test(l)), _call = _SCRUB_CALL.filter(_home), _close = _SCRUB_CLOSE.filter(_home);
   _say((_phys.length ? _phys : _SCRUB_PHYSICAL)[Math.floor(_rand() * (_phys.length || _SCRUB_PHYSICAL.length))]);
   if (typeof _isOrigin === "function" && _isOrigin("monger")) {
     _say((_dig.length ? _dig : _SCRUB_DIGITAL)[Math.floor(_rand() * (_dig.length || _SCRUB_DIGITAL.length))]);

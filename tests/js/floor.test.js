@@ -191,3 +191,25 @@ test("every written woman greets a man she knew last trip in her own words, once
     G.convoQ = null; const b = ask(id, "this bar"); assert.doesNotMatch(b, /Not my story|Not a thing I know|wrong girl/, id + " on her own bar");
   }
 });
+
+// ── The Doghouse (2026-10-08): the fourth floor — the Samson brothers' cold basement club on Pratumnak ──
+const DOG = ["sunee", "tukky", "tar", "gof", "wassana", "doghouse_bow"];
+test("the Doghouse: everyone answers for everyone on the floor; the lady chooses; Tukky knows where Bill is tonight", () => {
+  G.season0 = 2; G.room = "doghouse";
+  const q = (a, t) => { G.nightTurn = 30; return ask(a === "doghouse_bow" ? "bow" : a, t); };
+  for (const id of DOG) { G.nightTurn = 30; run("talk to " + (id === "doghouse_bow" ? "bow" : id)); }
+  for (const a of DOG) for (const b of DOG.filter(x => x !== a))
+    assert.match(q(a, NPCS[b].name.toLowerCase()), new RegExp(NPCS[b].name), `${a} on ${b}`);
+  assert.match(q("sunee", "rule"), /the lady looks first/);
+  assert.match(q("sunee", "bill"), /flowers/);
+  assert.match(q("tar", "bank"), /teller/);
+  assert.match(q("gof", "cold"), /wok/);
+  assert.match(q("wassana", "gold"), /never say sorry/);
+  assert.match(q("doghouse_bow", "airline"), /six centimetre/i);
+  for (const [d, re] of [[3, /Boardroom tonight/], [4, /Velvet tonight/], [5, /Here tonight/]]) {
+    G.day = d; G.talked.tukky = [];
+    assert.match(q("tukky", "bill"), re, "day " + d + ": " + _npcRoom("bill"));
+  }
+  assert.doesNotMatch(NPCS.doghouse_bow.desc + NPCS.sunee.desc, /stool/, "a gents' club seats its women on sofas");
+  assert.equal(FLOOR_OWN.gof.exit, null); assert.match(FLOOR_OWN.doghouse_bow.exit, /U-Tapao/);
+});

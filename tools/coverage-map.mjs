@@ -33,6 +33,7 @@ const NAMES = { A: "composition", B: "absence", C: "reachability", D: "promise",
 const SEV = { S: .24, C: .21, A: .17, I: .14, G: .15, B: .12, E: .12, J: .11, H: .11, R: .10, L: .04, D: .04, F: .03, P: .02, Q: 0, N: 0, M: 0, K: 0 };
 // which classes an instrument covers, and for which systems (empty = every system)
 const INSTRUMENTS = [
+  { name: "composition-audit", cls: ["A", "I"], systems: ["party", "affair", "barbooks", "barchain", "sobriety", "social", "conversation", "weather", "act1", "drinks", "ladydrinks", "bell", "barfine", "money"] },
   { name: "promises/afford/asktopic/errand/examine", cls: ["D"] },
   { name: "askable-audit", cls: ["N"], systems: ["drinks", "calendar", "hotels", "barfine", "bell", "regulars", "navigation", "money", "clinic", "police", "cons", "dog", "sobriety", "barbooks", "darkness", "phone", "social", "saleng"] },
   { name: "references.test", cls: ["K", "R"] },

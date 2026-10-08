@@ -112,7 +112,7 @@ test("the town hears what happened: Oy on the debts, Candy after the wallet, Ber
 const owner = () => { G.stage = "expat"; _setFlag("barPaid"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.room = "stinky_bar"; };
 test("the jobs name their price, and the owner's staff can say what the arrangements are", () => {
   const scr = SYNDICATE_JOBS.find(j => j.id === "screen"), pos = SYNDICATE_JOBS.find(j => j.id === "pos");
-  assert.match(scr.ask, new RegExp("฿" + SYN_JOB_NIGHT * 30)); assert.match(pos.ask, new RegExp("฿" + SYN_JOB_NIGHT * 30));
+  assert.match(scr.ask, new RegExp("฿" + (SYN_JOB_NIGHT * 30).toLocaleString("en-US"))); assert.match(pos.ask, new RegExp("฿" + (SYN_JOB_NIGHT * 30).toLocaleString("en-US")));
   assert.doesNotMatch(pos.who, /car door/);
   owner(); G.syn = G.syn || {}; G.syn.done = { cleaning: true };
   const cake = _npcsHere().find(i => NPC_ROLES[i] === "cashier");

@@ -1604,6 +1604,10 @@ function _convoChoices(remembered) {
 function _convoAsk(id, d, st) {
   if (!d || !d.asks) return;
   const key = d.asks.key;
+  // a question that does not fit a resident: "how long you stay?" to the man who lives here, "you got money in
+  // anything out here?" to the man whose bar he is sitting in (László, round 73)
+  if (key === "stay" && G.stage === "expat") return;
+  if (key === "invested" && typeof _barOwned === "function" && _barOwned()) return;
   st.know = st.know || {};
   if (st.know["asked_" + key]) return;
   // …and a question you already ANSWERED is never asked again, whatever cleared
@@ -2450,7 +2454,7 @@ function _topicMiss(npcId) {
   if (n.patron) return _PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](n.name, _patronHis(npcId));
   const she = _pronoun(npcId) === "she" || (!_pronoun(npcId) && !!n.filler);
   const house = /^(mamasan|cashier)$/.test(NPC_ROLES[npcId] || "") || (typeof _FLUENT_THAI !== "undefined" && _FLUENT_THAI.has(npcId));
-  const pool = house && she ? _TOPIC_MISS_HOUSE : _thaiVoice(npcId) ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;
+  const pool = house && she ? _TOPIC_MISS_HOUSE : (_thaiVoice(npcId) && npcId !== "tan" && npcId !== "nont") ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;   // Tan is fluent: "That one I don't know, na" was his (László, round 73)
   let line = _pickVary(pool, "miss:" + npcId)(n.name);   // not the same brush-off twice running from one mouth (Desmond, round 63)
   if (!she && pool === _TOPIC_MISS_TH) line = line.replace("her head", "his head").replace("the wrong girl", "the wrong man");
   if (she && NPC_ROLES[npcId] === "mamasan") line = line.replace("the wrong girl", "the wrong mama");   // Candy is nobody's girl (Margarethe, round 47)

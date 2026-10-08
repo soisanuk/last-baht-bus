@@ -17,6 +17,11 @@ const _DIRS = {
 // time, so these can sit above its definition.
 // _fmt templates (not raw interpolation): the {n}/{p} placeholders let the German
 // catalog reorder them. EN output is byte-identical to the old strings.
+const _LADY_DRINK_OWN = [   // a drink for your own girl: into your own till, and no customer's smile (composition audit, 2026-10-08)
+  n => _fmt("{n} takes the drink and rings it into your own till, which she finds very funny. \"Boss buy, boss pay, boss get the money. Everybody happy.\"", { n }),
+  n => _fmt("\"For me?\" {n} pours it herself, short, and puts the chit in the cup with the others. \"Is your money twice, boss. I drink it once.\"", { n }),
+  n => _fmt("{n} clinks it against your glass without ceremony. \"Staff drink. Cheapest lady drink in Pattaya — you already own it.\"", { n }),
+];
 const _LADY_DRINK_LINES = [
   n => _fmt("One lady drink for {n} — ฿{p} on the tab that is your life.", { n, p: _ladyPrice() }),
   n => _fmt("{n} gets her cola-with-benefits; {m}'s biro logs ฿{p} without looking up.", { n, p: _ladyPrice(), m: _mamaRef() }),
@@ -337,6 +342,16 @@ const _FOLK_SOAPY = [
 function _masseuseTalk(t) {
   const r = _room(), rm = G.room;
   if (r.soapy) return _pickVary(_FOLK_SOAPY, "folksoapy");
+  if (/\b(last night|yesterday)\b/.test(String(t || "")) && G.lastNightWas && G.lastNightWas.day === G.day - 1)   // the witness question in a parlour (László, round 73: "the stools in front of me")
+    return _pickVary(["\"Last night? Not on my table.\" She folds a towel. \"Where you were, your back knows. Lie down, I ask it.\"",
+      "\"Last night I was closed, and you were somewhere with a bar in it.\" A shrug. \"The shoulders say so.\""], "masslastnight");
+  if (/\b(last time|last visit|before|yesterday|remember me|again)\b/.test(String(t || "")) && G.massageLog && G.massageLog[rm] && G.massageLog[rm].last < G.day) {
+    const ml = G.massageLog[rm], ago = G.day - ml.last;
+    return _pickVary([
+      `"Last time?" She counts it on the oil bottle. "${ago === 1 ? "Yesterday" : ago + " day ago"}. Same shoulder, same man. ${ml.n > 1 ? "Number " + ml.n + " for you here. " : ""}I remember the back, not the face — the back does not lie."`,
+      `"You come ${ago === 1 ? "yesterday" : ago + " day ago"}." Not a question. "I write nothing down. The hands remember. ${ml.n >= 3 ? "Three time, you are a customer. " : ""}Same again?"`,
+    ], "masslast");
+  }
   const sw = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[rm];
   if (sw) (G.shopMet = G.shopMet || {})[rm] = true;   // "met 4" after Joom, Duean and the rest (Graeme, round 58)
   if (sw) {
@@ -4204,7 +4219,7 @@ function _doTalkCore(arg, topic) {
     _say(_pickVary([
       "\"Yours?\" Nira does not open the book. \"Paid. You owe me nothing, and I remember the ones who owe me nothing as carefully as the others.\"",
       "Nira glances at the calculator, not at you. \"We are square. That is a short list in this town — stay on it.\"",
-      "\"Debt?\" A small shake of the head. \"Not yours. You paid on the day. Come back when you want money, not when you want to be told you are good.\"",
+      (G.skipRepaid || 0) > 0 ? "\"Debt?\" A small shake of the head. \"Not yours. You paid late, and you paid. That is the second-best kind.\"" : "\"Debt?\" A small shake of the head. \"Not yours. You paid on the day. Come back when you want money, not when you want to be told you are good.\"",
     ], "nirasquare"));
     return;
   }
@@ -4600,6 +4615,7 @@ function _doTalkCore(arg, topic) {
           _aff && G.affair.soured ? (me === "mamasan"
               ? `"${n}?" ${_mamaLabel(NPCS[npc].name)} lowers her voice this time. "Your girl, boss. Still. But she is not happy, and the floor know why, and I am not going to say it for you."`
               : me === "cashier" ? `"${n}." ${NPCS[npc].name} does not open the book. "She is on your page and she is not happy there. I count money, boss, not that."`
+              : NPCS[npc].manager ? `"${n}?" ${NPCS[npc].name} doesn't grin this time. "Your girl, boss. Still. She's not happy, the floor knows why, and I'm not the one who's going to say it for you."`
               : `"${n}?" ${NPCS[npc].name} does not grin this time. "Boss. Everybody know that too. She not happy. You know why, so I don't say."`) :
           _aff ? (me === "mamasan" ? `"${n}?" ${_mamaLabel(NPCS[npc].name)} does not lower her voice. "Your girl. Everybody know, boss. ${G.affair && (G.affair.crisSeen || []).includes("rota") ? ((G.affair.crisChose || {}).rota === "b" ? "The rota stood. You let me run her like a hostess. Good." : "The rota is yours now — you made it yours.") : "I take her off the late rota myself."}" A look. "She is better than you. Be careful with her."`
                : me === "cashier" ? `"${n}." ${NPCS[npc].name} closes the book. "She is not on my page any more, boss. She is on yours. I don't count that one."`
@@ -5856,7 +5872,9 @@ const _TOWN = {
       "\"{b}?\" A grin. \"The new owner is sitting here asking me who is the new owner. Hahaha.\""],
     house: ["\"{b}.\" {n} tips the glass at you. \"Changed hands this year — a regular bought it, which is a better story than the group buying it. Word gets round, bud.\"",
       "\"You own {b},\" {n} says. \"The soi's known since the day the deposit cleared. Nothing's a secret here that anybody can see from the pavement.\"",
-      "\"{b}? Yours now, I hear.\" {n} shrugs. \"Good luck with it. The wet season's the one that finds out who meant it.\""],
+      "\"{b}? Yours now, I hear.\" {n} shrugs. \"Good luck with it. The wet season's the one that finds out who meant it.\"",
+      "\"{b}.\" {n} nods, slowly. \"A regular with his name over a door. Half this soi has dreamed it and the other half has watched the first half try.\"",
+      "{n} looks at you the way the soi looks at a new sign. \"{b}. Yours. Pay the rent on the first and nobody will ever say your name again — which is the best review a bar gets.\""],
     punter: ["\"{b}?\" {n} squints at you. \"You're the fella who bought it, aren't you. Word gets round. Rather you than me, mate — and rather you than the group.\"",
       "\"{b}? Changed hands.\" {n} nods at you. \"To you, as it goes. Everybody on the rail knows. Nobody's said it to your face because nobody wants a free drink bad enough.\"",
       "{n} raises the glass an inch. \"{b}'s owner. Didn't think you'd be the type. Then again, nobody ever is.\""],
@@ -5977,7 +5995,8 @@ const _TOWN = {
       "{n} laughs. \"Gentleman club is where the girl have a sofa, not a stool.\" She counts on her fingers. \"Boardroom, Velvet on Thappraya. Doghouse up Pratumnak. Bring money.\""],
     house: ["\"The gentlemen's clubs are up Thappraya and over on Pratumnak,\" {n} says. \"The Boardroom, the Velvet, the Doghouse. Air-con villas — one drink buys you the welcome, and the barfine is the dearest in town.\"",
       "\"Thappraya Road for the Boardroom and the Velvet,\" {n} says. \"Pratumnak for the rest. They're quiet rooms with a door on them. You pay for the door.\""],
-    punter: ["\"Thappraya Road, mate. The Boardroom, the Velvet Club. Pratumnak's got a couple more. Buy her a drink before you get ideas — that's the rule in there.\""],
+    punter: ["\"Thappraya Road. The Boardroom, the Velvet Club. Pratumnak's got a couple more. Buy her a drink before you get ideas — that's the rule in there.\"",
+      "\"The clubs? Up Thappraya, and over the hill on Pratumnak. Villas with the air-con on and the lights off. One drink buys you the sofa; the rest you negotiate.\""],
   },
   placedHouse: {
     floor: ["\"{w}? She run {job}.\" {n} tips her head toward her. \"You ask her. Careful, she know everything already.\""],
@@ -6033,6 +6052,52 @@ const _TOWN = {
       "{n} squints. \"Here, {h}, then gone. {W}Don't ask me where. I was watching the football.\"",
       "\"Last night you sat there and I sat here, {h} of it. {W}Then you went out and I didn't. That's the whole report.\""],
   },
+  // THE SHIFT'S OWN DECISIONS, remembered by the floor that watched them (László, round 73: the merit
+  // Lamai proposed, the slate, the man put out, Jiap's bus — "an hour later she has never heard of monks")
+  call_merit_yes: { floor: ["\"The monks?\" {n} wais, small. \"{d}. Nine of them, and the whole floor touch your arm after. Good luck for the bar, boss. Also good luck for you.\""],
+    house: ["\"The merit ceremony.\" {n} nods. \"{d}. Nine monks, the envelope, and it is on the books as a cost — the right kind. The floor needed it more than the till did.\""], punter: ["\"The monks? Saw them come in {d}. First bar on this soi I've seen do it properly. Girls were a different shape after.\""] },
+  call_merit_no: { floor: ["\"Monks?\" {n} is quiet a second. \"Mama ask, you say no. Is okay, boss. Next bad week, maybe ask again.\""],
+    house: ["\"The ceremony you turned down.\" {n} keeps her voice level. \"Your money, your bar. The floor noticed — the floor always notices a no.\""], punter: ["\"The monks? Heard the mama asked and the answer was no. Bar's your business, pal.\""] },
+  call_tab_yes: { floor: ["\"The slate? {d}, you say yes.\" {n} shrugs. \"Pay-day he pay, or he don't. Cake write it either way.\""],
+    house: ["\"The regular's slate — you took it {d}.\" {n} taps the book. \"It comes back on pay-day or it comes off the stock. I will tell you which.\""], punter: ["\"The tab? Decent of you. He'll square it Friday, or he'll find another bar. One or the other.\""] },
+  call_tab_no: { floor: ["\"The slate? You say no, {d}.\" {n} keeps wiping. \"He go drink somewhere that say yes. Is okay. Some nights no is the right one.\""],
+    house: ["\"The slate you refused, {d}.\" {n} is businesslike. \"His night went across the road. Cheaper than his night staying here unpaid.\""], punter: ["\"The tab? You said no. He's drinking at the Bucket tonight, telling them you're tight. Doesn't matter. He'll be back.\""] },
+  call_early_yes: { floor: ["\"{who}? You let her go for the bus, {d}.\" {n} smiles. \"Her boy see his mama. The floor is one short, we manage. Everybody remember that one, boss.\""],
+    house: ["\"{who} went home early, {d} — your call.\" {n} nods. \"A girl short on the floor and a mother home on the bus. The books felt it; the floor forgave it.\""], punter: ["\"{who}? Off early, {d}. Bus to somewhere. Rail was a girl short and nobody minded.\""] },
+  call_early_no: { floor: ["\"{who} ask to go early, {d}, and you say no.\" {n} looks at the floor. \"She stay. Her boy wait. Is the boss's bar.\""],
+    house: ["\"{who} asked for her bus, {d}. You kept her.\" {n} says it flat. \"The floor was full and the floor remembers.\""], punter: ["\"{who}? Wanted off early {d}, didn't get it. She did her shift. Didn't smile much.\""] },
+  call_round_yes: { floor: ["\"The round on the house! {d}.\" {n} grins. \"Everybody drink, everybody love the boss for one hour. Cheap for one hour of love.\""],
+    house: ["\"The round you stood, {d}.\" {n} half-smiles. \"The till paid for it and the room paid it back in noise. A fair trade, once a week at most.\""], punter: ["\"The free round? {d}. Finest hour this bar's had. Don't do it again or I'll never buy one.\""] },
+  call_round_no: { floor: ["\"The flat hour, {d}? You keep the till closed.\" {n} shrugs. \"Is the boss's money. The room stay flat. Also okay.\""],
+    house: ["\"You kept the till shut on the dead hour, {d}.\" {n} nods. \"Correct, mostly. A round is a mood, not a business.\""], punter: ["\"Flat as a mat {d}, and the boss kept his hand in his pocket. Can't fault it.\""] },
+  call_turning_yes: { floor: ["\"That man? You put him out, {d}.\" {n} is still a little impressed. \"Nobody make trouble after. Everybody see who is the boss.\""],
+    house: ["\"The punter you turned out, {d}.\" {n} keeps it level. \"Your name over the door, and now the door knows it. Bert would have waited for you to say.\""], punter: ["\"The drunk? You binned him {d}. About time somebody did. He was turning.\""] },
+  call_turning_no: { floor: ["\"That man, {d}? You let him stay.\" {n} is careful. \"He go quiet by himself. Lucky. Next time maybe not lucky.\""],
+    house: ["\"You let him ride it out, {d}.\" {n} shrugs. \"He went quiet. The floor was watching your face, not his.\""], punter: ["\"The one turning nasty {d}? Boss let him be. He wound down. They don't always.\""] },
+  // walked out by security: the room that put you out does not deny you were in it (Pieter, round 73)
+  saw_kicked: { floor: ["\"Last night?\" {n} looks at the door. \"Security walk you out. Everybody see. Tonight, be nice, na.\"",
+      "{n} lowers her voice. \"You here last night, boss. Then you not here. Mama say the word and the big man open the door. Tonight, small smile, no trouble.\""],
+    house: ["\"You were in here last night,\" {n} says, \"and then you were on the pavement, and that was my doing. You are sitting down tonight, so we are even. Don't make me do it twice.\"",
+      "\"Last night.\" {n} doesn't need the book. \"I had you walked out. You know why. Tonight you are a customer again — that is how this room works, once.\""],
+    punter: ["\"Last night? Mate, they threw you out. Whole rail watched. You went quietly, I'll give you that.\"",
+      "{n} grins. \"Saw you leave. Through the door, with help. We've all done it once.\""] },
+  // a massage shop's version of the witness question (László, round 73: "I only answer for the stools in front of me", in a parlour)
+  saw_parlour: { floor: ["\"Last night? Not on my table.\" She folds a towel. \"Where you were, your back knows. Lie down, I ask it.\"",
+      "\"Last night I was closed, and you were somewhere with a bar in it.\" A shrug. \"The shoulders say so.\""],
+    house: ["\"Last night? Not on my table.\" She folds a towel. \"Where you were, your back knows. Lie down, I ask it.\""], punter: ["\"Last night? Not on my table.\" She folds a towel. \"Ask your back.\""] },
+  // the man on the fifty-one, asked at your own bar (László, round 73: "That one, I cannot help you with" from your own mamasan)
+  partner_tan: { floor: ["\"Khun Tan? He is the paper, boss. Fifty-one.\" {n} says it the way you say the weather. \"He come, he drink nothing, he go. The cleaners come the next day. That is Khun Tan.\""],
+    house: ["\"Tan holds the fifty-one, and that is all anybody on this floor needs to know about Tan.\" {n} is precise. \"He has never once told me how to run it. That is either trust or something else, and I have stopped trying to decide which.\"",
+      "\"Khun Tan.\" {n} says the name the way you say a landlord's. \"On the paper, fifty-one. In the room, never. The cleaners come, the ice comes, nobody rings — that is what his name on the paper buys.\"",
+      "{n} glances at the door he came in by. \"Your partner asks for nothing and pays for nothing and everything arrives. I have worked for owners who did the opposite of all three. I know which I prefer.\""],
+    punter: ["\"Tan? Your partner. The quiet fella with the sedan. Never buys a drink, never needs to.\"", "\"The fifty-one? Tan. Drove me in from the airport once, years back. Didn't take the fare then either.\""] },
+  partner_candy: { floor: ["\"Khun Candy? She is the paper, boss — the lawyer paper behind the till.\" {n} nods at it. \"She come to check it one time a month. Very correct.\""],
+    house: ["\"Candy is the fifty-one, on paper that a Bangkok lawyer wrote.\" {n} taps the frame behind the till. \"Slow, expensive, and written down. I prefer written down.\"",
+      "\"Khun Candy.\" {n} nods at the paper behind the till. \"She reads it once a month, every line, and signs the bottom. In twenty years I have not met another partner who reads.\""],
+    punter: ["\"Candy? Your partner. The one with the lawyer. Did it properly, which round here is almost suspicious.\"", "\"The fifty-one's Candy — the one with the two bars on Buakhao. Paperwork you could frame. She did.\""] },
+  // last night's event, asked of the rail that had it (László, round 73: "No idea. Try somebody who was there" from Bert, about his own football finish)
+  lastevent: { floor: ["\"{e}!\" {n} remembers it well. \"{d}. Cake write it in the book — {amt}. Good night.\""],
+    house: ["\"{e}, {d}.\" {n} doesn't need the book. \"{amt} on the night. It's on your page — BOOKS has it.\""], punter: ["\"{e}? {d}, mate. I was here. {amt}, if you're counting, and the boss always is.\""] },
   saw_not: {
     floor: ["\"Last night? You not here, boss.\" {n} shrugs. \"I only see my own bar.\"",
       "{n} shakes her head. \"Not here last night. Ask where you were, not me.\"",
@@ -6191,12 +6256,13 @@ const _ARR_LIST_FLOOR = [
 const _ARR_LIST_HOUSE = [
   "\"{L}.\" {n} doesn't need to look it up. \"฿{per} a night between them — the arrangements line. Tan's people, and worth it, mostly.\"",
   "{n} nods at the book. \"{L}. ฿{per} a night, every night, wet or dry. The cheapest insurance on this soi, and the only kind that pays out.\"",
-  "\"That line is {L},\" {n} says. \"฿{per} a night. You never see them and nothing ever breaks on a Friday. That is not an accident.\"",
+  "\"{L}.\" {n} says it like a line of a hymn. \"That line. ฿{per} a night. You never see them and nothing ever breaks on a Friday. That is not an accident.\"",
 ];
 const _mamaLabel = n => /^mama\b/i.test(n) ? n : "Mama " + n;   // "Mama Mama Yai weighs it" (Marguerite, round 67)
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
-  const t = String(topic).toLowerCase().trim();
+  let t = String(topic).toLowerCase().trim();
+  if (/\bmy bar\b/.test(t) && typeof _barOwned === "function" && _barOwned() && G.bar && G.bar.room) t = t.replace(/\bmy bar\b/g, String(_barName(G.bar.room) || "").toLowerCase());   // "my bar" answered about HER bar (László, round 73)
   // THE CHORUS (Henrik, round 69): the women at one bar share these pools, and a man who asks
   // every woman the same question heard one sentence from three mouths. A line is HERS for the
   // night once she has said it; another speaker here is dealt a different one while one remains.
@@ -6204,7 +6270,7 @@ function _townTalk(npc, topic) {
     let line;
     if (npc === "tan" && _TAN_TOWN[k]) line = _tanTown(k, slots);
     else {
-      const pool = _roomFit(_TOWN[k][reg]), book = (G.soc.townSaid = G.soc.townSaid || {}), bk = G.room + ":" + k + ":" + reg;   // the room's own cast and furniture first, as _pickVary does
+      const pool = _roomFit(_TOWN[k][reg]), book = (G.soc.townSaid = G.soc.townSaid || {}), bk = (k === "owner" ? "*" : G.room) + ":" + k + ":" + reg;   // the room's own cast and furniture first, as _pickVary does
       const used = book[bk] = book[bk] || {};
       const free = pool.map((_, i) => i).filter(i => !used[i] || used[i] === npc);
       const i = free.length ? free[_hh(npc + ":" + k, 13) % free.length] : _hh(npc + ":" + k, 13) % pool.length;
@@ -6342,13 +6408,31 @@ function _townTalk(npc, topic) {
       !(typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid"))) {
     const w = G.lastNightWas;
     if (npc === "tan") return pick("saw", { how: _LASTNIGHT_TAN_HOW(w) });
+    if (_room().massage || _room().soapy) return pick("saw_parlour", {});
+    if (w.kicked && w.kicked.where && (_barName(G.room) === w.kicked.where || _barName(NPCS[npc].room) === w.kicked.where)) return pick("saw_kicked", {});   // the room that put you out (Pieter, round 73)
     if (w.with === npc) { _say(`"Last night?" ${NPCS[npc].name} looks at you. "You were there, tilac. You know."`); return true; }
-    const here = w.bar && (w.bar === G.room || (NPCS[npc].room === w.bar) || (Array.isArray(NPCS[npc].bars) && NPCS[npc].bars.includes(w.bar)));
+    const here = (w.bar && (w.bar === G.room || (NPCS[npc].room === w.bar) || (Array.isArray(NPCS[npc].bars) && NPCS[npc].bars.includes(w.bar)))) ||
+      (w.leftFrom && (w.leftFrom === G.room || NPCS[npc].room === w.leftFrom));   // the bar you walked her out of (Pieter, round 73: Near watched Cream leave on his arm)
     if (!here) return pick("saw_not", {});
     const hrs = Math.max(1, Math.round((w.barTurns || 0) / 10));
     const withHere = w.with && NPCS[w.with] && (typeof _npcRoom === "function" ? _npcRoom(w.with) === w.bar : NPCS[w.with].room === w.bar) ? NPCS[w.with].name : null;
     const W = !withHere ? "" : reg === "floor" ? `You leave with ${withHere} — everybody see. ` : reg === "house" ? `You left with ${withHere}, and the room noticed. ` : `You left with ${withHere}; we all saw. `;
     return pick("saw", { h: reg === "floor" ? `${hrs} hour` : `${hrs} hour${hrs > 1 ? "s" : ""}`, H: (reg === "floor" ? `${hrs} hour` : `${hrs} hour${hrs > 1 ? "s" : ""}`).replace(/^\d/, m => m), W });
+  }
+  // THE SHIFT'S DECISIONS, the night's event, the partner — answered at your own bar by the floor that was there (László, round 73)
+  if (typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid") && G.bar) {
+    const calls = (G.bar.calls || []).filter(c => G.day - c.day <= 2);
+    const K = { merit: /\b(monks?|merit|ceremony|temple|tam ?boon|blessing)\b/, tab: /\b(tab|slate|docket)\b/, early: /\b(early bus|her bus|\w+s? bus|the bus|sent home|go home early|went home|early)\b/, round: /\b(the round|round on the house|flat hour|free round|free drinks)\b/, turning: /\b(the man|that man|the punter|the drunk|turned|thrown out|put out|threw out|security)\b/ };
+    for (const id of Object.keys(K)) {
+      const c = [...calls].reverse().find(x => x.id === id);
+      if (c && K[id].test(t)) return pick("call_" + id + (c.yes ? "_yes" : "_no"), { who: c.who && NPCS[c.who] ? NPCS[c.who].name : "the girl", d: c.day === G.day ? "tonight" : "last night" });
+    }
+    const _EVW = /\b(football|footy|match|finish|birthday|millionaires?|regulars?|runner|police|fight|drunk|turned|round|bell)\b/i;
+    const ev = (G.bar.lastEvents || []).find(e => { const m = e.match(_EVW); return m && new RegExp("\\b" + m[1].toLowerCase().replace(/s$/, "") + "s?\\b").test(t); }) ||
+      ((G.bar.lastEvents || []).length && /\b(footy|the match|the game|last night'?s? (luck|event|news)|what happened|the event)\b/.test(t) ? G.bar.lastEvents[0] : null);
+    if (ev) { const m = ev.match(/^(.*?)\s*([+−-]฿[\d,]+)$/); return pick("lastevent", { e: (m ? m[1] : ev).replace(/^\w/, c => c.toUpperCase()), amt: m ? m[2] : "", d: "last night" }); }
+    if (/\btan\b/.test(t) && _flag("partnerTan") && NPC_ROLES[npc]) return pick("partner_tan", {});
+    if (/\bcandy\b/.test(t) && _flag("partnerCandy") && NPC_ROLES[npc]) return pick("partner_candy", {});
   }
   // the arrangements you signed: your own staff pay them nightly and could not name them
   // ("not my department", Kwame, round 60); the BOOKS word was a miss on the man who
@@ -8027,6 +8111,7 @@ function _doBuy(arg) {
   if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
     // a restaurant serves beer too — KISS's Item 47 IS 'BIG BEER'
     if (!_servesDrinks() && !_room().food && !FOOD_STALLS[G.room]) {
+      if (typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room]) { _say("No beer on this stall — a stool across the soi sells it, or the 7-Eleven does by the bottle."); return; }   // "the bar exhales" at a pavement wok (Pieter, round 73)
       _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return;
     }
     // Bert said "that's a beer on the house, bud" to the ex-married origin and
@@ -8185,7 +8270,7 @@ function _doBuy(arg) {
     const _lazy = NPCS[id].type === "lazy";
     if (!_lazy || _rand() < 0.4) _boughtBond(id, typeof _drinksOnly === "function" && _drinksOnly(id) ? 2 : 1);   // capped per girl per night; the drink IS the drinks-only girl's job (theme 12)
     const _warm = !_lazy && _bondTier(id) >= 2;
-    let _pool = _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;
+    let _pool = (typeof _ownBarStaff === "function" && _ownBarStaff(id)) ? _LADY_DRINK_OWN : _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;   // your own staff ring it into your own till, and say so (composition audit, 2026-10-08)
     if (!((G.soc.selfDrinks || {})[G.room])) { const _dry = _pool.filter(l => !/your (bottle|beer)\b/i.test(typeof l === "function" ? String(l) : l)); if (_dry.length) _pool = _dry; }   // "clinks the glass against your bottle" with no bottle (Piet, round 62)
     const _pk = _lazy ? "lazydrink" : _warm ? "warmdrink" : "ladydrink";
     _say(_fmt("{line} (฿{m} left.)", { line: _pickVary(_pool, _pk)(NPCS[id].name), m: G.money }));
@@ -8783,6 +8868,7 @@ function _doMotosai(arg) {
   // a BAR you know by name: the piwin takes you to the street its door is on (Priya, round 58:
   // "motosai to lucky tiger" got the menu while "lk metro" worked)
   let _venueRide = null;
+  if (w && !destKey && /\borchid\b/.test(w.toLowerCase())) { _say("\"The Orchid?\" The piwin laughs, not unkindly. \"Nobody drive you to that one, boss. You get taken. Ask the man who takes you.\""); return; }
   if (w && !destKey && typeof _roomByName === "function") {
     const rid = _roomByName(w);
     if (rid && ROOMS[rid] && ROOMS[rid].bar) {
@@ -9170,7 +9256,7 @@ function _gogoLightWarn() {
     _say(`${who} is at your elbow before the beam settles, one flat hand over ` +
       "your phone, smile fixed: \"No photo. No video. House rule, tilac — the " +
       "girls dance, nobody films.\" Two security shirts have already unfolded " +
-      "from the corner. Best switch that off.", "alert");
+      "from the corner. Best switch that off. (LIGHT OFF)", "alert");
   } else if (w.n === 2) {
     _say(`${who} is back, and the smile is gone. \"OFF. Now.\" Behind her the ` +
       "two security shirts have stopped pretending to watch the stage. The DJ " +
@@ -9784,6 +9870,7 @@ function _doDance(arg) {
   // with your own girl standing there (Rolf, round 55)
   const _w = String(arg || "").replace(/^with\s+/, "").trim();
   const _p = _w ? _resolveActor(_w, _npcsHere()) : null;
+  if (_p && typeof _maiDee === "function" && _maiDee(_p)) { _say(_pickVary(_MAI_DEE_SOCIAL, "maideesoc")(NPCS[_p].name)); return; }   // she danced after the verdict (composition audit, 2026-10-08)
   if (_p && typeof _affairLive === "function" && _affairLive() && _p === G.affair.id && (G.affair.soured || _outWithMe(_p))) {
     _say(G.affair.soured
       ? `${NPCS[_p].name} looks at your hand and then at the room. "Not tonight." She goes back to what she was doing.`
@@ -10195,6 +10282,8 @@ function _doTip(arg) {
   const _defaulted = !amtM;
   if (amtM && amount === 0) { _say("Zero isn't a tip, it's a gesture — and not a kind one. Keep your hand in your pocket or put something in it."); return; }
   const nameW = arg.replace(/\d+|฿|baht/g, " ").trim();
+  { const _tid = nameW && !/\bband\b|\bmusicians?\b|tip.?box/.test(arg) ? _findNpc(nameW) : null;   // a tip glowed after the verdict (composition audit, 2026-10-08)
+    if (_tid && typeof _maiDee === "function" && _maiDee(_tid)) { _say(_pickVary(_MAI_DEE_SOCIAL, "maideesoc")(NPCS[_tid].name)); return; } }
   if (/\bband\b|\bmusicians?\b|tip.?box/.test(arg)) {
     if (!_bandHere()) { _say("No band playing here tonight."); return; }
     if (G.money < amount) { _say(`The tip box wants ฿${_num(amount)}; you have ฿${_num(G.money)}.`); return; }
@@ -12416,6 +12505,11 @@ function engineComplete(input) {
 // nouns a Thai player types first. Greedy longest-match over a string with no
 // spaces; a line that maps entirely becomes the English command, anything else
 // Thai gets a voiced "the soi reads a little" instead of "didn't understand".
+const _GOHOME_NOT_YOURS = [
+  "{n} isn't on your arm, and a woman you walk out of here with is one you have asked. (BARFINE {N})",
+  "\"Home?\" {n} laughs, not unkindly. \"First you talk to the bar, tilac.\" (BARFINE {N})",
+  "You would have to ask her first — and in here, asking has a word. (BARFINE {N})",
+];
 const _THAI_CMD = [
   // ── The verbs a Thai speaker actually reaches for ──────────────────────────
   // The script table read 36 words and covered 17 of the parser's verbs, so a
@@ -12432,6 +12526,8 @@ const _THAI_CMD = [
   // the ones a native typed on night one and the parser had never heard: the wai
   // itself (which WINS Act One), yes, no, and the time (Nok-Anne, round 43)
   ["ไหว้", "wai"], ["ใช่", "yes"], ["ไม่ครับ", "no"], ["ไม่ค่ะ", "no"], ["ไม่", "no"],
+  // the loan and the dishes a learner orders (Pieter, round 73; yuem, dok bia, nee and moo ping wait on the trainer)
+  ["คืนเงิน", "repay"], ["คืน", "repay"], ["ก๋วยเตี๋ยว", "noodles"], ["ข้าวผัด", "fried rice"], ["ผัดไทย", "pad thai"],
   ["ร้องเพลง", "sing"], ["ถ่ายรูป", "photo"], ["ถอนเงิน", "withdraw"], ["ว่ายน้ำ", "swim"],
   ["ชายหาด", "beach"], ["ข้อความ", "message"], ["แท็กซี่", "taxi"], ["เงินสด", "cash"],
   ["บุหรี่", "cigarette"], ["บัญชี", "balance"], ["เบอร์", "contact"], ["จีบ", "flirt"],
@@ -13170,7 +13266,7 @@ function doCommand(input) {
   }
   // a fare said in Thai is a fare paid: bare สิบห้า / สิบห้าบาท at the prompt (Nattapong, round 56)
   if (G.pendingFare && /^[\u0E00-\u0E7F]+$/.test(lower.replace(/\s+/g, "")) && typeof parseThaiWords === "function") {
-    const _tn = parseThaiWords(_stripPolite(lower).replace(/บาท$/, "").trim());
+    const _tn = parseThaiWords(_stripPolite(lower).replace(/^(จ่าย|ให้)/, "").replace(/บาท$/, "").trim());   // จ่ายสิบห้า is PAY 15 (Pieter, round 73)
     if (_tn) { doCommand("pay " + _tn); return; }
   }
   // bare 15 at the fare prompt is the fare (Helga, round 57: refused, while the chip said PAY 15)
@@ -13273,6 +13369,11 @@ function doCommand(input) {
       // the woman on your arm: "home together ends it her way" promised a phrasing the parser
       // refused — GO HOME WITH LEK was a TRAVEL miss, TAKE LEK HOME "you don't see that here" (Marcus, round 61)
       if (_who && G.party && G.party.ids && G.party.ids.includes(_who) && typeof _partyHome === "function") { _partyHome(_who); _flushTrace(_room0); _checkAct1(); return; }
+      // a woman in the room who is NOT on your arm: the door to that has a word, and it is not "you don't see
+      // that here" (Pieter, round 73: GO HOME WITH CREAM, TAKE CREAM HOME)
+      if (_who && NPCS[_who] && _npcsHere().includes(_who) && (NPC_ROLES[_who] === "hostess" || _who === "cream") && !(typeof _affairLive === "function" && _affairLive() && _who === G.affair.id)) {
+        _say(_fmt(_pickVary(_GOHOME_NOT_YOURS, "gohomenot"), { n: NPCS[_who].name, N: NPCS[_who].name.toUpperCase() })); _flushTrace(_room0); return;
+      }
     }
   }
 
@@ -13490,6 +13591,15 @@ function doCommand(input) {
       const gw = arg.split(" ").filter(Boolean);
       if (gw.length < 2) { _say("Give what to whom? (GIVE <thing> TO <person>)"); break; }
       let split = gw.length - 1; // fallback: last word is the recipient
+      // GIVE NIRA 100 / ให้นิรา 100: the recipient FIRST, the way a Thai sentence and most men put it — "They're
+      // not here" with her on the Here line (Pieter, round 73). Only when the trailing word is nobody.
+      if (!_findNpc(gw[gw.length - 1]) && !/^(dog|sai|krok)$/.test(gw[gw.length - 1])) {
+        for (let k = Math.min(2, gw.length - 1); k >= 1; k--) {
+          const lead = gw.slice(0, k).join(" ");
+          if (!/^\d+$/.test(lead) && _findNpc(lead)) { _doGive(gw.slice(k).join(" ").trim(), lead); split = -1; break; }
+        }
+        if (split < 0) break;
+      }
       for (let k = Math.min(3, gw.length - 1); k >= 1; k--) {
         const cand = gw.slice(gw.length - k).join(" ");
         if (_findNpc(cand) ||
