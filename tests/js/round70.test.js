@@ -134,3 +134,41 @@ test("the small things: Bert has never seen Tan's ghost, Klang Corner is eightee
   assert.match(ROOMS.klang_corner ? ROOMS.klang_corner.desc : Object.values(ROOMS).find(r => r.name === "Klang Corner Massage").desc, /eighteen years/);
   assert.ok(!(ROOMS.beach_rd_n.lateDesc || []).some(l => /one man on a saddle/.test(l)));
 });
+
+// ── a night out with the affair girl, with consequences (Mario, 2026-10-08) ──────────────────
+const goOut = () => { run("take manow out"); run("take manow out"); };
+test("the night out: the stakes first, then the two of you get the night and the floor pays for it", () => {
+  affair({ strain: 8 }); G.bar.workedLast = true; G.bar.workedDay = G.day; G.bar.stoodTurns = 25;
+  out = []; run("take manow out"); assert.ok(!G.party); assert.match(said(), /rail is Bert's/);
+  out = []; run("take manow out");
+  assert.deepEqual(G.party.ids, ["manow"]); assert.equal(G.affair.strain, 6); assert.equal(G.affair.floorSour, 1);
+  assert.equal(G.bar.workedLast, false, "the shift lapsed at the door");
+  assert.ok(!_barStaff().includes("manow"), "she is not on the floor while she is out with you");
+});
+test("a second night out inside a week costs the floor double, and she won't go after a catch", () => {
+  affair({}); G.affair.lastOut = G.day - 3; goOut(); assert.equal(G.affair.floorSour, 2);
+  G.party = null; G.affairOutAsk = null;
+  Object.assign(G.affair, { soured: true, discovered: true, caughtDay: G.day, caughtWith: ["Ing"] });
+  out = []; run("take manow out"); run("take manow out"); assert.ok(!G.party); assert.match(said(), /cousin/);
+});
+test("the morning after: the floor's verdict; no away-night strain, no going formal, no other girl's dawn bus", () => {
+  affair({ strain: 7 }); G.hotel = "sabai"; G.money = 9000; goOut();
+  const s0 = G.affair.strain; G.room = _hotelRoomId(); out = []; _endNight("sleep");
+  assert.match(said(), /float|floor one short|Polite is the word|good morning/);
+  assert.doesNotMatch(said(), /worked it without you|did all of it|has gone formal/);
+  assert.doesNotMatch(said(), /The last baht bus was never yours/);
+  assert.ok(G.affair.strain <= s0, "a night out with her is not a night away from her");
+});
+
+// ── the two calls ─────────────────────────────────────────────────────────────
+test("the ledger is written after the bar settles: a till that went under is on that morning's ledger", () => {
+  owner(); G.bar.cash = -5000; G.money = 20000; _nightSnapshot();
+  G.room = _hotelRoomId(); out = []; _endNight("sleep");
+  const idx = out.findIndex(l => /The bar:/.test(l)), led = out.findIndex(l => /^Last night:/.test(l));
+  if (idx >= 0 && led >= 0) assert.ok(led > idx, "the ledger after the bar's settle line");
+  if (G.bar.pocketNight > 0 || /into the till when it went under/.test(said())) assert.match(G.lastNightSaid[0], /into the till when it went under/);
+});
+test("leaving the rail mid-shift says the rule at the door", () => {
+  owner(); G.room = "stinky_bar"; G.nightTurn = 30; _doWork(); G.bar.stoodTurns = 25;
+  G.room = "beach_rd_n"; out = []; _workPresenceTick(); assert.match(said(), /hour and a half/);
+});

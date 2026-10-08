@@ -111,8 +111,9 @@ test("the affair girl answers her own topics (late, free) and the man on the fif
 });
 test("TAKE MANOW OUT and TAKE MANOW FOR DINNER answer in her voice", () => {
   owner(); G.room = "stinky_bar"; G.nightTurn = 30;
-  out = []; run("take manow out"); assert.match(said(), /I work here, boss/);
-  out = []; run("take manow for dinner"); assert.match(said(), /our dinner/);
+  // since 2026-10-08 the night out is real, with its costs: the first ask states them, in her voice
+  out = []; run("take manow out"); assert.match(said(), /Everybody see us go/); assert.ok(!G.party, "the stakes first");
+  G.affairOutAsk = null; out = []; run("take manow for dinner"); assert.match(said(), /one short/);
 });
 test("a companion's drinks at your own bar are a BOOKS line of their own", () => {
   owner(); G.room = "stinky_bar"; G.nightTurn = 30; G.party = { ids: ["lek"], stops: 0, spent: 0, seen: { stinky_bar: true } };

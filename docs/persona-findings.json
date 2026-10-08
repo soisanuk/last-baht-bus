@@ -14898,13 +14898,13 @@
       "lens": "composition",
       "instrument": "",
       "claim": "The till's shortfall hit the pocket after the morning ledger printed, and appeared a day late",
-      "verdict": "deferred",
-      "note": "The settle runs after the ledger; consistent within each window (the money audit agrees). Reordering is a design change.",
+      "verdict": "fixed",
+      "note": "Mario's call to me (2026-10-08): the morning ledger and its snapshot now run AFTER the bar's settle, Nira's cousins and the care tick, so the shortfall is on the ledger of the night it happened.",
       "cls": "E",
       "sev": "med",
       "system": "barbooks",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round70.test.js"
     },
     {
       "round": "70",
@@ -14913,13 +14913,13 @@
       "lens": "composition",
       "instrument": "",
       "claim": "Leaving a declared shift after 28 turns settled it as Bert's",
-      "verdict": "design",
-      "note": "By design (an hour and a half away before midnight lapses it); the rule is now stated when WORK is declared.",
+      "verdict": "fixed",
+      "note": "Kept by design (Mario's call to me, 2026-10-08) and made legible: WORK states the rule, and the first step off your own floor mid-shift says it at the door.",
       "cls": "S",
       "sev": "med",
       "system": "bar",
       "between": "the rule and its statement",
-      "pin": ""
+      "pin": "tests/js/round70.test.js"
     },
     {
       "round": "70",
@@ -14958,13 +14958,13 @@
       "lens": "composition",
       "instrument": "",
       "claim": "No way out with his own girl: TAKE MANOW OUT refused",
-      "verdict": "design",
-      "note": "Mario's open call from round 66 (a night off with the affair girl).",
+      "verdict": "fixed",
+      "note": "Mario, 2026-10-08: 'sure, but there needs to be consequences'. _affairOut: stakes first, then a party; strain −2; floorSour +1 (+2 inside a week); the floor one short on the takings; a declared shift lapses at the door; refused three nights after a catch; the floor's verdict next morning.",
       "cls": "C",
       "sev": "med",
       "system": "affair",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round70.test.js"
     },
     {
       "round": "70",

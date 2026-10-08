@@ -506,6 +506,7 @@ const _term = (() => {
         wai:     l => ({ t: "wai",             c: "wai " + l,          go: true }),
         follow:  l => ({ t: "eat with him",    c: "follow " + l,       go: true }),
         gohome:  l => ({ t: "go home with her", c: "follow " + l,      go: true }),
+        takeout: l => ({ t: "take her out",     c: "take " + l + " out", go: true }),
         seehome: l => ({ t: "see her home",     c: "see " + l + " home", go: true }),
         lesson:  l => ({ t: "take a lesson",   c: "lesson",            go: true }),
         cash:    l => ({ t: "cash, five percent", c: "cash ",           go: false }),

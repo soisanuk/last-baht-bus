@@ -598,7 +598,7 @@ function _npcActions(id, full) {
     // Tan's standing food invite is a real option, so it gets the third surface
     // (parser + autocomplete + here). Hidden during Act One, when he refuses.
     if (id === "tan" && typeof _flag === "function" && _flag("act1Done")) acts.push("follow");
-    if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) acts.push("gohome");
+    if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) acts.push("gohome", "takeout");
     if (role === "hostess" && typeof _seeHomeOpen === "function" && _seeHomeOpen(id)) acts.push("seehome");   // cheap care: the wheel's door at closing
     if (id === "waen") acts.push("lesson");   // ฿100 the hour, the third surface
     if (id === "nont" && typeof _flag === "function" && _flag("hasWallet")) acts.push("cash");   // the priced fixer's verb on his own wheel
@@ -751,6 +751,9 @@ function _doBarfine(arg) {
     // your girl is not a transaction, and not "the long way round, same as any
     // regular" either (Rolf, round 55)
     const _tgt = typeof _findNpc === "function" && arg ? _findNpc(String(arg).replace(/\b(out|with|her|tonight)\b/g, " ").trim()) : null;   // TAKE MANOW OUT reached here as "manow out" and found nobody (round 66)
+    if (typeof _affairLive === "function" && _affairLive() && (!arg || _tgt === G.affair.id) && /\b(out|party)\b/.test(String(arg || "")) && _tgt === G.affair.id) {
+      _affairOut(); return;   // the night out, with its costs (Mario, 2026-10-08)
+    }
     if (typeof _affairLive === "function" && _affairLive() && (!arg || _tgt === G.affair.id)) {
       _say(_fmt(/\bout\b/.test(String(arg || "")) && !/^\s*out\s*$/.test(String(arg || ""))
         ? "\"Out?\" {n} looks at the room she is working, then at you. \"I work here, boss. Who stand here if I go out? Cake? Bert?\" She puts a water on your stool. \"After close, I come. That is our out.\" (FOLLOW {N} after close.)"
@@ -7364,6 +7367,11 @@ function _workPresenceTick() {
     return;
   }
   b.awayTurns = (b.awayTurns || 0) + 1;
+  // the rule said at the door, the first time you leave the rail mid-shift before midnight —
+  // not an hour later (Ossie, round 70: 28 turns stood, out, and it settled as Bert's)
+  if (b.awayTurns === 1 && G.nightTurn < 60 && !((b.stoodTurns || 0) >= WORK_MIN_STOOD && G.nightTurn >= 60)) {
+    _say(_fmt("(You're on shift and off your own floor. Bert holds the rail for an hour and a half — back before then, or tonight is his on the books.)"), "dim");
+  }
   // a shift stood into the small hours is a shift stood, wherever the night then
   // ends (Graham, round 47: 45 turns, home to bed, "Bert ran it"); before
   // midnight, clocking on and going out still lapses it (barchain.test)
@@ -7418,7 +7426,7 @@ const WORK_FLOOR_MAX = 3;    // …and how many a night can hold
 function _barStaff() {
   const room = (G.bar && G.bar.room) || "stinky_bar";
   return Object.keys(NPCS)
-    .filter(id => _npcRoom(id) === room && NPC_ROLES[id] && !NPCS[id].manager && _npcActive(id) &&
+    .filter(id => _npcRoom(id) === room && NPC_ROLES[id] && !NPCS[id].manager && _npcActive(id) && !((G.party && G.party.ids) || []).includes(id) &&
       (NPCS[id].room === room || (NPCS[id].bars || []).includes(room)))   // a girl you brought in on your arm is not your staff (Marta, round 63)
     .sort();
 }
@@ -8030,6 +8038,52 @@ function _affairHome() {
     `${n} nods at the door. "You go first. Everybody see us go together, tomorrow everybody talk. I come after Cake count."`,
   ], "affairhome"));
 }
+// A NIGHT OUT WITH HER (Mario, 2026-10-08: "sure, but there needs to be consequences"). The
+// affair's own law — two meters, no free answers — priced on one evening: the two of you get a
+// real night (strain eases, the party pays its stops), and the floor pays for it (one girl short
+// on the takings, the floor watched the owner leave with his girl, and a second night out inside a
+// week costs it double). A night you declared WORK lapses at the door. She will not go for three
+// nights after she has caught you. TAKE <her> OUT asks once with the stakes, then goes.
+const AFFAIR_OUT_SOUR = 1, AFFAIR_OUT_SOUR_AGAIN = 2, AFFAIR_OUT_EASE = 2, AFFAIR_OUT_WEEK = 7;
+function _affairOut() {
+  const a = G.affair, id = a.id, n = _affairHer(), b = G.bar;
+  if (a.soured && a.caughtDay != null && G.day - a.caughtDay < 3) {
+    _say(_fmt("\"Out?\" {n} does not stop drying the glass. \"With you? Tonight I go to my cousin.\"", { n })); return;
+  }
+  if (((G.party && G.party.ids) || []).includes(id)) { _say(_fmt("{n} is already on your arm. \"We are out, boss. Look around.\"", { n })); return; }
+  if (G.party && G.party.ids && G.party.ids.length) {
+    _say(_fmt("{n} looks at the woman on your arm, and then at you, for exactly as long as it takes. \"Out? You are out already.\"", { n })); return;
+  }
+  if (!_npcsHere().includes(id)) { _say(_fmt("{n} isn't on the floor to take anywhere.", { n })); return; }
+  const again = a.lastOut != null && G.day - a.lastOut < AFFAIR_OUT_WEEK;
+  const worked = b && b.workedLast && b.workedDay === G.day;
+  const staff = _barStaff(), mama = staff.find(x => NPC_ROLES[x] === "mamasan"), till = staff.find(x => NPC_ROLES[x] === "cashier");
+  const mn = mama ? NPCS[mama].name : "the floor", tn = till ? NPCS[till].name : "the till";
+  if (G.affairOutAsk !== G.turns - 1 && G.affairOutAsk !== G.turns) {   // the stakes first, once
+    G.affairOutAsk = G.turns;
+    _say(_fmt("{n} glances at the floor, then at the rail, and lowers her voice. \"Out, together? " +
+      "Everybody see us go. The floor is one short tonight and they know why.\" {extra}A beat. \"You still want, ask me again.\"",
+      { n,
+        extra: (worked ? "\"And you work tonight — the rail is Bert's if you walk out of it.\" " : "") +
+          (again ? _fmt("\"Two time in one week, {m} will not say anything. That is worse.\" ", { m: mn }) : "") }));
+    _say(_fmt("(TAKE {N} OUT again to go. The two of you get the night; the floor pays for it.)", { N: NPCS[id].name.toUpperCase() }), "dim");
+    return;
+  }
+  G.affairOutAsk = null;
+  a.floorSour = (a.floorSour || 0) + (again ? AFFAIR_OUT_SOUR_AGAIN : AFFAIR_OUT_SOUR);
+  a.strain = Math.max(0, (a.strain || 0) - AFFAIR_OUT_EASE);
+  a.lastOut = G.day; a.outs = (a.outs || 0) + 1;
+  if (typeof _shiftLost === "function") _shiftLost(SHIFT_EARLY_COST, NPCS[id].name + " out with the owner — the floor one short");
+  if (worked) { b.workedLast = false; b.workedDay = -1; b.lapses = (b.lapses || 0) + 1; }
+  G.party = { ids: [id], stops: 0, spent: 0, seen: { [G.room]: true }, affair: true };
+  _say(_pickVary([
+    `${n} unties the apron, folds it once and leaves it on the till where everybody can see it. Nobody says anything. You walk out of your own bar with your own girl, and the whole floor watches the door close.`,
+    `${n} says something quick to ${tn}, takes her bag from under the counter, and is at the door before you are. Out on the soi she takes your arm as if it were any couple's, which on this soi it is not.`,
+    `"Okay. Out." ${n} hands the float to ${mn} without a word, and ${mn} takes it without a word, which is a conversation. Then you are on the street, and for the first time she is not working.`,
+  ], "affairout"), "win");
+  _say("(The floor saw you go" + (worked ? ", and the rail is Bert's tonight — the shift lapsed at the door" : "") +
+    ". One girl short, and nobody will mention it, which is how a floor says things. BOOKS will have the rest.)", "dim");
+}
 // SHE SEES IT (Rolf, round 66): a girl from another bar slept in your bed, and the affair
 // girl "came in with the float counted and was asleep before you had said anything";
 // a girl from another bar sat on your own rail and nobody on it saw her. Discovery by
@@ -8190,7 +8244,8 @@ function _affairCrisisAnswer(k) {
 function _affairWarn() {
   const a = G.affair; if (!a || a.ended) return;
   a.warned = a.warned || {};   // a hand-built affair (a seed, a test) has no book yet
-  if (a.strain >= 9 && !a.warned.s9) { a.warned.s9 = true;
+  if (a.lastOut === G.day - 1) { /* the morning after a night out together is not the morning she goes formal */ }
+  else if (a.strain >= 9 && !a.warned.s9) { a.warned.s9 = true;
     _say(_fmt("({her} has started sleeping at her cousin's two nights a week. Nobody has said the word for what is happening, which is how it happens.)", { her: _affairHer() }), "alert");
   } else if (a.strain >= 6 && !a.warned.s6) { a.warned.s6 = true;
     _say(_fmt("(Something in the way {her} says goodnight has gone formal. You could fix it tonight. You could also tell yourself it's nothing, which is what most men in this town do at exactly this point.)", { her: _affairHer() }), "alert");
@@ -8205,6 +8260,16 @@ function _affairWarn() {
 function _affairNight(n) {
   const a = G.affair;
   if (!a || a.ended) return;
+  if (a.lastOut != null && a.lastOut === G.day - 1) {   // the morning after the night out: the floor's verdict, by the floor's voice
+    const mama = _barStaff().find(x => NPC_ROLES[x] === "mamasan"), mn = mama ? NPCS[mama].name : "The floor";
+    _say(_fmt(_pickVary(a.floorSour >= 3 ? [
+      "({m} has the rota out when you come in, and does not look up from it. The girls are polite to you all evening. Polite is the word.)",
+      "({m} says good evening to you the way she says it to a customer. The floor is a floor that has stopped telling you things.)",
+    ] : [
+      "({m} ran the floor one short last night and says nothing about it, which is the whole of what she has to say.)",
+      "({m} counts the float in front of you, slower than she needs to. The girls ask {her} how was it, and she says 'normal', and everybody knows it was not.)",
+    ], "affairoutmorn"), { m: mn, her: _affairHer() }), "dim");
+  }
   const honeymoon = G.day - a.since <= AFFAIR_HONEYMOON;
   if (n.worked) {
     if (honeymoon) {
@@ -8215,7 +8280,7 @@ function _affairNight(n) {
     } else {
       a.strain = Math.max(0, a.strain - AFFAIR_STRAIN_WORK);
     }
-  } else if (!honeymoon) {
+  } else if (!honeymoon && a.lastOut !== G.day - 1) {   // a night out WITH her is not a night away from her: _affairOut priced it
     a.strain += AFFAIR_STRAIN_AWAY;
     if (_lowSeason()) a.strain += 1;    // the money worry is in the room with you
     // the cost of a night away is felt, not just counted (Graham, round 47: six

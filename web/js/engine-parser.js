@@ -1762,7 +1762,7 @@ function _doTake(arg) {
     if (_who && NPC_ROLES[_who] && _npcsHere().includes(_who)) {
       const n = NPCS[_who].name;
       if (typeof _affairLive === "function" && _affairLive() && _who === G.affair.id)
-        _say(`"${_m[2]}?" ${n} laughs, not unkindly. "Boss, I work here. Who stand here if I go? After close, I come. That is our dinner." (FOLLOW ${n.toUpperCase()} after close.)`);
+        _affairOut();   // the night out is a real verb now, with its costs (Mario, 2026-10-08)
       else if (((G.party && G.party.ids) || []).includes(_who))
         _say(`${n} is already on your arm — lead, and she comes. ${/beach|sea|sand/i.test(_m[2]) ? "Beach Road runs the length of the sand." : /dinner|eat|food|restaurant/i.test(_m[2]) ? "The stalls and the 7-Eleven feed two as easily as one (BUY <food> FOR " + n.toUpperCase() + ")." : "Walk, and the town comes with you."}`);
       else

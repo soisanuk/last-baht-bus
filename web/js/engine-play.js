@@ -5145,7 +5145,7 @@ function _endNight(reason) {
       _joinerFee();
       _stdBarfineRoll();   // protection used if carried; else the night may keep a secret
       _conquestHappy(G.lastBfBase || 10, G.lastBfId); // reality-LT sets a lower base
-      if (_flag("act1Done") && _rand() < 0.35) _cinderellaCoda(); // her 6 a.m., occasionally
+      if (_flag("act1Done") && _rand() < 0.35 && !(G.affair && G.affair.id === G.lastBfId)) _cinderellaCoda(); // her 6 a.m., occasionally — not your own girl's, who went home with you
       break;
     case "bfscam": {
       // an operator ran her game on your long time — the veterans warned you.
@@ -5437,12 +5437,6 @@ function _endNight(reason) {
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──",
     { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
-  _morningLedger();
-  // The NEXT morning's baseline is taken HERE, at wake — not at night end. Taken
-  // at _endNight, the deltas only spanned the sleep (i.e. the rent), so every
-  // morning read "Last night: spent ฿400" no matter what the evening cost (two
-  // personas hit it independently, 2026-08-17). Wake-to-wake covers the night.
-  _nightSnapshot();
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
   if (wouldRough && !rough && _dogEgg() === "rescue") {
     // NOT "the last baht bus" — this fires only on nights you failed to get home,
@@ -5478,6 +5472,15 @@ function _endNight(reason) {
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   if (typeof _careTick === "function") _careTick();   // the fines she waived have a number, and a morning she says it
   if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
+  // THE LEDGER COMES AFTER EVERYTHING THE WAKE MOVES (Ossie, round 70: the till's shortfall came out
+  // of his pocket a turn after the ledger printed and appeared a morning late). The bar's settle,
+  // Nira's cousins and the care ask all belong to the night just played, so they are on its ledger.
+  _morningLedger();
+  // The NEXT morning's baseline is taken HERE, at wake — not at night end. Taken
+  // at _endNight, the deltas only spanned the sleep (i.e. the rent), so every
+  // morning read "Last night: spent ฿400" no matter what the evening cost (two
+  // personas hit it independently, 2026-08-17). Wake-to-wake covers the night.
+  _nightSnapshot();
   _stdMorningTick();                  // an untreated infection makes itself known each morning
   G.wakeTurn = G.turns;               // the SLEEP-on-waking guard reads this (engine-parser "sleep")
   G.enteredVia = null;
