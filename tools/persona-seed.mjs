@@ -130,6 +130,28 @@ function skintSeed() {
   _nightSnapshot();
   return serializeGame();
 }
+// frames (round 74, the paper by the till): a retired detective on day three of a holiday, the opening done,
+// money for a bar crawl of reading frames. jobs (round 74, the laundering quests): a new expat, a month of
+// calendar in front of him, money for the four jobs and the walks between them.
+function framesSeed() {
+  newGame();
+  G.player = { origin: "pi", personality: "blunt", orientation: "straight", said: {}, lang: "en", teetotal: false };
+  G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3; G.season0 = 1;
+  G.money = 12000; G.bank = 40000; G.battery = 100;
+  G.room = "buakhao_klang"; G.visited.buakhao_klang = true; G.nightTurn = 4;
+  _setFlag("roomSafeOpened"); quiet(); G.encDone = {}; _nightSnapshot();
+  return serializeGame();
+}
+function jobsSeed() {
+  newGame();
+  G.player = { origin: "business", personality: "joker", orientation: "straight", said: {}, lang: "en", teetotal: false };
+  if (true) G.season0 = 1;
+  G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 8;
+  out = []; _goExpat();
+  G.money = 25000; G.bank = 80000; G.battery = 100; G.room = _hotelRoomId(); G.nightTurn = 0;
+  _setFlag("roomSafeOpened"); G.act1SafeDue = false; quiet(); G.encDone = {}; _nightSnapshot();
+  return serializeGame();
+}
 function reload(blob) { newGame(); deserializeGame(blob); }
 
 // ── build ──
@@ -147,6 +169,8 @@ const seeds = {
   // a girl on his floor he likes, money for the massage shops, the clinic and the Orchid
   ossie: expatOwner({ season0: 9, day: 13, money: 15000, bank: 45000, bonds: { manow: 9, lamai: 4, tan: 3 } }),
   lamon: lamonSeed(),
+  frames: framesSeed(),
+  jobs: jobsSeed(),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -214,6 +238,20 @@ try {
   const sk = { loan: !!G.loan, cream: (() => { G.room = "metro_garden"; G.nightTurn = 45; return _npcsHere().includes("cream"); })() };
   console.log("skint:", JSON.stringify(sk));
   if (!sk.loan || !sk.cream) throw new Error("skint seed cannot reach its drive");
+  // Frames: the detective reads a frame and the house notices; the name is on two walls
+  reload(seeds.frames); G.room = "the_bucket"; G.nightTurn = 30; out = []; doCommand("examine licence");
+  const fr = { pi: _isOrigin("pi"), frame: /Benjawan|BENJAWAN/.test(out.join(" ")), stamp: /Second Road/.test(out.join(" ")) };
+  console.log("frames:", JSON.stringify(fr));
+  if (!fr.pi || !fr.frame || !fr.stamp) throw new Error("frames seed cannot reach its drive");
+  // Jobs: an expat; Grace, Reginald, Nont and Colin each have a job for him
+  reload(seeds.jobs); const offered = [];
+  const d0 = G.day;
+  for (const [who, q] of [["grace", "covers"], ["nont", "verification"], ["colin", "presale"]]) {
+    for (const d of [d0, d0 + 1, d0 + 2, d0 + 3, d0 + 4, d0 + 5, d0 + 6]) { G.day = d; G.room = _npcRoom(who); G.nightTurn = 50; if (_npcsHere().includes(who)) break; }   // a regular has his nights off
+    out = []; doCommand("talk to " + who); if (G.quests[q] === "offered") offered.push(q);
+  }
+  console.log("jobs:", G.stage, JSON.stringify(offered));
+  if (G.stage !== "expat" || offered.length < 3) throw new Error("jobs seed cannot reach its drive");
   // Gilt: through the door, the twins and Sasi answer in their own words
   reload(seeds.gilt); out = []; doCommand("enter gilt cage");
   const gilt = { room: G.room, ping: /twenty minute younger/.test((doCommand("ask ping about pong"), out.join(" "))) };

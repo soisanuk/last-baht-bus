@@ -4040,6 +4040,11 @@ function _conquestHappy(base, id) {
       G.affair.slipDay == null) {
     G.affair.slipDay = G.day;
   }
+  // …and WHO it was, so the gossip that reaches her names a woman she can name back (László, round 73: soured by the
+  // soi, Manow answered "ask Bert" to the name — the caught-in-person register only knew the women she saw)
+  if (typeof _affairLive === "function" && _affairLive() && id && id !== G.affair.id && NPCS[id]) {
+    const sw = (G.affair.slipWith = G.affair.slipWith || []); if (!sw.includes(NPCS[id].name)) sw.push(NPCS[id].name);
+  }
   // The tier is read PRE-accrual when the barfine path stashed it: the honest-LT
   // bond pay (+3/+6) lands before _endNight runs this, so a standard 4-drink
   // courtship hit 4+3=7 = tier 2 and the treadmill NEVER engaged for the

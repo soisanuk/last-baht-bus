@@ -133,3 +133,37 @@ test("your own staff give the boss no customer register: FLIRT, CONTACT, SEE HOM
   const audit = readFileSync(fileURLToPath(new URL("../../tools/composition-audit.mjs", import.meta.url)), "utf8");
   assert.match(audit, /const COMP_OPEN = \{\n  \/\/ \(none/, "the audit's open list is empty");
 });
+
+// ── round 73's leftovers (2026-10-08) ───────────────────────────────────────
+test("the soi names the woman: a gossip catch souring the affair knows who, and her register names her", () => {
+  owner(); G.affair = { id: "manow", since: G.day - 20, strain: 0, floorSour: 0, crisSeen: [], warned: {}, discovered: false, soured: false, ended: false, crisDay: G.day };   // strain 0: the discovery's +8 must not break it
+  _conquestHappy(5, "lek"); assert.deepEqual(G.affair.slipWith, ["Lek"]);
+  G.affair.slipDay = G.day - 3; G.bar.workedLast = false; G.day++; out = []; _affairNight({ worked: false });
+  assert.ok(G.affair.soured); assert.ok(G.affair.caughtWith.includes("Lek"));
+  G.room = "stinky_bar"; G.flags.tanFavourDone = true; while (G.pendingChoice) run("no"); run("talk to manow"); while (G.pendingChoice) run("no");
+  assert.match(ask("manow", "lek"), /Lek/); assert.doesNotMatch(said(), /Ask Bert|No idea/);
+});
+test("CALL TAN from his partner is about the bar, not a lift; TRAVEL announces only when it sets off", () => {
+  owner(); G.phone.contacts.tan = true; G.room = "beach_rd_c"; G.nightTurn = 30; out = []; run("call tan");
+  assert.match(said(), /Partner|fifty-one|You own a bar/); assert.doesNotMatch(said(), /last-option man/);
+  G.stage = "vacation"; G.flags.barOpen = false; G.flags.barPaid = false; G.bar.owner = false;
+  G.room = "jomtien_beach_rd"; G.lightOn = false; G.visited.hotel_room = true; G.nightTurn = 30;
+  const path = _path(G.room, "pratumnak_clubs") || [];
+  if (path.length && ROOMS[path[0]] && ROOMS[path[0]].dark) { G.visited.doghouse = true; out = []; run("travel doghouse"); assert.doesNotMatch(said(), /let your feet do the remembering/); }
+});
+test("a prompt takes its answer in Thai: ไป at Cream's door, ไม่ at a yes/no", () => {
+  G.room = "metro_garden"; G.nightTurn = 50; G.money = 5000; run("talk to cream");
+  G.pendingChoice = "chameleon"; out = []; run("ไม่"); assert.match(said(), /เข้าใจ — no/);
+  G.pendingChoice = null; G.pendingEnc = "police"; G.money = 1000; G.soc.drunk = 5; G.room = "beach_rd_c"; out = []; run("ไม่ได้เมาครับ");
+  assert.equal(G.money, 1000, "the police keep their own reading of a Thai no");
+});
+test("THE ACCOUNTANT'S CALL: Nont's money in quantity is a story; she rings in the evening; half the cash for a month", () => {
+  owner(); G.room = "stinky_bar"; G.nontOut = ACCT_THRESHOLD + 5000; G.nightTurn = 70;
+  assert.equal(_acctDue(), false, "not at gone midnight: an accountant rings after dinner");
+  G.nightTurn = 30; assert.equal(_acctDue(), true);
+  const cap = _atmCap(); out = []; _acctCall(); assert.match(said(), /Khun Wipa/); assert.match(said(), /Nobody is accusing anybody/);
+  assert.equal(_atmCap(), Math.round(cap / 2)); assert.equal(_acctDue(), false, "once, until the money moves again and the gap passes");
+  run("talk to bert"); assert.match(ask("bert", "the accountant"), /half your cash for a month/);
+  G.room = "buakhao_market"; run("talk to nont"); assert.match(ask("nont", "the accountant"), /use me smaller/);
+  G.day += ACCT_REVIEW_DAYS; assert.equal(_atmCap(), cap, "the review ends");
+});

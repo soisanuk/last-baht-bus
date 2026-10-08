@@ -4285,6 +4285,11 @@ function _tanRescue() {
   _describeRoom(true);
 }
 
+const _TAN_PARTNER_LINES = [
+  "\"Partner.\" A pause in which you can hear a car park. \"Is the bar on fire? No. Is anybody in the bar in trouble? No.\" The smile is audible. \"Then it is a good night, and you called to tell me so. Thank you. Go and stand at your rail.\" Click.",
+  "\"My friend.\" Somewhere behind him, a door shuts on a conversation. \"If it is the bar, Bert knows more than me. If it is a favour, I will come by. If it is a ride — you own a bar, my friend. Your staff will put you in a taxi. That is what staff are for.\" Click.",
+  "\"Ah — the fifty-one is calling the forty-nine.\" He likes that. \"Nothing is wrong, I can hear it in your voice. Something is only interesting. Tell me tomorrow, at the coffee.\" Click.",
+];
 function _tanCall() {
   if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
   G.battery = Math.max(0, G.battery - 1);
@@ -4345,6 +4350,11 @@ function _tanCall() {
     return;
   }
   if (G.room === _hotelRoomId()) { _say(_pickVary(_TAN_HOME_LINES, "tanhome")); return; }
+  // his partner is not a stranded tourist: the fifty-one rings him about the bar, not for a lift (László, round 73)
+  if (_flag("partnerTan") && typeof _barOwned === "function" && _barOwned() && G.nightTurn < LAST_BUS_TURN && !(G.rain > 0)) {
+    _say(_pickVary(_TAN_PARTNER_LINES, "tanpartner"));
+    return;
+  }
   if (G.nightTurn < LAST_BUS_TURN && !(G.rain > 0)) {
     _say(_pickVary(_TAN_WAIT_LINES, "tanwait"));
     return;
@@ -7454,6 +7464,25 @@ function _workTaleTell(b, how) {
   if (evt) _workTell(evt);
 }
 
+// THE ACCOUNTANT'S CALL (the good-standing material, 2026-10-08). You lose by being DROPPED, never accused: an
+// owner who moves ACCT_THRESHOLD or more through Nont's account (G.nontOut) since the last call gets one call, in
+// the evening, at his own rail. Khun Wipa keeps the Stinky's returns — the Bangkok firm's on Candy's route, a
+// Second Road shophouse Tan found on his. The bank has asked her where the money came from; she has told them
+// it is the owner's own from home; they will decide in a month, and until then the account gives half.
+function _acctDue() {
+  if (!(typeof _barOwned === "function" && _barOwned()) || !G.bar || G.room !== G.bar.room) return false;
+  if (G.nightTurn < 20 || G.nightTurn > 45) return false;   // eight till half ten: an accountant rings after dinner, never at two
+  if (G.acctDay != null && G.day - G.acctDay < ACCT_GAP_DAYS) return false;
+  return (G.nontOut || 0) - (G.acctBase || 0) >= ACCT_THRESHOLD;
+}
+function _acctCall() {
+  const moved = (G.nontOut || 0) - (G.acctBase || 0);
+  G.acctDay = G.day; G.acctBase = G.nontOut || 0; G.acctUntil = G.day + ACCT_REVIEW_DAYS;
+  const firm = _flag("partnerCandy") ? "from the Bangkok firm Candy's lawyer uses" : "from the shophouse on Second Road that Tan found you";
+  _say(`Bert holds the bar phone out across the rail with the face of a man handing over a summons. "Khun Wipa. Your accountant. At this hour, which means it isn't the weather."`, "alert");
+  _say(`"Sorry to call in the evening." Khun Wipa, ${firm}, sounds like she has the file open in front of her and has read it twice. "Can we talk about the ฿${_num(moved)} that came into the account through the Old Market? Some of what I'm seeing doesn't sit right — not wrong, not yet, only not sitting. The bank has asked me for a source of funds. I have told them it is the owner's own money, from home." A pause long enough to be a question. "They will take a month to decide whether they believe me. Until then they will let you take half your usual cash a day. Nobody is accusing anybody. That is the polite part." Another pause. "The other part is: next time, wire it from home, in your own name, like a farang. It is slower and it is cheaper and it is a story I do not have to tell."`);
+  _say(`(The account's daily cash is halved for ${ACCT_REVIEW_DAYS} days. Nothing else changes, and nobody will mention it again unless you ask.)`, "dim");
+}
 function _workPresenceTick() {
   const b = G.bar;
   if (!_barOwned() || !b || b.workedDay !== G.day || !b.workedLast) return;
@@ -8443,7 +8472,8 @@ function _affairNight(n) {
   if (a.slipDay != null && !a.discovered) {
     const forced = G.day - a.slipDay >= 3;
     if (forced || _hh("affdisc:" + G.vacation + ":" + G.day, 89) % 100 < 45) {
-      a.discovered = true; a.soured = true; a.strain += 8;
+      a.discovered = true; a.soured = true; a.strain += 8; a.caughtDay = G.day;
+      a.caughtWith = [...new Set([...(a.caughtWith || []), ...(a.slipWith || [])])];   // the soi named her: the soured register knows who (László, round 73)
       _say("");
       _say(_fmt("{her} knows. Of course she knows — she works in the industry the news is made of; the girl you were with has a friend who has a cousin on this very soi. She doesn't shout. She takes off the apron, folds it on the rail, and asks you one question in the flat voice: \"Why I stop working, if you don't?\" There is no good answer, and both of you stand there while you don't give it.", { her: _affairHer() }), "alert");
       _say("(Whatever the two of you salvage from here, one thing is gone for good: the version where you leave this town together. She will never again believe the machine doesn't own you too.)", "dim");

@@ -336,6 +336,7 @@ function newGame() {
     offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
     returnHello: {},     // npc id → the vacation a written woman last gave her return greeting (Aurelio, round 71)
+    acctBase: 0, acctUntil: 0, acctDay: null,   // the accountant's call: Nont's total at the last call, the review's end, the call's day
     coversNights: {},    // day → the men counted at Jasmine Garden that night (The Covers: a pattern is three nights, Mario 2026-10-08)
     licencesRead: {},    // room → the registered name read off the paper by the till (EXAMINE LICENCE, 2026-10-08)
     questDoneDay: {},    // quest id → the day it completed (the follow-ups a month later: Orathai closes, the police read the paper)
@@ -3379,6 +3380,7 @@ function _tick() {
   if (!G.game && !G.pendingEnc && !G.pendingChoice && !G.pendingBf && !G.pendingFare) {
     if (typeof _ccibDue === "function" && _ccibDue()) { _ccibVisit(); return; }
     if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
+    if (typeof _acctDue === "function" && _acctDue()) { _acctCall(); return; }
     if (typeof _shiftDue === "function" && _shiftDue()) { _shiftAsk(); return; }
     if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
     // the staff affair: the she-stays-after-close beat, then its crises

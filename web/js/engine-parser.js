@@ -1589,16 +1589,18 @@ function _doTravel(arg) {
         "the dawn. A MOTOSAI, or make your peace with where you are.", { n: hops }), "alert");
     return;
   }
-  _say(hops === 1
-    ? _fmt("You point yourself at {v} and let your feet do the remembering — " +
-        "one turn of soi, neon, and shortcuts.", { v: _barName(dest) })
-    : _fmt("You point yourself at {v} and let your feet do the remembering — " +
-        "{n} turns of soi, neon, and shortcuts.", { v: _barName(dest), n: hops }), "dim");
   // walking pace: hops turns in total; doCommand pays the last at the bottom.
   // Move along the real route as you go, so being stopped partway leaves you
   // partway — not back at the door you set out from.
   const startDay = G.day, g0 = G;
   const route = _path(G.room, dest) || [];
+  // the set-off line waits for the dark stop to be known: "13 turns of soi" and then a stop in the room you were
+  // standing in (László, round 73)
+  const _announce = () => _say(hops === 1
+    ? _fmt("You point yourself at {v} and let your feet do the remembering — " +
+        "one turn of soi, neon, and shortcuts.", { v: _barName(dest) })
+    : _fmt("You point yourself at {v} and let your feet do the remembering — " +
+        "{n} turns of soi, neon, and shortcuts.", { v: _barName(dest), n: hops }), "dim");
   // a manual step into the dark prints the light hint; TRAVEL inherited the risk of
   // the walk without repeating it, and a man ate two dog bites on a 21-turn walk
   // with the torch off (Vic, round 40)
@@ -1615,6 +1617,7 @@ function _doTravel(arg) {
   const _darkAt = _noLight ? route.findIndex(r => ROOMS[r] && ROOMS[r].dark) : -1;
   const _insist = G.travelDark && G.travelDark.key === G.room + ">" + dest && G.turns - G.travelDark.turn <= 3;
   const _stopAt = (_darkAt >= 0 && !_room().dark && !_insist) ? _darkAt : -1;
+  if (_stopAt !== 0) _announce();
   if (_darkAt >= 0 && _stopAt < 0)
     _say("(The way runs through the dark and you're walking it without a light — the soi dogs pick the route. LIGHT ON next time.)", "dim");
   const _darkStop = () => {
@@ -10915,7 +10918,11 @@ function _amount(s) {
   return (typeof parseThaiWords === "function") ? parseThaiWords(t) : null;
 }
 function _atmFee() { return G.thaiAccount ? 0 : ATM_FEE; }
-function _atmCap() { return G.thaiAccount ? THAI_ATM_CAP : ATM_DAILY_CAP; }
+function _atmCap() {
+  const cap = G.thaiAccount ? THAI_ATM_CAP : ATM_DAILY_CAP;
+  return (G.acctUntil || 0) > G.day ? Math.round(cap / 2) : cap;   // the bank's review after the accountant's call: half, for a month (2026-10-08)
+}
+function _acctNote() { return (G.acctUntil || 0) > G.day ? ` (Halved while the bank reviews the account — ${G.acctUntil - G.day} more day${G.acctUntil - G.day === 1 ? "" : "s"}. Your accountant rang about it.)` : ""; }
 function _doWithdrawInner(arg) {
   if (!_flag("hasWallet")) {
     _say("Your bank card was in the wallet — and the wallet is the whole problem. " +
@@ -10953,9 +10960,9 @@ function _doWithdrawInner(arg) {
   const drawn = _atmDrawnToday(), left = _atmCap() - drawn;
   if (n > left) {
     _say(left <= 0
-      ? `Daily limit reached — ฿${_num(_atmCap())} is the max, and you've hit it. ` +
+      ? `Daily limit reached — ฿${_num(_atmCap())} is the max, and you've hit it.${_acctNote()} ` +
         "The machine keeps your card just long enough to make the point, then spits it back."
-      : `Over the daily limit. You've drawn ฿${_num(drawn)} of ฿${_num(_atmCap())} ` +
+      : `Over the daily limit.${_acctNote()} You've drawn ฿${_num(drawn)} of ฿${_num(_atmCap())} ` +
         `today — only ฿${_num(left)} left until tomorrow.`);
     return;
   }
@@ -12896,6 +12903,15 @@ function doCommand(input) {
   _waitRefused = false; _moveRefused = false;
   // "last night" is the natural two-word form of the ledger verb (Stuart, round 47)
   if (/^\s*last night\b/i.test(raw)) raw = "ledger";
+  // THAI AT A PROMPT (Pieter, round 73: Cream's GO ignored ไป, the GIFT ignored สามร้อย, the police ignored ไม่).
+  // The gates below read the English they were written for, and the script translation used to run only after
+  // all of them. While a gate owns the input, a line of pure Thai script that the command table reads is answered
+  // in its English — the fare gate and the police keep their own readings (they parse Thai numbers and the apology).
+  if ((G.pendingChoice || G.pendingEnc || G.pendingBf || G.pendingSoapy || G.game) && G.pendingEnc !== "police" &&
+      /^[\u0E00-\u0E7F\s]+$/.test(raw) && typeof _thaiToCmd === "function") {
+    const _en = _thaiToCmd(raw.trim());
+    if (_en && !/\b(sorry|wai)\b/.test(_en)) { _say(`(เข้าใจ — ${_en})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1; raw = _en; }
+  }
   const lower = raw.toLowerCase();
   const words = lower.split(" ");
   const [v, ...rest] = words;
