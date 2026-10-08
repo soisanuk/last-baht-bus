@@ -2647,6 +2647,7 @@ test("the anonymous bar-bore (no named regular here): sober tips, drunk rambling
 });
 
 test("drink-sniping the regular's girl is bad form; a beer mends it", () => {
+  for (const id of Object.keys(NPCS)) if (NPCS[id].patron && _npcRoom(id) === "lucky_tiger") (state().soc.leftEarly = state().soc.leftEarly || {})[id] = state().day;   // the anonymous buyer is only on a rail with no named men (Aurelio, round 71)
   state().room = "lucky_tiger";
   state().money = 500;
   state().soc.patronBusy.lucky_tiger = true;
@@ -8257,7 +8258,7 @@ test("the collections show what's left, measured against people you've MET", () 
     "the denominator is who you've met, not the 334-strong cast");
 
   out = []; run("who");
-  assert.match(out.join("\n"), /1 number — out of 5 working girls|out of \d+ working girls/,   // "ladies" overclaimed the count (auditor, 2026-09-14)
+  assert.match(out.join("\n"), /out of \d+ women working the bars/,   // not "working girls": the mamasan and the cashier are in the count (Aurelio, round 71)   // "ladies" overclaimed the count (auditor, 2026-09-14)
     "the black book counts against ladies you know");
 
   out = []; run("score");

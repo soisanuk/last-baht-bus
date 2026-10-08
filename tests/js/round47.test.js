@@ -601,7 +601,7 @@ test("the black book names its denominator as what it counts", () => {
   G.soc.drinks[_npcsHere().find(i => NPC_ROLES[i] === "hostess")] = 3;   // somebody in the book, or WHO stops before the denominator
   out = []; run("who");
   assert.doesNotMatch(text(), /ladies you have actually met/);
-  assert.match(text(), /working girls you have actually met/);
+  assert.match(text(), /women working the bars you have actually met/);   // the mamasan and the cashier are not "working girls" (Aurelio, round 71)
 });
 
 

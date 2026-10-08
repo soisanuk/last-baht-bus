@@ -43,7 +43,7 @@ function _gameHostess(pref) {
 function _takeStake(want) {
   const stake = Math.min(want, G.money);
   if (stake > 0 && stake < want) _say(`(Short stake — she takes what's there: ฿${_num(stake)} against the table's ฿${_num(want)}.)`, "dim");
-  G.money -= stake;
+  G.money -= stake; G.offTill = (G.offTill || 0) + stake;   // a stake is not a slip in the cup (Aurelio, round 71)
   return stake;
 }
 
@@ -1965,7 +1965,7 @@ function _dartsInput(input) {
 
 // won: true / false / null (push). payout is added to money (escrow already taken).
 function _endGame(won, payout, text) {
-  G.money += payout;
+  G.money += payout; G.offIn = (G.offIn || 0) + payout;   // …and the pot coming back is not a refund on the chits
   if (G.game) G.lastGame = { type: G.game.type, stake: G.game.stake || 0, room: G.room }; // REMATCH / DOUBLE
   G.game = null;
   _say(text, won === false ? "alert" : "win");
@@ -2649,6 +2649,16 @@ function _doSocial(kind, targetWord) {
   _trace(kind, name); // breadcrumb (flirt/kiss/spank/fondle)
   // your girl is not "sitting with you, officially, to a smattering of applause"
   // (Rolf, round 55): the affair has its own register, and the room already knows
+  if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id && (kind === "flirt" || kind === "kiss") && G.affair.soured) {
+    _say(_pickVary([`${name} turns her cheek, not her mouth. "Not tonight, boss."`, `${name} steps back half a pace, which is all the answer there is.`], "affairkisssour")); return;
+  }
+  if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id && (kind === "flirt" || kind === "kiss") && _outWithMe(id)) {
+    _say(_pickVary([   // out together: no till, no ice machine, no customers (Callum, round 71)
+      `${name} kisses you in the middle of the pavement as if nobody in this town has ever seen it done, which is not true and does not matter.`,
+      `${name} laughs into it. "Nobody count tonight," she says. "Not even Cake."`,
+      `${name} pulls you in by the shirt front. "Out here I am not staff," she says, and proves it.`,
+    ], "affairkissout")); return;
+  }
   if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id && (kind === "flirt" || kind === "kiss")) {
     _say(_pickVary([
       `${name} lets you, briefly, and then puts a finger on your chest and pushes you back a step. "Customers." But she is smiling.`,
@@ -3653,9 +3663,15 @@ function _affairTalk(id, tt) {
     `"Mama?" ${n} laughs. "Mama ask about you every call. What you eat, if you are fat yet. I say not yet."`,
     `"Papa fix motorbikes in the village. He not say much about you. He say one thing: a farang with a bar is still a farang." A shrug. "He will like you. Slowly. Like Papa like everything."`,
   ]);
-  if (/\b(rota|late shift|friday|shift|schedule)\b/.test(tt)) return seen.includes("rota")
-    ? pick("rota", [`"The rota." ${n} makes a face. "You fix it, now everybody see you fix it. Next time I ask Mama, not you. Is better for both."`])
-    : pick("rota0", [`"Mama make the rota. I work the rota. Is simple until it is not."`]);
+  if (/\b(rota|late shift|friday|shift|schedule)\b/.test(tt)) return !seen.includes("rota")
+    ? pick("rota0", [`"Mama make the rota. I work the rota. Is simple until it is not."`])
+    : chose.rota === "b"   // the rota stood: she remembers THAT (Callum, round 71 — she thanked him for fixing it)
+    ? pick("rotab", [`"The rota stand." ${n} shrugs, too lightly. "I work the Friday, I smile at the hand-grabbers. You were right, boss. I hate that you were right."`])
+    : pick("rota", [`"The rota." ${n} makes a face. "You fix it, now everybody see you fix it. Next time I ask Mama, not you. Is better for both."`]);
+  if (/\b(last night|yesterday|the night out|out|our night|the beach|the club)\b/.test(tt) && a.lastOut === G.day - 1 && !a.soured) return pick("outlast", [
+    `"Last night?" ${n} smiles at the bar top, not at you. "Last night I was not staff. Tonight I am staff. Both are true, boss." A beat. "Ask me again tomorrow, maybe I tell you more."`,
+    `${n} laughs. "You dance very bad. I tell everybody you dance good." She lowers her voice. "The floor know, na. Mama know. Was worth it."`,
+  ]);
   if (/\b(mamasan|mama lamai|lamai)\b/.test(tt) && seen.includes("mamasan")) return pick("mama", [
     `"Lamai and me?" ${n} is quiet for a moment. "She is right, you know. A floor has one voice. I only don't like it when it is not mine."`,
   ]);
@@ -3986,6 +4002,10 @@ function _bondTalk(id) {
 // you've built a bond with (regular+, `id` passed) gives a +2 bonus and does NOT
 // advance jaded — depth is the correct road, breadth is the treadmill.
 function _conquestHappy(base, id) {
+  // caught at your own rail tonight, the night does not pay (Callum, round 71: the betrayal netted +12)
+  if (typeof _affairLive === "function" && G.affair && G.affair.caughtDay === G.day && id !== G.affair.id) {
+    _say("(Whatever the night was meant to be, it isn't now. It pays nothing.)", "dim"); G.lastConquest = { night: G.day, net: 0 }; return;
+  }
   // The affair's fidelity line: every conquest in the game funnels through here,
   // so ONE slip anywhere — a barfine, a freelancer, the booking app — while the
   // affair runs marks it. The soi always talks; she learns within days
@@ -4016,6 +4036,7 @@ function _conquestHappy(base, id) {
   const bonded = id && tier >= 2 && first;
   const net = Math.max(base + (bonded ? 2 : 0) - 2 * G.jaded, -4);
   _addHappy(net); // _addHappy no-ops on 0, so a wash prints nothing
+  G.lastConquest = { night: G.day, net, id };
   if (bonded) {
     _say("(No treadmill with her — a night with someone who knows you doesn't cheapen. " +
       "It's the one that keeps giving.)", "dim");
@@ -4972,6 +4993,16 @@ function _endNight(reason) {
   // point of taking her out, and the close pays for the evening she spent on
   // your arm (stops feed the base, the pair adds its premium).
   let _bedIds = null;   // who was in the bed when SLEEP converted to the LT close (read by the affair's morning)
+  if (reason === "sleep" && G.party && G.party.ids && G.party.ids.length === 1 && typeof _affairLive === "function" && _affairLive() && G.party.ids[0] === G.affair.id) {
+    // THE NIGHT OUT ENDS AT HOME, NOT IN A BARFINE: the long-time close paid +10 as a conquest,
+    // which made the night out the always-right answer (Callum, round 71). She comes home with you;
+    // the morning knows she was there.
+    _bedIds = G.party.ids.slice();
+    G.affair.homeDay = G.day; G.affair.together = G.day;
+    _addHappy(Math.min(3, 1 + Math.floor((G.party.stops || 0) / 2)));   // company, never the treadmill
+    _say(_fmt("You come home together, {n} with her shoes in her hand and nothing to count for once. The last of the night is nobody's business.", { n: _affairHer() }), "win");
+    G.party = null;
+  }
   if (reason === "sleep" && G.party && G.party.ids && G.party.ids.length) {
     const _pids = G.party.ids; _bedIds = _pids.slice();
     G.lastBfId = _pids[0];
@@ -5422,7 +5453,7 @@ function _endNight(reason) {
   // unnecessary (Howard, round 35). The safe pays first; the later call no-ops.
   if (!crash && G.act1SafeDue && G.room === _hotelRoomId() && typeof _roomSafeBeat === "function")
     _roomSafeBeat();
-  if (!crash && (_hadParty || _bedIds) && typeof _affairLive === "function" && _affairLive() && !(_bedIds || (G.party && G.party.ids) || []).includes(G.affair.id) && typeof _affairCaught === "function") _affairCaught("bed");   // two women in one bed and neither saw the other (Rolf, round 66)
+  if (!crash && (_hadParty || _bedIds) && typeof _affairLive === "function" && _affairLive() && !(_bedIds || (G.party && G.party.ids) || []).includes(G.affair.id) && typeof _affairCaught === "function") _affairCaught("bed", _bedIds);   // two women in one bed and neither saw the other (Rolf, round 66)
   else if (!crash && typeof _affairMorning === "function") _affairMorning();   // she came home with you (Rolf, round 55)
   _chargeRent(!!crash);              // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk

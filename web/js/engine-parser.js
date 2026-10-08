@@ -1045,7 +1045,7 @@ function _arriveAt(to) {
   // move, gate it too.
   if (G.mode === "soi6" && !SOI6_ROOMS.has(to)) { _say(_pickVary(_SOI6_BOUND, "soi6bound")); return; }
   (G.soc.arriveMoney = G.soc.arriveMoney || {})[to] = G.money;   // CHECK BIN counts from the stool you sat down on (callers may set G.room before arriving)
-  (G.soc.arriveBook = G.soc.arriveBook || {})[to] = { off: G.offTill || 0, lb: G.loanBorrowed || 0, lr: G.loanRepaid || 0, atm: G.atmTotal || 0, drawn: (G.bar && G.bar.drawn) || 0, floated: (G.bar && G.bar.floated) || 0 };   // what moved the pocket without a slip — your own till too (the money audit, D)
+  (G.soc.arriveBook = G.soc.arriveBook || {})[to] = { off: G.offTill || 0, lb: G.loanBorrowed || 0, lr: G.loanRepaid || 0, atm: G.atmTotal || 0, drawn: (G.bar && G.bar.drawn) || 0, floated: (G.bar && G.bar.floated) || 0, offIn: G.offIn || 0 };   // what moved the pocket without a slip — your own till too (the money audit, D)
   // A question somebody has put to YOU does not follow you out of the room. It
   // used to: a midnight ejection stranded Barry's ask on the street, where the
   // numbered answer the game had just PRINTED came back "I didn't understand
@@ -1746,6 +1746,14 @@ function _takeOut(arg) {
   if (!who && G.lastBfAsk) who = G.lastBfAsk;
   if (!who) return false;
   const id = _findNpc(who);
+  if (!id) {   // not here: say where, never "You don't see that here" (Callum, round 71)
+    const el = typeof _elsewhereLine === "function" ? _elsewhereLine(who) : null;
+    const gid = Object.keys(NPCS).find(i => NPC_ROLES[i] && String(NPCS[i].name).toLowerCase() === who.toLowerCase() && _met(i));
+    if (el || gid) { _say(el || `${NPCS[gid].name} isn't here to take anywhere.`, "dim"); return true; }
+  }   // not here: say where, never "You don't see that here" (Callum, round 71)
+  if (id && NPC_ROLES[id] && !_npcsHere().includes(id)) {   // "You don't see that here" for a woman, not a thing (Callum, round 71)
+    _say((typeof _elsewhereLine === "function" && _elsewhereLine(who)) || `${NPCS[id].name} isn't here to take anywhere.`, "dim"); return true;
+  }
   if (!id || !NPC_ROLES[id] || !_npcsHere().includes(id)) return false;
   _doBarfine(who + " out");
   return true;
@@ -1935,6 +1943,9 @@ function _doInventory() {
 // English, so no printed-Thai here — the Thai-script directional signs stay on the
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
+  flowers: ["silk flowers", "flower", "the flowers", "singha bottles", "bottles"],   // the Silk Rose's own (Aurelio, round 71)
+  regulars: ["the regulars", "two regulars", "the men", "two men", "the argument", "argument", "old men", "the two"],
+  thirdstool: ["third stool", "the third stool", "helmut's stool", "his stool"],
   menu: ["card", "menus", "price list", "prices", "price board"],
   ashtray: ["the ashtray", "league ashtray", "pot", "the pot", "table money"],
   laptop: ["computer", "machine", "pc", "screen", "lock screen", "post-it", "postit"],
@@ -4554,11 +4565,18 @@ function _doTalkCore(arg, topic) {
               ? `"${n}?" ${_mamaLabel(NPCS[npc].name)} lowers her voice this time. "Your girl, boss. Still. But she is not happy, and the floor know why, and I am not going to say it for you."`
               : me === "cashier" ? `"${n}." ${NPCS[npc].name} does not open the book. "She is on your page and she is not happy there. I count money, boss, not that."`
               : `"${n}?" ${NPCS[npc].name} does not grin this time. "Boss. Everybody know that too. She not happy. You know why, so I don't say."`) :
-          _aff ? (me === "mamasan" ? `"${n}?" ${_mamaLabel(NPCS[npc].name)} does not lower her voice. "Your girl. Everybody know, boss. ${G.affair && (G.affair.crisSeen || []).includes("rota") ? "The rota is yours now — you made it yours." : "I take her off the late rota myself."}" A look. "She is better than you. Be careful with her."`
+          _aff ? (me === "mamasan" ? `"${n}?" ${_mamaLabel(NPCS[npc].name)} does not lower her voice. "Your girl. Everybody know, boss. ${G.affair && (G.affair.crisSeen || []).includes("rota") ? ((G.affair.crisChose || {}).rota === "b" ? "The rota stood. You let me run her like a hostess. Good." : "The rota is yours now — you made it yours.") : "I take her off the late rota myself."}" A look. "She is better than you. Be careful with her."`
                : me === "cashier" ? `"${n}." ${NPCS[npc].name} closes the book. "She is not on my page any more, boss. She is on yours. I don't count that one."`
                : (G.affair && G.affair.soured
                  ? `"${n}." ${NPCS[npc].name} looks at the rail instead of you. "Boss. She not happy. You know why. I don't say it for you."`
-                 : `"${n}?" ${NPCS[npc].name} glances at the rail, then at you, and grins. "Boss. Everybody know. You think we blind? She happy. Don't make her not."`)) :
+                 : NPCS[npc].manager
+                 ? `"${n}?" ${NPCS[npc].name} doesn't look up from the glass. "Everybody knows, mate. She's happy. Don't make me the one who has to watch her stop being."`
+                 : [   // one speaker, one line: Bert, Jiap and Mew said the same sentence (Callum, round 71)
+                   `"${n}?" ${NPCS[npc].name} glances at the rail, then at you, and grins. "Boss. Everybody know. You think we blind? She happy. Don't make her not."`,
+                   `"${n}?" ${NPCS[npc].name} laughs behind her hand. "Boss, we see her phone light up when you text. Whole floor see. Is very cute. Don't tell her I say."`,
+                   `"${n}?" ${NPCS[npc].name} shrugs, fond. "She keep your stool clear even when you not here. We let her. Is easier than arguing."`,
+                   `"${n}?" ${NPCS[npc].name} looks at the till, then at you. "She work harder since you two. I think she want nobody say she is only the boss girl."`,
+                 ][_hh(npc + ":affrev", 47) % 4])) :
           them === "mamasan" ? _mamaRev[_rvPick(_mamaRev.length)] :
           them === "manager" ? [
             `"The boss? Pays on time, doesn't touch the girls, and the till adds up. That is the whole review, and it is a good one."`,
@@ -5875,6 +5893,21 @@ const _TOWN = {
       "\"{r}'s one of ours,\" {n} says. \"Same seat, pays {his} tab, causes no trouble. Every room needs a few.\"", "\"{r}?\" {n} allows herself half a smile. \"{He} tells the same three stories and tips on every one of them. I would not swap {him} for a new {man}.\"", "\"{r} has been coming in longer than half the girls here have been working,\" {n} says. \"{He} knows where everything is. Including the door, when it's time.\""],
     punter: ["\"{r}? Drinks here,\" {n} says.", "\"{r}? Fixture,\" {n} says. \"Been coming here longer than I have.\""],
   },
+  affFloorOk: {
+    floor: ["\"The floor? Is okay, boss.\" {n} means it. \"Everybody happy for you and {w}. Is nice to see.\""],
+    house: ["\"The floor's fine,\" {n} says. \"Keep it that way.\""],
+    punter: ["\"Floor looks alright to me, mate.\""],
+  },
+  affFloorWatch: {
+    floor: ["{n} looks at the other girls before she answers. \"Okay. Watching, na. When {w} go out with you, we work. Everybody count.\""],
+    house: ["\"The floor's watching you,\" {n} says. \"Every night {w} is out it's a girl short, and they know whose. Stand your rail with her on the floor and it comes round.\""],
+    punter: ["\"The girls have gone a bit careful round you, mate. Can't think why.\""],
+  },
+  affFloorClosed: {
+    floor: ["\"Floor?\" {n} gives you the customer smile. \"Floor is fine, boss.\" It is the answer she gives customers, and she knows you know it."],
+    house: ["\"Closed to you,\" {n} says flatly. \"Not angry. Closed. Nights on the rail with {w} working the floor, boss — that's the only thing that opens it.\""],
+    punter: ["\"Your floor's gone quiet, mate. Quiet's worse than loud.\""],
+  },
   companion: {
     floor: ["\"{w}? She come in with you, na.\" {n} tips her head at her. \"From {bar}. Ask her yourself — she is right there.\"",
       "{n} looks from {w} to you and back. \"Your friend tonight. {bar} girl, I think. Is okay — you buy her drink, everybody happy.\"",
@@ -5887,9 +5920,12 @@ const _TOWN = {
   },
   affairGone: {
     floor: ["\"{w}?\" {n} looks at the bar top. \"She go home, boss. You know why. On the floor we don't talk about it.\"",
-      "{n} is quiet a moment. \"{w} send a message to the girls. She is okay. She say don't tell boss.\" A small shrug. \"So I don't tell you.\""],
+      "{n} is quiet a moment. \"{w} send a message to the girls. She is okay. She say don't tell boss.\" A small shrug. \"So I don't tell you.\"",
+      "\"{w}.\" {n} says the name like a girl who used to work here, which she is. \"Her section is mine now. I keep it the way she keep it.\""],
     house: ["\"{w}'s gone home,\" {n} says, not unkindly. \"You were there for the end of it. The floor's still putting itself back together.\"",
-      "\"{w}.\" {n} lets the name sit. \"Gone. Wages to the baht, which was right. Don't go looking for the rest of it in here.\""],
+      "\"{w}.\" {n} lets the name sit. \"Gone. Wages to the baht, which was right. Don't go looking for the rest of it in here.\"",
+      "{n} closes the book on her page without reading it. \"{w} is not on this page any more, boss. I don't open a page that is closed.\"",
+      "\"{w}?\" {n} wipes the bar where nothing has spilled. \"She sends money home and a text to the girls at Songkran. That is all I know, and all I am going to know.\""],
     punter: ["\"{w}? Gone home, mate. Everybody saw how.\""],
   },
   present: {
@@ -6139,6 +6175,13 @@ function _townTalk(npc, topic) {
     _say(line);
     return true;
   };
+  // THE FLOOR, ASKED (Callum, round 71: the floor closed to him and nobody in his own bar could discuss
+  // "the floor"; he never saw the meter or the remedy). Your own staff answer it by the affair's floorSour.
+  if (/^(the )?(floor|morale|mood)$|\bthe floor\b|\bthe girls'? mood\b/.test(t) && G.affair && (_affairLive() || (G.affair.scarUntil || 0) > G.day) &&
+      G.bar && G.bar.room === G.room && _npcRoom(npc) === G.room) {
+    const fs = G.affair.floorSour || 0;
+    return pick(fs >= 3 ? "affFloorClosed" : fs >= 1 ? "affFloorWatch" : "affFloorOk", { w: NPCS[G.affair.id].name });
+  }
   // THE PEOPLE IN THE ROOM (Ossie, round 70: a woman sat beside him at his own rail, with his
   // partner pouring, and his manager swore he had never seen her). Somebody standing in front of
   // the speaker is somebody they can see — and a woman who came in on your arm, they saw arrive.
@@ -6246,6 +6289,7 @@ function _townTalk(npc, topic) {
     // the HOUSE knows its floor's regulars: five nights on one stool and the mamasan and the cashier
     // both said "new face" (Henrik, round 69). Whoever on this floor knows you best, they know too.
     let k = _knownTier(npc);
+    if (G.metDay && G.metDay[npc] != null && G.metDay[npc] < G.day) k = Math.max(k, 1);   // "first time I see you" on the third night of talking to her (Aurelio, round 71)
     if (NPC_ROLES[npc] === "mamasan" || NPC_ROLES[npc] === "cashier")
       for (const g of _npcsHere()) if (NPC_ROLES[g] === "hostess") k = Math.max(k, _knownTier(g));
     return pick(k >= 2 ? "me_known" : k >= 1 ? "me_seen" : "me_new", {});
@@ -8152,7 +8196,8 @@ function _doBuy(arg) {
     // saves stored `true` — treat that as "any hostess" so old games don't crash.
     const busyId = G.soc.patronBusy[G.room];
     const sniped = (busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId) &&
-      _bondTier(id) < 2 && !((G.party && G.party.ids) || []).includes(id);
+      _bondTier(id) < 2 && !((G.party && G.party.ids) || []).includes(id) &&
+      !_regularsHere().length;   // the anonymous buyer is not on a rail of named men: Helmut has bought nothing in thirteen years (Aurelio, round 71)
     // the guv'nor buying his own girl a drink is not sniping a punter's (Rolf, round 54)
     if (sniped && !G.soc.patronMiffed[G.room] && !(typeof _atOwnBar === "function" && _atOwnBar())) {
       G.soc.patronMiffed[G.room] = true;
@@ -8166,7 +8211,7 @@ function _doBuy(arg) {
       _setFlag("helmetDelivered"); // she'll talk now regardless
       _deliver("pim", _pickDialogue("pim", "oy"));
     } else {
-      _say(_pickVary(typeof _affairLive === "function" && _affairLive() && G.affair.id === id ? _AFFAIR_TOAST : _toastFor(id), "toast")(NPCS[id].name));   // one string, ten times a night (Tomasz, round 54); her own for your girl (Rolf, round 55)
+      _say(_pickVary(typeof _affairLive === "function" && _affairLive() && G.affair.id === id && !G.affair.soured && !_outWithMe(id) ? _AFFAIR_TOAST : _toastFor(id), "toast")(NPCS[id].name));   // not the till's secret toast out of the bar, or after she has caught you (Callum, round 71)   // one string, ten times a night (Tomasz, round 54); her own for your girl (Rolf, round 55)
     }
     _maybeSelfBarfine(id);
     return;
@@ -9692,6 +9737,15 @@ function _doDance(arg) {
   // with your own girl standing there (Rolf, round 55)
   const _w = String(arg || "").replace(/^with\s+/, "").trim();
   const _p = _w ? _resolveActor(_w, _npcsHere()) : null;
+  if (_p && typeof _affairLive === "function" && _affairLive() && _p === G.affair.id && (G.affair.soured || _outWithMe(_p))) {
+    _say(G.affair.soured
+      ? `${NPCS[_p].name} looks at your hand and then at the room. "Not tonight." She goes back to what she was doing.`
+      : _pickVary([   // out together, on somebody else's floor (Callum, round 71: "then she goes back to the ice", at Club Mirage)
+        `${NPCS[_p].name} dances like somebody who has watched other women dance for a living and has opinions, and for three songs nobody in the room is working.`,
+        `${NPCS[_p].name} drags you onto the floor and dances with her eyes shut, which you have never once seen her do behind the rail.`,
+      ], "affairdanceout"));
+    return;
+  }
   if (_p && typeof _affairLive === "function" && _affairLive() && _p === G.affair.id) {
     _say(_pickVary([
       `${NPCS[_p].name} puts the cloth down and dances with you for exactly one chorus, badly on purpose, and the girls at the far end cheer like it's a wedding. Then she goes back to the ice.`,
@@ -11425,7 +11479,7 @@ function _doCheckBin() {
   // counted street-cart shoes and loan interest, and a BORROW zeroed it)
   const bk = (G.soc.arriveBook || {})[G.room] || null;
   const moved = bk ? ((G.offTill || 0) - bk.off) + ((G.loanRepaid || 0) - bk.lr) - ((G.loanBorrowed || 0) - bk.lb) - ((G.atmTotal || 0) - bk.atm)
-    - (((G.bar && G.bar.drawn) || 0) - (bk.drawn || 0)) + (((G.bar && G.bar.floated) || 0) - (bk.floated || 0)) : 0;
+    - (((G.bar && G.bar.drawn) || 0) - (bk.drawn || 0)) + (((G.bar && G.bar.floated) || 0) - (bk.floated || 0)) - ((G.offIn || 0) - (bk.offIn || 0)) : 0;
   const spent = since != null ? Math.max(0, since - G.money - moved) : null;
   const tk = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
   const who = tk && NPCS[tk] ? NPCS[tk].name : "the till";
@@ -13310,6 +13364,14 @@ function doCommand(input) {
       // The soi invites it constantly ("Sit. Talk to Candy.") — it must never dead-end in
       // didn't-parse (both playtests, 2026-08-17). Flavor only. (A second `case "sit"` lower in this
       // switch held these lines and was dead code until 2026-10-07: the first label always won.)
+      if (G.room === "silk_rose" && /third/.test(arg || "")) {   // the bar's one standing rule, sat on (Aurelio, round 71)
+        _say(_npcsHere().includes("helmut")
+          ? "Helmut is on it. He looks at you over his glasses the way a man looks at a part that has arrived out of specification, and does not move. Mama Waew steers you one stool along with a hand on your elbow, smiling the whole time."
+          : _npcsHere().includes("waew")
+          ? "You get as far as touching it. \"No, no.\" Mama Waew is there before your weight lands. \"That one belongs to Germany. He comes at seven.\" She pats the next stool along. \"This one is very good also.\""
+          : "You sit on the third stool. It is exactly like the others, and you feel faintly as if you have taken somebody's coat.");
+        break;
+      }
       if (_isGogo()) _say(_pickVary(_SIT_LINES.gogo, "sitgogo"));
       else if (_inBar()) _say(_pickVary(_SIT_LINES.bar, "sitbar"));
       else if (/beach/i.test(_room().name)) _say(_pickVary(_SIT_LINES.beach, "sitbeach"));

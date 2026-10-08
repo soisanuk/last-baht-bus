@@ -311,7 +311,7 @@ function newGame() {
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
-    loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0,   // principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
+    loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0,   // principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
     rideLog: {},         // night rides per girl: {count, day, stops, great} — she remembers, and so does "late"
@@ -1787,7 +1787,7 @@ function _patronRage(id) {
 // (n, his) — `his` is the patron's possessive, "his"/"her": Sandra and Angela
 // were going back to "his glass" (German-mode playtest 2026-08-22)
 const _PATRON_MISS = [
-  (n, his) => `${n} shrugs. “Not one I know anything about, mate.”`,
+  (n, his) => `${n} shrugs. “Not one I know anything about.”`,   // "mate" from a Stuttgart toolmaker (Aurelio, round 71)
   (n, his) => `“Search me,” ${n} says, and goes back to ${his} glass. “Ask me something I've actually got an opinion on.”`,
   (n, his) => `${n} turns a hand over: nothing in it. “Couldn't tell you. Not my story.”`,
 ];
@@ -1818,6 +1818,10 @@ function _patronSeen(id) { return ((G.talked && G.talked[id]) || []).length > 0;
 // Money that ARRIVES in the account (a reward by the app, a transfer in a text, the sale):
 // counted, so the morning ledger names it rather than inferring it from the balance — an
 // inference that a rent charged to the card zeroed (the money audit, defect A, 2026-10-08)
+// She is on your arm tonight (a companion): not behind any rail, not serving anyone. The affair's
+// at-the-bar lines and the usual's "she has it on the mat" were firing in other bars and on the
+// beach with the owner's girl beside him (Callum, round 71).
+function _outWithMe(id) { return !!(G.party && G.party.ids && G.party.ids.includes(id)); }
 function _bankIn(n) { n = Math.max(0, Math.round(n || 0)); G.bank = (G.bank || 0) + n; G.bankIn = (G.bankIn || 0) + n; }
 function _pr(id) {
   const p = typeof _pronoun === "function" ? _pronoun(id) : (NPCS[id] || {}).pronoun;

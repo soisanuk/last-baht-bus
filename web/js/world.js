@@ -3248,6 +3248,11 @@ const ROOMS = {
     desc: "Quieter. Silk flowers in Singha bottles, a cashier doing sudoku, and two " +
       "regulars who have been mid-argument about football since 2019.",
     exits: { out: "buakhao_market" },
+    reads: {   // the room's three named things, examinable (Aurelio, round 71)
+      flowers: "Silk roses, mostly, faded to the colour of old lipstick — one to a Singha bottle along the bar. Somebody dusts them. Somebody also changes the bottles when the labels get tired, which tells you more about this bar than the flowers do.",
+      regulars: "Two old men at the far end, one Thai and one not, who have been arguing about the same match since 2019 and have never once raised their voices. Ton referees from her stool without turning round. Nobody has ever been introduced to them, and they would regard it as an intrusion.",
+      thirdstool: "The third stool from the left. It is identical to the other eight, except that it sits a degree squarer to the television and nobody but Helmut has sat on it since 2013.",
+    },
   },
   jasmine_garden: {
     name: "Jasmine Garden Bar",
@@ -13602,7 +13607,7 @@ const ENCOUNTERS = {
     hint: "(Go with her, or walk on and take the consequences. YES / NO.)",
   },
   coconutbar: {
-    rooms: ["north_beach"],
+    rooms: ["north_beach"], solo: true,   // "why you walk the beach alone" to a man with his girl on his arm (Callum, round 71)
     interactive: true, nightly: true, // the beach restocks its shade every night
     th: "ไปกับหนูไหมคะ", rom: "pai kap nuu mai kha?",
     intro: "Out past the string lights, in the dark under the palms, three or four women " +
@@ -14459,7 +14464,7 @@ const WORK_NIGHTS = [
   {
     id: "millionaires", weight: 5, happy: 4, money: 4000, when: G => !_lowSeason(),
     text: "Two lads three days into a two-week holiday and a bonus they haven't " +
-      "told their wives about find your bell at nine o'clock and ring it roughly " +
+      "told their wives about find your bell early and ring it roughly " +
       "hourly until one. The girls are laughing at them, not with them, and they " +
       "are having the time of their lives and do not care. The till sings. Bert " +
       "works the whole night with the expression of a man watching weather come " +
@@ -15799,13 +15804,13 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
           "thought about this. I cannot find the error. Every input was correct.\" He drinks, precisely. " +
           "\"Perhaps she was the error. That is the only variable I did not check.\"",
         short: "\"A colleague's wife went back after three years. Every input was correct. I cannot find the error.\"" },
-      { topic: "stool", text: "\"The third stool. I evaluated all nine.\" He is " +
+      { topic: "stool|third stool|the assessment|assessment", text: "\"The third stool. I evaluated all nine.\" He is " +
         "not joking. \"Best angle on the television, full coverage from fan " +
         "number two, and the rail does not wobble.\" A sip, precisely timed. " +
         "\"The Walking Street bars have better fans and worse everything else. " +
         "I did the assessment in 2013. It has not required updating.\"",
         short: "\"Third stool. I evaluated all nine in 2013. No update required.\"" },
-      { topic: "germany", text: "\"Nothing is wrong with Germany.\" A pause of " +
+      { topic: "germany|stuttgart", text: "\"Nothing is wrong with Germany.\" A pause of " +
         "engineering tolerance. \"My apartment is worth four times what I paid. " +
         "My pension is index-linked. My brother calls on Sundays.\" Another " +
         "pause. \"In Stuttgart I was a man waiting for the weather to improve. " +
@@ -15815,7 +15820,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       // certain, funded by the apron selfie every morning. No link to her table
       // at the Metro Beer Garden — a player who has the same photograph on his
       // own phone will know; nobody else can.
-      { topic: "girlfriend",
+      { topic: "girlfriend|pharmacy|the pharmacy|the photo|your friend",
         text: "He considers the question as a specification. \"A friend. Not a girlfriend " +
           "— I am too old, and the arithmetic is against it.\" He turns the {{phone}} face up " +
           "with one finger: a girl behind a pharmacy counter, white coat, hair in " +
@@ -15840,6 +15845,12 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
           "The cashier writes the bill as I would write it myself.\" He aligns the coaster with the rail. \"I " +
           "recommend this bar to nobody. I would like it to stay as it is.\"",
         short: "\"Thirteen years and never asked. I recommend this bar to nobody, so that it stays as it is.\"" },
+      // the football he watches and the argument he does not (Aurelio, round 71: "not my story", then "I was watching the football")
+      { topic: "football|the football|score|the score|tv|television|the match",
+        text: "\"Football.\" Helmut considers the screen. \"I watch the score. The score is information. The argument at the " +
+          "end of the bar I do not watch — it has had the same score since 2019.\" He aligns his glass with the coaster. " +
+          "\"That is not sport. That is marriage.\"",
+        short: "\"I watch the score. The argument at the end of the bar is not sport. It is marriage.\"" },
     ],
   },
 
@@ -18135,6 +18146,10 @@ const FLOOR_OWN = {
       { topic: "waew|mama|mamasan", text: "\"Mama Waew is like the old manager who never get sacked.\" Solemn. \"Because she win every year.\"", short: "\"The manager who never gets sacked.\"" },
       { topic: "grace|cashier", text: "\"Grace do sudoku and the till at the same time, and never wrong in either.\" Ton thinks about it. \"In football we call this a holding midfielder.\"", short: "\"Sudoku and the till, never wrong in either.\"" },
       { topic: "helmut", text: "\"Mister Helmut never ask me about football.\" Ton is still slightly offended. \"He ask the score. Only the score. He say the rest is opinion.\"", short: "\"He asks the score. The rest, he says, is opinion.\"" },
+      { topic: "the two|the men|two men|argument|the argument|the regulars|regulars|end of the bar", text: "\"Those two?\" Ton doesn't turn round. \"Same match since 2019. One say penalty, one say dive. I watch the replay on my {{phone}}, one hundred time. Is a dive.\" A sip. \"I never tell them. If I tell them, they have nothing to talk about, and then they go to another bar.\"", short: "\"Same match since 2019. It was a dive. I never tell them.\"" },
+      { topic: "casino|laos|savannakhet|cards|blackjack", text: "\"My brother deal blackjack across the bridge. Thai people go over to Laos to lose money, because in Thailand losing money is illegal.\" She considers this seriously. \"He say the Thai always come back. The money never.\"", short: "\"Thai people cross the bridge to lose money legally.\"" },
+      { topic: "score|tv|television|the screen|the match", text: "\"Score?\" She glances at the screen without needing to. \"Is a boring one. I tell you when something happen.\" She will, and she will be right.", short: "\"A boring one. I'll tell you when something happens.\"" },
+      { topic: "jackpot|shut the box", text: "\"Jackpot?\" Ton brightens. \"Shut the box. I am very good. You flip, I flip, the board count.\" A sly look. \"Mama let me play the customers because I lose the right amount.\"", short: "\"I'm very good. I lose the right amount.\"" },
     ],
   },
   nid: {
@@ -18157,6 +18172,10 @@ const FLOOR_OWN = {
       { topic: "waew|mama|mamasan", text: "\"Waew and me, nineteen year.\" Nid says it like a marriage. \"She hire me when I am twenty-five and crying in the toilet of another bar. I don't forget.\"", short: "\"Nineteen years. She found me crying in another bar's toilet.\"" },
       { topic: "grace|cashier", text: "\"Grace is young, but the till is old.\" Nid approves. \"She never let a customer argue the bill, and she never let a girl argue it either.\"", short: "\"Nobody argues the bill with Grace.\"" },
       { topic: "helmut", text: "\"Mister Helmut. Thirteen year.\" Nid says the number with care. \"One Chang, one glass, one coaster, seven o'clock. One time he come twenty past seven. I nearly call the hospital.\"", short: "\"Thirteen years. Once he was twenty minutes late and I nearly called the hospital.\"" },
+      { topic: "cat|your cat", text: "\"My cat is called Boss.\" Nid lets that land. \"He eats first, he sleeps on my side of the bed, and he never once pay for anything.\" A slow smile. \"He is the only man I keep.\"", short: "\"Boss. The only man I keep.\"" },
+      { topic: "drama|thai drama|soap|lakorn|the drama", text: "\"One episode, every night after work. A rich family, a poor girl, a slap, a misunderstanding.\" Nid shrugs. \"Twenty years I watch the same story. Is relaxing. In real life the slap come before the rich family.\"", short: "\"The same story twenty years. In real life the slap comes first.\"" },
+      { topic: "ice|the ice|ice man", text: "\"The ice man come at three.\" She means the afternoon. \"Waew pay him, Grace count the bags, I check it is not half water. Twenty years he try every week. Every week I catch him.\" A shrug. \"We are friends.\"", short: "\"Twenty years he tries, every week I catch him. We are friends.\"" },
+      { topic: "her papa|daughter's papa|ex-husband|ex husband|the papa", text: "\"Her papa?\" Nid looks at the bottles, not at you. \"Korat. A garage, a new wife, two more children. I know where. I never go.\" A beat. \"My daughter goes, one time a year, at New Year. I say nothing. Is her papa.\"", short: "\"Korat, a garage, a new wife. I know where. I never go.\"" },
     ],
   },
   wa: {
@@ -18180,6 +18199,8 @@ const FLOOR_OWN = {
       { topic: "waew|mama|mamasan", text: "\"Mama Waew is the plant manager.\" The {{phone}} stays down. \"She smile, and the problem go away. I don't know how. I watch to learn.\"", short: "\"She smiles and the problem goes away. I am learning how.\"" },
       { topic: "grace|cashier", text: "\"Grace count better than the machine.\" From Wa there is no higher praise. \"I check her arithmetic every week. Never one mistake. I check anyway.\"", short: "\"Never one mistake. I check anyway.\"" },
       { topic: "helmut", text: "\"Mister Helmut is very good customer.\" She has never needed the magnifier for him. \"Same every night. No defect. I wish every customer is made in Germany.\"", short: "\"Same every night. No defect.\"" },
+      { topic: "uncle|mud|the mud", text: "\"My uncle built the biggest rocket in the village three years running, and three years running it blow up on the ground.\" Wa almost laughs. \"Three years in the mud. Now he is the judge. Nobody throw the judge in the mud.\"", short: "\"Three years in the mud. Now he's the judge.\"" },
+      { topic: "rules|three rules|nid's rules|the rules", text: "\"Nid's three rules.\" Wa counts them off like a checklist. \"Never drink the free drink. Never cry where a customer see. Never lend money to a girl from another bar.\" A pause. \"I follow all three. The third one is the hardest.\"", short: "\"Three rules. The third is the hardest.\"" },
     ],
   },
   waew: {
@@ -18196,6 +18217,10 @@ const FLOOR_OWN = {
       { topic: "wa", text: "\"Wa is still deciding if this is a job or a mistake.\" Waew is not offended. \"Factory girls want the procedure. So I gave her one: be kind, be quick, write it down.\"", short: "\"Factory girls want a procedure. I gave her one.\"" },
       { topic: "grace|cashier", text: "\"Grace keeps my book, and the book keeps me honest.\" She pats the till in passing. \"She also has a little business on that headset. I pretend not to know. She pretends I don't.\"", short: "\"She keeps the book. I pretend not to know about the headset.\"" },
       { topic: "helmut", text: "\"Mister Helmut.\" Her voice warms by exactly one degree. \"Thirteen years on the third stool. He has never been rude to one girl and never bought one drink. I would not change him for ten men who buy drinks.\"", short: "\"Thirteen years. Never rude, never a drink. I would not change him.\"" },
+      { topic: "third stool|the third stool|stool|germany|german|the rule", text: "\"The third stool is Mister Helmut's.\" Waew says it like the name of a road. \"Thirteen years, seven o'clock, one Chang. The first month, a new girl sat there, and he stood behind her until she moved — very polite, not one word.\" She smiles. \"Now I keep it for him. A bar needs one thing that never changes.\"", short: "\"Mister Helmut's. A bar needs one thing that never changes.\"" },
+      { topic: "owner|the owner|landlord|rent|who owns", text: "\"The owner?\" Waew lowers her voice, not because it is a secret. \"A lady in Bangkok who bought {{the Silk Rose}} for her son. The son came twice and did not like the noise. Now she phones me on the first of the month and asks if the rent is okay.\" A shrug. \"The rent is okay. I make sure.\"", short: "\"A lady in Bangkok who bought it for a son who doesn't come.\"" },
+      { topic: "quota|quotas", text: "\"Quota, yes. I set it, Grace keeps it.\" She holds up a hand before you ask. \"I don't tell you the girls' numbers. I tell you nobody is under for long in my bar. If a girl is under, I find out why first.\"", short: "\"I set it, Grace keeps it. Nobody is under for long.\"" },
+      { topic: "mango|mango tree|tree", text: "\"My husband planted it the year before.\" Waew does not say before what. \"Every year it gives too many mangoes for one woman. I give them to the neighbours, and they think I am generous.\"", short: "\"Too many mangoes for one woman. The neighbours think I'm generous.\"" },
     ],
   },
   grace: {
@@ -18214,6 +18239,10 @@ const FLOOR_OWN = {
       { topic: "wa", text: "\"Wa checks my arithmetic.\" Grace almost smiles. \"She has never found a mistake. She checks anyway. I respect that.\"", short: "\"She checks anyway. I respect that.\"" },
       { topic: "waew|mama|mamasan", text: "\"Mama Waew reads the book once a night, at closing, for one minute.\" Grace squares it. \"One minute is enough when it is right.\"", short: "\"One minute, at closing. Enough when it is right.\"" },
       { topic: "helmut", text: "\"Mister Helmut's bill is the same every night. I could write it before he comes.\" She doesn't. \"He likes to watch me write it. Some customers like a ceremony.\"", short: "\"I could write his bill before he comes. He likes the ceremony.\"" },
+      { topic: "quota|quotas", text: "\"Waew sets it, I keep it.\" Grace taps a slim book under the till, separate from the chits. \"That book does not leave the till and does not get read to customers. Nice try.\"", short: "\"Waew sets it, I keep it. Nice try.\"" },
+      { topic: "owner|the owner|rent|landlord", text: "\"The owner is a {{phone}} call on the first of the month.\" Grace says it without irony. \"A lady in Bangkok. She asks Waew if the rent is okay, Waew says yes, and then Waew asks me.\" A beat. \"It is always okay. I make it okay.\"", short: "\"A {{phone}} call from Bangkok on the first. It's always okay.\"" },
+      { topic: "dogs|dog|the dogs", text: "\"Two dogs, at my sister's homestay.\" She shows you a photo: two brown soi dogs asleep on a guest's rucksack. \"They are the welcome committee. Guests think they come with the room. They do.\"", short: "\"The homestay's welcome committee.\"" },
+      { topic: "ceremony|the bill|helmut's bill", text: "\"Mister Helmut's bill.\" Grace almost smiles. \"I write it, he watches, he checks it against the one in his head, he pays exact, I say thank you, he says thank you. Thirteen years.\" A beat. \"Some people go to church.\"", short: "\"Thirteen years of the same bill. Some people go to church.\"" },
     ],
   },
   // ── Firefly Bar (Soi Khao Talo, the Darkside, 2026-10-08): the third floor written woman by

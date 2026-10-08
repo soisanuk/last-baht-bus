@@ -147,7 +147,7 @@ test("the night out: the stakes first, then the two of you get the night and the
 });
 test("a second night out inside a week costs the floor double, and she won't go after a catch", () => {
   affair({}); G.affair.lastOut = G.day - 3; goOut(); assert.equal(G.affair.floorSour, 2);
-  G.party = null; G.affairOutAsk = null;
+  G.party = null; G.affairOutAsk = null; G.room = "stinky_bar";
   Object.assign(G.affair, { soured: true, discovered: true, caughtDay: G.day, caughtWith: ["Ing"] });
   out = []; run("take manow out"); run("take manow out"); assert.ok(!G.party); assert.match(said(), /cousin/);
 });
