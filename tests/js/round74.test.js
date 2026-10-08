@@ -76,3 +76,12 @@ test("the regulars row is a town-wide book: one line is not two bars' sentence, 
   const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-parser.js", import.meta.url)), "utf8");
   assert.doesNotMatch(src, /about \{his\} divorce|my daughter a schoolbag|photo of \{his\} dog/, "a pooled line asserts no biography of the man or the speaker");
 });
+test("the eleven words the trainer added reach their verbs: borrow, interest, debt, the bill, goodbye, the wallet, moving, Cream, the stalls", () => {
+  const want = { "ยืมเงินสองพัน": "borrow 2000", "ถามนิราเรื่องดอกเบี้ย": "ask nira about interest", "ถามนิราเรื่องหนี้": "ask nira about debt",
+    "เช็คบิล": "check bin", "ลาก่อน": "goodbye", "ถามแคนดี้เรื่องกระเป๋าสตางค์": "ask candy about wallet", "กระเป๋าตังค์": "wallet",
+    "ย้ายมาอยู่พัทยา": "move to pattaya", "ถามครีม": "ask cream", "ขอหมูปิ้ง": "buy moo ping", "ขอจระเข้": "buy crocodile" };
+  for (const [th, en] of Object.entries(want)) assert.equal(_thaiToCmd(th), en, th);
+  G.room = "neon_paradise"; G.nightTurn = 30; run("talk to nira"); run("ยืมเงินสองพัน"); assert.ok(G.loan, "borrowed in Thai");
+  G.room = "second_rd_mall"; G.hunger = 60; const m0 = G.money; run("ขอจระเข้"); assert.ok(G.money < m0, "the crocodile is sold in Thai");
+  G.room = _hotelRoomId(); G.pendingChoice = "vacation_end"; run("ย้ายมาอยู่พัทยา"); assert.equal(G.stage, "expat");
+});

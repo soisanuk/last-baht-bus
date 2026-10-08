@@ -12140,7 +12140,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // Sandbox-only, late window (`from` is a nightTurn), see _npcActive.
   cream: {
     tinglish: true,   // the town rows answer in her register, never the house's (round 56)
-    name: "Cream", emoji: "💊", pronoun: "she",
+    th: "ครีม", name: "Cream", emoji: "💊", pronoun: "she",
     room: "metro_garden", from: 40, sandbox: true,
     look: "Thai woman, twenty-four, hair down for once, a stylish casual dress, a cocktail, no number — a customer, not staff.",
     desc: "At a table, not a stool: twenty-four or so, hair down, a simple dress that is " +

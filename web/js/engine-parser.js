@@ -12632,6 +12632,11 @@ const _THAI_CMD = [
   // itself (which WINS Act One), yes, no, and the time (Nok-Anne, round 43)
   ["ไหว้", "wai"], ["ใช่", "yes"], ["ไม่ครับ", "no"], ["ไม่ค่ะ", "no"], ["ไม่", "no"],
   // the loan and the dishes a learner orders (Pieter, round 73; yuem, dok bia, nee and moo ping wait on the trainer)
+  // the eleven words the trainer added for LBB (2026-10-09 — Nattapong r56, Jens r67, Pieter r73 typed them all)
+  ["ยืมเงิน", "borrow"], ["ยืม", "borrow"], ["ดอกเบี้ย", "interest"], ["หนี้", "debt"],
+  ["หมูปิ้ง", "moo ping"], ["จระเข้", "crocodile"], ["เช็คบิล", "check bin"], ["เช็ค", "check"],
+  ["ลาก่อน", "goodbye"], ["ย้ายมาอยู่", "move to"], ["ย้าย", "move"], ["พัทยา", "pattaya"],
+  ["กระเป๋าสตางค์", "wallet"], ["กระเป๋าตังค์", "wallet"], ["สตางค์", "money"], ["ตังค์", "money"],
   ["คืนเงิน", "repay"], ["คืน", "repay"], ["ก๋วยเตี๋ยว", "noodles"], ["ข้าวผัด", "fried rice"], ["ผัดไทย", "pad thai"],
   ["ร้องเพลง", "sing"], ["ถ่ายรูป", "photo"], ["ถอนเงิน", "withdraw"], ["ว่ายน้ำ", "swim"],
   ["ชายหาด", "beach"], ["ข้อความ", "message"], ["แท็กซี่", "taxi"], ["เงินสด", "cash"],
