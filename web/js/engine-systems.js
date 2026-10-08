@@ -3616,6 +3616,7 @@ function _questTick() {
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
     G.quests[qid] = "done";
+    (G.questDoneDay = G.questDoneDay || {})[qid] = G.day;   // the follow-ups a month later read it (the laundering quests, 2026-10-08)
     if (!_quietVignette(q)) _say(`✦ QUEST COMPLETE: ${q.name}`, "win");
     // A dep chain names its next door when the last one closes — the flagship
     // 51% decision was offered by nobody a money-driven publican thought to ask,
@@ -9191,7 +9192,8 @@ const _OPP_LINES = [
   ["The board across the road has been rubbed out and rewritten, and the new numbers are not smaller. A punter reads it, laughs, and comes in here instead.",
    "Two of the Dane's girls are at a kerb table outside his bar, not working, because there is nobody to work. One of them is doing sums on her phone."],
   ["There are three girls across the road where there were nine, and one of the three is new and does not know the regulars' names, because the regulars are here. The Dane has stopped standing on the step.",
-   "The man who brings Nont's money is across the road, at the Dane's table, with a folder. Bert sees you see it. “Ten percent, that'll be. Off the top, nightly.” He does not say any more."],
+   "The man who brings Nont's money is across the road, at the Dane's table, with a folder. Bert sees you see it. “Ten percent, that'll be. Off the top, nightly.” He does not say any more.",
+   "The Dane has taken the frame down from beside his till and is reading it at a kerb table, which nobody does until the day they do. Bert, with the ice: “Commercial registration. No company, no capital, no accounts — cheapest bar there is to lose. Same as half this soi.” The sign over the road is the only thing with his name on it, and the sign is not his either."],
   ["The shutters across the road are down at nine on a Saturday, and there is a sign on them you do not need to read. The Dane's second fridge is on the pavement with a price on it.",
    "Nobody is across the road. The sign is up. A piwin uses the step to eat his noodles on, which is what a step is for, in the end."],
 ];
@@ -10454,6 +10456,8 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  // WHY EVERY BAR COMPANY IS TWO MILLION (the laundering material, 2026-10-08 — the work-permit grid, structure only)
+  "WHY EVERY BAR COMPANY IN THIS TOWN IS TWO MILLION BAHT, squire, and never three: because the number is not the bar's, it is the permit's. A foreigner who wants to stand behind his own rail and call it work needs a company with two million paid in for each work permit it carries — one million if he had the sense to marry a Thai, four million if he wants a manager on the paper beside him. So the capital of every bar company on the register is set by the grid and not by the business, and a man reading the register can tell you how many farang work in a bar before he has seen its door. Three million does not exist. Most bars are not companies at all: a commercial registration in a woman's name, no capital, no accounts, no permit, and the farang who paid for the stools is nowhere on it — which is the cheapest kind of bar there is to lose and the only kind most men can afford. The Owl mentions it because the paper hangs by every till in a frame, and in twenty years he has watched one customer read it.",
   // THE BANK REMEMBERS THE PERSON (money-laundering flavour, 2026-10-08 — the mule-book pattern, structure only)
   "THE BANK REMEMBERS THE PERSON, squire, which is the one new fact in this town's oldest trade. It used to go like this: a girl from the rice walks into a branch with her ID card, opens an account, and sells the book and the card that same afternoon to a man she will never meet for three thousand baht, which is a week on the floor without the floor. The money that goes through that account is not hers and she never sees it; somebody over a border makes a telephone call, somebody's grandmother's account takes a transfer, somebody takes it out of a machine with eight cards in his sock and is paid by the amount, and the one on the news is the fourth somebody. What is new is that the banks now share a list, and the list has her name on it, not the book — so when the account is frozen, which it will be, every bank in the country knows her at the door for the rest of her life. Three thousand baht. The Owl mentions it because a reader asked why his girlfriend cannot open an account 'anywhere, even with my money', and the honest answer is the one above, and nobody on her floor will say it, because she was nineteen and it was a week's wages and the man was polite.",
   "THE THEORY OF FRONTS, squire, which every man at every rail in this town will explain to you " +
@@ -10536,6 +10540,9 @@ const _OWL_AMULET = [
 ];
 
 const _OWL_LETTERS = [
+  // struck off at Christmas (the laundering material, 2026-10-08)
+  ["A reader in Nong Prue writes: 'I went home for Christmas and came back to find my company struck off the register for not filing. Nobody rang. The bar was open the whole time. What do I do?'",
+    "Nothing, squire, is what most men do, and the register is content with that: struck off is free, and your bar never needed the company anyway, only your work permit did, and that went with it. If you want the company back it can be restored, for a fee, by the same accountant who did not file, and he will do it in a week, and you will wonder for a long time whether the week was the point. The Owl's advice is the only kind that costs nothing: a company is a thing somebody has to FILE for, every year, while you are at a wedding in Kent — and closing one properly costs money, which is why the honest ones pay to close and the rest are struck off like yours. Decide which you are before the next Christmas."],
   // the reader whose girlfriend has no bank (money-laundering flavour, 2026-10-08)
   ["A reader on Soi Buakhao writes: 'My lady cannot open a bank account. Three banks, same answer, no reason given. She is honest, she pays her bills, I have seen her send money home for two years. Who do I complain to?'",
     "Nobody, squire, and that is the design. Nobody accused her: a bank reviewed a relationship under its risk policy and wished her well, and the other two read the same list. Ask her, kindly and once, about an account she opened at nineteen for a boyfriend she never met, and whether the book went out of her hands for the price of a week. Then stop asking. The money she sends home goes through her cousin's account now, and that is not a crime, it is a workaround, and the whole country runs on them."],
@@ -10699,6 +10706,7 @@ const _OWL_ARRIVED = [
     "the whole first night. The second one you'll work out yourself.",
 ];
 const _OWL_LISTINGS = [
+  "A BUSINESS CONSULTANCY on Thappraya Road, second floor, no sign, sells nothing to nobody, invoices monthly. The Owl has never met a client and has met the accountant twice. Office hours by appointment; the appointment is never with you.",
   "STINKY BAR (Beach Road North), the American's shop, runs killer pool every third night — ฿100 in the ashtray, last cue standing takes the pot. His felt, his rules, his Singha.",
   "BLUE DOG (Beach Road North) keeps the best sunset seats on the strip and, six-to-seven nightly, the finest free show in town: the checkpoint across the road, farang and their paperwork, no cover charge.",
   "MAMA YAI'S (the Darkside) — som tam that arrives unasked and correct, beer ten baht under town, and a wall of photographs that knows everyone's second wife. Eat first, cry after.",

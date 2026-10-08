@@ -74,8 +74,8 @@ test("--quests is the third pivot: a quest's prose AND its wiring in one place",
   // the wiring is the point: a quest whose flag nothing sets is unfinishable, and
   // the header says so rather than leaving it to be discovered in play
   const all = run("--quests");
-  assert.match(all, /\[41 quests\]/);   // the laundering quests (2026-10-08)
-  assert.match(run("--map"), /quests \(wiring \+ prose\)\s+\d+\/41/);
+  assert.match(all, /\[42 quests\]/);   // the laundering quests (2026-10-08)
+  assert.match(run("--map"), /quests \(wiring \+ prose\)\s+\d+\/42/);
 });
 
 test("a large dump survives being piped — the tail is not lost to an async stdout flush", () => {

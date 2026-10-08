@@ -337,6 +337,8 @@ function newGame() {
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
     returnHello: {},     // npc id → the vacation a written woman last gave her return greeting (Aurelio, round 71)
     coversNights: {},    // day → the men counted at Jasmine Garden that night (The Covers: a pattern is three nights, Mario 2026-10-08)
+    licencesRead: {},    // room → the registered name read off the paper by the till (EXAMINE LICENCE, 2026-10-08)
+    questDoneDay: {},    // quest id → the day it completed (the follow-ups a month later: Orathai closes, the police read the paper)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
     sentTotal: 0,        // baht SENT to contacts over the game — the hospital queue's "money you'll never see" needs a debt to point at
     codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
@@ -854,6 +856,41 @@ function _pickVary(pool, key) {
   return pool[i];
 }
 
+// THE PAPER BY THE TILL (the laundering material, 2026-10-08): every bar hangs a licence and a registration that
+// nobody reads. This derives one from the data — the sign is never the operator. A small bar is a commercial
+// registration in the name of the woman who actually owns it (the mamasan, or the one woman who is the bar), no
+// capital, no accounts; a go-go is a company at exactly one work permit's worth of capital; the groups carry two
+// permits; your own bar is 51/49 to the share, with the partner's full name on it. A few names are winks, and one
+// name turns up on four unrelated bars across town, which is the research's nominee test made into a hidden job.
+const BENJAWAN_BARS = ["the_bucket", "gold_rush", "water_buffalo", "two_stools"];
+const _LICENCE_CO = [["Siam Neon", "Entertainment"], ["Golden Orchid", "Entertainment"], ["Blue Marlin", "Leisure"], ["Eastern Star", "Entertainment"], ["Sunrise Coast", "Leisure"], ["Lotus Night", "Entertainment"], ["Pattaya Dream", "Leisure"], ["Thai Smile", "Entertainment"]];
+function _licenceOf(room) {
+  const r = ROOMS[room]; if (!r || !r.bar) return null;
+  const fmt = n => "\u0e3f" + _num(n);
+  const samson = [...(NPCS.bill && NPCS.bill.bars || []), ...(NPCS.wimon && NPCS.wimon.bars || []), "hyper"];
+  if (typeof _barOwned === "function" && _barOwned() && G.bar && room === G.bar.room) {
+    const tan = _flag("partnerTan");
+    return { kind: "company", name: "Stinky Pinky Beach Bar Co., Ltd.", capital: 2000000,
+      line: `A company, capital ${fmt(2000000)} — one work permit's worth, which is one more than you hold. Shareholders, to the share: ${tan ? "Thanakorn Srisawat" : "Kanokwan Pholsiri"} — ${tan ? "Tan" : "Candy"}, by a name you have never once heard anyone use — 51.00, and a farang name that is yours, 49.00. The building is on none of it.` };
+  }
+  if (r.plg || r.group === "plg" || r.owner === "plg" || r.faction === "plg") return { kind: "company", name: "Pattaya Leisure (Holdings) Co., Ltd.", capital: 4000000, line: `Pattaya Leisure (Holdings) Co., Ltd., capital ${fmt(4000000)} — two permits' worth. It is the same paper, the same name and the same number in every room the group runs, which makes them the only bars on the soi where the sign and the registration agree.` };
+  if (samson.includes(room)) return { kind: "company", name: "Samson Brothers Hospitality Co., Ltd.", capital: 4000000, line: `Samson Brothers Hospitality Co., Ltd., capital ${fmt(4000000)}: two work permits, one of them Bill's. Three beer bars, three clubs and a go-go on one company — the brothers bought the paperwork once and have been adding rooms to it since.` };
+  if (room === "queen_vic") return { kind: "company", name: "Mind The Step Co., Ltd.", capital: 2000000, line: `Mind The Step Co., Ltd., capital ${fmt(2000000)}, one permit — the pub's, since a farang pulls the pints. Somebody on this rail named the company, and the same somebody signs a column the same way.` };
+  if (room === "cloze") return { kind: "company", name: "Soi Sanuk Language Co., Ltd.", capital: 1000000, line: `Soi Sanuk Language Co., Ltd., capital ${fmt(1000000)} — a school's paper, not a bar's, because the bar is the classroom. The licence to sell beer hangs beside it, in Kruu Waen's own name.` };
+  if (room === "succubus") return { kind: "company", name: "Kinnaree Hospitality Ltd., Part.", capital: 1000000, line: `Kinnaree Hospitality Ltd., Part., capital ${fmt(1000000)} — the married man's permit, half price, and her name first because it has to be. Thirty years on the hill on exactly that paper.` };
+  if (room === "sandy_toes") return { kind: "registration", name: "Last Baht Beach Bar", line: "A commercial registration — no capital, no accounts — in the name LAST BAHT BEACH BAR, which is not what the sign says and never was. Whoever registered it had a sense of humour about the hour, or about the money." };
+  if (BENJAWAN_BARS.includes(room)) return { kind: "registration", name: "Benjawan Srisuk", line: "A commercial registration — no capital, no accounts, no permit — in the name of one BENJAWAN SRISUK, dated 2019. Nobody on the floor is called Benjawan." };
+  const gogo = r.barType === "gogo" || r.barType === "gents";
+  if (gogo) {
+    const [a, b] = _LICENCE_CO[_hh("lic:" + room, 23) % _LICENCE_CO.length];
+    return { kind: "company", name: `${a} ${b} Co., Ltd.`, capital: 2000000, line: `${a} ${b} Co., Ltd., capital ${fmt(2000000)} — exactly one work permit's worth, for a farang who is not on the floor tonight and whose name is not on the sign either. Below it, smaller, a Thai name on 51.00 of it that nobody in the room would recognise.` };
+  }
+  const mama = Object.keys(NPCS).find(i => NPC_ROLES[i] === "mamasan" && _npcRoom(i) === room);
+  const solo = !mama && Object.keys(NPCS).filter(i => NPC_ROLES[i] && (NPCS[i].room === room || (NPCS[i].bars || []).includes(room)));
+  const who = mama ? NPCS[mama].name : (solo && solo.length === 1 ? NPCS[solo[0]].name : null);
+  if (who) return { kind: "registration", name: who, line: `A commercial registration — no capital, no accounts, no permit, the cheapest kind of bar there is to lose — in the name of ${who}, which is how you learn, in a frame by the till, who actually owns this place.` };
+  return { kind: "registration", name: "a name that is not the sign's", line: "A commercial registration — no capital, no accounts — in a Thai name that is not the sign's and not anybody's you have met. On this soi that is the usual arrangement, not the unusual one." };
+}
 function _inv() {
   return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === "inventory");
 }
