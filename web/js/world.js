@@ -12615,11 +12615,11 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"That's that handled. He's not a man who sends receipts, so if you're waiting on one, don't.\"",
         short: "\"Sorted.\"" },
       { topic: "note|the note|old man|arrears", when: (st, G) => _flag("barPaid"),
-        text: "\"฿" + BAR_MONTHLY + " a month to Ohio, six years, and he'll not chase you. That's the whole " +
+        text: "\"฿" + BAR_MONTHLY.toLocaleString("en-US") + " a month to Ohio, six years, and he'll not chase you. That's the whole " +
           "of it, and it's the worst bit — a man who chases, you can argue with.\" He wipes the same " +
           "patch twice. \"Walk it round when you're behind, and you can say how much. He'll not thank " +
           "you. He'll not not thank you either.\" (PAY THE NOTE · PAY NOTE <amount>)",
-        short: "\"฿" + BAR_MONTHLY + " a month, he'll not chase. PAY THE NOTE, or PAY NOTE <amount>.\"" },
+        short: "\"฿" + BAR_MONTHLY.toLocaleString("en-US") + " a month, he'll not chase. PAY THE NOTE, or PAY NOTE <amount>.\"" },
       { topic: "rent|landlord", when: (st, G) => _flag("barPaid"),
         text: "\"Every thirty days, to a guy who's never late collecting and never early with anything " +
           "else. Miss it once, his daughter comes by with a book. Miss it twice, I've told you what " +
@@ -13644,7 +13644,7 @@ const ENCOUNTERS = {
     ],
     hint: "(No bar, no barfine, no mamasan \u2014 and they told you what they are before you " +
       "asked, which is the difference between this wall and a story you would tell badly " +
-      "later. \u0e3f" + SEAWALL_ONE + ", or \u0e3f" + SEAWALL_TWO + " for two. YES / BOTH / NO.)",
+      "later. \u0e3f" + SEAWALL_ONE.toLocaleString("en-US") + ", or \u0e3f" + SEAWALL_TWO.toLocaleString("en-US") + " for two. YES / BOTH / NO.)",
   },
   bkktourist: { solo: true,
     rooms: ["ws_north", "ws_south", "beach_rd_c", "second_rd_c", "buakhao_market"],
@@ -14676,8 +14676,8 @@ const SHIFT_CALLS = [
       "Three of the girls are talking at the end of the bar and stop when you look over, which means it is about you.",
     ],
     ask: [
-      "\"Boss. The bar has bad luck.\" She says it the way she would say the ice is late. The slip, the compressor, the quiet nights — she lists them without looking at the list. \"We make merit. Nine monks, morning, food, the pig head for the spirit house. Everybody do it.\" A number, flat, no theatre: ฿" + MERIT_COST + ". \"Then the luck change.\"",
-      "\"Boss.\" She has clearly been chosen to say it. \"Girls are not happy. Too many bad nights — they say the spirit house is angry, nobody feed it since the old owner.\" She does not say whether she believes it; she says what it costs. \"Nine monks, food for everybody, pig head. ฿" + MERIT_COST + ". Morning, before open.\"",
+      "\"Boss. The bar has bad luck.\" She says it the way she would say the ice is late. The slip, the compressor, the quiet nights — she lists them without looking at the list. \"We make merit. Nine monks, morning, food, the pig head for the spirit house. Everybody do it.\" A number, flat, no theatre: ฿" + MERIT_COST.toLocaleString("en-US") + ". \"Then the luck change.\"",
+      "\"Boss.\" She has clearly been chosen to say it. \"Girls are not happy. Too many bad nights — they say the spirit house is angry, nobody feed it since the old owner.\" She does not say whether she believes it; she says what it costs. \"Nine monks, food for everybody, pig head. ฿" + MERIT_COST.toLocaleString("en-US") + ". Morning, before open.\"",
     ],
     yes: "You say yes, and something in the room unclenches that you had not known was clenched. The monks come at seven; the food goes round the floor afterwards; the pig's head sits at the spirit house with a cigarette in its mouth and a glass of red fizz, and every girl on the floor touches your arm once that night without a chit in it.",
     no: "You say it is not a budget line, and the mamasan says \"ka\" the way she says it to customers. The girls make merit anyway, the next morning, with their own money — and that night, between nine and eleven, the floor is across the road at a som tam table in a row, and the room has nobody in it but you and Bert.",

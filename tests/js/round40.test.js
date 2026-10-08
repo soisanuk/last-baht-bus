@@ -108,7 +108,7 @@ test("WORK declared and slept on settles as Bert's night (Keith)", () => {
 test("BOOKS itemises the night and tallies the shifts; TAKE 300 FROM TILL is DRAW at your own bar (Keith)", () => {
   ownsBar(); stub(() => _barSettle(G.day));
   out = []; run("books");
-  assert.match(text(), /Last night: ฿\d+ in.*nut ฿\d+ · stock ฿\d+ · wages ฿\d+ · Bert ฿\d+/);
+  assert.match(text(), /Last night: ฿[\d,]+ in.*nut ฿[\d,]+ · stock ฿[\d,]+ · wages ฿[\d,]+ · Bert ฿[\d,]+/);
   assert.match(text(), /Nights stood: \d+ of \d+/); assert.match(text(), /every thirty days/); assert.match(text(), /DRAW <amount>/);
   const m0 = G.money, c0 = G.bar.cash; out = []; run("take 300 from till");
   assert.equal(G.money, m0 + 300); assert.equal(G.bar.cash, c0 - 300); assert.doesNotMatch(text(), /fixtures, not luggage/);

@@ -293,7 +293,7 @@ test("the ride is a pool: the weaving, the hands on the first ride, three-up wit
 // ── Colin, the Cheap Charlie: every baht accounted for ──
 test("the beer names its price on the line that charges it, and the fifth one says why it cost สนุก (Colin)", () => {
   G.room = "candy_bar"; G.soc.drunk = 0; run("buy beer");
-  assert.match(text(), new RegExp(`\\(-฿${_beerPrice()}, ฿${G.money} left\\.\\)`));
+  assert.match(text(), new RegExp(`\\(-฿${_beerPrice()}, ฿${_num(G.money)} left\\.\\)`));
   G.room = "tequila_queen"; out = []; run("buy beer");
   assert.match(text(), new RegExp(`-฿${_beerPrice("tequila_queen")}`), "a go-go's Chang says what it is");
   G.soc.drunk = 5; out = []; run("buy beer"); assert.ok(_BEER_PAST.some(l => text().includes(l)), "past the sweet spot, counted (round 54)");

@@ -1913,7 +1913,7 @@ test("the real negotiation carries the party price to every surface, and she say
   out = []; doCommand("barfine lek");
   assert.ok(G.pendingBf && G.pendingBf.party > G.pendingBf.lt, "the negotiation computed her night's worth");
   const want = G.pendingBf.party;
-  assert.match(out.join("\n"), new RegExp("TAKE HER OUT ฿" + want), "the menu quotes the real number");
+  assert.match(out.join("\n"), new RegExp("TAKE HER OUT ฿" + _num(want)), "the menu quotes the real number");
   const m0 = G.money;
   out = []; doCommand("take her out");
   assert.equal(G.money, m0 - want, "…and the ledger charges it");

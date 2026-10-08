@@ -1045,7 +1045,7 @@ function _arriveAt(to) {
   // move, gate it too.
   if (G.mode === "soi6" && !SOI6_ROOMS.has(to)) { _say(_pickVary(_SOI6_BOUND, "soi6bound")); return; }
   (G.soc.arriveMoney = G.soc.arriveMoney || {})[to] = G.money;   // CHECK BIN counts from the stool you sat down on (callers may set G.room before arriving)
-  (G.soc.arriveBook = G.soc.arriveBook || {})[to] = { off: G.offTill || 0, lb: G.loanBorrowed || 0, lr: G.loanRepaid || 0, atm: G.atmTotal || 0 };   // what moved the pocket without a slip
+  (G.soc.arriveBook = G.soc.arriveBook || {})[to] = { off: G.offTill || 0, lb: G.loanBorrowed || 0, lr: G.loanRepaid || 0, atm: G.atmTotal || 0, drawn: (G.bar && G.bar.drawn) || 0, floated: (G.bar && G.bar.floated) || 0 };   // what moved the pocket without a slip — your own till too (the money audit, D)
   // A question somebody has put to YOU does not follow you out of the room. It
   // used to: a midnight ejection stranded Barry's ask on the street, where the
   // numbered answer the game had just PRINTED came back "I didn't understand
@@ -6283,7 +6283,7 @@ function _townTalk(npc, topic) {
   if (/\b(charge|charger|charging|battery|socket|plug|power bank|dead phone)\b/.test(t)) {
     const c = _room().seven ? "The 7-Eleven sells the cable — CHARGE PHONE at the counter, three ticks."
       : (typeof _nontHere === "function" && _nontHere()) ? "The kid at the table does it for ฿50, no cable needed — CHARGE PHONE."
-      : _inBar() ? "There's a socket behind the bar — buy a drink and CHARGE PHONE; the cable's ฿" + CHARGER_PRICE + " at any 7-Eleven if you haven't one."
+      : _inBar() ? "There's a socket behind the bar — buy a drink and CHARGE PHONE; the cable's ฿" + _num(CHARGER_PRICE) + " at any 7-Eleven if you haven't one."
       : "Any 7-Eleven sells the cable, and any bar with a drink in front of you has a socket — CHARGE PHONE.";
     return pick("charge", { c });
   }
@@ -8890,7 +8890,7 @@ function _doPay(arg) {
     G.pendingFare = null;
     G.room = dest;
     _say(`He accepts your ฿${_num(amount)} with the serene absence of change-giving for which ` +
-      "the profession is famous. An expensive listening lesson. (฿" + G.money + " left.)");
+      "the profession is famous. An expensive listening lesson. (฿" + _num(G.money) + " left.)");
   } else {
     G.money -= amount;
     G.pendingFare = null;
@@ -11196,9 +11196,9 @@ function _poolTalk(npc) {
   const champ = mine ? ` "And your name is on the slate, so you know all this already."` : "";
   return reg === "floor"
     ? `"The table?" ${n} looks at it with the fondness of somebody who has to clean around it. ` +
-      `"Is the real reason half these men come. ${stake ? "฿" + stake + " a rack" : "Money on it, always"}, and nobody play for fun after ten o'clock." ` +
+      `"Is the real reason half these men come. ${stake ? "฿" + _num(stake) + " a rack" : "Money on it, always"}, and nobody play for fun after ten o'clock." ` +
       `${league}${champ} (PLAY POOL)`
-    : `"The table." ${n ? n + " does not have to look at it. " : ""}"${stake ? "฿" + stake + " a rack" : "There is always money on it"}, ` +
+    : `"The table." ${n ? n + " does not have to look at it. " : ""}"${stake ? "฿" + _num(stake) + " a rack" : "There is always money on it"}, ` +
       `winner racks, and the standard after ten is higher than anybody warns you. ${league}"${champ} (PLAY POOL)`;
 }
 
@@ -11368,7 +11368,8 @@ function _doCheckBin() {
   // saleng's shoes, a cash tip, Nira's loan in or out, the machine (Clifford, round 68: the cup
   // counted street-cart shoes and loan interest, and a BORROW zeroed it)
   const bk = (G.soc.arriveBook || {})[G.room] || null;
-  const moved = bk ? ((G.offTill || 0) - bk.off) + ((G.loanRepaid || 0) - bk.lr) - ((G.loanBorrowed || 0) - bk.lb) - ((G.atmTotal || 0) - bk.atm) : 0;
+  const moved = bk ? ((G.offTill || 0) - bk.off) + ((G.loanRepaid || 0) - bk.lr) - ((G.loanBorrowed || 0) - bk.lb) - ((G.atmTotal || 0) - bk.atm)
+    - (((G.bar && G.bar.drawn) || 0) - (bk.drawn || 0)) + (((G.bar && G.bar.floated) || 0) - (bk.floated || 0)) : 0;
   const spent = since != null ? Math.max(0, since - G.money - moved) : null;
   const tk = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
   const who = tk && NPCS[tk] ? NPCS[tk].name : "the till";
@@ -11716,7 +11717,7 @@ function _chipSet() {
   if (G.pendingChoice === "bkkbill") { add("let", "let it go"); add("grab", "reach for it"); return chips; }
   if (G.pendingChoice === "cham") { add("go", "go with her"); add("not tonight"); return chips; }
   if (G.pendingChoice === "chamgift") {
-    if (_pers("whiteknight")) add("gift " + CHAM_GIFT, "gift ฿" + CHAM_GIFT);
+    if (_pers("whiteknight")) add("gift " + CHAM_GIFT, "gift ฿" + _num(CHAM_GIFT));
     add("gift ", "gift…"); add("nothing"); return chips;
   }
   if (G.pendingChoice === "synjob") {

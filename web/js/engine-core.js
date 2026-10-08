@@ -58,7 +58,10 @@ function _L(s) {
 // soak catches (its `defmt` warning).
 //   _say(_fmt("day {day} of 7.", { day: G.day }))
 function _fmt(en, params) {
-  return _L(en).replace(/\{(\w+)\}/g, (m, k) => (params && params[k] != null) ? params[k] : m);
+  // a number standing after ฿ prints with its separator, whoever passed it raw (the money
+  // audit, F: "฿{take}" printed ฿12500 on the settle line, BOOKS and the shift call)
+  return _L(en).replace(/(\u0e3f?)\{(\w+)\}/g, (m, cur, k) => (params && params[k] != null)
+    ? cur + (cur && typeof params[k] === "number" && typeof _num === "function" ? _num(params[k]) : params[k]) : m);
 }
 
 // Thousands formatting for a money/count figure. Call this rather than
@@ -332,6 +335,7 @@ function newGame() {
     flags: {},
     offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
+    bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
     sentTotal: 0,        // baht SENT to contacts over the game — the hospital queue's "money you'll never see" needs a debt to point at
     codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
     known: {},           // charId → true once their name has printed (ask-topic gate)
@@ -1811,6 +1815,10 @@ function _patronSeen(id) { return ((G.talked && G.talked[id]) || []).length > 0;
 // Reads world.js's `_pronoun(id)`, which is the ONE resolver (most role-carriers
 // carry no `pronoun` field at all and fall through its lady-role default — a
 // second copy of that rule here would read half the cast as men).
+// Money that ARRIVES in the account (a reward by the app, a transfer in a text, the sale):
+// counted, so the morning ledger names it rather than inferring it from the balance — an
+// inference that a rent charged to the card zeroed (the money audit, defect A, 2026-10-08)
+function _bankIn(n) { n = Math.max(0, Math.round(n || 0)); G.bank = (G.bank || 0) + n; G.bankIn = (G.bankIn || 0) + n; }
 function _pr(id) {
   const p = typeof _pronoun === "function" ? _pronoun(id) : (NPCS[id] || {}).pronoun;
   return p === "she" ? { s: "she", o: "her", p: "her" }

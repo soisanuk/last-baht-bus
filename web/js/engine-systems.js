@@ -1283,7 +1283,7 @@ function _partyArrive(to) {
   const dcost = _ladyPrice() * p.ids.length;
   const _ownTill = typeof _atOwnBar === "function" && _atOwnBar();   // at your own bar her drink rings into your own till (Marta, round 63: ฿150 out of the pocket and into nowhere)
   if (G.money >= dcost) {
-    G.money -= dcost; if (_ownTill && G.bar) G.bar.cash += dcost;
+    G.money -= dcost; if (_ownTill && G.bar) { G.bar.cash += dcost; G.bar.guestDrinks = (G.bar.guestDrinks || 0) + dcost; }   // and on BOOKS' guest line (the money audit, E1)
     p.spent += dcost;
     for (const id of p.ids) _boughtBond(id, 1);
     _say(_fmt(_pickVary(pair ? _PARTY_DRINKS_PAIR : _PARTY_DRINKS, "partydrink"), { who, c: dcost }), "dim");
@@ -1547,7 +1547,7 @@ function _bfPrompt(fresh) {
     _say(_fmt(G.pendingBf.mama ? "(Still on the table: {n}'s barfine, with {m} waiting on your answer.)"
       : "(Still on the table: {n}'s barfine.)",
       { n: NPCS[id].name, m: G.pendingBf.mama }), "dim");
-  const p = n => n ? "฿" + n : _L("waived — past midnight");
+  const p = n => n ? "฿" + _num(n) : _L("waived — past midnight");
   // At her-farang tier she waives the fine herself — foreshadow it in the quote
   // so a price-shy player doesn't back out at a number that won't be charged
   // (Alan playtest, 2026-08-17: the lovely reveal only fired AFTER committing).
@@ -1814,7 +1814,7 @@ function _bfResolve(kind) {
       "and the sweet goes out of her like a fuse blowing. The shouting is in two " +
       "languages and the thrown drink is in neither. A shove, a nail catching your " +
       "cheek, and then the mamasan and two of the girls have her by the arms and you " +
-      "by the shoulder, steering you out into the soi. Your ฿" + price + " bought that. " +
+      "by the shoulder, steering you out into the soi. Your ฿" + _num(price) + " bought that. " +
       "You're barred here for the night, and you'll feel the scratch tomorrow.", "alert");
     if (_hurt(1)) return;
     _kickOut();
@@ -3571,7 +3571,7 @@ function _questTick() {
       // money sent through the bank app lands in the ACCOUNT, as every other
       // transfer does (Joanne, round 64 — the line said bank app, the pocket grew)
       const _gv0 = _qGiver(q), _byApp = !!(NPCS[_gv0] && !_npcsHere().includes(_gv0));
-      if (_byApp) G.bank += q.reward.money; else G.money += q.reward.money;
+      if (_byApp) _bankIn(q.reward.money); else G.money += q.reward.money;
       // money with nobody handing it over (Arturo, round 47): name the giver, and
       // say how it reached you when the giver is not in the room
       const _gv = _qGiver(q), _gn = NPCS[_gv] ? NPCS[_gv].name : null;
@@ -3855,7 +3855,7 @@ function _pushMsg(from, text, gives, fromName, photo) {
   if (G.phone.inbox.length > 80) {
     for (const m of G.phone.inbox.slice(0, G.phone.inbox.length - 80)) {
       if (m.read) continue;
-      if (m.gives) G.bank = (G.bank || 0) + m.gives;
+      if (m.gives) _bankIn(m.gives);
       if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
     }
     G.phone.inbox = G.phone.inbox.slice(-80);
@@ -4550,7 +4550,7 @@ function _readMessages() {
     const dropped = show.slice(0, show.length - 12);
     for (const m of dropped) {
       m.read = true;
-      if (m.gives) { G.bank = (G.bank || 0) + m.gives; _say(`(An older transfer surfaces in the scroll: +฿${_num(m.gives)} to the account.)`, "win"); }
+      if (m.gives) { _bankIn(m.gives); _say(`(An older transfer surfaces in the scroll: +฿${_num(m.gives)} to the account.)`, "win"); }
       if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
     }
     _say(_fmt("(You thumb past {n} older messages — the phone's way of telling you how long you've been gone.)", { n: dropped.length }), "dim");
@@ -4573,7 +4573,7 @@ function _readMessages() {
     if (!msg.read && msg.gives) {
       // a transfer lands where SEND takes from — the account, not the pocket
       // (Mario, 2026-09-29: the banking app works the same both ways)
-      G.bank = (G.bank || 0) + msg.gives;
+      _bankIn(msg.gives);
       _say(`(She's transferred you ฿${_num(msg.gives)}. ฿${_num(G.bank)} in the account. This town.)`, "win");
     }
     msg.read = true;
@@ -8284,7 +8284,7 @@ function _sellBarYes() {
   const tan = _flag("partnerTan");
   _setFlag("barSold"); _setFlag("affairWon");
   G.flags.barOpen = false;
-  G.bank = (G.bank || 0) + AFFAIR_SALE;
+  _bankIn(AFFAIR_SALE);
   if (G.affair) { G.affair.ended = true; G.affair.won = true; }
   const id = G.affair && G.affair.id;
   if (id) { G.phone.contacts[id] = true; G.soc.drinks[id] = 20; }
@@ -8746,7 +8746,7 @@ function _barNight(settleDay) {
   const costs = nut + cogs + wages + proc;
   // Nont's money comes off the top, nightly, until it is clear — he is the creditor who chases
   let garnish = 0;
-  if (b.loan && b.loan.owed > 0) { garnish = Math.min(b.loan.owed, Math.round(take * NONT_LOAN_GARNISH)); b.loan.owed -= garnish; if (b.loan.owed <= 0) b.loan = null; }
+  if (b.loan && b.loan.owed > 0) { garnish = Math.min(b.loan.owed, Math.round(take * NONT_LOAN_GARNISH)); b.loan.owed -= garnish; _loanPrincipal(b.loan, garnish, "nontGarnishPrin"); if (b.loan.owed <= 0) b.loan = null; }   // the till pays principal first too, so a pocket REPAY later carries the interest (the money audit, C)
   const net = take - costs - garnish;
   b.cash += net;
   if (net > b.best) b.best = net;
@@ -10855,7 +10855,7 @@ function _roastNote() {
   if (!_roastHour(_nightHour())) return "Roast — off. \u201cNine o'clock, finish. You come early next week, na.\u201d";
   if (_roastLeft() <= 0) return "Roast — gone. \u201cAll finish! You see the time? Next Sunday you come SIX o'clock.\u201d";
   const n = _roastLeft();
-  return "\u0e3f" + QV_ROAST + " \u2014 the Sunday roast, and Aoy holds up fingers: \u201c" + n +
+  return "\u0e3f" + _num(QV_ROAST) + " \u2014 the Sunday roast, and Aoy holds up fingers: \u201c" + n +
     " left" + (n <= 3 ? " only" : "") + ", tilac.\u201d";
 }
 
@@ -10884,7 +10884,7 @@ function _qvKitchen(arg) {
     G.soc.qvCrisped = true;
     _say("Aoy doesn't even reach for the pad. \u201cKitchen close, tilac \u2014 cook go " +
       "home eleven o'clock, same as England.\u201d A bag of crisps lands on the bar " +
-      "instead, unbidden, and goes on the tab. \u201cCrisp. \u0e3f" + QV_CRISPS + ". Salt and vinegar. Is this or nothing.\u201d");
+      "instead, unbidden, and goes on the tab. \u201cCrisp. \u0e3f" + _num(QV_CRISPS) + ". Salt and vinegar. Is this or nothing.\u201d");
   }
   if (_fullNo()) return;                  // the kitchen keeps its food, you keep your money
   const dish = _qvMatchDish(arg) ||
@@ -10927,10 +10927,10 @@ function _qvKitchen(arg) {
 function _qvCard() {
   _say("The Queen Vic \u2014 KITCHEN", "win");
   for (const d of _qvMenu())
-    if (d.id !== "roast" && d.id !== "curry") _say("  \u0e3f" + d.price + " \u2014 " + d.name, "dim");
+    if (d.id !== "roast" && d.id !== "curry") _say("  \u0e3f" + _num(d.price) + " \u2014 " + d.name, "dim");
   if (_curryDay()) {
     const curry = QV_MENU.find(d => d.id === "curry");
-    if (!_qvClosed()) _say("  \u0e3f" + curry.price + " \u2014 " + curry.name, "dim");
+    if (!_qvClosed()) _say("  \u0e3f" + _num(curry.price) + " \u2014 " + curry.name, "dim");
   } else _say("  " + _curryNote(), "dim");
   _say("  " + _roastNote(), "dim");
   _say(_qvClosed()
@@ -11426,7 +11426,7 @@ function _doLesson(arg) {
   if (!_waenHere()) {
     _say(G.room === "cloze"
       ? "Waen isn't behind the bar just now. The board is still up; the chalk is not."
-      : "Nobody here teaches. Kruu Waen does, at Cloze on Soi Diana — ฿" + LESSON_PRICE + " the hour, and she keeps the good stool for people who come back.");
+      : "Nobody here teaches. Kruu Waen does, at Cloze on Soi Diana — ฿" + _num(LESSON_PRICE) + " the hour, and she keeps the good stool for people who come back.");
     return;
   }
   const tier = _lessonTier(arg);
@@ -11461,7 +11461,7 @@ function _doLesson(arg) {
     _say("  " + p.th + (p.rom ? "  " + p.rom : "") + (p.use ? "   — " + p.use : ""), "thai");
   }
   _say(_pickVary(_LESSON_CLOSE, "lessonclose"));
-  _say("(-฿" + LESSON_PRICE + ", ฿" + G.money + " left." + (left > 0 ? " She has more of this one: another LESSON " + tier.toUpperCase() + " when you want it." : " That is the whole of that tier.") + ")", "dim");
+  _say("(-฿" + _num(LESSON_PRICE) + ", ฿" + _num(G.money) + " left." + (left > 0 ? " She has more of this one: another LESSON " + tier.toUpperCase() + " when you want it." : " That is the whole of that tier.") + ")", "dim");
   // the flag goes up BEFORE the hour passes, so the tick inside the lesson sends
   // her link first and the nightly homework can never beat it to the inbox
   const _first = !_flag("lessonTaken");
@@ -11556,7 +11556,7 @@ function _doNotebook() {
   const seen = (G.thaiSeen || []).length;
   if (!said && !script && !tiers.length && !seen) {
     _say("The back pages are empty. You have not written down a word of Thai, said one on purpose, " +
-      "or had one taught to you. (Kruu Waen at Cloze, Soi Diana, takes ฿" + LESSON_PRICE + " the hour.)");
+      "or had one taught to you. (Kruu Waen at Cloze, Soi Diana, takes ฿" + _num(LESSON_PRICE) + " the hour.)");
     return;
   }
   _say("── THE BACK OF YOUR NOTEBOOK ──", "win");

@@ -47,7 +47,7 @@ test("the docket itemises the flat salary and Nont's cut; the wholesaler ignores
     const ll = G.bar.lastLines; assert.equal(ll.salary, BAR_SALARY_NIGHT);
     out = []; run("books"); assert.match(said(), /the flat salary ฿500/);
     const sum = ll.nut + ll.cogs + ll.wages + ll.mgr + ll.salary + (ll.proc || 0);
-    assert.match(said(), new RegExp("wages ฿" + ll.wages)); assert.ok(sum > 0);
+    assert.match(said(), new RegExp("wages ฿" + _num(ll.wages))); assert.ok(sum > 0);
     // the wholesaler reads list, not the board
     G.bar.terms = "commission"; G.bar.markup = "list"; G.room = "stinky_bar"; G.money = 5000; G.bar.cash = 10000;
     out = []; run("buy water"); const c0 = 10000 - G.bar.cash;
@@ -57,7 +57,7 @@ test("the docket itemises the flat salary and Nont's cut; the wholesaler ignores
     G.bar.markup = "list"; G.room = "hotel_room"; _endNight("sleep");   // the ledger is a delta against the last wake's snapshot
     G.room = _npcRoom("nont"); G.nightTurn = 40; run("borrow 10000");
     const t = _night(false); assert.match(t, /the night's luck he leaves you/); assert.ok(G.bar.lastLines.garnish > 0);
-    out = []; run("books"); assert.match(said(), /Nont's cut ฿\d+/);
+    out = []; run("books"); assert.match(said(), /Nont's cut ฿[\d,]+/);
     G.room = "hotel_room"; _endNight("sleep"); out = []; run("last night"); assert.match(said(), /borrowed from Nont for the bar/); assert.doesNotMatch(said(), /from Nira/);
   } finally { _rand = saved; }
 });

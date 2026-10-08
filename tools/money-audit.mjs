@@ -99,68 +99,11 @@ const MONEY_OK = [
 // defect, every key that defect produces.
 const _OPEN = (why, keys) => keys.map(key => ({ key, why }));
 const MONEY_OPEN = [
-  // A — the account side of the ledger is clamped away. _morningLedger (engine-play.js) infers
-  // money that ARRIVED in the account as `received = max(0, Δbank + drawn + fees + sent)` and
-  // nets it into "down ฿X". An account OUTFLOW with no counter of its own makes that sum
-  // negative, the max() zeroes it, and the outflow vanishes from every figure: rent the desk
-  // runs on the card (_chargeRent, "Light pockets; the desk runs your card instead") is the one
-  // the scenarios hit — the 400/270 a night that the I1 rows below cannot place. The same
-  // clamp would swallow any other card/transfer spend (TRANSFER KEY MONEY, the lawyer's bill,
-  // the deposit by transfer). Fix: compute the night's figure from pocket + account together
-  // and keep arrivals as an explicit counter (a quest reward by app, a texted transfer, Nont's
-  // held notes landing), rather than inferring them from a residual and clamping it.
-  ..._OPEN("A: an account outflow with no counter (rent run on the card) is clamped out of the ledger — _morningLedger's received = max(0, …)", [
-    "tourist-account#n1:I1:conservation", "tourist-account#n1:I2:spent",       // ฿80 printed; ฿480 left (฿400 rent off the card)
-    "expat-overdue#n7:I1:conservation", "expat-overdue#n7:I2:spent",           // the cousins empty the pocket; ฿270 rent off the card unprinted
-    "expat-overdue#n8:I1:conservation", "expat-overdue#n8:I2:spent",
-    "expat-blackout#n1:I1:conservation", "expat-blackout#n1:I2:spent",         // the rough wake empties the pocket; the card pays ฿270, unprinted
-    "expat-blackout#n2:I1:conservation", "expat-blackout#n2:I2:spent",
-  ]),
-  // B — Nont's cut is missing from the received sum. _nontCash takes `n` from the account and
-  // puts `n - cut` in the pocket, booking `n - cut` to G.atmTotal (as `drawn`) and `cut` to
-  // G.nontCut. _morningLedger's received = Δbank + drawn + fees + sent leaves the cut out, so a
-  // night with Nont's notes AND a real arrival understates the arrival by the cut and overstates
-  // "down" by it: a ฿300 recce reward and CASH 2000 printed "down ฿300 … ฿200 arrived in the
-  // account" for a true "down ฿200 … ฿300 arrived". Fix: add nontCutN to the received sum.
-  ..._OPEN("B: _morningLedger's received sum omits Nont's cut (nontCutN), so an arrival on a CASH night is understated by the cut and down overstated by it", [
-    "tourist-account#n2:I1:conservation", "tourist-account#n2:I2:spent", "tourist-account#n2:I2:received",
-  ]),
-  // C — Nont's bar loan: the garnish never reduces the principal. _barNight takes a quarter of
-  // the take off the top and lowers b.loan.owed, but not b.loan.left, so every pocket REPAY
-  // NONT is booked as principal (_loanPrincipal) and the loan's interest is never named on any
-  // surface: borrow ฿10,000 (owe ฿11,000), garnishes ฿2,005 + ฿1,024, repay ฿2,000 then
-  // ฿5,971 — ฿11,000 paid, ฿1,000 of it interest, and the morning says "฿5,971 repaid to Nont"
-  // with no interest and "down ฿270". BOOKS meanwhile prints the whole ฿3,029 of garnish as
-  // "Nont's cut", a cost. Fix: _loanPrincipal(b.loan, garnish, …) in _barNight (and decide which
-  // surface carries the interest — the audit's principal-first reading puts it on the last repay).
-  ..._OPEN("C: _barNight's garnish lowers b.loan.owed but not b.loan.left, so REPAY NONT is all principal and the loan's interest is never named", [
-    "owner-nontloan#n3:I2:spent", "owner-nontloan#n3:I2:nontInt",
-  ]),
-  // D — CHECK BIN at your own rail reads a till DRAW as a refund and a PUT as a slip.
-  // _doCheckBin's `moved` nets out G.offTill, Nira's loan and G.atmTotal, but not the owner's own
-  // till: DRAW 1000 after a ฿150 lady drink printed "nothing in it" (since − pocket − moved was
-  // −850, clamped to 0), and PUT 500 IN TILL would be counted as a ฿500 slip. Fix: arriveBook
-  // also keeps G.bar.drawn and G.bar.floated (and Nont's bar loan), and `moved` nets them.
-  ..._OPEN("D: _doCheckBin's moved ignores DRAW / PUT IN TILL at your own bar (arriveBook lacks G.bar.drawn and G.bar.floated)", [
-    "owner-stood#n1:I4:checkbin@stinky_bar",
-  ]),
-  // E — money that rings into your own till with no BOOKS line. (1) _partyArrive
-  // (engine-systems.js) at your own bar credits G.bar.cash with the companion's drink but never
-  // adds it to G.bar.guestDrinks, the line BOOKS prints for exactly that ("the drinks of the girl
-  // you brought in from another bar"); the ordinary BUY DRINK FOR her does. (2) _c4Input
-  // (engine-play.js:~1071) puts a lost Connect 4 stake in your own till ("joins the till") and
-  // books it nowhere — no line, no _barEvent. Each leaves the till ฿N off its own itemisation.
-  ..._OPEN("E1: _partyArrive at your own bar rings her drink into the till without G.bar.guestDrinks", ["owner-party#n1:I3:till"]),
-  ..._OPEN("E2: _c4Input puts a lost stake in your own till with no BOOKS line (_barEvent or a field)", ["owner-games#n1:I3:till"]),
-  // F — money printed without its thousands separator. Round 68 linted `฿${…}` without _num,
-  // but two other shapes print raw figures: a number handed to _fmt as a raw param ("฿{take}",
-  // "฿{amt}", "฿{cash}" — the settle line, BOOKS' itemised night and till, DRAW, the shift call's
-  // ฿2500) and plain concatenation ("฿" + G.money — the beer/water/lady-drink "(฿7920 left.)"
-  // lines, the ST/LT/TAKE HER OUT menu, the motel). Fix at the sites, or have _fmt format any
-  // numeric param that follows a ฿, and widen the round68d lint to both shapes.
-  ..._OPEN("F: raw ฿ figures (no separator) via _fmt numeric params and \"฿\" + n concatenation", [
-    "fmt:buy", "fmt:barfine", "fmt:get", "fmt:wait", "fmt:draw", "fmt:sleep", "fmt:books",
-  ]),
+  // empty: A–F were found by this audit's first run and fixed the same day (2026-10-08) —
+  // the account clamp, Nont's cut, the garnish's principal, CHECK BIN at your own till, a
+  // companion's drink and a lost stake at your own bar, and raw ฿ figures. A new row here is a
+  // defect found and not yet fixed, with its diagnosis.
+
 ];
 
 // --mutate <name>: break one counter on purpose, to show the instrument goes red when the

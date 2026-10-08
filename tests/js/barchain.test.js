@@ -571,7 +571,7 @@ test("BOOKS reads as a state, never as two numbers that contradict each other", 
   out = []; _doBooks();
   const books = out.join("\n");
   assert.doesNotMatch(books, /฿-/, "no raw negative in the drawer");
-  assert.match(books, /empty, and ฿12822 behind it/, "underwater is stated as a state");
+  assert.match(books, /empty, and ฿12,822 behind it/, "underwater is stated as a state");
   assert.match(books, /Months elapsed/, "an unpaid month is elapsed, not paid");
   assert.doesNotMatch(books, /Months paid/, "…and doesn't claim otherwise");
   // …and a bar that IS square still says "paid"

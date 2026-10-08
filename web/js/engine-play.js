@@ -439,7 +439,7 @@ function _piwinAbout(who) {
   if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner|wallet|pickpocket)\b/.test(w)) {
     const say =
       /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
-      /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + MOTOSAI_TOWN, f: "฿" + MOTOSAI_FAR }) +
+      /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + _num(MOTOSAI_TOWN), f: "฿" + _num(MOTOSAI_FAR) }) +
         // the mates' rate is the fare he actually charges you (Wiremu, round 59)
         (_flag("helmetDelivered") ? " A grin. \"For you, twenty. Every stand know the helmet man.\"" : "") :
       /\b(vest|jacket|number|queue|licen[cs]e)\b/.test(w) ? "\"The vest is the stand.\" He plucks the orange nylon. \"Number is my number. No vest, no stand — you ride from the side of the road, police take the bike. Vest cost more than the bike, some year.\"" :
@@ -1068,7 +1068,7 @@ function _c4Input(input) {
   c4Drop(g.board, ai, 2);
   _say(c4Render(g.board));
   if (c4Win(g.board) === 2) {
-    if (g.stake && typeof _atOwnBar === "function" && _atOwnBar() && G.bar) G.bar.cash += g.stake;   // "joins the till" — your own (Marta, round 63)
+    if (g.stake && typeof _atOwnBar === "function" && _atOwnBar() && G.bar) { G.bar.cash += g.stake; if (typeof _barEvent === "function") _barEvent(g.stake, "a Connect 4 stake lost to the house"); }   // and named in BOOKS (the money audit, E2)   // "joins the till" — your own (Marta, round 63)
     _endGame(false, 0, _pickVary(_C4_LOSS, "c4loss")(g.opp, ai + 1) +
       (g.stake ? ` Your ฿${_num(g.stake)} joins the till.` : ""));
     return;
@@ -4516,7 +4516,7 @@ const _CODA_HOME = [
   "Dawn on the main road, the sky the colour of a weak tea and the first trucks already " +
     "running. She swings up onto the bench of a baht bus with one other woman aboard, who is " +
     "also not talking, and sits where the metal is warm from the engine.",
-  "The fare is ฿" + BUS_FARE + " and she has it ready before the truck stops, because having it " +
+  "The fare is ฿" + _num(BUS_FARE) + " and she has it ready before the truck stops, because having it " +
     // No biography here: this coda lands on ANY girl, and it used to give a
     // woman with her own authored canon a hospital bill and a kid "she sees
     // four times a year" that contradicted what she'd told him all week
@@ -4594,7 +4594,7 @@ const _DEBRIEF = {
     what: "The motorbike found the one bit of gravel it was looking for.",
     why: "A motosai ride is the one RIDE in the game that can " +
       "hurt you, and drink makes it likelier.",
-    next: "The baht bus is ฿" + BUS_FARE + " and cannot crash you. After two it goes " +
+    next: "The baht bus is ฿" + _num(BUS_FARE) + " and cannot crash you. After two it goes " +
       "sparse rather than away — you wait at the kerb instead of riding straight off. " +
       "TIME tells you how thin they are running.",
   }),
@@ -4672,7 +4672,7 @@ function _nightSnapshot() {
     tillDrawn: (G.bar && G.bar.drawn) || 0,
     atm: G.atmTotal || 0,
     atmFees: G.atmFees || 0,
-    bank: G.bank || 0,   // so the morning can name what ARRIVED in the account (Marguerite, round 67)
+    bank: G.bank || 0, held: G.nontStuck || 0, bankIn: G.bankIn || 0,   // the account, Nont's overnight hold, and what ARRIVED (Marguerite, round 67; the money audit)
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
@@ -4723,14 +4723,21 @@ function _morningLedger() {
   // money that ARRIVED in the account — a quest reward, a gift by text — nets against the night,
   // and is named: "down ฿825" ignored Candy's ฿300 recce (Marguerite, round 67)
   const sentNight = (G.sentTotal || 0) - (b.sentB != null ? b.sentB : (G.sentTotal || 0));
-  const received = b.bank != null ? Math.max(0, ((G.bank || 0) - b.bank) + drawn + fees + sentNight) : 0;
+  const received = b.bankIn != null ? (G.bankIn || 0) - b.bankIn : (b.bank != null ? Math.max(0, ((G.bank || 0) - b.bank) + drawn + fees + sentNight) : 0);
   // a loan is net on both sides: the principal is not income coming in, and paying it back is
   // not spending going out — only what is paid past the principal is (Clifford, round 68)
   const since = (k, now) => now - (b[k] != null ? b[k] : now);
   const nontBn = since("nontB", G.nontBorrowed || 0);
   const prinN = since("loanP", G.loanPrin || 0), nontPrinN = since("nontP", G.nontPrin || 0);
   const nontCutN = since("nontCut", G.nontCut || 0), nontOutN = since("nontOut", G.nontOut || 0);
-  const spent = b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed + nontBn - prinN - nontPrinN + nontCutN - received;
+  // the night is what left pocket, account and Nont's hold TOGETHER, less what is not spending:
+  // a loan in, principal out, the till's money and the bar's own bills, and a send (named on
+  // its own); an arrival nets in, and is named too (Marguerite, round 67). Inferring the arrival from the balance lost any
+  // account spend without its own counter — the card paying the room (the money audit, A and B)
+  const wealth = (m, k, h) => m + k + h;
+  const spent = b.bankIn != null
+    ? wealth(b.money, b.bank, b.held || 0) - wealth(G.money, G.bank || 0, G.nontStuck || 0) - sentNight + borrowed + nontBn - prinN - nontPrinN + tillDraw - barDraw
+    : b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed + nontBn - prinN - nontPrinN + nontCutN - received;
   // THE FIGURE IS POCKET AND ACCOUNT TOGETHER, and on a night the machine was used
   // it has to SAY so: the assertion auditor (2026-09-14) withdrew ฿2,000, paid ฿400
   // rent, watched his pocket go UP ฿1,600 and was told "down ฿700" — which is

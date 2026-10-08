@@ -266,8 +266,8 @@ test("the sea wall north of Soi 6 is the coconut bar's sibling, and its cast say
   }
   // the prices are constants, quoted from them
   assert.ok(SEAWALL_ONE > 0 && SEAWALL_TWO > SEAWALL_ONE);
-  assert.match(e.hint, new RegExp("฿" + SEAWALL_ONE));
-  assert.match(e.hint, new RegExp("฿" + SEAWALL_TWO));
+  assert.match(e.hint, new RegExp("฿" + _num(SEAWALL_ONE)));
+  assert.match(e.hint, new RegExp("฿" + _num(SEAWALL_TWO)));
 });
 
 test("the sea wall never robs you — the pickpocket is the other encounter", () => {

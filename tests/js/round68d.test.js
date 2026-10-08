@@ -49,6 +49,9 @@ test("money prints with its separator everywhere: no raw ฿${…} left in the e
   for (const f of ["engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
     const raw = [...SRC(f).matchAll(/฿\$\{(?!_num\()([^}]*)\}/g)].map(m => m[1]).filter(x => !/toLocaleString/.test(x));
     assert.deepEqual(raw, [], f);
+    // …and the concatenated shape the money audit found: "฿" + G.money
+    const cat = [...SRC(f).matchAll(/(?:฿|\\u0e3f)["'] *\+ *(?!_num\()([A-Za-z_][\w.]*)/g)].map(m => m[1]);
+    assert.deepEqual(cat, [], f + " concatenation");
   }
   G.bank = 73900; G.room = "beach_rd_c"; out = []; run("send 99999999 to candy");
   assert.doesNotMatch(said(), /฿\d{5,}/, "no five-digit figure without its comma: " + said());

@@ -190,7 +190,7 @@ function _flowerTick() {
   // the Thai-numerals pitch is the theatre, but a money decision must be legible
   // — a cold player committed baht without knowing the amount (Tyler, 2026-08-26)
   const price = (typeof thaiBaht === "function"
-    ? thaiBaht(ROSE_PRICE) + " (฿" + ROSE_PRICE + ")" : "฿" + ROSE_PRICE);
+    ? thaiBaht(ROSE_PRICE) + " (฿" + _num(ROSE_PRICE) + ")" : "฿" + _num(ROSE_PRICE));
   _encPrompt(
     [G.flowerSeen <= 1
       ? "A woman drifts up to the rail with a plastic bucket of roses and, half-hidden " +
@@ -858,7 +858,7 @@ const _ENC = {
         "motosai ride three-up (illegal, hilarious), the night bazaar snacks, the " +
         "hotel corridor shushing, and the rest of it — will be retold by you, " +
         "badly, for the rest of your life, to anyone who asks and several who " +
-        "don't. (฿" + G.money + " left, every one of them irrelevant.)", "win");
+        "don't. (฿" + _num(G.money) + " left, every one of them irrelevant.)", "win");
       _conquestHappy(7);
     } else {
       const flavor = _rand() < 0.5 ?
