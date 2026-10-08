@@ -1553,7 +1553,7 @@
       "kind": "pub",
       "dark": false,
       "people": [],
-      "desc": "A proper sports bar wedged into the go-go alley: a wall of screens, a Premier League fixture list chalked up beside a Thai-boxing card, a dartboard with a queue, and a fridge of import beer at import prices. The commentary is in three languages and the groans when a penalty's missed are universal. A quiet corner to sober up in, if the match lets you."
+      "desc": "A proper sports bar wedged into the go-go alley: a wall of screens, a Premier League fixture list chalked up beside a Thai-boxing card, a dartboard with a queue, and a fridge of import beer at import prices, with a barman in a referee's shirt who serves without taking his eyes off the screens. The commentary is in three languages and the groans when a penalty's missed are universal. A quiet corner to sober up in, if the match lets you."
     },
     {
       "id": "metro_garden",
@@ -2235,6 +2235,7 @@
       "kind": "beer",
       "dark": false,
       "people": [
+        "Howard",
         "Jinda",
         "Meaw",
         "Orm",
