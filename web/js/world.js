@@ -14680,6 +14680,12 @@ const WORK_NIGHTS = [
 // challenge frame reads as a resource sim precisely because only one ledger is
 // ever visible). Canon-plausible, deliberately unglamorous.
 const LADY_CUT     = 60;   // her share of a LADY_DRINK — the bar keeps the rest
+// THE WEEKLY LADDER (2026-10-09, from a real recruiting post — structure only, nobody named): a group
+// pays a weekly guarantee plus a per-drink rate that climbs by level, and the new rate applies to
+// EVERY drink that week, so the drink that crosses a level is worth far more than its price.
+const GROUP_WEEK_BASE = 1250;
+const GROUP_LADDER = [[60, 65], [80, 70], [100, 75], [120, 80]];   // [drinks a week, ฿ a drink]
+function _ladderWeek(n) { let r = 0; for (const [d, b] of GROUP_LADDER) if (n >= d) r = b; return GROUP_WEEK_BASE + n * r; }
 const BAR_QUOTA    = 30;   // lady drinks a month before the bonus starts
 const BAR_SALARY   = 9000; // the monthly base a Soi 6 bar pays; everything else is commission
 const HOME_SEND    = 7000; // what a month typically sends north — before she has eaten

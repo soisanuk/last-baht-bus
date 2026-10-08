@@ -10831,6 +10831,7 @@ const _OWL_ARRIVED = [
     "the whole first night. The second one you'll work out yourself.",
 ];
 const _OWL_LISTINGS = [
+  "SITUATIONS VACANT, as pasted to the Owl's phone by three separate readers: a group with three rooms on a soi he will not name wants hostesses, ฿" + _num(GROUP_WEEK_BASE) + " a week guaranteed, paid on the eighth day, \"no 'next week'\" — then a ladder, " + GROUP_LADDER.map(([d, b]) => d + " drinks at ฿" + _num(b)).join(", ") + ", and the new rate on every drink once you climb. The Owl did the sum so you needn't: the eightieth drink of her week is worth ฿" + _num(_ladderWeek(80) - _ladderWeek(79)) + " to her. You paid ฿" + _num(LADY_DRINK) + " for it and thought it was a drink.",
   "A BUSINESS CONSULTANCY on Thappraya Road, second floor, no sign, sells nothing to nobody, invoices monthly. The Owl has never met a client and has met the accountant twice. Office hours by appointment; the appointment is never with you.",
   "STINKY BAR (Beach Road North), the American's shop, runs killer pool every third night — ฿100 in the ashtray, last cue standing takes the pot. His felt, his rules, his Singha.",
   "BLUE DOG (Beach Road North) keeps the best sunset seats on the strip and, six-to-seven nightly, the finest free show in town: the checkpoint across the road, farang and their paperwork, no cover charge.",

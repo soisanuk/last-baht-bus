@@ -154,3 +154,11 @@ test("the two room scams pass the clerk like any guest", () => {
   G.hotel = "sabai"; G.money = 3000; G.bfIncident = { kind: "leaveAfter", room: "stinky_bar", id: "manow", day: G.day };
   out = []; _endNight("bfscam"); assert.ok(G.joinerDay != null, "the joiner fee is charged");
 });
+
+// ── the weekly ladder (Mario's recruiting post, 2026-10-09): flavour, structure only ──
+test("the weekly ladder is constants, retroactive, and the Owl prints its arithmetic", () => {
+  assert.equal(_ladderWeek(59), GROUP_WEEK_BASE, "under the first rung, the guarantee");
+  assert.equal(_ladderWeek(80), GROUP_WEEK_BASE + 80 * 70, "the new rate on every drink");
+  assert.equal(_ladderWeek(80) - _ladderWeek(79), 465);
+  assert.ok(_OWL_LISTINGS.some(l => /SITUATIONS VACANT/.test(l) && l.includes("฿465")));
+});
