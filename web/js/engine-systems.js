@@ -3595,12 +3595,23 @@ function _giveShares() {
   _say("Orathai takes the folder, reads the one line that matters, signs where the fifty-one is blank with a pen she keeps in the folder for the purpose, dates it, and slides it back across the table in under a minute. \"One thousand baht,\" she says, \"from Khun Reginald, not from you — he knows.\" She returns to her lemon water. \"Tell him it is done. And tell him the second paper, if he wants one, costs the same.\" (ASK REGINALD ABOUT ORATHAI)", "win");
 }
 function _questTick() {
-  // THE COVERS (2026-10-08): the count is the player's own — twenty turns on a Jasmine Garden stool, and the
-  // stools are counted for him in the only unit Hong trusts
+  // THE COVERS (2026-10-08): the count is the player's own — twenty turns on a Jasmine Garden stool counts the
+  // men for him in the only unit Hong trusts, and A PATTERN IS THREE NIGHTS (Mario: "a single night is not
+  // enough"): one busy Friday proves nothing; three nights against a till that says forty every night does
   if (G.quests.covers === "active" && G.room === "jasmine_garden" && !_flag("coversCounted") && ((G.soc.barTurns || {}).jasmine_garden || 0) >= 20) {
-    _setFlag("coversCounted");
-    const men = 6 + _regularsHere().length + (G.nightTurn >= 40 ? 2 : 0);
-    _say(`(Two hours on the stool, and you have counted. ${men} men through the door tonight, Randy included, most of them one drink and gone. Hong's till will say forty thousand. ASK HONG ABOUT THE COUNT.)`, "dim");
+    const book = (G.coversNights = G.coversNights || {});
+    if (book[G.day] == null) {
+      const men = 6 + _regularsHere().length + (G.nightTurn >= 40 ? 2 : 0) + (_hh("covers:" + G.vacation + ":" + G.day, 7) % 3);
+      book[G.day] = men;
+      const nights = Object.keys(book).length;
+      if (nights >= COVERS_NIGHTS) {
+        _setFlag("coversCounted");
+        const counts = Object.keys(book).sort((a, b) => a - b).map(d => book[d]);
+        _say(`(${nights} nights on this stool, and you have your pattern: ${counts.join(", ")} men through the door, Randy included, most of them one drink and gone — and a till that says forty thousand every one of those nights. ASK HONG ABOUT THE COUNT.)`, "dim");
+      } else {
+        _say(`(Two hours on the stool, and you have counted: ${men} men through the door tonight, Randy included, most of them one drink and gone. One night is a night. ${COVERS_NIGHTS - nights} more and it is a pattern.)`, "dim");
+      }
+    }
   }
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;

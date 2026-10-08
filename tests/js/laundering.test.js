@@ -28,13 +28,17 @@ const offer = (giver, qid) => { stand(giver); run("talk to " + giver); assert.eq
 test("THE COVERS: the count is yours, the signature is Hong's — told, she initials the nights she saw; faked, an envelope", () => {
   offer("grace", "covers");
   G.room = "jasmine_garden"; assert.match(ask("hong", "the count"), /stools are there/);
-  G.soc.barTurns = { jasmine_garden: 19 }; G.room = "jasmine_garden"; out = []; run("wait"); assert.ok(_flag("coversCounted")); assert.match(said(), /you have counted/);
-  assert.match(ask("randy", "how many"), /Eight on a good night/);
+  // a pattern is three nights, not one busy Friday (Mario, 2026-10-08)
+  G.soc.barTurns = { jasmine_garden: 19 }; G.room = "jasmine_garden"; out = []; run("wait"); assert.ok(!_flag("coversCounted")); assert.match(said(), /One night is a night/);
+  assert.match(ask("hong", "the count"), /One night is a Friday/);
+  for (let n = 1; n < COVERS_NIGHTS; n++) { G.day++; G.soc.barTurns = { jasmine_garden: 19 }; G.room = "jasmine_garden"; out = []; run("wait"); }
+  assert.ok(_flag("coversCounted")); assert.match(said(), /your pattern/); assert.equal(Object.keys(G.coversNights).length, COVERS_NIGHTS);
+  stand("randy"); assert.match(ask("randy", "how many"), /Eight on a good night/); G.room = "jasmine_garden";
   G.convoQ = null; out = []; run("ask hong about the count"); assert.match(said(), /how many men/);
   out = []; run("1"); assert.ok(_flag("coversTold")); assert.equal(G.quests.covers, "done"); assert.match(said(), /initial the nights I saw/);
   G.room = "silk_rose"; assert.match(ask("grace", "hong"), /stopped signing/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" }; G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.season0 = 2; G.money = 7000;
-  offer("grace", "covers"); G.soc.barTurns = { jasmine_garden: 20 }; G.room = "jasmine_garden"; run("wait");
+  offer("grace", "covers"); for (let n = 0; n < COVERS_NIGHTS; n++) { G.day++; G.soc.barTurns = { jasmine_garden: 20 }; G.room = "jasmine_garden"; run("wait"); }
   const m0 = G.money; G.convoQ = null; run("ask hong about the count"); out = []; run("2"); assert.ok(_flag("coversFaked")); assert.equal(G.money, m0 + 2000); assert.equal(G.quests.covers, "done");
   G.room = "silk_rose"; assert.match(ask("grace", "hong"), /I did not ask you what you counted/);
 });

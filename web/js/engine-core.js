@@ -336,6 +336,7 @@ function newGame() {
     offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
     returnHello: {},     // npc id → the vacation a written woman last gave her return greeting (Aurelio, round 71)
+    coversNights: {},    // day → the men counted at Jasmine Garden that night (The Covers: a pattern is three nights, Mario 2026-10-08)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
     sentTotal: 0,        // baht SENT to contacts over the game — the hospital queue's "money you'll never see" needs a debt to point at
     codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
