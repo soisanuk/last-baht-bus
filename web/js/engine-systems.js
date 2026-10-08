@@ -10429,6 +10429,8 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  // THE BANK REMEMBERS THE PERSON (money-laundering flavour, 2026-10-08 — the mule-book pattern, structure only)
+  "THE BANK REMEMBERS THE PERSON, squire, which is the one new fact in this town's oldest trade. It used to go like this: a girl from the rice walks into a branch with her ID card, opens an account, and sells the book and the card that same afternoon to a man she will never meet for three thousand baht, which is a week on the floor without the floor. The money that goes through that account is not hers and she never sees it; somebody over a border makes a telephone call, somebody's grandmother's account takes a transfer, somebody takes it out of a machine with eight cards in his sock and is paid by the amount, and the one on the news is the fourth somebody. What is new is that the banks now share a list, and the list has her name on it, not the book — so when the account is frozen, which it will be, every bank in the country knows her at the door for the rest of her life. Three thousand baht. The Owl mentions it because a reader asked why his girlfriend cannot open an account 'anywhere, even with my money', and the honest answer is the one above, and nobody on her floor will say it, because she was nineteen and it was a week's wages and the man was polite.",
   "THE THEORY OF FRONTS, squire, which every man at every rail in this town will explain to you " +
     "by his second Chang: the bar with no customers that never closes, the tailor with a window " +
     "full of suits and nobody in it, the restaurant that has been empty every night for nine " +
@@ -10509,6 +10511,9 @@ const _OWL_AMULET = [
 ];
 
 const _OWL_LETTERS = [
+  // the reader whose girlfriend has no bank (money-laundering flavour, 2026-10-08)
+  ["A reader on Soi Buakhao writes: 'My lady cannot open a bank account. Three banks, same answer, no reason given. She is honest, she pays her bills, I have seen her send money home for two years. Who do I complain to?'",
+    "Nobody, squire, and that is the design. Nobody accused her: a bank reviewed a relationship under its risk policy and wished her well, and the other two read the same list. Ask her, kindly and once, about an account she opened at nineteen for a boyfriend she never met, and whether the book went out of her hands for the price of a week. Then stop asking. The money she sends home goes through her cousin's account now, and that is not a crime, it is a workaround, and the whole country runs on them."],
   ["A hostess writes (translated from the Thai by her cashier, who added commentary " +
     "your columnist has removed): 'A girl on the video say know your worth, everybody " +
     "charge more now. I charge more. My customer of six wet seasons pay the old price " +
