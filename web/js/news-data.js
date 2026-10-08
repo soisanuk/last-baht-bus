@@ -8,14 +8,19 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
+    "t": "Pattaya Land Expands Luxury Portfolio With New All-Suite Hotel Near Walking Street",
+    "s": "StreetInsider",
+    "d": "07 Oct 2026"
+  },
+  {
     "t": "Pattaya opens more public spaces to street performers",
     "s": "Thaiger",
     "d": "07 Oct 2026"
   },
   {
-    "t": "Pattaya parasailing platform remains stranded on beach 11 days after storm",
+    "t": "Pattaya removes stray dog after reports of attacks on tourists",
     "s": "Pattaya Mail",
-    "d": "06 Oct 2026"
+    "d": "08 Oct 2026"
   },
   {
     "t": "Gunmen raid foreigner’s Pattaya home, steal nearly 30m baht",
@@ -23,29 +28,19 @@ var NEWS_FEED = [
     "d": "07 Oct 2026"
   },
   {
-    "t": "Bangkok pushes flood recovery as 522,000 residents register for aid",
+    "t": "Pattaya orders rental motorcycles off public footpaths",
     "s": "Pattaya Mail",
-    "d": "06 Oct 2026"
+    "d": "08 Oct 2026"
   },
   {
-    "t": "Pattaya jazz festival is coming soon with global stars and free concerts",
+    "t": "Minister orders inspections of elderly and disability care centers across Thailand",
     "s": "Pattaya Mail",
-    "d": "06 Oct 2026"
+    "d": "07 Oct 2026"
   },
   {
-    "t": "Thailand monitors plague reports in Russia with no cases detected",
+    "t": "Russian couple rescued from airport travel nightmare after cancelled flight",
     "s": "Pattaya Mail",
-    "d": "06 Oct 2026"
-  },
-  {
-    "t": "British ambassador Nicola Pollitt builds community ties at Pattaya consular reception",
-    "s": "Pattaya Mail",
-    "d": "06 Oct 2026"
-  },
-  {
-    "t": "Cardiff man admits cannabis smuggling plan after teenagers arrested in Thailand",
-    "s": "BBC",
-    "d": "05 Oct 2026"
+    "d": "08 Oct 2026"
   },
   {
     "t": "As Thailand Cracks Down on Foreigners, a Tourist Paradise Reconsiders Its Welcome",
@@ -53,9 +48,14 @@ var NEWS_FEED = [
     "d": "04 Oct 2026"
   },
   {
-    "t": "Thailand at 'last paragraph' of US trade agreement, PM says",
+    "t": "Cardiff man admits cannabis smuggling plan after teenagers arrested in Thailand",
+    "s": "BBC",
+    "d": "05 Oct 2026"
+  },
+  {
+    "t": "How one woman's debt spiral signals trouble for Thailand's growth hopes",
     "s": "Reuters",
-    "d": "07 Oct 2026"
+    "d": "08 Oct 2026"
   },
   {
     "t": "Carrier USS George H.W. Bush Makes Port Call in Thailand",
@@ -63,25 +63,25 @@ var NEWS_FEED = [
     "d": "05 Oct 2026"
   },
   {
-    "t": "UN-appointed expert did not order Thailand to 'return' border village to Cambodia",
-    "s": "Yahoo",
-    "d": "07 Oct 2026"
+    "t": "Death toll from Thailand floods rises to 31, interior ministry says",
+    "s": "Reuters",
+    "d": "05 Oct 2026"
   },
   {
-    "t": "Is video of monkey rescuing dog from floodwaters in Thailand real?",
-    "s": "Snopes",
-    "d": "05 Oct 2026"
+    "t": "Thailand drains canals, adds pumps as floods leave 31 dead, 3.5 million affected",
+    "s": "Yahoo",
+    "d": "08 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-07","USD":33.69,"AUD":23.42,"GBP":44.48,"EUR":37.66};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-08","temp":25,"humid":96,"code":3,"hi":31,"rain":73};
+var WX_NOW = {"date":"2026-10-08","temp":31,"humid":67,"code":51,"hi":31,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4109,"date":"2026-10-07","baht":65450};
+var GOLD = {"usd":4120,"date":"2026-10-08","baht":65650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":83189,"thb":2798809};
+var BTC = {"usd":82636,"thb":2781620};
