@@ -62,7 +62,8 @@ function saoSeed() {
   out = []; _goExpat();
   G.money = 30000; G.bank = 90000; G.day = 10;
   G.room = "beach_rd_c"; G.nightTurn = 20; G.battery = 90; G.lightOn = false;
-  quiet(); G.encDone = {};
+  _setFlag("roomSafeOpened"); G.act1SafeDue = false;   // a month-old resident's stash, not a day-10 windfall (Ruairi, round 75)
+  quiet(); G.encDone = {}; _nightSnapshot();   // and his first morning has a night to measure
   out = []; _startEnc("bkktourist");   // she is in front of you; your first word is the answer
   if (G.pendingEnc !== "bkktourist") throw new Error("bkktourist did not arm");
   return serializeGame();
@@ -150,6 +151,7 @@ function rideSeed() {
   G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3; G.season0 = 1;
   G.money = 18000; G.bank = 30000; G.battery = 100;
   G.soc.drinks.lek = 8; G.phone.contacts.lek = true; G.talked.lek = [0];
+  G.visited[_npcRoom("lek")] = true;   // her regular has found her door (Pete, round 75: TRAVEL said he never had)
   G.room = "buakhao_klang"; G.visited.buakhao_klang = true; G.nightTurn = 4;
   _setFlag("roomSafeOpened"); quiet(); G.encDone = {}; _nightSnapshot();
   return serializeGame();

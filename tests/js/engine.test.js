@@ -6594,6 +6594,7 @@ test("DANCE and SING get +2 happy with live band in bar", () => {
   assert.match(lastOut(), /lock in harder|materialises/);
   assert.ok(state().happy >= h0 + 2, "dance with band: +2 happy");
   const h1 = state().happy;
+  G.soc.joyRooms = {};   // the floor pays once a room a night (round 75) — a new night for the song
   run("sing");
   assert.match(lastOut(), /commit completely|adjusts.*professionally|stops being yours/);
   assert.ok(state().happy >= h1 + 2, "sing with band: +2 happy");

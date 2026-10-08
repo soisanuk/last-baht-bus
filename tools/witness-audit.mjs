@@ -57,6 +57,7 @@ const CLASS = {
   "engine-parser.js:_leagueTalk|everybody see": [W_, "this IS the witness's answer (G.lastKp); 'who won' routes here too"],
   "engine-parser.js:_doTalkCore|everybody see": [W_, "the witness rule's own answer: her colleagues on her ride"],
   "engine-parser.js:_doTalkCore|everybody here knows": [W_, "the witness rule's own answer: the house on her"],
+  "engine-parser.js:_doTalkCore|in front of the whole": [W_, "the colleague review on a woman you complained about (G.bfStrikes) — the floor that watched the refund is the mouth; round75.test"],
   "engine-parser.js:_doTalkCore|spoken for": [W_, "the witness rule's comment quoting _REL_GREET"],
   // ── consequence: a mechanic keeps it ───────────────────────────────────────────────
   "engine-parser.js:_ANSWER_GOSSIP|the soi talks": [C_, "the grapevine catch in _convoAnswer (G.player.said)"],

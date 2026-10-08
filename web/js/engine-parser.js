@@ -4335,6 +4335,25 @@ function _doTalkCore(arg, topic) {
     _say(topic ? _pickVary(_MAI_DEE_TALK, "maideetalk")(NPCS[npc].name) : _pickVary(_REL_GREET_MAIDEE, "relmaidee")(NPCS[npc].name), "dim");
     return;
   }
+  // THE INSULT IS NOTED, AND KEPT TILL DAWN (Pete, round 75: "Something is noted… consequences,
+  // later, quietly", and one turn later Terry warmly offered him the stool). The man or woman you
+  // said it to answers you short for the rest of the night; an APOLOGY ends it.
+  if ((G.insulted || {})[npc] === G.day) {
+    if (topic && /\b(sorry|apolog\w*|my bad|forgive|i was wrong)\b/i.test(String(topic))) {
+      delete G.insulted[npc];
+      _say(_pickVary([
+        n => `${n} looks at you for a long second, then nods once. "Okay." It is not warm, but it is over.`,
+        n => `${n} weighs the apology like change at a till, and takes it. "Forget it." Mostly, they will.`,
+      ], "insultsorry")(NPCS[npc].name), "dim");
+      return;
+    }
+    _say(_pickVary([
+      n => `${n} answers the question you asked and not one word more, and then finds something else to look at.`,
+      n => `"Mm." ${n} does not turn round for it. What you said earlier is still in the room.`,
+      n => `${n} gives you the look a bar keeps for a man who has used up its patience, and the conversation stops there. (APOLOGIZE)`,
+    ], "insulted")(NPCS[npc].name), "dim");
+    return;
+  }
   // "my flight home" is the leaving, not her home — the synonym map read the second word
   // and Lek told him about Ban Phai (Piet, round 62). An authored literal LEAVING node still wins.
   if (topic && /\b(fly(?:ing)? home|my flight|flight home|go home tomorrow|tomorrow i (?:go|fly|leave)|airport tomorrow|leav(?:e|ing) tomorrow)\b/.test(String(topic).toLowerCase()) &&
@@ -4615,9 +4634,13 @@ function _doTalkCore(arg, topic) {
         const _rodeRecently = x => G.rideLog && G.rideLog[x] && G.day - G.rideLog[x].day <= 3;
         const _her = (mate && NPC_ROLES[mate] === "hostess" && !(typeof _affairLive === "function" && _affairLive() && G.affair.id === mate)) ? mate
           : (!mate && /\b(the ride|ride|her bike|bike|last night|motorbike|after two)\b/.test(_rt) ? here.find(x => NPC_ROLES[x] === "hostess" && _rodeRecently(x)) : null);
-        if (_her && (_rodeRecently(_her) || _bondTier(_her) >= 2)) {
+        // a woman who ran a game on you is not "watching the door" for you: the floor knows about the
+        // till and the refund, because the refund came out of the till (Ruairi, round 75 — six mouths,
+        // the same two sentences, the morning after three complaints)
+        const _game = _her && (((G.bfStrikes || {})[_her]) || (G.bfIncident && G.bfIncident.id === _her));
+        if (_her && (_game || _rodeRecently(_her) || _bondTier(_her) >= 2)) {
           const n = NPCS[_her].name, house = _hoursRegister(npc) !== "floor";
-          const kind = _rodeRecently(_her) ? "ride" : _bondTier(_her) >= 3 ? "hers" : "likes";
+          const kind = _game ? ((G.bfStrikes || {})[_her] ? "complained" : "game") : _rodeRecently(_her) ? "ride" : _bondTier(_her) >= 3 ? "hers" : "likes";
           const P = {
             ride: house ? [`"${n} came back at dawn on her own bike, looking like a woman who had a good night and isn't going to discuss it." A look at you. "Neither am I."`,
                            `"The ride." The smallest smile. "${n} took you round the town that isn't on the map. Most men she doesn't. Mind you remember that."`]
@@ -4627,8 +4650,20 @@ function _doTalkCore(arg, topic) {
                            `"${n}?" A level look. "Everybody here knows whose she is when you walk in. She'd want me to say nothing, so I've said it."`]
                         : [`"${n}?" She laughs. "Your girl. Everybody know, tilac. She keep your stool, she shout at the new girl who sit on it."`,
                            `"${n} is yours, na — whole bar know. When you not here she check the door like a dog waiting." A grin. "Don't tell her I say."`],
-            likes: house ? [`"${n}? She likes you. She wouldn't tell you, so I will — she watches the door."`]
-                         : [`"${n} like you. She say no, but she watch the door when you not here."`],
+            likes: house ? [`"${n}? She likes you. She wouldn't tell you, so I will — she watches the door."`,
+                            `"${n} asks if you came in, on the nights you don't. She thinks nobody notices her asking."`,
+                            `"${n}?" A small nod. "She keeps the stool next to her empty longer than she needs to. Make of that what you like."`]
+                         : [`"${n} like you. She say no, but she watch the door when you not here."`,
+                            `"${n}? She ask me, 'He come tonight?' Every night. I say how I know. She ask again."`,
+                            `"${n} keep your stool. New girl sit on it, ${n} make face." A grin. "I say nothing to you, na."`],
+            game: house ? [`"${n}." A pause. "Whatever she did, it is not finished until you take it to the till. That is what the till is for."`,
+                           `"${n} came back early, and alone, and didn't say why." A look. "If you have something to say about it, say it to the mamasan. She listens to money."`]
+                        : [`"${n}?" She looks away. "She come back very fast last night. Not my business. Mama business. You tell mama, na."`,
+                           `"${n} have a game, sometimes. Not every man." She shrugs. "You tell mama. Mama fix."`],
+            complained: house ? [`"${n} had a talking-to from the till, and you had your money back. She'll be careful with you now, which is not the same thing as fond."`,
+                                 `"It was handled." Said flat. "${n} paid for it in front of the whole floor. Nobody here will do that to you twice, and nobody here will forget you asked."`]
+                              : [`"${n}?" A face. "Mama shout at her, long time. She cry in toilet." A shrug. "She not do again to you. But she not love you now, na."`,
+                                 `"Everybody know you complain about ${n}." Not unkind. "Good. Mama right. But ${n} sit far from you now. That is how."`],
           }[kind];
           _say(_pickVary(P, "witness:" + kind + ":" + npc));
           return;
@@ -6116,12 +6151,12 @@ const _TOWN = {
       "\"The bus goes from the North station, every half hour or so, a couple of hundred baht,\" {n} says. \"Go for the food. Come back for everything else.\""],
   },
   saw: {
-    floor: ["\"Last night?\" {n} laughs. \"You sit here {h}, boss. {W}You tip okay. That is what I see — after you go out that door, I see nothing.\"",
+    floor: ["\"Last night?\" {n} laughs. \"You sit here {h}, boss. {W}You drink, you talk. That is what I see — after you go out that door, I see nothing.\"",
       "{n} counts on her fingers. \"You come, you drink, you stay {h}. {W}Then you go. What happen after, you tell ME, na.\"",
       "\"Mm, last night.\" {n} grins. \"Here you were a gentleman, {h}. {W}Outside — I don't know. The soi knows. Ask the soi.\""],
     house: ["\"You were on that stool {h},\" {n} says. \"{W}Behaved yourself, as far as this room's concerned. Where you went after is between you and the street.\"",
       "{n} doesn't need the book. \"{H} in here, then out. {W}I can tell you what you drank; what you did after is the one thing a barman never knows.\"",
-      "\"Last night you were in here {h}, {W}and you left upright. That's a good night by this room's standards.\""],
+      "\"Last night you were in here {h}, and you left upright. {W}That's a good night by this room's standards.\""],
     punter: ["\"You? You were here {h}, mate. {W}After that I'd stopped counting — anybody's night, after that.\"",
       "{n} squints. \"Here, {h}, then gone. {W}Don't ask me where. I was watching the football.\"",
       "\"Last night you sat there and I sat here, {h} of it. {W}Then you went out and I didn't. That's the whole report.\""],
@@ -6294,6 +6329,26 @@ const _RIDE_STOP_NOT = n => `${n} shakes her head. "We no go there. Next time, m
 // LAST NIGHT is a witness question (class N, 2026-10-07): the bar you sat longest in saw you
 // on its stool and saw who you left with; a bar you were not in says so; Tan knows how the
 // night ENDED, which nobody on a stool can.
+// HER LAST NIGHT, in her own words (round 75). Not "You were there, tilac. You know." — she was too.
+function _lastNightHers(npc, w) {
+  const n = NPCS[npc].name, floor = _hoursRegister(npc) === "floor";
+  const pool = w.reason === "barfine" && !w.quiet ? (floor ? [
+    `"Last night?" ${n} laughs. "You eat khao man gai like you never see rice before. Three o'clock, beach road, nobody. I remember, na."`,
+    `${n} grins. "Beach road, nobody on it, only us. I not tell anybody." She has clearly told everybody.`,
+    `"Last night good." ${n} says it simply. "The chicken rice, the beach, you walk slow like old man. Same again, na?"`,
+  ] : [
+    `"Last night." ${n} smiles at the glass. "Chicken rice at three, and the beach road with nobody on it. I don't do that with everybody."`,
+    `"You remember the plate?" ${n} asks. "I remember the plate. Most men remember the room."`,
+  ]) : w.reason === "barfine" ? (floor ? [
+    `${n} looks at her hands. "Last night I talk too much. Sorry, na." A beat. "Not sorry."`,
+    `"Last night I tell you everything." ${n} shrugs, a little shy. "Now you know. Too late, tilac."`,
+  ] : [
+    `"Last night I told you more than I tell the mamasan." ${n} looks at you steadily. "Keep it."`,
+  ]) : [
+    `"Last night?" ${n} looks at you. "You were there, tilac. You know."`,
+  ];
+  return _pickVary(pool, "lnhers:" + npc);
+}
 const _LASTNIGHT_TAN_HOW = (w) => {
   const who = w.with && NPCS[w.with] ? NPCS[w.with].name : "somebody", from = w.bar && _barName(w.bar) ? " from " + _barName(w.bar) : "";
   const where = w.endRoom && ROOMS[w.endRoom] ? ROOMS[w.endRoom].name : "the street";
@@ -6337,6 +6392,19 @@ function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
   if (/\bmy bar\b/.test(t) && typeof _barOwned === "function" && _barOwned() && G.bar && G.bar.room) t = t.replace(/\bmy bar\b/g, String(_barName(G.bar.room) || "").toLowerCase());   // "my bar" answered about HER bar (László, round 73)
+  // THE REASON SHE GAVE IS A SUBJECT (Ruairi, round 75: Mew refused for "temple in morning" and
+  // asking her about the temple was "I don't know about that"). The refusal she stated tonight, asked of her.
+  { const _rf = G.soc.bfRefused && G.soc.bfRefused[npc];
+    if (_rf && _rf.kind === "temple" && /\b(temple|wat|merit|tam bun|tambun|monks?|buddha|morning)\b/.test(t)) {
+      const n = NPCS[npc].name;
+      _say(_pickVary(_hoursRegister(npc) === "floor" ? [
+        n => `"Wat near my room. Small one." ${n} shows you with her hands how small. "Five o'clock the monks come. I give rice, I give for my family. If I go with you, I not wake up. Buddha first, na."`,
+        n => `"Every month one time I go." ${n} is matter-of-fact. "Make merit for my family. Tomorrow is the day. You come back tomorrow night, maybe I say yes."`,
+      ] : [
+        n => `"There's a wat behind my building," ${n} says. "The monks come past at five. I give rice for my family. Tonight I sleep, tomorrow I make merit. That's all it is."`,
+      ], "templetalk:" + npc)(n));
+      return true;
+    } }
   // THE PAPER, ASKED (Graham, round 74: "licence / registration / company / owner is a miss for everyone whose name is
   // on the paper" — Candy said "Mine, the bar" at the frame and "you ask the wrong woman" to the word). The staff of
   // this room answer from the same _licenceOf the frame prints; an authored node on the word still wins upstream.
@@ -6498,6 +6566,12 @@ function _townTalk(npc, topic) {
   if (/\b(bangkok|krung ?thep|bkk|the capital|the big city)\b/.test(t))
     return pick("bangkok", { d: G.bkk && G.bkk.went ? "You have seen the Sathorn side of it, with a driver. Most men only ever see the bus station."
       : "The bus from the North station is fine. Or I drive you, when there is a reason." });
+  // …and the details of the night she spent with you, by their own words: "khao man gai", "the beach"
+  // were "You ask the wrong girl" from the woman who shared the plate (Ruairi, round 75)
+  if (G.lastNightWas && G.lastNightWas.with === npc && G.lastNightWas.day === G.day - 1 && G.lastNightWas.reason === "barfine" &&
+      /\b(khao man gai|chicken rice|chicken|beach road|the beach|beach|three o.?clock|3 ?a\.?m|the plate|plate|the night|our night)\b/.test(t)) {
+    _say(_lastNightHers(npc, G.lastNightWas)); return true;
+  }
   // LAST NIGHT — a witness question; your own bar's book answers it below when you own one
   if (/\b(last night|yesterday|the night before|did you see me|how was i)\b/.test(t) && G.lastNightWas && G.lastNightWas.day === G.day - 1 &&
       !(typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid"))) {
@@ -6505,7 +6579,7 @@ function _townTalk(npc, topic) {
     if (npc === "tan") return pick("saw", { how: _LASTNIGHT_TAN_HOW(w) });
     if (_room().massage || _room().soapy) return pick("saw_parlour", {});
     if (w.kicked && w.kicked.where && (_barName(G.room) === w.kicked.where || _barName(NPCS[npc].room) === w.kicked.where)) return pick("saw_kicked", {});   // the room that put you out (Pieter, round 73)
-    if (w.with === npc) { _say(`"Last night?" ${NPCS[npc].name} looks at you. "You were there, tilac. You know."`); return true; }
+    if (w.with === npc) { _say(_lastNightHers(npc, w)); return true; }
     const here = (w.bar && (w.bar === G.room || (NPCS[npc].room === w.bar) || (Array.isArray(NPCS[npc].bars) && NPCS[npc].bars.includes(w.bar)))) ||
       (w.leftFrom && (w.leftFrom === G.room || NPCS[npc].room === w.leftFrom));   // the bar you walked her out of (Pieter, round 73: Near watched Cream leave on his arm)
     if (!here) return pick("saw_not", {});
@@ -8365,6 +8439,18 @@ function _doBuy(arg) {
       _poachAnger(id);
       return;
     }
+    // after the verdict a drink is a chit, not a warming: she takes it, because the book counts it,
+    // and nothing else moves (Pete, round 75 — "noticeably warmer" and +1 from a woman who had shut the book)
+    if (typeof _maiDee === "function" && _maiDee(id)) {
+      _ladyDrinkCharge(id);
+      (G.soc.drinkCount = G.soc.drinkCount || {})[id] = (G.soc.drinkCount[id] || 0) + 1;
+      _say(_fmt("{line} (฿{m} left.)", { line: _pickVary([
+        n => `${n} takes the drink because the bar counts drinks. She does not touch your glass with it.`,
+        n => `${n} puts the chit in the cup and drinks it at the far end of the bar, with her back half to you.`,
+        n => `"Kha." ${n} takes it. That is the whole of the transaction, and she makes sure it is.`,
+      ], "maideedrink")(NPCS[id].name), m: G.money }));
+      return;
+    }
     _ladyDrinkCharge(id);   // was called without her id — "a drink buys one telling in full" never armed on the ordinary path
     // a lazy girl banks the drink but rarely the warmth — favor sticks only ~40%.
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)
@@ -8533,6 +8619,10 @@ function _doBuy(arg) {
         .test(stripMarkup(r.desc || ""));
     } catch (e) { return false; }
   })();
+  // …unless the room is a kitchen and the thing it names is the dish: WHATEVER SHE MADE TODAY is
+  // the board at Cheap Charlie's, and it is open (Pete, round 75)
+  // (an eatery's own room — one door OUT — not a street whose prose names a cart that has shut)
+  if (_named && (FOOD_STALLS[G.room] || r.food) && r.exits && r.exits.out && !r.venues && !/^food\b/i.test(arg.trim())) return _doBuy("food");
   if (_named) {
     _say(_pickVary(_NOT_TONIGHT, "nottonight"));
     // …but a street with a stall still going says which one: "fruit on ice" got the
@@ -9964,8 +10054,19 @@ function _doSwim() {
       ? "Somewhere off to your left a jet ski scam lies sleeping. "
       : "Nobody is selling you anything, because nobody works this end. ") +
     "It's actually rather lovely, which nobody tells you about this town.");
+  // the pool pays once a day; the sea, which the prose calls lovely, paid nothing (Pete, round 75)
+  if (G.seaDay !== G.day) { G.seaDay = G.day; _addHappy(1); }
 }
 
+// THE FLOOR PAYS ONCE A ROOM A NIGHT (Pete, round 75 — forty SINGs at one stage were worth more
+// than every woman in town): a dance or a song is the night going well, not a till. The first one
+// in a room tonight pays; the rest are still danced and sung, and still printed, and pay nothing.
+// Dancing WITH somebody pays at least what dancing alone in front of the band does.
+function _floorJoy(n) {
+  const j = (G.soc.joyRooms = G.soc.joyRooms || {});
+  if (j[G.room]) return false;
+  j[G.room] = 1; _addHappy(n); return true;
+}
 function _doDance(arg) {
   // DANCE WITH <her>: the named woman, not "a hostess materialises at your elbow"
   // with your own girl standing there (Rolf, round 55)
@@ -9986,7 +10087,7 @@ function _doDance(arg) {
       `${NPCS[_p].name} puts the cloth down and dances with you for exactly one chorus, badly on purpose, and the girls at the far end cheer like it's a wedding. Then she goes back to the ice.`,
       `"Here? Now?" ${NPCS[_p].name} looks at the room, decides, and takes your hand. One song. Lamai pretends not to watch and watches the whole thing.`,
     ], "affairdance"));
-    _addHappy(1);
+    _floorJoy(1);
     return;
   }
   // the woman on your arm, named or not — "a hostess joins you instantly" with Lek beside you (Dev, round 65)
@@ -9997,12 +10098,12 @@ function _doDance(arg) {
       "You dance, and {who} dances with you — properly, not the professional version, laughing at you and joining in at the same time.",
       "{who} dances like nobody is paying for it, which tonight nobody is. One song, and she does not let go of your hand after it.",
     ], "dancewithcomp").replace(/\{who\}/g, NPCS[_comp].name));
-    _addHappy(1);
+    _floorJoy(2);
     return;
   }
   if (_p && NPC_ROLES[_p]) {
     _say(_fmt("{n} laughs and comes round the rail to take your hands, and for one song the bar is a dance floor.", { n: NPCS[_p].name }));
-    _addHappy(1);
+    _floorJoy(2);
     return;
   }
   if (_room().barType === "gogo") {
@@ -10037,7 +10138,7 @@ function _doDance(arg) {
       (_hostessHere()
         ? " A hostess materialises at your elbow and either leads or follows, both equally convincing."
         : " Somebody near the rail whoops. A freelancer two tables over decides you are worth watching, which is a different thing from being worth joining, and watches."));
-    _addHappy(2);
+    _floorJoy(2);
   } else if (_inBar()) {
     _say(_hostessHere()
       ? "You dance between the stools. A hostess joins you instantly and " +
@@ -10050,7 +10151,7 @@ function _doDance(arg) {
     _say("You dance in front of the stage. The guitarist points his headstock at you " +
       "approvingly. On the outside this looks ridiculous; on the inside you are having " +
       "the most fun you've had since you stopped caring what it looked like.");
-    _addHappy(2);
+    _floorJoy(2);
   } else {
     _say("You dance alone on the pavement. A passing baht bus honks the beat, " +
       "which is generous, because you weren't keeping one.");
@@ -10099,14 +10200,14 @@ function _doSing() {
       "pitch or something close enough that nobody here is grading. Three hostesses " +
       "join the chorus and the song stops being yours, which is the best thing that " +
       "can happen to it.");
-    _addHappy(2);
+    _floorJoy(2);
   } else if (_inBar()) {
     _say("You give it a verse. Three hostesses join the chorus without asking " +
       "what the song is. It has never once mattered.");
   } else if (_bandHere()) {
     _say("You sing along from the crowd. The vocalist grins and points the microphone " +
       "at you for a bar. The correct response is to commit completely, and you do.");
-    _addHappy(1);
+    _floorJoy(1);
   } else {
     _say("You sing to the street. Somewhere down the soi a karaoke bar " +
       "answers, worse. Honour is satisfied.");
@@ -11216,6 +11317,10 @@ function _hoursRegister(npc) {
   // the woman whose one room this is RUNS it — she is the house, not a customer
   // in her own shop (Pensri was answering about her own massage parlour in the
   // voice of a man on a stool).
+  // …but a MAN on a stool in a beer bar, a Soi 6 bar or a pub is a customer who never got the patron
+  // flag (Doug, Phil, Terry, the origin men), not the room's management: Doug answered LAST NIGHT with
+  // "I only answer for the stools in front of me" (Ruairi, round 75)
+  if (_pronoun(npc) === "he" && ["beer", "soi6", "pub"].includes(_room().barType)) return "punter";
   if (!NPCS[npc].patron && !NPCS[npc].filler && NPCS[npc].room === G.room && !!_room().bar) return "house";
   return "punter";
 }
@@ -12771,7 +12876,7 @@ function _vacationEndPrompt() {
   // permanent, and the terse redraw never said so.
   _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
     (G.bestHappy > G.happy ? ` (best trip so far: ${G.bestHappy})` : " (your best trip yet)"), "win");
-  _say("(NEW VACATION — fly back next month. No lost wallet this time. Probably.)", "dim");
+  _say("(NEW VACATION — fly back next month. No lost wallet this time. Probably. The สนุก count starts again at zero; the best trip is kept.)", "dim");   // the reset was never said (Pete, round 75)
   _say("(MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.)", "dim");
 }
 function _checkoutPrompt() {
@@ -13826,7 +13931,7 @@ function doCommand(input) {
           "kind of quiet that costs money. Pattaya does not do shouting — it does consequences, later, quietly."
         : "You let fly at the night in general. A piwin glances over, unimpressed; a hostess laughs, " +
           "not at the joke. This town has heard better, louder, and from men who tipped more.", "alert");
-      if (at) _addHeat(1);
+      if (at) { _addHeat(1); (G.insulted = G.insulted || {})[at] = G.day; if (typeof _repHit === "function" && _flag("act1Done")) _repHit(1); }   // noted, and kept till dawn (round 75)
       break;
     }
     case "info": case "readouts": case "status": {
@@ -14174,9 +14279,11 @@ function doCommand(input) {
       // the number with no name on it is the joker's — REPLY UNKNOWN / NUMBER / +66 (Joanne, round 64)
       if (/^(to\s+)?(the\s+)?(unknown|stranger|number|anon\w*|\+?66|0\d)/i.test(arg)) { _doJokeReply(); break; }
       const nm = arg.replace(/^to\s+/, "").split(/\s+/)[0].replace(/[^a-z'-]/gi, "");
-      if (nm && _contactByName(nm)) { _doMessage(nm); break; }
+      // …and the words after the name go with it, for the one contact who reads them (Sao, round 75)
+      const _rest = arg.replace(/^to\s+/, "").replace(/^[^\s:,]+[:,]?\s*/, "");
+      if (nm && _contactByName(nm)) { _doMessage(_contactByName(nm) === "sao" ? "sao " + _rest : nm); break; }
       const _last = (G.phone.inbox || []).slice().reverse().find(m => m.from && G.phone.contacts[m.from]);
-      if (_last && _last.from !== "mort") { _doMessage(_last.from); break; }
+      if (_last && _last.from !== "mort") { _doMessage(_last.from === "sao" ? "sao " + arg : _last.from); break; }
       _doJokeReply(); break;
     }
     case "call": case "dial": _doCall(arg); break;

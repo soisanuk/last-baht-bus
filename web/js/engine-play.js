@@ -1048,7 +1048,7 @@ function _c4Input(input) {
   const g = G.game;
   const m = input.match(/[1-7]/);
   if (!m) { _gameBoard(); _say("Not a move — tap a column 1-7, or Q to quit.", "dim"); return false; } // not a move: no tick
-  if (c4Drop(g.board, +m[0] - 1, 1) < 0) { _say("That column is full to the brim."); return; }
+  if (c4Drop(g.board, +m[0] - 1, 1) < 0) { _say("That column is full to the brim."); return false; }
   if (c4Win(g.board) === 1) {
     _say(c4Render(g.board));
     _endGame(true, g.stake * 2, `Four in a row. ${g.opp} stares at the board, then at you, ` +
@@ -1179,7 +1179,7 @@ function _jpInput(input) {
   if (!move) {
     _gameBoard();
     _say(_jpHint(g.pending, " — those are the choices."), "dim");
-    return;
+    return false;   // not a move: no minute off the clock (Pete, round 75 — thirteen bad flips, thirteen minutes)
   }
   jpFlip(g.tiles, move);
   g.pending = null;
@@ -1473,7 +1473,14 @@ function _quizInput(input) {
   if (pick === null) { _gameBoard(); _say("1, 2, or 3 — the microphone is patient, the bar less so.", "dim"); return false; } // not an answer: no tick
   if (pick === item.a) {
     g.right++;
-    _say(`“${item.opts[item.a]}” — CORRECT! The bar cheers like you cured something.`);
+    // pooled: "like you cured something" five times in one quiz (Pete, round 75)
+    _say(`“${item.opts[item.a]}” — CORRECT! ` + _pickVary([
+      "The bar cheers like you cured something.",
+      "A roar from the table by the door, who had money on you without telling you.",
+      "The host points the microphone at you like a man pointing out a suspect, delighted.",
+      "Somebody bangs the bar twice. The rival table confers in a low, wounded voice.",
+      "The host does a little drum-roll on the mic and moves on before it goes to your head.",
+    ], "quizright"));
   } else {
     _say(`“${item.opts[pick]}”… the host winces on your behalf. It was ` +
       `“${item.opts[item.a]}”. ` + _pickVary(_QUIZ_WRONG_TAIL, "quizwrong"), "alert");
@@ -2025,7 +2032,7 @@ function _gameInput(input) {
     const _same = { pool: "pool", kp: "killer", c4: "connect 4", jp: "jackpot", darts: "darts", quiz: "the quiz", cli: "that" }[G.game.type];
     _say(`You are already on ${_same}. One game at a time, champ. (QUIT to walk away.)`, "dim");
     _gameBoard();
-    return;
+    return false;
   }
   // A QUESTION IS NOT A MOVE: "what if I flip 7?" flipped the 7 (Marta, round 63). Thinking
   // out loud is free; the move is the plain command. Not the quiz or the terminal, where a
@@ -2267,6 +2274,17 @@ function _doApologize() {
       `"Sorry." ${n} tries the word out. "In Thai we don't say it so much. We just don't do the thing again." She looks at you. "So. Don't do the thing again."`,
     ], "affairsorry")); return;
   }
+  // the man you insulted tonight is in the room: the apology is his (round 75)
+  const _hurt = _npcsHere().find(n => (G.insulted || {})[n] === G.day);
+  if (_hurt) {
+    delete G.insulted[_hurt];
+    if (G.soc.heat[r]) G.soc.heat[r] = Math.max(0, G.soc.heat[r] - 1);
+    _say(_pickVary([
+      n => `${n} looks at you for a long second, then nods once. "Okay." It is not warm, but it is over.`,
+      n => `${n} weighs the apology like change at a till, and takes it. "Forget it." Mostly, they will.`,
+    ], "insultsorry")(NPCS[_hurt].name), "dim");
+    return;
+  }
   if (_inBar()) {
     const judged = _npcsHere().find(_maiDee);
     if (judged) { _say(_fmt(_pickVary(_MAI_DEE_SORRY, "maideesorry"), { n: NPCS[judged].name })); return; }
@@ -2346,6 +2364,10 @@ function _maiDeeScene(here) {
     (G.maiDee = G.maiDee || {})[id] = G.day;
     (G.maiDeeBar = G.maiDeeBar || {})[G.room] = G.day;
     _say(_fmt(_pickVary(_MAI_DEE_SCENE, "maideescene"), { n: NPCS[id].name }), "alert");
+    // the meter charged the bouncers and nothing for her (Pete, round 75: "it's counting the karaoke").
+    // What was lost is priced by what it was, and named.
+    const _lost = (G.soc.drinks[id] || 0) >= 13 ? 8 : 4;   // raw drinks: _bondTier is already capped by the verdict
+    _addHappy(-_lost, `${NPCS[id].name} has decided about you, and that does not come back`);
   }
 }
 
@@ -3060,7 +3082,10 @@ function _doBell() {
     : bt === "soi6" ? _BELL_SOI6 : bt === "gogo" ? _BELL_GOGO
     : _BELL_BEER; // beer bars, and any other bar-type, buy a round for the staff
   const _solo = _staffAt(G.room).length === 1 && bt !== "gogo";
-  _say(`${_pickVary(_solo ? _BELL_SOLO : pool, _solo ? "bellsolo" : "bell:" + bt)} (-฿${_num(price)}, ฿${_num(G.money)} left — reign while it lasts.)`);
+  // a two-storey live-music room is not "a very short bar" (Pete, round 75 — the bell at Rock Factory)
+  const _bigRoom = _room().liveMusic && _room().musicEveryNight;
+  const _bellPool = pool === _BELL_BEER && _bigRoom ? pool.filter(l => !/small bar|very short bar|little beer bar/i.test(l)) : pool;
+  _say(`${_pickVary(_solo ? _BELL_SOLO : _bellPool, _solo ? "bellsolo" : "bell:" + bt)} (-฿${_num(price)}, ฿${_num(G.money)} left — reign while it lasts.)`);
   if (pool === _BELL_BEER) _compDrink(1);      // every line in that pool hands one back across the rail
   const rings = G.soc.bells[r];
   if (rings === 2) {
@@ -3879,8 +3904,8 @@ const _OTHER_LEDGER = {
   // tier 1 — the cut. The first thing the arithmetic hides: what you hand over
   // is not what she receives.
   1: [
-    (n) => `The next lady drink that goes on your chit, ${n} does a thing you have seen her do twenty ` +
-      `times without once reading it: she takes the chit, folds it, and tucks it into the band of ` +
+    (n) => `The next lady drink that goes on your chit, ${n} does a thing every woman in every bar does without anybody ` +
+      `once reading it: she takes the chit, folds it, and tucks it into the band of ` +
       `her phone case with the others. Not a keepsake — a tally. "For counting, end of month." ` +
       `She fans them like a small hand of cards, unembarrassed. "This one, I get ฿${_num(LADY_CUT)}." ` +
       `The drink was ฿${_num(_ladyPrice())}. She says the difference like a sum she checked years ago, and ` +
@@ -3904,7 +3929,7 @@ const _OTHER_LEDGER = {
     (n) => `Two men come in, look the room over, and settle at the far end with somebody else. ` +
       `${n} watches them go with an expression that is not jealousy and not regret — it is ` +
       `arithmetic. "Thirty drink a month," she says, when she catches you noticing. "After that, ` +
-      `bonus." Tonight she has sat with you, only you, most of the evening, and you have bought her ` +
+      `bonus." Tonight she has sat with you, only you, ${((G.soc.barTurns || {})[G.room] || 0) >= 20 ? "most of the evening" : "since you came in"}, and you have bought her ` +
       `${(() => { const c = (G.soc.drinkCount && G.soc.drinkCount[_ledgerFor]) || 0; return c === 0 ? "nothing" : c === 1 ? "one" : c === 2 ? "two" : String(c); })()}. ` +
       `"You are good company." A shrug, entirely without accusation. "Good company is not ` +
       `thirty drink."`,
@@ -4072,8 +4097,9 @@ function _conquestHappy(base, id) {
   _addHappy(net); // _addHappy no-ops on 0, so a wash prints nothing
   G.lastConquest = { night: G.day, net, id };
   if (bonded) {
+    // the ride's stops are in the figure, and the figure says so (Pete, round 75: +12 one night, +13 the next, unexplained)
     _say("(No treadmill with her — a night with someone who knows you doesn't cheapen. " +
-      "It's the one that keeps giving.)", "dim");
+      "It's the one that keeps giving." + (base > 10 ? ` The ride is in it too: +${base - 10} for the stops she showed you.` : "") + ")", "dim");
   } else if (id && !first && tier >= 2) {
     // she is still your regular; this is just the same evening going round again
     _say(_pickVary([
@@ -4087,6 +4113,12 @@ function _conquestHappy(base, id) {
       "you mostly want to be alone now. Too many, too fast.)", "alert");
   } else if (net < base) {
     _say("(Good. Not like the first, though — something's wearing thin at the edges.)", "dim");
+  } else if (!bonded && !G.jaded && G.jadeSaid !== G.vacation) {
+    // the treadmill starts somewhere, and the first step says so (Pete, round 75 — the special
+    // massage set it silently, and he found it by reading the meter)
+    G.jadeSaid = G.vacation;
+    _say("(The first one of the trip lands in full. The next one from a stranger will land a little lighter — " +
+      "that is how it goes, and the cure is a slower night or a woman who knows you.)", "dim");
   }
   if (!bonded) G.jaded++;
 }
@@ -4978,8 +5010,8 @@ const _SUNRISE_END = [
     "starts frying something for people who have slept. You are not one of them, and you have never " +
     "minded less. Home, unhurried, in the light.",
   "It comes up behind the town the way it always does — over the hills, over Sukhumvit, over the " +
-    "traffic — and lands on the water last of all. You stay until it does. Then you go to bed like " +
-    "a man who has finished something.",
+    "traffic — and lands on the water last of all. You stay until it does. Then you go home to bed " +
+    "like a man who has finished something.",
 ]
 ;
 const _ALLNIGHTER_INDOORS = [
@@ -5077,7 +5109,8 @@ function _endNight(reason) {
   {
     const _bt = G.soc && G.soc.barTurns ? Object.entries(G.soc.barTurns).sort((a, b) => b[1] - a[1])[0] : null;
     G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, leftFrom: G.soc.leftFrom || null,
-      with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room, kicked: G.kickedTonight || null };
+      with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room, kicked: G.kickedTonight || null,
+      quiet: !!G.lastBfHonest };   // the quiet close or the khao man gai one — she remembers which (Ruairi, round 75)
     G.kickedTonight = null;
   }
   if (!_flag("act1Done") && ["dawn", "collapse", "blackout", "hurt", "accident", "roadhit"].includes(reason)) {
@@ -5241,13 +5274,15 @@ function _endNight(reason) {
       } else if (inc.kind === "mao") {
         _say(_pickVary(_SCAM_MAO, "scamMao")(gn), "alert");
         _addHappy(3);
+        _joinerFee();   // she went up the stairs; the clerk charges either way (Ruairi, round 75)
       } else { // leaveAfter
         _say(_pickVary(_SCAM_LEAVE, "scamLeave")(gn), "dim");
         _addHappy(6);
+        _joinerFee();   // "the door clicks" in your room — the clerk saw her go up
       }
       if (inc.room && inc.kind !== "leaveAfter") {
-        _say(`(The veterans at the rail called this one. COMPLAIN at ` +
-          `${_barName(inc.room)} — the mamasan will want to know. Bad girls ` +
+        // no claim that anybody "called this one" — nobody at the rail did (Pete, round 75)
+        _say(`(COMPLAIN at ${_barName(inc.room)} — the mamasan will want to know. Bad girls ` +
           "are bad business.)", "dim");
       }
       break;
@@ -5348,7 +5383,10 @@ function _endNight(reason) {
   let hangover = G.soc.drunk;
   G.soc.drunk = 0;
   // the Sabai Palms perk: Naklua quiet takes one size off the morning after
-  const _quietHelped = _flag("act1Done") && G.hotel === "sabai" && hangover > 0;
+  // …which needs you to WAKE there: a blackout on Soi Buakhao printed "Naklua quiet" (Pete, round 75)
+  const _wokeOut = ((reason === "collapse" || reason === "blackout" || reason === "dawn") && G.room !== _hotelRoomId()) ||
+    ["hurt", "hospital", "roadhit", "robbed"].includes(reason);
+  const _quietHelped = _flag("act1Done") && G.hotel === "sabai" && hangover > 0 && !_wokeOut;
   if (_quietHelped) hangover--;
   if (reason === "allnighter") hangover += 2; // the all-nighter's invoice arrives in the evening meters
   G.soc.bellAt = {};
@@ -5384,6 +5422,10 @@ function _endNight(reason) {
   G.soc.tries = {};    // …and last night's patience is not held against you tonight
   G.soc.contested = {}; // a forced drink's standoff doesn't outlive the shift
   G.soc.gaveCondom = {}; // as is the (amusing) condom fondness
+  G.soc.joyRooms = {};   // a dance or a song pays once a room a night (Pete, round 75: SING ×40 was the best job in town)
+  // the woman you woke up with saw you this morning: an LT, a night out or a ride is not an
+  // absence (Pete, round 75 — Manow asked where he had been for four days, the evening after)
+  for (const _w of [G.lastBfId, ...((G.party && G.party.ids) || [])]) if (_w && NPCS[_w]) (G.seenDay = G.seenDay || {})[_w] = G.day;
   G.lastBfId = null;   // clear the LT-ending bond hook
   G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)
   // bonds cool a notch a night; tend them or lose them — unless a loyal dog (Hachiko) holds them
@@ -5406,7 +5448,8 @@ function _endNight(reason) {
       // …and nothing at all to the owner after a stood shift: twelve hours behind his own
       // rail is not "three hours on the same stool" (Rolf, round 55)
       if (girls.length && !(G.bar && top === G.bar.room && _flag("barOpen")))
-        _say(`(Three hours on the same ${_seat(top)} at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
+        // the count is the one the room will quote back tomorrow (Ruairi, round 75: "three hours" here, "5 hour" from every mouth)
+        _say(`(${(() => { const h = Math.max(1, Math.round(n / 10)); return h === 1 ? "An hour" : ["", "", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"][h] + " hours"; })()} on the same ${_seat(top)} at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
       // and the man behind the rail: presence is how a manager decides you're not a tourist
       const mgr = _staffAt(top).find(id => NPCS[id] && NPCS[id].manager);
       // your own manager already knows your face — "(Bert will know it too.)" hung orphaned
@@ -5438,8 +5481,11 @@ function _endNight(reason) {
   for (const id in ENCOUNTERS) if (ENCOUNTERS[id].nightly) delete G.encDone[id]; // the street restocks
   G.hurt = 0;
   if (G.crashInjury) { G.hurt = 1; G.crashInjury = false; } // yesterday's spill still aches
-  G.hunger = Math.min(85, 30 + hangover * 5);
-  G.thirst = Math.min(90, 40 + hangover * 6);
+  // capped below the drain line (80) with room to reach water: a blackout's hangover woke at
+  // thirst 90 with the pockets emptied, and the next collapse came before any kerb sold a bottle
+  // (Ruairi, round 75 — three rough wakes in a row, each one the previous night's invoice)
+  G.hunger = Math.min(70, 30 + hangover * 5);
+  G.thirst = Math.min(75, 40 + hangover * 6);
   G.nightTurn = 0;
   G.darkStreak = 0;
   G.lightOn = false;

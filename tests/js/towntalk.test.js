@@ -68,7 +68,7 @@ test("last night is a witness question: the bar you sat in saw you and who you l
   G.lastNightWas = { day: G.day - 1, reason: "barfine", bar: "lucky_tiger", barTurns: 25, with: "lek", endRoom: "lucky_tiger" };
   G.room = "lucky_tiger"; doCommand("talk to rung");
   const r = ask("rung", "last night"); assert.match(r, /hour/); assert.match(r, /Lek/);
-  doCommand("talk to lek"); assert.match(ask("lek", "last night"), /You were there|bike|ride/);
+  doCommand("talk to lek"); assert.match(ask("lek", "last night"), /You were there|bike|ride|khao man gai|chicken rice|beach road|Beach road|the plate/);
   G.room = "stinky_bar"; doCommand("talk to bert"); assert.match(ask("bert", "last night"), /weren't in here|Not this room|somebody else's/);
   G.room = tanRoom(); doCommand("talk to tan"); assert.match(ask("tan", "last night"), /went home with Lek|Lek went home with you/);
   G.lastNightWas.reason = "blackout"; G.lastNightWas.endRoom = "beach_rd_c"; assert.match(ask("tan", "yesterday"), /did not make it home/);

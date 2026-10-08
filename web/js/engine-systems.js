@@ -84,6 +84,9 @@ function _bfExploitable(id) {
   // The white knight is the perfect mark: he over-invests and can't read the tells,
   // so bonding never buys him the safety a savvy punter earns at favor >= 6.
   if (typeof _pers === "function" && _pers("whiteknight")) return true;
+  // a man she has made a regular is not a mark: she sat with him for nights to get here, and
+  // the game is run on a stranger (Pete, round 75 — scammed by the woman he'd courted all week)
+  if (typeof _knownTier === "function" && _knownTier(id) >= 2) return false;
   return _favor(id) < 6;
 }
 
@@ -576,7 +579,7 @@ function _doSeeHome(arg) {
 const _USUAL_LINES = [
   "{n} has it open and on the mat before you have sat down — the usual, no question asked, which is a thing a bar does for about one man in forty.",
   "You open your mouth to order and {n} is already back with it, the right one, cold, the cap off. \"Same same,\" she says, which is the nicest thing anyone has said to you today.",
-  "The bottle arrives with the stool. {n} did not ask; she has not needed to ask for a week. There is a small vanity in being known, and you allow yourself it.",
+  "The bottle arrives with the stool. {n} did not ask; she stopped needing to ask some nights ago. There is a small vanity in being known, and you allow yourself it.",
   "{n} puts your beer down and a coaster under it and your name, more or less, on top: she has your order the way the cashier has the float — as a fact about the room.",
 ];
 function _usualHere() {
@@ -1144,7 +1147,12 @@ function _bfRefusalSay(id, r) {
     sponsor: `${name} touches your arm, honestly sorry: “Cannot now, tilac. My ` +
       "friend — he take care me, I no working while he in town. You " +
       "understand, na?” Everyone understands. It's a calendar, not a heartbreak.",
-    drinksonly: `${name} is already off the ${_seat()} — not to the till, to the changing room, with your ` +
+    // pooled: Rung and Oat refused in one sentence, word for word, two stools apart (Pete, round 75)
+    drinksonly: _pickVary([0, 1], "drinksonly") === 1
+      ? `${name} laughs, not unkindly, and taps your glass with hers. “Me, drink only, tilac. Every girl in the bar ` +
+        "know. Only you not know.” She says it like a house rule, which it is, and stays exactly where she is. " +
+        "(She will take another drink.)"
+      : `${name} is already off the ${_seat()} — not to the till, to the changing room, with your ` +
       `glass still half full on ${_ledge()} — and ` + (_npcsHere().some(n => NPC_ROLES[n] === "mamasan") ? "the mamasan, looking up a beat later, finds the " +
       "question with nobody to put it to. “That one, drink only,” she says, as if you had asked " +
       "the price of the ceiling. “She decide. Not me.”" : "the stool beside you is simply empty, with your question still on it.") + " A minute later " + name + " is back beside " +
@@ -1643,6 +1651,9 @@ function _bfResolve(kind) {
     G.pendingBf = null;
     return;
   }
+  // read BEFORE the gate drops: every "her money" branch below tested G.pendingBf after it was
+  // nulled, so a closed book was entered in the ledger with ceremony (Pete, round 75)
+  const _herMoney = !!(G.pendingBf && G.pendingBf.herMoney);
   G.pendingBf = null;
   const name = NPCS[id].name;
   const bt = _room().barType;
@@ -1875,7 +1886,7 @@ function _bfResolve(kind) {
   if (scam) { // runner | mao | leaveAfter — plays out across the night's end
     G.bfIncident = { id, room: G.room, kind: scam, fine: price, day: G.day };
     _say((price ?
-      (G.pendingBf && G.pendingBf.herMoney ? `฿${_num(price)} to her — the book is closed, this is her money — and she folds it away ` : `฿${_num(price)} to ${_bfPayee()}, who enters it in the ledger with ceremony and `) +
+      (_herMoney ? `฿${_num(price)} to her — the book is closed, this is her money — and she folds it away ` : `฿${_num(price)} to ${_bfPayee()}, who enters it in the ledger with ceremony and `) +
       `gives ${name} a nod that means back by opening, mind. ` :
       `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
       `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
@@ -1907,7 +1918,7 @@ function _bfResolve(kind) {
         `want hotel yet. Come — I show you MY Pattaya, the real one. Hold me tight, na, I ` +
         `drive little bit crazy."`;
     _encPrompt(
-      [(price ? (G.pendingBf && G.pendingBf.herMoney ? `฿${_num(price)} to her, and ` : `฿${_num(price)} to ${_bfPayee()}, and `) : "") + offer + ` (฿${_num(G.money)} left.)`, "win"],
+      [(price ? (_herMoney ? `฿${_num(price)} to her, and ` : `฿${_num(price)} to ${_bfPayee()}, and `) : "") + offer + ` (฿${_num(G.money)} left.)`, "win"],
       [`(RIDE with her into the night · or JUST the hotel — up to you.)`, "dim"]);
     return;
   }
@@ -1934,9 +1945,11 @@ function _bfResolve(kind) {
     _endNight("barfine");
     return;
   }
-  _say((price ?
-    `฿${_num(price)} to ${_bfPayee()}, who enters it in the ledger with ceremony and ` +
-    `gives ${name} a nod that means back by opening, mind. ` :
+  _say((price ? (_herMoney
+    ? `฿${_num(price)} to ${name} herself — the bar's book is shut for the night and this is hers — ` +
+      `and the mamasan gives her a nod that means back by opening, mind. `
+    : `฿${_num(price)} to ${_bfPayee()}, who enters it in the ledger with ceremony and ` +
+    `gives ${name} a nod that means back by opening, mind. `) :
     `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
     `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
     `and lovely — and takes your arm like you're the one being rented.` +
@@ -2100,9 +2113,37 @@ function _nightRide(input) {
   const seq = G.rideSeq;
   if (!seq) { _say("The night's already carried you off. Sleep it off."); return; } // state lost — safety
   const id = seq.id, name = NPCS[id].name;
-  const go = /\b(ride|yes|on|more|another|sure|ok|okay|go|keep|again|deeper|why not|lets?|come|drive)\b/.test(input) &&
-    !/\bno\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish/.test(input);
-  if (!go) return _endRide(seq, "choice");
+  const stop = /\bno\b|\bnope\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish|\bbye\b|goodnight|good night/.test(input);
+  const go = /\b(ride|yes|on|more|another|sure|ok|okay|go|keep|again|deeper|why not|lets?|come|drive)\b/.test(input) && !stop;
+  if (stop) return _endRide(seq, "choice");
+  // A NON-ANSWER IS NOT GOODBYE (Ruairi, round 75: "what?" on the back of the bike ended the best
+  // night of the trip). Water at a stop is bought where you stand; anything else and she waits.
+  if (!go) {
+    if (seq.stops > 0 && /\b(water|drink|thirsty|thirst|soda|coke|eat|food|hungry|snack)\b/.test(input)) {
+      const food = /\b(eat|food|hungry|snack)\b/.test(input), price = food ? 40 : 20;
+      const paid = G.money >= price;
+      if (!paid) _say(`${name} pays for it before you can find out you can't, and hands it over without comment.`);
+      else { G.money -= price; seq.spent += price; }
+      if (food) G.hunger = Math.max(0, G.hunger - 30); else G.thirst = Math.max(0, G.thirst - 35);
+      _say(_pickVary(food ? [
+        `A skewer of moo ping from the cart by the bike, eaten standing. ${name} steals the last piece.`,
+        `A bag of sticky rice and grilled pork from the woman who is always there at this hour. ${name} knows her name.`,
+        `Something on a stick, very good, from a cart with one bulb. ${name} orders for you in Thai and does not translate.`,
+      ] : [
+        `A bottle of water from the cooler by the stall, cold enough to hurt. ${name} drinks half of it.`,
+        `Water, two bottles, from a woman with a cool box and a stool. ${name} hands you one and keeps the other on the bike.`,
+        `A cold water from the cooler. ${name} presses it to the back of your neck first, which is better.`,
+      ], food ? "ridefood" : "ridewater") + (paid ? ` (-฿${_num(price)}, ฿${_num(G.money)} left.)` : ""));
+    } else {
+      _say(_pickVary([
+        `${name} waits, engine idling. She has all night; that is the point of it.`,
+        `${name} tilts her head — that wasn't an answer, and she is patient about it.`,
+        `"Hm?" ${name} looks back at you over her shoulder and waits.`,
+      ], "ridewait"));
+    }
+    G.pendingEnc = "nightride";   // the dispatcher dropped the gate before calling us; she is still waiting
+    return _renderEncounter();
+  }
   G.rideEverTaken = true; // you actually rode — kept for anything reading the global
   if (G.rideSeq && G.rideSeq.id) (G.rodeWith = G.rodeWith || {})[G.rideSeq.id] = true; // …and whose bike it was
   if (G.money < RIDE_MIN_CASH && seq.stops > 0) return _endRide(seq, "broke");
@@ -2499,7 +2540,7 @@ function _doMassage(arg) {
     const wasHurt = G.hurt, wasDrunk = G.soc.drunk;
     G.hurt = Math.max(0, G.hurt - 1);
     G.soc.drunk = Math.max(0, G.soc.drunk - 2);
-    if (_passTime(6)) return;
+    if (_passTime(10)) return;   // an hour is ten turns; "the whole hour" took 36 minutes (Pete, round 75)
     // the price list names four and all four printed the Thai one (Owen, round 46)
     const kind = /foot|feet|reflex/.test(arg) ? "foot" : /herbal|compress|ball|steam/.test(arg) ? "herbal" : /oil|aroma|swedish/.test(arg) ? "oil" : "thai";
     const MASSAGE_KIND = {
@@ -2533,7 +2574,7 @@ function _doMassage(arg) {
   (G.soc.massaged = G.soc.massaged || {})[G.room] = G.day; // the base is done; special is on the table
   { const _ml = (G.massageLog = G.massageLog || {}); _ml[G.room] = { last: G.day, n: ((_ml[G.room] || {}).n || 0) + 1 }; }
   if (she) _addBond(she, 1); // a soft, cheap bond — no drinks, no mama cut
-  if (_passTime(5)) return;
+  if (_passTime(10)) return;   // the oil hour is an hour (round 75)
   // the kind he asked for: MASSAGE THAI at Papaya delivered warm oil (Terence, round 57)
   const _kind = /foot|feet|reflex/.test(arg) ? "foot" : /thai|traditional/.test(arg) ? "thai" : "oil";
   const _Name = name.charAt(0).toUpperCase() + name.slice(1);
@@ -3132,6 +3173,13 @@ const _QUEST_HAIL = [
     "universal come-here of somebody with a job and nobody obvious to do it.",
 ];
 
+const _QUEST_HAIL_OUT = [
+  "{who} looks up as you pass and picks you out. \u201cYou. Got a minute?\u201d",
+  "{who} catches your eye and tips a head at the empty chair \u2014 the universal come-here of " +
+    "somebody with a job and nobody obvious to do it.",
+  "\u201cHere \u2014 one minute.\u201d {who} has the look of somebody who has been waiting all " +
+    "evening for a face that isn't a regular's.",
+];
 function _questHail() {
   if (G.questHailed) return;                       // once ever, not once a night
   if (Object.keys(G.quests || {}).length) return;  // you've had a job — you know the drill
@@ -3139,7 +3187,9 @@ function _questHail() {
     if (q.vignette || !_qGiver(q) || !_questAvailable(qid)) continue;
     if (!NPCS[_qGiver(q)] || _npcRoom(_qGiver(q)) !== G.room) continue;
     G.questHailed = true;
-    _say(_fmt(_pickVary(_QUEST_HAIL, "qhail"), { who: NPCS[_qGiver(q)].name }), "win");
+    // a table on the Old Market street has no rail and no quiet end (Pete, round 75 — Nont)
+    const _railed = typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar();
+    _say(_fmt(_pickVary(_railed ? _QUEST_HAIL : _QUEST_HAIL_OUT, _railed ? "qhail" : "qhailout"), { who: NPCS[_qGiver(q)].name }), "win");
     _questOffer(_qGiver(q));
     return;
   }
@@ -4187,7 +4237,7 @@ function _doMessage(arg) {
   }
   // Sao texts like a woman from Bangkok with a job and a family, never the bar's
   // "miss you na 🥺" — she read as two women in one inbox (Sol, round 55)
-  if (id === "sao") { _saoReply(); return; }
+  if (id === "sao") { _saoReply(w.split(/\s+/).slice(1).join(" ").replace(/^[:,]\s*/, "")); return; }
   if (G.phone.msgCd[id] === G.day) {
     _say(`You've already charmed ${NPCS[id].name} by text tonight. Twice is a pattern; ` +
       "three times is a case file.");
@@ -5312,17 +5362,38 @@ function _doJokeStop() {
 
 // REPLY — the number has a man on the end of it, and he is delighted.
 // Sao's side of the phone, by where the story stands (Sol, round 55)
-function _saoReply() {
+function _saoReply(said) {
   const b = G.bkk || {};
   G.battery = Math.max(0, G.battery - 1);
+  said = String(said || "").trim();
+  // SHE HEARS THE ANSWER (Ruairi, round 75: she asked for "something about Pattaya that isn't a bar",
+  // he told her about the sunrise behind the town, and the next text asked him again). Once answered,
+  // the question is retired and the answer is answered.
+  if (b.stage === 2 && b.askedPat && !b.heardPat && said.split(/\s+/).length >= 3) {
+    b.heardPat = true;
+    const s = said.toLowerCase();
+    const line = /sunrise|dawn|sun come|sun up|morning/.test(s) ? "The sunrise?? You're awake for that? 😅 I grew up two hours up the motorway and I've seen it maybe twice, both times from a taxi. Okay. That counts."
+      : /beach|sea|swim|sand|jomtien/.test(s) ? "The sea at night is the one thing nobody can sell you here. Fine, you pass 🙂"
+      : /som ?tam|food|market|noodle|rice|eat|cart|stall/.test(s) ? "Okay now you're speaking my language. Which cart? I'll judge it when I'm down 😋"
+      : /temple|wat|monk|buddha|hill/.test(s) ? "A temple. Mum would like you, which is a warning 😅"
+      : /dog|cat|soi dog/.test(s) ? "Every soi has its dog and every dog has its soi. You've been adopted, haven't you 😂"
+      : "Okay that's actually lovely. You're not what I expected from a man who lives in Pattaya 🙂";
+    _pushMsg("sao", line);
+    _say("(📱 Sao replies. CHECK MESSAGES.)", "dim");
+    return;
+  }
   let pool;
   if (_flag("bkkArcDone")) pool = b.went
     ? ["Thank you for coming! Dad said you were very interesting 🙂", "Crazy week. Talk soon!", "Haha. Hope Pattaya is being good to you 🙂"]
     : ["No worries at all! Hope you're well 😊", "Busy busy. Take care in Pattaya 🙂"];
   else if (b.stage >= 3) { b.yes = true; pool = ["Yay!! 🙏 Boy will be outside your hotel. Wear a collar, Dad notices collars 😅", "Good 🙂 Don't be nervous. He's nicer than he looks. Mostly."]; }
-  else if (b.stage === 2) pool = ["Second Road, the one with the plants outside. When I'm down, promise 🙂", "Work is eating me alive. Tell me something about Pattaya that isn't a bar 😅"];
-  else pool = ["Ha, you're sweet 😊 Friend turned up forty minutes late, as tradition demands.", "Back to Bangkok tomorrow, drowning already. Coffee when I'm down — I haven't forgotten."];
-  _pushMsg("sao", _pickVary(pool, "saoreply:" + (b.stage || 0) + (_flag("bkkArcDone") ? "d" : "")));
+  else if (b.stage === 2) pool = b.heardPat
+    ? ["Second Road, the one with the plants outside. When I'm down, promise 🙂", "Work is eating me alive. Still thinking about your answer, though 😊", "Meetings until nine, then my mother on the {{phone}} until ten. Pattaya sounds restful 😅"]
+    : ["Second Road, the one with the plants outside. When I'm down, promise 🙂", "Work is eating me alive. Tell me something about Pattaya that isn't a bar 😅"];
+  else pool = ["Ha, you're sweet 😊 Friend turned up forty minutes late, as tradition demands.", "Back to Bangkok tomorrow, drowning already. Coffee when I'm down — I haven't forgotten.", "Long day. Thank you for texting, honestly 🙂"];
+  const msg = _pickVary(pool, "saoreply:" + (b.stage || 0) + (_flag("bkkArcDone") ? "d" : "") + (b.heardPat ? "h" : ""));
+  if (/isn't a bar/.test(msg) && G.bkk) G.bkk.askedPat = true;
+  _pushMsg("sao", msg);
   _say("(📱 Sao replies. CHECK MESSAGES.)", "dim");
 }
 
@@ -6679,7 +6750,10 @@ function _doWatchSunrise() {
   if (G.nightTurn < SUNRISE_TURN) { _say(_pickVary(_SUNRISE_SOON, "sunriseSoon"), "dim"); return; }
   // the sky is the end of the night — asked once (Mario, 2026-10-07)
   if (G.sunriseDay !== G.day && !_endConfirm("sunrise", "The sky is going grey behind the town, over Sukhumvit. Watch it, and the night ends with it — there is nothing after the sunrise. (WATCH SUNRISE again to stay for it.)")) return;
-  _say(_pickVary(_SUNRISE, "sunrise"), "win");
+  // inland, the bay is not in front of you (Pete, round 75 — "black to pewter" from Soi Buakhao)
+  const _seaOk = /sea|beach|promenade|shore/i.test(String(_room().desc || "") + " " + (_room().region || ""));
+  const _sky = _seaOk ? _SUNRISE : _SUNRISE.filter(l => !/\b(bay|sea)\b/i.test(l));
+  _say(_pickVary(_sky.length ? _sky : _SUNRISE, "sunrise"), "win");
   if (G.sunriseDay === G.day) return;               // one sky a night
   G.sunriseDay = G.day;
   _addHappy(2);                                      // free, and the point of staying up
@@ -10907,7 +10981,7 @@ function _doColumn() {
     }
     _say("You pull up Last Orders in your inbox. Mort took it online years back, grousing the " +
       "whole way — 'the paper died, squire, not me' — and it lands most nights now, unasked, " +
-      "in the mail of anyone who ever stood him a beer:", "dim");
+      "in the mail of anyone who ever gave the Queen Vic an email address, which at some point is everybody:", "dim");   // Pete never stood him a beer (round 75)
   }
   _say("── LAST ORDERS ── Mort's back page, still going, out of spite ──", "win");
   _say(_owlPick(_OWL_LEADS, 1));

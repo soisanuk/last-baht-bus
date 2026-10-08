@@ -42,7 +42,7 @@ test("a man who sits three hours on one stool is somebody: the presence bond off
   G.room = "hotel_room"; _endNight("sleep");
   assert.equal(G.soc.drinks[away], 4, "the cool-off elsewhere");
   assert.equal(G.soc.drinks[home], 5, "…held where you sat");
-  assert.match(text(), /Three hours on the same stool/);
+  assert.match(text(), /(Three|Four|Five|Six) hours on the same stool/);
 });
 
 test("Nigel's sermon answers to the words a man types — topic aliases (Trevor / Hamish)", () => {
