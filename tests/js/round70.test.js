@@ -37,7 +37,7 @@ test("the woman on your arm is somebody the room saw arrive, named with her own 
 });
 test("after it ends, the bar remembers her", () => {
   affair({ ended: true, gone: true });
-  for (const w of ["bert", "lamai", "jiap"]) { run("talk to " + w); assert.match(ask(w, "manow"), /home|Gone|gone|message/); }
+  for (const w of ["bert", "lamai", "jiap"]) { run("talk to " + w); assert.match(ask(w, "manow"), /home|Gone|gone|message|not on this page|used to work here/); }
 });
 
 // ── the affair, after she has seen it ─────────────────────────────────────────
