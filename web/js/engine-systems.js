@@ -163,6 +163,7 @@ function _doDebt() {
     lines.push(G.loanSkippedOwed
       ? _fmt("Nira: ฿{o} from a trip you flew home in the middle of. It is not on any paper. It is the reason she will not lend to you again.", { o: _num(G.loanSkippedOwed) })
       : "Nira: the money you flew home with, last trip. It is not on any paper. It is the reason she will not lend to you again.");
+  if ((G.pityOwed || 0) > 0) lines.push(_fmt("The bike stand: ฿{p} for the rides home you couldn't pay — they will remember you at the stand before you remember them.", { p: _num(G.pityOwed) }));   // "every ledger with your name on it" (Gordie, round 72)
   if (G.hotelDebt > 0) {
     lines.push(_fmt("The hotel: ฿{h} on the book. Nobody checks out of a debt.",
       { h: _num(G.hotelDebt) }));
@@ -196,7 +197,8 @@ function _doBorrow(arg) {
   }
   if (G.loanSkipped && G.room === _npcRoom("nira")) {
     _say("Nira doesn't look up from the calculator. “You.” One word, and the whole last trip is in it. " +
-      "“You fly home with my money. Now you want more?” She laughs, once, not warmly. “No. Not you. Not ever.”", "alert");
+      "“You fly home with my money. Now you want more?” She laughs, once, not warmly. “No. Not until the last one is square.”", "alert");
+    _say(_fmt("(REPAY her what you owe from last trip{o}, and the stool is yours again.)", { o: G.loanSkippedOwed ? " — ฿" + _num(G.loanSkippedOwed) : "" }), "dim");
     return;
   }
   if (!_withNira()) {
@@ -246,10 +248,32 @@ function _repayAmount(arg, owed) {
   const p = _parseBaht(a);
   return p == null ? owed : p;
 }
+// THE LOAN YOU FLEW HOME WITH IS STILL A DEBT, and a debt can be paid (Gordie, round 72: she would
+// not lend, called him square, and would not take his money — a ban nobody admitted to). Paying it
+// down at her stool is named on the morning ledger (G.skipRepaid) and, once square, she lends again.
+function _skipRepay(arg) {
+  const owed = G.loanSkippedOwed || 0;
+  let amt = _repayAmount(arg, owed || G.money);
+  if (owed) amt = Math.min(amt, owed);
+  if (amt <= 0) { _say('"Pay me something real."', "dim"); return; }
+  if (G.money < amt) { _say(_fmt("You're ฿{s} short of that. (You have ฿{h}.)", { s: _num(amt - G.money), h: _num(G.money) }), "alert"); return; }
+  G.money -= amt; G.skipRepaid = (G.skipRepaid || 0) + amt;
+  if (owed) G.loanSkippedOwed = owed - amt;
+  if (!owed || G.loanSkippedOwed <= 0) {
+    G.loanSkipped = false; G.loanSkippedOwed = 0;
+    _say(_fmt("Nira counts it twice, which she never does, and writes a line under something in the book. \"฿{a}. Square.\" She looks at you properly for the first time since you came back. \"Okay. Next time you want money, you sit here and ask. Maybe I say yes.\"", { a: _num(amt) }), "win");
+  } else {
+    _say(_fmt("Nira takes ฿{a} without counting it in front of you. \"฿{o} still.\" The calculator goes back in the drawer. \"Last trip's money does not get cheaper for waiting.\"", { a: _num(amt), o: _num(G.loanSkippedOwed) }));
+  }
+}
 function _doRepay(arg) {
   if (_nontHere() && G.bar && G.bar.loan && G.bar.loan.owed > 0) { _nontRepay(arg); return; }
   if (!G.loan && G.bar && G.bar.loan && G.bar.loan.owed > 0) { _say(_fmt("The bar owes Nont ฿{o}, and Nont is paid at his table — the Old Market, Soi Buakhao. (Or let the nights pay him.)", { o: _num(G.bar.loan.owed) }), "dim"); return; }   // "you don't owe Nira" with ฿5,774 on the books (Hal, round 62)
   if (!G.loan && /\bnont\b/i.test(String(arg || ""))) { _say("You don't owe Nont a baht. He would remember if you did.", "dim"); return; }   // "you don't owe Nira" for the wrong lender (Marta, round 63)
+  if (!G.loan && G.loanSkipped) {
+    if (_withNira()) { _skipRepay(arg); return; }
+    _say(_fmt("You owe Nira {o} from last trip. Pay her at Neon Paradise on Walking Street.", { o: G.loanSkippedOwed ? "฿" + _num(G.loanSkippedOwed) : "the money you flew home with" }), "dim"); return;
+  }
   if (!G.loan) { _say("You don't owe Nira a baht. Keep it that way.", "dim"); return; }
   if (!_withNira()) {
     _say(`You owe Nira ฿${_num(G.loan.owed)}${G.loan.strikes ? " (overdue)" : `, due day ${G.loan.dueDay}`}. ` +
@@ -4986,6 +5010,7 @@ function _chamGift(amt) {
   G.pendingChoice = null;
   G.chamNight = false;
   G.chamGifts = (G.chamGifts || 0) + amt;
+  G.chamLast = { day: G.day, gift: amt };   // she remembers the night and the money (Gordie, round 72: "after you go out that door, I see nothing")
   _setFlag("chamDone");
   if (amt >= CHAM_GIFT) {
     G.money -= amt;
@@ -5000,7 +5025,7 @@ function _chamGift(amt) {
       "which you notice and decide not to. A kiss on the cheek; the door.", "dim");
   } else {
     _say("You don't. She thanks you anyway — a beat slower, the same shy smile — kisses " +
-      "your cheek, and goes to catch the bus to Naklua. The door closes softly. Nothing " +
+      "your cheek, and goes to catch her bus" + (G.hotel === "sabai" ? " — the pharmacy is ten minutes up the same road" : " back to Naklua") + ". The door closes softly. Nothing " +
       "was owed; nothing was asked; you are not sure, standing there, which of those two " +
       "sentences you are going to tell yourself.", "dim");
   }
@@ -5740,9 +5765,10 @@ function _textTalk(npc, topic) {
   if (!/\b(texts?|messages?|sms|what (you|she) (sent|wrote|said)|your (text|message)|photo you sent|the (selfie|photo|picture|pic))\b/.test(t)) {
     const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w)).map(_stem);
     if (!words.length) return false;
-    const hit = inbox.find(x => x.text && G.day - (x.day || G.day) <= 7 && String(x.text).toLowerCase().split(/[^a-z0-9]+/).map(_stem).some(w => w.length >= 3 && words.includes(w)));
+    const _body = x => x.text || x.photo || "";   // a photo's caption is what she said too: Cream's labels were a selfie's caption (Gordie, round 72)
+    const hit = inbox.find(x => _body(x) && G.day - (x.day || G.day) <= 7 && String(_body(x)).toLowerCase().split(/[^a-z0-9]+/).map(_stem).some(w => w.length >= 3 && words.includes(w)));
     if (!hit) return false;
-    const q0 = String(hit.text).replace(/\s+/g, " ").trim();
+    const q0 = String(_body(hit)).replace(/\s+/g, " ").trim();
     const short0 = q0.length > 70 ? q0.slice(0, q0.lastIndexOf(" ", 66)) + "…" : q0;
     _say(_pickVary(_hoursRegister(npc) === "floor" ? _TEXT_SUBJECT_FLOOR : _TEXT_SUBJECT_HOUSE, "textsubj:" + npc)(n, short0));
     return true;

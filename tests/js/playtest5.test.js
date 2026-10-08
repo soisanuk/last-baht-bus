@@ -780,7 +780,7 @@ test("the loan: Nira speaks it, DEBT states it, and flying home is what she reme
   assert.ok(G.loanSkipped, "flying home is what she remembers");
   G.room = _npcRoom("nira"); out = [];
   doCommand("borrow 5000");
-  assert.match(text(), /Not you\. Not ever/);
+  assert.match(text(), /Not until the last one is square/);
 });
 
 // ── round nine: the liability (Wazza) and the long-term resident (Bob) ──
@@ -802,7 +802,8 @@ test("OUT of your room after a respawn is your soi, and the stash pays on a resp
   // of debt out of an empty pocket a line before opening a safe with ฿3,000
   // in it. So the morning's rent comes out of the stash, honestly, and no
   // debt is carried — ฿3,000 in hand plus a ฿400 IOU was the artifact.
-  assert.equal(G.money, SAFE_CASH - _HOTELS[G.hotel].rate, "the safe paid on the respawn, and the room was paid from it");
+  // …and the joiner fee for the woman who came up is booked on an empty pocket, then settled from the stash (Gordie, round 72)
+  assert.equal(G.money, SAFE_CASH - _HOTELS[G.hotel].rate - (G.hotel === "sabai" ? JOINER_FEE : 0), "the safe paid on the respawn, and the room was paid from it");
   assert.equal(G.hotelDebt || 0, 0, "no IOU against money you had");
   assert.match(text(), /emergency stash/);
 });

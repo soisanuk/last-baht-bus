@@ -646,9 +646,9 @@ const _ENC = {
       _say(_fmt("{who} says something to him fast and low in Thai before you have opened your mouth — " +
         "the register a woman uses on a nephew. He listens. The price is the price; the tone is not.", { who: _partyLabel() }), "dim");
     }
-    if (/\bwai\b|sorry|khrap|krub|apolog|sawatdee/.test(input)) {
+    if (/\bwai\b|sorry|khrap|krub|krap|apolog|sawatdee|kh?or? ?thot|ขอโทษ|ไหว้|ครับ/.test(input)) {   // the apology the wai's own text says you make, in Thai (Gordie, round 72)
       const f = Math.min(POLICE_WAI, G.money);
-      G.money -= f;
+      G.money -= f; G.policePaid = (G.policePaid || 0) + f;   // named on the morning ledger (Gordie, round 72)
       _say("You wai first and apologise second, in Thai, both hands steady-ish. " +
         "The officer's arithmetic visibly adjusts for manners. " +
         (f ? `฿${_num(f)} changes hands inside a handshake old as the force itself. ` : "") +
@@ -656,10 +656,11 @@ const _ENC = {
       _addHappy(-1);
     } else if (/\b(?:pay|fine|give|baht|ok|okay|yes|here)\b/.test(input)) {
       const f = Math.min(POLICE_PAY, G.money);
-      G.money -= f;
+      G.money -= f; G.policePaid = (G.policePaid || 0) + f;   // named on the morning ledger (Gordie, round 72)
       _say((f ? `฿${_num(f)} disappears into a shirt pocket with a receipt that will never ` +
         "exist. " : "He turns out your pockets, finds lint, and looks personally " +
         "offended. ") +
+        (f && f < POLICE_PAY ? `He counts it, looks at the gap, looks at you, and decides the gap is your night's real fine. ` : "") +   // short, and said so (Gordie, round 72)
         "“Fine paid. No problem now. Sawatdee khrap.” The brown uniform strolls on, " +
         `scanning the crowd for the next swaying farang. (฿${_num(G.money)} left.)`, "alert");
       _addHappy(-2);
@@ -682,7 +683,7 @@ const _ENC = {
       return;
     } else {
       const f = Math.min(POLICE_ARGUE, G.money);
-      G.money -= f;
+      G.money -= f; G.policePaid = (G.policePaid || 0) + f;   // named on the morning ledger (Gordie, round 72)
       _say("You argue. His smile does not move, but a second uniform materialises " +
         "at your elbow, and the fine develops a friend. " +
         (f ? `฿${_num(f)} lighter, ` : "Pockets already empty, you are ") +

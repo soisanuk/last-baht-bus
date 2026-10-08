@@ -13145,6 +13145,11 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "twice. \"Pattaya Leisure's back room, up the soi. Velvet rope, a good table, men who don't drink much.\" He doesn't " +
         "look up. \"You don't get in by asking, bud. You get asked.\"",
         short: "\"Pattaya Leisure's back room. You don't get in by asking. You get asked.\"" },
+      // Nira by name, from the man who names her loan (Gordie, round 72: LOAN named her, NIRA got a shrug)
+      { topic: "nira", text: "\"Nira.\" Bert sets the glass down. \"Walking Street's bank — Neon Paradise, the stool by the till. Twenty " +
+        "percent for three days, and her cousins collect the rest.\" He picks the glass back up. \"Borrow from her once and you'll " +
+        "know why I said once.\"",
+        short: "\"Walking Street's bank. Twenty percent, three days, cousins. Once.\"" },
     ],
   },
 
@@ -17464,7 +17469,7 @@ const _H_ASK_PHRASINGS = {
     '"Handsome man like you — wife at home, na?" She is fishing and does not mind you knowing.',
     '"You have lady in your country? Tell true." A finger pointed at your chest, for honesty.'],
   trips: ['"First time Pattaya, or you come back? Come back for somebody, maybe na?"',
-    '"You come here before? I think I see you before." She almost certainly has not, and it is still nice.',
+    '"You come Pattaya before? I think you are not new." She looks at your sunburn line as if it were evidence.',
     '"New in Pattaya, or old man of Pattaya?" A grin. "Old man of Pattaya know where everything is."'],
 };
 const _H_ASK = [

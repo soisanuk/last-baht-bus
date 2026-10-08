@@ -2246,6 +2246,10 @@ const _MAI_DEE_SORRY = [
 ];
 function _doApologize() {
   const r = G.room, s = G.soc;
+  if (_npcsHere().includes("nira") && (G.loanSkipped || (G.loan && G.loan.strikes))) {   // not "the mamasan banks the credit" to the moneylender (Gordie, round 72)
+    _say(`Nira lets you finish. "Sorry is free," she says. "That is why I don't sell it." The calculator stays where it is. (REPAY at her stool.)`);
+    return;
+  }
   // the woman who found out is in the room: the apology is hers to take or not (Rolf, round 66 — "Nothing to apologize for. Tonight.")
   if (typeof _affairLive === "function" && _affairLive() && G.affair.soured && _npcsHere().includes(G.affair.id)) {
     const a = G.affair, n = NPCS[a.id].name;
@@ -4721,7 +4725,7 @@ function _nightSnapshot() {
     bank: G.bank || 0, held: G.nontStuck || 0, bankIn: G.bankIn || 0,   // the account, Nont's overnight hold, and what ARRIVED (Marguerite, round 67; the money audit)
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
-    nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
+    nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
     nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
@@ -4810,6 +4814,12 @@ function _morningLedger() {
   const topUp = (G.bar && G.bar.pocketNight) || 0;   // only the till's shortfall — rent and the note stay on the bar's page
   if (topUp > 0) bits.push("\u0e3f" + _num(topUp) + " of your own money into the till when it went under");
   if (borrowed > 0) bits.push("\u0e3f" + _num(borrowed) + " borrowed from Nira \u2014 a debt, not a win");
+  const polN = (G.policePaid || 0) - (b.polB != null ? b.polB : (G.policePaid || 0));
+  if (polN > 0) bits.push("\u0e3f" + _num(polN) + " of it to the police");   // a fine was lumped into "down" (Gordie, round 72)
+  const bookN = (G.hotelDebt || 0) - (b.bookB != null ? b.bookB : (G.hotelDebt || 0));
+  if (bookN > 0) bits.push("\u0e3f" + _num(bookN) + " more on the hotel book (\u0e3f" + _num(G.hotelDebt) + " in all)");
+  const skipR = (G.skipRepaid || 0) - (b.skipR != null ? b.skipR : (G.skipRepaid || 0));
+  if (skipR > 0) bits.push("\u0e3f" + _num(skipR) + " to Nira against the loan you flew home with");
   if (repaid > 0) bits.push("\u0e3f" + _num(repaid) + " repaid to Nira" + (repaid - prinN > 0 ? ` (\u0e3f${_num(repaid - prinN)} of it interest)` : ""));
   const nontB = (G.nontBorrowed || 0) - (b.nontB != null ? b.nontB : (G.nontBorrowed || 0));
   const nontR = (G.nontRepaid || 0) - (b.nontR != null ? b.nontR : (G.nontRepaid || 0));
@@ -4971,7 +4981,12 @@ const _JOINER_LINES = [
 // any woman who goes up to your room at the Sabai, once a night — the clerk charges the guest, not the trade
 function _joinerFee(night = G.day) {   // the NIGHT she came up: a fee charged at the next wake stamped the new day and let that night's guest in free (Ossie, round 70)
   if (!_flag("act1Done") || G.stage === "act1" || G.hotel !== "sabai") return;
-  if (G.joinerDay === night || G.money < JOINER_FEE) return;
+  if (G.joinerDay === night) return;
+  if (G.money < JOINER_FEE) {   // broke, it goes on the book like the room does — not waved through (Gordie, round 72)
+    G.joinerDay = night; G.hotelDebt = (G.hotelDebt || 0) + JOINER_FEE;
+    _say(_fmt("(The night clerk writes the joiner fee in the book instead — ฿{f}, on top of whatever else is in there. ฿{d} on the book now.)", { f: _num(JOINER_FEE), d: _num(G.hotelDebt) }), "dim");
+    return;
+  }
   G.joinerDay = night; G.money -= JOINER_FEE;
   _say(_fmt(_pickVary(_JOINER_LINES, "joiner"), { f: JOINER_FEE }), "dim");
 }

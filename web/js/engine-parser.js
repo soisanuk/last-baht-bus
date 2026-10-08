@@ -4120,6 +4120,21 @@ function _doTalkCore(arg, topic) {
   if (npc === "nont" && topic && !(/^tan$/i.test(String(topic).trim()) && _pickDialogue("nont", "tan").topic) && typeof _nontLocate === "function" && _nontLocate(topic)) return;   // his own words about Tan outrank the locator's laugh (the dialogue walk) // the priced locator: anybody, tonight, ฿200
   // the civilian at the table: "how much" is not a topic she answers, it's the
   // scene (chameleon economy) — no dialogue node, so the wheel never advertises it
+  // CREAM REMEMBERS THE NIGHT, in the act's own register (Gordie, round 72: the evening after she slept in
+  // his room, "after you go out that door, I see nothing", and the gift was "not my story")
+  if (npc === "cream" && topic && G.chamLast && G.day - G.chamLast.day <= 3 &&
+      /\b(last night|the night|hotel|your room|my room|gift|the money|money|this morning|morning|bus|the bus|pharmacy)\b/i.test(String(topic))) {
+    const t = String(topic).toLowerCase(), g = G.chamLast.gift || 0;
+    _say(/gift|money/.test(t)
+      ? (g > 0 ? `"The money?" Cream looks at her drink, not at you. "For the bus. For breakfast." Very quietly: "You so kind." The subject is closed by the way she reaches for her glass.`
+        : `"Nothing. Is okay." She says it quickly, to the table. "I tell you — I never do this. Is not for money."`)
+      : /hotel|room/.test(t)
+      ? `"Your hotel?" Cream pulls a face. "The man at the desk look at me like I am one of the girls." She is offended, which is the performance and is also true. "I am not one of the girls."`
+      : /morning|bus|pharmacy/.test(t)
+      ? `"Bus ten to eight. I make it, just." She touches the bun, which is back. "My boss say I look tired. I say I study late."`
+      : `"Last night?" Cream laughs, embarrassed, and checks the door as if somebody might hear. "I tell you, I never do this." A beat. "And then I do. Don't tell my boss."`);
+    return;
+  }
   if (npc === "cream" && topic && (["price", "late"].includes(topic) || ["price", "late"].includes(_convoTopic(topic))) &&   // the INVITE hint names LATE (Dieter, round 56)
       typeof _chamAsk === "function") { _chamAsk(); return; }
   // Your own staff, at the bar you own, greet you as the guv'nor and won't sell
@@ -4163,6 +4178,15 @@ function _doTalkCore(arg, topic) {
   // driver's cousin's debt — read as his ฿6,000 at twice the figure (Malcolm, round 59)
   // …and a man who has REPAID her and asks about debt is square — the Pim node's "Twelve
   // thousand… it grows while I sit here" read as a demand one line after "Paid" (Lothar, round 67)
+  if (npc === "nira" && G.loanSkipped && !(G.loan && G.loan.owed > 0) &&
+      (!topic || /\b(debt|owe|owed|owing|my money|my loan|repay|pay back|square|interest|loan|borrow|money|last trip|sorry)\b/i.test(String(topic)))) {
+    _say(_pickVary([
+      `Nira doesn't look up. "You fly home with my money${G.loanSkippedOwed ? ", ฿" + _num(G.loanSkippedOwed) : ""}. Now you sit at my stool." The calculator clicks. "Pay it, and then we talk about anything."`,
+      `"You." Nira says it to the book. "Last trip you owe me${G.loanSkippedOwed ? " ฿" + _num(G.loanSkippedOwed) : ""}, and you go to the airport instead." A shrug. "The airport is far. My stool is here. Pay."`,
+    ], "niraskip"), "alert");
+    _say("(REPAY <amount> at her stool.)", "dim");
+    return;
+  }
   if (npc === "nira" && topic && !(G.loan && G.loan.owed > 0) && (G.loanRepaid || 0) > 0 && !_flag("debtTruth") &&
       /\b(debt|owe|owed|owing|my money|my loan|repay|pay back|square|interest)\b/i.test(String(topic))) {
     _say(_pickVary([
@@ -5359,6 +5383,9 @@ function _saidAgrees(a, b) {
   // words, and the check called an honest woman's question-answerer a liar (Priya, round 58)
   const _neg = x => /\b(no|not|nobody|none|never|nope|nah|single|alone|nothing)\b/.test(x);
   if (_neg(na) && _neg(nb)) return true;
+  // …and two "I've been before"s are the same answer: "yes, you have" and "fourth trip" (Gordie, round 72 — called a liar for agreeing)
+  const _back = x => /\b(yes|yeah|yep|again|before|been back|come back|second|third|fourth|fifth|sixth|seventh|times|trips?|visits?)\b/.test(x) && !/\b(first|wife|married|widowed|divorced|single)\b/.test(x);
+  if (_back(na) && _back(nb)) return true;
   return ta.some(w => tb.has(w));
 }
 
@@ -7134,6 +7161,7 @@ function _doGive(itemWord, npcWord) {
   // "give 500 to jenny" — a money amount isn't an item; hand it over the right way:
   // TIP if she's in front of you, else a pointer at TIP/SEND (don't hit not-carrying).
   if (/^\d+$/.test(itemWord)) {
+    if (_findNpc(npcWord) === "nira" && (G.loanSkipped || (G.loan && G.loan.owed > 0))) return _doRepay(itemWord);   // money handed to the lender you owe is a repayment, not a tip (Gordie, round 72)
     if (_findNpc(npcWord)) return _doTip(npcWord + " " + itemWord);
     _say("To hand someone cash: TIP <lady> <amount> if she's in front of you, or SEND <amount> TO <name> for a phone contact.");
     return;
@@ -8833,19 +8861,20 @@ function _doMotosai(arg) {
       G.pityRides = (G.pityRides || 0) + 1;
       G.pityOwed = (G.pityOwed || 0) + d.price;   // "pay next time" is a promise the game keeps
       const _pityExtra = Math.max(0, _districtHops(_room().region, ROOMS[d.room].region) - 1);
+      const _hw = [_room().region, ROOMS[d.room].region].includes("Darkside") ? "threads the highway one-handed" : "weaves through the traffic one-handed";   // the highway only where the ride crosses it (Gordie, round 72)
       G.room = d.room;
       G.darkStreak = 0;
       if (_pityExtra) { G.offstage = true; const ended = _passTime(_pityExtra); G.offstage = false; if (ended) return; }
       _say(G.pityRides === 1
         ? "The piwin takes in the empty pockets, the hour, and the state of you, " +
           "and sighs the sigh of a man who has done this before. “Mai pen rai. Get " +
-          "on. Pay next time, boss.” He threads the highway one-handed and sets you " +
+          "on. Pay next time, boss.” He " + _hw + " and sets you " +
           "back down among the living — no charge, no lecture, just a nod that says " +
           "don't make a habit of it."
         : "The piwin knows you before you have said a word. “Again, boss?” Not angry. " +
           "Tired, maybe, the way a man is tired of a thing he is going to do anyway. “Get on. " +
           `Now you owe the stand ฿${_num(G.pityOwed)}. Next time you have money, you remember us.” ` +
-          "He threads the highway one-handed. The nod at the other end is shorter than last time.", "thai");
+          "He " + _hw + ". The nod at the other end is shorter than last time.", "thai");
       if (G.dog) _say(_dogN(_DOG_MOTOSAI[Math.floor(_rand() * _DOG_MOTOSAI.length)] +
         " No charge for Sai Krok either, not tonight."), "dim");
       _describeRoom(true);
@@ -8854,6 +8883,9 @@ function _doMotosai(arg) {
     }
     _say(`“${thaiBaht(price)}${dogFare ? ` — and ฿${_num(dogFare)} for his lordship's ride` : ""},” ` +
       `says the piwin. You have ฿${_num(G.money)}. He shrugs — no hard feelings, no free rides.`, "thai");
+    // why, when there was a free one earlier (Gordie, round 72: a mercy ride from Naklua, then "no free rides" from Walking Street)
+    if (G.money < price && G.pityRideDay === G.day) _say("(The stand's one free ride a night is spent. Walking is free, and the night is long enough.)", "dim");
+    else if (G.money < price && d.price !== MOTOSAI_TOWN) _say("(A free ride, when there is one, is a ride back into town — not out to the far end.)", "dim");
     return;
   }
   G.money -= total;
@@ -10774,7 +10806,7 @@ function _doWithdrawInner(arg) {
   G.atmToday = drawn + n;
   G.atmFees = (G.atmFees || 0) + _atmFee();   // the morning ledger counts the fee, which never touches the pocket (Stan, r35)
   _say(`The machine whirrs, thinks, and counts out ฿${_num(n)}` + (_atmFee()
-    ? ` — lighter a ฿${_num(_atmFee())} foreign-card fee.` : " — your own bank, no fee.") +
+    ? ` — less a ฿${_num(_atmFee())} foreign-card fee.` : " — your own bank, no fee.") +
     ` (฿${_num(G.money)} in pocket · ฿${_num(G.bank)} in the account.)`, "win");
 }
 

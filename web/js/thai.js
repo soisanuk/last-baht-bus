@@ -60,7 +60,7 @@ const THAI_SIGNS = {
 
 const THAI_PHRASES = [
   { key: "hello",    th: "สวัสดีครับ",   rom: "sawatdee khrap",  match: ["สวัสดีครับ", "สวัสดี", "หวัดดี", "sawasdee", "sawaddee", "sawadee khrap", "sawatdee", "sawasdee", "sawadee", "wai"] },
-  { key: "thanks",   th: "ขอบคุณครับ",  rom: "khop khun khrap", match: ["ขอบคุณครับ", "ขอบคุณ", "khop khun", "khopkhun", "kop khun"] },
+  { key: "thanks",   th: "ขอบคุณครับ",  rom: "khop khun khrap", match: ["ขอบคุณครับ", "ขอบคุณ", "khop khun", "khopkhun", "kop khun", "khob khun", "khobkhun", "kob khun", "khob khun krap", "khob khun ka"] },   // the spelling most phrasebooks print (Gordie, round 72)
   { key: "how_much", th: "เท่าไหร่",     rom: "thao rai",        match: ["เท่าไหร่", "thao rai", "taorai", "tao rai", "tao arai", "gee baht"] },
   { key: "no",       th: "ไม่เอา",       rom: "mai ao",          match: ["ไม่เอา", "mai ao", "maiao"] },
   { key: "delicious",th: "อร่อย",        rom: "aroi",            match: ["อร่อย", "aroi", "arroi", "aroy", "arroy", "aloy"] },
