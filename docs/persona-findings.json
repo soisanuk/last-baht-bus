@@ -15888,13 +15888,13 @@
       "lens": "skint-edges",
       "instrument": "",
       "claim": "'in' at Beach Road Soi 9 says 'That's a wall' when the exits list POLICE",
-      "verdict": "deferred",
-      "note": "IN to the one named building exit is a parser change for the next sweep.",
+      "verdict": "fixed",
+      "note": "IN takes the one door there is — a named building exit or the street's single venue — and on a street with several, lists them.",
       "cls": "D",
       "sev": "low",
       "system": "navigation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round72.test.js"
     },
     {
       "round": "72",
@@ -15918,13 +15918,13 @@
       "lens": "skint-edges",
       "instrument": "",
       "claim": "buy seafood on Naklua Road sells grilled chicken",
-      "verdict": "deferred",
-      "note": "Stall item-matching.",
+      "verdict": "fixed",
+      "note": "\"seafood\" contained \"food\" and hit BUY FOOD; the word boundary is fixed, and _stallRefuses answers a dish the stall doesn't make with what it does.",
       "cls": "L",
       "sev": "low",
       "system": "food",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round72.test.js"
     },
     {
       "round": "72",
@@ -15948,13 +15948,13 @@
       "lens": "skint-edges",
       "instrument": "",
       "claim": "Manow's texts repeat word for word, three times in a night",
-      "verdict": "deferred",
-      "note": "The floor text pool needs a per-woman book like the staff's.",
+      "verdict": "fixed",
+      "note": "_floorTextPick: a per-woman memory by text across the chatter and the invites; the tier-0 invite is a pool and checks you weren't just at her bar.",
       "cls": "Q",
       "sev": "low",
       "system": "phone",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round72.test.js"
     },
     {
       "round": "72",
@@ -15963,13 +15963,13 @@
       "lens": "skint-edges",
       "instrument": "",
       "claim": "Cream's morning identical every time",
-      "verdict": "deferred",
-      "note": "Pool it.",
+      "verdict": "fixed",
+      "note": "Pooled, three ways of leaving.",
       "cls": "Q",
       "sev": "low",
       "system": "cream",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round72.test.js"
     },
     {
       "round": "72",

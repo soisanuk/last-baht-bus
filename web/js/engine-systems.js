@@ -4984,11 +4984,20 @@ function _chamGo() {
 // simply offered the moment. Ungraded: she thanks him shyly whatever he does.
 function _chamMorning() {
   if (!G.chamNight) return;
-  _say("She is up before you, dressed, hair going up into a modest bun in the mirror " +
+  _say(_pickVary([   // one fixed morning, every morning (Gordie, round 72): the same woman, three ways of leaving
+    "She is up before you, dressed, hair going up into a modest bun in the mirror " +
     "with three pins held in her teeth — the transformation is quick and unshowy and " +
     "complete. A folded white coat goes into the little bag. \"Bus ten to eight,\" she " +
     "says round the pins. \"I late, boss angry.\" She has asked for nothing. She " +
-    "stands by the door a second longer than leaving takes.", "room");
+    "stands by the door a second longer than leaving takes.",
+    "The shower is already running when you wake. She comes out dressed for the counter — plain blouse, " +
+    "the bun, a face with half the evening washed off it — and checks the bus time on her {{phone}} twice. " +
+    "\"Seven fifty.\" She sits on the end of the bed to buckle her sandals and does not look at you while she does it. " +
+    "She has asked for nothing.",
+    "You wake to the sound of her folding last night's dress very small, into the bottom of the bag, under the white " +
+    "coat. \"Morning.\" She is already the pharmacy girl: the bun, the name badge in her hand, the voice a register " +
+    "lower. \"My bus.\" She waits by the door, not quite leaving. She has asked for nothing.",
+  ], "chammorning"), "room");
   if (_pers("whiteknight")) {
     _say("(Your hand is already on your wallet. You notice it there — it arrived before " +
       "you did. Not a rate; she never named one. A gift, because she's so sweet, and " +
@@ -5457,7 +5466,7 @@ function _maybeIncomingText() {
       const _elsewhere = Object.entries(G.soc.barTurns || {}).some(([rm, n]) => rm !== _npcRoom(id) && n >= 3 && ROOMS[rm] && ROOMS[rm].barType);
       const _pool = ["i dream about you last night na 💭❤️", _elsewhere ? "you go other bar?? 😤 i see you i KNOW 👀" : "you tired today? 😴 i still smile from the other night",
         "miss you so much cannot sleep 😢", G.stage === "expat" ? "my farang 🥰 you live here now, no excuse. come see me 555" : "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"];   // a resident is not 'still in pattaya' (Desmond, round 63)
-      _pushMsg(id, _pool[Math.floor(_rand() * 4)]);
+      _pushMsg(id, _floorTextPick(id, _pool.slice(0, 4)));
     }
   } else if (t >= 2) { // regular: invites and warmth, a little needy
     if (roll < 0.45 && !_sawYou) { G.phone.invite = { id, day: G.day };
@@ -5466,13 +5475,17 @@ function _maybeIncomingText() {
         `you where na? 👀 come sit with ${name}, i save you the good stool`,
         `tonight have music! you come? ${name} wait you 🎶🍺`,
       ], "invite2")); }
-    else if (roll < 0.6 + _askBias(id)) _pushMsg(id, (!_sawYou && _moneyAsk(id)) || _CHATTER[Math.floor(_rand() * _CHATTER.length)]);   // not the night you sat at her rail (Piet, round 62)
-    else _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
+    else if (roll < 0.6 + _askBias(id)) _pushMsg(id, (!_sawYou && _moneyAsk(id)) || _floorTextPick(id, _CHATTER));   // not the night you sat at her rail (Piet, round 62)
+    else _pushMsg(id, _floorTextPick(id, _CHATTER));
   } else { // a name and a number: the classic mix, scam-ask heavy
-    if (roll < 0.3) { G.phone.invite = { id, day: G.day };
-      _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
-    else if (roll < 0.65 + _askBias(id)) _pushMsg(id, (!_sawYou && _moneyAsk(id)) || _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
-    else if (roll < 0.9) _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
+    if (roll < 0.3 && !_sawYou) { G.phone.invite = { id, day: G.day };   // not the night you sat with her (Gordie, round 72)
+      _pushMsg(id, _floorTextPick(id, [
+        `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`,
+        `hello handsome 👋 tonight ${name} work late. you come?? 🍺`,
+        `you remember ${name}?? 😊 the bar have new music, come listen`,
+      ])); }
+    else if (roll < 0.65 + _askBias(id)) _pushMsg(id, (!_sawYou && _moneyAsk(id)) || _floorTextPick(id, _CHATTER));
+    else if (roll < 0.9) _pushMsg(id, _floorTextPick(id, _CHATTER));
     else _pushMsg(id, "lucky day!! I win lottery small small 🎉 send you luck money", 50);
   }
   _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
@@ -5731,6 +5744,17 @@ const _TEXT_STOP = new Set(["that", "this", "with", "from", "have", "what", "whe
 const _stem = w => w.replace(/(ies)$/, "y").replace(/(s|es)$/, "");
 // a woman does not send the same text twice inside a week: Cake's fan on day 15 and day 21,
 // word for word (Lothar, round 67) — a per-woman book over her role's pool, reset when it runs dry
+// The floor's texts, remembered per woman by their TEXT (any pool): Manow sent "you come see Manow?? i keep
+// you seat" three times and "bar quiet, boss angry" twice in one night (Gordie, round 72).
+function _floorTextPick(id, pool) {
+  const book = (G.phone.floorTexted = G.phone.floorTexted || {});
+  const sent = book[id] = book[id] || [];
+  let open = pool.filter(t => !sent.includes(t));
+  if (!open.length) { book[id] = sent.filter(t => !pool.includes(t)); open = pool.slice(); }
+  const t = open[Math.floor(_rand() * open.length)];
+  book[id].push(t); if (book[id].length > 30) book[id].shift();
+  return t;
+}
 function _staffTextPick(id, pool) {
   const book = (G.phone.staffTexted = G.phone.staffTexted || {});
   const sent = book[id] = book[id] || [];
@@ -11186,6 +11210,18 @@ const _QV_BASKET_LINES = [
   "Ten minutes and the kitchen hatch bangs: basket, chips, the pie because he made pie. Aoy delivers it with the quiet pride of a woman whose fryer has never once been beaten on this street.",
 ]
 
+// A STALL SELLS ITS DISH: BUY SEAFOOD on Naklua Road sold grilled chicken (Gordie, round 72). A dish the
+// stall doesn't make is answered with what it does; a menu (KISS) or a plain BUY FOOD still buys.
+function _stallRefuses(arg) {
+  if (!arg || typeof FOOD_STALLS === "undefined" || !FOOD_STALLS[G.room] || /menu/i.test(FOOD_STALLS[G.room].name)) return false;
+  const _DISH = ["seafood", "squid", "fish", "prawns?", "shrimp", "crab", "noodles?", "chicken", "pork", "som ?tam", "papaya", "mango", "kebab", "burger", "pad ?thai", "curry", "soup", "steak", "pizza", "roast", "pie", "crocodile", "croc"];
+  const st = FOOD_STALLS[G.room], nm = st.name.toLowerCase();
+  const asked = _DISH.filter(d => new RegExp("\\b" + d + "\\b").test(arg));
+  if (!asked.length || asked.some(d => new RegExp("\\b" + d + "\\b").test(nm))) return false;
+  const w = (arg.match(new RegExp("\\b(" + asked[0] + ")\\b")) || [])[1] || "that";
+  _say(`No ${w} here — this one is ${st.name}, ฿${_num(st.price)}. (BUY FOOD for that.)`, "dim");
+  return true;
+}
 function _doEat(arg) {
   // "EAT WITH TAN" is the other natural phrasing of his standing food invite —
   // route it to the same scene rather than the you're-not-carrying-that shrug.
@@ -11197,6 +11233,7 @@ function _doEat(arg) {
   // error; a verb the game's own prose TOLD you to type certainly must not.
   if (arg && /\bmot\b/.test(arg) && _npcsHere().includes("mot")) { _motDinner(); return; }
   if (arg && /\bfor \w+/.test(arg) && FOOD_STALLS[G.room] && _companionEats(arg, FOOD_STALLS[G.room].name, FOOD_STALLS[G.room].price)) return;   // the stall's plate, for her (Ingrid, round 62)
+  if (_stallRefuses(arg)) return;   // a stall sells its dish (Gordie, round 72)
   // Cherry Pop's bowl of maraschino cherries: a real nibble, but not a hunger
   // farm — one free cherry a night, the rest is just décor you're pawing at.
   if (arg && /\bcherr/.test(arg) && G.room === "cherry_pop") {

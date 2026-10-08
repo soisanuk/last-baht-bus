@@ -72,7 +72,7 @@ test("GO: the night ends in the hotel, and the morning is the player's verb — 
   doCommand("go");
   assert.match(text(), /I never do this/);
   assert.equal(G.pendingChoice, "chamgift", "the morning modal is armed at wake");
-  assert.match(text(), /Bus ten to eight/);
+  assert.match(text(), /Bus ten to eight|Seven fifty|My bus/);   // the morning is a pool now (Gordie, round 72)
   assert.match(text(), /asked for nothing/);
   assert.doesNotMatch(text(), /hand is already on your wallet/, "the wallet reflex is the white knight's, not everyone's");
   const m = G.money;

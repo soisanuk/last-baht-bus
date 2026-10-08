@@ -820,6 +820,18 @@ function _doGo(dirWord) {
   if ((dirWord === "in" || dir === "in") && !(r.exits && r.exits.in) && typeof _hotelRoomId === "function") {
     const _home = Object.keys(r.exits || {}).find(k => r.exits[k] === _hotelRoomId());
     if (_home) return _doGo(_home);
+    // …and IN where there is exactly one door to go in by — a named building exit (Soi 9's POLICE)
+    // or the one venue on the street — is that door (Gordie, round 72: "That's a wall, boss",
+    // with POLICE on the exits line)
+    const _CARD = /^(n|s|e|w|ne|nw|se|sw|up|down|out|u|d)$/;
+    const _named = Object.keys(r.exits || {}).filter(k => !_CARD.test(k));
+    if (_named.length === 1) return _doGo(_named[0]);
+    const _doors = typeof _venuesHere === "function" ? _venuesHere(r) : [];
+    if (!_named.length && _doors.length === 1 && typeof _doEnter === "function") return _doEnter(_barName(_doors[0]) || _doors[0]);
+    if (_named.length + _doors.length > 1) {
+      _say("In where? " + [..._named.map(k => "(" + k.toUpperCase() + ")"), ..._doors.slice(0, 6).map(v => "(ENTER " + String(_barName(v) || v).toUpperCase() + ")")].join(" · "), "dim");
+      return false;
+    }
   }
   if (!dir || !r.exits[dir]) {
     // A hotel room is indoors — the street "no road" pool ("shuttered shophouses,
@@ -7968,7 +7980,8 @@ function _doBuy(arg) {
   // a NAMED dish is this stall's only if the stall says so — BUY SOM TAM at the croc stall bought a croc skewer (Terence, round 57)
   const _dishW = (String(arg || "").match(/som ?tam|toastie|mango|chicken|kebab|rice|crocodile|croc|skewer/) || [])[0];
   const _stallTxt = FOOD_STALLS[G.room] ? JSON.stringify(FOOD_STALLS[G.room]).toLowerCase() : "";
-  if (FOOD_STALLS[G.room] && (/food|eat|snack/.test(arg) || (_dishW && (_stallTxt.includes(_dishW) || _stallTxt.includes(_dishW.replace(/ /g, "")))) ||
+  if (typeof _stallRefuses === "function" && _stallRefuses(arg)) return;
+  if (FOOD_STALLS[G.room] && (/\b(food|eat|snack)\b/.test(arg) || (_dishW && (_stallTxt.includes(_dishW) || _stallTxt.includes(_dishW.replace(/ /g, "")))) ||
       (arg && FOOD_STALLS[G.room].name.toLowerCase().split(/[^a-z]+/)
         .some(w => w.length > 3 && arg.includes(w))))) {
     const f = FOOD_STALLS[G.room];

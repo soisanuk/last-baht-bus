@@ -72,3 +72,14 @@ test("broke at the Sabai, the joiner fee goes on the book; DEBT lists the bike s
   G.pityOwed = 100; out = []; run("debt"); assert.match(said(), /bike stand: ฿100/);
   assert.ok(THAI_PHRASES.find(p => p.key === "thanks").match.includes("khob khun"));
 });
+test("the four deferrals: IN takes the one door, a stall sells its dish, the floor's texts don't repeat, Cream's morning is a pool", () => {
+  G.room = "beach_rd_soi9"; out = []; run("in"); assert.equal(G.room, "police_station");
+  G.room = "beach_rd_c"; out = []; run("in"); assert.match(said(), /In where\?/); assert.doesNotMatch(said(), /wall/);
+  G.room = "naklua_rd"; G.money = 500; G.hunger = 80; out = []; run("buy seafood");
+  assert.equal(G.money, 500); assert.match(said(), /No seafood here/);
+  out = []; run("buy food"); assert.ok(G.money < 500, "BUY FOOD still buys the stall's dish");
+  const seen = new Set(); for (let i = 0; i < _CHATTER.length; i++) seen.add(_floorTextPick("manow", _CHATTER));
+  assert.equal(seen.size, _CHATTER.length, "a woman's texts do not repeat until she has sent them all");
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.match(src, /"chammorning"/);
+});
