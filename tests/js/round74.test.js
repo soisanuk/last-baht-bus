@@ -85,3 +85,19 @@ test("the eleven words the trainer added reach their verbs: borrow, interest, de
   G.room = "second_rd_mall"; G.hunger = 60; const m0 = G.money; run("ขอจระเข้"); assert.ok(G.money < m0, "the crocodile is sold in Thai");
   G.room = _hotelRoomId(); G.pendingChoice = "vacation_end"; run("ย้ายมาอยู่พัทยา"); assert.equal(G.stage, "expat");
 });
+test("the sweep: PAY books the app, WHO RUNS THIS BAR reads the paper, the piwin knows the Old Market and Nont, the record lists the written women, a stand on the hill", () => {
+  G.room = _hotelRoomId(); G.nightTurn = 75; _startEnc("booking"); out = []; run("pay"); assert.doesNotMatch(said(), /phone face-down/);
+  G.pendingEnc = null; G.room = "lucky_tiger"; G.nightTurn = 40; out = []; run("who runs this bar"); assert.match(said(), /commercial registration/);
+  G.room = "pattaya_tai"; out = []; run("ask piwin about old market"); assert.match(said(), /Soi Buakhao/); out = []; run("ask piwin about nont"); assert.match(said(), /boy with the phones/);
+  G.talked.grace = [0]; G.talked.hong = [0]; out = []; run("journal record"); assert.match(said(), /Grace/); assert.match(said(), /Hong/);
+  assert.ok(ROOMS.pratumnak_soi5.motosai);
+});
+test("Howard, on the Two Stools rail, answers money from the bank's side and says why Benjawan is on his local's wall", () => {
+  G.room = "two_stools"; G.nightTurn = 40; assert.ok(_npcsHere().includes("howard"));
+  run("talk to howard");
+  assert.match(ask("howard", "what do you do"), /Financial crime/);
+  assert.match(ask("howard", "the frame"), /Ratree runs this place/);
+  assert.match(ask("howard", "dropped"), /never accused/);
+  assert.equal(_licenceOf("two_stools").name, "Benjawan Srisuk");
+  assert.ok(NPCS.howard.patron && NPCS.howard.look);
+});

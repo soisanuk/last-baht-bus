@@ -12943,6 +12943,8 @@ function doCommand(input) {
   _waitRefused = false; _moveRefused = false;
   // "last night" is the natural two-word form of the ledger verb (Stuart, round 47)
   if (/^\s*last night\b/i.test(raw)) raw = "ledger";
+  // WHO RUNS THIS BAR is a question about the paper, not the black book (Graham, round 74)
+  if (/^who (runs|owns) (this|the) (bar|place|club|pub)\??$/i.test(raw.trim()) && typeof _licenceOf === "function" && _licenceOf(G.room)) raw = "examine licence";
   // YES at "SLEEP again if you mean it" is meaning it — "that moment has passed" for the one word a man types at a question (Graham, round 74)
   if (G.endWarn && G.endWarn.day === G.day && G.turns - G.endWarn.turn <= 1 && /^(y|yes|yeah|yep|ok|okay|sure|do it|confirm|i mean it)[.!]*$/i.test(raw.trim()))
     raw = { sleep: "sleep", sunrise: "watch sunrise" }[G.endWarn.kind] || raw;

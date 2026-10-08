@@ -23,9 +23,9 @@
  ],
  "counts": {
   "geolocated": 243,
-  "patrons": 25,
+  "patrons": 26,
   "people": 352,
-  "portraits": 377,
+  "portraits": 378,
   "renders": 376,
   "thumbs": 376,
   "venues": 243
@@ -172,6 +172,14 @@
    "home": "silk_rose",
    "name": "Helmut",
    "nat": "German",
+   "pronoun": "he"
+  },
+  "howard": {
+   "desc": "Sixty-six, neat, in a linen shirt buttoned one higher than the heat suggests, with rimless glasses and a newspaper folded to the crossword. A single malt nobody else in the bar drinks sits at his elbow in a glass Ratree keeps for him. He has the stillness of a man who spent thirty years reading other people's money and has decided to read nothing heavier than seven across.",
+   "emoji": "📰",
+   "home": "two_stools",
+   "name": "Howard",
+   "nat": "Scottish",
    "pronoun": "he"
   },
   "josey": {
@@ -3790,6 +3798,7 @@
   "haad",
   "helmut",
   "hong",
+  "howard",
   "ice",
   "ing",
   "jah",

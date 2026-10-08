@@ -1092,7 +1092,7 @@ const ROOMS = {
       "west across the crest toward the Dongtan side. Quiet, dark, and a long way from a lady drink.",
     exits: { s: "thappraya_ext_m", w: "pratumnak_hill_rd" },
   },
-  pratumnak_soi5: {
+  pratumnak_soi5: { motosai: true,   // a stand on the hill: the clubs' bikes had nowhere to take you back from (Vince, round 74; Mario, 2026-10-09)
     name: "Pratumnak Soi 5",
     region: "Pratumnak",
     desc: "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up " +
@@ -3948,7 +3948,8 @@ const ROOMS = {
     bar: "The Offside Sports Bar", barType: "pub", outlet: true, darts: true,
     desc: "A proper sports bar wedged into the go-go alley: a wall of screens, a Premier " +
       "League fixture list chalked up beside a Thai-boxing card, a dartboard with a queue, " +
-      "and a fridge of import beer at import prices. The commentary is in three languages " +
+      "and a fridge of import beer at import prices, with a barman in a referee's shirt " +
+      "who serves without taking his eyes off the screens. The commentary is in three languages " +
       "and the groans when a penalty's missed are universal. A quiet corner to sober up in, " +
       "if the match lets you.",
     exits: { out: "lk_main" },
@@ -16649,6 +16650,38 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
   // nobody left there, hasn't been in twenty years. Would rather die poor here than cold alone
   // there. No self-pity anywhere in it; the arithmetic is stated flat, like Lek's price story.
   // (Not "Reg" — Reginald is already on the bench, and _findNpc matches a regular by name-prefix.)
+  // HOWARD (2026-10-09, the laundering material): a retired bank financial-crime man from Edinburgh on the Two Stools rail
+  // on Pratumnak — the peer the paper-by-the-till material lacked, the only other man in town who reads the frames,
+  // and good-standing's "dropped, never accused" from the bank's side of the letter. His local is one of the four
+  // Benjawan bars, so he can say what nobody else could: why the woman who has run it for years is not on its paper.
+  // Structure only; nobody real (docs/guardrails.md).
+  howard: {
+    work: "bank",
+    name: "Howard", emoji: "📰",
+    patron: true,
+    pronoun: "he",
+    room: "two_stools",
+    hops: false,
+    age: 66, nat: "Scottish",
+    title: "a neat Scotsman with a single malt and the crossword",
+    look: "Scottish man of sixty-six, neat grey hair, rimless glasses, pale linen shirt buttoned to the collar, a folded newspaper crossword",
+    desc: "Sixty-six, neat, in a linen shirt buttoned one higher than the heat suggests, with rimless glasses and a newspaper folded to the crossword. A single malt nobody else in the bar drinks sits at his elbow in a glass Ratree keeps for him. He has the stillness of a man who spent thirty years reading other people's money and has decided to read nothing heavier than seven across.",
+    dialogue: [
+      { text: "\"Howard.\" A dry handshake, Scottish, and a nod at the stool beside him, which he does not consider his to offer — he waits for you to take it. \"Thirty years reading other people's money for a bank in Edinburgh. Now I read the crossword.\" He taps the folded paper. \"It lies less.\"", short: "\"Howard. Thirty years reading other people's money. Now the crossword.\"" },
+      { topic: "bank|work|job|career|edinburgh|what do you do|fraud|financial crime|retired", text: "\"Financial crime, they called it by the end — fraud, before that, and before that just 'the investigations team'.\" He folds the crossword along its crease. \"Thirty years of looking at money that had a story and asking whether the story would survive somebody reading it. Mostly it would. My job was the ones that didn't.\"", short: "\"Thirty years asking whether money's story would survive somebody reading it.\"" },
+      { topic: "accused|dropped|de-risk|derisk|closed|exited|risk policy|the letter", text: "\"We never accused anybody. That's the thing nobody believes.\" He lines his glass up with the edge of the mat. \"We wrote a letter: the bank has reviewed the relationship and exited it under its risk policy, and wishes you well. No charge, no hearing, no appeal. The accountant resigned the same week, very politely. Being dropped is worse than being caught, because there's nobody to argue with — I spent thirty years being nobody.\"", short: "\"We never accused anyone. We wrote a letter. Being dropped is worse than being caught.\"" },
+      { topic: "mule|mule account|bank book|sold account|the list|the registry|three thousand", text: "\"A girl opens an account at a branch, sells the book and the card the same afternoon for three thousand baht, and the money that goes through it is never hers.\" Flat, without contempt. \"In my day the bank that froze it knew her name and nobody else did. Here they share a list now, and the list follows the person. She'll never hold an account again, anywhere, for a week's wages.\" A sip. \"The man who bought the book was three steps away and on a plane by the time the list caught up.\"", short: "\"Three thousand baht for a lifetime off every bank's books. The man who bought it was on a plane.\"" },
+      { topic: "frame|the frame|licence|license|registration|the paper|benjawan|benjawan srisuk|two stools|this bar|the bar|owner|who owns", text: "\"The frame by the cool box?\" The first real smile. \"Benjawan Srisuk, 2019, a Second Road lawyer's stamp. I read it the first night I sat here. Occupational habit.\" He glances at the woman behind the cool box. \"Ratree runs this place and has for years. The farang who bought the stools registered it in a nominee's name, went home, and nobody ever paid to change the paper — it costs money and it was never Ratree's name to change. So a woman somewhere in the north owns eleven stools on Pratumnak she has never seen.\" He goes back to the crossword. \"You'll find her on other walls. I did. Somebody who signs these things for a living would know who she was.\"", short: "\"Benjawan Srisuk, 2019. Ratree runs it; the paper never changed. You'll find her on other walls.\"" },
+      { topic: "two million|work permit|permit|capital|the grid|company", text: "\"Two million baht per work permit, one if you've a Thai wife, four for two.\" He says it like a rate he's quoted a thousand times. \"Which means the capital on a bar company tells you how many farang work there and nothing about the business. Every bar company in this town is two or four. In my old job a capital figure that round was the first thing we'd have flagged.\" He shrugs. \"Here it's just the law, being read literally.\"", short: "\"The capital tells you the permits, not the business. Every bar company here is two or four.\"" },
+      { topic: "nont|the boy|the market|the phone boy|cash", text: "\"The lad at the Old Market?\" Howard considers it with professional interest. \"He runs the cleanest small book in the province — a {{phone}}-case company with an accountant and a very boring year.\" A pause. \"That's exactly what would have worried me, once. Boring is what a story looks like when somebody's written it properly.\"", short: "\"The cleanest small book in the province. That's what would have worried me, once.\"" },
+      { topic: "orathai|the folder|the nominee|nominee|the lady with the folder", text: "\"The lady with the folder.\" He nods slowly. \"She signs the fifty-one for a thousand baht and closes the companies properly, which costs money and which nobody else bothers with. In thirty years I met three people who closed things properly.\" He folds the paper. \"She's the only honest professional in a dishonest structure, and the structure is legal. That's not a riddle. That's most of finance.\"", short: "\"She closes things properly. In thirty years I met three people who did.\"" },
+      { topic: "covers|count|the count|jasmine|jasmine garden|forty thousand|the till|volume", text: "\"A till that says forty thousand on a night with eight men in it?\" Howard nearly laughs. \"That's the first thing anyone in my old team would have flagged. Volume — receipts that a room that size cannot take. Count the stools three nights running and you have a pattern; one night is a Friday.\" He taps the bar. \"Nobody would have accused the bar. We'd have written to it.\"", short: "\"Volume. Three nights is a pattern; one is a Friday. We'd have written to it.\"" },
+      { topic: "accountant|wipa|khun wipa|source of funds|the bank called|half", when: (st, G) => G.acctDay != null, text: "\"Your accountant rang about a source of funds.\" He doesn't ask how he knows; the hill is small. \"Then she's good, and she's protecting you. Half your cash for a month is the polite version. The impolite version is a letter with no {{phone}} number on it.\" A sip. \"Wire it from home, in your own name. Boring is the whole defence.\"", short: "\"Half your cash for a month is the polite version. Wire it from home. Boring is the defence.\"" },
+      { topic: "pattaya|why|why here|retire|scotland|home", text: "\"Why here?\" He has an answer ready, and gives the true one. \"It's warm, it's cheap, and nobody on this hill has ever asked me what I used to do. After thirty years of asking other people that, it's the only luxury I wanted.\" He looks out at the road. \"And Ratree keeps a single malt in the cool box for me, which I've never asked her to do. That's a kind of account too.\"", short: "\"Warm, cheap, and nobody asks what I used to do.\"" },
+      { topic: "tan|your partner|the fixer", text: "\"Tan?\" Howard sets the pen down, which he rarely does. \"The cleanest man I've never been able to read. No money moves through him that I can see, and everything arrives. In my old job that was either a saint or a structure.\" A small smile. \"I stopped needing to know which. It's very restful.\"", short: "\"The cleanest man I've never been able to read. Either a saint or a structure.\"" },
+      { text: "\"Hm?\" Howard looks up from the crossword, finds nothing in the question he can audit, and goes back to it. \"Ask me about money. It's the only subject I'm any use on.\"", short: "\"Ask me about money. It's the only subject I'm any use on.\"" },
+    ],
+  },
   wilf: {
     work: "pension",   // which of his own topics answers "what do you do"
     name: "Wilf", emoji: "🍛",

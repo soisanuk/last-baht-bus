@@ -467,12 +467,16 @@ function _piwinAbout(who) {
     if (/\b(clinic|tested|std|the doctor)\b/.test(w)) { _say("\"Clinic?\" He knows the one you mean without asking which. \"Second Road, by Central — glass door, next to the pharmacy. Free. I take you, nobody look.\""); return; }
     const region = k.length >= 3 && [...new Set(Object.values(ROOMS).map(r => r.region).filter(Boolean))].find(rg => _pnm(rg) === k);
     if (venue === "nottys_place") { _say("\"Notty's?\" He grins. \"The wall, I know. The wall, I cannot open.\""); return; }
+    // the Old Market and the boy with the phones: every stand in town knows both (Graham, round 74: "Who?")
+    if (/\b(old market|the market|buakhao market)\b/.test(w)) { _say("\"Old Market? Soi Buakhao, the middle, by the noodle carts.\" He pats the seat. \"Everybody know. Get on.\""); return; }
+    if (/\bnont\b/.test(w)) { _say("\"Nont?\" A short laugh. \"The boy with the phones, Old Market, the folding table of phone cases. Every piwin know Nont. Half of us charge our phone there.\""); return; }
     if (venue && ROOMS[venue].invite) { _say(_fmt("\"{v}?\" He does not pat the seat. \"Nobody drive you there, boss. That one, you get taken.\"", { v: _barName(venue) })); return true; }   // the piwin placed the Orchid Room and then re-asked where to (László, round 73)
     if (venue) { _say(_fmt("\"{v}? {r}.\" He pats the seat. \"Everybody know. Get on.\"", { v: _barName(venue), r: ROOMS[venue].region })); return; }
     if (region) { _say(_fmt("\"{r}?\" As if you had asked him where the sea is. \"Get on, boss.\"", { r: region })); return; }
   }
   if (!id) { _say("\"Who?\" He shrugs, entirely unbothered. \"Don't know this one.\""); return; }
   const label = NPCS[id].name;
+  if (id === "nont") { _say("\"Nont?\" A short laugh. \"The boy with the phones, Old Market, the folding table of phone cases. Every piwin know Nont. Half of us charge our phone there.\""); return; }   // the one name every stand knows (Graham, round 74)
   if (!(G.known && G.known[id])) {
     _say("\"Mm.\" He does not know the name either, or does not care to. \"Lot of people.\"");
     return;

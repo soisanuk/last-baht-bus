@@ -142,6 +142,18 @@ function framesSeed() {
   _setFlag("roomSafeOpened"); quiet(); G.encDone = {}; _nightSnapshot();
   return serializeGame();
 }
+// ride (round 75, the happiness ledger and the night ride): day three of a holiday, a regular with one woman (Lek,
+// bond 8 — the night ride is offered on a long-time barfine of a bonded lady), money for a few nights out.
+function rideSeed() {
+  newGame();
+  G.player = { origin: "redundancy", personality: "romantic", orientation: "straight", said: {}, lang: "en", teetotal: false };
+  G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3; G.season0 = 1;
+  G.money = 18000; G.bank = 30000; G.battery = 100;
+  G.soc.drinks.lek = 8; G.phone.contacts.lek = true; G.talked.lek = [0];
+  G.room = "buakhao_klang"; G.visited.buakhao_klang = true; G.nightTurn = 4;
+  _setFlag("roomSafeOpened"); quiet(); G.encDone = {}; _nightSnapshot();
+  return serializeGame();
+}
 function jobsSeed() {
   newGame();
   G.player = { origin: "business", personality: "joker", orientation: "straight", said: {}, lang: "en", teetotal: false };
@@ -171,6 +183,7 @@ const seeds = {
   lamon: lamonSeed(),
   frames: framesSeed(),
   jobs: jobsSeed(),
+  ride: rideSeed(),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -243,6 +256,11 @@ try {
   const fr = { pi: _isOrigin("pi"), frame: /Benjawan|BENJAWAN/.test(out.join(" ")), stamp: /Second Road/.test(out.join(" ")) };
   console.log("frames:", JSON.stringify(fr));
   if (!fr.pi || !fr.frame || !fr.stamp) throw new Error("frames seed cannot reach its drive");
+  // Ride: a regular with Lek; her long-time barfine can turn into the night ride
+  reload(seeds.ride); G.room = _npcRoom("lek"); G.nightTurn = 60; out = []; doCommand("talk to lek");
+  const rd = { tier: _bondTier("lek"), here: _npcsHere().includes("lek") };
+  console.log("ride:", JSON.stringify(rd));
+  if (rd.tier < 2) throw new Error("ride seed cannot reach its drive");
   // Jobs: an expat; Grace, Reginald, Nont and Colin each have a job for him
   reload(seeds.jobs); const offered = [];
   const d0 = G.day;

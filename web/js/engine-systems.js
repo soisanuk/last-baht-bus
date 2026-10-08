@@ -3495,8 +3495,10 @@ function _doJournal(arg) {
 }
 function _journalRecord() {
   _say((G.battery > 0 ? "Notes, on the phone" : "Notes, from memory — the phone is dead") + " — the record:", "win");
-  const met = Object.keys(G.talked || {}).filter(id => NPCS[id] && !NPCS[id].filler);
-  const metF = Object.keys(G.talked || {}).filter(id => NPCS[id] && NPCS[id].filler).length;
+  // a floor woman counts as somebody once she is written (FLOOR_OWN) or part of a job you took (Vince, round 74: Grace and Hong missing)
+  const _somebody = id => NPCS[id] && (!NPCS[id].filler || (typeof FLOOR_OWN !== "undefined" && FLOOR_OWN[id]) || Object.values(QUESTS).some(q => q.giver === id || q.at === id));
+  const met = Object.keys(G.talked || {}).filter(_somebody);
+  const metF = Object.keys(G.talked || {}).filter(id => NPCS[id] && !_somebody(id)).length;
   const known = Object.keys(G.known || {}).filter(id => NPCS[id] && !NPCS[id].filler).length;
   _say(`  People: ${met.length} met of ${known} named to you${metF ? ` (and ${metF} of the girls)` : ""}.`, "dim");
   for (const id of met.slice(0, 12)) {

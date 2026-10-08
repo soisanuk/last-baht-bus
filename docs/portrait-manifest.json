@@ -2,20 +2,21 @@
   "generated": "2026-10-08",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 164,
+    "total": 165,
     "byRole": {
       "story": 51,
       "mamasan": 25,
       "hostess": 50,
       "cashier": 13,
-      "patron": 25
+      "patron": 26
     },
     "filler": 213,
-    "unrendered": 1,
+    "unrendered": 2,
     "relook": 0
   },
   "unrendered": [
-    "orathai"
+    "orathai",
+    "howard"
   ],
   "relook": [],
   "characters": [
@@ -171,7 +172,7 @@
       "look": "Thai woman, twenty-four, hair down for once, a stylish casual dress, a cocktail, no number — a customer, not staff.",
       "venueKind": "beer",
       "emoji": "💊",
-      "th": null,
+      "th": "ครีม",
       "room": "metro_garden",
       "tags": [],
       "desc": "At a table, not a stool: twenty-four or so, hair down, a simple dress that is stylish without trying, a cocktail she's making last. No number, no uniform, no hustle — she's scrolling her {{phone}} between glances at the bar like someone waiting for a friend to finish a shift. Her nails are short and very clean, the way a job makes them.",
@@ -2299,6 +2300,23 @@
       "tags": [],
       "desc": "Sixty-one, pressed short-sleeve shirt, glasses polished to optical-lab standard. He occupies the third stool from the left as if allocated it by the state. One Chang, one glass, one coaster, all aligned.",
       "rendered": true
+    },
+    {
+      "id": "howard",
+      "name": "Howard",
+      "source": "NPCS",
+      "role": "patron",
+      "look": "Scottish man of sixty-six, neat grey hair, rimless glasses, pale linen shirt buttoned to the collar, a folded newspaper crossword",
+      "sex": "m",
+      "venueKind": "beer",
+      "emoji": "📰",
+      "th": null,
+      "room": "two_stools",
+      "age": 66,
+      "nat": "Scottish",
+      "tags": [],
+      "desc": "Sixty-six, neat, in a linen shirt buttoned one higher than the heat suggests, with rimless glasses and a newspaper folded to the crossword. A single malt nobody else in the bar drinks sits at his elbow in a glass Ratree keeps for him. He has the stillness of a man who spent thirty years reading other people's money and has decided to read nothing heavier than seven across.",
+      "rendered": false
     },
     {
       "id": "josey",

@@ -1476,7 +1476,7 @@ const _ENC = {
       G.pendingEnc = null; G.encPrompt = null;
       doCommand("sleep"); return;
     }
-    const yes = /yes|ok|sure|book|come|deal|why not|send her|yeah/.test(input) &&
+    const yes = /yes|ok|sure|book|come|deal|why not|send her|yeah|\bpay\b/.test(input) &&   // PAY is a yes to a priced booking (Graham, round 74)
       !/\bno\b|sleep|turn in|pass|not tonight/.test(input);
     if (!yes) {
       _say(_isHotelRoom(G.room)
