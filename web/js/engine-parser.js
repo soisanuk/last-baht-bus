@@ -1064,7 +1064,7 @@ function _arriveAt(to) {
   if (to === "orchid_room" && _faction("plg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
   // sent by Candy, introduced to Rose, or arrived via Doyle's recon — any of the
   // three is a reason the wall has a door in it tonight
-  if (to === "nottys_place" && !_flag("orchidSent") && !_flag("orchidVouched") && !_flag("orchidReported")) {
+  if (to === "nottys_place" && !_nottysOpen()) {
     _say(_pickVary(_ORCHID_CLUB_UNKNOWN, "orchidclubunknown")); return;
   }
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
@@ -4570,7 +4570,7 @@ function _doTalkCore(arg, topic) {
                : (G.affair && G.affair.soured
                  ? `"${n}." ${NPCS[npc].name} looks at the rail instead of you. "Boss. She not happy. You know why. I don't say it for you."`
                  : NPCS[npc].manager
-                 ? `"${n}?" ${NPCS[npc].name} doesn't look up from the glass. "Everybody knows, mate. She's happy. Don't make me the one who has to watch her stop being."`
+                 ? `"${n}?" ${NPCS[npc].name} doesn't look up from the glass. "Everybody knows. She's happy. Don't make me the one who has to watch her stop being."`
                  : [   // one speaker, one line: Bert, Jiap and Mew said the same sentence (Callum, round 71)
                    `"${n}?" ${NPCS[npc].name} glances at the rail, then at you, and grins. "Boss. Everybody know. You think we blind? She happy. Don't make her not."`,
                    `"${n}?" ${NPCS[npc].name} laughs behind her hand. "Boss, we see her phone light up when you text. Whole floor see. Is very cute. Don't tell her I say."`,
@@ -6389,7 +6389,7 @@ function _townTalk(npc, topic) {
     const hits = Object.keys(ROOMS).filter(id => ROOMS[id].bar && !ROOMS[id].invite && id !== G.room && _pnm(ROOMS[id].bar || ROOMS[id].name) === k);
     if (hits.length === 1) {
       if (hits[0] === "nottys_place") {
-        const sent = _flag("orchidSent") || _flag("orchidVouched") || _flag("orchidReported");
+        const sent = _nottysOpen();
         if (npc === "tan") {
           _say(sent
             ? "\"Notty's.\" Tan nods, and something in it says he already heard. \"So somebody sent you. Good. I take people places — that place, somebody else takes you.\""
@@ -7657,7 +7657,7 @@ function _doBuy(arg) {
     const _m = String(arg || "").match(/^(\w+)\s+(?:(?:a|an|some|the|one)\s+)?(?!for\b)(.+)$/i);
     const _who = _m && _findNpc(_m[1]);
     if (_who && NPC_ROLES[_who] && _npcsHere().includes(_who) && !/\b(drinks?|beer|lady|shot|water|cola|coke|soda|juice|bra|rose|flower)\b/i.test(_m[2])) arg = _m[2] + " for " + _m[1];
-    if (/\bfor \w+/.test(arg) && FOOD_STALLS[G.room] && /\b(food|plate|meal|dinner|snack|eat|noodles?|rice|som ?tam)\b|\bfor\b/.test(arg) &&
+    if (/\bfor \w+/.test(arg) && FOOD_STALLS[G.room] && !/\b(toasties?|toast|sandwich|cheese)\b/.test(arg) && /\b(food|plate|meal|dinner|snack|eat|noodles?|rice|som ?tam)\b|\bfor\b/.test(arg) &&
         !/\b(drinks?|beer|lady|water|cola|soda|bra|rose)\b/.test(arg) && typeof _companionEats === "function" &&
         _companionEats(arg, FOOD_STALLS[G.room].name, FOOD_STALLS[G.room].price)) return;
   }
@@ -8734,6 +8734,8 @@ function _doMotosai(arg) {
     const _hr = { sabai: "hotel_room", queenvic: "qv_room", areca: "areca_room", metropole: "metropole_room" }[_named];
     G.motoHomeDoor = Object.keys(ROOMS).find(r => Object.values(ROOMS[r].exits || {}).includes(_hr)) || null;
   } else G.motoHomeDoor = null;
+  // the gentlemen's clubs, by class: "Don't know this one" (Ossie, round 70) — Thappraya, where the Boardroom is
+  if (/\b(gentle?m[ae]n'?s?'? ?clubs?|gents'? ?clubs?|gents)\b/.test(w)) { _say("“Gentleman club?” He grins. “Thappraya. The Boardroom, the Velvet. Okay.”", "dim"); w = "thappraya"; }
   // the longest key that fits: "beach road south" took the "beach road" key (Fintan, round 60)
   const destKey = Object.keys(MOTOSAI_DESTS).filter(k => w.includes(k)).sort((a, b) => b.length - a.length)[0] ||
     Object.keys(MOTOSAI_DESTS).find(k => k.includes(w));
@@ -10914,7 +10916,7 @@ const _MOTO_THREE_UP = [
   "{n} settles between you and the piwin without discussion — that is how three ride here, the girl in the middle with a hand on his shoulder and your arms round her — and the bike takes the weight the way it takes everything, with a slight complaint and no change of speed.",
   "You do the gentleman's thing and put {n} on the back, arms round your waist, and hold the piwin's shoulders yourself; he sighs the sigh of a man who now has a farang's hands on him for the whole ride, and goes.",
   "{n} rides side-saddle behind you, knees together, both hands on your ribs, texting with one of them somehow. Three on a bike is nothing here. It is a great deal to you.",
-  "{n} goes in the middle and immediately starts a conversation with the piwin over his shoulder in Thai — where you're from, how much you paid her, whether he knows her cousin — and the two of them laugh at something that is very probably you.",
+  "{n} goes in the middle and immediately starts a conversation with the piwin over his shoulder in Thai — where you're from, whether you are rich, whether he knows her cousin — and the two of them laugh at something that is very probably you.",
 ];
 // Four on a bike — you, two girls, the piwin — is not the broke fallback, it
 // is a thing that happens (Mario, 2026-09-03: "me and two girls on the same

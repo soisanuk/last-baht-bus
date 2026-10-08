@@ -14658,13 +14658,13 @@
       "lens": "composition",
       "instrument": "",
       "claim": "ASK BERT ABOUT ORCHID gave a generic hello",
-      "verdict": "deferred",
-      "note": "orchid → rose in the synonym map; needs a decision about what Bert knows of the Orchid.",
+      "verdict": "fixed",
+      "note": "Bert has a node on the Orchid Room (PLG's back room; you get asked), appended for save-index stability.",
       "cls": "P",
       "sev": "low",
       "system": "orchid",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "70",
@@ -14973,13 +14973,13 @@
       "lens": "composition",
       "instrument": "",
       "claim": "The piwin and TRAVEL can't find a gentlemen's club",
-      "verdict": "deferred",
-      "note": "The town names them now; the piwin's venue-class lookup is a separate change.",
+      "verdict": "fixed",
+      "note": "MOTOSAI TO a gentlemen's club rides to Thappraya; the town row names the clubs (round 70).",
       "cls": "C",
       "sev": "low",
       "system": "transport",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "70",
@@ -14988,13 +14988,13 @@
       "lens": "composition",
       "instrument": "",
       "claim": "Notty's bell gives an owner 'no standing'",
-      "verdict": "deferred",
-      "note": "Notty's opens on a name from an old bar owner; whether owning a bar is that name is a design call.",
+      "verdict": "fixed",
+      "note": "Mario, 2026-10-08: owning a bar (or having owned one) is the name. _nottysOpen() at all five sites; the grille opens on 'The Stinky'.",
       "cls": "C",
       "sev": "low",
       "system": "orchid",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "70",
@@ -15063,13 +15063,13 @@
       "lens": "composition",
       "instrument": "",
       "claim": "Manow to the boss: 'Free drink is for customer'",
-      "verdict": "deferred",
-      "note": "Her own free node at her own bar; minor.",
+      "verdict": "fixed",
+      "note": "_affairTalk answers free: she pours his herself.",
       "cls": "L",
       "sev": "low",
       "system": "affair",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "71",
@@ -15258,13 +15258,13 @@
       "lens": "affair-night-out",
       "instrument": "",
       "claim": "Toastie 'kebab', piwin 'how much you paid her', Joy pitching upstairs with Manow beside him",
-      "verdict": "deferred",
-      "note": "Companion edges in three pools; the next companion pass.",
+      "verdict": "fixed",
+      "note": "The toastie for her is a toastie (the stall path yields); the piwin's three-on-a-bike line is money-blind. Joy's authored upstairs pitch with a companion present is left for a companion pass.",
       "cls": "I",
       "sev": "low",
       "system": "party",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "71",
@@ -15333,8 +15333,8 @@
       "lens": "affair-night-out",
       "instrument": "",
       "claim": "Sending her home at 22:36 still bills the whole −฿600",
-      "verdict": "deferred",
-      "note": "Proportional outings: a design refinement.",
+      "verdict": "refuted",
+      "note": "Sent home, she goes home (leftEarly), not back to the floor: the floor is one short for the whole night, so the whole cost is right.",
       "cls": "E",
       "sev": "low",
       "system": "affair",
@@ -15423,13 +15423,13 @@
       "lens": "affair-night-out",
       "instrument": "",
       "claim": "The peddler on most nights at his own rail; the turning punter three times in five shifts",
-      "verdict": "deferred",
-      "note": "Frequency tuning.",
+      "verdict": "fixed",
+      "note": "No shift call repeats inside three nights (G.bar.callDay). The peddler's once-a-night at your own rail is by design.",
       "cls": "Q",
       "sev": "low",
       "system": "bar",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "71",
@@ -15528,13 +15528,13 @@
       "lens": "one-bar-week",
       "instrument": "",
       "claim": "The return trip is nobody's moment; 'ask nid about last time' misses",
-      "verdict": "deferred",
-      "note": "Return beats for FLOOR_OWN women: the next floor pass.",
+      "verdict": "fixed",
+      "note": "Every written woman (14 across three floors) has a return greeting once a trip for a man she knew last trip, and answers last time.",
       "cls": "B",
       "sev": "med",
       "system": "filler",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "71",
@@ -15618,13 +15618,13 @@
       "lens": "one-bar-week",
       "instrument": "",
       "claim": "Nid's 'silk rose' answer is generic Tinglish",
-      "verdict": "deferred",
-      "note": "Each written woman's own 'this bar' node: the next floor pass.",
+      "verdict": "fixed",
+      "note": "Every written woman has her own line on her bar.",
       "cls": "M",
       "sev": "low",
       "system": "filler",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round71.test.js"
     },
     {
       "round": "71",

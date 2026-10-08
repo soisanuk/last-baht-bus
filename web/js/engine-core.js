@@ -335,6 +335,7 @@ function newGame() {
     flags: {},
     offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
+    returnHello: {},     // npc id → the vacation a written woman last gave her return greeting (Aurelio, round 71)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
     sentTotal: 0,        // baht SENT to contacts over the game — the hospital queue's "money you'll never see" needs a debt to point at
     codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
@@ -1821,6 +1822,13 @@ function _patronSeen(id) { return ((G.talked && G.talked[id]) || []).length > 0;
 // She is on your arm tonight (a companion): not behind any rail, not serving anyone. The affair's
 // at-the-bar lines and the usual's "she has it on the mat" were firing in other bars and on the
 // beach with the owner's girl beside him (Callum, round 71).
+// NOTTY'S OPENS ON A NAME: sent by somebody who has run bars here a long time (Candy, Rose, Doyle's
+// recon) — or the man who runs one himself (Mario, 2026-10-08: owning a bar is the name; Ossie,
+// round 70, the Stinky's owner, was told he had "no standing to ring"). A sold bar still counts.
+function _nottysOpen() {
+  return _flag("orchidSent") || _flag("orchidVouched") || _flag("orchidReported") ||
+    (typeof _barOwned === "function" && _barOwned()) || _flag("barSold");
+}
 function _outWithMe(id) { return !!(G.party && G.party.ids && G.party.ids.includes(id)); }
 function _bankIn(n) { n = Math.max(0, Math.round(n || 0)); G.bank = (G.bank || 0) + n; G.bankIn = (G.bankIn || 0) + n; }
 function _pr(id) {
@@ -2831,7 +2839,7 @@ function _describeRoom(full, forceFull) {
   // it's right here). "Exits" is roads only now; the venues list is the doors.
   let venues = _venuesHere(r);
   // Notty's is somewhere you get SENT, not somewhere you find — keep it off the door list until you have been
-  if (!_flag("orchidSent") && !_flag("orchidVouched") && !_flag("orchidReported"))
+  if (!_nottysOpen())
     venues = venues.filter(id => id !== "nottys_place"); // you get SENT to Notty's — see Candy's `rose` node
   // …but not in your own hotel room, whose single DOWN/OUT is the venue the
   // exit-scan fallback would otherwise re-list as "Step inside: <the bar below>".

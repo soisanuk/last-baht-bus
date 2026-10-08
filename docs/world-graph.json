@@ -2,73 +2,73 @@
  "constants": [
   {
    "file": "world.js",
-   "line": 14608,
+   "line": 14613,
    "name": "AFFAIR_BOND_GATE",
    "value": 3
   },
   {
    "file": "world.js",
-   "line": 14610,
+   "line": 14615,
    "name": "AFFAIR_BREAK",
    "value": 12
   },
   {
    "file": "world.js",
-   "line": 14613,
+   "line": 14618,
    "name": "AFFAIR_DRAG",
    "value": 0.92
   },
   {
    "file": "world.js",
-   "line": 14614,
+   "line": 14619,
    "name": "AFFAIR_DRAG_SOUR",
    "value": 0.85
   },
   {
    "file": "world.js",
-   "line": 14619,
+   "line": 14624,
    "name": "AFFAIR_FAMILY_ASK",
    "value": 15000
   },
   {
    "file": "world.js",
-   "line": 14615,
+   "line": 14620,
    "name": "AFFAIR_GOOD_DAYS",
    "value": 60
   },
   {
    "file": "world.js",
-   "line": 14616,
+   "line": 14621,
    "name": "AFFAIR_GOOD_STRAIN",
    "value": 4
   },
   {
    "file": "world.js",
-   "line": 14609,
+   "line": 14614,
    "name": "AFFAIR_HONEYMOON",
    "value": 14
   },
   {
    "file": "world.js",
-   "line": 14617,
+   "line": 14622,
    "name": "AFFAIR_SALE",
    "value": 150000
   },
   {
    "file": "world.js",
-   "line": 14618,
+   "line": 14623,
    "name": "AFFAIR_SCAR_DAYS",
    "value": 10
   },
   {
    "file": "world.js",
-   "line": 14611,
+   "line": 14616,
    "name": "AFFAIR_STRAIN_AWAY",
    "value": 2
   },
   {
    "file": "world.js",
-   "line": 14612,
+   "line": 14617,
    "name": "AFFAIR_STRAIN_WORK",
    "value": 1
   },
@@ -188,7 +188,7 @@
   },
   {
    "file": "world.js",
-   "line": 14589,
+   "line": 14594,
    "name": "BAR_QUOTA",
    "value": 30
   },
@@ -236,7 +236,7 @@
   },
   {
    "file": "world.js",
-   "line": 14590,
+   "line": 14595,
    "name": "BAR_SALARY",
    "value": 9000
   },
@@ -284,13 +284,13 @@
   },
   {
    "file": "engine-core.js",
-   "line": 574,
+   "line": 575,
    "name": "BATON_DAWN_TURNS",
    "value": 2
   },
   {
    "file": "engine-core.js",
-   "line": 543,
+   "line": 544,
    "name": "BATON_VERSION",
    "value": 1
   },
@@ -320,13 +320,13 @@
   },
   {
    "file": "engine-play.js",
-   "line": 4087,
+   "line": 4092,
    "name": "BOND_NIGHT_CAP",
    "value": 6
   },
   {
    "file": "world.js",
-   "line": 13525,
+   "line": 13530,
    "name": "BOOK_PRICE",
    "value": 2500
   },
@@ -356,19 +356,19 @@
   },
   {
    "file": "world.js",
-   "line": 14671,
+   "line": 14676,
    "name": "CARE_DAYS",
    "value": 3
   },
   {
    "file": "world.js",
-   "line": 14670,
+   "line": 14675,
    "name": "CARE_WAIVED",
    "value": 2
   },
   {
    "file": "engine-systems.js",
-   "line": 12018,
+   "line": 12020,
    "name": "CCIB_LOW_DAYS",
    "value": 21
   },
@@ -386,7 +386,7 @@
   },
   {
    "file": "world.js",
-   "line": 13526,
+   "line": 13531,
    "name": "CLUB_TAXI",
    "value": 2000
   },
@@ -398,13 +398,13 @@
   },
   {
    "file": "engine-play.js",
-   "line": 4326,
+   "line": 4331,
    "name": "CONDOM_PACK",
    "value": 3
   },
   {
    "file": "engine-play.js",
-   "line": 4325,
+   "line": 4330,
    "name": "CONDOM_PRICE",
    "value": 40
   },
@@ -458,19 +458,19 @@
   },
   {
    "file": "world.js",
-   "line": 13524,
+   "line": 13529,
    "name": "FORTUNE_MERIT",
    "value": 500
   },
   {
    "file": "world.js",
-   "line": 13522,
+   "line": 13527,
    "name": "FORTUNE_READ",
    "value": 199
   },
   {
    "file": "world.js",
-   "line": 13523,
+   "line": 13528,
    "name": "FORTUNE_RITUAL",
    "value": 1900
   },
@@ -482,43 +482,43 @@
   },
   {
    "file": "world.js",
-   "line": 14669,
+   "line": 14674,
    "name": "GIFT_BIG",
    "value": 1000
   },
   {
    "file": "world.js",
-   "line": 13527,
+   "line": 13532,
    "name": "GIFT_DEBT",
    "value": 500
   },
   {
    "file": "world.js",
-   "line": 13528,
+   "line": 13533,
    "name": "GIFT_TIP",
    "value": 100
   },
   {
    "file": "world.js",
-   "line": 14591,
+   "line": 14596,
    "name": "HOME_SEND",
    "value": 7000
   },
   {
    "file": "engine-core.js",
-   "line": 923,
+   "line": 924,
    "name": "HOP_CHANCE",
    "value": 10
   },
   {
    "file": "engine-core.js",
-   "line": 924,
+   "line": 925,
    "name": "HOP_SETTLE",
    "value": 4
   },
   {
    "file": "engine-core.js",
-   "line": 3154,
+   "line": 3162,
    "name": "HURT_CAP",
    "value": 3
   },
@@ -536,7 +536,7 @@
   },
   {
    "file": "world.js",
-   "line": 14588,
+   "line": 14593,
    "name": "LADY_CUT",
    "value": 60
   },
@@ -596,7 +596,7 @@
   },
   {
    "file": "world.js",
-   "line": 14663,
+   "line": 14668,
    "name": "MERIT_COST",
    "value": 2500
   },
@@ -638,7 +638,7 @@
   },
   {
    "file": "engine-play.js",
-   "line": 4186,
+   "line": 4191,
    "name": "NIGHT_TURNS",
    "value": 120
   },
@@ -704,7 +704,7 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 8030,
+   "line": 8032,
    "name": "OWN_BAR_FOOD",
    "value": 60
   },
@@ -746,19 +746,19 @@
   },
   {
    "file": "world.js",
-   "line": 13532,
+   "line": 13537,
    "name": "POLICE_ARGUE",
    "value": 1000
   },
   {
    "file": "world.js",
-   "line": 13531,
+   "line": 13536,
    "name": "POLICE_PAY",
    "value": 500
   },
   {
    "file": "world.js",
-   "line": 13530,
+   "line": 13535,
    "name": "POLICE_WAI",
    "value": 300
   },
@@ -836,7 +836,7 @@
   },
   {
    "file": "world.js",
-   "line": 14592,
+   "line": 14597,
    "name": "ROOM_RENT",
    "value": 4000
   },
@@ -938,7 +938,7 @@
   },
   {
    "file": "engine-play.js",
-   "line": 4324,
+   "line": 4329,
    "name": "STD_RISK",
    "value": 0.1
   },
@@ -986,31 +986,31 @@
   },
   {
    "file": "world.js",
-   "line": 13529,
+   "line": 13534,
    "name": "TOASTIE_PRICE",
    "value": 35
   },
   {
    "file": "world.js",
-   "line": 13520,
+   "line": 13525,
    "name": "TONIC_FLEECE",
    "value": 6000
   },
   {
    "file": "world.js",
-   "line": 13533,
+   "line": 13538,
    "name": "TONIC_POLICE_CUT",
    "value": 0.35
   },
   {
    "file": "world.js",
-   "line": 13519,
+   "line": 13524,
    "name": "TONIC_PRICE",
    "value": 99
   },
   {
    "file": "world.js",
-   "line": 13521,
+   "line": 13526,
    "name": "TONIC_SHAKEDOWN",
    "value": 3000
   },
@@ -1095,8 +1095,8 @@
  ],
  "counts": {
   "constants": 182,
-  "dialogue": 3548,
-  "edges": 3226,
+  "dialogue": 3605,
+  "edges": 3218,
   "encounters": 23,
   "flags": 172,
   "items": 43,
@@ -1255,9 +1255,9 @@
    ]
   },
   {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
    "index": 0,
    "key": "aim#0",
    "npc": "aim"
@@ -1268,6 +1268,14 @@
    "hasWhen": false,
    "index": 1,
    "key": "aim#1",
+   "npc": "aim"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "aim#2",
    "npc": "aim",
    "topic": "book|law|textbook|studying|study|exam|exams|ramkhamhaeng|university",
    "topics": [
@@ -1286,8 +1294,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "aim#2",
+   "index": 3,
+   "key": "aim#3",
    "npc": "aim",
    "topic": "family|aunt|auntie|mother",
    "topics": [
@@ -1301,8 +1309,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "aim#3",
+   "index": 4,
+   "key": "aim#4",
    "npc": "aim",
    "topic": "home|hometown|village|where you from|maha sarakham",
    "topics": [
@@ -1317,8 +1325,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "aim#4",
+   "index": 5,
+   "key": "aim#5",
    "npc": "aim",
    "topic": "plan|future|dream|lawyer",
    "topics": [
@@ -1332,8 +1340,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "aim#5",
+   "index": 6,
+   "key": "aim#6",
    "npc": "aim",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -1347,8 +1355,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "aim#6",
+   "index": 7,
+   "key": "aim#7",
    "npc": "aim",
    "topic": "spend|spent|what i spent|how much i spent|my spend|my chits",
    "topics": [
@@ -1364,8 +1372,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "aim#7",
+   "index": 8,
+   "key": "aim#8",
    "notFlags": [
     "hasWallet"
    ],
@@ -1379,8 +1387,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "aim#8",
+   "index": 9,
+   "key": "aim#9",
    "npc": "aim",
    "topic": "somjai|mama|mamasan|auntie somjai",
    "topics": [
@@ -1394,8 +1402,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "aim#9",
+   "index": 10,
+   "key": "aim#10",
    "npc": "aim",
    "topic": "duan",
    "topics": [
@@ -1406,12 +1414,61 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "aim#10",
+   "index": 11,
+   "key": "aim#11",
    "npc": "aim",
    "topic": "saifon",
    "topics": [
     "saifon"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 12,
+   "key": "aim#12",
+   "npc": "aim",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 13,
+   "key": "aim#13",
+   "npc": "aim",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 14,
+   "key": "aim#14",
+   "npc": "aim",
+   "topic": "bar|this bar|the bar|here|this place|firefly|the firefly|firefly bar",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "firefly",
+    "the firefly",
+    "firefly bar"
    ]
   },
   {
@@ -4615,6 +4672,21 @@
     "the till job",
     "suppliers",
     "supplier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 69,
+   "key": "bert#69",
+   "npc": "bert",
+   "topic": "orchid|the orchid|orchid room|the orchid room",
+   "topics": [
+    "orchid",
+    "the orchid",
+    "orchid room",
+    "the orchid room"
    ]
   },
   {
@@ -10054,12 +10126,20 @@
    ]
   },
   {
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 0,
+   "key": "duan#0",
+   "npc": "duan"
+  },
+  {
    "bond": 2,
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 0,
-   "key": "duan#0",
+   "index": 1,
+   "key": "duan#1",
    "npc": "duan"
   },
   {
@@ -10067,16 +10147,16 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 1,
-   "key": "duan#1",
+   "index": 2,
+   "key": "duan#2",
    "npc": "duan"
   },
   {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "duan#2",
+   "index": 3,
+   "key": "duan#3",
    "npc": "duan",
    "topic": "family|sister|kids|children",
    "topics": [
@@ -10090,8 +10170,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "duan#3",
+   "index": 4,
+   "key": "duan#4",
    "npc": "duan",
    "topic": "home|hometown|village|where you from|nong khai|fireballs|naga",
    "topics": [
@@ -10108,8 +10188,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "duan#4",
+   "index": 5,
+   "key": "duan#5",
    "npc": "duan",
    "topic": "plan|future|dream",
    "topics": [
@@ -10122,8 +10202,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "duan#5",
+   "index": 6,
+   "key": "duan#6",
    "npc": "duan",
    "topic": "dance|dancing|dancer|town|walking street|knees",
    "topics": [
@@ -10139,8 +10219,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "duan#6",
+   "index": 7,
+   "key": "duan#7",
    "npc": "duan",
    "topic": "scrunchie|phones|boyfriend",
    "topics": [
@@ -10153,8 +10233,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "duan#7",
+   "index": 8,
+   "key": "duan#8",
    "npc": "duan",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -10168,8 +10248,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "duan#8",
+   "index": 9,
+   "key": "duan#9",
    "notFlags": [
     "hasWallet"
    ],
@@ -10183,8 +10263,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "duan#9",
+   "index": 10,
+   "key": "duan#10",
    "npc": "duan",
    "topic": "price",
    "topics": [
@@ -10195,8 +10275,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "duan#10",
+   "index": 11,
+   "key": "duan#11",
    "npc": "duan",
    "topic": "late",
    "topics": [
@@ -10208,8 +10288,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "duan#11",
+   "index": 12,
+   "key": "duan#12",
    "npc": "duan",
    "topic": "salary",
    "topics": [
@@ -10221,8 +10301,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "duan#12",
+   "index": 13,
+   "key": "duan#13",
    "npc": "duan",
    "topic": "quota",
    "topics": [
@@ -10233,8 +10313,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "duan#13",
+   "index": 14,
+   "key": "duan#14",
    "npc": "duan",
    "topic": "somjai|mama|mamasan",
    "topics": [
@@ -10247,8 +10327,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "duan#14",
+   "index": 15,
+   "key": "duan#15",
    "npc": "duan",
    "topic": "saifon",
    "topics": [
@@ -10259,8 +10339,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "duan#15",
+   "index": 16,
+   "key": "duan#16",
    "npc": "duan",
    "topic": "aim|cashier",
    "topics": [
@@ -10272,12 +10352,61 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "duan#16",
+   "index": 17,
+   "key": "duan#17",
    "npc": "duan",
    "topic": "daeng",
    "topics": [
     "daeng"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 18,
+   "key": "duan#18",
+   "npc": "duan",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 19,
+   "key": "duan#19",
+   "npc": "duan",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 20,
+   "key": "duan#20",
+   "npc": "duan",
+   "topic": "bar|this bar|the bar|here|this place|firefly|the firefly|firefly bar",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "firefly",
+    "the firefly",
+    "firefly bar"
    ]
   },
   {
@@ -14032,9 +14161,9 @@
    ]
   },
   {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
    "index": 0,
    "key": "grace#0",
    "npc": "grace"
@@ -14045,6 +14174,14 @@
    "hasWhen": false,
    "index": 1,
    "key": "grace#1",
+   "npc": "grace"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "grace#2",
    "npc": "grace",
    "topic": "name|your name|grace",
    "topics": [
@@ -14057,8 +14194,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "grace#2",
+   "index": 3,
+   "key": "grace#3",
    "npc": "grace",
    "topic": "headset|homestay|side business|bookings",
    "topics": [
@@ -14072,8 +14209,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "grace#3",
+   "index": 4,
+   "key": "grace#4",
    "npc": "grace",
    "topic": "sudoku|puzzle",
    "topics": [
@@ -14085,8 +14222,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "grace#4",
+   "index": 5,
+   "key": "grace#5",
    "npc": "grace",
    "topic": "family",
    "topics": [
@@ -14097,8 +14234,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "grace#5",
+   "index": 6,
+   "key": "grace#6",
    "npc": "grace",
    "topic": "home|hometown|village|where you from|loei|mountains|fog",
    "topics": [
@@ -14115,8 +14252,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "grace#6",
+   "index": 7,
+   "key": "grace#7",
    "npc": "grace",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -14130,8 +14267,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "grace#7",
+   "index": 8,
+   "key": "grace#8",
    "npc": "grace",
    "topic": "spend|spent|what i spent|how much i spent|my spend|my chits",
    "topics": [
@@ -14147,8 +14284,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "grace#8",
+   "index": 9,
+   "key": "grace#9",
    "notFlags": [
     "hasWallet"
    ],
@@ -14162,8 +14299,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "grace#9",
+   "index": 10,
+   "key": "grace#10",
    "npc": "grace",
    "topic": "ton",
    "topics": [
@@ -14174,8 +14311,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "grace#10",
+   "index": 11,
+   "key": "grace#11",
    "npc": "grace",
    "topic": "nid",
    "topics": [
@@ -14186,8 +14323,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "grace#11",
+   "index": 12,
+   "key": "grace#12",
    "npc": "grace",
    "topic": "wa",
    "topics": [
@@ -14198,8 +14335,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "grace#12",
+   "index": 13,
+   "key": "grace#13",
    "npc": "grace",
    "topic": "waew|mama|mamasan",
    "topics": [
@@ -14212,8 +14349,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "grace#13",
+   "index": 14,
+   "key": "grace#14",
    "npc": "grace",
    "topic": "helmut",
    "topics": [
@@ -14224,8 +14361,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "grace#14",
+   "index": 15,
+   "key": "grace#15",
    "npc": "grace",
    "topic": "quota|quotas",
    "topics": [
@@ -14237,8 +14374,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "grace#15",
+   "index": 16,
+   "key": "grace#16",
    "npc": "grace",
    "topic": "owner|the owner|rent|landlord",
    "topics": [
@@ -14252,8 +14389,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "grace#16",
+   "index": 17,
+   "key": "grace#17",
    "npc": "grace",
    "topic": "dogs|dog|the dogs",
    "topics": [
@@ -14266,14 +14403,62 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 17,
-   "key": "grace#17",
+   "index": 18,
+   "key": "grace#18",
    "npc": "grace",
    "topic": "ceremony|the bill|helmut's bill",
    "topics": [
     "ceremony",
     "the bill",
     "helmut's bill"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 19,
+   "key": "grace#19",
+   "npc": "grace",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 20,
+   "key": "grace#20",
+   "npc": "grace",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 21,
+   "key": "grace#21",
+   "npc": "grace",
+   "topic": "bar|this bar|the bar|here|this place|silk rose|the silk rose",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "silk rose",
+    "the silk rose"
    ]
   },
   {
@@ -25434,12 +25619,20 @@
    ]
   },
   {
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 0,
+   "key": "naree#0",
+   "npc": "naree"
+  },
+  {
    "bond": 2,
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 0,
-   "key": "naree#0",
+   "index": 1,
+   "key": "naree#1",
    "npc": "naree"
   },
   {
@@ -25447,16 +25640,16 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 1,
-   "key": "naree#1",
+   "index": 2,
+   "key": "naree#2",
    "npc": "naree"
   },
   {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "naree#2",
+   "index": 3,
+   "key": "naree#3",
    "npc": "naree",
    "topic": "family",
    "topics": [
@@ -25467,8 +25660,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "naree#3",
+   "index": 4,
+   "key": "naree#4",
    "npc": "naree",
    "topic": "home",
    "topics": [
@@ -25477,22 +25670,6 @@
   },
   {
    "bond": 1,
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
-   "index": 4,
-   "key": "naree#4",
-   "npc": "naree",
-   "topic": "plan|dream|future|salon|nail salon",
-   "topics": [
-    "plan",
-    "dream",
-    "future",
-    "salon",
-    "nail salon"
-   ]
-  },
-  {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
@@ -25515,6 +25692,22 @@
    "index": 6,
    "key": "naree#6",
    "npc": "naree",
+   "topic": "plan|dream|future|salon|nail salon",
+   "topics": [
+    "plan",
+    "dream",
+    "future",
+    "salon",
+    "nail salon"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 7,
+   "key": "naree#7",
+   "npc": "naree",
    "topic": "nails|nail|colour|color|bangkok sunset",
    "topics": [
     "nails",
@@ -25529,22 +25722,6 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": true,
-   "index": 7,
-   "key": "naree#7",
-   "npc": "naree",
-   "topic": "pong|sister|twin|twins|your sister",
-   "topics": [
-    "pong",
-    "sister",
-    "twin",
-    "twins",
-    "your sister"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
    "index": 8,
    "key": "naree#8",
    "npc": "naree",
@@ -25564,6 +25741,22 @@
    "index": 9,
    "key": "naree#9",
    "npc": "naree",
+   "topic": "pong|sister|twin|twins|your sister",
+   "topics": [
+    "pong",
+    "sister",
+    "twin",
+    "twins",
+    "your sister"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 10,
+   "key": "naree#10",
+   "npc": "naree",
    "topic": "buddha|amulet|necklace|gold buddha|monk|the monk|blessing",
    "topics": [
     "buddha",
@@ -25579,8 +25772,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "naree#10",
+   "index": 11,
+   "key": "naree#11",
    "npc": "naree",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -25594,8 +25787,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "naree#11",
+   "index": 12,
+   "key": "naree#12",
    "notFlags": [
     "hasWallet"
    ],
@@ -25609,8 +25802,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "naree#12",
+   "index": 13,
+   "key": "naree#13",
    "npc": "naree",
    "topic": "price",
    "topics": [
@@ -25621,8 +25814,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "naree#13",
+   "index": 14,
+   "key": "naree#14",
    "npc": "naree",
    "topic": "late",
    "topics": [
@@ -25634,8 +25827,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "naree#14",
+   "index": 15,
+   "key": "naree#15",
    "npc": "naree",
    "topic": "salary",
    "topics": [
@@ -25647,8 +25840,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "naree#15",
+   "index": 16,
+   "key": "naree#16",
    "npc": "naree",
    "topic": "quota",
    "topics": [
@@ -25659,8 +25852,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "naree#16",
+   "index": 17,
+   "key": "naree#17",
    "npc": "naree",
    "topic": "ping pong|ping-pong|pingpong|ping pong show|your name|your names",
    "topics": [
@@ -25676,8 +25869,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 17,
-   "key": "naree#17",
+   "index": 18,
+   "key": "naree#18",
    "npc": "naree",
    "topic": "bet|the bet|fifty baht",
    "topics": [
@@ -25690,8 +25883,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 18,
-   "key": "naree#18",
+   "index": 19,
+   "key": "naree#19",
    "npc": "naree",
    "topic": "danny",
    "topics": [
@@ -25702,8 +25895,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 19,
-   "key": "naree#19",
+   "index": 20,
+   "key": "naree#20",
    "npc": "naree",
    "topic": "wanida|mama|mamasan",
    "topics": [
@@ -25716,8 +25909,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 20,
-   "key": "naree#20",
+   "index": 21,
+   "key": "naree#21",
    "npc": "naree",
    "topic": "nubnab|cashier",
    "topics": [
@@ -25729,8 +25922,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 21,
-   "key": "naree#21",
+   "index": 22,
+   "key": "naree#22",
    "npc": "naree",
    "topic": "sasi",
    "topics": [
@@ -25741,8 +25934,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 22,
-   "key": "naree#22",
+   "index": 23,
+   "key": "naree#23",
    "npc": "naree",
    "topic": "show|stage|tiers|the show|top tier",
    "topics": [
@@ -25751,6 +25944,54 @@
     "tiers",
     "the show",
     "top tier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 24,
+   "key": "naree#24",
+   "npc": "naree",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 25,
+   "key": "naree#25",
+   "npc": "naree",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 26,
+   "key": "naree#26",
+   "npc": "naree",
+   "topic": "bar|this bar|the bar|here|this place|the gilt cage|gilt cage",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "the gilt cage",
+    "gilt cage"
    ]
   },
   {
@@ -26770,12 +27011,20 @@
    ]
   },
   {
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 0,
+   "key": "nid#0",
+   "npc": "nid"
+  },
+  {
    "bond": 2,
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 0,
-   "key": "nid#0",
+   "index": 1,
+   "key": "nid#1",
    "npc": "nid"
   },
   {
@@ -26783,16 +27032,16 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 1,
-   "key": "nid#1",
+   "index": 2,
+   "key": "nid#2",
    "npc": "nid"
   },
   {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "nid#2",
+   "index": 3,
+   "key": "nid#3",
    "npc": "nid",
    "topic": "family|daughter|husband",
    "topics": [
@@ -26805,8 +27054,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "nid#3",
+   "index": 4,
+   "key": "nid#4",
    "npc": "nid",
    "topic": "home|hometown|surin|village|where you from|elephant|elephants",
    "topics": [
@@ -26823,8 +27072,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "nid#4",
+   "index": 5,
+   "key": "nid#5",
    "npc": "nid",
    "topic": "plan|future|dream",
    "topics": [
@@ -26837,8 +27086,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "nid#5",
+   "index": 6,
+   "key": "nid#6",
    "npc": "nid",
    "topic": "pension|gold|chain|savings|saving",
    "topics": [
@@ -26853,8 +27102,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "nid#6",
+   "index": 7,
+   "key": "nid#7",
    "npc": "nid",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -26868,8 +27117,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "nid#7",
+   "index": 8,
+   "key": "nid#8",
    "notFlags": [
     "hasWallet"
    ],
@@ -26883,8 +27132,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "nid#8",
+   "index": 9,
+   "key": "nid#9",
    "npc": "nid",
    "topic": "price",
    "topics": [
@@ -26895,8 +27144,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "nid#9",
+   "index": 10,
+   "key": "nid#10",
    "npc": "nid",
    "topic": "late",
    "topics": [
@@ -26908,8 +27157,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "nid#10",
+   "index": 11,
+   "key": "nid#11",
    "npc": "nid",
    "topic": "salary",
    "topics": [
@@ -26921,8 +27170,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "nid#11",
+   "index": 12,
+   "key": "nid#12",
    "npc": "nid",
    "topic": "quota",
    "topics": [
@@ -26933,8 +27182,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "nid#12",
+   "index": 13,
+   "key": "nid#13",
    "npc": "nid",
    "topic": "ton",
    "topics": [
@@ -26945,8 +27194,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "nid#13",
+   "index": 14,
+   "key": "nid#14",
    "npc": "nid",
    "topic": "wa",
    "topics": [
@@ -26957,8 +27206,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "nid#14",
+   "index": 15,
+   "key": "nid#15",
    "npc": "nid",
    "topic": "waew|mama|mamasan",
    "topics": [
@@ -26971,8 +27220,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "nid#15",
+   "index": 16,
+   "key": "nid#16",
    "npc": "nid",
    "topic": "grace|cashier",
    "topics": [
@@ -26984,8 +27233,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "nid#16",
+   "index": 17,
+   "key": "nid#17",
    "npc": "nid",
    "topic": "helmut",
    "topics": [
@@ -26996,8 +27245,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 17,
-   "key": "nid#17",
+   "index": 18,
+   "key": "nid#18",
    "npc": "nid",
    "topic": "cat|your cat",
    "topics": [
@@ -27009,8 +27258,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 18,
-   "key": "nid#18",
+   "index": 19,
+   "key": "nid#19",
    "npc": "nid",
    "topic": "drama|thai drama|soap|lakorn|the drama",
    "topics": [
@@ -27025,8 +27274,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 19,
-   "key": "nid#19",
+   "index": 20,
+   "key": "nid#20",
    "npc": "nid",
    "topic": "ice|the ice|ice man",
    "topics": [
@@ -27039,8 +27288,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 20,
-   "key": "nid#20",
+   "index": 21,
+   "key": "nid#21",
    "npc": "nid",
    "topic": "her papa|daughter's papa|ex-husband|ex husband|the papa",
    "topics": [
@@ -27049,6 +27298,54 @@
     "ex-husband",
     "ex husband",
     "the papa"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 22,
+   "key": "nid#22",
+   "npc": "nid",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 23,
+   "key": "nid#23",
+   "npc": "nid",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 24,
+   "key": "nid#24",
+   "npc": "nid",
+   "topic": "bar|this bar|the bar|here|this place|silk rose|the silk rose",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "silk rose",
+    "the silk rose"
    ]
   },
   {
@@ -29033,9 +29330,9 @@
    ]
   },
   {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
    "index": 0,
    "key": "nubnab#0",
    "npc": "nubnab"
@@ -29046,6 +29343,14 @@
    "hasWhen": false,
    "index": 1,
    "key": "nubnab#1",
+   "npc": "nubnab"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "nubnab#2",
    "npc": "nubnab",
    "topic": "twins|ping|pong|handwriting",
    "topics": [
@@ -29059,8 +29364,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "nubnab#2",
+   "index": 3,
+   "key": "nubnab#3",
    "npc": "nubnab",
    "topic": "family",
    "topics": [
@@ -29071,8 +29376,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "nubnab#3",
+   "index": 4,
+   "key": "nubnab#4",
    "npc": "nubnab",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -29086,8 +29391,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "nubnab#4",
+   "index": 5,
+   "key": "nubnab#5",
    "npc": "nubnab",
    "topic": "calculator|sticker",
    "topics": [
@@ -29099,8 +29404,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "nubnab#5",
+   "index": 6,
+   "key": "nubnab#6",
    "npc": "nubnab",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -29114,8 +29419,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "nubnab#6",
+   "index": 7,
+   "key": "nubnab#7",
    "notFlags": [
     "hasWallet"
    ],
@@ -29129,8 +29434,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "nubnab#7",
+   "index": 8,
+   "key": "nubnab#8",
    "npc": "nubnab",
    "topic": "owner|the owner|boss",
    "topics": [
@@ -29143,8 +29448,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "nubnab#8",
+   "index": 9,
+   "key": "nubnab#9",
    "npc": "nubnab",
    "topic": "quota|quotas|the quota",
    "topics": [
@@ -29157,8 +29462,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "nubnab#9",
+   "index": 10,
+   "key": "nubnab#10",
    "npc": "nubnab",
    "topic": "spend|spent|what i spent|how much i spent|my spend|my chits",
    "topics": [
@@ -29174,8 +29479,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "nubnab#10",
+   "index": 11,
+   "key": "nubnab#11",
    "npc": "nubnab",
    "topic": "sasi",
    "topics": [
@@ -29186,8 +29491,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "nubnab#11",
+   "index": 12,
+   "key": "nubnab#12",
    "npc": "nubnab",
    "topic": "wanida|mama|mamasan",
    "topics": [
@@ -29200,12 +29505,60 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "nubnab#12",
+   "index": 13,
+   "key": "nubnab#13",
    "npc": "nubnab",
    "topic": "danny",
    "topics": [
     "danny"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 14,
+   "key": "nubnab#14",
+   "npc": "nubnab",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 15,
+   "key": "nubnab#15",
+   "npc": "nubnab",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 16,
+   "key": "nubnab#16",
+   "npc": "nubnab",
+   "topic": "bar|this bar|the bar|here|this place|the gilt cage|gilt cage",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "the gilt cage",
+    "gilt cage"
    ]
   },
   {
@@ -35984,12 +36337,20 @@
    ]
   },
   {
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 0,
+   "key": "saifon#0",
+   "npc": "saifon"
+  },
+  {
    "bond": 2,
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 0,
-   "key": "saifon#0",
+   "index": 1,
+   "key": "saifon#1",
    "npc": "saifon"
   },
   {
@@ -35997,16 +36358,16 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 1,
-   "key": "saifon#1",
+   "index": 2,
+   "key": "saifon#2",
    "npc": "saifon"
   },
   {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "saifon#2",
+   "index": 3,
+   "key": "saifon#3",
    "npc": "saifon",
    "topic": "family|son|husband",
    "topics": [
@@ -36019,8 +36380,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "saifon#3",
+   "index": 4,
+   "key": "saifon#4",
    "npc": "saifon",
    "topic": "home|hometown|village|where you from|yasothon",
    "topics": [
@@ -36035,8 +36396,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "saifon#4",
+   "index": 5,
+   "key": "saifon#5",
    "npc": "saifon",
    "topic": "chilli|chillies|chili|lemongrass|garden|market|morning|farm",
    "topics": [
@@ -36054,8 +36415,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "saifon#5",
+   "index": 6,
+   "key": "saifon#6",
    "npc": "saifon",
    "topic": "blouse|red blouse|silk|the blouse",
    "topics": [
@@ -36069,8 +36430,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "saifon#6",
+   "index": 7,
+   "key": "saifon#7",
    "npc": "saifon",
    "topic": "plan|future|dream",
    "topics": [
@@ -36083,8 +36444,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "saifon#7",
+   "index": 8,
+   "key": "saifon#8",
    "npc": "saifon",
    "topic": "translate|phone|google translate",
    "topics": [
@@ -36097,8 +36458,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "saifon#8",
+   "index": 9,
+   "key": "saifon#9",
    "npc": "saifon",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -36112,8 +36473,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "saifon#9",
+   "index": 10,
+   "key": "saifon#10",
    "notFlags": [
     "hasWallet"
    ],
@@ -36127,8 +36488,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "saifon#10",
+   "index": 11,
+   "key": "saifon#11",
    "npc": "saifon",
    "topic": "price",
    "topics": [
@@ -36139,8 +36500,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "saifon#11",
+   "index": 12,
+   "key": "saifon#12",
    "npc": "saifon",
    "topic": "late",
    "topics": [
@@ -36152,8 +36513,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "saifon#12",
+   "index": 13,
+   "key": "saifon#13",
    "npc": "saifon",
    "topic": "salary",
    "topics": [
@@ -36165,8 +36526,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "saifon#13",
+   "index": 14,
+   "key": "saifon#14",
    "npc": "saifon",
    "topic": "quota",
    "topics": [
@@ -36177,8 +36538,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "saifon#14",
+   "index": 15,
+   "key": "saifon#15",
    "npc": "saifon",
    "topic": "somjai|mama|mamasan",
    "topics": [
@@ -36191,8 +36552,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "saifon#15",
+   "index": 16,
+   "key": "saifon#16",
    "npc": "saifon",
    "topic": "duan",
    "topics": [
@@ -36203,13 +36564,62 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "saifon#16",
+   "index": 17,
+   "key": "saifon#17",
    "npc": "saifon",
    "topic": "aim|cashier",
    "topics": [
     "aim",
     "cashier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 18,
+   "key": "saifon#18",
+   "npc": "saifon",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 19,
+   "key": "saifon#19",
+   "npc": "saifon",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 20,
+   "key": "saifon#20",
+   "npc": "saifon",
+   "topic": "bar|this bar|the bar|here|this place|firefly|the firefly|firefly bar",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "firefly",
+    "the firefly",
+    "firefly bar"
    ]
   },
   {
@@ -36405,12 +36815,20 @@
    ]
   },
   {
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 0,
+   "key": "sasi#0",
+   "npc": "sasi"
+  },
+  {
    "bond": 2,
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 0,
-   "key": "sasi#0",
+   "index": 1,
+   "key": "sasi#1",
    "npc": "sasi"
   },
   {
@@ -36418,16 +36836,16 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 1,
-   "key": "sasi#1",
+   "index": 2,
+   "key": "sasi#2",
    "npc": "sasi"
   },
   {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "sasi#2",
+   "index": 3,
+   "key": "sasi#3",
    "npc": "sasi",
    "topic": "family|mother|father|parents|orphan|orphanage",
    "topics": [
@@ -36443,8 +36861,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "sasi#3",
+   "index": 4,
+   "key": "sasi#4",
    "npc": "sasi",
    "topic": "home",
    "topics": [
@@ -36455,8 +36873,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "sasi#4",
+   "index": 5,
+   "key": "sasi#5",
    "npc": "sasi",
    "topic": "plan|dream|future",
    "topics": [
@@ -36469,8 +36887,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "sasi#5",
+   "index": 6,
+   "key": "sasi#6",
    "npc": "sasi",
    "topic": "watch|sports watch|running|run|beach",
    "topics": [
@@ -36486,8 +36904,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "sasi#6",
+   "index": 7,
+   "key": "sasi#7",
    "npc": "sasi",
    "topic": "real mother|your mother|your real mother|birth mother",
    "topics": [
@@ -36501,8 +36919,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "sasi#7",
+   "index": 8,
+   "key": "sasi#8",
    "npc": "sasi",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -36516,8 +36934,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "sasi#8",
+   "index": 9,
+   "key": "sasi#9",
    "notFlags": [
     "hasWallet"
    ],
@@ -36531,8 +36949,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "sasi#9",
+   "index": 10,
+   "key": "sasi#10",
    "npc": "sasi",
    "topic": "price",
    "topics": [
@@ -36543,8 +36961,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "sasi#10",
+   "index": 11,
+   "key": "sasi#11",
    "npc": "sasi",
    "topic": "late",
    "topics": [
@@ -36556,8 +36974,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "sasi#11",
+   "index": 12,
+   "key": "sasi#12",
    "npc": "sasi",
    "topic": "salary",
    "topics": [
@@ -36569,8 +36987,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "sasi#12",
+   "index": 13,
+   "key": "sasi#13",
    "npc": "sasi",
    "topic": "quota",
    "topics": [
@@ -36581,8 +36999,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "sasi#13",
+   "index": 14,
+   "key": "sasi#14",
    "npc": "sasi",
    "topic": "roof|new roof|the roof",
    "topics": [
@@ -36595,8 +37013,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "sasi#14",
+   "index": 15,
+   "key": "sasi#15",
    "npc": "sasi",
    "topic": "ping",
    "topics": [
@@ -36607,8 +37025,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "sasi#15",
+   "index": 16,
+   "key": "sasi#16",
    "npc": "sasi",
    "topic": "pong",
    "topics": [
@@ -36619,8 +37037,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "sasi#16",
+   "index": 17,
+   "key": "sasi#17",
    "npc": "sasi",
    "topic": "wanida|mama|mamasan",
    "topics": [
@@ -36633,8 +37051,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 17,
-   "key": "sasi#17",
+   "index": 18,
+   "key": "sasi#18",
    "npc": "sasi",
    "topic": "nubnab|cashier",
    "topics": [
@@ -36646,8 +37064,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 18,
-   "key": "sasi#18",
+   "index": 19,
+   "key": "sasi#19",
    "npc": "sasi",
    "topic": "danny",
    "topics": [
@@ -36658,8 +37076,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 19,
-   "key": "sasi#19",
+   "index": 20,
+   "key": "sasi#20",
    "npc": "sasi",
    "topic": "show|stage|tiers|the show",
    "topics": [
@@ -36667,6 +37085,54 @@
     "stage",
     "tiers",
     "the show"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 21,
+   "key": "sasi#21",
+   "npc": "sasi",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 22,
+   "key": "sasi#22",
+   "npc": "sasi",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 23,
+   "key": "sasi#23",
+   "npc": "sasi",
+   "topic": "bar|this bar|the bar|here|this place|the gilt cage|gilt cage",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "the gilt cage",
+    "gilt cage"
    ]
   },
   {
@@ -37434,9 +37900,9 @@
    ]
   },
   {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
    "index": 0,
    "key": "somjai#0",
    "npc": "somjai"
@@ -37447,6 +37913,14 @@
    "hasWhen": false,
    "index": 1,
    "key": "somjai#1",
+   "npc": "somjai"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "somjai#2",
    "npc": "somjai",
    "topic": "girls|the girls|your girls|introduce",
    "topics": [
@@ -37460,8 +37934,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "somjai#2",
+   "index": 3,
+   "key": "somjai#3",
    "npc": "somjai",
    "topic": "family|husband|daughter|wedding",
    "topics": [
@@ -37475,8 +37949,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "somjai#3",
+   "index": 4,
+   "key": "somjai#4",
    "npc": "somjai",
    "topic": "home|hometown|village|where you from|udon|udon thani",
    "topics": [
@@ -37492,8 +37966,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "somjai#4",
+   "index": 5,
+   "key": "somjai#5",
    "npc": "somjai",
    "topic": "plan|future|retire",
    "topics": [
@@ -37506,8 +37980,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "somjai#5",
+   "index": 6,
+   "key": "somjai#6",
    "npc": "somjai",
    "topic": "history|danced|dancer|this street|before|the old days|strip",
    "topics": [
@@ -37524,8 +37998,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "somjai#6",
+   "index": 7,
+   "key": "somjai#7",
    "npc": "somjai",
    "topic": "daeng|daeng's|daeng's place",
    "topics": [
@@ -37538,8 +38012,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "somjai#7",
+   "index": 8,
+   "key": "somjai#8",
    "npc": "somjai",
    "topic": "shamrock|sean|the irish bar|irish bar",
    "topics": [
@@ -37553,8 +38027,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "somjai#8",
+   "index": 9,
+   "key": "somjai#9",
    "npc": "somjai",
    "topic": "lake|the lake|reservoir",
    "topics": [
@@ -37567,8 +38041,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "somjai#9",
+   "index": 10,
+   "key": "somjai#10",
    "npc": "somjai",
    "topic": "midnight|closing|close|hours|what time",
    "topics": [
@@ -37583,8 +38057,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "somjai#10",
+   "index": 11,
+   "key": "somjai#11",
    "npc": "somjai",
    "topic": "barfine|price|fine",
    "topics": [
@@ -37597,8 +38071,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "somjai#11",
+   "index": 12,
+   "key": "somjai#12",
    "notFlags": [
     "hasWallet"
    ],
@@ -37612,8 +38086,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "somjai#12",
+   "index": 13,
+   "key": "somjai#13",
    "npc": "somjai",
    "topic": "duan",
    "topics": [
@@ -37624,8 +38098,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "somjai#13",
+   "index": 14,
+   "key": "somjai#14",
    "npc": "somjai",
    "topic": "saifon",
    "topics": [
@@ -37636,14 +38110,63 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "somjai#14",
+   "index": 15,
+   "key": "somjai#15",
    "npc": "somjai",
    "topic": "aim|niece|cashier",
    "topics": [
     "aim",
     "niece",
     "cashier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 16,
+   "key": "somjai#16",
+   "npc": "somjai",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 17,
+   "key": "somjai#17",
+   "npc": "somjai",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 18,
+   "key": "somjai#18",
+   "npc": "somjai",
+   "topic": "bar|this bar|the bar|here|this place|firefly|the firefly|firefly bar",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "firefly",
+    "the firefly",
+    "firefly bar"
    ]
   },
   {
@@ -42194,12 +42717,20 @@
    ]
   },
   {
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 0,
+   "key": "ton#0",
+   "npc": "ton"
+  },
+  {
    "bond": 2,
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 0,
-   "key": "ton#0",
+   "index": 1,
+   "key": "ton#1",
    "npc": "ton"
   },
   {
@@ -42207,16 +42738,16 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 1,
-   "key": "ton#1",
+   "index": 2,
+   "key": "ton#2",
    "npc": "ton"
   },
   {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "ton#2",
+   "index": 3,
+   "key": "ton#3",
    "npc": "ton",
    "topic": "football|soccer|the football|penalty|premier league|the match|the game",
    "topics": [
@@ -42233,8 +42764,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "ton#3",
+   "index": 4,
+   "key": "ton#4",
    "npc": "ton",
    "topic": "family|papa|sister|brother",
    "topics": [
@@ -42248,8 +42779,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "ton#4",
+   "index": 5,
+   "key": "ton#5",
    "npc": "ton",
    "topic": "home|hometown|mukdahan|mekong|village|where you from",
    "topics": [
@@ -42265,8 +42796,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "ton#5",
+   "index": 6,
+   "key": "ton#6",
    "npc": "ton",
    "topic": "plan|future|dream",
    "topics": [
@@ -42279,8 +42810,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "ton#6",
+   "index": 7,
+   "key": "ton#7",
    "npc": "ton",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -42294,8 +42825,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "ton#7",
+   "index": 8,
+   "key": "ton#8",
    "notFlags": [
     "hasWallet"
    ],
@@ -42309,8 +42840,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "ton#8",
+   "index": 9,
+   "key": "ton#9",
    "npc": "ton",
    "topic": "price",
    "topics": [
@@ -42321,8 +42852,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "ton#9",
+   "index": 10,
+   "key": "ton#10",
    "npc": "ton",
    "topic": "late",
    "topics": [
@@ -42334,8 +42865,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "ton#10",
+   "index": 11,
+   "key": "ton#11",
    "npc": "ton",
    "topic": "salary",
    "topics": [
@@ -42347,8 +42878,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "ton#11",
+   "index": 12,
+   "key": "ton#12",
    "npc": "ton",
    "topic": "quota",
    "topics": [
@@ -42359,8 +42890,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "ton#12",
+   "index": 13,
+   "key": "ton#13",
    "npc": "ton",
    "topic": "nid",
    "topics": [
@@ -42371,8 +42902,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "ton#13",
+   "index": 14,
+   "key": "ton#14",
    "npc": "ton",
    "topic": "wa",
    "topics": [
@@ -42383,8 +42914,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "ton#14",
+   "index": 15,
+   "key": "ton#15",
    "npc": "ton",
    "topic": "waew|mama|mamasan",
    "topics": [
@@ -42397,8 +42928,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "ton#15",
+   "index": 16,
+   "key": "ton#16",
    "npc": "ton",
    "topic": "grace|cashier",
    "topics": [
@@ -42410,8 +42941,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "ton#16",
+   "index": 17,
+   "key": "ton#17",
    "npc": "ton",
    "topic": "helmut",
    "topics": [
@@ -42422,8 +42953,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 17,
-   "key": "ton#17",
+   "index": 18,
+   "key": "ton#18",
    "npc": "ton",
    "topic": "the two|the men|two men|argument|the argument|the regulars|regulars|end of the bar",
    "topics": [
@@ -42441,8 +42972,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 18,
-   "key": "ton#18",
+   "index": 19,
+   "key": "ton#19",
    "npc": "ton",
    "topic": "casino|laos|savannakhet|cards|blackjack",
    "topics": [
@@ -42457,8 +42988,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 19,
-   "key": "ton#19",
+   "index": 20,
+   "key": "ton#20",
    "npc": "ton",
    "topic": "score|tv|television|the screen|the match",
    "topics": [
@@ -42473,13 +43004,61 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 20,
-   "key": "ton#20",
+   "index": 21,
+   "key": "ton#21",
    "npc": "ton",
    "topic": "jackpot|shut the box",
    "topics": [
     "jackpot",
     "shut the box"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 22,
+   "key": "ton#22",
+   "npc": "ton",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 23,
+   "key": "ton#23",
+   "npc": "ton",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 24,
+   "key": "ton#24",
+   "npc": "ton",
+   "topic": "bar|this bar|the bar|here|this place|silk rose|the silk rose",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "silk rose",
+    "the silk rose"
    ]
   },
   {
@@ -43680,12 +44259,20 @@
    ]
   },
   {
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 0,
+   "key": "wa#0",
+   "npc": "wa"
+  },
+  {
    "bond": 2,
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 0,
-   "key": "wa#0",
+   "index": 1,
+   "key": "wa#1",
    "npc": "wa"
   },
   {
@@ -43693,16 +44280,16 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 1,
-   "key": "wa#1",
+   "index": 2,
+   "key": "wa#2",
    "npc": "wa"
   },
   {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "wa#2",
+   "index": 3,
+   "key": "wa#3",
    "npc": "wa",
    "topic": "family|mama|papa|brother",
    "topics": [
@@ -43716,8 +44303,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "wa#3",
+   "index": 4,
+   "key": "wa#4",
    "npc": "wa",
    "topic": "home|hometown|yasothon|village|where you from|rocket|rocket festival",
    "topics": [
@@ -43734,8 +44321,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "wa#4",
+   "index": 5,
+   "key": "wa#5",
    "npc": "wa",
    "topic": "factory|before|qc|electronics|eastern seaboard|rayong|work|job",
    "topics": [
@@ -43753,8 +44340,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "wa#5",
+   "index": 6,
+   "key": "wa#6",
    "npc": "wa",
    "topic": "plan|future|dream|course|supervisor",
    "topics": [
@@ -43769,8 +44356,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "wa#6",
+   "index": 7,
+   "key": "wa#7",
    "npc": "wa",
    "topic": "translate|google translate|phone",
    "topics": [
@@ -43783,8 +44370,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "wa#7",
+   "index": 8,
+   "key": "wa#8",
    "npc": "wa",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -43798,8 +44385,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "wa#8",
+   "index": 9,
+   "key": "wa#9",
    "notFlags": [
     "hasWallet"
    ],
@@ -43813,8 +44400,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "wa#9",
+   "index": 10,
+   "key": "wa#10",
    "npc": "wa",
    "topic": "price",
    "topics": [
@@ -43825,8 +44412,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "wa#10",
+   "index": 11,
+   "key": "wa#11",
    "npc": "wa",
    "topic": "late",
    "topics": [
@@ -43838,8 +44425,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "wa#11",
+   "index": 12,
+   "key": "wa#12",
    "npc": "wa",
    "topic": "salary",
    "topics": [
@@ -43851,8 +44438,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "wa#12",
+   "index": 13,
+   "key": "wa#13",
    "npc": "wa",
    "topic": "quota",
    "topics": [
@@ -43863,8 +44450,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "wa#13",
+   "index": 14,
+   "key": "wa#14",
    "npc": "wa",
    "topic": "ton",
    "topics": [
@@ -43875,8 +44462,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "wa#14",
+   "index": 15,
+   "key": "wa#15",
    "npc": "wa",
    "topic": "nid",
    "topics": [
@@ -43887,8 +44474,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "wa#15",
+   "index": 16,
+   "key": "wa#16",
    "npc": "wa",
    "topic": "waew|mama|mamasan",
    "topics": [
@@ -43901,8 +44488,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "wa#16",
+   "index": 17,
+   "key": "wa#17",
    "npc": "wa",
    "topic": "grace|cashier",
    "topics": [
@@ -43914,8 +44501,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 17,
-   "key": "wa#17",
+   "index": 18,
+   "key": "wa#18",
    "npc": "wa",
    "topic": "helmut",
    "topics": [
@@ -43926,8 +44513,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 18,
-   "key": "wa#18",
+   "index": 19,
+   "key": "wa#19",
    "npc": "wa",
    "topic": "uncle|mud|the mud",
    "topics": [
@@ -43940,8 +44527,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 19,
-   "key": "wa#19",
+   "index": 20,
+   "key": "wa#20",
    "npc": "wa",
    "topic": "rules|three rules|nid's rules|the rules",
    "topics": [
@@ -43949,6 +44536,54 @@
     "three rules",
     "nid's rules",
     "the rules"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 21,
+   "key": "wa#21",
+   "npc": "wa",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 22,
+   "key": "wa#22",
+   "npc": "wa",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 23,
+   "key": "wa#23",
+   "npc": "wa",
+   "topic": "bar|this bar|the bar|here|this place|silk rose|the silk rose",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "silk rose",
+    "the silk rose"
    ]
   },
   {
@@ -44286,9 +44921,9 @@
    ]
   },
   {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
    "index": 0,
    "key": "waew#0",
    "npc": "waew"
@@ -44299,6 +44934,14 @@
    "hasWhen": false,
    "index": 1,
    "key": "waew#1",
+   "npc": "waew"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "waew#2",
    "npc": "waew",
    "topic": "girls|the girls|your girls|introduce",
    "topics": [
@@ -44312,8 +44955,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "waew#2",
+   "index": 3,
+   "key": "waew#3",
    "npc": "waew",
    "topic": "family|husband|children|son|daughter",
    "topics": [
@@ -44328,8 +44971,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "waew#3",
+   "index": 4,
+   "key": "waew#4",
    "npc": "waew",
    "topic": "home|hometown|village|where you from|khon kaen|house|concrete house",
    "topics": [
@@ -44346,8 +44989,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "waew#4",
+   "index": 5,
+   "key": "waew#5",
    "npc": "waew",
    "topic": "plan|future|retire",
    "topics": [
@@ -44360,8 +45003,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "waew#5",
+   "index": 6,
+   "key": "waew#6",
    "npc": "waew",
    "topic": "barfine|price|fine",
    "topics": [
@@ -44374,8 +45017,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "waew#6",
+   "index": 7,
+   "key": "waew#7",
    "notFlags": [
     "hasWallet"
    ],
@@ -44389,8 +45032,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "waew#7",
+   "index": 8,
+   "key": "waew#8",
    "npc": "waew",
    "topic": "ton",
    "topics": [
@@ -44401,8 +45044,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "waew#8",
+   "index": 9,
+   "key": "waew#9",
    "npc": "waew",
    "topic": "nid",
    "topics": [
@@ -44413,8 +45056,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "waew#9",
+   "index": 10,
+   "key": "waew#10",
    "npc": "waew",
    "topic": "wa",
    "topics": [
@@ -44425,8 +45068,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "waew#10",
+   "index": 11,
+   "key": "waew#11",
    "npc": "waew",
    "topic": "grace|cashier",
    "topics": [
@@ -44438,8 +45081,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "waew#11",
+   "index": 12,
+   "key": "waew#12",
    "npc": "waew",
    "topic": "helmut",
    "topics": [
@@ -44450,8 +45093,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "waew#12",
+   "index": 13,
+   "key": "waew#13",
    "npc": "waew",
    "topic": "third stool|the third stool|stool|germany|german|the rule",
    "topics": [
@@ -44467,8 +45110,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "waew#13",
+   "index": 14,
+   "key": "waew#14",
    "npc": "waew",
    "topic": "owner|the owner|landlord|rent|who owns",
    "topics": [
@@ -44483,8 +45126,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "waew#14",
+   "index": 15,
+   "key": "waew#15",
    "npc": "waew",
    "topic": "quota|quotas",
    "topics": [
@@ -44496,14 +45139,62 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "waew#15",
+   "index": 16,
+   "key": "waew#16",
    "npc": "waew",
    "topic": "mango|mango tree|tree",
    "topics": [
     "mango",
     "mango tree",
     "tree"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 17,
+   "key": "waew#17",
+   "npc": "waew",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 18,
+   "key": "waew#18",
+   "npc": "waew",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 19,
+   "key": "waew#19",
+   "npc": "waew",
+   "topic": "bar|this bar|the bar|here|this place|silk rose|the silk rose",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "silk rose",
+    "the silk rose"
    ]
   },
   {
@@ -44616,9 +45307,9 @@
    ]
   },
   {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
    "index": 0,
    "key": "wanida#0",
    "npc": "wanida"
@@ -44629,6 +45320,14 @@
    "hasWhen": false,
    "index": 1,
    "key": "wanida#1",
+   "npc": "wanida"
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "wanida#2",
    "npc": "wanida",
    "topic": "girls|the girls|your girls|introduce",
    "topics": [
@@ -44642,8 +45341,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "wanida#2",
+   "index": 3,
+   "key": "wanida#3",
    "npc": "wanida",
    "topic": "twins|the twins",
    "topics": [
@@ -44655,8 +45354,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "wanida#3",
+   "index": 4,
+   "key": "wanida#4",
    "npc": "wanida",
    "topic": "family",
    "topics": [
@@ -44667,8 +45366,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "wanida#4",
+   "index": 5,
+   "key": "wanida#5",
    "npc": "wanida",
    "topic": "plan|future",
    "topics": [
@@ -44680,8 +45379,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "wanida#5",
+   "index": 6,
+   "key": "wanida#6",
    "npc": "wanida",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -44695,8 +45394,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 6,
-   "key": "wanida#6",
+   "index": 7,
+   "key": "wanida#7",
    "notFlags": [
     "hasWallet"
    ],
@@ -44710,8 +45409,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "wanida#7",
+   "index": 8,
+   "key": "wanida#8",
    "npc": "wanida",
    "topic": "ping pong|ping-pong|pingpong|ping pong show|their names|the names",
    "topics": [
@@ -44727,8 +45426,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "wanida#8",
+   "index": 9,
+   "key": "wanida#9",
    "npc": "wanida",
    "topic": "stairs|tiers|the stairs",
    "topics": [
@@ -44741,8 +45440,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "wanida#9",
+   "index": 10,
+   "key": "wanida#10",
    "npc": "wanida",
    "topic": "ping",
    "topics": [
@@ -44753,8 +45452,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "wanida#10",
+   "index": 11,
+   "key": "wanida#11",
    "npc": "wanida",
    "topic": "pong",
    "topics": [
@@ -44765,8 +45464,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "wanida#11",
+   "index": 12,
+   "key": "wanida#12",
    "npc": "wanida",
    "topic": "sasi",
    "topics": [
@@ -44777,8 +45476,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "wanida#12",
+   "index": 13,
+   "key": "wanida#13",
    "npc": "wanida",
    "topic": "nubnab|cashier",
    "topics": [
@@ -44790,8 +45489,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "wanida#13",
+   "index": 14,
+   "key": "wanida#14",
    "npc": "wanida",
    "topic": "danny",
    "topics": [
@@ -44802,8 +45501,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "wanida#14",
+   "index": 15,
+   "key": "wanida#15",
    "npc": "wanida",
    "topic": "show|schedule|the show|stage",
    "topics": [
@@ -44811,6 +45510,54 @@
     "schedule",
     "the show",
     "stage"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 16,
+   "key": "wanida#16",
+   "npc": "wanida",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 17,
+   "key": "wanida#17",
+   "npc": "wanida",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 18,
+   "key": "wanida#18",
+   "npc": "wanida",
+   "topic": "bar|this bar|the bar|here|this place|the gilt cage|gilt cage",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "the gilt cage",
+    "gilt cage"
    ]
   },
   {
@@ -45826,12 +46573,20 @@
    ]
   },
   {
+   "hasFx": true,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 0,
+   "key": "yada#0",
+   "npc": "yada"
+  },
+  {
    "bond": 2,
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 0,
-   "key": "yada#0",
+   "index": 1,
+   "key": "yada#1",
    "npc": "yada"
   },
   {
@@ -45839,16 +46594,16 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 1,
-   "key": "yada#1",
+   "index": 2,
+   "key": "yada#2",
    "npc": "yada"
   },
   {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "yada#2",
+   "index": 3,
+   "key": "yada#3",
    "npc": "yada",
    "topic": "family",
    "topics": [
@@ -45859,8 +46614,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "yada#3",
+   "index": 4,
+   "key": "yada#4",
    "npc": "yada",
    "topic": "home",
    "topics": [
@@ -45871,8 +46626,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 4,
-   "key": "yada#4",
+   "index": 5,
+   "key": "yada#5",
    "npc": "yada",
    "topic": "plan|dream|future",
    "topics": [
@@ -45885,8 +46640,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "yada#5",
+   "index": 6,
+   "key": "yada#6",
    "npc": "yada",
    "topic": "pen|chit|chits|ransom note",
    "topics": [
@@ -45898,22 +46653,6 @@
   },
   {
    "bond": 2,
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": true,
-   "index": 6,
-   "key": "yada#6",
-   "npc": "yada",
-   "topic": "ping|sister|twin|twins|your sister",
-   "topics": [
-    "ping",
-    "sister",
-    "twin",
-    "twins",
-    "your sister"
-   ]
-  },
-  {
    "hasFx": false,
    "hasShort": true,
    "hasWhen": true,
@@ -45932,7 +46671,7 @@
   {
    "hasFx": false,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 8,
    "key": "yada#8",
    "npc": "yada",
@@ -45952,6 +46691,22 @@
    "index": 9,
    "key": "yada#9",
    "npc": "yada",
+   "topic": "ping|sister|twin|twins|your sister",
+   "topics": [
+    "ping",
+    "sister",
+    "twin",
+    "twins",
+    "your sister"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 10,
+   "key": "yada#10",
+   "npc": "yada",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
     "free",
@@ -45964,8 +46719,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 10,
-   "key": "yada#10",
+   "index": 11,
+   "key": "yada#11",
    "notFlags": [
     "hasWallet"
    ],
@@ -45979,8 +46734,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "yada#11",
+   "index": 12,
+   "key": "yada#12",
    "npc": "yada",
    "topic": "price",
    "topics": [
@@ -45991,8 +46746,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 12,
-   "key": "yada#12",
+   "index": 13,
+   "key": "yada#13",
    "npc": "yada",
    "topic": "late",
    "topics": [
@@ -46004,8 +46759,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 13,
-   "key": "yada#13",
+   "index": 14,
+   "key": "yada#14",
    "npc": "yada",
    "topic": "salary",
    "topics": [
@@ -46017,8 +46772,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 14,
-   "key": "yada#14",
+   "index": 15,
+   "key": "yada#15",
    "npc": "yada",
    "topic": "quota",
    "topics": [
@@ -46029,8 +46784,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 15,
-   "key": "yada#15",
+   "index": 16,
+   "key": "yada#16",
    "npc": "yada",
    "topic": "ping pong|ping-pong|pingpong|ping pong show|your name|your names",
    "topics": [
@@ -46046,8 +46801,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 16,
-   "key": "yada#16",
+   "index": 17,
+   "key": "yada#17",
    "npc": "yada",
    "topic": "chair|second chair|the second chair",
    "topics": [
@@ -46060,8 +46815,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 17,
-   "key": "yada#17",
+   "index": 18,
+   "key": "yada#18",
    "npc": "yada",
    "topic": "buddha|amulet|necklace|lost buddha|your buddha",
    "topics": [
@@ -46076,8 +46831,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 18,
-   "key": "yada#18",
+   "index": 19,
+   "key": "yada#19",
    "npc": "yada",
    "topic": "bet|the bet|fifty baht",
    "topics": [
@@ -46090,8 +46845,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 19,
-   "key": "yada#19",
+   "index": 20,
+   "key": "yada#20",
    "npc": "yada",
    "topic": "danny",
    "topics": [
@@ -46102,8 +46857,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 20,
-   "key": "yada#20",
+   "index": 21,
+   "key": "yada#21",
    "npc": "yada",
    "topic": "wanida|mama|mamasan",
    "topics": [
@@ -46116,8 +46871,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 21,
-   "key": "yada#21",
+   "index": 22,
+   "key": "yada#22",
    "npc": "yada",
    "topic": "nubnab|cashier",
    "topics": [
@@ -46129,8 +46884,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 22,
-   "key": "yada#22",
+   "index": 23,
+   "key": "yada#23",
    "npc": "yada",
    "topic": "sasi",
    "topics": [
@@ -46141,8 +46896,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 23,
-   "key": "yada#23",
+   "index": 24,
+   "key": "yada#24",
    "npc": "yada",
    "topic": "show|stage|tiers|the show|middle tier",
    "topics": [
@@ -46151,6 +46906,54 @@
     "tiers",
     "the show",
     "middle tier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 25,
+   "key": "yada#25",
+   "npc": "yada",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 26,
+   "key": "yada#26",
+   "npc": "yada",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 27,
+   "key": "yada#27",
+   "npc": "yada",
+   "topic": "bar|this bar|the bar|here|this place|the gilt cage|gilt cage",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "the gilt cage",
+    "gilt cage"
    ]
   },
   {
@@ -46864,7 +47667,7 @@
   "INTERPOLATES": 582,
   "LOCATED": 392,
   "READ_BY_DATA": 134,
-  "READ_BY_ENGINE": 350,
+  "READ_BY_ENGINE": 342,
   "REQUIRES": 195,
   "SETS": 84,
   "SET_BY_ENGINE": 140,
@@ -50974,7 +51777,7 @@
    "type": "EXIT"
   },
   {
-   "from": "aim#7",
+   "from": "aim#8",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -51479,7 +52282,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "duan#8",
+   "from": "duan#9",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -51704,7 +52507,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "grace#8",
+   "from": "grace#9",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52369,7 +53172,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "naree#11",
+   "from": "naree#12",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52434,7 +53237,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "nid#7",
+   "from": "nid#8",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52504,7 +53307,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "nubnab#6",
+   "from": "nubnab#7",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52864,7 +53667,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "saifon#9",
+   "from": "saifon#10",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52879,7 +53682,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "sasi#8",
+   "from": "sasi#9",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52934,7 +53737,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "somjai#11",
+   "from": "somjai#12",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -53189,7 +53992,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "ton#7",
+   "from": "ton#8",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -53284,12 +54087,12 @@
    "type": "FORBIDS"
   },
   {
-   "from": "wa#8",
+   "from": "wa#9",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
   {
-   "from": "waew#6",
+   "from": "waew#7",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -53304,7 +54107,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "wanida#6",
+   "from": "wanida#7",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -53339,7 +54142,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "yada#10",
+   "from": "yada#11",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -53650,22 +54453,17 @@
   },
   {
    "from": "AFFAIR_BOND_GATE",
-   "to": "engine-systems.js:8158",
+   "to": "engine-systems.js:8160",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_BREAK",
-   "to": "engine-systems.js:8299",
+   "to": "engine-systems.js:8301",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_BREAK",
-   "to": "world.js:14601",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "AFFAIR_DRAG",
-   "to": "engine-systems.js:8860",
+   "to": "world.js:14606",
    "type": "INTERPOLATES"
   },
   {
@@ -53674,93 +54472,98 @@
    "type": "INTERPOLATES"
   },
   {
+   "from": "AFFAIR_DRAG",
+   "to": "engine-systems.js:8864",
+   "type": "INTERPOLATES"
+  },
+  {
    "from": "AFFAIR_DRAG_SOUR",
-   "to": "engine-systems.js:8860",
+   "to": "engine-systems.js:8862",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_FAMILY_ASK",
-   "to": "world.js:14649",
+   "to": "world.js:14654",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_FAMILY_ASK",
-   "to": "world.js:14650",
+   "to": "world.js:14655",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_GOOD_DAYS",
-   "to": "engine-systems.js:8358",
+   "to": "engine-systems.js:8360",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_GOOD_STRAIN",
-   "to": "engine-systems.js:8358",
+   "to": "engine-systems.js:8360",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_HONEYMOON",
-   "to": "engine-systems.js:8212",
+   "to": "engine-systems.js:8214",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_HONEYMOON",
-   "to": "engine-systems.js:8316",
+   "to": "engine-systems.js:8318",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_SALE",
-   "to": "engine-systems.js:8439",
+   "to": "engine-systems.js:8441",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_SALE",
-   "to": "engine-systems.js:8447",
+   "to": "engine-systems.js:8449",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_SCAR_DAYS",
-   "to": "engine-systems.js:8380",
+   "to": "engine-systems.js:8382",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_STRAIN_AWAY",
-   "to": "engine-systems.js:8335",
+   "to": "engine-systems.js:8337",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_STRAIN_WORK",
-   "to": "engine-systems.js:8332",
+   "to": "engine-systems.js:8334",
    "type": "INTERPOLATES"
   },
   {
    "from": "ATM_DAILY_CAP",
-   "to": "engine-parser.js:10719",
+   "to": "engine-parser.js:10721",
    "type": "INTERPOLATES"
   },
   {
    "from": "ATM_FEE",
-   "to": "engine-parser.js:10718",
+   "to": "engine-parser.js:10720",
    "type": "INTERPOLATES"
   },
   {
    "from": "ATM_FEE",
-   "to": "engine-systems.js:10566",
+   "to": "engine-systems.js:10568",
    "type": "INTERPOLATES"
   },
   {
    "from": "AWAY_TAKINGS",
-   "to": "engine-systems.js:8852",
+   "to": "engine-systems.js:8854",
    "type": "INTERPOLATES"
   },
   {
    "from": "AWAY_TAKINGS",
-   "to": "engine-systems.js:9176",
+   "to": "engine-systems.js:9178",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAN_TURNS",
-   "to": "engine-core.js:2033",
+   "to": "engine-core.js:2041",
    "type": "INTERPOLATES"
   },
   {
@@ -53805,17 +54608,17 @@
   },
   {
    "from": "BAR_ARREARS_BITE",
-   "to": "engine-systems.js:9252",
+   "to": "engine-systems.js:9254",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_ARREARS_END",
-   "to": "engine-systems.js:9251",
+   "to": "engine-systems.js:9253",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_ARREARS_WARN",
-   "to": "engine-systems.js:9263",
+   "to": "engine-systems.js:9265",
    "type": "INTERPOLATES"
   },
   {
@@ -53825,42 +54628,42 @@
   },
   {
    "from": "BAR_COGS",
-   "to": "engine-systems.js:8828",
+   "to": "engine-systems.js:8830",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:8644",
+   "to": "engine-systems.js:8646",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:8652",
+   "to": "engine-systems.js:8654",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:8653",
+   "to": "engine-systems.js:8655",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:8659",
+   "to": "engine-systems.js:8661",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:8659",
+   "to": "engine-systems.js:8661",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:8663",
+   "to": "engine-systems.js:8665",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:8677",
+   "to": "engine-systems.js:8679",
    "type": "INTERPOLATES"
   },
   {
@@ -53870,7 +54673,7 @@
   },
   {
    "from": "BAR_FLOOR_FLOOR",
-   "to": "engine-systems.js:9058",
+   "to": "engine-systems.js:9060",
    "type": "INTERPOLATES"
   },
   {
@@ -53880,27 +54683,27 @@
   },
   {
    "from": "BAR_FRICTION",
-   "to": "engine-systems.js:8896",
+   "to": "engine-systems.js:8898",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_FRICTION",
-   "to": "engine-systems.js:9502",
+   "to": "engine-systems.js:9504",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MGR_NIGHT",
-   "to": "engine-systems.js:8899",
+   "to": "engine-systems.js:8901",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MGR_NIGHT",
-   "to": "engine-systems.js:8941",
+   "to": "engine-systems.js:8943",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MGR_NIGHT",
-   "to": "engine-systems.js:9475",
+   "to": "engine-systems.js:9477",
    "type": "INTERPOLATES"
   },
   {
@@ -53915,37 +54718,37 @@
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:8546",
+   "to": "engine-systems.js:8548",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:8652",
+   "to": "engine-systems.js:8654",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:8684",
+   "to": "engine-systems.js:8686",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9193",
+   "to": "engine-systems.js:9195",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9203",
+   "to": "engine-systems.js:9205",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9212",
+   "to": "engine-systems.js:9214",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9638",
+   "to": "engine-systems.js:9640",
    "type": "INTERPOLATES"
   },
   {
@@ -53965,22 +54768,22 @@
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:9026",
+   "to": "engine-systems.js:9028",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:9068",
+   "to": "engine-systems.js:9070",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:9452",
+   "to": "engine-systems.js:9454",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:9452",
+   "to": "engine-systems.js:9454",
    "type": "INTERPOLATES"
   },
   {
@@ -53990,7 +54793,7 @@
   },
   {
    "from": "BAR_NUT",
-   "to": "engine-systems.js:8897",
+   "to": "engine-systems.js:8899",
    "type": "INTERPOLATES"
   },
   {
@@ -54000,32 +54803,32 @@
   },
   {
    "from": "BAR_PRESENT",
-   "to": "engine-systems.js:8853",
+   "to": "engine-systems.js:8855",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_PRICE",
-   "to": "engine-systems.js:8663",
+   "to": "engine-systems.js:8665",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_QUOTA",
-   "to": "engine-parser.js:11209",
+   "to": "engine-parser.js:11211",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_DAYS",
-   "to": "engine-systems.js:9027",
+   "to": "engine-systems.js:9029",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_DAYS",
-   "to": "engine-systems.js:9082",
+   "to": "engine-systems.js:9084",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_DAYS",
-   "to": "engine-systems.js:9454",
+   "to": "engine-systems.js:9456",
    "type": "INTERPOLATES"
   },
   {
@@ -54035,17 +54838,17 @@
   },
   {
    "from": "BAR_RAIL_SHARE",
-   "to": "engine-systems.js:9078",
+   "to": "engine-systems.js:9080",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_SHARE",
-   "to": "engine-systems.js:9082",
+   "to": "engine-systems.js:9084",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_SHARE",
-   "to": "engine-systems.js:9455",
+   "to": "engine-systems.js:9457",
    "type": "INTERPOLATES"
   },
   {
@@ -54055,22 +54858,22 @@
   },
   {
    "from": "BAR_RENT",
-   "to": "engine-systems.js:8952",
+   "to": "engine-systems.js:8954",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_CAP",
-   "to": "engine-systems.js:9170",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "BAR_RENT_CAP",
-   "to": "engine-systems.js:9177",
+   "to": "engine-systems.js:9172",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_CAP",
    "to": "engine-systems.js:9179",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "BAR_RENT_CAP",
+   "to": "engine-systems.js:9181",
    "type": "INTERPOLATES"
   },
   {
@@ -54080,22 +54883,22 @@
   },
   {
    "from": "BAR_RENT_GOOD",
-   "to": "engine-systems.js:9177",
+   "to": "engine-systems.js:9179",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_REVIEW",
-   "to": "engine-systems.js:8872",
+   "to": "engine-systems.js:8874",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_REVIEW",
-   "to": "engine-systems.js:9168",
+   "to": "engine-systems.js:9170",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_REVIEW",
-   "to": "engine-systems.js:9174",
+   "to": "engine-systems.js:9176",
    "type": "INTERPOLATES"
   },
   {
@@ -54105,12 +54908,12 @@
   },
   {
    "from": "BAR_RENT_RISE",
-   "to": "engine-systems.js:9170",
+   "to": "engine-systems.js:9172",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_RISE",
-   "to": "engine-systems.js:9179",
+   "to": "engine-systems.js:9181",
    "type": "INTERPOLATES"
   },
   {
@@ -54120,12 +54923,12 @@
   },
   {
    "from": "BAR_SALARY",
-   "to": "engine-parser.js:11209",
+   "to": "engine-parser.js:11211",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY",
-   "to": "engine-play.js:3904",
+   "to": "engine-play.js:3909",
    "type": "INTERPOLATES"
   },
   {
@@ -54135,12 +54938,12 @@
   },
   {
    "from": "BAR_SALARY",
-   "to": "engine-systems.js:9008",
+   "to": "engine-systems.js:9010",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-play.js:3760",
+   "to": "engine-play.js:3765",
    "type": "INTERPOLATES"
   },
   {
@@ -54150,27 +54953,27 @@
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:8899",
+   "to": "engine-systems.js:8901",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:8941",
+   "to": "engine-systems.js:8943",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:8960",
+   "to": "engine-systems.js:8962",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:9007",
+   "to": "engine-systems.js:9009",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:9451",
+   "to": "engine-systems.js:9453",
    "type": "INTERPOLATES"
   },
   {
@@ -54180,37 +54983,37 @@
   },
   {
    "from": "BAR_SHORT_STAFF",
-   "to": "engine-systems.js:8865",
+   "to": "engine-systems.js:8867",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SHORT_STAFF",
-   "to": "engine-systems.js:8875",
+   "to": "engine-systems.js:8877",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SWING",
-   "to": "engine-systems.js:8836",
+   "to": "engine-systems.js:8838",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SWING",
-   "to": "engine-systems.js:9176",
+   "to": "engine-systems.js:9178",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_TAKINGS",
-   "to": "engine-systems.js:8836",
+   "to": "engine-systems.js:8838",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_TAKINGS",
-   "to": "engine-systems.js:9176",
+   "to": "engine-systems.js:9178",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_TERM",
-   "to": "engine-systems.js:9433",
+   "to": "engine-systems.js:9435",
    "type": "INTERPOLATES"
   },
   {
@@ -54225,17 +55028,17 @@
   },
   {
    "from": "BAR_WAGES",
-   "to": "engine-play.js:3762",
+   "to": "engine-play.js:3767",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_WAGES",
-   "to": "engine-systems.js:8899",
+   "to": "engine-systems.js:8901",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_WAGES",
-   "to": "engine-systems.js:8941",
+   "to": "engine-systems.js:8943",
    "type": "INTERPOLATES"
   },
   {
@@ -54245,32 +55048,32 @@
   },
   {
    "from": "BATON_DAWN_TURNS",
-   "to": "engine-core.js:577",
+   "to": "engine-core.js:578",
    "type": "INTERPOLATES"
   },
   {
    "from": "BATON_VERSION",
-   "to": "engine-core.js:588",
+   "to": "engine-core.js:589",
    "type": "INTERPOLATES"
   },
   {
    "from": "BATON_VERSION",
-   "to": "engine-core.js:601",
+   "to": "engine-core.js:602",
    "type": "INTERPOLATES"
   },
   {
    "from": "BATON_VERSION",
-   "to": "engine-core.js:601",
+   "to": "engine-core.js:602",
    "type": "INTERPOLATES"
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-core.js:3461",
+   "to": "engine-core.js:3469",
    "type": "INTERPOLATES"
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-systems.js:10554",
+   "to": "engine-systems.js:10556",
    "type": "INTERPOLATES"
   },
   {
@@ -54295,7 +55098,7 @@
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:3468",
+   "to": "engine-core.js:3476",
    "type": "INTERPOLATES"
   },
   {
@@ -54305,7 +55108,7 @@
   },
   {
    "from": "BOND_NIGHT_CAP",
-   "to": "engine-play.js:4093",
+   "to": "engine-play.js:4098",
    "type": "INTERPOLATES"
   },
   {
@@ -54350,12 +55153,12 @@
   },
   {
    "from": "BOOK_PRICE",
-   "to": "world.js:13754",
+   "to": "world.js:13759",
    "type": "INTERPOLATES"
   },
   {
    "from": "BOOK_PRICE",
-   "to": "world.js:13759",
+   "to": "world.js:13764",
    "type": "INTERPOLATES"
   },
   {
@@ -54365,17 +55168,17 @@
   },
   {
    "from": "BOOK_TAKINGS",
-   "to": "engine-systems.js:8855",
+   "to": "engine-systems.js:8857",
    "type": "INTERPOLATES"
   },
   {
    "from": "BOOK_TAKINGS",
-   "to": "engine-systems.js:8855",
+   "to": "engine-systems.js:8857",
    "type": "INTERPOLATES"
   },
   {
    "from": "BOOK_TAKINGS",
-   "to": "engine-systems.js:9442",
+   "to": "engine-systems.js:9444",
    "type": "INTERPOLATES"
   },
   {
@@ -54415,12 +55218,12 @@
   },
   {
    "from": "BUS_CHARTER",
-   "to": "world.js:13462",
+   "to": "world.js:13467",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:14480",
+   "to": "engine-parser.js:14482",
    "type": "INTERPOLATES"
   },
   {
@@ -54510,12 +55313,7 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:8805",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "BUS_FARE",
-   "to": "engine-parser.js:9983",
+   "to": "engine-parser.js:8807",
    "type": "INTERPOLATES"
   },
   {
@@ -54525,7 +55323,12 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9986",
+   "to": "engine-parser.js:9987",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "BUS_FARE",
+   "to": "engine-parser.js:9988",
    "type": "INTERPOLATES"
   },
   {
@@ -54535,22 +55338,22 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-play.js:4560",
+   "to": "engine-play.js:4565",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-play.js:4638",
+   "to": "engine-play.js:4643",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-systems.js:10544",
+   "to": "engine-systems.js:10546",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-systems.js:10596",
+   "to": "engine-systems.js:10598",
    "type": "INTERPOLATES"
   },
   {
@@ -54565,7 +55368,7 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "world.js:13437",
+   "to": "world.js:13442",
    "type": "INTERPOLATES"
   },
   {
@@ -54585,17 +55388,17 @@
   },
   {
    "from": "CCIB_LOW_DAYS",
-   "to": "engine-systems.js:12065",
+   "to": "engine-systems.js:12067",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHAM_GIFT",
-   "to": "engine-parser.js:11830",
+   "to": "engine-parser.js:11832",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHAM_GIFT",
-   "to": "engine-parser.js:11830",
+   "to": "engine-parser.js:11832",
    "type": "INTERPOLATES"
   },
   {
@@ -54735,12 +55538,12 @@
   },
   {
    "from": "DOG_MOTOSAI_FARE",
-   "to": "engine-parser.js:8794",
+   "to": "engine-parser.js:8796",
    "type": "INTERPOLATES"
   },
   {
    "from": "EDDY_GROUND_DAYS",
-   "to": "engine-systems.js:12121",
+   "to": "engine-systems.js:12123",
    "type": "INTERPOLATES"
   },
   {
@@ -54755,27 +55558,27 @@
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5887",
+   "to": "engine-play.js:5892",
    "type": "INTERPOLATES"
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5888",
+   "to": "engine-play.js:5893",
    "type": "INTERPOLATES"
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5901",
+   "to": "engine-play.js:5906",
    "type": "INTERPOLATES"
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5908",
+   "to": "engine-play.js:5913",
    "type": "INTERPOLATES"
   },
   {
    "from": "EXPAT_SAVINGS",
-   "to": "engine-play.js:5911",
+   "to": "engine-play.js:5916",
    "type": "INTERPOLATES"
   },
   {
@@ -54845,12 +55648,12 @@
   },
   {
    "from": "FULL_AT",
-   "to": "engine-core.js:1156",
+   "to": "engine-core.js:1157",
    "type": "INTERPOLATES"
   },
   {
    "from": "FULL_AT",
-   "to": "engine-core.js:1165",
+   "to": "engine-core.js:1166",
    "type": "INTERPOLATES"
   },
   {
@@ -54870,72 +55673,72 @@
   },
   {
    "from": "HOME_SEND",
-   "to": "engine-parser.js:11209",
+   "to": "engine-parser.js:11211",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOME_SEND",
-   "to": "engine-play.js:3903",
+   "to": "engine-play.js:3908",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_CHANCE",
-   "to": "engine-core.js:1016",
+   "to": "engine-core.js:1017",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_SETTLE",
-   "to": "engine-core.js:1097",
+   "to": "engine-core.js:1098",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_SETTLE",
-   "to": "engine-core.js:949",
+   "to": "engine-core.js:950",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3156",
+   "to": "engine-core.js:3164",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3157",
+   "to": "engine-core.js:3165",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-parser.js:9506",
+   "to": "engine-parser.js:9508",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-parser.js:9512",
+   "to": "engine-parser.js:9514",
    "type": "INTERPOLATES"
   },
   {
    "from": "JOINER_FEE",
-   "to": "engine-play.js:4969",
+   "to": "engine-play.js:4974",
    "type": "INTERPOLATES"
   },
   {
    "from": "JOINER_FEE",
-   "to": "engine-play.js:4970",
+   "to": "engine-play.js:4975",
    "type": "INTERPOLATES"
   },
   {
    "from": "JOINER_FEE",
-   "to": "engine-play.js:4971",
+   "to": "engine-play.js:4976",
    "type": "INTERPOLATES"
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-core.js:2949",
+   "to": "engine-core.js:2957",
    "type": "INTERPOLATES"
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-parser.js:11178",
+   "to": "engine-parser.js:11180",
    "type": "INTERPOLATES"
   },
   {
@@ -54965,7 +55768,7 @@
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-parser.js:11209",
+   "to": "engine-parser.js:11211",
    "type": "INTERPOLATES"
   },
   {
@@ -54975,12 +55778,7 @@
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-play.js:3751",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "LADY_CUT",
-   "to": "engine-play.js:3856",
+   "to": "engine-play.js:3756",
    "type": "INTERPOLATES"
   },
   {
@@ -54990,12 +55788,12 @@
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-play.js:3869",
+   "to": "engine-play.js:3866",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-play.js:3933",
+   "to": "engine-play.js:3874",
    "type": "INTERPOLATES"
   },
   {
@@ -55005,22 +55803,27 @@
   },
   {
    "from": "LADY_CUT",
+   "to": "engine-play.js:3943",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "LADY_CUT",
    "to": "engine-systems.js:304",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-systems.js:9008",
+   "to": "engine-systems.js:9010",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-core.js:3463",
+   "to": "engine-core.js:3471",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-systems.js:10541",
+   "to": "engine-systems.js:10543",
    "type": "INTERPOLATES"
   },
   {
@@ -55045,37 +55848,37 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "world.js:14588",
+   "to": "world.js:14593",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_DRINK",
-   "to": "world.js:14657",
+   "to": "world.js:14662",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-core.js:2914",
+   "to": "engine-core.js:2922",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:10292",
+   "to": "engine-parser.js:10294",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:11529",
+   "to": "engine-parser.js:11531",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:12259",
+   "to": "engine-parser.js:12261",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:13850",
+   "to": "engine-parser.js:13852",
    "type": "INTERPOLATES"
   },
   {
@@ -55100,22 +55903,22 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:8792",
+   "to": "engine-parser.js:8794",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:8863",
+   "to": "engine-parser.js:8865",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:9981",
+   "to": "engine-parser.js:9983",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:9984",
+   "to": "engine-parser.js:9986",
    "type": "INTERPOLATES"
   },
   {
@@ -55170,12 +55973,7 @@
   },
   {
    "from": "LAWYER_FEE",
-   "to": "engine-systems.js:7816",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "LAWYER_FEE",
-   "to": "engine-systems.js:7816",
+   "to": "engine-systems.js:7818",
    "type": "INTERPOLATES"
   },
   {
@@ -55185,112 +55983,117 @@
   },
   {
    "from": "LAWYER_FEE",
-   "to": "engine-systems.js:7819",
+   "to": "engine-systems.js:7820",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "LAWYER_FEE",
+   "to": "engine-systems.js:7821",
    "type": "INTERPOLATES"
   },
   {
    "from": "LEASE_KEY_MONTHS",
-   "to": "engine-systems.js:8726",
+   "to": "engine-systems.js:8728",
    "type": "INTERPOLATES"
   },
   {
    "from": "LEASE_WET_FREE",
-   "to": "engine-systems.js:8733",
+   "to": "engine-systems.js:8735",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:11615",
+   "to": "engine-systems.js:11617",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:11633",
+   "to": "engine-systems.js:11635",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:11644",
+   "to": "engine-systems.js:11646",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:11650",
+   "to": "engine-systems.js:11652",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:11745",
+   "to": "engine-systems.js:11747",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_TURNS",
-   "to": "engine-systems.js:11629",
+   "to": "engine-systems.js:11631",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_TURNS",
-   "to": "engine-systems.js:11655",
+   "to": "engine-systems.js:11657",
    "type": "INTERPOLATES"
   },
   {
    "from": "LOW_SEASON",
-   "to": "engine-systems.js:8875",
+   "to": "engine-systems.js:8877",
    "type": "INTERPOLATES"
   },
   {
    "from": "MERIT_COST",
-   "to": "engine-systems.js:7860",
+   "to": "engine-systems.js:7862",
    "type": "INTERPOLATES"
   },
   {
    "from": "MERIT_COST",
-   "to": "engine-systems.js:7960",
+   "to": "engine-systems.js:7962",
    "type": "INTERPOLATES"
   },
   {
    "from": "MERIT_COST",
-   "to": "world.js:14684",
+   "to": "world.js:14689",
    "type": "INTERPOLATES"
   },
   {
    "from": "MERIT_COST",
-   "to": "world.js:14685",
+   "to": "world.js:14690",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS",
-   "to": "engine-parser.js:14717",
+   "to": "engine-parser.js:14719",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS_SAVED",
-   "to": "engine-parser.js:14717",
+   "to": "engine-parser.js:14719",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS_SAVED",
-   "to": "engine-parser.js:14735",
+   "to": "engine-parser.js:14737",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:14763",
+   "to": "engine-parser.js:14765",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:14764",
+   "to": "engine-parser.js:14766",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:14769",
+   "to": "engine-parser.js:14771",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:14781",
+   "to": "engine-parser.js:14783",
    "type": "INTERPOLATES"
   },
   {
@@ -55340,12 +56143,12 @@
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:8749",
+   "to": "engine-parser.js:8751",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:8863",
+   "to": "engine-parser.js:8865",
    "type": "INTERPOLATES"
   },
   {
@@ -55355,17 +56158,17 @@
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "world.js:13495",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "MOTOSAI_FAR",
-   "to": "world.js:13496",
+   "to": "world.js:13500",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
    "to": "world.js:13501",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "MOTOSAI_FAR",
+   "to": "world.js:13506",
    "type": "INTERPOLATES"
   },
   {
@@ -55400,17 +56203,17 @@
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:8749",
+   "to": "engine-parser.js:8751",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:8829",
+   "to": "engine-parser.js:8831",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:9341",
+   "to": "engine-parser.js:9343",
    "type": "INTERPOLATES"
   },
   {
@@ -55420,42 +56223,17 @@
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-play.js:5089",
+   "to": "engine-play.js:5094",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-play.js:5090",
+   "to": "engine-play.js:5095",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-play.js:5090",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "MOTOSAI_TOWN",
-   "to": "world.js:13486",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "MOTOSAI_TOWN",
-   "to": "world.js:13487",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "MOTOSAI_TOWN",
-   "to": "world.js:13488",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "MOTOSAI_TOWN",
-   "to": "world.js:13489",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "MOTOSAI_TOWN",
-   "to": "world.js:13490",
+   "to": "engine-play.js:5095",
    "type": "INTERPOLATES"
   },
   {
@@ -55480,22 +56258,47 @@
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "world.js:13500",
+   "to": "world.js:13495",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "world.js:13506",
+   "to": "world.js:13496",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "world.js:13507",
+   "to": "world.js:13497",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "world.js:13509",
+   "to": "world.js:13498",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "MOTOSAI_TOWN",
+   "to": "world.js:13499",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "MOTOSAI_TOWN",
+   "to": "world.js:13505",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "MOTOSAI_TOWN",
+   "to": "world.js:13511",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "MOTOSAI_TOWN",
+   "to": "world.js:13512",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "MOTOSAI_TOWN",
+   "to": "world.js:13514",
    "type": "INTERPOLATES"
   },
   {
@@ -55510,22 +56313,22 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:3252",
+   "to": "engine-core.js:3260",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:659",
+   "to": "engine-core.js:660",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:662",
+   "to": "engine-core.js:663",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:662",
+   "to": "engine-core.js:663",
    "type": "INTERPOLATES"
   },
   {
@@ -55535,17 +56338,17 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:10001",
+   "to": "engine-parser.js:10003",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:10102",
+   "to": "engine-parser.js:10104",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:10103",
+   "to": "engine-parser.js:10105",
    "type": "INTERPOLATES"
   },
   {
@@ -55560,17 +56363,17 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:9990",
+   "to": "engine-parser.js:9992",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:9995",
+   "to": "engine-parser.js:9997",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-play.js:4673",
+   "to": "engine-play.js:4678",
    "type": "INTERPOLATES"
   },
   {
@@ -55600,17 +56403,17 @@
   },
   {
    "from": "NONT_CHARGE",
-   "to": "engine-parser.js:9141",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "NONT_CHARGE",
-   "to": "engine-parser.js:9142",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "NONT_CHARGE",
    "to": "engine-parser.js:9143",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "NONT_CHARGE",
+   "to": "engine-parser.js:9144",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "NONT_CHARGE",
+   "to": "engine-parser.js:9145",
    "type": "INTERPOLATES"
   },
   {
@@ -55620,12 +56423,12 @@
   },
   {
    "from": "NONT_LOAN_GARNISH",
-   "to": "engine-systems.js:8909",
+   "to": "engine-systems.js:8911",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_LOAN_GARNISH",
-   "to": "engine-systems.js:9457",
+   "to": "engine-systems.js:9459",
    "type": "INTERPOLATES"
   },
   {
@@ -55715,27 +56518,27 @@
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9086",
+   "to": "engine-systems.js:9088",
    "type": "INTERPOLATES"
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9106",
+   "to": "engine-systems.js:9108",
    "type": "INTERPOLATES"
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9106",
+   "to": "engine-systems.js:9108",
    "type": "INTERPOLATES"
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9106",
+   "to": "engine-systems.js:9108",
    "type": "INTERPOLATES"
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9458",
+   "to": "engine-systems.js:9460",
    "type": "INTERPOLATES"
   },
   {
@@ -55745,17 +56548,17 @@
   },
   {
    "from": "OWN_BAR_FOOD",
-   "to": "engine-systems.js:11223",
+   "to": "engine-systems.js:11225",
    "type": "INTERPOLATES"
   },
   {
    "from": "OWN_BAR_FOOD",
-   "to": "engine-systems.js:11224",
+   "to": "engine-systems.js:11226",
    "type": "INTERPOLATES"
   },
   {
    "from": "OWN_BAR_FOOD",
-   "to": "engine-systems.js:11229",
+   "to": "engine-systems.js:11231",
    "type": "INTERPOLATES"
   },
   {
@@ -55875,7 +56678,7 @@
   },
   {
    "from": "QV_BASKET",
-   "to": "world.js:14927",
+   "to": "world.js:14932",
    "type": "INTERPOLATES"
   },
   {
@@ -55890,12 +56693,12 @@
   },
   {
    "from": "QV_CRISPS",
-   "to": "engine-systems.js:11073",
+   "to": "engine-systems.js:11075",
    "type": "INTERPOLATES"
   },
   {
    "from": "QV_CRISPS",
-   "to": "world.js:14937",
+   "to": "world.js:14942",
    "type": "INTERPOLATES"
   },
   {
@@ -55910,27 +56713,27 @@
   },
   {
    "from": "QV_CURRY",
-   "to": "world.js:14931",
+   "to": "world.js:14936",
    "type": "INTERPOLATES"
   },
   {
    "from": "QV_PIE",
-   "to": "world.js:14929",
+   "to": "world.js:14934",
    "type": "INTERPOLATES"
   },
   {
    "from": "QV_PLOUGH",
-   "to": "world.js:14933",
+   "to": "world.js:14938",
    "type": "INTERPOLATES"
   },
   {
    "from": "QV_ROAST",
-   "to": "engine-systems.js:11044",
+   "to": "engine-systems.js:11046",
    "type": "INTERPOLATES"
   },
   {
    "from": "QV_ROAST",
-   "to": "world.js:14935",
+   "to": "world.js:14940",
    "type": "INTERPOLATES"
   },
   {
@@ -55950,12 +56753,12 @@
   },
   {
    "from": "RENT_GRACE",
-   "to": "engine-systems.js:9242",
+   "to": "engine-systems.js:9244",
    "type": "INTERPOLATES"
   },
   {
    "from": "RENT_GRACE",
-   "to": "engine-systems.js:9479",
+   "to": "engine-systems.js:9481",
    "type": "INTERPOLATES"
   },
   {
@@ -55980,17 +56783,17 @@
   },
   {
    "from": "ROAST_COVERS",
-   "to": "engine-systems.js:11016",
+   "to": "engine-systems.js:11018",
    "type": "INTERPOLATES"
   },
   {
    "from": "ROAST_PACE",
-   "to": "engine-systems.js:11010",
+   "to": "engine-systems.js:11012",
    "type": "INTERPOLATES"
   },
   {
    "from": "ROAST_PACE",
-   "to": "engine-systems.js:11016",
+   "to": "engine-systems.js:11018",
    "type": "INTERPOLATES"
   },
   {
@@ -56000,7 +56803,7 @@
   },
   {
    "from": "ROOM_RENT",
-   "to": "engine-play.js:3920",
+   "to": "engine-play.js:3925",
    "type": "INTERPOLATES"
   },
   {
@@ -56045,37 +56848,37 @@
   },
   {
    "from": "ROUGH_WAKE_CAP",
-   "to": "engine-play.js:4676",
+   "to": "engine-play.js:4681",
    "type": "INTERPOLATES"
   },
   {
    "from": "ROUGH_WAKE_CAP",
-   "to": "engine-play.js:5267",
+   "to": "engine-play.js:5272",
    "type": "INTERPOLATES"
   },
   {
    "from": "ROUGH_WAKE_CAP",
-   "to": "engine-play.js:5418",
+   "to": "engine-play.js:5423",
    "type": "INTERPOLATES"
   },
   {
    "from": "SAFE_CASH",
-   "to": "engine-play.js:5775",
+   "to": "engine-play.js:5780",
    "type": "INTERPOLATES"
   },
   {
    "from": "SAFE_CASH",
-   "to": "engine-play.js:5855",
+   "to": "engine-play.js:5860",
    "type": "INTERPOLATES"
   },
   {
    "from": "SAFE_CASH",
-   "to": "engine-systems.js:11268",
+   "to": "engine-systems.js:11270",
    "type": "INTERPOLATES"
   },
   {
    "from": "SAFE_CASH",
-   "to": "engine-systems.js:11271",
+   "to": "engine-systems.js:11273",
    "type": "INTERPOLATES"
   },
   {
@@ -56090,27 +56893,27 @@
   },
   {
    "from": "SEASON_DEFAULT_M0",
-   "to": "engine-core.js:491",
+   "to": "engine-core.js:492",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEASON_DEFAULT_M0",
-   "to": "engine-systems.js:8563",
+   "to": "engine-systems.js:8565",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEASON_MONTH_DAYS",
-   "to": "engine-systems.js:8557",
+   "to": "engine-systems.js:8559",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEASON_MONTH_DAYS",
-   "to": "engine-systems.js:8592",
+   "to": "engine-systems.js:8594",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEASON_MONTH_DAYS",
-   "to": "engine-systems.js:8599",
+   "to": "engine-systems.js:8601",
    "type": "INTERPOLATES"
   },
   {
@@ -56120,77 +56923,72 @@
   },
   {
    "from": "SHIFT_EARLY_COST",
-   "to": "engine-systems.js:7857",
+   "to": "engine-systems.js:7859",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_EARLY_COST",
-   "to": "engine-systems.js:7932",
+   "to": "engine-systems.js:7934",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_EARLY_COST",
-   "to": "engine-systems.js:8086",
+   "to": "engine-systems.js:8088",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_FLAT_LOSS",
-   "to": "engine-systems.js:7981",
+   "to": "engine-systems.js:7983",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_FLAT_LOSS",
-   "to": "engine-systems.js:7993",
+   "to": "engine-systems.js:7995",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_FLAT_LOSS",
-   "to": "engine-systems.js:8002",
+   "to": "engine-systems.js:8004",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_MERIT_LOSS",
-   "to": "engine-systems.js:8007",
+   "to": "engine-systems.js:8009",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_ROUND_COST",
-   "to": "engine-systems.js:7858",
+   "to": "engine-systems.js:7860",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_ROUND_COST",
-   "to": "engine-systems.js:7947",
+   "to": "engine-systems.js:7949",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_ROUND_COST",
-   "to": "engine-systems.js:7952",
+   "to": "engine-systems.js:7954",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_ROUND_TAKE",
-   "to": "engine-systems.js:7948",
+   "to": "engine-systems.js:7950",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_DOCKET",
-   "to": "engine-systems.js:7910",
+   "to": "engine-systems.js:7912",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_DOCKET_PAYS",
-   "to": "engine-systems.js:7916",
+   "to": "engine-systems.js:7918",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_TAKE",
-   "to": "engine-systems.js:7856",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "SHIFT_TAB_TAKE",
-   "to": "engine-systems.js:7914",
+   "to": "engine-systems.js:7858",
    "type": "INTERPOLATES"
   },
   {
@@ -56200,12 +56998,17 @@
   },
   {
    "from": "SHIFT_TAB_TAKE",
-   "to": "engine-systems.js:7923",
+   "to": "engine-systems.js:7918",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_TAKE",
    "to": "engine-systems.js:7925",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "SHIFT_TAB_TAKE",
+   "to": "engine-systems.js:7927",
    "type": "INTERPOLATES"
   },
   {
@@ -56230,7 +57033,7 @@
   },
   {
    "from": "STD_RISK",
-   "to": "engine-play.js:4350",
+   "to": "engine-play.js:4355",
    "type": "INTERPOLATES"
   },
   {
@@ -56240,7 +57043,7 @@
   },
   {
    "from": "SUNRISE_TURN",
-   "to": "engine-parser.js:10082",
+   "to": "engine-parser.js:10084",
    "type": "INTERPOLATES"
   },
   {
@@ -56260,7 +57063,7 @@
   },
   {
    "from": "SYN_INSIDE_PRICE",
-   "to": "engine-systems.js:8828",
+   "to": "engine-systems.js:8830",
    "type": "INTERPOLATES"
   },
   {
@@ -56270,22 +57073,22 @@
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "engine-systems.js:8905",
+   "to": "engine-systems.js:8907",
    "type": "INTERPOLATES"
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "world.js:14823",
+   "to": "world.js:14828",
    "type": "INTERPOLATES"
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "world.js:14854",
+   "to": "world.js:14859",
    "type": "INTERPOLATES"
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "world.js:14887",
+   "to": "world.js:14892",
    "type": "INTERPOLATES"
   },
   {
@@ -56300,7 +57103,7 @@
   },
   {
    "from": "THAI_ATM_CAP",
-   "to": "engine-parser.js:10719",
+   "to": "engine-parser.js:10721",
    "type": "INTERPOLATES"
   },
   {
@@ -56345,7 +57148,7 @@
   },
   {
    "from": "TONIC_POLICE_CUT",
-   "to": "engine-parser.js:10832",
+   "to": "engine-parser.js:10834",
    "type": "INTERPOLATES"
   },
   {
@@ -56420,12 +57223,12 @@
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2534",
+   "to": "engine-core.js:2542",
    "type": "INTERPOLATES"
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2535",
+   "to": "engine-core.js:2543",
    "type": "INTERPOLATES"
   },
   {
@@ -56440,7 +57243,7 @@
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-play.js:4799",
+   "to": "engine-play.js:4804",
    "type": "INTERPOLATES"
   },
   {
@@ -56465,17 +57268,17 @@
   },
   {
    "from": "WORK_DRIFT",
-   "to": "engine-systems.js:9567",
+   "to": "engine-systems.js:9569",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_DRIFT",
-   "to": "engine-systems.js:9571",
+   "to": "engine-systems.js:9573",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_DRIFT",
-   "to": "engine-systems.js:9571",
+   "to": "engine-systems.js:9573",
    "type": "INTERPOLATES"
   },
   {
@@ -56510,7 +57313,7 @@
   },
   {
    "from": "WORK_MIN_STOOD",
-   "to": "engine-systems.js:8846",
+   "to": "engine-systems.js:8848",
    "type": "INTERPOLATES"
   },
   {
@@ -56520,12 +57323,12 @@
   },
   {
    "from": "WORK_TAKINGS",
-   "to": "engine-systems.js:8852",
+   "to": "engine-systems.js:8854",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_TAKINGS",
-   "to": "engine-systems.js:9176",
+   "to": "engine-systems.js:9178",
    "type": "INTERPOLATES"
   },
   {
@@ -59172,12 +59975,12 @@
   },
   {
    "from": "diamondTruth",
-   "to": "world.js:15461",
+   "to": "world.js:15466",
    "type": "READ_BY_DATA"
   },
   {
    "from": "diamondTruth",
-   "to": "world.js:15470",
+   "to": "world.js:15475",
    "type": "READ_BY_DATA"
   },
   {
@@ -59192,7 +59995,7 @@
   },
   {
    "from": "glamHeard",
-   "to": "world.js:15504",
+   "to": "world.js:15509",
    "type": "READ_BY_DATA"
   },
   {
@@ -59247,7 +60050,7 @@
   },
   {
    "from": "heardWhispers",
-   "to": "world.js:13887",
+   "to": "world.js:13892",
    "type": "READ_BY_DATA"
   },
   {
@@ -59257,12 +60060,12 @@
   },
   {
    "from": "jokeWho",
-   "to": "world.js:15479",
+   "to": "world.js:15484",
    "type": "READ_BY_DATA"
   },
   {
    "from": "jokeWho",
-   "to": "world.js:15530",
+   "to": "world.js:15535",
    "type": "READ_BY_DATA"
   },
   {
@@ -59302,12 +60105,12 @@
   },
   {
    "from": "mortGlam",
-   "to": "world.js:15504",
+   "to": "world.js:15509",
    "type": "READ_BY_DATA"
   },
   {
    "from": "mortMet",
-   "to": "world.js:15479",
+   "to": "world.js:15484",
    "type": "READ_BY_DATA"
   },
   {
@@ -59477,12 +60280,12 @@
   },
   {
    "from": "quietSideDone",
-   "to": "world.js:15025",
+   "to": "world.js:15030",
    "type": "READ_BY_DATA"
   },
   {
    "from": "quietSideDone",
-   "to": "world.js:15031",
+   "to": "world.js:15036",
    "type": "READ_BY_DATA"
   },
   {
@@ -59557,7 +60360,7 @@
   },
   {
    "from": "tiffinDelivered",
-   "to": "world.js:13929",
+   "to": "world.js:13934",
    "type": "READ_BY_DATA"
   },
   {
@@ -59582,52 +60385,52 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1192",
+   "to": "engine-core.js:1193",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1276",
+   "to": "engine-core.js:1277",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1370",
+   "to": "engine-core.js:1371",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:2884",
+   "to": "engine-core.js:2892",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3183",
+   "to": "engine-core.js:3191",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3190",
+   "to": "engine-core.js:3198",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3274",
+   "to": "engine-core.js:3282",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3276",
+   "to": "engine-core.js:3284",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:615",
+   "to": "engine-core.js:616",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:702",
+   "to": "engine-core.js:703",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59667,7 +60470,7 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:10586",
+   "to": "engine-parser.js:10588",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59677,27 +60480,22 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11674",
+   "to": "engine-parser.js:11676",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:12011",
+   "to": "engine-parser.js:12013",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:12015",
+   "to": "engine-parser.js:12017",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:13335",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "act1Done",
-   "to": "engine-parser.js:13552",
+   "to": "engine-parser.js:13337",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59707,32 +60505,37 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:13624",
+   "to": "engine-parser.js:13556",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14253",
+   "to": "engine-parser.js:13626",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14371",
+   "to": "engine-parser.js:14255",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14498",
+   "to": "engine-parser.js:14373",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14653",
+   "to": "engine-parser.js:14500",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14663",
+   "to": "engine-parser.js:14655",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "act1Done",
+   "to": "engine-parser.js:14665",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59787,32 +60590,32 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:8796",
+   "to": "engine-parser.js:8798",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:8862",
+   "to": "engine-parser.js:8864",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9189",
+   "to": "engine-parser.js:9191",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9197",
+   "to": "engine-parser.js:9199",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9227",
+   "to": "engine-parser.js:9229",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9386",
+   "to": "engine-parser.js:9388",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59822,12 +60625,12 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9969",
+   "to": "engine-parser.js:9971",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9980",
+   "to": "engine-parser.js:9982",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59857,67 +60660,67 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:3452",
+   "to": "engine-play.js:3454",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:4671",
+   "to": "engine-play.js:4676",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:4968",
+   "to": "engine-play.js:4973",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:4991",
+   "to": "engine-play.js:4996",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5031",
+   "to": "engine-play.js:5036",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5116",
+   "to": "engine-play.js:5121",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5179",
+   "to": "engine-play.js:5184",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5214",
+   "to": "engine-play.js:5219",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5264",
+   "to": "engine-play.js:5269",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5299",
+   "to": "engine-play.js:5304",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5347",
+   "to": "engine-play.js:5352",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5401",
+   "to": "engine-play.js:5406",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5422",
+   "to": "engine-play.js:5427",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -59932,17 +60735,17 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:10897",
+   "to": "engine-systems.js:10899",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:11264",
+   "to": "engine-systems.js:11266",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:11276",
+   "to": "engine-systems.js:11278",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60037,17 +60840,17 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:8573",
+   "to": "engine-systems.js:8575",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "affairOffered",
-   "to": "engine-parser.js:12275",
+   "to": "engine-parser.js:12277",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "affairOffered",
-   "to": "engine-systems.js:8426",
+   "to": "engine-systems.js:8428",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60062,7 +60865,7 @@
   },
   {
    "from": "amuletReturned",
-   "to": "engine-systems.js:10760",
+   "to": "engine-systems.js:10762",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60082,12 +60885,12 @@
   },
   {
    "from": "barBook",
-   "to": "engine-systems.js:8855",
+   "to": "engine-systems.js:8857",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barBook",
-   "to": "engine-systems.js:9442",
+   "to": "engine-systems.js:9444",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60097,17 +60900,17 @@
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:9359",
+   "to": "engine-systems.js:9361",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:9402",
+   "to": "engine-systems.js:9404",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:9630",
+   "to": "engine-systems.js:9632",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60117,12 +60920,12 @@
   },
   {
    "from": "barOpen",
-   "to": "engine-play.js:5356",
+   "to": "engine-play.js:5361",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-play.js:5362",
+   "to": "engine-play.js:5367",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60132,17 +60935,17 @@
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:8628",
+   "to": "engine-systems.js:8630",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:8965",
+   "to": "engine-systems.js:8967",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:9679",
+   "to": "engine-systems.js:9681",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60167,17 +60970,17 @@
   },
   {
    "from": "barPaid",
-   "to": "engine-systems.js:8639",
+   "to": "engine-systems.js:8641",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-systems.js:9411",
+   "to": "engine-systems.js:9413",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-systems.js:9416",
+   "to": "engine-systems.js:9418",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60187,27 +60990,32 @@
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:7798",
+   "to": "engine-systems.js:7800",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:8639",
+   "to": "engine-systems.js:8641",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:9413",
+   "to": "engine-systems.js:9415",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barSold",
-   "to": "engine-parser.js:12275",
+   "to": "engine-core.js:1830",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barSold",
-   "to": "engine-play.js:3699",
+   "to": "engine-parser.js:12277",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "barSold",
+   "to": "engine-play.js:3704",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60217,17 +61025,17 @@
   },
   {
    "from": "barSold",
-   "to": "engine-systems.js:8421",
+   "to": "engine-systems.js:8423",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barSold",
-   "to": "engine-systems.js:9398",
+   "to": "engine-systems.js:9400",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "beatBargirlC4",
-   "to": "engine-systems.js:11291",
+   "to": "engine-systems.js:11293",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60267,12 +61075,12 @@
   },
   {
    "from": "burnerUsed",
-   "to": "engine-systems.js:12037",
+   "to": "engine-systems.js:12039",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "burnerUsed",
-   "to": "engine-systems.js:12095",
+   "to": "engine-systems.js:12097",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60282,92 +61090,92 @@
   },
   {
    "from": "ccibCleared",
-   "to": "engine-systems.js:12137",
+   "to": "engine-systems.js:12139",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibCleared",
-   "to": "engine-systems.js:12164",
+   "to": "engine-systems.js:12166",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibCleared",
-   "to": "engine-systems.js:12189",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "ccibCleared",
-   "to": "engine-systems.js:12204",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "ccibLanded",
-   "to": "engine-systems.js:12190",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "ccibLanded",
-   "to": "engine-systems.js:12204",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "ccibLanded",
-   "to": "engine-systems.js:12226",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "ccibLoudAfter",
    "to": "engine-systems.js:12191",
    "type": "READ_BY_ENGINE"
   },
   {
+   "from": "ccibCleared",
+   "to": "engine-systems.js:12206",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "ccibLanded",
+   "to": "engine-systems.js:12192",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "ccibLanded",
+   "to": "engine-systems.js:12206",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "ccibLanded",
+   "to": "engine-systems.js:12228",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "ccibLoudAfter",
+   "to": "engine-systems.js:12193",
+   "type": "READ_BY_ENGINE"
+  },
+  {
    "from": "ccibReadGiven",
-   "to": "engine-systems.js:12150",
+   "to": "engine-systems.js:12152",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibSecondCoffee",
-   "to": "engine-systems.js:12204",
+   "to": "engine-systems.js:12206",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibSecondCoffee",
-   "to": "engine-systems.js:12233",
+   "to": "engine-systems.js:12235",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibSecondLook",
-   "to": "engine-systems.js:12150",
+   "to": "engine-systems.js:12152",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-parser.js:8962",
+   "to": "engine-parser.js:8964",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12057",
+   "to": "engine-systems.js:12059",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12137",
+   "to": "engine-systems.js:12139",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12164",
+   "to": "engine-systems.js:12166",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12189",
+   "to": "engine-systems.js:12191",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12204",
+   "to": "engine-systems.js:12206",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60397,7 +61205,7 @@
   },
   {
    "from": "clozeGot",
-   "to": "engine-systems.js:11580",
+   "to": "engine-systems.js:11582",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60407,12 +61215,12 @@
   },
   {
    "from": "ctfRabbit",
-   "to": "engine-parser.js:14656",
+   "to": "engine-parser.js:14658",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ctfRabbit",
-   "to": "engine-systems.js:10922",
+   "to": "engine-systems.js:10924",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60447,7 +61255,7 @@
   },
   {
    "from": "fed26",
-   "to": "engine-play.js:3528",
+   "to": "engine-play.js:3530",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60462,7 +61270,7 @@
   },
   {
    "from": "greetedFon",
-   "to": "engine-systems.js:11289",
+   "to": "engine-systems.js:11291",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60472,22 +61280,22 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:10721",
+   "to": "engine-parser.js:10723",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:10780",
+   "to": "engine-parser.js:10782",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:10791",
+   "to": "engine-parser.js:10793",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:13171",
+   "to": "engine-parser.js:13173",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60522,12 +61330,12 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-play.js:5442",
+   "to": "engine-play.js:5447",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-systems.js:11276",
+   "to": "engine-systems.js:11278",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60557,17 +61365,17 @@
   },
   {
    "from": "heardPlgHistory",
-   "to": "engine-core.js:737",
+   "to": "engine-core.js:738",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "heardPlgInside",
-   "to": "engine-core.js:736",
+   "to": "engine-core.js:737",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "heardPlgPitch",
-   "to": "engine-core.js:736",
+   "to": "engine-core.js:737",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60577,7 +61385,7 @@
   },
   {
    "from": "heardPriceStory",
-   "to": "engine-play.js:3526",
+   "to": "engine-play.js:3528",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60587,12 +61395,12 @@
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:8863",
+   "to": "engine-parser.js:8865",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:9341",
+   "to": "engine-parser.js:9343",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60602,17 +61410,17 @@
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-systems.js:11287",
+   "to": "engine-systems.js:11289",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hitJackpot",
-   "to": "engine-systems.js:11292",
+   "to": "engine-systems.js:11294",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hyperUpstairs",
-   "to": "engine-core.js:2942",
+   "to": "engine-core.js:2950",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60627,12 +61435,12 @@
   },
   {
    "from": "invoicesCopied",
-   "to": "engine-play.js:5974",
+   "to": "engine-play.js:5979",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "invoicesCopied",
-   "to": "engine-systems.js:12102",
+   "to": "engine-systems.js:12104",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60687,22 +61495,22 @@
   },
   {
    "from": "kidHandled",
-   "to": "engine-parser.js:8962",
+   "to": "engine-parser.js:8964",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "kidPaid",
-   "to": "engine-systems.js:12362",
+   "to": "engine-systems.js:12364",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "kidPath",
-   "to": "engine-parser.js:8962",
+   "to": "engine-parser.js:8964",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "kidPath",
-   "to": "engine-systems.js:12052",
+   "to": "engine-systems.js:12054",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60762,7 +61570,7 @@
   },
   {
    "from": "kyleShift",
-   "to": "engine-systems.js:12374",
+   "to": "engine-systems.js:12376",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60777,27 +61585,27 @@
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:11653",
+   "to": "engine-systems.js:11655",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:11710",
+   "to": "engine-systems.js:11712",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:11726",
+   "to": "engine-systems.js:11728",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:9386",
+   "to": "engine-parser.js:9388",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:9413",
+   "to": "engine-parser.js:9415",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60807,32 +61615,32 @@
   },
   {
    "from": "motBooted",
-   "to": "engine-parser.js:14719",
+   "to": "engine-parser.js:14721",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motBootsTold",
-   "to": "engine-parser.js:14727",
+   "to": "engine-parser.js:14729",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:12202",
+   "to": "engine-parser.js:12204",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:14203",
+   "to": "engine-parser.js:14205",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:14727",
+   "to": "engine-parser.js:14729",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:14758",
+   "to": "engine-parser.js:14760",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60862,117 +61670,72 @@
   },
   {
    "from": "orchidReported",
-   "to": "engine-core.js:2834",
+   "to": "engine-core.js:1829",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "orchidReported",
-   "to": "engine-parser.js:1067",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidReported",
-   "to": "engine-parser.js:6392",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidReported",
-   "to": "engine-play.js:3006",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidReported",
-   "to": "engine-play.js:3013",
+   "to": "engine-play.js:3007",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "orchidSent",
-   "to": "engine-core.js:2834",
+   "to": "engine-core.js:1829",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "orchidSent",
-   "to": "engine-parser.js:1067",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidSent",
-   "to": "engine-parser.js:6392",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidSent",
-   "to": "engine-play.js:3006",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidSent",
-   "to": "engine-play.js:3012",
+   "to": "engine-play.js:3007",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "orchidVouched",
-   "to": "engine-core.js:2834",
+   "to": "engine-core.js:1829",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "orchidVouched",
-   "to": "engine-parser.js:1067",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidVouched",
-   "to": "engine-parser.js:6392",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidVouched",
-   "to": "engine-play.js:3006",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "orchidVouched",
-   "to": "engine-play.js:3013",
+   "to": "engine-play.js:3007",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "owlAmulet",
-   "to": "engine-systems.js:10760",
+   "to": "engine-systems.js:10762",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "owlBox15",
-   "to": "engine-parser.js:14655",
+   "to": "engine-parser.js:14657",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "owlBox15",
-   "to": "engine-systems.js:10803",
+   "to": "engine-systems.js:10805",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-parser.js:14161",
+   "to": "engine-parser.js:14163",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-systems.js:12039",
+   "to": "engine-systems.js:12041",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-systems.js:12095",
+   "to": "engine-systems.js:12097",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "oyGaveWallet",
-   "to": "engine-systems.js:11283",
+   "to": "engine-systems.js:11285",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "oyGaveWallet",
-   "to": "engine-systems.js:11314",
+   "to": "engine-systems.js:11316",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60982,7 +61745,7 @@
   },
   {
    "from": "partnerCandy",
-   "to": "engine-systems.js:9495",
+   "to": "engine-systems.js:9497",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -60997,22 +61760,22 @@
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:8444",
+   "to": "engine-systems.js:8446",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:9270",
+   "to": "engine-systems.js:9272",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:9320",
+   "to": "engine-systems.js:9322",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:9679",
+   "to": "engine-systems.js:9681",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61027,7 +61790,7 @@
   },
   {
    "from": "pinPart71",
-   "to": "engine-systems.js:11296",
+   "to": "engine-systems.js:11298",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61042,7 +61805,7 @@
   },
   {
    "from": "pinPart9",
-   "to": "engine-systems.js:11296",
+   "to": "engine-systems.js:11298",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61052,22 +61815,22 @@
   },
   {
    "from": "plgFlipTried",
-   "to": "engine-core.js:735",
+   "to": "engine-core.js:736",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "plgResolved",
-   "to": "engine-core.js:735",
+   "to": "engine-core.js:736",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "plgResolved",
-   "to": "engine-play.js:5932",
+   "to": "engine-play.js:5937",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "priewRevealed",
-   "to": "engine-parser.js:9413",
+   "to": "engine-parser.js:9415",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61087,12 +61850,12 @@
   },
   {
    "from": "probeArmed",
-   "to": "engine-systems.js:10891",
+   "to": "engine-systems.js:10893",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "probeArmed",
-   "to": "engine-systems.js:10896",
+   "to": "engine-systems.js:10898",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61107,7 +61870,7 @@
   },
   {
    "from": "rabbitData",
-   "to": "engine-parser.js:12006",
+   "to": "engine-parser.js:12008",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61127,12 +61890,12 @@
   },
   {
    "from": "rabbitData",
-   "to": "engine-systems.js:12057",
+   "to": "engine-systems.js:12059",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "rabbitData",
-   "to": "engine-systems.js:12362",
+   "to": "engine-systems.js:12364",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61162,7 +61925,7 @@
   },
   {
    "from": "roomSafeOpened",
-   "to": "engine-systems.js:11264",
+   "to": "engine-systems.js:11266",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61172,17 +61935,17 @@
   },
   {
    "from": "sabaiSabai",
-   "to": "engine-core.js:551",
+   "to": "engine-core.js:552",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "sabaiSabai",
-   "to": "engine-play.js:4157",
+   "to": "engine-play.js:4162",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "sabaiSabai",
-   "to": "engine-play.js:5762",
+   "to": "engine-play.js:5767",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61197,27 +61960,27 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-core.js:2307",
+   "to": "engine-core.js:2315",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-play.js:5634",
+   "to": "engine-play.js:5639",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-systems.js:10084",
+   "to": "engine-systems.js:10086",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "simUsed",
-   "to": "engine-systems.js:12037",
+   "to": "engine-systems.js:12039",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "simUsed",
-   "to": "engine-systems.js:12051",
+   "to": "engine-systems.js:12053",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61227,17 +61990,17 @@
   },
   {
    "from": "somTamAccepted",
-   "to": "engine-systems.js:11233",
+   "to": "engine-systems.js:11235",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "somTamDelivered",
-   "to": "engine-systems.js:11233",
+   "to": "engine-systems.js:11235",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "somTamDelivered",
-   "to": "engine-systems.js:11288",
+   "to": "engine-systems.js:11290",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61252,7 +62015,7 @@
   },
   {
    "from": "tanAsked",
-   "to": "engine-systems.js:9686",
+   "to": "engine-systems.js:9688",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61267,12 +62030,12 @@
   },
   {
    "from": "tanRevealed",
-   "to": "engine-systems.js:10066",
+   "to": "engine-systems.js:10068",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "tanSuspected",
-   "to": "engine-systems.js:10065",
+   "to": "engine-systems.js:10067",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61297,12 +62060,12 @@
   },
   {
    "from": "waenLink",
-   "to": "engine-systems.js:11710",
+   "to": "engine-systems.js:11712",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "waenLink",
-   "to": "engine-systems.js:11726",
+   "to": "engine-systems.js:11728",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61312,7 +62075,7 @@
   },
   {
    "from": "waiedOy",
-   "to": "engine-systems.js:11290",
+   "to": "engine-systems.js:11292",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -61322,12 +62085,12 @@
   },
   {
    "from": "wrongNumberSent",
-   "to": "engine-systems.js:10891",
+   "to": "engine-systems.js:10893",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "wrongNumberSent",
-   "to": "engine-systems.js:10896",
+   "to": "engine-systems.js:10898",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -62307,42 +63070,42 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14414",
+   "to": "engine-parser.js:14416",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5763",
+   "to": "engine-play.js:5768",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-play.js:5881",
+   "to": "engine-play.js:5886",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:11277",
+   "to": "engine-systems.js:11279",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:11320",
+   "to": "engine-systems.js:11322",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "affairBegun",
-   "to": "engine-systems.js:8185",
+   "to": "engine-systems.js:8187",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "affairOffered",
-   "to": "engine-systems.js:8362",
+   "to": "engine-systems.js:8364",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "affairWon",
-   "to": "engine-systems.js:8445",
+   "to": "engine-systems.js:8447",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62362,32 +63125,32 @@
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:9332",
+   "to": "engine-systems.js:9334",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:8446",
+   "to": "engine-systems.js:8448",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:9333",
+   "to": "engine-systems.js:9335",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-systems.js:8656",
+   "to": "engine-systems.js:8658",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:7799",
+   "to": "engine-systems.js:7801",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barSold",
-   "to": "engine-systems.js:8445",
+   "to": "engine-systems.js:8447",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62422,7 +63185,7 @@
   },
   {
    "from": "burnerUsed",
-   "to": "engine-systems.js:12026",
+   "to": "engine-systems.js:12028",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62437,37 +63200,37 @@
   },
   {
    "from": "ccibCleared",
-   "to": "engine-systems.js:12139",
+   "to": "engine-systems.js:12141",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibLanded",
-   "to": "engine-systems.js:12227",
+   "to": "engine-systems.js:12229",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibLoudAfter",
-   "to": "engine-systems.js:12191",
+   "to": "engine-systems.js:12193",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibRadarSet",
-   "to": "engine-systems.js:12128",
+   "to": "engine-systems.js:12130",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibSecondCoffee",
-   "to": "engine-systems.js:12208",
+   "to": "engine-systems.js:12210",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibSecondLook",
-   "to": "engine-systems.js:12152",
+   "to": "engine-systems.js:12154",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12063",
+   "to": "engine-systems.js:12065",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62492,7 +63255,7 @@
   },
   {
    "from": "clozeGot",
-   "to": "engine-systems.js:11581",
+   "to": "engine-systems.js:11583",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62502,7 +63265,7 @@
   },
   {
    "from": "ctfRabbit",
-   "to": "engine-systems.js:10928",
+   "to": "engine-systems.js:10930",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62517,7 +63280,7 @@
   },
   {
    "from": "expatLife",
-   "to": "engine-play.js:5886",
+   "to": "engine-play.js:5891",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62562,12 +63325,12 @@
   },
   {
    "from": "hasDog",
-   "to": "engine-play.js:5502",
+   "to": "engine-play.js:5507",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "hasDog",
-   "to": "engine-systems.js:10025",
+   "to": "engine-systems.js:10027",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62577,7 +63340,7 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:14413",
+   "to": "engine-parser.js:14415",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62587,12 +63350,12 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-play.js:5764",
+   "to": "engine-play.js:5769",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-play.js:5882",
+   "to": "engine-play.js:5887",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62617,7 +63380,7 @@
   },
   {
    "from": "invoicesCopied",
-   "to": "engine-play.js:5974",
+   "to": "engine-play.js:5979",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62652,27 +63415,27 @@
   },
   {
    "from": "kidCleared",
-   "to": "engine-systems.js:12426",
+   "to": "engine-systems.js:12428",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidHandled",
-   "to": "engine-systems.js:12400",
+   "to": "engine-systems.js:12402",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidHandled",
-   "to": "engine-systems.js:12426",
+   "to": "engine-systems.js:12428",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidPaid",
-   "to": "engine-systems.js:12330",
+   "to": "engine-systems.js:12332",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidPath",
-   "to": "engine-systems.js:12330",
+   "to": "engine-systems.js:12332",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62692,7 +63455,7 @@
   },
   {
    "from": "kyleShift",
-   "to": "engine-systems.js:12375",
+   "to": "engine-systems.js:12377",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62702,27 +63465,27 @@
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:11654",
+   "to": "engine-systems.js:11656",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:9388",
+   "to": "engine-parser.js:9390",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motBooted",
-   "to": "engine-parser.js:14739",
+   "to": "engine-parser.js:14741",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motBootsTold",
-   "to": "engine-parser.js:14774",
+   "to": "engine-parser.js:14776",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:14770",
+   "to": "engine-parser.js:14772",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62747,27 +63510,27 @@
   },
   {
    "from": "owlAmulet",
-   "to": "engine-systems.js:10761",
+   "to": "engine-systems.js:10763",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "owlBox15",
-   "to": "engine-systems.js:10804",
+   "to": "engine-systems.js:10806",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-parser.js:14162",
+   "to": "engine-parser.js:14164",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "partnerCandy",
-   "to": "engine-systems.js:7810",
+   "to": "engine-systems.js:7812",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:7801",
+   "to": "engine-systems.js:7803",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62777,12 +63540,12 @@
   },
   {
    "from": "priewRevealed",
-   "to": "engine-parser.js:9416",
+   "to": "engine-parser.js:9418",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "probeArmed",
-   "to": "engine-systems.js:10892",
+   "to": "engine-systems.js:10894",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62792,47 +63555,47 @@
   },
   {
    "from": "rabbitBlown",
-   "to": "engine-systems.js:11989",
+   "to": "engine-systems.js:11991",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitData",
-   "to": "engine-play.js:5988",
+   "to": "engine-play.js:5993",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitData",
-   "to": "engine-systems.js:11941",
+   "to": "engine-systems.js:11943",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitData",
-   "to": "engine-systems.js:12363",
+   "to": "engine-systems.js:12365",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-systems.js:11820",
+   "to": "engine-systems.js:11822",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-systems.js:11841",
+   "to": "engine-systems.js:11843",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-systems.js:12282",
+   "to": "engine-systems.js:12284",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-systems.js:12354",
+   "to": "engine-systems.js:12356",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "recceDone",
-   "to": "engine-core.js:2682",
+   "to": "engine-core.js:2690",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62847,12 +63610,12 @@
   },
   {
    "from": "roomSafeOpened",
-   "to": "engine-systems.js:11266",
+   "to": "engine-systems.js:11268",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "sabaiSabai",
-   "to": "engine-play.js:4158",
+   "to": "engine-play.js:4163",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62882,7 +63645,7 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-systems.js:10085",
+   "to": "engine-systems.js:10087",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62892,7 +63655,7 @@
   },
   {
    "from": "simUsed",
-   "to": "engine-systems.js:12025",
+   "to": "engine-systems.js:12027",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62932,17 +63695,17 @@
   },
   {
    "from": "tanKidFavour",
-   "to": "engine-systems.js:12400",
+   "to": "engine-systems.js:12402",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "tanKidRefused",
-   "to": "engine-systems.js:12411",
+   "to": "engine-systems.js:12413",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "tanRevealed",
-   "to": "engine-systems.js:10067",
+   "to": "engine-systems.js:10069",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -62982,7 +63745,7 @@
   },
   {
    "from": "waenLink",
-   "to": "engine-systems.js:11711",
+   "to": "engine-systems.js:11713",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -63002,7 +63765,7 @@
   },
   {
    "from": "wrongNumberSent",
-   "to": "engine-systems.js:10899",
+   "to": "engine-systems.js:10901",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -64320,16 +65083,16 @@
     "world.js:9250"
    ],
    "readByEngine": [
-    "engine-core.js:1192",
-    "engine-core.js:1276",
-    "engine-core.js:1370",
-    "engine-core.js:2884",
-    "engine-core.js:3183",
-    "engine-core.js:3190",
-    "engine-core.js:3274",
-    "engine-core.js:3276",
-    "engine-core.js:615",
-    "engine-core.js:702",
+    "engine-core.js:1193",
+    "engine-core.js:1277",
+    "engine-core.js:1371",
+    "engine-core.js:2892",
+    "engine-core.js:3191",
+    "engine-core.js:3198",
+    "engine-core.js:3282",
+    "engine-core.js:3284",
+    "engine-core.js:616",
+    "engine-core.js:703",
     "engine-encounters.js:174",
     "engine-encounters.js:321",
     "engine-encounters.js:328",
@@ -64337,20 +65100,20 @@
     "engine-encounters.js:903",
     "engine-encounters.js:961",
     "engine-parser.js:1003",
-    "engine-parser.js:10586",
+    "engine-parser.js:10588",
     "engine-parser.js:1151",
-    "engine-parser.js:11674",
-    "engine-parser.js:12011",
-    "engine-parser.js:12015",
-    "engine-parser.js:13335",
-    "engine-parser.js:13552",
+    "engine-parser.js:11676",
+    "engine-parser.js:12013",
+    "engine-parser.js:12017",
+    "engine-parser.js:13337",
     "engine-parser.js:13554",
-    "engine-parser.js:13624",
-    "engine-parser.js:14253",
-    "engine-parser.js:14371",
-    "engine-parser.js:14498",
-    "engine-parser.js:14653",
-    "engine-parser.js:14663",
+    "engine-parser.js:13556",
+    "engine-parser.js:13626",
+    "engine-parser.js:14255",
+    "engine-parser.js:14373",
+    "engine-parser.js:14500",
+    "engine-parser.js:14655",
+    "engine-parser.js:14665",
     "engine-parser.js:1519",
     "engine-parser.js:1702",
     "engine-parser.js:5546",
@@ -64361,38 +65124,38 @@
     "engine-parser.js:7434",
     "engine-parser.js:8627",
     "engine-parser.js:8725",
-    "engine-parser.js:8796",
-    "engine-parser.js:8862",
-    "engine-parser.js:9189",
-    "engine-parser.js:9197",
-    "engine-parser.js:9227",
-    "engine-parser.js:9386",
+    "engine-parser.js:8798",
+    "engine-parser.js:8864",
+    "engine-parser.js:9191",
+    "engine-parser.js:9199",
+    "engine-parser.js:9229",
+    "engine-parser.js:9388",
     "engine-parser.js:992",
-    "engine-parser.js:9969",
-    "engine-parser.js:9980",
+    "engine-parser.js:9971",
+    "engine-parser.js:9982",
     "engine-play.js:205",
     "engine-play.js:215",
     "engine-play.js:216",
     "engine-play.js:2332",
     "engine-play.js:307",
-    "engine-play.js:3452",
-    "engine-play.js:4671",
-    "engine-play.js:4968",
-    "engine-play.js:4991",
-    "engine-play.js:5031",
-    "engine-play.js:5116",
-    "engine-play.js:5179",
-    "engine-play.js:5214",
-    "engine-play.js:5264",
-    "engine-play.js:5299",
-    "engine-play.js:5347",
-    "engine-play.js:5401",
-    "engine-play.js:5422",
+    "engine-play.js:3454",
+    "engine-play.js:4676",
+    "engine-play.js:4973",
+    "engine-play.js:4996",
+    "engine-play.js:5036",
+    "engine-play.js:5121",
+    "engine-play.js:5184",
+    "engine-play.js:5219",
+    "engine-play.js:5269",
+    "engine-play.js:5304",
+    "engine-play.js:5352",
+    "engine-play.js:5406",
+    "engine-play.js:5427",
     "engine-play.js:634",
     "engine-play.js:727",
-    "engine-systems.js:10897",
-    "engine-systems.js:11264",
-    "engine-systems.js:11276",
+    "engine-systems.js:10899",
+    "engine-systems.js:11266",
+    "engine-systems.js:11278",
     "engine-systems.js:2357",
     "engine-systems.js:2384",
     "engine-systems.js:2643",
@@ -64411,7 +65174,7 @@
     "engine-systems.js:600",
     "engine-systems.js:657",
     "engine-systems.js:824",
-    "engine-systems.js:8573"
+    "engine-systems.js:8575"
    ],
    "reqFlagOf": [
     "kwan_crane",
@@ -64433,33 +65196,33 @@
     "tan#44"
    ],
    "setByEngine": [
-    "engine-parser.js:14414",
-    "engine-play.js:5763",
-    "engine-play.js:5881",
-    "engine-systems.js:11277",
-    "engine-systems.js:11320"
+    "engine-parser.js:14416",
+    "engine-play.js:5768",
+    "engine-play.js:5886",
+    "engine-systems.js:11279",
+    "engine-systems.js:11322"
    ]
   },
   {
    "name": "affairBegun",
    "setByEngine": [
-    "engine-systems.js:8185"
+    "engine-systems.js:8187"
    ]
   },
   {
    "name": "affairOffered",
    "readByEngine": [
-    "engine-parser.js:12275",
-    "engine-systems.js:8426"
+    "engine-parser.js:12277",
+    "engine-systems.js:8428"
    ],
    "setByEngine": [
-    "engine-systems.js:8362"
+    "engine-systems.js:8364"
    ]
   },
   {
    "name": "affairWon",
    "setByEngine": [
-    "engine-systems.js:8445"
+    "engine-systems.js:8447"
    ]
   },
   {
@@ -64467,7 +65230,7 @@
    "readByEngine": [
     "engine-play.js:540",
     "engine-play.js:577",
-    "engine-systems.js:10760"
+    "engine-systems.js:10762"
    ],
    "requiredBy": [
     "mort#13"
@@ -64493,8 +65256,8 @@
    "readByEngine": [
     "engine-parser.js:5121",
     "engine-parser.js:5190",
-    "engine-systems.js:8855",
-    "engine-systems.js:9442"
+    "engine-systems.js:8857",
+    "engine-systems.js:9444"
    ],
    "setByEngine": [
     "engine-parser.js:5195"
@@ -64532,12 +65295,12 @@
    ],
    "readByEngine": [
     "engine-systems.js:7225",
-    "engine-systems.js:9359",
-    "engine-systems.js:9402",
-    "engine-systems.js:9630"
+    "engine-systems.js:9361",
+    "engine-systems.js:9404",
+    "engine-systems.js:9632"
    ],
    "setByEngine": [
-    "engine-systems.js:9332"
+    "engine-systems.js:9334"
    ]
   },
   {
@@ -64555,12 +65318,12 @@
    ],
    "readByEngine": [
     "engine-parser.js:3786",
-    "engine-play.js:5356",
-    "engine-play.js:5362",
+    "engine-play.js:5361",
+    "engine-play.js:5367",
     "engine-systems.js:6939",
-    "engine-systems.js:8628",
-    "engine-systems.js:8965",
-    "engine-systems.js:9679"
+    "engine-systems.js:8630",
+    "engine-systems.js:8967",
+    "engine-systems.js:9681"
    ],
    "requiredBy": [
     "candy#25",
@@ -64571,8 +65334,8 @@
     "bert#67"
    ],
    "setByEngine": [
-    "engine-systems.js:8446",
-    "engine-systems.js:9333"
+    "engine-systems.js:8448",
+    "engine-systems.js:9335"
    ]
   },
   {
@@ -64593,9 +65356,9 @@
     "engine-parser.js:6318",
     "engine-parser.js:6335",
     "engine-parser.js:6355",
-    "engine-systems.js:8639",
-    "engine-systems.js:9411",
-    "engine-systems.js:9416"
+    "engine-systems.js:8641",
+    "engine-systems.js:9413",
+    "engine-systems.js:9418"
    ],
    "reqFlagOf": [
     "bar_opening"
@@ -64605,7 +65368,7 @@
     "bert#67"
    ],
    "setByEngine": [
-    "engine-systems.js:8656"
+    "engine-systems.js:8658"
    ]
   },
   {
@@ -64622,9 +65385,9 @@
    ],
    "readByEngine": [
     "engine-systems.js:7228",
-    "engine-systems.js:7798",
-    "engine-systems.js:8639",
-    "engine-systems.js:9413"
+    "engine-systems.js:7800",
+    "engine-systems.js:8641",
+    "engine-systems.js:9415"
    ],
    "requiredBy": [
     "bert#66",
@@ -64632,7 +65395,7 @@
     "candy#27"
    ],
    "setByEngine": [
-    "engine-systems.js:7799"
+    "engine-systems.js:7801"
    ]
   },
   {
@@ -64658,20 +65421,21 @@
     "world.js:12570"
    ],
    "readByEngine": [
-    "engine-parser.js:12275",
-    "engine-play.js:3699",
+    "engine-core.js:1830",
+    "engine-parser.js:12277",
+    "engine-play.js:3704",
     "engine-systems.js:7222",
-    "engine-systems.js:8421",
-    "engine-systems.js:9398"
+    "engine-systems.js:8423",
+    "engine-systems.js:9400"
    ],
    "setByEngine": [
-    "engine-systems.js:8445"
+    "engine-systems.js:8447"
    ]
   },
   {
    "name": "beatBargirlC4",
    "readByEngine": [
-    "engine-systems.js:11291"
+    "engine-systems.js:11293"
    ],
    "setByEngine": [
     "engine-play.js:1050"
@@ -64754,11 +65518,11 @@
   {
    "name": "burnerUsed",
    "readByEngine": [
-    "engine-systems.js:12037",
-    "engine-systems.js:12095"
+    "engine-systems.js:12039",
+    "engine-systems.js:12097"
    ],
    "setByEngine": [
-    "engine-systems.js:12026"
+    "engine-systems.js:12028"
    ]
   },
   {
@@ -64791,42 +65555,42 @@
     "world.js:9386"
    ],
    "readByEngine": [
-    "engine-systems.js:12137",
-    "engine-systems.js:12164",
-    "engine-systems.js:12189",
-    "engine-systems.js:12204"
+    "engine-systems.js:12139",
+    "engine-systems.js:12166",
+    "engine-systems.js:12191",
+    "engine-systems.js:12206"
    ],
    "setByEngine": [
-    "engine-systems.js:12139"
+    "engine-systems.js:12141"
    ]
   },
   {
    "name": "ccibLanded",
    "readByEngine": [
-    "engine-systems.js:12190",
-    "engine-systems.js:12204",
-    "engine-systems.js:12226"
+    "engine-systems.js:12192",
+    "engine-systems.js:12206",
+    "engine-systems.js:12228"
    ],
    "requiredBy": [
     "tan#28"
    ],
    "setByEngine": [
-    "engine-systems.js:12227"
+    "engine-systems.js:12229"
    ]
   },
   {
    "name": "ccibLoudAfter",
    "readByEngine": [
-    "engine-systems.js:12191"
+    "engine-systems.js:12193"
    ],
    "setByEngine": [
-    "engine-systems.js:12191"
+    "engine-systems.js:12193"
    ]
   },
   {
    "name": "ccibRadarSet",
    "setByEngine": [
-    "engine-systems.js:12128"
+    "engine-systems.js:12130"
    ]
   },
   {
@@ -64837,7 +65601,7 @@
     "world.js:9400"
    ],
    "readByEngine": [
-    "engine-systems.js:12150"
+    "engine-systems.js:12152"
    ],
    "setByDialogue": [
     "tan#29",
@@ -64847,20 +65611,20 @@
   {
    "name": "ccibSecondCoffee",
    "readByEngine": [
-    "engine-systems.js:12204",
-    "engine-systems.js:12233"
+    "engine-systems.js:12206",
+    "engine-systems.js:12235"
    ],
    "setByEngine": [
-    "engine-systems.js:12208"
+    "engine-systems.js:12210"
    ]
   },
   {
    "name": "ccibSecondLook",
    "readByEngine": [
-    "engine-systems.js:12150"
+    "engine-systems.js:12152"
    ],
    "setByEngine": [
-    "engine-systems.js:12152"
+    "engine-systems.js:12154"
    ]
   },
   {
@@ -64875,16 +65639,16 @@
     "world.js:9386"
    ],
    "readByEngine": [
-    "engine-parser.js:8962",
-    "engine-systems.js:12057",
-    "engine-systems.js:12137",
-    "engine-systems.js:12164",
-    "engine-systems.js:12189",
-    "engine-systems.js:12204",
+    "engine-parser.js:8964",
+    "engine-systems.js:12059",
+    "engine-systems.js:12139",
+    "engine-systems.js:12166",
+    "engine-systems.js:12191",
+    "engine-systems.js:12206",
     "engine-systems.js:3640"
    ],
    "setByEngine": [
-    "engine-systems.js:12063"
+    "engine-systems.js:12065"
    ]
   },
   {
@@ -64922,10 +65686,10 @@
   {
    "name": "clozeGot",
    "readByEngine": [
-    "engine-systems.js:11580"
+    "engine-systems.js:11582"
    ],
    "setByEngine": [
-    "engine-systems.js:11581"
+    "engine-systems.js:11583"
    ]
   },
   {
@@ -64950,11 +65714,11 @@
   {
    "name": "ctfRabbit",
    "readByEngine": [
-    "engine-parser.js:14656",
-    "engine-systems.js:10922"
+    "engine-parser.js:14658",
+    "engine-systems.js:10924"
    ],
    "setByEngine": [
-    "engine-systems.js:10928"
+    "engine-systems.js:10930"
    ]
   },
   {
@@ -65009,8 +65773,8 @@
    ],
    "name": "diamondTruth",
    "readByData": [
-    "world.js:15461",
-    "world.js:15470"
+    "world.js:15466",
+    "world.js:15475"
    ],
    "requiredBy": [
     "wimon#0"
@@ -65066,14 +65830,14 @@
     "wayne#7"
    ],
    "setByEngine": [
-    "engine-play.js:5886"
+    "engine-play.js:5891"
    ]
   },
   {
    "name": "fed26",
    "readByEngine": [
     "engine-parser.js:7354",
-    "engine-play.js:3528"
+    "engine-play.js:3530"
    ],
    "setByEngine": [
     "engine-parser.js:7356"
@@ -65106,7 +65870,7 @@
    ],
    "name": "glamHeard",
    "readByData": [
-    "world.js:15504"
+    "world.js:15509"
    ],
    "setByDialogue": [
     "glam#2"
@@ -65141,7 +65905,7 @@
    "name": "greetedFon",
    "readByEngine": [
     "engine-parser.js:6686",
-    "engine-systems.js:11289"
+    "engine-systems.js:11291"
    ],
    "requiredBy": [
     "fon#3",
@@ -65172,8 +65936,8 @@
     "bert#48"
    ],
    "setByEngine": [
-    "engine-play.js:5502",
-    "engine-systems.js:10025",
+    "engine-play.js:5507",
+    "engine-systems.js:10027",
     "engine-systems.js:2787"
    ]
   },
@@ -65199,7 +65963,7 @@
   },
   {
    "forbiddenBy": [
-    "aim#7",
+    "aim#8",
     "air#4",
     "air#5",
     "alisa#5",
@@ -65268,7 +66032,7 @@
     "doghouse_bow#6",
     "dokmai#5",
     "dokmai#6",
-    "duan#8",
+    "duan#9",
     "duang#5",
     "duang#6",
     "earn#4",
@@ -65307,7 +66071,7 @@
     "golf#5",
     "goong#5",
     "goong#6",
-    "grace#8",
+    "grace#9",
     "guitar#5",
     "guitar#6",
     "hong#4",
@@ -65434,7 +66198,7 @@
     "nan#6",
     "napa#4",
     "napa#5",
-    "naree#11",
+    "naree#12",
     "near#5",
     "near#6",
     "neon_palm_bee#5",
@@ -65447,7 +66211,7 @@
     "neon_palm_toey#6",
     "nice#5",
     "nice#6",
-    "nid#7",
+    "nid#8",
     "nim#5",
     "nim#6",
     "nittaya#5",
@@ -65458,7 +66222,7 @@
     "noon#6",
     "noot#4",
     "noot#5",
-    "nubnab#6",
+    "nubnab#7",
     "nut#5",
     "nut#6",
     "oat#5",
@@ -65517,10 +66281,10 @@
     "rung#6",
     "sai#5",
     "sai#6",
-    "saifon#9",
+    "saifon#10",
     "sara#5",
     "sara#6",
-    "sasi#8",
+    "sasi#9",
     "sea_wall_duang#5",
     "sea_wall_duang#6",
     "sea_wall_fon#5",
@@ -65531,7 +66295,7 @@
     "sea_wall_kwang#6",
     "som#5",
     "som#6",
-    "somjai#11",
+    "somjai#12",
     "somruedee#5",
     "somruedee#6",
     "somsri#5",
@@ -65579,7 +66343,7 @@
     "tim#6",
     "toey#5",
     "toey#6",
-    "ton#7",
+    "ton#8",
     "toon#5",
     "toon#6",
     "tui#6",
@@ -65598,16 +66362,16 @@
     "two_stools_ratree#6",
     "view#5",
     "view#6",
-    "wa#8",
-    "waew#6",
+    "wa#9",
+    "waew#7",
     "wandee#5",
     "wandee#6",
-    "wanida#6",
+    "wanida#7",
     "wanpen#5",
     "wanpen#6",
     "wassana#5",
     "wassana#6",
-    "yada#10",
+    "yada#11",
     "yaya#5",
     "yaya#6",
     "ying#5",
@@ -65622,18 +66386,18 @@
     "world.js:9250"
    ],
    "readByEngine": [
-    "engine-parser.js:10721",
-    "engine-parser.js:10780",
-    "engine-parser.js:10791",
-    "engine-parser.js:13171",
+    "engine-parser.js:10723",
+    "engine-parser.js:10782",
+    "engine-parser.js:10793",
+    "engine-parser.js:13173",
     "engine-parser.js:1519",
     "engine-parser.js:1710",
     "engine-parser.js:2202",
     "engine-parser.js:4635",
     "engine-parser.js:964",
     "engine-parser.js:992",
-    "engine-play.js:5442",
-    "engine-systems.js:11276",
+    "engine-play.js:5447",
+    "engine-systems.js:11278",
     "engine-systems.js:1357",
     "engine-systems.js:2728",
     "engine-systems.js:2759",
@@ -65650,10 +66414,10 @@
     "oy#1"
    ],
    "setByEngine": [
-    "engine-parser.js:14413",
+    "engine-parser.js:14415",
     "engine-parser.js:1715",
-    "engine-play.js:5764",
-    "engine-play.js:5882"
+    "engine-play.js:5769",
+    "engine-play.js:5887"
    ]
   },
   {
@@ -65689,7 +66453,7 @@
     "world.js:5311"
    ],
    "readByEngine": [
-    "engine-core.js:737"
+    "engine-core.js:738"
    ],
    "requiredBy": [
     "bert#40",
@@ -65708,7 +66472,7 @@
     "world.js:5311"
    ],
    "readByEngine": [
-    "engine-core.js:736"
+    "engine-core.js:737"
    ],
    "requiredBy": [
     "bert#40",
@@ -65727,7 +66491,7 @@
     "world.js:8649"
    ],
    "readByEngine": [
-    "engine-core.js:736"
+    "engine-core.js:737"
    ],
    "reqFlagOf": [
     "plg_flip"
@@ -65750,7 +66514,7 @@
    "name": "heardPriceStory",
    "readByEngine": [
     "engine-parser.js:7354",
-    "engine-play.js:3526"
+    "engine-play.js:3528"
    ],
    "requiredBy": [
     "lek#11"
@@ -65766,7 +66530,7 @@
    ],
    "name": "heardWhispers",
    "readByData": [
-    "world.js:13887"
+    "world.js:13892"
    ],
    "requiredBy": [
     "oy#3",
@@ -65795,10 +66559,10 @@
    ],
    "readByEngine": [
     "engine-parser.js:8677",
-    "engine-parser.js:8863",
-    "engine-parser.js:9341",
+    "engine-parser.js:8865",
+    "engine-parser.js:9343",
     "engine-play.js:444",
-    "engine-systems.js:11287"
+    "engine-systems.js:11289"
    ],
    "reqFlagOf": [
     "taxi_debt"
@@ -65820,7 +66584,7 @@
   {
    "name": "hitJackpot",
    "readByEngine": [
-    "engine-systems.js:11292"
+    "engine-systems.js:11294"
    ],
    "setByEngine": [
     "engine-play.js:1196"
@@ -65829,7 +66593,7 @@
   {
    "name": "hyperUpstairs",
    "readByEngine": [
-    "engine-core.js:2942",
+    "engine-core.js:2950",
     "engine-systems.js:1754"
    ],
    "setByDialogue": [
@@ -65863,8 +66627,8 @@
    "name": "invoicesCopied",
    "readByEngine": [
     "engine-parser.js:5142",
-    "engine-play.js:5974",
-    "engine-systems.js:12102"
+    "engine-play.js:5979",
+    "engine-systems.js:12104"
    ],
    "requiredBy": [
     "fast_eddy#27",
@@ -65874,7 +66638,7 @@
     "wilawan#3"
    ],
    "setByEngine": [
-    "engine-play.js:5974"
+    "engine-play.js:5979"
    ]
   },
   {
@@ -65891,8 +66655,8 @@
   {
    "name": "jokeWho",
    "readByData": [
-    "world.js:15479",
-    "world.js:15530"
+    "world.js:15484",
+    "world.js:15535"
    ],
    "readByEngine": [
     "engine-systems.js:4068",
@@ -65945,7 +66709,7 @@
     "nont#12"
    ],
    "setByEngine": [
-    "engine-systems.js:12426"
+    "engine-systems.js:12428"
    ]
   },
   {
@@ -65954,11 +66718,11 @@
     "world.js:12403"
    ],
    "readByEngine": [
-    "engine-parser.js:8962"
+    "engine-parser.js:8964"
    ],
    "setByEngine": [
-    "engine-systems.js:12400",
-    "engine-systems.js:12426"
+    "engine-systems.js:12402",
+    "engine-systems.js:12428"
    ]
   },
   {
@@ -65968,10 +66732,10 @@
     "world.js:12394"
    ],
    "readByEngine": [
-    "engine-systems.js:12362"
+    "engine-systems.js:12364"
    ],
    "setByEngine": [
-    "engine-systems.js:12330"
+    "engine-systems.js:12332"
    ]
   },
   {
@@ -65982,12 +66746,12 @@
     "world.js:9375"
    ],
    "readByEngine": [
-    "engine-parser.js:8962",
-    "engine-systems.js:12052",
+    "engine-parser.js:8964",
+    "engine-systems.js:12054",
     "engine-systems.js:3640"
    ],
    "setByEngine": [
-    "engine-systems.js:12330"
+    "engine-systems.js:12332"
    ]
   },
   {
@@ -66121,14 +66885,14 @@
     "world.js:12700"
    ],
    "readByEngine": [
-    "engine-systems.js:12374"
+    "engine-systems.js:12376"
    ],
    "requiredBy": [
     "bert#22",
     "kyle#0"
    ],
    "setByEngine": [
-    "engine-systems.js:12375"
+    "engine-systems.js:12377"
    ]
   },
   {
@@ -66168,28 +66932,28 @@
   {
    "name": "lessonTaken",
    "readByEngine": [
-    "engine-systems.js:11653",
-    "engine-systems.js:11710",
-    "engine-systems.js:11726"
+    "engine-systems.js:11655",
+    "engine-systems.js:11712",
+    "engine-systems.js:11728"
    ],
    "setByEngine": [
-    "engine-systems.js:11654"
+    "engine-systems.js:11656"
    ]
   },
   {
    "name": "metPriew",
    "readByEngine": [
-    "engine-parser.js:9386",
-    "engine-parser.js:9413"
+    "engine-parser.js:9388",
+    "engine-parser.js:9415"
    ],
    "setByEngine": [
-    "engine-parser.js:9388"
+    "engine-parser.js:9390"
    ]
   },
   {
    "name": "mortGlam",
    "readByData": [
-    "world.js:15504"
+    "world.js:15509"
    ],
    "readByEngine": [
     "engine-systems.js:3203"
@@ -66201,7 +66965,7 @@
   {
    "name": "mortMet",
    "readByData": [
-    "world.js:15479"
+    "world.js:15484"
    ],
    "setByDialogue": [
     "mort#7"
@@ -66213,41 +66977,41 @@
    ],
    "name": "motBooted",
    "readByEngine": [
-    "engine-parser.js:14719"
+    "engine-parser.js:14721"
    ],
    "requiredBy": [
     "mot#3"
    ],
    "setByEngine": [
-    "engine-parser.js:14739"
+    "engine-parser.js:14741"
    ]
   },
   {
    "name": "motBootsTold",
    "readByEngine": [
-    "engine-parser.js:14727"
+    "engine-parser.js:14729"
    ],
    "setByDialogue": [
     "mot#2"
    ],
    "setByEngine": [
-    "engine-parser.js:14774"
+    "engine-parser.js:14776"
    ]
   },
   {
    "name": "motFed",
    "readByEngine": [
-    "engine-parser.js:12202",
-    "engine-parser.js:14203",
-    "engine-parser.js:14727",
-    "engine-parser.js:14758",
+    "engine-parser.js:12204",
+    "engine-parser.js:14205",
+    "engine-parser.js:14729",
+    "engine-parser.js:14760",
     "engine-systems.js:607"
    ],
    "requiredBy": [
     "mot#2"
    ],
    "setByEngine": [
-    "engine-parser.js:14770"
+    "engine-parser.js:14772"
    ]
   },
   {
@@ -66359,11 +67123,8 @@
     "world.js:9523"
    ],
    "readByEngine": [
-    "engine-core.js:2834",
-    "engine-parser.js:1067",
-    "engine-parser.js:6392",
-    "engine-play.js:3006",
-    "engine-play.js:3013"
+    "engine-core.js:1829",
+    "engine-play.js:3007"
    ],
    "setByDialogue": [
     "doyle#8"
@@ -66372,11 +67133,8 @@
   {
    "name": "orchidSent",
    "readByEngine": [
-    "engine-core.js:2834",
-    "engine-parser.js:1067",
-    "engine-parser.js:6392",
-    "engine-play.js:3006",
-    "engine-play.js:3012"
+    "engine-core.js:1829",
+    "engine-play.js:3007"
    ],
    "setByDialogue": [
     "candy#4"
@@ -66391,11 +67149,8 @@
    ],
    "name": "orchidVouched",
    "readByEngine": [
-    "engine-core.js:2834",
-    "engine-parser.js:1067",
-    "engine-parser.js:6392",
-    "engine-play.js:3006",
-    "engine-play.js:3013"
+    "engine-core.js:1829",
+    "engine-play.js:3007"
    ],
    "requiredBy": [
     "candy#5",
@@ -66414,31 +67169,31 @@
   {
    "name": "owlAmulet",
    "readByEngine": [
-    "engine-systems.js:10760"
+    "engine-systems.js:10762"
    ],
    "setByEngine": [
-    "engine-systems.js:10761"
+    "engine-systems.js:10763"
    ]
   },
   {
    "name": "owlBox15",
    "readByEngine": [
-    "engine-parser.js:14655",
-    "engine-systems.js:10803"
+    "engine-parser.js:14657",
+    "engine-systems.js:10805"
    ],
    "setByEngine": [
-    "engine-systems.js:10804"
+    "engine-systems.js:10806"
    ]
   },
   {
    "name": "ownPhoneUsed",
    "readByEngine": [
-    "engine-parser.js:14161",
-    "engine-systems.js:12039",
-    "engine-systems.js:12095"
+    "engine-parser.js:14163",
+    "engine-systems.js:12041",
+    "engine-systems.js:12097"
    ],
    "setByEngine": [
-    "engine-parser.js:14162"
+    "engine-parser.js:14164"
    ]
   },
   {
@@ -66449,8 +67204,8 @@
    ],
    "name": "oyGaveWallet",
    "readByEngine": [
-    "engine-systems.js:11283",
-    "engine-systems.js:11314"
+    "engine-systems.js:11285",
+    "engine-systems.js:11316"
    ],
    "setByDialogue": [
     "oy#1"
@@ -66474,7 +67229,7 @@
    ],
    "readByEngine": [
     "engine-systems.js:3013",
-    "engine-systems.js:9495"
+    "engine-systems.js:9497"
    ],
    "requiredBy": [
     "bert#66",
@@ -66482,7 +67237,7 @@
     "candy#28"
    ],
    "setByEngine": [
-    "engine-systems.js:7810"
+    "engine-systems.js:7812"
    ]
   },
   {
@@ -66495,10 +67250,10 @@
    "readByEngine": [
     "engine-systems.js:3014",
     "engine-systems.js:6939",
-    "engine-systems.js:8444",
-    "engine-systems.js:9270",
-    "engine-systems.js:9320",
-    "engine-systems.js:9679"
+    "engine-systems.js:8446",
+    "engine-systems.js:9272",
+    "engine-systems.js:9322",
+    "engine-systems.js:9681"
    ],
    "requiredBy": [
     "bert#67",
@@ -66509,7 +67264,7 @@
     "tan#13"
    ],
    "setByEngine": [
-    "engine-systems.js:7801"
+    "engine-systems.js:7803"
    ]
   },
   {
@@ -66550,7 +67305,7 @@
   {
    "name": "pinPart71",
    "readByEngine": [
-    "engine-systems.js:11296",
+    "engine-systems.js:11298",
     "engine-systems.js:2726"
    ],
    "setByDialogue": [
@@ -66565,7 +67320,7 @@
    "name": "pinPart9",
    "readByEngine": [
     "engine-parser.js:8210",
-    "engine-systems.js:11296",
+    "engine-systems.js:11298",
     "engine-systems.js:2727"
    ],
    "setByDialogue": [
@@ -66589,7 +67344,7 @@
     "world.js:8272"
    ],
    "readByEngine": [
-    "engine-core.js:735"
+    "engine-core.js:736"
    ],
    "requiredBy": [
     "bert#40",
@@ -66615,8 +67370,8 @@
     "world.js:8272"
    ],
    "readByEngine": [
-    "engine-core.js:735",
-    "engine-play.js:5932"
+    "engine-core.js:736",
+    "engine-play.js:5937"
    ],
    "requiredBy": [
     "bert#43",
@@ -66630,23 +67385,23 @@
   {
    "name": "priewRevealed",
    "readByEngine": [
-    "engine-parser.js:9413",
+    "engine-parser.js:9415",
     "engine-systems.js:4056",
     "engine-systems.js:4502",
     "engine-systems.js:5339"
    ],
    "setByEngine": [
-    "engine-parser.js:9416"
+    "engine-parser.js:9418"
    ]
   },
   {
    "name": "probeArmed",
    "readByEngine": [
-    "engine-systems.js:10891",
-    "engine-systems.js:10896"
+    "engine-systems.js:10893",
+    "engine-systems.js:10898"
    ],
    "setByEngine": [
-    "engine-systems.js:10892"
+    "engine-systems.js:10894"
    ]
   },
   {
@@ -66655,8 +67410,8 @@
    ],
    "name": "quietSideDone",
    "readByData": [
-    "world.js:15025",
-    "world.js:15031"
+    "world.js:15030",
+    "world.js:15036"
    ],
    "setByDialogue": [
     "sumalee#1"
@@ -66677,7 +67432,7 @@
     "engine-parser.js:877"
    ],
    "setByEngine": [
-    "engine-systems.js:11989"
+    "engine-systems.js:11991"
    ]
   },
   {
@@ -66700,12 +67455,12 @@
    ],
    "readByEngine": [
     "engine-parser.js:1197",
-    "engine-parser.js:12006",
+    "engine-parser.js:12008",
     "engine-parser.js:3826",
     "engine-parser.js:877",
     "engine-parser.js:878",
-    "engine-systems.js:12057",
-    "engine-systems.js:12362"
+    "engine-systems.js:12059",
+    "engine-systems.js:12364"
    ],
    "requiredBy": [
     "fast_eddy#11",
@@ -66716,9 +67471,9 @@
     "fast_eddy#28"
    ],
    "setByEngine": [
-    "engine-play.js:5988",
-    "engine-systems.js:11941",
-    "engine-systems.js:12363"
+    "engine-play.js:5993",
+    "engine-systems.js:11943",
+    "engine-systems.js:12365"
    ]
   },
   {
@@ -66741,10 +67496,10 @@
     "fast_eddy#33"
    ],
    "setByEngine": [
-    "engine-systems.js:11820",
-    "engine-systems.js:11841",
-    "engine-systems.js:12282",
-    "engine-systems.js:12354"
+    "engine-systems.js:11822",
+    "engine-systems.js:11843",
+    "engine-systems.js:12284",
+    "engine-systems.js:12356"
    ]
   },
   {
@@ -66763,7 +67518,7 @@
    ],
    "name": "recceDone",
    "setByEngine": [
-    "engine-core.js:2682"
+    "engine-core.js:2690"
    ]
   },
   {
@@ -66787,10 +67542,10 @@
   {
    "name": "roomSafeOpened",
    "readByEngine": [
-    "engine-systems.js:11264"
+    "engine-systems.js:11266"
    ],
    "setByEngine": [
-    "engine-systems.js:11266"
+    "engine-systems.js:11268"
    ]
   },
   {
@@ -66820,12 +67575,12 @@
   {
    "name": "sabaiSabai",
    "readByEngine": [
-    "engine-core.js:551",
-    "engine-play.js:4157",
-    "engine-play.js:5762"
+    "engine-core.js:552",
+    "engine-play.js:4162",
+    "engine-play.js:5767"
    ],
    "setByEngine": [
-    "engine-play.js:4158"
+    "engine-play.js:4163"
    ]
   },
   {
@@ -66888,15 +67643,15 @@
    ],
    "name": "shamrockVisited",
    "readByEngine": [
-    "engine-core.js:2307",
-    "engine-play.js:5634",
-    "engine-systems.js:10084"
+    "engine-core.js:2315",
+    "engine-play.js:5639",
+    "engine-systems.js:10086"
    ],
    "requiredBy": [
     "bert#25"
    ],
    "setByEngine": [
-    "engine-systems.js:10085"
+    "engine-systems.js:10087"
    ]
   },
   {
@@ -66908,11 +67663,11 @@
   {
    "name": "simUsed",
    "readByEngine": [
-    "engine-systems.js:12037",
-    "engine-systems.js:12051"
+    "engine-systems.js:12039",
+    "engine-systems.js:12053"
    ],
    "setByEngine": [
-    "engine-systems.js:12025"
+    "engine-systems.js:12027"
    ]
   },
   {
@@ -66931,7 +67686,7 @@
    ],
    "name": "somTamAccepted",
    "readByEngine": [
-    "engine-systems.js:11233"
+    "engine-systems.js:11235"
    ],
    "requiredBy": [
     "candy#11"
@@ -66952,8 +67707,8 @@
    ],
    "name": "somTamDelivered",
    "readByEngine": [
-    "engine-systems.js:11233",
-    "engine-systems.js:11288"
+    "engine-systems.js:11235",
+    "engine-systems.js:11290"
    ],
    "requiredBy": [
     "ploy#0"
@@ -66975,7 +67730,7 @@
    "name": "tanAsked",
    "readByEngine": [
     "engine-systems.js:6939",
-    "engine-systems.js:9686"
+    "engine-systems.js:9688"
    ],
    "requiredBy": [
     "tan#12"
@@ -67035,13 +67790,13 @@
     "nont#13"
    ],
    "setByEngine": [
-    "engine-systems.js:12400"
+    "engine-systems.js:12402"
    ]
   },
   {
    "name": "tanKidRefused",
    "setByEngine": [
-    "engine-systems.js:12411"
+    "engine-systems.js:12413"
    ]
   },
   {
@@ -67051,16 +67806,16 @@
     "world.js:9490"
    ],
    "readByEngine": [
-    "engine-systems.js:10066"
+    "engine-systems.js:10068"
    ],
    "setByEngine": [
-    "engine-systems.js:10067"
+    "engine-systems.js:10069"
    ]
   },
   {
    "name": "tanSuspected",
    "readByEngine": [
-    "engine-systems.js:10065"
+    "engine-systems.js:10067"
    ],
    "setByDialogue": [
     "tan#46"
@@ -67082,7 +67837,7 @@
    ],
    "name": "tiffinDelivered",
    "readByData": [
-    "world.js:13929"
+    "world.js:13934"
    ],
    "requiredBy": [
     "duangjai#5",
@@ -67139,18 +67894,18 @@
   {
    "name": "waenLink",
    "readByEngine": [
-    "engine-systems.js:11710",
-    "engine-systems.js:11726"
+    "engine-systems.js:11712",
+    "engine-systems.js:11728"
    ],
    "setByEngine": [
-    "engine-systems.js:11711"
+    "engine-systems.js:11713"
    ]
   },
   {
    "name": "waiedOy",
    "readByEngine": [
     "engine-parser.js:6676",
-    "engine-systems.js:11290"
+    "engine-systems.js:11292"
    ],
    "requiredBy": [
     "oy#1",
@@ -67214,11 +67969,11 @@
   {
    "name": "wrongNumberSent",
    "readByEngine": [
-    "engine-systems.js:10891",
-    "engine-systems.js:10896"
+    "engine-systems.js:10893",
+    "engine-systems.js:10898"
    ],
    "setByEngine": [
-    "engine-systems.js:10899"
+    "engine-systems.js:10901"
    ]
   },
   {
@@ -67753,7 +68508,7 @@
    "th": "เอ๋"
   },
   {
-   "dialogueCount": 11,
+   "dialogueCount": 15,
    "filler": true,
    "id": "aim",
    "name": "Aim",
@@ -67983,7 +68738,7 @@
    "th": "เบนซ์"
   },
   {
-   "dialogueCount": 69,
+   "dialogueCount": 70,
    "id": "bert",
    "manager": true,
    "movesTo": {
@@ -68433,7 +69188,7 @@
    "title": "a chain-smoking American with Navy posture"
   },
   {
-   "dialogueCount": 17,
+   "dialogueCount": 21,
    "filler": true,
    "id": "duan",
    "name": "Duan",
@@ -68726,7 +69481,7 @@
    "th": "กุ้ง"
   },
   {
-   "dialogueCount": 18,
+   "dialogueCount": 22,
    "filler": true,
    "id": "grace",
    "name": "Grace",
@@ -69608,7 +70363,7 @@
    "th": "นภา"
   },
   {
-   "dialogueCount": 23,
+   "dialogueCount": 27,
    "filler": true,
    "id": "naree",
    "name": "Ping",
@@ -69689,7 +70444,7 @@
    "th": "ไนซ์"
   },
   {
-   "dialogueCount": 21,
+   "dialogueCount": 25,
    "filler": true,
    "id": "nid",
    "name": "Nid",
@@ -69840,7 +70595,7 @@
    "room": "white_rabbit"
   },
   {
-   "dialogueCount": 13,
+   "dialogueCount": 17,
    "filler": true,
    "id": "nubnab",
    "name": "Nubnab",
@@ -70400,7 +71155,7 @@
    "th": "ทราย"
   },
   {
-   "dialogueCount": 17,
+   "dialogueCount": 21,
    "filler": true,
    "id": "saifon",
    "name": "Saifon",
@@ -70436,7 +71191,7 @@
    "th": "ซาร่า"
   },
   {
-   "dialogueCount": 20,
+   "dialogueCount": 24,
    "filler": true,
    "id": "sasi",
    "name": "Sasi",
@@ -70506,7 +71261,7 @@
    "th": "สมชิต"
   },
   {
-   "dialogueCount": 15,
+   "dialogueCount": 19,
    "filler": true,
    "id": "somjai",
    "name": "Somjai",
@@ -70818,7 +71573,7 @@
    "th": "ต้อย"
   },
   {
-   "dialogueCount": 21,
+   "dialogueCount": 25,
    "filler": true,
    "id": "ton",
    "name": "Ton",
@@ -70925,7 +71680,7 @@
    "th": "วิว"
   },
   {
-   "dialogueCount": 20,
+   "dialogueCount": 24,
    "filler": true,
    "id": "wa",
    "name": "Wa",
@@ -70951,7 +71706,7 @@
    "th": "แหวน"
   },
   {
-   "dialogueCount": 16,
+   "dialogueCount": 20,
    "filler": true,
    "id": "waew",
    "name": "Waew",
@@ -70977,7 +71732,7 @@
    "th": "วันดี"
   },
   {
-   "dialogueCount": 15,
+   "dialogueCount": 19,
    "filler": true,
    "id": "wanida",
    "name": "Wanida",
@@ -71063,7 +71818,7 @@
    "th": "วิน"
   },
   {
-   "dialogueCount": 24,
+   "dialogueCount": 28,
    "filler": true,
    "id": "yada",
    "name": "Pong",

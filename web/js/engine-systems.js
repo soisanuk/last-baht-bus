@@ -7723,7 +7723,8 @@ function _shiftEligible() {
   const meritOpen = (b.badRun || 0) >= 2 && !(b.meritDay != null && G.day - b.meritDay < 30);
   return SHIFT_CALLS.filter(c => (c.id !== "early" || (!!her && !(last != null && G.day - last < 14))) &&
     (c.id !== "merit" || meritOpen) &&
-    (c.id !== "tab" || !b.tabDue));   // not a fresh slate while his last docket is still under the till (Ossie, round 70)
+    (c.id !== "tab" || !b.tabDue) &&
+    !(b.callDay && b.callDay[c.id] != null && G.day - b.callDay[c.id] < 3));   // the turning punter three times in five shifts (Callum, round 71)   // not a fresh slate while his last docket is still under the till (Ossie, round 70)
 }
 
 function _shiftDue() {
@@ -7746,6 +7747,7 @@ function _shiftAsk() {
   h = (h ^ (h >>> 16)) >>> 0; h = Math.imul(h, 0x45d9f3b) >>> 0; h = (h ^ (h >>> 16)) >>> 0;   // unsigned: a signed XOR indexed the pool at -1   // _hh is near-linear in its last digit: tab, early, round, turning, tab… (Greta, round 61)
   const call = pool[h % pool.length];
   b.shiftAsked = true;
+  (b.callDay = b.callDay || {})[call.id] = G.day;
   G.shiftCall = call.id;
   G.shiftWho = null;
   if (call.id === "early") {

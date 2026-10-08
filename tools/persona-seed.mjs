@@ -117,6 +117,19 @@ function lamonSeed() {
   _nightSnapshot();
   return serializeGame();
 }
+// skint (round 72, the dark cells): a day-four tourist running low — Nira's loan, the street food, the
+// police on a drunk walk home, Cream after ten. Low pocket, a thin account, the opening done.
+function skintSeed() {
+  newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en", teetotal: false };
+  G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 4; G.season0 = 10;
+  G.money = 2200; G.bank = 6500; G.battery = 80;
+  G.room = "beach_rd_c"; G.visited.beach_rd_c = true; G.nightTurn = 6;
+  _setFlag("roomSafeOpened");
+  quiet(); G.encDone = {};
+  _nightSnapshot();
+  return serializeGame();
+}
 function reload(blob) { newGame(); deserializeGame(blob); }
 
 // ── build ──
@@ -126,6 +139,7 @@ const seeds = {
   saoling: saoSeed(),
   gilt: giltSeed(),
   silk: silkSeed(),
+  skint: skintSeed(),
   // greta (round 61): an owner at the top of the shoulder — March, the rail thinning, the
   // note due — with the two levers in front of her (docs/bar-failure-cycle.md)
   greta: expatOwner({ season0: 2, day: 16, money: 12000, bank: 40000, bonds: { manow: 8, jiap: 4, lamai: 5, tan: 3 } }),
@@ -195,6 +209,11 @@ try {
   const lam = { live: _affairLive(), out: !!(G.party && G.party.ids.includes("manow")) };
   console.log("lamon:", JSON.stringify(lam));
   if (!lam.live || !lam.out) throw new Error("lamon seed cannot reach its drive");
+  // Skint: Nira lends on Walking Street, and Cream is at the Metro Beer Garden after ten
+  reload(seeds.skint); G.room = "neon_paradise"; out = []; doCommand("talk to nira"); doCommand("borrow 5000");
+  const sk = { loan: !!G.loan, cream: (() => { G.room = "metro_garden"; G.nightTurn = 45; return _npcsHere().includes("cream"); })() };
+  console.log("skint:", JSON.stringify(sk));
+  if (!sk.loan || !sk.cream) throw new Error("skint seed cannot reach its drive");
   // Gilt: through the door, the twins and Sasi answer in their own words
   reload(seeds.gilt); out = []; doCommand("enter gilt cage");
   const gilt = { room: G.room, ping: /twenty minute younger/.test((doCommand("ask ping about pong"), out.join(" "))) };

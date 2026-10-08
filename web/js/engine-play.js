@@ -3003,14 +3003,16 @@ function _doBell() {
   // (Gerry, round 34). It exists; what you lack is the standing to use it.
   // …and a man who HAS been sent presses it and is expected: the bell was the one
   // door on the street that told the sent man "no bell out here" (Anand, round 59)
-  if (!_inBar() && G.room === "naklua_rd" && (_flag("orchidSent") || _flag("orchidVouched") || _flag("orchidReported"))) {
-    _say("You press the brass bell once, the way a man who has been sent presses it. Somewhere behind " +
+  if (!_inBar() && G.room === "naklua_rd" && _nottysOpen()) {
+    const _byName = !(_flag("orchidSent") || _flag("orchidVouched") || _flag("orchidReported"));
+    _say(_byName
+      ? "You press the brass bell once. A grille slides back; a woman's eyes look at you, and then past you, the way a mamasan reads a man at her door. \"The Stinky,\" she says — not a question. The grille closes, and the gate is open. A man with a bar on Soi 6 is a name here, whether or not anybody sent him."
+      : "You press the brass bell once, the way a man who has been sent presses it. Somewhere behind " +
       "the wall a lock thinks about it, and then the gate is simply open.", "dim");
     _doEnter("notty's place");
     return;
   }
-  if (!_inBar() && G.room === "naklua_rd" && !_flag("orchidSent") &&
-      !_flag("orchidVouched") && !_flag("orchidReported")) {
+  if (!_inBar() && G.room === "naklua_rd" && !_nottysOpen()) {
     _say("The brass bell on Notty's wall is the only bell out here, and it is not " +
       "the ringing kind — not for you. A man who has been sent presses it once and is " +
       "expected. A man who found it presses it and stands in a lane listening to nothing " +
@@ -3677,6 +3679,9 @@ function _affairTalk(id, tt) {
   ]);
   if (/\b(old customer|customer|regular|the old man|him)\b/.test(tt) && seen.includes("regular")) return pick("cust", [
     `"The old customer?" ${n} shakes her head. "He come, he drink, he go home. You let it ride. Is the right thing. Is also the thing I cry about in the toilet, one time. Only one time."`,
+  ]);
+  if (/\b(free|free drink|the free drink|free shot)\b/.test(tt)) return pick("free", [   // "Free drink is for customer" — to the boss (Ossie, round 70)
+    `"Free?" ${n} laughs. "Boss, I pour your free one myself. Is the only free thing in this bar, and it is for you."`,
   ]);
   if (/\b(salary|quota|wage|lady drink|drinks?|tips?|money)\b/.test(tt)) return pick("money", [
     `"Quota?" ${n} snorts. "Cake write my drinks same as everybody. Then she write them again on your page. Two books for one girl."`,

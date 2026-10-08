@@ -13140,6 +13140,11 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "cleaning, the boy for the screen — Candy's side of the bar, since opening night. She found every one of them, " +
           "she pays them on the day, and nobody rings you. I pour, I count, I tell you when the pool cushion's gone.\"",
         short: "\"Not my department. Candy's side of the bar. I pour.\"" },
+      // the Orchid Room, asked of the man who knows the soi (Ossie, round 70: a generic hello and a quest offer)
+      { topic: "orchid|the orchid|orchid room|the orchid room", text: "\"The Orchid Room.\" Bert wipes the same patch of bar " +
+        "twice. \"Pattaya Leisure's back room, up the soi. Velvet rope, a good table, men who don't drink much.\" He doesn't " +
+        "look up. \"You don't get in by asking, bud. You get asked.\"",
+        short: "\"Pattaya Leisure's back room. You don't get in by asking. You get asked.\"" },
     ],
   },
 
@@ -17889,6 +17894,9 @@ const FLOOR_OWN = {
   naree: {
     exit: "open a two-chair nail salon in Amnat Charoen",
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["naree"] || 0) >= 1 && (G.returnHello || {})["naree"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["naree"] = G.vacation; },
+        text: "\"You come back.\" Ping says it to the room first, the way she says a number she has been checking, and then to you, quieter: \"Welcome back. Pong say you forget us. I say you are a man who come back.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { bond: 2, text: '"You come back." Not a question; she is down the stage steps and on the seat beside you before you have ordered. "Pong say you come back for her. I say you come back for me. We bet fifty baht." She does not tell you who won.' },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: '"Sawatdee ka." A small wai, very correct. "I am Ping. Number fifty-three." A glance along the stage at a woman with her face, her hair parted the other way, laughing at something. "That one is my sister. She talk enough for two. I talk for one."',
@@ -17946,11 +17954,17 @@ const FLOOR_OWN = {
       { topic: "nubnab|cashier", text: "\"Nubnab check my book against her book every week.\" Ping nods, satisfied. \"Always same. We are the only two in this bar who count.\"", short: "\"Her book and my book — always the same.\"" },
       { topic: "sasi", text: "\"Sasi run on the beach at six o'clock. Every day. Even after rain.\" Ping says it the way you report something unbelievable but true. \"She is the only one here who is not tired. I don't understand her. I like her.\"", short: "\"She runs at six. Even after rain. I like her.\"" },
       { topic: "show|stage|tiers|the show|top tier", text: "\"I dance the top tier at midnight.\" Ping says it without pride or shame. \"Pong dance the middle — she like the noise, the front row. Up top is quiet. You can count the room from there.\"", short: "\"Top tier, at midnight. You can count the room from up there.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["naree"] || 0) >= 1, text: "\"Last time you look at the stage like a tourist. This time you look at the room.\" Ping approves. \"Is better. The room is where everything happen.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|the gilt cage|gilt cage", text: "\"The Gilt Cage?\" Ping looks up at the three tiers the way you look at a building you have worked in too long to see. \"Three stage, one owner, one Wanida. The owner is the money. Wanida is the bar.\"" },
     ],
   },
   yada: {
     exit: null,
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["yada"] || 0) >= 1 && (G.returnHello || {})["yada"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["yada"] = G.vacation; },
+        text: "\"Hey — HEY — he come back!\" Pong is off her seat and waving across the room at Ping before you have sat down. \"Pay me, Ping!\" Ping does not pay her. Pong does not mind. \"Sit, sit. Long time, na?\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { bond: 2, text: '"You! Sit sit." She is already writing your name on a chit and spelling it wrong with total confidence. "Ping say you come back for her. I tell her nobody come back for the quiet one." A wicked look. "She bet me fifty baht. Don\'t tell her."' },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: '"Hello hello! You find the good twin." A hoarse laugh, too big for the room, and she does not care. "I am Pong. That one —" a pen pointed at the solemn copy of her face, wherever it has got to — "is Ping. She will tell you she is the good twin. She lie."',
@@ -18008,11 +18022,17 @@ const FLOOR_OWN = {
       { topic: "nubnab|cashier", text: "\"Nubnab say my number look like ransom note.\" Pong is proud of this. \"But she never once put my drink on Ping chit. Even when I try.\"", short: "\"She never mixed up our chits. Even when I tried.\"" },
       { topic: "sasi", text: "\"Sasi?\" Pong drops her voice, which only makes it carry. \"Forty brother sister in the temple home, and she still send them money. Me, I have one sister and she send ME money.\" The laugh. \"Sasi is better than me. Don't tell her I say.\"", short: "\"Forty brothers and sisters and she still sends money. Better than me.\"" },
       { topic: "show|stage|tiers|the show|middle tier", text: "\"Middle tier is the best tier.\" Pong points at it with the pen. \"Close to the front row, close to the tips, close to the noise. Top tier is for Ping. She like to look down at everybody.\"", short: "\"Middle tier: close to the front row, close to the tips.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["yada"] || 0) >= 1, text: "\"Last time?\" Pong grins. \"Last time you are shy. This time you are less shy.\" She considers you. \"Next time, maybe you dance.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|the gilt cage|gilt cage", text: "\"Best go-go on the street.\" Pong says it the way she says everything, loud and certain. \"Okay — maybe not best. Most fun. Best is boring. You want boring, go to the bar with the clean carpet.\"" },
     ],
   },
   sasi: {
     exit: "go back to Sisaket and teach sport at the children's home",
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["sasi"] || 0) >= 1 && (G.returnHello || {})["sasi"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["sasi"] = G.vacation; },
+        text: "\"You come back!\" Sasi checks the watch out of pure habit and laughs at herself. \"I count, you know — the men who come back. Is a short list.\" She pats the seat. \"You are on it.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { bond: 2, text: '"You again." A real smile, not the stage one. "In the home, nobody come back. Volunteer come, take photo, go. You come back." She says it plainly and then orders, as if it were nothing.' },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: '"Hello! Sit, sit." She glances at the sports watch, then at you, as if you are a split time. "I am Sasi. I run on the beach every morning, six o\'clock. Nobody from this bar run. Only me." She seems proud of it and slightly baffled.',
@@ -18058,10 +18078,16 @@ const FLOOR_OWN = {
       { topic: "nubnab|cashier", text: "\"Nubnab teach me the bank app.\" Sasi taps her watch. \"Now I have a number for everything. Saving, sending, the roof. She say a girl with a number is a girl with a plan.\"", short: "\"She taught me the bank app. A girl with a number has a plan.\"" },
       { topic: "danny", text: "\"Danny ask me run with him one time.\" Sasi shakes her head. \"He stop at the second corner for a beer. I finish alone.\"", short: "\"He stopped at the second corner for a beer.\"" },
       { topic: "show|stage|tiers|the show", text: "\"I dance the first one, early, the low tier.\" Sasi checks the watch. \"Then I can sleep before two. Six o'clock I run. The big show is for Ping and Pong.\"", short: "\"The early one. Then sleep, then I run.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["sasi"] || 0) >= 1, text: "\"Last time?\" Sasi reviews it like a coach. \"You sit too long and sleep too little. I can see it.\" She taps your wrist where a watch would be. \"This time, sleep.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|the gilt cage|gilt cage", text: "\"The Gilt Cage is a good bar for a runner.\" Sasi means it. \"Three tiers, many stairs. Every night is training. The customers think we dance. We do intervals.\"" },
     ],
   },
   wanida: {
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["wanida"] || 0) >= 1 && (G.returnHello || {})["wanida"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["wanida"] = G.vacation; },
+        text: "\"Welcome back.\" Wanida remembers you the way a mamasan remembers any man who paid his chits and was polite: precisely, and without fuss. \"The girls will be pleased. Some of them will even say so.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { text: '"Good evening." She looks you over once, the way she checks a costume for loose sequins. "I am Wanida. I run this floor. If a girl is rude to you, tell me. If you are rude to a girl, I will already know."',
         short: '"Wanida. This floor is mine. Be nice to it."' },
       { topic: "girls|the girls|your girls|introduce",
@@ -18092,10 +18118,16 @@ const FLOOR_OWN = {
       { topic: "nubnab|cashier", text: "\"Nubnab keeps the book, and in nine years the book has never been wrong.\" Wanida does not lower her voice; she wants it heard. \"I pay her more than the owner knows I could.\"", short: "\"Nine years and the book has never been wrong.\"" },
       { topic: "danny", text: "\"Danny? A good customer.\" Wanida glances at the corner Danny takes when he comes. \"Spends, talks, and goes on to Mirage before the noise starts. Comes in early most weeks. I keep that seat clear.\"", short: "\"He spends, he talks, and he leaves before he gets loud.\"" },
       { topic: "show|schedule|the show|stage", text: "\"The lowest tier from the door opening, the middle at nine, the top at midnight.\" Wanida recites it the way you say your own address. \"The men who know, know. The men who don't, find out — that is what the stairs are for.\"", short: "\"Low tier, middle at nine, top at midnight.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["wanida"] || 0) >= 1, text: "\"Last time you were polite and you paid.\" Wanida says it as the whole of a review. \"On this street that makes a man memorable. Do the same again.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|the gilt cage|gilt cage", text: "\"Mine, in every way except the paper.\" Wanida glances round the three tiers. \"The owner is a man from Bangkok who comes once a month and counts the book. I am here every night. You can guess who the girls listen to.\"" },
     ],
   },
   nubnab: {
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["nubnab"] || 0) >= 1 && (G.returnHello || {})["nubnab"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["nubnab"] = G.vacation; },
+        text: "\"You again.\" Nubnab finds your page in the book without looking for it. \"Good. I kept it. Some men I close the page on. You I kept.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { text: '"Evening." Her eyes stay on the book. "Chit in the cup. You drink, I write, you sign at the end. Nobody argues." The calculator at her elbow has a sticker over its screen.',
         short: '"Chit in the cup. Sign at the end."' },
       { topic: "twins|ping|pong|handwriting",
@@ -18122,6 +18154,9 @@ const FLOOR_OWN = {
       { topic: "sasi", text: "\"Sasi asked me how a bank works.\" Nubnab's voice softens a fraction. \"Nobody had ever told her. Now she sends money to forty children and still has a savings line. I'm proud of that one.\"", short: "\"Nobody ever told her how a bank works. Now she saves.\"" },
       { topic: "wanida|mama|mamasan", text: "\"Wanida runs the floor and I run the book.\" Nubnab squares a stack of chits. \"Nine years. She has never once asked me to make a number different. That is the whole review.\"", short: "\"Nine years and she has never asked me to change a number.\"" },
       { topic: "danny", text: "\"Danny pays in baht.\" A beat. \"He tried once to pay in some coin on his phone he said was worth more than baht. I took baht.\"", short: "\"He tried to pay in a coin on his phone. I took baht.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["nubnab"] || 0) >= 1, text: "\"Last time?\" She turns back a few pages and reads, not to you. \"Paid every chit. Argued none.\" She closes the book. \"That is the whole of my memory, and it is a good one.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|the gilt cage|gilt cage", text: "\"The Gilt Cage runs on two books.\" Nubnab taps the chits, then the quota book. \"Mine are right. The owner's accountant's are also right, because he copies mine.\"" },
     ],
   },
   // ── The Silk Rose (Soi Buakhao, 2026-10-08): the second floor written woman by woman. A quiet
@@ -18129,6 +18164,9 @@ const FLOOR_OWN = {
   ton: {
     exit: null,
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["ton"] || 0) >= 1 && (G.returnHello || {})["ton"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["ton"] = G.vacation; },
+        text: "\"Hey — you come back.\" Ton actually turns her stool away from the screen, which is the highest honour she has. \"Long time. You miss the whole season. Sit — I tell you the scores.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { bond: 2, text: "\"You come back.\" She says it the way a commentator reads a team sheet, and turns the stool beside her toward the television. \"Sit. I tell you who is winning before the TV knows.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", asks: { key: "team", q: "\"You support who?\" She waits as if the answer will be marked. \"Careful. Here everybody already support somebody.\"" }, text: "\"Sawatdee ka.\" Big serious eyes, a slow wai. \"I am Ton.\" Behind her the two men at the end of the bar are arguing about a penalty from years ago; she corrects one of them without turning round. \"He is wrong. It was not a penalty.\"", short: "\"Ton. It was not a penalty.\"" },
       { topic: "football|soccer|the football|penalty|premier league|the match|the game", text: "\"The commentator is my English teacher.\" She nods at the television. \"He talk very clear. Offside. Injury time. He will be disappointed with that.\" The last one comes out in a perfect flat English murmur. \"Those two at the end argue since before COVID. I am the referee. I never give them a penalty.\"", short: "\"The commentator taught me English. Those two argue; I referee.\"" },
@@ -18150,11 +18188,17 @@ const FLOOR_OWN = {
       { topic: "casino|laos|savannakhet|cards|blackjack", text: "\"My brother deal blackjack across the bridge. Thai people go over to Laos to lose money, because in Thailand losing money is illegal.\" She considers this seriously. \"He say the Thai always come back. The money never.\"", short: "\"Thai people cross the bridge to lose money legally.\"" },
       { topic: "score|tv|television|the screen|the match", text: "\"Score?\" She glances at the screen without needing to. \"Is a boring one. I tell you when something happen.\" She will, and she will be right.", short: "\"A boring one. I'll tell you when something happens.\"" },
       { topic: "jackpot|shut the box", text: "\"Jackpot?\" Ton brightens. \"Shut the box. I am very good. You flip, I flip, the board count.\" A sly look. \"Mama let me play the customers because I lose the right amount.\"", short: "\"I'm very good. I lose the right amount.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["ton"] || 0) >= 1, text: "\"Last time you ask me about the football like a polite man.\" Ton considers. \"This time ask like you care. Then I tell you the good part.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|silk rose|the silk rose", text: "\"{{The Silk Rose}} is a quiet bar.\" Ton says it as a recommendation. \"No loud music, so you can hear the commentator. Only bar on Buakhao where the TV is the loudest thing.\"" },
     ],
   },
   nid: {
     exit: null,
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["nid"] || 0) >= 1 && (G.returnHello || {})["nid"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["nid"] = G.vacation; },
+        text: "\"There you are.\" Nid does not get up; she moves her bag off the stool, which from Nid is a parade. \"I kept your name. I told you to keep mine.\" She looks at you over her glass. \"Did you?\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { bond: 2, text: "\"There you are.\" Nid moves her bag off the stool beside her without looking, the way you move it for a husband. \"I keep it two night. Third night I give it away. You are lucky.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", asks: { key: "trips", q: "\"How many time you come Pattaya?\" She waits, amused. \"Tell me true. I will know anyway.\"" }, text: "\"Sawatdee ka.\" Nid does not get up; she pats the stool next to her. \"I am Nid. Twenty year on this street — I know every kind of farang.\" A long, patient look. \"You, I think I know already.\"", short: "\"Nid. Twenty years. I know your kind already.\"" },
       { topic: "family|daughter|husband", text: "\"One daughter, at Khon Kaen University — accounting, third year.\" The pride arrives before she can stop it. \"Her papa? Thai man. He go when she is two. He think I don't know where.\" A sip. \"I know where.\"", short: "\"A daughter at university. Her papa thinks I don't know where he went.\"" },
@@ -18176,11 +18220,17 @@ const FLOOR_OWN = {
       { topic: "drama|thai drama|soap|lakorn|the drama", text: "\"One episode, every night after work. A rich family, a poor girl, a slap, a misunderstanding.\" Nid shrugs. \"Twenty years I watch the same story. Is relaxing. In real life the slap come before the rich family.\"", short: "\"The same story twenty years. In real life the slap comes first.\"" },
       { topic: "ice|the ice|ice man", text: "\"The ice man come at three.\" She means the afternoon. \"Waew pay him, Grace count the bags, I check it is not half water. Twenty years he try every week. Every week I catch him.\" A shrug. \"We are friends.\"", short: "\"Twenty years he tries, every week I catch him. We are friends.\"" },
       { topic: "her papa|daughter's papa|ex-husband|ex husband|the papa", text: "\"Her papa?\" Nid looks at the bottles, not at you. \"Korat. A garage, a new wife, two more children. I know where. I never go.\" A beat. \"My daughter goes, one time a year, at New Year. I say nothing. Is her papa.\"", short: "\"Korat, a garage, a new wife. I know where. I never go.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["nid"] || 0) >= 1, text: "\"Last time you sit here and ask everybody everything.\" Nid is amused. \"You are a man who check. Good. Check again — the answers are the same, I promise.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|silk rose|the silk rose", text: "\"{{The Silk Rose}} is a bar for people who are finished looking.\" Nid says it fondly. \"The men found their stool, the girls found their customers. Nobody is in a hurry, and nobody is new — except you, sometimes.\"" },
     ],
   },
   wa: {
     exit: "go back to the Eastern Seaboard as a line supervisor",
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["wa"] || 0) >= 1 && (G.returnHello || {})["wa"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["wa"] = G.vacation; },
+        text: "Wa gives you the full inspection again, top to bottom and back, and nods. \"Still pass.\" The {{phone}} comes out: WELCOME BACK. She shows you, then puts it away. \"That one I don't need Translate. I wanted to see it written.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { bond: 2, text: "Wa looks you over, the full inspection, top to bottom and back. \"Pass,\" she says, and moves her glass so you can sit. \"Not many pass. Don't make me check again.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", asks: { key: "job", q: "Her {{phone}} again: WHAT IS YOUR WORK, BEFORE OR NOW? She waits with the patience of somebody used to waiting for machines." }, text: "\"Hello.\" She is already typing; the {{phone}} turns to you with the English on it: I AM WA. NICE TO MEET YOU. She reads your face while you read the screen. \"Translate is exact,\" she says. \"My English is close. Close is not same.\"", short: "\"Wa. Close is not the same as exact.\"" },
       { topic: "family|mama|papa|brother", text: "\"Mama and Papa in Yasothon, rice. One brother, army, in the south.\" The {{phone}} stays down; she has said this in English before. \"I send for the rice. The rice send nothing back. Is normal.\"", short: "\"Rice in Yasothon, a brother in the army. I send; nothing comes back.\"" },
@@ -18201,10 +18251,16 @@ const FLOOR_OWN = {
       { topic: "helmut", text: "\"Mister Helmut is very good customer.\" She has never needed the magnifier for him. \"Same every night. No defect. I wish every customer is made in Germany.\"", short: "\"Same every night. No defect.\"" },
       { topic: "uncle|mud|the mud", text: "\"My uncle built the biggest rocket in the village three years running, and three years running it blow up on the ground.\" Wa almost laughs. \"Three years in the mud. Now he is the judge. Nobody throw the judge in the mud.\"", short: "\"Three years in the mud. Now he's the judge.\"" },
       { topic: "rules|three rules|nid's rules|the rules", text: "\"Nid's three rules.\" Wa counts them off like a checklist. \"Never drink the free drink. Never cry where a customer see. Never lend money to a girl from another bar.\" A pause. \"I follow all three. The third one is the hardest.\"", short: "\"Three rules. The third is the hardest.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["wa"] || 0) >= 1, text: "\"Last time you ask many question.\" Wa considers it as data. \"Good questions, mostly. Two bad ones.\" A pause. \"I don't tell you which.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|silk rose|the silk rose", text: "\"{{Silk Rose}} is a good line.\" Wa means a production line. \"Same stool, same drink, same time, everybody. Low defect. Waew is a good supervisor.\"" },
     ],
   },
   waew: {
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["waew"] || 0) >= 1 && (G.returnHello || {})["waew"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["waew"] = G.vacation; },
+        text: "\"Welcome back, welcome back.\" Waew takes your hand in both of hers again, and this time she says your drink before you do. \"The third stool is still Germany's. Every other stool, you know already.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { text: "\"Welcome, welcome.\" Mama Waew takes your hand in both of hers and for a moment you are somebody's nephew. \"I am Waew. Sit anywhere — except the third stool from the left. That one belongs to Germany.\"", short: "\"Waew. Anywhere but the third stool.\"" },
       { topic: "girls|the girls|your girls|introduce", text: "\"My girls.\" She says it the way other women say my roses. \"Nid is twenty years on this street and still the first one in. Ton knows the football better than the men. Wa used to check things in a factory, and now she checks you.\" A kind, complete smile. \"Be nice to all three. I am watching all three.\"", short: "\"Nid, Ton, Wa. Be nice to all three; I am watching all three.\"" },
       { topic: "family|husband|children|son|daughter", text: "\"My husband drank, and then one year he did not wake up.\" She says it plainly; it was a long time ago. \"Two children. My son is a police sergeant in Khon Kaen. My daughter teaches primary school.\" The smile does not move. \"My son has never asked what the house is built on. A good policeman knows which questions.\"", short: "\"A son in the police, a daughter who teaches. My son never asks what the house is built on.\"" },
@@ -18221,10 +18277,16 @@ const FLOOR_OWN = {
       { topic: "owner|the owner|landlord|rent|who owns", text: "\"The owner?\" Waew lowers her voice, not because it is a secret. \"A lady in Bangkok who bought {{the Silk Rose}} for her son. The son came twice and did not like the noise. Now she phones me on the first of the month and asks if the rent is okay.\" A shrug. \"The rent is okay. I make sure.\"", short: "\"A lady in Bangkok who bought it for a son who doesn't come.\"" },
       { topic: "quota|quotas", text: "\"Quota, yes. I set it, Grace keeps it.\" She holds up a hand before you ask. \"I don't tell you the girls' numbers. I tell you nobody is under for long in my bar. If a girl is under, I find out why first.\"", short: "\"I set it, Grace keeps it. Nobody is under for long.\"" },
       { topic: "mango|mango tree|tree", text: "\"My husband planted it the year before.\" Waew does not say before what. \"Every year it gives too many mangoes for one woman. I give them to the neighbours, and they think I am generous.\"", short: "\"Too many mangoes for one woman. The neighbours think I'm generous.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["waew"] || 0) >= 1, text: "\"Last time you sat a week, caused no trouble and paid every night.\" Waew pats the bar. \"In my bar that is a good customer. In my house that is a good son-in-law.\" She laughs at your face." },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|silk rose|the silk rose", text: "\"{{The Silk Rose}} is the bar I would want to drink in, if I drank.\" Waew means it. \"Quiet, clean, the same faces. The owner wanted something bigger. I gave her something that lasts.\"" },
     ],
   },
   grace: {
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["grace"] || 0) >= 1 && (G.returnHello || {})["grace"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["grace"] = G.vacation; },
+        text: "\"Evening.\" Grace has your page open before you have sat down. \"Welcome back. Your bill is the same as last time.\" A beat. \"So far it is nothing.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { text: "\"Evening.\" Grace fills in the last square of a sudoku row first, and only then lifts her eyes. \"Chit in the cup, sign at the end. If a number is wrong, show me.\" A beat. \"It won't be.\"", short: "\"Chit in the cup. It won't be wrong.\"" },
       { topic: "name|your name|grace", text: "\"Grace?\" She has been asked before. \"My mother liked a shampoo advertisement. The girl in it had very good hair and the name Grace.\" A shrug. \"My hair is fine. The name is better.\"", short: "\"A shampoo advertisement. The name is better than the hair.\"" },
       { topic: "headset|homestay|side business|bookings", text: "\"The headset?\" She taps it. \"My sister has a homestay in Loei, near the mountains. I take the bookings.\" A small smile. \"Cold season, people from Bangkok want to see the fog. I sell them fog, between chits.\"", short: "\"My sister's homestay. I sell Bangkok people fog, between chits.\"" },
@@ -18243,12 +18305,18 @@ const FLOOR_OWN = {
       { topic: "owner|the owner|rent|landlord", text: "\"The owner is a {{phone}} call on the first of the month.\" Grace says it without irony. \"A lady in Bangkok. She asks Waew if the rent is okay, Waew says yes, and then Waew asks me.\" A beat. \"It is always okay. I make it okay.\"", short: "\"A {{phone}} call from Bangkok on the first. It's always okay.\"" },
       { topic: "dogs|dog|the dogs", text: "\"Two dogs, at my sister's homestay.\" She shows you a photo: two brown soi dogs asleep on a guest's rucksack. \"They are the welcome committee. Guests think they come with the room. They do.\"", short: "\"The homestay's welcome committee.\"" },
       { topic: "ceremony|the bill|helmut's bill", text: "\"Mister Helmut's bill.\" Grace almost smiles. \"I write it, he watches, he checks it against the one in his head, he pays exact, I say thank you, he says thank you. Thirteen years.\" A beat. \"Some people go to church.\"", short: "\"Thirteen years of the same bill. Some people go to church.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["grace"] || 0) >= 1, text: "\"Last time your book was square every night.\" Grace does not need to check. \"I remember the square ones. They are easy to remember, because they are rare.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|silk rose|the silk rose", text: "\"{{The Silk Rose}} balances.\" Grace says it the way other people say a bar is lively. \"Every night, to the baht. Not many bars on Buakhao can say that, and some of the ones that say it are lying.\"" },
     ],
   },
   // ── Firefly Bar (Soi Khao Talo, the Darkside, 2026-10-08): the third floor written woman by
   // woman. Settled women who ride home round the lake at the midnight close.
   somjai: {
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["somjai"] || 0) >= 1 && (G.returnHello || {})["somjai"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["somjai"] = G.vacation; },
+        text: "\"Welcome back.\" Somjai pushes the glasses up into her hair and looks at you properly. \"You came back to the Darkside. Most men find it once, by accident.\" A small nod. \"You are not an accident any more. Sit.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { text: "\"Sit, sit. Any stool — they all wobble the same.\" Somjai pushes the reading glasses up into her hair. \"I am Somjai. Firefly closes at midnight and opens tomorrow, and in between nobody shouts. That is the whole rule.\"", short: "\"Somjai. Midnight, and nobody shouts.\"" },
       { topic: "girls|the girls|your girls|introduce", text: "\"My girls are not girls.\" She says it fondly. \"Duan danced in town ten years and came out here when town started counting her age. Saifon grows chillies by the lake in the morning and sells them before she sleeps. And Aim is my niece — the only one of us who reads books.\" A glance at the till. \"Law books.\"", short: "\"Duan, Saifon, and my niece Aim with her law books.\"" },
       { topic: "family|husband|daughter|wedding", text: "\"A husband who drives a cement truck, and a daughter who is getting married in February.\" The gold at her wrist clinks as she counts on her fingers. \"Every bracelet I have, I wear at the wedding. Then two of them go to my daughter. That is what gold is for.\"", short: "\"A cement-truck husband, a daughter getting married. The gold is for the wedding.\"" },
@@ -18264,11 +18332,17 @@ const FLOOR_OWN = {
       { topic: "duan", text: "\"Duan was the best dancer on Walking Street for about one year, and a very good one for nine more.\" Somjai says it with respect. \"She came out here for her knees and stayed for the quiet. When a customer is rude, Duan looks at him the way she looked at the pole. He stops.\"", short: "\"The best dancer in town for a year. Now she stays for the quiet.\"" },
       { topic: "saifon", text: "\"Saifon is the one I would leave the bar with, if I had to leave it with somebody who is not family.\" Somjai nods toward the red blouse. \"Up at six for the chillies, here at eight, never late, never tired that you can see. I do not know when she sleeps.\"", short: "\"Up at six for the chillies. I don't know when she sleeps.\"" },
       { topic: "aim|niece|cashier", text: "\"My sister's girl.\" Somjai looks at the till the way other women look at a photograph. \"{{Bright}}, too bright for a till. I brought her down to keep the money honest, and now she is going to be a lawyer.\" A shrug that is pure pride. \"The till was only ever for a while.\"", short: "\"My niece. Too bright for a till. She will be a lawyer.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["somjai"] || 0) >= 1, text: "\"Last time you left before midnight without being told.\" Somjai approves. \"Out here that is good manners. In town it is a miracle.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|firefly|the firefly|firefly bar", text: "\"Firefly is mine twelve years, since the old owner went home.\" The gold clinks. \"Small, and it closes at midnight, and every girl here goes home to a gate.\" She lets that land. \"Out here, that is the business.\"" },
     ],
   },
   duan: {
     exit: null,
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["duan"] || 0) >= 1 && (G.returnHello || {})["duan"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["duan"] = G.vacation; },
+        text: "\"You!\" Duan straightens like a dancer called back to the stage. \"You come back to the Darkside. Nobody come back to the Darkside — they go back to the neon.\" She pats the stool. \"You like the stool. I knew.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { bond: 2, text: "\"You again.\" Duan straightens on the stool the way she used to straighten for the stage, from habit. \"In town, a man come back, he want something. Out here, a man come back — maybe he just like the stool.\" She pats the one beside her. \"I think you like the stool.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", asks: { key: "thisbar", q: "\"First time Firefly?\" She studies you. \"First time Darkside, I think. Town men always look for the neon.\"" }, text: "\"Sawatdee ka.\" Duan sits like a dancer — back straight, chin up — and laughs at herself for it. \"I am Duan. Ten year I dance in town. Now I sit. Sitting is better pay for my knees.\"", short: "\"Duan. Ten years dancing; now I sit.\"" },
       { topic: "family|sister|kids|children", text: "\"My sister's two kids live with me, past the lake. My sister work in Korea, factory — she send money for them, I send them to school.\" She snaps the scrunchie on her wrist. \"Auntie is a full-time job. Bar is part-time.\"", short: "\"My sister's kids live with me. Auntie is the full-time job.\"" },
@@ -18286,11 +18360,17 @@ const FLOOR_OWN = {
       { topic: "saifon", text: "\"Saifon is older than me and better than me.\" Duan doesn't mind saying so. \"She grow chilli in the morning and work here at night and never once look tired. I ask her how. She say: you sleep too much.\"", short: "\"She grows chillies all morning and never looks tired.\"" },
       { topic: "aim|cashier", text: "\"Aim read law at the till.\" Duan pulls a face of pure respect. \"One time a man say his bill is wrong, and Aim explain it to him like a judge. He pay, and he say thank you.\"", short: "\"She explains a bill like a judge.\"" },
       { topic: "daeng", text: "\"Daeng is a legend from town.\" Duan almost bows. \"When I start in Walking Street, the old girls talk about Daeng. Now she is two bar up from me and she call me little sister. Is very strange, and very nice.\"", short: "\"A legend from town. She calls me little sister.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["duan"] || 0) >= 1, text: "\"Last time you leave before midnight, like a good man.\" Duan approves all over again. \"Out here we notice the men who go home.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|firefly|the firefly|firefly bar", text: "\"Firefly is fairy lights and old friends.\" Duan looks up at the strings of bulbs. \"In town the bar sell you a dream. Out here the bar sell you a beer, and the dream is free.\"" },
     ],
   },
   saifon: {
     exit: null,
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["saifon"] || 0) >= 1 && (G.returnHello || {})["saifon"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["saifon"] = G.vacation; },
+        text: "Saifon looks up, and the {{phone}} stays face-down: she doesn't need it for this. \"You come back. Good.\" She finds a twist of newspaper in her bag — three chillies. \"I bring every night, for in case. Tonight is in case.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { bond: 2, text: "Saifon looks up and her face does something it does not do for customers. \"Ah. You.\" She lifts her bag onto her lap to clear the stool beside her. \"Every night I think, he is not coming. Every night I am wrong. Is good to be wrong sometimes.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", asks: { key: "stay", q: "\"How long you stay?\" She asks it plainly. \"Not for business. For the chilli — I need to know how many to bring you.\"" }, text: "\"Sawatdee ka.\" Saifon looks you over, unhurried, and gives the small nod of a woman who has been doing this longer than you have been coming. \"Saifon. My English is okay. My Translate is better.\" She turns the {{phone}} face-up on the bar, ready, and does not use it yet.", short: "\"Saifon. Okay English, better Translate.\"" },
       { topic: "family|son|husband", text: "\"One son. He work on a ship — engine room, big ship, Singapore to everywhere.\" She finds a photo: a young man in overalls, grinning, the sea behind him enormous. \"Every week he send a photo of the sea. I live ten minutes from a lake, and he send me the sea.\"", short: "\"A son in a ship's engine room. He sends me the sea.\"" },
@@ -18308,10 +18388,16 @@ const FLOOR_OWN = {
       { topic: "somjai|mama|mamasan", text: "\"Somjai is the boss and the boss's boss.\" Saifon nods at her. \"She is fair. If she is angry, she tell you once, in Thai, very quiet. Nobody need it two times.\"", short: "\"Fair. Angry once, in Thai, very quiet.\"" },
       { topic: "duan", text: "\"Duan is a dancer still, you see it when she walks.\" Saifon is fond. \"She raise her sister's kids. I give her chilli for them. They don't eat it. Kids now.\"", short: "\"A dancer still. I give her chillies for her sister's kids.\"" },
       { topic: "aim|cashier", text: "\"Aim will be a lawyer.\" Saifon says it as fact, the way you say rain is coming. \"When she is a lawyer, I will ask her about my husband's family's land. Everybody out here has a question about land.\"", short: "\"When she is a lawyer, everybody here has a question about land.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["saifon"] || 0) >= 1, text: "\"Last time you ask about the chilli. Nobody ask about the chilli.\" Saifon is pleased all over again. \"This time I tell you about the lemongrass.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|firefly|the firefly|firefly bar", text: "\"Firefly is a bar for women who go home at midnight.\" Saifon says it plainly. \"We have house, family, garden. Out here the bar is the work. In town the bar is the life.\"" },
     ],
   },
   aim: {
     nodes: [
+      { when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["aim"] || 0) >= 1 && (G.returnHello || {})["aim"] !== G.vacation,
+        fx: (st, G) => { (G.returnHello = G.returnHello || {})["aim"] = G.vacation; },
+        text: "\"Evening.\" Aim marks her page with a chit — a thicker book now. \"Welcome back. I passed one exam since you were here.\" A small, exact pride. \"Contract law. The bill still comes early.\"" },   // the return: a man she knew last trip (Aurelio, round 71: "a month away produced less than a night away")
       { text: "\"Evening.\" Aim looks up from a fat textbook propped against the till, marks her page with a chit, and is entirely yours. \"Chits in the cup. We close at midnight, so the bill comes early out here.\"", short: "\"Chits in the cup. The bill comes early.\"" },
       { topic: "book|law|textbook|studying|study|exam|exams|ramkhamhaeng|university", text: "\"Land law.\" She tilts the textbook so you can see the Thai on its spine. \"Ramkhamhaeng — the open university. I study here, I sit the exams in Bangkok twice a year.\" A small, exact smile. \"On this side of the highway, land is the only thing people fight about. Somebody should understand it.\"", short: "\"Land law, at the till. Out here land is the only thing people fight about.\"" },
       { topic: "family|aunt|auntie|mother", text: "\"Auntie Somjai is my mother's sister.\" Her voice drops a fraction. \"My mother is in Maha Sarakham with my grandmother. Auntie brought me down to keep the till because she trusts family with money.\" A beat. \"And because I am the only one who can find the calculator.\"", short: "\"Auntie Somjai is my mother's sister. Family keeps the money.\"" },
@@ -18323,6 +18409,9 @@ const FLOOR_OWN = {
       { topic: "somjai|mama|mamasan|auntie somjai", text: "\"Auntie Somjai counts the drawer with me at midnight, every night, for one minute.\" Aim straightens the chits. \"She does not check my numbers. She checks that I am home before one. That is the real audit.\"", short: "\"She checks I am home before one. That is the real audit.\"" },
       { topic: "duan", text: "\"Duan tells the customers I am a judge.\" Aim pretends to disapprove. \"I am not a judge. I am a cashier with a textbook. But they pay faster, so I let her.\"", short: "\"She tells customers I'm a judge. They pay faster.\"" },
       { topic: "saifon", text: "\"Saifon brings me chillies for the exam weeks.\" Aim looks genuinely touched. \"She says chilli keeps you awake. It does. It also makes you cry over contract law.\"", short: "\"Chillies for exam weeks. They keep you awake.\"" },
+      { topic: "last time|last trip|last visit|before", when: (st, G) => G.vacation > 1 && ((G.prevBond || {})["aim"] || 0) >= 1, text: "\"Last time I was on property law.\" Aim taps the new textbook. \"You asked about it. Most customers ask about the till. I liked that.\"" },
+      { topic: "last time|last trip|last visit|before", text: "\"Last time?\" She looks at you a moment. \"I think this is the first time we really talk.\" A small shrug. \"So — this time.\"" },
+      { topic: "bar|this bar|the bar|here|this place|firefly|the firefly|firefly bar", text: "\"Firefly is a small bar with a clean book.\" Aim squares the chits. \"Auntie owns it, I keep it, and on this side of the highway that is already more paperwork than most bars have.\"" },
     ],
   },
 };

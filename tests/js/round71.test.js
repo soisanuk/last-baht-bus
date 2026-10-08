@@ -118,3 +118,17 @@ test("an affair crisis answers 'what happens if…' with who pays, and a questio
   assert.doesNotMatch(said(), /฿?\d+ (strain|floor)/, "who pays, never a number");
   out = []; run("2"); assert.notEqual(G.pendingChoice, "affaircrisis");
 });
+test("owning a bar is the name that opens Notty's (Mario, 2026-10-08)", () => {
+  G.room = "naklua_rd"; G.nightTurn = 30;
+  assert.equal(_nottysOpen(), false);
+  owner(); assert.equal(_nottysOpen(), true);
+  out = []; run("ring bell"); assert.match(said(), /The Stinky/); assert.equal(G.room, "nottys_place");
+});
+test("the deferred sweep: Bert on the Orchid, the piwin to the clubs, a toastie for her, no repeat shift call, Manow's free drink", () => {
+  G.room = "stinky_bar"; run("talk to bert"); assert.match(ask("bert", "orchid"), /Pattaya Leisure's back room/);
+  G.room = "beach_rd_s"; G.money = 500; out = []; run("motosai to gentlemens club"); assert.match(said(), /Thappraya/);
+  owner(); G.bar.callDay = { turning: G.day - 1 }; assert.ok(!_shiftEligible().some(c => c.id === "turning"));
+  G.room = "stinky_bar"; G.money = 5000; affair({}); run("talk to manow"); assert.match(ask("manow", "free drink"), /I pour your free one myself/);
+  assert.ok(!_SHIFT_CALLS_SRC().includes("how much you paid her"));
+});
+function _SHIFT_CALLS_SRC() { return readFileSync(fileURLToPath(new URL("../../web/js/engine-parser.js", import.meta.url)), "utf8"); }

@@ -175,3 +175,19 @@ test("the Firefly: everyone answers for everyone on the floor, and its own subje
   assert.match(ask("aim", "law"), /land/);
   assert.match(ask("somjai", "closing"), /Midnight/);
 });
+
+// ── the written floors, together (2026-10-08, after Aurelio, round 71) ─────────────────────────
+test("every written woman greets a man she knew last trip in her own words, once a trip; and answers last time and her own bar", () => {
+  const SEASON = { windmill: 2, silk_rose: 2, firefly_bar: 2 };
+  for (const id of Object.keys(FLOOR_OWN)) {
+    newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" };
+    G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); for (const k in ENCOUNTERS) G.encDone[k] = true;
+    G.room = NPCS[id].room; G.season0 = SEASON[G.room] ?? 2; G.nightTurn = 30; G.vacation = 2; G.prevBond = { [id]: 2 };
+    const ret = FLOOR_OWN[id].nodes.find(n => n.when && n.fx && !n.topic);
+    assert.ok(ret, id + ": a return greeting");
+    out = []; run("talk to " + id); assert.ok(said().includes(ret.text.slice(0, 30)), id + " returns in her own words");
+    out = []; G.soc.helloed = {}; run("talk to " + id); assert.ok(!said().includes(ret.text.slice(0, 30)), id + ": once a trip");
+    G.convoQ = null; assert.doesNotMatch(ask(id, "last time"), /first time we really talk/, id + " remembers last time");
+    G.convoQ = null; const b = ask(id, "this bar"); assert.doesNotMatch(b, /Not my story|Not a thing I know|wrong girl/, id + " on her own bar");
+  }
+});
