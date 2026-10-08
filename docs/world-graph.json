@@ -1095,8 +1095,8 @@
  ],
  "counts": {
   "constants": 182,
-  "dialogue": 3506,
-  "edges": 3227,
+  "dialogue": 3529,
+  "edges": 3223,
   "encounters": 23,
   "flags": 172,
   "items": 43,
@@ -1264,10 +1264,76 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "aim#1",
+   "npc": "aim",
+   "topic": "book|law|textbook|studying|study|exam|exams|ramkhamhaeng|university",
+   "topics": [
+    "book",
+    "law",
+    "textbook",
+    "studying",
+    "study",
+    "exam",
+    "exams",
+    "ramkhamhaeng",
+    "university"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 2,
+   "key": "aim#2",
+   "npc": "aim",
+   "topic": "family|aunt|auntie|mother",
+   "topics": [
+    "family",
+    "aunt",
+    "auntie",
+    "mother"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 3,
+   "key": "aim#3",
+   "npc": "aim",
+   "topic": "home|hometown|village|where you from|maha sarakham",
+   "topics": [
+    "home",
+    "hometown",
+    "village",
+    "where you from",
+    "maha sarakham"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 4,
+   "key": "aim#4",
+   "npc": "aim",
+   "topic": "plan|future|dream|lawyer",
+   "topics": [
+    "plan",
+    "future",
+    "dream",
+    "lawyer"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 5,
+   "key": "aim#5",
    "npc": "aim",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -1279,37 +1345,27 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 2,
-   "key": "aim#2",
+   "index": 6,
+   "key": "aim#6",
    "npc": "aim",
-   "topic": "family",
+   "topic": "spend|spent|what i spent|how much i spent|my spend|my chits",
    "topics": [
-    "family"
+    "spend",
+    "spent",
+    "what i spent",
+    "how much i spent",
+    "my spend",
+    "my chits"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 3,
-   "key": "aim#3",
-   "npc": "aim",
-   "topic": "home|hometown|village|where you from",
-   "topics": [
-    "home",
-    "hometown",
-    "village",
-    "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 4,
-   "key": "aim#4",
+   "index": 7,
+   "key": "aim#7",
    "notFlags": [
     "hasWallet"
    ],
@@ -1321,17 +1377,41 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
-   "index": 5,
-   "key": "aim#5",
-   "notFlags": [
-    "hasWallet"
-   ],
+   "index": 8,
+   "key": "aim#8",
    "npc": "aim",
-   "topic": "wallet",
+   "topic": "somjai|mama|mamasan|auntie somjai",
    "topics": [
-    "wallet"
+    "somjai",
+    "mama",
+    "mamasan",
+    "auntie somjai"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 9,
+   "key": "aim#9",
+   "npc": "aim",
+   "topic": "duan",
+   "topics": [
+    "duan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 10,
+   "key": "aim#10",
+   "npc": "aim",
+   "topic": "saifon",
+   "topics": [
+    "saifon"
    ]
   },
   {
@@ -9974,56 +10054,107 @@
    ]
   },
   {
-   "asks": "stay",
+   "bond": 2,
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
    "index": 0,
    "key": "duan#0",
    "npc": "duan"
   },
   {
+   "asks": "thisbar",
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "duan#1",
-   "npc": "duan",
-   "topic": "family",
-   "topics": [
-    "family"
-   ]
+   "npc": "duan"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "duan#2",
    "npc": "duan",
-   "topic": "home",
+   "topic": "family|sister|kids|children",
    "topics": [
-    "home"
+    "family",
+    "sister",
+    "kids",
+    "children"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 3,
    "key": "duan#3",
    "npc": "duan",
-   "topic": "plan",
+   "topic": "home|hometown|village|where you from|nong khai|fireballs|naga",
    "topics": [
-    "plan"
+    "home",
+    "hometown",
+    "village",
+    "where you from",
+    "nong khai",
+    "fireballs",
+    "naga"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 4,
    "key": "duan#4",
+   "npc": "duan",
+   "topic": "plan|future|dream",
+   "topics": [
+    "plan",
+    "future",
+    "dream"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 5,
+   "key": "duan#5",
+   "npc": "duan",
+   "topic": "dance|dancing|dancer|town|walking street|knees",
+   "topics": [
+    "dance",
+    "dancing",
+    "dancer",
+    "town",
+    "walking street",
+    "knees"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "duan#6",
+   "npc": "duan",
+   "topic": "scrunchie|phones|boyfriend",
+   "topics": [
+    "scrunchie",
+    "phones",
+    "boyfriend"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 7,
+   "key": "duan#7",
    "npc": "duan",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -10035,57 +10166,17 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "duan#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "duan",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 6,
-   "key": "duan#6",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "duan",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "bond": 1,
-   "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 7,
-   "key": "duan#7",
-   "npc": "duan",
-   "topic": "salary",
-   "topics": [
-    "salary"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": true,
    "index": 8,
    "key": "duan#8",
+   "notFlags": [
+    "hasWallet"
+   ],
    "npc": "duan",
-   "topic": "price",
+   "topic": "wallet",
    "topics": [
-    "price"
+    "wallet"
    ]
   },
   {
@@ -10120,9 +10211,73 @@
    "index": 11,
    "key": "duan#11",
    "npc": "duan",
+   "topic": "salary",
+   "topics": [
+    "salary"
+   ]
+  },
+  {
+   "bond": 1,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 12,
+   "key": "duan#12",
+   "npc": "duan",
    "topic": "quota",
    "topics": [
     "quota"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 13,
+   "key": "duan#13",
+   "npc": "duan",
+   "topic": "somjai|mama|mamasan",
+   "topics": [
+    "somjai",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 14,
+   "key": "duan#14",
+   "npc": "duan",
+   "topic": "saifon",
+   "topics": [
+    "saifon"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 15,
+   "key": "duan#15",
+   "npc": "duan",
+   "topic": "aim|cashier",
+   "topics": [
+    "aim",
+    "cashier"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 16,
+   "key": "duan#16",
+   "npc": "duan",
+   "topic": "daeng",
+   "topics": [
+    "daeng"
    ]
   },
   {
@@ -35688,56 +35843,121 @@
    ]
   },
   {
-   "asks": "stay",
+   "bond": 2,
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
    "index": 0,
    "key": "saifon#0",
    "npc": "saifon"
   },
   {
+   "asks": "stay",
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "saifon#1",
-   "npc": "saifon",
-   "topic": "family",
-   "topics": [
-    "family"
-   ]
+   "npc": "saifon"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "saifon#2",
    "npc": "saifon",
-   "topic": "home",
+   "topic": "family|son|husband",
    "topics": [
-    "home"
+    "family",
+    "son",
+    "husband"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 3,
    "key": "saifon#3",
    "npc": "saifon",
-   "topic": "plan",
+   "topic": "home|hometown|village|where you from|yasothon",
    "topics": [
-    "plan"
+    "home",
+    "hometown",
+    "village",
+    "where you from",
+    "yasothon"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 4,
    "key": "saifon#4",
+   "npc": "saifon",
+   "topic": "chilli|chillies|chili|lemongrass|garden|market|morning|farm",
+   "topics": [
+    "chilli",
+    "chillies",
+    "chili",
+    "lemongrass",
+    "garden",
+    "market",
+    "morning",
+    "farm"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 5,
+   "key": "saifon#5",
+   "npc": "saifon",
+   "topic": "blouse|red blouse|silk|the blouse",
+   "topics": [
+    "blouse",
+    "red blouse",
+    "silk",
+    "the blouse"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 6,
+   "key": "saifon#6",
+   "npc": "saifon",
+   "topic": "plan|future|dream",
+   "topics": [
+    "plan",
+    "future",
+    "dream"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 7,
+   "key": "saifon#7",
+   "npc": "saifon",
+   "topic": "translate|phone|google translate",
+   "topics": [
+    "translate",
+    "phone",
+    "google translate"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 8,
+   "key": "saifon#8",
    "npc": "saifon",
    "topic": "free|free drink|the free drink|free shot",
    "topics": [
@@ -35749,69 +35969,17 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "saifon#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "saifon",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 6,
-   "key": "saifon#6",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "saifon",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
-   ]
-  },
-  {
-   "bond": 1,
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": false,
-   "index": 7,
-   "key": "saifon#7",
-   "npc": "saifon",
-   "topic": "salary",
-   "topics": [
-    "salary"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": true,
-   "hasWhen": true,
-   "index": 8,
-   "key": "saifon#8",
-   "npc": "saifon",
-   "topic": "price",
-   "topics": [
-    "price"
-   ]
-  },
-  {
-   "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
    "index": 9,
    "key": "saifon#9",
+   "notFlags": [
+    "hasWallet"
+   ],
    "npc": "saifon",
-   "topic": "price",
+   "topic": "wallet",
    "topics": [
-    "price"
+    "wallet"
    ]
   },
   {
@@ -35820,6 +35988,18 @@
    "hasWhen": false,
    "index": 10,
    "key": "saifon#10",
+   "npc": "saifon",
+   "topic": "price",
+   "topics": [
+    "price"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 11,
+   "key": "saifon#11",
    "npc": "saifon",
    "topic": "late",
    "topics": [
@@ -35831,12 +36011,64 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 11,
-   "key": "saifon#11",
+   "index": 12,
+   "key": "saifon#12",
+   "npc": "saifon",
+   "topic": "salary",
+   "topics": [
+    "salary"
+   ]
+  },
+  {
+   "bond": 1,
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 13,
+   "key": "saifon#13",
    "npc": "saifon",
    "topic": "quota",
    "topics": [
     "quota"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 14,
+   "key": "saifon#14",
+   "npc": "saifon",
+   "topic": "somjai|mama|mamasan",
+   "topics": [
+    "somjai",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 15,
+   "key": "saifon#15",
+   "npc": "saifon",
+   "topic": "duan",
+   "topics": [
+    "duan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 16,
+   "key": "saifon#16",
+   "npc": "saifon",
+   "topic": "aim|cashier",
+   "topics": [
+    "aim",
+    "cashier"
    ]
   },
   {
@@ -37070,76 +37302,162 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "somjai#1",
    "npc": "somjai",
-   "topic": "girls",
+   "topic": "girls|the girls|your girls|introduce",
    "topics": [
-    "girls"
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 2,
    "key": "somjai#2",
    "npc": "somjai",
-   "topic": "family",
+   "topic": "family|husband|daughter|wedding",
    "topics": [
-    "family"
+    "family",
+    "husband",
+    "daughter",
+    "wedding"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 3,
    "key": "somjai#3",
    "npc": "somjai",
-   "topic": "plan",
-   "topics": [
-    "plan"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": false,
-   "index": 4,
-   "key": "somjai#4",
-   "npc": "somjai",
-   "topic": "home|hometown|village|where you from",
+   "topic": "home|hometown|village|where you from|udon|udon thani",
    "topics": [
     "home",
     "hometown",
     "village",
-    "where you from"
+    "where you from",
+    "udon",
+    "udon thani"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 4,
+   "key": "somjai#4",
+   "npc": "somjai",
+   "topic": "plan|future|retire",
+   "topics": [
+    "plan",
+    "future",
+    "retire"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
    "index": 5,
    "key": "somjai#5",
-   "notFlags": [
-    "hasWallet"
-   ],
    "npc": "somjai",
-   "topic": "wallet",
+   "topic": "history|danced|dancer|this street|before|the old days|strip",
    "topics": [
-    "wallet"
+    "history",
+    "danced",
+    "dancer",
+    "this street",
+    "before",
+    "the old days",
+    "strip"
    ]
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 6,
    "key": "somjai#6",
+   "npc": "somjai",
+   "topic": "daeng|daeng's|daeng's place",
+   "topics": [
+    "daeng",
+    "daeng's",
+    "daeng's place"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 7,
+   "key": "somjai#7",
+   "npc": "somjai",
+   "topic": "shamrock|sean|the irish bar|irish bar",
+   "topics": [
+    "shamrock",
+    "sean",
+    "the irish bar",
+    "irish bar"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 8,
+   "key": "somjai#8",
+   "npc": "somjai",
+   "topic": "lake|the lake|reservoir",
+   "topics": [
+    "lake",
+    "the lake",
+    "reservoir"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 9,
+   "key": "somjai#9",
+   "npc": "somjai",
+   "topic": "midnight|closing|close|hours|what time",
+   "topics": [
+    "midnight",
+    "closing",
+    "close",
+    "hours",
+    "what time"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 10,
+   "key": "somjai#10",
+   "npc": "somjai",
+   "topic": "barfine|price|fine",
+   "topics": [
+    "barfine",
+    "price",
+    "fine"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 11,
+   "key": "somjai#11",
    "notFlags": [
     "hasWallet"
    ],
@@ -37147,6 +37465,44 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 12,
+   "key": "somjai#12",
+   "npc": "somjai",
+   "topic": "duan",
+   "topics": [
+    "duan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 13,
+   "key": "somjai#13",
+   "npc": "somjai",
+   "topic": "saifon",
+   "topics": [
+    "saifon"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 14,
+   "key": "somjai#14",
+   "npc": "somjai",
+   "topic": "aim|niece|cashier",
+   "topics": [
+    "aim",
+    "niece",
+    "cashier"
    ]
   },
   {
@@ -46208,7 +46564,7 @@
   "DEPENDS": 13,
   "DONE_BY": 37,
   "EXIT": 437,
-  "FORBIDS": 486,
+  "FORBIDS": 482,
   "GIVEN_BY": 38,
   "GIVES": 15,
   "INTERPOLATES": 582,
@@ -50306,12 +50662,7 @@
    "type": "EXIT"
   },
   {
-   "from": "aim#4",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "aim#5",
+   "from": "aim#7",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -50816,12 +51167,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "duan#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "duan#6",
+   "from": "duan#8",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52206,12 +52552,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "saifon#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "saifon#6",
+   "from": "saifon#9",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -52281,12 +52622,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "somjai#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "somjai#6",
+   "from": "somjai#11",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -64551,8 +64887,7 @@
   },
   {
    "forbiddenBy": [
-    "aim#4",
-    "aim#5",
+    "aim#7",
     "air#4",
     "air#5",
     "alisa#5",
@@ -64621,8 +64956,7 @@
     "doghouse_bow#6",
     "dokmai#5",
     "dokmai#6",
-    "duan#5",
-    "duan#6",
+    "duan#8",
     "duang#5",
     "duang#6",
     "earn#4",
@@ -64871,8 +65205,7 @@
     "rung#6",
     "sai#5",
     "sai#6",
-    "saifon#5",
-    "saifon#6",
+    "saifon#9",
     "sara#5",
     "sara#6",
     "sasi#8",
@@ -64886,8 +65219,7 @@
     "sea_wall_kwang#6",
     "som#5",
     "som#6",
-    "somjai#5",
-    "somjai#6",
+    "somjai#11",
     "somruedee#5",
     "somruedee#6",
     "somsri#5",
@@ -67109,7 +67441,7 @@
    "th": "เอ๋"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 11,
    "filler": true,
    "id": "aim",
    "name": "Aim",
@@ -67789,7 +68121,7 @@
    "title": "a chain-smoking American with Navy posture"
   },
   {
-   "dialogueCount": 12,
+   "dialogueCount": 17,
    "filler": true,
    "id": "duan",
    "name": "Duan",
@@ -69756,7 +70088,7 @@
    "th": "ทราย"
   },
   {
-   "dialogueCount": 12,
+   "dialogueCount": 17,
    "filler": true,
    "id": "saifon",
    "name": "Saifon",
@@ -69862,7 +70194,7 @@
    "th": "สมชิต"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 15,
    "filler": true,
    "id": "somjai",
    "name": "Somjai",

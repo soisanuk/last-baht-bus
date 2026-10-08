@@ -82,6 +82,41 @@ function giltSeed() {
   _nightSnapshot();             // the night's ledger baseline, which the real path takes at every wake (round 69: "first morning in town" on day four)
   return serializeGame();
 }
+// silk (round 71): a week on one stool at the Silk Rose, the second floor written woman by woman.
+// March, so nobody on that floor is home for the harvest or up in Bangkok.
+function silkSeed() {
+  newGame();
+  G.player = { origin: "pension", personality: "blunt", orientation: "straight", said: {}, lang: "en", teetotal: false };
+  G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3; G.season0 = 2;
+  G.money = 15000; G.bank = 120000; G.battery = 95;
+  G.room = "buakhao_market"; G.visited.buakhao_market = true; G.nightTurn = 8;
+  _setFlag("roomSafeOpened");
+  quiet(); G.encDone = {};
+  _nightSnapshot();
+  return serializeGame();
+}
+// lamon (round 71): an owner ten days into the affair, honeymoon nearly spent — the night out
+// and its costs. Built by the game's own path: the owner chain, a stood shift to the affair's door,
+// STAY through _affairYes; then the clock moved so the honeymoon ends in play.
+function lamonSeed() {
+  reload(expatOwner({ day: 14, money: 14000, bank: 60000, bonds: { manow: 15, lamai: 6, cake: 5, tan: 3 } }));
+  const saved = _rand;
+  try {
+    _rand = () => 0.99;
+    G.room = "stinky_bar"; G.nightTurn = 12; out = []; doCommand("work");
+    for (let i = 0; i < 80 && G.pendingChoice !== "affair"; i++) {
+      out = []; doCommand("wait");
+      if (G.pendingChoice === "tanfavour" || G.pendingChoice === "shift" || G.pendingChoice === "synjob") doCommand("no");
+    }
+    if (G.pendingChoice !== "affair") throw new Error("lamon: the affair's door never opened");
+    _affairYes();
+    G.room = _hotelRoomId(); _endNight("sleep");
+  } finally { _rand = saved; }
+  G.affair.since = G.day - 10; G.affair.crisDay = G.day;
+  quiet(); G.encDone = {};
+  _nightSnapshot();
+  return serializeGame();
+}
 function reload(blob) { newGame(); deserializeGame(blob); }
 
 // ── build ──
@@ -90,12 +125,14 @@ const seeds = {
   hennie: expatOwner({ season0: 8, day: 12, money: 4000, bank: 25000, bonds: { tan: 3 } }),
   saoling: saoSeed(),
   gilt: giltSeed(),
+  silk: silkSeed(),
   // greta (round 61): an owner at the top of the shoulder — March, the rail thinning, the
   // note due — with the two levers in front of her (docs/bar-failure-cycle.md)
   greta: expatOwner({ season0: 2, day: 16, money: 12000, bank: 40000, bonds: { manow: 8, jiap: 4, lamai: 5, tan: 3 } }),
   // ossie (round 70, composition): an October owner on the Tan route — procurement live,
   // a girl on his floor he likes, money for the massage shops, the clinic and the Orchid
   ossie: expatOwner({ season0: 9, day: 13, money: 15000, bank: 45000, bonds: { manow: 9, lamai: 4, tan: 3 } }),
+  lamon: lamonSeed(),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -148,6 +185,16 @@ try {
   }
   console.log("ossie:", JSON.stringify(o));
   if (!o.job || !/low/.test(o.tier)) throw new Error("ossie seed cannot reach its drive");
+  // Silk: through the door, the floor answers in its own words and all five are there
+  reload(seeds.silk); out = []; doCommand("enter silk rose");
+  const silk = { room: G.room, here: ["ton", "nid", "wa", "waew", "grace"].every(i => _npcsHere().includes(i)), ton: /referee/.test((doCommand("talk to ton"), out = [], doCommand("ask ton about football"), out.join(" "))) };
+  console.log("silk:", JSON.stringify(silk));
+  if (silk.room !== "silk_rose" || !silk.here || !silk.ton) throw new Error("silk seed cannot reach its drive");
+  // Lamon: the affair is live, and TAKE MANOW OUT goes on the second ask
+  reload(seeds.lamon); G.room = "stinky_bar"; G.nightTurn = 30; out = []; doCommand("take manow out"); while (G.pendingChoice) doCommand("no"); doCommand("take manow out");
+  const lam = { live: _affairLive(), out: !!(G.party && G.party.ids.includes("manow")) };
+  console.log("lamon:", JSON.stringify(lam));
+  if (!lam.live || !lam.out) throw new Error("lamon seed cannot reach its drive");
   // Gilt: through the door, the twins and Sasi answer in their own words
   reload(seeds.gilt); out = []; doCommand("enter gilt cage");
   const gilt = { room: G.room, ping: /twenty minute younger/.test((doCommand("ask ping about pong"), out.join(" "))) };

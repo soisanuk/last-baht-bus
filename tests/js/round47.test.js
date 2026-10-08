@@ -153,7 +153,7 @@ test("no two till-keepers in different districts recite the same life", () => {
   // gave the SAME family answer word for word, down to "My boyfriend prefers it
   // too." Round 46 gave the hostesses deep pools; the women on the money were
   // still drawing a whole inner life from a pool of two.
-  const by = role => Object.keys(NPCS).filter(i => NPCS[i].filler && NPC_ROLES[i] === role);
+  const by = role => Object.keys(NPCS).filter(i => NPCS[i].filler && NPC_ROLES[i] === role && !FLOOR_OWN[i]);   // a woman written in her own words is not drawing from the pool
   for (const [role, floor] of [["cashier", 6], ["mamasan", 6]]) {
     const ids = by(role);
     assert.ok(ids.length > 20, `${role}s exist in numbers (${ids.length})`);

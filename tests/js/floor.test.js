@@ -161,3 +161,17 @@ test("a two-letter topic is a whole word: Wa is not water, and Preeda's ex is no
   assert.equal(_topicHits("ex", "expat"), false); assert.equal(_topicHits("ex", "my ex"), true);
   assert.equal(_topicHits("no", "nont"), false); assert.equal(_topicHits("oy", "madam oy"), true);
 });
+
+// ── Firefly Bar (2026-10-08): the third floor, settled women who ride home round the lake ─────
+const FIRE = ["duan", "saifon", "somjai", "aim"];
+test("the Firefly: everyone answers for everyone on the floor, and its own subjects", () => {
+  G.season0 = 2; G.room = "firefly_bar"; G.nightTurn = 30;
+  for (const id of FIRE) run("talk to " + id);
+  for (const a of FIRE) for (const b of FIRE.filter(x => x !== a))
+    assert.match(ask(a, NPCS[b].name.toLowerCase()), new RegExp(b === "aim" && a === "somjai" ? "sister's girl" : NPCS[b].name), `${a} on ${b}`);
+  assert.match(ask("somjai", "shamrock"), /operation/);
+  assert.match(ask("duan", "scrunchie"), /trust the scrunchie/);
+  assert.match(ask("saifon", "chilli"), /Afternoon is mine/);
+  assert.match(ask("aim", "law"), /land/);
+  assert.match(ask("somjai", "closing"), /Midnight/);
+});

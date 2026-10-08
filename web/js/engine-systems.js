@@ -8059,7 +8059,7 @@ function _affairOut() {
   const worked = b && b.workedLast && b.workedDay === G.day;
   const staff = _barStaff(), mama = staff.find(x => NPC_ROLES[x] === "mamasan"), till = staff.find(x => NPC_ROLES[x] === "cashier");
   const mn = mama ? NPCS[mama].name : "the floor", tn = till ? NPCS[till].name : "the till";
-  if (G.affairOutAsk !== G.turns - 1 && G.affairOutAsk !== G.turns) {   // the stakes first, once
+  if (G.affairOutAsk == null || G.turns - G.affairOutAsk > 4) {   // the stakes first, once — and a modal in between does not make her ask again
     G.affairOutAsk = G.turns;
     _say(_fmt("{n} glances at the floor, then at the rail, and lowers her voice. \"Out, together? " +
       "Everybody see us go. The floor is one short tonight and they know why.\" {extra}A beat. \"You still want, ask me again.\"",
