@@ -2167,7 +2167,8 @@ function _selfNamedNode(npcId, topic) {
   const _FURNITURE = new Set(["night", "last", "tonight", "girl", "girls", "drink", "drinks", "money",
     "time", "here", "there", "come", "back", "good", "little", "thing", "things", "about", "some", "more",
     "beach", "road", "street", "town", "city", "hotel", "market", "pattaya", "jomtien", "naklua", "bangkok",
-    "thai", "thailand", "farang", "english", "isan"]);   // asking Tan about speaking thai got the PLG speech through "A Thai man" (Nattapong, round 56)
+    "thai", "thailand", "farang", "english", "isan",
+    "club", "clubs", "room", "house", "shop", "place", "soi"]);   // "gentlemen's club" is not Bert's Pattaya Flying Club (Ossie, round 70)   // asking Tan about speaking thai got the PLG speech through "A Thai man" (Nattapong, round 56)
   let words = String(topic).toLowerCase().split(/[^a-z0-9']+/)
     .filter(w => w.length >= 4 && !_STOP.has(w) && !_FURNITURE.has(w));
   // A MAN'S OWN NAME IN HIS OWN NODE IS A STAGE DIRECTION, NOT A TOPIC. Prose

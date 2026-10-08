@@ -157,8 +157,8 @@ test("a docket is decided on pay-day, not booked as stiffed the next morning", (
   try {
     _rand = () => 0.1;   // under SHIFT_TAB_DOCKET: on the book; and under DOCKET_PAYS: he pays on pay-day
     G.shiftCall = "tab"; G.pendingChoice = "shift"; const st0 = G.bar.stiffed || 0;
-    _shiftYes(); assert.ok(G.bar.tabDue && G.bar.tabDue.day === G.day + 2); assert.equal(G.bar.stiffed || 0, st0, "not stiffed tonight");
-    const c0 = G.bar.cash; G.day += 2; out = []; _tabDueTick(); assert.equal(G.bar.cash, c0 + SHIFT_TAB_TAKE); assert.match(said(), /pay-day/);
+    _shiftYes(); assert.ok(G.bar.tabDue && G.bar.tabDue.day === G.day + 3, "the morning AFTER pay-day night (Ossie, round 70)"); assert.equal(G.bar.stiffed || 0, st0, "not stiffed tonight");
+    const c0 = G.bar.cash; G.day += 2; _tabDueTick(); assert.ok(G.bar.tabDue, "not decided the morning of pay-day"); G.day += 1; out = []; _tabDueTick(); assert.equal(G.bar.cash, c0 + SHIFT_TAB_TAKE); assert.match(said(), /pay-day/);
     G.bar.tabDue = { day: G.day, pays: false, amt: SHIFT_TAB_TAKE }; out = []; _tabDueTick(); assert.equal(G.bar.stiffed, st0 + 1);
   } finally { _rand = saved; }
 });

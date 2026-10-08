@@ -1052,7 +1052,7 @@ function _arriveAt(to) {
   // that" — the last-resort line, fired by the game's own affordance
   // (Marguerite, 2026-08-27). Lapse it with a beat; _convoLapsed already brings
   // it back next time you sit with them, so nothing is lost but the dead end.
-  if (G.convoQ && to !== G.room && _npcRoom(G.convoQ.id) !== to) {
+  if (G.convoQ && to !== G.room && _npcRoom(G.convoQ.id) !== to && !((G.party && G.party.ids) || []).includes(G.convoQ.id)) {   // she is on your arm: her question walks with you (Ossie, round 70)
     const _who = _convoName(G.convoQ.id);
     if (G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q };
     G.convoQ = null; G.convo = null; G.convoIdx = null;
@@ -4114,7 +4114,8 @@ function _doTalkCore(arg, topic) {
   // Your own staff, at the bar you own, greet you as the guv'nor and won't sell
   // you your own girls — the customer register is wrong once you sign the lease.
   // Personal topics fall through to normal dialogue (an owner asks after her kids).
-  if (topic && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // Lamai's crates, Cake's fan: the text she sent (Lothar, round 67)
+  const _sourOwn = G.affair && G.affair.soured && !G.affair.ended && npc === G.affair.id && topic && typeof _AFFAIR_SOUR_RE !== "undefined" && _AFFAIR_SOUR_RE.test(String(topic).toLowerCase());
+  if (topic && !_sourOwn && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // Lamai's crates, Cake's fan: the text she sent (Lothar, round 67) — not her fond text, after she has seen it (Ossie, round 70)
   // a regular at the bar you own greets the guv'nor, not a new face (Piet, round 62: "New face. You here long?")
   if (!topic && NPCS[npc].patron && typeof _atOwnBar === "function" && _atOwnBar() && !(G.talked && G.talked[npc])) {   // not _met(): this function has its own _met further down
     _say(_pickVary(_RAIL_GUVNOR, "railguv")(NPCS[npc].name));
@@ -5466,6 +5467,8 @@ const _FIXTURE_PUNTER = [
 function _fixtureTalk(npc, topic) {
   const reads = _room().reads;
   if (!reads || !topic || !NPCS[npc]) return false;
+  // the room's furniture is its own staff's to point at — not a companion's at the clinic (Ossie, round 70: "I not going with you, I have stool")
+  if (_npcRoom(npc) !== G.room || ((G.party && G.party.ids) || []).includes(npc)) return false;
   const t = String(topic).toLowerCase();
   let key = null;
   for (const [k, aliases] of Object.entries(_READ_NOUNS)) {
@@ -5872,6 +5875,35 @@ const _TOWN = {
       "\"{r}'s one of ours,\" {n} says. \"Same seat, pays {his} tab, causes no trouble. Every room needs a few.\"", "\"{r}?\" {n} allows herself half a smile. \"{He} tells the same three stories and tips on every one of them. I would not swap {him} for a new {man}.\"", "\"{r} has been coming in longer than half the girls here have been working,\" {n} says. \"{He} knows where everything is. Including the door, when it's time.\""],
     punter: ["\"{r}? Drinks here,\" {n} says.", "\"{r}? Fixture,\" {n} says. \"Been coming here longer than I have.\""],
   },
+  companion: {
+    floor: ["\"{w}? She come in with you, na.\" {n} tips her head at her. \"From {bar}. Ask her yourself — she is right there.\"",
+      "{n} looks from {w} to you and back. \"Your friend tonight. {bar} girl, I think. Is okay — you buy her drink, everybody happy.\"",
+      "\"{w}?\" {n} laughs. \"You bring her, you know her better than me. She sit right next to you, na.\""],
+    house: ["\"{w} came in on your arm,\" {n} says. \"From {bar}. She's your company tonight, not staff here — ask her.\"",
+      "\"The girl you brought?\" {n} glances along the rail at {w}. \"{bar}'s, by the look of her. She's sitting right there.\"",
+      "{n} doesn't need to look. \"{w}. You walked in with her. I'd ask her before I'd ask me.\""],
+    punter: ["\"{w}? Came in with you, mate. You'd know better than me.\"",
+      "{n} looks from {w} to you. \"Your company tonight. Ask her, she's right there.\""],
+  },
+  affairGone: {
+    floor: ["\"{w}?\" {n} looks at the bar top. \"She go home, boss. You know why. On the floor we don't talk about it.\"",
+      "{n} is quiet a moment. \"{w} send a message to the girls. She is okay. She say don't tell boss.\" A small shrug. \"So I don't tell you.\""],
+    house: ["\"{w}'s gone home,\" {n} says, not unkindly. \"You were there for the end of it. The floor's still putting itself back together.\"",
+      "\"{w}.\" {n} lets the name sit. \"Gone. Wages to the baht, which was right. Don't go looking for the rest of it in here.\""],
+    punter: ["\"{w}? Gone home, mate. Everybody saw how.\""],
+  },
+  present: {
+    floor: ["\"{w}? She is right there.\" {n} points with her chin. \"Ask her.\"", "{n} nods across at {w}. \"Not my business, na. Her business. She is right there.\""],
+    house: ["\"{w}'s sitting right over there,\" {n} says. \"Ask her yourself — she's better at her own answers than I am.\"", "{n} tips her head toward {w}. \"Right there. I don't talk about people who can hear me.\""],
+    punter: ["{n} nods across the room. \"{w}'s right there, mate. Ask her.\""],
+  },
+  gents: {
+    floor: ["\"Gentleman club?\" {n} makes a face that is half professional respect. \"Thappraya Road — the Boardroom, the Velvet. Pratumnak also. Air-con, very private, very expensive. You buy her one drink first, or she is ice.\"",
+      "{n} laughs. \"Gentleman club is where the girl have a sofa, not a stool.\" She counts on her fingers. \"Boardroom, Velvet on Thappraya. Doghouse up Pratumnak. Bring money.\""],
+    house: ["\"The gentlemen's clubs are up Thappraya and over on Pratumnak,\" {n} says. \"The Boardroom, the Velvet, the Doghouse. Air-con villas — one drink buys you the welcome, and the barfine is the dearest in town.\"",
+      "\"Thappraya Road for the Boardroom and the Velvet,\" {n} says. \"Pratumnak for the rest. They're quiet rooms with a door on them. You pay for the door.\""],
+    punter: ["\"Thappraya Road, mate. The Boardroom, the Velvet Club. Pratumnak's got a couple more. Buy her a drink before you get ideas — that's the rule in there.\""],
+  },
   placedHouse: {
     floor: ["\"{w}? She run {job}.\" {n} tips her head toward her. \"You ask her. Careful, she know everything already.\""],
     house: ["\"{w} runs {job} here,\" {n} says. \"Ask her yourself — she won't mind being asked.\""],
@@ -6107,6 +6139,19 @@ function _townTalk(npc, topic) {
     _say(line);
     return true;
   };
+  // THE PEOPLE IN THE ROOM (Ossie, round 70: a woman sat beside him at his own rail, with his
+  // partner pouring, and his manager swore he had never seen her). Somebody standing in front of
+  // the speaker is somebody they can see — and a woman who came in on your arm, they saw arrive.
+  const _nm = id => { const nm = String(NPCS[id].name).toLowerCase(); return nm === t || nm.split(" ").pop() === t || id === t; };
+  const _arm = ((G.party && G.party.ids) || []).find(id => id !== npc && NPCS[id] && _nm(id));
+  if (_arm) return pick("companion", { w: NPCS[_arm].name, bar: _barName(NPCS[_arm].room || (NPCS[_arm].bars || [])[0]) || "another bar" });   // her own bar, not the one she is on your arm in
+  // …and the woman who was the owner's, after it ended: the floor watched the whole of it
+  if (G.affair && G.affair.ended && G.affair.id && G.affair.id !== npc && NPCS[G.affair.id] && _nm(G.affair.id) &&
+      G.bar && G.bar.room === G.room && _npcRoom(npc) === G.room) return pick("affairGone", { w: NPCS[G.affair.id].name });
+  // the gentlemen's clubs, by class: nobody in town could say where one was (Ossie, round 70)
+  if (/\b(gentle?m[ae]n'?s?'? ?clubs?|gents'? ?clubs?|gents)\b/.test(t)) return pick("gents", {});
+  const _here = typeof _npcsHere === "function" ? _npcsHere().find(id => id !== npc && NPCS[id] && !NPCS[id].patron && _nm(id) && _npcRoom(id) !== _npcRoom(npc)) : null;
+  if (_here) return pick("present", { w: NPCS[_here].name });
   if (/^(the )?(atm|cash machine|cashpoint|machine|withdraw|money machine|cash point)$/.test(t) || /\b(an? |the )?atm\b/.test(t)) {
     const here = _room().atm, near = here ? G.room : Object.keys(ROOMS).find(id => ROOMS[id].atm && ROOMS[id].region === _room().region);
     const w = here ? "the wall right here" : near ? ROOMS[near].name : "the main drag of every nightlife area — Second Road, Soi Buakhao, the Walking Street gate";
@@ -6159,7 +6204,14 @@ function _townTalk(npc, topic) {
     if (typeof _barOwned === "function" && _barOwned()) _say("(For the bar, Nont lends — BORROW at his table in the Old Market.)", "dim");
     return true;
   }
-  if (/^(my |a |bad )?back$|\b(back pain|bad back|my back|backache|sore back)\b/.test(t)) return pick("back", { p: MASSAGE_LEGIT });
+  if (/^(my |a |bad )?back$|\b(back pain|bad back|my back|backache|sore back)\b/.test(t) && NPCS[npc].masseuse && _room().massage) {
+    _say(_pickVary([   // a woman in her own shop answers your back as a masseuse, not as the town (Ossie, round 70)
+      `"Your back?" ${NPCS[npc].name} presses two thumbs either side of your spine, without asking, and you nearly sit down. "There. Oil is for the skin. For this you want Thai — I do both. ฿${_num(MASSAGE_LEGIT)}, one hour, and you walk out taller."`,
+      `${NPCS[npc].name} watches you stand up off the chair and winces on your behalf. "Every farang over fifty, same back. Lie down. Thai, not oil — oil is a holiday, Thai is a repair. ฿${_num(MASSAGE_LEGIT)}."`,
+    ], "masseuseback"));
+    return true;
+  }
+  if (/^(my |a |bad )?back$|\b(back pain|bad back|my back|backache|sore back)\b/.test(t)) return pick("back", { p: MASSAGE_LEGIT });   // not from a woman in her own shop (Orapin warned you off oil shops in hers — Ossie, round 70)
   // L925 — Priew on her round, asked of the room she is working
   if (/\bpriew\b/.test(t) && G.priewSeen && G.priewSeen.day === G.day && G.priewSeen.room === G.room) return pick("priew", {});
   // L912 — the chit she showed you is a thing she can be asked about
@@ -9234,13 +9286,6 @@ const _CLINIC_CLEAN = [
     "news into your pocket — the cheapest peace of mind in Pattaya — and step back out free.",
 ];
 function _doClinic() {
-  {
-    const _c = G.party && G.party.ids && G.party.ids.find(p => NPCS[p] && _npcsHere().includes(p));
-    if (_c && G.soc.clinicCompany !== G.day) { G.soc.clinicCompany = G.day; _say(_fmt(_pickVary([
-      "{n} takes the plastic chair beside yours without being asked and reads her {{phone}}, entirely unbothered — she has been in this room before, and not with a customer.",
-      "{n} knows the nurse by name. They do not discuss why. She sits with you until your number comes up, and when it does she says only, \"Go, na. Is quick.\"",
-    ], "cliniccomp"), { n: NPCS[_c].name }), "dim"); }
-  }
   // the clinic is a PLACE — GET TESTED ran from a bar stool and from a hotel bed
   // (Judith, round 47). It is on Second Road at the Central junction, and the
   // waiting room is there. And it takes the twenty minutes its own prose says
@@ -9255,6 +9300,14 @@ function _doClinic() {
       (_ride ? `You take a bike there (-฿${_num(_fare)}, ฿${_num(G.money)} left) and sit in the ` : "You walk it, and sit in the ") +
       "waiting room with whoever else the town sent tonight.", "dim");
     G.room = "second_rd_c";
+  }
+  // she sits beside you in the waiting room AFTER you have got there (Ossie, round 70)
+  {
+    const _c = G.party && G.party.ids && G.party.ids.find(p => NPCS[p] && _npcsHere().includes(p));
+    if (_c && G.soc.clinicCompany !== G.day) { G.soc.clinicCompany = G.day; _say(_fmt(_pickVary([
+      "{n} takes the plastic chair beside yours without being asked and reads her {{phone}}, entirely unbothered — she has been in this room before, and not with a customer.",
+      "{n} knows the nurse by name. They do not discuss why. She sits with you until your number comes up, and when it does she says only, \"Go, na. Is quick.\"",
+    ], "cliniccomp"), { n: NPCS[_c].name }), "dim"); }
   }
   // the second visit is a second visit (Terence, round 57: three tests, two in one night,
   // the identical leaflet and +1 สนุก each time)
@@ -9271,6 +9324,9 @@ function _doClinic() {
     _addHappy(3); // the relief of it being dealt with
   } else {
     _say(_pickVary(_CLINIC_CLEAN, "clinicclean"), "dim");
+    // a clean result twenty minutes after the special is a result about LAST month (Ossie, round 70)
+    const _today = Object.values(G.soc.special || {}).includes(G.day) || (G.soc.bfNight && Object.keys(G.soc.bfNight).length);
+    if (_today) _say("The nurse taps the date on the form. \"This test is for before. Tonight — come back in three weeks, and we see tonight.\" (A window period: nothing that happened this evening shows on tonight's test.)", "dim");
     _addHappy(1);
   }
   _priewMeet(); // the waiting room has one more thing in it, once (hospital-mirage arc)

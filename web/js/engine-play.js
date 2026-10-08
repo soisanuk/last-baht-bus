@@ -3604,10 +3604,25 @@ const _AFFAIR_MISS = [
   n => `"Hm?" ${n} is counting glasses and loses the count. "No idea, na. You know more than me about farang things."`,
   n => `${n} shrugs with one shoulder, which is how she says the question is for somebody else. "Ask Bert. Bert know everything useless."`,
 ];
+// the subjects she answers differently once she has seen it with her own eyes
+const _AFFAIR_SOUR_RE = /\b(shoes|hotel|last night|the girl|other girl|that girl|caught|saw|sorry|forgive|love|in love|feelings?|stay|together|you and me|us|plan|future|after close|after work)\b/;
 function _affairTalk(id, tt) {
   if (!tt) return null;
   const a = G.affair || {}, seen = a.crisSeen || [], chose = a.crisChose || {}, n = NPCS[id].name;
   const pick = (k, lines) => _pickVary(lines, "afftalk:" + k);
+  // AFTER SHE HAS SEEN IT (Ossie, round 70: the woman she watched on his arm got "No idea, na.
+  // Ask me something about us", and LAST NIGHT got her own fond text read back)
+  if (a.soured && a.caughtWith && a.caughtWith.length) {
+    const other = a.caughtWith.find(w => new RegExp("\\b" + w.toLowerCase() + "\\b").test(tt));
+    if (other || /\b(shoes|hotel|last night|the girl|other girl|that girl|caught|saw|see)\b/.test(tt)) return pick("sourother", [
+      `"${other || a.caughtWith[0]}." ${n} says the name the way she reads a chit back: correct, and not hers. "I see her. I see the shoes. You want me to say more, you are asking the wrong person to make you feel better."`,
+      `${n} keeps wiping. "${other || a.caughtWith[0]}? Nice girl. Good manners. She sit where I sit." A beat. "Ask me something about the bar, boss."`,
+    ]);
+  }
+  if (a.soured && /\b(sorry|forgive|love|in love|feelings?|stay|together|you and me|us|plan|future|after close|after work)\b/.test(tt)) return pick("sour", [
+    `"Now?" ${n} doesn't stop counting. "Now is staff. I tell you when it is not staff. Maybe I tell you."`,
+    `${n} looks at you for exactly as long as she looks at a customer. "That word is for before. Before is finished. Ask me again in a long time."`,
+  ]);
   if (/\b(love|in love|feelings?|love me)\b/.test(tt)) return pick("love", [
     `${n} doesn't look up from the glass she's drying. "Love is farang word. Thai word is — you come every night, I come every night. Same thing, more work." She holds the glass to the light. "Yes. Okay? Yes."`,
     `"You ask me that HERE?" ${n} tips her head at the rail, the girls, Cake's pen. "Ask me when the float is counted and there is no customer." A beat. "The answer is the same. I only want to say it with nobody paying for a drink."`,
@@ -3629,6 +3644,10 @@ function _affairTalk(id, tt) {
   if (/\b(village|home|hometown|where you from)\b/.test(tt)) return pick("home", [
     `"Home?" ${n} names the village like a place on a bus timetable. "Five hours. The bus is terrible. One day I show you, and you will hate it, and you will say it is beautiful to be polite."`,
     `"Up north-east. You know it already — I say it the first night." ${n} almost smiles. "Now it is where the money go. Here is where I am."`,
+  ]);
+  if (/\b(mother|mama|mum|mom|papa|father|dad|family|brother|sister)\b/.test(tt) && a.soured) return pick("familysour", [
+    `"Mama is fine." ${n} leaves it there, which she never used to.`,
+    `"Family okay." The cloth goes round the glass once more. "They don't ask about you now. I don't tell."`,
   ]);
   if (/\b(mother|mama|mum|mom|papa|father|dad|family|brother|sister)\b/.test(tt)) return pick("family", [
     `"Mama?" ${n} laughs. "Mama ask about you every call. What you eat, if you are fat yet. I say not yet."`,
@@ -3698,6 +3717,7 @@ function _ownBarTalk(id, topic) {
     // anything else she does not know, she says in HER voice — not the floor's "that
     // one I don't know", and never her first-night hello (Rolf, round 55)
     if (tt) { _say(_pickVary(_AFFAIR_MISS, "affairmiss")(NPCS[id].name)); return true; }
+    if (G.affair.soured) { _say(_pickVary(_REL_GREET_AFFAIR_SOUR, "relaffairsour")(NPCS[id].name), "dim"); return true; }   // the girls "know" — what they know changed (Ossie, round 70)
     _say(_pickVary(_REL_GREET_AFFAIR, "relaffair")(NPCS[id].name)); return true;
   }
   const role = NPC_ROLES[id];
@@ -4923,10 +4943,10 @@ const _JOINER_LINES = [
   "(The Sabai's desk: the joiner book slides across without the clerk looking up — ฿{f}, her ID, your room number. He has never once asked anybody what they do for a living.)",
 ];
 // any woman who goes up to your room at the Sabai, once a night — the clerk charges the guest, not the trade
-function _joinerFee() {
+function _joinerFee(night = G.day) {   // the NIGHT she came up: a fee charged at the next wake stamped the new day and let that night's guest in free (Ossie, round 70)
   if (!_flag("act1Done") || G.stage === "act1" || G.hotel !== "sabai") return;
-  if (G.joinerDay === G.day || G.money < JOINER_FEE) return;
-  G.joinerDay = G.day; G.money -= JOINER_FEE;
+  if (G.joinerDay === night || G.money < JOINER_FEE) return;
+  G.joinerDay = night; G.money -= JOINER_FEE;
   _say(_fmt(_pickVary(_JOINER_LINES, "joiner"), { f: JOINER_FEE }), "dim");
 }
 function _endNight(reason) {
@@ -4957,6 +4977,7 @@ function _endNight(reason) {
     G.lastBfId = _pids[0];
     G.lastBfHonest = false;   // the fun close: khao man gai at 3 a.m., fondly
     G.lastBfBase = Math.min(14, 10 + Math.floor(G.party.stops / 2) + (_pids.length > 1 ? 2 : 0));
+    G.lastBfPreTier = _bondTier(_pids[0]);   // read her tier BEFORE the close's bond, as the barfine path does: a one-night companion was told "someone who knows you" (Ossie, round 70)
     for (const _pid of _pids) _addBond(_pid, 3);
     _say(_fmt(_pids.length > 1
       ? "The three of you fall through your door somewhere past the point of counting, still laughing at a thing none of you can remember. {who} claim the shower in shifts and the bed by consensus, and the night finishes the way the best ones do — off the clock, off the books, unhurried."

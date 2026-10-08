@@ -1904,7 +1904,7 @@ const ROOMS = {
     lateDesc: [
       "Beach Road at the foot of Soi 6, and the runway is switched off: the soi behind you is grilles and mop buckets, the sea across the road is a sound rather than a view, and the songthaews that pass are half empty and not stopping unless you make it obvious.",
       "The junction at an hour that belongs to the road sweepers. Two of them are working the gutter with those long brooms and neither looks up. The Dolphin roundabout glows away to the north for nobody.",
-      "Foot of Soi 6, small hours: the taxi bikes have gone down to one man on a saddle with his boots on the handlebars, and he is awake, which is his entire professional advantage.",
+      "Foot of Soi 6, small hours: even the taxi bikes have gone from the mouth of the soi, and the road belongs to a dog asleep on the warm kerb and a 7-Eleven bag going nowhere in the breeze.",
     ],
     desc: "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and " +
       "lit like a runway. Across Beach Road to the west lies the open sand and the bay; the " +
@@ -3018,7 +3018,7 @@ const ROOMS = {
     desc: "A narrow shopfront wedged between a laundry and a shuttered {{phone}} repair " +
       "stall, close enough to the junction that the traffic noise comes through the " +
       "wall. Four mats, a fan on a stand, and a lady who has been doing this for " +
-      "twenty years and can tell from your walk which shoulder is the problem.",
+      "eighteen years and can tell from your walk which shoulder is the problem.",
     exits: { out: "buakhao_klang" },
   },
   myth_massage: {
@@ -12584,8 +12584,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "which with Candy is worse, and she'll still send you a girl when you're short.\"",
         short: "\"You went with Tan. She'll not hold it against you — she'll remember it.\"" },
       { topic: "the girl|the name|staff list|the book|labour office|her papers|papers|nong khai", req: ["tanFavourDone"],
-        text: "\"On the book, in capitals.\" Bert taps the ledger under the till. \"Comes in when she comes in, sits where she's " +
-          "told, and if anybody from the labour office ever asks, she's worked here since before the flood.\" He doesn't look up. " +
+        text: "\"On the book, in capitals.\" Bert taps the ledger under the till. \"Never once come in, and I'd not know her in the " +
+          "street — and if anybody from the labour office ever asks, she's worked here since before the flood.\" He doesn't look up. " +
           "\"I don't ask Tan where they come from and he doesn't ask me how the till balances.\"",
         short: "\"On the book, in capitals. I don't ask Tan, he doesn't ask me.\"" },
       { topic: "tan|candy|partner|partnership|fifty-one|51 percent|the partner|my partner", when: (st, G) => _flag("partnerTan"),
