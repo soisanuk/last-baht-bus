@@ -62,3 +62,17 @@ test("a lapsed TELL chip is 'that moment's passed', not the verb lecture; YES at
   G.room = _hotelRoomId(); G.nightTurn = 20; out = []; run("sleep"); const d0 = G.day; run("yes"); assert.equal(G.day, d0 + 1, "yes slept");
   G.room = "lucky_tiger"; G.nightTurn = 40; out = []; run("examine frame"); assert.match(said(), /commercial registration/);
 });
+test("the regulars row is a town-wide book: one line is not two bars' sentence, nor one woman's about two men", () => {
+  G.nightTurn = 50; const seen = {};
+  for (const [id, n] of Object.entries(NPCS)) {
+    if (!n.patron || !n.room || !ROOMS[n.room] || !ROOMS[n.room].bar) continue;
+    const st = Object.keys(NPCS).filter(i => (NPC_ROLES[i] === "cashier" || NPC_ROLES[i] === "mamasan") && NPCS[i].room === n.room); if (!st.length) continue;
+    G.room = n.room; run("talk to " + st[0]); const t = ask(st[0], n.name.toLowerCase()).replace(n.name, "X").replace(NPCS[st[0]].name, "N").split("·")[0].trim();
+    if (_TOWN.regular.house.concat(_TOWN.regular.floor).some(l => t.startsWith(String(l).slice(0, 6).replace(/\{\w+\}/g, "")))) (seen[t] = seen[t] || []).push(st[0] + "@" + n.room);
+  }
+  const dup = Object.entries(seen).filter(([, v]) => v.length > 1);
+  assert.ok(dup.length <= 1, "at most the pigeonhole's one repeat: " + JSON.stringify(dup));
+  assert.ok(_TOWN_WIDE.has("regular") && _TOWN_WIDE.has("owner"));
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-parser.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /about \{his\} divorce|my daughter a schoolbag|photo of \{his\} dog/, "a pooled line asserts no biography of the man or the speaker");
+});

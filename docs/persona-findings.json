@@ -17223,13 +17223,13 @@
       "lens": "crooked-completionist",
       "instrument": "",
       "claim": "One line across two cashiers (Kanom on Reginald, Ging on Nigel)",
-      "verdict": "deferred",
-      "note": "The staff-on-their-regulars town row; wants a per-bar book like the chorus.",
+      "verdict": "fixed",
+      "note": "_TOWN_WIDE: the owner, regular and placed rows are dealt from one town-wide book, keyed by the line (not its index in a room-fitted pool) and held by speaker and subject; the regulars' pools went to 16 house and 11 floor lines, every one a habit rather than a biography.",
       "cls": "Q",
       "sev": "minor",
       "system": "conversation",
       "between": "one line, two mouths",
-      "pin": ""
+      "pin": "tests/js/round74.test.js"
     },
     {
       "round": "74",

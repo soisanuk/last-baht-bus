@@ -5841,6 +5841,10 @@ function _tanTown(kind, slots) {
 // the clinic's room, the ฿300 the police modal charges, the tonic and fortune
 // constants — in the three registers _hoursRegister gives. Written for the
 // coverage map's N column (2026-09-27); the askable-audit has a row per fact.
+// A town-wide book for the rows a man asks in every bar (Vince, round 74: Kanom on Reginald and Ging on Nigel said one
+// sentence in two bars): the owner, a staffer on her own rail's regular, a colleague placed on the floor. Each line is
+// dealt once across the town while one remains; the per-room book stays for the rest.
+const _TOWN_WIDE = new Set(["owner", "regular", "placed"]);
 const _TOWN = {
   // a go-go's stage, by its own schedule (_GOGO_SHOW) — Henrik, round 69
   show: {
@@ -6014,10 +6018,11 @@ const _TOWN = {
   regular: {
     floor: ["\"{r}?\" {n} laughs. \"Our regular. Same stool, same drink, same joke. {He} tip okay. {He} is part of the furniture, but nice furniture.\"",
       "{n} glances at the stool. \"{r} — every night, nearly. {He} tell the same story, we laugh every time. Is our job, and also {he} is funny sometimes.\"",
-      "\"{r}?\" {n} laughs. \"Our regular. Same seat every night, same drink, same joke. Nice {man}. {He} tip okay.\"", "\"{r}?\" {n} rolls her eyes, fond. \"{He} think {he} is funny. Sometimes {he} is. {He} always tip, so {he} is always funny.\""],
+      "\"{r}?\" {n} laughs. \"Our regular. Same seat every night, same drink, same joke. Nice {man}. {He} tip okay.\"", "\"{r}?\" {n} rolls her eyes, fond. \"{He} think {he} is funny. Sometimes {he} is. {He} always tip, so {he} is always funny.\"", "\"{r}!\" {n} grins. \"{He} bring us mango sometimes. From the market. For no reason. Best customer.\"", "{n} lowers her voice. \"{r} never barfine anybody. Only talk. Mama say {he} is the cheapest customer and the best one.\"", "\"{r}? {He} is like uncle.\" {n} shrugs. \"Uncle who drink beer and tell the same joke. Every bar need one.\"", "\"{r}?\" {n} laughs. \"{He} teach me English word every night. Last night: umbrella. Tonight I teach {him} Thai: tilac. {He} go red.\"", "\"{r} is safe customer,\" {n} says, which from her is the highest grade. \"Drink, talk, go home. Like a clock.\"", "{n} makes a face of great patience. \"{r} always say 'last one' at drink three. Then four, then five. 'Last one.' Every night.\"", "\"{r}? When I start here I am a little scared of {him}. Now I know: {he} only look serious. Inside, very soft.\""],
     house: ["\"{r}'s one of ours,\" {n} says. \"Same stool, pays {his} tab, causes no trouble. A bar's built on regulars like that.\"",
-      "\"{r}'s one of ours,\" {n} says. \"Same seat, pays {his} tab, causes no trouble. Every room needs a few.\"", "\"{r}?\" {n} allows herself half a smile. \"{He} tells the same three stories and tips on every one of them. I would not swap {him} for a new {man}.\"", "\"{r} has been coming in longer than half the girls here have been working,\" {n} says. \"{He} knows where everything is. Including the door, when it's time.\""],
-    punter: ["\"{r}? Drinks here,\" {n} says.", "\"{r}? Fixture,\" {n} says. \"Been coming here longer than I have.\""],
+      "\"{r}'s one of ours,\" {n} says. \"Same seat, pays {his} tab, causes no trouble. Every room needs a few.\"", "\"{r}?\" {n} allows herself half a smile. \"{He} tells the same three stories and tips on every one of them. I would not swap {him} for a new {man}.\"", "\"{r} has been coming in longer than half the girls here have been working,\" {n} says. \"{He} knows where everything is. Including the door, when it's time.\"", "\"{r}?\" {n} glances at the stool before the man on it. \"Comes in at the same hour, leaves at the same hour, and the hour between is the most reliable money I take.\"", "{n} considers {r} the way she considers the float. \"Steady. Pays in notes, never asks for change, and once fixed the fan without being asked. That buys a man a lot of forgiveness.\"", "\"{r}'s been on that stool so long the stool's his shape,\" {n} says. \"I'd sooner lose the stool.\"", "\"{r}?\" {n} turns a page of the book. \"A good customer is a man you don't have to think about. I haven't thought about {r} in years. That's a compliment.\"", "\"{r}?\" {n} doesn't look round. \"Tuesday to Saturday, in by eight, out by eleven, never later. If {he} doesn't come, I send a girl to see if {he}'s dead.\" She isn't joking.", "\"{r} pays on the night, every night, and tips the cashier, which nobody does.\" {n} says it as if reading from a reference. \"I'd write {him} one, if anybody asked.\"", "\"{r}?\" {n} sighs, fondly. \"Has seven stories, one for each night, and tells them in order. I know what night it is by which one I am hearing.\"", "{n} weighs it. \"{r} is the kind of customer the girls call uncle and the owner calls a pension plan. Both are right.\"", "\"{r} came in for one drink in two thousand and something,\" {n} says. \"{He} is still on the one drink, as far as {he} is concerned.\"", "\"{r}? Ask {him} one question and you lose an hour; ask two and you lose the evening. I have done both, on slow nights, on purpose.\"", "\"I know {r}'s drink before {he} sits down and {his} mood before {he} speaks,\" {n} says. \"Years of it. It is more than I know about most of my family.\"", "{n} smiles at the name. \"{r} remembers every girl's birthday and none of their names. They forgive {him} the names.\""],
+    punter: ["\"{r}? Drinks here,\" {n} says.", "\"{r}? Fixture,\" {n} says. \"Been coming here longer than I have.\"",
+      "\"{r}?\" {n} shrugs. \"Sits there, I sit here. We nod. That's twenty years of friendship, here.\"", "\"{r}? Good bloke, as far as I've ever asked, which isn't far.\""],
   },
   affFloorOk: {
     floor: ["\"The floor? Is okay, boss.\" {n} means it. \"Everybody happy for you and {w}. Is nice to see.\""],
@@ -6356,11 +6361,15 @@ function _townTalk(npc, topic) {
     let line;
     if (npc === "tan" && _TAN_TOWN[k]) line = _tanTown(k, slots);
     else {
-      const pool = _roomFit(_TOWN[k][reg]), book = (G.soc.townSaid = G.soc.townSaid || {}), bk = (k === "owner" ? "*" : G.room) + ":" + k + ":" + reg;   // the room's own cast and furniture first, as _pickVary does
-      const used = book[bk] = book[bk] || {};
-      const free = pool.map((_, i) => i).filter(i => !used[i] || used[i] === npc);
-      const i = free.length ? free[_hh(npc + ":" + k, 13) % free.length] : _hh(npc + ":" + k, 13) % pool.length;
-      used[i] = used[i] || npc;
+      const pool = _roomFit(_TOWN[k][reg]), book = (G.soc.townSaid = G.soc.townSaid || {}), bk = (_TOWN_WIDE.has(k) ? "*" : G.room) + ":" + k + ":" + reg;   // the room's own cast and furniture first, as _pickVary does
+      // keyed by the LINE, not its index: _roomFit filters the pool per room, so an index meant a different line in each bar
+      // and the town-wide book dealt one sentence to two bars (Vince, round 74)
+      // a line is held by (speaker, subject): she does not give the same sentence about two different regulars either
+      const used = book[bk] = book[bk] || {}, lk = i => String(pool[i]).slice(0, 80), who = npc + "|" + ((slots && (slots.r || slots.w || slots.b)) || "");
+      const free = pool.map((_, i) => i).filter(i => !used[lk(i)] || used[lk(i)] === who);
+      const least = () => { const n = {}; for (const v of Object.values(used)) n[v] = 0; return pool.map((_, i) => i).sort((a, b) => (_hh(npc + lk(a), 7) % 97) - (_hh(npc + lk(b), 7) % 97)); };
+      const i = free.length ? free[_hh(who + ":" + k, 13) % free.length] : least()[0];
+      used[lk(i)] = used[lk(i)] || who;
       line = _sentenceCase(_fmt(pool[i], { n: NPCS[npc].name, ...slots }));
     }
     _say(line);
