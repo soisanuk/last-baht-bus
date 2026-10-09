@@ -11,6 +11,7 @@
     "map:audit": "node tools/gen-map.mjs --audit"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.1"
+    "@playwright/test": "^1.61.1",
+    "compromise": "^14.18.0"
   }
 }

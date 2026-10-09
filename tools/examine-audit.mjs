@@ -11,6 +11,8 @@
 //   node tools/examine-audit.mjs             # full report, noun-frequency first
 //   node tools/examine-audit.mjs --json      # machine-readable findings
 //   node tools/examine-audit.mjs --room soi6_mid   # one room, all its nouns
+//   node tools/examine-audit.mjs --nlp       # harvest noun phrases with Compromise (dev dependency) instead of the regex
+//   node tools/examine-audit.mjs --compare   # both harvests: which dead-ends each finds, and which only one does
 //
 // A DEAD verdict means: standing in the room, lit, EXAMINE <noun> printed one
 // of the _NO_SUCH_THING brush-offs or "You don't see that here." Everything
@@ -166,6 +168,47 @@ function harvest(text) {
   return [...found];
 }
 
+// ── the Compromise harvest (2026-10-09, Mario: "sure, go for it") ─────────────
+// A part-of-speech tagger's noun phrases instead of "article + one or two words". It sees nouns
+// with no article in front ("four mats, a fan"), adjective chains, and plurals; it knows nothing
+// about the game, so the same stoplists filter it. Dev-only: the game never loads it.
+let nlp = null;
+const NLP = process.argv.includes("--nlp"), COMPARE = process.argv.includes("--compare");
+if (NLP || COMPARE) {
+  try { nlp = (await import("compromise")).default; }
+  catch { console.error("compromise is not installed: npm install (it is a devDependency)"); process.exit(2); }
+}
+// what a tagger calls a noun and nobody points at: indefinites, abstractions of time and manner
+const NLP_STOP = new Set(["nothing", "everything", "something", "anything", "everyone", "anyone", "someone", "nobody", "everybody", "somebody",
+  "all", "none", "home", "tonight", "midnight", "ago", "halfway", "inland", "round", "proper", "yours", "upstairs", "downstairs",
+  "directions", "order", "kind", "sort", "lot", "bit", "way", "side", "end", "fact", "point", "case", "reason", "idea", "rest", "half",
+  "strung", "fronts", "smoke", "fairy", "lap", "ear", "massage", "food", "kiss", "thai"]);
+// the game's own place words: a region or a room's name is somewhere you are, not a thing on the table
+const PLACE_WORDS = new Set(Object.values(ROOMS).flatMap(r => [r.region, r.name].filter(Boolean)).join(" ").toLowerCase().split(/[^a-z]+/).filter(w => w.length > 3 &&
+  !/^(beach|road|street|soi|bar|club|market|massage|room|hotel|pier|corner|garden|lane|rail|gate)$/.test(w)));
+const DET = /^(?:a|an|the|its|his|her|their|my|your|our|some|every|each|this|that|these|those|one|two|three|four|five|six|another|no|any)\s+/;
+function harvestNlp(text) {
+  const found = new Set();
+  const clean = stripMarkup(String(text)).replace(/[\u0E00-\u0E7F]+/g, " ");
+  for (const raw of nlp(clean).nouns().not("(#Pronoun|#ProperNoun|#Place|#Date|#Time|#Duration|#Value|#Possessive)").out("array")) {
+    let p = raw.toLowerCase().replace(/[^a-z' -]/g, " ").replace(/\s+/g, " ").trim();
+    while (DET.test(p)) p = p.replace(DET, "");
+    const words = p.split(" ").filter(Boolean).filter(w => !/'s$/.test(w) || w.length > 3);
+    while (words.length && TRAIL.has(words[words.length - 1])) words.pop();
+    if (!words.length) continue;
+    const last = words[words.length - 1].replace(/'s$/, "");
+    if (STOP.has(last) || FUNCTION_WORDS.has(last) || last.length < 3 || NLP_STOP.has(last) || PLACE_WORDS.has(last)) continue;
+    // checked on its own, a head word must still read as a noun: "hums", "glitters", "dead" were a verb
+    // and an adjective inside their sentences
+    { const solo = nlp(last); if (!solo.has("#Noun") || solo.has("(#Verb|#Adjective|#Adverb|#Preposition)")) continue; }
+    // a word written with a capital mid-sentence is a name, whatever the tagger thought
+    if (new RegExp("[a-z,;] " + last[0].toUpperCase() + last.slice(1) + "\\b").test(clean)) continue;
+    if (words.length >= 2) found.add(words.slice(-2).join(" "));
+    found.add(last);
+  }
+  return [...found];
+}
+
 // ── the dead-end classifier ──────────────────────────────────────────────────
 const DEAD = new Set([..._NO_SUCH_THING, "You don't see that here."]);
 const isDead = lines => lines.some(l => DEAD.has(l));
@@ -180,8 +223,14 @@ let tested = 0;
 
 for (const [roomId, room] of Object.entries(ROOMS)) {
   if (onlyRoom && roomId !== onlyRoom) continue;
-  const prose = [room.desc || "", ...(room.revisit || [])].join(" ");
-  const nouns = harvest(prose);
+  // lateDesc too: the small hours are prose a man stands in, and a lateDesc may be a pool (round 42)
+  const late = Array.isArray(room.lateDesc) ? room.lateDesc : room.lateDesc ? [room.lateDesc] : [];
+  const prose = [room.desc || "", ...(room.revisit || []), ...late].join(" ");
+  const rx = harvest(prose), nl = nlp ? harvestNlp(prose) : [];
+  const via = new Map();
+  for (const n of rx) via.set(n, "rx");
+  for (const n of nl) via.set(n, via.has(n) ? "both" : "nlp");
+  const nouns = COMPARE ? [...via.keys()] : NLP ? nl : rx;
   if (!nouns.length) continue;
 
   for (const noun of nouns) {
@@ -198,8 +247,24 @@ for (const [roomId, room] of Object.entries(ROOMS)) {
     out.length = 0;
     doCommand("examine " + noun);
     tested++;
-    if (isDead(out)) findings.push({ room: roomId, noun, reply: out[0] || "" });
+    if (isDead(out)) findings.push({ room: roomId, noun, reply: out[0] || "", via: via.get(noun) || "rx" });
   }
+}
+
+// ── the comparison ──────────────────────────────────────────────────────────
+if (COMPARE) {
+  const by = k => findings.filter(f => f.via === k);
+  console.log(`examine-audit --compare: ${tested} probes · dead-ends found by both ${by("both").length}, ` +
+    `regex only ${by("rx").length}, Compromise only ${by("nlp").length}\n`);
+  for (const k of ["nlp", "rx"]) {
+    const rows = by(k), names = new Map();
+    for (const f of rows) names.set(f.noun, (names.get(f.noun) || []).concat(f.room));
+    console.log(`── ${k === "nlp" ? "only Compromise saw these" : "only the regex saw these"} (${rows.length}) ──`);
+    for (const [n, rs] of [...names.entries()].sort((a, b) => b[1].length - a[1].length).slice(0, 40))
+      console.log(`${String(rs.length).padStart(4)}  ${n.padEnd(26)} ${rs.slice(0, 4).join(", ")}${rs.length > 4 ? " …" : ""}`);
+    console.log("");
+  }
+  process.exit(0);
 }
 
 // ── report ───────────────────────────────────────────────────────────────────
