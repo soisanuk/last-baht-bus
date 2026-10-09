@@ -263,6 +263,7 @@ const NONT_LOAN_RATE   = 0.10;   // Nont's money for the bar: ten percent on the
 const NONT_LOAN_MAX    = 50000;
 const NONT_LOAN_GARNISH = 0.25;  // of every night's take, off the top, until he is paid
 const OPP_CYCLE        = 180;    // the bar opposite: five phases of thirty-six days, then a new man
+const FRONTIER_CYCLE   = 60;     // Soi 6's inner west: the group buys another front every sixty days, in three phases
 const WORK_TAKINGS = 1.35;     // your own rail, your own room
 const AWAY_TAKINGS = 0.72;     // Bert is good, but Bert is not the owner
 const WORK_SANUK   = 2;        // the satisfaction of a night's decent trade
@@ -291,7 +292,8 @@ const LESSON_TURNS = 10;      // an hour, at six minutes a turn      // Tan's co
 const ATM_DENOMS = [1000, 5000, 10000];
 // The Soi 6 challenge mode confines movement to this pocket of the map.
 const SOI6_ROOMS = new Set([
-  "qv_room", "queen_vic", "soi6_street", "soi6_mid", "soi6_deep",
+  "qv_room", "queen_vic", "soi6_street", "soi6_mid", "soi6_deep", "soi6_west_in", "soi6_east_in",
+  "jade_lounge", "peach_lounge", "lollipop_bar", "sweet_tamarind", "firecracker_bar", "hot_pepper", "hula_hula", "ladybird_bar",
   "pink_lotus", "orchid_room", "golden_dragon", "sunset_dreams", "kitten_corner", "cherry_pop", "ruby_kiss",
   "beach_rd_n", "stinky_bar", "blue_dog", "sunset_rail", "bay_watch", "sandy_toes",
   "north_beach",
@@ -3506,10 +3508,11 @@ const ROOMS = {
       "are grabbed by the other wrist. Someone significantly shorter than you attempts to climb " +
       "onto your back. A couple of the girls have armed themselves with foam pool noodles and " +
       "swat anyone who dares walk past without stopping. There are something like a hundred bars " +
-      "on Soi 6 between Beach Road and Second Road, and a good forty of them are jammed into this " +
-      "end — front after front, both sides, the signs running together into one smear of pink and " +
+      "on Soi 6 between Beach Road and Second Road, and a good twenty of them are jammed into this " +
+      "first stretch alone — front after front, both sides, the signs running together into one smear of pink and " +
       "green until you couldn't name the last three doorways you passed. The three down here you " +
-      "will come to know are PINK LOTUS LOUNGE, GOLDEN DRAGON BAR and SUNSET DREAMS LOUNGE. East, the soi opens into a " +
+      "will come to know are PINK LOTUS LOUNGE, GOLDEN DRAGON BAR and SUNSET DREAMS LOUNGE. East, the bars run on " +
+      "for another stretch before the soi opens into a " +
       "quieter middle stretch before the racket picks up again at the far end.",
     revisit: [
       "Back onto the west end and the wall of noise hits first, the hands second. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" You are grabbed, released, grabbed again, an item passed between bars.",
@@ -3520,16 +3523,16 @@ const ROOMS = {
       "The soi swallows you again. \"You! Yes you! Come Pink Lotus!\" \"No — Golden Dragon!\" \"He come with ME.\" You are, briefly, the most wanted man in Thailand.",
       "Back into the churn and the neon. The girls out front read foot traffic for a living, and you are foot traffic; the pitch starts before you've fully arrived.",
       "Soi 6 West again — a river of hands and offers, the quieter middle stretch glowing ahead east like a promise, the whole street daring you to reach it sober and solvent.",
-      "Back into the west end, forty fronts in a hundred metres. You stop trying to read the signs somewhere around the tenth; the signs never stop trying to read you.",
+      "Back into the west end, twenty fronts in seventy metres. You stop trying to read the signs somewhere around the tenth; the signs never stop trying to read you.",
       "Back onto the soi: bar after bar after bar, each one a single open room with a rail and a staircase, each one sure it is the only bar on Soi 6.",
     ],
     lateDesc: "Soi 6 after midnight: the frontages rolled down, the stools stacked behind the grilles, the girls gone home or gone on somewhere in twos on one motorbike. The neon is mostly off and what's left buzzes for nobody. A cat owns the middle of the road.",
     // the soi's size, at a close look (Soi 6 density, 2026-10-09)
     reads: {
       bars: "You try to count them and give up in the twenties. Open front, open front, open front, both sides, all the way down to Second Road — near enough a hundred on this one street, each a single room with a rail, a few stools, a sound system and a staircase. Most of them you will walk past and never learn the name of. Down this end, the ones you'll come back to are Pink Lotus, the Golden Dragon and Sunset Dreams.",
-      girls: "Four or five to a front and forty fronts at this end: more women in sequins in a hundred metres than most towns see in a year, and every one of them working — reading the walk, the shoes, the sunburn, the pocket the wallet's in — and every one of them has already decided what you are. Most of them you will never meet. The ones you do, you meet by stopping.",
+      girls: "Four or five to a front and twenty fronts on this first stretch: more women in sequins in seventy metres than most towns see in a year, and every one of them working — reading the walk, the shoes, the sunburn, the pocket the wallet's in — and every one of them has already decided what you are. Most of them you will never meet. The ones you do, you meet by stopping.",
     },
-    exits: { w: "beach_rd_n", e: "soi6_mid" },
+    exits: { w: "beach_rd_n", e: "soi6_west_in" },
     venues: ["pink_lotus", "golden_dragon", "sunset_dreams"],
   },
   pink_lotus: {
@@ -3699,8 +3702,253 @@ const ROOMS = {
       girls: "Fewer of them along here, and sitting down: a woman on a stool by each fridge, a cashier with a calculator, a mama with her shoes off under the table. They'll call you over if you look like you want calling. The grabbing is left to the loud ends.",
       dartboard: "Through the Queen Vic's window you can just see the dartboard and a man squaring up to it with a pint in his other hand — the one game on the soi played at a walking pace.",
     },
-    exits: { w: "soi6_street", e: "soi6_deep" },
+    exits: { w: "soi6_west_in", e: "soi6_east_in" },
     venues: ["queen_vic", "sunset_rail", "bay_watch", "sandy_toes"],
+  },
+  // ── SOI 6, THE INNER SEGMENTS (2026-10-09, docs/soi6-expansion.md) ─────────────────────────
+  // Between each loud end and the neutral middle. The inner WEST is the group's frontier — it
+  // sits nearest their flagship at the corner, and every cycle another anonymous front takes
+  // their paper (_frontierLine); the inner EAST is clean, every bar a woman's own. Four venues a
+  // segment is the cap: the venue list prints as ENTER lines and chips, and five reads as a wall
+  // on a phone.
+  soi6_west_in: {
+    name: "Soi 6 (Inner West)",
+    region: "Soi 6",
+    desc: "The second stretch in from Beach Road, and the loud end has not stopped: another " +
+      "twenty-odd fronts, both sides, the same open rooms with a rail and a staircase behind it, the " +
+      "same hands, the same foam noodles. But somebody has been shopping along here. Every few doors " +
+      "a front has newer paint, a bigger sound system and, on the paper by the till, the same " +
+      "company as the Pink Lotus back at the corner; between them the older fronts hold on. JADE " +
+      "LOUNGE and PEACH LOUNGE wear the new paint, LOLLIPOP BAR has a folder on its back table, and " +
+      "SWEET TAMARIND has a hand-lettered sign and no intention of selling. West, the corner; east, " +
+      "the quiet middle.",
+    revisit: [
+      "Back into the inner west, where the noise is the same as the corner's and the paint is not: every third front is newer than the one beside it.",
+      "The soi takes you back between the old fronts and the new ones. A girl steps off a stool under a fresh sign — \"HANDSOME! Jade Lounge!\" — and another under a faded one shouts the same thing about a different bar.",
+      "Back into the stretch the group is buying. You can tell which fronts are theirs from the street: the speakers are better and nobody has chalked anything.",
+      "Back between the Lollipop's stripes and the Tamarind's hand-painted sign, with a printed price board glowing between them like a bank.",
+      "The inner west again: twenty-odd fronts, a hand on your wrist every few metres, and two different kinds of paint arguing about who the soi belongs to.",
+      "Back onto the second stretch. The noodles are out, the staircases are where they always are, and a man in a good shirt is drinking soda at a kerb table, watching the fronts rather than the girls.",
+      "Back in among the old fronts and the new. A girl on a Peach Lounge stool calls you handsome in exactly the voice she used when it had a different paper on the wall.",
+      "The inner west takes you back. Somewhere along here a sign is always going up, and somewhere a girl is always asking you where you go.",
+    ],
+    lateDesc: [
+      "The inner west after the shutters: grilles down on old fronts and new ones alike, the group's printed boards dark behind them, the hand-lettered sign at the Tamarind the only thing still legible under the one working streetlight.",
+      "Past midnight on the second stretch: the girls gone, the stools stacked, a ladder left against a front where a sign is half up. Even the paint can't tell you whose bar it is tonight.",
+      "The inner west in the small hours: one grille still a hand's height off the ground with light under it and the sound of somebody counting, and the group's printed boards glowing faintly behind theirs like screens left on.",
+    ],
+    reads: {
+      bars: "Twenty-odd fronts on this stretch, and you can read the soi's next five years off them. The newer paint, the better speakers and the printed boards are the group's — the Jade, the Peach and a few more you'll never go into. The older fronts between them are still somebody's own. The Lollipop has a folder on its back table. The Sweet Tamarind has a row of business cards pinned by its till, every one of them a no.",
+      girls: "The same line of sequins as the corner, four or five to a front. You can't tell from the girls which bars have been bought; the girls stay when a bar is sold, which is most of what the buyer is paying for.",
+    },
+    exits: { w: "soi6_street", e: "soi6_mid" },
+    venues: ["jade_lounge", "peach_lounge", "lollipop_bar", "sweet_tamarind"],
+  },
+  jade_lounge: {
+    name: "Jade Lounge",
+    region: "Soi 6",
+    bar: "Jade Lounge", barType: "soi6", owner: "plg",
+    desc: "Green glass, brass and a sound system three sizes too big for the room: the group's paint " +
+      "on a front that was somebody else's two years ago. The stools are new, the staircase at the " +
+      "back has carpet on it now, and the price board is printed rather than chalked, which on Soi 6 " +
+      "is how you know who owns a bar.",
+    reads: {
+      carpet: "Dark green carpet on the stairs at the back, new enough that it still has the shop's smell and nobody has yet spilled anything on the third step, which on Soi 6 makes it the newest thing on the street.",
+      board: "Printed, laminated, a small company logo in the corner: beer, lady drink, the barfine and the room upstairs, the same numbers as the chalk along the soi. Nobody in here can change one of them, and that is the point of printing it.",
+    },
+    revisit: [
+      "Back into the Jade, all green glass and brass, and a girl is off her stool before the door has finished swinging. \"Handsome! You come back! One drink, then upstairs — new room, very clean, aircon.\"",
+      "The Jade takes you back: big sound, new stools, and two girls who know exactly what the carpet on the stairs is for and say so.",
+      "Back to the printed board and the brass rail. \"Same price, same girls, new paint,\" one of them says, reading your face. \"Boss new. We not new.\"",
+      "Into the Jade again, where the music is too big for the room and the come-on is exactly the right size: a hand, a drink, a nod at the stairs.",
+      "Back under the green glass. A girl hooks your arm and walks you to a stool as if you'd booked it. \"You sit. I sit. Then we talk about upstairs.\"",
+      "The Jade again — expensive paint, cheap jokes, and a girl telling you the rooms upstairs have new mattresses, which is the first sales pitch on the soi to lead with the furniture.",
+    ],
+    exits: { out: "soi6_west_in" },
+  },
+  peach_lounge: {
+    name: "Peach Lounge",
+    region: "Soi 6",
+    bar: "Peach Lounge", barType: "soi6", owner: "plg",
+    desc: "Peach-coloured everything, and the paint still smells faintly of paint. The group bought " +
+      "it not long ago and kept the name, the girls and the staircase; they changed the paper by the " +
+      "till, the sound system and the sign. The old hand-painted sign is leaning against the back " +
+      "wall, facing it.",
+    reads: {
+      sign: "The old sign, hand-painted: PEACH in red, with a peach that looks more like a heart. It leans against the back wall with its face to the plaster, behind the cashier. Nobody threw it out, and nobody hung it up again either.",
+    },
+    revisit: [
+      "Back into the Peach, the paint smell fainter than last time, and the same girl on the same stool. \"You know before, this bar? Before new boss? Same me. Better speakers.\"",
+      "The Peach takes you back: peach walls, peach light, a girl peeling herself off the rail toward you with the stairs already in her eyes.",
+      "Back past the old sign facing the wall. A girl follows your look and shrugs. \"Old boss go home. New boss never come. We still here. You buy me drink?\"",
+      "Into the Peach again, where the pitch is soft and very direct: a hand on your knee, a price in your ear, and a smile that says the hand was the main argument.",
+      "Back among the peach walls. Two girls argue cheerfully over which of them saw you first, then settle it by both sitting down.",
+      "The Peach again. Nothing here has changed except the paper, and nobody on the stools reads paper.",
+    ],
+    exits: { out: "soi6_west_in" },
+  },
+  lollipop_bar: {
+    name: "Lollipop Bar",
+    region: "Soi 6",
+    bar: "Lollipop Bar", barType: "soi6",
+    desc: "Pink and white stripes faded to the colour of a long week, a jar of lollipops on the bar " +
+      "for the girls to point with, and the same staircase as everybody's. At the back table, under " +
+      "the stairs, sits a manila folder that is not the bar's, placed where whoever is on the till can " +
+      "see it.",
+    reads: {
+      folder: "A manila folder on the back table with a company's name printed on the tab — Pattaya Leisure, in the small type of people who do not need big type. Nobody has opened it while you watch. Nobody has thrown it away either.",
+      stripes: "Pink and white stripes painted floor to ceiling, years ago, and faded unevenly: bright where the stools have kept the light off, tired everywhere else. Somebody has touched up one stripe by the till in a pink that almost matches.",
+      jar: "A big glass jar of lollipops on the bar, every colour, sticks up like a bouquet. The girls take one out to point at you, at the stairs, at the price, and put it back unlicked. It is the bar's whole theme and its sales pitch, and it cost about two hundred baht.",
+    },
+    revisit: [
+      "Back into the Lollipop, faded stripes and a girl pointing at you with a red lollipop. \"You. Upstairs. Not now — after one drink. I am polite.\"",
+      "The Lollipop takes you back. The folder is still on the back table; the girls walk round it the way you walk round a dog asleep in a doorway.",
+      "Back to the jar of lollipops and the girls who use them as pointers. One taps the price list with a green one, then the stairs, then you.",
+      "Into the Lollipop again. It is louder than it looks and sadder than it sounds, and the girl who claims your stool is the cheerful part of both.",
+      "Back under the stripes. \"This bar maybe new boss soon,\" a girl says, as if mentioning the weather. \"Same us. You come anyway, na?\"",
+      "The Lollipop again, a lollipop pointed at your chest like a microphone. \"Question: you want drink, or you want upstairs? Correct answer: both.\"",
+    ],
+    exits: { out: "soi6_west_in" },
+  },
+  sweet_tamarind: {
+    name: "Sweet Tamarind",
+    region: "Soi 6",
+    bar: "Sweet Tamarind", barType: "soi6",
+    desc: "A narrow front with a hand-lettered sign, a net of tamarind pods hanging by the till for " +
+      "luck, and the same staircase as everybody's. The paint is old and nobody here is apologising " +
+      "for it. Beside the till, pinned to the wall in a neat row, are the business cards of the men " +
+      "who have come in to make an offer.",
+    reads: {
+      cards: "Business cards pinned to the wall beside the till in a tidy row, the same company on every one, each with a date written across it in biro. The oldest has gone yellow. None of the numbers on them has ever been rung.",
+      tamarind: "A string net of tamarind pods hanging by the till, brown and knobbly. Sweet tamarind is the luck of the house; the girls snap one open now and then and eat it with salt and chilli while they wait for you to make up your mind.",
+    },
+    revisit: [
+      "Back into the Sweet Tamarind, narrow and loud, and a girl swings round on her stool with a tamarind pod half-eaten. \"You! Sit! You want try? Sweet. Then sour. Like me.\"",
+      "The Tamarind takes you back: old paint, the row of business cards by the till, and two girls already making room for you on the bench with their hips.",
+      "Back past the cards pinned by the till. \"Every year more card,\" a girl says, following your eye. \"Mama say: card is free. Bar is not for sale.\"",
+      "Into the Tamarind again, where the pitch is the soi's — drink, upstairs, price — and the laugh after it is louder than the soi's.",
+      "Back under the hand-lettered sign. Nobody in here has new anything, and nobody in here seems to mind, least of all the girl now sitting on your knee.",
+      "The Tamarind again. \"Same bar, same girl, same mama,\" says the girl who claims you. \"Only bar on this side still same. You lucky.\"",
+    ],
+    exits: { out: "soi6_west_in" },
+  },
+  soi6_east_in: {
+    name: "Soi 6 (Inner East)",
+    region: "Soi 6",
+    desc: "East of the quiet middle the soi gets loud again in stages, and this is the first: twenty-odd " +
+      "hostess bars shoulder to shoulder, and every one of them somebody's own. A Thai woman's name on " +
+      "the paper by the till, a cousin on the cashier's stool, a staircase at the back to the rooms that " +
+      "pay the rent. The signs are hand-me-downs and the paint is whatever was cheapest the year it was " +
+      "done. FIRECRACKER BAR, HOT PEPPER BAR, HULA HULA BAR and LADYBIRD BAR are the ones you'll come " +
+      "to know. West, the middle; east, the last loud stretch before Second Road.",
+    revisit: [
+      "Back into the inner east, twenty-odd fronts of old paint and new girls, and a foam noodle finds your shoulder before you've picked a side of the street.",
+      "The soi takes you back east of the middle, where the bars are small and family-run and every one of them shouts like it's the only bar in Pattaya.",
+      "Back among the hand-me-down signs. A girl outside the Firecracker and a girl outside the Hula Hula pitch you at the same moment, then laugh at each other and keep pitching.",
+      "The inner east again — luk thung from one door, Thai pop from the next, and a girl in the middle of the pavement dancing to both.",
+      "Back onto the stretch nobody has bought. The paint is tired, the girls aren't, and the cousins on the tills watch you the way shopkeepers watch weather.",
+      "Back east of the middle, where every front has a staircase and every staircase has a girl at the foot of it explaining, sweetly and exactly, what it is for.",
+      "The inner east takes you back: small bars, loud girls, and the comfortable feeling of a street that is still owned by the people standing in it.",
+      "Back between the Ladybird's spots and the Hot Pepper's giant chilli, a hand already on your sleeve and an argument already under way about whose bar you were heading for.",
+    ],
+    lateDesc: [
+      "The inner east after the shutters: twenty-odd grilles down, the giant chilli over the Hot Pepper dark, a cousin locking a padlock and testing it twice. The soi has gone home, and these bars were always going home to somewhere near here.",
+      "Past midnight east of the middle. The girls have gone in twos on motorbikes, the stools are stacked, and the tiki head in the Hula Hula has been switched off, which makes it look more thoughtful than it ever does at nine.",
+      "East of the middle after closing: a family on plastic stools outside one front eating from a shared pot, the girls out of their work clothes and into their own, and nobody calling you handsome at all.",
+    ],
+    reads: {
+      bars: "Twenty-odd fronts on this stretch and not one of them belongs to a company. You can tell from the signs, which are hand-me-downs, and from the paper by the tills, which carries women's names. Nobody bought into the inner east, which is why it is still like this. Firecracker, Hot Pepper, Hula Hula and Ladybird are the ones you'll get to know; the rest are a girl, a song and a staircase each.",
+      chilli: "Over the Hot Pepper's rail, two metres of fibreglass chilli, faded on one side, visible from halfway down the stretch. It is the inner east's landmark; people give directions by it.",
+      girls: "Three or four to a front, the soi's sequins and the soi's directness. More of them here are somebody's niece, cousin or neighbour than anywhere else on Soi 6, which you only notice when the cashier calls one of them by a family name across the room.",
+    },
+    exits: { w: "soi6_mid", e: "soi6_deep" },
+    venues: ["firecracker_bar", "hot_pepper", "hula_hula", "ladybird_bar"],
+  },
+  firecracker_bar: {
+    name: "Firecracker Bar",
+    region: "Soi 6",
+    bar: "Firecracker Bar", barType: "soi6",
+    desc: "Red and gold, a string of paper firecrackers over the door that knocks against the frame " +
+      "whenever the fan swings round, and a girl at the front who will tell you, before you have sat " +
+      "down, what the staircase is for and what it costs. Loud, quick, and honest about everything " +
+      "except how much fun you are going to have.",
+    reads: {
+      firecrackers: "Paper firecrackers on a red string, the New Year kind, left up since a New Year nobody here remembers. When the fan swings round they knock against the door frame like somebody wanting in.",
+    },
+    revisit: [
+      "Back into the Firecracker, red and gold and loud, and the girl at the front picks up exactly where she left off. \"Drink, upstairs, price. I already tell you. You came back — so yes?\"",
+      "The firecrackers knock against the frame as you come in, and two girls cheer as if you set them off.",
+      "Back to the Firecracker, where nobody wastes a sentence: a stool, a drink, a nod at the stairs, a number.",
+      "Into the Firecracker again. A girl hooks a finger in your belt loop and steers you to a stool. \"Sit. Bang. Like firecracker. Fast and loud.\"",
+      "Back under the red string. \"You think too long,\" a girl tells you kindly. \"Firecracker girl, not think. Firecracker girl, go.\"",
+      "The Firecracker takes you back: hot, red, quick, and entirely clear about what the evening is.",
+    ],
+    exits: { out: "soi6_east_in" },
+  },
+  hot_pepper: {
+    name: "Hot Pepper Bar",
+    region: "Soi 6",
+    bar: "Hot Pepper Bar", barType: "soi6",
+    desc: "A chilli-red front, a fibreglass chilli the size of a man bolted over the rail, and a " +
+      "playlist that is all luk thung, turned up to the point where it stops being music and becomes " +
+      "weather. The girls sing along to every word and expect you to try.",
+    reads: {
+      chilli: "A fibreglass chilli pepper two metres long, bolted over the rail and faded on one side to the colour of a tomato. Somebody wrote their name on it in marker, then somebody else, then about forty other people.",
+    },
+    revisit: [
+      "Back into the Hot Pepper, under the giant chilli, and the girls are singing the chorus at you before you're through the door.",
+      "The Hot Pepper takes you back: luk thung at full volume, and a girl pressing a microphone that isn't plugged in to your mouth. \"You sing! Then drink! Then upstairs!\"",
+      "Back to the chilli over the rail. A girl adds something to it in marker and points at you. \"Your name. Now you belong Hot Pepper.\" It may or may not be your name.",
+      "Into the Hot Pepper again, where the pitch comes in song: a verse about a lonely farmer, a drink, and a nod at the stairs on the key change.",
+      "Back under the red. \"Spicy?\" a girl asks, sitting down hard beside you. \"Hot Pepper girl very spicy. You can take?\"",
+      "The Hot Pepper again: too loud to talk, which suits the girls fine, because everything they want to say they say with a hand.",
+    ],
+    exits: { out: "soi6_east_in" },
+  },
+  hula_hula: {
+    name: "Hula Hula Bar",
+    region: "Soi 6",
+    bar: "Hula Hula Bar", barType: "soi6",
+    desc: "Grass skirts stapled along the front of the bar, plastic leis round every girl's neck, and a " +
+      "carved tiki head on the end of the rail with a light inside it that nobody has ever been able to " +
+      "explain. The theme was somebody's idea years ago; the girls wear it as a joke and the leis as a " +
+      "sales tool.",
+    reads: {
+      skirts: "Grass skirts stapled along the front of the bar, the plastic kind, sun-bleached at the ends and rustling every time the fan swings past. Here and there a strand has been pulled out and tied round somebody's wrist like a friendship bracelet.",
+      tiki: "A carved wooden tiki head on the end of the rail with a red bulb inside it, glowing through the eyes and mouth. Ask any of the girls why it is there and you'll get a different story, every one of them better than the truth, which is that it came with the bar.",
+      leis: "Plastic flower leis, pink and orange, round every girl's neck. Buy one of them a drink and she takes hers off and puts it round yours, which is the bar's whole marketing department.",
+    },
+    revisit: [
+      "Back into the Hula Hula, grass skirts rustling in the fan, and a girl drops a lei round your neck before you've chosen a stool. \"Aloha. Is Hawaii. Now you buy drink.\"",
+      "The tiki head glows at you from the end of the rail, and three girls in plastic flowers explain, all at once, why you should sit by them.",
+      "Back to the Hula Hula. \"You know Hawaii?\" a girl asks. \"Me neither. Upstairs is better than Hawaii. Cheaper also.\"",
+      "Into the Hula Hula again, where the theme is ridiculous, the girls know it, and the pitch is delivered with a hula that makes it impossible to say no in a straight voice.",
+      "Back under the grass skirts. A girl taps the tiki head. \"He say you buy me drink. He never wrong.\"",
+      "The Hula Hula takes you back: a lei, a laugh, a drink, a staircase, in that order, every time.",
+    ],
+    exits: { out: "soi6_east_in" },
+  },
+  ladybird_bar: {
+    name: "Ladybird Bar",
+    region: "Soi 6",
+    bar: "Ladybird Bar", barType: "soi6",
+    desc: "Small, tidy and spotted black-on-red from the stools to the ashtrays, run like a corner " +
+      "shop: the same girls every night and the same soap opera on the telly above the fridge. It is " +
+      "the bar a man ends up in on his third night on Soi 6, when he has stopped looking for the " +
+      "loudest one.",
+    reads: {
+      telly: "A small telly on a bracket above the fridge, permanently on a Thai soap opera: a rich family, a poor girl, a mother-in-law with terrible plans. The sound is low, the subtitles are Thai, and every girl in the bar knows exactly what is happening.",
+      spots: "Every stool in the Ladybird is painted red with black spots, by hand, and every spot is a slightly different size. Somebody did all of them one slow month and never did anything that patient again.",
+    },
+    revisit: [
+      "Back into the Ladybird, small and spotted and calm, and a girl looks up from the soap opera long enough to pat the stool beside her.",
+      "The Ladybird takes you back. The telly is on the same channel; the girl who sat with you last time is on the same stool. \"You again. Good. Sit.\"",
+      "Back among the spots. Even here it's Soi 6 — the stairs are at the back and she mentions them — but she mentions them in a voice you could use in a library.",
+      "Into the Ladybird again, where nobody grabs a wrist. They wait for you to sit down, which on this soi feels like being taken seriously.",
+      "Back to the corner-shop bar, the spotted stools, and a girl who wants to know how the soap opera ends as much as she wants a drink.",
+      "The Ladybird again: quiet by the soi's standards, which is to say merely loud, and a girl explaining the plot of the telly and the price of upstairs in the same calm breath.",
+    ],
+    exits: { out: "soi6_east_in" },
   },
   soi6_deep: {
     // the soi's real east end: it meets Second Road here, 0 m
@@ -3708,8 +3956,8 @@ const ROOMS = {
     region: "Soi 6",
     seven: true,
     outlet: true, // the 7-Eleven has a socket (see soi6_street)
-    desc: "The east end of the soi, past the quieter middle, where the bars run on toward " +
-      "Second Road and the volume comes roaring back. Another forty-odd fronts crowd the last " +
+    desc: "The east end of the soi, past the middle and the inner stretch, where the bars run on toward " +
+      "Second Road and the volume comes roaring back. Another twenty-odd fronts crowd the last " +
       "stretch before the main road; KITTEN CORNER, CHERRY POP BAR and RUBY KISS BAR are the " +
       "three whose names stick, and they trade wrist-grabs with the rest — same open ground-floor fronts, same " +
       "three-colour neon, same staircases behind the bar the menu doesn't mention, and the " +
@@ -3718,21 +3966,21 @@ const ROOMS = {
       "Deeper into the soi again, where the noise doubles down and the bars run on toward Second Road. A girl swings off a Kitten Corner stool to intercept you: \"Where you go? You go with ME.\"",
       "Back into the far stretch, wrist-grabs down both sides, three-colour neon, three staircases the menus don't mention. \"HANDSOME! Cherry Pop! No — Ruby Kiss! He come here!\"",
       "The deep end of Soi 6 takes you back — same open fronts, same offers, louder if anything. A hand finds your arm before you've picked a bar; the bar gets picked for you.",
-      "Back past the Queen Vic into the thick of it, where every doorway has a girl and every girl has a plan for your evening and none of them is subtle about it.",
+      "Back past the inner stretch into the thick of it, where every doorway has a girl and every girl has a plan for your evening and none of them is subtle about it.",
       "You round into the deep soi and the pitches overlap into one wall of sound: drink, upstairs, short time, long time, come come come, all of it aimed at you and meant.",
       "Back into the far stretch, the last hundred metres before Second Road, where the girls read your wallet through your shorts and grab accordingly.",
       "The deep soi again. Kitten, Cherry, Ruby — three fronts, three staircases, three sets of hands already reaching. You are, once more, the entire economy walking past.",
       "Back to where the soi runs out toward Second Road, neon stacked to the roofline, a girl on your sleeve saying the quiet part first and loud: \"Come upstairs, tilac. Why we pretend?\"",
-      "Back into the east end, front after front to the Second Road lights. You could drink in a different bar down here every night for a month and still not reach the corner.",
-      "Back among the far stretch's forty-odd doorways. Kitten, Cherry and Ruby are the names you know; the rest are a blur of neon and the same three words: handsome, upstairs, come.",
+      "Back into the east end, front after front to the Second Road lights. You could drink in a different bar down here every night for three weeks and still not reach the corner.",
+      "Back among the far stretch's twenty-odd doorways. Kitten, Cherry and Ruby are the names you know; the rest are a blur of neon and the same three words: handsome, upstairs, come.",
     ],
     lateDesc: "The far end of Soi 6 after the shutters: dark frontages, a mop bucket left out, the last of the ice melting in a bin. Whoever was reaching for your arm an hour ago is asleep, or working somewhere that isn't here.",
     // the soi's size, at a close look (Soi 6 density, 2026-10-09)
     reads: {
-      bars: "Another forty-odd fronts between the middle and Second Road, packed as tight as the west end: neon to the roofline in three colours, a rail and a staircase behind every one. Kitten Corner, Cherry Pop and Ruby Kiss are the names that stick. The rest you'll know by a sign, a song or a girl on a stool, and forget by morning.",
+      bars: "Another twenty-odd fronts between the inner stretch and Second Road, packed as tight as the west end: neon to the roofline in three colours, a rail and a staircase behind every one. Kitten Corner, Cherry Pop and Ruby Kiss are the names that stick. The rest you'll know by a sign, a song or a girl on a stool, and forget by morning.",
       girls: "The same line of sequins as the west end, louder if anything and more direct: down here the word upstairs gets said before the word drink. Two or three to every doorway, every one of them reading the crowd for the man who has already decided.",
     },
-    exits: { w: "soi6_mid", e: "second_rd_soi6" },
+    exits: { w: "soi6_east_in", e: "second_rd_soi6" },
     venues: ["kitten_corner", "cherry_pop", "ruby_kiss"],
   },
   kitten_corner: {
@@ -13743,7 +13991,7 @@ const ENCOUNTERS = {
   },
   noodle: {
     solo: true,   // she pulled a man walking with a Soi 6 girl (Ingrid, round 62)
-    rooms: ["soi6_street", "soi6_deep"],
+    rooms: ["soi6_street", "soi6_west_in", "soi6_east_in", "soi6_deep"],
     interactive: true, nightly: true, // the loud ends re-arm their noodle patrol each night
     th: "ไปไหนคะ", rom: "pai nai kha?",
     intro: "A girl steps out of an open front brandishing a fluorescent foam pool noodle like " +
@@ -19044,6 +19292,20 @@ const FLOOR_STAFF = {
   breakwater_kade: {"role":"cashier","name":"Kade","th":"เกด","room":"breakwater","look":"Fingers flying over a calculator app, eyes never leaving the cash","from":"{{Nong Bua Lamphu}}","desc":"Fingers flying over a calculator app, eyes never leaving the cash — the cashier at The Breakwater, from {{Nong Bua Lamphu}}.","pick":{"greet":7,"money":7,"lockin":1,"family":1,"home":1,"wallet":3}},
   neon_palm_noey: {"role":"cashier","name":"Noey","th":"เนย","room":"neon_palm","look":"Reading glasses, a receipt spike, and no patience for a disputed tab","from":"Udon Thani","desc":"Reading glasses, a receipt spike, and no patience for a disputed tab — the cashier at Neon Palm, from Udon Thani.","pick":{"greet":0,"money":0,"lockin":1,"family":6,"home":4,"wallet":0}},
   the_bucket_fai: {"role":"cashier","name":"Fai","th":"ฝ้าย","room":"the_bucket","look":"In a cage of fairy lights, counting notes faster than the eye follows","from":"Surin","desc":"In a cage of fairy lights, counting notes faster than the eye follows — the cashier at The Bucket, from Surin.","pick":{"greet":6,"money":6,"lockin":0,"family":4,"home":0,"wallet":2}},
+  jade_lounge_jinda: {"role":"mamasan","name":"Jinda","th":"จินดา","room":"jade_lounge","look":"A cloud of perfume and authority, hair lacquered against the fans","from":"Sakon Nakhon","desc":"A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Jade Lounge, from Sakon Nakhon. She puts four kids through school on other men's lonely nights.","pick":{"greet":6,"girls":6,"lockin":2,"family":1,"plan":4,"home":6,"wallet":2,"story":6}},
+  jade_lounge_jum: {"role":"cashier","name":"Jum","th":"จุ๋ม","room":"jade_lounge","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"Yasothon","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Jade Lounge, from Yasothon.","pick":{"greet":5,"money":5,"lockin":2,"family":3,"home":5,"wallet":1}},
+  peach_lounge_noot: {"role":"mamasan","name":"Noot","th":"นุช","room":"peach_lounge","look":"Broad, motherly, and entirely able to have you removed by smiling","from":"Buriram","desc":"Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.","pick":{"greet":0,"girls":0,"lockin":0,"family":2,"plan":6,"home":0,"wallet":0,"story":0}},
+  peach_lounge_farida: {"role":"cashier","name":"Farida","th":"ฟาริดา","room":"peach_lounge","look":"Cash drawer open, {{phone}} face-down, all of her attention on the maths","from":"Roi Et","desc":"Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at Peach Lounge, from Roi Et.","pick":{"greet":7,"money":7,"lockin":1,"family":5,"home":1,"wallet":3}},
+  lollipop_bar_khing: {"role":"mamasan","name":"Khing","th":"ขิง","room":"lollipop_bar","look":"A cloud of perfume and authority, hair lacquered against the fans","from":"Ubon","desc":"A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Lollipop Bar, from Ubon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":1,"plan":5,"home":7,"wallet":3,"story":7}},
+  sweet_tamarind_view: {"role":"mamasan","name":"View","th":"วิว","room":"sweet_tamarind","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Maha Sarakham","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Sweet Tamarind, from Maha Sarakham. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":5,"plan":1,"home":3,"wallet":3,"story":3}},
+  sweet_tamarind_tukta: {"role":"cashier","name":"Tukta","th":"ตุ๊กตา","room":"sweet_tamarind","look":"A blunt bob, red lipstick, and a stare that reconciles you at a glance","from":"Sakon Nakhon","desc":"A blunt bob, red lipstick, and a stare that reconciles you at a glance — the cashier at Sweet Tamarind, from Sakon Nakhon.","pick":{"greet":3,"money":3,"lockin":0,"family":1,"home":3,"wallet":3}},
+  firecracker_bar_napa: {"role":"mamasan","name":"Napa","th":"นภา","room":"firecracker_bar","look":"Thai woman in her late forties, round face, short permed hair, a gold necklace, a tired, shrewd smile","from":"Chaiyaphum","desc":"Thai woman in her late forties, round face, short permed hair, a gold necklace, a tired, shrewd smile — the mamasan of Firecracker Bar, from Chaiyaphum. She has run this floor longer than most of the girls have been alive.","pick":{"greet":2,"girls":2,"lockin":2,"family":4,"plan":0,"home":2,"wallet":2,"story":2}},
+  firecracker_bar_pang: {"role":"cashier","name":"Pang","th":"แป้ง","room":"firecracker_bar","look":"Headset on one ear, {{phone}} in one hand, the till in perfect order","from":"Chaiyaphum","desc":"Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Firecracker Bar, from Chaiyaphum.","pick":{"greet":6,"money":6,"lockin":1,"family":4,"home":4,"wallet":2}},
+  hot_pepper_gina: {"role":"mamasan","name":"Gina","th":"จีน่า","room":"hot_pepper","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Mukdahan","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.","pick":{"greet":4,"girls":5,"lockin":0,"family":2,"plan":6,"home":4,"wallet":0,"story":4}},
+  hot_pepper_chom: {"role":"cashier","name":"Chom","th":"ชม","room":"hot_pepper","look":"Cash drawer open, {{phone}} face-down, all of her attention on the maths","from":"Nakhon Phanom","desc":"Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at Hot Pepper Bar, from Nakhon Phanom.","pick":{"greet":7,"money":7,"lockin":1,"family":1,"home":1,"wallet":3}},
+  hula_hula_min: {"role":"mamasan","name":"Min","th":"มิน","room":"hula_hula","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Maha Sarakham","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.","pick":{"greet":1,"girls":1,"lockin":1,"family":3,"plan":7,"home":1,"wallet":1,"story":1}},
+  hula_hula_noon: {"role":"cashier","name":"Noon","th":"นุ่น","room":"hula_hula","look":"Neat bun, neat ledger, an engagement ring worn on a chain","from":"Sakon Nakhon","desc":"Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Hula Hula Bar, from Sakon Nakhon.","pick":{"greet":6,"money":6,"lockin":0,"family":4,"home":0,"wallet":2}},
+  ladybird_bar_ratsamee: {"role":"mamasan","name":"Ratsamee","th":"รัศมี","room":"ladybird_bar","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Loei","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Ladybird Bar, from Loei. She started on the stage at seventeen and owns a share of the place now.","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":4,"home":5,"wallet":1,"story":5}},
 };
 for (const [id, r] of Object.entries(FLOOR_STAFF)) {
   NPCS[id] = r.role === "hostess" ? _floorHostess(id, r) : r.role === "mamasan" ? _floorMama(id, r) : _floorCashier(id, r);
@@ -19076,6 +19338,475 @@ if (NPCS.boonsri) NPCS.boonsri.dialogue.unshift({
   short: "\"Is not their card, is mine — the year I had two customer and nearly lost the bar. " +
     "I keep it for me, na.\"",
 });
+
+// SOI 6'S INNER SEGMENTS — THE WOMEN (2026-10-09; docs/soi6-expansion.md). Every Soi 6 girl is a
+// specific, authored person (engine.test), so the eight new bars' hostesses are written here rather
+// than dealt from the pools; their house staff are FLOOR_STAFF records (tools/gen-floor-staff.mjs, spec
+// in docs/soi6-expansion-staff.json, which keeps these ids and names stable). Each names her province
+// somewhere in her own words, so the town's fallback answers about her home agree with her
+// (_authoredStory). The inner west is the group's frontier and its women each have a side of it;
+// the inner east is nobody's, and its women talk about what that is like.
+const SOI6_INNER_GIRLS = {
+  // ── JADE LOUNGE (the group's, bought two years ago) ──
+  jade_lounge_cartoon: {
+    name: "Cartoon", th: "การ์ตูน", emoji: "✏️", room: "jade_lounge",
+    look: "Thai woman of twenty-two, high bun, cropped denim jacket, a biro behind one ear, ink on her fingers.",
+    desc: "Twenty-two, a biro behind her ear and ink on her fingers. She draws the customers on beer mats while they talk — quick, unkind, very good — and the ones who buy her a drink she draws a little kinder.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hold still.\" She is already drawing you on a beer mat — three lines, the nose too big, the sunburn exactly right. \"Okay. Now you can talk.\" She turns it round. \"You like? Is for my box — I have a whole box of men.\" She tucks it away. \"The ones who buy me a drink, I draw a little bit nicer.\"",
+        short: "\"Hold still — I draw you. The ones who buy me a drink, I draw nicer.\"" },
+      { topic: "drawing|draw|cartoon|beer mat|beer mats|art",
+        text: "\"Since small. In Mukdahan I draw the teacher, I get the stick.\" She adds a moustache to the you on the mat. \"Here I draw customer, I get the drink. Better job.\" She fans out a stack of mats from her bag: a hundred faces, every one of them a little too honest. \"One day Walking Street, a little chair, a sign: portrait, five minute. Tourist love it. For now, the stairs pay better than the pen.\"" },
+      { topic: "group|new boss|pattaya leisure|company|aircon|sold",
+        text: "\"New boss?\" She shrugs, still drawing. \"I never see him. I see the aircon, I see the money on the day they say, I see the stairs got carpet.\" A small sideways look. \"Old boss, sometimes the money come Tuesday, sometimes Friday, sometimes he say sorry. Company never say sorry. Company also never late. I take the never late.\"" },
+      { topic: "family|brother|motorbike|shop",
+        text: "\"My brother fix motorbike, in Mukdahan, by the market. I send for the tools.\" She draws a tiny spanner in the corner of the mat, then a tiny her, holding it. \"He say when the shop is big I come home and do the sign. I tell him: I already do the sign. I just do it on a lot of farang first.\"" },
+    ],
+  },
+  jade_lounge_taan: {
+    name: "Taan", th: "ตาล", emoji: "🍯", room: "jade_lounge",
+    look: "Thai woman of thirty-four, heavy fringe, sharp eyeliner, plain black dress, a cool, level stare.",
+    desc: "Thirty-four, a heavy fringe and a stare she switches off the moment you sit. She was on these stools before the group bought the bar, and she is the only girl in the Jade who still calls it by its old name.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sit, sit.\" The stare goes, and something warmer comes on in its place, practised but not fake. \"You come before, when this was Mama's bar? No? Then you only know the new one. Is okay. Same stairs.\"",
+        short: "\"Same stairs, new paint. Sit.\"" },
+      { topic: "old boss|before|mama|old name|sold|new boss|group|pattaya leisure",
+        text: "\"Before, this bar is Mama's. Eleven stools, a fan, a cat.\" She says the cat as if it were the important part. \"Mama is tired, the man come with the folder, Mama go home up-country with the money. Company keep us — keep all the girls, change the shirt.\" She smooths the new shirt without looking at it. \"The aircon is better. The cat they don't keep. I take her home. She live with me now, in my room, very fat.\"" },
+      { topic: "upstairs|rooms|room|carpet|mattress",
+        text: "\"The rooms?\" Dry as paper. \"New mattress. The company very proud of the mattress. They tell us: say the mattress is new.\" A flicker of a smile. \"So I say. New mattress, clean, aircon. The man don't come here for the mattress, but okay. I say it anyway. Is my job to say.\"" },
+      { topic: "family|son|maha sarakham|home",
+        text: "\"One son, fifteen. In Maha Sarakham with my mother.\" A pause. \"He want to be a policeman. I tell him okay, but study, then you don't need to be a policeman, you can be the boss of the policeman.\" She laughs, short. \"He think I work in a hotel. Is almost true. Upstairs is a little bit hotel.\"" },
+    ],
+  },
+  jade_lounge_nittaya: {
+    name: "Nittaya", th: "นิตยา", emoji: "💄", room: "jade_lounge",
+    look: "Thai woman of twenty-eight, glossy shoulder-length bob, bright red lipstick, red dress, a confident wide smile.",
+    desc: "Twenty-eight, red lipstick, a voice two sizes bigger than she is, and the Jade's top seller three months running, which the printed board by the till does not mention and she does.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello handsome, I save you time.\" She ticks it off on red nails. \"I drink, you drink. Upstairs, mama tell you the bar money, I tell you my money, no surprise later. Then you are happy, I am happy, nobody cry.\" A beam. \"Or you just drink. Also fine. Slower.\"",
+        short: "\"Drink, upstairs, two money, no surprise. Or just drink — slower.\"" },
+      { topic: "price|short time|money|barfine|how much",
+        text: "\"Two money.\" She holds up two fingers, very clear. \"One for the bar, the mama say it, it go in the book. One for me, I say it, it go in my pocket.\" She taps her purse. \"Some girl don't tell you the second one until after. I think this is bad business. You find out, you don't come back. I tell you first, you come back.\" She is, by the evidence of the board, right." },
+      { topic: "korea|abroad|overseas",
+        text: "\"I go Korea one year. Farm, then massage, no visa.\" She says it flat, like a weather report. \"Good money, very cold, everybody shout. Then the police, then the airport, then Amnat Charoen again with nothing.\" She shrugs it off. \"Here, nobody shout, nobody cold, and the money I keep. Korea teach me one thing: the paper matter. Here I have the paper. Company make paper for everybody.\"" },
+      { topic: "plan|future|noodle|shop",
+        text: "\"Noodle shop. Boat noodle, small bowl, cheap, very fast.\" She has clearly done the arithmetic many times. \"In Amnat Charoen nobody make good boat noodle. I learn from a lady on Soi Buakhao, every Monday, free, because I buy her a {{phone}} once.\" A wink. \"Two more year. Maybe three. Top seller, maybe two.\"" },
+    ],
+  },
+  jade_lounge_namphueng: {
+    name: "Namphueng", th: "น้ำผึ้ง", emoji: "🐝", room: "jade_lounge",
+    look: "Thai woman of twenty-one, soft round face, mole above her lip, long hair loose, shy downward smile.",
+    desc: "Twenty-one and in her first month, a mole above her lip and a habit of looking down when she laughs. She is nervous, and she is watching everything the other girls do, and she will not be nervous for long.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sawatdee kha.\" Very correct, very quiet, and then a glance down the bar at Nittaya, checking she did it right. \"I am new. One month. You can tell?\" She laughs at her own question and looks at the floor. \"My cousin Mint say: don't say you are new. Too late.\"",
+        short: "\"I am new — one month. My cousin say don't tell.\"" },
+      { topic: "new|first month|first time|nervous",
+        text: "\"First week, I sit in the corner and I don't talk.\" She turns her glass a little. \"Second week Nittaya say: you sit in the corner, you go home with nothing, your mother eat nothing. So I sit at the front.\" A small, determined nod. \"Now I talk. Not good yet. But I talk. Mama say I learn fast. Mama say it like it is not a hundred percent good thing.\"" },
+      { topic: "mint|cousin|peach lounge|peach",
+        text: "\"Mint is my cousin. She work at the Peach, two door down.\" She points without looking. \"She bring me here from Loei. She say the company bar is safer for the new girl: the paper, the camera at the door, the boss nobody see but everybody afraid of.\" A shy smile. \"She check on me every night. Every night. Like a mother, but a mother who know about upstairs.\"" },
+      { topic: "family|loei|home|mother",
+        text: "\"Loei, in the mountain. Very cold in December — you don't believe, but is true.\" She smiles down at the bar. \"My mother think I work in a shop with Mint. Is a shop. Just the thing it sell is me a little bit.\" She says it carefully, testing the joke the older girls make, and isn't sure yet whether it's funny." },
+    ],
+  },
+  // ── PEACH LOUNGE (the group's, bought not long ago — same girls, new paper) ──
+  peach_lounge_keng: {
+    name: "Keng", th: "เก่ง", emoji: "🍑", room: "peach_lounge",
+    look: "Thai woman of thirty, mole above her lip, hair tied back, peach-coloured top, a wry tilted smile.",
+    desc: "Thirty, wry, and the one who turned the old sign to face the wall, which she will tell you without being asked. She worked the Peach for the old owner for six years and has worked it for the group for about six weeks, and she has opinions on both.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"You see the sign? On the floor, face to the wall?\" She doesn't wait. \"I do that. New boss want to throw it in the bin. I say: no, it stay. He say: then hide it. So I hide it.\" She shrugs, very satisfied. \"Same girls, same Peach. Only the paper is new.\"",
+        short: "\"I turn the old sign to the wall. Same girls, same Peach.\"" },
+      { topic: "sign|old sign|old boss|sold|new boss|group|pattaya leisure",
+        text: "\"Old boss is Australian. Good man, bad heart — the heart, the real one, here.\" She taps her chest. \"He sell to the company and go home for the operation. He paint that sign himself. The peach look like a heart because he cannot draw peach.\" A long breath. \"Company is okay. Pay on time, everything paper. But nobody here now paint anything himself.\"" },
+      { topic: "family|khon kaen|daughter|home",
+        text: "\"Daughter, nine, in Khon Kaen. Very smart, very bossy — like me, my mother say.\" She shows you a photo on her {{phone}}: a girl in a school uniform, scowling at the camera exactly as Keng is scowling now. \"She want an iPad. I say: when you are top of the class. She is top of the class. Now I need to find an iPad.\"" },
+      { topic: "plan|future|money",
+        text: "\"Plan?\" A dry look. \"Plan is the company don't sell the Peach to another company.\" Then, more seriously: \"Six year more, I have the house finish, I go home. In Khon Kaen I do nails. I already do the nails for every girl on this side of the soi. They pay me in drinks. Back home, they pay me in money.\"" },
+    ],
+  },
+  peach_lounge_pui: {
+    name: "Pui", th: "ปุ้ย", emoji: "🛵", room: "peach_lounge",
+    look: "Thai woman of twenty, baby-faced, nervous smile, a borrowed peach dress a size too big, sandals.",
+    desc: "New enough that the dress is still borrowed, and practical enough that she has already worked out exactly how many lady drinks a month pay off the motorbike outside, which she will show you on a calculator.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hi.\" A quick smile, then straight to business, as if she had rehearsed it. \"I am Pui. I have a motorbike to pay. You buy me drink, I pay one day of motorbike.\" She holds up her {{phone}} with the calculator already open. \"Is honest, na? Nobody else tell you what the drink is FOR.\"",
+        short: "\"One drink, one day of motorbike. Honest, na?\"" },
+      { topic: "motorbike|bike|honda|loan|payment",
+        text: "\"Honda Click, red. Outside — you see.\" She points through the open front at a small red scooter with a pink helmet on the mirror. \"Twenty-four month. I am month three.\" She scrolls her calculator history; it is all the same sum. \"When it is finish, I am free. Before, I am a girl working for a motorbike.\" She laughs. \"The motorbike is a good boss. Very quiet.\"" },
+      { topic: "paper|contract|group|new boss|company",
+        text: "\"New company give me paper. My first job with paper.\" She seems genuinely impressed by this. \"Paper say how much, say what day, say I can say no.\" She thinks. \"I don't know before if I can say no. Now is written. I don't say no much. But is nice it is written.\"" },
+      { topic: "family|roi et|home",
+        text: "\"Roi Et. My father grow rice, my mother sell rice, I eat rice.\" The rehearsed bit, then a real one: \"My father don't know I am here. He think I work at the 7-Eleven. When I go home at Songkran I bring him the 7-Eleven uniform. My friend lend it to me. He is very proud of the uniform.\"" },
+    ],
+  },
+  peach_lounge_mint: {
+    name: "Mint", th: "มิ้นท์", emoji: "🌿", room: "peach_lounge",
+    look: "Thai woman of twenty-six, small and sharp-chinned, blunt jaw-length haircut, watchful eyes, green top.",
+    desc: "Twenty-six, sharp-chinned, missing nothing — and, every twenty minutes, looking two doors up the soi towards the Jade, where the cousin she brought down from Loei is working her first month.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello.\" Her eyes go past you to the soi, check something, come back. \"Sorry. I watch my cousin. She work two door up, she is new.\" A quick professional smile. \"You want me, I am here. You want somebody nicer, everybody here is nicer than me. I am the one who notice.\"",
+        short: "\"Sorry — I watch my cousin up the soi. I'm the one who notices.\"" },
+      { topic: "namphueng|cousin|jade|jade lounge",
+        text: "\"Namphueng. My aunt's girl.\" Another glance up the soi. \"I bring her from Loei. Her mother sick, her father gone, she need money and she don't know anything. So I bring her where I can see her.\" She folds her arms. \"Company bar, both of us. Camera on the door, paper, a boss who want no trouble. Is not because the company is good. Is because the company is careful. Careful is what she need.\"" },
+      { topic: "family|loei|aunt|home",
+        text: "\"Loei. Mountain, cold, nothing.\" She says it fondly. \"My aunt is my second mother. When I was small she feed me when my mother cannot. Now I feed her girl.\" A shrug. \"In Isan we don't call it a favour. We call it the next part of the same thing.\"" },
+      { topic: "plan|future",
+        text: "\"Plan is Namphueng finish one year, save, and go home and never come back to this soi.\" Flat. \"Me, I stay. Somebody have to stay so the next cousin has somebody to watch her.\" She almost smiles. \"This is how a village works, even when the village is a bar.\"" },
+    ],
+  },
+  peach_lounge_aof: {
+    name: "Aof", th: "อ๊อฟ", emoji: "🎤", room: "peach_lounge",
+    look: "Thai woman of twenty-four, high bun, cropped jacket, big hoop earrings, mid-laugh, holding a microphone.",
+    desc: "Twenty-four, the loudest laugh in the Peach and a cordless microphone she brought from home, because the group's new sound system is very good and nobody has worked out how to switch the karaoke on.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"HELLO!\" Into the microphone, which is not plugged into anything, so it is merely loud. \"You sing? Everybody sing. Nobody sing GOOD, but everybody sing.\" She laughs at herself before you can. \"New speakers, very big. New boss never show us how to do karaoke. So I bring my own.\"",
+        short: "\"HELLO! You sing? Nobody sing good, everybody sing!\"" },
+      { topic: "song|sing|singing|karaoke|microphone",
+        text: "\"My song is the sad one. Every girl in Thailand have the same sad song — the man go away, the rice is dry, I wait at the bus station.\" She sings two lines, beautifully, then ruins them laughing. \"The customer think I sing for him. I sing for my mother. She sing this song when she wash the clothes. Now I sing it when I wash the customer's money.\"" },
+      { topic: "boyfriend|boy|cook",
+        text: "\"Thai boyfriend. He is a cook at a hotel in Jomtien.\" No apology in it. \"He know my job. He don't love my job. He love that I come home and he make me khao tom at four in the morning.\" She grins. \"Farang think every girl has a secret boyfriend. Mine is not a secret. He is just asleep.\"" },
+      { topic: "family|surin|home",
+        text: "\"Surin — the elephant city! You go? No?\" Mock outrage into the dead microphone. \"Every November, the elephant festival. My uncle have an elephant. Is true! Her name is Sweetie. She is very rude.\" She is delighted with this fact and clearly uses it on everybody. \"When I go home, I visit Sweetie before my mother. Don't tell my mother.\"" },
+    ],
+  },
+  // ── LOLLIPOP BAR (the folder on the back table) ──
+  lollipop_bar_duang: {
+    name: "Duang", th: "ดวง", emoji: "🍭", room: "lollipop_bar",
+    look: "Thai woman of thirty-one, freckled, high ponytail, faded sports vest, a lollipop in one hand, worried smile.",
+    desc: "Thirty-one, freckled, a lollipop for a pointer. She buys the lollipops — every week, from Makro, out of the bar's float — and she has been at the Lollipop long enough to be frightened of the folder on the back table.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello! You want one?\" She offers the jar, then laughs and takes it back. \"No, no, is for pointing. Is the Lollipop way.\" She points at you with a green one, then at the stairs, then at herself. \"Simple, na? Not like the folder.\" The smile slips a little at that, and comes back.",
+        short: "\"Lollipop for pointing! Simple — not like the folder.\"" },
+      { topic: "folder|sell|selling|group|new boss|pattaya leisure|company",
+        text: "\"Mama don't open it, but she don't throw it.\" Duang lowers her voice, which on Soi 6 means she now speaks at a normal volume. \"If she sell, the company say we stay. But the Peach girl tell me: company keep the girls, then change the girls, slowly, one by one, for the younger one.\" She turns the lollipop in her fingers. \"I am thirty-one. On this soi thirty-one is the old one.\"" },
+      { topic: "lollipop|lollipops|jar|makro",
+        text: "\"Two bag a week from Makro, the big bag. Mama say the lollipop is the cheapest decoration on Soi 6 and the best one.\" She points at you with a red one, demonstrating. \"Man walk past, girl point with lollipop, he laugh, he come in. You see? Marketing.\" She is genuinely proud of it. \"The company bar has the big speaker. We have the lollipop.\"" },
+      { topic: "mama|khing|boss",
+        text: "\"Mama is very good to us. When my father die she give me the bus ticket and a month money.\" A nod at the till. \"Eleven year this bar. She is tired. Everybody can see she is tired.\" Quietly: \"If she sell, I am happy for her. And I am also very worried for me. Both at the same time. Thai people can do that.\"" },
+      { topic: "family|khon kaen|home",
+        text: "\"Khon Kaen. My mother, my two sister, one buffalo who don't work.\" She grins. \"The buffalo retired. He is like a grandfather now. Everybody feed him and he do nothing.\" Then: \"My father die three year ago. I am the one with the job, so I am the one who send.\"" },
+    ],
+  },
+  lollipop_bar_mona: {
+    name: "Mona", th: "โมนา", emoji: "💰", room: "lollipop_bar",
+    look: "Thai woman of twenty-seven, gold earrings, gold chain, gold {{phone}} case, sleek long hair, amused knowing look.",
+    desc: "Twenty-seven, gold from her ears to her {{phone}} case, and the only girl in the Lollipop who hopes the mamasan signs — because she has done the sums, and the sums are on the company's side.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hi, handsome.\" She looks you over the way a jeweller looks at a ring. \"You know what is gold? Gold is the only boyfriend who never go back to his wife.\" She laughs, low. \"Sit. Buy me drink. I put it in gold.\"",
+        short: "\"Gold never go back to his wife. Buy me drink, I put it in gold.\"" },
+      { topic: "gold|money|savings|jewellery",
+        text: "\"Every week, one small piece, from the gold shop by the market.\" She lifts the chain with one finger. \"Bank — maybe it close, maybe the man run away. Gold, I wear it, I sleep with it, I run with it if I need.\" A small shrug. \"My mother lose everything in the bank in 1997. She tell me this story every year. So: gold.\"" },
+      { topic: "folder|sell|group|new boss|company|pattaya leisure",
+        text: "\"I hope Mama sign.\" She says it quietly, and doesn't look at the back table. \"I love Mama. But company bar pay on the day, every month, no sorry. The Jade girls have aircon and paper. We have a fan and a jar.\" She spreads her hands. \"Duang think the company throw away the old girls. Maybe. But Mama's bar cannot pay anybody if Mama is too tired to open it.\"" },
+      { topic: "family|amnat charoen|home|plan",
+        text: "\"Amnat Charoen. Small, small province — you never hear of it.\" Correct, you haven't. \"My plan is gold to the elbow, then I go home and nobody ask me where it come from.\" She smiles, all teeth. \"In my village they think I have a farang husband who send money. Is true, but it is many farang and they don't know they are the husband.\"" },
+    ],
+  },
+  lollipop_bar_fern: {
+    name: "Fern", th: "เฟิร์น", emoji: "🔮", room: "lollipop_bar",
+    look: "Thai woman of twenty-three, blunt jaw-length haircut, sharp chin, dark lipstick, a deck of tarot cards in hand.",
+    desc: "Twenty-three, sharp-chinned, with a deck of tarot cards she reads for customers between drinks. She reads them for the bar as well. She will not tell you what they said about the folder.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Pick a card.\" The deck is fanned before you've sat down. \"Any card. Is free.\" You pick; she looks at it, then at you, and nods slowly. \"Okay. I know everything now.\" She does not explain. \"Second card is a drink.\"",
+        short: "\"Pick a card. First one free. Second card is a drink.\"" },
+      { topic: "tarot|cards|fortune|reading|future",
+        text: "\"I learn from YouTube. Very serious.\" She turns over a card: a tower, falling. \"Customer get the Tower, he worry. I say: is good, the Tower mean change, you will meet a beautiful girl.\" She taps herself. \"Every card mean you will meet a beautiful girl. I am very accurate.\" A grin. \"The cards are for you to talk. Men tell the cards things they never tell the girl.\"" },
+      { topic: "folder|sell|group|new boss|company",
+        text: "She shuffles without looking down. \"I read for Mama about the folder. Three times.\" She stops. \"I don't tell you what come. Is Mama's reading.\" Then, very quietly, sliding one card back into the deck before you can see it: \"The cards don't decide. They just tell you what you already decide and pretend you don't know.\"" },
+      { topic: "family|loei|home|plan",
+        text: "\"Loei. My grandmother read the rice, not the cards. Throw the rice, look how it fall.\" She mimes it. \"Very accurate also.\" A beat. \"Plan: save, go home, open a little shop — coffee and fortune. Farang tourist love it. Thai people also. Everybody want to know the future. Nobody want to pay for the present.\"" },
+    ],
+  },
+  // ── SWEET TAMARIND (the holdout: not for sale) ──
+  sweet_tamarind_ple: {
+    name: "Ple", th: "เปิ้ล", emoji: "🌶️", room: "sweet_tamarind",
+    look: "Thai woman of twenty-five, thin, jet-black hair, red top, a tamarind pod in her fingers, a cheeky grin.",
+    desc: "Twenty-five, thin as wire, with a tamarind pod always half-eaten in her fingers. She is the mamasan's niece, which on this side of the soi is a job title, and she guards the row of business cards by the till as if they were trophies.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"You want try?\" She holds out a tamarind pod, cracked open, with a pinch of salt and chilli on it. \"Sweet first. Then sour. Then hot.\" She grins. \"Like the Tamarind. Like me. Sit, sit — this is a family bar, we feed you before we rob you.\" (EAT TAMARIND)",
+        short: "\"Sweet, sour, hot — like me. Sit. Family bar: we feed you first.\"" },
+      { topic: "cards|business cards|offer|sell|group|company|pattaya leisure|not for sale",
+        text: "\"My aunt pin them.\" She counts along the row with the tamarind pod. \"Every time the company man come, one card. He is very polite, every time. Every time she say thank you, and pin.\" Proud. \"The Jade sell, the Peach sell. Next door sell. Now this side, only us. My aunt say: when the cards go round the whole wall, maybe she think about it.\" A wink. \"The wall is very big.\"" },
+      { topic: "aunt|mama|view|family bar",
+        text: "\"My aunt is the mama, my cousin is on the till, my other cousin's friend is the girl at the end.\" She ticks them off. \"In the company bar everybody is a stranger with a number. Here everybody is somebody's somebody.\" She leans in. \"Is better and is worse. If you are bad to one girl here, the whole bar know by the time you finish your beer.\"" },
+      { topic: "tamarind|sweet tamarind|salt|chilli",
+        text: "\"From Phetchabun, the sweet one. My aunt's friend bring a sack every month.\" She cracks another. \"Sour tamarind is for cooking. Sweet tamarind is for luck, and for eating while you wait for the customer to decide.\" She looks at you pointedly. \"I eat a lot of tamarind.\"" },
+      { topic: "home|roi et|plan",
+        text: "\"Roi Et. My aunt is from the next province over — my mother marry a Roi Et man, so I am the Roi Et one.\" She shrugs. \"Plan is the bar is still ours when my aunt is old, and then it is mine.\" She glances at the cards on the wall. \"So I watch the wall.\"" },
+    ],
+  },
+  sweet_tamarind_jiab: {
+    name: "Jiab", th: "เจี๊ยบ", emoji: "🐣", room: "sweet_tamarind",
+    look: "Thai woman of twenty-nine, freckled, high ponytail, faded sports vest, sneakers, a sunny, knowing laugh.",
+    desc: "Twenty-nine, freckled, in a sports vest and sneakers. She worked two years at the Pink Lotus at the corner and walked out of it to come here, for less money and a fan instead of aircon, and she thinks she got the better deal.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello, hello!\" A big sunny laugh. \"You know the Pink Lotus? Big, pink, very loud, at the corner?\" She jerks a thumb west. \"I work there two year. Now I work here. Smaller, hotter, everybody know my name.\" She pats the stool. \"Is a good trade. Sit.\"",
+        short: "\"Two year at the Pink Lotus. Now here — smaller, hotter, they know my name.\"" },
+      { topic: "pink lotus|lotus|group|company|pattaya leisure|why left",
+        text: "\"Pink Lotus is good money. Good speaker, good aircon, the man in the shirt come round and say good job.\" She ticks it off fairly. \"But two year, the mama never say my name right one time. I am number, I am shift, I am drink count.\" She shrugs. \"Here I am Jiab. Less money. More Jiab.\" She grins. \"When you are thirty, the more Jiab is worth more than the money. Nearly.\"" },
+      { topic: "family|khon kaen|son|home",
+        text: "\"Khon Kaen. One son, eight year, crazy for football.\" She shows you a photo on her {{phone}}: a boy in a counterfeit Liverpool shirt, mid-kick. \"He think Liverpool is a village near Khon Kaen. I don't correct him. Is a nice village.\"" },
+      { topic: "plan|future|money",
+        text: "\"Plan is football school for my son, then I don't care.\" She means it, laughing. \"Me, I am fine. I can work anywhere: Pink Lotus, Tamarind, a noodle shop. My son, he need the school.\" A beat. \"And here I can leave early if he is sick. Pink Lotus, you leave early, you pay the fine. Here, the mama give you a tamarind for the bus.\"" },
+    ],
+  },
+  sweet_tamarind_alisa: {
+    name: "Alisa", th: "อลิสา", emoji: "🪷", room: "sweet_tamarind",
+    look: "Thai woman of forty-two, big solemn eyes, small gold Buddha at her throat, hair in a neat low knot, calm.",
+    desc: "Forty-two, big-eyed and solemn, a small gold Buddha at her throat. She has been on Soi 6 since before it had a company on it, and half the men at the Tamarind's rail come in for her and sit there pretending they came in for the beer.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sawatdee kha.\" Unhurried, a small wai, a real one. \"You are new on the soi? Your face is new.\" She considers you kindly. \"Sit. I don't grab. The young girls grab — they have rent. I have regulars.\" A slight smile. \"Regulars are slower and they last longer.\"",
+        short: "\"I don't grab. The young girls have rent. I have regulars.\"" },
+      { topic: "regular|regulars|customer|customers",
+        text: "\"Six man, every year. One from Norway, one from Wales, one from — I forget, the cold one.\" She counts on her fingers. \"They come in, I know their beer, I know their children's name, I know which knee is bad.\" She touches the Buddha. \"Young girl sell the night. Old girl sell the remembering. The remembering, you cannot buy at the company bar. They change the girls too fast.\"" },
+      { topic: "soi 6|soi|years|before|old days",
+        text: "\"When I come, Soi 6 is half bar, half house — people live here, hang the washing.\" She looks out at the street. \"No company. Every bar a woman, a fridge, a fan. Then the company come, one bar, two bar.\" A small shrug. \"Is not bad. Is just a different soi. Our side is the old soi. When this side sell, the old soi is finish. So my mama don't sell.\"" },
+      { topic: "family|surin|home|plan",
+        text: "\"Surin. Two daughter, both at university — one nurse, one accountant.\" Said simply, and not without pride. \"They know what I do. We don't talk about it. They send me the photo from graduation and I put it on my wall.\" She touches the Buddha again. \"Plan: one more year, maybe two. Then I sit in Surin and my daughters can buy ME a drink.\"" },
+    ],
+  },
+  // ── FIRECRACKER BAR (inner east — nobody's group) ──
+  firecracker_bar_fah: {
+    name: "Fah", th: "ฟ้า", emoji: "🧨", room: "firecracker_bar",
+    look: "Thai woman of twenty-five, slight build, short bob, sharp watchful eyes, red-and-gold top, quick smile.",
+    desc: "Twenty-five, small and quick, the girl at the Firecracker's front stool who tells you what the staircase is for and what it costs before your second foot is through the door, on the principle that it saves everybody a great deal of time.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello! I tell you everything now, okay?\" She counts it off fast. \"Drink for you, drink for me, mama say the bar money, I say my money, upstairs is clean, I am fun.\" She takes a breath. \"Now you know everything. Now you can decide. Most men here walk up and down for one hour pretending. You are lucky. You meet me first.\"",
+        short: "\"Drink, drink, bar money, my money, upstairs, fun. Now you know everything.\"" },
+      { topic: "price|short time|how much|money|barfine",
+        text: "\"Two money: the bar, and me.\" Two fingers, firmly. \"Mama say hers out loud, it go in the book. Mine I say in your ear, it go in my bag.\" A grin. \"Some bar on this soi, the girl don't tell you her one until the stairs. Firecracker girl tell you at the door. Bang. No surprise. Why we are called Firecracker.\" She is visibly making this up, and visibly proud of it." },
+      { topic: "honest|honesty|tell the truth|why",
+        text: "\"Because the man who is surprised, he is angry, and the man who is angry, he don't come back.\" Simple arithmetic. \"This side of the soi, no company to send new customer. Every customer is the customer who come back. So we are honest.\" She shrugs. \"Not because we are good girls. Because we are small bar.\"" },
+      { topic: "family|surin|home|plan",
+        text: "\"Surin. My mother sell silk — the real one, not the tourist one.\" Pride, briefly. \"Plan is a silk shop in Pattaya, for the tourist, with my mother's real silk. Farang pay three time the price and still say thank you.\" A wink. \"I learn that on this soi. Everything I know about selling, I learn on this soi.\"" },
+    ],
+  },
+  firecracker_bar_namtan: {
+    name: "Namtan", th: "น้ำตาล", emoji: "🩺", room: "firecracker_bar",
+    look: "Thai woman of thirty, lean and angular, high cheekbones, hair pinned up neatly, calm appraising eyes.",
+    desc: "Thirty, angular, unflappable. She was a nursing assistant at a hospital in Sisaket for six years before the arithmetic brought her here, and she still checks the pupils of any man who stumbles on the step.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sit down. Slowly.\" She is looking at your eyes, not your wallet. \"You drink water today? No? Nobody drink water on Soi 6.\" She puts a bottle in front of you before anything else, and only then smiles properly. \"Okay. Now you are a customer. Before, you were a patient.\"",
+        short: "\"Drink water first. Then you are a customer.\"" },
+      { topic: "hospital|nurse|nursing|sisaket|job",
+        text: "\"Six year, nursing assistant, Sisaket hospital. Night shift, every shift.\" Flat, factual. \"Hospital pay me in one month what this bar pay me in one week.\" She turns her glass. \"Here also night shift. Here also I clean up after men. But here they say thank you, and they tip.\" A dry look. \"In the hospital, nobody tip.\"" },
+      { topic: "family|home|mother",
+        text: "\"My mother is diabetes. The medicine is every month, forever.\" No self-pity in it at all. \"I know exactly how much is the medicine because I used to give it to other people's mothers.\" She shrugs. \"So I come here. Is the same job, different floor.\"" },
+      { topic: "plan|future",
+        text: "\"Plan: my mother medicine paid five year ahead, then I go back to the hospital.\" She means it. \"I like the hospital. I am good there.\" A small smile. \"Here also I am good. But in the hospital, when I am good, somebody walk out better. Here, somebody walk out — \" she considers the staircase — \"lighter.\"" },
+    ],
+  },
+  firecracker_bar_fasai: {
+    name: "Fasai", th: "ฟ้าใส", emoji: "🥊", room: "firecracker_bar",
+    look: "Thai woman of twenty-six, gold earrings and chain, muscled arms, hair in a tight braid, a boxing-gym tank top.",
+    desc: "Twenty-six, gold chains and the arms of somebody who hits things on purpose. Her boyfriend fights {{Muay Thai}} at the stadium out by Sukhumvit, and on fight nights the whole Firecracker knows the result before the bell.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"You like {{Muay Thai}}?\" Before hello, before anything. \"My boyfriend fight. Very good, very ugly.\" She flexes, laughing. \"Me also, a little — the gym every morning, then here every night. Buy me drink, I show you the elbow.\" She mimes an elbow at your head, gently. \"Is a joke. Mostly.\"",
+        short: "\"My boyfriend fight {{Muay Thai}}. Buy me drink, I show you the elbow.\"" },
+      { topic: "muay thai|boxing|fight|stadium|gym",
+        text: "\"Thai boxing is not like farang boxing. Is eight weapon: hand, foot, knee, elbow.\" She demonstrates each on the air, very fast. \"The farang come to the stadium for the show. The Thai come for the betting.\" A grin. \"My boyfriend lose sometimes. Then I win, because I bet on the other one. Love is love. Money is money.\"" },
+      { topic: "boyfriend|boy|fighter",
+        text: "\"He is from Buriram, like every fighter.\" She rolls her eyes fondly. \"He know my job. He say: you fight with your face, I fight with my face, nobody cry.\" Then, quieter: \"His nose is broken four time. When he finish fighting, he need another job. So I save for both of us.\"" },
+      { topic: "family|roi et|home|plan",
+        text: "\"Roi Et. My father was a fighter also, a long time ago — not good, but very brave.\" She smiles. \"Plan: a gym in Roi Et. My boyfriend teach, I take the money. He cannot count past eight. Eight weapon, eight round, eight beer. After eight, I count.\"" },
+    ],
+  },
+  // ── HOT PEPPER BAR (luk thung, the giant chilli) ──
+  hot_pepper_namwan: {
+    name: "Namwan", th: "น้ำหวาน", emoji: "🎶", room: "hot_pepper",
+    look: "Thai woman of twenty-four, a scar through one eyebrow, big grin, sequinned red top, hair long and curled.",
+    desc: "Twenty-four, a scar through one eyebrow and the best voice on the inner east. She wants to be a luk thung singer, has sung at three temple fairs in Yasothon, and sings at the Hot Pepper's customers until they buy her a drink to stop or to keep going.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "She doesn't say hello; she sings it, the first line of something mournful, eyes closed, a hand on her heart. Then she opens her eyes and grins. \"You like? Is luk thung — country music, Thai style. Every song is about a girl from Isan who is sad.\" She pats the stool. \"I am a girl from Isan. I am not sad. Sit.\"",
+        short: "She sings you in, then grins. \"Luk thung — every song a sad Isan girl. Not me. Sit.\"" },
+      { topic: "luk thung|song|songs|sing|singing|music|singer",
+        text: "\"Three temple fair in Yasothon. One time the radio.\" She holds up three fingers, then one, very seriously. \"One day a real stage, with the dancing girls behind me in the feather.\" She sings a line, and it is genuinely good. \"For now I sing for farang who don't understand one word. Is good practice. They cry anyway. The song do the work.\"" },
+      { topic: "scar|eyebrow",
+        text: "She touches the scar, unbothered. \"Motorbike, when I am fourteen. My brother drive, I sit on the back, a dog run out.\" She shrugs. \"The dog is fine. The bike is fine. My eyebrow is a little bit finished.\" A grin. \"On the stage, they will put makeup. Here, the customer think it is a story. I let him think.\"" },
+      { topic: "chilli|chili|pepper|marker|names",
+        text: "\"Everybody write the name on the chilli!\" She digs a marker out of her bra with no embarrassment at all, writes something on it in fast Thai, and points the marker at you. \"Your name. Now you belong Hot Pepper.\" It may or may not be your name. \"Forty name, maybe fifty. Some come back every year and find their name.\" She points at one, near the stalk. \"That one is a German. He come every November and kiss his name. Very sweet. Very drunk.\"" },
+      { topic: "family|yasothon|home|plan",
+        text: "\"Yasothon — the rocket festival! You know? The big bamboo rocket?\" Delighted. \"My plan is a song on the radio, then a show at the rocket festival in my own village. My mother in the front row.\" A beat. \"She think I sing in a restaurant. Is almost true. Is a restaurant with stairs.\"" },
+    ],
+  },
+  hot_pepper_noey: {
+    name: "Noey", th: "เนย", emoji: "🥗", room: "hot_pepper",
+    look: "Thai woman of thirty-three, freckled, ponytail, apron over a red vest, a pestle in one hand, laughing.",
+    desc: "Thirty-three, freckled, an apron over her work clothes. She makes the som tam that the Hot Pepper's staff eat at the back table between customers, hotter than the chilli over the door, and she judges a man by how he takes it.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"You hungry?\" She is pounding something in a clay mortar at the end of the bar. \"Is for the girls, not for sale — but for you, one spoon. A test.\" She holds out a spoonful of som tam that smells like a dare. \"You eat, you don't cry: you are welcome here. You cry: you are also welcome. But we laugh.\" (EAT SOM TAM)",
+        short: "\"One spoon of som tam — a test. You cry, we laugh, you're still welcome.\"" },
+      { topic: "som tam|papaya salad|food|spicy|cook|cooking",
+        text: "\"Green papaya, lime, fish sauce, the black crab, and chilli.\" She counts the chillies into the mortar: a lot. \"Isan way. The Bangkok way is sweet, for the tourist.\" Pound, pound. \"The girls eat at the back between customer. Hot Pepper is a bar, but the back table is my kitchen.\" A grin. \"Farang ask for not spicy. I give him not spicy. Then I laugh at him in Thai.\"" },
+      { topic: "test|spoon|spicy test|cry",
+        text: "\"Is how you know a man.\" Completely serious. \"He eat, he cry, he laugh: good man. He eat, he cry, he angry: bad man, he will be angry upstairs also. He don't eat: he don't trust anybody.\" She wipes the pestle. \"Mama say I am the best security in the bar. Cheaper than the camera.\"" },
+      { topic: "family|nakhon phanom|home|plan",
+        text: "\"Nakhon Phanom, by the Mekong — from my mother's house, across the water, is Laos.\" Warmly. \"Plan: a som tam stall on the river, the real way, no sugar.\" A wink. \"For now I make som tam for free and the stairs pay the rent. Is a strange restaurant, but the staff eat very well.\"" },
+    ],
+  },
+  hot_pepper_kaimook: {
+    name: "Kaimook", th: "ไข่มุก", emoji: "📱", room: "hot_pepper",
+    look: "Thai woman of twenty-two, quiet, pearl earrings, glasses pushed up into her hair, {{phone}} in hand, small smile.",
+    desc: "Twenty-two, the quiet one in the loudest bar on the inner east. She is the only girl at the Hot Pepper who doesn't sing, because she is doing an English course on her {{phone}} and practising on whoever sits down.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Good evening. How are you this evening?\" Perfectly pronounced, carefully, off a lesson. She checks her {{phone}}, pleased. \"Sorry — I study English. You can correct me?\" A small hopeful smile. \"The other girls sing. I conversation. Is the same, but quieter.\"",
+        short: "\"Good evening! I study English — you can correct me?\"" },
+      { topic: "english|study|course|lesson|learning",
+        text: "\"Online course, every morning, one hour.\" She shows you the app: a cartoon owl, a streak of a hundred and twelve days. \"In the bar, I practise on the customer. Is free teacher.\" She thinks. \"English from the customer is a little bit strange. I know 'cheers', 'bloody', and 'one more'. The app don't have these.\"" },
+      { topic: "quiet|sing|why not sing",
+        text: "\"I cannot sing. Really.\" A wince. \"One time I try, and the whole bar stop. Namwan say: please, never.\" She laughs at herself. \"So I talk. Some man want the loud girl. Some man want the quiet girl who listen.\" She tilts her head. \"The quiet girl get more of the long time, the mama say. Men like to be listened to. Even more than upstairs.\"" },
+      { topic: "family|ubon|home|plan",
+        text: "\"Ubon. My father drive a truck, my mother sell lottery ticket.\" She says the next part in very careful English, clearly rehearsed: \"My plan is to work at a hotel reception in Bangkok, with a uniform and a name badge.\" She looks up, checking. \"Is correct? The sentence?\" It is. She looks happier about that than about anything else that has happened tonight." },
+    ],
+  },
+  // ── HULA HULA BAR (the tiki head) ──
+  hula_hula_bright: {
+    name: "Bright", th: "ไบรท์", emoji: "🌺", room: "hula_hula",
+    look: "Thai woman of twenty-five, mole above her lip, plastic flower lei, grass-skirt costume over shorts, mischievous grin.",
+    desc: "Twenty-five, in a plastic lei and a grass skirt over denim shorts, and the keeper of the tiki head's mythology. Ask her why it is there and you'll get a story. Ask her again and you'll get a different one.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Aloha!\" With a hula that is mostly hips and entirely ironic. \"Is Hawaii. Very far. We are the Hawaii branch.\" She points at the tiki head glowing on the end of the rail. \"You see him? He choose who sit with who. Tonight he say: you, me.\" A grin. \"He is never wrong. I ask him earlier.\"",
+        short: "\"Aloha! The tiki choose — tonight he say you, me.\"" },
+      { topic: "tiki|tiki head|head|statue",
+        text: "\"The tiki?\" She leans in, as if sharing a great secret. \"A sailor from Hawaii, many year ago, lose all his money in this bar. No money, so he pay with the tiki. Every night he come back to look at it. Then one night he don't come back, and the light come on by itself.\" A long, solemn pause. \"Is a lie. But is a better lie than the truth, and the truth is boring. Mama buy him at the Sunday market.\"" },
+      { topic: "hawaii|theme|grass skirt|hula",
+        text: "\"Nobody here go to Hawaii. Nobody here even go to Phuket.\" She flicks her grass skirt. \"First mama, before this mama, she watch one film with the hula girl. She say: this is our bar now. Twenty year, still the hula.\" She does a deliberately terrible hula. \"The customer think is silly. Is very silly. He remember it. Is the point.\"" },
+      { topic: "family|roi et|home|plan",
+        text: "\"Roi Et. Flat, rice, more rice.\" She shrugs. \"Plan is the bank course, the real one, in Khon Kaen. Then I work in the bank and I wear the uniform with the little scarf.\" She mimes adjusting it. \"Then a man come to my counter, he say: I know you — the Hula Hula! I say: no, sir. Is Hawaii. Very far.\"" },
+    ],
+  },
+  hula_hula_wandee: {
+    name: "Wandee", th: "วันดี", emoji: "🌸", room: "hula_hula",
+    look: "Thai woman of twenty-seven, straight hair to her hips, silver anklet, a pink lei, perfectly still, amused eyes.",
+    desc: "Twenty-seven, hair to her hips and a silver anklet, and the Hula Hula's best seller, who has worked out that a lei round a man's neck is the only receipt on Soi 6 that he wears home.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "She is perfectly still on her stool until you sit; then she lifts the lei off her own neck and drops it over yours in one smooth movement. \"Now you are Hula Hula man.\" A slow smile. \"The flower is free. The drink is how you say thank you for the flower.\"",
+        short: "She drops her lei over your head. \"The flower is free. The drink is the thank-you.\"" },
+      { topic: "lei|leis|flower|flowers|garland",
+        text: "\"One lei, one drink — is the Hula Hula system.\" She lifts another from the hook under the bar; there is a box of them. \"Man walk on the soi with the lei, every girl know where he drink tonight. Free advertising.\" She smiles. \"The other bar, the man go home, nobody know. Our man go home pink. His wife know. Very bad for him. Very good for us.\"" },
+      { topic: "money|drinks|count|best seller",
+        text: "\"I count everything.\" She taps her temple. \"Drink, lei, the man's name, which night he come.\" She is not boasting, only explaining. \"The mama here is the owner — her name on the paper, her money in the till. Small bar, every drink is her rice. So I sell for her like I sell for me.\" A shrug. \"Is not the company. Is a person. You work harder for a person.\"" },
+      { topic: "family|khon kaen|home|plan|hair",
+        text: "\"Khon Kaen. The hair is for my grandmother — she say never cut it, it is your luck.\" She lets it fall over one shoulder. \"Plan is a hair salon, and the first customer is me, and I cut it.\" A laugh. \"My grandmother will be very angry. By then I will be very rich, so okay.\"" },
+    ],
+  },
+  hula_hula_tarn: {
+    name: "Tarn", th: "ธาร", emoji: "🏭", room: "hula_hula",
+    look: "Thai woman of thirty-two, round cheeks, sharp eyes, short practical hair, a pink lei, a pen behind one ear.",
+    desc: "Thirty-two, round-cheeked and sharp-eyed, keeping a tally of something on a beer mat. She worked nine years on a production line in an electronics factory in Rayong before it closed, and she runs her evening at the Hula Hula like a shift.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello.\" A tick on the beer mat. \"You are customer number six tonight. Good number.\" She looks up properly, friendly and brisk. \"I was in a factory before. I still count everything. Sit — you want drink? I write it.\"",
+        short: "\"Customer number six. Good number. I write it.\"" },
+      { topic: "factory|rayong|line|electronics|job",
+        text: "\"Nine year, the line, Rayong. Hard drive for computer — the small piece inside.\" She mimes a tiny precise movement. \"Twelve hour, two break, one supervisor who shout. Then the company move to Vietnam. One morning, the gate is close.\" A shrug. \"Here is also a shift. But the supervisor is a nice lady with a tiki, and I can sit down.\"" },
+      { topic: "count|counting|beer mat|tally|number",
+        text: "She turns the mat round: neat columns, ticks, a total. \"Customer, drink, lady drink, lei. Every night.\" Matter-of-fact. \"At the end I check with the mama's book. Two time the book was wrong — not on purpose, she is old, she is tired.\" A small proud nod. \"Now the mama ask me to count. Factory girl. Best thing about the factory: I know how to count when I am tired.\"" },
+      { topic: "family|surin|home|plan",
+        text: "\"Surin. Two kids, ten and seven, with my mother.\" She taps the beer mat. \"Plan is to count enough money that I go back to Surin and never count anything again.\" A rare grin. \"Maybe a chicken farm. Chicken you also have to count. I am stuck.\"" },
+    ],
+  },
+  // ── LADYBIRD BAR (small, calm, the third night) ──
+  ladybird_bar_pao: {
+    name: "Pao", th: "เป้า", emoji: "📺", room: "ladybird_bar",
+    look: "Thai woman of thirty-eight, sun-lined face, faded tattoo on one forearm, comfortable cardigan, eyes on the telly.",
+    desc: "Thirty-eight, sun-lined, with a faded tattoo on one forearm and her eyes on the soap opera above the fridge. She has watched it at the Ladybird every night for four years and will explain the plot to anybody, with feeling.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Shh — sit, sit.\" She pats the stool without looking away from the telly. \"The mother-in-law find out. Very big night.\" Only at the ad break does she turn to you properly, warm and unhurried. \"Sorry. Hello. You want drink? I tell you the story from the beginning. Is very long. You have time?\"",
+        short: "\"Shh — the mother-in-law find out. Sit. I tell you the story after.\"" },
+      { topic: "soap opera|lakorn|telly|tv|story|drama",
+        text: "\"Lakorn — Thai drama. This one is the rich family, the poor girl, the evil mother-in-law, the twin who is lost.\" She ticks them off like old friends. \"Every lakorn is the same lakorn. Is why we love it. You know what happen, but you want to see how.\" She glances at you, amused. \"Like the soi. Every man is the same man. But we want to see how.\"" },
+      { topic: "tattoo|arm",
+        text: "She looks at the faded blue lines on her forearm as if she had forgotten them. \"A name. A boy, when I am seventeen, in Sakon Nakhon.\" A dry laugh. \"He go to Bangkok, he forget me in one month. The tattoo don't forget.\" She covers it with her other hand, then uncovers it. \"Is a good lesson. I keep it. I don't need a lakorn to tell me about men.\"" },
+      { topic: "family|sakon nakhon|home|plan",
+        text: "\"Sakon Nakhon. My mother, my sister's children, a garden of chilli.\" She smiles at the thought. \"Plan is go home and watch lakorn on a big telly in my own house, in a soft chair, with nobody asking me for a drink.\" She pats your arm. \"Not you. You can visit.\"" },
+    ],
+  },
+  ladybird_bar_gaem: {
+    name: "Gaem", th: "แก้ม", emoji: "🐞", room: "ladybird_bar",
+    look: "Thai woman of twenty-six, pixie cut, small gold hoops, red-and-black spotted top, crooked disarming grin.",
+    desc: "Twenty-six, pixie-cut, with a crooked grin and paint still under one thumbnail. She painted every spot on every stool in the Ladybird, by hand, in one slow wet season, and she will tell you how many there are.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"You sit on my work.\" She grins at your stool. \"Every spot — me. One hundred and forty-three spots on this one.\" She shows you the paint under her thumbnail like a medal. \"Is a joke. I never count.\" A pause. \"Is a hundred and thirty-one. I count.\"",
+        short: "\"You sit on my work — every spot is me. A hundred and thirty-one on that one.\"" },
+      { topic: "spots|stools|painting|paint|ladybird",
+        text: "\"Low season, nobody come, the mama say: Gaem, you are bored, you are annoying, paint the stools.\" She traces a spot with one finger. \"Six week. Every spot different size, because I am not a machine.\" A shrug. \"Now the customer sit, he look down, he smile. A smile is half a drink already.\"" },
+      { topic: "low season|rain|wet season|quiet",
+        text: "\"Low season is when you find out who is your real customer.\" She says it like an old hand, though she isn't one. \"High season, every man is a customer. Low season, only the man who like you come. You can count them on one stool.\" She grins. \"In low season I paint. In high season I sell. Both are art, a little bit.\"" },
+      { topic: "family|udon|udon thani|home|plan",
+        text: "\"Udon Thani. My father is a sign painter — shop sign, temple sign, everything.\" Pride in it. \"I learn the brush from him. Plan: go home and paint signs with him, and when he is old, I am the sign painter.\" She looks round at the spotted stools. \"This is my first shop. The ladybird is my first sign.\"" },
+    ],
+  },
+  ladybird_bar_somsri: {
+    name: "Somsri", th: "สมศรี", emoji: "🍵", room: "ladybird_bar",
+    look: "Thai woman of forty-four, tanned arms, vine tattoo up one wrist, hair in a loose knot, motherly half-smile.",
+    desc: "Forty-four, motherly, a vine tattooed up one wrist. She is the reason men end up in the Ladybird on their third night: by then they are tired of being grabbed, and she has never grabbed anybody in her life.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Third night?\" She says it before you sit, kindly, as if diagnosing a cold. \"I can tell. First night, men go to the loud bar. Second night, the louder one. Third night, they come here, very tired, and they want somebody to just sit with them.\" She pulls out the stool. \"Sit. I just sit. Maybe later something else.\"",
+        short: "\"Third night? I can tell. Sit — I just sit. Maybe later something else.\"" },
+      { topic: "third night|tired|quiet|why here",
+        text: "\"Soi 6 is very loud for the man.\" She says it gently. \"Every girl grab, every girl say handsome, every girl say upstairs. After two night he feel like a wallet with legs.\" A slow smile. \"Here, nobody grab. He remember he is a man, not a wallet.\" She pats your hand. \"Then, sometimes, he decide by himself to go upstairs. Is better when he decide by himself.\"" },
+      { topic: "regulars|regular|customers",
+        text: "\"Many come back. Every year, the same week.\" She counts quietly. \"One is a teacher from Ireland. He come, he drink two beer, he tell me about his garden, he go home. Twelve year.\" She smiles. \"Never upstairs, not one time. He pay my drink, he pay for the garden talk.\" A shrug. \"The garden talk is also a service.\"" },
+      { topic: "family|ubon|home|plan",
+        text: "\"Ubon. My son is a monk — two year now, in a temple near the river.\" Quiet pride, and something more complicated beneath it. \"When I go home I give him food in the morning, on my knees, and he cannot say thank you, because monks don't say thank you.\" A small laugh. \"Is the only man in my life who never say thank you, and the only one I don't mind.\"" },
+    ],
+  },
+};
+for (const [id, n] of Object.entries(SOI6_INNER_GIRLS)) { NPCS[id] = n; NPC_ROLES[id] = "hostess"; }
+
+// THE FRONTIER'S TWO HOLDOUTS (Soi 6 expansion, 2026-10-09; docs/soi6-expansion.md). The inner west
+// is where the group is buying, and the two bars it hasn't bought each have a mamasan from the
+// pooled floor. She is given the one subject no pool can: the offer. Found by room and role, never
+// by id, so a regenerated floor (tools/gen-floor-staff.mjs --replace) keeps her lines. Appended,
+// so her pooled nodes keep their indices.
+for (const [id, n] of Object.entries(NPCS)) {
+  if (NPC_ROLES[id] !== "mamasan") continue;
+  if (n.room === "lollipop_bar") n.dialogue.push({
+    topic: "folder|offer|sell|selling|group|pattaya leisure|plg|company|buy the bar|new boss",
+    text: "“The folder?” She doesn't look at it; she doesn't need to. “Pattaya Leisure. Every month " +
+      "the man come — good shirt, one soda, same folder. He is very polite. He say: you are tired, " +
+      "they are not tired.” A pause long enough to count the stools. “Is true. My girls stay if I sell, " +
+      "he promise. Same girls, same name on the sign, new paper on the wall. Only me go.” She straightens " +
+      "the jar of lollipops by a centimetre. “I not sign yet. Not yet is not no. Not yet is not yes " +
+      "also.”",
+    short: "“Not yet,” she says of the folder, without looking at it. “Not yet is not no.”",
+  });
+  if (n.room === "sweet_tamarind") n.dialogue.push({
+    topic: "cards|offer|sell|selling|group|pattaya leisure|plg|company|buy the bar|business cards",
+    text: "“The cards?” A nod at the wall, proud as a diploma. “Every time the man come, I take the card, " +
+      "I say thank you, I pin it there. So next time he come, he can see how many time I already say " +
+      "no.” She counts them with one finger without taking her eyes off you. “Next door sell. Then the " +
+      "other side sell. Now they want this side, because this side is the last one between them.” A " +
+      "shrug that has the whole street in it. “My name is on the paper. Is not for sale, na.”",
+    short: "“Not for sale,” she says, and taps the row of cards like a ledger.",
+  });
+}
 
 // The girls every bar knows by name — their barfine never gets waived,
 // whatever the hour. Everyone else's quietly comes off the book after
@@ -19576,7 +20307,19 @@ const ROOM_GEO = {
   orchid_room:      [12.94285, 100.88530],
   golden_dragon:    [12.94251, 100.88539],
   sunset_dreams:    [12.94272, 100.88568],
+  // the inner segments: SKETCHED (4dp), interpolated between the surveyed ends and the middle —
+  // re-survey with Mario's anchors before trusting them (docs/soi6-expansion.md §3)
+  soi6_west_in:     [12.9425, 100.8860],
+  jade_lounge:      [12.9426, 100.8859],
+  peach_lounge:     [12.9424, 100.8860],
+  lollipop_bar:     [12.9426, 100.8861],
+  sweet_tamarind:   [12.9424, 100.8858],
   soi6_mid:         [12.94230, 100.88647],
+  soi6_east_in:     [12.9421, 100.8869],
+  firecracker_bar:  [12.9422, 100.8869],
+  hot_pepper:       [12.9420, 100.8870],
+  hula_hula:        [12.9422, 100.8871],
+  ladybird_bar:     [12.9420, 100.8868],
   queen_vic:        [12.94253, 100.88623],
   qv_room:          [12.94253, 100.88623],
   sunset_rail:      [12.94219, 100.88633],

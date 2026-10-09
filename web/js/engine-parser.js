@@ -1988,6 +1988,19 @@ function _doInventory() {
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
   // Soi 6's close looks (the examine audit, 2026-10-09)
+  // the inner segments' close looks (Soi 6 expansion, 2026-10-09)
+  folder: ["manila folder", "the folder", "back table"],
+  cards: ["business cards", "the cards", "card", "row of cards"],
+  tamarind: ["tamarind pods", "pods", "pod", "tamarind pod", "the net", "net"],
+  firecrackers: ["firecracker", "paper firecrackers", "the string", "red string", "string"],
+  chilli: ["chili", "chilli pepper", "giant chilli", "fibreglass chilli", "marker", "names on the chilli"],   // never bare "pepper": EXAMINE HOT PEPPER BAR is the venue's exterior
+  carpet: ["the carpet", "carpeted stairs", "stair carpet"],
+  stripes: ["pink and white stripes", "the stripes", "striped walls", "walls"],
+  skirts: ["grass skirts", "grass skirt", "skirt", "the skirts"],
+  telly: ["tv", "television", "soap opera", "lakorn", "the telly", "soap"],
+  tiki: ["tiki head", "the tiki", "head", "red bulb"],
+  leis: ["lei", "flower leis", "plastic flowers", "garlands"],
+  spots: ["spotted stools", "the spots", "ladybird stools", "painted stools", "ashtrays", "ashtray"],
   bars: ["the bars", "fronts", "the fronts", "frontages", "bar fronts", "open fronts", "doorways", "all the bars"],
   girls: ["the girls", "ladies", "the ladies", "women", "the women", "pullers", "barkers", "sequins"],
   deck: ["raised deck", "wooden deck", "the deck", "threshold", "the step", "planks"],
@@ -2090,7 +2103,7 @@ const _READ_NOUNS = {
   bird: ["painted bird"],
   dragon: ["gold dragon"],
   blender: [],
-  jar: ["jars", "tip jar", "mason jars"],
+  jar: ["jars", "tip jar", "mason jars", "lollipops", "lollipop", "jar of lollipops"],
   wheel: ["ship's wheel", "ships wheel", "floats"], // barometer got its own Anchor entry (playtest 2026-08-22)
   barometer: ["glass", "brass barometer"],
   horseshoe: ["horseshoes", "clover", "clovers"],
@@ -11134,16 +11147,17 @@ const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
 // is all noise — it names a dozen districts you can't reach. The confined mode
 // gets its own strip map: the soi west-to-east, the beach at its head, the bars
 // under each end. Keep the venue lists in step with SOI6_ROOMS.
-const _MAP_SOI6 = `    THE BEACH ~~~ BEACH RD ─── WEST ──────── MIDDLE ──────── DEEP END
-                  (junction)   (loud)         (quiet)         (loudest)
+const _MAP_SOI6 = `  BEACH ~ BEACH RD ── WEST ────── INNER W ───── MIDDLE ────── INNER E ───── EAST END
+          (junction) (loud)       (the group    (quiet)       (nobody's)    (loudest)
+                                   is buying)
+  north   Blue Dog   Pink Lotus   Jade Lounge   Queen Vic     Firecracker   Kitten Corner
+  beach   Stinky     Golden       Peach Lounge  (your room ↑) Hot Pepper    Cherry Pop
+          Pinky      Dragon       Lollipop      Shady Lady    Hula Hula     Ruby Kiss
+                     Sunset       Sweet         Front Row     Ladybird
+                     Dreams       Tamarind      The Verandah
+                     ATM · 7-11
 
-    north beach   Blue Dog     Pink Lotus     Queen Vic Inn   Kitten Corner
-    Sai Krok's    Stinky       Golden Dragon  (your room ↑)   Cherry Pop
-    surf          Pinky        Sunset Dreams  The Shady Lady  Ruby Kiss
-                               ATM · 7-Eleven Front Row Bar
-                                              The Verandah
-
-    ~100 open fronts down both sides — these are the ones you get to know.`;
+  ~100 open fronts down both sides — these are the ones you get to know.`;
 
 // EXITS — IF-genre furniture, and load-bearing here: a bar's door and a street's
 // continuation share bare compass letters, so `n` off a lively lane is a coin
@@ -11530,7 +11544,7 @@ function _doWithdrawInner(arg) {
   if (!_room().atm) {
     // On Soi 6 the only machine is at the West End by the junction — don't tell a
     // player already standing on the soi that "Soi 6 has one out on the street."
-    if (["soi6_mid", "soi6_deep"].includes(G.room))
+    if (["soi6_west_in", "soi6_mid", "soi6_east_in", "soi6_deep"].includes(G.room))
       _say("No ATM on this stretch — the only machine on Soi 6 is back at the West End, " +
         "by the beach-road junction. Head WEST.");
     else {

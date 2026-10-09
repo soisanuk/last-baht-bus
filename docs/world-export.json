@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 243,
+  "geolocated": 253,
   "patrons": 26,
-  "people": 352,
-  "portraits": 378,
+  "people": 392,
+  "portraits": 418,
   "renders": 376,
   "thumbs": 376,
-  "venues": 243
+  "venues": 253
  },
  "frames": [
   "baimon_pic1",
@@ -1066,6 +1066,53 @@
    "room": "candy_bar_2",
    "th": "เฟิร์น"
   },
+  "firecracker_bar_fah": {
+   "desc": "Twenty-five, small and quick, the girl at the Firecracker's front stool who tells you what the staircase is for and what it costs before your second foot is through the door, on the principle that it saves everybody a great deal of time.",
+   "emoji": "🧨",
+   "name": "Fah",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "firecracker_bar",
+   "th": "ฟ้า"
+  },
+  "firecracker_bar_fasai": {
+   "desc": "Twenty-six, gold chains and the arms of somebody who hits things on purpose. Her boyfriend fights {{Muay Thai}} at the stadium out by Sukhumvit, and on fight nights the whole Firecracker knows the result before the bell.",
+   "emoji": "🥊",
+   "name": "Fasai",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "firecracker_bar",
+   "th": "ฟ้าใส"
+  },
+  "firecracker_bar_namtan": {
+   "desc": "Thirty, angular, unflappable. She was a nursing assistant at a hospital in Sisaket for six years before the arithmetic brought her here, and she still checks the pupils of any man who stumbles on the step.",
+   "emoji": "🩺",
+   "name": "Namtan",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "firecracker_bar",
+   "th": "น้ำตาล"
+  },
+  "firecracker_bar_napa": {
+   "desc": "Thai woman in her late forties, round face, short permed hair, a gold necklace, a tired, shrewd smile — the mamasan of Firecracker Bar, from Chaiyaphum. She has run this floor longer than most of the girls have been alive.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Napa",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "firecracker_bar",
+   "th": "นภา"
+  },
+  "firecracker_bar_pang": {
+   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Firecracker Bar, from Chaiyaphum.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Pang",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "firecracker_bar",
+   "th": "แป้ง"
+  },
   "fon": {
    "desc": "Shy, half-hiding behind the plants she obviously waters herself. She brightens the instant anyone tries even one word of Thai.",
    "emoji": "🌺",
@@ -1255,6 +1302,100 @@
    "room": "jasmine_garden",
    "th": "ห่อง"
   },
+  "hot_pepper_chom": {
+   "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at Hot Pepper Bar, from Nakhon Phanom.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Chom",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "hot_pepper",
+   "th": "ชม"
+  },
+  "hot_pepper_gina": {
+   "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Gina",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "hot_pepper",
+   "th": "จีน่า"
+  },
+  "hot_pepper_kaimook": {
+   "desc": "Twenty-two, the quiet one in the loudest bar on the inner east. She is the only girl at the Hot Pepper who doesn't sing, because she is doing an English course on her {{phone}} and practising on whoever sits down.",
+   "emoji": "📱",
+   "name": "Kaimook",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "hot_pepper",
+   "th": "ไข่มุก"
+  },
+  "hot_pepper_namwan": {
+   "desc": "Twenty-four, a scar through one eyebrow and the best voice on the inner east. She wants to be a luk thung singer, has sung at three temple fairs in Yasothon, and sings at the Hot Pepper's customers until they buy her a drink to stop or to keep going.",
+   "emoji": "🎶",
+   "name": "Namwan",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "hot_pepper",
+   "th": "น้ำหวาน"
+  },
+  "hot_pepper_noey": {
+   "desc": "Thirty-three, freckled, an apron over her work clothes. She makes the som tam that the Hot Pepper's staff eat at the back table between customers, hotter than the chilli over the door, and she judges a man by how he takes it.",
+   "emoji": "🥗",
+   "name": "Noey",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "hot_pepper",
+   "th": "เนย"
+  },
+  "hula_hula_bright": {
+   "desc": "Twenty-five, in a plastic lei and a grass skirt over denim shorts, and the keeper of the tiki head's mythology. Ask her why it is there and you'll get a story. Ask her again and you'll get a different one.",
+   "emoji": "🌺",
+   "name": "Bright",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "hula_hula",
+   "th": "ไบรท์"
+  },
+  "hula_hula_min": {
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Min",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "hula_hula",
+   "th": "มิน"
+  },
+  "hula_hula_noon": {
+   "desc": "Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Hula Hula Bar, from Sakon Nakhon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Noon",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "hula_hula",
+   "th": "นุ่น"
+  },
+  "hula_hula_tarn": {
+   "desc": "Thirty-two, round-cheeked and sharp-eyed, keeping a tally of something on a beer mat. She worked nine years on a production line in an electronics factory in Rayong before it closed, and she runs her evening at the Hula Hula like a shift.",
+   "emoji": "🏭",
+   "name": "Tarn",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "hula_hula",
+   "th": "ธาร"
+  },
+  "hula_hula_wandee": {
+   "desc": "Twenty-seven, hair to her hips and a silver anklet, and the Hula Hula's best seller, who has worked out that a lei round a man's neck is the only receipt on Soi 6 that he wears home.",
+   "emoji": "🌸",
+   "name": "Wandee",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "hula_hula",
+   "th": "วันดี"
+  },
   "ice": {
    "desc": "Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Tequila Queen A-Go-Go's girls, from Roi Et. The badge pinned at her hip says 15 — the number the floor knows her by. The {{phone}} never leaves her hand.",
    "emoji": "💫",
@@ -1274,6 +1415,62 @@
    "role": "hostess",
    "room": "blue_dog",
    "th": "อิง"
+  },
+  "jade_lounge_cartoon": {
+   "desc": "Twenty-two, a biro behind her ear and ink on her fingers. She draws the customers on beer mats while they talk — quick, unkind, very good — and the ones who buy her a drink she draws a little kinder.",
+   "emoji": "✏️",
+   "name": "Cartoon",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "jade_lounge",
+   "th": "การ์ตูน"
+  },
+  "jade_lounge_jinda": {
+   "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Jade Lounge, from Sakon Nakhon. She puts four kids through school on other men's lonely nights.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Jinda",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "jade_lounge",
+   "th": "จินดา"
+  },
+  "jade_lounge_jum": {
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Jade Lounge, from Yasothon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Jum",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "jade_lounge",
+   "th": "จุ๋ม"
+  },
+  "jade_lounge_namphueng": {
+   "desc": "Twenty-one and in her first month, a mole above her lip and a habit of looking down when she laughs. She is nervous, and she is watching everything the other girls do, and she will not be nervous for long.",
+   "emoji": "🐝",
+   "name": "Namphueng",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "jade_lounge",
+   "th": "น้ำผึ้ง"
+  },
+  "jade_lounge_nittaya": {
+   "desc": "Twenty-eight, red lipstick, a voice two sizes bigger than she is, and the Jade's top seller three months running, which the printed board by the till does not mention and she does.",
+   "emoji": "💄",
+   "name": "Nittaya",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "jade_lounge",
+   "th": "นิตยา"
+  },
+  "jade_lounge_taan": {
+   "desc": "Thirty-four, a heavy fringe and a stare she switches off the moment you sit. She was on these stools before the group bought the bar, and she is the only girl in the Jade who still calls it by its old name.",
+   "emoji": "🍯",
+   "name": "Taan",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "jade_lounge",
+   "th": "ตาล"
   },
   "jah": {
    "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Gold Rush Lounge, from Buriram.",
@@ -1719,6 +1916,43 @@
    "room": "pink_lotus",
    "th": "ไคล์"
   },
+  "ladybird_bar_gaem": {
+   "desc": "Twenty-six, pixie-cut, with a crooked grin and paint still under one thumbnail. She painted every spot on every stool in the Ladybird, by hand, in one slow wet season, and she will tell you how many there are.",
+   "emoji": "🐞",
+   "name": "Gaem",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "ladybird_bar",
+   "th": "แก้ม"
+  },
+  "ladybird_bar_pao": {
+   "desc": "Thirty-eight, sun-lined, with a faded tattoo on one forearm and her eyes on the soap opera above the fridge. She has watched it at the Ladybird every night for four years and will explain the plot to anybody, with feeling.",
+   "emoji": "📺",
+   "name": "Pao",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "ladybird_bar",
+   "th": "เป้า"
+  },
+  "ladybird_bar_ratsamee": {
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Ladybird Bar, from Loei. She started on the stage at seventeen and owns a share of the place now.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Ratsamee",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "ladybird_bar",
+   "th": "รัศมี"
+  },
+  "ladybird_bar_somsri": {
+   "desc": "Forty-four, motherly, a vine tattooed up one wrist. She is the reason men end up in the Ladybird on their third night: by then they are tired of being grabbed, and she has never grabbed anybody in her life.",
+   "emoji": "🍵",
+   "name": "Somsri",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "ladybird_bar",
+   "th": "สมศรี"
+  },
   "lamai": {
    "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Stinky Pinky, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
    "emoji": "👑",
@@ -1762,6 +1996,43 @@
    "role": "hostess",
    "room": "water_buffalo",
    "th": "หลิน"
+  },
+  "lollipop_bar_duang": {
+   "desc": "Thirty-one, freckled, a lollipop for a pointer. She buys the lollipops — every week, from Makro, out of the bar's float — and she has been at the Lollipop long enough to be frightened of the folder on the back table.",
+   "emoji": "🍭",
+   "name": "Duang",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "lollipop_bar",
+   "th": "ดวง"
+  },
+  "lollipop_bar_fern": {
+   "desc": "Twenty-three, sharp-chinned, with a deck of tarot cards she reads for customers between drinks. She reads them for the bar as well. She will not tell you what they said about the folder.",
+   "emoji": "🔮",
+   "name": "Fern",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "lollipop_bar",
+   "th": "เฟิร์น"
+  },
+  "lollipop_bar_khing": {
+   "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Lollipop Bar, from Ubon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Khing",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "lollipop_bar",
+   "th": "ขิง"
+  },
+  "lollipop_bar_mona": {
+   "desc": "Twenty-seven, gold from her ears to her {{phone}} case, and the only girl in the Lollipop who hopes the mamasan signs — because she has done the sums, and the sums are on the company's side.",
+   "emoji": "💰",
+   "name": "Mona",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "lollipop_bar",
+   "th": "โมนา"
   },
   "lukkade": {
    "desc": "Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of The Cricketers' girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
@@ -2534,6 +2805,62 @@
    "room": "feedback_bar",
    "th": "แพท"
   },
+  "peach_lounge_aof": {
+   "desc": "Twenty-four, the loudest laugh in the Peach and a cordless microphone she brought from home, because the group's new sound system is very good and nobody has worked out how to switch the karaoke on.",
+   "emoji": "🎤",
+   "name": "Aof",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "peach_lounge",
+   "th": "อ๊อฟ"
+  },
+  "peach_lounge_farida": {
+   "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at Peach Lounge, from Roi Et.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Farida",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "peach_lounge",
+   "th": "ฟาริดา"
+  },
+  "peach_lounge_keng": {
+   "desc": "Thirty, wry, and the one who turned the old sign to face the wall, which she will tell you without being asked. She worked the Peach for the old owner for six years and has worked it for the group for about six weeks, and she has opinions on both.",
+   "emoji": "🍑",
+   "name": "Keng",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "peach_lounge",
+   "th": "เก่ง"
+  },
+  "peach_lounge_mint": {
+   "desc": "Twenty-six, sharp-chinned, missing nothing — and, every twenty minutes, looking two doors up the soi towards the Jade, where the cousin she brought down from Loei is working her first month.",
+   "emoji": "🌿",
+   "name": "Mint",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "peach_lounge",
+   "th": "มิ้นท์"
+  },
+  "peach_lounge_noot": {
+   "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Noot",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "peach_lounge",
+   "th": "นุช"
+  },
+  "peach_lounge_pui": {
+   "desc": "New enough that the dress is still borrowed, and practical enough that she has already worked out exactly how many lady drinks a month pay off the motorbike outside, which she will show you on a calculator.",
+   "emoji": "🛵",
+   "name": "Pui",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "peach_lounge",
+   "th": "ปุ้ย"
+  },
   "pear": {
    "desc": "A scar through one eyebrow and a grin that dares you to ask about it — one of Notty's Place's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
    "emoji": "🍒",
@@ -3123,6 +3450,53 @@
    "room": "doghouse",
    "th": "สุนีย์"
   },
+  "sweet_tamarind_alisa": {
+   "desc": "Forty-two, big-eyed and solemn, a small gold Buddha at her throat. She has been on Soi 6 since before it had a company on it, and half the men at the Tamarind's rail come in for her and sit there pretending they came in for the beer.",
+   "emoji": "🪷",
+   "name": "Alisa",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "sweet_tamarind",
+   "th": "อลิสา"
+  },
+  "sweet_tamarind_jiab": {
+   "desc": "Twenty-nine, freckled, in a sports vest and sneakers. She worked two years at the Pink Lotus at the corner and walked out of it to come here, for less money and a fan instead of aircon, and she thinks she got the better deal.",
+   "emoji": "🐣",
+   "name": "Jiab",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "sweet_tamarind",
+   "th": "เจี๊ยบ"
+  },
+  "sweet_tamarind_ple": {
+   "desc": "Twenty-five, thin as wire, with a tamarind pod always half-eaten in her fingers. She is the mamasan's niece, which on this side of the soi is a job title, and she guards the row of business cards by the till as if they were trophies.",
+   "emoji": "🌶️",
+   "name": "Ple",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "sweet_tamarind",
+   "th": "เปิ้ล"
+  },
+  "sweet_tamarind_tukta": {
+   "desc": "A blunt bob, red lipstick, and a stare that reconciles you at a glance — the cashier at Sweet Tamarind, from Sakon Nakhon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Tukta",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "sweet_tamarind",
+   "th": "ตุ๊กตา"
+  },
+  "sweet_tamarind_view": {
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Sweet Tamarind, from Maha Sarakham. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "View",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "sweet_tamarind",
+   "th": "วิว"
+  },
   "taan": {
    "desc": "Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of Gold Rush Lounge's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
@@ -3667,21 +4041,31 @@
    "beach_rd_n",
    "blue_dog",
    "cherry_pop",
+   "firecracker_bar",
    "golden_dragon",
+   "hot_pepper",
+   "hula_hula",
+   "jade_lounge",
    "kitten_corner",
+   "ladybird_bar",
+   "lollipop_bar",
    "north_beach",
    "orchid_room",
+   "peach_lounge",
    "pink_lotus",
    "queen_vic",
    "qv_room",
    "ruby_kiss",
    "sandy_toes",
    "soi6_deep",
+   "soi6_east_in",
    "soi6_mid",
    "soi6_street",
+   "soi6_west_in",
    "stinky_bar",
    "sunset_dreams",
-   "sunset_rail"
+   "sunset_rail",
+   "sweet_tamarind"
   ]
  },
  "portraits": [
@@ -3775,6 +4159,11 @@
   "fast_eddy",
   "fergie",
   "fern",
+  "firecracker_bar_fah",
+  "firecracker_bar_fasai",
+  "firecracker_bar_namtan",
+  "firecracker_bar_napa",
+  "firecracker_bar_pang",
   "fon",
   "gaem",
   "gaew",
@@ -3798,9 +4187,25 @@
   "haad",
   "helmut",
   "hong",
+  "hot_pepper_chom",
+  "hot_pepper_gina",
+  "hot_pepper_kaimook",
+  "hot_pepper_namwan",
+  "hot_pepper_noey",
   "howard",
+  "hula_hula_bright",
+  "hula_hula_min",
+  "hula_hula_noon",
+  "hula_hula_tarn",
+  "hula_hula_wandee",
   "ice",
   "ing",
+  "jade_lounge_cartoon",
+  "jade_lounge_jinda",
+  "jade_lounge_jum",
+  "jade_lounge_namphueng",
+  "jade_lounge_nittaya",
+  "jade_lounge_taan",
   "jah",
   "jaja",
   "jampa",
@@ -3848,10 +4253,18 @@
   "kwang",
   "kwanjai",
   "kyle",
+  "ladybird_bar_gaem",
+  "ladybird_bar_pao",
+  "ladybird_bar_ratsamee",
+  "ladybird_bar_somsri",
   "lamai",
   "lawan",
   "lek",
   "lin",
+  "lollipop_bar_duang",
+  "lollipop_bar_fern",
+  "lollipop_bar_khing",
+  "lollipop_bar_mona",
   "lukkade",
   "macca",
   "mai",
@@ -3937,6 +4350,12 @@
   "pang",
   "pao",
   "pat",
+  "peach_lounge_aof",
+  "peach_lounge_farida",
+  "peach_lounge_keng",
+  "peach_lounge_mint",
+  "peach_lounge_noot",
+  "peach_lounge_pui",
   "pear",
   "pen",
   "pensri",
@@ -4006,6 +4425,11 @@
   "sumalee",
   "sunee",
   "superman",
+  "sweet_tamarind_alisa",
+  "sweet_tamarind_jiab",
+  "sweet_tamarind_ple",
+  "sweet_tamarind_tukta",
+  "sweet_tamarind_view",
   "taan",
   "tabtim",
   "tan",
@@ -5423,6 +5847,17 @@
    "name": "Chok Dee Bar",
    "region": "Myth Night"
   },
+  "firecracker_bar": {
+   "bar": "Firecracker Bar",
+   "barType": "soi6",
+   "estimated": true,
+   "geo": [
+    12.9422,
+    100.8869
+   ],
+   "name": "Firecracker Bar",
+   "region": "Soi 6"
+  },
   "firefly_bar": {
    "bar": "Firefly Bar",
    "barType": "beer",
@@ -5490,6 +5925,17 @@
    "name": "Honey Trap Bar",
    "region": "Soi Honey"
   },
+  "hot_pepper": {
+   "bar": "Hot Pepper Bar",
+   "barType": "soi6",
+   "estimated": true,
+   "geo": [
+    12.942,
+    100.887
+   ],
+   "name": "Hot Pepper Bar",
+   "region": "Soi 6"
+  },
   "hotel_room": {
    "geo": [
     12.95978,
@@ -5506,6 +5952,17 @@
    "name": "Sabai Palms Soi (Naklua)",
    "region": "Naklua"
   },
+  "hula_hula": {
+   "bar": "Hula Hula Bar",
+   "barType": "soi6",
+   "estimated": true,
+   "geo": [
+    12.9422,
+    100.8871
+   ],
+   "name": "Hula Hula Bar",
+   "region": "Soi 6"
+  },
   "hyper": {
    "bar": "Hyper A Go-Go",
    "barType": "gogo",
@@ -5515,6 +5972,17 @@
    ],
    "name": "Hyper A Go-Go",
    "region": "Thappraya"
+  },
+  "jade_lounge": {
+   "bar": "Jade Lounge",
+   "barType": "soi6",
+   "estimated": true,
+   "geo": [
+    12.9426,
+    100.8859
+   ],
+   "name": "Jade Lounge",
+   "region": "Soi 6"
   },
   "jasmine_garden": {
    "bar": "Jasmine Garden Bar",
@@ -5789,6 +6257,17 @@
    "name": "Klang Corner Massage",
    "region": "Soi Buakhao"
   },
+  "ladybird_bar": {
+   "bar": "Ladybird Bar",
+   "barType": "soi6",
+   "estimated": true,
+   "geo": [
+    12.942,
+    100.8868
+   ],
+   "name": "Ladybird Bar",
+   "region": "Soi 6"
+  },
   "lake_bar": {
    "bar": "The Boathouse",
    "barType": "pub",
@@ -5861,6 +6340,17 @@
    ],
    "name": "The Offside Sports Bar",
    "region": "LK Metro"
+  },
+  "lollipop_bar": {
+   "bar": "Lollipop Bar",
+   "barType": "soi6",
+   "estimated": true,
+   "geo": [
+    12.9426,
+    100.8861
+   ],
+   "name": "Lollipop Bar",
+   "region": "Soi 6"
   },
   "lotus_oil": {
    "bar": "Lotus Oil Massage",
@@ -6176,6 +6666,17 @@
    ],
    "name": "South Pattaya Road (Pattaya Tai)",
    "region": "Walking Street"
+  },
+  "peach_lounge": {
+   "bar": "Peach Lounge",
+   "barType": "soi6",
+   "estimated": true,
+   "geo": [
+    12.9424,
+    100.886
+   ],
+   "name": "Peach Lounge",
+   "region": "Soi 6"
   },
   "peacock_cabaret": {
    "bar": "The Peacock Cabaret",
@@ -6582,6 +7083,15 @@
    "region": "Soi 6",
    "seven": true
   },
+  "soi6_east_in": {
+   "estimated": true,
+   "geo": [
+    12.9421,
+    100.8869
+   ],
+   "name": "Soi 6 (Inner East)",
+   "region": "Soi 6"
+  },
   "soi6_mid": {
    "geo": [
     12.9423,
@@ -6598,6 +7108,15 @@
    "name": "Soi 6 (West End)",
    "region": "Soi 6",
    "seven": true
+  },
+  "soi6_west_in": {
+   "estimated": true,
+   "geo": [
+    12.9425,
+    100.886
+   ],
+   "name": "Soi 6 (Inner West)",
+   "region": "Soi 6"
   },
   "soi_diamond": {
    "geo": [
@@ -6736,6 +7255,17 @@
    ],
    "name": "Supertown Complex (the elbow)",
    "region": "Thappraya"
+  },
+  "sweet_tamarind": {
+   "bar": "Sweet Tamarind",
+   "barType": "soi6",
+   "estimated": true,
+   "geo": [
+    12.9424,
+    100.8858
+   ],
+   "name": "Sweet Tamarind",
+   "region": "Soi 6"
   },
   "take_care_me": {
    "bar": "Take Care Me",

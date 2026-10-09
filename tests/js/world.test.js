@@ -247,7 +247,9 @@ test("an NPC id is derivable from its name, or the divergence is deliberate", ()
   for (const [id, n] of Object.entries(NPCS)) {
     if (n.filler) continue;
     const sn = slug(n.name), parts = sn.split("_");
-    const derivable = id === sn || parts.includes(id) || sn.startsWith(id) || id.startsWith(parts[0]);
+    // <room>_<name> is the floor's id form, and the namesake-safe one: one name in many bars, one id
+    // each (the Soi 6 inner segments' written women, 2026-10-09 — namesake.test.js)
+    const derivable = id === sn || parts.includes(id) || sn.startsWith(id) || id.startsWith(parts[0]) || id === n.room + "_" + sn;
     if (!derivable && !ID_NOT_NAME.has(id)) drift.push(`${id} → ${n.name}`);
   }
   assert.deepEqual(drift, [],

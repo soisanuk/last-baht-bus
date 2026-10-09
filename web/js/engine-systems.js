@@ -9409,6 +9409,44 @@ function _oppTalk(npc, topic) {   // anybody on your own rail, about the bar acr
   _say(_fmt(_pickVary(reg === "floor" ? floor : house, "opptalk" + reg), { s: _OPP_NAMES[o.phase].charAt(0).toUpperCase() + _OPP_NAMES[o.phase].slice(1) }));
   return true;
 }
+const _TAMARIND_LINES = [
+  "Ple cracks a pod and hands it over with a pinch of salt and chilli. Sweet first, then sour, then the chilli arrives late and stays. She watches your face the whole way through and laughs exactly when it reaches the third part.",
+  "A sweet tamarind from the net by the till, sticky and brown, with salt and dried chilli on the side. It tastes of tamarind, then of somebody's grandmother's kitchen, then of fire. \"Lucky now,\" says Ple. \"One pod, one night of luck. Rule of the house.\"",
+  "You peel a pod the way Ple shows you, thumbnail down the seam, and eat it with the salt and chilli. It is better than it has any right to be, and the girl at the end of the bar gives you a small round of applause.",
+];
+const _SOMTAM_TEST_LINES = [
+  "Noey's spoon arrives like a dare. Lime, fish sauce, the crunch of green papaya — and then the chilli, all of it, at once. Your eyes water; the back table cheers. \"Okay,\" says Noey, satisfied. \"Good man. You cry, but you laugh. Welcome.\" (Thirsty work.)",
+  "One spoon of the back table's som tam, Isan way, no sugar. It is magnificent for about two seconds and then it is a fire drill. Noey watches you reach for your drink and nods. \"You don't get angry. Good. Angry man, I tell mama.\" (Thirsty work.)",
+  "You take Noey's spoon. The girls at the back table stop eating to watch. Sour, salty, crunchy, then the chilli lands like a slap. You laugh, because there is nothing else to do, and the whole table laughs with you. \"Pass,\" says Noey. (Thirsty work.)",
+];
+
+// THE FRONTIER (Soi 6's inner west, 2026-10-09; docs/soi6-expansion.md). The group buying the soi a
+// front at a time, seen from the street by a man who owns nothing on it: the bar opposite's idiom
+// without the bar. FRONTIER_CYCLE days on a (vacation, day) clock — pure, so every player sees the
+// same front at the same phase — in three phases, one dim line a phase per trip, and only while the
+// fronts are open (a line about painters under a lateDesc of grilles would be two claims at once).
+// The fronts are anonymous on purpose: the named holdouts are the ones whose answer is not yet.
+const _FRONTIER_LINES = [
+  ["Halfway along, at the back table of one of the older fronts, a man in a good shirt is drinking soda with a folder squared in front of him. The woman opposite has her arms folded. Nobody on the stools looks round.",
+   "At one of the older fronts the mamasan is reading something at a kerb table instead of watching the street, which on Soi 6 is how you know the paper has arrived."],
+  ["One of the older fronts has its grille half down and two painters inside, rolling the group's colour over a wall that was something else last time you passed. Its girls are on the stools of the bar next door, still in their old bar's shirts.",
+   "A ladder against a front, a sign coming down in two pieces, and a man with a clipboard who is not looking at the sign but at the stools."],
+  ["A front that was somebody's own last time you looked has the group's paint, a printed board and a bigger sound system. The same girls are on the same stools under the new sign, which is the part of the purchase the paper doesn't mention.",
+   "Another printed board on the inner west, another sound system three sizes too big. The girl on the front stool waves you in in exactly the voice she used under the old sign."],
+];
+function _frontierPhase() {
+  const t = G.day + _hh("frontier:" + G.vacation, FRONTIER_CYCLE);
+  return { cycle: Math.floor(t / FRONTIER_CYCLE), phase: Math.floor((t % FRONTIER_CYCLE) / (FRONTIER_CYCLE / 3)) };
+}
+function _frontierTick() {
+  if (G.room !== "soi6_west_in" || G.nightTurn >= 60) return;
+  const f = _frontierPhase(), key = G.vacation + ":" + f.cycle + ":" + f.phase;
+  const said = (G.frontierSaid = G.frontierSaid || {});
+  if (said[key]) return;
+  said[key] = true;
+  _say(_pickVary(_FRONTIER_LINES[f.phase], "frontier" + f.phase), "dim");
+}
+
 const _OPP_NAMES = ["doing well, and the landlord has seen it", "paying the rise, and about to pass it on", "dearer than the soi, and emptier", "three girls where there were nine, and a folder on his table", "shut"];
 
 
@@ -11480,6 +11518,18 @@ function _doEat(arg) {
     _say("You fish a maraschino cherry from the sticky bowl and eat it. Syrupy, artificial, " +
       "faintly of the last decade — but it's something, and the hunger notices, barely.");
     return;
+  }
+  // The inner east and west's two offers (Soi 6 expansion, 2026-10-09): Ple holds out a tamarind pod
+  // and Noey a spoon of the staff's som tam, so each is a verb — free, once a night, a taste and not a meal.
+  if (G.room === "sweet_tamarind" && (!arg || /\b(tamarind|pods?)\b/.test(arg))) {
+    if (G.tamarindDay === G.day) { _say("You've had your pod. The net by the till is the house's luck, and luck is rationed."); return; }
+    G.tamarindDay = G.day; G.hunger = Math.max(0, G.hunger - 2);
+    _say(_pickVary(_TAMARIND_LINES, "tamarind")); return;
+  }
+  if (G.room === "hot_pepper" && arg && /\b(som ?tam|spoon|papaya|test)\b/.test(arg)) {
+    if (G.somTamTestDay === G.day) { _say("One spoon is the test. Two spoons is a meal, and the back table's som tam is for the girls."); return; }
+    G.somTamTestDay = G.day; G.hunger = Math.max(0, G.hunger - 3); G.thirst = Math.min(100, G.thirst + 8);
+    _say(_pickVary(_SOMTAM_TEST_LINES, "somtamtest")); return;
   }
   // Mama Yai's whole pitch is that the som tam "arrives unasked" — so it has
   // to actually arrive on EAT (bare, or naming it), not refuse like every

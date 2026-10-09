@@ -354,6 +354,7 @@ function newGame() {
     acctBase: 0, acctUntil: 0, acctDay: null,   // the accountant's call: Nont's total at the last call, the review's end, the call's day
     coversNights: {},    // day → the men counted at Jasmine Garden that night (The Covers: a pattern is three nights, Mario 2026-10-08)
     licencesRead: {},    // room → the registered name read off the paper by the till (EXAMINE LICENCE, 2026-10-08)
+    frontierSaid: {},    // "vacation:cycle:phase" → the inner west's frontier line was told (Soi 6 expansion, 2026-10-09)
     questDoneDay: {},    // quest id → the day it completed (the follow-ups a month later: Orathai closes, the police read the paper)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
     sentTotal: 0,        // baht SENT to contacts over the game — the hospital queue's "money you'll never see" needs a debt to point at
@@ -905,7 +906,7 @@ const _LICENCE_CO = [["Siam Neon", "Entertainment"], ["Golden Orchid", "Entertai
 // the research's nominee test (one person, many venues, no apparent means), there to be noticed (Graham, round 74:
 // "a Thai name on 51.00 … that I am never given")
 const _LICENCE_NOMINEE = ["Orathai Wongsuwan", "Supaporn Kaewmanee", "Orathai Wongsuwan", "Wanpen Chaiyasit", "Kanya Boonmee", "Orathai Wongsuwan", "Rattana Saetang", "Siriluk Thongdee"];
-const _PLG_ROOMS = ["pink_lotus", "kitten_corner", "golden_dragon", "orchid_room"];   // the group's own rooms by the game's own prose: Kesinee "runs one of their bars", the Dragon's "new owners", the flagship, the back room
+const _PLG_ROOMS = ["pink_lotus", "kitten_corner", "golden_dragon", "orchid_room", "jade_lounge", "peach_lounge"];   // the group's own rooms by the game's own prose: Kesinee "runs one of their bars", the Dragon's "new owners", the flagship, the back room
 function _licenceNominee(room) { return _LICENCE_NOMINEE[_hh("nom:" + room, 29) % _LICENCE_NOMINEE.length]; }
 // THE OWNER, NOT THE ROTA (Graham, round 74: the Hive's frame changed its name between Wednesday and Sunday): the woman
 // whose name is on a registration is the mamasan whose bar it is — her `room` or one of her `bars` — wherever she is tonight
@@ -2920,6 +2921,7 @@ function _describeRoom(full, forceFull) {
   // (or LOOKing) pays off the whole hidden-hub arc — see _tanOrchidReveal.
   if (G.room === "orchid_room") _tanOrchidReveal();
   if (typeof _oppTick === "function") _oppTick();   // the bar opposite, seen from your own doorway
+  if (typeof _frontierTick === "function") _frontierTick();   // the group buying Soi 6's inner west, a front at a time
   const exits = Object.keys(r.exits);
   if (exits.length) _say(_L("Exits: ") + exits.join(", ") + ".", "dim");
   // A warning at the DOOR, not after you have walked through it. The only way

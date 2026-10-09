@@ -2,11 +2,11 @@
   "generated": "2026-10-09",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 243,
+    "rooms": 253,
     "regions": 15,
     "byKind": {
       "beach": 14,
-      "street": 97,
+      "street": 99,
       "massage": 19,
       "beer": 58,
       "mall": 1,
@@ -22,7 +22,7 @@
       "soapy": 3,
       "hotel_room": 4,
       "gents": 5,
-      "soi6": 7,
+      "soi6": 15,
       "hostbar": 1,
       "club": 1
     }
@@ -268,25 +268,35 @@
       "roomIds": [
         "bay_watch",
         "cherry_pop",
+        "firecracker_bar",
         "golden_dragon",
+        "hot_pepper",
+        "hula_hula",
+        "jade_lounge",
         "kitten_corner",
         "kitten_office",
+        "ladybird_bar",
+        "lollipop_bar",
         "orchid_room",
+        "peach_lounge",
         "pink_lotus",
         "queen_vic",
         "qv_room",
         "ruby_kiss",
         "sandy_toes",
         "soi6_deep",
+        "soi6_east_in",
         "soi6_mid",
         "soi6_street",
+        "soi6_west_in",
         "sunset_dreams",
-        "sunset_rail"
+        "sunset_rail",
+        "sweet_tamarind"
       ],
       "sampleDescs": [
-        "The east end of the soi, past the quieter middle, where the bars run on toward Second Road and the volume comes roaring back. Another forty-odd fronts crowd the last stretch before the main road; KITTEN CORNER, CHERRY POP BAR and RUBY KISS BAR are the three whose names stick, and they trade wrist-grabs with the rest — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by.",
-        "The west end of the soi, and it hits you the moment you step in — a wall of bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the ladies working them, spilling out in sequins and very little else to reel in anything that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You are grabbed by the other wrist. Someone significantly shorter than you attempts to climb onto your back. A couple of the girls have armed themselves with foam pool noodles and swat anyone who dares walk past without stopping. There are something like a hundred bars on Soi 6 between Beach Road and Second Road, and a good forty of them are jammed into this end — front after front, both sides, the signs running together into one smear of pink and green until you couldn't name the last three doorways you passed. The three down here you will come to know are PINK LOTUS LOUNGE, GOLDEN DRAGON BAR and SUNSET DREAMS LOUNGE. East, the soi opens into a quieter middle stretch before the racket picks up again at the far end.",
-        "The middle of Soi 6, where the wall of noise thins to something you can hear yourself think over. The hard-selling open fronts of the west end give way to a run of easygoing beer bars whose whole business is letting you sit and watch the parade rather than be dragged into it. The pullers here are lazier, or wiser — they leave the grabbing to the loud ends and pick up the men who wander through wanting a cold one and a ringside seat. The fronts don't stop here — they never stop, on Soi 6 — but along this stretch they are beer bars with nothing upstairs, twenty-odd in a row, and nobody's group has ever bought into them: this is the part of the soi the whole soi drinks in. THE SHADY LADY, FRONT ROW BAR, and THE VERANDAH are the ones you'll get to know, and the QUEEN VIC INN — real aircon, real wood, a dartboard — anchors it, the one place on the soi that isn't shouting. West, the racket starts up again; east, it's worse."
+        "The east end of the soi, past the middle and the inner stretch, where the bars run on toward Second Road and the volume comes roaring back. Another twenty-odd fronts crowd the last stretch before the main road; KITTEN CORNER, CHERRY POP BAR and RUBY KISS BAR are the three whose names stick, and they trade wrist-grabs with the rest — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by.",
+        "The west end of the soi, and it hits you the moment you step in — a wall of bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the ladies working them, spilling out in sequins and very little else to reel in anything that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You are grabbed by the other wrist. Someone significantly shorter than you attempts to climb onto your back. A couple of the girls have armed themselves with foam pool noodles and swat anyone who dares walk past without stopping. There are something like a hundred bars on Soi 6 between Beach Road and Second Road, and a good twenty of them are jammed into this first stretch alone — front after front, both sides, the signs running together into one smear of pink and green until you couldn't name the last three doorways you passed. The three down here you will come to know are PINK LOTUS LOUNGE, GOLDEN DRAGON BAR and SUNSET DREAMS LOUNGE. East, the bars run on for another stretch before the soi opens into a quieter middle stretch before the racket picks up again at the far end.",
+        "East of the quiet middle the soi gets loud again in stages, and this is the first: twenty-odd hostess bars shoulder to shoulder, and every one of them somebody's own. A Thai woman's name on the paper by the till, a cousin on the cashier's stool, a staircase at the back to the rooms that pay the rent. The signs are hand-me-downs and the paint is whatever was cheapest the year it was done. FIRECRACKER BAR, HOT PEPPER BAR, HULA HULA BAR and LADYBIRD BAR are the ones you'll come to know. West, the middle; east, the last loud stretch before Second Road."
       ]
     },
     {
@@ -963,7 +973,6 @@
       "dark": false,
       "people": [
         "Kratae",
-        "Mama",
         "Mama Yai",
         "Ron",
         "Tangmo",
@@ -1198,9 +1207,7 @@
       "regionSlug": "jomtien",
       "kind": "shop",
       "dark": false,
-      "people": [
-        "Mama"
-      ],
+      "people": [],
       "desc": "The cold blast of air-con and the doorbell jingle of civilisation. Shelves of toasties, Mama noodles, and phone accessories. There's a power outlet by the window."
     },
     {
@@ -2497,6 +2504,24 @@
       "desc": "Red from floor to ceiling, a bowl of actual cherries on the bar that nobody eats, and a sound system stuck on one bubblegum playlist. Tabtim and Chaba call the odds from the rail. The stairs are where the stairs always are."
     },
     {
+      "id": "firecracker_bar",
+      "name": "Firecracker Bar",
+      "bar": "Firecracker Bar",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Fah",
+        "Fasai",
+        "Namtan",
+        "Napa",
+        "Pang"
+      ],
+      "desc": "Red and gold, a string of paper firecrackers over the door that knocks against the frame whenever the fan swings round, and a girl at the front who will tell you, before you have sat down, what the staircase is for and what it costs. Loud, quick, and honest about everything except how much fun you are going to have."
+    },
+    {
       "id": "golden_dragon",
       "name": "Golden Dragon Bar",
       "bar": "Golden Dragon Bar",
@@ -2517,6 +2542,61 @@
         "Wayne"
       ],
       "desc": "Open-fronted, louder than you expected from outside, which is saying something. The gold dragon above the bar was hand-painted by someone's cousin and has been there longer than most of the staff. Vintage Thai pop on the speakers — not the jukebox: that died in 2019, so the music comes off somebody's phone through the QR sticker the new owners put on every table. Almost nobody scans it, so the playlist stays whatever the last man who bothered chose, which is how it has stayed vintage. Pia keeps the bar — and the dead jukebox's memory — with a flat, unbothered calm."
+    },
+    {
+      "id": "hot_pepper",
+      "name": "Hot Pepper Bar",
+      "bar": "Hot Pepper Bar",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Chom",
+        "Gina",
+        "Kaimook",
+        "Namwan",
+        "Noey"
+      ],
+      "desc": "A chilli-red front, a fibreglass chilli the size of a man bolted over the rail, and a playlist that is all luk thung, turned up to the point where it stops being music and becomes weather. The girls sing along to every word and expect you to try."
+    },
+    {
+      "id": "hula_hula",
+      "name": "Hula Hula Bar",
+      "bar": "Hula Hula Bar",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Bright",
+        "Min",
+        "Noon",
+        "Tarn",
+        "Wandee"
+      ],
+      "desc": "Grass skirts stapled along the front of the bar, plastic leis round every girl's neck, and a carved tiki head on the end of the rail with a light inside it that nobody has ever been able to explain. The theme was somebody's idea years ago; the girls wear it as a joke and the leis as a sales tool."
+    },
+    {
+      "id": "jade_lounge",
+      "name": "Jade Lounge",
+      "bar": "Jade Lounge",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Cartoon",
+        "Jinda",
+        "Jum",
+        "Namphueng",
+        "Nittaya",
+        "Taan"
+      ],
+      "desc": "Green glass, brass and a sound system three sizes too big for the room: the group's paint on a front that was somebody else's two years ago. The stools are new, the staircase at the back has carpet on it now, and the price board is printed rather than chalked, which on Soi 6 is how you know who owns a bar."
     },
     {
       "id": "kitten_corner",
@@ -2551,6 +2631,40 @@
       "desc": "A windowless box behind the till, cold with aircon and lit like a fridge. Steel shelving, the night's cash bags in a milk crate, a wall safe with a keypad, and a laptop on a desk nobody sits at for long — the group's, not the bar's, with a sticker on the lid of a pattaya leisure and nothing else. A monitor above it cycles through six cameras, none of them pointing in here. Through the door the bar is a muffled bass line and a laugh; the corridor outside is the only way anybody comes, and the only way you leave."
     },
     {
+      "id": "ladybird_bar",
+      "name": "Ladybird Bar",
+      "bar": "Ladybird Bar",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Gaem",
+        "Pao",
+        "Ratsamee",
+        "Somsri"
+      ],
+      "desc": "Small, tidy and spotted black-on-red from the stools to the ashtrays, run like a corner shop: the same girls every night and the same soap opera on the telly above the fridge. It is the bar a man ends up in on his third night on Soi 6, when he has stopped looking for the loudest one."
+    },
+    {
+      "id": "lollipop_bar",
+      "name": "Lollipop Bar",
+      "bar": "Lollipop Bar",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Duang",
+        "Fern",
+        "Khing",
+        "Mona"
+      ],
+      "desc": "Pink and white stripes faded to the colour of a long week, a jar of lollipops on the bar for the girls to point with, and the same staircase as everybody's. At the back table, under the stairs, sits a manila folder that is not the bar's, placed where whoever is on the till can see it."
+    },
+    {
       "id": "orchid_room",
       "name": "The Orchid Room",
       "bar": "The Orchid Room",
@@ -2570,6 +2684,25 @@
         "Vasseur"
       ],
       "desc": "The name is the last classy thing about it. Laurent Vasseur wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, above all of it and touching none of it, is Laurent Vasseur — down when he is in the country, which is not often, and never anywhere the soi itself can see him."
+    },
+    {
+      "id": "peach_lounge",
+      "name": "Peach Lounge",
+      "bar": "Peach Lounge",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Aof",
+        "Farida",
+        "Keng",
+        "Mint",
+        "Noot",
+        "Pui"
+      ],
+      "desc": "Peach-coloured everything, and the paint still smells faintly of paint. The group bought it not long ago and kept the name, the girls and the staircase; they changed the paper by the till, the sound system and the sign. The old hand-painted sign is leaning against the back wall, facing it."
     },
     {
       "id": "pink_lotus",
@@ -2670,7 +2803,19 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The east end of the soi, past the quieter middle, where the bars run on toward Second Road and the volume comes roaring back. Another forty-odd fronts crowd the last stretch before the main road; KITTEN CORNER, CHERRY POP BAR and RUBY KISS BAR are the three whose names stick, and they trade wrist-grabs with the rest — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by."
+      "desc": "The east end of the soi, past the middle and the inner stretch, where the bars run on toward Second Road and the volume comes roaring back. Another twenty-odd fronts crowd the last stretch before the main road; KITTEN CORNER, CHERRY POP BAR and RUBY KISS BAR are the three whose names stick, and they trade wrist-grabs with the rest — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by."
+    },
+    {
+      "id": "soi6_east_in",
+      "name": "Soi 6 (Inner East)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "East of the quiet middle the soi gets loud again in stages, and this is the first: twenty-odd hostess bars shoulder to shoulder, and every one of them somebody's own. A Thai woman's name on the paper by the till, a cousin on the cashier's stool, a staircase at the back to the rooms that pay the rent. The signs are hand-me-downs and the paint is whatever was cheapest the year it was done. FIRECRACKER BAR, HOT PEPPER BAR, HULA HULA BAR and LADYBIRD BAR are the ones you'll come to know. West, the middle; east, the last loud stretch before Second Road."
     },
     {
       "id": "soi6_mid",
@@ -2696,7 +2841,19 @@
       "people": [
         "Tan"
       ],
-      "desc": "The west end of the soi, and it hits you the moment you step in — a wall of bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the ladies working them, spilling out in sequins and very little else to reel in anything that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You are grabbed by the other wrist. Someone significantly shorter than you attempts to climb onto your back. A couple of the girls have armed themselves with foam pool noodles and swat anyone who dares walk past without stopping. There are something like a hundred bars on Soi 6 between Beach Road and Second Road, and a good forty of them are jammed into this end — front after front, both sides, the signs running together into one smear of pink and green until you couldn't name the last three doorways you passed. The three down here you will come to know are PINK LOTUS LOUNGE, GOLDEN DRAGON BAR and SUNSET DREAMS LOUNGE. East, the soi opens into a quieter middle stretch before the racket picks up again at the far end."
+      "desc": "The west end of the soi, and it hits you the moment you step in — a wall of bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the ladies working them, spilling out in sequins and very little else to reel in anything that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You are grabbed by the other wrist. Someone significantly shorter than you attempts to climb onto your back. A couple of the girls have armed themselves with foam pool noodles and swat anyone who dares walk past without stopping. There are something like a hundred bars on Soi 6 between Beach Road and Second Road, and a good twenty of them are jammed into this first stretch alone — front after front, both sides, the signs running together into one smear of pink and green until you couldn't name the last three doorways you passed. The three down here you will come to know are PINK LOTUS LOUNGE, GOLDEN DRAGON BAR and SUNSET DREAMS LOUNGE. East, the bars run on for another stretch before the soi opens into a quieter middle stretch before the racket picks up again at the far end."
+    },
+    {
+      "id": "soi6_west_in",
+      "name": "Soi 6 (Inner West)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The second stretch in from Beach Road, and the loud end has not stopped: another twenty-odd fronts, both sides, the same open rooms with a rail and a staircase behind it, the same hands, the same foam noodles. But somebody has been shopping along here. Every few doors a front has newer paint, a bigger sound system and, on the paper by the till, the same company as the Pink Lotus back at the corner; between them the older fronts hold on. JADE LOUNGE and PEACH LOUNGE wear the new paint, LOLLIPOP BAR has a folder on its back table, and SWEET TAMARIND has a hand-lettered sign and no intention of selling. West, the corner; east, the quiet middle."
     },
     {
       "id": "sunset_dreams",
@@ -2733,6 +2890,24 @@
         "Pukky"
       ],
       "desc": "A beer bar in the quiet middle of Soi 6, deliberately set back under a low awning and a stand of potted palms — shade, in both senses. A long rail faces the soi so the regulars can watch the parade go past without being in it. Pukky pours without being asked and misses nothing that happens on the pavement."
+    },
+    {
+      "id": "sweet_tamarind",
+      "name": "Sweet Tamarind",
+      "bar": "Sweet Tamarind",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Alisa",
+        "Jiab",
+        "Ple",
+        "Tukta",
+        "View"
+      ],
+      "desc": "A narrow front with a hand-lettered sign, a net of tamarind pods hanging by the till for luck, and the same staircase as everybody's. The paint is old and nobody here is apologising for it. Beside the till, pinned to the wall in a neat row, are the business cards of the men who have come in to make an offer."
     },
     {
       "id": "buakhao_honey",

@@ -119,7 +119,7 @@ const CLASS = {
   "npc.helmut.dialogue.text|everyone knows": [G_], "npc.jenny.dialogue.short|spoken for": [G_, "her, to a sponsor"],
   "npc.jenny.dialogue.text|spoken for": [G_, "her, to a sponsor"], "npc.mot.desc|word got around": [G_],
   "npc.neil.dialogue.text|everybody knows": [G_], "npc.pae.dialogue.text|everybody knows": [G_],
-  "npc.tabtim.desc|the bar knows": [G_], "npc.wayne.dialogue.text|everyone knows": [G_],
+  "npc.tabtim.desc|the bar knows": [G_], "room.ladybird_bar.reads.telly|the bar knows": [G_, "the soap opera's plot, not you (Soi 6 expansion, 2026-10-09)"], "npc.wayne.dialogue.text|everyone knows": [G_],
   "patron.helmut.dialogue.text|everyone knows": [G_], "patron.neil.dialogue.text|everybody knows": [G_],
   "room.beach_rd_soi9.revisit|everybody knows": [G_], "room.container_8.reads.jar|everyone knows": [G_],
   "room.kiss.desc|everyone knows": [G_], "room.neon_paradise.desc|the room notices": [G_],

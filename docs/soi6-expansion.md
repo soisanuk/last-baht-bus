@@ -1,90 +1,144 @@
-# Soi 6 expansion: two more segments with named venues (PLAN)
+# Soi 6 expansion: two more segments with named venues
 
-Written 2026-10-09. **Nothing here is built yet.** The two steps it rests on shipped first, the same day:
+Planned and **built on 2026-10-09**. This is the record of what was decided and why. §3 is the
+checklist for the next round on Soi 6, and for applying the same method to other districts later.
+§4 lists what this round taught.
 
-- **Namesakes**: `_npcByName` is the one name-to-person policy, and `tests/js/namesake.test.js` proves it on every surface with five women called Rung. That removes the old constraint that every new woman needs a name nobody else has. Forty new women can be called whatever Isan girls are called.
-- **Density**: the three street rooms now say what the soi is: about a hundred fronts, with the eleven named rooms as the ones you come to know.
+Two steps shipped first, the same day, and the expansion rests on them:
 
-Mario's brief: *two more segments with named venues; the middle core remains neutral ground.*
+- **Namesakes.** `_npcByName` (engine-core) is the one name-to-person policy: the woman in the room,
+  else the one you met most recently, else the only one you know, else nobody. `tests/js/namesake.test.js`
+  proves it on every surface with five women called Rung. Names may now repeat across the town; the
+  only uniqueness rule is one woman of a name per bar.
+- **Density.** The street rooms say what the soi is: about a hundred fronts, with the named bars as
+  the ones you come to know (`reads.bars` / `reads.girls`; COUNT BARS reads the same look).
 
-## 1. Shape: two inner segments, and the ends and the middle unchanged
+## 1. Mario's calls
 
-Soi 6 runs about 350 m between two real roads: Beach Road North (`beach_rd_n`) and Second Road (`second_rd_soi6`, a real junction at 0 m). It cannot grow at either end. The survey has three rooms about 100 m apart:
+| question | call |
+|---|---|
+| where the segments go | between the middle and each end (the ends are real roads; the soi cannot grow past them) |
+| venues per segment | the reasonable maximum: **four** (the venue list prints as ENTER lines and chips; five reads as a wall on a phone, and the middle's four was already the most) |
+| what kind of bars | Soi 6 hostess bars with short-time rooms upstairs (`barType: "soi6"`) |
+| the group's buying | visible, but **concentrated in one segment**, the one nearest the flagship (the Pink Lotus at the west end); the other stays clean |
+| the Soi 6 challenge | includes both segments |
+| the hostesses | **authored**, every one: Soi 6's rule is that every girl is a specific, hand-written person (engine.test) |
 
-| today | lon | will be |
+The middle core stays neutral ground. Nobody's group ever bought into it, and a test pins that.
+
+## 2. The shape built
+
+```
+beach_rd_n ─ soi6_street ─ soi6_west_in ─ soi6_mid ─ soi6_east_in ─ soi6_deep ─ second_rd_soi6
+             West End      Inner West     Middle     Inner East     East End
+             (corner,      (the group     (neutral)  (nobody's)     (the loudest)
+              flagship)     is buying)
+```
+
+There are about a hundred fronts in five stretches of about twenty each. Every existing id, venue,
+save, art file and test kept its meaning. The two new rooms' survey pins are **sketched** (4 decimal
+places, interpolated); re-survey them with Mario's anchors before trusting them.
+
+| segment | bars | paper by the till |
 |---|---|---|
-| `soi6_street` West End (junction) | 100.88544 | **West End**, unchanged id, the beach-road end |
-| — | — | **NEW `soi6_west_in`**, the inner west |
-| `soi6_mid` Middle | 100.88647 | **Middle**, unchanged, neutral |
-| — | — | **NEW `soi6_east_in`**, the inner east |
-| `soi6_deep` East End | 100.88741 | **East End**, unchanged id, the Second Road end |
+| Inner West | **Jade Lounge**, **Peach Lounge** | the group's company (`owner: "plg"`, `_PLG_ROOMS`) |
+| | **Lollipop Bar** (a folder on the back table: "not yet is not no") | the mamasan's own name |
+| | **Sweet Tamarind** (the holdout: a row of business cards, every one a no) | the mamasan's own name |
+| Inner East | **Firecracker**, **Hot Pepper**, **Hula Hula**, **Ladybird** | a woman's own name, every one |
 
-**Recommendation: insert the two new rooms between the existing ones.** That gives five rooms about 70 m apart. Every existing id, venue, save, art file and test keeps its meaning. The middle stays the middle, with one loud segment and one inner segment on each side.
+**The frontier is seen from the street.** `_frontierTick` runs on the inner west only, while the fronts
+are open. On a `FRONTIER_CYCLE` (60-day) clock, keyed by vacation and day, an anonymous front goes
+through three phases: the folder, the paint, reopened under the group's paper. You get one dim line
+per phase per trip. It is the bar-opposite idiom (`_oppTick`) for a man who owns nothing on the soi.
+The named holdouts are the ones whose answer is *not yet*. Their mamasans each answer the offer in
+their own words: appended nodes, found by room and role so a regenerated floor keeps them.
 
-The density numbers rebalance with the split: West End about 20 fronts, inner west about 20, the middle's twenty-odd beer bars, inner east about 20, East End about 20. That is still about a hundred. The street descs and `reads.bars` added in step 2 get edited to match; that's one line each.
+**The people.** 40 in all: 26 authored hostesses (`SOI6_INNER_GIRLS` in world.js, about four nodes
+each) and 14 house staff on the pooled floor (`FLOOR_STAFF` records from `tools/gen-floor-staff.mjs`,
+spec in `docs/soi6-expansion-staff.json`). Each woman names her province in her own words, so the
+town's fallback answers about her home agree with her (`_authoredStory`). Each has a placeholder
+bust and is on the render queue.
 
-**The bar mat:**
+**Two offers are verbs.** EAT TAMARIND (Ple's pod at the Sweet Tamarind) and EAT SOM TAM (Noey's
+spoon test at the Hot Pepper) are each free once a night, and each is tappable from the line that
+offers it.
 
-```
-beach_rd_n ─w─ soi6_street ─e─ soi6_west_in ─e─ soi6_mid ─e─ soi6_east_in ─e─ soi6_deep ─e─ second_rd_soi6
-```
+Pinned in `tests/js/soi6expansion.test.js`, including the template pin (§3, step 4).
 
-Every move stays reversible (round46.test). The walk from the beach to Second Road goes from four steps to six.
+## 3. TEMPLATE: adding a segment of named bars
 
-## 2. The middle stays neutral, and the inner segments are where it shows
+In order. Every step is one that this round either needed or got wrong first.
 
-The middle's prose already says it: *nobody's group ever bought into the middle, it was never worth the trouble.* Every PLG room (`_PLG_ROOMS`: Pink Lotus, Golden Dragon, Kitten Corner, the Orchid Room) is at a loud end.
+1. **Decide the shape before the prose.** Where the segment sits on the bar mat (never past a real
+   road), how many venues (four is the cap), the venue class, who owns what (the faction geography;
+   a neutral stretch is a stated rule plus a test), and whether the district's challenge mode
+   includes it.
+2. **Names.** Check every proposed venue name for collisions with existing room names, NPC names and
+   common prose words (the script in this round's history; "Velvet" and "Sunflower" were taken). Check
+   against the real street too (a real bar's name plus its real flavour is two traits; see
+   `docs/guardrails.md`).
+3. **Rooms.** The street room (desc, an 8-line hour-blind `revisit` pool, a `lateDesc` pool of at least
+   3, `reads.bars` / `reads.girls`, exits, venues) and each bar (desc, one or two `reads` fixtures, a
+   6-line revisit pool, `exits: { out }`). **Register every new reads key in `_READ_NOUNS`.** Rewire
+   the neighbours' exits, and fix every adjacency or count claim in the neighbours' prose (a West End
+   that says "east, the quiet middle" is wrong the moment there is a segment between).
+4. **Staff.** Write a spec (`docs/<expansion>-staff.json`) and run
+   `node tools/gen-floor-staff.mjs <spec>` dry, then read the table it prints before `--write`.
+   - The tool guarantees the floor's invariants: one name per bar, one look per bar, no hostess look
+     on more than six women, one life story per rail, and a donor's tail kept with its picks.
+   - `--write --replace` is safe. The output is a pure function of the floor *outside* the spec's
+     rooms, and the template pin asserts that re-running it changes nothing.
+   - On a district whose rule is authored hostesses (Soi 6), set `"authored": true`. The tool then
+     writes only the house staff and prints a SCAFFOLD (id, name, Thai name, province) to write the
+     women from.
+5. **Write the women** at the district's standard: a greeting and three subjects, their own `look`
+   (≤20 words, front-loaded), their province in their own words, and a line on their bar's side of
+   whatever the segment is about. Give a subject a node if her greeting volunteers it. **An offer is a
+   verb or it is narrated to completion.** Never type a price.
+6. **Portraits.** Add `CHARS` specs to `scripts/gen-portraits.py` and run it with **explicit ids only**
+   (it skips anything rendered). Check `git status web/portraits` shows only `??`. Regenerate the
+   portrait manifest so the new women land on the render queue. Tell the art agent.
+7. **Wire the lists** that name rooms: the challenge pocket (`SOI6_ROOMS`), encounter `rooms:`
+   (the noodle patrol), the ATM refusal list, `_MAP` / `_MAP_SOI6`, and `ROOM_GEO` (sketched at 4
+   decimal places until surveyed).
+8. **Instruments, in this order:** the full suite (the doctrine tests will name what you missed),
+   `examine-audit --room` on every new room (give real objects a close look), the promise audits
+   (errand / asktopic / afford / askable), `dialogue-walk --lint` (two provinces in one woman, a
+   pronoun slip), `prose-corpus --delta --taps` (stray character taps such as "Muay Thai", and a
+   third-person "phone"), a multi-seed soak of the challenge mode, and `TZ=UTC npm run test:e2e`.
+   Then `--seed` the prose review on its own, never in the commit's shell chain.
+9. **Regenerate** the graph, the export, the scene manifest and the portrait manifest, then commit
+   with targeted `git add`.
 
-**Recommendation: make the two inner segments the FRONTIER.** These are the stretches where the rollup is still buying, and where independent bars still hold out:
+## 4. Lessons learned (2026-10-09)
 
-- **The frontier is visible from the street.** Each inner room carries one front on the `OPP_CYCLE` idiom (the bar opposite: busy → the folder on a table → shutters → a new name), so a player walking the soi watches a bar change hands over a season. The machinery exists; today only a bar owner can see it, from his own doorway.
-- **Each inner segment holds one group room and two or three independents.** That's enough for the paper by the till (`_licenceOf`) to tell them apart: the group's company frame, or the commercial registration in a woman's own name.
-- **The middle is pinned.** A test asserts that no `soi6_mid` venue carries an `owner`, that no `_PLG_ROOMS` entry is a middle venue, and that the middle's `reads.bars` claim stands. Neutral ground then becomes an invariant rather than a sentence.
+- **A generator's output must be a pure function of everything outside what it generates.** The first
+  `--replace` read its own previous output as part of the floor, shifted every name, and appended forty
+  women instead of replacing forty. Then writing the women made their names "principal" and their
+  words "authored prose", which shifted the pool again. The template pin caught the second one, so
+  write the regeneration test the day you write the tool.
+- **A borrowed record carries its origin.** Donor tails brought go-go badge numbers to a street with
+  no go-gos. Written women's looks and names would have given a new bar a second Pong. Two mamasans
+  four doors apart drew one husband's funeral. Strip what belongs to the donor's room, never borrow
+  from a written woman, and deal stories so a run does not repeat one.
+- **Names the prose already uses are taken**, whatever the cast says: Boonsri is on Neil's fridge,
+  Manow is behind your own rail, and Hong is the Covers quest. Search the quest text and the engine's
+  own prose, not only the dialogue.
+- **An alias can hijack a venue.** The chilli's "pepper" alias answered EXAMINE HOT PEPPER BAR, so a
+  fixture alias must never be a word in a venue name on the same street.
+- **Two provinces in one woman's words are a mechanical bug, not a style point**, because the fallback
+  answer about her home reads her text.
+- **A doctrine test is a design question.** "Every Soi 6 girl is hand-authored" is a choice about what
+  the district is, not a regression to route around. Asked, answered (authored), and written.
+- **Counts and adjacency in neighbouring prose** go stale silently ("forty fronts at this end", "back
+  past the Queen Vic"). Grep the neighbours' descs, revisits and reads for both whenever a segment is
+  inserted.
 
-This gives the faction layer (`docs/factions-thai.md`) a place on the map without anyone being threatened. The rollup *buys*; nobody is pushed. That is the existing doctrine.
+## Not done, and why
 
-## 3. The venues: 3 or 4 per segment, each a reason to stop
-
-Today's eleven are mostly variations on one shape: an open front, a staircase, sequins. New bars should each have one thing the soi doesn't have yet. These are the candidate flavours; **names are Mario's call** (see §6):
-
-1. **A ladyboy bar.** Soi 6 has them, and the game already routes bi orientation to katoey courtship (the Peacock). This would be the first one on the soi.
-2. **A family bar.** Three sisters and their aunt on the till; the one-woman-bar staffing canon at family size, where the "relative trusted with the money" is the whole floor.
-3. **A brand-new bar.** Opened this month, staff still learning the till, fresh paint. It is the other end of the `OPP_CYCLE`, and the frontier's newest purchase.
-4. **A pool bar.** Today the soi's only table is in Kitten Corner's back room; its desc named the table and the flag was missing until 2026-10-09. A bar that is ABOUT pool would give the soi a house team and a reason to come on league nights (`room.pool`, killer pool).
-5. **The late room.** The one Soi 6 bar that ignores the midnight close (`_closesMidnight` exception, like the Darkside's lock-ins). Somewhere for a man to go when the rest of the grilles come down.
-6. **An old bar.** Twenty years under one name, the mama older than most of the customers. It is the soi's memory: Tan's read, the Owl's listing, and the place the regulars' stories about the old soi come from.
-7. **A theme bar** (school uniforms / nurses / sailors, the soi's real costume nights), kept PG-13 by the same rules as the rest.
-
-**Recommendation:** pick 3–4 per segment. Put the ladyboy bar, the pool bar and the new bar in the inner west (the PLG side, the bigger-money stretch). Put the family bar, the old bar and the late room in the inner east. Use the theme bar wherever it reads better.
-
-## 4. The women
-
-- **Staffing** follows the canon. A big bar gets a mamasan, a cashier and four or five hostesses. A small bar gets one woman who is owner, mama and cashier (`_soloMama`, `_tillKeeper`).
-- **Seven new bars come to roughly 30–40 women**, all as `FLOOR_STAFF` records with stored looks. The pools are already deep enough that one new woman doesn't move anybody else.
-- **Names may repeat across the town** now. The only rule is one woman of a name per bar, and `namesake.test.js` enforces it. A Thai-script name must still be unique (round 56).
-- **Looks**: never two women at one bar with one look, and no more than six to a look. A `look` field is all the portrait prompt there is.
-- **Portraits**: `python3 scripts/gen-portraits.py <id …>` with explicit ids only, for placeholder busts. They land on the art agent's render queue (`docs/portrait-manifest.json` `unrendered`). This is the biggest piece of work the expansion hands the art agent; tell them before the batch lands.
-- **Written floors**: phase 2 writes one `FLOOR_OWN` floor per segment (the Gilt Cage pattern: own words, a return greeting, a LAST TIME answer, a line on her bar). The rest stay on the pooled floor.
-
-## 5. What else moves (the ripple list)
-
-- `world.js`: the two rooms (desc, revisit pools, `lateDesc` pool, `reads.bars`/`reads.girls`), exits rewired, `SOI6_ROOMS`, and `ROOM_GEO`. All five Soi 6 pins get re-surveyed at about 70 m. Use Mario's Google Maps anchors and the 5-decimal-place convention, never chained off a neighbour (the geography rework method).
-- `engine-parser.js`: the ATM refusal list (`["soi6_mid", "soi6_deep"]`, about line 11533) gains the inner rooms. `_MAP_SOI6` grows two columns. The `_MAP` line is unchanged.
-- **Soi 6 Challenge mode**: the pocket is `SOI6_ROOMS`. **Recommendation: include both segments**, because the challenge is "the soi". Then re-check its balance with `node tools/soak.mjs --mode soi6`, since two more steps cost turns.
-- **Unchanged and automatic**: the pushy-bar hash, the licence frame, the season's bench, saleng eligibility, the askable/witness/composition audits, the music (the region is unchanged), and the scene art (it falls back to the region plate until the art agent paints the rooms).
-- **Tests**: anything that walks `e`/`w` between Soi 6 rooms gets one more step. Today that's a handful (`grep -rn "soi6_" tests/`), and `compass.spec` stands in the middle, which doesn't move.
-- **Audits after authoring**: `examine-audit --room` for each new room and bar, `afford-audit`, `prose-corpus --rooms --delta`, the reference lint (venue names), and `gen-world-graph` / `gen-world-export` / `gen-scene-manifest`.
-
-## 6. Calls for Mario
-
-1. **Inner segments between the existing rooms** (recommended), or something else, such as a real side lane if you know of one off Soi 6.
-2. **Three or four venues per segment.**
-3. **Which flavours from §3, and their names.** Check every name against the real soi before it ships: a name is the one trait the guardrails allow, and a real bar's name plus its real flavour would already be two.
-4. **The frontier**: should the rollup's buying be visible in the inner segments, or should they be plain independents with only the middle's neutrality stated?
-5. **Soi 6 Challenge**: does the daily's pocket include the new segments?
-
-## 7. Phasing
-
-1. **Geography and the bars on the pooled floor**: rooms, exits, survey, venues, `FLOOR_STAFF`, placeholder busts, maps, the neutral-middle pin. One commit; the suite and audits stay green.
-2. **One written floor per segment** (`FLOOR_OWN`).
-3. **A persona round on the new soi**: a one-bar week in a new bar, plus a walker who counts fronts and asks every mouth who owns what. Aim it with `coverage-map --dark` on the Soi 6 row.
+- **Written floors for the house staff.** The mamasans and cashiers are pooled except for the two
+  holdouts' offer lines. A `FLOOR_OWN` pass per bar can come later.
+- **The survey.** The two new rooms are sketched; Mario's anchors would make them surveyed.
+- **Renders.** All 40 are placeholders on the render queue (the art agent's).
+- **A persona round** on the new soi: a one-bar week in a new bar, and a walker who counts fronts and
+  asks every mouth who owns what. Aim it with `coverage-map --dark` on the Soi 6 row.

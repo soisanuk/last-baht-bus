@@ -5469,7 +5469,11 @@ test("Soi 6 mode: starts at the Queen Vic, confined to the soi, no bus out, saba
   run("e");
   assert.equal(state().room, "soi6_street", "east into the west end of the soi");
   run("e");
-  assert.equal(state().room, "soi6_mid", "the new quiet middle stretch is in bounds");
+  assert.equal(state().room, "soi6_west_in", "the inner west, where the group is buying, is in bounds");
+  run("e");
+  assert.equal(state().room, "soi6_mid", "the quiet middle stretch is in bounds");
+  run("e"); run("e");
+  assert.equal(state().room, "soi6_deep", "and through the inner east to the far end (2026-10-09)");
   // the bus is waved on
   state().room = "beach_rd_n"; out = [];
   run("ride bus to walking street");

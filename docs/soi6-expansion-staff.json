@@ -1,0 +1,56 @@
+[
+ {
+  "room": "jade_lounge",
+  "mama": true,
+  "cashier": true,
+  "hostesses": 4,
+  "authored": true
+ },
+ {
+  "room": "peach_lounge",
+  "mama": true,
+  "cashier": true,
+  "hostesses": 4,
+  "authored": true
+ },
+ {
+  "room": "lollipop_bar",
+  "mama": "solo",
+  "hostesses": 3,
+  "authored": true
+ },
+ {
+  "room": "sweet_tamarind",
+  "mama": true,
+  "cashier": true,
+  "hostesses": 3,
+  "authored": true
+ },
+ {
+  "room": "firecracker_bar",
+  "mama": true,
+  "cashier": true,
+  "hostesses": 3,
+  "authored": true
+ },
+ {
+  "room": "hot_pepper",
+  "mama": true,
+  "cashier": true,
+  "hostesses": 3,
+  "authored": true
+ },
+ {
+  "room": "hula_hula",
+  "mama": true,
+  "cashier": true,
+  "hostesses": 3,
+  "authored": true
+ },
+ {
+  "room": "ladybird_bar",
+  "mama": "solo",
+  "hostesses": 3,
+  "authored": true
+ }
+]
