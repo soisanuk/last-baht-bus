@@ -6001,7 +6001,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Hello handsome! You play pool, or you just hiding from your night?\"" },
       // the re-readable gist once the story has moved past her greeting (playtest
       // 2026-08-22: ASK LEK ABOUT MOT / WALLET fell to "Hello handsome")
-      { topic: "office",
+      { topic: "office", notFlags: ["act1Done"],   // the Act One hint, not a regular's topic (Bridget, round 76)
         text: "\"Oy's office? Behind her bar, up the stair. Locks itself when the music is on — I " +
           "don't know the trick, I only hear about it.\" She chalks her cue. \"The girls in the " +
           "cage at Rainbow know that door better than Oy does. The cashier sees everything.\"",
@@ -6168,6 +6168,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "she hunts for it \"— a shoe is for walking somewhere.\" Then the grin comes " +
           "back. \"They are half a size small. I will wear them anyway. Don't say anything.\"",
         short: "\"Nobody buy me shoes before. A shoe is for walking somewhere.\"" },
+      // round 76: once the wallet is back, Oy's office is a story, not a hint
+      { topic: "office", req: ["act1Done"], text: "\"Oy's office?\" She laughs into her cue. \"You get the wallet, so now it is only a door again. Security stand there now, very serious. I don't go up those stairs, na.\"", short: "\"Only a door again now. Security stand there.\"" },
     ],
   },
 

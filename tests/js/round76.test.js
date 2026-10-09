@@ -121,3 +121,54 @@ test("TALK TO somebody else in the room is not small talk with the stranger in f
   assert.notEqual(G.pendingEnc, "bkktourist");
   assert.match(said(), /lapses|Nont/);
 });
+
+// ── the deferred bugs, fixed (2026-10-09) ────────────────────────────────────────
+test("a stranger's first question gets the hello AND the answer", () => {
+  G.room = _npcRoom("lek"); G.soc.drinks.lek = 0; G.talked = {};
+  out = []; run("ask lek about massage");   // a subject she has no node for: the first ask was spent on her hello
+  const lines = out.filter(l => !/^·/.test(l.trim()) && l.trim());
+  assert.ok(lines.length >= 2, "the hello and then an answer to the question: " + said());
+});
+test("at your own bar a remembered call outranks her own node; the fight is the punter; the Third Road listing is askable", () => {
+  owner(); G.bar.calls = [{ id: "tab", day: G.day, yes: true }, { id: "turning", day: G.day, yes: true }];
+  run("talk to cake"); assert.doesNotMatch(ask("cake", "the tab"), /Barfine and drinks are separate/);
+  run("talk to bert"); assert.match(ask("bert", "the fight"), /turned out|binned|put him out|door knows/i);
+  assert.match(ask("cake", "the listing"), /Third Road|sign/);
+});
+test("MY BAR at another bar is your bar", () => {
+  owner(); G.room = "silk_rose"; run("talk to ton");
+  assert.doesNotMatch(ask("ton", "my bar"), /Silk Rose\}\} is a quiet bar/);
+});
+test("her night's coda is pooled and she remembers the one it was; no last-bus warning after the airport taxi", () => {
+  G.lastNightWas = { day: G.day - 1, reason: "barfine", bar: "lucky_tiger", barTurns: 30, with: "lek", quiet: false, coda: "noodle" };
+  assert.match(_lastNightHers("lek", G.lastNightWas), /noodle/i);
+  G.pendingChoice = "vacation_end"; G.lastBusWarned = false; G.nightTurn = LAST_BUS_TURN - 3; G.room = "beach_rd_c";
+  out = []; _lastBusWarn(); assert.equal(out.join(""), "");
+});
+test("Lek's office is an Act One hint, and a story after it", () => {
+  G.room = _npcRoom("lek"); G.soc.drinks.lek = 8; run("talk to lek");
+  assert.doesNotMatch(ask("lek", "office"), /cage/);
+});
+test("a shop masseuse answers your back, misses a stranger's name, and still talks about her life after the hour", () => {
+  G.money = 9000; G.room = "klang_massage"; G.nightTurn = 30; run("massage thai");
+  assert.match(ask("wilaiwan", "my back"), /shoulder|back/i);
+  assert.match(ask("wilaiwan", "manow"), /don't know|Not my business/);
+});
+test("a round that does not land pays +1 and says why; your own glass from an empty till comes out of the pocket", () => {
+  assert.ok(/roundLanded === false\) _addHappy\(1, "/.test(readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8")));
+  owner(); G.bar.cash = 0; const m = G.money; out = []; run("buy beer");
+  assert.ok(G.bar.cash >= 0, "the till does not go negative"); assert.ok(G.money < m || /empty/.test(said()));
+});
+test("a direction walks past the tonic tout; GO HOME WITH CREAM asks rather than fines; a charter reaches the street you named", () => {
+  G.room = "beach_rd_c"; _startEnc("tonic"); const r = G.room; run("e"); assert.notEqual(G.room, r);
+  G.room = "metro_garden"; G.nightTurn = 50; run("talk to cream"); out = []; run("go home with cream"); assert.match(said(), /ASK CREAM ABOUT LATE/);
+  G.money = 5000; G.room = "buakhao_klang"; G.nightTurn = 30; run("ride bus to walking street");
+  for (let i = 0; i < 4 && (G.pendingFare || G.pendingChoice || G.pendingEnc); i++) run("pay 200");
+  assert.equal(G.room, "ws_gate");
+});
+test("her colleagues saw her go out with you", () => {
+  G.day = 7; G.partyLog = { lek: { day: 6, rooms: ["club_mirage"] } }; G.room = _npcRoom("lek");
+  const m = _npcsHere().find(x => x !== "lek" && NPC_ROLES[x] === "hostess");
+  run("talk to " + NPCS[m].name.toLowerCase());
+  assert.match(ask(m, "lek"), /out|OUT|tell us everything|own clothes/);
+});

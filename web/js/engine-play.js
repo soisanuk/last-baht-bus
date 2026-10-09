@@ -306,6 +306,7 @@ function _lastBusWarn() {
   if (G.mode === "soi6") return;
   if (!_flag("act1Done") || G.over || G.lastBusWarned) return;
   if (G.pendingBf) return;   // not between SHORT TIME · LONG TIME and the answer (Kenji, round 47)
+  if (G.pendingChoice === "vacation_end" || G.pendingChoice === "gameend") return;   // not after "the taxi to the airport leaves in an hour" (Bridget, round 76)
   if (G.nightTurn < LAST_BUS_TURN - 5 || G.nightTurn >= LAST_BUS_TURN) return;
   if (G.room === _hotelRoomId()) return; // already home — no race left to run
   if (typeof _workedTonight === "function" && _workedTonight() && G.room === ((G.bar && G.bar.room) || "")) return;   // standing his own rail: the last bus is not his (Malcolm, round 47)
@@ -5278,10 +5279,18 @@ function _endNight(reason) {
         ? "The rest is quieter than the night you paid for: the fan, her breathing, the " +
           "street going on without you. What happens in Pattaya has already forgotten your " +
           "name by morning — not unkindly."
-        : "The rest is nobody's business but the soi's: a shared plate of khao " +
-          "man gai at 3 a.m., the beach road with nobody on it, laughing at " +
-          "nothing. What happens in Pattaya has already forgotten your name by " +
-          "morning, fondly.", "win");
+        : (() => {
+          // pooled, and kept: her LAST NIGHT answer quotes whichever one it was (Bridget, round 76 —
+          // two rides, one coda word for word)
+          const _codas = [
+            ["khao", "a shared plate of khao man gai at 3 a.m., the beach road with nobody on it, laughing at nothing"],
+            ["noodle", "a bowl of noodles from a cart that only opens at two, her feet in your lap on a plastic stool, the street going quiet one bar at a time"],
+            ["toastie", "a 7-Eleven toastie split down the middle at four, and a slow walk back past the shutters while she tells you which bars lie about their happy hour"],
+          ];
+          const _c = _codas[_hh(String(G.lastBfId || "") + ":" + G.day + ":coda", 71) % _codas.length];
+          if (G.lastNightWas) G.lastNightWas.coda = _c[0];
+          return "The rest is nobody's business but the soi's: " + _c[1] + ". What happens in Pattaya has already forgotten your name by morning, fondly.";
+        })(), "win");
       G.lastBfHonest = false;
       _joinerFee();
       _stdBarfineRoll();   // protection used if carried; else the night may keep a secret

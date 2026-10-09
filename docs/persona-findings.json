@@ -18018,13 +18018,13 @@
       "lens": "the-night-asked",
       "instrument": "",
       "claim": "Nobody but Lek and Nigel can speak to the night out; her colleagues tell Thursday's motorbike",
-      "verdict": "deferred",
-      "note": "Her colleagues on a night out with her (the party's witness) is the next carrier; the stale ride line is fixed.",
+      "verdict": "fixed",
+      "note": "Her colleagues witness the night out (G.partyLog) in the witness review — an 'out' kind, newer than the ride.",
       "cls": "N",
       "sev": "moderate",
       "system": "party",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18063,13 +18063,13 @@
       "lens": "the-night-asked",
       "instrument": "",
       "claim": "GO HOME WITH CREAM points at BARFINE CREAM for a woman who says she doesn't work there",
-      "verdict": "deferred",
-      "note": "Her scene's key is the barfine verb by design; the pointer's wording wants her own phrase.",
+      "verdict": "fixed",
+      "note": "Cream answers in her own voice and points at ASK CREAM ABOUT LATE.",
       "cls": "D",
       "sev": "minor",
       "system": "cream",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18093,13 +18093,13 @@
       "lens": "the-night-asked",
       "instrument": "",
       "claim": "RIDE BUS TO WALKING STREET from Soi Buakhao drops at Pattaya Tai",
-      "verdict": "deferred",
-      "note": "Geography/bus-line question, not a prose defect.",
+      "verdict": "fixed",
+      "note": "A charter goes to a street named by its own name, off the line if need be (the gate first).",
       "cls": "C",
       "sev": "minor",
       "system": "bus",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18123,8 +18123,8 @@
       "lens": "the-night-asked",
       "instrument": "",
       "claim": "Two YES prompts live at once (the app booking and the sleep confirm)",
-      "verdict": "deferred",
-      "note": "Composition audit candidate.",
+      "verdict": "refuted",
+      "note": "Probed: the booking pitch is declined by SLEEP before the confirm prints.",
       "cls": "G",
       "sev": "minor",
       "system": "encounters",
@@ -18138,13 +18138,13 @@
       "lens": "the-night-asked",
       "instrument": "",
       "claim": "After 'the taxi to the airport leaves in an hour', the last-bus warning fires",
-      "verdict": "deferred",
-      "note": "",
+      "verdict": "fixed",
+      "note": "_lastBusWarn is silent under the week's-end and game-end gates.",
       "cls": "K",
       "sev": "minor",
       "system": "vacation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18153,13 +18153,13 @@
       "lens": "the-night-asked",
       "instrument": "",
       "claim": "Both night rides ended with the identical khao man gai coda",
-      "verdict": "deferred",
-      "note": "The coda is what her LAST NIGHT answer quotes; pooling it needs the coda kept on the night record.",
+      "verdict": "fixed",
+      "note": "The coda is pooled; the one shown is kept on G.lastNightWas.coda and her LAST NIGHT answer quotes it.",
       "cls": "Q",
       "sev": "minor",
       "system": "nightride",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18198,13 +18198,13 @@
       "lens": "the-night-asked",
       "instrument": "",
       "claim": "Lek's TOPICS still listed office and wallet for a regular",
-      "verdict": "deferred",
-      "note": "Not reproduced yet.",
+      "verdict": "fixed",
+      "note": "Her Act One office hint waits on act1Done; an appended node answers the office afterwards.",
       "cls": "N",
       "sev": "minor",
       "system": "conversation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18333,13 +18333,13 @@
       "lens": "procurement-evening",
       "instrument": "",
       "claim": "'My bar' means the speaker's bar at the Silk Rose",
-      "verdict": "deferred",
-      "note": "Her authored 'bar' node outranks the my-bar rewrite; wants the rewrite before node selection.",
+      "verdict": "fixed",
+      "note": "The parser keeps 'my bar' as the owned bar's name before it drops 'my'.",
       "cls": "L",
       "sev": "minor",
       "system": "conversation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18483,13 +18483,13 @@
       "lens": "procurement-evening",
       "instrument": "",
       "claim": "Cake on 'the tab' gives the barfine lecture; Bert misses 'the fight'",
-      "verdict": "deferred",
-      "note": "Word routing at the own rail; not yet traced.",
+      "verdict": "fixed",
+      "note": "At your own bar a remembered call outranks a woman's own node (_CALL_K, hoisted); 'the fight' is the punter.",
       "cls": "N",
       "sev": "minor",
       "system": "barbooks",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18498,13 +18498,13 @@
       "lens": "procurement-evening",
       "instrument": "",
       "claim": "The first ASK to anyone whose hello you haven't heard is eaten by the greeting",
-      "verdict": "deferred",
-      "note": "Needs a probe against the 'an answer is a meeting' rule.",
+      "verdict": "fixed",
+      "note": "A stranger's question gets the hello and then the question asked again, in the same turn.",
       "cls": "G",
       "sev": "minor",
       "system": "conversation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18528,13 +18528,13 @@
       "lens": "procurement-evening",
       "instrument": "",
       "claim": "Wilaiwan answers any subject with two after-massage lines",
-      "verdict": "deferred",
-      "note": "Her topicless memory nodes answer as a fallback.",
+      "verdict": "fixed",
+      "note": "A shop masseuse answers the back, misses a stranger's name, and still talks about her life after the hour.",
       "cls": "M",
       "sev": "minor",
       "system": "massage",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18573,13 +18573,13 @@
       "lens": "procurement-evening",
       "instrument": "",
       "claim": "The flat-hour round 'does not land' and still pays +2 สนุก",
-      "verdict": "deferred",
-      "note": "",
+      "verdict": "fixed",
+      "note": "A round that did not land pays +1, with the reason beside the figure; one that lands pays +2.",
       "cls": "E",
       "sev": "minor",
       "system": "barbooks",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18588,13 +18588,13 @@
       "lens": "procurement-evening",
       "instrument": "",
       "claim": "Water at your own bar takes wholesale off a till at ฿0",
-      "verdict": "deferred",
-      "note": "",
+      "verdict": "fixed",
+      "note": "An empty till's share of your own glass comes out of the pocket, booked to the bar.",
       "cls": "E",
       "sev": "minor",
       "system": "barbooks",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     },
     {
       "round": "76",
@@ -18603,13 +18603,13 @@
       "lens": "procurement-evening",
       "instrument": "",
       "claim": "`e` typed at the tonic tout refused him but didn't walk",
-      "verdict": "deferred",
-      "note": "",
+      "verdict": "fixed",
+      "note": "A direction at the street pitch walks past him.",
       "cls": "G",
       "sev": "minor",
       "system": "cons",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round76.test.js"
     }
   ]
 }

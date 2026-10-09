@@ -57,6 +57,8 @@ const CLASS = {
   "engine-parser.js:_leagueTalk|everybody see": [W_, "this IS the witness's answer (G.lastKp); 'who won' routes here too"],
   "engine-parser.js:_doTalkCore|everybody see": [W_, "the witness rule's own answer: her colleagues on her ride"],
   "engine-parser.js:_doTalkCore|everybody here knows": [W_, "the witness rule's own answer: the house on her"],
+  "engine-systems.js:_shiftYes|the floor saw": [C_, "the round that did not land still pays +1 — the reason beside the figure; G.bar.roundLanded (round 76)"],
+  "engine-parser.js:_doTalkCore|the floor watched": [W_, "her colleagues on the night out with her (G.partyLog) — the floor that watched her leave is the mouth; round76.test"],
   "engine-parser.js:_doTalkCore|in front of the whole": [W_, "the colleague review on a woman you complained about (G.bfStrikes) — the floor that watched the refund is the mouth; round75.test"],
   "engine-parser.js:_doTalkCore|spoken for": [W_, "the witness rule's comment quoting _REL_GREET"],
   // ── consequence: a mechanic keeps it ───────────────────────────────────────────────

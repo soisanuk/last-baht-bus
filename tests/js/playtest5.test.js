@@ -666,7 +666,7 @@ test("the piwin can be wai'd and spoken to; Candy knows Lek; Lek points at the c
   G.room = _npcRoom("candy"); doCommand("talk to candy"); out = [];
   doCommand("ask candy about lek"); assert.match(text(), /Lucky Tiger/);
   G.room = _npcRoom("lek"); doCommand("talk to lek"); out = [];
-  doCommand("ask lek about office"); assert.match(text(), /cage/);
+  { const _a1 = G.flags.act1Done; G.flags.act1Done = false; doCommand("ask lek about office"); G.flags.act1Done = _a1; } assert.match(text(), /cage/);   // the Act One hint, asked during Act One (round 76)
   assert.equal(ROOMS.police_station.exits.out, "beach_rd_soi9");
   assert.ok(FOOD_STALLS.jomtien_soi_7_m, "the lone som tam cart trades");
   assert.ok(ITEMS.bottle4 && ITEMS.bottle4.location === "promenade", "the promenade bins hold a bottle");

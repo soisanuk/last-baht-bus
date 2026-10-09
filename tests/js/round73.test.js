@@ -60,8 +60,9 @@ test("the room that walked you out does not deny you were in it; the bar you lef
 });
 test("GO HOME WITH a woman who is not on your arm points at the word for it", () => {
   G.room = "metro_garden"; G.nightTurn = 50; run("talk to cream");
-  out = []; run("go home with cream"); assert.match(said(), /\(BARFINE CREAM\)/);
-  out = []; run("take cream home"); assert.match(said(), /\(BARFINE CREAM\)/); assert.doesNotMatch(said(), /You don't see that here/);
+  // Cream does not work there, so her door is asked rather than fined (round 76)
+  out = []; run("go home with cream"); assert.match(said(), /\(ASK CREAM ABOUT LATE\)/);
+  out = []; run("take cream home"); assert.match(said(), /\(ASK CREAM ABOUT LATE\)/); assert.doesNotMatch(said(), /You don't see that here/);
 });
 test("คืนเงิน is REPAY, ขอข้าวผัด at a chicken cart is refused by name, and the source keeps no Thai the trainer lacks", () => {
   assert.equal(_thaiToCmd("คืนเงิน 500"), "repay 500");

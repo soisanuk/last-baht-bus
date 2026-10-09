@@ -1360,6 +1360,15 @@ const _ENC = {
     // branch below re-arming pendingEnc). This input is your reaction in the
     // back room.
     if (_flag("tonicShop")) { G.flags.tonicShop = false; return _tonicShop(input); }
+    // a direction at the street pitch is walking past him, and the walk happens (Stelian, round 76:
+    // "e" refused him and left you standing there)
+    { const _dir = String(input || "").trim().replace(/^go /, "");
+      const _full = { n: "n", s: "s", e: "e", w: "w", north: "n", south: "s", east: "e", west: "w", out: "out", in: "in" }[_dir];
+      if (_full && _room().exits && _room().exits[_full]) {
+        _say("You walk past him. He calls something after you about your hairline, cheerfully, and is already working the next man.", "dim");
+        _doGo(_full);
+        return;
+      } }
     // TAO RAI — the veteran's move. Ask the price straight and the free-sample /
     // "come see my cousin" / VIP-course machinery has nothing to grip: you pay
     // the one honest number and walk before the side-soi can happen.

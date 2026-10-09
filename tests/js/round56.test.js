@@ -87,7 +87,7 @@ test("\"normal girls\" has an answer — and it is the town's, in each register"
 test("what a woman volunteered is askable: Jaja's baby, Cream's coffee, Aoy's sister, Rob's different one", () => {
   const miss = /wrong girl|not my story|don't know|no idea/i;
   G.room = "mooring_bar"; assert.doesNotMatch(run("ask jaja about baby"), miss);
-  G.room = "metro_garden"; G.nightTurn = 50; assert.doesNotMatch(run("ask cream about coffee"), miss);
+  G.room = "metro_garden"; G.nightTurn = 50; assert.doesNotMatch(run("ask cream about pharmacy"), miss);   // her day job is the pharmacy now; "coffee" passed on her hello alone (round 76)
   G.room = "queen_vic"; assert.match(run("ask aoy about sister"), /Soi 6/);
   G.room = _npcRoom("rob"); assert.match(run("ask rob about different"), /Nine years/);
   G.room = "mooring_bar"; assert.doesNotMatch(run("ask jaja about udon"), miss);

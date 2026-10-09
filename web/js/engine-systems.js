@@ -8188,14 +8188,19 @@ function _shiftYes() {
     if (_rand() < 0.6) {
       _shiftTake(-SHIFT_ROUND_COST, "a round on the house");
       _shiftTake(SHIFT_ROUND_TAKE, "the hour it bought");
+      G.bar.roundLanded = true;
       _say("It lands. The rail thickens, somebody puts money in the jukebox, and the " +
         "hour that was going to end the night starts it again instead.", "win");
     } else {
       _shiftTake(-SHIFT_ROUND_COST, "a round on the house");
+      G.bar.roundLanded = false;
       _say("It does not land. They drink it, they thank you, and they go anyway \u2014 " +
         "some nights are just over and no amount of free Chang argues them out of it.", "dim");
     }
-    _addHappy(2);                       // your room, your night — never jading
+    // the goodwill lands either way, but a round that did not land does not pay like one that did,
+    // and the figure says why (Stelian, round 76: "it does not land" and +2)
+    if (G.bar.roundLanded === false) _addHappy(1, "the floor saw you stand it, even if the room didn't stay");
+    else _addHappy(2);                       // your room, your night — never jading
     _repGain();
     for (const id of _barStaff()) _addBond(id, 1);
   } else if (call.id === "merit") {
