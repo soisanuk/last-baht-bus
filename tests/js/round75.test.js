@@ -162,3 +162,11 @@ test("the weekly ladder is constants, retroactive, and the Owl prints its arithm
   assert.equal(_ladderWeek(80) - _ladderWeek(79), 465);
   assert.ok(_OWL_LISTINGS.some(l => /SITUATIONS VACANT/.test(l) && l.includes("฿465")));
 });
+test("the ladder reaches her phone, her pay answer and your own bar's notice — with the numbers from the constants", () => {
+  const reveal = _OTHER_LEDGER[1].map(f => f("Noi")).find(l => /every week|Every week/.test(l));
+  assert.ok(reveal && reveal.includes("฿" + _num(_ladderWeek(80) - _ladderWeek(79))) && reveal.includes("฿" + _num(LADY_CUT)), "the reveal does both sums");
+  assert.ok(_WORK_PAY.hostess.some(f => /new group/.test(f("Noi")) && !f("Noi").includes("฿" + _num(LADY_CUT))), "the pay answer never quotes the ledger's cut");
+  assert.ok(_NOTICE_FLOOR.some(l => l.includes("฿" + _num(GROUP_WEEK_BASE))) && _NOTICE_BERT.some(l => /by the week/.test(l)));
+  assert.ok(_NOTICE_FLOOR.every(l => typeof l === "string") && _NOTICE_BERT.every(l => typeof l === "string"), "no holes in the pools");
+  G.room = _npcRoom("lek"); run("talk to lek"); out = []; run("ask lek about guarantee"); assert.doesNotMatch(said(), /don't know|not my story|wrong girl/i);
+});

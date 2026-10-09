@@ -9254,10 +9254,13 @@ const _NOTICE_FLOOR = [
   "{n} waits until the ice man has gone and says it to the rail rather than to you: “Boss. End of the month, I finish.” She lets you take that in. “Not angry, na. The drink money — this month, half of last month. The bar on the corner pay same cut, more customer.” A shrug that is all arithmetic. “I have mama. You understand.”",
   "{n} does the thing the good ones do, which is to say it straight and once. “I give notice, boss. One week.” She counts on her fingers what the month paid, and it does not take all of them. “The board,” she says, and nods at the chalk, and that is the whole of her analysis, and it is correct.",
   "“Can I talk?” {n} never asks that. “My chits this month.” She fans them: thin. “Same girl, same smile, same hours. Less customer, less drink, less me.” She puts them away. “The Lucky Tiger ask me. I say I tell my boss first. So I tell you.”",
+  // the weekly ladder (2026-10-09): the rival's offer, said to the guv'nor
+  "{n} shows you her phone before she says anything: a post from a group across town, every week ฿" + _num(GROUP_WEEK_BASE) + " guaranteed, and a ladder for the drinks. “They pay on the eighth day, boss. Every week. Here I wait for the month, and the month is thin.” She is not bargaining; she is telling you the price of keeping her. “One week, I decide.”"
 ];
 const _NOTICE_BERT = [
   "Bert mentions it the way he mentions the ice. “{n}'s given her notice. Gave it to me, because you weren't here to give it to.” He lets that sit. “Drinks money's down and she can count. Week, she said.”",
   "“{n}'s going, boss.” Bert, not looking up from the glass he is drying. “End of the week. Told me last night. The take's thin and her cut's thinner, and there's a bar on the corner that'll have her tomorrow.” He puts the glass down. “Thought you'd want to hear it from somebody.”",
+  "“{n}'s going, or says she is.” Bert sets a glass down. “There's a group across town paying the girls by the week — guarantee up front, then a ladder on the drinks. She showed me the post. Can't say I blame her, bud. The month's been thin and a week's a shorter wait.”"
 ];
 const _NOTICE_STAYS = [
   "{n} comes in, looks at the board, and hangs her bag on the hook she always uses. Nothing is said about the notice. She works the night like a woman who has decided something, and the thing she decided was to stay, for now, and you both know for how long “for now” is.",

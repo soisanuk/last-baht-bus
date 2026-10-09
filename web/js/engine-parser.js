@@ -4522,7 +4522,7 @@ function _doTalkCore(arg, topic) {
       const said = _workTalk(npc, "boss");
       if (said) { _say(said); return; }
     }
-    if (/\b(pay|paid|salary|wage|wages|earn|earnings|commission|income)\b/.test(_ct)) {
+    if (/\b(pay|paid|salary|wage|wages|earn|earnings|commission|income|guarantee|weekly|ladder|every week)\b/.test(_ct)) {
       const said = _workTalk(npc, "pay");
       if (said) { _say(said); return; }
     }
@@ -11583,6 +11583,8 @@ const _WORK_PAY = {
   hostess: [
     n => `"Small salary." ${n} makes a small gesture to go with it, thumb and finger nearly touching. "The rest is drink, and tip, and what a man decide to give me. So — depend on the month. Depend on YOU, little bit." She says the last part without any weight on it at all.`,
     n => `"Bar pay me something." ${n} tilts her head. "Not enough by itself, never. Everything after that is what happen on the floor." A shrug, entirely factual. "Good week, I am fine. Bad week is also a real thing, na. Nobody ask about the bad week."`,
+    // the weekly ladder (2026-10-09): her month against the group's week
+    n => `"Here, month." ${n} counts it on her fingers: a salary that does not move, a little from every drink, a bonus after the quota. "My friend go to the new group. They pay every week — ฿${_num(GROUP_WEEK_BASE)} sure, then more for every drink, more again when she climb." She considers it honestly. "Every week is good when you send home. Every week is also every week they count you."`,
   ],
   cashier: [
     n => `"A wage." ${n} says it flatly. "Same every month, which the girls think is lucky and is only sometimes lucky." She closes the drawer. "And if the book is short at the end of the night, it is short out of me. So I am careful. That is also part of the wage."`,

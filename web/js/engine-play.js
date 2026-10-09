@@ -3922,6 +3922,13 @@ const _OTHER_LEDGER = {
       `and a girl who cannot take eight is a girl who goes home early. It costs ฿${_num(_ladyPrice())}, ` +
       `of which ฿${_num(LADY_CUT)} is hers — she says it the way she'd tell you which songthaew goes to ` +
       `Naklua, and asks whether you want another one.`,
+    // the weekly ladder (2026-10-09): the offer from across town, and the drink that crosses a rung
+    (n) => `${n} turns her {{phone}} round to show you a post a friend sent her — a group with three bars somewhere ` +
+      `else, wanting girls. "Every week they pay. ฿${_num(GROUP_WEEK_BASE)}, sure, even if nobody buy." She scrolls to ` +
+      `the ladder with her thumb. "Sixty drink, ฿${_num(GROUP_LADDER[0][1])} each. Eighty, ฿${_num(GROUP_LADDER[1][1])} — for ALL ` +
+      `of them, not only the new one." She has already done the sum. "Number eighty is worth ฿${_num(_ladderWeek(80) - _ladderWeek(79))} ` +
+      `to me there. Here it is ฿${_num(LADY_CUT)}, same like number one." She puts the {{phone}} face down. "Maybe I go. ` +
+      `Maybe the week is long." It is not a pitch; she is telling you what the drink in your hand is.`,
   ],
   // tier 2 — the cost of you. Being liked is expensive: the seat she keeps is
   // the seats she doesn't fill, and the month is counted in drinks, not affection.
