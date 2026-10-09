@@ -12022,6 +12022,17 @@ function _waenTick() {
     G.waenDay = G.day;   // the link IS tonight's text — two from her in one tick (Nattapong, round 56)
     return;
   }
+  // …and once, to a student she has taught twice, the register nobody teaches a farang: how you talk
+  // to a child (Mario's note, 2026-10-09 — อย่างไร becomes ยังไง, the particle goes, จ๊ะ and หนู come in)
+  if (G.waenDay !== G.day && _flag("lessonTaken") && (G.taughtBy || 0) >= 2 && !_flag("waenChild")) {
+    _setFlag("waenChild"); G.waenDay = G.day;
+    _pushMsg("waen", "Extra homework, for the day somebody puts their child in front of you. To a small child you drop the " +
+      "polite parts: อย่างไร becomes ยังไง, no ครับ, and you add จ๊ะ or call them หนู. Pointing: อันนี้ภาษาไทยเรียกว่าอะไรจ๊ะ — " +
+      "what is this called in Thai? If it is your own child, ลูก, not หนู. Try จ๊ะ on a grown woman and she will laugh at you. " +
+      "Try it anyway; then you will remember it. 📓");
+    _say("(📱 A text from Waen. CHECK MESSAGES.)", "dim");
+    return;
+  }
   // …and then a word a night, free, because she has decided you are a student
   if (G.waenDay === G.day) return;
   const w = _waenWord();

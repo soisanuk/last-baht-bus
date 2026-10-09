@@ -172,3 +172,31 @@ test("her colleagues saw her go out with you", () => {
   run("talk to " + NPCS[m].name.toLowerCase());
   assert.match(ask(m, "lek"), /out|OUT|tell us everything|own clothes/);
 });
+
+// ── the trainer's five words from Mario's two notes (2026-10-09): กด · เรียก · ยังไง · อันนี้ · จ๊ะ ──
+test("a polite particle and a pointing word are courtesy, not commands", () => {
+  assert.equal(_thaiToCmd("เบียร์ค่ะ"), "beer");
+  assert.equal(_thaiToCmd("อันนี้เท่าไหร่"), "how much");
+  assert.equal(_thaiToCmd("ขอน้ำครับ"), "buy water");
+  assert.equal(_thaiToCmd("กด"), "press");
+  assert.equal(_thaiToCmd("คะแนน"), false, "a word that merely starts like a particle is not one");
+});
+test("what's this called in Thai: somebody names a thing the room mentions, and จ๊ะ to a grown woman gets laughed at once", () => {
+  G.room = "stinky_bar"; G.nightTurn = 30; out = []; run("อันนี้ภาษาไทยเรียกว่าอะไรจ๊ะ");
+  assert.match(said(), /follows your finger/);
+  assert.match(said(), /mama talk to me when I am five/);
+  out = []; run("riak waa arai"); assert.doesNotMatch(said(), /mama talk to me/, "once a night");
+});
+test("กดดื่มได้ฟรีค่ะ: the cooler at Klang Corner is read in Thai, pressed once a day, and explained by the woman who wrote it", () => {
+  G.room = "klang_massage"; G.nightTurn = 30; G.thirst = 60;
+  out = []; run("read note"); assert.match(said(), /กดดื่มได้ฟรีค่ะ/);
+  out = []; run("press tap"); assert.ok(G.thirst < 60); assert.match(said(), /you can read, then/);
+  const th = G.thirst; out = []; run("กด"); assert.equal(G.thirst, th, "one cup a day");
+  assert.match(ask("wilaiwan", "the note"), /Free, na/);
+});
+test("Waen sends the child register once, to a student she has taught twice", () => {
+  G.phone.contacts.waen = true; G.talked.waen = [0]; G.flags.lessonTaken = true; G.flags.waenLink = true; G.taughtBy = 2; G.battery = 80;
+  _waenTick(); assert.ok(_flag("waenChild"));
+  assert.ok(G.phone.inbox.some(m => /ยังไง/.test(m.text) && /หนู/.test(m.text) && /ลูก/.test(m.text)));
+  const n = G.phone.inbox.length; G.day++; _waenTick(); assert.ok(!G.phone.inbox.slice(n).some(m => /ยังไง/.test(m.text)), "once");
+});

@@ -3023,7 +3023,14 @@ const ROOMS = {
     desc: "A narrow shopfront wedged between a laundry and a shuttered {{phone}} repair " +
       "stall, close enough to the junction that the traffic noise comes through the " +
       "wall. Four mats, a fan on a stand, and a lady who has been doing this for " +
-      "eighteen years and can tell from your walk which shoulder is the problem.",
+      "eighteen years and can tell from your walk which shoulder is the problem. By the " +
+      "door, a plastic cooler of something amber with a tap on it, and a handwritten note taped to the lid.",
+    // the note Mario photographed (2026-10-09): Thai only, the way such notes are — reading it is the exercise
+    freeTea: true,
+    reads: {
+      cooler: "A handwritten note on the cooler lid, in blue marker, with a little drawn glass and a smiley face: " +
+        "กดดื่มได้ฟรีค่ะ. The tea inside is the colour of weak whisky and smells of lemongrass. (PRESS TAP)",
+    },
     exits: { out: "buakhao_klang" },
   },
   myth_massage: {

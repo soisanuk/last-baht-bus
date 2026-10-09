@@ -59,6 +59,11 @@ const THAI_SIGNS = {
 // ── Phrases the player can say (typed Thai or romanisation both accepted) ──
 
 const THAI_PHRASES = [
+  // what's this called in Thai? — the learner's question, with the trainer's อันนี้/เรียก/ยังไง (2026-10-09)
+  { key: "whatcalled", th: "อันนี้ภาษาไทยเรียกว่าอะไร", rom: "an-nii phaa-saa thai riak waa arai",
+    match: ["อันนี้ภาษาไทยเรียกว่าอะไร", "ภาษาไทยเรียกว่าอะไร", "อันนี้เรียกว่าอะไร", "เรียกว่าอะไร", "ภาษาไทยพูดว่ายังไง", "พูดว่ายังไง",
+      "an nii phaa saa thai riak waa arai", "phaa saa thai riak waa arai", "riak waa arai", "riak wa arai", "pasa thai riak wa arai",
+      "phaa saa thai phuut waa yang ngai", "phuut waa yang ngai", "pood wa yang ngai"] },
   { key: "hello",    th: "สวัสดีครับ",   rom: "sawatdee khrap",  match: ["สวัสดีครับ", "สวัสดี", "หวัดดี", "sawasdee", "sawaddee", "sawadee khrap", "sawatdee", "sawasdee", "sawadee", "wai"] },
   { key: "thanks",   th: "ขอบคุณครับ",  rom: "khop khun khrap", match: ["ขอบคุณครับ", "ขอบคุณ", "khop khun", "khopkhun", "kop khun", "khob khun", "khobkhun", "kob khun", "khob khun krap", "khob khun ka"] },   // the spelling most phrasebooks print (Gordie, round 72)
   { key: "how_much", th: "เท่าไหร่",     rom: "thao rai",        match: ["เท่าไหร่", "thao rai", "taorai", "tao rai", "tao arai", "gee baht"] },

@@ -365,6 +365,7 @@ function _masseuseTalk(t) {
     if (/\b(special|extra|happy|finish)\b/.test(q)) return `"Wrong shop." ${sw.name} doesn't even look up. "Here is massage. Pink light is down the road — you pass three."`;
     // a back is her subject; anything else is a real question with a real answer — she does not
     // reply "drink water now" to a name she has never heard (Stelian, round 76, Wilaiwan at Klang Corner)
+    if (_room().freeTea && /\b(tea|note|cooler|the tap|free|sign)\b/.test(q)) return `"Free, na." ${sw.name} points at the cooler with her chin. "Press, drink. Lemongrass, sometimes chrysanthemum — what the market have. One cup for customer, not for the whole soi."`;
     if (/\b(back|neck|shoulders?|pain|sore|stiff|muscle|knots?)\b/.test(q)) return `"Your back?" ${sw.name} presses two fingers under your shoulder blade, unasked, and you find out exactly where it hurts. "Here. All farang, here. Thai massage, one hour, every three day. Not oil — oil is for sleeping."`;
     if (q && !/\b(massage|price|how much|tao rai|oil|foot|herbal|hour|again|last time|before|remember|life|yourself|you|story|talk|chat|day|work|job|shop|here)\b/.test(q) && !/^(hi|hello|sawasdee|sawatdee|hey)$/.test(q))
       return _pickVary([
@@ -1986,6 +1987,7 @@ function _doInventory() {
 // English, so no printed-Thai here — the Thai-script directional signs stay on the
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
+  cooler: ["the cooler", "note", "the note", "tap", "the tap", "dispenser", "tea", "iced tea", "the tea", "lid"],   // Klang Corner's free tea (2026-10-09)
   flowers: ["silk flowers", "flower", "the flowers", "singha bottles", "bottles"],   // the Silk Rose's own (Aurelio, round 71)
   regulars: ["the regulars", "two regulars", "the men", "two men", "the argument", "argument", "old men", "the two"],
   thirdstool: ["third stool", "the third stool", "helmut's stool", "his stool"],
@@ -7396,7 +7398,7 @@ function _khaNudge() {
 }
 
 function _stripPolite(s) {
-  return String(s || "").replace(/\s*(นะคะ|นะครับ|ค่ะ|คะ|ครับ|นะ)\s*$/g, "")
+  return String(s || "").replace(/\s*(นะคะ|นะครับ|ค่ะ|คะ|ครับ|จ๊ะ|นะ)\s*$/g, "")
     .replace(/\s+(na )?(kha|ka|khrap|krub|krap|krab|na)\s*$/i, "").trim();
 }
 function _doSay(arg, targetWord) {
@@ -7480,6 +7482,8 @@ function _doSay(arg, targetWord) {
     _say("“ไม่เอา” — mai ao. You wave it off, whatever it was. The nearest vendor shrugs it back into the bag" +
       // a laughing girl only where a girl is: Cloze has Kruu Waen (Nattapong, round 56)
       (_npcsHere().filter(i => NPC_ROLES[i] === "hostess" && i !== "waen").length ? "; the nearest girl laughs: “Ooh, he know this one.”" : "."));
+  } else if (key === "whatcalled") {
+    _thaiWhatCalled(_here, arg);
   } else if (_THAI_REPLY[key]) {
     _say(_THAI_REPLY[key](_here));
   } else {
@@ -7488,6 +7492,49 @@ function _doSay(arg, targetWord) {
   _thaiPraise(key);   // …and then somebody tells you how good your Thai is
 }
 
+// กดดื่มได้ฟรีค่ะ — "press and drink, it's free": the cooler at Klang Corner (Mario's photo, 2026-10-09). Once
+// a day, because the tea is for customers, and she is watching.
+const _FREE_TEA = [
+  "You press the tap and a paper cup of iced lemongrass tea fills itself, sweet and thin and exactly right.",
+  "Iced tea, the colour of weak whisky, from the cooler's tap into a paper cup. It is free, the note says so, and it tastes of lemongrass and somebody's kitchen.",
+  "You press the tap. The cup fills, cold, faintly of chrysanthemum today. Nobody charges you; nobody so much as looks up, which is the whole hospitality of it.",
+];
+function _freeTea() {
+  if (G.freeTeaDay === G.day) { _say("You've had your cup. The note says free, and Wilaiwan's look says once — the cooler is for customers, and it has to last till closing."); return; }
+  G.freeTeaDay = G.day;
+  G.thirst = Math.max(0, G.thirst - 25);
+  const _read = !!(G.examined || {})[G.room + ".cooler"];   // a map of "room.key" → 1
+  _say(_pickVary(_FREE_TEA, "freetea") + (_read ? " Wilaiwan saw you read the note before you pressed, and nods: you can read, then." : ""));
+}
+// "WHAT'S THIS CALLED IN THAI?" (2026-10-09, from Mario's note on talking to a child, with the trainer's
+// อันนี้ / เรียก / ยังไง / จ๊ะ): somebody in the room names a thing in front of you — a thing the room's own
+// text mentions, so the word is always for something you can see. Said with จ๊ะ to a grown woman, it is
+// the voice a mother uses on a five-year-old, and she says so once a night.
+const _CALLED_THINGS = [
+  [/\bbeers?\b|\bchang\b|\bsingha\b|\bbottle/i, "เบียร์", "bia", "a bottle of beer"],
+  [/\bice\b/i, "น้ำแข็ง", "nam khaeng", "the ice bucket"],
+  [/\bbell\b/i, "ระฆัง", "ra-khang", "the bell"],
+  [/\bsea\b|\bgulf\b|\bwaves?\b/i, "ทะเล", "tha-le", "the sea"],
+  [/\bmarket\b|\bstalls?\b/i, "ตลาด", "ta-laat", "the market"],
+  [/\bwater\b/i, "น้ำ", "naam", "a glass of water"],
+  [/\bfood\b|\bwok\b|\bplate\b|\bnoodles?\b/i, "อาหาร", "aa-haan", "the food"],
+  [/\bshop\b|\bstore\b/i, "ร้าน", "raan", "the shop"],
+  [/\bhotel\b/i, "โรงแรม", "rong-raem", "the hotel"],
+];
+function _thaiWhatCalled(here, said) {
+  const r = _room(), txt = stripMarkup(String(r.desc || "") + " " + (r.name || ""));
+  const fits = _CALLED_THINGS.filter(([rx]) => rx.test(txt));
+  const pool = fits.length ? fits : [_CALLED_THINGS[5]];
+  const [, th, rom, en] = pool[_hh(G.room + ":" + G.day + ":" + G.turns, 37) % pool.length];
+  const who = (here || []).find(i => NPC_ROLES[i]) || (here || []).find(i => NPCS[i].manager || NPCS[i].house) || (here || [])[0];   // a Thai woman on the floor before the American behind the till
+  if (/จ๊ะ/.test(String(said || "")) && who && _pronoun(who) === "she" && ((G.soc.jaTease = G.soc.jaTease || {})[who] !== G.day)) {
+    G.soc.jaTease[who] = G.day;
+    _say(`"จ๊ะ?" ${NPCS[who].name} laughs out loud. "You talk to me like my mama talk to me when I am five." She pats your hand, and plays along. "Okay, หนู. Look —"`, "thai");
+  }
+  _say(who
+    ? `${NPCS[who].name} follows your finger to ${en}. "${th}." Slowly, twice: ${rom}. "${th}. Now you say."`
+    : `A woman at the next table follows your finger to ${en} and tells you, as if it were obvious: "${th}" — ${rom}.`, "thai");
+}
 // The phrases a learner actually arrives with, answered in the room's voice
 // (Hugo, round 42: every one of these fell through to "the soi blinks at you").
 const _THAI_REPLY = {
@@ -8133,6 +8180,7 @@ function _ladyDrinkCharge(id) {
 }
 
 function _doBuy(arg) {
+  if (_room().freeTea && /\b(iced tea|tea|cooler|the tap)\b/.test(String(arg || ""))) { _freeTea(); return; }   // the note says free (2026-10-09)
   const r = _room();
   // BUY LEK A TOASTIE is BUY TOASTIE FOR LEK, and a plate for her is hers before
   // any fullness of yours is consulted (Anil, round 64 — both fed the buyer)
@@ -12951,7 +12999,7 @@ const _THAI_CMD = [
   ["ที่ไหน", "where"], ["เมื่อไร", "time"], ["ตำรวจ", "police"], ["สถานี", "bus"],
   ["ระฆัง", "ring bell"], ["อาหาร", "food"], ["ตลาด", "market"], ["ทะเล", "sea"],
   ["ทำไม", "why"], ["อะไร", "what"], ["ป้ายรถ", "bus"], ["ป้าย", "sign"], ["ห้อง", "room"], ["ร้าน", "shop"],
-  ["ดื่ม", "drink"], ["เปิด", "open"], ["แบต", "phone"], ["จ่าย", "pay"], ["ถาม", "ask"],
+  ["ดื่ม", "drink"], ["กด", "press"], ["เปิด", "open"], ["แบต", "phone"], ["จ่าย", "pay"], ["ถาม", "ask"],
   ["บอก", "tell"], ["ขาย", "sell"], ["ให้", "give"], ["กิน", "eat"], ["ปิด", "close"],
   ["ใคร", "who"], ["ฟัง", "listen"], ["รอ", "wait"], ["ดม", "smell"],
 
@@ -13002,6 +13050,11 @@ function _thaiToCmd(s) {
         }
       }
     if (num !== null) { out.push(String(num)); rest = rest.slice(numLen); if (++i > 12) return false; continue; }
+    // a polite or soft particle standing as its own word is courtesy, not a command: เบียร์ค่ะ was
+    // "the soi reads a little Thai — but not that" (2026-10-09, with the trainer's จ๊ะ). อันนี้ ("this
+    // one") points, and pointing is not a verb: อันนี้เท่าไหร่ is HOW MUCH.
+    { const pt = rest.match(/^(นะคะ|นะครับ|ครับ|ค่ะ|คะ|จ๊ะ|นะ|อันนี้)/);
+      if (pt && (rest.length === pt[0].length || /^\s/.test(rest.slice(pt[0].length)) || pt[0] === "อันนี้" || /^(ค่ะ|คะ|ครับ|จ๊ะ|นะ)/.test(rest.slice(pt[0].length)))) { rest = rest.slice(pt[0].length); continue; } }
     // a classifier after a number — เบียร์สองขวด — is the count's, not a word (Jens, round 67)
     { const cl = rest.match(/^(ขวด|แก้ว|จาน|อัน)/);
       if (cl && out.length && /^\d+$/.test(out[out.length - 1])) { out.pop(); rest = rest.slice(cl[0].length); continue; } }
@@ -14128,7 +14181,9 @@ function doCommand(input) {
       else if (/fridge|refrigerator|mini.?bar/.test(arg)) _doFridge();
       else _say("It doesn't open that way.");
       break;
-    case "press": case "type": _doEnter(arg); break;   // (CODE is a keypad word — below, with SAFE/KEYPAD/PIN)
+    case "press": case "type":
+      if (_room().freeTea && (!arg || /\b(tap|cooler|tea|button|dispenser)\b/.test(arg))) { _freeTea(); break; }
+      _doEnter(arg); break;   // (CODE is a keypad word — below, with SAFE/KEYPAD/PIN)
     case "play": case "challenge": _doPlay(arg); break;
     // the gambler's vocabulary (2026-08-22): REMATCH / DOUBLE replay the last game
     // here; BET / WAGER <n> [ON <game>] is PLAY with a stake; stray shot-words
