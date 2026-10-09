@@ -217,3 +217,15 @@ test("the things the prose puts in front of you answer EXAMINE: each was a dead 
   G.room = _npcRoom("tan"); out = []; run("examine car"); assert.match(said(), /grey sedan/, "the car where Tan stands is his");
   G.room = "queen_vic"; out = []; run("examine horn-rims"); assert.doesNotMatch(said(), /Traffic/, "horn-rims are not traffic");
 });
+test("Soi 6's close looks: what each room's prose names answers EXAMINE, and a bowl is not the Owl", () => {
+  const DEAD = new Set([..._NO_SUCH_THING, "You don't see that here."]);
+  for (const [r, n] of [["pink_lotus", "neon tubes"], ["pink_lotus", "velvet rope"], ["pink_lotus", "door"], ["orchid_room", "strobe"], ["golden_dragon", "qr sticker"],
+    ["sunset_dreams", "mural"], ["kitten_corner", "paw print"], ["kitten_office", "cash bags"], ["kitten_office", "sticker"], ["cherry_pop", "bowl"],
+    ["ruby_kiss", "lipstick marks"], ["queen_vic", "panelling"], ["qv_room", "balcony"], ["qv_room", "tv"], ["soi6_street", "pool noodle"], ["soi6_street", "sequins"],
+    ["soi6_mid", "dartboard"], ["soi6_deep", "menu"]]) {
+    newGame(); G.flags.act1Done = true; G.stage = "vacation"; G.room = r; G.lightOn = true; G.nightTurn = 30;
+    for (const k in ENCOUNTERS) G.encDone[k] = true; out = []; run("examine " + n);
+    assert.ok(!out.some(l => DEAD.has(l)) && !/Last Orders/.test(said()), `${r}: EXAMINE ${n} -> ${out[0]}`);
+  }
+  G.room = "qv_room"; out = []; run("examine tv"); assert.doesNotMatch(said(), /shophouse/, "your own flatscreen, not a neighbour's");
+});

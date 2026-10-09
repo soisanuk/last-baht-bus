@@ -3545,6 +3545,8 @@ const ROOMS = {
       "Back onto a pink stool with a girl already arranging herself across you. \"You think about me all day? Liar.\" She laughs, delighted. \"Okay — buy the drink, we go up, you think about me tomorrow.\"",
     ],
     reads: {   // the fixtures its own prose names (Declan, round 58)
+      neon: "Neon tubes bent round the sign in pink, blue and green at once, buzzing slightly, so that everyone under them looks like three different people depending on which colour wins.",
+      rope: "A velvet rope on two brass posts across an unmarked door beside the stairs. It is not much of a barrier on its own; the doorman beside it is the barrier. Everybody who works here knows who it is for, and so, by now, do you.",
       door: "Beside the stage stairs, an unmarked door behind a velvet rope, and a doorman who checks a {{phone}} against faces. Nothing about it says ORCHID; everything about the doorman does.",
     },
     exits: { out: "soi6_street", back: "orchid_room" },
@@ -3566,6 +3568,7 @@ const ROOMS = {
       "above all of it and touching none of it, is Laurent Vasseur \u2014 down when he is in the " +
       "country, which is not often, and never anywhere the soi itself can see him.",
     reads: {
+      strobe: "The strobe cuts the room into stills: a hand on a shoulder, a bottle tipping, the quiet man at the good table not moving at all. Between the flashes it is darker than it ever needs to be.",
       president: "The man in the patched vest holds court at volume — the laugh, the Blue Label, the arm round whichever girl is nearest. Loud men are easy to read. Watch who he keeps glancing at before he laughs.",
       envelope: "No envelope is ever on the table long enough to look at. You see a hand, a jacket, a waiter who suddenly has somewhere to be. That is what the envelope looks like, here: an absence with good timing.",
       table: [
@@ -3603,6 +3606,7 @@ const ROOMS = {
       "stays whatever the last man who bothered chose, which is how it has stayed vintage. Pia keeps the bar — " +
       "and the dead jukebox's memory — with a flat, unbothered calm.",
     reads: {
+      qr: "A QR sticker on every table, peeling at one corner, with SCAN FOR MUSIC printed under it in a font somebody chose with care. Nobody scans it. The playlist knows.",
       dragon: "The gold dragon over the bar was hand-painted by someone's cousin, and it " +
         "shows — the proportions are enthusiastic, one eye is larger than the other, and " +
         "the overall effect is less imperial guardian than large friendly dog in a dragon " +
@@ -3635,6 +3639,7 @@ const ROOMS = {
       "the rail, adding to a row of them lined up like a tiny origami militia, and still finds " +
       "a hand free for your sleeve as you pass.",
     reads: {
+      mural: "Clouds painted on the wall above the bar, pink and gold, by a hand that was better at clouds than at perspective. The damp has got into the lower ones, so the sky drips a little at the edges. It is still the nicest thing on the soi to look at, and it knows it.",
       crane: "Kwan's napkin cranes, a whole squadron lined along the rail — some crisp, some " +
         "already collapsing, each folded in the dead minutes between customers. Sit long enough " +
         "and she'll fold you into the flock.",
@@ -3672,6 +3677,11 @@ const ROOMS = {
       "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
     ],
     lateDesc: "The middle of Soi 6 past midnight: the short-time places have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours, and the three beer bars either side of it keep the Vic's — this is the light left on Soi 6 now; past them the grilles are down and the ice buckets are out on the pavement.",
+    // close looks at what the prose names (the examine audit, Soi 6 first — 2026-10-09)
+    reads: {
+      deck: "Across the soi, the Verandah's raised wooden deck sits one step above the pavement with its chairs and lazy fans, the only front on this stretch nobody tries to climb.",
+      dartboard: "Through the Queen Vic's window you can just see the dartboard and a man squaring up to it with a pint in his other hand — the one game on the soi played at a walking pace.",
+    },
     exits: { w: "soi6_street", e: "soi6_deep" },
     venues: ["queen_vic", "sunset_rail", "bay_watch", "sandy_toes"],
   },
@@ -3721,6 +3731,7 @@ const ROOMS = {
       "Back to the paw and the purr, and a girl who has decided you are hers for the night. \"No shy, handsome. This Soi 6. We say what we want, you buy the drink, we go up. Easy, na?\"",
     ],
     reads: {
+      paw: "A neon paw print over the door, four toes and a pad, one toe flickering on a rhythm of its own. Under it, cat posters — kittens in teacups, a lion in sunglasses — faded to the same pale blue by years of sun.",
       corridor: [
         { req: ["rabbitData"], text: "Past the till, a strip of lino and a door with a keypad. You know exactly what is behind it, " +
           "and the girl on the till knows you know; she has stopped looking at her phone. Nothing back there is yours." },
@@ -3757,6 +3768,9 @@ const ROOMS = {
       "The back office, and the small sound your own breathing makes in it.",
     ],
     reads: {
+      desk: "A cheap office desk with a laptop on it and nothing in the drawers but rubber bands and a stapler with no staples. Nobody works here; things just get put down here on the way somewhere else.",
+      bags: "Canvas cash bags in a milk crate on the floor, zipped, tagged with the night's date in marker. Heavier than they look, and very much not yours.",
+      coffee: "A plastic cup of iced coffee, half-finished, the ice melted to a pale layer on top and a ring of water spreading on the desk under it. Somebody meant to come back for it.",
       laptop: "The group's machine, not the bar's: a pattaya-leisure sticker on the lid, a lock " +
         "screen with a photo of a golf course, and a Post-it on the bezel with what is " +
         "almost certainly the password on it, because it is always the password on it. " +
@@ -3779,6 +3793,7 @@ const ROOMS = {
       "and a sound system stuck on one bubblegum playlist. Tabtim and Chaba call the odds " +
       "from the rail. The stairs are where the stairs always are.",
     reads: {
+      bowl: "A glass bowl of real cherries on the bar, shiny as plastic and very nearly as old. Nobody eats them; they are there to be pointed at, and every girl in the room has a line ready about them.",
       cherries: "The bowl of maraschino cherries on the bar, sticky and untouched — more décor " +
         "than snack, going tacky under the neon. (EAT one, if you're brave.)",
     },
@@ -3811,6 +3826,10 @@ const ROOMS = {
       "Into Ruby Kiss, where the girls kiss the glass, kiss your cheek, and name the whole transaction in one breath, and the mirror makes an audience of it.",
       "Back to the lipstick marks and a girl draped over your shoulders, chin on your head, watching you both in the mirror wall. \"See? We look good together. Buy me drink. We look even better upstairs.\"",
     ],
+    // close looks at what the prose names (the examine audit, Soi 6 first — 2026-10-09)
+    reads: {
+      lipstick: "Lipstick kisses printed on everything: the glasses, the coasters, the cushions, the menus, the wall behind the bar. Up close the prints on the glasses are real — somebody in the back kisses a fresh tray of them every afternoon.",
+    },
     exits: { out: "soi6_deep" },
   },
   queen_vic: {
@@ -3836,6 +3855,7 @@ const ROOMS = {
       "rather be and no intention of proving it. A staircase behind the bar leads UP " +
       "to the guest rooms.",
     reads: {
+      panelling: "Real wood panelling, dark with decades of smoke and polish, and fitted by somebody who knew what he was doing. It is the most expensive thing on Soi 6 that nobody is selling, and the regulars knock on it out of habit.",
       notebook: [
         // He isn't in tonight, so neither is his forearm. The desc hedges with
         // "most nights"; the close look did not, and a persona who came looking
@@ -3893,6 +3913,8 @@ const ROOMS = {
       "waters a day, housekeeping's one kindness — round out the luxuries. " +
       "(SLEEP to turn in and end the night · WATCH TV · OPEN FRIDGE · or step onto the BALCONY.)",
     reads: {
+      balcony: "A narrow balcony with a recliner, a small table and a rail at chest height, two floors above Soi 6. From up here the soi is a long glowing tank of noise and colour, and everything shouted down there arrives as one blurred throb. (WATCH SOI)",
+      flatscreen: "A flatscreen bolted to the wall at an angle that suits the bed and nothing else, with a remote that has had its batteries replaced with a different brand on each side. Thai soaps, English football, and a shopping channel selling knives at three in the morning. (WATCH TV)",
       recliner: "The balcony recliner has taken the shape of every guest before you and " +
         "reached an accommodation with all of them. It faces the soi at exactly the angle " +
         "of a man who wants to see everything and join nothing. (WATCH SOI)",

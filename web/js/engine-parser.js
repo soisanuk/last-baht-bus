@@ -1987,13 +1987,30 @@ function _doInventory() {
 // English, so no printed-Thai here — the Thai-script directional signs stay on the
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
+  // Soi 6's close looks (the examine audit, 2026-10-09)
+  deck: ["raised deck", "wooden deck", "the deck", "threshold", "the step", "planks"],
+  dartboard: ["dart board", "the dartboard", "darts"],
+  neon: ["neon tubes", "tubes", "the neon", "neon sign", "sign tubes"],
+  rope: ["velvet rope", "the rope", "velvet-roped", "velvet", "brass posts"],
+  strobe: ["strobe light", "the strobe", "strobes"],
+  qr: ["qr sticker", "qr code", "the sticker", "sticker", "scan code"],
+  mural: ["cloud mural", "clouds", "the clouds", "painted clouds", "the mural"],
+  paw: ["neon paw", "paw print", "the paw", "cat posters", "posters"],
+  desk: ["the desk", "office desk", "drawers"],
+  bags: ["cash bags", "the bags", "milk crate", "crate", "cash"],
+  coffee: ["iced coffee", "the coffee", "cup", "the cup"],
+  bowl: ["the bowl", "glass bowl"],
+  lipstick: ["lipstick marks", "lipstick-mark motif", "motif", "marks", "kiss marks", "kisses", "lipstick kisses"],
+  panelling: ["wood panelling", "paneling", "the panelling", "wood", "real wood", "actual wood"],
+  balcony: ["the balcony", "balcony rail", "recliner"],
+  flatscreen: ["flat screen", "tv", "the tv", "television", "telly"],
   cooler: ["the cooler", "note", "the note", "tap", "the tap", "dispenser", "tea", "iced tea", "the tea", "lid"],   // Klang Corner's free tea (2026-10-09)
   flowers: ["silk flowers", "flower", "the flowers", "singha bottles", "bottles"],   // the Silk Rose's own (Aurelio, round 71)
   regulars: ["the regulars", "two regulars", "the men", "two men", "the argument", "argument", "old men", "the two"],
   thirdstool: ["third stool", "the third stool", "helmut's stool", "his stool"],
   menu: ["card", "menus", "price list", "prices", "price board"],
   ashtray: ["the ashtray", "league ashtray", "pot", "the pot", "table money"],
-  laptop: ["computer", "machine", "pc", "screen", "lock screen", "post-it", "postit"],
+  laptop: ["computer", "machine", "pc", "screen", "lock screen", "post-it", "postit", "lid", "the lid", "laptop sticker", "sticker", "the sticker"],
   fish: ["tank", "fish tank", "the fish", "aquarium"],
   clinic: ["the clinic", "glass door", "pharmacy", "doctor"],
   monitor: ["cameras", "camera", "cctv", "feeds", "feed"],
@@ -2817,7 +2834,7 @@ const _SCENERY = [
   // material, echo the room; otherwise stay off the subject.
   // "seating" too — Bay Watch's own description calls its stools "theatre
   // seating", so it is the word the room itself put in the player's mouth.
-  { key: "stool", m: /\b(stools?|chairs?|seats?|seating|rail)\b/,
+  { key: "stool", m: /\b(stools?|barstools?|chairs?|seats?|seating|rail)\b/,
     fn: ctx => {
       const desc = String((_room() && _room().desc) || "");
       const mat = (desc.match(/\b(teak|brass|zinc|marble|bamboo|mahogany|copper|oak|concrete|stainless)\b/i) || [])[1];
@@ -3156,7 +3173,7 @@ const _SCENERY = [
 
   // `glass` and `chang` are the two that double as modifiers: the fishbowl's
   // one-way glass is a wall, and a Chang singlet is a garment on a market rail.
-  { key: "drink", m: /\b(beer|beers|drinks?|bottles?|glass(es)?|chang|leo|singha)\b/,
+  { key: "drink", m: /\b(beer|beers|drinks?|bottles?|glass(es)?|pints?|chang|leo|singha)\b/,
     unless: /one.?way|looking.glass|glass(es)? case|singlet|shirt|vest|tank ?top|shorts/,
     lines: {
     bar: [
@@ -3382,6 +3399,7 @@ const _SCENERY = [
       "The menu is mostly a formality — everyone here orders the same three things, and " +
         "the kitchen knows which before you do.",
     ], "scn_menu_bar");
+    if (ctx === "street") return "Laminated menus held out at every open front, pictures of beer and plates of food the bar has never cooked. What they do not list is upstairs.";
     return null;
   } },
 
@@ -3482,6 +3500,23 @@ const _SCENERY = [
   } },
 
   // ── the examine audit's batch (2026-10-09, with Compromise): things the prose puts in front of you ──
+  { key: "poolnoodles", m: /\b(pool noodles?|foam noodles?|foam)\b/, lines: {
+    street: [
+      "Foam pool noodles, pink and green, carried like truncheons by the girls at the open fronts. Walk past without stopping and one finds your shoulder, your ribs or the back of your head — not hard, but with feeling.",
+      "A foam pool noodle, bent in the middle from a night of use, swinging lazily from a girl's hand as she decides whether you're worth the swat.",
+    ],
+    any: [
+      "A pool noodle, a long way from any pool, doing the job of a bouncer.",
+    ],
+  } },
+  { key: "sequins", m: /\bsequins?\b|\bsequinned\b/, lines: {
+    street: [
+      "Sequins catching every colour of neon on the soi at once, on outfits cut for the heat and for being seen from the far end of the street.",
+    ],
+    any: [
+      "Sequins, and a lot of light for them to catch.",
+    ],
+  } },
   { key: "lights", m: /\b(street ?lights?|streetlamps?|sodium lamps?|lamps?|lamplight|bulbs?|lamp ?posts?|fairy lights)\b/, lines: {
     street: [
       "Sodium lamps, one in three of them working, turning everybody the colour of weak tea. The dark between them is where the dogs have their meetings.",
@@ -4177,7 +4212,7 @@ function _doRead(arg) {
   if (/\b(book|regulars|spreadsheet|list)\b/.test(String(arg||"")) && G.itemLoc.trade_book === "inventory") { _readBook(); return; }
   if (/\b(stick|usb|thumb drive)\b/.test(String(arg||"")) && G.itemLoc.data_stick === "inventory") { _readStick(); return; }
   if (/news|paper/.test(arg)) return _doPaper();
-  if (/column|owl/.test(arg)) return _doColumn(); // READ (THE) COLUMN / OWL
+  if (/\b(column|owl)\b/.test(arg)) return _doColumn(); // READ (THE) COLUMN / OWL — whole words: "bowl" is not the Owl (examine audit, 2026-10-09)
   // READ MENU and the bare MENU verb are separate paths and both have to reach
   // the Vic's generated card, or one of the two natural phrasings dead-ends.
   if (G.room === "queen_vic" && /menu|card|price|board/.test(arg || "")) { _qvCard(); return; }
