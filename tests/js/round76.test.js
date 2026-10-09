@@ -229,3 +229,15 @@ test("Soi 6's close looks: what each room's prose names answers EXAMINE, and a b
   }
   G.room = "qv_room"; out = []; run("examine tv"); assert.doesNotMatch(said(), /shophouse/, "your own flatscreen, not a neighbour's");
 });
+test("Kitten Corner's back room has the pool table its own desc names, and the soi's streets answer for their hundred fronts", () => {
+  assert.match(ROOMS.kitten_corner.desc, /pool table/);
+  G.room = "kitten_corner"; G.money = 2000; out = []; run("play pool");
+  assert.ok(G.game && G.game.type === "pool", "a table to play on: " + said()); run("quit");
+  for (const r of ["soi6_street", "soi6_mid", "soi6_deep"]) {
+    G.room = r; out = []; run("examine bars"); assert.ok(out.includes(ROOMS[r].reads.bars), r + " EXAMINE BARS is the close look: " + said());
+    out = []; run("count bars"); assert.ok(out.includes(ROOMS[r].reads.bars), r + " COUNT BARS is the same look");
+    out = []; run("examine girls"); assert.ok(out.includes(ROOMS[r].reads.girls), r + " EXAMINE GIRLS: " + said());
+  }
+  // the middle is neutral ground: no group room among its venues
+  for (const v of ROOMS.soi6_mid.venues) assert.ok(!ROOMS[v].owner && !_PLG_ROOMS.includes(v), v + " is nobody's group's");
+});

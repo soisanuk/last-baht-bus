@@ -5769,6 +5769,7 @@
     100.88727
    ],
    "name": "Kitten Corner",
+   "pool": true,
    "region": "Soi 6"
   },
   "kitten_office": {

@@ -3738,7 +3738,7 @@ const ROOMS = {
   kitten_corner: {
     name: "Kitten Corner",
     region: "Soi 6",
-    bar: "Kitten Corner", barType: "soi6",
+    bar: "Kitten Corner", barType: "soi6", pool: true,   // its own desc names the table in the cold half (it answered "not one of them" until 2026-10-09)
     desc: "Open to the pavement, walled in cat posters and a neon paw print, with a curtained doorway at the back into the cold half — pool table, toilets, and the only aircon on this stretch of the soi, which is where everybody drifts by midnight. Praewa and " +
       "Nangfah work the front, and the grab-and-giggle starts before you've fully stopped " +
       "walking; Kesinee watches it all from the end of the rail, pricing you before you sit, " +
