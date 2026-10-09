@@ -3505,8 +3505,11 @@ const ROOMS = {
       "that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You " +
       "are grabbed by the other wrist. Someone significantly shorter than you attempts to climb " +
       "onto your back. A couple of the girls have armed themselves with foam pool noodles and " +
-      "swat anyone who dares walk past without stopping. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, " +
-      "and SUNSET DREAMS LOUNGE are the main combatants here. East, the soi opens into a " +
+      "swat anyone who dares walk past without stopping. There are something like a hundred bars " +
+      "on Soi 6 between Beach Road and Second Road, and a good forty of them are jammed into this " +
+      "end — front after front, both sides, the signs running together into one smear of pink and " +
+      "green until you couldn't name the last three doorways you passed. The three down here you " +
+      "will come to know are PINK LOTUS LOUNGE, GOLDEN DRAGON BAR and SUNSET DREAMS LOUNGE. East, the soi opens into a " +
       "quieter middle stretch before the racket picks up again at the far end.",
     revisit: [
       "Back onto the west end and the wall of noise hits first, the hands second. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" You are grabbed, released, grabbed again, an item passed between bars.",
@@ -3517,8 +3520,15 @@ const ROOMS = {
       "The soi swallows you again. \"You! Yes you! Come Pink Lotus!\" \"No — Golden Dragon!\" \"He come with ME.\" You are, briefly, the most wanted man in Thailand.",
       "Back into the churn and the neon. The girls out front read foot traffic for a living, and you are foot traffic; the pitch starts before you've fully arrived.",
       "Soi 6 West again — a river of hands and offers, the quieter middle stretch glowing ahead east like a promise, the whole street daring you to reach it sober and solvent.",
+      "Back into the west end, forty fronts in a hundred metres. You stop trying to read the signs somewhere around the tenth; the signs never stop trying to read you.",
+      "Back onto the soi: bar after bar after bar, each one a single open room with a rail and a staircase, each one sure it is the only bar on Soi 6.",
     ],
     lateDesc: "Soi 6 after midnight: the frontages rolled down, the stools stacked behind the grilles, the girls gone home or gone on somewhere in twos on one motorbike. The neon is mostly off and what's left buzzes for nobody. A cat owns the middle of the road.",
+    // the soi's size, at a close look (Soi 6 density, 2026-10-09)
+    reads: {
+      bars: "You try to count them and give up in the twenties. Open front, open front, open front, both sides, all the way down to Second Road — near enough a hundred on this one street, each a single room with a rail, a few stools, a sound system and a staircase. Most of them you will walk past and never learn the name of. Down this end, the ones you'll come back to are Pink Lotus, the Golden Dragon and Sunset Dreams.",
+      girls: "Four or five to a front and forty fronts at this end: more women in sequins in a hundred metres than most towns see in a year, and every one of them working — reading the walk, the shoes, the sunburn, the pocket the wallet's in — and every one of them has already decided what you are. Most of them you will never meet. The ones you do, you meet by stopping.",
+    },
     exits: { w: "beach_rd_n", e: "soi6_mid" },
     venues: ["pink_lotus", "golden_dragon", "sunset_dreams"],
   },
@@ -3664,7 +3674,10 @@ const ROOMS = {
       "easygoing beer bars whose whole business is letting you sit and watch the parade rather " +
       "than be dragged into it. The pullers here are lazier, or wiser — they leave the grabbing " +
       "to the loud ends and pick up the men who wander through wanting a cold one and a ringside " +
-      "seat. THE SHADY LADY, FRONT ROW BAR, and THE VERANDAH line the quiet stretch, and the " +
+      "seat. The fronts don't stop here — they never stop, on Soi 6 — but along this stretch they " +
+      "are beer bars with nothing upstairs, twenty-odd in a row, and nobody's group has ever " +
+      "bought into them: this is the part of the soi the whole soi drinks in. " +
+      "THE SHADY LADY, FRONT ROW BAR, and THE VERANDAH are the ones you'll get to know, and the " +
       "QUEEN VIC INN — real aircon, real wood, a dartboard — anchors it, the one place on the " +
       "soi that isn't shouting. West, the racket starts up again; east, it's worse.",
     revisit: [
@@ -3675,11 +3688,15 @@ const ROOMS = {
       "The middle takes you back — the Queen Vic glowing calm, the easy bars either side, the loud ends holding the noise at arm's length for once.",
       "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.",
       "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
+      "Back to the middle: twenty-odd beer bars in a row with nothing upstairs, the one stretch of Soi 6 where a front is only a front.",
+      "The neutral stretch again. Nobody owns the middle and it shows — mismatched awnings, a different song every ten metres, and not one pool noodle on the pavement.",
     ],
     lateDesc: "The middle of Soi 6 past midnight: the short-time places have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours, and the three beer bars either side of it keep the Vic's — this is the light left on Soi 6 now; past them the grilles are down and the ice buckets are out on the pavement.",
     // close looks at what the prose names (the examine audit, Soi 6 first — 2026-10-09)
     reads: {
       deck: "Across the soi, the Verandah's raised wooden deck sits one step above the pavement with its chairs and lazy fans, the only front on this stretch nobody tries to climb.",
+      bars: "Beer bars end to end, twenty-odd of them along the quiet stretch: a rail, a fridge, a dozen stools and nothing upstairs, each one run for years by the same woman whose name is on the paper by the till. Nobody's group ever bought into the middle — it was never worth the trouble — so this is where the whole soi comes to sit down. The ones you'll get to know are the Shady Lady, the Front Row and the Verandah, with the Queen Vic among them, the one door on the soi with aircon behind it.",
+      girls: "Fewer of them along here, and sitting down: a woman on a stool by each fridge, a cashier with a calculator, a mama with her shoes off under the table. They'll call you over if you look like you want calling. The grabbing is left to the loud ends.",
       dartboard: "Through the Queen Vic's window you can just see the dartboard and a man squaring up to it with a pint in his other hand — the one game on the soi played at a walking pace.",
     },
     exits: { w: "soi6_street", e: "soi6_deep" },
@@ -3692,8 +3709,9 @@ const ROOMS = {
     seven: true,
     outlet: true, // the 7-Eleven has a socket (see soi6_street)
     desc: "The east end of the soi, past the quieter middle, where the bars run on toward " +
-      "Second Road and the volume comes roaring back. KITTEN CORNER, CHERRY POP BAR, and RUBY " +
-      "KISS BAR trade wrist-grabs down this stretch — same open ground-floor fronts, same " +
+      "Second Road and the volume comes roaring back. Another forty-odd fronts crowd the last " +
+      "stretch before the main road; KITTEN CORNER, CHERRY POP BAR and RUBY KISS BAR are the " +
+      "three whose names stick, and they trade wrist-grabs with the rest — same open ground-floor fronts, same " +
       "three-colour neon, same staircases behind the bar the menu doesn't mention, and the " +
       "same foam pool noodles that find your ribs if you try to walk on by.",
     revisit: [
@@ -3705,8 +3723,15 @@ const ROOMS = {
       "Back into the far stretch, the last hundred metres before Second Road, where the girls read your wallet through your shorts and grab accordingly.",
       "The deep soi again. Kitten, Cherry, Ruby — three fronts, three staircases, three sets of hands already reaching. You are, once more, the entire economy walking past.",
       "Back to where the soi runs out toward Second Road, neon stacked to the roofline, a girl on your sleeve saying the quiet part first and loud: \"Come upstairs, tilac. Why we pretend?\"",
+      "Back into the east end, front after front to the Second Road lights. You could drink in a different bar down here every night for a month and still not reach the corner.",
+      "Back among the far stretch's forty-odd doorways. Kitten, Cherry and Ruby are the names you know; the rest are a blur of neon and the same three words: handsome, upstairs, come.",
     ],
     lateDesc: "The far end of Soi 6 after the shutters: dark frontages, a mop bucket left out, the last of the ice melting in a bin. Whoever was reaching for your arm an hour ago is asleep, or working somewhere that isn't here.",
+    // the soi's size, at a close look (Soi 6 density, 2026-10-09)
+    reads: {
+      bars: "Another forty-odd fronts between the middle and Second Road, packed as tight as the west end: neon to the roofline in three colours, a rail and a staircase behind every one. Kitten Corner, Cherry Pop and Ruby Kiss are the names that stick. The rest you'll know by a sign, a song or a girl on a stool, and forget by morning.",
+      girls: "The same line of sequins as the west end, louder if anything and more direct: down here the word upstairs gets said before the word drink. Two or three to every doorway, every one of them reading the crowd for the man who has already decided.",
+    },
     exits: { w: "soi6_mid", e: "second_rd_soi6" },
     venues: ["kitten_corner", "cherry_pop", "ruby_kiss"],
   },

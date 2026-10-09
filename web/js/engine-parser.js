@@ -1988,6 +1988,8 @@ function _doInventory() {
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
   // Soi 6's close looks (the examine audit, 2026-10-09)
+  bars: ["the bars", "fronts", "the fronts", "frontages", "bar fronts", "open fronts", "doorways", "all the bars"],
+  girls: ["the girls", "ladies", "the ladies", "women", "the women", "pullers", "barkers", "sequins"],
   deck: ["raised deck", "wooden deck", "the deck", "threshold", "the step", "planks"],
   dartboard: ["dart board", "the dartboard", "darts"],
   neon: ["neon tubes", "tubes", "the neon", "neon sign", "sign tubes"],
@@ -11109,7 +11111,7 @@ function _doWave(arg) {
 // end; the Darkside is a motosai ride east, off any bar mat this size.
 const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
         ~              │
-        ~     BEACH RD N ─ SOI 6 (Queen Vic in the quiet middle)
+        ~     BEACH RD N ─ SOI 6 (a hundred bars; the Vic in the quiet middle)
         ~      │ (Blue Dog · Stinky Pinky)
         ~      │      PATTAYA KLANG ────► THE DARKSIDE
        ~       │       │      │   (Khao Talo · the lake · bike, or the
@@ -11139,7 +11141,9 @@ const _MAP_SOI6 = `    THE BEACH ~~~ BEACH RD ─── WEST ──────�
     Sai Krok's    Stinky       Golden Dragon  (your room ↑)   Cherry Pop
     surf          Pinky        Sunset Dreams  The Shady Lady  Ruby Kiss
                                ATM · 7-Eleven Front Row Bar
-                                              The Verandah`;
+                                              The Verandah
+
+    ~100 open fronts down both sides — these are the ones you get to know.`;
 
 // EXITS — IF-genre furniture, and load-bearing here: a bar's door and a street's
 // continuation share bare compass letters, so `n` off a lively lane is a coin
@@ -14093,6 +14097,10 @@ function doCommand(input) {
   }
   // COUNT THE STOOLS (Vince, round 74: "count stools" was a parse failure on the one job that is counting). Counting
   // is sitting — the job's tally is _questTick's; this says what the room holds right now, and where the count stands.
+  // COUNT THE BARS on a street that has a close look at them (Soi 6's hundred) — the count is the look
+  if (/^count( the| all the)? (bars|fronts|doorways)$/.test(lower) && _room().reads && _room().reads.bars) {
+    doCommand("examine bars"); return;
+  }
   if (/^count( the)? (stools|men|customers|heads|people|the room|room|punters|the bar)$/.test(lower) || (lower === "count" && !(typeof _convoActive === "function" && _convoActive()))) {
     if (!_inBar()) { _say("Nothing here worth counting except the bikes, and they don't stay still."); return; }
     const men = 2 + _regularsHere().length + (G.nightTurn >= 40 ? 2 : 0) + (_hh("count:" + G.room + ":" + G.day, 5) % 3);
