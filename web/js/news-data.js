@@ -8,7 +8,12 @@ var NEWS_FEED = [
     "d": "07 Oct 2026"
   },
   {
-    "t": "Chinese ex-bank manager held in Pattaya after 7 years of overstaying",
+    "t": "Thieves Hold Pattaya Expat at Gunpoint to Drain $820K in Crypto",
+    "s": "Bitcoin News",
+    "d": "09 Oct 2026"
+  },
+  {
+    "t": "Chinese restaurant in Pattaya busted for gambling, 18 arrested",
     "s": "Thaiger",
     "d": "08 Oct 2026"
   },
@@ -18,23 +23,18 @@ var NEWS_FEED = [
     "d": "08 Oct 2026"
   },
   {
+    "t": "Pattaya School 11 honours retiring educators and embraces Scouting-inspired education",
+    "s": "Pattaya Mail",
+    "d": "09 Oct 2026"
+  },
+  {
     "t": "Pattaya Mayor tracks progress on footbridge roofing and safety work",
     "s": "Pattaya Mail",
     "d": "08 Oct 2026"
   },
   {
-    "t": "Police stop 2.5 million baht call scam, arrest Thai and Macau cash collectors",
-    "s": "Pattaya Mail",
-    "d": "08 Oct 2026"
-  },
-  {
-    "t": "Chinese restaurant in Pattaya busted for gambling, 18 arrested",
+    "t": "Chinese ex-bank manager held in Pattaya after 7 years of overstaying",
     "s": "Thaiger",
-    "d": "08 Oct 2026"
-  },
-  {
-    "t": "Pattaya police hunt three armed robbers after luxury home raid",
-    "s": "Pattaya Mail",
     "d": "08 Oct 2026"
   },
   {
@@ -43,29 +43,29 @@ var NEWS_FEED = [
     "d": "08 Oct 2026"
   },
   {
-    "t": "Chris Hemsworth takes a Muay Thai break in Thailand",
-    "s": "Bangkok Post",
-    "d": "08 Oct 2026"
-  },
-  {
-    "t": "Thailand weighs THB1,000 departure tax for travellers of all nationalities",
-    "s": "Nation Thailand",
-    "d": "07 Oct 2026"
-  },
-  {
-    "t": "Watch: Thailand Queen Makes First Solo Flight In Gripen Fighter Jet",
-    "s": "NDTV",
+    "t": "I Flew to Thailand to Snatch My Face and Body",
+    "s": "The Cut",
     "d": "09 Oct 2026"
   },
   {
     "t": "Thailand’s Queen Suthida flies Gripen fighter solo for first time",
     "s": "AeroTime",
-    "d": "08 Oct 2026"
+    "d": "09 Oct 2026"
   },
   {
-    "t": "Thailand’s Queen Suthida takes controls of single-seat Gripen fighter for first solo flight",
-    "s": "Defence Industry Europe",
-    "d": "08 Oct 2026"
+    "t": "Floodwaters Overwhelm Thailand",
+    "s": "NASA Science (.gov)",
+    "d": "09 Oct 2026"
+  },
+  {
+    "t": "Nearly 30 years after IMF rescue, Thailand faces new economic test",
+    "s": "Reuters",
+    "d": "09 Oct 2026"
+  },
+  {
+    "t": "Thai police raid Chabad, Jewish institutions in Bangkok amid ongoing foreign business investigation",
+    "s": "The Jerusalem Post",
+    "d": "09 Oct 2026"
   },
   {
     "t": "Pita Limjaroenrat: The Leader Thailand Could Have Had",
@@ -74,14 +74,14 @@ var NEWS_FEED = [
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-10-08","USD":33.68,"AUD":23.39,"GBP":44.48,"EUR":37.68};
+var FX_RATES = {"date":"2026-10-09","USD":33.53,"AUD":23.41,"GBP":44.33,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-09","temp":32,"humid":56,"code":3,"hi":32,"rain":71};
+var WX_NOW = {"date":"2026-10-10","temp":27,"humid":81,"code":3,"hi":31,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4195,"date":"2026-10-09","baht":66800};
+var GOLD = {"usd":4196,"date":"2026-10-09","baht":66550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":82355,"thb":2761947};
+var BTC = {"usd":82534,"thb":2771001};
