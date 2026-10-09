@@ -1094,7 +1094,7 @@
    "th": "น้ำตาล"
   },
   "firecracker_bar_napa": {
-   "desc": "Thai woman in her late forties, round face, short permed hair, a gold necklace, a tired, shrewd smile — the mamasan of Firecracker Bar, from Chaiyaphum. She has run this floor longer than most of the girls have been alive.",
+   "desc": "Thai woman in her early fifties, grey-streaked hair in a neat bun, laugh lines, gold hoop earrings, navy blouse, appraising look. — the mamasan of Firecracker Bar, from Chaiyaphum. She has run this floor longer than most of the girls have been alive.",
    "emoji": "👑",
    "filler": true,
    "name": "Napa",
@@ -1104,7 +1104,7 @@
    "th": "นภา"
   },
   "firecracker_bar_pang": {
-   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Firecracker Bar, from Chaiyaphum.",
+   "desc": "Round-faced, a high ponytail and her {{phone}} in one hand, the till in perfect order — the cashier at Firecracker Bar, from Chaiyaphum.",
    "emoji": "🧾",
    "filler": true,
    "name": "Pang",
@@ -1235,7 +1235,7 @@
    "th": "กอฟ"
   },
   "golf": {
-   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Tequila Queen A-Go-Go, from Loei.",
+   "desc": "A boyish crop, a black polo and a pen behind her ear, the till in perfect order — the cashier at Tequila Queen A-Go-Go, from Loei.",
    "emoji": "🧾",
    "filler": true,
    "name": "Golf",
@@ -1303,7 +1303,7 @@
    "th": "ห่อง"
   },
   "hot_pepper_chom": {
-   "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at Hot Pepper Bar, from Nakhon Phanom.",
+   "desc": "Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin. — the cashier at Hot Pepper Bar, from Nakhon Phanom.",
    "emoji": "🧾",
    "filler": true,
    "name": "Chom",
@@ -1313,7 +1313,7 @@
    "th": "ชม"
   },
   "hot_pepper_gina": {
-   "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.",
+   "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.",
    "emoji": "👑",
    "filler": true,
    "name": "Gina",
@@ -1359,7 +1359,7 @@
    "th": "ไบรท์"
   },
   "hula_hula_min": {
-   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.",
+   "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.",
    "emoji": "👑",
    "filler": true,
    "name": "Min",
@@ -1369,7 +1369,7 @@
    "th": "มิน"
   },
   "hula_hula_noon": {
-   "desc": "Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Hula Hula Bar, from Sakon Nakhon.",
+   "desc": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling. — the cashier at Hula Hula Bar, from Sakon Nakhon.",
    "emoji": "🧾",
    "filler": true,
    "name": "Noon",
@@ -1426,7 +1426,7 @@
    "th": "การ์ตูน"
   },
   "jade_lounge_jinda": {
-   "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Jade Lounge, from Sakon Nakhon. She puts four kids through school on other men's lonely nights.",
+   "desc": "Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes. — the mamasan of Jade Lounge, from Sakon Nakhon. She puts four kids through school on other men's lonely nights.",
    "emoji": "👑",
    "filler": true,
    "name": "Jinda",
@@ -1436,7 +1436,7 @@
    "th": "จินดา"
   },
   "jade_lounge_jum": {
-   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Jade Lounge, from Yasothon.",
+   "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Jade Lounge, from Yasothon.",
    "emoji": "🧾",
    "filler": true,
    "name": "Jum",
@@ -1732,7 +1732,7 @@
    "th": "ขนม"
   },
   "kanya": {
-   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}.",
+   "desc": "Pearl earrings, thin gold glasses and an expression that gives away nothing, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}.",
    "emoji": "🧾",
    "filler": true,
    "name": "Kanya",
@@ -1935,7 +1935,7 @@
    "th": "เป้า"
   },
   "ladybird_bar_ratsamee": {
-   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Ladybird Bar, from Loei. She started on the stage at seventeen and owns a share of the place now.",
+   "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Ladybird Bar, from Loei. She started on the stage at seventeen and owns a share of the place now.",
    "emoji": "👑",
    "filler": true,
    "name": "Ratsamee",
@@ -2016,7 +2016,7 @@
    "th": "เฟิร์น"
   },
   "lollipop_bar_khing": {
-   "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Lollipop Bar, from Ubon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+   "desc": "Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze. — the mamasan of Lollipop Bar, from Ubon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
    "emoji": "👑",
    "filler": true,
    "name": "Khing",
@@ -2602,7 +2602,7 @@
    "th": "นุ่น"
   },
   "noot": {
-   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Succubus, from Khon Kaen.",
+   "desc": "Gold-rimmed glasses and a black blazer, counting notes faster than you can read them — the cashier at Succubus, from Khon Kaen.",
    "emoji": "🧾",
    "filler": true,
    "name": "Noot",
@@ -2815,7 +2815,7 @@
    "th": "อ๊อฟ"
   },
   "peach_lounge_farida": {
-   "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at Peach Lounge, from Roi Et.",
+   "desc": "Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin. — the cashier at Peach Lounge, from Roi Et.",
    "emoji": "🧾",
    "filler": true,
    "name": "Farida",
@@ -2843,7 +2843,7 @@
    "th": "มิ้นท์"
   },
   "peach_lounge_noot": {
-   "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.",
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.",
    "emoji": "👑",
    "filler": true,
    "name": "Noot",
@@ -3478,7 +3478,7 @@
    "th": "เปิ้ล"
   },
   "sweet_tamarind_tukta": {
-   "desc": "A blunt bob, red lipstick, and a stare that reconciles you at a glance — the cashier at Sweet Tamarind, from Sakon Nakhon.",
+   "desc": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling. — the cashier at Sweet Tamarind, from Sakon Nakhon.",
    "emoji": "🧾",
    "filler": true,
    "name": "Tukta",
@@ -3488,7 +3488,7 @@
    "th": "ตุ๊กตา"
   },
   "sweet_tamarind_view": {
-   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Sweet Tamarind, from Maha Sarakham. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+   "desc": "Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Sweet Tamarind, from Maha Sarakham. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
    "emoji": "👑",
    "filler": true,
    "name": "View",

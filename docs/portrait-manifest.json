@@ -11,11 +11,91 @@
       "patron": 26
     },
     "filler": 227,
-    "unrendered": 0,
-    "relook": 0
+    "unrendered": 39,
+    "relook": 39
   },
-  "unrendered": [],
-  "relook": [],
+  "unrendered": [
+    "pop",
+    "kaew",
+    "bua",
+    "som",
+    "yaya",
+    "oat",
+    "pui",
+    "namtip",
+    "prik",
+    "saifon",
+    "jaja",
+    "ing",
+    "jiab",
+    "bum",
+    "bpom",
+    "nittaya",
+    "wassana",
+    "the_terrace_fah",
+    "kingfisher_praew",
+    "two_stools_jinda",
+    "wanida",
+    "alisa",
+    "lamai",
+    "kingfisher_somsri",
+    "neon_palm_nittaya",
+    "farida",
+    "noot",
+    "golf",
+    "air",
+    "eye",
+    "fai",
+    "jeed",
+    "best",
+    "aim",
+    "kanya",
+    "mon",
+    "the_terrace_kade",
+    "the_gecko_ple",
+    "firecracker_bar_pang"
+  ],
+  "relook": [
+    "wanida",
+    "alisa",
+    "lamai",
+    "kingfisher_somsri",
+    "neon_palm_nittaya",
+    "saifon",
+    "noot",
+    "golf",
+    "kanya",
+    "farida",
+    "eye",
+    "aim",
+    "the_gecko_ple",
+    "air",
+    "fai",
+    "best",
+    "jeed",
+    "mon",
+    "the_terrace_kade",
+    "pop",
+    "som",
+    "kaew",
+    "yaya",
+    "jiab",
+    "bpom",
+    "oat",
+    "prik",
+    "bum",
+    "the_terrace_fah",
+    "pui",
+    "jaja",
+    "kingfisher_praew",
+    "namtip",
+    "nittaya",
+    "bua",
+    "ing",
+    "two_stools_jinda",
+    "wassana",
+    "firecracker_bar_pang"
+  ],
   "characters": [
     {
       "id": "aey",
@@ -3389,8 +3469,10 @@
       "room": "slutty",
       "tags": [],
       "desc": "New enough to still look a little nervous, in a borrowed dress a size too big — one of Slutty Go-Go's girls, from Roi Et. The badge pinned at her hip says 136 — the number the floor knows her by. She sits sideways on the edge of the bench, ready to stand, the way people do who stand up a lot.",
-      "look": "New enough to still look a little nervous, in a borrowed dress a size too big",
-      "rendered": true
+      "look": "Thai woman of nineteen, baby-faced, wide nervous eyes, hair loose to the shoulders, borrowed sequin dress too big.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "New enough to still look a little nervous, in a borrowed dress a size too big"
     },
     {
       "id": "namwan",
@@ -3485,8 +3567,10 @@
       "room": "paradise_nights",
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Paradise Nights Club's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
-      "look": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years",
-      "rendered": true
+      "look": "Thai woman of twenty-six, long dancer's neck, hair scraped into a high bun, sharp collarbones, emerald halter top.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years"
     },
     {
       "id": "meaw",
@@ -3533,8 +3617,10 @@
       "room": "candy_bar",
       "tags": [],
       "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
-      "look": "Gold everywhere — earrings, chain, phone case",
-      "rendered": true
+      "look": "Thai woman of thirty-one, gold hoop earrings and chains, glossy black hair, sharp winged eyeliner, gold phone case.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Gold everywhere — earrings, chain, phone case"
     },
     {
       "id": "fern",
@@ -3629,8 +3715,10 @@
       "room": "soundcheck_bar",
       "tags": [],
       "desc": "New enough to still look a little nervous, in a borrowed dress a size too big — one of Butterfly Bar's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.",
-      "look": "New enough to still look a little nervous, in a borrowed dress a size too big",
-      "rendered": true
+      "look": "Thai woman of twenty, round cheeks, shy smile, two clips holding her hair back, plain blue dress a size too big.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "New enough to still look a little nervous, in a borrowed dress a size too big"
     },
     {
       "id": "mam",
@@ -3693,8 +3781,10 @@
       "room": "reload_bar",
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Sunflower Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
-      "look": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years",
-      "rendered": true
+      "look": "Thai woman of twenty-four, swan neck, long side-swept hair, small diamond nose stud, yellow slip dress, poised.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years"
     },
     {
       "id": "ann",
@@ -3757,8 +3847,10 @@
       "room": "lucky_tiger",
       "tags": [],
       "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
-      "look": "Broad-shouldered and easy, a volleyball player's posture and handshake",
-      "rendered": true
+      "look": "Thai woman of twenty-seven, broad shoulders, short sporty bob, sunburnt cheeks, wide grin, white volleyball jersey.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Broad-shouldered and easy, a volleyball player's posture and handshake"
     },
     {
       "id": "ton",
@@ -3885,8 +3977,10 @@
       "room": "starlight_bar",
       "tags": [],
       "desc": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of Starlight Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
-      "look": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered",
-      "rendered": true
+      "look": "Thai woman of twenty-three, heavy-lidded sleepy eyes, messy topknot, faded band T-shirt worn as a dress, unbothered half-smile.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered"
     },
     {
       "id": "mild",
@@ -3949,8 +4043,10 @@
       "room": "lucky_charm",
       "tags": [],
       "desc": "Tiny and loud, all elbows and energy — one of Lucky Charm Bar's girls, from Udon Thani. She laughs before the joke is finished, which is either kindness or experience.",
-      "look": "Tiny and loud, all elbows and energy",
-      "rendered": true
+      "look": "Thai woman of twenty-two, tiny, wide laughing mouth, short choppy bob, bright pink lipstick, polka-dot dress.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tiny and loud, all elbows and energy"
     },
     {
       "id": "bella",
@@ -3981,8 +4077,10 @@
       "room": "moonshine_bar",
       "tags": [],
       "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.",
-      "look": "Broad-shouldered and easy, a volleyball player's posture and handshake",
-      "rendered": true
+      "look": "Thai woman of twenty-five, athletic shoulders, high braided ponytail, strong jaw, sweatband on one wrist, orange tank top.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Broad-shouldered and easy, a volleyball player's posture and handshake"
     },
     {
       "id": "mek",
@@ -4093,8 +4191,10 @@
       "room": "firefly_bar",
       "tags": [],
       "desc": "Grey at the temples, a red silk blouse, older than the town girls and better at this — one of Firefly Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.",
-      "look": "Grey at the temples, a red silk blouse, older than the town girls and better at this",
-      "rendered": true
+      "look": "Thai woman of fifty, grey at the temples, shoulder-length hair, laugh lines, red silk blouse, knowing half-smile.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Grey at the temples, a red silk blouse, older than the town girls and better at this"
     },
     {
       "id": "wanpen",
@@ -4189,8 +4289,10 @@
       "room": "mooring_bar",
       "tags": [],
       "desc": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of The Mooring's girls, from Loei. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.",
-      "look": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered",
-      "rendered": true
+      "look": "Thai woman of thirty-four, sleepy eyes, messy topknot, fine lines at the eyes, oversized grey T-shirt, slow easy smile.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered"
     },
     {
       "id": "dokmai",
@@ -4237,8 +4339,10 @@
       "room": "blue_dog",
       "tags": [],
       "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
-      "look": "Gold everywhere — earrings, chain, phone case",
-      "rendered": true
+      "look": "Thai woman of twenty-six, a row of gold studs in each ear, long wavy hair, dimpled smile, white top, fine gold chains.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Gold everywhere — earrings, chain, phone case"
     },
     {
       "id": "khing",
@@ -4365,8 +4469,10 @@
       "room": "honey_trap",
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Honey Trap Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
-      "look": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years",
-      "rendered": true
+      "look": "Thai woman of thirty, lean dancer's frame, sleek centre-parted hair, gold armband, black leotard top, tired eyes.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years"
     },
     {
       "id": "meen",
@@ -4445,8 +4551,10 @@
       "room": "dollhouse",
       "tags": [],
       "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
-      "look": "Broad-shouldered and easy, a volleyball player's posture and handshake",
-      "rendered": true
+      "look": "Thai woman of thirty, broad-shouldered, cropped wavy hair, freckled nose, easy laugh, oversized jersey dress.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Broad-shouldered and easy, a volleyball player's posture and handshake"
     },
     {
       "id": "ohm",
@@ -4573,8 +4681,10 @@
       "room": "lucky7",
       "tags": [],
       "desc": "Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Lucky 7 Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.",
-      "look": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years",
-      "rendered": true
+      "look": "Thai woman of twenty-two, long neck, pixie-short hair, bold red lips, silver body chain, turquoise crop top.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tall, with a dancer's long neck, bare shoulders, and the straight back of somebody who danced for years"
     },
     {
       "id": "proud",
@@ -4653,8 +4763,10 @@
       "room": "coconut",
       "tags": [],
       "desc": "Tiny and loud, all elbows and energy — one of Coconut Bar's girls, from Yasothon. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "look": "Tiny and loud, all elbows and energy",
-      "rendered": true
+      "look": "Thai woman of twenty-five, petite, big expressive eyebrows, curly shoulder-length hair, red crop top, mid-laugh.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Tiny and loud, all elbows and energy"
     },
     {
       "id": "duang",
@@ -4893,8 +5005,10 @@
       "room": "doghouse",
       "tags": [],
       "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Doghouse's girls, from Loei. She chimes faintly when she moves, and knows to the baht what it is all worth tonight.",
-      "look": "Gold everywhere — earrings, chain, phone case",
-      "rendered": true
+      "look": "Thai woman of thirty-five, gold bangles to the elbow, thick gold chain, hair in a high bun, satisfied smile.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Gold everywhere — earrings, chain, phone case"
     },
     {
       "id": "doghouse_bow",
@@ -5005,8 +5119,10 @@
       "room": "the_terrace",
       "tags": [],
       "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Terrace's girls, from Nakhon Phanom. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "look": "Broad-shouldered and easy, a volleyball player's posture and handshake",
-      "rendered": true
+      "look": "Thai woman of twenty-eight, strong shoulders, tied-back hair with loose strands, mole on one cheek, green sports top, calm smile.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Broad-shouldered and easy, a volleyball player's posture and handshake"
     },
     {
       "id": "the_terrace_namtip",
@@ -5037,8 +5153,10 @@
       "room": "kingfisher",
       "tags": [],
       "desc": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of The Kingfisher's girls, from Ubon. Google Translate is open before you finish the sentence.",
-      "look": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered",
-      "rendered": true
+      "look": "Thai woman of twenty-one, drowsy eyes, lopsided topknot, round glasses, pastel T-shirt dress.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered"
     },
     {
       "id": "kingfisher_kaew",
@@ -5085,8 +5203,10 @@
       "room": "two_stools",
       "tags": [],
       "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Two Stools Bar's girls, from {{Nong Khai}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.",
-      "look": "Gold everywhere — earrings, chain, phone case",
-      "rendered": true
+      "look": "Thai woman of forty, layered gold necklaces, short permed hair, sharp eyes, leopard-print blouse.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Gold everywhere — earrings, chain, phone case"
     },
     {
       "id": "the_gecko_duan",
@@ -5293,8 +5413,10 @@
       "room": "windmill",
       "tags": [],
       "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came down from the rice fields at seventeen and has run floors on this street for twenty years.",
-      "look": "Elegant, weathered, and plainly the last word on everything in the room",
-      "rendered": true
+      "look": "Thai woman in her fifties, silver-streaked hair in a low chignon, fine lines, dark plum lipstick, black silk blouse, composed.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Elegant, weathered, and plainly the last word on everything in the room"
     },
     {
       "id": "alisa",
@@ -5309,8 +5431,10 @@
       "room": "katoeys",
       "tags": [],
       "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns a share of the place now.",
-      "look": "Elegant, weathered, and plainly the last word on everything in the room",
-      "rendered": true
+      "look": "Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Elegant, weathered, and plainly the last word on everything in the room"
     },
     {
       "id": "sunee",
@@ -5373,8 +5497,10 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Stinky Pinky, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
-      "look": "Elegant, weathered, and plainly the last word on everything in the room",
-      "rendered": true
+      "look": "Thai woman in her early fifties, grey-streaked hair in a neat bun, laugh lines, gold hoop earrings, navy blouse, appraising look.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Elegant, weathered, and plainly the last word on everything in the room"
     },
     {
       "id": "jeab",
@@ -5645,8 +5771,10 @@
       "room": "kingfisher",
       "tags": [],
       "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Kingfisher, from Ubon. She started on the stage at seventeen and owns three of these stools now.",
-      "look": "Elegant, weathered, and plainly the last word on everything in the room",
-      "rendered": true
+      "look": "Thai woman of about fifty-five, short silver bob, reading glasses on a beaded chain, red lipstick, sharp amused eyes.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Elegant, weathered, and plainly the last word on everything in the room"
     },
     {
       "id": "two_stools_ratree",
@@ -5725,8 +5853,10 @@
       "room": "neon_palm",
       "tags": [],
       "desc": "A former headliner's posture and a gaze like a cash register — the mamasan of Neon Palm, from Sisaket. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
-      "look": "A former headliner's posture and a gaze like a cash register",
-      "rendered": true
+      "look": "Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "A former headliner's posture and a gaze like a cash register"
     },
     {
       "id": "the_bucket_ratchada",
@@ -5805,8 +5935,10 @@
       "room": "katoeys",
       "tags": [],
       "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Twice Shy, from Kalasin.",
-      "look": "Quiet and quick, the still point the whole loud room pays into",
-      "rendered": true
+      "look": "Thai woman of thirty-five, centre-parted straight black hair, small gold studs, calm narrow eyes, grey cardigan.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Quiet and quick, the still point the whole loud room pays into"
     },
     {
       "id": "tukky",
@@ -5836,9 +5968,11 @@
       "th": "นุช",
       "room": "succubus",
       "tags": [],
-      "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Succubus, from Khon Kaen.",
-      "look": "Headset on one ear, phone in one hand, the till in perfect order",
-      "rendered": true
+      "desc": "Gold-rimmed glasses and a black blazer, counting notes faster than you can read them — the cashier at Succubus, from Khon Kaen.",
+      "look": "Thai woman of thirty, short layered hair, gold-rimmed glasses, small mole on her chin, black blazer, counting notes.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Headset on one ear, phone in one hand, the till in perfect order"
     },
     {
       "id": "golf",
@@ -5852,9 +5986,11 @@
       "th": "กอล์ฟ",
       "room": "tequila_queen",
       "tags": [],
-      "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Tequila Queen A-Go-Go, from Loei.",
-      "look": "Headset on one ear, phone in one hand, the till in perfect order",
-      "rendered": true
+      "desc": "A boyish crop, a black polo and a pen behind her ear, the till in perfect order — the cashier at Tequila Queen A-Go-Go, from Loei.",
+      "look": "Thai woman of twenty-eight, boyish short crop, square jaw, silver stud earrings, black polo shirt, pen behind her ear.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Headset on one ear, phone in one hand, the till in perfect order"
     },
     {
       "id": "air",
@@ -5869,8 +6005,10 @@
       "room": "blue_dog",
       "tags": [],
       "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at Blue Dog, from Khon Kaen.",
-      "look": "Perched above the till like a lifeguard watching a pool of drunks",
-      "rendered": true
+      "look": "Thai woman of forty, sun-browned face, short curly perm, sharp watchful eyes, loud Hawaiian shirt.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Perched above the till like a lifeguard watching a pool of drunks"
     },
     {
       "id": "apple",
@@ -5965,8 +6103,10 @@
       "room": "crystal_palace",
       "tags": [],
       "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Crystal Palace A-Go-Go, from Kalasin.",
-      "look": "Quiet and quick, the still point the whole loud room pays into",
-      "rendered": true
+      "look": "Thai woman of twenty-nine, sleek bob with a blunt fringe, winged eyeliner, silver hoops, black top, steady gaze.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Quiet and quick, the still point the whole loud room pays into"
     },
     {
       "id": "fai",
@@ -5981,8 +6121,10 @@
       "room": "paradise_nights",
       "tags": [],
       "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at Paradise Nights Club, from Loei.",
-      "look": "Perched above the till like a lifeguard watching a pool of drunks",
-      "rendered": true
+      "look": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Perched above the till like a lifeguard watching a pool of drunks"
     },
     {
       "id": "gam",
@@ -6077,8 +6219,10 @@
       "room": "starlight_bar",
       "tags": [],
       "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at Starlight Bar, from Sakon Nakhon.",
-      "look": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
-      "rendered": true
+      "look": "Thai woman of forty-five, sleeve of faded tattoos, cropped hair, deep laugh lines, men's checked shirt, sceptical squint.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here"
     },
     {
       "id": "kaimook",
@@ -6141,8 +6285,10 @@
       "room": "water_buffalo",
       "tags": [],
       "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at The Water Buffalo, from {{Nong Khai}}.",
-      "look": "Perched above the till like a lifeguard watching a pool of drunks",
-      "rendered": true
+      "look": "Thai woman of thirty, high cheekbones, hair in two low braids, chunky turquoise earrings, olive shirt, wry smile.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Perched above the till like a lifeguard watching a pool of drunks"
     },
     {
       "id": "aim",
@@ -6157,8 +6303,10 @@
       "room": "firefly_bar",
       "tags": [],
       "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Firefly Bar, from Maha Sarakham.",
-      "look": "Quiet and quick, the still point the whole loud room pays into",
-      "rendered": true
+      "look": "Thai woman of twenty-six, hair in a low bun with a pencil through it, round glasses, freckles, plain white blouse.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Quiet and quick, the still point the whole loud room pays into"
     },
     {
       "id": "tangmo",
@@ -6188,9 +6336,11 @@
       "th": "กัญญา",
       "room": "nottys_place",
       "tags": [],
-      "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}.",
-      "look": "Headset on one ear, phone in one hand, the till in perfect order",
-      "rendered": true
+      "desc": "Pearl earrings, thin gold glasses and an expression that gives away nothing, the till in perfect order — the cashier at Notty's Place, from {{Nong Khai}}.",
+      "look": "Thai woman in her forties, sleek low ponytail, thin gold glasses, pearl earrings, cream silk blouse, unreadable expression.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Headset on one ear, phone in one hand, the till in perfect order"
     },
     {
       "id": "mon",
@@ -6205,8 +6355,10 @@
       "room": "night_heron",
       "tags": [],
       "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Night Heron, from Sakon Nakhon.",
-      "look": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
-      "rendered": true
+      "look": "Thai woman of fifty, tattooed knuckles, iron-grey bun, wire glasses, faded batik blouse, flat calm stare.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here"
     },
     {
       "id": "the_terrace_kade",
@@ -6221,8 +6373,10 @@
       "room": "the_terrace",
       "tags": [],
       "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Terrace, from Loei.",
-      "look": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
-      "rendered": true
+      "look": "Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here"
     },
     {
       "id": "kingfisher_noey",
@@ -6269,8 +6423,10 @@
       "room": "the_gecko",
       "tags": [],
       "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at The Gecko, from Buriram.",
-      "look": "Quiet and quick, the still point the whole loud room pays into",
-      "rendered": true
+      "look": "Thai woman of twenty-seven, long straight hair tucked behind her ears, dimples, small jade pendant, denim shirt.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Quiet and quick, the still point the whole loud room pays into"
     },
     {
       "id": "sea_wall_gig",
@@ -6348,8 +6504,8 @@
       "th": "จินดา",
       "room": "jade_lounge",
       "tags": [],
-      "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Jade Lounge, from Sakon Nakhon. She puts four kids through school on other men's lonely nights.",
-      "look": "A cloud of perfume and authority, hair lacquered against the fans",
+      "desc": "Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes. — the mamasan of Jade Lounge, from Sakon Nakhon. She puts four kids through school on other men's lonely nights.",
+      "look": "Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes.",
       "rendered": true
     },
     {
@@ -6364,8 +6520,8 @@
       "th": "จุ๋ม",
       "room": "jade_lounge",
       "tags": [],
-      "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Jade Lounge, from Yasothon.",
-      "look": "Black polo, a lanyard of too many keys, a calculator she never needs",
+      "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Jade Lounge, from Yasothon.",
+      "look": "A note-counting machine at her elbow and a faster one behind her eyes",
       "rendered": true
     },
     {
@@ -6380,8 +6536,8 @@
       "th": "นุช",
       "room": "peach_lounge",
       "tags": [],
-      "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.",
-      "look": "Broad, motherly, and entirely able to have you removed by smiling",
+      "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.",
+      "look": "Rings on every finger and a voice that cuts the music when she wants it",
       "rendered": true
     },
     {
@@ -6396,8 +6552,8 @@
       "th": "ฟาริดา",
       "room": "peach_lounge",
       "tags": [],
-      "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at Peach Lounge, from Roi Et.",
-      "look": "Cash drawer open, phone face-down, all of her attention on the maths",
+      "desc": "Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin. — the cashier at Peach Lounge, from Roi Et.",
+      "look": "Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin.",
       "rendered": true
     },
     {
@@ -6412,8 +6568,8 @@
       "th": "ขิง",
       "room": "lollipop_bar",
       "tags": [],
-      "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Lollipop Bar, from Ubon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
-      "look": "A cloud of perfume and authority, hair lacquered against the fans",
+      "desc": "Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze. — the mamasan of Lollipop Bar, from Ubon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+      "look": "Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze.",
       "rendered": true
     },
     {
@@ -6428,8 +6584,8 @@
       "th": "วิว",
       "room": "sweet_tamarind",
       "tags": [],
-      "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Sweet Tamarind, from Maha Sarakham. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
-      "look": "Rings on every finger and a voice that cuts the music when she wants it",
+      "desc": "Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Sweet Tamarind, from Maha Sarakham. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+      "look": "Gold at the wrist and throat, reading glasses pushed up into her hair",
       "rendered": true
     },
     {
@@ -6444,8 +6600,8 @@
       "th": "ตุ๊กตา",
       "room": "sweet_tamarind",
       "tags": [],
-      "desc": "A blunt bob, red lipstick, and a stare that reconciles you at a glance — the cashier at Sweet Tamarind, from Sakon Nakhon.",
-      "look": "A blunt bob, red lipstick, and a stare that reconciles you at a glance",
+      "desc": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling. — the cashier at Sweet Tamarind, from Sakon Nakhon.",
+      "look": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling.",
       "rendered": true
     },
     {
@@ -6460,8 +6616,8 @@
       "th": "นภา",
       "room": "firecracker_bar",
       "tags": [],
-      "desc": "Thai woman in her late forties, round face, short permed hair, a gold necklace, a tired, shrewd smile — the mamasan of Firecracker Bar, from Chaiyaphum. She has run this floor longer than most of the girls have been alive.",
-      "look": "Thai woman in her late forties, round face, short permed hair, a gold necklace, a tired, shrewd smile",
+      "desc": "Thai woman in her early fifties, grey-streaked hair in a neat bun, laugh lines, gold hoop earrings, navy blouse, appraising look. — the mamasan of Firecracker Bar, from Chaiyaphum. She has run this floor longer than most of the girls have been alive.",
+      "look": "Thai woman in her early fifties, grey-streaked hair in a neat bun, laugh lines, gold hoop earrings, navy blouse, appraising look.",
       "rendered": true
     },
     {
@@ -6476,9 +6632,11 @@
       "th": "แป้ง",
       "room": "firecracker_bar",
       "tags": [],
-      "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Firecracker Bar, from Chaiyaphum.",
-      "look": "Headset on one ear, phone in one hand, the till in perfect order",
-      "rendered": true
+      "desc": "Round-faced, a high ponytail and her {{phone}} in one hand, the till in perfect order — the cashier at Firecracker Bar, from Chaiyaphum.",
+      "look": "Thai woman of twenty-four, round face, high ponytail, wide bright smile, red-and-gold bar shirt, phone in hand.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Headset on one ear, phone in one hand, the till in perfect order"
     },
     {
       "id": "hot_pepper_gina",
@@ -6492,8 +6650,8 @@
       "th": "จีน่า",
       "room": "hot_pepper",
       "tags": [],
-      "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.",
-      "look": "Half-moon glasses down her nose, appraising you over the top of them",
+      "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.",
+      "look": "A cloud of perfume and authority, hair lacquered against the fans",
       "rendered": true
     },
     {
@@ -6508,8 +6666,8 @@
       "th": "ชม",
       "room": "hot_pepper",
       "tags": [],
-      "desc": "Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at Hot Pepper Bar, from Nakhon Phanom.",
-      "look": "Cash drawer open, phone face-down, all of her attention on the maths",
+      "desc": "Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin. — the cashier at Hot Pepper Bar, from Nakhon Phanom.",
+      "look": "Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin.",
       "rendered": true
     },
     {
@@ -6524,8 +6682,8 @@
       "th": "มิน",
       "room": "hula_hula",
       "tags": [],
-      "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.",
-      "look": "Rings on every finger and a voice that cuts the music when she wants it",
+      "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.",
+      "look": "Broad, motherly, and entirely able to have you removed by smiling",
       "rendered": true
     },
     {
@@ -6540,8 +6698,8 @@
       "th": "นุ่น",
       "room": "hula_hula",
       "tags": [],
-      "desc": "Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Hula Hula Bar, from Sakon Nakhon.",
-      "look": "Neat bun, neat ledger, an engagement ring worn on a chain",
+      "desc": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling. — the cashier at Hula Hula Bar, from Sakon Nakhon.",
+      "look": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling.",
       "rendered": true
     },
     {
@@ -6556,8 +6714,8 @@
       "th": "รัศมี",
       "room": "ladybird_bar",
       "tags": [],
-      "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Ladybird Bar, from Loei. She started on the stage at seventeen and owns a share of the place now.",
-      "look": "Rings on every finger and a voice that cuts the music when she wants it",
+      "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Ladybird Bar, from Loei. She started on the stage at seventeen and owns a share of the place now.",
+      "look": "Half-moon glasses down her nose, appraising you over the top of them",
       "rendered": true
     }
   ]

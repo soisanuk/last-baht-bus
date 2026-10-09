@@ -31,7 +31,13 @@
   "mama": true,
   "cashier": true,
   "hostesses": 3,
-  "authored": true
+  "authored": true,
+  "overrides": {
+   "firecracker_bar_pang": {
+    "look": "Thai woman of twenty-four, round face, high ponytail, wide bright smile, red-and-gold bar shirt, phone in hand.",
+    "descOpen": "Round-faced, a high ponytail and her phone in one hand, the till in perfect order"
+   }
+  }
  },
  {
   "room": "hot_pepper",

@@ -13353,12 +13353,12 @@
    "index": 8,
    "key": "firecracker_bar_pang#8",
    "npc": "firecracker_bar_pang",
-   "topic": "headset|instagram|app|marketing",
+   "topic": "instagram|app|marketing|phone",
    "topics": [
-    "headset",
     "instagram",
     "app",
-    "marketing"
+    "marketing",
+    "phone"
    ]
   },
   {

@@ -6,7 +6,8 @@
 //   node tools/gen-floor-staff.mjs <spec.json> --write   # append them to FLOOR_STAFF in world.js
 //   … --write --replace                                # rewrite records already there (ids are stable)
 //
-// spec.json: [{ "room": "jade_lounge", "mama": true | "solo" | false, "cashier": true, "hostesses": 4, "authored": true }, …]
+// spec.json: [{ "room": "jade_lounge", "mama": true | "solo" | false, "cashier": true, "hostesses": 4, "authored": true,
+//              "overrides": { "<id>": { "look": "…", "descOpen": "…" } } }, …]   (overrides: a face re-looked later)
 //   mama "solo" = the owner is mamasan AND cashier (no cashier record) — the small-bar canon.
 //   "authored": true = the hostesses are WRITTEN, not pooled (every Soi 6 girl is hand-authored —
 //   engine.test): their records are still computed, so the house staff's names and ids are the same
@@ -118,6 +119,13 @@ for (const bar of SPEC) {
     // SDXL verbatim); the desc keeps it, because the desc is what a player reads
     const _shown = String(look).replace(/\{\{|\}\}/g, "").replace(/\bphone\b/g, "{{phone}}");   // her phone, never yours, in the desc a player reads
     Object.assign(rec, { look: look.replace(/\{\{|\}\}/g, ""), from, desc: `${_shown} — ${what}, from ${from}.` + (t ? " " + t : ""), pick: { ...d.pick } });
+    // a FACE re-looked after the fact (the faceless-look pass, 2026-10-09): the spec carries it, so a
+    // re-run writes the same woman — { look, descOpen } replaces the look and the desc's opening clause
+    const ov = (bar.overrides || {})[bar.room + "_" + name.toLowerCase()];
+    if (ov) {
+      if (ov.look) rec.look = ov.look;
+      if (ov.descOpen) rec.desc = rec.desc.replace(/^.+? — /, String(ov.descOpen).replace(/\bphone\b/g, "{{phone}}") + " — ");
+    }
     if (d.selfies) rec.selfies = d.selfies;
     // the Connect 4 tier is read off her LOOK, not her donor's: a "New enough…"/"Baby-faced…" face
     // is the beatable new girl, and only that face is (engine.test's skill ladder)
