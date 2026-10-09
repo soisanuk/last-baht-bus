@@ -206,7 +206,22 @@ function _learnNames(text) {
   // person ("ASK CANDY ABOUT ROSE") still teaches her.
   scan = scan.replace(_NOT_A_NAME, m => " ".repeat(m.length)).replace(_NOT_A_NAME_CAPS, m => " ".repeat(m.length));
   const parens = (scan.match(/\([^)]*\)/g) || []).join(" ");
-  for (const [id, rx, rxCaps] of _nameRx) {
+  // A SHARED NAME MARKS ONE WOMAN, NOT EVERY WOMAN WHO WEARS IT (the namesake audit, 2026-10-09): "Fon"
+  // printed in one bar taught the journal both Fons. The one meant is the one in the room, or the one
+  // whose bar the same line names; with neither, a stranger's name is nobody yet.
+  const _hits = _nameRx.filter(([id, rx, rxCaps]) => rx.test(scan) || rxCaps.test(parens));
+  const _bySrc = new Map();
+  for (const h of _hits) { const k = h[1].source; if (!_bySrc.has(k)) _bySrc.set(k, []); _bySrc.get(k).push(h); }
+  const _here = typeof _npcsHere === "function" ? _npcsHere() : [];
+  const _meant = [];
+  for (const grp of _bySrc.values()) {
+    if (grp.length === 1) { _meant.push(grp[0]); continue; }
+    const pres = grp.find(([id]) => _here.includes(id));
+    if (pres) { _meant.push(pres); continue; }
+    const byBar = grp.filter(([id]) => { const r = typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room; const bn = r && typeof _barName === "function" ? _barName(r) : null; return bn && String(text).includes(bn); });
+    if (byBar.length === 1) _meant.push(byBar[0]);
+  }
+  for (const [id, rx, rxCaps] of _meant) {
     if (!G.known[id] && (rx.test(scan) || rxCaps.test(parens))) {
       G.known[id] = true;
       // provenance: the frontier HINT can say "Candy mentioned her, at Candy Bar"
@@ -777,6 +792,27 @@ function _setFlag(f) { G.flags[f] = true; }
 // texted homework to a stranger (Judith, round 47), and a bar manager could
 // never once say "new face", because his own room description had introduced
 // him one line before the welcome shot was poured.
+// THE NAMESAKE POLICY (2026-10-09): names are labels and ids are the people — 31 names are already
+// shared and the soi is about to grow. A name typed or asked resolves to the namesake in the room, else
+// the one you have met most recently, else the one you know of if only one, else nobody (or, with
+// opts.first, the first) — never silently the first woman of that name in the file.
+function _npcByName(name, opts = {}) {
+  const t = String(name || "").toLowerCase().trim();
+  if (!t) return null;
+  const c = Object.keys(NPCS).filter(i => (!opts.filter || opts.filter(i)) &&
+    (String(NPCS[i].name).toLowerCase() === t || String(NPCS[i].name).toLowerCase().split(" ").pop() === t));
+  // an id typed as itself wins — unless it is also one of several women by that NAME (rung is the
+  // Lucky Tiger's id and every Rung's name), where the id is an accident of who was written first
+  if (NPCS[t] && (!opts.filter || opts.filter(t)) && c.length <= 1) return t;
+  if (c.length <= 1) return c[0] || null;
+  const here = typeof _npcsHere === "function" ? _npcsHere() : [];
+  const h = c.find(i => here.includes(i)); if (h) return h;
+  const met = c.filter(i => (G.talked && G.talked[i] && G.talked[i].length) || (G.soc && G.soc.drinks && G.soc.drinks[i]));
+  if (met.length) return met.sort((a, b) => ((G.seenDay || {})[b] || (G.metDay || {})[b] || 0) - ((G.seenDay || {})[a] || (G.metDay || {})[a] || 0))[0];
+  const known = c.filter(i => G.known && G.known[i]);
+  if (known.length === 1) return known[0];
+  return opts.first ? c[0] : null;
+}
 function _met(id) { return !!(G.talked && G.talked[id]); }
 
 // IN TOWN, as Tan means it when he says "walk, it is four minutes": the bar

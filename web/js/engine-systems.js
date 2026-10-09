@@ -548,8 +548,7 @@ function _seeHomeOpen(id) {
 }
 function _doSeeHome(arg) {
   const nm = String(arg || "").toLowerCase().replace(/\b(home|to the bus|to her bike|to the songthaew)\b/g, "").replace(/^(the |a )/, "").trim();
-  const id = _findNpc(nm) || Object.keys(NPCS).find(k => /^[A-Z]/.test(NPCS[k].name || "") &&
-    (NPCS[k].name.toLowerCase() === nm || NPCS[k].name.toLowerCase().split(" ").pop() === nm));
+  const id = _findNpc(nm) || _npcByName(nm, { filter: k => /^[A-Z]/.test(NPCS[k].name || ""), first: true });
   if (!id || !NPCS[id]) { _say("See whom home? Somebody on the floor, by name."); return; }
   if (!NPC_ROLES[id] || NPC_ROLES[id] !== "hostess") { _say(`${NPCS[id].name} isn't going anywhere you can walk to.`); return; }
   if (!_npcsHere().includes(id)) { _say(`${NPCS[id].name} isn't here to walk home.`); return; }
@@ -1353,8 +1352,7 @@ const _NONT_LOCATE = [
 function _nontLocate(topic) {
   const t = String(topic || "").trim().toLowerCase();
   if (!t) return false;
-  const id = Object.keys(NPCS).find(i => i !== "nont" && (NPCS[i].name.toLowerCase() === t || i === t ||
-    NPCS[i].name.toLowerCase().split(" ").pop() === t));
+  const id = _npcByName(t, { filter: i => i !== "nont", first: true });   // the namesake you mean (2026-10-09)
   if (!id) return false;
   if (id === "fast_eddy") return false;   // the history, not the locate: his `rabbit|eddy` node answers (Declan, r45)
   if (id === "orathai") return false;   // the woman three tables along: his own node points, for nothing (the laundering quests, 2026-10-08)
@@ -3812,8 +3810,7 @@ const _TAN_SIGNOFF = [
 function _tanAbout(topic) {
   const t = String(topic || "").toLowerCase().trim();
   const id = (/^(the )?rabbit$/.test(t) ? "fast_eddy" : null) ||   // the soi calls him Rabbit (Declan, r45)
-    Object.keys(NPCS).find(i => NPCS[i].name.toLowerCase() === t || i === t ||
-      NPCS[i].name.toLowerCase().split(" ").pop() === t) ||
+    _npcByName(t, { first: true }) ||   // the namesake you mean, not the first in the file (2026-10-09)
     null;
   // the owner's own girl is not a floor girl to Tan: he read Manow as "works at the Stinky
   // Pinky", to the man who owns it, in the middle of it (Ossie, round 70)

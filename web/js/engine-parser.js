@@ -1792,7 +1792,7 @@ function _takeOut(arg) {
   const id = _findNpc(who);
   if (!id) {   // not here: say where, never "You don't see that here" (Callum, round 71)
     const el = typeof _elsewhereLine === "function" ? _elsewhereLine(who) : null;
-    const gid = Object.keys(NPCS).find(i => NPC_ROLES[i] && String(NPCS[i].name).toLowerCase() === who.toLowerCase() && _met(i));
+    const gid = _npcByName(who, { filter: i => NPC_ROLES[i] && _met(i) });
     if (el || gid) { _say(el || `${NPCS[gid].name} isn't here to take anywhere.`, "dim"); return true; }
   }   // not here: say where, never "You don't see that here" (Callum, round 71)
   if (id && NPC_ROLES[id] && !_npcsHere().includes(id)) {   // "You don't see that here" for a woman, not a thing (Callum, round 71)
@@ -2284,7 +2284,7 @@ function _doExamine(arg) {
       return _describeRoom(true, true);
   }
   { const _w = String(arg || "").toLowerCase().replace(/^(the|a|an)\s+/, "").trim();
-    const _kid = _w && Object.keys(NPCS).find(id => String(NPCS[id].name || "").toLowerCase() === _w && _met(id));
+    const _kid = _w && _npcByName(_w, { filter: id => _met(id) });
     if (_kid && typeof _elsewhereLine === "function") { const l = _elsewhereLine(_w); if (l) { _say(l); return; } } }   // "examine may" after the shutters (Gwen, round 66)
   _say(_pickVary(_NO_SUCH_THING, "xnothing"));
 }
@@ -8461,8 +8461,7 @@ function _doBuy(arg) {
       // a named man who is NOT here: "buy nigel a beer" poured one for the buyer, took ฿80
       // and paid สนุก, while TALK said he wasn't around (Dennis, round 60)
       if (!who && nm && !/^(man|lady|him|her|me|myself|round|drink|cold|big|small|another|one|two)$/.test(nm)) {
-        const away = Object.keys(NPCS).find(k => !NPCS[k].filler && /^[A-Z]/.test(NPCS[k].name || "") &&
-          (NPCS[k].name.toLowerCase() === nm || NPCS[k].name.toLowerCase().split(" ").pop() === nm));
+        const away = _npcByName(nm, { filter: k => !NPCS[k].filler && /^[A-Z]/.test(NPCS[k].name || ""), first: true });
         // a man who works THIS room and has left the floor has his own line (round 44's host)
         if (away && !_npcsHere().includes(away) && NPCS[away].room !== G.room && !r.hostBar) {
           _say(`${NPCS[away].name} isn't here to drink it. (BUY BEER, if the beer's for you.)`);

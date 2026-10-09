@@ -247,6 +247,9 @@ const _term = (() => {
         const here = cands.find(id =>
           NPCS[id] && typeof _npcRoom === "function" && _npcRoom(id) === G.room);
         if (here) return here;
+        // not in this room: the namesake you know (the engine's one policy), else the first
+        const known = typeof _npcByName === "function" && _npcByName(v, { filter: id => cands.includes(id) });
+        if (known) return known;
       }
       return cands[0];
     } catch (e) { return null; }
@@ -397,8 +400,9 @@ const _term = (() => {
           const w = (typeof _wcMap === "function" && _wcMap()[v]) || [v, "", ""];
           openWordModal(w);
         } };
-        let ent = null;
-        for (const [id, n] of Object.entries(NPCS)) if (n.th === v) ent = id;
+        const ths = Object.keys(NPCS).filter(id => NPCS[id].th === v);
+        const ent = ths.length > 1 && typeof _npcByName === "function"
+          ? (_npcByName(NPCS[ths[0]].name, { filter: id => ths.includes(id), first: true }) || ths[0]) : ths[0];
         if (ent) return [..._kwActions("npc", NPCS[ent].name, full), translate];
         return [translate];
       }
@@ -554,7 +558,9 @@ const _term = (() => {
       pid = _portraitId(kwEl.dataset.k, kwEl.dataset.v);
     } else if (kwEl.dataset.k === "thai") {
       try {
-        for (const [id, n] of Object.entries(NPCS)) if (n.th === kwEl.dataset.v) pid = id;
+        const ths = Object.keys(NPCS).filter(id => NPCS[id].th === kwEl.dataset.v);
+        pid = ths.length > 1 && typeof _npcByName === "function"
+          ? (_npcByName(NPCS[ths[0]].name, { filter: id => ths.includes(id), first: true }) || ths[0]) : (ths[0] || null);
       } catch (e) { /* world not loaded */ }
     }
     if (pid) {
