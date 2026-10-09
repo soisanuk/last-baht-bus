@@ -354,6 +354,7 @@ function newGame() {
     acctBase: 0, acctUntil: 0, acctDay: null,   // the accountant's call: Nont's total at the last call, the review's end, the call's day
     coversNights: {},    // day → the men counted at Jasmine Garden that night (The Covers: a pattern is three nights, Mario 2026-10-08)
     licencesRead: {},    // room → the registered name read off the paper by the till (EXAMINE LICENCE, 2026-10-08)
+    reviewOf: {},        // "speaker>colleague:kind" → the line she gives about her (round 77: an opinion is kept, not re-dealt nightly)
     frontierSaid: {},    // "vacation:cycle:phase" → the inner west's frontier line was told (Soi 6 expansion, 2026-10-09)
     questDoneDay: {},    // quest id → the day it completed (the follow-ups a month later: Orathai closes, the police read the paper)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
@@ -2570,6 +2571,15 @@ function _topicMiss(npcId) {
 // himself had just name-dropped, was answered "You asked me that one. Same
 // answer. Memory like a sieve, this town." on the FIRST ever ask (Wes, round
 // 33, 2026-09-01 — "a cross-checker's verb, gaslit on first use").
+// The first sentence of the first thing a node SAYS, closed — the gist of a story you have heard,
+// for a node with no authored `short` (round 77).
+function _gistOf(txt) {
+  const t = String(txt || "");
+  const q = t.match(/"([^"]+)"|“([^”]+)”/);
+  if (!q) return t.split(/(?<=[.!?])\s/)[0];
+  const said = (q[1] || q[2]).split(/(?<=[.!?])\s/)[0].replace(/[,;:—–-]\s*$/, "");
+  return "\"" + said + (/[.!?]$/.test(said) ? "" : "…") + "\"";
+}
 function _deliver(npcId, d, full, asNew) {
   const n = NPCS[npcId];
   // Second time you hear a line, get the point, not the whole spiel. We track
@@ -2619,8 +2629,11 @@ function _deliver(npcId, d, full, asNew) {
   // brush-off: the gist is fine (it still answers), the brush-off is not.
   const _ts = typeof _townStory === "function" ? _townStory(npcId, d) : null;   // the town book — see _townPick
   const _txt = (_ts && _ts.text) || d.text, _sh = (_ts && _ts.short) || d.short;
+  // …a node you have HEARD, reached by another word in it, is still a retelling: it answers with
+  // its gist — the first sentence she said — and never the whole speech again (Siobhan, round 77:
+  // "surin", "norway" and "wales" each replayed the whole node). Unheard, asNew tells it in full.
   _say(_fillSaid(terse
-    ? (_sh || (asNew ? _txt : (n.patron ? _patronAgain(npcId) : _askAgain(npcId))))
+    ? (_sh || (asNew ? _gistOf(_txt) : (n.patron ? _patronAgain(npcId) : _askAgain(npcId))))
     : _txt));
   // Courted before you ever talked (drinks first, introductions after — a
   // legitimate Pattaya order of operations): the authored greeting reads
@@ -3008,9 +3021,9 @@ function _describeRoom(full, forceFull) {
     if (!G.dogRegion && r.region) G.dogRegion = r.region;
     _say(_pickVary([
       "A soi dog with one clipped ear falls in beside you for half a block, matching " +
-        "your pace with off-duty professionalism, then peels away at the soi mouth with " +
+        "your pace with off-duty professionalism, then peels away at the next corner with " +
         "one look back. (FEED DOG, if you'd like that to go differently.)",
-      "The clipped-ear dog is at the soi mouth again, sitting like a man waiting for a bus. He " +
+      "The clipped-ear dog is on his corner again, sitting like a man waiting for a bus. He " +
         "watches you pass with no expectation whatsoever, which is somehow worse. (FEED DOG, if you like.)",
       "Nose down, one ear up, the clipped-ear dog checks the gutter ahead of you, finds nothing, " +
         "and glances back as if you might be the something. (FEED DOG — or don't; he's heard it before.)",

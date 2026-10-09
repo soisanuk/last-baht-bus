@@ -3517,7 +3517,7 @@ const ROOMS = {
     revisit: [
       "Back onto the west end and the wall of noise hits first, the hands second. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" You are grabbed, released, grabbed again, an item passed between bars.",
       "The soi takes you back into the bass and the barkers. A girl detaches from an open front to walk backwards ahead of you, selling her bar with her whole body. Then another. Then another.",
-      "Back into the loudest hundred metres in Thailand. Six sound systems fight, a dozen girls call you handsome in the same second, and one of them takes a foam pool noodle to your shoulder for walking too slow.",
+      "Back into the loudest stretch in Thailand. Six sound systems fight, a dozen girls call you handsome in the same second, and one of them takes a foam pool noodle to your shoulder for walking too slow.",
       "You step back into the west end and it's exactly as you left it: sequins, wrist-grabs, competing basslines, and the flat certainty that you will be spending money very soon.",
       "Back onto Soi 6 West, where standing still is not an option — a hand takes your wrist, a voice takes your name (you have no name here, you are Handsome), and a bar takes its shot.",
       "The soi swallows you again. \"You! Yes you! Come Pink Lotus!\" \"No — Golden Dragon!\" \"He come with ME.\" You are, briefly, the most wanted man in Thailand.",
@@ -3694,11 +3694,11 @@ const ROOMS = {
       "Back to the middle: twenty-odd beer bars in a row with nothing upstairs, the one stretch of Soi 6 where a front is only a front.",
       "The neutral stretch again. Nobody owns the middle and it shows — mismatched awnings, a different song every ten metres, and not one pool noodle on the pavement.",
     ],
-    lateDesc: "The middle of Soi 6 past midnight: the short-time places have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours, and the three beer bars either side of it keep the Vic's — this is the light left on Soi 6 now; past them the grilles are down and the ice buckets are out on the pavement.",
+    lateDesc: "The middle of Soi 6 past midnight: the short-time places either side have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours, and the three beer bars either side of it keep the Vic's — this is the light left on Soi 6 now; past them the grilles are down and the ice buckets are out on the pavement.",
     // close looks at what the prose names (the examine audit, Soi 6 first — 2026-10-09)
     reads: {
       deck: "Across the soi, the Verandah's raised wooden deck sits one step above the pavement with its chairs and lazy fans, the only front on this stretch nobody tries to climb.",
-      bars: "Beer bars end to end, twenty-odd of them along the quiet stretch: a rail, a fridge, a dozen stools and nothing upstairs, each one run for years by the same woman whose name is on the paper by the till. Nobody's group ever bought into the middle — it was never worth the trouble — so this is where the whole soi comes to sit down. The ones you'll get to know are the Shady Lady, the Front Row and the Verandah, with the Queen Vic among them, the one door on the soi with aircon behind it.",
+      bars: "Beer bars end to end, twenty-odd of them along the quiet stretch: a rail, a fridge, a dozen stools and nothing upstairs, most of them run for years by the woman whose name is on the paper by the till. Nobody's group ever bought into the middle — it was never worth the trouble — so this is where the whole soi comes to sit down. The ones you'll get to know are the Shady Lady, the Front Row and the Verandah, with the Queen Vic among them, the one door on the soi with aircon behind it.",
       girls: "Fewer of them along here, and sitting down: a woman on a stool by each fridge, a cashier with a calculator, a mama with her shoes off under the table. They'll call you over if you look like you want calling. The grabbing is left to the loud ends.",
       dartboard: "Through the Queen Vic's window you can just see the dartboard and a man squaring up to it with a pint in his other hand — the one game on the soi played at a walking pace.",
     },
@@ -3716,9 +3716,9 @@ const ROOMS = {
     region: "Soi 6",
     desc: "The second stretch in from Beach Road, and the loud end has not stopped: another " +
       "twenty-odd fronts, both sides, the same open rooms with a rail and a staircase behind it, the " +
-      "same hands, the same foam noodles. But somebody has been shopping along here. Every few doors " +
+      "same hands, the same foam noodles. But somebody has been shopping along here. Here and there " +
       "a front has newer paint, a bigger sound system and, on the paper by the till, the same " +
-      "company as the Pink Lotus back at the corner; between them the older fronts hold on. JADE " +
+      "company as the Pink Lotus back at the West End; between them the older fronts hold on. JADE " +
       "LOUNGE and PEACH LOUNGE wear the new paint, LOLLIPOP BAR has a folder on its back table, and " +
       "SWEET TAMARIND has a hand-lettered sign and no intention of selling. West, the corner; east, " +
       "the quiet middle.",
@@ -3738,7 +3738,9 @@ const ROOMS = {
       "The inner west in the small hours: one grille still a hand's height off the ground with light under it and the sound of somebody counting, and the group's printed boards glowing faintly behind theirs like screens left on.",
     ],
     reads: {
-      bars: "Twenty-odd fronts on this stretch, and you can read the soi's next five years off them. The newer paint, the better speakers and the printed boards are the group's — the Jade, the Peach and a few more you'll never go into. The older fronts between them are still somebody's own. The Lollipop has a folder on its back table. The Sweet Tamarind has a row of business cards pinned by its till, every one of them a no.",
+      bars: "Twenty-odd fronts on this stretch, and you can read the soi's next five years off them. The newer paint, the better speakers and the printed boards are the group's — the Jade, the Peach, and whichever front is being painted this month. The older fronts between them are still somebody's own. The Lollipop has a folder on its back table. The Sweet Tamarind has a row of business cards pinned by its till, every one of them a no.",
+      buyer: "Whoever is buying this month looks like the last one: a good shirt, a soda he doesn't drink, a folder squared on a kerb-side table or a clipboard at the foot of a ladder. He is not here for you. He looks at the stools, not the girls, and he does not look up.",
+      paint: "Two kinds of paint on one street. The group's fronts are the newer colour, with printed price boards and the same small logo in a corner; the older fronts have hand-lettered signs, chalk on the boards and a fan instead of aircon. From the pavement you can read who has sold without asking anybody.",
       girls: "The same line of sequins as the corner, four or five to a front. You can't tell from the girls which bars have been bought; the girls stay when a bar is sold, which is most of what the buyer is paying for.",
     },
     exits: { w: "soi6_street", e: "soi6_mid" },
@@ -3747,7 +3749,8 @@ const ROOMS = {
   jade_lounge: {
     name: "Jade Lounge",
     region: "Soi 6",
-    bar: "Jade Lounge", barType: "soi6", owner: "plg",
+    bar: "Jade Lounge", barType: "soi6", owner: "plg", boughtWhen: "two years ago",
+    formerOwner: "a Thai woman everybody called Mama, who ran eleven stools and a cat and went home up-country with the money",
     desc: "Green glass, brass and a sound system three sizes too big for the room: the group's paint " +
       "on a front that was somebody else's two years ago. The stools are new, the staircase at the " +
       "back has carpet on it now, and the price board is printed rather than chalked, which on Soi 6 " +
@@ -3769,13 +3772,14 @@ const ROOMS = {
   peach_lounge: {
     name: "Peach Lounge",
     region: "Soi 6",
-    bar: "Peach Lounge", barType: "soi6", owner: "plg",
+    bar: "Peach Lounge", barType: "soi6", owner: "plg", boughtWhen: "not long ago",
+    formerOwner: "an Australian who painted the old sign himself and went home for his heart",
     desc: "Peach-coloured everything, and the paint still smells faintly of paint. The group bought " +
       "it not long ago and kept the name, the girls and the staircase; they changed the paper by the " +
-      "till, the sound system and the sign. The old hand-painted sign is leaning against the back " +
+      "till, the sound system, and the sign for a printed one with the same word on it. The old hand-painted sign is leaning against the back " +
       "wall, facing it.",
     reads: {
-      sign: "The old sign, hand-painted: PEACH in red, with a peach that looks more like a heart. It leans against the back wall with its face to the plaster, behind the cashier. Nobody threw it out, and nobody hung it up again either.",
+      sign: "The old sign leans against the back wall with its face to the plaster, behind the cashier. Tilt it forward and there it is, hand-painted: PEACH in red, with a peach that looks more like a heart. Nobody threw it out, and nobody hung it up again either. The new one outside says the same word in the group's lettering.",
     },
     revisit: [
       "Back into the Peach, the paint smell fainter than last time, and the same girl on the same stool. \"You know before, this bar? Before new boss? Same me. Better speakers.\"",
@@ -3819,6 +3823,7 @@ const ROOMS = {
       "for it. Beside the till, pinned to the wall in a neat row, are the business cards of the men " +
       "who have come in to make an offer.",
     reads: {
+      sign: "The hand-lettered sign over the front: SWEET TAMARIND in brown paint on cream, the letters getting smaller towards the end where the painter ran out of board. Nobody has repainted it, and nobody is going to.",
       cards: "Business cards pinned to the wall beside the till in a tidy row, the same company on every one, each with a date written across it in biro. The oldest has gone yellow. None of the numbers on them has ever been rung.",
       tamarind: "A string net of tamarind pods hanging by the till, brown and knobbly. Sweet tamarind is the luck of the house; the girls snap one open now and then and eat it with salt and chilli while they wait for you to make up your mind.",
     },
@@ -3828,7 +3833,7 @@ const ROOMS = {
       "Back past the cards pinned by the till. \"Every year more card,\" a girl says, following your eye. \"Mama say: card is free. Bar is not for sale.\"",
       "Into the Tamarind again, where the pitch is the soi's — drink, upstairs, price — and the laugh after it is louder than the soi's.",
       "Back under the hand-lettered sign. Nobody in here has new anything, and nobody in here seems to mind, least of all the girl now sitting on your knee.",
-      "The Tamarind again. \"Same bar, same girl, same mama,\" says the girl who claims you. \"Only bar on this side still same. You lucky.\"",
+      "The Tamarind again. \"Same bar, same girl, same mama,\" says the girl who claims you. \"Last bar on this side that never even open the folder. You lucky.\"",
     ],
     exits: { out: "soi6_west_in" },
   },
@@ -3858,6 +3863,7 @@ const ROOMS = {
     ],
     reads: {
       bars: "Twenty-odd fronts on this stretch and not one of them belongs to a company. You can tell from the signs, which are hand-me-downs, and from the paper by the tills, which carries women's names. Nobody bought into the inner east, which is why it is still like this. Firecracker, Hot Pepper, Hula Hula and Ladybird are the ones you'll get to know; the rest are a girl, a song and a staircase each.",
+      paint: "Hand-me-down signs all along this stretch, each one painted by whoever owned the bar the year it went up: a firecracker, a chilli, a grass skirt, a ladybird. No printed boards, no logo in the corner. Chalk, mostly, and handwriting you could pick out of a line-up.",
       chilli: "Over the Hot Pepper's rail, two metres of fibreglass chilli, faded on one side, visible from halfway down the stretch. It is the inner east's landmark; people give directions by it.",
       girls: "Three or four to a front, the soi's sequins and the soi's directness. More of them here are somebody's niece, cousin or neighbour than anywhere else on Soi 6, which you only notice when the cashier calls one of them by a family name across the room.",
     },
@@ -3968,7 +3974,7 @@ const ROOMS = {
       "The deep end of Soi 6 takes you back — same open fronts, same offers, louder if anything. A hand finds your arm before you've picked a bar; the bar gets picked for you.",
       "Back past the inner stretch into the thick of it, where every doorway has a girl and every girl has a plan for your evening and none of them is subtle about it.",
       "You round into the deep soi and the pitches overlap into one wall of sound: drink, upstairs, short time, long time, come come come, all of it aimed at you and meant.",
-      "Back into the far stretch, the last hundred metres before Second Road, where the girls read your wallet through your shorts and grab accordingly.",
+      "Back into the far stretch, the last of the soi before Second Road, where the girls read your wallet through your shorts and grab accordingly.",
       "The deep soi again. Kitten, Cherry, Ruby — three fronts, three staircases, three sets of hands already reaching. You are, once more, the entire economy walking past.",
       "Back to where the soi runs out toward Second Road, neon stacked to the roofline, a girl on your sleeve saying the quiet part first and loud: \"Come upstairs, tilac. Why we pretend?\"",
       "Back into the east end, front after front to the Second Road lights. You could drink in a different bar down here every night for three weeks and still not reach the corner.",
@@ -3977,6 +3983,7 @@ const ROOMS = {
     lateDesc: "The far end of Soi 6 after the shutters: dark frontages, a mop bucket left out, the last of the ice melting in a bin. Whoever was reaching for your arm an hour ago is asleep, or working somewhere that isn't here.",
     // the soi's size, at a close look (Soi 6 density, 2026-10-09)
     reads: {
+      neon: "Three colours of neon stacked to the roofline, every front fighting the next for the same patch of night: pink, green, a blue that hurts. Kitten Corner's paw print is the one you can find again, which is the point of a paw print.",
       bars: "Another twenty-odd fronts between the inner stretch and Second Road, packed as tight as the west end: neon to the roofline in three colours, a rail and a staircase behind every one. Kitten Corner, Cherry Pop and Ruby Kiss are the names that stick. The rest you'll know by a sign, a song or a girl on a stool, and forget by morning.",
       girls: "The same line of sequins as the west end, louder if anything and more direct: down here the word upstairs gets said before the word drink. Two or three to every doorway, every one of them reading the crowd for the man who has already decided.",
     },
@@ -4195,12 +4202,12 @@ const ROOMS = {
     revisit: [
       "Back up to your balcony room over the Queen Vic — the fan turning its opinions over, Soi 6 still howling up over the rail two floors down.",
       "The room again: wood floors, the recliner on the balcony, the soi throwing its light and its bass up the wall like a fish tank with the volume left on.",
-      "You climb up to the balcony room. Somewhere below a girl is shrieking WHERE YOU GO SEXY MAN at a man who is, in fact, going. The blackout curtains will fix most of it.",
+      "The balcony room. Somewhere below a girl is shrieking WHERE YOU GO SEXY MAN at a man who is, in fact, going. The blackout curtains will fix most of it.",
       "Home, such as it is — one recliner, one small table, and the whole loud soi laid out below like it is putting on the show for you alone.",
       "Back to the balcony. Six bars' worth of music arrives as one blurred throb, a hostess laughs like a car alarm, and none of it follows you past the blackout curtains.",
       "Up the stairs to the fan and the recliner. The soi does not quiet down for anyone — but draw the blackout curtains and it drops to a rumour you can sleep through.",
       "The balcony room takes you back in. HANDSOME MAN! floats up from the pavement, aimed at somebody, everybody, nobody. You have learned to hear it as weather.",
-      "Back to your patch of quiet-ish over the loudest hundred metres in Thailand — recliner, small table, and blackout curtains thick enough to turn the neon and the shouting into a lullaby.",
+      "Back to your patch of quiet-ish over the loudest street in Thailand — recliner, small table, and blackout curtains thick enough to turn the neon and the shouting into a lullaby.",
     ],
     exits: { down: "queen_vic" },
   },
@@ -8606,12 +8613,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "steadier money. Where's the villainy in that?\" The smile holds a beat too long.",
         short: "\"We'd take the Stinky off their hands, freshen it up. Bert keeps his stool. Where's the villainy?\"" },
       { topic: "pattaya leisure", sets: ["heardPlgPitch"],
-        text: "\"Pattaya Leisure Group. We hold the paper on a handful of rooms up and down Soi 6 — six, going " +
-          "on seven if the numbers say so.\" He says it lightly. \"Laurent's money, really. I just keep the " +
+        text: "\"Pattaya Leisure Group. We hold the paper on a handful of rooms up and down Soi 6 — and one " +
+          "more most seasons, if the numbers say so.\" He says it lightly. \"Laurent's money, really. I just keep the " +
           "lights on and the books tidy.\" A small, pleasant shrug. \"People make it sinister. It's " +
           "hospitality. We're only the ones who read the spreadsheet at the end of the night instead of " +
           "drinking through it.\"",
-        short: "\"Pattaya Leisure. Six rooms, going on seven. Laurent's money. It's just hospitality.\"" },
+        short: "\"Pattaya Leisure. A handful of rooms, one more most seasons. Laurent's money. It's just hospitality.\"" },
       { topic: "laurent vasseur", text: "\"Laurent?\" For the first time the pleasantness has to work a little. " +
         "\"Rarely down these days. He bought the first room with money from somewhere else and has never " +
         "once been curious what the rooms are.\" A diplomatic sip he doesn't need. \"Charming in a " +
@@ -9983,8 +9990,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the soi with the air of a man who has said more than the arrangement strictly allows.",
         short: "“She'll be in. Headphones. Doesn't want a conversation — restful, frankly.”" },
       { topic: "pattaya leisure", sets: ["heardPlgHistory"],
-        text: "\"Pattaya Leisure Group.\" He says it the way you say a diagnosis. \"Laurent Vasseur. Never here in the flesh, always on the paperwork — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
-        short: "\"Pattaya Leisure. Laurent Vasseur. Six bars already, after another. Someone should do something.\"" },
+        text: "\"Pattaya Leisure Group.\" He says it the way you say a diagnosis. \"Laurent Vasseur. Never here in the flesh, always on the paperwork — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got a string of bars already, and there's a man with a folder on the inner west most weeks.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
+        short: "\"Pattaya Leisure. Laurent Vasseur. A string of bars already, and buying. Someone should do something.\"" },
       { topic: "vasseur|laurent",
         text: "\"Laurent Vasseur.\" Terry snorts into the Chang. \"French, and he'd like you to know it. Never " +
           "raises his voice, never in a hurry, never in the room when something happens in it.\" A slow " +
@@ -18081,7 +18088,7 @@ function _pronoun(id) {
 // the mamasan is the most fluent voice in the bar and still drops a particle.
 // Both are working women with real arithmetic, never victims and never sharks.
 const _M_GREET = [
-  '"Welcome, welcome. Sit anywhere — my bar, easy rules: be polite, buy a girl a drink when you like her company, don\'t touch the stage." A practised, unhurried smile.',
+  '"Welcome, welcome. Sit anywhere — my bar, easy rules: be polite, buy a girl a drink when you like her company, don\'t touch what you haven\'t paid for." A practised, unhurried smile.',
   '"New face. Good." She looks you over the way a woman checks fruit at the market. "I am the mamasan. Anything you need — a drink, a girl, a problem — you come to me. To fix it, na, not to make it."',
   '"Ah, farang, come in. Twenty year I stand at this bar. I danced here before; now I count the drinks and mind the girls." A wink. "Better job — my knees agree."',
   '"Sit, sit." She moves a stool half an inch, which somehow makes it yours. "You want quiet, I put you at the end. You want company, I send somebody nice. You tell me which, and I am never wrong twice."',
@@ -18104,7 +18111,7 @@ const _M_GREET = [
   '"Come in. Nobody here will lie to you about anything that costs money." The smile is slow. "Everything else, we are Thai."',
 ];
 const _M_GREET_SHORT = [
-  '"Sit anywhere. Be polite, buy a lady drink, mind the stage."',
+  '"Sit anywhere. Be polite, buy a lady drink, keep your hands honest."',
   '"The mamasan. Any problem, you come to me — to fix it."',
   '"Twenty year at this bar. Anything you need, ask me."',
   '"Quiet end or company? Tell me and I arrange it."',
@@ -18129,7 +18136,7 @@ const _M_GIRLS = [
   '"My girls are good girls — most from Isaan, like me a long time ago. They work hard, send the money home, and they won\'t cheat you if you don\'t cheat them." A level look. "Treat them nice, I treat you nice. Same-same."',
   '"You like one of them? Tell me, I introduce you proper — better than the grab-grab, tilac. The girl who chooses you likes you more than the girl you corner. This I know, twenty year of it."',
   '"Every one of them has somebody at home who thinks she works in a restaurant." She says it flatly, no edge. "So when a farang asks me is she a good girl — she is a girl with a family. Same as your sister. Ask a better question."',
-  '"I keep eleven and I lose two a year. One goes home, one goes with a man." A small shrug. "The one who goes home usually comes back. The other one, you never hear."',
+  '"I keep what I can keep, and I lose two a year. One goes home, one goes with a man." A small shrug. "The one who goes home usually comes back. The other one, you never hear."',
   '"They are not interchangeable, whatever the room looks like from a stool." She nods down the rail. "That one reads. That one sends four people to school. That one will run a bar of her own and be harder than me. Learn the names, they open up."',
   '"If a girl says no to you, she said no. I don\'t make her explain and neither do you." Perfectly pleasant, entirely final. "There are plenty of bars. There is only one of her."',
   '"You want to know who is new? The one who still counts her drinks out loud." A flick of the eyes. "Be gentle with that one. Six months and she will be counting yours."',
@@ -19538,10 +19545,10 @@ const SOI6_INNER_GIRLS = {
         text: "\"You want try?\" She holds out a tamarind pod, cracked open, with a pinch of salt and chilli on it. \"Sweet first. Then sour. Then hot.\" She grins. \"Like the Tamarind. Like me. Sit, sit — this is a family bar, we feed you before we rob you.\" (EAT TAMARIND)",
         short: "\"Sweet, sour, hot — like me. Sit. Family bar: we feed you first.\"" },
       { topic: "cards|business cards|offer|sell|group|company|pattaya leisure|not for sale",
-        text: "\"My aunt pin them.\" She counts along the row with the tamarind pod. \"Every time the company man come, one card. He is very polite, every time. Every time she say thank you, and pin.\" Proud. \"The Jade sell, the Peach sell. Next door sell. Now this side, only us. My aunt say: when the cards go round the whole wall, maybe she think about it.\" A wink. \"The wall is very big.\"" },
-      { topic: "aunt|mama|view|family bar",
+        text: "\"My aunt pin them.\" She counts along the row with the tamarind pod. \"Every time the company man come, one card. He is very polite, every time. Every time she say thank you, and pin.\" Proud. \"The Jade sell, the Peach sell. Next door have the folder. After the Lollipop, only us. My aunt say: when the cards go round the whole wall, maybe she think about it.\" A wink. \"The wall is very big.\"" },
+      { topic: "aunt|mama|view|family bar|cousin|cousins|family|tukta",
         text: "\"My aunt is the mama, my cousin is on the till, my other cousin's friend is the girl at the end.\" She ticks them off. \"In the company bar everybody is a stranger with a number. Here everybody is somebody's somebody.\" She leans in. \"Is better and is worse. If you are bad to one girl here, the whole bar know by the time you finish your beer.\"" },
-      { topic: "tamarind|sweet tamarind|salt|chilli",
+      { topic: "tamarind|sweet tamarind|salt|chilli|luck|lucky|pod|pods",
         text: "\"From Phetchabun, the sweet one. My aunt's friend bring a sack every month.\" She cracks another. \"Sour tamarind is for cooking. Sweet tamarind is for luck, and for eating while you wait for the customer to decide.\" She looks at you pointedly. \"I eat a lot of tamarind.\"" },
       { topic: "home|roi et|plan",
         text: "\"Roi Et. My aunt is from the next province over — my mother marry a Roi Et man, so I am the Roi Et one.\" She shrugs. \"Plan is the bar is still ours when my aunt is old, and then it is mine.\" She glances at the cards on the wall. \"So I watch the wall.\"" },
@@ -19780,6 +19787,62 @@ const SOI6_INNER_GIRLS = {
 };
 for (const [id, n] of Object.entries(SOI6_INNER_GIRLS)) { NPCS[id] = n; NPC_ROLES[id] = "hostess"; }
 
+// ROUND 77'S ANSWERS (Siobhan and Dirk, 2026-10-09): the subjects the new floors volunteered and could
+// not discuss, the two holdouts who did not know each other's names, and the group's own man on his own
+// buying. Appended, so every earlier index stands.
+const _R77 = {
+  sweet_tamarind_ple: [{ topic: "khing|lollipop|lollipop bar|the folder|folder|next door",
+    text: "\"Auntie Khing.\" Ple says it fondly. \"Next door. My aunt and Khing start the same year, same no money, same bad sign.\" She lowers her voice. \"Now Khing have the folder on the table. My aunt bring her som tam every Sunday and they don't talk about it. Is how you talk about it, with som tam.\"" }],
+  sweet_tamarind_alisa: [
+    { topic: "cards|business cards|the cards|the wall",
+      text: "\"Every card is a man in a good shirt saying the same thing in a nicer way.\" Alisa doesn't look at the wall; she knows it. \"View pin them so the next man can see the others. It is the only time I see her be unkind, and she is very polite about it.\"" },
+    { topic: "khing|lollipop|lollipop bar|folder|the folder|next door",
+      text: "\"Khing is tired.\" Alisa says it the way you say somebody has a cold. \"Not tired of the work. Tired of the rent, the fan, the girls who go. The company is not tired of anything — is why they win.\" A small touch of the Buddha at her throat. \"If Khing sign, View is the last one this side. View know it. She don't say.\"" }],
+  sweet_tamarind_jiab: [{ topic: "cards|business cards|the cards|the wall",
+    text: "\"At the Pink Lotus they don't have cards on the wall, they have the company on the wall.\" Jiab grins at the row of them. \"Here, the company is the card, and the card is on the wall, and the wall is Mama's. I like it this way round.\"" }],
+  lollipop_bar_duang: [{ topic: "keng|peach girl|the peach girl|peach lounge|nails",
+    text: "\"Keng, from the Peach. She do my nails — every girl this side, she do the nails, we pay her in drinks.\" Duang holds up ten small pink ovals as evidence. \"She is the one who tell me: company keep the girls, then change the girls. She see it. She is still there.\" A shrug. \"For now.\"" }],
+  lollipop_bar_mona: [{ topic: "view|sweet tamarind|tamarind|cards|the cards",
+    text: "\"View two door down? Brave woman. Old fan, old sign, every card on the wall a no.\" Mona turns a gold ring on her finger. \"Brave is very nice. Brave also don't pay on the day.\" She glances at the folder on the back table. \"I love View. I don't want to work for brave.\"" }],
+  lollipop_bar_fern: [{ topic: "view|sweet tamarind|tamarind|cards|the cards",
+    text: "\"I read for View one time also.\" Fern shuffles without looking. \"She pick one card, she look at it, she say: is wrong, and she put it back.\" A small smile. \"Very strong woman. The cards don't decide for her. Not even her own cards on her own wall.\"" }],
+  peach_lounge_keng: [{ topic: "nails|nail|manicure|polish",
+    text: "\"Every girl this side, from the Jade to the Tamarind.\" Keng spreads her own hands: perfect, dark plum. \"They pay me in drinks, because I am cheaper than the shop and I gossip better.\" She examines a thumbnail. \"Duang at the Lollipop, every Monday. She is worried. When the girl is worried, I paint slower, so she can talk.\"" }],
+  jade_lounge_taan: [{ topic: "cat|the cat",
+    text: "\"Ginger. Very fat, very old, very rude.\" Taan's face goes soft for the first time all night. \"Old Mama's cat. The company say: no animal in the bar, is the rule. So I take her. Now she sleep on my pillow and I sleep on the edge.\" A dry laugh. \"The company change the paper, the shirt, the mattress. The cat, they cannot change. The cat is mine.\"" }],
+};
+for (const [id, nodes] of Object.entries(_R77)) if (NPCS[id]) NPCS[id].dialogue.push(...nodes);
+// the group's man on the group's buying; the manager on the owner he works for
+if (NPCS.gavin) NPCS.gavin.dialogue.push(
+  { topic: "buying|buy|folder|the folder|lollipop|lollipop bar|sweet tamarind|tamarind|holdout|inner west|the next one|expansion|seventh|cards",
+    text: "\"We don't push, you understand. Pushing is noisy, and noise is expensive.\" Gavin turns his glass on the mat without drinking from it. \"A tired owner, a fair number, a folder left where she can see it. Most of them say not yet, and not yet is a price; it just hasn't been named.\" A pleasant shrug. \"The Tamarind lady pins my cards to her wall. I've rather come to admire it. We'll still be here when she isn't.\"",
+    short: "\"We don't push. Not yet is a price that hasn't been named.\"" },
+  { topic: "jade|jade lounge|peach|peach lounge|kitten corner|our bars|your bars|how many bars|the rooms",
+    text: "\"Ours, yes — the Lotus at the West End, this one, the Kitten at the far end, the Jade two years, and the Peach just lately.\" He nods at the room around you. \"Same paper, same aircon, same girls as before, mostly. We keep the girls. People think we buy the bar; we buy the queue of men who already walk into it.\"",
+    short: "\"Ours — same paper, same girls. We buy the queue of men who already walk in.\"" });
+if (NPCS.bert) NPCS.bert.dialogue.push(
+  { topic: "who owns|who owns this bar|owner|the owner|owns it",
+    text: "\"The man who owns it is in Ohio with a bad heart and a good memory.\" Bert sets the glass down. \"He bought it a long time ago, he hasn't been out in years, and I run it like he's coming back next week. The paper on the wall says a company — that's the permit, bud, not the man. The man is in Ohio.\"",
+    short: "\"Ohio, bad heart. I run it like he's coming back next week.\"" });
+// the two holdouts' house staff, found by room and role (a regenerated floor keeps the lines)
+for (const [id, n] of Object.entries(NPCS)) {
+  const role = NPC_ROLES[id];
+  // the women whose own words say the bar is theirs answer "this bar" as its owner (View called the rest
+  // "the owner's headache" — Siobhan, round 77): the two holdouts, and the inner east, every bar a woman's own
+  if (role === "mamasan" && ["sweet_tamarind", "lollipop_bar", "firecracker_bar", "hot_pepper", "hula_hula", "ladybird_bar"].includes(n.room)) n.ownsBar = true;
+  if (n.room === "sweet_tamarind" && role === "mamasan") n.dialogue.push(
+    { topic: "khing|lollipop|lollipop bar|the folder|folder|next door",
+      text: "\"{{Khing}}.\" A long breath. \"We open the same year, two door apart, two girls each and one fan between us — we borrow it on hot nights.\" She straightens a card on the wall without looking at it. \"Now she have the folder. I bring her som tam on Sunday. We don't talk about it. If she sign, I am the last one this side, and I still don't sign.\"" },
+    { topic: "soi 6|the soi|how long|years|before|the old soi",
+      text: "\"Twenty year this soi.\" She looks out at it. \"When I start, half the buildings is houses — washing on the balcony, children on the step. Then bar, bar, bar. Then the company.\" A shrug. \"Every soi has a company now. This one has me also.\"" });
+  if (n.room === "lollipop_bar" && role === "mamasan") n.dialogue.push(
+    { topic: "view|sweet tamarind|tamarind|cards|the cards|business cards|next door",
+      text: "\"{{View}} pin the cards.\" {{Khing}} almost smiles. \"I put the folder on the table. Same answer, different furniture.\" She looks two doors down without turning her head. \"We start the same year. She is stronger than me, or she is more stubborn, or she have a better landlord. Maybe all three. Sunday she bring som tam and we talk about everything except this.\"" });
+  if (n.room === "sweet_tamarind" && role === "cashier") n.dialogue.push(
+    { topic: "cards|business cards|the cards|the wall|how many cards",
+      text: "\"I count them, every time one go up.\" She doesn't look at the wall. \"Same company every card. Different man, same shirt. Auntie pin, I write the date.\" A tap on the drawer. \"The book is mine and the wall is hers. Both say no.\"" });
+}
+
 // THE FRONTIER'S TWO HOLDOUTS (Soi 6 expansion, 2026-10-09; docs/soi6-expansion.md). The inner west
 // is where the group is buying, and the two bars it hasn't bought each have a mamasan from the
 // pooled floor. She is given the one subject no pool can: the offer. Found by room and role, never
@@ -19801,8 +19864,8 @@ for (const [id, n] of Object.entries(NPCS)) {
     topic: "cards|offer|sell|selling|group|pattaya leisure|plg|company|buy the bar|business cards",
     text: "“The cards?” A nod at the wall, proud as a diploma. “Every time the man come, I take the card, " +
       "I say thank you, I pin it there. So next time he come, he can see how many time I already say " +
-      "no.” She counts them with one finger without taking her eyes off you. “Next door sell. Then the " +
-      "other side sell. Now they want this side, because this side is the last one between them.” A " +
+      "no.” She counts them with one finger without taking her eyes off you. “The Jade sell, the Peach " +
+      "sell. Now next door have the folder. After next door, is us — the last one between them.” A " +
       "shrug that has the whole street in it. “My name is on the paper. Is not for sale, na.”",
     short: "“Not for sale,” she says, and taps the row of cards like a ledger.",
   });

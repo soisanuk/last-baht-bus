@@ -6848,7 +6848,7 @@ const _BALCONY_SCENES = [
   "The soi throws its light and noise up the wall and you catch it all from the cheap seats: " +
     "a stag-do losing a man to a doorway, a mama counting her girls with her eyes, the " +
     "ring-light kid getting in everyone's way. Terry lifts his beer. Two balconies of quiet " +
-    "smugness, overlooking the loudest hundred metres in Thailand.",
+    "smugness, overlooking the loudest street in Thailand.",
   "Down in the tank, the eight-o'clock shift change: fresh girls out front stretching and " +
     "scanning, tired ones slipping upstairs, a barker resetting his voice for the next wave " +
     "of walkers. You've paid for the best seat in the house and it costs nothing extra to " +
@@ -6961,8 +6961,8 @@ function _doWatchSoi() {
   if (!_flag("sawBalcony")) {
     _setFlag("sawBalcony");
     _say("You step out to the third-floor rail, and Soi 6 opens up underneath you like somebody kicked over a crate of neon.");
-    _say("Four hundred metres of it, wall to wall, and you're perched right over the middle: both ends flaring away " +
-      "from you — go-go fronts throwing pink light and bass up the walls, west toward Beach Road and east toward Second, " +
+    _say("Three hundred-odd metres of it, wall to wall, and you're perched right over the middle: both ends flaring away " +
+      "from you — open fronts throwing pink light and bass up the walls, west toward Beach Road and east toward Second, " +
       "the signs getting bigger and the promises smaller the further out they go — with the quieter stretch laid out " +
       "directly below, close enough to eavesdrop. The parade never stops. Barkers working the walkers. Girls leaning " +
       "out of doorways to reel a passing shirt in by the sleeve — HANDSOME MAN, WHERE YOU GO — half of them meaning it, " +

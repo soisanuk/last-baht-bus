@@ -4355,7 +4355,7 @@ const _CRASH_SPOTS = {
   // never the off-map promenade/beach spots the fence would then refuse.
   soi6: { room: "soi6_street", prose: [
     "You come to on the Soi 6 pavement, back against a shuttered bar front. The " +
-      "loudest hundred metres in Thailand has gone eerily silent — a soi dog, a " +
+      "loudest street in Thailand has gone eerily silent — a soi dog, a " +
       "sweeper, the neon dead overhead. Whatever you were chasing last night got away.",
     "Soi 6 at dawn: the bars folded down to steel shutters, the beer smell hosed " +
       "toward the drains, and you in a plastic chair somebody left out, exactly " +

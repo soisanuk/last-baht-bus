@@ -95,6 +95,11 @@ In order. Every step is one that this round either needed or got wrong first.
    (≤20 words, front-loaded), their province in their own words, and a line on their bar's side of
    whatever the segment is about. Give a subject a node if her greeting volunteers it. **An offer is a
    verb or it is narrated to completion.** Never type a price.
+   **Write the floor as one floor** (round 77): every subject a woman volunteers about a colleague or
+   a neighbour needs a node on BOTH sides (Duang names "the Peach girl", so Keng answers her nails). The
+   segment's story (the folder, the cards) needs a line from its house staff and from the bar next
+   door, not only from the bar it happens in. A woman whose words say she owns the bar is marked
+   `ownsBar`.
 6. **Portraits.** Add `CHARS` specs to `scripts/gen-portraits.py` and run it with **explicit ids only**
    (it skips anything rendered). Check `git status web/portraits` shows only `??`. Regenerate the
    portrait manifest so the new women land on the render queue. Tell the art agent.
@@ -133,6 +138,25 @@ In order. Every step is one that this round either needed or got wrong first.
 - **Counts and adjacency in neighbouring prose** go stale silently ("forty fronts at this end", "back
   past the Queen Vic"). Grep the neighbours' descs, revisits and reads for both whenever a segment is
   inserted.
+
+### From the first persona round on the new soi (round 77)
+
+- **An opinion is kept.** Colleague reviews were re-dealt on every ask from a nightly book, so a
+  mamasan reviewed one girl three ways in a week, once in another girl's words. Reviews now live on
+  `G.reviewOf`: dealt once per speaker and colleague, never reused for a second woman, never mirrored,
+  and never asserting a life fact (a village, a cousin, an age) about a woman who has written facts.
+  A new floor inherits all of this for free.
+- **A heard story stays heard by every route.** A word inside a node reached it as a *new* question
+  and retold it in full. A heard node now gives its gist by any route (`_gistOf`).
+- **A street has questions of its own:** the bar next door, the old owner, who is buying, and the
+  stretches. These are `_townTalk` rows now. A new segment answers them on day one if its rooms carry
+  `formerOwner` / `boughtWhen` and its bars sit in a street's `venues`.
+- **One sentence per venue question** (`_venueAnswer`): the distance comes from where you stand and
+  the owner from the paper, so it can't say "a few doors down" and "ten minutes by bike" at once.
+- **No fixed count in any mouth** for a thing a mechanic keeps changing. The frontier buys a front
+  every sixty days, so "six, going on seven" was false by the second cycle.
+- **Check the template's own output.** The map's "north beach" was split across two rows by the
+  expansion that wrote this template.
 
 ## Not done, and why
 

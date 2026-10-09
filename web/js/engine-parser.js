@@ -2001,6 +2001,8 @@ const _READ_NOUNS = {
   tiki: ["tiki head", "the tiki", "head", "red bulb"],
   leis: ["lei", "flower leis", "plastic flowers", "garlands"],
   spots: ["spotted stools", "the spots", "ladybird stools", "painted stools", "ashtrays", "ashtray"],
+  buyer: ["man in the good shirt", "good shirt", "clipboard", "man with the clipboard", "folder man", "the buyer", "painters", "ladder", "man with the folder"],
+  paint: ["new paint", "the paint", "signs", "printed board", "price board", "printed boards", "hand-me-down signs", "old signs"],
   bars: ["the bars", "fronts", "the fronts", "frontages", "bar fronts", "open fronts", "doorways", "all the bars"],
   girls: ["the girls", "ladies", "the ladies", "women", "the women", "pullers", "barkers", "sequins"],
   deck: ["raised deck", "wooden deck", "the deck", "threshold", "the step", "planks"],
@@ -2660,7 +2662,7 @@ const _SCENERY = [
         seen = "\n\n" + line;
       }
     }
-    return "By the till, in a frame that has not been dusted since it went up: " + lic.line + tail + eye + seen;
+    return (_room().formerOwner ? "By the till, in a frame that still has the shop's sticker on the glass: " : "By the till, in a frame that has not been dusted since it went up: ") + lic.line + tail + eye + seen;
   } },
   // YOUR NAME BEHIND THE TILL. The title existed only in one arrival line every
   // third night: EXAMINE CHALK answered "Not here. Or not a thing." in the bar
@@ -4646,7 +4648,7 @@ function _doTalkCore(arg, topic) {
   if (topic && typeof _roomByName === "function") {
     const _tl = String(topic).toLowerCase().replace(/^the /, "");
     const _vr = Object.keys(ROOMS).find(r => ROOMS[r].bar && String(_barName(r) || "").toLowerCase().replace(/^the /, "") === _tl);   // exact: _roomByName("candy bar") is Candy Bar 2
-    if (_vr && _vr !== _npcRoom(npc) && NPC_ROLES[npc] &&   // staff with a "bar" node of their own; Mort's column and the regulars keep their words
+    if (_vr && _vr !== _npcRoom(npc) && (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house) &&   // staff, a manager or the house yield a word-node to the venue's whole name (Bert's "dog" for the Blue Dog, round 77); the regulars and Mort's column keep their words
         !(NPCS[npc].dialogue || []).some(x => x.topic && String(x.topic).split("|").some(k => k === _tl)) &&
         typeof _townTalk === "function" && _townTalk(npc, topic)) { _questOffer(npc); return; }
   }
@@ -4960,23 +4962,38 @@ function _doTalkCore(arg, topic) {
         // manager in the same sentence, in consecutive commands (Cake and Lamai,
         // Helen round 49) — a hash keyed on the pair is free to collide, and at a
         // three-handed bar it does. Walk to a line this room has not used.
-        const _rvBook = (G.soc.reviewSaid = G.soc.reviewSaid || {});
-        const _rvKey = G.room + ":" + mate;
-        const _rvUsed = _rvBook[_rvKey] = _rvBook[_rvKey] || [];
+        // A REVIEW IS AN OPINION, AND AN OPINION IS KEPT (Siobhan, round 77 — six nights on one
+        // stool: the mamasan gave three reviews of her own niece, one of them her review of another
+        // girl, and a woman in another bar said it word for word of a third). The book lives on G, not
+        // G.soc, so it outlasts the night: a speaker's line about a colleague is dealt ONCE and is hers
+        // about that woman from then on. It walks past (a) a line this speaker already gave about
+        // somebody else, (b) a line anybody already gave about this same woman (two colleagues at one
+        // rail in one sentence — Helen, round 49), (c) the line the colleague gave about HER (the mirror:
+        // "we share the cool-box" said both ways), and (d) a line whose CLAIM is false of the pair.
         const _pkRaw = _hh(npc + ":" + mate + ":review", 17);
-        // …and ONE SPEAKER does not use one line for two women: Wanida called both twins "too soft
-        // with the old men", which is the opposite of Pong (Henrik, round 69). A second book, per
-        // speaker per kind of review, walked past as well.
-        const _rvByKey = G.room + ":" + npc + ":" + them;
-        const _rvBy = (G.soc.reviewBy = G.soc.reviewBy || {})[_rvByKey] = (G.soc.reviewBy[_rvByKey] || []);
-        const _rvPick = (len) => {
-          let i = _pkRaw % len;
-          for (let k = 0; k < len && (_rvUsed.includes(i) || _rvBy.includes(i)); k++) i = (i + 1) % len;
-          if (_rvUsed.includes(i) || _rvBy.includes(i)) { for (let k = 0; k < len && _rvUsed.includes(i); k++) i = (i + 1) % len; }
-          if (!_rvUsed.includes(i)) _rvUsed.push(i);
-          if (!_rvBy.includes(i)) _rvBy.push(i);
-          return i;
+        const _rvBook = (G.reviewOf = G.reviewOf || {});
+        const _rvStable = (kind, len, ok = () => true) => {
+          const key = npc + ">" + mate + ":" + kind;
+          if (_rvBook[key] != null && _rvBook[key] < len) return _rvBook[key];
+          const mine = [], others = [];
+          for (const k of Object.keys(_rvBook)) {
+            if (!k.endsWith(":" + kind)) continue;
+            if (k.startsWith(npc + ">")) mine.push(_rvBook[k]);
+            if (k.includes(">" + mate + ":")) others.push(_rvBook[k]);
+          }
+          const mirror = _rvBook[mate + ">" + npc + ":" + kind];
+          const tiers = [i => !mine.includes(i) && !others.includes(i) && i !== mirror && ok(i), i => !mine.includes(i) && i !== mirror && ok(i), i => ok(i), () => true];
+          let pick = _pkRaw % len;
+          outer: for (const fits of tiers) for (let t = 0; t < len; t++) { const i = (_pkRaw + t) % len; if (fits(i)) { pick = i; break outer; } }
+          _rvBook[key] = pick;
+          return pick;
         };
+        const _rvPick = len => _rvStable(them + "/" + me, len);
+        // a claim about her LIFE (her village, a cousin, her age, a bank) is only true of a woman whose
+        // life the pools wrote; a written woman has her own facts (Jiab and Alisa "same village nearly",
+        // from Khon Kaen and Surin)
+        const _homeOf = id => { const n = NPCS[id]; if (!n) return null; const f = (n.storyBits && n.storyBits.from) || (FLOOR_STAFF[id] && FLOOR_STAFF[id].from) || (!n.filler && typeof _authoredStory === "function" ? (_authoredStory(id) || {}).from : null); return f ? String(f).replace(/[{}]/g, "") : null; };
+        const _pooledLife = id => !!(NPCS[id] && NPCS[id].filler);
         const _pk = _pkRaw;
         const _mamaRev = me === "cashier"
           ? [`"Mama?" ${NPCS[npc].name} doesn't look up from the drawer. "Strict. Fair. She counts this after I do, and it has never once come out different."`,
@@ -5031,8 +5048,13 @@ function _doTalkCore(arg, topic) {
             `"${n}." ${_mamaLabel(NPCS[npc].name)} doesn't look at her. "On time every night. Never sick when it rains. You know how rare that is? No — you don't. I do."`,
             `"${n}?" ${_mamaLabel(NPCS[npc].name)} considers the far end of the room. "Too soft with the old men. They come back for her, so I say nothing. Soft is a business too."`,
             `${_mamaLabel(NPCS[npc].name)} gives it a moment. "${n} came with nothing and a cousin. Now the cousin works somewhere else and ${n} is still here. That is the whole review."`,
-          ][_rvPick(4)] :
-          me === "cashier" ? `"${n} is on the book same as everybody." ${NPCS[npc].name} does not look up. "That is all the book says about anyone."` :
+          ][_rvStable("mama/girl", 4, i => i !== 3 || _pooledLife(mate))] :
+          me === "cashier" ? [
+            `"${n} is on the book same as everybody." ${NPCS[npc].name} does not look up. "That is all the book says about anyone."`,
+            `"${n}?" ${NPCS[npc].name} runs a finger down a column without looking for anything. "Never short, never argue the chit. In my job that is a love letter."`,
+            `"${n}." A small nod at the floor. "She count her own drinks before I do. Sometimes she is right and I am wrong. I don't tell her."`,
+            `"${n} pay the mama back on the day, every time." ${NPCS[npc].name} closes the drawer. "You would be surprised how rare."`,
+          ][_rvStable("till/girl", 4)] :
           me === "manager" ? `"${n}? Ask her — she runs me as much as I run her, and she'd say more."` :   // "been here longer than me" from a man twenty-two years behind this rail (Rolf, round 55)
           [`"${n}? My sister." A beat. "Not real sister. Bar sister. She take my customer, I take hers, we eat together after. Same same."`,
            `"${n}?" ${NPCS[npc].name} rolls her eyes, fond. "She borrow my lipstick, she never give back. Good girl, bad lipstick."`,
@@ -5043,7 +5065,9 @@ function _doTalkCore(arg, topic) {
            `"${n} is the clever one." ${NPCS[npc].name} says it without any envy at all. "She save money. Real saving, in the bank. The rest of us — " she waves a hand at the whole idea.`,
            `"${n}?" ${NPCS[npc].name} laughs. "She tell every customer she is twenty-five. She is twenty-five for three years now. We let her."`,
            `"Me and ${n}, same village nearly. Same bus home at Songkran." ${NPCS[npc].name} smiles. "Twelve hours together, no air-con. After that you are family or you are enemy."`,
-          ][_rvPick(8)];   // three hostesses review each other now (round 55)
+          ][_rvStable("girl/girl", 8, i =>
+            i === 7 ? (_homeOf(npc) && _homeOf(npc) === _homeOf(mate)) :   // the same bus home is a fact about two provinces
+            (i === 5 || i === 6) ? _pooledLife(mate) : true)];   // a bank, an age: a pooled life's, never a written woman's
         _say(line);
         _questOffer(npc);
         return;
@@ -5932,6 +5956,7 @@ const _FIXTURE_PUNTER = [
   "\"It's not going anywhere,\" {n} says. \"Neither am I. Have a look.\"",
 ];
 function _fixtureTalk(npc, topic) {
+  if (/\b(next door|next-door|neighbou?rs?)\b/i.test(String(topic || ""))) return false;   // the bar next door is a place, not this room's door (Nee, round 77)
   const reads = _room().reads;
   if (!reads || !topic || !NPCS[npc]) return false;
   // the room's furniture is its own staff's to point at — not a companion's at the clinic (Ossie, round 70: "I not going with you, I have stool")
@@ -6160,6 +6185,36 @@ function _tanTown(kind, slots) {
   const p = _TAN_TOWN[kind];
   return p ? _sentenceCase(_fmt(_pickVary(p, "tantown:" + kind), { n: "Tan", ...(slots || {}) })) : null;
 }
+// A BAR BY NAME, from anybody: where it is FROM HERE and whose paper it is on, in one sentence that
+// cannot contradict itself (round 77 — Siobhan heard "a few doors down" and "a bike'd have you there in
+// ten minutes" in one line; Dirk heard the paper-and-owner caveat said of the one bar where the paper and
+// the till are the same woman, the group's flagship mamasan call a sister bar a rival, and Gavin shrug at
+// his own company's room).
+function _streetOf(room) { return Object.keys(ROOMS).find(s => (ROOMS[s].venues || []).includes(room)) || null; }
+// "Soi 6 (Inner West)" → "Soi 6's inner west" — a room label is not something anybody says (Dirk)
+function _streetPhrase(st) { const nm = ROOMS[st] ? ROOMS[st].name : ""; const m = nm.match(/^(.*?)\s*\((.*)\)$/); return m ? m[1] + "'s " + m[2].toLowerCase() : nm; }
+const _stop = x => String(x).replace(/\.$/, "");   // "Co., Ltd." ends a sentence once, not twice
+function _venueAnswer(npc, v, reg) {
+  const n = NPCS[npc].name, bn = _barName(v), st = _streetOf(v);
+  const myRoom = _room().barType ? G.room : (NPCS[npc].room || (NPCS[npc].bars || [])[0] || G.room);
+  const hereSt = _room().venues ? G.room : _streetOf(G.room);
+  const adj = st && hereSt && st !== hereSt && Object.values(ROOMS[hereSt] ? ROOMS[hereSt].exits || {} : {}).includes(st);
+  const where = st && st === hereSt ? (reg === "floor" ? "Same street, few door" : "A few doors along this street")
+    : adj ? (reg === "floor" ? "Next part of the soi, walk two minute" : "The next stretch along — a two-minute walk")
+    : st ? (reg === "floor" ? _streetPhrase(st) : "On " + _streetPhrase(st)) : (ROOMS[v].region || "Across town");
+  const lic = _licenceOf(v), mine = _licenceOf(myRoom);
+  const ours = lic && mine && lic.kind === "company" && lic.name === mine.name;
+  const who = !lic ? (reg === "floor" ? "Owner I don't know." : "Whose it is, I couldn't tell you.")
+    : ours ? (reg === "floor" ? "Same company as us — same paper, other girls." : reg === "house" ? "One of ours: the same paper as this bar, a different floor." : "Same lot as this place. Same paper on the wall.")
+    : lic.kind === "company" ? (reg === "floor" ? `Paper say ${_stop(lic.name)}. Company — who is the company, nobody tell me.` : reg === "house" ? `The paper on that wall says ${_stop(lic.name)} — a company, and the paper and the owner are not always the same person.` : `${_stop(lic.name)}, on paper. A company.`)
+    : lic.owner ? (reg === "floor" ? `Is ${lic.name} bar — her name, her till.` : reg === "house" ? `${lic.name}'s — her name on the paper and her behind the till.` : `${lic.name}'s place. The name on the wall is the woman behind the bar.`)
+    : (reg === "floor" ? `Paper say ${lic.name}. Is not anybody I know.` : reg === "house" ? `The paper says ${lic.name}, which is not anybody you'll meet in there.` : `${lic.name}, the paper says. Nobody of that name behind the bar.`);
+  return _pickVary(reg === "floor"
+    ? [`"${bn}? ${where}." ${n} thinks. "${who}"`, `${n} points with her chin. "${bn} — ${where.charAt(0).toLowerCase() + where.slice(1)}. ${who}"`]
+    : reg === "house" ? [`"${bn}. ${where}." ${n} doesn't need to think. "${who}"`, `"${bn}?" ${n} says it like an address. "${where}. ${who}"`]
+    : [`"${bn}? ${where}." ${n} shrugs. "${who}"`, `${n} points the bottle. "${bn}. ${where}. ${who}"`], "venue:" + v);
+}
+
 // ASK <anyone> ABOUT <a thing the town is made of>: a venue by name, the ATM, the
 // clinic, the police, the cons on Beach Road. Each answer is COMPUTED from what the
 // engine already holds — the room's region and street, `atm: true`, `_atmFee()`,
@@ -6732,6 +6787,58 @@ function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
   if (/\bmy bar\b/.test(t) && typeof _barOwned === "function" && _barOwned() && G.bar && G.bar.room) t = t.replace(/\bmy bar\b/g, String(_barName(G.bar.room) || "").toLowerCase());   // "my bar" answered about HER bar (László, round 73)
+  // ROUND 77 (Dirk, a surveyor walking Soi 6 five nights): the street's own questions.
+  { const _st = typeof _streetOf === "function" ? (_room().venues ? G.room : _streetOf(G.room)) : null;
+    const _soi6 = (_room().region || "") === "Soi 6";
+    const _reg = _hoursRegister(npc), n = NPCS[npc].name;
+    // THE BAR NEXT DOOR is the neighbours, never this bar (five owners answered about their own paper,
+    // and the flagship's mamasan heard "door" and pointed at hers)
+    if (_st && _room().barType && /\b(next door|next-door|bar next door|neighbou?rs?|the bar beside|either side|bars beside)\b/.test(t)) {
+      const vs = ROOMS[_st].venues || [], i = vs.indexOf(G.room), nb = [vs[i - 1], vs[i + 1]].filter(v => v && ROOMS[v] && ROOMS[v].barType);
+      if (nb.length) { for (const v of nb) _say(_venueAnswer(npc, v, _reg)); return true; }
+    }
+    // THE OLD OWNER of a bar the group bought is somebody the floor remembers (Dirk: "who owned it before"
+    // answered with the new paper)
+    const _fo = _room().formerOwner;
+    if (_fo && (NPCS[npc].room === G.room || (NPCS[npc].bars || []).includes(G.room)) && /\b(old owner|former owner|previous owner|owned it before|old boss|before the group|before the company|used to own|who had it)\b/.test(t)) {
+      _say(_pickVary(_reg === "floor"
+        ? [`"Before? ${_fo.charAt(0).toUpperCase() + _fo.slice(1)}." ${n} shrugs. "The company buy ${_room().boughtWhen || "not long ago"}. Same us, new paper."`]
+        : [`"Before the group?" ${n} doesn't have to think. "${_fo.charAt(0).toUpperCase() + _fo.slice(1)}. The group bought it ${_room().boughtWhen || "not long ago"} and kept the floor."`], "oldowner:" + G.room));
+      return true;
+    }
+    // THE GROUP, asked anywhere on the soi: who it is, where it has bought and where it hasn't — in the
+    // register of whoever is asked, and from the side of the street she stands on (Farida, the group's own
+    // cashier, answered "the group" with "not a thing I know")
+    if (_soi6 && (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house || NPCS[npc].patron) &&
+        /\b(the group|group|pattaya leisure|plg|the company|company buying|buying the soi|who is buying|selling|sell up|the folder|folder)\b/.test(t) &&
+        !/\b(licen[cs]e|registration|the paper|who owns this)\b/.test(t)) {
+      const lic = _room().barType && typeof _licenceOf === "function" ? _licenceOf(G.room) : null;
+      const ours = lic && lic.kind === "company" && /Pattaya Leisure/.test(lic.name);
+      const side = _st === "soi6_west_in" ? "west" : _st === "soi6_east_in" ? "east" : _st === "soi6_mid" ? "mid" : "end";
+      const P = ours
+        ? (_reg === "floor" ? [`"We are the group." ${n} plucks at her shirt. "Same shirt every bar. The company buy, we stay. Pay on the day, aircon, paper. Nobody ask us before, nobody ask us after."`]
+          : [`"This is one of theirs." ${n} says it without weight. "The Lotus, the Dragon, the Kitten, the Jade, the Peach — and the inner west, a front at a time. They keep the floor and change the paper."`])
+        : side === "west" ? (_reg === "floor" ? [`"They buy this side now." ${n} tips her head up the street. "Jade, Peach. The Lollipop have the folder. The Tamarind say no every time. Next is whoever is most tired."`]
+          : [`"This stretch is where they're buying." ${n} nods along the fronts. "The Jade and the Peach are theirs; the Lollipop has the folder; the Tamarind pins the cards to the wall. You can watch it happen from the kerb."`])
+        : side === "east" ? (_reg === "floor" ? [`"This side? Nobody come with folder." ${n} looks pleased about it. "Small bar, family bar, old sign. Company want the big front by the corner, not us. Lucky, maybe."`]
+          : [`"Nobody's bought this side." ${n} says it like a weather report she's grateful for. "Small rooms, family on the till, nothing the group wants yet. They're busy on the other side of the middle."`])
+        : side === "mid" ? (_reg === "floor" ? [`"Middle? Nobody buy the middle. Beer bar, no upstairs — company don't want."`]
+          : [`"Not the middle." ${n} shakes ${typeof _pr === "function" ? _pr(npc).p : "her"} head. "Nothing upstairs, nothing worth the paperwork. They own the loud ends and they're buying the inner west. The middle is everybody's."`])
+        : (_reg === "floor" ? [`"Group have the Lotus, the Dragon, the Kitten at the far end — and now they buy the inner west." ${n} shrugs. "Big front, good money. They don't want small."`]
+          : [`"Pattaya Leisure." ${n} lists it like a round. "The Lotus and the Dragon at this end, the Kitten at the other, and the Jade and the Peach on the inner west, with more being painted. The middle and the inner east they haven't touched."`]);
+      _say(_pickVary(P, "groupside:" + side + ":" + _reg + ":" + (ours ? 1 : 0)));
+      return true;
+    }
+    // THE STREET as a subject — the five stretches, said by anybody on it (Dirk: "the middle" and "the street"
+    // were topics nowhere)
+    if (_soi6 && (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house || NPCS[npc].patron) &&
+        /^(the )?(middle|middle stretch|the street|street|soi 6|soi six|the soi|this soi|inner west|inner east|west end|east end|the stretches|stretches)$/.test(t)) {
+      _say(_pickVary(_reg === "floor"
+        ? [`"Soi 6?" ${n} draws it on the bar with a finger. "West end by the beach — loud. Then the company side. Then the middle, beer bar, quiet. Then our side, nobody's. Then the end by Second Road — loudest." A tap. "One hundred bar, maybe. Everybody know everybody."`]
+        : [`"Five stretches, about twenty fronts each." ${n} counts them off. "The West End at the beach, where the group has its flagship. The inner west, where it's buying. The middle — beer bars, nothing upstairs, nobody's. The inner east, nobody's either. And the East End out to Second Road."`], "soi6:street:" + _reg));
+      return true;
+    }
+  }
   // THE REASON SHE GAVE IS A SUBJECT (Ruairi, round 75: Mew refused for "temple in morning" and
   // asking her about the temple was "I don't know about that"). The refusal she stated tonight, asked of her.
   { const _rf = G.soc.bfRefused && G.soc.bfRefused[npc];
@@ -6749,7 +6856,7 @@ function _townTalk(npc, topic) {
   // on the paper" — Candy said "Mine, the bar" at the frame and "you ask the wrong woman" to the word). The staff of
   // this room answer from the same _licenceOf the frame prints; an authored node on the word still wins upstream.
   if (/\b(licen[cs]e|registration|registered|the paper|paperwork|company|who owns|owner|owns (this|the) (bar|place)|the frame|fifty-one|51)\b/.test(t) &&
-      typeof _licenceOf === "function" && typeof _inBar === "function" && _inBar() && (NPC_ROLES[npc] || NPCS[npc].manager) &&
+      typeof _licenceOf === "function" && typeof _inBar === "function" && _inBar() && (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house) &&
       (NPCS[npc].room === G.room || (NPCS[npc].bars || []).includes(G.room)) && !(typeof _atOwnBar === "function" && _atOwnBar())) {
     const lic = _licenceOf(G.room), n = NPCS[npc].name, floor = _hoursRegister(npc) === "floor";
     if (lic) {
@@ -6991,17 +7098,10 @@ function _townTalk(npc, topic) {
     }
   }
   // A VENUE BY NAME, asked anywhere: where it is, and whose paper it is on (Stelian, round 76 — Bert
-  // on the Pink Lotus, PLG's flagship: "Not my department")
+  // on the Pink Lotus, PLG's flagship: "Not my department") — one helper now, _venueAnswer (round 77)
   { const _core = s => String(s || "").toLowerCase().replace(/^the /, "").replace(/\s+(bar|lounge|club|pub|a-?go-?go|go-?go)$/, "").trim();
     const _v = _core(t).length >= 5 && Object.keys(ROOMS).find(k => ROOMS[k].barType && k !== G.room && _core(_barName(k)) === _core(t));
-    if (_v && typeof _licenceOf === "function") {
-      const lic = _licenceOf(_v), st = Object.keys(ROOMS).find(k => (ROOMS[k].venues || []).includes(_v)), where = st ? ROOMS[st].name : ROOMS[_v].region;
-      const whose = lic && lic.name ? lic.name : null, n = NPCS[npc].name, bn = _barName(_v);
-      _say(reg === "floor" ? `"${bn}? ${where}." ${n} thinks. "${whose ? `Paper say ${whose}.` : "I don't know the owner."} I don't work there, na — I only know the door."`
-        : reg === "house" ? `"${bn}, on ${where}." ${n} doesn't need to think. "${whose ? `The paper on that wall says ${whose}` : "Whose it is, I couldn't tell you"} — the paper and the owner are not always the same person here."`
-        : `"${bn}? ${where}." ${n} shrugs. "${whose ? `${whose}'s, on paper.` : "Couldn't tell you whose."} Drink there yourself and see."`);
-      return true;
-    } }
+    if (_v && typeof _licenceOf === "function") { _say(_venueAnswer(npc, _v, reg)); return true; } }
   // THE SHIFT'S DECISIONS, the night's event, the partner — answered at your own bar by the floor that was there (László, round 73)
   if (typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid") && G.bar) {
     const calls = (G.bar.calls || []).filter(c => G.day - c.day <= 2);
@@ -7115,7 +7215,8 @@ function _townTalk(npc, topic) {
       // the street you are standing on (or drinking off) is not an address: "Naklua, Bar Corner"
       // said inside the Anchor on Bar Corner (Fintan, round 60)
       const hereSt = _room().venues ? G.room : Object.keys(ROOMS).find(k => (ROOMS[k].venues || []).includes(G.room));
-      if (street && street === hereSt) return pick("venue", { v: _barName(v), rs: "A few doors down, on this street" });
+      if (ROOMS[v].barType && typeof _licenceOf === "function") { _say(_venueAnswer(npc, v, _hoursRegister(npc))); return true; }
+      if (street && street === hereSt) return pick("venue", { v: _barName(v), rs: "a few doors down, on this street" });
       return pick("venue", { v: _barName(v), rs: r + (phrase && phrase !== r ? ", " + phrase : "") });
     }
   }
@@ -11148,16 +11249,16 @@ const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
 // gets its own strip map: the soi west-to-east, the beach at its head, the bars
 // under each end. Keep the venue lists in step with SOI6_ROOMS.
 const _MAP_SOI6 = `  BEACH ~ BEACH RD ── WEST ────── INNER W ───── MIDDLE ────── INNER E ───── EAST END
-          (junction) (loud)       (the group    (quiet)       (nobody's)    (loudest)
-                                   is buying)
-  north   Blue Dog   Pink Lotus   Jade Lounge   Queen Vic     Firecracker   Kitten Corner
-  beach   Stinky     Golden       Peach Lounge  (your room ↑) Hot Pepper    Cherry Pop
-          Pinky      Dragon       Lollipop      Shady Lady    Hula Hula     Ruby Kiss
-                     Sunset       Sweet         Front Row     Ladybird
+          (junction) (loud)       (the group    (quiet,       (nobody's)    (loudest)
+                                   is buying)    nobody's)
+  ~ the   Blue Dog   Pink Lotus*  Jade Lounge*  Queen Vic     Firecracker   Kitten Corner*
+  north   Stinky     Golden       Peach Lounge* (your room ↑) Hot Pepper    Cherry Pop
+  beach ~ Pinky      Dragon*      Lollipop      Shady Lady    Hula Hula     Ruby Kiss
+                     Sunset       Sweet         Front Row     Ladybird      7-11
                      Dreams       Tamarind      The Verandah
                      ATM · 7-11
 
-  ~100 open fronts down both sides — these are the ones you get to know.`;
+  * the group's paper.  ~100 open fronts down both sides — these are the ones you get to know.`;
 
 // EXITS — IF-genre furniture, and load-bearing here: a bar's door and a street's
 // continuation share bare compass letters, so `n` off a lively lane is a coin
@@ -13890,7 +13991,7 @@ function doCommand(input) {
     if (softAnswer && (_addressed || !softAnswer.test(lower)) && (_isRealCommand(v) || (_room().exits && _room().exits[v]))) {
       // the note FIRST: with the decline prose printed before it, a man read the
       // peddler's head-shake as the answer to his BARFINE (Lionel, round 36)
-      _say("(That wasn't an answer; the pitch lapses and you carry on.)", "dim");
+      _say("(That wasn't an answer to her, so it counts as a no — and you carry on.)", "dim");   // the note and the decline say the same thing (Siobhan and Dirk, round 77)
       _ENC[enc]("no");
       doCommand(raw);
       return;
@@ -14111,10 +14212,21 @@ function doCommand(input) {
   }
   // COUNT THE STOOLS (Vince, round 74: "count stools" was a parse failure on the one job that is counting). Counting
   // is sitting — the job's tally is _questTick's; this says what the room holds right now, and where the count stands.
-  // COUNT THE BARS on a street that has a close look at them (Soi 6's hundred) — the count is the look
-  if (/^count( the| all the)? (bars|fronts|doorways)$/.test(lower) && _room().reads && _room().reads.bars) {
-    doCommand("examine bars"); return;
+  if (/^(do you |you )?remember me\??$/.test(lower)) {
+    const who = typeof _convoActive === "function" && _convoActive() ? G.convo : null;
+    if (who) { doCommand("ask " + NPCS[who].name.toLowerCase() + " about remember me"); return; }
+    _say("Remember you? Ask somebody — a name, then the question. (ASK <name> ABOUT ME)"); return;
   }
+  // COUNT THE BARS on a street that has a close look at them (Soi 6's hundred) — the count is the look;
+  // and COUNT <anything the room has a close look at> is that look (Dirk, round 77: COUNT CARDS at the
+  // Sweet Tamarind, COUNT BARS at the soi's mouth)
+  { const _cm = lower.match(/^count( the| all the)? ([a-z ]+?)$/);
+    if (_cm && !/^(stools|men|customers|heads|people|the room|room|punters|the bar)$/.test(_cm[2])) {
+      const _rd = _room().reads || {}, w = _cm[2];
+      const key = Object.keys(_rd).find(k => k === w || (typeof _READ_NOUNS !== "undefined" && (_READ_NOUNS[k] || []).includes(w)));
+      if (key) { doCommand("examine " + w); return; }
+      if (/^(bars|fronts|doorways)$/.test(w)) { _say("You count the fronts you can see from here and lose the number by the next doorway. The town is mostly bars, and none of them stand still to be counted."); return; }
+    } }
   if (/^count( the)? (stools|men|customers|heads|people|the room|room|punters|the bar)$/.test(lower) || (lower === "count" && !(typeof _convoActive === "function" && _convoActive()))) {
     if (!_inBar()) { _say("Nothing here worth counting except the bikes, and they don't stay still."); return; }
     const men = 2 + _regularsHere().length + (G.nightTurn >= 40 ? 2 : 0) + (_hh("count:" + G.room + ":" + G.day, 5) % 3);
@@ -14182,6 +14294,11 @@ function doCommand(input) {
     case "contacts": case "phonebook": _doContacts(); break;
     case "who": // "who am i" → your identity; bare WHO → the black book
       if (/\bam i\b|\bi am\b/.test(arg)) { _doWhoAmI(); break; }
+      // WHO OWNS THIS BAR is a question about the paper, not your contacts (Dirk, round 77)
+      if (/^owns\b/.test(arg)) {
+        if (_inBar()) { doCommand("examine licence"); break; }
+        _say("Who owns what is written by the till of every bar on this street — step inside one and read the frame, or ask whoever is behind it."); break;
+      }
       _doBlackbook(); break;
     case "blackbook": case "little black book": case "ladies": _doBlackbook(); break;
     case "identity": case "me": case "self": _doWhoAmI(); break;
