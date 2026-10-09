@@ -108,6 +108,7 @@ function _showStartMenu() {
   document.getElementById("start-menu").hidden = false;
   document.getElementById("start-intro").hidden = true;
   _applyFullGate();
+  _applyAgeGate();
   ov.hidden = false;
   const shelved = _shelvedLine();
   if (shelved) {
@@ -243,6 +244,18 @@ function _splashInit() {
   pre.onload = () => { swap(pre.src, true); setTimeout(startCarousel, 30000); };
   pre.onerror = startCarousel; // no splash art → straight to the girls
   pre.src = "art/posters/splash.webp";
+}
+
+// THE CONTENT NOTICE (Mario, 2026-10-09, for the public Soi 6 release): the splash says what the game
+// is about and asks for one 18+ tap before it shows the modes; remembered on this device. A saved night
+// continues straight in — the notice is for the front door, not a returning player's every visit.
+function _applyAgeGate() {
+  const box = document.getElementById("start-age"), menu = document.getElementById("start-menu");
+  if (!box || !menu) return;
+  let ok = false;
+  try { ok = localStorage.getItem("lbb_age_ok") === "1"; } catch (e) {}
+  box.hidden = ok;
+  menu.classList.toggle("age-wait", !ok);
 }
 
 function _applyFullGate() {
@@ -638,6 +651,12 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("start-intro").hidden = false;
     }));
   _applyFullGate();
+  _applyAgeGate();
+  { const ageOk = document.getElementById("start-age-ok");
+    if (ageOk) ageOk.addEventListener("click", () => {
+      try { localStorage.setItem("lbb_age_ok", "1"); } catch (e) {}
+      _applyAgeGate();
+    }); }
   document.getElementById("start-back").addEventListener("click", () => {
     document.getElementById("start-intro").hidden = true;
     document.getElementById("start-menu").hidden = false;

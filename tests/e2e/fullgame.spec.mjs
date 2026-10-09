@@ -11,8 +11,10 @@ test("THE FULL GAME is locked by default and TOGGLE FULL unlocks it", async ({ p
   const pageErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
   await page.goto(INDEX_URL);
+  if (await page.locator("#start-age-ok").isVisible()) await page.locator("#start-age-ok").click();   // the 18+ notice
   await page.evaluate(() => localStorage.clear());
   await page.reload();
+  if (await page.locator("#start-age-ok").isVisible()) await page.locator("#start-age-ok").click();   // the 18+ notice
 
   const full = page.locator('#start-menu .start-mode[data-mode="full"]');
   await expect(full).toBeVisible();
@@ -33,14 +35,17 @@ test("THE FULL GAME is locked by default and TOGGLE FULL unlocks it", async ({ p
 
   // and it survives a reload, because the pref is not in the save
   await page.reload();
+  if (await page.locator("#start-age-ok").isVisible()) await page.locator("#start-age-ok").click();   // the 18+ notice
   await expect(page.locator('#start-menu .start-mode[data-mode="full"]')).toBeEnabled();
   expect(pageErrors).toEqual([]);
 });
 
 test("picking THE FULL GAME starts the vacation, not the Soi 6 week", async ({ page }) => {
   await page.goto(INDEX_URL);
+  if (await page.locator("#start-age-ok").isVisible()) await page.locator("#start-age-ok").click();   // the 18+ notice
   await page.evaluate(() => { localStorage.clear(); localStorage.setItem("lbb_full_on", "1"); });
   await page.reload();
+  if (await page.locator("#start-age-ok").isVisible()) await page.locator("#start-age-ok").click();   // the 18+ notice
 
   await page.locator('#start-menu .start-mode[data-mode="full"]').click();
 

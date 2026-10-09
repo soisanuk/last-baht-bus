@@ -21,6 +21,7 @@ test("boots from file:// and round-trips a typed command", async ({ page }) => {
   page.on("pageerror", e => pageErrors.push(e.message));
 
   await page.goto(INDEX_URL);
+  if (await page.locator("#start-age-ok").isVisible()) await page.locator("#start-age-ok").click();   // the 18+ notice
 
   // A fresh boot shows the mode-select overlay — proof the scripts loaded, main.js
   // ran, and the start menu wired up. Click through it into the Soi 6 game.
@@ -75,6 +76,7 @@ test("boots from file:// and round-trips a typed command", async ({ page }) => {
 
 test("the scrollback is capped — a long session doesn't grow the DOM without bound", async ({ page }) => {
   await page.goto(INDEX_URL);
+  if (await page.locator("#start-age-ok").isVisible()) await page.locator("#start-age-ok").click();   // the 18+ notice
   await expect(page.locator("#start-overlay")).toBeVisible({ timeout: 5000 });
   await page.click('.start-mode[data-mode="soi6"]');
   await page.click("#start-go");

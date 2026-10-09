@@ -8,6 +8,20 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>The Last Baht Bus — a Pattaya misadventure</title>
+<!-- what a forum or a chat app shows when the link is pasted (the public Soi 6 release, 2026-10-09) -->
+<meta name="description" content="Seven nights on Soi 6, Pattaya, with ฿100,000 and a hard head. A text adventure about the bar trade, written straight — for adults, free in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Last Baht Bus">
+<meta property="og:title" content="The Last Baht Bus — one week on Soi 6">
+<meta property="og:description" content="Seven nights on Soi 6 with ฿100,000 and a hard head. A text adventure about Pattaya's bar trade, written straight. Free, in your browser.">
+<meta property="og:url" content="https://soisanuk.github.io/last-baht-bus/">
+<meta property="og:image" content="https://soisanuk.github.io/last-baht-bus/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pattaya Bay at night in neon pink, with the title The Last Baht Bus.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Last Baht Bus — one week on Soi 6">
+<meta name="twitter:image" content="https://soisanuk.github.io/last-baht-bus/og-card.jpg">
 <!-- The clacks overhead: names kept moving through the towers, never logged,
      turned around at the end of the line. Pratchett for the tradition itself;
      Trink because a man who filed for forty years deserves to keep moving. -->
@@ -596,6 +610,13 @@
   }
   .start-mode:hover:not([disabled]) { border-color: var(--pink); background: #1e0030; box-shadow: 0 0 16px #ff149344; }
   .start-mode[disabled] { opacity: .45; cursor: not-allowed; }
+  #start-age { margin: .8rem 0 .4rem; padding: .7rem .8rem; border: 1px solid var(--yellow); border-radius: 6px; background: #1a0428; }
+  #start-age[hidden] { display: none; }
+  .start-age-text { margin: 0 0 .6rem; font-size: .82em; line-height: 1.4; color: var(--text); }
+  .start-age-text b { color: var(--yellow); }
+  #start-age-ok { width: 100%; padding: .6rem; background: none; border: 1px solid var(--yellow); color: var(--yellow); font: inherit; font-weight: 700; border-radius: 6px; cursor: pointer; }
+  #start-age-ok:hover { box-shadow: 0 0 16px #ffd70055; }
+  #start-menu.age-wait .start-mode { display: none; }
   .start-mode-title { display: block; color: var(--pink); font-weight: 700; letter-spacing: .04em; }
   .start-mode[disabled] .start-mode-title { color: #8a6a90; }
   .start-mode-desc { display: block; font-size: .74em; color: var(--text); margin-top: .25rem; line-height: 1.35; }
@@ -1115,6 +1136,11 @@
       <p class="start-who">For punters, by a punter. The bar scene, written straight —
         the girls, the money, the long nights and what they cost.</p>
       <div id="start-art-wrap" aria-hidden="true"><img alt=""><img alt=""></div>
+      <div id="start-age" hidden>
+        <p class="start-age-text"><b>For adults (18+).</b> The game is set in Pattaya's bar trade — the girls,
+          the money, the drinking — and written straight. Nothing explicit; nothing sanitised either.</p>
+        <button id="start-age-ok">I'm 18 or over — let me in</button>
+      </div>
       <button class="start-mode" data-mode="soi6">
         <span class="start-mode-title">SOI 6 CHALLENGE ★</span>
         <span class="start-mode-desc">One week, one street. ฿100,000 and a hard head — max out your สนุก (sanuk — fun).</span>

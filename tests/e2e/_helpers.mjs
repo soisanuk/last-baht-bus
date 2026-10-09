@@ -5,6 +5,8 @@
 // mounts the menu, so the click is guarded by presence.
 export async function bootIntoGame(page, url) {
   await page.goto(url);
+  const age = page.locator("#start-age-ok");   // the 18+ notice (2026-10-09)
+  if (await age.count() && await age.isVisible()) await age.click();
   const soi6 = page.locator('.start-mode[data-mode="soi6"]');
   if (await soi6.count()) {
     await soi6.click();

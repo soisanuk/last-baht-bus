@@ -12,6 +12,7 @@ test("TODAY'S SOI seeds the daily; SHARE prints the week card and copies it", as
   page.on("pageerror", e => pageErrors.push(e.message));
   await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto(INDEX_URL);
+  if (await page.locator("#start-age-ok").isVisible()) await page.locator("#start-age-ok").click();   // the 18+ notice
 
   // fresh boot → mode select → intro panel → TODAY'S SOI
   await page.locator('.start-mode[data-mode="soi6"]').click();
