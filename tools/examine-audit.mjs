@@ -252,6 +252,7 @@ for (const [roomId, room] of Object.entries(ROOMS)) {
 }
 
 // ── the comparison ──────────────────────────────────────────────────────────
+if (COMPARE && asJson) { console.log(JSON.stringify({ tested, findings })); process.exit(0); }
 if (COMPARE) {
   const by = k => findings.filter(f => f.via === k);
   console.log(`examine-audit --compare: ${tested} probes · dead-ends found by both ${by("both").length}, ` +

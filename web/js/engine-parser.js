@@ -2882,7 +2882,17 @@ const _SCENERY = [
         "originally. This town runs on them.",
     ],
   } },
-  { key: "bench", m: /\b(benches?|loungers?|sun ?beds?)\b/, lines: {
+  { key: "bench", m: /\b(bench(es)?|loungers?|sun ?beds?)\b/, lines: {   // "benches?" never matched "bench" (examine audit, 2026-10-09)
+    gogo: [
+      "The benches along the walls, padded in something that wipes clean, each with a little table in front of it just big enough for two drinks and a tip.",
+      "A long padded bench under the mirror wall: the seats for a man who wants to watch without being in the front row, which the girls clock and price accordingly.",
+    ],
+    bar: [
+      "A plank bench against the back wall for the overflow, worn pale where a decade of people have sat on it waiting for a stool.",
+    ],
+    parlour: [
+      "A bench by the door for the people waiting their turn, with a stack of plastic sandals under it and a fan pointed at it.",
+    ],
     sand: [
       "Stacked in threes under the folded umbrellas, chained through the frames, waiting " +
         "for a morning that pays better than the night does.",
@@ -2948,7 +2958,7 @@ const _SCENERY = [
         "Whatever you leave in here survives a bad night out; whatever you carry " +
         "does not."
       : null },
-  { key: "window", m: /\b(windows?|balcony door|shutters?)\b/,
+  { key: "window", m: /\b(windows?|balcony door|shutters?|grilles?)\b/,
     fn: () => _isHotelRoom(G.room)
       ? "Aluminium frame, a gap at one corner that lets the soi in whether you want " +
         "it or not, and the same view every hotel in this town sells: somebody " +
@@ -2964,6 +2974,16 @@ const _SCENERY = [
       ],
     } },
   { key: "mirror", m: /\b(mirrors?)\b/, lines: {
+    parlour: [
+      "A long mirror on the wall facing the mats, so that afterwards you can see the man who walked in hunched and the one who is leaving, side by side for a second.",
+      "One mirror, by the door, with a comb on a string and a sticker in the corner from a temple fair. Everybody checks their hair in it on the way out.",
+    ],
+    gogo: [
+      "Mirrored walls, so the stage is three stages and the room is twice the size it paid for. Somewhere in there is you, holding a drink, looking like a man in a mirror.",
+    ],
+    street: [
+      "A wing mirror on a stopped bike, borrowed for a second by somebody fixing her lipstick at the red light. Then the light changes and the mirror goes back to watching traffic.",
+    ],
     bar: [
       "Behind the bottles, and doing the room a favour with the lighting. You look better in " +
         "it than you have any right to, which is the entire design brief.",
@@ -3136,7 +3156,7 @@ const _SCENERY = [
 
   // `glass` and `chang` are the two that double as modifiers: the fishbowl's
   // one-way glass is a wall, and a Chang singlet is a garment on a market rail.
-  { key: "drink", m: /\b(beer|beers|drinks?|bottles?|glass|chang|leo|singha)\b/,
+  { key: "drink", m: /\b(beer|beers|drinks?|bottles?|glass(es)?|chang|leo|singha)\b/,
     unless: /one.?way|looking.glass|glass(es)? case|singlet|shirt|vest|tank ?top|shorts/,
     lines: {
     bar: [
@@ -3215,7 +3235,13 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "climate", m: /\bfans?\b|\bair ?con(ditioner|ditioning)?\b|\bac unit\b/, lines: {
+  { key: "climate", m: /\bfans?\b|\bair[ -]?con(ditioner|ditioning)?\b|\bac units?\b/, lines: {
+    street: [
+      "Cold air rolls out of an open shop door onto the pavement and dies in about a metre. People slow down as they pass through it, every one of them.",
+    ],
+    parlour: [
+      "A wall unit dripping into a cut-down water bottle, set two degrees colder than the street and not one degree more, because the oil does not like the cold.",
+    ],
     bar: [
       "The fan does its slow police-search of the room, finding nothing, agreeing to look " +
         "again. The cold spots are known territory and the regulars are sitting in them.",
@@ -3244,7 +3270,11 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "sound", m: /\bsound ?system\b|\bspeakers?\b|\bsubwoofer\b|\bsound\s?desk\b|\bsystem\b/, lines: {
+  { key: "sound", m: /\bsound ?systems?\b|\bspeakers?\b|\bsubwoofers?\b|\bsound\s?desk\b|\bsystems?\b/, lines: {
+    street: [
+      "Three sound systems at once from three open fronts, each sure it is the only one playing, meeting in the middle of the soi as one long argument with a beat.",
+      "Speakers on the pavement, angled out at the street like guns on a ship. The bass arrives in your chest a good second before the tune does.",
+    ],
     bar: [
       "Stacked speakers with the grilles dented in, run at the volume where music stops " +
         "being heard and starts being weather.",
@@ -3292,7 +3322,7 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "curtain", m: /\bcurtains?\b/, lines: {
+  { key: "curtain", m: /\bcurtains?\b|\bdrapes?\b/, lines: {
     any: [
       "The curtain is doing the most important job in the building: being a wall that " +
         "forgives. What's behind it is between the curtain and its conscience.",
@@ -3451,6 +3481,156 @@ const _SCENERY = [
     return "No roundabout on this stretch — the traffic here prefers its chaos linear.";
   } },
 
+  // ── the examine audit's batch (2026-10-09, with Compromise): things the prose puts in front of you ──
+  { key: "lights", m: /\b(street ?lights?|streetlamps?|sodium lamps?|lamps?|lamplight|bulbs?|lamp ?posts?|fairy lights)\b/, lines: {
+    street: [
+      "Sodium lamps, one in three of them working, turning everybody the colour of weak tea. The dark between them is where the dogs have their meetings.",
+      "A string of bare bulbs looped from pole to pole over the stalls, every third one blown, the rest attracting a small weather system of insects.",
+    ],
+    sand: [
+      "The promenade lamps stand in a long line with their backs to the sea, lighting the road and leaving the sand to the dark and the people who prefer it.",
+    ],
+    bar: [
+      "Coloured bulbs strung along the front, the kind that make every face kinder than it is. Two are out; nobody has noticed in a year.",
+    ],
+    any: [
+      "Lights that do the job and not one thing more. The insects have opinions about them.",
+    ],
+  } },
+  { key: "poles", m: /\b(chrome poles?|poles?|power poles?|electricity poles?)\b/, unless: /\bpolice\b/, lines: {
+    gogo: [
+      "Chrome poles from stage to ceiling, polished at hand height and nowhere else. The good dancers barely touch them; the new ones hang on like the bus is moving.",
+    ],
+    street: [
+      "Concrete power poles with a century of cables knotted round the top like a bird's nest that gave up. Somebody has stapled a lost-dog poster to the bottom of one.",
+      "A pole with forty black cables going in and four coming out, and nobody alive who knows where the other thirty-six went.",
+    ],
+    any: [
+      "A pole, doing the work of holding up things nobody looks at.",
+    ],
+  } },
+  { key: "cooking", m: /\b(garlic|charcoal|squid|steam|grill|skewers?|woks?|rice|plates?|smoke)\b/, unless: /\bnumber plate\b|\blicen[cs]e plate\b/, lines: {
+    eatery: [
+      "Garlic hitting hot oil, the most persuasive smell in the language. Rice from a pot the size of a drum. Plates that come out faster than anyone can order.",
+      "Steam off the pots, charcoal off the grill, and the woman at the wok working four orders with one pan and losing track of none.",
+    ],
+    street: [
+      "A charcoal grill on a cart, squid and pork on bamboo skewers, the smoke going straight up into the lights and then sideways into everybody's clothes.",
+      "Steam from a noodle cart, garlic from somewhere you can't see, and charcoal over all of it — the soi's real perfume, the one under the beer.",
+    ],
+    sand: [
+      "A squid seller's grill, carried down to the sand on a pole across somebody's shoulders, glowing like a small campfire.",
+    ],
+    gogo: [
+      "The only smoke in here comes out of a machine at the foot of the stage on the chorus, and it smells of nothing at all.",
+    ],
+    bar: [
+      "Smoke from the grill cart outside drifts in under the awning with the garlic, mixes with somebody's cigarette at the rail, and the fan stirs all of it without improving any of it.",
+    ],
+    any: [
+      "Somebody is cooking somewhere close, and it is better than whatever you were going to eat.",
+    ],
+  } },
+  { key: "vehicles", m: /\b(trucks?|lorr(y|ies)|cars?|sedan|pick-?ups?|headlights?|horns?|tyres?|vans?|traffic)\b/, unless: /horn-?rim/,
+    // the car where Tan stands is HIS: a plain grey sedan, parked, never at the wheel (round 63)
+    fn: () => (_npcsHere().includes("tan") ? "A plain grey sedan at the kerb, clean the way a car is clean when somebody else washes it, parked exactly where parking is not allowed and nobody minds. Tan leans on it as if it were part of the street." : null),
+    lines: {
+    street: [
+      "Pickups with whole families in the back, a lorry trying a turn it was not built for, and a horn that means hello, sorry, move and thank you depending on the length.",
+      "Headlights in a long slow river, nobody indicating, everybody somehow getting where they are going. The horns are conversation, not anger.",
+    ],
+    sand: [
+      "On the road behind the sand the traffic goes on all night, a long hiss of tyres you stop hearing after the second beer.",
+    ],
+    any: [
+      "Traffic, going about its business, which is mostly being in the way of other traffic.",
+    ],
+  } },
+  { key: "folk", m: /\b(barkers?|touts?|pullers?|aunties|joggers?|sweepers?|freelancers?|street sellers?|vendors?)\b/, lines: {
+    street: [
+      "The barkers work the pavement with a laminated menu and the patience of anglers: a word, a smile, a hand on the arm that is gone before you can object to it.",
+      "A sweeper with a broom made of twigs, working the gutter as if nothing here is anybody's business but the leaves. She does not look up.",
+      "Women with a cool box and a stool, an auntie with a tray of fruit, a man selling lighters that light — the town that sells to the town that drinks.",
+    ],
+    sand: [
+      "Joggers at the water's edge in the cool hours, and a vendor with a cool box walking the line of loungers saying the same three words to everybody.",
+    ],
+    bar: [
+      "Freelancers at the far end, not the bar's and not pretending to be, working their own phones and occasionally the room.",
+    ],
+    any: [
+      "People earning a living in the space between your drink and your hotel.",
+    ],
+  } },
+  { key: "dancers", m: /\b(dancers?|the dancers|girls on stage)\b/, lines: {
+    gogo: [
+      "A row of numbered girls on the stage in two-piece outfits and heels, moving to a song in the way of people who have danced to it a thousand times. One of them is actually dancing.",
+      "The dancers rotate on a rhythm the DJ keeps: on, off, a seat beside a customer, back up. The badges are numbers so you don't need names; most men ask anyway.",
+    ],
+  } },
+  { key: "umbrellas", m: /\b(umbrellas?|parasols?|sunshades?)\b/, lines: {
+    sand: [
+      "Rows of umbrellas folded shut like birds asleep, chained in threes to their bases. In the day they belong to somebody; at night they belong to the wind.",
+    ],
+    any: [
+      "A big faded umbrella over a plastic table, advertising a beer that nobody has sold here in years.",
+    ],
+  } },
+  { key: "bins", m: /\b(bins?|wheelie bins?|bin bags?|rubbish|garbage|trash)\b/, lines: {
+    street: [
+      "Green wheelie bins at the corner, lids up, overflowing in a way that is everybody's fault and therefore nobody's. A cat sits on the highest one like a landlord.",
+    ],
+    any: [
+      "A bin, full, and patient about it.",
+    ],
+  } },
+  { key: "booth", m: /\b(dj booth|booths?|the booth|currency booth|exchange booth)\b/, lines: {
+    street: [
+      "A currency booth the size of a wardrobe, its board of rates in red LEDs, beating the bank by enough to make the walk worth it and not by enough to be suspicious.",
+    ],
+    parlour: [
+      "Through the window, the currency booth next door: a woman behind glass counting somebody's holiday into baht without looking at her hands.",
+    ],
+    gogo: [
+      "The DJ's booth, up a step at the end of the stage: one man, two screens, a microphone for calling numbers, and the expression of somebody who has played the same song four hundred nights.",
+    ],
+    bar: [
+      "A booth by the wall, the one seat in the place with a back to it, held by whoever got there first and defended by a drink left on the table.",
+    ],
+  } },
+  { key: "mats", m: /\b(mats?|mattress(es)?)\b/, lines: {
+    sand: [
+      "Straw mats on the sand, weighed down with carrier bags of food and somebody's grandmother. A family picnic that has been going since late afternoon and has no intention of stopping.",
+    ],
+    parlour: [
+      "Thin mats on a raised floor in a row, each with a clean sheet, a folded cloth for your face and a pillow hard enough to be good for you. Curtains between them that don't quite meet.",
+      "Mats side by side, close enough to hear the man next to you exhale when she finds the knot. Nobody is embarrassed. Everybody's back is the same back.",
+    ],
+  } },
+  { key: "shower", m: /\b(long shower|showers?|the shower|wet room)\b/, lines: {
+    parlour: [
+      "A tiled room with a drain in the middle, a low stool, a basket of bottles and a long hose: the shower is the first course, and it is not hurried.",
+    ],
+    any: [
+      "A shower with two settings, scalding and Antarctica, and a showerhead that has opinions about which.",
+    ],
+  } },
+  { key: "clothes", m: /\b(clothes|t-?shirts?|polos?|singlets?|sarongs?|elephant trousers)\b/, lines: {
+    street: [
+      "Racks of shirts, the same twelve designs in every size, elephant trousers in every colour elephants are not, and football shirts for clubs that have changed their sponsors twice since.",
+    ],
+    any: [
+      "Clothes for a climate, bought for the week and left behind at the end of it.",
+    ],
+  } },
+  { key: "toilets", m: /\b(toilets?|loos?|restrooms?|bathrooms?)\b/, lines: {
+    bar: [
+      "Round the back, past the crates: one toilet, a bucket and a scoop, and a sign in two languages asking you not to put anything in it you would not put in your mouth. Fair.",
+    ],
+    any: [
+      "There is a toilet. It is through there. It is what it is.",
+    ],
+  } },
   { key: "arch", m: /\barch(way)?\b/, fn: () => {
     if (["tt_entrance", "buakhao_tt", "buakhao_myth"].includes(G.room))
       return "The TREE TOWN arch: neon and fairy lights over a gap between shophouses, " +

@@ -200,3 +200,20 @@ test("Waen sends the child register once, to a student she has taught twice", ()
   assert.ok(G.phone.inbox.some(m => /ยังไง/.test(m.text) && /หนู/.test(m.text) && /ลูก/.test(m.text)));
   const n = G.phone.inbox.length; G.day++; _waenTick(); assert.ok(!G.phone.inbox.slice(n).some(m => /ยังไง/.test(m.text)), "once");
 });
+
+// ── the examine audit's batch, found with Compromise (2026-10-09) ────────────────
+test("the things the prose puts in front of you answer EXAMINE: each was a dead end the Compromise harvest found", () => {
+  const DEAD = new Set([..._NO_SUCH_THING, "You don't see that here."]);
+  const pairs = [["tequila_queen", "bench"], ["dolphin", "bench"], ["half_moon_massage", "mirror"], ["second_rd_diana", "mirror"],
+    ["emperor_soapy", "shower"], ["soi6_street", "sound systems"], ["jomtien_beach_rd_s", "air-con"], ["jomtien_beach_rd", "streetlights"],
+    ["cheap_charlies", "garlic"], ["tt_deep", "squid"], ["candy_bar", "glasses"], ["pk_east", "trucks"], ["thappraya_w", "barkers"],
+    ["hyper", "dancers"], ["jomtien_beach_m", "umbrellas"], ["klang_massage", "mats"], ["beach_north_end", "mats"], ["second_rd_india", "booth"]];
+  for (const [r, n] of pairs) {
+    if (!ROOMS[r]) continue;
+    newGame(); G.flags.act1Done = true; G.stage = "vacation"; G.room = r; G.lightOn = true; G.nightTurn = 30;
+    for (const k in ENCOUNTERS) G.encDone[k] = true; out = []; run("examine " + n);
+    assert.ok(!out.some(l => DEAD.has(l)), `${r}: EXAMINE ${n} -> ${out[0]}`);
+  }
+  G.room = _npcRoom("tan"); out = []; run("examine car"); assert.match(said(), /grey sedan/, "the car where Tan stands is his");
+  G.room = "queen_vic"; out = []; run("examine horn-rims"); assert.doesNotMatch(said(), /Traffic/, "horn-rims are not traffic");
+});

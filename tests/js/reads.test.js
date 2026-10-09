@@ -268,7 +268,7 @@ test("a scenery fn that declines falls through to its own pool", () => {
   // and probing with a non-matching string tests nothing while looking like it
   // tests something (it fails on the match, never reaching the fallthrough).
   const VOCAB = ["window", "grill", "glass", "poster", "stool", "shrine", "ceiling",
-    "mirror", "floor", "sand", "arch", "till", "bunting"];
+    "mirror", "floor", "sand", "arch", "till", "bunting", "car"];
   for (const e of withBoth) {
     const probe = e.m.test(e.key) ? e.key : VOCAB.find(w => e.m.test(w));
     assert.ok(probe, `no probe noun matches ${e.key} — add one to VOCAB`);
