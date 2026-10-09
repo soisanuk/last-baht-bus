@@ -1062,6 +1062,9 @@ test("one conquest anywhere sours it forever — the soi always talks", () => {
   while (!G.affair.discovered && d++ < 4) { G.day++; out = []; _affairNight({ worked: true }); }
   assert.ok(G.affair.discovered && d <= 3, "she learns within days, guaranteed");
   assert.ok(G.affair.soured, "and the good ending dies right there");
+  // the scene waits for her rail (round 76): stand there and it is told
+  assert.ok(G.affair.sceneDue, "the discovery is told at her rail, not at the wake");
+  G.room = G.bar.room || "stinky_bar"; out = []; _affairDiscoverScene();
   assert.match(out.join("\n"), /Why I stop working, if you don't/, "her one question, unanswerable");
   // even a subsequently perfect run can never reach the door
   G.affair.strain = 0; G.affair.since = G.day - AFFAIR_GOOD_DAYS - 5;

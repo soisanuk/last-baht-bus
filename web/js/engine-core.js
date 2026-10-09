@@ -2266,6 +2266,9 @@ function _selfNamedNode(npcId, topic) {
     if (d.bond && _knownTier(npcId) < d.bond) continue;
     if (d.when && !d.when(st, G)) continue;
     const body = String(d.text || "");
+    // a two-word name is one name: "klang corner" is not "Kitten Corner" because both say Corner
+    // (Stelian, round 76 — Bert's PLG speech for a massage shop he had just recommended)
+    if (words.length >= 2 && !words.every(w => new RegExp("\\b" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i").test(body))) continue;
     for (const w of words) {
       // Case-SENSITIVE, whole word: "Lek" in his own sentence is a person, "lek"
       // would also match the middle of nothing useful. Deliberately no lookbehind
@@ -3399,6 +3402,7 @@ function _tick() {
   // ownership without a single one (actuary playtest 2026-08-23). If the hour
   // comes round while you're already stood behind your own bar, it finds you.
   if (!G.game && !G.pendingEnc && !G.pendingChoice && !G.pendingBf && !G.pendingFare) {
+    if (typeof _affairSceneDue === "function" && _affairSceneDue()) { _affairDiscoverScene(); return; }
     if (typeof _ccibDue === "function" && _ccibDue()) { _ccibVisit(); return; }
     if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
     if (typeof _acctDue === "function" && _acctDue()) { _acctCall(); return; }

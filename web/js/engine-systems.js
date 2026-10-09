@@ -1286,6 +1286,10 @@ const _PARTY_SOFT_BYE = [
   "(In the mess of the night's ending, {who} squeezes your arm once — \u201cyou okay? okay\u201d — and is gone into the town she knows better than trouble does.)",
   "({who} melts away somewhere in the confusion, professionally unentangled, with a backward glance that says the night was fun while it was fun.)",
 ];
+const _PARTY_SOFT_BYE_CLOSE = [
+  "({who} stays until the light is properly up, says \u201cokay, now I sleep, you sleep, tomorrow you come\u201d, and does not let go of your hand until the taxi door makes her.)",
+  "({who} watches the last of it with her head on your shoulder, then stands, stretches, and kisses you once like a woman who intends to see you tonight.)",
+];
 const _PARTY_HOME_NUDGE = [
   "({who} looks at the room, then at you, and starts unhooking an earring with an air of complete arrival. SLEEP when you're ready \u2014 or the night is still out there if you've got legs left.)",
   "({who} kicks her shoes into the corner like she lives here and falls backward onto the bed, arms out. \u201cYour hotel is boring, tilac. But the bed is good.\u201d SLEEP to call it \u2014 or drag her out for one more.)",
@@ -1354,6 +1358,13 @@ function _nontLocate(topic) {
   if (!id) return false;
   if (id === "fast_eddy") return false;   // the history, not the locate: his `rabbit|eddy` node answers (Declan, r45)
   if (id === "orathai") return false;   // the woman three tables along: his own node points, for nothing (the laundering quests, 2026-10-08)
+  // your own staff are not a locate: they work at your bar, and he says so for nothing (Stelian, round 76 —
+  // ฿200 to find Manow, his own girl, at his own bar)
+  if (typeof _barOwned === "function" && _barOwned() && typeof _barStaff === "function" && G.bar && G.bar.room &&
+      (NPCS[id].room === G.bar.room || (G.affair && G.affair.id === id))) {
+    _say(`“${NPCS[id].name}?” Nont almost smiles. “At your bar, or on her way to it. I don't charge a man to find his own staff.”`);
+    return true;
+  }
   if (id === "tan") {
     // "the first laugh you've had out of him" was printing on the third night (Declan, r45)
     if (_flag("nontTanLaugh")) _say("“Tan finds you. Keep your money.” He doesn't look up this time.");
@@ -1546,7 +1557,10 @@ function _partyNightEnd(reason) {
     for (const id of p.ids) _addBond(id, 2);
     G.partyRescued = who;   // the morning ledger names her, not "the town" (Anil, round 64)
   } else {
-    _say(_fmt(_pickVary(_PARTY_SOFT_BYE, "partybye"), { who }), "dim");
+    // a woman who is yours does not leave "professionally unentangled" (Bridget, round 76 — at her
+    // her-farang's sunrise, with nothing said at the dawn itself)
+    const _close = p.ids.some(i => typeof _bondTier === "function" && _bondTier(i) >= 3);
+    _say(_fmt(_pickVary(_close ? _PARTY_SOFT_BYE_CLOSE : _PARTY_SOFT_BYE, _close ? "partybyeclose" : "partybye"), { who }), "dim");
   }
   G.party = null;
 }
@@ -5171,6 +5185,7 @@ function _chamTick() {
     _setFlag("chamSlip");
     _pushMsg("cream", "the money come na papa 🙏 i pay the room already, you the only one who " +
       "never forget. i buy the shoes for work like you tell me 💊🤍");
+    { const _ib = G.phone.inbox || []; if (_ib.length) _ib[_ib.length - 1].slip = true; }   // not hers to read back to you: it was never for you (Bridget, round 76)
     _pushMsg("cream", "omg sorry!! wrong person 555 😳 that is my… uncle. how are you na? you sleep well?");
     G.phone.lastText = G.turns;
     _say("(📱 Your phone buzzes — Cream. CHECK MESSAGES.)", "dim");
@@ -5870,14 +5885,14 @@ const _TEXT_TALK_PHOTO = [
   n => `${n} pretends not to know which photo, then gives up. "Okay, okay. My friend take it. Good angle, na?"`,
 ];
 const _TEXT_SUBJECT_FLOOR = [
-  (n, q) => `${n} nods. "Yes — I text you: “${q}”. Same now, boss. Nothing change."`,
+  (n, q) => `${n} nods. "Yes — I text you: “${q}”. Same now. Nothing change."`,   // "boss" from a woman who has never called him that (Bridget, round 76)
   (n, q) => `"That?" ${n} taps her own {{phone}}. "“${q}”. I write it so you know. Now you know two time."`,
 ];
 const _TEXT_SUBJECT_HOUSE = [
   (n, q) => `"“${q}”." ${n} says it again to your face, flatter than the text. "That's where it stands."`,
   (n, q) => `${n} doesn't check the {{phone}}. "I sent you that: “${q}”. Nothing since."`,
 ];
-const _TEXT_STOP = new Set(["that", "this", "with", "from", "have", "what", "when", "they", "them", "then", "again", "boss", "tonight", "today", "tomorrow", "night", "come", "say", "tell", "telling", "about", "your", "you", "will", "only", "very", "more", "some", "here", "there"]);
+const _TEXT_STOP = new Set(["last", "time", "trip", "week", "morning", "yesterday", "that", "this", "with", "from", "have", "what", "when", "they", "them", "then", "again", "boss", "tonight", "today", "tomorrow", "night", "come", "say", "tell", "telling", "about", "your", "you", "will", "only", "very", "more", "some", "here", "there"]);
 const _stem = w => w.replace(/(ies)$/, "y").replace(/(s|es)$/, "");
 // a woman does not send the same text twice inside a week: Cake's fan on day 15 and day 21,
 // word for word (Lothar, round 67) — a per-woman book over her role's pool, reset when it runs dry
@@ -5918,7 +5933,7 @@ function _putInTill(arg) {
 }
 function _textTalk(npc, topic) {
   const t = String(topic || "").toLowerCase();
-  const inbox = (G.phone.inbox || []).slice().reverse().filter(x => x.from === npc);
+  const inbox = (G.phone.inbox || []).slice().reverse().filter(x => x.from === npc && !x.slip);
   if (!inbox.length) return false;
   const n = NPCS[npc].name;
   // the SUBJECT of what she sent — Lamai's crates, Cake's fan — not only the word "text"
@@ -7507,7 +7522,7 @@ function _isCloseLine(s) { return /^(At close|Close of night)\b|\bat close\b/i.t
 function _floorKey(line) { return String(_hh(String(line), 131)); }
 function _closeReveal() {
   const b = G.bar, said = (b.floorSaid = b.floorSaid || {});
-  const af = (typeof _affairLive === "function" && _affairLive()) ? G.affair.id : null;
+  const af = (typeof _affairLive === "function" && _affairLive() && !G.affair.soured) ? G.affair.id : null;
   if (af) {
     const heard = said[af + ":us"] = said[af + ":us"] || [];
     const i = _AFFAIR_FLOOR.findIndex((l, k) => _isCloseLine(l) && !heard.includes(k));
@@ -7597,8 +7612,8 @@ function _workPresenceTick() {
   // midnight, clocking on and going out still lapses it (barchain.test)
   if ((b.stoodTurns || 0) >= WORK_MIN_STOOD && G.nightTurn >= 60) return;
   if (b.awayTurns === Math.floor(WORK_AWAY_BUDGET / 2)) {
-    _say("(Your bar is open, your name is on the shift, and you are not in it. " +
-      "Bert can hold a room for an hour. He has been holding it for one.)", "dim");
+    // one limit, said one way: the door's "hour and a half" and this line's "an hour" disagreed (Stelian, round 76)
+    _say(`(Your bar is open, your name is on the shift, and you are not in it. Bert has held the rail ${b.awayTurns * 6} minutes of his ${WORK_AWAY_BUDGET * 6}.)`, "dim");
     return;
   }
   if (b.awayTurns >= WORK_AWAY_BUDGET) {
@@ -7777,6 +7792,16 @@ function _workFloor() {
   // room has turned (floorSour ≥ 3) the OTHERS' moments stop — the depth you
   // chose, priced in the breadth you lost. The one-time line is in _affairWarn.
   const afId = (typeof _affairLive === "function" && _affairLive()) ? G.affair.id : null;
+  // after she has found out, her beat is the staff one — no "two-person rhythm" under "boss" (Stelian, round 76)
+  if (afId && G.affair.soured && b.floorDay !== G.day && _npcActive(afId)) {
+    b.floorDay = G.day; b.floorTurn = G.turns; b.floorN = (b.floorN || 0) + 1;
+    _say(_fmt(_pickVary([
+      "{who} works the floor like a good hostess for anybody's bar: correct, quick, and nowhere near you.",
+      "{who} brings you the float without being asked and goes back to the far end. Everything is in order. That is the message.",
+      "{who} laughs at a customer's joke at the far end, properly, and does not look round to see if you heard.",
+    ], "affsourfloor"), { who: _npcLabel(afId) }), "dim");
+    return;
+  }
   if (afId && b.floorDay !== G.day && _npcActive(afId)) {
     b.floorDay = G.day;
     b.floorTurn = G.turns; b.floorN = (b.floorN || 0) + 1;
@@ -8143,6 +8168,7 @@ function _shiftYes() {
       // the books say "settled" TONIGHT, so the sentence does too — it promised
       // payday while the ledger showed the money in (Rolf, round 54)
       _say(`(He squares it before he goes — in full, out of the back pocket he said was empty — and stands you one out of it. One docket fewer under the till.)`, "dim");
+      { const _c = (G.bar.calls || []).slice().reverse().find(x => x.id === "tab" && x.day === G.day); if (_c) _c.paid = true; }   // the floor knows it was settled (Stelian, round 76)
     }
   } else if (call.id === "early") {
     _shiftLost(SHIFT_EARLY_COST, (who ? NPCS[who].name + "'s early bus" : "an early bus") + " — the floor one short");   // takings never taken, not a bill (Kwame, round 60); named, so it is not read as the night out (Callum, round 71)
@@ -8317,6 +8343,23 @@ function _affairOut() {
     ". One girl short, and nobody will mention it, which is how a floor says things. BOOKS will have the rest.)", "dim");
   if (_door && ROOMS[_door]) { G.prevRoom = G.room; G.room = _door; _describeRoom(); }
 }
+// the soi's discovery, told where it happens: at her rail, the next time you stand at it (Stelian, round 76)
+// what she says she saw: the shoes only if she found them, the rail only if she watched it (Stelian, round 76)
+function _affairSawLine(a) {
+  const how = a.caughtHow || [], who = (a.caughtWith || []).join(" and ") || "the other one";
+  return [how.includes("bed") ? "I see the shoes." : null, how.includes("bar") ? `I see ${who} at my rail, with you, and I pour.` : null,
+    !how.includes("bed") && !how.includes("bar") ? `I hear about ${who}. The whole soi hear before me, and I smile at them.` : null].filter(Boolean).join(" ");
+}
+function _affairSceneDue() {
+  const a = G.affair;
+  return !!(a && a.sceneDue && !a.ended && typeof _atOwnBar === "function" && _atOwnBar() && typeof _barStaff === "function" && _barStaff().includes(a.id));
+}
+function _affairDiscoverScene() {
+  G.affair.sceneDue = false;
+  _say("");
+_say(_fmt("{her} knows. Of course she knows — she works in the industry the news is made of; the girl you were with has a friend who has a cousin on this very soi. She doesn't shout. She takes off the apron, folds it on the rail, and asks you one question in the flat voice: \"Why I stop working, if you don't?\" There is no good answer, and both of you stand there while you don't give it.", { her: _affairHer() }), "alert");
+  _say("(Whatever the two of you salvage from here, one thing is gone for good: the version where you leave this town together. She will never again believe the machine doesn't own you too.)", "dim");
+}
 // SHE SEES IT (Rolf, round 66): a girl from another bar slept in your bed, and the affair
 // girl "came in with the float counted and was asleep before you had said anything";
 // a girl from another bar sat on your own rail and nobody on it saw her. Discovery by
@@ -8329,6 +8372,7 @@ function _affairCaught(where, ids) {
   const first = !a.discovered;
   const sameNight = a.caughtDay === G.day;   // caught at the rail and again at the door is ONE night of being caught (Callum, round 71: 1 → 13 in an evening)
   a.discovered = true; a.soured = true; if (!sameNight) a.strain += first ? 8 : 3; a.caughtDay = G.day;
+  a.caughtHow = [...new Set([...(a.caughtHow || []), where])];   // "bed" or "bar": what she saw (Stelian, round 76)
   a.caughtWith = [...new Set([...(a.caughtWith || []), ...((ids || (G.party && G.party.ids) || []).filter(id => id !== a.id).map(id => NPCS[id] && NPCS[id].name).filter(Boolean))])];   // the bed's names too: the party is cleared by then (Callum, round 71)   // who she saw (Ossie, round 70)
   if (where === "bed" && G.lastConquest && G.lastConquest.night === G.day - 1 && G.lastConquest.id !== a.id && G.lastConquest.net > 0) {
     _addHappy(-G.lastConquest.net);   // the night paid at the close and is taken back at the door (Callum, round 71: the betrayal netted +12)
@@ -8569,9 +8613,10 @@ function _affairNight(n) {
     if (forced || _hh("affdisc:" + G.vacation + ":" + G.day, 89) % 100 < 45) {
       a.discovered = true; a.soured = true; a.strain += 8; a.caughtDay = G.day;
       a.caughtWith = [...new Set([...(a.caughtWith || []), ...(a.slipWith || [])])];   // the soi named her: the soured register knows who (László, round 73)
-      _say("");
-      _say(_fmt("{her} knows. Of course she knows — she works in the industry the news is made of; the girl you were with has a friend who has a cousin on this very soi. She doesn't shout. She takes off the apron, folds it on the rail, and asks you one question in the flat voice: \"Why I stop working, if you don't?\" There is no good answer, and both of you stand there while you don't give it.", { her: _affairHer() }), "alert");
-      _say("(Whatever the two of you salvage from here, one thing is gone for good: the version where you leave this town together. She will never again believe the machine doesn't own you too.)", "dim");
+      a.caughtHow = [...new Set([...(a.caughtHow || []), "soi"])];   // HEARD, not seen: no shoes in it (Stelian, round 76)
+      // the scene is set at her rail, so it waits for you to stand at it — it printed at the wake,
+      // under the tender line of a night she had spent in your bed (Stelian, round 76)
+      a.sceneDue = true;
     }
   }
   _affairWarn();
@@ -8613,8 +8658,7 @@ function _affairEnd(cause) {
   } else if (a.caughtDay != null) {
     const who = (a.caughtWith || []).join(" and ") || "the other one";
     _say(_fmt("{her} doesn't make a scene. There is a bag by the door, packed the calm way, " +
-      "and she waits until you've seen it. \"I see the shoes. I see {who} at my rail, with you, " +
-      "and I pour.\" She says it flat, the way she reads a chit back. \"I am not angry. Angry is " +
+      "and she waits until you've seen it. \"" + _affairSawLine(a) + "\" She says it flat, the way she reads a chit back. \"I am not angry. Angry is " +
       "for people who still think it can be different.\" She picks up the bag. \"The job did bad. " +
       "You did bad also, one time, two time. I count.\" The bar opens on time the next night, and " +
       "it is never quite your room again.", { her, who }), "alert");

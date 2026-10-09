@@ -12609,6 +12609,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "accountant|wipa|khun wipa|the accountant|the bank|source of funds|the review|the account|half|my account", when: (st, G) => G.acctDay != null, text: "\"Your accountant rang.\" Nont doesn't make it a question; he has seen the face before. \"Then use me less, or use me smaller. Ten thousand at a time is a man buying beer. Sixty is a story, and a story wants a source of funds.\" He turns the {{phone}} face-down. \"Or wire from home like a farang. Slower, cheaper, and nobody at a bank ever asks a farang where his own pension came from.\" A shrug. \"My account is fine. It is a {{phone}}-case company with a boring year. Yours is the one that got interesting.\"", short: "\"Use me less, or smaller. Sixty is a story; ten is a man buying beer.\"" },
       // the lawyer the stamps belong to (Graham, round 74: Nont volunteered him and "Not my department" to the word)
       { topic: "lawyer|the lawyer|nominee|nominees|second road|the stamp|stamp|the nominee paper|benjawan", text: "\"The lawyer.\" Nont doesn't name him; nobody does. \"Second Road, upstairs over a gold shop, a stamp on every nominee paper in town. He sends the farang to Orathai at the table there for the fifty-one, a thousand a time, and takes ten for himself.\" He tips his head at the folder three tables along. \"Before Orathai it was another lady. Same stamp. Ask Orathai — she knows whose name she inherited.\"", short: "\"Second Road, over a gold shop. His stamp is on every nominee paper. Ask Orathai whose name she inherited.\"" },
+      // round 76 (Stelian): the bar he lent to, asked by its name
+      { topic: "stinky pinky|the stinky|stinky|your bar|my bar|the bar loan|bar loan", req: ["barPaid"], when: (st, G) => !!(G.bar && (G.bar.loan || G.nontBorrowed)), text: "\"The Stinky Pinky.\" Nont does not look up from the screen; he does not need to. \"Your bar owes me, or did, and pays me first every night until it doesn't. Bert sees me before you do. That is the whole relationship, and it is a good one — ask the bars that borrowed from people who came round.\"", short: "\"Your bar pays me first, every night, until it doesn't. A good relationship.\"" },
     ],
   },
 
@@ -12784,7 +12786,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "cloth keeps moving. \"He'll not manage a bar this year. Might next. Wouldn't have said " +
           "that a week ago.\"",
         short: "\"Four hours of ice, never checked his phone. Might manage a bar next year. Wouldn't have said that a week ago.\"" },
-      { topic: "bar", req: ["barPremises"],
+      { topic: "bar", req: ["barPremises"], notFlags: ["barPaid"],
         text: "\"This bar?\" Bert looks round it like a man checking his pockets. \"Twelve stools, a " +
           "fridge that hums, the old man's name on the lease and mine on the till. He'll carry you — " +
           "I told you that. The rest is whose name goes on it, and that's the bit nobody here can " +
@@ -13226,6 +13228,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "accountant|wipa|khun wipa|the accountant|the bank|source of funds|the review|the account|half|my account", when: (st, G) => G.acctDay != null, text: "\"Wipa?\" Bert keeps wiping the glass. \"Good accountant. Rings in the evening, which means she's done her own day first. If she says the bank's reviewing, the bank's reviewing, and you'll have half your cash for a month and nothing worse.\" He holds the glass to the light. \"The old man ran his money the long way round for twenty years — wired from Ohio, slow, boring. Nobody ever rang him at the bar.\"", short: "\"Half your cash for a month and nothing worse. The old man wired from Ohio. Nobody ever rang him.\"" },
       // round 75 (Ruairi): a man who has met Tan asks the barman about him, and every Tan node was the partner's
       { topic: "tan|the driver|your driver|taxi|the taxi man", text: "\"Tan? The driver.\" Bert sets the glass down to think about it, which he does not do for most names. \"Never been in here, far as I know — and I'd know. Which is how you can tell he's smart. But there isn't a stool on this soi he couldn't find you, or a man on one he couldn't tell you about.\" He goes back to the glass. \"Ask him anything, bud. He'll tell you it's nothing. It's never nothing.\"", short: "\"Tan? Never been in here. Ask him anything — he'll say it's nothing. It's never nothing.\"" },
+      // round 76 (Stelian): the bar is the owner's now, and Bert's "this bar?" speech was the buyer's
+      { topic: "bar|this bar|my bar|the bar|the stinky|stinky pinky", req: ["barPaid"], text: "\"Yours, boss.\" Bert says it like he is still getting used to the sound of it. \"Twelve stools, a fridge that hums, the old man paid off a month at a time, and your name on the paper where his used to be. I still run the till. You still turn up. That's the whole arrangement, and it's a better one than most on this soi.\"", short: "\"Yours, boss. I run the till, you turn up. Better than most.\"" },
     ],
   },
 
@@ -14784,7 +14788,7 @@ const SHIFT_CALLS = [
       "\"Boss. The bar has bad luck.\" She says it the way she would say the ice is late. The slip, the compressor, the quiet nights — she lists them without looking at the list. \"We make merit. Nine monks, morning, food, the pig head for the spirit house. Everybody do it.\" A number, flat, no theatre: ฿" + MERIT_COST.toLocaleString("en-US") + ". \"Then the luck change.\"",
       "\"Boss.\" She has clearly been chosen to say it. \"Girls are not happy. Too many bad nights — they say the spirit house is angry, nobody feed it since the old owner.\" She does not say whether she believes it; she says what it costs. \"Nine monks, food for everybody, pig head. ฿" + MERIT_COST.toLocaleString("en-US") + ". Morning, before open.\"",
     ],
-    yes: "You say yes, and something in the room unclenches that you had not known was clenched. The monks come at seven; the food goes round the floor afterwards; the pig's head sits at the spirit house with a cigarette in its mouth and a glass of red fizz, and every girl on the floor touches your arm once that night without a chit in it.",
+    yes: "You say yes, and something in the room unclenches that you had not known was clenched. The monks come at seven tomorrow morning, before a shutter is up; the food will go round the floor afterwards, and the pig's head will sit at the spirit house with a cigarette in its mouth and a glass of red fizz. Tonight, every girl on the floor touches your arm once without a chit in it.",
     no: "You say it is not a budget line, and the mamasan says \"ka\" the way she says it to customers. The girls make merit anyway, the next morning, with their own money — and that night, between nine and eleven, the floor is across the road at a som tam table in a row, and the room has nobody in it but you and Bert.",
   },
   {

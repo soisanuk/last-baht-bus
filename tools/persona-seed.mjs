@@ -147,7 +147,7 @@ function framesSeed() {
 // bond 8 — the night ride is offered on a long-time barfine of a bonded lady), money for a few nights out.
 function rideSeed() {
   newGame();
-  G.player = { origin: "redundancy", personality: "romantic", orientation: "straight", said: {}, lang: "en", teetotal: false };
+  G.player = { origin: "redundancy", personality: "charmer", orientation: "straight", said: {}, lang: "en", teetotal: false };
   G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3; G.season0 = 1;
   G.money = 18000; G.bank = 30000; G.battery = 100;
   G.soc.drinks.lek = 8; G.phone.contacts.lek = true; G.talked.lek = [0];

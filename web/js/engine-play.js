@@ -436,6 +436,12 @@ function _piwinAbout(who) {
       : "\"Season good, boss.\" He counts the traffic with his chin. \"Everybody here, everybody want a bike. December I buy new tyre.\"");
     return;
   }
+  // LAST NIGHT is not his shift, and her bike is not his business (Bridget, round 76: "Work? This." every night)
+  if (/\blast night\b|\byesterday\b/.test(w)) { _say(_pickVary([
+      "\"Last night?\" He shrugs inside the vest. \"Many farang, many night, boss. If I drive you, I remember the fare, not the face.\"",
+      "\"Last night I am here, same place, same seat.\" He pats it. \"You, I don't know. Other stand, maybe.\"",
+    ], "piwinlastnight")); return; }
+  if (/\b(the ride|her bike|her motorbike|lady('s)? bike)\b/.test(w)) { _say("\"Her bike?\" He grins. \"Not my business, boss. Lady drive herself, no vest, no fare. Better for you — she don't charge the night rate.\""); return; }
   if (/\borchid\b/.test(w)) { _say("\"The Orchid?\" He does not pat the seat. \"Nobody drive you there, boss. That one, you get taken. Ask the man who takes you.\""); return; }   // "room" read as the hotel (László, round 73)
   if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner|wallet|pickpocket)\b/.test(w)) {
     const say =
@@ -3676,7 +3682,7 @@ function _affairTalk(id, tt) {
   if (a.soured && a.caughtWith && a.caughtWith.length) {
     const other = a.caughtWith.find(w => new RegExp("\\b" + w.toLowerCase() + "\\b").test(tt));
     if (other || /\b(shoes|hotel|last night|the girl|other girl|that girl|caught|saw|see)\b/.test(tt)) return pick("sourother", [
-      `"${other || a.caughtWith[0]}." ${n} says the name the way she reads a chit back: correct, and not hers. "I see her. I see the shoes. You want me to say more, you are asking the wrong person to make you feel better."`,
+      `"${other || a.caughtWith[0]}." ${n} says the name the way she reads a chit back: correct, and not hers. "${(a.caughtHow || []).includes("bed") ? "I see her. I see the shoes." : (a.caughtHow || []).includes("bar") ? "I see her, at my rail." : "I hear. The soi tell me before you do."} You want me to say more, you are asking the wrong person to make you feel better."`,
       `${n} keeps wiping. "${other || a.caughtWith[0]}? Nice girl. Good manners. She sit where I sit." A beat. "Ask me something about the bar, boss."`,
     ]);
   }
@@ -3786,6 +3792,9 @@ function _ownBarTalk(id, topic) {
     }
     // anything else she does not know, she says in HER voice — not the floor's "that
     // one I don't know", and never her first-night hello (Rolf, round 55)
+    // …but what the whole town knows (the shops, the lender, the season) she still knows: she did not
+    // forget Klang Corner the night she stayed after close (Stelian, round 76)
+    if (tt && typeof _townTalk === "function" && _townTalk(id, tt)) return true;
     if (tt) { _say(_pickVary(_AFFAIR_MISS, "affairmiss")(NPCS[id].name)); return true; }
     if (G.affair.soured) { _say(_pickVary(_REL_GREET_AFFAIR_SOUR, "relaffairsour")(NPCS[id].name), "dim"); return true; }   // the girls "know" — what they know changed (Ossie, round 70)
     _say(_pickVary(_REL_GREET_AFFAIR, "relaffair")(NPCS[id].name)); return true;
@@ -4124,7 +4133,7 @@ function _conquestHappy(base, id) {
     // the treadmill starts somewhere, and the first step says so (Pete, round 75 — the special
     // massage set it silently, and he found it by reading the meter)
     G.jadeSaid = G.vacation;
-    _say("(The first one of the trip lands in full. The next one from a stranger will land a little lighter — " +
+    _say("(The first one " + (G.stage === "expat" ? "in a while" : "of the trip") + " lands in full. The next one from a stranger will land a little lighter — " +   // a resident has no trip (Stelian, round 76)
       "that is how it goes, and the cure is a slower night or a woman who knows you.)", "dim");
   }
   if (!bonded) G.jaded++;
@@ -4789,7 +4798,7 @@ function _nightSnapshot() {
     bank: G.bank || 0, held: G.nontStuck || 0, bankIn: G.bankIn || 0,   // the account, Nont's overnight hold, and what ARRIVED (Marguerite, round 67; the money audit)
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
-    spcB: G.massageSpend || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0,
+    spcB: G.massageSpend || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0,
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
@@ -4887,6 +4896,8 @@ function _morningLedger() {
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
+  const chamN = (G.chamGifts || 0) - (b.chamB != null ? b.chamB : (G.chamGifts || 0));   // the morning's gift was in "down" and unnamed (Bridget, round 76)
+  if (chamN > 0) bits.push("\u0e3f" + _num(chamN) + " to Cream, the morning she left");
   const bookN = (G.hotelDebt || 0) - (b.bookB != null ? b.bookB : (G.hotelDebt || 0));
   if (bookN > 0) bits.push("\u0e3f" + _num(bookN) + " more on the hotel book (\u0e3f" + _num(G.hotelDebt) + " in all)");
   const skipR = (G.skipRepaid || 0) - (b.skipR != null ? b.skipR : (G.skipRepaid || 0));
@@ -5066,6 +5077,13 @@ function _endNight(reason) {
   // last night could re-enter here after the week's already ended — don't run the
   // whole night-end/_endVacation sequence twice.
   if (G.pendingChoice === "vacation_end") return;
+  // THE NIGHT OUT IS REMEMBERED by the woman you spent it with (Bridget, round 76: "We no go
+  // there" about the club she danced in, and "that one I don't know" about the sunrise she
+  // watched beside him) — the rooms the party walked through, and how it ended
+  if (G.party && G.party.ids && G.party.ids.length && G.party.seen) {
+    G.partyLog = G.partyLog || {};
+    for (const id of G.party.ids) G.partyLog[id] = { day: G.day, rooms: Object.keys(G.party.seen), sunrise: reason === "sunrise", dawn: reason === "allnighter" || reason === "dawn" };
+  }
   // The opening quest (Act One) is do-or-die: fail to reach room 412 before the
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
   // that RESETS the game, not the sandbox's soft rough-wake. Only a progress
@@ -5856,6 +5874,7 @@ function _suvarnabhumiScrub() {
 }
 
 function _newVacation() {
+  G.lightOn = false;     // a month later the torch is not still on (Bridget, round 76)
   G.chamNight = false;   // a morning that did not happen does not happen a month later (Dieter, round 56)
   G.testedDays = [];     // the day count restarts, so the clinic's memory does too (round 57)
   _suvarnabhumiScrub(); // kill "Sharky" and fly home — before the reset and the return
