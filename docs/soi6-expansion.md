@@ -99,7 +99,12 @@ In order. Every step is one that this round either needed or got wrong first.
    a neighbour needs a node on BOTH sides (Duang names "the Peach girl", so Keng answers her nails). The
    segment's story (the folder, the cards) needs a line from its house staff and from the bar next
    door, not only from the bar it happens in. A woman whose words say she owns the bar is marked
-   `ownsBar`.
+   `ownsBar`. The house staff are written too (`_houseOwn` makes a written set from one object per woman),
+   and the existing floor gets a line on the new stretch. Neighbours who never mention each other read
+   as two games. **A return greeting may say only what is true of every man who came back** (paid,
+   came back), never a particular thing he did ("last time you sang"): the game didn't record it.
+   **A look is what a renderer reads**: no `{{…}}`, and a face in it (a job description makes the
+   model invent the woman).
 6. **Portraits.** Add `CHARS` specs to `scripts/gen-portraits.py` and run it with **explicit ids only**
    (it skips anything rendered). Check `git status web/portraits` shows only `??`. Regenerate the
    portrait manifest so the new women land on the render queue. Tell the art agent.
@@ -160,8 +165,12 @@ In order. Every step is one that this round either needed or got wrong first.
 
 ## Not done, and why
 
-- **Written floors for the house staff.** The mamasans and cashiers are pooled except for the two
-  holdouts' offer lines. A `FLOOR_OWN` pass per bar can come later.
+- ~~Written floors for the house staff.~~ **Done the same day** (the deepening pass): all 14 have
+  `FLOOR_OWN` sets built by `_houseOwn` (world.js). Each has a return greeting, her girls or her money
+  (the two-fee price), family, plan, home, the wallet's pointer at Candy, her bar, and LAST TIME both
+  ways. Kinship is consistent with the hostesses' words: Tukta is View's niece, Pang is Napa's daughter,
+  Chom is Noey's cousin. The original eleven bars' house staff each got a line on the new stretches
+  (`_OLD_SOI_KNOWS`).
 - **The survey.** The two new rooms are sketched; Mario's anchors would make them surveyed.
 - **Renders.** All 40 are placeholders on the render queue (the art agent's).
 - **A persona round** on the new soi: a one-bar week in a new bar, and a walker who counts fronts and

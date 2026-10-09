@@ -104,3 +104,44 @@ test("THE TEMPLATE: the staff generator reproduces the house staff from its spec
   const scaffold = JSON.parse(txt.split("// SCAFFOLD — hostesses to author:")[1]);
   for (const s of scaffold) assert.ok(NPCS[s.id] && !NPCS[s.id].filler, s.id + ": the scaffold's id is the written woman's");
 });
+
+// ── THE DEEPENING PASS (2026-10-09, after round 77) ────────────────────────────────────────────────
+test("a look is what a RENDERER reads: no tap markup in any look (the art agent, 2026-10-09)", () => {
+  const bad = Object.keys(NPCS).filter(id => /\{\{|\}\}/.test(NPCS[id].look || ""))
+    .concat(Object.keys(FLOOR_STAFF).filter(id => /\{\{|\}\}/.test(FLOOR_STAFF[id].look || "")));
+  assert.deepEqual(bad, [], "markup in a look reaches the image model verbatim");
+});
+
+test("the house is written: every new mamasan and cashier has her own words, a return greeting and the two-fee price", () => {
+  const house = Object.keys(FLOOR_STAFF).filter(i => [...WEST, ...EAST].includes(FLOOR_STAFF[i].room));
+  assert.equal(house.length, 14);
+  for (const id of house) {
+    const own = FLOOR_OWN[id]; assert.ok(own, id + " is written");
+    assert.ok(own.nodes[0].when && !own.nodes[0].topic, id + ": a return greeting first");
+    assert.ok(own.nodes.some(n => /wallet/.test(n.topic || "") && /Candy/.test(n.text)), id + ": the wallet points at Candy");
+    if (FLOOR_STAFF[id].role === "cashier") assert.match(own.nodes.find(n => /^money/.test(n.topic || "")).text, /barfine/i, id + ": the bar's number and hers");
+    assert.ok(own.nodes.filter(n => /^last time/.test(n.topic || "")).length === 2, id + ": LAST TIME, both ways");
+  }
+  G.room = "sweet_tamarind"; out = []; run("ask tukta about view"); assert.match(said(), /Auntie View/, "Tukta is View's niece");
+  G.room = "firecracker_bar"; out = []; run("ask pang about napa"); assert.match(said(), /Mum/, "Pang is Napa's daughter");
+});
+
+test("the old soi knows the new stretches", () => {
+  for (const [room, who, what, rx] of [["pink_lotus", "nee", "jiab", /Tamarind/], ["golden_dragon", "peung", "jinda", /Jade/],
+    ["sunset_dreams", "malai", "the folder", /folder/], ["cherry_pop", "toi", "napa", /Firecracker/], ["ruby_kiss", "saeng", "hula hula", /grass skirts/]]) {
+    G.room = room; run("talk to " + who); out = []; run(`ask ${who} about ${what}`); assert.match(said(), rx, `${who} on ${what}`);
+  }
+});
+
+test("round 77's leftovers: the till is the till-keeper's, the frame's reactions are town-wide, the chit is the cashier's", () => {
+  // a mamasan with a cashier beside her goes back to the floor, never the till
+  G.room = "sunset_dreams"; G.soc.licLook = {}; out = []; run("examine licence");
+  if (_tillKeeper("sunset_dreams") !== "malai") assert.doesNotMatch(said(), /Malai[^.]*back to the till/);
+  // four owners do not give one reaction, word for word, while an unsaid one remains
+  const seen = [];
+  for (const r of ["firecracker_bar", "hot_pepper", "hula_hula"]) { G.room = r; G.soc.licLook = {}; out = []; run("examine licence"); seen.push(said().split("\n\n").pop()); }
+  const owners = seen.map(x => x.replace(/^\S+/, "").slice(0, 50));
+  assert.equal(new Set(owners).size, owners.length, "three owners, three reactions");
+  // the chit is written by whoever keeps the till
+  G.room = "sweet_tamarind"; assert.notEqual(_tillRef(), _L("the mamasan"), "Tukta keeps the Tamarind's till");
+});

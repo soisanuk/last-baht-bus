@@ -18783,13 +18783,13 @@
       "lens": "one-bar-week",
       "instrument": "",
       "claim": "Echo lines truncate ('You asked Ple about girl end')",
-      "verdict": "deferred",
-      "note": "The echo strips stopwords for brevity; cosmetic, left.",
+      "verdict": "fixed",
+      "note": "The breadcrumb takes eight words and marks a cut with an ellipsis; the parser's own article-stripping is left.",
       "cls": "M",
       "sev": "cosmetic",
       "system": "navigation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/engine.test.js"
     },
     {
       "round": "77",
@@ -18843,13 +18843,13 @@
       "lens": "one-bar-week",
       "instrument": "",
       "claim": "A lady drink at the Tamarind: 'the mamasan's biro logs' while Tukta keeps the till",
-      "verdict": "deferred",
-      "note": "The lady-drink pool names the mamasan's book generically; _roomFit does not yet read who keeps the till.",
+      "verdict": "fixed",
+      "note": "_tillRef: the chit is written by whoever keeps the till.",
       "cls": "I",
       "sev": "cosmetic",
       "system": "conversation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/soi6expansion.test.js"
     },
     {
       "round": "77",
@@ -18978,13 +18978,13 @@
       "lens": "street-survey",
       "instrument": "",
       "claim": "The licence reaction puts the wrong woman 'back to the till'",
-      "verdict": "deferred",
-      "note": "The owner-reaction pools say 'the till' for a mamasan where a cashier keeps it; a _tillKeeper read is the fix, next pass.",
+      "verdict": "fixed",
+      "note": "The till phrase follows _tillKeeper in the frame's reactions and in _townTalk's picker.",
       "cls": "I",
       "sev": "cosmetic",
       "system": "conversation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/soi6expansion.test.js"
     },
     {
       "round": "77",
@@ -19368,13 +19368,13 @@
       "lens": "street-survey",
       "instrument": "",
       "claim": "The owner-reaction lines at the frame are reused word for word across bars",
-      "verdict": "deferred",
-      "note": "A town-wide book for the licence reactions, like _TOWN_WIDE — next pass.",
+      "verdict": "fixed",
+      "note": "_pickTownLine: a town-wide book for the frame's reaction pools.",
       "cls": "M",
       "sev": "minor",
       "system": "conversation",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/soi6expansion.test.js"
     },
     {
       "round": "77",

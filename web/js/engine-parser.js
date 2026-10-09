@@ -24,7 +24,7 @@ const _LADY_DRINK_OWN = [   // a drink for your own girl: into your own till, an
 ];
 const _LADY_DRINK_LINES = [
   n => _fmt("One lady drink for {n} — ฿{p} on the tab that is your life.", { n, p: _ladyPrice() }),
-  n => _fmt("{n} gets her cola-with-benefits; {m}'s biro logs ฿{p} without looking up.", { n, p: _ladyPrice(), m: _mamaRef() }),
+  n => _fmt("{n} gets her cola-with-benefits; {m}'s biro logs ฿{p} without looking up.", { n, p: _ladyPrice(), m: _tillRef() }),
   n => _fmt("A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.", { n, p: _ladyPrice() }),
   n => _fmt("“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.", { n, p: _ladyPrice() }),
   n => _fmt("You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.", { n, p: _ladyPrice() }),
@@ -2654,11 +2654,14 @@ const _SCENERY = [
         let line;
         if (typeof _maiDee === "function" && _maiDee(who)) line = `${n} watches you read it and says nothing at all, which is her whole policy where you are concerned.`;
         else if (own) line = NPCS[who].manager ? `"Reading your own paper, boss?" ${n} doesn't look up. "Your partner's name's on it. Yours is the small one. Don't lose sleep — nobody who matters reads it, and the ones who do already know."` : `"Boss read the paper!" ${n} is delighted. "Nobody read it. Not even the police. Only you." She means it as a compliment, mostly.`;
-        else if (/Pattaya Leisure/.test(lic.name)) line = _pickVary(reg === "floor" ? [`${n} sees you reading it and her smile goes professional. "Company paper, tilac. Same in every bar. You want drink, or you want read?"`, `"The group." ${n} says it the way you say the weather in another country. "Their paper, their bar. I only work here." She does not look at the frame.`] : [`${n} sees you at the frame and does not move, which in this room is a kind of moving. "The group's paper. Reading it is the group's business, and the group is not here. A drink?"`, `"Pattaya Leisure." ${n} nods at the frame as if introducing it. "It is the same in every room. If you have a question, the office is not here and it is never open." A pause. "A drink, though, I can do."`], "licplg" + reg);
-        else if (who === ownerHere) line = _pickVary(tier >= 2 ? [`"That is my name." ${n} says it the way you say a house is yours. "The sign was somebody's joke; the paper is mine. You are the first customer who has read it, and you did not need to — you already knew."`, `${n} comes over and reads it with you, as if checking it is still true. "Mine. Twelve year in that frame. You are a regular — you can read it. Strangers, I watch."`, `"Still my name," ${n} says, pleased, as if it might have changed while you were away. "Every year I pay the fee and every year it stay."`] : [`"My name." ${n} has come over without your noticing. "Mine, the bar. The sign is for the farang. The paper is for me." A look that is not quite a question. "You want to buy? Everybody want to buy. Nobody want to pay."`, `${n} taps the glass of the frame with one nail. "Me. Every bar on this soi is somebody's mother. This one is mine." She does not explain which she means.`, `"Is mine." ${n} says it flatly, then smiles to take the edge off. "Not the company, not the farang, not the boyfriend. Mine. Why you read?"`, `${n} watches you finish reading. "Yes, that one is me. Twenty year to get my name in a frame." She goes back to the till. "Drink, now."`], "licowner" + tier);
+        else if (/Pattaya Leisure/.test(lic.name)) line = _pickTownLine(reg === "floor" ? [`${n} sees you reading it and her smile goes professional. "Company paper, tilac. Same in every bar. You want drink, or you want read?"`, `"The group." ${n} says it the way you say the weather in another country. "Their paper, their bar. I only work here." She does not look at the frame.`] : [`${n} sees you at the frame and does not move, which in this room is a kind of moving. "The group's paper. Reading it is the group's business, and the group is not here. A drink?"`, `"Pattaya Leisure." ${n} nods at the frame as if introducing it. "It is the same in every room. If you have a question, the office is not here and it is never open." A pause. "A drink, though, I can do."`], "licplg" + reg);
+        else if (who === ownerHere) line = _pickTownLine(tier >= 2 ? [`"That is my name." ${n} says it the way you say a house is yours. "The sign was somebody's joke; the paper is mine. You are the first customer who has read it, and you did not need to — you already knew."`, `${n} comes over and reads it with you, as if checking it is still true. "Mine. Twelve year in that frame. You are a regular — you can read it. Strangers, I watch."`, `"Still my name," ${n} says, pleased, as if it might have changed while you were away. "Every year I pay the fee and every year it stay."`] : [`"My name." ${n} has come over without your noticing. "Mine, the bar. The sign is for the farang. The paper is for me." A look that is not quite a question. "You want to buy? Everybody want to buy. Nobody want to pay."`, `${n} taps the glass of the frame with one nail. "Me. Every bar on this soi is somebody's mother. This one is mine." She does not explain which she means.`, `"Is mine." ${n} says it flatly, then smiles to take the edge off. "Not the company, not the farang, not the boyfriend. Mine. Why you read?"`, `${n} watches you finish reading. "Yes, that one is me. Twenty year to get my name in a frame." She goes back to the till. "Drink, now."`], "licowner" + tier);
         else if (tier >= 2) line = reg === "floor" ? `"You read that?" ${n} laughs. "Boss's name. Everybody know, nobody read — only you." She pats your arm. "Regular know too much, na."` : `${n} glances at the frame and back at you with something like respect. "Most men read the price list. You read the owner. A regular's privilege — ask me what you want to know; it's cheaper than the registry."`;
         else if (tier >= 1) line = reg === "floor" ? `${n} notices, and does not mind. "The paper? Is the boss's name. Everybody know. You can ask."` : `"Looking at the paper?" ${n} says it without weight. "Everybody's name is on something in this town. Drink while you read."`;
-        else line = _pickVary(reg === "floor" ? [`${n} sees you reading the frame and the smile tightens half a size. "You police? Spy?" A laugh that is not entirely a laugh. "Only joking. Buy drink, forget paper."`, `"Hey — that one is not menu." ${n} taps the bar in front of you. "Menu is here. Paper is for the police."`, `${n} watches you read it and decides to find it funny. "You want to buy the bar? Everybody want to buy. Sit, first, buy drink."`] : [`${n} watches you read the frame the way a cashier watches a man count her float. "It's a registration. Everyone has one." A pause exactly long enough. "Were you looking for somebody in particular?"`, `"The paper's in order," ${n} says, before you have asked anything. "It always is. It's the people who come in asking about it who usually aren't."`, `${n} lets you finish. "Most men read the price list." She slides one across. "That one's for customers."`], "licstranger" + reg);
+        else line = _pickTownLine(reg === "floor" ? [`${n} sees you reading the frame and the smile tightens half a size. "You police? Spy?" A laugh that is not entirely a laugh. "Only joking. Buy drink, forget paper."`, `"Hey — that one is not menu." ${n} taps the bar in front of you. "Menu is here. Paper is for the police."`, `${n} watches you read it and decides to find it funny. "You want to buy the bar? Everybody want to buy. Sit, first, buy drink."`] : [`${n} watches you read the frame the way a cashier watches a man count her float. "It's a registration. Everyone has one." A pause exactly long enough. "Were you looking for somebody in particular?"`, `"The paper's in order," ${n} says, before you have asked anything. "It always is. It's the people who come in asking about it who usually aren't."`, `${n} lets you finish. "Most men read the price list." She slides one across. "That one's for customers."`], "licstranger" + reg);
+        // "she goes back to the till" — only if she is the one who keeps it (Dirk, round 77: four mamasans
+        // walked back to a till a cashier was sitting at)
+        if (keeper && keeper !== who) line = line.replace(/\b(back to|behind) the till\b/g, "$1 the floor");
         seen = "\n\n" + line;
       }
     }
@@ -4644,6 +4647,9 @@ function _doTalkCore(arg, topic) {
          !(typeof _sponsorFamilyDay === "function" && _sponsorFamilyDay(npc))) ? "sponsor" : null;   // the drinks-only girl's price node already says it in her voice
     if (_k) { _bfRefusalSay(npc, { kind: _k }); return; }
   }
+  // "the bar next door" is the neighbours, not her own "bar" node (Ratsamee's bar node took it — the deepening pass, round 77)
+  if (topic && /\b(next door|next-door|neighbou?rs?)\b/i.test(String(topic)) && _room().barType && typeof _townTalk === "function" &&
+      (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house) && _townTalk(npc, topic)) { _questOffer(npc); return; }
   // a venue by its WHOLE name is the place, not her "bar" node: "ask kesinee about candy bar" got "My bar?" (Mick, round 57)
   if (topic && typeof _roomByName === "function") {
     const _tl = String(topic).toLowerCase().replace(/^the /, "");
@@ -6185,6 +6191,17 @@ function _tanTown(kind, slots) {
   const p = _TAN_TOWN[kind];
   return p ? _sentenceCase(_fmt(_pickVary(p, "tantown:" + kind), { n: "Tan", ...(slots || {}) })) : null;
 }
+// A LINE SAID ONCE ACROSS THE TOWN before it comes round again (Dirk, round 77: four owners gave him one
+// reaction to their frames, word for word). The _TOWN_WIDE idea for a pool outside _TOWN: an unsaid line
+// first, the whole pool again when every line has been said; _pickVary still keeps the one-deep memory.
+function _pickTownLine(pool, key) {
+  const book = (G.townLines = G.townLines || {}), said = (book[key] = book[key] || []);
+  let fresh = pool.filter(l => !said.includes(String(l).slice(0, 60)));
+  if (!fresh.length) { book[key] = []; fresh = pool; }
+  const line = _pickVary(fresh, key);
+  (book[key] = book[key] || []).push(String(line).slice(0, 60));
+  return line;
+}
 // A BAR BY NAME, from anybody: where it is FROM HERE and whose paper it is on, in one sentence that
 // cannot contradict itself (round 77 — Siobhan heard "a few doors down" and "a bike'd have you there in
 // ten minutes" in one line; Dirk heard the paper-and-owner caveat said of the one bar where the paper and
@@ -6192,7 +6209,8 @@ function _tanTown(kind, slots) {
 // his own company's room).
 function _streetOf(room) { return Object.keys(ROOMS).find(s => (ROOMS[s].venues || []).includes(room)) || null; }
 // "Soi 6 (Inner West)" → "Soi 6's inner west" — a room label is not something anybody says (Dirk)
-function _streetPhrase(st) { const nm = ROOMS[st] ? ROOMS[st].name : ""; const m = nm.match(/^(.*?)\s*\((.*)\)$/); return m ? m[1] + "'s " + m[2].toLowerCase() : nm; }
+// …but "Beach Road (foot of Soi 6)" is a note, not a stretch: "Beach Road, foot of Soi 6" (Lek, the same day)
+function _streetPhrase(st) { const nm = ROOMS[st] ? ROOMS[st].name : ""; const m = nm.match(/^(.*?)\s*\((.*)\)$/); return !m ? nm : /^[a-z]/.test(m[2]) ? m[1] + ", " + m[2] : m[1] + "'s " + m[2].toLowerCase(); }
 const _stop = x => String(x).replace(/\.$/, "");   // "Co., Ltd." ends a sentence once, not twice
 function _venueAnswer(npc, v, reg) {
   const n = NPCS[npc].name, bn = _barName(v), st = _streetOf(v);
@@ -6210,7 +6228,7 @@ function _venueAnswer(npc, v, reg) {
     : lic.owner ? (reg === "floor" ? `Is ${lic.name} bar — her name, her till.` : reg === "house" ? `${lic.name}'s — her name on the paper and her behind the till.` : `${lic.name}'s place. The name on the wall is the woman behind the bar.`)
     : (reg === "floor" ? `Paper say ${lic.name}. Is not anybody I know.` : reg === "house" ? `The paper says ${lic.name}, which is not anybody you'll meet in there.` : `${lic.name}, the paper says. Nobody of that name behind the bar.`);
   return _pickVary(reg === "floor"
-    ? [`"${bn}? ${where}." ${n} thinks. "${who}"`, `${n} points with her chin. "${bn} — ${where.charAt(0).toLowerCase() + where.slice(1)}. ${who}"`]
+    ? [`"${bn}? ${where}." ${n} thinks. "${who}"`, `${n} points with her chin. "${bn} — ${/^(Same|Next|A few|The next)\b/.test(where) ? where.charAt(0).toLowerCase() + where.slice(1) : where}. ${who}"`]
     : reg === "house" ? [`"${bn}. ${where}." ${n} doesn't need to think. "${who}"`, `"${bn}?" ${n} says it like an address. "${where}. ${who}"`]
     : [`"${bn}? ${where}." ${n} shrugs. "${who}"`, `${n} points the bottle. "${bn}. ${where}. ${who}"`], "venue:" + v);
 }
@@ -6887,6 +6905,9 @@ function _townTalk(npc, topic) {
       used[lk(i)] = used[lk(i)] || who;
       line = _sentenceCase(_fmt(pool[i], { n: NPCS[npc].name, ...slots }));
     }
+    // the till is the till-keeper's: a mamasan with a cashier beside her goes back to the floor (round 77)
+    { const tk = _inBar() && typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
+      if (tk && tk !== npc) line = line.replace(/\b(back to|behind) the till\b/g, "$1 the floor"); }
     _say(line);
     return true;
   };

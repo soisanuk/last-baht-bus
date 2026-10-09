@@ -114,7 +114,10 @@ for (const bar of SPEC) {
     const t = tail(d.desc);
     const rec = { role, name, th: [...thOf[name]][0], room: bar.room };
     if (role === "hostess") rec.emoji = d.emoji;
-    Object.assign(rec, { look, from, desc: `${look} — ${what}, from ${from}.` + (t ? " " + t : ""), pick: { ...d.pick } });
+    // a look is what a RENDERER reads, so no tap markup in it (the art agent, 2026-10-09: "{{phone}}" reached
+    // SDXL verbatim); the desc keeps it, because the desc is what a player reads
+    const _shown = String(look).replace(/\{\{|\}\}/g, "").replace(/\bphone\b/g, "{{phone}}");   // her phone, never yours, in the desc a player reads
+    Object.assign(rec, { look: look.replace(/\{\{|\}\}/g, ""), from, desc: `${_shown} — ${what}, from ${from}.` + (t ? " " + t : ""), pick: { ...d.pick } });
     if (d.selfies) rec.selfies = d.selfies;
     // the Connect 4 tier is read off her LOOK, not her donor's: a "New enough…"/"Baby-faced…" face
     // is the beatable new girl, and only that face is (engine.test's skill ladder)

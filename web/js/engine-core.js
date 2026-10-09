@@ -129,7 +129,8 @@ const _TRACE_VERBS = {
 function _traceLine(t) {
   if (!t || !t.verb) return "";
   const target = String(t.target || "").trim();
-  const extra = String(t.extra || "").split(/\s+/).filter(Boolean).slice(0, 4).join(" ");
+  const _ew = String(t.extra || "").split(/\s+/).filter(Boolean);   // eight words, and say so when cut ("who else should i" — Siobhan, round 77)
+  const extra = _ew.slice(0, 8).join(" ") + (_ew.length > 8 ? "…" : "");
   if (t.verb === "ask")
     return `· You asked ${target}${extra ? ` about ${extra}` : ""}`.trimEnd();
   if (t.verb === "give")
@@ -1329,6 +1330,14 @@ function _npcActive(id) {
 // top-level const initializer (the drizzle pool learned this the hard way).
 function _mamaHere() {
   return _npcsHere().find(x => NPC_ROLES[x] === "mamasan") || null;
+}
+// …and the woman who WRITES the chit is the till-keeper, not whoever runs the floor (Siobhan, round 77:
+// "the mamasan's biro logs ฿190" at the Sweet Tamarind, where Tukta keeps the till)
+function _tillRef(cap) {
+  const tk = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
+  if (!tk || !_npcsHere().includes(tk)) return _mamaRef(cap);
+  const s = NPC_ROLES[tk] === "cashier" ? _L("the cashier") : NPC_ROLES[tk] === "mamasan" ? _L("the mamasan") : NPCS[tk].name;
+  return cap ? s[0].toUpperCase() + s.slice(1) : s;
 }
 function _mamaRef(cap) {
   // through _L: this is interpolated INTO an already-translated sentence, so an

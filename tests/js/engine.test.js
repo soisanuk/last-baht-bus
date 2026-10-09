@@ -7963,9 +7963,12 @@ test("action breadcrumb (_traceLine) formats each verb shape", () => {
   assert.equal(_traceLine({ verb: "go", target: "Soi 6" }), "· You went to Soi 6");
   assert.equal(_traceLine(null), "");
   assert.equal(_traceLine({}), "");
-  // a long ask-topic is capped to keep the line short
+  // a long ask-topic is capped to keep the line short — at eight words, and it says when it cut
+  // (four cut "who else should i meet" mid-question — Siobhan, round 77)
   assert.equal(_traceLine({ verb: "ask", target: "Nok", extra: "one two three four five" }),
-    "· You asked Nok about one two three four");
+    "· You asked Nok about one two three four five");
+  assert.equal(_traceLine({ verb: "ask", target: "Nok", extra: "one two three four five six seven eight nine" }),
+    "· You asked Nok about one two three four five six seven eight…");
 });
 
 test("the breadcrumb prints after a command, infers movement, and explicit wins", () => {

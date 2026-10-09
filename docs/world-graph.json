@@ -284,13 +284,13 @@
   },
   {
    "file": "engine-core.js",
-   "line": 596,
+   "line": 597,
    "name": "BATON_DAWN_TURNS",
    "value": 2
   },
   {
    "file": "engine-core.js",
-   "line": 565,
+   "line": 566,
    "name": "BATON_VERSION",
    "value": 1
   },
@@ -524,19 +524,19 @@
   },
   {
    "file": "engine-core.js",
-   "line": 1022,
+   "line": 1023,
    "name": "HOP_CHANCE",
    "value": 10
   },
   {
    "file": "engine-core.js",
-   "line": 1023,
+   "line": 1024,
    "name": "HOP_SETTLE",
    "value": 4
   },
   {
    "file": "engine-core.js",
-   "line": 3280,
+   "line": 3289,
    "name": "HURT_CAP",
    "value": 3
   },
@@ -998,7 +998,7 @@
   },
   {
    "file": "engine-parser.js",
-   "line": 7627,
+   "line": 7648,
    "name": "THAI_FLUENT",
    "value": 10
   },
@@ -1113,8 +1113,8 @@
  ],
  "counts": {
   "constants": 185,
-  "dialogue": 4001,
-  "edges": 3458,
+  "dialogue": 4061,
+  "edges": 3444,
   "encounters": 23,
   "flags": 191,
   "items": 45,
@@ -13104,24 +13104,20 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "firecracker_bar_napa#0",
    "npc": "firecracker_bar_napa"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "firecracker_bar_napa#1",
-   "npc": "firecracker_bar_napa",
-   "topic": "girls",
-   "topics": [
-    "girls"
-   ]
+   "npc": "firecracker_bar_napa"
   },
   {
    "hasFx": false,
@@ -13129,6 +13125,21 @@
    "hasWhen": false,
    "index": 2,
    "key": "firecracker_bar_napa#2",
+   "npc": "firecracker_bar_napa",
+   "topic": "girls|the girls|your girls|introduce",
+   "topics": [
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 3,
+   "key": "firecracker_bar_napa#3",
    "npc": "firecracker_bar_napa",
    "topic": "family",
    "topics": [
@@ -13139,20 +13150,21 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "firecracker_bar_napa#3",
+   "index": 4,
+   "key": "firecracker_bar_napa#4",
    "npc": "firecracker_bar_napa",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 4,
-   "key": "firecracker_bar_napa#4",
+   "index": 5,
+   "key": "firecracker_bar_napa#5",
    "npc": "firecracker_bar_napa",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -13160,21 +13172,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "firecracker_bar_napa#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "firecracker_bar_napa",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -13194,18 +13191,75 @@
   },
   {
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
+   "index": 7,
+   "key": "firecracker_bar_napa#7",
+   "npc": "firecracker_bar_napa",
+   "topic": "bar|this bar|the bar|here|this place|firecracker bar|firecracker|the firecracker",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "firecracker bar",
+    "firecracker",
+    "the firecracker"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "firecracker_bar_napa#8",
+   "npc": "firecracker_bar_napa",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "firecracker_bar_napa#9",
+   "npc": "firecracker_bar_napa",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": true,
+   "hasShort": true,
+   "hasWhen": true,
    "index": 0,
    "key": "firecracker_bar_pang#0",
    "npc": "firecracker_bar_pang"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "firecracker_bar_pang#1",
+   "npc": "firecracker_bar_pang"
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 2,
+   "key": "firecracker_bar_pang#2",
    "npc": "firecracker_bar_pang",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -13219,8 +13273,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 2,
-   "key": "firecracker_bar_pang#2",
+   "index": 3,
+   "key": "firecracker_bar_pang#3",
    "npc": "firecracker_bar_pang",
    "topic": "family",
    "topics": [
@@ -13231,8 +13285,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "firecracker_bar_pang#3",
+   "index": 4,
+   "key": "firecracker_bar_pang#4",
    "npc": "firecracker_bar_pang",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -13240,21 +13294,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 4,
-   "key": "firecracker_bar_pang#4",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "firecracker_bar_pang",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -13270,6 +13309,86 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 6,
+   "key": "firecracker_bar_pang#6",
+   "npc": "firecracker_bar_pang",
+   "topic": "bar|this bar|the bar|here|this place|firecracker bar|firecracker|the firecracker",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "firecracker bar",
+    "firecracker",
+    "the firecracker"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "firecracker_bar_pang#7",
+   "npc": "firecracker_bar_pang",
+   "topic": "napa|mum|mother|mama|mamasan",
+   "topics": [
+    "napa",
+    "mum",
+    "mother",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 8,
+   "key": "firecracker_bar_pang#8",
+   "npc": "firecracker_bar_pang",
+   "topic": "headset|instagram|app|marketing",
+   "topics": [
+    "headset",
+    "instagram",
+    "app",
+    "marketing"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 9,
+   "key": "firecracker_bar_pang#9",
+   "npc": "firecracker_bar_pang",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "firecracker_bar_pang#10",
+   "npc": "firecracker_bar_pang",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
    ]
   },
   {
@@ -16546,19 +16665,27 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "hot_pepper_chom#0",
    "npc": "hot_pepper_chom"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "hot_pepper_chom#1",
+   "npc": "hot_pepper_chom"
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 2,
+   "key": "hot_pepper_chom#2",
    "npc": "hot_pepper_chom",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -16572,8 +16699,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 2,
-   "key": "hot_pepper_chom#2",
+   "index": 3,
+   "key": "hot_pepper_chom#3",
    "npc": "hot_pepper_chom",
    "topic": "family",
    "topics": [
@@ -16584,8 +16711,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "hot_pepper_chom#3",
+   "index": 4,
+   "key": "hot_pepper_chom#4",
    "npc": "hot_pepper_chom",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -16593,21 +16720,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 4,
-   "key": "hot_pepper_chom#4",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "hot_pepper_chom",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -16627,23 +16739,82 @@
   },
   {
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
+   "index": 6,
+   "key": "hot_pepper_chom#6",
+   "npc": "hot_pepper_chom",
+   "topic": "bar|this bar|the bar|here|this place|hot pepper bar|hot pepper|the hot pepper",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "hot pepper bar",
+    "hot pepper",
+    "the hot pepper"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "hot_pepper_chom#7",
+   "npc": "hot_pepper_chom",
+   "topic": "gina|mama|mamasan",
+   "topics": [
+    "gina",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "hot_pepper_chom#8",
+   "npc": "hot_pepper_chom",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "hot_pepper_chom#9",
+   "npc": "hot_pepper_chom",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": true,
+   "hasShort": true,
+   "hasWhen": true,
    "index": 0,
    "key": "hot_pepper_gina#0",
    "npc": "hot_pepper_gina"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "hot_pepper_gina#1",
-   "npc": "hot_pepper_gina",
-   "topic": "girls",
-   "topics": [
-    "girls"
-   ]
+   "npc": "hot_pepper_gina"
   },
   {
    "hasFx": false,
@@ -16651,6 +16822,21 @@
    "hasWhen": false,
    "index": 2,
    "key": "hot_pepper_gina#2",
+   "npc": "hot_pepper_gina",
+   "topic": "girls|the girls|your girls|introduce",
+   "topics": [
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 3,
+   "key": "hot_pepper_gina#3",
    "npc": "hot_pepper_gina",
    "topic": "family",
    "topics": [
@@ -16661,20 +16847,21 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "hot_pepper_gina#3",
+   "index": 4,
+   "key": "hot_pepper_gina#4",
    "npc": "hot_pepper_gina",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 4,
-   "key": "hot_pepper_gina#4",
+   "index": 5,
+   "key": "hot_pepper_gina#5",
    "npc": "hot_pepper_gina",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -16682,21 +16869,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "hot_pepper_gina#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "hot_pepper_gina",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -16712,6 +16884,55 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "hot_pepper_gina#7",
+   "npc": "hot_pepper_gina",
+   "topic": "bar|this bar|the bar|here|this place|hot pepper bar|hot pepper|the hot pepper",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "hot pepper bar",
+    "hot pepper",
+    "the hot pepper"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "hot_pepper_gina#8",
+   "npc": "hot_pepper_gina",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "hot_pepper_gina#9",
+   "npc": "hot_pepper_gina",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
    ]
   },
   {
@@ -17159,24 +17380,20 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "hula_hula_min#0",
    "npc": "hula_hula_min"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "hula_hula_min#1",
-   "npc": "hula_hula_min",
-   "topic": "girls",
-   "topics": [
-    "girls"
-   ]
+   "npc": "hula_hula_min"
   },
   {
    "hasFx": false,
@@ -17184,6 +17401,21 @@
    "hasWhen": false,
    "index": 2,
    "key": "hula_hula_min#2",
+   "npc": "hula_hula_min",
+   "topic": "girls|the girls|your girls|introduce",
+   "topics": [
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 3,
+   "key": "hula_hula_min#3",
    "npc": "hula_hula_min",
    "topic": "family",
    "topics": [
@@ -17194,20 +17426,21 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "hula_hula_min#3",
+   "index": 4,
+   "key": "hula_hula_min#4",
    "npc": "hula_hula_min",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 4,
-   "key": "hula_hula_min#4",
+   "index": 5,
+   "key": "hula_hula_min#5",
    "npc": "hula_hula_min",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -17215,21 +17448,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "hula_hula_min#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "hula_hula_min",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -17249,18 +17467,76 @@
   },
   {
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
+   "index": 7,
+   "key": "hula_hula_min#7",
+   "npc": "hula_hula_min",
+   "topic": "bar|this bar|the bar|here|this place|hula hula bar|hula hula|the hula hula|hula",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "hula hula bar",
+    "hula hula",
+    "the hula hula",
+    "hula"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "hula_hula_min#8",
+   "npc": "hula_hula_min",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "hula_hula_min#9",
+   "npc": "hula_hula_min",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": true,
+   "hasShort": true,
+   "hasWhen": true,
    "index": 0,
    "key": "hula_hula_noon#0",
    "npc": "hula_hula_noon"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "hula_hula_noon#1",
+   "npc": "hula_hula_noon"
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 2,
+   "key": "hula_hula_noon#2",
    "npc": "hula_hula_noon",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -17274,8 +17550,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 2,
-   "key": "hula_hula_noon#2",
+   "index": 3,
+   "key": "hula_hula_noon#3",
    "npc": "hula_hula_noon",
    "topic": "family",
    "topics": [
@@ -17286,8 +17562,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "hula_hula_noon#3",
+   "index": 4,
+   "key": "hula_hula_noon#4",
    "npc": "hula_hula_noon",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -17295,21 +17571,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 4,
-   "key": "hula_hula_noon#4",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "hula_hula_noon",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -17325,6 +17586,87 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 6,
+   "key": "hula_hula_noon#6",
+   "npc": "hula_hula_noon",
+   "topic": "bar|this bar|the bar|here|this place|hula hula bar|hula hula|the hula hula|hula",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "hula hula bar",
+    "hula hula",
+    "the hula hula",
+    "hula"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "hula_hula_noon#7",
+   "npc": "hula_hula_noon",
+   "topic": "min|mama|mamasan",
+   "topics": [
+    "min",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 8,
+   "key": "hula_hula_noon#8",
+   "npc": "hula_hula_noon",
+   "topic": "ring|engagement|fiance|fiancé|navy|sattahip",
+   "topics": [
+    "ring",
+    "engagement",
+    "fiance",
+    "fiancé",
+    "navy",
+    "sattahip"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 9,
+   "key": "hula_hula_noon#9",
+   "npc": "hula_hula_noon",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "hula_hula_noon#10",
+   "npc": "hula_hula_noon",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
    ]
   },
   {
@@ -17799,24 +18141,20 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "jade_lounge_jinda#0",
    "npc": "jade_lounge_jinda"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "jade_lounge_jinda#1",
-   "npc": "jade_lounge_jinda",
-   "topic": "girls",
-   "topics": [
-    "girls"
-   ]
+   "npc": "jade_lounge_jinda"
   },
   {
    "hasFx": false,
@@ -17824,6 +18162,21 @@
    "hasWhen": false,
    "index": 2,
    "key": "jade_lounge_jinda#2",
+   "npc": "jade_lounge_jinda",
+   "topic": "girls|the girls|your girls|introduce",
+   "topics": [
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 3,
+   "key": "jade_lounge_jinda#3",
    "npc": "jade_lounge_jinda",
    "topic": "family",
    "topics": [
@@ -17834,20 +18187,21 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "jade_lounge_jinda#3",
+   "index": 4,
+   "key": "jade_lounge_jinda#4",
    "npc": "jade_lounge_jinda",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 4,
-   "key": "jade_lounge_jinda#4",
+   "index": 5,
+   "key": "jade_lounge_jinda#5",
    "npc": "jade_lounge_jinda",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -17855,21 +18209,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "jade_lounge_jinda#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "jade_lounge_jinda",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -17889,18 +18228,75 @@
   },
   {
    "hasFx": false,
-   "hasShort": true,
+   "hasShort": false,
    "hasWhen": false,
+   "index": 7,
+   "key": "jade_lounge_jinda#7",
+   "npc": "jade_lounge_jinda",
+   "topic": "bar|this bar|the bar|here|this place|jade lounge|jade|the jade",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "jade lounge",
+    "jade",
+    "the jade"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "jade_lounge_jinda#8",
+   "npc": "jade_lounge_jinda",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "jade_lounge_jinda#9",
+   "npc": "jade_lounge_jinda",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": true,
+   "hasShort": true,
+   "hasWhen": true,
    "index": 0,
    "key": "jade_lounge_jum#0",
    "npc": "jade_lounge_jum"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "jade_lounge_jum#1",
+   "npc": "jade_lounge_jum"
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 2,
+   "key": "jade_lounge_jum#2",
    "npc": "jade_lounge_jum",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -17914,8 +18310,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 2,
-   "key": "jade_lounge_jum#2",
+   "index": 3,
+   "key": "jade_lounge_jum#3",
    "npc": "jade_lounge_jum",
    "topic": "family",
    "topics": [
@@ -17926,8 +18322,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "jade_lounge_jum#3",
+   "index": 4,
+   "key": "jade_lounge_jum#4",
    "npc": "jade_lounge_jum",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -17935,21 +18331,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 4,
-   "key": "jade_lounge_jum#4",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "jade_lounge_jum",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -17965,6 +18346,83 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 6,
+   "key": "jade_lounge_jum#6",
+   "npc": "jade_lounge_jum",
+   "topic": "bar|this bar|the bar|here|this place|jade lounge|jade|the jade",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "jade lounge",
+    "jade",
+    "the jade"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "jade_lounge_jum#7",
+   "npc": "jade_lounge_jum",
+   "topic": "keys|lanyard|the keys",
+   "topics": [
+    "keys",
+    "lanyard",
+    "the keys"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 8,
+   "key": "jade_lounge_jum#8",
+   "npc": "jade_lounge_jum",
+   "topic": "jinda|mama|mamasan",
+   "topics": [
+    "jinda",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 9,
+   "key": "jade_lounge_jum#9",
+   "npc": "jade_lounge_jum",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "jade_lounge_jum#10",
+   "npc": "jade_lounge_jum",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
    ]
   },
   {
@@ -20001,6 +20459,21 @@
    ]
   },
   {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "joy#7",
+   "npc": "joy",
+   "topic": "jiab|sweet tamarind|tamarind|the girl who left",
+   "topics": [
+    "jiab",
+    "sweet tamarind",
+    "tamarind",
+    "the girl who left"
+   ]
+  },
+  {
    "asks": "girlfriend",
    "hasFx": false,
    "hasShort": true,
@@ -21436,6 +21909,26 @@
    "topic": "police",
    "topics": [
     "police"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 15,
+   "key": "kesinee#15",
+   "npc": "kesinee",
+   "topic": "inner west|jade|peach|lollipop|sweet tamarind|the buying|buying|frontier|the folder",
+   "topics": [
+    "inner west",
+    "jade",
+    "peach",
+    "lollipop",
+    "sweet tamarind",
+    "the buying",
+    "buying",
+    "frontier",
+    "the folder"
    ]
   },
   {
@@ -23063,24 +23556,20 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "ladybird_bar_ratsamee#0",
    "npc": "ladybird_bar_ratsamee"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "ladybird_bar_ratsamee#1",
-   "npc": "ladybird_bar_ratsamee",
-   "topic": "girls",
-   "topics": [
-    "girls"
-   ]
+   "npc": "ladybird_bar_ratsamee"
   },
   {
    "hasFx": false,
@@ -23088,6 +23577,21 @@
    "hasWhen": false,
    "index": 2,
    "key": "ladybird_bar_ratsamee#2",
+   "npc": "ladybird_bar_ratsamee",
+   "topic": "girls|the girls|your girls|introduce",
+   "topics": [
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 3,
+   "key": "ladybird_bar_ratsamee#3",
    "npc": "ladybird_bar_ratsamee",
    "topic": "family",
    "topics": [
@@ -23098,20 +23602,21 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "ladybird_bar_ratsamee#3",
+   "index": 4,
+   "key": "ladybird_bar_ratsamee#4",
    "npc": "ladybird_bar_ratsamee",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 4,
-   "key": "ladybird_bar_ratsamee#4",
+   "index": 5,
+   "key": "ladybird_bar_ratsamee#5",
    "npc": "ladybird_bar_ratsamee",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -23119,21 +23624,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "ladybird_bar_ratsamee#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "ladybird_bar_ratsamee",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -23149,6 +23639,70 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "ladybird_bar_ratsamee#7",
+   "npc": "ladybird_bar_ratsamee",
+   "topic": "bar|this bar|the bar|here|this place|ladybird bar|ladybird|the ladybird",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "ladybird bar",
+    "ladybird",
+    "the ladybird"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 8,
+   "key": "ladybird_bar_ratsamee#8",
+   "npc": "ladybird_bar_ratsamee",
+   "topic": "third night|quiet|why quiet|nobody grabs",
+   "topics": [
+    "third night",
+    "quiet",
+    "why quiet",
+    "nobody grabs"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 9,
+   "key": "ladybird_bar_ratsamee#9",
+   "npc": "ladybird_bar_ratsamee",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "ladybird_bar_ratsamee#10",
+   "npc": "ladybird_bar_ratsamee",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
    ]
   },
   {
@@ -24052,24 +24606,20 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "lollipop_bar_khing#0",
    "npc": "lollipop_bar_khing"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "lollipop_bar_khing#1",
-   "npc": "lollipop_bar_khing",
-   "topic": "girls",
-   "topics": [
-    "girls"
-   ]
+   "npc": "lollipop_bar_khing"
   },
   {
    "hasFx": false,
@@ -24077,6 +24627,21 @@
    "hasWhen": false,
    "index": 2,
    "key": "lollipop_bar_khing#2",
+   "npc": "lollipop_bar_khing",
+   "topic": "girls|the girls|your girls|introduce",
+   "topics": [
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 3,
+   "key": "lollipop_bar_khing#3",
    "npc": "lollipop_bar_khing",
    "topic": "family",
    "topics": [
@@ -24087,20 +24652,21 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "lollipop_bar_khing#3",
+   "index": 4,
+   "key": "lollipop_bar_khing#4",
    "npc": "lollipop_bar_khing",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 4,
-   "key": "lollipop_bar_khing#4",
+   "index": 5,
+   "key": "lollipop_bar_khing#5",
    "npc": "lollipop_bar_khing",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -24108,21 +24674,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "lollipop_bar_khing#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "lollipop_bar_khing",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -24147,6 +24698,55 @@
    "index": 7,
    "key": "lollipop_bar_khing#7",
    "npc": "lollipop_bar_khing",
+   "topic": "bar|this bar|the bar|here|this place|lollipop bar|lollipop|the lollipop",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "lollipop bar",
+    "lollipop",
+    "the lollipop"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "lollipop_bar_khing#8",
+   "npc": "lollipop_bar_khing",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "lollipop_bar_khing#9",
+   "npc": "lollipop_bar_khing",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "lollipop_bar_khing#10",
+   "npc": "lollipop_bar_khing",
    "topic": "view|sweet tamarind|tamarind|cards|the cards|business cards|next door",
    "topics": [
     "view",
@@ -24162,8 +24762,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 8,
-   "key": "lollipop_bar_khing#8",
+   "index": 11,
+   "key": "lollipop_bar_khing#11",
    "npc": "lollipop_bar_khing",
    "topic": "folder|offer|sell|selling|group|pattaya leisure|plg|company|buy the bar|new boss",
    "topics": [
@@ -24801,6 +25401,26 @@
    "topic": "family",
    "topics": [
     "family"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "malai#10",
+   "npc": "malai",
+   "topic": "the group|group|folder|the folder|selling|sell|buying|inner west|frontier",
+   "topics": [
+    "the group",
+    "group",
+    "folder",
+    "the folder",
+    "selling",
+    "sell",
+    "buying",
+    "inner west",
+    "frontier"
    ]
   },
   {
@@ -29816,6 +30436,21 @@
    "topic": "pattaya leisure",
    "topics": [
     "pattaya leisure"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "nee#9",
+   "npc": "nee",
+   "topic": "jiab|the girl who left|sweet tamarind|tamarind",
+   "topics": [
+    "jiab",
+    "the girl who left",
+    "sweet tamarind",
+    "tamarind"
    ]
   },
   {
@@ -35890,19 +36525,27 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "peach_lounge_farida#0",
    "npc": "peach_lounge_farida"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "peach_lounge_farida#1",
+   "npc": "peach_lounge_farida"
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 2,
+   "key": "peach_lounge_farida#2",
    "npc": "peach_lounge_farida",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -35916,8 +36559,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 2,
-   "key": "peach_lounge_farida#2",
+   "index": 3,
+   "key": "peach_lounge_farida#3",
    "npc": "peach_lounge_farida",
    "topic": "family",
    "topics": [
@@ -35928,8 +36571,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "peach_lounge_farida#3",
+   "index": 4,
+   "key": "peach_lounge_farida#4",
    "npc": "peach_lounge_farida",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -35937,21 +36580,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 4,
-   "key": "peach_lounge_farida#4",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "peach_lounge_farida",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -35967,6 +36595,70 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 6,
+   "key": "peach_lounge_farida#6",
+   "npc": "peach_lounge_farida",
+   "topic": "bar|this bar|the bar|here|this place|peach lounge|peach|the peach",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "peach lounge",
+    "peach",
+    "the peach"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "peach_lounge_farida#7",
+   "npc": "peach_lounge_farida",
+   "topic": "group|the group|company|pattaya leisure",
+   "topics": [
+    "group",
+    "the group",
+    "company",
+    "pattaya leisure"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "peach_lounge_farida#8",
+   "npc": "peach_lounge_farida",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "peach_lounge_farida#9",
+   "npc": "peach_lounge_farida",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
    ]
   },
   {
@@ -36091,24 +36783,20 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "peach_lounge_noot#0",
    "npc": "peach_lounge_noot"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "peach_lounge_noot#1",
-   "npc": "peach_lounge_noot",
-   "topic": "girls",
-   "topics": [
-    "girls"
-   ]
+   "npc": "peach_lounge_noot"
   },
   {
    "hasFx": false,
@@ -36116,6 +36804,21 @@
    "hasWhen": false,
    "index": 2,
    "key": "peach_lounge_noot#2",
+   "npc": "peach_lounge_noot",
+   "topic": "girls|the girls|your girls|introduce",
+   "topics": [
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 3,
+   "key": "peach_lounge_noot#3",
    "npc": "peach_lounge_noot",
    "topic": "family",
    "topics": [
@@ -36126,20 +36829,21 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "peach_lounge_noot#3",
+   "index": 4,
+   "key": "peach_lounge_noot#4",
    "npc": "peach_lounge_noot",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 4,
-   "key": "peach_lounge_noot#4",
+   "index": 5,
+   "key": "peach_lounge_noot#5",
    "npc": "peach_lounge_noot",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -36147,21 +36851,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "peach_lounge_noot#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "peach_lounge_noot",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -36177,6 +36866,70 @@
    "topic": "wallet",
    "topics": [
     "wallet"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "peach_lounge_noot#7",
+   "npc": "peach_lounge_noot",
+   "topic": "bar|this bar|the bar|here|this place|peach lounge|peach|the peach",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "peach lounge",
+    "peach",
+    "the peach"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 8,
+   "key": "peach_lounge_noot#8",
+   "npc": "peach_lounge_noot",
+   "topic": "sign|old sign|australian|old boss",
+   "topics": [
+    "sign",
+    "old sign",
+    "australian",
+    "old boss"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 9,
+   "key": "peach_lounge_noot#9",
+   "npc": "peach_lounge_noot",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "peach_lounge_noot#10",
+   "npc": "peach_lounge_noot",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
    ]
   },
   {
@@ -36848,6 +37601,25 @@
    "topic": "free",
    "topics": [
     "free"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "peung#10",
+   "npc": "peung",
+   "topic": "jinda|jade|jade lounge|the jade|noot|peach|peach lounge|the peach",
+   "topics": [
+    "jinda",
+    "jade",
+    "jade lounge",
+    "the jade",
+    "noot",
+    "peach",
+    "peach lounge",
+    "the peach"
    ]
   },
   {
@@ -41200,6 +41972,23 @@
    ]
   },
   {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 8,
+   "key": "saeng#8",
+   "npc": "saeng",
+   "topic": "hula hula|min|tiki|hawaii|ladybird|ratsamee",
+   "topics": [
+    "hula hula",
+    "min",
+    "tiki",
+    "hawaii",
+    "ladybird",
+    "ratsamee"
+   ]
+  },
+  {
    "asks": "home",
    "hasFx": false,
    "hasShort": true,
@@ -44510,19 +45299,27 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "sweet_tamarind_tukta#0",
    "npc": "sweet_tamarind_tukta"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "sweet_tamarind_tukta#1",
+   "npc": "sweet_tamarind_tukta"
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 2,
+   "key": "sweet_tamarind_tukta#2",
    "npc": "sweet_tamarind_tukta",
    "topic": "money|tab|bill|price",
    "topics": [
@@ -44536,8 +45333,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 2,
-   "key": "sweet_tamarind_tukta#2",
+   "index": 3,
+   "key": "sweet_tamarind_tukta#3",
    "npc": "sweet_tamarind_tukta",
    "topic": "family",
    "topics": [
@@ -44548,8 +45345,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "sweet_tamarind_tukta#3",
+   "index": 4,
+   "key": "sweet_tamarind_tukta#4",
    "npc": "sweet_tamarind_tukta",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -44557,21 +45354,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 4,
-   "key": "sweet_tamarind_tukta#4",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "sweet_tamarind_tukta",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -44596,6 +45378,71 @@
    "index": 6,
    "key": "sweet_tamarind_tukta#6",
    "npc": "sweet_tamarind_tukta",
+   "topic": "bar|this bar|the bar|here|this place|sweet tamarind|tamarind|the tamarind",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "sweet tamarind",
+    "tamarind",
+    "the tamarind"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 7,
+   "key": "sweet_tamarind_tukta#7",
+   "npc": "sweet_tamarind_tukta",
+   "topic": "view|auntie|aunt|mama|mamasan",
+   "topics": [
+    "view",
+    "auntie",
+    "aunt",
+    "mama",
+    "mamasan"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "sweet_tamarind_tukta#8",
+   "npc": "sweet_tamarind_tukta",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "sweet_tamarind_tukta#9",
+   "npc": "sweet_tamarind_tukta",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "sweet_tamarind_tukta#10",
+   "npc": "sweet_tamarind_tukta",
    "topic": "cards|business cards|the cards|the wall|how many cards",
    "topics": [
     "cards",
@@ -44606,24 +45453,20 @@
    ]
   },
   {
-   "hasFx": false,
+   "hasFx": true,
    "hasShort": true,
-   "hasWhen": false,
+   "hasWhen": true,
    "index": 0,
    "key": "sweet_tamarind_view#0",
    "npc": "sweet_tamarind_view"
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 1,
    "key": "sweet_tamarind_view#1",
-   "npc": "sweet_tamarind_view",
-   "topic": "girls",
-   "topics": [
-    "girls"
-   ]
+   "npc": "sweet_tamarind_view"
   },
   {
    "hasFx": false,
@@ -44631,6 +45474,21 @@
    "hasWhen": false,
    "index": 2,
    "key": "sweet_tamarind_view#2",
+   "npc": "sweet_tamarind_view",
+   "topic": "girls|the girls|your girls|introduce",
+   "topics": [
+    "girls",
+    "the girls",
+    "your girls",
+    "introduce"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 3,
+   "key": "sweet_tamarind_view#3",
    "npc": "sweet_tamarind_view",
    "topic": "family",
    "topics": [
@@ -44641,20 +45499,21 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 3,
-   "key": "sweet_tamarind_view#3",
+   "index": 4,
+   "key": "sweet_tamarind_view#4",
    "npc": "sweet_tamarind_view",
-   "topic": "plan",
+   "topic": "plan|future",
    "topics": [
-    "plan"
+    "plan",
+    "future"
    ]
   },
   {
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 4,
-   "key": "sweet_tamarind_view#4",
+   "index": 5,
+   "key": "sweet_tamarind_view#5",
    "npc": "sweet_tamarind_view",
    "topic": "home|hometown|village|where you from",
    "topics": [
@@ -44662,21 +45521,6 @@
     "hometown",
     "village",
     "where you from"
-   ]
-  },
-  {
-   "hasFx": false,
-   "hasShort": false,
-   "hasWhen": true,
-   "index": 5,
-   "key": "sweet_tamarind_view#5",
-   "notFlags": [
-    "hasWallet"
-   ],
-   "npc": "sweet_tamarind_view",
-   "topic": "wallet",
-   "topics": [
-    "wallet"
    ]
   },
   {
@@ -44701,6 +45545,56 @@
    "index": 7,
    "key": "sweet_tamarind_view#7",
    "npc": "sweet_tamarind_view",
+   "topic": "bar|this bar|the bar|here|this place|sweet tamarind|tamarind|the tamarind|the sweet tamarind",
+   "topics": [
+    "bar",
+    "this bar",
+    "the bar",
+    "here",
+    "this place",
+    "sweet tamarind",
+    "tamarind",
+    "the tamarind",
+    "the sweet tamarind"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": true,
+   "index": 8,
+   "key": "sweet_tamarind_view#8",
+   "npc": "sweet_tamarind_view",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 9,
+   "key": "sweet_tamarind_view#9",
+   "npc": "sweet_tamarind_view",
+   "topic": "last time|last trip|last visit|before",
+   "topics": [
+    "last time",
+    "last trip",
+    "last visit",
+    "before"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 10,
+   "key": "sweet_tamarind_view#10",
+   "npc": "sweet_tamarind_view",
    "topic": "khing|lollipop|lollipop bar|the folder|folder|next door",
    "topics": [
     "khing",
@@ -44715,8 +45609,8 @@
    "hasFx": false,
    "hasShort": false,
    "hasWhen": false,
-   "index": 8,
-   "key": "sweet_tamarind_view#8",
+   "index": 11,
+   "key": "sweet_tamarind_view#11",
    "npc": "sweet_tamarind_view",
    "topic": "soi 6|the soi|how long|years|before|the old soi",
    "topics": [
@@ -44732,8 +45626,8 @@
    "hasFx": false,
    "hasShort": true,
    "hasWhen": false,
-   "index": 9,
-   "key": "sweet_tamarind_view#9",
+   "index": 12,
+   "key": "sweet_tamarind_view#12",
    "npc": "sweet_tamarind_view",
    "topic": "cards|offer|sell|selling|group|pattaya leisure|plg|company|buy the bar|business cards",
    "topics": [
@@ -48659,6 +49553,24 @@
    "topic": "free",
    "topics": [
     "free"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": false,
+   "hasWhen": false,
+   "index": 11,
+   "key": "toi#11",
+   "npc": "toi",
+   "topic": "napa|firecracker|inner east|hot pepper|hula hula|ladybird|the other side",
+   "topics": [
+    "napa",
+    "firecracker",
+    "inner east",
+    "hot pepper",
+    "hula hula",
+    "ladybird",
+    "the other side"
    ]
   },
   {
@@ -54001,7 +54913,7 @@
   "DEPENDS": 13,
   "DONE_BY": 42,
   "EXIT": 450,
-  "FORBIDS": 517,
+  "FORBIDS": 503,
   "GIVEN_BY": 43,
   "GIVES": 17,
   "INTERPOLATES": 605,
@@ -58930,17 +59842,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "firecracker_bar_napa#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
    "from": "firecracker_bar_napa#6",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "firecracker_bar_pang#4",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -59085,17 +59987,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "hot_pepper_chom#4",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
    "from": "hot_pepper_chom#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "hot_pepper_gina#5",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -59105,17 +59997,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "hula_hula_min#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
    "from": "hula_hula_min#6",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "hula_hula_noon#4",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -59145,17 +60027,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "jade_lounge_jinda#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
    "from": "jade_lounge_jinda#6",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "jade_lounge_jum#4",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -59470,11 +60342,6 @@
    "type": "FORBIDS"
   },
   {
-   "from": "ladybird_bar_ratsamee#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
    "from": "ladybird_bar_ratsamee#6",
    "to": "hasWallet",
    "type": "FORBIDS"
@@ -59521,11 +60388,6 @@
   },
   {
    "from": "lin#6",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "lollipop_bar_khing#5",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -60055,17 +60917,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "peach_lounge_farida#4",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
    "from": "peach_lounge_farida#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "peach_lounge_noot#5",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -60465,17 +61317,7 @@
    "type": "FORBIDS"
   },
   {
-   "from": "sweet_tamarind_tukta#4",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
    "from": "sweet_tamarind_tukta#5",
-   "to": "hasWallet",
-   "type": "FORBIDS"
-  },
-  {
-   "from": "sweet_tamarind_view#5",
    "to": "hasWallet",
    "type": "FORBIDS"
   },
@@ -61251,12 +62093,12 @@
   },
   {
    "from": "ATM_DAILY_CAP",
-   "to": "engine-parser.js:11635",
+   "to": "engine-parser.js:11656",
    "type": "INTERPOLATES"
   },
   {
    "from": "ATM_FEE",
-   "to": "engine-parser.js:11633",
+   "to": "engine-parser.js:11654",
    "type": "INTERPOLATES"
   },
   {
@@ -61276,7 +62118,7 @@
   },
   {
    "from": "BAN_TURNS",
-   "to": "engine-core.js:2143",
+   "to": "engine-core.js:2152",
    "type": "INTERPOLATES"
   },
   {
@@ -61291,32 +62133,32 @@
   },
   {
    "from": "BAN_TURNS",
-   "to": "engine-parser.js:7174",
+   "to": "engine-parser.js:7195",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAN_TURNS",
-   "to": "engine-parser.js:7174",
+   "to": "engine-parser.js:7195",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAND_ROUND",
-   "to": "engine-parser.js:9142",
+   "to": "engine-parser.js:9163",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAND_ROUND",
-   "to": "engine-parser.js:9143",
+   "to": "engine-parser.js:9164",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAND_ROUND",
-   "to": "engine-parser.js:9148",
+   "to": "engine-parser.js:9169",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAND_ROUND",
-   "to": "engine-parser.js:9150",
+   "to": "engine-parser.js:9171",
    "type": "INTERPOLATES"
   },
   {
@@ -61421,12 +62263,12 @@
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-parser.js:7154",
+   "to": "engine-parser.js:7175",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-parser.js:7164",
+   "to": "engine-parser.js:7185",
    "type": "INTERPOLATES"
   },
   {
@@ -61526,7 +62368,7 @@
   },
   {
    "from": "BAR_QUOTA",
-   "to": "engine-parser.js:12132",
+   "to": "engine-parser.js:12153",
    "type": "INTERPOLATES"
   },
   {
@@ -61636,7 +62478,7 @@
   },
   {
    "from": "BAR_SALARY",
-   "to": "engine-parser.js:12132",
+   "to": "engine-parser.js:12153",
    "type": "INTERPOLATES"
   },
   {
@@ -61731,12 +62573,12 @@
   },
   {
    "from": "BAR_WAGES",
-   "to": "engine-parser.js:7154",
+   "to": "engine-parser.js:7175",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_WAGES",
-   "to": "engine-parser.js:7164",
+   "to": "engine-parser.js:7185",
    "type": "INTERPOLATES"
   },
   {
@@ -61761,27 +62603,27 @@
   },
   {
    "from": "BATON_DAWN_TURNS",
-   "to": "engine-core.js:599",
+   "to": "engine-core.js:600",
    "type": "INTERPOLATES"
   },
   {
    "from": "BATON_VERSION",
-   "to": "engine-core.js:610",
+   "to": "engine-core.js:611",
    "type": "INTERPOLATES"
   },
   {
    "from": "BATON_VERSION",
-   "to": "engine-core.js:623",
+   "to": "engine-core.js:624",
    "type": "INTERPOLATES"
   },
   {
    "from": "BATON_VERSION",
-   "to": "engine-core.js:623",
+   "to": "engine-core.js:624",
    "type": "INTERPOLATES"
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-core.js:3589",
+   "to": "engine-core.js:3598",
    "type": "INTERPOLATES"
   },
   {
@@ -61811,7 +62653,7 @@
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:3596",
+   "to": "engine-core.js:3605",
    "type": "INTERPOLATES"
   },
   {
@@ -61876,7 +62718,7 @@
   },
   {
    "from": "BOOK_TAKINGS",
-   "to": "engine-parser.js:5657",
+   "to": "engine-parser.js:5663",
    "type": "INTERPOLATES"
   },
   {
@@ -61896,37 +62738,37 @@
   },
   {
    "from": "BRA_PRICE",
-   "to": "engine-parser.js:9125",
+   "to": "engine-parser.js:9146",
    "type": "INTERPOLATES"
   },
   {
    "from": "BRA_PRICE",
-   "to": "engine-parser.js:9126",
+   "to": "engine-parser.js:9147",
    "type": "INTERPOLATES"
   },
   {
    "from": "BRA_PRICE",
-   "to": "engine-parser.js:9130",
+   "to": "engine-parser.js:9151",
    "type": "INTERPOLATES"
   },
   {
    "from": "BRA_PRICE",
-   "to": "engine-parser.js:9134",
+   "to": "engine-parser.js:9155",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_CHARTER",
-   "to": "engine-parser.js:9474",
+   "to": "engine-parser.js:9495",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_CHARTER",
-   "to": "engine-parser.js:9485",
+   "to": "engine-parser.js:9506",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_CHARTER",
-   "to": "engine-parser.js:9492",
+   "to": "engine-parser.js:9513",
    "type": "INTERPOLATES"
   },
   {
@@ -61936,112 +62778,112 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10893",
+   "to": "engine-parser.js:10914",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10895",
+   "to": "engine-parser.js:10916",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10896",
+   "to": "engine-parser.js:10917",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:15499",
+   "to": "engine-parser.js:15520",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:7807",
+   "to": "engine-parser.js:7828",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:7807",
+   "to": "engine-parser.js:7828",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:8292",
+   "to": "engine-parser.js:8313",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:8292",
+   "to": "engine-parser.js:8313",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:8295",
+   "to": "engine-parser.js:8316",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:8308",
+   "to": "engine-parser.js:8329",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9304",
+   "to": "engine-parser.js:9325",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9307",
+   "to": "engine-parser.js:9328",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9348",
+   "to": "engine-parser.js:9369",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9436",
+   "to": "engine-parser.js:9457",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9437",
+   "to": "engine-parser.js:9458",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9479",
+   "to": "engine-parser.js:9500",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9515",
+   "to": "engine-parser.js:9536",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9517",
+   "to": "engine-parser.js:9538",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9522",
+   "to": "engine-parser.js:9543",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9552",
+   "to": "engine-parser.js:9573",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9553",
+   "to": "engine-parser.js:9574",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9699",
+   "to": "engine-parser.js:9720",
    "type": "INTERPOLATES"
   },
   {
@@ -62106,12 +62948,12 @@
   },
   {
    "from": "CHAM_GIFT",
-   "to": "engine-parser.js:12755",
+   "to": "engine-parser.js:12776",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHAM_GIFT",
-   "to": "engine-parser.js:12755",
+   "to": "engine-parser.js:12776",
    "type": "INTERPOLATES"
   },
   {
@@ -62126,27 +62968,27 @@
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:7190",
+   "to": "engine-parser.js:7211",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:8646",
+   "to": "engine-parser.js:8667",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:8646",
+   "to": "engine-parser.js:8667",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:8647",
+   "to": "engine-parser.js:8668",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:8650",
+   "to": "engine-parser.js:8671",
    "type": "INTERPOLATES"
   },
   {
@@ -62181,12 +63023,12 @@
   },
   {
    "from": "COFFEE_PRICE",
-   "to": "engine-parser.js:8600",
+   "to": "engine-parser.js:8621",
    "type": "INTERPOLATES"
   },
   {
    "from": "COFFEE_PRICE",
-   "to": "engine-parser.js:8600",
+   "to": "engine-parser.js:8621",
    "type": "INTERPOLATES"
   },
   {
@@ -62196,62 +63038,62 @@
   },
   {
    "from": "CONDOM_PACK",
-   "to": "engine-parser.js:8657",
+   "to": "engine-parser.js:8678",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PACK",
-   "to": "engine-parser.js:8659",
+   "to": "engine-parser.js:8680",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:8655",
+   "to": "engine-parser.js:8676",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:8655",
+   "to": "engine-parser.js:8676",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:8656",
+   "to": "engine-parser.js:8677",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:8659",
+   "to": "engine-parser.js:8680",
    "type": "INTERPOLATES"
   },
   {
    "from": "CORD_PRICE",
-   "to": "engine-parser.js:8748",
+   "to": "engine-parser.js:8769",
    "type": "INTERPOLATES"
   },
   {
    "from": "CORD_PRICE",
-   "to": "engine-parser.js:8749",
+   "to": "engine-parser.js:8770",
    "type": "INTERPOLATES"
   },
   {
    "from": "CORD_PRICE",
-   "to": "engine-parser.js:8751",
+   "to": "engine-parser.js:8772",
    "type": "INTERPOLATES"
   },
   {
    "from": "CORD_PRICE",
-   "to": "engine-parser.js:8756",
+   "to": "engine-parser.js:8777",
    "type": "INTERPOLATES"
   },
   {
    "from": "COVERS_NIGHTS",
-   "to": "engine-parser.js:14236",
+   "to": "engine-parser.js:14257",
    "type": "INTERPOLATES"
   },
   {
    "from": "COVERS_NIGHTS",
-   "to": "engine-parser.js:14236",
+   "to": "engine-parser.js:14257",
    "type": "INTERPOLATES"
   },
   {
@@ -62271,7 +63113,7 @@
   },
   {
    "from": "DOG_MOTOSAI_FARE",
-   "to": "engine-parser.js:9688",
+   "to": "engine-parser.js:9709",
    "type": "INTERPOLATES"
   },
   {
@@ -62356,7 +63198,7 @@
   },
   {
    "from": "FORTUNE_READ",
-   "to": "engine-parser.js:6926",
+   "to": "engine-parser.js:6947",
    "type": "INTERPOLATES"
   },
   {
@@ -62376,7 +63218,7 @@
   },
   {
    "from": "FORTUNE_RITUAL",
-   "to": "engine-parser.js:6926",
+   "to": "engine-parser.js:6947",
    "type": "INTERPOLATES"
   },
   {
@@ -62406,12 +63248,12 @@
   },
   {
    "from": "FULL_AT",
-   "to": "engine-core.js:1255",
+   "to": "engine-core.js:1256",
    "type": "INTERPOLATES"
   },
   {
    "from": "FULL_AT",
-   "to": "engine-core.js:1264",
+   "to": "engine-core.js:1265",
    "type": "INTERPOLATES"
   },
   {
@@ -62431,7 +63273,7 @@
   },
   {
    "from": "GROUP_WEEK_BASE",
-   "to": "engine-parser.js:12164",
+   "to": "engine-parser.js:12185",
    "type": "INTERPOLATES"
   },
   {
@@ -62456,7 +63298,7 @@
   },
   {
    "from": "HOME_SEND",
-   "to": "engine-parser.js:12132",
+   "to": "engine-parser.js:12153",
    "type": "INTERPOLATES"
   },
   {
@@ -62466,37 +63308,37 @@
   },
   {
    "from": "HOP_CHANCE",
-   "to": "engine-core.js:1115",
+   "to": "engine-core.js:1116",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_SETTLE",
-   "to": "engine-core.js:1048",
+   "to": "engine-core.js:1049",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_SETTLE",
-   "to": "engine-core.js:1196",
+   "to": "engine-core.js:1197",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3282",
+   "to": "engine-core.js:3291",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3283",
+   "to": "engine-core.js:3292",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-parser.js:10404",
+   "to": "engine-parser.js:10425",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-parser.js:10410",
+   "to": "engine-parser.js:10431",
    "type": "INTERPOLATES"
   },
   {
@@ -62531,12 +63373,12 @@
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-core.js:3075",
+   "to": "engine-core.js:3084",
    "type": "INTERPOLATES"
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-parser.js:12101",
+   "to": "engine-parser.js:12122",
    "type": "INTERPOLATES"
   },
   {
@@ -62566,12 +63408,12 @@
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-parser.js:12132",
+   "to": "engine-parser.js:12153",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-parser.js:6982",
+   "to": "engine-parser.js:7003",
    "type": "INTERPOLATES"
   },
   {
@@ -62621,7 +63463,7 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-core.js:3591",
+   "to": "engine-core.js:3600",
    "type": "INTERPOLATES"
   },
   {
@@ -62666,37 +63508,37 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-core.js:3040",
+   "to": "engine-core.js:3049",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:10891",
+   "to": "engine-parser.js:10912",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:10894",
+   "to": "engine-parser.js:10915",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:11204",
+   "to": "engine-parser.js:11225",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:12454",
+   "to": "engine-parser.js:12475",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:13184",
+   "to": "engine-parser.js:13205",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:14867",
+   "to": "engine-parser.js:14888",
    "type": "INTERPOLATES"
   },
   {
@@ -62706,27 +63548,27 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:9396",
+   "to": "engine-parser.js:9417",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:9404",
+   "to": "engine-parser.js:9425",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:9571",
+   "to": "engine-parser.js:9592",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:9686",
+   "to": "engine-parser.js:9707",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:9761",
+   "to": "engine-parser.js:9782",
    "type": "INTERPOLATES"
   },
   {
@@ -62781,7 +63623,7 @@
   },
   {
    "from": "LATE_MOTO_MULT",
-   "to": "engine-parser.js:9571",
+   "to": "engine-parser.js:9592",
    "type": "INTERPOLATES"
   },
   {
@@ -62876,37 +63718,37 @@
   },
   {
    "from": "MOT_BOOTS",
-   "to": "engine-parser.js:15736",
+   "to": "engine-parser.js:15757",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS_SAVED",
-   "to": "engine-parser.js:15736",
+   "to": "engine-parser.js:15757",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS_SAVED",
-   "to": "engine-parser.js:15754",
+   "to": "engine-parser.js:15775",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:15782",
+   "to": "engine-parser.js:15803",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:15783",
+   "to": "engine-parser.js:15804",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:15788",
+   "to": "engine-parser.js:15809",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:15800",
+   "to": "engine-parser.js:15821",
    "type": "INTERPOLATES"
   },
   {
@@ -62936,32 +63778,32 @@
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:7746",
+   "to": "engine-parser.js:7767",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:7808",
+   "to": "engine-parser.js:7829",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:7934",
+   "to": "engine-parser.js:7955",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:9567",
+   "to": "engine-parser.js:9588",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:9643",
+   "to": "engine-parser.js:9664",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:9761",
+   "to": "engine-parser.js:9782",
    "type": "INTERPOLATES"
   },
   {
@@ -62996,42 +63838,42 @@
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:10239",
+   "to": "engine-parser.js:10260",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:7746",
+   "to": "engine-parser.js:7767",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:7808",
+   "to": "engine-parser.js:7829",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:7934",
+   "to": "engine-parser.js:7955",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:9568",
+   "to": "engine-parser.js:9589",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:9643",
+   "to": "engine-parser.js:9664",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:9723",
+   "to": "engine-parser.js:9744",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:9752",
+   "to": "engine-parser.js:9773",
    "type": "INTERPOLATES"
   },
   {
@@ -63131,22 +63973,22 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:3378",
+   "to": "engine-core.js:3387",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:681",
+   "to": "engine-core.js:682",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:684",
+   "to": "engine-core.js:685",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:684",
+   "to": "engine-core.js:685",
    "type": "INTERPOLATES"
   },
   {
@@ -63156,27 +63998,27 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:10900",
+   "to": "engine-parser.js:10921",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:10905",
+   "to": "engine-parser.js:10926",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:10911",
+   "to": "engine-parser.js:10932",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:11012",
+   "to": "engine-parser.js:11033",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:11013",
+   "to": "engine-parser.js:11034",
    "type": "INTERPOLATES"
   },
   {
@@ -63221,17 +64063,17 @@
   },
   {
    "from": "NONT_CHARGE",
-   "to": "engine-parser.js:10039",
+   "to": "engine-parser.js:10060",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_CHARGE",
-   "to": "engine-parser.js:10040",
+   "to": "engine-parser.js:10061",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_CHARGE",
-   "to": "engine-parser.js:10041",
+   "to": "engine-parser.js:10062",
    "type": "INTERPOLATES"
   },
   {
@@ -63301,32 +64143,32 @@
   },
   {
    "from": "NONT_SIM",
-   "to": "engine-parser.js:8530",
+   "to": "engine-parser.js:8551",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_SIM",
-   "to": "engine-parser.js:8531",
+   "to": "engine-parser.js:8552",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_SIM",
-   "to": "engine-parser.js:8532",
+   "to": "engine-parser.js:8553",
    "type": "INTERPOLATES"
   },
   {
    "from": "NOODLE_PRICE",
-   "to": "engine-parser.js:8764",
+   "to": "engine-parser.js:8785",
    "type": "INTERPOLATES"
   },
   {
    "from": "NOODLE_PRICE",
-   "to": "engine-parser.js:8765",
+   "to": "engine-parser.js:8786",
    "type": "INTERPOLATES"
   },
   {
    "from": "NOODLE_PRICE",
-   "to": "engine-parser.js:8768",
+   "to": "engine-parser.js:8789",
    "type": "INTERPOLATES"
   },
   {
@@ -63441,12 +64283,12 @@
   },
   {
    "from": "POLICE_ARGUE",
-   "to": "engine-parser.js:6291",
+   "to": "engine-parser.js:6309",
    "type": "INTERPOLATES"
   },
   {
    "from": "POLICE_ARGUE",
-   "to": "engine-parser.js:6922",
+   "to": "engine-parser.js:6943",
    "type": "INTERPOLATES"
   },
   {
@@ -63471,12 +64313,12 @@
   },
   {
    "from": "POLICE_PAY",
-   "to": "engine-parser.js:6290",
+   "to": "engine-parser.js:6308",
    "type": "INTERPOLATES"
   },
   {
    "from": "POLICE_PAY",
-   "to": "engine-parser.js:6922",
+   "to": "engine-parser.js:6943",
    "type": "INTERPOLATES"
   },
   {
@@ -63491,12 +64333,12 @@
   },
   {
    "from": "POLICE_WAI",
-   "to": "engine-parser.js:6290",
+   "to": "engine-parser.js:6308",
    "type": "INTERPOLATES"
   },
   {
    "from": "POLICE_WAI",
-   "to": "engine-parser.js:6922",
+   "to": "engine-parser.js:6943",
    "type": "INTERPOLATES"
   },
   {
@@ -63716,7 +64558,7 @@
   },
   {
    "from": "SEASON_DEFAULT_M0",
-   "to": "engine-core.js:513",
+   "to": "engine-core.js:514",
    "type": "INTERPOLATES"
   },
   {
@@ -63866,7 +64708,7 @@
   },
   {
    "from": "SUNRISE_TURN",
-   "to": "engine-parser.js:10992",
+   "to": "engine-parser.js:11013",
    "type": "INTERPOLATES"
   },
   {
@@ -63891,7 +64733,7 @@
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "engine-parser.js:7129",
+   "to": "engine-parser.js:7150",
    "type": "INTERPOLATES"
   },
   {
@@ -63926,37 +64768,37 @@
   },
   {
    "from": "THAI_ATM_CAP",
-   "to": "engine-parser.js:11635",
+   "to": "engine-parser.js:11656",
    "type": "INTERPOLATES"
   },
   {
    "from": "THAI_FLUENT",
-   "to": "engine-parser.js:7632",
+   "to": "engine-parser.js:7653",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:8793",
+   "to": "engine-parser.js:8814",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:8795",
+   "to": "engine-parser.js:8816",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:8795",
+   "to": "engine-parser.js:8816",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:8796",
+   "to": "engine-parser.js:8817",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:8799",
+   "to": "engine-parser.js:8820",
    "type": "INTERPOLATES"
   },
   {
@@ -63966,12 +64808,12 @@
   },
   {
    "from": "TONIC_FLEECE",
-   "to": "engine-parser.js:6926",
+   "to": "engine-parser.js:6947",
    "type": "INTERPOLATES"
   },
   {
    "from": "TONIC_POLICE_CUT",
-   "to": "engine-parser.js:11751",
+   "to": "engine-parser.js:11772",
    "type": "INTERPOLATES"
   },
   {
@@ -64001,7 +64843,7 @@
   },
   {
    "from": "TONIC_PRICE",
-   "to": "engine-parser.js:6926",
+   "to": "engine-parser.js:6947",
    "type": "INTERPOLATES"
   },
   {
@@ -64011,27 +64853,27 @@
   },
   {
    "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:8671",
+   "to": "engine-parser.js:8692",
    "type": "INTERPOLATES"
   },
   {
    "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:8673",
+   "to": "engine-parser.js:8694",
    "type": "INTERPOLATES"
   },
   {
    "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:8676",
+   "to": "engine-parser.js:8697",
    "type": "INTERPOLATES"
   },
   {
    "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:8683",
+   "to": "engine-parser.js:8704",
    "type": "INTERPOLATES"
   },
   {
    "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:8686",
+   "to": "engine-parser.js:8707",
    "type": "INTERPOLATES"
   },
   {
@@ -64046,12 +64888,12 @@
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2659",
+   "to": "engine-core.js:2668",
    "type": "INTERPOLATES"
   },
   {
    "from": "WALLET_CASH",
-   "to": "engine-core.js:2660",
+   "to": "engine-core.js:2669",
    "type": "INTERPOLATES"
   },
   {
@@ -64176,17 +65018,17 @@
   },
   {
    "from": "YA_DONG_SHOT",
-   "to": "engine-parser.js:8844",
+   "to": "engine-parser.js:8865",
    "type": "INTERPOLATES"
   },
   {
    "from": "YA_DONG_SHOT",
-   "to": "engine-parser.js:8844",
+   "to": "engine-parser.js:8865",
    "type": "INTERPOLATES"
   },
   {
    "from": "YA_DONG_SHOT",
-   "to": "engine-parser.js:8845",
+   "to": "engine-parser.js:8866",
    "type": "INTERPOLATES"
   },
   {
@@ -67465,52 +68307,52 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1291",
+   "to": "engine-core.js:1292",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1375",
+   "to": "engine-core.js:1384",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1469",
+   "to": "engine-core.js:1478",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3010",
+   "to": "engine-core.js:3019",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3309",
+   "to": "engine-core.js:3318",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3316",
+   "to": "engine-core.js:3325",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3400",
+   "to": "engine-core.js:3409",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3402",
+   "to": "engine-core.js:3411",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:637",
+   "to": "engine-core.js:638",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:724",
+   "to": "engine-core.js:725",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -67545,22 +68387,22 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:10087",
+   "to": "engine-parser.js:10108",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:10095",
+   "to": "engine-parser.js:10116",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:10125",
+   "to": "engine-parser.js:10146",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:10284",
+   "to": "engine-parser.js:10305",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -67575,17 +68417,17 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:10879",
+   "to": "engine-parser.js:10900",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:10890",
+   "to": "engine-parser.js:10911",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11501",
+   "to": "engine-parser.js:11522",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -67595,57 +68437,57 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:12599",
+   "to": "engine-parser.js:12620",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:12936",
+   "to": "engine-parser.js:12957",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:12940",
+   "to": "engine-parser.js:12961",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14339",
+   "to": "engine-parser.js:14360",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14551",
+   "to": "engine-parser.js:14572",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14568",
+   "to": "engine-parser.js:14589",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14570",
+   "to": "engine-parser.js:14591",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14640",
+   "to": "engine-parser.js:14661",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:15272",
+   "to": "engine-parser.js:15293",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:15390",
+   "to": "engine-parser.js:15411",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:15517",
+   "to": "engine-parser.js:15538",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -67655,12 +68497,12 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:15672",
+   "to": "engine-parser.js:15693",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:15682",
+   "to": "engine-parser.js:15703",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -67670,7 +68512,7 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:6020",
+   "to": "engine-parser.js:6026",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -67680,42 +68522,42 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:7642",
+   "to": "engine-parser.js:7663",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:7647",
+   "to": "engine-parser.js:7668",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:8292",
+   "to": "engine-parser.js:8313",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:8295",
+   "to": "engine-parser.js:8316",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9518",
+   "to": "engine-parser.js:9539",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9616",
+   "to": "engine-parser.js:9637",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9690",
+   "to": "engine-parser.js:9711",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9760",
+   "to": "engine-parser.js:9781",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -67930,7 +68772,7 @@
   },
   {
    "from": "affairOffered",
-   "to": "engine-parser.js:13200",
+   "to": "engine-parser.js:13221",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -67960,12 +68802,12 @@
   },
   {
    "from": "barBook",
-   "to": "engine-parser.js:5591",
+   "to": "engine-parser.js:5597",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barBook",
-   "to": "engine-parser.js:5660",
+   "to": "engine-parser.js:5666",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68000,7 +68842,7 @@
   },
   {
    "from": "barOpen",
-   "to": "engine-parser.js:4129",
+   "to": "engine-parser.js:4132",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68040,32 +68882,32 @@
   },
   {
    "from": "barPaid",
-   "to": "engine-parser.js:7028",
+   "to": "engine-parser.js:7049",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-parser.js:7084",
+   "to": "engine-parser.js:7105",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-parser.js:7106",
+   "to": "engine-parser.js:7127",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-parser.js:7126",
+   "to": "engine-parser.js:7147",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-parser.js:7143",
+   "to": "engine-parser.js:7164",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-parser.js:7163",
+   "to": "engine-parser.js:7184",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68105,12 +68947,12 @@
   },
   {
    "from": "barSold",
-   "to": "engine-core.js:1932",
+   "to": "engine-core.js:1941",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barSold",
-   "to": "engine-parser.js:13200",
+   "to": "engine-parser.js:13221",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68145,7 +68987,7 @@
   },
   {
    "from": "bertFreeBeer",
-   "to": "engine-parser.js:8864",
+   "to": "engine-parser.js:8885",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68175,7 +69017,7 @@
   },
   {
    "from": "bookGiven",
-   "to": "engine-parser.js:5591",
+   "to": "engine-parser.js:5597",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68255,7 +69097,7 @@
   },
   {
    "from": "ccibVisited",
-   "to": "engine-parser.js:9860",
+   "to": "engine-parser.js:9881",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68315,7 +69157,7 @@
   },
   {
    "from": "coversCounted",
-   "to": "engine-parser.js:14236",
+   "to": "engine-parser.js:14257",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68330,7 +69172,7 @@
   },
   {
    "from": "ctfRabbit",
-   "to": "engine-parser.js:15675",
+   "to": "engine-parser.js:15696",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68345,7 +69187,7 @@
   },
   {
    "from": "debtTruth",
-   "to": "engine-parser.js:4554",
+   "to": "engine-parser.js:4557",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68365,7 +69207,7 @@
   },
   {
    "from": "fed26",
-   "to": "engine-parser.js:8215",
+   "to": "engine-parser.js:8236",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68375,7 +69217,7 @@
   },
   {
    "from": "fiftyoneSigned",
-   "to": "engine-parser.js:8034",
+   "to": "engine-parser.js:8055",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68385,12 +69227,12 @@
   },
   {
    "from": "gotBusFare",
-   "to": "engine-parser.js:8292",
+   "to": "engine-parser.js:8313",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "greetedFon",
-   "to": "engine-parser.js:7495",
+   "to": "engine-parser.js:7516",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68415,22 +69257,22 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:11640",
+   "to": "engine-parser.js:11661",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:11699",
+   "to": "engine-parser.js:11720",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:11710",
+   "to": "engine-parser.js:11731",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:14136",
+   "to": "engine-parser.js:14157",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68450,7 +69292,7 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:5097",
+   "to": "engine-parser.js:5103",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68490,22 +69332,22 @@
   },
   {
    "from": "heardPlgHistory",
-   "to": "engine-core.js:759",
+   "to": "engine-core.js:760",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "heardPlgInside",
-   "to": "engine-core.js:758",
+   "to": "engine-core.js:759",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "heardPlgPitch",
-   "to": "engine-core.js:758",
+   "to": "engine-core.js:759",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "heardPriceStory",
-   "to": "engine-parser.js:8215",
+   "to": "engine-parser.js:8236",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68515,17 +69357,17 @@
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:10239",
+   "to": "engine-parser.js:10260",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:9568",
+   "to": "engine-parser.js:9589",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:9761",
+   "to": "engine-parser.js:9782",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68545,7 +69387,7 @@
   },
   {
    "from": "hyperUpstairs",
-   "to": "engine-core.js:3068",
+   "to": "engine-core.js:3077",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68555,7 +69397,7 @@
   },
   {
    "from": "invoicesCopied",
-   "to": "engine-parser.js:5612",
+   "to": "engine-parser.js:5618",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68620,7 +69462,7 @@
   },
   {
    "from": "kidHandled",
-   "to": "engine-parser.js:9860",
+   "to": "engine-parser.js:9881",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68630,7 +69472,7 @@
   },
   {
    "from": "kidPath",
-   "to": "engine-parser.js:9860",
+   "to": "engine-parser.js:9881",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68650,7 +69492,7 @@
   },
   {
    "from": "knowMot",
-   "to": "engine-parser.js:9089",
+   "to": "engine-parser.js:9110",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68680,7 +69522,7 @@
   },
   {
    "from": "knowWasHere",
-   "to": "engine-parser.js:4271",
+   "to": "engine-parser.js:4274",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68700,12 +69542,12 @@
   },
   {
    "from": "lakeFishEaten",
-   "to": "engine-parser.js:8821",
+   "to": "engine-parser.js:8842",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lakeFishFree",
-   "to": "engine-parser.js:8821",
+   "to": "engine-parser.js:8842",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68730,12 +69572,12 @@
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:10284",
+   "to": "engine-parser.js:10305",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:10311",
+   "to": "engine-parser.js:10332",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68745,32 +69587,32 @@
   },
   {
    "from": "motBooted",
-   "to": "engine-parser.js:15738",
+   "to": "engine-parser.js:15759",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motBootsTold",
-   "to": "engine-parser.js:15746",
+   "to": "engine-parser.js:15767",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:13127",
+   "to": "engine-parser.js:13148",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:15222",
+   "to": "engine-parser.js:15243",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:15746",
+   "to": "engine-parser.js:15767",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:15777",
+   "to": "engine-parser.js:15798",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68780,7 +69622,7 @@
   },
   {
    "from": "nokFare",
-   "to": "engine-parser.js:8295",
+   "to": "engine-parser.js:8316",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68800,7 +69642,7 @@
   },
   {
    "from": "orchidReported",
-   "to": "engine-core.js:1931",
+   "to": "engine-core.js:1940",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68810,7 +69652,7 @@
   },
   {
    "from": "orchidSent",
-   "to": "engine-core.js:1931",
+   "to": "engine-core.js:1940",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68820,7 +69662,7 @@
   },
   {
    "from": "orchidVouched",
-   "to": "engine-core.js:1931",
+   "to": "engine-core.js:1940",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68835,7 +69677,7 @@
   },
   {
    "from": "owlBox15",
-   "to": "engine-parser.js:15674",
+   "to": "engine-parser.js:15695",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68845,7 +69687,7 @@
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-parser.js:15180",
+   "to": "engine-parser.js:15201",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68870,7 +69712,7 @@
   },
   {
    "from": "partnerCandy",
-   "to": "engine-parser.js:7120",
+   "to": "engine-parser.js:7141",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68890,7 +69732,7 @@
   },
   {
    "from": "partnerTan",
-   "to": "engine-core.js:927",
+   "to": "engine-core.js:928",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68900,7 +69742,7 @@
   },
   {
    "from": "partnerTan",
-   "to": "engine-parser.js:7119",
+   "to": "engine-parser.js:7140",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68960,7 +69802,7 @@
   },
   {
    "from": "pinPart9",
-   "to": "engine-parser.js:9092",
+   "to": "engine-parser.js:9113",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -68975,12 +69817,12 @@
   },
   {
    "from": "plgFlipTried",
-   "to": "engine-core.js:757",
+   "to": "engine-core.js:758",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "plgResolved",
-   "to": "engine-core.js:757",
+   "to": "engine-core.js:758",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69000,7 +69842,7 @@
   },
   {
    "from": "priewRevealed",
-   "to": "engine-parser.js:10311",
+   "to": "engine-parser.js:10332",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69040,12 +69882,12 @@
   },
   {
    "from": "rabbitData",
-   "to": "engine-parser.js:12931",
+   "to": "engine-parser.js:12952",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "rabbitData",
-   "to": "engine-parser.js:4169",
+   "to": "engine-parser.js:4172",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69070,12 +69912,12 @@
   },
   {
    "from": "rabbitPath",
-   "to": "engine-parser.js:4163",
+   "to": "engine-parser.js:4166",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-parser.js:4166",
+   "to": "engine-parser.js:4169",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69105,7 +69947,7 @@
   },
   {
    "from": "sabaiSabai",
-   "to": "engine-core.js:573",
+   "to": "engine-core.js:574",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69130,7 +69972,7 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-core.js:2420",
+   "to": "engine-core.js:2429",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69190,22 +70032,22 @@
   },
   {
    "from": "tanCoffee",
-   "to": "engine-parser.js:8600",
+   "to": "engine-parser.js:8621",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "tanFavourDone",
-   "to": "engine-parser.js:7064",
+   "to": "engine-parser.js:7085",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "tanFavourDone",
-   "to": "engine-parser.js:7066",
+   "to": "engine-parser.js:7087",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "tanFavourRefused",
-   "to": "engine-parser.js:7064",
+   "to": "engine-parser.js:7085",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69260,7 +70102,7 @@
   },
   {
    "from": "waiedOy",
-   "to": "engine-parser.js:7485",
+   "to": "engine-parser.js:7506",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69270,7 +70112,7 @@
   },
   {
    "from": "waiedPloy",
-   "to": "engine-parser.js:7490",
+   "to": "engine-parser.js:7511",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70515,7 +71357,7 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:15433",
+   "to": "engine-parser.js:15454",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70565,7 +71407,7 @@
   },
   {
    "from": "barBook",
-   "to": "engine-parser.js:5665",
+   "to": "engine-parser.js:5671",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70615,7 +71457,7 @@
   },
   {
    "from": "bertFreeBeer",
-   "to": "engine-parser.js:8865",
+   "to": "engine-parser.js:8886",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70630,7 +71472,7 @@
   },
   {
    "from": "bookGiven",
-   "to": "engine-parser.js:8062",
+   "to": "engine-parser.js:8083",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70715,7 +71557,7 @@
   },
   {
    "from": "craneDelivered",
-   "to": "engine-parser.js:8076",
+   "to": "engine-parser.js:8097",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70740,7 +71582,7 @@
   },
   {
    "from": "fed26",
-   "to": "engine-parser.js:8217",
+   "to": "engine-parser.js:8238",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70750,17 +71592,17 @@
   },
   {
    "from": "gotBusFare",
-   "to": "engine-parser.js:8293",
+   "to": "engine-parser.js:8314",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "gotBusFare",
-   "to": "engine-parser.js:8310",
+   "to": "engine-parser.js:8331",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "greetedFon",
-   "to": "engine-parser.js:7496",
+   "to": "engine-parser.js:7517",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70800,7 +71642,7 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:15432",
+   "to": "engine-parser.js:15453",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70820,12 +71662,12 @@
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:8042",
+   "to": "engine-parser.js:8063",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:9093",
+   "to": "engine-parser.js:9114",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70835,7 +71677,7 @@
   },
   {
    "from": "invoicesBurned",
-   "to": "engine-parser.js:5616",
+   "to": "engine-parser.js:5622",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70870,7 +71712,7 @@
   },
   {
    "from": "keysDelivered",
-   "to": "engine-parser.js:8101",
+   "to": "engine-parser.js:8122",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70900,17 +71742,17 @@
   },
   {
    "from": "knowMot",
-   "to": "engine-parser.js:9090",
+   "to": "engine-parser.js:9111",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "knowWasHere",
-   "to": "engine-parser.js:4272",
+   "to": "engine-parser.js:4275",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "knowWasHere",
-   "to": "engine-parser.js:9090",
+   "to": "engine-parser.js:9111",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70920,7 +71762,7 @@
   },
   {
    "from": "lakeFishEaten",
-   "to": "engine-parser.js:8822",
+   "to": "engine-parser.js:8843",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70930,27 +71772,27 @@
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:10286",
+   "to": "engine-parser.js:10307",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motBooted",
-   "to": "engine-parser.js:15758",
+   "to": "engine-parser.js:15779",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motBootsTold",
-   "to": "engine-parser.js:15793",
+   "to": "engine-parser.js:15814",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:15789",
+   "to": "engine-parser.js:15810",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "nokFare",
-   "to": "engine-parser.js:8310",
+   "to": "engine-parser.js:8331",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -70980,7 +71822,7 @@
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-parser.js:15181",
+   "to": "engine-parser.js:15202",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71010,7 +71852,7 @@
   },
   {
    "from": "priewRevealed",
-   "to": "engine-parser.js:10314",
+   "to": "engine-parser.js:10335",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71065,7 +71907,7 @@
   },
   {
    "from": "recceDone",
-   "to": "engine-core.js:2807",
+   "to": "engine-core.js:2816",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71090,7 +71932,7 @@
   },
   {
    "from": "sangsomDelivered",
-   "to": "engine-parser.js:8125",
+   "to": "engine-parser.js:8146",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71110,7 +71952,7 @@
   },
   {
    "from": "scoutSent",
-   "to": "engine-parser.js:8113",
+   "to": "engine-parser.js:8134",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71120,7 +71962,7 @@
   },
   {
    "from": "simDitched",
-   "to": "engine-parser.js:5643",
+   "to": "engine-parser.js:5649",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71135,7 +71977,7 @@
   },
   {
    "from": "somTamDelivered",
-   "to": "engine-parser.js:8094",
+   "to": "engine-parser.js:8115",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71150,7 +71992,7 @@
   },
   {
    "from": "tanCoffee",
-   "to": "engine-parser.js:8600",
+   "to": "engine-parser.js:8621",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71190,7 +72032,7 @@
   },
   {
    "from": "tiffinDelivered",
-   "to": "engine-parser.js:8085",
+   "to": "engine-parser.js:8106",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -71225,12 +72067,12 @@
   },
   {
    "from": "waiedOy",
-   "to": "engine-parser.js:7486",
+   "to": "engine-parser.js:7507",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "waiedPloy",
-   "to": "engine-parser.js:7491",
+   "to": "engine-parser.js:7512",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -72691,57 +73533,57 @@
     "world.js:9574"
    ],
    "readByEngine": [
-    "engine-core.js:1291",
-    "engine-core.js:1375",
-    "engine-core.js:1469",
-    "engine-core.js:3010",
-    "engine-core.js:3309",
-    "engine-core.js:3316",
-    "engine-core.js:3400",
-    "engine-core.js:3402",
-    "engine-core.js:637",
-    "engine-core.js:724",
+    "engine-core.js:1292",
+    "engine-core.js:1384",
+    "engine-core.js:1478",
+    "engine-core.js:3019",
+    "engine-core.js:3318",
+    "engine-core.js:3325",
+    "engine-core.js:3409",
+    "engine-core.js:3411",
+    "engine-core.js:638",
+    "engine-core.js:725",
     "engine-encounters.js:174",
     "engine-encounters.js:322",
     "engine-encounters.js:329",
     "engine-encounters.js:840",
     "engine-encounters.js:908",
     "engine-encounters.js:966",
-    "engine-parser.js:10087",
-    "engine-parser.js:10095",
-    "engine-parser.js:10125",
-    "engine-parser.js:10284",
+    "engine-parser.js:10108",
+    "engine-parser.js:10116",
+    "engine-parser.js:10146",
+    "engine-parser.js:10305",
     "engine-parser.js:1033",
     "engine-parser.js:1044",
-    "engine-parser.js:10879",
-    "engine-parser.js:10890",
-    "engine-parser.js:11501",
+    "engine-parser.js:10900",
+    "engine-parser.js:10911",
+    "engine-parser.js:11522",
     "engine-parser.js:1192",
-    "engine-parser.js:12599",
-    "engine-parser.js:12936",
-    "engine-parser.js:12940",
-    "engine-parser.js:14339",
-    "engine-parser.js:14551",
-    "engine-parser.js:14568",
-    "engine-parser.js:14570",
-    "engine-parser.js:14640",
-    "engine-parser.js:15272",
-    "engine-parser.js:15390",
-    "engine-parser.js:15517",
+    "engine-parser.js:12620",
+    "engine-parser.js:12957",
+    "engine-parser.js:12961",
+    "engine-parser.js:14360",
+    "engine-parser.js:14572",
+    "engine-parser.js:14589",
+    "engine-parser.js:14591",
+    "engine-parser.js:14661",
+    "engine-parser.js:15293",
+    "engine-parser.js:15411",
+    "engine-parser.js:15538",
     "engine-parser.js:1560",
-    "engine-parser.js:15672",
-    "engine-parser.js:15682",
+    "engine-parser.js:15693",
+    "engine-parser.js:15703",
     "engine-parser.js:1746",
-    "engine-parser.js:6020",
+    "engine-parser.js:6026",
     "engine-parser.js:616",
-    "engine-parser.js:7642",
-    "engine-parser.js:7647",
-    "engine-parser.js:8292",
-    "engine-parser.js:8295",
-    "engine-parser.js:9518",
-    "engine-parser.js:9616",
-    "engine-parser.js:9690",
-    "engine-parser.js:9760",
+    "engine-parser.js:7663",
+    "engine-parser.js:7668",
+    "engine-parser.js:8313",
+    "engine-parser.js:8316",
+    "engine-parser.js:9539",
+    "engine-parser.js:9637",
+    "engine-parser.js:9711",
+    "engine-parser.js:9781",
     "engine-play.js:205",
     "engine-play.js:215",
     "engine-play.js:216",
@@ -72814,7 +73656,7 @@
     "tan#44"
    ],
    "setByEngine": [
-    "engine-parser.js:15433",
+    "engine-parser.js:15454",
     "engine-play.js:5897",
     "engine-play.js:6015",
     "engine-systems.js:11625",
@@ -72830,7 +73672,7 @@
   {
    "name": "affairOffered",
    "readByEngine": [
-    "engine-parser.js:13200",
+    "engine-parser.js:13221",
     "engine-systems.js:8694"
    ],
    "setByEngine": [
@@ -72872,13 +73714,13 @@
     "world.js:12004"
    ],
    "readByEngine": [
-    "engine-parser.js:5591",
-    "engine-parser.js:5660",
+    "engine-parser.js:5597",
+    "engine-parser.js:5666",
     "engine-systems.js:9123",
     "engine-systems.js:9753"
    ],
    "setByEngine": [
-    "engine-parser.js:5665"
+    "engine-parser.js:5671"
    ]
   },
   {
@@ -72935,7 +73777,7 @@
     "world.js:13521"
    ],
    "readByEngine": [
-    "engine-parser.js:4129",
+    "engine-parser.js:4132",
     "engine-play.js:5484",
     "engine-play.js:5491",
     "engine-systems.js:7141",
@@ -72972,12 +73814,12 @@
    ],
    "readByEngine": [
     "engine-parser.js:2653",
-    "engine-parser.js:7028",
-    "engine-parser.js:7084",
-    "engine-parser.js:7106",
-    "engine-parser.js:7126",
-    "engine-parser.js:7143",
-    "engine-parser.js:7163",
+    "engine-parser.js:7049",
+    "engine-parser.js:7105",
+    "engine-parser.js:7127",
+    "engine-parser.js:7147",
+    "engine-parser.js:7164",
+    "engine-parser.js:7184",
     "engine-systems.js:8907",
     "engine-systems.js:9722",
     "engine-systems.js:9727"
@@ -73045,8 +73887,8 @@
     "world.js:12953"
    ],
    "readByEngine": [
-    "engine-core.js:1932",
-    "engine-parser.js:13200",
+    "engine-core.js:1941",
+    "engine-parser.js:13221",
     "engine-play.js:3760",
     "engine-systems.js:7424",
     "engine-systems.js:8689",
@@ -73106,13 +73948,13 @@
   {
    "name": "bertFreeBeer",
    "readByEngine": [
-    "engine-parser.js:8864"
+    "engine-parser.js:8885"
    ],
    "setByDialogue": [
     "bert#33"
    ],
    "setByEngine": [
-    "engine-parser.js:8865"
+    "engine-parser.js:8886"
    ]
   },
   {
@@ -73142,13 +73984,13 @@
     "world.js:12004"
    ],
    "readByEngine": [
-    "engine-parser.js:5591"
+    "engine-parser.js:5597"
    ],
    "requiredBy": [
     "fast_eddy#13"
    ],
    "setByEngine": [
-    "engine-parser.js:8062"
+    "engine-parser.js:8083"
    ]
   },
   {
@@ -73288,7 +74130,7 @@
     "world.js:9710"
    ],
    "readByEngine": [
-    "engine-parser.js:9860",
+    "engine-parser.js:9881",
     "engine-systems.js:12419",
     "engine-systems.js:12499",
     "engine-systems.js:12526",
@@ -73344,7 +74186,7 @@
   {
    "name": "coversCounted",
    "readByEngine": [
-    "engine-parser.js:14236",
+    "engine-parser.js:14257",
     "engine-systems.js:3684"
    ],
    "requiredBy": [
@@ -73409,13 +74251,13 @@
     "nont#23"
    ],
    "setByEngine": [
-    "engine-parser.js:8076"
+    "engine-parser.js:8097"
    ]
   },
   {
    "name": "ctfRabbit",
    "readByEngine": [
-    "engine-parser.js:15675",
+    "engine-parser.js:15696",
     "engine-systems.js:11245"
    ],
    "setByEngine": [
@@ -73462,7 +74304,7 @@
     "world.js:5744"
    ],
    "readByEngine": [
-    "engine-parser.js:4554"
+    "engine-parser.js:4557"
    ],
    "setByDialogue": [
     "pim#0"
@@ -73537,11 +74379,11 @@
   {
    "name": "fed26",
    "readByEngine": [
-    "engine-parser.js:8215",
+    "engine-parser.js:8236",
     "engine-play.js:3586"
    ],
    "setByEngine": [
-    "engine-parser.js:8217"
+    "engine-parser.js:8238"
    ]
   },
   {
@@ -73575,7 +74417,7 @@
    ],
    "name": "fiftyoneSigned",
    "readByEngine": [
-    "engine-parser.js:8034",
+    "engine-parser.js:8055",
     "engine-systems.js:3657"
    ],
    "requiredBy": [
@@ -73644,20 +74486,20 @@
   {
    "name": "gotBusFare",
    "readByEngine": [
-    "engine-parser.js:8292"
+    "engine-parser.js:8313"
    ],
    "requiredBy": [
     "nok#0"
    ],
    "setByEngine": [
-    "engine-parser.js:8293",
-    "engine-parser.js:8310"
+    "engine-parser.js:8314",
+    "engine-parser.js:8331"
    ]
   },
   {
    "name": "greetedFon",
    "readByEngine": [
-    "engine-parser.js:7495",
+    "engine-parser.js:7516",
     "engine-systems.js:11637"
    ],
    "requiredBy": [
@@ -73665,7 +74507,7 @@
     "fon#5"
    ],
    "setByEngine": [
-    "engine-parser.js:7496"
+    "engine-parser.js:7517"
    ]
   },
   {
@@ -73803,9 +74645,7 @@
     "fasai#6",
     "fern#5",
     "fern#6",
-    "firecracker_bar_napa#5",
     "firecracker_bar_napa#6",
-    "firecracker_bar_pang#4",
     "firecracker_bar_pang#5",
     "gaem#5",
     "gaem#6",
@@ -73831,21 +74671,15 @@
     "guitar#6",
     "hong#13",
     "hong#14",
-    "hot_pepper_chom#4",
     "hot_pepper_chom#5",
-    "hot_pepper_gina#5",
     "hot_pepper_gina#6",
-    "hula_hula_min#5",
     "hula_hula_min#6",
-    "hula_hula_noon#4",
     "hula_hula_noon#5",
     "ice#5",
     "ice#6",
     "ing#5",
     "ing#6",
-    "jade_lounge_jinda#5",
     "jade_lounge_jinda#6",
-    "jade_lounge_jum#4",
     "jade_lounge_jum#5",
     "jah#4",
     "jah#5",
@@ -73907,13 +74741,11 @@
     "kwang#6",
     "kwanjai#5",
     "kwanjai#6",
-    "ladybird_bar_ratsamee#5",
     "ladybird_bar_ratsamee#6",
     "lamai#5",
     "lamai#6",
     "lin#5",
     "lin#6",
-    "lollipop_bar_khing#5",
     "lollipop_bar_khing#6",
     "lukkade#5",
     "lukkade#6",
@@ -74010,9 +74842,7 @@
     "pao#6",
     "pat#5",
     "pat#6",
-    "peach_lounge_farida#4",
     "peach_lounge_farida#5",
-    "peach_lounge_noot#5",
     "peach_lounge_noot#6",
     "pear#5",
     "pear#6",
@@ -74080,9 +74910,7 @@
     "sudjai#5",
     "sudjai#6",
     "sunee#12",
-    "sweet_tamarind_tukta#4",
     "sweet_tamarind_tukta#5",
-    "sweet_tamarind_view#5",
     "sweet_tamarind_view#6",
     "taan#5",
     "taan#6",
@@ -74163,14 +74991,14 @@
    "readByEngine": [
     "engine-parser.js:1005",
     "engine-parser.js:1033",
-    "engine-parser.js:11640",
-    "engine-parser.js:11699",
-    "engine-parser.js:11710",
-    "engine-parser.js:14136",
+    "engine-parser.js:11661",
+    "engine-parser.js:11720",
+    "engine-parser.js:11731",
+    "engine-parser.js:14157",
     "engine-parser.js:1560",
     "engine-parser.js:1754",
     "engine-parser.js:2281",
-    "engine-parser.js:5097",
+    "engine-parser.js:5103",
     "engine-play.js:5574",
     "engine-systems.js:11624",
     "engine-systems.js:1400",
@@ -74189,7 +75017,7 @@
     "oy#1"
    ],
    "setByEngine": [
-    "engine-parser.js:15432",
+    "engine-parser.js:15453",
     "engine-parser.js:1759",
     "engine-play.js:5898",
     "engine-play.js:6016"
@@ -74228,7 +75056,7 @@
     "world.js:5631"
    ],
    "readByEngine": [
-    "engine-core.js:759"
+    "engine-core.js:760"
    ],
    "requiredBy": [
     "bert#40",
@@ -74247,7 +75075,7 @@
     "world.js:5631"
    ],
    "readByEngine": [
-    "engine-core.js:758"
+    "engine-core.js:759"
    ],
    "requiredBy": [
     "bert#40",
@@ -74266,7 +75094,7 @@
     "world.js:8971"
    ],
    "readByEngine": [
-    "engine-core.js:758"
+    "engine-core.js:759"
    ],
    "reqFlagOf": [
     "plg_flip"
@@ -74288,7 +75116,7 @@
    ],
    "name": "heardPriceStory",
    "readByEngine": [
-    "engine-parser.js:8215",
+    "engine-parser.js:8236",
     "engine-play.js:3584"
    ],
    "requiredBy": [
@@ -74333,9 +75161,9 @@
     "world.js:5735"
    ],
    "readByEngine": [
-    "engine-parser.js:10239",
-    "engine-parser.js:9568",
-    "engine-parser.js:9761",
+    "engine-parser.js:10260",
+    "engine-parser.js:9589",
+    "engine-parser.js:9782",
     "engine-play.js:452",
     "engine-systems.js:11635"
    ],
@@ -74352,8 +75180,8 @@
     "pim#1"
    ],
    "setByEngine": [
-    "engine-parser.js:8042",
-    "engine-parser.js:9093"
+    "engine-parser.js:8063",
+    "engine-parser.js:9114"
    ]
   },
   {
@@ -74368,7 +75196,7 @@
   {
    "name": "hyperUpstairs",
    "readByEngine": [
-    "engine-core.js:3068",
+    "engine-core.js:3077",
     "engine-systems.js:1804"
    ],
    "setByDialogue": [
@@ -74395,13 +75223,13 @@
   {
    "name": "invoicesBurned",
    "setByEngine": [
-    "engine-parser.js:5616"
+    "engine-parser.js:5622"
    ]
   },
   {
    "name": "invoicesCopied",
    "readByEngine": [
-    "engine-parser.js:5612",
+    "engine-parser.js:5618",
     "engine-play.js:6108",
     "engine-systems.js:12464"
    ],
@@ -74472,7 +75300,7 @@
     "wimon#5"
    ],
    "setByEngine": [
-    "engine-parser.js:8101"
+    "engine-parser.js:8122"
    ]
   },
   {
@@ -74493,7 +75321,7 @@
     "world.js:12768"
    ],
    "readByEngine": [
-    "engine-parser.js:9860"
+    "engine-parser.js:9881"
    ],
    "setByEngine": [
     "engine-systems.js:12762",
@@ -74521,7 +75349,7 @@
     "world.js:9699"
    ],
    "readByEngine": [
-    "engine-parser.js:9860",
+    "engine-parser.js:9881",
     "engine-systems.js:12414",
     "engine-systems.js:3775"
    ],
@@ -74574,7 +75402,7 @@
    ],
    "name": "knowMot",
    "readByEngine": [
-    "engine-parser.js:9089",
+    "engine-parser.js:9110",
     "engine-systems.js:2803",
     "engine-systems.js:2895",
     "engine-systems.js:4340"
@@ -74593,7 +75421,7 @@
     "candy#12"
    ],
    "setByEngine": [
-    "engine-parser.js:9090"
+    "engine-parser.js:9111"
    ]
   },
   {
@@ -74628,7 +75456,7 @@
    ],
    "name": "knowWasHere",
    "readByEngine": [
-    "engine-parser.js:4271",
+    "engine-parser.js:4274",
     "engine-systems.js:2802",
     "engine-systems.js:2893"
    ],
@@ -74638,8 +75466,8 @@
     "candy#20"
    ],
    "setByEngine": [
-    "engine-parser.js:4272",
-    "engine-parser.js:9090"
+    "engine-parser.js:4275",
+    "engine-parser.js:9111"
    ]
   },
   {
@@ -74689,16 +75517,16 @@
   {
    "name": "lakeFishEaten",
    "readByEngine": [
-    "engine-parser.js:8821"
+    "engine-parser.js:8842"
    ],
    "setByEngine": [
-    "engine-parser.js:8822"
+    "engine-parser.js:8843"
    ]
   },
   {
    "name": "lakeFishFree",
    "readByEngine": [
-    "engine-parser.js:8821"
+    "engine-parser.js:8842"
    ],
    "setByDialogue": [
     "duangjai#9"
@@ -74719,11 +75547,11 @@
   {
    "name": "metPriew",
    "readByEngine": [
-    "engine-parser.js:10284",
-    "engine-parser.js:10311"
+    "engine-parser.js:10305",
+    "engine-parser.js:10332"
    ],
    "setByEngine": [
-    "engine-parser.js:10286"
+    "engine-parser.js:10307"
    ]
   },
   {
@@ -74753,41 +75581,41 @@
    ],
    "name": "motBooted",
    "readByEngine": [
-    "engine-parser.js:15738"
+    "engine-parser.js:15759"
    ],
    "requiredBy": [
     "mot#3"
    ],
    "setByEngine": [
-    "engine-parser.js:15758"
+    "engine-parser.js:15779"
    ]
   },
   {
    "name": "motBootsTold",
    "readByEngine": [
-    "engine-parser.js:15746"
+    "engine-parser.js:15767"
    ],
    "setByDialogue": [
     "mot#2"
    ],
    "setByEngine": [
-    "engine-parser.js:15793"
+    "engine-parser.js:15814"
    ]
   },
   {
    "name": "motFed",
    "readByEngine": [
-    "engine-parser.js:13127",
-    "engine-parser.js:15222",
-    "engine-parser.js:15746",
-    "engine-parser.js:15777",
+    "engine-parser.js:13148",
+    "engine-parser.js:15243",
+    "engine-parser.js:15767",
+    "engine-parser.js:15798",
     "engine-systems.js:634"
    ],
    "requiredBy": [
     "mot#2"
    ],
    "setByEngine": [
-    "engine-parser.js:15789"
+    "engine-parser.js:15810"
    ]
   },
   {
@@ -74817,10 +75645,10 @@
   {
    "name": "nokFare",
    "readByEngine": [
-    "engine-parser.js:8295"
+    "engine-parser.js:8316"
    ],
    "setByEngine": [
-    "engine-parser.js:8310"
+    "engine-parser.js:8331"
    ]
   },
   {
@@ -74899,7 +75727,7 @@
     "world.js:9847"
    ],
    "readByEngine": [
-    "engine-core.js:1931",
+    "engine-core.js:1940",
     "engine-play.js:3060"
    ],
    "setByDialogue": [
@@ -74909,7 +75737,7 @@
   {
    "name": "orchidSent",
    "readByEngine": [
-    "engine-core.js:1931",
+    "engine-core.js:1940",
     "engine-play.js:3060"
    ],
    "setByDialogue": [
@@ -74925,7 +75753,7 @@
    ],
    "name": "orchidVouched",
    "readByEngine": [
-    "engine-core.js:1931",
+    "engine-core.js:1940",
     "engine-play.js:3060"
    ],
    "requiredBy": [
@@ -74954,7 +75782,7 @@
   {
    "name": "owlBox15",
    "readByEngine": [
-    "engine-parser.js:15674",
+    "engine-parser.js:15695",
     "engine-systems.js:11126"
    ],
    "setByEngine": [
@@ -74964,12 +75792,12 @@
   {
    "name": "ownPhoneUsed",
    "readByEngine": [
-    "engine-parser.js:15180",
+    "engine-parser.js:15201",
     "engine-systems.js:12401",
     "engine-systems.js:12457"
    ],
    "setByEngine": [
-    "engine-parser.js:15181"
+    "engine-parser.js:15202"
    ]
   },
   {
@@ -75004,7 +75832,7 @@
     "world.js:13521"
    ],
    "readByEngine": [
-    "engine-parser.js:7120",
+    "engine-parser.js:7141",
     "engine-systems.js:3093",
     "engine-systems.js:7588",
     "engine-systems.js:9806"
@@ -75026,9 +75854,9 @@
     "world.js:12979"
    ],
    "readByEngine": [
-    "engine-core.js:927",
+    "engine-core.js:928",
     "engine-parser.js:2632",
-    "engine-parser.js:7119",
+    "engine-parser.js:7140",
     "engine-systems.js:3094",
     "engine-systems.js:4436",
     "engine-systems.js:7141",
@@ -75101,7 +75929,7 @@
    ],
    "name": "pinPart9",
    "readByEngine": [
-    "engine-parser.js:9092",
+    "engine-parser.js:9113",
     "engine-systems.js:11644",
     "engine-systems.js:2807"
    ],
@@ -75126,7 +75954,7 @@
     "world.js:8594"
    ],
    "readByEngine": [
-    "engine-core.js:757"
+    "engine-core.js:758"
    ],
    "requiredBy": [
     "bert#40",
@@ -75152,7 +75980,7 @@
     "world.js:8594"
    ],
    "readByEngine": [
-    "engine-core.js:757",
+    "engine-core.js:758",
     "engine-play.js:6066"
    ],
    "requiredBy": [
@@ -75241,13 +76069,13 @@
   {
    "name": "priewRevealed",
    "readByEngine": [
-    "engine-parser.js:10311",
+    "engine-parser.js:10332",
     "engine-systems.js:4196",
     "engine-systems.js:4652",
     "engine-systems.js:5522"
    ],
    "setByEngine": [
-    "engine-parser.js:10314"
+    "engine-parser.js:10335"
    ]
   },
   {
@@ -75311,8 +76139,8 @@
    ],
    "readByEngine": [
     "engine-parser.js:1238",
-    "engine-parser.js:12931",
-    "engine-parser.js:4169",
+    "engine-parser.js:12952",
+    "engine-parser.js:4172",
     "engine-parser.js:918",
     "engine-parser.js:919",
     "engine-systems.js:12419",
@@ -75342,8 +76170,8 @@
     "world.js:12022"
    ],
    "readByEngine": [
-    "engine-parser.js:4163",
     "engine-parser.js:4166",
+    "engine-parser.js:4169",
     "engine-parser.js:918"
    ],
    "requiredBy": [
@@ -75374,7 +76202,7 @@
    ],
    "name": "recceDone",
    "setByEngine": [
-    "engine-core.js:2807"
+    "engine-core.js:2816"
    ]
   },
   {
@@ -75431,7 +76259,7 @@
   {
    "name": "sabaiSabai",
    "readByEngine": [
-    "engine-core.js:573",
+    "engine-core.js:574",
     "engine-play.js:4240",
     "engine-play.js:5896"
    ],
@@ -75445,7 +76273,7 @@
    ],
    "name": "sangsomDelivered",
    "setByEngine": [
-    "engine-parser.js:8125"
+    "engine-parser.js:8146"
    ]
   },
   {
@@ -75481,7 +76309,7 @@
     "mala#0"
    ],
    "setByEngine": [
-    "engine-parser.js:8113"
+    "engine-parser.js:8134"
    ]
   },
   {
@@ -75499,7 +76327,7 @@
    ],
    "name": "shamrockVisited",
    "readByEngine": [
-    "engine-core.js:2420",
+    "engine-core.js:2429",
     "engine-play.js:5766",
     "engine-systems.js:10395"
    ],
@@ -75513,7 +76341,7 @@
   {
    "name": "simDitched",
    "setByEngine": [
-    "engine-parser.js:5643"
+    "engine-parser.js:5649"
    ]
   },
   {
@@ -75570,7 +76398,7 @@
     "ploy#0"
    ],
    "setByEngine": [
-    "engine-parser.js:8094"
+    "engine-parser.js:8115"
    ]
   },
   {
@@ -75601,14 +76429,14 @@
    ],
    "name": "tanCoffee",
    "readByEngine": [
-    "engine-parser.js:8600"
+    "engine-parser.js:8621"
    ],
    "requiredBy": [
     "tan#39",
     "tan#40"
    ],
    "setByEngine": [
-    "engine-parser.js:8600"
+    "engine-parser.js:8621"
    ]
   },
   {
@@ -75617,8 +76445,8 @@
     "world.js:12965"
    ],
    "readByEngine": [
-    "engine-parser.js:7064",
-    "engine-parser.js:7066"
+    "engine-parser.js:7085",
+    "engine-parser.js:7087"
    ],
    "requiredBy": [
     "bert#6",
@@ -75635,7 +76463,7 @@
     "world.js:12965"
    ],
    "readByEngine": [
-    "engine-parser.js:7064"
+    "engine-parser.js:7085"
    ],
    "requiredBy": [
     "tan#9"
@@ -75708,7 +76536,7 @@
     "nont#24"
    ],
    "setByEngine": [
-    "engine-parser.js:8085"
+    "engine-parser.js:8106"
    ]
   },
   {
@@ -75813,7 +76641,7 @@
   {
    "name": "waiedOy",
    "readByEngine": [
-    "engine-parser.js:7485",
+    "engine-parser.js:7506",
     "engine-systems.js:11638"
    ],
    "requiredBy": [
@@ -75823,19 +76651,19 @@
     "oy#14"
    ],
    "setByEngine": [
-    "engine-parser.js:7486"
+    "engine-parser.js:7507"
    ]
   },
   {
    "name": "waiedPloy",
    "readByEngine": [
-    "engine-parser.js:7490"
+    "engine-parser.js:7511"
    ],
    "requiredBy": [
     "ploy#1"
    ],
    "setByEngine": [
-    "engine-parser.js:7491"
+    "engine-parser.js:7512"
    ]
   },
   {
@@ -77289,7 +78117,7 @@
    "th": "น้ำตาล"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 10,
    "filler": true,
    "id": "firecracker_bar_napa",
    "name": "Napa",
@@ -77298,7 +78126,7 @@
    "th": "นภา"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 11,
    "filler": true,
    "id": "firecracker_bar_pang",
    "name": "Pang",
@@ -77515,7 +78343,7 @@
    "th": "ห่อง"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 10,
    "filler": true,
    "id": "hot_pepper_chom",
    "name": "Chom",
@@ -77524,7 +78352,7 @@
    "th": "ชม"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 10,
    "filler": true,
    "id": "hot_pepper_gina",
    "name": "Gina",
@@ -77574,7 +78402,7 @@
    "th": "ไบรท์"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 10,
    "filler": true,
    "id": "hula_hula_min",
    "name": "Min",
@@ -77583,7 +78411,7 @@
    "th": "มิน"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 11,
    "filler": true,
    "id": "hula_hula_noon",
    "name": "Noon",
@@ -77634,7 +78462,7 @@
    "th": "การ์ตูน"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 10,
    "filler": true,
    "id": "jade_lounge_jinda",
    "name": "Jinda",
@@ -77643,7 +78471,7 @@
    "th": "จินดา"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 11,
    "filler": true,
    "id": "jade_lounge_jum",
    "name": "Jum",
@@ -77826,7 +78654,7 @@
    "title": "a broad-shouldered young Aussie in gym gear"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 8,
    "id": "joy",
    "name": "Joy",
    "personality": "joker",
@@ -77949,7 +78777,7 @@
    "th": "เก่ง"
   },
   {
-   "dialogueCount": 15,
+   "dialogueCount": 16,
    "id": "kesinee",
    "name": "Kesinee",
    "role": "mamasan",
@@ -78108,7 +78936,7 @@
    "th": "เป้า"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 11,
    "filler": true,
    "id": "ladybird_bar_ratsamee",
    "name": "Ratsamee",
@@ -78181,7 +79009,7 @@
    "th": "เฟิร์น"
   },
   {
-   "dialogueCount": 9,
+   "dialogueCount": 12,
    "filler": true,
    "id": "lollipop_bar_khing",
    "name": "Khing",
@@ -78236,7 +79064,7 @@
    "th": "มาลา"
   },
   {
-   "dialogueCount": 10,
+   "dialogueCount": 11,
    "id": "malai",
    "name": "Malai",
    "role": "mamasan",
@@ -78572,7 +79400,7 @@
    "th": "เนียร์"
   },
   {
-   "dialogueCount": 9,
+   "dialogueCount": 10,
    "id": "nee",
    "name": "Nee",
    "role": "mamasan",
@@ -78953,7 +79781,7 @@
    "th": "อ๊อฟ"
   },
   {
-   "dialogueCount": 6,
+   "dialogueCount": 10,
    "filler": true,
    "id": "peach_lounge_farida",
    "name": "Farida",
@@ -78978,7 +79806,7 @@
    "th": "มิ้นท์"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 11,
    "filler": true,
    "id": "peach_lounge_noot",
    "name": "Noot",
@@ -79045,7 +79873,7 @@
    "title": "a careful man at the dark end of the bar who sits facing the door"
   },
   {
-   "dialogueCount": 10,
+   "dialogueCount": 11,
    "id": "peung",
    "name": "Peung",
    "role": "mamasan",
@@ -79388,7 +80216,7 @@
    "th": "รุ้ง"
   },
   {
-   "dialogueCount": 8,
+   "dialogueCount": 9,
    "id": "saeng",
    "name": "Saeng",
    "role": "mamasan",
@@ -79638,7 +80466,7 @@
    "th": "เปิ้ล"
   },
   {
-   "dialogueCount": 7,
+   "dialogueCount": 11,
    "filler": true,
    "id": "sweet_tamarind_tukta",
    "name": "Tukta",
@@ -79647,7 +80475,7 @@
    "th": "ตุ๊กตา"
   },
   {
-   "dialogueCount": 10,
+   "dialogueCount": 13,
    "filler": true,
    "id": "sweet_tamarind_view",
    "name": "View",
@@ -79857,7 +80685,7 @@
    "th": "เตย"
   },
   {
-   "dialogueCount": 11,
+   "dialogueCount": 12,
    "id": "toi",
    "name": "Toi",
    "role": "mamasan",
