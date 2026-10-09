@@ -35,6 +35,7 @@ const SEV = { S: .24, C: .21, A: .17, I: .14, G: .15, B: .12, E: .12, J: .11, H:
 const INSTRUMENTS = [
   { name: "composition-audit", cls: ["A", "I"], systems: ["party", "affair", "barbooks", "barchain", "sobriety", "social", "conversation", "weather", "act1", "drinks", "ladydrinks", "bell", "barfine", "money"] },
   { name: "promises/afford/asktopic/errand/examine", cls: ["D"] },
+  { name: "happiness-audit", cls: ["E", "Q"], systems: ["happiness", "social", "bell", "drinks", "ladydrinks", "affair", "barbooks", "hotels", "games"] },
   { name: "askable-audit", cls: ["N"], systems: ["drinks", "calendar", "hotels", "barfine", "bell", "regulars", "navigation", "money", "clinic", "police", "cons", "dog", "sobriety", "barbooks", "darkness", "phone", "social", "saleng"] },
   { name: "references.test", cls: ["K", "R"] },
   { name: "templates.test", cls: ["L", "M", "K"] },

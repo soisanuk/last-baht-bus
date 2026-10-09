@@ -8618,7 +8618,7 @@ function _affairEnd(cause) {
       "for people who still think it can be different.\" She picks up the bag. \"The job did bad. " +
       "You did bad also, one time, two time. I count.\" The bar opens on time the next night, and " +
       "it is never quite your room again.", { her, who }), "alert");
-    _addHappy(-6);
+    _addHappy(-6, "she is gone, and it was you as much as the job");
   } else {
     _say(_fmt("{her} doesn't make a scene, because she has spent years learning " +
       "exactly how not to. There is a bag by the door of the room you half-share, packed " +
@@ -8629,7 +8629,7 @@ function _affairEnd(cause) {
       "up the bag. \"Nobody did bad. The job did bad.\" The door is very quiet behind " +
       "her, and the bar opens on time the next night, and it is never quite your room " +
       "again.", { her }), "alert");
-    _addHappy(-6);
+    _addHappy(-6, "she is gone; nobody did bad, and that does not help");
   }
   _say("(The floor takes a while to forgive the whole chapter — not her, and not quite " +
     "you either. Takings will say so for a while.)", "dim");
@@ -9560,7 +9560,7 @@ function _barLost(cause) {
   G.flags.barOpen = false;
   G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
     best: 0, workedLast: false, rentOwed: 0, rentShort: 0 };
-  _addHappy(-8);
+  _addHappy(-8, "the bar is gone, and you built it");   // named beside the figure (happiness audit, H3)
 }
 
 // BOOKS / TAKINGS — the player has to be able to look at it. Deliberately terse
