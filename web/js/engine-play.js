@@ -1290,15 +1290,19 @@ function _newbieNudge() {
   // man carrying his girl's number (Frank, 2026-08-26 — a false claim, the class
   // the repo lints for)
   const _hasLadyNum = Object.keys(G.phone.contacts || {}).some(id => G.phone.contacts[id] && NPC_ROLES[id]);
-  if (!_flag("tipNumber") && !_hasLadyNum && G.stage !== "expat" && G.money >= _ladyPrice(G.room)) {   // not at ฿0 (Malcolm, round 59)   // not to a man who owns a bar (Mick, round 57)
+  // …and never to a man who has only said no (Margaret, 2026-10-10: the prude was told that a
+  // number is how the week gets interesting, by a game she had refused at every turn) — it waits
+  // for the first lady drink, so a no has a night to be said in
+  const _boughtHere = Object.values(G.soc.drinkCount || {}).some(n => n > 0);   // a lady drink tonight, anywhere
+  if (!_flag("tipNumber") && !_hasLadyNum && _boughtHere && !(typeof _refusing === "function" && _refusing()) && G.stage !== "expat" && G.money >= _ladyPrice(G.room)) {   // not at ฿0 (Malcolm, round 59)   // not to a man who owns a bar (Mick, round 57)
     _setFlag("tipNumber");
-    _say("(A thought, since you're here: no bar girl's number is in your phone yet. Buy a lady a " +
-      "drink or two until she's warm to you, then CONTACT her — that's how the rest of this " +
-      "week gets interesting.)", "dim");
+    _say("(A thought, if it's the bars you came for: no bar girl's number is in your phone yet. Buy a lady a " +
+      "drink or two until she's warm to you, then CONTACT her — her number is where the week's texts " +
+      "start.)", "dim");
     return;                                   // one at a time; the bell keeps
   }
   const bellPrice = _bellPrice(G.room);
-  if (!_flag("tipBell") && G.money >= bellPrice * 2) {
+  if (!_flag("tipBell") && G.money >= bellPrice * 2 && (_flag("tipNumber") || _hasLadyNum || G.stage === "expat") && !(typeof _refusing === "function" && _refusing())) {   // the number first, and neither to a man who has only said no
     _setFlag("tipBell");
     _say(_fmt("(There's a bell over the rail. \u0e3f{p} rings it and buys the whole bar a round " +
       "\u2014 every lady in the room learns your name in about four seconds. It is the most " +
@@ -2836,6 +2840,7 @@ function _doSocial(kind, targetWord) {
     return;
   }
   if (kind === "flirt" && G.soc.charmed && G.soc.charmed[id]) kind = "kiss";
+  if (NPC_ROLES[id] === "hostess" && typeof _tradeMark === "function") _tradeMark("lean");   // a man who flirts with the floor is not refusing the trade
   // the bra you bought her makes fondling "more interesting" — one tier warmer
   const braBump = (kind === "fondle" && G.soc.bra && G.soc.bra[id]) ? 2 : 0;
   const net = _favor(id) - SEV[kind] + braBump + _persSocialMod(kind);
@@ -4073,6 +4078,7 @@ function _bondTalk(id) {
 // you've built a bond with (regular+, `id` passed) gives a +2 bonus and does NOT
 // advance jaded — depth is the correct road, breadth is the treadmill.
 function _conquestHappy(base, id) {
+  if (typeof _tradeMark === "function") _tradeMark("yes");
   // caught at your own rail tonight, the night does not pay (Callum, round 71: the betrayal netted +12)
   if (typeof _affairLive === "function" && G.affair && G.affair.caughtDay === G.day && id !== G.affair.id) {
     _say("(Whatever the night was meant to be, it isn't now. It pays nothing.)", "dim"); G.lastConquest = { night: G.day, net: 0 }; return;

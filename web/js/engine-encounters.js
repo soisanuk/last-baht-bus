@@ -166,7 +166,7 @@ function _salengMatchItem(input) {
 // The flower seller and her daughter — a real open-air-bar fixture, not a street
 // encounter (so it rides its own tick, like the saleng cart, not _maybeEncounter).
 // She works you only when you're plainly sitting WITH a girl you've been buying
-// for, at an open-front bar (never an enclosed go-go/gents/cabaret), and the kid
+// for, at an open-front bar (never an enclosed go-go/gents/cabaret), and the daughter
 // offers a rose to give to whoever you're talking to. Once per night.
 function _flowerTick() {
   if (!G || G.over || G.pendingEnc || G.game || G.pendingChoice) return;
@@ -178,7 +178,7 @@ function _flowerTick() {
   if (!open) return;
   const partner = typeof _convoActive === "function" && _convoActive();
   if (!partner || !NPC_ROLES[partner]) return;    // must be sitting with a working girl/ladyboy
-  if (NPC_ROLES[partner] === "mamasan" || NPC_ROLES[partner] === "cashier") return;   // the child does not pitch a rose for the mamasan (Rolf, round 54)
+  if (NPC_ROLES[partner] === "mamasan" || NPC_ROLES[partner] === "cashier") return;   // the daughter does not pitch a rose for the mamasan (Rolf, round 54)
   if (!(G.soc.drinks && G.soc.drinks[partner] > 0)) return; // and actually courting her
   if (G.flowerDay === G.day) return;              // once a night
   if (_rand() >= 0.12) return;
@@ -193,14 +193,14 @@ function _flowerTick() {
     ? thaiBaht(ROSE_PRICE) + " (฿" + _num(ROSE_PRICE) + ")" : "฿" + _num(ROSE_PRICE));
   _encPrompt(
     [G.flowerSeen <= 1
-      ? "A woman drifts up to the rail with a plastic bucket of roses and, half-hidden " +
-        "in her skirt, a girl of maybe seven, sleepy-eyed, clutching a single wrapped " +
-        `bloom in both hands. The mother says nothing; she doesn't have to. The child ` +
-        `holds the rose up toward you, then tips her head at ${her}, then back at you — ` +
-        `the whole pitch, no words, rehearsed a thousand times. ` + price + `.`
+      ? "A woman drifts up to the rail with a plastic bucket of roses, and a step behind " +
+        "her, her daughter — eighteen, a school-leaver's polo shirt, a single wrapped " +
+        `bloom held out in both hands. The mother says nothing; she doesn't have to. The ` +
+        `daughter holds the rose up toward you, then tips her head at ${her}, then back at you — ` +
+        `the whole pitch, no words, learned at her mother's elbow. ` + price + `.`
       : _pickVary([
-        `The rose bucket again — the same mother, the same sleepy-eyed girl, working the other end of the street tonight. The child clocks you, and something in the tiny professional face says she remembers which kind of answer you were. The rose comes up toward ${her}. ` + price + `.`,
-        `The rose family reaches your rail on their round. No pitch this time — the girl simply stands the wrapped bloom on the bar in front of you and looks from it to ${her} and back, a saleswoman who has learned that silence closes. ` + price + `.`,
+        `The rose bucket again — the same mother, the same daughter in the school polo, working the other end of the street tonight. The daughter clocks you, and something in her flat professional face says she remembers which kind of answer you were. The rose comes up toward ${her}. ` + price + `.`,
+        `The rose family reaches your rail on their round. No pitch this time — the daughter simply stands the wrapped bloom on the bar in front of you and looks from it to ${her} and back, a saleswoman who has learned that silence closes. ` + price + `.`,
       ], "flowerAgain"), "alert"],
     [`(BUY ROSE FOR ${her}) · or (WAVE) them gently on.`, "dim"]);
 }
@@ -281,8 +281,8 @@ function _salengVignette() {
 
 function _maybeEncounter() {
   if (!G || G.over || G.pendingFare || G.pendingEnc) return;
-  // nothing off the street walks into a bolted lock-in — a mother and a
-  // seven-year-old with roses did (Stan, round 35)
+  // nothing off the street walks into a bolted lock-in — the rose seller and
+  // her daughter did (Stan, round 35)
   if (typeof _lockedIn === "function" && _lockedIn()) return;
   if (_isDarkHere() || _room().bar) return; // the dark belongs to the soi dogs
   // public drunkenness attracts the boys in brown (repeatable, unlike the rest)
@@ -319,7 +319,7 @@ function _maybeEncounter() {
     (id !== "powerbank" || G.battery <= 30) &&
     // 70 = 01:00, which is when she says she finishes (the text no longer asserts the hour — it printed "gone 1 a.m." at 04:45, Dieter, round 56)
     // — the old gate of 40 fired the "gone 1 a.m." prose at half past ten.
-    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70 && G.day - (G.bookingDay || -9) >= 3)) && // the apps come alive after 1 a.m. — and not every other night (Judith, round 47)
+    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70 && G.day - (G.bookingDay || -9) >= 3 && !_refusing())) && // …and never to a man who has only said no to the trade (Margaret, 2026-10-10) // the apps come alive after 1 a.m. — and not every other night (Judith, round 47)
     (id !== "noodle" || G.nightTurn < 60) &&
     (id !== "bargirl" || G.nightTurn < 60 || !/^soi6/.test(G.room)) &&   // "every door is shut" and a girl weaving out of one (Henri/Desmond, round 47)   // Soi 6 shuts at midnight; the noodle girl went home with it (Piotr, round 40)
     // 60 = midnight, the same threshold beach_rd_top's own lateDesc uses: the
@@ -548,31 +548,31 @@ const _ENC = {
     // the girl beside you read out the bar's drinks instead)
     if (/^(how much|tao rai|thao rai|price|what does it cost|how much is it|how much for (?:a |the |one )?(?:rose|flower))\b/.test(input)) {
       G.flowerFor = id; G.pendingEnc = "flower";
-      _encPrompt([`The mother holds up the fingers before you have finished asking: ${ROSE_PRICE} baht, one rose. The child holds the bucket a little higher.`, "dim"],
+      _encPrompt([`The mother holds up the fingers before you have finished asking: ${ROSE_PRICE} baht, one rose. The daughter holds the bucket a little higher.`, "dim"],
         [id && NPCS[id] ? `(BUY ROSE FOR ${NPCS[id].name.toUpperCase()}) · or (WAVE) them gently on.` : "(BUY ROSE) · or (WAVE) them gently on.", "dim"]);
       return;
     }
-    // not an answer to the child at all (a tip, a talk, a walk): the pitch lapses
+    // not an answer to the daughter at all (a tip, a talk, a walk): the pitch lapses
     // quietly and the command runs — see the pendingEnc gate's passthrough
     // Anchored: the old unanchored /no|.../ read FLIRT NOEY as a "no" and ate the
-    // flirt as a wave at the child (Lionel, round 36). An answer starts the line.
+    // flirt as a wave at the daughter (Lionel, round 36). An answer starts the line.
     // BUY BEER / BUY <girl> A DRINK at a rail with the rose bucket on it bought
     // the rose (Lars, Graham, round 47 — five times): a BUY is an answer to the
-    // child only when it names the rose, or names nothing
+    // daughter only when it names the rose, or names nothing
     const buysRose = /^buy(?:\s+(?:a\s+|the\s+|one\s+|her\s+a\s+)?(?:rose|flower|one|it))?(?:\s+for\s+.+)?\s*$/.test(input);   // BUY ROSE FOR LEK is the tap the pitch prints (Kenji, round 47)
     if (!(buysRose || /^(?:yes|rose|flower|sure|ok|okay|please|one|no|nah|wave|leave|later|pass|shake|sorry)\b/.test(input))) {
-      _say("The mother reads your attention elsewhere, nods, and steers the child on to the next stool.", "dim");
+      _say("The mother reads your attention elsewhere, nods, and steers her daughter on to the next stool.", "dim");
       return "passthrough";
     }
     if ((buysRose || /^(?:yes|rose|flower|sure|ok|okay|please|one)\b/.test(input)) && !/\b(?:no|nah|wave|leave|later|pass)\b/.test(input)) {
       if (G.money < ROSE_PRICE) {
         _say(`You pat your pockets and come up short of even ${ROSE_PRICE} baht. The mother ` +
-          "reads it in a glance — no judgement, she's seen every wallet — gathers the child " +
-          "and drifts to the next bar. The kid looks back once.");
+          "reads it in a glance — no judgement, she's seen every wallet — and the two of " +
+          "them drift to the next bar. The daughter looks back once.");
         return;
       }
       G.money -= ROSE_PRICE;
-      _say(`The child's whole face changes — a real grin, not a pitch — as the ${ROSE_PRICE} baht ` +
+      _say(`The daughter's face changes — a real grin, not a pitch — as the ${ROSE_PRICE} baht ` +
         "goes to her mother and the rose comes to you. Mother wais, and they move off down the " +
         "rail already working the next stool.", "win");
       // route through the gift system so bond + the rose's own prose fire, and it's
@@ -591,9 +591,9 @@ const _ENC = {
       }
       return;
     }
-    _say(`You lift a palm — not tonight. The mother nods, unoffended, but the little girl gives ` +
-      `you the practised, devastating disappointed face she has clearly been coached on before ` +
-      `steering her to the next bar. You are, briefly, the villain of a seven-year-old's evening.`);
+    _say(`You lift a palm — not tonight. The mother nods, unoffended. The daughter gives you ` +
+      `a look that says she has heard no from better men than you, and is already counting ` +
+      `the stools to the next bar.`);
   },
   selfbf(input) {
     const name = NPCS[G.selfBfId] ? NPCS[G.selfBfId].name : "She";
@@ -610,6 +610,7 @@ const _ENC = {
       _addHappy(3);
       _endNight("barfine");
     } else {
+      _tradeMark("no");
       _say(`${name} takes it well — a small laugh, a smaller shrug — but something ` +
         "in the room closes like a till drawer. The other girls look at you the " +
         "way one looks at a man who returned a winning lottery ticket.");
@@ -821,6 +822,7 @@ const _ENC = {
     const both = /both|two|friend|ning|threesome|them/.test(input);
     const yes = both || /yes|ok|sure|company|come|deal|her|why not/.test(input);
     if (!yes) {
+      _tradeMark("no");
       // No wai here. This is the PASSTHROUGH — the player typed something
       // unrelated and the engine declines on his behalf — and it used to
       // narrate a wai for him. For a man whose whole arc is refusing exactly
@@ -1489,6 +1491,7 @@ const _ENC = {
     const yes = /yes|ok|sure|book|come|deal|why not|send her|yeah|\bpay\b/.test(input) &&   // PAY is a yes to a priced booking (Graham, round 74)
       !/\bno\b|sleep|turn in|pass|not tonight/.test(input);
     if (!yes) {
+      _tradeMark("no");
       _say(_isHotelRoom(G.room)
         ? "You put the phone face-down. Tomorrow's problem, or nobody's. The " +
           "ceiling fan turns, and the night decides the rest."

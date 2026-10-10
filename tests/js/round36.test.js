@@ -165,7 +165,7 @@ test("a name with NO in it is not a no to the rose seller — the flirt runs (Li
   assert.ok(noey, "a girl whose name contains 'no'");
   G.pendingEnc = "flower"; G.flowerFor = noey; G.money = 1000;
   run("flirt " + NPCS[noey].name.toLowerCase());
-  assert.match(text(), /steers the child on/, "the pitch lapses");
+  assert.match(text(), /steers her daughter on/, "the pitch lapses");
   assert.match(text(), /You flirted with/, "…and the flirt ran");
   assert.equal(G.pendingEnc, null); assert.equal(G.money, 1000, "no rose bought, no wave charged");
 });

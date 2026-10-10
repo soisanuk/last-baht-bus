@@ -1095,7 +1095,7 @@ test("the self-barfine offer lapses honestly, and BUY ROSE FOR <her> buys the ro
   assert.equal(G.pendingEnc, null); assert.match(text(), /lapses/); assert.doesNotMatch(text(), /still in the room/);
   assert.ok(G.money < 3000, "and the beer was bought");
   G.pendingEnc = "flower"; G.flowerFor = "candy"; out = []; doCommand("buy rose for candy");
-  assert.match(text(), /rose/i); assert.doesNotMatch(text(), /steers the child on/);
+  assert.match(text(), /rose/i); assert.doesNotMatch(text(), /steers her daughter on/);
 });
 
 test("the saga's return channels: Wimon after the whole of it, Diamond on the keys, Mala on the scout, the giver's pronoun", () => {

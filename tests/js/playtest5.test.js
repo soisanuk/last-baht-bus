@@ -508,7 +508,7 @@ test("the rose seller lapses on an unrelated command instead of eating it", () =
   doCommand(`tip ${NPCS[girl].name.toLowerCase()} 100`);
   assert.equal(G.pendingEnc, null);
   assert.equal(G.money, m - 100, "the tip actually happened");
-  assert.match(text(), /steers the child on/);
+  assert.match(text(), /steers her daughter on/);
   G.flowerFor = girl; G.pendingEnc = "flower"; out = [];
   doCommand("no thanks");
   assert.match(text(), /lift a palm/);
@@ -1533,7 +1533,7 @@ test("the rose family's second visit reads as recognition, not a rerun", () => {
     if (G.pendingEnc === "flower") fired = true;
   }
   assert.ok(fired, "the seller reaches a courted rail within 400 rolls");
-  assert.doesNotMatch(out.join("\n"), /rehearsed a thousand times/,
+  assert.doesNotMatch(out.join("\n"), /learned at her mother.s elbow/,
     "the emotionally loaded one-off must not print twice verbatim");
   assert.match(out.join("\n"), /again|remembers|their round|the same/i);
 });

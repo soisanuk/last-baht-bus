@@ -412,6 +412,7 @@ function newGame() {
     flowerSeen: 0,       // …and how many times you've met her — the rerun reads as recognition
     party: null,         // TAKE HER OUT: { ids, stops, spent, seen: {roomId: true} } — the night continues with her
     flowerFor: null,     // who the offered rose is for
+    trade: { yes: 0, no: 0, lean: 0 },   // the trade's offers, by what you did with them: a paid night (yes), a no to a proposition (no), a flirt (lean) — a man who only says no is not sent the app's girls or told to collect numbers (Mario, after Margaret's round, 2026-10-10)
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
     pendingBf: null,     // { id, st, lt, room } — barfine negotiation awaiting ST/LT/NO
@@ -817,6 +818,12 @@ function _npcByName(name, opts = {}) {
   return opts.first ? c[0] : null;
 }
 function _met(id) { return !!(G.talked && G.talked[id]); }
+// The man who keeps saying no (Margaret, the prude persona, 2026-10-10): she declined the
+// freelancer, the barfine and every offer, asked the town about its temples, and was still
+// sent the app's girl at one a.m. and told a bar girl's number is how the week gets
+// interesting. A no to a proposition counts; a paid night or a flirt undoes it.
+function _tradeMark(kind) { const t = G.trade || (G.trade = { yes: 0, no: 0, lean: 0 }); t[kind] = (t[kind] || 0) + 1; }
+function _refusing() { const t = G.trade || {}; return (t.no || 0) > 0 && !(t.yes || 0) && !(t.lean || 0); }
 
 // IN TOWN, as Tan means it when he says "walk, it is four minutes": the bar
 // districts you can actually walk between. Jomtien and Thappraya are the far

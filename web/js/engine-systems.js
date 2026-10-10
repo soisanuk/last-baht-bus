@@ -5076,6 +5076,7 @@ function _chamPrompt() {
 }
 function _chamDecline() {
   G.pendingChoice = null;
+  _tradeMark("no");
   _say("You say not tonight, and mean something you couldn't spell out. She nods quickly, " +
     "relieved or disappointed or neither — the face gives you nothing to price. \"Ok na. " +
     "Maybe another time.\" She types something into your phone before you've offered it: " +

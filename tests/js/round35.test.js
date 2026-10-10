@@ -291,7 +291,7 @@ test("a room that claims cheaper beer charges cheaper beer (Stan 8)", () => {
   assert.equal(_beerPrice("white_rabbit"), _beerPrice("naklua_bars") - 10);
 });
 
-// A mother and a seven-year-old with roses walked into a bolted after-hours bar.
+// The rose seller and her daughter walked into a bolted after-hours bar.
 test("the street does not reach inside a bolted door (Stan 10)", () => {
   G.room = "khao_talo_bar"; G.soc.lockIn = { khao_talo_bar: true }; G.encDone = {}; G.lastEnc = -999;
   for (let i = 0; i < 40; i++) { G.pendingEnc = null; _maybeEncounter(); assert.equal(G.pendingEnc, null, "nobody comes in"); }

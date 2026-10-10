@@ -8068,6 +8068,9 @@ test("the newbie nudges fire once, in order, and only where the advice works", (
   });
   state().room = bar; out = [];
   _newbieNudge();
+  assert.doesNotMatch(out.join("\n"), /no bar girl's number|bell over the rail/, "nothing on the first step through the door (round 78: it waits for a lady drink)");
+  state().soc.drinkCount = { [_npcsHere().find(n => NPC_ROLES[n] === "hostess")]: 1 }; out = [];
+  _newbieNudge();
   // "nobody's number" was false the moment Tan's went in at the airport (round 47)
   assert.match(out.join("\n"), /no bar girl's number/, "the first tip is the number");
   assert.doesNotMatch(out.join("\n"), /bell over the rail/, "one at a time");

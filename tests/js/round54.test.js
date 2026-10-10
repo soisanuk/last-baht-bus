@@ -213,7 +213,7 @@ test("the anonymous bar-bore never prints beside a named rail; a rose is never p
   assert.ok(rail.length, "the Stinky has named men on the rail");
   out = []; _describeRoom(true);
   assert.doesNotMatch(text(), /red-faced fixture|part of the furniture|lifer|drones on|laughing on cue/);
-  // the rose child
+  // the rose seller's daughter
   G.room = "lucky_tiger"; const mama = _npcsHere().find(id => NPC_ROLES[id] === "mamasan");
   assert.ok(mama); G.convo = mama; G.soc.drinks[mama] = 3; G.flowerDay = 0;
   const saved = _rand; try { _rand = () => 0.01; out = []; _flowerTick(); assert.equal(G.flowerDay, 0, "no pitch for the mamasan"); } finally { _rand = saved; }

@@ -5496,7 +5496,7 @@ const ITEMS = {
     portable: true, location: null, // from the flower-seller's daughter (flower encounter)
     kind: "gift", // meant for whoever you're sitting with
     desc: "A single red rose, cellophane-wrapped, one leaf browning — carried bar to " +
-      "bar in a plastic bucket by a kid who should be asleep. It costs almost nothing " +
+      "bar in a plastic bucket by the flower seller's grown daughter. It costs almost nothing " +
       "and means more than its price to the right person.",
   },
   hair_tonic: {

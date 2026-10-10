@@ -6064,6 +6064,20 @@ const _TEETOTAL_BROKEN = [
   "(Sober-as-ordered lasted exactly as long as it lasted. The room does not judge; the room pours.)",
 ];
 
+// I'M NOT HERE FOR THAT — the trade's equivalent of I DON'T DRINK (2026-10-10): said once, and the
+// app stops sending girls and nobody tells you to collect numbers (the street still asks — that is the street). A paid night or a flirt undoes it.
+const _NOT_BUYING_SAID = [
+  "(Said, and heard. The town has plenty of men who only come to look; it files you with them, and the app on your phone stops lighting up at one in the morning.)",
+  "(Fair enough. Nobody here is offended by a man who only wants a beer and the view. The app goes quiet; the women on the street will still try their luck, and a no is a whole sentence to them.)",
+  "(Understood. Looking is free and talking is free. Your phone stops offering you the other thing; the soi itself will still ask, once, and take no for an answer.)",
+];
+function _doNotBuying() {
+  if (_refusing()) { _say("Already said. The town has it written down."); return; }
+  if (G.trade) { G.trade.yes = 0; G.trade.lean = 0; }
+  _tradeMark("no");
+  _say(_pickVary(_NOT_BUYING_SAID, "notbuying"));
+}
+
 function _doTeetotal() {
   if (G.player.teetotal) { _say("Already said, already understood. Soda water, slice — the town has it written down."); return; }
   G.player.teetotal = true;
@@ -9221,11 +9235,11 @@ function _doBuy(arg) {
     return;
   }
   if (/\b(rose|roses|flower|flowers)\b/.test(String(arg || "").toLowerCase())) {
-    // the rose is the flower child's, not the bar's — "Not for sale here" after her
+    // the rose is the flower seller's, not the bar's — "Not for sale here" after her
     // round has moved on read as a bug (Tomasz, round 54)
     _say(_pickVary([
       "The rose bucket has moved on down the street with the girl who carries it. The bar sells beer; the bar has never sold a flower.",
-      "No roses without the rose child, and she is working somebody else's rail by now. Next time she reaches you, say yes faster.",
+      "No roses without the rose seller's daughter, and she is working somebody else's rail by now. Next time she reaches you, say yes faster.",
       "The flower seller and her daughter do a round, not a shop. They were here; they aren't. The bar's stock is in bottles.",
     ], "norose"));
     return;
@@ -12569,6 +12583,7 @@ THE WHOLE CARD (bare HELP is the short one):
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY SODA (any soft drink; in a bar it costs the beer) · BUY MAN DRINK (for the bar manager)
   I DON'T DRINK — say it once and the house stops pouring you free ones · DECLINE hands back a drink just poured
+  JUST LOOKING — say it once and the dating app goes quiet; the girls on the street will still try their luck
   RING BELL (฿300 in a beer bar, dearer in the fancy ones) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
@@ -14044,16 +14059,17 @@ function doCommand(input) {
       return;
     }
     // the party barfine — bfparty's honest mirror: take her (or them) OUT
-    if (/^(take|party)/.test(lower) || /\b(her|them) out\b/.test(lower)) { _bfResolve("party"); _tick(); return; }
-    if (/^(st\b|short)/.test(lower)) { _bfResolve("st"); _tick(); return; }
+    if (/^(take|party)/.test(lower) || /\b(her|them) out\b/.test(lower)) { _tradeMark("yes"); _bfResolve("party"); _tick(); return; }
+    if (/^(st\b|short)/.test(lower)) { _tradeMark("yes"); _bfResolve("st"); _tick(); return; }
     if (/^(lt\b|long|overnight|all night)/.test(lower)) {
       // LONG TIME is the night: the first answer says so, the second commits (Mario, 2026-10-07)
       const _withParty = !!(G.party && G.party.ids && G.party.ids.length);   // the ledger refuses an LT mid-party itself — no confirm on a refusal
       if (!_withParty && !G.pendingBf.ltAsked) { G.pendingBf.ltAsked = true; _bfLtWarn(); return; }
-      _bfResolve("lt"); _tick(); return;
+      _tradeMark("yes"); _bfResolve("lt"); _tick(); return;
     }
     if (/^(no\b|cancel|never|forget|back out|walk)/.test(lower)) {
       G.pendingBf = null;
+      _tradeMark("no");
       _say("You ease back off the ledge. The mamasan closes the ledger without " +
         "comment — no is a complete sentence here, and nobody holds it against " +
         "you. The girl is already laughing at something else.");
@@ -14064,7 +14080,7 @@ function doCommand(input) {
     // "ok"), any word ending "…ok", "fine" inside "barfine", etc. silently sign the
     // paid open contract and roll the scam table. The answer must BE one of these.
     if (/^(pay|yes|ok(ay)?|sure|fine|deal|whatever|up to you)\b/.test(lower)) {
-      _bfResolve("open"); _tick(); return;
+      _tradeMark("yes"); _bfResolve("open"); _tick(); return;
     }
     _bfPrompt(); // the negotiation eats everything else
     return;
@@ -14177,6 +14193,8 @@ function doCommand(input) {
   }
   // a sober man's sentence, and the hand that pushes a glass back (Neville, round 53)
   if (/^(i (don'?t|do not|never) drink( alcohol)?|teetotal(ler)?|no alcohol( for me)?|i'?m sober|sober)[.!]?$/.test(lower)) { _doTeetotal(); _tick(); return; }
+  if (!G.pendingChoice && !G.pendingEnc && !G.game && !G.convoQ && !G.pendingBf &&
+      /^(i'?m |i am )?(not (here )?for (that|the girls|girls)|not interested( in (that|the girls|girls))?|just (looking|watching|talking|here to (talk|look|watch))|no girls( for me)?)( thanks?| thank you)?[.!]?$/.test(lower)) { _doNotBuying(); _tick(); return; }
   if (/^(decline|refuse( (it|that|the (shot|drink|beer)))?|push it back|send it back|(i )?don'?t want (it|that|the (shot|drink))|not for me|no thanks|no thank you)[.!]?$/.test(lower) && !G.pendingChoice && !G.pendingEnc && !G.game && !G.convoQ) { _doRefuseDrink(); _tick(); return; }
 
   // Bigotry in the queer venues short-circuits everything else: ejection, and
