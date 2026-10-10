@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Skydivers fly Thai flag in record attempt",
+    "t": "Suspects flee country after B37m robbery of Turk in Pattaya",
     "s": "Bangkok Post",
-    "d": "07 Oct 2026"
+    "d": "10 Oct 2026"
   },
   {
     "t": "British tourist allegedly steals motorcycle left with key in Pattaya, too drunk to remember where he parked it",
@@ -23,6 +23,11 @@ var NEWS_FEED = [
     "d": "08 Oct 2026"
   },
   {
+    "t": "DSI searches three Bangkok sites in probe into suspected Israeli nominee businesses",
+    "s": "Pattaya Mail",
+    "d": "09 Oct 2026"
+  },
+  {
     "t": "Pattaya ride-hailing driver alleges assault by bar owner and group",
     "s": "Pattaya Mail",
     "d": "09 Oct 2026"
@@ -33,34 +38,19 @@ var NEWS_FEED = [
     "d": "09 Oct 2026"
   },
   {
-    "t": "Fatal crash renews warning over dangerous Jomtien curve",
-    "s": "Pattaya Mail",
-    "d": "08 Oct 2026"
-  },
-  {
     "t": "Car catches fire at Pattaya government housing project",
     "s": "Pattaya Mail",
     "d": "09 Oct 2026"
   },
   {
-    "t": "Inside Thailand’s cyanide murders and the search for its ‘most prolific serial killer’ in history",
-    "s": "CNA",
+    "t": "Thai Queen makes first solo flight in fighter jet",
+    "s": "BBC",
     "d": "09 Oct 2026"
   },
   {
-    "t": "I Flew to Thailand to Snatch My Face and Body",
-    "s": "The Cut",
-    "d": "09 Oct 2026"
-  },
-  {
-    "t": "Suspects flee country after B37m robbery of Turk in Pattaya",
-    "s": "Bangkok Post",
-    "d": "10 Oct 2026"
-  },
-  {
-    "t": "Thailand’s Queen Suthida pilots fighter jet for first-ever solo flight",
-    "s": "AP News",
-    "d": "09 Oct 2026"
+    "t": "Iron cage beds at Thai elderly home fuel anger, owner defends ‘innovation’",
+    "s": "South China Morning Post",
+    "d": "08 Oct 2026"
   },
   {
     "t": "Thailand prepares to host IMF-World Bank meetings",
@@ -68,15 +58,25 @@ var NEWS_FEED = [
     "d": "10 Oct 2026"
   },
   {
-    "t": "Nearly 30 years after IMF rescue, Thailand faces new economic test",
-    "s": "Reuters",
+    "t": "Floodwaters Overwhelm Thailand",
+    "s": "NASA Science (.gov)",
     "d": "09 Oct 2026"
+  },
+  {
+    "t": "George H.W. Bush Carrier Strike Group Departs Thailand",
+    "s": "navy.mil",
+    "d": "09 Oct 2026"
+  },
+  {
+    "t": "Pita Limjaroenrat: The Leader Thailand Could Have Had",
+    "s": "The New York Times",
+    "d": "08 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-09","USD":33.53,"AUD":23.41,"GBP":44.33,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-10","temp":27,"humid":94,"code":3,"hi":32,"rain":85};
+var WX_NOW = {"date":"2026-10-11","temp":25,"humid":95,"code":53,"hi":31,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4196,"date":"2026-10-10","baht":66550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":82773,"thb":2779002};
+var BTC = {"usd":83001,"thb":2786682};
