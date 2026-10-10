@@ -41,6 +41,14 @@ Alliance 2, Covert Action. The single most important lesson from all of them:
 being portable is not a nicety here — it decides several things we were otherwise weighing
 on taste.
 
+**Mechanics are data too** (2026-10-10). `cli-sim.js`'s verbs are a registry, not an
+if-chain: `CLI_CORE_VERBS` is the default set, a scenario adds its own (`scenario.verbs`) or
+drops core ones (`scenario.dropVerbs`), each verb is `{ name, aliases, help, run(ctx, arg,
+words), options(ctx) }`, and a verb's own state lives under `state.ext[<name>]`. The core
+loop keeps the step count, the budget and the goal check. The intrusion module should take
+the same shape for its moves from the start, so a Bangkok level that needs a move LBB never
+had is new data, not a fork.
+
 ### 2.1 A node graph, NOT a grid — decided
 
 The opening proposal was three-metre increments. **Three metres becomes the cost unit on

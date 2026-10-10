@@ -146,3 +146,59 @@ test("the budget telegraphs at 15 and 5 to go, in the scenario's words or a defa
   assert.deepEqual(warned, [5, 15], "warnings land at 15-to-go and 5-to-go");
   assert.ok(st.lost, "and then it locks");
 });
+
+// ── PLUGGABLE VERBS (2026-10-10): the command set is a registry a scenario adds to or trims, as
+// data — a follow-on game brings its own verbs without touching this file. A fixture verb, defined
+// HERE (not in the module): SKIM <word> reads every file in the current folder for a word, and
+// remembers what it found under state.ext.skim so the save stays plain data.
+const SKIM = {
+  name: "skim", help: "skim <word>     look for a word inside the files here",
+  run(ctx, arg) {
+    if (!arg) return ctx.say("skim for what?");
+    const hits = Object.keys(ctx.here.files || {}).filter(f => String(ctx.here.files[f]).includes(arg));
+    const mem = ctx.ext(); mem.found = (mem.found || []).concat(hits.filter(h => !(mem.found || []).includes(h)));
+    ctx.say(hits.length ? hits.join("\n") : `no file here mentions ${arg}`);
+  },
+  options(ctx) { return Object.keys(ctx.here.files || {}).length ? ["skim locked"] : []; },
+};
+
+test("a scenario's own verb registers, is offered, runs, keeps its state as plain data, and is on the help card", () => {
+  const sc = { ...FIX, verbs: [SKIM] };
+  const st = cliNew(sc, seq([0.5]));
+  const o = cliOptions(sc, st);
+  assert.ok(o.includes("skim locked"), "offered as a chip");
+  assert.equal(o[o.length - 1], "exit", "before exit, which stays last");
+  assert.deepEqual(o.filter(x => x !== "skim locked"), cliOptions(FIX, cliNew(FIX, seq([0.5]))), "the core options are untouched");
+  assert.match(cliInput(sc, st, "skim locked", seq([0.5])).output.join("\n"), /note\.txt/);
+  const back = JSON.parse(JSON.stringify(st));
+  assert.deepEqual(back.ext, { skim: { found: ["note.txt"] } }, "its state rides the save");
+  assert.match(cliInput(sc, st, "help", seq([0.5])).output.join("\n"), /skim <word>/, "the help card is built from the registry");
+  // an old save, before ext existed, still runs the verb
+  const old = cliNew(sc, seq([0.5])); delete old.ext;
+  assert.match(cliInput(sc, old, "skim opensesame", seq([0.5])).output.join("\n"), /note\.txt/);
+  assert.ok(old.ext.skim, "ext is created on first use");
+});
+
+test("a scenario that drops a core verb loses it from options, help and the parser; EXIT cannot be dropped", () => {
+  const sc = { ...FIX, dropVerbs: ["read", "find", "exit"] };
+  const st = cliNew(sc, seq([0.5]));
+  const o = cliOptions(sc, st);
+  assert.ok(!o.some(x => x.startsWith("read ")), "no read chips");
+  assert.ok(o.includes("exit"), "exit stays: it is how a host ends the session");
+  const help = cliInput(sc, st, "help", seq([0.5])).output.join("\n");
+  assert.doesNotMatch(help, /^read|^find/m); assert.match(help, /^exit/m);
+  assert.match(cliInput(sc, st, "read note.txt", seq([0.5])).output.join("\n"), /not a thing this machine does/);
+  assert.match(cliInput(sc, st, "cat note.txt", seq([0.5])).output.join("\n"), /not a thing this machine does/, "its aliases go with it");
+});
+
+test("a scenario may replace a core verb by name, and the goal is still the core's to check", () => {
+  const COPY2 = { name: "copy", aliases: ["cp"], help: "copy <file>     take it",
+    run(ctx, arg) { if (ctx.here.files && arg in ctx.here.files) { ctx.state.took.push(arg); ctx.res.took.push(arg); ctx.say("taken."); } },
+    options(ctx) { return Object.keys(ctx.here.files || {}).map(f => `copy ${f}`); } };
+  const sc = { ...FIX, verbs: [COPY2] };
+  const st = cliNew(sc, seq([0.5]));
+  assert.ok(cliOptions(sc, st).includes("copy junk.txt"), "the replacement's options are offered");
+  for (const l of ["read note.txt", "unlock locked opensesame", "cd locked"]) cliInput(sc, st, l, seq([0.5]));
+  const r = cliInput(sc, st, "copy target.dat", seq([0.5]));
+  assert.ok(r.won && r.done, "the core loop saw the goal on the stick");
+});
