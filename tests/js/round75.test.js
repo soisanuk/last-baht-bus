@@ -100,7 +100,7 @@ test("Cheap Charlie's board sells WHATEVER SHE MADE TODAY; a wrong flip at Jackp
 });
 test("a quiz answered right five times does not cheer one sentence five times", () => {
   const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-play.js", import.meta.url)), "utf8");
-  const m = src.match(/CORRECT! ` \+ _pickVary\(\[([\s\S]*?)\], "quizright"\)/);
+  const m = src.match(/const _qr = \[([\s\S]*?)\];/);   // round 78: dealt so none repeats inside one quiz
   assert.ok(m, "the correct-answer line is a pool"); assert.ok((m[1].match(/",/g) || []).length >= 4, "five lines deep");
 });
 

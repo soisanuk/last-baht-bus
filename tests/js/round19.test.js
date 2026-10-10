@@ -211,7 +211,7 @@ test("a choice the game just printed outranks a global verb", () => {
   // face — and anything unmatched fell through to TRAVEL. Doing something ELSE,
   // silently, is worse than not understanding.
   G.room = "kitten_corner";
-  doCommand("talk to kesinee");
+  doCommand("talk to kesinee"); doCommand("ask kesinee about pattaya leisure");   // the choices answer her question (round 78)
   out = [];
   doCommand("swear you are no pattaya leisure man");
   assert.doesNotMatch(text(), /let fly at the night/, "that is the SWEAR verb, not her answer");

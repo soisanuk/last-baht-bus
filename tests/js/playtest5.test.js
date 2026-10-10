@@ -88,7 +88,7 @@ test("a pending question lapses OUT LOUD when you turn to someone else, and the 
   assert.equal(cues(), 1);
   out = [];
   doCommand("talk to dave");                       // switch partners
-  assert.match(text(), /Bert's question goes unanswered/);
+  assert.match(text(), /Bert's question will keep/);
   assert.equal(G.convoQ, null);
 });
 
@@ -933,7 +933,7 @@ test("review: the Darkside league draws its own roster; the inbox is hard-capped
 
 // ── round ten: the completionist (Priya) ──
 test("a printed verbal-action hint parses after an intervening ask (the chips moved on, the label didn't)", () => {
-  G.room = _npcRoom("kesinee"); doCommand("talk to kesinee");
+  G.room = _npcRoom("kesinee"); doCommand("talk to kesinee"); doCommand("ask kesinee about pattaya leisure");
   if (G.convoChoiceMemo && G.convoChoiceMemo.kesinee != null) {
     doCommand("ask kesinee about kittens");
     out = []; doCommand("tell her bert sent you");

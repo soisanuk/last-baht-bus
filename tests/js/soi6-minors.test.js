@@ -52,7 +52,7 @@ test("a named male regular gets the beer you buy him — you don't drink it for 
   // against the POOL, not one string — the line was a fixed sentence until
   // round 19, which is how every man in the bar came to repay a drink with
   // Terry's own anecdote
-  assert.ok(_STAND_BEER.some(t => last().includes(_fmt(t, { who: "Terry", drink: "a cold one" }))),
+  assert.ok(_STAND_BEER.some(t => { const f = _fmt(t, { who: "Terry", drink: "a cold one" }); return last().includes(f.charAt(0).toUpperCase() + f.slice(1)); }),   // a sentence starts with a capital (round 78)
     "the bottle goes down the bar, in one of the pooled ways");
   assert.equal(S().soc.drunk, drunk0, "your own drunk counter doesn't move");
   out = [];

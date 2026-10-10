@@ -50,7 +50,7 @@ test("the street's questions: next door is the neighbours, the old owner is reme
   assert.match(ask("peach_lounge", "farida", "the group"), /one of theirs|group pays on the day/i, "the group's own cashier knows the group (in her own words, since the deepening pass)");
   assert.match(ask("peach_lounge", "pui", "the group"), /paper|group|company/i);
   assert.match(ask("firecracker_bar", "napa", "the group"), /Nobody's bought this side/);
-  assert.match(ask("sunset_rail", "bussaba", "the middle"), /Five stretches/);
+  assert.match(ask("sunset_rail", "bussaba", "the middle"), /stretch|five bits/i);
   assert.match(ask("golden_dragon", "gavin", "the folder"), /not yet is a price/i, "the group's man on the group's buying");
 });
 

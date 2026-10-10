@@ -148,3 +148,89 @@ test("the 7-Eleven sells beer until midnight, and Soi 6 has one of its own; the 
   assert.ok(ROOMS.second_rd_soi6.seven, "across Second Road");
   G.room = "sweet_tamarind"; G.nightTurn = 30; out = []; run("buy water"); assert.equal(G.money, m - SEVEN_BEER - _beerPrice(), "water in a bar is still the beer's price (Mario)");
 });
+
+// ── THE BUG PASS (Ray's and Margaret's findings, 2026-10-10) ──────────────────────────────────────
+const askOf = (room, who, what) => { G.room = room; run("talk to " + who); out = []; run(`ask ${who} about ${what}`); return said(); };
+
+test("a long time pays the bar's fine and her money, each named", () => {
+  G.room = "sweet_tamarind"; const g = "sweet_tamarind_ple"; G.soc.drinkCount = { [g]: 1 };
+  const saved = _rand; let lt;
+  try { _rand = () => 0.99; run("barfine ple"); lt = G.pendingBf.lt; run("long time"); out = []; run("long time"); } finally { _rand = saved; }   // no game rolled on the honest night
+  assert.match(said(), new RegExp(`฿${_num(lt - LADY_LT)} to [^,]+ for the bar's fine, entered in the ledger with ceremony, ฿${_num(LADY_LT)} into Ple's own hand`));
+});
+
+test("on Soi 6 anyone working can say what upstairs, short time and her money are, at the till's prices", () => {
+  const st = (() => { G.room = "sweet_tamarind"; return _barfinePrices("soi6", "sweet_tamarind_ple").st; })();
+  assert.match(askOf("sweet_tamarind", "ple", "short time"), new RegExp("฿" + _num(st)));
+  assert.match(askOf("firecracker_bar", "fah", "upstairs"), /Upstairs|stairs/);
+  assert.match(askOf("sweet_tamarind", "view", "the staircase"), /upstairs|stairs/);
+  assert.match(askOf("pink_lotus", "nee", "her money"), new RegExp("฿" + LADY_ST));
+});
+
+test("LAST NIGHT is last night's exit, not the last exit ever", () => {
+  G.soc.leftFrom = "sweet_tamarind"; _endNight("sleep"); _endNight("sleep");
+  assert.equal(G.lastNightWas.leftFrom, null, "night 3's long time does not answer for night 4");
+});
+
+test("a word inside a word does not lock a subject: Tan's 'ice' was in 'price' and 'police'", () => {
+  G.room = "soi6_street";
+  assert.doesNotMatch(askOf("soi6_street", "tan", "short time"), /Not yet, na/);
+  assert.match(askOf("soi6_street", "tan", "police"), /boys in brown/);
+  assert.match(askOf("soi6_street", "tan", "temple"), /Big Buddha/);
+  G.room = "stinky_bar"; assert.doesNotMatch(askOf("stinky_bar", "bert", "selling"), /pay grade|department/, "a word's START still gates: sell → selling");
+});
+
+test("a bare TALK to somebody whose question is open restates it", () => {
+  G.room = "soi6_street"; G.mode = "soi6"; run("talk to tan");
+  if (G.convoQ && G.convoQ.id === "tan") { out = []; run("talk to tan"); assert.match(said(), /question is still open/); }
+});
+
+test("the women answer what they raised: the monk, the teacher, the garden, the problem, leaving, mama", () => {
+  assert.match(askOf("ladybird_bar", "somsri", "the monk"), /my son/i);
+  assert.doesNotMatch(said(), /tonic|curse/i);
+  assert.match(askOf("ladybird_bar", "somsri", "the garden"), /apple tree/);
+  assert.match(askOf("pink_lotus", "belle", "problem"), /motorbike/);
+  assert.match(askOf("kitten_corner", "aum", "leaving"), /one year/i);
+  assert.match(askOf("stinky_bar", "manow", "mama"), /dangerous/);
+});
+
+test("standing a regular the drink she named earns her trust: Angela's navy, after a Singha", () => {
+  G.room = "queen_vic"; run("talk to angela"); run("ask angela about navy"); G.day++;
+  run("talk to angela"); run("buy drink for angela");
+  assert.match(askOf("queen_vic", "angela", "navy"), /Twelve years/);
+});
+
+test("the trade's words are a question with an answer", () => {
+  G.room = "sweet_tamarind";
+  for (const q of ["what is a barfine?", "what is a lady drink", "whats short time", "what does tilac mean"]) { out = []; run(q); assert.doesNotMatch(said(), /blinks|didn't parse|No idea/, q); }
+});
+
+test("TELL <her> <something> is said to her; GIVE <her> <n> FOR <a reason> pays and she hears the reason", () => {
+  G.room = "sandy_toes"; run("talk to nina"); out = []; run("tell nina i fly home tomorrow");
+  assert.doesNotMatch(said(), /Telling isn't the verb/);
+  G.room = "kitten_corner"; run("talk to aum"); const m = G.money; out = []; run("give aum 500 for her brother's school");
+  assert.equal(G.money, m - 500); assert.match(said(), /brother's school/);
+});
+
+test("Kesinee's vetting answers her question, not a hello that asked none", () => {
+  G.room = _npcRoom("kesinee"); run("talk to kesinee");
+  assert.ok(!_convoChoices("raw").some(c => /bert sent you/i.test(c.label)), "no choices on the hello");
+  run("ask kesinee about pattaya leisure");
+  assert.ok(_convoChoices("raw").some(c => /bert sent you/i.test(c.label)), "the choices answer 'who send you?'");
+});
+
+test("the room says who is with a customer; the noodle girls and the police answer; the frames are inside", () => {
+  G.room = "soi6_street"; out = []; run("talk to noodle girl"); assert.doesNotMatch(said(), /Nobody by that name/);
+  out = []; run("police"); assert.doesNotMatch(said(), /didn't parse|No idea/);
+  G.room = "soi6_mid"; out = []; run("examine licence"); assert.match(said(), /inside, in a frame by each till/);
+  assert.ok(!_hasBarman("sweet_tamarind"), "no barman at the Tamarind");
+});
+
+test("the prose stops asserting what didn't happen", () => {
+  assert.doesNotMatch(String(ROOMS.soi6_mid.desc), /nothing upstairs/);
+  assert.ok(Array.isArray(ROOMS.qv_room.lateDesc) && ROOMS.qv_room.lateDesc.every(l => !/shriek|HANDSOME MAN!/.test(l)));
+  for (const l of ENCOUNTERS.booking.intro) assert.doesNotMatch(l, /written off|half forgotten/);
+  for (const l of [].concat(ENCOUNTERS.freelancer.intro)) assert.doesNotMatch(l, /not necessarily Tuesday/);
+  assert.equal(HAPPY_LEVELS[HAPPY_LEVELS.length - 1][1].includes("running on empty"), false);
+  assert.doesNotMatch(_fmt(_STAND_BEER[0], { who: "Angela", drink: NPCS.angela.drink }), /Angela Singha/);
+});

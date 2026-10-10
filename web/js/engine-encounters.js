@@ -621,7 +621,7 @@ const _ENC = {
   police(input) {
     // "give me a receipt" paid ฿500 through the word "give" (Malcolm, round 59)
     if (/\breceipt\b/.test(input)) {
-      _say(`“Receipt?” He looks at you with real interest for the first time. “Receipt is at the station, Second Road. ฿${_num(POLICE_ARGUE)}, paperwork, all night.” He waits. Here, he means, is cheaper. (WAI and say sorry · PAY ฿${_num(POLICE_PAY)} · or argue it)`);
+      _say(`“Receipt?” He looks at you with real interest for the first time. “Receipt is at the station, Beach Road. ฿${_num(POLICE_ARGUE)}, paperwork, all night.” He waits. Here, he means, is cheaper. (WAI and say sorry · PAY ฿${_num(POLICE_PAY)} · or argue it)`);
       G.pendingEnc = "police"; return;
     }
     const barRoom = _venuesHere(_room()).find(to => ROOMS[to].barType && G.soc.mamaTreat[to]);

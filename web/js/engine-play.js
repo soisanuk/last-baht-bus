@@ -1485,13 +1485,16 @@ function _quizInput(input) {
   if (pick === item.a) {
     g.right++;
     // pooled: "like you cured something" five times in one quiz (Pete, round 75)
-    _say(`“${item.opts[item.a]}” — CORRECT! ` + _pickVary([
-      "The bar cheers like you cured something.",
+    // five questions, five lines: none twice in one quiz (Margaret, round 78: the suspect line came twice)
+    const _qr = ["The bar cheers like you cured something.",
       "A roar from the table by the door, who had money on you without telling you.",
       "The host points the microphone at you like a man pointing out a suspect, delighted.",
       "Somebody bangs the bar twice. The rival table confers in a low, wounded voice.",
-      "The host does a little drum-roll on the mic and moves on before it goes to your head.",
-    ], "quizright"));
+      "The host does a little drum-roll on the mic and moves on before it goes to your head."];
+    g.rightSaid = g.rightSaid || [];
+    const _qf = _qr.filter(l => !g.rightSaid.includes(l));
+    const _ql = _pickVary(_qf.length ? _qf : _qr, "quizright"); g.rightSaid.push(_ql);
+    _say(`“${item.opts[item.a]}” — CORRECT! ` + _ql);
   } else {
     _say(`“${item.opts[pick]}”… the host winces on your behalf. It was ` +
       `“${item.opts[item.a]}”. ` + _pickVary(_QUIZ_WRONG_TAIL, "quizwrong"), "alert");
@@ -2849,7 +2852,10 @@ function _doSocial(kind, targetWord) {
   // so a very-low-favor flirt (e.g. a bad-rep stranger) must clamp UP to its lowest
   // defined tier — "filed under harmless" — rather than crash on a null pool.
   while (tier < 4 && !_SOCIAL_TEXT[kind][tier]) tier++;   // bounded: tier 4 is always defined
-  const fn = _pickVary(_SOCIAL_TEXT[kind][tier], "soc:" + kind + tier);
+  // a woman you have just bought a drink does not ask you for one (Ray, round 78: "Buy me drink, funny man")
+  let _sp = _SOCIAL_TEXT[kind][tier];
+  if (((G.soc.drinkCount || {})[id] || 0) > 0) { const _nb = _sp.filter(l => !/buy (?:me|her)(?: a| one)? drink|lady drink/i.test(String(l))); if (_nb.length) _sp = _nb; }
+  const fn = _pickVary(_sp, "soc:" + kind + tier);
   _say(fn(name), tier === 0 ? "alert" : tier >= 3 ? "win" : "");
   if (braBump && tier >= 3) _say("(The bra you bought her is, as advertised, doing work.)", "dim");
   if (tier === 0) { _addHeat(SEV[kind] >= 4 ? 2 : 1); _addHappy(-1); }
@@ -3348,7 +3354,7 @@ const HAPPY_LEVELS = [
   [50, "สบาย — sabai"],
   [25, "สนุก — sanuk"],
   [10, "โอเค — finding your feet"],
-  [0, "เหนื่อย — running on empty"],
+  [0, "ช้าๆ — taking it slow"],   // "running on empty" read a gentle week as failure (Margaret, round 78)
 ];
 
 function _happyLevel(h) {
@@ -4122,7 +4128,7 @@ function _conquestHappy(base, id) {
   if (bonded) {
     // the ride's stops are in the figure, and the figure says so (Pete, round 75: +12 one night, +13 the next, unexplained)
     _say("(No treadmill with her — a night with someone who knows you doesn't cheapen. " +
-      "It's the one that keeps giving." + (base > 10 ? ` The ride is in it too: +${base - 10} for the stops she showed you.` : "") + ")", "dim");
+      "It's the one that keeps giving." + (base > 10 ? (G.lastBfWhy === "party" ? ` The night out is in it too: +${base - 10} for the bars you took her round.` : ` The ride is in it too: +${base - 10} for the stops she showed you.`) : "") + ")", "dim");
   } else if (id && !first && tier >= 2) {
     // she is still your regular; this is just the same evening going round again
     _say(_pickVary([
@@ -5124,6 +5130,7 @@ function _endNight(reason) {
     G.lastBfId = _pids[0];
     G.lastBfHonest = false;   // the fun close: khao man gai at 3 a.m., fondly
     G.lastBfBase = Math.min(14, 10 + Math.floor(G.party.stops / 2) + (_pids.length > 1 ? 2 : 0));
+    G.lastBfWhy = "party";   // the figure names what raised it: the bars, not a ride (Ray, round 78)
     G.lastBfPreTier = _bondTier(_pids[0]);   // read her tier BEFORE the close's bond, as the barfine path does: a one-night companion was told "someone who knows you" (Ossie, round 70)
     for (const _pid of _pids) _addBond(_pid, 3);
     _say(_fmt(_pids.length > 1
@@ -5468,6 +5475,7 @@ function _endNight(reason) {
   for (const _w of [G.lastBfId, ...((G.party && G.party.ids) || [])]) if (_w && NPCS[_w]) (G.seenDay = G.seenDay || {})[_w] = G.day;
   G.lastBfId = null;   // clear the LT-ending bond hook
   G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)
+  G.lastBfWhy = null;
   // bonds cool a notch a night; tend them or lose them — unless a loyal dog (Hachiko) holds them
   // a resident who comes by every few nights must be able to KEEP a local (27-night
   // playtest 2026-08-22: both contacts strangers by day 35) — expat bonds cool a
@@ -5498,6 +5506,7 @@ function _endNight(reason) {
     }
   }
   G.soc.barTurns = {};   // tonight's stools, not the vacation's — the line fired on a night slept through in the hotel (Keith, round 40)
+  G.soc.leftFrom = null; // tonight's exit, not the last one ever: night 3's long time answered LAST NIGHT on night 5 (Ray, round 78)
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh
@@ -5620,7 +5629,7 @@ function _endNight(reason) {
   }
   if (G.dog && !crash) {
     _say(_dogN("(Sai Krok is " + (G.hotel === "queenvic"
-      ? "curled in the Queen Vic's doorway when you come down"
+      ? "curled on the mat by the Queen Vic's door when you come down"
       : ((G.nightLog || [])[(G.nightLog || []).length - 1] === "allnighter"
         ? "up the stairs at your heel and asleep on the step before you've found the key"
         : "asleep against your door when you surface")) +

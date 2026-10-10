@@ -24,7 +24,7 @@ test("a choice label typed after the conversation lapsed is 'that moment's passe
   // Kesinee's greeting prints (… · PRESS HER FOR NAMES); Graham typed it back after
   // walking out and got TRAVEL's "you only know the way to bars". A label the game
   // printed is answered by the game, live partner or none.
-  G.room = _npcRoom("kesinee"); doCommand("talk to kesinee");
+  G.room = _npcRoom("kesinee"); doCommand("talk to kesinee"); doCommand("ask kesinee about pattaya leisure");   // the choices answer her question (round 78)
   assert.ok(_convoChoices("raw").some(c => /press her for names/i.test(c.label)), "the label was offered");
   G.room = "beach_rd_c"; out = [];
   doCommand("press her for names");

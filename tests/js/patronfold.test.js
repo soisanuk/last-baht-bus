@@ -134,7 +134,7 @@ test("a regular takes a beer, not a lady drink — and the ledger credits him", 
   out = [];
   doCommand("buy mort a drink");
   assert.equal(before - G.money, BEER_PRICE, "beer price, not lady-drink price");
-  assert.ok(_STAND_BEER.some(t => text().includes(_fmt(t, { who: "Mort", drink: "a cold one" }))),
+  assert.ok(_STAND_BEER.some(t => { const f = _fmt(t, { who: "Mort", drink: "a cold one" }); return text().includes(f.charAt(0).toUpperCase() + f.slice(1)); }),
     "the stand-a-beer scene, not the lady-drink scene");
 });
 

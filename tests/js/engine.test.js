@@ -2083,8 +2083,9 @@ test("recognition spreads across the soi — the main mamas + Bert read you", ()
     /police eyes/i, "Toi spots the ex-cop");
   const kes = read("kitten_corner", "kesinee", () => state().player.origin = "running");
   assert.match(kes, /you are hiding/i, "Kesinee reads the man running from something");
-  // ...and her Bert-vouch trust fork still rides the origin greeting
+  // ...and her Bert-vouch trust fork answers her PLG question (round 78: it rode the greetings, with no question)
   const t0 = _npcState("kesinee").trust;
+  run("ask kesinee about pattaya leisure");
   run("tell her bert sent you");
   assert.ok(_npcState("kesinee").trust >= t0 + 2, "the PLG vetting survives the origin read");
   // Bert (Beach Road) clocks your origin on the first meeting
@@ -2417,6 +2418,7 @@ test("PLG-cast choices move faction, NPC-trust, and bond from the player's respo
   state().room = "kitten_corner";
   run("talk kesinee");
   const t0 = _npcState("kesinee").trust;
+  run("ask kesinee about pattaya leisure");
   run("tell her bert sent you");
   assert.ok(_npcState("kesinee").trust >= t0 + 2, "Bert's name buys real trust");
   // Powers — needling the boss costs you PLG standing

@@ -371,6 +371,7 @@ function newGame() {
     exitTried: {},       // "room:dir" → day a way was tried and refused (the frontier stops offering it that night)
     examined: {},        // "room.readKey" → 1 — distinctive fixtures you've looked at (the Owl's noticer slot)
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
+    visitDay: {},        // roomId → the day you first stood in it: a greeting that says "your face is new" checks it (Ray, round 78)
     // roomId → true once a Darkside bar has bolted the door with you inside.
     // PERMANENT, unlike the nightly G.soc.lockIn: it is the difference between
     // a good customer and a face the door opens for (_lockInWelcome).
@@ -875,6 +876,11 @@ function _isGogo(room) { const r = ROOMS[room || G.room]; return !!(r && r.barTy
 // its stools and its bar top, a go-go has seats and small tables (Mario, 2026-10-07)
 function _seat(room) { return _isGogo(room) ? "seat" : "stool"; }
 function _ledge(room) { return _isGogo(room) ? "the table" : "the bar"; }
+function _hasBarman(room) {
+  const to = room || G.room, r = ROOMS[to] || {};
+  if (typeof _npcsHere === "function" && to === G.room && _npcsHere().some(i => NPCS[i] && (NPCS[i].manager || (NPCS[i].house && _pronoun(i) === "he")))) return true;
+  return /\b(barm[ae]n|bartenders?)\b/i.test(String(r.desc || "") + " " + (Array.isArray(r.revisit) ? r.revisit.join(" ") : ""));
+}
 function _roomFit(pool) {
   if (!pool || pool.length < 2 || !G || !G.room || !ROOMS[G.room] || !ROOMS[G.room].barType) return pool;
   if (typeof _npcsHere !== "function" || typeof NPC_ROLES === "undefined") return pool;
@@ -886,6 +892,10 @@ function _roomFit(pool) {
   if (!roles.has("cashier") && staff.length <= 1) bad.push(_FIT_TILL);
   if (ROOMS[G.room].barType === "gents" || ROOMS[G.room].indoors) bad.push(/open[- ]front/i);
   if (_isGogo()) bad.push(_FIT_GOGO);   // "the whole open front a few degrees warmer" in an aircon villa (Marguerite, round 67)
+  // a BARMAN is a man behind the bar, and most bars have none: the women pour (Ray, round 78 — "the
+  // barman builds her drink" at the Sweet Tamarind, run by View, Tukta and three nieces). A line naming
+  // one needs a manager on the floor or a room whose own prose has him.
+  if (!_hasBarman()) bad.push(/\b(barm[ae]n|bartenders?)\b/i);
   if (!bad.length) return pool;
   // read a function line's SOURCE, never call it: a pool line may roll dice or touch state, and
   // a filter that runs it shifts the seeded stream (round 57 found the soak's path had moved)
@@ -1556,7 +1566,7 @@ function _convoStart(id) {
   // turns while a typed digit routed to the new partner (mobile playtest,
   // 2026-08-17, Bpom's question haunting Roger's conversation).
   if (G.convoQ && G.convoQ.id !== id) {
-    const who = _convoName(G.convoQ.id);
+    const who = _convoName(G.convoQ.id), _qid = G.convoQ.id;
     // the question isn't spent — next time that node lands it can be asked again
     const ost = _npcState(G.convoQ.id);
     if (ost && ost.know) delete ost.know["asked_" + G.convoQ.key];
@@ -1567,7 +1577,7 @@ function _convoStart(id) {
     // re-ask on the next conversation with that person.
     (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q || "" };
     G.convoQ = null;
-    _say(`(${who}'s question goes unanswered — you've turned to ${_convoName(id)}.)`, "dim");
+    _say(`(${who}'s question will keep — you've turned to ${_convoName(id)}, and ${_sheHe(_qid).s} will ask again.)`, "dim");   // "goes unanswered" read as a penalty for greeting the room (Margaret, round 78)
   }
   G.convo = id; G.itNpc = id;
   // coming back to somebody whose question you walked away from: they ask again,
@@ -1735,7 +1745,7 @@ function _convoAsk(id, d, st) {
   // reload, but the QUESTION lived only in the scrollback — so a restored
   // player came back to "Answer in your own words — or: 1) …" with no way to
   // read what had been put to them (persistence playtest 2026-08-23).
-  G.convoQ = { id, key, q: d.asks.q || "" };
+  G.convoQ = { id, key, q: d.asks.q || "", turn: G.turns };
 }
 
 // The callback half of the ask loop: a delivered line can quote back what the
@@ -2197,7 +2207,7 @@ function _elsewhereLine(word) {
 // An unknown/locked topic falls back to the NPC's default (topicless) line —
 // classic adventure behaviour: they answer with whatever they always say.
 // A topic key matches the asked topic whole-word, never as a substring:
-// "boyfriend".includes("oy") was true, so ASK LEK ABOUT BOYFRIEND answered with
+// "boyfriend".includes("oy") was true, so "ask lek about boyfriend" answered with
 // Madam Oy — and every short key (oy, dj, ice, bank) could be found inside an
 // unrelated word (annoying, adjust, notice, embankment). Howard, round 35.
 // Multi-word keys ("sabai sabai", "walking street") still match inside a
@@ -2815,6 +2825,7 @@ function _describeRoom(full, forceFull) {
   const r = _room();
   const firstTime = !G.visited[G.room]; // full desc on first arrival + LOOK; brief ambient on revisit
   G.visited[G.room] = true; // standing in it is how places join the fast-travel list
+  if (G.visitDay && G.visitDay[G.room] == null) G.visitDay[G.room] = G.day;
   // Candy's recce quest: eyes on all three new drinking strips completes it
   // (flag is cheap and idempotent; _questTick only pays while the quest is active)
   // Tree Town's far end is TWO rooms a player could reasonably read as "the far
@@ -2874,7 +2885,7 @@ function _describeRoom(full, forceFull) {
   // (playtest, 2026-08-15). State-aware: working until the night's encounter is
   // spent, empty stools after.
   if (G.room === "north_beach") {
-    _say(G.encDone && G.encDone.freelancer
+    _say(G.soc && G.soc.coconutDone   // its own book: a freelancer met on another street did not empty these stools (Margaret, round 78)
       ? "The freelance stools under the palms sit empty now — the night's trade has moved on."
       : "Under the coconut palms, the freelance stools are working — a cigarette ember, " +
         "a low laugh, eyes reading the sand for a walk-up. (TALK TO THE LADIES, if you like.)", "dim");
@@ -2892,6 +2903,12 @@ function _describeRoom(full, forceFull) {
   // a girl on your arm has unpinned the number — she is with you, not on the board
   const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}${_onArm(id) ? " (with you)" : _badgeOf(id) ? " (" + _badgeOf(id) + ")" : ""}`);
   if (here.length) _say(_L("Here: ") + here.join(", ") + ".");
+  // a girl already sitting with a customer says so where you can see it: "the man beside her" was
+  // nobody on the Here: line (Margaret, round 78). The customers are the room's, not the cast's.
+  if (typeof _girlBusy === "function") {
+    const busy = npcs.filter(id => _girlBusy(id)).map(id => NPCS[id].name);
+    if (busy.length) _say(`(${busy.length === 1 ? busy[0] + " is" : busy.slice(0, -1).join(", ") + " and " + busy[busy.length - 1] + " are"} sitting with ${busy.length === 1 ? "a customer" : "customers"}.)`, "dim");
+  }
   // A punter knows the mama and the cashier the moment he sits down — the game
   // didn't say, and a man bought eight lady drinks for two cashiers and a
   // mamasan before EXAMINE told him (Lionel, round 36). One dim line, roles only.

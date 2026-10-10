@@ -39,6 +39,13 @@ function _stPaid(price, name, verb) {
   return `฿${_num(price - LADY_ST)} to the till for the bar's fine, ฿${_num(LADY_ST)} into ${name}'s own hand, and she ${verb}`;
 }
 
+// …and the long time's: the bar's fine into the ledger, her own money into her hand (Ray, round 78:
+// "she goes home with you all night and gets nothing")
+function _ltPaid(price, name) {
+  if (price <= LADY_LT) return `฿${_num(price)} into ${name}'s own hand, and ${_bfPayee()} `;
+  return `฿${_num(price - LADY_LT)} to ${_bfPayee()} for the bar's fine, entered in the ledger with ceremony, ฿${_num(LADY_LT)} into ${name}'s own hand, and ${_bfPayee()} `;
+}
+
 function _barfinePrice(bt, id) {
   let base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : bt === "gents" ? BF_GENTS : BF_BEER;
   if (typeof _barMarkup === "function" && _barMarkup(G.room) !== 1) base = _round50(base * _barMarkup(G.room));   // the owner's board (the bar-failure cycle)
@@ -1848,9 +1855,9 @@ function _bfResolve(kind) {
       // Beach Road bar that IS the short walk (Lionel, round 36)
       const motel = _room().region === "Beach Road"
         ? "short walk up the unlit alley off Soi 7 to Somchith's, the motel with no sign, where a ceiling fan is"
-        : _room().barType === "soi6" ? "short climb up the stairs at the back of the bar to the room above it, where a ceiling fan is"   // Soi 6 is upstairs (Darren, round 66)
+        : (_room().barType === "soi6" || _room().region === "Soi 6") ? "short climb up the stairs at the back of the bar to the room above it, where a ceiling fan is"   // Soi 6 is upstairs (Darren, round 66) — the middle's beer bars too (Ray, round 78)
         : "short walk to a short-time hotel with a ceiling fan";
-      _say((price ? `฿${_num(price)} to the ledger, and a` : "A") +
+      _say((price ? (price > LADY_ST ? `฿${_num(price - LADY_ST)} to the ledger for the bar's fine, ฿${_num(LADY_ST)} into ${name}'s own hand, and a` : `฿${_num(price)} into ${name}'s own hand, and a`) : "A") +
         ` ${motel} doing its slow count over the ` +
         `proceedings. ${name} is businesslike and cheerful and gone within the hour — a kiss at ` +
         `the door, and she's back on her stool at ${bar} before the song you left on has come round again. You amble ` +
@@ -1931,7 +1938,7 @@ function _bfResolve(kind) {
   if (scam) { // runner | mao | leaveAfter — plays out across the night's end
     G.bfIncident = { id, room: G.room, kind: scam, fine: price, day: G.day };
     _say((price ?
-      (_herMoney ? `฿${_num(price)} to her — the book is closed, this is her money — and she folds it away ` : `฿${_num(price)} to ${_bfPayee()}, who enters it in the ledger with ceremony and `) +
+      (_herMoney ? `฿${_num(price)} to her — the book is closed, this is her money — and she folds it away ` : _ltPaid(price, name)) +
       `gives ${name} a nod that means back by opening, mind. ` :
       `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
       `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
@@ -1993,7 +2000,7 @@ function _bfResolve(kind) {
   _say((price ? (_herMoney
     ? `฿${_num(price)} to ${name} herself — the bar's book is shut for the night and this is hers — ` +
       `and the mamasan gives her a nod that means back by opening, mind. `
-    : `฿${_num(price)} to ${_bfPayee()}, who enters it in the ledger with ceremony and ` +
+    : _ltPaid(price, name) +
     `gives ${name} a nod that means back by opening, mind. `) :
     `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
     `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
@@ -2349,6 +2356,7 @@ function _endRide(seq, reason) {
   G.lastRide = { id, day: G.day, stops: seq.stops };
   G.lastBfId = id;
   G.lastBfBase = 10 + Math.min(4, seq.stops); // a bigger night → a bigger memory at the payout
+  G.lastBfWhy = "ride";
   _endNight("barfine");
 }
 
@@ -3062,7 +3070,9 @@ function _doHint() {
       { giver, name: _L(q.name), id: offered[0].toUpperCase() }), "win");
       return;
     }
-    _say("The wallet's yours and the opening's behind you — out here there are no wrong " +
+    _say(G.mode === "soi6"   // there is no wallet on the Soi 6 week (Margaret, round 78)
+      ? "One street, seven nights, and no wrong answers on it — only better nights. Sit somewhere, ASK somebody, and come back to whoever answered best."
+      : "The wallet's yours and the opening's behind you — out here there are no wrong " +
       "answers, only better nights.", "dim");
     _sayLeads(true);
     _say("(JOURNAL is the whole page of what's open; QUESTS lists jobs, WHO your black book, MAP the lay of the land.)", "dim");
@@ -6017,7 +6027,7 @@ const _LEAVING_TALK = {
       n => `"Tomorrow already?" ${n} counts on her fingers, surprised. "Short holiday. Next time stay longer — then I learn your name properly, not only your drink."`,
       n => `${n} makes a face. "Tomorrow? Then tonight you buy one more, so I remember." She is joking, mostly.`,
       n => `"You go home and tell everybody Pattaya is very bad, na." ${n} grins. "So they don't come. Then you come back and it is only you."`],
-  2: [n => `${n} stops wiping the glass. "You tell me before. Good. Other man, I find out from mama, after." She puts the glass down. "I not take the night off. I work. But I remember you tell me."`,
+  2: [n => `${n} stops wiping the glass. "You tell me before. Good. Other man, I find out from mama, after." She puts the glass down. "I not cry about it. Tonight I work, same every night — you want me, you know the price. But I remember you tell me."`,   // "I not take the night off" read as a no, and BARFINE then sold her night (Ray, round 78)
       n => `"Tomorrow you fly." ${n} says it back to you flat, filing it. "Then tonight you sit with me, and you not look at your {{phone}}, and tomorrow I not look at mine." It is not quite a joke.`],
   3: [n => `${n} does not do the face. "Don't say it like that, like a sad movie. You go, you come back, I am here. I don't move." A hand on your arm, brief and hard. "Okay. Now buy me a drink and talk about something else."`,
       n => `"When?" ${n} wants the time, not the fact. You tell her, and she nods once, and the subject is closed for the night — she has clearly decided in advance how she will do this, and this is how.`],
@@ -6915,7 +6925,7 @@ const _PUB_SOI_SCENES = [
     "cold air and the low talk of men who found their stool and mean to keep it.",
   "The soi at arm's length through the glass — louder and grabbier down here than it ever looks from up top, every " +
     "offer aimed at pavement height. You nurse {yours}; the window holds. Terry lifts his without looking, a man who " +
-    "has watched this exact hundred metres longer than some of the girls out there have been alive.",
+    "has watched this exact stretch of pavement longer than some of the girls out there have been alive.",
 ];
 // One spectator happy-point a night, shared across every vantage (balcony, pub
 // window, the quiet-middle parade, the Blue Dog show) via G.blueDogDay.
@@ -10373,7 +10383,7 @@ function _doFeedDog(arg) {
     : "A passing bar girl laughs at your face: “Ohhh. He choose you, na.”") +
     " The soi calls him Sai Krok — sausage — after his one great subject. From here on he " +
     "pads at your heel, waits outside every bar, and sleeps " +
-    (G.hotel === "queenvic" ? "in the Queen Vic's doorway, down on the soi" : "against your door") +
+    (G.hotel === "queenvic" ? "on the mat by the Queen Vic's door, down on the soi" : "against your door") +
     ". Nobody " +
     "consulted you. That is how it works. (He's yours now: NAME DOG <something> if " +
     "you'd rather he answered to yours.)", "win");
