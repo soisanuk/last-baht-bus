@@ -106,3 +106,45 @@ test("the 18+ notice names the punter frame and the right to say no", () => {
   const notice = html.slice(html.indexOf('<div id="start-age"'), html.indexOf("</div>", html.indexOf('<div id="start-age"')));
   assert.match(notice, /18\+/); assert.match(notice, /You play a man/); assert.match(notice, /customer/); assert.match(notice, /say no/);
 });
+
+// ── THE PRICE PASS (Mario's calls on Ray, 2026-10-10) ─────────────────────────────────────────────
+test("Soi 6 short time is upstairs and long time is out of the bar, and the money is said as its two fees", () => {
+  G.room = "ruby_kiss"; G.nightTurn = 40;
+  const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && i !== "chompoo");
+  G.soc.drinkCount = { [g]: 1 }; out = []; run("barfine " + NPCS[g].name.toLowerCase());
+  assert.match(said(), /SHORT TIME [^·]*upstairs/); assert.match(said(), /LONG TIME [^·]*leaves the bar with you/);
+  const st = G.pendingBf.st; out = []; run("short time");
+  assert.match(said(), new RegExp(`฿${_num(st - LADY_ST)} to the till for the bar's fine, ฿${_num(LADY_ST)} into ${NPCS[g].name}'s own hand`), "her money is seen to be paid");
+});
+
+test("more drinks, more fun — unless she is a throughput girl, who likes a man who goes straight up", () => {
+  const soi6 = Object.keys(NPCS).filter(i => NPC_ROLES[i] === "hostess" && ROOMS[NPCS[i].room] && ROOMS[NPCS[i].room].barType === "soi6");
+  const thru = soi6.filter(_throughput), drinky = soi6.filter(i => !_throughput(i));
+  assert.ok(thru.length > soi6.length / 5 && thru.length < soi6.length / 2, "a minority, varies by girl: " + thru.length + "/" + soi6.length);
+  G.soc.drinkCount = { [drinky[0]]: 4, [thru[0]]: 4 };
+  assert.equal(_stDrinkBonus(drinky[0]).n, 3, "four drinks pay three");
+  assert.equal(_stDrinkBonus(thru[0]).n, 0, "four drinks are wasted on her");
+  G.soc.drinkCount = { [drinky[0]]: 1, [thru[0]]: 1 };
+  assert.equal(_stDrinkBonus(drinky[0]).n, 0); assert.equal(_stDrinkBonus(thru[0]).n, 2, "the one drink and up: her favourite");
+});
+
+test("the bell is a round for everyone in the room, priced per head", () => {
+  G.room = "kitten_corner";
+  const h = _bellHeads("kitten_corner");
+  assert.equal(_bellPrice("kitten_corner"), Math.max(BELL_PRICE, Math.round((h.women * _ladyPrice() + h.men * _beerPrice()) / 10) * 10));
+  assert.ok(_bellPrice("kitten_corner") >= 1000, "a full Soi 6 bar is four figures (Ray: ฿1,200 or more)");
+  assert.ok(_bellPrice("queen_vic") < _bellPrice("kitten_corner"), "a pub round is beers, not lady drinks");
+  const p = _bellPrice("kitten_corner"); assert.equal(_bellPrice("kitten_corner"), p, "quoting it moves nothing");
+  G.money = p + 50; out = []; run("ring bell"); assert.equal(G.money, 50, "quoted is charged");
+  for (const l of _BELL_BEER) assert.doesNotMatch(l, /round for the staff|Cheap at the price/, "a beer-bar bell is the whole bar's round");
+});
+
+test("the 7-Eleven sells beer until midnight, and Soi 6 has one of its own; the other is across Second Road", () => {
+  G.room = "soi6_street"; G.nightTurn = 30; const m = G.money, d = G.soc.drunk;
+  out = []; run("buy beer"); assert.equal(G.money, m - SEVEN_BEER); assert.equal(G.soc.drunk, d + 1);
+  G.nightTurn = 60; out = []; run("buy beer"); assert.equal(G.money, m - SEVEN_BEER, "past midnight the fridge is chained");
+  assert.ok(_SEVEN_BEER_SHUT.some(l => said().includes(l)));
+  assert.deepEqual(Object.keys(ROOMS).filter(r => ROOMS[r].region === "Soi 6" && ROOMS[r].seven), ["soi6_street"]);
+  assert.ok(ROOMS.second_rd_soi6.seven, "across Second Road");
+  G.room = "sweet_tamarind"; G.nightTurn = 30; out = []; run("buy water"); assert.equal(G.money, m - SEVEN_BEER - _beerPrice(), "water in a bar is still the beer's price (Mario)");
+});

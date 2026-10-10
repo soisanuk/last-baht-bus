@@ -251,13 +251,11 @@ test("the pocket flies home with you (Stan 2)", () => {
 // at ~40%.
 test("the Soi 6 drink tariff is measured in the unit it is quoted in (Stan 4)", () => {
   G.room = "sunset_dreams"; G.money = 5000; G.nightTurn = 40;
-  assert.equal(_soi6DrinkMin("kwan"), 5, "premise: Kwan runs the policy");
   NPCS.kwan.type = "lazy";                 // the worst case: 40% credited
-  G.soc.drinks.kwan = 3;
-  for (let i = 0; i < 5; i++) run("buy drink for kwan");
-  assert.equal(G.soc.drinkCount.kwan, 5, "five drinks bought, five counted");
+  run("buy drink for kwan");
+  assert.equal(G.soc.drinkCount.kwan, 1, "one drink bought, one counted");
   out = []; run("barfine kwan");
-  assert.doesNotMatch(text(), /5 lady drink first/, "a met tariff is a met tariff");
+  assert.doesNotMatch(text(), /One lady drink first|Buy me one drink|empty glass an inch/, "a met tariff is a met tariff, whatever the warmth credited");
   delete NPCS.kwan.type;
 });
 

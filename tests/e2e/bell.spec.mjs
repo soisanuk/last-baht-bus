@@ -21,7 +21,7 @@ test("bar bell FAB: hidden outside bars, taps to ring inside, clang fires", asyn
   // cooldowns far out so a random encounter can't spawn on the LOOK/ring ticks
   // and swallow "ring bell" as its snap reaction (the flake this guards).
   await page.evaluate(() => {
-    G.room = "neon_paradise"; G.money = 2000;
+    G.room = "neon_paradise"; G.money = 20000;   // the bell is a round for the whole room, per head (round 78)
     G.lastSaleng = 9e9; G.lastPeddler = 9e9;
   });
   await page.fill("#term-in", "look");
@@ -35,7 +35,7 @@ test("bar bell FAB: hidden outside bars, taps to ring inside, clang fires", asyn
     _audio.sfx = n => { window.__sfx.push(n); return orig(n); };
   });
   await fab.click();                        // the first tap names the price…
-  await expect(fab).toHaveText(/฿\d+\?/);
+  await expect(fab).toHaveText(/฿[\d,]+\?/);
   expect(await page.evaluate(() => window.__sfx.includes("bell"))).toBe(false);
   await fab.click();                        // …the second rings it
   await expect(page.locator("#term-out")).toContainText(/RING THE BELL/i);
@@ -60,7 +60,7 @@ test("bar bell FAB: hidden outside bars, taps to ring inside, clang fires", asyn
 test("the bell FAB never overlaps transcript text, at any scroll height", async ({ page }) => {
   await bootIntoGame(page, INDEX_URL);
   await page.evaluate(() => {
-    G.room = "neon_paradise"; G.money = 2000;
+    G.room = "neon_paradise"; G.money = 20000;   // the bell is a round for the whole room, per head (round 78)
     G.lastSaleng = 9e9; G.lastPeddler = 9e9;
   });
   // print a long block that fills the transcript without triggering a real

@@ -2050,7 +2050,7 @@ test("personalities bite in the social system — charmer/joker/blunt/operator",
   // integration: OPERATOR gets the pre-pay tell on a risky (drunk-type) girl
   state().player.personality = "operator";
   state().flags.act1Done = true; state().flags.hasWallet = true;
-  state().soc.drinks.dew = 6;
+  state().soc.drinks.dew = 6; state().soc.drinkCount = { dew: 1 };   // Soi 6's one drink (round 78)
   out = []; run("barfine dew");
   assert.match(lastOut(), /Operator's instinct/, "he clocks the angle before the money moves");
 });
@@ -2433,7 +2433,7 @@ test("PLG-cast choices move faction, NPC-trust, and bond from the player's respo
 
 test("cashiers cap physical contact until the bell has rung twice", () => {
   state().room = "rainbow_girls"; // a go-go — the bell is venue-tiered (×1.75), so two rings need headroom
-  state().money = 2000;
+  state().money = 20000;   // the bell is a round for the whole room (round 78)
   run("spank ploy");
   assert.match(lastOut(), /books, not the customers/i);
   assert.equal(state().soc.heat.rainbow_girls, 2);
@@ -2461,7 +2461,7 @@ test("the cashier's bell-gate hint remembers a ring already spent (Reg the publi
 
 test("three bell rings: the room is yours — hostess reciprocates cold", () => {
   state().room = "neon_paradise"; // Noi, a hostess
-  state().money = 2000;
+  state().money = 20000;   // the bell is a round for the whole room (round 78)
   run("ring bell", "ring bell", "ring bell");
   assert.equal(state().soc.bells.neon_paradise, 3);
   out = [];
@@ -2509,7 +2509,7 @@ test("the heat narration never names staff a one-hostess corner bar doesn't have
 
 test("bell flavor: 'Three' isn't shouty (no dead tap), four-plus gets a generic line", () => {
   state().room = "neon_paradise";
-  state().money = 5000;
+  state().money = 20000;   // the bell is a round for the whole room (round 78)
   run("ring bell", "ring bell", "ring bell"); // third ring: the peak line
   assert.match(lastOut(), /Three bells|own this bar/);
   assert.doesNotMatch(lastOut(), /THREE/, "all-caps would decorate into a dead tap target");
@@ -2620,9 +2620,10 @@ test("a drink for the mamasan buys the whole bar's goodwill", () => {
   assert.match(lastOut(), /royal assent|treat you like a regular/i);
 });
 
-test("ringing the bell costs ฿300, clears heat, and lifts every outcome", () => {
+test("ringing the bell buys the room a round, clears heat, and lifts every outcome", () => {
   state().room = "jasmine_garden";
-  state().money = 400;
+  const price = _bellPrice("jasmine_garden");   // a round for everyone in the room, per head (round 78)
+  state().money = price + 100;
   state().soc.heat.jasmine_garden = 2;
   run("ring bell");
   assert.equal(state().money, 100);
@@ -3907,7 +3908,7 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   state().room = "pink_lotus";
   state().money = 1000;
   state().nightTurn = 40; // 22:00 — base rate
-  state().soc.drinks.joy = 4;
+  state().soc.drinks.joy = 4; state().soc.drinkCount = { joy: 1 };   // Soi 6's one drink (round 78)
   run("barfine joy");
   assert.ok(state().pendingBf);
   assert.match(lastOut(), /upfront as a menu/i, "Soi 6 girls quote it themselves");
@@ -3920,27 +3921,23 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   assert.match(lastOut(), /Upstairs/i);
 });
 
-test("soi 6 drink-minimum: some girls want a few lady drinks before upstairs", () => {
+test("soi 6 is one lady drink before upstairs, and none for a regular (Mario, round 78)", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().room = "sunset_dreams"; // Kwan, Soi 6
   state().money = 2000;
   state().nightTurn = 40;
-  assert.equal(_soi6DrinkMin("kwan"), 5, "Kwan runs the policy this vacation");
-  state().soc.drinks.kwan = 2; // past the base gate, short of the tariff
   run("barfine kwan");
-  assert.ok(!state().pendingBf, "the ask is turned away, not opened");
-  assert.match(lastOut(), /bar rule: 5 lady drink/i);
-  // patience clears it — the tariff is a tab thing, re-checked each ask. It is
-  // counted in DRINKS BOUGHT tonight (round 35: it compared favor, which a
-  // lazy-drink girl credits at ~40%, so "5 lady drink first" outlived the
-  // eighth drink), so meet it in that unit.
-  state().soc.drinks.kwan = 5; state().soc.drinkCount = { kwan: 5 };
+  assert.ok(!state().pendingBf, "a stranger buys her one first");
+  assert.match(lastOut(), /one/i);
+  state().soc.drinkCount = { kwan: 1 };
   run("barfine kwan");
-  assert.ok(state().pendingBf, "tariff met, upstairs is on the table");
+  assert.ok(state().pendingBf, "one drink, and upstairs is on the table");
   assert.match(lastOut(), /upfront as a menu/i);
-  // reputation girls and the plain girls don't nickel-and-dime
-  assert.equal(_soi6DrinkMin("joy"), 0, "Joy runs no policy this vacation");
+  state().pendingBf = null; state().soc.drinkCount = {}; state().soc.drinks.kwan = 14;   // a regular
+  run("barfine kwan");
+  assert.ok(state().pendingBf, "a regular needs no drink at all");
+  assert.equal(_soi6DrinkMin("kwan"), 0, "the old 3-to-5 policy is retired");
 });
 
 // ── Massage: the legit heal, the oil special, and the soapy fishbowl ─────────
@@ -6346,7 +6343,7 @@ test("act one complete: scored, converted to happiness, night continues", () => 
 
 test("hitting 100 สนุก is celebrated, not terminal", () => {
   state().room = "candy_bar";
-  state().money = 500;
+  state().money = 20000;   // the bell is a round for the whole room (round 78)
   state().happy = 99;
   run("ring bell");
   assert.ok(state().happy >= 100);
@@ -8078,7 +8075,7 @@ test("the newbie nudges fire once, in order, and only where the advice works", (
   // the bell comes next visit, not the same breath
   out = []; _newbieNudge();
   assert.match(out.join("\n"), /bell over the rail/, "the bell is the second tip");
-  assert.match(out.join("\n"), new RegExp("฿" + BELL_PRICE), "and it quotes the real price");
+  assert.match(out.join("\n"), new RegExp("฿" + _num(_bellPrice(state().room))), "and it quotes the real price");
 
   // and never again
   out = []; _newbieNudge();

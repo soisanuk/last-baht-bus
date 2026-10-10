@@ -3605,11 +3605,30 @@ function _beerPrice(room) {
   return Math.max(10, Math.round(BEER_PRICE * _drinkMult(room) * half / 10) * 10 - (r.beerOff || 0));
 }
 function _ladyPrice(room) { return Math.round(LADY_DRINK * _drinkMult(room) / 10) * 10; }
-// The bell was the one round-for-the-house price the venue tier never
-// reached — flat everywhere, so in a go-go (×1.75) it bought a round for the
-// whole floor for less than one single lady drink (Reg the publican, round
-// 32, 2026-08-30). Same helper shape as beer/lady drink, same rounding.
-function _bellPrice(room) { return Math.round(BELL_PRICE * _drinkMult(room) / 10) * 10; }
+// THE BELL IS A ROUND FOR EVERYONE IN THE ROOM, priced per head (Mario, 2026-10-10, on Ray: a
+// flat ฿300–380 "bought the whole bar a round" at Kitten Corner, five girls and the mamasan at
+// ฿190 a lady drink — his mates would ring it on turn one). Every working woman present is a lady
+// drink, every man and every woman on the customer side of the rail is a beer, and the punters the
+// room has but the cast does not name are counted by a pure hash of (room, day, hour), thinner in
+// the wet — no dice, so quoting it moves nothing. BELL_PRICE is the floor: an empty bar's round.
+const _BELL_CROWD = { beer: 3, soi6: 3, gents: 3, pub: 6, gogo: 8, club: 10, host: 3 };
+function _bellHeads(room) {
+  const to = room || G.room;
+  const r = ROOMS[to] || {};
+  const party = (G.party && G.party.ids) || [];
+  const here = Object.keys(NPCS).filter(id => _npcWhere(id) === to || (to === G.room && party.includes(id)));
+  const women = here.filter(id => NPC_ROLES[id] && !party.includes(id)).length + party.filter(id => to === G.room).length;
+  const named = here.length - women;
+  const base = _BELL_CROWD[r.barType || r.drinks] || 3;
+  let anon = Math.floor(base / 2) + _hh(to + ":" + G.day + ":" + Math.floor((G.nightTurn || 0) / 10) + ":crowd", 7) % (base + 1);
+  if (typeof _lowSeason === "function" && _lowSeason()) anon = Math.floor(anon * 0.6);
+  return { women, men: named + Math.max(0, anon - named) };
+}
+function _bellPrice(room) {
+  const h = _bellHeads(room);
+  const n = h.women * _ladyPrice(room) + h.men * _beerPrice(room);
+  return Math.max(BELL_PRICE, Math.round(n / 10) * 10);
+}
 
 // WHO RUNS THE MONEY HERE. Not every bar has a cashier: a big go-go splits the
 // jobs, but on a small bar the owner IS the mamasan IS the cashier — one woman

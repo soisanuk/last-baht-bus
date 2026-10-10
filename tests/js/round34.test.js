@@ -603,8 +603,8 @@ test("a stake you can't have is explained, not pocketed (Gerry)", () => {
 
 test("the bell's HELP line doesn't quote a price the till tiers past (Gerry)", () => {
   assert.notEqual(_bellPrice("las_vegas"), _bellPrice("lucky_tiger"), "premise: it tiers");
-  assert.doesNotMatch(_HELP, /RING BELL \(฿300, instant/, "the flat quote is gone");
-  assert.match(_HELP, /dearer in the fancy ones/, "…replaced by something true everywhere");
+  assert.doesNotMatch(_HELP, /RING BELL \(฿300/, "the flat quote is gone");
+  assert.match(_HELP, /the fuller the bar, the bigger the bill/, "…replaced by something true everywhere (round 78: per head)");
 });
 
 // The room's own prose said every bar shut, then listed four of them as doors.

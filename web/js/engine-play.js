@@ -3148,17 +3148,17 @@ const _BELL_SOLO = [
   "A round for the house, and the house is her. She toasts you with something she was already drinking, tops your bottle up before it is empty, and says the thing every small bar says to a man who rings the bell early: \"You come back, na.\"",
 ];
 const _BELL_BEER = [
-  "A round for the staff, and the little beer bar loves you for it. The two or three girls behind " +
-    "the rail cheer, the cashier bangs the counter, and a cold one lands in front of you before " +
+  "A round for the house, and the little beer bar loves you for it. The girls behind " +
+    "the rail cheer, the cashier bangs the counter, the men on the stools raise whatever they have, and a cold one lands in front of you before " +
     "you've even lowered your arm.",
-  "The bell means the staff drink on you, and they do, gladly — whoops from behind the rail, a " +
-    "bottle-opener drum-roll, the whole open front a few degrees warmer, and a bottle back across the rail for you. Small bar, big welcome.",
-  "You ring it: a round for everyone working the bar. The girls toast you, the cashier grins, and " +
-    "a comped bottle finds its way back to your hand. Beer-bar economics — everybody wins.",
+  "The bell means the whole bar drinks on you, and it does, gladly — whoops from behind the rail, a " +
+    "bottle-opener drum-roll, a nod from every stool, the whole open front a few degrees warmer, and a bottle back across the rail for you. Small bar, big welcome.",
+  "You ring it: a round for everyone in the place, the girls working it and the men drinking in it. The girls toast you, the cashier grins, and " +
+    "a comped bottle finds its way back to your hand.",
   "A round for the house, which here is a handful of staff and whoever wandered in off the soi. " +
     "Cheers, clinks, a cold one pushed back at you, and your name suddenly known the length of a very short bar.",
-  "The bell brings the staff's whole attention and their whole thanks: a cheer, a toast, a cold " +
-    "one on the house right back at you. Cheap at the price for a bar this glad to see you.",
+  "The bell brings the bar's whole attention and its whole thanks: a cheer, a toast from the stools, a cold " +
+    "one on the house right back at you. Not cheap, and worth it, for a bar this glad to see you.",
 ];
 const _BELL_PUB = [
   "The pub erupts in the particular joy of the British abroad: a round for the house, on you. " +
@@ -3171,8 +3171,8 @@ const _BELL_PUB = [
     "settle back a notch friendlier. The staff get theirs too — nobody rings the bell and stiffs " +
     "the bar.",
   "The bell brings the whole room's head round, then the whole room's goodwill. Beers appear, " +
-    "glasses clink, the regular who's ignored you all week decides you're alright after all. Cheap, " +
-    "for a room full of temporary friends.",
+    "glasses clink, the regular who's ignored you all week decides you're alright after all. Not " +
+    "cheap, for a room full of temporary friends, and worth it.",
   "You ring it and the pub does the thing pubs do: a ragged cheer, every glass raised, a round on " +
     "your tab with the staff cut in. Terry lifts his without a word — which, from Terry, is a " +
     "standing ovation.",

@@ -11,6 +11,34 @@
 // The clock sets the rate: before 21:00 the mamasan charges for the whole
 // lost shift (×1.5); after midnight most beer bars quietly waive the fee —
 // except for the popular girls — and the flash joints just discount.
+// DRINKS OR THROUGHPUT (Mario, 2026-10-10, on Ray's round): the more lady drinks you buy a girl,
+// usually, the better the time upstairs — but it varies by girl, and some value the trip up the
+// stairs over the drinks before it. A stable third of the floor are the second kind.
+function _throughput(id) { return !!(id && NPCS[id] && NPC_ROLES[id] === "hostess" && _hh(id + ":thru", 5) % 3 === 0); }
+// what the drinks tonight add to a short time with her, and the line that says so
+const _ST_DRINKS_PAID = [
+  n => `(The drinks were not wasted. ${n} was already laughing at your jokes before the stairs, and it showed.)`,
+  n => `(${n} counts the evening in drinks, and by that count you were somebody tonight. It showed upstairs.)`,
+  n => `(A man who sat with her first is a different customer to ${n}. She made sure you noticed.)`,
+];
+const _ST_THROUGHPUT = [
+  n => `(${n} liked that you did not make a ceremony of it. Some girls count drinks; she counts trips up the stairs.)`,
+  n => `("You not waste my time," ${n} says on the stairs, approving. It is the nicest thing she says all night, and she means it.)`,
+  n => `(${n} is a throughput girl, and a man who goes straight up is her favourite kind of man.)`,
+];
+function _stDrinkBonus(id) {
+  const d = ((G.soc.drinkCount || {})[id]) || 0;
+  if (_throughput(id)) return d <= 1 ? { n: 2, line: _pickVary(_ST_THROUGHPUT, "stthru")(NPCS[id].name) } : { n: 0 };
+  const n = Math.min(Math.max(0, d - 1), 3);
+  return n ? { n, line: _pickVary(_ST_DRINKS_PAID, "stdrinks")(NPCS[id].name) } : { n: 0 };
+}
+// the short time's money, said as the two fees it is: the bar's fine to the till, her own money to her
+function _stPaid(price, name, verb) {
+  if (!price) return `No fee crosses the till — she squared it with the mama herself — and ${name} ${verb}`;
+  if (price <= LADY_ST) return `฿${_num(price)} into ${name}'s own hand, and she ${verb}`;
+  return `฿${_num(price - LADY_ST)} to the till for the bar's fine, ฿${_num(LADY_ST)} into ${name}'s own hand, and she ${verb}`;
+}
+
 function _barfinePrice(bt, id) {
   let base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : bt === "gents" ? BF_GENTS : BF_BEER;
   if (typeof _barMarkup === "function" && _barMarkup(G.room) !== 1) base = _round50(base * _barMarkup(G.room));   // the owner's board (the bar-failure cycle)
@@ -118,18 +146,10 @@ function _sponsorFamilyDay(id) {
   return _sponsorInTown(id) && G.day === _sponsorStart(id) + _hh(id + ":" + G.vacation + ":family", 89) % 3;
 }
 
-// Soi 6 upstairs drink-minimum. A hash-picked minority of Soi 6 girls (and the
-// bars behind them) run a "buy me a few lady drinks before we go upstairs"
-// policy — the bar wants its spend, the girl wants to warm up. It's quoted only
-// when you make the move, and rushing the ask on a single drink is exactly what
-// trips it; a couple more drinks and it lifts. Reputation girls don't bother.
-// N (3–5) is stable per (girl, vacation), shared-world-safe like _quizBars.
 function _soi6DrinkMin(id) {
-  if (_room().barType !== "soi6" || NPC_ROLES[id] !== "hostess") return 0;
-  if (POPULAR_GIRLS.includes(id)) return 0;
-  const h = _hh(id + ":" + G.vacation + ":dmin", 83);
-  if (h % 100 >= 40) return 0;        // ~40% run the policy
-  return 3 + (h >>> 16) % 3;          // 3, 4, or 5
+  // RETIRED (Mario, 2026-10-10, on Ray: "3 more, then we talk" is a Walking Street go-go rule;
+  // Soi 6 is one drink, or none for a regular — the gate in _doBarfine). Kept so a caller reads 0.
+  return 0;
 }
 
 // ── Nira's loan: borrow at 20%, due in three days, and she always gets paid ──
@@ -892,7 +912,21 @@ function _doBarfine(arg) {
     const dayNo = _bfDayRefusal(id);
     if (dayNo) { _bfRefusalSay(id, dayNo); return; }
   }
-  const _bfGate = bertAlly ? 1 : bt === "soi6" ? 2 : 4;
+  // SOI 6 IS ONE DRINK (Mario, 2026-10-10, on Ray: "3 more, then we talk" is a Walking Street
+  // rule) — one lady drink tonight from a stranger, none from a regular, counted in drinks
+  if (bt === "soi6" && !bertAlly) {
+    const _had = ((G.soc.drinkCount || {})[id]) || 0;
+    const _tipped = ((G.soc.given || {})[id] || 0) >= _ladyPrice();   // money already in her hand is better than a drink
+    if (_had < 1 && !_tipped && _knownTier(id) < 2) {
+      _say(_fmt(_pickVary([
+        "{n} laughs and taps the bar in front of her. \u201cOne lady drink first, na. Then we go up.\u201d Soi 6 has exactly one rule, and that is it.",
+        "\u201cBuy me one drink, handsome. One.\u201d {n} holds up a finger to make sure. \u201cThen upstairs.\u201d",
+        "{n} slides her empty glass an inch towards you, which is the whole of the negotiation. One drink, and the stairs are open.",
+      ], "soi6gate"), { n: name }) + " (BUY DRINK FOR " + name.toUpperCase() + ")");
+      return;
+    }
+  }
+  const _bfGate = bertAlly ? 1 : bt === "soi6" ? -99 : 4;
   if (_favor(id) < _bfGate) {
     // she names the REAL remaining count — a stated tariff that doesn't count
     // is a lie with a smile on it (grapevine playtest F12, 2026-08-25). That
@@ -970,7 +1004,7 @@ function _doBarfine(arg) {
       "upstairs the way a noodle cart quotes noodles, one eye still counting " +
       `the room over your shoulder.` +
       (G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
-        "apologetic shrug: take a Soi 6 girl off the floor for a whole night " +
+        "apologetic shrug: upstairs is one thing, but take a Soi 6 girl out of the bar for a whole night " +
         "this early and the mamasan prices her like a go-go headliner." : ""));
   } else if (typeof _soleStaff === "function" && _soleStaff(id) && !(NPCS[id] && NPCS[id].owner)) {
     // she is the only one working, and the canon says a bar this small is hers or
@@ -1073,13 +1107,11 @@ function _bfRefusal(id, bt) {
   // his family night. Also not held: it's a day thing, not a mood.
   // the upstairs drink-minimum: not a mood, a tariff — re-checked each ask so a
   // couple more lady drinks lifts it (not held; it's about your tab, not the day).
-  const dmin = _soi6DrinkMin(id);
   // Measured in DRINKS, because that is the word she uses. It compared favor,
   // and a lazy-drink girl credits only ~40% of what she's bought (_boughtBond
   // rolls it), so "5 lady drink first" stood after the eighth drink and ฿1,520
   // — a named condition met, exceeded, and never honoured (Stan, round 35).
   const _bought = (G.soc.drinkCount && G.soc.drinkCount[id]) || 0;
-  if (dmin && _bought < dmin) return { kind: "drinkmin", need: dmin, have: _bought };
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   if (G.soc.drunk >= 6 && _rand() < 0.5) return keep("mess");
   const gate = bt === "soi6" ? 2 : 4;
@@ -1185,11 +1217,6 @@ function _bfRefusalSay(id, r) {
         : _npcsHere().includes((G.soc.bfBar || {})[G.room])
         ? "The other girl is back on her stool, and everybody saw you leave with her; the rules of the floor outlast the hour."   // an ST round puts her back (Nadia, round 61)
         : "It doesn't matter that the other girl is gone; the rules of the floor outlast the shift."),
-    drinkmin: `${name} is up for it — hand already on your arm — but she tips her ` +
-      `chin at the mamasan minding the till: “Sure sure, tilac, but bar rule: ` +
-      `${r.need} lady drink first, then upstairs.” Not a brush-off. A tariff. ` +
-      "(You moved a shade fast — the ones who rush the stairs on one drink " +
-      "always hit this. Buy her a couple more and ask again.)",
   };
   _say(lines[r.kind] || lines.dislike, "alert");
   if (["dislike", "stealing"].includes(r.kind)) {
@@ -1619,12 +1646,17 @@ function _bfPrompt(fresh) {
   if (G.pendingBf.herMoney)
     _say("(No bar fine past midnight — the book is closed, and the mama wants nothing. " +
       "What follows is HER money, and she names it herself.)", "dim");
+  // on Soi 6 the two are different places, and the price says so (Mario, 2026-10-10, on Ray, who
+  // read the early long time as the price of going upstairs): short time is the room above the bar
+  const _s6 = _room().barType === "soi6";
+  const _stW = _s6 ? "upstairs, and she is back on her stool within the hour" : "one round, the night carries on";
+  const _ltW = _s6 ? "she leaves the bar with you for the night" : "overnight";
   _say(_fmt(pt > lt
-    ? "(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · " +
+    ? "(SHORT TIME {st} — {stw} · LONG TIME {lt} — {ltw} · " +
       "TAKE HER OUT {pt} — her WHOLE night, priced like one · NO backs out.)"
-    : "(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · " +
+    : "(SHORT TIME {st} — {stw} · LONG TIME {lt} — {ltw} · " +
       "TAKE HER OUT {pt} — she comes with you, and the night keeps going · NO backs out.)",
-    { st: p(st), lt: p(lt), pt: p(pt) }), "dim");
+    { st: p(st), lt: p(lt), pt: p(pt), stw: _stW, ltw: _ltW }), "dim");
 }
 
 // The player answered the negotiation. kind: "st" | "lt" | "open" — open is
@@ -1787,11 +1819,12 @@ function _bfResolve(kind) {
   // ── SHORT TIME: one round, off she goes, the night carries on ──
   if (kind === "st") {
     if (bt === "soi6") {
-      _say((price ? `฿${_num(price)} to the till and ${name} takes` :
-        `No fee crosses the till — she squared it with the mama herself — and ${name} takes`) +
+      const _bonus = _stDrinkBonus(id);
+      _say(_stPaid(price, name, "takes") +
         " your hand " + _pickVary(_ST_SOI6_LINES, "stsoi6") +
         ` (฿${_num(G.money)} left.)`, "win");
-      _conquestHappy(6, id);
+      if (_bonus.line) _say(_bonus.line, "dim");
+      _conquestHappy(6 + _bonus.n, id);
     } else if (bt === "gents") {
       _say((price ? `฿${_num(price)} to Rose, discreetly, and ${name} takes` :
         `No fee to Rose tonight — she squared it herself — and ${name} takes`) +

@@ -58,7 +58,7 @@ const ROAST_COVERS = 14; // how many the kitchen does. The room eats them too �
                          // who strolls in at nine has genuinely missed it.
 const ROAST_PACE = 2;    // a cover goes every two turns — arrive late, take your chances
 const BEER_PRICE = 80;   // your own big Chang, bar price
-const BELL_PRICE = 300;  // ring it and the round is on you
+const BELL_PRICE = 300;  // the least a bell costs: an empty bar's round (it is priced per head — _bellPrice)
 const C4_STAKE = 20, POOL_STAKE = 50, JP_MIN = 10, JP_MAX = 100, JP_DEFAULT = 20; // the tables' stakes (moved from engine-play so dialogue can quote them)
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
 const FULL_AT = 12;      // below this you are simply not hungry, and no amount of
@@ -2291,6 +2291,8 @@ const ROOMS = {
   second_rd_soi6: {
     busStop: "secondrd",
     motosai: true,
+    seven: true,   // the 7-Eleven across Second Road from the soi's mouth — the soi's own is at the west end (Mario, 2026-10-10)
+    outlet: true,
     name: "Second Road (Soi 6)",
     region: "Second Road",
     lateDesc: [
@@ -2300,7 +2302,7 @@ const ROOMS = {
     ],
     desc: "Second Road where Soi 6 runs into it, and the contrast does the work: " +
       "behind you a corridor of shouting neon, out here four lanes of traffic that " +
-      "could not care less. Girls come out of the soi's mouth in ones and twos to " +
+      "could not care less, and a 7-Eleven lit up across them. Girls come out of the soi's mouth in ones and twos to " +
       "buy something from the stall on the corner and go straight back in. A " +
       "songthaew slows, reads the pavement, decides against it, and rolls on.",
     revisit: [
@@ -3960,8 +3962,7 @@ const ROOMS = {
     // the soi's real east end: it meets Second Road here, 0 m
     name: "Soi 6 (East End)",
     region: "Soi 6",
-    seven: true,
-    outlet: true, // the 7-Eleven has a socket (see soi6_street)
+    // no 7-Eleven ON this stretch: the soi has one, at the west end; the other is across Second Road (Mario, 2026-10-10)
     desc: "The east end of the soi, past the middle and the inner stretch, where the bars run on toward " +
       "Second Road and the volume comes roaring back. Another twenty-odd fronts crowd the last " +
       "stretch before the main road; KITTEN CORNER, CHERRY POP BAR and RUBY KISS BAR are the " +
@@ -13928,6 +13929,7 @@ const CLUB_TAXI = 2000;      // the morning-after "taxi money" — the back-load
 const GIFT_DEBT = 500;       // the bun-khun a "free" gift calls in on the spot
 const GIFT_TIP = 100;        // paying tao-rai up front closes the account clean
 const TOASTIE_PRICE = 35;  // the 7-Eleven cheese toastie
+const SEVEN_BEER = 60;     // a big Chang from the 7-Eleven fridge — sold until midnight, then the fridges are chained (the law)
 const POLICE_WAI = 300;     // the drunk stop: a wai and a sorry
 const POLICE_PAY = 500;     // …money out before the manners
 const POLICE_ARGUE = 1000;  // …an argument

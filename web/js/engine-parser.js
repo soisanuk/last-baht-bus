@@ -6058,6 +6058,17 @@ const _BEER_PAST = [
   "You have stopped counting. The bar has not.",
 ];
 
+const _SEVEN_BEER_LINES = [
+  "A big Chang out of the 7-Eleven fridge, so cold it hurts your hand. You drink it on the step outside like half the town does, and it costs what a beer costs when nobody is renting you a seat.",
+  "The clerk rings a big Chang through without looking up and slides it into a thin bag you take straight off again. The pavement is the cheapest bar in Pattaya.",
+  "Fridge door, big bottle, beep, done. You stand under the awning and drink it while the soi walks past, and nobody asks you to buy anyone anything.",
+  "A cold Chang from the 7-Eleven, opened on the edge of the step with the heel of your hand. It tastes exactly like a bar beer, minus the girl and the bill.",
+];
+const _SEVEN_BEER_SHUT = [
+  "The beer fridges have a chain through the handles and a padlock on the chain. After midnight the law says no, and the clerk, who did not write the law, says it too: \"Close, na. Tomorrow.\"",
+  "You reach for the fridge and find the chain. Past midnight the 7-Eleven sells you anything in the shop except the thing behind the padlock. A bar will; the 7-Eleven won't.",
+  "\"No beer after twelve,\" the clerk says, the way he has said it a thousand times tonight, and points at the sign by the till as if it settles it. It does.",
+];
 const _TEETOTAL_BROKEN = [
   "(So much for that. Nobody says anything, which is its own kind of saying something; the town has updated its notes.)",
   "(The soda-water man orders a beer, and the bar does the thing bars do, which is nothing at all. The declaration is off the books.)",
@@ -8490,7 +8501,7 @@ function _shopStock() {
     return "(BUY TOASTIE \u00b7 BUY NOODLES \u00b7 BUY WATER \u00b7 BUY CHARGER \u00b7 BUY CONDOM \u00b7 CHARGE PHONE)";
   }
   if (FOOD_STALLS[G.room] || r.food) return "(BUY FOOD \u00b7 or EAT, which is the same thing done faster.)";
-  if (r.seven) return "(The 7-Eleven is right there: BUY TOASTIE \u00b7 BUY WATER \u00b7 BUY CHARGER \u00b7 BUY CONDOM)";
+  if (r.seven) return G.nightTurn < 60 ? "(The 7-Eleven is right there: BUY TOASTIE \u00b7 BUY BEER \u00b7 BUY WATER \u00b7 BUY CHARGER \u00b7 BUY CONDOM)" : "(The 7-Eleven is right there: BUY TOASTIE \u00b7 BUY WATER \u00b7 BUY CHARGER \u00b7 BUY CONDOM)";
   if (G.room === "queen_vic") return "(BUY BEER \u00b7 BUY FOOD \u00b7 BUY WATER)";
   if (_inBar()) return "(BUY BEER \u00b7 BUY WATER \u00b7 BUY DRINK FOR <name>)";
   return null;
@@ -8887,6 +8898,21 @@ function _doBuy(arg) {
     _checkDrunk();
     return;
   }
+  if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink") && _room().seven && !_servesDrinks()) {
+    // THE 7-ELEVEN SELLS BEER, UNTIL MIDNIGHT (Mario, 2026-10-10, on Ray: "the 7-Eleven refusing to sell
+    // beer"). After midnight the law chains the fridges and the clerk will not ring it through.
+    if (G.nightTurn >= 60) { _say(_pickVary(_SEVEN_BEER_SHUT, "sevenbeershut")); return; }
+    if (G.money < SEVEN_BEER) { _say(_fmt("A big Chang from the fridge is ฿{p}. You have ฿{m}.", { p: SEVEN_BEER, m: G.money })); return; }
+    G.money -= SEVEN_BEER;
+    G.soc.drunk++;
+    G.thirst = Math.max(0, G.thirst - 20);
+    _sevenIn();
+    if (G.player && G.player.teetotal) { G.player.teetotal = false; _say(_pickVary(_TEETOTAL_BROKEN, "teetotalbroke"), "dim"); }
+    _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _pickVary(_SEVEN_BEER_LINES, "sevenbeer"), p: SEVEN_BEER, m: G.money }));
+    _addHappy(G.soc.drunk <= 4 ? 1 : -1);
+    _checkDrunk();
+    return;
+  }
   if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
     // a restaurant serves beer too — KISS's Item 47 IS 'BIG BEER'
     if (!_servesDrinks() && !_room().food && !FOOD_STALLS[G.room]) {
@@ -9076,6 +9102,14 @@ function _doBuy(arg) {
     // words are "you buy drink for how many girl tonight?". Its own book now.
     (G.soc.drinkNight = G.soc.drinkNight || {})[id] = true;
     (G.soc.drinkCount = G.soc.drinkCount || {})[id] = (G.soc.drinkCount[id] || 0) + 1;
+    // a throughput girl takes the second drink with good grace and a look at the stairs (Mario, 2026-10-10)
+    if (G.soc.drinkCount[id] === 2 && _room().barType === "soi6" && typeof _throughput === "function" && _throughput(id) && !_atOwnBar()) {
+      _say(_fmt(_pickVary([
+        "{n} takes the second one with good grace and a glance at the stairs. Some girls like to be sat with; she likes to be taken up.",
+        "\u201cThank you, na.\u201d {n} drinks half of it and looks at the stairs, then at you, in case you missed the hint.",
+        "{n} clinks it against nothing in particular. \u201cYou buy drink, I drink. You want go up, we go up.\u201d She is not in a hurry; she is simply clear.",
+      ], "thrudrink"), { n: NPCS[id].name }), "dim");
+    }
     // …and a BUTTERFLY is a man who spreads them across girls he does not come
     // back to. Counting distinct girls called the single most loyal playstyle in
     // the game a flapper: four women, every night, all of them his regulars
@@ -11283,13 +11317,13 @@ const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
 // is all noise — it names a dozen districts you can't reach. The confined mode
 // gets its own strip map: the soi west-to-east, the beach at its head, the bars
 // under each end. Keep the venue lists in step with SOI6_ROOMS.
-const _MAP_SOI6 = `  BEACH ~ BEACH RD ── WEST ────── INNER W ───── MIDDLE ────── INNER E ───── EAST END
+const _MAP_SOI6 = `  BEACH ~ BEACH RD ── WEST ────── INNER W ───── MIDDLE ────── INNER E ───── EAST END ──── 2ND RD
           (junction) (loud)       (the group    (quiet,       (nobody's)    (loudest)
                                    is buying)    nobody's)
   ~ the   Blue Dog   Pink Lotus*  Jade Lounge*  Queen Vic     Firecracker   Kitten Corner*
   north   Stinky     Golden       Peach Lounge* (your room ↑) Hot Pepper    Cherry Pop
-  beach ~ Pinky      Dragon*      Lollipop      Shady Lady    Hula Hula     Ruby Kiss
-                     Sunset       Sweet         Front Row     Ladybird      7-11
+  beach ~ Pinky      Dragon*      Lollipop      Shady Lady    Hula Hula     Ruby Kiss     7-11 (across
+                     Sunset       Sweet         Front Row     Ladybird                    the road)
                      Dreams       Tamarind      The Verandah
                      ATM · 7-11
 
@@ -12584,7 +12618,7 @@ THE WHOLE CARD (bare HELP is the short one):
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY SODA (any soft drink; in a bar it costs the beer) · BUY MAN DRINK (for the bar manager)
   I DON'T DRINK — say it once and the house stops pouring you free ones · DECLINE hands back a drink just poured
   JUST LOOKING — say it once and the dating app goes quiet; the girls on the street will still try their luck
-  RING BELL (฿300 in a beer bar, dearer in the fancy ones) · TALK TO PATRON · BARFINE <lady>
+  RING BELL (a round for everyone in the room — the fuller the bar, the bigger the bill) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
   MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
@@ -12686,7 +12720,7 @@ THE WHOLE CARD (bare HELP is the short one):
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
-  RING BELL (฿300 in a beer bar, dearer in the fancy ones) · TALK TO PATRON · BARFINE <lady>
+  RING BELL (a round for everyone in the room — the fuller the bar, the bigger the bill) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
   QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)
@@ -13151,6 +13185,7 @@ function _completePool(verb, ctx) {
       // Soi 6 bar's "buy " chips include items it flatly refuses ("Not for sale here").
       const barItems = ["beer", "water", "lady drink for"];
       if (_room().seven) barItems.push("toastie");
+      if (_room().seven && !_servesDrinks() && G.nightTurn < 60) barItems.push("beer");
       if (typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room]) barItems.push("food");
       if ((_room().shop && _room().shop.charger) || _room().seven) barItems.push("charger");
       if (_bandHere()) barItems.push("round for band"); // only where a band's actually playing

@@ -309,7 +309,7 @@ test("the ATM says the fee before you commit, the piwin's rumour is a street thi
   _setFlag("hasWallet"); G.room = "beach_rd_c"; run("check balance"); assert.match(text(), /foreign-card fee ฿300 a pull/);
   G.room = "candy_bar"; out = []; run("ride bus"); assert.match(text(), /trucks are a rumour/);
   G.room = "buddha_hill"; out = []; run("drink fanta"); assert.match(text(), /No bar out here/);
-  G.room = "soi6_deep"; G.rain = 3; G.itemLoc.umbrella = null; out = []; run("w");
+  G.room = "soi6_street"; G.rain = 3; G.itemLoc.umbrella = null; out = []; run("e");   // the soi's own 7-Eleven is at the west end (round 78)
   assert.match(text(), /edge of the awning/); assert.doesNotMatch(text(), /mamasan/);
 });
 

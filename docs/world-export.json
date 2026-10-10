@@ -7092,7 +7092,8 @@
     100.88788
    ],
    "name": "Second Road (Soi 6)",
-   "region": "Second Road"
+   "region": "Second Road",
+   "seven": true
   },
   "second_rd_soi8": {
    "geo": [
@@ -7164,8 +7165,7 @@
     100.88741
    ],
    "name": "Soi 6 (East End)",
-   "region": "Soi 6",
-   "seven": true
+   "region": "Soi 6"
   },
   "soi6_east_in": {
    "estimated": true,
