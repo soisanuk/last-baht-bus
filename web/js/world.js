@@ -6787,7 +6787,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "Easy and unhurried behind the Shady Lady's rail — the kind of company that feels like a night off " +
       "rather than a transaction. No hurry in her, and no hustle either.",
     dialogue: [
-      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+      // a first night's hello: a man she met on an earlier night gets one of her return hellos (appended, _R79)
+      { when: (st, G) => !(G.metDay && G.metDay.pukky != null && G.metDay.pukky < G.day), th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Evening. Cold beer?\" No performance, a friendly nod and a real question. \"Beer bar is " +
           "different from the go-go, na. Nobody rush you here. You want to talk, we talk. You want to just sit " +
           "and watch the football, also fine. Up to you.\"",
@@ -6837,7 +6838,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Alright.\" A nod, like to a mate. \"Sit, watch the game. Fair warning — I don't do the " +
           "sweetheart thing, I'm rubbish at it, and you look like you got enough people lying to you already.\" " +
           "She turns back to the TV.",
-        asks: { key: "team", q: "\"Who you support? Wrong answer gets a warm one.\"" },   // "arsenal" was a topic miss (Dev, round 65)
+        asks: { key: "team", q: "\"Who you support? Wrong answer gets a warm one.\"", react: (v) => _somoTeam(v) },   // "arsenal" was a topic miss (Dev, round 65)
         short: "\"Sit, watch the game. I don't do the sweetheart thing — I'm rubbish at it.\"" },
       { topic: "football", text: "\"Liverpool, since I am small.\" She lights up, all business. \"My uncle " +
         "drive taxi Bangkok, always the match on the radio. I learn English from the football commentary " +
@@ -20148,6 +20149,32 @@ const _R78 = {
   ],
 };
 for (const [id, nodes] of Object.entries(_R78)) if (NPCS[id]) NPCS[id].dialogue.push(...nodes);
+
+// ROUND 79 (Gary, the cold newcomer on a phone): Pukky greeted him "first time this bar?" the night after
+// she had taken him round town on her bike, three nights running. Her return hellos, appended.
+const _R79 = {
+  pukky: [
+    { when: (st, G) => G.rideLog && G.rideLog.pukky && G.day - G.rideLog.pukky.day <= 2, th: "สวัสดีค่ะ", rom: "sawatdee kha",
+      text: "\"You.\" Pukky is grinning before you reach the stool. \"After my bike, I think you sleep two day. Your legs okay?\" She pats the stool beside her. \"Same stool. I keep it. Same beer?\"",
+      short: "\"After my bike, I think you sleep two day.\" She pats the stool beside her." },
+    { when: (st, G) => G.metDay && G.metDay.pukky != null && G.metDay.pukky < G.day, th: "สวัสดีค่ะ", rom: "sawatdee kha",
+      text: "\"You come back.\" Pukky says it like a small piece of good news, and has her hand on the fridge before you've sat. \"Same beer? Football on, fan working, nobody rush you. Same as before.\"",
+      short: "\"You come back. Same beer?\"" },
+  ],
+};
+for (const [id, nodes] of Object.entries(_R79)) if (NPCS[id]) NPCS[id].dialogue.push(...nodes);
+// Somo's football question, answered: "Wrong answer gets a warm one" said nothing back to Doncaster Rovers.
+function _somoTeam(v) {
+  const t = String(v || "").toLowerCase().replace(/^(i support|i follow|i'?m|im|my team is|my team'?s|support|follow)\s+/, "").replace(/^the\s+/, "").trim();
+  const T = t.split(/\s+/).map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join(" ").slice(0, 40);
+  if (/\b(liverpool|lfc|the reds|reds|kop|anfield)\b/.test(t)) return "\"Liverpool!\" Somo hits the bar with the flat of her hand. \"Right answer. Cold one for you.\" She means the beer you already have. She means it anyway.";
+  if (/\b(everton|toffees)\b/.test(t)) return "\"Everton?\" Somo looks at you with real sympathy. \"Wrong side of the park, my friend. Warm one for you.\" She doesn't, quite.";
+  if (/\b(man u|man utd|manchester united|united|red devils)\b/.test(t)) return "\"United.\" A slow, theatrical sigh from Somo. \"Warm one. Room temperature. You deserve.\" She is laughing before she has finished saying it.";
+  if (/\b(chelsea|arsenal|gunners|spurs|tottenham|man city|manchester city|city|newcastle|villa|aston villa)\b/.test(t)) return `"${T}?" Somo makes a face like the beer turned. "Wrong answer. Warm one for you, na." She laughs before you can.`;
+  if (/^(nobody|none|no one|no team|nothing|not really|i don'?t|dont|don'?t follow|no)\b/.test(t) || /\bbeer\b/.test(t)) return "\"Nobody?\" Somo considers it. \"Then you are safe. No warm one, no cold one. Just beer.\"";
+  if (!T) return null;
+  return `"${T}?" Somo tries the name out, carefully. "I don't know them. Small club?" She decides she approves. "Small club is honest club. Cold one for you."`;
+}
 // the group's man on the group's buying; the manager on the owner he works for
 if (NPCS.gavin) NPCS.gavin.dialogue.push(
   { topic: "buying|buy|folder|the folder|lollipop|lollipop bar|sweet tamarind|tamarind|holdout|inner west|the next one|expansion|seventh|cards",

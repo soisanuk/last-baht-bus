@@ -20358,13 +20358,13 @@
       "lens": "phone-cold-newcomer",
       "instrument": "",
       "claim": "Pukky's greeting is the same gist three nights after the ride",
-      "verdict": "deferred",
-      "note": "A bonded hello on a return: wants a when-gated return hello on her; next pass.",
+      "verdict": "fixed",
+      "note": "Pukky has return hellos (after her bike, and a man who came back); her first-night hello is gated on metDay.",
       "cls": "L",
       "sev": "minor",
       "system": "dialogue",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round79.test.js"
     },
     {
       "round": "79",
@@ -20583,13 +20583,13 @@
       "lens": "phone-cold-newcomer",
       "instrument": "",
       "claim": "'Doncaster Rovers' gets a generic nod from Somo",
-      "verdict": "deferred",
-      "note": "Somo's football answer has no branch for a team outside her list.",
+      "verdict": "fixed",
+      "note": "asks.react: a question can answer the answer; Somo has a line for her club, the rivals, nobody, and a small club she has never heard of.",
       "cls": "N",
       "sev": "trivial",
       "system": "dialogue",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round79.test.js"
     }
   ]
 }

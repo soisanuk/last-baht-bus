@@ -5924,7 +5924,11 @@ function _convoAnswer(text) {
     _repHit(1);                                                   // a softer catch — but the town noticed
     // no +1 — you didn't open up, you got caught telling it two ways
   } else {
-    _say(_pickVary(_ANSWER_ACK, "ansAck")(name));
+    // a question can care what you said: `asks.react(val)` is her line about YOUR answer (Gary, round 79:
+    // "Wrong answer gets a warm one", and Doncaster Rovers got the same nod as anything else)
+    const _node = (NPCS[id] && NPCS[id].dialogue || []).find(d => d.asks && d.asks.key === key && typeof d.asks.react === "function");
+    const _r = _node ? _node.asks.react(val, G) : null;
+    _say(_r || _pickVary(_ANSWER_ACK, "ansAck")(name));
     if (!prior) st.trust = Math.min(5, st.trust + 1); // opening up, once
     _repGain(); // a straight, honest answer is part of being a good sort (throttled)
   }
@@ -7445,10 +7449,13 @@ function _convoResolve(lower) {
     // first-person statement answers; a long line only changes the subject if it
     // leads with the topic
     const _firstPerson = /^(i|i'?m|im|i'?ve|ive|i'?d|my|me|we|we'?re|just|because|cause|to)\b/.test(bare);
+    // a question that reacts to its answer takes any non-question as the answer: "man united" to "who you
+    // support?" is the answer, not her football node (Gary, round 79)
+    const _reacts = (NPCS[G.convoQ.id] && NPCS[G.convoQ.id].dialogue || []).some(d => d.asks && d.asks.key === G.convoQ.key && typeof d.asks.react === "function");
     const changingSubject = isQuestion ||
       /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare) ||
       _findNpc(bare) ||
-      (!_firstPerson && _partnerHasTopic(G.convoQ.id, _convoTopic(lower)));
+      (!_reacts && !_firstPerson && _partnerHasTopic(G.convoQ.id, _convoTopic(lower)));
     if (!changingSubject) return _convoAnswer(lower);
     _convoDrop(true); // dodged (or a question back) — fall through; a late digit still gets the drift line, never "didn't understand" (Gareth, round 46)
   }

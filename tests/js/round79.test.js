@@ -88,3 +88,21 @@ test("small slips: first beer, darts capital, the ledge, the oche, the bell's em
   assert.match(src("index.html"), /max-width: 767px\) \{ #start-overlay \{ padding-top/);
   assert.doesNotMatch(src("js/engine-parser.js"), /or go OUT\.\)/);
 });
+
+// ── the two dialogue gaps (Mario: "fix the dialogue gaps") ───────────────────────────────────────
+test("Pukky greets a man who came back as one who came back, and the night after her bike as that", () => {
+  G.room = "sunset_rail"; G.metDay = { pukky: 1 }; G.day = 3;
+  out = []; run("talk to pukky"); assert.match(said(), /You come back/); assert.doesNotMatch(said(), /First time this bar/);
+  newGame(); G.player = { origin: "pension", personality: "joker", orientation: "straight", said: {}, lang: "en" }; _setFlag("act1Done");
+  G.room = "sunset_rail"; G.metDay = { pukky: 1 }; G.day = 3; G.rideLog = { pukky: { day: 2, count: 1 } };
+  out = []; run("talk to pukky"); assert.match(said(), /After my bike/);
+  newGame(); G.player = { origin: "pension", personality: "joker", orientation: "straight", said: {}, lang: "en" }; _setFlag("act1Done");
+  G.room = "sunset_rail"; out = []; run("talk to pukky"); assert.match(said(), /Cold beer\?/, "a first meeting is still a first meeting");
+});
+
+test("Somo hears which team you said: right, wrong, nobody, or a small club she has never heard of", () => {
+  for (const [a, rx] of [["doncaster rovers", /Doncaster Rovers\?.*Small club/], ["liverpool", /Right answer/], ["man united", /Warm one/], ["chelsea", /Wrong answer/], ["nobody", /you are safe/]]) {
+    newGame(); G.player = { origin: "pension", personality: "joker", orientation: "straight", said: {}, lang: "en" }; _setFlag("act1Done");
+    G.room = "bay_watch"; run("talk to somo"); out = []; run(a); assert.match(said(), rx, a);
+  }
+});
