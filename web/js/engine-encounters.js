@@ -202,7 +202,7 @@ function _flowerTick() {
         `The rose bucket again — the same mother, the same daughter in the school polo, working the other end of the street tonight. The daughter clocks you, and something in her flat professional face says she remembers which kind of answer you were. The rose comes up toward ${her}. ` + price + `.`,
         `The rose family reaches your rail on their round. No pitch this time — the daughter simply stands the wrapped bloom on the bar in front of you and looks from it to ${her} and back, a saleswoman who has learned that silence closes. ` + price + `.`,
       ], "flowerAgain"), "alert"],
-    [`(BUY ROSE FOR ${her}) · or (WAVE) them gently on.`, "dim"]);
+    [`(BUY ROSE FOR ${her.toUpperCase()}) · or (WAVE) them gently on.`, "dim"]);
 }
 
 function _salengTick() {
@@ -481,7 +481,7 @@ const _NOODLE_YES = [
   "The noodle goes vertical in triumph. She takes your hand in both of hers and reels you " +
     "toward the open front, calling ahead so a stool's already being wiped by the time you " +
     "arrive. (ENTER her bar to make it official, or wander on — the soi forgives fast.)",
-  "She beams, swats you once more on principle, then tows you in by the sleeve, loudly " +
+  "She beams, swats you once more on principle, then tows you toward her front by the sleeve, loudly " +
     "informing the neighbouring bars that this one is HERS. (ENTER to follow through, or peel " +
     "away — no hard feelings on Soi 6.)",
 ];

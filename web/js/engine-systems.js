@@ -921,7 +921,8 @@ function _doBarfine(arg) {
   }
   // SOI 6 IS ONE DRINK (Mario, 2026-10-10, on Ray: "3 more, then we talk" is a Walking Street
   // rule) — one lady drink tonight from a stranger, none from a regular, counted in drinks
-  if (bt === "soi6" && !bertAlly) {
+  const _onSoi6 = bt === "soi6" || _room().region === "Soi 6";   // the middle's beer bars are Soi 6 too (Gary, round 79: "3 more" at the Shady Lady)
+  if (_onSoi6 && !bertAlly) {
     const _had = ((G.soc.drinkCount || {})[id]) || 0;
     const _tipped = ((G.soc.given || {})[id] || 0) >= _ladyPrice();   // money already in her hand is better than a drink
     if (_had < 1 && !_tipped && _knownTier(id) < 2) {
@@ -933,7 +934,7 @@ function _doBarfine(arg) {
       return;
     }
   }
-  const _bfGate = bertAlly ? 1 : bt === "soi6" ? -99 : 4;
+  const _bfGate = bertAlly ? 1 : _onSoi6 ? -99 : 4;
   if (_favor(id) < _bfGate) {
     // she names the REAL remaining count — a stated tariff that doesn't count
     // is a lie with a smile on it (grapevine playtest F12, 2026-08-25). That
@@ -1006,7 +1007,7 @@ function _doBarfine(arg) {
       "way she's counting the room, the too-quick yes. You keep a hand near your wallet " +
       "and your wits about you.)", "dim");
   }
-  if (bt === "soi6") {
+  if (bt === "soi6" || _room().region === "Soi 6") {   // on Soi 6 the girl quotes it herself, the middle's beer bars included (Gary, round 79)
     _say(`${name} counts it out on her fingers, upfront as a menu — she quotes ` +
       "upstairs the way a noodle cart quotes noodles, one eye still counting " +
       `the room over your shoulder.` +
@@ -6496,7 +6497,7 @@ function _startRain(len) {
     _say(_pickVary(_RAIN_GOGO, "raingogo"), "alert");
   } else if (_inBar()) {
     _say(_pickVary(_RAIN_START, "rainstart") + " The street " +
-      "empties in five seconds flat. Nobody is going anywhere for a while.", "alert");
+      "empties in five seconds flat. Nobody out there is going anywhere dry for a while.", "alert");
     _say("(Nowhere to be. Nothing to be done about it. สบาย.)", "dim");
     _addHappy(1);
   } else if (_room().indoors) {   // windowless: you hear it, you don't see it (the PLG back office said "outside the glass" — Dougie, round 46)

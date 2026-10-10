@@ -785,7 +785,7 @@ function _closingTick() {
   // a barfine still mid-negotiation dies with the shutters — else its answer would
   // resolve against the street you've just been walked out onto (wrong barType/price).
   if (G.pendingBf) { G.pendingBf = null; _say("The half-finished barfine closes with the ledger — no deal, no harm, and the mamasan is already counting the till.", "dim"); }
-  if (G.game) _abandonGame("Midnight calls it");
+  if (G.game) _abandonGame("Midnight calls it", true);
   if (G.pendingEnc) {
     G.pendingEnc = null; G.encPrompt = null;
     _say("(Whatever was being offered, the shutters settle it — the moment goes " +
@@ -1776,7 +1776,7 @@ function _poolOppTurn(g) {
   const potted = poolOppVisit(g, _rand);
   if (g.oppWon) {
     if (!g.stake && G.poolHold) delete G.poolHold[G.room];   // the table goes with the frame
-    _endGame(false, 0, `${g.oppName} clears up like it's a chore and rolls the black in ` +
+    _endGame(false, 0, `${g.oppName.charAt(0).toUpperCase() + g.oppName.slice(1)} clears up like it's a chore and rolls the black in ` +
       `dead-weight. Game over${g.stake ? ` — your ฿${_num(g.stake)} slides off the cushion` : ""}.`);
     return;
   }
@@ -1935,7 +1935,7 @@ function _dartsStatus(g) { _say(`(You: ${g.you} · ${g.oppName}: ${g.opp}.)`, "d
 
 function _dartsOppTurn(g) {
   if (_dartsFinish(g.opp, g.oppSkill, _rand)) {
-    _endGame(false, 0, `${g.oppName} steps to the oche, barely sights it, and buries the double. ` +
+    _endGame(false, 0, `${g.oppName.charAt(0).toUpperCase() + g.oppName.slice(1)} steps to the oche, barely sights it, and buries the double. ` +
       `Game. ${g.stake ? `Your ฿${_num(g.stake)} leaves the shelf.` : `"Bad luck, boss."`}`);
     return;
   }
@@ -2006,10 +2006,17 @@ function _endGame(won, payout, text) {
 
 // A game can't follow you out of the bar: Tan's sedan moved a live Connect 4 to
 // Soi Buakhao and it kept running (gambler playtest 2026-08-22). The stake stays.
-function _abandonGame(why) {
+function _abandonGame(why, houseClosed) {
   if (!G.game) return;
   const g = G.game;
   G.game = null;
+  // the house closing on you is not you walking away: the stake comes back across the table
+  // (Gary, round 79: midnight killed a Connect 4 mid-move and kept his ฿20)
+  if (houseClosed && g.stake) {
+    G.money += g.stake; G.offIn = (G.offIn || 0) + g.stake;
+    _say(`(${why} — the ${g.type === "c4" ? "Connect 4" : g.type === "jp" ? "Jackpot" : "game"} is folded away unfinished, and the ฿${_num(g.stake)} comes back across the table. ฿${_num(G.money)} in your pocket.)`, "dim");
+    return;
+  }
   _say(`(${why} — the ${g.type === "c4" ? "Connect 4" : g.type === "jp" ? "Jackpot" : g.type === "quiz" ? "quiz" : "game"} dies with the stool you left` +
     (g.stake ? `; the ฿${_num(g.stake)} stays with the house` : "") + ".)", "dim");
 }
@@ -3102,7 +3109,9 @@ function _doBell() {
   const _solo = _staffAt(G.room).length === 1 && bt !== "gogo";
   // a two-storey live-music room is not "a very short bar" (Pete, round 75 — the bell at Rock Factory)
   const _bigRoom = _room().liveMusic && _room().musicEveryNight;
-  const _bellPool = pool === _BELL_BEER && _bigRoom ? pool.filter(l => !/small bar|very short bar|little beer bar/i.test(l)) : pool;
+  let _bellPool = pool === _BELL_BEER && _bigRoom ? pool.filter(l => !/small bar|very short bar|little beer bar/i.test(l)) : pool;
+  // nobody on the customer side of the rail: no stools raise a glass (Gary, round 79 — an empty low-season rail)
+  if (typeof _bellHeads === "function" && _bellHeads(G.room).men === 0) { const _nm = _bellPool.filter(l => !/\b(the men|men on|from the stools|every stool|the stools)\b/i.test(l)); if (_nm.length) _bellPool = _nm; }
   _say(`${_pickVary(_solo ? _BELL_SOLO : _bellPool, _solo ? "bellsolo" : "bell:" + bt)} (-฿${_num(price)}, ฿${_num(G.money)} left — reign while it lasts.)`);
   if (pool === _BELL_BEER) _compDrink(1);      // every line in that pool hands one back across the rail
   const rings = G.soc.bells[r];
@@ -4631,7 +4640,7 @@ function _hospitalMorning(reason) {
 // 2026-10-01 under docs/source-material-policy.md: pattern kept, every beat new.)
 const _CODA_CUT = [
   "You are already asleep — face-down, victorious, certain you conquered the city. So you miss " +
-    "this part. Across town the morning shift has started, and she is on it.",
+    "this part. Across town her own morning has started, and you are not in it.",
   "You sleep the sleep of a man who won, and never see the other half of the night — the half " +
     "that belongs to her, and begins when yours is over.",
   "The last thing you registered was how untouchable she looked under the lights. You sleep. " +

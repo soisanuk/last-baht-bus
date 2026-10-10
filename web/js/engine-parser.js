@@ -68,6 +68,7 @@ function _girlBusy(id) {
   if (!r || r.region !== "Soi 6") return false;    // the crowded soi is the etiquette context
   if (_convoActive() === id) return false;         // she's with YOU right now
   if ((G.soc.drinks[id] || 0) > 0) return false;   // already your acquaintance tonight
+  if (new RegExp("\\b" + NPCS[id].name + "\\b").test(String(r.desc || ""))) return false;   // the room's own prose sat her at your elbow (Gary, round 79: Kluay and Benz "claimed the two nearest for you", then "sitting with customers")
   const block = G.day + ":" + Math.floor((G.nightTurn || 0) / 10); // stable per hour-ish
   return _hh(id + ":" + block, 61) % 100 < 25;     // ~1 in 4 un-engaged girls is taken
 }
@@ -6911,6 +6912,10 @@ function _townTalk(npc, topic) {
       if (_bt && _bt !== "pub" && (_up ? (_soi6 || _bt === "soi6") : _hm) && (NPC_ROLES[npc] || NPCS[npc].house || NPCS[npc].manager) && typeof _barfinePrices === "function") {
         const q = _barfinePrices(_bt, NPC_ROLES[npc] === "hostess" ? npc : null);
         const fine = q.herMoney ? 0 : Math.max(0, q.st - LADY_ST), her = q.herMoney ? q.st : Math.min(q.st, LADY_ST);
+        // before nine the fine carries the early-doors premium: say so, and what it is after (Gary, round 79 —
+        // "she told me the price, then the mama told me a different one" an hour later)
+        let _later = "";
+        if (G.nightTurn < 30 && !q.herMoney) { const nt = G.nightTurn; G.nightTurn = 30; try { const q2 = _barfinePrices(_bt, NPC_ROLES[npc] === "hostess" ? npc : null); if (q2.st !== q.st) _later = _reg === "floor" ? ` Before nine o'clock, na. After nine, short time ฿${_num(q2.st)}.` : ` That's the early-doors price; after nine it's ฿${_num(q2.st)} short time.`; } finally { G.nightTurn = nt; } }
         const v = { n, st: _num(q.st), lt: _num(q.lt), fine: _num(fine), her: _num(her), herlt: _num(LADY_LT),
           drink: (_bt === "soi6" && NPC_ROLES[npc] === "hostess" && _knownTier(npc) < 2 && !((G.soc.drinkCount || {})[npc])) ? " One lady drink first, na." : "" };
         const lines = _hm
@@ -6924,7 +6929,7 @@ function _townTalk(npc, topic) {
                `{n} tips her head at the stairs at the back. "Up there. Short time, ฿{st}, then I come back to my stool. If you want me out all night, long time, ฿{lt} — the bar's fine to let me go, and mine."`]
             : [`"The rooms upstairs are the bar's." {n} says it like the price of ice. "Short time is ฿{st} — ฿{fine} of it is the bar's fine, ฿{her} is hers, and she'll tell you so herself. Long time is ฿{lt}, and that's taking her out of the bar for the night."`,
                `"Up the back stairs, an hour, a fan and a shower." {n} doesn't lower her voice; it's the business. "฿{st} short time, the bar's fine and her money together. ฿{lt} if she leaves with you for the night."`]);
-        _say(_fmt(_pickVary(lines, (_hm ? "hermoney:" : "upstairs:") + _reg), v));
+        _say(_fmt(_pickVary(lines, (_hm ? "hermoney:" : "upstairs:") + _reg), v) + (_hm ? "" : _later));
         return true;
       }
     }
@@ -7496,7 +7501,8 @@ function _convoResolve(lower) {
     // that is nobody's topic is the answer she was waiting for — not "You asked
     // Bee about bristol mate" (Rhiannon, round 47).
     const lapsed = G.convoLapsed && G.convoLapsed[id];
-    if (lapsed && !_partnerHasTopic(id, t) && !_partnerHasTopic(id, bare)) {
+    if (lapsed && !_partnerHasTopic(id, t) && !_partnerHasTopic(id, bare) &&
+        !/\?\s*$/.test(lower) && !/^(what|where|who|how|why|when|which|whats|hows)\b/.test(bare)) {   // "upstairs?" is a question, not his stay (Gary, round 79)
       delete G.convoLapsed[id];
       _say(`(You answer ${_convoName(id)}'s question, a beat late.)`, "dim");
       G.convoQ = { id, key: lapsed.key, q: lapsed.q };
@@ -8633,6 +8639,7 @@ const _PARTY_JEALOUS = [
 ];
 function _ladyDrinkCharge(id) {
   G.money -= _ladyPrice();
+  if (id && typeof _noteActor === "function") _noteActor(id);   // the woman you just bought a drink is "her" (Gary, round 79: TALK TO HER, "nobody by that name")
   // the woman on your arm has an opinion about the drink you just bought another one
   // (Marcus, round 61: Lek stood silent through two lady drinks for Nan and Mild)
   {
@@ -9071,7 +9078,8 @@ function _doBuy(arg) {
     const _usual = typeof _usualHere === "function" ? _usualHere() : null;
     if (_usual) _say(_fmt(_pickVary(_USUAL_LINES, "usual"), { n: NPCS[_usual].name }), "dim");
     // no gutter inside an air-conditioned pub (Helga, round 57)
-    const _bl = (_room().barType === "pub" || _room().indoors || _room().barType === "gents" || _room().barType === "gogo") ? _BEER_LINES.filter(l => !/gutter|pavement|street/.test(l)) : _BEER_LINES;
+    let _bl = (_room().barType === "pub" || _room().indoors || _room().barType === "gents" || _room().barType === "gogo") ? _BEER_LINES.filter(l => !/gutter|pavement|street/.test(l)) : _BEER_LINES;
+    if (Object.values(G.soc.selfDrinks || {}).reduce((a, n) => a + n, 0) <= 1) _bl = _bl.filter(l => !/^Another\b/.test(l));   // "Another big one" for the first beer of the night (Gary, round 79)
     if (_ownBeer) _ownStock(_beerPrice(), "a beer", _L(_pickVary(_bl, "beer")) + (_beerTail ? " " + _L(_beerTail) : ""));
     else _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_bl, "beer")), p: _beerPrice(), m: G.money }) +
       (_beerTail ? " " + _L(_beerTail) : "") + (d > 4 ? " " + _BEER_PAST[Math.min(d - 5, _BEER_PAST.length - 1)] : ""));   // counted, not repeated (Marek, round 53: "one past" on beers five to nine)
@@ -11147,7 +11155,7 @@ function _doWait(arg) {
     if (G.rain > 0) {
       _say(G.rain > 3
         ? `You wait. Pattaya doesn't, and neither does the rain — it's set in, ${G.rain * 6} minutes ` +
-          "of it at a guess. (WAIT 5 sits some of it out; a bar door sits all of it.)"
+          "of it at a guess." + ((_inBar() || (typeof _underRoof === "function" && _underRoof(G.room))) ? " (You're under a roof; WAIT 5 sits some of it out.)" : " (WAIT 5 sits some of it out; a bar door sits all of it.)")
         : "You wait. Pattaya doesn't. The rain, though, is easing — the gutters are still " +
           "running but " + (typeof _underRoof === "function" && _underRoof(G.room) ? "the roof has gone quiet" : "the awning has stopped drumming") + ". A few more minutes. (WAIT 2)", "dim");
       return;
@@ -13804,7 +13812,12 @@ function doCommand(input) {
   if (!raw) return;
   _waitRefused = false; _moveRefused = false;
   // "last night" is the natural two-word form of the ledger verb (Stuart, round 47)
-  if (/^\s*last night\b/i.test(raw)) raw = "ledger";
+  // LAST NIGHT is the ledger; "last night was great" said to the woman you're talking to is said to her (Gary, round 79)
+  if (/^\s*last night\b/i.test(raw)) {
+    const _rest = raw.trim().replace(/^last night\b/i, "").trim();
+    const _p = typeof _convoActive === "function" && _convoActive();
+    raw = (_rest && _p && NPCS[_p]) ? "ask " + NPCS[_p].name.toLowerCase() + " about last night" : "ledger";
+  }
   // WHO RUNS THIS BAR is a question about the paper, not the black book (Graham, round 74)
   if (/^who (runs|owns) (this|the) (bar|place|club|pub)\??$/i.test(raw.trim()) && typeof _licenceOf === "function" && _licenceOf(G.room)) raw = "examine licence";
   // YES at "SLEEP again if you mean it" is meaning it — "that moment has passed" for the one word a man types at a question (Graham, round 74)
@@ -14207,8 +14220,8 @@ function doCommand(input) {
     if (/^(no\b|cancel|never|forget|back out|walk)/.test(lower)) {
       G.pendingBf = null;
       _tradeMark("no");
-      _say("You ease back off the ledge. The mamasan closes the ledger without " +
-        "comment — no is a complete sentence here, and nobody holds it against " +
+      _say("You shake your head, and that is the end of it. The number goes back in " +   // "off the ledge" on a stool, and a mamasan the room may not have (Gary, round 79)
+        "the drawer without comment — no is a complete sentence here, and nobody holds it against " +
         "you. The girl is already laughing at something else.");
       _tick();
       return;
@@ -14330,6 +14343,25 @@ function doCommand(input) {
   }
   // a sober man's sentence, and the hand that pushes a glass back (Neville, round 53)
   if (/^(i (don'?t|do not|never) drink( alcohol)?|teetotal(ler)?|no alcohol( for me)?|i'?m sober|sober)[.!]?$/.test(lower)) { _doTeetotal(); _tick(); return; }
+  // HOW MUCH, said in English: only TAO RAI printed the price list, and "how much", "price", "menu",
+  // "how much beer" were six failures in a row for a man who'd been to Pattaya twice (Gary, round 79)
+  if (!G.pendingChoice && !G.pendingEnc && !G.game && !G.pendingBf && !G.convoQ) {
+    const pm = lower.replace(/[?!.]+$/, "").trim();
+    if (/^(how much|how much is it|price|prices|price list|the prices|menu|the menu|drinks menu|what are (?:the )?prices|what(?:'?s| is) (?:the )?price|(?:how much|what(?:'?s| is) (?:the )?price)(?: is| for| of| are)?(?: an?| the)? (?:beer|beers|drink|drinks|lady drink|lady drinks|water|soda|bell|the bell|chang|leo|singha))$/.test(pm) &&
+        typeof _servesDrinks === "function" && _servesDrinks(G.room) && !(typeof _atOwnBar === "function" && _atOwnBar())) { doCommand("tao rai"); return; }   // your own bar: PRICES is the board (_doPrices)
+    const bm = pm.match(/^(?:how much|what(?:'?s| is) (?:the )?price)(?: is| for| of)?(?: an?| the)? ?(barfine|bar fine|short time|long time|upstairs|her|to take her out|to go upstairs)(?: with (.+))?$/);
+    if (bm && _inBar()) {
+      const id = (bm[2] && _findNpc(bm[2])) || _lastActor() || _npcsHere().find(i => NPC_ROLES[i] === "hostess");
+      if (id && _npcsHere().includes(id)) { doCommand("ask " + NPCS[id].name.toLowerCase() + " about " + (/long/.test(bm[1]) ? "long time" : "short time")); return; }
+    }
+  }
+  // HER NUMBER said the way a man says it: ASK PUKKY FOR HER NUMBER, GET HER NUMBER (Gary, round 79 — "Not my story")
+  { const nm = lower.match(/^(?:ask|get|take|swap(?: numbers with)?)\s+(?:(.+?)\s+for\s+)?(?:(her|his|your|a|the)\s+)?(?:number|phone number|line|line id|contact)(?:\s+(?:from|off)\s+(.+))?[.!?]?$/);
+    if (nm && !G.pendingChoice && !G.pendingEnc && !G.game) {
+      const who = (nm[1] || nm[3] || "").replace(/^(her|him)$/, "").trim();
+      const id = who ? _findNpc(who) : _lastActor();
+      if (id && _npcsHere().includes(id)) { doCommand("contact " + NPCS[id].name.toLowerCase()); return; }
+    } }
   // a bare POLICE was a parse failure (Ray, round 78): the station takes a report, a checkpoint is watched,
   // and anywhere else the boys in brown find you rather than the other way round
   if (!G.pendingEnc && !G.game && /^(police|the police|cops|the cops|call (?:the )?police|find (?:the )?police|where (?:are|is) the police\??)$/.test(lower)) {
@@ -14432,7 +14464,9 @@ function doCommand(input) {
   switch (v) {
     case "go": case "walk": case "head": {
       // SEE/WALK <her> HOME, TAKE <her> TO THE BUS — cheap care's verb (essay ledger theme 2)
-      if (/\b(home|to the bus|to her bike|to the songthaew)\b/.test(arg) && _findNpc(arg.replace(/\b(home|to the bus|to her bike|to the songthaew)\b/g, "").trim())) { _doSeeHome(arg); break; }
+      // …and only with a NAME in it: a bare GO HOME is the man going home, never walking the woman he was talking to (Gary, round 79)
+      { const _who = arg.replace(/\b(home|to the bus|to her bike|to the songthaew)\b/g, "").replace(/^(with |to )/, "").trim();
+        if (/\b(home|to the bus|to her bike|to the songthaew)\b/.test(arg) && _who && !/^(my|the|to)$/.test(_who) && _findNpc(_who)) { _doSeeHome(arg); break; } }
       const gw = arg.replace(/^to (the )?/, "");
       // a direction alias OR one of this room's own exit keys (pub, hotel, …)
       if (!gw || _DIRS[gw] !== undefined || (_room().exits && _room().exits[gw])) _doGo(gw);
@@ -14836,6 +14870,18 @@ function doCommand(input) {
     case "special": case "happyending": _doMassage("special"); break;
     case "soapy": case "fishbowl": _doSoapy(); break;
     case "eat": _doEat(arg); break;
+    // bare nouns a newcomer types for the thing in front of him (Gary, round 79: "food", "darts", "quiz" on quiz night)
+    case "food": case "dinner": _doEat(arg); break;
+    case "darts": doCommand("play darts" + (arg ? " " + arg : "")); return;
+    case "quiz": {
+      if (typeof _quizHere === "function" && _quizHere()) { _startQuiz(true); break; }
+      const bars = (typeof _quizBars === "function" ? _quizBars() : []).map(b => _barName(b)).filter(Boolean);
+      const here = typeof _quizBars === "function" && _quizBars().includes(G.room);
+      if (typeof _quizDay === "function" && _quizDay() && G.nightTurn < 20 && here) _say("Quiz night, and this is one of tonight's quiz bars. It starts at eight — stay put and the host will find you with a pencil.", "dim");
+      else if (typeof _quizDay === "function" && _quizDay() && G.nightTurn < 40) _say(`Quiz night: eight till ten, at ${bars.join(", ") || "three bars on the board"}. Walk into one in the window and you are in it.`, "dim");
+      else _say(`The quiz is Thursday, eight till ten, at three bars chosen fresh each week${bars.length && _quizDay() ? " — tonight's was " + bars.join(", ") : ""}.`, "dim");
+      break;
+    }
     case "checkout": case "check-out": _doCheckout(); break;
     case "sleep": case "bed": case "crash":
       if (!_flag("act1Done")) _say("Sleep where? The beach already had you once tonight. Get the wallet, get the room.");
@@ -14855,7 +14901,7 @@ function doCommand(input) {
           : G.nightTurn < 10 ? `It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it.`
           : _who ? `It's ${_clockStr()}. Sleep now and the night ends here — ${_who} comes up with you, and that is the long-time close.`
           : `It's ${_clockStr()}. Sleep now and the night ends here; whatever is still open on the soi stays open without you.`;
-        if (!_endConfirm("sleep", _warn + " (SLEEP again if you mean it, or go OUT.)")) return;
+        if (!_endConfirm("sleep", _warn + " (SLEEP again if you mean it, or head back out.)")) return;
         // one flight below your own bed (the pub under the Queen Vic, a lobby):
         // turning in should just walk you up, not scold you for being close.
         if (_upstairs) { _say("You climb the stairs to your room and fall into bed."); G.room = _hotelRoomId(); }

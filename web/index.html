@@ -529,6 +529,9 @@
     background: radial-gradient(120% 120% at 50% 0%, #1a0033 0%, #05001a 72%);
   }
   #start-overlay[hidden] { display: none; }
+  /* the text-size buttons sit top-left over the overlay; on a phone the card's title ran under them
+     (Gary, round 79) — so the card starts below them */
+  @media (max-width: 767px) { #start-overlay { padding-top: 3rem; align-items: flex-start; } }
   .start-card {
     width: 100%; max-width: 440px; text-align: center;
     background: var(--panel); border: 1px solid var(--pink); border-radius: 14px;
@@ -1164,7 +1167,7 @@
       </ul>
       <div class="start-actions">
         <button id="start-back">← Back</button>
-        <button id="start-daily">TODAY'S SOI 📅</button>
+        <button id="start-daily">TODAY'S SOI</button>
         <button id="start-go">START ★</button>
       </div>
     </div>
