@@ -3,17 +3,17 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Skydivers fly Thai flag in record attempt",
+    "s": "Bangkok Post",
+    "d": "07 Oct 2026"
+  },
+  {
     "t": "British tourist allegedly steals motorcycle left with key in Pattaya, too drunk to remember where he parked it",
     "s": "Khaosod English",
     "d": "10 Oct 2026"
   },
   {
-    "t": "Thieves Hold Pattaya Expat at Gunpoint to Drain $820K in Crypto",
-    "s": "Bitcoin News",
-    "d": "09 Oct 2026"
-  },
-  {
-    "t": "Pattaya welcomes sunny skies and cool breezes during October’s seasonal transition",
+    "t": "Less rain does not mean less vigilance in Pattaya",
     "s": "Pattaya Mail",
     "d": "09 Oct 2026"
   },
@@ -28,33 +28,23 @@ var NEWS_FEED = [
     "d": "09 Oct 2026"
   },
   {
-    "t": "Chinese ex-bank manager held in Pattaya after 7 years of overstaying",
-    "s": "Thaiger",
-    "d": "08 Oct 2026"
-  },
-  {
     "t": "Thailand raids warehouses behind cheap counterfeit cosmetics sold online",
     "s": "Pattaya Mail",
     "d": "09 Oct 2026"
   },
   {
-    "t": "Australian man, 82, dies after falling from 16th-floor Pattaya condo",
+    "t": "Fatal crash renews warning over dangerous Jomtien curve",
+    "s": "Pattaya Mail",
+    "d": "08 Oct 2026"
+  },
+  {
+    "t": "Car catches fire at Pattaya government housing project",
     "s": "Pattaya Mail",
     "d": "09 Oct 2026"
   },
   {
-    "t": "Thai Queen makes first solo flight in fighter jet",
-    "s": "BBC",
-    "d": "09 Oct 2026"
-  },
-  {
-    "t": "Thailand’s Queen Suthida pilots fighter jet for first-ever solo flight",
-    "s": "AP News",
-    "d": "09 Oct 2026"
-  },
-  {
-    "t": "Thailand’s Queen is first reigning queen in the world to fly JAS-39 Gripen fighter solo",
-    "s": "The Aviation Geek Club",
+    "t": "Inside Thailand’s cyanide murders and the search for its ‘most prolific serial killer’ in history",
+    "s": "CNA",
     "d": "09 Oct 2026"
   },
   {
@@ -63,8 +53,18 @@ var NEWS_FEED = [
     "d": "09 Oct 2026"
   },
   {
-    "t": "IMF-World Bank meetings open to online viewers",
+    "t": "Suspects flee country after B37m robbery of Turk in Pattaya",
     "s": "Bangkok Post",
+    "d": "10 Oct 2026"
+  },
+  {
+    "t": "Thailand’s Queen Suthida pilots fighter jet for first-ever solo flight",
+    "s": "AP News",
+    "d": "09 Oct 2026"
+  },
+  {
+    "t": "Thailand prepares to host IMF-World Bank meetings",
+    "s": "Reuters",
     "d": "10 Oct 2026"
   },
   {
@@ -76,7 +76,7 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-09","USD":33.53,"AUD":23.41,"GBP":44.33,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-10","temp":31,"humid":65,"code":3,"hi":31,"rain":78};
+var WX_NOW = {"date":"2026-10-10","temp":27,"humid":94,"code":3,"hi":32,"rain":85};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4196,"date":"2026-10-10","baht":66550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":82714,"thb":2780235};
+var BTC = {"usd":82773,"thb":2779002};
