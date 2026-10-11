@@ -221,6 +221,13 @@
     scrollbar-width: thin;
     scrollbar-color: #ff149350 transparent;
   }
+  #more-below {
+    position: fixed; z-index: 40; transform: translateX(-50%);
+    padding: .3rem .9rem; border-radius: 999px; border: 1px solid var(--pink);
+    background: #1a0428ee; color: var(--pink); font: inherit; font-size: .8rem; font-weight: 700;
+    box-shadow: 0 0 14px #ff149355; cursor: pointer;
+  }
+  #more-below[hidden] { display: none; }
   .t-line { margin: .12rem 0; white-space: pre-wrap; word-break: break-word; }
   .t-line + .t-line.t-room { margin-top: .8rem; }
   .t-echo  { color: var(--pink); margin-top: .7rem; }
@@ -1093,6 +1100,9 @@
   </header>
   <div id="scene" hidden></div>
   <div id="term-out" role="log" aria-live="polite" aria-atomic="false" aria-label="Game text"></div>
+  <!-- unread text below the fold: a long reply opens at its start, and on a phone nothing said there
+       was more (Gary, round 79 — the first room sat two screens under Tan's drop-off speech) -->
+  <button id="more-below" type="button" hidden aria-label="More text below — tap to read on">more ↓</button>
   <!-- the dock: on a phone a row above the chips (the conversation card, the compass,
        the bell / messages / notes); wider screens keep the floating stack. -->
   <div id="dock">

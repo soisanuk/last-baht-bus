@@ -20448,13 +20448,13 @@
       "lens": "phone-cold-newcomer",
       "instrument": "",
       "claim": "The first room is two screens below Tan's speech",
-      "verdict": "deferred",
-      "note": "Scroll policy on a long first reply; a presentation pass.",
+      "verdict": "fixed",
+      "note": "A 'more ↓' cue floats at the foot of the transcript while unread text sits below; a tap reads on a screen at a time. The reply still opens at its start, so Tan's drop-off line is kept.",
       "cls": "P",
       "sev": "minor",
       "system": "ui",
       "between": "",
-      "pin": ""
+      "pin": "tests/e2e/morebelow.spec.mjs"
     },
     {
       "round": "79",

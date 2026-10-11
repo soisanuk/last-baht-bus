@@ -669,6 +669,7 @@ const _term = (() => {
     _out.appendChild(div);
     _trimScroll();
     _out.scrollTop = _out.scrollHeight;
+    _queueMoreBelow();
   }
 
   function echo(cmd) {
@@ -701,6 +702,22 @@ const _term = (() => {
   // commands in a row could behave completely differently depending on how much
   // the game happened to print — which reads as the scrollback moving on its
   // own. The anchor is now reserved for output that is unambiguously a wall.
+  // MORE BELOW: a floating cue at the foot of the transcript while unread text sits under the fold,
+  // tapped to read on a screen at a time (Gary, round 79). Presentation only.
+  let _moreBtn = null, _moreRaf = 0;
+  function _updateMoreBelow() {
+    if (!_out || !_moreBtn) return;
+    const line = parseFloat(getComputedStyle(_out).lineHeight) || 22;
+    const left = _out.scrollHeight - _out.clientHeight - _out.scrollTop;
+    const r = _out.getBoundingClientRect();
+    const show = left > 1.5 * line && r.height > 3 * line;
+    _moreBtn.hidden = !show;
+    if (show) { _moreBtn.style.left = (r.left + r.width / 2) + "px"; _moreBtn.style.top = (r.bottom - _moreBtn.offsetHeight - 8) + "px"; }
+  }
+  function _queueMoreBelow() {
+    if (_moreRaf) return;
+    _moreRaf = (window.requestAnimationFrame || (f => setTimeout(f, 16)))(() => { _moreRaf = 0; _updateMoreBelow(); });
+  }
   function _scrollToNew(anchor) {
     if (!_out) return;
     const bottom = _out.scrollHeight - _out.clientHeight;
@@ -1083,6 +1100,7 @@ const _term = (() => {
     if (typeof _updateScene === "function") _updateScene(); // v0 scene panel
     _renderChips(); // …and re-match the quick-command chips to the new context
     _scrollToNew(anchor); // read from the top of what just arrived, not the end
+    _queueMoreBelow();
   }
 
   function _wireNavFab() {
@@ -1133,6 +1151,17 @@ const _term = (() => {
   function init(onCommand) {
     _out = document.getElementById("term-out");
     _input = document.getElementById("term-in");
+    _moreBtn = document.getElementById("more-below");
+    if (_moreBtn) {
+      _moreBtn.addEventListener("click", () => {
+        const line = parseFloat(getComputedStyle(_out).lineHeight) || 22;
+        _out.scrollTop = Math.min(_out.scrollHeight, _out.scrollTop + _out.clientHeight - 2 * line);
+        _updateMoreBelow();
+      });
+      _out.addEventListener("scroll", _queueMoreBelow, { passive: true });
+      window.addEventListener("resize", _queueMoreBelow);
+      if (window.ResizeObserver) new ResizeObserver(_queueMoreBelow).observe(_out);
+    }
     _suggest = document.getElementById("term-suggest");
 
     _input.addEventListener("keydown", e => {
