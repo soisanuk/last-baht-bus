@@ -13,19 +13,14 @@ var NEWS_FEED = [
     "d": "10 Oct 2026"
   },
   {
-    "t": "Less rain does not mean less vigilance in Pattaya",
+    "t": "Family of murdered Pattaya teenager seeks compensation from Australian defendant",
     "s": "Pattaya Mail",
-    "d": "09 Oct 2026"
+    "d": "10 Oct 2026"
   },
   {
-    "t": "Chinese restaurant in Pattaya busted for gambling, 18 arrested",
+    "t": "Pattaya heist gang flees Thailand with 37 million baht",
     "s": "Thaiger",
-    "d": "08 Oct 2026"
-  },
-  {
-    "t": "DSI searches three Bangkok sites in probe into suspected Israeli nominee businesses",
-    "s": "Pattaya Mail",
-    "d": "09 Oct 2026"
+    "d": "11 Oct 2026"
   },
   {
     "t": "Pattaya ride-hailing driver alleges assault by bar owner and group",
@@ -38,9 +33,14 @@ var NEWS_FEED = [
     "d": "09 Oct 2026"
   },
   {
-    "t": "Car catches fire at Pattaya government housing project",
+    "t": "Two Nigerian men arrested in Pattaya condo cocaine raid",
     "s": "Pattaya Mail",
-    "d": "09 Oct 2026"
+    "d": "10 Oct 2026"
+  },
+  {
+    "t": "Umbrellas out, sunshine back after brief Pattaya downpour",
+    "s": "Pattaya Mail",
+    "d": "10 Oct 2026"
   },
   {
     "t": "Thai Queen makes first solo flight in fighter jet",
@@ -48,9 +48,14 @@ var NEWS_FEED = [
     "d": "09 Oct 2026"
   },
   {
-    "t": "Iron cage beds at Thai elderly home fuel anger, owner defends ‘innovation’",
-    "s": "South China Morning Post",
-    "d": "08 Oct 2026"
+    "t": "I Flew to Thailand to Snatch My Face and Body",
+    "s": "The Cut",
+    "d": "09 Oct 2026"
+  },
+  {
+    "t": "Thailand Plans Early Retirement Program to Reduce Civil Servants",
+    "s": "Bloomberg.com",
+    "d": "11 Oct 2026"
   },
   {
     "t": "Thailand prepares to host IMF-World Bank meetings",
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "09 Oct 2026"
   },
   {
-    "t": "George H.W. Bush Carrier Strike Group Departs Thailand",
-    "s": "navy.mil",
-    "d": "09 Oct 2026"
-  },
-  {
-    "t": "Pita Limjaroenrat: The Leader Thailand Could Have Had",
-    "s": "The New York Times",
-    "d": "08 Oct 2026"
+    "t": "In Thailand, car wash workers find a nearly 4-meter python camouflaged out back",
+    "s": "Yahoo",
+    "d": "10 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-09","USD":33.53,"AUD":23.41,"GBP":44.33,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-11","temp":25,"humid":95,"code":53,"hi":31,"rain":100};
+var WX_NOW = {"date":"2026-10-11","temp":29,"humid":77,"code":51,"hi":29,"rain":96};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4196,"date":"2026-10-10","baht":66550};
+var GOLD = {"usd":4196,"date":"2026-10-11","baht":66550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":83001,"thb":2786682};
+var BTC = {"usd":82997,"thb":2789757};
