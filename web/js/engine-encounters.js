@@ -882,6 +882,15 @@ const _ENC = {
   },
 
   noodle(input) {
+    // HOW MUCH is a question, and she has an answer: the prices, and the noodle stays up (Ilse, round 80:
+    // it read as NO and closed the moment)
+    if (/^(how much|tao ?rai|thao rai|price|prices|what'?s the price|how much (?:is|for) (?:a |the )?(?:beer|drink|lady drink))\b/.test(input)) {
+      const _front = (_room().venues || []).find(v => ROOMS[v] && ROOMS[v].barType) || G.room;   // her bar's price, not the pavement's
+      _encPrompt([`"Beer ฿${_num(_beerPrice(_front))}, lady drink ฿${_num(_ladyPrice(_front))} — same as everybody on the soi." The noodle doesn't drop an inch. "Cheap, na! You come?"`, "dim"],
+        ["(YES and follow her in · or walk on and take the noodle.)", "dim"]);
+      G.pendingEnc = "noodle";
+      return;
+    }
     if (/yes|yeah|ok|okay|sure|come|fine|why not|\bgo\b|her|deal/.test(input)) {
       // her bar is one of this street's fronts — name it, or the hint's ENTER
       // lands on "Which one?" (Gordon, round 37). Pure hash, no dice.

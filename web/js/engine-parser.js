@@ -13605,7 +13605,7 @@ function _norm(s) {
 const _ENC_SOFT = {
   powerbank:  /^(?:yes|yeah|sure|ok|okay|thank|khop|krub|krap|please|borrow|charge|why not|plug|tao ?rai|how much|price|no|nah|pass|wave|walk(?: on)?)\b/,   // "n" meant north, and cost a man his charge (Keith, round 40)
   peddler:    /^(?:haggle|bargain|cheap(?:er)?|discount|too much|lower|tao ?rai|how much|(?:buy (?:the |a )?)?(?:watch|rolex|glass(?:es)?|shades|sunglasses|vit(?:amin)?s?|pills?)|yes|no|nah|not interested|wave|pass)\b/,
-  noodle:     /^(?:yes|yeah|ok|okay|sure|come(?: on)?|fine|why not|her|deal|no|nah|pass|wave|walk(?: on)?)\b/,
+  noodle:     /^(?:yes|yeah|ok|okay|sure|come(?: on)?|fine|why not|her|deal|no|nah|pass|wave|walk(?: on)?|how much|tao ?rai|thao rai|price|prices|what'?s the price)\b/,
   freelancer: /^(?:both|two|friend|ning|threesome|them|yes|ok|okay|sure|company|come|deal|her|why not|no|nah|pass|wave|walk(?: on)?|thanks)\b/,
   coconutbar: /^(?:both|two|friend|muk|threesome|them|yes|yeah|ok|okay|sure|company|come|deal|her|why not|how much|price|no|nah|pass|walk(?: on)?)\b/,
   booking:    /^(?:yes|ok|okay|sure|book|come|deal|why not|send her|yeah|no|nah|sleep|turn in|pass|not tonight|stay|send)\b/,
@@ -13830,6 +13830,9 @@ function doCommand(input) {
   // YES at "SLEEP again if you mean it" is meaning it — "that moment has passed" for the one word a man types at a question (Graham, round 74)
   if (G.endWarn && G.endWarn.day === G.day && G.turns - G.endWarn.turn <= 1 && /^(y|yes|yeah|yep|ok|okay|sure|do it|confirm|i mean it)[.!]*$/i.test(raw.trim()))
     raw = { sleep: "sleep", sunrise: "watch sunrise" }[G.endWarn.kind] || raw;
+  // …and ANY other command disarms it: a free LOOK cost no turn, so the warning stayed armed and the next
+  // SLEEP ended the night without asking again (Ilse, round 80). Only the same choice repeated commits.
+  if (G.endWarn && !({ sleep: /^(sleep|go to (bed|sleep)|bed|turn in|nap|zz+)\b/, sunrise: /^(watch|see|wait for) (the )?(sunrise|dawn|sun ?rise)\b/, wait: /^wait\b|^z$/ }[G.endWarn.kind] || /^$/).test(raw.trim().toLowerCase())) G.endWarn = null;
   // THAI AT A PROMPT (Pieter, round 73: Cream's GO ignored ไป, the GIFT ignored สามร้อย, the police ignored ไม่).
   // The gates below read the English they were written for, and the script translation used to run only after
   // all of them. While a gate owns the input, a line of pure Thai script that the command table reads is answered
@@ -14324,7 +14327,20 @@ function doCommand(input) {
   const _chatBye = _convoActive() && /^(?:goodbye|bye|see you)$/.test(lower.trim());
   if (!_chatBye && (/^(?:goodbye|good ?night|bye|see you)(?:\s+(?:to\s+)?[a-z' ]+)?$/.test(lower.trim()) ||
       /^send\s+(?:her|them|[a-z']+)\s+home$/.test(lower.trim()))) {
-    if (G.party && G.party.ids && G.party.ids.length) { _partyGoodbye(); _tick(); return; }
+    if (G.party && G.party.ids && G.party.ids.length) {
+      const _t = lower.trim();
+      const _nm = ((_t.match(/^send\s+([a-z' ]+?)\s+home$/) || [])[1] || (_t.match(/^(?:goodbye|good ?night|bye|see you)\s+(?:to\s+)?([a-z' ]+)$/) || [])[1] || "").trim();
+      if (_nm && !/^(them|both|all|everyone|the girls|both of them)$/.test(_nm)) {
+        if (/^(her|she)$/.test(_nm) && G.party.ids.length > 1) { _say(`Which of them? (SEND ${NPCS[G.party.ids[0]].name.toUpperCase()} HOME · SEND THEM HOME)`, "dim"); return; }
+        const _who = /^(her|she)$/.test(_nm) ? G.party.ids[0]
+          : (G.party.ids.find(i => String(NPCS[i].name).toLowerCase() === _nm) || _findNpc(_nm) || (typeof _npcByName === "function" ? _npcByName(_nm, { first: true }) : null));
+        if (_who && G.party.ids.includes(_who)) { _partyGoodbyeOne(_who); _tick(); return; }
+        // a PERSON who is not on your arm parts with nobody — it never sends the women who are (Ilse, round 80);
+        // a word that is nobody ("goodnight sweetheart") is the goodbye it always was
+        if (_who && NPCS[_who]) { _say(`${NPCS[_who].name} isn't with you tonight — ${_partyLabel()} ${G.party.ids.length > 1 ? "are" : "is"}.`, "dim"); return; }
+      }
+      _partyGoodbye(); _tick(); return;
+    }
     if (/^send/.test(lower.trim())) { _say("Nobody on your arm to send anywhere. (SEND <amount> TO <name> is the banking app.)", "dim"); return; }
   }
   if (G.room === "oy_office" && !_flag("hasWallet") && /^[\d๐-๙]{1,4}$/.test(lower.trim())) {

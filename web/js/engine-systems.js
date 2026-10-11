@@ -1562,6 +1562,22 @@ function _partyHome(id) {
   _say("(Your room. SLEEP ends the night together, her way.)", "dim");
   _describeRoom(true);
 }
+// ONE of two goes home when ONE is named (Ilse, round 80 — "send belle home" put Mint in the taxi too,
+// and the two take-out fees went with them): a named companion parts alone, at her own half-fare;
+// the other stays on your arm. Unnamed, or THEM, the whole party goes, as before.
+function _partyGoodbyeOne(id) {
+  const p = G.party;
+  if (!p || !p.ids || !p.ids.includes(id)) return false;
+  if (p.ids.length < 2) { _partyGoodbye(); return true; }
+  (G.soc.leftEarly = G.soc.leftEarly || {})[id] = G.day;
+  const c = Math.min(G.money, Math.round(PARTY_TAXI / 2));
+  G.money -= c;
+  p.ids = p.ids.filter(x => x !== id);
+  _say(_fmt(_pickVary(_PARTY_GOODBYE, "partygoodbye"), { who: NPCS[id].name, c }), "dim");
+  _addBond(id, 1);
+  _say(`(${_partyLabel()} stays with you.)`, "dim");
+  return true;
+}
 function _partyGoodbye() {
   for (const id of ((G.party && G.party.ids) || [])) (G.soc.leftEarly = G.soc.leftEarly || {})[id] = G.day;   // she went home, not back to work (Callum, round 71: on the Stinky floor fifteen minutes later)
   const p = G.party;
