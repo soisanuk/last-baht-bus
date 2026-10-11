@@ -896,6 +896,9 @@ function _roomFit(pool) {
   // barman builds her drink" at the Sweet Tamarind, run by View, Tukta and three nieces). A line naming
   // one needs a manager on the floor or a room whose own prose has him.
   if (!_hasBarman()) bad.push(/\b(barm[ae]n|bartenders?)\b/i);
+  // …and a WAITRESS carries drinks in a go-go or a room whose prose has one, not to a rail where the
+  // women pour (Joost, round 81: "the waitress" at the Sweet Tamarind)
+  if (!_isGogo() && !/\bwaitress/i.test(String(ROOMS[G.room].desc || "") + " " + (Array.isArray(ROOMS[G.room].revisit) ? ROOMS[G.room].revisit.join(" ") : ""))) bad.push(/\bwaitress(es)?\b/i);
   if (!bad.length) return pool;
   // read a function line's SOURCE, never call it: a pool line may roll dice or touch state, and
   // a filter that runs it shifts the seeded stream (round 57 found the soak's path had moved)

@@ -120,7 +120,7 @@ test("the house is written: every new mamasan and cashier has her own words, a r
     assert.ok(own.nodes[0].when && !own.nodes[0].topic, id + ": a return greeting first");
     assert.ok(own.nodes.some(n => /wallet/.test(n.topic || "") && /Candy/.test(n.text)), id + ": the wallet points at Candy");
     if (FLOOR_STAFF[id].role === "cashier") assert.match(own.nodes.find(n => /^money/.test(n.topic || "")).text, /barfine/i, id + ": the bar's number and hers");
-    assert.ok(own.nodes.filter(n => /^last time/.test(n.topic || "")).length === 2, id + ": LAST TIME, both ways");
+    assert.ok(own.nodes.filter(n => /^last time/.test(n.topic || "")).length >= 2, id + ": LAST TIME, both ways (and this week's, round 81)");
   }
   G.room = "sweet_tamarind"; out = []; run("ask tukta about view"); assert.match(said(), /Auntie View/, "Tukta is View's niece");
   G.room = "firecracker_bar"; out = []; run("ask pang about napa"); assert.match(said(), /Mum/, "Pang is Napa's daughter");

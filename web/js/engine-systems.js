@@ -513,6 +513,7 @@ function _navEnter() {
     out.push({ cmd: "in", label: nm });
   }
   for (const id of r.venues || []) {
+    if (typeof _closedNow === "function" && _closedNow(id)) continue;   // a shuttered front is not a door to offer (Joost, round 81: four grilles, a turn each)
     const nm = (typeof _barName === "function" && _barName(id)) ||
       (ROOMS[id] && ROOMS[id].name) || null;
     if (nm) out.push({ cmd: "enter " + nm.toLowerCase(), label: nm.replace(/\s*\(.*\)$/, "") });
@@ -1011,7 +1012,7 @@ function _doBarfine(arg) {
     _say(`${name} counts it out on her fingers, upfront as a menu — she quotes ` +
       "upstairs the way a noodle cart quotes noodles, one eye still counting " +
       `the room over your shoulder.` +
-      (G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
+      (bt === "soi6" && G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
         "apologetic shrug: upstairs is one thing, but take a Soi 6 girl out of the bar for a whole night " +
         "this early and the mamasan prices her like a go-go headliner." : ""));
   } else if (typeof _soleStaff === "function" && _soleStaff(id) && !(NPCS[id] && NPCS[id].owner)) {
@@ -1677,7 +1678,7 @@ function _bfPrompt(fresh) {
   const _ltW = _s6 ? "she leaves the bar with you for the night" : "overnight";
   _say(_fmt(pt > lt
     ? "(SHORT TIME {st} — {stw} · LONG TIME {lt} — {ltw} · " +
-      "TAKE HER OUT {pt} — her WHOLE night, priced like one · NO backs out.)"
+      "TAKE HER OUT {pt} — her whole night, priced like one · NO backs out.)"
     : "(SHORT TIME {st} — {stw} · LONG TIME {lt} — {ltw} · " +
       "TAKE HER OUT {pt} — she comes with you, and the night keeps going · NO backs out.)",
     { st: p(st), lt: p(lt), pt: p(pt), stw: _stW, ltw: _ltW }), "dim");
@@ -1849,6 +1850,8 @@ function _bfResolve(kind) {
         ` (฿${_num(G.money)} left.)`, "win");
       if (_bonus.line) _say(_bonus.line, "dim");
       _conquestHappy(6 + _bonus.n, id);
+      // upstairs takes the half hour the prose says it does — it moved the clock six minutes (Ilse and Joost, rounds 80–81)
+      G.offstage = true; _passTime(Math.min(3, Math.max(0, NIGHT_TURNS - 1 - G.nightTurn))); G.offstage = false;
     } else if (bt === "gents") {
       _say((price ? `฿${_num(price)} to Rose, discreetly, and ${name} takes` :
         `No fee to Rose tonight — she squared it herself — and ${name} takes`) +
@@ -3590,7 +3593,7 @@ function _leads() {
     // No claim about how you'd get there: some of these are a walk, some a bus,
     // and the lead shouldn't guess. What IS reliably true is that the districts
     // do not look like each other.
-    out.push(_fmt("You have not set foot in {where} yet, and it looks nothing like this stretch.", { where }));
+    out.push(_fmt("You have not been to {where} yet, and it looks nothing like this stretch.", { where }));   // "set foot in the foot of the soi" (Joost, round 81)
   }
   return out;
 }
@@ -3625,7 +3628,11 @@ function _journalRecord() {
   _say(`  People: ${met.length} met of ${known} named to you${metF ? ` (and ${metF} of the girls)` : ""}.`, "dim");
   for (const id of met.slice(0, 12)) {
     const n = NPCS[id], seen = (G.talked[id] || []).length;
-    const open = (typeof _convoTopics === "function" ? _convoTopics(id, { all: true }) : []).length;
+    // still open = a topic she answers whose answer you have not heard (Joost, round 81: "5 still open"
+    // after all five were asked)
+    const _dl = n.dialogue || [];
+    const open = (typeof _convoTopics === "function" ? _convoTopics(id, { all: true }) : [])
+      .filter(t => { const d = typeof _pickDialogue === "function" ? _pickDialogue(id, t) : null; const k = d ? _dl.indexOf(d) : -1; return k < 0 || !(G.talked[id] || []).includes(k); }).length;
     const rm = (G.metRoom && G.metRoom[id]) || _npcRoom(id), where = rm && _barName(rm) ? ` — ${_barName(rm)}` : "";
     _say(`    ${n.emoji || "·"} ${n.name}${where}: ${seen} thing${seen === 1 ? "" : "s"} heard${open ? `, ${open} still open` : ""}.`, "dim");
   }
@@ -6373,8 +6380,8 @@ function _sayDrizzle() {
         ? "Rain arrives on the front glass in a long diagonal sweep. Inside " +
           "nothing changes at all — the commentary, the fridge hum, somebody's " +
           "crisps — and that nothing is the whole point of the place."
-        : "The soi outside blurs and empties; a girl from the bar opposite " +
-          "sprints past the window holding a stool over her head. In here the " +
+        : "The soi outside goes soft behind a fine rain; a girl from the bar opposite " +   // a drizzle, not the downpour: OUT is a wet street, not an emptied one (Joost, round 81)
+          "holds a menu over her head and does not hurry. In here the " +
           "rain is weather on a screen. Somebody turns the football up.", "dim");
       return;
     }

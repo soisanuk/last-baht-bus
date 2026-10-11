@@ -6829,6 +6829,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   // Somo (Front Row, beer) — the tomboy: football, no makeup, one of the lads. No romance
   // angle, and she says so. Learned English off the match commentary. No vector.
   somo: {
+    drinksOnly: true,   // "here I don't have to pretend I fancy anybody": she pours, she talks football, she does not go (Joost, round 81)
     name: "Somo", th: "โซโม่", emoji: "⚽",
     room: "bay_watch",
     desc: "In a Liverpool shirt and zero makeup, arguing offside with two regulars and winning. More one-of-" +
@@ -10034,8 +10035,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "wide. \"Soi's still performing — it always is. Sit, watch a minute. You're learning the rhythm of " +
           "the place; I can tell.\"",
         short: "\"Back again. Good.\" (An inch of shifted Chang — for Terry, arms wide open.)" },
-      { text: "He nods at the empty stool beside him and signals the barman for his own. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
+      // the soi is no show once the shutters are down (Joost, round 81, at 01:18): gated in place, the late hello after it
+      { when: (st, G) => G.nightTurn < 60, text: "He nods at the empty stool beside him and signals the barman for his own. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
         short: "He signals the barman. \"Sit. Best show in Pattaya, no tipping required.\"" },
+      { text: "He nods at the empty stool beside him and signals the barman for his own. \"Sit down. Show's over out there — shutters, ice buckets, one dog. In here it never closes.\"",
+        short: "He signals the barman. \"Sit. Show's over out there; in here it never stops.\"" },
     ],
   },
 
@@ -17730,6 +17734,7 @@ function _exited(id) {
 // and her tier-one ledger reveal says why.
 function _drinksOnly(id) {
   const n = NPCS[id];
+  if (n && n.drinksOnly) return true;   // an authored woman whose own words say she sits and does not go (Somo — Joost, round 81)
   if (!n || !n.filler || n.owner) return false;
   if (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] !== "hostess") return false;
   if (typeof POPULAR_GIRLS !== "undefined" && POPULAR_GIRLS.includes(id)) return false;
@@ -19122,8 +19127,15 @@ function _houseOwn(id, o) {
   nodes.push({ topic: "wallet", notFlags: ["hasWallet"], text: o.wallet });
   nodes.push({ topic: "bar|this bar|the bar|here|this place|" + o.barKeys, text: o.bar });
   for (const x of (o.extra || [])) nodes.push(x);
+  // a man who sat in her bar on an earlier night this trip is not "no last time" (Joost, round 81: View said
+  // it the night after 3.8 hours on her stool, while her own girls placed him). Gated in place, so every
+  // index stands, with this week's answer appended after it.
+  const sat = (st, G) => { const r = typeof _npcRoom === "function" ? _npcRoom(id) : null; return !!(r && G.visitDay && G.visitDay[r] != null && G.visitDay[r] < G.day); };
   nodes.push({ topic: "last time|last trip|last visit|before", when: back, text: o.lastBack });
-  nodes.push({ topic: "last time|last trip|last visit|before", text: o.last });
+  nodes.push({ topic: "last time|last trip|last visit|before", when: (st, G) => !sat(st, G), text: o.last });
+  nodes.push({ topic: "last time|last trip|last visit|before|remember me|you remember",   // ungated: the sibling above answers the first night
+    text: o.lastWeek || "\"Last time? This week — you sit here already.\" A small nod, the kind that files a face. \"Second time, I know you. That is the rule in this bar.\"",
+    short: "\"You sat here already this week. I know you.\"" });
   return { exit: null, nodes };
 }
 const _HOUSE_OWN = {

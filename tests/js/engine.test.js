@@ -8220,7 +8220,7 @@ test("with nothing on the books, the game names what's actually open", () => {
   assert.match(said, /Bert has something going/, "a man you have MET with work going");
   assert.match(said, /The Stinky Pinky/, "and where he actually is");
   assert.match(said, /Lek remembers you/, "the girl who is warmest to you");
-  assert.match(said, /not set foot in/, "and somewhere you have never been");
+  assert.match(said, /not been to/, "and somewhere you have never been");
 
   // a stranger's job is a spoiler, not a lead — only people you've met
   newGame();

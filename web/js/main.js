@@ -694,7 +694,7 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (sv.day) where = ` — ${mode}, day ${sv.day}${room ? ", " + room : ""}`;
     } catch (e) {}
     _term.print("A night in progress was found on this device" + where + ".");
-    _term.print("Continue your night? (YES / NO)", "alert");
+    _term.print(/the week is up/.test(where) ? "Back to your finished week? (YES / NO)" : "Continue your night? (YES / NO)", "alert");   // a finished week is not a night (Joost, round 81)
     _term.renderChips([{ cmd: "yes", label: "YES — continue" }, { cmd: "no", label: "NO — start fresh" }]);
   } else {
     _showStartMenu(); // fresh start → mode select + intro modal

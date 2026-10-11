@@ -32,8 +32,8 @@ test("HOW MUCH, PRICE and MENU in a bar are the price list; HOW MUCH BARFINE is 
 });
 
 test("the middle's beer bars are Soi 6: one drink, and the girl quotes it herself — with the before-nine price named", () => {
-  G.room = "bay_watch"; G.nightTurn = 10;
-  const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
+  G.room = "sunset_rail"; G.nightTurn = 10;
+  const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && !_drinksOnly(i));   // Somo sits, she does not go (round 81)
   run("talk to " + NPCS[g].name.toLowerCase()); out = []; run(`ask ${NPCS[g].name.toLowerCase()} about upstairs`);
   assert.match(said(), /after nine/i, "the early price says it is the early price");
   out = []; run("barfine " + NPCS[g].name.toLowerCase());

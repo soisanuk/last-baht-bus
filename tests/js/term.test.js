@@ -349,6 +349,11 @@ test("the single-FLIP jackpot hint wraps only FLIP as the tap target", () => {
   assert.ok(d.includes("&amp;"), "the & is HTML-escaped, not a second command");
 });
 
+test("a digit that ends a command is part of it: (PLAY CONNECT 4 · …) taps the whole command (Joost, round 81)", () => {
+  const d = _term.decorate("(PLAY CONNECT 4 · PLAY JACKPOT)");
+  assert.ok(d.includes(kw("PLAY CONNECT 4", "cmd")), d);
+});
+
 test("quiz answer lines: the leading digit taps while a quiz is live", () => {
   G.game = { type: "quiz", qs: [], at: 0, right: 0 };
   assert.equal(_term.decorate("  1. Bangkok"),

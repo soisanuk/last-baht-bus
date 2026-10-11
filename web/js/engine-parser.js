@@ -13120,7 +13120,7 @@ function _chipSet() {
   // into (Kurt, round 65). Since 2026-10-07 any SLEEP that ends a night asks once (_endConfirm),
   // so the fat finger costs a question, not the night, and the chip is offered at any hour (Mario,
   // 2026-10-08). Your own room only: SLEEP anywhere else is "get there and SLEEP".
-  if (G.room === _hotelRoomId() && _flag("act1Done")) add("sleep", G.nightTurn < 40 ? "sleep — end the night early" : "sleep — end the night");
+  if (G.room === _hotelRoomId() && _flag("act1Done")) add("sleep", (G.stage !== "expat" && G.day >= 7 && !G.visitUntil) ? "sleep — end the week" : G.nightTurn < 40 ? "sleep — end the night early" : "sleep — end the night");   // the last night's sleep ends the WEEK, and the chip says so (Joost, round 81)
   // The readout verbs live only in HELP, which is itself untappable — a thumb
   // player could not reach QUESTS/HINT/TIME/WHO/GALLERY at all (thumbs-only
   // playtest 2026-08-22). One chip, fanned out like the ATM.
@@ -13698,7 +13698,10 @@ function _renderResume() {
     _say(`📱 ${_unreadCount()} unread message${_unreadCount() > 1 ? "s" : ""} waiting (CHECK MESSAGES).`, "win");
   }
   if (G.pendingChoice === "intro") { _introPrompt(); return; }
-  if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
+  if (G.pendingChoice === "vacation_end") {   // a reload at the week's end redraws the card it was showing (Joost, round 81)
+    if (G.mode === "soi6" && typeof _shareCard === "function") for (const l of _shareCard()) _say(l, "win");
+    _vacationEndPrompt(); return;
+  }
   if (G.pendingChoice === "gameend") { for (const l of _lifeCard()) _say(l, "win"); _gameEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.pendingChoice === "rabbitjob") { _rabbitJobPrompt(); return; }
@@ -13789,7 +13792,8 @@ const _GERMAN_QUIP = {
 const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health", "verbs", "ledger",
   "inventory", "inv", "i", "map", "help", "quests", "journal", "notes", "diary", "hint", "share",
   "who", "blackbook", "standing", "rep", "gallery", "photos", "album", "books",
-  "takings", "identity", "topics", "subjects", "prices", "terms"]);
+  "takings", "identity", "topics", "subjects", "prices", "terms",
+  "contacts", "messages", "column", "owl"]);   // the info picker's readouts are all free alike (Joost, round 81: three of eleven cost a turn)
 
 let _rawAnswer = null; // the raw-cased line, for _convoAnswer's quote-back memory
 function doCommand(input) {
