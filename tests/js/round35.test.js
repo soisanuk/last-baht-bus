@@ -538,13 +538,11 @@ test("the junction can see the junction (Malcolm F3)", () => {
 // After one o'clock the pub's window said "shutters down and its neon off";
 // WATCH SOI, Angela and Terry all said the soi was still performing.
 test("after the shutters, the window and the rail agree with the room (Malcolm F4)", () => {
-  G.room = "queen_vic"; G.nightTurn = 70; _setFlag("sawBalcony");
+  G.room = "queen_vic"; G.nightTurn = SOI6_CLOSE + 5; _setFlag("sawBalcony");   // the soi performs till two now
   out = []; run("watch soi");
   assert.doesNotMatch(text(), /parade presses right up to the window/, "no parade at 01:00");
   assert.ok(_WATCH_SOI_LATE.some(l => text().includes(l.slice(0, 40))), "the late street instead");
-  G.known.terry = true; G.talked = {}; G.convo = null;
-  out = []; run("talk to terry");
-  assert.doesNotMatch(text(), /Soi's still performing/, "Terry reads the hour");
+  assert.ok(!_npcsHere().includes("terry"), "and Terry went home when the pub shut at eleven");
   assert.doesNotMatch(NPCS.angela.dialogue.map(d => d.text).join(" "), /howling away across the road/, "Angela's window is neutral");
 });
 

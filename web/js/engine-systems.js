@@ -7027,7 +7027,7 @@ const _WATCH_SOI_LATE = [
     "and you have never once seen them before, because they are never down when you are.",
 ];
 function _doWatchSoi() {
-  if (!_flag("sawBalcony")) {
+  if (!_flag("sawBalcony") && G.nightTurn < SOI6_CLOSE) {   // after two, the first look is the shut street like any other (Declan, round 83)
     _setFlag("sawBalcony");
     _say("You step out to the third-floor rail, and Soi 6 opens up underneath you like somebody kicked over a crate of neon.");
     _say("Three hundred-odd metres of it, wall to wall, and you're perched right over the middle: both ends flaring away " +
@@ -7048,9 +7048,9 @@ function _doWatchSoi() {
     _say("Somewhere down there is a week's worth of trouble with your name on it. (It's all just DOWN the stairs — " +
       "the pub first, then out into the soi. " + _close + ")", "dim");
   } else {
-    _say(_pickVary(G.nightTurn >= 60 ? _WATCH_SOI_LATE : _BALCONY_SCENES, G.nightTurn >= 60 ? "soilate" : "balcony"));
+    _say(_pickVary(G.nightTurn >= SOI6_CLOSE ? _WATCH_SOI_LATE : _BALCONY_SCENES, G.nightTurn >= SOI6_CLOSE ? "soilate" : "balcony"));   // the soi performs till two now
   }
-  _soiSpectateHappy("(Best seat above the best free show.)");
+  _soiSpectateHappy(G.nightTurn >= SOI6_CLOSE ? "(The show's over; the seat's still the best one.)" : "(Best seat above the best free show.)");
 }
 
 // The ground vantage: the Queen Vic's front window. Same soi, opposite feeling —
@@ -7060,7 +7060,7 @@ function _doWatchPubSoi() {
   // after the shutters the window shows a different street (Malcolm, r36:
   // "the parade presses right up to the window" at 01:30, beside the room's
   // own "shutters down and its neon off")
-  if (G.nightTurn >= 60) _say(_pickVary(_WATCH_SOI_LATE, "soilate"));
+  if (G.nightTurn >= SOI6_CLOSE) _say(_pickVary(_WATCH_SOI_LATE, "soilate"));
   else _say(_fmt(_pickVary(_PUB_SOI_SCENES, "pubsoi"), { yours: (G.player && G.player.teetotal) ? "the soda" : "the pint" }));   // a declared teetotaller nursed a pint (Joan, round 54)
   _soiSpectateHappy("(A pint, and the whole circus safely behind glass.)");
 }

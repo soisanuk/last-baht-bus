@@ -443,7 +443,7 @@ const _VIC_GUARD = [
   "The guard takes one earbud out. “Pub close, sir. Eleven o'clock.” He points up the stairs with his chin. “Your room, up. No beer. Sorry khrap.”",
   "“Close already, sir.” The security guard shows you the time on his {{phone}} as evidence. “You stay upstairs — okay, you go up. Beer tomorrow, six o'clock.”",
   "The guard on the barmaid's stool hears you out and shakes his head with real sympathy. “Bar close. I only watch the door, sir. I don't have the key for the fridge.”",
-  "“Sawatdee khrap.” He has seen you come and go all week. “Upstairs is open. Downstairs is close. Goodnight, sir.”",
+  "“Sawatdee khrap.” He knows the face that sleeps upstairs. “Upstairs is open. Downstairs is close. Goodnight, sir.”",
 ];
 const _FOLK_SEVEN = [
   "The 7-Eleven lad looks up from his phone. “Sawatdee khrap.” Then back down. That is the whole conversation available, and it is not unfriendly.",
@@ -467,9 +467,10 @@ function _promptedFolk(arg, topic) {
   // one place the question could not be put at all (Helen, round 49: "the people
   // who actually hold the town up are scenery with lovely paint on them").
   const _hoursSay = () => {
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two)\b/.test(t)) return _stillOpenTalk(null);
     if (/\b(open|opens|opening|opening time)\b/.test(t) && !/\bopen till\b/.test(t)) return _openingTalk(null);
     if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(t)) return _busyTalk(null);
-    if (/\b(closing|close|closed|closing time|shut|shutters|hours|last call|open till|what time)\b/.test(t)) return _closingTalk(null);
+    if (/\b(closing|close|closed|closing time|shut|shutters|hours|last call|open till|what time)\b/.test(t)) return _closingTalk(null, t);
     return null;
   };
   // ── state-driven mouths: people the transcript itself put in the room ──
@@ -4857,9 +4858,10 @@ function _doTalkCore(arg, topic) {
   if (topic && !d.topic && typeof _oppTalk === "function" && _oppTalk(npc, topic)) return;
   if (topic && !d.topic && _houses) {
     const _ct = String(topic).toLowerCase();
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two)\b/.test(_ct)) { _say(_stillOpenTalk(npc)); return; }   // not the opening hour (Declan, round 83)
     if (/\b(open|opens|opening|opening time|open at|start)\b/.test(_ct) && !/\bopen till\b/.test(_ct)) { _say(_openingTalk(npc)); return; }
     if (/\b(busy|rush|quiet|peak|packed|full|crowd|crowded)\b/.test(_ct)) { _say(_busyTalk(npc)); return; }
-    if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc)); return; }
+    if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc, _ct)); return; }
     if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_ct) || (G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day && /\b(who won|winner|the pot|the final|last frame|the finn)\b/.test(_ct))) { _say(_leagueTalk(npc)); return; }   // the man who runs the league can say who won it (Desmond, round 63)
     // the badge: at a distance it is a number for the board; to somebody she knows it is armour (theme 12)
     if (typeof _badge === "function" && _badge(npc) && /^(?:the |my |your |her )?(?:number|badge|tag|\d{1,3})$/.test(_ct)) {
@@ -4921,9 +4923,10 @@ function _doTalkCore(arg, topic) {
   if (topic && !d.topic && NPCS[npc].room === G.room &&
       !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house && !NPCS[npc].filler) {
     const _pt = String(topic).toLowerCase();
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two)\b/.test(_pt)) { _say(_stillOpenTalk(npc)); return; }
     if (/\b(open|opens|opening|opening time|open at)\b/.test(_pt) && !/\bopen till\b/.test(_pt)) { _say(_openingTalk(npc)); return; }
     if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(_pt)) { _say(_busyTalk(npc)); return; }
-    if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_pt)) { _say(_closingTalk(npc)); return; }
+    if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_pt)) { _say(_closingTalk(npc, _pt)); return; }
     if (/\b(league|killer|killer pool|pool league|tournament|league night)\b/.test(_pt) || (G.lastKp && G.lastKp.room === G.room && G.lastKp.day === G.day && /\b(who won|winner|the pot|the final|last frame)\b/.test(_pt))) { _say(_leagueTalk(npc)); return; }
     if (/\b(roast|sunday roast|kitchen|food|dinner|menu|card)\b/.test(_pt)) {
       const said = _kitchenTalk(npc);
@@ -11098,7 +11101,9 @@ function _doTime() {
   }
   _say(typeof _atOwnBar === "function" && _atOwnBar() ? "(Your own rail: the barfine book is shut to you — the girls are staff, and the fee would be a fee to yourself.)" :   // the guv'nor was being quoted early-doors rates (Rolf, round 54)
     t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
-    t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine.)" :
+    (typeof _closeTurn === "function" && _closeTurn(G.room) != null && t >= _closeTurn(G.room) - 5 && t < _closeTurn(G.room)) ? `(This place shuts at ${_closeClock(G.room)} — last orders now.)` :   // the hour, said at the hour it matters (Declan, round 83)
+    (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && t >= SOI6_CLOSE) ? "(The bars on Soi 6 shut at two. Whatever is still pouring is off the soi.)" :
+    t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine." + (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" ? " The soi shuts at two." : "") + ")" :
     "(Prime time. Standard rates apply.)", "dim");
   // Soi 6 mode never leaves the street (the bus is refused), so the last-bus
   // status — the titular tension of the full game — simply doesn't apply here.
@@ -11257,7 +11262,10 @@ function _doWait(arg) {
   // +1: the loop stops at target-1, and doCommand's bottom-of-loop tick will
   // land us on target — show THAT clock, not the pre-tick one (WAIT UNTIL 20:00
   // printed "19:00"; two personas, 2026-08-17).
-  _say(_fmt("You let the night idle past — ice melting, songs turning over, the street " +
+  // a shut room and a dark street have no songs turning over (Declan, round 83, in the shut Vic)
+  const _quiet = (typeof _shutHere === "function" && _shutHere()) || (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= SOI6_CLOSE) || _isHotelRoom(G.room);
+  _say(_fmt(_quiet ? "You let the night idle past — the fan, a motorbike somewhere, the long quiet after the shutters. {t}."
+    : "You let the night idle past — ice melting, songs turning over, the street " +
     "rearranging itself. {t}.", { t: _clockStr(G.nightTurn + 1) }));
 }
 
@@ -12163,11 +12171,51 @@ function _goneTalk(npc, gone) {
   const house = _hoursRegister(npc) !== "floor";
   return _fmt(_pickVary(house ? _GONE_HOUSE : _GONE_FLOOR, "gonetalk"), { n: NPCS[gone].name, p: plan });
 }
-function _closingTalk(npc) {
+// A place NAMED in a closing question is the place asked about: "what time does the Vic close",
+// put to a Soi 6 girl, got her own bar's two o'clock (Declan, round 83). The Vic answers to "vic".
+function _namedVenue(topic) {
+  const t = String(topic || "").toLowerCase();
+  if (/\bvic\b|queen vic/.test(t)) return "queen_vic";
+  const rest = t.replace(/\b(what|time|does|do|did|the|close|closes|closing|shut|shuts|shutting|open|opens|when|is|at|till|until|hours|tonight)\b/g, " ").replace(/\s+/g, " ").trim();
+  if (rest.length < 4) return null;
+  const id = typeof _roomByName === "function" ? _roomByName(rest) : null;
+  return id && ROOMS[id] && (ROOMS[id].bar || ROOMS[id].barType) ? id : null;
+}
+// WHERE IS STILL OPEN: the nearest bars pouring right now, by the walk (Declan, round 83 — the answer
+// was the OPENING time, and nobody on a shut Soi 6 named the two bars forty yards off that run to dawn)
+function _stillOpen(max) {
+  const out = [];
+  for (const id of Object.keys(ROOMS)) {
+    const r = ROOMS[id];
+    if (id === G.room || !r.barType || r.invite || (typeof _closedNow === "function" && _closedNow(id))) continue;
+    if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id)) continue;
+    if (r.barType === "gents" && !(G.flags && G.flags.orchidVouched)) continue;
+    const p = typeof _path === "function" ? _path(G.room, id) : null;
+    if (p && p.length) out.push({ id, n: p.length });
+  }
+  return out.sort((a, b) => a.n - b.n).slice(0, max || 2);
+}
+function _stillOpenTalk(npc) {
+  const reg = _hoursRegister(npc);
+  const open = _stillOpen(2), names = open.map(o => _barName(o.id)).join(open.length > 1 ? " or " : "");
+  if (!open.length) return reg === "floor" ? "“Now? Nothing near, na. Walking Street, on a bike.”" : "“Nothing you can walk to. Walking Street, on a bike, if you must.”";
+  const near = open[0].n <= 2 ? "just along" : open[0].n <= 5 ? "a short walk" : "a fair walk";
+  return reg === "floor" ? `“Still open? ${names} — ${near}, they go till late, na.”`
+    : `“${names} — ${near}. They pour till the last man goes.”`;
+}
+function _closingTalk(npc, topic) {
   if (npc === "tan") return _tanTown("closing");
   const r = _room();
   const reg = _hoursRegister(npc);
-  const pick = (pools) => _pickVary(pools[reg] || pools.house, "closing" + reg);
+  // one sentence from three mouths in three bars, word for word (Declan, round 83): dealt from a town-wide book
+  const pick = (pools) => typeof _pickTownLine === "function" ? _pickTownLine(pools[reg] || pools.house, "closing" + reg) : _pickVary(pools[reg] || pools.house, "closing" + reg);
+  if (topic && /\b(still open|what'?s open|anywhere open|open now|where.*open|after two|after (the )?shutters)\b/.test(String(topic).toLowerCase())) return _stillOpenTalk(npc);
+  { const v = _namedVenue(topic);
+    if (v && v !== G.room) {
+      const c = _closeTurn(v), N = _barName(v) || ROOMS[v].name, short = /queen vic/i.test(N) ? "The Vic" : N;
+      const when = c == null ? (reg === "floor" ? "never close, na — last man go home" : "it doesn't, as such — dawn, most nights") : _cap(_closeClock(v)) + (c === 50 ? " — the pub, anyway; the rooms upstairs never close" : "");
+      return reg === "floor" ? `“${short}? ${when}.”` : `“${short}? ${when}.”`;
+    } }
   // a parlour is not a bar and never was
   if (r.massage || r.soapy) return pick({
     floor: [
@@ -12213,7 +12261,7 @@ function _closingTalk(npc) {
     punter: [
       "“Eleven. It's a proper pub — time gets called at half ten, and the security bloke sits behind the bar after.”",
       "“Eleven o'clock, and they don't stretch it. Rest of the soi goes till two; this place goes to bed.”",
-      "“Eleven. Which is why the rest of us are at the Shady Lady by quarter past.”",
+      "“Eleven. Early for this street — but it's a pub, not a bar, and the beds are upstairs.”",
     ],
     house: [
       "“Eleven. Last orders at half ten, and after that the guard has the bar — he lets the guests up and pours nothing.”",
@@ -12224,19 +12272,23 @@ function _closingTalk(npc) {
   // everything on Soi 6 shuts at two (Mario, 2026-10-11)
   if (_closeTurn(G.room) === SOI6_CLOSE) return pick({
     floor: [
-      "“Two o'clock, tilac. Last call half past one, then shutter come down — whole soi same time. You come back tomorrow.”",
-      "“Two. Not our choice — all Soi 6 close two o'clock. Half one you order the last one.”",
+      "“Two o'clock, tilac. Last call half past one, then shutter come down. You come back tomorrow.”",
+      "“Two. Not our choice — the bars on Soi 6 close two o'clock. Half one you order the last one.”",
       "“Two o'clock! Every night, same. After that, you go Walking Street or you go sleep, hahaha.”",
+      "“Two, na. Half one Mama shout last one, then we count, then we go eat.”",
+      "“Two o'clock. The Vic close before us — eleven. We are the late ones, hahaha.”",
     ],
     punter: [
       "“Two, and they mean it. Last call's half one — drink up or wear it.”",
-      "“Two o'clock. The whole soi, same minute. I've been walked out of here more than once.”",
+      "“Two o'clock. Every bar on the soi, near enough the same minute. I've been walked out of here more than once.”",
       "“Two. Which is either early or civilised, depending how the week's gone.”",
+      "“Two. The Vic's gone at eleven; this lot hang on till two and not a minute after.”",
     ],
     house: [
-      "“Two o'clock. Last call at half one and the shutters come down on the dot — the whole of Soi 6, not just us.”",
-      "“Two, and it isn't negotiable. The soi closes, we close. Half one I start taking glasses off you.”",
-      "“Two. Every place on this street, the same minute. You'll hear the shutters go along the row.”",
+      "“Two o'clock. Last call at half one and the shutters come down on the dot — every bar on the soi, not just us.”",
+      "“Two, and it isn't negotiable. The bars close, we close. Half one I start taking glasses off you.”",
+      "“Two. Every bar on this street, near enough the same minute. You'll hear the shutters go along the row.”",
+      "“Two o'clock. The Vic shuts at eleven — the rest of us at two.”",
     ],
   });
   if (_closesMidnight(G.room)) return pick({
@@ -14461,6 +14513,38 @@ function doCommand(input) {
   }
   // a sober man's sentence, and the hand that pushes a glass back (Neville, round 53)
   if (/^(i (don'?t|do not|never) drink( alcohol)?|teetotal(ler)?|no alcohol( for me)?|i'?m sober|sober)[.!]?$/.test(lower)) { _doTeetotal(); _tick(); return; }
+  // THE BARMAID'S WORDS (Declan, round 83 — thirty years behind a Limerick bar, and "same again",
+  // "what's the damage", "bill please" and "where's still open" all failed): the order, the bill,
+  // the hour and the way to the next open door, said the way a man says them across a counter.
+  if (!G.pendingChoice && !G.pendingEnc && !G.game && !G.pendingBf) {
+    const bw = lower.replace(/[?!.,]+/g, " ").replace(/\s+/g, " ").trim();
+    const shutVic = typeof _shutHere === "function" && _shutHere() && typeof _guestThrough === "function" && _guestThrough(G.room);
+    if (/^(same again|another( one)?|another (beer|pint|chang|leo|singha|bottle)|one more( (beer|pint|bottle))?( before you (shut|close))?|one (more )?for the road|(a |another )?pint|a beer|beer please|(can|could|may) i (get|have) (one more|another( one)?|a beer|a pint|a chang|a leo|a singha)( to take (upstairs|away|home|with me))?|i'?ll have (another|a beer|a pint))( please)?$/.test(bw)) {
+      if (shutVic) { _say(_pickVary(_VIC_GUARD, "vicguard")); return; }
+      if (typeof _servesDrinks === "function" && _servesDrinks(G.room)) { doCommand("buy beer"); return; }
+      if (!_room().barType) { _say("(Nobody pours on the pavement — step into a bar first: ENTER <name>.)", "dim"); return; }
+    }
+    if (/^(what do i owe( you)?|what'?s the damage|bill( please)?|the bill( please)?|check( please)?|can i (settle up|pay up|get the bill|have the bill)|settle up|how much do i owe( you)?|my (bill|tab))$/.test(bw) &&
+        typeof _inBar === "function" && _inBar()) { doCommand("check bin"); return; }
+    if (/^(what do i owe( you)?|what'?s the damage|bill( please)?|the bill( please)?|can i (settle up|pay up|get the bill)|settle up|how much do i owe( you)?|my (bill|tab))$/.test(bw) && !_room().barType) {
+      _say("(There's no tab out here — every bar keeps its own cup of chits. CHECK BIN inside the one you drank in.)", "dim"); return; }
+    if (/^(what time do you (close|shut)|when do you (close|shut)|what time (does|do) (it|this place|the bar) (close|shut)|last orders|last call|what time is last (orders|call)|are you closing|you closing)$/.test(bw) &&
+        (_room().barType || _room().closesAt != null)) {
+      const _staff = _npcsHere().find(i => NPC_ROLES[i] || (NPCS[i] && (NPCS[i].manager || NPCS[i].house)));
+      _say(shutVic ? _pickVary(_VIC_GUARD, "vicguard") : _closingTalk(_staff || null, bw)); return;
+    }
+    if (/^(what time do (you|they|the bars) (close|shut)|when do (you|they|the bars) (close|shut)|what time does (it|everything|the soi) (close|shut)|last orders)$/.test(bw)) {
+      _say(ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" ? "(The bars on Soi 6 shut at two; the Vic's pub at eleven. Off the soi, the town's bars run to dawn.)"
+        : "(Every bar keeps its own hours — ASK <somebody behind it> ABOUT CLOSING.)", "dim"); return;   // said on the street, nobody to ask (Declan, round 83)
+    }
+    if (/^(where'?s still open|where is still open|what'?s (still )?open( now)?|anywhere (still )?open|is anywhere (still )?open|anything (still )?open|where can i (get|have) a drink( now)?)$/.test(bw)) { _say(_stillOpenTalk(null)); return; }
+    if (/^(who'?s here|who is here|who'?s in|who is in( here)?)$/.test(bw)) { doCommand("look"); return; }
+    const sv = bw.match(/^buy (.+?) (?:at|from|in) (?:the )?(?:7-?eleven|7-?11|seven-?eleven|seven|shop)$/);
+    if (sv) { doCommand("buy " + sv[1]); return; }
+    // the shut Vic downstairs is a pub with its chairs up, not a kerb or a balcony (Declan, round 83)
+    if (shutVic && /^(sit|sit down|take a seat|have a seat)$/.test(bw)) { _say("You take a chair down off a table and sit in the dark pub. The guard looks up, decides you are harmless, and goes back to his phone. Nobody is coming to take an order. (UP to your room · OUT)", "dim"); _tick(); return; }
+    if (shutVic && /^watch( the)? (soi|street|window)$/.test(bw)) { _say("The pub's window shows a dark soi through the reflection of the stacked chairs. The view worth having is the balcony upstairs. (UP)", "dim"); return; }
+  }
   // HOW MUCH, said in English: only TAO RAI printed the price list, and "how much", "price", "menu",
   // "how much beer" were six failures in a row for a man who'd been to Pattaya twice (Gary, round 79)
   if (!G.pendingChoice && !G.pendingEnc && !G.game && !G.pendingBf && !G.convoQ) {
@@ -15018,6 +15102,7 @@ function doCommand(input) {
           ? `It's ${_clockStr()} on the last night of the trip. Sleep now and the week ends here, with its final night unspent.`
           : G.nightTurn < 10 ? `It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it.`
           : _who ? `It's ${_clockStr()}. Sleep now and the night ends here — ${_who} comes up with you, and that is the long-time close.`
+          : (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= SOI6_CLOSE) ? `It's ${_clockStr()}. Sleep now and the night ends here — the soi has already shut; it is only the night that's left.`   // nothing was open to stay open (Declan, round 83)
           : `It's ${_clockStr()}. Sleep now and the night ends here; whatever is still open on the soi stays open without you.`;
         if (!_endConfirm("sleep", _warn + " (SLEEP again if you mean it, or head back out.)")) return;
         // one flight below your own bed (the pub under the Queen Vic, a lobby):

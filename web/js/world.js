@@ -3687,12 +3687,12 @@ const ROOMS = {
       "soi that isn't shouting. West, the racket starts up again; east, it's worse.",
     revisit: [
       "Back to the middle of the soi, where the volume drops by half and the bars let you be. A cold-beer stretch built for watching, not for being grabbed.",
-      "The quiet middle again — the Shady Lady's awning, the Front Row's theatre stools, the Verandah's raised deck, and the Queen Vic glowing calm in the thick of it.",
+      "The quiet middle again — the Shady Lady's awning, the Front Row's theatre stools, the Verandah's raised deck, and the Queen Vic's dark wood front in the thick of it.",
       "You come back into the soi's soft spot. Down at the west end a barker loses a fight with a foam noodle; up here nobody bothers, and that's the whole appeal.",
       "Back to the people-watching stretch, where the pullers are off-duty and the men who wanted a ringside seat without the hassle nurse their Changs and rate the parade.",
-      "The middle takes you back — the Queen Vic glowing calm, the easy bars either side, the loud ends holding the noise at arm's length for once.",
+      "The middle takes you back — the Queen Vic's panelled front, the easy bars either side, the loud ends holding the noise at arm's length for once.",
       "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.",
-      "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
+      "The quiet stretch again, the Queen Vic's panelled door, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
       "Back to the middle: twenty-odd beer bars in a row, the one stretch of Soi 6 where nobody mentions the stairs unless you do.",
       "The neutral stretch again. Nobody owns the middle and it shows — mismatched awnings, a different song every ten metres, and not one pool noodle on the pavement.",
     ],
@@ -8757,14 +8757,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "potato, the little pudding — Sunday, till nine, and it goes. Come Sunday early. Everybody " +
           "say they come early and everybody come at eight.\"",
         short: "\"Sunday, till nine, and it goes. Come early — everybody says that and comes at eight.\"" },
-      { topic: "kitchen", text: "\u201cKitchen?\u201d The pad comes out at the word. \u201cBasket and " +
+      { topic: "kitchen|crisps|crisp|chips|the kitchen", text: "\u201cKitchen?\u201d The pad comes out at the word. \u201cBasket and " +
         "chips — scampi, sausage, the pie if he made pie. ฿" + QV_BASKET + ", proper portion, " +
-        "cook is Thai but the fryer is very English.\u201d A glance at the clock. \u201cTill eleven. " +
-        "After eleven, only crisp — ฿" + QV_CRISPS + ", salt and vinegar or the green one " +
+        "cook is Thai but the fryer is very English.\u201d A glance at the clock. \u201cTill eleven — then the whole pub close, kitchen and me. " +
+        "Crisp any time we are open, ฿" + QV_CRISPS + ", salt and vinegar or the green one " +
         "nobody choose.\u201d Then, because she is proud of it: \u201cAnd SUNDAY \u2014 " +
         "roast, \u0e3f" + QV_ROAST + ". Beef, potato, the little pudding. Till nine only, and when " +
         "he finish, he finish. You want, you come early.\u201d (READ MENU \u00b7 BUY FOOD.)",
-        short: "\u201cBasket and chips \u0e3f" + QV_BASKET + " till eleven; after, crisps \u0e3f" + QV_CRISPS +
+        short: "\u201cBasket and chips \u0e3f" + QV_BASKET + " till eleven, when the pub shuts; crisps \u0e3f" + QV_CRISPS +
           ". Sunday roast \u0e3f" + QV_ROAST + " till nine. (READ MENU.)\u201d" },
       // On the day, she leads with it — a roast nobody is told about is a roast
       // nobody eats, which is exactly what happened to the persona who sat in
@@ -10027,7 +10027,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "tell 'em they're beautiful on camera, walk away without buying a drink. " +
         "Thousands of views. Zero baht.\" He finishes his Chang. \"Bar owner down the " +
         "road told me ninety-six percent of his foot traffic is that now. Content. " +
-        "Just content.\" He signals the barman again, for himself. \"The girls stand out front in " +
+        "Just content.\" He signals the bar again, for himself. \"The girls stand out front in " +
         "nothing all night for some kid's YouTube channel. And they can't even say no " +
         "because then they look bad on camera.\"" },
       // After one o'clock the soi is NOT still performing — the room's own
@@ -10044,10 +10044,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the place; I can tell.\"",
         short: "\"Back again. Good.\" (An inch of shifted Chang — for Terry, arms wide open.)" },
       // the soi is no show once the shutters are down (Joost, round 81, at 01:18): gated in place, the late hello after it
-      { when: (st, G) => G.nightTurn < 60, text: "He nods at the empty stool beside him and signals the barman for his own. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
-        short: "He signals the barman. \"Sit. Best show in Pattaya, no tipping required.\"" },
-      { text: "He nods at the empty stool beside him and signals the barman for his own. \"Sit down. Show's over out there — shutters, ice buckets, one dog. In here it never closes.\"",
-        short: "He signals the barman. \"Sit. Show's over out there; in here it never stops.\"" },
+      { when: (st, G) => G.nightTurn < 60, text: "He nods at the empty stool beside him and signals the bar for his own. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
+        short: "He signals the bar. \"Sit. Best show in Pattaya, no tipping required.\"" },
+      { text: "He nods at the empty stool beside him and signals the bar for his own. \"Sit down. Show's over out there — shutters, ice buckets, one dog. In here it's a pint and quiet.\"",
+        short: "He signals the bar. \"Sit. Show's over out there; in here it's a pint and quiet.\"" },
     ],
   },
 

@@ -298,13 +298,16 @@ function _closedMsg(to) {
     return "The Queen Vic is shut: chairs up on the tables, one strip light over the till, " +
       "and the security guard behind the bar shaking his head through the glass. The pub " +
       "closes at eleven; after that the door is for the guests upstairs.";
+  // …and name what IS still pouring: two bars forty yards off run to dawn, and nobody on a shut
+  // Soi 6 said so (Declan, round 83)
+  const _open = typeof _stillOpen === "function" ? _stillOpen(1) : [];
+  const _still = _open.length ? ` ${_barName(_open[0].id)} is still pouring, ${_open[0].n <= 3 ? "just along" : "a walk away"}.` : "";
   if (G.mode === "soi6")
     return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
-      "and mercifully off. Everything on the soi shuts at two — what's left of the night " +
-      "is your bed upstairs at the Vic.";
+      "and mercifully off. The bars on the soi shut at two." + (_still || " What's left of the night " +
+      "is your bed upstairs at the Vic.");
   return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
-    "and mercifully off. Everything on the soi shuts at two — it's " +
-    "Walking Street or nowhere now.";
+    "and mercifully off. The bars on the soi shut at two." + (_still || " It's Walking Street or nowhere now.");
 }
 // 30-minute last call (nightTurn 55 ≈ 23:30), once per bar per night — a courtesy,
 // and a nudge to BARFINE before the door shuts.
@@ -811,6 +814,9 @@ function _closingTick() {
   if (_guestThrough(G.room)) {
     if (G.soc.pubShut === G.day) return;
     G.soc.pubShut = G.day;
+    // the scene is for a man who was IN the pub as time was called — walking in at four, it
+    // replayed "the rail finishes up and files out" under a room with its chairs up (Declan, round 83)
+    if (G.nightTurn > close + 1) return;
     _say(_pickVary(_PUB_SHUT_GUEST, "pubshutguest"), "alert");
     _closeOutModals();
     return;
@@ -854,7 +860,7 @@ function _closingTick() {
     "behind the bar, and the last of the rail are shown the door with you among them. " +
     "The rooms upstairs are for guests." :
     "Two o'clock on Soi 6. The frontages roll down, the sound systems die mid-song, " +
-    "and the ladies shoo the last punters back toward Beach Road. The party, such " +
+    "and the ladies shoo the last punters out onto the soi" + (r.exits && r.exits.out && /east|deep/.test(r.exits.out) ? ", toward Second Road" : r.exits && r.exits.out && /soi6_street/.test(r.exits.out) ? ", toward Beach Road" : "") + ". The party, such " +
     "as it was, is over.", "alert");
   _closeOutModals();
   // Walk out. If the room we'd land in is ITSELF shut for the night (a back room
@@ -1515,7 +1521,7 @@ function _startQuiz(seated) {
     ? "“A NEW TEAM, ladies and gentlemen!” "
     : "Too late — the microphone has already found you. “A NEW TEAM, ladies and gentlemen!” ") +
     "Quiz night: five questions, the bar as your audience, prizes on " +
-    "the board. A hostess hands you a pencil you will not need and a beer mat " +
+    "the board. " + (_room().barType === "pub" ? "The barmaid" : "A hostess") + " hands you a pencil you will not need and a beer mat " +
     "you will.", "win");
   _say("(Answer 1, 2, or 3. QUIT slinks back out to the street.)", "dim");
   _quizAsk();

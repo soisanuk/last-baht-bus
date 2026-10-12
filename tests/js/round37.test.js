@@ -344,7 +344,7 @@ test("SCORES reads the same bake as the telly: results, then fixtures (Colin)", 
 
 test("drinks that are poured are on your tab — the prose stopped promising free ones (Colin)", () => {
   const src = readFileSync(join(here, "../../web/js/world.js"), "utf8");
-  assert.match(src, /signals the barman for his own/); assert.match(src, /on your tab, obviously/);
+  assert.match(src, /signals the bar for his own/); assert.match(src, /on your tab, obviously/);
   assert.match(src, /and the chit lands with it/); assert.match(src, /in your hand, its chit hovering|its chit hovering over the cup/);   // round 78: the glass is not on the chit until it is bought
   assert.doesNotMatch(src, /Forty baht gets " \+\n\s*"you a plate/);
   assert.match(ROOMS.cheap_charlies_jt.desc, /\(BUY FOOD\.\)/);
