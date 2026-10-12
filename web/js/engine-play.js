@@ -800,6 +800,160 @@ const _PUB_SHUT_GUEST = [
   "Time, at the Vic. The lights over the tables go off one row at a time, the rail finishes up and files out, and the security guard settles onto the stool behind the bar for the night. He knows you're staying upstairs; he just won't pour you anything. (UP to your room · OUT to the soi)",
   "Eleven, and the pub shuts round you — glasses collected, taps wrapped, the regulars out the door with the last word. The guard takes over the bar for the night, {{phone}} in hand. A guest can sit in the dark if he likes; the bar is closed. (UP · OUT)",
 ];
+// SMALL TALK, AND WHAT YOU TOLD HER (Kevin, round 84 — a man who came for the conversation: "half of
+// what each one tells me, she won't talk about thirty seconds later, and the game can't hear me say
+// anything about myself"). The questions a man asks a woman across a bar — what she did before, her day
+// off, her food, is she tired, her age, will she miss you, a boyfriend — had no answer unless she was
+// authored with one. These are the floor's answers: each woman's own line by a stable hash, so two
+// women do not share one, and an authored node always outranks them (they sit in the miss path).
+const _SMALL_TALK = {
+  before: [
+    "\"Before? Rice, then factory in Rayong, then here. Factory pay less and you stand all day.\"",
+    "\"Waitress in Korat. Same smile, less money.\"",
+    "\"7-Eleven, two year, night shift. Same customer buy same cigarette every night.\"",
+    "\"I sell som tam with my auntie. Now I sell beer. Is the same: you smile, you count.\"",
+    "\"Hotel, cleaning room. You see how farang live when nobody look. Very interesting, hahaha.\"",
+    "\"Hair salon in Udon. I still cut the girls' hair here, for free. Nobody pay, everybody happy.\"",
+    "\"Garment factory, Bangkok. Sixteen hour sewing pocket. Here at least there is music.\"",
+  ],
+  dayoff: [
+    "\"Day off I sleep until two, then I eat, then I sleep again. Is a good day.\"",
+    "\"I go Central with my friend. Look, look, buy nothing.\"",
+    "\"Temple with the girls, make merit, then moo kratha. Very healthy, and very not healthy.\"",
+    "\"Day off? Washing. Everybody think we go party. We do washing.\"",
+    "\"I video call home. Two hour. They show me every chicken.\"",
+    "\"Jomtien, the quiet side. I sit, I eat squid, nobody buy me drink. Is nice.\"",
+    "\"No day off this month. Next month, maybe. Then I sleep for you also.\"",
+  ],
+  food: [
+    "\"Som tam, very spicy. You cannot eat, I know already.\"",
+    "\"Moo kratha! The grill, the pork, everybody sit around. Best food.\"",
+    "\"Khao man gai from the cart on the corner. Better than hotel.\"",
+    "\"My mother's food. Nothing in Pattaya the same.\"",
+    "\"Noodle, any noodle, two o'clock in the morning. That is the time for noodle.\"",
+    "\"Pizza.\" She laughs at your face. \"Thai girl like pizza also, you know.\"",
+  ],
+  feeling: [
+    "\"Tired a little. Is okay — you here, I sit down.\"",
+    "\"Happy tonight. Customer nice, mamasan not shout.\"",
+    "\"Okay, okay. My feet say no, my face say yes, hahaha.\"",
+    "\"Good. Payday soon.\"",
+    "\"Little bit sleepy. You talk, I wake up.\"",
+    "\"I'm okay. You ask, is kind. Not many ask.\"",
+  ],
+  age: [
+    "\"Lady never say!\" She hides behind her glass. \"Guess. No — don't guess.\"",
+    "\"How old you think? No, don't say. I don't want to know what you think.\"",
+    "\"Older than I look, younger than I feel, hahaha.\"",
+    "\"Same as last year, plus one. You?\"",
+    "\"You first.\" A beat. \"See? Is not nice question.\"",
+  ],
+  miss: [
+    "\"Miss you? You still here, silly.\"",
+    "\"If you come back, I don't need to miss.\"",
+    "\"Everybody ask 'you miss me?' Then they don't come back. You come back, then I answer.\"",
+    "\"Little bit. Don't tell the other girls.\"",
+    "\"I miss my mother. You I see tomorrow, na?\"",
+    "\"Ask me when you go home. Now you here.\"",
+  ],
+  boyfriend: [
+    "\"No boyfriend. Boyfriend is expensive.\"",
+    "\"Have one before. Now I have phone, is better, hahaha.\"",
+    "\"No time. I work, I sleep, I send money.\"",
+    "\"Every night somebody ask. Every night same answer: not tonight.\"",
+    "\"Is complicated. Buy me drink, I tell you the short version.\" She doesn't.",
+  ],
+  abroad: [
+    "\"Your country? I never go. I see on YouTube — very clean, very cold, everybody have a dog.\"",
+    "\"Maybe I like. I don't know. Is far, and the visa is a big paper.\"",
+    "\"My friend go Australia with her husband. She send photo of snow. She say she miss som tam every day.\"",
+    "\"I like Thailand. Hot, but I know where everything is.\"",
+    "\"You take me one day, I tell you if I like.\" She laughs before you can answer.",
+  ],
+  finish: [
+    "\"When the bar close, I finish. Then I eat, then bed. Very exciting life, hahaha.\"",
+    "\"Two o'clock, if mamasan let me. Sometime she don't.\"",
+    "\"Finish? When the last man go home. Tonight maybe you.\"",
+  ],
+};
+const _SMALL_TALK_KEYS = [
+  ["before", /\b(before (this|pattaya|here|bar)|what did you do before|used to do|old job|before you work)\b/],
+  ["dayoff", /\b(day ?off|days off|weekend|free time|when you not work|spare time)\b/],
+  ["food", /\b(favou?rite food|what (do )?you (like to )?eat|food you like|hungry)\b/],
+  ["feeling", /\b(tired|are you (ok|okay|happy|sad|bored|good)|how are you|how you feel|feeling)\b/],
+  ["age", /\b(how old|your age|age)\b/],
+  ["miss", /\b(miss me|will you miss|do you miss|you miss)\b/],
+  ["boyfriend", /\b(boyfriend|is that your|husband|married)\b/],
+  ["abroad", /\b(do you like (australia|england|britain|the uk|america|germany|my country|europe)|have you (ever )?been (abroad|to (australia|england|europe|america))|would you (go|come) (to|with))\b/],
+  ["finish", /\b(what time (do )?you finish|when (do )?you finish|finish work|go home tonight)\b/],
+];
+function _smallTalk(npc, topic) {
+  if (!npc || NPC_ROLES[npc] !== "hostess" || !NPCS[npc]) return false;
+  const t = String(topic || "").toLowerCase();
+  const hit = _SMALL_TALK_KEYS.find(([, rx]) => rx.test(t));
+  if (!hit) return false;
+  const pool = _SMALL_TALK[hit[0]];
+  // her own line, kept: the same answer every time she is asked, and not her colleague's
+  const book = (G.smallTalk = G.smallTalk || {}), mine = (book[npc] = book[npc] || {});
+  if (mine[hit[0]] == null) {
+    const used = new Set(Object.keys(book).filter(o => o !== npc).map(o => book[o][hit[0]]));   // nobody else's line, town-wide, while one is free
+    let i = _hh(npc + ":" + hit[0], 97) % pool.length;
+    for (let k = 0; k < pool.length && used.has(i); k++) i = (i + 1) % pool.length;
+    mine[hit[0]] = i;
+  }
+  _say(`${NPCS[npc].name}: ${pool[mine[hit[0]] % pool.length]}`);
+  return true;
+}
+// WHAT YOU TELL HER ABOUT YOURSELF: "I'm divorced", "I'm an accountant", "I'm from Ballarat", "my name
+// is Kev" — kept on the player (G.player.told) and answered in her voice; "what's my name?" and "what do
+// I do?" are then hers to say back.
+const _TOLD_RX = [
+  ["status", /^i'?m (divorced|married|single|separated|a widower|widowed)\b/, m => m[1]],
+  ["status", /^i (was|got) divorced\b/, () => "divorced"],
+  ["job", /^i'?m an? ([a-z ]{3,30}?)(?: by trade)?$/, m => m[1]],
+  ["job", /^i (?:work as an?|work in) ([a-z ]{3,30})$/, m => m[1]],
+  ["home", /^i'?m from ([a-z' ]{3,30})$/, m => m[1]],
+  ["name", /^(?:my name is|my name'?s|call me|i'?m called) ([a-z' ]{2,20})$/, m => m[1]],
+];
+const _TOLD_REACT = {
+  status: { divorced: ["\"Divorced. Ah.\" She doesn't make a face. \"Many man here same. Is why you come, maybe. Is okay.\"", "\"Divorce?\" She pats your hand once. \"Then you are free man. Free man buy drink, hahaha.\""],
+    married: ["\"Married.\" She looks at your hand, then your face. \"Then I am only your friend, na. Friend is good also.\""],
+    single: ["\"Single? Everybody say single.\" She smiles anyway. \"Okay, I believe one time.\""],
+    other: ["She nods slowly. \"I'm sorry, na. You come here to be not alone. Is okay.\""] },
+  job: ["\"{x}?\" She tries the word. \"Is good job? Sit all day, I think. Then you come here and sit more, hahaha.\"", "\"Ohh, {x}. Very smart man.\" She means it, more or less. \"You count my chits for me, na?\""],
+  home: ["\"{X}? I don't know it.\" She doesn't pretend. \"Is far? Is cold? Everybody's home is cold.\"", "\"{X}.\" She files it away. \"Next time you tell me about it. Tonight you tell me about you.\""],
+  name: ["\"{X}.\" She says it back, twice. \"Okay. Now I know.\""],
+};
+function _doTell(lower) {
+  const pid = typeof _convoActive === "function" && _convoActive();
+  if (!pid || NPC_ROLES[pid] !== "hostess" || !_npcsHere().includes(pid)) return false;
+  const l = lower.replace(/[!.,?]+$/, "").trim();
+  for (const [key, rx, val] of _TOLD_RX) {
+    const m = l.match(rx); if (!m) continue;
+    const v = val(m).trim(); if (!v) continue;
+    if (key === "job" && /^(here|in pattaya|on holiday|from|tired|okay|ok|fine|drunk|sorry|happy|not|just|a bit|very)\b/.test(v)) return false;
+    ((G.player.told = G.player.told || {}))[key] = v;
+    const X = v.replace(/\b\w/g, c => c.toUpperCase());
+    const R = _TOLD_REACT[key];
+    const pool = Array.isArray(R) ? R : (R[v] || R.other || Object.values(R)[0]);
+    _say(`${NPCS[pid].name}: ` + _fmt(_pickVary(pool, "told:" + key), { x: v, X }));
+    return true;
+  }
+  // …and asked back: what she knows of you
+  if (/^(what'?s|what is|do you remember) my name\??$/.test(l) || /^who am i to you$/.test(l)) {
+    const told = G.player.told || {}, said = G.player.said || {};
+    const nm = told.name || said.nickname;
+    _say(`${NPCS[pid].name}: ` + (nm ? `"${nm.replace(/\b\w/g, c => c.toUpperCase()).split(/[ .,]/)[0]}." She looks pleased with herself. "You see? I listen."` : "\"You never tell me!\" She laughs. \"I call you handsome man, same as everybody. Tell me, then I remember.\""));
+    return true;
+  }
+  if (/^(what do i do|what'?s my job|do you remember what i do)\??$/.test(l)) {
+    const j = (G.player.told || {}).job;
+    _say(`${NPCS[pid].name}: ` + (j ? `"${j.replace(/\b\w/g, c => c.toUpperCase())}." She ticks it off on a finger. "Sit all day, count money."` : "\"You don't say yet. I think… teacher? No. You tell me.\""));
+    return true;
+  }
+  return false;
+}
+
 function _closingTick() {
   if (!_flag("act1Done") || G.over) return;
   if (!_closesMidnight(G.room) || _lockedIn()) return;
@@ -1369,7 +1523,7 @@ function _newbieNudge() {
   if (!_flag("tipNumber") && !_hasLadyNum && _boughtHere && !(typeof _refusing === "function" && _refusing()) && G.stage !== "expat" && G.money >= _ladyPrice(G.room)) {   // not at ฿0 (Malcolm, round 59)   // not to a man who owns a bar (Mick, round 57)
     _setFlag("tipNumber");
     _say("(A thought, if it's the bars you came for: no bar girl's number is in your phone yet. Buy a lady a " +
-      "drink or two until she's warm to you, then CONTACT her — her number is where the week's texts " +
+      "few drinks until she's warm to you, then CONTACT her — her number is where the week's texts " +
       "start.)", "dim");
     return;                                   // one at a time; the bell keeps
   }
@@ -5228,7 +5382,15 @@ function _endNight(reason) {
   // Desmond asked three people about everything that happened to him and nobody could say)
   {
     const _bt = G.soc && G.soc.barTurns ? Object.entries(G.soc.barTurns).sort((a, b) => b[1] - a[1])[0] : null;
-    G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, leftFrom: G.soc.leftFrom || null,
+    // …and EVERY bar you sat in or bought a woman a drink in, not only the longest: three bars a night
+    // and two of them denied he'd been there, on nights he bought them drinks (Kevin, round 84)
+    const _bars = {};
+    for (const [r, n] of Object.entries((G.soc && G.soc.barTurns) || {})) if (n >= 2) _bars[r] = n;
+    for (const [id, n] of Object.entries((G.soc && G.soc.drinkCount) || {})) {
+      const r = n > 0 && NPCS[id] && (typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room);
+      if (r && ROOMS[r] && !_bars[r]) _bars[r] = 2;
+    }
+    G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, bars: _bars, leftFrom: G.soc.leftFrom || null,
       with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room, kicked: G.kickedTonight || null,
       quiet: !!G.lastBfHonest };   // the quiet close or the khao man gai one — she remembers which (Ruairi, round 75)
     G.kickedTonight = null;

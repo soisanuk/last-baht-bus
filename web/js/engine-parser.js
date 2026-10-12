@@ -113,11 +113,18 @@ const _NO_EXIT_OPEN = [
 // courting man reads (Tomasz counted Lek's toast ten times in one night, round 54)
 const _TOAST_LINES = [
   n => `${n} toasts you and the conversation gets noticeably warmer.`,
-  n => `${n} clinks the glass against your bottle, drinks a third of it, and looks at you as if deciding what to ask first.`,   // it promised a question that never came (Helga, round 57),
+  n => `${n} clinks the glass against your bottle, drinks a third of it, and settles in like somebody with nowhere else to be.`,
   n => `A small toast from ${n} — "chon" — and the stool moves an inch closer, which is the whole point of the drink.`,
   n => `${n} lifts the glass, catches the cashier's eye for the chit, and gives you the rest of her attention with it.`,
   n => `${n} takes the glass the way you take a good hand: quietly. The next ten minutes are warmer than the last ten.`,
   n => `"Kop khun ka." ${n} says it to you and drinks it to the mamasan, and both of them mean it.`,
+  // deepened: three women, one night, and the same handful of toasts (Kevin, round 84)
+  n => `${n} touches the rim to yours without a word, which in here is a sentence.`,
+  n => `${n} drinks to you, then to the fan, then to the soi going past, laughing.`,
+  n => `${n} says "chok dee" and means the drink, the night and probably you.`,
+  n => `${n} holds the glass up to the light as if checking the bar has not short-changed you. Satisfied, she drinks.`,
+  n => `${n} slides the chit under the cup herself, so you don't have to watch it happen.`,
+  n => `${n} takes one sip and puts it down where she can reach it all night. It will last as long as you do.`,
 ];
 // a mamasan does not drink the toast to the mamasan, nor a cashier catch the
 // cashier's eye — Candy toasted herself (Joanne, round 64)
@@ -5360,6 +5367,7 @@ function _doTalkCore(arg, topic) {
     // fee, the clinic, the station and its ฿300, the two cons (the coverage map's N
     // column, 2026-09-27 — facts the engine computes that nobody on a stool could say)
     if (!gated && _townTalk(npc, topic)) { _questOffer(npc); return; }
+    if (!gated && typeof _smallTalk === "function" && _smallTalk(npc, topic)) { _questOffer(npc); return; }   // the questions a man asks across a bar (Kevin, round 84)
     // A girl's standard deflection is the language itself, and at fluency it is
     // gone: she cannot say she does not understand a question she plainly did
     // (Mario, round 42). She still doesn't have to answer — but the refusal has
@@ -5939,7 +5947,11 @@ function _convoAnswer(text) {
   // prefer the raw-cased line the player actually typed: the grapevine quoting
   // "manchester" back in flattened lowercase read as a bug, not dialect
   const raw = (typeof _rawAnswer === "string" && _rawAnswer.toLowerCase().includes(text.slice(0, 24))) ? _rawAnswer : text;
-  const val = raw.replace(/[.!?,]+$/, "").trim();
+  let val = raw.replace(/[.!?,]+$/, "").trim();
+  // a question may keep the WORD you answered with, not the whole sentence: Somo kept "Geelong Cats, but
+  // that's Aussie rules…" as a team name and read it back (Kevin, round 84)
+  { const _qn = (NPCS[id] && NPCS[id].dialogue || []).find(d => d.asks && d.asks.key === key && typeof d.asks.keep === "function");
+    if (_qn) { const k = _qn.asks.keep(val); if (k) val = k; } }
   const player = (G.player = G.player || {});
   const said = (player.said = player.said || {}); // harden: a hand-built/very-old state may lack .said
   const globalPrior = said[key]; // what you last told ANYONE (before this answer)
@@ -6372,7 +6384,7 @@ function _venueAnswer(npc, v, reg) {
 // A town-wide book for the rows a man asks in every bar (Vince, round 74: Kanom on Reginald and Ging on Nigel said one
 // sentence in two bars): the owner, a staffer on her own rail's regular, a colleague placed on the floor. Each line is
 // dealt once across the town while one remains; the per-room book stays for the rest.
-const _TOWN_WIDE = new Set(["owner", "regular", "placed"]);
+const _TOWN_WIDE = new Set(["owner", "regular", "placed", "me_seen", "me_known", "me_tonight"]);   // "You again. Same chair, same face" from two women in two bars (Kevin, round 84)
 const _TOWN = {
   // a go-go's stage, by its own schedule (_GOGO_SHOW) — Henrik, round 69
   show: {
@@ -6605,6 +6617,11 @@ const _TOWN = {
     house: ["\"{w} runs {job} here,\" {n} says. \"Ask her yourself — she won't mind being asked.\""],
     punter: ["\"{w}?\" {n}'s voice drops a fraction. \"Runs {job}. You don't buy her a drink, mate, you mind your manners and she decides if you're welcome.\"",
       "{n} nods toward her without looking. \"{w} runs {job}. Nicest woman in the building and I wouldn't cross her for money.\""],
+  },
+  me_tonight: {
+    floor: ["\"Tonight, yes!\" {n} laughs. \"You sit here one hour already. Tomorrow you come back, then I really remember.\"", "\"You? Tonight I know you.\" {n} taps your glass. \"Come again tomorrow — then you are somebody.\"", "{n} grins. \"Of course. You are the one from tonight. Ask me again next week, na.\""],
+    house: ["\"Tonight I do,\" {n} says. \"Come back tomorrow and I'll know you properly.\"", "\"From an hour ago, yes,\" {n} says. \"A second night is when a face starts to stay.\""],
+    punter: ["\"You were here an hour ago, mate. That's as far as I've got.\""],
   },
   me_new: {
     floor: ["\"You?\" {n} laughs. \"New face. Ask me again next week, I tell you who you are.\"", "\"First time I see you.\" {n} looks you up and down, friendly. \"Come back tomorrow, then I know you.\"", "{n} squints. \"You new, na? Is okay. Everybody new one time.\""],
@@ -7192,7 +7209,9 @@ function _townTalk(npc, topic) {
     if (G.metDay && G.metDay[npc] != null && G.metDay[npc] < G.day) k = Math.max(k, 1);   // "first time I see you" on the third night of talking to her (Aurelio, round 71)
     if (NPC_ROLES[npc] === "mamasan" || NPC_ROLES[npc] === "cashier")
       for (const g of _npcsHere()) if (NPC_ROLES[g] === "hostess") k = Math.max(k, _knownTier(g));
-    return pick(k >= 2 ? "me_known" : k >= 1 ? "me_seen" : "me_new", {});
+    // an hour after you sat with her and bought her a drink she does not call you a new face (Kevin, round 84)
+    const _tonight = k < 1 && ((G.metDay && G.metDay[npc] === G.day) || (G.soc.drinkCount && G.soc.drinkCount[npc] > 0));
+    return pick(k >= 2 ? "me_known" : k >= 1 ? "me_seen" : _tonight ? "me_tonight" : "me_new", {});
   }
   // Bangkok: two hours up the motorway, where the floor goes in the wet and the money comes from
   if (/\b(bangkok|krung ?thep|bkk|the capital|the big city)\b/.test(t))
@@ -7221,7 +7240,9 @@ function _townTalk(npc, topic) {
         `"The boys in brown." ${NPCS[npc].name} does not lower her voice; there is no need. "I saw them stop you. Here that is weather, not news — it costs what it costs, and the soi forgets by morning."`,
         `${NPCS[npc].name} nods at the power pole where it happened. "Last night, yes. I saw. Nobody here will mention it again, and neither should you."`,
       ], "policewitness")); return true; }
-    const _atBar = w.bar && (w.bar === G.room || (NPCS[npc].room === w.bar) || (Array.isArray(NPCS[npc].bars) && NPCS[npc].bars.includes(w.bar)));
+    const _myBars = [G.room, NPCS[npc].room].concat(Array.isArray(NPCS[npc].bars) ? NPCS[npc].bars : []);
+    const _seenAt = w.bars ? _myBars.find(b => w.bars[b]) : null;
+    const _atBar = (w.bar && _myBars.includes(w.bar)) || !!_seenAt;
     const _leftHere = w.leftFrom && (w.leftFrom === G.room || NPCS[npc].room === w.leftFrom);   // the bar you walked her out of (Pieter, round 73: Near watched Cream leave on his arm)
     const here = _atBar || _leftHere;
     // a mouth on a street or at a market table was nobody's witness: fall through to its own answer
@@ -7235,7 +7256,7 @@ function _townTalk(npc, topic) {
         : `"You left from here${who ? ` with ${who}` : ""}," ${NPCS[npc].name} says. "Where you spent the rest of the evening, ask that bar."`);
       return true;
     }
-    const hrs = Math.max(1, Math.round((w.barTurns || 0) / 10));
+    const hrs = Math.max(1, Math.round(((w.bar && _myBars.includes(w.bar)) ? w.barTurns : (w.bars && w.bars[_seenAt]) || w.barTurns || 0) / 10));
     const withHere = w.with && NPCS[w.with] && (typeof _npcRoom === "function" ? _npcRoom(w.with) === w.bar : NPCS[w.with].room === w.bar) ? NPCS[w.with].name : null;
     const W = !withHere ? "" : reg === "floor" ? `You leave with ${withHere} — everybody see. ` : reg === "house" ? `You left with ${withHere}, and the room noticed. ` : `You left with ${withHere}; we all saw. `;
     return pick("saw", { h: reg === "floor" ? `${hrs} hour` : `${hrs} hour${hrs > 1 ? "s" : ""}`, H: (reg === "floor" ? `${hrs} hour` : `${hrs} hour${hrs > 1 ? "s" : ""}`).replace(/^\d/, m => m), W });
@@ -9331,7 +9352,7 @@ function _doBuy(arg) {
     if (_favor(id) < 2) {
       _say(`You offer to buy ${name} a bra and she raises an eyebrow that could ` +
         "cut glass. “Buy me DRINK first, then we talk about my wardrobe.” " +
-        "(Warm her up — a lady drink or two.)");
+        "(Warm her up — a few lady drinks.)");
       return;
     }
     G.soc.bra = G.soc.bra || {};
@@ -14035,6 +14056,7 @@ function doCommand(input) {
       : /^(diagnose|how am i|status)$/.test(lower) ? _doDiagnose
       : /^(books|takings|accounts)$/.test(lower) ? _doBooks   // the owner's own page, under the affair's question (Greta, round 61)
       : /^(who|blackbook|black book)$/.test(lower) ? _doBlackbook
+      : /^topics?( .+)?$/.test(lower) && G.pendingEnc ? () => _doTopics(lower.replace(/^topics?\s*/, ""))   // TOPICS sent the rose seller away (Kevin, round 84)
       : /^(debt|debts)$/.test(lower) ? _doDebt
       : /^(contacts?|phonebook|numbers)$/.test(lower) ? _doContacts
       : null;
@@ -14513,6 +14535,47 @@ function doCommand(input) {
   }
   // a sober man's sentence, and the hand that pushes a glass back (Neville, round 53)
   if (/^(i (don'?t|do not|never) drink( alcohol)?|teetotal(ler)?|no alcohol( for me)?|i'?m sober|sober)[.!]?$/.test(lower)) { _doTeetotal(); _tick(); return; }
+  // A QUESTION TO THE WOMAN YOU'RE TALKING TO, in a man's own words (Kevin, round 84 — "where are you
+  // from?" got the map, "do you have kids?" did not parse, "goodnight Somo" was asked as a topic): the
+  // sentence goes to her, as the subject it is about; what you tell her about yourself is kept.
+  { // the woman you're talking to — or, sat beside her with no conversation open, the one you last spoke to
+    // or the only woman on the floor ("do you have kids?" with nobody addressed, Kevin, round 84)
+    const _floorW = _npcsHere().filter(i => NPC_ROLES[i] === "hostess");
+    const _la = typeof _lastActor === "function" ? _lastActor() : null;
+    const pid = (typeof _convoActive === "function" && _convoActive()) || (_la && _floorW.includes(_la) ? _la : _floorW.length === 1 ? _floorW[0] : null);
+    if (pid && NPCS[pid] && _npcsHere().includes(pid) && !G.pendingChoice && !G.pendingEnc && !G.game && !G.pendingBf) {
+      if (typeof _doTell === "function" && _doTell(lower)) { _tick(); return; }
+      const q = lower.replace(/[?!.,]+/g, " ").replace(/\s+/g, " ").trim();
+      const _her = typeof _convoName === "function" ? _convoName(pid) : NPCS[pid].name.toLowerCase();
+      const _onArm = G.party && G.party.ids && G.party.ids.includes(pid);
+      if (!_onArm && q !== "bye" && typeof _convoActive === "function" && _convoActive() === pid && /^(good ?night|goodbye|bye( bye)?|see (you|ya)|night night|ok bye|i'?m off)\b/.test(q)) { doCommand("bye"); return; }
+      if (/^((can|could|may) i (buy|get) you a drink|(do you )?want a drink|let me buy you a drink|have a drink on me|you want drink)/.test(q) && NPC_ROLES[pid]) { doCommand("buy drink for " + _her); return; }
+      const ROUTE = [
+        [/where (are|r) (you|u) from|where'?s (your )?home|where is (your )?home|where (do|did) you (grow up|live)|what province|where'?s your (village|family)|where is your (village|family)|are you from isan/, "home"],
+        [/(have|got) (any )?(kids|children|a son|a daughter|a baby)|how many (kids|children)|^kids$|how is your (papa|dad|father|mum|mom|mother|mama|sister|brother|son|daughter|family|baby)|your (papa|mama|family)/, "family"],
+        [/how long (have )?(you )?(been )?(work(ed|ing)?|here|in pattaya|lived here|living here)|do you like (this|the|your) (job|work)|^your job/, "work"],
+        [/how many drinks (before|until)|give me your number|your (number|line)/, "number"],
+        [/what'?s your (real )?name|what is your (real )?name|real name/, "name"],
+        [/send money( home)?/, "money"],
+        [/what will you do (when you stop|after this|later)|your (plan|dream)|in the future/, "plan"],
+      ];
+      const r = ROUTE.find(([rx]) => rx.test(q));
+      const qShaped = /\?\s*$/.test(lower.trim()) || /^(do|are|is|what|whats|how|when|where|will|have|did|can|you)\b/.test(q);
+      const topic = r ? r[1] : (qShaped && typeof _SMALL_TALK_KEYS !== "undefined" && _SMALL_TALK_KEYS.some(([, rx]) => rx.test(q)) ? q : null);
+      if (topic === "number" && NPC_ROLES[pid] && !/^ask /.test(lower)) { doCommand("contact " + _her); return; }   // "how many drinks before you give me your number?" is the number, asked
+      if (topic) { doCommand("ask " + _her + " about " + topic); return; }
+    } }
+  // GOODNIGHT NINA, SEE YOU TOMORROW said with nobody to say it to is a goodnight, not a parse failure (Kevin, round 84)
+  if (!G.pendingChoice && !G.pendingEnc && !G.game && !(G.party && G.party.ids && G.party.ids.length) &&
+      /^(good ?night|goodbye|bye|see (you|ya))\b.*\b(see you|tomorrow|later)\b/.test(lower) && !(typeof _convoActive === "function" && _convoActive())) {
+    const gn = lower.match(/^(?:good ?night|goodbye|bye|see (?:you|ya))[, ]+([a-z]+)/), gid = gn && _findNpc(gn[1]);
+    _say(gid && _npcsHere().includes(gid) ? `${NPCS[gid].name} lifts a hand. "Tomorrow, na."` : gid ? `${NPCS[gid].name} isn't here to hear it — tomorrow, then.` : "You say your goodnights to the room, and the room, being Pattaya, barely notices.", "dim");
+    return;
+  }
+  // HI NINA, HOW ARE YOU?: a greeting with a name in it is that woman, not the room's anonymous hostess (Kevin, round 84)
+  { const gm = lower.match(/^(?:hi|hello|hey|hiya|evening|good evening)[, ]+([a-z]+)\b/);   // English only: SAWATDEE <name> is the Thai greeting's own path
+    const gid = gm && !G.pendingChoice && !G.pendingEnc && !G.game && _findNpc(gm[1]);
+    if (gid && _npcsHere().includes(gid) && !/^(khrap|krap|kha|ka|na|there|all|everyone|everybody)$/.test(gm[1])) { doCommand("talk to " + gm[1]); return; } }
   // THE BARMAID'S WORDS (Declan, round 83 — thirty years behind a Limerick bar, and "same again",
   // "what's the damage", "bill please" and "where's still open" all failed): the order, the bill,
   // the hour and the way to the next open door, said the way a man says them across a counter.
@@ -16056,9 +16119,20 @@ function _introMatch(input, table) {
   let n = parseInt(s, 10);
   if (!n && typeof parseThaiWords === "function" && /^[\u0E00-\u0E7F]+$/.test(s)) n = parseThaiWords(s) || 0;
   if (n >= 1 && n <= table.length) return table[n - 1];
-  return table.find(e => e.id === s || e.label.toLowerCase() === s) ||
-    (s.length >= 4 ? table.find(e => e.label.toLowerCase().includes(s) || e.id.includes(s)) : null) ||
-    null;
+  // …and the words the line ITSELF says: "Someone easy to like." typed word for word got "a number, my
+  // friend" (Kevin, round 84). The printed answer, or most of its words, picks it.
+  const _norm = x => String(x || "").toLowerCase().replace(/[“”"'.,!?—–-]+/g, " ").replace(/\s+/g, " ").trim();
+  const _words = x => _norm(x).split(" ").filter(w => w.length >= 3 && !/^(the|and|you|your|for|but|not|just|with|from|that|this|here)$/.test(w));
+  const sw = _words(s);
+  const byWords = () => {
+    if (sw.length < 2) return null;
+    let best = null, bestN = 0;
+    for (const e of table) { const ew = new Set(_words((e.pick || "") + " " + e.label)); const n = sw.filter(w => ew.has(w)).length; if (n > bestN) { best = e; bestN = n; } }
+    return bestN >= Math.min(2, sw.length) ? best : null;
+  };
+  return table.find(e => e.id === s || e.label.toLowerCase() === s || (e.pick && _norm(e.pick) === _norm(s))) ||
+    (s.length >= 4 ? table.find(e => e.label.toLowerCase().includes(s) || e.id.includes(s) || (e.pick && _norm(e.pick).includes(_norm(s)))) : null) ||
+    byWords() || null;
 }
 
 function _introAnswer(input) {

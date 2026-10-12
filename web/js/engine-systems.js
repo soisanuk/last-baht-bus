@@ -4092,7 +4092,7 @@ function _doContacts() {
   if (!ids.length) {
     _say("Your LINE contacts: your mother, your bank, and a noodle shop in your " +
       "home town that closed in 2019. The local additions are earned — CONTACT " +
-      "a lady in her own bar once she likes you. A drink or two usually does it.");
+      "a lady in her own bar once she likes you. A few drinks usually does it.");
     return;
   }
   _say("Your phone, the local pages:");
@@ -5958,7 +5958,7 @@ const _TEXT_SUBJECT_HOUSE = [
   (n, q) => `"“${q}”." ${n} says it again to your face, flatter than the text. "That's where it stands."`,
   (n, q) => `${n} doesn't check the {{phone}}. "I sent you that: “${q}”. Nothing since."`,
 ];
-const _TEXT_STOP = new Set(["last", "time", "trip", "week", "morning", "yesterday", "that", "this", "with", "from", "have", "what", "when", "they", "them", "then", "again", "boss", "tonight", "today", "tomorrow", "night", "come", "say", "tell", "telling", "about", "your", "you", "will", "only", "very", "more", "some", "here", "there"]);
+const _TEXT_STOP = new Set(["last", "time", "trip", "week", "morning", "yesterday", "that", "this", "with", "from", "have", "what", "when", "they", "them", "then", "again", "boss", "tonight", "today", "tomorrow", "night", "come", "say", "tell", "telling", "about", "your", "you", "will", "only", "very", "more", "some", "here", "there", "bar", "bars", "other", "goodbye", "bye", "night", "goodnight", "quiet", "music"]);   // a text is not the answer to "goodbye pukky" or "the other bars" (Kevin, round 84)
 const _stem = w => w.replace(/(ies)$/, "y").replace(/(s|es)$/, "");
 // a woman does not send the same text twice inside a week: Cake's fan on day 15 and day 21,
 // word for word (Lothar, round 67) — a per-woman book over her role's pool, reset when it runs dry
@@ -5969,6 +5969,11 @@ function _floorTextPick(id, pool) {
   const sent = book[id] = book[id] || [];
   let open = pool.filter(t => !sent.includes(t));
   if (!open.length) { book[id] = sent.filter(t => !pool.includes(t)); open = pool.slice(); }
+  // …and a line another woman already sent you is hers: Nina and Somo both texted "last night SO funny 5555"
+  // (Kevin, round 84). Prefer what nobody has sent; the roll is unchanged when every line is somebody's.
+  const others = new Set(Object.entries(book).filter(([k]) => k !== id).flatMap(([, v]) => v));
+  const fresh = open.filter(t => !others.has(t));
+  if (fresh.length) open = fresh;
   const t = open[Math.floor(_rand() * open.length)];
   book[id].push(t); if (book[id].length > 30) book[id].shift();
   return t;
@@ -6005,7 +6010,8 @@ function _textTalk(npc, topic) {
   // the SUBJECT of what she sent — Lamai's crates, Cake's fan — not only the word "text"
   // (Lothar, round 67: "that one, I cannot help you with" from the woman who texted it)
   if (!/\b(texts?|messages?|sms|what (you|she) (sent|wrote|said)|your (text|message)|photo you sent|the (selfie|photo|picture|pic))\b/.test(t)) {
-    const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w)).map(_stem);
+    const _names = _textTalk._names || (_textTalk._names = new Set(Object.values(NPCS).map(n => String(n.name || "").toLowerCase())));   // her own name is not a subject
+    const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w) && !_names.has(w)).map(_stem);
     if (!words.length) return false;
     const _body = x => x.text || x.photo || "";   // a photo's caption is what she said too: Cream's labels were a selfie's caption (Gordie, round 72)
     const hit = inbox.find(x => _body(x) && G.day - (x.day || G.day) <= 7 && String(_body(x)).toLowerCase().split(/[^a-z0-9]+/).map(_stem).some(w => w.length >= 3 && words.includes(w)));
@@ -6062,8 +6068,13 @@ function _leavingTalk(npc, topic) {
   const said = (G.soc.leavingSaid = G.soc.leavingSaid || {});
   if (said[npc] === G.day) { _say(`${NPCS[npc].name} nods. She heard you the first time.`); return true; }
   said[npc] = G.day;
-  const _lp = _LEAVING_TALK[Math.min(3, _knownTier(npc))];
-  _say(_lp[_hh(npc + ":leaving", 31) % _lp.length](NPCS[npc].name));   // each woman her own line: Nid and Ton gave one sentence word for word (Aurelio, round 71)
+  const _lp = _LEAVING_TALK[Math.min(3, _knownTier(npc))], tier = Math.min(3, _knownTier(npc));
+  // her own line, and not one another woman gave you: Pukky and Nina gave the same goodbye speech (Kevin, round 84)
+  const lb = (G.leaveLine = G.leaveLine || {}), held = new Set(Object.entries(lb).filter(([k]) => k !== npc).map(([, v]) => v));
+  let li = lb[npc] != null && String(lb[npc]).startsWith(tier + ":") ? +String(lb[npc]).split(":")[1] : _hh(npc + ":leaving", 31) % _lp.length;
+  for (let k = 0; k < _lp.length && held.has(tier + ":" + li) && lb[npc] !== tier + ":" + li; k++) li = (li + 1) % _lp.length;
+  lb[npc] = tier + ":" + li;
+  _say(_lp[li](NPCS[npc].name));   // each woman her own line: Nid and Ton gave one sentence word for word (Aurelio, round 71)
   return true;
 }
 // a thing YOU told her — Rotterdam, your work — answered from the ask loop's memory; and the

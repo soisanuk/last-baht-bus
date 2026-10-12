@@ -1994,7 +1994,7 @@ const ROOMS = {
       "up the good seat.",
     revisit: [
       "Back up onto the Verandah's wooden deck, a step above the soi and just far enough off it to be left alone.",
-      "Nina walks your Chang out to the rail chair again. Down on the pavement the pullers work; up here the fans turn and nobody hurries.",
+      "Nina walks your beer out to the rail chair again. Down on the pavement the pullers work; up here the fans turn and nobody hurries.",
       "You settle back into a chair on the raised deck. The step up is doing its quiet job — the grabbers stay on the pavement where they belong.",
       "The Verandah again — the deck, the lazy fans, the rail, and the small civilised miracle of a Soi 6 seat where no one climbs into your lap.",
       "Back above the soi by one wooden step, which turns out to be exactly enough. Nina reads your thirst and beats you to it.",
@@ -6814,7 +6814,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Pukky's just a baby nickname — 'chubby'. It stuck.\"",
         // the question is a real one: "Ronnie. Ron now." was a parse failure while she waited (Ron, round 82)
         asks: { key: "nickname", q: "\"You? What they call you when you were small?\"", react: (v) => _pukkyNick(v) } },
-      { topic: "family", bond: 1,
+      { topic: "family|sister|sisters|mother|mum|mom|school|university|ubon",   // ungated: her family is no secret, and the pooled fallback gave her a sick papa (Kevin, round 84)
         text: "\"Ubon, out east — Isan, rice country. My mother, my two sister, all still there.\" She says " +
           "it easily, no sad music on it. \"I send home every month, is normal. My sister at university now — " +
           "first one in the family. That is me, that money. I am quite proud, actually.\"",
@@ -6826,7 +6826,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "then. I come Pattaya to start over, not to find a farang. That part—\" a glance at you, wry \"—that " +
           "part was not the plan. Still deciding if it is a good surprise.\"",
         short: "\"The true one: I was married in Ubon. It ended badly. I came here to start over, not to find a farang — you weren't the plan.\"" },
-      { topic: "plan",
+      { topic: "plan|thai bar|own bar|bar of my own|my own bar|dream|future",
         text: "\"Plan is no big plan, and that is the plan.\" She laughs at her own line. \"Little money saved, " +
           "little bar of my own one day maybe — not a farang bar, a Thai one, for the workers, cheap and clean. " +
           "Or maybe I go home when my sister finish school and she look after ME for a change. Either is fine. I " +
@@ -6847,7 +6847,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Alright.\" A nod, like to a mate. \"Sit, watch the game. Fair warning — I don't do the " +
           "sweetheart thing, I'm rubbish at it, and you look like you got enough people lying to you already.\" " +
           "She turns back to the TV.",
-        asks: { key: "team", q: "\"Who you support? Wrong answer gets a warm one.\"", react: (v) => _somoTeam(v) },   // "arsenal" was a topic miss (Dev, round 65)
+        asks: { key: "team", q: "\"Who you support? Wrong answer gets a warm one.\"", react: (v) => _somoTeam(v), keep: (v) => _somoTeamName(v) },   // "arsenal" was a topic miss (Dev, round 65)
         short: "\"Sit, watch the game. I don't do the sweetheart thing — I'm rubbish at it.\"" },
       { topic: "football", text: "\"Liverpool, since I am small.\" She lights up, all business. \"My uncle " +
         "drive taxi Bangkok, always the match on the radio. I learn English from the football commentary " +
@@ -6877,7 +6877,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { when: (st, G) => (G.hunger || 0) >= 25, th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"You eat already?\" Before hello, before anything — frowning at how tired you look. \"No? " +
           "Aiyo. Sit. Beer first, but I get you something also. You too skinny, you drink on empty stomach, " +
-          "tomorrow you feel terrible.\" She's already flagging the food cart. Resistance is pointless.",
+          "tomorrow you feel terrible.\" She's already flagging the food cart. Resistance is pointless. Ten minutes later " +
+          "a plate of khao pad lands in front of you, and she waves your wallet away.",
+        // the food she promises arrives (Kevin, round 84: "Nina's food never comes"), once a night
+        fx: (st, G) => { if (G.soc.ninaFed !== G.day) { G.soc.ninaFed = G.day; G.hunger = Math.max(0, (G.hunger || 0) - 35); } },
         short: "\"You eat already? No? Sit — beer first, but I get you food. Resistance is pointless.\"",
         asks: { key: "girlfriend", q: "\"Somebody feed you at home? A wife, a girlfriend?\" Half-worried, like an aunt. \"No? Then who make sure you okay? Everybody need one person make sure they okay.\"" } },
       { topic: "young girls", text: "\"The young ones here, I watch them.\" A nod down the rail. \"First month, " +
@@ -20184,6 +20187,66 @@ const _R79 = {
   ],
 };
 for (const [id, nodes] of Object.entries(_R79)) if (NPCS[id]) NPCS[id].dialogue.push(...nodes);
+// ROUND 84 (Kevin, the man who came for the conversation): each of his three women raised a subject and
+// could not discuss it thirty seconds later — her province, her children's father, the plantation, the
+// uncle with the taxi, the job offer, the food she kept promising. The things she says, she answers for.
+const _R84 = {
+  nina: [
+    { topic: "father|their father|husband|papa|babys father|baby father|the baby's father|kids father|kids' father",
+      text: "\"Their father?\" A short laugh, not unkind. \"Bangkok, long time, another wife. Is okay. I was better mother than he was husband, and everybody in the village know it.\"",
+      short: "\"Their father went to Bangkok and another wife. I was the better mother.\"" },
+    { topic: "family|kids|children|son|daughter|baby",
+      text: "\"Two. Grown now — one working Bangkok, one married.\" Nina says it the way you would say the weather, and then, because she cannot help it: \"The married one feed her husband properly. I check.\"",
+      short: "\"Two, grown. One in Bangkok, one married.\"" },
+    { topic: "home|nong bua lamphu|isan|village|where you from",
+      text: "\"Nong Bua Lamphu. Small, quiet, the rice and my sister's dogs.\" She smiles at the bar top. \"I go back for Songkran. Every year the town is smaller and my sister is louder.\"",
+      short: "\"Nong Bua Lamphu. Rice, my sister's dogs, Songkran.\"" },
+    { topic: "plan|laundry|shop|future|dream",
+      text: "\"Laundry shop. Nong Bua Lamphu, near the market.\" She has clearly priced it. \"Two machine, one dryer, a chair outside, and I read the newspaper while the clothes go round. Three more year. Maybe four.\"",
+      short: "\"A laundry shop at home. Two machines, a chair outside. Three more years.\"" },
+    { topic: "money|send money|send home",
+      text: "\"Now I send to my daughter, for the grandbaby.\" She shows you a photo before you can say no: a round face in a pink hat. \"Before, my kids. Now her kid. Always somebody to send, that is the life.\"",
+      short: "\"I send for the grandbaby now. Always somebody to send.\"" },
+    { topic: "food|eat|khao pad|cart|the food|dinner",
+      text: "\"Food is my job and nobody pay me for it.\" She is pleased with that. \"The cart outside, the som tam lady — I tell her you are my nephew, she give you more. You eat, I am happy. Easy.\"",
+      short: "\"Food is my job, unpaid. You eat, I'm happy.\"" },
+  ],
+  somo: [
+    { topic: "home|nakhon phanom|isan|village|mekong|where you from",
+      text: "\"Nakhon Phanom. The Mekong, Laos on the other side, and nothing to do but watch the river and the football.\" She shrugs. \"So — the football.\"",
+      short: "\"Nakhon Phanom, on the Mekong. Nothing to do but the football.\"" },
+    { topic: "family|husband|son|kids|children|baby",
+      text: "\"My husband go, leave me the baby and the loan on the motorbike.\" She says it like a scoreline. \"The baby is eight now, with my mum in Nakhon Phanom. Liverpool, obviously. I didn't give him a choice.\"",
+      short: "\"Husband went. My boy's eight, with my mum. Liverpool, obviously.\"" },
+    { topic: "uncle|taxi|commentary|radio",
+      text: "\"My uncle drive taxi in Bangkok twenty-two years, radio always on the match.\" She does the commentator's voice for one sentence, perfectly. \"He is why I talk like this. Mum say I sound like a man calling the races.\"",
+      short: "\"My uncle's taxi radio. That's why I talk like this.\"" },
+    { topic: "plan|rubber|plantation|future|dream",
+      text: "\"Rubber. My family have two rai, small.\" She says it with more care than anything else tonight. \"One day I go home, tap rubber in the morning, watch the football at night. Proper life. Not yet.\"",
+      short: "\"Two rai of rubber at home. Tap in the morning, football at night. Not yet.\"" },
+    { topic: "lady drink|60|sixty|chit|the chit|my drink",
+      text: "\"Sixty baht of the drink is mine. The rest is the bar's.\" No embarrassment about it. \"I don't ask, you see. You buy, I drink it, I don't pretend you're my boyfriend. Fair deal.\"",
+      short: "\"Sixty's mine, the rest the bar's. I don't ask, I don't pretend.\"" },
+    { topic: "my team|team|who do i support|geelong|your team", when: (st, G) => G.player && G.player.said && G.player.said.team,
+      text: "\"%team%.\" She remembers, and she is not impressed. \"Small club. Still — a man who support a small club is a man who stay. I respect that.\"",
+      short: "\"%team%. Small club. I remember.\"" },
+    { topic: "my team|team|who do i support|your team",
+      text: "\"You never tell me!\" She waits, arms folded. \"Go on. Who? And don't say Man United, I am trying to like you.\"",
+      short: "\"You never told me. Go on — who?\"" },
+  ],
+  pukky: [
+    { topic: "kids|children|baby|son|daughter",
+      text: "\"No kids.\" She laughs. \"My sister is my kid — I pay her school, I check her grades, I tell her no boyfriend until she finish. Same thing.\"",
+      short: "\"No kids. My sister's my kid — I pay her school.\"" },
+    { topic: "job offer|the offer|offer|eighty|quota|other bar|other bars|walking street",
+      text: "\"The offer? A go-go on Walking Street, my friend's mamasan.\" Pukky shrugs. \"Eighty drinks a month quota, every drink after is good money. I say no. Here I pour beer, nobody count me, I go home with my feet okay.\"",
+      short: "\"A Walking Street go-go. Eighty a month. I said no — here nobody counts me.\"" },
+    { topic: "lonely|alone|do you get lonely",
+      text: "\"Lonely?\" She thinks about it honestly. \"Is a bar full of people, you know. The lonely part is the bike home. Ten minutes. Then I call my sister and is finished.\"",
+      short: "\"The lonely part is the bike home. Ten minutes.\"" },
+  ],
+};
+for (const [id, nodes] of Object.entries(_R84)) if (NPCS[id]) NPCS[id].dialogue.push(...nodes);
 // Somo's football question, answered: "Wrong answer gets a warm one" said nothing back to Doncaster Rovers.
 // What Pukky makes of the name you were called as a child — she tries it out loud.
 function _pukkyNick(v) {
@@ -20195,8 +20258,12 @@ function _pukkyNick(v) {
   const N = w[0].toUpperCase() + w.slice(1).toLowerCase();
   return `"${N}." Pukky tries it out, twice, as if checking the fit. "${N}. Is good — small name for a small boy. I keep it." She doesn't say what for.`;
 }
+function _somoTeamName(v) {
+  const t = String(v || "").split(/[,;.!?]| but | though | although /i)[0].replace(/^(i support|i follow|i'?m|im|my team is|my team'?s|support|follow)\s+/i, "").replace(/^the\s+/i, "").trim();
+  return t ? t.split(/\s+/).map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join(" ").slice(0, 40) : null;
+}
 function _somoTeam(v) {
-  const t = String(v || "").toLowerCase().replace(/^(i support|i follow|i'?m|im|my team is|my team'?s|support|follow)\s+/, "").replace(/^the\s+/, "").trim();
+  const t = String(v || "").toLowerCase().split(/[,;.!?]| but | though | although /)[0].replace(/^(i support|i follow|i'?m|im|my team is|my team'?s|support|follow)\s+/, "").replace(/^the\s+/, "").trim();   // "Geelong Cats, but that's Aussie rules" is Geelong Cats (Kevin, round 84)
   const T = t.split(/\s+/).map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join(" ").slice(0, 40);
   if (/\b(liverpool|lfc|the reds|reds|kop|anfield)\b/.test(t)) return "\"Liverpool!\" Somo hits the bar with the flat of her hand. \"Right answer. Cold one for you.\" She means the beer you already have. She means it anyway.";
   if (/\b(everton|toffees)\b/.test(t)) return "\"Everton?\" Somo looks at you with real sympathy. \"Wrong side of the park, my friend. Warm one for you.\" She doesn't, quite.";
