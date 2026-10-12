@@ -8,18 +8,18 @@ var NEWS_FEED = [
     "d": "10 Oct 2026"
   },
   {
+    "t": "Pattaya begins 3.5km road upgrade ahead of New Year",
+    "s": "Thaiger",
+    "d": "12 Oct 2026"
+  },
+  {
+    "t": "Pattaya officials seize tables and cigarettes from sidewalk vendors on Second Road",
+    "s": "Pattaya Mail",
+    "d": "11 Oct 2026"
+  },
+  {
     "t": "Two Nigerian men arrested after cocaine found in Pattaya condo",
     "s": "Thaiger",
-    "d": "11 Oct 2026"
-  },
-  {
-    "t": "Pattaya Second Road power poles set for removal by March 2027",
-    "s": "Pattaya Mail",
-    "d": "11 Oct 2026"
-  },
-  {
-    "t": "Pattaya considers turning 70 rai of public land in Naklua into a recreational area",
-    "s": "Pattaya Mail",
     "d": "11 Oct 2026"
   },
   {
@@ -28,17 +28,17 @@ var NEWS_FEED = [
     "d": "10 Oct 2026"
   },
   {
-    "t": "Family of murdered Pattaya teenager seeks compensation from Australian defendant",
-    "s": "Pattaya Mail",
-    "d": "10 Oct 2026"
+    "t": "Pattaya heist gang flees Thailand with 37 million baht",
+    "s": "Thaiger",
+    "d": "11 Oct 2026"
   },
   {
-    "t": "Pattaya ride-hailing driver alleges assault by bar owner and group",
+    "t": "Pattaya considers turning 70 rai of public land in Naklua into a recreational area",
     "s": "Pattaya Mail",
-    "d": "09 Oct 2026"
+    "d": "11 Oct 2026"
   },
   {
-    "t": "Pattaya officials seize tables and cigarettes from sidewalk vendors on Second Road",
+    "t": "Pattaya reviews plans for fireworks, jazz and year-end festivals",
     "s": "Pattaya Mail",
     "d": "11 Oct 2026"
   },
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "09 Oct 2026"
   },
   {
-    "t": "Thailand’s Queen is first reigning queen in the world to fly JAS-39 Gripen fighter solo",
-    "s": "The Aviation Geek Club",
-    "d": "09 Oct 2026"
-  },
-  {
-    "t": "I Flew to Thailand to Snatch My Face and Body",
-    "s": "The Cut",
-    "d": "09 Oct 2026"
-  },
-  {
-    "t": "Nearly 30 years after IMF rescue, Thailand faces new economic test",
+    "t": "Thailand's queen pilots a fighter jet on her first solo flight",
     "s": "Reuters",
     "d": "09 Oct 2026"
   },
   {
-    "t": "Floodwaters Overwhelm Thailand",
-    "s": "NASA Science (.gov)",
+    "t": "Thai police raid Chabad, Jewish institutions in Bangkok amid ongoing foreign business investigation",
+    "s": "The Jerusalem Post",
+    "d": "09 Oct 2026"
+  },
+  {
+    "t": "Queen of Thailand flies fighter jet",
+    "s": "CNN",
+    "d": "11 Oct 2026"
+  },
+  {
+    "t": "Nearly 30 years after IMF rescue, Thailand faces new economic test",
+    "s": "Reuters",
     "d": "09 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-09","USD":33.53,"AUD":23.41,"GBP":44.33,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-12","temp":26,"humid":88,"code":3,"hi":32,"rain":94};
+var WX_NOW = {"date":"2026-10-12","temp":31,"humid":73,"code":2,"hi":31,"rain":94};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4196,"date":"2026-10-11","baht":66550};
+var GOLD = {"usd":4192,"date":"2026-10-12","baht":66500};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":83451,"thb":2806168};
+var BTC = {"usd":84020,"thb":2818859};
