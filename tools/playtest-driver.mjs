@@ -103,6 +103,7 @@ if (verb === "serve") {
   });
   await page.goto(url);
 
+  let missCursor = 0;   // where the miss ledger has read the transcript to
   const handlers = {
     // ── coverage ledger ──────────────────────────────────────────────────
     // Accumulated OUTSIDE the game, after every action, because G is not
@@ -161,6 +162,37 @@ if (verb === "serve") {
       }
       acc.verbs = [...v].sort();
       writeFileSync(f, JSON.stringify(acc, null, 1));
+      await handlers.harvestMisses();
+    },
+    // THE MISS LEDGER (Mario, 2026-10-13: "have we not done a verb audit on the persona runs?").
+    // Every input the game REFUSED — a parse failure, a name that landed on nobody, "Not for
+    // sale here", "You don't see that here" — goes to <dir>/misses.jsonl with the room, the
+    // clock and the reply, judged against the engine's own live pools (never a transcription).
+    // `node tools/miss-ledger.mjs` merges every session's file into one ranked list: what real
+    // players type that the game does not take.
+    async harvestMisses() {
+      const r = await page.evaluate((from) => {
+        const L = window.__ptLines || [];
+        const start = from > L.length ? 0 : from;   // a reload restarts the ledger
+        const pool = [].concat(typeof _HUH !== "undefined" ? _HUH : [], typeof _NOBODY_NAME !== "undefined" ? _NOBODY_NAME : [],
+          ["Not for sale here.", "You don't see that here."]);
+        const out = [];
+        let cmd = null;
+        for (let i = start; i < L.length; i++) {
+          const t = String(L[i] || "");
+          if (/^❯\s*/.test(t)) { cmd = t.replace(/^❯\s*/, ""); continue; }
+          if (cmd != null && pool.some(p => t.includes(p))) { out.push({ cmd, reply: t.slice(0, 160) }); cmd = null; }
+        }
+        let st = {};
+        try { st = { room: G.room, day: G.day, turn: G.nightTurn, mode: G.mode, convo: G.convo || null }; } catch (e) {}
+        return { next: L.length, out, st };
+      }, missCursor).catch(() => null);
+      if (!r) return;
+      missCursor = r.next;
+      if (!r.out.length) return;
+      const f = path.join(dir, "misses.jsonl");
+      const prev = (() => { try { return readFileSync(f, "utf8"); } catch { return ""; } })();
+      writeFileSync(f, prev + r.out.map(m => JSON.stringify({ ...m, ...r.st, at: new Date().toISOString() })).join("\n") + "\n");
     },
     async cmd({ inputs }) {
       for (const c of inputs) {
