@@ -228,6 +228,8 @@
     box-shadow: 0 0 14px #ff149355; cursor: pointer;
   }
   #more-below[hidden] { display: none; }
+  #term-out.has-more { margin-bottom: calc(1.6rem + .6rem * var(--fscale, 1)); }   /* the pill's own strip (Ron, round 82) */
+  #flyout .fly-title { font-size: .78em; color: var(--violet); padding: .3rem .7rem .1rem; letter-spacing: .04em; }
   .t-line { margin: .12rem 0; white-space: pre-wrap; word-break: break-word; }
   .t-line + .t-line.t-room { margin-top: .8rem; }
   .t-echo  { color: var(--pink); margin-top: .7rem; }
@@ -250,6 +252,7 @@
                      sideways instead of shrinking to 6px (Margaret, round 65) */
                   font-size: clamp(calc(.45rem * var(--fscale, 1)), 1.95vw, calc(.8rem * var(--fscale, 1))); line-height: 1.25; }
   .t-line.t-map::-webkit-scrollbar { height: 4px; }
+  .t-map-list { color: var(--violet); margin: 0; }   /* the Soi 6 map as a wrapping list (Ron, round 82) */
   /* The QR sticker (EXAMINE QR at the LK Metro mouth). Three things here are
      load-bearing rather than decorative, because this block has to survive being
      photographed off a screen by a phone:
@@ -308,6 +311,7 @@
     box-shadow: 0 0 18px #ff149360, 0 4px 24px #000c;
     padding: .3rem;
     max-width: min(78vw, 320px);
+    max-height: calc(100vh - 16px); overflow-y: auto;   /* a tall menu scrolls inside the screen (Ron, round 82) */
   }
   #flyout button {
     background: none; border: none; text-align: left;
@@ -931,18 +935,19 @@
 #scene-cast .bust span { display: block; font-size: 9px; color: #9a86b8; margin-top: 3px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #scene-hud { display: flex; align-items: center; gap: 7px; padding: 7px 14px;
-  font-size: 11px; color: var(--text); }
+  font-size: calc(11px * var(--fscale, 1)); color: var(--text); }   /* the money and the clock grow with A+ (Ron, round 82) */
 #scene-hud b { color: var(--green); }
 #scene-hud .sep { color: #9a86b8; }
 #scene-hud .grow { flex: 1; }
-#scene-hud .m { display: flex; align-items: center; gap: 3px; font-size: 10px; cursor: pointer; }
+#scene-hud .m { display: flex; align-items: center; gap: 3px; font-size: calc(10px * var(--fscale, 1)); cursor: pointer; }
 #scene-hud .bar { display: inline-block; width: 22px; height: 5px; background: #1c0f3a;
   border-radius: 3px; overflow: hidden; }
 #scene-hud .bar i { display: block; height: 100%; }
 #scene-exits { display: flex; gap: 8px; padding: 2px 12px 11px; overflow-x: auto; }
 /* the notes row: the frontier as taps — what's open, nearest first (design note 2026-09-15) */
 #scene-notes { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 10px; align-items: center; }
-#scene-notes .lbl { font-size: 10px; color: #9a86b8; flex: 0 0 100%; }
+#scene-notes .lbl { font-size: calc(10px * var(--fscale, 1)); color: #9a86b8; flex: 0 0 100%; }
+@media (max-width: 767px) { #scene-notes { max-height: 24vh; overflow-y: auto; } }   /* the story kept two lines under it (Ron, round 82) */
 #scene-notes button, #scene-notes span.plain { font: inherit; font-size: calc(11px * var(--fscale, 1)); color: var(--cyan); background: #1c0f3a;
   border: 1px solid #3a2560; border-radius: 8px; padding: 4px 8px; text-align: left; max-width: 100%; }
 #scene-notes span.plain { color: #cbb8e8; }
@@ -1017,6 +1022,7 @@
 #convo-card .who b { color: var(--yellow); font-size: calc(.9rem * var(--fscale, 1)); }
 #convo-card .who .line, #convo-card .who .tier { display: block; font-size: calc(.7rem * var(--fscale, 1)); color: #9a86b8;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 767px) { #convo-card .who .line, #convo-card .who .tier { white-space: normal; } }   /* "waiting on your…" said nothing (Ron, round 82) */
 #convo-card .who .tier { color: var(--cyan); }
 #convo-card .who .tier.cold { color: #ff6b81; }
 #convo-card .who .tier.ask { color: var(--pink); }
@@ -1028,7 +1034,10 @@
 #convo-card button.bye:active { background: #1e0030; }
 @media (pointer: coarse) { #convo-card button.bye { min-height: 44px; } }
 @media (max-width: 767px) {
-  header { padding: .45rem 3.6rem .35rem; }
+  header { padding: .45rem 5.6rem .35rem; }   /* the title cleared A−/A+ only at the smallest text (Ron, round 82) */
+  #scene-hud { flex-wrap: wrap; row-gap: 4px; white-space: normal; }
+  #scene-hud > * { white-space: nowrap; }
+  #bell-fab.armed { width: auto; min-width: 44px; padding: 0 9px; border-radius: 22px; }   /* "฿530?" was clipped by its circle */
   header .sub { display: none; }
   #ad-mini .tag { display: none; }
   #ad-mini { font-size: .72rem; }

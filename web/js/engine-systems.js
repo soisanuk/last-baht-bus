@@ -134,7 +134,7 @@ function _isDraw(id) {
   // the draw refusal lifts at midnight — meaningless in a bar that CLOSES at midnight
   // (soi6/gents/Darkside), where it would just make her un-barfineable all night (the
   // featured Soi 6 shows were all hitting this). Draws only in bars open past midnight.
-  if (_closesMidnight(_npcRoom(id))) return false;
+  { const c = _closeTurn(_npcRoom(id)); if (c != null && c <= 60) return false; }   // Soi 6 shuts at two now: its draws lift at midnight like anyone's (Mario, 2026-10-11)
   return _hh(id + ":" + G.vacation + ":draw", 61) % 100 < 15;
 }
 // A hash-picked minority are KEPT: a long-time sponsor pays them not to work
@@ -572,7 +572,7 @@ function _seeHomeOpen(id) {
   if (!_npcsHere().includes(id) || _bondTier(id) < 1) return false;
   if (G.party && G.party.ids && G.party.ids.includes(id)) return false;   // she is already with you
   if (G.soc.seenHome && G.soc.seenHome[id] === G.day) return false;
-  return typeof _closesMidnight === "function" && _closesMidnight(G.room) ? G.nightTurn >= 55 : G.nightTurn >= LAST_BUS_TURN;
+  return typeof _closesMidnight === "function" && _closesMidnight(G.room) ? G.nightTurn >= Math.min(_closeTurn(G.room), LAST_BUS_TURN) - 5 : G.nightTurn >= LAST_BUS_TURN;
 }
 function _doSeeHome(arg) {
   const nm = String(arg || "").toLowerCase().replace(/\b(home|to the bus|to her bike|to the songthaew)\b/g, "").replace(/^(the |a )/, "").trim();
@@ -586,7 +586,7 @@ function _doSeeHome(arg) {
   if (G.soc.seenHome && G.soc.seenHome[id] === G.day) { _say(`You already walked ${NPCS[id].name} to the stop tonight. She went.`); return; }
   if (typeof _maiDee === "function" && _maiDee(id)) { _say(`${NPCS[id].name} hears the offer out and says, "No, thank you," the way she would decline a second helping. Somebody else will see her home. Somebody always has.`); return; }
   if (!_seeHomeOpen(id)) {
-    const openAt = (typeof _closesMidnight === "function" && _closesMidnight(G.room)) ? 55 : LAST_BUS_TURN;
+    const openAt = (typeof _closesMidnight === "function" && _closesMidnight(G.room)) ? Math.min(_closeTurn(G.room), LAST_BUS_TURN) - 5 : LAST_BUS_TURN;
     const left = Math.max(1, openAt - G.nightTurn), hrs = Math.round(left / 10);
     const h = hrs >= 2 ? hrs + " hours" : hrs === 1 ? "One hour" : Math.max(6, left * 6) + " minutes";   // computed, not "three hours" at 00:42 (Marcus, round 61)
     _say(_pickVary(_SEE_HOME_EARLY, "seehomeearly")(NPCS[id].name, h)); return;
@@ -833,7 +833,8 @@ function _doBarfine(arg) {
   if (G.room === "peacock_cabaret") { _say(_pickVary(_PEACOCK_NO_BF, "pcnobf")); return; }
   if (!_inBar()) { _say("Barfines are negotiated indoors, with the mamasan watching."); return; }
   const here = _npcsHere().filter(id => NPC_ROLES[id]);
-  const id = arg ? _findNpc(arg) : (here.length === 1 ? here[0] : null);
+  // TAKE DOKMAI OUT arrives as "dokmai out" — the name is the woman, the rest is the night (composition audit, 2026-10-11)
+  const id = arg ? (_findNpc(arg) || _findNpc(String(arg).replace(/\b(out|tonight|with me)\b/g, " ").replace(/\s+/g, " ").trim())) : (here.length === 1 ? here[0] : null);
   if (id === "cream") { _chamAsk(); return; } // the civilian at the table: the inevitable question (chameleon economy)
   if (!id || !NPC_ROLES[id]) { _say(arg ? "She's not working this bar." : "Barfine whom, exactly?"); return; }
   const name = NPCS[id].name, role = NPC_ROLES[id];
@@ -1413,7 +1414,7 @@ function _nontLocate(topic) {
   const where = `${_barName(room) || ROOMS[room].name}, over on ${ROOMS[room].region}`;
   if (typeof _closedNow === "function" && _closedNow(room)) {
     // "Sunset Dreams, two hundred" at half past midnight, to a bar that shut at twelve (Piotr, round 40)
-    _say(`“${name}? ${_barName(room) || ROOMS[room].name} — and it shut at midnight, so no.” He waves the notes off. “Tomorrow's two hundred. Tonight's a no.”`);
+    _say(`“${name}? ${_barName(room) || ROOMS[room].name} — and it shut at ${_closeClock(room)}, so no.” He waves the notes off. “Tomorrow's two hundred. Tonight's a no.”`);
     return true;
   }
   if (id === "kwan" && _flag("craneDelivered") && G.soc.craneDay === G.day) {
@@ -7623,7 +7624,7 @@ function _workTaleTell(b, how) {
   // with Bert, and the morning told him about both (Kwame, round 60): the late half of
   // the tale waits on his having been on the rail for it
   const _late = s => _isCloseLine(s) || /\b(gone two|last bus|small hours|cash out|cash-out|the close|closing up)\b/i.test(String(s));
-  const _closeAt = (typeof _closesMidnight === "function" && _closesMidnight(b.room || (G.bar && G.bar.room))) ? 60 : 100;   // a beer bar closes near dawn: a man who left at two was not there for it (Rolf, round 66)
+  const _closeAt = (typeof _closeTurn === "function" && _closeTurn(b.room || (G.bar && G.bar.room))) || 100;   // a beer bar closes near dawn: a man who left at two was not there for it (Rolf, round 66)
   const _leftEarly = how === "morning" && (b.railTurn || 0) < Math.min(_closeAt, LAST_BUS_TURN + 20);
   let seen = t.seen;
   if (_leftEarly && _late(seen)) { const early = _WORK_SHIFT.filter(l => !_late(l)); if (early.length) seen = early[_hh("early:" + G.day, 79) % early.length]; }
@@ -9507,7 +9508,7 @@ function _frontierPhase() {
   return { cycle: Math.floor(t / FRONTIER_CYCLE), phase: Math.floor((t % FRONTIER_CYCLE) / (FRONTIER_CYCLE / 3)) };
 }
 function _frontierTick() {
-  if (G.room !== "soi6_west_in" || G.nightTurn >= 60) return;
+  if (G.room !== "soi6_west_in" || G.nightTurn >= SOI6_CLOSE) return;
   const f = _frontierPhase(), key = G.vacation + ":" + f.cycle + ":" + f.phase;
   const said = (G.frontierSaid = G.frontierSaid || {});
   if (said[key]) return;
@@ -10962,7 +10963,7 @@ const _OWL_ARRIVED = [
     "the truth.",
   () => "THE CURFEW, since a reader asked what time the town shuts. It doesn't. The blue trucks run " +
     "all night — sparse after two, but they come; the piwins never sleep; the bars on the beach " +
-    "side go to dawn and the ones with the shutters tell you so at half eleven. The only curfew " +
+    "side go to dawn and the ones with the shutters tell you so half an hour before. The only curfew " +
     "in Pattaya is on you: too drunk for the bike (the piwin will say so, and mean it), too " +
     "tired for the walk, too far gone to remember the hotel's name. The LAST BAHT BUS is the " +
     "last one you are still capable of catching, and the Owl has watched better men than you " +

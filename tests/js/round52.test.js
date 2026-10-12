@@ -63,7 +63,7 @@ test("TRAVEL stops at the last lit room before the dark with the torch off; the 
   const saved = _rand;
   try {
     _rand = () => 0.99;
-    G.room = "jomtien_beach"; G.visited.queen_vic = true; G.lightOn = false; G.nightTurn = 50;
+    G.room = "jomtien_beach"; G.visited.queen_vic = true; G.lightOn = false; G.nightTurn = 20;   // the pub shuts at eleven
     const route = _path("jomtien_beach", "queen_vic");
     const firstDark = route.findIndex(r => ROOMS[r].dark);
     assert.ok(firstDark > 0, "the route has a lit stretch then a dark one");
@@ -77,7 +77,7 @@ test("TRAVEL stops at the last lit room before the dark with the torch off; the 
     // with the light ON there is no stop at all
     newGame(); _setFlag("act1Done"); G.stage = "vacation";
     for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
-    G.room = "jomtien_beach"; G.visited.queen_vic = true; G.lightOn = true; G.battery = 80; G.nightTurn = 50;
+    G.room = "jomtien_beach"; G.visited.queen_vic = true; G.lightOn = true; G.battery = 80; G.nightTurn = 20;   // the pub shuts at eleven
     out = []; doCommand("travel queen vic");
     assert.equal(G.room, "queen_vic");
   } finally { _rand = saved; }

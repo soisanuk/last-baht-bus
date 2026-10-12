@@ -266,8 +266,9 @@ test("the middle of Soi 6 does not claim shut bars you can walk into", () => {
   out = [];
   doCommand("look");
   const shown = text();
-  for (const v of ROOMS.soi6_mid.venues)
+  for (const v of ROOMS.soi6_mid.venues.filter(v => v !== "queen_vic"))   // the Vic's pub shuts at eleven
     assert.equal(_closedNow(v), false, `${v} is open, so the prose must not say it is shuttered`);
+  assert.doesNotMatch(shown.split("\n").find(l => /^Step inside/.test(l)) || "", /Queen Vic/, "a shut door is not offered");
   assert.doesNotMatch(shown, /every bar but one/, "the old line contradicted its own Step inside list");
 });
 

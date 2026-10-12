@@ -320,8 +320,8 @@ function _maybeEncounter() {
     // 70 = 01:00, which is when she says she finishes (the text no longer asserts the hour — it printed "gone 1 a.m." at 04:45, Dieter, round 56)
     // — the old gate of 40 fired the "gone 1 a.m." prose at half past ten.
     (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70 && G.day - (G.bookingDay || -9) >= 3 && !_refusing())) && // …and never to a man who has only said no to the trade (Margaret, 2026-10-10) // the apps come alive after 1 a.m. — and not every other night (Judith, round 47)
-    (id !== "noodle" || G.nightTurn < 60) &&
-    (id !== "bargirl" || G.nightTurn < 60 || !/^soi6/.test(G.room)) &&   // "every door is shut" and a girl weaving out of one (Henri/Desmond, round 47)   // Soi 6 shuts at midnight; the noodle girl went home with it (Piotr, round 40)
+    (id !== "noodle" || G.nightTurn < (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" ? SOI6_CLOSE : 60)) &&
+    (id !== "bargirl" || G.nightTurn < SOI6_CLOSE || !/^soi6/.test(G.room)) &&   // "every door is shut" and a girl weaving out of one (Henri/Desmond, round 47)   // Soi 6 shuts at two now; the noodle girl goes home with it (Piotr, round 40)
     // 60 = midnight, the same threshold beach_rd_top's own lateDesc uses: the
     // corner must not produce the wall's regulars while the room is still
     // describing joggers and an ice-cream cart.

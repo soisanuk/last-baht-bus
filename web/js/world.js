@@ -3528,7 +3528,7 @@ const ROOMS = {
       "Back into the west end, twenty fronts in seventy metres. You stop trying to read the signs somewhere around the tenth; the signs never stop trying to read you.",
       "Back onto the soi: bar after bar after bar, each one a single open room with a rail and a staircase, each one sure it is the only bar on Soi 6.",
     ],
-    lateDesc: "Soi 6 after midnight: the frontages rolled down, the stools stacked behind the grilles, the girls gone home or gone on somewhere in twos on one motorbike. The neon is mostly off and what's left buzzes for nobody. A cat owns the middle of the road.",
+    lateDesc: "Soi 6 after two: the frontages rolled down, the stools stacked behind the grilles, the girls gone home or gone on somewhere in twos on one motorbike. The neon is mostly off and what's left buzzes for nobody. A cat owns the middle of the road.",
     // the soi's size, at a close look (Soi 6 density, 2026-10-09)
     reads: {
       bars: "You try to count them and give up in the twenties. Open front, open front, open front, both sides, all the way down to Second Road — near enough a hundred on this one street, each a single room with a rail, a few stools, a sound system and a staircase. Most of them you will walk past and never learn the name of. Down this end, the ones you'll come back to are Pink Lotus, the Golden Dragon and Sunset Dreams.",
@@ -3696,7 +3696,7 @@ const ROOMS = {
       "Back to the middle: twenty-odd beer bars in a row, the one stretch of Soi 6 where nobody mentions the stairs unless you do.",
       "The neutral stretch again. Nobody owns the middle and it shows — mismatched awnings, a different song every ten metres, and not one pool noodle on the pavement.",
     ],
-    lateDesc: "The middle of Soi 6 past midnight: the short-time places either side have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours, and the three beer bars either side of it keep the Vic's — this is the light left on Soi 6 now; past them the grilles are down and the ice buckets are out on the pavement.",
+    lateDesc: "The middle of Soi 6 after two: the beer bars that were the drinking end have pulled their grilles down with the rest of the soi, the stools are chained, and the Queen Vic has been dark since eleven but for one strip light and the security guard on a stool behind the bar. Ice buckets out on the pavement, a dog asleep under a front, and nothing open between here and Second Road.",
     // close looks at what the prose names (the examine audit, Soi 6 first — 2026-10-09)
     reads: {
       deck: "Across the soi, the Verandah's raised wooden deck sits one step above the pavement with its chairs and lazy fans, the only front on this stretch nobody tries to climb.",
@@ -3736,7 +3736,7 @@ const ROOMS = {
     ],
     lateDesc: [
       "The inner west after the shutters: grilles down on old fronts and new ones alike, the group's printed boards dark behind them, the hand-lettered sign at the Tamarind the only thing still legible under the one working streetlight.",
-      "Past midnight on the second stretch: the girls gone, the stools stacked, a ladder left against a front where a sign is half up. Even the paint can't tell you whose bar it is tonight.",
+      "After two on the second stretch: the girls gone, the stools stacked, a ladder left against a front where a sign is half up. Even the paint can't tell you whose bar it is tonight.",
       "The inner west in the small hours: one grille still a hand's height off the ground with light under it and the sound of somebody counting, and the group's printed boards glowing faintly behind theirs like screens left on.",
     ],
     reads: {
@@ -3860,7 +3860,7 @@ const ROOMS = {
     ],
     lateDesc: [
       "The inner east after the shutters: twenty-odd grilles down, the giant chilli over the Hot Pepper dark, a cousin locking a padlock and testing it twice. The soi has gone home, and these bars were always going home to somewhere near here.",
-      "Past midnight east of the middle. The girls have gone in twos on motorbikes, the stools are stacked, and the tiki head in the Hula Hula has been switched off, which makes it look more thoughtful than it ever does at nine.",
+      "After two, east of the middle. The girls have gone in twos on motorbikes, the stools are stacked, and the tiki head in the Hula Hula has been switched off, which makes it look more thoughtful than it ever does at nine.",
       "East of the middle after closing: a family on plastic stools outside one front eating from a shared pot, the girls out of their work clothes and into their own, and nobody calling you handsome at all.",
     ],
     reads: {
@@ -4117,6 +4117,11 @@ const ROOMS = {
     name: "Queen Vic Inn",
     region: "Soi 6",
     bar: "Queen Vic Inn", barType: "pub", darts: true,
+    // The pub shuts at eleven; the rooms upstairs never do. The bar IS the reception,
+    // and after eleven the security guard sits behind it — a guest walks through the
+    // dark pub to the stairs, nobody else gets past the door, and nobody is served
+    // (Mario, 2026-10-11).
+    closesAt: 50, lobbyFor: "qv_room",
     desc: "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn " +
       "anchors the quiet middle stretch of Soi 6 with the righteous calm of a man who has seen " +
       "it all and ordered another pint — the one place on the soi that isn't shouting. Through " +
@@ -4129,12 +4134,13 @@ const ROOMS = {
     // both carry a lateDesc saying exactly that, and the Vic contradicted them
     // through its own window (round 22). What makes this room itself is that
     // nothing inside it changes; only the view does.
-    lateDesc: "The Queen Vic in the small hours: same aircon, same panelling, same " +
-      "dartboard, and through the window a soi with its shutters down and its neon off. " +
-      "The show has gone home. The pub has not — it keeps its own hours and always has, " +
-      "and the handful still in here have the settled look of men with nowhere they'd " +
-      "rather be and no intention of proving it. A staircase behind the bar leads UP " +
-      "to the guest rooms.",
+    // After eleven a guest walks through the shut pub on his way to bed — the
+    // paint is the dark room and the man behind the bar, never the drinkers.
+    lateDesc: [
+      "The Queen Vic after hours: the chairs up on the tables, the dartboard in the dark, the aircon off and the room already warm. The security guard sits behind the bar on the stool the barmaid uses, {{phone}} in his hand, and lifts his chin at you — the guest, the one he lets through. A staircase behind the bar leads UP to the rooms. (UP · OUT)",
+      "The pub is shut. One strip light over the till, the stools stacked, the panelling gone brown-black. Behind the bar the security guard looks up from his {{phone}}, sees a guest, and goes back to it. (UP to your room · OUT to the soi)",
+      "The Vic with its lights off: the chairs legs-up on the tables, the beer taps wrapped in tea towels, and the guard on the barmaid's stool with his feet on a crate. He nods you towards the stairs. (UP · OUT)",
+    ],
     reads: {
       panelling: "Real wood panelling, dark with decades of smoke and polish, and fitted by somebody who knew what he was doing. It is the most expensive thing on Soi 6 that nobody is selling, and the regulars knock on it out of habit.",
       notebook: [
@@ -4210,10 +4216,10 @@ const ROOMS = {
       "The balcony room takes you back in. HANDSOME MAN! floats up from the pavement, aimed at somebody, everybody, nobody. You have learned to hear it as weather.",
       "Back to your patch of quiet-ish over the loudest street in Thailand — recliner, small table, and blackout curtains thick enough to turn the neon and the shouting into a lullaby.",
     ],
-    // after midnight the soi below is shut: the revisit pool's shrieking pavement is an evening thing (Ray, round 78)
+    // after two the soi below is shut: the revisit pool's shrieking pavement is an evening thing (Ray, round 78)
     lateDesc: [
-      "The balcony room after the shutters. Below, Soi 6 is a row of grilles and ice buckets on the pavement; the only light left on is the Vic's own, under your feet, and a scooter going home slowly. (SLEEP to turn in · WATCH TV · or the BALCONY.)",
-      "Back up to the room. The soi has gone quiet the way only a loud street can — one motorbike, a dog, the pub's last table laughing downstairs. The fan has the room to itself. (SLEEP · WATCH TV · BALCONY.)",
+      "The balcony room after the shutters. Below, Soi 6 is a row of grilles and ice buckets on the pavement; the pub under your feet has been dark since eleven, and the only thing moving is a scooter going home slowly. (SLEEP to turn in · WATCH TV · or the BALCONY.)",
+      "Back up to the room. The soi has gone quiet the way only a loud street can — one motorbike, a dog, and the guard downstairs laughing at something on his {{phone}}. The fan has the room to itself. (SLEEP · WATCH TV · BALCONY.)",
       "The balcony room in the small hours. The girls who shouted HANDSOME at the whole street have gone home in twos on one bike, and the street is just a street. The curtains have nothing left to keep out. (SLEEP · WATCH TV · BALCONY.)",
     ],
     exits: { down: "queen_vic" },
@@ -6804,8 +6810,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // shallower one so first-match warms with the relationship.
       { topic: "name", text: "\"Pukky? Is a nickname — everybody Thai have one, the real name too " +
         "formal for every day.\" A small smile. \"Mean nothing special. Chubby baby, my mother say. " +
-        "I was not chubby long, but the name stay. You? What they call you when you were small?\"",
-        short: "\"Pukky's just a baby nickname — 'chubby'. It stuck. What did they call YOU small?\"" },
+        "I was not chubby long, but the name stay.\"",
+        short: "\"Pukky's just a baby nickname — 'chubby'. It stuck.\"",
+        // the question is a real one: "Ronnie. Ron now." was a parse failure while she waited (Ron, round 82)
+        asks: { key: "nickname", q: "\"You? What they call you when you were small?\"", react: (v) => _pukkyNick(v) } },
       { topic: "family", bond: 1,
         text: "\"Ubon, out east — Isan, rice country. My mother, my two sister, all still there.\" She says " +
           "it easily, no sad music on it. \"I send home every month, is normal. My sister at university now — " +
@@ -13944,6 +13952,7 @@ const CLUB_TAXI = 2000;      // the morning-after "taxi money" — the back-load
 const GIFT_DEBT = 500;       // the bun-khun a "free" gift calls in on the spot
 const GIFT_TIP = 100;        // paying tao-rai up front closes the account clean
 const TOASTIE_PRICE = 35;  // the 7-Eleven cheese toastie
+const SOI6_CLOSE = 80;    // everything on Soi 6 shuts at two (Mario, 2026-10-11) — the Vic's pub earlier, at eleven
 const SEVEN_BEER = 60;     // a big Chang from the 7-Eleven fridge — sold until midnight, then the fridges are chained (the law)
 const POLICE_WAI = 300;     // the drunk stop: a wai and a sorry
 const POLICE_PAY = 500;     // …money out before the manners
@@ -20176,6 +20185,16 @@ const _R79 = {
 };
 for (const [id, nodes] of Object.entries(_R79)) if (NPCS[id]) NPCS[id].dialogue.push(...nodes);
 // Somo's football question, answered: "Wrong answer gets a warm one" said nothing back to Doncaster Rovers.
+// What Pukky makes of the name you were called as a child — she tries it out loud.
+function _pukkyNick(v) {
+  const t = String(v || "").replace(/^(they |people |my (mum|mom|mother|family|dad) )?(called|call|used to call) me\s+/i, "")
+    .replace(/^(it was|i was|my nickname was|nickname)\s+/i, "").trim();
+  const w = (t.match(/[A-Za-z][A-Za-z'-]*/) || [""])[0];
+  if (!w || /^(nothing|none|no|nobody|dunno|forget|forgot)$/i.test(w))
+    return "\"Nothing? Everybody have one.\" Pukky considers you. \"Okay. I give you one later, when I know what you are like.\"";
+  const N = w[0].toUpperCase() + w.slice(1).toLowerCase();
+  return `"${N}." Pukky tries it out, twice, as if checking the fit. "${N}. Is good — small name for a small boy. I keep it." She doesn't say what for.`;
+}
 function _somoTeam(v) {
   const t = String(v || "").toLowerCase().replace(/^(i support|i follow|i'?m|im|my team is|my team'?s|support|follow)\s+/, "").replace(/^the\s+/, "").trim();
   const T = t.split(/\s+/).map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join(" ").slice(0, 40);

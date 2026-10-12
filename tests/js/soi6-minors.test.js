@@ -40,7 +40,7 @@ test("bell ring count resets once the glow lapses (no stale level-3 restore)", (
 });
 
 test("midnight inside the Orchid Room ejects past closed Pink Lotus to the street", () => {
-  S().room = "orchid_room"; S().nightTurn = 60;
+  S().room = "orchid_room"; S().nightTurn = SOI6_CLOSE;
   _closingTick();
   assert.equal(S().room, "soi6_street", "the eject chain lands somewhere actually open");
 });

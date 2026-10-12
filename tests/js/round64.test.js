@@ -169,6 +169,7 @@ test("the unknown number keeps its own hour, not your first step out of Mort's p
   assert.ok(_jokeAt() >= 20 && _jokeAt() < 70);
   G.room = "beach_rd_c"; G.nightTurn = _jokeAt(); _tick();
   assert.ok(G.phone.inbox.some(m => m.from === "unknown"), "it arrives on the tick, at its hour");
-  G.phone.jokeDay = 0; G.phone.inbox = []; G.room = NPCS.mort.room; _tick();
+  while (_jokeAt() >= 50) G.day++;   // an hour he is in: the pub shuts at eleven
+  G.nightTurn = _jokeAt(); G.phone.jokeDay = 0; G.phone.inbox = []; G.room = NPCS.mort.room; _tick();
   assert.equal(G.phone.inbox.length, 0, "never while he is in the room with you");
 });

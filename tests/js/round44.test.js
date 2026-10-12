@@ -335,12 +335,13 @@ test("TOPICS lists only what the person will actually answer, right now", () => 
     G.room = _npcRoom(id); G.known[id] = true;
     const misses = new Set();
     for (const junk of ["zqxwv", "photosynthesis", "belgium"]) {
-      G.talked = {}; out = []; run(`ask ${id} about ${junk}`); misses.add(text().slice(-90));
+      G.talked = {}; G.nightTurn = 10; out = []; run(`ask ${id} about ${junk}`); misses.add(text().slice(-90));
     }
     const open = _convoTopics(id);
     assert.ok(open.length, `${id} has open topics`);
     for (const t of open) {
       G.talked = {};                       // a fresh ear, not a fresh world
+      G.nightTurn = 10;                    // …and an early hour: the Vic shuts at eleven
       out = []; run(`ask ${id} about ${t}`);
       assert.ok(!misses.has(text().slice(-90)),
         `${id} answers "${t}" — TOPICS must never offer a topic that misses`);

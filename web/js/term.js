@@ -500,7 +500,7 @@ const _term = (() => {
         talk:    l => ({ t: "talk",            c: "talk to " + l,      go: true }),
         examine: l => ({ t: "examine",         c: "x " + l,            go: true }),
         photo:   l => ({ t: "photo",           c: "photo " + l,        go: true }),
-        buyher:  l => ({ t: "buy her a drink", c: "buy drink for " + l, go: true }),
+        buyher:  l => ({ t: "buy her a drink" + (typeof _ladyPrice === "function" ? " ฿" + _num(_ladyPrice()) : ""), c: "buy drink for " + l, go: true }),   // the price before the till (Ron, round 82)
         buyhim:  l => ({ t: "buy him a drink", c: "buy drink for " + l, go: true }),
         flirt:   l => ({ t: "flirt",           c: "flirt " + l,        go: true }),
         tip:     l => ({ t: "tip …",           c: `tip ${l} `,         go: false }),
@@ -603,24 +603,37 @@ const _term = (() => {
       }
     }
     document.body.appendChild(_fly);
-    const r = kwEl.getBoundingClientRect();
-    const fw = _fly.offsetWidth, fh = _fly.offsetHeight;
-    let x = Math.min(r.left, window.innerWidth - fw - 8);
-    let y = r.bottom + 6;
-    if (y + fh > window.innerHeight - 8) y = Math.max(8, r.top - fh - 6);
-    _fly.style.left = Math.max(8, x) + "px";
-    _fly.style.top = y + "px";
+    _placeFly(kwEl.getBoundingClientRect());
   }
 
   // The character wheel's DOM, opened against an arbitrary element and fed a
   // plain [{cmd,label}] — the compass's IN needs a picker and there is no
   // keyword to hang _openFly on. Same #flyout id, so it inherits the styling
   // and _closeFly still closes it.
-  function _openListMenu(anchorEl, items) {
+  // Below the word if it fits, else above it, and ALWAYS inside the screen: at the largest text a
+  // character's menu opened with its portrait off the top (Ron, round 82). Placed again on the next
+  // frame, when the late fonts and the portrait have settled its real height.
+  function _placeFly(r) {
+    const place = () => {
+      if (!_fly) return;
+      const fw = _fly.offsetWidth, fh = _fly.offsetHeight, H = window.innerHeight;
+      let x = Math.min(r.left, window.innerWidth - fw - 8);
+      let y = r.bottom + 6;
+      if (y + fh > H - 8) y = r.top - fh - 6;
+      if (y < 8) y = Math.max(8, Math.min(H - fh - 8, r.bottom + 6));
+      _fly.style.left = Math.max(8, x) + "px";
+      _fly.style.top = Math.max(8, y) + "px";
+    };
+    place();
+    (window.requestAnimationFrame || (f => setTimeout(f, 16)))(place);
+  }
+  function _openListMenu(anchorEl, items, title) {
     _closeFly();
     if (!items || !items.length) return;
     _fly = document.createElement("div");
     _fly.id = "flyout";
+    // the list says what it is for: "barfine…" opened an untitled column of names (Ron, round 82)
+    if (title) { const h = document.createElement("div"); h.className = "fly-title"; h.textContent = _L(title); _fly.appendChild(h); }
     for (const it of items) {
       const b = document.createElement("button");
       b.textContent = _L(it.label);
@@ -634,13 +647,7 @@ const _term = (() => {
       _fly.appendChild(b);
     }
     document.body.appendChild(_fly);
-    const r = anchorEl.getBoundingClientRect();
-    const fw = _fly.offsetWidth, fh = _fly.offsetHeight;
-    let x = Math.min(r.left, window.innerWidth - fw - 8);
-    let y = r.bottom + 6;
-    if (y + fh > window.innerHeight - 8) y = Math.max(8, r.top - fh - 6);
-    _fly.style.left = Math.max(8, x) + "px";
-    _fly.style.top = y + "px";
+    _placeFly(anchorEl.getBoundingClientRect());
   }
 
   // A long night is thousands of commands; every line is a DOM node that never
@@ -712,7 +719,10 @@ const _term = (() => {
     const r = _out.getBoundingClientRect();
     const show = left > 1.5 * line && r.height > 3 * line;
     _moreBtn.hidden = !show;
-    if (show) { _moreBtn.style.left = (r.left + r.width / 2) + "px"; _moreBtn.style.top = (r.bottom - _moreBtn.offsetHeight - 8) + "px"; }
+    // the pill sat ON the last visible line and hid its words (Ron, round 82): while it shows, the
+    // transcript gives up a strip at its foot and the pill sits in the strip, over no text at all
+    _out.classList.toggle("has-more", show);
+    if (show) { const r2 = _out.getBoundingClientRect(); _moreBtn.style.left = (r2.left + r2.width / 2) + "px"; _moreBtn.style.top = (r2.bottom + 3) + "px"; }
   }
   function _queueMoreBelow() {
     if (_moreRaf) return;
@@ -995,6 +1005,8 @@ const _term = (() => {
   // three of a bar's six verbs were unreachable). Fan it out into a tap menu from
   // the engine's own completion pool — the same source the keyboard's autocomplete
   // uses, so the two surfaces can never disagree. Empty pool → the old prefill.
+  const _PICK_TITLE = { barfine: "Barfine which lady?", "buy drink for": "A drink for whom?", flirt: "Flirt with whom?",
+    hire: "Hire whom?", tip: "Tip whom?", talk: "Talk to whom?", "talk to": "Talk to whom?", enter: "Go into which?", travel: "Go where?" };
   function _prefillMenu(cmd) {
     let opts = [];
     try { opts = (typeof engineComplete === "function" ? engineComplete(cmd) : []) || []; } catch (e) { opts = []; }
@@ -1061,10 +1073,10 @@ const _term = (() => {
         // flyout" listener would otherwise fire on the very click that opened
         // this menu and shut it on the way up. (The compass takes the same
         // problem from the other end, with an #nav-fab exemption.)
-        if (cmd === "__atm") { ev.stopPropagation(); _openListMenu(b, _renderChipMenu(set, cmd)); return; }
+        if (cmd === "__atm") { ev.stopPropagation(); _openListMenu(b, _renderChipMenu(set, cmd), "The ATM"); return; }
         if (cmd.endsWith(" ")) {
           const menu = _prefillMenu(cmd);
-          if (menu.length) { ev.stopPropagation(); _openListMenu(b, menu); return; }
+          if (menu.length) { ev.stopPropagation(); _openListMenu(b, menu, _PICK_TITLE[cmd.trim()] || (cmd.trim()[0].toUpperCase() + cmd.trim().slice(1) + "…")); return; }
           _input.value = cmd; _input.focus(); _refreshSuggest();
         }
         else { _input.value = cmd; submit(_onCmd); }

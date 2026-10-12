@@ -42,12 +42,13 @@ test("the barfine menu's emphasis is not a tap; the readouts are free; IN offers
   G.room = "soi6_mid"; const t = G.turns;
   for (const c of ["contacts", "messages", "column"]) run(c);
   assert.equal(G.turns, t, "three readouts, no turns");
-  G.room = "soi6_west_in"; G.nightTurn = 70;
+  G.room = "soi6_west_in"; G.nightTurn = SOI6_CLOSE;
   assert.deepEqual(_navEnter(), [], "every front is shuttered");
 });
 
 test("a Soi 6 short time takes the half hour it says; Somo sits, she does not go", () => {
-  G.room = "ruby_kiss"; G.soc.drinkCount = { wilai: 1 }; run("barfine wilai"); const t = G.nightTurn; run("short time");
+  G.room = "ruby_kiss"; const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && i !== "chompoo" && !_isDraw(i)), nm = NPCS[g].name.toLowerCase();
+  G.soc.drinkCount = { [g]: 1 }; run("barfine " + nm); const t = G.nightTurn; run("short time");
   assert.ok(G.nightTurn - t >= 3, "the clock moved: " + (G.nightTurn - t));
   assert.equal(_drinksOnly("somo"), true);
 });

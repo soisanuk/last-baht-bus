@@ -209,7 +209,7 @@ test("Sunday pulls the manor in for its dinner", () => {
 test("the pub's regulars have something to say about each other", () => {
   // Round 22, Eric: "The regulars do not know each other" — Doug and Phil share
   // a rail nightly and have nothing to say about one another.
-  G.day = 4; G.nightTurn = 40;
+  G.day = 4; G.nightTurn = 20;   // the pub shuts at eleven, and this is a long conversation
   const rail = ["doyle", "terry", "mort", "angela"];
   for (const who of rail) {
     doCommand("talk to " + who);
@@ -263,9 +263,9 @@ test("the pub's late face doesn't claim the soi is still performing", () => {
   G.nightTurn = 20;
   out = []; _describeRoom(true, true);
   assert.match(text(), /the soi performs/, "early, the window show is on");
-  G.nightTurn = 70;
+  G.nightTurn = 70; G.hotel = "queenvic";   // after eleven only a guest is in here, walking through
   out = []; _describeRoom(true, true);
   assert.doesNotMatch(text(), /the soi performs/, "at one in the morning it is not");
-  assert.match(text(), /shutters down|gone home/i, "and the room says what it sees instead");
-  assert.match(text(), /aircon|panelling|dartboard/i, "while the pub itself is unchanged, which is the point of it");
+  assert.match(text(), /security guard|guard/i, "the room is the shut pub, with the guard on the bar");
+  assert.match(text(), /chairs (up|legs-up)|stools stacked/i, "and it says it is shut");
 });

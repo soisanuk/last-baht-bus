@@ -110,7 +110,7 @@ test("the 18+ notice names the punter frame and the right to say no", () => {
 // ── THE PRICE PASS (Mario's calls on Ray, 2026-10-10) ─────────────────────────────────────────────
 test("Soi 6 short time is upstairs and long time is out of the bar, and the money is said as its two fees", () => {
   G.room = "ruby_kiss"; G.nightTurn = 40;
-  const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && i !== "chompoo");
+  const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && i !== "chompoo" && !_isDraw(i));   // a draw is held till midnight now Soi 6 runs to two
   G.soc.drinkCount = { [g]: 1 }; out = []; run("barfine " + NPCS[g].name.toLowerCase());
   assert.match(said(), /SHORT TIME [^·]*upstairs/); assert.match(said(), /LONG TIME [^·]*leaves the bar with you/);
   const st = G.pendingBf.st; out = []; run("short time");

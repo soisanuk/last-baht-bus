@@ -1076,6 +1076,13 @@ function _hopsNow(id) {
 // Deliberately CLOCK-INDEPENDENT: filtering on _closesMidnight (a property of
 // the room) rather than _closedNow (a property of the hour) keeps the pool the
 // same all evening, which is what lets the cumulative walk below stay pure.
+// The bars a regular never drifts INTO: the ones that kept the law's midnight
+// before Soi 6 moved to two — gentleman's clubs, the Soi 6 short-time fronts
+// and the Darkside. Frozen on purpose: the drift is over by ten, so the closing
+// hour never mattered to it, and a moved hour must not re-roll the town's walks.
+function _lawHoursBar(r) {
+  return !!(r && r.barType) && (r.barType === "gents" || r.barType === "soi6" || r.region === "Darkside");
+}
 function _hopPool(id) {
   const n = NPCS[id];
   const home = ROOMS[n.room];
@@ -1085,7 +1092,7 @@ function _hopPool(id) {
   return Object.keys(ROOMS).filter(r =>
     ROOMS[r].barType && regions.indexOf(ROOMS[r].region) >= 0 &&
     avoids.indexOf(r) < 0 &&
-    !(typeof _closesMidnight === "function" && _closesMidnight(r)));
+    !_lawHoursBar(ROOMS[r]));
 }
 
 // A CUMULATIVE walk, not a per-hour teleport: he starts at his local and moves
@@ -1309,6 +1316,10 @@ function _npcActive(id) {
   // beer nights, which the season used to override). It also earns the arc: the
   // best story on the lake is only there if you get out to it early.
   if (n && n.until != null && G.nightTurn >= n.until) return false;
+  // A pub that shuts at eleven sends its people home with it: the barmaid and the
+  // whole rail are out of the Vic's door at its closing (Mario, 2026-10-11).
+  { const home = n && n.room && ROOMS[n.room];
+    if (home && home.barType && home.closesAt != null && G.nightTurn >= home.closesAt && _flag("act1Done")) return false; }
   if (n && n.sandbox && !_flag("act1Done")) return false; // not part of the opening quest's street
   if (G.soc && G.soc.sightedOff && G.soc.sightedOff[id] === G.day) return false;   // seen tonight at a table three districts from her stool (theme 5)
   // sent home early on a shift call — off the rail for the rest of the night
@@ -2870,7 +2881,7 @@ function _describeRoom(full, forceFull) {
   // …and a lateDesc may be a POOL, like every other repeatable line in the game
   // (Mario, 2026-09-04): a man who stays out to dawn every night reads it more
   // often than he reads the daytime paint.
-  const late = r.lateDesc && typeof _closesMidnight === "function" && G.nightTurn >= 60;
+  const late = r.lateDesc && typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room);
   if (full) _say(late ? (Array.isArray(r.lateDesc) ? _pickVary(r.lateDesc, "late:" + G.room) : r.lateDesc)
     : (!firstTime && !forceFull && r.revisit ? _pickVary(typeof _atOwnBar === "function" && _atOwnBar() ? _OWNER_REVISIT : r.revisit, "rv:" + G.room)
       : (typeof _atOwnBar === "function" && _atOwnBar() ? String(r.desc).replace(/^An American-run beer bar/, "Your beer bar — the old man's name still over the door —") : r.desc)));   // owned, it is not "American-run" (Marta, round 63)
@@ -3142,7 +3153,7 @@ function _describeRoom(full, forceFull) {
     const c = _SALENG_CARTS[G.salengCart];
     _say(c.here + " " + c.hint, "dim");
   }
-  if (r.barType) {
+  if (r.barType && !(typeof _shutHere === "function" && _shutHere())) {   // the shut Vic has no rail to describe
     // The season reaches the FURNITURE too: an emptied low-season rail (no named
     // regulars in) gets the thinned line, not the anonymous crowd — which would
     // otherwise disagree with the empty-bar register on the same screen.

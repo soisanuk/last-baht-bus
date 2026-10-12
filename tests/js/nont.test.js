@@ -138,8 +138,8 @@ test("the overnight landing goes to the account, not a sleeping man's hand", () 
 });
 
 test("a locate to a bar that shut at midnight is a free no; the girl whose crane he just unfolded is free too", () => {
-  G.nightTurn = 66; G.money = 5000; out = []; run("ask nont about kwan");
-  assert.equal(G.money, 5000); assert.match(text(), /shut at midnight, so no/);
+  G.nightTurn = _closeTurn(_npcRoom("kwan")) + 6; G.money = 5000; out = []; run("ask nont about kwan");
+  assert.equal(G.money, 5000); assert.match(text(), /shut at (midnight|two), so no/);
   G.nightTurn = 30; _setFlag("craneDelivered"); G.soc.craneDay = G.day; out = []; run("ask nont about kwan");
   assert.equal(G.money, 5000); assert.match(text(), /You know that\. I know that/);
 });

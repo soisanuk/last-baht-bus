@@ -221,7 +221,7 @@ test("the wheel: talk + actions, no ASK-about topics", () => {
   const quick = _term.kwActions("npc", "Lek", false);
   const labels = quick.map(a => a.t);
   assert.ok(labels.includes("talk"), "talk opens the conversation");
-  assert.ok(labels.includes("buy her a drink"), "the soi's love language");
+  assert.ok(labels.some(l => /^buy her a drink/.test(l)), "the soi's love language (with its price on it, round 82)");
   assert.ok(!labels.includes("barfine"), "barfine is not a quick tap");
   const full = _term.kwActions("npc", "Lek", true);
   const fullLabels = full.map(a => a.t);

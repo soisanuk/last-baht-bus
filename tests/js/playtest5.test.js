@@ -310,10 +310,10 @@ test("SAY GOODBYE is leave-taking; last call counts its minutes and says nothing
   doCommand("talk to mort"); out = [];
   doCommand("say goodbye");
   assert.match(text(), /take your leave/);
-  G.room = "pink_lotus"; G.nightTurn = 57; G.soc.lastCall = {}; out = [];
+  G.room = "pink_lotus"; G.nightTurn = SOI6_CLOSE - 3; G.soc.lastCall = {}; out = [];
   _lastCall("pink_lotus");
   assert.match(text(), /about 18 minutes/);
-  G.nightTurn = 59; G.soc.lastCall = {}; out = [];
+  G.nightTurn = SOI6_CLOSE - 1; G.soc.lastCall = {}; out = [];
   _lastCall("pink_lotus");
   assert.equal(text(), "");
 });
@@ -1477,12 +1477,14 @@ test("the Vic's kitchen keeps Aoy's stated hours", () => {
   assert.ok(_QV_BASKET_LINES.some(l => out.join("\n").includes(l)), "the basket lands before eleven");
   assert.equal(G.money, 999 - QV_BASKET);
   assert.ok(G.hunger < 80, "and it fed you");
-  G.nightTurn = 55; G.hunger = 80; const m0 = G.money;
-  out = []; doCommand("buy food");
-  assert.match(out.join("\n"), /only crisp|Crisp/i, "after eleven, Aoy's rule holds");
-  assert.equal(G.money, m0 - QV_CRISPS);
   out = []; doCommand("buy");
   assert.match(out.join("\n"), /BUY FOOD/, "bare BUY advertises the kitchen");
+  // after eleven the whole pub is shut — the kitchen with it — and a guest walking
+  // through is told so by the guard on the bar (Mario, 2026-10-11)
+  G.hotel = "queenvic"; G.nightTurn = 55; G.hunger = 80; const m0 = G.money;
+  out = []; doCommand("buy food");
+  assert.ok(_VIC_GUARD.some(l => out.join("\n").includes(l)), "the guard, not the kitchen");
+  assert.equal(G.money, m0, "nothing sold after eleven");
 });
 
 test("an unaffordable long time leaves the ledger open on the line you can afford", () => {
@@ -1561,10 +1563,10 @@ test("midnight abandons a live game instead of continuing it on the pavement", (
   const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType === "soi6");
   G.room = bar; G.money = 500;
   G.game = { type: "c4", stake: 100, board: [], oppId: null, depth: 2 };
-  G.nightTurn = 60;
+  G.nightTurn = SOI6_CLOSE;
   out = []; _closingTick();
   assert.equal(G.game, null, "the game dies with the stool you left");
-  assert.match(out.join("\n"), /Midnight calls it/, "…with a line, not silently");
+  assert.match(out.join("\n"), /Closing time calls it/, "…with a line, not silently");
   assert.notEqual(G.room, bar, "and you are walked out as before");
 });
 
@@ -1572,7 +1574,7 @@ test("midnight clears a pending street-offer instead of carrying it to the kerb"
   newGame(); G.stage = "expat"; _setFlag("act1Done");
   const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType === "soi6");
   G.room = bar; G.pendingEnc = "peddler"; G.encPrompt = [["x", ""]];
-  G.nightTurn = 60;
+  G.nightTurn = SOI6_CLOSE;
   out = []; _closingTick();
   assert.equal(G.pendingEnc, null);
   assert.equal(G.encPrompt, null);

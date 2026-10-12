@@ -78,7 +78,7 @@ test("the holdouts know each other, the owners own, and the floor answers what i
 test("the soi measures one way, the map is right, and the close looks answer", () => {
   for (const r of Object.keys(ROOMS)) for (const l of [ROOMS[r].desc, ...(ROOMS[r].revisit || [])]) assert.doesNotMatch(String(l || ""), /hundred metres in Thailand/, r);
   G.mode = "soi6"; out = []; run("map"); const m = said();
-  assert.match(m, /the\s+north\s+beach|~ the\s+Blue Dog/); assert.match(m, /\* the group's paper/); assert.match(m, /Ruby Kiss\s+\n?.*7-11/);
+  assert.match(m, /~ the beach ~/); assert.match(m, /\* the group's paper/); assert.match(m, /Ruby Kiss[\s\S]*SECOND ROAD — a 7.Eleven across the road/);   // the map is a list now (Ron, round 82)
   G.room = "sweet_tamarind"; out = []; run("count cards"); assert.match(said(), /Business cards/);
   out = []; run("examine sign"); assert.match(said(), /hand-lettered/);
   G.room = "soi6_west_in"; out = []; run("examine man in the good shirt"); assert.match(said(), /good shirt/);

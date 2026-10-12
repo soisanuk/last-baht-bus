@@ -854,7 +854,7 @@ test("staff answer the calendar they keep: closing and the league, in their own 
   G.day = 5; out = []; doCommand("ask lek about league"); assert.match(text(), /tomorrow/);
   G.room = "queen_vic"; out = []; doCommand("ask terry about quiz");
   assert.doesNotMatch(text(), /\bna\b/, "a pensioner does not say na");
-  out = []; doCommand("ask aoy about closing"); assert.match(text(), /dawn|last customer|last man|no closing time|whenever the room empties/i);
+  out = []; doCommand("ask aoy about closing"); assert.match(text(), /[Ee]leven/, "the pub shuts at eleven (Mario, 2026-10-11)");
 });
 
 test("TIME says where in the count the league is, and a quiz you are sitting in is ON", () => {
@@ -879,14 +879,13 @@ test("TAO RAI answers in a cabaret and a massage shop", () => {
   assert.match(text(), new RegExp("Thai.*฿" + MASSAGE_LEGIT));   // one price for all four kinds (round 57)
 });
 
-test("the Stinky's ashtray reads; a late pie is an offer of crisps, not a charge", () => {
+test("the Stinky's ashtray reads; a late pie is the guard's no, not a charge", () => {
   G.room = "stinky_bar"; out = []; doCommand("examine ashtray");
   assert.match(text(), /league ashtray/i);
-  G.room = "queen_vic"; G.nightTurn = 70; G.money = 1000; out = []; doCommand("buy pie");
-  assert.match(text(), /Kitchen close/); assert.match(text(), /goes on the tab/, "the joke names its price");
-  assert.equal(G.money, 1000 - QV_CRISPS, "the joke, once");
-  out = []; doCommand("buy curry");
-  assert.match(text(), /had the crisp already/); assert.equal(G.money, 1000 - QV_CRISPS, "and not twice");
+  // the kitchen shuts with the pub at eleven now; after that the guest meets the guard (Mario, 2026-10-11)
+  G.room = "queen_vic"; G.hotel = "queenvic"; G.nightTurn = 70; G.money = 1000; out = []; doCommand("buy pie");
+  assert.ok(_VIC_GUARD.some(l => text().includes(l)));
+  assert.equal(G.money, 1000, "nothing charged");
 });
 
 test("an absent owner's pronoun is his own; a filler girl's family line is not doubled", () => {

@@ -437,6 +437,14 @@ const _FOLK_BARSTAFF = [
   "Whoever is on tonight is halfway through changing a keg and answers you from down there — polite, distracted, and entirely uninterested in being a character in your evening.",
   "The bar staff here do the job and nothing else: pour, ring it in, wipe down, next. Nobody is going to sit with you, and after some of the other rooms on this street that is close to restful.",
 ];
+// After eleven the Vic's bar is the security guard's (Mario, 2026-10-11): he lets a
+// guest through to the stairs and pours nothing.
+const _VIC_GUARD = [
+  "The guard takes one earbud out. “Pub close, sir. Eleven o'clock.” He points up the stairs with his chin. “Your room, up. No beer. Sorry khrap.”",
+  "“Close already, sir.” The security guard shows you the time on his {{phone}} as evidence. “You stay upstairs — okay, you go up. Beer tomorrow, six o'clock.”",
+  "The guard on the barmaid's stool hears you out and shakes his head with real sympathy. “Bar close. I only watch the door, sir. I don't have the key for the fridge.”",
+  "“Sawatdee khrap.” He has seen you come and go all week. “Upstairs is open. Downstairs is close. Goodnight, sir.”",
+];
 const _FOLK_SEVEN = [
   "The 7-Eleven lad looks up from his phone. “Sawatdee khrap.” Then back down. That is the whole conversation available, and it is not unfriendly.",
   "The girl on the till gives you the smile the uniform requires and the eyes it doesn't. “Toastie?” No? The smile stays; the attention goes.",
@@ -573,6 +581,11 @@ function _promptedFolk(arg, topic) {
       _say(_pickVary(_FOLK_COUNTER, "folkcounter")); return true;
     }
   }
+  // the shut Vic: the guard on the barmaid's stool is the only mouth in the room
+  if (typeof _shutHere === "function" && _shutHere() && _guestThrough(G.room) &&
+      /\b(guard|security|barman|barmaid|bar ?staff|bartender|staff|anyone|anybody|somebody|man|reception|receptionist)\b/.test(a)) {
+    _say(_pickVary(_VIC_GUARD, "vicguard")); return true;
+  }
   // a bar with no role-carrier at all — somebody still pours
   if ((r.bar || r.barType || _servesDrinks(G.room)) &&
       /\b(barman|barmaid|bar ?staff|bartender|staff|hostess|hostesses|mama|mamasan|cashier|girl|girls|lady|ladies|waitress|server|anyone|anybody|somebody)\b/.test(a) &&
@@ -655,6 +668,22 @@ function _naturalHelp(lower) {
     const ans = gm && _glossary(gm[1]);
     if (ans) { _say(ans, "dim"); return true; } }
   if (/^(where am i|where is this|where are we|look around|look about|have a look)\b/.test(l)) { _describeRoom(true); return true; }
+  // WHERE IS THE ATM / THE 7-ELEVEN: the nearest one, and which way — "where is the atm" got the
+  // generic "ask around" while WITHDRAW already knew the machine was at the West End (Ron, round 82)
+  { const wm = l.match(/^(?:where(?:'s| is| are|s)?|how do i (?:find|get to)|find)\s+(?:the |a |an |nearest |closest )*(atm|cash ?machine|cashpoint|bank machine|7-?eleven|7-?11|seven ?eleven|seven)\b/);
+    if (wm) {
+      const atm = /atm|cash|bank/.test(wm[1]);
+      const has = id => ROOMS[id] && (atm ? ROOMS[id].atm : ROOMS[id].seven) && (G.mode !== "soi6" || typeof SOI6_ROOMS === "undefined" || SOI6_ROOMS.has(id));
+      const what = atm ? "cash machine" : "7-Eleven";
+      if (has(G.room)) { _say(`There's a ${what} right here.${atm ? " (WITHDRAW)" : ""}`, "dim"); return true; }
+      let best = null;
+      for (const id of Object.keys(ROOMS)) if (has(id)) { const p = typeof _path === "function" ? _path(G.room, id) : null; if (p && (!best || p.length < best.length)) best = p; }
+      if (!best || !best.length) { _say(`No ${what} you can walk to from here.`, "dim"); return true; }
+      const dir = Object.keys(_room().exits || {}).find(k => _room().exits[k] === best[0]);
+      const at = best[best.length - 1];
+      _say(`The nearest ${what} is on ${ROOMS[at].name}, ${best.length === 1 ? "one step" : best.length + " steps"} away${dir && /^(n|s|e|w|in|out|up|down)$/.test(dir) ? ` — ${({ n: "head north", s: "head south", e: "head east", w: "head west", in: "go in", out: "go out", up: "go up", down: "go down" })[dir]} (${dir.toUpperCase()})` : ""}.`, "dim");
+      return true;
+    } }
   if (/^(what (should|do|can) i do|what now|what next|help me|i'?m (lost|stuck|confused)|i don'?t know what to do)\b/.test(l)) {
     // state-blind before this: an expat weeks past the opening was told to ask
     // people about a wallet he had back (prose review, 2026-09-04) — gated the
@@ -901,7 +930,7 @@ function _doGo(dirWord) {
     const _CARD = /^(n|s|e|w|ne|nw|se|sw|up|down|out|u|d)$/;
     const _named = Object.keys(r.exits || {}).filter(k => !_CARD.test(k));
     if (_named.length === 1) return _doGo(_named[0]);
-    const _doors = typeof _venuesHere === "function" ? _venuesHere(r) : [];
+    const _doors = (typeof _venuesHere === "function" ? _venuesHere(r) : []).filter(v => !(typeof _closedNow === "function" && _closedNow(v)));   // no shutters in the list (Joost, round 81)
     if (!_named.length && _doors.length === 1 && typeof _doEnter === "function") return _doEnter(_barName(_doors[0]) || _doors[0]);
     if (_named.length + _doors.length > 1) {
       _say("In where? " + [..._named.map(k => "(" + k.toUpperCase() + ")"), ..._doors.slice(0, 6).map(v => "(ENTER " + String(_barName(v) || v).toUpperCase() + ")")].join(" · "), "dim");
@@ -1235,7 +1264,7 @@ function _arriveAt(to) {
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
   // walked in during the final half hour — the courtesy warning, and a barfine nudge
-  if (_flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 55 && G.nightTurn < 60 &&
+  if (_flag("act1Done") && _closesMidnight(to) && G.nightTurn >= _closeTurn(to) - 5 && G.nightTurn < _closeTurn(to) &&
       !(G.soc.lockIn && G.soc.lockIn[to])) _lastCall(to);
   // a girl you've built something with greets you by name (once per bar a night).
   // An invite being honoured THIS arrival is its own, bigger recognition scene —
@@ -1633,9 +1662,9 @@ function _doTravel(arg) {
   // (expat playtest 2026-08-22: eleven turns to a bolted Orchid; 22 turns to a
   // hotel with 22 left in the night).
   if (typeof _closesMidnight === "function" && _closesMidnight(dest) && !(typeof _lockedIn === "function" && _lockedIn(dest)) &&
-      G.nightTurn + hops >= 60 && G.nightTurn < NIGHT_TURNS) {
-    _say(_fmt("{v} shuts at midnight — {n} turns of soi from here puts you at its shutters. " +
-      "Somewhere that's still open, or a MOTOSAI.", { v: _barName(dest), n: hops }), "dim");
+      G.nightTurn + hops >= _closeTurn(dest) && G.nightTurn < NIGHT_TURNS && !_guestThrough(dest)) {
+    _say(_fmt("{v} shuts at {at} — {n} turns of soi from here puts you at its shutters. " +
+      "Somewhere that's still open, or a MOTOSAI.", { v: _barName(dest), n: hops, at: _closeClock(dest) }), "dim");
     return;
   }
   if (G.nightTurn + hops >= NIGHT_TURNS) {
@@ -6269,9 +6298,9 @@ const _TAN_TOWN = {
   sober: ["\"Good.\" Tan means it. \"I drive. I have watched the back seat at four in the morning, my friend. Sober is the cheapest thing in this town, and nobody buys it.\"",
     "Tan nods, the smallest nod. \"Coffee is my drink. You will meet more men here trying to stop than trying to start.\"",
     "\"No drink?\" A glance at you, weighing it. \"Then you will remember this town. That is a different holiday.\""],
-  closing: ["\"Close?\" Tan almost smiles. \"This soi, midnight — the gentlemen's clubs too. The beer bars and the go-go, when the last man goes home. The town, never. I am proof.\"",
-    "\"The town does not close, my friend. Only the soi does.\" A nod up it. \"Midnight here. Beach Road and the Walking Street, dawn.\"",
-    "\"Soi 6, midnight. The rest when the girls are tired and the men are broke — which is dawn, usually.\""],
+  closing: ["\"Close?\" Tan almost smiles. \"Soi 6, two o'clock — the Vic's pub at eleven, the gentlemen's clubs at midnight. The beer bars and the go-go in town, when the last man goes home. The town, never. I am proof.\"",
+    "\"The town does not close, my friend. Only the soi does.\" A nod up it. \"Two o'clock here. Beach Road and the Walking Street, dawn.\"",
+    "\"Soi 6, two o'clock. The rest when the girls are tired and the men are broke — which is dawn, usually.\""],
   opening: ["\"This soi works in daylight — afternoon, already open.\" Tan looks up it. \"The beer bars, four, five. The go-go later, when the lights mean something.\"",
     "\"Four, five o'clock the shutters go up across town.\" A shrug. \"I bring the first ones. They are always the same men.\"",
     "\"The early ones by four,\" Tan says. \"The go-go when it is dark enough that the signs mean something.\""],
@@ -11170,13 +11199,18 @@ function _doWait(arg) {
     _say("You wait. Pattaya doesn't."); return;
   }
   let target = null;
+  // WAIT AN HOUR / 30 MINUTES / 2 HOURS: a duration in the clock's own words — "wait 10" on the
+  // info menu waited an hour, because a bare number is turns (Ron, round 82)
+  { const d = arg.match(/^(?:for )?(?:(an?|half(?: an?)?|\d+)\s*)?(hours?|hrs?|h|minutes?|mins?|m)$/);   // the parser strips the article: "an hour" arrives as "hour"
+    if (d) { const n = /half/.test(d[1] || "") ? 0.5 : (!d[1] || /^an?$/.test(d[1])) ? 1 : parseInt(d[1], 10);
+      target = G.nightTurn + Math.max(1, Math.min(60, /^h/.test(d[2]) ? Math.round(n * 10) : Math.ceil(n / 6))); } }
   // accept 20:00 too — the game prints times that way (mobile playtest 2026-08-17)
   const until = arg.match(/^(?:until |till |for )?(?:(\d+)(?::(\d\d))?|midnight)\s*(am|pm)?$/);
   const _mins = until && until[2] ? parseInt(until[2], 10) : 0;   // WAIT UNTIL 02:10 stopped at 02:00 (Priya, round 58)
   if (until) until[2] = until[3];
   if (/midnight/.test(arg)) target = _hourToTurn(0);
   else if (/^(?:until |till )?(?:dawn|sunrise|morning|first light)$/.test(arg)) target = SUNRISE_TURN;   // "WAIT UNTIL DAWN" was invalid (Wendell, round 63)
-  else if (until && until[1]) {
+  else if (target === null && until && until[1]) {
     let h = parseInt(until[1], 10);
     if (/^(?:until|till)/.test(arg)) {
       if (until[2] === "pm" && h < 12) h += 12;
@@ -11434,17 +11468,26 @@ const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
 // is all noise — it names a dozen districts you can't reach. The confined mode
 // gets its own strip map: the soi west-to-east, the beach at its head, the bars
 // under each end. Keep the venue lists in step with SOI6_ROOMS.
-const _MAP_SOI6 = `  BEACH ~ BEACH RD ── WEST ────── INNER W ───── MIDDLE ────── INNER E ───── EAST END ──── 2ND RD
-          (junction) (loud)       (the group    (quiet,       (nobody's)    (loudest)
-                                   is buying)    nobody's)
-  ~ the   Blue Dog   Pink Lotus*  Jade Lounge*  Queen Vic     Firecracker   Kitten Corner*
-  north   Stinky     Golden       Peach Lounge* (your room ↑) Hot Pepper    Cherry Pop
-  beach ~ Pinky      Dragon*      Lollipop      Shady Lady    Hula Hula     Ruby Kiss     7-11 (across
-                     Sunset       Sweet         Front Row     Ladybird                    the road)
-                     Dreams       Tamarind      The Verandah
-                     ATM · 7-11
-
-  * the group's paper.  ~100 open fronts down both sides — these are the ones you get to know.`;
+// One street, so the map is a LIST, top to bottom, west to east — a line a stretch that wraps and
+// grows with the text size. The 92-column bar-mat version printed at 10px on a phone at the largest
+// text and still ran off the right edge (Ron, round 82: "smaller than a postage stamp").
+const _MAP_SOI6 = [
+  "~ the beach ~",
+  "BEACH ROAD, the junction — Blue Dog · Stinky Pinky",
+  "  ↓",
+  "WEST END (loud) — Pink Lotus* · Golden Dragon* · Sunset Dreams · ATM · 7‑Eleven",
+  "  ↓",
+  "INNER WEST (the group is buying) — Jade Lounge* · Peach Lounge* · Lollipop · Sweet Tamarind",
+  "  ↓",
+  "MIDDLE (quiet, nobody's) — Queen Vic, your room upstairs · Shady Lady · Front Row · The Verandah",
+  "  ↓",
+  "INNER EAST (nobody's) — Firecracker · Hot Pepper · Hula Hula · Ladybird",
+  "  ↓",
+  "EAST END (loudest) — Kitten Corner* · Cherry Pop · Ruby Kiss",
+  "  ↓",
+  "SECOND ROAD — a 7‑Eleven across the road",
+  "* the group's paper. About a hundred open fronts down both sides; these are the ones you get to know. Everything on the soi shuts at two, the Vic's pub at eleven.",
+];
 
 // EXITS — IF-genre furniture, and load-bearing here: a bar's door and a street's
 // continuation share bare compass letters, so `n` off a lively lane is a coin
@@ -11481,7 +11524,7 @@ function _doExits() {
 function _doMap() {
   if (G.mode === "soi6") {
     _say("Soi 6 — one street, west to east, the beach at its head:", "dim");
-    _say(_MAP_SOI6, "map");
+    for (const l of _MAP_SOI6) _say(l, /^\*/.test(l) ? "dim" : "map-list");
     return;
   }
   _say("The bar-mat map of greater Pattaya, not to scale, like all bar maps:", "dim");
@@ -12143,7 +12186,7 @@ function _closingTalk(npc) {
       "“We are not a bar. Nobody sits here drinking until the sun comes up, thank God.”",
     ],
   });
-  if (r.closesAt != null) { const h = _hourWord(r.closesAt), H = _cap(h); return pick({
+  if (r.closesAt != null && !r.barType) { const h = _hourWord(r.closesAt), H = _cap(h); return pick({
     floor: [
       `“We close ${h}, na. Same every night — not a bar, this.”`,
       `“${H}. Every night, no different. Then everybody go home, tilac.”`,
@@ -12160,6 +12203,42 @@ function _closingTalk(npc) {
       `“${H}, and nobody argues with it. Come earlier.”`,
     ],
   }); }
+  // the Vic's pub shuts at eleven and its rooms never do (Mario, 2026-10-11)
+  if (r.barType === "pub" && r.closesAt != null) return pick({
+    floor: [
+      "“Eleven o'clock the pub close, na. After, only the security man — he don't sell beer. You stay upstairs, you can still go up.”",
+      "“Eleven. Half ten I call the last one. Then I go home and the guard sit here.”",
+      "“Pub close eleven, every night. Hotel never close — the guard open the door for the guest.”",
+    ],
+    punter: [
+      "“Eleven. It's a proper pub — time gets called at half ten, and the security bloke sits behind the bar after.”",
+      "“Eleven o'clock, and they don't stretch it. Rest of the soi goes till two; this place goes to bed.”",
+      "“Eleven. Which is why the rest of us are at the Shady Lady by quarter past.”",
+    ],
+    house: [
+      "“Eleven. Last orders at half ten, and after that the guard has the bar — he lets the guests up and pours nothing.”",
+      "“Eleven o'clock for the pub. The rooms upstairs don't close, but the taps do.”",
+      "“Eleven, every night. The rest of the soi runs to two — we're a pub, not a beer bar.”",
+    ],
+  });
+  // everything on Soi 6 shuts at two (Mario, 2026-10-11)
+  if (_closeTurn(G.room) === SOI6_CLOSE) return pick({
+    floor: [
+      "“Two o'clock, tilac. Last call half past one, then shutter come down — whole soi same time. You come back tomorrow.”",
+      "“Two. Not our choice — all Soi 6 close two o'clock. Half one you order the last one.”",
+      "“Two o'clock! Every night, same. After that, you go Walking Street or you go sleep, hahaha.”",
+    ],
+    punter: [
+      "“Two, and they mean it. Last call's half one — drink up or wear it.”",
+      "“Two o'clock. The whole soi, same minute. I've been walked out of here more than once.”",
+      "“Two. Which is either early or civilised, depending how the week's gone.”",
+    ],
+    house: [
+      "“Two o'clock. Last call at half one and the shutters come down on the dot — the whole of Soi 6, not just us.”",
+      "“Two, and it isn't negotiable. The soi closes, we close. Half one I start taking glasses off you.”",
+      "“Two. Every place on this street, the same minute. You'll hear the shutters go along the row.”",
+    ],
+  });
   if (_closesMidnight(G.room)) return pick({
     floor: [
       "“Midnight, tilac. Last call half past eleven, then shutter come down — police, na. You come back tomorrow.”",
@@ -13020,11 +13099,13 @@ function _chipSet() {
   //      reaction, so the room chips stay live there.
   if (G.pendingBf) {
     const waived = G.pendingBf.id && typeof _bondTier === "function" && _bondTier(G.pendingBf.id) >= 3;
+    // NO comes FIRST: at the largest text only two money chips showed and "no, thanks" sat off the
+    // right edge, so saying no meant a sideways scroll past two prices (Ron, round 82)
+    add("no", "no, thanks");
     add("short time", waived ? "short time (no fine)" : `short time ฿${_num(G.pendingBf.st)}`);
     add("long time", G.pendingBf.ltAsked ? "long time — that is the night" : waived ? "long time (no fine)" : `long time ฿${_num(G.pendingBf.lt)}`);
     add("take her out", waived ? "take her out (no fine)"
       : `take her out ฿${_num(G.pendingBf.party != null ? G.pendingBf.party : G.pendingBf.lt)}`);
-    add("no", "no, thanks");
     return chips;
   }
   if (G.pendingEnc === "nightride") { add("ride on"); add("call it a night"); return chips; }
@@ -13046,8 +13127,8 @@ function _chipSet() {
     if (chips.length) return chips;
   }
   if (G.pendingSoapy) {
-    for (const t of _SOAPY_TIERS) add(String(t.num), `${t.num} · ฿${_num(t.price)}`);
     add("no", "no, thanks");
+    for (const t of _SOAPY_TIERS) add(String(t.num), `${t.num} · ฿${_num(t.price)}`);
     return chips;
   }
   // THE FARE CHIP SAID ฿15 AND SENT BARE "PAY", which the driver rejects: "A
@@ -13099,7 +13180,7 @@ function _chipSet() {
     // every working role takes a lady drink, and a patron/manager takes a beer —
     // the chip bar hid the actual loop behind a wheel a thumb may never find
     // (thumbs-only playtest 2026-08-22: ~12 turns with a mamasan and no drink chip)
-    if (NPCS[partner] && NPC_ROLES[partner]) add("buy drink for " + _first, "buy drink");
+    if (NPCS[partner] && NPC_ROLES[partner]) add("buy drink for " + _first, `buy her a drink ฿${_num(_ladyPrice())}`);   // the price before the till, not after (Ron, round 82)
     else if (_inBar()) add("buy drink for " + _first, "stand a beer");
     add("bye", "say goodbye"); // "leave" read as walking out of the bar (playtest #9)
     // the night-ending goodbye is its own chip, named for what it does
@@ -13129,7 +13210,7 @@ function _chipSet() {
   if (_inBar()) {
     const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
     if (r.hostBar) { add("buy drink for ", "buy drink…"); add("hire ", "hire…"); }
-    else if (girls.length) { add("flirt ", "flirt…"); add("buy drink for ", "buy drink…"); add("barfine ", "barfine…"); }
+    else if (girls.length) { add("flirt ", "flirt…"); add("buy drink for ", `lady drink ฿${_num(_ladyPrice())}…`); add("barfine ", "barfine…"); }
     add("buy beer");
     if (_playOptions().length) add("play");
     for (const pid of _regularsHere().slice(0, 2)) {
@@ -13167,7 +13248,10 @@ function _chipSet() {
   }
   if (r.motosai) add("motosai to ", "motosai…");
   if (r.busStop && G.mode !== "soi6") add("ride bus", "bus");   // the week's frame refuses every bus
-  if (r.atm) { add("withdraw 1000", "฿1k"); add("withdraw 5000", "฿5k"); add("withdraw 10000", "฿10k"); add("check balance", "balance"); }
+  if (r.atm) {   // the fee on the button, not after it (Ron, round 82: two ฿5k pulls cost him ฿300 he never saw coming)
+    const _fee = typeof _atmFee === "function" ? _atmFee() : 0, _f = _fee ? ` (+฿${_num(_fee)} fee)` : "";
+    add("withdraw 1000", "฿1,000" + _f); add("withdraw 5000", "฿5,000" + _f); add("withdraw 10000", "฿10,000" + _f); add("check balance", "balance");
+  }
 
   add("i", "inv"); add("map"); add("help");
   return chips;
@@ -13430,7 +13514,7 @@ function engineComplete(input) {
   else if (raw === "__info " || raw === "__info") {
     // the column Mort keeps telling you to read, an hour's WAIT and the inbox were
     // typed-only for a thumb (Margaret, round 65)
-    pool = ["quests", "hint", "time", "who", "contacts", "messages", "gallery", "column", "wait 10", "standing", "diagnose", "score", "last night", "map", "help"];
+    pool = ["quests", "hint", "time", "who", "contacts", "messages", "gallery", "column", "wait an hour", "standing", "diagnose", "score", "last night", "map", "help"];
     if (G.mode === "soi6") pool.push("share");
     if (G.stage === "expat") pool.push("books");
     // DEBT and DRAW are readouts about YOUR money, and they were the two verbs a
@@ -14347,6 +14431,13 @@ function doCommand(input) {
     }
     if (/^send/.test(lower.trim())) { _say("Nobody on your arm to send anywhere. (SEND <amount> TO <name> is the banking app.)", "dim"); return; }
   }
+  // THE SHUT VIC: a guest walking through the dark pub after eleven is not served —
+  // drink, food, the darts, the bell — and the guard says so (Mario, 2026-10-11).
+  if (typeof _shutHere === "function" && _shutHere() && _guestThrough(G.room) &&
+      /^(buy|drink|order|have|get|eat|play|darts|ring|bell|pour|beer|pint|tao ?rai|how much|menu|price)\b/.test(lower.trim()) &&
+      !/^(buy|get) (a )?(sim|condom)/.test(lower.trim())) {
+    _say(_pickVary(_VIC_GUARD, "vicguard")); return;
+  }
   if (G.room === "oy_office" && !_flag("hasWallet") && /^[\d๐-๙]{1,4}$/.test(lower.trim())) {
     const n = _amount(lower.trim());
     if (n !== null && !Number.isNaN(n)) { _doSafe(n); _tick(); return; }
@@ -14996,6 +15087,7 @@ function doCommand(input) {
     case "where": {
       // "where is rainbow girls", typed mid-hunt, deserves better than didn't-parse.
       if (/^(am i|is this|are we)\b/.test(arg || "")) { _describeRoom(true, true); break; }   // "where am I" is LOOK (Bronwyn, round 39)
+      if (_naturalHelp("where is " + String(arg || "").replace(/^(?:is|are|s)\s+/, ""))) break;   // the ATM and the 7-Eleven (Ron, round 82)
       const q = (arg || "").replace(/^(?:is|are)\s+(?:the\s+)?/, "").trim();
       if (!q) { _say("Wherever you are, that's where you are. (MAP for the town, TRAVEL for the places you know.)"); break; }
       const known = _travelDests().find(id => {
@@ -15725,8 +15817,9 @@ function _soi6Opening() {
   _say("Soi 6 · a Pattaya misadventure · Soi Sanuk universe", "dim");
   _say("═══════════════════════════════════", "dim");
   _say("One week in Pattaya, and you've picked your street and planted your flag: SOI 6 — the loudest " +
-    "three hundred metres in Thailand — with the Queen Vic Inn right in the thick of it. You're " +
-    "not leaving the soi this trip; the rest of the city keeps for next time.");
+    "three hundred metres in Thailand — with your room over the Queen Vic Inn right in the thick of it " +
+    "(฿" + _num(_HOTELS.queenvic.rate) + " a night, settled each morning). You're not leaving the soi " +
+    "this trip; the rest of the city keeps for next time.");   // the room's price, said before the first bill (Ron, round 82)
   _say(_fmt("฿{bank} for the week sits in the bank. ฿{pocket} is in your pocket — the rest " +
     "comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.",
     { bank: _num(SOI6_BANK), pocket: _num(SOI6_POCKET),

@@ -51,6 +51,7 @@ function _takeStake(want) {
 // (typed PLAY, the flyout wheel, autocomplete) draws from.
 function _playOptions() {
   const out = [];
+  if (typeof _shutHere === "function" && _shutHere()) return out;   // the shut Vic: the darts are in the dark
   if (_barGamesHere()) out.push("connect 4", "jackpot");
   if (_room().pool) {
     out.push("pool");
@@ -177,14 +178,50 @@ function _barSpendTonight(room) {
   return (G.soc.bells[room] || 0) >= 1 || G.soc.mamaTreat[room] || drinks >= 3;
 }
 
-// Bars that keep the law's hours: gentleman's clubs, most of Soi 6, and the
-// Darkside all shut at MIDNIGHT (nightTurn 60). The Queen Vic pub and the town's
-// beer bars and go-gos run to dawn. The exception is a Darkside lock-in — the
-// bolt goes across and the party runs on for those already inside and spending.
+// THE HOUR A VENUE SHUTS (Mario, 2026-10-11). Gentleman's clubs and the Darkside
+// keep the law's hours and shut at MIDNIGHT (nightTurn 60); everything on Soi 6
+// shuts at TWO (SOI6_CLOSE, 80); the Queen Vic's pub shuts at eleven (its own
+// `closesAt`, 50) though its rooms upstairs never do; the town's other beer bars
+// and go-gos run to dawn. `_closeTurn` is the one place that knows which, and
+// null means dawn. A Darkside lock-in still bolts the door instead of shutting it.
+function _closeTurn(id) {
+  const r = ROOMS[id];
+  if (!r) return null;
+  if (r.closesAt != null) return r.closesAt;
+  if (!r.barType) return null;
+  if (r.barType === "gents" || r.region === "Darkside") return 60;
+  if (r.region === "Soi 6") return SOI6_CLOSE;
+  return null;
+}
+// A bar that shuts before dawn (the name is older than the two o'clock rule).
 function _closesMidnight(id) {
   const r = ROOMS[id];
-  return !!(r && r.barType) &&
-    (r.barType === "gents" || r.barType === "soi6" || r.region === "Darkside");
+  return !!(r && r.barType) && _closeTurn(id) != null;
+}
+// The closing hour said the way the room says it.
+function _closeClock(id) {
+  const t = _closeTurn(id);
+  return t == null ? _L("dawn") : t === 60 ? _L("midnight") : t === 50 ? _L("eleven") : t === 80 ? _L("two") : _clockStr(t);
+}
+// When a room's small-hours paint (`lateDesc`) takes over: a pub at its own
+// closing, a Soi 6 room when Soi 6 shuts, everywhere else at midnight.
+function _lateTurn(id) {
+  const r = ROOMS[id];
+  if (!r) return 60;
+  if (r.barType && r.closesAt != null) return r.closesAt;
+  if (r.region === "Soi 6") return SOI6_CLOSE;
+  return 60;
+}
+// The guest's way through a shut pub: the Queen Vic's bar IS its reception, and a
+// man who sleeps upstairs walks through the dark pub to the stairs at any hour.
+function _guestThrough(to) {
+  const r = ROOMS[to];
+  return !!(r && r.lobbyFor && typeof _hotelRoomId === "function" && G.hotel && _hotelRoomId() === r.lobbyFor);
+}
+// Standing in a venue that has shut for the night (the guest in the dark Vic).
+function _shutHere(id) {
+  const room = id || G.room, t = _closeTurn(room);
+  return t != null && !!_flag("act1Done") && G.nightTurn >= t && !(G.soc && G.soc.lockIn && G.soc.lockIn[room]);
 }
 // THE DOOR OPENS FOR A FACE IT KNOWS (Mario's call, round 34). Every Darkside
 // street after midnight advertises "one padded door still thumping" and there
@@ -208,13 +245,14 @@ function _lockInWelcome(to) {
 }
 function _closedNow(to) {
   // A venue may name its OWN closing turn (Mario, 2026-09-07: Mike's Mall shuts at
-  // nine like every mall in Thailand). `closesAt` is a nightTurn; it is checked
-  // before the bar path, because a mall is not a bar and none of the midnight
-  // machinery — last call, the Darkside bolt, the lock-in — applies to it.
-  const r = ROOMS[to];
-  if (r && r.closesAt != null) return _flag("act1Done") && G.nightTurn >= r.closesAt;
-  return _flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 60 &&
-    !(G.soc.lockIn && G.soc.lockIn[to]) && !_lockInWelcome(to);
+  // nine like every mall in Thailand). `closesAt` is a nightTurn; a mall is not a
+  // bar and none of the midnight machinery — last call, the Darkside bolt, the
+  // lock-in — applies to it.
+  const r = ROOMS[to], at = _closeTurn(to);
+  if (at == null || !_flag("act1Done") || G.nightTurn < at) return false;
+  if (r.closesAt != null && !r.barType) return true;
+  if (_guestThrough(to)) return false;   // the Vic's guest goes up through the dark pub
+  return !(G.soc.lockIn && G.soc.lockIn[to]) && !_lockInWelcome(to);
 }
 // Which bar off the street you're standing in has a back door open to you
 // tonight — the target of ROUND THE BACK, and what the street's own line names.
@@ -232,7 +270,7 @@ const _SHUT_EARLY = [
 ;
 function _closedMsg(to) {
   const r = ROOMS[to];
-  if (r && r.closesAt != null)
+  if (r && r.closesAt != null && !r.barType)
     return _pickVary(_SHUT_EARLY, "shutearly:" + to);
   if (r.region === "Darkside") {
     // The tease has to stop being a tease once the player can answer it. For a
@@ -256,12 +294,16 @@ function _closedMsg(to) {
     return "The gentleman's club is dark and bolted. They keep gentleman's hours — " +
       "the afternoon-and-early trade is long done by midnight, before the go-gos " +
       "have hit their stride. Come back when the golf finishes tomorrow.";
+  if (r.barType === "pub")
+    return "The Queen Vic is shut: chairs up on the tables, one strip light over the till, " +
+      "and the security guard behind the bar shaking his head through the glass. The pub " +
+      "closes at eleven; after that the door is for the guests upstairs.";
   if (G.mode === "soi6")
     return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
-      "and mercifully off. Whatever you were after here shut at midnight — the beer bars " +
-      "and the Queen Vic are what's still awake now.";
+      "and mercifully off. Everything on the soi shuts at two — what's left of the night " +
+      "is your bed upstairs at the Vic.";
   return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
-    "and mercifully off. Whatever you were after here shut at midnight — it's " +
+    "and mercifully off. Everything on the soi shuts at two — it's " +
     "Walking Street or nowhere now.";
 }
 // 30-minute last call (nightTurn 55 ≈ 23:30), once per bar per night — a courtesy,
@@ -270,7 +312,8 @@ function _lastCall(id) {
   G.soc.lastCall = G.soc.lastCall || {};
   if (G.soc.lastCall[id]) return;
   G.soc.lastCall[id] = true;
-  const mins = Math.max(0, (60 - G.nightTurn) * 6);
+  const mins = Math.max(0, ((_closeTurn(id) || 60) - G.nightTurn) * 6);
+  const at = _closeClock(id);
   if (mins <= 6) return; // at the shutters there is no last call, only the shutters
   const when = mins >= 25 ? _L("about half an hour") : _fmt(_L("about {n} minutes"), { n: mins });
   // WHO IS TELLING YOU, AND WHETHER THERE IS ANYTHING TO BARFINE. This was one
@@ -286,14 +329,14 @@ function _lastCall(id) {
   const sellable = here.some(n => NPC_ROLES[n] === "hostess");
   if (!sellable) {
     _say(_fmt("Last call — chairs start going up on the far tables: {when} to closing. " +
-      "This place shuts at midnight.", { when }), "alert");
+      "This place shuts at {at}.", { when, at }) + (_guestThrough(id) ? " " + _L("(You're staying upstairs, so the door stays open to you.)") : ""), "alert");
     return;
   }
   _say(_fmt("Last call — {who}: {when} to closing. " +
-    "This place shuts at midnight, so if you mean to take a lady home tonight, now " +
+    "This place shuts at {at}, so if you mean to take a lady home tonight, now " +
     "is the moment to BARFINE. After the shutters come down it's the street.",
     { who: mama ? _fmt(_L("{n} taps her watch"), { n: NPCS[mama].name })
-                : _L("somebody behind the bar taps a watch"), when }), "alert");
+                : _L("somebody behind the bar taps a watch"), when, at }), "alert");
 }
 
 // The climax the game is named for: the ฿15 ride home has a curfew. One town-wide
@@ -737,14 +780,41 @@ function _pushyUpsell() {
   _say(_fmt(_pickVary(_COMP_PADDED, "comppadded"), { n: NPCS[id].name, p: _ladyPrice(), m: G.money }), "dim");
 }
 
+// What closing settles: a barfine still mid-negotiation dies with the shutters —
+// else its answer would resolve against the street you've just been walked out
+// onto (wrong barType/price) — a game is called, and an offer goes home.
+function _closeOutModals() {
+  if (G.pendingBf) { G.pendingBf = null; _say("The half-finished barfine closes with the ledger — no deal, no harm, and the till is already being counted.", "dim"); }
+  if (G.game) _abandonGame("Closing time calls it", true);
+  if (G.pendingEnc) {
+    G.pendingEnc = null; G.encPrompt = null;
+    _say("(Whatever was being offered, the shutters settle it — the moment goes " +
+      "home with everybody else.)", "dim");
+  }
+}
+const _PUB_SHUT_GUEST = [
+  "Eleven o'clock. The barmaid calls time, the last of the rail drink up and go out onto the soi, and the chairs go up on the tables around you. The security guard comes in, takes her stool behind the bar and the keys with it, and looks at you: a guest. You can stay — nobody will serve you — or go up to your room. (UP · OUT)",
+  "Time, at the Vic. The lights over the tables go off one row at a time, the rail finishes up and files out, and the security guard settles onto the stool behind the bar for the night. He knows you're staying upstairs; he just won't pour you anything. (UP to your room · OUT to the soi)",
+  "Eleven, and the pub shuts round you — glasses collected, taps wrapped, the regulars out the door with the last word. The guard takes over the bar for the night, {{phone}} in hand. A guest can sit in the dark if he likes; the bar is closed. (UP · OUT)",
+];
 function _closingTick() {
   if (!_flag("act1Done") || G.over) return;
   if (!_closesMidnight(G.room) || _lockedIn()) return;
   const r = _room();
   // the last-call courtesy in the final half hour
-  if (G.nightTurn >= 55 && G.nightTurn < 60) { _lastCall(G.room); return; }
-  if (G.nightTurn < 60) return;
+  const close = _closeTurn(G.room);
+  if (G.nightTurn >= close - 5 && G.nightTurn < close) { _lastCall(G.room); return; }
+  if (G.nightTurn < close) return;
   if (G.offstage) return;
+  // The Vic at eleven: a guest is not walked out of his own hotel — the pub shuts
+  // round him and the security guard takes the barmaid's stool (Mario, 2026-10-11).
+  if (_guestThrough(G.room)) {
+    if (G.soc.pubShut === G.day) return;
+    G.soc.pubShut = G.day;
+    _say(_pickVary(_PUB_SHUT_GUEST, "pubshutguest"), "alert");
+    _closeOutModals();
+    return;
+  }
   // midnight. A Darkside bar with a spender bolts the door instead of shutting it.
   if (r.region === "Darkside" && r.lockIn && _barSpendTonight(G.room)) {
     _lockInBegin(G.room);
@@ -779,18 +849,14 @@ function _closingTick() {
     "Midnight, and the club draws its shutters — gentleman's hours. A lady walks " +
     "you to the door with a kiss and a “come back tomorrow, na.” Whatever you " +
     "didn't get to here, you didn't get to." :
-    "Midnight on Soi 6. The frontages roll down, the sound systems die mid-song, " +
+    r.barType === "pub" ?
+    "Eleven o'clock at the Vic: the barmaid calls time, the security guard comes in " +
+    "behind the bar, and the last of the rail are shown the door with you among them. " +
+    "The rooms upstairs are for guests." :
+    "Two o'clock on Soi 6. The frontages roll down, the sound systems die mid-song, " +
     "and the ladies shoo the last punters back toward Beach Road. The party, such " +
     "as it was, is over.", "alert");
-  // a barfine still mid-negotiation dies with the shutters — else its answer would
-  // resolve against the street you've just been walked out onto (wrong barType/price).
-  if (G.pendingBf) { G.pendingBf = null; _say("The half-finished barfine closes with the ledger — no deal, no harm, and the mamasan is already counting the till.", "dim"); }
-  if (G.game) _abandonGame("Midnight calls it", true);
-  if (G.pendingEnc) {
-    G.pendingEnc = null; G.encPrompt = null;
-    _say("(Whatever was being offered, the shutters settle it — the moment goes " +
-      "home with everybody else.)", "dim");
-  }
+  _closeOutModals();
   // Walk out. If the room we'd land in is ITSELF shut for the night (a back room
   // like the Orchid Room ejecting into its closed parent bar), keep following the
   // way out until we reach somewhere actually open — otherwise the player lands in
@@ -2148,13 +2214,13 @@ const SEV = { flirt: 0, kiss: 3, spank: 4, fondle: 5 };
 const BELL_GLOW = 25;  // turns the whole bar loves you after a ring
 const BAN_TURNS = 40;  // security shift length
 
-function _inBar() { return !!_room().barType; }
+function _inBar() { return !!_room().barType && !(typeof _shutHere === "function" && _shutHere()); }   // the shut Vic a guest walks through is not a bar tonight
 // WHO WILL POUR YOU ONE. Wider than _inBar on purpose: the Peacock's own
 // compere says "buy a drink, tip a girl, laugh loud" and the room then
 // refused BUY BEER and BUY WATER while its menu line offered both (Marco,
 // round 44) — because a cabaret deliberately carries no barType. _inBar
 // still gates the bar-girl machinery; this gates the bar.
-function _servesDrinks(room) { const r = (room && ROOMS[room]) || _room(); return !!(r.barType || r.drinks); }
+function _servesDrinks(room) { const r = (room && ROOMS[room]) || _room(); return !!(r.barType || r.drinks) && !(typeof _shutHere === "function" && _shutHere(room && ROOMS[room] ? room : G.room)); }
 // The Peacock Cabaret sells drinks and takes flirting seriously without any of
 // the barType apparatus (no bells, games, closing hour, or barfine ledger) —
 // social verbs and lady drinks treat it as a bar, everything else doesn't.

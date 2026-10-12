@@ -58,7 +58,7 @@ test("the frontier is seen from the street — one front at a time, once a phase
   assert.ok(_FRONTIER_LINES.flat().some(l => said().includes(l)), "a line about the front being bought");
   out = []; _describeRoom(true);
   assert.ok(!_FRONTIER_LINES.flat().some(l => said().includes(l)), "once a phase, not every look");
-  G.frontierSaid = {}; G.nightTurn = 70; out = []; _describeRoom(true);
+  G.frontierSaid = {}; G.nightTurn = SOI6_CLOSE; out = []; _describeRoom(true);
   assert.ok(!_FRONTIER_LINES.flat().some(l => said().includes(l)), "no painters under the late paint of grilles");
   G.room = "soi6_east_in"; G.nightTurn = 30; G.frontierSaid = {}; out = []; _describeRoom(true);
   assert.ok(!_FRONTIER_LINES.flat().some(l => said().includes(l)), "the inner east is not for sale");

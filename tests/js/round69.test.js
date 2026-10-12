@@ -114,7 +114,7 @@ test("Pong's greeting does not put Ping on the stage", () => {
   assert.doesNotMatch(FLOOR_OWN.yada.nodes.map(n => n.text).join(" "), /up on the stage/);
 });
 test("the pub's own floor knows its rail, and a woman regular is not 'he'", () => {
-  G.room = "queen_vic"; G.nightTurn = 70; meet("gaew");
+  G.room = "queen_vic"; G.nightTurn = 30; meet("gaew");
   const a = ask("gaew", "angela"); assert.match(a, /Angela/); assert.doesNotMatch(a, /\b(he|his|him|men like)\b/i);
   assert.match(ask("gaew", "terry"), /Terry/);   // a rail customer without the patron flag
   for (const line of Object.values(_TOWN.regular).flat()) assert.doesNotMatch(line.replace(/\{\w+\}/g, ""), /\b(He|he|his|him)\b/, line);

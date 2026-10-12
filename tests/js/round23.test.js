@@ -421,7 +421,7 @@ test("Tan's signoff is a pool, not a catchphrase", () => {
 test("Mort gets shorter about declining, and starts fresh tomorrow", () => {
   // The full sixty-word refusal printed identically for every name a persona
   // tried, and she tried a dozen: "characterful once, a wall by the third."
-  G.room = "queen_vic"; G.day = 4; G.nightTurn = 40;
+  G.room = "queen_vic"; G.day = 4; G.nightTurn = 20;
   doCommand("talk to mort");
   const lens = [];
   for (const who of ["candy", "oy", "bert", "nira"]) {

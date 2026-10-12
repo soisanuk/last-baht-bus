@@ -4995,16 +4995,21 @@ test("midnight closing: gents clubs and Soi 6 shut, the town runs on", () => {
   assert.equal(state().room, "naklua_rd");
   assert.match(lastOut(), /dark and bolted|gentleman's hours/i);
 
-  // Soi 6 go-go closes; the Queen Vic pub does not
+  // Soi 6 runs to two, then shuts — everything on it (Mario, 2026-10-11)
   newGame(); state().lastSaleng = 99999;
   state().flags.act1Done = true; state().flags.hasWallet = true;
   state().room = "pink_lotus"; state().nightTurn = 62;
   out = []; run("wait");
-  assert.equal(state().room, "soi6_street", "Soi 6 bar shuttered at midnight");
-  // the pub stays open past midnight
-  state().room = "queen_vic"; state().nightTurn = 65;
+  assert.equal(state().room, "pink_lotus", "a Soi 6 bar is open past midnight");
+  state().nightTurn = SOI6_CLOSE + 1; out = []; run("wait");
+  assert.equal(state().room, "soi6_street", "and shuttered at two");
+  // the Vic's pub shuts at eleven: a man not staying there is walked out…
+  state().room = "queen_vic"; state().nightTurn = 50;
   out = []; run("wait");
-  assert.equal(state().room, "queen_vic", "the Queen Vic pub keeps its own hours");
+  assert.equal(state().room, "soi6_mid", "the pub closes at eleven");
+  // …and a guest is let through to his room
+  state().hotel = "queenvic"; state().room = "queen_vic"; out = []; run("wait");
+  assert.equal(state().room, "queen_vic", "the guest is not walked out of his own hotel");
 });
 
 test("midnight closing: walking in during last call gets the warning + barfine nudge", () => {
@@ -8435,7 +8440,7 @@ test("Mort knows you answered his text when you walk in", () => {
   newGame();
   state().stage = "vacation"; state().flags.act1Done = true; state().day = 3; state().nightTurn = 80; state().room = "beach_rd_c";
   _dailyJoke(); run("reply");
-  state().room = "queen_vic"; out = [];
+  state().day = 4; state().nightTurn = 20; state().room = "queen_vic"; out = [];   // the pub shuts at eleven: he is in the next evening
   run("talk to mort");
   assert.match(out.join("\n"), /one in forty/, "he places you on sight");
   assert.ok(_flag("mortMet"), "and it's spent — the next talk is normal");

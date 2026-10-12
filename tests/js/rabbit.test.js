@@ -625,7 +625,7 @@ test("the machine telegraphs its clock before it locks", () => {
 
 test("midnight in the office: OUT lets you out the back onto the soi", () => {
   recruitOperator(); toLaptop(); run("exit");
-  G.nightTurn = 70;   // the bar's shutters are down
+  G.nightTurn = SOI6_CLOSE + 2;   // the bar's shutters are down (Soi 6 shuts at two)
   assert.ok(_closedNow("kitten_corner"));
   out = []; run("out");
   assert.equal(G.room, "soi6_deep", "not sealed in a windowless room");
