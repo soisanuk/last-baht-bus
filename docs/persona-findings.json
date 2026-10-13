@@ -24378,13 +24378,13 @@
       "lens": "taps-only-phone",
       "instrument": "",
       "claim": "The last night: his girl never hears he is leaving",
-      "verdict": "deferred",
-      "note": "A goodbye beat is a design call; noted.",
+      "verdict": "fixed",
+      "note": "Mario 2026-10-14: the last night's goodbye, said at her bar (_lastNightBye) and remembered at the week's end",
       "cls": "J",
       "sev": "minor",
       "system": "party",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round93.test.js"
     },
     {
       "round": "91",

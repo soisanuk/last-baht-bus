@@ -136,3 +136,18 @@ test("deferred, fixed: Tan knows the Soi 6 week's basics, and 'beer' is not DJ B
     out = []; run("ask tan about " + t); assert.match(said(), re, t + ": " + said()); assert.doesNotMatch(said(), /pay grade|department|Jomtien|DJ Beer/, t);
   }
 });
+
+test("the last night's goodbye is said to her face, is a tap, pays once, and the week's end remembers it", () => {
+  G.day = 7; G.room = "sunset_dreams"; G.soc.drinks.may = 8;
+  run("talk to may"); assert.ok(_convoTopics("may").includes("goodbye"), "a chip on the last night");
+  const h = G.happy; out = []; run("goodbye may"); assert.equal(G.happy - h, 2); assert.match(said(), /May/);
+  out = []; run("goodbye may"); assert.match(said(), /had her goodbye/); assert.equal(G.happy - h, 2, "once");
+  assert.ok(!_convoTopics("may").includes("goodbye"));
+  G.hotel = "queenvic"; G.room = "qv_room"; G.nightTurn = 90; out = []; run("sleep"); run("sleep");
+  assert.equal(G.pendingChoice, "vacation_end"); assert.match(said(), /You said goodbye to May at her bar/);
+});
+
+test("no goodbye chip before the last night, nor for a stranger", () => {
+  G.day = 5; G.room = "sunset_dreams"; G.soc.drinks.may = 8; assert.ok(!_convoTopics("may").includes("goodbye"));
+  G.day = 7; G.soc.drinks = {}; G.talked = {}; assert.ok(!_lastByeDue("dear"));
+});

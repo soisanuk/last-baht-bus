@@ -6127,10 +6127,56 @@ const _GOODBYE_FARANG = [
     `not the job. I want to keep it not the job."`,
 ];
 
+// THE GOODBYE, SAID AT HER BAR (Mario, 2026-10-14, on Sam's round 90: "his girl never hears he is leaving"). On the
+// last night of a trip a woman who knows you can be told it to her face — GOODBYE <her>, SAY GOODBYE TO <her>, or
+// the "goodbye" chip — once a trip, in the register of how well she knows you, and the week's end then remembers
+// that you said it rather than narrating a scene you may not have had. Not a reward ladder: +2 สนุก once, because a
+// goodbye said properly is one of the good things a week can hold.
+function _lastNight() { return G.stage !== "expat" && G.day >= 7 && !G.visitUntil && _flag("act1Done"); }
+function _lastByeDue(id) {
+  if (!_lastNight() || !id || !NPCS[id] || NPC_ROLES[id] !== "hostess") return false;
+  if (typeof _maiDee === "function" && _maiDee(id)) return false;
+  if (G.lastNightBye && G.lastNightBye.v === G.vacation && G.lastNightBye.ids && G.lastNightBye.ids.includes(id)) return false;
+  return (typeof _knownTier === "function" ? _knownTier(id) : _bondTier(id)) >= 1 || !!(G.wentWith && G.wentWith[id]);
+}
+const _BYE_FACE = [
+  n => `"Go home tomorrow?" ${n} looks honestly surprised, then not. "Seven days. Everybody seven days." She clinks your glass. "Okay. Safe flight, na. Next time you come, you say hello first, before the other girls." A grin. "Is the rule."`,
+  n => `${n} takes it the way the floor takes everything, lightly and properly. "Ohh, last night already." A wai, small and real. "Thank you for come sit with me. Not everybody sit with me."`,
+  n => `"Tomorrow? Hm." ${n} looks at you as if checking she will know the face. "Okay. I remember. You come back, you sit here, I know you."`,
+];
+const _BYE_REGULAR = [
+  n => `${n} stops what she is doing — properly stops, cloth down. "Tomorrow you go." Not a question. "I know. I count also." She pours you one you did not order and pushes it across. "From me. Not the bar. You come back, na. I am here, I don't move."`,
+  n => `"Last night." ${n} says it before you finish, and laughs at herself for knowing. "Okay. No sad. Sad is for the airport, and I don't go to the airport." A hand on your wrist for a moment, there and gone. "You text me when you land. One word. Okay?"`,
+  n => `${n} hears it, nods, and keeps working for a minute, which is how she thinks. Then she comes back down the rail. "This week was good week. Not every week is good week." She means it as the highest thing she says.`,
+];
+const _BYE_FARANG = [
+  n => `${n} already knows — you can see her deciding not to make it a scene, and then deciding it can be a small one. She takes your face in both hands, in front of the whole floor, and looks at you for a long second. "Okay," she says. "Now go sleep. Tomorrow I don't come to the hotel. I already say goodbye, here, where I work. Is better."`,
+  n => `"Don't," ${n} says, before you have said anything. "I know what you say." She is smiling and her eyes are not. "Say this instead: 'see you.' Not goodbye. Goodbye is for people who don't come back." She waits until you say it. "Good. See you."`,
+  n => `${n} pulls the stool beside her own out from the rail, the one she keeps, and sits you on it for the last hour like it is the most ordinary night in the world. At the door she gives you one thing: her real name, the long one, written on a chit in careful Thai. "So you know who you say goodbye to."`,
+];
+const _BYE_WENT = [
+  n => `"After last night?" ${n} laughs, a little embarrassed in front of the floor. "Of course you go tomorrow. Men always go after the good night." She softens. "Okay. Was a good night. I keep it. You keep it too."`,
+];
+function _lastNightBye(id) {
+  const n = NPCS[id].name, tier = typeof _knownTier === "function" ? _knownTier(id) : _bondTier(id);
+  const went = G.wentWith && G.wentWith[id] && G.wentWith[id].day >= G.day - 1;
+  const pool = tier >= 3 ? _BYE_FARANG : went ? _BYE_WENT.concat(_BYE_REGULAR) : tier >= 2 ? _BYE_REGULAR : _BYE_FACE;
+  _say((typeof _pickTownLine === "function" ? _pickTownLine(pool, "lastbye:" + (tier >= 3 ? 3 : tier >= 2 || went ? 2 : 1)) : pool[0])(n), "room");
+  const b = (G.lastNightBye && G.lastNightBye.v === G.vacation) ? G.lastNightBye : (G.lastNightBye = { v: G.vacation, ids: [] });
+  b.ids.push(id); b.room = G.room;
+  (G.soc.leavingSaid = G.soc.leavingSaid || {})[id] = G.turns;   // she has been told: the hearsay goodbye can never print now
+  if (b.ids.length === 1) _addHappy(2);   // one goodbye said properly; the second is not a second reward
+}
+
 function _lastGoodbye() {
   const id = _farewellGirl();
   if (!id) return;
   const name = NPCS[id].name;
+  // you said it at her bar last night: the week remembers THAT, not a scene it narrates after the fact
+  if (G.lastNightBye && G.lastNightBye.v === G.vacation && (G.lastNightBye.ids || []).includes(id)) {
+    _say(`You said goodbye to ${name} at her bar, on the last night, to her face. The taxi does not need to carry anything else.`, "room");
+    return;
+  }
   const pool = _bondTier(id) >= 3 ? _GOODBYE_FARANG : _GOODBYE_REGULAR;
   // she cannot "find out from somebody else" if you told her, or if she spent
   // the last night with you (Anil, round 64): skip the hearsay variant then
@@ -6179,6 +6225,7 @@ function _endVacation() {
     // the week card, Wordle-style — printed here so it's the last thing the
     // week leaves you with, and SHARE re-prints (and copies) it on demand
     for (const l of _shareCard()) _say(l, "win");
+    _lastGoodbye();   // the Soi 6 week ends with a woman in it too (Sam, round 90: "his girl never hears he is leaving")
     _say("So — again?", "room");
     _say("(PLAY AGAIN — one more week on Soi 6. Fresh ฿100,000, fresh liver. " +
       "SHARE copies your week card.)", "dim");

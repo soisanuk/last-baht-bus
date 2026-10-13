@@ -4707,6 +4707,8 @@ function _doTalkCore(arg, topic) {
   // the bar opposite is asked by its NAME, and Bert's own "this bar" node took the word first (Hal, round 62)
   if (topic && typeof _oppTalk === "function" && _oppTalk(npc, topic)) return;
   if (topic && npc === "bert" && typeof _bertLeverTalk === "function" && _bertLeverTalk(topic)) return;
+  // ASK HER ABOUT GOODBYE (the chip) on the last night is the goodbye said
+  if (topic && /^(?:goodbye|say goodbye|the goodbye|farewell|i'?m leaving tomorrow)$/.test(String(topic).toLowerCase().trim()) && typeof _lastByeDue === "function" && _lastByeDue(npc)) { _lastNightBye(npc); return; }
   // a woman who spent a night with you greets you as one, before her stranger's hello (Martin, round 85)
   if (!topic && NPC_ROLES[npc] && typeof _maiDee === "function" && !_maiDee(npc) && typeof _wentWithHello === "function" && _wentWithHello(npc)) { if (typeof _convoStart === "function") _convoStart(npc); else G.convo = npc; return; }
   // the woman on your arm, addressed with no subject, is with you — not behind her own rail
@@ -7524,6 +7526,7 @@ function _situationTopics(id) {
     if (sawYou && _room().barType) first.push("last night");
     if (works && _dawnHere(id, w)) first.push("the sunrise");
   }
+  if (typeof _lastByeDue === "function" && _lastByeDue(id) && _npcsHere().includes(id) && !(G.party && G.party.ids && G.party.ids.includes(id))) first.unshift("goodbye");   // the last night's goodbye is a tap (Mario, 2026-10-14)
   if (_giftsOf(id).length) first.push("your present");
   if (_streetEvent("rain") && (works || n.patron)) first.push("the rain");
   if (works && _room().barType && _pronoun(id) === "she" && _afterWorkTalk(id)) last.push("after work");
@@ -15425,6 +15428,15 @@ function doCommand(input) {
   // Parting with a TAKE-HER-OUT companion before the night decides it for you:
   // GOODBYE / GOODNIGHT [name], SEND <her> HOME (the banking app answered that
   // one). Voiced when there is nobody to part with.
+  // THE LAST NIGHT'S GOODBYE, to her face: GOODBYE PUKKY / SAY GOODBYE TO PUKKY, a woman present and not on your arm
+  { const lb = lower.trim().match(/^(?:say )?(?:goodbye|bye|farewell)(?: to)? ([a-z' ]+)$/);
+    if (lb && typeof _lastByeDue === "function" && typeof _lastNight === "function" && _lastNight() && !G.pendingChoice && !G.pendingEnc && !G.game) {
+      const id = _findNpc(lb[1].trim());
+      if (id && _npcsHere().includes(id) && !(G.party && G.party.ids && G.party.ids.includes(id))) {
+        if (_lastByeDue(id)) { _lastNightBye(id); _tick(); return; }
+        if (G.lastNightBye && (G.lastNightBye.ids || []).includes(id)) { _say(`${NPCS[id].name} has had her goodbye. She gives you the small wave the floor gives a man who is still here.`, "dim"); return; }
+      }
+    } }
   // …but a bare BYE inside a conversation is the chip that ends the CHAT: "say goodbye" to
   // the woman you paid ฿1,050 to take out sent her home in a taxi (Helga, round 57)
   const _chatBye = _convoActive() && /^(?:goodbye|bye|see you)$/.test(lower.trim());
