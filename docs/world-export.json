@@ -698,7 +698,7 @@
    "th": "ไบรท์"
   },
   "bua": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She keeps half an eye on the door and the other half on you.",
    "emoji": "🌺",
    "filler": true,
    "name": "Bua",
@@ -708,7 +708,7 @@
    "th": "บัว"
   },
   "bum": {
-   "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She follows the music, the door and the till without turning her head.",
    "emoji": "🌺",
    "filler": true,
    "name": "Bum",
@@ -1407,7 +1407,7 @@
    "th": "ไอซ์"
   },
   "ing": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She laughs easily and watches carefully.",
    "emoji": "🌺",
    "filler": true,
    "name": "Ing",
@@ -2110,7 +2110,7 @@
    "th": "แหม่ม"
   },
   "manow": {
-   "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon. She has an opinion about every man at the rail and keeps all of them to herself.",
    "emoji": "🌺",
    "filler": true,
    "name": "Manow",
@@ -2218,7 +2218,7 @@
    "th": "มิ้ลค์"
   },
   "min": {
-   "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon. She knows which stool is whose before its owner does.",
    "emoji": "🌺",
    "filler": true,
    "name": "Min",
@@ -2493,7 +2493,7 @@
    "th": "นิด"
   },
   "nim": {
-   "desc": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon. She reads a room the way other people read a menu.",
    "emoji": "🌺",
    "filler": true,
    "name": "Nim",
@@ -2683,7 +2683,7 @@
    "th": "นัท"
   },
   "oat": {
-   "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She remembers a face after one beer, and lets you see that she does.",
    "emoji": "🌺",
    "filler": true,
    "name": "Oat",
@@ -3091,7 +3091,7 @@
    "th": "เปรี้ยว"
   },
   "prik": {
-   "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. Her eyes go to the door every time it moves.",
    "emoji": "🌺",
    "filler": true,
    "name": "Prik",
@@ -3225,7 +3225,7 @@
    "th": "รอย"
   },
   "rung": {
-   "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket. She notices who is drinking and who is only pretending to.",
    "emoji": "🌺",
    "filler": true,
    "name": "Rung",
@@ -3653,7 +3653,7 @@
    "th": "เกด"
   },
   "the_terrace_namtip": {
-   "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Terrace's girls, from Nakhon Phanom. She counts the room's empty glasses without seeming to look at them.",
+   "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Terrace's girls, from Nakhon Phanom. She is the first to see a new face and the last to say anything about it.",
    "emoji": "🌻",
    "filler": true,
    "name": "Namtip",

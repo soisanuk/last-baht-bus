@@ -5859,7 +5859,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "“You want to know a place most people never find?” Candy weighs you a moment, then " +
           "decides. “Rose. Notty's Place, out in Naklua — behind a wall, no sign, aircon like a " +
           "morgue and about as quiet. Old friend of mine, from before either of us ran anything.” " +
-          "She writes nothing down; there is nothing to write. “That place does not get found, tilac. " +
+          "She writes nothing down; there is nothing to write. “That place does not get found. " +
           "You get sent. So I am sending you — go and tell Rose that Candy vouches. And mind your " +
           "manners, na: Rose forgets nothing and forgives less.”",
         short: "“Rose's place — Notty's, Naklua, behind a wall, no sign. Old friend of mine. You don't find it, you get sent. Tell her Candy vouches.”" },
@@ -5897,13 +5897,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "\"Okay, tilac. You did good. Now go, before I start crying in front of my own customers.\"",
         short: "\"Tuesday. The photographs.\" Candy laughs like it isn't really about you at all." },
       { req: ["somTamAccepted"], notFlags: ["somTamDelivered"],
-        text: "\"Som tam not deliver itself, tilac. Rainbow Girls Bar, deep in the Tree Town maze — give it to PLOY at the cashier cage. Wai first. She melt.\"" },
+        text: "\"Som tam not deliver itself. Rainbow Girls Bar, deep in the Tree Town maze — give it to PLOY at the cashier cage. Wai first. She melt.\"" },
       { req: ["knowWasHere"], notFlags: ["knowMot"], th: "จำได้สิ", rom: "jam dai si",
         text: "\"Of course I remember you! Three a.m., singing, buying Mama noodles next door. You leave with big group toward LK Metro — and Mot follow you out. Little pickpocket, work the drunk ones.\" She narrows her eyes. \"Ask Lek at Lucky Tiger. She see Mot this morning. OR—\" she smiles sweetly \"—buy me lady drink and I tell you everything faster.\"",
         sets: ["knowMot"],
         short: "\"Mot followed you toward LK Metro. Ask Lek at Lucky Tiger — she saw him this morning.\"" },
       { topic: "wallet", req: ["knowMot"], notFlags: ["knowOyHasIt"],
-        text: "\"Wallet? Candy told you everything Candy knows, tilac \u2014 Mot follow you out, Lek at Lucky Tiger see him this morning. Go squeeze HER. My part is done.\"",
+        text: "\"Wallet? Candy told you everything Candy knows \u2014 Mot follow you out, Lek at Lucky Tiger see him this morning. Go squeeze HER. My part is done.\"",
         short: "\"Mot. Lucky Tiger. Ask Lek \u2014 my part is done.\"" },
       // …and on a plain TALK, too. Two personas walked Candy → Lek → Oy and
       // never came BACK to Candy, because nothing in the world says the way in
@@ -5922,9 +5922,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Oy said no, of course. The door into her world is som tam — give it to Ploy in the cage, and doors open.\"" },
       { notFlags: ["knowWasHere", "act1Done"], th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",   // not to a man who owns a bar (Mick, round 57)
         text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"",
-        short: "\"Sit down, tilac. Talk to Candy — everybody's problems come to Candy.\"" },
-      { text: "\"Back again, tilac.\" Candy counts the room without moving her eyes. \"You know the house now \u2014 sit, drink, don't be boring.\"",
-        short: "\"Back again, tilac. Sit, drink, don't be boring.\"" },
+        short: "\"Sit down. Talk to Candy — everybody's problems come to Candy.\"" },
+      { text: "\"Back again.\" Candy counts the room without moving her eyes. \"You know the house now \u2014 sit, drink, don't be boring.\"",
+        short: "\"Back again. Sit, drink, don't be boring.\"" },
       { topic: "wallet", req: ["knowOyHasIt"], notFlags: ["oyGaveWallet"],
         text: "\"Oy has it? Then it's safe — safer than in your pocket, clearly. But Oy… ai, she make you work for it. Take her som tam from the market cart — extra spicy, tell them 'Candy's order'. Give it to Ploy her cashier, and doors open.\" She tips her chin down the soi, toward the old market block where the som tam cart still holds its corner.", sets: ["somTamAccepted"], gives: "som_tam",
         short: "\"Oy has your wallet. Take her extra-spicy som tam — 'Candy's order' — and give it to Ploy, her cashier.\"" },
@@ -5948,7 +5948,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // The game prints ASK CANDY ABOUT LAST NIGHT; it used to land on her Bee
       // node by the word "night" (Malcolm, round 36). Her own account, literal.
       { topic: "last night", req: ["knowWasHere"],
-        text: "\"Last night? Same as I tell you, tilac: three a.m., you leave with the big group toward " +
+        text: "\"Last night? Same as I tell you: three a.m., you leave with the big group toward " +
           "LK Metro, singing, and Mot follow you out. Little pickpocket. Ask Lek at the Lucky Tiger " +
           "what he did with it — she see him every night.\"",
         short: "\"Three a.m., the big group toward LK Metro, Mot following you out. Ask Lek.\"" },
@@ -5958,7 +5958,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "you'd say a price that is too high. \"I have a type, you know — the man who " +
         "sit with my girl for one hour, buy her zero drinks, and try to have the " +
         "therapy session. 'What is your childhood dream?' 'Do you feel trapped?'\" " +
-        "She sets a glass down firmly. \"My girl is not your therapist, tilac. She " +
+        "She sets a glass down firmly. \"My girl is not your therapist. She " +
         "is here, she is present, and she would like a lady drink and a conversation " +
         "about something that is happening right now.\" A beat. \"The five-year-plan " +
         "man never tip anyway.\"" },
@@ -5984,7 +5984,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       {
         topic: "supply|supplier|suppliers|logistics|cleaning|contracts|jobs|arrangements|the arrangements|screen|ice man|beer man",
         req: ["partnerCandy", "barOpen"],
-        text: "\"Supply?\" She does not even put the glass down. \"Not your side, tilac. Ice " +
+        text: "\"Supply?\" She does not even put the glass down. \"Not your side. Ice " +
           "comes from my ice man, beer from my beer man, the boy who does the screen is my " +
           "sister's boy, and the cleaning is a cousin who owes me from 2009. Nobody rings a " +
           "farang about any of it, and nobody ever will.\" A nod down the rail. \"You sit " +
@@ -6031,7 +6031,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         fx: (st, G) => { G.pendingChoice = "partner"; G.partnerWho = "candy"; },
         text: "Candy does not answer for a long moment, and when she does it is not " +
           "the voice she uses on the floor.\n\n\"You know what you are asking me.\" " +
-          "Not a question. \"Fifty-one is not a favour, tilac. Fifty-one is my name " +
+          "Not a question. \"Fifty-one is not a favour. Fifty-one is my name " +
           "on your bar. If you drink it away, is my name. If you hit a girl, is my " +
           "name. If you go home and never come back—\" a small shrug " +
           "\"—then I have a bar, and everybody on this soi know how I got it.\"\n\n" +
@@ -6049,7 +6049,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Mama in Isaan thinks I own restaurants. No husband, no children — I chose the bar.\"" },
       { topic: "home|hometown|village|isaan|isan", text: "\"Isaan. A village with one shop and one road, and I was on that road at seventeen with one bag, same as every girl in here.\" She nods down the rail. \"That is why I hire them. I know the bag.\"",
         short: "\"Isaan, one shop, one road. I know the bag.\"" },
-      { topic: "plan|future|dream", text: "\"Plan?\" A short laugh. \"I am thirty-eight, tilac. Two bars, no boss, nobody's name on my paper but mine. The next plan is a girl I trust with one of them.\" She looks down the rail. \"I am still looking.\"",
+      { topic: "plan|future|dream", text: "\"Plan?\" A short laugh. \"I am thirty-eight. Two bars, no boss, nobody's name on my paper but mine. The next plan is a girl I trust with one of them.\" She looks down the rail. \"I am still looking.\"",
         short: "\"Two bars, no boss. Next: a girl I trust with one of them. Still looking.\"" },
     ],
   },
@@ -6931,7 +6931,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "reasonably priced.\"",
         short: "\"A charmer — good, for me. You spend to be liked, and liked never runs out of stock. Sit.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
-        text: "\"The funny one.\" Not a smile — an assessment. \"The girls will laugh, tilac. That is the job; " +
+        text: "\"The funny one.\" Not a smile — an assessment. \"The girls will laugh. That is the job; " +
           "they laugh at everybody. Be as funny as you like.\" The tablet does not look up. \"The bill has no " +
           "sense of humour, and past midnight, na, neither do I. Enjoy yourself until then.\"",
         short: "\"The funny one. The girls laugh at everybody — the bill has no sense of humour, and past midnight neither do I.\"" },
@@ -6988,33 +6988,33 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
         text: "\"You been here before.\" Not a question. \"Not my bar — this TOWN. Is in how you don't look " +
           "around no more, how you already know where is the toilet in a bar you never walk into.\" A brisk, " +
-          "unbothered nod. \"Welcome back, tilac. The girls are new. The game is not.\"",
+          "unbothered nod. \"Welcome back. The girls are new. The game is not.\"",
         short: "\"You been here before — not my bar, this town. The girls are new; the game is not.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
         text: "\"You had a Thai wife.\" Peung says it flat, certain. \"Is in how you hold the money — careful, " +
           "not scared. And how you say thank you to the girl, like you actually mean it.\" A shrewd tilt. \"So " +
-          "you know the song already, tilac. Which mean you know I am the second verse. Sit anyway. Knowing " +
+          "you know the song already. Which mean you know I am the second verse. Sit anyway. Knowing " +
           "never stopped anybody.\"",
         short: "\"You had a Thai wife — is in how you hold the money. You know the song, so you know I'm the second verse. Sit anyway.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
         text: "\"You are not here to drink.\" She prices the shoes, the watch, the wanting, in one pass. \"You " +
           "are here to BUY — a bar, a piece of something, a whole new life. Everybody like you end up across a " +
           "table from Pattaya Leisure sooner or later.\" A shrug that has watched it happen. \"Do yourself a " +
-          "kindness, tilac: drink first, sign later. Much later than they tell you.\"",
+          "kindness: drink first, sign later. Much later than they tell you.\"",
         short: "\"You're not here to drink — you're here to buy. Everybody like you ends up across a table from Pattaya Leisure. Drink first, sign much later.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pi"),
         text: "\"You watch the room like it owe you money.\" A long, level look, taken slowly. \"Or like " +
           "somebody pay you to watch it. ...Was pay you.\" She lets that go on purpose, and pours the beer she " +
-          "didn't ask you about. \"Not my business, tilac. In here nobody is what they used to be — that is the " +
+          "didn't ask you about. \"Not my business. In here nobody is what they used to be — that is the " +
           "whole product. Watch all you like. Just tip while you do it.\"",
         short: "\"You watch the room like somebody pays you to. ...Was pay you. Not my business. Watch all you like — tip while you do.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
         text: "\"A regular of this town — a proper one. Not of my bar. Not yet.\" Approval, rare from her. \"The kind who come the same night every week, because it is that night. My accountant love you, and he never meet you.\" She tips her chin down the rail. \"The old ones there will adopt you " +
-          "before your first beer go warm. Go sit with them, tilac. They tip in stories, and the stories at " +
+          "before your first beer go warm. Go sit with them. They tip in stories, and the stories at " +
           "least are free.\"",
         short: "\"A regular, proper one — same night every week. The old ones will adopt you; they tip in stories, and those are free.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
-        text: "\"You are lit up like the sign outside, tilac — new money, and nobody at home to ask where it go. I see it from here.\" Not unkind. A warning folded into it. \"So I tell you one time, " +
+        text: "\"You are lit up like the sign outside — new money, and nobody at home to ask where it go. I see it from here.\" Not unkind. A warning folded into it. \"So I tell you one time, " +
           "for free, because you remind me of my first year here too: this town LOVE exactly you. The happy " +
           "one who cannot believe his luck. Spend slow. The luck is the bar's, not yours.\"",
         short: "\"Lit up like the sign outside — first freedom, money in the pocket. This town loves exactly you. Spend slow; the luck is the bar's.\"" },
@@ -7032,7 +7032,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "them.\" A shrug that has seen everything. \"Better owner, worse owner, the girls still need the shift, " +
         "I still take my cut. You survive this business by not falling in love with who sign the cheque.\"" },
       { topic: "free", text: "\"The beer I send you — on the house.\" A dry look. \"On the house mean on your " +
-        "next three, tilac. I am not hiding it. A mama who hide the arithmetic is a mama who does not trust her " +
+        "next three. I am not hiding it. A mama who hide the arithmetic is a mama who does not trust her " +
         "arithmetic.\" She almost smiles. \"Mine is very good.\"",
         short: "\"On the house mean on your next three. I don't hide the arithmetic — mine's good.\"" },
     ],
@@ -7103,38 +7103,38 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // welcome that reads your whole story before the first bottle lands.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
         text: "\"HA — I know you!\" Toi points, delighted, over the music. \"Not YOU you. Your TYPE. Been to " +
-          "Pattaya more time than the songthaew, packed your golf club, never swing one. Welcome home, tilac — " +
+          "Pattaya more time than the songthaew, packed your golf club, never swing one. Welcome home — " +
           "the party missed you!\"",
         short: "\"HA, I know your TYPE — more trips than the songthaew, packed the clubs, never swung one. Welcome home!\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
         text: "\"You had a wife here.\" Toi says it grinning, no cruelty in it at all. \"I can tell — you tip " +
-          "like a man saying sorry to somebody who is not in the room. Don't worry, tilac. Tonight, nobody in " +
+          "like a man saying sorry to somebody who is not in the room. Don't worry. Tonight, nobody in " +
           "the room but us. LOUD music, na? Good for forgetting.\"",
         short: "\"You had a wife here — you tip like a man apologising to somebody not in the room. Loud music tonight, na. Good for forgetting.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
         text: "\"Investor face!\" She claps once, delighted. \"You look at my bar like you want to OWN one. Ha! " +
-          "Everybody do, tilac. Buy a drink first — much cheaper than buy a bar, and you keep more of your " +
+          "Everybody do. Buy a drink first — much cheaper than buy a bar, and you keep more of your " +
           "money. I tell you this as a FRIEND, and I never tell customer that.\"",
-        short: "\"Investor face — you look at my bar like you want to own one. Buy a drink first, tilac, much cheaper than a bar.\"" },
+        short: "\"Investor face — you look at my bar like you want to own one. Buy a drink first, much cheaper than a bar.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pi"),
         text: "\"You look at the door every time it open.\" A shrewd flash under all the loud. \"Police eyes. " +
-          "Ex-police, maybe. Relax, tilac — nothing happen in MY bar the envelope don't already know about. " +
+          "Ex-police, maybe. Relax — nothing happen in MY bar the envelope don't already know about. " +
           "Drink. Watch. Whatever make you happy. Just tip the girl for standing in your eyeline.\"",
         short: "\"You watching the room, not the girls — police eyes. Nothing happens in my bar the envelope don't know. Watch all you like.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
-        text: "\"A regular! A REAL one!\" Toi beams like you're family. \"Same stool every trip, same beer, never one problem — you, I keep the cold beer special. Sit by the rail with the old boys, tilac. They so boring you will " +
+        text: "\"A regular! A REAL one!\" Toi beams like you're family. \"Same stool every trip, same beer, never one problem — you, I keep the cold beer special. Sit by the rail with the old boys. They so boring you will " +
           "fit right in — ha! I love them. Don't tell them.\"",
-        short: "\"A REAL regular — same stool every trip. Sit with the old boys by the rail, tilac, you'll fit right in.\"" },
+        short: "\"A REAL regular — same stool every trip. Sit with the old boys by the rail, you'll fit right in.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
-        text: "\"First big trip! I see it, tilac — you SHINE.\" She loves it and warns it in the same breath. " +
+        text: "\"First big trip! I see it — you SHINE.\" She loves it and warns it in the same breath. " +
           "\"No boss, no wife's sister, whole town saying yes to you. Enjoy, enjoy — but slow, na? The shine, " +
           "the bar want to buy it off you cheap. Grandma Toi telling you free.\"",
         short: "\"First big trip — you SHINE. Money in the pocket, no boss. Enjoy, but slow, na — the bar wants to buy that shine off you cheap.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
         text: "\"You not here to party.\" Toi drops the volume, just for you, unexpectedly gentle. \"You here to " +
-          "be too loud to think. Okay, tilac — I am very, very good at loud. Sit. Let the bar do your shouting " +
+          "be too loud to think. Okay — I am very, very good at loud. Sit. Let the bar do your shouting " +
           "for you tonight. On the house, the first one. Nobody tell you that in here but me.\"",
-        short: "\"You're not here to party — you're here to be too loud to think. Sit, tilac. Let the bar shout for you tonight.\"" },
+        short: "\"You're not here to party — you're here to be too loud to think. Sit. Let the bar shout for you tonight.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"CHERRY POP! Welcome, welcome — tonight you have fun, guarantee!\" Big energy, big smile, and a " +
           "fast flick of the eyes that counts your table, your watch, your capacity. \"Chaba, look after this " +
@@ -7166,12 +7166,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Saeng watches and counts — she reads your MANNER dry and unhurried, from the
       // till, having already priced you against tonight's take.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("charmer"),
-        text: "\"Save it, tilac.\" Saeng barely lifts her eyes from the till, unimpressed and unbothered. \"The smile is for the girls — I already counted you. The charm work on them. On me, it just make the " +
+        text: "\"Save it.\" Saeng barely lifts her eyes from the till, unimpressed and unbothered. \"The smile is for the girls — I already counted you. The charm work on them. On me, it just make the " +
           "evening pleasant while you spend.\"",
         short: "\"A charmer — save it for the girls, I already counted you. On me it just makes the evening pleasant while you spend.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
         text: "\"You smile before you sit.\" A small, economical smile back that costs her nothing. \"Wilai will play with you — she " +
-          "like a live one. Me, I laugh when the till laugh. So far tonight, tilac, we both very quiet.\"",
+          "like a live one. Me, I laugh when the till laugh. So far tonight, we both very quiet.\"",
         short: "\"Funny man. Wilai will play with you. Me, I laugh when the till laughs — so far tonight we're both quiet.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
         text: "\"Straight talker. Good.\" She approves without warming a degree. \"Then straight: Wilai is the " +
@@ -7179,11 +7179,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the way you like it.\"",
         short: "\"Straight talker — then straight: Wilai's the show, the show's not free, I count what it earns. Enjoy her, pay me.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
-        text: "\"Mm.\" Saeng finally looks up, and something behind her eyes recalculates. \"You count the bar the way I count the bar — the doors, the girls, who is paying. An operator.\" A dry beat. \"Then you already see it — Wilai is the bait, the bar is the hook. Seeing the hook is free, tilac. The bait still cost. Sit. Be hungry professionally.\"",
+        text: "\"Mm.\" Saeng finally looks up, and something behind her eyes recalculates. \"You count the bar the way I count the bar — the doors, the girls, who is paying. An operator.\" A dry beat. \"Then you already see it — Wilai is the bait, the bar is the hook. Seeing the hook is free. The bait still cost. Sit. Be hungry professionally.\"",
         short: "\"You count the bar the way I do — an operator. Then you see it: Wilai's the bait, the bar's the hook. Seeing the hook is free; the bait still cost.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("whiteknight"),
         text: "\"Ohh. A careful one, this.\" She says it almost to herself, almost a sigh. \"The good heart. " +
-          "Wilai eat the good hearts for breakfast, tilac, and I count what she leave on the plate.\" A shrug, " +
+          "Wilai eat the good hearts for breakfast, and I count what she leave on the plate.\" A shrug, " +
           "not unkind. \"Go on. You came to be a hero. Be one. It cost exactly the same as being a fool.\"",
         short: "\"The good heart — Wilai eats those for breakfast, and I count what she leaves. Go be a hero. It costs the same as being a fool.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
@@ -7196,7 +7196,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "and I get the good years before she leave. Fair trade. I was her once, and my mama let me go too.\"" },
       { topic: "free", text: "\"The lipstick on the glass — Wilai do it, I pay for the lipstick.\" She " +
         "taps the mirror wall. \"Little cost, big return. The man keep the glass, remember the bar, come back. " +
-        "Marketing, tilac. I don't advertise. I just make sure you cannot forget us.\"",
+        "Marketing. I don't advertise. I just make sure you cannot forget us.\"",
         short: "\"The lipstick's a little cost, big return — you keep the glass, you come back. Marketing.\"" },
     ],
   },
@@ -7212,17 +7212,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // welcome below.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
         text: "\"A regular somewhere — I can tell, you sit like a man who owns a stool.\" The weathered smile deepens. " +
-          "\"Fixed money, long memory, no drama. My favourite kind. Keep the chair all night, tilac. Nobody " +
+          "\"Fixed money, long memory, no drama. My favourite kind. Keep the chair all night. Nobody " +
           "take it from you here.\"",
         short: "\"A regular — you sit like a man who owns the stool. Keep the chair all night, nobody takes it here.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
         text: "\"You read my price board like you cannot believe it. First time with money and no boss, I think.\" She reads the shine, and " +
-          "unlike the go-go mamas she only wants to keep it safe. \"You come to the right bar to start, tilac. " +
+          "unlike the go-go mamas she only wants to keep it safe. \"You come to the right bar to start. " +
           "Nobody scam you here. Learn the soi slow, from a place that won't rob you first.\"",
         short: "\"First money in the pocket, nobody telling you no. Right bar to start — learn the soi slow, from a place that won't rob you first.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
         text: "\"You want a quiet corner, a cold beer, and nobody asking a single question.\" A gentle, knowing " +
-          "nod. \"That is the whole menu at my bar, tilac. Sit. Nobody bother you here — I make sure of it " +
+          "nod. \"That is the whole menu at my bar. Sit. Nobody bother you here — I make sure of it " +
           "myself.\"",
         short: "\"A quiet corner, a cold beer, nobody asking questions — that's the whole menu here. Nobody bothers you; I make sure.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
@@ -7247,15 +7247,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // framed through the match; everyone else gets the plain kickoff welcome.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
         text: "\"Ha — good, a loud one. We need the noise.\" Half an eye stays on the screen. \"You'll fit the " +
-          "Saturday crowd fine, tilac. One rule: no jokes during a penalty. That, even I cannot forgive.\"",
+          "Saturday crowd fine. One rule: no jokes during a penalty. That, even I cannot forgive.\"",
         short: "\"A funny one — you'll fit the Saturday crowd. One rule: no jokes during a penalty.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
         text: "\"Straight talker. Football people, all of us — no soft-soap in a footy bar.\" A brisk, approving " +
-          "nod. \"You'll do fine here, tilac. Beer's cold, ref's blind, sit down.\"",
+          "nod. \"You'll do fine here. Beer's cold, ref's blind, sit down.\"",
         short: "\"Straight talker — football people, no soft-soap. You'll do fine. Beer's cold, ref's blind, sit down.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
         text: "\"Your eyes keep leaving the match.\" She half-approves, half-warns. \"Careful man. " +
-          "But nothing to work in here, tilac — just football and cold beer. Switch it off a while. Even the " +
+          "But nothing to work in here — just football and cold beer. Switch it off a while. Even the " +
           "angles take a night off for a good game.\"",
         short: "\"Watching the room and the match both — careful man. Nothing to work here, just football. Switch it off a while.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
@@ -7283,13 +7283,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // get the unhurried welcome below.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
         text: "\"You came to breathe.\" Malila says it softly, certain — and it is the kindest read anyone has " +
-          "given you all night. \"I know the look, tilac. You are safe to sit here and be nobody a while. Nina " +
+          "given you all night. \"I know the look. You are safe to sit here and be nobody a while. Nina " +
           "will bring food you didn't order. Let her.\"",
         short: "\"You came to breathe — I know the look. Safe to sit here and be nobody a while. Nina will bring food you didn't order. Let her.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
         text: "\"You've done the long version of this town.\" A comfortable, unhurried smile. \"I can tell — " +
           "you don't grab, you don't rush, you know how the whole thing goes. Then you know the Verandah is " +
-          "where a man comes once he's learned better. Sit, tilac.\"",
+          "where a man comes once he's learned better. Sit.\"",
         short: "\"You've done the long version — you don't grab, don't rush. The Verandah's where a man comes once he's learned better.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
         text: "\"You know the drill, na. No hustle needed for you.\" She gestures at the easy, half-empty bar. " +
@@ -7337,7 +7337,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { when: () => _sponsorFlipped("jenny"),
         text: "\"You.\" The practised welcome-smile isn't there; something quieter and more dangerous has " +
           "taken its place. \"I keep the ring in my bag now, when I know you coming. Klaus's ring, in my bag.\" " +
-          "A small, wry, unhappy tilt. \"That is your doing. So — hello, tilac. Don't make me sorry for it.\"",
+          "A small, wry, unhappy tilt. \"That is your doing. So — hello. Don't make me sorry for it.\"",
         short: "\"I keep the ring in my bag now when you come. That is your doing. Don't make me sorry.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello, welcome.\" Warm, with a boundary in it — the smile of a woman who has practised saying " +
@@ -8494,11 +8494,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "is Pattaya Leisure's, and you know precisely what you came for. Refreshing, honestly.\"",
         short: "\"A returner — you know the dance, so I won't waste the music. You know exactly what you came for. Refreshing.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
-        text: "\"You wore a ring here once.\" She notes it without judgement — a fact for the ledger. \"A man who married one here has read the menu from the other side of the table. Then I will not need to explain anything to you. Sit where you like, tilac.\"",
+        text: "\"You wore a ring here once.\" She notes it without judgement — a fact for the ledger. \"A man who married one here has read the menu from the other side of the table. Then I will not need to explain anything to you. Sit where you like.\"",
         short: "\"You wore a ring here once — a man who married one learned the hard way. I won't need to explain anything. Sit.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
         text: "\"An investor.\" The smile cools by a precise, professional degree. \"Since I liked you for three " +
-          "whole seconds, tilac, I save you a conversation: whatever they offer, Pattaya Leisure keep the paper and " +
+          "whole seconds, I save you a conversation: whatever they offer, Pattaya Leisure keep the paper and " +
           "you keep the risk. I ran this bar when it was mine. Now I rent my own eyes back from them.\" Quieter: " +
           "\"Ask me the rest in a corner, not at the door.\"",
         short: "\"An investor — whatever they offer, Pattaya Leisure keeps the paper and you keep the risk. I ran this bar when it was mine. Ask me the rest in a corner.\"" },
@@ -8510,17 +8510,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
         text: "\"A regular. Twenty years of you, maybe.\" Something almost fond crosses the sharp face. \"You " +
           "remember when this bar had another name and I had another title — owner, not manager. You are a " +
-          "witness to that. I keep witnesses close, tilac. Sit. The good stool is yours.\"",
+          "witness to that. I keep witnesses close. Sit. The good stool is yours.\"",
         short: "\"Twenty years of you, maybe — you remember when I was owner, not manager. You're a witness. I keep witnesses close.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
         text: "\"A severance. I can always tell — you spend like the money has a date on it.\" The gaze softens a " +
-          "fraction and prices you anyway. \"A thousand of you walk in lit up and walk out lighter, tilac. " +
+          "fraction and prices you anyway. \"A thousand of you walk in lit up and walk out lighter. " +
           "Spend careful. The bar will not love you back — but I tell you that honestly, which is more than most " +
           "on this soi will bother to.\"",
         short: "\"First freedom, money you never had — a thousand of you walk in lit up, out lighter. The bar won't love you back. Spend careful.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
         text: "\"You are hiding.\" Flat, quiet, and not a threat at all. \"I know the look — I wore it myself, " +
-          "running from Pattaya Leisure's lawyers inside my own bar. We do not ask the question here, tilac, and we are very, very good at not asking. That one thing, this soi sells honest.\"",
+          "running from Pattaya Leisure's lawyers inside my own bar. We do not ask the question here, and we are very, very good at not asking. That one thing, this soi sells honest.\"",
         short: "\"You are hiding — I know the look, I wore it running from Pattaya Leisure's lawyers in my own bar. Here we're very good at not asking.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Come in, come in. My girls will not bite unless you tip for it.\" The practised smile " +
@@ -10357,7 +10357,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "need somewhere to be. By dark, same chair, same men. Home away from home. " +
           "The home they wanted, na.\"" },
       { topic: "wife", text: "\"Every man here have a wife somewhere — Naklua, " +
-          "Jomtien, Manchester.\" She examines a nail. \"I know all the name. I never say them. That is the business, tilac — not the girls. The quiet is what they come back for. The girls, they can get anywhere.\"" },
+          "Jomtien, Manchester.\" She examines a nail. \"I know all the name. I never say them. That is the business — not the girls. The quiet is what they come back for. The girls, they can get anywhere.\"" },
       { topic: "orchid room|the orchid room|good room|the good room|nune|pae|gyp|the good table",
         text: "\"The good room.\" Rose does not look toward any door. \"There is a room in this town that is not mine to " +
           "talk about, and you have just named it. Some things I keep. That one I do not.\" She refills your " +
@@ -10772,7 +10772,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "UP. Quiet, clean, no walk. Our little secret.\" (You've learned Hyper's upstairs.)",
         short: "\"Upstairs is yours now, friend — barfine a girl short-time here and go UP, no hotel.\"" },
       { topic: "upstairs", text: "\"Upstairs?\" Diamond's smile stays warm and shuts like a vault. " +
-          "\"That is for friends of the house, tilac. Buy a girl a drink, buy ME one, come back a few " +
+          "\"That is for friends of the house. Buy a girl a drink, buy ME one, come back a few " +
           "times. We will see how good a friend you are.\" The subject is closed, pleasantly." },
       { topic: "glam", req: ["glamTruth"], sets: ["diamondTruth"],
         text: "\"Wimon sent you. I know — she message me before you finish your beer.\" Diamond " +
@@ -11334,7 +11334,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "girls", bond: 2,
         text: "\"My girls?\" The compère voice steps down to something room-temperature. \"Petch you " +
           "know. {{Gaew}} came to me at seventeen with a sports bag and a black eye and I did not ask " +
-          "which she minded more. 'Raise' is the right word, tilac — I do the paperwork, I watch the doses, I " +
+          "which she minded more. 'Raise' is the right word — I do the paperwork, I watch the doses, I " +
           "know which boyfriends get tea and which get the door. Twice a year I stand at a temple in " +
           "somebody's home village and I am introduced as 'her manager from Pattaya,' and the mother and " +
           "I look at each other, and we both know, and we drink the tea.\" She resets the headdress a " +
@@ -11347,7 +11347,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "on the television and I thought: there. That is the one that fits. It took the rest of them " +
           "thirty years to catch up to what I knew at eleven.\" She puts the headdress back on, and Miss " +
           "Mala reassembles around her like a curtain rising. \"His father cut stones. I cut a self. " +
-          "Same trade, tilac — you take away everything that is not the jewel.\"",
+          "Same trade — you take away everything that is not the jewel.\"",
         short: "\"His father cut stones. I cut a self. Same trade — you take away everything that is not the jewel.\"" },
     ],
   },
@@ -11757,7 +11757,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // "not my story". The warm versions wait on the wai, like her Roi Et; a customer gets the door.
       { topic: "family|my family|your family|mother|mama|husband", req: ["waiedOy"], text: "\"My mother is still in Roi Et. I built her the house with the tiled roof, the biggest in the village, and she still sleeps on the floor of the old one.\" Dry. \"No husband. Twenty years I watch husbands from this table. I kept the bar.\"",
         short: "\"My mother in Roi Et, in the house I built and won't sleep in. No husband — I kept the bar.\"" },
-      { topic: "family|my family|your family|mother|mama|husband", text: "\"My family?\" A look that grades the question. \"My family is three bars and forty girls, tilac. The other one you can ask about when you have learned to say hello.\"" },
+      { topic: "family|my family|your family|mother|mama|husband", text: "\"My family?\" A look that grades the question. \"My family is three bars and forty girls. The other one you can ask about when you have learned to say hello.\"" },
       { topic: "plan|future|dream", req: ["waiedOy"], text: "\"Plan? I am the plan.\" She taps the bar once. \"Every girl who walks in from a village like mine with one bag — I was that girl. The plan is that one of them stands here when I don't.\"",
         short: "\"I was the girl with one bag. The plan is one of them stands here when I don't.\"" },
       { topic: "plan|future|dream", text: "\"My plan is tonight's till.\" She does not look up from it. \"Tomorrow I make tomorrow's.\"" },
@@ -13757,7 +13757,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "also not young. Somehow everybody still order wine.\"" },
       { topic: "girls", text: "\"My girls dance here ten, twenty year. They know " +
         "every song, every trick, every kind of man who walk in that door — " +
-        "including your kind, tilac, whatever kind you think you are.\" She smiles " +
+        "including your kind, whatever kind you think you are.\" She smiles " +
         "to soften it. Mostly." },
       { topic: "oy", text: "\"Oy? Rainbow Girls Oy? HA. She dance HERE first, one " +
         "season, before Crystal Palace take her. Number 71. I give her that number " +
@@ -18181,7 +18181,7 @@ const _M_GREET_SHORT = [
 ];
 const _M_GIRLS = [
   '"My girls are good girls — most from Isaan, like me a long time ago. They work hard, send the money home, and they won\'t cheat you if you don\'t cheat them." A level look. "Treat them nice, I treat you nice. Same-same."',
-  '"You like one of them? Tell me, I introduce you proper — better than the grab-grab, tilac. The girl who chooses you likes you more than the girl you corner. This I know, twenty year of it."',
+  '"You like one of them? Tell me, I introduce you proper — better than the grab-grab. The girl who chooses you likes you more than the girl you corner. This I know, twenty year of it."',
   '"Every one of them has somebody at home who thinks she works in a restaurant." She says it flatly, no edge. "So when a farang asks me is she a good girl — she is a girl with a family. Same as your sister. Ask a better question."',
   '"I keep what I can keep, and I lose two a year. One goes home, one goes with a man." A small shrug. "The one who goes home usually comes back. The other one, you never hear."',
   '"They are not interchangeable, whatever the room looks like from a stool." She nods down the rail. "That one reads. That one sends four people to school. That one will run a bar of her own and be harder than me. Learn the names, they open up."',
@@ -18244,12 +18244,12 @@ const _C_HOME = [
   f => `"${f}." A shrug. "They know the money comes on the first. They don't ask what the job is called, and I don't volunteer."`,
 ];
 const _M_PLAN = [
-  `"A plan? I already did my plan, tilac — poor girl from the field, now I run the bar." She taps the till. "My plan now is the girls' plan: get out smarter than I did. Save it, don't drink it, don't marry the first farang who cries."`,
+  `"A plan? I already did my plan — poor girl from the field, now I run the bar." She taps the till. "My plan now is the girls' plan: get out smarter than I did. Save it, don't drink it, don't marry the first farang who cries."`,
   `"Big questions, ha." She thumbs her phone a moment, then just talks — she doesn't really need it. "I want to keep the bar honest and the girls safe. Not so romantic, but it is the plan that pays."`,
   `"Five more seasons and I buy the little place near my mother's and sell noodles at six in the morning." She sounds entirely serious. "You laugh. Noodles at six in the morning is a beautiful life. Nobody is drunk at six in the morning."`,
   `"I am fifty-three, so the plan is the knees." A flat, comic honesty. "Standing is the job. When standing stops, I want a chair with a till in front of it and a girl I trained doing the walking."`,
   `"I stopped making plans the year the whole soi shut and nobody came for eighteen months." She says it without drama, because it is simply what happened. "Now I make months. This month is good. That is a plan."`,
-  `"The land, tilac. Everything goes into the land." A small definite nod. "Money you can drink. A rai of land near the road, nobody can drink that."`,
+  `"The land. Everything goes into the land." A small definite nod. "Money you can drink. A rai of land near the road, nobody can drink that."`,
   `"Honestly? I would like one year where nothing happens." She laughs at herself. "No fire, no flood, no girl running off with the till. One boring year and I would take up gardening."`,
   `"My plan is that the girls who leave here leave with something." She squares a stack of chits that did not need squaring. "Some of them do. Not all. You would want me to say all."`,
   // round 65
@@ -18264,7 +18264,7 @@ const _M_PLAN = [
 ];
 const _M_WALLET = [
   '"You lost your wallet? Oi. Not in my bar — we don\'t do that here, bad for business, bad for luck." She considers. "Ask Candy, on Soi Buakhao. If it moved through this area, Candy heard about it."',
-  '"Not here, tilac. I would know — nothing moves in this bar without me." A tilt of the head toward the door. "Candy Bar, Buakhao side. Everybody\'s trouble ends up on Candy\'s desk."',
+  '"Not here. I would know — nothing moves in this bar without me." A tilt of the head toward the door. "Candy Bar, Buakhao side. Everybody\'s trouble ends up on Candy\'s desk."',
   '"A wallet." She sighs the sigh of a woman who has heard it a hundred times and believed it about sixty. "Not mine, not my girls. Go to Candy on Buakhao — she is the one who hears things first."',
   '"Bad luck, and bad luck travels." She touches the little shrine\'s edge without seeming to. "I ask my girls. If it turns up you will hear. Meanwhile: Candy, Soi Buakhao. Start there."',
 ];
@@ -18375,7 +18375,7 @@ function _floorMama(id, r) {
       // Candy standing six feet away while her own colleague says "ask Candy on
       // Buakhao" (Maureen, round 47 — Bua in the same bar gets it right).
       { topic: "wallet", notFlags: ["hasWallet"], when: (st, G) => _npcWhere("candy") === G.room,
-        text: '"Your wallet?" A tilt of the head down the bar. "Then you are in luck and you are also standing next to the answer \u2014 Candy is in tonight. Ask her, tilac. She hears about these before I do."' },
+        text: '"Your wallet?" A tilt of the head down the bar. "Then you are in luck and you are also standing next to the answer \u2014 Candy is in tonight. Ask her. She hears about these before I do."' },
       { topic: "wallet", notFlags: ["hasWallet"], text: _M_WALLET[k.wallet] },
     ]),
   };
@@ -19473,7 +19473,7 @@ const FLOOR_STAFF = {
   kaew: {"role":"hostess","name":"Kaew","th":"แก้ว","room":"paradise_nights","emoji":"🌻","look":"Thai woman of twenty-six, long dancer's neck, hair scraped into a high bun, sharp collarbones, emerald halter top.","from":"{{Nong Khai}}","desc":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Paradise Nights Club's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","selfies":["new nail 💅 pink na","new dress 👗 you like?? 😊","my cat 🐈 cute like me na 😽"],"pick":{"greet":2,"short":0,"ask":3,"askQ":0,"family":11,"plan":15,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   meaw: {"role":"hostess","name":"Meaw","th":"เหมียว","room":"paradise_nights","emoji":"✨","look":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing","from":"Sisaket","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of Paradise Nights Club's girls, from Sisaket. Google Translate is open before you finish the sentence.","pick":{"greet":4,"short":2,"ask":1,"askQ":2,"family":13,"plan":17,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   nan: {"role":"hostess","name":"Nan","th":"แนน","room":"candy_bar","emoji":"💫","look":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face","from":"Roi Et","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Candy Bar's girls, from Roi Et. The {{phone}} never leaves her hand.","pick":{"greet":0,"short":1,"ask":0,"askQ":1,"family":4,"plan":8,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
-  bua: {"role":"hostess","name":"Bua","th":"บัว","room":"candy_bar","emoji":"🌺","look":"Thai woman of thirty-one, gold hoop earrings and chains, glossy black hair, sharp winged eyeliner, gold phone case.","from":"Sisaket","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.","pick":{"greet":0,"short":2,"ask":3,"askQ":2,"family":19,"plan":3,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  bua: {"role":"hostess","name":"Bua","th":"บัว","room":"candy_bar","emoji":"🌺","look":"Thai woman of thirty-one, gold hoop earrings and chains, glossy black hair, sharp winged eyeliner, gold phone case.","from":"Sisaket","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She keeps half an eye on the door and the other half on you.","pick":{"greet":0,"short":2,"ask":3,"askQ":2,"family":19,"plan":3,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   fern: {"role":"hostess","name":"Fern","th":"เฟิร์น","room":"candy_bar_2","emoji":"🌙","look":"Round-faced and quick to laugh","from":"Mukdahan","desc":"Round-faced and quick to laugh — one of Candy Bar 2's girls, from Mukdahan. She types more than she talks — and laughs at both.","pick":{"greet":0,"short":0,"ask":2,"askQ":0,"family":14,"plan":18,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   mai: {"role":"hostess","name":"Mai","th":"ใหม่","room":"candy_bar_2","emoji":"🌸","look":"Straight hair to her hips, a silver anklet, perfectly still until she isn't","from":"Kalasin","desc":"Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of Candy Bar 2's girls, from Kalasin. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":4,"short":1,"ask":2,"askQ":1,"family":18,"plan":2,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
   ju: {"role":"hostess","name":"Ju","th":"จู","room":"amp_room","emoji":"🌙","look":"Round-faced and quick to laugh","from":"Buriram","desc":"Round-faced and quick to laugh — one of The Amp Room's girls, from Buriram. She types more than she talks — and laughs at both.","selfies":["rainy 🌧️ i stay home lonely 🥺","new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555"],"pick":{"greet":1,"short":0,"ask":2,"askQ":0,"family":10,"plan":14,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
@@ -19486,8 +19486,8 @@ const FLOOR_STAFF = {
   yaya: {"role":"hostess","name":"Yaya","th":"ยาย่า","room":"reload_bar","emoji":"🌻","look":"Thai woman of twenty-four, swan neck, long side-swept hair, small diamond nose stud, yellow slip dress, poised.","from":"{{Nong Khai}}","desc":"Tall, with a dancer's neck and a dancer's sore feet, her heels on the rail beside her — one of Sunflower Bar's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":4,"short":0,"ask":3,"askQ":0,"family":3,"plan":7,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   ann: {"role":"hostess","name":"Ann","th":"แอน","room":"midnight_sun","emoji":"🌸","look":"Straight hair to her hips, a silver anklet, perfectly still until she isn't","from":"Kalasin","desc":"Straight hair to her hips, a silver anklet, perfectly still until she isn't — one of Midnight Sun Bar's girls, from Kalasin. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":0,"short":1,"ask":2,"askQ":1,"family":14,"plan":18,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
   nut: {"role":"hostess","name":"Nut","th":"นัท","room":"midnight_sun","emoji":"🌙","look":"Round-faced and quick to laugh","from":"Amnat Charoen","desc":"Round-faced and quick to laugh — one of Midnight Sun Bar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.","selfies":["rainy 🌧️ i stay home lonely 🥺","friend birthday 🎂 we sing loud loud","so hot today 🥵 i melt 555"],"pick":{"greet":1,"short":0,"ask":2,"askQ":0,"family":10,"plan":14,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
-  rung: {"role":"hostess","name":"Rung","th":"รุ้ง","room":"lucky_tiger","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sisaket","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
-  oat: {"role":"hostess","name":"Oat","th":"โอ๊ต","room":"lucky_tiger","emoji":"🌺","look":"Thai woman of twenty-seven, broad shoulders, short sporty bob, sunburnt cheeks, wide grin, white volleyball jersey.","from":"Sakon Nakhon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":12,"plan":16,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  rung: {"role":"hostess","name":"Rung","th":"รุ้ง","room":"lucky_tiger","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sisaket","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket. She notices who is drinking and who is only pretending to.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  oat: {"role":"hostess","name":"Oat","th":"โอ๊ต","room":"lucky_tiger","emoji":"🌺","look":"Thai woman of twenty-seven, broad shoulders, short sporty bob, sunburnt cheeks, wide grin, white volleyball jersey.","from":"Sakon Nakhon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She remembers a face after one beer, and lets you see that she does.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":12,"plan":16,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   ton: {"role":"hostess","name":"Ton","th":"ต้น","room":"silk_rose","emoji":"💐","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Mukdahan","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of Silk Rose Bar's girls, from Mukdahan. She keeps the score of the football and the score of the argument at the end of the bar, and is right about both.","pick":{"greet":0,"short":0,"ask":0,"askQ":0,"family":4,"plan":8,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   nid: {"role":"hostess","name":"Nid","th":"นิด","room":"silk_rose","emoji":"🌼","look":"Forties, a sleek bob and a heavy gold chain, older than the go-go average and unhurried about it","from":"Surin","desc":"Forties, a sleek bob and a heavy gold chain, older than most of the soi's floor and unhurried about it — one of Silk Rose Bar's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":3,"short":2,"ask":2,"askQ":2,"family":2,"plan":6,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   wa: {"role":"hostess","name":"Wa","th":"หว้า","room":"silk_rose","emoji":"✨","look":"Lean and angular, cheekbones like a blade, eyes that weigh you","from":"Yasothon","desc":"Lean and angular, cheekbones like a blade, eyes that weigh you — one of Silk Rose Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.","pick":{"greet":4,"short":2,"ask":1,"askQ":2,"family":13,"plan":17,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
@@ -19501,12 +19501,12 @@ const FLOOR_STAFF = {
   guitar: {"role":"hostess","name":"Guitar","th":"กีตาร์","room":"rabbit_hole","emoji":"🍒","look":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot","from":"Sakon Nakhon","desc":"Tanned arms, a vine tattoo up one wrist, hair in a loose knot — one of The Rabbit Hole's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.","selfies":["my cat 🐈 cute like me na 😽","rainy 🌧️ i stay home lonely 🥺","gym 💪 strong for you"],"pick":{"greet":0,"short":0,"ask":1,"askQ":1,"family":17,"plan":1,"famWrap":1,"planWrap":0,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":0}},
   namtip: {"role":"hostess","name":"Namtip","th":"น้ำทิพย์","room":"lucky_charm","emoji":"💐","look":"Thai woman of twenty-two, tiny, wide laughing mouth, short choppy bob, bright pink lipstick, polka-dot dress.","from":"Udon Thani","desc":"Tiny and loud, all elbows and energy — one of Lucky Charm Bar's girls, from Udon Thani. She laughs before the joke is finished, which is either kindness or experience.","pick":{"greet":2,"short":0,"ask":0,"askQ":1,"family":4,"plan":12,"famWrap":1,"planWrap":0,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":0}},
   bella: {"role":"hostess","name":"Bella","th":"เบลล่า","room":"lucky_charm","emoji":"💕","look":"Round glasses and a cardigan over the bar dress, like a librarian on a dare","from":"{{Nong Bua Lamphu}}","desc":"Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of Lucky Charm Bar's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":0,"short":1,"ask":3,"askQ":1,"family":19,"plan":3,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
-  prik: {"role":"hostess","name":"Prik","th":"พริก","room":"moonshine_bar","emoji":"🌺","look":"Thai woman of twenty-five, athletic shoulders, high braided ponytail, strong jaw, sweatband on one wrist, orange tank top.","from":"Yasothon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","beach today 🏖️ miss you na"],"pick":{"greet":1,"short":2,"ask":3,"askQ":2,"family":15,"plan":19,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  prik: {"role":"hostess","name":"Prik","th":"พริก","room":"moonshine_bar","emoji":"🌺","look":"Thai woman of twenty-five, athletic shoulders, high braided ponytail, strong jaw, sweatband on one wrist, orange tank top.","from":"Yasothon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. Her eyes go to the door every time it moves.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","beach today 🏖️ miss you na"],"pick":{"greet":1,"short":2,"ask":3,"askQ":2,"family":15,"plan":19,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   mek: {"role":"hostess","name":"Mek","th":"เมฆ","room":"moonshine_bar","emoji":"💫","look":"Long hair, longer eyelashes, a practised pout","from":"Kalasin","desc":"Long hair, longer eyelashes, a practised pout — one of Moonshine Bar's girls, from Kalasin. The {{phone}} never leaves her hand.","pick":{"greet":0,"short":1,"ask":0,"askQ":1,"family":4,"plan":8,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
   namtan: {"role":"hostess","name":"Namtan","th":"น้ำตาล","room":"khao_talo_bar","emoji":"🌼","look":"Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match","from":"Roi Et","desc":"Fifties, hennaed hair, twenty seasons of soi behind her eyes and a laugh to match — one of Daeng's Place's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","pick":{"greet":2,"short":2,"ask":2,"askQ":0,"family":14,"plan":2,"famWrap":0,"planWrap":2,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":0,"price":1,"late":0,"lockin":2}},
   ying: {"role":"hostess","name":"Ying","th":"หญิง","room":"khao_talo_bar","emoji":"💐","look":"Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields","from":"Amnat Charoen","desc":"Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields — one of Daeng's Place's girls, from Amnat Charoen. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","selfies":["waiting work 💕 think about you","friend birthday 🎂 we sing loud loud","me eat somtam 🥵🌶️ so spicy 555"],"pick":{"greet":2,"short":0,"ask":0,"askQ":0,"family":16,"plan":0,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   lin: {"role":"hostess","name":"Lin","th":"หลิน","room":"water_buffalo","emoji":"🌸","look":"Fifties, reading glasses on a cord, and a laugh like a door banging shut","from":"Roi Et","desc":"Fifties, reading glasses on a cord, and a laugh like a door banging shut — one of The Water Buffalo's girls, from Roi Et. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","selfies":["me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na","new dress 👗 you like?? 😊"],"pick":{"greet":1,"short":1,"ask":2,"askQ":1,"family":10,"plan":14,"famWrap":0,"planWrap":0,"homeWrap":0,"free":0,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
-  nim: {"role":"hostess","name":"Nim","th":"นิ่ม","room":"water_buffalo","emoji":"🌺","look":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept","from":"Sakon Nakhon","desc":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  nim: {"role":"hostess","name":"Nim","th":"นิ่ม","room":"water_buffalo","emoji":"🌺","look":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept","from":"Sakon Nakhon","desc":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon. She reads a room the way other people read a menu.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   duan: {"role":"hostess","name":"Duan","th":"เดือน","room":"firefly_bar","emoji":"🍒","look":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept","from":"{{Nong Khai}}","desc":"Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of Firefly Bar's girls, from {{Nong Khai}}. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","selfies":["beach today 🏖️ miss you na","market this morning 🛵 buy food mama","gym 💪 strong for you"],"pick":{"greet":2,"short":0,"ask":1,"askQ":0,"family":1,"plan":5,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   saifon: {"role":"hostess","name":"Saifon","th":"สายฝน","room":"firefly_bar","emoji":"🍒","look":"Thai woman of fifty, grey at the temples, shoulder-length hair, laugh lines, red silk blouse, knowing half-smile.","from":"Yasothon","desc":"Grey at the temples, a red silk blouse, older than the town girls and better at this — one of Firefly Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.","pick":{"greet":3,"short":0,"ask":1,"askQ":1,"family":5,"plan":13,"famWrap":1,"planWrap":0,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":0}},
   wanpen: {"role":"hostess","name":"Wanpen","th":"วันเพ็ญ","room":"mama_yai","emoji":"💐","look":"Fifties, reading glasses on a cord, and a laugh like a door banging shut","from":"Udon Thani","desc":"Fifties, reading glasses on a cord, and a laugh like a door banging shut — one of Mama Yai's' girls, from Udon Thani. She laughs before the joke is finished, which is either kindness or experience.","pick":{"greet":2,"short":0,"ask":0,"askQ":1,"family":4,"plan":12,"famWrap":1,"planWrap":0,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":1,"price":2,"late":1,"lockin":2}},
@@ -19517,11 +19517,11 @@ const FLOOR_STAFF = {
   jaja: {"role":"hostess","name":"Jaja","th":"จาจา","room":"mooring_bar","emoji":"🍒","look":"Thai woman of thirty-four, sleepy eyes, messy topknot, fine lines at the eyes, oversized grey T-shirt, slow easy smile.","from":"Loei","desc":"Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of The Mooring's girls, from Loei. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","pick":{"greet":4,"short":0,"ask":1,"askQ":0,"family":13,"plan":17,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   dokmai: {"role":"hostess","name":"Dokmai","th":"ดอกไม้","room":"night_heron","emoji":"💫","look":"Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields","from":"Buriram","desc":"Sun-lined face, a faded tattoo on one forearm, a voice made for calling across fields — one of The Night Heron's girls, from Buriram. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":2,"short":1,"ask":0,"askQ":2,"family":4,"plan":8,"famWrap":2,"planWrap":1,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":2,"price":0,"late":2,"lockin":1}},
   jampa: {"role":"hostess","name":"Jampa","th":"จำปา","room":"night_heron","emoji":"💫","look":"A gold tooth, a sharper tongue, and drink arithmetic you can watch happening","from":"Maha Sarakham","desc":"A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of The Night Heron's girls, from Maha Sarakham. The {{phone}} never leaves her hand.","pick":{"greet":4,"short":1,"ask":0,"askQ":1,"family":8,"plan":12,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
-  ing: {"role":"hostess","name":"Ing","th":"อิง","room":"blue_dog","emoji":"🌺","look":"Thai woman of twenty-six, a row of gold studs in each ear, long wavy hair, dimpled smile, white top, fine gold chains.","from":"Sisaket","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":1,"short":2,"ask":3,"askQ":2,"family":15,"plan":19,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  ing: {"role":"hostess","name":"Ing","th":"อิง","room":"blue_dog","emoji":"🌺","look":"Thai woman of twenty-six, a row of gold studs in each ear, long wavy hair, dimpled smile, white top, fine gold chains.","from":"Sisaket","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She laughs easily and watches carefully.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":1,"short":2,"ask":3,"askQ":2,"family":15,"plan":19,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   khing: {"role":"hostess","name":"Khing","th":"ขิง","room":"blue_dog","emoji":"🌙","look":"Round-faced and quick to laugh","from":"Buriram","desc":"Round-faced and quick to laugh — one of Blue Dog's girls, from Buriram. She types more than she talks — and laughs at both.","selfies":["rainy 🌧️ i stay home lonely 🥺","friend birthday 🎂 we sing loud loud","so hot today 🥵 i melt 555"],"pick":{"greet":2,"short":0,"ask":2,"askQ":0,"family":6,"plan":10,"famWrap":2,"planWrap":2,"homeWrap":2,"free":0,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   bam: {"role":"hostess","name":"Bam","th":"บาม","room":"rock_factory","emoji":"🌻","look":"Baby-faced, chewing gum, thumbing her phone under the bar","from":"{{Nong Khai}}","desc":"Baby-faced, chewing gum, thumbing her phone under the bar — one of Rock Factory's girls, from {{Nong Khai}}. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","c4":2,"selfies":["new nail 💅 pink na","market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽"],"pick":{"greet":2,"short":0,"ask":3,"askQ":0,"family":11,"plan":15,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   kwang: {"role":"hostess","name":"Kwang","th":"กวาง","room":"rock_factory","emoji":"💕","look":"Round glasses and a cardigan over the bar dress, like a librarian on a dare","from":"{{Nong Bua Lamphu}}","desc":"Round glasses and a cardigan over the bar dress, like a librarian on a dare — one of Rock Factory's girls, from {{Nong Bua Lamphu}}. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":4,"short":1,"ask":3,"askQ":1,"family":3,"plan":7,"famWrap":0,"planWrap":0,"homeWrap":0,"free":1,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
-  manow: {"role":"hostess","name":"Manow","th":"มะนาว","room":"stinky_bar","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sakon Nakhon","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.","pick":{"greet":4,"short":2,"ask":3,"askQ":2,"family":3,"plan":7,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  manow: {"role":"hostess","name":"Manow","th":"มะนาว","room":"stinky_bar","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Sakon Nakhon","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon. She has an opinion about every man at the rail and keeps all of them to herself.","pick":{"greet":4,"short":2,"ask":3,"askQ":2,"family":3,"plan":7,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   jiap: {"role":"hostess","name":"Jiap","th":"จิ๊บ","room":"stinky_bar","emoji":"✨","look":"Small slight Thai woman, mid twenties, short bob, sharp watchful eyes, fitted black top, small knowing half-smile.","from":"Sisaket","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of The Stinky Pinky's girls, from Sisaket. Google Translate is open before you finish the sentence.","pick":{"greet":3,"short":2,"ask":1,"askQ":2,"family":17,"plan":1,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   mew: {"role":"hostess","name":"Mew","th":"มิว","room":"stinky_bar","emoji":"💫","look":"Thai woman, early twenties, very long straight hair, long false eyelashes, glossy practised pout, pink satin top, phone in hand.","from":"Roi Et","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of The Stinky Pinky's girls, from Roi Et. The {{phone}} never leaves her hand.","selfies":["so hot today 🥵 i melt 555","new nail 💅 pink na","market this morning 🛵 buy food mama"],"pick":{"greet":2,"short":1,"ask":0,"askQ":1,"family":16,"plan":0,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
   goong: {"role":"hostess","name":"Goong","th":"กุ้ง","room":"honey_trap","emoji":"🍒","look":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile","from":"Khon Kaen","desc":"Heavy fringe, sharp eyeliner, a stare she switches off the moment you smile — one of Honey Trap Bar's girls, from Khon Kaen. There is a scrunchie on her wrist that has outlived three phones and one boyfriend.","selfies":["beach today 🏖️ miss you na","new dress 👗 you like?? 😊","gym 💪 strong for you"],"pick":{"greet":1,"short":0,"ask":1,"askQ":0,"family":5,"plan":9,"famWrap":2,"planWrap":2,"homeWrap":2,"free":3,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
@@ -19530,7 +19530,7 @@ const FLOOR_STAFF = {
   yok: {"role":"hostess","name":"Yok","th":"หยก","room":"queen_bee","emoji":"🌼","look":"Baby-faced, chewing gum, thumbing her phone under the bar","from":"Surin","desc":"Baby-faced, chewing gum, thumbing her phone under the bar — one of The Hive's girls, from Surin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","c4":2,"selfies":["market this morning 🛵 buy food mama","my cat 🐈 cute like me na 😽","waiting work 💕 think about you"],"pick":{"greet":2,"short":2,"ask":2,"askQ":2,"family":6,"plan":10,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   namphueng: {"role":"hostess","name":"Namphueng","th":"น้ำผึ้ง","room":"buzz_inn","emoji":"💐","look":"Hair in two buns, glitter on her cheekbones, a phone charm the size of a fist","from":"Surin","desc":"Hair in two buns, glitter on her cheekbones, a {{phone}} charm the size of a fist — one of Buzz Inn's girls, from Surin. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":1,"short":0,"ask":0,"askQ":2,"family":0,"plan":16,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":1,"price":1,"late":2,"lockin":2}},
   gaem: {"role":"hostess","name":"Gaem","th":"แก้ม","room":"buzz_inn","emoji":"🌷","look":"Soft-spoken, a mole above her lip, looks down whenever she laughs","from":"Nakhon Phanom","desc":"Soft-spoken, a mole above her lip, looks down whenever she laughs — one of Buzz Inn's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.","pick":{"greet":3,"short":1,"ask":1,"askQ":1,"family":17,"plan":1,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
-  bum: {"role":"hostess","name":"Bum","th":"บุ๋ม","room":"dollhouse","emoji":"🌺","look":"Thai woman of thirty, broad-shouldered, cropped wavy hair, freckled nose, easy laugh, oversized jersey dress.","from":"Sakon Nakhon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  bum: {"role":"hostess","name":"Bum","th":"บุ๋ม","room":"dollhouse","emoji":"🌺","look":"Thai woman of thirty, broad-shouldered, cropped wavy hair, freckled nose, easy laugh, oversized jersey dress.","from":"Sakon Nakhon","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She follows the music, the door and the till without turning her head.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   ohm: {"role":"hostess","name":"Ohm","th":"โอม","room":"dollhouse","emoji":"✨","look":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing","from":"Yasothon","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of The Dollhouse's girls, from Yasothon. Google Translate is open before you finish the sentence.","selfies":["friend birthday 🎂 we sing loud loud","so hot today 🥵 i melt 555","new nail 💅 pink na"],"pick":{"greet":2,"short":2,"ask":1,"askQ":2,"family":1,"plan":5,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   fasai: {"role":"hostess","name":"Fasai","th":"ฟ้าใส","room":"sapphire","emoji":"✨","look":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing","from":"Sakon Nakhon","desc":"Small and sharp-chinned, hair cut blunt at the jaw, and misses nothing — one of Sapphire Bar's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.","pick":{"greet":4,"short":2,"ask":1,"askQ":2,"family":13,"plan":17,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   tarn: {"role":"hostess","name":"Tarn","th":"ธาร","room":"sapphire","emoji":"💫","look":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face","from":"Maha Sarakham","desc":"Wavy hair pinned with a plastic flower, a sundress, a sun-browned face — one of Sapphire Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.","pick":{"greet":0,"short":1,"ask":0,"askQ":1,"family":4,"plan":8,"famWrap":0,"planWrap":0,"homeWrap":0,"free":2,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
@@ -19555,7 +19555,7 @@ const FLOOR_STAFF = {
   gina: {"role":"hostess","name":"Gina","th":"จีน่า","room":"the_office","emoji":"💐","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Mukdahan","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Office Bar's girls, from Mukdahan. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":3,"short":0,"ask":0,"askQ":0,"family":12,"plan":16,"famWrap":2,"planWrap":2,"homeWrap":2,"free":2,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   bpaeng: {"role":"hostess","name":"Bpaeng","th":"แป้ง","room":"the_office","emoji":"🌼","look":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder","from":"Maha Sarakham","desc":"Petite and dimpled, a braid to her waist she keeps flicking over one shoulder — one of The Office Bar's girls, from Maha Sarakham. She sits sideways on the stool, ready to stand, the way people do who stand up a lot.","selfies":["rainy 🌧️ i stay home lonely 🥺","new hair 💇‍♀️ good mai??","waiting work 💕 think about you"],"pick":{"greet":4,"short":2,"ask":2,"askQ":0,"family":6,"plan":10,"famWrap":0,"planWrap":2,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":0,"price":1,"late":0,"lockin":2}},
   tim: {"role":"hostess","name":"Tim","th":"ทิม","room":"the_boardroom","emoji":"✨","look":"Lean and angular, cheekbones like a blade, eyes that weigh you","from":"Sisaket","desc":"Lean and angular, cheekbones like a blade, eyes that weigh you — one of The Boardroom's girls, from Sisaket. Google Translate is open before you finish the sentence.","pick":{"greet":3,"short":2,"ask":1,"askQ":2,"family":17,"plan":1,"famWrap":1,"planWrap":1,"homeWrap":1,"free":3,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
-  min: {"role":"hostess","name":"Min","th":"มิน","room":"the_boardroom","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Yasothon","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
+  min: {"role":"hostess","name":"Min","th":"มิน","room":"the_boardroom","emoji":"🌺","look":"Athletic, a sunburnt nose, a sports watch she checks between customers","from":"Yasothon","desc":"Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon. She knows which stool is whose before its owner does.","selfies":["new hair 💇‍♀️ good mai??","me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na"],"pick":{"greet":2,"short":2,"ask":3,"askQ":2,"family":11,"plan":15,"famWrap":1,"planWrap":1,"homeWrap":1,"free":1,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   tar: {"role":"hostess","name":"Tar","th":"ตาล","room":"doghouse","emoji":"🌼","look":"Neat side parting, pearl studs, a bank teller on her night off","from":"Chaiyaphum","desc":"Neat side parting, pearl studs, a bank teller on her night off — one of The Doghouse's girls, from Chaiyaphum. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","pick":{"greet":0,"short":2,"ask":2,"askQ":2,"family":14,"plan":18,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   gof: {"role":"hostess","name":"Gof","th":"กอฟ","room":"doghouse","emoji":"🌻","look":"A wide slow smile, a gap in her front teeth, nowhere she would rather be","from":"Khon Kaen","desc":"A wide slow smile, a gap in her front teeth, nowhere she would rather be — one of The Doghouse's girls, from Khon Kaen. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":4,"short":0,"ask":3,"askQ":0,"family":3,"plan":7,"famWrap":2,"planWrap":2,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":0,"lockin":0}},
   wassana: {"role":"hostess","name":"Wassana","th":"วาสนา","room":"doghouse","emoji":"🌺","look":"Thai woman of thirty-five, gold bangles to the elbow, thick gold chain, hair in a high bun, satisfied smile.","from":"Loei","desc":"Gold everywhere — earrings, chain, {{phone}} case — one of The Doghouse's girls, from Loei. She chimes faintly when she moves, and knows to the baht what it is all worth tonight.","selfies":["new hair 💇‍♀️ good mai??","rainy 🌧️ i stay home lonely 🥺","my cat 🐈 cute like me na 😽"],"pick":{"greet":1,"short":1,"ask":3,"askQ":1,"family":7,"plan":11,"famWrap":0,"planWrap":0,"homeWrap":1,"free":1,"wallet":0,"drinksOnly":2,"price":0,"late":1,"lockin":1}},
@@ -19566,7 +19566,7 @@ const FLOOR_STAFF = {
   milk: {"role":"hostess","name":"Milk","th":"มิ้ลค์","room":"velvet_club","emoji":"🌼","look":"Baby-faced, chewing gum, thumbing her phone under the bar","from":"Udon Thani","desc":"Baby-faced, chewing gum, thumbing her phone under the bar — one of The Velvet Club's girls, from Udon Thani. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","c4":2,"selfies":["market this morning 🛵 buy food mama","gym 💪 strong for you","waiting work 💕 think about you"],"pick":{"greet":2,"short":2,"ask":2,"askQ":2,"family":6,"plan":10,"famWrap":1,"planWrap":1,"homeWrap":1,"free":0,"wallet":2,"drinksOnly":1,"price":2,"late":2,"lockin":2}},
   june: {"role":"hostess","name":"June","th":"จูน","room":"velvet_club","emoji":"🌷","look":"Soft-spoken, a mole above her lip, looks down whenever she laughs","from":"Nakhon Phanom","desc":"Soft-spoken, a mole above her lip, looks down whenever she laughs — one of The Velvet Club's girls, from Nakhon Phanom. She hums along to whatever is playing and knows about half of the words in English.","selfies":["my cat 🐈 cute like me na 😽","rainy 🌧️ i stay home lonely 🥺","new hair 💇‍♀️ good mai??"],"pick":{"greet":2,"short":1,"ask":1,"askQ":1,"family":1,"plan":5,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
   the_terrace_fah: {"role":"hostess","name":"Fah","th":"ฟ้า","room":"the_terrace","emoji":"💕","look":"Thai woman of twenty-eight, strong shoulders, tied-back hair with loose strands, mole on one cheek, green sports top, calm smile.","from":"Nakhon Phanom","desc":"Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Terrace's girls, from Nakhon Phanom. She keeps one eye on the door and the other on whoever is talking, and misses nothing on either.","pick":{"greet":3,"short":2,"ask":3,"askQ":2,"family":3,"plan":11,"famWrap":2,"planWrap":0,"homeWrap":0,"free":1,"wallet":0,"drinksOnly":2,"price":1,"late":2,"lockin":2}},
-  the_terrace_namtip: {"role":"hostess","name":"Namtip","th":"น้ำทิพย์","room":"the_terrace","emoji":"🌻","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Nakhon Phanom","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Terrace's girls, from Nakhon Phanom. She counts the room's empty glasses without seeming to look at them.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","my cat 🐈 cute like me na 😽"],"pick":{"greet":2,"short":1,"ask":3,"askQ":2,"family":15,"plan":7,"famWrap":0,"planWrap":1,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":0,"price":1,"late":2,"lockin":0}},
+  the_terrace_namtip: {"role":"hostess","name":"Namtip","th":"น้ำทิพย์","room":"the_terrace","emoji":"🌻","look":"Hair bleached at the ends, a row of ear piercings, chewing on a straw","from":"Nakhon Phanom","desc":"Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Terrace's girls, from Nakhon Phanom. She is the first to see a new face and the last to say anything about it.","selfies":["new hair 💇‍♀️ good mai??","so hot today 🥵 i melt 555","my cat 🐈 cute like me na 😽"],"pick":{"greet":2,"short":1,"ask":3,"askQ":2,"family":15,"plan":7,"famWrap":0,"planWrap":1,"homeWrap":2,"free":1,"wallet":0,"drinksOnly":0,"price":1,"late":2,"lockin":0}},
   kingfisher_praew: {"role":"hostess","name":"Praew","th":"แพรว","room":"kingfisher","emoji":"🌷","look":"Thai woman of twenty-one, drowsy eyes, lopsided topknot, round glasses, pastel T-shirt dress.","from":"Ubon","desc":"Sleepy-eyed, a messy topknot, an oversized T-shirt for a dress, entirely unbothered — one of The Kingfisher's girls, from Ubon. Google Translate is open before you finish the sentence.","selfies":["my cat 🐈 cute like me na 😽","me eat somtam 🥵🌶️ so spicy 555","new nail 💅 pink na"],"pick":{"greet":3,"short":2,"ask":1,"askQ":0,"family":1,"plan":13,"famWrap":0,"planWrap":1,"homeWrap":2,"free":3,"wallet":1,"drinksOnly":0,"price":2,"late":0,"lockin":1}},
   kingfisher_kaew: {"role":"hostess","name":"Kaew","th":"แก้ว","room":"kingfisher","emoji":"🦋","look":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks","from":"Surin","desc":"Big-eyed and solemn, a little gold Buddha at her throat, older than she looks — one of The Kingfisher's girls, from Surin. Her nails are done in a colour called something like Bangkok Sunset, and she will tell you if you ask.","pick":{"greet":4,"short":0,"ask":0,"askQ":0,"family":0,"plan":12,"famWrap":0,"planWrap":1,"homeWrap":2,"free":2,"wallet":2,"drinksOnly":1,"price":2,"late":0,"lockin":1}},
   two_stools_meaw: {"role":"hostess","name":"Meaw","th":"แมว","room":"two_stools","emoji":"🌺","look":"Lean and angular, cheekbones like a blade, eyes that weigh you","from":"Sakon Nakhon","desc":"Lean and angular, cheekbones like a blade, eyes that weigh you — one of Two Stools Bar's girls, from Sakon Nakhon. A small Buddha on a chain sits outside her collar, and she touches it when she thinks nobody is looking.","pick":{"greet":0,"short":0,"ask":3,"askQ":0,"family":15,"plan":3,"famWrap":0,"planWrap":1,"homeWrap":2,"free":1,"wallet":1,"drinksOnly":1,"price":2,"late":0,"lockin":1}},

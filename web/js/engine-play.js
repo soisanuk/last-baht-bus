@@ -2808,7 +2808,7 @@ function _flirtUnwelcome(id, name) {
 // intact and it never plays as the punter rejecting her. Never a gag.
 const _LADYBOY_PASS = [
   n => _fmt("{n} clocks you clocking her and is already three steps ahead. \"Not for you, tilac — no problem. I know my customer, and you are not him.\" No hurt in it; she's been read a thousand times and long since stopped minding which way it goes. \"Plenty girls here. Go, be happy.\"", { n }),
-  n => _fmt("A slow, knowing smile. \"You didn't know? Now you know.\" {n} gives you the beat to decide, and reads the answer off your face before you find it. \"Is okay, tilac — you are not the first, and I am not offended. The ladies are that way.\" A graceful tilt of the head, and she turns to a customer looking for exactly her.", { n }),
+  n => _fmt("A slow, knowing smile. \"You didn't know? Now you know.\" {n} gives you the beat to decide, and reads the answer off your face before you find it. \"Is okay — you are not the first, and I am not offended. The ladies are that way.\" A graceful tilt of the head, and she turns to a customer looking for exactly her.", { n }),
 ];
 // The cabaret's own pass: at an all-kathoey venue "the ladies are that way" is
 // nonsense — a straight man's flirt gets folded into the show instead, and he
