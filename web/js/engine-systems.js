@@ -5011,7 +5011,7 @@ const _MONEYPIT_ASKS = [
   "landlord come today 😭 i short 3500... you help little bit? i pay back promise promise",
   "phone break AGAIN 😩 4000 for new one, i cannot work without it na 💔",
   "brother crash motorbike 😰 family need 5000 emergency. you my only good man 😢🙏",
-  "aiyo big problem, i tell you when i see you 😭 but i need 8000 quick. you the only one 💔",
+  "oi big problem, i tell you when i see you 😭 but i need 8000 quick. you the only one 💔",
 ];
 function _moneypitText(id) {
   const wk = typeof _pers === "function" && _pers("whiteknight");

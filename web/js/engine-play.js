@@ -3928,7 +3928,7 @@ const _OWNER_GREET = {
 const _OWNER_PITCH = {
   mamasan: [
     n => `${n} looks at you like you've made a joke, then decides you have. "Introduce you? Boss — every girl in here already work for YOU." She laughs, low. "You want to know one, you TALK to her. Is your bar. Cannot barfine your own bar, tilac."`,
-    n => `"Aiyah." ${n} waves it off, amused. "I sell the girls to the customer, not to the man who pay their wage. You like one of them, that is a different thing, and it is your own business — but there is no fine to pay yourself, na."`,
+    n => `"Tai laew." ${n} waves it off, amused. "I sell the girls to the customer, not to the man who pay their wage. You like one of them, that is a different thing, and it is your own business — but there is no fine to pay yourself, na."`,
   ],
   cashier: [
     n => `${n} raises an eyebrow at the drawer. "Barfine? Boss, the fine come to this till — your till. You want to move money from your pocket to your own bar?" A small, dry smile. "Just go talk to her."`,
@@ -4297,6 +4297,22 @@ const _LEDGER_DRINKS_ONLY = [
     `"Every time is more than one time. I can count. Mama can count too, but mama count different ` +
     `things."`,
 ]
+// …and the same three truths in the English of a woman who has it: Mercedes and Chompoo were handed "Bar take
+// most… is not what you think it is, na" in the floor's grammar (Ploy, the dialogue walk's reader, 2026-10-13)
+const _OTHER_LEDGER_EN = {
+  1: [
+    (n) => `${n} turns the chit over so you can read the bar's stamp. "You'd think the drink is for me. It is, in the sense that I drink it. The bar keeps most of the ฿${_num(_ladyPrice())}; I keep ฿${_num(LADY_CUT)}." She sets it down square. "I'm not complaining. I just stopped letting men think it was a present."`,
+    (n) => `"Since you're counting," ${n} says, and taps the folded chits in her phone case, "these are my evening. ฿${_num(LADY_CUT)} a drink, settled at the end of the month, minus whatever the month decides." She says it the way an accountant says a tax rate.`,
+  ],
+  2: [
+    (n) => `${n} watches a man two stools along buy a round he can't afford. "You know what you cost me, sitting here talking?" Not unkind — precise. "Nothing, tonight. Some nights a regular who talks costs me the man who would have bought. The book has no column for 'he comes back'. I keep that one in my head."`,
+    (n) => `"There's a quota," ${n} says, as if remarking on the weather. "So many drinks a month, or the salary shrinks. You are good for the quota and bad for the arithmetic, because you sit. I've decided I don't mind. Don't make me regret the decision."`,
+  ],
+  3: [
+    (n) => `${n} shows you her banking app without being asked: a column of transfers, the same day every month, the same village. "That is the point of all this," she says. "Everything else is weather." She puts the phone face down. "Most men never see that screen. I wanted one person in here to know."`,
+    (n) => `"Do you want the real sum?" ${n} asks, and gives it to you: what the bar pays, what goes north, what is left, how many more years at that rate. She has done it in her head so often it comes out finished. "That's the whole story. The rest is the part I perform."`,
+  ],
+};
 function _otherLedger(id) {
   if (!NPC_ROLES[id] || !G.soc.drinks) return false;
   // THE OTHER LEDGER IS A CUSTOMER'S BEAT. All three tiers fired on the owner's own
@@ -4315,10 +4331,10 @@ function _otherLedger(id) {
   const due = [1, 2, 3].find(x => x <= t && !seen.includes(x));
   if (!due) return false;
   _ledgerFor = id;                       // the tier-2 beat reads tonight's real drink count (Stan, r35: "two" after eight)
-  const pool = due === 1 && typeof _drinksOnly === "function" && _drinksOnly(id) ? _LEDGER_DRINKS_ONLY : _OTHER_LEDGER[due];
+  const pool = due === 1 && typeof _drinksOnly === "function" && _drinksOnly(id) ? _LEDGER_DRINKS_ONLY : (NPCS[id].fluent ? _OTHER_LEDGER_EN : _OTHER_LEDGER)[due];
   if (!pool) return false;
   seen.push(due);
-  const _lp = _ledgerPick(id, due, pool);
+  const _lp = _ledgerPick(id, NPCS[id].fluent ? due + "en" : due, pool);
   if (!_lp) return false;                    // the town has shown you this one already; she does not re-tell it
   G.ledgerSeen = (G.ledgerSeen || 0) + 1;   // how much of the other side you've been shown
   _say("");
@@ -4344,15 +4360,29 @@ function _ledgerPick(id, tier, pool) {
   return pool[i];
 }
 
+const _BOND_TALK_EN = {   // the same small true things, in a fluent woman's English (Ploy, 2026-10-13)
+  2: [
+    n => `${n} sits down properly, the professional brightness switched off. "I saved you the seat. I'm not going to pretend I didn't."`,
+    n => `"You look tired," ${n} says — not the bar line, the other one. "Did you eat? Don't lie to me, I can tell."`,
+    n => `${n} tells you something small and true: her mother rang, the new girl is lazy, her feet hurt. "I don't tell customers this," she says, and then, "which tells you something."`,
+    n => `${n} slips one heel off under the rail and doesn't put it back. "Eight hours. Don't tell anyone." It is the most relaxed you have seen her.`,
+  ],
+  3: [
+    n => `${n} doesn't perform for you any more and doesn't apologise for it. "You get the version of me that's tired," she says. "I'm told it's a compliment."`,
+    n => `"Somebody asked me tonight who you were," ${n} says. "I said a friend. Then I thought about it, and it was true." She seems faintly surprised.`,
+    n => `${n} talks about home — the real one, not the one she gives the floor — for ten unhurried minutes, and then laughs at herself for it.`,
+    n => `"When you go home," ${n} says, "don't make promises. Just come back if you come back." She says it as advice she has earned the right to give.`,
+  ],
+};
 function _bondTalk(id) {
   const t = _bondTier(id) >= 3 ? 3 : 2;
-  let pool = _BOND_TALK[t];
+  let pool = (NPCS[id] && NPCS[id].fluent ? _BOND_TALK_EN : _BOND_TALK)[t];
   // "Yesterday you no come, I look look" is a claim — she said it to a man who had
   // spent the previous night WITH her (one-girl playtest 2026-08-22). G.seenDay
   // records the last day you sat with her; skip that variant if it was yesterday.
   const last = (G.seenDay || {})[id];
   const skip = (t === 2 && last != null && last >= G.day - 1) ? [0] : [];
-  const line = _bondPick(id, t, pool, skip);   // hers first, then the town's — see _bondPick
+  const line = _bondPick(id, NPCS[id] && NPCS[id].fluent ? t + "en" : t, pool, NPCS[id] && NPCS[id].fluent ? [] : skip);   // hers first, then the town's — see _bondPick (the English pool keeps its own book)
   _say((line || _pickVary(_BOND_SPENT, "bondspent:" + id))(NPCS[id].name), line && t >= 3 ? "win" : "");
 }
 

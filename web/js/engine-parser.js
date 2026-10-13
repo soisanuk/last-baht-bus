@@ -10780,7 +10780,7 @@ function _lightNotice() {
         `You look for your money? I save you time: it's gone."`,
       `${name} steps into the beam and strikes a pose. "Ooh, spotlight! You pay ` +
         `me like a star too, na?"` + (npcs.filter(id => NPC_ROLES[id] === "hostess").length > 1 ? " The other girls are already laughing." : " She is already laughing."),
-      `${name} squints into the light. "Aiyo. You are police, or dentist?"`,
+      `${name} squints into the light. "Oi. You are police, or dentist?"`,
       `${name} puts her hand over the beam like it is a cigarette lighter in the wind. "Save battery, tilac. You need it to call me later."`,
       `${name} waves at the torch as if it were a person. "Hello, torch. You buy me drink also?"`,
       `${name} leans over and gently pushes your phone hand down. "Tilac. The ` +

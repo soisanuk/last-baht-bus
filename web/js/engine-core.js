@@ -2377,7 +2377,7 @@ function _selfNamedNode(npcId, topic) {
 // exasperation — the terse repeat for a pure-flavour line the writer never gave
 // a `short`. Gender-neutral (no she/he), so any NPC can deliver one.
 const _ASK_AGAIN = [
-  n => `“Aiyah, I tell you this already,” ${n} says, half a laugh. “Same answer, na. Farang memory.”`,
+  n => `“Tai laew, I tell you this already,” ${n} says, half a laugh. “Same answer, na. Farang memory.”`,
   n => `${n} waves you off, fond. “You forget so fast? Buy a drink — maybe it come back.”`,
   n => `“Same-same,” ${n} says. “I tell you this one already. We talk something new, or you talk to the wall.”`,
   n => `${n} gives you the look reserved for farang who repeat themselves. “Told you already, tilac.”`,
@@ -2421,7 +2421,8 @@ const _ASK_AGAIN_FLUENT = [
 function _askAgain(npcId) {
   // a mamasan or a cashier repeats herself in her own English, not "Farang memory, na"
   // (Gwen, round 66: Madam Oy, undefeated since 2009, in a floor girl's brush-off)
-  const _house = typeof NPC_ROLES !== "undefined" && (NPC_ROLES[npcId] === "mamasan" || NPC_ROLES[npcId] === "cashier");
+  // …and the Vic's women, house without a role: "Same-same… talk to the wall" from a pub whose own lines are dry and exact (Ploy, 2026-10-13)
+  const _house = typeof NPC_ROLES !== "undefined" && (NPC_ROLES[npcId] === "mamasan" || NPC_ROLES[npcId] === "cashier" || (NPCS[npcId] && NPCS[npcId].house));
   let pool = _FLUENT_THAI.has(npcId) ? _ASK_AGAIN_FLUENT : (_thaiVoice(npcId) && !_house) ? _ASK_AGAIN : _ASK_AGAIN_EN;
   // a massage shop sells no drinks: "Buy a drink — maybe it come back" from Pensri (Terence, round 57)
   if (_room() && (_room().massage || _room().soapy)) pool = pool.filter(f => !/drink/.test(String(f)));
