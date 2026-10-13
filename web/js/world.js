@@ -9492,7 +9492,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     dialogue: [
       // his home life is not yours to ask about (Mario, 2026-10-07) — but a miss line read as
       // though he had none; he closes it, politely, in his own voice
-      { topic: "wife|your wife|married|are you married|girlfriend|your girlfriend|love life|kids|children|your family|your home|where do you live",
+      { topic: "wife|your wife|married|are you married|girlfriend|your girlfriend|love life|kids|children|your family|your home|home|where do you live",
         text: "Tan smiles, and it is a perfectly friendly smile, and it is also a door closing. \"My family is at home, my friend, which is where a family should be.\" He turns his cup. \"Ask me about the town. The town I will tell you everything.\"",
         short: "\"My family is at home, where a family should be. Ask me about the town.\"" },
       // Sao, and the dinner: the same line before and after it, and nothing for her

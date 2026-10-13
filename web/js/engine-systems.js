@@ -4114,7 +4114,7 @@ function _phoneDead() {
   return false;
 }
 
-const _CHATTER = ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊", "last night SO funny 5555",
+const _CHATTER = ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊", "customer tonight SO funny 5555",
   "bar quiet 😴 boss angry at everybody", "i see a dog look like you today 555 🐕", "my friend ask who is the farang always smiling. i say mine 😏",
   "rain rain rain ☔ nobody come", "you sleep?? night still young, old man 555", "mama call, she say hello to you (she dont know you 555)"];
 function _pushMsg(from, text, gives, fromName, photo) {
@@ -12026,15 +12026,16 @@ function _thaiOverheard() {
   if (!_npcsHere().some(id => NPC_ROLES[id])) return;
   if (G.turns - (G.thaiHeardTurn || -99) < 25) return;
   if (_rand() > 0.12) return;
+  // ONE book, for life: each of these is a thing you overhear once — "from now on, everything near you is going to
+  // be translated first" printed in two bars the same night, the Nong Khai bus two nights running (Thomas, round 92),
+  // because a per-night book walked the pick back onto lines the life book had already spent. When the six are
+  // told, the floor has said what it says behind you; it goes quiet rather than rerun. "Since eight" waits for nine.
+  const said = (G.overheardSaid = G.overheardSaid || []);
+  const open = _THAI_OVERHEARD.map((_, k) => k).filter(k => !said.includes(k) && !(k === 0 && G.nightTurn < 30));
+  if (!open.length) return;
   G.thaiHeardTurn = G.turns;
-  { const seen = (G.soc.overheardSeen = G.soc.overheardSeen || []);   // the Nong Khai Sunday bus twice in two bars (Jens, round 67)
-    let i = Math.floor(_rand() * _THAI_OVERHEARD.length), tries = 0;
-    { const said = (G.overheardSaid = G.overheardSaid || []);   // the landlord's dull conversation, verbatim, three nights (Pieter, round 73): a per-life book
-      if (said.length < _THAI_OVERHEARD.length) { let g = 0; while (said.includes(i) && g++ < _THAI_OVERHEARD.length) i = (i + 1) % _THAI_OVERHEARD.length; }
-      said.push(i); }
-    while (seen.includes(i) && tries++ < _THAI_OVERHEARD.length) i = (i + 1) % _THAI_OVERHEARD.length;   // walk, never re-roll
-    if (seen.length >= _THAI_OVERHEARD.length) seen.length = 0;
-    seen.push(i); _say(_THAI_OVERHEARD[i], "dim"); }
+  const i = open[Math.floor(_rand() * open.length)];
+  said.push(i); _say(_THAI_OVERHEARD[i], "dim");
 }
 
 // ── Kruu Waen's hour ────────────────────────────────────────────────────────

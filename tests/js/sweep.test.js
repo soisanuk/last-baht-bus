@@ -174,7 +174,7 @@ test("L902 'i fly home tomorrow' to Thip is the leaving; L903 no Mama Mama Yai; 
   G.room = "moonshine_bar"; run("buy ya dong"); assert.ok((G.soc.selfDrinks || {}).moonshine_bar >= 1);
 });
 test("L933 + L935 บาร์ and a classifier after a number", () => {
-  assert.equal(_thaiToCmd("ซื้อเบียร์สองขวด"), "buy beer");
+  assert.equal(_thaiToCmd("ซื้อเบียร์สองขวด"), "buy beer 2");   // the count stays and _doBuy says one at a time (round 92)
   assert.match(String(_thaiToCmd("เข้าแคนดี้บาร์")), /enter candy bar/);
 });
 

@@ -124,7 +124,16 @@ const _SALENG_LINGERIE_SCENE = [
 // Pooled with a one-deep no-repeat memory, keyed per cart type — the repo prose
 // doctrine. A bare random pick fired the same bra-sizing line three times running
 // while one cart sat parked (Keith, 2026-08-26); _pickVary stops the back-to-back.
-function _salengPick(arr, key) { return _pickVary(arr, "saleng:" + (key || G.salengCart || "x")); }
+// one cart's visit never tells a scene twice: "Bright feeds a strip of moo ping…" printed twice in one stop (Thomas,
+// round 92) — the one-deep memory let it back after a single other line. A book per visit; when it is spent,
+// the vignettes go quiet (null) and the cart is just parked there.
+function _salengPick(arr, key) {
+  const visit = (G.salengRoom || "") + ":" + (G.salengUntil || 0) + ":" + (key || G.salengCart || "x");
+  const b = (G.salengSaid = G.salengSaid && G.salengSaid.visit === visit ? G.salengSaid : { visit, used: [] });
+  const open = (typeof _roomFit === "function" ? _roomFit(arr) : arr).filter(l => !b.used.includes(l));
+  if (!open.length) return null;
+  const l = open[Math.floor(_rand() * open.length)]; b.used.push(l); return l;
+}
 
 // Is a cart currently parked and un-expired? (alive anywhere) / here in this room?
 function _salengAlive() { return !!(G && G.salengCart && G.turns < G.salengUntil); }
@@ -199,7 +208,7 @@ function _flowerTick() {
         `daughter holds the rose up toward you, then tips her head at ${her}, then back at you — ` +
         `the whole pitch, no words, learned at her mother's elbow. ` + price + `.`
       : _pickVary([
-        `The rose bucket again — the same mother, the same daughter in the school polo, working the other end of the street tonight. The daughter clocks you, and something in her flat professional face says she remembers which kind of answer you were. The rose comes up toward ${her}. ` + price + `.`,
+        `The rose bucket again — the same mother, the same daughter in the school polo, working the other end of the street tonight. The daughter clocks you, and something in her flat professional face says she remembers you. The rose comes up toward ${her}. ` + price + `.`,
         `The rose family reaches your rail on their round. No pitch this time — the daughter simply stands the wrapped bloom on the bar in front of you and looks from it to ${her} and back, a saleswoman who has learned that silence closes. ` + price + `.`,
       ], "flowerAgain"), "alert"],
     [`(BUY ROSE FOR ${her.toUpperCase()}) · or (WAVE) them gently on.`, "dim"]);
@@ -270,11 +279,12 @@ function _salengVignette() {
   // mama") — same prose-claim class as the shift-call boy (Frank, 2026-08-26)
   const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
   if (!girls.length) return; // nobody to play with it — stay quiet
-  if (G.salengCart === "lingerie") { _say(_salengPick(_SALENG_LINGERIE_SCENE, "lingerie-scene"), "dim"); return; }
+  if (G.salengCart === "lingerie") { const _ls = _salengPick(_SALENG_LINGERIE_SCENE, "lingerie-scene"); if (_ls) _say(_ls, "dim"); return; }
   const gid = girls[Math.floor(_rand() * girls.length)];
   const gName = NPCS[gid].name;
   const pool = _SALENG_VIGNETTES[G.salengCart] || _SALENG_VIGNETTES._default;
-  _say(_salengPick(pool).replace(/\{g\}/g, gName), "dim");
+  const _sv = _salengPick(pool); if (!_sv) return;
+  _say(_sv.replace(/\{g\}/g, gName), "dim");
   // The cart itself is ambient — it doesn't break a conversation. But if the girl
   // who bolts to it is the one you were talking to, she's physically gone
   // mid-sentence, so THAT ends the conversation (the "she jumps to the cart" rule).
@@ -580,6 +590,8 @@ const _ENC = {
     // the rose (Lars, Graham, round 47 — five times): a BUY is an answer to the
     // daughter only when it names the rose, or names nothing
     const buysRose = /^buy(?:\s+(?:a\s+|the\s+|one\s+|her\s+a\s+)?(?:rose|flower|one|it))?(?:\s+for\s+.+)?\s*$/.test(input);   // BUY ROSE FOR LEK is the tap the pitch prints (Kenji, round 47)
+    // the rose stood in front of the woman beside you, bought or not, is a thing she saw (Thomas, round 92)
+    if (typeof _streetSaw === "function" && !buysRose) _streetSaw("rose", { for: id });
     if (!(buysRose || /^(?:yes|rose|flower|sure|ok|okay|please|one|no|nah|wave|leave|later|pass|shake|sorry)\b/.test(input))) {
       _say("The mother reads your attention elsewhere, nods, and steers her daughter on to the next stool.", "dim");
       return "passthrough";

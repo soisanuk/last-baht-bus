@@ -3163,7 +3163,9 @@ function _describeRoom(full, forceFull) {
       _say("(Diamond has warmed to you — there's more to Hyper than the stage. ASK her ABOUT UPSTAIRS.)", "dim");
   }
   if (r.pool) {
-    _say("A pool table waits under a low lamp (PLAY POOL)." +
+    // the late paint covers the table for the night — the line beneath it said it "waits under a low lamp" (Thomas, round 92)
+    const _covered = r.lateDesc && typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room) && /table covered/.test([].concat(r.lateDesc).join(" "));
+    _say((_covered ? "The pool table is under its cover for the night, and the cover comes off for anyone who asks (PLAY POOL)." : "A pool table waits under a low lamp (PLAY POOL).") +
       (_leagueTonight() ? ` Tonight is LEAGUE NIGHT (PLAY KILLER, ฿${_num(KP_ENTRY)} in the ashtray).` : ""), "dim");
   }
   if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).", "dim");

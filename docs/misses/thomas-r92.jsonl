@@ -1,0 +1,6 @@
+{"cmd":"ออกไป","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"soi6_mid","day":1,"turn":21,"mode":"soi6","convo":null,"at":"2026-10-13T13:22:19.471Z","src":"persona-thomas"}
+{"cmd":"fon tok mai","reply":"I didn't understand that. (HELP lists commands.)","room":"sunset_rail","day":2,"turn":10,"mode":"soi6","convo":"pukky","at":"2026-10-13T13:24:42.902Z","src":"persona-thomas"}
+{"cmd":"ขอเบอร์จอย","reply":"Not for sale here.","room":"pink_lotus","day":2,"turn":37,"mode":"soi6","convo":null,"at":"2026-10-13T13:25:38.821Z","src":"persona-thomas"}
+{"cmd":"ซื้อดอกไม้ให้ปุ๊กกี้","reply":"Not for sale here.","room":"sunset_rail","day":3,"turn":23,"mode":"soi6","convo":null,"at":"2026-10-13T13:28:10.702Z","src":"persona-thomas"}
+{"cmd":"ถามนุ่นเรื่องเงิน","reply":"Nobody by that name here.","room":"hula_hula","day":3,"turn":62,"mode":"soi6","convo":"hula_hula_min","at":"2026-10-13T13:29:03.919Z","src":"persona-thomas"}
+{"cmd":"pai shady lady","reply":"No idea what you're after there. (HELP lists commands.)","room":"sunset_rail","day":4,"turn":16,"mode":"soi6","convo":"pukky","at":"2026-10-13T13:29:47.995Z","src":"persona-thomas"}

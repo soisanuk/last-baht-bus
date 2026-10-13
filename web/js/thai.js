@@ -79,7 +79,7 @@ const THAI_PHRASES = [
   { key: "sorry",    th: "ขอโทษครับ",    rom: "khor thot khrap", match: ["ขอโทษครับ", "ขอโทษ", "khor thot", "khor thot khrap", "kor tot", "khaw thot"] },
   { key: "beautiful",th: "สวย",          rom: "suay",            match: ["สวย", "suay", "suai"] },
   { key: "expensive",th: "แพง",          rom: "phaeng",          match: ["แพง", "phaeng", "paeng", "pang mak"] },
-  { key: "eatenyet", th: "กินข้าวหรือยัง", rom: "kin khao mai",  match: ["กินข้าวหรือยัง", "kin khao mai", "kin kao mai", "gin khao mai"] },
+  { key: "eatenyet", th: "กินข้าวหรือยัง", rom: "kin khao rue yang",  match: ["กินข้าวหรือยัง", "กินข้าวไหม", "kin khao rue yang", "kin khao mai", "kin kao mai", "gin khao mai"] },
   { key: "cool",     th: "ใจเย็น",       rom: "jai yen",         match: ["ใจเย็น", "jai yen", "jai yen yen"] },
 ];
 

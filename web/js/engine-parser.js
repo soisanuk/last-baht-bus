@@ -26,7 +26,7 @@ const _LADY_DRINK_LINES = [
   n => _fmt("One lady drink for {n} — ฿{p} on the tab that is your life.", { n, p: _ladyPrice() }),
   n => _fmt("{n} gets her cola-with-benefits; {m}'s biro logs ฿{p} without looking up.", { n, p: _ladyPrice(), m: _tillRef() }),
   n => _fmt("A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.", { n, p: _ladyPrice() }),
-  n => _fmt("“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.", { n, p: _ladyPrice() }),
+  n => _fmt("“Chon gaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.", { n, p: _ladyPrice() }),
   n => _fmt("You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.", { n, p: _ladyPrice() }),
   n => _fmt("A ฿{p} lady drink for {n} — the house's real product, sold by the glass.", { n, p: _ladyPrice() }),
   n => _fmt("{n}'s glass runs dry the way a meter does; ฿{p} restarts it.", { n, p: _ladyPrice() }),
@@ -4710,6 +4710,24 @@ function _doTalkCore(arg, topic) {
   if (!topic && NPC_ROLES[npc] && typeof _maiDee === "function" && !_maiDee(npc) && typeof _wentWithHello === "function" && _wentWithHello(npc)) { if (typeof _convoStart === "function") _convoStart(npc); else G.convo = npc; return; }
   // the woman on your arm, addressed with no subject, is with you — not behind her own rail
   // ("Ohhh, again! You have no other bar?" at Candy Bar with Lek on his arm — Ingrid, round 62)
+  // …and the room she is drinking in with you is a thing she has an opinion on: "about this bar" with Pukky on
+  // his arm at the Front Row was "wrong girl" (Thomas, round 92). A professional's read of another floor.
+  if (topic && G.party && G.party.ids && G.party.ids.includes(npc) && (typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar()) &&
+      !/\b(your|my|last|her)\b/.test(String(topic).toLowerCase()) && (/\b(this bar|this place|here|the bar|the room|bar)\b/.test(String(topic).toLowerCase()) ||
+       (_barName(G.room) && String(_barName(G.room)).toLowerCase().replace(/^the /, "").split(" ").some(w => w.length > 3 && String(topic).toLowerCase().includes(w))))) {
+    const own = NPCS[npc].room === G.room || (NPCS[npc].bars || []).includes(G.room), w = _barName(G.room) || "here", n = NPCS[npc].name;
+    const girls = _npcsHere().filter(i => i !== npc && NPC_ROLES[i] === "hostess").length;
+    _say(_pickVary(own ? [`"${w}? Is MY bar, tilac." ${n} laughs. "Tonight I sit this side. Strange, na. I see everything I do wrong."`,
+        `${n} looks round her own floor from the customer side. "Is different from here. The stool is hard. I never know."`]
+      : girls >= 2 ? [`${n} gives the room the once-over a chef gives somebody else's kitchen. "Mama here is strict. Girls good. Beer more expensive than us." A sniff. "Music worse."`,
+        `"${w}?" ${n} lowers her voice. "Okay. Clean. The girl by the speaker is new — see, she don't know where to stand." She shrugs. "We stay one drink."`,
+        `${n} counts the stools and the girls without seeming to. "Busy enough. They do okay." A little proud: "We do better."`]
+      : girls === 1 ? [`"${w}?" ${n} looks at the only other girl on the floor and softens. "One girl, all the stools. Hard job. Buy her something, na — not me, her."`,
+        `${n} takes in the empty stools. "Quiet bar. Is okay. Quiet bar, nobody steal you from me." She grins.`]
+      : [`${n} takes in the empty stools. "Quiet bar. Is okay. Quiet bar, nobody steal you from me." She grins.`,
+        `"${w}?" ${n} shrugs. "Nobody working tonight, only us. Good. I am the girl here." She means it as a joke, mostly.`], "partyroom-opinion:" + npc + ":" + G.room));
+    return;
+  }
   if (!topic && G.party && G.party.ids && G.party.ids.includes(npc)) {
     _say((typeof _pickTownLine === "function" ? _pickTownLine(_partyTalkPool(npc), "partytalk") : _pickVary(_partyTalkPool(npc), "partytalk:" + npc))(NPCS[npc].name, _barName(G.room) || "here"));   // town-wide: two companions said one line (Martin, round 85)
     return;
@@ -5120,7 +5138,15 @@ function _doTalkCore(arg, topic) {
                               : [`"${n}?" A face. "Mama shout at her, long time. She cry in toilet." A shrug. "She not do again to you. But she not love you now, na."`,
                                  `"Everybody know you complain about ${n}." Not unkind. "Good. Mama right. But ${n} sit far from you now. That is how."`],
           }[kind];
-          _say(_pickVary(P, "witness:" + kind + ":" + G.room));
+          // one witness, one telling — and a second mouth tells it differently: Bussaba on Pukky, Bussaba on
+          // "last night" and Numfon on Pukky printed one sentence three times (Thomas, round 92). The book is
+          // keyed by what was seen; a speaker who has told it gives the gist, the next takes a line not yet said.
+          { const wb = (G.soc.witnessSaid = G.soc.witnessSaid || {}), key = kind + ":" + _her, b = (wb[key] = wb[key] || { by: {}, used: [] });
+            if (b.by[npc] != null) { _say(house ? `"I told you about ${n} already." A nod at the floor, which knows the rest.` : `"I tell you already, ${n} — same story, na." A grin.`); return; }
+            const pool = P.concat(house ? [`"${n}." A look across the room at her, then back at you. "Ask her. It's her story, and she tells it better."`]
+              : [`"${n}?" A look across the floor at her, then back. "Ask her. She tell it better than me — she was there."`]);
+            let i = pool.findIndex((_, k) => !b.used.includes(k)); if (i < 0) i = b.used.length % pool.length;
+            b.by[npc] = i; b.used.push(i); _say(pool[i]); }
           return;
         }
       }
@@ -5322,8 +5348,10 @@ function _doTalkCore(arg, topic) {
       : PW[_townPick(npc, _en ? "hplanwrapen" : "hplanwrap", PW.length, _hh(npc, 37) % PW.length, gf(PW))](story.plan);
     const _sk = npc + ":" + t.replace(/hometown|village/, "home").replace(/future|dream/, "plan");
     const _told = (G.soc.storyTold = G.soc.storyTold || {});
-    if (_told[_sk] && !_retell) _say(`${NPCS[npc].name}: ` + (/home|village/.test(t) ? `"${from}. You know already."` : /family/.test(t) ? `"${String(story.family).replace(/^["“]|["”]$/g, "").split(/(?<=[.!?])\s/)[0]}" The same answer, shorter — she told you already.` : `"Same dream. Still a dream."`));   // …and ASK … AGAIN retells (Gerry, round 64)   // told in full every time, six times (Piet, round 62)
-    else { _told[_sk] = true; _say(`${NPCS[npc].name}: ${line}`); }
+    if (_told[_sk] && !_retell) _say(`${NPCS[npc].name}: ` + (/home|village/.test(t) ? `"${from}. You know already."` : /family/.test(t) ? (() => { const _f = String(story.family).replace(/^["“]|["”]$/g, "").split(/(?<=[.!?])\s/)[0].replace(/([^.!?])$/, "$1."); return _f.length >= String(story.family).replace(/^["“]|["”]$/g, "").replace(/([^.!?])$/, "$1.").length ? `"${_f}" A nod — she told you that already.` : `"${_f}" The same answer, shorter — she told you already.`; })() : `"Same dream. Still a dream."`));   // …and ASK … AGAIN retells (Gerry, round 64)   // told in full every time, six times (Piet, round 62)
+    // a wrapper that opens on narration takes her name as its subject, not as a speaker's tag: "Joy: She laughs
+    // before she answers" (Thomas, round 92)
+    else { _told[_sk] = true; _say(/^(She|A |Her )/.test(line) ? line.replace(/^She\b/, NPCS[npc].name) : `${NPCS[npc].name}: ${line}`); }
     _questOffer(npc);
     return;
   }
@@ -5475,7 +5503,7 @@ function _doTalkCore(arg, topic) {
     // chit she had just unfolded in your hand read as a secret too (Nok-Anne,
     // round 43, and she is right that it is the worst kind of bug: the
     // best-written line in the file, doing damage).
-    const _touchy = /\b(money|price|quota|chit|cut|fine|barfine|sponsor|boyfriend|husband|farang|customer|mama|mamasan|owner|debt|loan|send|home|family|village|son|daughter|kid|child|age|old|real name|papa|before|last night|other man|him)\b/
+    const _touchy = /\b(money|price|quota|chit|cut|fine|barfine|sponsor|boyfriend|husband|farang|customer|mama|mamasan|owner|debt|loan|send|home|family|village|son|daughter|kid|child|age|old|real name|papa|before|other man|him)\b/
       .test(String(topic || "").toLowerCase());
     if (_touchy && !gated && typeof _thaiFluent === "function" && _thaiFluent() &&
         NPC_ROLES[npc] === "hostess" && typeof _thaiVoice === "function" && _thaiVoice(npc)) {
@@ -6749,7 +6777,7 @@ const _TOWN = {
     punter: ["\"Seen you about,\" {n} says."],
   },
   me_known: {
-    floor: ["\"You?\" {n} rolls her eyes. \"Everybody here know you. You think we don't talk?\"", "\"Everybody know you, tilac.\" {n} waves at the room. \"Even the DJ know you.\"", "{n} laughs. \"Know you? The girls talk about you when you go home. Good things, mostly.\""],
+    floor: ["\"You?\" {n} rolls her eyes. \"Everybody here know you. You think we don't talk?\"", "\"Everybody know you, tilac.\" {n} waves at the room. \"Even the motosai boys outside know you.\"", "{n} laughs. \"Know you? The girls talk about you when you go home. Good things, mostly.\""],
     house: ["\"Everybody on this floor knows you,\" {n} says. \"That's a compliment. Mostly.\"", "\"You're one of ours now,\" {n} says. \"That means I notice when you don't come in.\"", "{n} doesn't look up. \"Of course. Same seat, same nights. This floor keeps a book on its regulars, and you're in it.\""],
     punter: ["\"Everyone knows you, mate.\""],
   },
@@ -7366,6 +7394,18 @@ function _streetTalk(npc, topic) {
         `"${Cap(w)}, the bell." ${n} grins. "Whole bar say your name one time. Now everybody know you, na."`]
       : [`"You rang the bell ${w}," ${n} says. "${here ? "This room" : "The whole room"} drank on you. It's remembered — that's what it's for."`,
         `"${Cap(w)}, yes — the bell." ${n} nods. "A round for the house buys a face for a week. Use it."`], "streetbell:" + R));
+    return true;
+  }
+  // the rose family's round, not bought: the woman it was held up to saw it, and so did the rail (Thomas, round 92 —
+  // "ask pukky about rose" was "wrong girl" the night the daughter stood a rose in front of her twice)
+  const rose = /\b(roses?|flowers?|the rose girl|the daughter|rose (?:girl|seller|family)|bucket)\b/.test(t) && _streetEvent("rose");
+  if (rose && ((rose.present || []).includes(npc) || rose.for === npc)) {
+    const w = when(rose), mine = rose.for === npc;
+    _say(_pickTownLine(R === "floor" ? (mine ? [`"The rose?" ${n} laughs. "${Cap(w)} the girl hold it in front of me, you look at the ceiling. Is okay, na. Rose die in two day anyway."`,
+        `"${Cap(w)}, the rose girl." ${n} shrugs, smiling. "She is mama's daughter, very good student. You don't buy — never mind. Next time buy, she need for school 555."`]
+      : [`"The rose family?" ${n} nods. "Every night same round. The daughter is eighteen now, she study accounting. Mama make her work the rail Friday."`])
+      : [`"The rose seller?" ${n} says. "Every night, every rail. The daughter's doing an accounting course — the roses pay for it. Nobody minds a no."`],
+      "streetrose:" + R + (mine ? ":mine" : "")));
     return true;
   }
   const pol = /\b(police|cop|cops|the boys in brown|brown shirt|the fine|the stop)\b/.test(t) && _streetEvent("police");
@@ -9265,6 +9305,13 @@ function _ladyDrinkCharge(id) {
 }
 
 function _doBuy(arg) {
+  // a COUNT was dropped in silence: BUY 2 BEERS and ซื้อเบียร์สองขวด each poured one (Thomas, round 92). The bar
+  // pours them as you drink them, and says so; the number goes and the order stands.
+  { const _q = String(arg || "").match(/^(?:([2-9]|two|three|four|five)\s+)(.+)$|^(.+?)\s+([2-9]|two|three|four|five)$/i);
+    if (_q && !/\bfor\b|\d{2,}/.test(arg) && /\b(beers?|waters?|sodas?|cokes?|chang|leo|singha|drinks?|shots?)\b/i.test(_q[2] || _q[3])) {
+      arg = (_q[2] || _q[3]).replace(/s\b/, "");
+      _say("(One at a time — they pour the next when this one's gone.)", "dim");
+    } }
   if (_room().freeTea && /\b(iced tea|tea|cooler|the tap)\b/.test(String(arg || ""))) { _freeTea(); return; }   // the note says free (2026-10-09)
   const r = _room();
   // BUY LEK A TOASTIE is BUY TOASTIE FOR LEK, and a plate for her is hers before
@@ -12906,7 +12953,13 @@ function _afterWorkTalk(npc) {
   const book = (G.afterWorkOf = G.afterWorkOf || {});
   if (book[npc]) return book[npc];
   const reg = _hoursRegister(npc) === "floor" ? "floor" : "house";
-  return (book[npc] = typeof _pickTownLine === "function" ? _pickTownLine(_AFTER_WORK[reg], "afterwork:" + reg) : _AFTER_WORK[reg][0]);
+  // a line that hands her a daughter or a husband is hers only if her own words already have one: Nuch, who
+  // will not discuss family, said her daughter picks her up after work (Thomas, round 92)
+  const mine = (NPCS[npc].dialogue || []).map(d => (d.text || "") + " " + (d.topic || "")).join(" ").toLowerCase();
+  const KIN = ["daughter", "son", "husband", "boy", "kid", "children", "grand", "sister", "brother", "mother", "mama"];
+  const fit = _AFTER_WORK[reg].filter(l => KIN.every(k => !new RegExp("\\b" + k).test(l.toLowerCase()) || new RegExp("\\b" + k).test(mine)));
+  const pool = fit.length ? fit : _AFTER_WORK[reg];
+  return (book[npc] = typeof _pickTownLine === "function" ? _pickTownLine(pool, "afterwork:" + reg) : pool[0]);
 }
 function _closingTalk(npc, topic) {
   if (npc === "tan") return _tanTown("closing");
@@ -14421,17 +14474,47 @@ const _THAI_CMD = [
   ["เรื่อง", "about"], ["กระเป๋าเงิน", "wallet"], ["ส้มตำ", "som tam"], ["ครอบครัว", "family"],
   ["แฟน", "boyfriend"], ["ภาษาไทย", "thai"], ["บ้าน", "home"], ["แม่", "mother"], ["พ่อ", "father"],
   ["อ่าน", "read"], ["เดิน", "walk"], ["ชนแก้ว", "cheers"],
+  // Thomas, round 92 — a half-Thai Londoner put the week's questions to the floor in Thai and the parser had
+  // the verbs but not the subjects: last night, the rain, the present, after work, children. Every word here is
+  // already in the trainer's vocabulary. The questions come out as the English the router already answers.
+  ["เมื่อคืน", "last night"], ["เมื่อวาน", "last night"], ["ฝนตก", "rain"], ["ของขวัญ", "present"],
+  ["เลิกงานแล้วไปไหน", "after work"], ["เลิกงาน", "after work"], ["งาน", "work"],
+  ["ลูก", "children"], ["มีลูกไหม", "do you have kids"], ["มาจากไหน", "where are you from"],
+  ["ทำงานที่นี่นานหรือยัง", "how long have you worked here"], ["ทำงานที่นี่นานไหม", "how long have you worked here"],
+  ["เหนื่อยไหม", "are you tired"], ["เหนื่อย", "tired"], ["พูดไทยได้ไหม", "thai"], ["ที่ไหนยังเปิด", "where is still open"],
+  ["ยังเปิด", "still open"], ["อายุ", "age"], ["วันหยุด", "day off"], ["ชื่อ", "name"],
+  ["พี่สาว", "sister"], ["น้องสาว", "sister"], ["ควาย", "buffalo"], ["ดอกไม้", "rose"],
+  ["เหล้า", "drink"], ["เครื่องดื่ม", "drink"], ["ออกไป", "out"], ["ขอเบอร์", "contact"],
+  ["ไปเที่ยว", "out"], ["พา", "take"], ["กลับโรงแรม", "go home"], ["กลับบ้าน", "go home"],
+  ["ส่งเงิน", "send"], ["ส่ง", "send"], ["ตอบ", "reply"],
 ];
+// A word that is also a woman's name is the word after ABOUT: เรื่องฝน is the rain, not Fon (Thomas, round 92 —
+// it rained every night and nobody could be asked about it in Thai). Before ABOUT the name keeps it: ถามฝน is Fon.
+const _THAI_ABOUT_WORD = { "ฝน": "rain" };
 // The table, plus every character's own Thai name — you cannot ask a woman
 // about anything in Thai if the parser has never heard of her (Hugo, round 42:
 // ถามแคนดี้ missed while ถาม worked). Built once, longest-first, so a name
 // beats any table word it happens to start with.
-let _thaiCmdAll = null;
+let _thaiCmdAll = null, _thaiNameIds = {};
+// One Thai name can be several women — นุ่น is Nune at the Orchid and two Noons; ต้น is Tan and Ton. The name
+// typed means the one in the room, else the one you know (the _npcByName policy), never the first in the file:
+// ถามนุ่น at the Hula Hula's till was "ask nune" and "Nobody by that name here" (Thomas, round 92).
+function _thaiNameFor(th, fallback) {
+  const ids = _thaiNameIds[th];
+  if (!ids || ids.length < 2) return fallback;
+  const here = typeof _npcsHere === "function" ? _npcsHere() : [];
+  const pick = ids.find(i => here.includes(i)) || ids.find(i => G.talked && G.talked[i]) || ids.find(i => G.known && G.known[i]) || ids[0];
+  return String(NPCS[pick].name || pick).toLowerCase().split(" ").pop();
+}
 function _thaiCmdTable() {
   if (_thaiCmdAll) return _thaiCmdAll;
   const rows = _THAI_CMD.slice();
+  _thaiNameIds = {};
   for (const [id, n] of Object.entries(NPCS))
-    if (n.th && /[\u0E00-\u0E7F]/.test(n.th)) rows.push([n.th, String(n.name || id).toLowerCase().split(" ").pop()]);
+    if (n.th && /[\u0E00-\u0E7F]/.test(n.th)) {
+      (_thaiNameIds[n.th] = _thaiNameIds[n.th] || []).push(id);
+      if (_thaiNameIds[n.th].length === 1) rows.push([n.th, String(n.name || id).toLowerCase().split(" ").pop()]);
+    }
   for (const [id, r] of Object.entries(ROOMS))   // a bar's own Thai name (the maze signs): เข้าเรนโบว์ (Jens, round 67)
     if (r.th && /[\u0E00-\u0E7F]/.test(r.th)) rows.push([r.th, String(_barName(id) || r.name).toLowerCase()]);
   rows.sort((a, b) => b[0].length - a[0].length);
@@ -14458,18 +14541,33 @@ function _thaiToCmd(s) {
     // "the soi reads a little Thai — but not that" (2026-10-09, with the trainer's จ๊ะ). อันนี้ ("this
     // one") points, and pointing is not a verb: อันนี้เท่าไหร่ is HOW MUCH.
     { const pt = rest.match(/^(นะคะ|นะครับ|ครับ|ค่ะ|คะ|จ๊ะ|นะ|อันนี้)/);
-      if (pt && (rest.length === pt[0].length || /^\s/.test(rest.slice(pt[0].length)) || pt[0] === "อันนี้" || /^(ค่ะ|คะ|ครับ|จ๊ะ|นะ)/.test(rest.slice(pt[0].length)))) { rest = rest.slice(pt[0].length); continue; } }
+      if (pt && (rest.length === pt[0].length || /^\s/.test(rest.slice(pt[0].length)) || pt[0] === "อันนี้" || /^(ค่ะ|คะ|ครับ|จ๊ะ|นะ)/.test(rest.slice(pt[0].length)) ||
+          // …and between two words, as Thai is typed: สวัสดีครับปุ๊กกี้, ขอบคุณนะปุ๊กกี้ (Thomas, round 92 — the
+          // greeting reached her only with a space the language does not use)
+          (out.length && _thaiCmdTable().some(([th]) => rest.slice(pt[0].length).startsWith(th))))) { rest = rest.slice(pt[0].length); continue; } }
+    // a question's tail is the asking, not a word: เหนื่อยไหม / กินข้าวหรือยัง read as what precedes them
+    { const qt = rest.match(/^(หรือยัง|ไหม)/);
+      if (qt && out.length && (rest.length === qt[0].length || /^[\s]/.test(rest.slice(qt[0].length)))) { rest = rest.slice(qt[0].length); continue; } }
     // a classifier after a number — เบียร์สองขวด — is the count's, not a word (Jens, round 67)
     { const cl = rest.match(/^(ขวด|แก้ว|จาน|อัน)/);
-      if (cl && out.length && /^\d+$/.test(out[out.length - 1])) { out.pop(); rest = rest.slice(cl[0].length); continue; } }
+      // …and the count STAYS: popping it poured one beer for สองขวด in silence (Thomas, round 92); _doBuy says "one at a time"
+      if (cl && out.length && /^\d+$/.test(out[out.length - 1])) { rest = rest.slice(cl[0].length); continue; } }
+    { const aw = out[out.length - 1] === "about" && Object.keys(_THAI_ABOUT_WORD).find(w => rest.startsWith(w));
+      if (aw) { out.push(_THAI_ABOUT_WORD[aw]); rest = rest.slice(aw.length); if (++i > 12) return false; continue; } }
+    // ไปทางตะวันตก — "go the way west": ทาง after a GO is the road, not a word
+    if (rest.startsWith("ทาง") && out[out.length - 1] === "go") { rest = rest.slice(3); continue; }
     const hit = _thaiCmdTable().find(([th]) => rest.startsWith(th));
     if (!hit) return false; // some Thai the game doesn't read
-    out.push(hit[1]); rest = rest.slice(hit[0].length);
+    out.push(_thaiNameFor(hit[0], hit[1])); rest = rest.slice(hit[0].length);
     if (++i > 12) return false;
   }
   // เข้า is IN on its own and ENTER with a place after it: "เข้า candy bar" came out
   // "in candy bar" and then "I didn't understand that" (Nattapong, round 56)
-  return out.join(" ").replace(/^in (?=\S)/, "enter ").replace(/\s+baht\b/g, "");
+  return out.join(" ").replace(/^in (?=\S)/, "enter ").replace(/\s+baht\b/g, "")
+    // พาปุ๊กกี้ไปเที่ยว → take pukky out; กลับโรงแรมกับปุ๊กกี้ → go home with pukky; ส่งเงินสองร้อยให้จอย → send 200 to joy
+    .replace(/^go home to (\S+)$/, "go home with $1")
+    .replace(/^send (?:money )?(\d+) give (\S+)$/, "send $1 to $2").replace(/^send (?:money )?give (\S+) (\d+)$/, "send $2 to $1")
+    .replace(/^(contact|reply) give /, "$1 ");
 }
 function _norm(s) {
   return s.trim().replace(/\s+/g, " ")
@@ -14716,6 +14814,12 @@ function doCommand(input) {
   }
   // WHO RUNS THIS BAR is a question about the paper, not the black book (Graham, round 74)
   if (/^who (runs|owns) (this|the) (bar|place|club|pub)\??$/i.test(raw.trim()) && typeof _licenceOf === "function" && _licenceOf(G.room)) raw = "examine licence";
+  // …and in Thai: นอน twice re-printed the confirm forever and ใช่ disarmed it (Thomas, round 92) — the warning
+  // read the English, and the script was translated only after it. A pure-Thai line while it is armed is read first.
+  if (G.endWarn && /^[฀-๿\s]+$/.test(raw) && typeof _thaiToCmd === "function") {
+    const _en = _thaiToCmd(raw.trim());
+    if (_en) { _say(`(เข้าใจ — ${_en})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1; raw = _en; }
+  }
   // YES at "SLEEP again if you mean it" is meaning it — "that moment has passed" for the one word a man types at a question (Graham, round 74)
   if (G.endWarn && G.endWarn.day === G.day && G.turns - G.endWarn.turn <= 1 && /^(y|yes|yeah|yep|ok|okay|sure|do it|confirm|i mean it)[.!]*$/i.test(raw.trim()))
     raw = { sleep: "sleep", sunrise: "watch sunrise" }[G.endWarn.kind] || raw;
@@ -16351,7 +16455,9 @@ function doCommand(input) {
       // …but Thai the parser READS is a command, not an answer: "ถาม" + a name (ask Tan) and
       // "ไปเหนือ" (go north) were filed as the player's answer (Nattapong, round 56)
       if (G.convoQ && typeof _convoAnswer === "function" &&
-          (/[\u0E00-\u0E7F]/.test(lower) || _looksThai(lower)) && !(/[\u0E00-\u0E7F]/.test(lower) && _thaiToCmd(lower))) { _convoAnswer(raw); return; }
+          (/[\u0E00-\u0E7F]/.test(lower) || _looksThai(lower)) && !(/[\u0E00-\u0E7F]/.test(lower) && _thaiToCmd(lower)) &&
+          // \u2026nor a line that STARTS with a verb: "\u0E16\u0E32\u0E21 terry \u0E40\u0E23\u0E37\u0E48\u0E2D\u0E07\u2026" to a third man was filed as the answer to Doyle (Thomas, round 92)
+          !/^(\u0E16\u0E32\u0E21|\u0E1E\u0E39\u0E14|\u0E44\u0E1B|\u0E0B\u0E37\u0E49\u0E2D|\u0E43\u0E2B\u0E49|\u0E17\u0E34\u0E1B|\u0E08\u0E48\u0E32\u0E22|\u0E19\u0E2D\u0E19|\u0E14\u0E39|\u0E40\u0E02\u0E49\u0E32|\u0E2D\u0E2D\u0E01|\u0E2A\u0E48\u0E07|\u0E15\u0E2D\u0E1A)/.test(lower.trim())) { _convoAnswer(raw); return; }
       if (!/[\u0E00-\u0E7F]/.test(lower) && _looksThai(lower) && _thaiRegister() === "adequate" && _npcsHere().some(_thaiVoice)) {
         _say(_pickVary(_THAI_SWITCH, "thaiswitch"), "dim");
         return;
@@ -16374,7 +16480,10 @@ function doCommand(input) {
           // the recipient, buying the player's own beer (Nok-Anne, round 43)
           // …and keeps what was bought: "ซื้อ som tam ให้ nan" bought her a LADY DRINK
           // (Nattapong, round 56). A beer for her is still her drink (_doBuy's rewrite).
-          const en2 = /^buy .+ give /.test(en) ? en.replace(/^buy (.+) give /, "buy $1 for ") : en;
+          let en2 = /^buy .+ give /.test(en) ? en.replace(/^buy (.+) give /, "buy $1 for ") : en;
+          // เมื่อคืน said to the woman you are talking to is a question to HER, not the ledger (Thomas, round 92)
+          { const _p = typeof _convoActive === "function" && _convoActive();
+            if (_p && NPCS[_p] && /^(last night|after work)$/.test(en2)) en2 = "ask " + String(NPCS[_p].name).toLowerCase() + " about " + en2; }
           _say(`(เข้าใจ — ${en2})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1;
           _thaiPraise("script:" + en2.split(" ")[0]); doCommand(en2); return;
         }
