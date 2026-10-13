@@ -63,7 +63,7 @@ const pool = Object.keys(NPCS).filter(id => NPC_ROLES[id] === "hostess" && ROOMS
 const women = QUICK ? pool.filter((_, i) => i % Math.max(1, Math.floor(pool.length / 10)) === 0).slice(0, 10) : pool;
 
 // sentences, normalised: her name, the bar's name and digits blanked, punctuation and quotes dropped
-const norm = (t, id) => String(t).replace(new RegExp("\\b" + NPCS[id].name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "g"), "X")
+const norm = (t, id) => String(t).replace(/\b(?:Mama|Mae|Khun) [A-Z][a-z]+\b/g, "X").replace(new RegExp("\\b" + NPCS[id].name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "g"), "X")
   .replace(new RegExp((_barName(NPCS[id].room) || "@@").replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"), "BAR")
   .replace(/[“”"«»]/g, "").replace(/\d[\d,]*/g, "N");
 const sentences = (t, id) => norm(t, id).split(/\n/).filter(l => l.trim() && !/^\s*[·(]/.test(l) && !/^[^\s]+ [^:]+: “/.test(l))
@@ -88,6 +88,19 @@ for (const id of women) {
   G.phone.contacts[id] = true;
   { const t = _floorTextPick(id, (NPCS[id].textVoice && NPCS[id].textVoice.chatter) || _CHATTER); record(id, "text", t); }   // a contact's text, one each
   if (VERBOSE) console.log(id);
+}
+// …and THE HOUSE ON ITS GIRLS: four mamasans gave one character reference for four women (Bernard, round 88) — the
+// audit only asked the women about themselves, so the review pools were never in it. Each room's mamasan and cashier
+// is asked about a woman they work with; a sentence three of them say is a chorus.
+for (const room of [...new Set(women.map(id => NPCS[id].room))]) {
+  G.room = room; G.nightTurn = 30; G.convo = null; G.convoQ = null;
+  const here = _npcsHere(), girl = here.find(i => NPC_ROLES[i] === "hostess");
+  for (const h of here.filter(i => NPC_ROLES[i] === "mamasan" || NPC_ROLES[i] === "cashier")) {
+    if (!girl) continue;
+    G.hunger = 0; G.thirst = 0; G.soc.drunk = 0; G.convo = null;
+    out = []; doCommand(`ask ${String(NPCS[h].name).toLowerCase()} about ${String(NPCS[girl].name).toLowerCase()}`);
+    record(h, "review:" + girl, said().replace(new RegExp("\\b" + NPCS[girl].name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "g"), "X"));   // the subject's name too, or four bars never collide
+  }
 }
 _rand = savedRand;
 
