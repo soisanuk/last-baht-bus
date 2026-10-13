@@ -2828,6 +2828,16 @@ const _EXIT_ROSTER = [
   "No {n}. Not on a night off — gone. “She finish,” the woman on the till says, and then, because you keep looking at the stool: “She {p} now. Like she always say.” She says it flat, and then she says, “Good,” and goes back to the book.",
   "You look for {n} and the girl who catches you looking shakes her head, smiling. “She not here, she go home. She {p} now — the thing she always talk about.” A pause. “She send photo. Small shop. Very small.” She holds her fingers an inch apart, pleased.",
 ];
+// A room's return lines are a BOOK, not a coin: every line before any repeats — the balcony's WHERE YOU GO
+// SEXY MAN came round two mornings running (Kevin, round 84). One roll, as _pickVary always spent.
+function _revisitPick(pool, room) {
+  const book = (G.revisitSaid = G.revisitSaid || {}), said = (book[room] = book[room] || []);
+  let fresh = pool.filter(l => !said.includes(String(l).slice(0, 50)));
+  if (!fresh.length) { book[room] = []; fresh = pool; }
+  const line = _pickVary(fresh, "rv:" + room);
+  book[room].push(String(line).slice(0, 50));
+  return line;
+}
 function _describeRoom(full, forceFull) {
   // a pay-on-arrival fare has landed you already: a reload redrew the stop you LEFT, bars and
   // exits and all, under a driver waiting at the other end (Helga, round 57)
@@ -2883,7 +2893,7 @@ function _describeRoom(full, forceFull) {
   // often than he reads the daytime paint.
   const late = r.lateDesc && typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room);
   if (full) _say(late ? (Array.isArray(r.lateDesc) ? _pickVary(r.lateDesc, "late:" + G.room) : r.lateDesc)
-    : (!firstTime && !forceFull && r.revisit ? _pickVary(typeof _atOwnBar === "function" && _atOwnBar() ? _OWNER_REVISIT : r.revisit, "rv:" + G.room)
+    : (!firstTime && !forceFull && r.revisit ? _revisitPick(typeof _atOwnBar === "function" && _atOwnBar() ? _OWNER_REVISIT : r.revisit, G.room)
       : (typeof _atOwnBar === "function" && _atOwnBar() ? String(r.desc).replace(/^An American-run beer bar/, "Your beer bar — the old man's name still over the door —") : r.desc)));   // owned, it is not "American-run" (Marta, round 63)
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) {
@@ -3125,10 +3135,13 @@ function _describeRoom(full, forceFull) {
   if (_quizDay() && !r.barType) {
     const near = [...new Set([...Object.values(r.exits), ...(r.venues || [])])].filter(to => _quizBars().includes(to));
     if (near.length && G.nightTurn < 40) {
+      // a quiz you have already played tonight is not an invitation (Kevin, round 84: 5/5, and the board still said walk in)
+      const played = near.every(to => G.quizPlayed && G.quizPlayed[to]);
       _say(near.map(_barName).join(" and ") +
         (near.length > 1 ? " have" : " has") + " a chalkboard out: QUIZ NIGHT " +
         "TONIGHT 8-10 — PRIZES. " +
-        (G.nightTurn >= 20 ? "It's on right now; walk in and you're playing." :
+        (played ? "You've had your go tonight; the board has your team's chalk on it." :
+          G.nightTurn >= 20 ? "It's on right now; walk in and you're playing." :
           "Starts at 20:00; walk in during and you're playing."), "dim");
     }
   }
@@ -3449,7 +3462,7 @@ function _tick() {
   } else if (_flag("act1Done") && G.rainDay !== G.day && G.nightTurn >= _rainEarliest() && _wetSeason() && _wxRainy() && G.turns - G.lastRain >= 30 && _rand() < 0.11) {
     // the monsoon-months amplifier: a rainy (not stormy) sky becomes a downpour
     _startRain(3 + Math.floor(_rand() * 6));
-  } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < (_wetSeason() ? 0.10 : 0.05)) {
+  } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && G.turns - (G.lastRain || -99) >= 20 && _rand() < (_wetSeason() ? 0.10 : 0.05)) {   // not straight after a downpour: "the rain is doing all the talking" seven turns after it stopped (Kevin, round 84)
     G.lastDrizzle = G.turns; // light rain: atmosphere only, never mechanics
     if (!_onRide()) _sayDrizzle();   // the bar you rode away from does not narrate its gutter (Kenji, round 47)
   }

@@ -474,7 +474,7 @@ function _promptedFolk(arg, topic) {
   // one place the question could not be put at all (Helen, round 49: "the people
   // who actually hold the town up are scenery with lovely paint on them").
   const _hoursSay = () => {
-    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two)\b/.test(t)) return _stillOpenTalk(null);
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(t)) return _stillOpenTalk(null);
     if (/\b(open|opens|opening|opening time)\b/.test(t) && !/\bopen till\b/.test(t)) return _openingTalk(null);
     if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(t)) return _busyTalk(null);
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|last call|open till|what time)\b/.test(t)) return _closingTalk(null, t);
@@ -726,7 +726,7 @@ const _HUH = [
 ];
 const _BEER_LINES = [
   "One big Chang, cold enough to hurt.",
-  "A sweating bottle of Leo, cap flicked into the gutter — the first pull the best one.",
+  "A sweating bottle of Leo, the cap popped off against the edge of the bar — the first pull the best one.",
   "Cold Singha, condensation already running for the door. The bar exhales; so do you.",
   "Another big one, cracked and poured over the last of the ice. The true national anthem.",
 ];
@@ -4865,7 +4865,7 @@ function _doTalkCore(arg, topic) {
   if (topic && !d.topic && typeof _oppTalk === "function" && _oppTalk(npc, topic)) return;
   if (topic && !d.topic && _houses) {
     const _ct = String(topic).toLowerCase();
-    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two)\b/.test(_ct)) { _say(_stillOpenTalk(npc)); return; }   // not the opening hour (Declan, round 83)
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(_ct)) { _say(_stillOpenTalk(npc)); return; }   // not the opening hour (Declan, round 83)
     if (/\b(open|opens|opening|opening time|open at|start)\b/.test(_ct) && !/\bopen till\b/.test(_ct)) { _say(_openingTalk(npc)); return; }
     if (/\b(busy|rush|quiet|peak|packed|full|crowd|crowded)\b/.test(_ct)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc, _ct)); return; }
@@ -4930,7 +4930,7 @@ function _doTalkCore(arg, topic) {
   if (topic && !d.topic && NPCS[npc].room === G.room &&
       !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house && !NPCS[npc].filler) {
     const _pt = String(topic).toLowerCase();
-    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two)\b/.test(_pt)) { _say(_stillOpenTalk(npc)); return; }
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(_pt)) { _say(_stillOpenTalk(npc)); return; }
     if (/\b(open|opens|opening|opening time|open at)\b/.test(_pt) && !/\bopen till\b/.test(_pt)) { _say(_openingTalk(npc)); return; }
     if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(_pt)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_pt)) { _say(_closingTalk(npc, _pt)); return; }
@@ -12230,7 +12230,7 @@ function _closingTalk(npc, topic) {
   const reg = _hoursRegister(npc);
   // one sentence from three mouths in three bars, word for word (Declan, round 83): dealt from a town-wide book
   const pick = (pools) => typeof _pickTownLine === "function" ? _pickTownLine(pools[reg] || pools.house, "closing" + reg) : _pickVary(pools[reg] || pools.house, "closing" + reg);
-  if (topic && /\b(still open|what'?s open|anywhere open|open now|where.*open|after two|after (the )?shutters)\b/.test(String(topic).toLowerCase())) return _stillOpenTalk(npc);
+  if (topic && /\b(still open|what'?s open|anywhere open|open now|where.*open|after two|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after|after (the )?shutters)\b/.test(String(topic).toLowerCase())) return _stillOpenTalk(npc);
   { const v = _namedVenue(topic);
     if (v && v !== G.room) {
       const c = _closeTurn(v), N = _barName(v) || ROOMS[v].name, short = /queen vic/i.test(N) ? "The Vic" : N;
@@ -13278,7 +13278,7 @@ function _chipSet() {
   // The readout verbs live only in HELP, which is itself untappable — a thumb
   // player could not reach QUESTS/HINT/TIME/WHO/GALLERY at all (thumbs-only
   // playtest 2026-08-22). One chip, fanned out like the ATM.
-  if (_flag("act1Done") || G.stage === "act1") add("__info ", "info…");
+  if (_flag("act1Done") || G.stage === "act1") add("__info ", "time, map & phone…");   // "info…" didn't say what it was for (Ron, round 82)
 
   if (_inBar()) {
     const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
@@ -13786,6 +13786,8 @@ const _ENC_SOFT = {
 // A real top-level command word (not a bare answer): used only to decide whether
 // a soft encounter should let the line through.
 function _isRealCommand(v) {
+  // a bare drink order is an order, not a no to the man with the watches (Declan, round 83: "beer" at the Blue Dog)
+  if (/^(beer|water|soda|chang|leo|singha|pint|coke|cola)$/.test(v)) return true;
   return /^(haggle|bargain|answer|lesson|learn|go|n|s|e|w|ne|nw|se|sw|in|out|up|down|enter|travel|goto|ride|motosai|bus|buy|drink|eat|talk|ask|tell|tip|give|quests|journal|watch|light|check|message|send|look|l|examine|x|wait|sleep|map|time|hint|who|blackbook|contacts|phone|photo|play|rematch|sell|feed|pet|wai|dance|sing|order|read|inventory|i|inv|diagnose|score|call|follow|shower|withdraw|atm|balance|borrow|repay|work|books|draw|complain|report|column|owl|paper|tv|scores|lottery|weather|standing|rep|gallery|share|charge|barfine|flirt|kiss|spank|fondle|contact|number|meet|name|rename|accept|abandon|drop|take|get|open|close|use|search|smell|listen|pray|swim|throw|stand|ring|bell|help|checkout|toggle|undo|restart|reset|again|g|hug|good|stay|heel|whistle|come|bet|wager|beg)$/.test(v);
 }
 let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die with the session

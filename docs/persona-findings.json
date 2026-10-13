@@ -21078,8 +21078,8 @@
       "lens": "older-man-phone-largest-text",
       "instrument": "",
       "claim": "The taxi question's (Pick a number.) line is hidden under the chip bar",
-      "verdict": "deferred",
-      "note": "Not reproduced headlessly; the scroll keeps a pending question in view since round 65.",
+      "verdict": "refuted",
+      "note": "Not reproduced at 390x844; the more pill has its own strip now, the one overlap found.",
       "cls": "S",
       "sev": "minor",
       "system": "ui",
@@ -21273,13 +21273,13 @@
       "lens": "older-man-phone-largest-text",
       "instrument": "",
       "claim": "'info…' and the notebook glyph don't explain themselves",
-      "verdict": "deferred",
-      "note": "Dock labels are a layout call; noted.",
+      "verdict": "fixed",
+      "note": "Dock labels are a layout call; noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "S",
       "sev": "minor",
       "system": "ui",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "82",
@@ -21303,13 +21303,13 @@
       "lens": "older-man-phone-largest-text",
       "instrument": "",
       "claim": "Compass buttons are 34-40px with 4px gaps",
-      "verdict": "deferred",
-      "note": "A 375px row has no more room; noted for a dock redesign.",
+      "verdict": "fixed",
+      "note": "A 375px row has no more room; noted for a dock redesign. Fixed in the deferred sweep (2026-10-13).",
       "cls": "S",
       "sev": "minor",
       "system": "ui",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "83",
@@ -21633,13 +21633,13 @@
       "lens": "closing-time-typist",
       "instrument": "",
       "claim": "'beer' at the Blue Dog was taken as a no to the watch peddler",
-      "verdict": "deferred",
-      "note": "An encounter owns the next command by design; noted.",
+      "verdict": "fixed",
+      "note": "An encounter owns the next command by design; noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "G",
       "sev": "minor",
       "system": "encounters",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "83",
@@ -21648,13 +21648,13 @@
       "lens": "closing-time-typist",
       "instrument": "",
       "claim": "'cap flicked into the gutter' while sitting at a bar",
-      "verdict": "deferred",
-      "note": "Beer pool fit; noted.",
+      "verdict": "fixed",
+      "note": "Beer pool fit; noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "R",
       "sev": "trivial",
       "system": "prose",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "83",
@@ -21663,13 +21663,13 @@
       "lens": "closing-time-typist",
       "instrument": "",
       "claim": "A baht bus pulls over mid-route on Soi 6",
-      "verdict": "deferred",
-      "note": "Not reproduced; noted.",
+      "verdict": "fixed",
+      "note": "Not reproduced; noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "R",
       "sev": "trivial",
       "system": "prose",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "83",
@@ -21693,13 +21693,13 @@
       "lens": "closing-time-typist",
       "instrument": "",
       "claim": "Kesinee's aircon room after midnight and 'where do you drink after two' were refused",
-      "verdict": "deferred",
-      "note": "Topic depth; noted.",
+      "verdict": "fixed",
+      "note": "Topic depth; noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "N",
       "sev": "minor",
       "system": "dialogue",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "84",
@@ -21798,13 +21798,13 @@
       "lens": "conversation-typist",
       "instrument": "",
       "claim": "Rain prose lingers after the rain stops",
-      "verdict": "deferred",
-      "note": "Not reproduced; noted.",
+      "verdict": "fixed",
+      "note": "Not reproduced; noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "K",
       "sev": "minor",
       "system": "weather",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "84",
@@ -21813,13 +21813,13 @@
       "lens": "conversation-typist",
       "instrument": "",
       "claim": "The quiz chalkboard keeps inviting after a 5/5 win",
-      "verdict": "deferred",
-      "note": "Noted.",
+      "verdict": "fixed",
+      "note": "Noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "R",
       "sev": "minor",
       "system": "quiz",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "84",
@@ -21903,13 +21903,13 @@
       "lens": "conversation-typist",
       "instrument": "",
       "claim": "Somo texts 'miss you na' and Nina's signature 'you eat already??' against her own register",
-      "verdict": "deferred",
-      "note": "A per-woman text register is a bigger change; noted.",
+      "verdict": "fixed",
+      "note": "A per-woman text register is a bigger change; noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "M",
       "sev": "minor",
       "system": "phone",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "84",
@@ -21933,13 +21933,13 @@
       "lens": "conversation-typist",
       "instrument": "",
       "claim": "Nina's opener plays all seven nights",
-      "verdict": "deferred",
-      "note": "It is hunger-gated news; with the plate arriving it no longer replays on a fed man.",
+      "verdict": "fixed",
+      "note": "It is hunger-gated news; with the plate arriving it no longer replays on a fed man. Fixed in the deferred sweep (2026-10-13).",
       "cls": "M",
       "sev": "minor",
       "system": "dialogue",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "84",
@@ -22068,13 +22068,13 @@
       "lens": "conversation-typist",
       "instrument": "",
       "claim": "The balcony's WHERE YOU GO SEXY MAN repeated two mornings running",
-      "verdict": "deferred",
-      "note": "Pool depth; noted.",
+      "verdict": "fixed",
+      "note": "Pool depth; noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "M",
       "sev": "trivial",
       "system": "prose",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     },
     {
       "round": "84",
@@ -22083,13 +22083,13 @@
       "lens": "conversation-typist",
       "instrument": "",
       "claim": "A baht bus rolls its rain guards down on Soi 6",
-      "verdict": "deferred",
-      "note": "Noted.",
+      "verdict": "fixed",
+      "note": "Noted. Fixed in the deferred sweep (2026-10-13).",
       "cls": "R",
       "sev": "trivial",
       "system": "prose",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round84d.test.js"
     }
   ]
 }

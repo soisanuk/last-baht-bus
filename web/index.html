@@ -112,6 +112,13 @@
   #bell-fab.show, #msg-fab.show, #notes-fab.show { display: block; }
   #bell-fab:active, #msg-fab:active, #notes-fab:active { background: #46006b; transform: scale(0.94); }
   #notes-fab { animation: none; }   /* the notes are always there; only the bell and the inbox pulse */
+  #notes-fab .fab-lbl { display: none; }
+  /* on a phone the glyph says what it is, and the compass is a taller target (Ron, round 82) */
+  @media (max-width: 767px) {
+    #notes-fab.show { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+    #notes-fab .fab-lbl { display: block; font-size: .55rem; color: #cbb8e8; margin-top: 1px; letter-spacing: .02em; }
+    #nav-fab button { height: 44px; }
+  }
   #notes-fab.open { border-color: var(--cyan); color: var(--cyan); }
   #bell-fab.armed { font-size: .8rem; font-weight: 700; color: var(--yellow); border-color: var(--yellow); animation: none; }
   @keyframes fab-pulse {
@@ -1119,7 +1126,7 @@
     <div id="fab-stack">
       <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
       <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
-      <button id="notes-fab" title="Your notes — what's open" aria-label="Your notes">📓</button>
+      <button id="notes-fab" title="Your notes — what's open" aria-label="Your notes">📓<span class="fab-lbl">notes</span></button>
       <div id="nav-extra" role="group" aria-label="Ways out"></div>
     <div id="nav-fab" role="group" aria-label="Compass">
         <button data-nav="n" aria-label="Go north">N</button>

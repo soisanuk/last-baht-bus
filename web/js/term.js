@@ -1006,7 +1006,8 @@ const _term = (() => {
   // the engine's own completion pool — the same source the keyboard's autocomplete
   // uses, so the two surfaces can never disagree. Empty pool → the old prefill.
   const _PICK_TITLE = { barfine: "Barfine which lady?", "buy drink for": "A drink for whom?", flirt: "Flirt with whom?",
-    hire: "Hire whom?", tip: "Tip whom?", talk: "Talk to whom?", "talk to": "Talk to whom?", enter: "Go into which?", travel: "Go where?" };
+    hire: "Hire whom?", tip: "Tip whom?", talk: "Talk to whom?", "talk to": "Talk to whom?", enter: "Go into which?", travel: "Go where?",
+    __info: "The time, the map, your phone" };
   function _prefillMenu(cmd) {
     let opts = [];
     try { opts = (typeof engineComplete === "function" ? engineComplete(cmd) : []) || []; } catch (e) { opts = []; }

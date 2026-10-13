@@ -6874,7 +6874,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "A little older than the rail usually runs, and she mothers the whole bar — the young girls, the " +
       "drunk regulars, and, within about four minutes, you. You'll have eaten something before you leave.",
     dialogue: [
-      { when: (st, G) => (G.hunger || 0) >= 25, th: "สวัสดีค่ะ", rom: "sawatdee kha",
+      { when: (st, G) => (G.hunger || 0) >= 25 && !(G.metDay && G.metDay.nina != null && G.metDay.nina < G.day), th: "สวัสดีค่ะ", rom: "sawatdee kha",   // the first night; a man who comes back gets his own line (Kevin, round 84)
         text: "\"You eat already?\" Before hello, before anything — frowning at how tired you look. \"No? " +
           "Aiyo. Sit. Beer first, but I get you something also. You too skinny, you drink on empty stomach, " +
           "tomorrow you feel terrible.\" She's already flagging the food cart. Resistance is pointless. Ten minutes later " +
@@ -20247,6 +20247,40 @@ const _R84 = {
   ],
 };
 for (const [id, nodes] of Object.entries(_R84)) if (NPCS[id]) NPCS[id].dialogue.push(...nodes);
+// Nina's opener played all seven nights (Kevin, round 84): a man who comes back hungry gets the short form and the
+// plate, placed before her fed greeting so the order of the gates holds.
+if (NPCS.nina) {
+  const _fed = NPCS.nina.dialogue.findIndex(d => !d.topic && !d.when && /You eat\? Good/.test(String(d.text)));
+  NPCS.nina.dialogue.splice(_fed < 0 ? NPCS.nina.dialogue.length : _fed, 0,
+    { when: (st, G) => (G.hunger || 0) >= 25 && G.metDay && G.metDay.nina != null && G.metDay.nina < G.day, th: "สวัสดีค่ะ", rom: "sawatdee kha",
+      text: "\"Hungry again.\" Nina doesn't ask; she can see it. \"Sit. Same as yesterday.\" A plate of something with rice in it arrives before your beer does, and your wallet is waved away before it is fully out.",
+      short: "\"Hungry again. Sit.\" The plate comes first.",
+      fx: (st, G) => { if (G.soc.ninaFed !== G.day) { G.soc.ninaFed = G.day; G.hunger = Math.max(0, (G.hunger || 0) - 35); } } });
+}
+// Kesinee's own back room, which her bar's description advertises and she would not discuss (Declan, round 83)
+if (NPCS.kesinee) NPCS.kesinee.dialogue.push(
+  { topic: "aircon|aircon room|air con|back room|the back|cold half|cold room|pool table|curtain|behind the curtain",
+    text: "\"The back?\" Kesinee does not turn round; she knows where it is. \"Pool table, the toilets, and the only aircon on this stretch. By midnight everybody drifts in there, and the girls go where the men go.\" A small shrug. \"Same prices, colder beer. You want, you go through. Nobody stops you in the back. They stop you on the stairs.\"",
+    short: "\"Pool, toilets, the only aircon on the stretch. Same prices, colder beer.\"" });
+// …and how each of them TEXTS: a woman with a voice of her own keeps it on the phone (Kevin, round 84 —
+// Somo, who "doesn't do the sweetheart thing", sent "miss you na 🥺" and Nina's own "you eat already??").
+// `textVoice.chatter` replaces the floor's chatter for her; `textVoice.reply` answers your MESSAGE.
+if (NPCS.somo) NPCS.somo.textVoice = {
+  noAsk: true,
+  chatter: ["LIVERPOOL 2 - 0 ⚽⚽ told you", "bar dead tonight. two regulars and a dog arguing about VAR", "you watch the match?? no?? then what you doing 😂",
+    "uncle say hello. he dont know you. he say hello to everybody", "rubber price up today. one day I am rich farmer 🌳", "my boy score a goal at school. obviously ⚽"],
+  reply: ["haha ok mate", "👍 come watch the game", "you text like my uncle 😂", "ok. Front Row, kick off nine. dont be late"],
+};
+if (NPCS.nina) NPCS.nina.textVoice = {
+  chatter: ["you eat already?? 🍚", "som tam lady ask where is my nephew 😂", "rain. take umbrella. you never take umbrella",
+    "young girl crying today, ok now. I sit with her 2 hour", "grandbaby walk!! 👶", "you sleep enough? you look tired yesterday"],
+  reply: ["you eat already??", "ok ok. come tonight, I feed you", "good boy 😊 now eat", "😊 drink water also"],
+};
+if (NPCS.pukky) NPCS.pukky.textVoice = {
+  chatter: ["bar quiet tonight 😴", "sister pass exam!! 🎓", "football on, fan working, same stool free", "rain. nobody come. you come?",
+    "new music tonight, very old song 😂", "bike flat tire. walk to work. strong legs now 💪"],
+  reply: ["555 ok", "same stool free 😊", "come later, I keep the beer cold", "ok na. take care"],
+};
 // Somo's football question, answered: "Wrong answer gets a warm one" said nothing back to Doncaster Rovers.
 // What Pukky makes of the name you were called as a child — she tries it out loud.
 function _pukkyNick(v) {

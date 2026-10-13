@@ -4336,8 +4336,11 @@ function _doMessage(arg) {
   if (!NPC_ROLES[id]) {
     _pushMsg(id, _pickVary(["👍", "ok 🙂", "haha. later na", "thumbs up, busy — talk soon"], "plainreply"));
   } else
-  _pushMsg(id, ["555+ you funny", "miss you na 🥺", "come see me tonight!!",
-    "work boring... you come make sanuk"][Math.floor(_rand() * 4)]);
+  {   // a woman with her own voice answers in it: Somo, who "doesn't do the sweetheart thing", texted "miss you na 🥺" (Kevin, round 84)
+    const _tv = NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.reply;
+    const _rp = _tv || ["555+ you funny", "miss you na 🥺", "come see me tonight!!", "work boring... you come make sanuk"];
+    _pushMsg(id, _rp[Math.floor(_rand() * _rp.length)]);
+  }
   _say(_fmt("(📱 {who} replies almost instantly. CHECK MESSAGES.)",
     { who: _pronoun(id) === "she" ? "She" : NPCS[id].name }), "dim");   // Tan was a "she" (Anders, round 43)
 }
@@ -5693,8 +5696,8 @@ function _maybeIncomingText() {
         `you where na? 👀 come sit with ${name}, i save you the good stool`,
         `tonight have music! you come? ${name} wait you 🎶🍺`,
       ], "invite2")); }
-    else if (roll < 0.6 + _askBias(id)) _pushMsg(id, (!_sawYou && _moneyAsk(id)) || _floorTextPick(id, _CHATTER));   // not the night you sat at her rail (Piet, round 62)
-    else _pushMsg(id, _floorTextPick(id, _CHATTER));
+    else if (roll < 0.6 + _askBias(id)) _pushMsg(id, (!_sawYou && _moneyAsk(id)) || _floorTextPick(id, (NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.chatter) || _CHATTER));   // not the night you sat at her rail (Piet, round 62)
+    else _pushMsg(id, _floorTextPick(id, (NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.chatter) || _CHATTER));
   } else { // a name and a number: the classic mix, scam-ask heavy
     if (roll < 0.3 && !_sawYou) { G.phone.invite = { id, day: G.day };   // not the night you sat with her (Gordie, round 72)
       _pushMsg(id, _floorTextPick(id, [
@@ -5702,8 +5705,8 @@ function _maybeIncomingText() {
         `hello handsome 👋 tonight ${name} work late. you come?? 🍺`,
         `you remember ${name}?? 😊 the bar have new music, come listen`,
       ])); }
-    else if (roll < 0.65 + _askBias(id)) _pushMsg(id, (!_sawYou && _moneyAsk(id)) || _floorTextPick(id, _CHATTER));
-    else if (roll < 0.9) _pushMsg(id, _floorTextPick(id, _CHATTER));
+    else if (roll < 0.65 + _askBias(id)) _pushMsg(id, (!_sawYou && _moneyAsk(id)) || _floorTextPick(id, (NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.chatter) || _CHATTER));
+    else if (roll < 0.9) _pushMsg(id, _floorTextPick(id, (NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.chatter) || _CHATTER));
     else _pushMsg(id, "lucky day!! I win lottery small small 🎉 send you luck money", 50);
   }
   _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
@@ -5858,6 +5861,7 @@ function _askScripted(id) { return _hh(String(id) + ":script", 127) % 100 < 30; 
 function _askBias(id) { return Math.min(0.2, ((G.soc.given && G.soc.given[id]) || 0) / 5000); }   // the generous man is the first number called
 function _moneyAsk(id) {
   if (G.phone.noAsk && G.phone.noAsk[id]) return null;   // the sighting ended that without a word (theme 5)
+  if (NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.noAsk) return null;   // "I don't ask, you see" — Somo means it (Kevin, round 84)   // the sighting ended that without a word (theme 5)
   if (G.day - ((G.phone.askDay || {})[id] || -9) < 3) return null;   // not twice inside three days — Mild billed the same ฿300 three times in five (Marcus, round 61)
   if (_npcRoom(id) === G.room) return null;   // never while you sit on her stool
   const book = (G.phone.asks = G.phone.asks || {});
@@ -6418,7 +6422,9 @@ function _sayDrizzle() {
     // (Tomasz, round 54, drizzle-on-the-beach reading like Second Road)
     const sand = /\b(beach|sands?)\b/i.test(_room().name || "") && !/\broad\b|\brd\b/i.test(_room().name || "");
     const pool0 = dark && !sand ? _DRIZZLE_DARK : sand ? _DRIZZLE_SAND : _DRIZZLE_STREET;
-    const pool = G.busWaitTurn != null && G.turns - G.busWaitTurn <= 10 ? pool0.filter(l => !/baht bus/.test(String(l))) : pool0;
+    // no baht bus where none runs: one "pulled over mid-route" on Soi 6 (Declan and Kevin, rounds 83–84)
+    const _noBus = (G.busWaitTurn != null && G.turns - G.busWaitTurn <= 10) || !(_room().busStop || /Beach Road|Second Road|Jomtien|Sukhumvit|Pattaya Klang|Naklua|Soi Buakhao|Thappraya/.test(_room().region || ""));
+    const pool = _noBus ? pool0.filter(l => !/baht bus/.test(String(l))) : pool0;
     _say(pool[(G.day * 7 + Math.floor(G.turns / 15)) % pool.length], "dim");
   }
   // The dog's rain repertoire lived only in _startRain (a full downpour, which
