@@ -3,13 +3,33 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "‘I want to punch him’: Family of Thai teen face to face with Australian murder accused",
+    "s": "SMH.com.au",
+    "d": "12 Oct 2026"
+  },
+  {
+    "t": "Thai-German pilot injured in small plane crash near Pattaya airfield",
+    "s": "Khaosod English",
+    "d": "13 Oct 2026"
+  },
+  {
+    "t": "Pattaya begins 3.5km road upgrade ahead of New Year",
+    "s": "Thaiger",
+    "d": "12 Oct 2026"
+  },
+  {
     "t": "Suspects flee country after B37m robbery of Turk in Pattaya",
     "s": "Bangkok Post",
     "d": "10 Oct 2026"
   },
   {
-    "t": "Pattaya begins 3.5km road upgrade ahead of New Year",
-    "s": "Thaiger",
+    "t": "What Thailand stands to gain from hosting the world’s financial leaders",
+    "s": "Pattaya Mail",
+    "d": "12 Oct 2026"
+  },
+  {
+    "t": "Heavy rain threatens western Thailand from October 13 to 16",
+    "s": "Pattaya Mail",
     "d": "12 Oct 2026"
   },
   {
@@ -18,38 +38,18 @@ var NEWS_FEED = [
     "d": "12 Oct 2026"
   },
   {
-    "t": "Two Nigerian men arrested after cocaine found in Pattaya condo",
-    "s": "Thaiger",
-    "d": "11 Oct 2026"
-  },
-  {
-    "t": "Pattaya reviews plans for fireworks, jazz and year-end festivals",
-    "s": "Pattaya Mail",
-    "d": "11 Oct 2026"
-  },
-  {
-    "t": "Pattaya officials seize tables and cigarettes from sidewalk vendors on Second Road",
-    "s": "Pattaya Mail",
-    "d": "11 Oct 2026"
-  },
-  {
-    "t": "The Riviera Beverly Hills brings Hollywood-inspired luxury living to Jomtien",
+    "t": "Thailand waives tolls at 63 expressway checkpoints on October 13 holiday",
     "s": "Pattaya Mail",
     "d": "12 Oct 2026"
   },
   {
-    "t": "Pattaya considers turning 70 rai of public land in Naklua into a recreational area",
-    "s": "Pattaya Mail",
-    "d": "11 Oct 2026"
+    "t": "Thailand has become 'the sick man of Asia': Korn",
+    "s": "Bangkok Post",
+    "d": "12 Oct 2026"
   },
   {
-    "t": "Thai Queen makes first solo flight in fighter jet",
-    "s": "BBC",
-    "d": "09 Oct 2026"
-  },
-  {
-    "t": "Livestream clash raises questions over tourist conduct, filming, and violence in Thailand",
-    "s": "Khaosod English",
+    "t": "Indian YouTuber Faces Backlash For Seeking Free Shelter At Temple During Thailand Trip: \"No Money\"",
+    "s": "NDTV",
     "d": "12 Oct 2026"
   },
   {
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "11 Oct 2026"
   },
   {
-    "t": "Australian man agrees to plead guilty to one charge over Thai teen's death",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
+    "t": "Thailand flood death toll since September 16 rises to 71, Interior Ministry says",
+    "s": "Reuters",
     "d": "12 Oct 2026"
   },
   {
-    "t": "Thailand prepares to host IMF-World Bank meetings",
-    "s": "Reuters",
-    "d": "10 Oct 2026"
+    "t": "Thailand Eyes $30 Departure Tax for Tourists in Revenue Push",
+    "s": "Bloomberg.com",
+    "d": "13 Oct 2026"
   },
   {
-    "t": "Below Deck's Rainbeau de Roos Reveals Intense Partying Experience in Thailand",
-    "s": "Yahoo",
+    "t": "I've traveled to over 100 countries on my own. I'd recommend these 5 destinations to first-time solo travelers.",
+    "s": "Business Insider",
     "d": "12 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-10-12","USD":33.61,"AUD":23.44,"GBP":44.48,"EUR":37.58};
+var FX_RATES = {"date":"2026-10-13","USD":33.59,"AUD":23.44,"GBP":44.5,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-13","temp":28,"humid":84,"code":2,"hi":32,"rain":89};
+var WX_NOW = {"date":"2026-10-13","temp":28,"humid":86,"code":3,"hi":31,"rain":69};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4166,"date":"2026-10-13","baht":66200};
+var GOLD = {"usd":4172,"date":"2026-10-13","baht":66250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81519,"thb":2742105};
+var BTC = {"usd":83502,"thb":2805680};
