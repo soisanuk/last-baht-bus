@@ -147,3 +147,16 @@ test("Tan answers a Thai passenger in Thai once, then steers the ride back to En
   out = []; run("สอง"); assert.doesNotMatch(said(), /พูดไทยเก่งมาก/, "once");
   assert.equal(G.introStep, 1);
 });
+
+test("the trainer's sixteen are parser words: the closing hour, the small hours, the stairs, the bar's barfine", () => {
+  const T = { "ปิดกี่โมง": "what time do you close", "เลิกงานกี่โมง": "when do you finish", "กี่โมงแล้ว": "time",
+    "ที่ไหนยังเปิดหลังตีสอง": "where is still open after two", "ถามปุ๊กกี้เรื่องหลังตีสอง": "ask pukky about after two",
+    "คุยกับปุ๊กกี้": "talk to pukky", "ลงบันได": "down", "ออฟปุ๊กกี้": "barfine pukky", "โอนเงินสองร้อยให้จอย": "send 200 to joy",
+    "ถามปุ๊กกี้เรื่องแผน": "ask pukky about plan", "ถามปุ๊กกี้เรื่องอีสาน": "ask pukky about isan", "ราตรีสวัสดิ์": "goodnight",
+    "ถามปุ๊กกี้เรื่องกุหลาบ": "ask pukky about rose", "ถามปุ๊กกี้เรื่องรองเท้าแตะ": "ask pukky about sandals",
+    "ถามปุ๊กกี้เรื่องชุดชั้นใน": "ask pukky about lingerie", "ถามปุ๊กกี้เรื่องควิซ": "ask pukky about quiz" };
+  for (const [th, en] of Object.entries(T)) assert.equal(_thaiToCmd(th), en, th);
+  G.room = "sunset_rail"; G.nightTurn = 30;
+  out = []; run("ที่ไหนยังเปิดหลังตีสอง"); assert.match(said(), /Blue Dog|Stinky/); assert.doesNotMatch(said(), /ask around/);
+  out = []; run("ปิดกี่โมง"); assert.match(said(), /[Tt]wo/);
+});

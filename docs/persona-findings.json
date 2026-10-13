@@ -25713,13 +25713,13 @@
       "lens": "thai-speaker-typing-thai",
       "instrument": "",
       "claim": "Words the trainer lacks: แผน, เหงา, อุบล, อีสาน, ตี(สอง), ควิซ, กุหลาบ, รองเท้าแตะ, ชุดชั้นใน, คุย, ลง, บันได, ออฟ, โอน, กี่, สวัสดิ์",
-      "verdict": "deferred",
-      "note": "Trainer requests — the coverage test holds Thai the trainer cannot gloss",
+      "verdict": "fixed",
+      "note": "The trainer added them (thaicab 3667fa17, 2026-10-14) — ราตรีสวัสดิ์ whole, no bare สวัสดิ์ needed; parser rows added",
       "cls": "L",
       "sev": "minor",
       "system": "thai",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round92.test.js"
     },
     {
       "round": "92",

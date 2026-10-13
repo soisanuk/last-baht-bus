@@ -14487,6 +14487,15 @@ const _THAI_CMD = [
   ["เหล้า", "drink"], ["เครื่องดื่ม", "drink"], ["ออกไป", "out"], ["ขอเบอร์", "contact"],
   ["ไปเที่ยว", "out"], ["พา", "take"], ["กลับโรงแรม", "go home"], ["กลับบ้าน", "go home"],
   ["ส่งเงิน", "send"], ["ส่ง", "send"], ["ตอบ", "reply"],
+  // …and the sixteen the trainer added for him (2026-10-14, thaicab 3667fa17): the closing hour and the small
+  // hours (กี่, ตี), the floor's things (rose, sandals, lingerie, the quiz), Isan and Ubon, the stairs, the bar's
+  // own word for a barfine, the app's transfer, and a woman's plan and her loneliness.
+  ["ที่ไหนยังเปิดหลังตีสอง", "where is still open after two"], ["หลังตีสอง", "after two"], ["ตีสอง", "after two"],
+  ["ปิดกี่โมง", "what time do you close"], ["เลิกงานกี่โมง", "when do you finish"], ["กี่โมงแล้ว", "time"], ["กี่โมง", "time"],
+  ["แผน", "plan"], ["เหงา", "lonely"], ["อุบล", "ubon"], ["อีสาน", "isan"], ["ควิซ", "quiz"], ["กุหลาบ", "rose"],
+  ["รองเท้าแตะ", "sandals"], ["รองเท้า", "shoes"], ["ชุดชั้นใน", "lingerie"], ["คุยกับ", "talk to"], ["คุย", "talk"],
+  ["ลงบันได", "down"], ["ขึ้นบันได", "up"], ["ลงไป", "down"], ["ลง", "down"], ["บันได", "stairs"],
+  ["ออฟ", "barfine"], ["โอนเงิน", "send"], ["โอน", "send"], ["ราตรีสวัสดิ์", "goodnight"],
 ];
 // A word that is also a woman's name is the word after ABOUT: เรื่องฝน is the rain, not Fon (Thomas, round 92 —
 // it rained every night and nobody could be asked about it in Thai). Before ABOUT the name keeps it: ถามฝน is Fon.
@@ -15436,7 +15445,7 @@ function doCommand(input) {
       _say(ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" ? "(The bars on Soi 6 shut at two; the Vic's pub at eleven. Off the soi, the town's bars run to dawn.)"
         : "(Every bar keeps its own hours — ASK <somebody behind it> ABOUT CLOSING.)", "dim"); return;   // said on the street, nobody to ask (Declan, round 83)
     }
-    if (/^(where'?s still open|where is still open|what'?s (still )?open( now)?|anywhere (still )?open|is anywhere (still )?open|anything (still )?open|where can i (get|have) a drink( now)?)$/.test(bw)) { _say(_stillOpenTalk(null)); return; }
+    if (/^(where'?s still open|where is still open|what'?s (still )?open( now)?|anywhere (still )?open|is anywhere (still )?open|anything (still )?open|where can i (get|have) a drink( now)?)( after (two|2|the shutters))?$/.test(bw)) { _say(_stillOpenTalk(null, bw)); return; }   // …"after two" is the hour asked (Thomas, round 92)
     if (/^(who'?s here|who is here|who'?s in|who is in( here)?)$/.test(bw)) { doCommand("look"); return; }
     const sv = bw.match(/^buy (.+?) (?:at|from|in) (?:the )?(?:7-?eleven|7-?11|seven-?eleven|seven|shop)$/);
     if (sv) { doCommand("buy " + sv[1]); return; }
