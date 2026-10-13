@@ -643,6 +643,8 @@ function _npcActions(id, full) {
     // audit (round 32, 2026-08-30) flagged them as untappable, but Mario's call
     // is they're slated for removal as separate verbs (extensions of FLIRT),
     // so exposing them further on the wheel would be wasted work.
+    // the woman on your arm: her lead, a dance, her ride home — not a barfine she has already been paid (Sam, round 90)
+    else if (role === "hostess" && G.party && G.party.ids && G.party.ids.includes(id)) acts.push("leadme", "danceher", "sendhome", "tip", "contact");
     else if (role === "hostess") acts.push("barfine", "flirt", "tip", "contact");
     else if (role === "cashier") {           // the sponsor-cashier arc's verbs (were typed-only)
       acts.push("tip", "contact");
@@ -1013,7 +1015,9 @@ function _doBarfine(arg) {
   }
   const _waivedFine = typeof _bondTier === "function" && _bondTier(id) >= 3 && !(typeof _careOk === "function" && !_careOk(id));
   if (bt === "soi6" || _room().region === "Soi 6") {   // on Soi 6 the girl quotes it herself, the middle's beer bars included (Gary, round 79)
-    _say(_waivedFine ? `${name} leans in close and says it quietly, not as a menu: for you, no fine — she will square it with the house herself.` : `${name} counts it out on her fingers, upfront as a menu — she quotes ` +   // not the noodle-cart menu right before she waives it (Sunil, round 86)
+    _say(_waivedFine ? `${name} leans in close and says it quietly, not as a menu: for you, no fine — she will square it with the house herself.`
+      : _bondTier(id) >= 2 ? `${name} tells you the numbers plainly, the way you would tell a friend what something costs — no menu voice, and no eye on the room while she does it.`   // a regular is not quoted at (Sam, round 90)
+      : `${name} counts it out on her fingers, upfront as a menu — she quotes ` +   // not the noodle-cart menu right before she waives it (Sunil, round 86)
       "upstairs the way a noodle cart quotes noodles, one eye still counting " +
       `the room over your shoulder.` +
       (bt === "soi6" && G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
@@ -1553,7 +1557,14 @@ const _PARTY_TALK_OUT = [
   (n) => `${n} laughs at something that was not a joke, the way she does when she is happy, and puts her hand flat on your back. "Okay. Say something. I listen."`,
   (n) => `${n} checks her {{phone}}, laughs at something on it, and shows you a photo of somebody's cat you are evidently meant to have an opinion about. "Where next, tilac?"`,
 ];
-function _partyTalkPool() { return (typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar()) ? _PARTY_TALK : _PARTY_TALK_OUT; }
+function _partyTalkPool(id) {
+  const pool = (typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar()) ? _PARTY_TALK : _PARTY_TALK_OUT;
+  // her OWN bar is not "somebody else's floor", and a bar with no other girls has no girl by the door (Sam, round 90)
+  const own = id && NPCS[id] && (NPCS[id].room === G.room || (NPCS[id].bars || []).includes(G.room));
+  const others = _npcsHere().filter(i => i !== id && NPC_ROLES[i] === "hostess").length;
+  const f = pool.filter(l => !((own || others < 2) && /somebody else|girl by the door/.test(String(l))));
+  return f.length ? f : pool;
+}
 // a thing bought FOR her is hers — "buy toastie for lek" fed the buyer (Ingrid, round 62)
 function _companionEats(arg, what, price) {
   const m = String(arg || "").toLowerCase().match(/\bfor (\w+)/);
@@ -2048,7 +2059,7 @@ function _bfResolve(kind) {
     _say((price ? `฿${_num(price)} to ${_bfPayee()}, and ` : "") +
       `${name} comes home with you — and stays home, in every sense. Somewhere before ` +
       "midnight she stops being a fantasy and becomes a person: the whole life story, the " +
-      "father, the sister, the kid up-country, thirty minutes of it, then tears you didn't " +
+      `father, the sister, ${typeof _girlHasBoy === "function" && _girlHasBoy(id) ? "the kid up-country" : "the village and who is left in it"}, thirty minutes of it, then tears you didn't ` +   // Pukky has no kid (Sam, round 90)
       "order over something you can't quite follow. You fall asleep before the sex. In the " +
       "morning she's dressed and cool and kisses your cheek at the door like a wife who's " +
       `decided something. You wanted a one-day girlfriend; you got a five-year one. (฿${_num(G.money)} left.)`, "");
@@ -6936,6 +6947,16 @@ const _SUNRISE_INDOORS = [
   "Not from in here. Whatever the sky is doing, this room is not part of it — outside, and somewhere with a bit of open in front of you.",
   "No window worth the name. The dawn is out there; you are in here, which is a choice you can still change.",
 ];
+// the sky is watchable from here, now: what the verb checks, so the chip bar can offer it (Sam, round 90 — a thumb
+// at 05:12 on the street and 05:20 on the beach had nothing to press)
+function _sunriseVisible() {
+  const r = _room();
+  if (!_flag("act1Done") || G.nightTurn < SUNRISE_TURN || G.sunriseDay === G.day) return false;
+  const openFront = !!(r.barType && r.barType !== "gogo" && r.barType !== "gents") && !r.indoors;
+  const hotelWindow = _isHotelRoom(G.room);
+  const indoors = !openFront && !hotelWindow && !!(r.bar || r.barType || r.shop || r.massage || r.soapy || r.indoors);
+  return !indoors;
+}
 function _doWatchSunrise() {
   const r = _room();
   // a street with a 7-Eleven on it is a STREET (`seven` is a shop the room *has*, not a
@@ -9637,7 +9658,10 @@ function _frontierTick() {
   const said = (G.frontierSaid = G.frontierSaid || {});
   if (said[key]) return;
   said[key] = true;
-  _say(_pickVary(_FRONTIER_LINES[f.phase], "frontier" + f.phase), "dim");
+  // "last time you passed" needs a last time: the first visit gets the line that remembers nothing (Sam, round 90)
+  const _first = !(G.visitDay && G.visitDay.soi6_west_in != null && G.visitDay.soi6_west_in < G.day);
+  const _fp = _first ? _FRONTIER_LINES[f.phase].filter(l => !/last time/.test(l)) : _FRONTIER_LINES[f.phase];
+  _say(_pickVary(_fp.length ? _fp : _FRONTIER_LINES[f.phase], "frontier" + f.phase), "dim");
 }
 
 const _OPP_NAMES = ["doing well, and the landlord has seen it", "paying the rise, and about to pass it on", "dearer than the soi, and emptier", "three girls where there were nine, and a folder on his table", "shut"];

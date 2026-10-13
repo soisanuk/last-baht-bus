@@ -509,6 +509,9 @@ const _term = (() => {
         hire:    l => ({ t: "hire",            c: "hire " + l,         go: true }),
         wai:     l => ({ t: "wai",             c: "wai " + l,          go: true }),
         follow:  l => ({ t: "eat with him",    c: "follow " + l,       go: true }),
+        leadme:  l => ({ t: "let her lead",    c: "follow " + l,       go: true }),
+        danceher: l => ({ t: "dance with her",  c: "dance with " + l,   go: true }),
+        sendhome: l => ({ t: "send her home",   c: "send " + l + " home", go: true }),
         gohome:  l => ({ t: "go home with her", c: "follow " + l,      go: true }),
         takeout: l => ({ t: "take her out",     c: "take " + l + " out", go: true }),
         seehome: l => ({ t: "see her home",     c: "see " + l + " home", go: true }),
@@ -518,6 +521,11 @@ const _term = (() => {
       };
       const keys = typeof _npcActions === "function" ? _npcActions(npc || pat, full) : ["talk", "examine"];
       for (const key of keys) { const m = _NPC_ACT[key]; if (m) a.push(m(lo)); }
+      // ask the woman you're talking to about this one (Sam, round 90: long-press offered no asks)
+      const _pid = typeof _convoActive === "function" ? _convoActive() : null;
+      const _me = npc || pat;
+      if (_pid && _me && _pid !== _me && NPCS[_pid] && typeof _npcsHere === "function" && _npcsHere().includes(_pid))
+        a.push({ t: "ask " + NPCS[_pid].name + " about " + NPCS[_me].name, c: "ask " + NPCS[_pid].name.toLowerCase() + " about " + lo, go: true });
     } catch (e) { /* engine not booted: no actions */ }
     return a;
   }

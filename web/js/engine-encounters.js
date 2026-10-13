@@ -856,7 +856,7 @@ const _ENC = {
           "appraisal of the passing trade.",
         "\u201cNot tonight,\u201d you say, not slowing, and she lets you go with a lazy wave that " +
           "has already forgotten you. Behind you the two of them go back to pricing the street.",
-        "You keep your eyes on the road and your feet moving, and she reads it in two steps " +
+        `You keep your eyes on the ${/\b(beach|sand)\b/i.test(String(_room().name || "")) ? "sand" : "road"} and your feet moving, and she reads it in two steps ` +   // on the beach there is no road (Sam, round 90)
           "and turns to the next pair of shoes. Nobody\u2019s feelings are anywhere near this.",
       ], "flnope"));
       return;

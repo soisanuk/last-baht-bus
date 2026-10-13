@@ -8139,8 +8139,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // No shame, no victim: a pro respecting a mark who turned out not to be one.
       { topic: "game", text: "\"...Okay.\" The warmth switches off like a tap; the pro looks out from behind it. " +
         "\"You see it. Good — save us both the show, na. You want me tonight, is fine. But no more 'I love you', " +
-        "no sick mama.\" She names a number, flat. \"Straight price. Higher — the show was the discount. You pay " +
-        "for honest now.\"",
+        "no sick mama.\" She names a number, flat — \u0e3f" + String(LADY_LT + 1000).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ", for the night, her money on top of the bar's. \"Straight price. Higher — the show was the discount. You pay " +
+        "for honest now.\"",   // "names a number" and no number (Sam, round 90)
         short: "\"You see it. Straight price then — higher, na. The show was the discount.\"" },
     ],
   },
@@ -9698,8 +9698,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // FOOD was a miss one command before it (Marek, round 53)
       { topic: "food|eat|eating|hungry|noodles|dinner|lunch|breakfast|khao man gai|a place to eat|somewhere to eat", req: ["act1Done"],
         text: "\u201cYou eat yet?\u201d It is not really a question; he has looked at you and decided. " +
-          "\u201cYou never eat. There is a cart round the corner \u2014 khao man gai, the old woman has " +
-          "done it thirty years and the chicken is the chicken. Come, I know a place. (FOLLOW TAN)\u201d",
+          "\u201cYou never eat. There is a cart round the corner \u2014 the old woman has done it thirty " +
+          "years, and whatever she has on tonight is the thing to have. Come, I know a place. (FOLLOW TAN)\u201d",   // the cart serves what it serves (Sam, round 90: khao man gai promised, noodles served)
         short: "\u201cYou eat yet? Come. (FOLLOW TAN)\u201d" },
       { topic: "food|eat|eating|hungry|noodles|dinner|lunch|breakfast|khao man gai|a place to eat|somewhere to eat",
         text: "\u201cEat?\u201d Tan looks at you the way he looked at you at the airport. \u201cThe wallet first. " +

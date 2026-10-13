@@ -4607,8 +4607,14 @@ function _doTalkCore(arg, topic) {
   if (topic && !_sourOwn && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // Lamai's crates, Cake's fan: the text she sent (Lothar, round 67) — not her fond text, after she has seen it (Ossie, round 70)
   // what happened on the pavement, from whoever could have seen it — before LAST NIGHT takes "the rain last night"
   // (round 87). Only when it happened, and an authored node on the same word still wins.
-  if (topic && typeof _streetTalk === "function" && !(NPCS[npc].dialogue || []).some(x => x.topic && String(x.topic).split("|").some(k => k.length > 2 && new RegExp("\\b" + k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(String(topic).toLowerCase()))) &&
-      _streetTalk(npc, topic)) { _questOffer(npc); return; }
+  // …and an authored node she has ALREADY told you gives way to the money you sent her yesterday (Sam, round 90:
+  // "Money" got "I tell you this one already" the day after a ฿300 send for her family's medicine)
+  if (topic && typeof _streetTalk === "function") {
+    const _tl = String(topic).toLowerCase(), _seen = (G.talked && G.talked[npc]) || [];
+    const _hits = (NPCS[npc].dialogue || []).map((x, i) => ({ x, i })).filter(({ x }) => x.topic && String(x.topic).split("|").some(k => k.length > 2 && new RegExp("\\b" + k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(_tl)));
+    const _owns = _hits.some(({ i }) => !_seen.includes(i)) || (_hits.length && !(typeof _giftMatch === "function" && _giftMatch(npc, _tl)));
+    if (!_owns && _streetTalk(npc, topic)) { _questOffer(npc); return; }
+  }
   // where SHE goes after work, before her "work" node takes the word (Callum, round 89) — her own late/after node wins
   if (topic && _AFTER_WORK_RE.test(String(topic).toLowerCase()) && !/\bopen\b/.test(String(topic).toLowerCase()) &&
       !(NPCS[npc].dialogue || []).some(x => x.topic && /(^|\|)(late|after|after hours|after work)(\||$)/.test(String(x.topic)))) {
@@ -4705,7 +4711,7 @@ function _doTalkCore(arg, topic) {
   // the woman on your arm, addressed with no subject, is with you — not behind her own rail
   // ("Ohhh, again! You have no other bar?" at Candy Bar with Lek on his arm — Ingrid, round 62)
   if (!topic && G.party && G.party.ids && G.party.ids.includes(npc)) {
-    _say((typeof _pickTownLine === "function" ? _pickTownLine(_partyTalkPool(), "partytalk") : _pickVary(_partyTalkPool(), "partytalk:" + npc))(NPCS[npc].name, _barName(G.room) || "here"));   // town-wide: two companions said one line (Martin, round 85)
+    _say((typeof _pickTownLine === "function" ? _pickTownLine(_partyTalkPool(npc), "partytalk") : _pickVary(_partyTalkPool(npc), "partytalk:" + npc))(NPCS[npc].name, _barName(G.room) || "here"));   // town-wide: two companions said one line (Martin, round 85)
     return;
   }
   // THE VERDICT CLOSES THE CONVERSATION TOO: the ride topic came back as an invitation
@@ -6961,20 +6967,50 @@ function _partyTalk(npc, topic) {
 // went out together.
 const _WENT_HELLO = {
   st: [n => `${n} sees you and laughs before you've sat. "You again! Okay, okay — you sit, I sit. This time we talk first, hahaha."`,
-       n => `"Back already?" ${n} pats the stool. "Upstairs was good. Down here is also good. Buy me one, we see."`],
+       n => `"Back already?" ${n} pats the stool. "Upstairs was good. Down here is also good. Buy me one, we see."`,
+       n => `${n} gives you a look that the rest of the bar is not invited to. "Hello again. You remember the stairs? I remember you."`,
+       n => `"Oh, it's you." ${n} is pleased and trying not to show it. "Sit. Tonight you buy me a drink first, then we see. Manners, na."`],
   lt: [n => `${n} looks up and something in her face settles. "You." Not a question. "You sleep okay after? I sleep like a stone."`,
-       n => `"Hello, you." ${n} says it quietly, for you, not the bar. "Same beer? I remember."`],
-  out: [n => `"Ah — my party man!" ${n} is grinning. "My feet still hurt from you. Sit, sit — tonight I sit down the whole time."`,
-        n => `${n} waves you over like an old friend. "You! The night we go everywhere. Tonight we stay one place, okay? I'm tired from you."`],
+       n => `"Hello, you." ${n} says it quietly, for you, not the bar. "Same beer? I remember."`,
+       n => `${n} straightens your collar before she says anything, as if she had been waiting to. "Okay. Now hello."`,
+       n => `"You look tired." ${n} says it with some satisfaction. "Good. Me too. Sit down, I get you water first."`],
+  // a night out by how big it was: "the night we go everywhere" after one bar (Sam, round 90)
+  outBig: [n => `"Ah — my party man!" ${n} is grinning. "My feet still hurt from you. Sit, sit — tonight I sit down the whole time."`,
+        n => `${n} waves you over like an old friend. "You! The night we go everywhere. Tonight we stay one place, okay? I'm tired from you."`,
+        n => `"Every bar on the soi!" ${n} counts them on her fingers and runs out. "Tonight you sit HERE. One bar. My bar."`],
+  outSmall: [n => `"You came back." ${n} sounds like she had a small bet on it with herself. "Last night was nice, na. Quiet. I like quiet with you."`,
+        n => `${n} pats the stool beside hers. "Same place as last night. You remember where I sit? Good. You learn."`,
+        n => `"Hello, you." ${n} smiles. "Last night we don't go far, but I tell my friend about it anyway. She say I am lucky. I say maybe."`],
 };
 function _wentWithHello(npc) {
+  // the HOUSE took the fine: the mamasan or the cashier remembers the man who left with one of her girls (Sam, round 90 —
+  // Gina greeted him as a stranger the night after her bar took ฿750 for Noey)
+  if ((NPC_ROLES[npc] === "mamasan" || NPC_ROLES[npc] === "cashier") && !(G.wentWith && G.wentWith[npc])) {
+    const home = NPCS[npc].room || (NPCS[npc].bars || [])[0];
+    const g = Object.keys(G.wentWith || {}).find(id => NPCS[id] && NPCS[id].room === home && G.wentWith[id].day < G.day && G.day - G.wentWith[id].day <= 2);
+    const book = (G.soc.wentHello = G.soc.wentHello || {});
+    if (g && book[npc] !== G.day + ":house") {
+      book[npc] = G.day + ":house";
+      const n = NPCS[npc].name, her = NPCS[g].name;
+      _say(_pickVary(NPC_ROLES[npc] === "mamasan"
+        ? [`${n} gives you the look she gives a man who has paid a fine in her bar. "${her}'s friend. Sit. She is here tonight — you want her, you ask me first, same as before."`,
+           `"You again." ${n} doesn't smile, quite. "You looked after ${her}? She say yes. Okay. Sit down."`]
+        : [`${n} glances up from the book. "${her}'s fine, the other night. Paid on the spot. Sit — your stool is the same stool."`,
+           `"I remember you — you pay ${her}'s fine in notes, not a story." ${n} goes back to the till. "Sit."`], "housewent"));
+      if (typeof _markHello === "function") _markHello(npc);
+      return true;
+    }
+  }
   const w = G.wentWith && G.wentWith[npc];
-  if (!w || !_WENT_HELLO[w.kind] || (G.party && G.party.ids && G.party.ids.includes(npc))) return false;
+  if (!w || !(_WENT_HELLO[w.kind] || w.kind === "out") || (G.party && G.party.ids && G.party.ids.includes(npc))) return false;
   if (w.day === G.day && w.kind !== "st") return false;   // still the same night out
   const book = (G.soc.wentHello = G.soc.wentHello || {});
   if (book[npc] === G.day + ":" + w.day) return false;     // once a night per night she remembers
   book[npc] = G.day + ":" + w.day;
-  _say(_pickVary(_WENT_HELLO[w.kind], "wenthello:" + npc)(NPCS[npc].name));
+  let pool = _WENT_HELLO[w.kind];
+  if (w.kind === "out") { const pl = G.partyLog && G.partyLog[npc]; const rooms = pl && Array.isArray(pl.rooms) ? new Set(pl.rooms).size : 1;
+    pool = rooms >= 3 ? _WENT_HELLO.outBig : _WENT_HELLO.outSmall; }
+  _say((typeof _pickTownLine === "function" ? _pickTownLine(pool, "wenthello:" + w.kind) : _pickVary(pool, "wenthello:" + npc))(NPCS[npc].name));   // two women, two hellos (Sam)
   if (typeof _markHello === "function") _markHello(npc);
   return true;
 }
@@ -7007,6 +7043,12 @@ const _RIDE_STOP_NOT = n => `${n} shakes her head. "We no go there. Next time, m
 function _lastNightHers(npc, w) {
   const n = NPCS[npc].name, floor = _hoursRegister(npc) === "floor";
   const _cd = w.coda || "khao";
+  // the early night (round 90): no 3 a.m. plate she can remember, because there wasn't one
+  if (w.reason === "barfine" && !w.quiet && (_cd === "early" || _cd === "fan")) {
+    return _pickVary(floor ? [`"Last night we go home so early!" ${n} laughs. "Like old people. I sleep before you. You snore? Maybe. I not hear."`,
+        `"Early night, na." ${n} smiles. "The music still going downstairs and we already finish. Is nice sometimes, early."`]
+      : [`"Home before the soi was even busy." ${n} sounds pleased about it. "I slept nine hours. Do you know what that is, in this job?"`], "lnhers:" + npc);
+  }
   if (w.reason === "barfine" && !w.quiet && _cd !== "khao") {
     const P = _cd === "noodle"
       ? (floor ? [`"The noodle at two o'clock!" ${n} laughs. "You put your feet on my stool, I put mine on you. Little stool, big night, na."`,
@@ -7141,6 +7183,13 @@ function _giftLine(npc, g, R) {
       `"${a}." ${n} nods, serious for a second. "${Day}. That one I send home. You pay for a little bit of my mama's rice."`]
     : [`"The ${a}?" ${n} doesn't pretend not to remember. "${Day}. Thank you. I don't make a speech about tips — but I don't forget them."`,
       `"${Day}, ${a}." ${n} inclines her head. "Noted, and appreciated. That is what a tip is for."`];
+  else if (g.kind === "send" && ((G.phone.asks || {})[npc] || []).some(a => a.paid && a.paidDay === g.day)) {
+    // money she ASKED for is thanked for the thing it paid for (Sam, round 90: "I keep it in my book" for her family's medicine)
+    const k = ((G.phone.asks || {})[npc] || []).filter(a => a.paid && a.paidDay === g.day).pop().kind;
+    const what = { medicine: "the medicine", hospital: "mama's hospital", rent: "the room", school: "my brother's school", phone: "my phone", buffalo: "the buffalo", motorbike: "my bike" }[k] || "what I ask";
+    L = [`"${a} for ${what}." ${n} doesn't make a show of it. "${Day}. It go where I say. Thank you, na — I don't forget who help."`,
+      `"You remember?" ${n} looks at you. "I ask, you send, ${day}. ${what.charAt(0).toUpperCase() + what.slice(1)} — okay now. Because you."`];
+  }
   else if (g.kind === "send") L = fl ? [`"The money in the app?" ${n} holds up her phone. "${Day}, ${a}. I see. I still have the screen."`,
       `"${a} ${day}." ${n} looks at you a beat longer than usual. "In the app, very fast. I keep it in my book, na. Not my pocket."`,
       `"You send me ${a}." ${n} says it quietly, like it shouldn't carry. "${Day}. I remember. Don't tell the other girls."`]
@@ -7282,6 +7331,27 @@ function _streetTalk(npc, topic) {
     }
   }
   return false;
+}
+// the topics the engine answers about EVENTS and HOURS, offered only where the answer fires (round 90)
+function _situationTopics(id) {
+  const first = [], last = [], n = NPCS[id];
+  if (!n || id === "tan") return { first, last };
+  const works = !!(NPC_ROLES[id] || n.house || n.manager);
+  const home = n.room || (Array.isArray(n.bars) ? n.bars[0] : null);
+  const w = G.lastNightWas;
+  if (w && w.day === G.day - 1) {
+    const sawYou = w.with === id || (works && (w.bar === home || w.leftFrom === home || (w.bars && (w.bars[home] || w.bars[G.room])) || _dawnHere(id, w)));
+    if (sawYou && _room().barType) first.push("last night");
+    if (works && _dawnHere(id, w)) first.push("the sunrise");
+  }
+  if (_giftsOf(id).length) first.push("your present");
+  if (_streetEvent("rain") && (works || n.patron)) first.push("the rain");
+  if (works && _room().barType && _pronoun(id) === "she" && _afterWorkTalk(id)) last.push("after work");
+  if (works && _room().barType && home === G.room) {
+    last.push("closing time");
+    if ((_room().region || "") === "Soi 6" && typeof _closeTurn === "function" && _closeTurn(G.room) != null) last.push("open after two");
+  }
+  return { first, last };
 }
 // the night ended at dawn in THIS bar, with you in it: a sunrise or an all-nighter whose last room was hers
 function _dawnHere(npc, w) {
@@ -11582,6 +11652,9 @@ function _nursed() {
   const lim = _housePatience();
   if (!lim) return false;
   if (G.party && G.party.ids && G.party.ids.length) return false;   // her drinks are on the chit; nobody pitches across her (Lars, round 47)
+  // …nor at the bar of a woman who is yours: her drinks are waived, so no money moves, and "an hour on one drink"
+  // nagged a man minutes after he bought her one (Sam, round 90)
+  if (_npcsHere().some(i => NPC_ROLES[i] === "hostess" && _bondTier(i) >= 3)) return false;
   const t = (G.soc.spentTurn || {})[G.room];
   // THE NURSE READS THE CUP (Henrik, round 69: six lady drinks and a beer in the hour, and the
   // mamasan told him "you drink nothing"). Every chit tonight buys the seat a little more time.
@@ -11935,7 +12008,7 @@ const _MAP_SOI6 = [
   "  ↓",
   "EAST END (loudest) — Kitten Corner* · Cherry Pop · Ruby Kiss",
   "  ↓",
-  "SECOND ROAD — a 7‑Eleven across the road",
+  "SECOND ROAD — the end of the soi, and of the week's rule",   // the far 7-Eleven is outside the fence (Sam, round 90)
   "* the group's paper. About a hundred open fronts down both sides; these are the ones you get to know. Everything on the soi shuts at two, the Vic's pub at eleven.",
 ];
 
@@ -13794,6 +13867,7 @@ function _chipSet() {
   else if (!G.lightOn && (G.battery || 0) > 0 && Object.values((_room() && _room().exits) || {}).some(to => ROOMS[to] && ROOMS[to].dark))
     add("light on", "🔦 light on — dark ahead");
   add("look");
+  if (typeof _sunriseVisible === "function" && _sunriseVisible()) add("watch sunrise", "🌅 watch the sunrise");   // a thumb's dawn (Sam, round 90)
   if (G.room === "kitten_office" && G.rabbitWay === "operator" && !_flag("rabbitData") && !G.game) add("use laptop", "use the laptop");
   // It was off the chip bar before 22:00 — one fat finger from losing a night you had just woken
   // into (Kurt, round 65). Since 2026-10-07 any SLEEP that ends a night asks once (_endConfirm),
@@ -13808,7 +13882,7 @@ function _chipSet() {
   if (_inBar()) {
     const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
     if (r.hostBar) { add("buy drink for ", "buy drink…"); add("hire ", "hire…"); }
-    else if (girls.length) { add("flirt ", "flirt…"); add("buy drink for ", `lady drink ฿${_num(_ladyPrice())}…`); add("barfine ", "barfine…"); }
+    else if (girls.length) { add("flirt ", "flirt…"); add("buy drink for ", `lady drink ฿${_num(_ladyPrice())}…`); if (!(G.party && G.party.ids && G.party.ids.length)) add("barfine ", "barfine…"); }   // no barfine chip with a woman on your arm (Sam, round 90)
     add("buy beer");
     if (_playOptions().length) add("play");
     for (const pid of _regularsHere().slice(0, 2)) {
@@ -13818,6 +13892,9 @@ function _chipSet() {
   } else if (_npcsHere().length) { // one cast — the regulars are in _npcsHere
     add("talk to ", "talk…");
   }
+  // the woman on your arm, by thumb: follow her lead, send her home (Sam, round 90 — only inside a conversation, and FOLLOW never)
+  { const _co = ((G.party && G.party.ids) || []).filter(i => NPCS[i] && _npcsHere().includes(i));
+    if (_co.length) { const _cn = NPCS[_co[0]].name; add("follow " + _cn.toLowerCase(), "follow " + _cn); add("send " + _cn.toLowerCase() + " home", "send " + _cn + " home"); } }
   if (G.room === "north_beach" && !(G.encDone && G.encDone.freelancer) && !G.pendingEnc)
     add("talk to the ladies", "the ladies");
 
@@ -13982,7 +14059,9 @@ function _completePool(verb, ctx) {
       // Only suggest what THIS room actually sells — toastie/condom at a 7-Eleven
       // room, food at a food stall, chargers where there's a shop/seven — else a
       // Soi 6 bar's "buy " chips include items it flatly refuses ("Not for sale here").
-      const barItems = ["beer", "water", "lady drink for"];
+      // a bar's menu only where drinks are served: the 7-Eleven after midnight offered a padlocked beer and a lady
+      // drink "where drinks are sold" (Sam, round 90)
+      const barItems = _servesDrinks() ? ["beer", "water", "lady drink for"] : _room().seven ? ["water"] : [];
       if (_room().seven) barItems.push("toastie");
       if (_room().seven && !_servesDrinks() && G.nightTurn < 60) barItems.push("beer");
       if (typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room]) barItems.push("food");
@@ -15570,7 +15649,7 @@ function doCommand(input) {
     case "press": case "type":
       if (_room().freeTea && (!arg || /\b(tap|cooler|tea|button|dispenser)\b/.test(arg))) { _freeTea(); break; }
       _doEnter(arg); break;   // (CODE is a keypad word — below, with SAFE/KEYPAD/PIN)
-    case "play": case "challenge": _doPlay(arg); break;
+    case "play": case "challenge": if (!String(arg || "").trim()) { _doPlay(""); return; } _doPlay(arg); break;   // a bare PLAY is the menu, free (Sam, round 90)
     // the gambler's vocabulary (2026-08-22): REMATCH / DOUBLE replay the last game
     // here; BET / WAGER <n> [ON <game>] is PLAY with a stake; stray shot-words
     // with no game on the table get a pointer instead of the conversation layer
@@ -15703,9 +15782,9 @@ function doCommand(input) {
         const _last = G.stage !== "expat" && G.day >= 7 && !G.visitUntil;
         const _who = G.party && G.party.ids && G.party.ids.length && typeof _partyLabel === "function" ? _partyLabel() : null;
         const _warn = _last
-          ? `It's ${_clockStr()} on the last night of the trip. Sleep now and the week ends here, with its final night unspent.`
+          ? `It's ${_clockStr()} on the last night of the trip. Sleep now and the week ends here${G.nightTurn >= 60 ? "." : ", with its final night unspent."}`   // at 02:18 the night is spent (Sam, round 90)
           : G.nightTurn < 10 ? `It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it.`
-          : _who ? `It's ${_clockStr()}. Sleep now and the night ends here — ${_who} ${G.party.ids.length > 1 ? "come" : "comes"} up with you, and that is the long-time close.`
+          : _who ? `It's ${_clockStr()}. Sleep now and the night ends here — ${_who} ${G.room === _hotelRoomId() ? (G.party.ids.length > 1 ? "are" : "is") + " already in the room" : (G.party.ids.length > 1 ? "come" : "comes") + " up with you"}, and that is the long-time close.`   // she is already here (Sam, round 90)
           : (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= SOI6_CLOSE) ? `It's ${_clockStr()}. Sleep now and the night ends here — the soi has already shut; it is only the night that's left.`   // nothing was open to stay open (Declan, round 83)
           : `It's ${_clockStr()}. Sleep now and the night ends here; whatever is still open on the soi stays open without you.`;
         if (!_endConfirm("sleep", _warn + " (SLEEP again if you mean it, or head back out.)")) return;

@@ -190,7 +190,7 @@ test("SLEEP at any hour asks once, and the second SLEEP ends the night", () => {
 });
 test("SLEEP with a girl on your arm names the long-time close before it happens", () => {
   G.room = _hotelRoomId(); G.nightTurn = 50; G.party = { ids: ["lek"], stops: 1, spent: 0, seen: {} };
-  out = []; run("sleep"); assert.match(said(), /Lek comes up with you, and that is the long-time close/);
+  out = []; run("sleep"); assert.match(said(), /Lek (comes up with you|is already in the room), and that is the long-time close/);
 });
 test("LONG TIME asks twice: the first answer says it is the night, the second commits", () => {
   G.room = "candy_bar"; G.nightTurn = 40; G.money = 20000; G.soc.drinks.nan = 8;

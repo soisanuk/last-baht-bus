@@ -4965,7 +4965,9 @@ function _cinderellaCoda() {
   // she rode you home on her own bike; she is not climbing into a baht bus (Kenji, round 47)
   // the coda runs before the day turns, so the ride is TODAY's (Dieter, round 56: the bike
   // line never fired, and she caught a baht bus home after driving him all night)
-  const _rode = !!(G.lastRide && G.lastRide.id === G.lastBfId && G.lastRide.day >= G.day - 1);
+  // …nor if her own texts have told you about her bike (Sam, round 90: "bike flat tire", then the baht bus coin)
+  const _rode = !!(G.lastRide && G.lastRide.id === G.lastBfId && G.lastRide.day >= G.day - 1) ||
+    !!(G.lastBfId && (G.phone.inbox || []).some(x => x.from === G.lastBfId && /\b(bike|motorbike|scooter)\b/i.test(String(x.text || ""))));
   _say(_rode
     ? "Dawn on the main road, the sky the colour of a weak tea. She kicks the bike awake, puts on the helmet " +
       "she did not wear all night because the police are up now, and is gone into the first traffic without " +
@@ -5446,6 +5448,7 @@ function _endNight(reason) {
       ? "The three of you fall through your door somewhere past the point of counting, still laughing at a thing none of you can remember. {who} claim the shower in shifts and the bed by consensus, and the night finishes the way the best ones do — off the clock, off the books, unhurried."
       : (_isHotelRoom(G.room) && G.party.stops === 0
         ? "{who} kicks off her shoes by the door as if she has always kicked them off there. The last of the night is nobody's business and unhurried about being so."
+        : G.nightTurn < 50 ? "You bring {who} home early, while the soi is still filling up behind you. Nobody in it minds."
         : "You bring {who} home the long way, through a town that has watched the two of you all evening and approves. The door closes on the last of the night, and what's left of it is nobody's business and unhurried about being so."),
       { who: _partyLabel() }), "win");
     G.party = null;
@@ -5623,6 +5626,10 @@ function _endNight(reason) {
             ["noodle", "a bowl of noodles from a cart that only opens at two, her feet in your lap on a plastic stool, the street going quiet one bar at a time"],
             ["toastie", "a 7-Eleven toastie split down the middle at four, and a slow walk back past the shutters while she tells you which bars lie about their happy hour"],
           ];
+          // the hour the night actually ended: a cart that opens at two, at twenty past nine (Sam, round 90)
+          if (G.nightTurn < 70) _codas.splice(0, _codas.length,
+            ["early", "an early night that felt like a late one, the street still loud under the window and her asleep before you, mid-sentence"],
+            ["fan", "the fan on two, the soi's music coming up through the floor, and a long argument about nothing that she wins"]);
           let _ck = _hh(String(G.lastBfId || "") + ":" + G.day + ":coda", 71) % _codas.length;
           if (_codas[_ck][0] === G.lastCoda) _ck = (_ck + 1) % _codas.length;   // not the same close two nights running (Martin, round 85)
           const _c = _codas[_ck]; G.lastCoda = _c[0];

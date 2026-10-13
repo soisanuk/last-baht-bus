@@ -41,11 +41,11 @@ test("she remembers the night: the greeting, the topic, and the other woman of a
   run("barfine alisa"); run("take her out");
   assert.equal(G.wentWith.sweet_tamarind_alisa.kind, "out");
   _endNight("sleep"); G.nightTurn = 20; G.room = "sweet_tamarind"; out = []; run("talk to alisa");
-  assert.doesNotMatch(said(), /you watch, you don't talk|First time this bar/); assert.ok(_WENT_HELLO.out.some(f => said().includes(f("Alisa").slice(0, 30))));
+  assert.doesNotMatch(said(), /you watch, you don't talk|First time this bar/); assert.ok([..._WENT_HELLO.outBig, ..._WENT_HELLO.outSmall].some(f => said().includes(f("Alisa").slice(0, 30))));
   G.partyMates = { sweet_tamarind_alisa: ["joy"] }; out = []; run("ask alisa about joy");
   if (NPCS.joy) assert.match(said(), /We go out together|friends, because of you/);
   G.wentWith.kluay = { day: G.day, kind: "st" }; G.room = "ruby_kiss"; out = []; run("talk to kluay");
-  assert.match(said(), /You again|Back already/);
+  assert.ok(_WENT_HELLO.st.some(f => said().includes(f(NPCS.kluay.name))), said());   // the pool deepened (round 90)
 });
 
 test("with a woman on your arm: no pitch lines, no ST/LT on the menu or chips, no BARFINE last call, no colleague offered", () => {

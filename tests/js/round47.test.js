@@ -93,7 +93,9 @@ test("every label TOPICS can print is a phrase the parser takes", () => {
     const npc = NPCS[id]; if (!npc.dialogue) continue;
     const room = _npcRoom(id); if (!room || !ROOMS[room]) continue;
     G.room = room; G.known[id] = true;
+    const _sit = (o => [...o.first, ...o.last])(_situationTopics(id));   // engine-answered (round 90), asked for real in round90.test
     for (const t of _convoTopics(id, { all: true })) {
+      if (_sit.includes(t)) continue;
       const label = strip(_topicLabel(t));
       checked++;
       let d = _pickDialogue(id, label);
@@ -112,7 +114,8 @@ test("TOPICS answers for a woman the chip bar has nothing to show", () => {
   // subjects were suppressed by CHIP ETIQUETTE (quest-driven nodes, and a topic
   // that is another character's name), none by a gate.
   G.room = _npcRoom("pim"); G.known.pim = true;
-  assert.deepEqual(_convoTopics("pim"), [], "the chip bar still shows her none — that part is by design");
+  const _authored = id => _convoTopics(id).filter(t => !(o => [...o.first, ...o.last])(_situationTopics(id)).includes(t));   // the engine's own topics (round 90) are not hers
+  assert.deepEqual(_authored("pim"), [], "the chip bar still shows her none — that part is by design");
   const open = _convoTopics("pim", { all: true });
   assert.ok(open.length >= 2, `TOPICS finds her subjects (${JSON.stringify(open)})`);
   out = []; run("topics pim");
@@ -432,7 +435,7 @@ test("chip:\"topics\" is listed by the verb and never suggested by the bar", () 
   }
   // Pim is the case that started it: nothing on the bar, two subjects on the verb
   G.room = _npcRoom("pim"); G.known.pim = true;
-  assert.deepEqual(_convoTopics("pim"), []);
+  assert.deepEqual(_convoTopics("pim").filter(t => !(o => [...o.first, ...o.last])(_situationTopics("pim")).includes(t)), []);
   assert.ok(_convoTopics("pim", { all: true }).length >= 2);
 });
 

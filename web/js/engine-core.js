@@ -890,6 +890,9 @@ function _roomFit(pool) {
   const roles = new Set(staff.map(i => NPC_ROLES[i]));
   const bad = [];
   if (staff.length <= 1) bad.push(_FIT_NOBODY);
+  // one hostess with a mamasan and a cashier is still ONE girl: "two of the girls slip out", "her friends look over"
+  // at the Shady Lady, where Pukky is the floor (Sam, round 90)
+  else if (staff.filter(i => NPC_ROLES[i] === "hostess").length <= 1) bad.push(/\b(other girls?|the girls|two of the girls|her friends|girl beside her|nearest girl|the girls have)\b/i);
   if (!roles.has("mamasan")) bad.push(_FIT_MAMA);
   if (!roles.has("cashier") && staff.length <= 1) bad.push(_FIT_TILL);
   if (ROOMS[G.room].barType === "gents" || ROOMS[G.room].indoors) bad.push(/open[- ]front/i);
@@ -1879,7 +1882,11 @@ function _convoTopics(id, opts) {
     if (d.when && !d.when(st, G)) continue;
     { const _t = String(d.topic).split("|")[0]; if (!out.includes(_t)) out.push(_t); }   // the chip shows the first alias
   }
-  return out;
+  // what the ENGINE answers about the night and the hours is a topic too — last night, the sunrise, the present, the
+  // rain first (timely), after work and the hours last (Sam, round 90: a thumb could ask none of it)
+  const sit = typeof _situationTopics === "function" ? _situationTopics(id) : null;
+  if (!sit) return out;
+  return [...sit.first.filter(t => !out.includes(t)), ...out, ...sit.last.filter(t => !out.includes(t))];
 }
 
 // Faction standing with the powers of the night — PLG (Laurent Vasseur's Soi 6 rollup),
