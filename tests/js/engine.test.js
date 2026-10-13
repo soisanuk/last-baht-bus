@@ -5134,7 +5134,7 @@ test("bond-scaled texting: your farang texts more, and longs — never the mama-
   }
   assert.ok(sent, "a farang-tier contact does reach out");
   assert.doesNotMatch(msg, /buffalo|medicine|phone of me break|lottery/i, "no scam-ask on her own farang");
-  assert.match(msg, /come see me|miss you|my farang|dream about you|other bar/i, "she longs");
+  assert.match(msg, /come see me|miss you|my farang|dream about you|other bar|think of you|ask about you|which 😏|sleep/i, "she longs");   // the pool deepened in round 86
 });
 
 test("Darkside girls are veterans: no green tier past Sukhumvit", () => {

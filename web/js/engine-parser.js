@@ -9014,6 +9014,12 @@ function _doBuy(arg) {
       }
       G.roomWater = (G.roomWater || 0) + 1;
       G.thirst = Math.max(0, G.thirst - 45);
+      // the Vic's room keeps them in the mini-fridge, cold (Sunil, round 86: "warm as soup… by the kettle")
+      if (/mini-fridge/.test(String(_room().desc || ""))) {
+        _say(G.roomWater === 1 ? "A cold bottle out of the mini-fridge, the first of housekeeping's two. It goes down in one long pull."
+          : "The second cold bottle from the mini-fridge. The fridge hums, empty now until housekeeping.");
+        return;
+      }
       _say(G.roomWater === 1
         ? _pickVary([
           "One of the two complimentary bottles by the kettle — warm as soup, free as air, and exactly what the body wanted. Housekeeping will replace it tomorrow, the quiet daily kindness of every hotel in the kingdom.",
@@ -11105,15 +11111,20 @@ const _TOILET_LINES = {
   ],
 };
 
+// who joins in: the women actually on the floor ("three hostesses" in a one-hostess bar — Sunil, round 86)
+function _chorusWho() {
+  const n = _npcsHere().filter(i => NPC_ROLES[i] === "hostess" && !(G.party && G.party.ids && G.party.ids.includes(i))).length;
+  return n >= 3 ? "Three hostesses join" : n === 2 ? "Both girls join" : n === 1 ? "The girl behind the rail joins" : "The whole rail joins";
+}
 function _doSing() {
   if (_inBar() && _bandHere()) {
     _say("You add your voice. The band adjusts — subtly, professionally — and you're on " +
-      "pitch or something close enough that nobody here is grading. Three hostesses " +
-      "join the chorus and the song stops being yours, which is the best thing that " +
+      "pitch or something close enough that nobody here is grading. " + _chorusWho() +
+      " the chorus and the song stops being yours, which is the best thing that " +
       "can happen to it.");
     _floorJoy(2);
   } else if (_inBar()) {
-    _say("You give it a verse. Three hostesses join the chorus without asking " +
+    _say("You give it a verse. " + _chorusWho() + " the chorus without asking " +
       "what the song is. It has never once mattered.");
   } else if (_bandHere()) {
     _say("You sing along from the crowd. The vocalist grins and points the microphone " +
@@ -12136,7 +12147,7 @@ function _doCheers() {
     return;
   }
   _say("“ชนแก้ว!” (chon gaew — glasses meet!) Every glass within reach angles " +
-    "toward yours: the girls', the regular's, possibly the mamasan's calculator. " +
+    "toward yours: " + (_npcsHere().some(i => NPC_ROLES[i] === "mamasan") ? "the girls', the regular's, possibly the mamasan's calculator. " : _npcsHere().some(i => NPC_ROLES[i]) ? "the girls', the regular's, the till's. " : "the rail's, the barmaid's, the man in the corner's. ") +   // no mamasan at the Vic (Sunil, round 86)
     "Nobody needs a reason. Not needing a reason is the entire custom.");
 }
 

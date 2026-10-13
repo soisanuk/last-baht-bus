@@ -973,6 +973,9 @@ function _doTell(lower) {
 
 function _closingTick() {
   if (!_flag("act1Done") || G.over) return;
+  // a man on the back of her bike is not in the bar he left: its two o'clock shut on him mid-ride and took
+  // the ride and the long-time night with it (Sunil, round 86 — the 02:00 close made it reachable)
+  if (typeof _onRide === "function" && _onRide()) return;
   if (!_closesMidnight(G.room) || _lockedIn()) return;
   const r = _room();
   // the last-call courtesy in the final half hour
@@ -3370,7 +3373,8 @@ function _doBell() {
   }
   _engineSfx("bell");
   _engineSpeak("ชนแก้ว");
-  _boughtHappy(2);
+  // a bell that pays nothing says so where it rang (Sunil, round 86 — ฿1,240, +0, and the taper's one note long gone)
+  if (_boughtHappy(2) === false) _say("(no สนุก — you've bought enough tonight that a round pays the room, not you)", "dim");
 }
 
 // RING BELL means different things by venue. A go-go bell is a round for the
@@ -4378,7 +4382,9 @@ function _conquestHappy(base, id) {
   const first = !(id && G.soc.bfNight && G.soc.bfNight[id]);
   if (id) (G.soc.bfNight = G.soc.bfNight || {})[id] = (G.soc.bfNight[id] || 0) + 1;
   const bonded = id && tier >= 2 && first;
-  const net = Math.max(base + (bonded ? 2 : 0) - 2 * G.jaded, -4);
+  // bonded is NO treadmill: the jaded discount was still taken off her first night, so "No treadmill with
+  // her — the one that keeps giving" printed beside a −1, and a regular paid less than a stranger (Sunil, round 86)
+  const net = bonded ? base + 2 : Math.max(base - 2 * G.jaded, -4);
   _addHappy(net); // _addHappy no-ops on 0, so a wash prints nothing
   G.lastConquest = { night: G.day, net, id };
   if (bonded) {
@@ -4487,10 +4493,11 @@ function _charmHappy(n) {
 function _boughtHappy(n) {
   if (!n) return;
   const c = (G.soc.bought = (G.soc.bought || 0) + 1);
-  if (c <= 6) return _addHappy(n);                        // an ordinary generous night: full value
+  if (c <= 6) { _addHappy(n); return true; }              // an ordinary generous night: full value
   if (c === 7) _say("(Past six bought tonight, a drink stops paying you in สนุก every time — it still pays her.)", "dim");   // the silent taper (Marguerite, round 67)
-  if (c <= 14) { if (c % 2 === 0) _addHappy(n); return; } // half rate
-  if (c % 3 === 0) _addHappy(n);                          // a grind: a third, and it stays a third
+  if (c <= 14) { if (c % 2 === 0) { _addHappy(n); return true; } return false; } // half rate
+  if (c % 3 === 0) { _addHappy(n); return true; }         // a grind: a third, and it stays a third
+  return false;
 }
 function _addHappy(n, why) {
   if (!n) return;
@@ -4514,9 +4521,12 @@ function _addHappy(n, why) {
         "know your name. You are, officially, happy. " + ((typeof _servesDrinks === "function" && _servesDrinks(G.room) && !(typeof _shutHere === "function" && _shutHere()))
           ? "The DJ, unprompted, plays your song." : "Somewhere down the soi, a song you like comes on."), "win");   // no DJ in a hotel room at two (Martin, round 85)
       _engineSpeak("สบายสบาย");
-      _say("(The night keeps going. So can you.)", "dim");
+      _say(G.nightTurn >= (typeof SUNRISE_TURN !== "undefined" ? SUNRISE_TURN : 110) ? "(The night's done; the feeling isn't.)" : "(The night keeps going. So can you.)", "dim");   // not "keeps going" at dawn (Sunil, round 86)
     } else {
-      _say(`✨ ${after}`, "win");
+      // a level is announced once a trip: dipping below and climbing back re-printed "finding your feet" (Sunil, round 86)
+      const seen = (G.levelsSeen = G.levelsSeen || {});
+      const k = G.vacation + ":" + after;
+      if (!seen[k]) { seen[k] = true; _say(`✨ ${after}`, "win"); }
     }
   }
 }
@@ -5477,7 +5487,9 @@ function _endNight(reason) {
       // You stayed out for it deliberately, which is the difference: the all-nighter
       // is what happens to you, this is what you did. Same body cost, more สนุก.
       { let _l = _pickVary(_SUNRISE_END, "sunriseEnd");   // "you get a bike home" charged nothing (Marguerite, round 67)
-        if (/\bbike\b/.test(_l) && G.money < MOTOSAI_TOWN) _l = _pickVary(_SUNRISE_END.filter(x => !/\bbike\b/.test(x)), "sunriseEnd");
+        // …and no bike to a bed on the same street: a ฿50 ride to the Vic from Soi 6 one night, a walk the next (Sunil, round 86)
+        const _walkHome = ROOMS[_hotelRoomId()] && ROOMS[G.room] && ROOMS[_hotelRoomId()].region === ROOMS[G.room].region;
+        if (/\bbike\b/.test(_l) && (G.money < MOTOSAI_TOWN || _walkHome)) _l = _pickVary(_SUNRISE_END.filter(x => !/\bbike\b/.test(x)), "sunriseEnd");
         if (/\bbike\b/.test(_l)) { G.money -= MOTOSAI_TOWN; _l += ` (฿${_num(MOTOSAI_TOWN)} for the bike — ฿${_num(G.money)} left.)`; }
         _say(_l, "win"); }
       _addHappy(3);

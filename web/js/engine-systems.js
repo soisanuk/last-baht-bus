@@ -1011,8 +1011,9 @@ function _doBarfine(arg) {
       "way she's counting the room, the too-quick yes. You keep a hand near your wallet " +
       "and your wits about you.)", "dim");
   }
+  const _waivedFine = typeof _bondTier === "function" && _bondTier(id) >= 3 && !(typeof _careOk === "function" && !_careOk(id));
   if (bt === "soi6" || _room().region === "Soi 6") {   // on Soi 6 the girl quotes it herself, the middle's beer bars included (Gary, round 79)
-    _say(`${name} counts it out on her fingers, upfront as a menu — she quotes ` +
+    _say(_waivedFine ? `${name} leans in close and says it quietly, not as a menu: for you, no fine — she will square it with the house herself.` : `${name} counts it out on her fingers, upfront as a menu — she quotes ` +   // not the noodle-cart menu right before she waives it (Sunil, round 86)
       "upstairs the way a noodle cart quotes noodles, one eye still counting " +
       `the room over your shoulder.` +
       (bt === "soi6" && G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
@@ -2541,7 +2542,7 @@ function _bfScamRoll(id, marked) {
 function _maybeGoWithYou(id) {
   if (!_flag("act1Done") || G.pendingEnc || G.game || G.pendingBf) return;
   if (_atOwnBar()) return;                        // your own staff don't proposition you out of your own till
-  if (G.party && G.party.ids && G.party.ids.includes(id)) return; // she's already yours tonight
+  if (G.party && G.party.ids && G.party.ids.length) return; // she's already yours tonight — or somebody else is: "You go with ME" with Pukky on his arm (Sunil, round 86)
   if (NPC_ROLES[id] !== "hostess") return;
   if (typeof _drinksOnly === "function" && _drinksOnly(id)) return;   // she does not go, so she does not offer (theme 12)
   if (_hasSponsor(id) && _sponsorInTown(id)) return;   // "I go with you, na" from a girl who is not working this week (Lars, round 47)
@@ -5728,9 +5729,14 @@ function _maybeIncomingText() {
       // "you go other bar?? i see you" is an accusation: it wants another bar behind it
       // tonight, not a night spent wholly with her (Wiremu, round 59)
       const _elsewhere = Object.entries(G.soc.barTurns || {}).some(([rm, n]) => rm !== _npcRoom(id) && n >= 3 && ROOMS[rm] && ROOMS[rm].barType);
+      // "miss you so much cannot sleep" the morning after she slept in your bed (Sunil, round 86): not then
+      const _slept = G.lastNightWas && G.lastNightWas.with === id && G.lastNightWas.day >= G.day - 1;
       const _pool = ["i dream about you last night na 💭❤️", _elsewhere ? "you go other bar?? 😤 i see you i KNOW 👀" : "you tired today? 😴 i still smile from the other night",
-        "miss you so much cannot sleep 😢", G.stage === "expat" ? "my farang 🥰 you live here now, no excuse. come see me 555" : "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"];   // a resident is not 'still in pattaya' (Desmond, round 63)
-      _pushMsg(id, _floorTextPick(id, _pool.slice(0, 4)));
+        _slept ? "you sleep ok? i sleep like a stone 😴💕" : "miss you so much cannot sleep 😢", G.stage === "expat" ? "my farang 🥰 you live here now, no excuse. come see me 555" : "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555",   // a resident is not 'still in pattaya' (Desmond, round 63)
+        // deeper than a week, so the her-farang texts do not come round twice (Sunil, round 86)
+        "i buy mango today, i think of you. you hate mango 555 🥭", "the girls ask where is my farang. i say sleeping, old man 😂",
+        "tonight i wear the blue one. you know which 😏", "my mother ask about you. i say you are polite. she say good 🙏"];
+      _pushMsg(id, _floorTextPick(id, _pool));
     }
   } else if (t >= 2) { // regular: invites and warmth, a little needy
     if (roll < 0.45 && !_sawYou) { G.phone.invite = { id, day: G.day };
@@ -5822,8 +5828,8 @@ const _CARE_ASK = [
   "can i say something true? 🙏 no fine for you = no money for me that night. {w} nights. i happy to do it. but my room, my mama, same same every month. you understand na? (SEND {a} TO {N})",
 ];
 const _CARE_THANKS = [
-  "😭🙏 see? i KNOW you understand. ok. i not say again. finish 💕",
-  "🙏🙏 thank you na. not for the money. for that you listen. ok, finish, i not talk about it again",
+  "😭🙏 see? i KNOW you understand. ok. now we are square 💕",   // no "i not say again": the ledger asks again when the nights add up (Sunil, round 86)
+  "🙏🙏 thank you na. not for the money. for that you listen. now is square",
   "💕 ok. now i not feel strange. you good man. jing jing",
 ];
 const _CARE_COLD = [
@@ -6592,6 +6598,11 @@ function _startRain(len) {
   G.rain = len;
   G.lastRain = G.turns;
   G.rainDay = G.day;   // one a night (Mario, 2026-09-14)
+  // on her bike the rain is the road's, not the bar you left (Sunil, round 86: the bar's +1 and the dog's spray "across four stools" mid-ride)
+  if (typeof _onRide === "function" && _onRide()) {
+    _say("The rain catches you on the back of her bike. She pulls in under a shop awning, laughing, and the two of you wait it out with the engine ticking.", "alert");
+    return;
+  }
   if (_room().barType === "gogo") {   // an enclosed go-go: no street to empty, no awning (Henrik, round 69: rain on the tin, the sandwich board dragged in)
     _say(_pickVary(_RAIN_GOGO, "raingogo"), "alert");
   } else if (_inBar()) {
@@ -11566,8 +11577,12 @@ function _qvKitchen(arg) {
     return;
   }
   if (dish.id === "crisps") {
-    _say(_fmt("\u0e3f{p} for a bag of crisps. They are exactly what they are. (\u0e3f{m} left.)",
-      { p: dish.price, m: G.money }));
+    _say(_fmt(_pickVary([   // pooled: three bags, one sentence three times (Sunil, round 86)
+      "\u0e3f{p} for a bag of crisps. They are exactly what they are. (\u0e3f{m} left.)",
+      "Salt and vinegar, \u0e3f{p}. Aoy slides them over without breaking conversation. (\u0e3f{m} left.)",
+      "Another bag, \u0e3f{p}. The green flavour, because she's run out of the other. (\u0e3f{m} left.)",
+      "Crisps, \u0e3f{p}, the bag already open by the time it reaches you. (\u0e3f{m} left.)",
+    ], "qvcrisps"), { p: dish.price, m: G.money }));
     return;
   }
   const pool = dish.id === "basket" ? _QV_BASKET_LINES : _QV_DISH_LINES[dish.id];
