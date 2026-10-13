@@ -139,3 +139,11 @@ test("Tan answers HOME; the eaten-yet greeting is romanised as itself", () => {
   out = []; run("ask tan about home"); assert.match(said(), /My family is at home/);
   assert.equal(THAI_PHRASES.find(p => p.key === "eatenyet").rom, "kin khao rue yang");
 });
+
+test("Tan answers a Thai passenger in Thai once, then steers the ride back to English (one language path)", () => {
+  newGame(); G.player = { said: {} }; _taxiIntro("soi6");
+  out = []; run("ผมมาจากลอนดอน"); assert.match(said(), /พูดไทยเก่งมาก/); assert.match(said(), /speak English/);
+  assert.equal(G.introStep, 0, "still the first question");
+  out = []; run("สอง"); assert.doesNotMatch(said(), /พูดไทยเก่งมาก/, "once");
+  assert.equal(G.introStep, 1);
+});

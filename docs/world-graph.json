@@ -64746,37 +64746,37 @@
   },
   {
    "from": "MOT_BOOTS",
-   "to": "engine-parser.js:17127",
+   "to": "engine-parser.js:17136",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS_SAVED",
-   "to": "engine-parser.js:17127",
+   "to": "engine-parser.js:17136",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS_SAVED",
-   "to": "engine-parser.js:17145",
+   "to": "engine-parser.js:17154",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:17173",
+   "to": "engine-parser.js:17182",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:17174",
+   "to": "engine-parser.js:17183",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:17179",
+   "to": "engine-parser.js:17188",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:17191",
+   "to": "engine-parser.js:17200",
    "type": "INTERPOLATES"
   },
   {
@@ -69695,12 +69695,12 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:17063",
+   "to": "engine-parser.js:17072",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:17073",
+   "to": "engine-parser.js:17082",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70355,7 +70355,7 @@
   },
   {
    "from": "ctfRabbit",
-   "to": "engine-parser.js:17066",
+   "to": "engine-parser.js:17075",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70770,12 +70770,12 @@
   },
   {
    "from": "motBooted",
-   "to": "engine-parser.js:17129",
+   "to": "engine-parser.js:17138",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motBootsTold",
-   "to": "engine-parser.js:17137",
+   "to": "engine-parser.js:17146",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70790,12 +70790,12 @@
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:17137",
+   "to": "engine-parser.js:17146",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:17168",
+   "to": "engine-parser.js:17177",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70865,7 +70865,7 @@
   },
   {
    "from": "owlBox15",
-   "to": "engine-parser.js:17065",
+   "to": "engine-parser.js:17074",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -72970,17 +72970,17 @@
   },
   {
    "from": "motBooted",
-   "to": "engine-parser.js:17149",
+   "to": "engine-parser.js:17158",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motBootsTold",
-   "to": "engine-parser.js:17184",
+   "to": "engine-parser.js:17193",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:17180",
+   "to": "engine-parser.js:17189",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -74769,8 +74769,8 @@
     "engine-parser.js:16651",
     "engine-parser.js:16769",
     "engine-parser.js:16897",
-    "engine-parser.js:17063",
-    "engine-parser.js:17073",
+    "engine-parser.js:17072",
+    "engine-parser.js:17082",
     "engine-parser.js:1829",
     "engine-parser.js:6257",
     "engine-parser.js:699",
@@ -75452,7 +75452,7 @@
   {
    "name": "ctfRabbit",
    "readByEngine": [
-    "engine-parser.js:17066",
+    "engine-parser.js:17075",
     "engine-systems.js:11482"
    ],
    "setByEngine": [
@@ -76776,25 +76776,25 @@
    ],
    "name": "motBooted",
    "readByEngine": [
-    "engine-parser.js:17129"
+    "engine-parser.js:17138"
    ],
    "requiredBy": [
     "mot#3"
    ],
    "setByEngine": [
-    "engine-parser.js:17149"
+    "engine-parser.js:17158"
    ]
   },
   {
    "name": "motBootsTold",
    "readByEngine": [
-    "engine-parser.js:17137"
+    "engine-parser.js:17146"
    ],
    "setByDialogue": [
     "mot#2"
    ],
    "setByEngine": [
-    "engine-parser.js:17184"
+    "engine-parser.js:17193"
    ]
   },
   {
@@ -76802,15 +76802,15 @@
    "readByEngine": [
     "engine-parser.js:14251",
     "engine-parser.js:16601",
-    "engine-parser.js:17137",
-    "engine-parser.js:17168",
+    "engine-parser.js:17146",
+    "engine-parser.js:17177",
     "engine-systems.js:664"
    ],
    "requiredBy": [
     "mot#2"
    ],
    "setByEngine": [
-    "engine-parser.js:17180"
+    "engine-parser.js:17189"
    ]
   },
   {
@@ -76978,7 +76978,7 @@
   {
    "name": "owlBox15",
    "readByEngine": [
-    "engine-parser.js:17065",
+    "engine-parser.js:17074",
     "engine-systems.js:11363"
    ],
    "setByEngine": [

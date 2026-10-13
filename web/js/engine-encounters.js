@@ -283,8 +283,8 @@ function _salengVignette() {
   const gid = girls[Math.floor(_rand() * girls.length)];
   const gName = NPCS[gid].name;
   const pool = _SALENG_VIGNETTES[G.salengCart] || _SALENG_VIGNETTES._default;
-  const _sv = _salengPick(pool); if (!_sv) return;
-  _say(_sv.replace(/\{g\}/g, gName), "dim");
+  const _sv = _salengPick(pool);
+  if (_sv) _say(_sv.replace(/\{g\}/g, gName), "dim");   // scenes spent: no new prose, but she can still go to the cart
   // The cart itself is ambient — it doesn't break a conversation. But if the girl
   // who bolts to it is the one you were talking to, she's physically gone
   // mid-sentence, so THAT ends the conversation (the "she jumps to the cart" rule).

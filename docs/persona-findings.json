@@ -25623,13 +25623,13 @@
       "lens": "thai-speaker-typing-thai",
       "instrument": "",
       "claim": "Tan on the airport ride takes no notice of a passenger answering in fluent Thai",
-      "verdict": "deferred",
-      "note": "The intro's three picks are numbered; a Thai-register read of Tan's is a writing pass",
+      "verdict": "fixed",
+      "note": "Mario 2026-10-14: Tan answers in Thai once and steers back to English — one language path",
       "cls": "N",
       "sev": "trivial",
       "system": "intro",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round92.test.js"
     },
     {
       "round": "92",
@@ -25758,8 +25758,8 @@
       "lens": "thai-speaker-typing-thai",
       "instrument": "",
       "claim": "Romanised: 'pai shady lady' → No idea; 'meua keun' a miss; 'fon tok mai' gets no Thai hint",
-      "verdict": "deferred",
-      "note": "Romanised Thai beyond the phrasebook is a separate pass",
+      "verdict": "design",
+      "note": "Mario 2026-10-14: romanised Thai beyond the phrasebook is too much — not pursued",
       "cls": "L",
       "sev": "minor",
       "system": "thai",

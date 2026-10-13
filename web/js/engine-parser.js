@@ -16992,6 +16992,15 @@ function _introAnswer(input) {
   const stepIdx = G.introStep || 0;
   const step = _INTRO_STEPS[stepIdx];
   const pick = _introMatch(input, step.table());
+  // A passenger who answers in Thai is answered in Thai — once — and then steered back to English: the game keeps
+  // ONE language path (Mario, 2026-10-14, after Thomas in round 92 got "a number, my friend" to fluent Thai). Tan
+  // has a reason the town will share: out here you are a farang whatever you say, and he paid for the English.
+  if (/[\u0E00-\u0E7F]/.test(input || "") && !G.player.tanThai) {
+    G.player.tanThai = true;
+    _say("“โอ้โห — พูดไทยเก่งมาก!” (Wow — your Thai is very good!) For the first time Tan looks at you properly in the mirror. " +
+      "“Okay, okay. But in this car we speak English, na. Six years in Ohio I paid for it, I don't waste it on a man who already knows the words.” " +
+      "A grin. “And out there the town calls you farang whatever you say. Easier if I start the same.”");
+  }
   if (!pick) { _say("\"Hah — a number, my friend. Long drive.\"", "dim"); _introPrompt(); return; }
   G.player[step.field] = pick.id;
   // …and remember the ANSWER YOU GAVE, not just where it routes. Two
