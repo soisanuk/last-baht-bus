@@ -95,7 +95,7 @@ test("last night's quiz win is remembered by the room that saw it", () => {
 });
 
 test("small: the bell's price says it moves, no 'tonight' on the last morning, DRINK BEER at the 7-Eleven, WAIT UNTIL 1:55 at 01:54", () => {
-  G.room = _npcRoom("pukky"); out = []; run("tao rai"); assert.match(said(), /goes up as the room fills/);
+  G.room = _npcRoom("pukky"); out = []; run("tao rai"); assert.match(said(), /moves with the room/);
   G.room = "soi6_street"; G.nightTurn = 30; const m = G.money; run("drink beer"); assert.ok(G.money < m);
   G.nightTurn = 79; out = []; run("wait until 1:55"); assert.equal(G.nightTurn, 80);
   assert.ok(!/intends to see you tonight/.test(String(_fmt(String(_PARTY_SOFT_BYE_CLOSE.filter(l => !/tonight|tomorrow/.test(l)).join("")), { who: "X" }))));

@@ -1104,6 +1104,24 @@ function _bfDayRefusal(id) {
   return null;
 }
 
+// …the same day facts READ, with nothing written: what she would say tonight if you asked to take her out. A woman
+// who quoted "one lady drink first, na — after nine ฿750", sold the drink, and then said temple (Liam, round 93, three
+// nights of seven) was a quote the day had already answered. Her own price talk asks this first.
+function _bfDayPeek(id) {
+  const held = G.soc.bfRefused && G.soc.bfRefused[id];
+  if (held && held.kind !== "cheap" && held.kind !== "mess") return held.kind;
+  if (_maiDee(id)) return "maidee";
+  if (typeof _drinksOnly === "function" && _drinksOnly(id)) return "drinksonly";
+  if (G.ladyTime && G.ladyTime[id] && G.ladyTime[id].v === G.vacation && G.day - G.ladyTime[id].day <= 3 && G.day >= G.ladyTime[id].day) return "period";
+  const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
+  return life < 10 ? (life < 5 ? "period" : "temple") : null;
+}
+const _BF_PEEK_SAY = {
+  period: "“Not me tonight, na — lady time.” She says it before anything else, which is how the honest ones do it.",
+  temple: "“Not me tonight. I go temple at five, make merit, so tonight I go home early and sleep clean.” She means it.",
+  drinksonly: "“Me, drink only. No go out, no upstairs.” She says it nicely and she says it first.",
+  maidee: "She does not answer that. Not from you.",
+};
 function _bfRefusal(id, bt) {
   const held = G.soc.bfRefused && G.soc.bfRefused[id];
   if (held) {
@@ -1188,7 +1206,7 @@ function _bfRefusalSay(id, r) {
       "baht moves: “Cannot tonight, tilac. Lady time, jing jing.” The honest " +
       "ones tell you BEFORE the fine is paid. Remember that.",
     temple: `${name} makes an apologetic temple of her own hands: “Cannot, na. ` +
-      "I go temple in morning, make merit for my family. Buddha first, boom " +
+      "I go temple at five, make merit for my family — tonight I go home early and sleep clean. Buddha first, boom " +
       "boom later.” It has the ring of complete truth.",
     draw: `${name} says yes with her whole face — but the mamasan is already at her ` +
       "shoulder, all smiles and steel: “This one very popular, she bring me many " +
@@ -1291,7 +1309,7 @@ const _PARTY_JOIN2 = [
 const _PARTY_ARRIVE = [
   "{who} makes an entrance of your arrival — a wave here, a shriek of recognition there; she knows somebody at every rail in this town, and tonight you're the one she brought.",
   "In the new light {who} looks around like a landlady inspecting a property, delivers a verdict in Thai you don't need translated, and steers you to the exact right spot at the bar. There is always an exact right spot. She always knows it.",
-  "{who} orders before you've sat down — hers, and the right thing for you, in that order — and clinks your glass like the night has just now properly started. Every bar, it has just now properly started.",
+  "{who} orders hers before you've sat down and nods at the bar for you — your call, your drink — then clinks whatever you are holding like the night has just now properly started. Every bar, it has just now properly started.",
   "Walking in with {who} changes what the room does with you: the staff read her, recalibrate, and upgrade you from tourist to somebody's guest. It is a better class of welcome and you did nothing to earn it.",
   "{who} clocks the room in one sweep — who's working, who's pretending to, which table is trouble — and parks you with your back to the wall like a professional. \u201cOkay. Here is good.\u201d It is.",
 ];
@@ -1589,6 +1607,13 @@ function _companionEats(arg, what, price) {
   if (G.money < price) { _say(_fmt("{w} for {n} is ฿{p}; you have ฿{m}.", { w: what.charAt(0).toUpperCase() + what.slice(1), n: NPCS[id].name, p: price, m: G.money })); return true; }
   G.money -= price;
   _addBond(id, 1);
+  if (/chang|beer/i.test(what)) {   // a beer off the 7-Eleven's fridge, drunk on the step (Liam, round 93)
+    _say(_fmt(_pickVary([
+      "{n} takes {w}, taps the can against yours and drinks standing on the step like everybody else on the soi. \"Cheapest bar in Pattaya, na.\" (-฿{p}, ฿{m} left.)",
+      "{n} holds {w} against her cheek first, then drinks a third of it. \"Seven-Eleven beer, best beer.\" She means the price. (-฿{p}, ฿{m} left.)",
+    ], "compbeer"), { n: NPCS[id].name, w: what, p: price, m: G.money }));
+    return true;
+  }
   if (/water/.test(what)) {   // a drink is drunk, not eaten in four bites (Martin, round 85)
     _say(_fmt(_pickVary([
       "{n} drinks half of {w} in one go and holds the cold bottle against her neck. \"Ahh. You know what I need.\" (-฿{p}, ฿{m} left.)",
@@ -1597,7 +1622,7 @@ function _companionEats(arg, what, price) {
     return true;
   }
   _say(_fmt(_pickVary([
-    "{n} takes {w} in both hands like a present and eats it in four bites, watching the street. \"You not eat? Okay. More for me.\" (-฿{p}, ฿{m} left.)",
+    "{n} takes {w} in both hands like a present and eats it in four bites, watching the street. \"Okay. All mine, na.\" (-฿{p}, ฿{m} left.)",
     "You hand {n} {w}. She tears it in half and gives you the bigger half without discussion, which is the most Thai thing anybody has done to you all week. (-฿{p}, ฿{m} left.)",
     "{n} did not say she was hungry and eats {w} like somebody who was. \"Thank you, na.\" Said with her mouth full, which is how you know it is true. (-฿{p}, ฿{m} left.)",
   ], "compeats"), { n: NPCS[id].name, w: what, p: price, m: G.money }));
@@ -1763,7 +1788,7 @@ function _bfPrompt(fresh) {
 const _ST_SOI6_LINES = [
   "with the confidence of home advantage. “Upstairs” turns out to be exactly as advertised. Some time later you are back on your stool, thinking about nothing at all, while she fixes her hair in the till mirror.",
   "and leads, unhurried, like a woman showing you her own house. Afterwards she reappears behind the rail mid-conversation with the cashier, as if the last half hour were a rumour you both heard somewhere.",
-  "and takes the stairs first. When you come back down the bar has not moved an inch and neither has your beer; she pats your knee once in passing, all business, and the night simply resumes.",
+  "and takes the stairs first. When you come back down the bar has not moved an inch and neither has your stool; she pats your knee once in passing, all business, and the night simply resumes.",
   "— up the back stair, past the towel shelf, a door with a number painted on it in nail varnish. Later, on your stool, you find she has already ordered you a fresh one, on your tab, which seems fair.",
   "and the room upstairs is small, clean, and dealt with the efficiency of a woman who has a shift to get back to. She is downstairs before you are, laughing at something the mamasan said an hour ago.",
 ];
@@ -1849,7 +1874,7 @@ function _bfResolve(kind) {
     }
     _say(`The number is ฿${_num(price)}. Your pocket says ฿${_num(G.money)}. The ledger ` +
       "closes with a soft, final flap, and the negotiation is over without " +
-      "anyone saying so.");
+      "anyone saying so." + ((G.bank || 0) >= price - G.money ? " (The machine on the street has the rest: WITHDRAW <amount>, then ask again.)" : ""));   // short, with the money in the bank (Liam, round 93)
     return;
   }
   G.money -= price;

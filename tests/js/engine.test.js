@@ -916,9 +916,11 @@ test("the last night of the week is not free — the town doesn't check your fli
   newGame(); state().lastSaleng = 99999;
   state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
   state().day = 7; state().money = 1750; state().room = "naklua_rd"; state().dog = null;
+  const _w0 = state().money + (state().bank || 0);
   _endNight("dawn");
   assert.equal(state().pendingChoice, "vacation_end");
-  assert.equal(state().money, 1750, "the man still upright keeps every baht");
+  // …and the room is settled at checkout, as every other night's is (round 93)
+  assert.equal(_w0 - (state().money + (state().bank || 0)), _hotelRate(state().hotel), "the man still upright keeps every baht but the room's");
 });
 
 test("a night that ends mid-frame says so, and leaves no dead prompt behind", () => {
@@ -5335,7 +5337,7 @@ test("refusals: customer-stealing, the honest lady-time, temple, and the recover
   state().day = 2; state().room = "candy_bar_2"; state().money = 5000;
   state().soc.drinks.bee = 6;
   run("barfine bee");
-  assert.match(lastOut(), /go temple in morning/i);
+  assert.match(lastOut(), /go temple at five/i);
   // cheap charlie is recoverable: warm her up and ask again
   newGame(); state().lastSaleng = 99999;
   state().flags.act1Done = true; state().flags.hasWallet = true;
@@ -6688,7 +6690,7 @@ test("TALK TO BAND works when band is playing", () => {
 test("time reads the clock and the night's pricing", () => {
   run("time");
   assert.match(lastOut(), /18:00/);
-  assert.match(lastOut(), /barfines run ×1\.5/);
+  assert.match(lastOut(), /premium until 21:00/);
   state().nightTurn = 65;
   out = [];
   run("time");

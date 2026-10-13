@@ -327,7 +327,7 @@ function newGame() {
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
-    loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0,   // principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
+    loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0, quizWon: 0, giftIn: 0,   // quiz prizes and a note pressed on you (round 93); principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
     streetLog: [],       // what happened on the pavement, and who was there to see it (_streetSaw — round 87)
@@ -1429,7 +1429,7 @@ function _chargeRent(rough) {
   }
   if (G.money >= _hotelRate(G.hotel)) {
     G.money -= _hotelRate(G.hotel);
-    _say(`(${rough ? "The folio is waiting at the desk when you finally get back" :
+    _say(`(${G.checkoutNight ? "Checkout: the last night settled at the desk on the way to the taxi" : rough ? "The folio is waiting at the desk when you finally get back" :
       "The folio slides under the door"}: ฿${_num(_hotelRate(G.hotel))}` +
       (G.stage === "expat" ? " — the long-stay rate" : "") +
       `, the ${_HOTELS[G.hotel].name}. ฿${_num(G.money)} left.)`, "dim");
@@ -2332,7 +2332,7 @@ function _selfNamedNode(npcId, topic) {
   // asking Tan about the beach landed on his once-a-vacation favour node because it
   // names Bank's stand (Lionel, round 36 — a favour fired by a question about sand)
   const _FURNITURE = new Set(["night", "last", "tonight", "girl", "girls", "drink", "drinks", "money",
-    "time", "here", "there", "come", "back", "good", "little", "thing", "things", "about", "some", "more",
+    "time", "here", "there", "come", "back", "good", "little", "thing", "things", "about", "some", "more", "long", "short",   // "long time" was May's "Long day?" hello (Liam, round 93)
     "beach", "road", "street", "town", "city", "hotel", "market", "pattaya", "jomtien", "naklua", "bangkok",
     "thai", "thailand", "farang", "english", "isan",
     "club", "clubs", "room", "house", "shop", "place", "soi"]);   // "gentlemen's club" is not Bert's Pattaya Flying Club (Ossie, round 70)   // asking Tan about speaking thai got the PLG speech through "A Thai man" (Nattapong, round 56)
@@ -3134,7 +3134,9 @@ function _describeRoom(full, forceFull) {
         "eventually, to whoever waits. (RIDE BUS TO <place>, and settle in.)", "dim");
     else _say("A baht bus can be caught here. (RIDE BUS TO <place>)", "dim");
   }
-  if (r.motosai) _say("A motosai stand is here. (MOTOSAI TO <place>)", "dim");
+  // on the Soi 6 week the stand is scenery — every ride is refused by the week's own fence, and its sixteen fares
+  // were a tease to a man pricing the cheapest way home (Liam, round 93)
+  if (r.motosai) _say(G.mode === "soi6" ? "A motosai stand is here, the piwins in their vests waiting on fares out of the soi — not yours this week. Soi 6 is the whole map." : "A motosai stand is here. (MOTOSAI TO <place>)", "dim");
   if (r.atm) _say("An ATM stands against the wall. (WITHDRAW <amount> · CHECK BALANCE)", "dim");
   if (r.barType === "beer" || r.barType === "soi6") {
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
@@ -3168,7 +3170,7 @@ function _describeRoom(full, forceFull) {
     _say((_covered ? "The pool table is under its cover for the night, and the cover comes off for anyone who asks (PLAY POOL)." : "A pool table waits under a low lamp (PLAY POOL).") +
       (_leagueTonight() ? ` Tonight is LEAGUE NIGHT (PLAY KILLER, ฿${_num(KP_ENTRY)} in the ashtray).` : ""), "dim");
   }
-  if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).", "dim");
+  if (r.seven) _say("A 7-Eleven glows across the way " + (typeof _sevenMenu === "function" ? _sevenMenu() : "(BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM)") + ".", "dim");
   if (_quizDay() && !r.barType) {
     const near = [...new Set([...Object.values(r.exits), ...(r.venues || [])])].filter(to => _quizBars().includes(to));
     if (near.length && G.nightTurn < 40) {

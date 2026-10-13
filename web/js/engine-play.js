@@ -1771,14 +1771,14 @@ function _quizInput(input) {
   G.quizLast = { room: G.room, day: G.day, right, present: _npcsHere().slice() };   // the town can say how it went (Fintan, round 60) — and who was there to see it (Dagny, round 91)
   _say(`Final score: ${right} of 5.`, "room");
   if (right === 5) {
-    G.money += 500;
+    G.money += 500; G.quizWon = (G.quizWon || 0) + 500;
     _setFlag("quizChamp");
     _say("A PERFECT ROUND. The host demands a bow; the bar demands a speech; the " +
       `board demands your name in chalk. First prize: ฿500 off the till. ` +
       `(฿${_num(G.money)} in pocket.)`, "win");
     _addHappy(5);
   } else if (right === 4) {
-    G.money += 200;
+    G.money += 200; G.quizWon = (G.quizWon || 0) + 200;
     _say(`Second place overall — ฿200 and a round of applause you'll remember ` +
       `longer than the money. (฿${_num(G.money)}.)`, "win");
     _addHappy(3);
@@ -5133,6 +5133,7 @@ function _nightSnapshot() {
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
     spcB: G.massageSpend || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0,
+    wonB: (G.offIn || 0) + (G.quizWon || 0), giftInB: G.giftIn || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
@@ -5228,6 +5229,12 @@ function _morningLedger() {
   if (polN > 0) bits.push("\u0e3f" + _num(polN) + " of it to the police");   // a fine was lumped into "down" (Gordie, round 72)
   const spcN = (G.massageSpend || 0) - (b.spcB != null ? b.spcB : (G.massageSpend || 0));   // the specials and the joiner fee were in "down" and nowhere else (László, round 73)
   if (spcN > 0) bits.push("\u0e3f" + _num(spcN) + " of it on the massage table");
+  // what came BACK into the pocket — a pot, a quiz prize, a note a woman pressed on you — nets into "down" and is named,
+  // or "down ฿2,320" hides the ฿500 a man won at the quiz (Liam, round 93)
+  const wonN = (G.offIn || 0) + (G.quizWon || 0) - (b.wonB != null ? b.wonB : (G.offIn || 0) + (G.quizWon || 0));
+  if (wonN > 0) bits.push("\u0e3f" + _num(wonN) + " back in at the tables and the quiz, netted in");
+  const giftInN = (G.giftIn || 0) - (b.giftInB != null ? b.giftInB : (G.giftIn || 0));
+  if (giftInN > 0) bits.push("\u0e3f" + _num(giftInN) + " pressed into your hand by somebody, netted in");
   const jobN = (G.jobPaid || 0) - (b.jobB != null ? b.jobB : (G.jobPaid || 0));   // a job's money, in cash, named (Vince, round 74: "up ฿3,100" for ฿4,000 of fees)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
@@ -5758,8 +5765,8 @@ function _endNight(reason) {
     // costs you the cash in your pocket" and then the vacation ended with every
     // baht intact — making it optimal to blow the bankroll and pass out in the
     // road on night seven (stress-test playtest 2026-08-23). The town doesn't
-    // check your flight date. Rent, the respawn and the loan roll are correctly
-    // skipped — you are not waking up here tomorrow — but the pockets go.
+    // check your flight date. The respawn and the loan roll are correctly
+    // skipped — you are not waking up here tomorrow — but the pockets go, and the room is paid at checkout.
     const _lastRough = (reason === "dawn" || reason === "collapse" || reason === "blackout") &&
       !(_flag("act1Done") && G.room === _hotelRoomId()) && _dogEgg() !== "rescue" && !G.dog &&
       !(G.party && G.party.ids && G.party.ids.length) && !(typeof _atOwnBar === "function" && _atOwnBar());
@@ -5780,6 +5787,9 @@ function _endNight(reason) {
     // the woman on your arm says goodbye before the week does: a last-night sunrise ran straight to the
     // week card and she was still "(with you)" on day 8 (Martin, round 85)
     if (typeof _partyNightEnd === "function" && G.party && G.party.ids && G.party.ids.length) _partyNightEnd(reason);
+    // …and the last NIGHT is still a night in the room: six folios came under the door and the seventh never
+    // did, "฿700 a night, settled each morning" (Liam, round 93). It is settled at the desk on the way to the taxi.
+    G.checkoutNight = true; try { _chargeRent(false); } finally { G.checkoutNight = false; }
     // the last night of the week still gets its ledger, and the next morning
     // does not net two nights into one (Kenji, round 47)
     _morningLedger();

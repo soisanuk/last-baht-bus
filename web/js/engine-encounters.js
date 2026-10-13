@@ -788,7 +788,7 @@ const _ENC = {
       _addHappy(2);
       return;
     }
-    G.money += 20;
+    G.money += 20; G.giftIn = (G.giftIn || 0) + 20;   // named on the morning ledger (Liam, round 93)
     if (G.itemLoc.moo_ping === null) G.itemLoc.moo_ping = "inventory";
     _say("Before you can say a word she presses a ฿20 note and a moo ping skewer " +
       "into your hands, pats your cheek with tremendous sincerity, and says you " +
@@ -921,7 +921,7 @@ const _ENC = {
     // it read as NO and closed the moment)
     if (/^(how much|tao ?rai|thao rai|price|prices|what'?s the price|how much (?:is|for) (?:a |the )?(?:beer|drink|lady drink))\b/.test(input)) {
       const _front = (_room().venues || []).find(v => ROOMS[v] && ROOMS[v].barType) || G.room;   // her bar's price, not the pavement's
-      _encPrompt([`"Beer ฿${_num(_beerPrice(_front))}, lady drink ฿${_num(_ladyPrice(_front))} — same as everybody on the soi." The noodle doesn't drop an inch. "Cheap, na! You come?"`, "dim"],
+      _encPrompt([`"Beer ฿${_num(_beerPrice(_front))}, lady drink ฿${_num(_ladyPrice(_front))} — same as the bars this end." The noodle doesn't drop an inch. "Cheap, na! You come?"`, "dim"],
         ["(YES and follow her in · or walk on and take the noodle.)", "dim"]);
       G.pendingEnc = "noodle";
       return;
@@ -940,7 +940,7 @@ const _ENC = {
     // walk on — THWACK. The bop itself is the payoff: pure, stupid, capped sanuk.
     _say(_pickVary(_NOODLE_BOP, "noodlebop"));
     _addHappy(1); // once — the encounter is nightly, so it can't be farmed
-    _say("(Pure sanuk. +1 สนุก.)", "win");
+    _say("(Pure sanuk.)", "win");   // _addHappy prints its own +1 — the second "+1" read as two (Liam, round 93)
   },
 
   coconutbar(input) {
