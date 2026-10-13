@@ -5319,6 +5319,20 @@ const _ALLNIGHTER_OWN = [
   "The sweepers are working Beach Road when you finally kill the lights. There is a particular quiet in an empty bar that is yours — the fans ticking down, a glass nobody claimed — and you stand in it for a minute before you lock up and let a piwin take you to bed.",
   "You close your own bar at six in the morning, which is not a thing a customer ever has to do. Chairs up. Float in the bag. Shutter, padlock, the key that sticks. The street is pink and completely uninterested in how hard the night was.",
 ];
+// your bed is in this district or the next: you walk home at dawn, nobody sells you a ride (Sunil, round 86; Callum, round 89)
+function _homeNear() {
+  // six steps or fewer on the map: the Stinky to the Vic's stairs is six, Beach Road to Naklua is nine and a ride
+  const h = typeof _hotelRoomId === "function" ? _hotelRoomId() : null;
+  if (!h || !ROOMS[h] || !ROOMS[G.room] || typeof _path !== "function") return false;
+  const p = _path(G.room, h);
+  return !!p && p.length <= 6;
+}
+// …and home is a street away (Callum, round 89)
+const _ALLNIGHTER_WALK = [
+  "06:00 finds you still upright, and home is a street away. You walk it in the new light, past the sweepers and a noodle cart setting up, and you are in bed before the town has decided whether it is morning.",
+  "Dawn, and your bed is a few doors up the soi. You walk it slowly, past shutters you have never once seen down in daylight, and let yourself in past a guard who has seen you do this before.",
+  "The light comes up grey and then gold behind the town. Home is close enough to walk, so you walk it, and the street is so quiet you can hear your own sandals.",
+];
 const _ALLNIGHTER_LINES = [
   "The music finally stops and the room is suddenly a room: strip lights, wet floor, chairs. The club empties into the soft light, the street sweepers work around the wreckage, and a taxi with its windows down carries you home through a town changing shifts — night people going to bed, monks already walking. You did the whole night. All of it.",
   "06:00 arrives and finds you still standing, which at this point feels like a citation for valour. You share a taxi with two strangers and a man asleep in a party hat, watch the neon give up section by section, and let yourself in as the breakfast carts light their first burners. The bed takes you like an old friend.",
@@ -5514,7 +5528,7 @@ function _endNight(reason) {
       // is what happens to you, this is what you did. Same body cost, more สนุก.
       { let _l = _pickVary(_SUNRISE_END, "sunriseEnd");   // "you get a bike home" charged nothing (Marguerite, round 67)
         // …and no bike to a bed on the same street: a ฿50 ride to the Vic from Soi 6 one night, a walk the next (Sunil, round 86)
-        const _walkHome = ROOMS[_hotelRoomId()] && ROOMS[G.room] && ROOMS[_hotelRoomId()].region === ROOMS[G.room].region;
+        const _walkHome = _homeNear();
         if (/\bbike\b/.test(_l) && (G.money < MOTOSAI_TOWN || _walkHome)) _l = _pickVary(_SUNRISE_END.filter(x => !/\bbike\b/.test(x)), "sunriseEnd");
         if (/\bbike\b/.test(_l)) { G.money -= MOTOSAI_TOWN; _l += ` (฿${_num(MOTOSAI_TOWN)} for the bike — ฿${_num(G.money)} left.)`; }
         _say(_l, "win"); }
@@ -5534,7 +5548,11 @@ function _endNight(reason) {
       } else if (!_herDawn) {
         // the guv'nor does not "share a taxi with two strangers" out of his own bar;
         // he locks up (Rolf, round 54)
-        _say(_pickVary(typeof _atOwnBar === "function" && _atOwnBar() ? _ALLNIGHTER_OWN : _inBar() ? _ALLNIGHTER_LINES : (_underRoof(G.room) ? _ALLNIGHTER_INDOORS : _ALLNIGHTER_STREET), typeof _atOwnBar === "function" && _atOwnBar() ? "allnighterown" : _inBar() ? "allnighter" : (_underRoof(G.room) ? "allnighterin" : "allnighterst")), "win");
+        { // a man whose bed is a street away walks it: "share a taxi home" from under his own balcony (Callum, round 89)
+          const _p0 = typeof _atOwnBar === "function" && _atOwnBar() ? _ALLNIGHTER_OWN : _inBar() ? _ALLNIGHTER_LINES : (_underRoof(G.room) ? _ALLNIGHTER_INDOORS : _ALLNIGHTER_STREET);
+          let _p1 = _homeNear() ? _p0.filter(l => !/\b(taxi|bike|songthaew|baht bus|motosai)\b/.test(String(l))) : _p0;
+          if (!_p1.length) _p1 = _ALLNIGHTER_WALK;
+          _say(_pickVary(_p1, typeof _atOwnBar === "function" && _atOwnBar() ? "allnighterown" : _inBar() ? "allnighter" : (_underRoof(G.room) ? "allnighterin" : "allnighterst")), "win"); }
       }
       if (!_herDawn) _addHappy(2); // the big night out is a WIN — the invoice is the morning (her goodbye paid its own)
       break;

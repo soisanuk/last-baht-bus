@@ -3462,7 +3462,11 @@ function _tick() {
   if (G.rain > 0) {
     G.rain--;
     if (G.rain === 0) {
-      _say("The rain stops the way it started — all at once, like a tap. The " +
+      // after the shutters there is no music to come back up (Callum, round 89, on the shut West End at 02:20)
+      const _shut = typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room) && !(ROOMS[G.room] && ROOMS[G.room].barType && !(typeof _shutHere === "function" && _shutHere()));
+      _say(_shut ? "The rain stops the way it started — all at once, like a tap. The shut fronts drip, the street " +
+        "steams under the lights that are left, and the town goes back to being asleep."
+        : "The rain stops the way it started — all at once, like a tap. The " +
         "street steams, the music comes back up to volume, and the town picks " +
         "up exactly where it left off.", "alert");
     }

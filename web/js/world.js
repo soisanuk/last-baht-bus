@@ -2006,6 +2006,13 @@ const ROOMS = {
   },
   blue_dog: {
     openFront: true,   // "no walls, no door" — a refused direction is the rail, not a wall (Rolf, round 54)
+    // the small hours: the checkpoint and the sunset were printing at half three (Callum, round 89)
+    lateWithSoi6: true,
+    lateDesc: [
+      "The Blue Dog after the soi has shut: the tin roof, the long rail, and half the plastic chairs stacked, the other half still facing the dark bay as if something might yet happen out there. The checkpoint is long gone from the road south. Across the mouth of the soi the Stinky Pinky still has its lights on, and between the two of them they are the whole of Soi 6 that is awake. Somebody behind the rail is eating rice out of a bag.",
+      "Small hours at the Blue Dog. Beach Road has gone down to a taxi every minute and the odd bike with two girls on it heading home. The rail keeps three or four of you — the ones who don't do bed before light — and the staff have stopped pretending to be busy. Behind you, over the town, the sky will start to go grey before the bay does. (WATCH SUNRISE when it does.)",
+      "The Blue Dog with the night run out of it: a girl asleep sitting up in the corner with her phone still lit in her hand, the fridge humming, the bay black and flat. Nobody here is going anywhere until there is light to go in.",
+    ],
     name: "Blue Dog",
     region: "Beach Road",
     bar: "Blue Dog", barType: "beer",
@@ -2050,6 +2057,13 @@ const ROOMS = {
     exits: { e: "beach_rd_n", n: "beach_north_end", s: "central_beach" },
   },
   stinky_bar: {
+    // after the soi shuts it is one of the two rooms still lit at the foot of it (Callum, round 89: the evening desc at 3 a.m.)
+    lateWithSoi6: true,
+    lateDesc: [
+      "The Stinky Pinky in the small hours: the league trophies catching the one strip light Bert leaves on, the table covered for the night, the stools down to the men who live on them. Behind the open front the soi is all shutters now; over on the beach-side corner the Blue Dog keeps its rail lit for the same reason. Bert is still on his end stool. Bert is always still on his end stool.",
+      "Past two at the Stinky. The cue chalk and the lime are still there under the smell of a mopped floor. The road south is empty where the checkpoint was; a songthaew goes by every few minutes with nobody in the back. Bert pours like a man who has nowhere to be until four, and then nowhere to be after it either.",
+      "The Stinky at the bottom of the night: three men on stools who have run out of things to say and are fine about it, a cue left on the table nobody will rack, and the till open while it is counted. The open front looks onto a Beach Road with nothing on it but light.",
+    ],
     name: "The Stinky Pinky",
     region: "Beach Road",
     bar: "The Stinky Pinky", barType: "beer", pool: true, liveMusic: true,

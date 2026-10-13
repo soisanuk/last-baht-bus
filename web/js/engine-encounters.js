@@ -212,6 +212,9 @@ function _salengTick() {
   // a lingerie cart pitch interleaving with the airport goodbye read as a bug
   // (Gaz playtest, 2026-08-17). Carts hold until the modal clears.
   if (G.pendingChoice || G.pendingBf || G.pendingFare || G.game) return;   // …and a barfine on the table: the cart's "(BUY MOO PING)" printed under the ST/LT line and the gate swallowed it (Darren, round 66)
+  // the cart goes when the bar does: lingerie modelled in the same breath as the two o'clock shutters (Callum, round 89)
+  const _cl = G.salengRoom && typeof _closeTurn === "function" ? _closeTurn(G.salengRoom) : null;
+  if (G.salengCart && _cl != null && G.nightTurn >= _cl - 2) G.salengUntil = Math.min(G.salengUntil, G.turns);
   if (G.salengCart && G.turns >= G.salengUntil) { // its time is up — it moves on
     const here = G.salengRoom === G.room;
     G.salengCart = null; G.salengRoom = null; G.salengUntil = 0;
@@ -226,6 +229,8 @@ function _salengTick() {
       !((G.soc.salengBar || {})[G.room]) &&   // one cart per bar per night — three som-tam carts in one evening (Trevor, round 39)
       !(G.rain > 0) &&   // a cart does not park in a downpour (Tomasz, round 54)
       !_room().invite && !_room().indoors &&   // nor outside a windowless members' room (Declan, round 58)
+      // …nor in a bar's last half hour, nor at three in the morning anywhere (Callum: a shoe cart at 02:20, som tam at 04:30)
+      G.nightTurn < 90 && !(typeof _closeTurn === "function" && _closeTurn(G.room) != null && G.nightTurn >= _closeTurn(G.room) - 5) &&
       _rand() < 0.10) {
     (G.soc.salengBar = G.soc.salengBar || {})[G.room] = true;
     _salengSpawn();

@@ -474,7 +474,7 @@ function _promptedFolk(arg, topic) {
   // one place the question could not be put at all (Helen, round 49: "the people
   // who actually hold the town up are scenery with lovely paint on them").
   const _hoursSay = () => {
-    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|bars? (still )?open|what bars|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(t)) return _stillOpenTalk(null);
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|bars? (still )?open|what bars|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(t)) return _stillOpenTalk(null, t);
     if (/\b(open|opens|opening|opening time)\b/.test(t) && !/\bopen till\b/.test(t)) return _openingTalk(null);
     if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(t)) return _busyTalk(null);
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|last call|open till|what time)\b/.test(t)) return _closingTalk(null, t);
@@ -4609,6 +4609,10 @@ function _doTalkCore(arg, topic) {
   // (round 87). Only when it happened, and an authored node on the same word still wins.
   if (topic && typeof _streetTalk === "function" && !(NPCS[npc].dialogue || []).some(x => x.topic && String(x.topic).split("|").some(k => k.length > 2 && new RegExp("\\b" + k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(String(topic).toLowerCase()))) &&
       _streetTalk(npc, topic)) { _questOffer(npc); return; }
+  // where SHE goes after work, before her "work" node takes the word (Callum, round 89) — her own late/after node wins
+  if (topic && _AFTER_WORK_RE.test(String(topic).toLowerCase()) && !/\bopen\b/.test(String(topic).toLowerCase()) &&
+      !(NPCS[npc].dialogue || []).some(x => x.topic && /(^|\|)(late|after|after hours|after work)(\||$)/.test(String(x.topic)))) {
+    const _aw = _afterWorkTalk(npc); if (_aw) { _say(_aw); _questOffer(npc); return; } }
   // a regular at the bar you own greets the guv'nor, not a new face (Piet, round 62: "New face. You here long?")
   if (!topic && NPCS[npc].patron && typeof _atOwnBar === "function" && _atOwnBar() && !(G.talked && G.talked[npc])) {   // not _met(): this function has its own _met further down
     _say(_pickVary(_RAIL_GUVNOR, "railguv")(NPCS[npc].name));
@@ -4876,7 +4880,8 @@ function _doTalkCore(arg, topic) {
   if (topic && !d.topic && typeof _oppTalk === "function" && _oppTalk(npc, topic)) return;
   if (topic && !d.topic && _houses) {
     const _ct = String(topic).toLowerCase();
-    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|bars? (still )?open|what bars|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(_ct)) { _say(_stillOpenTalk(npc)); return; }   // not the opening hour (Declan, round 83)
+    { const _aw = _AFTER_WORK_RE.test(_ct) && !/\bopen\b/.test(_ct) ? _afterWorkTalk(npc) : null; if (_aw) { _say(_aw); return; } }   // where SHE goes, not what is open (round 89)
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|bars? (still )?open|what bars|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(_ct)) { _say(_stillOpenTalk(npc, _ct)); return; }   // not the opening hour (Declan, round 83)
     if (/\b(open|opens|opening|opening time|open at|start)\b/.test(_ct) && !/\bopen till\b/.test(_ct)) { _say(_openingTalk(npc)); return; }
     if (/\b(busy|rush|quiet|peak|packed|full|crowd|crowded)\b/.test(_ct)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_ct)) { _say(_closingTalk(npc, _ct)); return; }
@@ -4941,7 +4946,7 @@ function _doTalkCore(arg, topic) {
   if (topic && !d.topic && NPCS[npc].room === G.room &&
       !NPC_ROLES[npc] && !NPCS[npc].manager && !NPCS[npc].house && !NPCS[npc].filler) {
     const _pt = String(topic).toLowerCase();
-    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|bars? (still )?open|what bars|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(_pt)) { _say(_stillOpenTalk(npc)); return; }
+    if (/\b(still open|what'?s open|anywhere open|open now|where.*open|after two|bars? (still )?open|what bars|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after)\b/.test(_pt)) { _say(_stillOpenTalk(npc, _pt)); return; }
     if (/\b(open|opens|opening|opening time|open at)\b/.test(_pt) && !/\bopen till\b/.test(_pt)) { _say(_openingTalk(npc)); return; }
     if (/\b(busy|rush|quiet|peak|packed|crowd|crowded)\b/.test(_pt)) { _say(_busyTalk(npc)); return; }
     if (/\b(closing|close|closed|closing time|shut|shutters|hours|opening hours|last call|open till|what time)\b/.test(_pt)) { _say(_closingTalk(npc, _pt)); return; }
@@ -6735,7 +6740,7 @@ const _TOWN = {
       "{n} counts on her fingers. \"You come, you drink, you stay {h}. {W}Then you go. What happen after, you tell ME, na.\"",
       "\"Mm, last night.\" {n} grins. \"Here you were a gentleman, {h}. {W}Outside — I don't know. The soi knows. Ask the soi.\""],
     house: ["\"You were on that stool {h},\" {n} says. \"{W}Behaved yourself, as far as this room's concerned. Where you went after is between you and the street.\"",
-      "{n} doesn't need the book. \"{H} in here, then out. {W}I can tell you what you drank; what you did after is the one thing a barman never knows.\"",
+      "{n} doesn't need the book. \"{H} in here, then out. {W}I can tell you what you drank; what you did after is the one thing nobody behind a bar ever knows.\"",
       "\"Last night you were in here {h}, and you left upright. {W}That's a good night by this room's standards.\""],
     punter: ["\"You? You were here {h}, mate. {W}After that I'd stopped counting — anybody's night, after that.\"",
       "{n} squints. \"Here, {h}, then gone. {W}Don't ask me where. I was watching the football.\"",
@@ -6768,6 +6773,15 @@ const _TOWN = {
   call_turning_no: { floor: ["\"That man, {d}? You let him stay.\" {n} is careful. \"He go quiet by himself. Lucky. Next time maybe not lucky.\""],
     house: ["\"You let him ride it out, {d}.\" {n} shrugs. \"He went quiet. The floor was watching your face, not his.\""], punter: ["\"The one turning nasty {d}? Boss let him be. He wound down. They don't always.\""] },
   // walked out by security: the room that put you out does not deny you were in it (Pieter, round 73)
+  // the bar you watched the sun come up from: its people were three feet away (Callum, round 89 — "you went out that door")
+  saw_dawn: { floor: ["\"Last night? You no go home!\" {n} laughs. \"You sit here till the sun come up — me, you, the chairs. Then you say 'okay' like you finish a job and you walk out in the light.\"",
+      "{n} points at the chair. \"That one. You sit till sunrise, boss. Sky go pink behind Sukhumvit, you say nothing for ten minute. Is nice. Tonight you go home early, na? 555\"",
+      "\"You and the sunrise.\" {n} shakes her head, fond. \"Every girl here tired, and you — you happy like a monk. We see. We were there.\""],
+    house: ["\"You saw the sun up from that chair,\" {n} says. \"Most men who stay that late are asleep on the bar by four. You watched it like it was the show. It is, at this hour.\"",
+      "\"Last night you were the last man in,\" {n} says. \"Sat through to the light, paid up, walked out into it. I'd call that a good night by anybody's book.\"",
+      "{n} nods at the open front. \"Five o'clock, the sky going over Sukhumvit, and you on that stool not saying a word. I was here. I noticed.\""],
+    punter: ["\"Last night? You were still here when the sun came up, mate. I know because so was I.\"",
+      "\"You did the full shift, you did. Sat right through to daylight. Fair play — I went home at three and felt it.\""] },
   saw_kicked: { floor: ["\"Last night?\" {n} looks at the door. \"Security walk you out. Everybody see. Tonight, be nice, na.\"",
       "{n} lowers her voice. \"You here last night, boss. Then you not here. Mama say the word and the big man open the door. Tonight, small smile, no trouble.\""],
     house: ["\"You were in here last night,\" {n} says, \"and then you were on the pavement, and that was my doing. You are sitting down tonight, so we are even. Don't make me do it twice.\"",
@@ -7269,6 +7283,12 @@ function _streetTalk(npc, topic) {
   }
   return false;
 }
+// the night ended at dawn in THIS bar, with you in it: a sunrise or an all-nighter whose last room was hers
+function _dawnHere(npc, w) {
+  if (!w || !w.endRoom || !["sunrise", "allnighter", "dawn"].includes(w.reason)) return false;
+  const mine = [G.room, NPCS[npc] && NPCS[npc].room].concat(NPCS[npc] && Array.isArray(NPCS[npc].bars) ? NPCS[npc].bars : []);
+  return mine.includes(w.endRoom) && !!(ROOMS[w.endRoom] && ROOMS[w.endRoom].barType);
+}
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
@@ -7547,6 +7567,9 @@ function _townTalk(npc, topic) {
       /\b(khao man gai|chicken rice|chicken|beach road|the beach|beach|three o.?clock|3 ?a\.?m|the plate|plate|the night|our night|noodles?|the noodle|cart|stool|toastie|7-?eleven|the walk)\b/.test(t)) {
     _say(_lastNightHers(npc, G.lastNightWas)); return true;
   }
+  // …and THE SUNRISE by its own word, from the room you watched it in (Callum: "ask pen about the sunrise" — not my story)
+  if (/\b(sunrise|sun ?rise|the sun|sun came up|sun come up|dawn|daylight)\b/.test(t) && G.lastNightWas && G.lastNightWas.day === G.day - 1 && _dawnHere(npc, G.lastNightWas))
+    return pick("saw_dawn", {});
   // LAST NIGHT — a witness question; your own bar's book answers it below when you own one
   if (/\b(last night|yesterday|the night before|did you see me|how was i)\b/.test(t) && G.lastNightWas && G.lastNightWas.day === G.day - 1 &&
       !(typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid"))) {
@@ -7555,6 +7578,7 @@ function _townTalk(npc, topic) {
     if (_room().massage || _room().soapy) return pick("saw_parlour", {});
     if (w.kicked && w.kicked.where && (_barName(G.room) === w.kicked.where || _barName(NPCS[npc].room) === w.kicked.where)) return pick("saw_kicked", {});   // the room that put you out (Pieter, round 73)
     if (w.with === npc) { _say(_lastNightHers(npc, w)); return true; }
+    if (_dawnHere(npc, w)) return pick("saw_dawn", {});   // you watched the sun up from her chairs (Callum, round 89)
     // the police on THIS pavement last night are a thing the pavement saw (Bridget, round 76: Orathai,
     // ten feet away, "Weren't here, were you? Can't help you, mate.")
     const _pol = G.policeAt && G.policeAt.day === G.day - 1 && G.policeAt.room === G.room;
@@ -9327,10 +9351,18 @@ function _doBuy(arg) {
   // asked for a 7-Eleven item from INSIDE a bar whose street has one: point at
   // the door instead of a flat "not for sale" (Tyler, 2026-08-26 — the street
   // prose advertised the toastie, the bar refusal gave no way to reach it)
+  // …a step you can TAKE: the East End's neighbour is across Second Road, outside the Soi 6 week (Callum, round 89)
+  const _fenced = x => G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(x);
   if (!r.seven && /toastie|cheese|sandwich/.test(arg) &&
-      Object.values(r.exits || {}).some(x => ROOMS[x] && ROOMS[x].seven)) {
+      Object.values(r.exits || {}).some(x => ROOMS[x] && ROOMS[x].seven && !_fenced(x))) {
     _say(_inBar() ? "The bar doesn't do toasties — but the 7-Eleven's right out on the street. Step OUT and the grill's yours."
       : "Not here — but there's a 7-Eleven one step along. Walk to it and the grill's yours.");   // "the bar" said on a dark hotel soi (Rolf, round 55)
+    return;
+  }
+  // on Soi 6 the one 7-Eleven is at the West End: say so, from anywhere on the soi (Callum, round 89, starving at the East End at two)
+  if (!r.seven && /toastie|cheese|sandwich/.test(arg) && (r.region || "") === "Soi 6" && ROOMS.soi6_street && ROOMS.soi6_street.seven && G.room !== "soi6_street") {
+    const _n = typeof _path === "function" ? (_path(G.room, "soi6_street") || []).length : 0;
+    _say(`The only 7-Eleven on the soi is at the West End${_n ? `, ${_n} step${_n === 1 ? "" : "s"} west` : ""}. It's open all night — the toastie is always there; the beer stops at midnight.`);
     return;
   }
   // …and a 7-Eleven DOOR on this street is the grill, through the door (Bridget, round 76: "A 7-Eleven
@@ -11082,6 +11114,13 @@ const _SMELLS_LATE = {
   "Naklua": "Low tide, temple incense burned down to the stubs, and the fish market's first ice being broken.",
   "Darkside": "Wet grass, lake mud, and a karaoke bar's last cigarette. Proper night, the kind the town proper forgot.",
 };
+// the small hours AFTER the closing: half an hour past the shutters, the street is asleep (Callum, round 89)
+const _SMELLS_DEAD = {
+  "Soi 6": "Wet concrete where the mop buckets went into the drain, old ice melting in a gutter, and from somewhere round the corner the first charcoal of the morning being lit.",
+};
+const _SOUNDS_DEAD = {
+  "Soi 6": "Nothing on the soi but a shutter ticking as it cools, a moped somewhere out on Second Road, and a dog barking at a dog that isn't there.",
+};
 const _SOUNDS_LATE = {
   "Jomtien": "Just the sea now, and one beach dog who has decided the tide is a personal matter.",
   "Pratumnak": "Geckos, a far-off motorbike climbing the hill in low gear, and below you the town turned right down.",
@@ -11120,8 +11159,12 @@ function _doSmell() {
     _say(_pickVary(_BAR_SMELLS, "barsmell"));
     return;
   }
-  const late = G.nightTurn >= 60 && _SMELLS_LATE[_room().region];
-  _say((late ? _SMELLS_LATE[_room().region] : _SMELLS[_room().region]) || "Pattaya. It's not describable, but it is memorable.");
+  // the small hours have their own hour: Soi 6's late register is its closing, and three hours after the shutters
+  // nobody is burning a midnight moo ping (Callum, round 89)
+  const _lt = typeof _lateTurn === "function" ? _lateTurn(G.room) : 60;
+  const dead = G.nightTurn >= _lt + 6 && !_room().barType && _SMELLS_DEAD[_room().region];
+  const late = G.nightTurn >= _lt && _SMELLS_LATE[_room().region];
+  _say((dead || (late ? _SMELLS_LATE[_room().region] : _SMELLS[_room().region])) || "Pattaya. It's not describable, but it is memorable.");
 }
 
 function _doListen() {
@@ -11151,7 +11194,9 @@ function _doListen() {
         "chorus of “HELLO WELCOME” as somebody richer walks past outside.");
     return;
   }
-  _say(((G.nightTurn >= 60 && _SOUNDS_LATE[_room().region]) || _SOUNDS[_room().region]) || "Pattaya, idling.");
+  { const _lt = typeof _lateTurn === "function" ? _lateTurn(G.room) : 60;   // stacking stools at five and a half in the morning (Callum, round 89)
+    const dead = G.nightTurn >= _lt + 6 && !_room().barType && _SOUNDS_DEAD[_room().region];
+    _say((dead || (G.nightTurn >= _lt && _SOUNDS_LATE[_room().region]) || _SOUNDS[_room().region]) || "Pattaya, idling."); }
 }
 
 // Is there anybody on this floor to dance with? Take Care Me's prose says no
@@ -11559,7 +11604,10 @@ const _NURSE_BAR = [
   "The cashier's glance reaches you down the rail before {n} does. \"Drink? Beer, water, Coke — up to you.\" The one thing not on the list is nothing.",
 ];
 function _sayNursed() {
-  const staff = (typeof _staffAt === "function" ? _staffAt(G.room) : []).filter(id => NPC_ROLES[id] === "hostess" && _npcsHere().includes(id));
+  // not a woman the room has just said is sitting with a customer (Callum, round 89: five times)
+  const staff0 = (typeof _staffAt === "function" ? _staffAt(G.room) : []).filter(id => NPC_ROLES[id] === "hostess" && _npcsHere().includes(id));
+  const _free = staff0.filter(id => !(typeof _girlBusy === "function" && _girlBusy(id)));
+  const staff = _free.length ? _free : staff0;
   // a pub has no hostess: the house (Aoy) asks, or nobody does — "A girl is
   // beside you" printed three times in the Queen Vic (Brenda, round 47)
   const house = staff.length ? [] : _npcsHere().filter(id => NPCS[id].house);
@@ -11654,8 +11702,10 @@ function _doWait(arg) {
   // land us on target — show THAT clock, not the pre-tick one (WAIT UNTIL 20:00
   // printed "19:00"; two personas, 2026-08-17).
   // a shut room and a dark street have no songs turning over (Declan, round 83, in the shut Vic)
-  const _quiet = (typeof _shutHere === "function" && _shutHere()) || (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= SOI6_CLOSE) || _isHotelRoom(G.room);
-  _say(_fmt(_quiet ? "You let the night idle past — the fan, a motorbike somewhere, the long quiet after the shutters. {t}."
+  const _quiet = (typeof _shutHere === "function" && _shutHere()) || (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= SOI6_CLOSE) || _isHotelRoom(G.room) ||
+    (!_room().barType && typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room) + 6);   // any street, half an hour past its own late turn (Callum, round 89)
+  _say(_fmt(_quiet ? (_isHotelRoom(G.room) ? "You let the night idle past — the fan, a motorbike somewhere, the long quiet after the shutters. {t}."
+      : "You let the night idle past — a shutter ticking, a motorbike somewhere, the long quiet after the shutters. {t}.")   // no fan on the pavement (Callum, round 89)
     : "You let the night idle past — ice melting, songs turning over, the street " +
     "rearranging itself. {t}.", { t: _clockStr(G.nightTurn + 1) }));
 }
@@ -12597,21 +12647,80 @@ function _stillOpen(max) {
   }
   return out.sort((a, b) => a.n - b.n).slice(0, max || 2);
 }
-function _stillOpenTalk(npc) {
+// THE HOUR THAT WAS ASKED (Callum, round 89 — "where is still open after two?" at half past eight named the two
+// bars next door, which shut at two, fifteen times in a week): "after two", "at four", "after the shutters" are an
+// hour, and the answer is what is pouring THEN.
+function _askedTurn(topic) {
+  const t = String(topic || "").toLowerCase();
+  if (/\b(four|4 ?am|dawn|sunrise|morning)\b/.test(t)) return 100;
+  if (/\b(three|3 ?am)\b/.test(t)) return 90;
+  if (/\bafter (?:the )?(?:vic|pub) (?:shuts|closes)\b/.test(t)) return 51;
+  if (/\b(after two|two o'?clock|2 ?am)\b/.test(t)) return Math.max(G.nightTurn, 81);   // "two" is two, wherever it is asked (the Vic shuts at eleven)
+  if (/\b(after (?:the )?(?:shutters?|close|closing)|when (?:the bars?|it|this|everything|the soi) (?:shuts?|closes?)|after (?:the )?(?:bars?|soi) (?:shuts?|closes?)|all night|later on|late)\b/.test(t)) {
+    const c = typeof _closeTurn === "function" ? _closeTurn(G.room) : null;
+    return Math.max(G.nightTurn, (c != null ? c : (typeof SOI6_CLOSE !== "undefined" ? SOI6_CLOSE : 80)) + 1);
+  }
+  if (/\bmidnight\b/.test(t)) return 61;
+  return null;
+}
+function _stillOpenTalk(npc, topic) {
   const reg = _hoursRegister(npc);
-  const open = _stillOpen(2), names = open.map(o => _barName(o.id)).join(open.length > 1 ? " or " : "");
-  if (!open.length) return reg === "floor" ? "“Now? Nothing near, na. Walking Street, on a bike.”" : "“Nothing you can walk to. Walking Street, on a bike, if you must.”";
+  const at = _askedTurn(topic), nt = G.nightTurn, later = at != null && at > nt;
+  let open;
+  try { if (later) G.nightTurn = at; open = _stillOpen(2); } finally { G.nightTurn = nt; }
+  const label = !later ? "" : at >= 100 ? "four" : at >= 90 ? "three" : at >= 80 ? "two" : at >= 61 ? "midnight" : "eleven";
+  if (!open.length) return reg === "floor" ? `“${later ? "After " + label + "? " : "Now? "}Nothing near, na. Walking Street, on a bike.”` : `“${later ? "After " + label + ", n" : "N"}othing you can walk to. Walking Street, on a bike, if you must.”`;
+  const names = open.map(o => _barName(o.id)).join(open.length > 1 ? " or " : "");
   const near = open[0].n <= 2 ? "just along" : open[0].n <= 5 ? "a short walk" : "a fair walk";
-  return reg === "floor" ? `“Still open? ${names} — ${near}, they go till late, na.”`
-    : `“${names} — ${near}. They pour till the last man goes.”`;
+  // "till the last man goes" only of a bar that does — not of two that shut at two (Callum)
+  const dawn = open.every(o => typeof _closeTurn !== "function" || _closeTurn(o.id) == null);
+  const until = dawn ? (reg === "floor" ? "they no close, na — sun come up, still open" : "They pour till the last man goes.")
+    : (reg === "floor" ? `open till ${_closeClock(open[0].id)}` : `Open till ${_closeClock(open[0].id)}, mind.`);
+  return reg === "floor" ? `“${later ? "After " + label + "? " : "Still open? "}${names} — ${near}, ${until}.”`.replace(/\.\.”$/, ".”")
+    : `“${later ? "After " + label + ", " : ""}${names} — ${near}. ${until}”`;
+}
+// WHERE SHE GOES AFTER WORK (Callum, round 89: twelve women asked, and every one told him what time the bar shuts).
+// Her own answer, dealt from the town's book and kept: asked twice, she goes to the same noodle stall.
+const _AFTER_WORK_RE = /\b(after (?:work|your (?:shift|work)|the shift|closing|close|you (?:finish|close|knock off)|the shutters|the bar (?:shuts|closes)|you shut)|where (?:do|d) you (?:go|eat|sleep)|what do you do after|go home after|eat after|after hours|knock off)\b/;
+const _AFTER_WORK = {
+  floor: ["“After? I count my chits, I take off the shoes, then noodle on the corner with the girls. Best part of the night, na — nobody buy me nothing.”",
+    "“I go home on my bike, round the back road. Shower, phone my mama — she wake up early, I go sleep late, we meet in the middle 555.”",
+    "“Karaoke, sometimes. The girls from three bars, one room on Buakhao, very bad singing. Then som tam. Then sleep till two in the afternoon.”",
+    "“My room is ten minute on the bike. Three girls, one fan, one bathroom. I go home, I take make-up off, I am different person.”",
+    "“After, I eat. Always I eat. Khao man gai on Second Road, open all night, the man know my order. Then bed.”",
+    "“I video call my son. In the village he wake for school when I finish here. Five minute, then he go, then I sleep.”",
+    "“After two we go to the ran lao behind Buakhao — Thai place, Thai music, no farang. I don't work there. I sit.”",
+    "“Nothing exciting, na. 7-Eleven, toastie, bike, bed. You think bar girl life is party? Party is the job. After is quiet.”",
+    "“I go to my friend's room and we count the money together and complain about the customers. Not you. Other customers 555.”",
+    "“Some nights I go to the beach with the girls and sit on the wall and eat corn and look at the boats. Nobody talk to us. Very nice.”",
+    "“Motorbike taxi home, same piwin every night. He wait for me at the corner — I pay him every Saturday, not every night.”",
+    "“I go to the temple in the morning on my day off. Other days — sleep. I sleep like a dead person, my roommate say.”"],
+  house: ["“After we shut? I count the till twice, lock it, and go home to a husband who has been asleep since ten. That is the glamour.”",
+    "“I eat with the girls at the noodle place on the corner — the one that knows all the bars' hours better than we do. Then home.”",
+    "“I drive two of the girls home on my scooter, one at a time. They are not supposed to ride without a helmet. Neither am I.”",
+    "“Home, a shower, and an hour of Thai soap opera on my phone with the sound off. Nobody talks to me for that hour. It is the best hour.”",
+    "“I go to the market when it is setting up — four, half four — and buy the day's fruit before the prices are awake.”",
+    "“After the shutters I sit outside the front for ten minutes and smoke one cigarette. One. Then I go. Twenty years, one a night.”",
+    "“My daughter picks me up in the car. She is a nurse, she is just starting when I am just finishing. We have breakfast at five.”",
+    "“I do the book at home, not here. The money here at four in the morning is a bad idea for everybody.”"],
+};
+function _afterWorkTalk(npc) {
+  if (!npc || !NPCS[npc] || npc === "tan") return null;
+  const works = NPC_ROLES[npc] || NPCS[npc].house || NPCS[npc].manager;
+  if (!works || (typeof _pronoun === "function" && _pronoun(npc) !== "she")) return null;
+  const book = (G.afterWorkOf = G.afterWorkOf || {});
+  if (book[npc]) return book[npc];
+  const reg = _hoursRegister(npc) === "floor" ? "floor" : "house";
+  return (book[npc] = typeof _pickTownLine === "function" ? _pickTownLine(_AFTER_WORK[reg], "afterwork:" + reg) : _AFTER_WORK[reg][0]);
 }
 function _closingTalk(npc, topic) {
   if (npc === "tan") return _tanTown("closing");
+  { const _ct = String(topic || "").toLowerCase(); const _aw = _AFTER_WORK_RE.test(_ct) && !/\bopen\b/.test(_ct) ? _afterWorkTalk(npc) : null; if (_aw) return _aw; }   // where SHE goes after (round 89)
   const r = _room();
   const reg = _hoursRegister(npc);
   // one sentence from three mouths in three bars, word for word (Declan, round 83): dealt from a town-wide book
   const pick = (pools) => typeof _pickTownLine === "function" ? _pickTownLine(pools[reg] || pools.house, "closing" + reg) : _pickVary(pools[reg] || pools.house, "closing" + reg);
-  if (topic && /\b(still open|what'?s open|anywhere open|open now|where.*open|after two|bars? (still )?open|what bars|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after|after (the )?shutters)\b/.test(String(topic).toLowerCase())) return _stillOpenTalk(npc);
+  if (topic && /\b(still open|what'?s open|anywhere open|open now|where.*open|after two|bars? (still )?open|what bars|after (the )?(vic|pub|bar) (shuts|closes)|where (do|d) you (drink|go) after|after (the )?shutters)\b/.test(String(topic).toLowerCase())) return _stillOpenTalk(npc, topic);
   { const v = _namedVenue(topic);
     if (v && v !== G.room) {
       const c = _closeTurn(v), N = _barName(v) || ROOMS[v].name, short = /queen vic/i.test(N) ? "The Vic" : N;
@@ -12684,6 +12793,13 @@ function _closingTalk(npc, topic) {
       "“Two. The police like two o'clock very much. So we like it also.”",
       "“Two o'clock finish. Half one I start count my chits.”",
       "“Two, tilac. After that, Soi 6 sleep. Only the cats awake.”",
+      // deeper than a man who asks every bar one question (Callum, round 89)
+      "“Two. My feet know before the clock know, na.”",
+      "“Two o'clock. Half one the music go down a little, then a little more. Then nothing. You will feel it.”",
+      "“We close two. Then I sit on the step, shoes off, five minute. Best part of the shift.”",
+      "“Two, every bar. Before two, maybe mama make a special price. After two, no price — closed.”",
+      "“Two! Why — you want stay with me till two? 555 Okay, you buy one more, I tell you when.”",
+      "“Two o'clock, boss. Mama say one minute after two, police already walking. So one minute before, finish.”",
     ],
     punter: [
       "“Two, and they mean it. Last call's half one — drink up or wear it.”",
@@ -12696,6 +12812,9 @@ function _closingTalk(npc, topic) {
       "“Two, and it isn't negotiable. The bars close, we close. Half one I start taking glasses off you.”",
       "“Two. Every bar on this street, near enough the same minute. You'll hear the shutters go along the row.”",
       "“Two o'clock. The Vic shuts at eleven — the rest of us at two.”",
+      "“Two. I start pulling the shutter halfway at five to — the men take the hint quicker from a shutter than from me.”",
+      "“Two o'clock, by law and by habit. The habit is stricter.”",
+      "“Two. If you are still in here at five past, you are helping me stack stools.”",
     ],
   });
   if (_closesMidnight(G.room)) return pick({

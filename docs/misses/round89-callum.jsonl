@@ -1,0 +1,5 @@
+{"cmd":"ask the mamasan where do you go after work","reply":"No one here answers to that.","room":"soi6_east_in","day":1,"turn":34,"mode":"soi6","convo":null,"at":"2026-10-13T06:43:44.186Z","src":"persona-callum"}
+{"cmd":"ask the mamasan where is open after two","reply":"That name doesn't land on anyone in the room.","room":"soi6_east_in","day":1,"turn":34,"mode":"soi6","convo":null,"at":"2026-10-13T06:43:44.186Z","src":"persona-callum"}
+{"cmd":"buy toastie","reply":"Not for sale here.","room":"kitten_corner","day":2,"turn":69,"mode":"soi6","convo":"praewa","at":"2026-10-13T06:46:33.959Z","src":"persona-callum"}
+{"cmd":"buy toastie","reply":"Not for sale here.","room":"kitten_corner","day":2,"turn":75,"mode":"soi6","convo":"praewa","at":"2026-10-13T06:46:44.621Z","src":"persona-callum"}
+{"cmd":"ask the guard about last night","reply":"No one here answers to that.","room":"sandy_toes","day":5,"turn":12,"mode":"soi6","convo":"malila","at":"2026-10-13T06:49:48.285Z","src":"persona-callum"}
