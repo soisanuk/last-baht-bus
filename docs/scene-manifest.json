@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-11",
+  "generated": "2026-10-13",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 253,
@@ -2774,7 +2774,7 @@
         "Saeng",
         "Wilai"
       ],
-      "desc": "The last loud front before the soi spills onto Second Road: lipstick-red lighting, a mirror wall, and a lipstick-mark motif on everything including the glasses. Wilai runs the front stools, and Kluay and Benz have already claimed the two nearest for you."
+      "desc": "The last loud front before the soi spills onto Second Road: lipstick-red lighting, a mirror wall, and a lipstick-mark motif on everything including the glasses. Wilai runs the front stools, and two of the girls have already claimed the two nearest for you."
     },
     {
       "id": "sandy_toes",

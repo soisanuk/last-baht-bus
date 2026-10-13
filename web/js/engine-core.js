@@ -2864,7 +2864,28 @@ const _EXIT_ROSTER = [
 ];
 // A room's return lines are a BOOK, not a coin: every line before any repeats — the balcony's WHERE YOU GO
 // SEXY MAN came round two mornings running (Kevin, round 84). One roll, as _pickVary always spent.
+// A ROOM'S OWN LINES READ WHO IS IN IT (Ruth, round 94): with a woman on your arm the floor does not pitch you
+// ("Come upstairs, tilac. Why we pretend?", "drink, room, price"), and a line naming one of this room's women
+// who is not on her floor — gone home, or on your arm — is not said. The whole pool comes back if nothing is left.
+const _ROOM_PITCH = /\bupstairs\b|why we pretend|short time|long time|in your lap|across you|drink, room, price|the rest\?|hand on your thigh|choose me|the offer against your ear|noodle finds your|noodle to your|wrist-grabs|to intercept you|hands already reaching|HANDSOME!|call you handsome|the entire economy walking past|hand finds your arm|grab accordingly|read your wallet|offers? (?:you|at you)|before you.ve picked a bar|hand on your wrist|calls you handsome|a plan for you/i;
+// …and when every line on a street is a pitch, the street with a woman on your arm (rather than the pitch back)
+const _ROOM_WITH_HER = [
+  "Back along the soi with {who} on your arm, and the doorways look straight past you — the wrist-grabs go to the next man, the noodles stay down. Company is the one thing on this street nobody tries to sell you.",
+  "The fronts call to everybody but you. {who} nods to a girl she knows, says something in Thai that makes them both laugh, and steers you on.",
+  "A tout starts his line, sees {who}, and turns it into a wave. On this soi a man with somebody on his arm is off the market, and the market respects it.",
+  "The neon is the same and the noise is the same, but the soi treats you like a resident tonight: nobody reaches, nobody calls. {who} has your arm and the whole street can see it.",
+];
+const _ROOM_WITH_HER_RE = /^(?:Back along the soi with|The fronts call to everybody|A tout starts his line|The neon is the same and the noise)/;
+function _roomLinesFit(pool, room) {
+  const withHer = !!(G.party && G.party.ids && G.party.ids.length);
+  const absent = Object.keys(NPCS).filter(i => NPC_ROLES[i] && (NPCS[i].room === room) && (!_npcsHere().includes(i) || (withHer && G.party.ids.includes(i))));
+  const f = pool.filter(l => (!withHer || !_ROOM_PITCH.test(String(l))) &&
+    !absent.some(i => new RegExp("\\b" + String(NPCS[i].name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(String(l))));
+  if (!f.length && withHer && !(ROOMS[room] && ROOMS[room].barType)) return _ROOM_WITH_HER.map(l => _fmt(l, { who: typeof _partyLabel === "function" ? _partyLabel() : "her" }));
+  return f.length ? f : pool;
+}
 function _revisitPick(pool, room) {
+  pool = _roomLinesFit(pool, room);
   const book = (G.revisitSaid = G.revisitSaid || {}), said = (book[room] = book[room] || []);
   let fresh = pool.filter(l => !said.includes(String(l).slice(0, 50)));
   if (!fresh.length) { book[room] = []; fresh = pool; }

@@ -139,7 +139,7 @@ function _startC4(want, vs) {
       `My table is ฿${_num(cap)}." She is not negotiating; a bigger board is a bigger opponent.`, "dim");
   }
   const stake = _takeStake(Math.min(want || C4_STAKE, cap));
-  G.game = { type: "c4", board: c4New(), opp: name, oppId: id, depth, stake };
+  G.game = { type: "c4", board: c4New(), opp: name, oppId: id, depth, stake }; if (typeof _withHerNote === "function") _withHerNote(G.game.type);
   // the intro telegraphs the tier — read your opponent before you bet
   if (depth >= 8) {
     _say(`${_ucfirst(name)} has the Connect 4 frame up and loaded before you finish asking. ` +
@@ -1377,7 +1377,7 @@ function _startJackpot(w) {
   // every roll is a manual flip, even a forced one, so you learn the moves. After
   // that, forced single-option rolls auto-play and only real choices stop for you.
   const tutorial = !_flag("jpLearned");
-  G.game = { type: "jp", tiles: jpNew(), opp, stake, pending: null, tutorial, taught: {} };
+  G.game = { type: "jp", tiles: jpNew(), opp, stake, pending: null, tutorial, taught: {} }; if (typeof _withHerNote === "function") _withHerNote(G.game.type);
   _say(_fmt("{n} slides over the battered Jackpot box — nine tiles up, two dice, " +
     "the felt worn smooth by ten thousand losing farang. Flip the dice, or flip " +
     "their sum. Lowest score wins; shut the box and it's JACKPOT.", { n: _ucfirst(opp) }));
@@ -1708,7 +1708,7 @@ function _startQuiz(seated) {
   const qs = [];
   for (let i = 0; i < 5; i++) qs.push(pool.splice(Math.floor(_rand() * pool.length), 1)[0]);
   G.quizSeen.qs.push(...qs);
-  G.game = { type: "quiz", qs, at: 0, right: 0 };
+  G.game = { type: "quiz", qs, at: 0, right: 0 }; if (typeof _withHerNote === "function") _withHerNote(G.game.type);
   _say((seated
     ? "“A NEW TEAM, ladies and gentlemen!” "
     : "Too late — the microphone has already found you. “A NEW TEAM, ladies and gentlemen!” ") +
@@ -1853,7 +1853,7 @@ function _startKiller() {
   }
   const names = ["You", ...field.map(f => f[0])];
   const skills = [0, ...field.map(f => f[1])];
-  G.game = { type: "kp", kp: kpNew(names, skills), stake: KP_ENTRY * names.length };
+  G.game = { type: "kp", kp: kpNew(names, skills), stake: KP_ENTRY * names.length }; if (typeof _withHerNote === "function") _withHerNote(G.game.type);
   (G.kpPlayed = G.kpPlayed || {})[G.room] = true;   // you turned up: the title is defended by PLAYING, won or lost
   // the men you are about to play are people for the rest of the night — a
   // player who has just put four frames past Big Kev could not say a word to
@@ -2019,6 +2019,7 @@ function _startPool(w) {
   const opp = (her && her.id) ? NPCS[her.id].name
     : daeng ? "Daeng" : _L("a leathery expat off the rail who hasn't missed since 1997");
   const stake = _takeStake(POOL_STAKE);
+  if (typeof _withHerNote === "function") _withHerNote("pool");
   G.game = { type: "pool", you: 7, opp: 7,
     oppName: (her && her.id) ? NPCS[her.id].name : daeng ? "Daeng" : "the old boy",
     // she plays her tier: the canon pool girls are sharks and say so
@@ -3002,6 +3003,28 @@ function _doSocial(kind, targetWord) {
   // outside a bar this almost never goes well (the katoey encounter, handled
   // by its own resolver, is the famous exception; the Peacock counts as inside
   // — see _socialVenue)
+  // …and the woman whose bar you walked another woman into does not flirt back the same night (Ruth, round 94:
+  // FLIRT got "decides you'll do for the night" from his her-farang, with Kluay on his arm)
+  if (G.rivalLog && G.rivalLog[id] && G.rivalLog[id].day === G.day && G.party && G.party.ids && G.party.ids.length && !G.party.ids.includes(id)) {
+    _say(_pickVary([`${name} looks at you, then at ${_partyLabel()}, and goes back to what she was doing. "You busy tonight, na."`,
+      `"Ha." ${name} does not even turn round. "Ask your friend."`], "rivalflirt"));
+    return;
+  }
+  // THE WOMAN ON YOUR ARM, on the street: she is with you, not a stranger to be grabbed at (Ruth, round 94 — a
+  // street KISS to her own her-farang got "THWACK… faces appear in doorways", twice, and the night went on sweetly)
+  if (!_socialVenue() && G.party && G.party.ids && G.party.ids.includes(id) && (kind === "flirt" || kind === "kiss")) {
+    const t = _knownTier(id);
+    _say(_pickVary(kind === "kiss" ? (t >= 2 ? [
+      `${name} kisses you back, quick, then looks up and down the soi like a woman crossing a road. "Not on the street, na — " She is smiling. "Okay. One more. Then walk."`,
+      `${name} lets you, under the awning, and then laughs into your shirt. "Everybody see. Never mind. Tonight I don't work."`,
+      `A kiss on the pavement, and ${name} keeps hold of your shirt afterwards like she might need it to stand. "Thai people don't do this on the street," she says, and does it again.`]
+      : [`${name} turns her face so it lands on her cheek. "Street, tilac. Thai lady don't kiss on the street." She squeezes your arm to show it is not a no to you.`,
+      `"Ai — people look!" ${name} laughs and pushes you off, then takes your arm again. "Later. Inside. Not here."`])
+      : [`${name} bumps her hip against yours. "You flirt with me? I am already here, silly."`,
+      `${name} rolls her eyes and keeps your arm. "Save it. You already have me tonight."`], "streetkiss:" + (kind === "kiss" && t >= 2 ? "close" : kind)));
+    (G.kissLog = G.kissLog || {})[id] = { day: G.day, turn: G.nightTurn, room: G.room, rain: G.rain > 0 };
+    return;
+  }
   if (!_socialVenue()) {
     if (kind === "flirt") {
       _say(id === "nok" ?
@@ -4569,7 +4592,7 @@ function _addHappy(n, why) {
       _say("Somewhere between the last laugh and this one, it happened: nowhere " +
         "to be, nothing owed, cold bottle, warm night, a city full of people who " +
         "know your name. You are, officially, happy. " + ((typeof _servesDrinks === "function" && _servesDrinks(G.room) && !(typeof _shutHere === "function" && _shutHere()))
-          ? "The DJ, unprompted, plays your song." : "Somewhere down the soi, a song you like comes on."), "win");   // no DJ in a hotel room at two (Martin, round 85)
+          ? (["gogo", "club"].includes(_room().barType) ? "The DJ, unprompted, plays your song." : "Somebody behind the bar, unprompted, puts on your song.") : "Somewhere down the soi, a song you like comes on."), "win");   // no DJ in a hotel room at two (Martin, round 85), nor in a beer bar (Ruth, round 94)
       _engineSpeak("สบายสบาย");
       _say(G.nightTurn >= (typeof SUNRISE_TURN !== "undefined" ? SUNRISE_TURN : 110) ? "(The night's done; the feeling isn't.)" : "(The night keeps going. So can you.)", "dim");   // not "keeps going" at dawn (Sunil, round 86)
     } else {
@@ -4975,15 +4998,16 @@ const _CODA_HOME = [
     // (Howard, round 35). The image stays; the facts are hers to tell.
     "ready is the last thing tonight she can decide, and home is forty minutes off. The notes are already in the zip at the " +
     "back of the {{phone}} case. That money has an address, and it isn't hers.",
-  "She presses the buzzer at a lane off the top of Pattaya Tai, drops the coin on the tray, " +
-    "and walks the last of it home past a woman sweeping. A shared room; a cousin who works days, " +
-    "so the one bed is always warm and never shared. Asleep by seven. The alarm is at three.",
+  // …and no address and no cousin: this line gave two women one lane, one cousin and one alarm (Ruth, round 94)
+  "She presses the buzzer at the end of the truck's run, drops the coin on the tray, " +
+    "and walks the last of it home past a woman sweeping. Whatever she goes home to is hers, " +
+    "and she is asleep before the sweeping is done.",
 ];
 const _CODA_CLOSE = [
   "The last baht bus was never yours. It is hers — going the other way, at dawn, with the " +
     "fare ready and the night folded up in a bag.",
   "You'll wake at noon sure you shared something. She was asleep by seven, and you are the " +
-    "part of the night she will not mention to the cousin at three.",
+    "part of the night she will not mention at home.",
   "That is the whole of the trick. The town lights her up for you and then switches her off " +
     "and sends her home on a bench, and only one of those two things costs money.",
 ];
@@ -4993,7 +5017,11 @@ function _cinderellaCoda() {
   // a go-go dancer unpins a number; a Soi 6 girl wore none (Martin, round 85)
   const _her = G.lastBfId && NPCS[G.lastBfId], _gogoHer = _her && ROOMS[_her.room] && ROOMS[_her.room].barType === "gogo";
   const _dc = _gogoHer ? _CODA_DECON : _CODA_DECON.filter(l => !/unpin the number/.test(l));
-  _say(_dc[Math.floor(_rand() * _dc.length)], "room");
+  // a coda is a book, not a die: Pukky's ran word for word two nights running (Ruth, round 94)
+  const _book = (G.codaBook = G.codaBook || { decon: [], home: [] });
+  const _deal = (pool, k) => { let open = pool.filter(l => !_book[k].includes(String(l).slice(0, 50))); if (!open.length) { _book[k] = []; open = pool; }
+    const l = open[Math.floor(_rand() * open.length)]; _book[k].push(String(l).slice(0, 50)); return l; };
+  _say(_deal(_dc, "decon"), "room");
   // she rode you home on her own bike; she is not climbing into a baht bus (Kenji, round 47)
   // the coda runs before the day turns, so the ride is TODAY's (Dieter, round 56: the bike
   // line never fired, and she caught a baht bus home after driving him all night)
@@ -5004,7 +5032,7 @@ function _cinderellaCoda() {
     ? "Dawn on the main road, the sky the colour of a weak tea. She kicks the bike awake, puts on the helmet " +
       "she did not wear all night because the police are up now, and is gone into the first traffic without " +
       "looking back. The receipt is her tail-light, then not even that."
-    : _CODA_HOME[Math.floor(_rand() * _CODA_HOME.length)], "room");
+    : _deal(_CODA_HOME, "home"), "room");
   const _close = _rode ? _CODA_CLOSE.filter(l => !/baht bus/.test(l)) : _CODA_CLOSE;
   _say(_close[G.codaSeen % _close.length], "dim");
   G.codaSeen++;
@@ -5663,7 +5691,7 @@ function _endNight(reason) {
           // pooled, and kept: her LAST NIGHT answer quotes whichever one it was (Bridget, round 76 —
           // two rides, one coda word for word)
           const _codas = [
-            ["khao", "a shared plate of khao man gai at 3 a.m., the beach road with nobody on it, laughing at nothing"],
+            ["khao", G.mode === "soi6" ? "a shared plate of khao man gai at 3 a.m. off the last cart on Second Road, laughing at nothing" : "a shared plate of khao man gai at 3 a.m., the beach road with nobody on it, laughing at nothing"],   // the Soi 6 week has no beach road (Ruth, round 94)
             ["noodle", "a bowl of noodles from a cart that only opens at two, her feet in your lap on a plastic stool, the street going quiet one bar at a time"],
             ["toastie", "a 7-Eleven toastie split down the middle at four, and a slow walk back past the shutters while she tells you which bars lie about their happy hour"],
           ];
@@ -6152,7 +6180,7 @@ const _BYE_REGULAR = [
 const _BYE_FARANG = [
   n => `${n} already knows — you can see her deciding not to make it a scene, and then deciding it can be a small one. She takes your face in both hands, in front of the whole floor, and looks at you for a long second. "Okay," she says. "Now go sleep. Tomorrow I don't come to the hotel. I already say goodbye, here, where I work. Is better."`,
   n => `"Don't," ${n} says, before you have said anything. "I know what you say." She is smiling and her eyes are not. "Say this instead: 'see you.' Not goodbye. Goodbye is for people who don't come back." She waits until you say it. "Good. See you."`,
-  n => `${n} pulls the stool beside her own out from the rail, the one she keeps, and sits you on it for the last hour like it is the most ordinary night in the world. At the door she gives you one thing: her real name, the long one, written on a chit in careful Thai. "So you know who you say goodbye to."`,
+  n => `${n} pulls the stool beside her own out from the rail, the one she keeps, and sits you on it for the last hour like it is the most ordinary night in the world. At the door she gives you one thing: her real name, the long one, said slowly, twice, so you have it. "So you know who you say goodbye to."`,
 ];
 const _BYE_WENT = [
   n => `"After last night?" ${n} laughs, a little embarrassed in front of the floor. "Of course you go tomorrow. Men always go after the good night." She softens. "Okay. Was a good night. I keep it. You keep it too."`,

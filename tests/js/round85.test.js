@@ -43,7 +43,7 @@ test("she remembers the night: the greeting, the topic, and the other woman of a
   _endNight("sleep"); G.nightTurn = 20; G.room = "sweet_tamarind"; out = []; run("talk to alisa");
   assert.doesNotMatch(said(), /you watch, you don't talk|First time this bar/); assert.ok([..._WENT_HELLO.outBig, ..._WENT_HELLO.outSmall].some(f => said().includes(f("Alisa").slice(0, 30))));
   G.partyMates = { sweet_tamarind_alisa: ["joy"] }; out = []; run("ask alisa about joy");
-  if (NPCS.joy) assert.match(said(), /We go out together|friends, because of you/);
+  if (NPCS.joy) assert.match(said(), /We go out together|friends, because of you|talk too much|know each other before/);
   G.wentWith.kluay = { day: G.day, kind: "st" }; G.room = "ruby_kiss"; out = []; run("talk to kluay");
   assert.ok(_WENT_HELLO.st.some(f => said().includes(f(NPCS.kluay.name))), said());   // the pool deepened (round 90)
 });

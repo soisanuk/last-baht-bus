@@ -449,7 +449,10 @@ function _salengBuy(input) {
         "noodles": [`${name} sits at the end of the bar with the bowl and eats with her whole attention, and only afterwards looks up and says thank you properly, with a wai.`],
       };
       const _given = (G.soc.giftLines = G.soc.giftLines || {});
-      const _react = _given[item] && _AGAIN[item] ? _AGAIN[item][(_given[item] - 1) % _AGAIN[item].length] : REACTIONS[item];
+      let _react = _given[item] && _AGAIN[item] ? _AGAIN[item][(_given[item] - 1) % _AGAIN[item].length] : REACTIONS[item];
+      // a woman who doesn't work this floor has no "back" to go to and no locker in it (Ruth, round 94)
+      if (forId && NPCS[forId] && NPCS[forId].room !== G.room && /to the back|her locker|the girls who already/i.test(String(_react || "")))
+        _react = `${name} peeks in the bag, shuts it fast and stuffs it in her own handbag, laughing. "Not here, na — this is not my bar!"`;
       _given[item] = (_given[item] || 0) + 1;
       _say(`฿${_num(price)} for the ${item}. ` +
         (_react || `${name} takes it with a wai. "Khob khun kha~"`) +
@@ -1295,16 +1298,19 @@ const _ENC = {
       if (G.money < px.watch) { _say(`฿${_num(px.watch)} for the 'Rolex'. He inspects your ฿` + G.money + " and moves along, unoffended."); return; }
       G.money -= px.watch;
       G.itemLoc.fake_rolex = "inventory";
-      _say(`฿${_num(px.watch)}, and the 'Rolex' is yours — fitted on your wrist with jeweller's ` +
+      // a thing bought FOR her is never "yours" on the way past (Ruth, round 94: the RayBens "go on immediately")
+      if (_for) _say(`฿${_num(px.watch)}, and the 'Rolex' comes off the board for ${NPCS[_for].name}. (฿${_num(G.money)} left.)`);
+      else { _say(`฿${_num(px.watch)}, and the 'Rolex' is yours — fitted on your wrist with jeweller's ` +
         `ceremony and a squeeze of the forearm. (฿${_num(G.money)} left.)`);
-      _say("(You now have the genuine Rolex (allegedly).)", "dim");
+      _say("(You now have the genuine Rolex (allegedly).)", "dim"); }
       _addHappy(1);
     } else if (/glass|shade|sun/.test(input)) {
       if (G.money < px.shades) { _say(`฿${_num(px.shades)} for the RayBens, and you haven't got it. He tips an invisible hat.`); return; }
       G.money -= px.shades;
       G.itemLoc.shades = "inventory";
-      _say(`฿${_num(px.shades)}. The RayBens go on immediately, indoors, at night. Perfect. (฿${_num(G.money)} left.)`);
-      _say("(You now have the designer sunglasses.)", "dim");
+      if (_for) _say(`฿${_num(px.shades)}, and the RayBens come off the board for ${NPCS[_for].name}. (฿${_num(G.money)} left.)`);
+      else { _say(`฿${_num(px.shades)}. The RayBens go on immediately, indoors, at night. Perfect. (฿${_num(G.money)} left.)`);
+      _say("(You now have the designer sunglasses.)", "dim"); }
       _addHappy(1);
     } else if (/vitamin|pill|med|blue/.test(input)) {
       if (G.money < px.vits) { _say(`฿${_num(px.vits)} for the 'vitamins'. Your pockets decline on your behalf.`); return; }
@@ -1312,7 +1318,7 @@ const _ENC = {
       G.itemLoc.vitamin_v = "inventory";
       _say(`฿${_num(px.vits)} changes hands with the discretion of a state secret, which fools ` +
         `no one — the whole bar saw, and the whole bar is delighted. (฿${_num(G.money)} left.)`);
-      _say("(You now have the packet of 'vitamins'. The hostesses will NEVER let this go.)", "dim");
+      if (!_for) _say("(You now have the packet of 'vitamins'. The hostesses will NEVER let this go.)", "dim");
       _addHappy(1);
     }
     if (Object.keys(_had).some(k => _had[k] !== "inventory" && G.itemLoc[k] === "inventory")) { _giveAfter(); return; }

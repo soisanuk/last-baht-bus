@@ -1100,6 +1100,7 @@ function _bfDayRefusal(id) {
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
   if (life < 5) (G.ladyTime = G.ladyTime || {})[id] = { day: G.day, v: G.vacation };
+  if (life >= 5 && life < 10 && _templeWaits(id)) return null;
   if (life < 10) return keep(life < 5 ? "period" : "temple");
   return null;
 }
@@ -1114,8 +1115,12 @@ function _bfDayPeek(id) {
   if (typeof _drinksOnly === "function" && _drinksOnly(id)) return "drinksonly";
   if (G.ladyTime && G.ladyTime[id] && G.ladyTime[id].v === G.vacation && G.day - G.ladyTime[id].day <= 3 && G.day >= G.ladyTime[id].day) return "period";
   const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
+  if (life >= 5 && life < 10 && _templeWaits(id)) return null;
   return life < 10 ? (life < 5 ? "period" : "temple") : null;
 }
+// the temple waits a day for the man she calls hers, on his last night (Ruth, round 94: her-farang, told he flies
+// tomorrow, gave the floor's temple speech). Lady time does not wait for anybody.
+function _templeWaits(id) { return typeof _lastNight === "function" && _lastNight() && _knownTier(id) >= 3; }
 const _BF_PEEK_SAY = {
   period: "“Not me tonight, na — lady time.” She says it before anything else, which is how the honest ones do it.",
   temple: "“Not me tonight. I go temple at five, make merit, so tonight I go home early and sleep clean.” She means it.",
@@ -1174,6 +1179,7 @@ function _bfRefusal(id, bt) {
   // callers _nightRide/_bfResolve already put day mid-key for the same reason.)
   const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
   if (life < 5) (G.ladyTime = G.ladyTime || {})[id] = { day: G.day, v: G.vacation };
+  if (life >= 5 && life < 10 && _templeWaits(id)) return null;
   if (life < 10) return keep(life < 5 ? "period" : "temple");
   return null;
 }
@@ -1205,9 +1211,12 @@ function _bfRefusalSay(id, r) {
     period: `${name} squeezes your hand and tells you straight, before a single ` +
       "baht moves: “Cannot tonight, tilac. Lady time, jing jing.” The honest " +
       "ones tell you BEFORE the fine is paid. Remember that.",
-    temple: `${name} makes an apologetic temple of her own hands: “Cannot, na. ` +
+    // one woman's temple, not the whole floor's: Wilai's speech and Pukky's were one sentence (Ruth, round 94)
+    temple: _pickTownLine([`${name} makes an apologetic temple of her own hands: “Cannot, na. ` +
       "I go temple at five, make merit for my family — tonight I go home early and sleep clean. Buddha first, boom " +
       "boom later.” It has the ring of complete truth.",
+      `“Not tonight.” ${name} wais the air, small, in the direction of nowhere in particular. “Tomorrow early I go temple with my mother — she come from home special. I sleep early.” No apology in it; it is simply the calendar.`,
+      `${name} shakes her head, smiling. “Wan phra tomorrow — Buddha day. I go temple at six, give food to the monk. Tonight I am a good girl.” She says it like a joke and means it.`], "temple-no"),
     draw: `${name} says yes with her whole face — but the mamasan is already at her ` +
       "shoulder, all smiles and steel: “This one very popular, she bring me many " +
       "customer. You want? Twenty-five lady drink, five thousand bar fine.” It is " +
@@ -1380,6 +1389,30 @@ const _PARTY_PAIR = {
 function _partyPool(pool, key) { return (G.party && G.party.ids && G.party.ids.length > 1 && _PARTY_PAIR[key]) ? _PARTY_PAIR[key] : pool; }
 // each NEW venue with company on your arm pays the night — company สนุก is
 // presence, never conquest, so it goes nowhere near the jading treadmill
+// THE WOMAN WHOSE BAR IT IS SEES WHO YOU BROUGHT (Ruth, round 94 — twice he walked Kluay into the Shady Lady, where
+// Pukky was his her-farang, and Pukky said "You come back. Same beer?"; the next day only "you laugh too loud one
+// time"). A woman on this floor you are a regular to, not on your arm, says so — once a night, in her tier's register,
+// and it is remembered: her bond cools and tomorrow's hello is cooler (G.miffed), as when you leave with another woman in front of her — never a moral grade.
+const _RIVAL_SEES = {
+  2: [`{n} sees {who} on your arm before she sees you, and her smile does the thing a professional smile does when it is put back on. "Hello. You bring a friend." She does not come down the rail.`,
+      `{n} looks at {who}, then at you, then at the drink in front of her, which suddenly needs her whole attention.`],
+  3: [`{n} sees you come in with {who}. She does not say anything. She finishes the drink she is pouring, sets it down very carefully, and goes to the far end of the rail, and stays there.`,
+      `"Oh." {n} says it to {who}, politely, Thai to Thai, and something passes between them that is not about you and is entirely about you. Then, to you, in English: "Okay. Enjoy." It is the coldest word you have heard her use.`,
+      `{n} looks at {who}'s hand on your arm for one second exactly. "You come to MY bar," she says, "with her." Not loud. The girls near her go quiet in a way that is louder. She turns her back, and it is a decision.`],
+};
+function _partyRival(to) {
+  const p = G.party; if (!p || !p.ids || !p.ids.length) return;
+  const seen = (G.soc.rivalSaw = G.soc.rivalSaw || {});
+  const rival = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && !p.ids.includes(i) && _knownTier(i) >= 2 && !(typeof _maiDee === "function" && _maiDee(i)) &&
+    (NPCS[i].room === to || (NPCS[i].bars || []).includes(to)) && !seen[i]);
+  if (!rival) return;
+  seen[rival] = true;
+  const tier = _knownTier(rival) >= 3 ? 3 : 2;
+  _say(_fmt(_pickVary(_RIVAL_SEES[tier], "rival:" + tier), { n: NPCS[rival].name, who: _partyLabel() }), "alert");
+  (G.rivalLog = G.rivalLog || {})[rival] = { day: G.day, with: p.ids.slice() };
+  // the same account as leaving with another woman in front of her, one notch gentler (no rep: nobody left with anybody)
+  _addBond(rival, -2); (G.miffed = G.miffed || {})[rival] = G.day;
+}
 function _partyArrive(to) {
   const p = G.party;
   if (!p || !p.ids || !p.ids.length) return;
@@ -1404,6 +1437,7 @@ function _partyArrive(to) {
   const pair = p.ids.length > 1;
   const names = { who, a: NPCS[p.ids[0]].name, b: pair ? NPCS[p.ids[1]].name : "" };
   _say(_fmt(_pickVary(pair ? (club ? _PARTY_ARRIVE_CLUB_PAIR : _PARTY_ARRIVE_PAIR) : (club ? _PARTY_ARRIVE_CLUB : _PARTY_ARRIVE), "partyarr"), names));
+  _partyRival(to);
   const dcost = _ladyPrice() * p.ids.length;
   const _ownTill = typeof _atOwnBar === "function" && _atOwnBar();   // at your own bar her drink rings into your own till (Marta, round 63: ฿150 out of the pocket and into nowhere)
   if (G.money >= dcost) {
@@ -1630,7 +1664,12 @@ function _companionEats(arg, what, price) {
 }
 function _partyHome(id) {
   // a bed a street away is walked to, and not by songthaew down a shut soi (Dagny, round 91 — then the close said "a slow walk")
-  _say(_fmt(_pickVary(typeof _homeNear === "function" && _homeNear() ? _PARTY_HOME_WALK : _PARTY_HOME, "partyhome"), { n: NPCS[id].name }), "win");
+  // the rain and the hour are in the walk: "past the fronts and the shutters" at 21:24 in a downpour (Ruth, round 94)
+  const _near = typeof _homeNear === "function" && _homeNear();
+  const _hp = G.rain > 0 ? [_near ? "{n} holds her bag over both your heads and you run it, the few doors to your bed, laughing, soaked to the knees by the second front."
+      : "{n} flags a taxi in the downpour like a woman who has done it a thousand times, pulls you in after her, and wrings out her hair on the back seat all the way home."]
+    : (_near ? _PARTY_HOME_WALK : _PARTY_HOME).filter(l => G.nightTurn >= ((_room().region || "") === "Soi 6" ? SOI6_CLOSE : 100) || !/shutters/.test(l));
+  _say(_fmt(_pickVary(_hp.length ? _hp : (_near ? _PARTY_HOME_WALK : _PARTY_HOME), "partyhome"), { n: NPCS[id].name }), "win");
   // the vehicle in the sentence is the mechanic under it: a bike ride, not a walk that
   // stops in the dark because she thumbed your torch off (Ingrid, round 62)
   const home = _hotelRoomId();
@@ -1934,7 +1973,9 @@ function _bfResolve(kind) {
     p2.seen[G.room] = true;   // her own bar is the start line, not a stop
     ((p2.rooms = p2.rooms || {})[id] = [G.room]);
     if (second) { const m = (G.partyMates = G.partyMates || {}); (m[id] = m[id] || []).push(p2.ids[0]); (m[p2.ids[0]] = m[p2.ids[0]] || []).push(id); }   // they know each other after a night together
-    _say(_fmt(_pickVary(second ? _PARTY_JOIN2 : (price > 0 ? _PARTY_JOIN : _PARTY_JOIN.filter(l => !/fine is barely/.test(l))), "partyjoin"),   // no fine in the book when there was none (Dagny, round 91)
+    // a night out begins in a line she has not used on you before (Ruth, round 94: "First we walk, then we dance" on three take-outs)
+    _say(_fmt((pool => { const mine = ((G.joinSaid = G.joinSaid || {})[id] = G.joinSaid[id] || []); const f = pool.filter(l => !mine.includes(String(l).slice(0, 40)));
+      const l = _pickVary(f.length ? f : pool, "partyjoin"); mine.push(String(l).slice(0, 40)); return l; })(second ? _PARTY_JOIN2 : (price > 0 ? _PARTY_JOIN : _PARTY_JOIN.filter(l => !/fine is barely/.test(l)))),   // no fine in the book when there was none (Dagny, round 91)
       { n: name, other: second ? NPCS[p2.ids[0]].name : "" }), "win");
     _say(second
       ? "(Two of them now. The town is going to remember this one. Lead on \u2014 her drinks land wherever you do.)"
@@ -6217,6 +6258,15 @@ const _LEAVING_TALK = {
       n => `"When?" ${n} wants the time, not the fact. You tell her, and she nods once, and the subject is closed for the night — she has clearly decided in advance how she will do this, and this is how.`],
 };
 function _leavingTalk(npc, topic) {
+  // TOMORROW / TONIGHT, said to a woman you have told you are leaving, is about that (Ruth, round 94: "about tomorrow", straight after)
+  if (NPC_ROLES[npc] && /^(?:about )?(?:tomorrow|tonight|after tonight)\??$/.test(String(topic || "").toLowerCase().trim()) &&
+      G.soc.leavingSaid && G.soc.leavingSaid[npc] != null && typeof _lastNight === "function" && _lastNight()) {
+    const n = NPCS[npc].name, t = _knownTier(npc);
+    _say(_pickVary(t >= 2 ? [`"Tomorrow you fly, and I work." ${n} shrugs, and the shrug costs her something. "Tonight is tonight. Don't spend it asking about tomorrow."`,
+      `"Tomorrow?" ${n} looks at the door. "Tomorrow is the airport and the long road. Tonight you sit here with me. That one I like better."`]
+      : [`"Tomorrow you go home." ${n} nods. "Safe flight, na. Tonight — one more drink?"`], "tomorrowtalk"));
+    return true;
+  }
   if (!NPC_ROLES[npc] || !/\b(leav(?:e|ing)|fly(?:ing)? home|my flight|flight home|go home tomorrow|tomorrow i (?:go|fly|leave)|last night here|airport tomorrow|going home)\b/.test(String(topic || "").toLowerCase())) return false;
   const said = (G.soc.leavingSaid = G.soc.leavingSaid || {});
   if (said[npc] === G.day) { _say(`${NPCS[npc].name} nods. She heard you the first time.`); return true; }
@@ -6530,7 +6580,9 @@ function _sayDrizzle() {
       !(typeof _barSpendTonight === "function" && _barSpendTonight(G.room)); // you just bought a round: not dead
     if (dead && _room().barType === "beer") {
       const staff = _npcsHere().filter(n => NPC_ROLES[n] === "hostess").length;
-      const pool = _RAIN_EMPTY_BAR.filter(s => (_room().pool || !/pool table/.test(s)) && (staff >= 2 || !/two of the girls/.test(s)));
+      // "nobody has bought anything in an hour" fifteen minutes after a lady drink and lingerie in this bar (Ruth, round 94)
+      const _boughtHere = G.turns - (((G.soc.spentTurn || {})[G.room]) || -99) < 10;
+      const pool = _RAIN_EMPTY_BAR.filter(s => (_room().pool || !/pool table/.test(s)) && (staff >= 2 || !/two of the girls/.test(s)) && !(_boughtHere && /bought anything|nobody has bought/i.test(s)));
       _say(_pickVary(pool.length ? pool : _RAIN_EMPTY_BAR, "rainempty"), "dim");
       return;
     }

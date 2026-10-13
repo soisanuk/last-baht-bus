@@ -1956,7 +1956,7 @@ const ROOMS = {
       "You settle back onto the rail in the shade. The parade grinds past a few feet away, and the whole pleasure is being just outside it.",
       "The Shady Lady again — potted palms, low awning, cold Chang, and the best seat on the soi for watching other men get pulled into bars.",
       "Back under the awning where the noise softens by half. Somebody pours, and the rail goes back to reading the pavement like a form guide.",
-      "The shaded rail takes you back. A go-go tout two doors down loses a customer; the Shady Lady's regulars rate the technique and drink on.",
+      "The shaded rail takes you back. A tout two doors down loses a customer; the Shady Lady's regulars rate the technique and drink on.",   // no go-gos on Soi 6 (Ruth, round 94)
       "Back to the quiet middle and the shade, a cold one sweating on the rail, the soi safely at arm's length where you like it.",
     ],
     exits: { out: "soi6_mid" },
@@ -4111,7 +4111,7 @@ const ROOMS = {
     bar: "Ruby Kiss Bar", barType: "soi6",
     desc: "The last loud front before the soi spills onto Second Road: lipstick-red lighting, " +
       "a mirror wall, and a lipstick-mark motif on everything including the glasses. Wilai runs " +
-      "the front stools, and Kluay and Benz have already claimed the two nearest for you.",
+      "the front stools, and two of the girls have already claimed the two nearest for you.",
     revisit: [
       "Back into Ruby Kiss and a lipstick-marked glass is in your hand, its chit hovering, before a girl is in your lap — but only just. \"You have my kiss. Now you want the rest?\" Wilai grins at the mirror, at the two of you the glass makes four. \"Buy me drink, we go up.\"",
       "Lipstick lighting, mirror wall, and Kluay already arranging herself across you. \"Last bar on the soi, best girls on the soi — you save the best, na?\" A hand, a price, a nod at the stairs.",

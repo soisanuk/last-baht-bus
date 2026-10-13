@@ -5337,7 +5337,7 @@ test("refusals: customer-stealing, the honest lady-time, temple, and the recover
   state().day = 2; state().room = "candy_bar_2"; state().money = 5000;
   state().soc.drinks.bee = 6;
   run("barfine bee");
-  assert.match(lastOut(), /go temple at five/i);
+  assert.match(lastOut(), /temple/i);   // a pool now (round 94)
   // cheap charlie is recoverable: warm her up and ask again
   newGame(); state().lastSaleng = 99999;
   state().flags.act1Done = true; state().flags.hasWallet = true;
