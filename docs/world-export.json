@@ -1215,7 +1215,7 @@
    "th": "จีน่า"
   },
   "ging": {
-   "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Lucky Tiger Bar, from Amnat Charoen.",
+   "desc": "Behind a counter hung with lucky charms, squaring a stack of chits — the cashier at Lucky Tiger Bar, from Amnat Charoen.",
    "emoji": "🧾",
    "filler": true,
    "name": "Ging",
@@ -1473,7 +1473,7 @@
    "th": "ตาล"
   },
   "jah": {
-   "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Gold Rush Lounge, from Buriram.",
+   "desc": "Under a strip light, sorting the notes by colour without looking — the cashier at Gold Rush Lounge, from Buriram.",
    "emoji": "🧾",
    "filler": true,
    "name": "Jah",
@@ -1751,7 +1751,7 @@
    "th": "แคท"
   },
   "keng": {
-   "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Daeng's Place, from Mukdahan.",
+   "desc": "Behind the till with the radio low, adding up the evening in her head — the cashier at Daeng's Place, from Mukdahan.",
    "emoji": "🧾",
    "filler": true,
    "name": "Keng",
@@ -1804,7 +1804,7 @@
    "th": "แก้ว"
   },
   "kingfisher_noey": {
-   "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at The Kingfisher, from Khon Kaen.",
+   "desc": "A ledger in her own small handwriting and a pen she does not lend — the cashier at The Kingfisher, from Khon Kaen.",
    "emoji": "🧾",
    "filler": true,
    "name": "Noey",
@@ -3563,7 +3563,7 @@
    "room": "queen_vic"
   },
   "the_bucket_fai": {
-   "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at The Bucket, from Surin.",
+   "desc": "Elbows on the counter, the chits fanned out like a winning hand — the cashier at The Bucket, from Surin.",
    "emoji": "🧾",
    "filler": true,
    "name": "Fai",
@@ -3813,7 +3813,7 @@
    "th": "แมว"
   },
   "two_stools_orm": {
-   "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Two Stools Bar, from Loei.",
+   "desc": "The cup of chits at her elbow and every tab in the bar in her head — the cashier at Two Stools Bar, from Loei.",
    "emoji": "🧾",
    "filler": true,
    "name": "Orm",
