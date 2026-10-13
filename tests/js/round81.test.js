@@ -33,7 +33,7 @@ test("JOURNAL RECORD's 'still open' is what you have not heard", () => {
 test("the house knows a man who sat in its bar earlier this week", () => {
   G.room = "sweet_tamarind"; G.visitDay = { sweet_tamarind: 1 }; G.day = 2;
   run("talk to view"); out = []; run("ask view about last time");
-  assert.match(said(), /This week — you sit here already/); assert.doesNotMatch(said(), /No last time/);
+  assert.match(said(), new RegExp(_HOUSE_LASTWEEK.map(l => l.slice(2, 30).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"))); assert.doesNotMatch(said(), /No last time/);
   G.day = 1; out = []; run("ask tukta about last time"); assert.doesNotMatch(said(), /This week/, "the first night is still the first night");
 });
 

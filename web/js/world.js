@@ -19161,10 +19161,28 @@ function _houseOwn(id, o) {
   nodes.push({ topic: "last time|last trip|last visit|before", when: back, text: o.lastBack });
   nodes.push({ topic: "last time|last trip|last visit|before", when: (st, G) => !sat(st, G), text: o.last });
   nodes.push({ topic: "last time|last trip|last visit|before|remember me|you remember",   // ungated: the sibling above answers the first night
-    text: o.lastWeek || "\"Last time? This week — you sit here already.\" A small nod, the kind that files a face. \"Second time, I know you. That is the rule in this bar.\"",
+    // her own words, not one sentence from fourteen house women (the dialogue walk's --lint, 2026-10-13): a stable pick by id
+    text: o.lastWeek || _HOUSE_LASTWEEK[((_HOUSE_LASTWEEK.dealt = (_HOUSE_LASTWEEK.dealt || 0) + 1) - 1) % _HOUSE_LASTWEEK.length],   // dealt in declaration order: fourteen women, fourteen lines
     short: "\"You sat here already this week. I know you.\"" });
   return { exit: null, nodes };
 }
+const _HOUSE_LASTWEEK = [
+  "\"Last time? This week — you sit here already.\" A small nod, the kind that files a face. \"Second time, I know you. That is the rule in this bar.\"",
+  "\"You were here this week.\" She doesn't check anything; she doesn't need to. \"Same stool, same beer. I remember the beer before the face, but I remember.\"",
+  "\"Before? A night or two ago.\" A glance at the end stool. \"You sat there and watched the door like a man waiting for a bus. Sit somewhere better tonight.\"",
+  "\"This week, yes. You paid in small notes and said thank you twice.\" A short laugh. \"I remember the polite ones. There are not so many.\"",
+  "\"You came in already, this week.\" She taps the bar where your glass was. \"I don't forget a man who comes back. Coming back is the whole business.\"",
+  "\"I know you — this week, the quiet one.\" She says it kindly. \"Quiet is good in here. The loud ones I remember for other reasons.\"",
+  "\"Last time was a few nights ago.\" She folds a cloth over the tap. \"Two visits in one trip, and you are not a stranger here any more. That is how my book works.\"",
+  "\"You again — good.\" Not effusive, but she means it. \"This week you were here. The girls asked who you were after you left. I told them: a customer who comes back.\"",
+  "\"This week, a night or two ago.\" She looks at you the way she looks at a bill she has already paid. \"Settled, then. You are on the list of faces.\"",
+  "\"Before? This same week.\" A nod at the street. \"Most men try every bar once. You tried this one twice. I noticed — I notice the second time, never the first.\"",
+  "\"You were in already.\" She almost smiles. \"You tipped the girl who didn't ask. That I remember. Tonight, same girl, same manners, okay?\"",
+  "\"Yes, you came in this week.\" She counts something on her fingers and gives up. \"Monday? Tuesday? Doesn't matter. The face I keep; the days I lose.\"",
+  "\"I saw you this week.\" She wipes the bar in front of you before you've sat. \"Second visit, you get the clean end of the bar. That's the rule nobody wrote down.\"",
+  "\"Last time? Recently.\" She looks pleased about it. \"A man who comes back the same week either likes the bar or likes a girl. Either is good for me.\"",
+  "\"You sat with us already this week.\" She says it like an entry in a ledger. \"One visit is a guess. Two is a habit. Welcome to the habit.\"",
+];
 const _HOUSE_OWN = {
   // ── JADE LOUNGE (the group's) ──
   jade_lounge_jinda: _houseOwn("jade_lounge_jinda", {
@@ -20171,7 +20189,7 @@ const _R78 = {
     // after "you watch, you don't talk to me")
     { th: "สวัสดีค่ะ", rom: "sawatdee kha",
       when: (st, G) => (G.metDay && G.metDay.sweet_tamarind_alisa != null && G.metDay.sweet_tamarind_alisa < G.day) || ((G.soc && G.soc.drinks && G.soc.drinks.sweet_tamarind_alisa) || 0) >= 2,
-      text: "\"Sawatdee kha.\" The same small wai, but this time she moves her bag off the stool beside her before you reach it. \"You come back. Good. I like a man who talk — the watching ones I never know what they want.\" She settles. \"So. Tell me something today.\"",
+      text: "She moves her bag off the stool beside her before you reach it, and only then the small wai. \"You come back. Good. I like a man who talk — the watching ones I never know what they want.\" She settles. \"So. Tell me something today.\"",
       short: "\"You came back. Sit. Tell me something today.\"" },
     { th: "สวัสดีค่ะ", rom: "sawatdee kha",
       text: "\"Sawatdee kha.\" A small wai, a real one, and a look that has already placed you. \"You sit in my bar before — you watch, you don't talk to me. I see you.\" She considers you kindly. \"Now you talk. Good. I don't grab. The young girls grab — they have rent. I have regulars, and regulars are slower.\"",
