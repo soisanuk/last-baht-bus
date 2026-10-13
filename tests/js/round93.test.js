@@ -105,3 +105,34 @@ test("SHORT TIME WITH <her> is the barfine", () => {
   G.room = "sunset_dreams"; const id = _npcsHere().find(i => NPC_ROLES[i] === "hostess");
   out = []; run(`short time with ${NPCS[id].name.toLowerCase()}`); assert.doesNotMatch(said(), /blinks|didn't understand/);
 });
+
+test("deferred, fixed: THE FINE said to a woman on a bar floor is hers, not the police's", () => {
+  G.room = "sunset_dreams"; G.day = 3; G.soc.drinks.may = 14;
+  out = []; run("ask may about the fine"); assert.doesNotMatch(said(), /Station|boys in brown|wai first/, said());
+});
+
+test("deferred, fixed: nobody texts from behind the open front you are standing outside", () => {
+  G.phone.contacts = { may: true };
+  const tally = room => { G.room = room; G.phone.inbox = []; G.phone.textDay = {}; const saved = _rand;
+    try { _rand = () => 0; for (let k = 0; k < 40; k++) { G.phone.lastText = -99; G.turns += 30; _maybeIncomingText(); } } finally { _rand = saved; }
+    return G.phone.inbox.filter(m => m.from === "may").length; };
+  assert.equal(_streetOf(_npcWhere("may")), "soi6_street");
+  assert.equal(tally("soi6_street"), 0, "not from ten metres away");
+  assert.ok(tally("soi6_east") > 0, "she does text from down the soi");
+});
+
+test("deferred, fixed: one woman never gives the same went-with hello twice", () => {
+  G.room = "sunset_dreams"; const seen = [];
+  for (let k = 0; k < 5; k++) {
+    G.day = 3 + k * 2; G.wentWith = { may: { kind: "out", day: G.day - 1 } }; G.partyLog = { may: { day: G.day - 1, rooms: ["sunset_dreams"] } };
+    G.soc.wentHello = {}; out = []; _wentWithHello("may"); seen.push(said());
+  }
+  assert.equal(new Set(seen).size, seen.length, seen.join("\n---\n"));
+});
+
+test("deferred, fixed: Tan knows the Soi 6 week's basics, and 'beer' is not DJ Beer", () => {
+  G.room = _npcRoom("tan"); run("talk to tan"); G.convoQ = null;
+  for (const [t, re] of [["lady drink", new RegExp("฿" + _ladyPrice("sunset_dreams"))], ["beer", new RegExp("฿" + SEVEN_BEER)], ["bus", new RegExp("฿" + BUS_FARE)], ["cheap", /middle of the soi/], ["7-eleven", /Chang/]]) {
+    out = []; run("ask tan about " + t); assert.match(said(), re, t + ": " + said()); assert.doesNotMatch(said(), /pay grade|department|Jomtien|DJ Beer/, t);
+  }
+});

@@ -39,6 +39,7 @@ const CLASS = {
   "engine-parser.js:_TOWN|the soi knows": [G_, "idiom — the hostess's shrug at what happens outside her door; the witness of your night IS this line's speaker (LAST NIGHT, towntalk.test)"],
   "engine-parser.js:_LASTNIGHT_TAN_HOW|the soi noticed": [W_, "Tan answering LAST NIGHT off G.lastNightWas — he is the mouth; towntalk.test"],
   "engine-parser.js:_giftSeen|everybody see": [W_, "a colleague who was in the room answering the gift off G.gifts[id].present — she is the mouth; round88.test"],
+  "engine-parser.js:_tanBasics|everybody knows": [G_, "a fact about the town (the 7-Eleven step is the cheapest bar), not about you"],
   "engine-parser.js:_townTalk|everybody see": [W_, "her colleague answering LAST NIGHT off G.lastNightWas.with — she is the mouth; towntalk.test"],
   "engine-parser.js:_townTalk|the room noticed": [W_, "the house answering LAST NIGHT off G.lastNightWas.with — the mouth itself; towntalk.test"],
   "engine-systems.js:_affairCaught|the floor sees": [C_, "G.affair.discovered/soured — the floor seeing it IS the discovery, and every later verb reads it (round 66)"],

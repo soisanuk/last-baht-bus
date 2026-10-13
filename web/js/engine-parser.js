@@ -4567,6 +4567,7 @@ function _doTalkCore(arg, topic) {
   // of a wall of names. It cannot be a dialogue `fx` — those fire on first
   // delivery only, so the list would freeze on the night you first asked.
   if (npc === "tan" && _convoTopic(topic || "") === "others" && _tanOthers()) return;
+  if (npc === "tan" && topic && typeof _tanBasics === "function" && _tanBasics(topic)) return;   // the town's basics, before a NAME claims the word (Liam, round 93: "beer" was DJ Beer)
   if (npc === "tan" && topic && typeof _tanAbout === "function" && _tanAbout(topic)) return; // "meet somebody, then ask me who they are" — honoured
   if (topic && typeof _ccibLoud === "function" && !["tan", "fast_eddy", "nont"].includes(npc) &&
       /\bccib\b|cyber ?police|\bpolice\b|\bheist\b|\bbox\b|eastern seaboard|invoices|rabbit'?s job|\bcoffee\b|\bofficer\b|polo shirt|laptop|kitten office/.test(topic)) _ccibLoud("asking");   // the article is stripped before we see it
@@ -4957,7 +4958,10 @@ function _doTalkCore(arg, topic) {
       const said = _poolTalk(npc);
       if (said) { _say(said); return; }
     }
-    if (/\bbar ?fines?\b|\btake\b[^.]*\b(?:girl|her|lady)\b|\b(?:girl|lady|her) out\b|\b(?:go|come) with me\b|\b(?:short|long) time (?:price|cost|money)\b/.test(_ct)) {
+    // …and THE FINE, said to a woman on a bar floor, is hers — not the police's (Liam, round 93: May, the day after
+    // she waived it, answered with the station on Beach Road)
+    if (/\bbar ?fines?\b|\btake\b[^.]*\b(?:girl|her|lady)\b|\b(?:girl|lady|her) out\b|\b(?:go|come) with me\b|\b(?:short|long) time (?:price|cost|money)\b/.test(_ct) ||
+        (_inBar() && NPC_ROLES[npc] && /^(?:the |your |my |her )?fines?$/.test(_ct.trim()))) {
       const said = _barfineTalk(npc);
       if (said) { _say(said); return; }
     }
@@ -6453,6 +6457,38 @@ function _sentenceCase(s) {
   return String(s).replace(/([.?!] )([a-z])/g, (m, a, b) => a + b.toUpperCase())
     .replace(/(^|[.?!] |\s)"([a-z])/g, (m, a, b) => a + '"' + b.toUpperCase());
 }
+// TAN KNOWS THE BASICS (Liam, round 93 — a man pricing his week asked the hub about a lady drink and the bus and was
+// told "above my pay grade"; "cheap" sent him to Jomtien on a week that cannot leave Soi 6; "beer" found DJ Beer).
+// Quoted from the same helpers the tills charge with: the ends of the soi and its middle, the 7-Eleven, the truck.
+function _tanBasics(topic) {
+  const t = String(topic || "").toLowerCase().trim();
+  const soi = id => ROOMS[id] && ROOMS[id].region === "Soi 6";
+  const end = Object.keys(ROOMS).find(k => soi(k) && ROOMS[k].barType === "soi6"), mid = Object.keys(ROOMS).find(k => soi(k) && ROOMS[k].barType === "beer");
+  if (!end || !mid) return false;
+  const soi6 = G.mode === "soi6";
+  if (/^(?:a |the )?lady ?drinks?$/.test(t)) {
+    _say(`"A lady drink?" Tan doesn't need to think. "฿${_num(_ladyPrice(end))} at the two ends of the soi, ฿${_num(_ladyPrice(mid))} in the middle. About ฿${_num(LADY_CUT)} of it is hers — her wage, on a chit, not the bar's markup. One, and she sits with you. Upstairs wants one first."`);
+    return true;
+  }
+  if (/^(?:a |the )?(?:beers?|chang|drink prices?|drinks?)$/.test(t)) {
+    _say(`"Beer is ฿${_num(_beerPrice(end))} at the ends, ฿${_num(_beerPrice(mid))} in the middle, and ฿${_num(SEVEN_BEER)} for a big Chang at the 7-Eleven till midnight." A small smile. "The step outside the 7-Eleven is the cheapest bar in Pattaya. Everybody knows. Nobody says."`);
+    return true;
+  }
+  if (/^(?:the )?(?:7-?eleven|seven|seven ?eleven|7-?11)$/.test(t)) {
+    _say(`"West End, by the corner — and another across Second Road." Tan nods at it. "Toastie ฿${_num(TOASTIE_PRICE)}, water ฿10, a big Chang ฿${_num(SEVEN_BEER)} till midnight. After twelve the fridges are chained. The law."`);
+    return true;
+  }
+  if (/^(?:the )?(?:bus|baht ?bus|songthaew|truck|buses)$/.test(t)) {
+    _say(soi6 ? `"The baht bus?" Tan smiles at the road. "Second Road, Beach Road — wave, sit, ring the bell, ฿${_num(BUS_FARE)}. This week you don't need it. The whole of your week is this one street, and you can walk it in five minutes."`
+      : `"Wave it down, sit in the back, ring the bell when you want off, ฿${_num(BUS_FARE)} in the driver's hand through the window." Tan shrugs. "Never ask the price first — that is how you find out there is a different price for asking."`);
+    return true;
+  }
+  if (soi6 && /^(?:cheap|cheaper|cheapest|budget|cheap bars?|cheap beer|a cheap night)$/.test(t)) {
+    _say(`"Cheap?" Tan almost laughs. "The middle of the soi — the bars between the ends, beer ฿${_num(_beerPrice(mid))}, lady drink ฿${_num(_ladyPrice(mid))}. A Chang on the 7-Eleven step before midnight. And go back to the same girl — after a few nights she stops charging you the fine. That is the cheapest thing on Soi 6, and the only one nobody advertises."`);
+    return true;
+  }
+  return false;
+}
 function _tanTown(kind, slots) {
   const p = _TAN_TOWN[kind];
   return p ? _sentenceCase(_fmt(_pickVary(p, "tantown:" + kind), { n: "Tan", ...(slots || {}) })) : null;
@@ -7093,7 +7129,14 @@ function _wentWithHello(npc) {
   let pool = _WENT_HELLO[w.kind];
   if (w.kind === "out") { const pl = G.partyLog && G.partyLog[npc]; const rooms = pl && Array.isArray(pl.rooms) ? new Set(pl.rooms).size : 1;
     pool = rooms >= 3 ? _WENT_HELLO.outBig : _WENT_HELLO.outSmall; }
-  _say((typeof _pickTownLine === "function" ? _pickTownLine(pool, "wenthello:" + w.kind) : _pickVary(pool, "wenthello:" + npc))(NPCS[npc].name));   // two women, two hellos (Sam)
+  // …and one woman, never the same hello twice: May's "Last night we don't go far" word for word on nights 2 and 5
+  // (Liam, round 93). Her own book over the town's; spent, she says hello the way a regular is said hello to.
+  { const mine = ((G.wentSaid = G.wentSaid || {})[npc] = G.wentSaid[npc] || []);
+    const fresh = pool.filter(f => !mine.includes(String(f)));
+    if (!fresh.length) { _say(_pickVary([`${NPCS[npc].name} smiles before you reach the stool — no speech this time, just the seat pulled out, which is better.`,
+      `"You." ${NPCS[npc].name} doesn't make a thing of it any more. "Sit. Same as always."`], "wenthello-spent:" + npc)); if (typeof _markHello === "function") _markHello(npc); return true; }
+    const f = typeof _pickTownLine === "function" ? _pickTownLine(fresh, "wenthello:" + w.kind) : _pickVary(fresh, "wenthello:" + npc);
+    mine.push(String(f)); _say(f(NPCS[npc].name)); }   // two women, two hellos (Sam)
   if (typeof _markHello === "function") _markHello(npc);
   return true;
 }
@@ -16463,9 +16506,9 @@ function doCommand(input) {
           break;
         }
         if (/lady|drink for|buy .* drink|bell/.test(_last)) {
-          _say(_pickVary(_room().barType === "soi6" ? [`"Lady drink is her money, na — half for her, half for the bar. You want cheap, the middle of the soi is cheaper." A grin. "Same smile."`,
+          _say(_pickVary(_room().barType === "soi6" ? [`"Lady drink is part her money, na — her cut on a chit, the rest for the bar. You want cheap, the middle of the soi is cheaper." A grin. "Same smile."`,
             `"Price is price." She taps the board. "The bars in the middle of the soi charge less. Here you pay for the end of the soi."`]
-            : [`"Price is the board, tilac." She taps it. "Half the lady drink is hers. Nobody haggle her half."`,
+            : [`"Price is the board, tilac." She taps it. "Part of the lady drink is her cut. Nobody haggle her cut."`,
             `"Same as next door, give or take ten baht." A shrug that has priced a thousand drinks. "Cheap bar already, na."`], "haggle:lady"));
           break;
         }

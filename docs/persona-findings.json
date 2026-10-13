@@ -26043,13 +26043,13 @@
       "lens": "budget-backpacker",
       "instrument": "",
       "claim": "ASK MAY ABOUT THE FINE the day after she waived it gets the police fine",
-      "verdict": "deferred",
-      "note": "'the fine' is the police's word in the town table; a waived-barfine row is a later pass",
+      "verdict": "fixed",
+      "note": "'the fine' said to a woman on a bar floor is her barfine",
       "cls": "N",
       "sev": "trivial",
       "system": "dialogue",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round93.test.js"
     },
     {
       "round": "93",
@@ -26208,13 +26208,13 @@
       "lens": "budget-backpacker",
       "instrument": "",
       "claim": "Tan can't answer lady drink or bus; his 'cheap' points at Jomtien, off the week's map",
-      "verdict": "deferred",
-      "note": "Tan's town-basics rows on the Soi 6 week are a writing pass",
+      "verdict": "fixed",
+      "note": "_tanBasics: lady drink, beer, the 7-Eleven, the bus and cheap from the tills' own helpers, before a name claims the word",
       "cls": "N",
       "sev": "minor",
       "system": "tan",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round93.test.js"
     },
     {
       "round": "93",
@@ -26298,13 +26298,13 @@
       "lens": "budget-backpacker",
       "instrument": "",
       "claim": "May's 'you eat already??' text arrives while he stands ten metres from her bar; 'Last night we don't go far' word for word nights 2 and 5",
-      "verdict": "deferred",
-      "note": "Text proximity and the went-with hello book per woman",
+      "verdict": "fixed",
+      "note": "No text from a woman whose open front you stand outside; the went-with hello keeps a per-woman book (G.wentSaid)",
       "cls": "M",
       "sev": "minor",
       "system": "phone",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round93.test.js"
     },
     {
       "round": "93",

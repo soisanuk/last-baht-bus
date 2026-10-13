@@ -5630,7 +5630,10 @@ function _maybeIncomingText() {
   let contacts = Object.keys(G.phone.contacts).filter(_texts)   // "a contact who texts", not "works a bar floor" (Judith, round 47: Priew never sent one)
     .filter(id => !_maiDee(id))   // …and never again from a woman who has decided (theme 6)
     .filter(id => !(G.phone.cut && G.phone.cut[id] === G.vacation))   // …nor, this trip, from the one you went over to (theme 5)
-    .filter(id => !_npcsHere().includes(id));   // nobody texts you from across the table (Desmond, round 63: Cream's "you sleep well?" while you sat with her)
+    .filter(id => !_npcsHere().includes(id))   // nobody texts you from across the table (Desmond, round 63: Cream's "you sleep well?" while you sat with her)
+    // …nor from behind the open front you are standing outside: May's "you eat already??" arrived ten metres from her
+    // stool (Liam, round 93). Her bar opens onto this street; she can see you.
+    .filter(id => { const h = typeof _npcWhere === "function" ? _npcWhere(id) : null; return !h || !(typeof _streetOf === "function" && _streetOf(h) === G.room && ROOMS[h] && ROOMS[h].barType && !["gogo", "gents"].includes(ROOMS[h].barType)); });
   // the affair's endings reach the phone too (Frank, 2026-08-26: the in-love
   // text pool kept sending the morning after she left). Gone is gone — silence
   // is her whole statement. Won gets its own register: Prachuap, not a barstool.
