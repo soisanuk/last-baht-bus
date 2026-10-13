@@ -23,17 +23,7 @@ var NEWS_FEED = [
     "d": "11 Oct 2026"
   },
   {
-    "t": "Pattaya heist gang flees Thailand with 37 million baht",
-    "s": "Thaiger",
-    "d": "11 Oct 2026"
-  },
-  {
-    "t": "Pattaya police arrest 25-year-old with nine bank cards and 90,000 baht",
-    "s": "Pattaya Mail",
-    "d": "10 Oct 2026"
-  },
-  {
-    "t": "Pattaya considers turning 70 rai of public land in Naklua into a recreational area",
+    "t": "Pattaya reviews plans for fireworks, jazz and year-end festivals",
     "s": "Pattaya Mail",
     "d": "11 Oct 2026"
   },
@@ -43,14 +33,24 @@ var NEWS_FEED = [
     "d": "11 Oct 2026"
   },
   {
+    "t": "The Riviera Beverly Hills brings Hollywood-inspired luxury living to Jomtien",
+    "s": "Pattaya Mail",
+    "d": "12 Oct 2026"
+  },
+  {
+    "t": "Pattaya considers turning 70 rai of public land in Naklua into a recreational area",
+    "s": "Pattaya Mail",
+    "d": "11 Oct 2026"
+  },
+  {
     "t": "Thai Queen makes first solo flight in fighter jet",
     "s": "BBC",
     "d": "09 Oct 2026"
   },
   {
-    "t": "I Flew to Thailand to Snatch My Face and Body",
-    "s": "The Cut",
-    "d": "09 Oct 2026"
+    "t": "Livestream clash raises questions over tourist conduct, filming, and violence in Thailand",
+    "s": "Khaosod English",
+    "d": "12 Oct 2026"
   },
   {
     "t": "Queen of Thailand flies fighter jet",
@@ -63,25 +63,25 @@ var NEWS_FEED = [
     "d": "12 Oct 2026"
   },
   {
-    "t": "Nearly 30 years after IMF rescue, Thailand faces new economic test",
+    "t": "Thailand prepares to host IMF-World Bank meetings",
     "s": "Reuters",
-    "d": "09 Oct 2026"
+    "d": "10 Oct 2026"
   },
   {
-    "t": "Thailand Plans Early Retirement Program to Reduce Civil Servants",
-    "s": "Bloomberg.com",
-    "d": "11 Oct 2026"
+    "t": "Below Deck's Rainbeau de Roos Reveals Intense Partying Experience in Thailand",
+    "s": "Yahoo",
+    "d": "12 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-12","USD":33.61,"AUD":23.44,"GBP":44.48,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-12","temp":26,"humid":97,"code":3,"hi":32,"rain":94};
+var WX_NOW = {"date":"2026-10-13","temp":28,"humid":84,"code":2,"hi":32,"rain":89};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4170,"date":"2026-10-12","baht":66300};
+var GOLD = {"usd":4166,"date":"2026-10-13","baht":66200};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":82685,"thb":2779214};
+var BTC = {"usd":81519,"thb":2742105};
