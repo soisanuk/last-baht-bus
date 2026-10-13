@@ -1178,7 +1178,7 @@ function _arriveAt(to) {
   // it back next time you sit with them, so nothing is lost but the dead end.
   if (G.convoQ && to !== G.room && _npcRoom(G.convoQ.id) !== to && !((G.party && G.party.ids) || []).includes(G.convoQ.id)) {   // she is on your arm: her question walks with you (Ossie, round 70)
     const _who = _convoName(G.convoQ.id);
-    if (G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q };
+    if (G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, day: G.day };
     G.convoQ = null; G.convo = null; G.convoIdx = null;
     _say(_fmt("({who}'s question goes unanswered behind you — it will keep.)", { who: _who }), "dim");
   }
@@ -5115,7 +5115,9 @@ function _doTalkCore(arg, topic) {
             if (k.includes(">" + mate + ":")) others.push(_rvBook[k]);
           }
           const mirror = _rvBook[mate + ">" + npc + ":" + kind];
-          const tiers = [i => !mine.includes(i) && !others.includes(i) && i !== mirror && ok(i), i => !mine.includes(i) && i !== mirror && ok(i), i => ok(i), () => true];
+          // the TOWN's book first: four mamasans in four bars gave one character reference for four girls (Bernard, round 88)
+          const all = Object.keys(_rvBook).filter(k => k.endsWith(":" + kind)).map(k => _rvBook[k]);
+          const tiers = [i => !all.includes(i) && i !== mirror && ok(i), i => !mine.includes(i) && !others.includes(i) && i !== mirror && ok(i), i => !mine.includes(i) && i !== mirror && ok(i), i => ok(i), () => true];
           let pick = _pkRaw % len;
           outer: for (const fits of tiers) for (let t = 0; t < len; t++) { const i = (_pkRaw + t) % len; if (fits(i)) { pick = i; break outer; } }
           _rvBook[key] = pick;
@@ -5181,13 +5183,26 @@ function _doTalkCore(arg, topic) {
             `"${n}." ${_mamaLabel(NPCS[npc].name)} doesn't look at her. "On time every night. Never sick when it rains. You know how rare that is? No — you don't. I do."`,
             `"${n}?" ${_mamaLabel(NPCS[npc].name)} considers the far end of the room. "Too soft with the old men. They come back for her, so I say nothing. Soft is a business too."`,
             `${_mamaLabel(NPCS[npc].name)} gives it a moment. "${n} came with nothing and a cousin. Now the cousin works somewhere else and ${n} is still here. That is the whole review."`,
-          ][_rvStable("mama/girl", 4, i => i !== 3 || _pooledLife(mate))] :
+            // deeper than a week's bars (Bernard, round 88: one sentence from four mamasans)
+            `"${n}?" ${_mamaLabel(NPCS[npc].name)} watches her for a second. "She can read a man from the door. Who will buy, who will only look, who will be trouble at one o'clock. I don't teach that. She came with it."`,
+            `"${n} is quiet." ${_mamaLabel(NPCS[npc].name)} says it as a compliment. "The loud ones get the first drink. The quiet ones get the man who comes back. I know which I want on my floor."`,
+            `"${n}?" ${_mamaLabel(NPCS[npc].name)} almost smiles. "She argues with me about everything and she is right about half. I keep her for the half."`,
+            `"${n} never lets a customer see her tired." ${_mamaLabel(NPCS[npc].name)} folds her arms. "At four in the morning she is still the first girl he saw. That is a job, whatever you think it is."`,
+            `"${n}." ${_mamaLabel(NPCS[npc].name)} glances at the stools. "She remembers what every regular drinks and what his wife is called. She does not mix them up. Not once."`,
+            `"Ask me about ${n} in a year." ${_mamaLabel(NPCS[npc].name)} shrugs. "New girls change. Good ones change slower. So far, slow."`,
+          ][_rvStable("mama/girl", 10, i => i !== 3 || _pooledLife(mate))] :
           me === "cashier" ? [
             `"${n} is on the book same as everybody." ${NPCS[npc].name} does not look up. "That is all the book says about anyone."`,
             `"${n}?" ${NPCS[npc].name} runs a finger down a column without looking for anything. "Never short, never argue the chit. In my job that is a love letter."`,
             `"${n}." A small nod at the floor. "She count her own drinks before I do. Sometimes she is right and I am wrong. I don't tell her."`,
             `"${n} pay the mama back on the day, every time." ${NPCS[npc].name} closes the drawer. "You would be surprised how rare."`,
-          ][_rvStable("till/girl", 4)] :
+            `"${n}?" ${NPCS[npc].name} taps the chits. "Her drinks come in a steady line, not a rush. Steady is better for the book and better for her."`,
+            `"${n} keeps her chits flat." ${NPCS[npc].name} demonstrates with one. "Some girls bring me paper balls. She brings me a stack. I notice."`,
+            `"${n} asks me to check her total before mama does." ${NPCS[npc].name} almost smiles. "Nobody else asks. Everybody else should."`,
+            `"${n}." ${NPCS[npc].name} doesn't look up. "Her number goes up on a Friday and stays up. Most girls are a Friday and then a Monday."`,
+            `"${n} never asks for an advance." ${NPCS[npc].name} shuts the drawer on it. "In this job that is the whole personality test."`,
+            `"${n}?" ${NPCS[npc].name} weighs the question like coins. "Tips she declares. All of them. I know because I watch the jar."`,
+          ][_rvStable("till/girl", 10)] :
           me === "manager" ? `"${n}? Ask her — she runs me as much as I run her, and she'd say more."` :   // "been here longer than me" from a man twenty-two years behind this rail (Rolf, round 55)
           [`"${n}? My sister." A beat. "Not real sister. Bar sister. She take my customer, I take hers, we eat together after. Same same."`,
            `"${n}?" ${NPCS[npc].name} rolls her eyes, fond. "She borrow my lipstick, she never give back. Good girl, bad lipstick."`,
@@ -6230,7 +6245,7 @@ const _TEETOTAL_BROKEN = [
 const _GIVE_FOR = [
   "\"For {what}?\" {n} says it back to you, quieter, as if checking she heard it right. \"Okay. I tell them it come from you.\"",
   "{n} folds it small and puts it somewhere separate from the bar's money. \"For {what},\" she repeats, and nods once. \"Not for me. I remember.\"",
-  "\"{what}.\" {n} looks at the notes, then at you, and the smile she gives is not the bar's. \"You listen when I talk. Not every man listen.\"",
+  "\"{What}.\" {n} looks at the notes, then at you, and the smile she gives is not the bar's. \"You listen when I talk. Not every man listen.\"",
 ];
 const _POLICE_BARE = [
   "No brown shirts in sight. In this town you don't go looking for the police; a man drunk on the pavement is found by them, and the station on Beach Road, by Soi 9, takes reports from the ones who find it first.",
@@ -7049,6 +7064,92 @@ const _ARR_LIST_HOUSE = [
 const _mamaLabel = n => /^mama\b/i.test(n) ? n : "Mama " + n;   // "Mama Mama Yai weighs it" (Marguerite, round 67)
 // the words for each shift call the floor remembers (round 73; "the fight" added in round 76)
 const _CALL_K = { merit: /\b(monks?|merit|ceremony|temple|tam ?boon|blessing)\b/, tab: /\b(tab|slate|docket)\b/, early: /\b(early bus|her bus|\w+s? bus|the bus|sent home|go home early|went home|early)\b/, round: /\b(the round|round on the house|flat hour|free round|free drinks)\b/, turning: /\b(the man|that man|the punter|the drunk|turned|thrown out|put out|threw out|security|fight|the fight|trouble|the trouble)\b/ };
+// THE GIFT BOOK (Bernard, round 88): every thing and every baht a man gives a woman, kept on her page for
+// three days — cart items and food, a rose, a tip, money given for a reason, a send she kept or sent back.
+function _giftNote(id, e) {
+  if (!id || !NPCS[id]) return;
+  const book = (G.gifts = G.gifts || {}), list = (book[id] = Array.isArray(book[id]) ? book[id] : []);
+  const last = list[list.length - 1];
+  // GIVE <her> <n> FOR <x> runs the tip first: the reason replaces the bare tip it came with
+  if (e.kind === "give" && last && last.kind === "tip" && last.day === G.day && last.amt === e.amt) list.pop();
+  list.push(Object.assign({ day: G.day, room: G.room, present: typeof _npcsHere === "function" ? _npcsHere().slice() : [] }, e));
+  while (list.length > 10) list.shift();
+}
+function _giftsOf(id) {
+  const out = ((G.gifts || {})[id] || []).slice();
+  const old = G.giftLog && G.giftLog[id];   // a save from round 87 kept one cart item
+  if (old && !out.some(g => g.kind === "item" && g.item === old.item && g.day === old.day)) out.unshift({ kind: "item", item: old.item, day: old.day });
+  return out.filter(g => G.day - g.day <= 3);
+}
+const _GIFT_ITEM_WORDS = { lingerie: /\b(lingerie|underwear|knickers|bra|the pretty things?)\b/, sandals: /\b(sandals?|flip ?flops?|shoes?)\b/,
+  heels: /\b(heels?|shoes?)\b/, "moo ping": /\b(moo ?ping|pork|skewers?)\b/, noodles: /\bnoodles?\b/, "som tam": /\b(som ?tam|papaya)\b/,
+  fruit: /\b(fruit|mango|pineapple)\b/, rose: /\b(roses?|flowers?)\b/ };
+const _FOOD_ITEMS = ["moo ping", "noodles", "som tam", "fruit", "crisps", "snacks"];
+function _giftWord(g) { return g.kind === "item" ? (_GIFT_ITEM_WORDS[g.item] || new RegExp("\\b" + String(g.item).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b")) :
+  g.kind === "send" || g.kind === "sendback" ? /\b(money|send|sent|transfer|the app|bank|baht|\d{2,})\b/ : /\b(tip|tips|money|baht|cash|notes?|\d{2,})\b/; }
+function _giftMatch(npc, t) {
+  const list = _giftsOf(npc).reverse();
+  if (!list.length) return null;
+  const num = (t.match(/\d[\d,]*/) || [""])[0].replace(/,/g, "");
+  if (num) { const byAmt = list.find(g => g.amt && String(g.amt) === num); if (byAmt) return byAmt; }
+  const _whyHit = g => g.why && String(g.why).toLowerCase().split(/[^a-z']+/).some(w => w.length >= 4 && new RegExp("\\b" + w).test(t));   // "the taxi" for "my taxi home"
+  const hit = list.find(g => _whyHit(g)) || list.find(g => _giftWord(g).test(t));
+  if (hit) return hit;
+  return /\b(gift|present|what i (?:bought|got|gave) you|the cart|saleng)\b/.test(t) ? list[0] : null;
+}
+function _giftLine(npc, g, R) {
+  const n = NPCS[npc].name, day = g.day === G.day ? "tonight" : G.day - g.day === 1 ? "last night" : "the other night";
+  const Day = day.charAt(0).toUpperCase() + day.slice(1), a = g.amt ? "฿" + _num(g.amt) : "", it = g.item;
+  const fl = R === "floor";
+  let L;
+  if (g.kind === "item" && it === "lingerie") L = [`"Shh!" ${n} laughs and puts one finger on your mouth. "${Day} you buy, now I wear. Only you know, na. Other girls know too — they see the bag."`,
+    `${n} goes pink and touches her own hip, very briefly. "Is on. You buy ${day}. Very nice. I not tell you what the cart man charge — is gift."`,
+    `"You ask about THAT?" ${n} hides her face in her hands and laughs through her fingers. "${Day}. Yes. Okay. Thank you. Now we talk about something else, na."`];
+  else if (g.kind === "item" && /sandals|heels/.test(it)) L = [`${n} puts a foot up on the rail to show you. "${Day} you buy — I wear every night now. Other girl jealous 555."`,
+    `"My ${it}!" ${n} turns an ankle in the light. "${Day}. You remember? I remember. Old pair in my bag, finish."`,
+    `${n} looks down at her own feet, pleased with them. "You see? I wear. ${Day} you buy, today my feet not hurt. You don't know what that is worth."`];
+  else if (g.kind === "item" && it === "rose") L = [`"The rose?" ${n} nods at a glass behind the bar where it stands, already tired. "${Day}. I keep it till it die. Then I keep the picture."`,
+    `"Rose from the little girl." ${n} smiles. "${Day} you buy. Her mother know you now — she will try you again, na."`];
+  else if (g.kind === "item") L = [`"The ${it}?" ${n} smiles. "${Day} you buy for me. I remember. Not everybody feed the girls."`,
+    `"${Day}! The ${it}." ${n} pats the rail where it was. "Was good. Best ${it} on the soi, from that cart."`,
+    `"You feed me ${day}." ${n} says it like it's written down somewhere. "Mama see. Mama like a man who feed the girls."`,
+    `"${it.charAt(0).toUpperCase() + it.slice(1)}, yes." ${n} grins. "I share with the girls, they say thank you too. You feed whole bar, almost."`,
+    `"${Day} you buy me ${it}. I still think about it 555. Is the small things, na."`,
+    `"I remember the ${it}." ${n} nods once. "Not the money men give. The ${it}. Different."`,
+    `"The ${it} ${day}?" ${n} laughs. "I eat too fast, I know. You see me. Very bad manners. Very good ${it}."`,
+    `"${Day}." ${n} counts something on her fingers. "${it.charAt(0).toUpperCase() + it.slice(1)}, and you didn't want nothing for it. I notice that one."`];
+  else if (g.kind === "give") L = fl ? [`"You give me ${a} for ${g.why}." ${n} says it back to you carefully. "I do it. ${Day}. Thank you for listen when I talk."`,
+      `"${a}, for ${g.why}." ${n} nods. "Yes. I remember what it for. Most man don't ask what it for."`]
+    : [`"${a}, for ${g.why}." ${n} says it back to you exactly. "It went where you said. ${Day}. Thank you for asking what it was for."`];
+  else if (g.kind === "tip") L = fl ? [`"The ${a}?" ${n} touches her phone case, where the chits live. "${Day}. I remember. Not for mama — for me."`,
+      `"${Day} you give me ${a} in my hand." ${n} smiles. "I don't say anything that time. Now I say: thank you, na."`,
+      `"You think I forget ${a}?" ${n} laughs. "I count everything, tilac. ${Day}. Is in my book. Good man."`,
+      `"${a}." ${n} nods, serious for a second. "${Day}. That one I send home. You pay for a little bit of my mama's rice."`]
+    : [`"The ${a}?" ${n} doesn't pretend not to remember. "${Day}. Thank you. I don't make a speech about tips — but I don't forget them."`,
+      `"${Day}, ${a}." ${n} inclines her head. "Noted, and appreciated. That is what a tip is for."`];
+  else if (g.kind === "send") L = fl ? [`"The money in the app?" ${n} holds up her phone. "${Day}, ${a}. I see. I still have the screen."`,
+      `"${a} ${day}." ${n} looks at you a beat longer than usual. "In the app, very fast. I keep it in my book, na. Not my pocket."`,
+      `"You send me ${a}." ${n} says it quietly, like it shouldn't carry. "${Day}. I remember. Don't tell the other girls."`]
+    : [`"${a}, ${day}, through the app." ${n} doesn't make it light. "It arrived. I've not forgotten it."`];
+  else /* sendback */ L = [`"The money I send back?" ${n} shakes her head, fond. "${Day}. Too much, na. You keep. I remember you try — that is enough for me."`,
+    `"${a}? I send back." ${n} smiles. "${Day}. Big money from a man I know little bit — not yet. Buy me a drink, that one I take."`,
+    `"You try to send me ${a} ${day}." ${n} looks at you properly. "I send back. Not angry. Just — not like that, na."`];
+  return _pickTownLine(L, "gift:" + g.kind + ":" + (g.kind === "item" ? (_FOOD_ITEMS.includes(it) ? "food" : it) : R));
+}
+// a colleague who was in the room when you gave it: "The bar votes: better" — and the bar can say so (Bernard: "Not mine to know" about the sandals)
+function _giftSeen(npc, t) {
+  if (!(NPC_ROLES[npc] || NPCS[npc].house)) return null;
+  for (const [id, list] of Object.entries(G.gifts || {})) {
+    if (id === npc || !NPCS[id]) continue;
+    const g = list.slice().reverse().find(x => x.kind === "item" && G.day - x.day <= 1 && (x.present || []).includes(npc) && _giftWord(x).test(t));
+    if (!g) continue;
+    const n = NPCS[id].name, day = g.day === G.day ? "tonight" : "last night";
+    return _pickTownLine([`"${n}'s ${g.item}?" ${NPCS[npc].name} laughs. "Everybody see. ${day.charAt(0).toUpperCase() + day.slice(1)} — she show the whole bar. Now we all want."`,
+      `"The ${g.item} you buy ${n}." ${NPCS[npc].name} nods down the bar at her. "${day.charAt(0).toUpperCase() + day.slice(1)}. She very happy. We are a little bit jealous, is normal."`,
+      `"${n}'s ${g.item}, ${day}." ${NPCS[npc].name} shrugs, amused. "You want to be famous on this floor, that is how. Now every girl look at your hands."`], "giftseen");
+  }
+  return null;
+}
 // THE STREET'S EYES (Aisling, round 87, a night-desk sub who made one thing happen on the pavement each night and
 // rang every source the next evening: "a town with no eyes, not a town that lies"). Five downpours in six nights and
 // nobody on Soi 6 could discuss rain; the piwin she sheltered with said "other stand, maybe"; the woman she bought
@@ -7086,19 +7187,12 @@ function _streetTalk(npc, topic) {
   const reg = typeof _hoursRegister === "function" ? _hoursRegister(npc) : "house";
   const n = NPCS[npc].name, R = npc === "tan" ? "tan" : reg === "floor" ? "floor" : reg === "punter" ? "punter" : "house";
   const when = ev => ev.day === G.day ? "tonight" : "last night", Cap = x => x.charAt(0).toUpperCase() + x.slice(1);
-  // a gift is hers: what you bought her off the cart, by its own name or as "the present"
-  const gift = G.giftLog && G.giftLog[npc];
-  if (gift && G.day - gift.day <= 3 && ((_GIFT_RE[gift.item] && _GIFT_RE[gift.item].test(t)) || /\b(gift|present|what i (?:bought|got) you|the cart|saleng)\b/.test(t))) {
-    const day = gift.day === G.day ? "tonight" : G.day - gift.day === 1 ? "last night" : "the other night";
-    const L = gift.item === "lingerie" ? [`"Shh!" ${n} laughs and puts one finger on your mouth. "${Cap(day)} you buy, now I wear. Only you know, na. Other girls know too — they see the bag."`,
-        `${n} goes pink and points at her own hip, very briefly. "Is on. You buy ${day}. Very nice, very expensive for you — cart man say ฿ — no, I not tell you, is gift."`]
-      : /sandals|heels/.test(gift.item) ? [`${n} puts a foot up on the rail to show you. "${Cap(day)} you buy — I wear every night now. Other girl jealous 555."`,
-        `"My ${gift.item}!" ${n} turns an ankle in the light. "${Cap(day)}. You remember? I remember. Old one in my bag, finish."`]
-      : [`${n} pats her stomach. "${Cap(day)} you feed me! Mama say you can come again 555."`,
-        `"The ${gift.item}?" ${n} grins. "${Cap(day)}, you buy, I eat standing up like buffalo. Very good. Thank you, na."`];
-    _say(_pickTownLine(L, "gift:" + gift.item));
-    return true;
-  }
+  // a gift is hers — off the cart, in her hand, through the app, or sent back — by its own word, the latest first
+  // (Aisling, round 87; Bernard, round 88: "hand her two thousand and she's forgotten before you've sat back down")
+  { const g = _giftMatch(npc, t);
+    if (g) { _say(_giftLine(npc, g, R)); return true; }
+    const c = _giftSeen(npc, t);   // …and her colleagues, who were in the room
+    if (c) { _say(c); return true; } }
   const rain = _STREET_RAIN_RE.test(t) && _streetEvent("rain");
   if (rain) {
     const saw = _sawIt(npc, rain), at = typeof _clockStr === "function" ? _clockStr(rain.turn) : "", w = when(rain);
@@ -8573,6 +8667,7 @@ function _doGive(itemWord, npcWord) {
   if (ITEMS[id].kind === "gift" && NPC_ROLES[npc]) {
     G.itemLoc[id] = null;
     _addBond(npc, 1);
+    if (typeof _giftNote === "function") _giftNote(npc, { kind: "item", item: String(ITEMS[id].name || id).replace(/^(?:a|an|the|some|pair of)\s+/i, "").toLowerCase() });
     const name = NPCS[npc].name;
     const GIFT_TEXT = {
       rose: {
@@ -9640,6 +9735,14 @@ function _doBuy(arg) {
   // no bar stocks — checked after the bar goods so shared words (bra/drink) still
   // resolve to the bar. The cart lingers; buying doesn't send it away.
   if (_salengHere() && _salengMatchItem(arg)) { _salengBuy(arg); return; }
+  // the cart that was here a minute ago: "Not for sale here" read as if it had never been (Bernard, round 88)
+  if (!_salengHere() && G.salengRoom === G.room && G.salengUntil != null && G.turns - G.salengUntil <= 15 &&
+      typeof _SALENG_CARTS !== "undefined" && Object.values(_SALENG_CARTS).some(c => (c.items || []).some(it => new RegExp("\\b" + it.split(" ")[0]).test(arg)))) {
+    _say(_pickVary(["The cart's gone — you can still hear it, two fronts down, the horn going for the next bar. It will be back when it's back.",
+      "Too late: the saleng has puttered off up the soi with everything on it. The girls who bought are wearing theirs already.",
+      "The cart left a minute ago. One of the girls points down the soi, helpfully, at nothing."], "salenggone"));
+    return;
+  }
   // Bare BUY inside a shop listed nothing, while the STREET outside a 7-Eleven
   // prints the whole stock list — so standing in the shop gave you strictly less
   // information than standing outside it (persona report B#9, 2026-08-23).
@@ -11659,6 +11762,7 @@ function _doTip(arg) {
   if (G.money < amount) { _say(`Generosity of spirit, poverty of pocket: you have ฿${_num(G.money)}.`); return; }
   G.money -= amount; G.offTill = (G.offTill || 0) + amount;   // a tip is handed over, not chitted (CHECK BIN)
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amount; // toward a sponsor flip
+  if (typeof _giftNote === "function") _giftNote(id, { kind: "tip", amt: amount });   // she remembers the money in her hand (Bernard, round 88)
   const name = NPCS[id].name;
   // her night's money, handed across the rail — the care ask answered in notes (theme 1)
   if (typeof _careSent === "function" && _careSent(id, amount)) {
@@ -14846,9 +14950,11 @@ function doCommand(input) {
     // or the only woman on the floor ("do you have kids?" with nobody addressed, Kevin, round 84)
     const _floorW = _npcsHere().filter(i => NPC_ROLES[i] === "hostess");
     const _la = typeof _lastActor === "function" ? _lastActor() : null;
-    const pid = (typeof _convoActive === "function" && _convoActive()) || (_la && _floorW.includes(_la) ? _la : _floorW.length === 1 ? _floorW[0] : null);
+    // …and "my name is" said to a floor of several: to the woman who knows you best (Bernard, round 88: "didn't parse")
+    const _best = /^(my name|call me|i'?m called)\b/.test(lower) && _floorW.length ? _floorW.slice().sort((a, b) => (_knownTier(b) - _knownTier(a)) || ((G.soc.drinks[b] || 0) - (G.soc.drinks[a] || 0)))[0] : null;
+    const pid = (typeof _convoActive === "function" && _convoActive()) || (_la && _floorW.includes(_la) ? _la : _floorW.length === 1 ? _floorW[0] : _best);
     if (pid && NPCS[pid] && _npcsHere().includes(pid) && !G.pendingChoice && !G.pendingEnc && !G.game && !G.pendingBf) {
-      if (typeof _doTell === "function" && _doTell(lower)) { _tick(); return; }
+      if (typeof _doTell === "function" && _doTell(lower, pid)) { if (typeof _convoStart === "function") _convoStart(pid); _tick(); return; }
       const q = lower.replace(/[?!.,]+/g, " ").replace(/\s+/g, " ").trim();
       const _her = typeof _convoName === "function" ? _convoName(pid) : NPCS[pid].name.toLowerCase();
       const _onArm = G.party && G.party.ids && G.party.ids.includes(pid);
@@ -15239,7 +15345,9 @@ function doCommand(input) {
             if (who) {
               const what = fm[2].replace(/[.!?]+$/, "").replace(/\bher\b/g, "my").replace(/\bhis\b/g, "my").replace(/\byour\b/g, "my")
                 .replace(/\b(brother|sister|son|daughter|mother|mama|papa|father|grandmother|grandma|baby|kid)s\b/g, "$1's");   // the parser ate the apostrophe
-              _say(_fmt(_pickVary(_GIVE_FOR, "givefor"), { n: NPCS[who].name, what }), "dim");
+              _say(_fmt(_pickVary(_GIVE_FOR, "givefor"), { n: NPCS[who].name, what, What: what.charAt(0).toUpperCase() + what.slice(1) }), "dim");
+              const _ga = (fm[1].match(/\d[\d,]*/) || ["0"])[0].replace(/,/g, "");
+              if (typeof _giftNote === "function") _giftNote(who, { kind: "give", amt: parseInt(_ga, 10) || 0, why: what });   // "for my taxi home", kept (Bernard)
             }
           }
           return;
@@ -15663,6 +15771,8 @@ function doCommand(input) {
           const who = _findNpc(tw.slice(0, k).join(" "));
           if (who && _npcsHere().includes(who)) {
             const rest = tw.slice(k).join(" ").replace(/^(that|about|her|him)\s+/, "").trim();
+            // what you tell her about yourself is KEPT, not asked back as a subject ("tell nina my name is bernard")
+            if (rest && NPC_ROLES[who] === "hostess" && typeof _doTell === "function") { _convoStart(who); if (_doTell(rest)) { _tick(); return; } }
             if (rest) { _doTalk(tw.slice(0, k).join(" "), rest); return; }
           }
         }

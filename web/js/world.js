@@ -20153,6 +20153,12 @@ const _R78 = {
       short: "\"First time I see you. I remember who eats.\"" },
   ],
   sweet_tamarind_alisa: [
+    // a man she knows is not the one who only watched (Bernard, round 88: two drinks, a tip, her number, and every night
+    // after "you watch, you don't talk to me")
+    { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+      when: (st, G) => (G.metDay && G.metDay.sweet_tamarind_alisa != null && G.metDay.sweet_tamarind_alisa < G.day) || ((G.soc && G.soc.drinks && G.soc.drinks.sweet_tamarind_alisa) || 0) >= 2,
+      text: "\"Sawatdee kha.\" The same small wai, but this time she moves her bag off the stool beside her before you reach it. \"You come back. Good. I like a man who talk — the watching ones I never know what they want.\" She settles. \"So. Tell me something today.\"",
+      short: "\"You came back. Sit. Tell me something today.\"" },
     { th: "สวัสดีค่ะ", rom: "sawatdee kha",
       text: "\"Sawatdee kha.\" A small wai, a real one, and a look that has already placed you. \"You sit in my bar before — you watch, you don't talk to me. I see you.\" She considers you kindly. \"Now you talk. Good. I don't grab. The young girls grab — they have rent. I have regulars, and regulars are slower.\"",
       short: "\"You sat here before and didn't talk. Now you talk. Good.\"" },

@@ -944,7 +944,10 @@ const _TOLD_RX = [
   ["job", /^i (?:work as an?|work in) ([a-z ]{3,30})$/, m => m[1]],
   ["home", /^i'?m from ([a-z' ]{3,30})$/, m => m[1]],
   ["name", /^(?:my name is|my name'?s|call me|i'?m called) ([a-z' ]{2,20})$/, m => m[1]],
+  // "I'm Bernard" — one word that is a name and not a state (Bernard, round 88: "i'm bernard" was not my story)
+  ["name", /^(?:i'?m|i am|it'?s|this is) ([a-z']{2,15})$/, m => _TOLD_NOT_NAME.test(m[1]) ? "" : m[1]],
 ];
+const _TOLD_NOT_NAME = /^(tired|fine|ok|okay|good|great|drunk|here|back|sorry|happy|sad|bored|lost|hungry|thirsty|broke|rich|poor|english|british|american|australian|german|irish|scottish|welsh|retired|single|married|divorced|widowed|separated|new|old|young|done|ready|leaving|going|off|home|alone|free|busy|full|sober|cold|hot|sick|ill|well|shy|serious|joking|kidding|curious|confused|listening|waiting|staying|working|interested|sure|right|wrong|late|early|him|her|you|me|it|that|this|what|who|nobody|somebody|everyone)$/;
 const _TOLD_REACT = {
   status: { divorced: ["\"Divorced. Ah.\" She doesn't make a face. \"Many man here same. Is why you come, maybe. Is okay.\"", "\"Divorce?\" She pats your hand once. \"Then you are free man. Free man buy drink, hahaha.\""],
     married: ["\"Married.\" She looks at your hand, then your face. \"Then I am only your friend, na. Friend is good also.\""],
@@ -954,9 +957,11 @@ const _TOLD_REACT = {
   home: ["\"{X}? I don't know it.\" She doesn't pretend. \"Is far? Is cold? Everybody's home is cold.\"", "\"{X}.\" She files it away. \"Next time you tell me about it. Tonight you tell me about you.\""],
   name: ["\"{X}.\" She says it back, twice. \"Okay. Now I know.\""],
 };
-function _doTell(lower) {
-  const pid = typeof _convoActive === "function" && _convoActive();
-  if (!pid || NPC_ROLES[pid] !== "hostess" || !_npcsHere().includes(pid)) return false;
+function _doTell(lower, to) {
+  const pid = to || (typeof _convoActive === "function" && _convoActive());
+  // any woman you are talking to, not only a hostess: Nina at Sandy Toes never heard his name (Bernard, round 88) — the
+  // reactions are hers ("she"), so a man on the rail still gets the old path
+  if (!pid || !NPCS[pid] || !_npcsHere().includes(pid) || !(NPC_ROLES[pid] === "hostess" || (typeof _pronoun === "function" && _pronoun(pid) === "she" && !NPCS[pid].patron))) return false;
   const l = lower.replace(/[!.,?]+$/, "").trim();
   for (const [key, rx, val] of _TOLD_RX) {
     const m = l.match(rx); if (!m) continue;
@@ -4206,7 +4211,7 @@ const _OTHER_LEDGER = {
       `explaining a system she lives inside, to a man who has only ever ` +
       `seen it from the customer's side. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
     (n) => (_isGogo() ? `${n} makes you look at her drink when the waitress sets it down, because she tells you to. Ice to the top, ` +
-      `a short pour, tonic over it until the colour went.` : `${n} makes you watch the barman build her drink, because she tells you to. Ice to the top, ` +
+      `a short pour, tonic over it until the colour went.` : `${n} makes you watch ${typeof _hasBarman === "function" && !_hasBarman() ? "the cashier" : "the barman"} build her drink, because she tells you to. Ice to the top, ` +   // no barman at the Sweet Tamarind (Bernard, round 88)
       `a short pour, tonic over it until the colour goes.`) + ` "Lady drink," she says, and turns the glass ` +
       `so the ice knocks. "Weak one. Must be." She has eight of these in her if the night goes well, ` +
       `and a girl who cannot take eight is a girl who goes home early. It costs ฿${_num(_ladyPrice())}, ` +
@@ -5167,7 +5172,9 @@ function _morningLedger() {
   if (machine > 0) _via.push(`\u0e3f${_num(machine)} came out of the machine` + (fees > 0 ? `, \u0e3f${_num(fees)} of that in fees` : ""));
   if (nontOutN > 0) _via.push(`\u0e3f${_num(nontOutN)} through Nont, \u0e3f${_num(nontCutN)} his cut`);
   else if (nontCutN > 0) _via.push(`Nont's \u0e3f${_num(nontCutN)} cut, the rest held in his account overnight`);
-  const via = _via.length ? ` (across pocket and account \u2014 ${_via.join("; ")})` : "";
+  // the send is its own line below, and the headline must say it is not in it (Bernard, round 88: "I thought ฿1,300 was missing")
+  const _sentApart = typeof sentNight !== "undefined" && sentNight > 0 ? ", not counting what you sent" : "";
+  const via = _via.length ? ` (across pocket and account${_sentApart} \u2014 ${_via.join("; ")})` : _sentApart ? ` (${_sentApart.slice(2)})` : "";
   // The safe tag goes on the ledger that actually netted the money, which is the
   // NEXT ledger after it landed — keyed on the day it fired a morning late for a
   // man who slept the wallet night in his own room, because the safe pays at that
@@ -5205,7 +5212,13 @@ function _morningLedger() {
   // a SEND leaves the account, which "pocket and account together" has to show — ฿1,500 to
   // a woman was invisible on the one figure a man keeping books reads (Marcus, round 61)
   const sentN = (G.sentTotal || 0) - (b.sentB != null ? b.sentB : (G.sentTotal || 0));
-  if (sentN > 0) bits.push("\u0e3f" + _num(sentN) + " sent from the account through the banking app");
+  // …to whom, and what went into whose hand (Bernard, round 88: "the ledger never itemises who a send went to, or the tips")
+  const _nightGifts = kinds => Object.entries(G.gifts || {}).flatMap(([id, l]) => (Array.isArray(l) ? l : []).filter(g => kinds.includes(g.kind) && g.day === G.day - 1 && g.amt > 0).map(g => ({ id, amt: g.amt })));
+  const _names = list => { const m = {}; for (const x of list) m[x.id] = (m[x.id] || 0) + x.amt; return Object.entries(m).filter(([id]) => NPCS[id]).map(([id, a]) => NPCS[id].name + " \u0e3f" + _num(a)).join(", "); };
+  const _sends = _nightGifts(["send"]), _sendSum = _sends.reduce((a, x) => a + x.amt, 0);
+  if (sentN > 0) bits.push("\u0e3f" + _num(sentN) + " sent from the account through the banking app" + (_sendSum === sentN && _sends.length ? ` (${_names(_sends)})` : ""));
+  const _hand = _nightGifts(["tip", "give"]), _handSum = _hand.reduce((a, x) => a + x.amt, 0);
+  if (_handSum > 0) bits.push("\u0e3f" + _num(_handSum) + " of it into the women's hands (" + _names(_hand) + ")");
   // "down ฿111 · ฿2,111 of it lifted" — a bigger theft than the night's spend is not "of it" (Des, round 41)
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + (spent > 0 && G.roughLost <= spent ? " of it lifted while you were out" : " lifted while you were out"));
   const _metNow = Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length;

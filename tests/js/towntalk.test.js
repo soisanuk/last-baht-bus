@@ -72,7 +72,7 @@ test("last night is a witness question: the bar you sat in saw you and who you l
   G.room = "stinky_bar"; doCommand("talk to bert"); assert.match(ask("bert", "last night"), /weren't in here|Not this room|somebody else's/);
   G.room = tanRoom(); doCommand("talk to tan"); assert.match(ask("tan", "last night"), /went home with Lek|Lek went home with you/);
   G.lastNightWas.reason = "blackout"; G.lastNightWas.endRoom = "beach_rd_c"; assert.match(ask("tan", "yesterday"), /did not make it home/);
-  G.lastNightWas.reason = "sleep"; assert.match(ask("tan", "last night"), /own feet|own bed/);
+  G.lastNightWas.reason = "sleep"; assert.match(ask("tan", "last night"), /own feet|own bed|to bed|guard at your door/);   // the pool deepened in round 87
   G.lastNightWas.day = G.day - 3; assert.equal(_townTalk("tan", "last night"), false, "a snapshot older than last night is not last night");
 });
 test("the woman who drove remembers the stop you name, and denies one you did not make", () => {

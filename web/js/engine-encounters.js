@@ -399,13 +399,13 @@ function _salengBuy(input) {
       // what she was actually given, so a bond node can thank you for a REAL
       // gift. Lek thanked a man for sandals he had never bought her, because
       // her node is bond-gated and nothing recorded the giving (Geraint, round 48).
-      (G.giftLog = G.giftLog || {})[forId] = { item: String(item), cart: _salengCartItem(), day: G.day };   // the morning after she can still name it (Aisling, round 87)
+      if (typeof _giftNote === "function") _giftNote(forId, { kind: "item", item: String(item), cart: _salengCartItem() });   // the morning after she can still name it (Aisling, round 87)
       (G.soc.gifted = G.soc.gifted || {})[forId] = [...new Set([...(Array.isArray(G.soc.gifted[forId]) ? G.soc.gifted[forId] : []), _salengCartItem()])];   // the saleng's book, not the sponsor-flip baht (G.soc.given)
       const name = NPCS[forId].name;
       _addBond(forId, 1);
       const REACTIONS = {
         "moo ping": `${name} takes the skewers with both hands and wais before she's even ` +
-          `bitten in. "Aoy, so sweet!" She eats standing up and immediately tries to feed you one.`,
+          `bitten in. "Aroy mak! So sweet!" She eats standing up and immediately tries to feed you one.`,
         "noodles": `${name} cradles the bowl like it solved something. ` +
           `"Same same my mum cook." She means it. That lands.`,
         "sandals": `${name} sits on the nearest stool and swaps shoes without ceremony — ` +
@@ -598,7 +598,7 @@ const _ENC = {
       const _to = _forId && _npcsHere().includes(_forId) ? _forId : id;
       if (_to && _npcsHere && _npcsHere().includes(_to)) {
         G.itemLoc.rose = "inventory";
-        _doGive("rose", NPCS[_to].name.toLowerCase());
+        _doGive("rose", NPCS[_to].name.toLowerCase());   // _doGive files it in her gift book
       } else {
         G.itemLoc.rose = "inventory";
         _say("(You're holding the rose — GIVE ROSE TO <someone> when the moment's right.)", "dim");

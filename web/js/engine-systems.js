@@ -4730,8 +4730,19 @@ function _doSendMoney(arg) {
   if (amt >= GIFT_BIG && NPC_ROLES[id] && NPCS[id].type !== "sponsor" && !_dripping && _knownTier(id) < 2) {
     G.battery = Math.max(0, G.battery - 1);
     if (_hh(String(id) + ":krengjai", 113) % 2 === 0) {
+      if (typeof _giftNote === "function") _giftNote(id, { kind: "sendback", amt });
+      // a woman who knows your face does not write "i not know you" (Bernard, round 88: Alisa, five nights in), and the
+      // lines are dealt town-wide, not one per woman
+      const _gb = _knownTier(id) >= 1 ? _GIFT_BACK_FACE : _GIFT_BACK;
+      const _line = typeof _pickTownLine === "function" ? _pickTownLine(_gb, "giftback:" + (_gb === _GIFT_BACK ? "0" : "1")) : _gb[0];
+      if (_npcsHere().includes(id)) {
+        // …and she is on the next stool: she says it, she does not text it (Bernard: three women texted from beside him)
+        _say(_fmt("฿{a} goes out. {n}'s phone buzzes in her hand; she looks at it, looks at you, and sends it straight back across the bar before you've put yours down.", { a: amt, n: NPCS[id].name }));
+        _say(`“${_line.replace(/\s*[😳🙏😌]+/gu, "").trim()}”`);
+        return;
+      }
       _say(_fmt("฿{a} goes out — and comes back inside the minute, with a text.", { a: amt }));
-      _pushMsg(id, _pickVary(_GIFT_BACK, "giftback:" + id));
+      _pushMsg(id, _line);
       _say("(📱 CHECK MESSAGES.)", "dim");
       return;
     }
@@ -4741,7 +4752,9 @@ function _doSendMoney(arg) {
     const o = (G.owed = G.owed || {})[id];
     G.owed[id] = { amt: (o ? o.amt : 0) + amt, day: G.day };
     _addBond(id, 1);
-    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+    if (typeof _giftNote === "function") _giftNote(id, { kind: "send", amt });
+    _say(_npcsHere().includes(id) ? _fmt("฿{a}, phone to phone across the width of a bar. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) })
+      : _fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
     _pushMsg(id, _pickVary(_GIFT_ACCOUNT, "giftacct:" + id));
     _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
     return;
@@ -4753,6 +4766,7 @@ function _doSendMoney(arg) {
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
   _addBond(id, bump);
+  if (typeof _giftNote === "function") _giftNote(id, { kind: "send", amt });   // she remembers the screen (Bernard, round 88)
   const _care = _careSent(id, amt);         // her night's money, understood (theme 1)
   const _ask = _askPaid(id, amt);           // an ask on the books, answered (theme 4)
   if (_npcsHere().includes(id))
@@ -4811,7 +4825,7 @@ function _doSendMoney(arg) {
   if (amt >= 500) (G.soc.freeNight = G.soc.freeNight || {})[_npcRoom(id)] = G.day;   // she said tonight is on her; the house does not nurse you (Piet, round 62)
   (G.givenEver = G.givenEver || {})[id] = (G.givenEver[id] || 0) + amt;   // permanent — she remembers it in person
   _pushMsg(id, amt >= 500 ? _pickVary(["🙏🙏🙏 you TOO good to me. tonight I take care YOU",
-      "😭😭 why you so good?? i no forget this, promise", "OMG 🙏💕 you save me. tonight you no pay for nothing, i talk to mama"], "sendbig:" + id) :
+      "😭😭 why you so good?? i no forget this, promise", "OMG 🙏💕 you save me. i tell mama you are good man. she not believe me 555"], "sendbig:" + id) :
     amt >= 100 ? _pickVary(["khop khun kha!! 💕 you number one", "thank you thank you 🙏 you sweet man",
       "💕💕 you good heart. i think of you tonight na", "khop khun mak mak 😘 i buy you beer when you come"], "sendmid:" + id) :
     _pickVary(["55555 cheap Charlie... but sweet 💕", "5555 what i can buy with this?? 😜 but thank you na",
@@ -5778,10 +5792,19 @@ function _maybeIncomingText() {
 
 // a stranger's big money, sent back — hers to refuse, and the refusal is a kindness she
 // cannot say out loud (Tinglish, hers)
+// …and from a woman who knows your face by now: not "i not know you" (Bernard, round 88)
+const _GIFT_BACK_FACE = [
+  "no no 😳 too much na. you know me little bit, i know you little bit. little bit is not this much money. i send back. come sit, buy me one drink, that is right size",
+  "i send back na 🙏 not angry. you are nice man. but big money make everything strange. i like not strange. see you tonight?",
+  "too much!! 😳 i give back. mama see money like this, she think something. sit with me, talk with me. that one i take, free 555",
+  "🙏 thank you but no. you come back to my bar every night — that is the present already. money i send back",
+];
 const _GIFT_BACK = [
   "no no na 😳 too much. i not know you, you not know me. big money like this i have to REMEMBER. i send back. come drink with me, that one i take 555",
   "😳😳 why?? i send back na. you keep. you want give me something, give me one lady drink and your real name 🙏",
   "cannot take, sorry na 🙏 my mama say money from man you don't know is not money, is a rope. i send you back. no angry na?",
+  "😳 who are you?? 555 ok i know who. but no. i send back. stranger money is bad luck in my village",
+  "no thank you na 🙏 i give back already. if you want help me, come drink, sit, be polite. that is enough",
 ];
 // …and taken — by a woman who writes it down (Tinglish, hers)
 const _GIFT_ACCOUNT = [
@@ -6064,7 +6087,10 @@ function _textTalk(npc, topic) {
   // (Lothar, round 67: "that one, I cannot help you with" from the woman who texted it)
   if (!/\b(texts?|messages?|sms|what (you|she) (sent|wrote|said)|your (text|message)|photo you sent|the (selfie|photo|picture|pic))\b/.test(t)) {
     const _names = _textTalk._names || (_textTalk._names = new Set(Object.values(NPCS).map(n => String(n.name || "").toLowerCase())));   // her own name is not a subject
-    const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w) && !_names.has(w)).map(_stem);
+    // her family, her home, her plan are HER subjects, answered by her own nodes — not by the medicine text that
+    // happened to say "mama" (Bernard, round 88: "ask jiab about her family" got the ฿400 ask back)
+    const _own = /^(famil|mama|mum|mom|mother|papa|dad|father|home|plan|kid|son|daughter|sister|brother|villag|parent|grandm)/;
+    const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w) && !_names.has(w) && !_own.test(w)).map(_stem);
     if (!words.length) return false;
     const _body = x => x.text || x.photo || "";   // a photo's caption is what she said too: Cream's labels were a selfie's caption (Gordie, round 72)
     const hit = inbox.find(x => _body(x) && G.day - (x.day || G.day) <= 7 && String(_body(x)).toLowerCase().split(/[^a-z0-9]+/).map(_stem).some(w => w.length >= 3 && words.includes(w)));

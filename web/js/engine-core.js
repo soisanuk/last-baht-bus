@@ -331,7 +331,7 @@ function newGame() {
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
     streetLog: [],       // what happened on the pavement, and who was there to see it (_streetSaw — round 87)
-    giftLog: {},         // the last thing you bought her off a cart, and the day: she remembers it (round 87)
+    gifts: {},           // what you gave each woman, thing or baht, three days back: she remembers it (_giftNote — rounds 87–88)
     rideLog: {},         // night rides per girl: {count, day, stops, great} — she remembers, and so does "late"
     lastRide: null,      // {id, day, stops} — the coda knows she has a bike
     selfBfHold: 0,       // the self-barfine offer stands for a command or two
@@ -1594,7 +1594,7 @@ function _convoStart(id) {
     // and the question was never put again — while the whole consistency system
     // hangs on answering it (persona report B#15, 2026-08-23). Remember it, and
     // re-ask on the next conversation with that person.
-    (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q || "" };
+    (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q || "", day: G.day };
     G.convoQ = null;
     _say(`(${who}'s question will keep — you've turned to ${_convoName(id)}, and ${_sheHe(_qid).s} will ask again.)`, "dim");   // "goes unanswered" read as a penalty for greeting the room (Margaret, round 78)
   }
@@ -1604,7 +1604,8 @@ function _convoStart(id) {
   const lapsed = G.convoLapsed && G.convoLapsed[id];
   if (lapsed && !G.convoQ) {
     delete G.convoLapsed[id];
-    if (lapsed.q && !lapsed.dodged) {
+    // the same night only: "First time this bar?" five nights and three drinks later (Bernard, round 88)
+    if (lapsed.q && !lapsed.dodged && (lapsed.day == null || lapsed.day === G.day)) {
       _say(`${_convoName(id)} comes back to it, because ${_sheHe(id).s} was actually asking.`, "dim");
       _say(lapsed.q);
       G.convoQ = { id, key: lapsed.key, q: lapsed.q };
@@ -1679,7 +1680,7 @@ function _convoCard() {
   return { id, name: n.name, line, tier, cold, asking: !!(G.convoQ && G.convoQ.id === id) };
 }
 function _convoDrop(dodged) {
-  if (G.convoQ && G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, dodged: !!dodged };
+  if (G.convoQ && G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, dodged: !!dodged, day: G.day };
   G.convoQ = null;
 }
 // she/he/they for a character the engine is ABOUT to pronoun — same logic the
@@ -1699,7 +1700,7 @@ function _convoEnd(quiet) {
   // an unanswered question survives the interruption: she comes back to it
   // next time, same as when you turn to somebody else mid-ask
   if (G.convoQ && G.convoQ.q) {
-    (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q };
+    (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, day: G.day };
   }
   G.convo = null;
   G.convoQ = null;
@@ -2453,19 +2454,19 @@ const _DOG_TALK_TH = [
   n => `“Him?” ${n} laughs. “He come every night now, I think. I save him the chicken bone.” She crouches to Sai Krok's level. “Na, handsome? You like me more than him.”`,
   n => `${n} says something to Sai Krok in Thai, soft, the way you talk to a child or a grandfather. “I tell him be good boy for you,” she says. “He say ok.”`,
   n => `“Your dog?” ${n} reaches down and Sai Krok permits one ear to be scratched, no more. “He come in, he sit by door, he watch the street for us. Better than security, cheaper.”`,
-  n => `${n} wrinkles her nose. “He smell like the soi, na. Same same everybody here at four o'clock.” She feeds him a corner of her toast anyway.`,
+  n => `${n} wrinkles her nose at Sai Krok. “He smell like the soi, na. Same same everybody here at four o'clock.” She feeds him a corner of her toast anyway.`,
   n => `“Sai Krok!” ${n} says it like a greeting to a regular. “He know which bar give food. He come here first, then he come you. Don't be jealous.”`,
-  n => `${n} looks at the dog for a long moment. “My papa have dog like this, in the village. Same ear. He wait at the gate every day for the school bus.” She doesn't finish the story and doesn't need to.`,
+  n => `${n} looks at Sai Krok for a long moment. “My papa have dog like this, in the village. Same ear. He wait at the gate every day for the school bus.” She doesn't finish the story and doesn't need to.`,
 ];
 const _DOG_TALK_TH_HE = [
   n => `${n} looks down at Sai Krok, then at you. “Soi dog. The best kind — already he know everything. He choose you, not the other way.”`,
   n => `${n} says something short to Sai Krok in Thai, the way one old acquaintance greets another. “I tell him look after you,” he says. “He say he already does.”`,
 ];
 const _DOG_TALK_EN = [
-  n => `“Good-looking dog, that,” ${n} says. “Soi dogs make the best ones. They've already survived the worst of it before you turn up — anything after that is a bonus to them.”`,
+  n => `“Good-looking dog, that,” ${n} says, with a nod at Sai Krok. “Soi dogs make the best ones. They've already survived the worst of it before you turn up — anything after that is a bonus to them.”`,
   n => `${n} glances down at Sai Krok. “He picked you, didn't he. They do that. You don't get a say, and you wouldn't want one.”`,
-  n => `“He's been doing the rounds,” ${n} says. “Comes in, checks the floor, checks the door, leaves. Better manners than half the customers.”`,
-  n => `${n} looks down at him. “Feed him rice, not the chicken bones the girls slip him. And don't let him near the Sukhumvit side after dark.”`,
+  n => `“Sai Krok's been doing the rounds,” ${n} says. “Comes in, checks the floor, checks the door, leaves. Better manners than half the customers.”`,
+  n => `${n} looks down at Sai Krok. “Feed him rice, not the chicken bones the girls slip him. And don't let him near the Sukhumvit side after dark.”`,
 ];
 function _dogTalk(npcId) {
   if (npcId === "daeng" && _flag("shamrockVisited")) {
