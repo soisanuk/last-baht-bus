@@ -399,6 +399,7 @@ function _salengBuy(input) {
       // what she was actually given, so a bond node can thank you for a REAL
       // gift. Lek thanked a man for sandals he had never bought her, because
       // her node is bond-gated and nothing recorded the giving (Geraint, round 48).
+      (G.giftLog = G.giftLog || {})[forId] = { item: String(item), cart: _salengCartItem(), day: G.day };   // the morning after she can still name it (Aisling, round 87)
       (G.soc.gifted = G.soc.gifted || {})[forId] = [...new Set([...(Array.isArray(G.soc.gifted[forId]) ? G.soc.gifted[forId] : []), _salengCartItem()])];   // the saleng's book, not the sponsor-flip baht (G.soc.given)
       const name = NPCS[forId].name;
       _addBond(forId, 1);
@@ -421,8 +422,21 @@ function _salengBuy(input) {
         "fruit": `${name} peels the mango with a knife from her bag — fast, professional — ` +
           `and gives you the first slice. The bar gets the rest.`,
       };
+      // a second woman given the same thing does not get the first one's paragraph (Aisling, round 87: Ple and Jiab,
+      // back to back, word for word) — the cart's book keeps who got which reaction tonight
+      const _AGAIN = {
+        "lingerie": [`${name} holds the bag against her chest and looks at you over it, deciding something, then decides it in your favour and is gone to the back. The girls who already got theirs give her a cheer when she comes out.`,
+          `${name} peeks in the bag, shuts it fast, laughs and slaps your arm. "Naughty, na!" It goes straight into her locker with a speed that suggests it will be worn.`],
+        "sandals": [`${name} kicks off the old pair under the stool and tries the new ones without sitting down, one hand on your shoulder for balance. "Fit!" she says, as though it were your doing.`],
+        "heels": [`${name} puts the heels on and walks the length of the bar and back, very seriously, a catwalk four metres long. The girls score her. She scores herself higher.`],
+        "moo ping": [`${name} eats the first skewer in three bites and saves the second for the girl beside her, which is how you find out who her friend is.`],
+        "noodles": [`${name} sits at the end of the bar with the bowl and eats with her whole attention, and only afterwards looks up and says thank you properly, with a wai.`],
+      };
+      const _given = (G.soc.giftLines = G.soc.giftLines || {});
+      const _react = _given[item] && _AGAIN[item] ? _AGAIN[item][(_given[item] - 1) % _AGAIN[item].length] : REACTIONS[item];
+      _given[item] = (_given[item] || 0) + 1;
       _say(`฿${_num(price)} for the ${item}. ` +
-        (REACTIONS[item] || `${name} takes it with a wai. "Khob khun kha~"`) +
+        (_react || `${name} takes it with a wai. "Khob khun kha~"`) +
         ` (฿${_num(G.money)} left.)`, "win");
       _addHappy(1);
       _maybeSelfBarfine(forId);
@@ -768,6 +782,9 @@ const _ENC = {
   },
 
   brit(input) {
+    // the pavement saw him (Aisling, round 87: in front of Tan, the piwin and an open front, and nobody could say so)
+    if (typeof _streetSaw === "function") _streetSaw("drunk", { how: /sorry|apolog|calm|mate|friend|wai|easy|misunderstand|mistake|my bad|buy you/.test(input) ? "calm"
+      : /fight|punch|hit|swing|shove|push|square|come on|idiot|wanker|muppet yourself/.test(input) ? "fight" : "blank" });
     if (/sorry|apolog|calm|mate|friend|wai|easy|misunderstand|mistake|my bad|buy you/.test(input)) {
       G.money += 50;
       _say("“…Nah. Nah, you’re alright, you’re alright.” The rage evaporates as " +
@@ -896,6 +913,7 @@ const _ENC = {
       // lands on "Which one?" (Gordon, round 37). Pure hash, no dice.
       const fronts = (_room().venues || []).filter(v => ROOMS[v] && ROOMS[v].barType && !(typeof _closedNow === "function" && _closedNow(v)));
       const bar = fronts.length ? fronts[_hh(G.room + ":" + G.day, 5) % fronts.length] : null;
+      if (bar && typeof _streetSaw === "function") _streetSaw("noodle", { bar });   // her own bar knows its noodle girl (round 87)
       let line = _pickVary(_NOODLE_YES, "noodleyes");
       if (bar) line = line.replace(/\(ENTER[^)]*\)/, `(ENTER ${_barName(bar).toUpperCase()} to follow it through — or drift off; the soi forgives fast.)`);
       _say(line);

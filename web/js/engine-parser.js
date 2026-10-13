@@ -2084,7 +2084,7 @@ const _READ_NOUNS = {
   tiki: ["tiki head", "the tiki", "head", "red bulb"],
   leis: ["lei", "flower leis", "plastic flowers", "garlands"],
   spots: ["spotted stools", "the spots", "ladybird stools", "painted stools", "ashtrays", "ashtray"],
-  buyer: ["man in the good shirt", "good shirt", "clipboard", "man with the clipboard", "folder man", "the buyer", "painters", "ladder", "man with the folder"],
+  buyer: ["man in the good shirt", "good shirt", "man at the table", "kerb table", "man drinking soda", "soda man", "man", "clipboard", "man with the clipboard", "folder man", "the buyer", "painters", "ladder", "man with the folder"],
   paint: ["new paint", "the paint", "signs", "printed board", "price board", "printed boards", "hand-me-down signs", "old signs"],
   bars: ["the bars", "fronts", "the fronts", "frontages", "bar fronts", "open fronts", "doorways", "all the bars"],
   girls: ["the girls", "ladies", "the ladies", "women", "the women", "pullers", "barkers", "sequins"],
@@ -4042,7 +4042,11 @@ const _SCENERY = [
 
   // Prose only — reads G.rain / the bake's _wxRainy, consumes no dice, moves
   // nothing (the weather->mechanics door stays the one sanctioned downpour path).
-  { key: "rain", m: /\brain\b|\bdownpour\b|\bstorm\b/, fn: () => {
+  { key: "rain", m: /\brain\b|\bdownpour\b|\bstorm\b|\bdrizzle\b/, fn: () => {
+    // a drizzle that printed in the last few minutes is still in the air (Aisling, round 87)
+    if (!(G.rain > 0) && G.drizzleTurn != null && G.turns - G.drizzleTurn <= 6) return "Barely rain — a fine " +
+      "warm drift you feel on your forearms more than see, until you look under a streetlight and there it is, " +
+      "hanging. Not enough to move anybody. Enough to make the pavement shine.";
     if (G.rain > 0) return "It is not falling so much as arriving — a white roar off the " +
       "gulf that has turned the street into a river with lighting. The awnings are " +
       "drumming, the girls are shrieking happily under them, and nobody sane is walking " +
@@ -4601,6 +4605,10 @@ function _doTalkCore(arg, topic) {
   if (topic && typeof _atOwnBar === "function" && _atOwnBar() && G.bar && (G.bar.calls || []).some(c => G.day - c.day <= 2 && _CALL_K[c.id] && _CALL_K[c.id].test(String(topic).toLowerCase())) &&
       (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].patron) && _townTalk(npc, topic)) return;
   if (topic && !_sourOwn && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // Lamai's crates, Cake's fan: the text she sent (Lothar, round 67) — not her fond text, after she has seen it (Ossie, round 70)
+  // what happened on the pavement, from whoever could have seen it — before LAST NIGHT takes "the rain last night"
+  // (round 87). Only when it happened, and an authored node on the same word still wins.
+  if (topic && typeof _streetTalk === "function" && !(NPCS[npc].dialogue || []).some(x => x.topic && String(x.topic).split("|").some(k => k.length > 2 && new RegExp("\\b" + k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(String(topic).toLowerCase()))) &&
+      _streetTalk(npc, topic)) { _questOffer(npc); return; }
   // a regular at the bar you own greets the guv'nor, not a new face (Piet, round 62: "New face. You here long?")
   if (!topic && NPCS[npc].patron && typeof _atOwnBar === "function" && _atOwnBar() && !(G.talked && G.talked[npc])) {   // not _met(): this function has its own _met further down
     _say(_pickVary(_RAIL_GUVNOR, "railguv")(NPCS[npc].name));
@@ -6839,7 +6847,7 @@ const _TOWN = {
       "{n} grins. \"The carts! Moo ping, sandals, the pretty things. Come when they come, na. {c}\"",
       "\"You wait, you see.\" {n} nods at the window. \"Four kind of cart. Girls buy, customer buy for girl. {c}\""],
     house: ["\"The three-wheelers — food, shoes, lingerie, snacks. One per bar per night, on no timetable anyone has found.\" {n} shrugs. \"{c}\"",
-      "{n} answers like a man who has counted them. \"Four carts work the sois. They park, the girls swarm, they move on. {c}\"",
+      "{n} answers like somebody who has counted them. \"Four carts work the sois. They park, the girls swarm, they move on. {c}\"",
       "\"Saleng. Four kinds. When it's here you'll know — the whole floor goes to the window.\" {n} adds: \"{c}\""],
     punter: ["\"The carts? Food, shoes, knickers, crisps.\" {n} shrugs. \"They come when they come. {c}\"",
       "{n} laughs. \"Buy a girl sandals off the cart and you're a regular for a week. {c}\"",
@@ -7004,7 +7012,10 @@ const _LASTNIGHT_TAN_HOW = (w) => {
     case "barfine": return _pickVary([`You went home with ${who}${from}. The soi noticed; it notices everything that leaves on a bike.`,
       `${who} went home with you${from}. I did not see it. Three people told me before breakfast.`], "tanln:bf");
     case "sleep": return _pickVary(["You went home on your own feet. In this town that is a result.",
-      "You slept in your own bed, alone, before the sky changed. Most men here cannot say that twice in a week."], "tanln:sleep");
+      "You slept in your own bed, alone, before the sky changed. Most men here cannot say that twice in a week.",
+      "Home, and early enough that the guard at your door had not yet changed. I hear about the other kind of night; this one nobody mentioned.",
+      "Nothing to report, which in this town is the report. You went to bed.",
+      "Your own bed, your own key, your own money in the morning. I have watched men try for a year to manage that."], "tanln:sleep");   // seven nights in a week (Aisling, round 87)
     case "allnighter": return _pickVary(["You were still standing when the sky went grey over Sukhumvit. A big night. Your body will send the bill this evening.",
       "You saw the monks go past. That means you did not go home. A big night, and today you will pay for it in the body, not the pocket."], "tanln:all");
     case "sunrise": return "You went to watch the sun come up behind the town. The men who do that on purpose are the ones who last here.";
@@ -7038,6 +7049,132 @@ const _ARR_LIST_HOUSE = [
 const _mamaLabel = n => /^mama\b/i.test(n) ? n : "Mama " + n;   // "Mama Mama Yai weighs it" (Marguerite, round 67)
 // the words for each shift call the floor remembers (round 73; "the fight" added in round 76)
 const _CALL_K = { merit: /\b(monks?|merit|ceremony|temple|tam ?boon|blessing)\b/, tab: /\b(tab|slate|docket)\b/, early: /\b(early bus|her bus|\w+s? bus|the bus|sent home|go home early|went home|early)\b/, round: /\b(the round|round on the house|flat hour|free round|free drinks)\b/, turning: /\b(the man|that man|the punter|the drunk|turned|thrown out|put out|threw out|security|fight|the fight|trouble|the trouble)\b/ };
+// THE STREET'S EYES (Aisling, round 87, a night-desk sub who made one thing happen on the pavement each night and
+// rang every source the next evening: "a town with no eyes, not a town that lies"). Five downpours in six nights and
+// nobody on Soi 6 could discuss rain; the piwin she sheltered with said "other stand, maybe"; the woman she bought
+// lingerie for could not name it; the noodle girl's own bar denied her. _streetSaw keeps what happened and who was
+// in the room; _streetTalk answers it from the people who could have seen it — rain is the whole town's weather,
+// a drunk is the pavement's and the open fronts on it, the noodle girl is her own bar's, a gift is hers.
+function _streetSaw(kind, extra) {
+  const log = (G.streetLog = Array.isArray(G.streetLog) ? G.streetLog : []);
+  log.push(Object.assign({ kind, room: G.room, day: G.day, turn: G.nightTurn,
+    present: typeof _npcsHere === "function" ? _npcsHere().slice() : [], stand: !!(ROOMS[G.room] && ROOMS[G.room].motosai) }, extra || {}));
+  while (log.length > 24) log.shift();
+}
+function _streetEvent(kind) {
+  const log = Array.isArray(G.streetLog) ? G.streetLog : [];
+  for (let i = log.length - 1; i >= 0; i--) if (log[i].kind === kind && log[i].day >= G.day - 1) return log[i];
+  return null;
+}
+// could she have seen it: in the room, or behind an open front on the street it happened in
+function _sawIt(npc, ev) {
+  if ((ev.present || []).includes(npc)) return true;
+  const home = NPCS[npc] && (NPCS[npc].room || (NPCS[npc].bars || [])[0]);
+  if (!home) return false;
+  if (home === ev.room) return true;
+  const bt = ROOMS[home] && ROOMS[home].barType;
+  return !!bt && !["gogo", "gents"].includes(bt) && typeof _streetOf === "function" && _streetOf(home) === ev.room;
+}
+const _STREET_RAIN_RE = /\b(rain|rained|raining|rainy|downpour|storm|the wet|got wet|soaked|drenched)\b/;
+const _STREET_DRUNK_RE = /\b(drunk|muppet|shout\w*|the fight|angry man|loud man|big (?:man|lad|farang|bloke)|chang vest|sunburn\w*|that bloke)\b/;
+const _STREET_NOODLE_RE = /\bnoodles?\b|\bwho (?:brought|towed|took|caught) me\b/;
+const _GIFT_RE = { lingerie: /\b(lingerie|underwear|knickers|bra|the pretty things?)\b/, sandals: /\b(sandals?|flip ?flops?|shoes?)\b/,
+  heels: /\b(heels?|shoes?)\b/, "moo ping": /\b(moo ?ping|pork|skewers?)\b/, noodles: /\bnoodles?\b/ };
+function _streetTalk(npc, topic) {
+  if (!topic || !NPCS[npc]) return false;
+  const t = String(topic).toLowerCase();
+  const reg = typeof _hoursRegister === "function" ? _hoursRegister(npc) : "house";
+  const n = NPCS[npc].name, R = npc === "tan" ? "tan" : reg === "floor" ? "floor" : reg === "punter" ? "punter" : "house";
+  const when = ev => ev.day === G.day ? "tonight" : "last night", Cap = x => x.charAt(0).toUpperCase() + x.slice(1);
+  // a gift is hers: what you bought her off the cart, by its own name or as "the present"
+  const gift = G.giftLog && G.giftLog[npc];
+  if (gift && G.day - gift.day <= 3 && ((_GIFT_RE[gift.item] && _GIFT_RE[gift.item].test(t)) || /\b(gift|present|what i (?:bought|got) you|the cart|saleng)\b/.test(t))) {
+    const day = gift.day === G.day ? "tonight" : G.day - gift.day === 1 ? "last night" : "the other night";
+    const L = gift.item === "lingerie" ? [`"Shh!" ${n} laughs and puts one finger on your mouth. "${Cap(day)} you buy, now I wear. Only you know, na. Other girls know too — they see the bag."`,
+        `${n} goes pink and points at her own hip, very briefly. "Is on. You buy ${day}. Very nice, very expensive for you — cart man say ฿ — no, I not tell you, is gift."`]
+      : /sandals|heels/.test(gift.item) ? [`${n} puts a foot up on the rail to show you. "${Cap(day)} you buy — I wear every night now. Other girl jealous 555."`,
+        `"My ${gift.item}!" ${n} turns an ankle in the light. "${Cap(day)}. You remember? I remember. Old one in my bag, finish."`]
+      : [`${n} pats her stomach. "${Cap(day)} you feed me! Mama say you can come again 555."`,
+        `"The ${gift.item}?" ${n} grins. "${Cap(day)}, you buy, I eat standing up like buffalo. Very good. Thank you, na."`];
+    _say(_pickTownLine(L, "gift:" + gift.item));
+    return true;
+  }
+  const rain = _STREET_RAIN_RE.test(t) && _streetEvent("rain");
+  if (rain) {
+    const saw = _sawIt(npc, rain), at = typeof _clockStr === "function" ? _clockStr(rain.turn) : "", w = when(rain);
+    const where = ROOMS[rain.room] && ROOMS[rain.room].barType ? "in here" : "under the awnings";
+    const L = {
+      floor: saw ? [`"Rain? I see you! ${Cap(w)}, ${at} — you run ${where} like cat 555. Half hour, then stop like somebody turn off the tap."`,
+          `"${Cap(w)}! Big one. You stand ${where} with everybody, same same us. Nobody money, nobody go anywhere."`]
+        : [`"${Cap(w)}, rain come ${at}, big one. Everybody inside, no customer. Then stop, finish, like nothing."`,
+          `"Rain? ${Cap(w)}. October, every night same. Half hour, everybody wet, then dry. Why you ask — you get wet? 555"`],
+      house: saw ? [`"${Cap(w)}, about ${at}. You were ${where} with the rest of the street. Twenty minutes, then off like a tap — it always stops like that."`,
+          `"I watched you dive for it." ${n} almost smiles. "${Cap(w)}, ${at}. October does it every night and every night somebody's surprised."`]
+        : [`"It came down about ${at}, ${w}. The whole soi empties for twenty minutes and then pretends it didn't happen."`,
+          `"${Cap(w)}, ${at}." ${n} shrugs. "Wet season. It comes off the Gulf, it stops all at once, the girls wring their hair out and go back to work."`],
+      punter: saw ? [`"Saw you leg it, mate. About ${at} ${w} — came down like a bath emptying. I stayed dry, which is the whole point of a stool."`,
+          `"${Cap(w)}? I watched you get it." ${n} lifts the glass. "Twenty minutes and stopped like a tap. You learn to sit near the back."`]
+        : [`"About ${at}, ${w}. Bucketed down, then stopped. You get used to it, or you get a stool by the window."`,
+          `"Rained ${w}, didn't it? About ${at}. Always does in October. The trick is to be inside when it does."`],
+      tan: saw ? [`"${Cap(w)}, ${at}. We stood under the same awning." Tan says it as though it settles something. "You didn't run. Most farang run, and get wetter."`,
+          `"I was there." Tan almost smiles. "${Cap(w)}, ${at}. Twenty minutes. The street goes quiet in a way it doesn't for anything else — you noticed that, I think."`]
+        : [`"${Cap(w)}, about ${at}." Tan glances at the sky as if it owes him. "In this month it comes every night and nobody plans for it. That is the town."`,
+          `"It rained, ${w}. ${at}." Tan shrugs. "Rain is good for business only for the 7-Eleven and the piwins with a roof."`],
+    };
+    _say(_pickTownLine(L[R], "streetrain:" + R + (saw ? ":saw" : "")));
+    return true;
+  }
+  const drunk = _STREET_DRUNK_RE.test(t) && _streetEvent("drunk");
+  if (drunk && _sawIt(npc, drunk)) {
+    const w = when(drunk);
+    const how = { calm: { floor: "say sorry, he cry and hug you 555", house: "talked him down and he hugged you for it", punter: "talked him down — fair play, he hugged you" },
+      fight: { floor: "want fight — no good, tilac, piwin take him", house: "squared up, and the piwins had him off you before it was anything", punter: "squared up, which nobody on this street would advise" },
+      blank: { floor: "look at him like wall, he go away talking to lamp", house: "gave him nothing at all and he reeled off talking to a lamppost", punter: "gave him the blank stare and he went off apologising to a lamppost" } }[drunk.how || "blank"];
+    const L = {
+      floor: [`"The big farang, red like crab? I see! ${Cap(w)}. He shout, you ${how.floor}. Every week one, na."`,
+        `"Chang vest man!" ${n} laughs. "${Cap(w)} he think you spill his beer. You ${how.floor}."`],
+      house: [`"The sunburnt one in the vest? I watched it from the door, ${w}. You ${how.house}."`,
+        `"${Cap(w)}." ${n} nods at the pavement. "Big lad, very sure of himself, wrong about you. You ${how.house}. Every street has had him once."`],
+      tan: [`"I saw." Tan says nothing for a moment. "${Cap(w)}. You ${how.house}. The piwins would have had him either way — but you did not make them, and they noticed."`,
+        `"The man in the vest." Tan does not look impressed or unimpressed. "${Cap(w)}. You ${how.house}. He does this somewhere every week. Nobody here takes it personally, and you shouldn't."`],
+      punter: [`"The big lad in the Chang vest? Saw the whole thing, ${w}. You ${how.punter}."`,
+        `"That muppet?" ${n} snorts. "${Cap(w)}. You ${how.punter}. Seen him do it to three blokes this month."`],
+    };
+    _say(_pickTownLine(L[R], "streetdrunk:" + R));
+    return true;
+  }
+  const noodle = _STREET_NOODLE_RE.test(t) && _streetEvent("noodle");
+  if (noodle && noodle.bar && (NPCS[npc].room === noodle.bar || (NPCS[npc].bars || []).includes(noodle.bar)) && (NPC_ROLES[npc] || NPCS[npc].house || NPCS[npc].manager)) {
+    const L = {
+      floor: [`"Our noodle girl! She catch you, na?" ${n} laughs. "She get ฿20 from mama every man she bring. You good catch."`,
+        `"Noodle!" ${n} mimes the bop. "She work the street for us. ${Cap(when(noodle))} she bring you, she very proud. Thank you for come."`],
+      house: [`"That's our noodle." ${n} doesn't pretend otherwise. "One of the girls takes the pavement with it most nights; every man she walks in is twenty baht on her chit. You were ${when(noodle)}'s."`,
+        `"The noodle is the cheapest salesman on the soi — a pool float and a girl who isn't shy." ${n} taps the book. "${Cap(when(noodle))} she brought you. She'll want you to know she remembers."`],
+      punter: [`"The noodle girl? Got me too, my first night." ${n} grins. "Best sales technique on the soi and it costs the bar a pool float."`,
+        `"She brought you in ${when(noodle)}, I saw. She's on commission, mate — it's still the nicest way anyone's ever sold me a beer."`],
+    };
+    _say(_pickTownLine(L[R], "streetnoodle:" + R));
+    return true;
+  }
+  // the driver at the stand outside her own front, every night (Aisling: "you ask the wrong woman" from Nee)
+  if (/\btan\b/.test(t) && npc !== "tan" && G.talked && G.talked.tan && typeof _npcWhere === "function") {
+    const tr = _npcWhere("tan"), home = NPCS[npc].room || (NPCS[npc].bars || [])[0];
+    const tSt = tr && (ROOMS[tr] && ROOMS[tr].venues ? tr : _streetOf(tr));
+    if (tSt && home && (home === tr || _streetOf(home) === tSt) && (NPC_ROLES[npc] || NPCS[npc].house || NPCS[npc].manager)) {
+      const L = {
+        floor: [`"Tan? Driver, outside, every night." ${n} points at the kerb with her chin. "He know everybody, nobody know him. Good man, I think. Never buy drink 555."`,
+          `"Khun Tan!" ${n} lowers her voice a little. "He stand there every night, watch the street. Mama say be polite to Tan. I always polite."`],
+        house: [`"Tan stands at the kerb most nights — the driver." ${n} weighs how much to say. "Everybody on this street is polite to Tan. He's never once asked any of us for anything, which is what you notice."`,
+          `"The driver?" ${n} glances out at him. "Every night, same spot. He knows who comes and goes on this street better than I do, and I keep the book."`],
+        punter: [`"Tan? The bloke by the bikes." ${n} nods out at him. "Never seen him drink. Never seen him not know somebody."`,
+          `"Tan's furniture, mate — the kerb outside. Ask him anything about this town and he'll know, and you'll owe him nothing, apparently."`],
+      };
+      _say(_pickTownLine(L[R], "streettan:" + R));
+      return true;
+    }
+  }
+  return false;
+}
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
@@ -12346,6 +12483,9 @@ function _stillOpen(max) {
   for (const id of Object.keys(ROOMS)) {
     const r = ROOMS[id];
     if (id === G.room || !r.barType || r.invite || (typeof _closedNow === "function" && _closedNow(id))) continue;
+    // pouring, not passable: a guest walks through the dark Vic to his room, and the shut soi named it as the
+    // place still serving (Aisling, round 87)
+    if (typeof _closeTurn === "function" && _closeTurn(id) != null && G.nightTurn >= _closeTurn(id) && !(G.soc.lockIn && G.soc.lockIn[id])) continue;
     if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id)) continue;
     if (r.barType === "gents" && !(G.flags && G.flags.orchidVouched)) continue;
     const p = typeof _path === "function" ? _path(G.room, id) : null;

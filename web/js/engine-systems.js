@@ -6488,7 +6488,14 @@ function _sayDrizzle() {
     const pool0 = dark && !sand ? _DRIZZLE_DARK : sand ? _DRIZZLE_SAND : _DRIZZLE_STREET;
     // no baht bus where none runs: one "pulled over mid-route" on Soi 6 (Declan and Kevin, rounds 83–84)
     const _noBus = (G.busWaitTurn != null && G.turns - G.busWaitTurn <= 10) || !(_room().busStop || /Beach Road|Second Road|Jomtien|Sukhumvit|Pattaya Klang|Naklua|Soi Buakhao|Thappraya/.test(_room().region || ""));
-    const pool = _noBus ? pool0.filter(l => !/baht bus/.test(String(l))) : pool0;
+    let pool = _noBus ? pool0.filter(l => !/baht bus/.test(String(l))) : pool0;
+    // the hour, too: girls under one umbrella at 02:12 with every grille down (Aisling, round 87). Past the
+    // street's own late turn a line with people working in it gives way to the shut street's; before it, the shut one waits
+    const _late = typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room);
+    const _shut = l => /\b(shutters|grilles?)\b/.test(String(l));   // whole words: "grilled squid" is not a shut front
+    const _lp = pool.filter(l => _late ? !/girls|vendors|grilled|bars\b/.test(String(l)) || _shut(l) : !_shut(l));
+    if (_lp.length) pool = _lp;
+    G.drizzleTurn = G.turns;   // EXAMINE RAIN sees what it just printed (round 87: "Not raining — yet" one line later)
     _say(pool[(G.day * 7 + Math.floor(G.turns / 15)) % pool.length], "dim");
   }
   // The dog's rain repertoire lived only in _startRain (a full downpour, which
@@ -6526,6 +6533,10 @@ const _DRIZZLE_STREET = [
     "not the hour. Two girls share one umbrella and one {{phone}} between three bars.",
   "Drizzle, warm as breath. The soi smells suddenly of wet concrete and grilled " +
     "squid. Nobody hurries; hurrying in this town is what the rain is for.",
+  "A fine rain on the shutters, so light it only shows under the streetlights. A grille ticks as it cools; " +
+    "somewhere a scooter goes by slow with its rider's jacket over her head.",
+  "Drizzle on the shut fronts, and the pavement takes the neon that is left and doubles it. A cat crosses " +
+    "under the grilles without hurrying, which is the only traffic.",
 ];
 const _DRIZZLE_DARK = [
   "A soft rain comes across the lake and the road. A motosai pulls in under a " +
@@ -6598,6 +6609,7 @@ function _startRain(len) {
   G.rain = len;
   G.lastRain = G.turns;
   G.rainDay = G.day;   // one a night (Mario, 2026-09-14)
+  if (typeof _streetSaw === "function") _streetSaw("rain");   // five downpours and nobody on Soi 6 could discuss one (Aisling, round 87)
   // on her bike the rain is the road's, not the bar you left (Sunil, round 86: the bar's +1 and the dog's spray "across four stools" mid-ride)
   if (typeof _onRide === "function" && _onRide()) {
     _say("The rain catches you on the back of her bike. She pulls in under a shop awning, laughing, and the two of you wait it out with the engine ticking.", "alert");
@@ -11736,6 +11748,10 @@ function _doEat(arg) {
     ], "ownfood"), { p: OWN_BAR_FOOD, m: G.money }));
     return;
   }
+  // a 7-Eleven street: EAT TOASTIE buys one at the counter, the way BUY TOASTIE already ate it (Aisling, round 87)
+  if (!id && _room().seven && (!arg || /\b(toastie|toast|sandwich|food|snack)\b/.test(arg))) { _doBuy(arg && !/\b(food|snack)\b/.test(arg) ? arg : "toastie"); return; }
+  // Soi 6 sells drinks, not dinner: "the street sells everything" on a street with no stall (Aisling)
+  if (!id && !arg && (_room().region || "") === "Soi 6") { _say("Nothing edible on you, and Soi 6 sells drinks, not dinner. The 7-Eleven at the West End does a toastie, and a food cart comes by the bars when it comes."); return; }
   if (!id) { _say(arg ? "You're not carrying that, or it isn't food." : "Nothing edible on you. The street sells everything."); return; }
   if (id === "som_tam" && _flag("somTamAccepted") && !_flag("somTamDelivered")) {
     _say("It's Ploy's som tam. You eat Ploy's som tam. It is magnificent, and you " +

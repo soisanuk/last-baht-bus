@@ -330,6 +330,8 @@ function newGame() {
     loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0,   // principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
+    streetLog: [],       // what happened on the pavement, and who was there to see it (_streetSaw — round 87)
+    giftLog: {},         // the last thing you bought her off a cart, and the day: she remembers it (round 87)
     rideLog: {},         // night rides per girl: {count, day, stops, great} — she remembers, and so does "late"
     lastRide: null,      // {id, day, stops} — the coda knows she has a bike
     selfBfHold: 0,       // the self-barfine offer stands for a command or two
@@ -2450,6 +2452,10 @@ const _DOG_TALK_TH = [
   n => `${n} looks down at Sai Krok and then at you, pleased. “He good dog. Where you find him? Soi dog the best — already he know everything, na. You lucky he choose you.”`,
   n => `“Him?” ${n} laughs. “He come every night now, I think. I save him the chicken bone.” She crouches to Sai Krok's level. “Na, handsome? You like me more than him.”`,
   n => `${n} says something to Sai Krok in Thai, soft, the way you talk to a child or a grandfather. “I tell him be good boy for you,” she says. “He say ok.”`,
+  n => `“Your dog?” ${n} reaches down and Sai Krok permits one ear to be scratched, no more. “He come in, he sit by door, he watch the street for us. Better than security, cheaper.”`,
+  n => `${n} wrinkles her nose. “He smell like the soi, na. Same same everybody here at four o'clock.” She feeds him a corner of her toast anyway.`,
+  n => `“Sai Krok!” ${n} says it like a greeting to a regular. “He know which bar give food. He come here first, then he come you. Don't be jealous.”`,
+  n => `${n} looks at the dog for a long moment. “My papa have dog like this, in the village. Same ear. He wait at the gate every day for the school bus.” She doesn't finish the story and doesn't need to.`,
 ];
 const _DOG_TALK_TH_HE = [
   n => `${n} looks down at Sai Krok, then at you. “Soi dog. The best kind — already he know everything. He choose you, not the other way.”`,
@@ -2458,6 +2464,8 @@ const _DOG_TALK_TH_HE = [
 const _DOG_TALK_EN = [
   n => `“Good-looking dog, that,” ${n} says. “Soi dogs make the best ones. They've already survived the worst of it before you turn up — anything after that is a bonus to them.”`,
   n => `${n} glances down at Sai Krok. “He picked you, didn't he. They do that. You don't get a say, and you wouldn't want one.”`,
+  n => `“He's been doing the rounds,” ${n} says. “Comes in, checks the floor, checks the door, leaves. Better manners than half the customers.”`,
+  n => `${n} looks down at him. “Feed him rice, not the chicken bones the girls slip him. And don't let him near the Sukhumvit side after dark.”`,
 ];
 function _dogTalk(npcId) {
   if (npcId === "daeng" && _flag("shamrockVisited")) {
@@ -2468,7 +2476,9 @@ function _dogTalk(npcId) {
   }
   // the Thai pool crouches and says "she" — Tan got it (Fintan, round 60)
   const pool = _thaiVoice(npcId) ? (_pr(npcId).s === "he" ? _DOG_TALK_TH_HE : _DOG_TALK_TH) : _DOG_TALK_EN;
-  return _dogN(pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name));
+  // dealt from the town's book: Pukky and Nee gave the one chicken-bone line (Aisling, round 87)
+  const f = typeof _pickTownLine === "function" ? _pickTownLine(pool, "dogtalk:" + (pool === _DOG_TALK_EN ? "en" : "th")) : pool[Math.floor(_rand() * pool.length)];
+  return _dogN(f(NPCS[npcId].name));
 }
 // "ask <anyone> about quiz / darts": TIME knew, nobody else did (gambler playtest
 // 2026-08-22). One honest line, register-neutral, computed from the schedule.
@@ -2998,7 +3008,8 @@ function _describeRoom(full, forceFull) {
   if (G.room === "orchid_room") _tanOrchidReveal();
   if (typeof _oppTick === "function") _oppTick();   // the bar opposite, seen from your own doorway
   if (typeof _frontierTick === "function") _frontierTick();   // the group buying Soi 6's inner west, a front at a time
-  const exits = Object.keys(r.exits);
+  // the Soi 6 week's fence is a refusal, not a road: the East End listed "e" every night (Aisling, round 87 — the compass already knew)
+  const exits = Object.keys(r.exits).filter(d => !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(r.exits[d])));
   if (exits.length) _say(_L("Exits: ") + exits.join(", ") + ".", "dim");
   // A warning at the DOOR, not after you have walked through it. The only way
   // out of your own hotel room is an unlit soi with a dog in it, and a player on

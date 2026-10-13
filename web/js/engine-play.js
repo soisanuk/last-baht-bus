@@ -484,6 +484,19 @@ function _piwinAbout(who) {
       : "\"Season good, boss.\" He counts the traffic with his chin. \"Everybody here, everybody want a bike. December I buy new tyre.\"");
     return;
   }
+  // …but a thing that happened at HIS stand, he saw: the rain you sat out under the awning beside him, the drunk
+  // his mates peeled off you ("Other stand, maybe" — there is one stand. Aisling, round 87)
+  { const _ev = typeof _streetEvent === "function" ? ["rain", "drunk"].map(k => _streetEvent(k)).filter(e => e && e.room === G.room && e.stand)
+      .sort((a, b) => b.day - a.day || b.turn - a.turn)[0] : null;
+    if (_ev && (/\blast night\b|\byesterday\b|\btonight\b/.test(w) || (_ev.kind === "rain" ? /\b(rain|rained|downpour|storm|awning|wet)\b/ : /\b(drunk|muppet|fight|big (?:man|lad|farang)|chang|shout\w*)\b/).test(w))) {
+      const _wn = _ev.day === G.day ? "Tonight" : "Last night";
+      _say(_ev.kind === "rain"
+        ? _pickVary([`"${_wn}? Rain! You and me under the seven, vest on my head." He laughs. "I remember. You don't want bike, you want roof. Same same everybody."`,
+            `"${_wn} the rain, yes — you stand there, me here." He points at the awning. "Half hour. I lose two fare. You lose nothing, you dry."`], "piwinrainmem")
+        : _pickVary([`"${_wn}, the big farang?" He mimes a wardrobe being walked. "We take him. No fighting on my stand, boss — bad for everybody."`,
+            `"The Chang vest man? ${_wn}. He shout at you, we move him. He go Beach Road, I think, talking to the lamp."`], "piwindrunkmem"));
+      return;
+    } }
   // LAST NIGHT is not his shift, and her bike is not his business (Bridget, round 76: "Work? This." every night)
   if (/\blast night\b|\byesterday\b/.test(w)) { _say(_pickVary([
       "\"Last night?\" He shrugs inside the vest. \"Many farang, many night, boss. If I drive you, I remember the fare, not the face.\"",
@@ -5756,6 +5769,7 @@ function _endNight(reason) {
   G.soc.joyRooms = {};   // a dance or a song pays once a room a night (Pete, round 75: SING ×40 was the best job in town)
   G.soc.dancePaid = false; G.soc.danceNoted = false;   // …and a DANCE once a night, with a woman who knows you (Mario, 2026-10-13)
   G.soc.photoJoy = 0; G.soc.photoNoted = false;        // …and the first three new faces a night (same call)
+  G.soc.giftLines = {};   // the cart's reactions start over (round 87)
   // the woman you woke up with saw you this morning: an LT, a night out or a ride is not an
   // absence (Pete, round 75 — Manow asked where he had been for four days, the evening after)
   for (const _w of [G.lastBfId, ...((G.party && G.party.ids) || [])]) if (_w && NPCS[_w]) (G.seenDay = G.seenDay || {})[_w] = G.day;
