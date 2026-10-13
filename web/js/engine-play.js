@@ -810,7 +810,7 @@ function _closeOutModals() {
   }
 }
 const _PUB_SHUT_GUEST = [
-  "Eleven o'clock. The barmaid calls time, the last of the rail drink up and go out onto the soi, and the chairs go up on the tables around you. The security guard comes in, takes her stool behind the bar and the keys with it, and looks at you: a guest. You can stay — nobody will serve you — or go up to your room. (UP · OUT)",
+  "Eleven o'clock. The barmaid calls time, the last of the rail drink up and go out onto the soi, and the chairs go up on the tables around you. The security guard comes in, takes the barmaid's stool behind the bar and the keys with it, and looks at you: a guest. You can stay — nobody will serve you — or go up to your room. (UP · OUT)",
   "Time, at the Vic. The lights over the tables go off one row at a time, the rail finishes up and files out, and the security guard settles onto the stool behind the bar for the night. He knows you're staying upstairs; he just won't pour you anything. (UP to your room · OUT to the soi)",
   "Eleven, and the pub shuts round you — glasses collected, taps wrapped, the regulars out the door with the last word. The guard takes over the bar for the night, {{phone}} in hand. A guest can sit in the dark if he likes; the bar is closed. (UP · OUT)",
 ];
@@ -1768,7 +1768,7 @@ function _quizInput(input) {
   // scoring
   const right = g.right;
   G.game = null;
-  G.quizLast = { room: G.room, day: G.day, right };   // the town can say how it went (Fintan, round 60)
+  G.quizLast = { room: G.room, day: G.day, right, present: _npcsHere().slice() };   // the town can say how it went (Fintan, round 60) — and who was there to see it (Dagny, round 91)
   _say(`Final score: ${right} of 5.`, "room");
   if (right === 5) {
     G.money += 500;
@@ -3391,6 +3391,7 @@ function _doBell() {
   }
   _engineSfx("bell");
   _engineSpeak("ชนแก้ว");
+  if (typeof _streetSaw === "function") _streetSaw("bell");   // the floor that drank it remembers it (Dagny, round 91)
   // a bell that pays nothing says so where it rang (Sunil, round 86 — ฿1,240, +0, and the taper's one note long gone)
   if (_boughtHappy(2) === false) _say("(no สนุก — you've bought enough tonight that a round pays the room, not you)", "dim");
 }
@@ -3748,6 +3749,7 @@ function _relGreeting(id) {
   }
   const t = _bondTier(id);
   if (t < 1) return;
+  if (G.miffed && G.miffed[id] != null && G.day - G.miffed[id] <= 1) return;   // she watched you leave with another: no warm hello on arrival (Dagny, round 91)
   // four nights in the hotel and nobody said where you'd been (Piet, round 62): a regular notices a gap
   const gap = (G.seenDay || {})[id] != null ? G.day - G.seenDay[id] : 0;
   if (t >= 2 && gap >= 3 && (G.soc.awaySaid = G.soc.awaySaid || {})[id] !== G.day) {
@@ -5406,7 +5408,7 @@ function _endNight(reason) {
   // watched beside him) — the rooms the party walked through, and how it ended
   if (G.party && G.party.ids && G.party.ids.length && G.party.seen) {
     G.partyLog = G.partyLog || {};
-    for (const id of G.party.ids) G.partyLog[id] = { day: G.day, rooms: (G.party.rooms && G.party.rooms[id]) || Object.keys(G.party.seen), sunrise: reason === "sunrise", dawn: reason === "allnighter" || reason === "dawn" };   // her own rooms, from where she joined (Martin, round 85)
+    for (const id of G.party.ids) G.partyLog[id] = { day: G.day, danced: !!(G.party.danced && G.party.danced[id]), sunSand: reason === "sunrise" && /\b(beach|sand)\b/i.test(String((ROOMS[G.room] || {}).name || "")), home: reason === "sleep" || reason === "barfine", rooms: (G.party.rooms && G.party.rooms[id]) || Object.keys(G.party.seen), sunrise: reason === "sunrise", dawn: reason === "allnighter" || reason === "dawn" };   // her own rooms, from where she joined (Martin, round 85)
   }
   // The opening quest (Act One) is do-or-die: fail to reach room 412 before the
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
@@ -5426,6 +5428,8 @@ function _endNight(reason) {
   // point of taking her out, and the close pays for the evening she spent on
   // your arm (stops feed the base, the pair adds its premium).
   let _bedIds = null;   // who was in the bed when SLEEP converted to the LT close (read by the affair's morning)
+  // the sunrise watched from your own room with her in it is home together, not "go home to bed" and a taxi for her (Dagny, round 91)
+  if (reason === "sunrise" && G.room === _hotelRoomId() && G.party && G.party.ids && G.party.ids.length) reason = "sleep";
   if (reason === "sleep" && G.party && G.party.ids && G.party.ids.length === 1 && typeof _affairLive === "function" && _affairLive() && G.party.ids[0] === G.affair.id) {
     // THE NIGHT OUT ENDS AT HOME, NOT IN A BARFINE: the long-time close paid +10 as a conquest,
     // which made the night out the always-right answer (Callum, round 71). She comes home with you;

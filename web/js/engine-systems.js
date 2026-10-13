@@ -629,7 +629,7 @@ function _npcActions(id, full) {
   // and the gallery rows still enlarge on tap); it just stops advertising
   // itself in the one place its name is ambiguous.
   const acts = ["talk", "examine"];
-  if (role) acts.push("buyher");             // hostess/cashier/mamasan economy
+  if (role && !(typeof _servesDrinks === "function" && !_servesDrinks(G.room) && _npcsHere().includes(id))) acts.push("buyher");             // hostess/cashier/mamasan economy — where drinks are sold (Dagny, round 91)
   else if (isHost) acts.push("buyhim");      // host bar, gender-flipped
 
   if (full) {
@@ -802,6 +802,11 @@ function _doBarfine(arg) {
   if (G.party && G.party.ids && G.party.ids.length && arg) {
     const _other = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && !G.party.ids.includes(i) &&
       arg.toLowerCase().includes(NPCS[i].name.toLowerCase()));
+    // a colleague of the woman on your arm says her no NOW, not "she come too" and then "I don't steal customer" (Dagny, round 91)
+    if (_other && G.party.ids.some(c => NPCS[c] && NPCS[c].room === NPCS[_other].room)) {
+      _say(_fmt("{who} shakes her head before you finish, with a look at {her}. \u201cCannot, na. Same bar, same floor. She is your girl tonight — I don't steal from my sister.\u201d", { who: NPCS[_other].name, her: _partyLabel() }), "alert");
+      return;
+    }
     if (_other && !/\b(out|party|with us|too)\b/.test(arg.toLowerCase())) {
       _say(_fmt("{who} glances past you — at {her} — and smiles without writing anything. " +
         "\u201cYou have company tonight already, tilac. She come TOO, or she don't come.\u201d",
@@ -1090,8 +1095,11 @@ function _bfDayRefusal(id) {
   };
   if (_maiDee(id)) return keep("maidee");   // the verdict comes before the calendar: a no with nothing in it to negotiate (theme 6)
   if (typeof _drinksOnly === "function" && _drinksOnly(id)) return keep("drinksonly");   // hers, not mama's — and not the tariff's (theme 12)
+  // her period is days, not a night: the same no for three more (Dagny, round 91 — "lady time lasted exactly one night")
+  if (G.ladyTime && G.ladyTime[id] && G.ladyTime[id].v === G.vacation && G.day - G.ladyTime[id].day <= 3 && G.day >= G.ladyTime[id].day) return keep("period");
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
+  if (life < 5) (G.ladyTime = G.ladyTime || {})[id] = { day: G.day, v: G.vacation };
   if (life < 10) return keep(life < 5 ? "period" : "temple");
   return null;
 }
@@ -1109,6 +1117,8 @@ function _bfRefusal(id, bt) {
   };
   if (_maiDee(id)) return keep("maidee");   // the verdict: a no with nothing in it to negotiate (theme 6)
   if (typeof _drinksOnly === "function" && _drinksOnly(id)) return keep("drinksonly");
+  // her period is days, not a night: the same no for three more (Dagny, round 91 — "lady time lasted exactly one night")
+  if (G.ladyTime && G.ladyTime[id] && G.ladyTime[id].v === G.vacation && G.day - G.ladyTime[id].day <= 3 && G.day >= G.ladyTime[id].day) return keep("period");
   // SOMEBODY HAS TO STAND HERE. A one-woman bar's owner cannot leave with you,
   // and the reason is a rota rather than a virtue: there is no mamasan to cover
   // and no cashier to hold the till (Mario, round 43 — "who runs the bar if that
@@ -1145,6 +1155,7 @@ function _bfRefusal(id, bt) {
   // constant ":life" suffix diffuses the day through the polynomial. (Sibling
   // callers _nightRide/_bfResolve already put day mid-key for the same reason.)
   const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
+  if (life < 5) (G.ladyTime = G.ladyTime || {})[id] = { day: G.day, v: G.vacation };
   if (life < 10) return keep(life < 5 ? "period" : "temple");
   return null;
 }
@@ -1542,6 +1553,10 @@ const _PARTY_HOME = [
   "{n} does not ask where. She waves down a bike with the hand that isn't holding yours, says the hotel's name to the piwin before you can, and rides pillion-and-a-half the whole way back with her chin on your shoulder.",
   "\"Home?\" {n} says it like a test and then like a yes. The songthaew is half empty and she takes the bench against the cab and pulls you down beside her, and the town goes past the open back like somebody else's night.",
 ];
+const _PARTY_HOME_WALK = [
+  "{n} takes your arm as if she has been walking you home for years. It is only a few doors; she makes it last, stopping to say goodnight to a cat, to a guard, to a girl two bars down who calls something after you both.",
+  "\"Walk, na. Is close.\" {n} hooks her fingers through yours and you go up the soi together, past the fronts and the shutters, her shoes in her other hand by the second door.",
+];
 // the woman on your arm, addressed with nothing in particular: with you, wherever you are
 const _PARTY_TALK = [
   (n, w) => `${n} is at your elbow, which is where she has been all night. "Mm?" She looks round ${w} with the professional eye she cannot switch off, and then back at you. "Is okay here. Where next?"`,
@@ -1589,7 +1604,8 @@ function _companionEats(arg, what, price) {
   return true;
 }
 function _partyHome(id) {
-  _say(_fmt(_pickVary(_PARTY_HOME, "partyhome"), { n: NPCS[id].name }), "win");
+  // a bed a street away is walked to, and not by songthaew down a shut soi (Dagny, round 91 — then the close said "a slow walk")
+  _say(_fmt(_pickVary(typeof _homeNear === "function" && _homeNear() ? _PARTY_HOME_WALK : _PARTY_HOME, "partyhome"), { n: NPCS[id].name }), "win");
   // the vehicle in the sentence is the mechanic under it: a bike ride, not a walk that
   // stops in the dark because she thumbed your torch off (Ingrid, round 62)
   const home = _hotelRoomId();
@@ -1606,7 +1622,7 @@ function _partyHome(id) {
 function _partyLogOne(id) {
   const p = G.party;
   if (!p || !p.ids || !p.ids.includes(id)) return;
-  (G.partyLog = G.partyLog || {})[id] = { day: G.day, rooms: (p.rooms && p.rooms[id]) || Object.keys(p.seen || {}), sentHome: true };
+  (G.partyLog = G.partyLog || {})[id] = { day: G.day, rooms: (p.rooms && p.rooms[id]) || Object.keys(p.seen || {}), sentHome: true, danced: !!(p.danced && p.danced[id]) };
 }
 function _partyGoodbyeOne(id) {
   const p = G.party;
@@ -1654,7 +1670,11 @@ function _partyNightEnd(reason) {
     // a woman who is yours does not leave "professionally unentangled" (Bridget, round 76 — at her
     // her-farang's sunrise, with nothing said at the dawn itself)
     const _close = p.ids.some(i => typeof _bondTier === "function" && _bondTier(i) >= 3);
-    _say(_fmt(_pickVary(_partyPool(_close ? _PARTY_SOFT_BYE_CLOSE : _PARTY_SOFT_BYE, _close ? "partybyeclose" : "partybye"), _close ? "partybyeclose" : "partybye"), { who }), "dim");
+    // the last morning has no "tonight" and no "tomorrow you come" (Dagny, round 91: beside the airport taxi)
+    const _lastDay = G.stage !== "expat" && G.day >= 7 && !G.visitUntil;
+    let _byePool = _partyPool(_close ? _PARTY_SOFT_BYE_CLOSE : _PARTY_SOFT_BYE, _close ? "partybyeclose" : "partybye");
+    if (_lastDay) { const _f = _byePool.filter(l => !/tonight|tomorrow/.test(String(l))); _byePool = _f.length ? _f : ["({who} stays until the light is properly up, and holds your face in both hands for a second as if to remember it. She does not say see you tomorrow. She knows what day it is.)"]; }
+    _say(_fmt(_pickVary(_byePool, _close ? "partybyeclose" : "partybye"), { who }), "dim");
   }
   G.party = null;
 }
@@ -1841,7 +1861,7 @@ function _bfResolve(kind) {
     if (other !== id && NPC_ROLES[other] === "hostess" && _bondTier(other) >= 2) {
       _addBond(other, -3);
       _repHit(2); // jilting a regular in front of the bar is a bad look, and it travels
-      (G.soc.miffed = G.soc.miffed || {})[other] = G.day; // …and her next hello is cooler for it
+      (G.miffed = G.miffed || {})[other] = G.day; // …and her next hello is cooler for it — tomorrow too, not just tonight (Dagny, round 91: "lights up like payday" the night after)
       _say(`(${NPCS[other].name} watches you leave with ${name} and turns very ` +
         "deliberately back to her phone. That will cost you — and not in baht.)", "dim");
     }
@@ -1889,7 +1909,7 @@ function _bfResolve(kind) {
     p2.seen[G.room] = true;   // her own bar is the start line, not a stop
     ((p2.rooms = p2.rooms || {})[id] = [G.room]);
     if (second) { const m = (G.partyMates = G.partyMates || {}); (m[id] = m[id] || []).push(p2.ids[0]); (m[p2.ids[0]] = m[p2.ids[0]] || []).push(id); }   // they know each other after a night together
-    _say(_fmt(_pickVary(second ? _PARTY_JOIN2 : _PARTY_JOIN, "partyjoin"),
+    _say(_fmt(_pickVary(second ? _PARTY_JOIN2 : (price > 0 ? _PARTY_JOIN : _PARTY_JOIN.filter(l => !/fine is barely/.test(l))), "partyjoin"),   // no fine in the book when there was none (Dagny, round 91)
       { n: name, other: second ? NPCS[p2.ids[0]].name : "" }), "win");
     _say(second
       ? "(Two of them now. The town is going to remember this one. Lead on \u2014 her drinks land wherever you do.)"
@@ -6977,7 +6997,7 @@ function _doWatchSunrise() {
   // the sky is the end of the night — asked once (Mario, 2026-10-07)
   if (G.sunriseDay !== G.day && !_endConfirm("sunrise", "The sky is going grey behind the town, over Sukhumvit. Watch it, and the night ends with it — there is nothing after the sunrise. (WATCH SUNRISE again to stay for it.)")) return;
   // inland, the bay is not in front of you (Pete, round 75 — "black to pewter" from Soi Buakhao)
-  const _seaOk = /sea|beach|promenade|shore/i.test(String(_room().desc || "") + " " + (_room().region || ""));
+  const _seaOk = !_isHotelRoom(G.room) && /sea|beach|promenade|shore/i.test(String(_room().desc || "") + " " + (_room().region || ""));   // a window over Soi 6 has no water (Dagny, round 91)
   const _sky = _seaOk ? _SUNRISE : _SUNRISE.filter(l => !/\b(bay|sea)\b/i.test(l));
   _say(_pickVary(_sky.length ? _sky : _SUNRISE, "sunrise"), "win");
   if (G.sunriseDay === G.day) return;               // one sky a night

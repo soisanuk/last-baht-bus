@@ -1616,7 +1616,7 @@ test("the jilted regular's next hello is cooler, once", () => {
   for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
   const girl = Object.keys(NPCS).find(id => NPC_ROLES[id] === "hostess" && NPCS[id].filler);
   G.room = _npcRoom(girl);
-  (G.soc.miffed = {})[girl] = G.day;
+  (G.miffed = {})[girl] = G.day;   // kept past the night since round 91
   out = []; doCommand("talk to " + NPCS[girl].name);
   assert.ok(_MIFFED_HELLO.some(l => out.join("\n").includes(l.replace("{n}", NPCS[girl].name))),
     "one cooled hello");

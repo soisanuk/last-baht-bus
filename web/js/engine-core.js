@@ -2498,6 +2498,15 @@ function _quizTalk(npc) {
   // the woman who chalked his name said "tonight, eight till ten, go" — as did ten others, some
   // at a quarter to three (Fintan, round 60)
   const q = G.quizLast && G.quizLast.day === G.day ? G.quizLast : null;
+  // …and the night after: the board was wiped, the people who watched it go up were not (Dagny, round 91: four mouths, one schedule)
+  const qy = G.quizLast && G.quizLast.day === G.day - 1 ? G.quizLast : null;
+  if (!q && qy && npc && (_npcRoom(npc) === qy.room || (NPCS[npc] && NPCS[npc].room === qy.room) || (qy.present || []).includes(npc))) {
+    return qy.right === 5
+      ? (farang ? "“Last night — all five. They've wiped the board, but people remember a clean sweep. The teachers from Rayong were not amused.”" : "“Last night you get five from five! The teacher table very angry, hahaha. I tell everybody.”")
+      : qy.right >= 3
+        ? (farang ? `“${qy.right} out of five last night. Decent. The Rayong lot still won.”` : `“Last night ${qy.right} from five, na. Not bad. Next Thursday you beat the teachers.”`)
+        : (farang ? `“Last night? ${qy.right} out of five. We don't talk about it.”` : `“Last night… ${qy.right}.” A kind face. “Next Thursday, na.”`);
+  }
   if (q && _npcRoom(npc) === q.room) {
     return q.right === 5
       ? (farang ? "“You were the one with all five. It's on the board — the whole bar watched it go up.”" : "“You! Five from five — your name is on the board, na. Everybody see.”")

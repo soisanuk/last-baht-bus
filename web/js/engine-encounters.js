@@ -294,6 +294,7 @@ function _maybeEncounter() {
   if (G.soc.drunk >= 5 && G.turns - G.lastPolice >= 30 && _rand() < 0.2) {
     G.lastPolice = G.turns;
     G.policeAt = { room: G.room, day: G.day };   // the pavement that saw it (Bridget, round 76)
+    if (typeof _streetSaw === "function") _streetSaw("police");   // …and the woman on your arm who talked them down (Dagny, round 91)
     if (_dogEgg() === "guard") { // the hound sees the shakedown off before it starts
       _say(_dogN("A boy in brown peels off a power pole toward your weaving path — then clocks the " +
         "dog at your heel, reconsiders his entire evening, and melts back into the shade. Nobody " +
@@ -1268,6 +1269,16 @@ const _ENC = {
       _encPrompt([`He follows your gaze to whatever caught it, entirely unbothered, and does not move an inch. (WATCH \u0e3f${px.watch} \u00b7 SUNGLASSES \u0e3f${px.shades} \u00b7 VITAMINS \u0e3f${px.vits} \u00b7 or NO.)`]);
       return;
     }
+    // BUY SUNGLASSES FOR PLE: the "for" is a person, and the thing is hers (Dagny, round 91 — the RayBens went on his own face)
+    const _forM = input.match(/\bfor\s+(?:the\s+)?([a-z' ]+)$/);
+    const _forId = _forM && typeof _findNpc === "function" ? _findNpc(_forM[1].trim()) : null;
+    const _for = _forId && _npcsHere().includes(_forId) ? _forId : null;
+    const _had = { fake_rolex: G.itemLoc.fake_rolex, shades: G.itemLoc.shades, vitamin_v: G.itemLoc.vitamin_v };
+    const _giveAfter = () => {
+      if (!_for) return;
+      const got = Object.keys(_had).find(k => _had[k] !== "inventory" && G.itemLoc[k] === "inventory");
+      if (got && typeof _doGive === "function") _doGive({ fake_rolex: "rolex", shades: "sunglasses", vitamin_v: "vitamins" }[got], NPCS[_for].name.toLowerCase());
+    };
     if (/\brolex\b/.test(input) || /\bwatch\b/.test(input)) {
       if (G.money < px.watch) { _say(`฿${_num(px.watch)} for the 'Rolex'. He inspects your ฿` + G.money + " and moves along, unoffended."); return; }
       G.money -= px.watch;
@@ -1291,7 +1302,9 @@ const _ENC = {
         `no one — the whole bar saw, and the whole bar is delighted. (฿${_num(G.money)} left.)`);
       _say("(You now have the packet of 'vitamins'. The hostesses will NEVER let this go.)", "dim");
       _addHappy(1);
-    } else {
+    }
+    if (Object.keys(_had).some(k => _had[k] !== "inventory" && G.itemLoc[k] === "inventory")) { _giveAfter(); return; }
+    if (!(/\brolex\b/.test(input) || /\bwatch\b/.test(input) || /glass|shade|sun/.test(input) || /vitamin|pill|med|blue/.test(input))) {
       _say("A slow head-shake. He re-shoulders the display board — watches swinging " +
         "like wind chimes — and moves along to a man who has already made " +
         "eye contact, the fatal error.");
