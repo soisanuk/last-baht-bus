@@ -146,6 +146,8 @@ function ownerFlags() {
 // composition class exactly: one system forgot the other was live. Kept to whole phrases, so a
 // warm line that merely mentions a drink is never read as a pitch.
 const CUSTOMER_PITCH = /smile calibrated to the exact value|Buy her a drink first; be a face|not yet, big spender|Buy me drink, funny man|offering to carry your bag/;
+// the floor working YOU, said while a woman is out with you (round 85)
+const FLOOR_PITCH = /take me up|we go up|into your lap|why you sit alone|now is the moment to BARFINE/i;   // "TAKE <her> OUT adds her to the night" is an offer the ledger sells, not a pitch
 const pitchTo = (r, id) => named(r.cmd, id) && CUSTOMER_PITCH.test(r.text) ? r.text.match(CUSTOMER_PITCH)[0] : null;
 // a person standing in the room, aimed at by name, and the verb's FIRST line says she isn't
 const DENIED = /not working this bar|isn't here to|They're not here|nobody here by that name|doesn't land on anyone|You don't see that here/;
@@ -196,6 +198,20 @@ const STATES = {
         return m ? `placed at ${here}, the bar you walked her into: "${m[0]}"` : null;
       },
       pitched: (a, b, r) => { const m = pitchTo(r, COMPANION); return m ? `the woman on your arm got the customer register: "${m}"` : null; },
+      // …and the floor does not pitch YOU with her on your arm: the re-entry pools, the lap, the stairs, the
+      // last call's BARFINE nudge (Martin, round 85 — the class came back in nine rounds before an instrument held it)
+      "floor-pitch": (a, b, r) => {
+        if (r.dayChanged || !a.party.includes(COMPANION) || !b.party.includes(COMPANION)) return null;
+        const m = r.text.match(FLOOR_PITCH);
+        return m ? `the floor pitched you with ${NAME(COMPANION)} on your arm: "${m[0]}"` : null;
+      },
+      // the ledger only sells another companion: no SHORT/LONG TIME on the prompt or the chips while she is out
+      "menu-offer": (a, b, r) => {
+        if (r.dayChanged || !b.party.includes(COMPANION)) return null;
+        if (/\(SHORT TIME |\bLONG TIME \S+ —/.test(r.text)) return `the barfine menu offered SHORT/LONG TIME with ${NAME(COMPANION)} on your arm`;
+        const chips = (typeof _chipSet === "function" ? _chipSet() : []).map(x => x.cmd);
+        return chips.includes("short time") || chips.includes("long time") ? `the chips offered short/long time with ${NAME(COMPANION)} on your arm` : null;
+      },
     },
   },
   // Standing at the bar you own. Your staff don't work you like a walk-in; the house's angles are yours.
@@ -509,6 +525,15 @@ const MUTATIONS = {
     globalThis._ladyDrinkCharge = function (id, ...rest) {
       const r = orig.call(this, id, ...rest);
       for (const p of (G.party && G.party.ids) || []) if (p !== id) G.soc.drinks[p] = Math.max(0, (G.soc.drinks[p] || 0) - 1);
+      return r;
+    };
+  },
+  // the chip bar forgets the woman on your arm and sells short time again (Martin, round 85)
+  "companion-menu": () => {
+    const orig = globalThis._chipSet;
+    globalThis._chipSet = function (...rest) {
+      const r = orig.apply(this, rest);
+      if (G.party && G.party.ids && G.party.ids.length) r.push({ cmd: "short time", label: "short time" });
       return r;
     };
   },

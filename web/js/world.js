@@ -1908,6 +1908,7 @@ const ROOMS = {
   beach_rd_n: {
     name: "Beach Road (foot of Soi 6)",
     region: "Beach Road",
+    lateWithSoi6: true,   // its small-hours paint is the soi shut, and the soi shuts at two (Martin, round 85)
     lateDesc: [
       "Beach Road at the foot of Soi 6, and the runway is switched off: the soi behind you is grilles and mop buckets, the sea across the road is a sound rather than a view, and the songthaews that pass are half empty and not stopping unless you make it obvious.",
       "The junction at an hour that belongs to the road sweepers. Two of them are working the gutter with those long brooms and neither looks up. The Dolphin roundabout glows away to the north for nobody.",

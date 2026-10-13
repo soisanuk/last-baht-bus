@@ -55,4 +55,5 @@ test("composition audit goes red when a consumer forgets a state (--mutate)", ()
   assert.ok(run("--mutate", "ownbar", "--state", "ownbar").unknown.some(k => /\|ownbar:heat\|/.test(k)), "heat at your own bar went unseen");
   // the jilt loop counts the woman on your arm
   assert.ok(run("--mutate", "companion", "--state", "companion").unknown.some(k => /\|companion:bond\|/.test(k)), "a companion's bond docked went unseen");
+  assert.ok(run("--mutate", "companion-menu", "--state", "companion").unknown.some(k => /\|companion:menu-offer\|/.test(k)), "short time offered with a woman on your arm went unseen (round 85)");
 });

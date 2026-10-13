@@ -209,7 +209,7 @@ function _lateTurn(id) {
   const r = ROOMS[id];
   if (!r) return 60;
   if (r.barType && r.closesAt != null) return r.closesAt;
-  if (r.region === "Soi 6") return SOI6_CLOSE;
+  if (r.region === "Soi 6" || r.lateWithSoi6) return SOI6_CLOSE;
   return 60;
 }
 // The guest's way through a shut pub: the Queen Vic's bar IS its reception, and a
@@ -329,7 +329,8 @@ function _lastCall(id) {
   // sell a transaction the room does not offer.
   const here = _npcsHere();
   const mama = here.find(n => NPC_ROLES[n] === "mamasan");
-  const sellable = here.some(n => NPC_ROLES[n] === "hostess");
+  // no BARFINE nudge in a pub with no bar girls, nor to a man with company on his arm (Martin, round 85)
+  const sellable = here.some(n => NPC_ROLES[n] === "hostess") && _room().barType !== "pub" && !(G.party && G.party.ids && G.party.ids.length);
   if (!sellable) {
     _say(_fmt("Last call — chairs start going up on the far tables: {when} to closing. " +
       "This place shuts at {at}.", { when, at }) + (_guestThrough(id) ? " " + _L("(You're staying upstairs, so the door stays open to you.)") : ""), "alert");
@@ -815,6 +816,10 @@ const _SMALL_TALK = {
     "\"Hotel, cleaning room. You see how farang live when nobody look. Very interesting, hahaha.\"",
     "\"Hair salon in Udon. I still cut the girls' hair here, for free. Nobody pay, everybody happy.\"",
     "\"Garment factory, Bangkok. Sixteen hour sewing pocket. Here at least there is music.\"",
+    "\"Massage, two year, Beach Road. My hands still remember. My back also, hahaha.\"",
+    "\"Nothing before. I come from the village straight here. My cousin bring me.\"",
+    "\"Karaoke in Udon. Same job, less English, more drunk men singing.\"",
+    "\"Shop assistant, Central. Uniform, smile, no sitting down. Here I can sit.\"",
   ],
   dayoff: [
     "\"Day off I sleep until two, then I eat, then I sleep again. Is a good day.\"",
@@ -824,6 +829,10 @@ const _SMALL_TALK = {
     "\"I video call home. Two hour. They show me every chicken.\"",
     "\"Jomtien, the quiet side. I sit, I eat squid, nobody buy me drink. Is nice.\"",
     "\"No day off this month. Next month, maybe. Then I sleep for you also.\"",
+    "\"I do my nails, then I watch Korean drama all day. Very important work.\"",
+    "\"Go Bangkok to see my sister. Bus five hour, talk ten hour, bus five hour.\"",
+    "\"Day off, I cook for the girls in my room. Everybody come, everybody eat, small room very full.\"",
+    "\"Sometime I go Koh Larn on the boat. Swim a little, sleep on the sand a lot.\"",
   ],
   food: [
     "\"Som tam, very spicy. You cannot eat, I know already.\"",
@@ -832,6 +841,10 @@ const _SMALL_TALK = {
     "\"My mother's food. Nothing in Pattaya the same.\"",
     "\"Noodle, any noodle, two o'clock in the morning. That is the time for noodle.\"",
     "\"Pizza.\" She laughs at your face. \"Thai girl like pizza also, you know.\"",
+    "\"Larb with sticky rice. Isan food. Your mouth will cry, hahaha.\"",
+    "\"Mango sticky rice. I am a child for dessert.\"",
+    "\"Grilled chicken from the market on Soi Buakhao. The old man there know me.\"",
+    "\"Tom yum, but my way, very sour. Restaurant tom yum is for tourist.\"",
   ],
   feeling: [
     "\"Tired a little. Is okay — you here, I sit down.\"",
@@ -840,6 +853,10 @@ const _SMALL_TALK = {
     "\"Good. Payday soon.\"",
     "\"Little bit sleepy. You talk, I wake up.\"",
     "\"I'm okay. You ask, is kind. Not many ask.\"",
+    "\"Tired from the stairs. Twelve times tonight already — the toilet is upstairs, hahaha.\"",
+    "\"Good now. Before you come, boring. Now not boring.\"",
+    "\"Little bit sad today. My dog at home is sick. Is okay, my mother take him to the doctor.\"",
+    "\"I'm fine. Is Friday feeling, even when is Tuesday.\"",
   ],
   age: [
     "\"Lady never say!\" She hides behind her glass. \"Guess. No — don't guess.\"",
@@ -4277,9 +4294,11 @@ function _otherLedger(id) {
   const pool = due === 1 && typeof _drinksOnly === "function" && _drinksOnly(id) ? _LEDGER_DRINKS_ONLY : _OTHER_LEDGER[due];
   if (!pool) return false;
   seen.push(due);
+  const _lp = _ledgerPick(id, due, pool);
+  if (!_lp) return false;                    // the town has shown you this one already; she does not re-tell it
   G.ledgerSeen = (G.ledgerSeen || 0) + 1;   // how much of the other side you've been shown
   _say("");
-  _say(_ledgerPick(id, due, pool)(NPCS[id].name), "thai");
+  _say(_lp(NPCS[id].name), "thai");
   return true;
 }
 
@@ -4293,7 +4312,9 @@ function _ledgerPick(id, tier, pool) {
   const heard = (G.soc.ledgerHeard = G.soc.ledgerHeard || {});
   const told = heard[tier] = heard[tier] || [];
   let pick = pool.map((_, i) => i).filter(i => !told.includes(i));
-  if (!pick.length) { told.length = 0; pick = pool.map((_, i) => i); }
+  // the town shows you each reveal ONCE: when it has shown them all, nobody re-tells one — three women gave
+  // one chit-and-stamp speech word for word (chorus audit, 2026-10-13; the _bondPick doctrine, round 62)
+  if (!pick.length) return null;
   const i = pick[_hh(id + ":ledger" + tier + ":" + told.length, 23) % pick.length];
   told.push(i);
   return pool[i];
@@ -4490,8 +4511,8 @@ function _addHappy(n, why) {
       _say("★ สบายสบาย ★", "win");
       _say("Somewhere between the last laugh and this one, it happened: nowhere " +
         "to be, nothing owed, cold bottle, warm night, a city full of people who " +
-        "know your name. You are, officially, happy. The DJ, unprompted, plays " +
-        "your song.", "win");
+        "know your name. You are, officially, happy. " + ((typeof _servesDrinks === "function" && _servesDrinks(G.room) && !(typeof _shutHere === "function" && _shutHere()))
+          ? "The DJ, unprompted, plays your song." : "Somewhere down the soi, a song you like comes on."), "win");   // no DJ in a hotel room at two (Martin, round 85)
       _engineSpeak("สบายสบาย");
       _say("(The night keeps going. So can you.)", "dim");
     } else {
@@ -4909,7 +4930,10 @@ const _CODA_CLOSE = [
 
 function _cinderellaCoda() {
   _say(_CODA_CUT[G.codaSeen % _CODA_CUT.length], "dim");
-  _say(_CODA_DECON[Math.floor(_rand() * _CODA_DECON.length)], "room");
+  // a go-go dancer unpins a number; a Soi 6 girl wore none (Martin, round 85)
+  const _her = G.lastBfId && NPCS[G.lastBfId], _gogoHer = _her && ROOMS[_her.room] && ROOMS[_her.room].barType === "gogo";
+  const _dc = _gogoHer ? _CODA_DECON : _CODA_DECON.filter(l => !/unpin the number/.test(l));
+  _say(_dc[Math.floor(_rand() * _dc.length)], "room");
   // she rode you home on her own bike; she is not climbing into a baht bus (Kenji, round 47)
   // the coda runs before the day turns, so the ride is TODAY's (Dieter, round 56: the bike
   // line never fired, and she caught a baht bus home after driving him all night)
@@ -5330,7 +5354,7 @@ function _endNight(reason) {
   // watched beside him) — the rooms the party walked through, and how it ended
   if (G.party && G.party.ids && G.party.ids.length && G.party.seen) {
     G.partyLog = G.partyLog || {};
-    for (const id of G.party.ids) G.partyLog[id] = { day: G.day, rooms: Object.keys(G.party.seen), sunrise: reason === "sunrise", dawn: reason === "allnighter" || reason === "dawn" };
+    for (const id of G.party.ids) G.partyLog[id] = { day: G.day, rooms: (G.party.rooms && G.party.rooms[id]) || Object.keys(G.party.seen), sunrise: reason === "sunrise", dawn: reason === "allnighter" || reason === "dawn" };   // her own rooms, from where she joined (Martin, round 85)
   }
   // The opening quest (Act One) is do-or-die: fail to reach room 412 before the
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
@@ -5543,7 +5567,9 @@ function _endNight(reason) {
             ["noodle", "a bowl of noodles from a cart that only opens at two, her feet in your lap on a plastic stool, the street going quiet one bar at a time"],
             ["toastie", "a 7-Eleven toastie split down the middle at four, and a slow walk back past the shutters while she tells you which bars lie about their happy hour"],
           ];
-          const _c = _codas[_hh(String(G.lastBfId || "") + ":" + G.day + ":coda", 71) % _codas.length];
+          let _ck = _hh(String(G.lastBfId || "") + ":" + G.day + ":coda", 71) % _codas.length;
+          if (_codas[_ck][0] === G.lastCoda) _ck = (_ck + 1) % _codas.length;   // not the same close two nights running (Martin, round 85)
+          const _c = _codas[_ck]; G.lastCoda = _c[0];
           if (G.lastNightWas) G.lastNightWas.coda = _c[0];
           return "The rest is nobody's business but the soi's: " + _c[1] + ". What happens in Pattaya has already forgotten your name by morning, fondly.";
         })(), "win");
@@ -5654,6 +5680,9 @@ function _endNight(reason) {
         "\"bus ten to eight\" said to the room. There is a coffee on the side table she must have " +
         "gone down for. She asked for nothing, and there is no morning left to offer her anything in.", "room");
     }
+    // the woman on your arm says goodbye before the week does: a last-night sunrise ran straight to the
+    // week card and she was still "(with you)" on day 8 (Martin, round 85)
+    if (typeof _partyNightEnd === "function" && G.party && G.party.ids && G.party.ids.length) _partyNightEnd(reason);
     // the last night of the week still gets its ledger, and the next morning
     // does not net two nights into one (Kenji, round 47)
     _morningLedger();

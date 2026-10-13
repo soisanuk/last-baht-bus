@@ -5310,7 +5310,7 @@ test("the Walking Street party: three girls, your bill, no deed done", () => {
 test("refusals: customer-stealing, the honest lady-time, temple, and the recoverable cheap-charlie", () => {
   state().flags.act1Done = true; state().flags.hasWallet = true;
   // stealing: a girl already left this bar with you tonight
-  state().room = "candy_bar"; state().money = 5000;
+  state().room = "candy_bar"; state().money = 5000; state().nightTurn = 40;   // the rail's advice is for after nine (Martin, round 85)
   state().soc.drinks.nan = 6;
   (state().soc.bfBar = {}).candy_bar = "bua";
   run("barfine nan");

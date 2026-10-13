@@ -899,6 +899,9 @@ function _roomFit(pool) {
   // …and a WAITRESS carries drinks in a go-go or a room whose prose has one, not to a rail where the
   // women pour (Joost, round 81: "the waitress" at the Sweet Tamarind)
   if (!_isGogo() && !/\bwaitress/i.test(String(ROOMS[G.room].desc || "") + " " + (Array.isArray(ROOMS[G.room].revisit) ? ROOMS[G.room].revisit.join(" ") : ""))) bad.push(/\bwaitress(es)?\b/i);
+  // with a woman on your arm the floor does not pitch you: "Buy me drink. Take me up", a girl sliding into
+  // your lap, "why you sit alone?" — four rooms, Mercedes and Joy beside him (Martin, round 85)
+  if (G.party && G.party.ids && G.party.ids.length) bad.push(/take me up|we go up|nod at the stairs|into your lap|across you|sit alone|why you alone|buy me (a )?drink/i);
   if (!bad.length) return pool;
   // read a function line's SOURCE, never call it: a pool line may roll dice or touch state, and
   // a filter that runs it shifts the seeded stream (round 57 found the soak's path had moved)
@@ -2596,7 +2599,10 @@ function _topicMiss(npcId) {
   const she = _pronoun(npcId) === "she" || (!_pronoun(npcId) && !!n.filler);
   const house = /^(mamasan|cashier)$/.test(NPC_ROLES[npcId] || "") || (typeof _FLUENT_THAI !== "undefined" && _FLUENT_THAI.has(npcId));
   const pool = house && she ? _TOPIC_MISS_HOUSE : (_thaiVoice(npcId) && npcId !== "tan" && npcId !== "nont") ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;   // Tan is fluent: "That one I don't know, na" was his (László, round 73)
-  let line = _pickVary(pool, "miss:" + npcId)(n.name);   // not the same brush-off twice running from one mouth (Desmond, round 63)
+  // a woman out of her own bar (on your arm in another) does not say "this bar, I know everything about" (Martin, round 85)
+  const _away = NPCS[npcId].room && NPCS[npcId].room !== G.room;
+  const _pool = _away ? pool.filter(f => !/this bar|my side of the counter/.test(String(f))) : pool;
+  let line = _pickVary(_pool.length ? _pool : pool, "miss:" + npcId)(n.name);   // not the same brush-off twice running from one mouth (Desmond, round 63)
   if (!she && pool === _TOPIC_MISS_TH) line = line.replace("her head", "his head").replace("the wrong girl", "the wrong man");
   if (she && NPC_ROLES[npcId] === "mamasan") line = line.replace("the wrong girl", "the wrong mama");   // Candy is nobody's girl (Margarethe, round 47)
   if (she && pool === _TOPIC_MISS_EN) line = line.replace("shakes his head", "shakes her head");
