@@ -850,8 +850,8 @@ test("staff answer the calendar they keep: closing and the league, in their own 
   G.room = "lucky_tiger"; G.day = 3;
   out = []; doCommand("ask lek about league");
   assert.match(text(), /Tonight/); assert.match(text(), /PLAY KILLER/);
-  G.day = 4; out = []; doCommand("ask lek about league"); assert.match(text(), /night after next/);
-  G.day = 5; out = []; doCommand("ask lek about league"); assert.match(text(), /tomorrow/);
+  G.day = 4; out = []; doCommand("ask lek about league"); assert.match(text(), /[Nn]ight after next/);
+  G.day = 5; out = []; doCommand("ask lek about league"); assert.match(text(), /[Tt]omorrow/);   // the pool capitalises a leading word (round 85)
   G.room = "queen_vic"; out = []; doCommand("ask terry about quiz");
   assert.doesNotMatch(text(), /\bna\b/, "a pensioner does not say na");
   out = []; doCommand("ask aoy about closing"); assert.match(text(), /[Ee]leven/, "the pub shuts at eleven (Mario, 2026-10-11)");

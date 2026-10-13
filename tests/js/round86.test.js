@@ -77,3 +77,25 @@ test("the Vic's room water comes out of the mini-fridge, cold", () => {
 test("the care thanks does not promise never to ask again", () => {
   assert.ok(!_CARE_THANKS.some(l => /not say again|not talk about it again/.test(l)));
 });
+
+// Mario's call on the score economy (2026-10-13): a dance pays once a night, with a woman who knows you;
+// a photo pays for the first three new faces a night. Each first zero says why.
+test("DANCE WITH a stranger pays nothing and says why; a woman who knows you pays once a night", () => {
+  G.room = "pink_lotus"; const g = _npcsHere().filter(i => NPC_ROLES[i] === "hostess");
+  let h = G.happy; out = []; run(`dance with ${NPCS[g[0]].name.toLowerCase()}`);
+  assert.equal(G.happy, h, "a stranger's dance is hers"); assert.match(said(), /stranger is hers/);
+  G.soc.drinks[g[0]] = 4; h = G.happy; run(`dance with ${NPCS[g[0]].name.toLowerCase()}`);
+  assert.equal(G.happy - h, 2, "she knows you: the night's dance");
+  if (g[1]) { G.soc.drinks[g[1]] = 4; h = G.happy; run(`dance with ${NPCS[g[1]].name.toLowerCase()}`); assert.equal(G.happy, h, "once a night, not once a woman"); }
+  _endNight("sleep"); G.room = "pink_lotus"; G.nightTurn = 30; h = G.happy; run(`dance with ${NPCS[g[0]].name.toLowerCase()}`);
+  assert.equal(G.happy - h, 2, "a new night, a new dance");
+});
+
+test("PHOTO pays for three new faces a night, then says the album keeps the rest", () => {
+  G.room = "queen_vic"; G.nightTurn = 20; G.battery = 100;
+  const faces = _npcsHere().filter(i => !NPC_ROLES[i] || !/gogo|soi6/.test(ROOMS[G.room].barType || ""));
+  assert.ok(faces.length >= 4, "the Vic has four faces to photograph: " + faces.length);
+  const h = G.happy; out = [];
+  for (const id of faces.slice(0, 5)) run(`photo ${NPCS[id].name.toLowerCase()}`);
+  assert.equal(G.happy - h, PHOTO_JOY_NIGHT); assert.match(said(), /first three new faces/);
+});

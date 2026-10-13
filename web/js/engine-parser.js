@@ -10984,6 +10984,27 @@ function _floorJoy(n) {
   if (j[G.room]) return false;
   j[G.room] = 1; _addHappy(n); return true;
 }
+// DANCING PAYS ONCE A NIGHT, AND ONLY WITH SOMEBODY WHO KNOWS YOU (Mario, 2026-10-13, after Sunil, round 86:
+// DANCE WITH every woman in every room was ~140 of a 300 week — churn outpaying every relationship in the game,
+// the opposite of what the Soi 6 opening says out loud). A stranger's dance is hers; a woman you have met, the
+// one on your arm or the band's floor pays the night's one dance. The first zero of a night says why, once.
+function _danceJoy(n, id) {
+  const knows = !id || (G.party && G.party.ids && G.party.ids.includes(id)) ||
+    (typeof _knownTier === "function" && _knownTier(id) >= 1) || (typeof _affairLive === "function" && _affairLive() && G.affair.id === id);
+  // a floor dance with nobody is the room's, like a song: it shares the song's once-a-room book too
+  const floorTaken = !id && G.soc.joyRooms && G.soc.joyRooms[G.room];
+  if (knows && !G.soc.dancePaid && !floorTaken) {
+    G.soc.dancePaid = true; if (!id) (G.soc.joyRooms = G.soc.joyRooms || {})[G.room] = 1;
+    _addHappy(n); return true;
+  }
+  if (!G.soc.danceNoted) {
+    G.soc.danceNoted = true;
+    _say(knows && floorTaken && !G.soc.dancePaid ? "(No สนุก — this floor has paid you once tonight already.)"
+      : knows ? "(No สนุก — a dance pays once a night. The rest are for the room.)"
+      : "(No สนุก — a dance with a stranger is hers. It pays with a woman who knows you, once a night.)", "dim");
+  }
+  return false;
+}
 function _doDance(arg) {
   // DANCE WITH <her>: the named woman, not "a hostess materialises at your elbow"
   // with your own girl standing there (Rolf, round 55)
@@ -11004,7 +11025,7 @@ function _doDance(arg) {
       `${NPCS[_p].name} puts the cloth down and dances with you for exactly one chorus, badly on purpose, and the girls at the far end cheer like it's a wedding. Then she goes back to the ice.`,
       `"Here? Now?" ${NPCS[_p].name} looks at the room, decides, and takes your hand. One song. Lamai pretends not to watch and watches the whole thing.`,
     ], "affairdance"));
-    _floorJoy(1);
+    _danceJoy(1, _p);
     return;
   }
   // the woman on your arm, named or not — "a hostess joins you instantly" with Lek beside you (Dev, round 65)
@@ -11015,12 +11036,12 @@ function _doDance(arg) {
       "You dance, and {who} dances with you — properly, not the professional version, laughing at you and joining in at the same time.",
       "{who} dances like nobody is paying for it, which tonight nobody is. One song, and she does not let go of your hand after it.",
     ], "dancewithcomp").replace(/\{who\}/g, NPCS[_comp].name));
-    _floorJoy(2);
+    _danceJoy(2, _comp);
     return;
   }
   if (_p && NPC_ROLES[_p]) {
     _say(_fmt("{n} laughs and comes round the rail to take your hands, and for one song the bar is a dance floor.", { n: NPCS[_p].name }));
-    _floorJoy(2);
+    _danceJoy(2, _p);
     return;
   }
   if (_room().barType === "gogo") {
@@ -11055,7 +11076,7 @@ function _doDance(arg) {
       (_hostessHere()
         ? " A hostess materialises at your elbow and either leads or follows, both equally convincing."
         : " Somebody near the rail whoops. A freelancer two tables over decides you are worth watching, which is a different thing from being worth joining, and watches."));
-    _floorJoy(2);
+    _danceJoy(2);
   } else if (_inBar()) {
     _say(_hostessHere()
       ? "You dance between the stools. A hostess joins you instantly and " +
@@ -11068,7 +11089,7 @@ function _doDance(arg) {
     _say("You dance in front of the stage. The guitarist points his headstock at you " +
       "approvingly. On the outside this looks ridiculous; on the inside you are having " +
       "the most fun you've had since you stopped caring what it looked like.");
-    _floorJoy(2);
+    _danceJoy(2);
   } else {
     _say("You dance alone on the pavement. A passing baht bus honks the beat, " +
       "which is generous, because you weren't keeping one.");
@@ -11740,8 +11761,15 @@ function _photoChar(id) {
   const had = _hasPortrait(id);
   _addPhoto(id);
   if (had) _say(_pickVary(_PHOTO_DUP, "photodup")(n.name));
-  else if (sneaky) { _say(_pickVary(_PHOTO_GOGO_YES, "photosneak")(n.name)); _addHappy(1); }
-  else { _say(_pickVary(_PHOTO_NEW, "photonew")(n.name)); _addHappy(1); }
+  else if (sneaky) { _say(_pickVary(_PHOTO_GOGO_YES, "photosneak")(n.name)); _photoJoy(); }
+  else { _say(_pickVary(_PHOTO_NEW, "photonew")(n.name)); _photoJoy(); }
+}
+// the first three new faces a night pay (Mario, 2026-10-13 — Sunil photographed six regulars in six turns for
+// +6, about 35 a week for nothing); the album keeps the rest, and the first one that doesn't pay says so
+const PHOTO_JOY_NIGHT = 3;
+function _photoJoy() {
+  if ((G.soc.photoJoy || 0) < PHOTO_JOY_NIGHT) { G.soc.photoJoy = (G.soc.photoJoy || 0) + 1; _addHappy(1); return; }
+  if (!G.soc.photoNoted) { G.soc.photoNoted = true; _say("(No สนุก — the first three new faces a night are the ones that pay. The album keeps the rest.)", "dim"); }
 }
 
 function _doPhoto(arg) {

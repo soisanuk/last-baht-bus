@@ -5754,6 +5754,8 @@ function _endNight(reason) {
   G.soc.contested = {}; // a forced drink's standoff doesn't outlive the shift
   G.soc.gaveCondom = {}; // as is the (amusing) condom fondness
   G.soc.joyRooms = {};   // a dance or a song pays once a room a night (Pete, round 75: SING ×40 was the best job in town)
+  G.soc.dancePaid = false; G.soc.danceNoted = false;   // …and a DANCE once a night, with a woman who knows you (Mario, 2026-10-13)
+  G.soc.photoJoy = 0; G.soc.photoNoted = false;        // …and the first three new faces a night (same call)
   // the woman you woke up with saw you this morning: an LT, a night out or a ride is not an
   // absence (Pete, round 75 — Manow asked where he had been for four days, the evening after)
   for (const _w of [G.lastBfId, ...((G.party && G.party.ids) || [])]) if (_w && NPCS[_w]) (G.seenDay = G.seenDay || {})[_w] = G.day;

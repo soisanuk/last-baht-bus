@@ -22638,13 +22638,13 @@
       "lens": "score-chaser",
       "instrument": "",
       "claim": "DANCE WITH any woman pays +2 a room a night, free — ~140 of 300; churn pays more than any relationship",
-      "verdict": "design",
-      "note": "Score economy: put to Mario (cap per night, or pay for a woman you know).",
+      "verdict": "fixed",
+      "note": "Mario 2026-10-13: a dance pays once a night, with a woman who knows you; the first zero says why.",
       "cls": "E",
       "sev": "major",
       "system": "economy",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round86.test.js"
     },
     {
       "round": "86",
@@ -22653,13 +22653,13 @@
       "lens": "score-chaser",
       "instrument": "",
       "claim": "PHOTO pays +1 per new face, free, men included (~35)",
-      "verdict": "design",
-      "note": "Score economy: put to Mario.",
+      "verdict": "fixed",
+      "note": "Mario 2026-10-13: the first three new faces a night pay; the album keeps the rest.",
       "cls": "E",
       "sev": "minor",
       "system": "economy",
       "between": "",
-      "pin": ""
+      "pin": "tests/js/round86.test.js"
     },
     {
       "round": "86",
