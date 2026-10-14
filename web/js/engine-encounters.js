@@ -190,7 +190,8 @@ function _flowerTick() {
   if (NPC_ROLES[partner] === "mamasan" || NPC_ROLES[partner] === "cashier") return;   // the daughter does not pitch a rose for the mamasan (Rolf, round 54)
   if (!(G.soc.drinks && G.soc.drinks[partner] > 0)) return; // and actually courting her
   if (G.flowerDay === G.day) return;              // once a night
-  if (_rand() >= 0.12) return;
+  if (G.flowerDay && G.day - G.flowerDay < 2) return;   // …and never two nights running: five nights of seven at one rail (Steve's fourth run)
+  if (_rand() >= 0.05) return;
   G.flowerDay = G.day;
   G.flowerFor = partner;
   G.pendingEnc = "flower";

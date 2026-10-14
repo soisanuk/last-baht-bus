@@ -205,7 +205,7 @@ test("WATCH SUNRISE asks once; a WAIT into the dawn asks once", () => {
   out = []; run("watch sunrise"); assert.match(said(), /WATCH SUNRISE again/); assert.equal(G.day, day);
   out = []; run("watch sunrise"); assert.equal(G.day, day + 1);
   G.room = "stinky_bar"; G.nightTurn = 100; const d2 = G.day;
-  out = []; run("wait 60"); assert.match(said(), /WAIT again if you mean it/); assert.equal(G.day, d2);
+  out = []; run("wait 60 turns"); assert.match(said(), /WAIT again if you mean it/); assert.equal(G.day, d2);
 });
 test("the prompts that end a night say so", () => {
   assert.match(String(_chamPrompt), /the night goes with her/);

@@ -1601,11 +1601,15 @@ function _convoStart(id) {
     G.convoQ = null;
     _say(`(${who}'s question will keep — you've turned to ${_convoName(id)}, and ${_sheHe(_qid).s} will ask again.)`, "dim");   // "goes unanswered" read as a penalty for greeting the room (Margaret, round 78)
   }
+  const _same = G.convo === id;
   G.convo = id; G.itNpc = id;
   // coming back to somebody whose question you walked away from: they ask again,
   // once, because a question that can never be re-offered is a dead end
   const lapsed = G.convoLapsed && G.convoLapsed[id];
-  if (lapsed && !G.convoQ) {
+  // …but a question she put aside a moment ago for YOURS, in the same conversation, is still waiting on your answer
+  // after she gives hers — it is not re-asked and not lost (Steve's fourth run: "Doncaster Rovers")
+  if (lapsed && !G.convoQ && _same && lapsed.back != null && G.turns - lapsed.back <= 3) { /* kept for the answer */ }
+  else if (lapsed && !G.convoQ) {
     delete G.convoLapsed[id];
     // the same night only: "First time this bar?" five nights and three drinks later (Bernard, round 88)
     if (lapsed.q && !lapsed.dodged && (lapsed.day == null || lapsed.day === G.day)) {
@@ -1683,7 +1687,8 @@ function _convoCard() {
   return { id, name: n.name, line, tier, cold, asking: !!(G.convoQ && G.convoQ.id === id) };
 }
 function _convoDrop(dodged) {
-  if (G.convoQ && G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, dodged: !!dodged, day: G.day };
+  // `back`: when it was put aside — a short answer in the next few turns is still hers (Steve's fourth run, "Doncaster Rovers")
+  if (G.convoQ && G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, dodged: !!dodged, day: G.day, back: dodged ? G.turns : null };
   G.convoQ = null;
 }
 // she/he/they for a character the engine is ABOUT to pronoun — same logic the

@@ -7765,7 +7765,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "the story. I don't quite know what to do with that yet. Sit, na. We find out.\"",
         short: "\"Back again — and no Berlin-business excuse. Refreshing. Most regulars need a story. You don't. Sit, na.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "She finishes the eight-count before she even looks at you — the stage is hers and she knows it. " +
+        text: "She finishes her conversation with the girl beside her before she even looks at you — the front stool is hers and she knows it. " +
           "\"Hi. Yes, ladyboy, before you spend an hour wondering — I like to save everyone the detective work.\" " +
           "The English is quick and unaccented in the wrong places, schooled somewhere colder than here. \"Berlin " +
           "polished it. Long story, expensive city. Buy me a drink and I might tell you a little of it — auf " +

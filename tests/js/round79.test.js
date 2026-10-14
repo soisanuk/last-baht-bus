@@ -39,7 +39,7 @@ test("the middle's beer bars are Soi 6: one drink, and the girl quotes it hersel
   out = []; run("barfine " + NPCS[g].name.toLowerCase());
   assert.doesNotMatch(said(), /more, then we talk/, "not Walking Street's three drinks");
   G.soc.drinkCount = { [g]: 1 }; out = []; run("barfine " + NPCS[g].name.toLowerCase());
-  assert.match(said(), /upfront as a menu/, "she quotes it herself");
+  assert.ok(_BF_MENU_LINES.some(l => said().includes(l.split("{n} ")[1].slice(0, 25))), "she quotes it herself");
 });
 
 test("a question is not the answer to her earlier question", () => {

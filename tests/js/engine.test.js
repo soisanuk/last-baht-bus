@@ -3915,7 +3915,7 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   state().soc.drinks.joy = 4; state().soc.drinkCount = { joy: 1 };   // Soi 6's one drink (round 78)
   run("barfine joy");
   assert.ok(state().pendingBf);
-  assert.match(lastOut(), /upfront as a menu/i, "Soi 6 girls quote it themselves");
+  assert.ok(_BF_MENU_LINES.some(l => lastOut().includes(l.split("{n} ")[1].slice(0, 25))), "Soi 6 girls quote it themselves");
   run("short time");
   assert.equal(state().room, "pink_lotus", "still on your stool");
   assert.equal(state().day, 2, "night continues");
@@ -3937,7 +3937,7 @@ test("soi 6 is one lady drink before upstairs, and none for a regular (Mario, ro
   state().soc.drinkCount = { kwan: 1 };
   run("barfine kwan");
   assert.ok(state().pendingBf, "one drink, and upstairs is on the table");
-  assert.match(lastOut(), /upfront as a menu/i);
+  assert.ok(_BF_MENU_LINES.some(l => lastOut().includes(l.split("{n} ")[1].slice(0, 25))));
   state().pendingBf = null; state().soc.drinkCount = {}; state().soc.drinks.kwan = 14;   // a regular
   run("barfine kwan");
   assert.ok(state().pendingBf, "a regular needs no drink at all");

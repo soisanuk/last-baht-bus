@@ -770,6 +770,16 @@ const _PEACOCK_NO_BF = [
     "pieces aren't for sale. \"You like one of my girls? Come back. Tip. Learn her name and use " +
     "it. That currency we take.\"",
 ];
+// the Soi 6 girl's own quote, as a stranger hears it — a pool: Kwan and Nina quoted it in one sentence two nights apart
+// (Steve's fourth run)
+const _BF_MENU_LINES = [   // a pool now: Kwan and Nina quoted it in one sentence two nights apart (Steve's fourth run)
+        "{n} counts it out on her fingers, upfront as a menu — she quotes upstairs the way a noodle cart quotes noodles, one eye still counting the room over your shoulder.",
+        "{n} gives you the prices in a low, practical voice, the way you'd tell a friend where the toilet is.",
+        "{n} doesn't make a show of it: the numbers, once each, and then she watches to see which one you heard.",
+        "{n} says the figures to her glass rather than to you, which is its own kind of manners.",
+        "{n} ticks the numbers off on a beer mat with one fingernail, then turns the mat so you can read it.",
+        "{n} quotes it like a bus fare — flat, quick, nothing to be embarrassed about on either side."
+];
 function _doBarfine(arg) {
   // BARFINE at the girl on your own arm: the ledger has nothing to sell you
   if (typeof _atOwnBar === "function" && _atOwnBar()) {
@@ -1022,9 +1032,7 @@ function _doBarfine(arg) {
   if (bt === "soi6" || _room().region === "Soi 6") {   // on Soi 6 the girl quotes it herself, the middle's beer bars included (Gary, round 79)
     _say(_waivedFine ? `${name} leans in close and says it quietly, not as a menu: for you, no fine — she will square it with the house herself.`
       : _bondTier(id) >= 2 ? `${name} tells you the numbers plainly, the way you would tell a friend what something costs — no menu voice, and no eye on the room while she does it.`   // a regular is not quoted at (Sam, round 90)
-      : `${name} counts it out on her fingers, upfront as a menu — she quotes ` +   // not the noodle-cart menu right before she waives it (Sunil, round 86)
-      "upstairs the way a noodle cart quotes noodles, one eye still counting " +
-      `the room over your shoulder.` +
+      : _fmt(_pickTownLine(_BF_MENU_LINES, "bfmenu"), { n: name }) +
       (bt === "soi6" && G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
         "apologetic shrug: upstairs is one thing, but take a Soi 6 girl out of the bar for a whole night " +
         "this early and the mamasan prices her like a go-go headliner." : ""));

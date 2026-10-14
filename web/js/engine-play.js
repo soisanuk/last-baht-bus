@@ -1063,6 +1063,18 @@ const _SMALL_TALK = {
     "\"Of course. You think I drink cola all night because I love cola?\"",
     "\"Yes, my cut. Is why I say thank you very nice.\"",
   ],
+  howlong: [   // vague on purpose: a woman's own nodes may state her years, and these must never contradict them
+    "\"Long enough that the new girls ask me where the ice is.\"",
+    "\"Longer than I plan. Everybody here say that, and everybody here is telling the truth.\"",
+    "\"Little while. Some night feel like one year, some night feel like ten.\"",
+    "\"Since before the owner promise new chairs. Still waiting for the chairs.\"",
+    "\"Ask the mamasan, she write it in the book. I don't count.\"",
+    "\"This bar? Not so long. Pattaya? Longer.\"",
+    "\"Long time. The regulars know my name. The soi dog know my name.\"",
+    "\"Since I stop counting. Is a good sign or a bad sign, I don't know.\"",
+    "\"Enough Songkran to be tired of the water fight.\"",
+    "\"Too long, my feet say. Not long enough, my bank say.\"",
+  ],
   lonely: [
     "\"Lonely?\" She thinks about it honestly. \"In the bar, never. On the bike home at three, little bit.\"",
     "\"Sometime. Pattaya is full of people and nobody know you. Is a special kind of lonely.\"",
@@ -1273,9 +1285,10 @@ const _SMALL_TALK_KEYS = [
   ["before", /\b(before (this|pattaya|here|bar)|what did you do before|used to do|old job|before you work)\b/],
   ["dayoff", /\b(day ?off|days off|weekend|free time|when you not work|spare time)\b/],
   ["food", /\b(favou?rite food|what (do )?you (like (to )?)?eat|food you like|hungry)\b/],
-  ["feeling", /\b(tired|are you (ok|okay|happy|sad|bored|good)|how are you|how you feel|feeling)\b/],
+  ["feeling", /\b(tired|are you (ok|okay|happy|sad|bored|good)|how are you|how you feel|feeling|having fun|enjoying (?:yourself|it|tonight)|(?:having|have) (?:a )?(?:good|nice|fun) (?:time|night))\b/],
+  ["howlong", /\b(how long here|how long (?:have )?(?:you )?(?:been )?(?:work|here|in pattaya|working))\b/],
   ["age", /\b(how old|your age|age)\b/],
-  ["miss", /\b(miss me|will you miss|do you miss|you miss)\b/],
+  ["miss", /\b(miss(?:ed)? me|will you miss|do you miss|you miss|did you miss)\b/],
   ["boyfriend", /\b(boyfriend|is that your|husband|married)\b/],
   ["abroad", /\b(do you like (australia|england|britain|the uk|america|germany|my country|europe)|have you (ever )?been (abroad|to (australia|england|europe|america))|would you (go|come)(?: (?:to|with))?)\b/],
   ["finish", /\b(what time (do )?you finish|when (do )?you finish|finish work|go home tonight)\b/],
@@ -2943,6 +2956,31 @@ function _doApologize() {
       n => `${n} weighs the apology like change at a till, and takes it. "Forget it." Mostly, they will.`,
     ], "insultsorry")(NPCS[_hurt].name), "dim");
     return;
+  }
+  // the woman who saw you walk in with somebody else (the jilt, the rival) is in the room: the apology is hers (Steve's
+  // fourth run: "sorry about last night" got the mamasan's book of credit)
+  const _jilted = _npcsHere().find(n => G.miffed && G.miffed[n] != null && G.day - G.miffed[n] <= 2 && !_maiDee(n));
+  if (_jilted) {
+    delete G.miffed[_jilted];
+    _say(_fmt(_pickTownLine([
+      "{n} looks at you for a long moment, deciding. \"Okay. Last night was last night.\" She moves her bag off the stool.",
+      "\"Sorry for what?\" {n} says, in the voice of a woman who knows exactly for what. Then, quieter: \"Okay. Sit.\"",
+      "{n} makes you wait one full song before she answers. \"Next time you bring her, you buy me two drink. Is the rule.\" She is nearly smiling.",
+      "\"Hm.\" {n} studies you. \"Farang always sorry the next day. Thai man never sorry, never next day.\" A shrug. \"Okay. Accepted.\"",
+      "{n} waves it away with the back of her hand. \"Mai pen rai. I am not your wife.\" But she sits closer than she did a minute ago.",
+    ], "jiltsorry"), { n: NPCS[_jilted].name }));
+    return;
+  }
+  { const c = typeof _convoActive === "function" && _convoActive();
+    if (c && NPC_ROLES[c] === "hostess" && _npcsHere().includes(c)) {
+      _say(_fmt(_pickTownLine([
+        "\"Sorry for what?\" {n} looks honestly puzzled. \"You not do anything. Yet, hahaha.\"",
+        "{n} pats your hand. \"Mai pen rai. Nothing to be sorry. You think too much.\"",
+        "\"Okay, I forgive you.\" {n} grins. \"For what, I don't know. But I forgive.\"",
+        "\"Farang say sorry all the time,\" {n} says. \"Thai people say it when it is real. Is this real?\" She lets you off with a laugh.",
+      ], "lightsorry"), { n: NPCS[c].name }));
+      return;
+    }
   }
   if (_inBar()) {
     const judged = _npcsHere().find(_maiDee);
