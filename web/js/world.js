@@ -17669,13 +17669,16 @@ function _c4Depth(id) {
 // Gareth, round 46; the claim-collision class exactly), and her family/plan
 // lines dodge everything already told at her bar — filler girls first, then the
 // authored girls before her in id order. Pure: same id, same answer, every night.
+const _H_FROM_NORTH = ["Nan", "Chiang Rai", "Chiang Mai", "Phrae", "Phayao", "Lampang", "Lamphun", "Mae Hong Son", "Uttaradit", "Sukhothai", "Phitsanulok", "Phetchabun"];
 function _authoredStory(npc) {
   const n = NPCS[npc]; if (!n) return null;
   const room = n.room || (n.bars && n.bars[0]);
   const provs = _H_FROM.map(p => p.replace(/[{}]/g, ""));
   const own = (n.dialogue || []).map(e => e.text || "").join(" ") + " " + (n.desc || "");
   const named = provs.find(p => own.includes(p));
-  const from = named ? _H_FROM[provs.indexOf(named)] : _H_FROM[_hh(npc, 3) % _H_FROM.length];
+  // a home her own text names outside Isan (Kwan's Nan) is her home too — never a hashed province two lines later
+  const north = !named && _H_FROM_NORTH.find(p => new RegExp("\\b" + p + "\\b").test(own));
+  const from = named ? _H_FROM[provs.indexOf(named)] : north ? north : _H_FROM[_hh(npc, 3) % _H_FROM.length];
   const taken = { family: new Set(_storyTaken(room).family), plan: new Set(_storyTaken(room).plan) };
   const peers = Object.keys(NPCS).filter(id => id !== npc && id < npc && !NPCS[id].filler &&
     NPC_ROLES[id] === "hostess" && (NPCS[id].room === room || (NPCS[id].bars || []).includes(room)));

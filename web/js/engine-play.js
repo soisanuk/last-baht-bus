@@ -3245,9 +3245,13 @@ function _doTalkAct(kind, targetWord) {
   const st = _npcState(id);
 
   // How it lands is a function of how warm they already are.
+  // …and a woman who knows you by the bond, or is on your arm tonight, is not a stranger whatever the talk ledger
+  // says ("Early for that" after a night together — Steve, the baseline rerun)
+  const close = (typeof _knownTier === "function" && _knownTier(id) >= 2) || !!(G.party && (G.party.ids || []).includes(id)) ||
+    !!(G.wentWith && G.wentWith[id]);
   let outcome;
-  if (kind === "compliment") outcome = (st.dstate === "stranger" || st.trust <= 0) ? "flat" : "warm";
-  else if (kind === "joke")  outcome = (st.mood === "open" || st.trust >= 2) ? "warm" : "flat";
+  if (kind === "compliment") outcome = !close && (st.dstate === "stranger" || st.trust <= 0) ? "flat" : "warm";
+  else if (kind === "joke")  outcome = close || st.mood === "open" || st.trust >= 2 ? "warm" : "flat";
   else                        outcome = st.trust >= 3 ? "warm" : "cool"; // tease is earned
   outcome = _persTalkOutcome(kind, outcome);        // your personality tilts how it lands…
   outcome = _npcPersTalkOutcome(id, kind, outcome); // …and theirs gets the last word
@@ -5031,13 +5035,20 @@ function _cinderellaCoda() {
   // …nor if her own texts have told you about her bike (Sam, round 90: "bike flat tire", then the baht bus coin)
   const _rode = !!(G.lastRide && G.lastRide.id === G.lastBfId && G.lastRide.day >= G.day - 1) ||
     !!(G.lastBfId && (G.phone.inbox || []).some(x => x.from === G.lastBfId && /\b(bike|motorbike|scooter)\b/i.test(String(x.text || ""))));
-  _say(_rode
+  // …nor a woman who has ridden you on that bike on an earlier night: she owns it, she rode it to work (Steve's rerun)
+  const _bike = !_rode && !!(G.lastBfId && G.rideLog && G.rideLog[G.lastBfId]);
+  if (_bike) _say(_deal([
+    "Dawn on the main road. She walks you to the corner, then on to wherever she parked the bike last night, and you hear it start two streets away — the same cough it made the night she rode you round the town.",
+    "She leaves in the grey with her helmet on her arm. Her bike is where she always leaves it, behind the 7-Eleven; you know that now, which is its own kind of receipt.",
+  ], "home"), "room");
+  else _say(_rode
     ? "Dawn on the main road, the sky the colour of a weak tea. She kicks the bike awake, puts on the helmet " +
       "she did not wear all night because the police are up now, and is gone into the first traffic without " +
       "looking back. The receipt is her tail-light, then not even that."
     : _deal(_CODA_HOME, "home"), "room");
-  const _close = _rode ? _CODA_CLOSE.filter(l => !/baht bus/.test(l)) : _CODA_CLOSE;
-  _say(_close[G.codaSeen % _close.length], "dim");
+  const _close = _rode || _bike ? _CODA_CLOSE.filter(l => !/baht bus/.test(l)) : _CODA_CLOSE;
+  (_book.close = _book.close || []);
+  _say(_deal(_close, "close"), "dim");   // the close is a book too: Steve read one sentence three dawns running
   G.codaSeen++;
 }
 
@@ -6144,7 +6155,7 @@ const _GOODBYE_FARANG = [
     `arrangement.\n\n"I don't do this," she says. "Airport, crying, all that — no. ` +
     `Stupid." She hands you the coffee. "So I do it here instead, quick, and then I go ` +
     `sleep." She does it here instead. It is quick. Neither of you is any good at it.`,
-  n => `${n} does not come to see you off, and her text says plainly why: ` +
+  n => `${n} will not come to the airport, and her text says plainly why: ` +
     `"because then i stand there like idiot, and after you go i still stand there." She ` +
     `writes it flatly, the way she says the price of things. What she does instead is put ` +
     `you in the taxi herself at the hotel, argue with the driver about the airport fare ` +
@@ -6195,7 +6206,7 @@ function _lastNightBye(id) {
   _say((typeof _pickTownLine === "function" ? _pickTownLine(pool, "lastbye:" + (tier >= 3 ? 3 : tier >= 2 || went ? 2 : 1)) : pool[0])(n), "room");
   const b = (G.lastNightBye && G.lastNightBye.v === G.vacation) ? G.lastNightBye : (G.lastNightBye = { v: G.vacation, ids: [] });
   b.ids.push(id); b.room = G.room;
-  (G.soc.leavingSaid = G.soc.leavingSaid || {})[id] = G.turns;   // she has been told: the hearsay goodbye can never print now
+  (G.soc.leavingSaid = G.soc.leavingSaid || {})[id] = G.day;   // she has been told: the hearsay goodbye can never print now
   if (b.ids.length === 1) _addHappy(2);   // one goodbye said properly; the second is not a second reward
 }
 

@@ -2879,7 +2879,11 @@ const _ROOM_WITH_HER_RE = /^(?:Back along the soi with|The fronts call to everyb
 function _roomLinesFit(pool, room) {
   const withHer = !!(G.party && G.party.ids && G.party.ids.length);
   const absent = Object.keys(NPCS).filter(i => NPC_ROLES[i] && (NPCS[i].room === room) && (!_npcsHere().includes(i) || (withHer && G.party.ids.includes(i))));
-  const f = pool.filter(l => (!withHer || !_ROOM_PITCH.test(String(l))) &&
+  // …and a bar where a woman on the floor is already yours (regular or better) does not pitch you as a walk-in: the
+  // floor knows whose you are (Steve's rerun, at the bar the room itself had called him "spoken for" in)
+  const spoken = !withHer && !!(ROOMS[room] && ROOMS[room].barType) && typeof _knownTier === "function" &&
+    _npcsHere().some(i => NPC_ROLES[i] === "hostess" && NPCS[i].room === room && _knownTier(i) >= 2);
+  const f = pool.filter(l => (!(withHer || spoken) || !_ROOM_PITCH.test(String(l))) &&
     !absent.some(i => new RegExp("\\b" + String(NPCS[i].name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(String(l))));
   if (!f.length && withHer && !(ROOMS[room] && ROOMS[room].barType)) return _ROOM_WITH_HER.map(l => _fmt(l, { who: typeof _partyLabel === "function" ? _partyLabel() : "her" }));
   return f.length ? f : pool;

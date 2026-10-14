@@ -1655,6 +1655,14 @@ function _companionEats(arg, what, price) {
     ], "compdrinks"), { n: NPCS[id].name, w: what, p: price, m: G.money }));
     return true;
   }
+  if (typeof _servesDrinks === "function" && _servesDrinks(G.room)) {   // a plate at a table is not a snack on the step (the Vic's pie)
+    _say(_fmt(_pickVary([
+      "{n} pulls {w} across the table and eats it properly, knife and fork, all of it, while you watch. \"Farang food very heavy,\" she says, and finishes the crust. (-฿{p}, ฿{m} left.)",
+      "{n} cuts {w} in two before she starts and slides the bigger half back to you without discussion. (-฿{p}, ฿{m} left.)",
+      "{n} photographs {w} for somebody before she eats it, then eats it like somebody who was hungrier than she let on. \"Thank you, na.\" (-฿{p}, ฿{m} left.)",
+    ], "compplate"), { n: NPCS[id].name, w: what, p: price, m: G.money }));
+    return true;
+  }
   _say(_fmt(_pickVary([
     "{n} takes {w} in both hands like a present and eats it in four bites, watching the street. \"Okay. All mine, na.\" (-฿{p}, ฿{m} left.)",
     "You hand {n} {w}. She tears it in half and gives you the bigger half without discussion, which is the most Thai thing anybody has done to you all week. (-฿{p}, ฿{m} left.)",
@@ -6191,6 +6199,7 @@ function _textTalk(npc, topic) {
     // her family, her home, her plan are HER subjects, answered by her own nodes — not by the medicine text that
     // happened to say "mama" (Bernard, round 88: "ask jiab about her family" got the ฿400 ask back)
     const _own = /^(famil|mama|mum|mom|mother|papa|dad|father|home|plan|kid|son|daughter|sister|brother|villag|parent|grandm)/;
+    if (typeof _qAsked !== "undefined" && _qAsked) return false;   // a question about her is not a question about her texts
     const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w) && !_names.has(w) && !_own.test(w)).map(_stem);
     if (!words.length) return false;
     const _body = x => x.text || x.photo || "";   // a photo's caption is what she said too: Cream's labels were a selfie's caption (Gordie, round 72)
@@ -6283,6 +6292,16 @@ function _leavingTalk(npc, topic) {
   if (!NPC_ROLES[npc]) return false;
   const said = (G.soc.leavingSaid = G.soc.leavingSaid || {});
   if (said[npc] === G.day) { _say(`${NPCS[npc].name} nods. She heard you the first time.`); return true; }
+  // told on an earlier night: she remembers, and does not give the same speech again (Steve's rerun: one reply, twice)
+  if (said[npc] != null && said[npc] !== G.day) {
+    const n = NPCS[npc].name, ago = G.day - said[npc];
+    said[npc] = G.day;
+    _say(_pickTownLine([`"I know, I know. You tell me ${ago === 1 ? "yesterday" : "already"}." ${n} counts on her fingers. "So now is ${_lastNight() ? "the last one" : "less days"}. Okay. Then we don't waste."`,
+      `${n} gives you a look. "Every night you tell me you go home. Every night you are still here." A smile. "I start to think you don't go."`,
+      `"Same news like ${ago === 1 ? "last night" : "before"}." ${n} taps your glass. "I remember. You think I forget?"`,
+      `"Yes, yes, you fly." ${n} waves it away. "You said. I hear you the first time — I am not Pattaya man, I listen."`], "leaving:again"));
+    return true;
+  }
   said[npc] = G.day;
   const _lp = _LEAVING_TALK[Math.min(3, _knownTier(npc))], tier = Math.min(3, _knownTier(npc));
   // her own line, and not one another woman gave you: Pukky and Nina gave the same goodbye speech (Kevin, round 84)

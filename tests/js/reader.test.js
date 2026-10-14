@@ -106,3 +106,63 @@ test("the small wrongs: the dog's mat, the fridge's one count, darts that drift,
   assert.ok(new Set(visits).size > 1, "not 60 every time");
   G.room = "queen_vic"; G.nightTurn = 20; const m = G.money; out = []; run("food"); assert.equal(G.money, m, "the card, not a basket");
 });
+
+// ── the rerun's gaps (Steve, the second time round) ──────────────────────────────────────────────────────────────
+test("anything else said to her is answered in character — never 'didn't parse' while she is listening", () => {
+  G.room = "sunset_dreams"; run("talk to kwan"); G.convoQ = null;
+  for (const c of ["i'm here till sunday", "i'll miss you", "the weather is hot tonight", "great night tonight"]) {
+    out = []; run(c); assert.doesNotMatch(said(), /didn't parse|didn't understand|blinks at you/, c + ": " + said());
+  }
+  out = []; run("nice blue dress"); assert.match(said(), /Kwan/);
+  out = []; run("lok"); assert.ok(out.length, "a stray word still answers somehow");
+});
+
+test("WHAT'S YOUR NAME is answered with her name", () => {
+  G.room = "sunset_dreams"; run("talk to kwan"); G.convoQ = null;
+  out = []; run("what's your name"); assert.match(said(), /Kwan/); assert.doesNotMatch(said(), /wrong girl|Not my story|don't know/);
+});
+
+test("with her on your arm: LET'S GO HOME goes home with her; WHERE DO YOU WANT TO GO follows her", () => {
+  G.room = "sunset_dreams"; run("talk to kwan"); G.convoQ = null; G.party = { ids: ["kwan"], stops: 1, spent: 0, seen: {} };
+  out = []; run("where do you want to go"); assert.match(said(), /FOLLOW KWAN|Next place|Out first/i);
+  out = []; run("let's go home"); assert.equal(G.room, _hotelRoomId(), said());
+});
+
+test("a bare LAST NIGHT said to the woman who spent it with you is hers, not the ledger", () => {
+  G.room = "sunset_dreams"; G.day = 4; run("talk to kwan"); G.convoQ = null;
+  G.partyLog = { kwan: { day: 3, rooms: ["sunset_dreams"] } };
+  out = []; run("last night"); assert.doesNotMatch(said(), /Nothing to report|The morning ledger/i, said());
+});
+
+test("Kwan's family lives in Nan, as her own home answer says; a pie for her is hers", () => {
+  assert.equal(_authoredStory("kwan").from, "Nan");
+  G.room = "queen_vic"; G.nightTurn = 20; G.party = { ids: ["kwan"], stops: 1, spent: 0, seen: {} }; G.hunger = 50;
+  const h = G.hunger, m = G.money; out = []; run("buy pie for kwan");
+  assert.ok(G.hunger >= h, "he did not eat it"); assert.ok(G.money < m); assert.match(said(), /Kwan/); assert.doesNotMatch(said(), /watching the street/);
+});
+
+test("a compliment from a man she has gone out with is not 'early for that'", () => {
+  G.room = "sunset_dreams"; G.wentWith = { kwan: { kind: "out", day: G.day - 1 } };
+  for (let k = 0; k < 6; k++) { out = []; run("compliment kwan"); assert.doesNotMatch(said(), /Early for that|strangers are weather/); }
+});
+
+test("a question about her is not answered with her old text; told twice on two nights, she says she remembers", () => {
+  G.room = "sunset_dreams"; G.soc.drinks.kwan = 10; G.phone.contacts = { kwan: true };
+  G.phone.inbox = [{ from: "kwan", text: "tomorrow i work double shift, so tired", turn: 1, read: true, day: G.day }];
+  run("talk to kwan"); G.convoQ = null; out = []; run("what are you doing tomorrow?");
+  assert.doesNotMatch(said(), /double shift/, said());
+  G.day = 5; run("i fly home in two days"); const first = said();
+  G.day = 6; out = []; run("i fly home tomorrow"); assert.notEqual(said(), first); assert.match(said(), /already|yesterday|remember|first time|still here/i, said());
+});
+
+test("the dawn coda's close is a book, and a woman who rode you on her bike does not catch the baht bus", () => {
+  const seen = []; for (let k = 0; k < 3; k++) { out = []; G.lastBfId = "pukky"; _cinderellaCoda(); seen.push(out[out.length - 1]); }
+  assert.equal(new Set(seen).size, seen.length);
+  G.rideLog = { pukky: { day: G.day - 3 } }; G.lastRide = null;
+  for (let k = 0; k < 4; k++) { out = []; G.lastBfId = "pukky"; _cinderellaCoda(); assert.doesNotMatch(said(), /baht bus/i); }
+});
+
+test("no cart vignette while she has asked you something; carts are three hours apart", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-encounters.js", import.meta.url)), "utf8");
+  assert.match(src, /!G\.convoQ && _rand\(\) < 0\.20/); assert.match(src, /G\.lastSaleng >= 30/);
+});

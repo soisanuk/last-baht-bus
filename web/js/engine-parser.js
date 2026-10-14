@@ -5584,7 +5584,7 @@ function _doTalkCore(arg, topic) {
       (_knownTier(npc) >= 1 || (G.phone.contacts || {})[npc] || (G.soc.drinks[npc] || 0) > 0) &&
       !((G.soc.retHello = G.soc.retHello || {})[npc])) {
     G.soc.retHello[npc] = true;
-    const n = NPCS[npc].name, gift = _giftsOf(npc).length > 0, num = !!(G.phone.contacts && G.phone.contacts[npc]);
+    const n = NPCS[npc].name, gift = _giftsOf(npc).length > 0, num = !!(G.phone.contacts && G.phone.contacts[npc]) && (G.phone.inbox || []).some(m => m.from === npc);   // she has to have SENT one (Steve, rerun)
     const pool = [
       `"You come back!" ${n} pats the stool beside her. "I think maybe you forget me. Sit, sit."`,
       `${n} sees you and lifts her glass an inch. "Hello again, you. Same as last time?"`,
@@ -6162,8 +6162,10 @@ function _convoAnswer(text) {
     // "Wrong answer gets a warm one", and Doncaster Rovers got the same nod as anything else)
     const _node = (NPCS[id] && NPCS[id].dialogue || []).find(d => d.asks && d.asks.key === key && typeof d.asks.react === "function");
     const _r = _node ? _node.asks.react(val, G) : null;
-    const _v = String(val || "").length <= 40 ? String(val || "").replace(/^i'?m |^i am |^my /i, "").trim() : "";
-    _say(_r || (_pr(id).s === "she" ? _pickVary(_ANSWER_ACK, "ansAck") : _ANSWER_ACK[1])(name, _v));
+    // said back only when it is a short answer, without the stray punctuation, and not the same line from two people (Steve, rerun)
+    const _v0 = String(val || "").replace(/^i'?m |^i am |^my /i, "").replace(/[?!.,;:]+/g, "").trim();
+    const _v = _v0.split(/\s+/).length <= 3 ? _v0 : "";
+    _say(_r || (_pr(id).s === "she" ? _pickTownLine(_ANSWER_ACK, "ansAck") : _ANSWER_ACK[1])(name, _v));
     if (!prior) st.trust = Math.min(5, st.trust + 1); // opening up, once
     _repGain(); // a straight, honest answer is part of being a good sort (throttled)
   }
@@ -9478,6 +9480,9 @@ function _doBuy(arg) {
   // the till are one object (_qvMenu) by construction.
   if (G.room === "queen_vic" &&
       (/food|kitchen|dinner|snack|meal|eat/.test(arg) || _qvNamesDish(arg))) {
+    // a dish FOR her is hers: BUY PIE FOR KWAN fed Steve and left her watching (the baseline rerun)
+    const _forDish = /\bfor \w+/.test(arg) && _qvMatchDish(arg.replace(/\s+for\s+\w+.*$/, ""));
+    if (_forDish && typeof _companionEats === "function" && _companionEats(arg, "the " + _forDish.name, _forDish.price)) return;
     _qvKitchen(arg);
     return;
   }
@@ -14877,6 +14882,10 @@ function _readListener() {
 }
 // The acts the reader routes before the word-matching parser can misread them. Returns true if it handled the line.
 let _readDepth = 0;
+// a QUESTION a man asked her in his own words is about her, not about the last text she sent: "what are you doing
+// tomorrow?" read her old lottery text back (Steve's rerun). _textTalk reads this while the ask runs.
+let _qAsked = false;
+function _askQ(cmd) { _qAsked = true; try { doCommand(cmd); } finally { _qAsked = false; } }
 function _readRoute(raw) {
   if (G.pendingChoice || G.pendingEnc || G.game || G.pendingBf || G.pendingFare || G.pendingSoapy) return false;
   // the commands it routes TO are commands already: never read twice
@@ -14888,6 +14897,7 @@ function _readRouteBody(raw) {
   const R = _read(raw);
   const who = _readListener();
   const name = who ? String(NPCS[who].name).toLowerCase() : null;
+  if (who && _nameSaid(who, R)) return true;
   // telling somebody you are leaving (Steve, the baseline: three phrasings, three wrong answers)
   if (R.act === "leaving" && R.kind !== "question" && (R.about === "me" || /\b(trip|holiday|stay|week|here)\b/.test(R.raw.toLowerCase()))) {
     if (!who) { _say("(You could tell somebody — TALK TO somebody you know here, and say it to them.)", "dim"); return true; }
@@ -14914,16 +14924,122 @@ function _readRouteBody(raw) {
   if (R.kind === "yes" && G.lastOffer && (G.turns - G.lastOffer.turn <= 1 || (!G.convoQ && G.turns - G.lastOffer.turn <= 3)) && G.quests[G.lastOffer.qid] === "offered" && _npcsHere().includes(G.lastOffer.giver)) {
     doCommand("accept " + G.lastOffer.qid); return true;
   }
-  // a QUESTION to the woman you are talking to always reaches her, as the subject it is about (her own "not my
-  // story" is an answer; "didn't parse" never is) — only once nothing more specific claimed it, so this is the floor
+  // the woman on your arm: LET'S GO HOME is going home with her, WHERE DO YOU WANT TO GO is following her lead
+  // (Steve's rerun: both were parse failures while she stood beside him) — the reader's only acts are the ones that
+  // change the game's state; everything else said to her is answered by _readAsk's catch-all
+  if (who && G.party && (G.party.ids || []).includes(who)) {
+    const l = R.raw.toLowerCase();
+    if (/^(?:ok(?:ay)?,? )?(?:let'?s|shall we|we should|time to|wanna|want to) (?:go )?(?:home|back(?: to (?:mine|my (?:room|hotel)|the hotel))?|to bed|bed)\b/.test(l) ||
+        /^(?:come|coming) (?:home|back) with me\b/.test(l)) { doCommand("go home with " + name); return true; }
+    if (/\bwhere (?:do |would )?(?:you|u) (?:want|wanna|like) (?:to )?go\b|^(?:you (?:choose|pick|decide|lead)|lead the way|your (?:choice|call)|take me somewhere|show me (?:your|a) place)\b/.test(l)) {
+      doCommand("follow " + name); return true;
+    }
+  }
   return false;
+}
+// WHAT A MAN SAYS TO HER THAT IS NOT A COMMAND (the catch-all, last before the parse failure). The reader does not
+// try to understand it; it CLASSIFIES it into a handful of buckets and she answers in character — "didn't parse"
+// is never what a woman says to a man talking to her. A new reader act is added only when the game must change state
+// (above); a sentence that only wants answering lands here. Order: a night she shared, a subject she has, a
+// compliment (the COMPLIMENT verb, so the talk ledger counts it), then a pooled acknowledgement by bucket.
+const _HEARD = {
+  floor: {
+    affectionCool: ["She laughs. \"You say same thing every bar, na. Buy me drink first, then I believe little bit.\"",
+      "\"Miss me? You know me one hour, tilac.\" But she is smiling at the bar mat.",
+      "\"Sweet mouth,\" she says, tapping your lip with one finger. \"Pattaya make every man sweet mouth.\"",
+      "She tilts her head. \"Maybe true, maybe beer talking. I wait see if beer come back tomorrow.\""],
+    affectionWarm: ["She goes quiet a second. \"Me too,\" she says, to the glass, and then quickly: \"Little bit. Not too much.\"",
+      "\"Don't say like that,\" she says, and squeezes your hand under the bar where nobody can see.",
+      "She looks at you properly for once. \"I know. You come back, okay? Not just say.\"",
+      "\"Hm.\" She leans her shoulder into yours. \"Then you stay longer next time. Simple.\""],
+    plan: ["\"Okay, okay. I remember.\" She taps her temple. \"Not write down — remember.\"",
+      "\"So I see you again before then, na?\" Not a question, the way she says it.",
+      "She counts it off on her fingers, pleased to have the arithmetic. \"Okay. Still have time.\"",
+      "\"Good. Then no hurry tonight,\" she says, and settles back on her stool."],
+    food: ["\"Hungry? Noodle cart outside, very cheap. Or 7-Eleven toastie — farang love toastie.\"",
+      "\"You eat yet? Kin khao rue yang?\" She looks genuinely concerned. \"Must eat, then drink.\"",
+      "\"Som tam, very spicy, you cannot,\" she decides for you. \"Maybe noodle.\""],
+    generic: ["She nods along, catching most of it. \"Mm. Same same,\" she says, which is agreement of a kind.",
+      "\"Really?\" She leans in like it's the best thing she's heard tonight, and maybe it is.",
+      "She laughs — at the sense or the sound of it, you can't tell — and clinks her glass on yours.",
+      "\"Ohh,\" she says, and then, practical: \"So — you want another beer?\"",
+      "She thinks about it, then gives a little shrug. \"Up to you, tilac. Your holiday.\"",
+      "\"Hah. You funny man,\" she says, and seems to mean it in the good way.",
+      "She repeats a word of it back to you, trying it out, and gets it nearly right.",
+      "\"Sabai sabai,\" she says, which covers it, and tops up your glass from the bottle."],
+  },
+  house: {
+    affectionCool: ["A dry look. \"Everybody says that around eleven o'clock. Come back at seven and say it sober.\"",
+      "\"That's the beer, love,\" comes the answer, kindly enough."],
+    affectionWarm: ["\"You've been good company this week,\" comes the answer, quieter than usual. \"That's not nothing here.\"",
+      "A small smile. \"Go on. You'll be back. They all say they won't and they're back by March.\""],
+    plan: ["A nod. \"Noted. Plenty of time yet, then.\"", "\"Good,\" comes the answer. \"Then we'll see you before you go.\"",
+      "\"Right you are.\" Said like a man writing it on a mental beer mat."],
+    food: ["\"There's a noodle cart round the corner most nights, and the 7-Eleven's toasties have saved more lives than the clinic.\"",
+      "\"Eat something before the next one. Seriously.\""],
+    generic: ["A nod — heard, considered, filed under the evening's conversation.", "\"Fair enough,\" comes the answer, and the glass is raised an inch.",
+      "\"Is that right,\" comes the reply — a statement, not a question, the way old hands say it.",
+      "A laugh, short and genuine. \"You'll fit in here yet.\"", "\"Hm.\" A pause. \"Can't argue with that.\""],
+  },
+};
+// WHAT'S YOUR NAME: a woman knows her own name, whatever her topics are (Steve's rerun: "You ask the wrong girl")
+function _nameSaid(c, R) {
+  if (!c || R.kind !== "question" || R.about !== "you" || !/^(?:your )?(?:name|real name|nickname|thai name)$/.test(R.topic)) return false;
+  if ((_convoTopics(c, { all: true }) || []).some(k => _topicHits(k, "name"))) return false;   // her own words on it win
+  const n = NPCS[c];
+  _say(_hoursRegister(c) === "floor"
+    ? _fmt(_pickTownLine(_NAME_SAID.floor, "namesaid"), { n: n.name, th: n.th || n.name })
+    : _fmt(_pickTownLine(_NAME_SAID.house, "namesaidh"), { n: n.name }));
+  if (G.known) G.known[c] = true;
+  _tick(); return true;
+}
+const _NAME_SAID = {
+  floor: ["\"{n}.\" She says it twice, the second time slower, as if you might need it again. \"{th}. You remember?\"",
+    "\"{n}. Nickname — real name too long for farang.\" A grin. \"{n} is enough.\"",
+    "She points at herself. \"{n}. And you? No — I guess first.\"",
+    "\"Me? {n}.\" She writes it on the bar mat with a wet finger, in Thai, and watches you try to read it."],
+  house: ["\"{n},\" comes the answer, with a nod — the way you give your name to a man who might be back.",
+    "\"{n}. Has been all my life.\"", "\"It's {n}. Everybody here just says {n}.\""],
+};
+const _READ_EN = new Set(("great good bad nice night tonight today tomorrow fun beer drink bar hot cold busy quiet tired happy sad " +
+  "love music song weather rain lovely pretty beautiful week holiday place town street money cheap expensive").split(" "));
+function _heardBucket(t) {
+  if (/\b(?:miss (?:you|u)|love (?:you|u)|like (?:you|u)|fancy (?:you|u)|think about (?:you|u)|you'?re (?:special|the one)|my girl)\b/.test(t)) return "affection";
+  if (/\b(?:hungry|starving|eat|food|dinner|noodles?|som tam)\b/.test(t)) return "food";
+  if (/\b(?:till|until|back (?:on|in|tomorrow|next)|staying|here for|tomorrow|next week|on (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday))\b/.test(t)) return "plan";
+  if (/^(?:nice|lovely|beautiful|pretty|gorgeous|cute|love (?:the|your)|i like your) (?!night|time|day|week|evening)|\byou (?:look|are|'re|re) (?:beautiful|pretty|lovely|gorgeous|cute|nice|stunning)\b|\b(?:dress|hair|smile|eyes)\b/.test(t)) return "compliment";
+  return "generic";
 }
 function _readAsk(raw) {
   const R = _read(raw);
   const c = typeof _convoActive === "function" && _convoActive();
-  if (R.kind !== "question" || R.about === "me" || !c || !_npcsHere().includes(c) || !R.topic) return false;
+  if (!c || !_npcsHere().includes(c)) return false;
   if (G.pendingChoice || G.pendingEnc || G.game || G.pendingBf) return false;
-  doCommand("ask " + String(NPCS[c].name).toLowerCase() + " about " + R.topic);
+  const name = String(NPCS[c].name).toLowerCase();
+  if (R.kind === "question") {
+    if (R.about === "me" || !R.topic) return false;
+
+    _askQ("ask " + name + " about " + R.topic); return true;
+  }
+  // only a sentence: a stray word is a typo, and "didn't understand" is the honest answer to one
+  const t = R.raw.toLowerCase().replace(/[?!.,]+/g, " ").replace(/\s+/g, " ").trim();
+  if (!["statement", "command"].includes(R.kind) || t.split(" ").length < 2) return false;
+  // a night she shared is hers to talk about ("great night", "last night was fun")
+  if (/\b(?:great|good|fun|lovely|amazing|brilliant|best) night\b|\blast night\b/.test(t) &&
+      ((G.partyLog && G.partyLog[c]) || (G.wentWith && G.wentWith[c]) || G.lastBfId === c)) { doCommand("ask " + name + " about last night"); return true; }
+  // a subject she has an answer for
+  const topics = typeof _convoTopics === "function" ? _convoTopics(c, { all: true }) : [];
+  const words = R.topic.split(" ").filter(w => w.length > 2);
+  const hit = topics.find(k => words.some(w => _topicHits(k, w)));
+  if (hit) { doCommand("ask " + name + " about " + String(hit).split("|")[0]); return true; }
+  const b = _heardBucket(t);
+  // a sentence in another language is not a remark she nods at: the generic bucket needs English in it
+  if (b === "generic" && !t.split(" ").some(w => _READ_STOP.has(w) || _READ_EN.has(w))) return false;
+  if (b === "compliment") { doCommand("compliment " + name); return true; }
+  const reg = _hoursRegister(c) === "floor" ? "floor" : "house";
+  const key = b === "affection" ? (_knownTier(c) >= 2 || (G.party && (G.party.ids || []).includes(c)) ? "affectionWarm" : "affectionCool") : b;
+  _say(_pickTownLine(_HEARD[reg][key], "heard:" + reg + key));
+  _tick();
   return true;
 }
 function _norm(s) {
@@ -15170,7 +15286,10 @@ function doCommand(input) {
     // "last night of the trip / here" is the leaving said, not the ledger: the sentence reader takes it (Steve, the baseline)
     if (/^(?:of (?:the|my) (?:trip|holiday|week|stay)|here|in (?:pattaya|town))\b/i.test(_rest)) { /* left for _readRoute */ }
     else
-    raw = (_rest && _p && NPCS[_p]) ? "ask " + NPCS[_p].name.toLowerCase() + " about last night" : "ledger";
+    // …and a bare LAST NIGHT said to the woman who SPENT it with you is hers, not the ledger (Steve's rerun)
+    raw = (_p && NPCS[_p] && _npcsHere().includes(_p) && (_rest || (G.partyLog && G.partyLog[_p] && G.partyLog[_p].day === G.day - 1) ||
+      (G.wentWith && G.wentWith[_p] && G.wentWith[_p].day === G.day - 1) || (G.lastNightWas && G.lastNightWas.with === _p && G.lastNightWas.day === G.day - 1)))
+      ? "ask " + NPCS[_p].name.toLowerCase() + " about last night" : "ledger";
   }
   // WHO RUNS THIS BAR is a question about the paper, not the black book (Graham, round 74)
   if (/^who (runs|owns) (this|the) (bar|place|club|pub)\??$/i.test(raw.trim()) && typeof _licenceOf === "function" && _licenceOf(G.room)) raw = "examine licence";
@@ -15767,7 +15886,7 @@ function doCommand(input) {
       if (!_onArm && q !== "bye" && typeof _convoActive === "function" && _convoActive() === pid && /^(good ?night|goodbye|bye( bye)?|see (you|ya)|night night|ok bye|i'?m off)\b/.test(q)) { doCommand("bye"); return; }
       if (/^((can|could|may) i (buy|get) you a drink|(do you )?want a drink|let me buy you a drink|have a drink on me|you want drink)/.test(q) && NPC_ROLES[pid]) { doCommand("buy drink for " + _her); return; }
       const ROUTE = [
-        [/where (are|r) (you|u) from|where'?s (your )?home|where is (your )?home|where (do|did) you (grow up|live)|what province|where'?s your (village|family)|where is your (village|family)|are you from isan/, "home"],
+        [/where (?:(?:are|r) )?(you|u) from|where'?s (your )?home|where is (your )?home|where (do|did) you (grow up|live)|what province|where'?s your (village|family)|where is your (village|family)|are you from isan/, "home"],
         [/(have|got) (any )?(kids|children|a son|a daughter|a baby)|how many (kids|children)|^kids$|how is your (papa|dad|father|mum|mom|mother|mama|sister|brother|son|daughter|family|baby)|your (papa|mama|family)/, "family"],
         [/how long (have )?(you )?(been )?(work(ed|ing)?|here|in pattaya|lived here|living here)|do you like (this|the|your) (job|work)|^your job/, "work"],
         [/how many drinks (before|until)|give me your number|your (number|line)/, "number"],
@@ -15781,7 +15900,7 @@ function doCommand(input) {
       const qShaped = _read(lower).kind === "question";
       const topic = r ? r[1] : (qShaped && typeof _SMALL_TALK_KEYS !== "undefined" && _SMALL_TALK_KEYS.some(([, rx]) => rx.test(q)) ? q : null);
       if (topic === "number" && NPC_ROLES[pid] && !/^ask /.test(lower)) { doCommand("contact " + _her); return; }   // "how many drinks before you give me your number?" is the number, asked
-      if (topic) { doCommand("ask " + _her + " about " + topic); return; }
+      if (topic) { _askQ("ask " + _her + " about " + topic); return; }
     } }
   // GOODNIGHT NINA, SEE YOU TOMORROW said with nobody to say it to is a goodnight, not a parse failure (Kevin, round 84)
   if (!G.pendingChoice && !G.pendingEnc && !G.game && !(G.party && G.party.ids && G.party.ids.length) &&
@@ -16077,12 +16196,14 @@ function doCommand(input) {
     case "what": case "whats": case "define": case "explain": case "im": case "i'm": case "have":
       if (_naturalHelp(lower)) break;
       if (_politePhrase(lower) || _convoResolve(lower)) break;
+      if (typeof _readAsk === "function" && _readAsk(lower)) break;   // "i'm here till sunday", said to her (Steve's rerun)
       _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse"); return;
     case "i":
       if (!arg) { _doInventory(); break; }
       // "i love you", "i want a beer" — not an inventory request; let the
       // polite-phrase / conversation layers have it (Alan playtest 2026-08-17)
       if (_politePhrase(lower) || _convoResolve(lower)) break;
+      if (typeof _readAsk === "function" && _readAsk(lower)) break;
       _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse"); return;
     // Meta, not play: handing the character to the other game and taking one
     // back are outside the fiction, and charging a turn of the night for them

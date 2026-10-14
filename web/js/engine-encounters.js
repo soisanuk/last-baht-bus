@@ -230,11 +230,12 @@ function _salengTick() {
     if (here) _say(_pickVary(_SALENG_LEAVE, "salengleave"), "dim");
     return; // never spawn a replacement the same tick it leaves
   }
-  if (_salengHere()) { if (!_lockedIn() && _rand() < 0.20) _salengVignette(); return; }   // windows black, door bolted: no cart vignette (Darren, round 37)
+  // …and not while the woman you are talking to has asked you something: she does not bolt for the cart mid-question (Steve's rerun)
+  if (_salengHere()) { if (!_lockedIn() && !G.convoQ && _rand() < 0.20) _salengVignette(); return; }   // windows black, door bolted: no cart vignette (Darren, round 37)
   if (!G.game && !G.pendingEnc && !G.salengCart && _inBar() && _room().barType !== "pub" &&
       _room().barType !== "gents" && // enclosed villa behind a wall — no cart wheels in
       !(G.soc.lockIn && G.soc.lockIn[G.room]) && // the cart can't get past the bolt
-      _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 15 &&
+      _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 30 && Object.keys(G.soc.salengBar || {}).length < 3 &&   // a cart every bar he sat in read as a parade (Steve's rerun): three a night, three hours apart
       !((G.soc.salengBar || {})[G.room]) &&   // one cart per bar per night — three som-tam carts in one evening (Trevor, round 39)
       !(G.rain > 0) &&   // a cart does not park in a downpour (Tomasz, round 54)
       !_room().invite && !_room().indoors &&   // nor outside a windowless members' room (Declan, round 58)

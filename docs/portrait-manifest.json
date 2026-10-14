@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-10",
+  "generated": "2026-10-14",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 191,
@@ -3532,7 +3532,7 @@
       "th": "บัว",
       "room": "candy_bar",
       "tags": [],
-      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. She keeps half an eye on the door and the other half on you.",
       "look": "Thai woman of thirty-one, gold hoop earrings and chains, glossy black hair, sharp winged eyeliner, gold phone case.",
       "rendered": true
     },
@@ -3740,7 +3740,7 @@
       "th": "รุ้ง",
       "room": "lucky_tiger",
       "tags": [],
-      "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of Lucky Tiger Bar's girls, from Sisaket. She notices who is drinking and who is only pretending to.",
       "look": "Athletic, a sunburnt nose, a sports watch she checks between customers",
       "rendered": true
     },
@@ -3756,7 +3756,7 @@
       "th": "โอ๊ต",
       "room": "lucky_tiger",
       "tags": [],
-      "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Lucky Tiger Bar's girls, from Sakon Nakhon. She remembers a face after one beer, and lets you see that she does.",
       "look": "Thai woman of twenty-seven, broad shoulders, short sporty bob, sunburnt cheeks, wide grin, white volleyball jersey.",
       "rendered": true
     },
@@ -3980,7 +3980,7 @@
       "th": "พริก",
       "room": "moonshine_bar",
       "tags": [],
-      "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of Moonshine Bar's girls, from Yasothon. Her eyes go to the door every time it moves.",
       "look": "Thai woman of twenty-five, athletic shoulders, high braided ponytail, strong jaw, sweatband on one wrist, orange tank top.",
       "rendered": true
     },
@@ -4060,7 +4060,7 @@
       "th": "นิ่ม",
       "room": "water_buffalo",
       "tags": [],
-      "desc": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept — one of The Water Buffalo's girls, from Sakon Nakhon. She reads a room the way other people read a menu.",
       "look": "Thin as wire, hair dyed jet black, an old dancer's posture she has kept",
       "rendered": true
     },
@@ -4236,7 +4236,7 @@
       "th": "อิง",
       "room": "blue_dog",
       "tags": [],
-      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. She laughs easily and watches carefully.",
       "look": "Thai woman of twenty-six, a row of gold studs in each ear, long wavy hair, dimpled smile, white top, fine gold chains.",
       "rendered": true
     },
@@ -4300,7 +4300,7 @@
       "th": "มะนาว",
       "room": "stinky_bar",
       "tags": [],
-      "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Stinky Pinky's girls, from Sakon Nakhon. She has an opinion about every man at the rail and keeps all of them to herself.",
       "look": "Athletic, a sunburnt nose, a sports watch she checks between customers",
       "rendered": true
     },
@@ -4444,7 +4444,7 @@
       "th": "บุ๋ม",
       "room": "dollhouse",
       "tags": [],
-      "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Broad-shouldered and easy, a volleyball player's posture and handshake — one of The Dollhouse's girls, from Sakon Nakhon. She follows the music, the door and the till without turning her head.",
       "look": "Thai woman of thirty, broad-shouldered, cropped wavy hair, freckled nose, easy laugh, oversized jersey dress.",
       "rendered": true
     },
@@ -4844,7 +4844,7 @@
       "th": "มิน",
       "room": "the_boardroom",
       "tags": [],
-      "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Athletic, a sunburnt nose, a sports watch she checks between customers — one of The Boardroom's girls, from Yasothon. She knows which stool is whose before its owner does.",
       "look": "Athletic, a sunburnt nose, a sports watch she checks between customers",
       "rendered": true
     },
@@ -5020,7 +5020,7 @@
       "th": "น้ำทิพย์",
       "room": "the_terrace",
       "tags": [],
-      "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Terrace's girls, from Nakhon Phanom. She counts the room's empty glasses without seeming to look at them.",
+      "desc": "Hair bleached at the ends, a row of ear piercings, chewing on a straw — one of The Terrace's girls, from Nakhon Phanom. She is the first to see a new face and the last to say anything about it.",
       "look": "Hair bleached at the ends, a row of ear piercings, chewing on a straw",
       "rendered": true
     },
@@ -6012,7 +6012,7 @@
       "th": "กิ่ง",
       "room": "lucky_tiger",
       "tags": [],
-      "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Lucky Tiger Bar, from Amnat Charoen.",
+      "desc": "Behind a counter hung with lucky charms, squaring a stack of chits — the cashier at Lucky Tiger Bar, from Amnat Charoen.",
       "look": "In a cage of fairy lights, counting notes faster than the eye follows",
       "rendered": true
     },
@@ -6060,7 +6060,7 @@
       "th": "จ๊ะ",
       "room": "gold_rush",
       "tags": [],
-      "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Gold Rush Lounge, from Buriram.",
+      "desc": "Under a strip light, sorting the notes by colour without looking — the cashier at Gold Rush Lounge, from Buriram.",
       "look": "In a cage of fairy lights, counting notes faster than the eye follows",
       "rendered": true
     },
@@ -6124,7 +6124,7 @@
       "th": "เก่ง",
       "room": "khao_talo_bar",
       "tags": [],
-      "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Daeng's Place, from Mukdahan.",
+      "desc": "Behind the till with the radio low, adding up the evening in her head — the cashier at Daeng's Place, from Mukdahan.",
       "look": "In a cage of fairy lights, counting notes faster than the eye follows",
       "rendered": true
     },
@@ -6236,7 +6236,7 @@
       "th": "เนย",
       "room": "kingfisher",
       "tags": [],
-      "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at The Kingfisher, from Khon Kaen.",
+      "desc": "A ledger in her own small handwriting and a pen she does not lend — the cashier at The Kingfisher, from Khon Kaen.",
       "look": "A note-counting machine at her elbow and a faster one behind her eyes",
       "rendered": true
     },
@@ -6252,7 +6252,7 @@
       "th": "ออม",
       "room": "two_stools",
       "tags": [],
-      "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Two Stools Bar, from Loei.",
+      "desc": "The cup of chits at her elbow and every tab in the bar in her head — the cashier at Two Stools Bar, from Loei.",
       "look": "A note-counting machine at her elbow and a faster one behind her eyes",
       "rendered": true
     },
@@ -6332,7 +6332,7 @@
       "th": "ฝ้าย",
       "room": "the_bucket",
       "tags": [],
-      "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at The Bucket, from Surin.",
+      "desc": "Elbows on the counter, the chits fanned out like a winning hand — the cashier at The Bucket, from Surin.",
       "look": "In a cage of fairy lights, counting notes faster than the eye follows",
       "rendered": true
     },
