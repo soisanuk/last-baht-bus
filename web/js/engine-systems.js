@@ -2307,6 +2307,12 @@ function _rideBike(id) {
     "Honda Wave with a milk crate bungeed on the back", "Click with a Doraemon sticker over the fuel cap"];
   return bikes[_hh(String(id) + ":bike", 23) % bikes.length];
 }
+// …and the same bike in her own mouth, first person (the hundred questions: "do you have a motorbike?")
+function _rideBikeMine(id) {
+  const mine = ["A Honda Click, very scratched", "A Scoopy — one mirror broken, I fix next month", "A PCX, a little too big for me, I know",
+    "A Honda Wave with a milk crate on the back", "A Click with Doraemon on the fuel cap"];
+  return mine[_hh(String(id) + ":bike", 23) % mine.length];
+}
 function _rideNickname(id) { return _herNameForYou(id); }   // one list, in engine-play, so the rail and the ride agree
 function _pickRideVenue(seen) {
   // Soi 6 mode fences Walking Street off entirely (the mode blocks you from walking

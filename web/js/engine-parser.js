@@ -15091,7 +15091,7 @@ const _HER_ROUTE = [
         [/how long (have )?(you )?(been )?(work(ed|ing)?|here|in pattaya|lived here|living here)|do you like (this|the|your) (job|work)|^your job/, "work"],
         [/how many drinks (before|until)|give me your number|your (number|line)/, "number"],
         [/what'?s your (real )?name|what is your (real )?name|real name/, "name"],
-        [/send money( home)?/, "money"],
+        [/send money( home)?/, "send money home"],
         [/what will you do (when you stop|after this|later)|your (plan|dream)|in the future/, "plan"],
   [/\b(?:have|got) (?:line|facebook|instagram|insta|whatsapp|tiktok)\b|\byour (?:facebook|instagram|insta|whatsapp|tiktok)\b/, "number"],
   [/\b(?:the )?(?:mamasan|mama san|your mama|your boss)\b(?! .*(?:sick|ok|okay|well))/, "mamasan"],
@@ -15138,8 +15138,7 @@ function _toHer(c, raw, addressed) {
     return true;   // the soft ask spent the turn
   }
   let missed = false;
-  if (R.kind === "question" && _heardBucket(t) === "affection") missed = true;   // "am I too old for you?" is not her age
-  else if (R.kind === "question") {
+  if (R.kind === "question") {
     if (R.about === "me" && !addressed && !/\b(?:you|your|u|ur)\b/.test(t)) return false;
     const rr = _HER_ROUTE.find(([rx]) => rx.test(t));
     if (rr && rr[1] === "number" && NPC_ROLES[c]) { doCommand("contact " + name); return true; }

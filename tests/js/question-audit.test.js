@@ -12,6 +12,9 @@ test("every question reaches her: no verb takes it, nothing fails to parse", () 
   const r = run("--quick");
   assert.ok(r.asked > 250, "the sample asked");
   assert.deepEqual(r.findings, [], r.findings.map(f => `${f.c} ${f.id}: ${f.q} → ${f.o}`).join("\n"));
+  // the writing queue was emptied on 2026-10-14 (the 32 subjects): keep it empty — a new question on the list needs
+  // a subject, not the catch-all
+  assert.equal(r.bucketed, 0, "every question has a subject that answers it");
 });
 
 test("the audit goes red without the routing rule", () => {

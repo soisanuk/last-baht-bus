@@ -212,3 +212,20 @@ test("Jenny's Singapore: her aiyoo and her lah are hers, and nobody else's", () 
   const hits = [...src.matchAll(/\baiyo+\b|\blah\b/gi)].map(m => m.index).filter(i => !/\/\/[^\n]*$/.test(src.slice(src.lastIndexOf("\n", i), i)));
   assert.ok(hits.length >= 2 && hits.every(i => i > jb && i < je), String(hits.length));
 });
+
+// ── the 32 subjects (2026-10-14) ─────────────────────────────────────────────────────────────────────────────────
+test("a feeling is answered by how well she knows you; her bike is the bike the night ride puts her on", () => {
+  G.room = "sunset_dreams"; run("talk to kwan"); G.convoQ = null;
+  out = []; run("do you love me?"); const cool = said();
+  assert.ok(_SMALL_TALK.love.cool.some(l => cool.includes(l.slice(1, 30))), cool);
+  G.soc.drinks.kwan = 14; G.smallTalk = {}; out = []; run("do you love me?");
+  assert.ok(_SMALL_TALK.love.warm.some(l => said().includes(l.slice(1, 30))), said());
+  out = []; run("do you have a motorbike?");
+  assert.ok(said().toLowerCase().includes(_rideBikeMine("kwan").toLowerCase().split(/[,—]/)[0].replace(/^a /, "").trim()), said());
+});
+
+test("every new subject pool is deeper than a week's ten women, and none of its lines gives a woman kin or a province", () => {
+  const keys = ["spicy", "drink", "smoke", "moto", "temple", "football", "music", "sing", "dance", "ghosts", "sign", "mantype", "farang", "oldmen", "marry", "manymen", "girls", "weather", "looks", "lonely", "sendhome", "gohome", "drinkcut"];
+  for (const k of keys) { assert.ok(_SMALL_TALK[k].length >= 10, k); for (const l of _SMALL_TALK[k]) assert.doesNotMatch(l.replace("Buriram United", ""), /\bmy (son|daughter|husband|father|brother|sister)\b|Udon|Buriram|Sisaket|Ubon|Khon Kaen|Korat/, k + ": " + l); }
+  for (const k of ["love", "likeme"]) for (const t of ["cool", "warm"]) assert.ok(_SMALL_TALK[k][t].length >= 10, k + t);
+});
