@@ -8,9 +8,9 @@ var NEWS_FEED = [
     "d": "13 Oct 2026"
   },
   {
-    "t": "Pattaya begins 3.5km road upgrade ahead of New Year",
+    "t": "Police fire shots during Pattaya drug chase after pickup hits office",
     "s": "Thaiger",
-    "d": "12 Oct 2026"
+    "d": "14 Oct 2026"
   },
   {
     "t": "Australian admits hiding teen’s body in suitcase, denies murder in Pattaya case",
@@ -18,7 +18,7 @@ var NEWS_FEED = [
     "d": "14 Oct 2026"
   },
   {
-    "t": "Who really buys Thai condos?",
+    "t": "Pattaya police raid call center targeting scam victims with fake refund promises",
     "s": "Pattaya Mail",
     "d": "14 Oct 2026"
   },
@@ -38,24 +38,9 @@ var NEWS_FEED = [
     "d": "14 Oct 2026"
   },
   {
-    "t": "What Thailand stands to gain from hosting the world’s financial leaders",
-    "s": "Pattaya Mail",
+    "t": "Pattaya begins 3.5km road upgrade ahead of New Year",
+    "s": "Thaiger",
     "d": "12 Oct 2026"
-  },
-  {
-    "t": "Thailand has become 'the sick man of Asia': Korn",
-    "s": "Bangkok Post",
-    "d": "12 Oct 2026"
-  },
-  {
-    "t": "Grab announces new Thailand initiative with OpenAI",
-    "s": "CNN",
-    "d": "14 Oct 2026"
-  },
-  {
-    "t": "An eerie trip inside Thailand’s oldest amusement park, deserted after flooding",
-    "s": "The Guardian",
-    "d": "14 Oct 2026"
   },
   {
     "t": "A $60 Casio Watch Is a New Political Status Symbol in Thailand",
@@ -63,25 +48,40 @@ var NEWS_FEED = [
     "d": "14 Oct 2026"
   },
   {
-    "t": "Thailand's inflation will come down in the near-term: Bank of Thailand's Deputy Governor",
-    "s": "CNBC",
+    "t": "Thailand has become 'the sick man of Asia': Korn",
+    "s": "Bangkok Post",
+    "d": "12 Oct 2026"
+  },
+  {
+    "t": "An eerie trip inside Thailand’s oldest amusement park, deserted after flooding",
+    "s": "The Guardian",
     "d": "14 Oct 2026"
   },
   {
-    "t": "I've traveled to over 100 countries on my own. I'd recommend these 5 destinations to first-time solo travelers.",
-    "s": "Business Insider",
+    "t": "Grab announces new Thailand initiative with OpenAI",
+    "s": "CNN",
+    "d": "14 Oct 2026"
+  },
+  {
+    "t": "Tried to bring 300 saplings from Thailand without authorization and got caught",
+    "s": "The Jerusalem Post",
+    "d": "13 Oct 2026"
+  },
+  {
+    "t": "Thailand flood death toll since September 16 rises to 71, Interior Ministry says",
+    "s": "Reuters",
     "d": "12 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-13","USD":33.59,"AUD":23.44,"GBP":44.5,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-14","temp":29,"humid":85,"code":95,"hi":30,"rain":100};
+var WX_NOW = {"date":"2026-10-14","temp":26,"humid":95,"code":3,"hi":29,"rain":98};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4167,"date":"2026-10-14","baht":66200};
+var GOLD = {"usd":4139,"date":"2026-10-14","baht":65750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":83723,"thb":2808632};
+var BTC = {"usd":83394,"thb":2800041};
