@@ -166,3 +166,49 @@ test("no cart vignette while she has asked you something; carts are three hours 
   const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-encounters.js", import.meta.url)), "utf8");
   assert.match(src, /!G\.convoQ && _rand\(\) < 0\.20/); assert.match(src, /G\.lastSaleng >= 30/);
 });
+
+test("a German sentence to one of the three German-speaking women is German to her, not 'didn't understand'", () => {
+  for (const id of _GERMAN_LADIES) {
+    G.room = _npcRoom(id); run("talk to " + id); G.convoQ = null;
+    for (const c of ["woher kommst du", "hast du kinder", "danke schön"]) {
+      out = []; run(c); assert.ok(_GERMAN_QUIP[id].some(f => said().includes(f(NPCS[id].name).slice(0, 30))), id + " / " + c + ": " + said());
+    }
+  }
+  G.room = "queen_vic"; run("talk to terry"); out = []; run("woher kommst du");
+  assert.match(said(), /didn't understand|didn't parse|soi blinks|no idea/i, "Terry has no German");
+});
+
+// ── the routing rule (Steve's third run, the hundred questions) ───────────────────────────────────────────────────
+test("a question about her reaches her before a verb takes one of its words", () => {
+  G.room = "sunset_dreams"; run("talk to kwan"); G.convoQ = null;
+  const cases = [["where did you learn english?", /You'd have to ask around/], ["who looks after your kids?", /black book/],
+    ["can you speak english?", /best shot/], ["is the mamasan nice?", /Not my story/], ["you like it here?", /blinks|No idea/]];
+  for (const [c, bad] of cases) { out = []; run(c); assert.doesNotMatch(said(), bad, c + ": " + said()); assert.match(said(), /Kwan|she|She/, c); }
+});
+
+test("an endearment marks a line as said to her: back in a minute love, come on love let's go home, ok love buy beer", () => {
+  G.room = "sunset_dreams"; run("talk to kwan"); G.convoQ = null;
+  out = []; run("back in a minute love"); assert.doesNotMatch(said(), /side of the building/); assert.ok(_HEARD.floor.back.some(l => said().includes(l.slice(0, 20))), said());
+  const m = G.money; out = []; run("ok love, buy beer"); assert.ok(G.money < m, "the beer was bought");
+  G.party = { ids: ["kwan"], stops: 1, spent: 0, seen: {} }; run("talk to kwan"); out = []; run("come on love, let's go home");
+  assert.equal(G.room, _hotelRoomId(), said());
+});
+
+test("where can I eat is answered by anyone, with real open food inside the week", () => {
+  G.room = "sunset_dreams"; run("talk to kwan"); G.convoQ = null;
+  out = []; run("where can I get food round here"); assert.match(said(), /7-Eleven|Queen Vic|kitchen/); assert.doesNotMatch(said(), /ask around/);
+  G.convo = null; G.room = "soi6_street"; out = []; run("where's good to eat?"); assert.match(said(), /7-Eleven|Queen Vic/);
+});
+
+test("a drunk Brit on the step does not eat the withdrawal", () => {
+  G.room = "soi6_street"; const m = G.money; _startEnc("brit"); out = []; run("withdraw 10000"); assert.equal(G.money - m, 10000, said());
+});
+
+test("Jenny's Singapore: her aiyoo and her lah are hers, and nobody else's", () => {
+  G.room = _npcRoom("jenny"); run("talk to jenny"); out = []; run("ask jenny about singapore"); assert.match(said(), /Golden Mile/);
+  const src = ["engine-core", "engine-play", "engine-parser", "engine-systems", "engine-encounters"].map(f => readFileSync(fileURLToPath(new URL(`../../web/js/${f}.js`, import.meta.url)), "utf8")).join("\n");
+  // every "aiyoo" and "lah" in the engine sits inside Jenny's own German quip
+  const jb = src.indexOf("// Jenny —"), je = src.indexOf("// Chompoo", jb);
+  const hits = [...src.matchAll(/\baiyo+\b|\blah\b/gi)].map(m => m.index).filter(i => !/\/\/[^\n]*$/.test(src.slice(src.lastIndexOf("\n", i), i)));
+  assert.ok(hits.length >= 2 && hits.every(i => i > jb && i < je), String(hits.length));
+});

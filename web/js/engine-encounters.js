@@ -831,6 +831,10 @@ const _ENC = {
       _say("You blink at him with perfect, bottomless neutrality. Somewhere behind " +
         "the sunburn the thread is lost. “…Wrong bloke. Sorry pal.” He apologises " +
         "to you, then to a lamppost, and reels away into the night.");
+      // …and what you were doing when he arrived still happens: WITHDRAW 10000 was eaten as the blank stare and no
+      // money came out — a man found out at the barfine (Steve's third run). He reels off; the ATM is still there.
+      const v = String(input || "").trim().split(/\s+/)[0];
+      if (typeof _isRealCommand === "function" && _isRealCommand(v) && !/^(?:talk|ask|look|l|wait|help|tell|flirt|kiss|spank|fondle|hug|give|tip)$/.test(v)) return "passthrough";
     }
   },
 

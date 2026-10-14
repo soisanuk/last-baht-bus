@@ -7321,7 +7321,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     name: "Jenny", th: "เจนนี่", emoji: "🧾", type: "sponsor",
     room: "pink_lotus",
     desc: "Neat, quick with the till, a promise ring she touches when she's thinking. She took the cashier " +
-      "seat on purpose — off the floor, off the market, kept clean for the man in Germany who sends the money.",
+      "seat on purpose — off the floor, off the market, kept clean for the man in Germany who sends the money. " +
+      "Now and then an \"aiyoo\" or an \"ok lah\" escapes her, souvenirs of two years at a Thai disco in Singapore.",
     // The "loosening" drip: as your gifts (G.soc.given) climb toward outbidding Klaus
     // (SPONSOR_FLIP ฿15k), she cracks a little more each threshold — a texted selfie
     // that says, without saying, that it's working. Rendered pics in portraits/pics.
@@ -7368,6 +7369,21 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Thai, and his Thai is...\" She pulls a face that finishes the sentence. \"I learn the words he need me " +
           "to have. Not the other ones.\"",
         short: "\"Klaus teach me, two year on the {{phone}}. Guten Morgen, ich bin vergeben, wie viel. The words he need me to have.\"" },
+      // Singapore, before Pattaya (Mario, 2026-10-14: many Thai nightlife workers did the Singapore discos first —
+      // it is where she learned the till, and the only place a Thai woman picks up "aiyoo")
+      { topic: "singapore|before|golden mile|disco|aiyoo|aiyo|lah|work before|worked before|where did you work",
+        text: "\"Aiyoo — you hear that?\" She laughs at herself. \"Singapore. Before here, two year at a Thai disco in " +
+          "the Golden Mile — big old building on Beach Road, same name like here, every floor Thai. Thirty days in, fly " +
+          "out, fly back, thirty days again.\" She taps the till. \"Money good, rules many — \'can or not, can or not\', " +
+          "the manager say all night. He count every " +
+          "drink, so I learn to count also. I learn the till there. And the aiyoo, and the lah — every auntie in that " +
+          "building say it. Klaus say I sound like Chinese grandmother.\" A shrug. \"Pattaya is easier lah. One visa, no airport every month.\"",
+        short: "\"Singapore, two year — Thai disco, Golden Mile. That is where I learn the till. And the aiyoo. Ok lah.\"" },
+      { topic: "klaus singapore|met klaus|how did you meet|where did you meet",
+        text: "\"Not Singapore — Singapore is for work, everybody tired.\" She smiles at the till. \"Here. My first month " +
+          "at this bar, he sit there, he order one beer for one hour, he ask my real name. Nobody in Singapore ask " +
+          "my real name. Two year ago.\" She touches the ring. \"I count that night also.\"",
+        short: "\"Here, first month at this bar. He ask my real name. Nobody in Singapore ever ask.\"" },
       { topic: "ring", text: "\"Not married. Not yet.\" She turns it. \"Promise ring. He say when he retire he " +
         "take me Germany, we marry proper. I believe him. Mostly.\" The 'mostly' escapes before she can stop " +
         "it, and she files it away, embarrassed. \"He is a good man. Really. Two year, always the money come.\"" },

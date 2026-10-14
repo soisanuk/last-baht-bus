@@ -6269,7 +6269,7 @@ const _LEAVING_TALK = {
 };
 // THE LEAVING, in the words a man uses (Steve, the baseline player: "i fly home in two days" got her old text read
 // back, "i'm going home soon" got HER going home, "last night of the trip" was the ledger)
-const _LEAVING_RE = /\b(leav(?:e|ing)|fly(?:ing)? (?:home|back|out)|my flight|flight home|go(?:ing)? home (?:tomorrow|soon|in \w+ days?|on \w+|next week|this week)|i'?m going home|i go home|tomorrow i (?:go|fly|leave)|last (?:night|day) (?:here|of (?:the|my) (?:trip|holiday|week|stay))|airport tomorrow|my (?:trip|holiday|week) is (?:over|ending|nearly over|almost over)|end of my (?:trip|holiday|week)|going home)\b/;
+const _LEAVING_RE = /\b(leav(?:e|ing)|fly(?:ing)? (?:home|back|out)|my flight|flight home|(?:go(?:ing)?|off|head(?:ing)?|back) home (?:tomorrow|soon|in \w+ days?|on \w+|next week|this week)|i'?m going home|i go home|tomorrow i (?:go|fly|leave)|last (?:night|day) (?:here|of (?:the|my) (?:trip|holiday|week|stay))|airport tomorrow|my (?:trip|holiday|week) is (?:over|ending|nearly over|almost over)|end of my (?:trip|holiday|week)|going home)\b/;
 function _leavingTalk(npc, topic) {
   // TOMORROW / TONIGHT, said to a woman you have told you are leaving, is about that (Ruth, round 94: "about tomorrow", straight after)
   if (NPC_ROLES[npc] && /^(?:about )?(?:tomorrow|tonight|after tonight)\??$/.test(String(topic || "").toLowerCase().trim()) &&
