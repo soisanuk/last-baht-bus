@@ -3,11 +3,6 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Suspects flee country after B37m robbery of Turk in Pattaya",
-    "s": "Bangkok Post",
-    "d": "10 Oct 2026"
-  },
-  {
     "t": "Thai-German pilot injured in small plane crash near Pattaya airfield",
     "s": "Khaosod English",
     "d": "13 Oct 2026"
@@ -18,27 +13,32 @@ var NEWS_FEED = [
     "d": "12 Oct 2026"
   },
   {
+    "t": "Australian admits hiding teen’s body in suitcase, denies murder in Pattaya case",
+    "s": "Pattaya Mail",
+    "d": "14 Oct 2026"
+  },
+  {
+    "t": "Who really buys Thai condos?",
+    "s": "Pattaya Mail",
+    "d": "14 Oct 2026"
+  },
+  {
+    "t": "Thailand video news | Australian accused of killing Thai teenager to face trial in Pattaya this December, Thailand defends proposed 1,000-ba",
+    "s": "Thaiger",
+    "d": "14 Oct 2026"
+  },
+  {
+    "t": "Small plane crashes in East Pattaya field, injuring pilot",
+    "s": "Pattaya Mail",
+    "d": "14 Oct 2026"
+  },
+  {
+    "t": "Pattaya plane crash damages scrap business, injures pilot",
+    "s": "Thaiger",
+    "d": "14 Oct 2026"
+  },
+  {
     "t": "What Thailand stands to gain from hosting the world’s financial leaders",
-    "s": "Pattaya Mail",
-    "d": "12 Oct 2026"
-  },
-  {
-    "t": "Heavy rain threatens western Thailand from October 13 to 16",
-    "s": "Pattaya Mail",
-    "d": "12 Oct 2026"
-  },
-  {
-    "t": "Thailand waives tolls at 63 expressway checkpoints on October 13 holiday",
-    "s": "Pattaya Mail",
-    "d": "12 Oct 2026"
-  },
-  {
-    "t": "Pattaya City Expats Club talk urges strength building to prevent falls",
-    "s": "Pattaya Mail",
-    "d": "12 Oct 2026"
-  },
-  {
-    "t": "Huawei Thailand earns two HR Asia honors for fourth year running",
     "s": "Pattaya Mail",
     "d": "12 Oct 2026"
   },
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "12 Oct 2026"
   },
   {
-    "t": "Queen of Thailand flies fighter jet",
+    "t": "Grab announces new Thailand initiative with OpenAI",
     "s": "CNN",
-    "d": "11 Oct 2026"
+    "d": "14 Oct 2026"
   },
   {
-    "t": "Thailand flood death toll since September 16 rises to 71, Interior Ministry says",
-    "s": "Reuters",
-    "d": "12 Oct 2026"
+    "t": "An eerie trip inside Thailand’s oldest amusement park, deserted after flooding",
+    "s": "The Guardian",
+    "d": "14 Oct 2026"
   },
   {
-    "t": "Thailand Eyes $30 Departure Tax for Tourists in Revenue Push",
+    "t": "A $60 Casio Watch Is a New Political Status Symbol in Thailand",
     "s": "Bloomberg.com",
-    "d": "13 Oct 2026"
+    "d": "14 Oct 2026"
+  },
+  {
+    "t": "Thailand's inflation will come down in the near-term: Bank of Thailand's Deputy Governor",
+    "s": "CNBC",
+    "d": "14 Oct 2026"
   },
   {
     "t": "I've traveled to over 100 countries on my own. I'd recommend these 5 destinations to first-time solo travelers.",
     "s": "Business Insider",
-    "d": "12 Oct 2026"
-  },
-  {
-    "t": "Australian man agrees to plead guilty to one charge over Thai teen's death",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
     "d": "12 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-13","USD":33.59,"AUD":23.44,"GBP":44.5,"EUR":37.58};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-14","temp":25,"humid":95,"code":2,"hi":30,"rain":100};
+var WX_NOW = {"date":"2026-10-14","temp":29,"humid":85,"code":95,"hi":30,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4161,"date":"2026-10-13","baht":66100};
+var GOLD = {"usd":4167,"date":"2026-10-14","baht":66200};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":83449,"thb":2799753};
+var BTC = {"usd":83723,"thb":2808632};
