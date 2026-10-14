@@ -3443,6 +3443,7 @@ function _questOffer(npcId) {
     }
     if (G.quests[qid] === "offered") continue; // already on the table — surface the giver's NEXT job instead
     G.quests[qid] = "offered";
+    G.lastOffer = { qid, giver: npcId, turn: G.turns };   // a YES the next turn takes it (the sentence reader)
     // A quest's `desc` is the ACTIVE-quest instruction and its tappable command
     // usually only works once you've accepted — Pete's "(ASK PETE ABOUT THE
     // NAME)" gets you a shutter coming down until quiet_one is active. Printing
@@ -6257,6 +6258,9 @@ const _LEAVING_TALK = {
   3: [n => `${n} does not do the face. "Don't say it like that, like a sad movie. You go, you come back, I am here. I don't move." A hand on your arm, brief and hard. "Okay. Now buy me a drink and talk about something else."`,
       n => `"When?" ${n} wants the time, not the fact. You tell her, and she nods once, and the subject is closed for the night — she has clearly decided in advance how she will do this, and this is how.`],
 };
+// THE LEAVING, in the words a man uses (Steve, the baseline player: "i fly home in two days" got her old text read
+// back, "i'm going home soon" got HER going home, "last night of the trip" was the ledger)
+const _LEAVING_RE = /\b(leav(?:e|ing)|fly(?:ing)? (?:home|back|out)|my flight|flight home|go(?:ing)? home (?:tomorrow|soon|in \w+ days?|on \w+|next week|this week)|i'?m going home|i go home|tomorrow i (?:go|fly|leave)|last (?:night|day) (?:here|of (?:the|my) (?:trip|holiday|week|stay))|airport tomorrow|my (?:trip|holiday|week) is (?:over|ending|nearly over|almost over)|end of my (?:trip|holiday|week)|going home)\b/;
 function _leavingTalk(npc, topic) {
   // TOMORROW / TONIGHT, said to a woman you have told you are leaving, is about that (Ruth, round 94: "about tomorrow", straight after)
   if (NPC_ROLES[npc] && /^(?:about )?(?:tomorrow|tonight|after tonight)\??$/.test(String(topic || "").toLowerCase().trim()) &&
@@ -6267,7 +6271,16 @@ function _leavingTalk(npc, topic) {
       : [`"Tomorrow you go home." ${n} nods. "Safe flight, na. Tonight — one more drink?"`], "tomorrowtalk"));
     return true;
   }
-  if (!NPC_ROLES[npc] || !/\b(leav(?:e|ing)|fly(?:ing)? home|my flight|flight home|go home tomorrow|tomorrow i (?:go|fly|leave)|last night here|airport tomorrow|going home)\b/.test(String(topic || "").toLowerCase())) return false;
+  if (!_LEAVING_RE.test(String(topic || "").toLowerCase())) return false;
+  // a man on his own stool hears it too, in his own register (Steve: "last night of the trip" to Terry was the ledger)
+  if (!NPC_ROLES[npc] && NPCS[npc] && npc !== "tan" && (NPCS[npc].patron || NPCS[npc].house || NPCS[npc].manager || ROOMS[NPCS[npc].room] && ROOMS[NPCS[npc].room].barType)) {   // Terry has no patron flag
+    const n = NPCS[npc].name;
+    _say(_pickTownLine([`"Going home, are you?" ${n} lifts the glass an inch. "Then the next one's on me. Safe flight — and come back before you forget the way."`,
+      `${n} nods slowly. "Last night, eh. Everybody's last night is the best one. Don't waste it talking to me."`,
+      `"Home." ${n} says it like the name of a place he used to know. "Have a good flight. The stool'll still be here."`], "leaving:patron"));
+    return true;
+  }
+  if (!NPC_ROLES[npc]) return false;
   const said = (G.soc.leavingSaid = G.soc.leavingSaid || {});
   if (said[npc] === G.day) { _say(`${NPCS[npc].name} nods. She heard you the first time.`); return true; }
   said[npc] = G.day;
@@ -10639,7 +10652,8 @@ function _doFeedDog(arg) {
       "be polite about it";
   if (food) {
     G.itemLoc[food] = null;
-    _say(`${approach}. You crouch and hold out the ${ITEMS[food].name}. He takes it with ` +
+    // the week's start puts the noodles in your pocket, and a man who never bought them asks where they came from (Steve, the baseline)
+    _say(`${approach}. You crouch and hold out the ${ITEMS[food].name}${food === "noodles" ? " you'd forgotten was in your pocket" : ""}. He takes it with ` +
       "shocking gentleness, eats it in one movement, and then — this is the part nobody warns " +
       "you about — looks at you. Properly. Files something away.", "win");
   } else {

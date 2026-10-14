@@ -2137,8 +2137,10 @@ function _dartsVisit(mode, aim, rnd) {
       else if (r < 0.9) darts.push([1, 5, 12, 20][Math.floor(rnd() * 4)]); // stray neighbour
       else darts.push(0);                                              // wire / off the board
     } else {
-      if (r < aim) darts.push(20);
-      else if (r < aim + (1 - aim) * 0.6) darts.push([5, 1, 19][Math.floor(rnd() * 3)]);
+      // a steady arm still drifts: 20, 20, 20 every visit was a machine, not a man (Steve, the baseline)
+      if (r < aim * 0.78) darts.push(20);
+      else if (r < aim * 0.86) darts.push(60);                          // a treble you weren't aiming for
+      else if (r < aim + (1 - aim) * 0.6) darts.push([5, 1, 19, 20][Math.floor(rnd() * 4)]);
       else darts.push(0);
     }
   }
@@ -2229,7 +2231,8 @@ function _dartsInput(input) {
     if (g.you > 170 || _DARTS_BOGEY.includes(g.you)) {
       _say(`No checkout on ${g.you} — score first: GO BIG or STEADY.`, "dim"); return; }
     if (_dartsFinish(g.you, aim, _rand)) {
-      _endGame(true, g.stake * 2, "You call the double, take your time in a suddenly quiet bar, and post it " +
+      // an odd number is not one double: a single sets it up (Steve: "out from 21 on a double")
+      _endGame(true, g.stake * 2, (g.you % 2 ? "A single to set it up, then you call the double," : "You call the double,") + " take your time in a suddenly quiet bar, and post it " +
         `dead centre. ${g.stake ? `฿${_num(g.stake * 2)} off the shelf, and a nod from the old boy.` : "The bar erupts. Priceless."}`);
       return;
     }
@@ -2323,7 +2326,7 @@ function _gameInput(input) {
   // A QUESTION IS NOT A MOVE: "what if I flip 7?" flipped the 7 (Marta, round 63). Thinking
   // out loud is free; the move is the plain command. Not the quiz or the terminal, where a
   // question can be the answer.
-  if (G.game.type === "cli" && (/^(what|wha|huh|eh|pardon|sorry|say again|hm+)\??$/.test(_gi) || /^(what if|what happens|should i|can i|could i|is it|which)\b/.test(_gi))) {
+  if (G.game.type === "cli" && typeof _read === "function" && (_read(_gi).kind === "huh" || (_read(_gi).kind === "question" && !/^(?:help|ls|cd|read|find|unlock|copy|exit)\b/.test(_gi)))) {
     _say("(The terminal doesn't do questions. HELP lists its commands; EXIT walks away.)", "dim");   // a shrug typed at the prompt is not a minute of the trace (modal-audit, 2026-10-07)
     return false;
   }
@@ -6039,7 +6042,7 @@ function _endNight(reason) {
   }
   if (G.dog && !crash) {
     _say(_dogN("(Sai Krok is " + (G.hotel === "queenvic"
-      ? "curled on the mat by the Queen Vic's door when you come down"
+      ? "curled on the mat inside your door when you wake"   // the same mat he went to sleep on (Steve, the baseline)
       : ((G.nightLog || [])[(G.nightLog || []).length - 1] === "allnighter"
         ? "up the stairs at your heel and asleep on the step before you've found the key"
         : "asleep against your door when you surface")) +

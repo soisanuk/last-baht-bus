@@ -422,7 +422,7 @@ test("an NPC puts a question to you and remembers the answer", () => {
   assert.equal(state().player.said.home, "london", "the answer is remembered");
   assert.equal(state().convoQ, null, "the question is resolved");
   assert.equal(_npcState("angela").trust, t + 1, "opening up warms her a little");
-  assert.match(lastOut(), /files it|question put away/i, "she acknowledges it");
+  assert.match(lastOut(), /files it|question put away|london/i, "she acknowledges it — and says it back (the reader pass, 2026-10-14)");
 });
 
 test("telling an NPC a different answer than before is caught", () => {
@@ -459,7 +459,7 @@ test("the soi grapevine: tell one person X, tell another Y, the second hears abo
   state().convoQ = { id: "bert", key: "home" };
   out = [];
   run("manchester");
-  assert.match(lastOut(), /files it|question put away|takes it in/i, "consistent re-telling is acknowledged, not caught");
+  assert.match(lastOut(), /files it|question put away|takes it in|manchester/i, "consistent re-telling is acknowledged, not caught");
 });
 
 test("a consistent story across the soi is NOT caught (same answer to two people)", () => {
