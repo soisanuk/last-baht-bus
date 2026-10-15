@@ -8,18 +8,18 @@ var NEWS_FEED = [
     "d": "13 Oct 2026"
   },
   {
+    "t": "Russian man dies after bike crash in Pattaya",
+    "s": "Thaiger",
+    "d": "15 Oct 2026"
+  },
+  {
+    "t": "Pattaya health teams screen 90 people for sexually transmitted infections in Soi 6",
+    "s": "Pattaya Mail",
+    "d": "14 Oct 2026"
+  },
+  {
     "t": "Police fire shots during Pattaya drug chase after pickup hits office",
     "s": "Thaiger",
-    "d": "14 Oct 2026"
-  },
-  {
-    "t": "Getting up Pratumnak Hill easier and safer with Pattaya’s new roads, footpaths and lighting",
-    "s": "Pattaya Mail",
-    "d": "14 Oct 2026"
-  },
-  {
-    "t": "Lost iPhone 13 found in Pattaya rubbish bin with help from Tourist Police",
-    "s": "Pattaya Mail",
     "d": "14 Oct 2026"
   },
   {
@@ -38,13 +38,23 @@ var NEWS_FEED = [
     "d": "14 Oct 2026"
   },
   {
-    "t": "Russian man arrested in Pattaya after 568 days of visa overstay",
+    "t": "Getting up Pratumnak Hill easier and safer with Pattaya’s new roads, footpaths and lighting",
     "s": "Pattaya Mail",
     "d": "14 Oct 2026"
   },
   {
     "t": "A $60 Casio Watch Is a New Political Status Symbol in Thailand",
     "s": "Bloomberg.com",
+    "d": "14 Oct 2026"
+  },
+  {
+    "t": "Thailand’s new political status symbol is a US$60 Casio watch",
+    "s": "The Straits Times",
+    "d": "14 Oct 2026"
+  },
+  {
+    "t": "Thai PM Anutin's $60 Casio watch becomes a symbol of political connections among ministers, officials | World News",
+    "s": "Hindustan Times",
     "d": "14 Oct 2026"
   },
   {
@@ -58,30 +68,20 @@ var NEWS_FEED = [
     "d": "14 Oct 2026"
   },
   {
-    "t": "Tried to bring 300 saplings from Thailand without authorization and got caught",
-    "s": "The Jerusalem Post",
-    "d": "14 Oct 2026"
-  },
-  {
     "t": "Thailand Wants to Charge People to Exit the Country",
     "s": "Fodors Travel Guide",
     "d": "14 Oct 2026"
-  },
-  {
-    "t": "Live updates from the IMF-World Bank Annual Meetings in Thailand as financial leaders take on AI, debt, and geopolitical upheaval - Atlantic",
-    "s": "Atlantic Council",
-    "d": "12 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-14","USD":33.58,"AUD":23.53,"GBP":44.54,"EUR":37.59};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-15","temp":25,"humid":97,"code":3,"hi":30,"rain":100};
+var WX_NOW = {"date":"2026-10-15","temp":29,"humid":80,"code":96,"hi":30,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4107,"date":"2026-10-14","baht":65200};
+var GOLD = {"usd":4148,"date":"2026-10-15","baht":65850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81836,"thb":2752154};
+var BTC = {"usd":81444,"thb":2731957};
