@@ -105,3 +105,43 @@ test("Steve (run 5): a sentence nothing reads gets 'I don't understand' in her o
   for (const pool of Object.values(_NOT_UNDERSTOOD)) assert.ok(pool.length >= 10);
   assert.ok(!_NOT_UNDERSTOOD.house.concat(_NOT_UNDERSTOOD.floor).some(l => /\blove\b|didn't catch/.test(l)), "no British idiom in a Thai mouth (Mario)");
 });
+
+// ── run 5: what he did for her, the last night's close, repeats, and the smaller ones ─────────────────────────────
+const J = "sweet_tamarind_jiab";
+test("Steve (run 5): she remembers the medicine he paid for, and the temple she turned him down for", () => {
+  talkTo(J); G.day = 4; G.phone.asks = { [J]: [{ kind: "medicine", amt: 300, paid: true, paidDay: 4 }] };
+  out = []; run("how is your mum?"); assert.doesNotMatch(said(), /talk to the wall|You forget so fast|already/, said());
+  out = []; run("is your family ok now? the medicine?"); assert.doesNotMatch(said(), /talk to the wall|tell you this one already/, said());
+  G.bfNo = { [J]: { kind: "temple", day: 3 } }; out = []; run("how was the temple?");
+  assert.doesNotMatch(said(), /Buddhist, of course/); assert.match(said(), /monk|temple|string|merit/i);
+});
+
+test("Steve (run 5): 'how is your son?' on a later night is news, not a brush-off", () => {
+  G.day = 1; talkTo(J); run("do you have kids?"); G.day = 2; G.soc.helloed = {}; talkTo(J);
+  out = []; run("how is your son?"); assert.doesNotMatch(said(), /already|talk to the wall|forget so fast|Same answer/, said());
+});
+
+test("Steve (run 5): the last night has no noon, and a ride home before midnight is not dawn", () => {
+  G.day = 7; G.lastBfId = "pukky";
+  for (let k = 0; k < 6; k++) { out = []; _cinderellaCoda(); assert.doesNotMatch(said(), /wake at noon/); }
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.match(src, /G\.nightTurn >= SUNRISE_TURN - 15 \? `You roll in as the sky pales/);
+});
+
+test("Steve (run 5): a pooled line is not said again until half its pool has been", () => {
+  const pool = ["a", "b", "c", "d", "e", "f"]; const seen = [];
+  for (let k = 0; k < 3; k++) seen.push(_pickVary(pool, "steve5test"));
+  assert.equal(new Set(seen).size, 3, seen.join(","));
+});
+
+test("Steve (run 5): take her back to my room, maybe later, one more drink first, goodbye, darts with her", () => {
+  talkTo(J); G.soc.drinks[J] = 4; (G.soc.drinkCount = G.soc.drinkCount || {})[J] = 2;
+  run("barfine jiab"); assert.ok(G.pendingBf); out = []; run("maybe later love"); assert.equal(G.pendingBf, null, said());
+  const m = G.money; out = []; run("one more drink first"); assert.ok(G.money < m, said());
+  G.party = { ids: [J], stops: 1, spent: 0, seen: {} }; out = []; run("take jiab back to my room"); assert.equal(G.room, _hotelRoomId(), said());
+  G.party = null; G.room = "queen_vic"; G.nightTurn = 20; G.party = { ids: [J], stops: 1, spent: 0, seen: {} };
+  out = []; run("play darts with jiab"); assert.match(said(), /Jiab throws/, said());
+  assert.ok(!_chipSet().some(c => /finish/.test(c.cmd)), "no FINISH on 501"); G.game = null;
+  G.day = 7; G.party = null; G.room = _npcRoom(J); G.soc.drinks[J] = 8; talkTo(J);
+  out = []; run("goodbye"); assert.doesNotMatch(said(), /You take your leave/, said()); assert.ok(G.lastNightBye, "the goodbye scene");
+});

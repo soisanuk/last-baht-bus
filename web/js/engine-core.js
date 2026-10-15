@@ -918,9 +918,14 @@ function _pickVary(pool, key) {
   pool = _roomFit(pool);
   if (!pool || pool.length < 2) return pool && pool[0];
   G._lastPick = G._lastPick || {};
+  // no line again until half the pool has been said (Steve's fifth run: Jiab's lines and the morning-after paragraphs
+  // came word for word on different nights — a one-deep memory only stops the line said just now). One roll, as before,
+  // so the seeded stream does not move; the walk to the next unsaid index is bounded by the pool.
+  const keep = Math.max(1, Math.floor(pool.length / 2));
+  let recent = G._lastPick[key]; recent = Array.isArray(recent) ? recent : recent == null ? [] : [recent];
   let i = Math.floor(_rand() * pool.length);
-  if (i === G._lastPick[key]) i = (i + 1) % pool.length;
-  G._lastPick[key] = i;
+  for (let k = 0; k < pool.length && recent.includes(i); k++) i = (i + 1) % pool.length;
+  G._lastPick[key] = recent.concat(i).slice(-keep);
   return pool[i];
 }
 

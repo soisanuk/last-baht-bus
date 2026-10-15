@@ -4811,6 +4811,9 @@ function _doTalkCore(arg, topic) {
         !(NPCS[npc].dialogue || []).some(x => x.topic && String(x.topic).split("|").some(k => k === _tl)) &&
         typeof _townTalk === "function" && _townTalk(npc, topic)) { _questOffer(npc); return; }
   }
+  // what you did for her lately — a paid ask, a refusal's reason, a follow-up on her family — outranks her own lines,
+  // which would otherwise be a repeat and its brush-off (Steve's fifth run)
+  if (topic && typeof _deedTalk === "function" && _deedTalk(npc, topic)) { _questOffer(npc); return; }
   let d = _pickDialogue(npc, topic || null);
   // the one NAMED piwin answers for his own job the way any piwin at a stand does —
   // "ask bank about fare" was "not my story" while the anonymous man beside him
@@ -8253,7 +8256,7 @@ function _convoResolve(lower) {
   // 1) Leave-taking ends an active conversation.
   if (_convoActive() &&
       /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare)) {
-    _convoEnd(); return true;
+    _byeOrScene(); return true;
   }
   // 2) A bare name for someone present starts (or switches) the conversation —
   //    this is the `> angela` opener. Routes through the normal TALK path, which
@@ -14166,7 +14169,7 @@ function _chipSet() {
     // how a three-surfaces rule fails: two surfaces agree and the third is
     // silently missing. SHOT/POWER only — no safety in the league game.
     if (G.game.type === "kp") { add("shot"); add("power"); }
-    if (G.game.type === "darts") { add("go big", "go big"); add("steady"); add("finish"); }
+    if (G.game.type === "darts") { add("go big", "go big"); add("steady"); if (G.game.you <= 170 && !(typeof _DARTS_BOGEY !== "undefined" && _DARTS_BOGEY.includes(G.game.you))) add("finish"); }   // no FINISH on 501 (Steve's fifth run)
     if (G.game.type === "quiz") {   // bare 1/2/3 chips (Margaret, round 65)
       const _qi = typeof QUIZ_POOL !== "undefined" && G.game.qs ? QUIZ_POOL[G.game.qs[G.game.at]] : null;
       if (_qi && _qi.opts) _qi.opts.forEach((o, i) => add(String(i + 1), (i + 1) + " · " + String(o).slice(0, 22)));
@@ -14908,8 +14911,8 @@ let _qAsked = false;
 function _askQ(cmd) { _qAsked = true; try { doCommand(cmd); } finally { _qAsked = false; } }
 // A SOFT ask: the sentence is put to her as a subject, and if she has nothing on it the catch-all answers in her
 // voice rather than "not my story" (the 100-question pass: thirty subjects missed on all three women asked).
-let _softAsk = false, _softMissed = false;
-function _askSoft(cmd) { _softAsk = true; _softMissed = false; _qAsked = true; try { doCommand(cmd); } finally { _softAsk = false; _qAsked = false; } return !_softMissed; }
+let _softAsk = false, _softMissed = false, _saidLine = "";   // _saidLine: the man's own sentence, for an answer that reads it (the nested ask replaces _rawAnswer)
+function _askSoft(cmd, said) { _softAsk = true; _softMissed = false; _qAsked = true; _saidLine = said || ""; try { doCommand(cmd); } finally { _softAsk = false; _qAsked = false; _saidLine = ""; } return !_softMissed; }
 function _readRoute(raw) {
   if (G.pendingChoice || G.pendingEnc || G.game || G.pendingBf || G.pendingFare || G.pendingSoapy) return false;
   // the commands it routes TO are commands already: never read twice
@@ -14985,8 +14988,9 @@ function _readRouteBody(raw) {
   if (who && G.party && (G.party.ids || []).includes(who)) {
     const l = R.raw.toLowerCase();
     if (/^(?:ok(?:ay)?,? )?(?:let'?s|shall we|we should|time to|wanna|want to) (?:go )?(?:home|back(?: to (?:mine|my (?:room|hotel)|the hotel))?|to bed|bed)\b/.test(l) ||
-        /^(?:come|coming) (?:home|back) with me\b/.test(l)) { doCommand("go home with " + name); return true; }
-    if (/\bwhere (?:do |would )?(?:you|u) (?:want|wanna|like) (?:to )?go\b|\bwhere (?:shall|should|do|can|will) we go\b|^(?:you (?:choose|pick|decide|lead)|lead the way|your (?:choice|call)|take me somewhere|show me (?:your|a) place)\b/.test(l)) {
+        /^(?:come|coming) (?:home|back) with me\b/.test(l) ||
+        new RegExp(`^take (?:her|${String(NPCS[who].name).toLowerCase()}) (?:back )?(?:home|back|to (?:my|the) (?:room|hotel|place))\\b`).test(l)) { doCommand("go home with " + name); return true; }   // "take jiab back to my room" (Steve's fifth run)
+    if (/\bwhere (?:do |would )?(?:you|u) (?:want|wanna|like) (?:to )?go\b|\bwhere (?:shall|should|do|can|will) we go\b|\bwhere (?:are )?we going\b|^(?:you (?:choose|pick|decide|lead)|lead the way|your (?:choice|call)|take me somewhere|show me (?:your|a) place)\b/.test(l)) {
       doCommand("follow " + name); return true;
     }
   }
@@ -15126,6 +15130,13 @@ function _heardBucket(t) {
   if (/^(?:nice|lovely|beautiful|pretty|gorgeous|cute|love (?:the|your)|i like your) (?!night|time|day|week|evening)|\byou (?:look|are|'re|re) (?:beautiful|pretty|lovely|gorgeous|cute|nice|stunning)\b|\b(?:dress|hair|smile|eyes)\b/.test(t)) return "compliment";
   return "generic";
 }
+// GOODBYE on the last night, to a woman who knows you, is the goodbye scene — not "you take your leave of her"
+// (Steve's fifth run: the Goodbye chip just left; he had to type SAY GOODBYE TO JIAB to get the real one)
+function _byeOrScene() {
+  const c = _convoActive();
+  if (c && typeof _lastByeDue === "function" && _lastByeDue(c) && typeof _lastNightBye === "function") { _lastNightBye(c); return; }
+  _convoEnd();
+}
 function _readAsk(raw) {
   const c = typeof _convoActive === "function" && _convoActive();
   if (!c || !_npcsHere().includes(c)) return false;
@@ -15220,7 +15231,7 @@ function _toHer(c, raw, addressed) {
     // THE MAMASAN is a person: ask her about the woman who runs this floor, by name
     if (topic === "mamasan") { const m = _npcsHere().find(i => NPC_ROLES[i] === "mamasan" && i !== c) || Object.keys(NPCS).find(i => NPC_ROLES[i] === "mamasan" && (NPCS[i].room === G.room || (NPCS[i].bars || []).includes(G.room)) && i !== c);
       if (m) topic = String(NPCS[m].name).toLowerCase(); }
-    if (topic) { if (_askSoft("ask " + name + " about " + topic)) return true; }
+    if (topic) { if (_askSoft("ask " + name + " about " + topic, t)) return true; }
     missed = true;
   }
   // only a sentence: a stray word is a typo, and "didn't understand" is the honest answer to one
@@ -16087,7 +16098,7 @@ function doCommand(input) {
       if (!_withParty && !_ltShort && !G.pendingBf.ltAsked) { G.pendingBf.ltAsked = true; _bfLtWarn(); return; }
       _tradeMark("yes"); _bfResolve("lt"); _tick(); return;
     }
-    if (/^(no\b|cancel|never|forget|back out|walk)/.test(lower)) {
+    if (/^(no\b|nah\b|cancel|never|forget|back out|walk|maybe later|later|not now|not tonight|another time|next time|some other time)/.test(lower)) {   // "maybe later love" (Steve's fifth run)
       G.pendingBf = null;
       _tradeMark("no");
       _say("You shake your head, and that is the end of it. The number goes back in " +   // "off the ledge" on a stool, and a mamasan the room may not have (Gary, round 79)
@@ -16298,7 +16309,7 @@ function doCommand(input) {
   if (!G.pendingChoice && !G.pendingEnc && !G.game && !G.pendingBf) {
     const bw = lower.replace(/[?!.,]+/g, " ").replace(/\s+/g, " ").trim();
     const shutVic = typeof _shutHere === "function" && _shutHere() && typeof _guestThrough === "function" && _guestThrough(G.room);
-    if (/^(same again|another( one)?|another (beer|pint|chang|leo|singha|bottle)|one more( (beer|pint|bottle))?( before you (shut|close))?|one (more )?for the road|(a |another )?pint|a beer|beer please|(can|could|may) i (get|have) (one more|another( one)?|a beer|a pint|a chang|a leo|a singha)( to take (upstairs|away|home|with me))?|i'?ll have (another|a beer|a pint))( please)?$/.test(bw)) {
+    if (/^(same again|another( one)?|another (beer|pint|chang|leo|singha|bottle)|one more( (beer|pint|bottle|drink|round))?( (first|then|please|before we go|before you (shut|close)))?|one (more )?for the road|(a |another )?pint|a beer|beer please|(can|could|may) i (get|have) (one more|another( one)?|a beer|a pint|a chang|a leo|a singha)( to take (upstairs|away|home|with me))?|i'?ll have (another|a beer|a pint))( please)?$/.test(bw)) {
       if (shutVic) { _say(_pickVary(_VIC_GUARD, "vicguard")); return; }
       if (typeof _servesDrinks === "function" && _servesDrinks(G.room)) { doCommand("buy beer"); return; }
       if (!_room().barType) { _say("(Nobody pours on the pavement — step into a bar first: ENTER <name>.)", "dim"); return; }
@@ -16726,7 +16737,7 @@ function doCommand(input) {
       const phraseText = (m ? m[1] : said).trim();
       const targetW = m ? m[2].replace(/^(the|a|an)\s+/, "").trim() : "";
       if (/^(sorry|khor ?thot|kho ?thot|ขอโทษ)/.test(phraseText)) _doApologize();
-      else if (/^(goodbye|bye|cheerio|see you|later|good ?night)\b/.test(phraseText) && _convoActive()) _convoEnd(); // the "say goodbye" chip
+      else if (/^(goodbye|bye|cheerio|see you|later|good ?night)\b/.test(phraseText) && _convoActive()) _byeOrScene(); // the "say goodbye" chip
       else _doSay(phraseText, targetW);
       break;
     }

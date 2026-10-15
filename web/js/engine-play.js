@@ -111,7 +111,7 @@ function _doPlay(arg) {
   if (/juke/.test(w) && G.room === "golden_dragon") { _say(_pickVary(_JUKEBOX_DEAD, "juke")); return; }
   if (w.includes("jackpot") || w.includes("dice")) return _startJackpot(w);
   if (w.includes("killer") || w.includes("league")) return _startKiller();
-  if (w.includes("dart")) return _startDarts();
+  if (w.includes("dart")) return _startDarts(w);
   if (w.includes("connect") || w.includes("four") || /\b4\b/.test(w)) {
     const m = w.match(/\b(\d{2,9})\b/); // a trailing stake: PLAY CONNECT 4 100 (7 figures fell through the old 2–5)
     const vs = (w.match(/\b(?:with|vs|against)\s+([a-z]+)/) || [])[1];
@@ -2568,7 +2568,7 @@ function _dartsWobble() {
   return "You're not quite at your steadiest tonight.";
 }
 
-function _startDarts() {
+function _startDarts(arg) {
   if (!_room().darts) {
     const boards = Object.keys(ROOMS)
       .filter(id => ROOMS[id].darts && G.visited && G.visited[id])
@@ -2582,7 +2582,11 @@ function _startDarts() {
   // if one is actually working this room (never the "hostess on shift" fallback,
   // which would conjure one in a pub like the Queen Vic).
   const gh = _gameHostess();
-  const opp = gh.id && _rand() < 0.5 ? gh.name : _L("a leathery expat with his own darts in a belt case");
+  // PLAY DARTS WITH <her>: she throws, not a stranger at the next table (Steve's fifth run: "play darts with jiab"
+  // put a leathery expat on the oche)
+  const _wm = String(arg || "").match(/\bwith ([a-z' ]+)$/);
+  const _wid = _wm && typeof _findNpc === "function" ? _findNpc(_wm[1].trim()) : null;
+  const opp = _wid && _npcsHere().includes(_wid) ? NPCS[_wid].name : gh.id && _rand() < 0.5 ? gh.name : _L("a leathery expat with his own darts in a belt case");
   const stake = _takeStake(DARTS_STAKE);
   G.game = { type: "darts", you: 501, opp: 501, oppName: opp.length > 22 ? "the old boy" : opp, oppSkill: 0.62, stake };
   _say(_fmt("Chalk up: 501 each, straight off, check out on a double. {n} throws " +
@@ -5467,7 +5471,9 @@ function _cinderellaCoda() {
       "she did not wear all night because the police are up now, and is gone into the first traffic without " +
       "looking back. The receipt is her tail-light, then not even that."
     : _deal(_CODA_HOME, "home"), "room");
-  const _close = _rode || _bike ? _CODA_CLOSE.filter(l => !/baht bus/.test(l)) : _CODA_CLOSE;
+  let _close = _rode || _bike ? _CODA_CLOSE.filter(l => !/baht bus/.test(l)) : _CODA_CLOSE;
+  // the last night of a trip has no noon: "You'll wake at noon" sat above "the taxi to the airport leaves in an hour" (Steve's fifth run)
+  if (typeof _lastNight === "function" && _lastNight()) _close = _close.filter(l => !/wake at noon/.test(l));
   (_book.close = _book.close || []);
   _say(_deal(_close, "close"), "dim");   // the close is a book too: Steve read one sentence three dawns running
   G.codaSeen++;

@@ -1099,6 +1099,7 @@ function _bfDayRefusal(id) {
   }
   const keep = kind => {
     (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind, favor: _favor(id) };
+    (G.bfNo = G.bfNo || {})[id] = { kind, day: G.day };   // the reason outlives the night: "how was the temple?" is asked tomorrow (Steve's fifth run)
     return G.soc.bfRefused[id];
   };
   if (_maiDee(id)) return keep("maidee");   // the verdict comes before the calendar: a no with nothing in it to negotiate (theme 6)
@@ -1144,6 +1145,7 @@ function _bfRefusal(id, bt) {
   }
   const keep = kind => {
     (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind, favor: _favor(id) };
+    (G.bfNo = G.bfNo || {})[id] = { kind, day: G.day };   // the reason outlives the night: "how was the temple?" is asked tomorrow (Steve's fifth run)
     return G.soc.bfRefused[id];
   };
   if (_maiDee(id)) return keep("maidee");   // the verdict: a no with nothing in it to negotiate (theme 6)
@@ -2528,7 +2530,8 @@ function _endRide(seq, reason) {
       `remember it as anything special, or she might — that's hers, not yours, and that's the part that'll haunt you.)`, "dim");
   }
   // the dog kept the door all night — and gets an opinion about who you brought home
-  if (G.dog) _say(_dogN(`You roll in as the sky pales, and Sai Krok is exactly where you left him: ` +
+  // the sky pales only if it is near dawn: a ride that ended before midnight "rolled in as the sky pales" (Steve's fifth run)
+  if (G.dog) _say(_dogN((G.nightTurn >= SUNRISE_TURN - 15 ? `You roll in as the sky pales, and ` : `You roll in with the soi still lit behind you, and `) + `Sai Krok is exactly where you left him: ` +
     `sitting at the door, ears up, having clearly not slept a wink on principle. He gives ${name} a ` +
     `long, level appraisal — then one slow thump of the tail. Approved. She crouches to him without ` +
     `being told, murmuring something in Thai, and your chest does a quiet thing about that it isn't ` +
@@ -6231,6 +6234,82 @@ function _textTalk(npc, topic) {
   const pool = _hoursRegister(npc) === "floor" ? _TEXT_TALK_FLOOR : _TEXT_TALK_HOUSE;
   _say(_pickVary(pool, "texttalk:" + npc)(n, short));
   return true;
+}
+// WHAT YOU DID FOR HER, LATELY (Steve's fifth run — the worst moment of his week: he paid Jiab's ฿300 for her family's
+// medicine, and that evening "is your family ok now? the medicine?" got "I tell you this one already… talk to the
+// wall"). Checked BEFORE her own lines: a paid ask from the last four days answers the family, the medicine, the
+// buffalo — first with the news, then with the plain thanks; a refusal she gave for a reason (the temple at five)
+// is the thing she answers the next day. A scripted asker thanks you for the MONEY, never the thing (the doctrine).
+const _ASK_AFTER = {
+  family: [
+    n => `${n} brightens. "Mama better now. The medicine work — she eat again, she complain again, so she is okay." A small wai, quick. "Thank you, na. Really."`,
+    n => `"Better," ${n} says, and means it. "I call this morning. She sit up, she watch TV, she ask why I sound tired." She laughs. "Because of you I don't worry so much."`,
+    n => `${n} shows you her {{phone}}: a grainy photo of an old woman in a plastic chair, scowling at the camera. "Look. Angry again. That is how I know she is okay."`,
+  ],
+  buffalo: [
+    n => `"The buffalo?" ${n} laughs. "Standing up! My brother send video. Very ugly buffalo, very alive. Thank you."`,
+  ],
+  thing: [
+    (n, k) => `"The ${k}?" ${n} nods. "Fixed. Finish. You help me, I don't forget." That is the whole of it, and it is enough.`,
+    (n, k) => `${n} pats your hand. "${k.charAt(0).toUpperCase() + k.slice(1)} okay now. Because of you. I tell my sister — she want to meet the good farang, hahaha."`,
+  ],
+  script: [
+    n => `"Okay, okay, all okay." ${n} says it quickly. "Thank you for the money, na. You very good man." She is already looking at the door.`,
+    n => `${n} nods. "Better. Thank you for help." It sounds like a sentence she has said before.`,
+  ],
+};
+const _AFTER_FAMILY_WORDS = /\b(mum|mom|mama|mother|mam|family|dad|papa|father|grandma|grandmother|better|ok now|okay now|is she ok|is she okay|is he ok|the medicine|sick)\b/;
+function _deedTalk(npc, topic) {
+  if (!NPC_ROLES[npc]) return false;
+  const t = String(topic || "").toLowerCase();
+  // a refusal with a reason, asked about after
+  const no = G.bfNo && G.bfNo[npc];
+  if (no && no.kind === "temple" && G.day - no.day >= 1 && G.day - no.day <= 2 && /\b(temple|wat|monk|merit|this morning|five o'?clock)\b/.test(t)) {
+    _say(_fmt(_pickTownLine([
+      "\"Temple good.\" {n} looks rested, which is new. \"Five o'clock I give rice to the monk, then I sleep again until two. Sorry about the other night, na.\"",
+      "\"You remember!\" {n} is pleased. \"I go with my aunty. Make merit, pray little bit for my family — little bit for you also, hahaha.\"",
+      "{n} touches the white string still tied round her wrist. \"The monk give me. For luck. You see, I don't lie — temple really.\"",
+    ], "templeafter"), { n: NPCS[npc].name }));
+    return true;
+  }
+  // HOW IS YOUR SON? on a later night is asking after him, not asking her to repeat herself: once she has told you
+  // about her family, a follow-up gets news, never "I tell you this one already… talk to the wall" (Steve's fifth run)
+  const raw0 = String((typeof _saidLine !== "undefined" && _saidLine) || (typeof _rawAnswer !== "undefined" ? _rawAnswer : "")).toLowerCase();
+  if (/^(?:and )?(?:how(?:'?s| is| are)|hows) (?:your|ur)\b|\bis (?:your|ur) .{1,20} (?:ok|okay|good|better|well)\b/.test(raw0) &&
+      /\b(son|daughter|kids?|boy|girl|baby|mum|mom|mama|mother|dad|papa|father|family|sister|brother|grandma|grandmother)\b/.test(raw0) &&
+      (G.talked[npc] || []).some(i => /famil|son|kid|daughter|mama|mother|baby|home/.test(String((NPCS[npc].dialogue[i] || {}).topic || "")))) {
+    const reg = typeof _hoursRegister === "function" && _hoursRegister(npc) !== "floor" ? "house" : "floor";
+    _say(_fmt(_pickTownLine(reg === "floor" ? [
+      "\"Good, good. Everybody okay at home.\" {n} looks pleased you asked. \"Thank you, na. Not many ask two time.\"",
+      "{n} checks her {{phone}} as if the answer is in it. \"Okay! I call this morning. Same like always — noisy.\"",
+      "\"Fine. Little bit sick last week, now okay.\" She knocks on the bar. \"Touch wood, farang say, no?\"",
+      "\"You remember!\" {n} brightens. \"Good. Always asking when I come home. I say soon, soon.\"",
+      "\"Okay now. Growing, eating, making trouble. Normal.\" {n} laughs. \"Thank you for ask.\"",
+      "{n} holds up the {{phone}} with a new photo on it. \"Look — this week. Same face, bigger.\"",
+    ] : [
+      "\"Well, thank you. Everyone is fine at home.\" {n} seems genuinely glad of the question.",
+      "\"Good. I spoke to them this morning. You remembered — that's kind.\"",
+      "\"Fine, fine. Nothing to report, which is the best report.\"",
+    ], "familyafter:" + reg), { n: NPCS[npc].name }));
+    return true;
+  }
+  const asks = ((G.phone.asks && G.phone.asks[npc]) || []).filter(a => a.paid && a.paidDay != null && G.day - a.paidDay <= 4);
+  for (const a of asks.slice().reverse()) {
+    const fam = ["medicine", "hospital", "papa"].includes(a.kind);
+    const hit = (fam && _AFTER_FAMILY_WORDS.test(t)) || (_ASK_KIND_WORDS[a.kind] && _ASK_KIND_WORDS[a.kind].test(t));
+    if (!hit) continue;
+    const told = (G.askTold = G.askTold || {}), key = npc + ":" + a.kind + ":" + a.paidDay;
+    if (told[key]) { _say(_pickVary(_MONEY_TALK.paid, "moneytalk:" + a.kind)(NPCS[npc].name, { medicine: "medicine", hospital: "hospital", rent: "room", school: "school fee", phone: "phone", buffalo: "buffalo", motorbike: "motorbike", quiet: "room", papa: "medicine" }[a.kind] || a.kind)); return true; }
+    told[key] = G.day;
+    const n = NPCS[npc].name;
+    if (typeof _askScripted === "function" && _askScripted(npc)) _say(_pickVary(_ASK_AFTER.script, "askafter:s")(n));
+    else if (fam && a.kind !== "papa") _say(_pickTownLine(_ASK_AFTER.family, "askafter:f")(n));
+    else if (a.kind === "papa") _say(_pickVary(_ASK_AFTER.thing, "askafter:t")(n, "medicine for papa"));
+    else if (a.kind === "buffalo") _say(_ASK_AFTER.buffalo[0](n));
+    else _say(_pickVary(_ASK_AFTER.thing, "askafter:t")(n, { rent: "room", school: "school fee", phone: "phone", motorbike: "motorbike", quiet: "room" }[a.kind] || a.kind));
+    return true;
+  }
+  return false;
 }
 function _moneyTalk(npc, topic) {
   const t = String(topic || "").toLowerCase();

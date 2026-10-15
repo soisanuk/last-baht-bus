@@ -94,7 +94,9 @@ test("darts is offered by PLAY and by the chip bar where there's a board", () =>
   G.room = Object.keys(ROOMS).find(id => ROOMS[id].darts);
   assert.ok(_playOptions().includes("darts"));
   G.money = 200; run("play darts");
-  assert.ok(_chipSet().some(c => c.cmd === "finish"), "mid-game chips are the darts moves");
+  assert.ok(_chipSet().some(c => c.cmd === "steady"), "mid-game chips are the darts moves");
+  assert.ok(!_chipSet().some(c => c.cmd === "finish"), "no FINISH offered on 501 — it would only refuse (Steve's fifth run)");
+  G.game.you = 40; assert.ok(_chipSet().some(c => c.cmd === "finish"), "FINISH once a checkout exists");
 });
 
 function run(cmd) { doCommand(cmd); }

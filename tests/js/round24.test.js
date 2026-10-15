@@ -193,7 +193,7 @@ test("killer pool offers its moves, not just a way to forfeit", () => {
                               ["darts", ["go big", "steady", "finish", "quit"]],
                               ["quiz", ["1", "2", "3", "quit"]]]) {
     sandbox();
-    G.game = { type };
+    G.game = { type, you: 40 };   // darts offers FINISH only when a checkout exists
     assert.deepEqual(_chipSet().map(c => c.cmd), want, `${type} chips its own moves`);
     // and the two surfaces agree
     const verbs = _gameVerbs();
