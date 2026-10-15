@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pattaya begins 3.5km road upgrade ahead of New Year",
+    "t": "Pattaya plane crash damages scrap business, injures pilot",
     "s": "Thaiger",
-    "d": "12 Oct 2026"
+    "d": "14 Oct 2026"
   },
   {
     "t": "A Night of Honour celebrates Rotary leadership, service and fellowship in Pattaya",
@@ -23,7 +23,7 @@ var NEWS_FEED = [
     "d": "15 Oct 2026"
   },
   {
-    "t": "Small plane crashes in East Pattaya field, injuring pilot",
+    "t": "Australian admits hiding teen’s body in suitcase, denies murder in Pattaya case",
     "s": "Pattaya Mail",
     "d": "14 Oct 2026"
   },
@@ -33,12 +33,12 @@ var NEWS_FEED = [
     "d": "14 Oct 2026"
   },
   {
-    "t": "Australian admits hiding teen’s body in suitcase, denies murder in Pattaya case",
-    "s": "Pattaya Mail",
-    "d": "14 Oct 2026"
+    "t": "Pattaya driver asks couple to wait until hotel before sex acts",
+    "s": "Thaiger",
+    "d": "15 Oct 2026"
   },
   {
-    "t": "Pattaya plane crash damages scrap business, injures pilot",
+    "t": "Police fire shots during Pattaya drug chase after pickup hits office",
     "s": "Thaiger",
     "d": "14 Oct 2026"
   },
@@ -74,14 +74,14 @@ var NEWS_FEED = [
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-10-14","USD":33.58,"AUD":23.53,"GBP":44.54,"EUR":37.59};
+var FX_RATES = {"date":"2026-10-15","USD":33.55,"AUD":23.18,"GBP":44.42,"EUR":37.59};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-15","temp":27,"humid":88,"code":95,"hi":30,"rain":100};
+var WX_NOW = {"date":"2026-10-15","temp":27,"humid":97,"code":3,"hi":30,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4157,"date":"2026-10-15","baht":66000};
+var GOLD = {"usd":4148,"date":"2026-10-15","baht":65800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":80943,"thb":2711452};
+var BTC = {"usd":82026,"thb":2751065};
