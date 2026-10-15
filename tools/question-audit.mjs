@@ -39,7 +39,9 @@ const PARSE = /didn't understand|didn't parse|soi blinks|No idea what you're aft
 
 const all = Object.keys(NPCS).filter(id => NPC_ROLES[id] === "hostess" && ROOMS[NPCS[id].room] && ROOMS[NPCS[id].room].region === "Soi 6" && !NPCS[id].offmap);
 const women = QUICK ? ["kwan", "pukky", "may"].concat(all.filter(i => NPCS[i].filler).slice(0, 1)) : all;
-const bucketLines = new Set(Object.values(_HEARD).flatMap(r => Object.values(r).flat()).map(x => String(x).slice(0, 30)));
+// …and "I don't understand" in her voice (2026-10-15) is unanswered too: it is honest, but it is not her answer
+const bucketLines = new Set(Object.values(_HEARD).flatMap(r => Object.values(r).flat()).concat(Object.values(_NOT_UNDERSTOOD).flat())
+  .map(x => String(x).replace(/\{n\} ?/g, "").slice(0, 30)));
 function fresh(id) {
   newGame(); G.player = { origin: "pension", personality: "straight", orientation: "straight", said: {}, lang: "en" };
   G.stage = "vacation"; G.mode = "soi6"; G.hotel = "queenvic"; _setFlag("act1Done"); _setFlag("hasWallet");

@@ -6176,8 +6176,12 @@ function _convoAnswer(text) {
     const _node = (NPCS[id] && NPCS[id].dialogue || []).find(d => d.asks && d.asks.key === key && typeof d.asks.react === "function");
     const _r = _node ? _node.asks.react(val, G) : null;
     // said back only when it is a short answer, without the stray punctuation, and not the same line from two people (Steve, rerun)
-    const _v0 = String(val || "").replace(/^i'?m |^i am |^my /i, "").replace(/[?!.,;:]+/g, "").trim();
-    const _v = _v0.split(/\s+/).length <= 3 ? _v0 : "";
+    // said back only when it is a NAME or a PLACE — "name is steve" was nodded at "as if it explains a thing or two",
+    // "here till sunday" was "tried on" (Steve's fifth run)
+    const _v0 = String(val || "").replace(/^(?:i'?m |i am |my name is |my name'?s |name is |name'?s |it'?s |call me |my |from )+/i, "").replace(/[?!.,;:]+/g, "").trim();
+    const _vw = _v0.split(/\s+/).filter(Boolean);
+    const _v = _vw.length && _vw.length <= 2 && !_vw.some(w => _READ_STOP.has(w.toLowerCase()) || /^(?:till|until|mate|love|yeah|no|yes|ok|okay|sunday|monday|tuesday|wednesday|thursday|friday|saturday)$/i.test(w))
+      ? _vw.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : "";
     _say(_r || (_pr(id).s === "she" ? _pickTownLine(_ANSWER_ACK, "ansAck") : _ANSWER_ACK[1])(name, _v));
     if (!prior) st.trust = Math.min(5, st.trust + 1); // opening up, once
     _repGain(); // a straight, honest answer is part of being a good sort (throttled)
@@ -14868,7 +14872,7 @@ function _read(text) {
   // a hesitation is not the sentence: "um, hello?" is a hello, said badly (the katoey's dithering)
   { const h = bare.replace(/^(?:um+|uh+|er+m?|ehm|well|so|oh|ah+)\s+/, ""); if (h !== bare) return Object.assign(_read(h + (/\?\s*$/.test(t) && !/^(?:hi|hello|hey)\b/.test(h) ? "?" : "")), { raw }); }
   if (/^(?:what|wha|huh|eh|pardon|sorry|say again|come again|again|hm+)$/.test(bare)) R.kind = "huh";   // asking for it again, not asking a thing
-  else if (/^(?:hi|hello|hey|hiya|evening|good (?:evening|morning|afternoon)|sawa?t ?dee|sawasdee)\b/.test(bare)) R.kind = "greeting";
+  else if (/^(?:hi|hello|hey|hiya|evening|alright|alreet|g'?day|howdy|good (?:evening|morning|afternoon)|sawa?t ?dee|sawasdee)\b/.test(bare)) R.kind = "greeting";
   else if (/^(?:bye|goodbye|good ?night|night|nite|see (?:you|ya)|night night|laters?|cheerio|la ?gorn)\b/.test(bare)) R.kind = "farewell";
   else if (/^(?:thanks|thank you|cheers|ta|khop khun|kob kun)\b/.test(bare)) R.kind = "thanks";
   else if (/^(?:yes|yeah|yep|yup|ok|okay|sure|deal|alright|all right|why not|go on then|i'?ll do it|count me in)(?: (?:please|then|mate|na|okay))?$/.test(bare)) R.kind = "yes";
@@ -15056,6 +15060,12 @@ const _HEARD = {
       "She makes a face that means it is a long story. \"Is a long story, na. You stay long enough, you hear it.\"",
       "\"Hah. Secret.\" She taps the side of her nose, and is visibly pleased to have one.",
       "She tilts her head. \"You first. Then me.\" It is a deal, not a dodge, and she means to hold you to it."],
+    return: ["\"You say. Everybody say.\" She looks at you a moment longer. \"Okay. I believe you little bit.\"",
+      "\"Okay. I am here. I don't move.\"",
+      "\"Next time you come, you come here first. Before the other bar.\"",
+      "\"Promise?\" She holds out her little finger, half joking, all the way serious.",
+      "\"Okay. I wait. Not every night, but I wait.\"",
+      "\"Many men say. Few men come. You be the few, okay?\""],
     back: ["\"Okay. I keep your seat.\" She puts her phone on your stool to prove it.", "\"One minute Thai time or one minute farang time?\" She waves you off. \"Go, go. I wait.\"",
       "\"Okay, na. Don't get lost.\"", "She nods and moves your glass in from the edge, the way the floor does for a man coming back."],
     generic: ["She nods along, catching most of it. \"Mm. Same same,\" she says, which is agreement of a kind.",
@@ -15078,6 +15088,7 @@ const _HEARD = {
       "\"Eat something before the next one. Seriously.\""],
     question: ["\"Long story. Another night, maybe.\"", "A short laugh. \"Ask me that again when we know each other.\"",
       "\"Now that,\" comes the answer, \"would take more than one beer.\"", "\"You first,\" comes the reply, pleasantly, and it is not a dodge so much as a toll."],
+    return: ["\"We'll see you, then.\" A nod that has heard it before and doesn't hold it against you.", "\"Good. The stool'll keep.\"", "\"Come back, then. We're not going anywhere.\""],
     back: ["\"Right you are. Glass'll be here.\"", "A nod. \"Seat's yours.\"", "\"Go on. Nobody's taking the stool.\""],
     generic: ["A nod — heard, considered, filed under the evening's conversation.", "\"Fair enough,\" comes the answer, and the glass is raised an inch.",
       "\"Is that right,\" comes the reply — a statement, not a question, the way old hands say it.",
@@ -15110,7 +15121,8 @@ function _heardBucket(t) {
   if (/\b(?:do|would) you (?:like|love|fancy|miss) me\b|\bam i (?:handsome|ugly|too old|your type|fat|good looking|sexy)\b|\bdo you think i'?m (?:handsome|old|sexy)\b/.test(t)) return "affection";
   if (/\b(?:miss (?:you|u)|love (?:you|u)|like (?:you|u)|fancy (?:you|u)|think about (?:you|u)|you'?re (?:special|the one)|my girl)\b/.test(t)) return "affection";
   if (/\b(?:hungry|starving|eat|food|dinner|noodles?|som tam)\b/.test(t)) return "food";
-  if (/\b(?:till|until|back (?:on|in|tomorrow|next)|staying|here for|tomorrow|next week|on (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday))\b/.test(t)) return "plan";
+  if (/\b(?:i'?ll|i will|i'?m going to|gonna) (?:be |come )?back\b|\bcome back (?:next|again|soon)\b|\bsee you next (?:year|time|trip)\b/.test(t)) return "return";
+  if (/\b(?:here|staying|stay) (?:till|until|for)\b|\b(?:till|until) (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|the weekend)\b/.test(t)) return "plan";
   if (/^(?:nice|lovely|beautiful|pretty|gorgeous|cute|love (?:the|your)|i like your) (?!night|time|day|week|evening)|\byou (?:look|are|'re|re) (?:beautiful|pretty|lovely|gorgeous|cute|nice|stunning)\b|\b(?:dress|hair|smile|eyes)\b/.test(t)) return "compliment";
   return "generic";
 }
@@ -15192,9 +15204,15 @@ function _toHer(c, raw, addressed) {
     _say(_fmt(_pickTownLine(_hoursRegister(c) === "floor" ? _ENGLISH_FLOOR : _ENGLISH_HOUSE, "english:" + _hoursRegister(c)), { n: NPCS[c].name }));
     return true;   // the soft ask spent the turn
   }
+  // ANY GOOD BARS I SHOULD TRY?: she names her own (with a laugh) and one more that is open nearby; a man names his local
+  if (/\b(?:good|best|other|nice|fun|decent) bars?\b|\bbars? (?:to|i should|worth) (?:try|go|visit)|\bwhere (?:else )?(?:should|can) i (?:go|drink)\b/.test(t)) { _barTip(c); _tick(); return true; }
   let missed = false;
+  // a REMARK on a subject she has a line for ("the weather is hot tonight") reaches that line, not "too fast"
+  if (R.kind !== "question" && typeof _SMALL_TALK_KEYS !== "undefined" && _SMALL_TALK_KEYS.some(([, rx]) => rx.test(t))) {
+    if (_askSoft("ask " + name + " about " + t)) return true; missed = true;
+  }
   if (R.kind === "question") {
-    if (R.about === "me" && !addressed && !/\b(?:you|your|u|ur)\b/.test(t)) return false;
+    if (R.about === "me" && !addressed && !/\b(?:you|your|u|ur)\b/.test(t) && !_HER_ROUTE.some(([rx]) => rx.test(t))) return false;
     const rr = _HER_ROUTE.find(([rx]) => rx.test(t));
     if (rr && rr[1] === "number" && NPC_ROLES[c]) { doCommand("contact " + name); return true; }
     // a small-talk subject is matched on the whole question (round 84's _smallTalk reads the sentence, not a word)
@@ -15213,16 +15231,134 @@ function _toHer(c, raw, addressed) {
     const hit = topics.find(k => words.some(w => _topicHits(k, w)));
     if (hit) { doCommand("ask " + name + " about " + String(hit).split("|")[0]); return true; }
   }
+  // A MAN ON HIS STOOL answers the basics about himself from what the game knows of him (Steve's fifth run: Terry,
+  // Barry and Wayne all dodged "where you from?" with a deflection that read as a brush-off)
+  if (!NPC_ROLES[c] && (R.kind === "question" || missed)) { const mb = _manBasics(c, t); if (mb) { _say(mb); if (!missed) _tick(); return true; } }
   const b = _heardBucket(t);
   // a sentence in another language is not a remark she nods at: the generic bucket needs English in it
   if ((b === "generic" || b === "question") && !missed && !addressed && !t.split(" ").some(w => _READ_STOP.has(w) || _READ_EN.has(w))) return false;
   if (b === "compliment") { doCommand("compliment " + name); return true; }
   const reg = _hoursRegister(c) === "floor" ? "floor" : "house";
-  const key = b === "affection" ? (_knownTier(c) >= 2 || (G.party && (G.party.ids || []).includes(c)) ? "affectionWarm" : "affectionCool")
-    : b === "generic" && (missed || R.kind === "question") ? "question" : b;
+  // NOT UNDERSTOOD is the honest answer when nothing above read the sentence (Mario, 2026-10-15: "shouldn't a
+  // character just say the equivalent of 'I don't understand'?") — in her own English, never a deflection that
+  // pretends to have read it. Only the narrow buckets that are reliably right keep their own lines.
+  if (b === "generic" || b === "question" || (b === "plan" && R.kind === "question")) {
+    _say(_fmt(_pickTownLine(_NOT_UNDERSTOOD[_notUnderstoodReg(c)], "huh:" + _notUnderstoodReg(c)), { n: NPCS[c].name }));
+    if (!missed) _tick();
+    return true;
+  }
+  const key = b === "affection" ? (_knownTier(c) >= 2 || (G.party && (G.party.ids || []).includes(c)) ? "affectionWarm" : "affectionCool") : b;
   _say(_pickTownLine(_HEARD[reg][key], "heard:" + reg + key));
   if (!missed) _tick();   // the soft ask already spent the turn
   return true;
+}
+// whose English the "I don't understand" is in: the floor's Tinglish, the house's fluent Thai English (a mamasan,
+// a cashier, Tan, Nont — fluent, but Thai fluent, never British idiom: Mario, 2026-10-15), or a farang's own
+function _notUnderstoodReg(c) {
+  const reg = _hoursRegister(c);
+  if (reg === "floor") return "floor";
+  const nat = _natOf(c);
+  if (reg === "punter" || (nat && !/thai/i.test(nat))) return "farang";
+  return "house";
+}
+// a man's nationality: his `nat`, else the one his own description states ("American, sixty…") — never invented
+const _NAT_WORDS = /\b(English|British|American|Australian|Canadian|Scouse|Scottish|Irish|Welsh|German|Dutch|Danish|Swedish|Norwegian|French|Belgian|Swiss|Austrian|Kiwi|Finnish|Italian|Russian|Japanese|Indian|Thai)\b/;
+function _natOf(c) {
+  const n = NPCS[c] || {}; if (n.nat) return n.nat;
+  const m = String(n.desc || "").split(/[.—]/)[0].match(_NAT_WORDS); return m ? m[1] : null;
+}
+const _NOT_UNDERSTOOD = {
+  floor: [
+    "{n} leans closer. \"Sorry, I not understand. Say again — slowly, na?\"",
+    "{n} holds out her phone with Google Translate already open. \"You type. My English only bar English.\"",
+    "\"Ha?\" {n} cups a hand to her ear. \"Music too loud. Again?\"",
+    "{n} smiles the smile of a woman who caught half of it. \"Mai kao jai — I don't understand. You say other way?\"",
+    "\"Sorry, sorry.\" {n} laughs at herself. \"Too fast. One more time, easy English.\"",
+    "{n} tilts her head. \"What you say? I hear the words, I don't get the meaning, hahaha.\"",
+    "\"Again, na?\" {n} taps your arm. \"Short words. Farang talk too long.\"",
+    "{n} frowns, trying. \"Not understand. You want something? Beer? Me? Toilet?\"",
+    "\"Huh?\" {n} genuinely has no idea, and isn't embarrassed about it. \"Say simple.\"",
+    "{n} shakes her head, smiling. \"Lost me. Start again, slowly slowly.\"",
+  ],
+  house: [
+    "\"Sorry, what you say? Again, slowly, na.\"",
+    "\"Mai kao jai — I don't understand. You say it another way?\"",
+    "\"My English is bar English. Say simple, I understand.\"",
+    "{n} frowns politely. \"Sorry, I don't understand. Again?\"",
+    "\"Ha? The music. Say again.\"",
+    "{n} gives you her full attention, which doesn't help. \"Sorry. What you mean?\"",
+    "\"Too fast for me. Again, slowly.\"",
+    "\"Sorry, I don't follow. You ask me something?\"",
+    "{n} shakes her head. \"Not understand. One more time.\"",
+    "\"Say again? I hear you, but I don't get it.\"",
+  ],
+  farang: [
+    "\"Sorry — say that again?\"",
+    "{n} leans in. \"Didn't catch that. Again?\"",
+    "\"Come again?\"",
+    "{n} squints at you. \"Lost me there.\"",
+    "\"You'll have to run that past me again.\"",
+    "\"Sorry, what was that?\" {n} turns an ear towards you.",
+    "\"Eh? Too much noise in here.\"",
+    "{n} frowns. \"Not with you. Say it again?\"",
+    "\"Run that by me again?\"",
+    "\"Missed that one. Again?\"",
+  ],
+};
+const _NAT_PLACE = { british: "the UK", english: "England", scottish: "Scotland", irish: "Ireland", welsh: "Wales", australian: "Australia",
+  american: "the States", canadian: "Canada", german: "Germany", dutch: "Holland", danish: "Denmark", norwegian: "Norway",
+  swedish: "Sweden", french: "France", belgian: "Belgium", swiss: "Switzerland", austrian: "Austria", "new zealander": "New Zealand",
+  kiwi: "New Zealand", scouse: "Liverpool", russian: "Russia", finnish: "Finland", italian: "Italy", indian: "India", japanese: "Japan" };
+function _barTip(c) {
+  const fenced = r => G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(r);
+  const own = NPCS[c].room;
+  const near = Object.keys(ROOMS).filter(r => ROOMS[r].bar && ROOMS[r].barType && r !== own && r !== G.room && !fenced(r) && !ROOMS[r].invite &&
+    !(typeof _closedNow === "function" && _closedNow(r)) && ((_path(G.room, r) || []).length || 99) <= 4);
+  const other = near.length ? near[_hh(c + ":tip:" + G.day, 41) % near.length] : null;
+  const ob = (other ? _barName(other) : "the Queen Vic").replace(/^The /, "the ");   // mid-sentence: "the Shady Lady"
+  const reg = _notUnderstoodReg(c);
+  if (reg === "farang") {
+    const local = own && ROOMS[own] && ROOMS[own].bar ? _barName(own) : null;
+    _say(_fmt(_pickTownLine(local && own !== G.room ? ["\"{l}. That's mine. Tell them I sent you and they'll overcharge you anyway.\"", "\"I drink at {l}. Can't speak for the rest.\""]
+      : ["\"You're in it.\" {n} lifts the glass. \"Failing that, {o}.\"", "\"This one. And {o}, if you want a change of wallpaper.\""], "bartip:m"), { n: NPCS[c].name, l: local, o: ob }));
+    return;
+  }
+  _say(_fmt(_pickTownLine(reg === "floor"
+    ? ["\"Best bar? Here!\" {n} laughs at her own sales pitch. \"Okay, okay — {o} also good. Tell them I say hello.\"",
+       "\"You want to leave me already?\" {n} pretends to be hurt. \"{O}. Good music. But you come back.\"",
+       "\"This one, of course.\" A beat. \"{O} not bad. My friend work there.\""]
+    : ["\"This one,\" comes the answer, without hesitation. \"After that, {o}.\"", "\"{O} is decent. But you're sitting in the best one.\""], "bartip:" + reg),
+    { n: NPCS[c].name, o: ob, O: ob.charAt(0).toUpperCase() + ob.slice(1) }));
+}
+function _manBasics(c, t) {
+  const n = NPCS[c]; if (!n) return null;
+  const nat = String(_natOf(c) || "").toLowerCase(), place = _NAT_PLACE[nat] || null;
+  if (/\bwhere (?:are )?(?:you|u) from\b|\bwhere(?:'?s| is) home\b|\bwhich country\b/.test(t) && !place) return _fmt(_pickTownLine([   // nothing on record: an answer that names no place
+    "\"Here, now. Long enough that the rest doesn't count.\"",
+    "\"Here.\" {n} taps the bar. \"Anything before here is a long story and a short flight.\"",
+    "\"Here's home. The other place just sends the post.\"",
+  ], "manfromnone"), { n: n.name });
+  if (/\bwhere (?:are )?(?:you|u) from\b|\bwhere(?:'?s| is) home\b|\bwhich country\b/.test(t) && place) return _fmt(_pickTownLine([
+    "\"{p}, originally.\" {n} says it like a place {he} used to know. \"Here now.\"",
+    "\"{p}. Long time ago.\"",
+    "\"{p}. Don't hold it against me.\"",
+    "\"Born in {p}. Live on this stool.\"",
+    "{n} raises {his} glass an inch. \"{p}. You?\"",
+  ], "manfrom"), { n: n.name, p: place.charAt(0).toUpperCase() + place.slice(1), he: _pr(c).s, his: _pr(c).p });
+  if (/\bhow long (?:have )?(?:you )?(?:been )?(?:coming|here|in pattaya|out here|living here|lived here)\b/.test(t)) return _fmt(_pickTownLine([
+    "\"Long enough to remember when a Chang was forty baht.\"",
+    "\"Too long, my doctor says.\"",
+    "\"Since before the girls on this soi were born, some of them.\" {n} doesn't look proud of it.",
+    "\"Years. You stop counting after the third visa run.\"",
+    "\"Long enough to have a stool.\" {He} pats it.",
+  ], "manlong"), { n: n.name, He: _pr(c).s.charAt(0).toUpperCase() + _pr(c).s.slice(1) });
+  if (/\bhow old are (?:you|u)\b/.test(t) && !n.age) return _fmt(_pickTownLine([   // no age on record: an answer that states none
+    "\"Old enough to know better. Not old enough to do better.\"", "\"Older than this bar. Younger than that barstool.\"", "\"Ask me after the next one.\"",
+  ], "managenone"), { n: n.name });
+  if (/\bhow old are (?:you|u)\b/.test(t) && n.age) return _fmt(_pickTownLine([
+    "\"{a}. Feels older on a Monday.\"", "\"{a}, and every one of them paid for.\"", "\"{a}. Don't tell the girls.\"",
+  ], "manage"), { n: n.name, a: String(n.age) });
+  return null;
 }
 // WHERE CAN I EAT, asked of anyone, or of nobody (Steve's third run: four bar ladies told him to "ask around — the bar
 // ladies know"). The nearest food that is open and inside the week's fence, named with where it is from here.

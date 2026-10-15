@@ -53,6 +53,13 @@ const CASES = [
   ["somo", () => { G.day = 5; }, "I'm going home Sunday", /Tomorrow you fly/],
   ["nina", () => onArm("nina"), "having fun?", /Not my story|wrong girl/],
   ["terry", () => { G.day = 7; }, "last night mate, fly home tomorrow", /somebody saw you|Not on this rail/],
+  // run 5 — the men dodged "where you from?" with deflections; the plans pool misfired; nothing is said back that wasn't a name
+  ["terry", () => { G.room = "queen_vic"; G.nightTurn = 20; }, "where you from?", /when we know each other|more than one beer|You first/],
+  ["barry", null, "where you from?", /when we know each other|more than one beer|You first/, /England/],
+  ["angela", () => { G.nightTurn = 20; }, "where you from then?", /You first/],
+  ["kwan", null, "what you doing tomorrow?", /no hurry tonight|Still have time/],
+  ["kwan", null, "I'll be back next year", /Still have time|no hurry/],
+  ["kwan", null, "any good bars I should try?", /ask around/],
 ];
 for (const [who, setup, line, bad, good] of CASES) {
   test(`Steve to ${who}: "${line}"`, () => {
@@ -90,4 +97,11 @@ test("Steve: FOLLOW her does not walk you into the bar of another woman who is y
 test("Steve: the rose seller is never two nights running", () => {
   const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-encounters.js", import.meta.url)), "utf8");
   assert.match(src, /G\.day - G\.flowerDay < 2/);
+});
+
+test("Steve (run 5): a sentence nothing reads gets 'I don't understand' in her own English — never a deflection that pretends", () => {
+  talkTo("kwan"); out = []; run("what's the story with the frog?");
+  assert.ok(_NOT_UNDERSTOOD.floor.some(l => said().includes(l.replace("{n}", "Kwan").slice(0, 25))), said());
+  for (const pool of Object.values(_NOT_UNDERSTOOD)) assert.ok(pool.length >= 10);
+  assert.ok(!_NOT_UNDERSTOOD.house.concat(_NOT_UNDERSTOOD.floor).some(l => /\blove\b|didn't catch/.test(l)), "no British idiom in a Thai mouth (Mario)");
 });
