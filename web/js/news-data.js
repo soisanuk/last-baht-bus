@@ -3,18 +3,38 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Pattaya girl beaten by group after no-makeup photo gossip",
+    "s": "Thaiger",
+    "d": "16 Oct 2026"
+  },
+  {
+    "t": "Pattaya reviews beach parking after rental operators complain of space shortage",
+    "s": "Pattaya Mail",
+    "d": "15 Oct 2026"
+  },
+  {
+    "t": "Pattaya gambling bust catches nine after condo left unlocked",
+    "s": "Thaiger",
+    "d": "16 Oct 2026"
+  },
+  {
+    "t": "Russian man dies after bike crash in Pattaya",
+    "s": "Thaiger",
+    "d": "15 Oct 2026"
+  },
+  {
     "t": "South Korean man held after Thai woman reports Pattaya assault",
     "s": "Thaiger",
     "d": "15 Oct 2026"
   },
   {
-    "t": "Complaints mount over dangerous ramps at Pattaya’s Lan Pho Naklua parking building",
-    "s": "Pattaya Mail",
-    "d": "15 Oct 2026"
+    "t": "Cambodian suspect farts at police during Pattaya drug raid",
+    "s": "Thaiger",
+    "d": "16 Oct 2026"
   },
   {
-    "t": "Russian man dies after bike crash in Pattaya",
-    "s": "Thaiger",
+    "t": "Pattaya awaits cooler weather to lift hopes for year-end tourism",
+    "s": "Pattaya Mail",
     "d": "15 Oct 2026"
   },
   {
@@ -23,38 +43,18 @@ var NEWS_FEED = [
     "d": "15 Oct 2026"
   },
   {
-    "t": "Pattaya driver asks couple to wait until hotel before sex acts",
-    "s": "Thaiger",
-    "d": "15 Oct 2026"
-  },
-  {
-    "t": "Pattaya Second Road repairs face October deadline after rain delays",
-    "s": "Pattaya Mail",
-    "d": "15 Oct 2026"
-  },
-  {
-    "t": "Police fire shots during Pattaya drug chase after pickup hits office",
-    "s": "Thaiger",
-    "d": "14 Oct 2026"
-  },
-  {
-    "t": "Pattaya plane crash damages scrap business, injures pilot",
-    "s": "Thaiger",
-    "d": "14 Oct 2026"
-  },
-  {
     "t": "A $60 Casio Watch Is a New Political Status Symbol in Thailand",
-    "s": "Bloomberg.com",
+    "s": "Bloomberg",
     "d": "14 Oct 2026"
   },
   {
-    "t": "An eerie trip inside Thailand’s oldest amusement park, deserted after flooding",
+    "t": "Inside a deserted Thailand amusement park, forced to close after flooding – video",
     "s": "The Guardian",
-    "d": "14 Oct 2026"
+    "d": "16 Oct 2026"
   },
   {
     "t": "Artificial mangrove roots offer a stopgap for Thailand’s eroding coastline",
-    "s": "Mongabay",
+    "s": "news - Mongabay",
     "d": "15 Oct 2026"
   },
   {
@@ -63,8 +63,8 @@ var NEWS_FEED = [
     "d": "14 Oct 2026"
   },
   {
-    "t": "Abusive Care Facility in Thailand Raises Broader Concerns",
-    "s": "Human Rights Watch",
+    "t": "Chinese fugitive with Privilege visa arrested in Phuket",
+    "s": "Bangkok Post",
     "d": "15 Oct 2026"
   },
   {
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-15","USD":33.55,"AUD":23.18,"GBP":44.42,"EUR":37.59};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-16","temp":26,"humid":95,"code":3,"hi":31,"rain":100};
+var WX_NOW = {"date":"2026-10-16","temp":31,"humid":75,"code":3,"hi":31,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-01","first":"402701","last2":"70","front3":["791","912"],"back3":["058","396"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4172,"date":"2026-10-15","baht":66200};
+var GOLD = {"usd":4180,"date":"2026-10-16","baht":66300};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":82171,"thb":2755587};
+var BTC = {"usd":82046,"thb":2746441};
