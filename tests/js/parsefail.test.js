@@ -1,7 +1,8 @@
-// A PARSE FAILURE IS SAID PLAINLY (Mario, 2026-10-18): "when input isn't parseable we should throw a clear warning
-// that the input needs to be properly phrased. three failed parses in a row triggers an examples modal". The engine
-// prints the warning and commands that work where you stand; the third failure in a row arms _examplesDue(), which
-// term.js reads after each command to open the modal (tests/e2e/examples.spec.mjs drives that half).
+// A PARSE FAILURE ESCALATES (Mario, 2026-10-18): "when input isn't parseable we should throw a clear warning that
+// the input needs to be properly phrased. three failed parses in a row triggers an examples modal" — and then "on
+// first parse failure 'The soi blinks at you' is fine, second gets the new warning, third gets the examples card".
+// The engine prints each step; the third arms _examplesDue(), which term.js reads after each command to open the
+// card (tests/e2e/examples.spec.mjs drives that half).
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -13,7 +14,7 @@ let out = [];
 engineInit((text, cls) => out.push({ text: String(text), cls }));
 const said = () => out.map(o => o.text).join("\n");
 const run = c => doCommand(c);
-const huh = () => out.some(o => _HUH.includes(o.text) || o.text === _HUH_THAI);
+const huh = () => out.some(o => _HUH.includes(o.text) || o.text === _HUH_THAI || o.text === _HUH_THAI_SOFT);
 
 beforeEach(() => {
   newGame();
@@ -24,13 +25,17 @@ beforeEach(() => {
   G.room = "sunset_dreams"; _examplesDue(); run("look"); out = [];
 });
 
-test("a line the game cannot read gets a clear warning, in its own class, and commands that work here", () => {
+test("the first miss is the soi's shrug; the second in a row is the plain warning, with commands that work here", () => {
   run("flibber wobble");
-  const w = out.find(o => _HUH.includes(o.text));
+  assert.ok(out.some(o => o.text === _HUH_SOFT[0]), said());
+  assert.ok(!out.some(o => o.cls === "warn"), "no warning for one typo");
+  assert.doesNotMatch(said(), /\(Try:/);
+  out = []; run("zzk qq");
+  const w = out.find(o => _HUH_WARN.includes(o.text));
   assert.ok(w, said()); assert.equal(w.cls, "warn", "the game's own voice, styled as a warning");
   assert.match(w.text, /didn't (understand|parse)/); assert.match(w.text, /verb/, "it says how to phrase it");
   assert.match(said(), /\(Try: [A-Z]/, "with examples to tap");
-  assert.equal(_examplesDue(), false, "one failure is not three");
+  assert.equal(_examplesDue(), false, "two is not three");
 });
 
 test("three in a row arm the examples modal once; anything that works in between resets the count", () => {
@@ -46,15 +51,18 @@ test("a nested hand-off is one failure per thing typed, not two", () => {
   run("great night tonight"); run("lovely shoes in the moonlight"); assert.equal(_examplesDue(), false);
 });
 
-test("a sentence to the woman you are talking to: her own line, then the game says plainly it couldn't read it", () => {
+test("a sentence to the woman you are talking to: her own line first, then the game says plainly it couldn't read it", () => {
   run("talk to kwan"); G.convoQ = null; out = [];
   run("great night tonight");
-  assert.match(said(), /Kwan/); assert.match(said(), /didn't parse|couldn't read|didn't follow/, said());
+  assert.match(said(), /Kwan/); assert.ok(!out.some(o => o.cls === "warn"), "the first time, her shrug is the answer");
+  out = []; run("the purple sky is grumpy");
+  assert.match(said(), /didn't parse|couldn't read|didn't follow/, said());
   assert.match(said(), /ASK KWAN ABOUT/, "the examples are hers");
 });
 
-test("Thai the game cannot read is said plainly too", () => {
-  run("ไก่ทอดหอมมาก"); assert.ok(out.some(o => o.text === _HUH_THAI && o.cls === "warn"), said());
+test("Thai the game cannot read: the soi's line first, the plain warning second", () => {
+  run("ไก่ทอดหอมมาก"); assert.ok(out.some(o => o.text === _HUH_THAI_SOFT), said());
+  out = []; run("ไก่ทอดอร่อยมาก"); assert.ok(out.some(o => o.text === _HUH_THAI && o.cls === "warn"), said());
 });
 
 test("every example the game offers is a command it takes, in a street, a bar, a conversation and a prompt", () => {

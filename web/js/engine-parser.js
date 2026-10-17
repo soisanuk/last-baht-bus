@@ -718,25 +718,30 @@ function _staleModalAnswer(lower) {
   _say("(That moment has passed — nobody is asking you that now.)", "dim");
   return true;
 }
-// A PARSE FAILURE IS SAID PLAINLY (Mario, 2026-10-18: "when input isn't parseable we should throw a clear
-// warning that the input needs to be properly phrased. three failed parses in a row triggers an examples
-// modal"). The line is the game's, not the soi's — no "the soi blinks at you" — and it is printed on its own,
-// exactly as written here, so every oracle that judges a miss against this pool (the modal audit, the playtest
-// driver's miss ledger, the soak) still recognises it. _parseFail prints it and the examples under it.
-const _HUH = [
+// A PARSE FAILURE ESCALATES (Mario, 2026-10-18: "when input isn't parseable we should throw a clear warning that
+// the input needs to be properly phrased. three failed parses in a row triggers an examples modal" — then: "on first
+// parse failure 'The soi blinks at you' is fine, second gets the new warning, third gets the examples card"). One miss
+// is a typo and the soi can shrug at it; a second in a row is a player who needs telling how the game reads; a third
+// opens the card. Every line is printed on its own, exactly as written, and _HUH is BOTH pools, so every oracle that
+// judges a miss against it (the modal audit, the playtest driver's miss ledger, the soak) still recognises it.
+const _HUH_SOFT = ["The soi blinks at you. Try again — (HELP lists commands.)"];
+const _HUH_WARN = [
   "I didn't understand that — it needs to be phrased as a command: a verb, then who or what.",
   "That didn't parse. Phrase it as a command the game knows: a verb, then who or what.",
   "I didn't understand that. Try a shorter command — a verb, then who or what.",
   "That didn't parse — start with a verb the game knows, then who or what.",
 ];
-// …the same honesty when the person you are talking to could not read a sentence: she says so in her own
-// English (_NOT_UNDERSTOOD) and the GAME then says what happened, because her shrug alone does not tell a player
-// whether the game or the woman missed it.
+const _HUH = [..._HUH_SOFT, ..._HUH_WARN];
+// …the same honesty when the person you are talking to could not read a sentence: the first time her own English
+// (_NOT_UNDERSTOOD) is the whole answer; from the second the GAME says what happened under it, because her shrug
+// alone does not tell a player whether the game or the woman missed it.
 const _HUH_TALK = [
   "(The game couldn't read that sentence. To talk to {n}, ask about a subject, or tap one of {pos} topics.)",
   "(That sentence didn't parse. Ask {n} about something by name, or tap a topic.)",
   "(The game didn't follow that. A question about a subject reaches {n} best — or tap a topic.)",
 ];
+const _HUH_THAI_SOFT = "(The soi reads a little Thai — ซื้อ, ไป, ดู, น้ำ, เบียร์, เท่าไหร่, สวัสดี, ขอบคุณ — but not that one yet. " +
+  "Try it in English, or tap a Thai word for the card.)";
 const _HUH_THAI = "I didn't understand that Thai. The game reads short Thai commands — ซื้อ, ไป, ดู, น้ำ, เบียร์, " +
   "เท่าไหร่, สวัสดี, ขอบคุณ — not whole sentences yet. Try a shorter one, or say it in English.";
 // Consecutive failures, counted per TOP-LEVEL command (doCommand wraps _doCommandInner and resets the run on any
@@ -744,15 +749,24 @@ const _HUH_THAI = "I didn't understand that Thai. The game reads short Thai comm
 // start, and nothing in G should care how a man types.
 let _cmdDepth = 0, _failedThis = false, _failRun = 0, _examplesPending = false;
 const PARSE_FAILS_MODAL = 3;
-function _parseFail(line, cls) {
-  _say(line, cls || "warn");
-  const ex = _examples(3).map(e => e.cmd.toUpperCase());
+// kind: "cmd" (the parser read nothing), "thai" (Thai it could not read), or "talk" (a sentence to the person you
+// are talking to — her own line is already printed; c is who).
+function _parseFail(kind, c) {
   if (!_failedThis) { _failedThis = true; _failRun++; }
-  if (_failRun >= PARSE_FAILS_MODAL) {
-    _failRun = 0; _examplesPending = true;
-    _say("(Three in a row. Here are some ways to put things" + (ex.length ? ": " + ex.join(" · ") : "") +
-      ". HELP MORE lists every command.)", "dim");
-  } else if (ex.length) _say("(Try: " + ex.join(" · ") + ")", "dim");
+  const n = _failRun;
+  if (n === 1) {
+    if (kind === "thai") _say(_HUH_THAI_SOFT, "dim");
+    else if (kind !== "talk") _say(_HUH_SOFT[0], "dim");
+  } else {
+    if (kind === "talk") _say(_fmt(_pickVary(_HUH_TALK, "huhtalk"), { n: NPCS[c].name, pos: _pr(c).p }), "warn");
+    else _say(kind === "thai" ? _HUH_THAI : _pickVary(_HUH_WARN, "huh"), "warn");
+    const ex = _examples(3).map(e => e.cmd.toUpperCase());
+    if (n >= PARSE_FAILS_MODAL) {
+      _failRun = 0; _examplesPending = true;
+      _say("(Three in a row. Here are some ways to put things" + (ex.length ? ": " + ex.join(" · ") : "") +
+        ". HELP MORE lists every command.)", "dim");
+    } else if (ex.length) _say("(Try: " + ex.join(" · ") + ")", "dim");
+  }
   if (typeof _noteMiss === "function") _noteMiss("parse");
 }
 // The frontend asks once after each command whether to open the examples (term.js) — presentation's question,
@@ -15324,7 +15338,7 @@ function _toHer(c, raw, addressed) {
   // pretends to have read it. Only the narrow buckets that are reliably right keep their own lines.
   if (b === "generic" || b === "question" || (b === "plan" && R.kind === "question")) {
     _say(_fmt(_pickTownLine(_NOT_UNDERSTOOD[_notUnderstoodReg(c)], "huh:" + _notUnderstoodReg(c)), { n: NPCS[c].name }));
-    _parseFail(_fmt(_pickVary(_HUH_TALK, "huhtalk"), { n: NPCS[c].name, pos: _pr(c).p }), "dim");
+    _parseFail("talk", c);
     if (!missed) _tick();
     return true;
   }
@@ -16665,14 +16679,14 @@ function _doCommandInner(input) {
       if (_naturalHelp(lower)) break;
       if (_politePhrase(lower) || _convoResolve(lower)) break;
       if (typeof _readAsk === "function" && _readAsk(lower)) break;   // "i'm here till sunday", said to her (Steve's rerun)
-      _parseFail(_pickVary(_HUH, "huh")); return;
+      _parseFail("cmd"); return;
     case "i":
       if (!arg) { _doInventory(); break; }
       // "i love you", "i want a beer" — not an inventory request; let the
       // polite-phrase / conversation layers have it (Alan playtest 2026-08-17)
       if (_politePhrase(lower) || _convoResolve(lower)) break;
       if (typeof _readAsk === "function" && _readAsk(lower)) break;
-      _parseFail(_pickVary(_HUH, "huh")); return;
+      _parseFail("cmd"); return;
     // Meta, not play: handing the character to the other game and taking one
     // back are outside the fiction, and charging a turn of the night for them
     // is charging the player for using the door between two games (persistence
@@ -17172,7 +17186,7 @@ function _doCommandInner(input) {
       // a modal's answer typed after the modal closed is "that moment has passed", never a parse
       // failure — "1", "short time", "calm down" all fell through (Darren, round 66)
       if (_staleModalAnswer(lower)) { _traceCancel(); return; }
-      _parseFail(_pickVary(_HUH, "huh")); _traceCancel();
+      _parseFail("cmd"); _traceCancel();
       return;
     case "touch": case "feel": case "taste": case "lick": case "tell":
     case "verbose": case "brief": case "restore": case "load": case "move":
@@ -17343,7 +17357,7 @@ function _doCommandInner(input) {
     case "good": // GOOD BOY / GOOD DOG — else "good evening" and friends go to the courtesy layer
       if (G.dog && /\b(boy|dog|lad|girl)\b/.test(arg)) { _dogPraise(v); break; }
       if (_politePhrase(lower) || _convoResolve(lower)) break;
-      _parseFail(_pickVary(_HUH, "huh")); return;
+      _parseFail("cmd"); return;
     case "quiet": case "hush": case "shh": case "shush": case "still": _doQuiet(); break;
     case "stay": case "heel": case "whistle": case "come":
       if (v === "stay" && /quiet|still|put|silent|low|calm/.test(arg || "")) { _doQuiet(); break; }
@@ -17498,7 +17512,7 @@ function _doCommandInner(input) {
           _say(`(เข้าใจ — ${en2})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1;
           _thaiPraise("script:" + en2.split(" ")[0]); doCommand(en2); return;
         }
-        _parseFail(_HUH_THAI);
+        _parseFail("thai");
         return;
       }
       // conversation layer: a bare name opens a chat; while one's live, a bare
@@ -17542,7 +17556,7 @@ function _doCommandInner(input) {
       // reader: "remember me? doncaster rovers" and "who's playing tonight" did not parse — Steve, the baseline)
       if (typeof _readAsk === "function" && _readAsk(lower)) break;
       if (_staleModalAnswer(lower)) { _traceCancel(); return; }
-      _parseFail(_pickVary(_HUH, "huh"));
+      _parseFail("cmd");
       // …and drop any breadcrumb still pending. This path returns WITHOUT
       // _flushTrace, so a trace stranded by an earlier early-return survived
       // here and printed against some unrelated later command — Frank's

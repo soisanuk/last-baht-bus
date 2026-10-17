@@ -8805,7 +8805,7 @@ test("stage 2: the probe gate fires on security probes and never on play", () =>
 test("stage 2: a probe is answered with the ordinary brush-off — the cover holds", () => {
   newGame(); G.flags.act1Done = true; G.stage = "vacation";
   out = []; run("' OR 1=1--");
-  assert.match(lastOut(), /didn't parse|understand/i, "the probe got a special answer — the cover is blown");
+  assert.match(lastOut(), /didn.t parse|understand|soi blinks/i, "the probe got a special answer — the cover is blown");
   assert.doesNotMatch(lastOut(), /blacksite|rabbit|SanukPay/i, "the probe's reply leaked the chain");
   assert.equal(_flag("probeArmed"), true, "the probe didn't arm the wrong number");
 });

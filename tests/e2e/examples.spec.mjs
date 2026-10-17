@@ -1,5 +1,5 @@
-// THE EXAMPLES MODAL (Mario, 2026-10-18): a line the game can't read gets a plain warning; three in a row open a
-// card of commands that work where you stand, and tapping one runs it. Typing anything instead closes it.
+// THE EXAMPLES MODAL (Mario, 2026-10-18): the first unreadable line is the soi's shrug, the second a plain warning,
+// the third opens a card of commands that work where you stand, and tapping one runs it. Typing anything instead closes it.
 import { test, expect } from "@playwright/test";
 import { bootIntoGame } from "./_helpers.mjs";
 
@@ -10,8 +10,10 @@ test("three unreadable lines open the examples; a tap runs one and closes the ca
   await bootIntoGame(page, INDEX_URL);
   const ov = page.locator("#ex-overlay");
   await say(page, "flibber wobble");
-  await expect(page.locator(".t-warn").last()).toContainText(/didn't (understand|parse)/);
+  await expect(page.locator(".t-line").last()).toContainText("The soi blinks at you");
+  await expect(page.locator(".t-warn")).toHaveCount(0);
   await say(page, "zzk qq");
+  await expect(page.locator(".t-warn").last()).toContainText(/didn't (understand|parse)/);
   await expect(ov).toBeHidden();
   await say(page, "qq zzk blorp");
   await expect(ov).toBeVisible();
