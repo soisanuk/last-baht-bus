@@ -331,6 +331,44 @@ const _term = (() => {
     ov.classList.add("open");
   }
 
+  // THE EXAMPLES MODAL (Mario, 2026-10-18): three parse failures in a row and the engine says so (_examplesDue);
+  // the rows are its _examples() — commands that work where you stand, each a tap that runs it.
+  function _closeExamples() {
+    const ov = document.getElementById("ex-overlay");
+    if (ov && ov.classList.contains("open")) { ov.classList.remove("open"); ov.innerHTML = ""; }
+  }
+  function _openExamples() {
+    const ov = document.getElementById("ex-overlay");
+    if (!ov || typeof _examples !== "function") return;
+    if (!ov._wired) {
+      ov.addEventListener("click", ev => { if (ev.target === ov) _closeExamples(); });
+      ov.addEventListener("keydown", ev => { if (ev.key === "Escape") { _closeExamples(); _input.focus(); } });
+      ov._wired = true;
+    }
+    ov.innerHTML = "";
+    const card = document.createElement("div"); card.className = "ex-card";
+    const h = document.createElement("h2"); h.id = "ex-title"; h.textContent = "How to say it";
+    const p = document.createElement("p");
+    p.textContent = "The game reads short commands: a verb, then who or what. When you are talking to somebody, " +
+      "a plain question to them works too. These work where you are now — tap one to try it.";
+    const ul = document.createElement("ul");
+    for (const row of _examples(8)) {
+      const li = document.createElement("li");
+      const what = document.createElement("span"); what.textContent = row.what;
+      const b = document.createElement("button"); b.type = "button"; b.textContent = row.cmd.toUpperCase();
+      b.addEventListener("click", () => { _closeExamples(); _input.value = row.cmd; submit(_onCmd); });
+      li.append(what, b); ul.appendChild(li);
+    }
+    const close = document.createElement("button"); close.type = "button"; close.className = "ex-close";
+    close.textContent = "Close";
+    close.addEventListener("click", () => { _closeExamples(); _input.focus(); });
+    card.append(h, p, ul, close); ov.appendChild(card);
+    ov.classList.add("open");
+    // focus the CARD, never a button: the Enter that submitted the third failure is still being dispatched, and its
+    // keypress would land on a focused button and run that command by itself (the e2e caught DOWN walking you out)
+    card.tabIndex = -1; card.focus();
+  }
+
   function _addAvatars(div, text) {
     if (!/^(Here: |Gallery — |📷 |Poster — )/.test(text)) return;
     // Gallery rows and texted selfies are the COLLECTION — their photos enlarge on
@@ -1098,6 +1136,7 @@ const _term = (() => {
     const cmd = _input.value.trim();
     if (!cmd) return;
     _closeFly(); // a wheel left open over the transcript outlives the moment it was for (mobile playtest 2026-08-22)
+    _closeExamples(); // …and so does the examples card: typing anything is the answer to it
     const anchor = echo(cmd);
     _history.push(cmd);
     _histIdx = _history.length;
@@ -1122,6 +1161,7 @@ const _term = (() => {
     _renderChips(); // …and re-match the quick-command chips to the new context
     _scrollToNew(anchor); // read from the top of what just arrived, not the end
     _queueMoreBelow();
+    try { if (typeof _examplesDue === "function" && _examplesDue()) _openExamples(); } catch (e) {}
   }
 
   function _wireNavFab() {

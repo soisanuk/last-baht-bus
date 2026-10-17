@@ -111,7 +111,7 @@ const CLASS = {
   "engine-parser.js:_ORCHID_BOUNCER|everybody knows": [G_], "engine-parser.js:_SCENERY|the town sees": [G_],
   "engine-parser.js:_doBuy|the floor notices": [G_, "a moment"], "engine-parser.js:_doExamine|the floor knows": [G_],
   "engine-parser.js:_doGive|everybody here knew": [G_], "engine-parser.js:_doGive|the whole rail can see": [G_, "a moment"],
-  "engine-parser.js:_politePhrase|the soi has heard": [G_], "engine-parser.js:doCommand|the mamasan hears": [G_],
+  "engine-parser.js:_politePhrase|the soi has heard": [G_], "engine-parser.js:_doCommandInner|the mamasan hears": [G_],
   "engine-play.js:_BELL_SOI6|the street hears": [G_, "a moment"], "engine-play.js:_LOCKIN_GAMES|everybody knows": [G_],
   "engine-play.js:_SOCIAL_TEXT|the bar heard": [G_, "a moment"], "engine-play.js:_SOCIAL_TEXT|the bar notices": [G_, "a moment"],
   "engine-play.js:_c4Input|the whole bar over to see": [G_, "a moment"], "engine-play.js:_poolInput|the bar notices": [G_, "a moment"],
