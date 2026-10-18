@@ -55,7 +55,7 @@ test("Candy and Oy answer family, home and plan; an authored mamasan without lin
   const authored = Object.keys(NPCS).find(id => NPC_ROLES[id] === "mamasan" && !NPCS[id].filler && !NPCS[id].dialogue.some(d => d.topic && /family/.test(d.topic)));
   if (authored) { const a = ask(authored, "family"); assert.ok(_M_FAMILY.some(l => a.includes(l.slice(1, 40))), authored + ": " + a); }
   const mama = Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "mamasan");
-  G.talked[mama] = [0]; const miss = ask(mama, "photosynthesis"); assert.ok(_TOPIC_MISS_HOUSE.some(f => miss.includes(f(NPCS[mama].name).slice(0, 25))), miss);
+  G.talked[mama] = [0]; const miss = ask(mama, "photosynthesis"); assert.ok([..._TOPIC_MISS_HOUSE, ..._TOPIC_MISS_THAI].some(f => miss.includes(f(NPCS[mama].name).slice(0, 25))), miss);
 });
 test("a girl answers FREE; WAIT UNTIL DAWN is a time", () => {
   const id = Object.keys(NPCS).find(i => NPCS[i].filler && NPC_ROLES[i] === "hostess");

@@ -47,16 +47,16 @@ test("the street's questions: next door is the neighbours, the old owner is reme
   assert.match(ask("pink_lotus", "nee", "the bar next door"), /Golden Dragon/, "not this bar's door");
   assert.match(ask("ladybird_bar", "ratsamee", "the bar next door"), /Hula Hula/);
   assert.match(ask("peach_lounge", "noot", "the old owner"), /Australian/);
-  assert.match(ask("peach_lounge", "farida", "the group"), /one of theirs|group pays on the day/i, "the group's own cashier knows the group (in her own words, since the deepening pass)");
+  assert.match(ask("peach_lounge", "farida", "the group"), /one of theirs|group pays? on the day/i, "the group's own cashier knows the group (in her own words, since the deepening pass)");
   assert.match(ask("peach_lounge", "pui", "the group"), /paper|group|company/i);
-  assert.match(ask("firecracker_bar", "napa", "the group"), /Nobody's bought this side/);
-  assert.match(ask("sunset_rail", "bussaba", "the middle"), /stretch|five bits/i);
+  assert.match(ask("firecracker_bar", "napa", "the group"), /Nobody's bought this side|Nobody buy this side/);
+  assert.match(ask("sunset_rail", "bussaba", "the middle"), /stretch|five bits|five part|beach end/i);
   assert.match(ask("golden_dragon", "gavin", "the folder"), /not yet is a price/i, "the group's man on the group's buying");
 });
 
 test("a bar by name, from any mouth, says where it is from HERE and whose paper — and cannot contradict itself", () => {
   const t = ask("sweet_tamarind", "view", "jade lounge");
-  assert.match(t, /A few doors along this street/); assert.doesNotMatch(t, /bike|motosai/i);
+  assert.match(t, /A few doors? along this street/); assert.doesNotMatch(t, /bike|motosai/i);
   assert.match(ask("lollipop_bar", "duang", "sweet tamarind"), /View bar — her name, her till|View's — her name on the paper/, "the one bar where paper and owner agree says so");
   assert.match(ask("pink_lotus", "nee", "jade lounge"), /One of ours/, "the flagship's mamasan on a sister bar");
   assert.match(ask("stinky_bar", "bert", "blue dog"), /Pen's/, "the Blue Dog is a bar, not Bert's dog speech");

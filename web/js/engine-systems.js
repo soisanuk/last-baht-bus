@@ -6148,6 +6148,11 @@ const _TEXT_TALK_HOUSE = [
   (n, q) => `"“${q}”." ${n} nods. "I meant it. I don't send for nothing."`,
   (n, q) => `${n} doesn't need reminding what she sent. "“${q}” — and here you are. Good."`,
 ];
+// the Thai house voice (Mario, 2026-10-18)
+const _TEXT_TALK_THAI = [
+  (n, q) => `"“${q}”." ${n} nods. "I mean it. I don't send for nothing, na."`,
+  (n, q) => `${n} doesn't need reminding what she sent. "“${q}” — and now you come. Good."`,
+];
 const _TEXT_TALK_PHOTO = [
   n => `"The photo?" ${n} grins. "Keep it. Is better than the real one at four in the morning."`,
   n => `${n} pretends not to know which photo, then gives up. "Okay, okay. My friend take it. Good angle, na?"`,
@@ -6159,6 +6164,10 @@ const _TEXT_SUBJECT_FLOOR = [
 const _TEXT_SUBJECT_HOUSE = [
   (n, q) => `"“${q}”." ${n} says it again to your face, flatter than the text. "That's where it stands."`,
   (n, q) => `${n} doesn't check the {{phone}}. "I sent you that: “${q}”. Nothing since."`,
+];
+const _TEXT_SUBJECT_THAI = [
+  (n, q) => `"“${q}”." ${n} says it again to your face, flatter than the text. "Same now. Nothing change."`,
+  (n, q) => `${n} doesn't check the {{phone}}. "I send you already: “${q}”. After that, nothing new."`,
 ];
 const _TEXT_STOP = new Set(["last", "time", "trip", "week", "morning", "yesterday", "that", "this", "with", "from", "have", "what", "when", "they", "them", "then", "again", "boss", "tonight", "today", "tomorrow", "night", "come", "say", "tell", "telling", "about", "your", "you", "will", "only", "very", "more", "some", "here", "there", "bar", "bars", "other", "goodbye", "bye", "night", "goodnight", "quiet", "music"]);   // a text is not the answer to "goodbye pukky" or "the other bars" (Kevin, round 84)
 const _stem = w => w.replace(/(ies)$/, "y").replace(/(s|es)$/, "");
@@ -6224,14 +6233,14 @@ function _textTalk(npc, topic) {
     if (!hit) return false;
     const q0 = String(_body(hit)).replace(/\s+/g, " ").trim();
     const short0 = q0.length > 70 ? q0.slice(0, q0.lastIndexOf(" ", 66)) + "…" : q0;
-    _say(_pickVary(_hoursRegister(npc) === "floor" ? _TEXT_SUBJECT_FLOOR : _TEXT_SUBJECT_HOUSE, "textsubj:" + npc)(n, short0));
+    _say(_pickVary(_hoursRegister(npc) === "floor" ? _TEXT_SUBJECT_FLOOR : _thaiHouse(npc) ? _TEXT_SUBJECT_THAI : _TEXT_SUBJECT_HOUSE, "textsubj:" + npc)(n, short0));
     return true;
   }
   const m = inbox[0];
   if (m.photo && !m.text) { _say(_pickVary(_TEXT_TALK_PHOTO, "texttalkpic:" + npc)(n)); return true; }
   const q = String(m.text || "").replace(/\s+/g, " ").trim();
   const short = q.length > 70 ? q.slice(0, q.lastIndexOf(" ", 66)) + "…" : q;
-  const pool = _hoursRegister(npc) === "floor" ? _TEXT_TALK_FLOOR : _TEXT_TALK_HOUSE;
+  const pool = _hoursRegister(npc) === "floor" ? _TEXT_TALK_FLOOR : _thaiHouse(npc) ? _TEXT_TALK_THAI : _TEXT_TALK_HOUSE;
   _say(_pickVary(pool, "texttalk:" + npc)(n, short));
   return true;
 }
@@ -6286,6 +6295,10 @@ function _deedTalk(npc, topic) {
       "\"You remember!\" {n} brightens. \"Good. Always asking when I come home. I say soon, soon.\"",
       "\"Okay now. Growing, eating, making trouble. Normal.\" {n} laughs. \"Thank you for ask.\"",
       "{n} holds up the {{phone}} with a new photo on it. \"Look — this week. Same face, bigger.\"",
+    ] : typeof _thaiHouse === "function" && _thaiHouse(npc) ? [   // the Thai house voice (Mario, 2026-10-18)
+      "\"Thank you. Everybody at home okay.\" {n} seems genuinely glad of the question.",
+      "\"Good. I call them this morning. You remember — kind of you.\"",
+      "\"Fine, fine. No news. No news is good news, na.\"",
     ] : [
       "\"Well, thank you. Everyone is fine at home.\" {n} seems genuinely glad of the question.",
       "\"Good. I spoke to them this morning. You remembered — that's kind.\"",
@@ -9845,7 +9858,11 @@ function _oppTalk(npc, topic) {   // anybody on your own rail, about the bar acr
     "“Over the road?” She does not look across. “{s}. The girls there, same cut as us. They count stools same like us.”",
     "“That bar?” A small sideways look. “{s}. My friend work there. She tell me everything, boss. Everything.”",
   ];
-  _say(_fmt(_pickVary(reg === "floor" ? floor : house, "opptalk" + reg), { s: _OPP_NAMES[o.phase].charAt(0).toUpperCase() + _OPP_NAMES[o.phase].slice(1) }));
+  const thai = [   // a Thai mama or cashier at your rail: the Thai house voice (Mario, 2026-10-18)
+    "“Across the road?” She gives it the glance you give a weather map. “{s}. Watch it, boss. Is you over there — one year early, or one year late.”",
+    "“The Dane's place.” A shrug with twenty-two years in it. “{s}. Same soi, same rent, same girls, same arithmetic. Only the man is different.”",
+  ];
+  _say(_fmt(_pickVary(reg === "floor" ? floor : (typeof _thaiHouse === "function" && _thaiHouse(npc)) ? thai : house, "opptalk" + reg), { s: _OPP_NAMES[o.phase].charAt(0).toUpperCase() + _OPP_NAMES[o.phase].slice(1) }));
   return true;
 }
 const _TAMARIND_LINES = [

@@ -4395,8 +4395,8 @@ const _OWNER_GREET = {
     n => `"Ah, the owner arrives." ${n} says it dry, fond. "Sit, sit — is your bar, but you still sit. I run the floor, you watch the door. Twenty year, I know my half. You learning yours."`,
   ],
   cashier: [
-    n => `${n} glances up from the drawer. "Evening, boss. Till started clean, I show you the book at close." Back to the count. With you, she is all business, which is the compliment.`,
-    n => `"You're in." ${n} turns the book a quarter so you can see the running figure without asking. "Slow hour. It'll pick up. It always picks up." She does not look worried, so you decide not to be.`,
+    n => `${n} glances up from the drawer. "Evening, boss. Till start clean. I show you the book at close." Back to the count. With you, she is all business, which is the compliment.`,
+    n => `"You come." ${n} turns the book a quarter so you can see the running figure without asking. "Slow hour now. Later, pick up. Always pick up." She does not look worried, so you decide not to be.`,
     n => `${n} slides last night's docket across without being asked and taps one line — a comp she wants you to initial. Everything above board, everything witnessed. She runs your money like it's her reputation, because it is.`,
     n => `"Boss." ${n} doesn't look up from the count, but two fingers rise from the notes in greeting — the exact amount of ceremony a till in progress can spare, and from her, warmth.`,
   ],
@@ -4409,7 +4409,7 @@ const _OWNER_GREET = {
 };
 const _OWNER_PITCH = {
   mamasan: [
-    n => `${n} looks at you like you've made a joke, then decides you have. "Introduce you? Boss — every girl in here already work for YOU." She laughs, low. "You want to know one, you TALK to her. Is your bar. Cannot barfine your own bar, tilac."`,
+    n => `${n} looks at you like you've made a joke, then decides you have. "Introduce you? Boss — every girl in here already work for YOU." She laughs, low. "You want to know one, you TALK to her. Is your bar. Cannot barfine your own bar, na."`,
     n => `"Tai laew." ${n} waves it off, amused. "I sell the girls to the customer, not to the man who pay their wage. You like one of them, that is a different thing, and it is your own business — but there is no fine to pay yourself, na."`,
   ],
   cashier: [

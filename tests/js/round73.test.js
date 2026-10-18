@@ -52,7 +52,7 @@ test("a Thai 'I am NOT drunk' is a soft no to the police, not a paid apology; a 
 });
 test("the room that walked you out does not deny you were in it; the bar you left her from saw you go", () => {
   G.lastNightWas = { day: G.day - 1, reason: "sleep", bar: "metro_garden", barTurns: 30, with: null, kicked: { n: 1, where: "Neon Paradise A-Go-Go" } };
-  G.room = "neon_paradise"; run("talk to jeab"); assert.match(ask("jeab", "last night"), /walked out|on the pavement|Security walk you out/);
+  G.room = "neon_paradise"; run("talk to jeab"); assert.match(ask("jeab", "last night"), /walked out|on the pavement|Security walk you out|on the road outside|I have you walk out/);
   G.lastNightWas = { day: G.day - 1, reason: "barfine", bar: "stinky_bar", barTurns: 30, with: "cream", leftFrom: "metro_garden" };
   G.room = "metro_garden"; G.nightTurn = 50; run("talk to near"); assert.doesNotMatch(ask("near", "last night"), /You not here|somebody else's room|Not this room/);
   G.room = "thappraya_massage"; G.lastNightWas = { day: G.day - 1, reason: "sleep", bar: "stinky_bar", barTurns: 30, with: null };
@@ -77,7 +77,7 @@ test("the floor remembers the shift's own decisions: the monks, the slate, her b
   G.bar.badRun = 3; G.shiftCall = "merit"; G.shiftWho = null; _shiftYes();
   assert.match(ask("lamai", "the monks"), /Nine monks|monks/); assert.doesNotMatch(said(), /wrong woman/);
   G.shiftCall = "tab"; _shiftYes(); assert.match(ask("bert", "the tab"), /slate|pay-day/);
-  G.shiftCall = "early"; G.shiftWho = "jiap"; _shiftNo(); assert.match(ask("lamai", "jiap's bus"), /Jiap asked for her bus|You kept her/);
+  G.shiftCall = "early"; G.shiftWho = "jiap"; _shiftNo(); assert.match(ask("lamai", "jiap's bus"), /Jiap asked for her bus|You kept her|Jiap ask for her bus|You keep her/);
   G.shiftCall = "turning"; _shiftYes(); assert.match(ask("bert", "that man"), /turned out|put him out|door knows/);
   assert.ok(G.bar.calls.length >= 4);
 });

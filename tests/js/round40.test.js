@@ -62,7 +62,7 @@ test("staff talk about the people they work with, the room, and the wallet (Vic 
   assert.match(text(), /Good girl|different version|On time every night|Too soft|came with nothing/); assert.doesNotMatch(text(), /Not my story|don't know/);   // a pool since the sweep (round 61, Nadia)
   out = []; run("ask lek about ratana"); assert.match(text(), /Strict\. Fair|look AT us|Mama know everything/);
   G.nightTurn = 50; G.room = "lucky_tiger"; const cashier = _npcsHere().find(i => NPC_ROLES[i] === "cashier");
-  out = []; run(`ask ${NPCS[cashier].name.toLowerCase()} about lucky tiger`); assert.match(text(), /Comes in here, goes out there/);
+  out = []; run(`ask ${NPCS[cashier].name.toLowerCase()} about lucky tiger`); assert.match(text(), /Comes in here, goes out there|Money come in here, go out there/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; G.stage = "act1"; G.nightTurn = 50; G.room = "doghouse"; out = [];
   run("ask bill about wallet"); assert.match(text(), /Everybody's problem goes to Candy/);
 });

@@ -77,7 +77,7 @@ test("a fluent girl keeps her English on question two; the house repeats itself 
   assert.doesNotMatch(again, /Farang memory|Aiyah/);
 });
 test("the house's miss does not invite the question just asked, and the mamasan's miss has no tilac", () => {
-  for (const f of _TOPIC_MISS_HOUSE) { const t = f("X"); assert.doesNotMatch(t, /or the girls/); assert.doesNotMatch(t, /tilac/); }
+  for (const f of [..._TOPIC_MISS_HOUSE, ..._TOPIC_MISS_THAI]) { const t = f("X"); assert.doesNotMatch(t, /or the girls/); assert.doesNotMatch(t, /tilac/); }
 });
 
 // ── Rolf: the woman on your arm, on your own floor ───────────────────────────

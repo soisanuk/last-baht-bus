@@ -609,7 +609,7 @@ test("a flavour entry with no short brushes off on repeat (terseness consistency
   out = [];
   run("talk to ploy");
   assert.doesNotMatch(lastOut(), /Cage is for money and me/, "not the whole spiel again");
-  const _brush = (name) => [..._ASK_AGAIN, ..._ASK_AGAIN_EN, ..._ASK_AGAIN_FLUENT].some(f => lastOut().includes(f(name)));
+  const _brush = (name) => [..._ASK_AGAIN, ..._ASK_AGAIN_EN, ..._ASK_AGAIN_FLUENT, ..._ASK_AGAIN_THAI].some(f => lastOut().includes(f(name)));
   assert.ok(_brush("Ploy"), "a generic brush-off: " + lastOut());
 });
 
@@ -621,7 +621,7 @@ test("ask the same gossip twice: full, then a brush-off (the Bee-about-Candy cas
   out = [];
   run("ask bee about candy");
   assert.notEqual(lastOut(), first);
-  assert.ok([..._ASK_AGAIN, ..._ASK_AGAIN_EN, ..._ASK_AGAIN_FLUENT].some(f => lastOut().includes(f("Bee"))), lastOut());
+  assert.ok([..._ASK_AGAIN, ..._ASK_AGAIN_EN, ..._ASK_AGAIN_FLUENT, ..._ASK_AGAIN_THAI].some(f => lastOut().includes(f("Bee"))), lastOut());
 });
 
 test("every payload entry (gives/sets) has a short, so its clue re-reads concisely", () => {

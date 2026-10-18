@@ -49,6 +49,7 @@ const CLASS = {
   "engine-systems.js:_affairCaught|the floor sees": [C_, "G.affair.discovered/soured — the floor seeing it IS the discovery, and every later verb reads it (round 66)"],
   "world.js:_H_GREET|the whole street see": [G_, "a seat with a view: idiom about the stool, not a report on you (round 65)"],
   "engine-parser.js:_doTalkCore|the floor knows": [W_, "the manager on the soured affair — the colleague review IS the witness (round 70's soured branch; round73.test)"],
+  "engine-parser.js:_TOWN_THAI|the floor see": [W_, "the same in the Thai house voice: the shift call refused, answered by the floor that watched it (G.bar.calls; round73.test)"],
   "engine-parser.js:_TOWN|the floor noticed": [W_, "the shift call's own answer: the floor that watched the call (G.bar.calls, _townTalk call_* rows; round73.test)"],
   "engine-parser.js:_TOWN|the floor remembers": [W_, "the same: the early-bus call refused, answered by the floor (G.bar.calls; round73.test)"],
   "engine-parser.js:_TOWN|everybody see": [W_, "the turned-out punter and the walk-out, answered by the room that saw them (G.bar.calls, G.lastNightWas.kicked; round73.test)"],

@@ -2428,12 +2428,20 @@ const _ASK_AGAIN_FLUENT = [
   n => `“We have done that one.” ${n} lets it rest there. “I don't mind saying it twice. It won't be better the second time.”`,
   n => `${n} gives you a patient look. “I told you. Try me on something I haven't answered.”`,
 ];
+// a Thai mamasan or cashier repeating herself (Mario, 2026-10-18): no "mate", no idiom, no "tilac" — and no Google,
+// she just says it is the same answer and moves you on
+const _ASK_AGAIN_THAI = [
+  n => `“You ask me already,” ${n} says. “Same answer. Ask me something new, na.”`,
+  n => `${n} gives you a look. “This one, finish already. Ask me something I don't answer yet.”`,
+  n => `“I tell you already,” ${n} says, not unkindly. “Buy one more round — then I make it new for you.”`,
+];
 function _askAgain(npcId) {
   // a mamasan or a cashier repeats herself in her own English, not "Farang memory, na"
   // (Gwen, round 66: Madam Oy, undefeated since 2009, in a floor girl's brush-off)
   // …and the Vic's women, house without a role: "Same-same… talk to the wall" from a pub whose own lines are dry and exact (Ploy, 2026-10-13)
   const _house = typeof NPC_ROLES !== "undefined" && (NPC_ROLES[npcId] === "mamasan" || NPC_ROLES[npcId] === "cashier" || (NPCS[npcId] && NPCS[npcId].house));
-  let pool = _FLUENT_THAI.has(npcId) ? _ASK_AGAIN_FLUENT : (_thaiVoice(npcId) && !_house) ? _ASK_AGAIN : _ASK_AGAIN_EN;
+  let pool = _FLUENT_THAI.has(npcId) ? _ASK_AGAIN_FLUENT : (_thaiVoice(npcId) && !_house) ? _ASK_AGAIN
+    : (_house && typeof _thaiHouse === "function" && _thaiHouse(npcId)) ? _ASK_AGAIN_THAI : _ASK_AGAIN_EN;
   // a massage shop sells no drinks: "Buy a drink — maybe it come back" from Pensri (Terence, round 57)
   if (_room() && (_room().massage || _room().soapy)) pool = pool.filter(f => !/drink/.test(String(f)));
   return _pickVary(pool, "askagain:" + G.room)(NPCS[npcId].name);   // two regulars said "Told you already, tilac" in the same minute (Henrik, round 69): a room does not repeat itself
@@ -2504,7 +2512,9 @@ function _dogTalk(npcId) {
 function _quizTalk(npc) {
   const bars = (typeof _quizBars === "function") ? _quizBars().map(b => _barName(b)).filter(Boolean) : [];
   // an English pensioner does not say "na" (Brenda, round 47: eleven mouths, one hostess's sentence)
-  const farang = npc && NPCS[npc] && (NPCS[npc].patron || NPCS[npc].manager || NPCS[npc].house || _pronoun(npc) === "he");
+  // …and a Thai mamasan, cashier or pub woman is not a farang either: the Thai house voice, never "tilac" (Mario, 2026-10-18)
+  const th = !!npc && typeof _thaiHouse === "function" && _thaiHouse(npc);
+  const farang = !th && npc && NPCS[npc] && (NPCS[npc].patron || NPCS[npc].manager || NPCS[npc].house || _pronoun(npc) === "he");
   // THE QUIZ YOU JUST PLAYED, and the one that is over: a perfect round at the Starlight, and
   // the woman who chalked his name said "tonight, eight till ten, go" — as did ten others, some
   // at a quarter to three (Fintan, round 60)
@@ -2522,7 +2532,7 @@ function _quizTalk(npc) {
     return q.right === 5
       ? (farang ? "“You were the one with all five. It's on the board — the whole bar watched it go up.”" : "“You! Five from five — your name is on the board, na. Everybody see.”")
       : q.right >= 3
-        ? (farang ? `“${q.right} out of five. Respectable. The teachers from Rayong got more — they always do.”` : `“${q.right} from five! Not bad, tilac. The teacher table always win.”`)
+        ? (farang ? `“${q.right} out of five. Respectable. The teachers from Rayong got more — they always do.”` : `“${q.right} from five! Not bad, ${th ? "na" : "tilac"}. The teacher table always win.”`)
         : (farang ? `“${q.right} out of five.” A kind look. “It's a hard board. Next Thursday.”` : `“${q.right}...” A kind face. “Is okay. Next Thursday you study, na.”`);
   }
   if (typeof _quizDay === "function" && _quizDay() && G.nightTurn >= 40) {
@@ -2627,6 +2637,13 @@ const _TOPIC_MISS_HOUSE = [
   n => `${n} gives a small, practised shrug. “You ask the wrong woman. This bar, I know everything about.”`,
   n => `“No.” ${n} says it the way she says a price: flat, final, not unfriendly. “Not mine to know.”`,
 ];
+// the same miss in the Thai house voice (Mario, 2026-10-18): confident, short, and back to her side of the counter
+const _TOPIC_MISS_THAI = [
+  n => `${n} thinks about it, then puts it away. “This one I don't know. Ask me about this bar.”`,
+  n => `“That one, I cannot help.” ${n} is perfectly pleasant about it. “Ask me something my side of the counter, na.”`,
+  n => `${n} gives a small, practised shrug. “You ask wrong woman. This bar — everything, I know.”`,
+  n => `“No.” ${n} says it the way she says a price: flat, final, not unfriendly. “Not my business to know.”`,
+];
 function _topicMiss(npcId) {
   const n = NPCS[npcId];
   // The rail keeps its own voice. A regular's "not my story" is a man turning a
@@ -2636,7 +2653,7 @@ function _topicMiss(npcId) {
   if (n.patron) return _PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](n.name, _patronHis(npcId));
   const she = _pronoun(npcId) === "she" || (!_pronoun(npcId) && !!n.filler);
   const house = /^(mamasan|cashier)$/.test(NPC_ROLES[npcId] || "") || (typeof _FLUENT_THAI !== "undefined" && _FLUENT_THAI.has(npcId));
-  const pool = house && she ? _TOPIC_MISS_HOUSE : (_thaiVoice(npcId) && npcId !== "tan" && npcId !== "nont") ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;   // Tan is fluent: "That one I don't know, na" was his (László, round 73)
+  const pool = house && she ? (typeof _thaiHouse === "function" && _thaiHouse(npcId) ? _TOPIC_MISS_THAI : _TOPIC_MISS_HOUSE) : (_thaiVoice(npcId) && npcId !== "tan" && npcId !== "nont") ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;   // Tan is fluent: "That one I don't know, na" was his (László, round 73)
   // a woman out of her own bar (on your arm in another) does not say "this bar, I know everything about" (Martin, round 85)
   const _away = NPCS[npcId].room && NPCS[npcId].room !== G.room;
   const _pool = _away ? pool.filter(f => !/this bar|my side of the counter/.test(String(f))) : pool;
