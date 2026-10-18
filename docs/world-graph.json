@@ -368,7 +368,7 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 12878,
+   "line": 12879,
    "name": "CCIB_LOW_DAYS",
    "value": 21
   },
@@ -458,7 +458,7 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 8179,
+   "line": 8180,
    "name": "FLOOR_REVEAL_ODDS",
    "value": 0.3
   },
@@ -722,7 +722,7 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 8739,
+   "line": 8740,
    "name": "OWN_BAR_FOOD",
    "value": 60
   },
@@ -764,7 +764,7 @@
   },
   {
    "file": "engine-parser.js",
-   "line": 13011,
+   "line": 13026,
    "name": "PHOTO_JOY_NIGHT",
    "value": 3
   },
@@ -914,55 +914,55 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 8374,
+   "line": 8375,
    "name": "SHIFT_EARLY_COST",
    "value": 600
   },
   {
    "file": "engine-systems.js",
-   "line": 8377,
+   "line": 8378,
    "name": "SHIFT_FLAT_LOSS",
    "value": 400
   },
   {
    "file": "engine-systems.js",
-   "line": 8378,
+   "line": 8379,
    "name": "SHIFT_MERIT_LOSS",
    "value": 1500
   },
   {
    "file": "engine-systems.js",
-   "line": 8375,
+   "line": 8376,
    "name": "SHIFT_ROUND_COST",
    "value": 500
   },
   {
    "file": "engine-systems.js",
-   "line": 8376,
+   "line": 8377,
    "name": "SHIFT_ROUND_TAKE",
    "value": 900
   },
   {
    "file": "engine-systems.js",
-   "line": 8372,
+   "line": 8373,
    "name": "SHIFT_TAB_DOCKET",
    "value": 0.5
   },
   {
    "file": "engine-systems.js",
-   "line": 8373,
+   "line": 8374,
    "name": "SHIFT_TAB_DOCKET_PAYS",
    "value": 0.3
   },
   {
    "file": "engine-systems.js",
-   "line": 8371,
+   "line": 8372,
    "name": "SHIFT_TAB_STIFF",
    "value": 0.35
   },
   {
    "file": "engine-systems.js",
-   "line": 8370,
+   "line": 8371,
    "name": "SHIFT_TAB_TAKE",
    "value": 1200
   },
@@ -986,7 +986,7 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 4745,
+   "line": 4746,
    "name": "STUCK_AT",
    "value": 10
   },
@@ -1076,7 +1076,7 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 7971,
+   "line": 7972,
    "name": "WORK_AWAY_BUDGET",
    "value": 15
   },
@@ -1088,25 +1088,25 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 7810,
+   "line": 7811,
    "name": "WORK_EVENT_ODDS",
    "value": 0.42
   },
   {
    "file": "engine-systems.js",
-   "line": 8116,
+   "line": 8117,
    "name": "WORK_FLOOR_GAP",
    "value": 12
   },
   {
    "file": "engine-systems.js",
-   "line": 8117,
+   "line": 8118,
    "name": "WORK_FLOOR_MAX",
    "value": 3
   },
   {
    "file": "engine-systems.js",
-   "line": 7975,
+   "line": 7976,
    "name": "WORK_MIN_STOOD",
    "value": 20
   },
@@ -1124,7 +1124,7 @@
   },
   {
    "file": "engine-systems.js",
-   "line": 8002,
+   "line": 8003,
    "name": "WORK_TALE_TURN",
    "value": 85
   },
@@ -63181,12 +63181,12 @@
   },
   {
    "from": "AFFAIR_BOND_GATE",
-   "to": "engine-systems.js:8889",
+   "to": "engine-systems.js:8890",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_BREAK",
-   "to": "engine-systems.js:9030",
+   "to": "engine-systems.js:9031",
    "type": "INTERPOLATES"
   },
   {
@@ -63196,17 +63196,17 @@
   },
   {
    "from": "AFFAIR_DRAG",
-   "to": "engine-systems.js:9592",
+   "to": "engine-systems.js:9593",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_DRAG",
-   "to": "engine-systems.js:9594",
+   "to": "engine-systems.js:9595",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_DRAG_SOUR",
-   "to": "engine-systems.js:9592",
+   "to": "engine-systems.js:9593",
    "type": "INTERPOLATES"
   },
   {
@@ -63221,72 +63221,72 @@
   },
   {
    "from": "AFFAIR_GOOD_DAYS",
-   "to": "engine-systems.js:9091",
+   "to": "engine-systems.js:9092",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_GOOD_STRAIN",
-   "to": "engine-systems.js:9091",
+   "to": "engine-systems.js:9092",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_HONEYMOON",
-   "to": "engine-systems.js:8943",
+   "to": "engine-systems.js:8944",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_HONEYMOON",
-   "to": "engine-systems.js:9047",
+   "to": "engine-systems.js:9048",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_SALE",
-   "to": "engine-systems.js:9171",
+   "to": "engine-systems.js:9172",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_SALE",
-   "to": "engine-systems.js:9179",
+   "to": "engine-systems.js:9180",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_SCAR_DAYS",
-   "to": "engine-systems.js:9113",
+   "to": "engine-systems.js:9114",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_STRAIN_AWAY",
-   "to": "engine-systems.js:9066",
+   "to": "engine-systems.js:9067",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_STRAIN_WORK",
-   "to": "engine-systems.js:9063",
+   "to": "engine-systems.js:9064",
    "type": "INTERPOLATES"
   },
   {
    "from": "ATM_DAILY_CAP",
-   "to": "engine-parser.js:13272",
+   "to": "engine-parser.js:13287",
    "type": "INTERPOLATES"
   },
   {
    "from": "ATM_FEE",
-   "to": "engine-parser.js:13270",
+   "to": "engine-parser.js:13285",
    "type": "INTERPOLATES"
   },
   {
    "from": "ATM_FEE",
-   "to": "engine-systems.js:11359",
+   "to": "engine-systems.js:11360",
    "type": "INTERPOLATES"
   },
   {
    "from": "AWAY_TAKINGS",
-   "to": "engine-systems.js:9584",
+   "to": "engine-systems.js:9585",
    "type": "INTERPOLATES"
   },
   {
    "from": "AWAY_TAKINGS",
-   "to": "engine-systems.js:9958",
+   "to": "engine-systems.js:9959",
    "type": "INTERPOLATES"
   },
   {
@@ -63316,37 +63316,37 @@
   },
   {
    "from": "BAND_ROUND",
-   "to": "engine-parser.js:10641",
+   "to": "engine-parser.js:10656",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAND_ROUND",
-   "to": "engine-parser.js:10642",
+   "to": "engine-parser.js:10657",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAND_ROUND",
-   "to": "engine-parser.js:10647",
+   "to": "engine-parser.js:10662",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAND_ROUND",
-   "to": "engine-parser.js:10649",
+   "to": "engine-parser.js:10664",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_ARREARS_BITE",
-   "to": "engine-systems.js:10034",
+   "to": "engine-systems.js:10035",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_ARREARS_END",
-   "to": "engine-systems.js:10033",
+   "to": "engine-systems.js:10034",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_ARREARS_WARN",
-   "to": "engine-systems.js:10045",
+   "to": "engine-systems.js:10046",
    "type": "INTERPOLATES"
   },
   {
@@ -63356,17 +63356,12 @@
   },
   {
    "from": "BAR_COGS",
-   "to": "engine-systems.js:9560",
+   "to": "engine-systems.js:9561",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:9376",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:9384",
+   "to": "engine-systems.js:9377",
    "type": "INTERPOLATES"
   },
   {
@@ -63376,22 +63371,27 @@
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:9391",
+   "to": "engine-systems.js:9386",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:9391",
+   "to": "engine-systems.js:9392",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:9395",
+   "to": "engine-systems.js:9392",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_DEPOSIT",
-   "to": "engine-systems.js:9409",
+   "to": "engine-systems.js:9396",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "BAR_DEPOSIT",
+   "to": "engine-systems.js:9410",
    "type": "INTERPOLATES"
   },
   {
@@ -63401,7 +63401,7 @@
   },
   {
    "from": "BAR_FLOOR_FLOOR",
-   "to": "engine-systems.js:9794",
+   "to": "engine-systems.js:9795",
    "type": "INTERPOLATES"
   },
   {
@@ -63411,27 +63411,27 @@
   },
   {
    "from": "BAR_FRICTION",
-   "to": "engine-systems.js:10284",
+   "to": "engine-systems.js:10285",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_FRICTION",
-   "to": "engine-systems.js:9628",
+   "to": "engine-systems.js:9629",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MGR_NIGHT",
-   "to": "engine-systems.js:10257",
+   "to": "engine-systems.js:10258",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MGR_NIGHT",
-   "to": "engine-systems.js:9631",
+   "to": "engine-systems.js:9632",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MGR_NIGHT",
-   "to": "engine-systems.js:9674",
+   "to": "engine-systems.js:9675",
    "type": "INTERPOLATES"
   },
   {
@@ -63446,37 +63446,37 @@
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:10420",
+   "to": "engine-systems.js:10421",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9278",
+   "to": "engine-systems.js:9279",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9384",
+   "to": "engine-systems.js:9385",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9416",
+   "to": "engine-systems.js:9417",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9975",
+   "to": "engine-systems.js:9976",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9985",
+   "to": "engine-systems.js:9986",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_MONTHLY",
-   "to": "engine-systems.js:9994",
+   "to": "engine-systems.js:9995",
    "type": "INTERPOLATES"
   },
   {
@@ -63491,27 +63491,27 @@
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:10234",
+   "to": "engine-systems.js:10235",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:10234",
+   "to": "engine-systems.js:10235",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:8304",
+   "to": "engine-systems.js:8305",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:9759",
+   "to": "engine-systems.js:9760",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_NOTICE_DAYS",
-   "to": "engine-systems.js:9804",
+   "to": "engine-systems.js:9805",
    "type": "INTERPOLATES"
   },
   {
@@ -63521,42 +63521,42 @@
   },
   {
    "from": "BAR_NUT",
-   "to": "engine-systems.js:9629",
+   "to": "engine-systems.js:9630",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_PRESENT",
-   "to": "engine-systems.js:7918",
+   "to": "engine-systems.js:7919",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_PRESENT",
-   "to": "engine-systems.js:9585",
+   "to": "engine-systems.js:9586",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_PRICE",
-   "to": "engine-systems.js:9395",
+   "to": "engine-systems.js:9396",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_QUOTA",
-   "to": "engine-parser.js:14082",
+   "to": "engine-parser.js:14097",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_DAYS",
-   "to": "engine-systems.js:10236",
+   "to": "engine-systems.js:10237",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_DAYS",
-   "to": "engine-systems.js:9760",
+   "to": "engine-systems.js:9761",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_DAYS",
-   "to": "engine-systems.js:9818",
+   "to": "engine-systems.js:9819",
    "type": "INTERPOLATES"
   },
   {
@@ -63566,17 +63566,17 @@
   },
   {
    "from": "BAR_RAIL_SHARE",
-   "to": "engine-systems.js:10237",
+   "to": "engine-systems.js:10238",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_SHARE",
-   "to": "engine-systems.js:9814",
+   "to": "engine-systems.js:9815",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RAIL_SHARE",
-   "to": "engine-systems.js:9818",
+   "to": "engine-systems.js:9819",
    "type": "INTERPOLATES"
   },
   {
@@ -63586,22 +63586,22 @@
   },
   {
    "from": "BAR_RENT",
-   "to": "engine-systems.js:9685",
+   "to": "engine-systems.js:9686",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_CAP",
-   "to": "engine-systems.js:9952",
+   "to": "engine-systems.js:9953",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_CAP",
-   "to": "engine-systems.js:9959",
+   "to": "engine-systems.js:9960",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_CAP",
-   "to": "engine-systems.js:9961",
+   "to": "engine-systems.js:9962",
    "type": "INTERPOLATES"
   },
   {
@@ -63611,22 +63611,22 @@
   },
   {
    "from": "BAR_RENT_GOOD",
-   "to": "engine-systems.js:9959",
+   "to": "engine-systems.js:9960",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_REVIEW",
-   "to": "engine-systems.js:9604",
+   "to": "engine-systems.js:9605",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_REVIEW",
-   "to": "engine-systems.js:9950",
+   "to": "engine-systems.js:9951",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_REVIEW",
-   "to": "engine-systems.js:9956",
+   "to": "engine-systems.js:9957",
    "type": "INTERPOLATES"
   },
   {
@@ -63636,12 +63636,12 @@
   },
   {
    "from": "BAR_RENT_RISE",
-   "to": "engine-systems.js:9952",
+   "to": "engine-systems.js:9953",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_RENT_RISE",
-   "to": "engine-systems.js:9961",
+   "to": "engine-systems.js:9962",
    "type": "INTERPOLATES"
   },
   {
@@ -63651,7 +63651,7 @@
   },
   {
    "from": "BAR_SALARY",
-   "to": "engine-parser.js:14082",
+   "to": "engine-parser.js:14097",
    "type": "INTERPOLATES"
   },
   {
@@ -63666,7 +63666,7 @@
   },
   {
    "from": "BAR_SALARY",
-   "to": "engine-systems.js:9741",
+   "to": "engine-systems.js:9742",
    "type": "INTERPOLATES"
   },
   {
@@ -63676,7 +63676,7 @@
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:10233",
+   "to": "engine-systems.js:10234",
    "type": "INTERPOLATES"
   },
   {
@@ -63686,22 +63686,22 @@
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:9631",
+   "to": "engine-systems.js:9632",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:9674",
+   "to": "engine-systems.js:9675",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:9693",
+   "to": "engine-systems.js:9694",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SALARY_NIGHT",
-   "to": "engine-systems.js:9740",
+   "to": "engine-systems.js:9741",
    "type": "INTERPOLATES"
   },
   {
@@ -63711,37 +63711,37 @@
   },
   {
    "from": "BAR_SHORT_STAFF",
-   "to": "engine-systems.js:9597",
+   "to": "engine-systems.js:9598",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SHORT_STAFF",
-   "to": "engine-systems.js:9607",
+   "to": "engine-systems.js:9608",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SWING",
-   "to": "engine-systems.js:9568",
+   "to": "engine-systems.js:9569",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_SWING",
-   "to": "engine-systems.js:9958",
+   "to": "engine-systems.js:9959",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_TAKINGS",
-   "to": "engine-systems.js:9568",
+   "to": "engine-systems.js:9569",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_TAKINGS",
-   "to": "engine-systems.js:9958",
+   "to": "engine-systems.js:9959",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_TERM",
-   "to": "engine-systems.js:10215",
+   "to": "engine-systems.js:10216",
    "type": "INTERPOLATES"
   },
   {
@@ -63761,12 +63761,12 @@
   },
   {
    "from": "BAR_WAGES",
-   "to": "engine-systems.js:9631",
+   "to": "engine-systems.js:9632",
    "type": "INTERPOLATES"
   },
   {
    "from": "BAR_WAGES",
-   "to": "engine-systems.js:9674",
+   "to": "engine-systems.js:9675",
    "type": "INTERPOLATES"
   },
   {
@@ -63801,7 +63801,7 @@
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-systems.js:11347",
+   "to": "engine-systems.js:11348",
    "type": "INTERPOLATES"
   },
   {
@@ -63906,52 +63906,52 @@
   },
   {
    "from": "BOOK_TAKINGS",
-   "to": "engine-systems.js:10224",
+   "to": "engine-systems.js:10225",
    "type": "INTERPOLATES"
   },
   {
    "from": "BOOK_TAKINGS",
-   "to": "engine-systems.js:9587",
+   "to": "engine-systems.js:9588",
    "type": "INTERPOLATES"
   },
   {
    "from": "BOOK_TAKINGS",
-   "to": "engine-systems.js:9587",
+   "to": "engine-systems.js:9588",
    "type": "INTERPOLATES"
   },
   {
    "from": "BRA_PRICE",
-   "to": "engine-parser.js:10624",
+   "to": "engine-parser.js:10639",
    "type": "INTERPOLATES"
   },
   {
    "from": "BRA_PRICE",
-   "to": "engine-parser.js:10625",
+   "to": "engine-parser.js:10640",
    "type": "INTERPOLATES"
   },
   {
    "from": "BRA_PRICE",
-   "to": "engine-parser.js:10629",
+   "to": "engine-parser.js:10644",
    "type": "INTERPOLATES"
   },
   {
    "from": "BRA_PRICE",
-   "to": "engine-parser.js:10633",
+   "to": "engine-parser.js:10648",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_CHARTER",
-   "to": "engine-parser.js:10981",
+   "to": "engine-parser.js:10996",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_CHARTER",
-   "to": "engine-parser.js:10992",
+   "to": "engine-parser.js:11007",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_CHARTER",
-   "to": "engine-parser.js:10999",
+   "to": "engine-parser.js:11014",
    "type": "INTERPOLATES"
   },
   {
@@ -63961,82 +63961,82 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10811",
+   "to": "engine-parser.js:10826",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10814",
+   "to": "engine-parser.js:10829",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10855",
+   "to": "engine-parser.js:10870",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10943",
+   "to": "engine-parser.js:10958",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10944",
+   "to": "engine-parser.js:10959",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:10986",
+   "to": "engine-parser.js:11001",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:11022",
+   "to": "engine-parser.js:11037",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:11024",
+   "to": "engine-parser.js:11039",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:11029",
+   "to": "engine-parser.js:11044",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:11059",
+   "to": "engine-parser.js:11074",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:11060",
+   "to": "engine-parser.js:11075",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:11206",
+   "to": "engine-parser.js:11221",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:12489",
+   "to": "engine-parser.js:12504",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:12491",
+   "to": "engine-parser.js:12506",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:12492",
+   "to": "engine-parser.js:12507",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:18883",
+   "to": "engine-parser.js:18898",
    "type": "INTERPOLATES"
   },
   {
@@ -64061,32 +64061,32 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9233",
+   "to": "engine-parser.js:9248",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9233",
+   "to": "engine-parser.js:9248",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9719",
+   "to": "engine-parser.js:9734",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9719",
+   "to": "engine-parser.js:9734",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9722",
+   "to": "engine-parser.js:9737",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-parser.js:9735",
+   "to": "engine-parser.js:9750",
    "type": "INTERPOLATES"
   },
   {
@@ -64106,12 +64106,12 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-systems.js:11337",
+   "to": "engine-systems.js:11338",
    "type": "INTERPOLATES"
   },
   {
    "from": "BUS_FARE",
-   "to": "engine-systems.js:11389",
+   "to": "engine-systems.js:11390",
    "type": "INTERPOLATES"
   },
   {
@@ -64131,67 +64131,67 @@
   },
   {
    "from": "CARE_DAYS",
+   "to": "engine-systems.js:6016",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "CARE_WAIVED",
+   "to": "engine-systems.js:5915",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "CARE_WAIVED",
    "to": "engine-systems.js:6015",
    "type": "INTERPOLATES"
   },
   {
-   "from": "CARE_WAIVED",
-   "to": "engine-systems.js:5914",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "CARE_WAIVED",
-   "to": "engine-systems.js:6014",
-   "type": "INTERPOLATES"
-  },
-  {
    "from": "CCIB_LOW_DAYS",
-   "to": "engine-systems.js:12925",
+   "to": "engine-systems.js:12926",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHAM_GIFT",
-   "to": "engine-parser.js:14741",
+   "to": "engine-parser.js:14756",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHAM_GIFT",
-   "to": "engine-parser.js:14741",
+   "to": "engine-parser.js:14756",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHAM_GIFT",
-   "to": "engine-systems.js:5394",
+   "to": "engine-systems.js:5395",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHAM_GIFT",
-   "to": "engine-systems.js:5407",
+   "to": "engine-systems.js:5408",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:10106",
+   "to": "engine-parser.js:10121",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:10106",
+   "to": "engine-parser.js:10121",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:10107",
+   "to": "engine-parser.js:10122",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:10110",
+   "to": "engine-parser.js:10125",
    "type": "INTERPOLATES"
   },
   {
    "from": "CHARGER_PRICE",
-   "to": "engine-parser.js:14389",
+   "to": "engine-parser.js:14404",
    "type": "INTERPOLATES"
   },
   {
@@ -64231,12 +64231,12 @@
   },
   {
    "from": "COFFEE_PRICE",
-   "to": "engine-parser.js:10060",
+   "to": "engine-parser.js:10075",
    "type": "INTERPOLATES"
   },
   {
    "from": "COFFEE_PRICE",
-   "to": "engine-parser.js:10060",
+   "to": "engine-parser.js:10075",
    "type": "INTERPOLATES"
   },
   {
@@ -64246,67 +64246,67 @@
   },
   {
    "from": "CONDOM_PACK",
-   "to": "engine-parser.js:10117",
+   "to": "engine-parser.js:10132",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PACK",
-   "to": "engine-parser.js:10119",
+   "to": "engine-parser.js:10134",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:10115",
+   "to": "engine-parser.js:10130",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:10115",
+   "to": "engine-parser.js:10130",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:10116",
+   "to": "engine-parser.js:10131",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:10119",
+   "to": "engine-parser.js:10134",
    "type": "INTERPOLATES"
   },
   {
    "from": "CONDOM_PRICE",
-   "to": "engine-parser.js:14389",
+   "to": "engine-parser.js:14404",
    "type": "INTERPOLATES"
   },
   {
    "from": "CORD_PRICE",
-   "to": "engine-parser.js:10215",
+   "to": "engine-parser.js:10230",
    "type": "INTERPOLATES"
   },
   {
    "from": "CORD_PRICE",
-   "to": "engine-parser.js:10216",
+   "to": "engine-parser.js:10231",
    "type": "INTERPOLATES"
   },
   {
    "from": "CORD_PRICE",
-   "to": "engine-parser.js:10218",
+   "to": "engine-parser.js:10233",
    "type": "INTERPOLATES"
   },
   {
    "from": "CORD_PRICE",
-   "to": "engine-parser.js:10223",
+   "to": "engine-parser.js:10238",
    "type": "INTERPOLATES"
   },
   {
    "from": "COVERS_NIGHTS",
-   "to": "engine-parser.js:17520",
+   "to": "engine-parser.js:17535",
    "type": "INTERPOLATES"
   },
   {
    "from": "COVERS_NIGHTS",
-   "to": "engine-parser.js:17520",
+   "to": "engine-parser.js:17535",
    "type": "INTERPOLATES"
   },
   {
@@ -64326,12 +64326,12 @@
   },
   {
    "from": "DOG_MOTOSAI_FARE",
-   "to": "engine-parser.js:11195",
+   "to": "engine-parser.js:11210",
    "type": "INTERPOLATES"
   },
   {
    "from": "EDDY_GROUND_DAYS",
-   "to": "engine-systems.js:12981",
+   "to": "engine-systems.js:12982",
    "type": "INTERPOLATES"
   },
   {
@@ -64371,12 +64371,12 @@
   },
   {
    "from": "FLOOR_REVEAL_ODDS",
-   "to": "engine-systems.js:8175",
+   "to": "engine-systems.js:8176",
    "type": "INTERPOLATES"
   },
   {
    "from": "FLOOR_REVEAL_ODDS",
-   "to": "engine-systems.js:8230",
+   "to": "engine-systems.js:8231",
    "type": "INTERPOLATES"
   },
   {
@@ -64436,12 +64436,7 @@
   },
   {
    "from": "FRONTIER_CYCLE",
-   "to": "engine-systems.js:9893",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "FRONTIER_CYCLE",
-   "to": "engine-systems.js:9906",
+   "to": "engine-systems.js:9894",
    "type": "INTERPOLATES"
   },
   {
@@ -64451,12 +64446,17 @@
   },
   {
    "from": "FRONTIER_CYCLE",
-   "to": "engine-systems.js:9907",
+   "to": "engine-systems.js:9908",
    "type": "INTERPOLATES"
   },
   {
    "from": "FRONTIER_CYCLE",
-   "to": "engine-systems.js:9907",
+   "to": "engine-systems.js:9908",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "FRONTIER_CYCLE",
+   "to": "engine-systems.js:9908",
    "type": "INTERPOLATES"
   },
   {
@@ -64471,7 +64471,7 @@
   },
   {
    "from": "GIFT_BIG",
-   "to": "engine-systems.js:4856",
+   "to": "engine-systems.js:4857",
    "type": "INTERPOLATES"
   },
   {
@@ -64486,7 +64486,7 @@
   },
   {
    "from": "GROUP_WEEK_BASE",
-   "to": "engine-parser.js:14114",
+   "to": "engine-parser.js:14129",
    "type": "INTERPOLATES"
   },
   {
@@ -64496,12 +64496,12 @@
   },
   {
    "from": "GROUP_WEEK_BASE",
-   "to": "engine-systems.js:11393",
+   "to": "engine-systems.js:11394",
    "type": "INTERPOLATES"
   },
   {
    "from": "GROUP_WEEK_BASE",
-   "to": "engine-systems.js:9768",
+   "to": "engine-systems.js:9769",
    "type": "INTERPOLATES"
   },
   {
@@ -64511,7 +64511,7 @@
   },
   {
    "from": "HOME_SEND",
-   "to": "engine-parser.js:14082",
+   "to": "engine-parser.js:14097",
    "type": "INTERPOLATES"
   },
   {
@@ -64546,12 +64546,12 @@
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-parser.js:11913",
+   "to": "engine-parser.js:11928",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-parser.js:11919",
+   "to": "engine-parser.js:11934",
    "type": "INTERPOLATES"
   },
   {
@@ -64591,12 +64591,12 @@
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-parser.js:14026",
+   "to": "engine-parser.js:14041",
    "type": "INTERPOLATES"
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-parser.js:14061",
+   "to": "engine-parser.js:14076",
    "type": "INTERPOLATES"
   },
   {
@@ -64626,7 +64626,7 @@
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-parser.js:14082",
+   "to": "engine-parser.js:14097",
    "type": "INTERPOLATES"
   },
   {
@@ -64731,7 +64731,7 @@
   },
   {
    "from": "LADY_CUT",
-   "to": "engine-systems.js:9741",
+   "to": "engine-systems.js:9742",
    "type": "INTERPOLATES"
   },
   {
@@ -64741,12 +64741,12 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-systems.js:11334",
+   "to": "engine-systems.js:11335",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-systems.js:11393",
+   "to": "engine-systems.js:11394",
    "type": "INTERPOLATES"
   },
   {
@@ -64791,57 +64791,57 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:10903",
+   "to": "engine-parser.js:10918",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:10911",
+   "to": "engine-parser.js:10926",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:11078",
+   "to": "engine-parser.js:11093",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:11193",
+   "to": "engine-parser.js:11208",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:11268",
+   "to": "engine-parser.js:11283",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:12487",
+   "to": "engine-parser.js:12502",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:12490",
+   "to": "engine-parser.js:12505",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:12825",
+   "to": "engine-parser.js:12840",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:14439",
+   "to": "engine-parser.js:14454",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:15185",
+   "to": "engine-parser.js:15200",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-parser.js:18213",
+   "to": "engine-parser.js:18228",
    "type": "INTERPOLATES"
   },
   {
@@ -64906,27 +64906,22 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-systems.js:8023",
+   "to": "engine-systems.js:8024",
    "type": "INTERPOLATES"
   },
   {
    "from": "LATE_MOTO_MULT",
-   "to": "engine-parser.js:11078",
+   "to": "engine-parser.js:11093",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAWYER_FEE",
-   "to": "engine-systems.js:8517",
+   "to": "engine-systems.js:8518",
    "type": "INTERPOLATES"
   },
   {
    "from": "LAWYER_FEE",
-   "to": "engine-systems.js:8517",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "LAWYER_FEE",
-   "to": "engine-systems.js:8519",
+   "to": "engine-systems.js:8518",
    "type": "INTERPOLATES"
   },
   {
@@ -64935,63 +64930,68 @@
    "type": "INTERPOLATES"
   },
   {
+   "from": "LAWYER_FEE",
+   "to": "engine-systems.js:8521",
+   "type": "INTERPOLATES"
+  },
+  {
    "from": "LEASE_KEY_MONTHS",
-   "to": "engine-systems.js:9458",
+   "to": "engine-systems.js:9459",
    "type": "INTERPOLATES"
   },
   {
    "from": "LEASE_WET_FREE",
-   "to": "engine-systems.js:9465",
+   "to": "engine-systems.js:9466",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:12464",
+   "to": "engine-systems.js:12465",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:12482",
+   "to": "engine-systems.js:12483",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:12493",
+   "to": "engine-systems.js:12494",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:12499",
+   "to": "engine-systems.js:12500",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_PRICE",
-   "to": "engine-systems.js:12605",
+   "to": "engine-systems.js:12606",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_TURNS",
-   "to": "engine-systems.js:12478",
+   "to": "engine-systems.js:12479",
    "type": "INTERPOLATES"
   },
   {
    "from": "LESSON_TURNS",
-   "to": "engine-systems.js:12504",
+   "to": "engine-systems.js:12505",
    "type": "INTERPOLATES"
   },
   {
    "from": "LOW_SEASON",
-   "to": "engine-systems.js:9607",
+   "to": "engine-systems.js:9608",
    "type": "INTERPOLATES"
   },
   {
    "from": "MERIT_COST",
-   "to": "engine-systems.js:8561",
+   "to": "engine-systems.js:8562",
    "type": "INTERPOLATES"
   },
   {
    "from": "MERIT_COST",
-   "to": "engine-systems.js:8668",
+   "to": "engine-systems.js:8669",
    "type": "INTERPOLATES"
   },
   {
@@ -65006,37 +65006,37 @@
   },
   {
    "from": "MOT_BOOTS",
-   "to": "engine-parser.js:19140",
+   "to": "engine-parser.js:19161",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS_SAVED",
-   "to": "engine-parser.js:19140",
+   "to": "engine-parser.js:19161",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_BOOTS_SAVED",
-   "to": "engine-parser.js:19158",
+   "to": "engine-parser.js:19179",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:19186",
+   "to": "engine-parser.js:19207",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:19187",
+   "to": "engine-parser.js:19208",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:19192",
+   "to": "engine-parser.js:19213",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOT_DINNER",
-   "to": "engine-parser.js:19204",
+   "to": "engine-parser.js:19225",
    "type": "INTERPOLATES"
   },
   {
@@ -65066,32 +65066,32 @@
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:11074",
+   "to": "engine-parser.js:11089",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:11150",
+   "to": "engine-parser.js:11165",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:11268",
+   "to": "engine-parser.js:11283",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:9172",
+   "to": "engine-parser.js:9187",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:9234",
+   "to": "engine-parser.js:9249",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "engine-parser.js:9360",
+   "to": "engine-parser.js:9375",
    "type": "INTERPOLATES"
   },
   {
@@ -65126,42 +65126,42 @@
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:11075",
+   "to": "engine-parser.js:11090",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:11150",
+   "to": "engine-parser.js:11165",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:11230",
+   "to": "engine-parser.js:11245",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:11259",
+   "to": "engine-parser.js:11274",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:11748",
+   "to": "engine-parser.js:11763",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:9172",
+   "to": "engine-parser.js:9187",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:9234",
+   "to": "engine-parser.js:9249",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "engine-parser.js:9360",
+   "to": "engine-parser.js:9375",
    "type": "INTERPOLATES"
   },
   {
@@ -65286,27 +65286,27 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:12496",
+   "to": "engine-parser.js:12511",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:12501",
+   "to": "engine-parser.js:12516",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:12507",
+   "to": "engine-parser.js:12522",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:12624",
+   "to": "engine-parser.js:12639",
    "type": "INTERPOLATES"
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-parser.js:12625",
+   "to": "engine-parser.js:12640",
    "type": "INTERPOLATES"
   },
   {
@@ -65356,17 +65356,17 @@
   },
   {
    "from": "NONT_CHARGE",
-   "to": "engine-parser.js:11546",
+   "to": "engine-parser.js:11561",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_CHARGE",
-   "to": "engine-parser.js:11547",
+   "to": "engine-parser.js:11562",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_CHARGE",
-   "to": "engine-parser.js:11548",
+   "to": "engine-parser.js:11563",
    "type": "INTERPOLATES"
   },
   {
@@ -65376,12 +65376,12 @@
   },
   {
    "from": "NONT_LOAN_GARNISH",
-   "to": "engine-systems.js:10239",
+   "to": "engine-systems.js:10240",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_LOAN_GARNISH",
-   "to": "engine-systems.js:9641",
+   "to": "engine-systems.js:9642",
    "type": "INTERPOLATES"
   },
   {
@@ -65436,32 +65436,32 @@
   },
   {
    "from": "NONT_SIM",
-   "to": "engine-parser.js:9974",
+   "to": "engine-parser.js:9989",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_SIM",
-   "to": "engine-parser.js:9975",
+   "to": "engine-parser.js:9990",
    "type": "INTERPOLATES"
   },
   {
    "from": "NONT_SIM",
-   "to": "engine-parser.js:9976",
+   "to": "engine-parser.js:9991",
    "type": "INTERPOLATES"
   },
   {
    "from": "NOODLE_PRICE",
-   "to": "engine-parser.js:10231",
+   "to": "engine-parser.js:10246",
    "type": "INTERPOLATES"
   },
   {
    "from": "NOODLE_PRICE",
-   "to": "engine-parser.js:10232",
+   "to": "engine-parser.js:10247",
    "type": "INTERPOLATES"
   },
   {
    "from": "NOODLE_PRICE",
-   "to": "engine-parser.js:10235",
+   "to": "engine-parser.js:10250",
    "type": "INTERPOLATES"
   },
   {
@@ -65471,27 +65471,27 @@
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:10240",
+   "to": "engine-systems.js:10241",
    "type": "INTERPOLATES"
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9822",
+   "to": "engine-systems.js:9823",
    "type": "INTERPOLATES"
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9843",
+   "to": "engine-systems.js:9844",
    "type": "INTERPOLATES"
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9843",
+   "to": "engine-systems.js:9844",
    "type": "INTERPOLATES"
   },
   {
    "from": "OPP_CYCLE",
-   "to": "engine-systems.js:9843",
+   "to": "engine-systems.js:9844",
    "type": "INTERPOLATES"
   },
   {
@@ -65501,17 +65501,17 @@
   },
   {
    "from": "OWN_BAR_FOOD",
-   "to": "engine-systems.js:12064",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "OWN_BAR_FOOD",
    "to": "engine-systems.js:12065",
    "type": "INTERPOLATES"
   },
   {
    "from": "OWN_BAR_FOOD",
-   "to": "engine-systems.js:12070",
+   "to": "engine-systems.js:12066",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "OWN_BAR_FOOD",
+   "to": "engine-systems.js:12071",
    "type": "INTERPOLATES"
   },
   {
@@ -65556,7 +65556,7 @@
   },
   {
    "from": "PHOTO_JOY_NIGHT",
-   "to": "engine-parser.js:13013",
+   "to": "engine-parser.js:13028",
    "type": "INTERPOLATES"
   },
   {
@@ -65666,7 +65666,7 @@
   },
   {
    "from": "QV_CRISPS",
-   "to": "engine-systems.js:11868",
+   "to": "engine-systems.js:11869",
    "type": "INTERPOLATES"
   },
   {
@@ -65701,7 +65701,7 @@
   },
   {
    "from": "QV_ROAST",
-   "to": "engine-systems.js:11839",
+   "to": "engine-systems.js:11840",
    "type": "INTERPOLATES"
   },
   {
@@ -65726,12 +65726,12 @@
   },
   {
    "from": "RENT_GRACE",
-   "to": "engine-systems.js:10024",
+   "to": "engine-systems.js:10025",
    "type": "INTERPOLATES"
   },
   {
    "from": "RENT_GRACE",
-   "to": "engine-systems.js:10261",
+   "to": "engine-systems.js:10262",
    "type": "INTERPOLATES"
   },
   {
@@ -65756,17 +65756,17 @@
   },
   {
    "from": "ROAST_COVERS",
-   "to": "engine-systems.js:11811",
+   "to": "engine-systems.js:11812",
    "type": "INTERPOLATES"
   },
   {
    "from": "ROAST_PACE",
-   "to": "engine-systems.js:11805",
+   "to": "engine-systems.js:11806",
    "type": "INTERPOLATES"
   },
   {
    "from": "ROAST_PACE",
-   "to": "engine-systems.js:11811",
+   "to": "engine-systems.js:11812",
    "type": "INTERPOLATES"
   },
   {
@@ -65846,12 +65846,12 @@
   },
   {
    "from": "SAFE_CASH",
-   "to": "engine-systems.js:12113",
+   "to": "engine-systems.js:12114",
    "type": "INTERPOLATES"
   },
   {
    "from": "SAFE_CASH",
-   "to": "engine-systems.js:12116",
+   "to": "engine-systems.js:12117",
    "type": "INTERPOLATES"
   },
   {
@@ -65871,22 +65871,22 @@
   },
   {
    "from": "SEASON_DEFAULT_M0",
-   "to": "engine-systems.js:9295",
+   "to": "engine-systems.js:9296",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEASON_MONTH_DAYS",
-   "to": "engine-systems.js:9289",
+   "to": "engine-systems.js:9290",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEASON_MONTH_DAYS",
-   "to": "engine-systems.js:9324",
+   "to": "engine-systems.js:9325",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEASON_MONTH_DAYS",
-   "to": "engine-systems.js:9331",
+   "to": "engine-systems.js:9332",
    "type": "INTERPOLATES"
   },
   {
@@ -65896,32 +65896,32 @@
   },
   {
    "from": "SEVEN_BEER",
-   "to": "engine-parser.js:10018",
+   "to": "engine-parser.js:10033",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEVEN_BEER",
-   "to": "engine-parser.js:10334",
+   "to": "engine-parser.js:10349",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEVEN_BEER",
-   "to": "engine-parser.js:10334",
+   "to": "engine-parser.js:10349",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEVEN_BEER",
-   "to": "engine-parser.js:10335",
+   "to": "engine-parser.js:10350",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEVEN_BEER",
-   "to": "engine-parser.js:10340",
+   "to": "engine-parser.js:10355",
    "type": "INTERPOLATES"
   },
   {
    "from": "SEVEN_BEER",
-   "to": "engine-parser.js:14388",
+   "to": "engine-parser.js:14403",
    "type": "INTERPOLATES"
   },
   {
@@ -65936,92 +65936,92 @@
   },
   {
    "from": "SHIFT_EARLY_COST",
-   "to": "engine-systems.js:8558",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "SHIFT_EARLY_COST",
-   "to": "engine-systems.js:8635",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "SHIFT_EARLY_COST",
-   "to": "engine-systems.js:8799",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "SHIFT_FLAT_LOSS",
-   "to": "engine-systems.js:8689",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "SHIFT_FLAT_LOSS",
-   "to": "engine-systems.js:8702",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "SHIFT_FLAT_LOSS",
-   "to": "engine-systems.js:8711",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "SHIFT_MERIT_LOSS",
-   "to": "engine-systems.js:8716",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "SHIFT_ROUND_COST",
    "to": "engine-systems.js:8559",
    "type": "INTERPOLATES"
   },
   {
-   "from": "SHIFT_ROUND_COST",
-   "to": "engine-systems.js:8650",
+   "from": "SHIFT_EARLY_COST",
+   "to": "engine-systems.js:8636",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "SHIFT_EARLY_COST",
+   "to": "engine-systems.js:8800",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "SHIFT_FLAT_LOSS",
+   "to": "engine-systems.js:8690",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "SHIFT_FLAT_LOSS",
+   "to": "engine-systems.js:8703",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "SHIFT_FLAT_LOSS",
+   "to": "engine-systems.js:8712",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "SHIFT_MERIT_LOSS",
+   "to": "engine-systems.js:8717",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_ROUND_COST",
-   "to": "engine-systems.js:8656",
+   "to": "engine-systems.js:8560",
    "type": "INTERPOLATES"
   },
   {
-   "from": "SHIFT_ROUND_TAKE",
+   "from": "SHIFT_ROUND_COST",
    "to": "engine-systems.js:8651",
    "type": "INTERPOLATES"
   },
   {
+   "from": "SHIFT_ROUND_COST",
+   "to": "engine-systems.js:8657",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "SHIFT_ROUND_TAKE",
+   "to": "engine-systems.js:8652",
+   "type": "INTERPOLATES"
+  },
+  {
    "from": "SHIFT_TAB_DOCKET",
-   "to": "engine-systems.js:8612",
+   "to": "engine-systems.js:8613",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_DOCKET_PAYS",
-   "to": "engine-systems.js:8618",
+   "to": "engine-systems.js:8619",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_TAKE",
-   "to": "engine-systems.js:8557",
+   "to": "engine-systems.js:8558",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_TAKE",
-   "to": "engine-systems.js:8616",
+   "to": "engine-systems.js:8617",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_TAKE",
-   "to": "engine-systems.js:8618",
+   "to": "engine-systems.js:8619",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_TAKE",
-   "to": "engine-systems.js:8625",
+   "to": "engine-systems.js:8626",
    "type": "INTERPOLATES"
   },
   {
    "from": "SHIFT_TAB_TAKE",
-   "to": "engine-systems.js:8627",
+   "to": "engine-systems.js:8628",
    "type": "INTERPOLATES"
   },
   {
@@ -66036,32 +66036,32 @@
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-parser.js:12481",
+   "to": "engine-parser.js:12496",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-parser.js:12653",
+   "to": "engine-parser.js:12668",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-parser.js:13677",
+   "to": "engine-parser.js:13692",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-parser.js:13677",
+   "to": "engine-parser.js:13692",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-parser.js:13832",
+   "to": "engine-parser.js:13847",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-parser.js:17986",
+   "to": "engine-parser.js:18001",
    "type": "INTERPOLATES"
   },
   {
@@ -66086,32 +66086,32 @@
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-systems.js:7425",
+   "to": "engine-systems.js:7426",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-systems.js:7446",
+   "to": "engine-systems.js:7447",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-systems.js:7446",
+   "to": "engine-systems.js:7447",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-systems.js:7448",
+   "to": "engine-systems.js:7449",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-systems.js:7458",
+   "to": "engine-systems.js:7459",
    "type": "INTERPOLATES"
   },
   {
    "from": "SOI6_CLOSE",
-   "to": "engine-systems.js:9910",
+   "to": "engine-systems.js:9911",
    "type": "INTERPOLATES"
   },
   {
@@ -66131,7 +66131,7 @@
   },
   {
    "from": "SPONSOR_FLIP",
-   "to": "engine-systems.js:5132",
+   "to": "engine-systems.js:5133",
    "type": "INTERPOLATES"
   },
   {
@@ -66151,12 +66151,12 @@
   },
   {
    "from": "STUCK_AT",
-   "to": "engine-systems.js:4763",
+   "to": "engine-systems.js:4764",
    "type": "INTERPOLATES"
   },
   {
    "from": "SUNRISE_TURN",
-   "to": "engine-parser.js:12602",
+   "to": "engine-parser.js:12617",
    "type": "INTERPOLATES"
   },
   {
@@ -66186,17 +66186,17 @@
   },
   {
    "from": "SUNRISE_TURN",
-   "to": "engine-systems.js:7204",
+   "to": "engine-systems.js:7205",
    "type": "INTERPOLATES"
   },
   {
    "from": "SUNRISE_TURN",
-   "to": "engine-systems.js:7226",
+   "to": "engine-systems.js:7227",
    "type": "INTERPOLATES"
   },
   {
    "from": "SYN_INSIDE_PRICE",
-   "to": "engine-systems.js:9560",
+   "to": "engine-systems.js:9561",
    "type": "INTERPOLATES"
   },
   {
@@ -66206,7 +66206,7 @@
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "engine-systems.js:9637",
+   "to": "engine-systems.js:9638",
    "type": "INTERPOLATES"
   },
   {
@@ -66236,47 +66236,47 @@
   },
   {
    "from": "THAI_ATM_CAP",
-   "to": "engine-parser.js:13272",
+   "to": "engine-parser.js:13287",
    "type": "INTERPOLATES"
   },
   {
    "from": "THAI_FLUENT",
-   "to": "engine-parser.js:9053",
+   "to": "engine-parser.js:9059",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:10268",
+   "to": "engine-parser.js:10283",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:10270",
+   "to": "engine-parser.js:10285",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:10270",
+   "to": "engine-parser.js:10285",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:10271",
+   "to": "engine-parser.js:10286",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:10274",
+   "to": "engine-parser.js:10289",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:14387",
+   "to": "engine-parser.js:14402",
    "type": "INTERPOLATES"
   },
   {
    "from": "TOASTIE_PRICE",
-   "to": "engine-parser.js:16445",
+   "to": "engine-parser.js:16460",
    "type": "INTERPOLATES"
   },
   {
@@ -66296,7 +66296,7 @@
   },
   {
    "from": "TONIC_POLICE_CUT",
-   "to": "engine-parser.js:13388",
+   "to": "engine-parser.js:13403",
    "type": "INTERPOLATES"
   },
   {
@@ -66336,27 +66336,27 @@
   },
   {
    "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:10131",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:10133",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:10136",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "UMBRELLA_PRICE",
-   "to": "engine-parser.js:10143",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "UMBRELLA_PRICE",
    "to": "engine-parser.js:10146",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "UMBRELLA_PRICE",
+   "to": "engine-parser.js:10148",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "UMBRELLA_PRICE",
+   "to": "engine-parser.js:10151",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "UMBRELLA_PRICE",
+   "to": "engine-parser.js:10158",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "UMBRELLA_PRICE",
+   "to": "engine-parser.js:10161",
    "type": "INTERPOLATES"
   },
   {
@@ -66406,112 +66406,112 @@
   },
   {
    "from": "WORK_AWAY_BUDGET",
-   "to": "engine-systems.js:8075",
+   "to": "engine-systems.js:8076",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_AWAY_BUDGET",
-   "to": "engine-systems.js:8077",
+   "to": "engine-systems.js:8078",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_AWAY_BUDGET",
-   "to": "engine-systems.js:8080",
+   "to": "engine-systems.js:8081",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_DRIFT",
-   "to": "engine-systems.js:10349",
+   "to": "engine-systems.js:10350",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_DRIFT",
-   "to": "engine-systems.js:10353",
+   "to": "engine-systems.js:10354",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_DRIFT",
-   "to": "engine-systems.js:10353",
+   "to": "engine-systems.js:10354",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_EVENT_ODDS",
-   "to": "engine-systems.js:7813",
+   "to": "engine-systems.js:7814",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_FLOOR_GAP",
-   "to": "engine-systems.js:8251",
+   "to": "engine-systems.js:8252",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_FLOOR_MAX",
-   "to": "engine-systems.js:8250",
+   "to": "engine-systems.js:8251",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_MIN_STOOD",
-   "to": "engine-systems.js:8007",
+   "to": "engine-systems.js:8008",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_MIN_STOOD",
-   "to": "engine-systems.js:8068",
+   "to": "engine-systems.js:8069",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_MIN_STOOD",
-   "to": "engine-systems.js:8074",
+   "to": "engine-systems.js:8075",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_MIN_STOOD",
-   "to": "engine-systems.js:9578",
+   "to": "engine-systems.js:9579",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_TAKINGS",
-   "to": "engine-systems.js:7917",
+   "to": "engine-systems.js:7918",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_TAKINGS",
-   "to": "engine-systems.js:9584",
+   "to": "engine-systems.js:9585",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_TAKINGS",
-   "to": "engine-systems.js:9958",
+   "to": "engine-systems.js:9959",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_TALE_TURN",
-   "to": "engine-systems.js:8007",
+   "to": "engine-systems.js:8008",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_TALE_TURN",
-   "to": "engine-systems.js:8274",
+   "to": "engine-systems.js:8275",
    "type": "INTERPOLATES"
   },
   {
    "from": "WORK_TALE_TURN",
-   "to": "engine-systems.js:8335",
+   "to": "engine-systems.js:8336",
    "type": "INTERPOLATES"
   },
   {
    "from": "YA_DONG_SHOT",
-   "to": "engine-parser.js:10319",
+   "to": "engine-parser.js:10334",
    "type": "INTERPOLATES"
   },
   {
    "from": "YA_DONG_SHOT",
-   "to": "engine-parser.js:10319",
+   "to": "engine-parser.js:10334",
    "type": "INTERPOLATES"
   },
   {
    "from": "YA_DONG_SHOT",
-   "to": "engine-parser.js:10320",
+   "to": "engine-parser.js:10335",
    "type": "INTERPOLATES"
   },
   {
@@ -69875,42 +69875,42 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11025",
+   "to": "engine-parser.js:11040",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11123",
+   "to": "engine-parser.js:11138",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11197",
+   "to": "engine-parser.js:11212",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11267",
+   "to": "engine-parser.js:11282",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11594",
+   "to": "engine-parser.js:11609",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11602",
+   "to": "engine-parser.js:11617",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11632",
+   "to": "engine-parser.js:11647",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:11793",
+   "to": "engine-parser.js:11808",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69925,17 +69925,17 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:12473",
+   "to": "engine-parser.js:12488",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:12486",
+   "to": "engine-parser.js:12501",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:13138",
+   "to": "engine-parser.js:13153",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69945,17 +69945,17 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14585",
+   "to": "engine-parser.js:14600",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14928",
+   "to": "engine-parser.js:14943",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:14932",
+   "to": "engine-parser.js:14947",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -69965,52 +69965,52 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:17626",
+   "to": "engine-parser.js:17641",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:17860",
+   "to": "engine-parser.js:17875",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:17877",
+   "to": "engine-parser.js:17892",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:17879",
+   "to": "engine-parser.js:17894",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:17970",
+   "to": "engine-parser.js:17985",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:18655",
+   "to": "engine-parser.js:18670",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:18773",
+   "to": "engine-parser.js:18788",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:18901",
+   "to": "engine-parser.js:18916",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:19076",
+   "to": "engine-parser.js:19097",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:19086",
+   "to": "engine-parser.js:19107",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70030,22 +70030,22 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9063",
+   "to": "engine-parser.js:9069",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9068",
+   "to": "engine-parser.js:9074",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9719",
+   "to": "engine-parser.js:9734",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:9722",
+   "to": "engine-parser.js:9737",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70155,17 +70155,17 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:11692",
+   "to": "engine-systems.js:11693",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:12109",
+   "to": "engine-systems.js:12110",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:12121",
+   "to": "engine-systems.js:12122",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70215,17 +70215,17 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:4773",
+   "to": "engine-systems.js:4774",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:5250",
+   "to": "engine-systems.js:5251",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:5589",
+   "to": "engine-systems.js:5590",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70240,7 +70240,7 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:6509",
+   "to": "engine-systems.js:6510",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70255,7 +70255,7 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:7204",
+   "to": "engine-systems.js:7205",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70265,17 +70265,17 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:9305",
+   "to": "engine-systems.js:9306",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "affairOffered",
-   "to": "engine-parser.js:15201",
+   "to": "engine-parser.js:15216",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "affairOffered",
-   "to": "engine-systems.js:9158",
+   "to": "engine-systems.js:9159",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70290,7 +70290,7 @@
   },
   {
    "from": "amuletReturned",
-   "to": "engine-systems.js:11555",
+   "to": "engine-systems.js:11556",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70310,32 +70310,32 @@
   },
   {
    "from": "barBook",
-   "to": "engine-systems.js:10224",
+   "to": "engine-systems.js:10225",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barBook",
-   "to": "engine-systems.js:9587",
+   "to": "engine-systems.js:9588",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:10141",
+   "to": "engine-systems.js:10142",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:10184",
+   "to": "engine-systems.js:10185",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:10412",
+   "to": "engine-systems.js:10413",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:7891",
+   "to": "engine-systems.js:7892",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70355,22 +70355,22 @@
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:10461",
+   "to": "engine-systems.js:10462",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:7605",
+   "to": "engine-systems.js:7606",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:9360",
+   "to": "engine-systems.js:9361",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:9698",
+   "to": "engine-systems.js:9699",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70410,37 +70410,37 @@
   },
   {
    "from": "barPaid",
-   "to": "engine-systems.js:10193",
+   "to": "engine-systems.js:10194",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-systems.js:10198",
+   "to": "engine-systems.js:10199",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-systems.js:9371",
+   "to": "engine-systems.js:9372",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:10195",
+   "to": "engine-systems.js:10196",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:7894",
+   "to": "engine-systems.js:7895",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:8499",
+   "to": "engine-systems.js:8500",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:9371",
+   "to": "engine-systems.js:9372",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70450,7 +70450,7 @@
   },
   {
    "from": "barSold",
-   "to": "engine-parser.js:15201",
+   "to": "engine-parser.js:15216",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70460,22 +70460,22 @@
   },
   {
    "from": "barSold",
-   "to": "engine-systems.js:10180",
+   "to": "engine-systems.js:10181",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barSold",
-   "to": "engine-systems.js:7888",
+   "to": "engine-systems.js:7889",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "barSold",
-   "to": "engine-systems.js:9153",
+   "to": "engine-systems.js:9154",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "beatBargirlC4",
-   "to": "engine-systems.js:12136",
+   "to": "engine-systems.js:12137",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70485,7 +70485,7 @@
   },
   {
    "from": "bertFreeBeer",
-   "to": "engine-parser.js:10354",
+   "to": "engine-parser.js:10369",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70500,17 +70500,17 @@
   },
   {
    "from": "bkkArcDone",
-   "to": "engine-systems.js:5455",
+   "to": "engine-systems.js:5456",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "bkkArcDone",
-   "to": "engine-systems.js:5654",
+   "to": "engine-systems.js:5655",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "bkkArcDone",
-   "to": "engine-systems.js:5662",
+   "to": "engine-systems.js:5663",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70520,12 +70520,12 @@
   },
   {
    "from": "burnerUsed",
-   "to": "engine-systems.js:12897",
+   "to": "engine-systems.js:12898",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "burnerUsed",
-   "to": "engine-systems.js:12955",
+   "to": "engine-systems.js:12956",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70535,92 +70535,92 @@
   },
   {
    "from": "ccibCleared",
-   "to": "engine-systems.js:12997",
+   "to": "engine-systems.js:12998",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibCleared",
-   "to": "engine-systems.js:13024",
+   "to": "engine-systems.js:13025",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibCleared",
-   "to": "engine-systems.js:13049",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "ccibCleared",
-   "to": "engine-systems.js:13064",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "ccibLanded",
    "to": "engine-systems.js:13050",
    "type": "READ_BY_ENGINE"
   },
   {
-   "from": "ccibLanded",
-   "to": "engine-systems.js:13064",
+   "from": "ccibCleared",
+   "to": "engine-systems.js:13065",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibLanded",
-   "to": "engine-systems.js:13086",
-   "type": "READ_BY_ENGINE"
-  },
-  {
-   "from": "ccibLoudAfter",
    "to": "engine-systems.js:13051",
    "type": "READ_BY_ENGINE"
   },
   {
+   "from": "ccibLanded",
+   "to": "engine-systems.js:13065",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "ccibLanded",
+   "to": "engine-systems.js:13087",
+   "type": "READ_BY_ENGINE"
+  },
+  {
+   "from": "ccibLoudAfter",
+   "to": "engine-systems.js:13052",
+   "type": "READ_BY_ENGINE"
+  },
+  {
    "from": "ccibReadGiven",
-   "to": "engine-systems.js:13010",
+   "to": "engine-systems.js:13011",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibSecondCoffee",
-   "to": "engine-systems.js:13064",
+   "to": "engine-systems.js:13065",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibSecondCoffee",
-   "to": "engine-systems.js:13093",
+   "to": "engine-systems.js:13094",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibSecondLook",
-   "to": "engine-systems.js:13010",
+   "to": "engine-systems.js:13011",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-parser.js:11367",
+   "to": "engine-parser.js:11382",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12917",
+   "to": "engine-systems.js:12918",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12997",
+   "to": "engine-systems.js:12998",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:13024",
+   "to": "engine-systems.js:13025",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:13049",
+   "to": "engine-systems.js:13050",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:13064",
+   "to": "engine-systems.js:13065",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70630,32 +70630,32 @@
   },
   {
    "from": "chamAsked",
-   "to": "engine-systems.js:5310",
+   "to": "engine-systems.js:5311",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "chamDone",
-   "to": "engine-systems.js:5252",
+   "to": "engine-systems.js:5253",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "chamDone",
-   "to": "engine-systems.js:5310",
+   "to": "engine-systems.js:5311",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "chamSlip",
-   "to": "engine-systems.js:5437",
+   "to": "engine-systems.js:5438",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "clozeGot",
-   "to": "engine-systems.js:12429",
+   "to": "engine-systems.js:12430",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "coversCounted",
-   "to": "engine-parser.js:17520",
+   "to": "engine-parser.js:17535",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70670,12 +70670,12 @@
   },
   {
    "from": "ctfRabbit",
-   "to": "engine-parser.js:19079",
+   "to": "engine-parser.js:19100",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ctfRabbit",
-   "to": "engine-systems.js:11717",
+   "to": "engine-systems.js:11718",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70700,12 +70700,12 @@
   },
   {
    "from": "expatLife",
-   "to": "engine-systems.js:5455",
+   "to": "engine-systems.js:5456",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "fed26",
-   "to": "engine-parser.js:9642",
+   "to": "engine-parser.js:9657",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70715,7 +70715,7 @@
   },
   {
    "from": "fiftyoneSigned",
-   "to": "engine-parser.js:9460",
+   "to": "engine-parser.js:9475",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70725,7 +70725,7 @@
   },
   {
    "from": "gotBusFare",
-   "to": "engine-parser.js:9719",
+   "to": "engine-parser.js:9734",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70735,7 +70735,7 @@
   },
   {
    "from": "greetedFon",
-   "to": "engine-systems.js:12134",
+   "to": "engine-systems.js:12135",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70755,17 +70755,17 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:13277",
+   "to": "engine-parser.js:13292",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:13336",
+   "to": "engine-parser.js:13351",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:13347",
+   "to": "engine-parser.js:13362",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70775,7 +70775,7 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:17286",
+   "to": "engine-parser.js:17301",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70800,7 +70800,7 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-systems.js:12121",
+   "to": "engine-systems.js:12122",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70845,7 +70845,7 @@
   },
   {
    "from": "heardPriceStory",
-   "to": "engine-parser.js:9642",
+   "to": "engine-parser.js:9657",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70855,17 +70855,17 @@
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:11075",
+   "to": "engine-parser.js:11090",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:11268",
+   "to": "engine-parser.js:11283",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:11748",
+   "to": "engine-parser.js:11763",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70875,12 +70875,12 @@
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-systems.js:12132",
+   "to": "engine-systems.js:12133",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "hitJackpot",
-   "to": "engine-systems.js:12137",
+   "to": "engine-systems.js:12138",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70905,22 +70905,22 @@
   },
   {
    "from": "invoicesCopied",
-   "to": "engine-systems.js:12962",
+   "to": "engine-systems.js:12963",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "jokeStop",
-   "to": "engine-systems.js:5590",
+   "to": "engine-systems.js:5591",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "jokeStop",
-   "to": "engine-systems.js:5622",
+   "to": "engine-systems.js:5623",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "jokeStop",
-   "to": "engine-systems.js:5670",
+   "to": "engine-systems.js:5671",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70930,17 +70930,17 @@
   },
   {
    "from": "jokeWho",
-   "to": "engine-systems.js:5613",
+   "to": "engine-systems.js:5614",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "jokeWho",
-   "to": "engine-systems.js:5617",
+   "to": "engine-systems.js:5618",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "jokeWho",
-   "to": "engine-systems.js:5671",
+   "to": "engine-systems.js:5672",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70960,22 +70960,22 @@
   },
   {
    "from": "kidHandled",
-   "to": "engine-parser.js:11367",
+   "to": "engine-parser.js:11382",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "kidPaid",
-   "to": "engine-systems.js:13222",
+   "to": "engine-systems.js:13223",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "kidPath",
-   "to": "engine-parser.js:11367",
+   "to": "engine-parser.js:11382",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "kidPath",
-   "to": "engine-systems.js:12912",
+   "to": "engine-systems.js:12913",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -70990,7 +70990,7 @@
   },
   {
    "from": "knowMot",
-   "to": "engine-parser.js:10588",
+   "to": "engine-parser.js:10603",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71035,47 +71035,47 @@
   },
   {
    "from": "kyleShift",
-   "to": "engine-systems.js:13234",
+   "to": "engine-systems.js:13235",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lakeFishEaten",
-   "to": "engine-parser.js:10296",
+   "to": "engine-parser.js:10311",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lakeFishFree",
-   "to": "engine-parser.js:10296",
+   "to": "engine-parser.js:10311",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:12502",
+   "to": "engine-systems.js:12503",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:12559",
+   "to": "engine-systems.js:12560",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:12572",
+   "to": "engine-systems.js:12573",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:12586",
+   "to": "engine-systems.js:12587",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:11793",
+   "to": "engine-parser.js:11808",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:11820",
+   "to": "engine-parser.js:11835",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71085,32 +71085,32 @@
   },
   {
    "from": "motBooted",
-   "to": "engine-parser.js:19142",
+   "to": "engine-parser.js:19163",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motBootsTold",
-   "to": "engine-parser.js:19150",
+   "to": "engine-parser.js:19171",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:15128",
+   "to": "engine-parser.js:15143",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:18596",
+   "to": "engine-parser.js:18611",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:19150",
+   "to": "engine-parser.js:19171",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:19181",
+   "to": "engine-parser.js:19202",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71120,7 +71120,7 @@
   },
   {
    "from": "nokFare",
-   "to": "engine-parser.js:9722",
+   "to": "engine-parser.js:9737",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71165,7 +71165,7 @@
   },
   {
    "from": "orchidVouched",
-   "to": "engine-parser.js:13660",
+   "to": "engine-parser.js:13675",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71175,42 +71175,42 @@
   },
   {
    "from": "owlAmulet",
-   "to": "engine-systems.js:11555",
+   "to": "engine-systems.js:11556",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "owlBox15",
-   "to": "engine-parser.js:19078",
+   "to": "engine-parser.js:19099",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "owlBox15",
-   "to": "engine-systems.js:11598",
+   "to": "engine-systems.js:11599",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-parser.js:18554",
+   "to": "engine-parser.js:18569",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-systems.js:12899",
+   "to": "engine-systems.js:12900",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-systems.js:12955",
+   "to": "engine-systems.js:12956",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "oyGaveWallet",
-   "to": "engine-systems.js:12128",
+   "to": "engine-systems.js:12129",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "oyGaveWallet",
-   "to": "engine-systems.js:12159",
+   "to": "engine-systems.js:12160",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71220,7 +71220,7 @@
   },
   {
    "from": "partnerCandy",
-   "to": "engine-systems.js:10277",
+   "to": "engine-systems.js:10278",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71230,7 +71230,7 @@
   },
   {
    "from": "partnerCandy",
-   "to": "engine-systems.js:8052",
+   "to": "engine-systems.js:8053",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71250,17 +71250,17 @@
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:10052",
+   "to": "engine-systems.js:10053",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:10102",
+   "to": "engine-systems.js:10103",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:10461",
+   "to": "engine-systems.js:10462",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71275,12 +71275,12 @@
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:7605",
+   "to": "engine-systems.js:7606",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:9176",
+   "to": "engine-systems.js:9177",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71295,7 +71295,7 @@
   },
   {
    "from": "pinPart71",
-   "to": "engine-systems.js:12141",
+   "to": "engine-systems.js:12142",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71305,12 +71305,12 @@
   },
   {
    "from": "pinPart9",
-   "to": "engine-parser.js:10591",
+   "to": "engine-parser.js:10606",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "pinPart9",
-   "to": "engine-systems.js:12141",
+   "to": "engine-systems.js:12142",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71345,7 +71345,7 @@
   },
   {
    "from": "priewRevealed",
-   "to": "engine-parser.js:11820",
+   "to": "engine-parser.js:11835",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71355,22 +71355,22 @@
   },
   {
    "from": "priewRevealed",
-   "to": "engine-systems.js:4907",
+   "to": "engine-systems.js:4908",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "priewRevealed",
-   "to": "engine-systems.js:5781",
+   "to": "engine-systems.js:5782",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "probeArmed",
-   "to": "engine-systems.js:11686",
+   "to": "engine-systems.js:11687",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "probeArmed",
-   "to": "engine-systems.js:11691",
+   "to": "engine-systems.js:11692",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71395,7 +71395,7 @@
   },
   {
    "from": "rabbitData",
-   "to": "engine-parser.js:14923",
+   "to": "engine-parser.js:14938",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71405,12 +71405,12 @@
   },
   {
    "from": "rabbitData",
-   "to": "engine-systems.js:12917",
+   "to": "engine-systems.js:12918",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "rabbitData",
-   "to": "engine-systems.js:13222",
+   "to": "engine-systems.js:13223",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71440,7 +71440,7 @@
   },
   {
    "from": "roomSafeOpened",
-   "to": "engine-systems.js:12109",
+   "to": "engine-systems.js:12110",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71465,12 +71465,12 @@
   },
   {
    "from": "sawBalcony",
-   "to": "engine-systems.js:7425",
+   "to": "engine-systems.js:7426",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "sawBuddhaHill",
-   "to": "engine-systems.js:7386",
+   "to": "engine-systems.js:7387",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71485,37 +71485,37 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-systems.js:10867",
+   "to": "engine-systems.js:10868",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "simUsed",
-   "to": "engine-systems.js:12897",
+   "to": "engine-systems.js:12898",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "simUsed",
-   "to": "engine-systems.js:12911",
+   "to": "engine-systems.js:12912",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "soidogTexted",
-   "to": "engine-systems.js:5061",
+   "to": "engine-systems.js:5062",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "somTamAccepted",
-   "to": "engine-systems.js:12078",
+   "to": "engine-systems.js:12079",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "somTamDelivered",
-   "to": "engine-systems.js:12078",
+   "to": "engine-systems.js:12079",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "somTamDelivered",
-   "to": "engine-systems.js:12133",
+   "to": "engine-systems.js:12134",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71525,17 +71525,17 @@
   },
   {
    "from": "tanAsked",
-   "to": "engine-systems.js:10468",
+   "to": "engine-systems.js:10469",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "tanAsked",
-   "to": "engine-systems.js:7605",
+   "to": "engine-systems.js:7606",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "tanCoffee",
-   "to": "engine-parser.js:10060",
+   "to": "engine-parser.js:10075",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71560,12 +71560,12 @@
   },
   {
    "from": "tanRevealed",
-   "to": "engine-systems.js:10849",
+   "to": "engine-systems.js:10850",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "tanSuspected",
-   "to": "engine-systems.js:10848",
+   "to": "engine-systems.js:10849",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71595,17 +71595,17 @@
   },
   {
    "from": "waenChild",
-   "to": "engine-systems.js:12572",
+   "to": "engine-systems.js:12573",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "waenLink",
-   "to": "engine-systems.js:12559",
+   "to": "engine-systems.js:12560",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "waenLink",
-   "to": "engine-systems.js:12586",
+   "to": "engine-systems.js:12587",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71615,7 +71615,7 @@
   },
   {
    "from": "waiedOy",
-   "to": "engine-systems.js:12135",
+   "to": "engine-systems.js:12136",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -71625,12 +71625,12 @@
   },
   {
    "from": "wrongNumberSent",
-   "to": "engine-systems.js:11686",
+   "to": "engine-systems.js:11687",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "wrongNumberSent",
-   "to": "engine-systems.js:11691",
+   "to": "engine-systems.js:11692",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -72870,7 +72870,7 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-parser.js:18816",
+   "to": "engine-parser.js:18831",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -72885,27 +72885,27 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:12122",
+   "to": "engine-systems.js:12123",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-systems.js:12165",
+   "to": "engine-systems.js:12166",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "affairBegun",
-   "to": "engine-systems.js:8916",
+   "to": "engine-systems.js:8917",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "affairOffered",
-   "to": "engine-systems.js:9095",
+   "to": "engine-systems.js:9096",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "affairWon",
-   "to": "engine-systems.js:9177",
+   "to": "engine-systems.js:9178",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -72925,32 +72925,32 @@
   },
   {
    "from": "barLost",
-   "to": "engine-systems.js:10114",
-   "type": "SET_BY_ENGINE"
-  },
-  {
-   "from": "barOpen",
    "to": "engine-systems.js:10115",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barOpen",
-   "to": "engine-systems.js:9178",
+   "to": "engine-systems.js:10116",
+   "type": "SET_BY_ENGINE"
+  },
+  {
+   "from": "barOpen",
+   "to": "engine-systems.js:9179",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barPaid",
-   "to": "engine-systems.js:9388",
+   "to": "engine-systems.js:9389",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barPartner",
-   "to": "engine-systems.js:8500",
+   "to": "engine-systems.js:8501",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "barSold",
-   "to": "engine-systems.js:9177",
+   "to": "engine-systems.js:9178",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -72960,7 +72960,7 @@
   },
   {
    "from": "beeBanked",
-   "to": "engine-systems.js:4961",
+   "to": "engine-systems.js:4962",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -72970,27 +72970,27 @@
   },
   {
    "from": "bertFreeBeer",
-   "to": "engine-parser.js:10355",
+   "to": "engine-parser.js:10370",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "bkkArcDone",
-   "to": "engine-systems.js:5495",
+   "to": "engine-systems.js:5496",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "bkkArcDone",
-   "to": "engine-systems.js:5504",
+   "to": "engine-systems.js:5505",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "bookGiven",
-   "to": "engine-parser.js:9488",
+   "to": "engine-parser.js:9503",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "burnerUsed",
-   "to": "engine-systems.js:12886",
+   "to": "engine-systems.js:12887",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73005,62 +73005,62 @@
   },
   {
    "from": "ccibCleared",
-   "to": "engine-systems.js:12999",
+   "to": "engine-systems.js:13000",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibLanded",
-   "to": "engine-systems.js:13087",
+   "to": "engine-systems.js:13088",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibLoudAfter",
-   "to": "engine-systems.js:13051",
+   "to": "engine-systems.js:13052",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibRadarSet",
-   "to": "engine-systems.js:12988",
+   "to": "engine-systems.js:12989",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibSecondCoffee",
-   "to": "engine-systems.js:13068",
+   "to": "engine-systems.js:13069",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibSecondLook",
-   "to": "engine-systems.js:13012",
+   "to": "engine-systems.js:13013",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ccibVisited",
-   "to": "engine-systems.js:12923",
+   "to": "engine-systems.js:12924",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "chamAsked",
-   "to": "engine-systems.js:5341",
+   "to": "engine-systems.js:5342",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "chamAsked",
-   "to": "engine-systems.js:5356",
+   "to": "engine-systems.js:5357",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "chamDone",
-   "to": "engine-systems.js:5406",
+   "to": "engine-systems.js:5407",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "chamSlip",
-   "to": "engine-systems.js:5438",
+   "to": "engine-systems.js:5439",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "clozeGot",
-   "to": "engine-systems.js:12430",
+   "to": "engine-systems.js:12431",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73070,12 +73070,12 @@
   },
   {
    "from": "craneDelivered",
-   "to": "engine-parser.js:9502",
+   "to": "engine-parser.js:9517",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ctfRabbit",
-   "to": "engine-systems.js:11723",
+   "to": "engine-systems.js:11724",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73095,7 +73095,7 @@
   },
   {
    "from": "fed26",
-   "to": "engine-parser.js:9644",
+   "to": "engine-parser.js:9659",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73105,12 +73105,12 @@
   },
   {
    "from": "gotBusFare",
-   "to": "engine-parser.js:9720",
+   "to": "engine-parser.js:9735",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "gotBusFare",
-   "to": "engine-parser.js:9737",
+   "to": "engine-parser.js:9752",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73145,7 +73145,7 @@
   },
   {
    "from": "hasDog",
-   "to": "engine-systems.js:10808",
+   "to": "engine-systems.js:10809",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73155,7 +73155,7 @@
   },
   {
    "from": "hasWallet",
-   "to": "engine-parser.js:18815",
+   "to": "engine-parser.js:18830",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73175,12 +73175,12 @@
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:10592",
+   "to": "engine-parser.js:10607",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "helmetDelivered",
-   "to": "engine-parser.js:9468",
+   "to": "engine-parser.js:9483",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73200,12 +73200,12 @@
   },
   {
    "from": "jokeStop",
-   "to": "engine-systems.js:5624",
+   "to": "engine-systems.js:5625",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "jokeWho",
-   "to": "engine-systems.js:5680",
+   "to": "engine-systems.js:5681",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73225,42 +73225,42 @@
   },
   {
    "from": "keysDelivered",
-   "to": "engine-parser.js:9527",
+   "to": "engine-parser.js:9542",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidCleared",
-   "to": "engine-systems.js:13286",
+   "to": "engine-systems.js:13287",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidHandled",
-   "to": "engine-systems.js:13260",
+   "to": "engine-systems.js:13261",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidHandled",
-   "to": "engine-systems.js:13286",
+   "to": "engine-systems.js:13287",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidPaid",
-   "to": "engine-systems.js:13190",
+   "to": "engine-systems.js:13191",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "kidPath",
-   "to": "engine-systems.js:13190",
+   "to": "engine-systems.js:13191",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "knowMot",
-   "to": "engine-parser.js:10589",
+   "to": "engine-parser.js:10604",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "knowWasHere",
-   "to": "engine-parser.js:10589",
+   "to": "engine-parser.js:10604",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73270,42 +73270,42 @@
   },
   {
    "from": "kyleShift",
-   "to": "engine-systems.js:13235",
+   "to": "engine-systems.js:13236",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "lakeFishEaten",
-   "to": "engine-parser.js:10297",
+   "to": "engine-parser.js:10312",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "lessonTaken",
-   "to": "engine-systems.js:12503",
+   "to": "engine-systems.js:12504",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "metPriew",
-   "to": "engine-parser.js:11795",
+   "to": "engine-parser.js:11810",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motBooted",
-   "to": "engine-parser.js:19162",
+   "to": "engine-parser.js:19183",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motBootsTold",
-   "to": "engine-parser.js:19197",
+   "to": "engine-parser.js:19218",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "motFed",
-   "to": "engine-parser.js:19193",
+   "to": "engine-parser.js:19214",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "nokFare",
-   "to": "engine-parser.js:9737",
+   "to": "engine-parser.js:9752",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73325,27 +73325,27 @@
   },
   {
    "from": "owlAmulet",
-   "to": "engine-systems.js:11556",
+   "to": "engine-systems.js:11557",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "owlBox15",
-   "to": "engine-systems.js:11599",
+   "to": "engine-systems.js:11600",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "ownPhoneUsed",
-   "to": "engine-parser.js:18555",
+   "to": "engine-parser.js:18570",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "partnerCandy",
-   "to": "engine-systems.js:8511",
+   "to": "engine-systems.js:8512",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "partnerTan",
-   "to": "engine-systems.js:8502",
+   "to": "engine-systems.js:8503",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73365,12 +73365,12 @@
   },
   {
    "from": "priewRevealed",
-   "to": "engine-parser.js:11823",
+   "to": "engine-parser.js:11838",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "probeArmed",
-   "to": "engine-systems.js:11687",
+   "to": "engine-systems.js:11688",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73380,7 +73380,7 @@
   },
   {
    "from": "rabbitBlown",
-   "to": "engine-systems.js:12849",
+   "to": "engine-systems.js:12850",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73390,32 +73390,32 @@
   },
   {
    "from": "rabbitData",
-   "to": "engine-systems.js:12801",
+   "to": "engine-systems.js:12802",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitData",
-   "to": "engine-systems.js:13223",
+   "to": "engine-systems.js:13224",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-systems.js:12680",
+   "to": "engine-systems.js:12681",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-systems.js:12701",
+   "to": "engine-systems.js:12702",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-systems.js:13142",
+   "to": "engine-systems.js:13143",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "rabbitPath",
-   "to": "engine-systems.js:13214",
+   "to": "engine-systems.js:13215",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73435,7 +73435,7 @@
   },
   {
    "from": "roomSafeOpened",
-   "to": "engine-systems.js:12111",
+   "to": "engine-systems.js:12112",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73445,17 +73445,17 @@
   },
   {
    "from": "sangsomDelivered",
-   "to": "engine-parser.js:9551",
+   "to": "engine-parser.js:9566",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "sawBalcony",
-   "to": "engine-systems.js:7426",
+   "to": "engine-systems.js:7427",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "sawBuddhaHill",
-   "to": "engine-systems.js:7387",
+   "to": "engine-systems.js:7388",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73465,12 +73465,12 @@
   },
   {
    "from": "scoutSent",
-   "to": "engine-parser.js:9539",
+   "to": "engine-parser.js:9554",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-systems.js:10868",
+   "to": "engine-systems.js:10869",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73480,17 +73480,17 @@
   },
   {
    "from": "simUsed",
-   "to": "engine-systems.js:12885",
+   "to": "engine-systems.js:12886",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "soidogTexted",
-   "to": "engine-systems.js:5064",
+   "to": "engine-systems.js:5065",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "somTamDelivered",
-   "to": "engine-parser.js:9520",
+   "to": "engine-parser.js:9535",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73500,37 +73500,37 @@
   },
   {
    "from": "tanAsked",
-   "to": "engine-systems.js:7610",
+   "to": "engine-systems.js:7611",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "tanCoffee",
-   "to": "engine-parser.js:10060",
+   "to": "engine-parser.js:10075",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "tanFavourDone",
-   "to": "engine-systems.js:7658",
+   "to": "engine-systems.js:7659",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "tanFavourRefused",
-   "to": "engine-systems.js:7681",
+   "to": "engine-systems.js:7682",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "tanKidFavour",
-   "to": "engine-systems.js:13260",
+   "to": "engine-systems.js:13261",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "tanKidRefused",
-   "to": "engine-systems.js:13271",
+   "to": "engine-systems.js:13272",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "tanRevealed",
-   "to": "engine-systems.js:10850",
+   "to": "engine-systems.js:10851",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73545,7 +73545,7 @@
   },
   {
    "from": "tiffinDelivered",
-   "to": "engine-parser.js:9511",
+   "to": "engine-parser.js:9526",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73570,12 +73570,12 @@
   },
   {
    "from": "waenChild",
-   "to": "engine-systems.js:12573",
+   "to": "engine-systems.js:12574",
    "type": "SET_BY_ENGINE"
   },
   {
    "from": "waenLink",
-   "to": "engine-systems.js:12560",
+   "to": "engine-systems.js:12561",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -73595,7 +73595,7 @@
   },
   {
    "from": "wrongNumberSent",
-   "to": "engine-systems.js:11694",
+   "to": "engine-systems.js:11695",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -75063,41 +75063,41 @@
     "engine-encounters.js:347",
     "engine-encounters.js:886",
     "engine-encounters.js:964",
-    "engine-parser.js:11025",
-    "engine-parser.js:11123",
-    "engine-parser.js:11197",
-    "engine-parser.js:11267",
-    "engine-parser.js:11594",
-    "engine-parser.js:11602",
-    "engine-parser.js:11632",
-    "engine-parser.js:11793",
+    "engine-parser.js:11040",
+    "engine-parser.js:11138",
+    "engine-parser.js:11212",
+    "engine-parser.js:11282",
+    "engine-parser.js:11609",
+    "engine-parser.js:11617",
+    "engine-parser.js:11647",
+    "engine-parser.js:11808",
     "engine-parser.js:1199",
     "engine-parser.js:1210",
-    "engine-parser.js:12473",
-    "engine-parser.js:12486",
-    "engine-parser.js:13138",
+    "engine-parser.js:12488",
+    "engine-parser.js:12501",
+    "engine-parser.js:13153",
     "engine-parser.js:1358",
-    "engine-parser.js:14585",
-    "engine-parser.js:14928",
-    "engine-parser.js:14932",
+    "engine-parser.js:14600",
+    "engine-parser.js:14943",
+    "engine-parser.js:14947",
     "engine-parser.js:1726",
-    "engine-parser.js:17626",
-    "engine-parser.js:17860",
-    "engine-parser.js:17877",
-    "engine-parser.js:17879",
-    "engine-parser.js:17970",
-    "engine-parser.js:18655",
-    "engine-parser.js:18773",
-    "engine-parser.js:18901",
-    "engine-parser.js:19076",
-    "engine-parser.js:19086",
+    "engine-parser.js:17641",
+    "engine-parser.js:17875",
+    "engine-parser.js:17892",
+    "engine-parser.js:17894",
+    "engine-parser.js:17985",
+    "engine-parser.js:18670",
+    "engine-parser.js:18788",
+    "engine-parser.js:18916",
+    "engine-parser.js:19097",
+    "engine-parser.js:19107",
     "engine-parser.js:1912",
     "engine-parser.js:6476",
     "engine-parser.js:699",
-    "engine-parser.js:9063",
-    "engine-parser.js:9068",
-    "engine-parser.js:9719",
-    "engine-parser.js:9722",
+    "engine-parser.js:9069",
+    "engine-parser.js:9074",
+    "engine-parser.js:9734",
+    "engine-parser.js:9737",
     "engine-play.js:1416",
     "engine-play.js:224",
     "engine-play.js:242",
@@ -75119,9 +75119,9 @@
     "engine-play.js:6448",
     "engine-play.js:6632",
     "engine-play.js:707",
-    "engine-systems.js:11692",
-    "engine-systems.js:12109",
-    "engine-systems.js:12121",
+    "engine-systems.js:11693",
+    "engine-systems.js:12110",
+    "engine-systems.js:12122",
     "engine-systems.js:2665",
     "engine-systems.js:2692",
     "engine-systems.js:2951",
@@ -75131,17 +75131,17 @@
     "engine-systems.js:3843",
     "engine-systems.js:4578",
     "engine-systems.js:4639",
-    "engine-systems.js:4773",
-    "engine-systems.js:5250",
-    "engine-systems.js:5589",
+    "engine-systems.js:4774",
+    "engine-systems.js:5251",
+    "engine-systems.js:5590",
     "engine-systems.js:570",
     "engine-systems.js:613",
-    "engine-systems.js:6509",
+    "engine-systems.js:6510",
     "engine-systems.js:657",
     "engine-systems.js:714",
-    "engine-systems.js:7204",
+    "engine-systems.js:7205",
     "engine-systems.js:899",
-    "engine-systems.js:9305"
+    "engine-systems.js:9306"
    ],
    "reqFlagOf": [
     "covers",
@@ -75172,33 +75172,33 @@
     "tan#44"
    ],
    "setByEngine": [
-    "engine-parser.js:18816",
+    "engine-parser.js:18831",
     "engine-play.js:6838",
     "engine-play.js:6956",
-    "engine-systems.js:12122",
-    "engine-systems.js:12165"
+    "engine-systems.js:12123",
+    "engine-systems.js:12166"
    ]
   },
   {
    "name": "affairBegun",
    "setByEngine": [
-    "engine-systems.js:8916"
+    "engine-systems.js:8917"
    ]
   },
   {
    "name": "affairOffered",
    "readByEngine": [
-    "engine-parser.js:15201",
-    "engine-systems.js:9158"
+    "engine-parser.js:15216",
+    "engine-systems.js:9159"
    ],
    "setByEngine": [
-    "engine-systems.js:9095"
+    "engine-systems.js:9096"
    ]
   },
   {
    "name": "affairWon",
    "setByEngine": [
-    "engine-systems.js:9177"
+    "engine-systems.js:9178"
    ]
   },
   {
@@ -75206,7 +75206,7 @@
    "readByEngine": [
     "engine-play.js:613",
     "engine-play.js:650",
-    "engine-systems.js:11555"
+    "engine-systems.js:11556"
    ],
    "requiredBy": [
     "mort#13"
@@ -75232,8 +75232,8 @@
    "readByEngine": [
     "engine-parser.js:5994",
     "engine-parser.js:6063",
-    "engine-systems.js:10224",
-    "engine-systems.js:9587"
+    "engine-systems.js:10225",
+    "engine-systems.js:9588"
    ],
    "setByEngine": [
     "engine-parser.js:6068"
@@ -75270,13 +75270,13 @@
     "world.js:13164"
    ],
    "readByEngine": [
-    "engine-systems.js:10141",
-    "engine-systems.js:10184",
-    "engine-systems.js:10412",
-    "engine-systems.js:7891"
+    "engine-systems.js:10142",
+    "engine-systems.js:10185",
+    "engine-systems.js:10413",
+    "engine-systems.js:7892"
    ],
    "setByEngine": [
-    "engine-systems.js:10114"
+    "engine-systems.js:10115"
    ]
   },
   {
@@ -75296,10 +75296,10 @@
     "engine-parser.js:4317",
     "engine-play.js:6377",
     "engine-play.js:6384",
-    "engine-systems.js:10461",
-    "engine-systems.js:7605",
-    "engine-systems.js:9360",
-    "engine-systems.js:9698"
+    "engine-systems.js:10462",
+    "engine-systems.js:7606",
+    "engine-systems.js:9361",
+    "engine-systems.js:9699"
    ],
    "requiredBy": [
     "candy#25",
@@ -75310,8 +75310,8 @@
     "bert#67"
    ],
    "setByEngine": [
-    "engine-systems.js:10115",
-    "engine-systems.js:9178"
+    "engine-systems.js:10116",
+    "engine-systems.js:9179"
    ]
   },
   {
@@ -75336,9 +75336,9 @@
     "engine-parser.js:8520",
     "engine-parser.js:8537",
     "engine-parser.js:8557",
-    "engine-systems.js:10193",
-    "engine-systems.js:10198",
-    "engine-systems.js:9371"
+    "engine-systems.js:10194",
+    "engine-systems.js:10199",
+    "engine-systems.js:9372"
    ],
    "reqFlagOf": [
     "bar_opening"
@@ -75350,7 +75350,7 @@
     "nont#35"
    ],
    "setByEngine": [
-    "engine-systems.js:9388"
+    "engine-systems.js:9389"
    ]
   },
   {
@@ -75366,10 +75366,10 @@
     "world.js:13091"
    ],
    "readByEngine": [
-    "engine-systems.js:10195",
-    "engine-systems.js:7894",
-    "engine-systems.js:8499",
-    "engine-systems.js:9371"
+    "engine-systems.js:10196",
+    "engine-systems.js:7895",
+    "engine-systems.js:8500",
+    "engine-systems.js:9372"
    ],
    "requiredBy": [
     "bert#66",
@@ -75377,7 +75377,7 @@
     "candy#27"
    ],
    "setByEngine": [
-    "engine-systems.js:8500"
+    "engine-systems.js:8501"
    ]
   },
   {
@@ -75404,20 +75404,20 @@
    ],
    "readByEngine": [
     "engine-core.js:1995",
-    "engine-parser.js:15201",
+    "engine-parser.js:15216",
     "engine-play.js:4530",
-    "engine-systems.js:10180",
-    "engine-systems.js:7888",
-    "engine-systems.js:9153"
+    "engine-systems.js:10181",
+    "engine-systems.js:7889",
+    "engine-systems.js:9154"
    ],
    "setByEngine": [
-    "engine-systems.js:9177"
+    "engine-systems.js:9178"
    ]
   },
   {
    "name": "beatBargirlC4",
    "readByEngine": [
-    "engine-systems.js:12136"
+    "engine-systems.js:12137"
    ],
    "setByEngine": [
     "engine-play.js:1751"
@@ -75433,7 +75433,7 @@
     "bee#5"
    ],
    "setByEngine": [
-    "engine-systems.js:4961"
+    "engine-systems.js:4962"
    ]
   },
   {
@@ -75464,13 +75464,13 @@
   {
    "name": "bertFreeBeer",
    "readByEngine": [
-    "engine-parser.js:10354"
+    "engine-parser.js:10369"
    ],
    "setByDialogue": [
     "bert#33"
    ],
    "setByEngine": [
-    "engine-parser.js:10355"
+    "engine-parser.js:10370"
    ]
   },
   {
@@ -75482,16 +75482,16 @@
    "readByEngine": [
     "engine-encounters.js:1098",
     "engine-systems.js:3613",
-    "engine-systems.js:5455",
-    "engine-systems.js:5654",
-    "engine-systems.js:5662"
+    "engine-systems.js:5456",
+    "engine-systems.js:5655",
+    "engine-systems.js:5663"
    ],
    "requiredBy": [
     "colin#3"
    ],
    "setByEngine": [
-    "engine-systems.js:5495",
-    "engine-systems.js:5504"
+    "engine-systems.js:5496",
+    "engine-systems.js:5505"
    ]
   },
   {
@@ -75506,7 +75506,7 @@
     "fast_eddy#13"
    ],
    "setByEngine": [
-    "engine-parser.js:9488"
+    "engine-parser.js:9503"
    ]
   },
   {
@@ -75525,11 +75525,11 @@
   {
    "name": "burnerUsed",
    "readByEngine": [
-    "engine-systems.js:12897",
-    "engine-systems.js:12955"
+    "engine-systems.js:12898",
+    "engine-systems.js:12956"
    ],
    "setByEngine": [
-    "engine-systems.js:12886"
+    "engine-systems.js:12887"
    ]
   },
   {
@@ -75562,42 +75562,42 @@
     "world.js:9767"
    ],
    "readByEngine": [
-    "engine-systems.js:12997",
-    "engine-systems.js:13024",
-    "engine-systems.js:13049",
-    "engine-systems.js:13064"
+    "engine-systems.js:12998",
+    "engine-systems.js:13025",
+    "engine-systems.js:13050",
+    "engine-systems.js:13065"
    ],
    "setByEngine": [
-    "engine-systems.js:12999"
+    "engine-systems.js:13000"
    ]
   },
   {
    "name": "ccibLanded",
    "readByEngine": [
-    "engine-systems.js:13050",
-    "engine-systems.js:13064",
-    "engine-systems.js:13086"
+    "engine-systems.js:13051",
+    "engine-systems.js:13065",
+    "engine-systems.js:13087"
    ],
    "requiredBy": [
     "tan#28"
    ],
    "setByEngine": [
-    "engine-systems.js:13087"
+    "engine-systems.js:13088"
    ]
   },
   {
    "name": "ccibLoudAfter",
    "readByEngine": [
-    "engine-systems.js:13051"
+    "engine-systems.js:13052"
    ],
    "setByEngine": [
-    "engine-systems.js:13051"
+    "engine-systems.js:13052"
    ]
   },
   {
    "name": "ccibRadarSet",
    "setByEngine": [
-    "engine-systems.js:12988"
+    "engine-systems.js:12989"
    ]
   },
   {
@@ -75608,7 +75608,7 @@
     "world.js:9781"
    ],
    "readByEngine": [
-    "engine-systems.js:13010"
+    "engine-systems.js:13011"
    ],
    "setByDialogue": [
     "tan#29",
@@ -75618,20 +75618,20 @@
   {
    "name": "ccibSecondCoffee",
    "readByEngine": [
-    "engine-systems.js:13064",
-    "engine-systems.js:13093"
+    "engine-systems.js:13065",
+    "engine-systems.js:13094"
    ],
    "setByEngine": [
-    "engine-systems.js:13068"
+    "engine-systems.js:13069"
    ]
   },
   {
    "name": "ccibSecondLook",
    "readByEngine": [
-    "engine-systems.js:13010"
+    "engine-systems.js:13011"
    ],
    "setByEngine": [
-    "engine-systems.js:13012"
+    "engine-systems.js:13013"
    ]
   },
   {
@@ -75646,63 +75646,63 @@
     "world.js:9767"
    ],
    "readByEngine": [
-    "engine-parser.js:11367",
-    "engine-systems.js:12917",
-    "engine-systems.js:12997",
-    "engine-systems.js:13024",
-    "engine-systems.js:13049",
-    "engine-systems.js:13064",
+    "engine-parser.js:11382",
+    "engine-systems.js:12918",
+    "engine-systems.js:12998",
+    "engine-systems.js:13025",
+    "engine-systems.js:13050",
+    "engine-systems.js:13065",
     "engine-systems.js:4010"
    ],
    "setByEngine": [
-    "engine-systems.js:12923"
+    "engine-systems.js:12924"
    ]
   },
   {
    "name": "chamAsked",
    "readByEngine": [
-    "engine-systems.js:5310"
+    "engine-systems.js:5311"
    ],
    "setByEngine": [
-    "engine-systems.js:5341",
-    "engine-systems.js:5356"
+    "engine-systems.js:5342",
+    "engine-systems.js:5357"
    ]
   },
   {
    "name": "chamDone",
    "readByEngine": [
-    "engine-systems.js:5252",
-    "engine-systems.js:5310"
+    "engine-systems.js:5253",
+    "engine-systems.js:5311"
    ],
    "requiredBy": [
     "cream#0"
    ],
    "setByEngine": [
-    "engine-systems.js:5406"
+    "engine-systems.js:5407"
    ]
   },
   {
    "name": "chamSlip",
    "readByEngine": [
-    "engine-systems.js:5437"
+    "engine-systems.js:5438"
    ],
    "setByEngine": [
-    "engine-systems.js:5438"
+    "engine-systems.js:5439"
    ]
   },
   {
    "name": "clozeGot",
    "readByEngine": [
-    "engine-systems.js:12429"
+    "engine-systems.js:12430"
    ],
    "setByEngine": [
-    "engine-systems.js:12430"
+    "engine-systems.js:12431"
    ]
   },
   {
    "name": "coversCounted",
    "readByEngine": [
-    "engine-parser.js:17520",
+    "engine-parser.js:17535",
     "engine-systems.js:3919"
    ],
    "requiredBy": [
@@ -75767,17 +75767,17 @@
     "nont#23"
    ],
    "setByEngine": [
-    "engine-parser.js:9502"
+    "engine-parser.js:9517"
    ]
   },
   {
    "name": "ctfRabbit",
    "readByEngine": [
-    "engine-parser.js:19079",
-    "engine-systems.js:11717"
+    "engine-parser.js:19100",
+    "engine-systems.js:11718"
    ],
    "setByEngine": [
-    "engine-systems.js:11723"
+    "engine-systems.js:11724"
    ]
   },
   {
@@ -75868,7 +75868,7 @@
    "readByEngine": [
     "engine-encounters.js:1098",
     "engine-systems.js:3245",
-    "engine-systems.js:5455"
+    "engine-systems.js:5456"
    ],
    "reqFlagOf": [
     "bar_licence",
@@ -75895,11 +75895,11 @@
   {
    "name": "fed26",
    "readByEngine": [
-    "engine-parser.js:9642",
+    "engine-parser.js:9657",
     "engine-play.js:4356"
    ],
    "setByEngine": [
-    "engine-parser.js:9644"
+    "engine-parser.js:9659"
    ]
   },
   {
@@ -75933,7 +75933,7 @@
    ],
    "name": "fiftyoneSigned",
    "readByEngine": [
-    "engine-parser.js:9460",
+    "engine-parser.js:9475",
     "engine-systems.js:3892"
    ],
    "requiredBy": [
@@ -76002,21 +76002,21 @@
   {
    "name": "gotBusFare",
    "readByEngine": [
-    "engine-parser.js:9719"
+    "engine-parser.js:9734"
    ],
    "requiredBy": [
     "nok#0"
    ],
    "setByEngine": [
-    "engine-parser.js:9720",
-    "engine-parser.js:9737"
+    "engine-parser.js:9735",
+    "engine-parser.js:9752"
    ]
   },
   {
    "name": "greetedFon",
    "readByEngine": [
     "engine-parser.js:8916",
-    "engine-systems.js:12134"
+    "engine-systems.js:12135"
    ],
    "requiredBy": [
     "fon#3",
@@ -76048,7 +76048,7 @@
    ],
    "setByEngine": [
     "engine-play.js:6528",
-    "engine-systems.js:10808",
+    "engine-systems.js:10809",
     "engine-systems.js:3095"
    ]
   },
@@ -76507,16 +76507,16 @@
    "readByEngine": [
     "engine-parser.js:1171",
     "engine-parser.js:1199",
-    "engine-parser.js:13277",
-    "engine-parser.js:13336",
-    "engine-parser.js:13347",
+    "engine-parser.js:13292",
+    "engine-parser.js:13351",
+    "engine-parser.js:13362",
     "engine-parser.js:1726",
-    "engine-parser.js:17286",
+    "engine-parser.js:17301",
     "engine-parser.js:1920",
     "engine-parser.js:2458",
     "engine-parser.js:5451",
     "engine-play.js:6468",
-    "engine-systems.js:12121",
+    "engine-systems.js:12122",
     "engine-systems.js:1531",
     "engine-systems.js:3036",
     "engine-systems.js:3067",
@@ -76533,7 +76533,7 @@
     "oy#1"
    ],
    "setByEngine": [
-    "engine-parser.js:18815",
+    "engine-parser.js:18830",
     "engine-parser.js:1925",
     "engine-play.js:6839",
     "engine-play.js:6957"
@@ -76632,7 +76632,7 @@
    ],
    "name": "heardPriceStory",
    "readByEngine": [
-    "engine-parser.js:9642",
+    "engine-parser.js:9657",
     "engine-play.js:4354"
    ],
    "requiredBy": [
@@ -76677,11 +76677,11 @@
     "world.js:5778"
    ],
    "readByEngine": [
-    "engine-parser.js:11075",
-    "engine-parser.js:11268",
-    "engine-parser.js:11748",
+    "engine-parser.js:11090",
+    "engine-parser.js:11283",
+    "engine-parser.js:11763",
     "engine-play.js:512",
-    "engine-systems.js:12132"
+    "engine-systems.js:12133"
    ],
    "reqFlagOf": [
     "taxi_debt"
@@ -76696,14 +76696,14 @@
     "pim#1"
    ],
    "setByEngine": [
-    "engine-parser.js:10592",
-    "engine-parser.js:9468"
+    "engine-parser.js:10607",
+    "engine-parser.js:9483"
    ]
   },
   {
    "name": "hitJackpot",
    "readByEngine": [
-    "engine-systems.js:12137"
+    "engine-systems.js:12138"
    ],
    "setByEngine": [
     "engine-play.js:1897"
@@ -76747,7 +76747,7 @@
    "readByEngine": [
     "engine-parser.js:6015",
     "engine-play.js:7049",
-    "engine-systems.js:12962"
+    "engine-systems.js:12963"
    ],
    "requiredBy": [
     "fast_eddy#27",
@@ -76763,12 +76763,12 @@
   {
    "name": "jokeStop",
    "readByEngine": [
-    "engine-systems.js:5590",
-    "engine-systems.js:5622",
-    "engine-systems.js:5670"
+    "engine-systems.js:5591",
+    "engine-systems.js:5623",
+    "engine-systems.js:5671"
    ],
    "setByEngine": [
-    "engine-systems.js:5624"
+    "engine-systems.js:5625"
    ]
   },
   {
@@ -76779,12 +76779,12 @@
    ],
    "readByEngine": [
     "engine-systems.js:4443",
-    "engine-systems.js:5613",
-    "engine-systems.js:5617",
-    "engine-systems.js:5671"
+    "engine-systems.js:5614",
+    "engine-systems.js:5618",
+    "engine-systems.js:5672"
    ],
    "setByEngine": [
-    "engine-systems.js:5680"
+    "engine-systems.js:5681"
    ]
   },
   {
@@ -76816,7 +76816,7 @@
     "wimon#5"
    ],
    "setByEngine": [
-    "engine-parser.js:9527"
+    "engine-parser.js:9542"
    ]
   },
   {
@@ -76828,7 +76828,7 @@
     "nont#12"
    ],
    "setByEngine": [
-    "engine-systems.js:13286"
+    "engine-systems.js:13287"
    ]
   },
   {
@@ -76837,11 +76837,11 @@
     "world.js:12867"
    ],
    "readByEngine": [
-    "engine-parser.js:11367"
+    "engine-parser.js:11382"
    ],
    "setByEngine": [
-    "engine-systems.js:13260",
-    "engine-systems.js:13286"
+    "engine-systems.js:13261",
+    "engine-systems.js:13287"
    ]
   },
   {
@@ -76851,10 +76851,10 @@
     "world.js:12858"
    ],
    "readByEngine": [
-    "engine-systems.js:13222"
+    "engine-systems.js:13223"
    ],
    "setByEngine": [
-    "engine-systems.js:13190"
+    "engine-systems.js:13191"
    ]
   },
   {
@@ -76865,12 +76865,12 @@
     "world.js:9756"
    ],
    "readByEngine": [
-    "engine-parser.js:11367",
-    "engine-systems.js:12912",
+    "engine-parser.js:11382",
+    "engine-systems.js:12913",
     "engine-systems.js:4010"
    ],
    "setByEngine": [
-    "engine-systems.js:13190"
+    "engine-systems.js:13191"
    ]
   },
   {
@@ -76918,7 +76918,7 @@
    ],
    "name": "knowMot",
    "readByEngine": [
-    "engine-parser.js:10588",
+    "engine-parser.js:10603",
     "engine-systems.js:3031",
     "engine-systems.js:3123",
     "engine-systems.js:4581"
@@ -76937,7 +76937,7 @@
     "candy#12"
    ],
    "setByEngine": [
-    "engine-parser.js:10589"
+    "engine-parser.js:10604"
    ]
   },
   {
@@ -76982,7 +76982,7 @@
     "candy#20"
    ],
    "setByEngine": [
-    "engine-parser.js:10589",
+    "engine-parser.js:10604",
     "engine-parser.js:4460"
    ]
   },
@@ -77004,14 +77004,14 @@
     "world.js:13182"
    ],
    "readByEngine": [
-    "engine-systems.js:13234"
+    "engine-systems.js:13235"
    ],
    "requiredBy": [
     "bert#22",
     "kyle#0"
    ],
    "setByEngine": [
-    "engine-systems.js:13235"
+    "engine-systems.js:13236"
    ]
   },
   {
@@ -77033,16 +77033,16 @@
   {
    "name": "lakeFishEaten",
    "readByEngine": [
-    "engine-parser.js:10296"
+    "engine-parser.js:10311"
    ],
    "setByEngine": [
-    "engine-parser.js:10297"
+    "engine-parser.js:10312"
    ]
   },
   {
    "name": "lakeFishFree",
    "readByEngine": [
-    "engine-parser.js:10296"
+    "engine-parser.js:10311"
    ],
    "setByDialogue": [
     "duangjai#9"
@@ -77051,23 +77051,23 @@
   {
    "name": "lessonTaken",
    "readByEngine": [
-    "engine-systems.js:12502",
-    "engine-systems.js:12559",
-    "engine-systems.js:12572",
-    "engine-systems.js:12586"
+    "engine-systems.js:12503",
+    "engine-systems.js:12560",
+    "engine-systems.js:12573",
+    "engine-systems.js:12587"
    ],
    "setByEngine": [
-    "engine-systems.js:12503"
+    "engine-systems.js:12504"
    ]
   },
   {
    "name": "metPriew",
    "readByEngine": [
-    "engine-parser.js:11793",
-    "engine-parser.js:11820"
+    "engine-parser.js:11808",
+    "engine-parser.js:11835"
    ],
    "setByEngine": [
-    "engine-parser.js:11795"
+    "engine-parser.js:11810"
    ]
   },
   {
@@ -77097,41 +77097,41 @@
    ],
    "name": "motBooted",
    "readByEngine": [
-    "engine-parser.js:19142"
+    "engine-parser.js:19163"
    ],
    "requiredBy": [
     "mot#3"
    ],
    "setByEngine": [
-    "engine-parser.js:19162"
+    "engine-parser.js:19183"
    ]
   },
   {
    "name": "motBootsTold",
    "readByEngine": [
-    "engine-parser.js:19150"
+    "engine-parser.js:19171"
    ],
    "setByDialogue": [
     "mot#2"
    ],
    "setByEngine": [
-    "engine-parser.js:19197"
+    "engine-parser.js:19218"
    ]
   },
   {
    "name": "motFed",
    "readByEngine": [
-    "engine-parser.js:15128",
-    "engine-parser.js:18596",
-    "engine-parser.js:19150",
-    "engine-parser.js:19181",
+    "engine-parser.js:15143",
+    "engine-parser.js:18611",
+    "engine-parser.js:19171",
+    "engine-parser.js:19202",
     "engine-systems.js:664"
    ],
    "requiredBy": [
     "mot#2"
    ],
    "setByEngine": [
-    "engine-parser.js:19193"
+    "engine-parser.js:19214"
    ]
   },
   {
@@ -77161,10 +77161,10 @@
   {
    "name": "nokFare",
    "readByEngine": [
-    "engine-parser.js:9722"
+    "engine-parser.js:9737"
    ],
    "setByEngine": [
-    "engine-parser.js:9737"
+    "engine-parser.js:9752"
    ]
   },
   {
@@ -77270,7 +77270,7 @@
    "name": "orchidVouched",
    "readByEngine": [
     "engine-core.js:1994",
-    "engine-parser.js:13660",
+    "engine-parser.js:13675",
     "engine-play.js:3825"
    ],
    "requiredBy": [
@@ -77290,31 +77290,31 @@
   {
    "name": "owlAmulet",
    "readByEngine": [
-    "engine-systems.js:11555"
+    "engine-systems.js:11556"
    ],
    "setByEngine": [
-    "engine-systems.js:11556"
+    "engine-systems.js:11557"
    ]
   },
   {
    "name": "owlBox15",
    "readByEngine": [
-    "engine-parser.js:19078",
-    "engine-systems.js:11598"
+    "engine-parser.js:19099",
+    "engine-systems.js:11599"
    ],
    "setByEngine": [
-    "engine-systems.js:11599"
+    "engine-systems.js:11600"
    ]
   },
   {
    "name": "ownPhoneUsed",
    "readByEngine": [
-    "engine-parser.js:18554",
-    "engine-systems.js:12899",
-    "engine-systems.js:12955"
+    "engine-parser.js:18569",
+    "engine-systems.js:12900",
+    "engine-systems.js:12956"
    ],
    "setByEngine": [
-    "engine-parser.js:18555"
+    "engine-parser.js:18570"
    ]
   },
   {
@@ -77325,8 +77325,8 @@
    ],
    "name": "oyGaveWallet",
    "readByEngine": [
-    "engine-systems.js:12128",
-    "engine-systems.js:12159"
+    "engine-systems.js:12129",
+    "engine-systems.js:12160"
    ],
    "setByDialogue": [
     "oy#1"
@@ -77350,9 +77350,9 @@
    ],
    "readByEngine": [
     "engine-parser.js:8514",
-    "engine-systems.js:10277",
+    "engine-systems.js:10278",
     "engine-systems.js:3323",
-    "engine-systems.js:8052"
+    "engine-systems.js:8053"
    ],
    "requiredBy": [
     "bert#66",
@@ -77360,7 +77360,7 @@
     "candy#28"
    ],
    "setByEngine": [
-    "engine-systems.js:8511"
+    "engine-systems.js:8512"
    ]
   },
   {
@@ -77374,13 +77374,13 @@
     "engine-core.js:961",
     "engine-parser.js:2812",
     "engine-parser.js:8513",
-    "engine-systems.js:10052",
-    "engine-systems.js:10102",
-    "engine-systems.js:10461",
+    "engine-systems.js:10053",
+    "engine-systems.js:10103",
+    "engine-systems.js:10462",
     "engine-systems.js:3324",
     "engine-systems.js:4677",
-    "engine-systems.js:7605",
-    "engine-systems.js:9176"
+    "engine-systems.js:7606",
+    "engine-systems.js:9177"
    ],
    "requiredBy": [
     "bert#67",
@@ -77391,7 +77391,7 @@
     "tan#13"
    ],
    "setByEngine": [
-    "engine-systems.js:8502"
+    "engine-systems.js:8503"
    ]
   },
   {
@@ -77432,7 +77432,7 @@
   {
    "name": "pinPart71",
    "readByEngine": [
-    "engine-systems.js:12141",
+    "engine-systems.js:12142",
     "engine-systems.js:3034"
    ],
    "setByDialogue": [
@@ -77446,8 +77446,8 @@
    ],
    "name": "pinPart9",
    "readByEngine": [
-    "engine-parser.js:10591",
-    "engine-systems.js:12141",
+    "engine-parser.js:10606",
+    "engine-systems.js:12142",
     "engine-systems.js:3035"
    ],
    "setByDialogue": [
@@ -77586,23 +77586,23 @@
   {
    "name": "priewRevealed",
    "readByEngine": [
-    "engine-parser.js:11820",
+    "engine-parser.js:11835",
     "engine-systems.js:4431",
-    "engine-systems.js:4907",
-    "engine-systems.js:5781"
+    "engine-systems.js:4908",
+    "engine-systems.js:5782"
    ],
    "setByEngine": [
-    "engine-parser.js:11823"
+    "engine-parser.js:11838"
    ]
   },
   {
    "name": "probeArmed",
    "readByEngine": [
-    "engine-systems.js:11686",
-    "engine-systems.js:11691"
+    "engine-systems.js:11687",
+    "engine-systems.js:11692"
    ],
    "setByEngine": [
-    "engine-systems.js:11687"
+    "engine-systems.js:11688"
    ]
   },
   {
@@ -77633,7 +77633,7 @@
     "engine-parser.js:1084"
    ],
    "setByEngine": [
-    "engine-systems.js:12849"
+    "engine-systems.js:12850"
    ]
   },
   {
@@ -77658,10 +77658,10 @@
     "engine-parser.js:1084",
     "engine-parser.js:1085",
     "engine-parser.js:1404",
-    "engine-parser.js:14923",
+    "engine-parser.js:14938",
     "engine-parser.js:4357",
-    "engine-systems.js:12917",
-    "engine-systems.js:13222"
+    "engine-systems.js:12918",
+    "engine-systems.js:13223"
    ],
    "requiredBy": [
     "fast_eddy#11",
@@ -77673,8 +77673,8 @@
    ],
    "setByEngine": [
     "engine-play.js:7063",
-    "engine-systems.js:12801",
-    "engine-systems.js:13223"
+    "engine-systems.js:12802",
+    "engine-systems.js:13224"
    ]
   },
   {
@@ -77697,10 +77697,10 @@
     "fast_eddy#33"
    ],
    "setByEngine": [
-    "engine-systems.js:12680",
-    "engine-systems.js:12701",
-    "engine-systems.js:13142",
-    "engine-systems.js:13214"
+    "engine-systems.js:12681",
+    "engine-systems.js:12702",
+    "engine-systems.js:13143",
+    "engine-systems.js:13215"
    ]
   },
   {
@@ -77743,10 +77743,10 @@
   {
    "name": "roomSafeOpened",
    "readByEngine": [
-    "engine-systems.js:12109"
+    "engine-systems.js:12110"
    ],
    "setByEngine": [
-    "engine-systems.js:12111"
+    "engine-systems.js:12112"
    ]
   },
   {
@@ -77790,25 +77790,25 @@
    ],
    "name": "sangsomDelivered",
    "setByEngine": [
-    "engine-parser.js:9551"
+    "engine-parser.js:9566"
    ]
   },
   {
    "name": "sawBalcony",
    "readByEngine": [
-    "engine-systems.js:7425"
+    "engine-systems.js:7426"
    ],
    "setByEngine": [
-    "engine-systems.js:7426"
+    "engine-systems.js:7427"
    ]
   },
   {
    "name": "sawBuddhaHill",
    "readByEngine": [
-    "engine-systems.js:7386"
+    "engine-systems.js:7387"
    ],
    "setByEngine": [
-    "engine-systems.js:7387"
+    "engine-systems.js:7388"
    ]
   },
   {
@@ -77826,7 +77826,7 @@
     "mala#0"
    ],
    "setByEngine": [
-    "engine-parser.js:9539"
+    "engine-parser.js:9554"
    ]
   },
   {
@@ -77846,13 +77846,13 @@
    "readByEngine": [
     "engine-core.js:2498",
     "engine-play.js:6706",
-    "engine-systems.js:10867"
+    "engine-systems.js:10868"
    ],
    "requiredBy": [
     "bert#25"
    ],
    "setByEngine": [
-    "engine-systems.js:10868"
+    "engine-systems.js:10869"
    ]
   },
   {
@@ -77864,20 +77864,20 @@
   {
    "name": "simUsed",
    "readByEngine": [
-    "engine-systems.js:12897",
-    "engine-systems.js:12911"
+    "engine-systems.js:12898",
+    "engine-systems.js:12912"
    ],
    "setByEngine": [
-    "engine-systems.js:12885"
+    "engine-systems.js:12886"
    ]
   },
   {
    "name": "soidogTexted",
    "readByEngine": [
-    "engine-systems.js:5061"
+    "engine-systems.js:5062"
    ],
    "setByEngine": [
-    "engine-systems.js:5064"
+    "engine-systems.js:5065"
    ]
   },
   {
@@ -77887,7 +77887,7 @@
    ],
    "name": "somTamAccepted",
    "readByEngine": [
-    "engine-systems.js:12078"
+    "engine-systems.js:12079"
    ],
    "requiredBy": [
     "candy#11"
@@ -77908,14 +77908,14 @@
    ],
    "name": "somTamDelivered",
    "readByEngine": [
-    "engine-systems.js:12078",
-    "engine-systems.js:12133"
+    "engine-systems.js:12079",
+    "engine-systems.js:12134"
    ],
    "requiredBy": [
     "ploy#0"
    ],
    "setByEngine": [
-    "engine-parser.js:9520"
+    "engine-parser.js:9535"
    ]
   },
   {
@@ -77930,14 +77930,14 @@
   {
    "name": "tanAsked",
    "readByEngine": [
-    "engine-systems.js:10468",
-    "engine-systems.js:7605"
+    "engine-systems.js:10469",
+    "engine-systems.js:7606"
    ],
    "requiredBy": [
     "tan#12"
    ],
    "setByEngine": [
-    "engine-systems.js:7610"
+    "engine-systems.js:7611"
    ]
   },
   {
@@ -77946,14 +77946,14 @@
    ],
    "name": "tanCoffee",
    "readByEngine": [
-    "engine-parser.js:10060"
+    "engine-parser.js:10075"
    ],
    "requiredBy": [
     "tan#39",
     "tan#40"
    ],
    "setByEngine": [
-    "engine-parser.js:10060"
+    "engine-parser.js:10075"
    ]
   },
   {
@@ -77971,7 +77971,7 @@
     "tan#8"
    ],
    "setByEngine": [
-    "engine-systems.js:7658"
+    "engine-systems.js:7659"
    ]
   },
   {
@@ -77986,7 +77986,7 @@
     "tan#9"
    ],
    "setByEngine": [
-    "engine-systems.js:7681"
+    "engine-systems.js:7682"
    ]
   },
   {
@@ -77998,13 +77998,13 @@
     "nont#13"
    ],
    "setByEngine": [
-    "engine-systems.js:13260"
+    "engine-systems.js:13261"
    ]
   },
   {
    "name": "tanKidRefused",
    "setByEngine": [
-    "engine-systems.js:13271"
+    "engine-systems.js:13272"
    ]
   },
   {
@@ -78014,16 +78014,16 @@
     "world.js:9871"
    ],
    "readByEngine": [
-    "engine-systems.js:10849"
+    "engine-systems.js:10850"
    ],
    "setByEngine": [
-    "engine-systems.js:10850"
+    "engine-systems.js:10851"
    ]
   },
   {
    "name": "tanSuspected",
    "readByEngine": [
-    "engine-systems.js:10848"
+    "engine-systems.js:10849"
    ],
    "setByDialogue": [
     "tan#46"
@@ -78053,7 +78053,7 @@
     "nont#24"
    ],
    "setByEngine": [
-    "engine-parser.js:9511"
+    "engine-parser.js:9526"
    ]
   },
   {
@@ -78140,27 +78140,27 @@
   {
    "name": "waenChild",
    "readByEngine": [
-    "engine-systems.js:12572"
+    "engine-systems.js:12573"
    ],
    "setByEngine": [
-    "engine-systems.js:12573"
+    "engine-systems.js:12574"
    ]
   },
   {
    "name": "waenLink",
    "readByEngine": [
-    "engine-systems.js:12559",
-    "engine-systems.js:12586"
+    "engine-systems.js:12560",
+    "engine-systems.js:12587"
    ],
    "setByEngine": [
-    "engine-systems.js:12560"
+    "engine-systems.js:12561"
    ]
   },
   {
    "name": "waiedOy",
    "readByEngine": [
     "engine-parser.js:8906",
-    "engine-systems.js:12135"
+    "engine-systems.js:12136"
    ],
    "requiredBy": [
     "oy#1",
@@ -78225,11 +78225,11 @@
   {
    "name": "wrongNumberSent",
    "readByEngine": [
-    "engine-systems.js:11686",
-    "engine-systems.js:11691"
+    "engine-systems.js:11687",
+    "engine-systems.js:11692"
    ],
    "setByEngine": [
-    "engine-systems.js:11694"
+    "engine-systems.js:11695"
    ]
   },
   {

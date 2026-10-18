@@ -4697,6 +4697,7 @@ function _tanCall() {
     redundancy: "whether the redundancy money is lasting", running: "whether the town is far enough away yet",
     business: "how the investing is going, in a voice that has seen investors", married: "after your wife's family",
     monger: "whether the town is still everything you remembered", nomad: "whether anybody has taken you seriously yet",
+    halfthai: "whether the town has decided yet what you are",
     charmer: "how many hearts, roughly, and laughs before you can answer" };
   _say(_fmt(_pickVary(_TAN_RIDE_LINES, "tanride"), { tanask: _TAN_ASK[(G.player || {}).origin] || "how the week is treating you" }));
   if (G.dog) _say(_dogN("Sai Krok gets the back seat without discussion, arranges himself " +

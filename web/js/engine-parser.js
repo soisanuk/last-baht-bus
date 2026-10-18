@@ -9048,8 +9048,14 @@ const _THAI_PRAISE = [
 const THAI_FLUENT = 10;                       // distinct points before the town stops performing
 function _thaiPoints() {
   const d = G.thaiSaid ? Object.keys(G.thaiSaid).length : 0;
-  return d + (G.thaiScript || 0);             // script counts twice: once as a phrase, once here
+  // kitchen Thai: the luk khrueng starts where the room already answers him in English (the adequate register)
+  return d + (G.thaiScript || 0) + (typeof _isOrigin === "function" && _isOrigin("halfthai") ? 3 : 0);             // script counts twice: once as a phrase, once here
 }
+const _HALF_THAI_CLOCKED = [
+  "{n} stops, hearing it. \"Khon Thai?\" A look at your face, then your shoes. \"Luk khrueng, na. Your mother — from where?\" And then, kindly, in English, because the question has told her which language you live in.",
+  "\"Oh — you are half.\" {n} says it as a fact, the way the town says everything about where a person is from. \"The Thai is from your mama's kitchen, I think. Okay. English is easier for you, I can hear it.\" No fuss is made, which is the compliment.",
+  "{n} tilts her head at the accent under the Thai. \"Luk khrueng.\" Not a question. \"Your mama Thai, your papa farang — you grow up outside. I know this one.\" She switches to English without being asked, which is a kindness and a decision.",
+];
 function _thaiFluent() { return _thaiPoints() >= THAI_FLUENT; }
 // what a Thai character does with your Thai: nothing (a stranger), the polite
 // switch to English (adequate), or actually talking to you (fluent)
@@ -9076,6 +9082,15 @@ function _thaiPraise(key) {
   // while you are still a novelty; when they stop saying it and simply talk to
   // you, differently, that is the whole reward — and on the floor it comes with
   // the wariness (_THAI_SPY), because now you can hear the room.
+  // a luk khrueng is not told "poot Thai geng" — he is clocked, once, and answered in English from then on
+  if (typeof _isOrigin === "function" && _isOrigin("halfthai")) {
+    if (G.halfThaiClocked) return;
+    const partner = typeof _convoActive === "function" && _convoActive();
+    const who = (partner && here.includes(partner)) ? partner : here[0];
+    G.halfThaiClocked = true;
+    _say(_genderLine(_fmt(_pickVary(_HALF_THAI_CLOCKED, "halfthai"), { n: NPCS[who].name }), who), "dim");
+    return;
+  }
   if (_thaiFluent()) {
     const girl = here.find(x => NPC_ROLES[x] === "hostess");
     if (girl && !G.thaiSpyDone) {   // ONCE: it was per-night soc state, and fired on nights two and four (Nattapong, round 56)
@@ -18999,7 +19014,13 @@ function _introAnswer(input) {
   // A passenger who answers in Thai is answered in Thai — once — and then steered back to English: the game keeps
   // ONE language path (Mario, 2026-10-14, after Thomas in round 92 got "a number, my friend" to fluent Thai). Tan
   // has a reason the town will share: out here you are a farang whatever you say, and he paid for the English.
-  if (/[\u0E00-\u0E7F]/.test(input || "") && !G.player.tanThai) {
+  if (/[\u0E00-\u0E7F]/.test(input || "") && !G.player.tanThai && (G.player.origin === "halfthai" || (pick && pick.id === "halfthai"))) {
+    // a luk khrueng's Thai is not a farang's party trick: no compliment, no "farang whatever you say" (Mario, 2026-10-18)
+    G.player.tanThai = true;
+    _say("“Kitchen Thai.” Tan hears it in a word and does not make a fuss of it, which is its own compliment. " +
+      "“Your mother's, na? Good. But in this car we speak English — your Thai is for her, mine cost me six years in Ohio.” " +
+      "A glance in the mirror. “Out there, English anyway. A man who understands too much pays a different price, and nobody tells him which.”");
+  } else if (/[\u0E00-\u0E7F]/.test(input || "") && !G.player.tanThai) {
     G.player.tanThai = true;
     _say("“โอ้โห — พูดไทยเก่งมาก!” (Wow — your Thai is very good!) For the first time Tan looks at you properly in the mirror. " +
       "“Okay, okay. But in this car we speak English, na. Six years in Ohio I paid for it, I don't waste it on a man who already knows the words.” " +

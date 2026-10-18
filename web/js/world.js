@@ -17275,6 +17275,14 @@ const ORIGINS = [
   { id: "nomad", label: "The nomad",
     pick: "I'm location-independent — content, some crypto, a few projects. Honestly? Long-term I want to get into bar management. Seriously.",
     tan: "\"Bar management.\" He checks the mirror, not unkindly — filing you somewhere. \"Five years ago you all said 'content'. Before that, 'crypto'. The word changes, my friend; the seat of my taxi does not.\" At the lights, the one free piece of advice: \"A bar is not content. A bar is ice, and a blocked toilet at ten o'clock, and knowing which customer gets no more drink. Nobody in this town cares who follows you.\" The lights change. \"But you came to the right dirty town to learn it, na. Start by carrying something.\"" },
+  // The half-Thai player (Mario, 2026-10-18, after a Thai-born persona was called farang all week and told "in this
+  // car we speak English"): a Thai mother, grown up in Perth, kitchen Thai and a Thai face on a foreign passport, back
+  // on his own money for the first time. Appended LAST so the eight before keep their intro numbers. The minimum
+  // build: this entry, Tan's read, the canned answers, no "poot Thai geng" and the English-switch register from the
+  // start (_thaiPoints). His own Soi 6 character and the sweep of "farang" said to his face are the next pass.
+  { id: "halfthai", label: "The luk khrueng",
+    pick: "My mum's Thai — I grew up in Perth. Kitchen Thai, a Thai face, an Australian passport. First time back on my own money.",
+    tan: "\"Luk khrueng.\" He says it like a man reading a passport, and the mirror gets a second look. \"Face from here, voice from there. This town will not know what to do with you, my friend — too Thai for a farang, too farang for the Thai. The girls will decide by your shoes.\" At the lights: \"Your Thai is from a kitchen. Good. The kitchen is where the real Thai is. But out there, speak English anyway, na — a man who understands too much pays a different price, and nobody tells him which.\"" },
 ];
 
 // The same five ids also apply to NPCs: a hand-authored NPC may opt in with a
@@ -17366,6 +17374,7 @@ const ASK_REPLIES = {
     { origin: "married", text: "Buriram, half the year" },
     { origin: "monger", text: "Reading" },
     { origin: "nomad", text: "Austin, technically" },
+    { origin: "halfthai", text: "Perth, mostly" },
     { text: "Back home. It'll keep." },
   ],
   // what you do for a living — Belle's money-worry question, its own answer
@@ -17374,6 +17383,7 @@ const ASK_REPLIES = {
     { origin: "business", text: "I own a couple of things that own me back" },
     { origin: "pension", text: "Done working. The pension does the working now" },
     { origin: "nomad", text: "Content. Don't laugh" },
+    { origin: "halfthai", text: "The mines. Fly in, fly out" },
     { pers: "joker", text: "As little as I can get away with" },
     { text: "Getting by. Nobody home is worried" },
   ],
@@ -17409,6 +17419,7 @@ const ASK_REPLIES = {
     { origin: "pi", text: "Work, officially. Ask me again later" },
     { origin: "monger", text: "Same reason as last time" },
     { origin: "nomad", text: "Cheap rent and a laptop. Then I stayed" },
+    { origin: "halfthai", text: "My mother's country. First time on my own money" },
   ],
   finding: [
     { pers: "charmer", text: "Better than I came for" },
