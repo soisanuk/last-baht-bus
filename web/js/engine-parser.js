@@ -6229,6 +6229,11 @@ function _convoAnswer(text) {
   // telling her you are leaving is not an answer to her question (Steve: "i fly home in two days" was filed somewhere)
   if (typeof _LEAVING_RE !== "undefined" && _LEAVING_RE.test(String(text).toLowerCase()) && G.convoQ && NPCS[G.convoQ.id] &&
       typeof _leavingTalk === "function") { const _id = G.convoQ.id; G.convoQ = null; if (_leavingTalk(_id, text)) return true; }
+  // …nor is a feeling: "i miss you" (พี่คิดถึงน้อง) was kept as the name his mother called him (Anan, the Thai-only
+  // week). Her question gives way and the line is said to her, where the sentence reader answers it.
+  if (G.convoQ && typeof _heardBucket === "function" && /^(affection|back|return)$/.test(_heardBucket(String(text).toLowerCase()))) {
+    _convoDrop(true); return false;
+  }
   const { id, key } = G.convoQ;
   G.convoQ = null;
   const st = _npcState(id);
@@ -8688,7 +8693,12 @@ function _thaiPraise(key) {
     }
     return;
   }
-  const id = here.find(x => !G.soc.thaiPraised[x]);
+  // …and it comes from the woman you are TALKING to: while a conversation is open, nobody else in the room
+  // butts in to praise a sentence that was not said to her (Anan, the Thai-only week — Malai praised what he
+  // said to Kwan, and Bussaba and Numfon took turns praising what he said to Pukky)
+  const partner = typeof _convoActive === "function" && _convoActive();
+  const id = partner ? (here.includes(partner) && !G.soc.thaiPraised[partner] ? partner : null)
+    : here.find(x => !G.soc.thaiPraised[x]);
   if (!id) return;
   G.soc.thaiPraised[id] = true;
   _say(_fmt(_pickVary(_THAI_PRAISE, "thaipraise"), { n: NPCS[id].name }), "dim");
@@ -14836,6 +14846,23 @@ const _THAI_CMD = [
   ["รองเท้าแตะ", "sandals"], ["รองเท้า", "shoes"], ["ชุดชั้นใน", "lingerie"], ["คุยกับ", "talk to"], ["คุย", "talk"],
   ["ลงบันได", "down"], ["ขึ้นบันได", "up"], ["ลงไป", "down"], ["ลง", "down"], ["บันได", "stairs"],
   ["ออฟ", "barfine"], ["โอนเงิน", "send"], ["โอน", "send"], ["ราตรีสวัสดิ์", "goodnight"],
+  // …and the twenty-seven the trainer added after Anan's Thai-only week (2026-10-18, thaicab 2c8f750), with the
+  // compounds his failed lines needed (the table sorts longest-first, so a compound beats its parts): the barfine's
+  // two words, the ATM and the inbox, a drink bought for her, the shower, goodnight, the temple, the stairs, the
+  // beers by name, the toastie, a game, LINE, his age question (อายุเท่าไหร่ was the PRICE LIST), the leaving, and
+  // the forms of address a man uses to a younger woman — พี่ for himself, น้อง for her.
+  ["ชั่วคราว", "short time"], ["ค้างคืน", "long time"], ["ออฟชั่วคราว", "short time"], ["ออฟค้างคืน", "long time"],
+  ["กดเงิน", "withdraw"], ["ดูข้อความ", "check messages"], ["อ่านข้อความ", "check messages"],
+  ["เลี้ยง", "buy drink for"], ["อาบน้ำ", "shower"], ["ฝันดี", "goodnight"], ["บาย", "bye"], ["ไปก่อน", "bye"],
+  ["ทำบุญ", "temple"], ["วันพระ", "temple"], ["ไปวัด", "temple"],
+  ["ข้างล่าง", "down"], ["ข้างบน", "up"], ["ข้างนอก", "out"],
+  ["สิงห์", "singha"], ["ลีโอ", "leo"], ["แซนวิช", "toastie"], ["โทสต์", "toastie"], ["ขนมปังปิ้ง", "toastie"],
+  ["เล่นเกม", "play"], ["เกม", "play"], ["เพลง", "music"], ["ไลน์", "contact"], ["ขอไลน์", "contact"],
+  ["อายุเท่าไหร่", "how old are you?"], ["อายุกี่ปี", "how old are you?"],
+  ["น้องชื่ออะไร", "what's your name"], ["คุณชื่ออะไร", "what's your name"],
+  ["พรุ่งนี้กลับบ้าน", "i go home tomorrow"], ["พรุ่งนี้กลับ", "i go home tomorrow"],
+  ["คิดถึง", "miss"], ["พี่", "i"], ["น้อง", "you"],
+  ["อังกฤษ", "england"], ["ออสเตรเลีย", "australia"], ["โคราช", "korat"], ["มาจาก", "from"],
 ];
 // A word that is also a woman's name is the word after ABOUT: เรื่องฝน is the rain, not Fon (Thomas, round 92 —
 // it rained every night and nobody could be asked about it in Thai). Before ABOUT the name keeps it: ถามฝน is Fon.
@@ -14890,8 +14917,9 @@ function _thaiToCmd(s) {
     // a polite or soft particle standing as its own word is courtesy, not a command: เบียร์ค่ะ was
     // "the soi reads a little Thai — but not that" (2026-10-09, with the trainer's จ๊ะ). อันนี้ ("this
     // one") points, and pointing is not a verb: อันนี้เท่าไหร่ is HOW MUCH.
-    { const pt = rest.match(/^(นะคะ|นะครับ|ครับ|ค่ะ|คะ|จ๊ะ|นะ|อันนี้)/);
-      if (pt && (rest.length === pt[0].length || /^\s/.test(rest.slice(pt[0].length)) || pt[0] === "อันนี้" || /^(ค่ะ|คะ|ครับ|จ๊ะ|นะ)/.test(rest.slice(pt[0].length)) ||
+    // หน่อย ("a little", the softener on a request — ขอไลน์หน่อย) is courtesy too (Anan, the Thai-only week)
+    { const pt = rest.match(/^(นะคะ|นะครับ|หน่อย|ครับ|ค่ะ|คะ|จ๊ะ|นะ|อันนี้)/);
+      if (pt && (rest.length === pt[0].length || /^\s/.test(rest.slice(pt[0].length)) || pt[0] === "อันนี้" || /^(หน่อย|ค่ะ|คะ|ครับ|จ๊ะ|นะ)/.test(rest.slice(pt[0].length)) ||
           // …and between two words, as Thai is typed: สวัสดีครับปุ๊กกี้, ขอบคุณนะปุ๊กกี้ (Thomas, round 92 — the
           // greeting reached her only with a space the language does not use)
           (out.length && _thaiCmdTable().some(([th]) => rest.slice(pt[0].length).startsWith(th))))) { rest = rest.slice(pt[0].length); continue; } }
@@ -14922,7 +14950,12 @@ function _thaiToCmd(s) {
     // พาปุ๊กกี้ไปเที่ยว → take pukky out; กลับโรงแรมกับปุ๊กกี้ → go home with pukky; ส่งเงินสองร้อยให้จอย → send 200 to joy
     .replace(/^go home to (\S+)$/, "go home with $1")
     .replace(/^send (?:money )?(\d+) give (\S+)$/, "send $1 to $2").replace(/^send (?:money )?give (\S+) (\d+)$/, "send $2 to $1")
-    .replace(/^(contact|reply) give /, "$1 ");
+    .replace(/^(contact|reply) give /, "$1 ")
+    // เลี้ยง with nobody after it is a drink; เลี้ยงน้อง / เลี้ยงคุณ is a drink for the woman in front of you
+    .replace(/^buy drink for$/, "buy drink").replace(/^buy drink for you$/, "buy her a drink")
+    .replace(/^buy (singha|leo)$/, "buy beer")
+    // ผมมาจากโคราช / ผมชื่อ anan — what a man says about himself, as the English the answer and TELL already read
+    .replace(/^i from /, "i'm from ").replace(/^i name (?=\S)/, "my name is ");
 }
 // ── THE SENTENCE READER (2026-10-14) ───────────────────────────────────────
 // Mario, after the baseline player: "at this point you might as well just bolt on NLP." The parser matched

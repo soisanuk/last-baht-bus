@@ -1336,9 +1336,9 @@ function _smallTalk(npc, topic) {
 const _TOLD_RX = [
   ["status", /^i'?m (divorced|married|single|separated|a widower|widowed)\b/, m => m[1]],
   ["status", /^i (was|got) divorced\b/, () => "divorced"],
-  ["job", /^i'?m an? ([a-z ]{3,30}?)(?: by trade)?$/, m => m[1]],
+  ["job", /^(?:i'?m|i am) an? ([a-z ]{3,30}?)(?: by trade)?$/, m => m[1]],
   ["job", /^i (?:work as an?|work in) ([a-z ]{3,30})$/, m => m[1]],
-  ["home", /^i'?m from ([a-z' ]{3,30})$/, m => m[1]],
+  ["home", /^(?:i'?m|i am|i come) from ([a-z' ]{3,30})$/, m => m[1]],
   ["name", /^(?:my name is|my name'?s|call me|i'?m called) ([a-z' ]{2,20})$/, m => m[1]],
   // "I'm Bernard" — one word that is a name and not a state (Bernard, round 88: "i'm bernard" was not my story)
   ["name", /^(?:i'?m|i am|it'?s|this is) ([a-z']{2,15})$/, m => _TOLD_NOT_NAME.test(m[1]) ? "" : m[1]],
@@ -1352,7 +1352,13 @@ const _TOLD_REACT = {
   job: ["\"{x}?\" She tries the word. \"Is good job? Sit all day, I think. Then you come here and sit more, hahaha.\"", "\"Ohh, {x}. Very smart man.\" She means it, more or less. \"You count my chits for me, na?\""],
   home: ["\"{X}? I don't know it.\" She doesn't pretend. \"Is far? Is cold? Everybody's home is cold.\"", "\"{X}.\" She files it away. \"Next time you tell me about it. Tonight you tell me about you.\""],
   name: ["\"{X}.\" She says it back, twice. \"Okay. Now I know.\""],
+  // a Thai place said to a Thai woman: she knows it, and a farang who names it has a story (Anan, the Thai-only week —
+  // "Korat? I don't know it" from a woman who grew up three hours from it)
+  homeThai: ["\"{X}?\" She looks at you properly. \"You live there? Farang say {X} only for one reason — wife, hahaha.\"",
+    "\"{X}!\" She laughs. \"Then you are more Thai than me. You eat som tam the real way, too spicy?\"",
+    "\"{X}, really?\" She tries to picture it and can't. \"Is very Thai place. No bar like this one there, I think.\""],
 };
+const _THAI_PLACES = /^(korat|nakhon ratchasima|isan|isaan|ubon|ubon ratchathani|udon|udon thani|khon kaen|buriram|surin|sisaket|si sa ket|chaiyaphum|roi et|yasothon|kalasin|maha sarakham|sakon nakhon|nakhon phanom|nong khai|loei|mukdahan|amnat charoen|bueng kan|nong bua lamphu|chiang mai|chiang rai|nan|phrae|lampang|lamphun|phayao|bangkok|krung thep|pattaya|chonburi|chon buri|rayong|sattahip|ayutthaya|lopburi|phuket|hat yai|songkhla|surat thani|hua hin|prachuap|thailand)$/;
 function _doTell(lower, to) {
   const pid = to || (typeof _convoActive === "function" && _convoActive());
   // any woman you are talking to, not only a hostess: Nina at Sandy Toes never heard his name (Bernard, round 88) — the
@@ -1364,8 +1370,11 @@ function _doTell(lower, to) {
     const v = val(m).trim(); if (!v) continue;
     if (key === "job" && /^(here|in pattaya|on holiday|from|tired|okay|ok|fine|drunk|sorry|happy|not|just|a bit|very)\b/.test(v)) return false;
     ((G.player.told = G.player.told || {}))[key] = v;
+    // …and when SHE has just asked it, it is her answer: "where you from?" then "i'm from korat" was a remark, and
+    // her question stayed unanswered in the book (Anan, the Thai-only week)
+    if (G.convoQ && G.convoQ.id === pid && G.convoQ.key === key && typeof _convoAnswer === "function") { _rawAnswer = v; return _convoAnswer(v); }
     const X = v.replace(/\b\w/g, c => c.toUpperCase());
-    const R = _TOLD_REACT[key];
+    const R = key === "home" && _THAI_PLACES.test(v) ? _TOLD_REACT.homeThai : _TOLD_REACT[key];
     const pool = Array.isArray(R) ? R : (R[v] || R.other || Object.values(R)[0]);
     _say(`${NPCS[pid].name}: ` + _fmt(_pickVary(pool, "told:" + key), { x: v, X }));
     return true;

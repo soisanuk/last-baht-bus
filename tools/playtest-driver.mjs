@@ -174,7 +174,9 @@ if (verb === "serve") {
       const r = await page.evaluate((from) => {
         const L = window.__ptLines || [];
         const start = from > L.length ? 0 : from;   // a reload restarts the ledger
+        // …and the Thai the game could not read: ~70 of Anan's misses were invisible here (the Thai-only week)
         const pool = [].concat(typeof _HUH !== "undefined" ? _HUH : [], typeof _NOBODY_NAME !== "undefined" ? _NOBODY_NAME : [],
+          typeof _HUH_THAI !== "undefined" ? [_HUH_THAI, _HUH_THAI_SOFT] : [],
           ["Not for sale here.", "You don't see that here."]);
         const out = [];
         let cmd = null;
