@@ -5051,7 +5051,7 @@ function _addHappy(n, why) {
       _say("★ สบายสบาย ★", "win");
       _say("Somewhere between the last laugh and this one, it happened: nowhere " +
         "to be, nothing owed, cold bottle, warm night, a city full of people who " +
-        "know your name. You are, officially, happy. " + ((typeof _servesDrinks === "function" && _servesDrinks(G.room) && !(typeof _shutHere === "function" && _shutHere()))
+        "know your name. You are, officially, happy. " + ((typeof _onRide === "function" && _onRide()) ? "Somewhere under the engine, from a radio taped to the bike, a song you like comes on." : (typeof _servesDrinks === "function" && _servesDrinks(G.room) && !(typeof _shutHere === "function" && _shutHere()))
           ? (["gogo", "club"].includes(_room().barType) ? "The DJ, unprompted, plays your song." : "Somebody behind the bar, unprompted, puts on your song.") : "Somewhere down the soi, a song you like comes on."), "win");   // no DJ in a hotel room at two (Martin, round 85), nor in a beer bar (Ruth, round 94)
       _engineSpeak("สบายสบาย");
       _say(G.nightTurn >= (typeof SUNRISE_TURN !== "undefined" ? SUNRISE_TURN : 110) ? "(The night's done; the feeling isn't.)" : "(The night keeps going. So can you.)", "dim");   // not "keeps going" at dawn (Sunil, round 86)
@@ -5984,7 +5984,7 @@ function _endNight(reason) {
     for (const _pid of _pids) _addBond(_pid, 3);
     _say(_fmt(_pids.length > 1
       ? "The three of you fall through your door somewhere past the point of counting, still laughing at a thing none of you can remember. {who} claim the shower in shifts and the bed by consensus, and the night finishes the way the best ones do — off the clock, off the books, unhurried."
-      : (_isHotelRoom(G.room) && G.party.stops === 0
+      : (_isHotelRoom(G.room)
         ? "{who} kicks off her shoes by the door as if she has always kicked them off there. The last of the night is nobody's business and unhurried about being so."
         : G.nightTurn < 50 ? "You bring {who} home early, while the soi is still filling up behind you. Nobody in it minds."
         : "You bring {who} home the long way, through a town that has watched the two of you all evening and approves. The door closes on the last of the night, and what's left of it is nobody's business and unhurried about being so."),
@@ -6707,7 +6707,7 @@ function _endVacation() {
       ? "Sai Krok is on the mat by the door when the taxi is called, and does not get up, and does not stop watching you. He has done this before, at a shuttered pub on the Darkside, and he knows how it goes."
       : "Sai Krok is on the mat by the door when the taxi is called, and does not get up, and does not stop watching you. Whatever he knows about people leaving, he learned before you, and he knows how it goes.",
     "You leave the last of the water down for Sai Krok. He drinks it, and then sits by the case, which is the argument he is able to make.",
-    "Sai Krok walks you to the lobby doors and stops at the line where the aircon ends, because he has never once come further, and looks up at you with his whole plan showing.",
+    "Sai Krok walks you to the lobby doors and sits down at the line where the aircon ends, as if a taxi were a thing he could prevent by watching it, and looks up at you with his whole plan showing.",
   ], "dogbye")) : null;
   _say("═══════════════════════════════════", "win");
   _say("The week is up. The taxi to the airport leaves in an hour, and the city " +

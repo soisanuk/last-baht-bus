@@ -4553,6 +4553,10 @@ function _doTalkBody(arg, topic) {
 let _helloRetry = false;   // module-local: one re-ask after a stranger's hello, never saved
 function _doTalkCore(arg, topic) {
   arg = (arg || "").trim();
+  if (/^(?:a bit|bit|a while|while|a little|little|for a (?:bit|while|minute|sec)|for (?:bit|while|minute|sec)|some|to (?:you|her|him|somebody|someone)|with (?:you|her|him|somebody|someone))$/.test(arg)) arg = "";   // "chat a bit" — _norm has already taken the article (Steve, run 7)
+  // "why did you leave Pink Lotus" is a question about the PLACE, not her goodbye node on the word "leave" (Steve, run 7)
+  if (topic) { const _wl = String(topic).match(/^(?:(?:why|when|how come) (?:did|do|have) you )?(?:leave|left|quit|move from|stop working at) (?:the )?(.+?)[?]*$/i);
+    if (_wl && typeof _roomByName === "function" && _roomByName(_wl[1])) topic = _wl[1]; }
   // "BAR FINE" IS ONE WORD IN THIS TOWN. Spelled with the space it matched the
   // `bar` topic by substring, so a mamasan answered a question about the fine
   // with a description of her premises (Helen, round 49). Normalised before node
@@ -4705,7 +4709,7 @@ function _doTalkCore(arg, topic) {
   if (topic && typeof _atOwnBar === "function" && _atOwnBar() && G.bar && (G.bar.calls || []).some(c => G.day - c.day <= 2 && _CALL_K[c.id] && _CALL_K[c.id].test(String(topic).toLowerCase())) &&
       (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].patron) && _townTalk(npc, topic)) return;
   // telling her you are leaving comes before any text she sent you (Steve: "i fly home in two days" got her lottery text back)
-  if (topic && typeof _LEAVING_RE !== "undefined" && _LEAVING_RE.test(String(topic).toLowerCase()) &&
+  if (topic && typeof _isLeavingSaid === "function" && _isLeavingSaid(topic) &&
       !(NPCS[npc].dialogue || []).some(x => x.topic && /leav|flight/.test(x.topic) && _topicHits(x.topic, String(topic).toLowerCase()) && !/\bflights\b/.test(x.topic)) &&
       typeof _leavingTalk === "function" && _leavingTalk(npc, topic)) return;
   if (topic && !_sourOwn && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // Lamai's crates, Cake's fan: the text she sent (Lothar, round 67) — not her fond text, after she has seen it (Ossie, round 70)
@@ -6251,7 +6255,7 @@ function _convoAnswer(text) {
       G.convoQ = _save; if (G.convoLapsed) delete G.convoLapsed[_save.id];
     } }
   // telling her you are leaving is not an answer to her question (Steve: "i fly home in two days" was filed somewhere)
-  if (typeof _LEAVING_RE !== "undefined" && _LEAVING_RE.test(String(text).toLowerCase()) && G.convoQ && NPCS[G.convoQ.id] &&
+  if (typeof _isLeavingSaid === "function" && _isLeavingSaid(text) && G.convoQ && NPCS[G.convoQ.id] &&
       typeof _leavingTalk === "function") { const _id = G.convoQ.id; G.convoQ = null; if (_leavingTalk(_id, text)) return true; }
   // …nor is a feeling: "i miss you" (พี่คิดถึงน้อง) was kept as the name his mother called him (Anan, the Thai-only
   // week). Her question gives way and the line is said to her, where the sentence reader answers it.
@@ -6294,7 +6298,7 @@ function _convoAnswer(text) {
     // said back only when it is a short answer, without the stray punctuation, and not the same line from two people (Steve, rerun)
     // said back only when it is a NAME or a PLACE — "name is steve" was nodded at "as if it explains a thing or two",
     // "here till sunday" was "tried on" (Steve's fifth run)
-    const _v0 = String(val || "").replace(/^(?:i'?m |i am |my name is |my name'?s |name is |name'?s |it'?s |call me |my |from )+/i, "").replace(/[?!.,;:]+/g, "").trim();
+    const _v0 = String(val || "").replace(/^(?:i'?m |i am |my name is |my name'?s |name is |name'?s |it'?s |call me |my |from )+/i, "").replace(/[?!.,;:]+/g, "").replace(/\s+(?:me|mate|pal|myself)$/i, "").trim();
     const _vw = _v0.split(/\s+/).filter(Boolean);
     const _v = _vw.length && _vw.length <= 2 && !_vw.some(w => _READ_STOP.has(w.toLowerCase()) || /^(?:till|until|mate|love|yeah|no|yes|ok|okay|sunday|monday|tuesday|wednesday|thursday|friday|saturday)$/i.test(w))
       ? _vw.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : "";
@@ -13407,7 +13411,13 @@ function _doReport(arg) {
   _addHappy(1);
 }
 
-function _doCheers() {
+function _doCheers(arg) {
+  // "cheers tan" with Tan beside you toasts Tan, not the night air (Steve, run 7)
+  { const who = arg && typeof _findNpc === "function" ? _findNpc(String(arg).replace(/^(?:to |with )/, "").trim()) : null;
+    if (who && _npcsHere().includes(who)) {
+      _say(_fmt(_pickTownLine(["\"Chon gaew.\" You touch glasses with {n}, who was ready for it.", "{n} meets your glass halfway. \"Chok dee.\"", "You raise your glass to {n}. {n} raises what {s} has, which is the custom."], "cheersto"), { n: NPCS[who].name, s: _pr(who).s }));
+      return;
+    } }
   if (!_inBar()) {
     _say("You toast the night air. The night, in fairness, has earned it.");
     return;
@@ -15559,6 +15569,9 @@ function _readRoute(raw) {
   _readDepth++;
   try { return _readRouteBody(raw); } finally { _readDepth--; }
 }
+const _UPSTAIRS_RE = /\b(?:come back (?:to|with me to) (?:my|the) (?:hotel|room|place)|back to (?:my|the) (?:hotel|room|place)|back to mine|come to my (?:hotel|room|place)|my place or|(?:shall|should|can|could|do you want to|want to|wanna|let'?s|lets) (?:we )?go upstairs|go upstairs|come upstairs|upstairs with me|come (?:back |home )?with me|one last night together|spend the night|stay with me tonight)\b/;
+const _DRINK_FOR_HER_RE = /\b(?:(?:one more|another|a) (?:drink|one|beer) for (?:you|her|the lady)|buy (?:her|you|the lady) (?:a |one more |another )?drink|drink for you|get (?:her|you) a drink)\b/;
+const _BARMAID_RE = /\b(?:same again|one more|one for the road|the bill|what do i owe|last orders|a pint)\b/;
 function _readRouteBody(raw) {
   // _norm strips "can you"/"please", which is where the YOU of "can you speak english?" was (Steve's third run)
   { const full = String(_rawAnswer || "").trim(), f = full.toLowerCase().replace(/[“”"']/g, "");
@@ -15657,7 +15670,9 @@ function _readRouteBody(raw) {
     // "ask her about haha" or the house rules on "trouble" (the fallback choices, 2026-10-18)
     { const tl = l.replace(/[!.,]+/g, " ").replace(/\s+/g, " ").trim(), tone = _remarkTone(tl);
       const english = tl.split(" ").some(w => _READ_STOP.has(w) || _READ_EN.has(w)) || /^(?:laugh|wow|agree|drunk|tease|good|bad|sad|town)$/.test(tone);
-      if (tl.split(" ").length <= 4 && !R.raw.includes("?") && !G.convoQ && !G.pendingChoice && !G.pendingEnc && !G.pendingBf && !G.game &&
+      // a line that DOES something is not a remark: "ha, buy her a drink", "yes same again", "yes really. long time" (Steve, run 7)
+      const acts = R.act || _BARMAID_RE.test(tl) || _DRINK_FOR_HER_RE.test(tl) || _UPSTAIRS_RE.test(tl) || /\b(?:short time|long time|barfine|take you out)\b/.test(tl);
+      if (!acts && tl.split(" ").length <= 4 && !R.raw.includes("?") && !G.convoQ && !G.pendingChoice && !G.pendingEnc && !G.pendingBf && !G.game &&
           english && !/^(?:greeting|farewell|thanks|no)$/.test(R.kind) &&
           !(R.kind === "yes" && G.lastOffer && G.turns - G.lastOffer.turn <= 2) &&   // a YES to a job just offered is the job
           (/^(?:laugh|wow|drunk|tease)$/.test(tone) || (tone === "agree" && !/^(?:yes|sure|ok|okay|of course|right)\b/.test(tl)))) {
@@ -15667,8 +15682,20 @@ function _readRouteBody(raw) {
         _remarkBeat(partner, tl); _tick(); return true;
       } }
     // YOU WANT TO COME BACK TO MY HOTEL?: that is the barfine, asked as a man asks it — not the hotel's prices
-    if (/\b(?:come back (?:to|with me to) (?:my|the) (?:hotel|room|place)|back to my (?:hotel|room|place)|come to my (?:hotel|room|place)|my place or)\b/.test(l) &&
-        NPC_ROLES[partner] && !(G.party && (G.party.ids || []).includes(partner))) { doCommand("barfine " + String(NPCS[partner].name).toLowerCase()); return true; }
+    if (_UPSTAIRS_RE.test(l) && NPC_ROLES[partner] && !(G.party && (G.party.ids || []).includes(partner))) { doCommand("barfine " + String(NPCS[partner].name).toLowerCase()); return true; }
+    // …and with her already on your arm, "come on, back to my hotel" is GO HOME WITH her (Steve, run 7)
+    if (_UPSTAIRS_RE.test(l) && G.party && (G.party.ids || []).includes(partner)) { doCommand("go home with " + String(NPCS[partner].name).toLowerCase()); return true; }
+    // SHORT TIME / LONG TIME said to her with no barfine open: open it, then the term answers it (Steve, run 7: "Sabai sabai")
+    { const bt = l.match(/\b(short time|long time)\b/);
+      if (bt && NPC_ROLES[partner] === "hostess" && !G.pendingBf && !(G.party && (G.party.ids || []).includes(partner))) {
+        doCommand("barfine " + String(NPCS[partner].name).toLowerCase());
+        if (G.pendingBf) doCommand(bt[1]);
+        return true;
+      } }
+    // "one more drink for you" / "buy her a drink" is the drink, whatever it rode in on (Steve, run 7: read as a compliment, no money moved)
+    if (_DRINK_FOR_HER_RE.test(l) && NPC_ROLES[partner]) { doCommand("buy drink for " + String(NPCS[partner].name).toLowerCase()); return true; }
+    // the barmaid's words win over a chat with a man on the rail: "same again" to Terry was "Exactly." (Steve, run 7)
+    if (_BARMAID_RE.test(l) && typeof _servesDrinks === "function" && _servesDrinks(G.room)) return false;
     // CAN I TAKE YOU OUT / FANCY COMING OUT WITH ME: the take-her-out door, asked as a man asks it
     if (/\b(?:take you out|come out with me|go out with me|coming out with me|fancy (?:coming|going) out|out with me tonight)\b/.test(l) && NPC_ROLES[partner]) {
       doCommand("take " + String(NPCS[partner].name).toLowerCase() + " out"); return true;
@@ -16012,6 +16039,8 @@ function _unaskedTopic(c) {
   return (typeof _convoTopics === "function" ? _convoTopics(c) : []).find(k => {
     const key = String(k).split("|")[0];
     if (steered.includes(key) || (typeof _topicKnown === "function" && !_topicKnown(key))) return false;
+    // only a subject with HER words behind it — "Ask about last night" a turn after he asked it, and "your present" (Steve, run 7)
+    if (!dl.some(d => d.topic && String(d.topic).split("|").includes(key))) return false;
     return !dl.some((d, i) => d.topic && seen.includes(i) && String(d.topic).split("|").includes(key));
   });
 }
@@ -16023,7 +16052,7 @@ function _remarkBeat(c, t) {
   const n = ((G.soc.beats = G.soc.beats || {})[c] = (G.soc.beats[c] || 0) + 1);
   const back = _toldBack(c);
   if (back) { _say(back); return; }
-  if (n % 2) return;   // every other beat: a woman who steers every line is a woman running an interview
+  if (n % 3 || ((G.soc.steered = G.soc.steered || {})[c] || []).length >= 2) return;   // a third of the beats, twice a night: seven steers a week read as an interview (Steve, run 7)
   const k = _unaskedTopic(c);
   if (!k) return;
   const key = String(k).split("|")[0];
@@ -16203,6 +16232,11 @@ function _toHer(c, raw, addressed) {
   // ANY GOOD BARS I SHOULD TRY?: she names her own (with a laugh) and one more that is open nearby; a man names his local
   if (/\b(?:good|best|other|nice|fun|decent) bars?\b|\bbars? (?:to|i should|worth) (?:try|go|visit)|\bwhere (?:else )?(?:should|can) i (?:go|drink)\b/.test(t)) { _barTip(c); _tick(); return true; }
   let missed = false;
+  // a question about somebody SHE told you about — "does he play football" is her son, not her football (Steve, run 7)
+  if (R.kind === "question" && /\b(?:he|him|his|she|her)\b/.test(t) && !/\b(?:you|your)\b/.test(t) && NPC_ROLES[c]) {
+    const fam = (_convoTopics(c, { all: true }) || []).find(k => /\b(?:son|daughter|kid|kids|children|child|family|boy|girl|baby|husband|boyfriend|mother|father|brother|sister)\b/.test(String(k)));
+    if (fam && _askSoft("ask " + name + " about " + String(fam).split("|")[0], t)) return true;
+  }
   // a REMARK on a subject she has a line for ("the weather is hot tonight") reaches that line, not "too fast"
   if (R.kind !== "question" && typeof _SMALL_TALK_KEYS !== "undefined" && _SMALL_TALK_KEYS.some(([, rx]) => rx.test(t))) {
     if (_askSoft("ask " + name + " about " + t)) return true; missed = true;
@@ -16229,6 +16263,12 @@ function _toHer(c, raw, addressed) {
   }
   // A MAN ON HIS STOOL answers the basics about himself from what the game knows of him (Steve's fifth run: Terry,
   // Barry and Wayne all dodged "where you from?" with a deflection that read as a brush-off)
+  if (!NPC_ROLES[c] && /\bwhat (?:did|do|d'?you) you do\b|\bwhat(?:'?s| was| is) your (?:job|work|trade|line)\b|\bwhat (?:did|do) you (?:work|do for a living)\b/.test(t)) {
+    const job = (_convoTopics(c, { all: true }) || []).find(k => /\b(?:work|job|trade|detective|police|navy|army|business|career|retire|pension)\b/.test(String(k)));
+    if (job && _askSoft("ask " + name + " about " + String(job).split("|")[0], t)) return true;
+    _say(_fmt(_pickTownLine(["\"This and that, back home. Here, mostly this.\" {n} lifts the glass an inch.", "\"Long story, short pension,\" {n} says. \"Ask me another night.\"",
+      "{n} considers it. \"Enough to be sitting here. That's the whole CV.\""], "manjob"), { n: NPCS[c].name })); _tick(); return true;
+  }
   if (!NPC_ROLES[c] && (R.kind === "question" || missed)) { const mb = _manBasics(c, t); if (mb) { _say(mb); if (!missed) _tick(); return true; } }
   const b = _heardBucket(t);
   // a sentence in another language is not a remark she nods at: the generic bucket needs English in it
@@ -18242,7 +18282,7 @@ function _doCommandInner(input) {
     case "balance": _doBalance(); break;
     case "report": case "file": _doReport(arg); break;
     case "complain": _doComplain(); break;
-    case "cheers": case "toast": case "chon": _doCheers(); break;
+    case "cheers": case "toast": case "chon": _doCheers(arg); break;
     // RAISE YOUR GLASS is the sighting's manners (theme 5) and, anywhere else, a toast — a
     // plausible verb never dead-ends in "didn't understand"
     case "raise": if (/\b(glass|bottle|beer|toast|drink)\b/.test(arg)) { _doCheers(); break; }
@@ -18280,7 +18320,12 @@ function _doCommandInner(input) {
       if (G.dog && /\b(boy|dog|lad|girl)\b/.test(arg)) { _dogPraise(v); break; }
       if (_politePhrase(lower) || _convoResolve(lower)) break;
       _parseFail("cmd"); return;
-    case "quiet": case "hush": case "shh": case "shush": case "still": _doQuiet(); break;
+    case "quiet": case "hush": case "shh": case "shush": case "still":
+      // "quiet tonight eh" is a remark on the room, not the hold-still beat (Steve, run 7)
+      if (arg && v === "quiet") { const _c = typeof _convoActive === "function" && _convoActive();
+        if (_c && _npcsHere().includes(_c) && typeof _remarkBeat === "function") { _remarkBeat(_c, lower); _tick(); break; }
+        _say(_pickVary(["Quiet, yes — the kind the soi gets between songs. It will not last.", "It is. Give it an hour.", "Quiet for here. Somewhere else this would count as a riot."], "quietremark")); break; }
+      _doQuiet(); break;
     case "stay": case "heel": case "whistle": case "come":
       if (v === "stay" && /quiet|still|put|silent|low|calm/.test(arg || "")) { _doQuiet(); break; }
       if (G.dog) { _dogPraise(v); break; }

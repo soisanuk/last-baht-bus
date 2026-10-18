@@ -145,3 +145,36 @@ test("Steve (run 5): take her back to my room, maybe later, one more drink first
   G.day = 7; G.party = null; G.room = _npcRoom(J); G.soc.drinks[J] = 8; talkTo(J);
   out = []; run("goodbye"); assert.doesNotMatch(said(), /You take your leave/, said()); assert.ok(G.lastNightBye, "the goodbye scene");
 });
+
+// ── run 7 (2026-10-18): 25 stops, after the remark beats and the Thai house voice ────────────────────────────────
+test("Steve (run 7): upstairs in words, a drink for her in a sentence, same again, a question about her son, his flight home", () => {
+  G.room = "pink_lotus"; G.nightTurn = 30; G.money = 20000;
+  const h = _npcsHere().find(i => NPC_ROLES[i] === "hostess"); talkTo(h); (G.soc.drinkCount = G.soc.drinkCount || {})[h] = 2; G.soc.drinks[h] = 4;
+  out = []; run("shall we go upstairs"); assert.ok(G.pendingBf, "the barfine opens: " + said()); G.pendingBf = null;
+  out = []; run("short time"); assert.doesNotMatch(said(), /Sabai sabai/); assert.ok(/SHORT TIME|to the till|into .* own hand/.test(said()), said()); G.pendingBf = null;
+  let m = G.money; out = []; run("ha you're good. one more drink for you"); assert.ok(G.money < m, "the drink was bought: " + said());
+  m = G.money; out = []; run("ha, buy her a drink"); assert.ok(G.money < m, said());
+  G.room = "queen_vic"; G.nightTurn = 20; talkTo("terry");
+  m = G.money; out = []; run("same again"); assert.ok(G.money < m, "the barmaid's words win over the chat: " + said());
+  out = []; run("what did you do then terry"); assert.doesNotMatch(said(), /run that past me|not understand|didn't parse/i, said());
+  out = []; run("cheers terry"); assert.doesNotMatch(said(), /night air/); assert.match(said(), /Terry/);
+  out = []; run("quiet tonight eh"); assert.doesNotMatch(said(), /photograph/);
+  out = []; run("chat a bit"); assert.doesNotMatch(said(), /doesn't land|Nobody here goes by/, said());
+  G.room = "sweet_tamarind"; const w = _npcsHere().find(i => NPC_ROLES[i] === "hostess"); talkTo(w);
+  out = []; run("why did you leave pink lotus"); assert.doesNotMatch(said(), /Tomorrow|last beer|take care/i, "not his leaving, not her goodbye: " + said());
+  G.convoQ = { id: w, key: "team", q: "Who you support?", turn: G.turns, shown: true }; out = []; run("Doncaster Rovers me");
+  assert.doesNotMatch(said(), /Rovers Me/); assert.match(said(), /Doncaster Rovers/);
+  G.party = { ids: [w], stops: 1, spent: 0, seen: {} }; G.room = "soi6_street"; out = []; run("come on, back to my hotel");
+  assert.equal(G.room, _hotelRoomId(), said());
+});
+
+test("Steve (run 7): the last night's 'i fly home tomorrow' to the woman he is fond of is the goodbye; a leaving text gets a leaving reply; her son is her family", () => {
+  G.room = "pink_lotus"; G.nightTurn = 30; G.day = 7;
+  const h = _npcsHere().find(i => NPC_ROLES[i] === "hostess"); G.soc.drinks[h] = 8; talkTo(h);
+  G.day = 5; out = []; run("i fly home on sunday"); assert.ok(!G.lastNightBye, "day five: the leaving, not the goodbye yet");   // told on an earlier night
+  G.day = 7; out = []; run(NPCS[h].name.toLowerCase() + ", i fly home tomorrow");
+  assert.doesNotMatch(said(), /hear you the first time|You said/, said()); assert.ok(G.lastNightBye, "the goodbye scene");
+  G.day = 4; out = []; run("talk to " + NPCS[h].name.toLowerCase()); G.convoQ = null;
+  const fam = (_convoTopics(h, { all: true }) || []).find(k => /son|kids|children|family/.test(String(k)));
+  if (fam) { out = []; run("does he play football"); assert.doesNotMatch(said(), /Buriram United|Liverpool|Manchester/, "her son, not her team: " + said()); }
+});

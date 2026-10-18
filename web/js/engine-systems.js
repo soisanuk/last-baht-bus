@@ -4505,7 +4505,10 @@ function _doMessage(arg) {
   } else
   {   // a woman with her own voice answers in it: Somo, who "doesn't do the sweetheart thing", texted "miss you na 🥺" (Kevin, round 84)
     const _tv = NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.reply;
-    const _rp = _tv || ["555+ you funny", "miss you na 🥺", "come see me tonight!!", "work boring... you come make sanuk"];
+    const _leaving = typeof _isLeavingSaid === "function" && _isLeavingSaid(String(_rawAnswer || ""));   // "going home tomorrow, thanks for everything" got "555+ you funny" (Steve, run 7)
+    const _rp = _leaving ? ["safe flight na 😢 you come back, you come here first", "ohh you go already?? 😭 dont forget me. message me when you home",
+        "thank you too na. next time you come, i still here 🙏", "😢😢 okay. safe travel. you have my line, use it"]
+      : _tv || ["555+ you funny", "miss you na 🥺", "come see me tonight!!", "work boring... you come make sanuk"];
     _pushMsg(id, _rp[Math.floor(_rand() * _rp.length)]);
   }
   _say(_fmt("(📱 {who} replies almost instantly. CHECK MESSAGES.)",
@@ -6375,6 +6378,12 @@ const _LEAVING_TALK = {
 };
 // THE LEAVING, in the words a man uses (Steve, the baseline player: "i fly home in two days" got her old text read
 // back, "i'm going home soon" got HER going home, "last night of the trip" was the ledger)
+// …and only when it is the PLAYER leaving: "why did you leave Pink Lotus" was his flight home (Steve, run 7)
+function _isLeavingSaid(t) {
+  t = String(t || "").toLowerCase();
+  return _LEAVING_RE.test(t) && !/\b(?:you|she|her|he|him|they)\b[^.?!]*\b(?:leav|go home|going home|fl(?:y|ew)|flight)/.test(t) &&
+    !/^(?:why|when|where|did|do|does|how|what|who|is|are|was)\b/.test(t.trim());
+}
 const _LEAVING_RE = /\b(leav(?:e|ing)|fly(?:ing)? (?:home|back|out)|my flight|flight home|(?:go(?:ing)?|off|head(?:ing)?|back) home (?:tomorrow|soon|in \w+ days?|on \w+|next week|this week)|i'?m going home|i go home|tomorrow i (?:go|fly|leave)|last (?:night|day) (?:here|of (?:the|my) (?:trip|holiday|week|stay))|airport tomorrow|my (?:trip|holiday|week) is (?:over|ending|nearly over|almost over)|end of my (?:trip|holiday|week)|going home)\b/;
 function _leavingTalk(npc, topic) {
   // TOMORROW / TONIGHT, said to a woman you have told you are leaving, is about that (Ruth, round 94: "about tomorrow", straight after)
@@ -6397,6 +6406,9 @@ function _leavingTalk(npc, topic) {
   }
   if (!NPC_ROLES[npc]) return false;
   const said = (G.soc.leavingSaid = G.soc.leavingSaid || {});
+  // on the last night, to a woman who knows you, the leaving IS the goodbye — "Yes, yes, you fly… I hear you the first
+  // time" waved off the one line Steve had been saving all week (run 7)
+  if (typeof _lastByeDue === "function" && _lastByeDue(npc) && typeof _lastNightBye === "function") { _lastNightBye(npc); said[npc] = G.day; return true; }
   if (said[npc] === G.day) { _say(`${NPCS[npc].name} nods. She heard you the first time.`); return true; }
   // told on an earlier night: she remembers, and does not give the same speech again (Steve's rerun: one reply, twice)
   if (said[npc] != null && said[npc] !== G.day) {

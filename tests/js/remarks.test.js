@@ -47,8 +47,8 @@ test("the beat is in the remark's tone, and moves nothing", () => {
   assert.equal(G.happy, h); assert.equal(G.soc.drinks.pukky || 0, b);
 });
 
-test("every other beat she offers a subject you have not asked her, with the tap", () => {
-  run("great night tonight"); run("this beer is warm");
+test("every third beat she offers a subject you have not asked her, with the tap — one her own words are behind", () => {
+  run("great night tonight"); run("this beer is warm"); run("long day today");
   const m = said().match(/\(ASK PUKKY ABOUT ([A-Z ]+)\)/);
   assert.ok(m, said());
   out = []; run(m[0].slice(1, -1).toLowerCase()); assert.doesNotMatch(said(), /don't know about that|wrong girl|didn't parse/, said());
