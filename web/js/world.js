@@ -15434,7 +15434,7 @@ const QUIZ_POOL = [
   { q: "At a plain beer bar, a lady drink runs…", opts: ["฿80", "฿" + LADY_DRINK, "฿300"], a: 1 },   // the soi6 ends charge more — the question says which bar (Liam, round 93)
   { q: "ห้ามเข้า on a door means…", opts: ["welcome", "no entry", "ring the bell"], a: 1 },
   { q: "A piwin's vest is…", opts: ["orange", "grey", "hot pink"], a: 0 },
-  { q: "Thai for water is…", opts: ["nam", "chang", "sanuk"], a: 0 },
+  { q: "Thai for water is…", opts: ["nam", "chang", "sanuk"], a: 0, th: ["น้ำ", "ช้าง", "สนุก"] },   // th: the options in script, for a player who types them (Anan)
   { q: "The oldest go-go in Pattaya is…", opts: ["Neon Paradise", "Tequila Queen", "Crystal Palace"], a: 1 },
   { q: "ซ้าย, painted on a maze wall, points…", opts: ["left", "right", "straight on"], a: 0 },
   { q: "'Songthaew' literally means…", opts: ["blue bus", "two rows", "fifteen baht"], a: 1 },

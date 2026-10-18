@@ -9087,7 +9087,7 @@ function _thaiPraise(key) {
     : here.find(x => !G.soc.thaiPraised[x]);
   if (!id) return;
   G.soc.thaiPraised[id] = true;
-  _say(_fmt(_pickVary(_THAI_PRAISE, "thaipraise"), { n: NPCS[id].name }), "dim");
+  _say(_genderLine(_fmt(_pickVary(_THAI_PRAISE, "thaipraise"), { n: NPCS[id].name }), id), "dim");   // Tan is not "she" (Anan)
 }
 
 // KEEP THE PARTICLE THE PLAYER TYPED. Every phrase echoed back in ครับ, so a
@@ -15381,6 +15381,8 @@ const _THAI_CMD = [
   ["พรุ่งนี้กลับบ้าน", "i go home tomorrow"], ["พรุ่งนี้กลับ", "i go home tomorrow"],
   ["คิดถึง", "miss"], ["พี่", "i"], ["น้อง", "you"],
   ["อังกฤษ", "england"], ["ออสเตรเลีย", "australia"], ["โคราช", "korat"], ["มาจาก", "from"],
+  // …and the food words a hungry man types (Anan): I'm hungry, grilled chicken, and the dishes the stalls make
+  ["หิว", "hungry"], ["ไก่ย่าง", "grilled chicken"], ["ข้าวเหนียว", "sticky rice"],
 ];
 // A word that is also a woman's name is the word after ABOUT: เรื่องฝน is the rain, not Fon (Thomas, round 92 —
 // it rained every night and nobody could be asked about it in Thai). Before ABOUT the name keeps it: ถามฝน is Fon.
@@ -16694,7 +16696,10 @@ function _doCommandInner(input) {
   // The gates below read the English they were written for, and the script translation used to run only after
   // all of them. While a gate owns the input, a line of pure Thai script that the command table reads is answered
   // in its English — the fare gate and the police keep their own readings (they parse Thai numbers and the apology).
-  if ((G.pendingChoice || G.pendingEnc || G.pendingBf || G.pendingSoapy || G.game) && G.pendingEnc !== "police" &&
+  // …a quiz question whose options ARE Thai words reads the script itself: น้ำ answered "Thai for water is… nam" and
+  // was translated to "water", which matched nothing (Anan, the Thai-only week)
+  const _quizTh = G.game && G.game.type === "quiz" && typeof QUIZ_POOL !== "undefined" && G.game.qs && QUIZ_POOL[G.game.qs[G.game.at]] && QUIZ_POOL[G.game.qs[G.game.at]].th;
+  if ((G.pendingChoice || G.pendingEnc || G.pendingBf || G.pendingSoapy || G.game) && G.pendingEnc !== "police" && !(_quizTh && _quizTh.includes(raw.trim())) &&
       /^[\u0E00-\u0E7F\s]+$/.test(raw) && typeof _thaiToCmd === "function") {
     const _en = _thaiToCmd(raw.trim());
     if (_en && !/\b(sorry|wai)\b/.test(_en)) { _say(`(เข้าใจ — ${_en})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1; raw = _en; }
@@ -17589,6 +17594,7 @@ function _doCommandInner(input) {
       _doDrop(arg); break;
     case "inv": case "inventory": _doInventory(); break;
     case "what": case "whats": case "define": case "explain": case "im": case "i'm": case "have":
+      if (typeof _dishOrder === "function" && _dishOrder(lower)) break;   // "i'm hungry" (Anan)
       if (_naturalHelp(lower)) break;
       if (_politePhrase(lower) || _convoResolve(lower)) break;
       if (typeof _readAsk === "function" && _readAsk(lower)) break;   // "i'm here till sunday", said to her (Steve's rerun)
@@ -18400,6 +18406,7 @@ function _doCommandInner(input) {
         _say(_pickVary(_THAI_SWITCH, "thaiswitch"), "dim");
         return;
       }
+      if (typeof _dishOrder === "function" && _dishOrder(lower)) break;   // "som tam" at a cart is an order or the stall's refusal, before the phrasebook hint (Anan)
       if (!/[\u0E00-\u0E7F]/.test(lower) && _looksThai(lower)) {
         _say("(That sounded like Thai and the soi only reads a little — SAWATDEE, KHOP KHUN, TAO RAI, MAI AO, AROI, SANUK, " +
           "MAI PEN RAI, CHOK DEE, KHOR THOT, SUAY, PHAENG, JAI YEN, KIN KHAO MAI — and Thai numbers, spoken or written.)", "dim");

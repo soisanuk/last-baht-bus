@@ -2164,6 +2164,7 @@ function _quizInput(input) {
   const _tw = !m && typeof parseThaiWords === "function" ? parseThaiWords(input.trim()) : null;   // หนึ่ง / สอง / สาม (Jens, round 67)
   if (m) pick = +m[1] - 1;
   else if (_tw >= 1 && _tw <= 3) pick = _tw - 1;
+  else if (item.th && item.th.includes(input.trim())) pick = item.th.indexOf(input.trim());   // the Thai word itself, where the options are Thai words
   else {
     const idx = item.opts.findIndex(o => o.toLowerCase().includes(input.trim()));
     if (idx >= 0 && input.trim().length > 1) pick = idx;

@@ -62,3 +62,26 @@ test("'I'm from Korat' answers her where-you-from, and a Thai woman knows Korat"
   G.convoQ = null; out = []; run("i am from buriram");
   assert.doesNotMatch(said(), /I don't know it/, said()); assert.match(said(), /Buriram/);
 });
+
+// ── the deferred three, closed (2026-10-18) ──────────────────────────────────────────────────────────────────────
+test("a bare dish at its cart is an order, in Thai or English; hungry off a cart is told where the food is", () => {
+  G.money = 5000;
+  for (const [room, l] of [["pattaya_soi_9", "ก๋วยเตี๋ยว"], ["pattaya_soi_9", "noodles"], ["cheap_charlies", "ข้าวผัด"], ["naklua_rd", "ไก่ย่าง"], ["buakhao_market", "หิว"]]) {
+    G.room = room; G.hunger = 60; const m = G.money; out = []; run(l);
+    assert.ok(G.money < m, `${room}: ${l} bought nothing — ${said()}`);
+  }
+  G.room = "naklua_rd"; const m = G.money; out = []; run("som tam"); assert.equal(G.money, m); assert.match(said(), /No som tam here/);
+  G.room = "soi6_street"; out = []; run("im hungry"); assert.match(said(), /7-Eleven|food/i); assert.doesNotMatch(said(), /didn't parse|blinks/);
+});
+
+test("the quiz reads a Thai option in script: น้ำ is nam", () => {
+  G.room = "stinky_bar"; G.day = 4; G.nightTurn = 25;
+  const qi = QUIZ_POOL.findIndex(x => x.th); assert.ok(qi >= 0);
+  G.game = { type: "quiz", qs: [qi, 1, 2], at: 0, right: 0, room: "stinky_bar" };
+  out = []; run("น้ำ"); assert.equal(G.game.right, 1, said());
+});
+
+test("Tan praises a man's Thai as himself, not as 'she'", () => {
+  G.room = "soi6_street"; G.soc.thaiPraised = {}; out = []; run("หิว");
+  assert.doesNotMatch(said(), /Tan.*\bshe\b|\bshe\b.*Tan/, said());
+});

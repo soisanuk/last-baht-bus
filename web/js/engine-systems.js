@@ -11947,15 +11947,32 @@ const _QV_BASKET_LINES = [
 
 // A STALL SELLS ITS DISH: BUY SEAFOOD on Naklua Road sold grilled chicken (Gordie, round 72). A dish the
 // stall doesn't make is answered with what it does; a menu (KISS) or a plain BUY FOOD still buys.
+// the dishes a man names at a cart (shared by the refusal and by _dishOrder, which makes a bare dish an order)
+const _DISH_WORDS = ["seafood", "squid", "fish", "prawns?", "shrimp", "crab", "noodles?", "chicken", "pork", "som ?tam", "papaya", "mango", "kebab", "burger", "pad ?thai", "fried rice", "curry", "soup", "steak", "pizza", "roast", "pie", "crocodile", "croc"];
 function _stallRefuses(arg) {
   if (!arg || typeof FOOD_STALLS === "undefined" || !FOOD_STALLS[G.room] || /menu/i.test(FOOD_STALLS[G.room].name)) return false;
-  const _DISH = ["seafood", "squid", "fish", "prawns?", "shrimp", "crab", "noodles?", "chicken", "pork", "som ?tam", "papaya", "mango", "kebab", "burger", "pad ?thai", "fried rice", "curry", "soup", "steak", "pizza", "roast", "pie", "crocodile", "croc"];
+  const _DISH = _DISH_WORDS;
   const st = FOOD_STALLS[G.room], nm = st.name.toLowerCase();
   const asked = _DISH.filter(d => new RegExp("\\b" + d + "\\b").test(arg));
   if (!asked.length || asked.some(d => new RegExp("\\b" + d + "\\b").test(nm))) return false;
   const w = (arg.match(new RegExp("\\b(" + asked[0] + ")\\b")) || [])[1] || "that";
   _say(`No ${w} here — this one is ${st.name}, ฿${_num(st.price)}. (BUY FOOD for that.)`, "dim");
   return true;
+}
+// A BARE DISH IS AN ORDER (Anan, the Thai-only week — ก๋วยเตี๋ยว at the noodle place and ข้าวผัด at Cheap Charlie's
+// were parse failures, and so were "noodles" and "grilled chicken" in English): at a cart, a dish word on its own
+// is BUY FOOD (the stall refuses a dish it does not make, as before), and "hungry" is the same order; off a cart,
+// "hungry" is told where the nearest food is.
+function _dishOrder(lower) {
+  const t = String(lower || "").replace(/^(?:i'?m |i am |so |very |a bit |bloody )+/, "").replace(/[!.?]+$/, "").trim();
+  const hungry = /^(?:hungry|starving|famished|peckish|need (?:to eat|food|some food)|want (?:to eat|food|some food)|something to eat|get (?:some )?food)$/.test(t);
+  const dish = !hungry && t.split(" ").length <= 3 && _DISH_WORDS.some(d => new RegExp("\\b(?:" + d + ")\\b").test(t)) &&
+    !/\b(?:buy|eat|order|want|get|have|for|about|ask|where|how|what|price|is|the|that)\b/.test(t.replace(/^(?:a |an |some |the )/, ""));
+  if (!hungry && !dish) return false;
+  const stall = typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room];
+  if (stall) { if (dish && _stallRefuses(t)) return true; doCommand(dish ? "buy " + t.replace(/^(?:a |an |some |the )/, "") : "buy food"); return true; }
+  if (hungry) { if (typeof _foodWhereTalk === "function") _foodWhereTalk(typeof _convoActive === "function" && _convoActive() || null); else _say("Nothing is cooking here."); return true; }
+  return false;
 }
 function _doEat(arg) {
   // "EAT WITH TAN" is the other natural phrasing of his standing food invite —
