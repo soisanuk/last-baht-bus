@@ -4532,6 +4532,8 @@ function _doTalkBody(arg, topic) {
     // visible and your next line is read as the answer (Margaret, round 78: Tan's went quiet)
     if (id && !topic && _qBefore && G.convoQ === _qBefore && _qBefore.id === id && _qBefore.q && NPCS[id])
       _say(`(${NPCS[id].name}'s question is still open: ${_qBefore.q})`, "dim");
+    // …and on a later night she brings up something you told her (your name, home, job, dog — once a trip each)
+    else if (id && !topic && NPCS[id] && _npcsHere().includes(id) && typeof _toldBack === "function") { const cb = _toldBack(id); if (cb) _say(cb); }
     // A stranger who has answered you has met you, whether or not the answer was
     // the first thing she ever said — Rose's vouch node was delivered, so the book
     // was not empty, and her full welcome played the next night (Joanne, round 64).
@@ -6252,6 +6254,7 @@ function _convoAnswer(text) {
   said[key] = val;
   const prior = heard[key];
   heard[key] = val;
+  if (typeof _toldNote === "function") _toldNote(id, key, String(val).replace(/^(?:i'?m |i am |my name is |from )+/i, "").trim());
   const name = _convoName(id);
   const pr = _sheHe(id);
   if (prior && !_saidAgrees(prior, val)) {
@@ -8391,6 +8394,20 @@ function _convoResolve(lower) {
       _say(`(You answer ${_convoName(id)}'s question, a beat late.)`, "dim");
       G.convoQ = { id, key: lapsed.key, q: lapsed.q };
       return _convoAnswer(lower);
+    }
+    // A SHORT REMARK that is none of her subjects — "i'm bored", "long day", "i'm retired" — is said to her, not asked
+    // of her: a beat in its tone (the fallback calls, 2026-10-18), never "You asked Kwan about im bored"
+    if (words >= 2 && typeof _remarkBeat === "function" && _npcsHere().includes(id)) {
+      const R0 = _read(lower), first = bare.split(/\s+/)[0];
+      const english = bare.split(/\s+/).some(w => _READ_STOP.has(w) || _READ_EN.has(w)) || _remarkTone(bare) !== "neutral";
+      if (english && R0.kind !== "question" && _heardBucket(bare) === "generic" && !/^(?:greeting|farewell|thanks|yes|no|huh)$/.test(R0.kind) &&
+          !(_isRealCommand(first) && !/^(?:i|i'?m|im|i've|ive|my|it'?s|its|that'?s|this|the|so|long)$/.test(first)) &&
+          !(typeof _TOLD_RX !== "undefined" && _TOLD_RX.some(([, rx, val]) => { const m = bare.match(rx); return m && String(val(m) || "").trim(); }))) {
+        // a remark that names one of her subjects is put to her softly first; if she has nothing on it, the beat
+        if ((_partnerHasTopic(id, t) || _partnerHasTopic(id, bare)) &&
+            _askSoft("ask " + String(_convoName(id)).toLowerCase() + " about " + (_partnerHasTopic(id, bare) ? bare : t))) return true;
+        _remarkBeat(id, bare); _tick(); return true;
+      }
     }
     if (words <= 2 || _partnerHasTopic(id, t) || _partnerHasTopic(id, bare)) {
       // pass the RAW words: _doTalkBody tries the literal topic first and falls
@@ -15130,6 +15147,19 @@ function _readRouteBody(raw) {
       } }
     // SORRY, said to her, is an apology to her (not the mamasan's book on the house's credit)
     if (/^(?:i'?m |i am |so )?sorry\b/.test(l)) { doCommand("apologize"); return true; }
+    // A SHORT REMARK IN A TONE — haha, wow, yeah, i'm drunk, you're trouble — is said to her: a beat in its key, never
+    // "ask her about haha" or the house rules on "trouble" (the fallback choices, 2026-10-18)
+    { const tl = l.replace(/[!.,]+/g, " ").replace(/\s+/g, " ").trim(), tone = _remarkTone(tl);
+      const english = tl.split(" ").some(w => _READ_STOP.has(w) || _READ_EN.has(w)) || /^(?:laugh|wow|agree|drunk|tease|good|bad|sad|town)$/.test(tone);
+      if (tl.split(" ").length <= 4 && !R.raw.includes("?") && !G.convoQ && !G.pendingChoice && !G.pendingEnc && !G.pendingBf && !G.game &&
+          english && !/^(?:greeting|farewell|thanks|no)$/.test(R.kind) &&
+          !(R.kind === "yes" && G.lastOffer && G.turns - G.lastOffer.turn <= 2) &&   // a YES to a job just offered is the job
+          (/^(?:laugh|wow|drunk|tease)$/.test(tone) || (tone === "agree" && !/^(?:yes|sure|ok|okay|of course|right)\b/.test(tl)))) {
+        // a remark that names one of her subjects is put to her softly first ("this beer is warm" may be her beer line)
+        if (typeof _partnerHasTopic === "function" && (_partnerHasTopic(partner, tl) || _partnerHasTopic(partner, _convoTopic(tl))) &&
+            _askSoft("ask " + String(NPCS[partner].name).toLowerCase() + " about " + (_partnerHasTopic(partner, tl) ? tl : _convoTopic(tl)))) return true;
+        _remarkBeat(partner, tl); _tick(); return true;
+      } }
     // YOU WANT TO COME BACK TO MY HOTEL?: that is the barfine, asked as a man asks it — not the hotel's prices
     if (/\b(?:come back (?:to|with me to) (?:my|the) (?:hotel|room|place)|back to my (?:hotel|room|place)|come to my (?:hotel|room|place)|my place or)\b/.test(l) &&
         NPC_ROLES[partner] && !(G.party && (G.party.ids || []).includes(partner))) { doCommand("barfine " + String(NPCS[partner].name).toLowerCase()); return true; }
@@ -15198,8 +15228,25 @@ const _HEARD = {
       "\"Sabai sabai,\" she says, which covers it, and tops up your glass from the bottle."],
   },
   house: {
+    affectionCool: ["A dry look. \"Everybody says that at eleven o'clock. Say it at seven, sober, then I listen.\"",
+      "\"That is the beer talking, na,\" she says, kindly enough.", "\"Very sweet. Tell the girls, they like to hear it more than me.\""],
+    affectionWarm: ["\"You have been good company this week,\" she says, quieter than usual. \"That is not nothing here.\"",
+      "A small smile. \"You will come back. Everybody say they won't, and they come back.\"", "\"Okay. I remember you, then. I don't remember everybody.\""],
+    plan: ["A nod. \"Okay. Still plenty of time, then.\"", "\"Good. Then we see you before you go, na.\"", "\"I write it in my head,\" she says, tapping it."],
+    food: ["\"There is a noodle cart round the corner most nights, and the 7-Eleven toastie. Eat first, then drink.\"",
+      "\"Eat something before the next one. I mean it.\"", "\"Kin khao rue yang? You eat yet? Farang always forget.\""],
+    question: ["\"Long story. Another night, maybe.\"", "A short laugh. \"Ask me that again when we know each other.\"",
+      "\"That one needs more than one beer.\"", "\"You first,\" she says pleasantly, and it is not a dodge so much as a toll."],
+    return: ["\"We see you, then.\" A nod that has heard it before and doesn't hold it against you.", "\"Good. The stool will wait.\"",
+      "\"Come back, then. We are not going anywhere.\""],
+    back: ["\"Okay. Your glass stays here.\"", "A nod. \"Seat is yours.\"", "\"Go, go. Nobody take your stool.\""],
+    generic: ["A nod — heard, considered, filed under the evening's conversation.", "\"Okay,\" she says, and raises her glass an inch.",
+      "\"Is that so,\" she says — a statement, not a question.", "A laugh, short and genuine. \"You fit in here, I think.\"",
+      "\"Hm.\" A pause. \"Maybe so.\""],
+  },
+  farang: {
     affectionCool: ["A dry look. \"Everybody says that around eleven o'clock. Come back at seven and say it sober.\"",
-      "\"That's the beer, love,\" comes the answer, kindly enough."],
+      "\"That's the beer talking,\" comes the answer, kindly enough."],
     affectionWarm: ["\"You've been good company this week,\" comes the answer, quieter than usual. \"That's not nothing here.\"",
       "A small smile. \"Go on. You'll be back. They all say they won't and they're back by March.\""],
     plan: ["A nod. \"Noted. Plenty of time yet, then.\"", "\"Good,\" comes the answer. \"Then we'll see you before you go.\"",
@@ -15215,6 +15262,287 @@ const _HEARD = {
       "A laugh, short and genuine. \"You'll fit in here yet.\"", "\"Hm.\" A pause. \"Can't argue with that.\""],
   },
 };
+// A REMARK THE GAME CAN'T PLACE GETS A BEAT, BY ITS TONE (Mario, 2026-10-18: "go for it" on the fallback choices — a
+// remark nothing reads gets a neutral beat from her; she steers you to her topics; tone is flavour only; she remembers
+// your news). A QUESTION nothing reads is still "I don't understand" and the escalation (_parseFail); a REMARK is
+// something said to her, and the honest answer to most remarks in a bar is a nod in the right key. The tone picks the
+// key and moves nothing — no สนุก, no bond, no meter (remark-audit pins that). Three registers: the floor's Tinglish,
+// the house's fluent Thai English (never a British idiom in a Thai mouth), a farang's own on his stool.
+function _remarkTone(t) {
+  if (/\b(?:drunk|pissed|wasted|hammered|smashed|tipsy|too much (?:beer|to drink)|had a few|legless)\b/.test(t)) return "drunk";
+  if (/\b(?:lonely|sad|depressed|miss (?:home|my (?:wife|kids|family|son|daughter|dog))|my (?:wife|girlfriend) (?:left|died)|divorce|lost my (?:job|wife|dog)|bad (?:week|year|day)|died|passed away|funeral|hard (?:year|time))\b/.test(t)) return "sad";
+  if (/\b(?:hot|tired|knackered|exhausted|bored|boring|expensive|warm beer|beer is warm|too loud|noisy|sore|hurts?|hate|annoying|sick|rubbish|crap|terrible|awful|my feet|hangover|headache|broke|skint)\b/.test(t)) return "bad";
+  if (/\b(?:haha+|hehe+|lol|lmao|555+|joke|joking|kidding|funny|hilarious)\b|^ha+\b/.test(t)) return "laugh";
+  if (/^(?:wow|whoa|blimey|crikey|really|no way|seriously|crazy|unbelievable|amazing|jesus|bloody hell|oh my god|omg)\b/.test(t)) return "wow";
+  if (/^(?:yeah|yes|yep|true|exactly|me too|same|same here|fair enough|i know|right|agreed|absolutely|definitely|of course|sure|totally)\b/.test(t)) return "agree";
+  if (/\b(?:pattaya|thailand|thai people|this town|the soi|soi 6|soi six|bangkok|the beach|walking street|this place|this bar)\b/.test(t)) return "town";
+  if (/^you(?:'re| are|re| r)? (?:trouble|cheeky|naughty|crazy|bad|terrible|funny|a laugh|mad|clever|smart|sneaky)\b|^you (?:little|cheeky)\b/.test(t)) return "tease";
+  if (/\b(?:great|good|fun|lovely|brilliant|awesome|fantastic|nice|best|love (?:it|this)|enjoying|happy|cool|perfect|sabai)\b/.test(t)) return "good";
+  if (/^(?:i|i'?m|i'?ve|i'?ll|i'?d|my|me)\b/.test(t)) return "self";
+  return "neutral";
+}
+const _REMARK = {
+  floor: {
+    good: ["\"Sanuk, na?\" She looks pleased, as if the good night were partly her doing. Maybe it is.",
+      "\"Good, good.\" She clinks her glass on yours. \"Happy customer, happy bar.\"",
+      "\"I know! Tonight is good night.\" She does a small dance on the stool without getting off it.",
+      "She beams. \"You see? Pattaya not so bad. Everybody say bad, but you have fun.\"",
+      "\"Chai, chai — yes.\" She nods hard enough for both of you. \"Me also. Tonight sabai.\"",
+      "\"Then you stay more.\" A practical smile. \"Good night must be long night.\"",
+      "\"Good!\" She raises her glass. \"Chok dee. For the good night.\"",
+      "\"Sabai sabai,\" she agrees, and settles back like it was her idea."],
+    bad: ["\"Oy, mai pen rai.\" She pats your arm. \"Have one more cold beer, then better.\"",
+      "She makes a sympathetic face. \"Same same me. Tonight, everybody tired. Only the music not tired.\"",
+      "\"Aw.\" She fans you with a beer mat, very seriously. \"Better?\"",
+      "\"Pattaya like that sometime.\" A shrug. \"Tomorrow different. Always different.\"",
+      "She tuts. \"You need sleep, or you need beer. I think beer, hahaha.\"",
+      "\"Mai pen rai, na.\" Never mind. She says it like a cure, and half the time it is one.",
+      "\"Poor thing.\" She doesn't sound sorry, exactly — she sounds like somebody who has heard worse tonight.",
+      "\"Then sit here with me. Sitting here is free.\" She thinks. \"Sitting is free. Drink is not free.\""],
+    sad: ["She goes quiet, and puts her hand on your arm, and leaves it there a moment. \"Mai pen rai. You here now.\"",
+      "\"Oh.\" She doesn't say anything clever, which is the clever thing. She just sits closer.",
+      "\"Sorry, na.\" She means it. \"Everybody here carry something. You carry this one. Okay.\"",
+      "She looks at you properly. \"Is why you come Pattaya? Is okay. Many man come for that.\"",
+      "\"Jai yen yen,\" she says softly — cool heart. \"Slowly. Tonight you not alone.\"",
+      "She pours the last of your bottle into your glass, which is the only thing to hand, and it helps a little.",
+      "\"Sad story.\" She nods. \"I have sad story too. Not tonight. Tonight we drink, okay?\"",
+      "She squeezes your hand once, quick, and lets go. \"Okay. Now you tell me something happy.\""],
+    laugh: ["She laughs before she has decided whether it was funny, which is a professional skill and also genuine.",
+      "\"555!\" She slaps the bar. \"Farang joke. I don't understand, but I laugh.\"",
+      "\"You crazy,\" she says, delighted. \"Crazy good, not crazy bad.\"",
+      "She laughs so hard the girl on the next stool asks what, and she can't explain it, and that's funnier.",
+      "\"Hahaha — again! Say again!\" She wants to hear it twice. It is better the second time.",
+      "\"Ba ba bo bo,\" she says, which is what you call a man who talks nonsense, fondly.",
+      "She hides her face behind her hand and laughs into it. \"Stop, stop. My make-up.\"",
+      "\"Funny man.\" She points at you, in case anybody missed which one."],
+    wow: ["\"I know!\" She is delighted you noticed. \"Pattaya, everything can happen.\"",
+      "\"Jing jing — really!\" She nods, eyes wide, matching yours.",
+      "\"Wow, wow.\" She copies you, then laughs at herself copying.",
+      "\"Crazy, na?\" She shrugs the shrug of somebody for whom this is a Tuesday.",
+      "She looks where you're looking and laughs. \"Every night like that. You get used to.\"",
+      "\"Ooh.\" She pulls the face the room pulls at a big tip — mouth round, eyebrows up — and laughs at herself for it.",
+      "\"For real,\" she says, in English she is proud of. \"For real for real.\"",
+      "\"You think that is crazy? Stay until two o'clock.\""],
+    agree: ["\"Chai!\" Yes. She clinks your glass on it.",
+      "\"Same same,\" she says, satisfied, as if a deal has been struck.",
+      "\"You know!\" She points at you. \"You understand Pattaya.\"",
+      "\"Okay, okay.\" Agreement settled, she moves straight on. \"So — another beer?\"",
+      "She nods, firmly, the matter closed. \"We same idea.\"",
+      "\"Right, right.\" She has picked up the word from somebody and likes how it sounds.",
+      "\"Yes, yes, yes.\" Three yeses. It is a lot of agreement.",
+      "\"Chai mai la — yes, of course.\" She grins. \"Easy question.\""],
+    town: ["\"Pattaya, is like that.\" She waves at the whole soi. \"Everybody come for one week, stay ten years.\"",
+      "\"Thailand good, na?\" She is proud of it in a way that has nothing to do with the bar.",
+      "She looks out at the street. \"Daytime, this soi very quiet. Nighttime, crazy. Two different place.\"",
+      "\"You like? Then you come back.\" A shrug. \"Everybody come back.\"",
+      "\"Thai people smile, farang think we happy.\" She smiles. \"Sometime happy. Sometime only smile.\"",
+      "\"This soi, I know everybody.\" She counts the doors with her eyes. \"And everybody know me.\"",
+      "\"Pattaya not real Thailand,\" she says, not unkindly. \"Real Thailand more quiet. More rice.\"",
+      "\"Sanuk town,\" she agrees. \"Fun town. Expensive fun.\""],
+    tease: ["\"Me?\" A hand on her chest, all innocence. \"I am good girl. Ask anybody. No — don't ask anybody.\"",
+      "\"Little bit.\" She holds up finger and thumb, a millimetre apart. \"Only little bit.\"",
+      "She grins and doesn't deny it. \"Somebody must be. You too polite.\"",
+      "\"You know me one night, already you know too much.\"",
+      "\"Takes one to know one,\" she says carefully, a phrase she has been waiting all week to use.",
+      "\"Ha! You too.\" She pokes your arm. \"Same same.\"",
+      "She narrows her eyes. \"Careful. I remember everything.\"",
+      "\"Is my job,\" she says, completely straight, and then can't hold it and laughs."],
+    self: ["She listens with her chin on her hand, catching most of it. \"Oh — okay. Then you tell me more.\"",
+      "\"Really?\" She sounds like she means it. \"I never know that kind of man before.\"",
+      "\"Mm.\" She nods along. \"Your life very different from my life. Is interesting.\"",
+      "She repeats a word of it back to you, trying it out, and gets it nearly right.",
+      "\"Okay, I remember.\" She taps her temple. \"Next time I ask you.\"",
+      "\"You talk, I listen.\" She settles in. \"Is good. Most man only talk about the beer.\"",
+      "\"Ohh.\" A pause while she files it. \"So that is you.\"",
+      "\"Good for you,\" she says, an English phrase she uses for everything, and here it fits."],
+    drunk: ["\"I know.\" She moves your glass a little further from your elbow. \"I see already.\"",
+      "\"Mao laew — drunk already!\" She laughs. \"Drink water, then beer. Thai way.\"",
+      "\"Slowly, slowly.\" She steadies your stool with her foot, which you hadn't noticed was needed.",
+      "\"Never mind. Drunk is holiday.\" She holds up a hand. \"But no motorbike. Promise.\"",
+      "She slides her own glass of water along to you. \"Drink. Is mine, is free.\"",
+      "\"Drunk man always say he not drunk. You say you drunk — so you okay.\" The logic is hers.",
+      "\"Mao mao,\" she says, fondly — drunk drunk. \"Sit. Don't fall down. Is my bar.\"",
+      "\"How you go home?\" A real question. \"Baht bus. Not walk. Okay?\""],
+    neutral: ["She nods along, catching most of it. \"Mm. Same same,\" she says, which is agreement of a kind.",
+      "\"Really?\" She leans in like it's the best thing she's heard tonight, and maybe it is.",
+      "She laughs — at the sense or the sound of it, you can't tell — and clinks her glass on yours.",
+      "\"Ohh,\" she says, and then, practical: \"So — you want another beer?\"",
+      "She thinks about it, then gives a little shrug. \"Up to you, tilac. Your holiday.\"",
+      "\"Okay, okay,\" she says, and means: I heard you, and I like you, and I didn't get all of it.",
+      "\"Sabai sabai,\" she says, which covers it, and tops up your glass from the bottle.",
+      "She smiles and doesn't answer, and the smile is enough of one."],
+  },
+  house: {
+    good: ["\"Good. That is what we are here for.\" A nod at the room. \"Tell your friends.\"",
+      "\"Happy customer.\" She says it like a line in a book. \"I like to see that.\"",
+      "\"Good night for everybody, then. The girls too, na.\"",
+      "\"Glad, glad.\" She raises her glass an inch. \"Chok dee.\"",
+      "A small, satisfied smile. \"I told you this bar is the best one on the soi.\"",
+      "\"Good. Then you come back tomorrow. Same stool.\""],
+    bad: ["\"Mai pen rai. The next one is colder.\" She signals the bar without looking.",
+      "\"Everybody is tired this time of year. The girls also.\" A shrug. \"We keep going.\"",
+      "\"I can fix the beer. The rest, I cannot fix.\"",
+      "She clicks her tongue. \"Sit near the fan. That is the best seat, I give it to you.\"",
+      "\"Tomorrow is different. In Pattaya, always tomorrow is different.\"",
+      "\"You want something to eat? Most of that is hunger, I think.\""],
+    sad: ["She is quiet a moment. \"I am sorry. Truly.\" And then, because it is a bar and she has run one a long time: \"Take your time.\"",
+      "\"Many men come here carrying that.\" She doesn't make it smaller than it is. \"Sit. Nobody will bother you.\"",
+      "\"Jai yen yen. Cool heart.\" She pats the bar beside your hand. \"Take your time.\"",
+      "\"I know that feeling.\" She doesn't say more, and you believe her.",
+      "\"Then tonight be easy on yourself, na.\" A look at the girls. \"They are good company. That is what they are for.\"",
+      "She refills your glass without a word, which says more than one would."],
+    laugh: ["A dry laugh. \"You are a funny one. I have seen a lot of funny ones.\"",
+      "\"Ha.\" One syllable, but it is real. \"Okay, that was good.\"",
+      "She shakes her head, smiling. \"Farang humour. Every year I understand a little more.\"",
+      "\"555.\" She says it out loud, which she would deny later.",
+      "\"Keep that one for the girls. They will laugh more than me.\" But she is laughing.",
+      "\"You should do that on the stage,\" she says. \"No — please don't.\""],
+    wow: ["\"Welcome to Pattaya.\" She has said it a thousand times and still enjoys it.",
+      "\"Every night something.\" A shrug. \"Tonight it is your turn to see.\"",
+      "\"Really, yes. I have worked here a long time. Nothing surprises me now.\"",
+      "\"You think so? Wait for Songkran.\"",
+      "\"Crazy town,\" she agrees, not at all impressed. \"It pays the rent.\"",
+      "She raises an eyebrow. \"That is nothing. You should see a Friday.\""],
+    agree: ["\"Exactly.\" A firm nod, matter settled.", "\"Yes. You understand how it works.\"",
+      "\"Same idea, we have.\" She taps the bar on it.", "\"Of course.\" As if it never needed saying.",
+      "\"That is what I always tell the girls.\"", "\"Yes, yes.\" She is already looking at the door for the next customer."],
+    town: ["\"Pattaya changes every year and stays the same every night.\" She has thought about it.",
+      "\"This soi, I know every door. Who opened, who closed, who owes who.\"",
+      "\"Thailand is not Pattaya. But Pattaya is Thailand also. Both true.\"",
+      "\"People come for a week. Some of them never leave. You be careful, na.\"",
+      "\"In the day it is a different street. Nobody believes me.\"",
+      "\"The town is good to people who are good to it.\" A look. \"Mostly.\""],
+    tease: ["\"Me?\" A raised eyebrow. \"I run a respectable bar.\" Nobody in earshot believes it, including her.",
+      "\"Somebody must be naughty here, and the girls are too busy.\"", "\"I have to be. Somebody has to keep the girls in order.\"",
+      "\"Careful. I am the one who keeps the book.\"", "She laughs. \"Long time in this business. What did you expect?\"",
+      "\"And you are not?\" She lets it hang."],
+    self: ["\"Is that so.\" She listens properly — it is part of the job, and she is good at the job.",
+      "\"Interesting.\" She seems to mean it. \"Different life from this one.\"",
+      "\"I remember that.\" She says it like a promise. \"I remember everybody's story.\"",
+      "\"Okay. Now I know you a little.\" A nod. \"That is how it starts.\"",
+      "\"Good for you.\" Said plainly, without irony.", "She nods slowly, filing it. \"Tell me more another night.\""],
+    drunk: ["\"I can see.\" She moves your glass back from the edge. \"Water next. Then we see.\"",
+      "\"Slowly, na. The night is long.\"", "\"Don't ride a motorbike. Take the baht bus. I mean it.\"",
+      "\"Drunk is okay. Drunk and loud, I call security.\" She smiles. \"You are only drunk.\"",
+      "\"Sit. Eat something. Then decide.\"", "She signals the bar for water. \"Thai way: one water, one beer.\""],
+    neutral: ["A nod — heard, considered, filed under the evening's conversation.", "\"I see.\" Polite, and she does.",
+      "\"Okay.\" She raises her glass an inch.", "\"Hm.\" A pause. \"Maybe so.\"",
+      "\"Up to you,\" she says — the Thai answer to most things, and not a dismissal.", "She smiles, the professional one and then, briefly, the real one."],
+  },
+  farang: {
+    good: ["\"Good. Don't tell anyone or they'll all come.\"", "\"That's the spirit.\" A glass raised an inch.",
+      "\"Best town in the world, three nights a week.\"", "\"Enjoy it. That's the whole trick.\"", "\"Told you. It grows on you.\""],
+    bad: ["\"Welcome to the tropics.\" No sympathy, but no malice either.", "\"Have another. It's what the rest of us do.\"",
+      "\"Give it a week. Then you won't notice.\"", "\"Could be worse. Could be home.\"", "\"Sit under the fan. Rookie mistake, the end seat.\""],
+    sad: ["He's quiet a second. \"Yeah. Most of us in here have one of those.\"", "\"Sorry to hear it.\" He means it, and leaves it there.",
+      "\"Get you one?\" It's the only kind of sympathy he's got, and he offers it.", "\"That's why half of us are here,\" he says. \"Nobody asks.\"",
+      "He nods slowly. \"Takes a while. Pattaya's a decent place to let it.\""],
+    laugh: ["He snorts into his glass. \"Not bad.\"", "\"Ha. I'll be stealing that.\"", "A short laugh. \"You'll do.\"",
+      "\"Heard worse. Heard better. Heard it in this bar.\"", "He laughs despite himself."],
+    wow: ["\"Pattaya,\" he says, as if that explains it, and it does.", "\"Every night. You stop noticing.\"",
+      "\"That's nothing. Stick around.\"", "\"Yep. Welcome.\"", "\"Wait till you've seen a Friday.\""],
+    agree: ["\"Exactly.\"", "\"Too right.\"", "\"Can't argue with that.\"", "\"That's what I keep telling them.\"", "\"Spot on.\""],
+    town: ["\"It's not Thailand, it's Pattaya. Different country.\"", "\"Twenty years I've been coming. Never the same place twice.\"",
+      "\"Everybody's got an opinion on this town. Most of them are right.\"", "\"It'll eat you if you let it. Mostly it doesn't.\"",
+      "\"You get used to it. Then you can't go back.\""],
+    tease: ["\"Guilty.\"", "\"Takes one to know one.\"", "\"So I've been told.\"", "\"At my age it's that or the crossword.\"", "He grins and doesn't deny it."],
+    self: ["\"Is that right.\" A statement, not a question — the way old hands say it.", "\"Fair enough.\" He nods, filing it.",
+      "\"Everybody's got a story in here.\"", "\"Good for you.\"", "\"Yeah? I did something like that once.\" He doesn't say what."],
+    drunk: ["\"Pace yourself. Long night.\"", "\"Water. Then decide.\"", "\"Don't get on a bike. I mean it.\"",
+      "\"We've all been there. Most of us are there now.\"", "\"Sit down before you fall down.\""],
+    neutral: ["\"Is that right.\"", "\"Fair enough.\" The glass goes up an inch.", "\"Hm.\" He considers it.", "\"Can't argue with that.\"", "A nod."],
+  },
+};
+// STEERING (the same call): every other remark she has nothing to say to, she offers you one of her subjects — a
+// subject she would answer now and you have not asked her about — with the tap to ask it.
+const _STEER = {
+  floor: ["\"You want to know something about me? Ask about {topic}. That one I tell you.\" ({CMD})",
+    "\"Ask me {topic}, na. Is more easy for my English.\" ({CMD})",
+    "She changes the subject the friendly way. \"You never ask me about {topic}.\" ({CMD})",
+    "\"Okay, my turn to talk. You ask — {topic}.\" ({CMD})",
+    "\"I tell you about {topic}, if you want.\" She waits to see if you do. ({CMD})",
+    "\"Farang always ask same question. You ask different one — {topic}.\" ({CMD})"],
+  house: ["\"If you want a story, ask me about {topic}.\" ({CMD})", "\"Ask me about {topic} one night. I have plenty to say.\" ({CMD})",
+    "\"You haven't asked about {topic}. Everybody asks about that.\" ({CMD})", "\"Ask about {topic}, if you want the real version.\" ({CMD})"],
+  farang: ["\"Ask me about {topic} sometime. Got all night.\" ({CMD})", "\"You want a story, ask me about {topic}.\" ({CMD})",
+    "\"Never asked me about {topic}. Most do.\" ({CMD})", "\"Get me on {topic} one night.\" ({CMD})"],
+};
+
+// One line, said by whoever it is: the pools are written in the speaker's usual gender and turned for the other.
+function _genderLine(line, c) {
+  const she = _pr(c).s === "she";
+  return she ? line.replace(/\bHe\b/g, "She").replace(/\bhe\b/g, "she").replace(/\bhis\b/g, "her").replace(/\bhim\b/g, "her")
+    : line.replace(/\bShe\b/g, "He").replace(/\bshe\b/g, "he").replace(/\bher\b/g, "his").replace(/\bherself\b/g, "himself");
+}
+// a subject she would answer now that you have not asked her about (the chip palette, so nothing she would dodge)
+function _unaskedTopic(c) {
+  const dl = (NPCS[c] && NPCS[c].dialogue) || [], seen = (G.talked && G.talked[c]) || [];
+  const steered = ((G.soc.steered = G.soc.steered || {})[c] = G.soc.steered[c] || []);
+  return (typeof _convoTopics === "function" ? _convoTopics(c) : []).find(k => {
+    const key = String(k).split("|")[0];
+    if (steered.includes(key) || (typeof _topicKnown === "function" && !_topicKnown(key))) return false;
+    return !dl.some((d, i) => d.topic && seen.includes(i) && String(d.topic).split("|").includes(key));
+  });
+}
+function _remarkBeat(c, t) {
+  const reg = _notUnderstoodReg(c), tone = _remarkTone(t);
+  // the beat names her: a line that opens on her quote is hers by name, a line that opens on "She" opens on her name
+  const line = _genderLine(_pickTownLine(_REMARK[reg][tone], "remark:" + reg + tone), c);
+  _say(/^["“]/.test(line) ? NPCS[c].name + ": " + line : line.replace(/^(?:She|He)\b/, NPCS[c].name));
+  const n = ((G.soc.beats = G.soc.beats || {})[c] = (G.soc.beats[c] || 0) + 1);
+  const back = _toldBack(c);
+  if (back) { _say(back); return; }
+  if (n % 2) return;   // every other beat: a woman who steers every line is a woman running an interview
+  const k = _unaskedTopic(c);
+  if (!k) return;
+  const key = String(k).split("|")[0];
+  G.soc.steered[c].push(key);
+  const label = String(typeof _topicLabel === "function" ? _topicLabel(key) : key).toLowerCase();
+  _say(_genderLine(_fmt(_pickTownLine(_STEER[reg], "steer:" + reg), { topic: label,
+    CMD: ("ask " + String(NPCS[c].name).split(" ")[0] + " about " + key).toUpperCase() }), c));
+}
+// WHAT YOU TOLD HER, SHE KEEPS (the same call): your name, where you are from, your job, your dog — kept per woman
+// (G.toldTo, written by TELL and by her own question), and on a LATER night she brings one of them up, once a trip each.
+const _TOLD_KEYS = ["name", "home", "job", "dog"];
+function _toldNote(c, key, v) {
+  if (!c || !_TOLD_KEYS.includes(key) || !v) return;
+  ((G.toldTo = G.toldTo || {})[c] = G.toldTo[c] || {})[key] = { v: String(v), day: G.day, back: null };
+}
+const _TOLD_BACK = {
+  floor: {
+    name: ["\"{X}!\" She says your name like she has been practising it. \"You see? I remember.\"",
+      "\"Hello, {X}.\" A pleased little pause, to see if you noticed she kept it."],
+    home: ["\"You — the man from {X}.\" She points, proud of it. \"I remember. Still cold there?\"",
+      "\"{X} man!\" She grins. \"You go back {X} yet, or you stay Pattaya forever?\""],
+    job: ["\"Mister {X}!\" She laughs. \"Today you work, or today holiday?\"",
+      "\"You the {x} one. I remember. Very smart job.\""],
+    dog: ["\"How is your dog?\" A real question. \"Somebody give him food while you here?\"",
+      "\"Your dog — {X}, na? He miss you, I think. Dog always miss.\""],
+  },
+  house: {
+    name: ["\"Good evening, {X}.\" She keeps a book of names and you are in it.", "\"{X}. Welcome back.\""],
+    home: ["\"The one from {X}. I remember. How is it there?\"", "\"Back from {X} again, or still on holiday from it?\""],
+    job: ["\"How is the {x} business?\" She remembers what every customer does. It is part of the job.", "\"Still a {x}? Or retired now, like everybody here?\""],
+    dog: ["\"And your dog? Who is looking after him?\"", "\"How is {X}? You told me about him.\""],
+  },
+};
+function _toldBack(c) {
+  const rec = G.toldTo && G.toldTo[c];
+  if (!rec) return null;
+  const reg = _notUnderstoodReg(c) === "floor" ? "floor" : _notUnderstoodReg(c) === "house" ? "house" : null;
+  if (!reg) return null;
+  for (const key of _TOLD_KEYS) {
+    const e = rec[key];
+    if (!e || e.day >= G.day || e.back === G.vacation) continue;
+    e.back = G.vacation;
+    const v = e.v === "yes" ? "" : e.v;
+    const pool = _TOLD_BACK[reg][key].filter(l => v || !/\{X\}|\{x\}/.test(l));
+    if (!pool.length) continue;
+    return _genderLine(_fmt(_pickVary(pool, "toldback:" + reg + key), { X: v.replace(/\b\w/g, m => m.toUpperCase()), x: v }), c);
+  }
+  return null;
+}
+
 // WHAT'S YOUR NAME: a woman knows her own name, whatever her topics are (Steve's rerun: "You ask the wrong girl")
 function _nameSaid(c, R) {
   if (!c || R.kind !== "question" || R.about !== "you" || !/^(?:your )?(?:name|real name|nickname|thai name)$/.test(R.topic)) return false;
@@ -15235,7 +15563,8 @@ const _NAME_SAID = {
     "\"{n}. Has been all my life.\"", "\"It's {n}. Everybody here just says {n}.\""],
 };
 const _READ_EN = new Set(("great good bad nice night tonight today tomorrow fun beer drink bar hot cold busy quiet tired happy sad " +
-  "love music song weather rain lovely pretty beautiful week holiday place town street money cheap expensive").split(" "));
+  "love music song weather rain lovely pretty beautiful week holiday place town street money cheap expensive " +
+  "long day days life time work job home wife kids family friend friends bored crazy funny mad shame pity mate").split(" "));
 function _heardBucket(t) {
   if (/^(?:back in a (?:minute|min|sec|second|bit|mo)|be (?:right )?back|brb|one minute|wait here|don'?t go anywhere|save my (?:seat|stool)|just going to the (?:loo|toilet|gents))\b/.test(t)) return "back";
   if (/\b(?:do|would) you (?:like|love|fancy|miss) me\b|\bam i (?:handsome|ugly|too old|your type|fat|good looking|sexy)\b|\bdo you think i'?m (?:handsome|old|sexy)\b/.test(t)) return "affection";
@@ -15369,6 +15698,9 @@ function _toHer(c, raw, addressed) {
   // NOT UNDERSTOOD is the honest answer when nothing above read the sentence (Mario, 2026-10-15: "shouldn't a
   // character just say the equivalent of 'I don't understand'?") — in her own English, never a deflection that
   // pretends to have read it. Only the narrow buckets that are reliably right keep their own lines.
+  // a REMARK is answered with a beat in its tone, and sometimes her subject or your news; only a QUESTION nothing
+  // reads is "I don't understand" (Mario, 2026-10-18)
+  if (b === "generic" && R.kind !== "question" && !/\?\s*$/.test(R.raw || "")) { _remarkBeat(c, t); if (!missed) _tick(); return true; }
   if (b === "generic" || b === "question" || (b === "plan" && R.kind === "question")) {
     _say(_fmt(_pickTownLine(_NOT_UNDERSTOOD[_notUnderstoodReg(c)], "huh:" + _notUnderstoodReg(c)), { n: NPCS[c].name }));
     _parseFail("talk", c);
@@ -15376,7 +15708,9 @@ function _toHer(c, raw, addressed) {
     return true;
   }
   const key = b === "affection" ? (_knownTier(c) >= 2 || (G.party && (G.party.ids || []).includes(c)) ? "affectionWarm" : "affectionCool") : b;
-  _say(_pickTownLine(_HEARD[reg][key], "heard:" + reg + key));
+  // three registers (a Thai house never says "love" or "right you are" — Mario, 2026-10-15), turned to the speaker
+  const reg3 = _notUnderstoodReg(c);
+  _say(_genderLine(_pickTownLine(_HEARD[reg3][key], "heard:" + reg3 + key), c));
   if (!missed) _tick();   // the soft ask already spent the turn
   return true;
 }

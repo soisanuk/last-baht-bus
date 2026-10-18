@@ -51,11 +51,12 @@ test("a nested hand-off is one failure per thing typed, not two", () => {
   run("great night tonight"); run("lovely shoes in the moonlight"); assert.equal(_examplesDue(), false);
 });
 
-test("a sentence to the woman you are talking to: her own line first, then the game says plainly it couldn't read it", () => {
+test("a question the woman you are talking to cannot read: her own line first, then the game says plainly", () => {
+  // (a REMARK gets a beat in its tone — tests/js/remarks.test.js; this is a question nothing reads)
   run("talk to kwan"); G.convoQ = null; out = [];
-  run("great night tonight");
+  run("does the moon like turnips?");
   assert.match(said(), /Kwan/); assert.ok(!out.some(o => o.cls === "warn"), "the first time, her shrug is the answer");
-  out = []; run("the purple sky is grumpy");
+  out = []; run("is the moon fond of turnips?");
   assert.match(said(), /didn't parse|couldn't read|didn't follow/, said());
   assert.match(said(), /ASK KWAN ABOUT/, "the examples are hers");
 });

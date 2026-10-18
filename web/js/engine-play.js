@@ -1340,6 +1340,8 @@ const _TOLD_RX = [
   ["job", /^i (?:work as an?|work in) ([a-z ]{3,30})$/, m => m[1]],
   ["home", /^(?:i'?m|i am|i come) from ([a-z' ]{3,30})$/, m => m[1]],
   ["name", /^(?:my name is|my name'?s|call me|i'?m called) ([a-z' ]{2,20})$/, m => m[1]],
+  // the dog at home: named or not (the fallback choices, 2026-10-18 — "she remembers your news")
+  ["dog", /^(?:i (?:have|'ve got|got) a dog|i have got a dog|my dog)(?:,? (?:called|named|is called|'s called|is named|is))? ?([a-z']{2,15})?$/, m => m[1] && !/^(at|back|home|in|old|young|big|small|cute|sick|dead|lovely)$/.test(m[1]) ? m[1] : "yes"],
   // "I'm Bernard" — one word that is a name and not a state (Bernard, round 88: "i'm bernard" was not my story)
   ["name", /^(?:i'?m|i am|it'?s|this is) ([a-z']{2,15})$/, m => _TOLD_NOT_NAME.test(m[1]) ? "" : m[1]],
 ];
@@ -1349,9 +1351,13 @@ const _TOLD_REACT = {
     married: ["\"Married.\" She looks at your hand, then your face. \"Then I am only your friend, na. Friend is good also.\""],
     single: ["\"Single? Everybody say single.\" She smiles anyway. \"Okay, I believe one time.\""],
     other: ["She nods slowly. \"I'm sorry, na. You come here to be not alone. Is okay.\""] },
-  job: ["\"{x}?\" She tries the word. \"Is good job? Sit all day, I think. Then you come here and sit more, hahaha.\"", "\"Ohh, {x}. Very smart man.\" She means it, more or less. \"You count my chits for me, na?\""],
+  job: ["\"{X}?\" She tries the word. \"Is good job? Sit all day, I think. Then you come here and sit more, hahaha.\"", "\"Ohh, {x}. Very smart man.\" She means it, more or less. \"You count my chits for me, na?\""],
   home: ["\"{X}? I don't know it.\" She doesn't pretend. \"Is far? Is cold? Everybody's home is cold.\"", "\"{X}.\" She files it away. \"Next time you tell me about it. Tonight you tell me about you.\""],
   name: ["\"{X}.\" She says it back, twice. \"Okay. Now I know.\""],
+  dog: ["\"You have dog? What kind? Big one, small one?\" She approves of dogs. \"Who give him food when you here?\"",
+    "\"Dog man.\" She nods, as if it explains something. \"Dog man is kind man, mostly.\""],
+  dogNamed: ["\"{X}? Is good name for dog.\" She tries it out. \"{X}. I remember.\"",
+    "\"{X}!\" She laughs. \"Your dog have better name than me.\""],
   // a Thai place said to a Thai woman: she knows it, and a farang who names it has a story (Anan, the Thai-only week —
   // "Korat? I don't know it" from a woman who grew up three hours from it)
   homeThai: ["\"{X}?\" She looks at you properly. \"You live there? Farang say {X} only for one reason — wife, hahaha.\"",
@@ -1370,24 +1376,36 @@ function _doTell(lower, to) {
     const v = val(m).trim(); if (!v) continue;
     if (key === "job" && /^(here|in pattaya|on holiday|from|tired|okay|ok|fine|drunk|sorry|happy|not|just|a bit|very)\b/.test(v)) return false;
     ((G.player.told = G.player.told || {}))[key] = v;
+    if (typeof _toldNote === "function") _toldNote(pid, key, v);
     // …and when SHE has just asked it, it is her answer: "where you from?" then "i'm from korat" was a remark, and
     // her question stayed unanswered in the book (Anan, the Thai-only week)
     if (G.convoQ && G.convoQ.id === pid && G.convoQ.key === key && typeof _convoAnswer === "function") { _rawAnswer = v; return _convoAnswer(v); }
     const X = v.replace(/\b\w/g, c => c.toUpperCase());
-    const R = key === "home" && _THAI_PLACES.test(v) ? _TOLD_REACT.homeThai : _TOLD_REACT[key];
+    const R = key === "home" && _THAI_PLACES.test(v) ? _TOLD_REACT.homeThai : key === "dog" && v !== "yes" ? _TOLD_REACT.dogNamed : _TOLD_REACT[key];
     const pool = Array.isArray(R) ? R : (R[v] || R.other || Object.values(R)[0]);
     _say(`${NPCS[pid].name}: ` + _fmt(_pickVary(pool, "told:" + key), { x: v, X }));
     return true;
   }
   // …and asked back: what she knows of you
   if (/^(what'?s|what is|do you remember) my name\??$/.test(l) || /^who am i to you$/.test(l)) {
-    const told = G.player.told || {}, said = G.player.said || {};
-    const nm = told.name || said.nickname;
+    // what SHE was told — another woman's book is not hers (the fallback choices, 2026-10-18)
+    const mine = (G.toldTo && G.toldTo[pid]) || {}, heardMe = (_npcState(pid).heard || {});
+    const nm = (mine.name && mine.name.v) || heardMe.nickname;
     _say(`${NPCS[pid].name}: ` + (nm ? `"${nm.replace(/\b\w/g, c => c.toUpperCase()).split(/[ .,]/)[0]}." She looks pleased with herself. "You see? I listen."` : "\"You never tell me!\" She laughs. \"I call you handsome man, same as everybody. Tell me, then I remember.\""));
     return true;
   }
+  if (/^(?:where am i from|where(?:'?s| is) my home|do you remember where i'?m from)\??$/.test(l)) {
+    const h = ((G.toldTo && G.toldTo[pid] || {}).home || {}).v || (_npcState(pid).heard || {}).home;
+    _say(`${NPCS[pid].name}: ` + (h ? `"${String(h).replace(/\b\w/g, c => c.toUpperCase())}." She is pleased to have it. "You see? I listen."` : "\"You never tell me! England? Everybody England.\""));
+    return true;
+  }
+  if (/^(?:do you remember my dog|what'?s my dog called|what is my dog'?s name)\??$/.test(l)) {
+    const d = ((G.toldTo && G.toldTo[pid] || {}).dog || {}).v;
+    _say(`${NPCS[pid].name}: ` + (d && d !== "yes" ? `"${d.replace(/\b\w/g, c => c.toUpperCase())}!" Straight away. "Dog name I never forget."` : d ? "\"You have dog — but you never tell me the name.\"" : "\"You have dog? You never say.\""));
+    return true;
+  }
   if (/^(what do i do|what'?s my job|do you remember what i do)\??$/.test(l)) {
-    const j = (G.player.told || {}).job;
+    const j = (((G.toldTo && G.toldTo[pid]) || {}).job || {}).v;
     _say(`${NPCS[pid].name}: ` + (j ? `"${j.replace(/\b\w/g, c => c.toUpperCase())}." She ticks it off on a finger. "Sit all day, count money."` : "\"You don't say yet. I think… teacher? No. You tell me.\""));
     return true;
   }
