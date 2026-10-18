@@ -8,39 +8,39 @@ var NEWS_FEED = [
     "d": "15 Oct 2026"
   },
   {
-    "t": "Pattaya reviews progress on football stadium and youth sports center projects",
+    "t": "Pattaya seizes beach mats and chairs rented out illegally to tourists",
     "s": "Pattaya Mail",
-    "d": "16 Oct 2026"
+    "d": "17 Oct 2026"
   },
   {
-    "t": "Pattaya’s pink rabbits chase tourist dollars in uncertain high season",
+    "t": "Pattaya police search cars and raid nightclub, six patrons face drug tests",
     "s": "Pattaya Mail",
-    "d": "16 Oct 2026"
+    "d": "17 Oct 2026"
   },
   {
-    "t": "Pattaya officials tell foreign content creator to clear clothes and props from beach",
+    "t": "Pattaya Beach set to swing with two nights of world-class jazz November 6–7",
     "s": "Pattaya Mail",
-    "d": "16 Oct 2026"
+    "d": "17 Oct 2026"
   },
   {
-    "t": "Pattaya switches 5,281 motorcycle taxi drivers from orange to blue vests",
+    "t": "Pattaya reorganizes 420-space city hall car park to ease parking shortages",
     "s": "Pattaya Mail",
-    "d": "16 Oct 2026"
+    "d": "17 Oct 2026"
   },
   {
-    "t": "Pattaya and eastern Thailand face wet roads near rainy season’s end",
+    "t": "U-Tapao welcomes SiamWings’ second Airbus A330 ahead of winter season",
     "s": "Pattaya Mail",
-    "d": "16 Oct 2026"
+    "d": "17 Oct 2026"
   },
   {
-    "t": "Pattaya Tourist Police assist elderly German visitor with hospital transfer",
+    "t": "IMF raises Asia-Pacific growth forecast to 4.8%, Thailand to 2.1%",
     "s": "Pattaya Mail",
-    "d": "16 Oct 2026"
+    "d": "17 Oct 2026"
   },
   {
-    "t": "Pattaya restaurant catches fire after loud bang, no casualties",
-    "s": "Thaiger",
-    "d": "16 Oct 2026"
+    "t": "Pattaya’s 5,281 registered motorcycle taxi riders face a bigger test than blue vests",
+    "s": "Pattaya Mail",
+    "d": "17 Oct 2026"
   },
   {
     "t": "After Welcoming China’s Electric Vehicles, This Country Is Paying the Price",
@@ -48,14 +48,19 @@ var NEWS_FEED = [
     "d": "16 Oct 2026"
   },
   {
-    "t": "Home Office denies British baby living in Thailand chance to meet great-grandfather in UK",
+    "t": "From piercings to purification: Thailand’s 2026 vegetarian festival – in pictures",
     "s": "The Guardian",
     "d": "17 Oct 2026"
   },
   {
-    "t": "Queen Suthida of Thailand Becomes the First Sitting Queen to Pilot a Fighter Jet",
-    "s": "People.com",
-    "d": "16 Oct 2026"
+    "t": "Nigerians held in drug sting",
+    "s": "Bangkok Post",
+    "d": "18 Oct 2026"
+  },
+  {
+    "t": "Chinese embassy issues fresh Thailand travel alert over kidnappings, job scams",
+    "s": "South China Morning Post",
+    "d": "17 Oct 2026"
   },
   {
     "t": "Gamescom Asia x Thailand Game Show 2026 announces four additional pavilions from Indonesia, Japan, Malaysia, and the US",
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "16 Oct 2026"
   },
   {
-    "t": "Thai authorities search Chiang Mai Chabad House amid crackdown on Jewish centers",
-    "s": "The Jerusalem Post",
+    "t": "Queen Suthida of Thailand Becomes the First Sitting Queen to Pilot a Fighter Jet",
+    "s": "People.com",
     "d": "16 Oct 2026"
-  },
-  {
-    "t": "Chinese embassy issues fresh Thailand travel alert over kidnappings, job scams",
-    "s": "South China Morning Post",
-    "d": "17 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-16","USD":33.41,"AUD":23.25,"GBP":44.56,"EUR":37.61};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-17","temp":26,"humid":95,"code":3,"hi":31,"rain":99};
+var WX_NOW = {"date":"2026-10-18","temp":31,"humid":72,"code":1,"hi":31,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4166,"date":"2026-10-17","baht":65850};
+var GOLD = {"usd":4166,"date":"2026-10-18","baht":65850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81435,"thb":2708957};
+var BTC = {"usd":81831,"thb":2722114};
