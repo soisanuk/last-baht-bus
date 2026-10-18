@@ -2243,7 +2243,8 @@ const _READ_NOUNS = {
   // other photos rooms: a fridge they don't have is a noun nobody types there.
   photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "portrait", "fridge"],
   sign: ["notice", "placard", "arrows", "arrow", "signage", "plate", "brass plate", "nameplate", "name plate"],
-  calendar: ["wall calendar", "shipping calendar"],
+  calendar: ["wall calendar", "shipping calendar", "hong kong calendar", "chinese calendar"],
+  tattoo: ["her tattoo", "the tattoo", "shoulder", "her shoulder", "oy's shoulder", "ink", "the ink", "the character"],   // Madam Oy's shoulder (2026-10-18)
   registration: ["certificate", "company registration", "the seal", "gold seal", "frame"],
   // the Shamrock's darts-and-fixtures wall (renamed from `board`, whose aliases
   // were all DJ-sheet words — the authored elegy was unreachable by any noun a
@@ -13566,7 +13567,9 @@ function _englishOf(npc) {
   const n = NPCS[npc]; if (!n) return "some";
   if (n.english) return n.english;
   if (n.fluent) return "good";
-  if (NPC_ROLES[npc] === "cashier" && typeof _hh === "function") { const h = _hh(npc, "english") % 20; return h < 3 ? "none" : h === 19 ? "good" : "some"; }
+  // only a GENERATED cashier is dealt her English by hash: an authored one's own lines are her English (Ploy at Rainbow
+  // Girls was marked "none" under twelve written nodes)
+  if (NPC_ROLES[npc] === "cashier" && n.filler && typeof _hh === "function") { const h = _hh(npc, "english") % 20; return h < 3 ? "none" : h === 19 ? "good" : "some"; }
   return "some";
 }
 const _NO_ENGLISH = [

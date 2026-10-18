@@ -2421,7 +2421,7 @@ function _thaiVoice(id) {
 // school in Ohio, Nont speaks unaccented English, Jun reads at university, and all of them
 // were brushing a repeat off in Tinglish — "or you talk to the wall". Their own voices are
 // fluent, so their repeat is too. Named, like _FARANG_NPCS, because no field marks fluency.
-const _FLUENT_THAI = new Set(["tan", "nont", "jun", "wilawan", "rose", "ampai", "gift", "nangfah", "mala",
+const _FLUENT_THAI = new Set(["oy", "tan", "nont", "jun", "wilawan", "rose", "ampai", "gift", "nangfah", "mala",
   "duangjai", "pae", "mercedes", "chompoo", "somchith", "nit", "tul", "waen", "kesinee", "wimon", "preeda", "thip"]);
 const _ASK_AGAIN_FLUENT = [
   n => `“You asked me that one already,” ${n} says, with a small smile. “Same answer. Ask me something new.”`,

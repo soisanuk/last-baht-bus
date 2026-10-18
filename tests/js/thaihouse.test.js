@@ -49,7 +49,8 @@ test("a cashier with no English is translated by a girl, once a night", () => {
   assert.ok(none, "about one cashier in seven has none");
   G.room = _npcRoom(none); out = [];
   doCommand("talk to " + NPCS[none].name.toLowerCase());
-  assert.match(said(), /next to no English|English stops at numbers/);
+  assert.match(said(), /no English|English stops at numbers/);
+  assert.ok(NPCS[none].filler, "an authored cashier's own lines are her English — never dealt none");
   out = []; doCommand("talk to " + NPCS[none].name.toLowerCase());
-  assert.doesNotMatch(said(), /next to no English|English stops at numbers/, "once a night");
+  assert.doesNotMatch(said(), /no English|English stops at numbers/, "once a night");
 });
