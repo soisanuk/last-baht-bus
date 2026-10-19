@@ -1264,7 +1264,7 @@ const _term = (() => {
         try { price = typeof _bellPrice === "function" ? _bellPrice(G.room) : null; } catch (e) {}
         bellFab.classList.add("armed");
         bellFab.textContent = price ? "฿" + (typeof _num === "function" ? _num(price) : price) + "?" : "ring?";   // four figures now (per head, round 78)
-        bellFab.title = "Tap again to ring it — the whole bar drinks on you";
+        bellFab.title = "Tap again to ring it — a drink a head, the whole bar drinks on you";
         setTimeout(() => { if (Date.now() - bellArmed >= 2900) { bellFab.classList.remove("armed"); bellFab.textContent = "🔔"; bellFab.title = "Ring the bell"; } }, 3000);
         return;
       }

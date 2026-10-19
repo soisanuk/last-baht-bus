@@ -1,0 +1,7 @@
+{"cmd":"baht bus","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"soi6_deep","day":1,"turn":27,"mode":"soi6","convo":null,"at":"2026-10-19T18:24:58.999Z","src":"persona-dougie"}
+{"cmd":"when is the last bus","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"soi6_deep","day":1,"turn":30,"mode":"soi6","convo":null,"at":"2026-10-19T18:25:03.894Z","src":"persona-dougie"}
+{"cmd":"ask lotus staff what is still open after two","reply":"Nobody here goes by that — not tonight.","room":"pink_lotus","day":2,"turn":67,"mode":"soi6","convo":null,"at":"2026-10-19T18:26:17.066Z","src":"persona-dougie"}
+{"cmd":"take joy to jomtien","reply":"You don't see that here.","room":"soi6_street","day":3,"turn":17,"mode":"soi6","convo":"joy","at":"2026-10-19T18:27:17.038Z","src":"persona-dougie"}
+{"cmd":"fly home","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"queen_vic","day":4,"turn":4,"mode":"soi6","convo":null,"at":"2026-10-19T18:27:59.606Z","src":"persona-dougie"}
+{"cmd":"tuk tuk","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"soi6_deep","day":6,"turn":8,"mode":"soi6","convo":null,"at":"2026-10-19T18:29:52.113Z","src":"persona-dougie"}
+{"cmd":"ask shady lady staff about the last night of the week","reply":"Nobody by that name here.","room":"sunset_rail","day":7,"turn":38,"mode":"soi6","convo":null,"at":"2026-10-19T18:31:53.101Z","src":"persona-dougie"}

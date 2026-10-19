@@ -7964,7 +7964,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // man, and because "brother" is what the girls call the boyfriend when the farang
       // is listening. Nont's own reaction — "Brother. She said brother?" — is the joke.
       // Do not reconcile these two backstories; the gap is the writing.
-      { topic: "brother|nont|phi", notFlags: ["craneDelivered"],
+      { when: (st, G) => G.mode !== "soi6",  topic: "brother|nont|phi", notFlags: ["craneDelivered"],
         text: "\"My brother?\" The crane in her hands stops. \"Nont. Fix {{phone}} — Buakhao, the old " +
           "market. Everybody know him.\" A fold, another fold. \"He don't know anybody. Not any " +
           "more.\" She doesn't look up. \"You go there? Take him something for me. Small thing. " +
@@ -16014,7 +16014,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
       // and wins the greeting for as long as it is the newest thing between you.
       { when: (st, G) => _flag("jokeWho") && !_flag("mortMet"),
         sets: ["mortMet"],
-        fx: (st, G) => { st.trust = Math.min(5, (st.trust || 0) + 1); },
+        fx: (st, G) => { st.trust = Math.min(5, (st.trust || 0) + 1); if (typeof _compDrink === "function") { _compDrink(1); if (!(G.player && G.player.teetotal)) _say("(A second bottle lands by your hand. His word, kept.)", "dim"); } },   // he signalled two and none came (Hal, round 96)
         text: "He is already looking at the door when you come through it, and he places you " +
           "before you have said anything. \u201cThe one in forty.\u201d The notebook closes on " +
           "the biro. \u201cSit down, I said I would buy and I am a man of my word about beer " +

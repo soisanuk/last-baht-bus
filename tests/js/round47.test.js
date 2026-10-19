@@ -508,7 +508,7 @@ test("the morning ledger names the account on a night the machine was used", () 
   assert.match(text(), /down ฿700 on the night/, "the arithmetic was always right");
   assert.match(text(), /across pocket and account/, "…and now it says what it counts");
   assert.match(text(), /฿2,000 came out of the machine/);
-  assert.match(text(), /฿300 of that in fees/);
+  assert.match(text(), /plus ฿300 in fees/);   // the clause names the fee as extra (Dougie, round 96)
   G.lastNight = { vacation: 1, happy: G.happy, money: 3990, atm: 2000, atmFees: 300, known: 0, talked: 0, nums: 0, faces: 0 };
   G.money = 3590; G.day = 7;
   out = []; _morningLedger();

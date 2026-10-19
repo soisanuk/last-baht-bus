@@ -5706,6 +5706,7 @@ function _maybeIncomingText() {
     .filter(id => !_maiDee(id))   // …and never again from a woman who has decided (theme 6)
     .filter(id => !(G.phone.cut && G.phone.cut[id] === G.vacation))   // …nor, this trip, from the one you went over to (theme 5)
     .filter(id => !_npcsHere().includes(id))   // nobody texts you from across the table (Desmond, round 63: Cream's "you sleep well?" while you sat with her)
+    .filter(id => !(G.party && (G.party.ids || []).includes(id)) && !(G.rideSeq && G.rideSeq.id === id))   // …nor from your arm, nor from the front of her own bike (Marcus, round 96)
     // …nor from behind the open front you are standing outside: May's "you eat already??" arrived ten metres from her
     // stool (Liam, round 93). Her bar opens onto this street; she can see you.
     .filter(id => { const h = typeof _npcWhere === "function" ? _npcWhere(id) : null; return !h || !(typeof _streetOf === "function" && _streetOf(h) === G.room && ROOMS[h] && ROOMS[h].barType && !["gogo", "gents"].includes(ROOMS[h].barType)); });
@@ -6384,8 +6385,20 @@ const _LEAVING_TALK = {
 // THE LEAVING, in the words a man uses (Steve, the baseline player: "i fly home in two days" got her old text read
 // back, "i'm going home soon" got HER going home, "last night of the trip" was the ledger)
 // …and only when it is the PLAYER leaving: "why did you leave Pink Lotus" was his flight home (Steve, run 7)
+// how many days off the flight is, from what he SAID ("the day after tomorrow", "three more days") or the calendar
+// (Hal, round 96: "i fly home the day after tomorrow" → "Tomorrow." — said back like a fact on a chit, and remembered wrong)
+function _leaveDays(t) {
+  t = String(t || "").toLowerCase();
+  if (/\bday after tomorrow\b/.test(t)) return 2;
+  const m = t.match(/\b(\d+|two|three|four|five|six)\s+(?:more\s+)?(?:days?|nights?)\b/);
+  if (m) return ({ two: 2, three: 3, four: 4, five: 5, six: 6 })[m[1]] || +m[1] || 1;
+  if (/\btomorrow\b|\btonight\b|\bmy last night\b/.test(t)) return 1;
+  return G.stage !== "expat" && G.day >= 1 && G.day <= 7 ? Math.max(1, 8 - G.day) : 1;
+}
+function _leaveWhen(d) { return d <= 1 ? "tomorrow" : d === 2 ? "the day after tomorrow" : `in ${d} days`; }
 function _isLeavingSaid(t) {
   t = String(t || "").toLowerCase();
+  if (/\b(?:my|our) last night\b|\blast night (?:here|in pattaya|of (?:the|my) (?:trip|week|holiday))\b/.test(t)) return true;   // "it's my last night" (Dougie, round 96)
   return _LEAVING_RE.test(t) && !/\b(?:you|she|her|he|him|they)\b[^.?!]*\b(?:leav|go home|going home|fl(?:y|ew)|flight)/.test(t) &&
     !/^(?:why|when|where|did|do|does|how|what|who|is|are|was)\b/.test(t.trim());
 }
@@ -6400,7 +6413,7 @@ function _leavingTalk(npc, topic) {
       : [`"Tomorrow you go home." ${n} nods. "Safe flight, na. Tonight — one more drink?"`], "tomorrowtalk"));
     return true;
   }
-  if (!_LEAVING_RE.test(String(topic || "").toLowerCase())) return false;
+  if (!_isLeavingSaid(topic)) return false;   // the same test the router uses: "its my last night" passed the door and failed here (Dougie, round 96)
   // a man on his own stool hears it too, in his own register (Steve: "last night of the trip" to Terry was the ledger)
   if (!NPC_ROLES[npc] && NPCS[npc] && npc !== "tan" && (NPCS[npc].patron || NPCS[npc].house || NPCS[npc].manager || ROOMS[NPCS[npc].room] && ROOMS[NPCS[npc].room].barType)) {   // Terry has no patron flag
     const n = NPCS[npc].name;
@@ -6432,7 +6445,10 @@ function _leavingTalk(npc, topic) {
   let li = lb[npc] != null && String(lb[npc]).startsWith(tier + ":") ? +String(lb[npc]).split(":")[1] : _hh(npc + ":leaving", 31) % _lp.length;
   for (let k = 0; k < _lp.length && held.has(tier + ":" + li) && lb[npc] !== tier + ":" + li; k++) li = (li + 1) % _lp.length;
   lb[npc] = tier + ":" + li;
-  _say(_lp[li](NPCS[npc].name));   // each woman her own line: Nid and Ton gave one sentence word for word (Aurelio, round 71)
+  let _line = _lp[li](NPCS[npc].name);   // each woman her own line: Nid and Ton gave one sentence word for word (Aurelio, round 71)
+  { const _d = _leaveDays(String(topic || "") + " " + (typeof _rawAnswer === "string" ? _rawAnswer : "")); G.leaveOn = G.day + _d;
+    if (_d > 1) _line = _line.replace(/\b([Tt])omorrow\b/g, (m, c) => c === "T" ? _leaveWhen(_d).replace(/^./, x => x.toUpperCase()) : _leaveWhen(_d)); }   // the day he said, not the pool's (Hal, round 96)
+  _say(_line);
   return true;
 }
 // a thing YOU told her — Rotterdam, your work — answered from the ask loop's memory; and the
@@ -6948,7 +6964,7 @@ function _startRain(len) {
       "through would still take you. GO <somewhere inside>, or wait it out.)", "dim");
   } else {
     _say("The sky lets go all at once — a grey-white wall of " + (typeof _wetSeason === "function" && !_wetSeason() ? "out-of-season rain, the kind the high season swears it never gets, " : "rainy-season rain ") +
-      "marching up the street. You make the nearest awning already soaked. " +
+      "marching up the street. You make the nearest awning, already soaked. " +
       "The street becomes a river with motorbikes in it. Even the soi dogs " +
       "have vanished; nothing with sense stays out in this.", "alert");
     _say("(Pinned until it passes — though a doorway close enough to dive " +

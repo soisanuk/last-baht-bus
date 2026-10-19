@@ -458,7 +458,11 @@ function _piwinAbout(who) {
     const lines = typeof _busLinesFor === "function" ? _busLinesFor(G.room) : [];
     _say(lines.length
       ? "\"Bus? Here, yes.\" He tips his chin at the road. \"Stand there, hand up. Late, you wait — but it come. Always come.\""
-      : "\"Bus? Not down here, boss. Highway.\" He points west, toward the sodium glow. \"Sukhumvit — the Pattaya Tai truck stop at the crossing. Or —\" a pat on the seat behind him \"— I take you.\"");
+      : /Darkside|Khao Talo|Sukhumvit/.test(_room().region || "")
+        ? "\"Bus? Not down here, boss. Highway.\" He points west, toward the sodium glow. \"Sukhumvit — the Pattaya Tai truck stop at the crossing. Or —\" a pat on the seat behind him \"— I take you.\""
+        // a town soi with no truck down it: the trucks are a street over, and on the fenced week he offers no ride (Dougie, round 96 — he pointed west at Sukhumvit from Soi 6 and offered a ride the game refused)
+        : G.mode === "soi6" ? "\"Bus? Not down this soi, boss. Beach Road, Second Road — the trucks run there.\" He does not pat the seat. \"This week you walk it. You say so yourself.\""
+        : "\"Bus? Not down this soi, boss. Beach Road, Second Road — end of the street, hand up.\" A pat on the seat behind him. \"Or I take you.\"");
     return;
   }
   // HIS OWN JOB, before the person lookup. Every non-person subject fell into
@@ -535,9 +539,13 @@ function _piwinAbout(who) {
     const region = k.length >= 3 && [...new Set(Object.values(ROOMS).map(r => r.region).filter(Boolean))].find(rg => _pnm(rg) === k);
     if (venue === "nottys_place") { _say("\"Notty's?\" He grins. \"The wall, I know. The wall, I cannot open.\""); return; }
     // the Old Market and the boy with the phones: every stand in town knows both (Graham, round 74: "Who?")
-    if (/\b(old market|the market|buakhao market)\b/.test(w)) { _say("\"Old Market? Soi Buakhao, the middle, by the noodle carts.\" He pats the seat. \"Everybody know. Get on.\""); return; }
+    { const _rd = w.match(/^(?:the )?(second road|beach road|third road|walking street|soi buakhao|buakhao|soi diana|lk metro|jomtien|naklua|pratumnak|the darkside|darkside|khao talo|sukhumvit|soi 6|soi six|pattaya tai|pattaya klang|central pattaya)\b/);   // "second road" was the massage shop with the road's name (Dougie, round 96)
+      if (_rd) { const _R = _rd[1].replace(/\b\w/g, c => c.toUpperCase());
+        _say(G.mode === "soi6" ? `"${_R}?" He taps the seat and does not pat it. "Not this week, boss. Soi 6 — you say it yourself."` : `"${_R}? Everybody know." He pats the seat. "Get on. ฿${_num(typeof _motoFare === "function" ? _motoFare(_rd[1]) || MOTOSAI_TOWN : MOTOSAI_TOWN)}, maybe more if far."`); return; } }
+    if (/\b(old market|the market|buakhao market)\b/.test(w)) { _say(G.mode === "soi6" ? "\"Old Market? Soi Buakhao, the middle.\" He does not pat the seat. \"Not this week, boss.\"" : "\"Old Market? Soi Buakhao, the middle, by the noodle carts.\" He pats the seat. \"Everybody know. Get on.\""); return; }
     if (/\bnont\b/.test(w)) { _say("\"Nont?\" A short laugh. \"The boy with the phones, Old Market, the folding table of phone cases. Every piwin know Nont. Half of us charge our phone there.\""); return; }
     if (venue && ROOMS[venue].invite) { _say(_fmt("\"{v}?\" He does not pat the seat. \"Nobody drive you there, boss. That one, you get taken.\"", { v: _barName(venue) })); return true; }   // the piwin placed the Orchid Room and then re-asked where to (László, round 73)
+    if (venue && G.mode === "soi6" && ROOMS[venue].region !== "Soi 6") { _say(_fmt("\"{v}? {r}.\" He taps the seat and does not pat it. \"Not this week, boss. Soi 6 — you say it yourself.\"", { v: _barName(venue), r: ROOMS[venue].region })); return; }   // the ride he offered was refused at the next step (Dougie, round 96)
     if (venue) { _say(_fmt("\"{v}? {r}.\" He pats the seat. \"Everybody know. Get on.\"", { v: _barName(venue), r: ROOMS[venue].region })); return; }
     if (region) { _say(_fmt("\"{r}?\" As if you had asked him where the sea is. \"Get on, boss.\"", { r: region })); return; }
   }
@@ -1371,6 +1379,8 @@ function _doTell(lower, to) {
   // reactions are hers ("she"), so a man on the rail still gets the old path
   if (!pid || !NPCS[pid] || !_npcsHere().includes(pid) || !(NPC_ROLES[pid] === "hostess" || (typeof _pronoun === "function" && _pronoun(pid) === "she" && !NPCS[pid].patron))) return false;
   const l = lower.replace(/[!.,?]+$/, "").trim();
+  { const lt = l.replace(/^tell [a-z']+ (?:that |to )?/, "");   // "tell joy its my last night" through the router carries her name
+    if (!/^(?:ask|talk|tell|say) /.test(lt) && /\b(?:i|i'?m|im|my|our|it'?s|its|we)\b/.test(lt) && typeof _isLeavingSaid === "function" && _isLeavingSaid(lt) && typeof _leavingTalk === "function") return _leavingTalk(pid, lt); }   // a statement, never an ASK's subject (Nira's flight node, Ple's "why did you leave")   // "tell joy its my last night" was a subject she didn't know (Dougie, round 96)
   for (const [key, rx, val] of _TOLD_RX) {
     const m = l.match(rx); if (!m) continue;
     const v = val(m).trim(); if (!v) continue;
@@ -2300,8 +2310,8 @@ function _startKiller() {
 // venue is named only once you have stood in it or heard its name.
 function _tableHint() {
   const here = G.room;
-  const tables = Object.keys(ROOMS).filter(id => ROOMS[id].pool && id !== here);
-  const known = tables.filter(id => (G.visited && G.visited[id]) || (G.heardOf && G.heardOf[id]));
+  const tables = Object.keys(ROOMS).filter(id => ROOMS[id].pool && id !== here && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id)));   // the fenced week's tables are inside the fence (Marcus, round 96)
+  const known = tables.filter(id => (G.visited && G.visited[id]) || (G.heardOf && G.heardOf[id]) || (typeof _venueUnfound === "function" && !_venueUnfound(id)));   // a door on a street you walked is found (Marcus, round 96: TIME promised killer pool and nobody named a table)
   if (!known.length) return "You would have to ask around for a table — half the beer bars have one, and this is not one of them.";
   const near = known.filter(id => ROOMS[id].region === _room().region);
   const pick = (near.length ? near : known).slice(0, 3);
@@ -5712,7 +5722,7 @@ function _morningLedger() {
   // to anybody watching the notes in his hand. The arithmetic was never wrong; the
   // sentence was unsupported by its own wording.
   const machine = drawn - nontOutN, _via = [];
-  if (machine > 0) _via.push(`\u0e3f${_num(machine)} came out of the machine` + (fees > 0 ? `, \u0e3f${_num(fees)} of that in fees` : ""));
+  if (machine > 0) _via.push(`\u0e3f${_num(machine)} came out of the machine` + (fees > 0 ? `, plus \u0e3f${_num(fees)} in fees` : ""));
   if (nontOutN > 0) _via.push(`\u0e3f${_num(nontOutN)} through Nont, \u0e3f${_num(nontCutN)} his cut`);
   else if (nontCutN > 0) _via.push(`Nont's \u0e3f${_num(nontCutN)} cut, the rest held in his account overnight`);
   // the send is its own line below, and the headline must say it is not in it (Bernard, round 88: "I thought ฿1,300 was missing")
@@ -6178,6 +6188,8 @@ function _endNight(reason) {
           // the hour the night actually ended: a cart that opens at two, at twenty past nine (Sam, round 90)
           if (G.nightTurn < 70) _codas.splice(0, _codas.length,
             ["early", "an early night that felt like a late one, the street still loud under the window and her asleep before you, mid-sentence"],
+            ["shower", "the shower running too long because she sings in it, and the two of you on top of the covers with the air-con losing the argument"],
+            ["balcony", "ten minutes on the balcony watching the soi you just left, her in your shirt, the bars still going without the pair of you"],
             ["fan", "the fan on two, the soi's music coming up through the floor, and a long argument about nothing that she wins"]);
           let _ck = _hh(String(G.lastBfId || "") + ":" + G.day + ":coda", 71) % _codas.length;
           if (_codas[_ck][0] === G.lastCoda) _ck = (_ck + 1) % _codas.length;   // not the same close two nights running (Martin, round 85)
@@ -6472,6 +6484,7 @@ function _endNight(reason) {
   if (_ownBarRescue) { _say(_pickVary(_OWN_BAR_RESCUE, "ownrescue"), "alert"); G.ownRescueDay = G.day; }
   if (crash) {
     _say(crash.prose[Math.floor(_rand() * crash.prose.length)], "alert");
+    if (G.mode === "soi6") _say("(You sleep the day off where the soi left you. The next night starts there, at six, with the shutters going up.)", "dim");   // the dawn prose and an 18:00 restart (Dougie, round 96)
     _say(G.dog
       ? _dogN(`(Phone on ${_CRASH_BATTERY}%. Your pockets are untouched: Sai Krok spent the ` +
         "night sitting on your chest like a paperweight with teeth, and the town let " +

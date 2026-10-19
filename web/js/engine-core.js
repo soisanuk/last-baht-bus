@@ -2526,14 +2526,16 @@ function _quizTalk(npc) {
   const qy = G.quizLast && G.quizLast.day === G.day - 1 ? G.quizLast : null;
   if (!q && qy && npc && (_npcRoom(npc) === qy.room || (NPCS[npc] && NPCS[npc].room === qy.room) || (qy.present || []).includes(npc))) {
     return qy.right === 5
-      ? (farang ? "“Last night — all five. They've wiped the board, but people remember a clean sweep. The teachers from Rayong were not amused.”" : "“Last night you get five from five! The teacher table very angry, hahaha. I tell everybody.”")
+      ? (farang ? _pickTownLine(["“Last night — all five. They've wiped the board, but people remember a clean sweep. The teachers from Rayong were not amused.”",   // one line, two men on one rail (Hal, round 96)
+          "“You're the clean sweep. Board's wiped, but the Rayong table hasn't forgiven you yet.”", "“Five out of five last night — I was here. They'll be checking your phone next Thursday.”"], "quiz5y:f") : _pickTownLine(["“Last night you get five from five! The teacher table very angry, hahaha. I tell everybody.”", "“All five last night! Everybody talk about it. Teacher table go home early, very angry.”", "“The board is clean now, but I remember — five from five. You clever, or you cheat?” A grin."], "quiz5y:t"))
       : qy.right >= 3
         ? (farang ? `“${qy.right} out of five last night. Decent. The Rayong lot still won.”` : `“Last night ${qy.right} from five, na. Not bad. Next Thursday you beat the teachers.”`)
         : (farang ? `“Last night? ${qy.right} out of five. We don't talk about it.”` : `“Last night… ${qy.right}.” A kind face. “Next Thursday, na.”`);
   }
   if (q && _npcRoom(npc) === q.room) {
     return q.right === 5
-      ? (farang ? "“You were the one with all five. It's on the board — the whole bar watched it go up.”" : "“You! Five from five — your name is on the board, na. Everybody see.”")
+      ? (farang ? _pickTownLine(["“You were the one with all five. It's on the board — the whole bar watched it go up.”", "“All five. I watched it go up on the board. The teachers' table went very quiet.”", "“Clean sweep, that was you. Don't let the Rayong lot buy you a drink — it'll be a test.”"], "quiz5:f")
+        : _pickTownLine(["“You! Five from five — your name is on the board, na. Everybody see.”", "“Five, five, five, five, five!” A finger for each. “Your name on the board. Teacher table very angry, hahaha.”", "“Clever man! All five. I see the board — everybody see.”"], "quiz5:t"))
       : q.right >= 3
         ? (farang ? `“${q.right} out of five. Respectable. The teachers from Rayong got more — they always do.”` : `“${q.right} from five! Not bad, ${th ? "na" : "tilac"}. The teacher table always win.”`)
         : (farang ? `“${q.right} out of five.” A kind look. “It's a hard board. Next Thursday.”` : `“${q.right}...” A kind face. “Is okay. Next Thursday you study, na.”`);
@@ -2938,7 +2940,21 @@ function _revisitPick(pool, room) {
   book[room].push(String(line).slice(0, 50));
   return line;
 }
+// A SENTENCE OF THE PAINT THAT SEATS THE WOMAN ON YOUR ARM is dropped while she is on it (Hal, round 96: "Kwan folds
+// napkins into cranes at the end of the rail" with Kwan listed "(with you)"). Her name, whole-word; the rest of the paint stands.
+function _dropCompanionLines(text) {
+  const ids = (G && G.party && G.party.ids) || [];
+  if (!ids.length || typeof text !== "string") return text;
+  const names = ids.map(id => NPCS[id] && NPCS[id].name).filter(Boolean);
+  if (!names.length) return text;
+  const parts = text.split(/(?<=[.!?])\s+/), kept = parts.filter(s => !names.some(nm => new RegExp("\\b" + nm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(s)));
+  return kept.length && kept.length < parts.length ? kept.join(" ") : text;
+}
 function _describeRoom(full, forceFull) {
+  // THE LAST NIGHT SAYS SO on its first look (Dougie, round 96: nothing told him until he tried to go to bed)
+  if (G && G.mode === "soi6" && typeof _lastNight === "function" && _lastNight() && G.lastNightSaid !== G.day && !G.pendingChoice && G.nightTurn < 20) {
+    G.lastNightSaid = G.day; _say("(The last night of the week. Whatever it is you came for, this is the night for it.)", "alert");
+  }
   // a pay-on-arrival fare has landed you already: a reload redrew the stop you LEFT, bars and
   // exits and all, under a driver waiting at the other end (Helga, round 57)
   if (G.pendingFare && !G.pendingFare.charter && G.pendingFare.dest && ROOMS[G.pendingFare.dest] && G.pendingFare.dest !== G.room) {
@@ -2992,9 +3008,9 @@ function _describeRoom(full, forceFull) {
   // (Mario, 2026-09-04): a man who stays out to dawn every night reads it more
   // often than he reads the daytime paint.
   const late = r.lateDesc && typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room);
-  if (full) _say(late ? (Array.isArray(r.lateDesc) ? _pickVary(r.lateDesc, "late:" + G.room) : r.lateDesc)
+  if (full) _say(_dropCompanionLines(late ? (Array.isArray(r.lateDesc) ? _pickVary(r.lateDesc, "late:" + G.room) : r.lateDesc)
     : (!firstTime && !forceFull && r.revisit ? _revisitPick(typeof _atOwnBar === "function" && _atOwnBar() ? _OWNER_REVISIT : r.revisit, G.room)
-      : (typeof _atOwnBar === "function" && _atOwnBar() ? String(r.desc).replace(/^An American-run beer bar/, "Your beer bar — the old man's name still over the door —") : r.desc)));   // owned, it is not "American-run" (Marta, round 63)
+      : (typeof _atOwnBar === "function" && _atOwnBar() ? String(r.desc).replace(/^An American-run beer bar/, "Your beer bar — the old man's name still over the door —") : r.desc))));   // owned, it is not "American-run" (Marta, round 63)
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) {
     // An item may carry a `sight:` line that places it in the scene ("...at the

@@ -940,10 +940,15 @@ const _ENC = {
       // lands on "Which one?" (Gordon, round 37). Pure hash, no dice.
       const fronts = (_room().venues || []).filter(v => ROOMS[v] && ROOMS[v].barType && !(typeof _closedNow === "function" && _closedNow(v)));
       const bar = fronts.length ? fronts[_hh(G.room + ":" + G.day, 5) % fronts.length] : null;
-      if (bar && typeof _streetSaw === "function") _streetSaw("noodle", { bar });   // her own bar knows its noodle girl (round 87)
+      // THE GIRL ON THE END OF THE NOODLE IS SOMEBODY (Hal, round 96: five women on the floor and none was her) — one of her
+      // bar's hostesses working tonight, by hash; her bar and her colleagues name her, and she answers for it herself
+      const _hs = bar && typeof _staffAt === "function" ? _staffAt(bar).filter(h => NPC_ROLES[h] === "hostess" && (typeof _npcActive !== "function" || _npcActive(h))) : [];
+      const by = _hs.length ? _hs[_hh(G.room + ":" + G.day + ":noodleby", 7) % _hs.length] : null;
+      if (bar && typeof _streetSaw === "function") _streetSaw("noodle", { bar, by });   // her own bar knows its noodle girl (round 87)
       let line = _pickVary(_NOODLE_YES, "noodleyes");
       if (bar) line = line.replace(/\(ENTER[^)]*\)/, `(ENTER ${_barName(bar).toUpperCase()} to follow it through — or drift off; the soi forgives fast.)`);
       _say(line);
+      if (by && NPCS[by]) { _say(`(The girl on the end of the noodle is ${NPCS[by].name}.)`, "dim"); if (typeof _learnNames === "function") _learnNames(NPCS[by].name); }
       return;
     }
     // walk on — THWACK. The bop itself is the payoff: pure, stupid, capped sanuk.
@@ -1300,7 +1305,7 @@ const _ENC = {
       const got = Object.keys(_had).find(k => _had[k] !== "inventory" && G.itemLoc[k] === "inventory");
       if (got && typeof _doGive === "function") _doGive({ fake_rolex: "rolex", shades: "sunglasses", vitamin_v: "vitamins" }[got], NPCS[_for].name.toLowerCase());
     };
-    if (/\brolex\b/.test(input) || /\bwatch\b/.test(input)) {
+    if (/\brolex\b/.test(input) || (/\bwatch\b/.test(input) && !/\bwatch (?:sunrise|the sunrise|dawn|tv|show|the show|soi|the soi|football|the game|police|the police|her|him|them|out|it)\b/.test(input))) {   // WATCH SUNRISE bought the Rolex (Dougie, round 96)
       if (G.money < px.watch) { _say(`฿${_num(px.watch)} for the 'Rolex'. He inspects your ฿` + G.money + " and moves along, unoffended."); return; }
       G.money -= px.watch;
       G.itemLoc.fake_rolex = "inventory";
@@ -1310,7 +1315,7 @@ const _ENC = {
         `ceremony and a squeeze of the forearm. (฿${_num(G.money)} left.)`);
       _say("(You now have the genuine Rolex (allegedly).)", "dim"); }
       _addHappy(1);
-    } else if (/glass|shade|sun/.test(input)) {
+    } else if (/glass|shade|\bsun\b|sunglass|sunnies|ray ?ban/.test(input)) {   // "sun" matched SUNRISE and sold the shades (Dougie, round 96)
       if (G.money < px.shades) { _say(`฿${_num(px.shades)} for the RayBens, and you haven't got it. He tips an invisible hat.`); return; }
       G.money -= px.shades;
       G.itemLoc.shades = "inventory";
@@ -1328,7 +1333,7 @@ const _ENC = {
       _addHappy(1);
     }
     if (Object.keys(_had).some(k => _had[k] !== "inventory" && G.itemLoc[k] === "inventory")) { _giveAfter(); return; }
-    if (!(/\brolex\b/.test(input) || /\bwatch\b/.test(input) || /glass|shade|sun/.test(input) || /vitamin|pill|med|blue/.test(input))) {
+    if (!(/\brolex\b/.test(input) || (/\bwatch\b/.test(input) && !/\bwatch (?:sunrise|the sunrise|dawn|tv|show|the show|soi|the soi|football|the game|police|the police|her|him|them|out|it)\b/.test(input)) || /glass|shade|\bsun\b|sunglass|sunnies|ray ?ban/.test(input) || /vitamin|pill|med|blue/.test(input))) {   // the same three tests as the sale (round 96)
       _say("A slow head-shake. He re-shoulders the display board — watches swinging " +
         "like wind chimes — and moves along to a man who has already made " +
         "eye contact, the fatal error.");

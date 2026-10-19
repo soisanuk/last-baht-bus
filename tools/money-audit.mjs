@@ -231,7 +231,7 @@ function parseLedger(line) {
   let m;
   if ((m = g(/down ฿([\d,]+) on the night/))) P.spent = N(m[1]);
   if ((m = g(/up ฿([\d,]+) on the night/))) P.spent = -N(m[1]);
-  if ((m = g(/฿([\d,]+) came out of the machine(?:, ฿([\d,]+) of that in fees)?/))) { P.machine = N(m[1]); P.fees = m[2] ? N(m[2]) : 0; }
+  if ((m = g(/฿([\d,]+) came out of the machine(?:, (?:plus )?฿([\d,]+) (?:of that )?in fees)?/))) { P.machine = N(m[1]); P.fees = m[2] ? N(m[2]) : 0; }
   if ((m = g(/฿([\d,]+) through Nont, ฿([\d,]+) his cut/))) { P.nontNotes = N(m[1]); P.nontCut = N(m[2]); }
   if ((m = g(/Nont's ฿([\d,]+) cut, the rest held/))) P.nontCut = N(m[1]);
   if ((m = g(/฿([\d,]+) drawn from your own till/))) P.tillDraw = N(m[1]);
