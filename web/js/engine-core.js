@@ -1340,6 +1340,7 @@ function _npcActive(id) {
   // home for the harvest, or gone to Bangkok till the rain stops (essay ledger theme 8)
   if (typeof _awayForSeason === "function" && _awayForSeason(id)) return false;
   if (typeof _exited === "function" && _exited(id)) return false;   // she hit the thing she said, and went (theme 11)
+  if (G.bar && G.bar.kept && G.bar.kept.id === id && G.bar.kept.stage !== "done") return false;   // kept off your own floor by a sponsor's daily fee (the quiet shift change)
   if (G.bar && G.bar.gone && G.bar.gone[id]) return false;   // she gave you her notice, and you let it run (the bar-failure cycle)
   // the affair's endings take her off the floor for good: gone home to Isaan
   // after a break, or by the sea in Prachuap after the earned ending
@@ -2187,6 +2188,7 @@ function _elsewhereLine(word) {
           : `${_barName(NPCS[nid].room)}${_dupeBar(NPCS[nid].room) ? " out in " + (ROOMS[NPCS[nid].room].region || "") : ""}, early doors, is where you'll find ${_pr(nid).o}.`);
     // gone for good comes before gone for the season (theme 11 before theme 8)
     const _gone = typeof _exited === "function" && _exited(nid);
+    if (_gone === "kept") return `${NPCS[nid].name} ${notHere} — she isn't on any floor now. Her sponsor stopped paying the bar and she stopped coming, the girls say; a condo on the far side of Sukhumvit, and the message the boss put in the group got no answer from anybody.`;
     if (_gone) return `${NPCS[nid].name} ${notHere} — she isn't anywhere on the soi. She went home to ${_gone}, the way she always said she would, and the girls say it quietly, like good news they are not sure they are allowed.`;
     // an absence with a reason the floor can give (theme 8): the harvest, or Bangkok
     const _away = typeof _awayForSeason === "function" && _awayForSeason(nid);
@@ -2884,6 +2886,12 @@ function _dogSpot(r) {
 }
 
 // the roster's one line about a woman who left (narration; the floor's words are hers)
+// the kept exit's roster line (the quiet shift change, 2026-10-19): the board said "out with customer" for a week
+const _EXIT_ROSTER_KEPT = [
+  "{n}'s stool has somebody else on it. The girl beside you follows your look. “She go with her sponsor. He stop pay the bar, she stop come.” A shrug with something underneath it. “Boss write big message in the group. Everybody read. Nobody answer.”",
+  "No {n}. Her name was on the board all last week — ‘out with customer’, the woman on the till says, and then it was not on the board. “She have a condo now. Other side of Sukhumvit.” She says it like a weather report, and does not say what she thinks of the weather.",
+  "You look for {n}, and the girl who catches you looking does not smile. “She finish. Her man take her — no more bar.” A pause. “Boss say he send her photo to every bar. Nobody care. Every bar take her tomorrow.” And then, quieter: “Lucky one.”",
+];
 const _EXIT_ROSTER = [
   "{n}'s stool has somebody else on it. When you ask, the girl beside you says it the way people say good news they are not sure they are allowed: “She go home. She {p} now. End of last month.” One morning the locker was empty, and that was the whole of the leaving.",
   "No {n}. Not on a night off — gone. “She finish,” the woman on the till says, and then, because you keep looking at the stool: “She {p} now. Like she always say.” She says it flat, and then she says, “Good,” and goes back to the book.",
@@ -3069,7 +3077,7 @@ function _describeRoom(full, forceFull) {
         G.talked && G.talked[id] && _exited(id));
       if (gone) {
         said[G.room] = G.vacation;
-        _say(_fmt(_pickVary(_EXIT_ROSTER, "exitroster"), { n: NPCS[gone].name, p: _exited(gone) }), "dim");
+        _say(_fmt(_pickVary(_exited(gone) === "kept" ? _EXIT_ROSTER_KEPT : _EXIT_ROSTER, "exitroster"), { n: NPCS[gone].name, p: _exited(gone) }), "dim");
       }
     }
   }
@@ -3612,6 +3620,8 @@ function _tick() {
     if (typeof _ccibDue === "function" && _ccibDue()) { _ccibVisit(); return; }
     if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
     if (typeof _acctDue === "function" && _acctDue()) { _acctCall(); return; }
+    if (typeof _keptNewsDue === "function" && _keptNewsDue()) { _keptNews(); return; }
+    if (typeof _keptDue === "function" && _keptDue()) { _keptAsk(); return; }
     if (typeof _shiftDue === "function" && _shiftDue()) { _shiftAsk(); return; }
     if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
     // the staff affair: the she-stays-after-close beat, then its crises

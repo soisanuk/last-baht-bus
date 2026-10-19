@@ -13649,8 +13649,20 @@ const _GONE_THAI = [
 function _goneTalk(npc, gone) {
   const plan = _exited(gone);
   const house = _hoursRegister(npc) !== "floor";
+  if (plan === "kept") return _fmt(_pickVary(house ? _GONE_HOUSE_KEPT : _GONE_FLOOR_KEPT, "gonetalkkept"), { n: NPCS[gone].name });
   return _fmt(_pickVary(house ? (_thaiHouse(npc) ? _GONE_THAI : _GONE_HOUSE) : _GONE_FLOOR, "gonetalk"), { n: NPCS[gone].name, p: plan });
 }
+// the kept exit, answered by the floor she left (the quiet shift change, 2026-10-19): the floor's register is envy
+// held very still; the house's is the fact the essay turns on — there is no list
+const _GONE_FLOOR_KEPT = [
+  "“{n}? She go with her sponsor.” She says it to her glass. “He pay the bar every day, long time — then he say no more bar, he stop pay, she stop come. Boss write big message in the group, very angry. Everybody read.” A small shrug. “Nobody answer. Me, I think she brave.”",
+  "“{n} finish. Not finish bar — finish THIS bar.” A look along the rail. “Her man take her. Condo, other side Sukhumvit. Boss say he send her photo to every bar.” The corner of her mouth. “Every bar want her. Nobody ask about before.”",
+  "“{n}.” She waits a second before she says the rest. “Her sponsor stop pay. Three day, boss wait. Then — big message, everybody.” She reads something on the bar top that is not there. “We all read it. Same time. Nobody say nothing. You know why?” She does not tell you why.",
+];
+const _GONE_HOUSE_KEPT = [
+  "“{n}? Her man stop paying the fee and she stop coming. That is how it go — no notice, no goodbye. The board say ‘out with customer’ one week, then I take her name off.” A level look. “There is no list, whatever anybody shout in the group. Every bar on this soi hire her tomorrow and ask nothing.”",
+  "“{n}. Gone with her sponsor.” No looking up from the till. “He pay us a long time, then he want her only for him. Fine. The girls think I am angry.” A pause on the chit. “I am not angry. I am the one who know there is no list.”",
+];
 // A place NAMED in a closing question is the place asked about: "what time does the Vic close",
 // put to a Soi 6 girl, got her own bar's two o'clock (Declan, round 83). The Vic answers to "vic".
 function _namedVenue(topic) {
@@ -14764,6 +14776,7 @@ function _chipSet() {
     const c = typeof _shiftCallById === "function" ? _shiftCallById(G.shiftCall) : null;
     add("yes", c ? c.yesLabel : "yes"); add("no"); return chips;
   }
+  if (G.pendingChoice === "keptgirl") { add("no", "no — put the phone down"); add("let him", "let him post it"); return chips; }
   if (G.pendingChoice === "affair") { add("stay", "stay — make it real"); add("step back"); return chips; }
   if (G.pendingChoice === "affaircrisis") {
     const c = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
@@ -15242,6 +15255,7 @@ function engineComplete(input) {
   else if (G.pendingChoice === "chamgift") pool = ["gift ", "nothing"];
   else if (G.pendingChoice === "synjob") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "shift") pool = ["yes", "no"];
+  else if (G.pendingChoice === "keptgirl") pool = ["no", "let him"];
   else if (G.pendingChoice === "partner") pool = ["yes", "no"];
   else if (G.pendingChoice === "affair") pool = ["stay", "step back"];
   else if (G.pendingChoice === "affaircrisis") {
@@ -16613,6 +16627,7 @@ function _renderResume() {
   }
   if (G.pendingChoice === "synjob") { _synResume(); return; }
   if (G.pendingChoice === "shift") { _shiftResume(); return; }
+  if (G.pendingChoice === "keptgirl") { _keptResume(); return; }
   if (G.pendingChoice === "partner") { _partnerPrompt(); return; }
   if (G.pendingChoice === "affair") { _affairPrompt(); return; }
   if (G.pendingChoice === "affaircrisis") { _affairCrisisPrompt(); return; }
@@ -16908,6 +16923,15 @@ function _doCommandInner(input) {
     _say("It is still standing there waiting on you, which is most of what " +
       "owning a bar turns out to be.", "dim");
     _shiftPrompt();
+    return;
+  }
+  // Bert with the bar phone: the message about the girl who stopped coming (the quiet shift change)
+  if (G.pendingChoice === "keptgirl") {
+    if (/^(yes|let|post|send|do it|go on|ok|okay|sure|aye|fine)\b/.test(lower)) { _keptYes(); return; }
+    if (/^(no|don'?t|dont|not|leave|stop|put|refuse|decline|never)\b/.test(lower)) { _keptNo(); return; }
+    if (/\?|^(how|what|who|why|cost|price|which)\b/.test(lower)) { _keptStakes(); return; }
+    _say("Bert is still holding the bar's {{phone}} out across the rail.", "dim");
+    _keptPrompt();
     return;
   }
   // the staff affair: she asked the question nobody asks out loud

@@ -257,6 +257,15 @@ const BAR_MARKUPS = {            // take per customer × punters through the doo
 const BAR_SALARY_NIGHT = 500;    // flat terms: on the wages line every night, wet or dry
 const BAR_FLOOR_FLOOR  = 0.92;   // a month's traffic under this, on commission, and one of them gives notice
 const BAR_NOTICE_DAYS  = 7;      // the days she gives you to change her mind
+// THE QUIET SHIFT CHANGE (canon essay, 2026-10-19 — structure only): a kept girl's sponsor pays the bar a daily fee to
+// keep her off the floor; the bar tolerates it because it collects. Then he wants her for himself, stops paying, and
+// she simply stops coming — on the board as "out with customer", then off it. The threat the house makes is empty:
+// there is no list, and any bar hires her tomorrow without asking.
+const KEPT_FEE          = 500;    // the sponsor's daily fee into the till, while he pays it
+const KEPT_AFTER_NIGHTS = 14;     // the bar is open this long before one of your girls is kept
+const KEPT_PAY_DAYS     = 10;     // the fee runs this long (plus a hash of up to 8) before he stops
+const KEPT_SILENT_DAYS  = 3;      // nights of no money and no word before Bert reaches for the phone
+const KEPT_QUIET_DAYS   = 5;      // nights the floor reads the message in silence, if you let him send it
 const BAR_RAIL_SHARE   = 0.07;   // the rail that drinks across the road with her
 const BAR_RAIL_DAYS    = 90;     // …until her regulars drift back, or don't
 const NONT_LOAN_RATE   = 0.10;   // Nont's money for the bar: ten percent on the day
@@ -17806,6 +17815,9 @@ function _storyClash(famIdx, planIdx) {
 const _EXIT_PLANS = [0, 4, 5, 7, 9, 10, 13, 15, 16, 19, 20, 23, 26, 29, 31, 33, 35, 37, 39];   // indices into _H_PLAN that name a thing you can open
 function _exited(id) {
   const n = NPCS[id];
+  // THE QUIET SHIFT CHANGE (2026-10-19): the owner's kept girl whose sponsor stopped paying is gone for good too
+  if (typeof G !== "undefined" && G && G.bar && G.bar.gone && G.bar.gone[id] && G.bar.gone[id].kept) return "kept";
+  if (typeof _exitedKept === "function" && _exitedKept(id)) return "kept";   // the other quiet exit: with her sponsor
   if (!n || !n.filler || !n.storyIdx) return false;
   // her own words where she has them (FLOOR_OWN's `exit`: null for a woman with no thing to open)
   const target = n.exitPlan !== undefined ? n.exitPlan : (_EXIT_PLANS.includes(n.storyIdx.plan) ? _H_PLAN[n.storyIdx.plan] : null);
@@ -17823,6 +17835,23 @@ function _exited(id) {
     if (trip < leaves) return false;
   } else return false;
   return target;
+}
+// THE KEPT EXIT (the quiet shift change, 2026-10-19): a third of the kept girls on the town's floors leave the way the
+// essay describes — the sponsor stops paying the bar, she stops coming — on some trip from the second to the sixth.
+// Returns the sentinel "kept" through _exited, so every consumer that removes a woman who left removes her too;
+// the pools branch on the kind. Never your own bar's floor (that is G.bar.kept's story), never the affair girl.
+function _exitedKept(id) {
+  const n = NPCS[id];
+  if (!n || !n.filler || typeof G === "undefined" || !G) return false;
+  if (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] !== "hostess") return false;
+  if (n.exitPlan !== undefined) return false;   // a written woman decides her own exit (FLOOR_OWN's `exit`; null is "she stays")
+  if (G.bar && G.bar.room === n.room) return false;
+  if (G.affair && G.affair.id === id) return false;
+  if (typeof _hasSponsor !== "function" || !_hasSponsor(id)) return false;
+  if (_hh(id + ":keptever", 173) % 3 !== 0) return false;
+  const leaves = 2 + _hh(id + ":keptvac", 181) % 5;
+  const trip = (G.vacation || 1) + (G.stage === "expat" ? Math.floor((G.day || 1) / 90) : 0);
+  return trip >= leaves;
 }
 // THE DRINKS-ONLY CLASS (theme 12's sibling, from the lady-drink economics essays): the
 // bar runs on drinks, not barfines, and a growing share of the floor works drinks only —

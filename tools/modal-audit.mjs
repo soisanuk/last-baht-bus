@@ -112,6 +112,8 @@ const STATES = {
   cham:         { gate: "choice:cham", arm() { base(); G.room = "metro_beer_garden"; G.nightTurn = 50; G.known.cream = true; _chamAsk(); }, decline: "not tonight" },
   chamgift:     { gate: "choice:chamgift", arm() { base(); G.room = _hotelRoomId(); G.chamNight = true; _chamMorning(); }, decline: "nothing" },
   synjob:       { gate: "choice:synjob", arm() { owner(); _synAsk(); }, decline: "no" },
+  keptgirl:     { gate: "choice:keptgirl", arm() { owner(); G.nightTurn = 40; G.bar.nights = 20; const id = Object.keys(NPCS).find(i => NPCS[i].room === "stinky_bar" && NPC_ROLES[i] === "hostess");
+                  G.bar.kept = { id, since: G.day - 15, paidTo: G.day - 5, stage: "lapsed", lapsed: G.day - 3, told: true, fee: 5000 }; _keptAsk(); }, decline: "no" },
   shift:        { gate: "choice:shift", arm() { owner(); G.nightTurn = 40; G.bar.worked = 5; G.bar.workedTurn = 0; _shiftAsk(); }, decline: "no" },
   partner:      { gate: "choice:partner", arm() { base(); G.stage = "expat"; _setFlag("expatLife"); G.room = "candy_bar"; G.pendingChoice = "partner"; G.partnerWho = "candy"; _partnerPrompt(); }, decline: "no" },
   affair:       { gate: "choice:affair", arm() { owner(); G.affair = null; G.nightTurn = 56; _affairAsk("manow"); }, decline: "step back" },

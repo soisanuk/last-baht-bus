@@ -68,6 +68,7 @@ const CLASS = {
   "engine-parser.js:_doTalkCore|the floor watched": [W_, "her colleagues on the night out with her (G.partyLog) — the floor that watched her leave is the mouth; round76.test"],
   "engine-parser.js:_doTalkCore|in front of the whole": [W_, "the colleague review on a woman you complained about (G.bfStrikes) — the floor that watched the refund is the mouth; round75.test"],
   "engine-parser.js:_doTalkCore|spoken for": [W_, "the witness rule's comment quoting _REL_GREET"],
+  "engine-systems.js:_keptPrompt|the floor sees": [C_, "Bert's phone: letting him send it sets G.bar.floorQuietUntil — the floor moments stop and say so once, and BOOKS names it (quietshift.test)"],
   // ── consequence: a mechanic keeps it ───────────────────────────────────────────────
   "engine-parser.js:_ANSWER_GOSSIP|the soi talks": [C_, "the grapevine catch in _convoAnswer (G.player.said)"],
   "engine-parser.js:_TAN_TOWN|the soi knew": [C_, "the owner rows: the town knows who owns the bar"],

@@ -4320,6 +4320,10 @@ function _doBlackbook() {
       continue;
     }
     const bar = _barName(G.party && G.party.ids && G.party.ids.includes(id) ? NPCS[id].room : _npcRoom(id)) || "around";   // on your arm she is listed at HER bar (composition audit, 2026-10-08)
+    if (typeof _exited === "function" && _exited(id) === "kept") {   // gone with her sponsor (the quiet shift change)
+      _say(`· ${n.emoji || ""} ${n.name} — gone · with her sponsor, a condo across Sukhumvit; the number is quiet`, "dim");
+      continue;
+    }
     if (typeof _exited === "function" && _exited(id)) {   // she left, and the book says for what (theme 11)
       _say(`· ${n.emoji || ""} ${n.name} — gone home · ${_exited(id)}, the way she said`, "dim");
       continue;
@@ -5730,7 +5734,7 @@ function _maybeIncomingText() {
     if (gone && G.turns - G.phone.lastText >= 25) {
       (G.phone.exitTexted = G.phone.exitTexted || {})[gone] = true;
       G.phone.lastText = G.turns;
-      _pushMsg(gone, _fmt(_pickVary(_EXIT_TEXT, "exittext"), { p: _exited(gone) }));
+      _pushMsg(gone, _exited(gone) === "kept" ? _pickVary(_EXIT_TEXT_KEPT, "exittextkept") : _fmt(_pickVary(_EXIT_TEXT, "exittext"), { p: _exited(gone) }));
       _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
       return;
     }
@@ -6477,6 +6481,12 @@ function _maiDeeFloor(to) {
 }
 
 // the one text from home (Tinglish, hers; the plan is her own words from the floor)
+// the kept exit's one text (the quiet shift change): she is not sorry, and she is not coming back
+const _EXIT_TEXT_KEPT = [
+  "i not work bar now na 🙏 he take care me. condo, sukhumvit side 555 dont tell mama where. you good man — take care na",
+  "finish bar!! 😊 my man say no more. i stay home now, cook, sleep late 555. boss very angry in group, i see. i dont care na. bye bye, be good",
+  "this number i keep for you only 🙏 i not come bar again. he pay condo, i stop. if you see the girls, say i am okay. dont say more",
+];
 const _EXIT_TEXT = [
   "i not work bar now na 🙏 i {p}!! at home. small small but mine. you come my province one day, i make you coffee 555 take care na",
   "surprise 😊 i finish pattaya. i {p} now, in my village. mama help me. no more lady drink 555 if you come isan you find me. bye bye na, be good man",
@@ -7603,6 +7613,7 @@ function _isDogWord(a) {
 //   · Only the Tan route can ever see it. Candy's 51% is pinned behind the till
 //     in a Bangkok lawyer's handwriting; there is nothing to call in.
 function _tanFavourDue() {
+  if (G.pendingChoice || G.pendingEnc || G.pendingBf || G.game) return false;   // never on top of a gate already up: LOOK armed him over Bert's phone (the quiet shift change)
   return _flag("partnerTan") && _flag("barOpen") && !_flag("tanAsked") &&
     G.room === "stinky_bar" && G.nightTurn >= 30;   // an evening beat, not a dawn one
 }
@@ -8055,6 +8066,85 @@ function _acctCall() {
   _say(`"Sorry to call in the evening." Khun Wipa, ${firm}, sounds like she has the file open in front of her and has read it twice. "Can we talk about the ฿${_num(moved)} that came into the account through the Old Market? Some of what I'm seeing doesn't sit right — not wrong, not yet, only not sitting. The bank has asked me for a source of funds. I have told them it is the owner's own money, from home." A pause long enough to be a question. "They will take a month to decide whether they believe me. Until then they will let you take half your usual cash a day. Nobody is accusing anybody. That is the polite part." Another pause. "The other part is: next time, wire it from home, in your own name, like a farang. It is slower and it is cheaper and it is a story I do not have to tell."`);
   _say(`(The account's daily cash is halved for ${ACCT_REVIEW_DAYS} days. Nothing else changes, and nobody will mention it again unless you ask.)`, "dim");
 }
+// ── THE QUIET SHIFT CHANGE (canon essay, 2026-10-19; constants in world.js) ────────────────────────────────────
+// One of your own hostesses is kept: her sponsor pays the bar KEPT_FEE a night to keep her off the floor, and the bar
+// collects — a BOOKS line and a girl short, both honest. Then he wants her to himself and the money stops; she simply
+// stops coming. The board says "out with customer" for KEPT_SILENT_DAYS, and then Bert comes down the rail with the
+// bar phone, wanting to post her photo to the owners' group. Either answer loses her — she was gone the day the fee
+// stopped — and the threat is empty by canon: there is no list, any bar hires her tomorrow. Letting him send it costs
+// the floor's regard (the girls read it in silence, and each is waiting for her own turn); not sending it costs nothing.
+// Structure only — the manager is Bert, not the essay's; no venue, no name (docs/source-material-policy.md).
+function _keptTick() {   // daily, from _barSettle
+  const b = G.bar; if (!b || !_flag("barOpen") || !_barOwned()) return;
+  if (!b.kept) {
+    if ((b.nights || 0) < KEPT_AFTER_NIGHTS || b.keptDone) return;
+    const hostesses = _barStaff().filter(id => NPC_ROLES[id] === "hostess");
+    // the arc MAKES her kept — a sponsor is the story, not a prerequisite (the Stinky's three carry none by hash);
+    // a girl the hash already keeps goes first where there is one
+    const pool = hostesses.filter(id => NPCS[id].filler && !(G.affair && G.affair.id === id) && !(b.notice && b.notice.id === id));
+    const girls = pool.some(id => typeof _hasSponsor === "function" && _hasSponsor(id)) ? pool.filter(id => _hasSponsor(id)) : pool;
+    if (hostesses.length < 3 || !girls.length) return;   // never the floor's last women
+    const id = girls.sort()[_hh("kept:" + G.vacation + ":" + b.nights, 191) % girls.length];
+    b.kept = { id, since: G.day, paidTo: G.day + KEPT_PAY_DAYS + _hh(id + ":keptpay", 193) % 8, stage: "paying", told: false, fee: 0 };
+    return;
+  }
+  const k = b.kept;
+  if (k.stage === "paying") {
+    if (G.day <= k.paidTo) { b.cash += KEPT_FEE; k.fee += KEPT_FEE; b.lastKeptFee = KEPT_FEE; return; }
+    k.stage = "lapsed"; k.lapsed = G.day; b.lastKeptFee = 0;
+  }
+}
+function _keptNewsDue() {
+  const b = G.bar; return !!(b && b.kept && !b.kept.told && b.kept.stage === "paying" && _barOwned() && G.room === b.room && G.nightTurn >= 10);
+}
+function _keptNews() {
+  const b = G.bar, k = b.kept, n = NPCS[k.id].name; k.told = true;
+  _say(_fmt("Bert nods at the stool {n} used to take. \"Her sponsor's paying her fee — ฿{f} a night to the bar, to keep her off the floor and at home. She's on the board as out with a customer and she'll stay on it while he pays.\" He wipes the rail. \"Money for a girl who isn't here. The best kind, till it stops.\" (BOOKS has the line.)",
+    { n, f: _num(KEPT_FEE) }), "dim");
+}
+function _keptDue() {
+  const b = G.bar; if (!b || !b.kept || b.kept.stage !== "lapsed" || !_barOwned()) return false;
+  if (G.room !== b.room || G.nightTurn < 15 || G.nightTurn > 70) return false;
+  return G.day - b.kept.lapsed >= KEPT_SILENT_DAYS;
+}
+function _keptPrompt() {
+  _say("(Let Bert post her photo to the owners' group, or not? LET HIM · NO. Either way she is already gone; the question is what the floor sees you do.)", "dim");
+}
+function _keptAsk() {
+  const b = G.bar, k = b.kept, n = NPCS[k.id].name, d = G.day - k.lapsed;
+  G.keptAskText = _fmt("Bert comes down the rail with the bar phone already unlocked and the owners' group open on it. \"{n}. {d} nights, no money, no word — not to me, not to the girls. Her sponsor's stopped paying and she's stopped coming, and she hasn't had the manners to say so.\" His thumb is over the keyboard. \"I'm going to put her photo in here. Every owner on the soi. See how far she gets.\"",
+    { n, d: d === 1 ? "One night" : d === 2 ? "Two nights" : d === 3 ? "Three nights" : d + " nights" });
+  _say(""); _say(G.keptAskText, "alert");
+  _keptPrompt();
+  G.pendingChoice = "keptgirl";
+}
+function _keptResume() { if (G.keptAskText) _say(G.keptAskText, "alert"); _keptPrompt(); }
+function _keptStakes() {
+  _say("\"What does it cost? Nothing — that's the point. There's no list; there's never been a list. She'll be on another floor by Friday if she wants one and nobody'll ask.\" Bert knows this and is holding the {{phone}} anyway. \"It's not for her. It's so the rest of them see it.\" The rest of them are at the far end, not looking over, listening to every word.", "dim");
+  _keptPrompt();
+}
+function _keptClose(sent) {
+  const b = G.bar, k = b.kept, id = k.id;
+  G.pendingChoice = null; G.keptAskText = null;
+  k.stage = "done"; k.sent = !!sent; k.doneDay = G.day;
+  b.gone[id] = { day: G.day, kept: true };   // gone for good; no rail follows her — she was not drinking it
+  b.keptDone = true; b.keptLast = k; b.kept = null;
+}
+function _keptYes() {
+  const k = G.bar.kept, n = NPCS[k.id].name;
+  _keptClose(true);
+  G.bar.floorQuietUntil = G.day + KEPT_QUIET_DAYS;
+  _say(_fmt("You let him. The message goes — her photo, a paragraph in capitals, every owner on the soi copied in. At the far end of the bar four phones light up at once and four faces read it, and nobody says anything, and nobody looks at you, and then the phones go face-down on the rail one after another like a hand of cards being folded.", { n }), "alert");
+  _say(_fmt("Nothing comes back. Nothing will. There is no list, and by the weekend {n} will be on a stool two sois over if she wants one, and nobody will ask. What the message did, it did in this room: the girls read it in silence, and each of them is thinking about her own turn.", { n }));
+  _say("(The floor is quiet with you for a few nights. BOOKS says so.)", "dim");
+  _addHappy(-1, "the room watched you let him");
+}
+function _keptNo() {
+  const k = G.bar.kept, n = NPCS[k.id].name;
+  _keptClose(false);
+  _say(_fmt("\"Put it down, Bert.\" He looks at the phone, then at you, and locks it, and puts it under the till where the dockets go. \"Your bar.\" Not sulking — filing it. At the far end of the rail nothing changes, which is the thing you did: four women who had been waiting to see what you were go back to their drinks.", { n }));
+  _say(_fmt("{n} is gone either way — she went the night the money stopped, and the board will say so until somebody wipes it. There is no list to put her on. She will be on another floor by Friday if she wants one.", { n }), "dim");
+}
 function _workPresenceTick() {
   const b = G.bar;
   if (!_barOwned() || !b || b.workedDay !== G.day || !b.workedLast) return;
@@ -8248,6 +8338,8 @@ const _AFFAIR_FLOOR = [
 function _workFloor() {
   if (!_workedTonight() || G.room !== ((G.bar && G.bar.room) || "stinky_bar")) return;
   const b = G.bar;
+  // the floor read the message in silence, and is quiet with you for a few nights (the quiet shift change)
+  if (b.floorQuietUntil && G.day < b.floorQuietUntil) { if (b.floorQuietSaid !== G.day) { b.floorQuietSaid = G.day; b.floorDay = G.day; _say("The floor is correct tonight, and quick, and nowhere near you. Nobody has said a word about the message. Nobody needs to.", "dim"); } return; }
   if ((b.floorN || 0) >= WORK_FLOOR_MAX) return;
   if (G.turns - (b.floorTurn || -99) < WORK_FLOOR_GAP) return;
   // the affair rewires the floor: her beat leads each worked night, and once the
@@ -9816,7 +9908,7 @@ function _noticeTick() {   // daily, from _barSettle: a notice told, kept, or le
 }
 function _railLostOn(day) {   // the share of the rail that left with the women who left
   const b = G.bar; if (!b || !b.gone) return 0;
-  return Object.values(b.gone).filter(g => day - g.day < BAR_RAIL_DAYS).length * BAR_RAIL_SHARE;
+  return Object.values(b.gone).filter(g => !g.kept && day - g.day < BAR_RAIL_DAYS).length * BAR_RAIL_SHARE;   // a kept girl took no rail with her
 }
 
 // THE BAR OPPOSITE. Not "you fail": a man watching the bar across the street fail,
@@ -10232,6 +10324,9 @@ function _doBooks() {
   _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened{up}.", { r: _num(_barRent()),
     up: (b.rentUp || 0) > 0 ? _fmt(" — up {p}% since you opened, because he could see you were busy", { p: Math.round(b.rentUp * 100) }) : "" }), "dim");
   if (G.room === b.room) _say(_PRICES_BOARD(b) + (b.terms === "salary" ? _fmt(" The girls are on a flat salary — ฿{n} a night on the wages line, and they stay.", { n: BAR_SALARY_NIGHT }) : " The girls are on the trade's cut, and a thin month is theirs before it is yours."), "dim");
+  if (b.kept && b.kept.stage === "paying") _say(_fmt("{n}: out with her sponsor — his fee ฿{f} a night into the till, ฿{t} so far. On the board as out with a customer while he pays.", { n: NPCS[b.kept.id].name, f: _num(KEPT_FEE), t: _num(b.kept.fee) }), "dim");
+  if (b.kept && b.kept.stage === "lapsed") _say(_fmt("{n}: ‘out with customer’ on the board — the fee stopped {d} night{s} ago, and no word.", { n: NPCS[b.kept.id].name, d: G.day - b.kept.lapsed, s: G.day - b.kept.lapsed === 1 ? "" : "s" }), "dim");
+  if (b.keptLast && G.day - b.keptLast.doneDay < 14) _say(_fmt("{n}: off the board. There is no list.{q}", { n: NPCS[b.keptLast.id].name, q: b.floorQuietUntil && G.day < b.floorQuietUntil ? " The floor read Bert's message, and is quiet with you." : "" }), "dim");
   if (b.notice && !b.gone[b.notice.id]) _say(_fmt("{n} has given notice — {d} day{s} left to change her mind. (PRICES · TERMS)", { n: NPCS[b.notice.id].name, d: Math.max(0, BAR_NOTICE_DAYS - (G.day - b.notice.day)), s: BAR_NOTICE_DAYS - (G.day - b.notice.day) === 1 ? "" : "s" }), "alert");
   {
     const gone = Object.keys(b.gone || {}).filter(id => G.day - b.gone[id].day < BAR_RAIL_DAYS);
@@ -10382,6 +10477,7 @@ function _barSettle(settleDay) {
   if (typeof _affairNight === "function") _affairNight(n);   // the affair's nightly account
   if (n.garnish) _say(_fmt("(Nont's man took ฿{g} off the top before the till saw it — a quarter of the trade; the night's luck he leaves you. ฿{o} to go.)", { g: n.garnish, o: _num((G.bar.loan && G.bar.loan.owed) || 0) }), "alert");
   _noticeCheck(); _noticeTick();   // a fortnight of thin chits, then a notice told, kept, or let run out
+  _keptTick();   // a kept girl's sponsor pays her fee, then stops, and she stops coming (the quiet shift change)
   // THE MECHANISM, STATED: a raised board costs the floor its chits every night, and the
   // morning says so — the cost was invisible until a woman left (Greta, round 61)
   if (n.markup && n.markup !== "list") {
@@ -11141,6 +11237,8 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  // THE LIST THAT DOES NOT EXIST (the quiet shift change, 2026-10-19 — structure only, no manager named)
+  "THERE IS NO LIST, squire, and I have been asked to write about it by a man who was very sure there was one. A girl on a standing arrangement — her fellow paying the bar its daily fee to keep her stool warm and empty — stops turning up the week her fellow stops paying, and three nights later the man who thought he ran the place is typing in capitals to every owner on the soi with her photograph attached. He is typing into a room that does not exist. Nobody keeps a register of girls who left; nobody rings the last bar to ask; she will be on a stool two sois over by Friday if she wants one, and the only people who read his message properly were the women at the far end of his own rail, who read it in silence and each thought the same thought, which was: not yet.",
   // WHY EVERY BAR COMPANY IS TWO MILLION (the laundering material, 2026-10-08 — the work-permit grid, structure only)
   "WHY EVERY BAR COMPANY IN THIS TOWN IS TWO MILLION BAHT, squire, and never three: because the number is not the bar's, it is the permit's. A foreigner who wants to stand behind his own rail and call it work needs a company with two million paid in for each work permit it carries — one million if he had the sense to marry a Thai, four million if he wants a manager on the paper beside him. So the capital of every bar company on the register is set by the grid and not by the business, and a man reading the register can tell you how many farang work in a bar before he has seen its door. Three million does not exist. Most bars are not companies at all: a commercial registration in a woman's name, no capital, no accounts, no permit, and the farang who paid for the stools is nowhere on it — which is the cheapest kind of bar there is to lose and the only kind most men can afford. The Owl mentions it because the paper hangs by every till in a frame, and in twenty years he has watched one customer read it.",
   // THE BANK REMEMBERS THE PERSON (money-laundering flavour, 2026-10-08 — the mule-book pattern, structure only)
