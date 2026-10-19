@@ -8094,6 +8094,34 @@ function _keptTick() {   // daily, from _barSettle
     k.stage = "lapsed"; k.lapsed = G.day; b.lastKeptFee = 0;
   }
 }
+// the floor answers for her, by role and by stage — the kept girl is what BOOKS says she is, to everybody
+const _KEPT_TALK = {
+  paying: {
+    mamasan: ["\"{n}? Her man pay the bar. ฿{f} every night, she stay home, he is happy, I am happy.\" A shrug. \"Is business, boss. Your till, your money. The stool is empty, the money is not.\"",
+      "\"Sponsor keep her. He pay us ฿{f} one night so she don't sit with customer.\" She says it like the ice order. \"Old arrangement. Many bar have one. Nothing to fix.\""],
+    cashier: ["\"฿{f}, every night, into my till — I write it.\" She shows you the line without being asked. \"{n} is on the board as out with customer. While he pay, she stay out.\"",
+      "\"Her sponsor's money. ฿{f}.\" She taps the cup. \"Same time every night, by the app. Easiest money in this book.\""],
+    hostess: ["\"{n}? Her sponsor pay mama. She stay home, watch TV.\" A look that is not quite envy. \"Lucky one. He pay so nobody else can sit with her.\"",
+      "\"She have a man now. He pay the bar, she no need come.\" A small shrug. \"We all want that one, na. Until he stop.\""],
+    manager: ["\"Her fellow's paying her fee. ฿{f} a night to the bar, to keep her at home.\" He wipes the rail. \"Money for a girl who isn't here. It's on your page.\"",
+      "\"Kept. He pays, she stays home, the till says thank you.\" A shrug. \"They all stop paying eventually. Then you find out what she was.\""],
+  },
+  lapsed: {
+    mamasan: ["\"{n}'s man stop paying. {d} night now.\" She doesn't lower her voice. \"She don't come, she don't call. I leave her on the board one more day. Then — off.\"",
+      "\"The money stop.\" A flat look. \"So she stop. Is how it go, boss. Nobody call, nobody say sorry. You want to know where she is? With him. Where else.\""],
+    cashier: ["\"No fee {d} night.\" She turns the book so you can see the blank line. \"I still write her name. Out with customer. Tomorrow I don't.\"",
+      "\"He stop paying. She stop coming. Same day.\" The pen goes down. \"I am not surprised, boss. I am never surprised.\""],
+    hostess: ["\"{n}? Gone, I think.\" She says it quietly. \"Her man stop pay the bar. She not come back — why she come back? Nobody come back.\"",
+      "\"Don't ask mama about {n}.\" A glance along the rail. \"The money stop. Mama is angry. We are not angry.\" She does not say what they are."],
+    manager: ["\"{d} nights, no money, no word.\" Bert looks at the board. \"Her fellow's decided he doesn't need us. That's what it means when the fee stops. She's his problem now.\"",
+      "\"Stopped paying. So she's stopped coming.\" He shrugs. \"I'll give it another night. Then I've a thing to say in the group, and you'll want a say in it.\""],
+  },
+};
+function _keptTalk(npc) {
+  const k = G.bar.kept, n = NPCS[k.id].name, role = NPCS[npc].manager ? "manager" : (NPC_ROLES[npc] || "hostess");
+  const pool = (_KEPT_TALK[k.stage] || _KEPT_TALK.paying)[role] || _KEPT_TALK[k.stage].hostess;
+  return _fmt(_pickVary(pool, "kepttalk:" + k.stage + role), { n, f: _num(KEPT_FEE), d: Math.max(1, G.day - (k.lapsed || G.day)) });
+}
 function _keptNewsDue() {
   const b = G.bar; return !!(b && b.kept && !b.kept.told && b.kept.stage === "paying" && _barOwned() && G.room === b.room && G.nightTurn >= 10);
 }
@@ -8847,7 +8875,7 @@ function _affairHome() {
   a.homeDay = G.day;
   _say(_pickVary([
     `"After close," ${n} says, without looking up from the float. "Go. I come." It is not a question, and she does not make it sound like a favour.`,
-    `${n} nods at the door. "You go first. Everybody see us go together, tomorrow everybody talk. I come after Cake count."`,
+    `${n} nods at the door. "You go first. Two minute, then me. Everybody see anyway — everybody always see. I come after Cake count."`,
   ], "affairhome"));
 }
 // A NIGHT OUT WITH HER (Mario, 2026-10-08: "sure, but there needs to be consequences"). The
@@ -8978,7 +9006,7 @@ function _affairHer() { return G.affair ? _npcLabel(G.affair.id) : ""; }
 function _affairDue() {
   if (G.affair || (G.affairCool && G.day - G.affairCool < 14)) return null;
   if (!_workedTonight() || G.room !== ((G.bar && G.bar.room) || "stinky_bar")) return null;
-  if (G.nightTurn < 55) return null;   // last-call hour — the room thinning out
+  if (G.nightTurn < ((typeof _closeTurn === "function" && _closeTurn(G.room)) ? _closeTurn(G.room) - 5 : 55)) return null;   // last call by the room's OWN close — Soi 6 shuts at two (Jurgen, round 95: "last call" at 23:36)
   const her = _barStaff().filter(id => NPC_ROLES[id] === "hostess" && _bondTier(id) >= AFFAIR_BOND_GATE)
     .sort((a, b) => (G.soc.drinks[b] || 0) - (G.soc.drinks[a] || 0))[0];
   return her || null;
@@ -8997,6 +9025,10 @@ function _affairAsk(her) {
     "mother PLAN it.\" She turns a beer mat over, once. \"So. I am asking you the thing " +
     "nobody ask out loud. What am I? I work for you, or I am your lady? Because I cannot " +
     "be both good. Nobody can be both.\"");
+  _affairPrompt();
+}
+function _affairStakes() {
+  _say("(STAY: she stays after close, and from here you are her man and her boss at once. Nobody schemes and nobody is graded — the position is the enemy: nights away from her cost the two of you, nights with her cost the floor, and the soi always finds out. STEP BACK: nothing happens, it costs nothing, and the door opens again in a fortnight if she still wants it.)", "dim");
   _affairPrompt();
 }
 function _affairPrompt() {
@@ -10428,6 +10460,7 @@ function _tabDueTick() {
 function _barSettle(settleDay) {
   if (!_barOwned()) return;
   _tabDueTick();
+  _keptTick();   // a kept girl's sponsor pays her fee BEFORE the night is settled — the morning's till is BOOKS' till (Jurgen, round 95: ฿500 apart every morning)
   const n = _barNight(settleDay);   // the night played (G.day-1 from _endNight); the monthly cycle stays on G.day
   const m = _barMonthly();
   // the nightly line is quiet; the monthly one is not
@@ -10477,7 +10510,6 @@ function _barSettle(settleDay) {
   if (typeof _affairNight === "function") _affairNight(n);   // the affair's nightly account
   if (n.garnish) _say(_fmt("(Nont's man took ฿{g} off the top before the till saw it — a quarter of the trade; the night's luck he leaves you. ฿{o} to go.)", { g: n.garnish, o: _num((G.bar.loan && G.bar.loan.owed) || 0) }), "alert");
   _noticeCheck(); _noticeTick();   // a fortnight of thin chits, then a notice told, kept, or let run out
-  _keptTick();   // a kept girl's sponsor pays her fee, then stops, and she stops coming (the quiet shift change)
   // THE MECHANISM, STATED: a raised board costs the floor its chits every night, and the
   // morning says so — the cost was invisible until a woman left (Greta, round 61)
   if (n.markup && n.markup !== "list") {

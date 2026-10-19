@@ -15372,7 +15372,7 @@ const SYNDICATE_JOBS = [
   },
   {
     id: "screen",
-    lead: "\"The football. You need a screen.\"",
+    lead: "\"The football. You need a proper screen — what you have is a television.\"",
     ask: "Tan has evidently already discussed this with Bert, and possibly with the " +
       "regulars. \"Big one, behind the bar, on the bracket — and the wiring done " +
       "properly, in the trunking, not taped along the beam like the Water Buffalo.\" " +
@@ -15396,7 +15396,7 @@ const SYNDICATE_JOBS = [
       "sits exactly level, which you only notice because the one at the Water Buffalo " +
       "never has.",
     perk: "Neither of them will take a tip. A week later a man you have never met " +
-      "reboots your frozen till over the phone, for nothing, because he owes somebody " +
+      "resets the screen over the phone when it freezes, for nothing, because he owes somebody " +
       "who owes somebody.",
     no: "\"Of course.\" No shift in tone at all. \"There are many people who do " +
       "this.\"\n\nThere are. The two lads you find are cheaper by half and pleasant " +
@@ -15415,7 +15415,7 @@ const SYNDICATE_JOBS = [
     who: "\"You are paying for same day.\" He says it as though it were obvious, " +
       "which it is. \"Anybody can sell you a till. On a Saturday in high season, when " +
       "every bar on this coast has the same problem, you are one of forty phone calls " +
-      "— or you are one of the four they come to first.\"\n\nHe turns his coffee a quarter-turn on the bar. " +
+      "— or you are one of the four they come to first.\"\n\nHe turns the water Bert put in front of him a quarter-turn on the bar. " +
       "\"That is the only thing you ever buy in this country, my friend. Not the " +
       "thing. The order of the phone calls.\"",
     yes: "It costs what he said it would cost, which is too much. One day it will die on " +
@@ -18416,6 +18416,18 @@ const _C_MONEY = [
   '"The machine die after midnight, I take cash and I write you a paper that say so." She shows you the paper. "Morning, the paper is a receipt. You lose it — then it is a memory."',
   '"Every bar on this soi run on the same three number: the beer, the lady drink, the fine." She holds up three fingers. "Only the beer is on the wall. Ask me the other two now, while you can still do the sum."',
 ];
+// the cashier's plan (Lorraine, round 95 — every till keeper in town refused the question): the reliable woman's
+// arithmetic, in her own register — no husband, no child, no province, those are her other nodes'
+const _C_PLAN = [
+  "\"Plan?\" She squares the notes. \"Keep this book straight until the book is mine. Then a smaller one, somewhere quiet, with my name on the first page.\"",
+  "\"Save. Same as the girls, only I can see the numbers.\" A dry almost-smile. \"When the number is right, I go. The number is not right yet.\"",
+  "\"I like the till. Not the bar — the till.\" She taps it. \"One day a shop with a till and no bar around it. Same job, better hours.\"",
+  "\"Plan is: mama retire, I don't.\" She lets that sit. \"Somebody must be here who can count. For now that is me. After — we see.\"",
+  "\"Two more year, then study. Accounting, maybe.\" She says it like a figure she has already checked. \"I already do the work. I want the paper that say I can.\"",
+  "\"My plan?\" She looks round the room once. \"Not this. But this pay for the next thing, so — this, carefully, for now.\"",
+  "\"House first. Small, concrete, my name.\" The pen does not stop. \"Every bar girl say the same. Difference is, I know exactly how far away it is.\"",
+  "\"I don't make a plan. I make a float.\" A small shrug. \"The float get bigger, the plan make itself.\"",
+];
 const _C_FAMILY = [
   `"My family? Isaan, same everybody here. I send money every month — same the girls, only I sit down to do it." A small dry smile. "Cashier is better than dance, for me. My boyfriend like it better too."`,
   `"One boy, he stay with my mother in {from}. I do this job because I am good with number, and the number here is bigger than the number at home." A shrug. "Simple."`,
@@ -18484,7 +18496,7 @@ function _floorCashier(id, r) {
   const k = r.pick, room = r.room, from = r.from;
   return {
     name: r.name, th: r.th, emoji: "\ud83e\uddfe", room, filler: true, ..._floorExit(id),
-    storyBits: { from, family: k.family, greet: k.greet, money: k.money, home: k.home },   // the original eight: baked text unchanged
+    storyBits: { from, family: k.family, greet: k.greet, money: k.money, home: k.home, plan: _hh(id + ":cplan", 61) % 8 },   // the original eight: baked text unchanged
     look: r.look,   // the portrait prompt, apart from the desc
     desc: r.desc,
     dialogue: _floorOwn(id, [
@@ -18492,6 +18504,7 @@ function _floorCashier(id, r) {
       // one answer, so one topic with two keys — TOPICS listed "money · tab" and
       // gave the same paragraph twice (Maureen, round 47).
       { topic: "money|tab|bill|price", text: _C_MONEY[k.money], story: "cmoney" },
+      { topic: "plan|future|dream", text: _C_PLAN[_hh(id + ":cplan", 61) % _C_PLAN.length], story: "cplan" },   // every till in town refused "plan" (Lorraine, round 95)
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: _C_LOCKIN[k.lockin] }] : []),
       { topic: "family", text: _C_FAMILY[k.family].replace(/\{from\}/g, from), story: "cfamily" },
       { topic: "home|hometown|village|where you from", text: _C_HOME[k.home](from), story: "chome" },   // round 66

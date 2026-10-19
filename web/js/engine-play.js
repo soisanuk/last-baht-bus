@@ -1374,7 +1374,7 @@ function _doTell(lower, to) {
   for (const [key, rx, val] of _TOLD_RX) {
     const m = l.match(rx); if (!m) continue;
     const v = val(m).trim(); if (!v) continue;
-    if (key === "job" && /^(here|in pattaya|on holiday|from|tired|okay|ok|fine|drunk|sorry|happy|not|just|a bit|very)\b/.test(v)) return false;
+    if (key === "job" && /^(here|in pattaya|on holiday|from|tired|okay|ok|fine|drunk|sorry|happy|not|just|a bit|very|woman|man|lady|girl|boy|female|male|bloke|guy|person|customer|tourist)\b/.test(v)) return false;   // "i am a woman" → "Woman? Is good job?" (Lorraine, round 95)
     ((G.player.told = G.player.told || {}))[key] = v;
     if (typeof _toldNote === "function") _toldNote(pid, key, v);
     // …and when SHE has just asked it, it is her answer: "where you from?" then "i'm from korat" was a remark, and
@@ -4391,7 +4391,7 @@ const _BOND_SPENT = [
 // Tinglish and just glad the boss is in.
 const _OWNER_GREET = {
   mamasan: [
-    n => `"Boss." ${n} gives you the nod she keeps for you and nobody else. "Quiet start, but the crowd not come yet. Two girl late — I already call them. You want I put more ice on, or we see how it go?"`,
+    n => `"Boss." ${n} gives you the nod she keeps for you and nobody else. "Quiet start, but the crowd not come yet. You want I put more ice on, or we see how it go?"`,
     n => `${n} is at your elbow before you've got your jacket off, low and quick: "One girl, her papers — the office want new photo, I fix, don't worry. Everything else clean. Good you come in tonight, boss."`,
     n => `"Ah, the owner arrives." ${n} says it dry, fond. "Sit, sit — is your bar, but you still sit. I run the floor, you watch the door. Twenty year, I know my half. You learning yours."`,
   ],
@@ -4448,6 +4448,17 @@ function _affairTalk(id, tt) {
   if (!tt) return null;
   const a = G.affair || {}, seen = a.crisSeen || [], chose = a.crisChose || {}, n = NPCS[id].name;
   const pick = (k, lines) => _pickVary(lines, "afftalk:" + k);
+  // THE NIGHT AT HOME (Jurgen, round 95: "ask jiab about last night" the evening after she slept in his room got
+  // "Money is Cake's side, boss"): the morning, the note on the kettle, the ice man — hers, for two days
+  if (a.together != null && G.day - a.together <= 2 && /\b(last night|this morning|the morning|the hotel|my room|your room|sleep well|the note|note on the kettle|kettle|ice man|the ice|four o'?clock)\b/.test(tt)) {
+    if (/\b(note|kettle|ice man|the ice|four o'?clock)\b/.test(tt)) return pick("home-note", [
+      `"The ice man come at four." ${n} says it like the obvious thing it is. "Somebody must be at the bar for him — you sleep till six, so, me. Cake write it on the kettle so you don't worry. You don't worry, na."`,
+      `"Four o'clock, the ice. I go." A shrug. "You never see him. He never see you. That is why there is me."`]);
+    return pick("home-night", [
+      `${n} looks at you a second longer than the question needs. "Last night was not the bar." Quieter: "I like your room. Nobody can see me there. In the bar everybody look."`,
+      `"This morning you snore." ${n} says it fondly and does not let you argue. "Then I go for the ice, and you sleep. Next time you make coffee first."`,
+      `"Don't ask me about last night in here." The tone is light; the look is not. "In here I am staff. Last night I was not. Both are true, and the girls can hear you."`]);
+  }
   // AFTER SHE HAS SEEN IT (Ossie, round 70: the woman she watched on his arm got "No idea, na.
   // Ask me something about us", and LAST NIGHT got her own fond text read back)
   if (a.soured && a.caughtWith && a.caughtWith.length) {

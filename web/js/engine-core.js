@@ -1765,6 +1765,7 @@ function _convoAsk(id, d, st) {
   // a question that does not fit a resident: "how long you stay?" to the man who lives here, "you got money in
   // anything out here?" to the man whose bar he is sitting in (László, round 73)
   if (key === "stay" && G.stage === "expat") return;
+  if (key === "trips" && G.metDay && G.metDay[id] != null && G.metDay[id] < G.day) return;   // "You again… I remember" and then "First time Pattaya?" (Meaw — Lorraine, round 95)
   if (key === "invested" && typeof _barOwned === "function" && _barOwned()) return;
   st.know = st.know || {};
   if (st.know["asked_" + key]) return;
@@ -2617,7 +2618,7 @@ function _townStory(npc, d) {
       const w = _townPick(npc, "hplanwrap", _H_PLAN_WRAP.length, b.planWrap, fit(_H_PLAN_WRAP, null));
       return { text: _H_PLAN_WRAP[w](_H_PLAN[c]) };
     }
-    case "home": return { text: _H_HOME_WRAP[_townPick(npc, "hhomewrap:" + b.from, _H_HOME_WRAP.length, b.homeWrap, fit(_H_HOME_WRAP, null))](b.from) };   // keyed by province: two Buriram women, one sentence (Nattapong, round 56)
+    case "home": return { text: _H_HOME_WRAP[_townPick(npc, "hhomewrap", _H_HOME_WRAP.length, b.homeWrap, fit(_H_HOME_WRAP, null))](b.from) };   // one book for the WRAPPER across every province: keyed by province, eight women from eight provinces said "Long bus, ten hour" (Lorraine, round 95)   // keyed by province: two Buriram women, one sentence (Nattapong, round 56)
     case "free": return { text: _H_FREE[_townPick(npc, "hfree", _H_FREE.length, b.free || 0, fit(_H_FREE, null))] };
     case "mgreet": { const i = _townPick(npc, "mgreet", _M_GREET.length, b.greet, fit(_M_GREET, null)); return { text: _M_GREET[i], short: _M_GREET_SHORT[i] }; }
     case "mfamily": { const bad = (typeof _M_FAM_CLASH !== "undefined" && _M_FAM_CLASH[b.story]) || []; return { text: _M_FAMILY[_townPick(npc, "mfamily", _M_FAMILY.length, b.family, fit(_M_FAMILY, i => !bad.includes(i)))] }; }
@@ -2628,6 +2629,7 @@ function _townStory(npc, d) {
     case "chome": return { text: _C_HOME[_townPick(npc, "chome", _C_HOME.length, b.home || 0, fit(_C_HOME, null))](b.from) };
     case "cgreet": { const i = _townPick(npc, "cgreet", _C_GREET.length, b.greet || 0, fit(_C_GREET, null)); return { text: _C_GREET[i], short: _C_GREET_SHORT[i] }; }
     case "cmoney": return { text: _C_MONEY[_townPick(npc, "cmoney", _C_MONEY.length, b.money || 0, fit(_C_MONEY, null))] };
+    case "cplan": return { text: _C_PLAN[_townPick(npc, "cplan", _C_PLAN.length, b.plan || 0, fit(_C_PLAN, null))] };
   }
   return null;
 }
@@ -2645,6 +2647,10 @@ const _TOPIC_MISS_THAI = [
   n => `“That one, I cannot help.” ${n} is perfectly pleasant about it. “Ask me something my side of the counter, na.”`,
   n => `${n} gives a small, practised shrug. “You ask wrong woman. This bar — everything, I know.”`,
   n => `“No.” ${n} says it the way she says a price: flat, final, not unfriendly. “Not my business to know.”`,
+  n => `${n} shakes her head once. “Not this one. Ask me the bar, the girls, the price — those I know.”`,
+  n => `“Hm.” ${n} goes back to what she was doing. “Somebody else know that. Not me.”`,
+  n => `“That I don't know.” ${n} is not sorry about it. “Many thing I don't know. The till, I know.”`,
+  n => `${n} lets it pass, the way she lets a joke pass. “Another question, na. One I can answer.”`,
 ];
 function _topicMiss(npcId) {
   const n = NPCS[npcId];
