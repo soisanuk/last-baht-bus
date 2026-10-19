@@ -218,8 +218,10 @@ test("L327 last night's killer field the morning after; L480 introductions; L846
   G.room = "stinky_bar"; assert.match(ask("bert", "who else should i meet"), /ASK BERT ABOUT/);
   G.room = NPCS.somo.room; run("talk to somo"); assert.ok(G.convoQ && G.convoQ.key === "team");
 });
-test("L268 the home answer is booked per province; L251 the work answers are booked town-wide", () => {
-  assert.match(String(_townStory), /hhomewrap:" \+ b\.from/);
+test("L268 the home WRAPPER is one book across every province; L251 the work answers are booked town-wide", () => {
+  // L268 had keyed the wrapper by province (two Buriram women, one sentence); eight women from eight provinces then said one
+  // sentence (Lorraine, round 95) — one town-wide book serves both, since the province is in the text anyway
+  assert.match(String(_townStory), /_townPick\(npc, "hhomewrap", _H_HOME_WRAP\.length/);
   const hs = Object.keys(NPCS).filter(i => NPCS[i].filler && NPC_ROLES[i] === "hostess" && _npcActive(i)).slice(0, 12);
   const said = new Map(); let dup = 0;
   for (const id of hs) { const l = _workTalk(id, "job"); if (said.has(l)) dup++; said.set(l, id); }

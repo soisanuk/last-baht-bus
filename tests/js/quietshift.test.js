@@ -31,10 +31,10 @@ test("a third of the kept girls leave with their sponsor on a later trip; every 
   const gone = kept.filter(i => _exited(i) === "kept");
   assert.ok(gone.length >= kept.length / 5 && gone.length <= kept.length / 2, `${gone.length} of ${kept.length}`);
   // a kept woman whose bar has no OTHER exited hostess, so the roster line is hers
-  const id = gone.find(g => !Object.keys(NPCS).some(o => o !== g && NPCS[o].room === NPCS[g].room && NPC_ROLES[o] === "hostess" && _exited(o))) || gone[0];
+  const id = gone.find(g => ROOMS[NPCS[g].room].barType && !Object.keys(NPCS).some(o => o !== g && NPCS[o].room === NPCS[g].room && NPC_ROLES[o] === "hostess" && _exited(o))) || gone[0];
   assert.equal(_npcActive(id), false, "off her floor");
   G.room = NPCS[id].room; G.talked[id] = [0]; G.exitSaid = {}; out = []; _describeRoom();
-  assert.match(said(), /sponsor|out with customer|condo/i, "the roster line is the kept one: " + said());
+  assert.match(said(), /sponsor|out with customer|condo|her man|photo|every bar/i, "the roster line is the kept one: " + said());
   assert.doesNotMatch(said(), /She go home\. She kept/, "never the plan pool with the sentinel in it");
   const col = Object.keys(NPCS).find(i => NPCS[i].room === NPCS[id].room && i !== id && NPC_ROLES[i] === "hostess" && _npcActive(i));
   if (col) { run("talk to " + NPCS[col].name.toLowerCase()); out = []; run("ask " + NPCS[col].name.toLowerCase() + " about " + NPCS[id].name.toLowerCase());

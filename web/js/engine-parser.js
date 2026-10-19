@@ -4932,7 +4932,8 @@ function _doTalkCore(arg, topic) {
     // buffalo (Lorraine, round 95) — the same rule round 77 made for a hostess's own bar node
     { const _cv = x => String(x || "").toLowerCase().replace(/^the /, "").replace(/\s+(bar|lounge|club|pub|a-?go-?go|go-?go)$/, "").trim();
       const _vb = topic && _cv(topic).length >= 5 && Object.keys(ROOMS).find(k => ROOMS[k].barType && _cv(_barName(k)) === _cv(topic));
-      if (_vb && _vb !== G.room && typeof _venueAnswer === "function" && typeof _licenceOf === "function") { _say(_venueAnswer(npc, _vb, _hoursRegister(npc))); return; } }
+      const _person = _vb && typeof _npcByName === "function" && _npcByName(_cv(topic).split(" ")[0]);   // "candy" is Candy before it is Candy Bar
+      if (_vb && _vb !== G.room && !_person && !_pickDialogue(npc, topic) && typeof _venueAnswer === "function" && typeof _licenceOf === "function") { _say(_venueAnswer(npc, _vb, _hoursRegister(npc))); return; } }
     // "how long have you worked here", typed as an ASK: the small-talk subject, not her "work" node on the substring (Lorraine, round 95)
     if (topic && NPC_ROLES[npc] === "hostess" && /^how long (?:have |had )?(?:you )?(?:work|worked|been|been working)(?: here| in pattaya| in this bar)?\??$/i.test(String(topic).trim()) &&
         typeof _smallTalk === "function" && _smallTalk(npc, "how long have you worked here")) return;
@@ -5437,7 +5438,7 @@ function _doTalkCore(arg, topic) {
           // identical sentence in one week (Helen, round 49). The owner keeps it;
           // the woman who runs the floor says what she actually runs, and it is
           // pooled, because it is the commonest question in the game.
-          me === "mamasan" ? ((NPCS[npc].owner || NPCS[npc].ownsBar || (typeof _licenceOwner === "function" && _licenceOwner(G.room) === npc))   // ownsBar: hers, without the one-woman-bar branches `owner` drives (Helga, round 57); the paper's name owns it too (Danny, round 95: "Not mine" then "My name on the paper")
+          me === "mamasan" ? ((NPCS[npc].owner || NPCS[npc].ownsBar || (typeof _licenceOwner === "function" && _licenceOwner(G.room) === npc && (() => { const _l = _licenceOf(G.room); return _l && _l.kind === "registration" && _l.owner; })()))   // ownsBar: hers, without the one-woman-bar branches `owner` drives (Helga, round 57); the paper's name owns it too (Danny, round 95: "Not mine" then "My name on the paper")
             ? `"This bar?" ${_isGogo() ? "A look round the room that takes in every seat" : "A look down the rail that takes in every stool"}. "My bar. Every girl here — my problem, and my money. You want to know how it work, buy a drink and watch me."`
             : [`"This bar?" ${_isGogo() ? "A look round the room that takes in every seat" : "A look down the rail that takes in every stool"}. "Not mine — but the floor, mine. Every girl here, my problem. Owner worry about the rent. I worry about the room."`,
                `"Here?" ${NPCS[npc].name} shrugs at the room without affection or complaint. "Is a good bar. Clean, honest price, nobody make trouble. I keep it like that — is my job, na."`,
@@ -11380,8 +11381,7 @@ function _doMotosai(arg) {
   _say(`“${thaiBaht(price)}${dogFare ? ` (plus ${thaiBaht(dogFare)} for his lordship's ride)` : ""}.” ` +
     `You pay${price === 20 ? (_npcsHere().includes("bank") ? " — Bank's special price" : " — Bank's mates' rate; word got round the stands") : ""}, swing on the back` + (seat ? "." + seat + " " : ", ") +
     rideSentence + ". " +
-    _fmt(_pickVary(["That was the fastest ฿{t} of your life", "฿{t}, and your heart arrives a minute after the rest of you", "฿{t} for a ride that felt like a dare you had accepted without reading it",
-      "฿{t}, most of it spent with your eyes shut", "฿{t} — the piwin's life story shouted into the wind and lost there", "฿{t}, and the soi's whole smell in one lungful"], "ridefast"), { t: _num(total) }) +
+    `That was the fastest ฿${_num(total)} of your life` +
     (extraTurns
       ? ` — ${_minutesWord((extraTurns + 1) * 6).toLowerCase()} of it, ` +
         _pickVary(extraTurns >= 2 ? ["the town going by in districts", "one district blurring into the next", "Pattaya passing in slabs of light", "the whole town's traffic threaded without a touch of the brake"]
@@ -14155,12 +14155,12 @@ const _WORK_JOB = {
     n => `"Hostess." ${n} says the English word carefully, as if it belonged to somebody else. "In Thai is not so nice word. I like the English one. It sound like a hotel."`,
     // deepened to fourteen (Lorraine, round 95: "Smile. Remember name" from eight women in six bars) — the job, never a biography
     n => `"Work?" ${n} laughs once. "Sit straight, look happy, don't look at the phone. Three rule. Mama check all three."`,
-    n => `"My job is the chair." ${n} pats the stool beside her. "Empty chair, no money. I make the chair not empty. That is the whole thing."`,
+    n => `"My job is the chair." ${n} pats the seat beside her. "Empty chair, no money. I make the chair not empty. That is the whole thing."`,
     n => `${n} thinks about it. "Talk, mostly. Listen, more. Farang like to talk about home — I know many home I never see."`,
     n => `"Six to two. Stand outside, say hello, sit inside, say hello again." ${n} shrugs. "Hello is the job. The rest is extra."`,
     n => `"Drink and don't get drunk." ${n} lifts the glass, which is mostly ice. "Is a skill. Not every girl have it."`,
     n => `"I am good at the quiet man." ${n} says it like a trade. "Loud man, anybody can. Quiet man, you must find the door."`,
-    n => `"What I do?" ${n} looks at the rail. "Same as you — I come here every night and I don't want to. Only I get paid."`,
+    n => `"What I do?" ${n} looks at the room. "Same as you — I come here every night and I don't want to. Only I get paid."`,
     n => `"Make him forget the time." ${n} nods at the clock the bar does not have. "When he look for the clock, I already lose."`,
   ],
   cashier: [
@@ -14174,7 +14174,7 @@ const _WORK_JOB = {
     n => `"I am the one nobody argue with." ${n} does not smile. "Because I have the paper. The paper never drink."`,
     n => `"My job? The float." ${n} opens the drawer a finger's width and shuts it. "Same money every night at six. Different money at two. The difference is the night."`,
     n => `${n} nods at the cup of chits. "Every drink is a paper. I turn paper into money and money into the book. If the book and the drawer disagree, I don't go home."`,
-    n => `"I sit here, the girls sit there." ${n} draws the line on the bar with a finger. "Here, numbers. There, feelings. I prefer here."`,
+    n => `"I sit here, the girls sit there." ${n} draws the line on the table with a finger. "Here, numbers. There, feelings. I prefer here."`,
   ],
   mamasan: [
     n => `"I run the floor." ${n} lets her eyes go round the room and back, and it takes about a second. "Who work tonight, who is late, who is crying in the toilet, who is drinking too much — customer AND girl." A shrug. "Mostly I see the trouble before it is trouble. That is the whole job."`,
@@ -16524,7 +16524,7 @@ const _HOUSE_FOOTBALL = [
   "\"Football?\" {n} looks at the screen as if it belongs to somebody else. \"The TV is for customer. I know Liverpool because Ron shout Liverpool. That is all I know.\"",
   "{n} shrugs. \"Red one, blue one. When the red one win, the bar drink more. That is my team.\"",
   "\"I don't follow.\" {n} says it without apology. \"The men follow. I follow the men's tab.\"",
-  "\"Muay Thai, I watch. Football — the customers tell me who win, every night, whether I ask or not.\"",
+  "\"Thai boxing, I watch. Football — the customers tell me who win, every night, whether I ask or not.\"",
   "{n} tips her head at the telly. \"I turn it on at eight, I turn it off at two. In between, I don't look. If the bar go quiet, somebody score.\"",
   "\"Ask Terry. Ask any of them.\" A small smile. \"A woman in this job learn exactly as much football as it take to not get asked twice.\"",
 ];

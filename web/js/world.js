@@ -18496,7 +18496,7 @@ function _floorCashier(id, r) {
   const k = r.pick, room = r.room, from = r.from;
   return {
     name: r.name, th: r.th, emoji: "\ud83e\uddfe", room, filler: true, ..._floorExit(id),
-    storyBits: { from, family: k.family, greet: k.greet, money: k.money, home: k.home, plan: _hh(id + ":cplan", 61) % 8 },   // the original eight: baked text unchanged
+    storyBits: { from, family: k.family, greet: k.greet, money: k.money, home: k.home, plan: k.money % 8 },   // the original eight: baked text unchanged; the plan's base is her stored money index, nothing hashed at load
     look: r.look,   // the portrait prompt, apart from the desc
     desc: r.desc,
     dialogue: _floorOwn(id, [
@@ -18504,7 +18504,7 @@ function _floorCashier(id, r) {
       // one answer, so one topic with two keys — TOPICS listed "money · tab" and
       // gave the same paragraph twice (Maureen, round 47).
       { topic: "money|tab|bill|price", text: _C_MONEY[k.money], story: "cmoney" },
-      { topic: "plan|future|dream", text: _C_PLAN[_hh(id + ":cplan", 61) % _C_PLAN.length], story: "cplan" },   // every till in town refused "plan" (Lorraine, round 95)
+      ...((typeof FLOOR_OWN !== "undefined" && FLOOR_OWN[id]) ? [] : [{ topic: "plan|future|dream", text: _C_PLAN[k.money % _C_PLAN.length], story: "cplan" }]),   // every till in town refused "plan" (Lorraine, round 95); the town book deals the rest, nothing hashed at load; a written woman's plan is hers to write
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: _C_LOCKIN[k.lockin] }] : []),
       { topic: "family", text: _C_FAMILY[k.family].replace(/\{from\}/g, from), story: "cfamily" },
       { topic: "home|hometown|village|where you from", text: _C_HOME[k.home](from), story: "chome" },   // round 66

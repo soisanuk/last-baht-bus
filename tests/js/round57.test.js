@@ -68,7 +68,7 @@ test("the town knows who owns the Stinky — at your own rail and across town", 
   owner(); const t1 = run("ask doug about this bar");
   assert.ok(Object.values(_TOWN.owner).flat().some(l => t1.includes(l.split("{")[0].slice(0, 12)) ) || /owner|yours|your bar/i.test(t1), t1);
   G.room = "queen_vic"; G.talked.terry = [0];   // a stranger gets his hello first
-  assert.match(run("ask terry about stinky pinky"), /bought it|owner|Yours|yours|You own/i);
+  assert.match(run("ask terry about stinky pinky"), /bought it|buy it|owner|Yours|yours|You own|your bar/i);
 });
 
 test("the piwin knows what month it is and where a massage is", () => {

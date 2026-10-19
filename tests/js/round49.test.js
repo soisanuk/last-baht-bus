@@ -83,7 +83,10 @@ test("a manager does not answer in a bar girl's Tinglish, and one boss gets more
 });
 
 test("'my bar' is an ownership claim, and a mamasan does not own the bar", () => {
-  const mamas = Object.keys(NPC_ROLES).filter(id => NPC_ROLES[id] === "mamasan" && !NPCS[id].owner).slice(0, 5);
+  // …unless the paper says she does: a mamasan whose bar is a commercial registration in HER name owns it (Danny, round 95 — Ratana
+  // and Mama Yai said "Not mine" and then "My name on the paper")
+  const paperOwner = id => { const r = _npcRoom(id), l = r && _licenceOf(r); return !!(l && l.kind === "registration" && l.owner && _licenceOwner(r) === id); };
+  const mamas = Object.keys(NPC_ROLES).filter(id => NPC_ROLES[id] === "mamasan" && !NPCS[id].owner && !NPCS[id].ownsBar && !paperOwner(id)).slice(0, 5);
   assert.ok(mamas.length >= 2, "there are mamasans who own nothing");
   for (const id of mamas) {
     const line = ask(_npcRoom(id), id, "bar");

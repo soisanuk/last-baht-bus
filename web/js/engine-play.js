@@ -4450,7 +4450,7 @@ function _affairTalk(id, tt) {
   const pick = (k, lines) => _pickVary(lines, "afftalk:" + k);
   // THE NIGHT AT HOME (Jurgen, round 95: "ask jiab about last night" the evening after she slept in his room got
   // "Money is Cake's side, boss"): the morning, the note on the kettle, the ice man — hers, for two days
-  if (a.together != null && G.day - a.together <= 2 && /\b(last night|this morning|the morning|the hotel|my room|your room|sleep well|the note|note on the kettle|kettle|ice man|the ice|four o'?clock)\b/.test(tt)) {
+  if (a.together != null && G.day - a.together <= 2 && /\b(last night|this morning|the morning|morning|the hotel|hotel|my room|your room|sleep well|note|kettle|ice man|the ice|four o'?clock)\b/.test(tt)) {   // the parser hands "the note" over as "note"
     if (/\b(note|kettle|ice man|the ice|four o'?clock)\b/.test(tt)) return pick("home-note", [
       `"The ice man come at four." ${n} says it like the obvious thing it is. "Somebody must be at the bar for him — you sleep till six, so, me. Cake write it on the kettle so you don't worry. You don't worry, na."`,
       `"Four o'clock, the ice. I go." A shrug. "You never see him. He never see you. That is why there is me."`]);
