@@ -13,12 +13,22 @@ var NEWS_FEED = [
     "d": "19 Oct 2026"
   },
   {
-    "t": "Pattaya woman lures suspected thief into beer session before police arrest",
+    "t": "Viral footage shows woman clinging to car near Pattaya Walking Street",
+    "s": "Thaiger",
+    "d": "19 Oct 2026"
+  },
+  {
+    "t": "Pattaya shooting follows tit-for-tat motorcycle revving",
+    "s": "Thaiger",
+    "d": "19 Oct 2026"
+  },
+  {
+    "t": "‘I still love Pattaya, but I hate seeing what money is doing to the city’, says 20-year visitor",
     "s": "Pattaya Mail",
     "d": "18 Oct 2026"
   },
   {
-    "t": "Pattaya’s sanitation workers work tirelessly to keep the city clean",
+    "t": "Pattaya woman lures suspected thief into beer session before police arrest",
     "s": "Pattaya Mail",
     "d": "18 Oct 2026"
   },
@@ -28,17 +38,7 @@ var NEWS_FEED = [
     "d": "18 Oct 2026"
   },
   {
-    "t": "‘I still love Pattaya, but I hate seeing what money is doing to the city’, says 20-year visitor",
-    "s": "Pattaya Mail",
-    "d": "18 Oct 2026"
-  },
-  {
-    "t": "U-Tapao Rayong–Pattaya Airport prepares for winter travel season with new aircraft arrival",
-    "s": "Pattaya Mail",
-    "d": "17 Oct 2026"
-  },
-  {
-    "t": "Nightlife operators face fresh police inspections across Chonburi",
+    "t": "Pattaya’s sanitation workers work tirelessly to keep the city clean",
     "s": "Pattaya Mail",
     "d": "18 Oct 2026"
   },
@@ -48,9 +48,14 @@ var NEWS_FEED = [
     "d": "16 Oct 2026"
   },
   {
-    "t": "New airport baggage inspection starts on Friday",
-    "s": "Bangkok Post",
-    "d": "16 Oct 2026"
+    "t": "Thailand Targets $417 Million of Land in Foreign Buyer Crackdown",
+    "s": "Bloomberg.com",
+    "d": "19 Oct 2026"
+  },
+  {
+    "t": "From piercings to purification: Thailand’s 2026 vegetarian festival – in pictures",
+    "s": "The Guardian",
+    "d": "18 Oct 2026"
   },
   {
     "t": "In Thailand, a nearly 16-foot black king cobra turns up inside a home as rain drives snakes in",
@@ -58,25 +63,20 @@ var NEWS_FEED = [
     "d": "18 Oct 2026"
   },
   {
-    "t": "From piercings to purification: Thailand’s 2026 vegetarian festival – in pictures",
-    "s": "The Guardian",
-    "d": "17 Oct 2026"
+    "t": "China’s embassy issues fresh Thailand travel alert over kidnappings, job scams",
+    "s": "Bangkok Post",
+    "d": "19 Oct 2026"
   },
   {
-    "t": "Gamescom Asia x Thailand Game Show 2026 announces four additional pavilions from Indonesia, Japan, Malaysia, and the US",
-    "s": "GamesIndustry.biz",
-    "d": "16 Oct 2026"
-  },
-  {
-    "t": "Thailand insists sea boundary talks with Cambodia must stay within UNCLOS scope",
-    "s": "Khaosod English",
-    "d": "18 Oct 2026"
+    "t": "Laos, Thailand strengthen cooperation to combat online scams, money laundering",
+    "s": "The Star",
+    "d": "19 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-16","USD":33.41,"AUD":23.25,"GBP":44.56,"EUR":37.61};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-19","temp":31,"humid":73,"code":95,"hi":31,"rain":100};
+var WX_NOW = {"date":"2026-10-19","temp":26,"humid":94,"code":2,"hi":33,"rain":98};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4183,"date":"2026-10-19","baht":66100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":82561,"thb":2769096};
+var BTC = {"usd":82534,"thb":2770208};
