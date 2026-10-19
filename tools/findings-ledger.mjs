@@ -67,7 +67,7 @@ if (args.includes("--aim")) {
   const rank = Object.entries(byC).sort((a, b) => (b[1].sev / b[1].n - b[1].inst / b[1].n) - (a[1].sev / a[1].n - a[1].inst / a[1].n));
   for (const [c, v] of rank) {
     const top = Object.entries(v.lens).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([l, n]) => `${l}×${n}`).join(" ");
-    console.log(`  ${c} ${NAMES[c].padEnd(18)} n=${String(v.n).padStart(3)}  severe ${String(Math.round(100 * v.sev / v.n)).padStart(3)}%  instrument ${String(Math.round(100 * v.inst / v.n)).padStart(3)}%   ${top}`);
+    console.log(`  ${c} ${(NAMES[c] || "(unclassed)").padEnd(18)} n=${String(v.n).padStart(3)}  severe ${String(Math.round(100 * v.sev / v.n)).padStart(3)}%  instrument ${String(Math.round(100 * v.inst / v.n)).padStart(3)}%   ${top}`);
   }
   console.log("\n  a class high on severe and low on instrument is where a persona still earns its keep;");
   console.log("  the lenses listed are the ones that have produced it — pick one of those, or a new lens with the same shape");
