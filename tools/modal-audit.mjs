@@ -100,6 +100,7 @@ const STATES = {
   // pendingChoice
   intro:        { gate: "choice:intro", arm() { newGame(); G.player = { said: {}, lang: "en" }; _taxiIntro("beach"); }, noDecline: true },
   vacation_end: { gate: "choice:vacation_end", arm() { base(); G.day = 8; G.room = _hotelRoomId(); _endVacation(); }, noDecline: true },
+  keptby:       { gate: "choice:keptby", arm() { base(); G.stage = "expat"; _setFlag("expatLife"); G.payDay = G.day; G.hotel = "sabai"; G.hotelDebt = _DEBT_CAP; G.money = 0; G.bank = 0; G.soc.drinks.lek = 8; G.talked.lek = [0]; G.roofless = G.day; _destituteTick(); }, decline: "no" },
   soi6continue: { gate: "choice:soi6continue", arm() { base(); startSoi6Mode(); doCommand("1"); doCommand("3"); doCommand("1"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.day = 8; G.room = "qv_room"; _endVacation(); doCommand("continue"); }, decline: "not yet" },
   gameend:      { gate: "choice:gameend", arm() { owner(); G.lifeStats = { day: G.day, stood: 5, nights: 9, her: "manow" }; _gameEnd(); }, noDecline: true },
   checkout:     { gate: "choice:checkout", arm() { base(); G.room = _hotelRoomId(); G.nightTurn = 2; _doCheckout(); }, decline: "stay" },

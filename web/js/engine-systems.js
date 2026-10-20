@@ -9361,9 +9361,18 @@ function _sellBarYes() {
 // game had no road to. So SELL UP closes the game the way the week closes a
 // vacation: an epilogue, the card, and a gate — VISIT PATTAYA (a week down from
 // Prachuap, the same calendar, and the bus home at the end of it) or START OVER.
-function _gameEnd() {
+function _gameEnd(kind) {
   G.pendingChoice = "gameend";
   G.visitUntil = 0;
+  G.endKind = kind || "sold";
+  G.lifeStats = G.lifeStats || { day: G.day, stood: (G.bar && G.bar.worked) || 0, nights: (G.bar && G.bar.nights) || 0, happy: G.happy };
+  if (kind === "repatriated") {   // destitution's third morning (Mario, 2026-10-20): the loan against the passport, and a plane
+    _say("═══════════════════════════════════", "win");
+    _say(_fmt("The man from the consulate is polite in the way that has a form behind it. An emergency loan — ฿{l}, the fare and a night in a Bangkok hotel with a guard on the corridor — against a passport that is now flagged until it is repaid, which it will not be. " +
+      "Nobody shouts. Nobody says the word deported, because it is not that; it is a man being helped home. From the highway the neon shrinks to a smudge on the coast, the way it did the first time, and this time nobody is coming back for it.", { l: _num(EMBASSY_LOAN) }), "win");
+    for (const l of _lifeCard()) _say(l, "win");
+    _gameEndPrompt(); return;
+  }
   _say("═══════════════════════════════════", "win");
   _say(_fmt("Prachuap is five hours round the top of the Gulf and a different country: a sea that faces " +
     "east, a noodle pot that starts at six in the morning, an auntie who calls you by the " +
@@ -9374,12 +9383,20 @@ function _gameEnd() {
   _gameEndPrompt();
 }
 function _gameEndPrompt() {
+  if (G.endKind === "repatriated") { _say("(The loan against your passport comes first, and it is not coming. START OVER — a new first night. SHARE — the card.)", "dim"); return; }
   _say("(VISIT PATTAYA — a week up from Prachuap. The town has not changed; you have.)", "dim");
   _say("(START OVER — a new first night, face down on a beach. SHARE — the card.)", "dim");
 }
 function _lifeCard() {
   const L = G.lifeStats || {};
   const her = L.her && NPCS[L.her] ? NPCS[L.her].name : "her";
+  if (G.endKind === "repatriated") return [
+    "🚌 THE LAST BAHT BUS — the plane",
+    `🏝️ ${L.day || G.day} days in Pattaya · 👥 ${Object.keys(G.talked || {}).filter(id => NPCS[id]).length} names`,
+    `✈️ an emergency loan against the passport — ฿${_num(EMBASSY_LOAN)}, not coming back`,
+    `สนุก ${L.happy != null ? L.happy : G.happy} · the town kept its books`,
+    "soisanuk.github.io/last-baht-bus",
+  ];
   return [
     "🚌 THE LAST BAHT BUS — the long way round",
     `🏝️ ${L.day || G.day} days in Pattaya · 🍺 ${L.stood || 0} of ${L.nights || 0} nights behind your own rail`,

@@ -362,6 +362,12 @@ function newGame() {
     questDoneDay: {},    // quest id → the day it completed (the follow-ups a month later: Orathai closes, the police read the paper)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
     bankNotes: [],       // what the arrivals were, for the ledger's sentence (the pension, a reward)
+    destitute: 0,        // consecutive roofless mornings (expat); DESTITUTE_DAYS is the plane
+    destituteDay: null,  // the last morning counted
+    roofless: null,      // the morning the clerk did not write you down (set by _chargeRent at the cap)
+    keptBy: null,        // { id, since, nights } while a woman who knows you keeps you
+    keptByUsed: false,   // her offer comes once a life
+    endKind: null,       // how the game ended: "sold" (Prachuap) or "repatriated"
     condo: null,         // { since, deposit, short, guestsTold } while you rent the Pratumnak condo (G.hotel === "condo")
     paper: null,         // tourist / longstay / permit (the expat stage; null on a holiday) — see PAPER_COST in world.js
     paperUntil: null,    // a lost permit's paper lasts to this day, then falls back to the origin's
@@ -1438,7 +1444,8 @@ function _hotelRate(k) {
 // crates in the Buakhao market forecourt).
 function _chargeRent(rough) {
   if (!_flag("act1Done") || G.stage === "act1") return;
-  if (G.hotel === "condo") return;   // a roof by the month bills on the payday (_condoMonth), not under the door
+  if (G.hotel === "condo") return;
+  if (G.keptBy) return;   // her mat: no folio (destitution, 2026-10-20)   // a roof by the month bills on the payday (_condoMonth), not under the door
   if (G.hotelDebt && G.money >= G.hotelDebt + _hotelRate(G.hotel)) {
     G.money -= G.hotelDebt;
     _say(`(You settle the ฿${_num(G.hotelDebt)} on the book on your way past the desk. ` +
@@ -1498,6 +1505,7 @@ function _chargeRent(rough) {
       : _fmt("The night clerk doesn't reach for the book. He stopped writing you " +
         "down somewhere around ฿{d} and has not mentioned it since, which is a " +
         "different kind of debt and a heavier one.", { d: G.hotelDebt }), "alert");
+    if (G.hotelDebt <= owedBefore && G.stage === "expat") G.roofless = G.day;   // nothing written, nothing paid: no roof this morning (destitution, 2026-10-20)
   }
 }
 

@@ -138,7 +138,16 @@ const OWL_LEAD_PAY = 100, OWL_LEADS_WEEK = 5;
 // and one in advance at the office, the landlord's short fuse (CONDO_GRACE months short and your bag is at the Sabai, the
 // deposit his), no joiner fee (the juristic office has a WORD about overnight guests, and it is only a word), a kitchen
 // (CONDO_MEAL a plate), a pool. Moving out inside the lease forfeits the deposit; after it the office hands it back. ──
-const CONDO_RENT = 9000, CONDO_UTIL = 2000, CONDO_DEPOSIT_MONTHS = 2, CONDO_GRACE = 2, CONDO_LEASE = 180, CONDO_MEAL = 60;    // Mort pays a hundred a paragraph for a fixture you read and he had not; five a week, cash, when you next sit with him
+const CONDO_RENT = 9000, CONDO_UTIL = 2000, CONDO_DEPOSIT_MONTHS = 2, CONDO_GRACE = 2, CONDO_LEASE = 180, CONDO_MEAL = 60;
+// ── DESTITUTION (Mario, 2026-10-20): the expat stage can be LOST. ──
+// No roof (the Sabai has stopped writing you down — the book at its cap and nothing for the night) and nothing for one
+// night anywhere, counted at the wake, consecutive: DESTITUTE_DAYS mornings and the consulate has your name — an
+// emergency loan against your passport and a plane, which is the real version (nobody is flown home out of kindness;
+// the fare is lent and the passport flagged until it is repaid). A bar owner with a bar is exempt — a till and a floor
+// to sleep on is a roof. The way out is the people: Nira, Nont, a job — and best, a woman who knows you keeps you
+// (HER offer, never asked for: KEPT_BY_NIGHTS on her mat, no folio, and then her mama has noticed; it costs her face on
+// her floor, which the floor says). Structural, never a morality tale: nobody lectures.
+const DESTITUTE_DAYS = 3, KEPT_BY_NIGHTS = 5, EMBASSY_LOAN = 28000;    // Mort pays a hundred a paragraph for a fixture you read and he had not; five a week, cash, when you next sit with him
 function _originMoney(id) { return ORIGIN_MONEY[id] || ORIGIN_MONEY_DEFAULT; }
 
 // ── Buying the Stinky: the old man carries the paper ────────────────────────

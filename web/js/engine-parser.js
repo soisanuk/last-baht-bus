@@ -8157,6 +8157,13 @@ function _dawnHere(npc, w) {
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
+  // HER MAT (destitution, 2026-10-20): she answers for it, and her floor saw it — the cost is hers, and the floor says so
+  { const kb = G.keptBy || (G.keptByLog && G.keptByLog.until >= G.day ? G.keptByLog : null);
+    if (kb && /\b(your room|the mat|staying with you|your sister|your mama|the farang in your room|keep me|kept me|her room|mat)\b/.test(t)) {
+      const n = NPCS[npc].name, kn = NPCS[kb.id] ? NPCS[kb.id].name : "her";
+      if (npc === kb.id) { _say(G.keptBy ? `"My room?" ${n} shrugs, which is not nothing. "Small. My sister snore. You snore. Is okay. Five night I can say to mama, after that I cannot."` : `"Five night." ${n} says it flat. "Mama ask. Sister ask. Now the girls ask. Is okay. You don't ask — that is the one thing."`); return true; }
+      if (NPC_ROLES[npc] && (NPCS[npc].room === NPCS[kb.id].room || (NPCS[npc].bars || []).includes(NPCS[kb.id].room))) { _say(NPC_ROLES[npc] === "mamasan" ? `"${kn} keep a farang in her room." ${n} does not lower her voice. "Not my business. Her room, her money, her name. I only say — the girls talk, and the girls are right."` : `"${kn}?" ${n} looks across at her. "She keep you. Everybody know. Her sister tell my cousin." A shrug. "Brave, or stupid. Same word here, some days."`); return true; }
+    } }
   // A JOB is the house's to offer (2026-10-20): the mamasan, the manager or the woman on the till, at a bar with a rail
   if (/^(?:a |the )?(?:job|jobs|work here|work for you|hiring|vacancy|position|manager'?s? job|a manager)\b/.test(t) && _room().barType &&
       (NPC_ROLES[npc] === "mamasan" || NPCS[npc].manager || NPCS[npc].owner || (typeof _tillKeeper === "function" && _tillKeeper(G.room) === npc)) && typeof _jobOffer === "function")
@@ -14872,6 +14879,7 @@ function _chipSet() {
   }
   if (G.pendingChoice === "gameend") { add("visit pattaya", "visit Pattaya"); add("start over"); add("share", "share card"); return chips; }
   if (G.pendingChoice === "soi6continue") { add("another week", "another week — a month on"); add("cancel the ticket", "cancel the ticket — never going home"); add("not yet"); return chips; }
+  if (G.pendingChoice === "keptby") { add("yes", "yes — her mat"); add("no"); return chips; }
   if (G.pendingChoice === "vacation_end") {
     if (G.mode === "soi6") { add("continue", "continue — the same people"); add("play again", "play again — fresh week"); add("share", "share card"); add("restart", "restart as somebody else"); return chips; }   // RESTART was in HELP's sentence and on no chip (Marcus, round 96)
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
@@ -15373,6 +15381,7 @@ function engineComplete(input) {
   if (G.pendingChoice === "gameend") pool = ["visit pattaya", "start over", "share"];
   else if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["continue", "play again", "share", "restart"] : ["new vacation", "move to pattaya"];
   else if (G.pendingChoice === "soi6continue") pool = ["another week", "cancel the ticket", "not yet", "share"];
+  else if (G.pendingChoice === "keptby") pool = ["yes", "no"];
   else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", ...(G.known && G.known.nont && _kidOpen() ? ["the kid"] : []), "not me", "ask"];
   else if (G.pendingChoice === "kidprice") pool = ["pay", "no", "ask"];
   else if (G.pendingChoice === "kidfavour") pool = ["yes", "no", "ask"];
@@ -16776,6 +16785,7 @@ function _renderResume() {
   }
   if (G.pendingChoice === "gameend") { for (const l of _lifeCard()) _say(l, "win"); _gameEndPrompt(); return; }
   if (G.pendingChoice === "soi6continue") { _soi6ContinuePrompt(); return; }
+  if (G.pendingChoice === "keptby") { _keptByPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.pendingChoice === "rabbitjob") { _rabbitJobPrompt(); return; }
   if (G.pendingChoice === "kidprice") { _kidPricePrompt(); return; }
@@ -17073,10 +17083,18 @@ function _doCommandInner(input) {
 
   // the week is over: the airline needs an answer before anything else
   if (G.pendingChoice === "gameend") {
+    if (G.endKind === "repatriated" && /^(visit|pattaya|back|go back|return)\b/.test(lower)) { _say("(The loan against your passport comes first, and it is not coming. START OVER, or SHARE the card.)", "dim"); _gameEndPrompt(); return; }
     if (/^share/.test(lower)) { _doShare(); _gameEndPrompt(); return; }
     if (/^(visit|pattaya|go back|back|week|yes)\b/.test(lower)) { _visitPattaya(); return; }
     if (/^(start over|restart|new game|over|again|begin)\b/.test(lower)) { newGame(); engineIntro(); return; }
     _gameEndPrompt(); return;
+  }
+  // HER MAT (destitution, 2026-10-20): her offer, once; a question keeps it; the wrong answer keeps it
+  if (G.pendingChoice === "keptby") {
+    if (/^(yes|ok|okay|thank|thanks|stay|her|i stay|please)\b/.test(lower) || /^y$/.test(lower)) { _keptByYes(); return; }
+    if (/^(no|nope|can'?t|cannot|not|never)\b/.test(lower) || /^n$/.test(lower)) { _keptByNo(); return; }
+    if (_read(lower).kind === "question" || /^(explain|what|help)\b/.test(lower)) { _say("A mat on her floor for " + KEPT_BY_NIGHTS + " nights, no folio, nothing asked — and her mama, her sister and her floor all see a farang in her room, which is hers to pay for, not yours. YES or NO.", "dim"); _keptByPrompt(); return; }
+    _keptByPrompt(); return;
   }
   // CONTINUE's two doors: another week on the same soi a month on, or the ticket in the bin and the whole town
   if (G.pendingChoice === "soi6continue") {
@@ -18250,6 +18268,12 @@ function _doCommandInner(input) {
       // SLEEP THAT ENDED THE PREVIOUS NIGHT counted as the previous command, and a
       // double-tap ate a whole night (round 24, Jojo). _endConfirm arms for the NEXT
       // command only — five inputs later it still ended the week (Darren, round 66).
+      else if (G.keptBy && !_flag("barOpen")) {   // her mat (destitution, 2026-10-20): the night ends wherever you stand, on the walk to her room
+        const kn = NPCS[G.keptBy.id] ? NPCS[G.keptBy.id].name : "her";
+        if (!_endConfirm("sleep", `It's ${_clockStr()}. Sleep now and the night ends on ${kn}'s mat; whatever is still open stays open without you. (SLEEP again if you mean it.)`)) return;
+        _say(`${kn}'s room: the fan, the mat, her sister's phone glowing across the dark. You are asleep before the arithmetic of it catches up with you.`);
+        _endNight("sleep"); return;
+      }
       else if (G.room === _hotelRoomId() || (_room().exits && _room().exits.up === _hotelRoomId())) {
         const _upstairs = G.room !== _hotelRoomId();
         const _last = G.stage !== "expat" && G.day >= 7 && !G.visitUntil;
