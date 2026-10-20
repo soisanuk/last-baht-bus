@@ -5456,7 +5456,7 @@ test("Soi 6 mode: starts at the Queen Vic, confined to the soi, no bus out, saba
   assert.equal(state().mode, "soi6");
   assert.equal(state().room, "qv_room");
   assert.equal(state().money, 1000);
-  assert.equal(state().bank, 100000);
+  assert.equal(state().bank, ORIGIN_MONEY[state().player.origin].bank);   // the week's stake is the origin's (2026-10-20)
   assert.equal(state().hotel, "queenvic");
   assert.equal(state().day, 1);
   assert.ok(state().flags.hasWallet && state().flags.act1Done, "has card, skips Act One");

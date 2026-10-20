@@ -14686,7 +14686,7 @@ THE WHOLE CARD (bare HELP is the short one):
     DRAW [amount] (take your own money out of your own till — nobody else will do it for you)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
-  JOURNAL (what's open, nearest first; JOURNAL RECORD for what you've done) · SCORE (happiness & progress) · DEBT (what you owe, and to whom) · LAST NIGHT (the morning ledger again)
+  JOURNAL (what's open, nearest first; JOURNAL RECORD for what you've done) · SCORE (happiness & progress) · MONEY (what you live on, and how many nights a week it is) · DEBT (what you owe, and to whom) · LAST NIGHT (the morning ledger again)
   UNDO · RESTART   (the night autosaves itself; UNSHELVE takes back a night you stepped away from)
   BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
@@ -14808,7 +14808,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "see", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "journal", "accept", "abandon", "contact",
-  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "last night", "wait", "again",
+  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
 
@@ -18106,6 +18106,7 @@ function _doCommandInner(input) {
     }
     case "money": case "cash": case "wallet": case "pocket":
       if (v === "cash" && arg) { _nontCash(arg); break; }   // CASH <amount> is Nont's verb; bare CASH stays the pocket readout
+      if (v === "money" && G.stage === "expat" && typeof _doMoney === "function") { _doMoney(); break; }   // a resident's MONEY is the month (2026-10-20)
       _say(_fmt("฿{m} in your pocket" + (_flag("act1Done") ? ", ฿{b} in the account" : "") + ".",
         { m: _num(G.money), b: _num(G.bank || 0) }), "dim");
       if (_flag("act1Done")) _say("(WITHDRAW at any ATM · CHECK BALANCE · the daily cap is real.)", "dim");
@@ -18599,6 +18600,7 @@ function _doCommandInner(input) {
         "display board of watches.");
       break;
     case "score": _doScore(); break;
+    case "budget": case "income": case "cashflow": case "finances": case "payday": _doMoney(); break;   // the month, by origin (2026-10-20); MONEY itself is the pocket readout below, and the month in the expat stage
     case "rep": case "reputation": case "standing": _doRep(); break;
     // The natural guess for a player who has just been told he is inside
     // somebody's web of favours — and it dead-ended in "that didn't parse",
@@ -19044,7 +19046,7 @@ function _soi6Setup() {
   G.hotel = "queenvic";
   G.day = 1;              // Soi 6 starts fresh on day one — no lost first day
   G.money = SOI6_POCKET;
-  G.bank = SOI6_BANK;
+  G.bank = _originMoney(G.player && G.player.origin).bank;   // the week's stake is the origin's (Mario, 2026-10-20) — SOI6_BANK is the fallback
   G.battery = 100;        // a solvent tourist charged up before going out — not the Act-One 13%
   G.visited = {}; // fresh — the opening describe shows qv_room's full desc, then marks it visited
   _setFlag("hasWallet");  // you kept your card this time

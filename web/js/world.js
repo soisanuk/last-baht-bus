@@ -93,6 +93,30 @@ const WALLET_CASH = 500; // what's left in the recovered wallet — TWO recovery
 const SOI6_POCKET = 1000, SOI6_BANK = 100000; // the challenge week's stake — _soi6Setup
                          // sets them, _soi6Opening and index.html quote them
 const EXPAT_SAVINGS = 20000; // wired over when you make the move
+// ── THE MONTH (Mario, 2026-10-20): what each origin lives on once the holiday is over. ──
+// The expat stage had a wire once and a hotel bill every morning and no income, so a man with no
+// bar bled until the hotel ladder caught him and nothing said why he could afford to be here at
+// all. The origin answers that: it is the difficulty setting, and it is the player's own story.
+// `bank` is what he arrives with (the Soi 6 week's stake reads it; SOI6_BANK is the fallback),
+// `income` lands every INCOME_DAYS in the expat stage by `kind` — a pension (reliable; paid at a
+// CONSTANT rate, the paper's FX moan stays prose), a salary that stops after `months`, a retainer
+// that shrinks with rough mornings (RETAINER_ROUGH a tenth each, floor at 40%), or a pot (no
+// payday: a countdown). NIGHT_COST is the gauge's unit — an ordinary night for a man who is not
+// a cheap charlie — so the month line can say how many nights a week the money is.
+const INCOME_DAYS = 30, NIGHT_COST = 1200, RETAINER_ROUGH = 0.1;
+const ORIGIN_MONEY = {
+  redundancy: { bank: 250000, income: 0,     kind: "pot",      what: "the redundancy cheque" },
+  pension:    { bank:  80000, income: 42000, kind: "pension",  what: "the state pension" },
+  running:    { bank:  40000, income: 0,     kind: "pot",      what: "what you came with" },
+  pi:         { bank: 100000, income: 70000, kind: "pension",  what: "the force's pension" },
+  business:   { bank: 200000, income: 0,     kind: "pot",      what: "the capital" },
+  married:    { bank: 120000, income: 45000, kind: "salary",   months: 3, what: "the salary still arriving from home" },
+  monger:     { bank: 120000, income: 0,     kind: "pot",      what: "twenty years of savings" },
+  nomad:      { bank:  60000, income: 55000, kind: "retainer", what: "the retainer" },
+  halfthai:   { bank:  50000, income: 0,     kind: "pot",      what: "the Perth savings" },
+};
+const ORIGIN_MONEY_DEFAULT = { bank: SOI6_BANK, income: 0, kind: "pot", what: "what you brought" };
+function _originMoney(id) { return ORIGIN_MONEY[id] || ORIGIN_MONEY_DEFAULT; }
 
 // ── Buying the Stinky: the old man carries the paper ────────────────────────
 // The player cannot buy a bar. Pocket + bank tops out at ฿120,000 and an

@@ -54,7 +54,7 @@ test("SEVERE: THE LAST BAHT BUS takes 'when is the last bus', the songthaew you 
   for (const c of ["when is the last bus", "when's the next baht bus", "last bus?", "take the songthaew", "grab the baht bus", "baht bus"])
     assert.doesNotMatch(t(c), new RegExp(_HUH.map(h => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")), c + " → " + said());
   assert.match(t("grab a taxi"), /piwin|MOTOSAI|app/i); assert.match(t("tuk tuk"), /piwin|MOTOSAI|app/i);
-  assert.match(t("take a motorbike taxi"), /piwin|motosai|where to|stand|Soi 6 is the entire world|edge of the soi|one street|those were the terms/i, said());   // the week's fence is the honest answer to a bike
+  assert.match(t("take a motorbike taxi"), /piwin|motosai|where to|stand|Soi 6 is the entire world|edge of the soi|one street|those were the terms|made yourself a rule/i, said());   // the week's fence is the honest answer to a bike
 });
 
 test("the peddler's WATCH is the product, never WATCH SUNRISE", () => {

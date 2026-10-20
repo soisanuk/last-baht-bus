@@ -5721,6 +5721,7 @@ function _morningLedger() {
   // right (rent plus the ฿300 fee, the draw not being income) and reads as a lie
   // to anybody watching the notes in his hand. The arithmetic was never wrong; the
   // sentence was unsupported by its own wording.
+  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + Math.max(0, spent); G.month.days = (G.month.days || 0) + 1; }   // the month's book
   const machine = drawn - nontOutN, _via = [];
   if (machine > 0) _via.push(`\u0e3f${_num(machine)} came out of the machine` + (fees > 0 ? `, plus \u0e3f${_num(fees)} in fees` : ""));
   if (nontOutN > 0) _via.push(`\u0e3f${_num(nontOutN)} through Nont, \u0e3f${_num(nontCutN)} his cut`);
@@ -5792,7 +5793,7 @@ function _morningLedger() {
   // round 47): black out, get your pockets emptied, close the app because you are not
   // proud of yourself, come back — and ฿1,181 is gone with the game saying nothing. Keep
   // what was said so LAST NIGHT can say it again.
-  if (received > 0) bits.push(`฿${_num(received)} arrived in the account`);
+  if (received > 0) { const _bn = (G.bankNotes || []).splice(0); bits.push(`฿${_num(received)} arrived in the account${_bn.length ? " — " + _bn.join(", ") : ""}`); }   // named: the pension, a reward (round 96's month)
   if (G.bruise && G.bruise.day === G.day - 1) { bits.push("nursing " + G.bruise.what); G.bruise = null; }
   if (G.lastNightWas && G.lastNightWas.day === G.day - 1 && G.lastNightWas.kicked)
     bits.push(`walked out of ${G.lastNightWas.kicked.where} by security${G.lastNightWas.kicked.n > 1 ? ", twice" : ""} — the night's bad news, and the สนุก it cost`);
@@ -6335,6 +6336,7 @@ function _endNight(reason) {
   const _quietHelped = _flag("act1Done") && G.hotel === "sabai" && hangover > 0 && !_wokeOut;
   if (_quietHelped) hangover--;
   if (reason === "allnighter") hangover += 2; // the all-nighter's invoice arrives in the evening meters
+  if (G.stage === "expat" && G.month && (hangover >= 2 || ["allnighter", "blackout", "collapse"].includes(reason))) G.month.rough = (G.month.rough || 0) + 1;   // the nomad's client counts these
   G.soc.bellAt = {};
   G.soc.bells = {};    // the bell COUNT resets too, not just the glow timer (bellAt) —
                        // else one week's three bells makes any later ฿300 ring an instant
@@ -6553,10 +6555,12 @@ function _endNight(reason) {
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   if (typeof _careTick === "function") _careTick();   // the fines she waived have a number, and a morning she says it
   if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
+  if (typeof _incomeTick === "function") _incomeTick();   // the payday lands before the ledger, so the ledger names it
   // THE LEDGER COMES AFTER EVERYTHING THE WAKE MOVES (Ossie, round 70: the till's shortfall came out
   // of his pocket a turn after the ledger printed and appeared a morning late). The bar's settle,
   // Nira's cousins and the care ask all belong to the night just played, so they are on its ledger.
   _morningLedger();
+  if (G.monthLine && G.monthLine.length) { for (const l of G.monthLine) _say(l, "win"); if (Array.isArray(G.lastNightSaid)) G.lastNightSaid.push(...G.monthLine); G.monthLine = null; }   // the month, after the night
   // The NEXT morning's baseline is taken HERE, at wake — not at night end. Taken
   // at _endNight, the deltas only spanned the sleep (i.e. the rent), so every
   // morning read "Last night: spent ฿400" no matter what the evening cost (two
@@ -6992,6 +6996,54 @@ function _newVacation(opts) {
   _describeRoom(true);
 }
 
+// ── THE PAYDAY (Mario, 2026-10-20): the origin's income lands every INCOME_DAYS in the expat stage ──
+// The clock is G.payDay (set when you don't board), the same shape as the bar's rent and the old man's
+// note; the money lands in the ACCOUNT through _bankIn so the morning ledger counts it as an arrival
+// and names it; the month line after the ledger says what the month cost and how many nights a week
+// the money is. No dice anywhere in it. A pot origin has no payday and gets a countdown instead.
+function _incomeDue() { return G.stage === "expat" && G.payDay != null && G.day - G.payDay >= INCOME_DAYS; }
+function _incomeAmount() {
+  const om = _originMoney(G.player && G.player.origin), m = G.month || {};
+  let amt = om.income || 0;
+  if (om.kind === "salary" && om.months && (G.payCount || 0) >= om.months) amt = 0;   // the salary from home stops when somebody there notices
+  if (om.kind === "retainer" && amt) amt = Math.round(amt * (1 - Math.min(0.6, RETAINER_ROUGH * (m.rough || 0))) / 100) * 100;   // the client noticed the mornings
+  return amt;
+}
+function _nightsAWeek(income) {   // the gauge: what is left after the roof, in nights, per week
+  const roof = _hotelRate(G.hotel) * INCOME_DAYS;
+  return Math.max(0, Math.round(((income - roof) / NIGHT_COST) / (INCOME_DAYS / 7) * 10) / 10);
+}
+function _weeksLeft() {   // a pot's countdown, at last month's rate (or the gauge's unit until there is one)
+  const m = G.month || {}, perDay = (m.spent > 0 && m.days > 0) ? m.spent / m.days : NIGHT_COST + _hotelRate(G.hotel);
+  const wealth = Math.max(0, (G.money || 0) + (G.bank || 0));
+  return perDay > 0 ? Math.floor(wealth / perDay / 7) : 99;
+}
+function _incomeTick() {
+  if (!_incomeDue()) return;
+  const om = _originMoney(G.player && G.player.origin), m = (G.month = G.month || { spent: 0, rent: 0, rough: 0 });
+  G.payDay += INCOME_DAYS; G.payCount = (G.payCount || 0) + 1;
+  const amt = _incomeAmount();
+  if (amt > 0) { _bankIn(amt); (G.bankNotes = G.bankNotes || []).push(om.what); }
+  const lines = [];
+  if (om.kind === "pot") lines.push(`The month: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. No payday — ${om.what} is what there is: ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account, about ${_weeksLeft()} weeks at this rate.`);
+  else if (amt <= 0) lines.push(`The month: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. ${om.what.replace(/^./, c => c.toUpperCase())} did not land this time${om.kind === "salary" ? " — somebody at home noticed" : ""}. ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account.`);
+  else {
+    const short = om.kind === "retainer" && amt < om.income ? ` (short — the client counted ${m.rough} rough morning${m.rough === 1 ? "" : "s"})` : "";
+    lines.push(`The month: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room; ${om.what} landed, ฿${_num(amt)}${short}. After the roof that is about ${_nightsAWeek(amt)} nights a week.`);
+  }
+  G.monthLine = lines;
+  G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
+}
+function _doMoney() {
+  const om = _originMoney(G.player && G.player.origin), m = G.month || {};
+  if (G.stage !== "expat") { _say(`(A holiday has no payday. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account — what you brought is what there is.)`, "dim"); return; }
+  const next = G.payDay == null ? null : Math.max(0, INCOME_DAYS - (G.day - G.payDay));
+  const amt = _incomeAmount();
+  if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; the room is ฿${_num(_hotelRate(G.hotel))} a night. At this rate, about ${_weeksLeft()} weeks.`);
+  else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; the room is ฿${_num(_hotelRate(G.hotel))} a night. About ${_weeksLeft()} weeks at this rate.`);
+  else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. The room is ฿${_num(_hotelRate(G.hotel))} a night; after the roof that is about ${_nightsAWeek(amt)} nights a week. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
+  _say(`(This month so far: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room.)`, "dim");
+}
 function _goExpat(opts) {
   const _soi6 = !!(opts && opts.soi6);   // CANCEL THE TICKET at the Soi 6 week's end (Mario, 2026-10-20): the challenge's man stays, and the whole town opens
   G.stage = "expat";
@@ -7042,6 +7094,13 @@ function _goExpat(opts) {
   // a resident has a Thai account of his own — the difference between a tourist
   // and an expat at every ATM in the kingdom (Mario, 2026-09-04)
   G.thaiAccount = true;
+  // the payday clock starts the day you don't board, and the opening says what you live on (Mario, 2026-10-20)
+  G.payDay = G.day; G.payCount = 0; G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
+  { const om = _originMoney(G.player && G.player.origin);
+    _say(om.kind === "pension" ? `${om.what.replace(/^./, c => c.toUpperCase())} lands every thirty days — ฿${_num(om.income)}, at a rate you have stopped looking at. (MONEY says where you stand.)`
+      : om.kind === "salary" ? `${om.what.replace(/^./, c => c.toUpperCase())} lands every thirty days — ฿${_num(om.income)} — for as long as nobody at home notices. (MONEY says where you stand.)`
+      : om.kind === "retainer" ? `${om.what.replace(/^./, c => c.toUpperCase())} is ฿${_num(om.income)} a month while the client gets what he pays for; the mornings are where it goes. (MONEY says where you stand.)`
+      : `No payday. ${om.what.replace(/^./, c => c.toUpperCase())} is what there is — ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account — and a month here costs what it costs. (MONEY says where you stand.)`, "dim"); }
   _say("The visa comes with a bank book: a Thai account in your own name, which is " +
     "the difference between a tourist and a resident at every ATM in the kingdom — " +
     "no card fee, and a counter that will hand you real money for a real purchase.", "dim");

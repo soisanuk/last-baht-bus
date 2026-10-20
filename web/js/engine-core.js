@@ -361,6 +361,10 @@ function newGame() {
     frontierSaid: {},    // "vacation:cycle:phase" → the inner west's frontier line was told (Soi 6 expansion, 2026-10-09)
     questDoneDay: {},    // quest id → the day it completed (the follow-ups a month later: Orathai closes, the police read the paper)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
+    bankNotes: [],       // what the arrivals were, for the ledger's sentence (the pension, a reward)
+    payDay: null,        // the expat stage's clock: the day the last payday fell (set by _goExpat), INCOME_DAYS apart
+    payCount: 0,         // paydays so far (a salary stops after its months)
+    month: { spent: 0, rent: 0, rough: 0 },   // this month's book: what the nights cost, what the room cost, the rough mornings (the nomad's retainer reads them)
     sentTotal: 0,        // baht SENT to contacts over the game — the hospital queue's "money you'll never see" needs a debt to point at
     codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
     known: {},           // charId → true once their name has printed (ask-topic gate)
@@ -1433,6 +1437,7 @@ function _chargeRent(rough) {
       "The ledger closes with real warmth.)", "dim");
     G.hotelDebt = 0;
   }
+  if (G.stage === "expat" && G.month) G.month.rent = (G.month.rent || 0) + _hotelRate(G.hotel);   // the month's book (paid from wherever it is paid; the shortfall ladder bills the same figure)
   if (G.money >= _hotelRate(G.hotel)) {
     G.money -= _hotelRate(G.hotel);
     _say(`(${G.checkoutNight ? "Checkout: the last night settled at the desk on the way to the taxi" : rough ? "The folio is waiting at the desk when you finally get back" :
