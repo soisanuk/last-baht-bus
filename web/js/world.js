@@ -132,6 +132,8 @@ const MGR_CASH_PAY = 30000, MGR_CASH_NIGHTS = 4;  // a beer bar's envelope: note
 const MGR_PERMIT_PAY = 40000, MGR_PERMIT_NIGHTS = 6, MGR_PERMIT_AFTER = 30;   // a company bar: through the books, six nights, the paper after thirty stood nights (the work, not luck)
 const MGR_INCIDENT_PCT = 4;                       // a stood shift on the wrong paper: the chance the night brings the police (pure hash of bar and day)
 const MGR_STRIKES = 2;                            // short weeks a company bar forgives before the sack; a cash bar docks the envelope instead
+const SCHOOL_PAY = 35000, SCHOOL_LATES = 3;      // the school (Jerry's door): a proper contract, the permit with the first payday, weekday MORNINGS — a rough morning before a school day is a late, and three in a month is the sack
+const OWL_LEAD_PAY = 100, OWL_LEADS_WEEK = 5;    // Mort pays a hundred a paragraph for a fixture you read and he had not; five a week, cash, when you next sit with him
 function _originMoney(id) { return ORIGIN_MONEY[id] || ORIGIN_MONEY_DEFAULT; }
 
 // ── Buying the Stinky: the old man carries the paper ────────────────────────
@@ -21304,3 +21306,40 @@ NPCS.waen.dialogue.push({ topic: "online|platform|online teaching|teach online|o
     "a face from England, a flag on the profile, a scanned degree. Twenty hours a week, a quiet room, a morning voice.\" " +
     "She looks at you the way she looks at a pupil who has not done the reading. \"The degree I cannot sell you. The mornings, nobody can. (TEACH ONLINE, from your room.)\"",
   short: "\"Online? A quiet room and a morning voice. The degree I cannot sell you. (TEACH ONLINE)\"" });
+
+// THE SCHOOL (the expat economy, 2026-10-20): Jerry's school wants natives — a proper contract, the permit with the
+// first payday, and weekday mornings, which is the opposite presence trade from the bar. A door in his own voice.
+NPCS.david.dialogue.push(
+  { topic: "a job|job for me|school|your school|hiring|work for you|teaching job|a teaching job",
+    when: (st, G) => G.stage === "expat" && !G.job,
+    fx: (st, G) => { G.jobOffer = { kind: "school", day: G.day }; },
+    text: "\"A job? Oh — oh, at the school? They're ALWAYS short a native.\" Jerry is already turning to face you properly, which " +
+      "for Jerry is a chair rotation. \"M2, M3, conversation classes, a real contract — they do the permit, they do the bank letter, " +
+      "the whole thing. Thirty-five a month.\" The tactical sip. \"Here's the catch, and it's the only catch: eight o'clock. Monday " +
+      "to Friday. They don't care what you did on Soi 6 at two, they care that you're at the gate at eight with your eyes open. " +
+      "Three mornings you're not, in a month, and it's a very polite letter.\" (TAKE THE JOB — the offer keeps till dawn.)",
+    short: "\"The school's always short a native. Eight o'clock, Monday to Friday, a real contract. (TAKE THE JOB)\"" },
+  { topic: "a job|job for me|school|your school|hiring|work for you|teaching job|a teaching job",
+    when: (st, G) => G.stage === "expat" && !!G.job,
+    text: "\"You've GOT a job!\" Jerry says it like congratulations and a warning in one. \"One's plenty here. Two is how guys end up asleep on the beach.\"",
+    short: "\"You've got a job. One's plenty.\"" });
+// THE OWL'S STRINGER: Mort pays per paragraph — a fixture you read that his column had not. Small money, in-fiction.
+NPCS.mort.dialogue.push(
+  { topic: "stringer|a job|job for me|work for you|hiring|leads|the leads|a lead|paragraphs|copy",
+    when: (st, G) => G.stage === "expat" && !G.stringer,
+    fx: (st, G) => { G.stringer = { since: G.day, paid: {}, weekStart: G.day, weekPaid: 0 }; },
+    text: "\"A job.\" Mort does not look up from the notebook, and then he does. \"Last Orders pays a hundred baht a paragraph and " +
+      "the paragraph has to be a thing you looked at that I didn't — a table, a notebook, a bell, a thing on a wall. Not a girl. " +
+      "Not an opinion. A thing.\" The biro taps the page. \"You sit here, you tell me what you read this week, I count them, I pay " +
+      "cash. Five a week, because the column is one page and so is my patience. Nobody has ever got rich on it. Nobody was meant to.\"",
+    short: "\"A hundred a paragraph, five a week, for things you looked at that I didn't. Cash. Sit down.\"" },
+  { topic: "stringer|leads|the leads|a lead|paragraphs|copy",
+    when: (st, G) => G.stage === "expat" && !!G.stringer,
+    text: "\"Read anything?\" Mort's biro is already waiting. \"A thing, mind. Not a girl.\"",
+    short: "\"Read anything? A thing, mind.\"" });
+NPCS.david.dialogue.push({ topic: "a job|job for me|school|your school|hiring|work for you|teaching job|a teaching job",
+  text: "\"The school? Oh, they'd take you tomorrow — natives, right? — but you're on HOLIDAY.\" Jerry says it like the word has a capital letter. \"Ask me again when you've stopped going home.\"",
+  short: "\"The school'd take you — when you've stopped going home.\"" });
+NPCS.mort.dialogue.push({ topic: "stringer|a job|job for me|work for you|hiring|leads|the leads|a lead|paragraphs|copy",
+  text: "\"A job.\" Mort looks at you over the glasses. \"Last Orders hires residents, squire, and you have a flight. Come back when you don't.\"",
+  short: "\"The column hires residents. Come back when you don't have a flight.\"" });

@@ -4907,6 +4907,7 @@ function _doTalkCore(arg, topic) {
   }
   // what you did for her lately — a paid ask, a refusal's reason, a follow-up on her family — outranks her own lines,
   // which would otherwise be a repeat and its brush-off (Steve's fifth run)
+  if (npc === "mort" && G.stringer && typeof _stringerPay === "function" && !topic) _stringerPay();   // the stringer's cash, when you sit with him (2026-10-20)
   if (topic && typeof _deedTalk === "function" && _deedTalk(npc, topic)) { _questOffer(npc); return; }
   // A JOB FOR YOU is the house's to offer, on its own words — "a job", "work for you", "hiring", "a manager" — before her
   // authored node on HER job (Nee's "I am the mother of the room"); a bare JOB / WORK stays hers (2026-10-20)
@@ -8125,6 +8126,10 @@ function _situationTopics(id) {
   if (works && _room().barType && _pronoun(id) === "she" && _afterWorkTalk(id)) last.push("after work");
   if (works && _room().barType && home === G.room) {
     if (G.stage === "expat" && !G.job && (NPC_ROLES[id] === "mamasan" || n.manager || n.owner)) last.push("a job");   // the house's offer is a tap (2026-10-20)
+  }
+  if (G.stage === "expat" && !G.job && id === "david" && _npcsHere().includes(id)) last.push("a job");   // Jerry's school
+  if (G.stage === "expat" && id === "mort" && _npcsHere().includes(id)) last.push(G.stringer ? "the leads" : "a job");   // Mort's column
+  if (works && _room().barType && home === G.room) {
     last.push("closing time");
     if ((_room().region || "") === "Soi 6" && typeof _closeTurn === "function" && _closeTurn(G.room) != null) last.push("open after two");
   }
@@ -14691,7 +14696,7 @@ THE WHOLE CARD (bare HELP is the short one):
   ASK <who> ABOUT <topic> AGAIN (you get the gist on a repeat — “again” asks for the whole story back)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   DEBT (every ledger with your name on it: Nira, the hotel book, the old man's note)
-  A living (a resident's): MONEY (what you live on) · TEACH ONLINE (from your room — grey, the mornings pay for it) · ASK the mamasan or the manager ABOUT A JOB at a bar whose floor knows you (a beer bar pays cash on nobody's paper; a company bar pays through the books, six nights, and the permit after a month) · TAKE THE JOB · WORK (stand the shift) · QUIT JOB
+  A living (a resident's): MONEY (what you live on) · TEACH ONLINE (from your room — grey, the mornings pay for it) · ASK the mamasan or the manager ABOUT A JOB at a bar whose floor knows you (a beer bar pays cash on nobody's paper; a company bar pays through the books, six nights, and the permit after a month) · ASK JERRY ABOUT THE SCHOOL (a real contract, weekday mornings) · ASK MORT ABOUT A JOB (a hundred baht a paragraph for a thing you read) · TAKE THE JOB · WORK (stand the shift) · QUIT JOB
   Your own bar (once you own one): WORK / MIND (stand behind your own rail tonight) · BOOKS / TAKINGS
     PRICES [cheap|list|up|steep] · TERMS [salary|commission] (your two levers: the board moves the punters, the terms move the girls — both cost you, in different currencies)
     BORROW <amount> at Nont's table (the bar's money, ten percent, a quarter of every night off the top)

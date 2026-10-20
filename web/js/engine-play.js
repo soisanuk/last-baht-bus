@@ -7042,7 +7042,12 @@ function _jobOffer(room, npc) {
 }
 function _takeJob() {
   const o = G.jobOffer;
-  if (!o || o.day !== G.day) { _say(G.job ? "You have a job." : "Nobody has offered you one tonight. (ASK the mamasan or the manager ABOUT A JOB, at a bar whose floor knows your face.)"); return; }
+  if (!o || o.day !== G.day) { _say(G.job ? "You have a job." : "Nobody has offered you one tonight. (ASK the mamasan or the manager ABOUT A JOB, at a bar whose floor knows your face — or Jerry about his school.)"); return; }
+  if (G.job) { _say("One job at a time. (QUIT JOB first.)"); return; }
+  if (o.kind === "school") {   // Jerry's school: a proper contract, the permit with the first payday, weekday mornings
+    G.job = { kind: "school", since: G.day, lates: 0, paidOnce: false }; G.jobOffer = null;
+    _say(`Done. A contract, a timetable, and a gate at eight o'clock Monday to Friday. The school's paper takes a month; the mornings start tomorrow. (QUIT JOB to leave it; MONEY says where you stand.)`, "win"); return;
+  }
   G.job = { kind: "manager", room: o.room, corp: o.corp, nights: o.corp ? MGR_PERMIT_NIGHTS : MGR_CASH_NIGHTS, stood: 0, weekStood: 0, weekStart: G.day, strikes: 0, since: G.day, shiftDay: null, shiftStood: 0 };
   G.jobOffer = null;
   _say(`Done. ${_barName(o.room)} has a manager. ${o.corp ? "Six nights a week, through the books; the paper comes after a month of them." : "Four nights a week, cash in an envelope, and nobody's paper."} (WORK there to stand a shift; QUIT JOB to leave it.)`, "win");
@@ -7055,10 +7060,28 @@ function _doTeach() {
   G.job = { kind: "teach", since: G.day };
   _say(`A platform, a profile, a flag on it, and a scanned degree you may or may not have. Twenty hours a week in a quiet room — ฿${_num(TEACH_PAY)} a month if the mornings are yours; the platform counts the ones that are not. Nobody in this town will ever ask what paper it is on. (QUIT JOB to stop; MONEY says where you stand.)`, "win");
 }
+// the stringer's cash: the authored fixtures you read (G.examined) that Mort has not paid for, five a week
+function _stringerOwed() {
+  if (!G.stringer) return [];
+  return Object.keys(G.examined || {}).filter(k => !G.stringer.paid[k]);
+}
+function _stringerPay() {
+  const st = G.stringer; if (!st) return false;
+  if (G.day - (st.weekStart || 0) >= 7) { st.weekStart = G.day; st.weekPaid = 0; }
+  const owed = _stringerOwed().slice(0, Math.max(0, OWL_LEADS_WEEK - (st.weekPaid || 0)));
+  if (!owed.length) return false;
+  for (const k of owed) st.paid[k] = G.day;
+  st.weekPaid = (st.weekPaid || 0) + owed.length;
+  const pay = owed.length * OWL_LEAD_PAY; G.money += pay; G.jobPaid = (G.jobPaid || 0) + pay;
+  const names = owed.map(k => { const [room, key] = k.split("."); return `the ${key} at ${_barName(room) || ROOMS[room] && ROOMS[room].name || room}`; });
+  _say(`Mort hears you out, biro going, and counts them off: ${names.join("; ")}. ${owed.length} paragraph${owed.length === 1 ? "" : "s"} — ฿${_num(pay)}, folded under the coaster. "Don't spend it on a girl. That's an order from a man who did."`, "win");
+  return true;
+}
 function _quitJob() {
   if (!G.job) { _say("You have no job to quit, which is either freedom or the problem."); return; }
   const j = G.job; G.job = null;
   if (j.kind === "teach") { _say("You close the platform. The mornings are yours again, and so is the bill."); return; }
+  if (j.kind === "school") { if (_paper() === "permit") G.paperUntil = G.day + PAPER_GRACE; _say(`You hand the timetable back. The mornings are yours, and the school's paper was the school's: ${PAPER_GRACE} days, and it is a stamp again.`); return; }
   if (_paper() === "permit") { G.paperUntil = G.day + PAPER_GRACE; }
   _say(`You hand the keys back at ${_barName(j.room)}. ${j.corp ? `The paper was the company's: ${PAPER_GRACE} days, and it is a stamp again.` : "The envelope stops with the nights."}`);
 }
@@ -7073,6 +7096,16 @@ function _mgrShift() {
 function _jobNight() {
   const j = G.job;
   if (G.paperUntil != null && G.day >= G.paperUntil) { G.paperUntil = null; G.paper = _paperBase(); G.thaiAccount = G.paper !== "tourist"; _say(`(The permit's paper has run out: ${_paperWord(G.paper)} again${G.thaiAccount ? "" : ", and the bank book with it"}.)`, "dim"); }
+  if (j && j.kind === "school") {   // a rough morning before a school day is a late; three in a month is the letter
+    const roughNow = (G.month && G.month.rough || 0) > (j.roughSeen || 0); j.roughSeen = G.month && G.month.rough || 0;
+    const schoolMorning = [1, 2, 3, 4, 5].includes(G.day % 7);   // the night just played ends on a weekday morning (day 1 is Monday)
+    if (roughNow && schoolMorning) {
+      j.lates = (j.lates || 0) + 1;
+      if (j.lates >= SCHOOL_LATES) { G.job = null; if (_paper() === "permit") G.paperUntil = G.day + PAPER_GRACE; _say(`(The third morning in a month. The letter is very polite, and it is a letter. The school's paper was the school's.)`, "alert"); return; }
+      _say(`(Eight o'clock came and went with you in it. The school counts: ${j.lates} of ${SCHOOL_LATES} this month.)`, "dim");
+    }
+    return;
+  }
   if (!j || j.kind !== "manager") return;
   const stood = j.shiftDay === G.day - 1 && (j.shiftStood || 0) >= WORK_MIN_STOOD;
   if (stood) {
@@ -7101,6 +7134,7 @@ function _jobNight() {
 function _jobPay() {   // the month's share, on the payday: what the nights earned
   const j = G.job; if (!j) return 0;
   if (j.kind === "teach") return Math.round(TEACH_PAY * _roughFactor() / 100) * 100;
+  if (j.kind === "school") return SCHOOL_PAY;
   const need = Math.max(1, Math.round(j.nights * INCOME_DAYS / 7)), frac = Math.min(1, (j.stood || 0) / need);
   const base = j.corp ? MGR_PERMIT_PAY : MGR_CASH_PAY;
   return Math.round(base * frac / 100) * 100;
@@ -7116,6 +7150,10 @@ function _incomeTick() {
   if (G.job) {
     const jp = _jobPay(), j = G.job;
     if (j.kind === "teach") { if (jp > 0) { _bankIn(jp); G.bankNotes.push("the platform"); } jobLine = ` The platform paid ฿${_num(jp)}${jp < TEACH_PAY ? ` (short — it counted ${m.rough} rough morning${m.rough === 1 ? "" : "s"})` : ""}.`; }
+    else if (j.kind === "school") {
+      _bankIn(jp); G.bankNotes.push("the school"); jobLine = ` The school paid ฿${_num(jp)}.`; j.lates = 0;
+      if (!j.paidOnce) { j.paidOnce = true; if (_paper() !== "permit") { G.paper = "permit"; G.paperUntil = null; G.thaiAccount = true; jobLine += " And its paper came through: a work permit in your name, a bank book with it."; } }
+    }
     else if (j.corp) { if (jp > 0) { _bankIn(jp); G.bankNotes.push(`${_barName(j.room)}'s salary, through the company`); } jobLine = ` ${_barName(j.room)} paid ฿${_num(jp)} through the books for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }
     else { if (jp > 0) { G.money += jp; G.jobPaid = (G.jobPaid || 0) + jp; } jobLine = ` ${_barName(j.room)}'s envelope: ฿${_num(jp)} for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }
   }
@@ -7132,6 +7170,7 @@ function _incomeTick() {
   if (jobLine || paperLine) lines[0] += jobLine + paperLine;
   G.monthLine = lines;
   G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
+  if (G.job && G.job.roughSeen) G.job.roughSeen = 0;   // the school counts the new month's mornings from zero
 }
 function _doMoney() {
   const om = _originMoney(G.player && G.player.origin), m = G.month || {};
@@ -7139,7 +7178,8 @@ function _doMoney() {
   const next = G.payDay == null ? null : Math.max(0, INCOME_DAYS - (G.day - G.payDay));
   const amt = _incomeAmount();
   { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_barName(G.job.room)}` : ""}${p === "tourist" ? " — no bank book, the foreign card and its fee" : p === "longstay" ? " — a bank book" : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
-    if (G.job) _say(G.job.kind === "teach" ? `Job: online English, ฿${_num(_jobPay())} this month at the mornings you have kept.` : `Job: manager at ${_barName(G.job.room)} — ${G.job.nights} nights a week, ${G.job.stood || 0} stood this month, ${G.job.corp ? `฿${_num(MGR_PERMIT_PAY)} through the books` : `฿${_num(MGR_CASH_PAY)} in an envelope`}${G.job.corp && _paper() !== "permit" ? `; the paper after ${MGR_PERMIT_AFTER} nights (${G.job.stood || 0} so far)` : ""}.`, "dim"); }
+    if (G.stringer) _say(`Stringer for Last Orders: ฿${_num(OWL_LEAD_PAY)} a paragraph, ${OWL_LEADS_WEEK} a week, for a thing you read that Mort had not — ${_stringerOwed().length} unpaid.`, "dim");
+    if (G.job) _say(G.job.kind === "teach" ? `Job: online English, ฿${_num(_jobPay())} this month at the mornings you have kept.` : G.job.kind === "school" ? `Job: the school — ฿${_num(SCHOOL_PAY)} a month through the books, eight o'clock Monday to Friday; ${G.job.lates || 0} of ${SCHOOL_LATES} late mornings this month${G.job.paidOnce ? "" : "; the permit with the first payday"}.` : `Job: manager at ${_barName(G.job.room)} — ${G.job.nights} nights a week, ${G.job.stood || 0} stood this month, ${G.job.corp ? `฿${_num(MGR_PERMIT_PAY)} through the books` : `฿${_num(MGR_CASH_PAY)} in an envelope`}${G.job.corp && _paper() !== "permit" ? `; the paper after ${MGR_PERMIT_AFTER} nights (${G.job.stood || 0} so far)` : ""}.`, "dim"); }
   if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; the room is ฿${_num(_hotelRate(G.hotel))} a night. At this rate, about ${_weeksLeft()} weeks.`);
   else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; the room is ฿${_num(_hotelRate(G.hotel))} a night. About ${_weeksLeft()} weeks at this rate.`);
   else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. The room is ฿${_num(_hotelRate(G.hotel))} a night; after the roof that is about ${_nightsAWeek(amt)} nights a week. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
