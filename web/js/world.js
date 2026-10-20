@@ -5939,6 +5939,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     dialogue: [
       // the receipt SHOWN, the question ASKED: the Mot reveal answers ASK ABOUT WALLET
       // too, not only a bare TALK (completionist playtest 2026-08-22)
+      // THE LOST HOURS (round 99 — Owain and Frank blacked out on Soi 6 and were told Act One's night): the same facts, said to a
+      // man who has no film of them — a blackout is a night that went on without you
+      { topic: "wallet", req: ["knowWasHere"], notFlags: ["knowMot"], sets: ["knowMot"], when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),
+        text: "\"Of course I remember you — you don't remember ME? Ha. No film, farang; it happens.\" Candy taps the receipt in your hand. \"Three in the morning, singing, buying Mama noodles next door. You leave with a big group toward LK Metro, and Mot follow you out. Mot — little pickpocket, no mother in this town, too many aunties. He sell what he lift to one buyer, always. Lek at the Lucky Tiger see him when he has money. Ask her.\"",
+        short: "\"Three a.m., singing, LK Metro — and Mot behind you. Ask Lek at the Lucky Tiger.\"" },
       { topic: "wallet", req: ["knowWasHere"], notFlags: ["knowMot"], sets: ["knowMot"],
         text: "\"Your wallet? Listen.\" She taps the receipt. \"Three a.m. you leave with big group toward " +
           "LK Metro — and Mot follow you out. Little pickpocket, work the drunk ones. Go ask Lek at " +
@@ -6026,7 +6031,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // her hello IS the errand — first match, so it outranks the welcomes.
       { req: ["knowOyHasIt"], notFlags: ["somTamAccepted", "somTamDelivered", "hasWallet"],   // the errand is Act One's; with the wallet back it is over (Dex, round 38)
         th: "กลับมาแล้ว", rom: "klap ma laeo",
-        text: "\"You again — and no wallet in your hand, so Oy said no.\" Candy doesn't wait for " +
+        text: "\"You again — and no wallet in your hand. Oy says no to everybody the first time.\" Candy doesn't wait for " +
           "you to confirm it. \"Of course she said no. Sit.\" She's already reaching under the " +
           "bar for a takeaway box. \"There is one door into that woman's world and it is not " +
           "brave and it is not clever, it is som tam. Extra spicy, her order. You give it to " +
@@ -6468,6 +6473,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "take anything from Madam Oy.\" A shrug, and the grin comes back. \"Anyway. You " +
           "keep it in the front pocket now, handsome. Front pocket, hand on top, always.\"",
         short: "\"You got it back — so Oy let you have it. Front pocket from now on, handsome.\"" },
+      { topic: "wallet", req: ["knowMot"], sets: ["knowOyHasIt"], when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),   // dated by the loss, not "this morning" (Frank, round 99)
+        text: "\"Mot?\" Lek flicks a nail at the door. \"He come in the morning after you lose it, with money that is not his. He sell everything to one woman — Madam Oy, Rainbow Girls, top of Tree Town. Your wallet is in her safe, guarantee. Go polite. Polite works better than clever, with Oy.\"",
+        short: "\"Mot sold it to Madam Oy — Rainbow Girls, Tree Town. In her safe. Go polite.\"" },
       { topic: "wallet", req: ["knowMot"], sets: ["knowOyHasIt"],
         text: "\"Mot? He sell your wallet to Madam Oy — Rainbow Girls, top of Tree Town. In her " +
           "safe by now, guarantee.\" She flicks a nail at the door. \"Go. Be polite to her. " +
@@ -9983,7 +9991,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // The chip appears when the ≥3-fragments node below unlocks, so the topic
       // surfacing at all IS the telegraph that Tan is ready to say the real thing.
       // report-back channels (Anand, round 59): the sender could not hear how it went
-      { topic: "wallet|my wallet|the wallet", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),   // THE SECOND WALLET: the man who said most men lose it twice (2026-10-21)
+      { topic: "wallet|my wallet|the wallet|card|my card|no card|cash|atm|the machine", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()) && !_flag("act1Scored"),   // the Soi 6 man's FIRST wallet (round 99)
+        text: "\"Your first one.\" Tan says it like a man naming a tooth. \"Everybody has a first one in this town; the ones who stay have a second. Nobody runs tonight — you live here, your room is your room, the desk knows your face. The card is the problem, not the bed.\" He counts it on his fingers, leaning on the parked car. \"The machine is dead to you. Nira lends. The kid at the Old Market moves money without a card — CASH, at his table. And a wallet in this town goes where lost things go: ask the woman on Soi Buakhao who misses nothing, and bring her something.\"",
+        short: "\"Your first one. The card is the problem, not the bed — Nira, the kid's CASH, and the woman on Buakhao who misses nothing.\"" },
+      { topic: "wallet|my wallet|the wallet|card|my card|no card|cash|atm|the machine", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),   // THE SECOND WALLET: the man who said most men lose it twice (2026-10-21)
         text: "\"Twice.\" Tan does not smile, which is the kindest thing he could do with his face. \"I told you most men lose it twice. The second time is the one that teaches, so — learn. Nobody runs tonight: you live here, your room is your room, the desk knows your face. The card is the problem, not the bed.\" He counts it on his fingers, leaning on the parked car. \"The machine is dead to you. Nira lends. The kid at the Old Market moves money without a card. And a wallet in this town goes where it went the first time — ask the woman who misses nothing, and bring her something.\"",
         short: "\"Twice. The second time teaches. The card is the problem, not the bed — Nira, the kid, and the woman who misses nothing.\"" },
       { topic: "wallet", req: ["act1Done"],
@@ -14805,7 +14816,7 @@ const QUESTS = {
     reward: { money: 200, happy: 3 },
   },
   wallet_again: {
-    name: "The Second Wallet",
+    name: "The Lost Wallet",
     giver: "tan",
     desc: "The wallet went with the night — cards, key card, the lot — and the machine on the street is no use without it. " +
       "The town knows where things go: READ what is still in your pockets, then ask the women who miss nothing (HINT nudges).",
@@ -21372,6 +21383,16 @@ NPCS.tar.dialogue.push(   // after her own lines (the written floor is sliced by
   { topic: "card|my card|bank card|the card|replacement|new card|lost card|atm|the machine", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),
     text: "\"Lost the card?\" Tar's voice drops into the register of a counter with a queue behind you. \"Then the machine is a wall until the bank sends a new one — a week, if the branch on Beach Road has your passport number, and they do, because you drew on it. Nobody can hurry that; I tried, six years, for nicer people than you.\" A small smile. \"Till then the app still sends. It just cannot give you notes. The kid at the Old Market can. Or your wallet comes back — in this town they sometimes do, if you ask the right woman.\"",
     short: "\"A week for the new card. The app sends, the machine is a wall; the kid at the Old Market, or the wallet comes back.\"" });
+// THE LOST CARD, from the two men who read it as a trade (round 99 — Owain: the retired detective on his own rail said "not my
+// department"; the kid who cashes the account without a card said "above my pay grade" to the word wallet)
+NPCS.doyle.dialogue.push(
+  { topic: "wallet|my wallet|the wallet|lost wallet|pickpocket", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),
+    text: "\"Twenty-six years I read rooms.\" Doyle does not turn round. \"A wallet lifted off a man who can't stand up is at a fence inside the hour, and this town has exactly one who matters. You don't go to the police — they want a face and a name and you have neither. You go to the woman who runs the soi's lost-and-found and you bring her something: Candy, Candy Bar, Soi Buakhao. Then you do what she says, in order.\"",
+    short: "\"A fence inside the hour. Not the police — Candy, on Buakhao, with something in your hand.\"" });
+NPCS.nont.dialogue.push(
+  { topic: "wallet|my wallet|the wallet|lost wallet|my card|no card|lost card|the card", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),
+    text: "\"Wallet? I move money, not wallets.\" Nont turns the {{phone}} face down. \"Your card is gone; your account is not. Send from the app to me, I give you notes, five percent — CASH, here. That is the whole service. The wallet itself — Candy, on this soi. She knows which boy, and I am not telling you for free what she tells you for a drink.\"",
+    short: "\"I move money, not wallets. CASH here, five percent; Candy for the wallet.\"" });
 NPCS.david.dialogue.unshift(
   { topic: "pay|the pay|payday|salary|contract|permit|the permit|thirty-five|hours|mornings|lates|late",
     when: (st, G) => G.stage === "expat" && !!G.jobOffer && G.jobOffer.kind === "school" || (G.stage === "expat" && !!G.job && G.job.kind === "school"),

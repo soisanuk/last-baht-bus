@@ -692,6 +692,27 @@ function _naturalHelp(lower) {
       _say(`The nearest ${what} is on ${ROOMS[at].name}, ${best.length === 1 ? "one step" : best.length + " steps"} away${dir && /^(n|s|e|w|in|out|up|down)$/.test(dir) ? ` — ${({ n: "head north", s: "head south", e: "head east", w: "head west", in: "go in", out: "go out", up: "go up", down: "go down" })[dir]} (${dir.toUpperCase()})` : ""}.`, "dim");
       return true;
     } }
+  // HOW DO I GET TO <a place>: a street, a district or a bar you have heard of — the way, in steps, and the ride (Owain, round 99:
+  // a broke man on one soi had to guess MOTOSAI; "how do i get to soi buakhao" was a parse failure)
+  { const dm = l.match(/^(?:how do i (?:get|go) to|how to get to|which way (?:is|to)|where(?:'s| is| are)?|what'?s the way to|directions? to)\s+(?:the )?(.+?)\??$/);
+    if (dm && dm[1].length >= 4 && !/^(atm|cash ?machine|cashpoint|bank machine|7-?eleven|7-?11|seven|police|the police|toilet|loo|bathroom)/.test(dm[1])) {
+      const q = dm[1].replace(/[^a-z0-9 ]/g, "").trim();
+      let dest = null, regQ = null;   // a district by its name first — "soi buakhao" is the street, not the first room whose name contains it
+      { const reg = Object.keys(ROOMS).map(k => ROOMS[k].region).filter(Boolean).find(r => r && r.toLowerCase() === q); if (reg) { regQ = reg; const cands = Object.keys(ROOMS).filter(k => ROOMS[k].region === reg && ROOMS[k].venues); let best = null; for (const id of cands) { const p = typeof _path === "function" ? _path(G.room, id) : null; if (p && (!best || p.length < best.p.length)) best = { id, p }; } dest = best && best.id; } }
+      if (!dest) dest = typeof _roomByName === "function" ? _roomByName(q) : null;
+      if (dest && dest !== G.room && ROOMS[dest]) {
+        if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(dest)) { _say("Not this week — the soi is the whole town for the seven nights.", "dim"); return true; }
+        const p = typeof _path === "function" ? _path(G.room, dest) : null;
+        if (!p || !p.length) { _say(`No way you know to ${ROOMS[dest].bar || ROOMS[dest].name} from here — a bike from a stand, or ask somebody.`, "dim"); return true; }
+        const dir = Object.keys(_room().exits || {}).find(k => _room().exits[k] === p[0]);
+        const far = p.length > 6, plain = String(ROOMS[dest].bar || ROOMS[dest].name).replace(/\s*\(.*?\)\s*$/, "");   // a room's bracketed name is an id, never said aloud (Owain, round 99)
+        const name = regQ ? regQ : (ROOMS[dest].region && ROOMS[dest].region !== _room().region ? `${plain}, over on ${ROOMS[dest].region}` : plain);
+        const _md = typeof MOTOSAI_DESTS !== "undefined" ? Object.keys(MOTOSAI_DESTS).find(k => (regQ || plain + " " + (ROOMS[dest].region || "")).toLowerCase().includes(k)) : null;
+        _say(`${name}: ${p.length === 1 ? "one step" : p.length + " steps"} away${dir && /^(n|s|e|w|in|out|up|down)$/.test(dir) ? ` — ${({ n: "north", s: "south", e: "east", w: "west", in: "in", out: "out", up: "up", down: "down" })[dir]} first` : ""}.` +
+          (far ? ` Far enough for a bike${_md ? ` (MOTOSAI TO ${_md.toUpperCase()})` : ""} or the baht bus along the main road.` : " Walkable.") + (!regQ && G.visited && G.visited[dest] ? ` (TRAVEL ${plain.toUpperCase()} walks it.)` : ""), "dim");
+        return true;
+      }
+    } }
   if (/^(what (should|do|can) i do|what now|what next|help me|i'?m (lost|stuck|confused)|i don'?t know what to do)\b/.test(l)) {
     // state-blind before this: an expat weeks past the opening was told to ask
     // people about a wallet he had back (prose review, 2026-09-04) — gated the
@@ -1580,11 +1601,13 @@ function _notADoor(arg) {
 function _roomByName(w) {
   const t = String(w).toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
   if (t.length < 4) return null;
+  const norm = nm => String(nm).toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
+  for (const [id, r] of Object.entries(ROOMS)) for (const nm of [r.bar, r.name]) if (nm && norm(nm) === t) return id;   // "candy bar" is Candy Bar before it is Candy Bar 2 (Frank, round 99)
   for (const [id, r] of Object.entries(ROOMS)) {
     for (const nm of [r.bar, r.name]) {
       if (!nm) continue;
-      const n = String(nm).toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
-      if (n === t || n.includes(t) || t.includes(n)) return id;
+      const n = norm(nm);
+      if (n.includes(t) || t.includes(n)) return id;
     }
   }
   return null;
@@ -1925,12 +1948,12 @@ function _doSafe(num) {
   if (G.room !== "oy_office") { _say("There's no keypad here."); return; }
   if (_flag("hasWallet")) { _say("The safe hangs open and empty. You've pushed your luck far enough."); return; }
   if (num === SAFE_PIN) {
-    _say(`You press ${thaiDigits(SAFE_PIN)} — the number from the poster, and the ` +
+    _say(`You press ${thaiDigits(SAFE_PIN)} — the dancer's number, and the ` +
       "lucky nine. A pause. A clunk that sounds like forgiveness. The safe swings open.");
     G.itemLoc.wallet = "inventory";
     _setFlag("hasWallet");
     const _wc = _walletCash(); G.money += _wc; G.walletLedger = true; G.walletLedgerN = _wc;
-    _say(_wc > 0 ? `(You take your wallet. Most of the cash is still in it — ฿${_num(_wc)} back in ` +
+    _say(_wc > 0 ? `(You take your wallet. ${G.walletHeld != null ? "Some" : "Most"} of the cash is still in it — ฿${_num(_wc)} back in ` +
       "play — and there's a note inside, worth reading.)" : "(You take your wallet. The cash is gone, the cards are not — and there's a note inside, worth reading.)", "dim");
   } else {
     G.safeTries++;
@@ -4463,6 +4486,7 @@ function _doRead(arg) {
   const id = _findItem(arg);
   // the price list on the wall is read, not carried (Terence, round 57)
   if (!id && /\b(price|prices|list|board|menu|sign|chart)\b/.test(String(arg || "")) && (_room().massage || _room().soapy)) { _doExamine(arg); return; }
+  if (!id && /\bnote\b/.test(String(arg || "")) && G.itemLoc.wallet === "inventory") { _say(ITEMS.wallet.desc); return; }   // "a note inside, worth reading" is READ NOTE (Frank, round 99)
   if (!id) { _say("You don't have that to read."); return; }
   if (id === "masseuse_note") return _readNote();
   const it = ITEMS[id];
@@ -4471,7 +4495,8 @@ function _doRead(arg) {
     _say(it.readEn);
     if (!_flag("knowWasHere")) {
       _setFlag("knowWasHere");
-      _say("(Soi Buakhao, 3 a.m. That's a lead — and proof of where you were.)", "dim");
+      _say(_walletHunt() ? "(Soi Buakhao, 3 a.m. — hours you have no film of, and the only lead you own. Whoever sold you those noodles saw you with a wallet.)"
+        : "(Soi Buakhao, 3 a.m. That's a lead — and proof of where you were.)", "dim");
     }
     return;
   }
@@ -4959,7 +4984,8 @@ function _doTalkCore(arg, topic) {
     { const _cv = x => String(x || "").toLowerCase().replace(/^the /, "").replace(/\s+(bar|lounge|club|pub|a-?go-?go|go-?go)$/, "").trim();
       const _vb = topic && _cv(topic).length >= 5 && Object.keys(ROOMS).find(k => ROOMS[k].barType && _cv(_barName(k)) === _cv(topic));
       const _person = _vb && typeof _npcByName === "function" && _npcByName(_cv(topic).split(" ")[0]);   // "candy" is Candy before it is Candy Bar
-      if (_vb && _vb !== G.room && !_person && !_pickDialogue(npc, topic) && typeof _venueAnswer === "function" && typeof _licenceOf === "function") { _say(_venueAnswer(npc, _vb, _hoursRegister(npc))); return; } }
+      const _ownWord = _vb && new RegExp("\\b" + _cv(topic).replace(/[^a-z0-9 ]/g, "") + "\\b", "i").test(JSON.stringify([_room().desc, _room().lateDesc, _room().revisit, _room().reads].map(x => typeof x === "function" ? "" : x)));   // "office" inside Rainbow Girls is Oy's door, not The Office Bar on Thappraya (Frank, round 99)
+      if (_vb && _vb !== G.room && !_person && !_ownWord && !_pickDialogue(npc, topic) && typeof _venueAnswer === "function" && typeof _licenceOf === "function") { _say(_venueAnswer(npc, _vb, _hoursRegister(npc))); return; } }
     // "how long have you worked here", typed as an ASK: the small-talk subject, not her "work" node on the substring (Lorraine, round 95)
     if (topic && NPC_ROLES[npc] === "hostess" && /^how long (?:have |had )?(?:you )?(?:work|worked|been|been working)(?: here| in pattaya| in this bar)?\??$/i.test(String(topic).trim()) &&
         typeof _smallTalk === "function" && _smallTalk(npc, "how long have you worked here")) return;
@@ -5491,7 +5517,9 @@ function _doTalkCore(arg, topic) {
       }
       if (/^(wallet|my wallet)$/.test(_rt) && !_flag("hasWallet") && !NPCS[npc].filler &&
           !NPCS[npc].dialogue.some(e => e.topic && /\bwallet\b/.test(String(e.topic)))) {   // a gated wallet node is a "not yet", not a miss
-        _say(`"Wallet?" ${NPCS[npc].name} shakes the head. "Not here — nobody lose anything in here, bad luck for the bar. Soi Buakhao, Candy Bar. Everybody's problem goes to Candy."`);
+        { const said = (G.soc.walletPointed = G.soc.walletPointed || {});   // dealt town-wide, and a repeat is a pointer, not a shrug (Owain, round 99: three women, one sentence; then "that one I don't know")
+          _say(said[npc] ? _pickVary(_WALLET_POINT_AGAIN, "walletagain:" + npc)(NPCS[npc].name, _pr(npc)) : _pickTownLine(_WALLET_POINT, "walletpoint")(NPCS[npc].name, _pr(npc)));
+          said[npc] = true; }
         _questOffer(npc);
         return;
       }
@@ -7184,6 +7212,31 @@ const _TOWN = {
   // last night's event, asked of the rail that had it (László, round 73: "No idea. Try somebody who was there" from Bert, about his own football finish)
   lastevent: { floor: ["\"{e}!\" {n} remembers it well. \"{d}. Cake write it in the book — {amt}. Good night.\""],
     house: ["\"{e}, {d}.\" {n} doesn't need the book. \"{amt} on the night. It's on your page — BOOKS has it.\""], punter: ["\"{e}? {d}, mate. I was here. {amt}, if you're counting, and the boss always is.\""] },
+  atm_nocard: {
+    floor: ["\"ATM?\" {n} winces for you. \"No card, no machine, na. {d} day the bank take for new one. Before that — Nira lend, the Old Market boy cash from your phone. Or find the wallet.\"",
+      "\"The machine not know you without card.\" {n} taps her own phone. \"App still send, na. The kid at Old Market make it notes. {d} day, then bank give card.\"",
+      "{n} shakes her head. \"No card? Then no machine. My friend lose hers one time — she borrow, she wait {d} day, she cry. Nira is faster than bank.\""],
+    house: ["\"The machine wants a card,\" {n} says, \"and you have an app. The app sends. The Old Market boy turns a send into notes, five percent. The bank's card is {d} days. Nira is tonight.\"",
+      "{n} does not look up. \"No card, no machine. Nira lends. The boy at the Old Market cashes the phone. Or the wallet comes back — ask on Soi Buakhao.\"",
+      "\"Card gone?\" {n} counts it off. \"Bank: {d} days. Nira: tonight, twenty percent. The kid: five percent, from your own account. Pick one.\""],
+    punter: ["\"No card? Been there.\" {n} grimaces. \"The machine won't talk to you. Nira at Neon Paradise lends, the kid at the Old Market cashes your app — five percent — and the bank takes about {d} days. Don't walk the dark side skint.\"",
+      "\"The machine's a wall without the card, mate,\" {n} says. \"Phone app still works for sending. Old Market kid turns it into notes. Or get the wallet back — this town's got a lost-and-found with a mamasan on the door.\"",
+      "{n} shrugs. \"Everybody loses a card here once. The bank's a week; Nira's tonight; the kid's five percent. Ask around on Buakhao for the wallet itself.\""],
+  },
+  wallet_back: {
+    floor: ["\"You got it back!\" {n} claps once. \"Front pocket now, na. Hand on top.\"",
+      "{n} grins. \"Your wallet come home. Who give? Oy? Then you were polite. Good.\"",
+      "\"The wallet!\" {n} pats the pocket where it is. \"See? This town give back, sometimes. Not twice, na.\"",
+      "{n} nods at your pocket. \"Back. I hear already — everybody on the soi hear. Keep it in front now.\""],
+    house: ["\"Back in your pocket,\" {n} says. \"Good. The soi talks; it talked about that. Front pocket from now on.\"",
+      "{n} glances at the pocket and back to the book. \"The wallet came home. Mot sells to one woman and that woman gives back for manners. Everybody knows the arithmetic.\"",
+      "\"Your wallet,\" {n} says. \"I heard. The machine works for you again, so the drinks are not on the house any more.\"",
+      "{n} does not smile, quite. \"It came back. Most don't. Keep a hand on it.\""],
+    punter: ["\"Got it back, did you? Lucky sod.\" {n} raises the glass an inch. \"Front pocket. Hand on it after ten.\"",
+      "\"Heard you got the wallet back,\" {n} says. \"Through Oy, was it? She likes a polite one. The rest of us had to learn the hard way.\"",
+      "{n} nods. \"Wallet's home. Lesson's free the first time; the second time it costs you the week.\"",
+      "\"Back, is it?\" {n} shrugs. \"Good. Now stop telling people about it — half this rail would have it off you again for the sport.\""],
+  },
   saw_not: {
     floor: ["\"Last night? You not here, boss.\" {n} shrugs. \"I only see my own bar.\"",
       "{n} shakes her head. \"Not here last night. Ask where you were, not me.\"",
@@ -8160,6 +8213,22 @@ function _dawnHere(npc, w) {
   const mine = [G.room, NPCS[npc] && NPCS[npc].room].concat(NPCS[npc] && Array.isArray(NPCS[npc].bars) ? NPCS[npc].bars : []);
   return mine.includes(w.endRoom) && !!(ROOMS[w.endRoom] && ROOMS[w.endRoom].barType);
 }
+// the authored hostess's wallet pointer (she has no wallet node of her own): one town-wide book, eight deep (round 99)
+const _WALLET_POINT = [
+  (n, p) => `"Wallet?" ${n} shakes the head. "Not here — nobody lose anything in here, bad luck for the bar. Soi Buakhao, Candy Bar. Everybody's problem goes to Candy."`,
+  (n, p) => `"You lose wallet?" ${n} pats your arm. "Not in this bar, na. Go Soi Buakhao, ask Candy at Candy Bar. She know every pocket in Pattaya."`,
+  (n, p) => `${n} sucks ${p.p} teeth. "Wallet. Hm. Here, nobody take — my mama kill them. Other side of Second Road, Soi Buakhao: Candy. Lost thing go to Candy."`,
+  (n, p) => `"Oi, poor you." ${n} looks genuinely sorry for about a second. "Candy Bar, Soi Buakhao. Candy is like police but she pick up the {{phone}}. Tell her ${n} send you."`,
+  (n, p) => `"Not here." ${n} says it fast, the way a bar says it. "But I know who. Candy — Candy Bar, over on Buakhao. She hear everything before it happen."`,
+  (n, p) => `${n} glances at the till, then back. "Nobody steal in here, bad luck. You want it back, you go Candy. Soi Buakhao. She the boss of boss for lost things."`,
+  (n, p) => `"Wallet gone? Again, this town." ${n} shakes ${p.p} head at Pattaya in general. "Soi Buakhao. Candy Bar. Ask Candy, buy her girl one drink, she tell you who."`,
+  (n, p) => `"Hmm." ${n} thinks about it properly. "Mot, maybe — the little one. Candy know. Candy Bar, Soi Buakhao, other side of Second Road. Go before she busy."`,
+];
+const _WALLET_POINT_AGAIN = [
+  (n, p) => `"Candy, na." ${n} points east with ${p.p} chin. "Candy Bar, Soi Buakhao. I tell you already. Go."`,
+  (n, p) => `${n} laughs. "Same answer — Candy. Soi Buakhao. You ask me three time, is still Candy."`,
+  (n, p) => `"Soi Buakhao. Candy Bar." ${n} holds up two fingers, then one. "Second Road, then over. She is there every night."`,
+];
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
@@ -8390,6 +8459,9 @@ function _townTalk(npc, topic) {
   if (/\b(gentle?m[ae]n'?s?'? ?clubs?|gents'? ?clubs?|gents)\b/.test(t)) return pick("gents", {});
   const _here = typeof _npcsHere === "function" ? _npcsHere().find(id => id !== npc && NPCS[id] && !NPCS[id].patron && _nm(id) && _npcRoom(id) !== _npcRoom(npc)) : null;
   if (_here) return pick("present", { w: NPCS[_here].name });
+  if (typeof _walletHunt === "function" && _walletHunt() && (/^(the )?(atm|cash machine|cashpoint|machine|withdraw|money machine|cash point|my card|the card|card|cash)$/.test(t) || /\b(an? |the )?atm\b/.test(t)))
+    return pick("atm_nocard", { d: Math.max(0, WALLET_CARD_DAYS - (G.day - (G.walletLostDay || G.day))) });   // no card: the machine is a wall, and the mouths know the lifelines (Owain, round 99)
+  if (_flag("walletBack") && G.walletBackDay != null && G.day - G.walletBackDay <= 14 && /\b(wallet|my wallet|the wallet|my card|the card)\b/.test(t)) return pick("wallet_back", {});   // the town heard it came back (Owain: "nobody on Soi 6 registers that it came back")
   if (/^(the )?(atm|cash machine|cashpoint|machine|withdraw|money machine|cash point)$/.test(t) || /\b(an? |the )?atm\b/.test(t)) {
     const here = _room().atm, near = here ? G.room : Object.keys(ROOMS).find(id => ROOMS[id].atm && ROOMS[id].region === _room().region);
     const w = here ? "the wall right here" : near ? ROOMS[near].name : "the main drag of every nightlife area — Second Road, Soi Buakhao, the Walking Street gate";
@@ -8611,7 +8683,8 @@ function _townTalk(npc, topic) {
   // on the Pink Lotus, PLG's flagship: "Not my department") — one helper now, _venueAnswer (round 77)
   { const _core = s => String(s || "").toLowerCase().replace(/^the /, "").replace(/\s+(bar|lounge|club|pub|a-?go-?go|go-?go)$/, "").trim();
     const _v = _core(t).length >= 5 && Object.keys(ROOMS).find(k => ROOMS[k].barType && k !== G.room && _core(_barName(k)) === _core(t));
-    if (_v && typeof _licenceOf === "function") { _say(_venueAnswer(npc, _v, reg)); return true; } }
+    const _mine = _v && new RegExp("\\b" + _core(t).replace(/[^a-z0-9 ]/g, "") + "\\b", "i").test(JSON.stringify([_room().desc, _room().lateDesc, _room().revisit, _room().reads].map(x => typeof x === "function" ? "" : x)));   // a word the room's own paint uses is the room's (Frank, round 99: "office" in Rainbow Girls)
+    if (_v && !_mine && typeof _licenceOf === "function") { _say(_venueAnswer(npc, _v, reg)); return true; } }
   // THE SHIFT'S DECISIONS, the night's event, the partner — answered at your own bar by the floor that was there (László, round 73)
   if (typeof _atOwnBar === "function" && _atOwnBar() && _flag("barPaid") && G.bar) {
     const calls = (G.bar.calls || []).filter(c => G.day - c.day <= 2);
@@ -13474,6 +13547,7 @@ function _doWithdrawInner(arg) {
 
 function _doBalance() {
   if (!_flag("hasWallet")) {
+    if (_walletHunt()) { _say(`The app knows the balance without the card: ฿${_num(G.bank || 0)} in the account. It just cannot put notes in your hand — the machine wants the card.`, "dim"); return; }   // the app is not the card (Frank, round 99)
     _say("Your card's in your wallet, wherever that's got to. Nothing to check until it's back.");
     return;
   }
@@ -15699,7 +15773,7 @@ function _read(text) {
   if (!bare) return R;
   // a hesitation is not the sentence: "um, hello?" is a hello, said badly (the katoey's dithering)
   { const h = bare.replace(/^(?:um+|uh+|er+m?|ehm|well|so|oh|ah+)\s+/, ""); if (h !== bare) return Object.assign(_read(h + (/\?\s*$/.test(t) && !/^(?:hi|hello|hey)\b/.test(h) ? "?" : "")), { raw }); }
-  if (/^(?:what|wha|huh|eh|pardon|sorry|say again|come again|again|hm+)$/.test(bare)) R.kind = "huh";   // asking for it again, not asking a thing
+  if (/^(?:what|wha|huh|eh|pardon|say again|come again|again|hm+)$/.test(bare) || (bare === "sorry" && /\?\s*$/.test(String(text || "")))) R.kind = "huh";   // asking for it again, not asking a thing; a bare SORRY is an apology (the influencer's own option — Frank, round 99)
   else if (/^(?:hi|hello|hey|hiya|evening|alright|alreet|g'?day|howdy|good (?:evening|morning|afternoon)|sawa?t ?dee|sawasdee)\b/.test(bare)) R.kind = "greeting";
   else if (/^(?:bye|goodbye|good ?night|night|nite|see (?:you|ya)|night night|laters?|cheerio|la ?gorn)\b/.test(bare)) R.kind = "farewell";
   else if (/^(?:thanks|thank you|cheers|ta|khop khun|kob kun)\b/.test(bare)) R.kind = "thanks";
@@ -18707,6 +18781,7 @@ function _doCommandInner(input) {
       const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return;
     }
     default:
+      if (/^(?:how do i|how to|which way|directions?|what'?s the way)\b/.test(lower) && _naturalHelp(lower)) break;   // "how do i get to soi buakhao" (Owain, round 99)
       // the piwin just asked "where to?" and the player answered with a place, not a verb
       if (G.motoAsked && G.turns - G.motoAsked <= 1 && lower.length >= 3 && typeof MOTOSAI_DESTS !== "undefined" &&
           (lower === "hotel" || Object.keys(MOTOSAI_DESTS).some(k => lower === k || lower.includes(k)))) { G.motoAsked = 0; _doMotosai(lower); break; }

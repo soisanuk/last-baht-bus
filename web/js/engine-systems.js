@@ -165,7 +165,7 @@ function _soi6DrinkMin(id) {
 // while her cousins escalate from a text, to asking around, to garnishing the
 // cash in your pocket. One loan at a time. Pure-ish (only touches G + _say).
 const LOAN_MAX = 20000, LOAN_MIN = 1000, LOAN_DAYS = 3;
-function _loanRound(n) { return Math.ceil(n / 100) * 100; }          // to the hundred
+function _loanRound(n) { return Math.round(n / 100) * 100; }         // to the nearest hundred (ceil made twenty percent read as twenty-five — Frank, round 99)
 function _loanTerms(amt) { return _loanRound(amt * 1.2); }           // principal +20%
 function _withNira() { return _npcsHere().includes("nira"); }
 function _parseBaht(arg) {
@@ -1528,7 +1528,7 @@ function _nontLocate(topic) {
 }
 function _nontCash(arg) {
   if (!_nontHere()) { _say("No Nont here. His table is at the Old Market on Soi Buakhao, most nights. (CASH is his verb, not the town's.)"); return; }
-  if (!_flag("hasWallet")) { _say("“Cash from what account?” He's not wrong: your card was in the wallet."); return; }
+  if (!_flag("act1Done")) { _say("“Cash from what account?” He's not wrong: your card was in the wallet."); return; }   // a lost CARD is exactly his trade — the app moves it, he hands the notes over (Frank, round 99)
   const _a = typeof _amount === "function" ? _amount(arg) : null;   // Thai numbers too: "cash พัน" (Nattapong, round 56)
   const n = (_a && !Number.isNaN(_a)) ? _a : parseInt(String(arg || "").replace(/[^0-9]/g, ""), 10);
   if (!n || n < 500) { _say(`“Five hundred minimum, or it's not worth my thumbs.” (CASH <amount> — five percent, no card fee, no daily limit.)`); return; }
@@ -3078,27 +3078,39 @@ function _walletLost() {
   for (const f of _WALLET_RE_CLEAR) delete G.flags[f];
   _setFlag("walletLost"); _setFlag("walletEver");
   G.walletLostDay = G.day; G.walletLostNow = true; G.safeTries = 0;
-  G.walletHeld = G.roughLost || 0;   // what the night took is what the wallet gives back
+  { const w = G.lastNightWas || {}; const r = w.endRoom && ROOMS[w.endRoom] ? w.endRoom : G.room;   // where the film stopped, and when (Owain and Frank, round 99)
+    G.walletLostAt = { room: r, name: _barName(r) || (ROOMS[r] && ROOMS[r].name) || "the street", clock: w.turn != null && typeof _clockStr === "function" ? _clockStr(w.turn) : null }; }
+  G.walletHeld = (G.roughLost || 0) >= 200 ? Math.round((G.roughLost || 0) / 2 / 100) * 100 : 0;   // about half of what the night took comes back in it; the rest paid for somebody's week (Owain, Frank: "all of it" was "most")
   G.itemLoc.wallet = null;           // in the safe again
   if (G.itemLoc.receipt !== "inventory") G.itemLoc.receipt = "inventory";   // the one thing a pocket keeps
   G.quests.wallet_again = "active";
 }
 function _walletLostSay() {
   G.walletLostNow = false;
+  const at = G.walletLostAt || {}, film = at.name ? `The last thing the film has is ${at.name}${at.clock ? " at " + at.clock : ""}. ` : "";
   _say("You pat the pocket that matters, and then the other one, and then both again, the way a man checks a thing he already knows. " +
-    "The wallet is gone — the cards, the key card, the lot. Not the pocket cash; the wallet. Somewhere between the last bar you remember " +
-    "and this pavement, the town took it, and the town does not mail things back.", "alert");
-  _say(`(The second wallet. You live here now, so nobody is running anywhere: the desk knows your face, your room is your room. ` +
+    "The wallet is gone — the cards, the key card, the lot. The pocket cash went too, the town's usual tax on a sleeping farang, but it is the wallet that matters. " +
+    film + "Everything after that is somebody else's story, and there is a receipt in your pocket you do not remember paying for.", "alert");
+  _say(`(${_flag("act1Scored") ? "The second wallet. " : ""}You live here now, so nobody is running anywhere: the desk knows your face, your room is your room. ` +
     `But the machine on the street is a wall without the card, and the bank's replacement is ${WALLET_CARD_DAYS} days off. ` +
-    `Nira lends; the kid at the Old Market cashes the account without a card; and a wallet in this town goes where it went the first time. ` +
+    `Nira lends; the kid at the Old Market cashes the account without a card; and a wallet in this town goes ${_flag("act1Scored") ? "where it went the first time" : "where lost things go"}. ` +
     `READ what is still in your pockets. HINT nudges; QUESTS has it on the books.)`, "dim");
 }
+// the hunt's own hints: the lost hours are the blackout's, Lek's sighting is dated by the loss, and the hard way is
+// named without its digits — a resident has earned the whisper, not the combination (Frank, round 99)
+const _WALLET2_HINTS = {
+  knowWasHere: "Start with the hours you have no film of — READ what's still in your pockets, then take it to Candy, the Candy Bar mamasan on Soi Buakhao. She misses nothing on her soi.",
+  knowMot: "Candy saw you that night, singing, with a little pickpocket called Mot on your heels. TALK to her about the wallet — a lady drink speeds the story along.",
+  knowOyHasIt: "Mot fences everything he lifts to one buyer. Lek at the Lucky Tiger sees him whenever he has money — ASK LEK where your wallet ended up.",
+  hasWallet: "It's in Madam Oy's safe at Rainbow Girls, deep in the Tree Town maze off Buakhao's north end. Oy respects manners: WAI her properly, then ask about the wallet. (The hard way in is still there — a door, a song, and a number four people on the soi each hold a piece of — ASK ANY OF THEM ABOUT OY.)",
+};
 // the wallet comes back by either of the opening's two doors — the same hasWallet both set
 function _walletBackCheck() {
   if (!_flag("walletLost") || !_flag("hasWallet") || _flag("walletBack")) return;
   _setFlag("walletBack");
-  _say("Cards, key card, the note — the second time you check a wallet you did not expect to see again, you do it slower. " +
-    "The machine on the street is a machine again. Tan was right about the second time.", "win");
+  G.walletBackDay = G.day;
+  _say(`Cards, key card, the note — ${_flag("act1Scored") ? "the second time you check a wallet you did not expect to see again, you do it slower" : "you check a wallet you did not expect to see again the way a man does, twice"}. ` +
+    "The machine on the street is a machine again.", "win");
 }
 // the bank's side of a lost card: a replacement a week on, signed for at the branch — the machine works without the wallet
 function _walletCardTick() {
@@ -3274,7 +3286,7 @@ function _doQuit() {
 function _doHint() {
   if (_walletHunt()) {   // the second wallet: the opening's own nudges, no coyness — a resident has earned the whisper (2026-10-21)
     const next = _ACT1_HINTS.find(([f]) => !_flag(f));
-    if (next) { _say("The soi whispers, the second time louder: " + next[1], "dim"); return; }
+    if (next) { _say((_flag("act1Scored") ? "The soi whispers, the second time louder: " : "The soi whispers: ") + (_WALLET2_HINTS[next[0]] || next[1]), "dim"); return; }
   }
   if (_flag("act1Done")) {
     // Sandbox: reuse the "next actionable step" idea for the quest journal —
@@ -3892,8 +3904,8 @@ function _doQuests() {
       _say(_fmt("  {mark} {label}", { mark: _flag(f) ? "✓" : "·", label: _L(shownLabel) }), "dim");
     }
     shown++;
-  } else if (_flag("act1Done") && G.mode !== "soi6") {
-    // soi6 mode force-sets act1Done but never plays Act One — no wallet, no score
+  } else if (_flag("act1Done") && G.mode !== "soi6" && (_flag("act1Scored") || G.score > 0)) {
+    // soi6 mode force-sets act1Done but never plays Act One — no wallet, no score; nor does the man who cancelled the ticket (round 99)
     _say(`✓ The Last Baht Bus — Act One, scored ${G.score}`, "dim");
     shown++;
   }
@@ -12349,7 +12361,7 @@ function _roomSafeBeat() {
 
 function _checkAct1() {
   if (!_flag("hasWallet") || _flag("act1Done")) return;
-  _setFlag("act1Done");
+  _setFlag("act1Done"); _setFlag("act1Scored");   // the opening was PLAYED — the Soi 6 man's act1Done only means the sandbox is open (round 99)
   G.act1SafeDue = true; // the room safe owes you the stash — paid on your first time IN the room, walked or respawned
   let score = 0;
   const lines = [];

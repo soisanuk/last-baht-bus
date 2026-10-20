@@ -1379,6 +1379,7 @@ function _doTell(lower, to) {
   // reactions are hers ("she"), so a man on the rail still gets the old path
   if (!pid || !NPCS[pid] || !_npcsHere().includes(pid) || !(NPC_ROLES[pid] === "hostess" || (typeof _pronoun === "function" && _pronoun(pid) === "she" && !NPCS[pid].patron))) return false;
   const l = lower.replace(/[!.,?]+$/, "").trim();
+  if (/\bwallet\b/.test(l) && (_flag("walletLost") || !_flag("hasWallet")) && typeof _townTalk === "function" && _townTalk(pid, /\bback\b|\bgot\b|\bfound\b/.test(l) && _flag("walletBack") ? "my wallet" : "wallet")) return true;   // "i got my wallet back" / "i lost my wallet" are the town's rows (Owain, round 99)
   if (/\b(?:i'?m staying|i stay(?:ed)? here|not going home|cancel+ed (?:my|the) ticket|i live here now|i'?m not leaving|never going home|i'?m here for good|moved here)\b/.test(l) && typeof _stayTalk === "function") return _stayTalk(pid);   // the ticket in the bin (Dougal, round 97)
   { const lt = l.replace(/^tell [a-z']+ (?:that |to )?/, "");   // "tell joy its my last night" through the router carries her name
     if (!/^(?:ask|talk|tell|say) /.test(lt) && /\b(?:i|i'?m|im|my|our|it'?s|its|we)\b/.test(lt) && typeof _isLeavingSaid === "function" && _isLeavingSaid(lt) && typeof _leavingTalk === "function") return _leavingTalk(pid, lt); }   // a statement, never an ASK's subject (Nira's flight node, Ple's "why did you leave")   // "tell joy its my last night" was a subject she didn't know (Dougie, round 96)
@@ -5760,7 +5761,7 @@ function _morningLedger() {
   if (paperN > 0) bits.push("\u0e3f" + _num(paperN) + " to the visa agent");
   const condoN = (G.condoPaid || 0) - (b.condoB != null ? b.condoB : (G.condoPaid || 0));   // the lease's money, named (Victor)
   if (condoN > 0) bits.push("\u0e3f" + _num(condoN) + " to the condo's office" + (condoN >= CONDO_RENT * CONDO_DEPOSIT_MONTHS ? " (the deposit, held, and the first month)" : " (the rent and the electric)"));
-  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + Math.max(0, spent + wonN + giftInN + jobN); G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
+  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + Math.max(0, spent + wonN + giftInN + jobN - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0)); G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
@@ -6035,7 +6036,7 @@ function _endNight(reason) {
       if (r && ROOMS[r] && !_bars[r]) _bars[r] = 2;
     }
     G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, bars: _bars, leftFrom: G.soc.leftFrom || null,
-      with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room, kicked: G.kickedTonight || null,
+      with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room, turn: G.nightTurn, kicked: G.kickedTonight || null,
       quiet: !!G.lastBfHonest };   // the quiet close or the khao man gai one — she remembers which (Ruairi, round 75)
     G.kickedTonight = null;
   }
@@ -6500,6 +6501,7 @@ function _endNight(reason) {
       ? _dogN(`(Phone on ${_CRASH_BATTERY}%. Your pockets are untouched: Sai Krok spent the ` +
         "night sitting on your chest like a paperweight with teeth, and the town let " +
         "you both be. Nobody works a farang whose dog is watching.)")
+      : !(G.roughLost > 0) ? `(Phone on ${_CRASH_BATTERY}%. Pockets turned out and nothing in them to take; the town works the farang who don't make it home, and found you already worked.)`
       : `(Phone on ${_CRASH_BATTERY}%. ${_flag("hasWallet") ? "Wallet" : "Pockets"} ` +
         `turned out — ฿${_num(G.roughLost || 0)} gone; the town works the farang who ` +
         "don't make it home." + (G.money > 0

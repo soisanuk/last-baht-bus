@@ -64,7 +64,7 @@ test("staff talk about the people they work with, the room, and the wallet (Vic 
   G.nightTurn = 50; G.room = "lucky_tiger"; const cashier = _npcsHere().find(i => NPC_ROLES[i] === "cashier");
   out = []; run(`ask ${NPCS[cashier].name.toLowerCase()} about lucky tiger`); assert.match(text(), /Comes in here, goes out there|Money come in here, go out there/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; G.stage = "act1"; G.nightTurn = 50; G.room = "doghouse"; out = [];
-  run("ask bill about wallet"); assert.match(text(), /Everybody's problem goes to Candy/);
+  run("ask bill about wallet"); assert.match(text(), /Candy/); assert.doesNotMatch(text(), /\bher teeth\b|\bher head\b|\bher chin\b/, "Bill is a man");   // pooled since round 99
 });
 
 // ── Keith: the publican who bought in September ──────────────────────────────

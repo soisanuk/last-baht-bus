@@ -2794,7 +2794,7 @@ function _deliver(npcId, d, full, asNew) {
     _say(`(You now have ${/^(your|the|a|an)\b/i.test(ITEMS[d.gives].name) ? "" : "the "}${ITEMS[d.gives].name}.)`, "dim");
     if (d.gives === "wallet") {
       const _wc = _walletCash(); G.money += _wc; G.walletLedger = true; G.walletLedgerN = _wc;
-      _say(_wc > 0 ? `(Most of the cash is still in it — ฿${_num(_wc)} back in play.)` : "(The cash is gone; the cards and the key card are what came back.)", "dim");
+      _say(_wc > 0 ? `(${G.walletHeld != null ? "Some" : "Most"} of the cash is still in it — ฿${_num(_wc)} back in play${G.walletHeld != null ? "; the rest paid for somebody's week" : ""}.)` : "(The cash is gone; the cards and the key card are what came back.)", "dim");
     }
   }
   const st = _npcState(npcId);
