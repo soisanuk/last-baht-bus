@@ -3060,6 +3060,54 @@ const _ACT1_FAIL_LEDE = {
   accident: "The road took the decision out of your hands: a ward ceiling, a drip, and " +
     "room 412 exactly as far away as it was when the bike went over.",
 };
+// THE SECOND WALLET (Mario, 2026-10-21 — the opening's chain as an expat blackout event; see WALLET_LOST_ODDS).
+// A rough blackout wake in the expat stage, once a life: the wallet is in Oy's safe again, the clue flags are
+// cleared so the same people answer the same questions, and the stake is the card, never the bed.
+function _walletLostRoll(reason) {
+  G.walletLostNow = false;
+  if (reason !== "blackout" || G.stage !== "expat" || !_flag("hasWallet") || _flag("walletEver") || G.mode === "soi6") return false;
+  G.blackouts = (G.blackouts || 0) + 1;
+  const odds = WALLET_LOST_ODDS[Math.min(G.blackouts, WALLET_LOST_ODDS.length) - 1];
+  if (_rand() >= odds) return false;
+  _walletLost();
+  return true;
+}
+const _WALLET_RE_CLEAR = ["hasWallet", "knowWasHere", "knowMot", "knowOyHasIt", "knowDoorTrick", "pinPart71", "pinPart9",
+  "oyGaveWallet", "waiedOy", "officeOpen", "sabaiPlaying", "somTamAccepted", "somTamDelivered", "walletBack"];
+function _walletLost() {
+  for (const f of _WALLET_RE_CLEAR) delete G.flags[f];
+  _setFlag("walletLost"); _setFlag("walletEver");
+  G.walletLostDay = G.day; G.walletLostNow = true; G.safeTries = 0;
+  G.walletHeld = G.roughLost || 0;   // what the night took is what the wallet gives back
+  G.itemLoc.wallet = null;           // in the safe again
+  if (G.itemLoc.receipt !== "inventory") G.itemLoc.receipt = "inventory";   // the one thing a pocket keeps
+  G.quests.wallet_again = "active";
+}
+function _walletLostSay() {
+  G.walletLostNow = false;
+  _say("You pat the pocket that matters, and then the other one, and then both again, the way a man checks a thing he already knows. " +
+    "The wallet is gone — the cards, the key card, the lot. Not the pocket cash; the wallet. Somewhere between the last bar you remember " +
+    "and this pavement, the town took it, and the town does not mail things back.", "alert");
+  _say(`(The second wallet. You live here now, so nobody is running anywhere: the desk knows your face, your room is your room. ` +
+    `But the machine on the street is a wall without the card, and the bank's replacement is ${WALLET_CARD_DAYS} days off. ` +
+    `Nira lends; the kid at the Old Market cashes the account without a card; and a wallet in this town goes where it went the first time. ` +
+    `READ what is still in your pockets. HINT nudges; QUESTS has it on the books.)`, "dim");
+}
+// the wallet comes back by either of the opening's two doors — the same hasWallet both set
+function _walletBackCheck() {
+  if (!_flag("walletLost") || !_flag("hasWallet") || _flag("walletBack")) return;
+  _setFlag("walletBack");
+  _say("Cards, key card, the note — the second time you check a wallet you did not expect to see again, you do it slower. " +
+    "The machine on the street is a machine again. Tan was right about the second time.", "win");
+}
+// the bank's side of a lost card: a replacement a week on, signed for at the branch — the machine works without the wallet
+function _walletCardTick() {
+  if (!_flag("walletLost") || _flag("hasWallet") || _flag("walletCard") || G.walletLostDay == null) return;
+  if (G.day - G.walletLostDay < WALLET_CARD_DAYS) return;
+  _setFlag("walletCard");
+  _say("(A text from the bank, in Thai and then in English that was once Thai: the replacement card is at the Beach Road branch, and by the afternoon it is in your hand. " +
+    "The machine on the street knows you again. The wallet is still wherever it went.)", "dim");
+}
 function _act1Fail(reason) {
   const reached = _act1Progress(), total = _ACT1_MILESTONES.length;
   const prevBest = G.act1Best || 0, best = Math.max(prevBest, reached);
@@ -3224,6 +3272,10 @@ function _doQuit() {
 }
 
 function _doHint() {
+  if (_walletHunt()) {   // the second wallet: the opening's own nudges, no coyness — a resident has earned the whisper (2026-10-21)
+    const next = _ACT1_HINTS.find(([f]) => !_flag(f));
+    if (next) { _say("The soi whispers, the second time louder: " + next[1], "dim"); return; }
+  }
   if (_flag("act1Done")) {
     // Sandbox: reuse the "next actionable step" idea for the quest journal —
     // point at one active quest (with where to go), else nudge an offer.
@@ -3931,6 +3983,7 @@ function _questTick() {
       }
     }
   }
+  if (typeof _walletBackCheck === "function") _walletBackCheck();   // the second wallet's own completion (2026-10-21)
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
     G.quests[qid] = "done";

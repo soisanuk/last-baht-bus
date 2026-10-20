@@ -5736,7 +5736,7 @@ function _morningLedger() {
   // wake BEFORE the ledger runs (Tomasz and Joan, round 54)
   const safeIn = !!G.safeMoneyLedger; G.safeMoneyLedger = false;
   const walletIn = !!G.walletLedger; G.walletLedger = false;   // the wallet's ฿500 netted in unnamed (Terence, round 57)
-  const safeTag = safeIn ? " (with the room safe's stash netted in)" : walletIn ? ` (with the wallet's ฿${_num(WALLET_CASH)} back in it)` : "";   // it was never Madam Oy's money (Rolf, round 55)
+  const safeTag = safeIn ? " (with the room safe's stash netted in)" : walletIn ? ` (with the wallet's ฿${_num(G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH)} back in it)` : "";   // it was never Madam Oy's money (Rolf, round 55)
   if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via + safeTag);   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via + safeTag);
   if (tillDraw > 0) bits.push("\u0e3f" + _num(tillDraw) + " drawn from your own till");
@@ -6476,6 +6476,7 @@ function _endNight(reason) {
       G.roughLost = Math.min(G.money, ROUGH_WAKE_CAP);
       G.money -= G.roughLost;
     }
+    if (typeof _walletLostRoll === "function") _walletLostRoll(reason);   // the second wallet: a blackout in the expat stage (2026-10-21)
     // …unless a soi dog is sitting on them. Nobody negotiates with Sai Krok.
   } else if (_flag("act1Done")) {
     G.room = _hotelRoomId(); G.battery = 100;
@@ -6493,6 +6494,7 @@ function _endNight(reason) {
   if (_ownBarRescue) { _say(_pickVary(_OWN_BAR_RESCUE, "ownrescue"), "alert"); G.ownRescueDay = G.day; }
   if (crash) {
     _say(crash.prose[Math.floor(_rand() * crash.prose.length)], "alert");
+    if (G.walletLostNow && typeof _walletLostSay === "function") _walletLostSay();
     if (G.mode === "soi6") _say("(You sleep the day off where the soi left you. The next night starts there, at six, with the shutters going up.)", "dim");   // the dawn prose and an 18:00 restart (Dougie, round 96)
     _say(G.dog
       ? _dogN(`(Phone on ${_CRASH_BATTERY}%. Your pockets are untouched: Sai Krok spent the ` +
@@ -6567,6 +6569,7 @@ function _endNight(reason) {
   if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
   if (typeof _condoWake === "function") _condoWake();     // the office's word about last night's guest
   if (typeof _destituteTick === "function") _destituteTick();   // no roof, counted; her mat; the plane
+  if (typeof _walletCardTick === "function") _walletCardTick();   // the bank's replacement card, a week on (2026-10-21)
   if (typeof _jobNight === "function") _jobNight();       // the shift just stood, the week's count, the paper, the incident
   if (typeof _incomeTick === "function") _incomeTick();   // the payday lands before the ledger, so the ledger names it
   // THE LEDGER COMES AFTER EVERYTHING THE WAKE MOVES (Ossie, round 70: the till's shortfall came out

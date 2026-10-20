@@ -36,11 +36,12 @@
     "intro"
    ],
    "quests": [
-    "safecracker"
+    "safecracker",
+    "wallet_again"
    ],
    "encounters": [],
    "predicates": [],
-   "note": "the do-or-die opening; rough wakes are a resident mechanic"
+   "note": "the do-or-die opening; rough wakes are a resident mechanic The second wallet (2026-10-21): the chain replayed as an expat blackout event."
   },
   {
    "id": "identity",

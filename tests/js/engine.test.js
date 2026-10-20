@@ -3685,7 +3685,7 @@ test("the taxi intro gates Soi 6 mode too, then opens the week", () => {
   assert.equal(state().pendingChoice, null);
   assert.equal(state().mode, "soi6");
   assert.equal(state().room, "qv_room");
-  assert.match(lastOut(), /planted your flag: SOI 6/, "the week's framing opens");
+  assert.match(lastOut(), /top of SOI 6/, "the week's framing opens");
 });
 
 test("your identity is picked once and survives an Act One reset", () => {

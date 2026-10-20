@@ -327,6 +327,7 @@ function newGame() {
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
+    blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
     loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0, quizWon: 0, giftIn: 0, lastNightBye: null,   // quiz prizes and a note pressed on you (round 93); principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
@@ -799,6 +800,10 @@ function _rand() {
 
 function _flag(f) { return !!G.flags[f]; }
 function _setFlag(f) { G.flags[f] = true; }
+// THE SECOND WALLET is out: the opening's chain is live again in the expat stage (2026-10-21)
+function _walletHunt() { return !!(G && G.flags && G.flags.walletLost && !G.flags.hasWallet); }
+// what the recovered wallet gives back — the opening's ฿500, or what the second wake took
+function _walletCash() { return G && G.walletHeld != null ? G.walletHeld : WALLET_CASH; }
 
 // ── Named predicates for the questions the code keeps asking ────────────────
 // Class L (docs/persona-findings-systemic.md §3.4) is the right question asked
@@ -1465,7 +1470,7 @@ function _chargeRent(rough) {
   // to Naklua (Lionel, round 36). The desk runs the card before it runs you out.
   if ((G.bank || 0) >= _hotelRate(G.hotel)) {
     G.bank -= _hotelRate(G.hotel); _monthRoom(_hotelRate(G.hotel));
-    _say(`(Light pockets; the desk runs your card instead. ฿${_num(_hotelRate(G.hotel))}, the ` +
+    _say(`(Light pockets; ${typeof _walletHunt === "function" && _walletHunt() ? "the desk takes a transfer from the app instead — the card went with the wallet" : "the desk runs your card instead"}. ฿${_num(_hotelRate(G.hotel))}, the ` +
       `${_HOTELS[G.hotel].name}, off the account — ฿${_num(G.bank)} in the bank.)`, "dim");
     return;
   }
@@ -2788,8 +2793,8 @@ function _deliver(npcId, d, full, asNew) {
     // article-aware: "your wallet" must not become "the your wallet"
     _say(`(You now have ${/^(your|the|a|an)\b/i.test(ITEMS[d.gives].name) ? "" : "the "}${ITEMS[d.gives].name}.)`, "dim");
     if (d.gives === "wallet") {
-      G.money += WALLET_CASH; G.walletLedger = true;
-      _say(`(Most of the cash is still in it — ฿${_num(WALLET_CASH)} back in play.)`, "dim");
+      const _wc = _walletCash(); G.money += _wc; G.walletLedger = true; G.walletLedgerN = _wc;
+      _say(_wc > 0 ? `(Most of the cash is still in it — ฿${_num(_wc)} back in play.)` : "(The cash is gone; the cards and the key card are what came back.)", "dim");
     }
   }
   const st = _npcState(npcId);

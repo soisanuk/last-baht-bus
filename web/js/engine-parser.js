@@ -1213,7 +1213,7 @@ function _doGo(dirWord) {
   }
   // …and once the wallet is back, the office is Oy's again: the door stayed open for good after
   // the first song, with nothing left behind it for you (Mario, round 58, after Declan)
-  if (to === "oy_office" && _flag("act1Done")) {
+  if (to === "oy_office" && _flag("act1Done") && !_walletHunt()) {   // the second wallet is in that safe again (2026-10-21)
     _say(_pickVary([
       "One of the security men is already in the doorway before you reach it, arms folded, pleasant. \"Finish, na. Mamasan office.\" The ห้ามเข้า sign has its old meaning back.",
       "The ห้ามเข้า door is shut, and a man in a black polo is leaning on it with the air of somebody who will be leaning on it all night. He shakes his head once. You had your song.",
@@ -1929,9 +1929,9 @@ function _doSafe(num) {
       "lucky nine. A pause. A clunk that sounds like forgiveness. The safe swings open.");
     G.itemLoc.wallet = "inventory";
     _setFlag("hasWallet");
-    G.money += WALLET_CASH; G.walletLedger = true;
-    _say(`(You take your wallet. Most of the cash is still in it — ฿${_num(WALLET_CASH)} back in ` +
-      "play — and there's a note inside, worth reading.)", "dim");
+    const _wc = _walletCash(); G.money += _wc; G.walletLedger = true; G.walletLedgerN = _wc;
+    _say(_wc > 0 ? `(You take your wallet. Most of the cash is still in it — ฿${_num(_wc)} back in ` +
+      "play — and there's a note inside, worth reading.)" : "(You take your wallet. The cash is gone, the cards are not — and there's a note inside, worth reading.)", "dim");
   } else {
     G.safeTries++;
     if (G.safeTries >= 3) {
@@ -13411,9 +13411,12 @@ function _atmCap() {
 }
 function _acctNote() { return (G.acctUntil || 0) > G.day ? ` (Halved while the bank reviews the account — ${G.acctUntil - G.day} more day${G.acctUntil - G.day === 1 ? "" : "s"}. Your accountant rang about it.)` : ""; }
 function _doWithdrawInner(arg) {
-  if (!_flag("hasWallet")) {
-    _say("Your bank card was in the wallet — and the wallet is the whole problem. " +
-      "No card, no cash. Solve that first.");
+  if (!_flag("hasWallet") && !_flag("walletCard")) {
+    _say(_walletHunt()
+      ? "Your card went with the wallet, and the machine does not know your face. " +
+        `The bank's replacement is ${Math.max(0, WALLET_CARD_DAYS - (G.day - (G.walletLostDay || G.day)))} days off; till then Nira lends, the kid at the Old Market cashes the account without a card (CASH <amount>), or the wallet comes back.`
+      : "Your bank card was in the wallet — and the wallet is the whole problem. " +
+        "No card, no cash. Solve that first.");
     return;
   }
   if (!_room().atm) {
@@ -14749,7 +14752,7 @@ const _HELP_HEAD = "The point of it all: สนุก (“sanuk” — fun) is t
 const _HELP_TAPS = "Highlighted words in the story are tappable: tap for the quick menu, PRESS AND HOLD (or right-click with a mouse) for the full one.";
 function _helpFirstPage() {
   const soi6 = G.mode === "soi6";
-  const opening = !_flag("act1Done");
+  const opening = !_flag("act1Done") || _walletHunt();   // the second wallet is the opening again (2026-10-21)
   const L = [_HELP_HEAD, ""];
   if (opening) {
     L.push("Tonight: get the wallet back, get home. What you need, and nothing you don't:");
@@ -19133,10 +19136,10 @@ function _soi6Setup() {
 function _soi6Opening() {
   _say("Soi 6 · a Pattaya misadventure · Soi Sanuk universe", "dim");
   _say("═══════════════════════════════════", "dim");
-  _say("One week in Pattaya, and you've picked your street and planted your flag: SOI 6 — the loudest " +
-    "three hundred metres in Thailand — with your room over the Queen Vic Inn right in the thick of it " +
-    "(฿" + _num(_HOTELS.queenvic.rate) + " a night, settled each morning). You're not leaving the soi " +
-    "this trip; the rest of the city keeps for next time.");   // the room's price, said before the first bill (Ron, round 82)
+  _say("Tan's car stops at the top of SOI 6 — the loudest three hundred metres in Thailand — and that is where " +
+    "he leaves you: a room over the Queen Vic Inn right in the thick of it (฿" + _num(_HOTELS.queenvic.rate) +
+    " a night, settled each morning), a week of nights, and the rest of the city somewhere past the end of the " +
+    "street, where it can keep. \"This soi,\" he says through the window, \"is enough town for one week.\"");   // where Tan dropped you, not a rule you set yourself (Mario, 2026-10-21); the room's price before the first bill (Ron, round 82)
   _say(_fmt("฿{bank} for the week sits in the bank. ฿{pocket} is in your pocket — the rest " +
     "comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.",
     { bank: _num(SOI6_BANK), pocket: _num(SOI6_POCKET),

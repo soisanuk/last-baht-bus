@@ -88,6 +88,13 @@ const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
 const ROUGH_WAKE_CAP = 20000; // most a rough wake can take off you — a pocket, not an estate
 const CHAM_GIFT = 3000;  // the "gift" a man gives a girl who never does this (the chameleon economy)
 const WALLET_CASH = 500; // what's left in the recovered wallet — TWO recovery paths
+// THE SECOND WALLET (Mario, 2026-10-21): the opening's chain, replayed once a life as an EXPAT blackout event —
+// a rough blackout wake in the expat stage rolls the wallet gone by the count of blackouts (half the first time,
+// certain by the third), the clue flags clear and the same people answer the same questions; the stake is NO CARD
+// (the machine refuses, Nira and Nont are the lifelines) until the wallet is back or the bank's replacement card
+// arrives after WALLET_CARD_DAYS. Never a race, never a reset: act1Done stays set — it means the sandbox is open.
+const WALLET_LOST_ODDS = [0.5, 0.75, 1];
+const WALLET_CARD_DAYS = 7;
                          // (Oy hands it back in _deliver; you crack the safe in _doSafe),
                          // each printing the number, so it must be one constant
 const SOI6_POCKET = 1000, SOI6_BANK = 100000; // the challenge week's stake — _soi6Setup
@@ -5976,10 +5983,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Notty's.\" Candy looks pleased with herself, which she does not often allow. \"You went. And Rose let you sit — I know, because if she didn't you would not be standing here asking me nicely.\"",
         short: "\"You went to Rose's. Good. She let you sit.\"" },
       // the town can say what just happened (Fintan, round 60)
-      { topic: "mot", req: ["act1Done"],
+      { topic: "mot", req: ["act1Done"], when: (st, G) => !(typeof _walletHunt === "function" && _walletHunt()),   // not while the second wallet is out (2026-10-21)
         text: "\"Mot?\" Candy snorts, not unkindly. \"You have your wallet, na — so for once he sell to the right person. Leave him be. He is a boy with no mother in this town and too many aunties.\"",
         short: "\"You have your wallet. Leave the boy be.\"" },
-      { topic: "oy|madam oy", req: ["act1Done"],
+      { topic: "oy|madam oy", req: ["act1Done"], when: (st, G) => !(typeof _walletHunt === "function" && _walletHunt()),
         text: "\"Oy give it back to you.\" Candy says it as a fact she already knew, because she did. \"She like manners more than money — that is the whole secret of Oy, and nobody believe me when I tell them.\"",
         short: "\"Oy gave it back. She likes manners more than money.\"" },
       { topic: "tan",
@@ -6026,7 +6033,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Ploy — her cashier, the cage at Rainbow. Ploy stand there six hours hungry every " +
           "night. Feed her, and doors open.\"", sets: ["somTamAccepted"], gives: "som_tam",
         short: "\"Oy said no, of course. The door into her world is som tam — give it to Ploy in the cage, and doors open.\"" },
-      { notFlags: ["knowWasHere", "act1Done"], th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",   // not to a man who owns a bar (Mick, round 57)
+      { notFlags: ["knowWasHere"], when: (st, G) => !_flag("act1Done") || (typeof _walletHunt === "function" && _walletHunt()), th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",   // not to a man who owns a bar (Mick, round 57)
         text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"",
         short: "\"Sit down. Talk to Candy — everybody's problems come to Candy.\"" },
       { text: "\"Back again.\" Candy counts the room without moving her eyes. \"You know the house now \u2014 sit, drink, don't be boring.\"",
@@ -6444,7 +6451,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Hello handsome! You play pool, or you just hiding from your night?\"" },
       // the re-readable gist once the story has moved past her greeting (playtest
       // 2026-08-22: ASK LEK ABOUT MOT / WALLET fell to "Hello handsome")
-      { topic: "office", notFlags: ["act1Done"],   // the Act One hint, not a regular's topic (Bridget, round 76)
+      { topic: "office", when: (st, G) => !_flag("act1Done") || (typeof _walletHunt === "function" && _walletHunt()),   // the Act One hint, not a regular's topic (Bridget, round 76); live again while the second wallet is out
         text: "\"Oy's office? Behind her bar, up the stair. Locks itself when the music is on — I " +
           "don't know the trick, I only hear about it.\" She chalks her cue. \"The girls in the " +
           "cage at Rainbow know that door better than Oy does. The cashier sees everything.\"",
@@ -6612,7 +6619,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "back. \"They are half a size small. I will wear them anyway. Don't say anything.\"",
         short: "\"Nobody buy me shoes before. A shoe is for walking somewhere.\"" },
       // round 76: once the wallet is back, Oy's office is a story, not a hint
-      { topic: "office", req: ["act1Done"], text: "\"Oy's office?\" She laughs into her cue. \"You get the wallet, so now it is only a door again. Security stand there now, very serious. I don't go up those stairs, na.\"", short: "\"Only a door again now. Security stand there.\"" },
+      { topic: "office", req: ["act1Done"], when: (st, G) => !(typeof _walletHunt === "function" && _walletHunt()), text: "\"Oy's office?\" She laughs into her cue. \"You get the wallet, so now it is only a door again. Security stand there now, very serious. I don't go up those stairs, na.\"", short: "\"Only a door again now. Security stand there.\"" },
     ],
   },
 
@@ -9976,6 +9983,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // The chip appears when the ≥3-fragments node below unlocks, so the topic
       // surfacing at all IS the telegraph that Tan is ready to say the real thing.
       // report-back channels (Anand, round 59): the sender could not hear how it went
+      { topic: "wallet|my wallet|the wallet", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),   // THE SECOND WALLET: the man who said most men lose it twice (2026-10-21)
+        text: "\"Twice.\" Tan does not smile, which is the kindest thing he could do with his face. \"I told you most men lose it twice. The second time is the one that teaches, so — learn. Nobody runs tonight: you live here, your room is your room, the desk knows your face. The card is the problem, not the bed.\" He counts it on his fingers, leaning on the parked car. \"The machine is dead to you. Nira lends. The kid at the Old Market moves money without a card. And a wallet in this town goes where it went the first time — ask the woman who misses nothing, and bring her something.\"",
+        short: "\"Twice. The second time teaches. The card is the problem, not the bed — Nira, the kid, and the woman who misses nothing.\"" },
       { topic: "wallet", req: ["act1Done"],
         text: "\"The wallet.\" Tan glances at your pocket as if checking a job was done properly. \"Mostly all there, I think. Most men lose it twice in this town. The first time is the wallet. The second time is the one that teaches.\"",
         short: "\"Mostly all there. The second time is the one that teaches.\"" },
@@ -11884,7 +11894,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "debts|debt|the debts|bought debts|new money|the whisper", req: ["heardWhispers"],
         text: "\"New money, not an old face.\" Oy repeats it to herself the way you'd repeat a {{phone}} number you intend to keep. \"Somebody buying my girls' paper quietly. So now I buy it first, louder.\" A glance at you. \"You carried it properly. That is rarer than the money.\"",
         short: "\"New money. Now I buy the paper first, louder.\"" },
-      { topic: "safe|your safe|the safe", req: ["act1Done"],
+      { topic: "safe|your safe|the safe", req: ["act1Done"], when: (st, G) => !(typeof _walletHunt === "function" && _walletHunt()),
         text: "\"My safe is my business, farang.\" Almost a smile. \"Your wallet came out of it once. Once is a great deal, from that safe. Don't make it a habit.\"",
         short: "\"Your wallet came out of it once. Once is a great deal.\"" },
       // report-back channels (Anand, round 59): the sender could not hear how it went
@@ -14793,6 +14803,13 @@ const QUESTS = {
     at: "bee",              // whose/where the next move is — HINT/journal resolve the live location
     doneFlag: "sangsomDelivered",
     reward: { money: 200, happy: 3 },
+  },
+  wallet_again: {
+    name: "The Second Wallet",
+    giver: "tan",
+    desc: "The wallet went with the night — cards, key card, the lot — and the machine on the street is no use without it. " +
+      "The town knows where things go: READ what is still in your pockets, then ask the women who miss nothing (HINT nudges).",
+    deps: [], reqFlags: ["walletLost"], at: "candy", doneFlag: "walletBack", reward: { money: 0, happy: 4 }, noNudge: true,   // booked by the event itself, never offered on a talk (it was Tan's first job on any night)
   },
   league: {
     name: "King of the Killer Table",
@@ -21350,6 +21367,11 @@ NPCS.waen.dialogue.push({ topic: "online|platform|online teaching|teach online|o
 
 // THE SCHOOL (the expat economy, 2026-10-20): Jerry's school wants natives — a proper contract, the permit with the
 // first payday, and weekday mornings, which is the opposite presence trade from the bar. A door in his own voice.
+// THE SECOND WALLET — Tar counted money for a bank for six years, so she is the one mouth in town that knows what a lost card actually costs (2026-10-21)
+NPCS.tar.dialogue.push(   // after her own lines (the written floor is sliced by count), on keys her own set does not carry
+  { topic: "card|my card|bank card|the card|replacement|new card|lost card|atm|the machine", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),
+    text: "\"Lost the card?\" Tar's voice drops into the register of a counter with a queue behind you. \"Then the machine is a wall until the bank sends a new one — a week, if the branch on Beach Road has your passport number, and they do, because you drew on it. Nobody can hurry that; I tried, six years, for nicer people than you.\" A small smile. \"Till then the app still sends. It just cannot give you notes. The kid at the Old Market can. Or your wallet comes back — in this town they sometimes do, if you ask the right woman.\"",
+    short: "\"A week for the new card. The app sends, the machine is a wall; the kid at the Old Market, or the wallet comes back.\"" });
 NPCS.david.dialogue.unshift(
   { topic: "pay|the pay|payday|salary|contract|permit|the permit|thirty-five|hours|mornings|lates|late",
     when: (st, G) => G.stage === "expat" && !!G.jobOffer && G.jobOffer.kind === "school" || (G.stage === "expat" && !!G.job && G.job.kind === "school"),
