@@ -5945,6 +5945,7 @@ const _JOINER_LINES = [
 ];
 // any woman who goes up to your room at the Sabai, once a night — the clerk charges the guest, not the trade
 function _joinerFee(night = G.day) {   // the NIGHT she came up: a fee charged at the next wake stamped the new day and let that night's guest in free (Ossie, round 70)
+  if (G.hotel === "condo" && G.condo) { G.condo.guestPending = true; return; }   // no fee — the office has a word in the morning, once (2026-10-20)
   if (!_flag("act1Done") || G.stage === "act1" || G.hotel !== "sabai") return;
   if (G.joinerDay === night) return;
   if (G.money < JOINER_FEE) {   // broke, it goes on the book like the room does — not waved through (Gordie, round 72)
@@ -6556,6 +6557,7 @@ function _endNight(reason) {
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   if (typeof _careTick === "function") _careTick();   // the fines she waived have a number, and a morning she says it
   if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
+  if (typeof _condoWake === "function") _condoWake();     // the office's word about last night's guest
   if (typeof _jobNight === "function") _jobNight();       // the shift just stood, the week's count, the paper, the incident
   if (typeof _incomeTick === "function") _incomeTick();   // the payday lands before the ledger, so the ledger names it
   // THE LEDGER COMES AFTER EVERYTHING THE WAKE MOVES (Ossie, round 70: the till's shortfall came out
@@ -7011,12 +7013,13 @@ function _incomeAmount() {
   if (om.kind === "retainer" && amt) amt = Math.round(amt * (1 - Math.min(0.6, RETAINER_ROUGH * (m.rough || 0))) / 100) * 100;   // the client noticed the mornings
   return amt;
 }
+function _roofMonth() { return G.hotel === "condo" ? CONDO_RENT + CONDO_UTIL : _hotelRate(G.hotel) * INCOME_DAYS; }   // what the roof costs a month, whichever roof
 function _nightsAWeek(income) {   // the gauge: what is left after the roof, in nights, per week
-  const roof = _hotelRate(G.hotel) * INCOME_DAYS;
+  const roof = _roofMonth();
   return Math.max(0, Math.round(((income - roof) / NIGHT_COST) / (INCOME_DAYS / 7) * 10) / 10);
 }
 function _weeksLeft() {   // a pot's countdown, at last month's rate (or the gauge's unit until there is one)
-  const m = G.month || {}, perDay = (m.spent > 0 && m.days > 0) ? m.spent / m.days : NIGHT_COST + _hotelRate(G.hotel);
+  const m = G.month || {}, perDay = (m.spent > 0 && m.days > 0) ? m.spent / m.days + (G.hotel === "condo" ? _roofMonth() / INCOME_DAYS : 0) : NIGHT_COST + _roofMonth() / INCOME_DAYS;
   const wealth = Math.max(0, (G.money || 0) + (G.bank || 0));
   return perDay > 0 ? Math.floor(wealth / perDay / 7) : 99;
 }
@@ -7139,6 +7142,51 @@ function _jobPay() {   // the month's share, on the payday: what the nights earn
   const base = j.corp ? MGR_PERMIT_PAY : MGR_CASH_PAY;
   return Math.round(base * frac / 100) * 100;
 }
+// ── THE CONDO (Mario, 2026-10-20) — see CONDO_RENT in world.js for the doctrine ──
+function _doRentCondo() {
+  if (G.stage !== "expat") { _say("Rooms by the month are for residents. A holiday has a hotel, and a flight."); return; }
+  if (G.hotel === "condo") { _say(`You rent it already — the ninth floor, ฿${_num(CONDO_RENT)} and the electric on the payday. (MOVE OUT to give it back.)`); return; }
+  if (G.room !== "pratumnak_soi5") { _say("The condo towers are up on Pratumnak Soi 5 — the office on the ground floor of the one with the intercom does the paper. (TRAVEL there.)"); return; }
+  const dep = CONDO_RENT * CONDO_DEPOSIT_MONTHS, advance = CONDO_RENT, need = dep + advance;
+  const have = (G.money || 0) + (G.bank || 0);
+  if (have < need) { _say(`The woman in the office slides the sheet across: ฿${_num(dep)} deposit — two months — and ฿${_num(advance)} the first month in advance. ฿${_num(need)}, and you have ฿${_num(have)} between the pocket and the account. She does not say anything unkind. She does not have to.`); return; }
+  let fromBank = Math.min(G.bank || 0, need); G.bank = (G.bank || 0) - fromBank; const fromPocket = need - fromBank; G.money -= fromPocket;
+  G.condoPaid = (G.condoPaid || 0) + need;
+  G.condo = { since: G.day, deposit: dep, short: 0, guestsTold: false, rentDay: G.payDay != null ? G.payDay : G.day };
+  G.hotel = "condo"; G.room = "condo_room"; G.hotelDebt = 0;
+  _say(`A lease in two languages, a copy of your passport page, ฿${_num(need)} across the desk — two months' deposit you will see again only if the office says so, and the first month — and a key card for the ninth floor. ` +
+    `The rent is ฿${_num(CONDO_RENT)} a month and the electric about ฿${_num(CONDO_UTIL)}, both on the payday. No desk, no folio under the door, no joiner fee: the juristic office has a sign about overnight guests, and a sign is a sign. ` +
+    `A kitchen (COOK), a balcony, the bay. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`, "win");
+  _describeRoom(true);
+}
+function _doMoveOut() {
+  if (G.hotel !== "condo" || !G.condo) { _say("You have no lease to give back. The hotel takes a key card, not notice."); return; }
+  const c = G.condo, kept = G.day - c.since < CONDO_LEASE;
+  if (!kept) { G.bank = (G.bank || 0) + c.deposit; _bankIn(0); }
+  G.condo = null; G.hotel = "sabai"; G.room = _hotelRoomId();
+  _say(kept ? `You give the key card back inside the lease, and the office keeps the ฿${_num(c.deposit)} deposit the way the lease said it would, with a smile. Your bag makes its own way to the Sabai Palms.`
+    : `The lease ran its term. The office counts the tiles, finds nothing, and the ฿${_num(c.deposit)} deposit lands back in the account a week later than it said. Your bag makes its own way to the Sabai Palms.`);
+}
+function _condoMonth() {   // on the payday: the rent and the electric; short twice and the bag is at the Sabai, the deposit the landlord's
+  if (G.hotel !== "condo" || !G.condo) return "";
+  const due = CONDO_RENT + CONDO_UTIL; const have = (G.money || 0) + (G.bank || 0);
+  if (have >= due) {
+    const fb = Math.min(G.bank || 0, due); G.bank = (G.bank || 0) - fb; G.money -= (due - fb); G.condoPaid = (G.condoPaid || 0) + due;
+    if (G.condo.short) G.condo.short = 0;
+    return ` The condo: ฿${_num(CONDO_RENT)} rent and ฿${_num(CONDO_UTIL)} electric.`;
+  }
+  G.condo.short = (G.condo.short || 0) + 1;
+  if (G.condo.short >= CONDO_GRACE) {
+    const c = G.condo; G.condo = null; G.hotel = "sabai"; G.room = _hotelRoomId();
+    return ` The condo: ฿${_num(due)} due and not there, the second month running. The office changes the lock while you are out, keeps the ฿${_num(c.deposit)} deposit against the two months, and your bag makes its own way to the Sabai Palms. Nobody is unkind about it.`;
+  }
+  return ` The condo: ฿${_num(due)} due and not there. The office makes a note — one month. A second and the lock changes.`;
+}
+function _condoWake() {   // the morning after a guest: the office's word, once
+  if (G.hotel !== "condo" || !G.condo || !G.condo.guestPending) return;
+  G.condo.guestPending = false;
+  if (!G.condo.guestsTold) { G.condo.guestsTold = true; _say("(The woman in the juristic office looks up as you pass, and down again at her book. There is a sign about overnight guests. It has been read.)", "dim"); }
+}
 function _incomeTick() {
   if (!_incomeDue()) return;
   const om = _originMoney(G.player && G.player.origin), m = (G.month = G.month || { spent: 0, rent: 0, rough: 0 });
@@ -7167,7 +7215,8 @@ function _incomeTick() {
     const short = om.kind === "retainer" && amt < om.income ? ` (short — the client counted ${m.rough} rough morning${m.rough === 1 ? "" : "s"})` : "";
     lines.push(`The month: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room; ${om.what} landed, ฿${_num(amt)}${short}. After the roof that is about ${_nightsAWeek(amt)} nights a week.`);
   }
-  if (jobLine || paperLine) lines[0] += jobLine + paperLine;
+  const condoLine = _condoMonth();
+  if (jobLine || paperLine || condoLine) lines[0] += jobLine + paperLine + condoLine;
   G.monthLine = lines;
   G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
   if (G.job && G.job.roughSeen) G.job.roughSeen = 0;   // the school counts the new month's mornings from zero
@@ -7180,9 +7229,11 @@ function _doMoney() {
   { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_barName(G.job.room)}` : ""}${p === "tourist" ? " — no bank book, the foreign card and its fee" : p === "longstay" ? " — a bank book" : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
     if (G.stringer) _say(`Stringer for Last Orders: ฿${_num(OWL_LEAD_PAY)} a paragraph, ${OWL_LEADS_WEEK} a week, for a thing you read that Mort had not — ${_stringerOwed().length} unpaid.`, "dim");
     if (G.job) _say(G.job.kind === "teach" ? `Job: online English, ฿${_num(_jobPay())} this month at the mornings you have kept.` : G.job.kind === "school" ? `Job: the school — ฿${_num(SCHOOL_PAY)} a month through the books, eight o'clock Monday to Friday; ${G.job.lates || 0} of ${SCHOOL_LATES} late mornings this month${G.job.paidOnce ? "" : "; the permit with the first payday"}.` : `Job: manager at ${_barName(G.job.room)} — ${G.job.nights} nights a week, ${G.job.stood || 0} stood this month, ${G.job.corp ? `฿${_num(MGR_PERMIT_PAY)} through the books` : `฿${_num(MGR_CASH_PAY)} in an envelope`}${G.job.corp && _paper() !== "permit" ? `; the paper after ${MGR_PERMIT_AFTER} nights (${G.job.stood || 0} so far)` : ""}.`, "dim"); }
-  if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; the room is ฿${_num(_hotelRate(G.hotel))} a night. At this rate, about ${_weeksLeft()} weeks.`);
-  else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; the room is ฿${_num(_hotelRate(G.hotel))} a night. About ${_weeksLeft()} weeks at this rate.`);
-  else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. The room is ฿${_num(_hotelRate(G.hotel))} a night; after the roof that is about ${_nightsAWeek(amt)} nights a week. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
+  const roof = G.hotel === "condo" ? `the condo is ฿${_num(CONDO_RENT + CONDO_UTIL)} a month with the electric` : `the room is ฿${_num(_hotelRate(G.hotel))} a night`;
+  if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; ${roof}. At this rate, about ${_weeksLeft()} weeks.`);
+  else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; ${roof}. About ${_weeksLeft()} weeks at this rate.`);
+  else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. ${roof.replace(/^./, c => c.toUpperCase())}; after the roof that is about ${_nightsAWeek(amt)} nights a week. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
+  if (G.hotel === "condo" && G.condo) _say(`(The condo: ${G.condo.short ? `${G.condo.short} month short — one more and the lock changes` : "paid up"}; the ฿${_num(G.condo.deposit)} deposit is the office's until the lease has run ${CONDO_LEASE} days${G.day - G.condo.since >= CONDO_LEASE ? " — which it has" : ""}.)`, "dim");
   _say(`(This month so far: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room.)`, "dim");
 }
 function _goExpat(opts) {

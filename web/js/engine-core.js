@@ -362,6 +362,7 @@ function newGame() {
     questDoneDay: {},    // quest id → the day it completed (the follow-ups a month later: Orathai closes, the police read the paper)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
     bankNotes: [],       // what the arrivals were, for the ledger's sentence (the pension, a reward)
+    condo: null,         // { since, deposit, short, guestsTold } while you rent the Pratumnak condo (G.hotel === "condo")
     paper: null,         // tourist / longstay / permit (the expat stage; null on a holiday) — see PAPER_COST in world.js
     paperUntil: null,    // a lost permit's paper lasts to this day, then falls back to the origin's
     paperFlag: null,     // the day an incident read the wrong paper (a company bar remembers PAPER_FLAG_DAYS)
@@ -1419,6 +1420,7 @@ const _HOTELS = {
   queenvic:  { room: "qv_room",        name: "Queen Vic Inn",     rate: 700,  expatRate: 400 },
   areca:     { room: "areca_room",     name: "Areca Lodge",       rate: 900,  expatRate: 520, pool: true }, // "a window over the garden pool"
   metropole: { room: "metropole_room", name: "LK Metropole",      rate: 1300, expatRate: 730, pool: true },
+  condo:     { room: "condo_room",     name: "the condo on Pratumnak", rate: 0, expatRate: 0, pool: true, monthly: true },   // by the month, on the payday's clock (2026-10-20) — never a desk, never on the ladder
 };
 const _HOTEL_DOWNGRADE = ["metropole", "areca", "queenvic", "sabai"];
 const _DEBT_CAP = 2000;
@@ -1436,6 +1438,7 @@ function _hotelRate(k) {
 // crates in the Buakhao market forecourt).
 function _chargeRent(rough) {
   if (!_flag("act1Done") || G.stage === "act1") return;
+  if (G.hotel === "condo") return;   // a roof by the month bills on the payday (_condoMonth), not under the door
   if (G.hotelDebt && G.money >= G.hotelDebt + _hotelRate(G.hotel)) {
     G.money -= G.hotelDebt;
     _say(`(You settle the ฿${_num(G.hotelDebt)} on the book on your way past the desk. ` +

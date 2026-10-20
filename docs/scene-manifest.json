@@ -1,8 +1,8 @@
 {
-  "generated": "2026-10-13",
+  "generated": "2026-10-20",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 253,
+    "rooms": 254,
     "regions": 15,
     "byKind": {
       "beach": 14,
@@ -10,7 +10,7 @@
       "massage": 19,
       "beer": 58,
       "mall": 1,
-      "interior": 4,
+      "interior": 5,
       "motel": 1,
       "gogo": 11,
       "pub": 3,
@@ -208,6 +208,7 @@
       "name": "Pratumnak",
       "roomIds": [
         "buddha_hill",
+        "condo_room",
         "doghouse",
         "dongtan_rd_n",
         "eastern_seaboard",
@@ -1976,6 +1977,19 @@
       "darkLight": "the whole curve of the bay glittering far below, Walking Street neon-pink at the south end",
       "people": [],
       "desc": "The big golden Buddha watches the bay with infinite patience. Below, the whole curve of Pattaya glitters — Walking Street burning neon-pink at the south end. Someone has left an offering of marigolds and a small bottle of red Fanta. It is the one quiet place for miles, and the view is the whole reason to climb. (WATCH THE BAY.)"
+    },
+    {
+      "id": "condo_room",
+      "name": "Your Condo — Pratumnak",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "interior",
+      "dark": false,
+      "indoors": true,
+      "people": [],
+      "desc": "A studio on the ninth floor of a tower on Pratumnak Soi 5 — white tiles, an air-con unit that actually works, a two-ring hob and a fridge with your name on nothing in it, and a balcony the width of a chair with the whole bay beyond it, Jomtien's lights strung along the far side. The lift hums. Down on the ground floor the juristic office keeps a list of who comes in after midnight, and consults it in the morning."
     },
     {
       "id": "doghouse",

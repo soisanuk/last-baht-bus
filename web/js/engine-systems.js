@@ -12136,6 +12136,16 @@ function _dishOrder(lower) {
   return false;
 }
 function _doEat(arg) {
+  // THE CONDO'S KITCHEN (2026-10-20): a plate for CONDO_MEAL that no stall would charge you less for
+  if (G.room === "condo_room" && (!arg || /\b(cook|noodles?|eggs?|rice|something|dinner|breakfast|food|a plate)\b/.test(arg))) {   // being in the room is being the tenant
+    if (G.money < CONDO_MEAL && (G.bank || 0) < CONDO_MEAL) { _say("The fridge has the eggs and the rice has the rice, but the gas is out and the shop downstairs wants sixty baht for a refill you cannot find."); return; }
+    if (G.money >= CONDO_MEAL) G.money -= CONDO_MEAL; else G.bank -= CONDO_MEAL;
+    G.hunger = Math.max(0, G.hunger - 55); G.thirst = Math.max(0, G.thirst - 20);
+    _say(_pickVary([`Eggs, rice, a fistful of the dried chilli somebody left in the cupboard. Twenty minutes, two rings, and a plate that cost ฿${_num(CONDO_MEAL)} and would have been ฿${_num(CONDO_MEAL * 2)} on the street with a stool thrown in.`,
+      `Instant noodles upgraded with an egg and the half papaya, eaten on the balcony with the bay for a television. ฿${_num(CONDO_MEAL)}, and nobody to tip.`,
+      `The rice cooker does its one job; you do the rest with the wok somebody left. It is not a stall's plate. It is yours, which is a different flavour. (฿${_num(CONDO_MEAL)}.)`], "condomeal"));
+    return;
+  }
   // "EAT WITH TAN" is the other natural phrasing of his standing food invite —
   // route it to the same scene rather than the you're-not-carrying-that shrug.
   if (arg && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _tanFood(); return; }

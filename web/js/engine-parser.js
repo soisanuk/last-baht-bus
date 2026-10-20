@@ -1166,6 +1166,12 @@ function _doGo(dirWord) {
         : "You pick your moment and duck in under the awning, shedding water like a soi dog.", "dim");
     }
   }
+  // the condo's lift is a tenant's: the office on the ground floor does the paper (2026-10-20)
+  if (to === "condo_room" && G.hotel !== "condo") {
+    _say(G.stage === "expat" ? "The intercom answers in Thai, then in English when it hears you: rooms are by the month, and the month starts at the office on the ground floor. (RENT A CONDO.)"
+      : "The intercom answers in Thai, then in English: rooms by the month, for residents. A holiday has a hotel.");
+    return;
+  }
   // hotel rooms open for their guests only
   const _hotelOf = Object.keys(_HOTELS).find(k => _HOTELS[k].room === to);
   if (_hotelOf && _hotelOf !== G.hotel && _flag("hasWallet")) {
@@ -2300,6 +2306,13 @@ const _READ_NOUNS = {
   table: ["good table", "best table"],
   notebook: ["spiral notebook", "biro"],
   hatch: ["serving hatch", "ply", "plywood"],
+  // the condo and its tower (2026-10-20)
+  tower: ["condo tower", "the tower", "intercom"],
+  condo: ["condos", "condo walls"],
+  kitchen: ["hob", "two-ring hob", "rice cooker", "wok"],
+  office: ["juristic office", "the office", "juristic"],
+  fridge: ["the fridge"],
+  lift: ["the lift", "elevator"],
 };
 // A reads value is a plain string, or an ARRAY of gated nodes {req, notFlags,
 // text, sets?, reveal?} resolved first-match like dialogue — so a close look can
@@ -13274,7 +13287,7 @@ function _doCheckout() {
       return;
     }
   }
-  const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
+  const others = Object.keys(_HOTELS).filter(k => k !== G.hotel && !_HOTELS[k].monthly);
   G.pendingChoice = "checkout";
   _say(`You set the key card on the desk at the ${_HOTELS[G.hotel].name}. The ` +
     "clerk produces the folio with the speed of a man who has seen farang " +
@@ -14696,6 +14709,7 @@ THE WHOLE CARD (bare HELP is the short one):
   ASK <who> ABOUT <topic> AGAIN (you get the gist on a repeat — “again” asks for the whole story back)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   DEBT (every ledger with your name on it: Nira, the hotel book, the old man's note)
+  A roof (a resident's): RENT A CONDO on Pratumnak Soi 5 (by the month, on the payday — two months' deposit, a kitchen (COOK), no joiner fee, no desk; short twice and the lock changes) · MOVE OUT
   A living (a resident's): MONEY (what you live on) · TEACH ONLINE (from your room — grey, the mornings pay for it) · ASK the mamasan or the manager ABOUT A JOB at a bar whose floor knows you (a beer bar pays cash on nobody's paper; a company bar pays through the books, six nights, and the permit after a month) · ASK JERRY ABOUT THE SCHOOL (a real contract, weekday mornings) · ASK MORT ABOUT A JOB (a hundred baht a paragraph for a thing you read) · TAKE THE JOB · WORK (stand the shift) · QUIT JOB
   Your own bar (once you own one): WORK / MIND (stand behind your own rail tonight) · BOOKS / TAKINGS
     PRICES [cheap|list|up|steep] · TERMS [salary|commission] (your two levers: the board moves the punters, the terms move the girls — both cost you, in different currencies)
@@ -14825,7 +14839,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "see", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "journal", "accept", "abandon", "contact",
-  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "teach online", "take the job", "quit job", "last night", "wait", "again",
+  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "teach online", "take the job", "quit job", "rent a condo", "move out", "cook", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
 
@@ -15380,7 +15394,7 @@ function engineComplete(input) {
   else if (G.pendingChoice === "sellbar") pool = ["yes", "no"];
 
   else if (G.pendingChoice === "checkout") {
-    pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
+    pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel && !_HOTELS[k].monthly)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
   } else if (G.pendingBf) pool = ["short time", "long time", "take her out", "no"];
   else if (G.pendingSoapy) pool = [..._SOAPY_TIERS.map(t => String(t.num)), "star", "super star", "model", "no"];
@@ -16710,7 +16724,7 @@ function _vacationEndPrompt() {
   _say("(MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.)", "dim");
 }
 function _checkoutPrompt() {
-  const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
+  const others = Object.keys(_HOTELS).filter(k => k !== G.hotel && !_HOTELS[k].monthly);
   // With their nightly rates: the live list is priced, and a resume that drops
   // the prices leaves three hotel names and no way to tell them apart (round 17).
   _say("The clerk waits. (" +
@@ -16914,6 +16928,13 @@ function _doCommandInner(input) {
   { const _tx = raw.trim().match(/^(?:take|grab|catch|get|hail|flag|call|order) (?:the |a |an )?(?:taxi|cab|uber|grab|bolt)\b(.*)$/i); if (_tx) raw = "grab" + _tx[1]; }
   { const _tm = raw.trim().match(/^(?:take|grab|catch|get|hail|flag) (?:the |a )?(?:motosai|moto|motorbike taxi|bike taxi|motorbike|tuk ?tuk)\b(.*)$/i); if (_tm) raw = "motosai" + _tm[1]; }
   if (/^tuk ?tuk$/i.test(raw.trim())) raw = "grab";
+  // THE CONDO (2026-10-20): the lease at the office, notice, the kitchen
+  if (/^(?:rent|take|lease|get) (?:a |the )?(?:condo|apartment|flat|room by the month|studio)\b/i.test(raw.trim()) && typeof _doRentCondo === "function") { _doRentCondo(); return; }
+  if (/^(?:move out|give notice|leave the condo|end the lease|hand back the (?:key|condo))$/i.test(raw.trim()) && typeof _doMoveOut === "function") { _doMoveOut(); return; }
+  if (/^cook(?: .*)?$|^make (?:some )?(?:food|dinner|noodles|eggs|breakfast)$/i.test(raw.trim())) {
+    if (G.room === "condo_room") { _doEat("cook"); _tick(); return; }
+    _say(G.hotel === "condo" ? "Your hob is on the ninth floor of a tower on Pratumnak. Here there is a stall, and a stall is quicker." : "Nothing to cook on and nowhere to cook it — a hotel room has a kettle at best. The stalls are the kitchen here. (A condo has a hob.)"); return;
+  }
   // THE JOBS (2026-10-20): a verb each, lean — the offer lapses at dawn, no gate
   if (/^(?:take|accept) (?:the |that |this )?job$|^i'?ll take it$|^take it$/i.test(raw.trim()) && G.jobOffer && typeof _takeJob === "function") { _takeJob(); return; }
   if (/^(?:quit|leave|resign|hand in|give up) (?:the |my )?(?:job|notice|rail)$|^resign$/i.test(raw.trim()) && typeof _quitJob === "function") { _quitJob(); return; }

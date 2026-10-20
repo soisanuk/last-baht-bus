@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 253,
+  "geolocated": 254,
   "patrons": 26,
   "people": 392,
   "portraits": 418,
   "renders": 418,
   "thumbs": 418,
-  "venues": 253
+  "venues": 254
  },
  "frames": [
   "baimon_pic1",
@@ -5725,6 +5725,15 @@
    ],
    "name": "Coconut Bar",
    "region": "Jomtien"
+  },
+  "condo_room": {
+   "estimated": true,
+   "geo": [
+    12.9124,
+    100.8616
+   ],
+   "name": "Your Condo — Pratumnak",
+   "region": "Pratumnak"
   },
   "container_8": {
    "bar": "Venus Bar",

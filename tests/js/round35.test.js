@@ -354,7 +354,7 @@ test("EXAMINE the bar you're standing in is the bar (Stan 20)", () => {
 });
 
 test("HELP's hotel list is the checkout's (Stan 22)", () => {
-  for (const k of Object.keys(_HOTELS)) assert.ok(_HELP.includes("฿" + _HOTELS[k].rate), _HOTELS[k].name + " is listed");
+  for (const k of Object.keys(_HOTELS).filter(k => !_HOTELS[k].monthly)) assert.ok(_HELP.includes("฿" + _HOTELS[k].rate), _HOTELS[k].name + " is listed");
 });
 
 test("SEND to a woman standing next to you says so (Stan 24)", () => {

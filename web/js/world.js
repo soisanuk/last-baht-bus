@@ -133,7 +133,12 @@ const MGR_PERMIT_PAY = 40000, MGR_PERMIT_NIGHTS = 6, MGR_PERMIT_AFTER = 30;   //
 const MGR_INCIDENT_PCT = 4;                       // a stood shift on the wrong paper: the chance the night brings the police (pure hash of bar and day)
 const MGR_STRIKES = 2;                            // short weeks a company bar forgives before the sack; a cash bar docks the envelope instead
 const SCHOOL_PAY = 35000, SCHOOL_LATES = 3;      // the school (Jerry's door): a proper contract, the permit with the first payday, weekday MORNINGS — a rough morning before a school day is a late, and three in a month is the sack
-const OWL_LEAD_PAY = 100, OWL_LEADS_WEEK = 5;    // Mort pays a hundred a paragraph for a fixture you read and he had not; five a week, cash, when you next sit with him
+const OWL_LEAD_PAY = 100, OWL_LEADS_WEEK = 5;
+// ── THE CONDO (Mario, 2026-10-20): a roof by the month — rent and the electric on the payday's clock, two months' deposit
+// and one in advance at the office, the landlord's short fuse (CONDO_GRACE months short and your bag is at the Sabai, the
+// deposit his), no joiner fee (the juristic office has a WORD about overnight guests, and it is only a word), a kitchen
+// (CONDO_MEAL a plate), a pool. Moving out inside the lease forfeits the deposit; after it the office hands it back. ──
+const CONDO_RENT = 9000, CONDO_UTIL = 2000, CONDO_DEPOSIT_MONTHS = 2, CONDO_GRACE = 2, CONDO_LEASE = 180, CONDO_MEAL = 60;    // Mort pays a hundred a paragraph for a fixture you read and he had not; five a week, cash, when you next sit with him
 function _originMoney(id) { return ORIGIN_MONEY[id] || ORIGIN_MONEY_DEFAULT; }
 
 // ── Buying the Stinky: the old man carries the paper ────────────────────────
@@ -1163,9 +1168,35 @@ const ROOMS = {
       "Downhill from here. Your knees register it before you do.",
     ],
     reads: {
+      tower: "A condo tower behind the wall with the intercom: nine floors of balconies, half of them dark, a juristic office on the ground floor with a light on. Rooms by the month, for a resident with a deposit and the right stamp. (RENT A CONDO)",
+      condo: "A condo tower behind the wall with the intercom: nine floors of balconies, half of them dark, a juristic office on the ground floor with a light on. Rooms by the month, for a resident with a deposit and the right stamp. (RENT A CONDO)",
       gap: "Between two condo walls, one gap the width of a doorway, and through it the whole bay: the beach road's string of lights, Walking Street's pink smear, a ship's lights out where the water goes black. The condos paid for the view. The gap is free.",
     },
-    exits: { e: "pratumnak_clubs", w: "pratumnak_soi5_m" },
+    exits: { e: "pratumnak_clubs", w: "pratumnak_soi5_m", in: "condo_room" },
+  },
+  // THE CONDO (2026-10-20): the tower behind one of those walls — a resident's roof by the month
+  condo_room: {
+    name: "Your Condo — Pratumnak",
+    region: "Pratumnak",
+    indoors: true, outlet: true,
+    desc: "A studio on the ninth floor of a tower on Pratumnak Soi 5 — white tiles, an air-con unit that " +
+      "actually works, a two-ring hob and a fridge with your name on nothing in it, and a balcony the width of a " +
+      "chair with the whole bay beyond it, Jomtien's lights strung along the far side. The lift hums. Down on the " +
+      "ground floor the juristic office keeps a list of who comes in after midnight, and consults it in the morning.",
+    lateDesc: ["Four in the morning on the ninth floor: the bay black, a ship's lights out where the water goes, the " +
+      "air-con ticking, and nobody at all to ask what time it is.",
+      "The tower is asleep around you — a door on the floor below, a lift that goes down and does not come back up. " +
+      "The bay has the only lights left on.",
+      "The small hours on the balcony: the hill road's one streetlight, a motorbike going down it too fast, and the fridge humming behind you like a thing that is paid for."],
+    reads: {
+      kitchen: "A two-ring hob, a wok somebody left, a rice cooker that is the most reliable appliance in the building. Instant noodles, eggs, a bag of rice — a plate for sixty baht that no stall would charge you less for. (COOK)",
+      balcony: "A chair's width of balcony, a plastic chair to fill it, and the bay: Jomtien's lights, Walking Street's pink smear, a ship out where the water goes black. The best thing you own, and you rent it.",
+      office: "The juristic office on the ground floor: a desk, a woman who keeps the building's book, and a sign in two languages about overnight guests that everybody in the tower has read once and ignored since.",
+      fridge: "Water, beer, half a papaya, the eggs. The hum of a fridge in your own kitchen at three in the morning is a sound no hotel sells.",
+      lift: "One lift for nine floors, a mirror in it that has seen you come home in every state there is, and a notice from the juristic office taped under the buttons about guests after midnight. It is the slowest thing in the building and the building knows it.",
+      tower: "Nine floors on a hill above a bay, half the balconies dark — owners in Moscow and Shanghai who bought a view and visit it twice a year — and a juristic office on the ground floor that keeps the book on the rest.",
+    },
+    exits: { out: "pratumnak_soi5", w: "pratumnak_soi5" },
   },
   pratumnak_soi5_m: {
     name: "Pratumnak Soi 5 (middle)",
@@ -21043,6 +21074,7 @@ const ROOM_GEO = {
   thappraya_ext_m:  [12.90765, 100.86893],
   thappraya_ext_n:  [12.91354, 100.87064],
   pratumnak_soi5:   [12.91238, 100.86183],
+  condo_room:       [12.9124, 100.8616],   // the tower behind the wall on Soi 5 — sketched (2026-10-20)
   pratumnak_soi5_m: [12.91133, 100.86060],
   the_terrace:      [12.91139, 100.86050],
   kingfisher:       [12.91127, 100.86068],
