@@ -905,7 +905,7 @@ test("texts: no identical line twice running from one sender, the inbox is cappe
 
 // ── the 2026-08-22 code review (HANDOFF-CODE-REVIEW.md, since deleted) ──
 test("review: a command that merely CONTAINS an answer word passes through a soft encounter", () => {
-  G.room = "stinky_bar"; G.money = 2000; G.pendingEnc = "peddler"; out = [];
+  G.room = "stinky_bar"; G.money = 2000; G.pendingEnc = "peddler"; out = []; G.flowerDay = G.day;   // a lady drink makes her the woman you are talking to (round 96), which lets the rose family roll on the same tick and re-arm the gate — 1 run in 20 on CI
   const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
   doCommand(`buy drink for ${NPCS[girl].name.toLowerCase()}`);
   assert.equal(G.pendingEnc, null);
