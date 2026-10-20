@@ -100,6 +100,7 @@ const STATES = {
   // pendingChoice
   intro:        { gate: "choice:intro", arm() { newGame(); G.player = { said: {}, lang: "en" }; _taxiIntro("beach"); }, noDecline: true },
   vacation_end: { gate: "choice:vacation_end", arm() { base(); G.day = 8; G.room = _hotelRoomId(); _endVacation(); }, noDecline: true },
+  soi6continue: { gate: "choice:soi6continue", arm() { base(); startSoi6Mode(); doCommand("1"); doCommand("3"); doCommand("1"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.day = 8; G.room = "qv_room"; _endVacation(); doCommand("continue"); }, decline: "not yet" },
   gameend:      { gate: "choice:gameend", arm() { owner(); G.lifeStats = { day: G.day, stood: 5, nights: 9, her: "manow" }; _gameEnd(); }, noDecline: true },
   checkout:     { gate: "choice:checkout", arm() { base(); G.room = _hotelRoomId(); G.nightTurn = 2; _doCheckout(); }, decline: "stay" },
   rabbitjob:    { gate: "choice:rabbitjob", arm() { owner(); G.room = "white_rabbit"; _rabbitInterview(); }, decline: "not me" },

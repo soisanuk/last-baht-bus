@@ -29885,10 +29885,10 @@
    "between": "",
    "system": "",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/round96.test.js",
    "claim": "Week 2 after PLAY AGAIN Pukky is a stranger again",
-   "verdict": "design",
-   "note": "PLAY AGAIN is a fresh week by the gate's own words ('fresh dice, the same you'); a second week that remembers is Mario's call",
+   "verdict": "fixed",
+   "note": "CONTINUE has two doors (Mario): ANOTHER WEEK keeps the people a month on; CANCEL THE TICKET never goes home — the expat stage with the whole map",
    "cls": "B"
   },
   {

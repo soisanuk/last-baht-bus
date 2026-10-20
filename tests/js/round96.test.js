@@ -91,12 +91,12 @@ test("the card: a calendar row, not a moon that reads as an eighth night; what t
 
 test("the week's-end gate: HELP explains it, SCORE and SHARE answer once, LOOK looks, NO and 'today's soi' are voiced, RESTART is a chip", () => {
   soi6(); G.day = 8; G.pendingChoice = "vacation_end"; G.room = "soi6_street";
-  assert.match(t("help"), /PLAY AGAIN starts another week/); assert.equal(G.pendingChoice, "vacation_end");
+  assert.match(t("help"), /PLAY AGAIN is a fresh week/); assert.equal(G.pendingChoice, "vacation_end");
   assert.match(t("score"), /สนุก happiness/); assert.equal((said().match(/THE LAST BAHT BUS — Soi 6/g) || []).length, 0, "SCORE is the score; the card is SHARE's");
   assert.equal((t("share").match(/THE LAST BAHT BUS — Soi 6/g) || []).length, 1, "the card once under SHARE");
   assert.match(t("look"), /Soi 6/); assert.equal(G.pendingChoice, "vacation_end");
   assert.match(t("no"), /Nothing to say no to/); assert.match(t("today's soi"), /start panel/);
-  assert.deepEqual(_chipSet().map(c => c.cmd), ["play again", "share", "restart"]);
+  assert.deepEqual(_chipSet().map(c => c.cmd), ["continue", "play again", "share", "restart"]);
   assert.ok(engineComplete("res").some(c => /^restart/.test(c)), "and in the completion");
 });
 
@@ -183,4 +183,38 @@ test("Mort is a man of his word about beer; the early-night close has more than 
   assert.ok(/\["shower",/.test(y) && /\["balcony",/.test(y));
   const p = readFileSync(fileURLToPath(new URL("../../web/js/engine-parser.js", import.meta.url)), "utf8");
   assert.match(p, /Type the same, get the same/);
+});
+
+test("CONTINUE at the Soi 6 week's end: the same soi a month on, the people remembering you (Mario's call on Marcus)", () => {
+  soi6(); G.room = NPCS.pukky.room; run("talk to pukky"); G.day = 8; G.soc.drinks.pukky = 14; G.soc.drinks.somo = 4; G.phone.contacts = G.phone.contacts || {}; G.phone.contacts.pukky = true; G.money = 2400; G.bank = 80000;
+  G.pendingChoice = "vacation_end"; G.room = "soi6_street"; G.nightLog = ["home", "barfine"];
+  assert.deepEqual(_chipSet().map(c => c.cmd), ["continue", "play again", "share", "restart"]);
+  assert.ok(engineComplete("cont").some(c => /^continue/.test(c)));
+  assert.match(t("what's the difference?"), /CONTINUE keeps the people/); assert.equal(G.pendingChoice, "vacation_end");
+  out = []; run("continue"); assert.equal(G.pendingChoice, "soi6continue", "CONTINUE has two doors");
+  assert.deepEqual(_chipSet().map(c => c.cmd), ["another week", "cancel the ticket", "not yet"]);
+  assert.match(t("what's the difference?"), /ANOTHER WEEK.*CANCEL THE TICKET/s); assert.equal(G.pendingChoice, "soi6continue");
+  run("not yet"); assert.equal(G.pendingChoice, "vacation_end", "NOT YET is the card again"); run("continue");
+  out = []; run("another week");
+  assert.equal(G.pendingChoice, null); assert.equal(G.mode, "soi6"); assert.equal(G.day, 1); assert.equal(G.vacation, 2);
+  assert.equal(G.room, "qv_room"); assert.equal(G.hotel, "queenvic"); assert.equal(G.money, SOI6_POCKET); assert.equal(G.bank, 82400, "the pocket flew home into the account");
+  assert.equal(G.soc.drinks.pukky, 7, "her-farang comes back a regular"); assert.ok(!G.soc.drinks.somo, "a face is a week's warmth");
+  assert.ok(G.phone.contacts.pukky, "her number survives"); assert.deepEqual(G.nightLog, []);
+  assert.match(said(), /SOI 6 · WEEK 2 · DAY 1 of 7/); assert.match(said(), /people on it have/); assert.doesNotMatch(said(), /Sabai Palms/);
+  assert.match(_shareCard().join("\n"), /week 2/);
+  G.room = _streetOf(NPCS.pukky.room); G.nightTurn = 30; out = []; run("enter " + _barName(NPCS.pukky.room).toLowerCase()); run("talk to pukky");
+  assert.match(said(), /back|again|remember|miss|month/i, "she knows you: " + said());
+});
+
+test("CANCEL THE TICKET: the Soi 6 week's man never goes home — the fence lifts, the people and the money stay, the expat stage opens at the Vic", () => {
+  soi6(); G.room = NPCS.pukky.room; run("talk to pukky"); G.day = 8; G.soc.drinks.pukky = 14; G.money = 2400; G.bank = 80000; G.dailyId = "2026-10-20";
+  G.pendingChoice = "vacation_end"; G.room = "soi6_street"; run("continue"); out = []; run("cancel the ticket");
+  assert.equal(G.pendingChoice, null); assert.equal(G.stage, "expat"); assert.equal(G.mode, null, "the fence is down"); assert.ok(!G.dailyId, "a life is not a seed");
+  assert.ok(_flag("expatLife")); assert.equal(G.room, "qv_room"); assert.equal(G.hotel, "queenvic"); assert.equal(G.money, 2400 + EXPAT_SAVINGS); assert.equal(G.bank, 80000);
+  assert.equal(G.soc.drinks.pukky, 14, "nobody flew anywhere: she knows you exactly as well as last night"); assert.equal(G.vacation, 1);
+  assert.match(said(), /ticket goes in the bin/); assert.match(said(), /EXPAT MODE/); assert.doesNotMatch(said(), /room 412|Sabai Palms/);
+  assert.ok(G.thaiAccount, "a resident's bank book"); assert.ok(_flag("hasWallet") && _flag("act1Done"), "the card was in the wallet from night one — no safe, no Act One");
+  G.nightTurn = 30; G.room = "soi6_street"; out = []; run("e"); run("e"); run("e"); run("e");
+  assert.notEqual(G.room, "soi6_street", "the street has an end now: " + G.room); assert.doesNotMatch(said(), /Soi 6 is the entire world|one street|those were the terms/);
+  G.room = "soi6_street"; out = []; run("travel jomtien"); assert.doesNotMatch(said(), /Soi 6 is the entire world|one street|those were the terms/);
 });

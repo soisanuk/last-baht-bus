@@ -14776,7 +14776,7 @@ THE WHOLE CARD (bare HELP is the short one):
   AGAIN or G (repeat last command)
   JOURNAL (what's open; JOURNAL RECORD for the record) · SCORE (happiness & progress) · LAST NIGHT (the morning ledger again) · SHARE (your week card — one emoji a night, copy & compare)
   UNDO · RESTART   (the night autosaves itself)
-  PLAY AGAIN (once the week's up — another seven days on the soi)
+  CONTINUE / PLAY AGAIN (once the week's up — the same soi a month on, or a fresh seven days)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
     "…" chip fans out into a menu — this list needs no typing to use
   Highlighted words in the story are tappable: tap for the quick menu, PRESS AND HOLD (or
@@ -14840,8 +14840,9 @@ function _chipSet() {
     return chips;
   }
   if (G.pendingChoice === "gameend") { add("visit pattaya", "visit Pattaya"); add("start over"); add("share", "share card"); return chips; }
+  if (G.pendingChoice === "soi6continue") { add("another week", "another week — a month on"); add("cancel the ticket", "cancel the ticket — never going home"); add("not yet"); return chips; }
   if (G.pendingChoice === "vacation_end") {
-    if (G.mode === "soi6") { add("play again"); add("share", "share card"); add("restart", "restart as somebody else"); return chips; }   // RESTART was in HELP's sentence and on no chip (Marcus, round 96)
+    if (G.mode === "soi6") { add("continue", "continue — the same people"); add("play again", "play again — fresh week"); add("share", "share card"); add("restart", "restart as somebody else"); return chips; }   // RESTART was in HELP's sentence and on no chip (Marcus, round 96)
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
   }
   if (G.pendingChoice === "rabbitjob") {
@@ -15339,7 +15340,8 @@ function engineComplete(input) {
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
   if (G.pendingChoice === "gameend") pool = ["visit pattaya", "start over", "share"];
-  else if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again", "share", "restart"] : ["new vacation", "move to pattaya"];
+  else if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["continue", "play again", "share", "restart"] : ["new vacation", "move to pattaya"];
+  else if (G.pendingChoice === "soi6continue") pool = ["another week", "cancel the ticket", "not yet", "share"];
   else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", ...(G.known && G.known.nont && _kidOpen() ? ["the kid"] : []), "not me", "ask"];
   else if (G.pendingChoice === "kidprice") pool = ["pay", "no", "ask"];
   else if (G.pendingChoice === "kidfavour") pool = ["yes", "no", "ask"];
@@ -16677,8 +16679,11 @@ let _prevCmd = ""; // the one before it (the SLEEP-on-waking guard: two SLEEPs i
 // a one-line prompt; these helpers are the single source of truth so the live
 // prompt, the "that wasn't a valid answer" reprompt, and the resume redraw all
 // read identically. See _renderResume.
+function _soi6ContinuePrompt() {
+  _say("(ANOTHER WEEK — the same soi a month on, the people remembering you · CANCEL THE TICKET — never going home: the long stay, the whole town opens · NOT YET.)", "dim");
+}
 function _vacationEndPrompt() {
-  if (G.mode === "soi6") { _say("(PLAY AGAIN — another week on Soi 6 · SHARE — your week card · RESTART — somebody else.)", "dim"); return; }
+  if (G.mode === "soi6") { _say("(CONTINUE — the same people: another week, or never going home · PLAY AGAIN — a fresh week · SHARE — your week card · RESTART — somebody else.)", "dim"); return; }
   // Both options in full, every time. A man coming back to his phone ten minutes
   // later has to be able to see what he is choosing between — MOVE TO PATTAYA is
   // permanent, and the terse redraw never said so.
@@ -16739,6 +16744,7 @@ function _renderResume() {
     _vacationEndPrompt(); return;
   }
   if (G.pendingChoice === "gameend") { for (const l of _lifeCard()) _say(l, "win"); _gameEndPrompt(); return; }
+  if (G.pendingChoice === "soi6continue") { _soi6ContinuePrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.pendingChoice === "rabbitjob") { _rabbitJobPrompt(); return; }
   if (G.pendingChoice === "kidprice") { _kidPricePrompt(); return; }
@@ -17030,6 +17036,20 @@ function _doCommandInner(input) {
     if (/^(start over|restart|new game|over|again|begin)\b/.test(lower)) { newGame(); engineIntro(); return; }
     _gameEndPrompt(); return;
   }
+  // CONTINUE's two doors: another week on the same soi a month on, or the ticket in the bin and the whole town
+  if (G.pendingChoice === "soi6continue") {
+    if (/^(another|another week|week|a week|a month|month|come back|next week|week two|one more)\b/.test(lower)) { _newVacation({ soi6: true }); return; }
+    if (/^(cancel|never|stay|not going|no flight|tear|bin|live|move|expat|for good|i'?m staying|keep)\b/.test(lower)) { _soi6Stay(); return; }
+    if (/^(not yet|back|wait|hold on|hang on|no|nope)\b/.test(lower)) { G.pendingChoice = "vacation_end"; _vacationEndPrompt(); return; }
+    if (/^share/.test(lower)) { _doShare(); _soi6ContinuePrompt(); return; }
+    if (_read(lower).kind === "question" || /^(explain|tell me|difference|help)\b/.test(lower)) {
+      _say("ANOTHER WEEK: you fly home and come back a month on — seven more nights on Soi 6, the women who got to know you still knowing you, your number still in their phones. " +
+        "CANCEL THE TICKET: you never board. No clock on the week, a long-stay rate at the Vic, your savings wired over, and the fence comes down — Beach Road, Second Road, the whole town, " +
+        "and they say the smart ones end up owning a bar. NOT YET goes back to the card.", "dim");
+      _soi6ContinuePrompt(); return;
+    }
+    _soi6ContinuePrompt(); return;
+  }
   if (G.pendingChoice === "vacation_end") {
     if (G.mode === "soi6") {
       if (/^restart/.test(lower)) { G.player = null; startSoi6Mode(); return; } // RESTART re-picks identity (matches the verb everywhere else)
@@ -17038,14 +17058,15 @@ function _doCommandInner(input) {
       // this one didn't: "what happens if i play again?" threw a week away unshared
       // (Darren, round 66). A question gets the explanation; the choice has to START it.
       if (_read(lower).kind === "question" || /^(explain|tell me|difference|help)\b/.test(lower)) {
-        _say("PLAY AGAIN starts another week on Soi 6 — same street, fresh dice, the same you. This week's card and its " +
-          "number are gone once the new week starts, so SHARE first if you want to keep it.", "dim");
+        _say("CONTINUE keeps the people: another week on the same street a month on, or the ticket in the bin and no week at all — the long stay, and the whole town past the end of the soi. " +
+          "PLAY AGAIN is a fresh week — fresh dice, nobody remembers, the same you. Either way this week's card and its number are gone once the new week starts, so SHARE first if you want to keep it.", "dim");
         _say("SHARE prints this week's card (and copies it) without ending anything. RESTART picks a new identity.", "dim");
         _vacationEndPrompt(); return;
       }
+      if (/^(continue|carry on|keep going|come back|same people|same street|stay)\b/.test(lower)) { G.pendingChoice = "soi6continue"; _soi6ContinuePrompt(); return; }   // CONTINUE has two doors (Marcus, round 96 — Mario's call)
       if (/^(play|again|another|more|yes|soi|new week)\b/.test(lower)) { startSoi6Mode(); return; }  // PLAY AGAIN keeps who you are
       if (/^(today'?s soi|today|daily|the daily|same daily)\b/.test(lower)) { _say("(TODAY'S SOI is on the start panel — the button that seeds the daily. The game can't read the date itself; the panel can.)", "dim"); _vacationEndPrompt(); return; }
-      if (/^(no|nope|not now|nothing|wait)\b/.test(lower)) { _say("(Nothing to say no to. The week is done: SHARE it, PLAY AGAIN, or RESTART as somebody else.)", "dim"); _vacationEndPrompt(); return; }
+      if (/^(no|nope|not now|nothing|wait)\b/.test(lower)) { _say("(Nothing to say no to. The week is done: SHARE it, CONTINUE on the same soi, PLAY AGAIN fresh, or RESTART as somebody else.)", "dim"); _vacationEndPrompt(); return; }
       _vacationEndPrompt(); return;
     }
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
@@ -18934,7 +18955,7 @@ function _shareCard() {
   const weekNights = (G.vacation || 1) === 1 && G.mode !== "soi6" ? 6 : 7;
   const nights = log.map(r => _NIGHT_EMOJI[r] || "▫").join("") +
     "·".repeat(Math.max(0, weekNights - log.length));
-  const label = G.dailyId ? `daily ${G.dailyId}` : "free week";
+  const label = (G.dailyId ? `daily ${G.dailyId}` : "free week") + ((G.vacation || 1) > 1 && G.mode === "soi6" ? ` · week ${G.vacation}` : "");   // a continued week says which (round 96)
   const done = G.pendingChoice === "vacation_end" || log.length >= weekNights;
   // The social line: the card scored a week in meters only, which framed the
   // whole mode as a resource sim (design note 2026-08-26 — "a survival

@@ -6847,7 +6847,16 @@ function _suvarnabhumiScrub() {
   }
 }
 
-function _newVacation() {
+// THE SECOND CONTINUE (Mario, 2026-10-20): the Soi 6 week ends and the man does not go home at all — the fence lifts,
+// the daily's label goes (a life is not a seed), the people and the money stay exactly as they are, and the expat
+// stage opens with the whole map. The wallet was never in a safe: the challenge gave him his card on night one, so
+// Act One's story is simply one he never had.
+function _soi6Stay() {
+  G.mode = null; delete G.dailyId; G.pendingChoice = null;
+  _goExpat({ soi6: true });
+}
+function _newVacation(opts) {
+  const _soi6 = !!(opts && opts.soi6);   // CONTINUE at the Soi 6 week's end (Mario, 2026-10-20): the same street a month on, the people remembering you
   G.lightOn = false;     // a month later the torch is not still on (Bridget, round 76)
   G.chamNight = false;   // a morning that did not happen does not happen a month later (Dieter, round 56)
   G.testedDays = [];     // the day count restarts, so the clinic's memory does too (round 57)
@@ -6946,6 +6955,14 @@ function _newVacation() {
   G.itemLoc.phone = "inventory";
   G.itemLoc.charger = "inventory";
   G.itemLoc.wallet = "inventory";
+  if (_soi6) {
+    // the challenge's frame holds: the Vic's balcony room, the week's stake in the pocket, the account as you left it
+    G.hotel = "queenvic"; G.room = "qv_room"; G.money = SOI6_POCKET; G.nightTurn = 0;
+    _say("");
+    _say("A month at home, and then the same balcony over the same street, the same ceiling fan with the same opinions. " +
+      `The soi has not noticed you were gone; the people on it have. ฿${_num(SOI6_POCKET)} in the pocket, the card in the wallet, seven nights on the clock.`, "win");
+    _say(`── SOI 6 · WEEK ${G.vacation} · DAY 1 of 7 ──`, "win");
+  } else {
   G.hotel = "sabai"; // a fresh booking always starts where the story did
   G.room = "hotel_room";
   _say("");
@@ -6953,6 +6970,7 @@ function _newVacation() {
     "pings off over the gulf. Same Sabai Palms. Same terrible, perfect bed. Room 412 " +
     `keeps your secrets. ฿${_num(SAFE_CASH)} in the safe, seven nights on the clock.`, "win");
   _say(`── VACATION ${G.vacation} · DAY 1 of 7 ──`, "win");
+  }
   // …and the other half of the goodbye: she texted while you were in the air.
   // G.prevBond was just computed from the week you flew home from, and her
   // number survives the trip, so the phone is where the relationship keeps
@@ -6974,7 +6992,8 @@ function _newVacation() {
   _describeRoom(true);
 }
 
-function _goExpat() {
+function _goExpat(opts) {
+  const _soi6 = !!(opts && opts.soi6);   // CANCEL THE TICKET at the Soi 6 week's end (Mario, 2026-10-20): the challenge's man stays, and the whole town opens
   G.stage = "expat";
   G.pendingChoice = null;
   _setFlag("act1Done");
@@ -6991,6 +7010,15 @@ function _goExpat() {
   G.hurt = 0;
   G.soc.drunk = 0;
   G.battery = 100;
+  if (_soi6) {
+    G.hotel = "queenvic"; G.room = "qv_room";   // the balcony room was home for a week; the long-stay rate is the Vic's
+    _say("");
+    _say("You don't board. The ticket goes in the bin on the balcony, which is remarkably little ceremony for a decision " +
+      "that size: a visa run, a long-stay rate on the balcony room negotiated with the Vic over exactly one bottle of Sang Som, " +
+      `and your savings wired over — ฿${_num(EXPAT_SAVINGS)}, in your pocket by the time the barmaid has finished laughing at you. ` +
+      "Soi 6 absorbs the news without comment. And the street you made your whole world for a week is a street again: " +
+      "Beach Road at one end, Second Road at the other, and a town behind both (MAP · TRAVEL).", "win");
+  } else {
   G.hotel = "sabai"; // the long-stay rate is a 412 negotiation
   G.room = "hotel_room";
   _say("");
@@ -6999,6 +7027,7 @@ function _goExpat() {
     "Sang Som with the night clerk, and your savings wired over — " +
     `฿${_num(EXPAT_SAVINGS)}, in your pocket by the time the clerk finishes his ` +
     "cigarette. The soi absorbs the news without comment. Candy just sets out your glass.", "win");
+  }
   if (G.dog) _say(_dogN(_pickVary([
     "Sai Krok, who was never told and never asked, turns three circles on the mat by the door of room 412 and drops, chin on paws. As far as he is concerned nothing has been decided today; you were always going to stay.",
     "The only one who gets told is Sai Krok, and you tell him out loud, feeling every inch the fool. He thumps his tail twice on the tile. Motion carried.",
