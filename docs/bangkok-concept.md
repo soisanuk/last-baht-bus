@@ -522,6 +522,44 @@ them see it; let the LBB player *recognise* it.
 | 2026-09-14 | **Sukhumvit added to the shortlist as PROPOSED, not confirmed** (Mario's thought, after the etymology came up). The road is the literal Bangkok–Pattaya link (Route 3, LBB's crossing room is on it); the name decomposes to *sukhum* (subtle/discreet) + *wit* (knowledge) — the broker's job and Tan's register in one word; short-trip/long-road pairing with LBB. Against: the expat-strip connotation. Two cautions recorded — the gloss belongs in a character's mouth, not on the cover, and สุขุม ≠ สุข (not "road of happiness"). |
 | 2026-09-03 | **Accessibility section added** after the LBB pass (Nok opening / Tan's habit / Owl's five words). The reverse test is a hard rule: every scene must work for a player who never played LBB; LBB payoffs are bonuses, never keys. The code-switch must telegraph; the CLI sim is never a literacy test. |
 
+## The mule account — research pass (2026-10-20, shared with LBB's expat economy)
+
+Done for LBB's mule income stream (the direction note in the `lbb-expat-economy-direction` memory)
+and recorded here because the laundering back door is this game's economy. **Structure only**, and
+the guardrails below apply: no real bank, branch, officer or defendant, and never an ethnic framing
+of the villains — a *tour group*, a *branch*, a *desk*.
+
+- **A tourist cannot open a Thai account.** Since 2025 the big banks refuse tourist and short-stay
+  visas, pushed by the central bank after the case below. The consequence for both games: a bank
+  book follows the PAPER (a long-term visa or a work permit), never the arrival — so the crooked
+  route is the article's route: a branch where a desk forges the paperwork, a Thai facilitator who
+  escorts the applicant in, an interpreter, a commission nobody states. (In LBB that desk is Nont's
+  territory; here it is a Ground Floor business.)
+- **The shape of the real case** (a Pattaya branch, 2025): fifteen first-time tourist arrivals,
+  escorted round the country over four days to open accounts on forged paper, flown home before the
+  money moved; ~฿118M through the fifteen accounts and ฿91M out before the freeze, linked onward to
+  462 accounts, 2,084 cases and ~฿2.2B. The court gave the desk staff thirteen years each, the
+  recruiters five, the broker six, and **the man who lent his account one** — the asymmetry is the
+  whole moral economy of the chain in one sentence: the account holder is the cheapest person in it.
+- **The regime is the freeze, not the knock.** Since 31 January 2025 banks are *prohibited* from
+  processing transactions to or from a suspected mule account, may freeze both directions, and may
+  refuse new accounts to anyone listed; the scale (~800,000 mule accounts handled in a year, 1.5M
+  seized in one crackdown, ฿29B frozen) makes a freeze routine and impersonal. Nobody is accused;
+  the book goes dead with the money in it and no letter says why — which is exactly the
+  *dropped-never-accused* doctrine LBB took from the good-standing material, now confirmed from the
+  other side.
+- **Liability.** Lending an account is an offence in its own right (the 2023 technology-crime act,
+  up to three years or ฿300k, plus accomplice charges and the victims' claims); banks and telcos
+  *share* liability for losses unless they met the standards (the 2025 emergency decree), and a bank
+  that admits a listed person owns the damage. AMLO-listed directors and partners must appear in
+  person at the company registrar — the nominee trade (LBB's fifty-one) got harder in the same year.
+- **SIM = identity.** Mobile banking is blocked where the SIM's registered owner does not match the
+  account's. A burner SIM cannot run the banking app on a real account — a mechanical crossing for
+  the intrusion layer's wire choice and for any mule beat here.
+- **For the design**: the mule is the one income that is free and *ends* you, and it is offered to
+  the man with the real paper and the clean book, because legitimacy is what is being borrowed. The
+  tourist's version is the crooked desk, priced by whoever knows the desk, and it ends worst.
+
 ## Sources
 
 The intro has promised "the sources at the bottom" since 2026-08-13 and there were none — the
@@ -537,6 +575,22 @@ way round. Anything added from here carries its link.
   and the two residents quoted in *Two Saen Saeps*. **The people in that article are sources,
   not characters** — the guardrail against real names and allegations applies to them exactly as
   it applies to the factions note.
+- **The mule-account pass (2026-10-20).** Khaosod English, *Thai bank manager and staff arrested in
+  Chinese scam network* (21 May 2025):
+  <https://www.khaosodenglish.com/news/2025/05/21/thai-bank-manager-and-staff-arrested-in-chinese-scam-network/>
+  — the branch, the fifteen accounts, the figures. VietnamPlus, *Thai court jails bank employees over
+  mule account scam network*: <https://en.vietnamplus.vn/thai-court-jails-bank-employees-over-mule-account-scam-network-post348094.vnp>
+  — the sentences and their asymmetry. Thai PBS World, *Nearly 3,000 money 'mules' arrested*:
+  <https://www.thaipbsworld.com/crime/nearly-3,000-money-‘mules’-arrested> — the Section 9 penalty.
+  Bank of Thailand, *Enhances measures to manage mule accounts* (30 Jan 2025):
+  <https://www.bot.or.th/en/news-and-media/news/news-20250130.html> and The Nation,
+  <https://www.nationthailand.com/business/banking-finance/40045741> — the freeze regime. Tilleke &
+  Gibbins on the digital-fraud guidelines and the corporate mule-account measures:
+  <https://www.tilleke.com/insights/thailand-launches-measures-to-suppress-corporate-mule-accounts/>.
+  Danish-Thai Chamber on the account rules for tourists:
+  <https://dancham.or.th/thai-banks-adopts-stricter-measures-for-tourists-and-short-stay-visitors-to-open-bank-accounts/>.
+  Pattaya Mail on AMLO's year: <https://www.pattayamail.com/thailandnews/pm-anutin-highlights-amlos-role-in-fighting-online-scams-as-29-billion-baht-in-assets-seized-524982>.
+  **The people in these articles are sources, not characters.**
 - **The 2026-08-13 grounding pass** (dead Pantip / the scam-and-laundering economy / CCIB /
   the liability and surveillance regime) was verified at the time but recorded without links.
   Treat its conclusions as needing a re-check with citations before anything is built on them.
