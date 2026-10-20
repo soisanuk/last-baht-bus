@@ -106,16 +106,32 @@ const EXPAT_SAVINGS = 20000; // wired over when you make the move
 const INCOME_DAYS = 30, NIGHT_COST = 1200, RETAINER_ROUGH = 0.1;
 const ORIGIN_MONEY = {
   redundancy: { bank: 250000, income: 0,     kind: "pot",      what: "the redundancy cheque" },
-  pension:    { bank:  80000, income: 42000, kind: "pension",  what: "the state pension" },
+  pension:    { bank:  80000, income: 42000, kind: "pension", paper: "longstay",  what: "the state pension" },
   running:    { bank:  40000, income: 0,     kind: "pot",      what: "what you came with" },
-  pi:         { bank: 100000, income: 70000, kind: "pension",  what: "the force's pension" },
+  pi:         { bank: 100000, income: 70000, kind: "pension", paper: "longstay",  what: "the force's pension" },
   business:   { bank: 200000, income: 0,     kind: "pot",      what: "the capital" },
-  married:    { bank: 120000, income: 45000, kind: "salary",   months: 3, what: "the salary still arriving from home" },
+  married:    { bank: 120000, income: 45000, kind: "salary", paper: "longstay",   months: 3, what: "the salary still arriving from home" },
   monger:     { bank: 120000, income: 0,     kind: "pot",      what: "twenty years of savings" },
   nomad:      { bank:  60000, income: 55000, kind: "retainer", what: "the retainer" },
   halfthai:   { bank:  50000, income: 0,     kind: "pot",      what: "the Perth savings" },
 };
 const ORIGIN_MONEY_DEFAULT = { bank: SOI6_BANK, income: 0, kind: "pot", what: "what you brought" };
+// ── THE PAPER (Mario, 2026-10-20): ONE scalar, never a simulation. ──
+// G.paper is tourist / longstay (a retirement or marriage visa — the pension, the detective and the returner
+// arrive with it) / permit (an employer's, and gone PAPER_GRACE days after the job). It changes only when a
+// job changes it, costs one line on the month (the agent, offstage — PAPER_COST; a permit's paper is the
+// employer's problem), gates the Thai bank book (no account on a tourist stamp — the branch wants a long-term
+// visa, so the foreign card and its fee stay), and is only READ at an incident the game already generates.
+// No border runs, no 90-day reports, no agent scenes. Wrong paper at an incident costs the job and a fine,
+// never jail, and a company bar remembers it PAPER_FLAG_DAYS.
+const PAPER_COST = { tourist: 1900, longstay: 700, permit: 0 };
+const PAPER_GRACE = 7, PAPER_FLAG_DAYS = 60;
+// ── THE JOBS: every one a presence trade; the proper tier pays security and costs freedom. ──
+const TEACH_PAY = 28000;                          // online English a month at full mornings — grey, nobody asks; the retainer's rough-morning rule applies
+const MGR_CASH_PAY = 30000, MGR_CASH_NIGHTS = 4;  // a beer bar's envelope: notes, no paper, four nights a week, an incident away from the sack
+const MGR_PERMIT_PAY = 40000, MGR_PERMIT_NIGHTS = 6, MGR_PERMIT_AFTER = 30;   // a company bar: through the books, six nights, the paper after thirty stood nights (the work, not luck)
+const MGR_INCIDENT_PCT = 4;                       // a stood shift on the wrong paper: the chance the night brings the police (pure hash of bar and day)
+const MGR_STRIKES = 2;                            // short weeks a company bar forgives before the sack; a cash bar docks the envelope instead
 function _originMoney(id) { return ORIGIN_MONEY[id] || ORIGIN_MONEY_DEFAULT; }
 
 // ── Buying the Stinky: the old man carries the paper ────────────────────────
@@ -21279,3 +21295,12 @@ NPCS.hong.dialogue.unshift({ topic: "envelope|the envelope|the money|two thousan
 // Nigel's bar, as the people who see him every night know it (Vince, round 74: Ging answered with "the same three stories")
 NPCS.ging.dialogue.unshift({ topic: "nigel|nigel's bar|his bar|the bar on third road", req: ["verifSold"], when: (st, G) => G.day - ((G.questDoneDay || {}).verification ?? G.day) < 30, text: "\"{{Nigel}} has a bar now!\" {{Ging}} finds this very funny and a little sad. \"Third Road, green light. He go there in the afternoon, sit on his own stool with his own name on it, then he come here at night because here the lager is cold and his bar has no customer.\" The lanyard clicks. \"Fourth sign on that door. I give him six month.\"", short: "\"He has a bar now. He drinks here at night.\"" });
 NPCS.ging.dialogue.unshift({ topic: "nigel|nigel's bar|his bar|the bar on third road", req: ["verifSold"], when: (st, G) => G.day - ((G.questDoneDay || {}).verification ?? G.day) >= 30, text: "\"{{Nigel}}'s bar?\" {{Ging}} shakes her head. \"Shutter down last week. The landlord's nephew want the unit for a {{phone}} shop.\" She looks at the end of the bar, where {{Nigel}} sits. \"He keep the brass plate. Is in his pocket. Fifth sign on that door now — the {{phone}} shop.\"", short: "\"Shut last week. He kept the brass plate.\"" });
+
+// KRUU WAEN'S OTHER TRADE (the expat economy, 2026-10-20): the platforms want natives, and the one thing she
+// cannot sell you is the degree. A door to TEACH ONLINE, in the expat stage only.
+NPCS.waen.dialogue.push({ topic: "online|platform|online teaching|teach online|online english|the platforms",
+  when: (st, G) => G.stage === "expat",
+  text: "\"Online?\" Waen takes the glasses off, which is how you know it is a real answer. \"The platforms want natives — " +
+    "a face from England, a flag on the profile, a scanned degree. Twenty hours a week, a quiet room, a morning voice.\" " +
+    "She looks at you the way she looks at a pupil who has not done the reading. \"The degree I cannot sell you. The mornings, nobody can. (TEACH ONLINE, from your room.)\"",
+  short: "\"Online? A quiet room and a morning voice. The degree I cannot sell you. (TEACH ONLINE)\"" });

@@ -7912,6 +7912,8 @@ function _barOwnerNudge() {
 }
 
 function _doWork() {
+  if (!_barOwned() && G.job && G.job.kind === "manager" && G.room === G.job.room && typeof _mgrShift === "function") { _mgrShift(); return; }   // a manager's shift (2026-10-20)
+  if (!_barOwned() && G.job && G.job.kind === "manager") { _say(`Your rail is ${_barName(G.job.room)}'s, not this one. (TRAVEL there, then WORK.)`); return; }
   if (!_barOwned()) {
     _say(_flag("barSold")
       ? "You're retired, in the specific and enviable sense. If your hands miss the " +

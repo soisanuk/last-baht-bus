@@ -199,7 +199,7 @@ const buyer = () => { newGame(); G.player = { origin: "monger", personality: "jo
   out = []; };
 
 test("expat mode opens a Thai account: no card fee, a resident's counter limit (Mario)", () => {
-  G.day = 8; G.pendingChoice = "vacation_end"; G.stage = "vacation"; G.bank = 100000;
+  G.day = 8; G.pendingChoice = "vacation_end"; G.stage = "vacation"; G.bank = 100000; G.player.origin = "pension";   // the book follows the PAPER now (2026-10-20): a retirement visa has one
   const saved = _rand; _rand = () => 0.5; try { _goExpat(); } finally { _rand = saved; }
   assert.equal(G.thaiAccount, true); assert.match(text(), /Thai account in your own name/);
   assert.equal(_atmFee(), 0); assert.equal(_atmCap(), THAI_ATM_CAP);

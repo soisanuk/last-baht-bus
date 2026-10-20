@@ -4908,6 +4908,12 @@ function _doTalkCore(arg, topic) {
   // what you did for her lately — a paid ask, a refusal's reason, a follow-up on her family — outranks her own lines,
   // which would otherwise be a repeat and its brush-off (Steve's fifth run)
   if (topic && typeof _deedTalk === "function" && _deedTalk(npc, topic)) { _questOffer(npc); return; }
+  // A JOB FOR YOU is the house's to offer, on its own words — "a job", "work for you", "hiring", "a manager" — before her
+  // authored node on HER job (Nee's "I am the mother of the room"); a bare JOB / WORK stays hers (2026-10-20)
+  if (topic && G.stage === "expat" && (/\babout (?:a|the) job\b|\bwork for you\b|\bhiring\b|\bvacancy\b|\babout (?:a|the) manager'?s? job\b|\bjob for me\b/.test(String(typeof _rawAnswer === "string" ? _rawAnswer : "").toLowerCase()) ||
+      /^(?:work for you|hiring|vacancy|job for me|a job|the job)$/.test(String(topic).toLowerCase().trim()))) {   // the parser strips the article, so the RAW line is read
+    if (_room().barType && (NPC_ROLES[npc] === "mamasan" || NPCS[npc].manager || NPCS[npc].owner || (typeof _tillKeeper === "function" && _tillKeeper(G.room) === npc)) && typeof _jobOffer === "function" && _jobOffer(G.room, npc)) return;
+  }
   let d = _pickDialogue(npc, topic || null);
   // the one NAMED piwin answers for his own job the way any piwin at a stand does —
   // "ask bank about fare" was "not my story" while the anonymous man beside him
@@ -8118,6 +8124,7 @@ function _situationTopics(id) {
   if (_streetEvent("rain") && (works || n.patron)) first.push("the rain");
   if (works && _room().barType && _pronoun(id) === "she" && _afterWorkTalk(id)) last.push("after work");
   if (works && _room().barType && home === G.room) {
+    if (G.stage === "expat" && !G.job && (NPC_ROLES[id] === "mamasan" || n.manager || n.owner)) last.push("a job");   // the house's offer is a tap (2026-10-20)
     last.push("closing time");
     if ((_room().region || "") === "Soi 6" && typeof _closeTurn === "function" && _closeTurn(G.room) != null) last.push("open after two");
   }
@@ -8132,6 +8139,10 @@ function _dawnHere(npc, w) {
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
+  // A JOB is the house's to offer (2026-10-20): the mamasan, the manager or the woman on the till, at a bar with a rail
+  if (/^(?:a |the )?(?:job|jobs|work here|work for you|hiring|vacancy|position|manager'?s? job|a manager)\b/.test(t) && _room().barType &&
+      (NPC_ROLES[npc] === "mamasan" || NPCS[npc].manager || NPCS[npc].owner || (typeof _tillKeeper === "function" && _tillKeeper(G.room) === npc)) && typeof _jobOffer === "function")
+    return _jobOffer(G.room, npc);
   // A POOL TABLE is furniture the street knows (Marcus, round 96 — league night, and three mouths said "ask around"):
   // the bars on the speaker's own street with a table, nearest first; the notebook's law is about the journal, not her
   if (/\bpool table\b|\bkiller pool\b|\bkiller\b|\bplay pool\b|\btable for pool\b|\ba table\b|\bthe tables?\b|\bwhere.*\bpool\b/.test(t) && !/\bswim/.test(t)) {
@@ -14680,6 +14691,7 @@ THE WHOLE CARD (bare HELP is the short one):
   ASK <who> ABOUT <topic> AGAIN (you get the gist on a repeat — “again” asks for the whole story back)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   DEBT (every ledger with your name on it: Nira, the hotel book, the old man's note)
+  A living (a resident's): MONEY (what you live on) · TEACH ONLINE (from your room — grey, the mornings pay for it) · ASK the mamasan or the manager ABOUT A JOB at a bar whose floor knows you (a beer bar pays cash on nobody's paper; a company bar pays through the books, six nights, and the permit after a month) · TAKE THE JOB · WORK (stand the shift) · QUIT JOB
   Your own bar (once you own one): WORK / MIND (stand behind your own rail tonight) · BOOKS / TAKINGS
     PRICES [cheap|list|up|steep] · TERMS [salary|commission] (your two levers: the board moves the punters, the terms move the girls — both cost you, in different currencies)
     BORROW <amount> at Nont's table (the bar's money, ten percent, a quarter of every night off the top)
@@ -14808,7 +14820,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "see", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "journal", "accept", "abandon", "contact",
-  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "last night", "wait", "again",
+  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "teach online", "take the job", "quit job", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
 
@@ -16897,6 +16909,10 @@ function _doCommandInner(input) {
   { const _tx = raw.trim().match(/^(?:take|grab|catch|get|hail|flag|call|order) (?:the |a |an )?(?:taxi|cab|uber|grab|bolt)\b(.*)$/i); if (_tx) raw = "grab" + _tx[1]; }
   { const _tm = raw.trim().match(/^(?:take|grab|catch|get|hail|flag) (?:the |a )?(?:motosai|moto|motorbike taxi|bike taxi|motorbike|tuk ?tuk)\b(.*)$/i); if (_tm) raw = "motosai" + _tm[1]; }
   if (/^tuk ?tuk$/i.test(raw.trim())) raw = "grab";
+  // THE JOBS (2026-10-20): a verb each, lean — the offer lapses at dawn, no gate
+  if (/^(?:take|accept) (?:the |that |this )?job$|^i'?ll take it$|^take it$/i.test(raw.trim()) && G.jobOffer && typeof _takeJob === "function") { _takeJob(); return; }
+  if (/^(?:quit|leave|resign|hand in|give up) (?:the |my )?(?:job|notice|rail)$|^resign$/i.test(raw.trim()) && typeof _quitJob === "function") { _quitJob(); return; }
+  if ((/^(?:teach online|online teaching|teach english online|start teaching online)$/i.test(raw.trim()) || (G.stage === "expat" && /^(?:teach|teach english|start teaching)$/i.test(raw.trim()))) && typeof _doTeach === "function") { _doTeach(); return; }   // a bare TEACH on a holiday stays the lesson pointer
   if (/^(?:where(?:'s| is| can i find)|is there|any) (?:a |the )?(?:pool table|table for pool|killer pool|pool|snooker)\b/i.test(raw.trim()) && typeof _tableHint === "function") { _say(_tableHint()); return; }   // "ask around" (Marcus, round 96)
   // THE FLIGHT: "fly home", "go to the airport", "leave pattaya" were a parse failure and "Leave to where?" (Dougie, round 96)
   if (/^(?:fly home|fly back|go (?:to )?(?:the )?airport|(?:taxi|motosai|bike|grab|bus) to (?:the )?airport|leave pattaya|leave thailand|go home to [a-z ]+|check ?out early|cut (?:the|my) (?:trip|week) short)\b/i.test(raw.trim())) {

@@ -17,7 +17,7 @@ const t = c => { out = []; run(c); return said(); };
 const expat = (origin) => {
   newGame(); G.player = { origin, personality: "straight", orientation: "straight", said: {}, lang: "en" };
   _setFlag("act1Done"); _setFlag("hasWallet"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2;
-  G.stage = "expat"; _setFlag("expatLife"); G.thaiAccount = true; G.hotel = "sabai"; G.room = "hotel_room";
+  G.stage = "expat"; _setFlag("expatLife"); G.paper = _originMoney(origin).paper || "tourist"; G.thaiAccount = G.paper !== "tourist"; G.hotel = "sabai"; G.room = "hotel_room";
   G.money = 3000; G.bank = 50000; G.day = 10; G.payDay = 10; G.payCount = 0; G.month = { spent: 0, rent: 0, rough: 0, days: 0 }; G.nightTurn = 30; out = [];
 };
 const sleep = () => { out = []; run("sleep"); run("sleep"); return said(); };   // the night-ending choice asks once
@@ -39,7 +39,7 @@ test("the pension lands every thirty days in the expat stage, through the accoun
   assert.ok(!_incomeDue(), "day 28 of the month: not yet");
   sleep(); assert.equal(G.day, 39); assert.ok(!/state pension/.test(said()), "wakes on day 29: nothing yet");
   const before = G.bank; const s = sleep(); assert.equal(G.day, 40);
-  assert.ok(G.bank >= before + ORIGIN_MONEY.pension.income - _hotelRate(G.hotel), "the pension arrived in the account (the room may come off it)");
+  assert.ok(G.bank >= before + ORIGIN_MONEY.pension.income - _hotelRate(G.hotel) - PAPER_COST.longstay, "the pension arrived in the account (the room and the agent may come off it)");
   assert.match(s, /arrived in the account — the state pension/); assert.match(s, /The month: .*the state pension landed, ฿42,000.*nights a week/);
   assert.equal(G.payDay, 40); assert.equal(G.payCount, 1); assert.ok(G.month.rough === 0 && G.month.days === 1 && G.month.rent === 0, "the month's book resets, and the payday night opens the new one: " + JSON.stringify(G.month));
   assert.ok(G.lastNightSaid.some(l => /The month:/.test(l)), "LAST NIGHT keeps the month line");

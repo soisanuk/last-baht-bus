@@ -213,7 +213,7 @@ test("CANCEL THE TICKET: the Soi 6 week's man never goes home — the fence lift
   assert.ok(_flag("expatLife")); assert.equal(G.room, "qv_room"); assert.equal(G.hotel, "queenvic"); assert.equal(G.money, 2400 + EXPAT_SAVINGS); assert.equal(G.bank, 80000);
   assert.equal(G.soc.drinks.pukky, 14, "nobody flew anywhere: she knows you exactly as well as last night"); assert.equal(G.vacation, 1);
   assert.match(said(), /ticket goes in the bin/); assert.match(said(), /EXPAT MODE/); assert.doesNotMatch(said(), /room 412|Sabai Palms/);
-  assert.ok(G.thaiAccount, "a resident's bank book"); assert.ok(_flag("hasWallet") && _flag("act1Done"), "the card was in the wallet from night one — no safe, no Act One");
+  assert.equal(G.paper, "tourist"); assert.ok(!G.thaiAccount, "a redundancy cheque is a tourist stamp: no bank book (2026-10-20)"); assert.ok(_flag("hasWallet") && _flag("act1Done"), "the card was in the wallet from night one — no safe, no Act One");
   G.nightTurn = 30; G.room = "soi6_street"; out = []; run("e"); run("e"); run("e"); run("e");
   assert.notEqual(G.room, "soi6_street", "the street has an end now: " + G.room); assert.doesNotMatch(said(), /Soi 6 is the entire world|one street|those were the terms/);
   G.room = "soi6_street"; out = []; run("travel jomtien"); assert.doesNotMatch(said(), /Soi 6 is the entire world|one street|those were the terms/);

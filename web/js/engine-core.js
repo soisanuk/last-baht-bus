@@ -362,6 +362,11 @@ function newGame() {
     questDoneDay: {},    // quest id → the day it completed (the follow-ups a month later: Orathai closes, the police read the paper)
     bankIn: 0,           // baht that ARRIVED in the account (_bankIn) — the morning ledger names it
     bankNotes: [],       // what the arrivals were, for the ledger's sentence (the pension, a reward)
+    paper: null,         // tourist / longstay / permit (the expat stage; null on a holiday) — see PAPER_COST in world.js
+    paperUntil: null,    // a lost permit's paper lasts to this day, then falls back to the origin's
+    paperFlag: null,     // the day an incident read the wrong paper (a company bar remembers PAPER_FLAG_DAYS)
+    job: null,           // { kind: "teach" } or { kind: "manager", room, corp, nights, stood, weekStood, weekStart, strikes, shiftDay, shiftStood }
+    jobOffer: null,      // a bar's terms, on the table till dawn ({ room, corp, day })
     payDay: null,        // the expat stage's clock: the day the last payday fell (set by _goExpat), INCOME_DAYS apart
     payCount: 0,         // paydays so far (a salary stops after its months)
     month: { spent: 0, rent: 0, rough: 0 },   // this month's book: what the nights cost, what the room cost, the rough mornings (the nomad's retainer reads them)
@@ -3660,6 +3665,7 @@ function _tick() {
     }
   }
   if (typeof _workPresenceTick === "function") _workPresenceTick(); // a declared shift has to be stood
+  if (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && G.room === G.job.room) G.job.shiftStood = (G.job.shiftStood || 0) + 1;   // a manager's shift is stood the same way
   if (typeof _workFloor === "function") _workFloor();          // …and a stood shift is where your own staff live
   if (!_onRide()) _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
