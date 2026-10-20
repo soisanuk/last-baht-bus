@@ -166,6 +166,20 @@ function jobsSeed() {
   _setFlag("roomSafeOpened"); G.act1SafeDue = false; quiet(); G.encDone = {}; _nightSnapshot();
   return serializeGame();
 }
+// wallet2 (2026-10-21, the second wallet): the Soi 6 man who cancelled the ticket — the week played by the
+// game's own path, CONTINUE → CANCEL THE TICKET at its end, never Act One, never met Candy, Lek or Oy — with
+// money for a night of drinking and two rough mornings already behind him (G.blackouts = 2, so the third
+// blackout is certain to take the wallet: the persona pays for one night, not a lottery).
+function wallet2Seed() {
+  newGame(); startSoi6Mode();
+  doCommand("1"); doCommand("3"); doCommand("1");   // the taxi's three picks
+  G.player.origin = "pension"; G.season0 = 1;
+  quiet(); G.day = 8; G.pendingChoice = "vacation_end"; out = []; doCommand("continue"); doCommand("cancel the ticket");
+  if (G.stage !== "expat" || G.mode) throw new Error("wallet2 seed: the ticket was not cancelled");
+  G.money = 6000; G.bank = 40000; G.battery = 100; G.blackouts = 2;
+  G.room = "qv_room"; G.nightTurn = 0; quiet(); G.encDone = {}; _nightSnapshot();
+  return serializeGame();
+}
 function reload(blob) { newGame(); deserializeGame(blob); }
 
 // ── build ──
@@ -186,6 +200,7 @@ const seeds = {
   frames: framesSeed(),
   jobs: jobsSeed(),
   ride: rideSeed(),
+  wallet2: wallet2Seed(),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -281,6 +296,11 @@ try {
   reload(seeds.saoling); out = []; doCommand("hello");
   console.log("saoling:", !!G.phone.contacts.sao, JSON.stringify(G.bkk));
   if (!G.phone.contacts.sao || !G.bkk) throw new Error("sao seed cannot reach its drive");
+  // Wallet2: a street blackout takes the wallet (the third is certain), the chain is live, the machine refuses, Candy is a stranger
+  reload(seeds.wallet2); G.room = "beach_rd_c"; G.nightTurn = 50; G.soc.drunk = 9; out = []; _endNight("blackout");
+  const w2 = { lost: _flag("walletLost"), quest: G.quests.wallet_again, act1: _flag("act1Done"), candy: !!G.talked.candy, atm: /does not know your face/.test((out = [], G.nightTurn = 30, doCommand("withdraw 1000"), out.join(" "))) };
+  console.log("wallet2:", JSON.stringify(w2));
+  if (!w2.lost || w2.quest !== "active" || !w2.act1 || w2.candy || !w2.atm) throw new Error("wallet2 seed cannot reach its drive");
 } finally { _rand = saved; }
 
 for (const [name, blob] of Object.entries(seeds)) {
