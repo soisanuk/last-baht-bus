@@ -4810,7 +4810,8 @@ function _doTalkCore(arg, topic) {
   if (topic && typeof _partyTalk === "function" && _partyTalk(npc, topic)) return;
   // the girl who took you on her bike remembers it — and "late" is not "you not
   // friend yet" to a man she has ridden three nights (Kenji, round 47)
-  if (topic && G.rideLog && G.rideLog[npc] && (/\b(late|late-late|after two|after[- ]?hours|ride|the ride|bike|motorbike|your bike|last night|where we went|that night)\b/i.test(String(topic)) || _rideStopKey(topic))) {
+  if (topic && G.rideLog && G.rideLog[npc] && (/\b(late|late-late|after two|after[- ]?hours|ride|the ride|bike|motorbike|your bike|last night|where we went|that night)\b/i.test(String(topic)) || _rideStopKey(topic))
+      && !(/\blast night\b/i.test(String(topic)) && G.rideLog[npc].day !== G.day - 1)) {   // LAST NIGHT is last night, not the ride twelve nights ago (Dougal, round 97)
     const r = G.rideLog[npc], ago = G.day - r.day;
     // a stop by NAME: the disco, the som tam cart, her friend's bar (class N, 2026-10-07 — the
     // ride's venues were a thing nobody in town could discuss, least of all the woman who drove)
@@ -4920,8 +4921,13 @@ function _doTalkCore(arg, topic) {
   }
   // what you did for her lately — a paid ask, a refusal's reason, a follow-up on her family — outranks her own lines,
   // which would otherwise be a repeat and its brush-off (Steve's fifth run)
-  if (npc === "mort" && G.stringer && typeof _stringerPay === "function" && !topic) _stringerPay();   // the stringer's cash, when you sit with him (2026-10-20)
+  if (npc === "mort" && G.stringer && typeof _stringerPay === "function" && (!topic || /\b(stringer|leads?|paragraphs?|copy|column|read|looked|saw|what i read|the (?:dartboard|bell|table|notebook|photos?|frame|sign|board))\b/.test(String(topic).toLowerCase()))) _stringerPay();   // the stringer's cash: a bare TALK, or telling him what you read (Victor)
+  if (topic && typeof _myJobTalk === "function" && _myJobTalk(npc, topic)) { _questOffer(npc); return; }   // "my job" from the man managing her bar is his figures, not her work node (Dougal, round 98)
   if (topic && typeof _deedTalk === "function" && _deedTalk(npc, topic)) { _questOffer(npc); return; }
+  // THE PAPER IS ASKABLE (Victor: ten people, ten shrugs, in a pub full of expats): visa, permit, bank book, the agent —
+  // a hostess has no paper problem, the house knows the agent and the grid, a regular has his own extension
+  if (topic && G.stage === "expat" && /\b(visa|work permit|the permit|a permit|bank book|visa agent|the agent|my paper|paper|immigration|long[- ]stay|retirement visa|extension)\b/.test(String(topic).toLowerCase()) &&
+      !(typeof _pickDialogue === "function" && (() => { const d = _pickDialogue(npc, topic); return d && d.topic; })()) && typeof _paperTalk === "function" && _paperTalk(npc)) { _questOffer(npc); return; }   // her own TOPIC node outranks; the topicless fallback does not
   // A JOB FOR YOU is the house's to offer, on its own words — "a job", "work for you", "hiring", "a manager" — before her
   // authored node on HER job (Nee's "I am the mother of the room"); a bare JOB / WORK stays hers (2026-10-20)
   if (topic && G.stage === "expat" && (/\babout (?:a|the) job\b|\bwork for you\b|\bhiring\b|\bvacancy\b|\babout (?:a|the) manager'?s? job\b|\bjob for me\b/.test(String(typeof _rawAnswer === "string" ? _rawAnswer : "").toLowerCase()) ||
@@ -8159,10 +8165,10 @@ function _townTalk(npc, topic) {
   let t = String(topic).toLowerCase().trim();
   // HER MAT (destitution, 2026-10-20): she answers for it, and her floor saw it — the cost is hers, and the floor says so
   { const kb = G.keptBy || (G.keptByLog && G.keptByLog.until >= G.day ? G.keptByLog : null);
-    if (kb && /\b(your room|the mat|staying with you|your sister|your mama|the farang in your room|keep me|kept me|her room|mat)\b/.test(t)) {
+    if (kb && /\b(your room|the mat|staying with (?:you|her)|staying|your mama|the farang in (?:your|her) room|keep me|kept me|keeping me|her room|your floor|her floor|mat|where i sleep|my bed)\b/.test(t)) {
       const n = NPCS[npc].name, kn = NPCS[kb.id] ? NPCS[kb.id].name : "her";
-      if (npc === kb.id) { _say(G.keptBy ? `"My room?" ${n} shrugs, which is not nothing. "Small. My sister snore. You snore. Is okay. Five night I can say to mama, after that I cannot."` : `"Five night." ${n} says it flat. "Mama ask. Sister ask. Now the girls ask. Is okay. You don't ask — that is the one thing."`); return true; }
-      if (NPC_ROLES[npc] && (NPCS[npc].room === NPCS[kb.id].room || (NPCS[npc].bars || []).includes(NPCS[kb.id].room))) { _say(NPC_ROLES[npc] === "mamasan" ? `"${kn} keep a farang in her room." ${n} does not lower her voice. "Not my business. Her room, her money, her name. I only say — the girls talk, and the girls are right."` : `"${kn}?" ${n} looks across at her. "She keep you. Everybody know. Her sister tell my cousin." A shrug. "Brave, or stupid. Same word here, some days."`); return true; }
+      if (npc === kb.id) { _say(G.keptBy ? `"My room?" ${n} shrugs, which is not nothing. "Small. One fan. You snore. Is okay. Five night I can say to mama, after that I cannot."` : `"Five night." ${n} says it flat. "Mama ask. Now the girls ask. Is okay. You don't ask — that is the one thing."`); return true; }
+      if (NPC_ROLES[npc] && (NPCS[npc].room === NPCS[kb.id].room || (NPCS[npc].bars || []).includes(NPCS[kb.id].room))) { _say(NPC_ROLES[npc] === "mamasan" ? `"${kn} keep a farang in her room." ${n} does not lower her voice. "Not my business. Her room, her money, her name. I only say — the girls talk, and the girls are right."` : `"${kn}?" ${n} looks across at her. "She keep you. Everybody know. Her landlady tell my cousin." A shrug. "Brave, or stupid. Same word here, some days."`); return true; }
     } }
   // A JOB is the house's to offer (2026-10-20): the mamasan, the manager or the woman on the till, at a bar with a rail
   if (/^(?:a |the )?(?:job|jobs|work here|work for you|hiring|vacancy|position|manager'?s? job|a manager)\b/.test(t) && _room().barType &&
@@ -16877,7 +16883,7 @@ const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health", "ve
   "inventory", "inv", "i", "map", "help", "quests", "journal", "notes", "diary", "hint", "share",
   "who", "blackbook", "standing", "rep", "gallery", "photos", "album", "books",
   "takings", "identity", "topics", "subjects", "prices", "terms",
-  "contacts", "messages", "column", "owl"]);   // the info picker's readouts are all free alike (Joost, round 81: three of eleven cost a turn)
+  "contacts", "messages", "column", "owl", "money", "budget", "income", "cashflow", "finances", "payday"]);   // the info picker's readouts are all free alike (Joost, round 81: three of eleven cost a turn)
 
 let _rawAnswer = null; // the raw-cased line, for _convoAnswer's quote-back memory
 // The top-level command: every nested doCommand (a router handing a sentence on as ASK, a Thai line becoming its
@@ -16890,6 +16896,7 @@ function doCommand(input) {
 }
 function _doCommandInner(input) {
   _rawAnswer = String(input == null ? "" : input);
+  G.askArmPrev = G.askArm || null; G.askArm = null;   // a "again to sign" arm holds for the NEXT command only (the lease, the notice — Victor, round 97)
   if (!G) newGame();
   // CTF stage 2 gate (docs/ctf.md): an obvious security probe — read off the
   // TRUE raw input, before _norm strips the quotes and braces that make it one
@@ -17041,6 +17048,8 @@ function _doCommandInner(input) {
     // HELP is an ANSWER to the Tree Town maze and its kin, so an encounter keeps it
     const _free = !G.pendingEnc && G.pendingChoice !== "vacation_end" && /^(help|\?|verbs)$/.test(lower) ? () => _doHelp(lower === "verbs" ? "more" : "")   // the week's-end gate explains itself (Marcus, round 96)
       : /^(score|standing|rep)$/.test(lower) && typeof _doScore === "function" ? () => _doScore()
+      : /^(budget|income|cashflow|finances|payday)$/.test(lower) && typeof _doMoney === "function" ? () => _doMoney()   // a readout costs no turn (Victor)
+      : /^money$/.test(lower) && G.stage === "expat" && typeof _doMoney === "function" ? () => _doMoney()
       : /^(share|card)$/.test(lower) && typeof _doShare === "function" ? () => _doShare()   // "SHARE prints your week card, any time" — it was swallowed in a game (Marcus, round 96)
       : /^(look|l)$/.test(lower) && G.pendingChoice === "vacation_end" ? () => _describeRoom()
       : /^(time|clock)$/.test(lower) ? _doTime
@@ -18271,7 +18280,7 @@ function _doCommandInner(input) {
       else if (G.keptBy && !_flag("barOpen")) {   // her mat (destitution, 2026-10-20): the night ends wherever you stand, on the walk to her room
         const kn = NPCS[G.keptBy.id] ? NPCS[G.keptBy.id].name : "her";
         if (!_endConfirm("sleep", `It's ${_clockStr()}. Sleep now and the night ends on ${kn}'s mat; whatever is still open stays open without you. (SLEEP again if you mean it.)`)) return;
-        _say(`${kn}'s room: the fan, the mat, her sister's phone glowing across the dark. You are asleep before the arithmetic of it catches up with you.`);
+        _say(`${kn}'s room: the fan, the mat, her phone glowing on the shrine shelf. You are asleep before the arithmetic of it catches up with you.`);
         _endNight("sleep"); return;
       }
       else if (G.room === _hotelRoomId() || (_room().exits && _room().exits.up === _hotelRoomId())) {
@@ -19064,7 +19073,7 @@ function _shareCard() {
       (done ? " · week complete" : ` · night ${Math.min(G.day, 7)}/7`),
     // …and what you SPENT is the week's other number — not the pocket (that call stands), the money that went through the
     // soi: the stake plus the machine, less what is left (Marcus, round 96: "half the banter on a forum is what it cost")
-    ...(G.mode === "soi6" ? [`💸 ฿${_num(Math.max(0, SOI6_POCKET + (G.atmTotal || 0) - Math.max(0, G.money)))} spent`] : []),
+    ...(G.mode === "soi6" ? [`💸 ฿${_num(Math.max(0, SOI6_POCKET + (G.atmTotal || 0) + (G.atmFees || 0) - Math.max(0, G.money)))} spent`] : []),   // the machine's fee is spent too (Victor)
     "soisanuk.github.io/last-baht-bus",
   ];
 }

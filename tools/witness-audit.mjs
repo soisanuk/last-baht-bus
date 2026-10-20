@@ -34,6 +34,7 @@ const RX = new RegExp("\\b((the whole|half the|all the|the entire|every(?:one|bo
 
 const G_ = "general", C_ = "consequence", W_ = "witness";
 const CLASS = {
+  "engine-play.js:_paperTalk|everybody knows": [G_, "a fact about the world: who works on what paper is common knowledge on a beer bar rail (the paper, round 97)"],
   "engine-play.js:_jobOffer|spoken for": [G_, "idiom — the mornings are spoken for by the platform; nobody saw anything (the jobs, 2026-10-20)"],
   // ── witness: people answer for it (tested) ─────────────────────────────────────────
   "engine-parser.js:_TAN_TOWN|everybody knows": [G_, "a fact about the town, not about you: Pattaya knows everybody, Bangkok nobody (class-N pass, 2026-10-07)"],

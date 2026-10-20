@@ -799,7 +799,8 @@
    "npcs": [],
    "effects": [],
    "modals": [
-    "vacation_end"
+    "vacation_end",
+    "soi6continue"
    ],
    "quests": [],
    "encounters": [],
@@ -1120,6 +1121,36 @@
    "encounters": [],
    "predicates": [],
    "note": ""
+  },
+  {
+   "id": "expat-economy",
+   "name": "The expat economy: the month, the paper, the jobs, the condo, destitution and her mat",
+   "verbs": [
+    "money",
+    "budget",
+    "teach",
+    "take",
+    "quit",
+    "rent",
+    "move",
+    "cook"
+   ],
+   "rooms": [
+    "condo_room"
+   ],
+   "npcs": [
+    "david",
+    "mort",
+    "waen"
+   ],
+   "effects": [],
+   "modals": [
+    "keptby"
+   ],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": "built 2026-10-20; rounds 97–98"
   }
  ]
 }

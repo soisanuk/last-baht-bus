@@ -1163,7 +1163,7 @@ const ROOMS = {
     name: "Pratumnak Soi 5",
     region: "Pratumnak",
     desc: "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up " +
-      "here is for you: condo walls with broken glass set into the top, a security box " +
+      "here is for a tourist: condo walls with broken glass set into the top, a security box " +
       "with a man asleep in it, and gates with intercoms that answer in Thai or not at " +
       "all. The road tips west from here and keeps tipping — you can feel the gradient " +
       "in your calves before you can see it. Between two walls there is one gap, and " +
@@ -1187,12 +1187,12 @@ const ROOMS = {
   condo_room: {
     name: "Your Condo — Pratumnak",
     region: "Pratumnak",
-    indoors: true, outlet: true,
+    outlet: true,   // a balcony and a bay: not windowless (indoors would hear the rain "with no window to watch it through" — Victor)
     desc: "A studio on the ninth floor of a tower on Pratumnak Soi 5 — white tiles, an air-con unit that " +
       "actually works, a two-ring hob and a fridge with your name on nothing in it, and a balcony the width of a " +
       "chair with the whole bay beyond it, Jomtien's lights strung along the far side. The lift hums. Down on the " +
       "ground floor the juristic office keeps a list of who comes in after midnight, and consults it in the morning.",
-    lateDesc: ["Four in the morning on the ninth floor: the bay black, a ship's lights out where the water goes, the " +
+    lateDesc: ["The small hours on the ninth floor: the bay black, a ship's lights out where the water goes, the " +
       "air-con ticking, and nobody at all to ask what time it is.",
       "The tower is asleep around you — a door on the floor below, a lift that goes down and does not come back up. " +
       "The bay has the only lights left on.",
@@ -21350,13 +21350,18 @@ NPCS.waen.dialogue.push({ topic: "online|platform|online teaching|teach online|o
 
 // THE SCHOOL (the expat economy, 2026-10-20): Jerry's school wants natives — a proper contract, the permit with the
 // first payday, and weekday mornings, which is the opposite presence trade from the bar. A door in his own voice.
+NPCS.david.dialogue.unshift(
+  { topic: "pay|the pay|payday|salary|contract|permit|the permit|thirty-five|hours|mornings|lates|late",
+    when: (st, G) => G.stage === "expat" && !!G.jobOffer && G.jobOffer.kind === "school" || (G.stage === "expat" && !!G.job && G.job.kind === "school"),
+    text: "\"Thirty-five, into the account, on the same day every month — the school's bank letter gets you the book.\" Jerry counts it on the beer bottle. \"The permit comes with the first pay, not before; they do the running. Eight o'clock, Monday to Friday. Three mornings late in a month and it's a letter, and the letter is polite, and the letter is final.\"",
+    short: "\"Thirty-five, the permit with the first pay, eight o'clock Monday to Friday, three lates and a letter.\"" });   // first in his list: his old permit grumble took "the permit" (Victor, round 97)
 NPCS.david.dialogue.push(
   { topic: "a job|job for me|school|your school|hiring|work for you|teaching job|a teaching job",
     when: (st, G) => G.stage === "expat" && !G.job,
     fx: (st, G) => { G.jobOffer = { kind: "school", day: G.day }; },
     text: "\"A job? Oh — oh, at the school? They're ALWAYS short a native.\" Jerry is already turning to face you properly, which " +
       "for Jerry is a chair rotation. \"M2, M3, conversation classes, a real contract — they do the permit, they do the bank letter, " +
-      "the whole thing. Thirty-five a month.\" The tactical sip. \"Here's the catch, and it's the only catch: eight o'clock. Monday " +
+      "the whole thing. Thirty-five a month — more than they pay me, which you will not repeat.\" The tactical sip. \"Here's the catch, and it's the only catch: eight o'clock. Monday " +
       "to Friday. They don't care what you did on Soi 6 at two, they care that you're at the gate at eight with your eyes open. " +
       "Three mornings you're not, in a month, and it's a very polite letter.\" (TAKE THE JOB — the offer keeps till dawn.)",
     short: "\"The school's always short a native. Eight o'clock, Monday to Friday, a real contract. (TAKE THE JOB)\"" },
@@ -21374,7 +21379,7 @@ NPCS.mort.dialogue.push(
       "Not an opinion. A thing.\" The biro taps the page. \"You sit here, you tell me what you read this week, I count them, I pay " +
       "cash. Five a week, because the column is one page and so is my patience. Nobody has ever got rich on it. Nobody was meant to.\"",
     short: "\"A hundred a paragraph, five a week, for things you looked at that I didn't. Cash. Sit down.\"" },
-  { topic: "stringer|leads|the leads|a lead|paragraphs|copy",
+  { topic: "stringer|leads|the leads|a lead|paragraphs|copy|a job|job|job for me|work for you|hiring|my job|the column",
     when: (st, G) => G.stage === "expat" && !!G.stringer,
     text: "\"Read anything?\" Mort's biro is already waiting. \"A thing, mind. Not a girl.\"",
     short: "\"Read anything? A thing, mind.\"" });

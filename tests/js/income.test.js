@@ -40,9 +40,9 @@ test("the pension lands every thirty days in the expat stage, through the accoun
   sleep(); assert.equal(G.day, 39); assert.ok(!/state pension/.test(said()), "wakes on day 29: nothing yet");
   const before = G.bank; const s = sleep(); assert.equal(G.day, 40);
   assert.ok(G.bank >= before + ORIGIN_MONEY.pension.income - _hotelRate(G.hotel) - PAPER_COST.longstay, "the pension arrived in the account (the room and the agent may come off it)");
-  assert.match(s, /arrived in the account — the state pension/); assert.match(s, /The month: .*the state pension landed, ฿42,000.*nights a week/);
+  assert.match(s, /arrived in the account — the state pension/); assert.match(s, /The month, to last night's close: .*the state pension landed, ฿42,000.*nights out a week/);
   assert.equal(G.payDay, 40); assert.equal(G.payCount, 1); assert.ok(G.month.rough === 0 && G.month.days === 1 && G.month.rent === 0, "the month's book resets, and the payday night opens the new one: " + JSON.stringify(G.month));
-  assert.ok(G.lastNightSaid.some(l => /The month:/.test(l)), "LAST NIGHT keeps the month line");
+  assert.ok(G.lastNightSaid.some(l => /^The month/.test(l)), "LAST NIGHT keeps the month line");
   const b1 = G.bank; sleep(); assert.ok(G.bank < b1 + 1000, "not twice");
   // a holiday has no payday
   newGame(); G.player = { origin: "pension", personality: "straight", orientation: "straight", said: {}, lang: "en" }; _setFlag("act1Done"); _setFlag("hasWallet");
@@ -68,7 +68,7 @@ test("a rough morning is counted on the month's book; the room goes on it; the n
 
 test("MONEY says where you stand, on every surface", () => {
   expat("pension"); G.day = 20;
-  const a = t("money"); assert.match(a, /The state pension: ฿42,000 a month, next in 20 days/); assert.match(a, /nights a week/); assert.match(a, /This month so far/);
+  const a = t("money"); assert.match(a, /The state pension: ฿42,000 a month, next in 20 days/); assert.match(a, /nights out a week/); assert.match(a, /This month so far/);
   expat("redundancy"); assert.match(t("budget"), /No payday — the redundancy cheque is what there is/);
   expat("married"); G.payCount = 3; assert.match(t("income"), /has stopped/);
   newGame(); startSoi6Mode(); run("1"); run("3"); run("1"); G.nightTurn = 30; assert.match(t("budget"), /A holiday has no payday/); assert.match(t("money"), /in your pocket/);

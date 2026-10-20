@@ -1379,6 +1379,7 @@ function _doTell(lower, to) {
   // reactions are hers ("she"), so a man on the rail still gets the old path
   if (!pid || !NPCS[pid] || !_npcsHere().includes(pid) || !(NPC_ROLES[pid] === "hostess" || (typeof _pronoun === "function" && _pronoun(pid) === "she" && !NPCS[pid].patron))) return false;
   const l = lower.replace(/[!.,?]+$/, "").trim();
+  if (/\b(?:i'?m staying|i stay(?:ed)? here|not going home|cancel+ed (?:my|the) ticket|i live here now|i'?m not leaving|never going home|i'?m here for good|moved here)\b/.test(l) && typeof _stayTalk === "function") return _stayTalk(pid);   // the ticket in the bin (Dougal, round 97)
   { const lt = l.replace(/^tell [a-z']+ (?:that |to )?/, "");   // "tell joy its my last night" through the router carries her name
     if (!/^(?:ask|talk|tell|say) /.test(lt) && /\b(?:i|i'?m|im|my|our|it'?s|its|we)\b/.test(lt) && typeof _isLeavingSaid === "function" && _isLeavingSaid(lt) && typeof _leavingTalk === "function") return _leavingTalk(pid, lt); }   // a statement, never an ASK's subject (Nira's flight node, Ple's "why did you leave")   // "tell joy its my last night" was a subject she didn't know (Dougie, round 96)
   for (const [key, rx, val] of _TOLD_RX) {
@@ -4251,7 +4252,7 @@ function _relGreeting(id) {
     return;
   }
   const pool = _REL_GREET[t];
-  _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name, _herNameForYou(id)), t >= 2 ? "win" : "");
+  _say(_pickVary(pool, "relgreet:" + t + ":" + id)(NPCS[id].name, _herNameForYou(id)), t >= 2 ? "win" : "");   // never the same hello two nights running (Dougal, round 98: "Mister Tomorrow" arrived as news twice)
   const _arm = G.party && G.party.ids && G.party.ids.find(p => p !== id && NPCS[p]);
   if (_arm && t >= 2) _say(_pickVary([
     (n, c) => `— and then ${n} sees who is on your arm. The towel goes back under the rail. ${c} gets the smile that is all teeth; you get the one that keeps the book.`,
@@ -5651,7 +5652,7 @@ function _nightSnapshot() {
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
     spcB: G.massageSpend || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0,
-    wonB: (G.offIn || 0) + (G.quizWon || 0), giftInB: G.giftIn || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
+    wonB: (G.offIn || 0) + (G.quizWon || 0), giftInB: G.giftIn || 0, condoB: G.condoPaid || 0, paperB: G.paperPaid || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
@@ -5722,7 +5723,6 @@ function _morningLedger() {
   // right (rent plus the ฿300 fee, the draw not being income) and reads as a lie
   // to anybody watching the notes in his hand. The arithmetic was never wrong; the
   // sentence was unsupported by its own wording.
-  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + Math.max(0, spent); G.month.days = (G.month.days || 0) + 1; }   // the month's book
   const machine = drawn - nontOutN, _via = [];
   if (machine > 0) _via.push(`\u0e3f${_num(machine)} came out of the machine` + (fees > 0 ? `, plus \u0e3f${_num(fees)} in fees` : ""));
   if (nontOutN > 0) _via.push(`\u0e3f${_num(nontOutN)} through Nont, \u0e3f${_num(nontCutN)} his cut`);
@@ -5756,6 +5756,11 @@ function _morningLedger() {
   const giftInN = (G.giftIn || 0) - (b.giftInB != null ? b.giftInB : (G.giftIn || 0));
   if (giftInN > 0) bits.push("\u0e3f" + _num(giftInN) + " pressed into your hand by somebody, netted in");
   const jobN = (G.jobPaid || 0) - (b.jobB != null ? b.jobB : (G.jobPaid || 0));   // a job's money, in cash, named (Vince, round 74: "up ฿3,100" for ฿4,000 of fees)
+  const paperN = (G.paperPaid || 0) - (b.paperB != null ? b.paperB : (G.paperPaid || 0));   // the agent's fee, named (Dougal: the envelope "vanished" into it)
+  if (paperN > 0) bits.push("\u0e3f" + _num(paperN) + " to the visa agent");
+  const condoN = (G.condoPaid || 0) - (b.condoB != null ? b.condoB : (G.condoPaid || 0));   // the lease's money, named (Victor)
+  if (condoN > 0) bits.push("\u0e3f" + _num(condoN) + " to the condo's office" + (condoN >= CONDO_RENT * CONDO_DEPOSIT_MONTHS ? " (the deposit, held, and the first month)" : " (the rent and the electric)"));
+  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + Math.max(0, spent + wonN + giftInN + jobN); G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
@@ -5801,7 +5806,7 @@ function _morningLedger() {
   G.partyRescued = null;
   G.lastNightSaid = [
     bits.length ? "Last night: " + bits.join(" \u00b7 ")
-      : "(A quiet one. It happens, and the week is long enough to carry a few.)",
+      : G.stage === "expat" ? "(A quiet one. It happens; you live here.)" : "(A quiet one. It happens, and the week is long enough to carry a few.)",
     _fmt("\u0e2a\u0e19\u0e38\u0e01 {h} \u2014 {label}{left}",
       { h: G.happy, label: _happyLevel(G.happy),
         left: G.stage === "expat" ? "" : " \u00b7 " + (8 - G.day) + " night" + (8 - G.day === 1 ? "" : "s") + " left" }),
@@ -6237,8 +6242,8 @@ function _endNight(reason) {
       }
       break;
     case "sleep":
-      _say("You call it. The air-con rattles its lullaby, the neon leaks through " +
-        "the curtains, and Pattaya carries on politely without you.", "room");
+      if (!G.keptBy) _say("You call it. The air-con rattles its lullaby, the neon leaks through " +
+        "the curtains, and Pattaya carries on politely without you.", "room");   // her mat has its own line (Dougal)
       break;
     case "robbed": {
       const safeRoom = _flag("act1Done") && G.stage !== "act1" && G.hotel === "metropole";
@@ -6518,6 +6523,9 @@ function _endNight(reason) {
   if (G.chamNight) _say(_fmt("── DAY {d}{home} — grey light, far too early, and somebody else in the " +
     "room is already dressed. The rest of the day you will sleep through ──",
     { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
+  else if (G.stage === "expat" && G.job && G.job.kind === "school" && [1, 2, 3, 4, 5].includes(G.day % 7))   // a man with a gate at eight does not surface mid-afternoon (Victor)
+    _say(_fmt("── DAY {d} · PATTAYA, HOME — the alarm at seven, the gate at eight, M3 and M4 and the conversation class; " +
+      "the afternoon is yours and by the time you have slept it off the neon is waking up ──", { d: G.day }), "win");
   else _say(_fmt("── DAY {d}{home} — you " +
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──",
@@ -6862,6 +6870,7 @@ function _suvarnabhumiScrub() {
 // Act One's story is simply one he never had.
 function _soi6Stay() {
   G.mode = null; delete G.dailyId; G.pendingChoice = null;
+  _setFlag("roomSafeOpened");   // no wallet was ever lost on the Soi 6 week, so no emergency stash waits in any safe (Victor found ฿3,000 in a condo wardrobe)
   _goExpat({ soi6: true });
 }
 function _newVacation(opts) {
@@ -7031,11 +7040,54 @@ function _paperWord(p) { return p === "permit" ? "a work permit" : p === "longst
 function _companyBar(room) { const r = ROOMS[room]; return !!r && (r.barType === "gogo" || r.barType === "gents" || _PLG_ROOMS.includes(room)); }   // a company behind it: the only paper that can carry a permit (the ฿2m grid)
 function _floorKnowsYou(room) { return (typeof _staffAt === "function" ? _staffAt(room) : []).some(id => NPC_ROLES[id] === "hostess" && _knownTier(id) >= 2); }
 function _roughFactor() { const m = G.month || {}; return 1 - Math.min(0.6, RETAINER_ROUGH * (m.rough || 0)); }
+function _paperTalk(npc) {
+  const n = NPCS[npc] ? NPCS[npc].name : "", reg = typeof _hoursRegister === "function" ? _hoursRegister(npc) : "floor", th = reg === "house" && typeof _thaiHouse === "function" && _thaiHouse(npc);
+  const mine = _paperWord(_paper());
+  if (npc === "tan") { _say(`"Paper." Tan says it the way he says most things, as if it were a fare. "You have ${mine}. A company puts a man on a permit — two million baht of company for every farang name on it, which is why the big rooms can and a beer bar cannot. The rest is an agent on Second Road who charges what the office would, plus his cigarettes. Nobody here asks until something happens. Then everybody asks."`); return true; }
+  if (NPC_ROLES[npc] === "hostess") { _say(_pickTownLine([`"Visa?" ${n} laughs. "I am Thai, na — I don't have paper problem. Farang have paper problem. The agent on Second Road, the one with the sign, he fix for everybody. Expensive, but he fix."`,
+    `"${mine.replace(/^a /, "")}?" ${n} shrugs. "I don't know this one. The farang who work here — Bert — he have paper from the company, I think. Or he don't. Nobody ask."`,
+    `"Paper." ${n} makes a face. "My friend's farang, every three month he go to the border and come back grey. Now he pay a man and he don't go. Is better. For him."`], "papertalk:floor")); return true; }
+  if (reg === "house" || NPCS[npc].manager) { _say(_pickTownLine(th ? [`"${mine.replace(/^a /, "")}." ${n} says it flat. "The company bar, the go-go, they have a company — two million baht paper, one farang name each. A beer bar has nothing. So a farang on a beer bar rail works on nothing. Everybody know. Nobody look, until somebody fight."`,
+      `"Agent on Second Road," ${n} says. "Everybody use him. He charge, he fix, you don't go to the office. For a permit you need a company. For a bank book you need the permit, or the long visa. Tourist get nothing now — the bank change the rule."`]
+    : [`"Paper." ${n} does not look up. "The company bars can put a man on a permit — two million of capital per name, and they have it. A beer bar has a woman's name on a registration and nothing to hang a farang off. Everybody on a beer bar rail is on something that isn't a permit, and everybody knows, and nobody looks until a fight brings the police in to read it."`,
+      `"The agent on Second Road," ${n} says. "He does the extensions, the reports, the letter for the bank — for a fee you'd rather not know. A bank book wants the long visa or a permit now; the tourist stamp gets you a foreign card and its fee. You have ${mine}, which is ${_paper() === "permit" ? "the good one" : _paper() === "longstay" ? "the quiet one" : "the one everybody starts on"}."`], "papertalk:house")); return true; }
+  if (NPCS[npc].patron || ROOMS[NPCS[npc].room] && ROOMS[NPCS[npc].room].barType) { _say(_pickTownLine([`"Visa?" ${n} snorts. "Retirement extension, eight hundred thousand in the bank for two months before and three after, and an agent on Second Road who does the queueing for fifteen. Don't do the border runs. Nobody does the border runs any more; they do the agent."`,
+    `"Paper's the one thing nobody here talks about and everybody pays for," ${n} says. "A permit needs a company behind you; a beer bar can't give you one, whatever the manager tells you. The bank book wants the visa first — they tightened that, after the mule business."`,
+    `${n} taps the bar. "Long-stay, through the agent. The office is on Second Road and the agent is next to it, and the difference is a day of your life and about two thousand baht. You have ${mine}; that's where everyone starts."`], "papertalk:patron")); return true; }
+  return false;
+}
+// THE MANAGER'S OWN FIGURES, from the floor he manages (Dougal, round 98: "my job" was her work node, three nights running)
+function _myJobTalk(npc, topic) {
+  const t = String(topic || "").toLowerCase();
+  if (!(G.job && G.job.kind === "manager" && (/^(?:my |the |your )?(?:job|shifts?|nights?|wages?|pay|envelope|payday|rail|work here)$/.test(t.trim()) || /\b(my job|my shifts?|my nights?|my wages?|my pay|the envelope|my money|what you pay me|my rail)\b/.test(t)))) return false;   // the parser hands "my job" over as "job"
+  if (!((NPCS[npc].room === G.job.room || (NPCS[npc].bars || []).includes(G.job.room)) && (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house))) return false;
+  const j = G.job, n = NPCS[npc].name, reg = _hoursRegister(npc), base = j.corp ? MGR_PERMIT_PAY : MGR_CASH_PAY;
+  _say(reg === "floor" ? `"Your job?" ${n} counts on her fingers. "${j.nights} night a week. This month you stand ${j.stood || 0}. Mama pay on the payday${j.corp ? ", through the book" : ", in envelope"} — ฿${_num(base)} if you stand all. You stand half, she pay half. Simple, na."`
+    : `"Your nights." ${n} does not need the book. "${j.nights} a week, ฿${_num(base)} a month ${j.corp ? "through the books" : "in an envelope"} on the payday, pro rata — ${j.stood || 0} stood this month so far. Stand them and it's yours; skip them and it isn't."`);
+  return true;
+}
+// THE TICKET IN THE BIN, said to her (Dougal, round 97): the leaving's inverse — once a trip, in her register, by how well she knows you
+function _stayTalk(npc) {
+  const n = NPCS[npc].name, said = (G.soc.staySaid = G.soc.staySaid || {});
+  if (said[npc]) { _say(`${n} nods. "You tell me. I remember." A beat. "I still don't believe. But I remember."`); return true; }
+  said[npc] = G.day; const t = _knownTier(npc);
+  _say(_pickTownLine(t >= 2 ? [`"Stay?" ${n} puts the glass down. "Everybody say stay. Three men say it to me, this year. One stay." She looks at you properly. "Okay. Then I stop counting days for you. Then you have to come anyway — not because flight, because me."`,
+      `${n} does not smile at first, which is how you know it landed. "You stay. Hm." Then she does. "Then I need to know your real name, not the one on the stool. And you need a job, na — Pattaya eat the ones who only drink."`,
+      `"No ticket." ${n} says it back, testing it. "Then tomorrow is not the last time, and the day after is not the last time." She takes your glass and brings it back full, which she has never done unpaid. "Welcome. Now you pay like everybody."`]
+    : [`"Stay?" ${n} laughs. "Everybody stay, first week. Second week they buy ticket. Okay — show me in a month."`,
+      `${n} shrugs. "Good for you. Pattaya is cheap if you have money and expensive if you don't. Which one you are, I find out."`,
+      `"Live here?" ${n} looks you over like a landlord. "Then learn the price of everything, and buy me one drink a night, not five. That is how you live here."`], "staytalk:" + t));
+  return true;
+}
+function _jobName() {   // what the job is called in a sentence (Victor, the payday-ledger: "undefined's rail")
+  const j = G.job; if (!j) return "";
+  return j.kind === "teach" ? "the platform" : j.kind === "school" ? "the school" : (_barName(j.room) || "the bar");
+}
 function _jobOffer(room, npc) {
   const n = NPCS[npc] ? NPCS[npc].name : "the house";
   if (G.stage !== "expat") { _say(`"${n === "the house" ? "" : n + ": "}A job? You are on holiday." ${n === "the house" ? "The house" : n} finds that funnier than you do.`); return true; }
   if (_barOwned() && G.bar && G.bar.room === room) { _say("You own it. The job is yours already, and it does not pay what you think."); return true; }
-  if (G.job) { _say(G.job.kind === "teach" ? "You have a job; the mornings are spoken for. (QUIT JOB first.)" : `You have a rail — ${_barName(G.job.room)}'s. One at a time. (QUIT JOB first.)`); return true; }
+  if (G.job) { _say(G.job.kind === "teach" ? "You have a job; the mornings are spoken for. (QUIT JOB first.)" : G.job.kind === "school" ? "You have a job — the school, eight o'clock Monday to Friday. One at a time. (QUIT JOB first.)" : `You have a rail — ${_jobName()}'s. One at a time. (QUIT JOB first.)`); return true; }
   const company = _companyBar(room);
   if (!_floorKnowsYou(room)) { _say(`"${n}" shrugs: "A job? First the floor has to know your face. Come back when somebody here calls you by name."`.replace(/^"[^"]*" shrugs/, `${n} shrugs`)); return true; }
   if (company && G.paperFlag != null && G.day - G.paperFlag < PAPER_FLAG_DAYS) { _say(`${n} does not quite look at you. "The company checked. There was a night with the police and a paper that was not right. Not for a while."`); return true; }
@@ -7059,7 +7111,7 @@ function _takeJob() {
 function _doTeach() {
   if (G.stage !== "expat") { _say("A holiday has no mornings to sell. (It is a resident's job.)"); return; }
   if (G.job && G.job.kind === "teach") { _say(`You already teach — ฿${_num(TEACH_PAY)} a month at full mornings, less what the mornings cost. (QUIT JOB to stop.)`); return; }
-  if (G.job) { _say(`You have a rail — ${_barName(G.job.room)}'s. One job at a time. (QUIT JOB first.)`); return; }
+  if (G.job) { _say(G.job.kind === "school" ? "You have a job — the school. One at a time. (QUIT JOB first.)" : `You have a rail — ${_jobName()}'s. One job at a time. (QUIT JOB first.)`); return; }
   if (G.room !== _hotelRoomId()) { _say("A laptop, a quiet room and a morning voice: it starts from your room, not a bar stool."); return; }
   G.job = { kind: "teach", since: G.day };
   _say(`A platform, a profile, a flag on it, and a scanned degree you may or may not have. Twenty hours a week in a quiet room — ฿${_num(TEACH_PAY)} a month if the mornings are yours; the platform counts the ones that are not. Nobody in this town will ever ask what paper it is on. (QUIT JOB to stop; MONEY says where you stand.)`, "win");
@@ -7102,8 +7154,10 @@ function _jobNight() {
   if (G.paperUntil != null && G.day >= G.paperUntil) { G.paperUntil = null; G.paper = _paperBase(); G.thaiAccount = G.paper !== "tourist"; _say(`(The permit's paper has run out: ${_paperWord(G.paper)} again${G.thaiAccount ? "" : ", and the bank book with it"}.)`, "dim"); }
   if (j && j.kind === "school") {   // a rough morning before a school day is a late; three in a month is the letter
     const roughNow = (G.month && G.month.rough || 0) > (j.roughSeen || 0); j.roughSeen = G.month && G.month.rough || 0;
+    const _lastEnd = (G.nightLog || []).slice(-1)[0], _endR = _lastEnd && typeof _lastEnd === "object" ? _lastEnd.reason : _lastEnd;
+    const upAtDawn = ["dawn", "allnighter", "sunrise"].includes(_endR);   // a night that ran to six is a late wherever it ended (Victor: up till 06:00 at home counted for nothing)
     const schoolMorning = [1, 2, 3, 4, 5].includes(G.day % 7);   // the night just played ends on a weekday morning (day 1 is Monday)
-    if (roughNow && schoolMorning) {
+    if ((roughNow || upAtDawn) && schoolMorning) {
       j.lates = (j.lates || 0) + 1;
       if (j.lates >= SCHOOL_LATES) { G.job = null; if (_paper() === "permit") G.paperUntil = G.day + PAPER_GRACE; _say(`(The third morning in a month. The letter is very polite, and it is a letter. The school's paper was the school's.)`, "alert"); return; }
       _say(`(Eight o'clock came and went with you in it. The school counts: ${j.lates} of ${SCHOOL_LATES} this month.)`, "dim");
@@ -7112,6 +7166,7 @@ function _jobNight() {
   }
   if (!j || j.kind !== "manager") return;
   const stood = j.shiftDay === G.day - 1 && (j.shiftStood || 0) >= WORK_MIN_STOOD;
+  if (j.shiftDay === G.day - 1 && !stood) _say(`(You declared a shift at ${_barName(j.room)} and stood ${j.shiftStood || 0} turn${j.shiftStood === 1 ? "" : "s"} of it; the house counts a night from ${WORK_MIN_STOOD / 10} hours on the rail. It did not count.)`, "dim");
   if (stood) {
     j.stood = (j.stood || 0) + 1; j.weekStood = (j.weekStood || 0) + 1;
     if (j.corp && _paper() !== "permit" && j.stood >= MGR_PERMIT_AFTER) {
@@ -7150,6 +7205,11 @@ function _doRentCondo() {
   if (G.room !== "pratumnak_soi5") { _say("The condo towers are up on Pratumnak Soi 5 — the office on the ground floor of the one with the intercom does the paper. (TRAVEL there.)"); return; }
   const dep = CONDO_RENT * CONDO_DEPOSIT_MONTHS, advance = CONDO_RENT, need = dep + advance;
   const have = (G.money || 0) + (G.bank || 0);
+  if (G.askArmPrev !== "condo") {   // the terms first, the money on the second ask with no command between — ฿27,000 went on a question (Victor)
+    G.askArm = "condo";
+    _say(`The woman in the office slides the sheet across. A studio on the ninth floor: ฿${_num(CONDO_RENT)} a month and the electric — about ฿${_num(CONDO_UTIL)} — both on the payday; ฿${_num(dep)} deposit (two months) held ${CONDO_LEASE} days, and ฿${_num(advance)} the first month in advance — ฿${_num(need)} today. No desk, no folio, no joiner fee; a sign about overnight guests. Short twice and the lock changes and the deposit is theirs; move out inside the lease and it is theirs too. (RENT A CONDO again to sign.)`);
+    return;
+  }
   if (have < need) { _say(`The woman in the office slides the sheet across: ฿${_num(dep)} deposit — two months — and ฿${_num(advance)} the first month in advance. ฿${_num(need)}, and you have ฿${_num(have)} between the pocket and the account. She does not say anything unkind. She does not have to.`); return; }
   let fromBank = Math.min(G.bank || 0, need); G.bank = (G.bank || 0) - fromBank; const fromPocket = need - fromBank; G.money -= fromPocket;
   G.condoPaid = (G.condoPaid || 0) + need;
@@ -7163,6 +7223,12 @@ function _doRentCondo() {
 function _doMoveOut() {
   if (G.hotel !== "condo" || !G.condo) { _say("You have no lease to give back. The hotel takes a key card, not notice."); return; }
   const c = G.condo, kept = G.day - c.since < CONDO_LEASE;
+  if (G.askArmPrev !== "moveout") {   // it asks once: a ฿18,000 deposit went on a question (Victor)
+    G.askArm = "moveout";
+    _say(kept ? `The lease has ${CONDO_LEASE - (G.day - c.since)} days to run. Hand the key back now and the office keeps the ฿${_num(c.deposit)} deposit, and this month's rent with it; your bag goes to the Sabai Palms. (MOVE OUT again if you mean it.)`
+      : `The lease has run its term: hand the key back and the ฿${_num(c.deposit)} deposit comes back to the account, the office permitting; your bag goes to the Sabai Palms. (MOVE OUT again if you mean it.)`);
+    return;
+  }
   if (!kept) { G.bank = (G.bank || 0) + c.deposit; _bankIn(0); }
   G.condo = null; G.hotel = "sabai"; G.room = _hotelRoomId();
   _say(kept ? `You give the key card back inside the lease, and the office keeps the ฿${_num(c.deposit)} deposit the way the lease said it would, with a smile. Your bag makes its own way to the Sabai Palms.`
@@ -7197,7 +7263,7 @@ function _destituteTick() {
     const n = NPCS[k.id] ? NPCS[k.id].name : "She";
     if (k.nights >= KEPT_BY_NIGHTS) {
       G.keptBy = null; G.keptByLog = { id: k.id, until: G.day + 14 }; _addBond(k.id, -2); if (typeof _repHit === "function") _repHit(1);
-      _say(`${n} says it at the door, not looking at you, which is how she says the things that cost her: "Mama ask who is the farang in my room. My sister ask. Five night, I say. It is five night." The mat is rolled. The soi has noticed, and the soi's noticing is a thing she pays for, not you.`, "alert");
+      _say(`${n} says it at the door, not looking at you, which is how she says the things that cost her: "Mama ask who is the farang in my room. The girls ask. Five night, I say. It is five night." The mat is rolled. The soi has noticed, and the soi's noticing is a thing she pays for, not you.`, "alert");
       G.hotel = "sabai"; G.room = _hotelRoomId();
     } else {
       _say(`(A mat in ${n}'s room — ${KEPT_BY_NIGHTS - k.nights} night${KEPT_BY_NIGHTS - k.nights === 1 ? "" : "s"} more before her mama asks. No folio. Her face on her floor is the rent.)`, "dim");
@@ -7210,7 +7276,7 @@ function _destituteTick() {
   const left = DESTITUTE_DAYS - G.destitute;
   if (G.destitute >= DESTITUTE_DAYS) { _gameEnd("repatriated"); return; }
   if (G.destitute === 1) {
-    _say(`(No roof and nothing for one. The first morning of it: ${left} more and a desk in Bangkok has your name. Nira lends against nothing once; Nont moves money that is not there; a bar whose floor knows your face pays a manager in notes.)`, "alert");
+    _say(`(No roof and nothing for one. The first morning of it: ${left} more and a desk in Bangkok has your name. Nira lends against nothing once; Nont moves money that is not there${G.job ? (G.job.kind === "manager" ? "; the envelope comes on the payday, and the nights before it are the problem" : "") : "; a bar whose floor knows your face pays a manager in notes"}.)`, "alert");
     const her = !G.keptByUsed && _bestWoman();
     if (her) {
       G.keptByUsed = true; G.pendingChoice = "keptby"; G.keptOffer = her;
@@ -7223,13 +7289,13 @@ function _destituteTick() {
 }
 function _keptByPrompt() {
   const her = G.keptOffer, n = NPCS[her] ? NPCS[her].name : "She";
-  _say(`${n}'s text, at nine in the morning, which is the middle of her night: "you stay me. small room, my sister also. ${KEPT_BY_NIGHTS} night, then mama ask. you dont pay. you dont tell." (YES — her mat, and her face on her floor · NO.)`, "dim");
+  _say(`${n}'s text, at nine in the morning, which is the middle of her night: "you stay me. small room, one fan. ${KEPT_BY_NIGHTS} night, then mama ask. you dont pay. you dont tell." (YES — her mat, and her face on her floor · NO.)`, "dim");
 }
 function _keptByYes() {
   const her = G.keptOffer; G.pendingChoice = null; G.keptOffer = null;
   G.keptBy = { id: her, since: G.day, nights: 0 }; G.destitute = 0; G.destituteDay = null; G.roofless = null;
   const n = NPCS[her] ? NPCS[her].name : "She", st = typeof _streetOf === "function" ? _streetOf(NPCS[her].room) : null;
-  _say(`A room off a soi you had never walked, a mat on the floor by a fan, a sister who looks at you once and then at her phone. ${n} does not make a thing of it, which is the thing of it. (No folio. ${KEPT_BY_NIGHTS} nights.)`, "win");
+  _say(`A room off a soi you had never walked, a mat on the floor by a fan, a rice cooker and a shrine shelf and nothing else that is not hers. ${n} does not make a thing of it, which is the thing of it. (No folio. ${KEPT_BY_NIGHTS} nights.)`, "win");
   if (st && ROOMS[st]) { G.room = st; _describeRoom(true); }
 }
 function _keptByNo() {
@@ -7247,6 +7313,9 @@ function _incomeTick() {
   G.payDay += INCOME_DAYS; G.payCount = (G.payCount || 0) + 1;
   const amt = _incomeAmount();
   if (amt > 0) { _bankIn(amt); (G.bankNotes = G.bankNotes || []).push(om.what); }
+  // the agent's line: the paper costs what it costs, offstage
+  const pc = PAPER_COST[_paper()] || 0; let paperLine = "";
+  if (pc > 0) { if ((G.bank || 0) >= pc) G.bank -= pc; else { const r = pc - (G.bank || 0); G.bank = 0; G.money = Math.max(0, G.money - r); } G.paperPaid = (G.paperPaid || 0) + pc; paperLine = ` The agent's ฿${_num(pc)} for ${_paperWord(_paper())}.`; }
   // the job's share: the platform and a company bar pay into the account; a beer bar's envelope is notes in the hand
   let jobLine = "";
   if (G.job) {
@@ -7259,20 +7328,18 @@ function _incomeTick() {
     else if (j.corp) { if (jp > 0) { _bankIn(jp); G.bankNotes.push(`${_barName(j.room)}'s salary, through the company`); } jobLine = ` ${_barName(j.room)} paid ฿${_num(jp)} through the books for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }
     else { if (jp > 0) { G.money += jp; G.jobPaid = (G.jobPaid || 0) + jp; } jobLine = ` ${_barName(j.room)}'s envelope: ฿${_num(jp)} for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }
   }
-  // the agent's line: the paper costs what it costs, offstage
-  const pc = PAPER_COST[_paper()] || 0; let paperLine = "";
-  if (pc > 0) { if ((G.bank || 0) >= pc) G.bank -= pc; else { const r = pc - (G.bank || 0); G.bank = 0; G.money = Math.max(0, G.money - r); } G.paperPaid = (G.paperPaid || 0) + pc; paperLine = ` The agent's ฿${_num(pc)} for ${_paperWord(_paper())}.`; }
   const lines = [];
-  if (om.kind === "pot") lines.push(`The month: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. No payday — ${om.what} is what there is: ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account, about ${_weeksLeft()} weeks at this rate.`);
-  else if (amt <= 0) lines.push(`The month: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. ${om.what.replace(/^./, c => c.toUpperCase())} did not land this time${om.kind === "salary" ? " — somebody at home noticed" : ""}. ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account.`);
+  if (om.kind === "pot") lines.push(`The month, to last night's close: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. No payday — ${om.what} is what there is: ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account, about ${_weeksLeft()} weeks at this rate.`);
+  else if (amt <= 0) lines.push(`The month, to last night's close: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. ${om.what.replace(/^./, c => c.toUpperCase())} did not land this time${om.kind === "salary" ? " — somebody at home noticed" : ""}. ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account.`);
   else {
     const short = om.kind === "retainer" && amt < om.income ? ` (short — the client counted ${m.rough} rough morning${m.rough === 1 ? "" : "s"})` : "";
-    lines.push(`The month: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room; ${om.what} landed, ฿${_num(amt)}${short}. After the roof that is about ${_nightsAWeek(amt)} nights a week.`);
+    lines.push(`The month, to last night's close: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room; ${om.what} landed, ฿${_num(amt)}${short}. After the roof that is about ${_nightsAWeek(amt + _jobPay())} nights out a week, at ฿${_num(NIGHT_COST)} a night.`);
   }
   const condoLine = _condoMonth();
   if (jobLine || paperLine || condoLine) lines[0] += jobLine + paperLine + condoLine;
   G.monthLine = lines;
   G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
+  if (G.hotel === "condo" && G.condo && condoLine && !/not there/.test(condoLine)) G.month.rent = CONDO_RENT + CONDO_UTIL;   // the rent is the coming month's room (Victor: "฿0 of it the room")
   if (G.job && G.job.roughSeen) G.job.roughSeen = 0;   // the school counts the new month's mornings from zero
 }
 function _doMoney() {
@@ -7282,13 +7349,13 @@ function _doMoney() {
   const amt = _incomeAmount();
   if (G.destitute) _say(`(No roof: morning ${G.destitute} of ${DESTITUTE_DAYS}. ${DESTITUTE_DAYS - G.destitute} more and the consulate has your name.)`, "alert");
   if (G.keptBy) _say(`(A mat in ${NPCS[G.keptBy.id] ? NPCS[G.keptBy.id].name : "her"}'s room, ${KEPT_BY_NIGHTS - (G.keptBy.nights || 0)} nights left of it. No folio; her face is the rent.)`, "dim");
-  { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_barName(G.job.room)}` : ""}${p === "tourist" ? " — no bank book, the foreign card and its fee" : p === "longstay" ? " — a bank book" : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
+  { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_jobName()}` : ""}${p === "tourist" ? " — no bank book, the foreign card and its fee" : p === "longstay" ? " — a bank book" : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
     if (G.stringer) _say(`Stringer for Last Orders: ฿${_num(OWL_LEAD_PAY)} a paragraph, ${OWL_LEADS_WEEK} a week, for a thing you read that Mort had not — ${_stringerOwed().length} unpaid.`, "dim");
     if (G.job) _say(G.job.kind === "teach" ? `Job: online English, ฿${_num(_jobPay())} this month at the mornings you have kept.` : G.job.kind === "school" ? `Job: the school — ฿${_num(SCHOOL_PAY)} a month through the books, eight o'clock Monday to Friday; ${G.job.lates || 0} of ${SCHOOL_LATES} late mornings this month${G.job.paidOnce ? "" : "; the permit with the first payday"}.` : `Job: manager at ${_barName(G.job.room)} — ${G.job.nights} nights a week, ${G.job.stood || 0} stood this month, ${G.job.corp ? `฿${_num(MGR_PERMIT_PAY)} through the books` : `฿${_num(MGR_CASH_PAY)} in an envelope`}${G.job.corp && _paper() !== "permit" ? `; the paper after ${MGR_PERMIT_AFTER} nights (${G.job.stood || 0} so far)` : ""}.`, "dim"); }
   const roof = G.hotel === "condo" ? `the condo is ฿${_num(CONDO_RENT + CONDO_UTIL)} a month with the electric` : `the room is ฿${_num(_hotelRate(G.hotel))} a night`;
   if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; ${roof}. At this rate, about ${_weeksLeft()} weeks.`);
   else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; ${roof}. About ${_weeksLeft()} weeks at this rate.`);
-  else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. ${roof.replace(/^./, c => c.toUpperCase())}; after the roof that is about ${_nightsAWeek(amt)} nights a week. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
+  else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. ${roof.replace(/^./, c => c.toUpperCase())}; after the roof that is about ${_nightsAWeek(amt + _jobPay())} nights out a week, at ฿${_num(NIGHT_COST)} a night. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
   if (G.hotel === "condo" && G.condo) _say(`(The condo: ${G.condo.short ? `${G.condo.short} month short — one more and the lock changes` : "paid up"}; the ฿${_num(G.condo.deposit)} deposit is the office's until the lease has run ${CONDO_LEASE} days${G.day - G.condo.since >= CONDO_LEASE ? " — which it has" : ""}.)`, "dim");
   _say(`(This month so far: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room.)`, "dim");
 }

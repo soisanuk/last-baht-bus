@@ -1426,7 +1426,7 @@ const _HOTELS = {
   queenvic:  { room: "qv_room",        name: "Queen Vic Inn",     rate: 700,  expatRate: 400 },
   areca:     { room: "areca_room",     name: "Areca Lodge",       rate: 900,  expatRate: 520, pool: true }, // "a window over the garden pool"
   metropole: { room: "metropole_room", name: "LK Metropole",      rate: 1300, expatRate: 730, pool: true },
-  condo:     { room: "condo_room",     name: "the condo on Pratumnak", rate: 0, expatRate: 0, pool: true, monthly: true },   // by the month, on the payday's clock (2026-10-20) — never a desk, never on the ladder
+  condo:     { room: "condo_room",     name: "condo on Pratumnak", rate: 0, expatRate: 0, pool: true, monthly: true },   // by the month, on the payday's clock (2026-10-20) — never a desk, never on the ladder
 };
 const _HOTEL_DOWNGRADE = ["metropole", "areca", "queenvic", "sabai"];
 const _DEBT_CAP = 2000;
@@ -1452,9 +1452,9 @@ function _chargeRent(rough) {
       "The ledger closes with real warmth.)", "dim");
     G.hotelDebt = 0;
   }
-  if (G.stage === "expat" && G.month) G.month.rent = (G.month.rent || 0) + _hotelRate(G.hotel);   // the month's book (paid from wherever it is paid; the shortfall ladder bills the same figure)
+  const _monthRoom = (n) => { if (G.stage === "expat" && G.month) G.month.rent = (G.month.rent || 0) + n; };   // the month's book counts what was PAID for the room (Dougal, round 97: "฿2,160 of it the room" from a book at its cap)
   if (G.money >= _hotelRate(G.hotel)) {
-    G.money -= _hotelRate(G.hotel);
+    G.money -= _hotelRate(G.hotel); _monthRoom(_hotelRate(G.hotel));
     _say(`(${G.checkoutNight ? "Checkout: the last night settled at the desk on the way to the taxi" : rough ? "The folio is waiting at the desk when you finally get back" :
       "The folio slides under the door"}: ฿${_num(_hotelRate(G.hotel))}` +
       (G.stage === "expat" ? " — the long-stay rate" : "") +
@@ -1464,7 +1464,7 @@ function _chargeRent(rough) {
   // A guest with ฿94,700 in the account and ฿450 in his pocket had his bag posted
   // to Naklua (Lionel, round 36). The desk runs the card before it runs you out.
   if ((G.bank || 0) >= _hotelRate(G.hotel)) {
-    G.bank -= _hotelRate(G.hotel);
+    G.bank -= _hotelRate(G.hotel); _monthRoom(_hotelRate(G.hotel));
     _say(`(Light pockets; the desk runs your card instead. ฿${_num(_hotelRate(G.hotel))}, the ` +
       `${_HOTELS[G.hotel].name}, off the account — ฿${_num(G.bank)} in the bank.)`, "dim");
     return;
@@ -1487,7 +1487,7 @@ function _chargeRent(rough) {
   }
   const rate = _hotelRate(G.hotel);
   if (G.money >= rate) {
-    G.money -= rate;
+    G.money -= rate; _monthRoom(rate);
     _say(`(฿${_num(rate)} for the night. ฿${_num(G.money)} left — thin, but paid.)`, "dim");
   } else {
     const owedBefore = G.hotelDebt;
@@ -3676,7 +3676,10 @@ function _tick() {
     }
   }
   if (typeof _workPresenceTick === "function") _workPresenceTick(); // a declared shift has to be stood
-  if (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && G.room === G.job.room) G.job.shiftStood = (G.job.shiftStood || 0) + 1;   // a manager's shift is stood the same way
+  if (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && G.room === G.job.room) {   // a manager's shift is stood the same way
+    G.job.shiftStood = (G.job.shiftStood || 0) + 1;
+    if (G.job.shiftStood === 1 || G.job.shiftStood % 10 === 0) for (const id of (typeof _staffAt === "function" ? _staffAt(G.room) : [])) (G.seenDay = G.seenDay || {})[id] = G.day;   // the floor saw you (Dougal: "10 night you no come" to the man on its rail)
+  }
   if (typeof _workFloor === "function") _workFloor();          // …and a stood shift is where your own staff live
   if (!_onRide()) _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();

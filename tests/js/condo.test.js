@@ -28,18 +28,18 @@ beforeEach(() => { newGame(); });
 test("the lease: at the office on Pratumnak Soi 5, in the expat stage, for the deposit and the first month; the lift is a tenant's", () => {
   moveIn("pension"); G.room = "pratumnak_soi5";
   assert.match(t("examine tower"), /Rooms by the month/); assert.match(t("in"), /office on the ground floor/); assert.equal(G.room, "pratumnak_soi5");
-  G.bank = 10000; G.money = 1000; assert.match(t("rent a condo"), /฿27,000, and you have ฿11,000/); assert.equal(G.hotel, "sabai");
-  G.bank = 50000; const b = G.bank; assert.match(t("rent a condo"), /key card for the ninth floor/);
+  G.bank = 10000; G.money = 1000; assert.match(t("rent a condo"), /RENT A CONDO again to sign/, "the terms first"); assert.match(t("rent a condo"), /฿27,000, and you have ฿11,000/); assert.equal(G.hotel, "sabai");
+  G.bank = 50000; const b = G.bank; run("rent a condo"); assert.match(t("rent a condo"), /key card for the ninth floor/, "a refused sign is not an arm: the terms again, then the key");
   assert.equal(G.hotel, "condo"); assert.equal(G.room, "condo_room"); assert.equal(G.bank, b - need); assert.ok(G.condo && G.condo.deposit === CONDO_RENT * 2);
   assert.match(said(), /Your Condo — Pratumnak/); assert.match(t("examine kitchen"), /COOK/); assert.match(t("examine balcony"), /the bay/);
-  assert.match(t("money"), /the condo is ฿11,000 a month with the electric/i); assert.match(said(), /paid up/);
+  assert.match(t("money"), /the condo is ฿11,000 a month with the electric/i); assert.match(said(), /paid up/); assert.match(said(), /nights out a week, at ฿1,200 a night/);
   // a holiday has a hotel
   newGame(); G.player = { origin: "pension", personality: "straight", orientation: "straight", said: {}, lang: "en" }; _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation"; G.room = "pratumnak_soi5"; G.nightTurn = 30;
   assert.match(t("rent a condo"), /residents/); assert.match(t("in"), /A holiday has a hotel/);
 });
 
 test("no folio under the door; the rent and the electric on the payday; short twice and the lock changes, the deposit the landlord's", () => {
-  moveIn("monger"); G.room = "pratumnak_soi5"; G.bank = 60000; run("rent a condo"); const b0 = G.bank; G.money = 3000;
+  moveIn("monger"); G.room = "pratumnak_soi5"; G.bank = 60000; run("rent a condo"); run("rent a condo"); const b0 = G.bank; G.money = 3000;
   sleep(); assert.equal(G.bank, b0, "nothing under the door"); assert.equal(G.money, 3000); assert.doesNotMatch(said(), /folio/);
   G.day = G.payDay + 30; sleep(); assert.match(said(), /The condo: ฿9,000 rent and ฿2,000 electric/); assert.ok(G.bank <= b0 - CONDO_RENT - CONDO_UTIL);
   G.bank = 0; G.money = 500; G.day = G.payDay + 30; sleep(); assert.match(said(), /one month\. A second and the lock changes/); assert.equal(G.condo.short, 1); assert.equal(G.hotel, "condo");
@@ -48,7 +48,7 @@ test("no folio under the door; the rent and the electric on the payday; short tw
 });
 
 test("a guest costs no fee — the office has a word, once; the kitchen feeds you for sixty baht; the pool is yours", () => {
-  moveIn("pension"); G.room = "pratumnak_soi5"; G.bank = 60000; run("rent a condo"); G.money = 2000;
+  moveIn("pension"); G.room = "pratumnak_soi5"; G.bank = 60000; run("rent a condo"); run("rent a condo"); G.money = 2000;
   const m = G.money; _joinerFee(); assert.equal(G.money, m, "no joiner fee"); assert.ok(G.condo.guestPending);
   sleep(); assert.match(said(), /sign about overnight guests/); assert.ok(G.condo.guestsTold); _joinerFee(); sleep(); assert.doesNotMatch(said(), /sign about overnight guests/, "once");
   G.hunger = 80; const m2 = G.money; assert.match(t("cook"), /฿60/); assert.equal(G.money, m2 - CONDO_MEAL); assert.ok(G.hunger <= 30);
@@ -58,9 +58,9 @@ test("a guest costs no fee — the office has a word, once; the kitchen feeds yo
 });
 
 test("moving out inside the lease forfeits the deposit; after it the office hands it back; the checkout list never offers the condo", () => {
-  moveIn("pension"); G.room = "pratumnak_soi5"; G.bank = 60000; run("rent a condo"); const dep = G.condo.deposit;
-  const b = G.bank; assert.match(t("move out"), /keeps the ฿18,000 deposit/); assert.equal(G.bank, b); assert.equal(G.hotel, "sabai");
-  G.room = "pratumnak_soi5"; run("rent a condo"); G.condo.since = G.day - CONDO_LEASE; const b2 = G.bank; assert.match(t("move out"), /lands back in the account/); assert.equal(G.bank, b2 + dep);
+  moveIn("pension"); G.room = "pratumnak_soi5"; G.bank = 60000; run("rent a condo"); run("rent a condo"); const dep = G.condo.deposit;
+  const b = G.bank; assert.match(t("move out"), /MOVE OUT again if you mean it/, "it asks once"); assert.equal(G.hotel, "condo"); assert.match(t("move out"), /keeps the ฿18,000 deposit/); assert.equal(G.bank, b); assert.equal(G.hotel, "sabai");
+  G.room = "pratumnak_soi5"; run("rent a condo"); run("rent a condo"); G.condo.since = G.day - CONDO_LEASE; const b2 = G.bank; run("move out"); assert.match(t("move out"), /lands back in the account/); assert.equal(G.bank, b2 + dep);
   G.room = "hotel_room"; G.nightTurn = 2; out = []; run("checkout"); assert.doesNotMatch(said(), /condo/i); run("stay");
   assert.match(t("move out"), /no lease to give back/);
 });

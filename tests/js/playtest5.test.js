@@ -910,7 +910,7 @@ test("review: a command that merely CONTAINS an answer word passes through a sof
   doCommand(`buy drink for ${NPCS[girl].name.toLowerCase()}`);
   assert.equal(G.pendingEnc, null);
   assert.ok(G.money < 2000, "the lady drink was bought — not eaten as the peddler's answer");
-  G.room = "buakhao_n"; G.pendingEnc = "noodle"; out = [];
+  G.room = "buakhao_n"; G.pendingEnc = "noodle"; out = []; for (const k in ENCOUNTERS) G.encDone[k] = true;   // a street encounter rolling on arrival is not the noodle girl's gate (the flower seller re-armed pendingEnc, 2 runs in 10)
   doCommand("go north");
   assert.equal(G.pendingEnc, null);
   assert.notEqual(G.room, "buakhao_n", "GO NORTH walked — 'go' is not the noodle girl's yes");

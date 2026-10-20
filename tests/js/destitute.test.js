@@ -51,7 +51,7 @@ test("her offer: a woman who knows you keeps you — once, a modal; five nights 
   assert.match(t("what does it cost?"), /her mama, her sister and her floor/); assert.equal(G.pendingChoice, "keptby");
   out = []; run("yes"); assert.equal(G.pendingChoice, null); assert.ok(G.keptBy && G.keptBy.id === "lek"); assert.equal(G.destitute, 0); assert.match(said(), /a mat on the floor by a fan/i);
   const b0 = G.bank, m0 = G.money; sleep(); assert.equal(G.keptBy.nights, 1); assert.equal(G.money, m0); assert.equal(G.bank, b0, "no folio"); assert.match(said(), /4 nights more/);
-  G.room = NPCS.lek.room; G.nightTurn = 30; run("talk to lek"); assert.match(t("ask lek about your room"), /sister snore/);
+  G.room = NPCS.lek.room; G.nightTurn = 30; run("talk to lek"); assert.match(t("ask lek about your room"), /One fan\. You snore/);
   const col = _staffAt(NPCS.lek.room).find(i => i !== "lek" && NPC_ROLES[i] === "hostess"); if (col) { run("talk to " + col); assert.match(t("ask " + col + " about the farang in her room"), /keep you|Brave/); }
   const bond = G.soc.drinks.lek; for (let i = 0; i < 4; i++) { G.room = "hotel_room"; sleep(); }
   assert.equal(G.keptBy, null); assert.match(said(), /It is five night/); assert.ok(G.soc.drinks.lek <= bond - 2, "the cost is hers, and some of it is yours to carry: " + G.soc.drinks.lek + " from " + bond); assert.ok(G.keptByLog && G.keptByLog.id === "lek");
