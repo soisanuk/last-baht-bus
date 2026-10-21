@@ -838,5 +838,25 @@
    "design": 131,
    "deferred": 90
   }
+ },
+ {
+  "date": "2026-10-21",
+  "latestRound": 101,
+  "systems": 52,
+  "cells": 796,
+  "lit": 562,
+  "hot": 8,
+  "instrumented": 214,
+  "dark": 20,
+  "systemsNeverWalked": 0,
+  "findingsClassified": 2573,
+  "findingsUntagged": 24,
+  "strays": 6,
+  "verdicts": {
+   "fixed": 1874,
+   "refuted": 146,
+   "design": 132,
+   "deferred": 109
+  }
  }
 ]

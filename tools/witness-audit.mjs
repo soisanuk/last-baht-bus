@@ -34,6 +34,10 @@ const RX = new RegExp("\\b((the whole|half the|all the|the entire|every(?:one|bo
 
 const G_ = "general", C_ = "consequence", W_ = "witness";
 const CLASS = {
+  "engine-parser.js:_streetTalk|the soi talks": [W_, "your own floor on the boss's blackout across the soi: printed only from the blackout street event, by your own staff — round101.test asks the mamasan (Kaspar, round 101)"],
+  "engine-parser.js:_mineTalk|everybody knows": [G_, "Nont on a bar by name: a venue's existence is a fact about the world, not a sighting of you (round 101)"],
+  "engine-parser.js:_townTalk|in front of the whole": [W_, "the saw row, a punter's register: printed only from G.lastNightWas at the bar she left from — round96.test pins who can say it"],
+  "engine-parser.js:_doCommandInner|the girls see": [G_, "your own hostess on why she will not go home with the boss: what the floor would see, said as a reason, not a claim it saw (round 101)"],
   "engine-parser.js:_TOWN|the whole rail knows": [C_, "the my_loan row: the line only prints while G.loan is open, and Nira's cousins asking around IS the mechanic that spread it (round 100)"],
   "engine-parser.js:_TOWN|the soi talks": [C_, "the wallet_back row: the line only prints after walletBack, so the mouth saying the soi talked is the mechanic that heard it (round 99)"],
   "engine-parser.js:_TOWN|everybody knows": [G_, "a fact about the world: Mot sells to one woman and she gives back for manners — the arithmetic of the chain, not a sighting (round 99)"],

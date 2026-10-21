@@ -2353,7 +2353,7 @@ function _nightRide(input) {
   const seq = G.rideSeq;
   if (!seq) { _say("The night's already carried you off. Sleep it off."); return; } // state lost — safety
   const id = seq.id, name = NPCS[id].name;
-  const stop = /\bno\b|\bnope\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish|\bbye\b|goodnight|good night/.test(input);
+  const stop = /\bno\b|\bnope\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish|\bbye\b|goodnight|good night/.test(input) || /^\s*just\s*$/.test(input);   // a bare JUST is the first word of JUST HOME (Eoin, round 101)
   const go = /\b(ride|yes|on|more|another|sure|ok|okay|go|keep|again|deeper|why not|lets?|come|drive)\b/.test(input) && !stop;
   if (stop) return _endRide(seq, "choice");
   // A NON-ANSWER IS NOT GOODBYE (Ruairi, round 75: "what?" on the back of the bike ended the best
@@ -2473,6 +2473,7 @@ function _endRide(seq, reason) {
       `for: easy, warm, hers till morning. ${name} is asleep before you are.`, "win");
     _addBond(id, 3);
     G.lastBfId = id;
+    G.lastRide = { id, day: G.day, stops: 0 };   // she rode you home: the dawn coda is her bike, not the baht bus (Eoin, round 101)
     _endNight("barfine");
     return;
   }
@@ -3095,7 +3096,7 @@ function _walletLostSay() {
     film + "Everything after that is somebody else's story, and there is a receipt in your pocket you do not remember paying for.", "alert");
   _say(`(${_flag("act1Scored") ? "The second wallet. " : ""}You live here now, so nobody is running anywhere: ${_inCondo() ? "the office has a spare key and a sigh for it, your flat is your flat" : "the desk knows your face, your room is your room"}. ` +
     `But the machine on the street is a wall without the card, and the bank's replacement is ${WALLET_CARD_DAYS} days off. ` +
-    `Nira lends; the kid at the Old Market cashes the account without a card; and a wallet in this town goes ${_flag("act1Scored") ? "where it went the first time" : "where lost things go"}. ` +
+    `Nira lends; the kid at the Old Market cashes the account without a card;${typeof _barOwned === "function" && _barOwned() ? " your own till is cash (DRAW, at your bar);" : ""} and a wallet in this town goes ${_flag("act1Scored") ? "where it went the first time" : "where lost things go"}. ` +
     `READ what is still in your pockets. HINT nudges; QUESTS has it on the books.)`, "dim");
 }
 // the hunt's own hints: the lost hours are the blackout's, Lek's sighting is dated by the loss, and the hard way is
@@ -5869,6 +5870,7 @@ function _maybeIncomingText() {
     ], "afftextsour")); buzz(); return;
   }
   if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) {
+    if (G.affair.homeDay === G.day) return;   // she said she is coming after close: no "sleep na boss" from a woman on her way up the stairs (Kaspar, round 101)
     _pushMsg(id, _pickVary([
       "ice man come at 4 again. i deal with it. sleep na boss 😴",
       "mama ask me again today. i say nothing. she know anyway 🙄",
@@ -5888,7 +5890,7 @@ function _maybeIncomingText() {
       "one girl sick tomorrow. i fix. you don't worry",
       "the uncle bring 3 crate short again. i write it. you pay only what come",
       "my mama ask what my boss is like. i say ok. she say only ok?? 555",
-      "the pool table man want cash friday. i say boss decide. he say boss always decide 555",
+      "the pool table man want cash friday. i pay him from the float, slip in the drawer. boss no need decide 555",
       "two farang ask tonight if bar for sale. i say no. correct na?",
     ] : _role === "cashier" ? [
       "float right. i count 2 time. goodnight boss",
@@ -5951,7 +5953,7 @@ function _maybeIncomingText() {
       const _pool = ["i dream about you last night na 💭❤️", _elsewhere ? "you go other bar?? 😤 i see you i KNOW 👀" : "you tired today? 😴 i still smile from the other night",
         _slept ? "you sleep ok? i sleep like a stone 😴💕" : "miss you so much cannot sleep 😢", G.stage === "expat" ? "my farang 🥰 you live here now, no excuse. come see me 555" : "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555",   // a resident is not 'still in pattaya' (Desmond, round 63)
         // deeper than a week, so the her-farang texts do not come round twice (Sunil, round 86)
-        "i buy mango today, i think of you. you hate mango 555 🥭", "the girls ask where is my farang. i say sleeping, old man 😂",
+        "i buy mango today, i think of you. you like mango? everybody like mango 555 🥭", "the girls ask where is my farang. i say sleeping, old man 😂",
         "tonight i wear the blue one. you know which 😏", "my mother ask about you. i say you are polite. she say good 🙏"];
       _pushMsg(id, _floorTextPick(id, _pool));
     }
@@ -6472,6 +6474,32 @@ function _isLeavingSaid(t) {
     !/^(?:why|when|where|did|do|does|how|what|who|is|are|was)\b/.test(t.trim());
 }
 const _LEAVING_RE = /\b(leav(?:e|ing)|fly(?:ing)? (?:home|back|out)|my flight|flight home|(?:go(?:ing)?|off|head(?:ing)?|back) home (?:tomorrow|soon|in \w+ days?|on \w+|next week|this week)|i'?m going home|i go home|tomorrow i (?:go|fly|leave)|last (?:night|day) (?:here|of (?:the|my) (?:trip|holiday|week|stay))|airport tomorrow|my (?:trip|holiday|week) is (?:over|ending|nearly over|almost over)|end of my (?:trip|holiday|week)|going home)\b/;
+// THE FLIGHT YOU DID NOT TAKE: a woman who heard "I fly home tomorrow" answers "my flight" the day after as what it was
+// (Eoin, round 101) — and notices, once, that you are still on her stool (_stillHereTalk, from the talk hooks)
+function _flightTalk(npc, topic) {
+  const t = String(topic || "").toLowerCase().trim();
+  if (!NPC_ROLES[npc] || !NPCS[npc]) return false;
+  if (!/\b(?:my |the )?(?:flight|plane|ticket|airport)\b|\bflying home\b|\bmy last night\b|\b(?:the )?leaving\b/.test(t)) return false;
+  const ls = G.leaveSaid || {}, n = NPCS[npc].name;
+  if (ls[npc] == null) return false;
+  if (ls[npc] === G.day) { _say(_pickVary([`"Your flight?" ${n} nods. "Tomorrow. You tell me already. I don't forget — I only pretend to forget."`, `${n} taps her temple. "I know, I know. Tomorrow you fly. Tonight you sit. Which one you want to talk about?"`], "flightsame")); return true; }
+  (G.stayedPast = G.stayedPast || {})[npc] = G.day;
+  _say(_pickVary([`"Your flight?" ${n} looks at you, then at the stool you are sitting on, then at you again. "I think your flight go without you, na. Every farang's last night is three nights long. 555"`,
+    `${n} laughs before you finish. "The flight! You say 'tomorrow I fly' and tomorrow you are here. Good. I like this kind of flight."`,
+    `"Hmm. The plane go, you stay." ${n} says it like a weather report. "Okay. Then tonight is not last night. Then you buy me drink like a normal night."`,
+    `"Ah — the flight you don't take." ${n} wags a finger. "Next time you say goodbye, I don't believe you. Is your fault."`], "flightpast:" + npc));
+  return true;
+}
+function _stillHereTalk(npc) {   // once, on a bare TALK the day after the flight she was told about
+  const ls = G.leaveSaid || {}; if (!NPC_ROLES[npc] || ls[npc] == null || ls[npc] >= G.day) return false;
+  if (G.leaveOn == null || G.leaveOn > G.day) return false;
+  const sp = (G.stayedPast = G.stayedPast || {}); if (sp[npc] != null) return false;
+  sp[npc] = G.day; const n = NPCS[npc].name;
+  _say(_pickVary([`${n} sees you and stops with the cloth in her hand. "You! You say you fly today." She looks for luggage and finds a beer. "Okay. I think the plane is slow. Sit."`,
+    `"Still here?" ${n} does not hide the smile. "I tell the girls, 'He go home today.' Now they laugh at me. You owe me one drink for that."`,
+    `${n} points at you across the rail. "Your flight! You miss it, or you lie to me?" She decides she does not care which. "Same stool. Same beer."`], "stillhere:" + npc));
+  return false;   // the hello still follows
+}
 function _leavingTalk(npc, topic) {
   // TOMORROW / TONIGHT, said to a woman you have told you are leaving, is about that (Ruth, round 94: "about tomorrow", straight after)
   if (NPC_ROLES[npc] && /^(?:about )?(?:tomorrow|tonight|after tonight)\??$/.test(String(topic || "").toLowerCase().trim()) &&
@@ -6495,6 +6523,7 @@ function _leavingTalk(npc, topic) {
   const said = (G.soc.leavingSaid = G.soc.leavingSaid || {});
   // on the last night, to a woman who knows you, the leaving IS the goodbye — "Yes, yes, you fly… I hear you the first
   // time" waved off the one line Steve had been saving all week (run 7)
+  (G.leaveSaid = G.leaveSaid || {})[npc] = G.day;   // G.soc resets at dawn; the leaving she heard does not (Eoin, round 101: "my flight" the next night was "the wrong girl")
   if (typeof _lastByeDue === "function" && _lastByeDue(npc) && typeof _lastNightBye === "function") { _lastNightBye(npc); said[npc] = G.day; return true; }
   if (said[npc] === G.day) { _say(`${NPCS[npc].name} nods. She heard you the first time.`); return true; }
   // told on an earlier night: she remembers, and does not give the same speech again (Steve's rerun: one reply, twice)
@@ -8177,7 +8206,7 @@ function _keptTick() {   // daily, from _barSettle
   }
   const k = b.kept;
   if (k.stage === "paying") {
-    if (G.day <= k.paidTo) { b.cash += KEPT_FEE; k.fee += KEPT_FEE; b.lastKeptFee = KEPT_FEE; return; }
+    if (G.day <= k.paidTo) { b.cash += KEPT_FEE; k.fee += KEPT_FEE; b.lastKeptFee = KEPT_FEE; (b.eventNotes = b.eventNotes || []).push(`${NPCS[k.id] ? NPCS[k.id].name : "her"}'s sponsor +฿${_num(KEPT_FEE)}`); return; }   // named on the night's notes (Kaspar, round 101: the till moved ฿500 more than in − out every Bert night)   // named on the morning's bar line, not a ฿500 the till moved by itself (Kaspar, round 101) — _barEvent books eventIn, which _barNight adds to the take
     k.stage = "lapsed"; k.lapsed = G.day; b.lastKeptFee = 0;
   }
 }
@@ -8960,6 +8989,13 @@ function _affairHome() {
   }
   if (a.homeDay === G.day) { _say(_fmt("\"I said I come,\" {n} says, not looking up. \"I come.\"", { n })); return; }
   a.homeDay = G.day;
+  { const ct = typeof _closeTurn === "function" ? _closeTurn(G.room) : null;   // the shutters are down and the float is counted: she is not "two minute" behind Cake (Kaspar, round 101, at 05:36)
+    if ((ct != null && G.nightTurn >= ct) || G.nightTurn >= NIGHT_TURNS - 10) {
+      _say(_pickVary([
+        `${n} has the float counted and her shoes already in her hand. "Finish. Everybody gone. Go — I am behind you." She is.`,
+        `"Now?" ${n} looks at the empty floor, the chairs on the tables. "Who is watching? Nobody. Okay. Walk slow, I catch you."`,
+      ], "affairhomelate")); return;
+    } }
   _say(_pickVary([
     `"After close," ${n} says, without looking up from the float. "Go. I come." It is not a question, and she does not make it sound like a favour.`,
     `${n} nods at the door. "You go first. Two minute, then me. Everybody see anyway — everybody always see. I come after Cake count."`,
@@ -10633,7 +10669,7 @@ function _barSettle(settleDay) {
   // short needs to see which of the two shortfalls is the one that matters.
   if (m.waived) _say("(No rent this month — the wet-season month he gave you to get the door open.)", "dim");
   if (m.keyBilled) _say(_fmt("(The key money rode on this bill at the full ฿{k} — the notes never turned up.)", { k: m.keyBilled }), "dim");
-  if (m.rentShort <= 0) {
+  if (m.rentShort <= 0 && m.rentPaid > 0) {   // a waived month printed "฿0, from ." (Kaspar, round 101)
     _say(_fmt("Rent to the landlord: ฿{amt}, from {src}. He counts it in " +
       "front of you, every month, and it has never once been wrong.",
       { amt: m.rentPaid, src: _L(m.rentFrom.join(" and ")) }), "dim");

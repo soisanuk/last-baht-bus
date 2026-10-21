@@ -1242,6 +1242,48 @@ const _SMALL_TALK = {
     "\"Same as last year, plus one. You?\"",
     "\"You first.\" A beat. \"See? Is not nice question.\"",
   ],
+  missAway: [
+    "\"{d} night you no come. I count.\" She shrugs, like it is nothing. \"Little bit. Don't tell the other girls.\"",
+    "\"Miss? {d} night.\" She holds up the fingers. \"I ask Mama where you go. Mama say, 'He is farang. He come back or he don't.' So — you come back.\"",
+    "\"You go {d} night, I think you find new bar.\" A look. \"Okay. I forgive. One time.\"",
+    "\"Little bit. {d} night is long.\" She wipes the rail that is already clean. \"Where you go? No — don't tell me. Sit.\"",
+    "\"Everybody go {d} night, everybody come back, everybody say 'you miss me?'\" She laughs. \"Yes. Now buy me drink, I miss you less.\"",
+    "\"{d} night.\" She says it to the glass. \"I don't count. Okay, I count.\"",
+  ],
+  whyhere: [
+    "\"Why Pattaya?\" She laughs at the size of it. \"Money, na. Same every girl. Home have no money, here have little bit. Little bit is more than no.\"",
+    "\"My friend come first. She send money home, buy her mama a fridge.\" A shrug. \"I want fridge also. So.\"",
+    "\"Why?\" She counts on her fingers. \"Rice field, hot. Factory, hot and boss shout. Here — aircon, and the boss is me, little bit.\"",
+    "\"Everybody from my village come here or go Bangkok. Bangkok is too big. Here I can walk to work.\"",
+    "\"First I come for one month, for my brother school.\" She holds up fingers. \"That was four year ago. Don't ask me how.\"",
+    "\"How I end up here? Bus.\" She grins. \"Eleven hour. After that is a long story and you have one beer. Not enough beer.\"",
+    "\"Papa sick. Hospital want money. The hospital don't take rice.\" She says it flat, the way the floor says the true things.",
+    "\"My cousin work here before. She say, 'Come, is easy money.'\" A dry look. \"She lie about the easy. Not about the money.\"",
+    "\"Why this bar? Mama is from my province. She know my mother.\" A beat. \"Is good and bad, that one.\"",
+    "\"I come to see the sea.\" She looks at the rail, the glasses, the door. \"Still waiting.\"",
+  ],
+  movein: {
+    cool: [
+      "\"Live with you?\" She laughs so the next stool looks over. \"Three beer and you want a wife. Four beer, you want two. Drink slow.\"",
+      "\"Move in — in where? Your hotel?\" She pats your hand. \"Ask me when you have a kitchen and I know your mother's name.\"",
+      "\"Everybody say move in. Then the flight come.\" She shrugs. \"Say it again in one month, same stool. Then I listen.\"",
+      "\"Hah. You don't even know what I eat for breakfast.\" She tips her glass. \"Start there.\"",
+    ],
+    warm: [
+      "She does not laugh, which is the answer before the answer. \"Mama ask every day what I do. The girls ask. If I go live with you, everybody know, and if you go home after, everybody know that also.\" A beat. \"Ask me again when you have been here one more month. I don't say no.\"",
+      "\"Live together.\" She tries the words like a dress. \"I think about it, na. I think about it before you ask.\" Then, quieter: \"My mother ask who pay the rent if you go. That is the only question she have. I have the same one.\"",
+      "\"You mean it?\" She looks at you properly, not the bar look. \"Okay. Not tonight. Tonight you drink. Tomorrow you ask me sober, and I tell you what I need to bring.\"",
+      "\"Maybe.\" She says it to the rail, so the floor does not hear. \"Not maybe like the girls say maybe. Maybe like a person. Give me a week.\"",
+    ],
+  },
+  myflat: [
+    "\"Your place?\" She laughs. \"Too clean. One cup, one plate, one spoon. Like a monk with a fridge.\"",
+    "\"I sleep good. Your bed is better than mine, and your fan is quiet.\" A beat. \"Your pillow smell like hotel. Buy a new one.\"",
+    "\"The view!\" She says it like she is still on the balcony. \"I never see the sea from up high before. Only from the sand.\"",
+    "\"Sleep well? I sleep like a dead one.\" She stretches. \"Then the lift. Nine floor, every morning. You are fit, or you are lazy.\"",
+    "\"Your flat is okay.\" A shrug that means more than okay. \"The office lady look at me like police. Next time I come up the stairs.\"",
+    "\"Good. Quiet. Nobody shouting outside the window at four.\" She thinks. \"I don't know how you sleep with quiet.\"",
+  ],
   miss: [
     "\"Miss you? You still here, silly.\"",
     "\"If you come back, I don't need to miss.\"",
@@ -1278,6 +1320,9 @@ const _SMALL_TALK = {
 const _SMALL_TALK_KEYS = [
   // the hundred questions (2026-10-14) — first, so a specific subject beats a broad one; tolerant of the "to"/"a"
   // the ask path strips ("would you come england", "what do you like eat")
+  ["movein", /\b(move in|live with me|living together|live together|come (?:and )?live|move (?:in )?to (?:my|the) (?:condo|flat|place)|stay with me|come stay with me)\b/],   // the question the stay builds to (Margit, round 101) — a design call for the mechanic; her answer meanwhile
+  ["whyhere", /\b(why (?:did|do|d'?you) (?:you )?(?:come|move|end up|choose)|how (?:did|do) you (?:end up|come to be|get|land)|what brought you|why pattaya|why (?:this bar|here|a bar)|why (?:did|do) you come back)\b/],
+  ["myflat", /\b(sleep well|slept well|sleep ok|my (?:flat|condo|place|bed|apartment)|like my (?:flat|place|room)|the ninth floor|my balcony)\b/],
   ["love", /\b(love me|do you love|you love me|in love|love you)\b/],
   ["likeme", /\b(do you like me|you like me|fancy me|like me)\b/],
   ["looks", /\b(handsome|good looking|am i ugly|am i sexy|am i attractive|my face)\b/],
@@ -1310,7 +1355,7 @@ const _SMALL_TALK_KEYS = [
   ["tomorrow", /\b(doing tomorrow|tomorrow (?:night|day)|plans? (?:for )?tomorrow|working tomorrow)\b/],
   ["howlong", /\b(how long here|how long (?:have )?(?:you )?(?:been )?(?:work|here|in pattaya|working))\b/],
   ["age", /\b(how old|your age|age)\b/],
-  ["miss", /\b(miss(?:ed)? me|will you miss|do you miss|you miss|did you miss)\b/],
+  ["miss", /\b(miss(?:ed)? me|will you miss me|did you miss me|you miss me|(?:gonna|going to) miss me|miss me if)\b/],   // not "do you miss austria" (Margit, round 101)
   ["boyfriend", /\b(boyfriend|is that your|husband|married)\b/],
   ["abroad", /\b(do you like (australia|england|britain|the uk|america|germany|my country|europe)|have you (ever )?been (abroad|to (australia|england|europe|america))|would you (go|come)(?: (?:to|with))?)\b/],
   ["finish", /\b(what time (do )?you finish|when (do )?you finish|finish work|go home tonight)\b/],
@@ -1321,6 +1366,9 @@ function _smallTalk(npc, topic) {
   const hit = _SMALL_TALK_KEYS.find(([, rx]) => rx.test(t));
   if (!hit) return false;
   let pool = _SMALL_TALK[hit[0]], key = hit[0];
+  const gap = ((G.soc || {}).gapSeen || {})[npc] || 0;
+  if (key === "miss" && gap >= 2) { key = "missAway"; pool = _SMALL_TALK.missAway; }   // two nights away is not "you still here, silly" (Eoin, round 101)
+  if (key === "myflat") { const hs = (G.homeSeen || {})[npc]; if (!hs || !hs.nights || G.day - (hs.day || 0) > 3) return false; }   // only a woman who slept there (Margit: "did you sleep well" the morning after)
   // a feeling is answered by how well she knows you: teased as a stranger, something real when you are hers
   if (!Array.isArray(pool)) {
     const warm = _knownTier(npc) >= 2 || !!(G.party && (G.party.ids || []).includes(npc)) || !!(G.wentWith && G.wentWith[npc]);
@@ -1335,6 +1383,7 @@ function _smallTalk(npc, topic) {
     mine[key] = i;
   }
   let line = pool[mine[key] % pool.length];
+  if (/\{d\}/.test(line)) line = line.replace(/\{d\}/g, String(gap));
   if (/\{bike\}/.test(line)) { const b = typeof _rideBikeMine === "function" ? _rideBikeMine(npc) : "A Honda"; line = line.replace(/\{bike\}/g, (m, off, str) => /(?:^|["“]|[.:!?]\s)$/.test(str.slice(0, off)) ? b : b.charAt(0).toLowerCase() + b.slice(1)); }
   _say(`${NPCS[npc].name}: ${line}`);
   return true;
@@ -1381,7 +1430,8 @@ function _doTell(lower, to) {
   if (!pid || !NPCS[pid] || !_npcsHere().includes(pid) || !(NPC_ROLES[pid] === "hostess" || (typeof _pronoun === "function" && _pronoun(pid) === "she" && !NPCS[pid].patron))) return false;
   const l = lower.replace(/[!.,?]+$/, "").trim();
   if (/\bwallet\b/.test(l) && (_flag("walletLost") || !_flag("hasWallet")) && typeof _townTalk === "function" && _townTalk(pid, /\bback\b|\bgot\b|\bfound\b/.test(l) && _flag("walletBack") ? "my wallet" : "wallet")) return true;   // "i got my wallet back" / "i lost my wallet" are the town's rows (Owain, round 99)
-  if (/\b(?:i'?m staying|i stay(?:ed)? here|not going home|cancel+ed (?:my|the) ticket|i live here now|i'?m not leaving|never going home|i'?m here for good|moved here)\b/.test(l) && typeof _stayTalk === "function") return _stayTalk(pid);   // the ticket in the bin (Dougal, round 97)
+  if (/\b(?:i'?m staying|i stay(?:ed)? here|not going home|cancel+ed (?:my|the) ticket|i live here now|i'?m not leaving|never going home|i'?m here for good|moved here|i (?:might|may|could|think i(?:'ll| will)|want to|am going to|am thinking (?:of|about)|m thinking (?:of|about)) stay(?:ing)?(?: here| in pattaya| on)?)\b/.test(l) && typeof _stayTalk === "function") return _stayTalk(pid);   // "I might stay in pattaya" was a non sequitur (Margit, round 101)   // the ticket in the bin (Dougal, round 97)
+  if (/\b(?:i (?:want|need|am looking|m looking) (?:to )?(?:rent|find)|looking for) (?:a |an |somewhere |some )?(?:flat|apartment|condo|room|place)\b/.test(l) && typeof _townTalk === "function" && _townTalk(pid, "condo")) return true;   // "I want to rent an apartment" (Margit, round 101)
   { const lt = l.replace(/^tell [a-z']+ (?:that |to )?/, "");   // "tell joy its my last night" through the router carries her name
     if (!/^(?:ask|talk|tell|say) /.test(lt) && /\b(?:i|i'?m|im|my|our|it'?s|its|we)\b/.test(lt) && typeof _isLeavingSaid === "function" && _isLeavingSaid(lt) && typeof _leavingTalk === "function") return _leavingTalk(pid, lt); }   // a statement, never an ASK's subject (Nira's flight node, Ple's "why did you leave")   // "tell joy its my last night" was a subject she didn't know (Dougie, round 96)
   for (const [key, rx, val] of _TOLD_RX) {
@@ -4248,6 +4298,7 @@ function _relGreeting(id) {
   if (G.miffed && G.miffed[id] != null && G.day - G.miffed[id] <= 1) return;   // she watched you leave with another: no warm hello on arrival (Dagny, round 91)
   // four nights in the hotel and nobody said where you'd been (Piet, round 62): a regular notices a gap
   const gap = (G.seenDay || {})[id] != null ? G.day - G.seenDay[id] : 0;
+  (G.soc.gapSeen = G.soc.gapSeen || {})[id] = gap;   // "did you miss me" reads the gap tonight (Eoin, round 101: the same canned line after two nights away)
   if (t >= 2 && gap >= 3 && (G.soc.awaySaid = G.soc.awaySaid || {})[id] !== G.day) {
     G.soc.awaySaid[id] = G.day;
     _say(_pickVary(_REL_GREET_AWAY, "relaway:" + id)(NPCS[id].name, gap), "win");
@@ -4461,6 +4512,17 @@ function _affairTalk(id, tt) {
   if (!tt) return null;
   const a = G.affair || {}, seen = a.crisSeen || [], chose = a.crisChose || {}, n = NPCS[id].name;
   const pick = (k, lines) => _pickVary(lines, "afftalk:" + k);
+  // a colleague by name, your flat, the ice man: hers to answer, but not with "ask me something about us" — the
+  // colleague review, the town's rows and the shop pool below take them (Kaspar, round 101: Mew, the condo, the ice man)
+  { const who = typeof _npcByName === "function" ? _npcByName(tt) : null;
+    if (who && who !== id && typeof _ownBarStaff === "function" && _ownBarStaff(who)) return null;
+    if (/\b(?:my )?(?:condo|flat|apartment)\b/.test(tt) && !/\b(?:last night|sleep)\b/.test(tt)) return null;
+    if (/\b(?:the )?(?:ice|ice man|kettle|fan|float|stock|the till|pool table)\b/.test(tt) && !(a.together != null && G.day - a.together <= 2)) return pick("shop", [
+      `"The ice man come at four, every day, like the sun." ${n} shrugs. "Somebody must be here. Is me, or is Cake. You sleep — you are the boss, boss."`,
+      `${n} ticks it off on her fingers. "Ice, four o'clock. Fan in the back, dying since last year. Float, I count. Pool table man, Friday." A look. "You want to know the bar, or you want to know me?"`,
+      `"The bar things?" ${n} laughs, short. "I write them on the kettle so you don't have to carry them. That is the whole point of the kettle."`,
+    ]);
+  }
   // THE NIGHT AT HOME (Jurgen, round 95: "ask jiab about last night" the evening after she slept in his room got
   // "Money is Cake's side, boss"): the morning, the note on the kettle, the ice man — hers, for two days
   if (a.together != null && G.day - a.together <= 2 && /\b(last night|this morning|the morning|morning|the hotel|hotel|my room|your room|sleep well|note|kettle|ice man|the ice|four o'?clock)\b/.test(tt)) {   // the parser hands "the note" over as "note"
@@ -4682,6 +4744,9 @@ function _ownBarTalk(id, topic) {
     // a STEP BACK holds for the month in her hello too — four nights after it Manow had her head on
     // his shoulder, "my farang… everything off the clock" (Greta, round 61)
     if (G.affairCool && G.affairCoolWho === id && G.day - G.affairCool < 30) { _say(_pickVary(_REL_GREET_STEPPED, "relstepped")(NPCS[id].name), "dim"); return true; }
+    // the generic bond register is the FLOOR'S (a hostess kicking a heel off under the rail); the woman who runs your
+    // floor or your till is greeted as what she is (Kaspar, round 101: Lamai "does the thing she does when the mamasan is not looking")
+    if (NPC_ROLES[id] !== "hostess" && _OWNER_GREET[NPC_ROLES[id]]) { _say(_pickVary(_OWNER_GREET[NPC_ROLES[id]], "ownergreet:" + NPC_ROLES[id])(NPCS[id].name)); return true; }
     _bondTalk(id); return true;
   }
   return false;
@@ -5653,7 +5718,7 @@ function _nightSnapshot() {
     bank: G.bank || 0, held: G.nontStuck || 0, bankIn: G.bankIn || 0,   // the account, Nont's overnight hold, and what ARRIVED (Marguerite, round 67; the money audit)
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
-    spcB: G.massageSpend || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0,
+    spcB: G.massageSpend || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0, pdB: (G.bar && G.bar.pocketDrawn) || 0,
     wonB: (G.offIn || 0) + (G.quizWon || 0), giftInB: G.giftIn || 0, condoB: G.condoPaid || 0, paperB: G.paperPaid || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
@@ -5671,6 +5736,8 @@ function _morningLedger() {
     // hadn't (assertion auditor, 2026-09-14: a flat false negative, on the one
     // morning he was most likely to read it). Say what is true instead.
     G.lastNightSaid = ["(First morning in town — nothing to measure last night against yet. From tomorrow this is the night's ledger.)"];
+    if (G.stage === "expat" && G.month && G.roomNight) G.month.spent = (G.month.spent || 0) + G.roomNight;   // the room is in the month even with nothing to measure the night against (round 101)
+    G.roomNight = 0;
     G.bankNotes = [];   // nothing to name them on; they do not leak into tomorrow's line
     G.safeMoneyLedger = false;
     return;
@@ -5762,7 +5829,13 @@ function _morningLedger() {
   if (paperN > 0) bits.push("\u0e3f" + _num(paperN) + " to the visa agent");
   const condoN = (G.condoPaid || 0) - (b.condoB != null ? b.condoB : (G.condoPaid || 0));   // the lease's money, named (Victor)
   if (condoN > 0) bits.push("\u0e3f" + _num(condoN) + " to the condo's office" + (condoN >= CONDO_RENT * CONDO_DEPOSIT_MONTHS ? " (the deposit, held, and the first month)" : " (the rent and the electric)"));
-  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + Math.max(0, spent + wonN + giftInN + jobN - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0)); G.monthAdj = 0; G.month.days = (G.month.days || 0) + 1; }   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
+  // what left your own pocket for the BAR — its rent, the old man's note, money put in the till — stays on the bar's page
+  // (Gordon's doctrine) but is the month's spending all the same (Kaspar, round 101: the month never counted ฿9,252 to the note)
+  const pdN = Math.max(0, barDraw - (b.pdB != null ? b.pdB : barDraw)) - (topUp > 0 ? topUp : 0);
+  // the room is in the month's spend whatever the night did: a night that came out "up" used to add nothing while the
+  // room was still paid, so the month read "฿1,080 spent, ฿1,350 of it the room" (Kaspar, round 101)
+  const roomN = G.roomNight || 0; G.roomNight = 0;
+  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0)) + pdN; G.monthAdj = 0; G.month.days = (G.month.days || 0) + 1; }   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
@@ -6039,8 +6112,11 @@ function _endNight(reason) {
       const r = n > 0 && NPCS[id] && (typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room);
       if (r && ROOMS[r] && !_bars[r]) _bars[r] = 2;
     }
+    if ((reason === "blackout" || reason === "collapse") && typeof _streetSaw === "function") _streetSaw(reason, { where: G.room });   // the room that watched you go down can say so, and so can your own floor (Kaspar, round 101)
     G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, bars: _bars, leftFrom: G.soc.leftFrom || null,
-      with: (_bedIds && _bedIds[0]) || G.lastBfId || null, endRoom: G.room, turn: G.nightTurn, kicked: G.kickedTonight || null,
+      with: (_bedIds && _bedIds[0]) || (reason === "barfine" ? G.lastBfId : null) || null, upstairs: (!_bedIds && reason !== "barfine" && G.lastBfId && G.soc.bfBar && Object.keys(G.soc.bfBar).length) ? G.lastBfId : null,   // a short time is not "you leave with her" (Eoin, round 101)
+      dry: Object.fromEntries(Object.keys(_bars).filter(r => !((G.soc.selfDrinks || {})[r]) && !Object.keys((G.soc.drinkCount || {})).some(id => (G.soc.drinkCount[id] || 0) > 0 && NPCS[id] && (typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room) === r)).map(r => [r, true])),   // a night you bought nothing is not a drinking night (Eoin)
+      endRoom: G.room, turn: G.nightTurn, kicked: G.kickedTonight || null,
       quiet: !!G.lastBfHonest };   // the quiet close or the khao man gai one — she remembers which (Ruairi, round 75)
     G.kickedTonight = null;
   }
@@ -6577,12 +6653,14 @@ function _endNight(reason) {
   if (G.dog) _setFlag("hasDog");      // backfill for saves that adopted before the flag existed
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   if (typeof _careTick === "function") _careTick();   // the fines she waived have a number, and a morning she says it
-  if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
   if (typeof _condoWake === "function") _condoWake();     // the office's word about last night's guest
-  if (typeof _destituteTick === "function") _destituteTick();   // no roof, counted; her mat; the plane
-  if (typeof _walletCardTick === "function") _walletCardTick();   // the bank's replacement card, a week on (2026-10-21)
+  // the payday and the condo's rent come BEFORE the bar's settle: the old man's note never chases and used to take the
+  // pocket first, so the condo — whose lock changes on the second miss — went short with the money gone to Ohio (Kaspar, round 101)
   if (typeof _jobNight === "function") _jobNight();       // the shift just stood, the week's count, the paper, the incident
   if (typeof _incomeTick === "function") _incomeTick();   // the payday lands before the ledger, so the ledger names it
+  if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
+  if (typeof _destituteTick === "function") _destituteTick();   // no roof, counted; her mat; the plane
+  if (typeof _walletCardTick === "function") _walletCardTick();   // the bank's replacement card, a week on (2026-10-21)
   // THE LEDGER COMES AFTER EVERYTHING THE WAKE MOVES (Ossie, round 70: the till's shortfall came out
   // of his pocket a turn after the ledger printed and appeared a morning late). The bar's settle,
   // Nira's cousins and the care ask all belong to the night just played, so they are on its ledger.
@@ -6686,7 +6764,8 @@ const _GOODBYE_FARANG = [
 // goodbye said properly is one of the good things a week can hold.
 function _lastNight() { return G.stage !== "expat" && G.day >= 7 && !G.visitUntil && _flag("act1Done"); }
 function _lastByeDue(id) {
-  if (!_lastNight() || !id || !NPCS[id] || NPC_ROLES[id] !== "hostess") return false;
+  const residentLast = G.stage === "expat" && G.leaveOn != null && G.leaveOn === G.day + 1;   // "this is my last night", said by a man who lives here (Eoin, round 101: GOODBYE was "you take your leave")
+  if (!(_lastNight() || residentLast) || !id || !NPCS[id] || NPC_ROLES[id] !== "hostess") return false;
   if (typeof _maiDee === "function" && _maiDee(id)) return false;
   if (G.lastNightBye && G.lastNightBye.v === G.vacation && G.lastNightBye.ids && G.lastNightBye.ids.includes(id)) return false;
   return (typeof _knownTier === "function" ? _knownTier(id) : _bondTier(id)) >= 1 || !!(G.wentWith && G.wentWith[id]);
@@ -6779,8 +6858,8 @@ function _endVacation() {
     for (const l of _shareCard()) _say(l, "win");
     _lastGoodbye();   // the Soi 6 week ends with a woman in it too (Sam, round 90: "his girl never hears he is leaving")
     _say("So — again?", "room");
-    _say("(PLAY AGAIN — one more week on Soi 6. Fresh ฿100,000, fresh liver. " +
-      "SHARE copies your week card.)", "dim");
+    _say("(CONTINUE — the same people: another week, or never going home · PLAY AGAIN — one more week on Soi 6, fresh ฿100,000, fresh liver · " +
+      "SHARE copies your week card.)", "dim");   // the stay was a chip and nowhere in the text (Margit, round 101)
     return;
   }
   if (G.loan && G.loan.owed > 0) {
@@ -7044,8 +7123,22 @@ function _nightsAWeek(income) {   // the gauge: what is left after the roof, in 
 }
 function _weeksLeft() {   // a pot's countdown, at last month's rate (or the gauge's unit until there is one)
   const m = G.month || {}, perDay = (m.spent > 0 && m.days > 0) ? m.spent / m.days + (G.hotel === "condo" ? _roofMonth() / INCOME_DAYS : 0) : NIGHT_COST + _roofMonth() / INCOME_DAYS;
-  const wealth = Math.max(0, (G.money || 0) + (G.bank || 0));
+  const wealth = Math.max(0, (G.money || 0) + (G.bank || 0) + _tillMine() - _debtsOwed());   // the till is yours and a debt is not (Kaspar, round 101: a ฿10,000 loan read as nine weeks of runway)
   return perDay > 0 ? Math.floor(wealth / perDay / 7) : 99;
+}
+function _tillMine() { return (typeof _barOwned === "function" && _barOwned() && G.bar) ? Math.max(0, G.bar.cash || 0) : 0; }
+function _debtsOwed() {   // what you owe, as MONEY names it: Nira, Nont's loan to the bar, the hotel's book, a loan flown home with
+  const nira = G.loan && G.loan.owed > 0 ? G.loan.owed : 0, skipped = G.loanSkippedOwed || 0, hotel = G.hotelDebt || 0;
+  const nont = G.bar && G.bar.loan && G.bar.loan.owed > 0 ? G.bar.loan.owed : 0;
+  return nira + skipped + hotel + nont;
+}
+function _debtsLine() {
+  const parts = [];
+  if (G.loan && G.loan.owed > 0) parts.push(`฿${_num(G.loan.owed)} to Nira, due in ${Math.max(0, G.loan.dueDay - G.day)} day${_plural(Math.max(0, G.loan.dueDay - G.day))}`);
+  if (G.loanSkippedOwed > 0) parts.push(`฿${_num(G.loanSkippedOwed)} to Nira from the last trip`);
+  if (G.bar && G.bar.loan && G.bar.loan.owed > 0) parts.push(`฿${_num(G.bar.loan.owed)} to Nont against the bar`);
+  if (G.hotelDebt > 0) parts.push(`฿${_num(G.hotelDebt)} on the hotel's book`);
+  return parts.length ? `Owed: ${parts.join("; ")} — not counted as yours.` : "";
 }
 // ── THE PAPER AND THE JOBS (Mario, 2026-10-20) — see PAPER_COST in world.js for the doctrine ──
 function _paper() { return G.paper || (G.stage === "expat" ? "tourist" : null); }
@@ -7083,6 +7176,7 @@ function _myJobTalk(npc, topic) {
 // THE TICKET IN THE BIN, said to her (Dougal, round 97): the leaving's inverse — once a trip, in her register, by how well she knows you
 function _stayTalk(npc) {
   const n = NPCS[npc].name, said = (G.soc.staySaid = G.soc.staySaid || {});
+  if (G.leaveSaid) delete G.leaveSaid[npc]; G.leaveOn = null;   // "only joking, I'm not leaving" takes the flight off her book (Eoin, round 101)
   if (said[npc]) { _say(`${n} nods. "You tell me. I remember." A beat. "I still don't believe. But I remember."`); return true; }
   said[npc] = G.day; const t = _knownTier(npc);
   _say(_pickTownLine(t >= 2 ? [`"Stay?" ${n} puts the glass down. "Everybody say stay. Three men say it to me, this year. One stay." She looks at you properly. "Okay. Then I stop counting days for you. Then you have to come anyway — not because flight, because me."`,
@@ -7216,7 +7310,7 @@ function _jobPay() {   // the month's share, on the payday: what the nights earn
 function _doRentCondo() {
   if (G.stage !== "expat") { _say("Rooms by the month are for residents. A holiday has a hotel, and a flight."); return; }
   if (G.hotel === "condo") { _say(`You rent it already — the ninth floor, ฿${_num(CONDO_RENT)} and the electric on the payday. (MOVE OUT to give it back.)`); return; }
-  if (G.room !== "pratumnak_soi5") { _say("The condo towers are up on Pratumnak Soi 5 — the top of the soi, past the clubs, the tower behind the wall with the intercom; the office on its ground floor does the paper. (HOW DO I GET TO PRATUMNAK SOI 5 for the way; MOTOSAI TO PRATUMNAK from a stand.)"); return; }
+  if (G.room !== "pratumnak_soi5") { _say(_condoPointer(), "dim"); return; }   // the way from here, not the soi you are standing on (Margit and Eoin, round 101)
   const dep = CONDO_RENT * CONDO_DEPOSIT_MONTHS, advance = CONDO_RENT, need = dep + advance;
   const have = (G.money || 0) + (G.bank || 0);
   if (G.askArmPrev !== "condo") {   // the terms first, the money on the second ask with no command between — ฿27,000 went on a question (Victor)
@@ -7367,15 +7461,17 @@ function _doMoney() {
   const amt = _incomeAmount();
   if (G.destitute) _say(`(No roof: morning ${G.destitute} of ${DESTITUTE_DAYS}. ${DESTITUTE_DAYS - G.destitute} more and the consulate has your name.)`, "alert");
   if (G.keptBy) _say(`(A mat in ${NPCS[G.keptBy.id] ? NPCS[G.keptBy.id].name : "her"}'s room, ${KEPT_BY_NIGHTS - (G.keptBy.nights || 0)} nights left of it. No folio; her face is the rent.)`, "dim");
-  { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_jobName()}` : ""}${p === "tourist" ? " — no bank book, the foreign card and its fee" : p === "longstay" ? " — a bank book" : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
+  { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_jobName()}` : ""}${p === "tourist" ? (typeof _walletHunt === "function" && _walletHunt() ? " — no bank book, and no card either till the replacement comes" : " — no bank book, the foreign card and its fee") : p === "longstay" ? (typeof _walletHunt === "function" && _walletHunt() ? " — a bank book; the card went with the wallet" : " — a bank book") : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
     if (G.stringer) _say(`Stringer for Last Orders: ฿${_num(OWL_LEAD_PAY)} a paragraph, ${OWL_LEADS_WEEK} a week, for a thing you read that Mort had not — ${_stringerOwed().length} unpaid.`, "dim");
     if (G.job) _say(G.job.kind === "teach" ? `Job: online English, ฿${_num(_jobPay())} this month at the mornings you have kept.` : G.job.kind === "school" ? `Job: the school — ฿${_num(SCHOOL_PAY)} a month through the books, eight o'clock Monday to Friday; ${G.job.lates || 0} of ${SCHOOL_LATES} late mornings this month${G.job.paidOnce ? "" : "; the permit with the first payday"}.` : `Job: manager at ${_barName(G.job.room)} — ${G.job.nights} nights a week, ${G.job.stood || 0} stood this month, ${G.job.corp ? `฿${_num(MGR_PERMIT_PAY)} through the books` : `฿${_num(MGR_CASH_PAY)} in an envelope`}${G.job.corp && _paper() !== "permit" ? `; the paper after ${MGR_PERMIT_AFTER} nights (${G.job.stood || 0} so far)` : ""}.`, "dim"); }
   if (G.envelopeDue) _say(`An envelope of ฿${_num(G.envelopeDue.amt)} is waiting at ${_barName(G.envelopeDue.room)} — the house hands it over when you are next behind the rail.`);
   const roof = G.hotel === "condo" ? `the condo is ฿${_num(CONDO_RENT + CONDO_UTIL)} a month with the electric` : `the room is ฿${_num(_hotelRate(G.hotel))} a night`;
-  if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; ${roof}. At this rate, about ${_weeksLeft()} weeks.`);
-  else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; ${roof}. About ${_weeksLeft()} weeks at this rate.`);
+  const _till = _tillMine() > 0 ? `, ฿${_num(_tillMine())} in your own till` : "";
+  if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account${_till}; ${roof}. At this rate, about ${_weeksLeft()} week${_plural(_weeksLeft())}.`);
+  else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account${_till}; ${roof}. About ${_weeksLeft()} week${_plural(_weeksLeft())} at this rate.`);
   else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. ${roof.replace(/^./, c => c.toUpperCase())}; after the roof that is about ${_nightsAWeek(amt + _jobPay())} nights out a week, at ฿${_num(NIGHT_COST)} a night. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
   if (G.hotel === "condo" && G.condo) _say(`(The condo: ${G.condo.short ? `${G.condo.short} month short — one more and the lock changes` : "paid up"}; the ฿${_num(G.condo.deposit)} deposit is the office's until the lease has run ${CONDO_LEASE} days${G.day - G.condo.since >= CONDO_LEASE ? " — which it has" : ""}.)`, "dim");
+  { const d = _debtsLine(); if (d) _say(d); }
   _say(`(This month so far: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room.)`, "dim");
 }
 function _goExpat(opts) {

@@ -93,8 +93,15 @@ test("LAST NIGHT to the woman who rode you home twelve nights ago is not the rid
 });
 
 test("the her-farang hello is never the same line two nights running", () => {
-  moveIn("monger"); G.soc.drinks.lek = 14; G.talked.lek = [0]; G.room = NPCS.lek.room; const seen = new Set();
-  for (let i = 0; i < 6; i++) { G.day++; G.soc.greeted = {}; G.seenDay = { lek: G.day }; out = []; _relGreeting("lek"); const l = said(); assert.ok(l); seen.add(l); }
+  moveIn("monger"); G.soc.drinks.lek = 14; G.talked.lek = [0]; G.room = NPCS.lek.room; const seen = new Set(); const lines = [];
+  // cycling dice, not real ones: a three-line pool with a one-deep memory can alternate two lines over six nights
+  // by chance (it did, once in ~30 suite runs) — the property is that consecutive hellos differ
+  const saved = _rand; let k = 0; const seq = [0.1, 0.5, 0.9, 0.3, 0.7, 0.2];
+  try {
+    _rand = () => seq[k++ % seq.length];
+    for (let i = 0; i < 6; i++) { G.day++; G.soc.greeted = {}; G.seenDay = { lek: G.day }; out = []; _relGreeting("lek"); const l = said(); assert.ok(l); seen.add(l); lines.push(l); }
+  } finally { _rand = saved; }
+  for (let i = 1; i < lines.length; i++) assert.notEqual(lines[i], lines[i - 1], "the same hello two nights running");
   assert.ok(seen.size >= 3, "a pool, dealt: " + seen.size);
 });
 

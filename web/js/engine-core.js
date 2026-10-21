@@ -1464,7 +1464,7 @@ function _chargeRent(rough) {
       "The ledger closes with real warmth.)", "dim");
     G.hotelDebt = 0;
   }
-  const _monthRoom = (n) => { if (G.stage === "expat" && G.month) G.month.rent = (G.month.rent || 0) + n; };   // the month's book counts what was PAID for the room (Dougal, round 97: "฿2,160 of it the room" from a book at its cap)
+  const _monthRoom = (n) => { if (G.stage === "expat" && G.month) { G.month.rent = (G.month.rent || 0) + n; G.roomNight = (G.roomNight || 0) + n; } };   // roomNight: the ledger counts the room into the month's spend even on a night that was "up" (Kaspar, round 101: "฿1,080 spent, ฿1,350 of it the room")   // the month's book counts what was PAID for the room (Dougal, round 97: "฿2,160 of it the room" from a book at its cap)
   if (G.money >= _hotelRate(G.hotel)) {
     G.money -= _hotelRate(G.hotel); _monthRoom(_hotelRate(G.hotel));
     _say(`(${G.checkoutNight ? "Checkout: the last night settled at the desk on the way to the taxi" : rough ? "The folio is waiting at the desk when you finally get back" :
@@ -3299,7 +3299,7 @@ function _describeRoom(full, forceFull) {
           "Starts at 20:00; walk in during and you're playing."), "dim");
     }
   }
-  if (_bandHere()) {
+  if (_bandHere() && !(typeof _closedNow === "function" && _closedNow(G.room)) && !(typeof _closeTurn === "function" && _closeTurn(G.room) != null && G.nightTurn >= _closeTurn(G.room))) {   // "a live band is playing" at 02:18 under the shutters (Kaspar, round 101)
     const isBar = !!r.barType;
     _say("A live band is playing tonight." +
       (isBar ? " (DANCE · SING · REQUEST <song> · TIP BAND · BUY ROUND FOR BAND)" :
