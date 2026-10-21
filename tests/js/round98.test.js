@@ -48,7 +48,7 @@ test("SEVERE: a declared shift stood short of the house's count is SAID at the w
 
 test("the agent's fee is NAMED on the morning ledger (it had swallowed the envelope unnamed)", () => {
   moveIn("monger"); hireAt(cashBar); G.room = "hotel_room"; sleep(); G.job.stood = 9; G.day = G.payDay + 30; const s = sleep();
-  assert.match(s, /envelope: ฿/); assert.match(s, new RegExp(`฿${_num(PAPER_COST.tourist)} to the visa agent`));
+  assert.match(s, /envelope — ฿.*is at the bar/); assert.match(s, new RegExp(`฿${_num(PAPER_COST.tourist)} to the visa agent`));
 });
 
 test("the hotel's lullaby does not print on her mat; the sleep there is hers", () => {

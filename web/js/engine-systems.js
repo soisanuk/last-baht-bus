@@ -563,8 +563,8 @@ const _SEE_HOME = [
 ];
 const _SEE_HOME_EARLY = [
   (n, h) => `${n} laughs. "Home? ${h} more, tilac. You want to see me home, you wait with me."`,
-  n => `"Now?" ${n} nods at the clock over the optics. "Mama would see me home before you did. Later, na."`,
-  n => `${n} shakes her head, pleased. "Finish first. Then yes." She goes back to her section with the yes in her walk.`,
+  (n, h) => `"Now?" ${n} nods at the clock behind the till. "Mama would see me home before you did. ${h} more, then yes."`,
+  (n, h) => `${n} shakes her head, pleased. "Finish first — ${h} more. Then yes." She goes back to her section with the yes in her walk.`,
 ];
 function _seeHomeOpen(id) {
   if (!id || !NPC_ROLES[id] || NPC_ROLES[id] !== "hostess" || !_flag("act1Done")) return false;
@@ -1612,7 +1612,7 @@ const _PARTY_GOODBYE = [
 // which the parser refused (Marcus, round 61). The ride back is the fast travel; the night
 // then ends her way with SLEEP, exactly as the hint said.
 const _PARTY_HOME = [
-  "{n} does not ask where. She waves down a bike with the hand that isn't holding yours, says the hotel's name to the piwin before you can, and rides pillion-and-a-half the whole way back with her chin on your shoulder.",
+  "{n} does not ask where. She waves down a bike with the hand that isn't holding yours, says {home} to the piwin before you can, and rides pillion-and-a-half the whole way back with her chin on your shoulder.",
   "\"Home?\" {n} says it like a test and then like a yes. The songthaew is half empty and she takes the bench against the cab and pulls you down beside her, and the town goes past the open back like somebody else's night.",
 ];
 const _PARTY_HOME_WALK = [
@@ -1687,7 +1687,9 @@ function _partyHome(id) {
   const _hp = G.rain > 0 ? [_near ? "{n} holds her bag over both your heads and you run it, the few doors to your bed, laughing, soaked to the knees by the second front."
       : "{n} flags a taxi in the downpour like a woman who has done it a thousand times, pulls you in after her, and wrings out her hair on the back seat all the way home."]
     : (_near ? _PARTY_HOME_WALK : _PARTY_HOME).filter(l => G.nightTurn >= ((_room().region || "") === "Soi 6" ? SOI6_CLOSE : 100) || !/shutters/.test(l));
-  _say(_fmt(_pickVary(_hp.length ? _hp : (_near ? _PARTY_HOME_WALK : _PARTY_HOME), "partyhome"), { n: NPCS[id].name }), "win");
+  _say(_fmt(_pickVary(_hp.length ? _hp : (_near ? _PARTY_HOME_WALK : _PARTY_HOME), "partyhome"), { n: NPCS[id].name, home: _homeSaid() }), "win");
+  // the ride costs what a ride costs — two rides home charged nothing (Renata, round 100); the walk is free
+  if (!_near) { const fare = G.rain > 0 ? MOTOSAI_FAR : MOTOSAI_TOWN; if (G.money >= fare) { G.money -= fare; _say(`(฿${_num(fare)} for the ride, yours. ฿${_num(G.money)} left.)`, "dim"); } else _say("(She pays the ride, and does not mention it.)", "dim"); }
   // the vehicle in the sentence is the mechanic under it: a bike ride, not a walk that
   // stops in the dark because she thumbed your torch off (Ingrid, round 62)
   const home = _hotelRoomId();
@@ -2151,7 +2153,7 @@ function _bfResolve(kind) {
         `drive little bit crazy."`;
     _encPrompt(
       [(price ? (_herMoney ? `฿${_num(price)} to her, and ` : `฿${_num(price)} to ${_bfPayee()}, and `) : "") + offer + ` (฿${_num(G.money)} left.)`, "win"],
-      [`(RIDE with her into the night · or JUST the hotel — up to you.)`, "dim"]);
+      [`(RIDE with her into the night · or JUST ${_inCondo() ? "home" : "the hotel"} — up to you.)`, "dim"]);
     return;
   }
   // the honest overnight. Sometimes it's the fantasy; sometimes long time hands you
@@ -2466,7 +2468,7 @@ function _endRide(seq, reason) {
   G.offstage = false; // back in the world (also belt-and-braces cleared by _endNight)
   if (seq.stops === 0) {
     // declined the offer outright — no sulk, just the hotel and a good honest night
-    _say(`"Okay tilac — hotel then. Boring man." But she's smiling, no sting in it. She swings ` +
+    _say(`"Okay tilac — ${_inCondo() ? "your place" : "hotel"} then. Boring man." But she's smiling, no sting in it. She swings ` +
       `the bike around for the short hop to the room, and the night is exactly what you paid ` +
       `for: easy, warm, hers till morning. ${name} is asleep before you are.`, "win");
     _addBond(id, 3);
@@ -3089,9 +3091,9 @@ function _walletLostSay() {
   G.walletLostNow = false;
   const at = G.walletLostAt || {}, film = at.name ? `The last thing the film has is ${at.name}${at.clock ? " at " + at.clock : ""}. ` : "";
   _say("You pat the pocket that matters, and then the other one, and then both again, the way a man checks a thing he already knows. " +
-    "The wallet is gone — the cards, the key card, the lot. The pocket cash went too, the town's usual tax on a sleeping farang, but it is the wallet that matters. " +
+    `The wallet is gone — the cards, ${_inCondo() ? "your door key" : "the key card"}, the lot. The pocket cash went too, the town's usual tax on a sleeping farang, but it is the wallet that matters. ` +
     film + "Everything after that is somebody else's story, and there is a receipt in your pocket you do not remember paying for.", "alert");
-  _say(`(${_flag("act1Scored") ? "The second wallet. " : ""}You live here now, so nobody is running anywhere: the desk knows your face, your room is your room. ` +
+  _say(`(${_flag("act1Scored") ? "The second wallet. " : ""}You live here now, so nobody is running anywhere: ${_inCondo() ? "the office has a spare key and a sigh for it, your flat is your flat" : "the desk knows your face, your room is your room"}. ` +
     `But the machine on the street is a wall without the card, and the bank's replacement is ${WALLET_CARD_DAYS} days off. ` +
     `Nira lends; the kid at the Old Market cashes the account without a card; and a wallet in this town goes ${_flag("act1Scored") ? "where it went the first time" : "where lost things go"}. ` +
     `READ what is still in your pockets. HINT nudges; QUESTS has it on the books.)`, "dim");
@@ -3323,8 +3325,9 @@ function _doHint() {
     }
     _say(G.mode === "soi6"   // there is no wallet on the Soi 6 week (Margaret, round 78)
       ? "One street, seven nights, and no wrong answers on it — only better nights. Sit somewhere, ASK somebody, and come back to whoever answered best."
+      : G.stage === "expat" ? `You live here. MONEY says what you live on${G.hotel === "condo" ? "" : "; a roof by the month is the condo tower on Pratumnak Soi 5 (RENT A CONDO at its wall)"}${G.job ? "" : "; a job is the house's to offer — ASK a mamasan whose floor knows your face ABOUT A JOB, or TEACH ONLINE from your room"}. The rest is the soi, and the people on it.`
       : "The wallet's yours and the opening's behind you — out here there are no wrong " +
-      "answers, only better nights.", "dim");
+      "answers, only better nights.", "dim");   // a resident's nudge (Willem, round 100: HINT still talked about the week)
     _sayLeads(true);
     _say("(JOURNAL is the whole page of what's open; QUESTS lists jobs, WHO your black book, MAP the lay of the land.)", "dim");
     return;
@@ -5877,7 +5880,7 @@ function _maybeIncomingText() {
   // your OWN staff do not text the guv'nor a customer's invite — "when you come
   // see me?? i keep you seat every night" to the man pouring her drinks, and "you
   // go other bar?? i KNOW" after a night he stood his own rail (Rolf, round 54)
-  if (typeof _barOwned === "function" && _barOwned() && typeof _barStaff === "function" && _barStaff().includes(id)) {   // every tier: Lamai sent the guv'nor "family of me sick need medicine 300" (Greta, round 61)
+  if ((typeof _barOwned === "function" && _barOwned() && typeof _barStaff === "function" && _barStaff().includes(id)) || (typeof _jobBarStaff === "function" && _jobBarStaff(id))) {   // the floor you manage texts you as the floor (Renata, round 100: "i tell mamasan my farang come")   // every tier: Lamai sent the guv'nor "family of me sick need medicine 300" (Greta, round 61)
     // by role: Cake's fan text was word for word Lamai's (Rolf, round 55)
     const _role = NPC_ROLES[id];
     const _pool = _role === "mamasan" ? [
@@ -12224,6 +12227,15 @@ function _doEat(arg) {
     if (G.money < CONDO_MEAL && (G.bank || 0) < CONDO_MEAL) { _say("The fridge has the eggs and the rice has the rice, but the gas is out and the shop downstairs wants sixty baht for a refill you cannot find."); return; }
     if (G.money >= CONDO_MEAL) G.money -= CONDO_MEAL; else G.bank -= CONDO_MEAL;
     G.hunger = Math.max(0, G.hunger - 55); G.thirst = Math.max(0, G.thirst - 20);
+    // a plate FOR HER, with her in the room: the companion, or the woman named (Cormac and Renata, round 100: "cook for sasi" fed one)
+    { const her = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && (!arg || !/\bfor\b/.test(arg) || new RegExp("\\b" + NPCS[i].name.toLowerCase() + "\\b").test(String(arg || "").toLowerCase())));
+      if (her) {
+        const hs = ((G.homeSeen = G.homeSeen || {})[her] = G.homeSeen[her] || { day: G.day }); hs.cooked = G.day;
+        _say(_pickVary([n => `Two plates, which the kitchen was not built for. ${n} takes the balcony chair and eats with the fork she has decided is hers, and tells you the rice is wrong in a way that means she will eat all of it. (฿${_num(CONDO_MEAL)} for the two of you; the view is free.)`,
+          n => `Eggs and rice for two on two rings, ${n} leaning on the counter saying "put chilli, put MORE," and then the pair of you on the balcony with the bay gone black. She finishes first. (฿${_num(CONDO_MEAL)}.)`,
+          n => `${n} watches you cook the way she watches a new girl pour: ready to take over. She does not have to. Two plates on the floor by the fan, her legs across yours. (฿${_num(CONDO_MEAL)}, and nobody to tip but her.)`], "condomealher")(NPCS[her].name));
+        return;
+      } }
     _say(_pickVary([`Eggs, rice, a fistful of the dried chilli somebody left in the cupboard. Twenty minutes, two rings, and a plate that cost ฿${_num(CONDO_MEAL)} and would have been ฿${_num(CONDO_MEAL * 2)} on the street with a stool thrown in.`,
       `Instant noodles upgraded with an egg and the half papaya, eaten on the balcony with the bay for a television. ฿${_num(CONDO_MEAL)}, and nobody to tip.`,
       `The rice cooker does its one job; you do the rest with the wok somebody left. It is not a stall's plate. It is yours, which is a different flavour. (฿${_num(CONDO_MEAL)}.)`], "condomeal"));

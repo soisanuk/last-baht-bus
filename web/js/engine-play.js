@@ -330,7 +330,8 @@ function _lastCall(id) {
   const here = _npcsHere();
   const mama = here.find(n => NPC_ROLES[n] === "mamasan");
   // no BARFINE nudge in a pub with no bar girls, nor to a man with company on his arm (Martin, round 85)
-  const sellable = here.some(n => NPC_ROLES[n] === "hostess") && _room().barType !== "pub" && !(G.party && G.party.ids && G.party.ids.length);
+  const sellable = here.some(n => NPC_ROLES[n] === "hostess") && _room().barType !== "pub" && !(G.party && G.party.ids && G.party.ids.length) && !(typeof _atJobBar === "function" && _atJobBar());
+  if (typeof _atJobBar === "function" && _atJobBar()) { _say(_fmt("Last call — yours to call, boss: {when} to closing, and the floor is looking at you for the nod.", { when }), "alert"); return; }   // the manager is not sold a barfine by his own floor (Willem, round 100)
   if (!sellable) {
     _say(_fmt("Last call — chairs start going up on the far tables: {when} to closing. " +
       "This place shuts at {at}.", { when, at }) + (_guestThrough(id) ? " " + _L("(You're staying upstairs, so the door stays open to you.)") : ""), "alert");
@@ -1487,7 +1488,7 @@ function _closingTick() {
     "behind the bar, and the last of the rail are shown the door with you among them. " +
     "The rooms upstairs are for guests." :
     "Two o'clock on Soi 6. The frontages roll down, the sound systems die mid-song, " +
-    "and the ladies shoo the last punters out onto the soi" + (r.exits && r.exits.out && /east|deep/.test(r.exits.out) ? ", toward Second Road" : r.exits && r.exits.out && /soi6_street/.test(r.exits.out) ? ", toward Beach Road" : "") + ". The party, such " +
+    (typeof _atJobBar === "function" && _atJobBar() ? "and you are the one who shoos the last punters out onto the soi, counts the chits with the mamasan, and pulls the shutter down yourself" : "and the ladies shoo the last punters out onto the soi") + (r.exits && r.exits.out && /east|deep/.test(r.exits.out) ? ", toward Second Road" : r.exits && r.exits.out && /soi6_street/.test(r.exits.out) ? ", toward Beach Road" : "") + ". The party, such " +
     "as it was, is over.", "alert");
   _closeOutModals();
   // Walk out. If the room we'd land in is ITSELF shut for the night (a back room
@@ -5761,7 +5762,7 @@ function _morningLedger() {
   if (paperN > 0) bits.push("\u0e3f" + _num(paperN) + " to the visa agent");
   const condoN = (G.condoPaid || 0) - (b.condoB != null ? b.condoB : (G.condoPaid || 0));   // the lease's money, named (Victor)
   if (condoN > 0) bits.push("\u0e3f" + _num(condoN) + " to the condo's office" + (condoN >= CONDO_RENT * CONDO_DEPOSIT_MONTHS ? " (the deposit, held, and the first month)" : " (the rent and the electric)"));
-  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + Math.max(0, spent + wonN + giftInN + jobN - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0)); G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
+  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + Math.max(0, spent + wonN + giftInN + jobN - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0)); G.monthAdj = 0; G.month.days = (G.month.days || 0) + 1; }   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
@@ -5802,6 +5803,7 @@ function _morningLedger() {
   // what was said so LAST NIGHT can say it again.
   if (received > 0) { const _bn = (G.bankNotes || []).splice(0); bits.push(`฿${_num(received)} arrived in the account${_bn.length ? " — " + _bn.join(", ") : ""}`); }   // named: the pension, a reward (round 96's month)
   if (G.bruise && G.bruise.day === G.day - 1) { bits.push("nursing " + G.bruise.what); G.bruise = null; }
+  if (Array.isArray(G.ledgerNotes) && G.ledgerNotes.length) { bits.push(...G.ledgerNotes); G.ledgerNotes = []; }   // money that did not move but was lost: the condo's deposit kept (Renata, round 100)
   if (G.lastNightWas && G.lastNightWas.day === G.day - 1 && G.lastNightWas.kicked)
     bits.push(`walked out of ${G.lastNightWas.kicked.where} by security${G.lastNightWas.kicked.n > 1 ? ", twice" : ""} — the night's bad news, and the สนุก it cost`);
   G.partyRescued = null;
@@ -6015,7 +6017,9 @@ function _endNight(reason) {
     _say(_fmt(_pids.length > 1
       ? "The three of you fall through your door somewhere past the point of counting, still laughing at a thing none of you can remember. {who} claim the shower in shifts and the bed by consensus, and the night finishes the way the best ones do — off the clock, off the books, unhurried."
       : (_isHotelRoom(G.room)
-        ? "{who} kicks off her shoes by the door as if she has always kicked them off there. The last of the night is nobody's business and unhurried about being so."
+        ? _pickVary([_inCondo() ? "{who} kicks off her shoes by the door, finds the balcony before she finds the bed, and stands there a minute with the bay doing nothing. The last of the night is nobody's business and unhurried about being so." : "{who} kicks off her shoes by the door as if she has always kicked them off there. The last of the night is nobody's business and unhurried about being so.",
+            _inCondo() ? "{who} takes the lift like a woman who has decided she likes lifts, and your door like a woman who has decided she likes you. The rest is the night's." : "{who} takes the stairs ahead of you, two at a time, and your door like a woman who has decided she likes you. The rest is the night's.",
+            "{who} says nothing at the door, which is the loudest thing she has said all night, and the night does the rest."], "partyclosehome")
         : G.nightTurn < 50 ? "You bring {who} home early, while the soi is still filling up behind you. Nobody in it minds."
         : "You bring {who} home the long way, through a town that has watched the two of you all evening and approves. The door closes on the last of the night, and what's left of it is nobody's business and unhurried about being so."),
       { who: _partyLabel() }), "win");
@@ -6196,10 +6200,10 @@ function _endNight(reason) {
           ];
           // the hour the night actually ended: a cart that opens at two, at twenty past nine (Sam, round 90)
           if (G.nightTurn < 70) _codas.splice(0, _codas.length,
-            ["early", "an early night that felt like a late one, the street still loud under the window and her asleep before you, mid-sentence"],
+            ["early", _inCondo() ? "an early night that felt like a late one, the lift humming once below and her asleep before you, mid-sentence, nine floors above the soi" : "an early night that felt like a late one, the street still loud under the window and her asleep before you, mid-sentence"],
             ["shower", "the shower running too long because she sings in it, and the two of you on top of the covers with the air-con losing the argument"],
-            ["balcony", "ten minutes on the balcony watching the soi you just left, her in your shirt, the bars still going without the pair of you"],
-            ["fan", "the fan on two, the soi's music coming up through the floor, and a long argument about nothing that she wins"]);
+            ["balcony", _inCondo() ? "ten minutes on the balcony with the bay gone black and the hill road's one streetlight, her in your shirt, the bars somewhere behind the tower and not your problem" : "ten minutes on the balcony watching the soi you just left, her in your shirt, the bars still going without the pair of you"],
+            ["fan", _inCondo() ? "the fan on two, the tower settling around you, and a long argument about nothing that she wins" : "the fan on two, the soi's music coming up through the floor, and a long argument about nothing that she wins"]);   // a condo is not a room over the soi (Cormac, Renata, round 100)
           let _ck = _hh(String(G.lastBfId || "") + ":" + G.day + ":coda", 71) % _codas.length;
           if (_codas[_ck][0] === G.lastCoda) _ck = (_ck + 1) % _codas.length;   // not the same close two nights running (Martin, round 85)
           const _c = _codas[_ck]; G.lastCoda = _c[0];
@@ -6243,8 +6247,11 @@ function _endNight(reason) {
       }
       break;
     case "sleep":
-      if (!G.keptBy) _say("You call it. The air-con rattles its lullaby, the neon leaks through " +
-        "the curtains, and Pattaya carries on politely without you.", "room");   // her mat has its own line (Dougal)
+      if (!G.keptBy) _say(_inCondo() ? _pickVary(["You call it. Nine floors up the town is a hum and a glow past the balcony rail, the lift sighs once somewhere below, and the bay does nothing all night, beautifully.",
+        "You call it. The fan on two, the hill road's one streetlight, and the bars a long way down and somebody else's problem until tomorrow.",
+        "You call it. The flat does what a flat does at this hour: the fridge clicks, the tower settles, and you are asleep before you have decided to be."], "sleepcondo")
+        : "You call it. The air-con rattles its lullaby, the neon leaks through " +
+        "the curtains, and Pattaya carries on politely without you.", "room");   // her mat has its own line (Dougal); the condo has its own (Cormac, round 100)
       break;
     case "robbed": {
       const safeRoom = _flag("act1Done") && G.stage !== "act1" && G.hotel === "metropole";
@@ -6382,6 +6389,8 @@ function _endNight(reason) {
   G.soc.dancePaid = false; G.soc.danceNoted = false;   // …and a DANCE once a night, with a woman who knows you (Mario, 2026-10-13)
   G.soc.photoJoy = 0; G.soc.photoNoted = false;        // …and the first three new faces a night (same call)
   G.soc.giftLines = {};   // the cart's reactions start over (round 87)
+  // THE FLAT IS REMEMBERED (round 100): a woman who woke in your condo keeps the day — the balcony, the lift, what you cooked
+  if (_inCondo()) for (const _w of [...(_bedIds || []), ...((G.party && G.party.ids) || [])]) if (_w && NPCS[_w]) { const hs = ((G.homeSeen = G.homeSeen || {})[_w] = G.homeSeen[_w] || {}); hs.day = G.day; hs.nights = (hs.nights || 0) + 1; }
   // the woman you woke up with saw you this morning: an LT, a night out or a ride is not an
   // absence (Pete, round 75 — Manow asked where he had been for four days, the evening after)
   for (const _w of [G.lastBfId, ...((G.party && G.party.ids) || [])]) if (_w && NPCS[_w]) (G.seenDay = G.seenDay || {})[_w] = G.day;
@@ -6407,7 +6416,7 @@ function _endNight(reason) {
       // his own employees (Malcolm, round 47). Same beat, the guv'nor's register.
       // …and nothing at all to the owner after a stood shift: twelve hours behind his own
       // rail is not "three hours on the same stool" (Rolf, round 55)
-      if (girls.length && !(G.bar && top === G.bar.room && _flag("barOpen")))
+      if (girls.length && !(G.bar && top === G.bar.room && _flag("barOpen")) && !(G.job && G.job.kind === "manager" && top === G.job.room))   // nor to the manager about his own floor (Renata, round 100)
         // the count is the one the room will quote back tomorrow (Ruairi, round 75: "three hours" here, "5 hour" from every mouth)
         _say(`(${(() => { const h = Math.max(1, Math.round(n / 10)); return h === 1 ? "An hour" : ["", "", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"][h] + " hours"; })()} on the same ${_seat(top)} at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
       // and the man behind the rail: presence is how a manager decides you're not a tourist
@@ -6533,7 +6542,7 @@ function _endNight(reason) {
   else _say(_fmt("── DAY {d}{home} — you " +
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──",
-    { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
+    { d: G.day, home: G.stage === "expat" ? _L(crash ? " · PATTAYA" : " · PATTAYA, HOME") : _L(" of 7") }), "win");   // not HOME on a bench (Renata, round 100)
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
   if (wouldRough && !rough && _dogEgg() === "rescue") {
     // NOT "the last baht bus" — this fires only on nights you failed to get home,
@@ -7140,7 +7149,7 @@ function _stringerPay() {
 }
 function _quitJob() {
   if (!G.job) { _say("You have no job to quit, which is either freedom or the problem."); return; }
-  const j = G.job; G.job = null;
+  const j = G.job; G.job = null; if (j.kind === "manager") G.jobQuit = { room: j.room, day: G.day };   // the floor notices (Renata, round 100)
   if (j.kind === "teach") { _say("You close the platform. The mornings are yours again, and so is the bill."); return; }
   if (j.kind === "school") { if (_paper() === "permit") G.paperUntil = G.day + PAPER_GRACE; _say(`You hand the timetable back. The mornings are yours, and the school's paper was the school's: ${PAPER_GRACE} days, and it is a stamp again.`); return; }
   if (_paper() === "permit") { G.paperUntil = G.day + PAPER_GRACE; }
@@ -7207,16 +7216,18 @@ function _jobPay() {   // the month's share, on the payday: what the nights earn
 function _doRentCondo() {
   if (G.stage !== "expat") { _say("Rooms by the month are for residents. A holiday has a hotel, and a flight."); return; }
   if (G.hotel === "condo") { _say(`You rent it already — the ninth floor, ฿${_num(CONDO_RENT)} and the electric on the payday. (MOVE OUT to give it back.)`); return; }
-  if (G.room !== "pratumnak_soi5") { _say("The condo towers are up on Pratumnak Soi 5 — the office on the ground floor of the one with the intercom does the paper. (TRAVEL there.)"); return; }
+  if (G.room !== "pratumnak_soi5") { _say("The condo towers are up on Pratumnak Soi 5 — the top of the soi, past the clubs, the tower behind the wall with the intercom; the office on its ground floor does the paper. (HOW DO I GET TO PRATUMNAK SOI 5 for the way; MOTOSAI TO PRATUMNAK from a stand.)"); return; }
   const dep = CONDO_RENT * CONDO_DEPOSIT_MONTHS, advance = CONDO_RENT, need = dep + advance;
   const have = (G.money || 0) + (G.bank || 0);
   if (G.askArmPrev !== "condo") {   // the terms first, the money on the second ask with no command between — ฿27,000 went on a question (Victor)
-    G.askArm = "condo";
+    const lapsed = !!G.condoTermsRead; G.askArm = "condo"; G.condoTermsRead = true;
+    if (lapsed) _say("(The question in between reset it — the sheet again, and RENT A CONDO straight after signs.)", "dim");   // "nothing said so" (Willem, round 100)
     _say(`The woman in the office slides the sheet across. A studio on the ninth floor: ฿${_num(CONDO_RENT)} a month and the electric — about ฿${_num(CONDO_UTIL)} — both on the payday; ฿${_num(dep)} deposit (two months) held ${CONDO_LEASE} days, and ฿${_num(advance)} the first month in advance — ฿${_num(need)} today. No desk, no folio, no joiner fee; a sign about overnight guests. Short twice and the lock changes and the deposit is theirs; move out inside the lease and it is theirs too. (RENT A CONDO again to sign.)`);
     return;
   }
   if (have < need) { _say(`The woman in the office slides the sheet across: ฿${_num(dep)} deposit — two months — and ฿${_num(advance)} the first month in advance. ฿${_num(need)}, and you have ฿${_num(have)} between the pocket and the account. She does not say anything unkind. She does not have to.`); return; }
   let fromBank = Math.min(G.bank || 0, need); G.bank = (G.bank || 0) - fromBank; const fromPocket = need - fromBank; G.money -= fromPocket;
+  if (G.month) { G.month.rent = (G.month.rent || 0) + advance; G.monthAdj = (G.monthAdj || 0) + dep; }   // the first month is the room; the deposit is held, not spent (Renata, round 100)
   G.condoPaid = (G.condoPaid || 0) + need;
   G.condo = { since: G.day, deposit: dep, short: 0, guestsTold: false, rentDay: G.payDay != null ? G.payDay : G.day };
   G.hotel = "condo"; G.room = "condo_room"; G.hotelDebt = 0;
@@ -7236,7 +7247,8 @@ function _doMoveOut() {
   }
   if (!kept) { G.bank = (G.bank || 0) + c.deposit; _bankIn(0); }
   G.condo = null; G.hotel = "sabai"; G.room = _hotelRoomId();
-  _say(kept ? `You give the key card back inside the lease, and the office keeps the ฿${_num(c.deposit)} deposit the way the lease said it would, with a smile. Your bag makes its own way to the Sabai Palms.`
+  if (kept) (G.ledgerNotes = G.ledgerNotes || []).push(`the condo's ฿${_num(c.deposit)} deposit kept by the office, inside the lease`);   // on the ledger by name, though no money moved that night (Renata)
+  _say(kept ? `You give the key back inside the lease, and the office keeps the ฿${_num(c.deposit)} deposit the way the lease said it would, with a smile. Your bag makes its own way to the Sabai Palms.`
     : `The lease ran its term. The office counts the tiles, finds nothing, and the ฿${_num(c.deposit)} deposit lands back in the account a week later than it said. Your bag makes its own way to the Sabai Palms.`);
 }
 function _condoMonth() {   // on the payday: the rent and the electric; short twice and the bag is at the Sabai, the deposit the landlord's
@@ -7244,6 +7256,7 @@ function _condoMonth() {   // on the payday: the rent and the electric; short tw
   const due = CONDO_RENT + CONDO_UTIL; const have = (G.money || 0) + (G.bank || 0);
   if (have >= due) {
     const fb = Math.min(G.bank || 0, due); G.bank = (G.bank || 0) - fb; G.money -= (due - fb); G.condoPaid = (G.condoPaid || 0) + due;
+    if (G.month) { G.month.rent = (G.month.rent || 0) + due; G.month.spent = (G.month.spent || 0) + due; }   // the payday's rent is the new month's room AND its spending — "฿0 spent, ฿11,000 of it the room" (Renata)
     if (G.condo.short) G.condo.short = 0;
     return ` The condo: ฿${_num(CONDO_RENT)} rent and ฿${_num(CONDO_UTIL)} electric.`;
   }
@@ -7331,7 +7344,7 @@ function _incomeTick() {
       if (!j.paidOnce) { j.paidOnce = true; if (_paper() !== "permit") { G.paper = "permit"; G.paperUntil = null; G.thaiAccount = true; jobLine += " And its paper came through: a work permit in your name, a bank book with it."; } }
     }
     else if (j.corp) { if (jp > 0) { _bankIn(jp); G.bankNotes.push(`${_barName(j.room)}'s salary, through the company`); } jobLine = ` ${_barName(j.room)} paid ฿${_num(jp)} through the books for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }
-    else { if (jp > 0) { G.money += jp; G.jobPaid = (G.jobPaid || 0) + jp; } jobLine = ` ${_barName(j.room)}'s envelope: ฿${_num(jp)} for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }
+    else { if (jp > 0) G.envelopeDue = { amt: jp, room: j.room, day: G.day, nights: j.stood }; jobLine = jp > 0 ? ` ${_barName(j.room)}'s envelope — ฿${_num(jp)} for ${j.stood} night${j.stood === 1 ? "" : "s"} — is at the bar; the house hands it over when you are next behind the rail.` : ` ${_barName(j.room)}'s envelope: nothing for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }   // the envelope waits where the work was (Renata, round 100: it landed in his pocket at the condo)
   }
   const lines = [];
   if (om.kind === "pot") lines.push(`The month, to last night's close: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. No payday — ${om.what} is what there is: ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account, about ${_weeksLeft()} weeks at this rate.`);
@@ -7344,7 +7357,7 @@ function _incomeTick() {
   if (jobLine || paperLine || condoLine) lines[0] += jobLine + paperLine + condoLine;
   G.monthLine = lines;
   G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
-  if (G.hotel === "condo" && G.condo && condoLine && !/not there/.test(condoLine)) G.month.rent = CONDO_RENT + CONDO_UTIL;   // the rent is the coming month's room (Victor: "฿0 of it the room")
+  if (G.hotel === "condo" && G.condo && condoLine && !/not there/.test(condoLine)) { G.month.rent = CONDO_RENT + CONDO_UTIL; G.month.spent = CONDO_RENT + CONDO_UTIL; }   // the rent is the coming month's room AND its first spend (Victor: "฿0 of it the room"; Renata: "฿0 spent, ฿11,000 of it the room")
   if (G.job && G.job.roughSeen) G.job.roughSeen = 0;   // the school counts the new month's mornings from zero
 }
 function _doMoney() {
@@ -7357,6 +7370,7 @@ function _doMoney() {
   { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_jobName()}` : ""}${p === "tourist" ? " — no bank book, the foreign card and its fee" : p === "longstay" ? " — a bank book" : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
     if (G.stringer) _say(`Stringer for Last Orders: ฿${_num(OWL_LEAD_PAY)} a paragraph, ${OWL_LEADS_WEEK} a week, for a thing you read that Mort had not — ${_stringerOwed().length} unpaid.`, "dim");
     if (G.job) _say(G.job.kind === "teach" ? `Job: online English, ฿${_num(_jobPay())} this month at the mornings you have kept.` : G.job.kind === "school" ? `Job: the school — ฿${_num(SCHOOL_PAY)} a month through the books, eight o'clock Monday to Friday; ${G.job.lates || 0} of ${SCHOOL_LATES} late mornings this month${G.job.paidOnce ? "" : "; the permit with the first payday"}.` : `Job: manager at ${_barName(G.job.room)} — ${G.job.nights} nights a week, ${G.job.stood || 0} stood this month, ${G.job.corp ? `฿${_num(MGR_PERMIT_PAY)} through the books` : `฿${_num(MGR_CASH_PAY)} in an envelope`}${G.job.corp && _paper() !== "permit" ? `; the paper after ${MGR_PERMIT_AFTER} nights (${G.job.stood || 0} so far)` : ""}.`, "dim"); }
+  if (G.envelopeDue) _say(`An envelope of ฿${_num(G.envelopeDue.amt)} is waiting at ${_barName(G.envelopeDue.room)} — the house hands it over when you are next behind the rail.`);
   const roof = G.hotel === "condo" ? `the condo is ฿${_num(CONDO_RENT + CONDO_UTIL)} a month with the electric` : `the room is ฿${_num(_hotelRate(G.hotel))} a night`;
   if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; ${roof}. At this rate, about ${_weeksLeft()} weeks.`);
   else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account; ${roof}. About ${_weeksLeft()} weeks at this rate.`);

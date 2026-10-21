@@ -6038,7 +6038,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Ploy — her cashier, the cage at Rainbow. Ploy stand there six hours hungry every " +
           "night. Feed her, and doors open.\"", sets: ["somTamAccepted"], gives: "som_tam",
         short: "\"Oy said no, of course. The door into her world is som tam — give it to Ploy in the cage, and doors open.\"" },
-      { notFlags: ["knowWasHere"], when: (st, G) => !_flag("act1Done") || (typeof _walletHunt === "function" && _walletHunt()), th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",   // not to a man who owns a bar (Mick, round 57)
+      { when: (st, G) => (!_flag("act1Done") || (typeof _walletHunt === "function" && _walletHunt())) && !(G.talked.candy || []).length, th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",   // a stranger with no wallet, receipt read or not (Renata, round 100: "Back again" in a bar never entered)   // not to a man who owns a bar (Mick, round 57)
         text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"",
         short: "\"Sit down. Talk to Candy — everybody's problems come to Candy.\"" },
       { text: "\"Back again.\" Candy counts the room without moving her eyes. \"You know the house now \u2014 sit, drink, don't be boring.\"",
@@ -14498,14 +14498,14 @@ const QUESTS = {
   // is the callback (you got a wallet back off her, which almost nobody does), and
   // the objective stays inside Tree Town: get the whispers from Pim at the
   // Starlight, report to Oy. doneFlag observes the world as usual.
-  safecracker: {
+  safecracker: {   // a job for the man who got a wallet back off her — not the man whose wallet is in her safe tonight (Renata, round 100)
     name: "The Safe-Cracker",
     giver: "oy",
     desc: "Madam Oy has a job for the farang who got a wallet back off her. Find out what has " +
       "her girls jumpy (ASK PIM ABOUT THE WHISPERS), then take it back to her (ASK OY ABOUT " +
       "THE OFFER).",
     deps: [],
-    reqFlags: ["act1Done"],
+    reqFlags: ["act1Done", "hasWallet"],
     at: (G) => _flag("heardWhispers") ? "oy" : "pim", // the where-clause follows the step (completionist playtest 2026-08-22)
     doneFlag: "oyJobDone",
     reward: { money: 2000, happy: 6 },
@@ -21393,6 +21393,11 @@ NPCS.nont.dialogue.push(
   { topic: "wallet|my wallet|the wallet|lost wallet|my card|no card|lost card|the card", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),
     text: "\"Wallet? I move money, not wallets.\" Nont turns the {{phone}} face down. \"Your card is gone; your account is not. Send from the app to me, I give you notes, five percent — CASH, here. That is the whole service. The wallet itself — Candy, on this soi. She knows which boy, and I am not telling you for free what she tells you for a drink.\"",
     short: "\"I move money, not wallets. CASH here, five percent; Candy for the wallet.\"" });
+// THE TOWER ON THE HILL — the fixer knows where the men who stay end up (Willem, round 100: "above my pay grade" about a condo)
+NPCS.tan.dialogue.push(
+  { topic: "condo|a condo|flat|a flat|apartment|an apartment|a place to live|somewhere to live|rent|renting|where to live|a room by the month|cheaper place", when: (st, G) => G.stage === "expat",
+    text: "\"A flat.\" Tan nods as if you have passed something. \"Pratumnak Soi 5 — the top of the soi, the tower behind the wall with the intercom. Nine thousand a month and the electric, two months down, the office on the ground floor. Every man who stays asks me this in his second week. The lift is slow and the woman in the office remembers everything, which is the same thing as a good building.\" He turns the key. \"Say Pratumnak to any bike.\"",
+    short: "\"Pratumnak Soi 5, the tower behind the wall. Nine thousand and the electric. Say Pratumnak to any bike.\"" });
 NPCS.david.dialogue.unshift(
   { topic: "pay|the pay|payday|salary|contract|permit|the permit|thirty-five|hours|mornings|lates|late",
     when: (st, G) => G.stage === "expat" && !!G.jobOffer && G.jobOffer.kind === "school" || (G.stage === "expat" && !!G.job && G.job.kind === "school"),

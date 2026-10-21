@@ -54,7 +54,8 @@ test("a beer bar's job: the floor has to know your face, the terms are cash on n
   G.room = "hotel_room"; sleep(); assert.equal(G.job.stood, 1, "the night counted at the wake");
   // the month: four nights a week is ~17 a month; one night is a sliver of the envelope, into the pocket, named
   G.job.stood = 9; G.day = G.payDay + 30; const m0 = G.money, jp = _jobPay(); assert.ok(jp > 0 && jp < MGR_CASH_PAY);
-  sleep(); assert.match(said(), /envelope: ฿/); assert.match(said(), /paid to you for a job/); assert.ok(G.money >= m0 + jp - _hotelRate(G.hotel) - 1); assert.equal(G.job.stood, 0);
+  sleep(); assert.match(said(), /envelope — ฿.*is at the bar/); assert.ok(G.envelopeDue && G.envelopeDue.amt === jp, "the envelope waits at the bar"); assert.equal(G.job.stood, 0);
+  G.room = cashBar; G.nightTurn = 30; out = []; run("talk to bert"); assert.match(said(), /envelope/); assert.ok(G.money >= m0 + jp - _hotelRate(G.hotel) - 1, "handed over at the rail: " + G.money); assert.equal(G.envelopeDue, null);
   assert.match(t("money"), /Job: manager at The Stinky Pinky — 4 nights a week/);
   assert.match(t("quit job"), /hand the keys back/); assert.equal(G.job, null);
 });

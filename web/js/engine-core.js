@@ -328,6 +328,7 @@ function newGame() {
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
+    homeSeen: {}, envelopeDue: null, ledgerNotes: [], monthAdj: 0,   // the resident's integration pass (round 100)
     loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0, quizWon: 0, giftIn: 0, lastNightBye: null,   // quiz prizes and a note pressed on you (round 93); principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
@@ -802,6 +803,12 @@ function _flag(f) { return !!G.flags[f]; }
 function _setFlag(f) { G.flags[f] = true; }
 // THE SECOND WALLET is out: the opening's chain is live again in the expat stage (2026-10-21)
 function _walletHunt() { return !!(G && G.flags && G.flags.walletLost && !G.flags.hasWallet); }
+// THE RESIDENT'S ROOF AND RAIL (round 100): a man in a condo is not a guest, and a man standing his job's rail is not a customer
+function _inCondo() { return !!(G && G.hotel === "condo"); }
+function _homeWord() { return _inCondo() ? "your flat" : "the hotel"; }            // "JUST the hotel" → "JUST home"
+function _homeSaid() { return _inCondo() ? "Pratumnak Soi 5" : "the hotel's name"; }   // what she says to the piwin
+function _atJobBar() { return !!(G && G.job && G.job.kind === "manager" && G.room === G.job.room); }
+function _jobBarStaff(id) { return !!(G && G.job && G.job.kind === "manager" && NPCS[id] && (NPCS[id].room === G.job.room || (NPCS[id].bars || []).includes(G.job.room)) && (NPC_ROLES[id] || NPCS[id].manager)); }
 // what the recovered wallet gives back — the opening's ฿500, or what the second wake took
 function _walletCash() { return G && G.walletHeld != null ? G.walletHeld : WALLET_CASH; }
 

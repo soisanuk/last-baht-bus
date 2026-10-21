@@ -34,6 +34,7 @@ const RX = new RegExp("\\b((the whole|half the|all the|the entire|every(?:one|bo
 
 const G_ = "general", C_ = "consequence", W_ = "witness";
 const CLASS = {
+  "engine-parser.js:_TOWN|the whole rail knows": [C_, "the my_loan row: the line only prints while G.loan is open, and Nira's cousins asking around IS the mechanic that spread it (round 100)"],
   "engine-parser.js:_TOWN|the soi talks": [C_, "the wallet_back row: the line only prints after walletBack, so the mouth saying the soi talked is the mechanic that heard it (round 99)"],
   "engine-parser.js:_TOWN|everybody knows": [G_, "a fact about the world: Mot sells to one woman and she gives back for manners — the arithmetic of the chain, not a sighting (round 99)"],
   "quest.wallet_again.desc|the town knows": [G_, "idiom: where lost things go in this town is a fact about the world, not a sighting (the second wallet, 2026-10-21)"],
