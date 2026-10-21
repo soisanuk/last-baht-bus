@@ -18,9 +18,9 @@ var NEWS_FEED = [
     "d": "20 Oct 2026"
   },
   {
-    "t": "Man, 30, killed by passenger train near Pattaya railway station",
-    "s": "Pattaya Mail",
-    "d": "20 Oct 2026"
+    "t": "Pattaya motorcyclist killed by train after ignoring railway barrier",
+    "s": "Thaiger",
+    "d": "21 Oct 2026"
   },
   {
     "t": "SUV driver claims he fell asleep before crash injuring eight at Pattaya junction",
@@ -28,12 +28,12 @@ var NEWS_FEED = [
     "d": "20 Oct 2026"
   },
   {
-    "t": "Suspects admit all charges in murder of Russian siblings buried in Huay Yai",
+    "t": "Man, 30, killed by passenger train near Pattaya railway station",
     "s": "Pattaya Mail",
     "d": "20 Oct 2026"
   },
   {
-    "t": "Thailand consumer agency recovers over 7 million baht through mediation",
+    "t": "Thailand’s IMF–World Bank meetings set attendance record with 19,000 delegates",
     "s": "Pattaya Mail",
     "d": "20 Oct 2026"
   },
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "16 Oct 2026"
   },
   {
+    "t": "How Thailand is capturing next wave of investments in ‘China plus one’ outlook",
+    "s": "South China Morning Post",
+    "d": "20 Oct 2026"
+  },
+  {
+    "t": "Thailand cabinet approves $313 million flood relief, official says",
+    "s": "Reuters",
+    "d": "20 Oct 2026"
+  },
+  {
     "t": "Thailand Targets $417 Million of Land in Foreign Buyer Crackdown",
     "s": "Bloomberg.com",
     "d": "19 Oct 2026"
   },
   {
+    "t": "Toyota to build hydrogen-powered Hilux pickup in Thailand",
+    "s": "Nikkei Asia",
+    "d": "20 Oct 2026"
+  },
+  {
     "t": "In Thailand, a nearly 16-foot black king cobra turns up inside a home as rain drives snakes in",
     "s": "Yahoo",
     "d": "18 Oct 2026"
-  },
-  {
-    "t": "Chinese students ripped off by condo agents",
-    "s": "Bangkok Post",
-    "d": "20 Oct 2026"
-  },
-  {
-    "t": "Thailand, Cambodia seek to calm escalating dispute over US$300 billion seabed",
-    "s": "South China Morning Post",
-    "d": "20 Oct 2026"
-  },
-  {
-    "t": "22 global economic takeaways from IMF–World Bank meetings in Thailand",
-    "s": "Asia News Network",
-    "d": "19 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-20","USD":33.65,"AUD":23.5,"GBP":44.9,"EUR":37.74};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-21","temp":25,"humid":98,"code":3,"hi":30,"rain":98};
+var WX_NOW = {"date":"2026-10-21","temp":30,"humid":77,"code":3,"hi":30,"rain":92};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4126,"date":"2026-10-20","baht":65650};
+var GOLD = {"usd":4118,"date":"2026-10-21","baht":65550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":82787,"thb":2781928};
+var BTC = {"usd":82676,"thb":2782048};
