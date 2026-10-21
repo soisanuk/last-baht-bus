@@ -6673,6 +6673,7 @@ function _endNight(reason) {
   if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
   if (typeof _destituteTick === "function") _destituteTick();   // no roof, counted; her mat; the plane
   if (typeof _walletCardTick === "function") _walletCardTick();   // the bank's replacement card, a week on (2026-10-21)
+  if (typeof _launderRiskTick === "function") _launderRiskTick();   // a crooked door that came back (2026-10-22)
   // THE LEDGER COMES AFTER EVERYTHING THE WAKE MOVES (Ossie, round 70: the till's shortfall came out
   // of his pocket a turn after the ledger printed and appeared a morning late). The bar's settle,
   // Nira's cousins and the care ask all belong to the night just played, so they are on its ledger.

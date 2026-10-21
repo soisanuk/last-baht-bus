@@ -28,6 +28,9 @@ test("the locator: anybody, tonight, ฿200 — and nothing else moves", () => {
   const target = Object.keys(NPCS).find(id => NPC_ROLES[id] === "hostess" && _npcWhere(id) && !NPCS[id].filler);
   const rep = G.rep, bond = G.soc.drinks[target] || 0, trust = _npcState("nont").trust;
   run(`ask nont about ${NPCS[target].name.toLowerCase()}`);
+  assert.equal(G.money, 5000, "the fee is named and confirmed before it is paid (Mario, 2026-10-22)");
+  assert.match(text(), /YES to pay/);
+  run("yes");
   assert.equal(G.money, 5000 - NONT_LOCATE);
   assert.match(text(), new RegExp(_barName(_npcWhere(target)).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.match(text(), /over on/, "…with the district");

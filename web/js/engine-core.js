@@ -356,7 +356,7 @@ function newGame() {
     offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
     returnHello: {},     // npc id → the vacation a written woman last gave her return greeting (Aurelio, round 71)
-    acctBase: 0, acctUntil: 0, acctDay: null,   // the accountant's call: Nont's total at the last call, the review's end, the call's day
+    acctBase: 0, acctUntil: 0, acctDay: null, acctWhy: null, launderRisk: [], launderBack: {},   // the laundering doors' risk book (2026-10-22)   // the accountant's call: Nont's total at the last call, the review's end, the call's day
     coversNights: {},    // day → the men counted at Jasmine Garden that night (The Covers: a pattern is three nights, Mario 2026-10-08)
     licencesRead: {},    // room → the registered name read off the paper by the till (EXAMINE LICENCE, 2026-10-08)
     reviewOf: {},        // "speaker>colleague:kind" → the line she gives about her (round 77: an opinion is kept, not re-dealt nightly)
@@ -811,6 +811,8 @@ function _atJobBar() { return !!(G && G.job && G.job.kind === "manager" && G.roo
 // …and on SHIFT there tonight: the close is his to call only on a night he declared it (Brendan, round 102:
 // "last call — yours to call, boss" on his night off)
 function _onShift() { return _atJobBar() && G.job.shiftDay === G.day; }
+// a woman on the floor he manages, wherever he is standing: a manager does not barfine his own girls (Mario, 2026-10-22)
+function _myFloorGirl(id) { return !!(G && G.job && G.job.kind === "manager" && NPCS[id] && NPC_ROLES[id] === "hostess" && (NPCS[id].room === G.job.room || (NPCS[id].bars || []).includes(G.job.room))); }
 function _jobBarStaff(id) { return !!(G && G.job && G.job.kind === "manager" && NPCS[id] && (NPCS[id].room === G.job.room || (NPCS[id].bars || []).includes(G.job.room)) && (NPC_ROLES[id] || NPCS[id].manager)); }
 // what the recovered wallet gives back — the opening's ฿500, or what the second wake took
 function _walletCash() { return G && G.walletHeld != null ? G.walletHeld : WALLET_CASH; }

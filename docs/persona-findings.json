@@ -33995,10 +33995,10 @@
    "between": "",
    "system": "expat-jobs",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/rulings1022.test.js",
    "claim": "As manager he takes his own floor's girl out on a barfine, kisses her 'like she means the version she's selling', pays ฿80 water at his own rail",
-   "verdict": "design",
-   "note": "Mario's call: a manager and a woman on his floor — and staff prices",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-22: prohibited — a manager cannot barfine his own girls (BARFINE, TAKE OUT, GO HOME WITH refused), and his drinks at his own bar are complimentary, hers too",
    "cls": "D"
   },
   {
@@ -34265,10 +34265,10 @@
    "between": "",
    "system": "bus",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/rulings1022.test.js",
    "claim": "No baht bus serves the condo; the Jomtien truck runs past the hill",
-   "verdict": "design",
-   "note": "Mario's call: a stop at Pratumnak Soi 5 changes the bus map",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-22: no bus goes up Pratumnak — the street names the Thepprasit trucks and the piwin at the tower gate, and the driver says so",
    "cls": "D"
   },
   {
@@ -34505,10 +34505,10 @@
    "between": "",
    "system": "laundering",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/rulings1022.test.js",
    "claim": "The honest doors of the Covers, Under Verification and the Glam saga pay nothing while costing beers and locates; the crooked doors pay on the spot",
-   "verdict": "design",
-   "note": "the laundering doctrine (money from the choice) — Mario's call whether honest work should pay",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-22: the four laundering jobs and the Name on the Wall pay the honest door; the crooked door pays more and books a 40% delayed cost by pure hash, named on the ledger. The Glam saga is not a laundering job and is unchanged",
    "cls": "D"
   },
   {
@@ -34520,10 +34520,10 @@
    "between": "",
    "system": "money",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/rulings1022.test.js",
    "claim": "Nont's ฿200 locate charged on the ask, with no confirmation, for a bar on his own block",
-   "verdict": "deferred",
-   "note": "a locate confirm",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-22: the fee is named and waits for YES (or the same ask again); any other command lets it go",
    "cls": "D"
   },
   {

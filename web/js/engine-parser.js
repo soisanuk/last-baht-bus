@@ -17,6 +17,11 @@ const _DIRS = {
 // time, so these can sit above its definition.
 // _fmt templates (not raw interpolation): the {n}/{p} placeholders let the German
 // catalog reorder them. EN output is byte-identical to the old strings.
+const _LADY_DRINK_JOB = [   // a drink for a girl on the floor he manages: the house's, no chit (Mario, 2026-10-22)
+  n => _fmt("{n} pours herself one and doesn't write it. \"Staff drink, boss. Mama say the manager don't pay.\"", { n }),
+  n => _fmt("{n} clinks it against your glass. No chit goes in the cup; the cashier pretends not to see, which is the house's way of saying yes.", { n }),
+  n => _fmt("\"For me? From the manager?\" {n} grins at the floor so they all see it. \"Free drink, and they think I'm special. Two good things.\"", { n }),
+];
 const _LADY_DRINK_OWN = [   // a drink for your own girl: into your own till, and no customer's smile (composition audit, 2026-10-08)
   n => _fmt("{n} takes the drink and rings it into your own till, which she finds very funny. \"Boss buy, boss pay, boss get the money. Everybody happy.\"", { n }),
   n => _fmt("\"For me?\" {n} pours it herself, short, and puts the chit in the cup with the others. \"Is your money twice, boss. I drink it once.\"", { n }),
@@ -10492,7 +10497,7 @@ const _PARTY_JEALOUS = [
   (c, o) => `${c} leans over and clinks ${o}'s new glass with her own. "My farang, generous." A smile at ${o} with teeth in it. "Tonight only, na."`,
 ];
 function _ladyDrinkCharge(id) {
-  G.money -= _ladyPrice();
+  if (!(id && typeof _atJobBar === "function" && _atJobBar() && typeof _myFloorGirl === "function" && _myFloorGirl(id))) G.money -= _ladyPrice();   // his own girls' drinks are the house's, at his bar (Mario, 2026-10-22)
   if (id && typeof _noteActor === "function") _noteActor(id);   // the woman you just bought a drink is "her" (Gary, round 79: TALK TO HER, "nobody by that name")
   if (id && NPCS[id] && typeof _convoStart === "function" && _convoActive() !== id && !(G.party && (G.party.ids || []).includes(id)) && _npcsHere().includes(id)) _convoStart(id);   // …and the one you are talking to: "do you like me?" after her drink went to the cashier (Hal, round 96)
   if (id && NPCS[id]) { const md = (G.metDay = G.metDay || {}); if (md[id] == null) md[id] = G.day; }   // a drink is a meeting: Pukky asked "first time this bar?" the night after two (memory audit, 2026-10-13)
@@ -10766,6 +10771,11 @@ function _doBuy(arg) {
       _ownStock(price, soft ? "a soda" : "a water");
       return;
     }
+    if (typeof _atJobBar === "function" && _atJobBar()) {   // the manager drinks free at the bar he runs (Mario, 2026-10-22)
+      G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
+      _say(_pickVary([`${soft ? "A soda" : "A water"}, from the cooler behind the rail, on the house. Nobody writes a chit for the manager.`, `You take ${soft ? "a soda" : "a water"} off the ice yourself. The cashier does not look up: staff drink is staff drink.`], "jobwater"));
+      return;
+    }
     if (G.money < price) { _say(_fmt("฿{p} for a cold bottle, and you don't have it. Grim.", { p: price })); return; }
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
@@ -10951,7 +10961,8 @@ function _doBuy(arg) {
     const regId = _regularHere(beerName);
     if (/patron|regular|expat|him|guy|bloke/.test(arg) || regId) { _standRegular(regId); return; }
     const _ownBeer = typeof _atOwnBar === "function" && _atOwnBar();
-    if (!_ownBeer) G.money -= _beerPrice();
+    const _jobBeer = !_ownBeer && typeof _atJobBar === "function" && _atJobBar();   // complimentary for the manager (Mario, 2026-10-22)
+    if (!_ownBeer && !_jobBeer) G.money -= _beerPrice();
     (G.soc.selfDrinks = G.soc.selfDrinks || {})[G.room] = ((G.soc.selfDrinks[G.room] || 0) + 1); // "sit like a customer" — the midnight gate reads it
     G.soc.drunk++;
     G.thirst = Math.max(0, G.thirst - 20);
@@ -10976,6 +10987,7 @@ function _doBuy(arg) {
     let _bl = (_room().barType === "pub" || _room().indoors || _room().barType === "gents" || _room().barType === "gogo") ? _BEER_LINES.filter(l => !/gutter|pavement|street/.test(l)) : _BEER_LINES;
     if (Object.values(G.soc.selfDrinks || {}).reduce((a, n) => a + n, 0) <= 1) _bl = _bl.filter(l => !/^Another\b/.test(l));   // "Another big one" for the first beer of the night (Gary, round 79)
     if (_ownBeer) _ownStock(_beerPrice(), "a beer", _L(_pickVary(_bl, "beer")) + (_beerTail ? " " + _L(_beerTail) : ""));
+    else if (_jobBeer) _say(_L(_pickVary(_bl, "beer")) + " (On the house — the manager's drink.)" + (_beerTail ? " " + _L(_beerTail) : ""));
     else _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_bl, "beer")), p: _beerPrice(), m: G.money }) +
       (_beerTail ? " " + _L(_beerTail) : "") + (d > 4 ? " " + _BEER_PAST[Math.min(d - 5, _BEER_PAST.length - 1)] : ""));   // counted, not repeated (Marek, round 53: "one past" on beers five to nine)
     _addHappy(d <= 4 ? 1 : -1);
@@ -11092,7 +11104,7 @@ function _doBuy(arg) {
     const _lazy = NPCS[id].type === "lazy";
     if (!_lazy || _rand() < 0.4) _boughtBond(id, typeof _drinksOnly === "function" && _drinksOnly(id) ? 2 : 1);   // capped per girl per night; the drink IS the drinks-only girl's job (theme 12)
     const _warm = !_lazy && _bondTier(id) >= 2;
-    let _pool = (typeof _ownBarStaff === "function" && _ownBarStaff(id)) ? _LADY_DRINK_OWN : _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;   // your own staff ring it into your own till, and say so (composition audit, 2026-10-08)
+    let _pool = (typeof _ownBarStaff === "function" && _ownBarStaff(id)) ? _LADY_DRINK_OWN : (typeof _atJobBar === "function" && _atJobBar() && typeof _myFloorGirl === "function" && _myFloorGirl(id)) ? _LADY_DRINK_JOB : _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;   // your own staff ring it into your own till, and say so (composition audit, 2026-10-08)
     if (!((G.soc.selfDrinks || {})[G.room])) { const _dry = _pool.filter(l => !/your (bottle|beer)\b/i.test(typeof l === "function" ? String(l) : l)); if (_dry.length) _pool = _dry; }   // "clinks the glass against your bottle" with no bottle (Piet, round 62)
     const _pk = _lazy ? "lazydrink" : _warm ? "warmdrink" : "ladydrink";
     _say(_fmt("{line} (฿{m} left.)", { line: (typeof _pickTownLine === "function" ? _pickTownLine(_pool, _pk) : _pickVary(_pool, _pk))(NPCS[id].name), m: G.money }));   // the whole pool before a repeat: three women, one sentence (Margaret, round 78)
@@ -11477,7 +11489,7 @@ function _doRideBus(arg) {
     const _stops = [...new Set(_busLinesFor(G.room).flatMap(l => BUS_LINES[l]))].filter(s => s !== G.room);
     const _nm = x => String(ROOMS[x] && (ROOMS[x].name || "")).toLowerCase().replace(/[()]/g, " ").replace(/\s+/g, " ").trim();
     if (/\b(?:home|condo|flat|pratumnak|the tower)\b/.test(_w0) && G.hotel === "condo" && !_stops.some(s => /^pratumnak/.test(s))) {   // Laurie, round 102: eight turns at the kerb, then "not this truck"
-      _say("The driver shakes his head before you finish: no truck goes up the hill to the towers. A bike from the stand does. (MOTOSAI HOME)"); return;
+      _say("The driver shakes his head before you finish: no baht bus goes up Pratumnak. The trucks run on Thepprasit Road — you walk up from there — or a bike takes you to the tower's gate, where two more wait. (MOTOSAI HOME)"); return;   // Mario, 2026-10-22
     }
     if (_w0 && G.nightTurn >= LAST_BUS_TURN && G.turns - (G.busCameTurn || -99) > 6 &&
         !/\bloop\b|\bround trip\b|\bjoyride\b|\bhotel\b|\bhome\b/.test(_w0) &&
@@ -13884,7 +13896,7 @@ function _atmCap() {
   const cap = G.thaiAccount ? THAI_ATM_CAP : ATM_DAILY_CAP;
   return (G.acctUntil || 0) > G.day ? Math.round(cap / 2) : cap;   // the bank's review after the accountant's call: half, for a month (2026-10-08)
 }
-function _acctNote() { return (G.acctUntil || 0) > G.day ? ` (Halved while the bank reviews the account — ${G.acctUntil - G.day} more day${G.acctUntil - G.day === 1 ? "" : "s"}. Your accountant rang about it.)` : ""; }
+function _acctNote() { return (G.acctUntil || 0) > G.day ? ` (Halved while the bank reviews the account — ${G.acctUntil - G.day} more day${G.acctUntil - G.day === 1 ? "" : "s"}. ${G.acctWhy === "presale" ? "The list you sold went somewhere it was read." : "Your accountant rang about it."})` : ""; }
 function _doWithdrawInner(arg) {
   if (!_flag("hasWallet") && !_flag("walletCard")) {
     _say(_walletHunt()
@@ -17448,6 +17460,12 @@ function doCommand(input) {
 function _doCommandInner(input) {
   _rawAnswer = String(input == null ? "" : input);
   G.askArmPrev = G.askArm || null; G.askArm = null;   // a "again to sign" arm holds for the NEXT command only (the lease, the notice — Victor, round 97)
+  // YES / PAY to Nont's named fee: the locate he just priced (Mario, 2026-10-22)
+  if (typeof G.askArmPrev === "string" && G.askArmPrev.startsWith("nont:") && /^(?:yes|yeah|yep|ok|okay|sure|deal|go on|pay(?: him| nont)?(?: (?:200|two hundred))?|fine|do it)[.!]*$/.test(String(_rawAnswer || "").toLowerCase().trim()) && typeof _nontLocate === "function") {
+    const _nid = G.askArmPrev.slice(5); G.nontPayNow = true;
+    try { _nontLocate(String(NPCS[_nid] ? NPCS[_nid].name : _nid).toLowerCase()); } finally { G.nontPayNow = false; }
+    _tick(); return;
+  }
   if (!G) newGame();
   // CTF stage 2 gate (docs/ctf.md): an obvious security probe — read off the
   // TRUE raw input, before _norm strips the quotes and braces that make it one
@@ -18331,6 +18349,8 @@ function _doCommandInner(input) {
         const _gone = _npcByName(_hm[1]);
         if (_gone && NPCS[_gone] && _met(_gone)) { _say(`${NPCS[_gone].name} isn't here — the floor goes home at the shutter, like every night. (MESSAGE her, or ask her tomorrow.)`); _flushTrace(_room0); _checkAct1(); return; }
       }
+      if (_who && typeof _myFloorGirl === "function" && _myFloorGirl(_who) && !(G.party && G.party.ids && G.party.ids.includes(_who))) {   // a manager does not take his own girls home (Mario, 2026-10-22)
+        _say(_pickVary(_JOB_BARFINE_NO, "jobbf")(NPCS[_who].name), "alert"); _flushTrace(_room0); _tick(); _checkAct1(); return; }
       if (_who && typeof _ownBarStaff === "function" && _ownBarStaff(_who) && typeof _atOwnBar === "function" && _atOwnBar() && !(G.party && G.party.ids && G.party.ids.includes(_who))) {   // "First you talk to the bar (BARFINE MANOW)" → BARFINE refused: a loop with no door (Kaspar, round 101)
         _say(_fmt(_pickVary([
           "{n} looks at the rail, and at the till, and at you. \"Boss. I work here.\" It is not a no, exactly; it is the whole arrangement in three words. The door for that, if there is one, opens at last call — and not for a customer.",

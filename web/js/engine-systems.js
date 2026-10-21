@@ -783,7 +783,17 @@ const _BF_MENU_LINES = [   // a pool now: Kwan and Nina quoted it in one sentenc
         "{n} ticks the numbers off on a beer mat with one fingernail, then turns the mat so you can read it.",
         "{n} quotes it like a bus fare — flat, quick, nothing to be embarrassed about on either side."
 ];
+const _JOB_BARFINE_NO = [
+  n => `${n} looks at you, then at the mamasan, then back. "Boss. You are the manager." She says it kindly, the way you tell a man his fly is down. "Manager cannot barfine his own girls. Mama would take your envelope and your job before she write the fine."`,
+  n => `The mamasan is there before ${n} can answer. "No." Flat, final, almost fond. "You run my floor, you don't buy it. That is the rule in every bar on the soi, and it is the rule here."`,
+  n => `"Barfine me?" ${n} laughs, not unkindly. "You pay me already, boss — it's called the job. A manager who barfines his own floor is a manager for one night."`,
+];
 function _doBarfine(arg) {
+  // A MANAGER CANNOT BARFINE HIS OWN GIRLS — prohibited, wherever he is standing (Mario, 2026-10-22, on Brendan's round 102)
+  { const _t0 = typeof _findNpc === "function" && arg ? _findNpc(String(arg).replace(/\b(out|with|her|tonight|party|short|long|time)\b/g, " ").trim()) : null;
+    const _tid = typeof _t0 === "string" ? _t0 : _t0 && _t0.id;
+    const _girl = _tid || (!arg && typeof _convoActive === "function" && _convoActive());
+    if (_girl && typeof _myFloorGirl === "function" && _myFloorGirl(_girl)) { _say(_pickVary(_JOB_BARFINE_NO, "jobbf")(NPCS[_girl].name), "alert"); return; } }
   // BARFINE at the girl on your own arm: the ledger has nothing to sell you
   if (typeof _atOwnBar === "function" && _atOwnBar()) {
     // your girl is not a transaction, and not "the long way round, same as any
@@ -1524,6 +1534,13 @@ function _nontLocate(topic) {
     _say(`“Two hundred.” He looks at your hands, not your face. “You haven't got it. Come back when you have, or ask Tan and owe him instead.” (WITHDRAW at a machine, or CASH <amount> here.)`);
     return true;
   }
+  // THE FEE IS CONFIRMED BEFORE IT IS PAID (Mario, 2026-10-22, on Dmitri's round 102: ฿200 taken on the ask, three times)
+  if (G.askArmPrev !== "nont:" + id && !G.nontPayNow) {
+    G.askArm = "nont:" + id;
+    _say(`“${name}.” Nont does not look up from the screen. “Two hundred, and I tell you where ${_pr(id).s} ${_pr(id).s === "they" ? "are" : "is"} sitting tonight.”` + ` (YES to pay ฿${_num(NONT_LOCATE)} — or ask him something else.)`);
+    return true;
+  }
+  G.nontPayNow = false;
   G.money -= NONT_LOCATE;
   G.soc.nontTold[id] = G.day;
   _say(_fmt(_pickVary(_NONT_LOCATE, "nontlocate"), { n: name, where }) + ` (-฿${_num(NONT_LOCATE)}, ฿${_num(G.money)} left.)`);
@@ -2670,6 +2687,7 @@ function _bfScamRoll(id, marked) {
 function _maybeGoWithYou(id) {
   if (!_flag("act1Done") || G.pendingEnc || G.game || G.pendingBf) return;
   if (_atOwnBar()) return;                        // your own staff don't proposition you out of your own till
+  if (typeof _myFloorGirl === "function" && _myFloorGirl(id)) return;   // nor the girls on the floor he manages (Mario, 2026-10-22)
   if (G.party && G.party.ids && G.party.ids.length) return; // she's already yours tonight — or somebody else is: "You go with ME" with Pukky on his arm (Sunil, round 86)
   if (NPC_ROLES[id] !== "hostess") return;
   if (typeof _drinksOnly === "function" && _drinksOnly(id)) return;   // she does not go, so she does not offer (theme 12)
@@ -2697,6 +2715,7 @@ function _maybeSelfBarfine(id) {
   _maybeGoWithYou(id); // the softer nudge shares every call site; it gates itself
   if (!_flag("act1Done") || G.pendingEnc || G.game) return;
   if (_atOwnBar()) return;                        // not at the bar you own — she works for you here
+  if (typeof _myFloorGirl === "function" && _myFloorGirl(id)) return;   // nor on the floor he manages (Mario, 2026-10-22)
   if (G.party && G.party.ids && G.party.ids.includes(id)) return; // she is out with you, not on shift
   if (G.nightTurn < 60) return;                 // the thought arrives after midnight
   if (NPC_ROLES[id] !== "hostess") return;
@@ -3956,6 +3975,42 @@ function _doQuests() {
   }
 }
 
+// THE CROOKED DOOR COMES BACK, SOMETIMES (Mario, 2026-10-22). Choosing it books a risk: a pure hash of the job and the
+// day says whether, and when, it lands — never dice, so a reload cannot reroll it — and _launderRiskTick at the wake
+// takes the cost before the morning ledger names it. Nobody is charged; people are inconvenienced.
+function _launderArm(kind) {
+  if (_hh("launder:" + kind + ":" + G.day, 7) % 100 >= LAUNDER_RISK_PCT) return false;
+  (G.launderRisk = G.launderRisk || []).push({ kind, due: G.day + LAUNDER_RISK_MIN + (_hh("launderDue:" + kind + ":" + G.day, 3) % LAUNDER_RISK_SPAN) });
+  return true;
+}
+const _LAUNDER_BACK = {
+  covers: () => `A text from Hong, at nine in the morning: "police come Jasmine last night. fight outside. they read the paper, my book, the month. they ask who count. I say you. sorry." By noon a man from the station has rung, very polite, and a statement at the station costs a brown envelope. Nobody is charged. People are inconvenienced.`,
+  fiftyone: () => `A text from Reginald, early: "Khun Orathai closed a company this morning. Not mine — yet. I have made enquiries, dear boy, and you knew. I'll have the thousand back, and the five hundred it cost me to learn it. — R." You send it. It is cheaper than the conversation.`,
+  verification: () => `A letter arrives at the desk for you, on a Second Road lawyer's paper: Mr Nigel has bought a business with no company behind it, at a unit that has had three, and it is suggested that the man who walked him the sheet contribute to his costs, without anyone admitting anything. It is very politely written. It costs what it says.`,
+  presale: () => `The bank texts at eleven: a transfer near an account it is watching, a recovery-service complaint from twelve men in a chat group, and a list that was sent from a phone. Nobody is accused. Your account's daily cash is halved while they look.`,
+};
+function _launderPay(n) {   // the pocket first, then the account
+  const p = Math.min(G.money, n); G.money -= p; const rest = n - p;
+  if (rest > 0) G.bank = Math.max(0, (G.bank || 0) - rest);
+}
+function _launderRiskTick() {
+  if (!Array.isArray(G.launderRisk) || !G.launderRisk.length) return;
+  G.launderRisk = G.launderRisk.filter(r => {
+    if (G.day < r.due) return true;
+    const cost = LAUNDER_COST[r.kind] || 0;
+    if (_LAUNDER_BACK[r.kind]) _say(_LAUNDER_BACK[r.kind](), "alert");
+    if (cost > 0) {
+      _launderPay(cost);
+      const why = { covers: "to the station, over the covers you signed off", fiftyone: "back to Reginald, the walk you took the thousand for", verification: "to Nigel's lawyer, over the sheet you handed him" }[r.kind];
+      (G.ledgerNotes = G.ledgerNotes || []).push(`฿${_num(cost)} ${why}`);
+    }
+    if (r.kind === "presale") { G.acctUntil = Math.max(G.acctUntil || 0, G.day + ACCT_REVIEW_DAYS); G.acctWhy = "presale"; (G.ledgerNotes = G.ledgerNotes || []).push("the account's daily cash halved while the bank looks at the list you sold"); }
+    _repHit(r.kind === "fiftyone" ? 1 : 2);
+    (G.launderBack = G.launderBack || {})[r.kind] = G.day;
+    return false;
+  });
+}
+
 // Reward sweep — runs every turn; any active quest whose doneFlag has been
 // set (by give/win/bank, wherever) completes here.
 // FIFTY-ONE: Khun Orathai signs and hands the folder back (the laundering quests, 2026-10-08)
@@ -3972,6 +4027,14 @@ function _questTick() {
     G.jobPay = G.jobPay.filter(p => {
       if (G.day < p.due) return true;
       if (p.kind === "nont") { _pushMsg("nont", "he bit. 3k sent. — N.", p.amt); G.jobPaid = (G.jobPaid || 0) + 0; return false; }   // a message's money lands in the account on read (_bankIn names it)
+      // a fee a named person hands you the next time you stand in front of them, and one that comes as a text with the
+      // money in it (the laundering jobs pay both doors, 2026-10-22)
+      if (p.kind === "hand" && NPCS[p.who] && _npcsHere().includes(p.who)) {
+        G.money += p.amt; G.jobPaid = (G.jobPaid || 0) + p.amt;
+        _say(String(p.line || "").replace("{amt}", "฿" + _num(p.amt)), "dim");
+        return false;
+      }
+      if (p.kind === "msg") { _pushMsg(p.who, p.line, p.amt); return false; }
       if (p.kind === "hong" && G.room === "jasmine_garden" && _npcsHere().includes("hong")) {
         G.money += p.amt; G.jobPaid = (G.jobPaid || 0) + p.amt;
         _say(`Hong slides an envelope across the till without looking at it. "A boy bring this for you. For the count." ฿${_num(p.amt)}, in old notes. She goes back to her book before your hand has closed on it.`, "dim");
@@ -4007,6 +4070,8 @@ function _questTick() {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
     G.quests[qid] = "done";
     (G.questDoneDay = G.questDoneDay || {})[qid] = G.day;   // the follow-ups a month later read it (the laundering quests, 2026-10-08)
+    if (qid === "nameonwall") (G.jobPay = G.jobPay || []).push({ due: G.day, kind: "hand", who: "orathai", amt: LAUNDER_HONEST.nameonwall,
+      line: "Orathai counts notes out of the folder and lays them by your glass: {amt}. \"For the reading. I will pay her filing — somebody should — and this is what it cost to find the bars.\"" });
     if (!_quietVignette(q)) _say(`✦ QUEST COMPLETE: ${q.name}`, "win");
     // A dep chain names its next door when the last one closes — the flagship
     // 51% decision was offered by nobody a money-driven publican thought to ask,
@@ -8181,7 +8246,7 @@ function _acctDue() {
 }
 function _acctCall() {
   const moved = (G.nontOut || 0) - (G.acctBase || 0);
-  G.acctDay = G.day; G.acctBase = G.nontOut || 0; G.acctUntil = G.day + ACCT_REVIEW_DAYS;
+  G.acctDay = G.day; G.acctBase = G.nontOut || 0; G.acctUntil = G.day + ACCT_REVIEW_DAYS; G.acctWhy = null;
   const firm = _flag("partnerCandy") ? "from the Bangkok firm Candy's lawyer uses" : "from the shophouse on Second Road that Tan found you";
   _say(`Bert holds the bar phone out across the rail with the face of a man handing over a summons. "Khun Wipa. Your accountant. At this hour, which means it isn't the weather."`, "alert");
   _say(`"Sorry to call in the evening." Khun Wipa, ${firm}, sounds like she has the file open in front of her and has read it twice. "Can we talk about the ฿${_num(moved)} that came into the account through the Old Market? Some of what I'm seeing doesn't sit right — not wrong, not yet, only not sitting. The bank has asked me for a source of funds. I have told them it is the owner's own money, from home." A pause long enough to be a question. "They will take a month to decide whether they believe me. Until then they will let you take half your usual cash a day. Nobody is accusing anybody. That is the polite part." Another pause. "The other part is: next time, wire it from home, in your own name, like a farang. It is slower and it is cheaper and it is a story I do not have to tell."`);
