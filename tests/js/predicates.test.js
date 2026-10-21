@@ -144,6 +144,42 @@ const MUST_CONSULT = {
     { fn: "_doDiagnose", why: "stone sober, as ordered — not 'fixable'" },
     { fn: "_jpFinish", why: "the forfeit is soda water, and they count anyway" },
   ],
+  // Your roof is the condo, not a hotel (2026-10-20). Every line that says hotel, desk, folio,
+  // housekeeping or the Sabai to a tenant is wrong about where he lives (rounds 100–101).
+  "_inCondo()": [
+    { fn: "_endNight", why: "the wake on a bench is PATTAYA, not HOME; the woman who woke in the flat is in homeSeen" },
+    { fn: "_endRide", why: "'your place then', not 'hotel then', when she drops a tenant" },
+    { fn: "_walletLostSay", why: "the door key, and the office's spare, not the key card at a desk" },
+    { fn: "_doBuy", why: "the water is your own fridge, not housekeeping's two bottles (Kaspar, round 101)" },
+    { fn: "_doMotosai", why: "MOTOSAI HOME is the tower's door" },
+    { fn: "_doPay", why: "PAY CONDO settles a short month at the office (Kaspar, round 101)" },
+    { fn: "_partyHome", needs: "_homeSaid", why: "the ride home names Pratumnak Soi 5 and costs the fare (round 100)" },
+  ],
+
+  // You are standing in the bar you manage (2026-10-20). The house does not work its own manager.
+  "_atJobBar()": [
+    { fn: "_nursed", why: "no nurse at the bar you manage (Renata, round 100)" },
+    { fn: "_lastCall", why: "last call is his to call, not a nudge to him" },
+    { fn: "_closingTick", why: "the two o'clock close is his to lock up, not a walk-out" },
+    { fn: "_doTalkCore", why: "the floor greets its manager once a night" },
+  ],
+  "_jobBarStaff()": [
+    { fn: "_maybeIncomingText", why: "she texts her manager in the staff register" },
+    { fn: "_doTalkCore", why: "the envelope is handed over at the rail; the hello is the manager's" },
+    { fn: "_mineTalk", why: "'my job' asked of her is his figures, not her work node" },
+  ],
+
+  // The second wallet is lost and not back (2026-10-21). Act One's gates are live again for a man
+  // whose act1Done is never unset — every one of them must read this, or the chain is shut.
+  "_walletHunt()": [
+    { fn: "_doWithdrawInner", why: "the machine is a wall without the card" },
+    { fn: "_doBalance", why: "CHECK BALANCE is the app, not the machine (Frank, round 99)" },
+    { fn: "_doHint", why: "HINT is the opening's own whisper again" },
+    { fn: "_helpFirstPage", why: "HELP's first page is the opening's" },
+    { fn: "_chargeRent", why: "the desk takes a transfer: the card went with the wallet" },
+    { fn: "_doMoney", why: "MONEY names the lost card" },
+  ],
+
   "_atOwnBar()": [
     { fn: "_addHeat", why: "you cannot be thrown out of your own bar" },
     { fn: "_doBuy", why: "the lady-drink branch: busy/contested does not apply to your own girl" },

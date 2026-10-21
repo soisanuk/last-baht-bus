@@ -389,6 +389,10 @@ const PREDICATES = [
   { name: "_atOwnBar()", match: "_atOwnBar()", note: "you are standing in the bar you own" },
   { name: "G.dog", match: "G.dog", note: "the soi dog is yours (companion)" },
   { name: "G.player.teetotal", match: "G.player.teetotal", note: "you have said you don't drink (round 53)" },
+  { name: "_inCondo()", match: "_inCondo()", note: "your roof is the condo on Pratumnak, not a hotel (2026-10-20)" },
+  { name: "_atJobBar()", match: "_atJobBar()", note: "you are standing in the bar you manage (2026-10-20)" },
+  { name: "_jobBarStaff()", match: "_jobBarStaff(", note: "she works the floor you manage (round 100)" },
+  { name: "_walletHunt()", match: "_walletHunt()", note: "the second wallet is lost and not back (2026-10-21)" },
 ];
 const predicates = [];
 const fnNames = allFnNames();

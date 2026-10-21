@@ -1192,7 +1192,7 @@
  "counts": {
   "constants": 198,
   "dialogue": 4169,
-  "edges": 3642,
+  "edges": 3669,
   "encounters": 23,
   "flags": 196,
   "items": 45,
@@ -56750,7 +56750,7 @@
  ],
  "edgeCounts": {
   "AT": 44,
-  "CONSULTS": 206,
+  "CONSULTS": 233,
   "DEPENDS": 13,
   "DONE_BY": 43,
   "EXIT": 453,
@@ -57207,6 +57207,30 @@
   },
   {
    "file": "engine-play.js",
+   "from": "_atJobBar()",
+   "to": "_closingTick",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_atJobBar()",
+   "to": "_doTalkCore",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-play.js",
+   "from": "_atJobBar()",
+   "to": "_lastCall",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_atJobBar()",
+   "to": "_nursed",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-play.js",
    "from": "_atOwnBar()",
    "to": "_addHeat",
    "type": "CONSULTS"
@@ -57434,6 +57458,90 @@
    "type": "CONSULTS"
   },
   {
+   "file": "engine-systems.js",
+   "from": "_inCondo()",
+   "to": "_bfResolve",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_inCondo()",
+   "to": "_doBuy",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_inCondo()",
+   "to": "_doCommandInner",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_inCondo()",
+   "to": "_doMotosai",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_inCondo()",
+   "to": "_doPay",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-play.js",
+   "from": "_inCondo()",
+   "to": "_endNight",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-systems.js",
+   "from": "_inCondo()",
+   "to": "_endRide",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-core.js",
+   "from": "_inCondo()",
+   "to": "_homeSaid",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-core.js",
+   "from": "_inCondo()",
+   "to": "_homeWord",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-systems.js",
+   "from": "_inCondo()",
+   "to": "_walletLostSay",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_jobBarStaff()",
+   "to": "_doTalkCore",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-core.js",
+   "from": "_jobBarStaff()",
+   "to": "_jobBarStaff",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-systems.js",
+   "from": "_jobBarStaff()",
+   "to": "_maybeIncomingText",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_jobBarStaff()",
+   "to": "_mineTalk",
+   "type": "CONSULTS"
+  },
+  {
    "file": "engine-play.js",
    "from": "_onRide()",
    "to": "_addHappy",
@@ -57461,6 +57569,60 @@
    "file": "engine-core.js",
    "from": "_onRide()",
    "to": "_tick",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-core.js",
+   "from": "_walletHunt()",
+   "to": "_chargeRent",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_walletHunt()",
+   "to": "_doBalance",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_walletHunt()",
+   "to": "_doGo",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-systems.js",
+   "from": "_walletHunt()",
+   "to": "_doHint",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-play.js",
+   "from": "_walletHunt()",
+   "to": "_doMoney",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_walletHunt()",
+   "to": "_doRead",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_walletHunt()",
+   "to": "_doWithdrawInner",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_walletHunt()",
+   "to": "_helpFirstPage",
+   "type": "CONSULTS"
+  },
+  {
+   "file": "engine-parser.js",
+   "from": "_walletHunt()",
+   "to": "_townTalk",
    "type": "CONSULTS"
   },
   {
@@ -84203,6 +84365,57 @@
    ],
    "name": "G.player.teetotal",
    "note": "you have said you don't drink (round 53)"
+  },
+  {
+   "consumers": [
+    "_bfResolve",
+    "_doBuy",
+    "_doCommandInner",
+    "_doMotosai",
+    "_doPay",
+    "_endNight",
+    "_endRide",
+    "_homeSaid",
+    "_homeWord",
+    "_walletLostSay"
+   ],
+   "name": "_inCondo()",
+   "note": "your roof is the condo on Pratumnak, not a hotel (2026-10-20)"
+  },
+  {
+   "consumers": [
+    "_closingTick",
+    "_doTalkCore",
+    "_lastCall",
+    "_nursed"
+   ],
+   "name": "_atJobBar()",
+   "note": "you are standing in the bar you manage (2026-10-20)"
+  },
+  {
+   "consumers": [
+    "_doTalkCore",
+    "_jobBarStaff",
+    "_maybeIncomingText",
+    "_mineTalk"
+   ],
+   "name": "_jobBarStaff()",
+   "note": "she works the floor you manage (round 100)"
+  },
+  {
+   "consumers": [
+    "_chargeRent",
+    "_doBalance",
+    "_doGo",
+    "_doHint",
+    "_doMoney",
+    "_doRead",
+    "_doWithdrawInner",
+    "_helpFirstPage",
+    "_townTalk"
+   ],
+   "name": "_walletHunt()",
+   "note": "the second wallet is lost and not back (2026-10-21)"
   }
  ],
  "quests": [

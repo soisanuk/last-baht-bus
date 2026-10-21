@@ -8,12 +8,15 @@ for*: `node tools/coverage-map.mjs` (the matrix), `--dark`, `--hot`, `--numbers`
 
 ## The two axes
 
-- **Rows are systems** — `docs/systems.json`, 51 of them: the wallet race, the clock, the
+- **Rows are systems** — `docs/systems.json`, 55 of them (2026-10-21: the expat economy is three rows — the month, the jobs, the condo — and the paper-by-the-till work is its own): the wallet race, the clock, the
   body, sobriety, the bus, the motosai, lady drinks, the bell, the barfine, the party, the
   ride, the phone, conversation, quests, the regulars, the calendar, the games, Thai, the
   hotels, the books, the affair, the heist… The grouping is by hand, but the atoms are
   derived and guarded: every soak `EFFECTS` id, every `pendingChoice` modal, every quest
-  and every encounter must belong to exactly one system, and the tool lists any stray. A
+  and every encounter must belong to exactly one system, and the tool lists any stray —
+  **and since 2026-10-21 `tests/js/systems.test.js` FAILS on one**, as it does on a finding
+  whose `system` is neither a row id nor an entry in the file's `aliases` (a thousand findings
+  had been filed under sixty triage words the map could not join). A
   new system that ships without a row shows up as strays until it gets one.
 - **Columns are the defect classes A–S** (the analysis §1): composition, absence,
   reachability, promise, economy, state-blind prose, modal gating, cross-surface,

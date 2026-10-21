@@ -26,6 +26,12 @@ const args = process.argv.slice(2);
 const opt = k => { const i = args.indexOf(k); return i === -1 ? null : args[i + 1]; };
 
 const SYS = J("docs/systems.json").systems;
+// a triage row's `system` is a free word ("condo", "dialogue"); the aliases map it onto a row, and a word that is
+// neither an id nor an alias is reported (and gated by tests/js/systems.test.js) — a thousand findings once sat
+// under sixty names the map could not join, so the condo read hot while the system it belonged to read dark
+const ALIAS = J("docs/systems.json").aliases || {};
+const SYS_IDS = new Set(SYS.map(s => s.id));
+const sysOf = x => !x ? x : SYS_IDS.has(x) ? x : (ALIAS[x] || x);
 const CLASSES = "ABCDEFGHIJKLMNPQRS".split("");
 const NAMES = { A: "composition", B: "absence", C: "reachability", D: "promise", E: "economy", F: "state-blind", G: "modal", H: "cross-surface",
   I: "edge-blind", J: "return-channel", K: "clock", L: "predicate", M: "template", N: "town-can't-say", P: "parser", Q: "repetition", R: "world-claim", S: "save/reload" };
@@ -39,7 +45,7 @@ const INSTRUMENTS = [
   { name: "askable-audit", cls: ["N"], systems: ["drinks", "calendar", "hotels", "barfine", "bell", "regulars", "navigation", "money", "clinic", "police", "cons", "dog", "sobriety", "barbooks", "darkness", "phone", "social", "saleng"] },
   { name: "references.test", cls: ["K", "R"] },
   { name: "templates.test", cls: ["L", "M", "K"] },
-  { name: "predicates.test", cls: ["I"], systems: ["party", "nightride", "affair", "barchain", "barbooks", "dog", "sobriety"] },
+  { name: "predicates.test", cls: ["I"], systems: ["party", "nightride", "affair", "barchain", "barbooks", "dog", "sobriety", "expat-condo", "expat-jobs", "act1"] },
   { name: "dialogue-lifecycle", cls: ["J"], systems: SYS.filter(s => s.quests.length).map(s => s.id).concat(["quests", "conversation", "barchain", "heist"]) },
   { name: "soak liveness", cls: ["B"], systems: SYS.filter(s => s.effects.length).map(s => s.id) },
   { name: "prose-corpus dossiers", cls: ["R", "F"], systems: ["worldprose", "filler", "regulars", "conversation"] },
@@ -117,7 +123,10 @@ for (const r of rows) {
   const c = classes[key] || {}, s = systems[key] || {};
   for (const k of ["cls", "sev", "instrument", "between"]) if (r[k] == null && c[k] != null) r[k] = c[k];
   if (r.system == null && s.system) { r.system = s.system; r.system2 = s.system2 || ""; }
+  r.system = sysOf(r.system); r.system2 = sysOf(r.system2);
 }
+// every system a ledger row names, after the aliases, must be a row of the map
+const unknownSystems = [...new Set(rows.flatMap(r => [r.system, r.system2]).filter(x => x && !SYS_IDS.has(x)))].sort();
 const fixed = rows.filter(r => r.verdict === "fixed" && r.cls && r.cls !== "X");
 const roundNum = r => parseInt(String(r.round).replace(/\D/g, ""), 10) || 0;
 const latest = Math.max(...fixed.map(roundNum));
@@ -171,7 +180,7 @@ if (args.includes("--numbers") || args.includes("--record")) {
   const neverWalked = SYS.filter(s => !walked[s.id]).length;
   const d = new Date(), date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   const out = { date, latestRound: latest, systems: SYS.length, cells, lit, hot, instrumented: inst, dark, systemsNeverWalked: neverWalked,
-    findingsClassified: fixed.length, findingsUntagged: untagged, strays: strays.length,
+    findingsClassified: fixed.length, findingsUntagged: untagged, strays: strays.length, unknownSystems: unknownSystems.length,
     verdicts: Object.fromEntries(["fixed", "refuted", "design", "deferred"].map(v => [v, ledger.filter(r => r.verdict === v).length])) };
   console.log(JSON.stringify(out));
   if (args.includes("--record")) {
@@ -219,3 +228,4 @@ for (const s of SYS) {
   console.log(s.id.padEnd(14) + " " + CLASSES.map(k => glyph(s, k)).join("") + "   " + String((walked[s.id] || new Set()).size).padStart(4) + "   " + String(total).padStart(4));
 }
 console.log(`\n${fixed.length} classified findings, ${untagged} without a system tag` + (strays.length ? `\nSTRAYS (a derived atom no system owns): ${strays.join(", ")}` : "\nevery effect, modal, quest and encounter belongs to a system"));
+if (unknownSystems.length) console.log(`UNKNOWN SYSTEMS (a ledger row names a system that is neither an id nor an alias in docs/systems.json): ${unknownSystems.join(", ")}`);

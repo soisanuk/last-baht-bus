@@ -1,5 +1,5 @@
 {
- "_about": "The systems the game is made of — the ROWS of the coverage map (tools/coverage-map.mjs). Hand-grouped, but the atoms are derived: every soak EFFECTS id, every pendingChoice modal, every QUESTS id and every ENCOUNTERS id must belong to exactly one system or the tool lists it as unmapped. verbs/rooms/npcs are the atoms a coverage record can touch (a persona 'walked' a system when their record intersects them). Grow the table when a system ships; the guard says when.",
+ "_about": "The systems the game is made of — the ROWS of the coverage map (tools/coverage-map.mjs). Hand-grouped, but the atoms are derived: every soak EFFECTS id, every pendingChoice modal, every QUESTS id and every ENCOUNTERS id must belong to exactly one system or the tool lists it as unmapped. verbs/rooms/npcs are the atoms a coverage record can touch (a persona 'walked' a system when their record intersects them). Grow the table when a system ships; the guard says when. ALIASES: a ledger row's `system` may be a free word from triage; `aliases` maps each onto a row id, and tests/js/systems.test.js fails on a row whose system is neither (2026-10-21 — a thousand findings had been filed under sixty names the map could not join).",
  "systems": [
   {
    "id": "act1",
@@ -40,7 +40,9 @@
     "wallet_again"
    ],
    "encounters": [],
-   "predicates": [],
+   "predicates": [
+    "_walletHunt()"
+   ],
    "note": "the do-or-die opening; rough wakes are a resident mechanic The second wallet (2026-10-21): the chain replayed as an expat blackout event."
   },
   {
@@ -127,8 +129,7 @@
    "quests": [],
    "encounters": [],
    "predicates": [
-    "teetotal",
-    "lastComp"
+    "G.player.teetotal"
    ],
    "note": ""
   },
@@ -880,7 +881,8 @@
     "bar.nont.loan"
    ],
    "modals": [
-    "shift"
+    "shift",
+    "keptgirl"
    ],
    "quests": [],
    "encounters": [],
@@ -1124,26 +1126,14 @@
    "note": ""
   },
   {
-   "id": "expat-economy",
-   "name": "The expat economy: the month, the paper, the jobs, the condo, destitution and her mat",
+   "id": "expat-month",
+   "name": "The resident's month: income by origin, the payday, MONEY, the paper scalar, destitution and her mat",
    "verbs": [
     "money",
-    "budget",
-    "teach",
-    "take",
-    "quit",
-    "rent",
-    "move",
-    "cook"
+    "budget"
    ],
-   "rooms": [
-    "condo_room"
-   ],
-   "npcs": [
-    "david",
-    "mort",
-    "waen"
-   ],
+   "rooms": [],
+   "npcs": [],
    "effects": [],
    "modals": [
     "keptby"
@@ -1151,7 +1141,150 @@
    "quests": [],
    "encounters": [],
    "predicates": [],
-   "note": "built 2026-10-20; rounds 97–98"
+   "note": "split from expat-economy 2026-10-21; built 2026-10-20, rounds 97–101"
+  },
+  {
+   "id": "expat-jobs",
+   "name": "Jobs: teaching online, the manager's job at a bar, Jerry's school, Mort's stringer, the envelope",
+   "verbs": [
+    "teach",
+    "take",
+    "quit"
+   ],
+   "rooms": [],
+   "npcs": [
+    "david",
+    "mort",
+    "waen"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [
+    "_atJobBar()",
+    "_jobBarStaff()"
+   ],
+   "note": "split from expat-economy 2026-10-21"
+  },
+  {
+   "id": "expat-condo",
+   "name": "The condo: renting on Pratumnak Soi 5, the payday's rent, COOK, MOVE OUT, a woman at home",
+   "verbs": [
+    "rent",
+    "move",
+    "cook"
+   ],
+   "rooms": [
+    "condo_room",
+    "pratumnak_soi5"
+   ],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [
+    "_inCondo()"
+   ],
+   "note": "split from expat-economy 2026-10-21"
+  },
+  {
+   "id": "laundering",
+   "name": "The paper by the till and the laundering jobs: EXAMINE LICENCE, The Covers, Fifty-One, Under Verification, Pre-Sale, the name on the wall",
+   "verbs": [
+    "count"
+   ],
+   "rooms": [
+    "buakhao_market",
+    "jasmine_garden"
+   ],
+   "npcs": [
+    "orathai",
+    "hong",
+    "howard"
+   ],
+   "effects": [],
+   "modals": [],
+   "quests": [
+    "covers",
+    "fiftyone",
+    "verification",
+    "presale",
+    "nameonwall"
+   ],
+   "encounters": [],
+   "predicates": [],
+   "note": "built 2026-10-08; the stray quests homed 2026-10-21"
   }
- ]
+ ],
+ "aliases": {
+  "expat-economy": "expat-month",
+  "condo": "expat-condo",
+  "jobs": "expat-jobs",
+  "destitution": "expat-month",
+  "wallet": "act1",
+  "dialogue": "conversation",
+  "memory": "conversation",
+  "witness": "conversation",
+  "baseline": "conversation",
+  "tan": "conversation",
+  "parser": "conversation",
+  "street": "encounters",
+  "bar": "barbooks",
+  "kept": "barbooks",
+  "floor": "filler",
+  "gogo": "filler",
+  "staff-affair": "affair",
+  "bar-social": "social",
+  "bonds": "social",
+  "reputation": "social",
+  "gifts": "social",
+  "care": "social",
+  "seehome": "social",
+  "companion": "party",
+  "night-ride": "nightride",
+  "coda": "barfine",
+  "trade": "barfine",
+  "ledger": "money",
+  "economy": "money",
+  "atm": "money",
+  "loan": "loans",
+  "hotel": "hotels",
+  "sleep": "hotels",
+  "season": "calendar",
+  "closing": "calendar",
+  "quiz": "games",
+  "night": "clock",
+  "sunrise": "clock",
+  "hours": "clock",
+  "wake": "body",
+  "survival": "body",
+  "transport": "bus",
+  "travel": "navigation",
+  "nav": "navigation",
+  "items": "navigation",
+  "frontend": "presentation",
+  "ui": "presentation",
+  "help": "presentation",
+  "chips": "presentation",
+  "harness": "presentation",
+  "modal": "presentation",
+  "journal": "quests",
+  "frontier": "quests",
+  "hint": "quests",
+  "licence": "laundering",
+  "rooms": "worldprose",
+  "prose": "worldprose",
+  "soapy": "massage",
+  "shops": "food",
+  "pub": "drinks",
+  "intro": "identity",
+  "treadmill": "happiness",
+  "score": "happiness",
+  "share": "vacation",
+  "share-card": "vacation",
+  "soi6": "vacation",
+  "seed": "saveload"
+ }
 }

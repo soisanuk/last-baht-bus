@@ -18108,7 +18108,7 @@ function _doCommandInner(input) {
     const _best = /^(my name|call me|i'?m called)\b/.test(lower) && _floorW.length ? _floorW.slice().sort((a, b) => (_knownTier(b) - _knownTier(a)) || ((G.soc.drinks[b] || 0) - (G.soc.drinks[a] || 0)))[0] : null;
     let pid = (typeof _convoActive === "function" && _convoActive()) || (_la && _floorW.includes(_la) ? _la : _floorW.length === 1 ? _floorW[0] : _best);
     // an ASK / TELL / TALK TO that names somebody ELSE in the room is theirs, whoever you were talking to (Kaspar, round 101:
-    // ASK BERT ABOUT MY WALLET printed Manow's answer word for word while her conversation was open, and ASK LAMAI got Cake's)
+    // "ask bert about my wallet" printed Manow's answer word for word while her conversation was open, and asking Lamai got Cake's)
     { const tm = lower.match(/^(?:ask|tell|talk to|speak to|say to)\s+([a-z][a-z'.-]*(?:\s+[a-z][a-z'.-]*)?)\b/);
       if (tm) { const two = _findNpc(tm[1]), one = two || _findNpc(tm[1].split(/\s+/)[0]); const tid = typeof one === "string" ? one : one && one.id;
         if (tid && NPCS[tid] && _npcsHere().includes(tid) && tid !== pid) pid = tid; } }
