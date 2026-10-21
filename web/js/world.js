@@ -1208,7 +1208,7 @@ const ROOMS = {
       kitchen: "A two-ring hob, a wok somebody left, a rice cooker that is the most reliable appliance in the building. Instant noodles, eggs, a bag of rice — a plate for sixty baht that no stall would charge you less for. (COOK)",
       balcony: "A chair's width of balcony, a plastic chair to fill it, and the bay: Jomtien's lights, Walking Street's pink smear, a ship out where the water goes black. The best thing you own, and you rent it.",
       office: "The juristic office on the ground floor: a desk, a woman who keeps the building's book, and a sign in two languages about overnight guests that everybody in the tower has read once and ignored since.",
-      fridge: "Water, beer, half a papaya, the eggs. The hum of a fridge in your own kitchen at three in the morning is a sound no hotel sells.",
+      fridge: "Water, beer, half a papaya, the eggs. The hum of a fridge in your own kitchen at any hour is a sound no hotel sells.",
       lift: "One lift for nine floors, a mirror in it that has seen you come home in every state there is, and a notice from the juristic office taped under the buttons about guests after midnight. It is the slowest thing in the building and the building knows it.",
       tower: "Nine floors on a hill above a bay, half the balconies dark — owners in Moscow and Shanghai who bought a view and visit it twice a year — and a juristic office on the ground floor that keeps the book on the rest.",
     },
@@ -14360,7 +14360,7 @@ const ENCOUNTERS = {
     // apps run on the 'tomorrow' clock even at 1 a.m.); then a photos-vs-reality
     // roll — sometimes a genuine payout, more often the catfish, worst in heels.
     // The two-step catfish + the hit live in _ENC.booking / _catfishDoor.
-    rooms: ["hotel_room", "qv_room", "areca_room", "metropole_room", "naklua_rd"],
+    rooms: ["hotel_room", "qv_room", "areca_room", "metropole_room", "condo_room", "naklua_rd"],   // the app reaches a tenant too (Laurie, round 102)
     interactive: true, nightly: true,
     intro: [
       "Your phone buzzes — a message request from a stranger's profile, somebody who found your number the way numbers get found here, " +
@@ -21415,8 +21415,8 @@ NPCS.david.dialogue.push(
     short: "\"The school's always short a native. Eight o'clock, Monday to Friday, a real contract. (TAKE THE JOB)\"" },
   { topic: "a job|job for me|school|your school|hiring|work for you|teaching job|a teaching job",
     when: (st, G) => G.stage === "expat" && !!G.job,
-    text: "\"You've GOT a job!\" Jerry says it like congratulations and a warning in one. \"One's plenty here. Two is how guys end up asleep on the beach.\"",
-    short: "\"You've got a job. One's plenty.\"" });
+    text: "\"You've GOT a job!\" Jerry says it like congratulations and a warning in one. \"One's plenty here. Two is how guys end up asleep on the beach.\" The tactical sip. \"But since you ask: the school's always short a native. Thirty-five a month, a real contract, they do the permit and the bank letter. Eight o'clock, Monday to Friday — three lates in a month and it's a very polite letter. Quit the one you've got and ask me again.\" (QUIT JOB first — the school has no closing date.)",   // the terms, to a man who holds a job (Dmitri, round 102: he quit blind to hear them)
+    short: "\"You've got a job. Thirty-five, eight o'clock, a permit — quit yours and ask me again.\"" });
 // THE OWL'S STRINGER: Mort pays per paragraph — a fixture you read that his column had not. Small money, in-fiction.
 NPCS.mort.dialogue.push(
   { topic: "stringer|a job|job for me|work for you|hiring|leads|the leads|a lead|paragraphs|copy",

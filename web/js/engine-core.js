@@ -808,6 +808,9 @@ function _inCondo() { return !!(G && G.hotel === "condo"); }
 function _homeWord() { return _inCondo() ? "your flat" : "the hotel"; }            // "JUST the hotel" → "JUST home"
 function _homeSaid() { return _inCondo() ? "Pratumnak Soi 5" : "the hotel's name"; }   // what she says to the piwin
 function _atJobBar() { return !!(G && G.job && G.job.kind === "manager" && G.room === G.job.room); }
+// …and on SHIFT there tonight: the close is his to call only on a night he declared it (Brendan, round 102:
+// "last call — yours to call, boss" on his night off)
+function _onShift() { return _atJobBar() && G.job.shiftDay === G.day; }
 function _jobBarStaff(id) { return !!(G && G.job && G.job.kind === "manager" && NPCS[id] && (NPCS[id].room === G.job.room || (NPCS[id].bars || []).includes(G.job.room)) && (NPC_ROLES[id] || NPCS[id].manager)); }
 // what the recovered wallet gives back — the opening's ฿500, or what the second wake took
 function _walletCash() { return G && G.walletHeld != null ? G.walletHeld : WALLET_CASH; }

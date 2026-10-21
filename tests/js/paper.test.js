@@ -94,7 +94,7 @@ test("online English: from your room, grey, paid by the mornings; one job at a t
   sleep(); G.month.rough = 3; assert.equal(_jobPay(), Math.round(TEACH_PAY * 0.7 / 100) * 100);
   G.day = G.payDay + 30; const b = G.bank; sleep(); assert.match(said(), /The platform paid ฿19,600 \(short — it counted 3 rough mornings\)/); assert.match(said(), /the platform/);
   assert.ok(G.bank > b, "into the account");
-  G.room = cashBar; knownAt(cashBar); run("talk to bert"); assert.match(t("ask bert about a job"), /mornings are spoken for/);
+  G.room = cashBar; knownAt(cashBar); run("talk to bert"); { const r = t("ask bert about a job"); assert.match(r, /QUIT JOB first/); assert.match(r, /฿30,000|a month/); assert.equal(G.job.kind, "teach", "still the platform"); }   // a floor that knows him tells the terms; taking them needs QUIT JOB (Dmitri, round 102)
   G.room = "cloze"; run("talk to waen"); assert.match(t("ask waen about online"), /TEACH ONLINE/);
   newGame(); G.player = { origin: "nomad", personality: "straight", orientation: "straight", said: {}, lang: "en" }; _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation"; G.room = "hotel_room"; G.nightTurn = 30;
   assert.match(t("teach online"), /holiday has no mornings|resident/); assert.ok(!G.job);

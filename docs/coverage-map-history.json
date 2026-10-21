@@ -879,5 +879,47 @@
    "design": 132,
    "deferred": 109
   }
+ },
+ {
+  "date": "2026-10-21",
+  "latestRound": 102,
+  "systems": 55,
+  "cells": 842,
+  "lit": 608,
+  "hot": 48,
+  "instrumented": 209,
+  "dark": 25,
+  "systemsNeverWalked": 0,
+  "findingsClassified": 2611,
+  "findingsUntagged": 24,
+  "strays": 0,
+  "unknownSystems": 0,
+  "verdicts": {
+   "fixed": 1912,
+   "refuted": 151,
+   "design": 135,
+   "deferred": 120
+  }
+ },
+ {
+  "date": "2026-10-21",
+  "latestRound": 102,
+  "systems": 55,
+  "cells": 842,
+  "lit": 608,
+  "hot": 48,
+  "instrumented": 209,
+  "dark": 25,
+  "systemsNeverWalked": 0,
+  "findingsClassified": 2611,
+  "findingsUntagged": 24,
+  "strays": 0,
+  "unknownSystems": 0,
+  "verdicts": {
+   "fixed": 1912,
+   "refuted": 151,
+   "design": 135,
+   "deferred": 120
+  }
  }
 ]

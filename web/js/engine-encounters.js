@@ -1445,6 +1445,11 @@ const _ENC = {
         _doGo(_full);
         return;
       } }
+    // a command is not an answer: MOTOSAI TO SOI 6 walked him into the shop because "soi" read as "the soi" (Dmitri, round 102: ฿495)
+    if (/^(?:motosai|moto|motorbike|taxi|travel|goto|go to|enter|ride|bus|baht bus|songthaew|walk to|head to)\b/.test(String(input || "").trim())) {
+      _say("You wave him off and keep moving. He calls something after you about your hairline, cheerfully.", "dim");
+      doCommand(input); return;
+    }
     // TAO RAI — the veteran's move. Ask the price straight and the free-sample /
     // "come see my cousin" / VIP-course machinery has nothing to grip: you pay
     // the one honest number and walk before the side-soi can happen.
@@ -1460,7 +1465,7 @@ const _ENC = {
       return;
     }
     // Follow him to the shop — the friendly patter's whole purpose.
-    if (/shop|soi|follow|come|vip|treatment|cousin|see|show|look/.test(input) &&
+    if (/\b(?:shop|follow|come|vip|treatment|cousin|see|show|look)\b|\b(?:his|the|down the|that|your) soi\b/.test(input) &&
         !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
       G.pendingEnc = "tonic";
       _setFlag("tonicShop");

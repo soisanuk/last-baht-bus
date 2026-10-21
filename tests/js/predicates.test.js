@@ -160,7 +160,7 @@ const MUST_CONSULT = {
   "_atJobBar()": [
     { fn: "_nursed", why: "no nurse at the bar you manage (Renata, round 100)" },
     { fn: "_lastCall", why: "last call is his to call, not a nudge to him" },
-    { fn: "_closingTick", why: "the two o'clock close is his to lock up, not a walk-out" },
+    { fn: "_closingTick", needs: "_onShift", why: "the two o'clock close is his to lock up, not a walk-out — on a night he declared it (round 102)" },
     { fn: "_doTalkCore", why: "the floor greets its manager once a night" },
   ],
   "_jobBarStaff()": [

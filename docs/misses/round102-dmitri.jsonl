@@ -1,0 +1,5 @@
+{"cmd":"ask mort who should I ask about work?","reply":"No one here answers to that.","room":"queen_vic","day":8,"turn":8,"mode":null,"convo":"angela","at":"2026-10-21T13:39:54.832Z","src":"persona-hunter"}
+{"cmd":"ask pukky who should I ask about work","reply":"Nobody here goes by that — not tonight.","room":"sunset_rail","day":8,"turn":37,"mode":null,"convo":"numfon","at":"2026-10-21T13:40:49.994Z","src":"persona-hunter"}
+{"cmd":"ask the manager about a job","reply":"Nobody by that name here.","room":"pink_lotus","day":8,"turn":64,"mode":null,"convo":"jenny","at":"2026-10-21T13:41:51.335Z","src":"persona-hunter"}
+{"cmd":"ask piwin how do farang make money","reply":"No one here answers to that.","room":"soi6_mid","day":9,"turn":6,"mode":null,"convo":null,"at":"2026-10-21T13:43:20.560Z","src":"persona-hunter"}
+{"cmd":"ask piwin who is hiring","reply":"That name doesn't land on anyone in the room.","room":"soi6_mid","day":9,"turn":6,"mode":null,"convo":null,"at":"2026-10-21T13:43:20.560Z","src":"persona-hunter"}

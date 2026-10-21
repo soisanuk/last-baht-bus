@@ -180,6 +180,32 @@ function wallet2Seed() {
   G.room = "qv_room"; G.nightTurn = 0; quiet(); G.encDone = {}; _nightSnapshot();
   return serializeGame();
 }
+// hill (round 102): the Soi 6 man who cancelled the ticket, a pension and a long-stay visa, already
+// renting the condo through the real lease (RENT A CONDO twice at the tower), with Pukky at the Shady
+// Lady at regular — so her floor knows his face and her mamasan can offer him the manager's job there.
+function stayedSeed(origin, money, bank) {
+  newGame(); startSoi6Mode();
+  doCommand("1"); doCommand("3"); doCommand("1");
+  G.player.origin = origin; G.season0 = 1;
+  quiet(); G.day = 8; G.pendingChoice = "vacation_end"; out = []; doCommand("continue"); doCommand("cancel the ticket");
+  if (G.stage !== "expat" || G.mode) throw new Error(origin + " seed: the ticket was not cancelled");
+  G.money = money; G.bank = bank; G.battery = 100;
+}
+function hillSeed() {
+  stayedSeed("pension", 12000, 60000);
+  G.room = "pratumnak_soi5"; G.nightTurn = 2; out = []; doCommand("rent a condo"); doCommand("rent a condo");
+  if (G.hotel !== "condo") throw new Error("hill seed: the lease did not sign: " + out.join(" | "));
+  G.soc.drinks.pukky = 9; G.phone.contacts.pukky = true; G.talked.pukky = [0]; (G.metDay = G.metDay || {}).pukky = 3; (G.seenDay = G.seenDay || {}).pukky = G.day - 1;
+  G.room = "condo_room"; G.nightTurn = 0; G.hunger = 10; G.thirst = 10; quiet(); G.encDone = {}; _nightSnapshot(); G.monthAdj = 0;   // the lease was signed before the snapshot: its deposit is not tomorrow's adjustment (the seed zeroed night one, round 102)
+  return serializeGame();
+}
+// hunter (round 102): the same man on a redundancy pot that is running down — no job, no bonds,
+// a little money — so every way to earn in town has to be found by asking.
+function hunterSeed() {
+  stayedSeed("redundancy", 3500, 22000);
+  G.room = "qv_room"; G.nightTurn = 0; G.hunger = 10; G.thirst = 10; quiet(); G.encDone = {}; _nightSnapshot();
+  return serializeGame();
+}
 function reload(blob) { newGame(); deserializeGame(blob); }
 
 // ── build ──
@@ -201,6 +227,8 @@ const seeds = {
   jobs: jobsSeed(),
   ride: rideSeed(),
   wallet2: wallet2Seed(),
+  hill: hillSeed(),
+  hunter: hunterSeed(),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -301,6 +329,16 @@ try {
   const w2 = { lost: _flag("walletLost"), quest: G.quests.wallet_again, act1: _flag("act1Done"), candy: !!G.talked.candy, atm: /does not know your face/.test((out = [], G.nightTurn = 30, doCommand("withdraw 1000"), out.join(" "))) };
   console.log("wallet2:", JSON.stringify(w2));
   if (!w2.lost || w2.quest !== "active" || !w2.act1 || w2.candy || !w2.atm) throw new Error("wallet2 seed cannot reach its drive");
+  // Hill: a tenant; Pukky's mamasan offers the manager's job at her bar
+  reload(seeds.hill); G.room = "sunset_rail"; G.nightTurn = 30; out = []; doCommand("talk to bussaba"); doCommand("ask bussaba about a job");
+  const hl = { tenant: G.hotel === "condo", offer: !!G.jobOffer, tier: _knownTier("pukky") };
+  console.log("hill:", JSON.stringify(hl));
+  if (!hl.tenant || !hl.offer || hl.tier < 2) throw new Error("hill seed cannot reach its drive");
+  // Hunter: a resident on a pot, no job
+  reload(seeds.hunter); const om = _originMoney(G.player.origin);
+  const hu = { stage: G.stage, pot: om.kind === "pot", job: !!G.job, money: G.money };
+  console.log("hunter:", JSON.stringify(hu));
+  if (hu.stage !== "expat" || !hu.pot || hu.job) throw new Error("hunter seed cannot reach its drive");
 } finally { _rand = saved; }
 
 for (const [name, blob] of Object.entries(seeds)) {

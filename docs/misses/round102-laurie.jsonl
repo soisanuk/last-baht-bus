@@ -1,0 +1,5 @@
+{"cmd":"ask pukky did you sleep well","reply":"That name doesn't land on anyone in the room.","room":"soi6_mid","day":9,"turn":10,"mode":null,"convo":null,"at":"2026-10-21T13:41:10.069Z","src":"persona-homes"}
+{"cmd":"buy whisky","reply":"Not for sale here.","room":"beach_rd_c","day":16,"turn":3,"mode":null,"convo":null,"at":"2026-10-21T13:47:45.043Z","src":"persona-homes"}
+{"cmd":"charter","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"beach_rd_s","day":17,"turn":28,"mode":null,"convo":null,"at":"2026-10-21T13:49:33.371Z","src":"persona-homes"}
+{"cmd":"how do i get home?","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"jomtien_beach_rd","day":17,"turn":29,"mode":null,"convo":null,"at":"2026-10-21T13:49:37.893Z","src":"persona-homes"}
+{"cmd":"how do i get to my condo?","reply":"That didn't parse — start with a verb the game knows, then who or what.","room":"jomtien_beach_rd","day":17,"turn":30,"mode":null,"convo":null,"at":"2026-10-21T13:49:43.646Z","src":"persona-homes"}

@@ -596,7 +596,10 @@ function _doSeeHome(arg) {
   _addBond(id, 2);   // presence, not a purchase: the lady-drink taper has nothing to say about it
   G.offstage = true; const ended = _passTime(3); G.offstage = false;
   if (ended) return;
-  _say(_fmt(_pickVary(_SEE_HOME, "seehome"), { n: NPCS[id].name }), "win");
+  { const bike = !!(G.rideLog && G.rideLog[id]);   // a woman who rode you home on her own bike is walked to it, not to the truck (Laurie, round 102)
+    const pool = _SEE_HOME.filter(l => bike ? /\bbike\b/.test(l) : !/\bbike\b/.test(l));
+    _say(_fmt(_pickVary(pool.length ? pool : _SEE_HOME, "seehome:" + (bike ? "bike" : "truck")), { n: NPCS[id].name }), "win"); }
+  (G.seenDay = G.seenDay || {})[id] = G.day;
   _addHappy(1);
   const street = ROOMS[G.room] && ROOMS[G.room].exits && ROOMS[G.room].exits.out;
   if (street && ROOMS[street]) { G.room = street; _describeRoom(true); }
@@ -1383,7 +1386,7 @@ const _PARTY_SOFT_BYE_CLOSE = [
 ];
 const _PARTY_HOME_NUDGE = [
   "({who} looks at the room, then at you, and starts unhooking an earring with an air of complete arrival. SLEEP when you're ready \u2014 or the night is still out there if you've got legs left.)",
-  "({who} kicks her shoes into the corner like she lives here and falls backward onto the bed, arms out. \u201cYour hotel is boring, tilac. But the bed is good.\u201d SLEEP to call it \u2014 or drag her out for one more.)",
+  "({who} kicks her shoes into the corner like she lives here and falls backward onto the bed, arms out. \u201cYour place is boring, tilac. But the bed is good.\u201d SLEEP to call it \u2014 or drag her out for one more.)",
 ];
 
 // …and the same beats for TWO: "Joy and Alisa kicks her shoes… falls backward" (Martin, round 85)
@@ -1574,7 +1577,7 @@ const _MOTEL_AGAIN = [
 const _MOTEL_ROOM_LINES = [
   "฿{p} across the counter and Somchith unhooks a key without looking at which. {n} takes your hand up the stairs, kicks the shoes off inside the door, and the fan takes up its slow count. Later — a shower that runs cold, then colder, {n} fixing her hair in a mirror the size of a paperback, and the old man's nod as you pass the counter. (฿{m} left.)",
   "The key is warm from somebody else's pocket. Upstairs: a fan, a towel, a bottle of water sweating on the sill, and {n} being businesslike and fond in the same breath. Some time later you come down together, not quite together, and Somchith pours his coffee and does not look up. (-฿{p}, ฿{m} left.)",
-  "฿{p} to the old man. {n} goes up the stairs ahead of you as if she has done these particular stairs before, which she has. The room is a bed and a fan and a window painted shut. Afterward she stands at the mirror putting her face back on for the floor and tells you, over her shoulder and kindly, that she has had worse nights. (฿{m} left.)",
+  "฿{p} to the old man. {n} goes up the stairs ahead of you as if she has done these particular stairs before, which she has. The room is a bed and a fan and a window painted shut. Afterward she stands at the mirror putting her face back on — for the rest of the night with you, not for the floor — and tells you, over her shoulder, that the fan is the best thing in the room. (฿{m} left.)",
   "Up the stairs behind {n}, past a door with a shoe outside it, into a room that smells of lemongrass and the last hour. The fan counts the minutes. When you come down the alley has its lights on and Somchith has a fresh cup poured. \"Okay?\" Okay. (-฿{p}, ฿{m} left.)",
 ];
 function _motelRoom() {
@@ -2144,12 +2147,12 @@ function _bfResolve(kind) {
     const ridden = !!(G.rodeWith && G.rodeWith[id]);
     const offer = ridden
       ? `${name} takes your hand — and there's the ${_rideBike(id)} again, already off its stand. ` +
-        `"Not hotel yet," she says, mock-stern, reading the hope on your face. "I know, I know ` +
+        `"Not ${G.hotel === "condo" ? "your place" : "hotel"} yet," she says, mock-stern, reading the hope on your face. "I know, I know ` +
         `— you want the same night again. Cannot step in same river, na. But come — tonight is ` +
         `its own." She pats the seat.`
-      : `${name} takes your hand — but instead of the taxi rank she wheels a ${_rideBike(id)} ` +
+      : `${name} takes your hand — but instead of ${_inCondo() || G.hotel === "condo" ? "the bike stand" : "the taxi rank"} she wheels a ${_rideBike(id)} ` +
         `off its stand, thumbs it awake, and pats the seat behind her. "Tonight I not ` +
-        `want hotel yet. Come — I show you MY Pattaya, the real one. Hold me tight, na, I ` +
+        `want ${G.hotel === "condo" ? "your place" : "hotel"} yet. Come — I show you MY Pattaya, the real one. Hold me tight, na, I ` +
         `drive little bit crazy."`;
     _encPrompt(
       [(price ? (_herMoney ? `฿${_num(price)} to her, and ` : `฿${_num(price)} to ${_bfPayee()}, and `) : "") + offer + ` (฿${_num(G.money)} left.)`, "win"],
@@ -5882,6 +5885,7 @@ function _maybeIncomingText() {
   // your OWN staff do not text the guv'nor a customer's invite — "when you come
   // see me?? i keep you seat every night" to the man pouring her drinks, and "you
   // go other bar?? i KNOW" after a night he stood his own rail (Rolf, round 54)
+  if (typeof _jobBarStaff === "function" && _jobBarStaff(id) && G.job && G.job.shiftDay === G.day) return;   // he stood her rail tonight: nobody texts the man who locked up (Brendan, round 102)
   if ((typeof _barOwned === "function" && _barOwned() && typeof _barStaff === "function" && _barStaff().includes(id)) || (typeof _jobBarStaff === "function" && _jobBarStaff(id))) {   // the floor you manage texts you as the floor (Renata, round 100: "i tell mamasan my farang come")   // every tier: Lamai sent the guv'nor "family of me sick need medicine 300" (Greta, round 61)
     // by role: Cake's fan text was word for word Lamai's (Rolf, round 55)
     const _role = NPC_ROLES[id];
@@ -5900,8 +5904,8 @@ function _maybeIncomingText() {
       "the card machine print blank again. i write by hand. all ok",
       "one chit missing tonight. i find it under the ice bucket. all ok. i tell you so you know",
     ] : [
-      "cake count the float 3 time tonight. it is right. she still count 🙄",
-      "quiet tonight boss. i sit with old man from the pool table so he stay. he buy one more ❤️",
+      `${(NPCS[_tillKeeper(_npcRoom(id) || G.room)] || { name: "the till" }).name.toLowerCase()} count the float 3 time tonight. it is right. she still count 🙄`,   // her own bar's till keeper, not the Stinky's Cake (Brendan, round 102)
+      ...(ROOMS[NPCS[id].room] && ROOMS[NPCS[id].room].pool ? ["quiet tonight boss. i sit with old man from the pool table so he stay. he buy one more ❤️"] : ["quiet tonight boss. i sit with the old man at the end so he stay. he buy one more ❤️"]),
       "you look tired today na boss. sleep. bar is fine. i am here",
       "new girl at the bar next door very loud. we are better 555",
       "mama let us close the back early. nobody come. i sweep anyway",
@@ -5936,7 +5940,8 @@ function _maybeIncomingText() {
   // "you no come i sad" twenty minutes after he left her bar with a drink bought)
   const _sawYou = ((G.soc.drinkCount || {})[id] || 0) > 0 || ((G.soc.barTurns || {})[_npcRoom(id)] || 0) >= 6 ||
     !!(G.lastNightWas && G.lastNightWas.with === id && G.lastNightWas.day >= G.day - 1) ||   // "you no come i sad" the evening after her bike (Dieter, round 56)
-    !!(G.lastRide && G.lastRide.id === id && G.lastRide.day >= G.day - 1);
+    !!(G.lastRide && G.lastRide.id === id && G.lastRide.day >= G.day - 1) ||
+    ((G.seenDay || {})[id] != null && G.seenDay[id] >= G.day - 1) || !!((G.homeSeen || {})[id] && G.homeSeen[id].day >= G.day - 1);   // she saw you, or woke in your flat (Laurie, round 102)
   if (t >= 3) { // her farang: longing, jealousy, the real ones — no scam game on you
     if (roll < 0.45 && !_sawYou) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, _pickVary([
@@ -12272,9 +12277,9 @@ function _doEat(arg) {
           n => `${n} watches you cook the way she watches a new girl pour: ready to take over. She does not have to. Two plates on the floor by the fan, her legs across yours. (฿${_num(CONDO_MEAL)}, and nobody to tip but her.)`], "condomealher")(NPCS[her].name));
         return;
       } }
-    _say(_pickVary([`Eggs, rice, a fistful of the dried chilli somebody left in the cupboard. Twenty minutes, two rings, and a plate that cost ฿${_num(CONDO_MEAL)} and would have been ฿${_num(CONDO_MEAL * 2)} on the street with a stool thrown in.`,
+    _say(_pickVary([`Eggs, rice, a fistful of the dried chilli from the market in the cupboard. Twenty minutes, two rings, and a plate that cost ฿${_num(CONDO_MEAL)} and would have been ฿${_num(CONDO_MEAL * 2)} on the street with a stool thrown in.`,
       `Instant noodles upgraded with an egg and the half papaya, eaten on the balcony with the bay for a television. ฿${_num(CONDO_MEAL)}, and nobody to tip.`,
-      `The rice cooker does its one job; you do the rest with the wok somebody left. It is not a stall's plate. It is yours, which is a different flavour. (฿${_num(CONDO_MEAL)}.)`], "condomeal"));
+      `The rice cooker does its one job; you do the rest with the wok you bought on Third Road. It is not a stall's plate. It is yours, which is a different flavour. (฿${_num(CONDO_MEAL)}.)`], "condomeal"));
     return;
   }
   // "EAT WITH TAN" is the other natural phrasing of his standing food invite —
