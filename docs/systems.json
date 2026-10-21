@@ -1216,6 +1216,27 @@
    "encounters": [],
    "predicates": [],
    "note": "built 2026-10-08; the stray quests homed 2026-10-21"
+  },
+  {
+   "id": "soi6-stream",
+   "name": "The digital barstool: the group's cameras in four PLG bars on Soi 6, the big tipper at the Jade Lounge, WATCH STREAM and STREAM DRINK",
+   "verbs": [
+    "stream",
+    "watch"
+   ],
+   "rooms": [
+    "pink_lotus",
+    "golden_dragon",
+    "jade_lounge",
+    "peach_lounge"
+   ],
+   "npcs": [],
+   "effects": [],
+   "modals": [],
+   "quests": [],
+   "encounters": [],
+   "predicates": [],
+   "note": "built 2026-10-22 from the canon essay (pattern only)"
   }
  ],
  "aliases": {
@@ -1285,6 +1306,8 @@
   "share": "vacation",
   "share-card": "vacation",
   "soi6": "vacation",
-  "seed": "saveload"
+  "seed": "saveload",
+  "stream": "soi6-stream",
+  "livestream": "soi6-stream"
  }
 }

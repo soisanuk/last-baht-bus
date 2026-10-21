@@ -356,7 +356,7 @@ function newGame() {
     offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
     returnHello: {},     // npc id → the vacation a written woman last gave her return greeting (Aurelio, round 71)
-    acctBase: 0, acctUntil: 0, acctDay: null, acctWhy: null, launderRisk: [], launderBack: {},   // the laundering doors' risk book (2026-10-22)   // the accountant's call: Nont's total at the last call, the review's end, the call's day
+    acctBase: 0, acctUntil: 0, acctDay: null, acctWhy: null, launderRisk: [], launderBack: {}, streamSpent: 0, streamDrinks: {},   // the laundering doors' risk book (2026-10-22)   // the accountant's call: Nont's total at the last call, the review's end, the call's day
     coversNights: {},    // day → the men counted at Jasmine Garden that night (The Covers: a pattern is three nights, Mario 2026-10-08)
     licencesRead: {},    // room → the registered name read off the paper by the till (EXAMINE LICENCE, 2026-10-08)
     reviewOf: {},        // "speaker>colleague:kind" → the line she gives about her (round 77: an opinion is kept, not re-dealt nightly)
@@ -3146,6 +3146,7 @@ function _describeRoom(full, forceFull) {
   if (G.room === "orchid_room") _tanOrchidReveal();
   if (typeof _oppTick === "function") _oppTick();   // the bar opposite, seen from your own doorway
   if (typeof _frontierTick === "function") _frontierTick();   // the group buying Soi 6's inner west, a front at a time
+  if (typeof _streamDescribe === "function") _streamDescribe();   // the camera corner while the big tipper is online (2026-10-22)
   // the Soi 6 week's fence is a refusal, not a road: the East End listed "e" every night (Aisling, round 87 — the compass already knew)
   const exits = Object.keys(r.exits).filter(d => !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(r.exits[d])));
   if (exits.length) _say(_L("Exits: ") + exits.join(", ") + ".", "dim");
@@ -3655,7 +3656,8 @@ function _tick() {
   if (_inBar() && (G.room !== G.soc.tickRoom || G.money < (G.soc.moneyTick == null ? G.money : G.soc.moneyTick)))
     (G.soc.spentTurn = G.soc.spentTurn || {})[G.room] = G.turns;
   G.soc.moneyTick = G.money; G.soc.tickRoom = G.room;
-  if (!_onRide()) _railTick();     // the hour turns and somebody drains a glass and moves on
+  if (!_onRide()) _railTick();
+  if (typeof _streamTick === "function") _streamTick();   // the group's cameras at work (2026-10-22)     // the hour turns and somebody drains a glass and moves on
   _nokLeavesTick();
   if (typeof _flowerTick === "function") _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter

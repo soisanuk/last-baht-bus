@@ -266,6 +266,9 @@ const ACCT_THRESHOLD = 60000, ACCT_REVIEW_DAYS = 30, ACCT_GAP_DAYS = 90;
 const LAUNDER_HONEST = { covers: 1000, fiftyone: 500, verification: 1500, presale: 1500, nameonwall: 2000 };
 const LAUNDER_RISK_PCT = 40, LAUNDER_RISK_MIN = 3, LAUNDER_RISK_SPAN = 4;
 const LAUNDER_COST = { covers: 1500, fiftyone: 1500, verification: 2500, presale: 0 };
+// THE DIGITAL BARSTOOL (2026-10-22): what a tip must be to bring a girl back from the group's camera at the Jade Lounge
+// while the big tipper is online — he pays about that a song, so matching him is the price of her company
+const STREAM_MATCH = 500;
 const COVERS_NIGHTS = 3;   // The Covers: a pattern is three nights on the stool, not one busy Friday (Mario, 2026-10-08)
 const SYN_JOB_NIGHT = 120;     // each ACCEPTED job is a standing cost — the invoice you pay for frictionlessness (~฿3.6k/mo). Refusing is cheaper on paper; what it buys you is the weather.
 const LOW_SEASON   = 0.55;     // takings multiplier at the trough (Sep–Oct); see SEASON_MULT
@@ -3679,12 +3682,12 @@ const ROOMS = {
   pink_lotus: {
     name: "Pink Lotus Lounge",
     region: "Soi 6",
-    bar: "Pink Lotus Lounge", barType: "soi6", owner: "plg",
+    bar: "Pink Lotus Lounge", barType: "soi6", stream: true,   // the group's cameras (the digital barstool, 2026-10-22) owner: "plg",
     desc: "Pattaya Leisure's flagship, and the loudest argument for why the group should not be " +
       "allowed nice things. The front is open to the street; half the bar is technically the " +
       "pavement. Neon tubes frame the sign in three colours simultaneously. Inside, the pink " +
       "is structural — walls, barstools, the girls' outfits, arguably the air itself. Joy is " +
-      "already talking before you sit down. A staircase at the back climbs to the short-time " +
+      "already talking before you sit down. Over the bar a little camera on a bracket watches the pink and sends it to the internet all night — the group streams its rooms on this soi, every one but the one behind the rope. A staircase at the back climbs to the short-time " +
       "rooms; beside it, a velvet-roped, unmarked door leads to the ORCHID ROOM — the group's " +
       "members-only back room, and very much not for tonight's walk-up trade. (GO BACK, if you " +
       "think you're on the list.)",
@@ -3697,8 +3700,10 @@ const ROOMS = {
       "The girls clock you the second you round the post and close in like choreography. \"Same handsome from before! You want me now? Upstairs quiet, aircon cold — worth the walk, I promise.\"",
       "Into the Pink Lotus, where nobody wastes your time or theirs: a lap, a hand, a mouth at your ear naming a number and a room, and the fairy lights doing their best to make it romantic.",
       "Back onto a pink stool with a girl already arranging herself across you. \"You think about me all day? Liar.\" She laughs, delighted. \"Okay — buy the drink, we go up, you think about me tomorrow.\"",
+      "Back into the pink, and over the bar the little camera's red light is on, as it always is. A girl at the end of the rail is waving at it.",
     ],
-    reads: {   // the fixtures its own prose names (Declan, round 58)
+    reads: {
+      camera: "A small camera on a bracket over the bar, a red light on its face, and on the shelf under it a {{phone}} on a stand showing the same room back with a column of names scrolling up the side. When the {{phone}} pings, a girl raises her glass to the lens and says a name nobody here has ever met. The group's cameras are in every room it owns on this soi — every one but the room behind the velvet rope, which nobody films. (WATCH STREAM)",   // the fixtures its own prose names (Declan, round 58)
       neon: "Neon tubes bent round the sign in pink, blue and green at once, buzzing slightly, so that everyone under them looks like three different people depending on which colour wins.",
       rope: "A velvet rope on two brass posts across an unmarked door beside the stairs. It is not much of a barrier on its own; the doorman beside it is the barrier. Everybody who works here knows who it is for, and so, by now, do you.",
       door: "Beside the stage stairs, an unmarked door behind a velvet rope, and a doorman who checks a {{phone}} against faces. Nothing about it says ORCHID; everything about the doorman does.",
@@ -3751,15 +3756,16 @@ const ROOMS = {
   golden_dragon: {
     name: "Golden Dragon Bar",
     region: "Soi 6",
-    bar: "Golden Dragon Bar", barType: "soi6",
+    bar: "Golden Dragon Bar", barType: "soi6", stream: true,   // the group's cameras (the digital barstool, 2026-10-22)
     desc: "Open-fronted, louder than you expected from outside, which is saying something. " +
       "The gold dragon above the bar was hand-painted by someone's cousin and has been " +
       "there longer than most of the staff. Vintage Thai pop on the speakers — not the " +
       "jukebox: that died in 2019, so the music comes off somebody's {{phone}} through the QR " +
       "sticker the new owners put on every table. Almost nobody scans it, so the playlist " +
       "stays whatever the last man who bothered chose, which is how it has stayed vintage. Pia keeps the bar — " +
-      "and the dead jukebox's memory — with a flat, unbothered calm.",
+      "and the dead jukebox's memory — with a flat, unbothered calm. Since the new owners came, a camera has looked down from beside the dragon's larger eye, streaming the bar to whoever is watching from wherever they are.",
     reads: {
+      camera: "A camera fixed beside the dragon's larger eye, newer than anything else in the room, and a {{phone}} on a stand by the till that pings when somebody far away buys a drink. The girl nearest the till lifts the glass to the lens and says his name off the screen. The new owners put it in the same week as the QR stickers; the stickers nobody scans, the camera everybody plays to. (WATCH STREAM)",
       qr: "A QR sticker on every table, peeling at one corner, with SCAN FOR MUSIC printed under it in a font somebody chose with care. Nobody scans it. The playlist knows.",
       dragon: "The gold dragon over the bar was hand-painted by someone's cousin, and it " +
         "shows — the proportions are enthusiastic, one eye is larger than the other, and " +
@@ -3779,6 +3785,7 @@ const ROOMS = {
       "Back into the gold and the grab. \"Same shirt, same handsome! You come for me tonight?\" She does not wait for an answer; she is already climbing half into your lap. \"Yes. You come for me.\"",
       "Into the Golden Dragon, where the offer arrives before the beer does: a thigh, a whisper, a price, a room number, all inside the first ten seconds, all with a grin.",
       "Back to the dragon and the dead jukebox's faithful ghost. A girl hooks a leg over yours and leans in close enough to share breath. \"Upstairs is nicer than down here. Much nicer. Buy me drink, I prove it.\"",
+      "Back under the Golden Dragon, and the camera beside its eye is watching you come in, which is more than the dragon ever bothers to do.",
     ],
     exits: { out: "soi6_street" },
   },
@@ -3890,13 +3897,14 @@ const ROOMS = {
   jade_lounge: {
     name: "Jade Lounge",
     region: "Soi 6",
-    bar: "Jade Lounge", barType: "soi6", owner: "plg", boughtWhen: "two years ago",
+    bar: "Jade Lounge", barType: "soi6", stream: "pull",   // the group's cameras (the digital barstool, 2026-10-22) owner: "plg", boughtWhen: "two years ago",
     formerOwner: "a Thai woman everybody called Mama, who ran eleven stools and a cat and went home up-country with the money",
     desc: "Green glass, brass and a sound system three sizes too big for the room: the group's paint " +
       "on a front that was somebody else's two years ago. The stools are new, the staircase at the " +
       "back has carpet on it now, and the price board is printed rather than chalked, which on Soi 6 " +
-      "is how you know who owns a bar.",
+      "is how you know who owns a bar. In the corner by the stairs is the newest thing of all: a ring light, a camera on a tripod and a {{phone}} on a stand, so that the Jade Lounge is also a bar on the internet, and some nights it prefers being that one.",
     reads: {
+      camera: "A ring light, a camera on a tripod, and a {{phone}} on a stand showing the room back to itself with a column of names and numbers scrolling up the side. A girl in front of it is working and so is the group: a drink bought on the stream pays her the same cut as one bought on a stool, and the mamasan's sheet has a column for it. When one particular name comes online the {{phone}} pings all night, and the corner fills. (WATCH STREAM)",
       carpet: "Dark green carpet on the stairs at the back, new enough that it still has the shop's smell and nobody has yet spilled anything on the third step, which on Soi 6 makes it the newest thing on the street.",
       board: "Printed, laminated, a small company logo in the corner: beer, lady drink, the barfine and the room upstairs, the same numbers as the chalk along the soi. Nobody in here can change one of them, and that is the point of printing it.",
     },
@@ -3907,19 +3915,21 @@ const ROOMS = {
       "Into the Jade again, where the music is too big for the room and the come-on is exactly the right size: a hand, a drink, a nod at the stairs.",
       "Back under the green glass. A girl hooks your arm and walks you to a stool as if you'd booked it. \"You sit. I sit. Then we talk about upstairs.\"",
       "The Jade again — expensive paint, cheap jokes, and a girl telling you the rooms upstairs have new mattresses, which is the first sales pitch on the soi to lead with the furniture.",
+      "Back into the Jade Lounge. The ring light in the corner is on, and the girls glance at the {{phone}} under it before they glance at the door.",
     ],
     exits: { out: "soi6_west_in" },
   },
   peach_lounge: {
     name: "Peach Lounge",
     region: "Soi 6",
-    bar: "Peach Lounge", barType: "soi6", owner: "plg", boughtWhen: "not long ago",
+    bar: "Peach Lounge", barType: "soi6", stream: true,   // the group's cameras (the digital barstool, 2026-10-22) owner: "plg", boughtWhen: "not long ago",
     formerOwner: "an Australian who painted the old sign himself and went home for his heart",
     desc: "Peach-coloured everything, and the paint still smells faintly of paint. The group bought " +
       "it not long ago and kept the name, the girls and the staircase; they changed the paper by the " +
       "till, the sound system, and the sign for a printed one with the same word on it. The old hand-painted sign is leaning against the back " +
-      "wall, facing it.",
+      "wall, facing it. The group's other change hangs over the till: a camera, streaming the room to the internet, under which the girls have learned to smile on cue.",
     reads: {
+      camera: "A camera on a bracket over the till, the same model as in every room the group owns, with a red light and a {{phone}} beneath it. The {{phone}} pings, a girl turns to the lens, raises her drink and says a name from the screen; she rarely looks at the lens while she says it. The old sign faces the wall; the camera faces everything else. (WATCH STREAM)",
       sign: "The old sign leans against the back wall with its face to the plaster, behind the cashier. Tilt it forward and there it is, hand-painted: PEACH in red, with a peach that looks more like a heart. Nobody threw it out, and nobody hung it up again either. The new one outside says the same word in the group's lettering.",
     },
     revisit: [
@@ -3929,6 +3939,7 @@ const ROOMS = {
       "Into the Peach again, where the pitch is soft and very direct: a hand on your knee, a price in your ear, and a smile that says the hand was the main argument.",
       "Back among the peach walls. Two girls argue cheerfully over which of them saw you first, then settle it by both sitting down.",
       "The Peach again. Nothing here has changed except the paper, and nobody on the stools reads paper.",
+      "Back into Peach Lounge, where the camera over the till has the room on the internet and a girl is telling it a stranger's name with her drink up.",
     ],
     exits: { out: "soi6_west_in" },
   },

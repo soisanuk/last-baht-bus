@@ -42,6 +42,7 @@ const CLASS = {
   "engine-parser.js:_TOWN|the soi talks": [C_, "the wallet_back row: the line only prints after walletBack, so the mouth saying the soi talked is the mechanic that heard it (round 99)"],
   "engine-parser.js:_TOWN|everybody knows": [G_, "a fact about the world: Mot sells to one woman and she gives back for manners — the arithmetic of the chain, not a sighting (round 99)"],
   "quest.wallet_again.desc|the town knows": [G_, "idiom: where lost things go in this town is a fact about the world, not a sighting (the second wallet, 2026-10-21)"],
+  "engine-systems.js:_doWatchStream|the floor knows": [G_, "a fact about the big tipper and the floor, not about you (the digital barstool, 2026-10-22)"],
   "engine-systems.js:_walletCardTick|the street knows": [G_, "idiom: the machine on the street takes the replacement card — a fact about the bank, not a witness (the second wallet, 2026-10-21)"],
   "engine-play.js:_paperTalk|everybody knows": [G_, "a fact about the world: who works on what paper is common knowledge on a beer bar rail (the paper, round 97)"],
   "engine-play.js:_jobOffer|spoken for": [G_, "idiom — the mornings are spoken for by the platform; nobody saw anything (the jobs, 2026-10-20)"],

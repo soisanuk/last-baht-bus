@@ -3497,6 +3497,7 @@ function _doSocial(kind, targetWord) {
   _noteActor(id); // this person is now the antecedent for the next "her/him"
   const name = NPCS[id].name;
   const role = NPC_ROLES[id];
+  if ((kind === "flirt" || kind === "kiss") && typeof _atCamera === "function" && _atCamera(id)) { _say(_pickVary(_STREAM_FLIRT, "streamflirt")(name)); return; }   // she is singing to the lens (2026-10-22)
   _trace(kind, name); // breadcrumb (flirt/kiss/spank/fondle)
   // your girl is not "sitting with you, officially, to a smattering of applause"
   // (Rolf, round 55): the affair has its own register, and the room already knows
@@ -3924,6 +3925,7 @@ function _doBell() {
   if (typeof _bellHeads === "function" && _bellHeads(G.room).men === 0) { const _nm = _bellPool.filter(l => !/\b(the men|men on|from the stools|every stool|the stools)\b/i.test(l)); if (_nm.length) _bellPool = _nm; }
   _say(`${_pickVary(_solo ? _BELL_SOLO : _bellPool, _solo ? "bellsolo" : "bell:" + bt)} (-฿${_num(price)}, ฿${_num(G.money)} left — reign while it lasts.)`);
   if (pool === _BELL_BEER) _compDrink(1);      // every line in that pool hands one back across the rail
+  if (typeof _streamBell === "function") _streamBell(r);   // the bell beats the internet for the hour (2026-10-22)
   const rings = G.soc.bells[r];
   if (rings === 2) {
     _say("That's two bells this visit. The whole room's tilting hard your way now — " +
@@ -5726,7 +5728,7 @@ function _nightSnapshot() {
     bank: G.bank || 0, held: G.nontStuck || 0, bankIn: G.bankIn || 0,   // the account, Nont's overnight hold, and what ARRIVED (Marguerite, round 67; the money audit)
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
-    spcB: G.massageSpend || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0, pdB: (G.bar && G.bar.pocketDrawn) || 0,
+    spcB: G.massageSpend || 0, strB: G.streamSpent || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0, pdB: (G.bar && G.bar.pocketDrawn) || 0,
     wonB: (G.offIn || 0) + (G.quizWon || 0), giftInB: G.giftIn || 0, condoB: G.condoPaid || 0, paperB: G.paperPaid || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
@@ -5826,6 +5828,8 @@ function _morningLedger() {
   if (polN > 0) bits.push("\u0e3f" + _num(polN) + " of it to the police");   // a fine was lumped into "down" (Gordie, round 72)
   const spcN = (G.massageSpend || 0) - (b.spcB != null ? b.spcB : (G.massageSpend || 0));   // the specials and the joiner fee were in "down" and nowhere else (László, round 73)
   if (spcN > 0) bits.push("\u0e3f" + _num(spcN) + " of it on the massage table");
+  const strN = (G.streamSpent || 0) - (b.strB != null ? b.strB : (G.streamSpent || 0));   // drinks bought on the stream, from the account (2026-10-22)
+  if (strN > 0) bits.push("\u0e3f" + _num(strN) + " of it on drinks through the stream");
   // what came BACK into the pocket — a pot, a quiz prize, a note a woman pressed on you — nets into "down" and is named,
   // or "down ฿2,320" hides the ฿500 a man won at the quiz (Liam, round 93)
   const wonN = (G.offIn || 0) + (G.quizWon || 0) - (b.wonB != null ? b.wonB : (G.offIn || 0) + (G.quizWon || 0));

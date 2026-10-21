@@ -72,6 +72,7 @@ function _girlBusy(id) {
   const r = ROOMS[_npcRoom(id)];
   if (!r || r.region !== "Soi 6") return false;    // the crowded soi is the etiquette context
   if (_convoActive() === id) return false;         // she's with YOU right now
+  if (typeof _atCamera === "function" && _atCamera(id)) return false;   // she is at the camera, not with a customer (the digital barstool, 2026-10-22)
   if ((G.soc.drinks[id] || 0) > 0) return false;   // already your acquaintance tonight
   if (new RegExp("\\b" + NPCS[id].name + "\\b").test(String(r.desc || ""))) return false;   // the room's own prose sat her at your elbow (Gary, round 79: Kluay and Benz "claimed the two nearest for you", then "sitting with customers")
   const block = G.day + ":" + Math.floor((G.nightTurn || 0) / 10); // stable per hour-ish
@@ -2267,6 +2268,7 @@ function _doInventory() {
 // English, so no printed-Thai here — the Thai-script directional signs stay on the
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
+  camera: ["the camera", "webcam", "ring light", "tripod", "the lens", "lens", "the stream", "livestream", "live stream", "the phone on the stand"],   // the group's cameras (the digital barstool, 2026-10-22)
   // Soi 6's close looks (the examine audit, 2026-10-09)
   // the inner segments' close looks (Soi 6 expansion, 2026-10-09)
   folder: ["manila folder", "the folder", "back table"],
@@ -4965,6 +4967,8 @@ function _doTalkCore(arg, topic) {
     _say(topic ? _pickVary(_MAI_DEE_TALK, "maideetalk")(NPCS[npc].name) : _pickVary(_REL_GREET_MAIDEE, "relmaidee")(NPCS[npc].name), "dim");
     return;
   }
+  // AT THE CAMERA: a bare TALK gets the one finger, the one song — a question still reaches her (2026-10-22)
+  if (!topic && typeof _atCamera === "function" && _atCamera(npc) && _npcsHere().includes(npc)) { _streamBusy(npc); return; }
   // THE INSULT IS NOTED, AND KEPT TILL DAWN (Pete, round 75: "Something is noted… consequences,
   // later, quietly", and one turn later Terry warmly offered him the stool). The man or woman you
   // said it to answers you short for the rest of the night; an APOLOGY ends it.
@@ -5804,7 +5808,7 @@ function _doTalkCore(arg, topic) {
       (_n2 !== topic && (k === _n2 || _inW(_n2, k)))));
     // the room's own furniture: a thing the desc advertises and EXAMINE answers is
     // not "not my story" from the woman who works under it — she points at it
-    if (!gated && _fixtureTalk(npc, topic)) { _questOffer(npc); return; }
+    if (!gated && !(typeof _streamBar === "function" && _streamBar() && /\b(camera|stream|ring light|lens|tripod|webcam|livestream)\b/.test(String(topic))) && _fixtureTalk(npc, topic)) { _questOffer(npc); return; }
     // …and the town's four beds: a rate the engine bills to the baht is a fact
     // anyone on a stool can quote (Clive, round 53: the pub sits over one of them
     // and its regulars had nothing to say about it)
@@ -7839,6 +7843,115 @@ const _TOWN_THAI = {
     "\"Tonic, fortune — two of them work the beach road.\" {n} shrugs. \"฿{t} and ฿{fr} first. ฿{tf} and ฿{fri} after you follow. You pay already? REPORT — they give some back.\""
   ]
 };
+// THE DIGITAL BARSTOOL'S ROWS (2026-10-22): the camera, the big tipper, the bars without one, and the drink she can't place
+Object.assign(_TOWN, {
+  stream: {
+    floor: [
+      "\"The camera?\" {n} waves at it. \"Company put. Man far away buy drink on {{phone}}, I say his name, I get same {c} like you buy here.\" A shrug. \"Easy money. He never touch.\"",
+      "{n} laughs. \"Internet customer! He pay {p}, I drink, I say name. I don't know which one he is. He know me.\"",
+      "\"Every night many name,\" {n} says, nodding at the {{phone}} on the stand. \"Germany, England, Australia. Morning for them, night for me.\"",
+      "\"Camera, na.\" {n} turns her face to it without thinking, then back. \"You buy drink here, you get me. Buy there, you get my face.\"",
+      "{n} points at the red light. \"Company watch, man far away watch. Mamasan count. I smile, everybody happy.\"",
+      "\"Same money,\" {n} says about the stream, a little proud of the arithmetic. \"Stool or internet, {c}. But internet man never ask upstairs.\"",
+      "\"Some man watch every night, same time,\" {n} says. \"I know his name before I know anybody face here.\"",
+      "{n} rolls her eyes at the lens, fondly. \"Camera like old man on a stool. Always there, always looking, never buy enough.\"",
+    ],
+    house: [
+      "\"The group put the cameras in,\" {n} says. \"Every bar of theirs on this soi. A drink on the stream is {p}; the girl gets {c}, same as a drink on a stool. The sheet counts both.\"",
+      "{n} doesn't look at it. \"A camera, a link, a {{phone}} at the till. A man in another country buys a drink and hears his name. It sells more than you would think.\"",
+      "\"It's a stool for men who can't come,\" {n} says. \"Some are old, some are sick, some only talk about coming. They pay the same and drink nothing.\"",
+      "\"Head office reads the stream numbers before it reads the till,\" {n} says, flat. \"So the girls smile at the lens.\"",
+      "{n} glances at the red light. \"It never closes and it never complains about the beer. Best customer in the room, on paper.\"",
+      "\"Every room the group owns has one,\" {n} says. \"Except the one behind the rope. Nobody films that room.\"",
+    ],
+    punter: [
+      "\"The camera?\" {n} snorts. \"Blokes at home paying {p} to watch a girl say their name. And I'm the one sat here like a mug paying for the real thing.\"",
+      "{n} tips his bottle at the lens. \"Some poor sod in a bedsit in Wigan is watching me drink this. Wave, if you like.\"",
+      "\"Started in the lockdown,\" {n} says. \"Never stopped. Half the regulars on the stream have never been, and never will.\"",
+      "\"I bought one once from home,\" {n} admits. \"She said my name wrong. Best {p} I ever spent, and the worst.\"",
+      "{n} shrugs at the camera. \"Same girls, same price, no stool. Some men like it better. Can't let you down from four thousand miles.\"",
+      "\"It's the honest version,\" {n} says. \"Everybody on the stream knows exactly what he's buying. Can't say that about this side of the bar.\"",
+    ],
+  },
+  stream_whale: {
+    floor: [
+      "\"{w}?\" {n}'s face does something complicated. \"Big tipper. {m} one song. When he online, everybody want the camera. Sorry, na — is money.\"",
+      "\"Mister Silver.\" {n} says it like a regular's nickname. \"England. He wake up, he watch us. Nobody see his face, everybody know his name.\"",
+      "{n} glances at the {{phone}}. \"When he online, the girl at the camera make more than the girl with customer. Mamasan say sit with customer. Girls say: you pay {m} a song?\"",
+      "\"He tip, he tip, he tip,\" {n} says about {w}. \"One night he send twenty song. One girl buy motorbike from him.\" She does not say which girl.",
+      "\"I sit with you,\" {n} says, \"but when the {{phone}} ping I look. Everybody look. Is not personal, tilac.\"",
+      "\"He never come Pattaya,\" {n} says of {w}. \"I ask on the stream. He say maybe next year. Every year he say next year.\"",
+    ],
+    house: [
+      "\"{w},\" {n} says. \"He keeps an English afternoon and tips by the song — {m}. The girls go to the camera when he's on, and I let them, because the group reads the stream numbers.\"",
+      "{n} sighs. \"The men on the stools don't like it when he is online. I don't like it either. The sheet likes it.\"",
+      "\"Match him and she stays,\" {n} says, very dry. \"{m} the song. Or ring the bell; even he can't buy the whole room.\"",
+      "\"He has never been to Thailand,\" {n} says. \"He knows every girl's name on my floor. I know his handle. That is the whole relationship.\"",
+    ],
+    punter: [
+      "\"Silver bloody Fox,\" {n} says. \"Every night about eight his name comes up and half the floor walks off to sing at a tripod. You can't compete with a man who isn't here.\"",
+      "{n} nods at the corner. \"Tips {m} a song from his front room in Leeds, apparently. I've stopped taking it personally. Mostly.\"",
+      "\"Ring the bell when he's on,\" {n} says. \"Only thing that works. Costs you a round, buys you the room back for an hour.\"",
+      "\"Man's never set foot on Soi 6 and he's the most popular bloke in the bar,\" {n} says. \"Says something. Not sure what.\"",
+    ],
+  },
+  stream_not: {
+    floor: [
+      "\"Camera? Not here, na.\" {n} laughs. \"Here old style. You want see me, you come sit. {b} — they have camera.\"",
+      "\"The company bar have camera,\" {n} says. \"{b}. Here no company, no camera, only me.\"",
+      "{n} shrugs. \"Internet customer go {b}. Here only real customer. Real customer better, he buy upstairs.\"",
+      "\"My friend work {b},\" {n} says. \"She say internet man very polite and very far away. I like customer close.\"",
+    ],
+    house: [
+      "\"That's the group's,\" {n} says. \"{b}. Cameras in every room they own. We are a bar; they are a channel as well.\"",
+      "{n} shakes her head. \"No camera here. A man who wants to see my floor comes and sits on it. {b}, if you want the internet.\"",
+      "\"The group's rooms stream,\" {n} says. \"{b}. Ours doesn't. Ours you have to be in.\"",
+    ],
+    punter: [
+      "\"The cameras are in the group's bars,\" {n} says. \"{b}. This place is the old kind: you want to see it, you sit in it.\"",
+      "{n} snorts. \"Streaming? Here? The telly barely works. Try {b} if you want to be on the internet.\"",
+      "\"{b} have the cameras,\" {n} says. \"I watch them sometimes from my room when I can't sleep. Don't tell anybody.\"",
+    ],
+  },
+  stream_me: {
+    floor: [
+      "\"That was YOU?\" {n} laughs, delighted and a little caught out. \"I say many name tonight. I don't look which one. Next time you come, I say it to your face.\"",
+      "\"{h}?\" {n} tries it. \"I say that name? Maybe. Many name.\" She looks at you properly. \"Here is better. Here I know.\"",
+      "{n} covers her face. \"I not look at the camera when I say name! Is like — saying name to the wall.\" She takes your hand. \"Sorry, tilac. Now I know which one.\"",
+      "\"You buy from phone?\" {n} shakes her head at you. \"Why? You are in Pattaya! Come sit, I drink with you, not with the camera.\"",
+    ],
+    house: [
+      "\"Yours was one of a hundred names,\" {n} says, not unkindly. \"She said it and she didn't look up. That's how the stream works. This side of the bar is where she looks.\"",
+      "{n} smiles a little. \"You bought a drink on the stream while you were in town? Next time, walk in. It's the same drink and you get the girl.\"",
+    ],
+    punter: [
+      "\"You bought one on the stream?\" {n} shakes his head. \"Mate, you're in Pattaya. Walk in.\"",
+      "{n} laughs. \"She'll have said your name to the wall. They all do. That's the deal.\"",
+    ],
+  },
+});
+Object.assign(_TOWN_THAI, {
+  stream: [
+    "\"The company put camera,\" {n} says. \"Every bar of company on this soi. Drink on the stream is {p}; girl get {c}, same like drink on stool. The sheet count both.\"",
+    "{n} doesn't look at it. \"Camera, link, phone at the till. Man in other country buy drink, he hear his name. Sell more than you think.\"",
+    "\"Is stool for man who cannot come,\" {n} says. \"Some old, some sick, some only talk. Same money, no drink.\"",
+    "\"Every room of company have one,\" {n} says. \"Not the room behind the rope. Nobody film that room.\"",
+  ],
+  stream_whale: [
+    "\"{w},\" {n} says. \"English afternoon, he tip by the song — {m}. When he on, girls go camera. I let them; company read the stream number.\"",
+    "{n} sighs. \"Customer on stool don't like when he online. Me also. The sheet like.\"",
+    "\"Match him, she stay,\" {n} says. \"{m} one song. Or ring bell — even him cannot buy whole room.\"",
+  ],
+  stream_not: [
+    "\"That is company bar,\" {n} says. \"{b}. Camera every room. Here no. Here you have to come sit.\"",
+    "{n} shakes her head. \"No camera here. You want see my floor, you sit on it. {b}, if you want internet.\"",
+  ],
+  stream_me: [
+    "\"Your name one of hundred,\" {n} says. \"She say, she don't look. Stream like that. This side of bar, she look.\"",
+    "{n} smiles a little. \"You buy on stream when you in Pattaya? Next time walk in. Same drink, you get the girl.\"",
+  ],
+});
+["stream", "stream_whale", "stream_not", "stream_me"].forEach(k => _TOWN_WIDE.add(k));
 // ── the night ride's stops, by name ─────────────────────────────────────────
 const _RIDE_STOP_WORDS = [
   ["disco", /thai disco|\bdisco\b/i], ["somtam", /som ?tam|papaya salad|the cart/i], ["wsclub", /\bclub\b|superclub|walking street/i],
@@ -8462,6 +8575,7 @@ function _situationTopics(id) {
   }
   if (typeof _lastByeDue === "function" && _lastByeDue(id) && _npcsHere().includes(id) && !(G.party && G.party.ids && G.party.ids.includes(id))) first.unshift("goodbye");   // the last night's goodbye is a tap (Mario, 2026-10-14)
   if (_giftsOf(id).length) first.push("your present");
+  { const sd = (G.streamDrinks || {})[id]; if (sd && G.day - sd.day <= 3 && NPC_ROLES[id] === "hostess" && _npcsHere().includes(id)) first.push("the stream"); }   // the drink you bought her on the phone (2026-10-22)
   if (_streetEvent("rain") && (works || n.patron)) first.push("the rain");
   if (works && _room().barType && _pronoun(id) === "she" && _afterWorkTalk(id)) last.push("after work");
   if (works && _room().barType && home === G.room) {
@@ -8469,6 +8583,7 @@ function _situationTopics(id) {
   }
   if (G.stage === "expat" && !G.job && id === "david" && _npcsHere().includes(id)) last.push("a job");   // Jerry's school
   if (G.stage === "expat" && id === "mort" && _npcsHere().includes(id)) last.push(G.stringer ? "the leads" : "a job");   // Mort's column
+  if (works && _room().barType && home === G.room && typeof _streamBar === "function" && _streamBar(G.room)) last.push("the camera");   // the group's channel is a tap (2026-10-22)
   if (works && _room().barType && home === G.room) {
     last.push("closing time");
     if ((_room().region || "") === "Soi 6" && typeof _closeTurn === "function" && _closeTurn(G.room) != null) last.push("open after two");
@@ -8855,6 +8970,15 @@ function _townTalk(npc, topic) {
     const _here = G.room === G.bar.room && /\b(this bar|this place|here|the bar)\b/.test(t);
     if (_here || (_bn && (t.includes(_bn) || t.includes(_bn.replace(/^the /, "")) || /\bstinky\b/.test(t))) || /\b(new owner|the owner|who owns|owner|changed hands|your bar|my bar)\b/.test(t))
       return pick("owner", { b: _barName(G.bar.room) });
+  }
+  // THE CAMERA (the digital barstool, 2026-10-22): the group's channel, the big tipper, the bars without one, and the drink she can't place
+  if (typeof _streamBar === "function" && /\b(camera|cameras|streams?|streaming|live ?stream|livestream|webcam|ring light|the lens|tripod|silver ?fox|silverfox|mister silver|the whale|big tipper|channel|youtube|internet customers?|the internet)\b/.test(t)) {
+    const sd = (G.streamDrinks || {})[npc], room = NPCS[npc].room;
+    const bars = Object.keys(ROOMS).filter(id => _streamBar(id)).map(id => _barName(id)), b = bars.slice(0, -1).join(", ") + " and " + bars[bars.length - 1];
+    if (sd && G.day - sd.day <= 3 && NPC_ROLES[npc] === "hostess") return pick("stream_me", { h: _myHandle() });
+    if (_streamPull(G.room) && (/\b(silver|whale|big tipper|leeds)\b/.test(t) || _whaleOn()) && _npcsHere().includes(npc)) return pick("stream_whale", { w: STREAM_WHALE, m: _num(STREAM_MATCH) });
+    if (_streamBar(G.room) && _npcsHere().includes(npc)) return pick("stream", { p: _num(_ladyPrice(G.room)), c: _num(LADY_CUT) });
+    if (_room().barType || NPC_ROLES[npc] || NPCS[npc].patron) return pick("stream_not", { b });
   }
   if (_isGogo() && /\b(the )?(show|shows|schedule|stage|big show|the act|tiers?|rotation|front row|tipping|tips?)\b/.test(t) && typeof _showSchedule === "function")
     return pick("show", { s: _showSchedule(G.room) });
@@ -11179,6 +11303,8 @@ function _doBuy(arg) {
     } else if (id === "pim" && !_flag("pinPart9")) {
       _setFlag("helmetDelivered"); // she'll talk now regardless
       _deliver("pim", _pickDialogue("pim", "oy"));
+    } else if (typeof _atCamera === "function" && _atCamera(id)) {
+      _streamAfterDrink(id);   // the toast is to you; the rest of the drink is the camera's, while he is online (2026-10-22)
     } else {
       _say(_pickVary(typeof _affairLive === "function" && _affairLive() && G.affair.id === id && !G.affair.soured && !_outWithMe(id) ? _AFFAIR_TOAST : _toastFor(id), "toast")(NPCS[id].name));   // not the till's secret toast out of the bar, or after she has caught you (Callum, round 71)   // one string, ten times a night (Tomasz, round 54); her own for your girl (Rolf, round 55)
     }
@@ -13301,7 +13427,8 @@ function _doTip(arg) {
   if (amtM && amount === 0) { _say("Zero isn't a tip, it's a gesture — and not a kind one. Keep your hand in your pocket or put something in it."); return; }
   const nameW = arg.replace(/\d+|฿|baht/g, " ").trim();
   { const _tid = nameW && !/\bband\b|\bmusicians?\b|tip.?box/.test(arg) ? _findNpc(nameW) : null;   // a tip glowed after the verdict (composition audit, 2026-10-08)
-    if (_tid && typeof _maiDee === "function" && _maiDee(_tid)) { _say(_pickVary(_MAI_DEE_SOCIAL, "maideesoc")(NPCS[_tid].name)); return; } }
+    if (_tid && typeof _maiDee === "function" && _maiDee(_tid)) { _say(_pickVary(_MAI_DEE_SOCIAL, "maideesoc")(NPCS[_tid].name)); return; }
+    if (_tid && amtM && typeof _streamTip === "function" && _streamTip(_tid, amount)) return; }   // matching the big tipper (2026-10-22)
   if (/\bband\b|\bmusicians?\b|tip.?box/.test(arg)) {
     if (!_bandHere()) { _say("No band playing here tonight."); return; }
     if (G.money < amount) { _say(`The tip box wants ฿${_num(amount)}; you have ฿${_num(G.money)}.`); return; }
@@ -15191,6 +15318,7 @@ THE WHOLE CARD (bare HELP is the short one):
   I DON'T DRINK — say it once and the house stops pouring you free ones · DECLINE hands back a drink just poured
   JUST LOOKING — say it once and the dating app goes quiet; the girls on the street will still try their luck
   RING BELL (a round for everyone in the room — the fuller the bar, the bigger the bill) · TALK TO PATRON · BARFINE <lady>
+  WATCH STREAM — the camera in the group's Soi 6 bars, or its channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
   MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
@@ -15296,6 +15424,7 @@ THE WHOLE CARD (bare HELP is the short one):
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
   RING BELL (a round for everyone in the room — the fuller the bar, the bigger the bill) · TALK TO PATRON · BARFINE <lady>
+  WATCH STREAM — the camera in the group's Soi 6 bars, or its channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens
   BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
   QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)
@@ -15331,6 +15460,7 @@ const _COMPLETE_VERBS = [
   "topics",
   "break sim",
   "buy piwin a beer",
+  "stream drink",
   "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to", "ride the loop",
@@ -15845,8 +15975,9 @@ function _completePool(verb, ctx) {
       return (typeof _waenHere === "function" && _waenHere()) ? ["phrases", "reading", "verbs"] : [];
     case "watch": {
       const _dawn = G.nightTurn >= LAST_BUS_TURN + 5 && !_room().bar && !_room().barType ? ["sunrise"] : [];
-      return G.room === "blue_dog" ? ["police", "sunset", "tv", ..._dawn]
-        : G.room === "peacock_cabaret" ? ["drag", "show", "cabaret"] : ["tv", ..._dawn];
+      const _strm = typeof _streamBar === "function" && (_streamBar() || _streamRoomsKnown().length) ? ["stream"] : [];   // the group's channel (2026-10-22)
+      return G.room === "blue_dog" ? ["police", "sunset", "tv", ..._dawn, ..._strm]
+        : G.room === "peacock_cabaret" ? ["drag", "show", "cabaret"] : ["tv", ..._dawn, ..._strm];
     }
     case "hire": return _room().hostBar ? ["arm", "win"] : [];
     case "check": return _inBar() ? ["bin", "messages"] : ["messages"];
@@ -15860,6 +15991,10 @@ function _completePool(verb, ctx) {
         ? _cNpcsHere() : ["sawatdee", "khop khun", "thao rai", "mai ao", "aroi", "sanuk", "sorry"];
     case "ring": return ["bell"];
     case "charge": return ["phone"];
+    case "stream":   // STREAM DRINK <her> — the women on a stream bar's floor tonight, from your phone (2026-10-22)
+      if (ctx.length < 2) return ["drink"];
+      return Object.keys(NPCS).filter(x => NPC_ROLES[x] === "hostess" && typeof _streamBar === "function" && _streamBar(NPCS[x].room) && NPCS[x].room !== G.room &&
+        _npcWhere(x) === NPCS[x].room && _streamRoomsKnown().includes(NPCS[x].room)).map(x => NPCS[x].name.toLowerCase());
     case "sell": return _flag("affairOffered") && !_flag("barSold") ? ["up", "bottles"] : ["bottles"];
     case "wait": return ["until midnight", "until 9pm", "10"];
     default: return [];
@@ -19091,7 +19226,12 @@ function _doCommandInner(input) {
       if (G.room === "qv_room") _doWatchSoi();
       else _say("No balcony here. Yours is the one over the Queen Vic — head UP to your room and WATCH SOI from the rail.");
       break;
+    case "stream": case "livestream": case "webcam":
+      // the group's channel (the digital barstool, 2026-10-22): STREAM DRINK <her> from your phone, else watch it
+      if (/^(?:a )?drinks?\b/.test(arg || "")) { _doStreamDrink(arg); break; }
+      _doWatchStream(arg); break;
     case "watch":
+      if (/\b(stream|camera|webcam|livestream|channel|the corner)\b/.test(arg || "") && typeof _doWatchStream === "function") { _doWatchStream(arg); return; }
       if (/sunrise|daybreak|first light|sun ?up/.test(arg || "")) { _doWatchSunrise(); return; }
   if (G.room === "qv_room" && (!arg || /soi|street|balcony|show|chaos|girls|parade/.test(arg)))
         _doWatchSoi();
