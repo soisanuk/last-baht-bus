@@ -10283,7 +10283,8 @@ function _streamTick() {
   if (!girls.length) return;
   last[G.room] = G.nightTurn;
   const n = NPCS[girls[_hh("st:" + G.day + ":" + G.nightTurn, 5) % girls.length]].name;
-  _say(_pickVary(_STREAM_TOAST, "streamtoast")(n, _streamHandle(G.day + ":" + G.nightTurn)), "dim");
+  const pool = _PLG_ROOMS.includes(G.room) ? _STREAM_TOAST : _STREAM_TOAST.filter(f => !/under the camera|red light|over the till/.test(String(f)));   // a bar's own {{phone}} is the camera
+  _say(_pickVary(pool, "streamtoast")(n, _streamHandle(G.day + ":" + G.nightTurn)), "dim");
 }
 // a bare TALK to a girl at the camera: she waves from the corner — the one finger, the one song
 const _STREAM_BUSY_KNOWN = [
@@ -10365,12 +10366,12 @@ function _doWatchStream(arg) {
   if (_streamBar() && !a) {
     const g = _cameraGirls().map(x => NPCS[x].name);
     if (_whaleOn() && g.length) _say(`You watch the corner. ${g.join(" and ")} at the ring light; on the {{phone}} under it, ${STREAM_WHALE}'s name scrolls up the screen between hearts and the numbers of his tips. Every girl on the floor knows his handle. Not one of them knows his face.`);
-    else _say(`You watch the camera watch the room. On the {{phone}} under it the bar is a little delayed, a little pinker, with a column of handles down the side — ${_streamHandle(G.day)}, ${_streamHandle(G.day + 1)}, ${_streamHandle(G.day + 2)} — men in other time zones keeping a stool warm they will never sit on. A drink bought there pays her ฿${_num(LADY_CUT)}, same as one bought here. (It is the group's channel; from your own phone it is STREAM DRINK <name>.)`);
+    else _say(`You watch the camera watch the room. On the {{phone}} ${_PLG_ROOMS.includes(G.room) ? "under it" : "itself"} the bar is a little delayed, a little ${_PLG_ROOMS.includes(G.room) ? "pinker" : "brighter"}, with a column of handles down the side — ${_streamHandle(G.day)}, ${_streamHandle(G.day + 1)}, ${_streamHandle(G.day + 2)} — men in other time zones keeping a stool warm they will never sit on. A drink bought there pays her ฿${_num(LADY_CUT)}, same as one bought here. (${_PLG_ROOMS.includes(G.room) ? "It is the group's channel" : "It is the bar's own channel"}; from your own phone it is STREAM DRINK <name>.)`);
     return;
   }
   if (G.battery <= 0) { _say("Your phone is dead. The internet will have to watch itself."); return; }
   const known = _streamRoomsKnown();
-  if (!known.length) { _say("You don't know a bar on this soi with a camera in it yet. The group's rooms on Soi 6 have them; walk in and look up."); return; }
+  if (!known.length) { _say("You don't know a bar with a camera in it yet. A handful in town stream their floor — the group's rooms on Soi 6, and a few beer bars that put a phone on a stand; walk in and look up."); return; }
   let room = known.find(id => a && String(_barName(id) || "").toLowerCase().includes(a)) || known.find(id => _whaleOn(id)) || known[0];
   if (a && !known.some(id => String(_barName(id) || "").toLowerCase().includes(a))) { _say(`You know the channels of ${known.map(id => _barName(id)).join(", ")}. (WATCH STREAM <bar>)`); return; }
   G.battery = Math.max(0, G.battery - 1);
@@ -10392,7 +10393,7 @@ function _doStreamDrink(arg) {
   const who = String(arg || "").replace(/^(?:drink|a drink)\s+(?:for|to)?\s*/i, "").replace(/^(?:for|to)\s+/i, "").trim();
   if (G.battery <= 0) { _say("Your phone is dead."); return; }
   const id = who ? (typeof _npcByName === "function" ? _npcByName(who, { filter: x => NPC_ROLES[x] === "hostess" && _streamBar(NPCS[x].room), first: true }) : _findNpc(who)) : null;
-  if (!id || !NPCS[id] || NPC_ROLES[id] !== "hostess" || !_streamBar(NPCS[id].room)) { _say(`Only the group's rooms have the camera. ${_streamRoomsKnown().length ? "WATCH STREAM shows who is on the floor." : "Walk into one and look up."}`); return; }
+  if (!id || !NPCS[id] || NPC_ROLES[id] !== "hostess" || !_streamBar(NPCS[id].room)) { _say(`Only a handful of bars stream their floor. ${_streamRoomsKnown().length ? "WATCH STREAM shows who is on the floor." : "Walk into one and look up."}`); return; }
   const room = NPCS[id].room, n = NPCS[id].name;
   if (G.room === room) { _say(`${n} is right there. Buy it across the stool and she can drink it with you. (BUY ${n.toUpperCase()} A DRINK)`); return; }
   if (!(typeof _npcWhere === "function" && _npcWhere(id) === room) || (typeof _closedNow === "function" && _closedNow(room))) { _say(`${n} isn't on ${_barName(room)}'s camera tonight — the stream is the rail without her.`); return; }

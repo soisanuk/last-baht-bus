@@ -7952,6 +7952,44 @@ Object.assign(_TOWN_THAI, {
   ],
 });
 ["stream", "stream_whale", "stream_not", "stream_me"].forEach(k => _TOWN_WIDE.add(k));
+// the bar's own channel: a {{phone}} on a stand, in a beer bar that is nobody's group (2026-10-22)
+Object.assign(_TOWN, {
+  stream_indie: {
+    floor: [
+      "\"Camera? Mama put, in the COVID time. Nobody come, so we go to them.\" {n} laughs. \"Now customer come back, the {{phone}} still on.\"",
+      "{n} waves at the {{phone}}. \"Man far away buy drink, I say his name, I get {c} same like you buy here. Mama get the rest.\"",
+      "\"Is our {{phone}},\" {n} says, proud of it. \"Not big company. Small bar, small camera, many friend in England.\"",
+      "\"Some old man watch every night,\" {n} says. \"He never come. He send drink, I say name. Like a regular inside the TV.\"",
+      "{n} shrugs at the stand. \"Drink on {{phone}} {p}, same price. But {{phone}} man never ask upstairs, never get drunk, never cry.\"",
+      "\"You want be on the internet?\" {n} turns you toward it. \"Wave! Now your mother see you in Pattaya.\" She laughs harder than you do.",
+      "\"Lockdown time, bar close, girl no money,\" {n} says. \"Mama put {{phone}}, we sing, man in Australia send drink. Now we keep.\"",
+      "\"Internet customer very polite,\" {n} says. \"He say thank you, he say good night. Real customer, sometimes no.\"",
+    ],
+    house: [
+      "\"We put the {{phone}} up in the lockdown,\" {n} says. \"No customers in the bar, plenty on the internet. When the bar opened again we just never took it down.\"",
+      "{n} glances at the stand. \"A drink on the stream is {p}; the girl gets {c}, same as on a stool. It is a small channel. It pays for the ice.\"",
+      "\"No company,\" {n} says, as if you'd asked. \"Our {{phone}}, our name on it. The group's bars on Soi 6 have proper cameras. We have tape.\"",
+      "\"Some of them have watched for three years,\" {n} says. \"They know every girl's birthday. Not one of them has been.\"",
+      "{n} turns the {{phone}} a little so the stools are in frame. \"It's a bar for men who can't come. They pay the same and they drink nothing.\"",
+      "\"It keeps the girls busy on a quiet night,\" {n} says. \"And a quiet night is most nights.\"",
+    ],
+    punter: [
+      "\"The {{phone}}?\" {n} snorts. \"Lads at home buying her a drink and watching her drink it. And here's me paying for mine in person.\"",
+      "{n} raises his bottle at the stand. \"Say hello to the folks at home. Somebody's always watching.\"",
+      "\"Started in the lockdown,\" {n} says. \"Half the channel's never been. Never will be.\"",
+      "\"I watched it from home the year I couldn't come,\" {n} admits. \"Bought a few. She said my name wrong every time. I didn't mind.\"",
+      "{n} shrugs at the {{phone}}. \"Same girls, no stool. Some blokes like it better that way.\"",
+      "\"Mind yourself,\" {n} says, nodding at the {{phone}}. \"Your wife's sister's husband might be watching.\"",
+    ],
+  },
+});
+_TOWN_THAI.stream_indie = [
+  "\"We put {{phone}} in the lockdown,\" {n} says. \"No customer in bar, many on internet. Bar open again, we never take down.\"",
+  "{n} looks at the stand. \"Drink on stream {p}; girl get {c}, same like stool. Small channel. Pay the ice.\"",
+  "\"No company,\" {n} says. \"Our {{phone}}, our name. Company bar on Soi 6 have big camera. We have tape.\"",
+  "\"Some watch three year,\" {n} says. \"Know every girl birthday. Never come.\"",
+];
+_TOWN_WIDE.add("stream_indie");
 // ── the night ride's stops, by name ─────────────────────────────────────────
 const _RIDE_STOP_WORDS = [
   ["disco", /thai disco|\bdisco\b/i], ["somtam", /som ?tam|papaya salad|the cart/i], ["wsclub", /\bclub\b|superclub|walking street/i],
@@ -8974,10 +9012,10 @@ function _townTalk(npc, topic) {
   // THE CAMERA (the digital barstool, 2026-10-22): the group's channel, the big tipper, the bars without one, and the drink she can't place
   if (typeof _streamBar === "function" && /\b(camera|cameras|streams?|streaming|live ?stream|livestream|webcam|ring light|the lens|tripod|silver ?fox|silverfox|mister silver|the whale|big tipper|channel|youtube|internet customers?|the internet)\b/.test(t)) {
     const sd = (G.streamDrinks || {})[npc], room = NPCS[npc].room;
-    const bars = Object.keys(ROOMS).filter(id => _streamBar(id)).map(id => _barName(id)), b = bars.slice(0, -1).join(", ") + " and " + bars[bars.length - 1];
+    const bars = Object.keys(ROOMS).filter(id => _streamBar(id) && _PLG_ROOMS.includes(id)).map(id => _barName(id)), b = bars.slice(0, -1).join(", ") + " and " + bars[bars.length - 1];   // the outsiders' line is about the group's cameras
     if (sd && G.day - sd.day <= 3 && NPC_ROLES[npc] === "hostess") return pick("stream_me", { h: _myHandle() });
     if (_streamPull(G.room) && (/\b(silver|whale|big tipper|leeds)\b/.test(t) || _whaleOn()) && _npcsHere().includes(npc)) return pick("stream_whale", { w: STREAM_WHALE, m: _num(STREAM_MATCH) });
-    if (_streamBar(G.room) && _npcsHere().includes(npc)) return pick("stream", { p: _num(_ladyPrice(G.room)), c: _num(LADY_CUT) });
+    if (_streamBar(G.room) && _npcsHere().includes(npc)) return pick(_PLG_ROOMS.includes(G.room) ? "stream" : "stream_indie", { p: _num(_ladyPrice(G.room)), c: _num(LADY_CUT) });   // the group's camera, or the bar's own phone
     if (_room().barType || NPC_ROLES[npc] || NPCS[npc].patron) return pick("stream_not", { b });
   }
   if (_isGogo() && /\b(the )?(show|shows|schedule|stage|big show|the act|tiers?|rotation|front row|tipping|tips?)\b/.test(t) && typeof _showSchedule === "function")
@@ -15318,7 +15356,7 @@ THE WHOLE CARD (bare HELP is the short one):
   I DON'T DRINK — say it once and the house stops pouring you free ones · DECLINE hands back a drink just poured
   JUST LOOKING — say it once and the dating app goes quiet; the girls on the street will still try their luck
   RING BELL (a round for everyone in the room — the fuller the bar, the bigger the bill) · TALK TO PATRON · BARFINE <lady>
-  WATCH STREAM — the camera in the group's Soi 6 bars, or its channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens
+  WATCH STREAM — the camera in a handful of bars (the group's Soi 6 rooms and a few beer bars), or a channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
   MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
@@ -15424,7 +15462,7 @@ THE WHOLE CARD (bare HELP is the short one):
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
   RING BELL (a round for everyone in the room — the fuller the bar, the bigger the bill) · TALK TO PATRON · BARFINE <lady>
-  WATCH STREAM — the camera in the group's Soi 6 bars, or its channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens
+  WATCH STREAM — the camera in a handful of bars (the group's Soi 6 rooms and a few beer bars), or a channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens
   BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
   QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)

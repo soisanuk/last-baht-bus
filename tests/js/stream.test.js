@@ -33,11 +33,19 @@ const onCamera = () => {
   throw new Error("no night with the tipper online");
 };
 
-test("the cameras are the group's: four PLG rooms on Soi 6, never the room behind the rope, one with the pull", () => {
-  const streams = Object.keys(ROOMS).filter(id => ROOMS[id].stream);
+const INDIE = ["dollhouse", "gold_rush", "honey_trap", "lucky_tiger", "the_bucket"];
+test("the cameras: four of the group's rooms on Soi 6 (never the room behind the rope), five independent beer bars across the map, one pull", () => {
+  const all = Object.keys(ROOMS).filter(id => ROOMS[id].stream);
+  const streams = all.filter(id => _PLG_ROOMS.includes(id));
   assert.deepEqual(streams.sort(), ["golden_dragon", "jade_lounge", "peach_lounge", "pink_lotus"]);
+  assert.deepEqual(all.filter(id => !_PLG_ROOMS.includes(id)).sort(), INDIE);
+  assert.equal(new Set(INDIE.map(id => ROOMS[id].region)).size, INDIE.length, "one a district");
+  for (const id of INDIE) {
+    assert.equal(ROOMS[id].barType, "beer", id + " is a beer bar — no camera in a go-go, a gents' club or a lock-in");
+    assert.match(ROOMS[id].desc, /\{\{phone\}\}/, id + " says so, and the bar's phone never taps as yours");
+    G.room = id; assert.match(t("examine camera"), /WATCH STREAM/);
+  }
   for (const id of streams) {
-    assert.ok(_PLG_ROOMS.includes(id), id + " is on the group's paper");
     assert.match(_licenceOf(id).name, /Pattaya Leisure/);
     assert.match(ROOMS[id].desc, /camera/, id + " says so in its own room");
     G.room = id; assert.match(t("examine camera"), /WATCH STREAM/, id + " has a close look at it");
@@ -102,6 +110,11 @@ test("the town answers the camera: what it is at a streaming bar, the tipper at 
   G.room = "sunset_rail"; G.nightTurn = 30; quiet();
   const p = t("ask pukky about the camera");
   assert.match(p, /Pink Lotus Lounge, Golden Dragon Bar, Jade Lounge and Peach Lounge/);
+  // …and an independent with its own phone says so: no "company put" from a bar that is nobody's group
+  G.room = "lucky_tiger"; G.nightTurn = 30; quiet();
+  const ind = t("ask ging about the camera");
+  assert.doesNotMatch(ind, /Company put|The group put|head office/i, ind);
+  assert.ok([..._TOWN.stream_indie.floor, ..._TOWN.stream_indie.house, ..._TOWN_THAI.stream_indie].some(l => ind.includes(_fmt(l, { n: "Ging", p: _num(_ladyPrice("lucky_tiger")), c: _num(LADY_CUT) }).slice(0, 25))), ind);
   assert.ok(joy);
 });
 

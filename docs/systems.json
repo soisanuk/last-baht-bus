@@ -1219,7 +1219,7 @@
   },
   {
    "id": "soi6-stream",
-   "name": "The digital barstool: the group's cameras in four PLG bars on Soi 6, the big tipper at the Jade Lounge, WATCH STREAM and STREAM DRINK",
+   "name": "The digital barstool: the group's cameras in four PLG bars on Soi 6 and a phone on a stand in five independent beer bars, the big tipper at the Jade Lounge, WATCH STREAM and STREAM DRINK",
    "verbs": [
     "stream",
     "watch"
@@ -1228,7 +1228,12 @@
     "pink_lotus",
     "golden_dragon",
     "jade_lounge",
-    "peach_lounge"
+    "peach_lounge",
+    "lucky_tiger",
+    "the_bucket",
+    "honey_trap",
+    "gold_rush",
+    "dollhouse"
    ],
    "npcs": [],
    "effects": [],

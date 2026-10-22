@@ -1975,14 +1975,15 @@ const ROOMS = {
   },
   the_bucket: {
     name: "The Bucket",
-    bar: "The Bucket", barType: "beer",
+    bar: "The Bucket", barType: "beer", stream: true,   // the bar's own channel (the digital barstool, 2026-10-22)
     region: "Beach Road",
     desc: "Directly opposite the Neon Palm and locked in a sound war with it that " +
       "neither has ever won. Named for what it sells: a sand bucket of ice, a bottle of " +
       "something, and enough straws for a table. The clientele skews a decade younger " +
       "than anywhere else on this beach, and the staff have the specific patience of " +
-      "people who work where the customers are having a better night than they are.",
+      "people who work where the customers are having a better night than they are. A {{phone}} in a clamp on the end of the bar is the Bucket's camera and streams the place live, and the young crowd plays to it harder than the girls do.",
     reads: {
+      camera: "A {{phone}} in a clamp on the end of the bar with a little ring light round it, and the Bucket's channel running all night: the sand buckets, the straws, the girls, and lads on three continents typing down the side. A drink bought through the link pays the girl the same as one bought across the bar. (WATCH STREAM)",
       bucket: "The house product, mid-assembly along the bar: a child's sand bucket, a " +
         "bottle upended into ice, a fistful of straws like a losing hand of pick-up-sticks. " +
         "Engineering-wise it is a delivery system for regret. Commercially it is genius — " +
@@ -1993,6 +1994,7 @@ const ROOMS = {
       "The sound war continues. Neither side has ever won and neither will.",
       "Young crowd, loud room, and the staff moving through it unhurried.",
       "Back into the Bucket, where the measure of an evening is literal.",
+      "Back into the Bucket, where a lad at the end of the bar is waving at the {{phone}} in its clamp, and a girl is waving at the lad, and the internet is getting both.",
     ],
     exits: { out: "pattaya_soi_8" },
   },
@@ -3358,16 +3360,20 @@ const ROOMS = {
     region: "Soi Buakhao",
     // pool: the desc has always advertised "a pool table with a lean you could
     // ski off" — the examine-audit caught the mechanic not honouring the prose.
-    bar: "Lucky Tiger Bar", barType: "beer", liveMusic: true, pool: true,
+    bar: "Lucky Tiger Bar", barType: "beer", stream: true, liveMusic: true, pool: true,   // the bar's own channel (the digital barstool, 2026-10-22)
     desc: "Tiger stripes on the bar top, a golden waving cat with dead batteries, and a " +
       "pool table with a lean you could ski off. Loud, friendly, dangerous to wallets " +
-      "in the normal, voluntary way.",
+      "in the normal, voluntary way. Above the pool table a {{phone}} on a selfie stick is taped to the light fitting as the bar's camera, streaming the table and the bar to whoever is watching; the mamasan started it in the lockdown and never stopped.",
     revisit: [
       "Back into Lucky Tiger — tiger stripes down the bar top, the golden cat stopped mid-wave on dead batteries, the pool table with its ski-slope lean.",
       "The bar takes you back loud and friendly, and dangerous to your wallet in the normal, entirely voluntary way.",
       "Somebody's racking up on the leaning table again. The waving cat keeps not waving; nobody's replaced the batteries in years.",
       "Lucky Tiger again — stripes, that tilted table, and the cheerful certainty you'll leave lighter than you came.",
+      "Back into the Lucky Tiger, and the {{phone}} taped over the pool table is pointing at you for a second, until the next ping and a girl's wave turn it back to the room.",
     ],
+    reads: {
+      camera: "A {{phone}} on a selfie stick, taped to the light over the pool table with more tape than the light itself has. It streams the table, the bar and the girls to a channel in the mamasan's name, and when it pings a girl lifts her glass to it and says a name. Nobody here owns a camera; the bar owns a {{phone}} and a roll of tape. (WATCH STREAM)",
+    },
     exits: { out: "buakhao_n" },
   },
   rock_factory: {
@@ -3549,15 +3555,19 @@ const ROOMS = {
   gold_rush: {
     name: "Gold Rush Lounge",
     region: "Tree Town",
-    bar: "Gold Rush Lounge", barType: "beer",
+    bar: "Gold Rush Lounge", barType: "beer", stream: true,   // the bar's own channel (the digital barstool, 2026-10-22)
     desc: "Gold tinsel, gold bar stools, gold-painted everything, none of it gold. A " +
-      "nervous sweetness to the place, like it's trying hard on its first week too.",
+      "nervous sweetness to the place, like it's trying hard on its first week too. A cheap {{phone}} on a stand by the till is the camera, streaming the gold to the internet at an angle that makes the tinsel look nearly real.",
     revisit: [
       "Back into the Gold Rush — gold tinsel, gold stools, gold-painted everything, none of it actually gold.",
       "The lounge takes you back with its nervous sweetness, still trying a little too hard, still on its first week in spirit.",
       "You settle back onto a gold-painted stool. The place beams at you like it needs the reassurance.",
       "Gold Rush again: all that glitter and not an ounce of the real thing, and somehow you don't mind.",
+      "Back into the Gold Rush, the tinsel catching the little light on the {{phone}} by the till, which is streaming the room to somebody, somewhere, who has never been in it.",
     ],
+    reads: {
+      camera: "A cheap {{phone}} on a stand by the till, filming the gold tinsel at an angle that makes it look almost like money. The channel has a few regulars abroad who know the girls' names better than the men on the stools do; when it pings, a girl turns and waves at it. (WATCH STREAM)",
+    },
     exits: { out: "tt_lane_1" },
   },
   starlight_bar: {
@@ -3682,7 +3692,7 @@ const ROOMS = {
   pink_lotus: {
     name: "Pink Lotus Lounge",
     region: "Soi 6",
-    bar: "Pink Lotus Lounge", barType: "soi6", stream: true,   // the group's cameras (the digital barstool, 2026-10-22) owner: "plg",
+    bar: "Pink Lotus Lounge", barType: "soi6", stream: true, owner: "plg",   // the group's cameras (the digital barstool, 2026-10-22)
     desc: "Pattaya Leisure's flagship, and the loudest argument for why the group should not be " +
       "allowed nice things. The front is open to the street; half the bar is technically the " +
       "pavement. Neon tubes frame the sign in three colours simultaneously. Inside, the pink " +
@@ -3897,7 +3907,7 @@ const ROOMS = {
   jade_lounge: {
     name: "Jade Lounge",
     region: "Soi 6",
-    bar: "Jade Lounge", barType: "soi6", stream: "pull",   // the group's cameras (the digital barstool, 2026-10-22) owner: "plg", boughtWhen: "two years ago",
+    bar: "Jade Lounge", barType: "soi6", stream: "pull", owner: "plg", boughtWhen: "two years ago",   // the group's cameras (the digital barstool, 2026-10-22)
     formerOwner: "a Thai woman everybody called Mama, who ran eleven stools and a cat and went home up-country with the money",
     desc: "Green glass, brass and a sound system three sizes too big for the room: the group's paint " +
       "on a front that was somebody else's two years ago. The stools are new, the staircase at the " +
@@ -3922,7 +3932,7 @@ const ROOMS = {
   peach_lounge: {
     name: "Peach Lounge",
     region: "Soi 6",
-    bar: "Peach Lounge", barType: "soi6", stream: true,   // the group's cameras (the digital barstool, 2026-10-22) owner: "plg", boughtWhen: "not long ago",
+    bar: "Peach Lounge", barType: "soi6", stream: true, owner: "plg", boughtWhen: "not long ago",   // the group's cameras (the digital barstool, 2026-10-22)
     formerOwner: "an Australian who painted the old sign himself and went home for his heart",
     desc: "Peach-coloured everything, and the paint still smells faintly of paint. The group bought " +
       "it not long ago and kept the name, the girls and the staircase; they changed the paper by the " +
@@ -5155,11 +5165,14 @@ const ROOMS = {
   },
   honey_trap: {
     name: "Honey Trap Bar",
-    bar: "Honey Trap Bar", barType: "beer",
+    bar: "Honey Trap Bar", barType: "beer", stream: true,   // the bar's own channel (the digital barstool, 2026-10-22)
     region: "Soi Honey",
     desc: "The loud one: a horseshoe bar under a ceiling solid with fairy lights, a Connect 4 " +
       "frame chained to the rail, and a hand-painted sign promising HAPPY HOUR ALL NIGHT (it is " +
-      "not). The girls clock you from thirty feet and have your stool wiped before you reach it.",
+      "not). The girls clock you from thirty feet and have your stool wiped before you reach it. Under the fairy lights a {{phone}} on a stand does for a camera and streams the horseshoe to the internet; it brings in more than the HAPPY HOUR sign, which is not hard.",
+    reads: {
+      camera: "A {{phone}} on a stand by the till, propped on a stack of chits, streaming the horseshoe to a channel with the bar's name on it. When it pings, the woman on the till reads the name out across the bar like a raffle number, and whoever is nearest raises a glass to it. (WATCH STREAM)",
+    },
     exits: { out: "soi_honey_w" },
   },
   queen_bee: {
@@ -5287,12 +5300,13 @@ const ROOMS = {
   },
   dollhouse: {
     name: "The Dollhouse",
-    bar: "The Dollhouse", barType: "beer",
+    bar: "The Dollhouse", barType: "beer", stream: true,   // the bar's own channel (the digital barstool, 2026-10-22)
     region: "Soi Diana",
     desc: "A big open-fronted beer bar, all fairy lights and cane stools, its counter wrapped in a " +
       "horseshoe so the girls can reach every seat. No stage, no pole — just cold Chang, a Connect 4 " +
-      "frame, and a dozen hostesses who treat every farang who slows down as a long-lost friend.",
+      "frame, and a dozen hostesses who treat every farang who slows down as a long-lost friend. At the end of the horseshoe a {{phone}} on a stand, the bar's camera, streams the room to the internet, so the long-lost friends include a few who have never been found.",
     reads: {
+      camera: "A {{phone}} on a stand at the end of the horseshoe, its little light on all night, streaming the cane stools and the fairy lights to a channel somebody's nephew set up. A drink bought through it pays the girl the same as one bought across the counter. (WATCH STREAM)",
       horseshoe: "The counter's horseshoe wrap is the whole business plan in carpentry: no " +
         "seat more than an arm's reach from a girl, no girl more than an arm's reach from " +
         "the ice. Somebody thought hard about this once, and every night since has proved " +

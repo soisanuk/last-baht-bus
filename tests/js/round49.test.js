@@ -24,11 +24,22 @@ beforeEach(() => {
 const ask = (room, who, topic) => { G.room = room; out = []; doCommand(`ask ${who} about ${topic}`); return text(); };
 const miss = /not my story|wrong (girl|man|mama)|I don't know about that|That one I don't know|No idea, mate|No idea\. Try somebody|Not a thing I know|cannot help you with|wrong woman|doesn't land on anyone|Can't help you there/i;
 
+// …and any property shape after the `//` — a string, an array, an object, mid-line, in a comment with an apostrophe in it:
+// "the group's cameras" ate owner: "plg" and boughtWhen on three Soi 6 rooms, and "the bar's own channel" ate the Lucky
+// Tiger's liveMusic and pool, and the narrow form above saw none of it (the digital barstool, 2026-10-22)
+function _eatsProp(l) {
+  const k = l.indexOf("//"); if (k < 0) return false;
+  const before = l.slice(0, k);
+  if (!/\S/.test(before) || (before.match(/"/g) || []).length % 2 || (before.match(/`/g) || []).length % 2) return false;   // the // is inside a string
+  return /(?:^|[,;]\s*|\)\s+|\s)[a-zA-Z_]\w*: +(?:true|false|-?\d+(?:\.\d+)?|"[^"]*"|\[[^\]]*\]|\{[^}]*\})\s*,/.test(l.slice(k));
+}
 test("a property is not a comment: nothing is swallowed by a trailing line comment", () => {
   // `water: true` and a dialogue node's `deflect: true` had each been absorbed into
   // the `//` comment on their own line — silent, invisible to every test, and the
   // mall's food court could not sell a bottle of water for its whole life.
   assert.equal(ROOMS.mikes_mall.water, true, "the mall's food court sells water");
+  assert.equal(ROOMS.lucky_tiger.pool, true, "the Lucky Tiger's table"); assert.equal(ROOMS.lucky_tiger.liveMusic, true);
+  assert.equal(ROOMS.jade_lounge.owner, "plg"); assert.equal(ROOMS.peach_lounge.boughtWhen, "not long ago");
   const gated = NPCS.fast_eddy.dialogue.filter(d => /rabbit job/.test(d.topic || ""));
   assert.ok(gated.some(d => d.deflect), "the heist deflect is a deflect");
   const src = readFileSync(fileURLToPath(new URL("../../web/js/world.js", import.meta.url)), "utf8");
@@ -36,7 +47,7 @@ test("a property is not a comment: nothing is swallowed by a trailing line comme
     .map((l, i) => [i + 1, l])
     // a SWALLOWED property always has code before the `//` — a whole-line comment
     // that happens to mention `offmap:true` in prose is not a finding
-    .filter(([, l]) => !/^\s*\/\//.test(l) && /\/\/[^"']*\b[a-zA-Z_]+: +(true|false|[0-9]+) *,? *$/.test(l));
+    .filter(([, l]) => !/^\s*\/\//.test(l) && (/\/\/[^"']*\b[a-zA-Z_]+: +(true|false|[0-9]+) *,? *$/.test(l) || _eatsProp(l)));
   assert.deepEqual(swallowed.map(([n]) => n), [], "a trailing // comment has eaten a property");
 });
 
