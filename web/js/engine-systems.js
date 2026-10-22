@@ -10262,6 +10262,7 @@ function _atCamera(id, remote) {   // remote: seen on the phone, from anywhere �
   const s = G.soc;
   if (_streamHeld((s.streamWon || {})[id], 10) || _streamHeld((s.streamBell || {})[room], 10)) return false;
   if (_streamHeld((s.streamAway || {})[id], 6)) return true;
+  if (_streamHeld((s.whaleBellAt || {})[room], 6) && !_streamHeld((s.streamWon || {})[id], 10)) return true;   // his bell: the whole floor thanks him
   return _hm("cam:" + id + ":" + _streamHour(), 23) % 100 < 55;
 }
 function _cameraGirls(room) { return (typeof _npcsHere === "function" ? _npcsHere() : []).filter(x => NPCS[x].room === (room || G.room) && _atCamera(x)); }
@@ -10311,6 +10312,7 @@ function _streamTick() {
   if (typeof _onRide === "function" && _onRide()) return;
   const last = (G.soc.streamLast = G.soc.streamLast || {});
   if (G.nightTurn - (last[G.room] != null ? last[G.room] : -99) < 8) return;
+  if (_whaleOn() && typeof _whaleBellTick === "function" && _whaleBellTick()) { last[G.room] = G.nightTurn; return; }   // he rings it himself, now and then
   const roll = _hh("stv:" + G.room + ":" + G.day + ":" + G.nightTurn + ":" + G.vacation, 31) % 100;
   if (roll >= (_whaleOn() ? 22 : 12)) return;
   const busy = new Set([...((G.party && G.party.ids) || []), typeof _convoActive === "function" ? _convoActive() : null]);
@@ -10424,7 +10426,7 @@ function _doWatchStream(arg) {
   const bell = _streamHeld(((G.soc && G.soc.streamBell) || {})[room], 10) && _whaleOn(room);
   _say(`You open ${_barName(room)} on your phone: the room ${ROOMS[room].streamFrom || "from the camera's corner"}, a second behind the room itself, ${floor.length ? floor.map(x => NPCS[x].name).join(", ") + " on the floor" : atCam.length ? "nobody on the stools" : "nobody on the stools"}, and down the side a column of handles — ${_streamCol(room).join(", ")}.` +
     (bell ? ` ${_whaleOf(room).h} is online and typing question marks: somebody rang the bell, and the corner is empty.` : _whaleOn(room) ? ` ${_whaleOf(room).h} is online; ${atCam.length ? atCam.map(x => NPCS[x].name).join(" and ") + " at the camera, singing to him" : "the corner waits for a girl"}.` : "") +
-    (girls.length ? ` (STREAM DRINK <name> — ฿${_num(_ladyPrice(room))} from the account; she says your handle, ${_myHandle()}, to the lens.)` : ""));
+    (girls.length ? ` (STREAM DRINK <name> — ฿${_num(_ladyPrice(room))} from the account; she says your handle, ${_myHandle()}, to the lens. STREAM BELL ${String(_barName(room)).toUpperCase()} — ฿${_num(_bellPrice(room))}, a round for the room on your handle.)` : ""));
 }
 // STREAM DRINK <her> — a drink bought through the link, from wherever you are. It pays her the stool's cut and buys you
 // your handle said to a camera; it builds nothing — she does not know which handle you are. The appearance of attention.
@@ -10450,6 +10452,62 @@ function _doStreamDrink(arg) {
   G.battery = Math.max(0, G.battery - 1);
   _say(_pickVary(_STREAM_DRINK_LINES, "streamdrink")(n, _myHandle(), _camDev(room)) + ` (-฿${_num(p)} from the account.)`);
   if ((G.soc.streamJoy || 0) < 1) { G.soc.streamJoy = 1; _addHappy(1, "your handle, said to a camera"); }
+}
+
+// THE BELL ON THE STREAM (Mario, 2026-10-22: "Streamers can ring the bell"). A man on the link can ring a streamed bar's
+// bell from anywhere: the room drinks on him — the price is the room's own bell (_bellPrice, per head) — and every girl
+// on the floor turns to the camera and says his handle. From your own phone it is STREAM BELL <bar>: from the account,
+// no bond, no favour (you are not in the room), the appearance of a round. The big tipper does it too, about once a
+// night while he is online, and his bell does the opposite of yours: it sends the floor TO the camera for a while.
+const _STREAM_BELL_LINES = [
+  (b, h, d) => `On your phone, a second late: the bell over the bar at ${b} goes, the whole room turns to the camera, and the women say "${h}!" all at once with their glasses up. Then the room turns back to itself.`,
+  (b, h, d) => `You watch ${b} drink on you. The bell, the cheer, the mamasan pointing at the ${d}; somebody at the rail who did not pay raises his beer to the lens. "${h}, thank you na!" from the whole floor, nobody quite looking into it.`,
+  (b, h, d) => `The ${d} at ${b} pings, the bell rings, and for ten seconds you are the most popular man in a room you are not in. "${h}!" A girl blows the lens a kiss. The round goes down the rail on a stranger.`,
+  (b, h, d) => `${b} on your phone: the bell, a roar a second behind it, glasses up to a camera in the corner and your handle shouted in five accents of English. "${h}! Come Pattaya!" Somebody laughs. The rail goes back to its own men.`,
+];
+const _STREAM_WHALE_BELL = [
+  (w, d) => `The bell over the bar rings, and nobody in the room rang it: the ${d} in the corner has. ${w.h}, from ${w.home}, has bought the room a round. Every girl on the floor goes to the camera to thank him, and the stools are on their own.`,
+  (w, d) => `The bell goes on its own — no hand on the rope, a ping on the ${d}. "${w.nick}!" The whole floor turns to the lens with their glasses up, and a round arrives at your elbow paid for by a man in ${w.when}.`,
+  (w, d) => `A ring from nobody: the mamasan reads the ${d} and laughs. "${w.h} ring the bell!" The girls crowd the camera to say so to it. You have a free drink and an empty stool beside you, both courtesy of the internet.`,
+];
+function _doStreamBell(arg) {
+  const a = String(arg || "").toLowerCase().replace(/^(?:the )?bell\s*/, "").replace(/^(?:at|on|in|for)\s+/, "").replace(/\b(?:on (?:the )?(?:stream|phone|camera)|the stream|stream)\b/g, " ").trim();
+  if (G.battery <= 0) { _say("Your phone is dead. A bell on the internet still needs the internet."); return; }
+  const known = _streamRoomsKnown();
+  if (!known.length) { _say("You don't know a bar with a camera in it yet. A handful in town stream their floor — walk in and look up."); return; }
+  const named = a ? known.find(id => String(_barName(id) || "").toLowerCase().includes(a) || _pnm(String(_barName(id) || "")).includes(_pnm(a))) : null;
+  if (a && !named) { _say(`You know the channels of ${known.map(id => _barName(id)).join(", ")}. (STREAM BELL <bar>)`); return; }
+  const _last = [G.prevRoom, ...Object.keys(G.visitDay || {}).sort((x, y) => (G.visitDay[y] || 0) - (G.visitDay[x] || 0))].find(id => id && known.includes(id) && id !== G.room);
+  const room = named || _last || known.find(id => id !== G.room);
+  if (!room) { _say("The only camera you know is the one over your head. (RING BELL)"); return; }
+  if (room === G.room) { _say(`You're standing in ${_barName(room)}. Ring it with your hand — the room drinks on you either way, and this way they can see who. (RING BELL)`); return; }
+  if (typeof _closedNow === "function" && _closedNow(room)) { _say(`${_barName(room)}'s stream is a pulled shutter and a still of an empty rail. Nobody there to drink on you.`); return; }
+  const p = _bellPrice(room);
+  if ((G.bank || 0) < p) { _say(`The bell on the link at ${_barName(room)} is ฿${_num(p)} — a round for the room as it stands tonight — and the account has ฿${_num(G.bank || 0)}.`); return; }
+  G.bank -= p; G.streamSpent = (G.streamSpent || 0) + p; G.battery = Math.max(0, G.battery - 1);
+  (G.streamBells = G.streamBells || {})[room] = { day: G.day, n: (((G.streamBells || {})[room] || {}).n || 0) + 1 };
+  _say(_pickVary(_STREAM_BELL_LINES, "streambellme")(_barName(room), _myHandle(), _camDev(room)) + ` (-฿${_num(p)} from the account.)`, "win");
+  if ((G.soc.streamJoy || 0) < 1) { G.soc.streamJoy = 1; _addHappy(1, "a round on your handle"); }
+  else _say("(no สนุก — a second round on the internet is a round, not a night)", "dim");
+}
+// the big tipper rings it himself, about once a night while he is online — never in a room on its bell's glow
+function _whaleBellTick() {
+  const r = G.room;
+  if (!_whaleOn(r) || (G.soc.whaleBell = G.soc.whaleBell || {})[r] === G.day) return false;
+  if (_streamHeld(((G.soc.streamBell) || {})[r], 10) || _hm("whaleBell:" + r + ":" + G.day + ":" + G.nightTurn, 41) % 100 >= 6) return false;
+  G.soc.whaleBell[r] = G.day; (G.soc.whaleBellAt = G.soc.whaleBellAt || {})[r] = _streamNow();
+  _say(_pickVary(_STREAM_WHALE_BELL, "whalebell")(_whaleOf(r), _camDev(r)), "dim");
+  if (typeof _compDrink === "function") _compDrink(1);   // a round for the room: your glass too
+  if (typeof _streetSaw === "function") _streetSaw("whalebell");
+  return true;
+}
+// a streamed bar's name on the wheel: its channel and its bell, from your phone
+function _streamBarActs(name) {
+  if (typeof _roomByName !== "function") return [];
+  const id = _roomByName(name);
+  if (!id || !_streamBar(id) || id === G.room || !_streamRoomsKnown().includes(id)) return [];
+  const lo = String(_barName(id) || name).toLowerCase();
+  return [{ t: "watch its stream", c: "watch stream " + lo, go: true }, { t: "ring its bell on the stream", c: "stream bell " + lo, go: true }];
 }
 
 function _oppTick() {

@@ -169,7 +169,7 @@ test("the morning ledger names drinks bought through the stream", () => {
   G.room = "soi6_mid"; G.nightTurn = 40; G.visited.pink_lotus = true; quiet(); _nightSnapshot();
   t("stream drink joy"); out = [];
   _endNight("sleep");
-  assert.match(said(), /on drinks through the stream/);
+  assert.match(said(), /through the stream — drinks and bells/);
 });
 
 test("three surfaces: the parser, the wheel away from her bar, and the completion; and HELP names it", () => {
@@ -187,4 +187,39 @@ test("the real path: the tick puts the camera to work in a streaming room, and t
   assert.ok(_STREAM_TOAST.some(f => said().includes(f("@@", "@@").split("@@")[1] || "~")) || /camera|lens/.test(said()), "a girl raises a glass to the lens");
   onCamera(); out = []; _describeRoom(true);
   assert.match(said(), /SilverFox_Leeds/);
+});
+
+// STREAMERS CAN RING THE BELL (Mario, 2026-10-22)
+test("STREAM BELL <bar> from your phone: the room's own bell price from the account, the room drinks on your handle, the ledger says so", () => {
+  G.nightTurn = 30; G.visited.lucky_tiger = true; G.room = "soi6_mid";
+  const p = _bellPrice("lucky_tiger"), b0 = G.bank, m0 = G.money;
+  const a = t("stream bell lucky tiger");
+  assert.match(a, new RegExp(_myHandle())); assert.match(a, /Lucky Tiger/);
+  assert.equal(G.bank, b0 - p); assert.equal(G.money, m0, "never the pocket"); assert.equal(G.streamSpent, p);
+  assert.match(t("ring the bell at lucky tiger"), /Lucky Tiger/, "RING THE BELL AT <bar> is the same thing");
+  assert.match(t("ring the bell on the stream"), /Lucky Tiger/);
+  G.room = "lucky_tiger"; assert.match(t("stream bell lucky tiger"), /You're standing in/, "in the room, ring it with your hand");
+  assert.deepEqual(_streamBarActs("Lucky Tiger Bar"), [], "no wheel bell for the room you are in");
+  G.room = "soi6_mid"; assert.equal(_streamBarActs("Lucky Tiger Bar").length, 2);
+  assert.ok(engineComplete("stream ").includes("bell"));
+});
+
+test("the floor that drank your stream bell remembers it, by when", () => {
+  G.nightTurn = 30; G.visited.lucky_tiger = true; G.room = "soi6_mid"; t("stream bell lucky tiger");
+  G.room = "lucky_tiger"; const g = _npcsHere().find(x => NPC_ROLES[x] === "hostess"), n = NPCS[g].name.toLowerCase();
+  t("talk to " + n); const a = t("ask " + n + " about the bell");
+  assert.ok(_TOWN.stream_bellme[_hoursRegister(g)].some(l => a.includes(_fmt(l, { n: NPCS[g].name, h: _myHandle(), when: "tonight", hp: _pr(g).p }).slice(0, 25))) ||
+    _TOWN_THAI.stream_bellme.some(l => a.includes(_fmt(l, { n: NPCS[g].name, h: _myHandle(), when: "tonight" }).slice(0, 25))), a);
+});
+
+test("the big tipper rings it himself, once a night: the room drinks on him — your glass too — and the floor goes to the camera", () => {
+  G.room = JADE; let fired = false;
+  for (let d = 2; d < 120 && !fired; d++) { G.day = d; G.soc.whaleBell = {}; for (let h = 20; h < 70 && !fired; h++) { G.nightTurn = h; if (_whaleOn() && _hm("whaleBell:" + JADE + ":" + d + ":" + h, 41) % 100 < 6) {
+    G.soc.streamLast = {}; G.soc.drunk = 0; out = []; _streamTick(); fired = true; } } }
+  assert.ok(fired, "a night he rang it");
+  assert.match(said(), /bell/i); assert.equal(G.soc.whaleBell[JADE], G.day, "once a night");
+  assert.equal(G.soc.drunk, 1, "a round for the room is a drink in your hand");
+  const hs = _npcsHere().filter(x => NPC_ROLES[x] === "hostess" && _knownTier(x) < 3);
+  assert.ok(hs.every(x => _atCamera(x)), "his bell sends the floor to the camera");
+  out = []; G.soc.streamLast = {}; _streamTick(); assert.doesNotMatch(said(), /bell.*rings|rings the bell|ring the bell!/i, "not twice a night");
 });

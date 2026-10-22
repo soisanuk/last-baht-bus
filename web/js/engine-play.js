@@ -5833,7 +5833,7 @@ function _morningLedger() {
   const spcN = (G.massageSpend || 0) - (b.spcB != null ? b.spcB : (G.massageSpend || 0));   // the specials and the joiner fee were in "down" and nowhere else (László, round 73)
   if (spcN > 0) bits.push("\u0e3f" + _num(spcN) + " of it on the massage table");
   const strN = (G.streamSpent || 0) - (b.strB != null ? b.strB : (G.streamSpent || 0));   // drinks bought on the stream, from the account (2026-10-22)
-  if (strN > 0) bits.push("\u0e3f" + _num(strN) + " of it on drinks through the stream");
+  if (strN > 0) bits.push("\u0e3f" + _num(strN) + " of it through the stream — drinks and bells on your handle");
   // what came BACK into the pocket — a pot, a quiz prize, a note a woman pressed on you — nets into "down" and is named,
   // or "down ฿2,320" hides the ฿500 a man won at the quiz (Liam, round 93)
   const wonN = (G.offIn || 0) + (G.quizWon || 0) - (b.wonB != null ? b.wonB : (G.offIn || 0) + (G.quizWon || 0));

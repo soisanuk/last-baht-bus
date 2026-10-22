@@ -4976,7 +4976,8 @@ function _doTalkCore(arg, topic) {
   // AT THE CAMERA: a bare TALK gets the one finger, the one song — a question still reaches her (2026-10-22)
   if (!topic && typeof _atCamera === "function" && _atCamera(npc) && _npcsHere().includes(npc)) { _streamBusy(npc); return; }
   // a tipper's or a handle's name is the stream's subject before it is any word in her own nodes ("where silverfox lives" was her home, Gareth round 103)
-  if (topic && typeof _whaleIn === "function" && (_whaleIn(topic) || _handleIn(topic)) && typeof _townTalk === "function" && _townTalk(npc, topic)) { if (typeof _questOffer === "function") _questOffer(npc); return; }
+  const _sbr = (G.streamBells || {})[NPCS[npc].room];
+  if (topic && typeof _whaleIn === "function" && (_whaleIn(topic) || _handleIn(topic) || (_sbr && G.day - _sbr.day <= 3 && _npcsHere().includes(npc) && /\b(bell|round|rang|ring|my handle|hear)\b/.test(String(topic).toLowerCase()))) && typeof _townTalk === "function" && _townTalk(npc, topic)) { if (typeof _questOffer === "function") _questOffer(npc); return; }
   // THE INSULT IS NOTED, AND KEPT TILL DAWN (Pete, round 75: "Something is noted… consequences,
   // later, quietly", and one turn later Terry warmly offered him the stool). The man or woman you
   // said it to answers you short for the rest of the night; an APOLOGY ends it.
@@ -7904,12 +7905,14 @@ Object.assign(_TOWN, {
       "\"He tip, he tip, he tip,\" {n} says about {w}. \"One night he send twenty song. One girl buy motorbike from him.\" She does not say which girl.",
       "\"I sit with you,\" {n} says, \"but when the {d} ping I look. Everybody look. Is not personal, tilac.\"",
       "\"He never come Pattaya,\" {n} says of {w}. \"I ask on the stream. He say maybe next year. Every year he say next year.\"",
+      "\"Sometime he ring the bell from {from},\" {n} says. \"Bell! From the phone! Everybody drink, everybody go camera say thank you. Customer here get free drink and nobody.\"",
     ],
     house: [
       "\"{w},\" {n} says. \"He keeps {when} and tips by the song — {m}. The girls go to the camera when he's on, and I let them, because a song from him is a night's drinks.\"",
       "{n} sighs. \"The men on the stools don't like it when he is online. I don't like it either. The till likes it.\"",
       "\"Match him and she stays,\" {n} says, very dry. \"{m} the song. Or ring the bell; even he can't buy the whole room.\"",
       "\"He has never been to Thailand,\" {n} says. \"He knows every girl's name on my floor. I know his handle. That is the whole relationship.\"",
+      "\"Some nights he rings the bell,\" {n} says. \"From {home}. The whole room drinks on him and every girl goes to the camera to thank him — and a man on a stool drinks free and sits alone.\"",
     ],
     punter: [
       "\"{w},\" {n} says. \"Bloody {w}. His name comes up on that {d} and half the floor walks off to sing at a camera. You can't compete with a man who isn't here.\"",
@@ -7944,7 +7947,7 @@ Object.assign(_TOWN, {
   stream_me: {
     floor: [
       "\"That was YOU?\" {n} laughs, delighted and a little caught out. \"I say many name {when}. I don't look which one. Next time you come, I say it to your face.\"",
-      "\"{h}?\" {n} tries it. \"I say that name? Maybe. Many name.\" She looks at you properly. \"Here is better. Here I know.\"",
+      "\"I say {h}?\" {n} tries it. \"Maybe. Many name.\" She looks at you properly. \"Here is better. Here I know.\"",
       "{n} covers her face. \"I not look at the camera when I say name! Is like — saying name to the wall.\" She takes your hand. \"Sorry, tilac. Now I know which one.\"",
       "\"You buy from phone?\" {n} shakes her head at you. \"Why? You are in Pattaya! Come sit, I drink with you, not with the camera.\"",
     ],
@@ -8023,18 +8026,18 @@ _TOWN_WIDE.add("stream_indie");
 Object.assign(_TOWN, {
   stream_handle: {
     floor: [
-      "\"{h}?\" {n} shrugs. \"Name on the phone. I say it, I drink. Maybe England, maybe Germany. I never see.\"",
+      "{n} shrugs. \"Name on the phone, {h}. I say it, I drink. Maybe England, maybe Germany. I never see.\"",
       "{n} laughs. \"{h}! I don't know him. Phone know him. Phone say, I say.\"",
       "\"Many name like that,\" {n} says. \"{h}, I say it to the camera. Who is he — nobody know. He know me.\"",
       "\"{h} buy drink sometime,\" {n} says. \"Polite. Far away. That is all I know, tilac.\"",
     ],
     house: [
-      "\"{h}?\" {n} shrugs. \"A handle on the {{phone}}. He buys a drink now and then and the girls say it. I have never seen his face.\"",
+      "{n} shrugs. \"That is a handle on the {{phone}}, {h}. He buys a drink now and then and the girls say it. I have never seen his face.\"",
       "\"One of the names,\" {n} says. \"{h}. They come up, she says it, it goes on the sheet. That is the whole of him.\"",
       "{n} looks at the camera. \"{h} — he is on most weeks. Who he is, where he is, nobody here could tell you.\"",
     ],
     punter: [
-      "\"{h}?\" {n} snorts. \"Some bloke at home. You'll never meet him. He'll never meet you. That's the beauty of it.\"",
+      "{n} snorts. \"That one, {h}? Some bloke at home. You'll never meet him. He'll never meet you. That's the beauty of it.\"",
       "\"Heard the name,\" {n} says. \"{h}. Every bar's got a few. Ghosts with a bank card.\"",
       "{n} shrugs. \"{h}'s a name on a screen, mate. Might be a millionaire, might be a bloke in a bedsit. Probably the bedsit.\"",
     ],
@@ -8071,7 +8074,7 @@ Object.assign(_TOWN, {
 });
 Object.assign(_TOWN_THAI, {
   stream_handle: [
-    "\"{h}?\" {n} shrugs. \"Name on the phone. He buy drink sometime, girl say. I never see his face.\"",
+    "{n} shrugs. \"That one is a name on the phone. He buy drink sometime, girl say. I never see his face.\"",
     "\"One of the name,\" {n} says. \"{h}. Come up, girl say, I write on sheet. That is all.\"",
   ],
   stream_home: [
@@ -8084,6 +8087,31 @@ Object.assign(_TOWN_THAI, {
   ],
 });
 ["stream_handle", "stream_home", "stream_elsewhere"].forEach(k => _TOWN_WIDE.add(k));
+Object.assign(_TOWN, {
+  stream_bellme: {
+    floor: [
+      "\"That was YOU?\" {n} slaps the bar. \"{h}! The bell ring {when}, everybody drink, everybody say your name to the camera — and you are not even here! Now you are here. Ring it with your hand, na.\"",
+      "{n} tries your handle — {h} — then laughs. \"Bell from the internet! Mama very happy. I drink one for you {when}. Next time I drink it next to you.\"",
+      "{n} points at the camera, then at you. \"You ring from phone {when}? Crazy man. Same money, no face. Today I see the face. Better.\"",
+    ],
+    house: [
+      "\"The bell from the link, {when}?\" {n} nods. \"The whole floor said your handle to the corner. They'll say your name to your face now, if you give them one.\"",
+      "{n} smiles a little. \"You rang it from your phone. The till liked it. The girls liked it more when they found out the man was in town.\"",
+    ],
+    punter: [
+      "\"You rang it from your phone?\" {n} shakes his head. \"Mate, you were three hundred yards away. Walk in and ring it. They like to see the hand.\"",
+      "{n} laughs. \"That was you, {when}? We drank it. Didn't know who to thank. The camera got the thanks.\"",
+    ],
+  },
+});
+Object.assign(_TOWN_THAI, {
+  stream_bellme: [
+    "\"Bell from the link, {when}?\" {n} nods. \"Whole floor say your name to the camera. Now you here, they say to your face.\"",
+    "{n} smiles a little. \"You ring from phone. Till happy. Girls more happy when they know the man is in Pattaya.\"",
+  ],
+});
+_TOWN_WIDE.add("stream_bellme");
+
 
 // ── the night ride's stops, by name ─────────────────────────────────────────
 const _RIDE_STOP_WORDS = [
@@ -9142,9 +9170,9 @@ function _townTalk(npc, topic) {
   if (typeof _streamBar === "function") {
     const _whaleNamed = _whaleIn(t);
     const _handleNamed = _handleIn(t);
-    const _mine = t.includes(_myHandle()) || /\b(my (?:drink|name|handle)|did you (?:see|say|get)|you said my|the drink i (?:sent|bought))\b/.test(t);
+    const _mine = t.includes(_myHandle()) || /\b(my (?:drink|name|handle|bell|round)|did you (?:see|say|get|hear)|you said my|the (?:drink|bell|round) i (?:sent|bought|rang))\b/.test(t);
     const _tipWords = /\b(tips? (?:so )?much|tipping|why (?:does|do) he tip|the whale|big tipper|tipper)\b/.test(t);
-    if (_whaleNamed || _handleNamed || _tipWords || /\b(camera|cameras|streams?|streaming|live ?stream|livestream|webcam|ring light|the lens|tripod|tablet|channel|youtube|internet customers?|the internet|my handle|change my handle)\b/.test(t) || (_mine && (G.streamDrinks || {})[npc])) {
+    if (_whaleNamed || _handleNamed || _tipWords || ((_mine || /\b(bell|the round|a round|rang)\b/.test(t)) && ((G.streamBells || {})[NPCS[npc].room]) && G.day - G.streamBells[NPCS[npc].room].day <= 3) || /\b(camera|cameras|streams?|streaming|live ?stream|livestream|webcam|ring light|the lens|tripod|tablet|channel|youtube|internet customers?|the internet|my handle|change my handle)\b/.test(t) || (_mine && (G.streamDrinks || {})[npc])) {
       const sd = (G.streamDrinks || {})[npc];
       const plg = Object.keys(ROOMS).filter(id => _streamBar(id) && _PLG_ROOMS.includes(id)), bars = plg.map(id => _barName(id)), b = bars.slice(0, -1).join(", ") + " and " + bars[bars.length - 1];
       const indies = Object.keys(ROOMS).filter(id => _streamBar(id) && !_PLG_ROOMS.includes(id) && id !== G.room);
@@ -9152,6 +9180,10 @@ function _townTalk(npc, topic) {
       const sl = { b, b1: _barName(plg[_hh("b1:" + npc, 7) % plg.length]), o: near ? _barName(near) : _barName(plg[0]) };
       const reg = _hoursRegister(npc), here = _streamBar(G.room) && _npcsHere().includes(npc);
       // a handle she can't place is a handle: a name on the phone, a man in another country
+      // the bell you rang from your phone, remembered by the floor that drank it (Mario, 2026-10-22)
+      { const sb = (G.streamBells || {})[NPCS[npc].room];
+        if (sb && G.day - sb.day <= 3 && _npcsHere().includes(npc) && (/\b(bell|the round|a round|rang|ring)\b/.test(t) || _mine))
+          return pick("stream_bellme", { h: _myHandle(), when: sb.day === G.day ? "tonight" : sb.day === G.day - 1 ? "last night" : "the other night" }); }
       if (/\bchange my (?:handle|name)\b/.test(t)) { _say(reg === "floor" ? `"Your name on the stream?" ${NPCS[npc].name} laughs. "Phone give it, phone keep it. ${_myHandle()} — I like. Sound like a man who come back."` : `"The link gives you a name when you pay," ${NPCS[npc].name} says. "It keeps it. ${_myHandle()}. Nobody in here can change it for you."`); return true; }
       if (sd && G.day - sd.day <= 3 && NPC_ROLES[npc] === "hostess" && (_mine || !(_whaleNamed || _handleNamed || _tipWords)))
         return pick("stream_me", { h: _myHandle(), when: sd.day === G.day ? "tonight" : sd.day === G.day - 1 ? "last night" : "the other night" });
@@ -15511,7 +15543,7 @@ THE WHOLE CARD (bare HELP is the short one):
   I DON'T DRINK — say it once and the house stops pouring you free ones · DECLINE hands back a drink just poured
   JUST LOOKING — say it once and the dating app goes quiet; the girls on the street will still try their luck
   RING BELL (a round for everyone in the room — the fuller the bar, the bigger the bill) · TALK TO PATRON · BARFINE <lady>
-  WATCH STREAM — the camera in a handful of bars (the group's Soi 6 rooms and a few beer bars), or a channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens
+  WATCH STREAM — the camera in a handful of bars (the group's Soi 6 rooms and a few beer bars), or a channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens · STREAM BELL <bar> — ring a streamed bar's bell from your phone: the room drinks on your handle
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
   MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
@@ -15617,7 +15649,7 @@ THE WHOLE CARD (bare HELP is the short one):
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
   RING BELL (a round for everyone in the room — the fuller the bar, the bigger the bill) · TALK TO PATRON · BARFINE <lady>
-  WATCH STREAM — the camera in a handful of bars (the group's Soi 6 rooms and a few beer bars), or a channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens
+  WATCH STREAM — the camera in a handful of bars (the group's Soi 6 rooms and a few beer bars), or a channel on your phone · STREAM DRINK <lady> — a drink bought through the link; she says your handle to the lens · STREAM BELL <bar> — ring a streamed bar's bell from your phone: the room drinks on your handle
   BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
   QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)
@@ -15654,6 +15686,7 @@ const _COMPLETE_VERBS = [
   "break sim",
   "buy piwin a beer",
   "stream drink",
+  "stream bell",
   "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to", "ride the loop",
@@ -16185,7 +16218,8 @@ function _completePool(verb, ctx) {
     case "ring": return ["bell"];
     case "charge": return ["phone"];
     case "stream":   // STREAM DRINK <her> — the women on a stream bar's floor tonight, from your phone (2026-10-22)
-      if (ctx.length < 2) return ["drink"];
+      if (ctx.length < 2) return ["drink", "bell"];
+      if (ctx[1] === "bell") return _streamRoomsKnown().filter(id => id !== G.room).map(id => String(_barName(id) || "").toLowerCase());
       return Object.keys(NPCS).filter(x => NPC_ROLES[x] === "hostess" && typeof _streamBar === "function" && _streamBar(NPCS[x].room) && NPCS[x].room !== G.room &&
         _npcWhere(x) === NPCS[x].room && _streamRoomsKnown().includes(NPCS[x].room)).map(x => NPCS[x].name.toLowerCase());
     case "sell": return _flag("affairOffered") && !_flag("barSold") ? ["up", "bottles"] : ["bottles"];
@@ -19182,7 +19216,13 @@ function _doCommandInner(input) {
     }
     case "spank": _doSocial("spank", arg); break;
     case "fondle": case "grope": _doSocial("fondle", arg); break;
-    case "ring": case "bell": _doBell(); break;
+    case "ring": case "bell": {
+      // RING THE BELL ON THE STREAM / AT <a streamed bar you are not in>: from your phone (Mario, 2026-10-22)
+      const _ra = String(arg || "").replace(/^(?:the )?bell\s*/, "");
+      if (typeof _doStreamBell === "function" && (/\b(stream|phone|camera|online|internet|link)\b/.test(_ra) ||
+          (_ra.replace(/^(?:at|in|for)\s+/, "").length > 2 && _streamRoomsKnown().some(id => id !== G.room && _pnm(String(_barName(id) || "")).includes(_pnm(_ra.replace(/^(?:at|in|for)\s+/, "")))))))
+        { _doStreamBell(_ra); break; }
+      _doBell(); break; }
     case "barfine": case "bf": _doBarfine(arg.replace(/^with /, "")); break;
     case "meet": case "visit": _doMeetOffShift(arg); break;
     case "answer": case "guess": case "fill": _doAnswer(arg); break;
@@ -19446,6 +19486,7 @@ function _doCommandInner(input) {
     case "stream": case "livestream": case "webcam":
       // the group's channel (the digital barstool, 2026-10-22): STREAM DRINK <her> from your phone, else watch it
       if (/^(?:a )?drinks?\b/.test(arg || "")) { _doStreamDrink(arg); break; }
+      if (/^(?:the )?bell\b/.test(arg || "")) { _doStreamBell(arg); break; }   // a round on your handle, from your phone (Mario, 2026-10-22)
       _doWatchStream(arg); break;
     case "watch":
       if (/\b(stream|camera|webcam|livestream|channel|the corner)\b/.test(arg || "") && typeof _doWatchStream === "function") { _doWatchStream(arg); return; }

@@ -500,7 +500,7 @@ const _term = (() => {
         // which is what a long-press's flyout button used to show.
         return [{ t: open ? cmd : lo, c: cmd + (open ? " " : ""), go: !open }];
       }
-      if (k === "bar") return [{ t: "enter " + v, c: "enter " + lo, go: true }];
+      if (k === "bar") return [{ t: "enter " + v, c: "enter " + lo, go: true }, ...(typeof _streamBarActs === "function" ? _streamBarActs(v) : [])];   // a streamed bar's channel and bell (2026-10-22)
       if (k === "item") {
         // two items can share a name (two empty Singha bottles): the one HERE, then the one in your
         // pocket — the last one in the table offered TAKE only on the promenade (Yusuf, round 68)
