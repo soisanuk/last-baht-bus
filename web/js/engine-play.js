@@ -7417,10 +7417,11 @@ function _destituteTick() {
     }
     return;
   }
+  if (G.street) { _streetMorning(); return; }   // the plane refused: the bench, the sweep, the plane again in a week
   if (G.roofless !== G.day) { if (G.destituteDay !== G.day - 1 || G.roofless !== G.day) G.destitute = 0; return; }
   G.destitute = G.destituteDay === G.day - 1 ? (G.destitute || 0) + 1 : 1; G.destituteDay = G.day;
   const left = DESTITUTE_DAYS - G.destitute;
-  if (G.destitute >= DESTITUTE_DAYS) { _gameEnd("repatriated"); return; }
+  if (G.destitute >= DESTITUTE_DAYS) { G.pendingChoice = "embassy"; _embassyPrompt(); return; }   // the plane is offered, and can be refused (Mario, 2026-10-22)
   if (G.destitute === 1) {
     _say(`(No roof and nothing for one. The first morning of it: ${left} more and a desk in Bangkok has your name. Nira lends against nothing once; Nont moves money that is not there${G.job ? (G.job.kind === "manager" ? "; the envelope comes on the payday, and the nights before it are the problem" : "") : "; a bar whose floor knows your face pays a manager in notes"}.)`, "alert");
     const her = !G.keptByUsed && _bestWoman();
@@ -7432,6 +7433,58 @@ function _destituteTick() {
     _say(`(The second morning. ${left} more. A man from the consulate was asking at the Vic, Mort says — not for you by name, which is how they ask.)`, "alert");
     if (G.phone && (G.phone.contacts || {}).tan && typeof _pushMsg === "function") _pushMsg("tan", "There is a desk in Bangkok that has your name on it now, my friend. Not police. Worse: polite. One more morning and they come with a ticket.");
   }
+}
+// THE PLANE REFUSED (Mario, 2026-10-22, from the canon essay "the people who should not be here" — pattern only). The
+// consulate's loan is offered on the third roofless morning, and it can be refused: what keeps these men here is not the
+// fare, it is going home with nothing in front of the people who watched them leave. STAY is the bench — the morning
+// sweep that warns and releases, the lenders shut, the floor looking past a man with no room — and the plane offered
+// again every week. The way back is a roof paid for again: a pension's payday, a job's envelope. Nobody lectures; the
+// position is the antagonist. Never a death, never an ending of its own.
+function _embassyPrompt() {
+  const again = G.street && G.street.nights > 0;
+  _say(again
+    ? _fmt("The man from the consulate again, same shirt, same patience, on the end of your bench at nine in the morning. \"The offer stands,\" he says. \"฿{l} against the passport, the fare, a bed in Bangkok tonight. Nobody at home needs to know how. Nobody here will remember.\" (TAKE THE PLANE · STAY)", { l: _num(EMBASSY_LOAN) })
+    : _fmt("A man in a pressed shirt finds you at nine in the morning, which means somebody told him where to look. The consulate. An emergency loan — ฿{l}, the fare and a night in Bangkok — against a passport that stays flagged until it is repaid. \"It is not a punishment,\" he says. \"It is a ticket. Men refuse it. I come back.\" (TAKE THE PLANE — the game ends, a man helped home · STAY — the bench, and the offer again in a week)", { l: _num(EMBASSY_LOAN) }), "alert");
+}
+function _embassyGo() { G.pendingChoice = null; G.street = null; _gameEnd("repatriated"); }
+function _embassyStay() {
+  G.pendingChoice = null; G.destitute = 0; G.destituteDay = null;
+  const first = !G.street;
+  G.street = G.street || { since: G.day, nights: 0, swept: 0 };
+  G.street.offered = G.day;
+  const spot = _crashSpotFor(G.room); if (spot && ROOMS[spot.room]) G.room = spot.room;
+  _say(first
+    ? "\"No,\" you say, and it comes out easier than it should. He does not argue; he writes something down, and leaves a card on the bench that you do not pick up and do not throw away. Going home with nothing, in front of everybody who watched you leave with something, is the one fare you cannot find. The town does not mind. The town has room on its benches."
+    : "You shake your head. He nods as if he expected it, which he did, and the card goes on the bench next to last week's.", "dim");
+  _describeRoom(true);
+}
+const _STREET_MORNING = [
+  "You wake on the bench with the sun already on it. A woman sweeping the pavement sweeps around your feet, the way you sweep around a post.",
+  "Morning, and the bench has given you a back you did not have yesterday. A dog that used to be wary of you has stopped bothering.",
+  "The first bus goes past full of people with somewhere to be. You count the coins you do not have and sit up slowly.",
+  "You wake to a motorbike horn and a monk's alms bowl going past at eye level. He does not stop; you have nothing to give, and he knows the look.",
+  "The night was long and the bench was short. A 7-Eleven door opens and shuts behind you all morning, letting out cold air you can feel from here.",
+  "You come to with your shoes still on — you have learned that — and your bag under your head. The sea is doing what it always does, for nobody.",
+];
+const _STREET_SWEEP = [
+  "Then the sweep: a pickup, two officers, a clipboard. They wake the benches along the road, read names off passports, say the same three sentences in careful English — not here, not again, go home — and drive off. By evening every bench is taken again, yours included.",
+  "Two officers on a motorbike, the morning round. One reads your passport, one reads your face. \"Overstay? No? Okay. Not here, sir. Not on this road.\" A warning, written nowhere. They are gone before the shops open.",
+  "A police pickup rolls the length of the road at walking pace while an officer photographs the benches. Nobody is taken anywhere. It is the kind of sweep that is for the photographs.",
+];
+function _streetMorning() {
+  const s = G.street;
+  if (G.roofless !== G.day) {   // a roof paid for again: the payday, the envelope, a friend
+    G.street = null; G.streetDone = { since: s.since, off: G.day, nights: s.nights };
+    _say(`A room again, with a door that locks and a fan that is yours. ${s.nights} night${s.nights === 1 ? "" : "s"} on the bench, and the town did not once ask you to explain them. You find you do not want to either.`, "win");
+    return;
+  }
+  s.nights = (s.nights || 0) + 1;
+  const spot = _crashSpotFor(G.room); if (spot && ROOMS[spot.room]) G.room = spot.room;
+  G.battery = Math.min(G.battery, 30);   // no socket on a bench
+  _say(_pickVary(_STREET_MORNING, "streetmorning"), "dim");
+  if (_hm("sweep:" + G.vacation + ":" + G.day, 13) % 100 < STREET_SWEEP_PCT) { s.swept = (s.swept || 0) + 1; _say(_pickVary(_STREET_SWEEP, "streetsweep"), "dim"); }
+  if (typeof _addHappy === "function") _addHappy(-1, "a night on a bench");
+  if (G.day - (s.offered || s.since) >= STREET_REOFFER) { G.pendingChoice = "embassy"; _embassyPrompt(); }
 }
 function _keptByPrompt() {
   const her = G.keptOffer, n = NPCS[her] ? NPCS[her].name : "She";
@@ -7495,6 +7548,7 @@ function _doMoney() {
   const next = G.payDay == null ? null : Math.max(0, INCOME_DAYS - (G.day - G.payDay));
   const amt = _incomeAmount();
   if (G.destitute) _say(`(No roof: morning ${G.destitute} of ${DESTITUTE_DAYS}. ${DESTITUTE_DAYS - G.destitute} more and the consulate has your name.)`, "alert");
+  if (G.street) _say(`(On the street: ${G.street.nights} night${G.street.nights === 1 ? "" : "s"} on a bench. The consulate's plane comes round again in ${Math.max(0, STREET_REOFFER - (G.day - (G.street.offered || G.street.since)))} day${STREET_REOFFER - (G.day - (G.street.offered || G.street.since)) === 1 ? "" : "s"}; a roof paid for — a payday, a job — ends it without one.)`, "alert");
   if (G.keptBy) _say(`(A mat in ${NPCS[G.keptBy.id] ? NPCS[G.keptBy.id].name : "her"}'s room, ${KEPT_BY_NIGHTS - (G.keptBy.nights || 0)} nights left of it. No folio; her face is the rent.)`, "dim");
   { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_jobName()}` : ""}${p === "tourist" ? (typeof _walletHunt === "function" && _walletHunt() ? " — no bank book, and no card either till the replacement comes" : " — no bank book, the foreign card and its fee") : p === "longstay" ? (typeof _walletHunt === "function" && _walletHunt() ? " — a bank book; the card went with the wallet" : " — a bank book") : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
     if (G.stringer) _say(`Stringer for Last Orders: ฿${_num(OWL_LEAD_PAY)} a paragraph, ${OWL_LEADS_WEEK} a week, for a thing you read that Mort had not — ${_stringerOwed().length} unpaid.`, "dim");

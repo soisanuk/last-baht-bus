@@ -225,6 +225,11 @@ function _doBorrow(arg) {
       "I only do money.\"");
     return;
   }
+  if (G.street && G.room === _npcRoom("nira")) {   // the bench: she lends against a roof, a job, a face — not against a man the sweep woke (2026-10-22)
+    _say(_pickVary(["Nira looks at your shoes, then your shirt, then your face, in that order. \"Where you sleep?\" She does not wait for the answer. \"No. Not against nothing. You get a room, you come back. I lend to a man with a door.\"",
+      "\"No.\" Nira doesn't make it unkind; she makes it short. \"My cousins collect from a room. From a bench, they collect nothing and everybody look bad. Get a roof. Then we talk.\""], "niraStreet"), "alert");
+    return;
+  }
   if (G.loanSkipped && G.room === _npcRoom("nira")) {
     _say("Nira doesn't look up from the calculator. “You.” One word, and the whole last trip is in it. " +
       "“You fly home with my money. Now you want more?” She laughs, once, not warmly. “No. Not until the last one is square.”", "alert");
@@ -10490,6 +10495,20 @@ function _doStreamBell(arg) {
   if ((G.soc.streamJoy || 0) < 1) { G.soc.streamJoy = 1; _addHappy(1, "a round on your handle"); }
   else _say("(no สนุก — a second round on the internet is a round, not a night)", "dim");
 }
+// THE FLOOR LOOKS PAST HIM (the plane refused, 2026-10-22): once a bar a night, a line — never a refusal; his money is
+// still money, and the women who know him still know him
+const _STREET_LOOK = [
+  "The girls on the stools clock the shirt and the shoes before your face, the way they clock everything, and the pitch you would have had last month does not come. Nobody is rude. Nobody calls you handsome either.",
+  "The mamasan's eyes go to your hands — bag, no bag, the look of a man who slept out — and then somewhere just past your shoulder. You are served. You are not seen.",
+  "A girl starts towards you with the smile and stops halfway, the way you stop at a door you have just remembered is locked. She sits back down.",
+];
+function _streetLookTick() {
+  if (!G.street || !_inBar() || (typeof _atOwnBar === "function" && _atOwnBar())) return;
+  const book = (G.soc.streetLook = G.soc.streetLook || {});
+  if (book[G.room]) return;
+  if (!_npcsHere().some(x => NPC_ROLES[x])) return;
+  book[G.room] = true; _say(_pickVary(_STREET_LOOK, "streetlook"), "dim");
+}
 // the big tipper rings it himself, about once a night while he is online — never in a room on its bell's glow
 function _whaleBellTick() {
   const r = G.room;
@@ -11812,6 +11831,8 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  // THE MEN ON THE BENCHES (2026-10-22, the canon essay "the people who should not be here" — pattern only, no figures)
+  "THE MEN ON THE BENCHES, squire, are not a mystery and not a scandal, and I will thank the readers who write in to call them either. They came for the cheap life the videos promised, on a pension that was enough the year they sold the house. Then the rate, or the divorce, or the girlfriend's brother's restaurant. The fare home is not what keeps them here; the consulate will lend it, and does. What keeps them is the arrivals hall, and the faces at the barrier who watched them leave with something. The police wake them, write nothing, and drive on. Buy one a coffee. It confuses them, and it is the only thing in this town that is not for sale.",
   // THE LIST THAT DOES NOT EXIST (the quiet shift change, 2026-10-19 — structure only, no manager named)
   "THERE IS NO LIST, squire, and I have been asked to write about it by a man who was very sure there was one. A girl on a standing arrangement — her fellow paying the bar its daily fee to keep her stool warm and empty — stops turning up the week her fellow stops paying, and three nights later the man who thought he ran the place is typing in capitals to every owner on the soi with her photograph attached. He is typing into a room that does not exist. Nobody keeps a register of girls who left; nobody rings the last bar to ask; she will be on a stool two sois over by Friday if she wants one, and the only people who read his message properly were the women at the far end of his own rail, who read it in silence and each thought the same thought, which was: not yet.",
   // WHY EVERY BAR COMPANY IS TWO MILLION (the laundering material, 2026-10-08 — the work-permit grid, structure only)
@@ -11898,6 +11919,9 @@ const _OWL_AMULET = [
 ];
 
 const _OWL_LETTERS = [
+  // the friend who stopped answering (2026-10-22, the canon essay — pattern only)
+  ["A reader in Esbjerg writes: 'A friend retired to Pattaya six years ago. The photographs stopped two years ago, then the messages. His daughter thinks he is fine. Is he?'",
+    "I do not know your friend, madam, and I will not pretend to. I will say that a man who is fine sends photographs, and a man who is not stops, because the photographs were the proof of a life he could not keep up. If you want to find him, do not ask the police; ask the noodle carts on Beach Road at closing. And when you find him, do not bring the fare. Bring a coffee and your own face, and let him decide what the fare is for."],
   // struck off at Christmas (the laundering material, 2026-10-08)
   ["A reader in Nong Prue writes: 'I went home for Christmas and came back to find my company struck off the register for not filing. Nobody rang. The bar was open the whole time. What do I do?'",
     "Nothing, squire, is what most men do, and the register is content with that: struck off is free, and your bar never needed the company anyway, only your work permit did, and that went with it. If you want the company back it can be restored, for a fee, by the same accountant who did not file, and he will do it in a week, and you will wonder for a long time whether the week was the point. The Owl's advice is the only kind that costs nothing: a company is a thing somebody has to FILE for, every year, while you are at a wedding in Kent — and closing one properly costs money, which is why the honest ones pay to close and the rest are struck off like yours. Decide which you are before the next Christmas."],

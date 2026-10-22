@@ -1,20 +1,22 @@
 {
-  "generated": "2026-10-18",
+  "generated": "2026-10-22",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 191,
+    "total": 192,
     "byRole": {
-      "story": 51,
+      "story": 52,
       "mamasan": 25,
       "hostess": 76,
       "cashier": 13,
       "patron": 26
     },
     "filler": 227,
-    "unrendered": 0,
+    "unrendered": 1,
     "relook": 0
   },
-  "unrendered": [],
+  "unrendered": [
+    "henning"
+  ],
   "relook": [],
   "characters": [
     {
@@ -292,6 +294,21 @@
       "tags": [],
       "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the Pattaya Leisure man. He is unfailingly pleasant, which is the unsettling part.",
       "rendered": true
+    },
+    {
+      "id": "henning",
+      "name": "Henning",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "look": "Danish man of sixty-eight, long unwashed grey hair, white stubble, sunburnt, a faded denim shirt, plastic bag at his feet",
+      "venueKind": null,
+      "emoji": "🪑",
+      "th": null,
+      "room": "beach_rd_c",
+      "tags": [],
+      "desc": "Sixty-eight, sunburnt the deep permanent way, grey hair past his collar, a denim shirt that was ironed once by somebody who loved him. He has the bench by the bus stop and the plastic bag under it, and he sits up very straight, as if posture were the last thing he still owned outright. He was a ship's engineer for thirty years. He will tell you that before he tells you his name.",
+      "rendered": false
     },
     {
       "id": "jiew",

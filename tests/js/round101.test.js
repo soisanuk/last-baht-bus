@@ -158,7 +158,7 @@ test("Eoin: a bare JUST on the night ride is home; a ride she ended at the kerb 
 });
 
 test("Eoin: 'what did we do last night' is LAST NIGHT; 'not buying tonight, just sitting with you' is hers; a dry night is not 'what you drink'", () => {
-  resident(); G.room = "sunset_rail"; G.soc.drinks.pukky = 8; G.talked.pukky = [0]; G.partyLog = { pukky: { day: G.day - 1, rooms: ["sunset_rail"], end: "home" } };
+  resident(); G.flowerDay = G.day; G.room = "sunset_rail"; G.soc.drinks.pukky = 8; G.talked.pukky = [0]; G.partyLog = { pukky: { day: G.day - 1, rooms: ["sunset_rail"], end: "home" } };
   run("talk to pukky"); G.convoQ = null; assert.match(t("what did we do last night"), /asked Pukky about last night|last night|Last night/i); G.convoQ = null;
   assert.match(t("i'm not buying tonight, just sitting with you"), /Sit is free|Not every night is buying night|Then sit properly|talk for free/);
   // the dry night: the house remembers no chit

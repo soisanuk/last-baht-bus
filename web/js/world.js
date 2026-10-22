@@ -154,7 +154,7 @@ const CONDO_RENT = 9000, CONDO_UTIL = 2000, CONDO_DEPOSIT_MONTHS = 2, CONDO_GRAC
 // to sleep on is a roof. The way out is the people: Nira, Nont, a job — and best, a woman who knows you keeps you
 // (HER offer, never asked for: KEPT_BY_NIGHTS on her mat, no folio, and then her mama has noticed; it costs her face on
 // her floor, which the floor says). Structural, never a morality tale: nobody lectures.
-const DESTITUTE_DAYS = 3, KEPT_BY_NIGHTS = 5, EMBASSY_LOAN = 28000;    // Mort pays a hundred a paragraph for a fixture you read and he had not; five a week, cash, when you next sit with him
+const DESTITUTE_DAYS = 3, KEPT_BY_NIGHTS = 5, EMBASSY_LOAN = 28000, STREET_REOFFER = 7, STREET_SWEEP_PCT = 35;   // the plane refused (2026-10-22): offered again every week; the dawn sweep some mornings    // Mort pays a hundred a paragraph for a fixture you read and he had not; five a week, cash, when you next sit with him
 function _originMoney(id) { return ORIGIN_MONEY[id] || ORIGIN_MONEY_DEFAULT; }
 
 // ── Buying the Stinky: the old man carries the paper ────────────────────────
@@ -17398,6 +17398,34 @@ for (const [id, t] of Object.entries(_PATRON_TITLES)) if (_REGULARS[id]) _REGULA
 // it — the flag is the query (`NPCS[id].patron`), so there is exactly one entry
 // per character and no way for two tables to drift apart again.
 for (const [id, p] of Object.entries(_REGULARS)) NPCS[id] = p;
+// HENNING (2026-10-22, from the canon essay "the people who should not be here" — pattern only, nobody real): the man
+// on the bench before the player is ever on one. He refused the plane twice. Never pitied, never preached; the position
+// is the antagonist, and he knows the town's rules better than the men with rooms.
+NPCS.henning = {
+    name: "Henning", emoji: "🪑", pronoun: "he",
+    room: "beach_rd_c",
+    age: 68, nat: "Danish",
+    title: "the man on the bench",
+    look: "Danish man of sixty-eight, long unwashed grey hair, white stubble, sunburnt, a faded denim shirt, plastic bag at his feet",
+    desc: "Sixty-eight, sunburnt the deep permanent way, grey hair past his collar, a denim shirt that was " +
+      "ironed once by somebody who loved him. He has the bench by the bus stop and the plastic bag under it, " +
+      "and he sits up very straight, as if posture were the last thing he still owned outright. He was a ship's " +
+      "engineer for thirty years. He will tell you that before he tells you his name.",
+    dialogue: [
+      { when: (st, G) => !!G.street, text: "\"Ah.\" Henning moves the bag an inch with his foot, which is the whole welcome. \"The man from the consulate found you, then. Same shirt? He has three.\" He looks at the sea. \"Keep your shoes on. Sleep with the bag under your head. Stay off this road when the pickup comes, and do not drink the first thing anybody offers you, because it is never the first.\"", short: "\"Shoes on. Bag under your head. Off this road when the pickup comes.\"" },
+      { when: (st, G) => !!G.streetDone, text: "\"You got a door.\" Henning says it the way men say congratulations at a funeral, meaning it. \"Good. Do not come and visit. Visiting is how it starts.\"", short: "\"You got a door. Do not visit.\"" },
+      { text: "\"Thirty years in engine rooms,\" Henning says, before you have said anything, \"Danish ships, then Chinese ships, then nobody.\" He offers his hand like a man who expects it to be taken, and it is very clean. \"Henning. From Aalborg. I am not asking you for money. Everybody thinks the first sentence is for money.\"", short: "\"Henning. Engine rooms. I am not asking for money.\"" },
+      { topic: "home|aalborg|denmark|family|your family|daughter|go home", text: "\"Aalborg has a daughter in it who thinks I have a condo with a pool,\" he says. \"I sent her the photographs, the first year. The pool is still there. I am not in it.\" A pause. \"She would send the fare tomorrow. That is precisely the problem.\"", short: "\"A daughter who thinks I have a pool. She would send the fare. That is the problem.\"" },
+      { topic: "the plane|plane|consulate|embassy|the man|the loan|ticket|why stay|why don't you go home", text: "\"Twice he has offered,\" Henning says. \"Polite man. Good shirt. A loan against the passport and a seat by the window.\" He shrugs. \"And then Aalborg airport, and my daughter's face at the barrier, and every man at the harbour who shook my hand when I left. The fare I could find. That one I cannot.\"", short: "\"The fare I could find. The faces at the barrier, I cannot.\"" },
+      { topic: "the sweep|sweep|police|the pickup|arrested|overstay|visa", text: "\"The pickup comes at seven some mornings.\" He says it like a tide table. \"They read the passport, they say not here, they photograph the bench, they go. My visa is good — I am careful about that, it is the last thing I am careful about. The ones with no visa, they take for a while. Then they are back. Where would they go?\"", short: "\"Not here, they say, and photograph the bench. Then they go.\"" },
+      { topic: "money|pension|how much|the money|what happened|how did you|scam|the woman", text: "\"A pension that was enough in 2009,\" he says. \"A house I sold to come here, and a woman I gave the house to, and her brother's restaurant, which was a very good idea for eight months.\" He is not bitter about it; he has filed it. \"I am not a victim. I am a man who believed a spreadsheet he wrote himself.\"", short: "\"A pension that was enough in 2009, and a spreadsheet I believed.\"" },
+      { topic: "drink|beer|whisky|the bag|bottle|sang som", text: "He does not look at the bag. \"In the afternoon, a little. In the evening, more. In the morning, never — that is my rule, and I keep it, because it is the one I can.\" A small dry smile. \"Do not buy me one. Buy me a coffee, if you like. Nobody buys a man on a bench a coffee. It confuses them.\"", short: "\"Do not buy me a drink. A coffee confuses people.\"" },
+      { topic: "food|eat|hungry|water|where do you eat", text: "\"The woman with the noodle cart gives me the end of the pot at closing,\" he says. \"I do not ask. I sweep her bit of pavement in the morning; she does not ask either. That is a Thai arrangement and I am very proud of it.\"", short: "\"The end of the noodle pot. I sweep her pavement. Nobody asks.\"" },
+      { topic: "shelter|bangkok|charity|help|the church|a bed", text: "\"There is a place in Bangkok,\" Henning says. \"A bed, a shower, a man who helps with the forms. They take men off the streets, a few at a time.\" He folds his hands. \"I went once. I lasted two nights. They were very kind and they wanted to know my daughter's telephone number.\"", short: "\"Bangkok has a bed. They wanted my daughter's number.\"" },
+      { topic: "the bench|bench|sleep|where do you sleep|the beach", text: "\"This one, by the bus stop, because the light is on all night and the 7-Eleven is twenty metres.\" He pats it. \"The beach is softer and the sea takes your shoes. The benches by the market are better in the rain. You learn the town by where it lets you lie down.\"", short: "\"The bench with the light on. You learn the town by where it lets you lie down.\"" },
+    ],
+  };
+
 
 // ── Character creation: who you are ─────────────────────────────────────────
 // Picked in the taxi-ride intro (see _taxiIntro). Dialogue-only for v1: origin/

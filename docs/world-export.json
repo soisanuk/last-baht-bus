@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 254,
   "patrons": 26,
-  "people": 392,
-  "portraits": 418,
+  "people": 393,
+  "portraits": 419,
   "renders": 418,
   "thumbs": 418,
   "venues": 254
@@ -1291,6 +1291,13 @@
    "role": "cashier",
    "room": "sandy_toes",
    "th": "หาด"
+  },
+  "henning": {
+   "desc": "Sixty-eight, sunburnt the deep permanent way, grey hair past his collar, a denim shirt that was ironed once by somebody who loved him. He has the bench by the bus stop and the plastic bag under it, and he sits up very straight, as if posture were the last thing he still owned outright. He was a ship's engineer for thirty years. He will tell you that before he tells you his name.",
+   "emoji": "🪑",
+   "name": "Henning",
+   "pronoun": "he",
+   "room": "beach_rd_c"
   },
   "hong": {
    "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Jasmine Garden Bar, from Ubon.",
@@ -4186,6 +4193,7 @@
   "gyp",
   "haad",
   "helmut",
+  "henning",
   "hong",
   "hot_pepper_chom",
   "hot_pepper_gina",

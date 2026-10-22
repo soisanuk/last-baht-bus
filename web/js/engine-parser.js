@@ -7901,24 +7901,24 @@ Object.assign(_TOWN, {
     floor: [
       "\"{w}?\" {n}'s face does something complicated. \"Big tipper. {m} one song. When he online, everybody want the camera. Sorry, na — is money.\"",
       "\"{nick}.\" {n} says it like a regular's nickname. \"{from}. He wake up, he watch us. Nobody see his face, everybody know his name.\"",
-      "{n} glances at the {d}. \"When he online, the girl at the camera make more than the girl with customer. Mama say sit with customer. Girls say: you pay {m} a song?\"",
+      "{n} glances at the {d}. \"When {w} online, the girl at the camera make more than the girl with customer. Mama say sit with customer. Girls say: you pay {m} a song?\"",
       "\"He tip, he tip, he tip,\" {n} says about {w}. \"One night he send twenty song. One girl buy motorbike from him.\" She does not say which girl.",
-      "\"I sit with you,\" {n} says, \"but when the {d} ping I look. Everybody look. Is not personal, tilac.\"",
+      "\"I sit with you,\" {n} says, \"but when the {d} ping and is {w}, I look. Everybody look. Is not personal, tilac.\"",
       "\"He never come Pattaya,\" {n} says of {w}. \"I ask on the stream. He say maybe next year. Every year he say next year.\"",
-      "\"Sometime he ring the bell from {from},\" {n} says. \"Bell! From the phone! Everybody drink, everybody go camera say thank you. Customer here get free drink and nobody.\"",
+      "\"Sometime {w} ring the bell from {from},\" {n} says. \"Bell! From the phone! Everybody drink, everybody go camera say thank you. Customer here get free drink and nobody.\"",
     ],
     house: [
       "\"{w},\" {n} says. \"He keeps {when} and tips by the song — {m}. The girls go to the camera when he's on, and I let them, because a song from him is a night's drinks.\"",
-      "{n} sighs. \"The men on the stools don't like it when he is online. I don't like it either. The till likes it.\"",
-      "\"Match him and she stays,\" {n} says, very dry. \"{m} the song. Or ring the bell; even he can't buy the whole room.\"",
-      "\"He has never been to Thailand,\" {n} says. \"He knows every girl's name on my floor. I know his handle. That is the whole relationship.\"",
-      "\"Some nights he rings the bell,\" {n} says. \"From {home}. The whole room drinks on him and every girl goes to the camera to thank him — and a man on a stool drinks free and sits alone.\"",
+      "{n} sighs. \"The men on the stools don't like it when {w} is online. I don't like it either. The till likes it.\"",
+      "\"Match {w} and she stays,\" {n} says, very dry. \"{m} the song. Or ring the bell; even he can't buy the whole room.\"",
+      "\"{w} has never been to Thailand,\" {n} says. \"He knows every girl's name on my floor. I know his handle. That is the whole relationship.\"",
+      "\"Some nights {w} rings the bell,\" {n} says. \"From {home}. The whole room drinks on him and every girl goes to the camera to thank him — and a man on a stool drinks free and sits alone.\"",
     ],
     punter: [
       "\"{w},\" {n} says. \"Bloody {w}. His name comes up on that {d} and half the floor walks off to sing at a camera. You can't compete with a man who isn't here.\"",
-      "{n} nods at the corner. \"Tips {m} a song from {home}, apparently. I've stopped taking it personally. Mostly.\"",
-      "\"Ring the bell when he's on,\" {n} says. \"Only thing that works. Costs you a round, buys you the room back for an hour.\"",
-      "\"Man's never set foot in Pattaya and he's the most popular bloke in the bar,\" {n} says. \"Says something. Not sure what.\"",
+      "{n} nods at the corner. \"{w}. Tips {m} a song from {home}, apparently. I've stopped taking it personally. Mostly.\"",
+      "\"Ring the bell when {w}'s on,\" {n} says. \"Only thing that works. Costs you a round, buys you the room back for an hour.\"",
+      "\"{w} has never set foot in Pattaya and he's the most popular bloke in the bar,\" {n} says. \"Says something. Not sure what.\"",
     ],
   },
   stream_not: {
@@ -7970,8 +7970,8 @@ Object.assign(_TOWN_THAI, {
   ],
   stream_whale: [
     "\"{w},\" {n} says. \"{When}, he tip by the song — {m}. When he on, girls go camera. I let them; one song from him is drinks for the night.\"",
-    "{n} sighs. \"Customer on stool don't like when he online. Me also. The till like.\"",
-    "\"Match him, she stay,\" {n} says. \"{m} one song. Or ring bell — even him cannot buy whole room.\"",
+    "{n} sighs. \"Customer on stool don't like when {w} online. Me also. The till like.\"",
+    "\"Match {w}, she stay,\" {n} says. \"{m} one song. Or ring bell — even him cannot buy whole room.\"",
   ],
   stream_not: [
     "\"That is company bar,\" {n} says. \"{b}. Camera every room. Here no. Here you have to come sit.\"",
@@ -15733,6 +15733,7 @@ function _chipSet() {
   }
   if (G.pendingChoice === "gameend") { add("visit pattaya", "visit Pattaya"); add("start over"); add("share", "share card"); return chips; }
   if (G.pendingChoice === "soi6continue") { add("another week", "another week — a month on"); add("cancel the ticket", "cancel the ticket — never going home"); add("not yet"); return chips; }
+  if (G.pendingChoice === "embassy") { add("take the plane"); add("stay"); return chips; }
   if (G.pendingChoice === "keptby") { add("yes", "yes — her mat"); add("no"); return chips; }
   if (G.pendingChoice === "vacation_end") {
     if (G.mode === "soi6") { add("continue", "continue — the same people"); add("play again", "play again — fresh week"); add("share", "share card"); add("restart", "restart as somebody else"); return chips; }   // RESTART was in HELP's sentence and on no chip (Marcus, round 96)
@@ -16241,6 +16242,7 @@ function engineComplete(input) {
   if (G.pendingChoice === "gameend") pool = ["visit pattaya", "start over", "share"];
   else if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["continue", "play again", "share", "restart"] : ["new vacation", "move to pattaya"];
   else if (G.pendingChoice === "soi6continue") pool = ["another week", "cancel the ticket", "not yet", "share"];
+  else if (G.pendingChoice === "embassy") pool = ["take the plane", "stay"];
   else if (G.pendingChoice === "keptby") pool = ["yes", "no"];
   else if (G.pendingChoice === "rabbitjob") pool = ["carry it", "keyboard", ...(G.known && G.known.nont && _kidOpen() ? ["the kid"] : []), "not me", "ask"];
   else if (G.pendingChoice === "kidprice") pool = ["pay", "no", "ask"];
@@ -17732,6 +17734,7 @@ function _renderResume() {
   }
   if (G.pendingChoice === "gameend") { for (const l of _lifeCard()) _say(l, "win"); _gameEndPrompt(); return; }
   if (G.pendingChoice === "soi6continue") { _soi6ContinuePrompt(); return; }
+  if (G.pendingChoice === "embassy") { _embassyPrompt(); return; }
   if (G.pendingChoice === "keptby") { _keptByPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.pendingChoice === "rabbitjob") { _rabbitJobPrompt(); return; }
@@ -18048,6 +18051,12 @@ function _doCommandInner(input) {
     _gameEndPrompt(); return;
   }
   // HER MAT (destitution, 2026-10-20): her offer, once; a question keeps it; the wrong answer keeps it
+  if (G.pendingChoice === "embassy") {   // the plane, offered (2026-10-22)
+    if (/^(take|plane|the plane|yes|ok|okay|go home|fly|home|accept|i'?ll go|go)\b/.test(lower) || /^y$/.test(lower)) { _embassyGo(); return; }
+    if (/^(stay|no|nope|refuse|never|not going|i'?m staying|i stay|keep)\b/.test(lower) || /^n$/.test(lower)) { _embassyStay(); return; }
+    if (_read(lower).kind === "question" || /^(explain|what|help|why|how)\b/.test(lower)) { _say(_fmt("The plane is ฿{l} lent against your passport: a flight home, the game's end, and nothing asked about how. STAY is the bench — no folio, the morning sweep, the lenders shut — and the offer again in " + STREET_REOFFER + " days. A roof paid for again (a payday, a job) ends the bench without a plane.", { l: _num(EMBASSY_LOAN) }), "dim"); _embassyPrompt(); return; }
+    _embassyPrompt(); return;
+  }
   if (G.pendingChoice === "keptby") {
     if (/^(yes|ok|okay|thank|thanks|stay|her|i stay|please)\b/.test(lower) || /^y$/.test(lower)) { _keptByYes(); return; }
     if (/^(no|nope|can'?t|cannot|not|never)\b/.test(lower) || /^n$/.test(lower)) { _keptByNo(); return; }
@@ -19261,6 +19270,11 @@ function _doCommandInner(input) {
         const kn = NPCS[G.keptBy.id] ? NPCS[G.keptBy.id].name : "her";
         if (!_endConfirm("sleep", `It's ${_clockStr()}. Sleep now and the night ends on ${kn}'s mat; whatever is still open stays open without you. (SLEEP again if you mean it.)`)) return;
         _say(`${kn}'s room: the fan, the mat, her phone glowing on the shrine shelf. You are asleep before the arithmetic of it catches up with you.`);
+        _endNight("sleep"); return;
+      }
+      else if (G.street) {   // the plane refused: a bench is a bed (2026-10-22)
+        if (!_endConfirm("sleep", `It's ${_clockStr()}. Sleep now and the night ends on whatever bench you can find; the morning finds you there. (SLEEP again if you mean it.)`)) return;
+        _say(_isHotelRoom(G.room) ? "The night porter lets you have the lobby chair till six, which is a kindness with a time limit." : "You find a bench the night has not claimed, put the bag under your head, and keep your shoes on. You have learned that much.");
         _endNight("sleep"); return;
       }
       else if (G.room === _hotelRoomId() || (_room().exits && _room().exits.up === _hotelRoomId())) {

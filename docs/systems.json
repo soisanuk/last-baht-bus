@@ -1127,16 +1127,19 @@
   },
   {
    "id": "expat-month",
-   "name": "The resident's month: income by origin, the payday, MONEY, the paper scalar, destitution and her mat",
+   "name": "The resident's month: income by origin, the payday, MONEY, the paper scalar, destitution and her mat; the plane refused and the bench",
    "verbs": [
     "money",
     "budget"
    ],
    "rooms": [],
-   "npcs": [],
+   "npcs": [
+    "henning"
+   ],
    "effects": [],
    "modals": [
-    "keptby"
+    "keptby",
+    "embassy"
    ],
    "quests": [],
    "encounters": [],
