@@ -1,0 +1,6 @@
+{"cmd":"streams","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"condo_room","day":8,"turn":2,"mode":null,"convo":null,"at":"2026-10-22T16:34:51.209Z","src":"persona-remote"}
+{"cmd":"who's online?","reply":"I didn't understand that. Try a shorter command — a verb, then who or what.","room":"condo_room","day":8,"turn":2,"mode":null,"convo":null,"at":"2026-10-22T16:34:51.209Z","src":"persona-remote"}
+{"cmd":"did you see my bell?","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"condo_room","day":8,"turn":20,"mode":null,"convo":null,"at":"2026-10-22T16:35:36.529Z","src":"persona-remote"}
+{"cmd":"is silverfox on?","reply":"That didn't parse — start with a verb the game knows, then who or what.","room":"condo_room","day":8,"turn":20,"mode":null,"convo":null,"at":"2026-10-22T16:35:36.529Z","src":"persona-remote"}
+{"cmd":"is silverfox online","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"condo_room","day":9,"turn":33,"mode":null,"convo":null,"at":"2026-10-22T16:38:23.343Z","src":"persona-remote"}
+{"cmd":"who's on the stream","reply":"That didn't parse. Phrase it as a command the game knows: a verb, then who or what.","room":"condo_room","day":9,"turn":33,"mode":null,"convo":null,"at":"2026-10-22T16:38:23.343Z","src":"persona-remote"}

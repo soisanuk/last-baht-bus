@@ -328,7 +328,7 @@ function newGame() {
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
-    homeSeen: {}, flatTold: {}, street: null, streetDone: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0,   // the resident's integration pass (round 100)
+    homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0,   // the resident's integration pass (round 100)
     loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0, quizWon: 0, giftIn: 0, lastNightBye: null,   // quiz prizes and a note pressed on you (round 93); principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
@@ -1462,7 +1462,9 @@ function _hotelRate(k) {
 function _chargeRent(rough) {
   if (!_flag("act1Done") || G.stage === "act1") return;
   if (G.hotel === "condo") return;
-  if (G.keptBy) return;   // her mat: no folio (destitution, 2026-10-20)   // a roof by the month bills on the payday (_condoMonth), not under the door
+  if (G.keptBy) return;   // her mat: no folio (destitution, 2026-10-20)
+  if (G.roomPrepaid === G.day - 1) { G.roomPrepaid = null; return; }   // the night was paid at the desk, or by Bert: no folio under the door for it
+  if (G.street) { G.roofless = G.day; return; }   // a bench takes no folio: the desk does not bill a man it did not house (Alun, round 104)   // a roof by the month bills on the payday (_condoMonth), not under the door
   if (G.hotelDebt && G.money >= G.hotelDebt + _hotelRate(G.hotel)) {
     G.money -= G.hotelDebt;
     _say(`(You settle the ฿${_num(G.hotelDebt)} on the book on your way past the desk. ` +
@@ -2464,7 +2466,7 @@ function _thaiVoice(id) {
   // the rail regulars (one cast since the patron fold): 23 western expats who
   // must not get the Tinglish miss pool — but Somsak is Thai, so key on the
   // profile card he already carries, not on the flag alone
-  if (n.patron && n.nat && n.nat !== "Thai") return false;
+  if (n.nat && n.nat !== "Thai") return false;   // any westerner with a profile card, rail or bench (Henning, round 104)
   return true;
 }
 // THE FLUENT THAI REGISTER (the dialogue walk's readers, 2026-10-02): Tan went to film

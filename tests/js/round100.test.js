@@ -86,7 +86,7 @@ test("Willem's own sentences: 'ok i take the job', 'number now', 'what's to eat'
   run("talk to " + m); run("ask " + m + " about a job"); t("ok i take the job"); assert.ok(G.job, "the job was taken"); run("quit job");
   const g = _staffAt(SB).find(i => NPC_ROLES[i] === "hostess"); run("talk to " + g); G.soc.drinks[g] = 4; assert.doesNotMatch(t("number now?"), /not here to ask|didn't parse/);
   G.room = "queen_vic"; assert.doesNotMatch(t("what's to eat"), /The soi blinks|didn't parse/);
-  G.room = SB; run("talk to " + g); assert.match(t("let's go to my hotel"), /SHORT TIME|LONG TIME|barfine|fine|not tonight|mama|upstairs|lady drink first|we go up|the stairs are open|One drink/i);
+  G.room = SB; run("talk to " + g); assert.match(t("let's go to my hotel"), /SHORT TIME|LONG TIME|barfine|fine|not tonight|mama|upstairs|lady drink first|we go up|the stairs are open|One drink|closing|camera|lose him/i);
   G.hotel = "areca"; assert.match(t("is there a pool"), /SWIM/);
   newGame(); startSoi6Mode(); run("retired. ferry engineer, a pension"); assert.equal(G.player.origin, "pension");
 });

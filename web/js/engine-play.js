@@ -6342,6 +6342,7 @@ function _endNight(reason) {
       }
       break;
     case "sleep":
+      if (G.street) break;   // the bench said its own line at SLEEP; no air-con on a bench (Alun, round 104)
       if (!G.keptBy) _say(_inCondo() ? _pickVary(["You call it. Nine floors up the town is a hum and a glow past the balcony rail, the lift sighs once somewhere below, and the bay does nothing all night, beautifully.",
         "You call it. The fan on two, the hill road's one streetlight, and the bars a long way down and somebody else's problem until tomorrow.",
         "You call it. The flat does what a flat does at this hour: the fridge clicks, the tower settles, and you are asleep before you have decided to be."], "sleepcondo")
@@ -6622,7 +6623,9 @@ function _endNight(reason) {
   // unnecessary (Howard, round 35). The safe pays first; the later call no-ops.
   if (!crash && G.act1SafeDue && G.room === _hotelRoomId() && typeof _roomSafeBeat === "function")
     _roomSafeBeat();
-  if (!crash && (_hadParty || _bedIds) && typeof _affairLive === "function" && _affairLive() && !(_bedIds || (G.party && G.party.ids) || []).includes(G.affair.id) && typeof _affairCaught === "function") _affairCaught("bed", _bedIds);   // two women in one bed and neither saw the other (Rolf, round 66)
+  // only a night that ENDED in your bed with somebody who is not her: the party is cleared by now, so "anybody on your arm"
+  // read as nobody, and a night out that ended at the sunrise (or with HER) caught you with no shoes at the door (Benoît, round 104)
+  if (!crash && _bedIds && _bedIds.length && typeof _affairLive === "function" && _affairLive() && !_bedIds.includes(G.affair.id) && typeof _affairCaught === "function") _affairCaught("bed", _bedIds);   // two women in one bed and neither saw the other (Rolf, round 66)
   else if (!crash && typeof _affairMorning === "function") _affairMorning();   // she came home with you (Rolf, round 55)
   _chargeRent(!!crash);              // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
@@ -6633,6 +6636,7 @@ function _endNight(reason) {
   if (G.chamNight) _say(_fmt("── DAY {d}{home} — grey light, far too early, and somebody else in the " +
     "room is already dressed. The rest of the day you will sleep through ──",
     { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
+  else if (G.street) _say(_fmt("── DAY {d} · PATTAYA — first light on a bench, the town waking up around you before you have decided to ──", { d: G.day }), "win");   // not mid-afternoon in a room (Alun, round 104)
   else if (G.stage === "expat" && G.job && G.job.kind === "school" && [1, 2, 3, 4, 5].includes(G.day % 7))   // a man with a gate at eight does not surface mid-afternoon (Victor)
     _say(_fmt("── DAY {d} · PATTAYA, HOME — the alarm at seven, the gate at eight, M3 and M4 and the conversation class; " +
       "the afternoon is yours and by the time you have slept it off the neon is waking up ──", { d: G.day }), "win");
@@ -7206,6 +7210,13 @@ function _stayTalk(npc) {
   if (G.leaveSaid) delete G.leaveSaid[npc]; G.leaveOn = null;   // "only joking, I'm not leaving" takes the flight off her book (Eoin, round 101)
   if (said[npc]) { _say(`${n} nods. "You tell me. I remember." A beat. "I still don't believe. But I remember."`); return true; }
   said[npc] = G.day; const t = _knownTier(npc);
+  // a man who already lives here — the owner of a bar, a tenant, a month in — is news, not a first-week boast (Benoît, round 104)
+  const _owns = typeof _barOwned === "function" && _barOwned(), _rooted = _owns || G.hotel === "condo" || (G.stage === "expat" && G.payDay != null && G.day - G.payDay > 20);
+  if (_rooted && G.stage === "expat") {
+    _say(_pickTownLine(_owns ? [`"I know." ${n} grins. "${_barName(G.bar.room)}. Everybody on the soi know. Farang who own a bar is not leaving — the bar don't let him."`, `"You own ${_barName(G.bar.room)}," ${n} says. "That is not stay. That is stuck. Good stuck, maybe."`]
+      : [`"I know you stay," ${n} says. "Farang who only visit, his shoes are new. Yours are not new."`, `${n} nods. "You stay already. I see you every week, same face, more tired. That is how I know."`], "staytalk:rooted"));
+    return true;
+  }
   _say(_pickTownLine(t >= 2 ? [`"Stay?" ${n} puts the glass down. "Everybody say stay. Three men say it to me, this year. One stay." She looks at you properly. "Okay. Then I stop counting days for you. Then you have to come anyway — not because flight, because me."`,
       `${n} does not smile at first, which is how you know it landed. "You stay. Hm." Then she does. "Then I need to know your real name, not the one on the stool. And you need a job, na — Pattaya eat the ones who only drink."`,
       `"No ticket." ${n} says it back, testing it. "Then tomorrow is not the last time, and the day after is not the last time." She takes your glass and brings it back full, which she has never done unpaid. "Welcome. Now you pay like everybody."`]
@@ -7471,15 +7482,33 @@ const _STREET_SWEEP = [
   "Two officers on a motorbike, the morning round. One reads your passport, one reads your face. \"Overstay? No? Okay. Not here, sir. Not on this road.\" A warning, written nowhere. They are gone before the shops open.",
   "A police pickup rolls the length of the road at walking pace while an officer photographs the benches. Nobody is taken anywhere. It is the kind of sweep that is for the photographs.",
 ];
+function _streetOff(how) {   // a roof again: the desk takes the folio and the key works (a check-in, a payday's card, a friend squaring it)
+  const s = G.street; if (!s) return;
+  G.street = null; G.streetDone = { since: s.since, off: G.day, nights: s.nights }; G.roofless = null; G.destitute = 0; G.destituteDay = null;
+  _say(`${how || "A room again"}, with a door that locks and a fan that is yours. ${s.nights} night${s.nights === 1 ? "" : "s"} on the bench, and the town did not once ask you to explain them. You find you do not want to either.`, "win");
+}
+// the desk takes him back: the folio and a night, from the pocket and then the card (Alun, round 104: "Nobody's waiting to be paid")
+function _streetCheckIn() {
+  if (!G.street) return false;
+  const due = (G.hotelDebt || 0) + _hotelRate(G.hotel);
+  if (G.money + (G.bank || 0) < due) { _say(`The night man shows you the folio: ฿${_num(G.hotelDebt || 0)} on the book and ฿${_num(_hotelRate(G.hotel))} for tonight — ฿${_num(due)} before the key comes off the board. You have ฿${_num(G.money + (G.bank || 0))}, pocket and card together.`, "dim"); return true; }
+  const p = Math.min(G.money, due); G.money -= p; G.bank = (G.bank || 0) - (due - p);
+  if (G.stage === "expat" && G.month) { G.month.rent = (G.month.rent || 0) + _hotelRate(G.hotel); G.roomNight = (G.roomNight || 0) + _hotelRate(G.hotel); }
+  G.hotelDebt = 0; G.roomPrepaid = G.day;
+  _streetOff(`The night man takes ฿${_num(due)}, writes it in the book without looking up, and slides the key across: a room again`);
+  return true;
+}
 function _streetMorning() {
   const s = G.street;
-  if (G.roofless !== G.day) {   // a roof paid for again: the payday, the envelope, a friend
-    G.street = null; G.streetDone = { since: s.since, off: G.day, nights: s.nights };
-    _say(`A room again, with a door that locks and a fan that is yours. ${s.nights} night${s.nights === 1 ? "" : "s"} on the bench, and the town did not once ask you to explain them. You find you do not want to either.`, "win");
-    return;
+  // the payday's money is a roof: the desk runs the card for the folio and the week (Alun, round 104 — the pension landed, still "9 nights on a bench")
+  const due = (G.hotelDebt || 0) + _hotelRate(G.hotel);
+  if ((G.bank || 0) + G.money >= due + _hotelRate(G.hotel) * 7) {
+    const p = Math.min(G.money, due); G.money -= p; G.bank = (G.bank || 0) - (due - p); G.hotelDebt = 0;
+    _streetOff("The desk runs your card this morning — the folio, and the night — and the key comes off the board: a room again"); return;
   }
   s.nights = (s.nights || 0) + 1;
-  const spot = _crashSpotFor(G.room); if (spot && ROOMS[spot.room]) G.room = spot.room;
+  const lay = s.lay && ROOMS[s.lay] && !_isHotelRoom(s.lay) && !ROOMS[s.lay].barType && !ROOMS[s.lay].indoors ? s.lay : null;   // he wakes where he lay down
+  const spot = lay ? { room: lay } : _crashSpotFor(s.lay || G.room); if (spot && ROOMS[spot.room]) G.room = spot.room;
   G.battery = Math.min(G.battery, 30);   // no socket on a bench
   _say(_pickVary(_STREET_MORNING, "streetmorning"), "dim");
   if (_hm("sweep:" + G.vacation + ":" + G.day, 13) % 100 < STREET_SWEEP_PCT) { s.swept = (s.swept || 0) + 1; _say(_pickVary(_STREET_SWEEP, "streetsweep"), "dim"); }

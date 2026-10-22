@@ -11446,6 +11446,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "school fee, the fertiliser, the funeral. We charge…\" she taps the bar twice \"…ยี่สิบ, " +
           "twenty percent, pay back in a few days. Everybody happy.\" A beat. \"You think the bar owns " +
           "me. The bar RENTS me. Different thing, na.\"" },
+      { topic: "loan|borrow|lend|borrowing", when: (st, G) => !!G.street && !G.loan, text: "\"Loan?\" Nira looks at your shoes before your face. \"I lend to a man with a door. Get a room, any room — then come back, and I remember you were polite when you had nothing.\"", short: "\"A man with a door, I lend. Get a room first.\"" },   // the bench (Alun, round 104: BORROW refused, ASK ABOUT LOAN pitched)
       { topic: "loan|borrow|lend|borrowing", when: (st, G) => !!(G.loan && G.day > G.loan.dueDay),
         text: "\"Late.\" Nira says it before you do, and does not stop counting. \"You know the number — " +
           "it went up last night and it goes up tonight. I don't shout. I don't need to.\" She looks at " +
@@ -15565,13 +15566,13 @@ const SYNDICATE_JOBS = [
     who: "\"You are paying for same day.\" He says it as though it were obvious, " +
       "which it is. \"Anybody can sell you a till. On a Saturday in high season, when " +
       "every bar on this coast has the same problem, you are one of forty phone calls " +
-      "— or you are one of the four they come to first.\"\n\nHe turns the water Bert put in front of him a quarter-turn on the bar. " +
+      "— or you are one of the few they come to first.\"\n\nHe turns the water Bert put in front of him a quarter-turn on the bar. " +
       "\"That is the only thing you ever buy in this country, my friend. Not the " +
       "thing. The order of the phone calls.\"",
     yes: "It costs what he said it would cost, which is too much. One day it will die on " +
       "a Saturday at nine in the evening and a man will be standing in your bar at ten past " +
       "with the replacement under his arm, and you will understand exactly what you bought.",
-    perk: "You are one of the four.",
+    perk: "You are one of the few.",
     no: "\"Mm.\" He considers the street for a moment. \"Then I hope it does not " +
       // No sneer at the outside option: the whole discipline of this passage is
       // that neither answer is graded, and "a very smart website" was the one
@@ -17422,6 +17423,7 @@ NPCS.henning = {
       { topic: "drink|beer|whisky|the bag|bottle|sang som", text: "He does not look at the bag. \"In the afternoon, a little. In the evening, more. In the morning, never — that is my rule, and I keep it, because it is the one I can.\" A small dry smile. \"Do not buy me one. Buy me a coffee, if you like. Nobody buys a man on a bench a coffee. It confuses them.\"", short: "\"Do not buy me a drink. A coffee confuses people.\"" },
       { topic: "food|eat|hungry|water|where do you eat", text: "\"The woman with the noodle cart gives me the end of the pot at closing,\" he says. \"I do not ask. I sweep her bit of pavement in the morning; she does not ask either. That is a Thai arrangement and I am very proud of it.\"", short: "\"The end of the noodle pot. I sweep her pavement. Nobody asks.\"" },
       { topic: "shelter|bangkok|charity|help|the church|a bed", text: "\"There is a place in Bangkok,\" Henning says. \"A bed, a shower, a man who helps with the forms. They take men off the streets, a few at a time.\" He folds his hands. \"I went once. I lasted two nights. They were very kind and they wanted to know my daughter's telephone number.\"", short: "\"Bangkok has a bed. They wanted my daughter's number.\"" },
+      { topic: "closing|close|closing time|what time|last orders|open late|still open", text: "\"The bars?\" Henning almost smiles. \"I do not keep their hours any more. The 7-Eleven never closes, which is why I chose this bench.\"", short: "\"I do not keep the bars' hours. The 7-Eleven never closes.\"" },
       { topic: "the bench|bench|sleep|where do you sleep|the beach", text: "\"This one, by the bus stop, because the light is on all night and the 7-Eleven is twenty metres.\" He pats it. \"The beach is softer and the sea takes your shoes. The benches by the market are better in the rain. You learn the town by where it lets you lie down.\"", short: "\"The bench with the light on. You learn the town by where it lets you lie down.\"" },
     ],
   };

@@ -112,7 +112,7 @@ function lamonSeed() {
     if (G.pendingChoice !== "affair") throw new Error("lamon: the affair's door never opened");
     _affairYes();
     G.room = _hotelRoomId(); _endNight("sleep");
-  } finally { _rand = saved; }
+} finally { _rand = saved; }
   G.affair.since = G.day - 10; G.affair.crisDay = G.day;
   quiet(); G.encDone = {};
   _nightSnapshot();
@@ -206,6 +206,28 @@ function hunterSeed() {
   G.room = "qv_room"; G.nightTurn = 0; G.hunger = 10; G.thirst = 10; quiet(); G.encDone = {}; _nightSnapshot();
   return serializeGame();
 }
+// bench (round 104): the pensioner who cancelled the ticket and went broke — the Sabai has stopped writing him down,
+// two roofless mornings behind him, Pukky's offer already spent, his pension's payday about ten days out — so the
+// third morning is the consulate's plane, and STAY is the bench until the payday is a roof again.
+function benchSeed() {
+  stayedSeed("pension", 0, 0);
+  G.hotel = "sabai"; G.hotelDebt = _DEBT_CAP; G.room = _hotelRoomId(); G.payDay = G.day - (INCOME_DAYS - 10);
+  G.destitute = 2; G.destituteDay = G.day; G.keptByUsed = true;   // counted this morning: the next is the third
+  G.soc.drinks.pukky = 4; G.phone.contacts.pukky = true; G.talked.pukky = [0]; (G.metDay = G.metDay || {}).pukky = 3;
+  G.nightTurn = 30; G.hunger = 40; G.thirst = 40; quiet(); G.encDone = {}; _nightSnapshot();
+  return serializeGame();
+}
+// remote (round 104): the condo tenant who knows the camera bars — the Jade, the Golden Dragon, the Lucky Tiger, the
+// Honey Trap — with money in the account and a face at the Jade, so the phone is his barstool
+function remoteSeed() {
+  stayedSeed("pension", 3000, 80000);
+  G.room = "pratumnak_soi5"; G.nightTurn = 2; out = []; doCommand("rent a condo"); doCommand("rent a condo");
+  if (G.hotel !== "condo") throw new Error("remote seed: the lease did not sign: " + out.join(" | "));
+  for (const r of ["jade_lounge", "golden_dragon", "lucky_tiger", "honey_trap"]) { G.visited[r] = true; (G.visitDay = G.visitDay || {})[r] = G.day - 2; }
+  G.soc.drinks.jade_lounge_cartoon = 4; G.phone.contacts.jade_lounge_cartoon = true; G.talked.jade_lounge_cartoon = [0]; (G.metDay = G.metDay || {}).jade_lounge_cartoon = 4;
+  G.room = "condo_room"; G.nightTurn = 0; G.hunger = 10; G.thirst = 10; quiet(); G.encDone = {}; _nightSnapshot(); G.monthAdj = 0;
+  return serializeGame();
+}
 function reload(blob) { newGame(); deserializeGame(blob); }
 
 // ── build ──
@@ -229,6 +251,8 @@ const seeds = {
   wallet2: wallet2Seed(),
   hill: hillSeed(),
   hunter: hunterSeed(),
+  bench: benchSeed(),
+  remote: remoteSeed(),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -339,6 +363,16 @@ try {
   const hu = { stage: G.stage, pot: om.kind === "pot", job: !!G.job, money: G.money };
   console.log("hunter:", JSON.stringify(hu));
   if (hu.stage !== "expat" || !hu.pot || hu.job) throw new Error("hunter seed cannot reach its drive");
+  // Bench: the third morning is the plane; STAY is the bench
+  reload(seeds.bench); out = []; doCommand("sleep"); doCommand("sleep");
+  const be = { gate: G.pendingChoice }; doCommand("stay"); be.street = !!G.street; be.end = G.endKind || null;
+  console.log("bench:", JSON.stringify(be));
+  if (be.gate !== "embassy" || !be.street || be.end) throw new Error("bench seed cannot reach its drive");
+  // Remote: the phone shows a stream bar and rings its bell
+  reload(seeds.remote); G.nightTurn = 30; out = []; doCommand("watch stream jade"); const rw = out.join(" "); out = []; const b0 = G.bank; doCommand("stream bell jade");
+  const re = { watch: /Jade Lounge/.test(rw), bell: G.bank < b0, tenant: G.hotel === "condo" };
+  console.log("remote:", JSON.stringify(re));
+  if (!re.watch || !re.bell || !re.tenant) throw new Error("remote seed cannot reach its drive");
 } finally { _rand = saved; }
 
 for (const [name, blob] of Object.entries(seeds)) {

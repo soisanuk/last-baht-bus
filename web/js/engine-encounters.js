@@ -333,6 +333,7 @@ function _maybeEncounter() {
   const withCompany = !!(G.party && G.party.ids && G.party.ids.length);
   const eligible = Object.keys(ENCOUNTERS).filter(id =>
     !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
+    !(G.street && ["freelancer", "tonic", "fortune", "peddler", "booking", "flower"].includes(id)) &&   // the street knows a man who slept out: nobody pitches him (Alun, round 104)
     !(withCompany && ENCOUNTERS[id].solo) &&
     (id !== "powerbank" || G.battery <= 30) &&
     // 70 = 01:00, which is when she says she finishes (the text no longer asserts the hour — it printed "gone 1 a.m." at 04:45, Dieter, round 56)

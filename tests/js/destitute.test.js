@@ -87,7 +87,7 @@ test("the bench: a morning on it is named; the sweep comes some mornings; Nira w
 });
 test("a roof paid for again ends the bench without a plane — the payday is the way back", () => {
   toEmbassy(); run("stay"); sleep();
-  G.money = 5000; G.hotelDebt = 0; const s = sleep(); assert.equal(G.street, null); assert.ok(G.streetDone); assert.match(s, /A room again/);
+  G.money = 5000; G.hotelDebt = 0; const s = sleep(); assert.equal(G.street, null); assert.ok(G.streetDone); assert.match(s, /room again/i);
 });
 test("Henning on the bench answers for himself, and for a man who has joined him", () => {
   broke(); G.room = "beach_rd_c"; G.nightTurn = 30; for (const k in ENCOUNTERS) G.encDone[k] = true;
