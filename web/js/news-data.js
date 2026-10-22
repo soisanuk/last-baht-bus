@@ -3,42 +3,42 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pattaya motorbike taxi riders say blue vests confuse tourists",
+    "t": "Motorcyclist killed after riding past lowered railway crossing barrier in Pattaya",
     "s": "Khaosod English",
-    "d": "20 Oct 2026"
-  },
-  {
-    "t": "Pattaya coffee shop owner left fearing revenge after thief escapes from police",
-    "s": "Thaiger",
     "d": "21 Oct 2026"
   },
   {
-    "t": "Pattaya bars keep customers happy with parties, celebrations and personal touches",
-    "s": "Pattaya Mail",
-    "d": "20 Oct 2026"
+    "t": "Chinese Red Notice suspect arrested in Pattaya as DNA probe uncovers paternity case",
+    "s": "Nation Thailand",
+    "d": "22 Oct 2026"
   },
   {
-    "t": "Pattaya motorcyclist killed by train after ignoring railway barrier",
+    "t": "Pattaya’s blue taxi vests face U-turn after just six days",
     "s": "Thaiger",
+    "d": "22 Oct 2026"
+  },
+  {
+    "t": "Kenny G returns to Pattaya Jazz Festival 2026 with huge crowds expected",
+    "s": "Pattaya Mail",
     "d": "21 Oct 2026"
   },
   {
-    "t": "SUV driver claims he fell asleep before crash injuring eight at Pattaya junction",
-    "s": "Pattaya Mail",
-    "d": "20 Oct 2026"
+    "t": "American YouTuber shows CCTV saying he was assaulted and robbed in Pattaya",
+    "s": "Khaosod English",
+    "d": "22 Oct 2026"
   },
   {
-    "t": "Two plead guilty in Pattaya Russian siblings murder case",
+    "t": "Chinese gambling suspect, wife and fake Thai father charged with citizenship fraud in Pattaya",
     "s": "Thaiger",
-    "d": "20 Oct 2026"
+    "d": "22 Oct 2026"
   },
   {
-    "t": "Man, 30, killed by passenger train near Pattaya railway station",
+    "t": "Grab food delivery rider injured in collision on Pattaya Third Road",
     "s": "Pattaya Mail",
-    "d": "20 Oct 2026"
+    "d": "21 Oct 2026"
   },
   {
-    "t": "Dr Darin Phanthusak named among Thailand’s 50 most influential personalities",
+    "t": "Thailand reviews anti-corruption practices in push for OECD membership",
     "s": "Pattaya Mail",
     "d": "21 Oct 2026"
   },
@@ -53,13 +53,13 @@ var NEWS_FEED = [
     "d": "20 Oct 2026"
   },
   {
-    "t": "Thailand Targets $417 Million of Land in Foreign Buyer Crackdown",
-    "s": "Bloomberg.com",
-    "d": "19 Oct 2026"
+    "t": "Warning over $200 diesel price crisis",
+    "s": "Bangkok Post",
+    "d": "21 Oct 2026"
   },
   {
-    "t": "PM’s new narcotics bill equates possession with trafficking",
-    "s": "Bangkok Post",
+    "t": "Nestlé breaks ground on US$685 million coffee factory in Thailand",
+    "s": "Khaosod English",
     "d": "21 Oct 2026"
   },
   {
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "21 Oct 2026"
   },
   {
-    "t": "Toyota to build hydrogen-powered Hilux pickup in Thailand",
-    "s": "Nikkei Asia",
-    "d": "20 Oct 2026"
+    "t": "Thailand, Malaysia urge citizens to avoid protest-hit EU nations",
+    "s": "Yahoo",
+    "d": "22 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-21","USD":33.58,"AUD":23.62,"GBP":45,"EUR":37.72};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-22","temp":27,"humid":91,"code":0,"hi":31,"rain":92};
+var WX_NOW = {"date":"2026-10-22","temp":27,"humid":93,"code":2,"hi":32,"rain":93};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4132,"date":"2026-10-21","baht":65600};
+var GOLD = {"usd":4067,"date":"2026-10-22","baht":64600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":84400,"thb":2834370};
+var BTC = {"usd":81759,"thb":2759238};
