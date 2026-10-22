@@ -10232,7 +10232,7 @@ function _cameraGirls(room) { return (typeof _npcsHere === "function" ? _npcsHer
 function _streamHandle(k) { return _STREAM_HANDLES[_hh("handle:" + k, 29) % _STREAM_HANDLES.length]; }
 function _myHandle() {
   const o = String((G.player && G.player.origin) || "x"), p = String((G.player && G.player.personality) || "y");
-  return ["nightbus_", "lastbaht_", "soi_", "farang_"][_hh(o, 5) % 4] + ["wanderer", "lad", "regular", "dreamer"][_hh(o + p, 7) % 4] + (40 + _hh(p + o, 11) % 50);
+  return ["nightbus_", "lastbaht_", "soi_", "farang_"][_hh(o, 5) % 4] + ["wanderer", "lad", "regular", "dreamer", "monger", "punter"][_hh(o + p, 7) % 6] + (40 + _hh(p + o, 11) % 50);
 }
 // the corner, as the room shows it while he is online (the rain's idiom: state, said on every look)
 const _STREAM_PULLED = [
