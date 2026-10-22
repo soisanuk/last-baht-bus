@@ -2268,7 +2268,7 @@ function _doInventory() {
 // English, so no printed-Thai here — the Thai-script directional signs stay on the
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
-  camera: ["the camera", "webcam", "ring light", "tripod", "the lens", "lens", "the stream", "livestream", "live stream", "the phone on the stand"],   // the group's cameras (the digital barstool, 2026-10-22)
+  camera: ["the camera", "tablet", "the tablet", "webcam", "ring light", "tripod", "the lens", "lens", "the stream", "livestream", "live stream", "the phone on the stand"],   // the group's cameras (the digital barstool, 2026-10-22)
   // Soi 6's close looks (the examine audit, 2026-10-09)
   // the inner segments' close looks (Soi 6 expansion, 2026-10-09)
   folder: ["manila folder", "the folder", "back table"],
@@ -7876,23 +7876,23 @@ Object.assign(_TOWN, {
   stream_whale: {
     floor: [
       "\"{w}?\" {n}'s face does something complicated. \"Big tipper. {m} one song. When he online, everybody want the camera. Sorry, na — is money.\"",
-      "\"Mister Silver.\" {n} says it like a regular's nickname. \"England. He wake up, he watch us. Nobody see his face, everybody know his name.\"",
-      "{n} glances at the {{phone}}. \"When he online, the girl at the camera make more than the girl with customer. Mamasan say sit with customer. Girls say: you pay {m} a song?\"",
+      "\"{nick}.\" {n} says it like a regular's nickname. \"{from}. He wake up, he watch us. Nobody see his face, everybody know his name.\"",
+      "{n} glances at the {d}. \"When he online, the girl at the camera make more than the girl with customer. Mama say sit with customer. Girls say: you pay {m} a song?\"",
       "\"He tip, he tip, he tip,\" {n} says about {w}. \"One night he send twenty song. One girl buy motorbike from him.\" She does not say which girl.",
-      "\"I sit with you,\" {n} says, \"but when the {{phone}} ping I look. Everybody look. Is not personal, tilac.\"",
+      "\"I sit with you,\" {n} says, \"but when the {d} ping I look. Everybody look. Is not personal, tilac.\"",
       "\"He never come Pattaya,\" {n} says of {w}. \"I ask on the stream. He say maybe next year. Every year he say next year.\"",
     ],
     house: [
-      "\"{w},\" {n} says. \"He keeps an English afternoon and tips by the song — {m}. The girls go to the camera when he's on, and I let them, because the group reads the stream numbers.\"",
-      "{n} sighs. \"The men on the stools don't like it when he is online. I don't like it either. The sheet likes it.\"",
+      "\"{w},\" {n} says. \"He keeps {when} and tips by the song — {m}. The girls go to the camera when he's on, and I let them, because a song from him is a night's drinks.\"",
+      "{n} sighs. \"The men on the stools don't like it when he is online. I don't like it either. The till likes it.\"",
       "\"Match him and she stays,\" {n} says, very dry. \"{m} the song. Or ring the bell; even he can't buy the whole room.\"",
       "\"He has never been to Thailand,\" {n} says. \"He knows every girl's name on my floor. I know his handle. That is the whole relationship.\"",
     ],
     punter: [
-      "\"Silver bloody Fox,\" {n} says. \"Every night about eight his name comes up and half the floor walks off to sing at a tripod. You can't compete with a man who isn't here.\"",
-      "{n} nods at the corner. \"Tips {m} a song from his front room in Leeds, apparently. I've stopped taking it personally. Mostly.\"",
+      "\"{w},\" {n} says. \"Bloody {w}. His name comes up on that {d} and half the floor walks off to sing at a camera. You can't compete with a man who isn't here.\"",
+      "{n} nods at the corner. \"Tips {m} a song from {home}, apparently. I've stopped taking it personally. Mostly.\"",
       "\"Ring the bell when he's on,\" {n} says. \"Only thing that works. Costs you a round, buys you the room back for an hour.\"",
-      "\"Man's never set foot on Soi 6 and he's the most popular bloke in the bar,\" {n} says. \"Says something. Not sure what.\"",
+      "\"Man's never set foot in Pattaya and he's the most popular bloke in the bar,\" {n} says. \"Says something. Not sure what.\"",
     ],
   },
   stream_not: {
@@ -7938,8 +7938,8 @@ Object.assign(_TOWN_THAI, {
     "\"Every room of company have one,\" {n} says. \"Not the room behind the rope. Nobody film that room.\"",
   ],
   stream_whale: [
-    "\"{w},\" {n} says. \"English afternoon, he tip by the song — {m}. When he on, girls go camera. I let them; company read the stream number.\"",
-    "{n} sighs. \"Customer on stool don't like when he online. Me also. The sheet like.\"",
+    "\"{w},\" {n} says. \"{When}, he tip by the song — {m}. When he on, girls go camera. I let them; one song from him is drinks for the night.\"",
+    "{n} sighs. \"Customer on stool don't like when he online. Me also. The till like.\"",
     "\"Match him, she stay,\" {n} says. \"{m} one song. Or ring bell — even him cannot buy whole room.\"",
   ],
   stream_not: [
@@ -7956,37 +7956,37 @@ Object.assign(_TOWN_THAI, {
 Object.assign(_TOWN, {
   stream_indie: {
     floor: [
-      "\"Camera? Mama put, in the COVID time. Nobody come, so we go to them.\" {n} laughs. \"Now customer come back, the {{phone}} still on.\"",
-      "{n} waves at the {{phone}}. \"Man far away buy drink, I say his name, I get {c} same like you buy here. Mama get the rest.\"",
-      "\"Is our {{phone}},\" {n} says, proud of it. \"Not big company. Small bar, small camera, many friend in England.\"",
+      "\"Camera? Mama put, in the COVID time. Nobody come, so we go to them.\" {n} laughs. \"Now customer come back, the {d} still on.\"",
+      "{n} waves at the {d}. \"Man far away buy drink, I say his name, I get {c} same like you buy here. Mama get the rest.\"",
+      "\"Is our {d},\" {n} says, proud of it. \"Not big company. Small bar, small camera, many friend in England.\"",
       "\"Some old man watch every night,\" {n} says. \"He never come. He send drink, I say name. Like a regular inside the TV.\"",
-      "{n} shrugs at the stand. \"Drink on {{phone}} {p}, same price. But {{phone}} man never ask upstairs, never get drunk, never cry.\"",
+      "{n} shrugs at the stand. \"Drink on {d} {p}, same price. But {d} man never ask upstairs, never get drunk, never cry.\"",
       "\"You want be on the internet?\" {n} turns you toward it. \"Wave! Now your mother see you in Pattaya.\" She laughs harder than you do.",
-      "\"Lockdown time, bar close, girl no money,\" {n} says. \"Mama put {{phone}}, we sing, man in Australia send drink. Now we keep.\"",
+      "\"Lockdown time, bar close, girl no money,\" {n} says. \"Mama put {d}, we sing, man in Australia send drink. Now we keep.\"",
       "\"Internet customer very polite,\" {n} says. \"He say thank you, he say good night. Real customer, sometimes no.\"",
     ],
     house: [
-      "\"We put the {{phone}} up in the lockdown,\" {n} says. \"No customers in the bar, plenty on the internet. When the bar opened again we just never took it down.\"",
+      "\"We put the {d} up in the lockdown,\" {n} says. \"No customers in the bar, plenty on the internet. When the bar opened again we just never took it down.\"",
       "{n} glances at the stand. \"A drink on the stream is {p}; the girl gets {c}, same as on a stool. It is a small channel. It pays for the ice.\"",
-      "\"No company,\" {n} says, as if you'd asked. \"Our {{phone}}, our name on it. The group's bars on Soi 6 have proper cameras. We have tape.\"",
+      "\"No company,\" {n} says, as if you'd asked. \"Our {d}, our name on it. The group's bars on Soi 6 have proper cameras. We have tape.\"",
       "\"Some of them have watched for three years,\" {n} says. \"They know every girl's birthday. Not one of them has been.\"",
-      "{n} turns the {{phone}} a little so the stools are in frame. \"It's a bar for men who can't come. They pay the same and they drink nothing.\"",
+      "{n} turns the {d} a little so the stools are in frame. \"It's a bar for men who can't come. They pay the same and they drink nothing.\"",
       "\"It keeps the girls busy on a quiet night,\" {n} says. \"And a quiet night is most nights.\"",
     ],
     punter: [
-      "\"The {{phone}}?\" {n} snorts. \"Lads at home buying her a drink and watching her drink it. And here's me paying for mine in person.\"",
+      "\"The {d}?\" {n} snorts. \"Lads at home buying her a drink and watching her drink it. And here's me paying for mine in person.\"",
       "{n} raises his bottle at the stand. \"Say hello to the folks at home. Somebody's always watching.\"",
       "\"Started in the lockdown,\" {n} says. \"Half the channel's never been. Never will be.\"",
       "\"I watched it from home the year I couldn't come,\" {n} admits. \"Bought a few. She said my name wrong every time. I didn't mind.\"",
-      "{n} shrugs at the {{phone}}. \"Same girls, no stool. Some blokes like it better that way.\"",
-      "\"Mind yourself,\" {n} says, nodding at the {{phone}}. \"Your wife's sister's husband might be watching.\"",
+      "{n} shrugs at the {d}. \"Same girls, no stool. Some blokes like it better that way.\"",
+      "\"Mind yourself,\" {n} says, nodding at the {d}. \"Your wife's sister's husband might be watching.\"",
     ],
   },
 });
 _TOWN_THAI.stream_indie = [
-  "\"We put {{phone}} in the lockdown,\" {n} says. \"No customer in bar, many on internet. Bar open again, we never take down.\"",
+  "\"We put {d} in the lockdown,\" {n} says. \"No customer in bar, many on internet. Bar open again, we never take down.\"",
   "{n} looks at the stand. \"Drink on stream {p}; girl get {c}, same like stool. Small channel. Pay the ice.\"",
-  "\"No company,\" {n} says. \"Our {{phone}}, our name. Company bar on Soi 6 have big camera. We have tape.\"",
+  "\"No company,\" {n} says. \"Our {d}, our name. Company bar on Soi 6 have big camera. We have tape.\"",
   "\"Some watch three year,\" {n} says. \"Know every girl birthday. Never come.\"",
 ];
 _TOWN_WIDE.add("stream_indie");
@@ -9010,12 +9010,14 @@ function _townTalk(npc, topic) {
       return pick("owner", { b: _barName(G.bar.room) });
   }
   // THE CAMERA (the digital barstool, 2026-10-22): the group's channel, the big tipper, the bars without one, and the drink she can't place
-  if (typeof _streamBar === "function" && /\b(camera|cameras|streams?|streaming|live ?stream|livestream|webcam|ring light|the lens|tripod|silver ?fox|silverfox|mister silver|the whale|big tipper|channel|youtube|internet customers?|the internet)\b/.test(t)) {
+  if (typeof _streamBar === "function" && (/\b(camera|cameras|streams?|streaming|live ?stream|livestream|webcam|ring light|the lens|tripod|tablet|the whale|big tipper|tipper|channel|youtube|internet customers?|the internet)\b/.test(t) || _STREAM_WHALES.some(w => t.includes(w.nick.toLowerCase()) || w.h.toLowerCase().split("_").some(x => x.length > 3 && t.includes(x.toLowerCase()))))) {
     const sd = (G.streamDrinks || {})[npc], room = NPCS[npc].room;
     const bars = Object.keys(ROOMS).filter(id => _streamBar(id) && _PLG_ROOMS.includes(id)).map(id => _barName(id)), b = bars.slice(0, -1).join(", ") + " and " + bars[bars.length - 1];   // the outsiders' line is about the group's cameras
     if (sd && G.day - sd.day <= 3 && NPC_ROLES[npc] === "hostess") return pick("stream_me", { h: _myHandle() });
-    if (_streamPull(G.room) && (/\b(silver|whale|big tipper|leeds)\b/.test(t) || _whaleOn()) && _npcsHere().includes(npc)) return pick("stream_whale", { w: STREAM_WHALE, m: _num(STREAM_MATCH) });
-    if (_streamBar(G.room) && _npcsHere().includes(npc)) return pick(_PLG_ROOMS.includes(G.room) ? "stream" : "stream_indie", { p: _num(_ladyPrice(G.room)), c: _num(LADY_CUT) });   // the group's camera, or the bar's own phone
+    { const w = _whaleOf(G.room);
+      if (_streamBar(G.room) && (/\b(whale|big tipper|tipper)\b/.test(t) || t.includes(w.nick.toLowerCase()) || w.h.toLowerCase().split("_").some(x => x.length > 3 && t.includes(x)) || _whaleOn()) && _npcsHere().includes(npc))
+        return pick("stream_whale", { w: w.h, nick: w.nick, from: w.from, home: w.home, when: w.when, When: w.when.replace(/^./, c => c.toUpperCase()), m: _num(STREAM_MATCH), d: _camDev() }); }
+    if (_streamBar(G.room) && _npcsHere().includes(npc)) return pick(_PLG_ROOMS.includes(G.room) ? "stream" : "stream_indie", { p: _num(_ladyPrice(G.room)), c: _num(LADY_CUT), d: _camDev() });   // the group's camera, or the bar's own phone
     if (_room().barType || NPC_ROLES[npc] || NPCS[npc].patron) return pick("stream_not", { b });
   }
   if (_isGogo() && /\b(the )?(show|shows|schedule|stage|big show|the act|tiers?|rotation|front row|tipping|tips?)\b/.test(t) && typeof _showSchedule === "function")

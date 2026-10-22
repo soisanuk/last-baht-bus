@@ -1151,7 +1151,7 @@ const _BF_PEEK_SAY = {
   temple: "“Not me tonight. I go temple at five, make merit, so tonight I go home early and sleep clean.” She means it.",
   drinksonly: "“Me, drink only. No go out, no upstairs.” She says it nicely and she says it first.",
   maidee: "She does not answer that. Not from you.",
-  stream: "“Not now, na — he online.” She tips her head at the ring light in the corner. “When he go sleep, maybe.”",
+  stream: "“Not now, na — he online.” She tips her head at the camera in the corner. “When he go sleep, maybe.”",
 };
 function _bfRefusal(id, bt) {
   const held = G.soc.bfRefused && G.soc.bfRefused[id];
@@ -1258,8 +1258,8 @@ function _bfRefusalSay(id, r) {
       : `${name} tips her head at the empty rail beside her. “Tonight only me, na. Nobody for ` +
         `the till, nobody for the beer.” It is not a no about you and she makes sure you know ` +
         `it. “Later, when I can close. Come back later.”`,
-    stream: `${name} looks at the stairs, then at the ring light in the corner, where the {{phone}} is pinging. ` +
-      `"Not this hour, na. ${STREAM_WHALE} online — he tip ${STREAM_MATCH} one song. I go upstairs, I lose him." ` +
+    stream: `${name} looks at the stairs, then at the camera in the corner, where the ${_camDev()} is pinging. ` +
+      `"Not this hour, na. ${_whaleOf().h} online — he tip ${STREAM_MATCH} one song. I go upstairs, I lose him." ` +
       "It is not about you, and she does the arithmetic out loud so that you know it. (When he logs off, ask again — or match him: TIP " + name.toUpperCase() + " " + STREAM_MATCH + ".)",
     sponsor: `${name} touches your arm, honestly sorry: “Cannot now, tilac. My ` +
       "friend — he take care me, I no working while he in town. You " +
@@ -10197,7 +10197,19 @@ function _oppPhase(day) {
 // the hour, never dice) the girls would rather work the camera than sit with the men on the stools — a drink is taken and
 // she goes back to the lens, the stairs wait till he logs off, and the remedy is to match him (TIP <her> STREAM_MATCH)
 // or ring the bell. A woman who is yours (her-farang) or on your arm stays with you.
-const STREAM_WHALE = "SilverFox_Leeds";
+// EVERY CAMERA HAS ITS BIG TIPPER (Mario, 2026-10-22: "big tipper tension should happen randomly at the other bars with the
+// cameras"): the Jade Lounge's is online most nights; the other camera bars' are online some nights, each his own man
+const _STREAM_WHALES = [
+  { h: "SilverFox_Leeds", nick: "Mister Silver", from: "England", home: "his front room in Leeds", when: "an English afternoon" },
+  { h: "KaiserKlaus_Hamburg", nick: "Mister Klaus", from: "Germany", home: "his flat in Hamburg", when: "a German afternoon" },
+  { h: "Big_Tex_Dallas", nick: "Mister Tex", from: "Texas", home: "his porch in Dallas", when: "a Texas morning" },
+  { h: "Viking_Olaf_Bergen", nick: "Mister Olaf", from: "Norway", home: "his kitchen in Bergen", when: "a Norwegian afternoon" },
+  { h: "Bazza_Wollongong", nick: "Mister Bazza", from: "Australia", home: "his sofa in Wollongong", when: "an Australian night he can't sleep through" },
+];
+const STREAM_WHALE = _STREAM_WHALES[0].h;
+function _whaleOf(room) { room = room || G.room; return _streamPull(room) ? _STREAM_WHALES[0] : _STREAM_WHALES[1 + _hh("whaleOf:" + room, 37) % (_STREAM_WHALES.length - 1)]; }
+// the camera itself: a phone, or a tablet on a stand (Mario, 2026-10-22: "the camera can also be a tablet")
+function _camDev(room) { const r = ROOMS[room || G.room]; return r && r.streamDevice === "tablet" ? "tablet" : "{{phone}}"; }
 const _STREAM_HANDLES = ["chang_n_chips", "pattaya_dreamer71", "noodle_king_au", "loverboy_hamburg", "ghost_of_soi6", "lonely_lion_59",
   "farang_in_bolton", "sanuk4ever_dk", "soi6_memories", "never_went_ken", "wheelchair_wally", "deckchair_dutchman"];
 function _streamBar(room) { const r = ROOMS[room || G.room]; return !!(r && r.stream); }
@@ -10205,15 +10217,15 @@ function _streamPull(room) { const r = ROOMS[room || G.room]; return !!(r && r.s
 function _streamHour() { return G.day * 100 + Math.floor((G.nightTurn || 0) / 10); }
 function _streamNow() { return G.day * 1000 + (G.nightTurn || 0); }   // a match or a bell holds ten turns, whatever the clock hour (2026-10-22)
 function _streamHeld(v, span) { return v != null && _streamNow() - v >= 0 && _streamNow() - v < span; }
-// the big tipper keeps an English afternoon: 20:00 to just before one, most nights, most hours
+// the big tipper is online 20:00 to just before one: at the Jade most nights, at the other camera bars some nights
 function _whaleOn(room) {
   room = room || G.room;
-  if (!_streamPull(room)) return false;
+  if (!_streamBar(room)) return false;
   const t = G.nightTurn || 0;
   if (t < 20 || t >= 70) return false;
   if (typeof _closedNow === "function" && _closedNow(room)) return false;
-  if (_hh("whaleNight:" + G.vacation + ":" + G.day + ":w", 17) % 100 >= 70) return false;
-  return _hh("whaleHour:" + G.day + ":" + Math.floor(t / 10) + ":" + G.vacation, 19) % 100 < 65;
+  if (_hh("whaleNight:" + room + ":" + G.vacation + ":" + G.day + ":w", 17) % 100 >= (_streamPull(room) ? 70 : 22)) return false;
+  return _hh("whaleHour:" + room + ":" + G.day + ":" + Math.floor(t / 10) + ":" + G.vacation, 19) % 100 < 65;
 }
 // she is at the camera this hour: a hostess of the pull bar, on her floor with you, while he is online — unless she is
 // yours or with you, or you matched him or rang the bell this hour
@@ -10236,33 +10248,33 @@ function _myHandle() {
 }
 // the corner, as the room shows it while he is online (the rain's idiom: state, said on every look)
 const _STREAM_PULLED = [
-  "In the corner the ring light is up and the {{phone}} under it pings every minute or two: " + STREAM_WHALE + " is online. {g} at the camera, and the stools wait.",
-  "The {{phone}} on the stand will not stop pinging. " + STREAM_WHALE + " again — the girls say his name like a regular's. {g} in front of the lens, and the rail is a little emptier for it.",
-  "The ring light in the corner, a name scrolling up the {{phone}} under it — " + STREAM_WHALE + ", tipping by the song — and {g} singing to it rather than to anybody in the room.",
-  "{g} at the tripod, glass up, saying " + STREAM_WHALE + " to the lens as if he were sitting where you are. The men on the stools have noticed where the girls went.",
+  (g, w, d) => `In the corner the ${d} pings every minute or two: ${w.h} is online. ${g} at the camera, and the stools wait.`,
+  (g, w, d) => `The ${d} on the stand will not stop pinging. ${w.h} again — the girls say his name like a regular's. ${g} in front of the lens, and the rail is a little emptier for it.`,
+  (g, w, d) => `A name scrolling up the ${d} in the corner — ${w.h}, tipping by the song — and ${g} singing to it rather than to anybody in the room.`,
+  (g, w, d) => `${g} at the camera, glass up, saying ${w.h} to the lens as if he were sitting where you are. The men on the stools have noticed where the girls went.`,
 ];
 function _streamDescribe() {
   if (!_whaleOn()) return;
   const g = _cameraGirls().map(x => NPCS[x].name);
   if (!g.length) return;
   const who = g.length === 1 ? g[0] + " is" : g.slice(0, -1).join(", ") + " and " + g[g.length - 1] + " are";
-  _say(_pickVary(_STREAM_PULLED, "streampulled").replace("{g}", who), "dim");
+  _say(_pickVary(_STREAM_PULLED, "streampulled")(who, _whaleOf(), _camDev()), "dim");
 }
 // the camera at work, now and then, in a room that streams: a girl, a glass, a stranger's handle
 const _STREAM_TOAST = [
-  (n, h) => `The {{phone}} over the till pings. ${n} turns to the camera, raises her glass and says "${h}, thank you na!" to the lens, then turns back to the room with the glass still up.`,
-  (n, h) => `${n} glances at the {{phone}} under the camera, finds the name, and lifts her drink to the red light: "Chok dee, ${h}." She does not look at the lens while she says it.`,
-  (n, h) => `A ping from the {{phone}} on the stand. "${h}!" ${n} calls to the camera, blows it a kiss, and is back on her stool before the kiss lands anywhere.`,
-  (n, h) => `${n} reads a handle off the {{phone}} — ${h} — and says it to the lens with the smile the camera gets, which is not quite the smile the stools get.`,
-  (n, h) => `Somebody on the other side of the world has bought ${n} a drink. She says "${h}" to the camera, drinks a mouthful of something pale, and goes on talking to the man beside her.`,
-  (n, h) => `"Who is ${h}?" ${n} asks the girl next to her, reading it off the {{phone}}. Neither of them knows. ${n} raises the glass to the lens anyway.`,
+  (n, h, d) => `The ${d} over the till pings. ${n} turns to the camera, raises her glass and says "${h}, thank you na!" to the lens, then turns back to the room with the glass still up.`,
+  (n, h, d) => `${n} glances at the ${d} under the camera, finds the name, and lifts her drink to the red light: "Chok dee, ${h}." She does not look at the lens while she says it.`,
+  (n, h, d) => `A ping from the ${d} on the stand. "${h}!" ${n} calls to the camera, blows it a kiss, and is back on her stool before the kiss lands anywhere.`,
+  (n, h, d) => `${n} reads a handle off the ${d} — ${h} — and says it to the lens with the smile the camera gets, which is not quite the smile the stools get.`,
+  (n, h, d) => `Somebody on the other side of the world has bought ${n} a drink. She says "${h}" to the camera, drinks a mouthful of something pale, and goes on talking to the man beside her.`,
+  (n, h, d) => `"Who is ${h}?" ${n} asks the girl next to her, reading it off the ${d}. Neither of them knows. ${n} raises the glass to the lens anyway.`,
 ];
 const _STREAM_WHALE_TICK = [
-  n => `The {{phone}} pings twice in a row. "${STREAM_WHALE}!" ${n} is off her stool and at the ring light before the second ping stops, singing the chorus he asked for to a camera in an English afternoon.`,
-  n => `${n} reads a song request off the {{phone}} — ${STREAM_WHALE} again — and takes the microphone to the tripod. The man she was sitting with looks at his beer.`,
-  n => `"He tip five hundred for one song," ${n} tells the girl beside her, not quietly, and goes to the corner. Two men at the rail are left with half a conversation each.`,
-  n => `${n} blows a kiss at the lens and says "${STREAM_WHALE}, I love you too na" in a voice for nobody in the room. The {{phone}} pings. She does it again.`,
-  n => `The ring light catches ${n} mid-wave. On the {{phone}} under it a column of hearts from ${STREAM_WHALE} climbs the screen, and the mamasan, at the till, makes a mark on her sheet.`,
+  (n, w, d) => `The ${d} pings twice in a row. "${w.h}!" ${n} is off her stool and at the camera before the second ping stops, singing the chorus he asked for to a camera in ${w.when}.`,
+  (n, w, d) => `${n} reads a song request off the ${d} — ${w.h} again — and takes the microphone to the camera. The man she was sitting with looks at his beer.`,
+  (n, w, d) => `"He tip five hundred for one song," ${n} tells the girl beside her, not quietly, and goes to the corner. Two men at the rail are left with half a conversation each.`,
+  (n, w, d) => `${n} blows a kiss at the lens and says "${w.h}, I love you too na" in a voice for nobody in the room. The ${d} pings. She does it again.`,
+  (n, w, d) => `The camera catches ${n} mid-wave. On the ${d} a column of hearts from ${w.h} climbs the screen, and the mamasan, at the till, makes a mark on her sheet.`,
 ];
 function _streamTick() {
   if (!_streamBar() || (typeof _closedNow === "function" && _closedNow(G.room)) || (typeof _shutHere === "function" && _shutHere())) return;
@@ -10276,7 +10288,7 @@ function _streamTick() {
     const g = _cameraGirls().filter(x => !busy.has(x));
     if (!g.length) return;
     last[G.room] = G.nightTurn;
-    _say(_pickVary(_STREAM_WHALE_TICK, "streamwhale")(NPCS[g[_hh("sw:" + G.nightTurn, 3) % g.length]].name), "dim");
+    _say(_pickVary(_STREAM_WHALE_TICK, "streamwhale")(NPCS[g[_hh("sw:" + G.nightTurn, 3) % g.length]].name, _whaleOf(), _camDev()), "dim");
     return;
   }
   const girls = _npcsHere().filter(x => NPC_ROLES[x] === "hostess" && !busy.has(x));
@@ -10284,56 +10296,56 @@ function _streamTick() {
   last[G.room] = G.nightTurn;
   const n = NPCS[girls[_hh("st:" + G.day + ":" + G.nightTurn, 5) % girls.length]].name;
   const pool = _PLG_ROOMS.includes(G.room) ? _STREAM_TOAST : _STREAM_TOAST.filter(f => !/under the camera|red light|over the till/.test(String(f)));   // a bar's own {{phone}} is the camera
-  _say(_pickVary(pool, "streamtoast")(n, _streamHandle(G.day + ":" + G.nightTurn)), "dim");
+  _say(_pickVary(pool, "streamtoast")(n, _streamHandle(G.day + ":" + G.nightTurn), _camDev()), "dim");
 }
 // a bare TALK to a girl at the camera: she waves from the corner — the one finger, the one song
 const _STREAM_BUSY_KNOWN = [
-  n => `${n} sees you from the ring light and holds up one finger: one song. "He pay five hundred, tilac. I come back." She sings the next line to the lens.`,
-  n => `"Wait, wait." ${n} does not leave the camera. "${STREAM_WHALE} online. You I see every night; him only when he wake up." She means it kindly, and it is still the camera.`,
-  n => `${n} waves at you over the tripod, apologetic, and keeps singing. The {{phone}} pings. The apology does not get any bigger.`,
-  n => `"You sit, I come," ${n} says from the corner, and the {{phone}} pings, and she does not come.`,
+  (n, w, d) => `${n} sees you from the camera corner and holds up one finger: one song. "He pay five hundred, tilac. I come back." She sings the next line to the lens.`,
+  (n, w, d) => `"Wait, wait." ${n} does not leave the camera. "${w.h} online. You I see every night; him only when he wake up." She means it kindly, and it is still the camera.`,
+  (n, w, d) => `${n} waves at you from the camera, apologetic, and keeps singing. The ${d} pings. The apology does not get any bigger.`,
+  (n, w, d) => `"You sit, I come," ${n} says from the corner, and the ${d} pings, and she does not come.`,
 ];
 const _STREAM_BUSY_NEW = [
-  n => `${n} is in the corner at the camera, singing to a {{phone}}, and does not see you. Or sees you and does the arithmetic.`,
-  n => `${n} gives you a smile across the room — the stool smile — and turns back to the ring light. Somebody in another country is paying by the song.`,
-  n => `"Later, na." ${n} does not take her eyes off the {{phone}} on the stand. The name on it is not yours.`,
-  n => `${n} is at the tripod with a microphone, singing for ${STREAM_WHALE}. A man on a stool is not, this hour, the business.`,
+  (n, w, d) => `${n} is in the corner at the camera, singing to a ${d}, and does not see you. Or sees you and does the arithmetic.`,
+  (n, w, d) => `${n} gives you a smile across the room — the stool smile — and turns back to the camera. Somebody in another country is paying by the song.`,
+  (n, w, d) => `"Later, na." ${n} does not take her eyes off the ${d} on the stand. The name on it is not yours.`,
+  (n, w, d) => `${n} is at the camera with a microphone, singing for ${w.h}. A man on a stool is not, this hour, the business.`,
 ];
 function _streamBusy(id) {
   const n = NPCS[id].name, known = typeof _knownTier === "function" && _knownTier(id) >= 1;
-  _say(_pickVary(known ? _STREAM_BUSY_KNOWN : _STREAM_BUSY_NEW, known ? "streambusyk" : "streambusyn")(n), "dim");
+  _say(_pickVary(known ? _STREAM_BUSY_KNOWN : _STREAM_BUSY_NEW, known ? "streambusyk" : "streambusyn")(n, _whaleOf(), _camDev()), "dim");
   _say(`(She is at the camera this hour. TIP ${n.toUpperCase()} ${STREAM_MATCH} matches him — or ring the bell, or wait till he logs off.)`, "dim");
 }
 // a lady drink for a girl at the camera: she takes it — the cut is the cut — and goes back to the lens
 const _STREAM_GOES_BACK = [
-  n => `${n} drinks to you, a real smile, and then the {{phone}} pings and she is back at the camera with your drink in her hand, saying somebody else's name to the lens.`,
-  n => `"Thank you, tilac." ${n} clinks your glass, sits for exactly as long as it takes to say it, and goes back to the ring light. ${STREAM_WHALE} has asked for a song.`,
-  n => `${n} takes the drink to the corner. She raises it to the camera, which has paid for nothing, and then to you, which has.`,
-  n => `${n} sits with you for half a drink and keeps one eye on the {{phone}}. When it pings she squeezes your arm — "one song" — and is gone to the tripod.`,
+  (n, w, d) => `${n} drinks to you, a real smile, and then the ${d} pings and she is back at the camera with your drink in her hand, saying somebody else's name to the lens.`,
+  (n, w, d) => `"Thank you, tilac." ${n} clinks your glass, sits for exactly as long as it takes to say it, and goes back to the camera. ${w.h} has asked for a song.`,
+  (n, w, d) => `${n} takes the drink to the corner. She raises it to the camera, which has paid for nothing, and then to you, which has.`,
+  (n, w, d) => `${n} sits with you for half a drink and keeps one eye on the ${d}. When it pings she squeezes your arm — "one song" — and is gone to the camera.`,
 ];
 function _streamAfterDrink(id) {
   if (!_atCamera(id)) return;
   (G.soc.streamAway = G.soc.streamAway || {})[id] = _streamNow();
-  _say(_pickVary(_STREAM_GOES_BACK, "streamback")(NPCS[id].name), "dim");
+  _say(_pickVary(_STREAM_GOES_BACK, "streamback")(NPCS[id].name, _whaleOf(), _camDev()), "dim");
 }
 // FLIRT and KISS at a girl who is singing to a man in Leeds
 const _STREAM_FLIRT = [
-  n => `${n} laughs at it, but she laughs at the camera. The {{phone}} has her attention; you have the back of her shoulder.`,
-  n => `"Ha! Later, later." ${n} pats your hand without looking at it and turns back to the lens.`,
-  n => `${n} winks — at the camera, you realise, a second after you winked back.`,
-  n => `"You very sweet." ${n} says it to the ring light, and the {{phone}} pings, and she sings the next line.`,
+  (n, w, d) => `${n} laughs at it, but she laughs at the camera. The ${d} has her attention; you have the back of her shoulder.`,
+  (n, w, d) => `"Ha! Later, later." ${n} pats your hand without looking at it and turns back to the lens.`,
+  (n, w, d) => `${n} winks — at the camera, you realise, a second after you winked back.`,
+  (n, w, d) => `"You very sweet." ${n} says it to the camera, and the ${d} pings, and she sings the next line.`,
 ];
 // TIP her what he tips, and you have her for the hour
 const _STREAM_WON = [
-  n => `${n} looks at the note, at the {{phone}}, at you. The {{phone}} pings. She turns it face down. "Okay. This hour, you." She sits, and stays sat.`,
-  n => `"Same like him?" ${n} folds the note into her top with a grin. "Then you are the internet now." She leaves the camera to whoever wants it.`,
-  n => `${n} weighs it — five hundred from a man on a stool against five hundred from a man in an English afternoon — and picks the stool. "You I can see," she says.`,
-  n => `${n} lets the next ping go unanswered. "Mister Silver can wait. He always wait." She pulls her stool closer to yours.`,
+  (n, w, d) => `${n} looks at the note, at the ${d}, at you. The ${d} pings. She turns it face down. "Okay. This hour, you." She sits, and stays sat.`,
+  (n, w, d) => `"Same like him?" ${n} folds the note into her top with a grin. "Then you are the internet now." She leaves the camera to whoever wants it.`,
+  (n, w, d) => `${n} weighs it — five hundred from a man on a stool against five hundred from a man in ${w.when} — and picks the stool. "You I can see," she says.`,
+  (n, w, d) => `${n} lets the next ping go unanswered. "${w.nick} can wait. He always wait." She pulls her stool closer to yours.`,
 ];
 const _STREAM_SHORT = [
-  n => `${n} takes it with a real thank-you and goes back to the camera. He pays ${STREAM_MATCH} a song; it is not personal, it is arithmetic.`,
-  n => `"Kop khun ka." ${n} tucks the note away and finishes the chorus for the lens. A smaller note does not move a bigger tipper.`,
-  n => `${n} smiles at the note, smiles at you, and the {{phone}} pings, and she sings.`,
+  (n, w, d) => `${n} takes it with a real thank-you and goes back to the camera. He pays ${STREAM_MATCH} a song; it is not personal, it is arithmetic.`,
+  (n, w, d) => `"Kop khun ka." ${n} tucks the note away and finishes the chorus for the lens. A smaller note does not move a bigger tipper.`,
+  (n, w, d) => `${n} smiles at the note, smiles at you, and the ${d} pings, and she sings.`,
 ];
 function _streamTip(id, amount) {
   if (!_atCamera(id)) return false;
@@ -10344,8 +10356,8 @@ function _streamTip(id, amount) {
   if (amount >= STREAM_MATCH) {
     (G.soc.streamWon = G.soc.streamWon || {})[id] = _streamNow();
     if (typeof _addBond === "function") _addBond(id, 1);
-    _say(`${_pickVary(_STREAM_WON, "streamwon")(n)} (-฿${_num(amount)}, ฿${_num(G.money)} left.)`, "win");
-  } else _say(`${_pickVary(_STREAM_SHORT, "streamshort")(n)} (-฿${_num(amount)}, ฿${_num(G.money)} left.)`, "dim");
+    _say(`${_pickVary(_STREAM_WON, "streamwon")(n, _whaleOf(), _camDev())} (-฿${_num(amount)}, ฿${_num(G.money)} left.)`, "win");
+  } else _say(`${_pickVary(_STREAM_SHORT, "streamshort")(n, _whaleOf(), _camDev())} (-฿${_num(amount)}, ฿${_num(G.money)} left.)`, "dim");
   return true;
 }
 // THE BELL beats the internet for the hour: a round for the room, and the room is the room again
@@ -10354,9 +10366,9 @@ function _streamBell(room) {
   const had = _cameraGirls(room).length;
   (G.soc.streamBell = G.soc.streamBell || {})[room] = _streamNow();
   if (had) _say(_pickVary([
-    `The girls leave the ring light for the rail. On the {{phone}} in the corner, ${STREAM_WHALE} types three question marks to an empty frame.`,
-    `The bell does what the internet can't: the whole floor comes back to the stools. The {{phone}} pings, and pings, and nobody goes.`,
-    `"Bell! Bell!" — and the camera corner empties. ${STREAM_WHALE} gets a view of a tripod and an empty chair for the rest of the hour.`,
+    `The girls leave the camera for the rail. On the ${_camDev(room)} in the corner, ${_whaleOf(room).h} types three question marks to an empty frame.`,
+    `The bell does what the internet can't: the whole floor comes back to the stools. The ${_camDev(room)} pings, and pings, and nobody goes.`,
+    `"Bell! Bell!" — and the camera corner empties. ${_whaleOf(room).h} gets a view of an empty chair for the rest of the hour.`,
   ], "streambell"), "win");
 }
 // WATCH STREAM — in a room that streams, the corner as it is; anywhere else, the {{phone}}: the channel of a stream bar you know
@@ -10365,8 +10377,8 @@ function _doWatchStream(arg) {
   const a = String(arg || "").toLowerCase().replace(/\b(the |live ?)?(stream|camera|webcam|channel|livestream|on (?:my |the )?phone|online)\b/g, " ").trim();
   if (_streamBar() && !a) {
     const g = _cameraGirls().map(x => NPCS[x].name);
-    if (_whaleOn() && g.length) _say(`You watch the corner. ${g.join(" and ")} at the ring light; on the {{phone}} under it, ${STREAM_WHALE}'s name scrolls up the screen between hearts and the numbers of his tips. Every girl on the floor knows his handle. Not one of them knows his face.`);
-    else _say(`You watch the camera watch the room. On the {{phone}} ${_PLG_ROOMS.includes(G.room) ? "under it" : "itself"} the bar is a little delayed, a little ${_PLG_ROOMS.includes(G.room) ? "pinker" : "brighter"}, with a column of handles down the side — ${_streamHandle(G.day)}, ${_streamHandle(G.day + 1)}, ${_streamHandle(G.day + 2)} — men in other time zones keeping a stool warm they will never sit on. A drink bought there pays her ฿${_num(LADY_CUT)}, same as one bought here. (${_PLG_ROOMS.includes(G.room) ? "It is the group's channel" : "It is the bar's own channel"}; from your own phone it is STREAM DRINK <name>.)`);
+    if (_whaleOn() && g.length) _say(`You watch the corner. ${g.join(" and ")} at the camera; on the ${_camDev()}, ${_whaleOf().h}'s name scrolls up the screen between hearts and the numbers of his tips. Every girl on the floor knows his handle. Not one of them knows his face.`);
+    else _say(`You watch the camera watch the room. On the ${_PLG_ROOMS.includes(G.room) ? "{{phone}} under it" : _camDev() + " itself"} the bar is a little delayed, a little ${_PLG_ROOMS.includes(G.room) ? "pinker" : "brighter"}, with a column of handles down the side — ${_streamHandle(G.day)}, ${_streamHandle(G.day + 1)}, ${_streamHandle(G.day + 2)} — men in other time zones keeping a stool warm they will never sit on. A drink bought there pays her ฿${_num(LADY_CUT)}, same as one bought here. (${_PLG_ROOMS.includes(G.room) ? "It is the group's channel" : "It is the bar's own channel"}; from your own phone it is STREAM DRINK <name>.)`);
     return;
   }
   if (G.battery <= 0) { _say("Your phone is dead. The internet will have to watch itself."); return; }
@@ -10378,16 +10390,16 @@ function _doWatchStream(arg) {
   if (typeof _closedNow === "function" && _closedNow(room)) { _say(`${_barName(room)}'s stream is a still of an empty rail and a pulled shutter, with the handles still scrolling down the side as if somebody might come back.`); return; }
   const girls = Object.keys(NPCS).filter(x => NPC_ROLES[x] === "hostess" && NPCS[x].room === room && typeof _npcWhere === "function" && _npcWhere(x) === room);
   _say(`You open ${_barName(room)} on your phone: the room from over the bar, a second behind the room itself, ${girls.length ? girls.map(x => NPCS[x].name).join(", ") + " on the floor" : "nobody on the stools"}, and a column of handles down the side.` +
-    (_whaleOn(room) ? ` ${STREAM_WHALE} is online; the corner is full.` : "") +
+    (_whaleOn(room) ? ` ${_whaleOf(room).h} is online; the corner is full.` : "") +
     (girls.length ? ` (STREAM DRINK <name> — ฿${_num(_ladyPrice(room))} from the account; she says your handle, ${_myHandle()}, to the lens.)` : ""));
 }
 // STREAM DRINK <her> — a drink bought through the link, from wherever you are. It pays her the stool's cut and buys you
 // your handle said to a camera; it builds nothing — she does not know which handle you are. The appearance of attention.
 const _STREAM_DRINK_LINES = [
-  (n, h) => `On your phone, a second late: the {{phone}} over the bar pings, ${n} reads it, lifts a glass of something pale to the lens and says "${h}, thank you na!" Then she turns back to the man beside her.`,
-  (n, h) => `${n} finds your handle on the screen, says "${h}" to the camera with the camera smile, and drinks. She never once looks into the lens. You watch it twice.`,
-  (n, h) => `The ping, the glance, the glass: "Chok dee, ${h}!" ${n} is talking to the girl next to her again before the word has reached you.`,
-  (n, h) => `${n} says your handle — "${h}" — a little wrong, the way you say a word from a list. She blows the lens a kiss. Somebody else's ping is already on the screen.`,
+  (n, h, d) => `On your phone, a second late: the ${d} over the bar pings, ${n} reads it, lifts a glass of something pale to the lens and says "${h}, thank you na!" Then she turns back to the man beside her.`,
+  (n, h, d) => `${n} finds your handle on the screen, says "${h}" to the camera with the camera smile, and drinks. She never once looks into the lens. You watch it twice.`,
+  (n, h, d) => `The ping, the glance, the glass: "Chok dee, ${h}!" ${n} is talking to the girl next to her again before the word has reached you.`,
+  (n, h, d) => `${n} says your handle — "${h}" — a little wrong, the way you say a word from a list. She blows the lens a kiss. Somebody else's ping is already on the screen.`,
 ];
 function _doStreamDrink(arg) {
   const who = String(arg || "").replace(/^(?:drink|a drink)\s+(?:for|to)?\s*/i, "").replace(/^(?:for|to)\s+/i, "").trim();
@@ -10403,7 +10415,7 @@ function _doStreamDrink(arg) {
   const book = (G.streamDrinks = G.streamDrinks || {});
   book[id] = { day: G.day, n: ((book[id] && book[id].n) || 0) + 1, room };
   G.battery = Math.max(0, G.battery - 1);
-  _say(_pickVary(_STREAM_DRINK_LINES, "streamdrink")(n, _myHandle()) + ` (-฿${_num(p)} from the account.)`);
+  _say(_pickVary(_STREAM_DRINK_LINES, "streamdrink")(n, _myHandle(), _camDev(room)) + ` (-฿${_num(p)} from the account.)`);
   if ((G.soc.streamJoy || 0) < 1) { G.soc.streamJoy = 1; _addHappy(1, "your handle, said to a camera"); }
 }
 

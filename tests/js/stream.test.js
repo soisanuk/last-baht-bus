@@ -42,7 +42,7 @@ test("the cameras: four of the group's rooms on Soi 6 (never the room behind the
   assert.equal(new Set(INDIE.map(id => ROOMS[id].region)).size, INDIE.length, "one a district");
   for (const id of INDIE) {
     assert.equal(ROOMS[id].barType, "beer", id + " is a beer bar — no camera in a go-go, a gents' club or a lock-in");
-    assert.match(ROOMS[id].desc, /\{\{phone\}\}/, id + " says so, and the bar's phone never taps as yours");
+    assert.match(ROOMS[id].desc, /\{\{phone\}\}|tablet/, id + " says so, and the bar's phone never taps as yours");
     G.room = id; assert.match(t("examine camera"), /WATCH STREAM/);
   }
   for (const id of streams) {
@@ -54,20 +54,47 @@ test("the cameras: four of the group's rooms on Soi 6 (never the room behind the
   assert.deepEqual(streams.filter(id => _streamPull(id)), [JADE]);
 });
 
-test("the big tipper keeps hours by a pure hash — no dice — and only at the Jade Lounge", () => {
-  const r0 = G.rng; let on = 0;
-  for (let d = 1; d < 40; d++) for (let h = 0; h < 120; h += 5) { G.day = d; G.nightTurn = h; if (_whaleOn(JADE)) { on++; assert.ok(h >= 20 && h < 70, "an English afternoon"); } assert.ok(!_whaleOn("pink_lotus")); }
+test("every camera has its big tipper, by a pure hash — no dice: the Jade's most nights, the others' some nights, each his own man", () => {
+  const r0 = G.rng, streams = Object.keys(ROOMS).filter(id => ROOMS[id].stream), nights = {};
+  for (const r of streams) { nights[r] = 0;
+    for (let d = 1; d <= 120; d++) { let on = false;
+      for (let h = 0; h < 120; h += 5) { G.day = d; G.nightTurn = h; if (_whaleOn(r)) { on = true; assert.ok(h >= 20 && h < 70, "his hours"); } }
+      if (on) nights[r]++; } }
   assert.equal(G.rng, r0, "reading his hours rolls nothing");
-  assert.ok(on > 0, "he is online some nights");
+  for (const r of streams) if (r !== JADE) { assert.ok(nights[r] > 5, r + " has nights"); assert.ok(nights[r] < nights[JADE] / 2, r + " fewer than the Jade"); }
+  assert.ok(!_whaleOn("seabreeze") && !_whaleOn("rainbow_girls"), "no camera, no tipper");
+  assert.equal(_whaleOf(JADE).h, STREAM_WHALE);
+  assert.ok(streams.filter(r => r !== JADE).every(r => _whaleOf(r).h !== STREAM_WHALE), "the others are other men");
+});
+
+test("a tipper night at another camera bar is the Jade's tension in that bar's words — its own man, its own device", () => {
+  G.room = "honey_trap"; let g = null;
+  for (let d = 2; d < 200 && !g; d++) for (let h = 20; h < 70 && !g; h += 10) { G.day = d; G.nightTurn = h; if (_cameraGirls().length) g = _cameraGirls()[0]; }
+  assert.ok(g, "a night at the Honey Trap"); quiet();
+  const w = _whaleOf("honey_trap"), n = NPCS[g].name.toLowerCase();
+  out = []; _describeRoom(true); assert.match(said(), new RegExp(w.h)); assert.doesNotMatch(said(), /ring light|tripod/, "the Jade's furniture stays at the Jade");
+  assert.match(t("talk to " + n), new RegExp(`TIP ${NPCS[g].name.toUpperCase()} ${STREAM_MATCH}`));
+  assert.match(t(`ask ${n} about the tipper`), new RegExp(w.h + "|" + w.nick + "|" + w.from));
+  assert.match(t("ring bell"), new RegExp(w.h + "|nobody goes"));
+  assert.deepEqual(_cameraGirls(), []);
+});
+
+test("the camera can be a tablet: the Honey Trap and the Dollhouse stream from one, and say so", () => {
+  for (const id of ["honey_trap", "dollhouse"]) {
+    assert.equal(ROOMS[id].streamDevice, "tablet");
+    assert.match(ROOMS[id].desc, /tablet/); assert.doesNotMatch(ROOMS[id].reads.camera, /phone/);
+    G.room = id; assert.equal(_camDev(), "tablet"); assert.match(t("examine tablet"), /WATCH STREAM/);
+  }
+  G.room = "lucky_tiger"; assert.equal(_camDev(), "{{phone}}");
 });
 
 test("at the camera: a bare TALK gets one finger, FLIRT lands on the lens, and nothing moves the meter", () => {
   const g = onCamera(), n = NPCS[g].name.toLowerCase(), h0 = G.happy;
   const r = t("talk to " + n);
-  assert.ok([..._STREAM_BUSY_KNOWN, ..._STREAM_BUSY_NEW].some(f => r.includes(f(NPCS[g].name).slice(0, 30))), r);
+  assert.ok([..._STREAM_BUSY_KNOWN, ..._STREAM_BUSY_NEW].some(f => r.includes(f(NPCS[g].name, _whaleOf(JADE), _camDev(JADE)).slice(0, 30))), r);
   assert.match(r, new RegExp(`TIP ${NPCS[g].name.toUpperCase()} ${STREAM_MATCH}`));
   const f = t("flirt " + n);
-  assert.ok(_STREAM_FLIRT.some(x => f.includes(x(NPCS[g].name).slice(0, 25))), f);
+  assert.ok(_STREAM_FLIRT.some(x => f.includes(x(NPCS[g].name, _whaleOf(JADE), _camDev(JADE)).slice(0, 25))), f);
   assert.equal(G.happy, h0);
 });
 
@@ -75,7 +102,7 @@ test("a drink is taken — the cut is the cut — and she goes back to the lens;
   const g = onCamera(), n = NPCS[g].name.toLowerCase(), m = G.money;
   const d = t("buy " + n + " a drink");
   assert.equal(G.money, m - _ladyPrice(JADE), "charged as any lady drink");
-  assert.ok(_STREAM_GOES_BACK.some(x => d.includes(x(NPCS[g].name).slice(0, 25))), d);
+  assert.ok(_STREAM_GOES_BACK.some(x => d.includes(x(NPCS[g].name, _whaleOf(JADE), _camDev(JADE)).slice(0, 25))), d);
   assert.ok(!_TOAST_LINES.some(x => d.includes(x(NPCS[g].name).slice(0, 30))), "no warm toast from a girl walking back to the camera");
   const b = t("barfine " + n);
   assert.match(b, /SilverFox_Leeds|he tip/); assert.equal(G.pendingBf || null, null, "no negotiation opens");

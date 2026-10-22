@@ -5165,13 +5165,13 @@ const ROOMS = {
   },
   honey_trap: {
     name: "Honey Trap Bar",
-    bar: "Honey Trap Bar", barType: "beer", stream: true,   // the bar's own channel (the digital barstool, 2026-10-22)
+    bar: "Honey Trap Bar", barType: "beer", stream: true, streamDevice: "tablet",   // the bar's own channel, on a tablet (the digital barstool, 2026-10-22)
     region: "Soi Honey",
     desc: "The loud one: a horseshoe bar under a ceiling solid with fairy lights, a Connect 4 " +
       "frame chained to the rail, and a hand-painted sign promising HAPPY HOUR ALL NIGHT (it is " +
-      "not). The girls clock you from thirty feet and have your stool wiped before you reach it. Under the fairy lights a {{phone}} on a stand does for a camera and streams the horseshoe to the internet; it brings in more than the HAPPY HOUR sign, which is not hard.",
+      "not). The girls clock you from thirty feet and have your stool wiped before you reach it. Under the fairy lights a tablet on a stand does for a camera and streams the horseshoe to the internet; it brings in more than the HAPPY HOUR sign, which is not hard.",
     reads: {
-      camera: "A {{phone}} on a stand by the till, propped on a stack of chits, streaming the horseshoe to a channel with the bar's name on it. When it pings, the woman on the till reads the name out across the bar like a raffle number, and whoever is nearest raises a glass to it. (WATCH STREAM)",
+      camera: "A tablet on a stand by the till, propped on a stack of chits, streaming the horseshoe to a channel with the bar's name on it. When it pings, the woman on the till reads the name out across the bar like a raffle number, and whoever is nearest raises a glass to it. (WATCH STREAM)",
     },
     exits: { out: "soi_honey_w" },
   },
@@ -5300,13 +5300,13 @@ const ROOMS = {
   },
   dollhouse: {
     name: "The Dollhouse",
-    bar: "The Dollhouse", barType: "beer", stream: true,   // the bar's own channel (the digital barstool, 2026-10-22)
+    bar: "The Dollhouse", barType: "beer", stream: true, streamDevice: "tablet",   // the bar's own channel, on a tablet (the digital barstool, 2026-10-22)
     region: "Soi Diana",
     desc: "A big open-fronted beer bar, all fairy lights and cane stools, its counter wrapped in a " +
       "horseshoe so the girls can reach every seat. No stage, no pole — just cold Chang, a Connect 4 " +
-      "frame, and a dozen hostesses who treat every farang who slows down as a long-lost friend. At the end of the horseshoe a {{phone}} on a stand, the bar's camera, streams the room to the internet, so the long-lost friends include a few who have never been found.",
+      "frame, and a dozen hostesses who treat every farang who slows down as a long-lost friend. At the end of the horseshoe a tablet on a stand, the bar's camera, streams the room to the internet, so the long-lost friends include a few who have never been found.",
     reads: {
-      camera: "A {{phone}} on a stand at the end of the horseshoe, its little light on all night, streaming the cane stools and the fairy lights to a channel somebody's nephew set up. A drink bought through it pays the girl the same as one bought across the counter. (WATCH STREAM)",
+      camera: "A tablet on a stand at the end of the horseshoe, its little light on all night, streaming the cane stools and the fairy lights to a channel somebody's nephew set up. A drink bought through it pays the girl the same as one bought across the counter. (WATCH STREAM)",
       horseshoe: "The counter's horseshoe wrap is the whole business plan in carpentry: no " +
         "seat more than an arm's reach from a girl, no girl more than an arm's reach from " +
         "the ice. Somebody thought hard about this once, and every night since has proved " +

@@ -3913,6 +3913,7 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   state().money = 1000;
   state().nightTurn = 40; // 22:00 — base rate
   state().soc.drinks.joy = 4; state().soc.drinkCount = { joy: 1 };   // Soi 6's one drink (round 78)
+  state().soc.streamBell = { pink_lotus: state().day * 1000 + state().nightTurn };   // the flow, not the camera: Pink Lotus's big tipper is online this hour (the digital barstool, 2026-10-22)
   run("barfine joy");
   assert.ok(state().pendingBf);
   assert.ok(_BF_MENU_LINES.some(l => lastOut().includes(l.split("{n} ")[1].slice(0, 25))), "Soi 6 girls quote it themselves");
