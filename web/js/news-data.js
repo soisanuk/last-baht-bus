@@ -3,9 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Motorcyclist killed after riding past lowered railway crossing barrier in Pattaya",
+    "t": "Pattaya bike taxis switch back to orange after just five days in blue",
+    "s": "Bangkok Post",
+    "d": "22 Oct 2026"
+  },
+  {
+    "t": "American YouTuber shows CCTV saying he was assaulted and robbed in Pattaya",
     "s": "Khaosod English",
-    "d": "21 Oct 2026"
+    "d": "22 Oct 2026"
   },
   {
     "t": "Chinese Red Notice suspect arrested in Pattaya as DNA probe uncovers paternity case",
@@ -13,18 +18,8 @@ var NEWS_FEED = [
     "d": "22 Oct 2026"
   },
   {
-    "t": "Pattaya’s blue taxi vests face U-turn after just six days",
+    "t": "Pattaya raids target 12 firms in 800m baht nominee land probe",
     "s": "Thaiger",
-    "d": "22 Oct 2026"
-  },
-  {
-    "t": "Kenny G returns to Pattaya Jazz Festival 2026 with huge crowds expected",
-    "s": "Pattaya Mail",
-    "d": "21 Oct 2026"
-  },
-  {
-    "t": "American YouTuber shows CCTV saying he was assaulted and robbed in Pattaya",
-    "s": "Khaosod English",
     "d": "22 Oct 2026"
   },
   {
@@ -38,8 +33,18 @@ var NEWS_FEED = [
     "d": "21 Oct 2026"
   },
   {
+    "t": "Two women scuffle over beach seat in Pattaya; one injured",
+    "s": "Khaosod English",
+    "d": "22 Oct 2026"
+  },
+  {
     "t": "Thailand reviews anti-corruption practices in push for OECD membership",
     "s": "Pattaya Mail",
+    "d": "21 Oct 2026"
+  },
+  {
+    "t": "Vietjet Thailand affirms no impact from UK court case",
+    "s": "Bangkok Post",
     "d": "21 Oct 2026"
   },
   {
@@ -53,9 +58,9 @@ var NEWS_FEED = [
     "d": "20 Oct 2026"
   },
   {
-    "t": "Warning over $200 diesel price crisis",
-    "s": "Bangkok Post",
-    "d": "21 Oct 2026"
+    "t": "Thailand warns of heavy rain in East and South as high tides loom",
+    "s": "Nation Thailand",
+    "d": "22 Oct 2026"
   },
   {
     "t": "Nestlé breaks ground on US$685 million coffee factory in Thailand",
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "21 Oct 2026"
   },
   {
-    "t": "France unrest offers Thailand lesson in debt and fiscal discipline",
-    "s": "Asia News Network",
+    "t": "Thailand for Rs 50,000? Travel creators reveal how their Chiang Mai getaway from Hyderabad felt cheaper t",
+    "s": "The Times of India",
     "d": "21 Oct 2026"
-  },
-  {
-    "t": "Thailand, Malaysia urge citizens to avoid protest-hit EU nations",
-    "s": "Yahoo",
-    "d": "22 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-10-21","USD":33.58,"AUD":23.62,"GBP":45,"EUR":37.72};
+var FX_RATES = {"date":"2026-10-22","USD":33.75,"AUD":23.66,"GBP":45.15,"EUR":37.81};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-22","temp":27,"humid":93,"code":2,"hi":32,"rain":93};
+var WX_NOW = {"date":"2026-10-23","temp":26,"humid":92,"code":0,"hi":31,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4067,"date":"2026-10-22","baht":64600};
+var GOLD = {"usd":4025,"date":"2026-10-22","baht":64250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81759,"thb":2759238};
+var BTC = {"usd":81389,"thb":2743484};
