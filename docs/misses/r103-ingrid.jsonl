@@ -1,0 +1,3 @@
+{"cmd":"take the job","reply":"You don't see that here.","room":"queen_vic","day":12,"turn":32,"mode":null,"convo":"mort","at":"2026-10-22T13:38:22.952Z","src":"persona-ingrid"}
+{"cmd":"ask reginald did you find out about orathai","reply":"Nobody by that name here.","room":"las_vegas","day":22,"turn":20,"mode":null,"convo":"kanom","at":"2026-10-22T13:41:33.942Z","src":"persona-ingrid"}
+{"cmd":"ask orathai did reginald find out","reply":"That name doesn't land on anyone in the room.","room":"silk_rose","day":22,"turn":34,"mode":null,"convo":"grace","at":"2026-10-22T13:41:43.063Z","src":"persona-ingrid"}

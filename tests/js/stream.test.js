@@ -116,7 +116,7 @@ test("the remedies: match him (TIP the song price) or ring the bell — each hol
   G.nightTurn += 5; assert.ok(!_atCamera(g)); G.nightTurn += 6; G.soc.streamAway = {};
   const g2 = onCamera(); G.soc.streamWon = {};
   const r = t("ring bell");
-  assert.match(r, /camera corner empties|leave the ring light|comes back to the stools/);
+  assert.match(r, /camera corner empties|leave the camera|comes back to the stools/);
   assert.deepEqual(_cameraGirls(), [], "the room is the room again");
   assert.ok(g2);
 });

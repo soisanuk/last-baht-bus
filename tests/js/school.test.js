@@ -60,7 +60,7 @@ test("Mort's stringer: a hundred a paragraph for a fixture you read, five a week
   const m0 = G.money; out = []; run("talk to mort");
   assert.match(said(), /counts them off/); assert.match(said(), /5 paragraphs — ฿500/); assert.equal(G.money, m0 + 5 * OWL_LEAD_PAY); assert.equal(G.jobPaid, 500);
   out = []; run("talk to mort"); assert.doesNotMatch(said(), /counts them off/, "five a week");
-  G.day += 7; out = []; run("talk to mort"); assert.match(said(), /2 paragraphs — ฿200/);
+  G.day += 7; out = []; run("talk to mort"); assert.match(said(), /1 paragraph — ฿100/);   // his own pub's notebook is never a lead (round 103)
   assert.match(t("money"), /Stringer for Last Orders.*0 unpaid/);
   G.room = "hotel_room"; sleep(); sleep(); assert.ok(G.lastNightSaid.some(l => /paid to you for a job/.test(l)) || true);
   newGame(); G.player = { origin: "monger", personality: "straight", orientation: "straight", said: {}, lang: "en" }; _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation"; G.room = "queen_vic"; G.nightTurn = 30;

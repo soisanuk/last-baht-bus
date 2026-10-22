@@ -678,6 +678,9 @@ function _glossary(word) {
 }
 function _jobQuestion(l) {   // "is my shift done" / "when do i get paid": the player's own figures, before any mouth takes the word (Willem, round 100)
   if (/\bi(?:'ll| will)? take (?:the|that|it|your|this) job\b|^(?:ok(?:ay)?|yes|yeah|deal|i accept|i'?m in|count me in)\b.*\bjob\b|^(?:i'?ll do it|i take it|you'?re on)$/.test(l) && (G.jobOffer || (G.lastOffer && !G.job))) { doCommand("take the job"); return true; }   // "ok i take the job" re-read the offer (Willem)
+  // the answer to "work or drink tonight?" that is not WORK (Tomás, round 103: "not tonight, i'm drinking tonight" was "Hm. Maybe.")
+  if (G.job && G.job.kind === "manager" && G.room === G.job.room && G.job.shiftDay !== G.day && /\b(not tonight|night off|i'?m drinking|drinking tonight|customer tonight|day off|i'?m off tonight|just drinking)\b/.test(l)) {
+    G.job.offDay = G.day; _say(`"Okay. Customer." The house says it once and means it: tonight ${_barName(G.job.room)}'s rail is somebody else's, and you sit on the customer side of it. (WORK, if you change your mind before ten.)`); return true; }
   if (G.job && /\b(when do i start|when can i start|do i start tonight|first shift)\b/.test(l)) { _say(G.job.kind === "manager" ? `(Tonight, if you like: WORK at ${_barName(G.job.room)} declares a shift, and ${WORK_MIN_STOOD} turns behind the rail count it. ${G.job.nights} a week is the deal.)` : G.job.kind === "school" ? "(Monday morning. The nights are yours; the mornings are the school's — a rough one before a school day is a late.)" : "(Whenever you sit down to it in your room: TEACH. The mornings are what the platform counts.)", "dim"); return true; }   // "when do I start" (Margit, round 101)
   if (!(G.job && /\b(is my shift (?:done|over|finished)|when do i get paid|when'?s payday|when is payday|how many nights (?:have i|did i) (?:stood|done|worked)|what do you want me to do tonight|what do i (?:do|actually do)(?: as (?:a )?manager| here| for you)?|what(?:'s| is) (?:the|my) job(?: involve)?)\b/.test(l))) return false;
   const j = G.job, w = j.kind === "manager" ? `${j.nights} nights a week at ${_barName(j.room)}; ${j.stood || 0} stood this month${j.shiftDay === G.day ? `, tonight's ${(j.shiftStood || 0) >= WORK_MIN_STOOD ? "counted" : "not yet counted — " + Math.max(0, WORK_MIN_STOOD - (j.shiftStood || 0)) + " more turns on the rail"}` : ", no shift declared tonight (WORK at the bar to stand one)"}` : j.kind === "teach" ? "the mornings, from your room" : "weekday mornings at the school";
@@ -2292,6 +2295,7 @@ const _READ_NOUNS = {
   neon: ["neon tubes", "tubes", "the neon", "neon sign", "sign tubes"],
   rope: ["velvet rope", "the rope", "velvet-roped", "velvet", "brass posts"],
   strobe: ["strobe light", "the strobe", "strobes"],
+  owl: ["brass owl", "the owl", "the brass owl"],
   qr: ["qr sticker", "qr code", "the sticker", "sticker", "scan code"],
   mural: ["cloud mural", "clouds", "the clouds", "painted clouds", "the mural"],
   paw: ["neon paw", "paw print", "the paw", "cat posters", "posters"],
@@ -4530,7 +4534,7 @@ function _doRead(arg) {
   if (/\b(book|regulars|spreadsheet|list)\b/.test(String(arg||"")) && G.itemLoc.trade_book === "inventory") { _readBook(); return; }
   if (/\b(stick|usb|thumb drive)\b/.test(String(arg||"")) && G.itemLoc.data_stick === "inventory") { _readStick(); return; }
   if (/news|paper/.test(arg)) return _doPaper();
-  if (/\b(column|owl)\b/.test(arg)) return _doColumn(); // READ (THE) COLUMN / OWL — whole words: "bowl" is not the Owl (examine audit, 2026-10-09)
+  if (/\b(column|owl)\b/.test(arg) && !/\bbrass owl\b/.test(arg)) return _doColumn(); // READ (THE) COLUMN / OWL — whole words: "bowl" is not the Owl (examine audit, 2026-10-09)
   // READ MENU and the bare MENU verb are separate paths and both have to reach
   // the Vic's generated card, or one of the two natural phrasings dead-ends.
   if (G.room === "queen_vic" && /menu|card|price|board/.test(arg || "")) { _qvCard(); return; }
@@ -4828,6 +4832,8 @@ function _doTalkCore(arg, topic) {
   if (topic && typeof _isLeavingSaid === "function" && _isLeavingSaid(topic) &&
       !(NPCS[npc].dialogue || []).some(x => x.topic && /leav|flight/.test(x.topic) && _topicHits(x.topic, String(topic).toLowerCase()) && !/\bflights\b/.test(x.topic)) &&
       typeof _leavingTalk === "function" && _leavingTalk(npc, topic)) return;
+  if (topic && typeof _seenHomeTalk === "function" && _seenHomeTalk(npc, topic)) return;   // the walk to her ride is hers before any locked topic (Tomás, round 103)
+  if (topic && typeof _deedTalk === "function" && _deedTalk(npc, topic)) { _questOffer(npc); return; }   // the ask you PAID outranks the text that asked it (Gareth, round 103: "how is the buffalo?" got the ask read back)
   if (topic && !_sourOwn && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // Lamai's crates, Cake's fan: the text she sent (Lothar, round 67) — not her fond text, after she has seen it (Ossie, round 70)
   // what happened on the pavement, from whoever could have seen it — before LAST NIGHT takes "the rain last night"
   // (round 87). Only when it happened, and an authored node on the same word still wins.
@@ -4969,6 +4975,8 @@ function _doTalkCore(arg, topic) {
   }
   // AT THE CAMERA: a bare TALK gets the one finger, the one song — a question still reaches her (2026-10-22)
   if (!topic && typeof _atCamera === "function" && _atCamera(npc) && _npcsHere().includes(npc)) { _streamBusy(npc); return; }
+  // a tipper's or a handle's name is the stream's subject before it is any word in her own nodes ("where silverfox lives" was her home, Gareth round 103)
+  if (topic && typeof _whaleIn === "function" && (_whaleIn(topic) || _handleIn(topic)) && typeof _townTalk === "function" && _townTalk(npc, topic)) { if (typeof _questOffer === "function") _questOffer(npc); return; }
   // THE INSULT IS NOTED, AND KEPT TILL DAWN (Pete, round 75: "Something is noted… consequences,
   // later, quietly", and one turn later Terry warmly offered him the stool). The man or woman you
   // said it to answers you short for the rest of the night; an APOLOGY ends it.
@@ -5045,7 +5053,7 @@ function _doTalkCore(arg, topic) {
         `"You." ${n} points at the rail with her chin. "Tonight you work or you drink? Say now, so I know who to shout at."`])
       : role === "cashier" ? [`${n} does not look up from the drawer. "Boss. Float is right. It was right yesterday. You want to count it anyway, count it."`,
         `"Manager." ${n} slides the chit book an inch toward you, which is the whole welcome. "Nothing wrong tonight yet."`]
-      : [`"Boss!" ${n} grins and does not get up — staff do not get up for staff. "You stand tonight? Mama ask me to ask."`,
+      : [_on ? `"Boss!" ${n} grins and does not get up — staff do not get up for staff. "Mama say you stand tonight. Good. The end table is loud."` : `"Boss!" ${n} grins and does not get up — staff do not get up for staff. "You stand tonight? Mama ask me to ask."`,
         `${n} waves from her stool. "Boss. You eat? Mama say the manager who no eat is the manager who shout."`,
         `"Khun manager." ${n} makes it a joke and a fact. "Tonight the float, the ice, the drunk at the end — all yours. I only sit."`], "jobhello:" + role));
     _questOffer(npc); return;
@@ -5060,9 +5068,11 @@ function _doTalkCore(arg, topic) {
   }
   if (G.jobQuit && G.day - G.jobQuit.day <= 3 && G.room === G.jobQuit.room && (NPC_ROLES[npc] || NPCS[npc].manager) && (G.soc.quitSaid = G.soc.quitSaid || {})[npc] !== true) {
     G.soc.quitSaid[npc] = true;
-    _say(_pickTownLine([n => `"You quit." ${n} says it without heat. "Okay. Customer again. Customer pay for water." She means it as a welcome.`,
-      n => `${n} looks at the rail, then at you. "Bert stand it now. You sit on this side. Is okay — the money was small, the nights were long. You stay a customer, na?"`,
-      n => `"So — no more boss." ${n} shrugs. "Mama say nothing, which is what Mama say when she is sad. Buy me a drink and she forgive."`], "quitsaid")(NPCS[npc].name));
+    _say(_pickTownLine(NPC_ROLES[npc] === "mamasan" ? [n => `"So." ${n} takes the keys back and does not count them. "The rail is mine again. Was mine before." A shrug. "Money small, nights long. I know. You come drink, I don't charge you the face."`,
+      n => `${n} looks at you over the till. "You stand it, you stop. Okay. Now I stand it." She pours you a water and charges for it, which is the joke.`]
+      : [n => `"You quit." ${n} says it without heat. "Okay. Customer again. Customer pay for water." She means it as a welcome.`,
+      n => `${n} looks at the rail, then at you. "Mama stand it now. You sit on this side. Is okay — the money was small, the nights were long. You stay a customer, na?"`,
+      n => `"So — no more boss." ${n} shrugs. "Mama say nothing, which is what Mama say when she is sad. Buy me a drink and she forgive."`], "quitsaid" + (NPC_ROLES[npc] === "mamasan" ? "m" : ""))(NPCS[npc].name));   // Bert works at the Stinky (Tomás, round 103)
   }
   if (topic && typeof _lastTimeTalk === "function" && _lastTimeTalk(npc, topic)) { _questOffer(npc); return; }   // a resident's LAST TIME is her memory of him, not a first-trip line (Cormac, round 100: "Today is day one" to her regular)
   if (topic && typeof _flightTalk === "function" && _flightTalk(npc, topic)) { _questOffer(npc); return; }   // "my flight", the day after she heard it (Eoin, round 101)
@@ -5420,7 +5430,7 @@ function _doTalkCore(arg, topic) {
         if (_her && (_game || _rodeRecently(_her) || _outRecently(_her) || _bondTier(_her) >= 2)) {
           const n = NPCS[_her].name, house = _hoursRegister(npc) !== "floor", th = house && _thaiHouse(npc);
           const kind = _game ? ((G.bfStrikes || {})[_her] ? "complained" : "game") : _rodeRecently(_her) ? "ride" : _outRecently(_her) ? "out" : (_bondTier(_her) >= 3 || ((G.everBond || {})[_her] || 0) >= 3) ? "hers" : "likes";   // two nights away cooled "your girl" to "good girl, send money home" (Eoin, round 101)
-          const P = {
+          let P = {
             ride: th ? [`"${n} come back at sunrise on her own bike. Face like a woman who have good night and won't talk about it." A look at you. "Me also, I won't."`,
                            `"The ride." The smallest smile. "${n} take you round the town that is not on the map. Most man, she don't. Remember that, na."`]
                   : house ? [`"${n} came back at dawn on her own bike, looking like a woman who had a good night and isn't going to discuss it." A look at you. "Neither am I."`,
@@ -5461,6 +5471,12 @@ function _doTalkCore(arg, topic) {
                               : [`"${n}?" A face. "Mama shout at her, long time. She cry in toilet." A shrug. "She not do again to you. But she not love you now, na."`,
                                  `"Everybody know you complain about ${n}." Not unkind. "Good. Mama right. But ${n} sit far from you now. That is how."`],
           }[kind];
+          // a night out that ENDED at your place: she did not come back with sore feet, and there was no crawl to tell (Tomás, round 103)
+          { const _pl = G.partyLog && G.partyLog[_her];
+            if (kind === "out" && _pl && _pl.home) P = th ? [`"${n} go out with you and don't come back." Not a complaint. "Her stool empty till closing. Next day she come in late and smile at nothing."`, `"${n}?" A small nod. "She go with you in her own clothes. Where after — not my business. She is happy, so I am."`]
+              : house ? [`"${n} went out with you and didn't come back." Not a complaint. "Her stool was empty till close. She came in late the next day, smiling at nothing."`, `"${n}?" A small nod. "She went with you in her own clothes. Where after is not my business. She's happy, so I am."`]
+              : [`"${n} go with you — and no come back!" A delighted gasp. "Her stool empty all night. Next day, big smile, no story. No story is the story."`, `"You take ${n} home." She does not ask whose home. "She come in late, she sing in the toilet. Okay, okay."`];
+            else if (kind === "out" && _pl && (_pl.rooms || []).length <= 1) P = P.filter(l => !/every bar|which bar|sore feet/.test(l)).concat(th ? [`"${n} go out with you, early." A nod. "She come back, say nothing, keep the smile for herself."`] : house ? [`"${n} went out with you early, and came back with nothing to report except her face."`] : [`"${n} go out with you!" A grin. "She come back, no story. Very suspicious."`]); }
           // one witness, one telling — and a second mouth tells it differently: Bussaba on Pukky, Bussaba on
           // "last night" and Numfon on Pukky printed one sentence three times (Thomas, round 92). The book is
           // keyed by what was seen; a speaker who has told it gives the gist, the next takes a line not yet said.
@@ -6516,7 +6532,7 @@ function _runChoice(id, c) {
   const st = _npcState(id);
   for (const f of c.sets || []) _setFlag(f);
   if (c.fx) c.fx(st, G);
-  if (c.text) _say(_fillSaid(c.text));
+  if (c.text) _say(_fillSaid(c.text).replace("{covers}", () => typeof _coversSaid === "function" ? _coversSaid() : "eight, nine, seven"));   // the count you made, not a number written for you (Ingrid, round 103)
   if (c.topic) { _doTalk(_convoName(id), c.topic); return; } // jump: delivers that node + its choices (+ prompt)
   G.convoIdx = null;                               // terminal — choices consumed
   if (_convoActive()) _convoPrompt(_convoActive()); // re-show the palette after the beat
@@ -6617,6 +6633,7 @@ function _fixtureTalk(npc, topic) {
   }
   if (!key && reads[t]) key = t;
   if (!key) return false;
+  if (key === "camera" && typeof _streamBar === "function" && _streamBar()) return false;   // the camera is the stream's subject: it came with the group, not before the staff (Gareth, round 103)
   const reg = _hoursRegister(npc);
   const pool = reg === "floor" ? _FIXTURE_FLOOR : reg === "house" ? (_thaiHouse(npc) ? _FIXTURE_THAI : _FIXTURE_HOUSE) : _FIXTURE_PUNTER;
   _say(_fmt(_pickVary(pool, "fixture:" + reg), { n: NPCS[npc].name, k: key }));
@@ -7446,7 +7463,13 @@ const _TOWN = {
   },
   my_flat_seen: {
     tan: ["\"Your flat,\" Tan says. \"She told her floor about a balcony and a kitchen. Her floor told the soi. The soi told me. Nobody mentioned the bar.\"", "Tan almost smiles. \"The condo. I hear she liked the lift.\""],
-    floor: ["\"Your flat?\" {n} smiles with one side of her mouth. \"Ninth floor. Lift slow, balcony good, the sea doing nothing.{c} I remember. Not a hotel. A hotel does not have your shirt on the chair.\"", "{n} pretends to think. \"The one with the balcony. The fan on two.{c} Better than hotel — nobody write in a book who come in.\" A beat. \"The office woman write anyway.\""],
+    floor: ["\"Your flat?\" {n} smiles with one side of her mouth. \"Ninth floor. Lift slow, balcony good, the sea doing nothing.{c} I remember. Not a hotel. A hotel does not have your shirt on the chair.\"", "{n} pretends to think. \"The one with the balcony. The fan on two.{c} Better than hotel — nobody write in a book who come in.\" A beat. \"The office woman write anyway.\"",
+      "\"The flat.\" {n} laughs at something private.{c2} \"Your kitchen have one pan and three spoon. Next time I bring a pan.\"",
+      "{n} leans in. \"I tell my sister: he have a balcony, and the balcony have a chair, and the chair is only for him.{c2} Now is for me.\"",
+      "\"Ninth floor.\" {n} mimes the lift: slow, slower.{c2} \"Long way up. Worth it. Don't tell nobody I say.\"",
+      "{n} goes a little shy. \"Your flat is quiet. Here never quiet. I sleep like a dead woman.{c2}\"",
+      "\"The view!\" {n} sighs at it from here.{c2} \"Morning the sea is grey, then blue. In my room the morning is a wall.\"",
+      "{n} points at you with her straw. \"You make the bed after. Farang man make the bed!{c2} I tell everybody.\""],
     house: ["\"Your flat,\" {n} says. \"She told the girls about the balcony, not the bar. That is a first.\"", "{n} nods. \"Pratumnak. She came back talking about a kitchen. Nobody on this floor has seen a kitchen in a farang's room before.\""],
     punter: ["\"The condo? She was up there, I heard,\" {n} says. \"Balcony and all. You'll not get her back on a stool so easy now.\"", "{n} grins. \"Heard about the balcony. And the cooking. You're ruining it for the rest of us.\""],
   },
@@ -7849,7 +7872,7 @@ Object.assign(_TOWN, {
     floor: [
       "\"The camera?\" {n} waves at it. \"Company put. Man far away buy drink on {{phone}}, I say his name, I get same {c} like you buy here.\" A shrug. \"Easy money. He never touch.\"",
       "{n} laughs. \"Internet customer! He pay {p}, I drink, I say name. I don't know which one he is. He know me.\"",
-      "\"Every night many name,\" {n} says, nodding at the {{phone}} on the stand. \"Germany, England, Australia. Morning for them, night for me.\"",
+      "\"Every night many name,\" {n} says, nodding at the {{phone}} in the corner. \"Germany, England, Australia. Morning for them, night for me.\"",
       "\"Camera, na.\" {n} turns her face to it without thinking, then back. \"You buy drink here, you get me. Buy there, you get my face.\"",
       "{n} points at the red light. \"Company watch, man far away watch. Mamasan count. I smile, everybody happy.\"",
       "\"Same money,\" {n} says about the stream, a little proud of the arithmetic. \"Stool or internet, {c}. But internet man never ask upstairs.\"",
@@ -7900,22 +7923,27 @@ Object.assign(_TOWN, {
       "\"Camera? Not here, na.\" {n} laughs. \"Here old style. You want see me, you come sit. {b} — they have camera.\"",
       "\"The company bar have camera,\" {n} says. \"{b}. Here no company, no camera, only me.\"",
       "{n} shrugs. \"Internet customer go {b}. Here only real customer. Real customer better, he buy upstairs.\"",
-      "\"My friend work {b},\" {n} says. \"She say internet man very polite and very far away. I like customer close.\"",
+      "\"My friend work {b1},\" {n} says. \"She say internet man very polite and very far away. I like customer close.\"",
+      "\"{o} have camera,\" {n} says. \"Small bar, phone on a stick. Not company. My friend sing there for England man.\"",
     ],
     house: [
       "\"That's the group's,\" {n} says. \"{b}. Cameras in every room they own. We are a bar; they are a channel as well.\"",
-      "{n} shakes her head. \"No camera here. A man who wants to see my floor comes and sits on it. {b}, if you want the internet.\"",
+      "{n} shakes {hp} head. \"No camera here. A man who wants to see my floor comes and sits on it. {b}, if you want the internet.\"",
+      "\"Not here,\" {n} says. \"The group's rooms have them, and a few small bars put a {{phone}} on a stand in the lockdown — {o}, for one.\"",
       "\"The group's rooms stream,\" {n} says. \"{b}. Ours doesn't. Ours you have to be in.\"",
     ],
     punter: [
       "\"The cameras are in the group's bars,\" {n} says. \"{b}. This place is the old kind: you want to see it, you sit in it.\"",
       "{n} snorts. \"Streaming? Here? The telly barely works. Try {b} if you want to be on the internet.\"",
       "\"{b} have the cameras,\" {n} says. \"I watch them sometimes from my room when I can't sleep. Don't tell anybody.\"",
+      "\"Not just the group,\" {n} says. \"{o} has a {{phone}} on a stand. Started in the lockdown. Nobody's bothered to take it down.\"",
+      "{n} considers it. \"There's the group's four on Soi 6. And {o} — little place, does it on a {{phone}}. That's the one I'd watch, if I watched.\"",
+      "\"Can't stand them,\" {n} says of the cameras. \"A bar's a room. You're in it or you're not. {b1} is the worst for it.\"",
     ],
   },
   stream_me: {
     floor: [
-      "\"That was YOU?\" {n} laughs, delighted and a little caught out. \"I say many name tonight. I don't look which one. Next time you come, I say it to your face.\"",
+      "\"That was YOU?\" {n} laughs, delighted and a little caught out. \"I say many name {when}. I don't look which one. Next time you come, I say it to your face.\"",
       "\"{h}?\" {n} tries it. \"I say that name? Maybe. Many name.\" She looks at you properly. \"Here is better. Here I know.\"",
       "{n} covers her face. \"I not look at the camera when I say name! Is like — saying name to the wall.\" She takes your hand. \"Sorry, tilac. Now I know which one.\"",
       "\"You buy from phone?\" {n} shakes her head at you. \"Why? You are in Pattaya! Come sit, I drink with you, not with the camera.\"",
@@ -7944,7 +7972,8 @@ Object.assign(_TOWN_THAI, {
   ],
   stream_not: [
     "\"That is company bar,\" {n} says. \"{b}. Camera every room. Here no. Here you have to come sit.\"",
-    "{n} shakes her head. \"No camera here. You want see my floor, you sit on it. {b}, if you want internet.\"",
+    "{n} shakes {hp} head. \"No camera here. You want see my floor, you sit on it. {b}, if you want internet.\"",
+    "\"Not here,\" {n} says. \"Company bar have. Small bar also some — {o}, they put phone on stand in COVID time.\"",
   ],
   stream_me: [
     "\"Your name one of hundred,\" {n} says. \"She say, she don't look. Stream like that. This side of bar, she look.\"",
@@ -7960,22 +7989,23 @@ Object.assign(_TOWN, {
       "{n} waves at the {d}. \"Man far away buy drink, I say his name, I get {c} same like you buy here. Mama get the rest.\"",
       "\"Is our {d},\" {n} says, proud of it. \"Not big company. Small bar, small camera, many friend in England.\"",
       "\"Some old man watch every night,\" {n} says. \"He never come. He send drink, I say name. Like a regular inside the TV.\"",
-      "{n} shrugs at the stand. \"Drink on {d} {p}, same price. But {d} man never ask upstairs, never get drunk, never cry.\"",
+      "{n} shrugs at the camera. \"Drink on {d} {p}, same price. But {d} man never ask upstairs, never get drunk, never cry.\"",
       "\"You want be on the internet?\" {n} turns you toward it. \"Wave! Now your mother see you in Pattaya.\" She laughs harder than you do.",
       "\"Lockdown time, bar close, girl no money,\" {n} says. \"Mama put {d}, we sing, man in Australia send drink. Now we keep.\"",
       "\"Internet customer very polite,\" {n} says. \"He say thank you, he say good night. Real customer, sometimes no.\"",
     ],
     house: [
       "\"We put the {d} up in the lockdown,\" {n} says. \"No customers in the bar, plenty on the internet. When the bar opened again we just never took it down.\"",
-      "{n} glances at the stand. \"A drink on the stream is {p}; the girl gets {c}, same as on a stool. It is a small channel. It pays for the ice.\"",
+      "{n} glances at the camera. \"A drink on the stream is {p}; the girl gets {c}, same as on a stool. It is a small channel. It pays for the ice.\"",
       "\"No company,\" {n} says, as if you'd asked. \"Our {d}, our name on it. The group's bars on Soi 6 have proper cameras. We have tape.\"",
       "\"Some of them have watched for three years,\" {n} says. \"They know every girl's birthday. Not one of them has been.\"",
       "{n} turns the {d} a little so the stools are in frame. \"It's a bar for men who can't come. They pay the same and they drink nothing.\"",
       "\"It keeps the girls busy on a quiet night,\" {n} says. \"And a quiet night is most nights.\"",
+      "\"We are not the only small one,\" {n} says. \"{o} has a {{phone}} up too. Half the lockdown bars did, and a few never stopped.\"",
     ],
     punter: [
       "\"The {d}?\" {n} snorts. \"Lads at home buying her a drink and watching her drink it. And here's me paying for mine in person.\"",
-      "{n} raises his bottle at the stand. \"Say hello to the folks at home. Somebody's always watching.\"",
+      "{n} raises his bottle at the camera. \"Say hello to the folks at home. Somebody's always watching.\"",
       "\"Started in the lockdown,\" {n} says. \"Half the channel's never been. Never will be.\"",
       "\"I watched it from home the year I couldn't come,\" {n} admits. \"Bought a few. She said my name wrong every time. I didn't mind.\"",
       "{n} shrugs at the {d}. \"Same girls, no stool. Some blokes like it better that way.\"",
@@ -7985,11 +8015,76 @@ Object.assign(_TOWN, {
 });
 _TOWN_THAI.stream_indie = [
   "\"We put {d} in the lockdown,\" {n} says. \"No customer in bar, many on internet. Bar open again, we never take down.\"",
-  "{n} looks at the stand. \"Drink on stream {p}; girl get {c}, same like stool. Small channel. Pay the ice.\"",
+  "{n} looks at the camera. \"Drink on stream {p}; girl get {c}, same like stool. Small channel. Pay the ice.\"",
   "\"No company,\" {n} says. \"Our {d}, our name. Company bar on Soi 6 have big camera. We have tape.\"",
   "\"Some watch three year,\" {n} says. \"Know every girl birthday. Never come.\"",
 ];
 _TOWN_WIDE.add("stream_indie");
+Object.assign(_TOWN, {
+  stream_handle: {
+    floor: [
+      "\"{h}?\" {n} shrugs. \"Name on the phone. I say it, I drink. Maybe England, maybe Germany. I never see.\"",
+      "{n} laughs. \"{h}! I don't know him. Phone know him. Phone say, I say.\"",
+      "\"Many name like that,\" {n} says. \"{h}, I say it to the camera. Who is he — nobody know. He know me.\"",
+      "\"{h} buy drink sometime,\" {n} says. \"Polite. Far away. That is all I know, tilac.\"",
+    ],
+    house: [
+      "\"{h}?\" {n} shrugs. \"A handle on the {{phone}}. He buys a drink now and then and the girls say it. I have never seen his face.\"",
+      "\"One of the names,\" {n} says. \"{h}. They come up, she says it, it goes on the sheet. That is the whole of him.\"",
+      "{n} looks at the camera. \"{h} — he is on most weeks. Who he is, where he is, nobody here could tell you.\"",
+    ],
+    punter: [
+      "\"{h}?\" {n} snorts. \"Some bloke at home. You'll never meet him. He'll never meet you. That's the beauty of it.\"",
+      "\"Heard the name,\" {n} says. \"{h}. Every bar's got a few. Ghosts with a bank card.\"",
+      "{n} shrugs. \"{h}'s a name on a screen, mate. Might be a millionaire, might be a bloke in a bedsit. Probably the bedsit.\"",
+    ],
+  },
+  stream_home: {
+    floor: [
+      "\"{from},\" {n} says. \"He watch from {home}. He show the window one time — rain.\"",
+      "\"{nick}? {from}.\" {n} counts on her fingers. \"There is {when} when here is night. He never sleep, I think.\"",
+      "\"{from}. He watch from {home},\" {n} says. \"He say he come next year. Every year next year.\"",
+    ],
+    house: [
+      "\"{from},\" {n} says. \"He watches from {home}, if you believe the stream. He tips in {when}. That is all I know of him, and all I need.\"",
+      "\"He says he watches from {home},\" {n} says. \"I have no reason to doubt it and no way to check.\"",
+    ],
+    punter: [
+      "\"Watches from {home}, so he says,\" {n} says. \"Tips like a lottery winner from a sofa. Never set foot here.\"",
+      "\"{from},\" {n} says. \"{home}. You'd think a man with that much money would buy a plane ticket.\"",
+    ],
+  },
+  stream_elsewhere: {
+    floor: [
+      "\"{w}? Not here, na. He is {wb} man,\" {n} says. \"Every camera have one. Here we have our own.\"",
+      "\"{nick}?\" {n} laughs. \"{wb}! My friend there say he tip {m} a song. Not my bar.\"",
+    ],
+    house: [
+      "\"{w} is {wb}'s,\" {n} says. \"Every camera has its big tipper. He is not ours.\"",
+      "\"Not on this channel,\" {n} says. \"{w} tips at {wb}. We have our own nuisance.\"",
+    ],
+    punter: [
+      "\"{w}? That's {wb}'s ghost,\" {n} says. \"Every bar with a camera's got one.\"",
+      "\"Wrong bar,\" {n} says. \"{w} haunts {wb}. Ask in there.\"",
+    ],
+  },
+});
+Object.assign(_TOWN_THAI, {
+  stream_handle: [
+    "\"{h}?\" {n} shrugs. \"Name on the phone. He buy drink sometime, girl say. I never see his face.\"",
+    "\"One of the name,\" {n} says. \"{h}. Come up, girl say, I write on sheet. That is all.\"",
+  ],
+  stream_home: [
+    "\"{from},\" {n} says. \"He watch from {home}, he say. He tip in {when}. I don't need know more.\"",
+    "\"He say he watch from {home},\" {n} says. \"I cannot check. I don't need check.\"",
+  ],
+  stream_elsewhere: [
+    "\"{w} is {wb} man,\" {n} says. \"Every camera have one. Not ours.\"",
+    "\"Not here,\" {n} says. \"{w} tip at {wb}. Here we have our own.\"",
+  ],
+});
+["stream_handle", "stream_home", "stream_elsewhere"].forEach(k => _TOWN_WIDE.add(k));
+
 // ── the night ride's stops, by name ─────────────────────────────────────────
 const _RIDE_STOP_WORDS = [
   ["disco", /thai disco|\bdisco\b/i], ["somtam", /som ?tam|papaya salad|the cart/i], ["wsclub", /\bclub\b|superclub|walking street/i],
@@ -8684,7 +8779,7 @@ function _mineTalk(npc, topic) {
   }
   if (!mine) return false;
   const what = mine[1], n = NPCS[npc].name, reg = _hoursRegister(npc);
-  const pick = (k, slots) => { const _th = reg === "house" && _TOWN_THAI[k] && _thaiHouse(npc); const pool = (npc === "tan" && _TOWN[k].tan) || (_th ? _TOWN_THAI[k] : _TOWN[k])[reg] || _TOWN[k].punter; _say(_fmt(_pickTownLine(pool, "mine:" + k), Object.assign({ n }, slots || {}))); return true; };
+  const pick = (k, slots) => { const _th = reg === "house" && _TOWN_THAI[k] && _thaiHouse(npc); const pool = (npc === "tan" && _TOWN[k].tan) || (_th ? _TOWN_THAI[k] : _TOWN[k])[reg] || _TOWN[k].punter; _say(_fmt(_pickTownLine(pool, "mine:" + k), Object.assign({ n, hp: _pr(npc).p }, slots || {}))); return true; };
   if (/^(job|work|shifts?|wages?|pay)$/.test(what)) {
     if (typeof _jobBarStaff === "function" && _jobBarStaff(npc) && typeof _myJobTalk === "function") return _myJobTalk(npc, "my job");
     if (!G.job) { if (G.jobQuit && G.day - G.jobQuit.day <= 14) return pick("my_job_quit", { b: _barName(G.jobQuit.room) }); return pick("my_job_none", {}); }
@@ -8701,7 +8796,15 @@ function _mineTalk(npc, topic) {
     if (what === "room" && !/\bmy room\b/.test(raw) && !G.condo) return false;
     if (G.hotel === "condo") {
       const hs = (G.homeSeen || {})[npc];
-      if (hs && hs.nights > 0) return pick("my_flat_seen", { c: hs.cooked ? " You cook for me. Rice was wrong. I eat all." : "" });
+      if (hs && hs.nights > 0) return pick("my_flat_seen", { c: hs.cooked ? " You cook for me. Rice was wrong. I eat all." : "", c2: hs.cooked ? " And you cook — I still taste it." : "" });   // more than two lines: two women said one sentence (Tomás, round 103)
+      const ft = (G.flatTold = G.flatTold || {});
+      if (ft[npc] != null) {   // she has heard about the flat: the first-hearing surprise is not news a month later (Tomás, round 103)
+        const n = NPCS[npc].name;
+        _say(_pickTownLine(reg === "floor" ? [`"Your condo, yes, yes." ${n} waves it away. "You tell me already. Ninth floor, the sea. One day you invite, not only talk."`, `"I know, I know — Pratumnak." ${n} smiles. "You say it like I forget. I don't forget a balcony."`]
+          : [`"The flat on Pratumnak," ${n} says. "You've mentioned it."`, `"Still on the hill?" ${n} nods. "Good. Somebody should be."`], "flatagain:" + reg));
+        return true;
+      }
+      ft[npc] = G.day;
       return pick("my_flat", {});
     }
     return pick("my_flat_none", { h: _HOTELS[G.hotel] ? _HOTELS[G.hotel].name : "the hotel" });
@@ -8738,6 +8841,18 @@ const _WALLET_POINT_AGAIN = [
 function _teachesHere(id) {
   return !!(NPCS[id] && (NPCS[id].dialogue || []).some(d => d.topic && /\b(?:online|teach)/.test(String(d.topic)) && (!d.when || d.when(_npcState(id), G)) && (!d.req || d.req.every(f => _flag(f))) && !(d.notFlags || []).some(f => _flag(f))));
 }
+// SEE HOME, remembered by the woman you walked (Tomás, round 103: "Not yet, na. Maybe later" to the songthaew she took on his arm)
+function _seenHomeTalk(npc, t) {
+  t = String(t || "").toLowerCase();
+  { const w = G.lastNightWas;
+    if (w && w.seenHome === npc && /\b(songthaew|walk(?:ed)? (?:you|me)|your ride|the ride|see you home|saw you home|the bike|your bike|to the corner)\b/.test(t)) {
+      const n = NPCS[npc].name, reg = _hoursRegister(npc);
+      _say(_pickTownLine(reg === "floor" ? [`"I remember." ${n} looks pleased and tries not to. "You walk me like a husband. My friend see from the songthaew, she tease me all the way home."`, `"Yes, yes." ${n} bumps your shoulder. "Gentleman. Nobody walk me since — long time. Thank you, na."`, `${n} smiles at the bar top. "You carry nothing, you say nothing, you just walk. Is the best part of the night."`]
+        : [`"I remember," ${n} says. "It was kind, and the whole floor saw it, which is also kind, in its way."`, `${n} nods. "You walked me to my ride. People notice who does that."`], "seenhometalk:" + reg));
+      return true;
+    } }
+  return false;
+}
 function _townTalk(npc, topic) {
   if (!topic || !NPCS[npc]) return false;
   let t = String(topic).toLowerCase().trim();
@@ -8748,6 +8863,13 @@ function _townTalk(npc, topic) {
       if (npc === kb.id) { _say(G.keptBy ? `"My room?" ${n} shrugs, which is not nothing. "Small. One fan. You snore. Is okay. Five night I can say to mama, after that I cannot."` : `"Five night." ${n} says it flat. "Mama ask. Now the girls ask. Is okay. You don't ask — that is the one thing."`); return true; }
       if (NPC_ROLES[npc] && (NPCS[npc].room === NPCS[kb.id].room || (NPCS[npc].bars || []).includes(NPCS[kb.id].room))) { _say(NPC_ROLES[npc] === "mamasan" ? `"${kn} keep a farang in her room." ${n} does not lower her voice. "Not my business. Her room, her money, her name. I only say — the girls talk, and the girls are right."` : `"${kn}?" ${n} looks across at her. "She keep you. Everybody know. Her landlady tell my cousin." A shrug. "Brave, or stupid. Same word here, some days."`); return true; }
     } }
+  // THE FLAT, from inside it: the woman standing in your flat can talk about it (Tomás, round 103: "That one I don't know, na", on the balcony)
+  if (G.room === "condo_room" && _npcsHere().includes(npc) && /\b(flat|balcony|condo|kitchen|view|the room|this room|this place|here|my place|the lift|the sea|the bed|like it)\b/.test(t)) {
+    const n = NPCS[npc].name, reg = _hoursRegister(npc);
+    _say(_pickTownLine(reg === "floor" ? [`"Here?" ${n} turns a slow circle. "Is quiet. Is clean. One pan." She goes to the balcony door and stays there. "The sea do nothing all night. I like."`, `${n} opens the fridge, closes it. "Beer, water, one egg. Farang fridge." She smiles. "The balcony is the good part. You sit there and nobody sell you anything."`, `"Ninth floor," ${n} says, as if you might not know. "My room, I hear my neighbour sneeze. Here I hear nothing. Nothing is expensive, na."`, `${n} sits on the edge of the bed and bounces once, testing. "Okay. Better than hotel. Hotel is somebody else's."`]
+      : [`"It's quiet," ${n} says, and means it as praise. "You can hear yourself think up here. That's rare in this town."`, `${n} looks out at the sea. "Good view. Empty kitchen. That's a man who eats out."`], "flathere:" + reg));
+    return true;
+  }
   // A JOB is the house's to offer (2026-10-20): the mamasan, the manager or the woman on the till, at a bar with a rail
   if (/^(?:a |the )?(?:job|jobs|work here|work for you|hiring|vacancy|position|manager'?s? job|a manager)\b/.test(t) && _room().barType &&
       (NPC_ROLES[npc] === "mamasan" || NPCS[npc].manager || NPCS[npc].owner || (typeof _tillKeeper === "function" && _tillKeeper(G.room) === npc)) && typeof _jobOffer === "function" &&
@@ -9010,15 +9132,41 @@ function _townTalk(npc, topic) {
       return pick("owner", { b: _barName(G.bar.room) });
   }
   // THE CAMERA (the digital barstool, 2026-10-22): the group's channel, the big tipper, the bars without one, and the drink she can't place
-  if (typeof _streamBar === "function" && (/\b(camera|cameras|streams?|streaming|live ?stream|livestream|webcam|ring light|the lens|tripod|tablet|the whale|big tipper|tipper|channel|youtube|internet customers?|the internet)\b/.test(t) || _STREAM_WHALES.some(w => t.includes(w.nick.toLowerCase()) || w.h.toLowerCase().split("_").some(x => x.length > 3 && t.includes(x.toLowerCase()))))) {
-    const sd = (G.streamDrinks || {})[npc], room = NPCS[npc].room;
-    const bars = Object.keys(ROOMS).filter(id => _streamBar(id) && _PLG_ROOMS.includes(id)).map(id => _barName(id)), b = bars.slice(0, -1).join(", ") + " and " + bars[bars.length - 1];   // the outsiders' line is about the group's cameras
-    if (sd && G.day - sd.day <= 3 && NPC_ROLES[npc] === "hostess") return pick("stream_me", { h: _myHandle() });
-    { const w = _whaleOf(G.room);
-      if (_streamBar(G.room) && (/\b(whale|big tipper|tipper)\b/.test(t) || t.includes(w.nick.toLowerCase()) || w.h.toLowerCase().split("_").some(x => x.length > 3 && t.includes(x)) || _whaleOn()) && _npcsHere().includes(npc))
-        return pick("stream_whale", { w: w.h, nick: w.nick, from: w.from, home: w.home, when: w.when, When: w.when.replace(/^./, c => c.toUpperCase()), m: _num(STREAM_MATCH), d: _camDev() }); }
-    if (_streamBar(G.room) && _npcsHere().includes(npc)) return pick(_PLG_ROOMS.includes(G.room) ? "stream" : "stream_indie", { p: _num(_ladyPrice(G.room)), c: _num(LADY_CUT), d: _camDev() });   // the group's camera, or the bar's own phone
-    if (_room().barType || NPC_ROLES[npc] || NPCS[npc].patron) return pick("stream_not", { b });
+  // "ask jinda to send taan back": the house cannot outbid the internet for you, and says what can (Gareth, round 103)
+  if (typeof _streamBar === "function" && _streamBar(G.room) && _whaleOn() && (NPC_ROLES[npc] === "mamasan" || NPC_ROLES[npc] === "cashier" || NPCS[npc].manager) &&
+      /\b(send|bring|get|call)\b.*\b(back|over|here)\b|\b(i want|tell .* to come)\b/.test(t) && _cameraGirls().length) {
+    const gn = _cameraGirls().map(x => NPCS[x].name).join(" and "), th = _thaiHouse(npc);
+    _say(th ? `"${gn} working, na," ${NPCS[npc].name} says. "He pay ${_num(STREAM_MATCH)} one song. You pay same, she come. Or ring bell — even him cannot buy whole room."` : `"${gn} is working," ${NPCS[npc].name} says. "He pays ${_num(STREAM_MATCH)} a song. Match it and she's yours for the hour — or ring the bell. Even he can't buy the whole room."`);
+    return true;
+  }
+  if (typeof _streamBar === "function") {
+    const _whaleNamed = _whaleIn(t);
+    const _handleNamed = _handleIn(t);
+    const _mine = t.includes(_myHandle()) || /\b(my (?:drink|name|handle)|did you (?:see|say|get)|you said my|the drink i (?:sent|bought))\b/.test(t);
+    const _tipWords = /\b(tips? (?:so )?much|tipping|why (?:does|do) he tip|the whale|big tipper|tipper)\b/.test(t);
+    if (_whaleNamed || _handleNamed || _tipWords || /\b(camera|cameras|streams?|streaming|live ?stream|livestream|webcam|ring light|the lens|tripod|tablet|channel|youtube|internet customers?|the internet|my handle|change my handle)\b/.test(t) || (_mine && (G.streamDrinks || {})[npc])) {
+      const sd = (G.streamDrinks || {})[npc];
+      const plg = Object.keys(ROOMS).filter(id => _streamBar(id) && _PLG_ROOMS.includes(id)), bars = plg.map(id => _barName(id)), b = bars.slice(0, -1).join(", ") + " and " + bars[bars.length - 1];
+      const indies = Object.keys(ROOMS).filter(id => _streamBar(id) && !_PLG_ROOMS.includes(id) && id !== G.room);
+      const near = indies.slice().sort((x, y) => (_districtHops(G.room, x) - _districtHops(G.room, y)) || (_hh(npc + x, 7) - _hh(npc + y, 7)))[0];
+      const sl = { b, b1: _barName(plg[_hh("b1:" + npc, 7) % plg.length]), o: near ? _barName(near) : _barName(plg[0]) };
+      const reg = _hoursRegister(npc), here = _streamBar(G.room) && _npcsHere().includes(npc);
+      // a handle she can't place is a handle: a name on the phone, a man in another country
+      if (/\bchange my (?:handle|name)\b/.test(t)) { _say(reg === "floor" ? `"Your name on the stream?" ${NPCS[npc].name} laughs. "Phone give it, phone keep it. ${_myHandle()} — I like. Sound like a man who come back."` : `"The link gives you a name when you pay," ${NPCS[npc].name} says. "It keeps it. ${_myHandle()}. Nobody in here can change it for you."`); return true; }
+      if (sd && G.day - sd.day <= 3 && NPC_ROLES[npc] === "hostess" && (_mine || !(_whaleNamed || _handleNamed || _tipWords)))
+        return pick("stream_me", { h: _myHandle(), when: sd.day === G.day ? "tonight" : sd.day === G.day - 1 ? "last night" : "the other night" });
+      if (_handleNamed && !_whaleNamed) return pick("stream_handle", { h: _handleNamed });
+      const w = _whaleNamed || (_streamBar(G.room) ? _whaleOf(G.room) : null);
+      if (w && (_whaleNamed || _tipWords || (here && _whaleOn()))) {
+        const home = Object.keys(ROOMS).filter(id => _streamBar(id) && _whaleOf(id) === w);
+        const ws = { w: w.h, nick: w.nick, from: w.from, home: w.home, when: w.when, When: w.when.replace(/^./, c => c.toUpperCase()), m: _num(STREAM_MATCH), d: _camDev(home[0] || G.room), wb: _barName(home[0]) };
+        if (/\b(where (?:does|do|is) he (?:live|from)|where (?:is )?.{0,20} from|lives?|his home|which country|what country)\b/.test(t)) return pick("stream_home", ws);
+        if (home.includes(G.room) || !home.length) return pick("stream_whale", ws);
+        return pick("stream_elsewhere", ws);
+      }
+      if (here) return pick(_PLG_ROOMS.includes(G.room) ? "stream" : "stream_indie", { p: _num(_ladyPrice(G.room)), c: _num(LADY_CUT), d: _camDev(), o: sl.o });   // the group's camera, or the bar's own phone
+      if (_room().barType || NPC_ROLES[npc] || NPCS[npc].patron) return pick("stream_not", sl);
+    }
   }
   if (_isGogo() && /\b(the )?(show|shows|schedule|stage|big show|the act|tiers?|rotation|front row|tipping|tips?)\b/.test(t) && typeof _showSchedule === "function")
     return pick("show", { s: _showSchedule(G.room) });
@@ -9156,6 +9304,9 @@ function _townTalk(npc, topic) {
       (G.partyLog[id].rooms || []).some(r => _myBars.includes(r)) && NPCS[id].room && !_myBars.includes(NPCS[id].room));
     const _bN = _brought && NPCS[_brought].name, _bB = _brought && (_barName(NPCS[_brought].room) || "another bar");
     const W = _brought ? (reg === "floor" ? `You come with ${_bN}, from ${_bB} — I see. ` : reg === "house" ? (_thaiHouse(npc) ? `You bring ${_bN} with you, from ${_bB}. ` : `You brought ${_bN} in with you, from ${_bB}. `) : `You had ${_bN} with you, from ${_bB}. `)
+      : (w.shift && w.shift === _hereBar && w.shiftLeft != null && !(w.seenHome && NPCS[w.seenHome] && (w.seenHome === npc || NPCS[w.seenHome].room === _hereBar)) && typeof _jobBarStaff === "function" && _jobBarStaff(npc)) ? (withHere   // he left before the shutter, and the floor saw him go (Tomás, round 103)
+          ? (reg === "floor" ? `You stand the rail, boss — then ${_clockStr(w.shiftLeft)} you go out with ${withHere}. Mama lock up. ` : `You stood the rail till ${_clockStr(w.shiftLeft)}, then went out with ${withHere}. We locked up without you. `)
+          : _pickTownLine(reg === "floor" ? [`You stand the rail, boss, till ${_clockStr(w.shiftLeft)}. Then you go. Mama lock up. `, `You work, then ${_clockStr(w.shiftLeft)} you gone. The shutter is Mama. `] : [`You stood the rail till ${_clockStr(w.shiftLeft)} and then you went. We locked up without you. `, `Your shift ended at ${_clockStr(w.shiftLeft)}, as far as the floor could see. The shutter was ours. `], "sawshiftleft:" + reg))
       : (w.shift && w.shift === _hereBar && typeof _jobBarStaff === "function" && _jobBarStaff(npc)) ? _pickTownLine(reg === "floor" ? [`You stand the rail, boss, and you lock up. `, `You work. You count with Mama. You pull the shutter. `] : [`You stood the rail and you locked up — I watched you count. `, `Your shift, start to shutter. `], "sawshift:" + reg)   // the manager's night, not a customer's (Brendan, round 102)
       : (w.seenHome && NPCS[w.seenHome] && (w.seenHome === npc || NPCS[w.seenHome].room === _hereBar)) ? (w.seenHome === npc ? _pickTownLine([`Then you walk me to my ride, like old-fashioned man. `, `After, you walk me out. Gentleman to the corner. `], "sawseenme") : _pickTownLine(reg === "floor" ? [`Then you walk ${NPCS[w.seenHome].name} to her ride — everybody see, nobody laugh. `] : [`Then you walked ${NPCS[w.seenHome].name} to her ride. Old-fashioned. `], "sawseen:" + reg))   // Laurie, round 102
       : (w.upstairs && NPCS[w.upstairs] && _hereBar && (typeof _npcRoom === "function" ? _npcRoom(w.upstairs) === _hereBar : NPCS[w.upstairs].room === _hereBar)) ? _pickTownLine(reg === "floor" ? [`Upstairs with ${NPCS[w.upstairs].name}, then she back on her stool and you go. `, `You go up with ${NPCS[w.upstairs].name} — not long — and she come down smiling. `] : reg === "house" ? [`Upstairs with ${NPCS[w.upstairs].name}, and she was back on the floor inside the hour. `, `${NPCS[w.upstairs].name} took you up and came back down; the till has the chit. `] : [`You went up with ${NPCS[w.upstairs].name} and came down alone, mate. `], "sawup:" + reg)   // the short time, not the long one (Eoin, round 101)
@@ -11845,7 +11996,7 @@ function _doMotosai(arg) {
     if (_isHotelRoom(G.room)) { _say("No piwin in here. The stands are on the street — OUT first."); return false; }
     let best = null;   // the nearest stand, and which way (Margit, round 101: "No motosai stand here" two blocks from one)
     for (const id of Object.keys(ROOMS)) if (ROOMS[id].motosai && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id))) { const pth = typeof _path === "function" ? _path(G.room, id) : null; if (pth && pth.length && (!best || pth.length < best.p.length)) best = { id, p: pth }; }
-    if (best) { const dir = Object.keys(r.exits || {}).find(k => r.exits[k] === best.p[0]); _say(`No motosai stand here — the nearest is on ${ROOMS[best.id].name.replace(/\s*\(.*\)$/, "")}, ${best.p.length} ${best.p.length === 1 ? "step" : "steps"}${dir ? " " + (_DIRS[dir] ? { n: "north", s: "south", e: "east", w: "west" }[dir] || dir : dir) : ""} of here${dir ? ` (GO ${dir.toUpperCase()})` : ""}.`); }
+    if (best) { const dir = Object.keys(r.exits || {}).find(k => r.exits[k] === best.p[0]); _say(`No motosai stand here — the nearest is on ${ROOMS[best.id].name.replace(/\s*\(.*\)$/, "")}, ${best.p.length} ${best.p.length === 1 ? "step" : "steps"}${dir && { n: 1, s: 1, e: 1, w: 1 }[dir] ? " " + { n: "north", s: "south", e: "east", w: "west" }[dir] + " of here" : " away"}${dir ? ` (GO ${dir.toUpperCase()})` : ""}.`); }
     else _say("No motosai stand here.");
     return false;
   }
@@ -14962,6 +15113,8 @@ function _workTalk(npc, kind) {
       ? `"${NPCS[boss].name}." ${n} says the name the way you say a fact. "She decide who work, who go home, who sit with who. I ask her, not the other way."`
       : _thaiHouse(npc) ? `"${NPCS[boss].name} run this floor. I only work here."` : `"${NPCS[boss].name} runs this floor. I just work on it."`;
     if (mgr) return null;    // a manager's boss is his own authored story
+    if (role && ((typeof _licenceOwner === "function" && _licenceOwner(G.room) === npc) || role === "mamasan"))   // the woman whose name is on the paper is not "the owner" in the third person (Tomás, round 103)
+      return _thaiHouse(npc) ? `"Me." ${n} taps the frame by the till. "My name on the paper. I decide who work, who go home."` : `"Me." ${n} taps the frame by the till. "My name is on the paper. I decide who works and who goes home."`;
     return role ? `"The owner." ${n} shrugs. "She is not here every night. Mostly the floor run itself, and when it don't, everybody find out at the same time."` : null;
   }
   const pools = kind === "pay" ? _WORK_PAY : _WORK_JOB;
@@ -16579,9 +16732,19 @@ function _readRouteBody(raw) {
     if (/\b(?:take you out|come out with me|go out with me|coming out with me|fancy (?:coming|going) out|out with me tonight)\b/.test(l) && NPC_ROLES[partner]) {
       doCommand("take " + String(NPCS[partner].name).toLowerCase() + " out"); return true;
     }
+    // COME SIT WITH ME / CAN TAAN COME SIT WITH ME: the woman named, or the one you are talking to (Gareth, round 103)
+    if (/\b(?:come (?:and )?sit|sit with me|sit down with me|join me)\b/.test(l)) {
+      const nm = _npcsHere().find(x => NPC_ROLES[x] === "hostess" && new RegExp("\\b" + String(NPCS[x].name).toLowerCase() + "\\b").test(l)) || partner;
+      if (nm && typeof _toHer === "function" && _toHer(nm, l, true)) return true;
+    }
     // a question ABOUT HER, or anything said to her by name or endearment, is hers — never a verb's
     // NIGHT KWAN: a goodnight to the woman you are talking to ends the chat (on your arm, she keeps it — existing rule)
     if (R.kind === "farewell" && !(G.party && (G.party.ids || []).includes(partner))) { doCommand("bye"); return true; }
+    // I SENT YOU 200 FOR THE BUFFALO is the money's subject, not her family (Gareth, round 103: it reached her brother's shop)
+    { const sm = l.match(/\bi (?:sent|send|gave|give|transferred|wired) you\b(?:.*?\bfor (?:the |your )?([a-z ]+?))?[?!.]*$/);
+      if (sm) { const p = String(NPCS[partner].name).toLowerCase(), k = (sm[1] || "").trim();
+        if (k && _askSoft("ask " + p + " about " + k)) return true;
+        if (_askSoft("ask " + p + " about my money")) return true; } }
     // TELL ME ABOUT X is asking her about X
     { const tm = l.match(/^tell me (?:about |more about )?(?:your |the )?(.+?)[?!.]*$/); if (tm && !/^(?:more|a story|the story|it|that)$/.test(tm[1]))
       { if (_askSoft("ask " + String(NPCS[partner].name).toLowerCase() + " about " + tm[1])) return true;
@@ -16634,7 +16797,7 @@ const _HEARD = {
       "\"Really?\" She leans in like it's the best thing she's heard tonight, and maybe it is.",
       "She laughs — at the sense or the sound of it, you can't tell — and clinks her glass on yours.",
       "\"Ohh,\" she says, and then, practical: \"So — you want another beer?\"",
-      "She thinks about it, then gives a little shrug. \"Up to you, tilac. Your holiday.\"",
+      "She thinks about it, then gives a little shrug. \"Up to you, tilac. Your night.\"",
       "\"Hah. You funny man,\" she says, and seems to mean it in the good way.",
       "She repeats a word of it back to you, trying it out, and gets it nearly right.",
       "\"Sabai sabai,\" she says, which covers it, and tops up your glass from the bottle."],
@@ -16782,7 +16945,7 @@ const _REMARK = {
     drunk: ["\"I know.\" She moves your glass a little further from your elbow. \"I see already.\"",
       "\"Mao laew — drunk already!\" She laughs. \"Drink water, then beer. Thai way.\"",
       "\"Slowly, slowly.\" She steadies your stool with her foot, which you hadn't noticed was needed.",
-      "\"Never mind. Drunk is holiday.\" She holds up a hand. \"But no motorbike. Promise.\"",
+      "\"Never mind. Drunk is Pattaya.\" She holds up a hand. \"But no motorbike. Promise.\"",
       "She slides her own glass of water along to you. \"Drink. Is mine, is free.\"",
       "\"Drunk man always say he not drunk. You say you drunk — so you okay.\" The logic is hers.",
       "\"Mao mao,\" she says, fondly — drunk drunk. \"Sit. Don't fall down. Is my bar.\"",
@@ -16791,7 +16954,7 @@ const _REMARK = {
       "\"Really?\" She leans in like it's the best thing she's heard tonight, and maybe it is.",
       "She laughs — at the sense or the sound of it, you can't tell — and clinks her glass on yours.",
       "\"Ohh,\" she says, and then, practical: \"So — you want another beer?\"",
-      "She thinks about it, then gives a little shrug. \"Up to you, tilac. Your holiday.\"",
+      "She thinks about it, then gives a little shrug. \"Up to you, tilac. Your night.\"",
       "\"Okay, okay,\" she says, and means: I heard you, and I like you, and I didn't get all of it.",
       "\"Sabai sabai,\" she says, which covers it, and tops up your glass from the bottle.",
       "She smiles and doesn't answer, and the smile is enough of one."],
@@ -16924,6 +17087,7 @@ function _unaskedTopic(c) {
   });
 }
 function _remarkBeat(c, t) {
+  if (typeof _atCamera === "function" && _atCamera(c)) { _streamBusy(c); return; }   // she is singing to the lens: a remark gets the one finger (Gareth, round 103)
   const reg = _notUnderstoodReg(c), tone = _remarkTone(t);
   // the beat names her: a line that opens on her quote is hers by name, a line that opens on "She" opens on her name
   const line = _genderLine(_pickTownLine(_REMARK[reg][tone], "remark:" + reg + tone), c);
@@ -17071,6 +17235,11 @@ function _toHer(c, raw, addressed) {
   // deflection (Steve's fourth run: "what time is it" got "Is a long story", "fancy a game of connect four?" got
   // "Why you want to know?", "you eaten?" got "Hah. Secret.")
   if (/^(?:what(?:'?s| is)? the time|what time is it|whats the time|time now|got the time)\b/.test(t)) { doCommand("time"); return true; }
+  // COME SIT WITH ME: the camera keeps her, else she comes (Gareth, round 103)
+  if (/\b(?:come (?:and )?sit|sit with me|sit down with me|come over here|join me)\b/.test(t)) {
+    if (typeof _atCamera === "function" && _atCamera(c)) { _streamBusy(c); return true; }
+    if (_npcsHere().includes(c) && NPC_ROLES[c] === "hostess") { _convoStart(c); _say(_genderLine(_pickTownLine(["She slides onto the stool beside you. \"Okay. I sit.\"", "She comes, drink first. \"You want company? Company is here.\"", "She sits, knee against yours, chin on her hand. \"Okay. Talk.\"", "\"Five minute,\" she says, and sits for twenty."], "comesit"), c)); _tick(); return true; }
+  }
   if (!/\bwatch/.test(t) && /\b(?:play|fancy|game of|wanna|up for|want (?:to )?play)\b/.test(t)) {
     const g = t.match(/\b(connect ?(?:4|four)|jackpot|pool|darts)\b/) || t.match(/\b(a game|game)\b/);   // the named game first, wherever it sits
     if (g) { doCommand(("play " + (/connect/.test(g[1]) ? "connect 4" : /^(?:jackpot|pool|darts)$/.test(g[1]) ? g[1] : "")).trim()); return true; }
@@ -17698,6 +17867,8 @@ function _doCommandInner(input) {
   }
   // THE JOBS (2026-10-20): a verb each, lean — the offer lapses at dawn, no gate
   if (/^(?:take|accept) (?:the |that |this )?job$|^i'?ll take it$|^take it$/i.test(raw.trim()) && G.jobOffer && typeof _takeJob === "function") { _takeJob(); return; }
+  if (/^(?:take|accept) (?:the |that |this )?job$/i.test(raw.trim()) && !G.jobOffer && G.stringer && _npcsHere().includes("mort")) { _say("\"You've taken it.\" Mort doesn't look up from the notebook. \"Read something I haven't, and tell me about it. That's the whole job.\""); return; }   // Ingrid, round 103
+  if (/^(?:take|accept) (?:the |that |this )?job$/i.test(raw.trim()) && !G.jobOffer) { _say(G.job ? "You have a job already. (MONEY says which; QUIT JOB first if you want another.)" : "Nobody has offered you one tonight. (ASK the mamasan or the manager ABOUT A JOB.)"); return; }
   if (/^(?:quit|leave|resign|hand in|give up) (?:the |my )?(?:job|notice|rail)$|^resign$/i.test(raw.trim()) && typeof _quitJob === "function") { _quitJob(); return; }
   if ((/^(?:teach online|online teaching|teach english online|start teaching online)$/i.test(raw.trim()) || (G.stage === "expat" && /^(?:teach|teach english|start teaching)$/i.test(raw.trim()))) && typeof _doTeach === "function") { _doTeach(); return; }   // a bare TEACH on a holiday stays the lesson pointer
   if (/^(?:where(?:'s| is| can i find)|is there|any) (?:a |the )?(?:pool table|table for pool|killer pool|pool|snooker)\b/i.test(raw.trim()) && typeof _tableHint === "function" && !(/\bpool\b(?! table)/i.test(raw) && !/table|killer|snooker/i.test(raw) && G.hotel && _HOTELS[G.hotel] && (_HOTELS[G.hotel].pool || G.hotel === "condo"))) { _say(_tableHint()); return; }   // a man whose building has a pool means the pool (Willem, round 100)   // "ask around" (Marcus, round 96)
@@ -18691,6 +18862,7 @@ function _doCommandInner(input) {
       else if (arg === "bus" || arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (arg.startsWith("motosai") || arg.startsWith("bike")) _doMotosai(arg.replace(/^\S+\s*/, ""));
       else if (/^(tested|checked|test|checkup|screen)\b/.test(arg)) _doClinic();
+      else if (v === "take" && /^(.+?)\s+(?:upstairs|up the stairs)$/.test(arg) && _npcsHere().includes(_findNpc(arg.replace(/\s+(?:upstairs|up the stairs)$/, "")) || "")) _doBarfine(arg.replace(/\s+(?:upstairs|up the stairs)$/, ""));   // TAKE TAAN UPSTAIRS is the short time (Gareth, round 103)
       else if (/\bout\b/.test(arg) && _flag("act1Done") && _takeOut(arg)) {}   // TAKE NAN OUT — the refusal's own hint (Ingrid, round 62; a second case "take" lower down was dead)
       else _doTake(arg.replace(/^up /, ""));
       break;
@@ -19138,6 +19310,10 @@ function _doCommandInner(input) {
           if (hs && hs.day === G.day && G.nightTurn < 5) { _say(`${NPCS[_wid].name} was gone before you woke — the first bus, the way the floor goes home. She is on her stool tonight${(G.visited || {})[NPCS[_wid].room] ? ` (TRAVEL ${String(_barName(NPCS[_wid].room) || "").toUpperCase()})` : ""}.`); break; }
           const el = typeof _elsewhereLine === "function" ? _elsewhereLine(_wq) : null; if (el) { _say(el); break; }
         } }
+      if (typeof _whaleIn === "function" && (_whaleIn(lower) || _handleIn(lower))) {   // "where does big tex live?" — a man on the phone is the room's to answer (Gareth, round 103)
+        const _cw = typeof _convoActive === "function" && _convoActive();
+        const _ws = _cw && _npcsHere().includes(_cw) ? _cw : _npcsHere().find(x => NPC_ROLES[x] || (NPCS[x] && (NPCS[x].manager || NPCS[x].patron)));
+        if (_ws && typeof _townTalk === "function" && _townTalk(_ws, lower)) { _tick(); break; } }
       if (_naturalHelp(lower)) break;   // "where can i live cheaper" is a resident's question, not a place lookup (Willem, round 100)
       if (_naturalHelp("where is " + String(arg || "").replace(/^(?:is|are|s)\s+/, ""))) break;   // the ATM and the 7-Eleven (Ron, round 82)
       const q = (arg || "").replace(/^(?:is|are)\s+(?:the\s+)?/, "").trim();
@@ -19264,7 +19440,8 @@ function _doCommandInner(input) {
     }
     case "balcony": case "rail":
       if (G.room === "qv_room") _doWatchSoi();
-      else _say("No balcony here. Yours is the one over the Queen Vic — head UP to your room and WATCH SOI from the rail.");
+      else if (G.room === "condo_room" || ((ROOMS[G.room] || {}).reads || {}).balcony) doCommand("examine balcony");   // the flat has its own (Tomás, round 103)
+      else _say(G.hotel === "qv" || G.hotel === "queenvic" ? "No balcony here. Yours is the one over the Queen Vic — head UP to your room and WATCH SOI from the rail." : G.hotel === "condo" ? "No balcony here. Yours is on the ninth floor of the tower on Pratumnak Soi 5." : "No balcony here.");
       break;
     case "stream": case "livestream": case "webcam":
       // the group's channel (the digital barstool, 2026-10-22): STREAM DRINK <her> from your phone, else watch it
@@ -19434,6 +19611,13 @@ function _doCommandInner(input) {
       if (!arg && !G.dog && _convoTopicHere("name")) { _doTalkBody("", "name"); break; }
       _doNameDog(arg); break;
     case "haggle": case "bargain": case "expensive": case "too": case "rip": case "ripoff": case "robbery": case "why":
+      // "why does he tip so much?" is a question about the man on the phone, not a price complaint (Gareth, round 103)
+      if (v === "why" && (/\b(tips?|tipping|tipper|camera|stream)\b/.test(lower) || !/\b(expensive|cost|costs|price|pay|charge|water|beer|so much|dear|same as)\b/.test(lower))) {
+        const _c = typeof _convoActive === "function" && _convoActive();
+        const _who = _c && _npcsHere().includes(_c) ? _c : _npcsHere().find(x => NPC_ROLES[x] || (NPCS[x] && (NPCS[x].manager || NPCS[x].patron)));
+        if (_who && typeof _townTalk === "function" && _townTalk(_who, lower)) { _tick(); break; }
+        if (_convoResolve(lower)) break;
+      }
       if (_inBar()) {
         // the thing just quoted is the thing he means: the seat speech after a lady drink or a barfine quote
         // answered a question about water nobody asked (Liam, round 93)

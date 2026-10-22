@@ -170,7 +170,7 @@ function stripMarkup(text) {
 
 let _nameRx = null; // [id, /\bName\b/] pairs, built once from the rosters
 
-const _NOT_A_NAME = /\bmoo ping\b|\bping[- ]?pong\b|\bsom tam\b|\bsang ?som\b/gi;
+const _NOT_A_NAME = /\bmoo ping\b|\bping[- ]?pong\b|\bsom tam\b|\bsang ?som\b|\bDear (?:lady|boy|girl|sir|madam|friend|me|god|heart|old|chap|fellow|Khun|Mister|Mr)\b|(?:^|[“"(]\s*)Dear\b(?=[^.!?]{0,40},)/gi;   // "Dear lady" is not Dear (Ingrid, round 103)
 const _NOT_A_NAME_CAPS = /\b(?:BUY|GIVE|HOLD|HOLDING)\s+(?:A\s+)?ROSES?\b|\bROSES?\s+(?:FOR|TO)\b|\bGIFT\s+(?=[<$\d])|\bABOUT ICE\b/g;
 function _learnNames(text) {
   if (!G || !G.known) return;
@@ -328,7 +328,7 @@ function newGame() {
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
-    homeSeen: {}, envelopeDue: null, ledgerNotes: [], monthAdj: 0,   // the resident's integration pass (round 100)
+    homeSeen: {}, flatTold: {}, envelopeDue: null, ledgerNotes: [], monthAdj: 0,   // the resident's integration pass (round 100)
     loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0, quizWon: 0, giftIn: 0, lastNightBye: null,   // quiz prizes and a note pressed on you (round 93); principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
@@ -2036,6 +2036,15 @@ function _nottysOpen() {
 }
 function _outWithMe(id) { return !!(G.party && G.party.ids && G.party.ids.includes(id)); }
 function _bankIn(n) { n = Math.max(0, Math.round(n || 0)); G.bank = (G.bank || 0) + n; G.bankIn = (G.bankIn || 0) + n; }
+// _hh FINALISED: _hh is near-linear in its last characters (day 9 and day 10 land one apart), so any roll keyed on a
+// day wants this — consecutive days were one result for a whole week (Ingrid, round 103: two crooked doors, 17 nights,
+// nothing back). New rolls use it; old ones keep _hh, because changing them would move every seeded result.
+function _hm(s, salt) {
+  let h = _hh(s, salt);
+  h = (h ^ (h >>> 16)) >>> 0; h = Math.imul(h, 0x45d9f3b) >>> 0; h = (h ^ (h >>> 16)) >>> 0;
+  h = Math.imul(h, 0x45d9f3b) >>> 0; h = (h ^ (h >>> 16)) >>> 0;
+  return h;
+}
 function _pr(id) {
   const p = typeof _pronoun === "function" ? _pronoun(id) : (NPCS[id] || {}).pronoun;
   return p === "she" ? { s: "she", o: "her", p: "her" }
@@ -2876,6 +2885,17 @@ const _BAR_REGULAR = [
   "The far stools run to the usual weathered faces — here before you, here after you, and not looking for anyone new tonight.",
   "Somewhere down the bar a regular drones on to nobody in particular, background hum under the music.",
 ];
+// a go-go has benches and a front row, never a bar to be welded to (Ingrid, round 103, at the Las Vegas)
+const _BAR_REGULAR_GOGO = [
+  "Along the wall benches, a knot of regulars have their usual table and an argument only they follow — part of the furniture, not the cast.",
+  "A lifer holds down the end of the front row, tipping by the habit of years; the kind of fixture you nod past, never actually meet.",
+  "The back benches run to the usual weathered faces — here before you, here after you, and not looking for anyone new tonight.",
+  "Somewhere along the benches a regular drones on to the waitress, background hum under the music.",
+];
+const _BAR_REGULAR_GOGO_BUSY = [
+  g => _fmt("At the end of the front row a sunburnt regular holds court{g}, sealed in his own little world — no seam in it for you to get a word through.", { g }),
+  g => _fmt("A red-faced fixture has the corner bench{g}, mid-story, mid-myth; whatever that is, it isn't yours to join.", { g }),
+];
 const _BAR_REGULAR_BUSY = [
   g => _fmt("Down the far end a sunburnt regular holds court{g}, sealed in his own little world — no seam in it for you to get a word through.", { g }),
   g => _fmt("A red-faced fixture works the far stools{g}, mid-story, mid-myth; whatever that is, it isn't yours to join.", { g }),
@@ -3376,8 +3396,9 @@ function _describeRoom(full, forceFull) {
         : _npcsHere().find(id => NPC_ROLES[id] === "hostess" &&
             id !== (typeof _convoActive === "function" && _convoActive()) && !_descHas(id) && !_mine(id));
       const g = girl ? `, ${NPCS[girl].name} laughing on cue beside him` : "";
-      if (girl) _say(_pickVary(_BAR_REGULAR_BUSY, "barReg")(g), "dim");
-      else _say(_pickVary(_BAR_REGULAR, "barReg"), "dim");
+      const _gg = typeof _isGogo === "function" && _isGogo();
+      if (girl) _say(_pickVary(_gg ? _BAR_REGULAR_GOGO_BUSY : _BAR_REGULAR_BUSY, "barReg")(g), "dim");
+      else _say(_pickVary(_gg ? _BAR_REGULAR_GOGO : _BAR_REGULAR, "barReg"), "dim");
     } else if (!_railCrowd.length) {
       // THE ANONYMOUS BAR-BORE IS FOR A ROOM WITH NOBODY IN IT. Printed at the
       // Queen Vic — "a knot of regulars welded to the bar… part of the furniture,
@@ -3386,7 +3407,7 @@ function _describeRoom(full, forceFull) {
       // town specifically for the company read it as the game telling him the
       // blokes he came for weren't worth crossing the floor to meet (round 22).
       // Real people outrank furniture; if the rail has names, say nothing.
-      _say(_pickVary(_BAR_REGULAR, "barReg"), "dim");
+      _say(_pickVary(typeof _isGogo === "function" && _isGogo() ? _BAR_REGULAR_GOGO : _BAR_REGULAR, "barReg"), "dim");
     }
   }
   // The two junction bars look out on the evening's two free shows: the police
@@ -3696,7 +3717,7 @@ function _tick() {
   }
   if (typeof _workPresenceTick === "function") _workPresenceTick(); // a declared shift has to be stood
   if (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && G.room === G.job.room) {   // a manager's shift is stood the same way
-    G.job.shiftStood = (G.job.shiftStood || 0) + 1;
+    G.job.shiftStood = (G.job.shiftStood || 0) + 1; G.job.shiftLast = G.nightTurn;   // when he was last on it: the shutter is the man who was there at close (Tomás, round 103)
     if (G.job.shiftStood === 1 || G.job.shiftStood % 10 === 0) for (const id of (typeof _staffAt === "function" ? _staffAt(G.room) : [])) (G.seenDay = G.seenDay || {})[id] = G.day;   // the floor saw you (Dougal: "10 night you no come" to the man on its rail)
   }
   if (typeof _workFloor === "function") _workFloor();          // …and a stood shift is where your own staff live

@@ -48,7 +48,7 @@ test("the Soi 6 man who stays never finds ฿3,000 in a wardrobe; Mort, hired, s
   G.room = "pratumnak_soi5"; G.bank = 60000; run("rent a condo"); run("rent a condo"); const m = G.money; out = []; run("look"); assert.doesNotMatch(said(), /emergency stash/); assert.equal(G.money, m);
   moveIn("monger"); G.room = "queen_vic"; run("talk to mort"); run("ask mort about a job"); assert.ok(G.stringer);
   assert.match(t("ask mort about job"), /Read anything/); assert.doesNotMatch(said(), /hires residents/);
-  G.examined = { "queen_vic.notebook": 1, "stinky_bar.cooler": 1 }; const m2 = G.money; assert.match(t("ask mort about what i read"), /counts them off/); assert.equal(G.money, m2 + 200);
+  G.examined = { "queen_vic.notebook": 1, "stinky_bar.cooler": 1 }; const m2 = G.money; assert.match(t("ask mort about what i read"), /counts them off/); assert.equal(G.money, m2 + 100);   // not his own notebook (round 103)
 });
 
 test("the paper is askable: a hostess, the house, a regular and Tan each answer a visa in their own register", () => {

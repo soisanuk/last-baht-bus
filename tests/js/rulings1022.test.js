@@ -71,7 +71,7 @@ test("Nont's ฿200 is named and waits for a YES — another command lets it go,
 // ── the laundering doors ──
 const choice = lab => { for (const [id, n] of Object.entries(NPCS)) for (const d of n.dialogue || []) for (const c of d.choices || []) if (c.label === lab) return [id, c]; };
 const pick = (lab) => { const [id, c] = choice(lab); c.fx && c.fx(_npcState(id), G); return id; };
-const hitDay = (kind, want) => { for (let d = 1; d < 400; d++) if ((_hh("launder:" + kind + ":" + d, 7) % 100 < LAUNDER_RISK_PCT) === want) return d; };
+const hitDay = (kind, want) => { for (let d = 1; d < 400; d++) if ((_hm("launder:" + kind + ":" + d, 7) % 100 < LAUNDER_RISK_PCT) === want) return d; };
 
 test("every laundering job pays its honest door — less than the crooked one", () => {
   newGame(); _setFlag("act1Done"); G.money = 1000;

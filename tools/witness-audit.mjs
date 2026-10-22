@@ -56,6 +56,7 @@ const CLASS = {
   "engine-parser.js:_partyTalk|everybody see": [C_, "her own answer about the kiss, off G.kissLog (round94.test)"],
   "engine-parser.js:_tanBasics|everybody knows": [G_, "a fact about the town (the 7-Eleven step is the cheapest bar), not about you"],
   "engine-play.js:_BYE_FARANG|in front of the whole": [G_, "the last night's goodbye — the week ends before anybody could be asked about it"],
+  "engine-parser.js:_seenHomeTalk|the whole floor saw": [W_, "the woman you walked to her ride, answering it herself off G.lastNightWas.seenHome — the mouth; round103.test"],
   "engine-parser.js:_townTalk|everybody see": [W_, "her colleague answering LAST NIGHT off G.lastNightWas.with — she is the mouth; towntalk.test"],
   "engine-parser.js:_townTalk|the room noticed": [W_, "the house answering LAST NIGHT off G.lastNightWas.with — the mouth itself; towntalk.test"],
   "engine-systems.js:_affairCaught|the floor sees": [C_, "G.affair.discovered/soured — the floor seeing it IS the discovery, and every later verb reads it (round 66)"],

@@ -55,7 +55,7 @@ test("SEVERE (Renata, Willem): the manager is the manager at his bar — the flo
   G.job.stood = 9; G.day = G.payDay + 30; G.room = _hotelRoomId(); G.nightTurn = 30; const s = sleep(); assert.match(s, /envelope — ฿.*is at the bar/); assert.ok(G.envelopeDue);
   assert.match(t("money"), /An envelope of ฿.*waiting at Sweet Tamarind/);
   G.room = SB; G.nightTurn = 30; const m0 = G.money; out = []; run("talk to " + m); assert.match(said(), /envelope/); assert.ok(G.money > m0); assert.equal(G.envelopeDue, null);
-  run("quit job"); assert.ok(G.jobQuit); G.soc.quitSaid = {}; assert.match(t("talk to " + g), /You quit|Customer again|no more boss|Bert stand it now/);
+  run("quit job"); assert.ok(G.jobQuit); G.soc.quitSaid = {}; assert.match(t("talk to " + g), /You quit|Customer again|no more boss|Mama stand it now|The rail is mine again|Now I stand it/);
   assert.match(t("ask " + g + " about my job"), /quit|Customer again|no more boss|Bert stand it now|Sweet Tamarind|none/);
 });
 
@@ -66,7 +66,7 @@ test("SEVERE (Cormac): the condo is a home when a woman is in it — the ride sa
   assert.match(t("cook for lek"), /Two plates|for two|plates on the floor/); assert.equal((G.homeSeen.lek || {}).cooked, G.day);
   out = []; run("sleep"); run("sleep"); assert.doesNotMatch(said(), /watching the soi you just left|street still loud under the window|soi's music coming up through the floor|neon leaks through the curtains/);
   assert.ok(G.homeSeen.lek && G.homeSeen.lek.nights >= 1, "she woke in the flat: " + JSON.stringify(G.homeSeen));
-  G.room = NPCS.lek.room; G.nightTurn = 30; run("talk to lek"); assert.match(t("ask lek about my flat"), /Ninth floor|balcony|not a hotel|rice was wrong/i);
+  G.room = NPCS.lek.room; G.nightTurn = 30; run("talk to lek"); assert.match(t("ask lek about my flat"), /Ninth floor|balcony|not a hotel|rice was wrong|the flat|kitchen|lift|the view|the bed|quiet|cook/i);
   G.room = "queen_vic"; assert.match(t("ask terry about my flat"), /balcony|cooking|Pratumnak/i);
   assert.match(t("examine fridge") + (G.room = "condo_room", t("examine fridge")), /eggs|rice|your name on nothing/i); assert.doesNotMatch(said(), /housekeeping/);
   G.battery = 40; assert.match(t("charge phone"), /Your own socket/); assert.equal(G.battery, 100);

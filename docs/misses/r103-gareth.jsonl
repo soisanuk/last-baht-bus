@@ -1,0 +1,6 @@
+{"cmd":"can i change my handle?","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"soi6_west_in","day":8,"turn":73,"mode":null,"convo":null,"at":"2026-10-22T13:33:02.355Z","src":"persona-gareth"}
+{"cmd":"handle gareth_wrexham","reply":"That didn't parse. Phrase it as a command the game knows: a verb, then who or what.","room":"soi6_west_in","day":8,"turn":73,"mode":null,"convo":null,"at":"2026-10-22T13:33:02.355Z","src":"persona-gareth"}
+{"cmd":"can taan come sit with me?","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"jade_lounge","day":9,"turn":32,"mode":null,"convo":"jade_lounge_jinda","at":"2026-10-22T13:33:46.078Z","src":"persona-gareth"}
+{"cmd":"take taan upstairs","reply":"You don't see that here.","room":"jade_lounge","day":9,"turn":32,"mode":null,"convo":"jade_lounge_jinda","at":"2026-10-22T13:33:46.078Z","src":"persona-gareth"}
+{"cmd":"ask the mamasan which bars have a camera","reply":"No one here answers to that.","room":"metro_garden","day":12,"turn":13,"mode":null,"convo":null,"at":"2026-10-22T13:38:42.188Z","src":"persona-gareth"}
+{"cmd":"ask the mamasan about the live stream","reply":"That name doesn't land on anyone in the room.","room":"metro_garden","day":12,"turn":13,"mode":null,"convo":null,"at":"2026-10-22T13:38:42.188Z","src":"persona-gareth"}

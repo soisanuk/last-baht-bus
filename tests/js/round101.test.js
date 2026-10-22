@@ -142,7 +142,7 @@ test("Eoin: 'I fly home tomorrow' is kept past the dawn — 'my flight' the day 
 
 test("Eoin: 'did you miss me' after a gap reads the gap; the review of a woman who was yours does not cool to a stranger's line; a short time is 'upstairs', not 'you leave with her'", () => {
   resident(); G.room = "sunset_rail"; G.soc.drinks.pukky = 8; G.talked.pukky = [0]; G.seenDay = { pukky: G.day - 3 }; out = []; _relGreeting("pukky");
-  assert.equal(G.soc.gapSeen.pukky, 3); run("talk to pukky"); assert.match(t("did you miss me"), /3 night/);
+  assert.equal(G.soc.gapSeen.pukky, 3); run("talk to pukky"); assert.match(t("did you miss me"), /2 night/);   // nights missed, as the greeting counts them (round 103)
   G.seenDay = { pukky: G.day }; G.soc.gapSeen = {}; assert.doesNotMatch(t("did you miss me"), /\d night/);
   // the review: her-farang once, her-farang when the bond has cooled two nights
   G.soc.drinks.pukky = 11; G.everBond = { pukky: 3 }; const mate = _staffAt("sunset_rail").find(i => NPC_ROLES[i] === "hostess" && i !== "pukky");

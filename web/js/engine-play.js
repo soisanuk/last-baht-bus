@@ -27,14 +27,18 @@ function _gameHostess(pref) {
   const here = _npcsHere();
   // "PLAY CONNECT 4 WITH RATANA": an opponent named and present takes the frame
   // (the mamasan IS the shark tier — gambler playtest 2026-08-22 asked for her and got Lek)
+  const cam = n => typeof _atCamera === "function" && _atCamera(n);   // a girl singing to the lens is not free for a board (Gareth, round 103)
+  let camNamed = null;
   if (pref) {
     const p = here.find(n => NPC_ROLES[n] && NPCS[n].name.toLowerCase() === pref) ||
       here.find(n => NPC_ROLES[n] && NPCS[n].name.toLowerCase().startsWith(pref));
-    if (p) return { id: p, name: NPCS[p].name };
+    if (p && !cam(p)) return { id: p, name: NPCS[p].name };
+    if (p) camNamed = p;
   }
-  const id = here.find(n => CANON_HOSTESSES.includes(n)) ||
-    here.find(n => NPC_ROLES[n]) || null;
-  if (pref && id) _say(`(Nobody here answers to "${pref}" for a game — ${NPCS[id].name} has the frame tonight.)`, "dim");
+  const id = here.find(n => CANON_HOSTESSES.includes(n) && !cam(n)) ||
+    here.find(n => NPC_ROLES[n] && !cam(n)) || null;
+  if (camNamed && id) _say(`(${NPCS[camNamed].name} is at the camera and holds up one finger — one song. ${NPCS[id].name} takes the frame instead.)`, "dim");
+  else if (pref && id) _say(`(Nobody here answers to "${pref}" for a game — ${NPCS[id].name} has the frame tonight.)`, "dim");
   return { id, name: id ? NPCS[id].name : "the hostess on shift" };
 }
 
@@ -1383,7 +1387,7 @@ function _smallTalk(npc, topic) {
     mine[key] = i;
   }
   let line = pool[mine[key] % pool.length];
-  if (/\{d\}/.test(line)) line = line.replace(/\{d\}/g, String(gap));
+  if (/\{d\}/.test(line)) line = line.replace(/\{d\}/g, String(Math.max(1, gap - 1)));   // nights missed, as the greeting counts them (Tomás, round 103: "4 night" then "5 night")
   if (/\{bike\}/.test(line)) { const b = typeof _rideBikeMine === "function" ? _rideBikeMine(npc) : "A Honda"; line = line.replace(/\{bike\}/g, (m, off, str) => /(?:^|["“]|[.:!?]\s)$/.test(str.slice(0, off)) ? b : b.charAt(0).toLowerCase() + b.slice(1)); }
   _say(`${NPCS[npc].name}: ${line}`);
   return true;
@@ -3497,7 +3501,7 @@ function _doSocial(kind, targetWord) {
   _noteActor(id); // this person is now the antecedent for the next "her/him"
   const name = NPCS[id].name;
   const role = NPC_ROLES[id];
-  if ((kind === "flirt" || kind === "kiss") && typeof _atCamera === "function" && _atCamera(id)) { _say(_pickVary(_STREAM_FLIRT, "streamflirt")(name)); return; }   // she is singing to the lens (2026-10-22)
+  if ((kind === "flirt" || kind === "kiss") && typeof _atCamera === "function" && _atCamera(id)) { _say(_pickVary(_STREAM_FLIRT, "streamflirt")(name, _whaleOf(), _camDev())); return; }   // she is singing to the lens (2026-10-22)
   _trace(kind, name); // breadcrumb (flirt/kiss/spank/fondle)
   // your girl is not "sitting with you, officially, to a smattering of applause"
   // (Rolf, round 55): the affair has its own register, and the room already knows
@@ -5647,7 +5651,7 @@ const _DEBRIEF = {
   accident: () => ({
     what: "The motorbike found the one bit of gravel it was looking for.",
     why: "A motosai ride is the one RIDE in the game that can " +
-      "hurt you, and drink makes it likelier.",
+      "hurt you. Drink makes it likelier; sober only makes it rarer.",
     next: "The baht bus is ฿" + _num(BUS_FARE) + " and cannot crash you. After two it goes " +
       "sparse rather than away — you wait at the kerb instead of riding straight off. " +
       "TIME tells you how thin they are running.",
@@ -6126,7 +6130,8 @@ function _endNight(reason) {
     }
     if ((reason === "blackout" || reason === "collapse") && typeof _streetSaw === "function") _streetSaw(reason, { where: G.room });   // the room that watched you go down can say so, and so can your own floor (Kaspar, round 101)
     G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, bars: _bars, leftFrom: G.soc.leftFrom || null,
-      shift: (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && (G.job.shiftStood || 0) >= WORK_MIN_STOOD) ? G.job.room : null,   // the manager's night (Brendan, round 102)
+      shift: (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && (G.job.shiftStood || 0) >= WORK_MIN_STOOD) ? G.job.room : null,
+      shiftLeft: (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && (G.job.shiftLast || 0) < (_closeTurn(G.job.room) == null ? NIGHT_TURNS : _closeTurn(G.job.room)) - 3) ? (G.job.shiftLast || 0) : null,   // he left before the shutter: the floor saw him go   // the manager's night (Brendan, round 102)
       seenHome: Object.keys(G.soc.seenHome || {}).find(k => G.soc.seenHome[k] === G.day) || null,
       with: (_bedIds && _bedIds[0]) || (reason === "barfine" ? G.lastBfId : null) || null, upstairs: (!_bedIds && reason !== "barfine" && G.lastBfId && G.soc.bfBar && Object.keys(G.soc.bfBar).length) ? G.lastBfId : null,   // a short time is not "you leave with her" (Eoin, round 101)
       dry: Object.fromEntries(Object.keys(_bars).filter(r => !((G.soc.selfDrinks || {})[r]) && !Object.keys((G.soc.drinkCount || {})).some(id => (G.soc.drinkCount[id] || 0) > 0 && NPCS[id] && (typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room) === r)).map(r => [r, true])),   // a night you bought nothing is not a drinking night (Eoin)
@@ -7252,7 +7257,11 @@ function _doTeach() {
 // the stringer's cash: the authored fixtures you read (G.examined) that Mort has not paid for, five a week
 function _stringerOwed() {
   if (!G.stringer) return [];
-  return Object.keys(G.examined || {}).filter(k => !G.stringer.paid[k]);
+  // what he has not seen: never his own pub's furniture (he paid for his own notebook — Ingrid, round 103), and the
+  // paper by a till you read is a lead too (four frames read earned nothing)
+  const own = NPCS.mort && NPCS.mort.room;
+  const keys = Object.keys(G.examined || {}).filter(k => k.split(".")[0] !== own && !/\.licen[cs]e$/.test(k)).concat(Object.keys(G.licencesRead || {}).filter(r => r !== own).map(r => r + ".licence"));
+  return keys.filter(k => !G.stringer.paid[k]);
 }
 function _stringerPay() {
   const st = G.stringer; if (!st) return false;
@@ -7262,7 +7271,7 @@ function _stringerPay() {
   for (const k of owed) st.paid[k] = G.day;
   st.weekPaid = (st.weekPaid || 0) + owed.length;
   const pay = owed.length * OWL_LEAD_PAY; G.money += pay; G.jobPaid = (G.jobPaid || 0) + pay;
-  const names = owed.map(k => { const [room, key] = k.split("."); return `the ${key} at ${_barName(room) || ROOMS[room] && ROOMS[room].name || room}`; });
+  const names = owed.map(k => { const [room, key] = k.split("."); return `the ${key === "licence" ? "paper by the till" : key} at ${_barName(room) || ROOMS[room] && ROOMS[room].name || room}`; });
   _say(`Mort hears you out, biro going, and counts them off: ${names.join("; ")}. ${owed.length} paragraph${owed.length === 1 ? "" : "s"} — ฿${_num(pay)}, folded under the coaster. "Don't spend it on a girl. That's an order from a man who did."`, "win");
   return true;
 }

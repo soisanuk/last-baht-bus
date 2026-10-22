@@ -1189,7 +1189,8 @@ function _bfRefusal(id, bt) {
   // and a lazy-drink girl credits only ~40% of what she's bought (_boughtBond
   // rolls it), so "5 lady drink first" stood after the eighth drink and ฿1,520
   // — a named condition met, exceeded, and never honoured (Stan, round 35).
-  const _bought = (G.soc.drinkCount && G.soc.drinkCount[id]) || 0;
+  const _tipped = ((G.gifts || {})[id] || []).some(g => g.day === G.day && (g.kind === "tip" || g.kind === "give") && (g.amt || 0) >= _ladyPrice(G.room));   // a tip of a drink's price is a drink (Gareth, round 103: ฿1,000, then "you nice man, but no")
+  const _bought = ((G.soc.drinkCount && G.soc.drinkCount[id]) || 0) + (_tipped ? 1 : 0);
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   if (G.soc.drunk >= 6 && _rand() < 0.5) return keep("mess");
   const gate = bt === "soi6" ? 2 : 4;
@@ -1714,7 +1715,8 @@ function _partyHome(id) {
   const _near = typeof _homeNear === "function" && _homeNear();
   const _hp = G.rain > 0 ? [_near ? "{n} holds her bag over both your heads and you run it, the few doors to your bed, laughing, soaked to the knees by the second front."
       : "{n} flags a taxi in the downpour like a woman who has done it a thousand times, pulls you in after her, and wrings out her hair on the back seat all the way home."]
-    : (_near ? _PARTY_HOME_WALK : _PARTY_HOME).filter(l => G.nightTurn >= ((_room().region || "") === "Soi 6" ? SOI6_CLOSE : 100) || !/shutters/.test(l));
+    : (_near ? _PARTY_HOME_WALK : _PARTY_HOME).filter(l => (G.nightTurn >= ((_room().region || "") === "Soi 6" ? SOI6_CLOSE : 100) || !/shutters/.test(l)) &&
+        !(typeof _inCondo === "function" && G.hotel === "condo" && /songthaew/.test(l)));   // no truck goes up the hill (Tomás, round 103; Mario's ruling 2026-10-22)
   _say(_fmt(_pickVary(_hp.length ? _hp : (_near ? _PARTY_HOME_WALK : _PARTY_HOME), "partyhome"), { n: NPCS[id].name, home: _homeSaid() }), "win");
   // the ride costs what a ride costs — two rides home charged nothing (Renata, round 100); the walk is free
   if (!_near) { const fare = G.rain > 0 ? MOTOSAI_FAR : MOTOSAI_TOWN; if (G.money >= fare) { G.money -= fare; _say(`(฿${_num(fare)} for the ride, yours. ฿${_num(G.money)} left.)`, "dim"); } else _say("(She pays the ride, and does not mention it.)", "dim"); }
@@ -3988,9 +3990,14 @@ function _doQuests() {
 // THE CROOKED DOOR COMES BACK, SOMETIMES (Mario, 2026-10-22). Choosing it books a risk: a pure hash of the job and the
 // day says whether, and when, it lands — never dice, so a reload cannot reroll it — and _launderRiskTick at the wake
 // takes the cost before the morning ledger names it. Nobody is charged; people are inconvenienced.
+// THE COVERS, as you counted them: the nights in order, "11, 9 and 11"
+function _coversSaid() {
+  const n = Object.keys(G.coversNights || {}).sort((a, b) => a - b).map(d => String(G.coversNights[d]));
+  return n.length ? (n.length === 1 ? n[0] : n.slice(0, -1).join(", ") + " and " + n[n.length - 1]) : "eight, nine, seven";
+}
 function _launderArm(kind) {
-  if (_hh("launder:" + kind + ":" + G.day, 7) % 100 >= LAUNDER_RISK_PCT) return false;
-  (G.launderRisk = G.launderRisk || []).push({ kind, due: G.day + LAUNDER_RISK_MIN + (_hh("launderDue:" + kind + ":" + G.day, 3) % LAUNDER_RISK_SPAN) });
+  if (_hm("launder:" + kind + ":" + G.day, 7) % 100 >= LAUNDER_RISK_PCT) return false;
+  (G.launderRisk = G.launderRisk || []).push({ kind, due: G.day + LAUNDER_RISK_MIN + (_hm("launderDue:" + kind + ":" + G.day, 3) % LAUNDER_RISK_SPAN) });
   return true;
 }
 const _LAUNDER_BACK = {
@@ -5150,7 +5157,8 @@ function _readMessages() {
       // a transfer lands where SEND takes from — the account, not the pocket
       // (Mario, 2026-09-29: the banking app works the same both ways)
       _bankIn(msg.gives);
-      _say(`(She's transferred you ฿${_num(msg.gives)}. ฿${_num(G.bank)} in the account. This town.)`, "win");
+      { const _sp = NPCS[msg.from] ? _pr(msg.from).s : "she";   // Nont's ฿3,000 and Colin's ฿1,500 were "she" (Ingrid, round 103)
+        _say(`(${_sp.charAt(0).toUpperCase() + _sp.slice(1)}'${_sp === "they" ? "ve" : "s"} transferred you ฿${_num(msg.gives)}. ฿${_num(G.bank)} in the account. This town.)`, "win"); }
     }
     msg.read = true;
   }
@@ -6320,6 +6328,14 @@ const _TEXT_SUBJECT_FLOOR = [
   (n, q) => `${n} nods. "Yes — I text you: “${q}”. Same now. Nothing change."`,   // "boss" from a woman who has never called him that (Bridget, round 76)
   (n, q) => `"That?" ${n} taps her own {{phone}}. "“${q}”. I write it so you know. Now you know two time."`,
 ];
+const _TEXT_SUBJECT_UNREAD_FLOOR = [
+  (n, q) => `"You don't read my text?" ${n} pretends to be hurt. "I write: “${q}”. Now you know."`,
+  (n, q) => `${n} holds up her {{phone}} so you can see the screen: “${q}”. "I send you. You not look yet, I think."`,
+];
+const _TEXT_SUBJECT_UNREAD_HOUSE = [
+  (n, q) => `"You haven't read it, then." ${n} doesn't seem surprised. "“${q}”. That's what I sent."`,
+  (n, q) => `${n} raises an eyebrow. "It's on your phone, unread, I imagine: “${q}”."`,
+];
 const _TEXT_SUBJECT_HOUSE = [
   (n, q) => `"“${q}”." ${n} says it again to your face, flatter than the text. "That's where it stands."`,
   (n, q) => `${n} doesn't check the {{phone}}. "I sent you that: “${q}”. Nothing since."`,
@@ -6372,10 +6388,12 @@ function _putInTill(arg) {
   const tk = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : null;
   _say(`${tk && NPCS[tk] ? NPCS[tk].name : "The till"} counts it in twice — ฿${_num(n)} of your own into the float. The drawer stands at ฿${_num(G.bar.cash)}. (฿${_num(G.money)} left in your pocket.)`);
 }
+// a text as SHE wrote it: the game's tap hint is not in her mouth (Gareth, round 103: "(SEND…" quoted back)
+function _unhint(x) { return String(x || "").replace(/\s*\((?=[^)]*\b[A-Z]{3,})[^)]*\)?/g, "").replace(/\s+/g, " ").trim(); }
 function _textTalk(npc, topic) {
   const t = String(topic || "").toLowerCase();
-  const inbox = (G.phone.inbox || []).slice().reverse().filter(x => x.from === npc && !x.slip);
-  if (!inbox.length) return false;
+  const all = (G.phone.inbox || []).slice().reverse().filter(x => x.from === npc && !x.slip);
+  if (!all.length) return false;
   const n = NPCS[npc].name;
   // the SUBJECT of what she sent — Lamai's crates, Cake's fan — not only the word "text"
   // (Lothar, round 67: "that one, I cannot help you with" from the woman who texted it)
@@ -6388,16 +6406,18 @@ function _textTalk(npc, topic) {
     const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w) && !_names.has(w) && !_own.test(w)).map(_stem);
     if (!words.length) return false;
     const _body = x => x.text || x.photo || "";   // a photo's caption is what she said too: Cream's labels were a selfie's caption (Gordie, round 72)
-    const hit = inbox.find(x => _body(x) && G.day - (x.day || G.day) <= 7 && String(_body(x)).toLowerCase().split(/[^a-z0-9]+/).map(_stem).some(w => w.length >= 3 && words.includes(w)));
+    const hit = all.find(x => _body(x) && G.day - (x.day || G.day) <= 7 && String(_body(x)).toLowerCase().split(/[^a-z0-9]+/).map(_stem).some(w => w.length >= 3 && words.includes(w)));
     if (!hit) return false;
-    const q0 = String(_body(hit)).replace(/\s+/g, " ").trim();
+    const q0 = _unhint(_body(hit));
     const short0 = q0.length > 70 ? q0.slice(0, q0.lastIndexOf(" ", 66)) + "…" : q0;
+    // a text you have not opened is told for the first time, not "again" (Ingrid, round 103: Colin quoted an unopened text back)
+    if (hit.read === false) { hit.read = true; _say(_pickVary(_hoursRegister(npc) === "floor" ? _TEXT_SUBJECT_UNREAD_FLOOR : _TEXT_SUBJECT_UNREAD_HOUSE, "textunread:" + npc)(n, short0)); return true; }
     _say(_pickVary(_hoursRegister(npc) === "floor" ? _TEXT_SUBJECT_FLOOR : _thaiHouse(npc) ? _TEXT_SUBJECT_THAI : _TEXT_SUBJECT_HOUSE, "textsubj:" + npc)(n, short0));
     return true;
   }
-  const m = inbox[0];
+  const m = all[0];   // "your text" asked outright: the one she sent, opened or not
   if (m.photo && !m.text) { _say(_pickVary(_TEXT_TALK_PHOTO, "texttalkpic:" + npc)(n)); return true; }
-  const q = String(m.text || "").replace(/\s+/g, " ").trim();
+  const q = _unhint(m.text);
   const short = q.length > 70 ? q.slice(0, q.lastIndexOf(" ", 66)) + "…" : q;
   const pool = _hoursRegister(npc) === "floor" ? _TEXT_TALK_FLOOR : _thaiHouse(npc) ? _TEXT_TALK_THAI : _TEXT_TALK_HOUSE;
   _say(_pickVary(pool, "texttalk:" + npc)(n, short));
@@ -10200,13 +10220,16 @@ function _oppPhase(day) {
 // EVERY CAMERA HAS ITS BIG TIPPER (Mario, 2026-10-22: "big tipper tension should happen randomly at the other bars with the
 // cameras"): the Jade Lounge's is online most nights; the other camera bars' are online some nights, each his own man
 const _STREAM_WHALES = [
-  { h: "SilverFox_Leeds", nick: "Mister Silver", from: "England", home: "his front room in Leeds", when: "an English afternoon" },
-  { h: "KaiserKlaus_Hamburg", nick: "Mister Klaus", from: "Germany", home: "his flat in Hamburg", when: "a German afternoon" },
-  { h: "Big_Tex_Dallas", nick: "Mister Tex", from: "Texas", home: "his porch in Dallas", when: "a Texas morning" },
-  { h: "Viking_Olaf_Bergen", nick: "Mister Olaf", from: "Norway", home: "his kitchen in Bergen", when: "a Norwegian afternoon" },
-  { h: "Bazza_Wollongong", nick: "Mister Bazza", from: "Australia", home: "his sofa in Wollongong", when: "an Australian night he can't sleep through" },
+  { h: "SilverFox_Leeds", a: ["silverfox", "silver fox", "mister silver", "silverfox_leeds"], nick: "Mister Silver", from: "England", home: "his front room in Leeds", when: "an English afternoon" },
+  { h: "KaiserKlaus_Hamburg", a: ["kaiserklaus", "kaiser klaus", "klaus", "mister klaus"], nick: "Mister Klaus", from: "Germany", home: "his flat in Hamburg", when: "a German afternoon" },
+  { h: "Big_Tex_Dallas", a: ["big tex", "big_tex", "mister tex", "tex"], nick: "Mister Tex", from: "Texas", home: "his porch in Dallas", when: "a Texas morning" },
+  { h: "Viking_Olaf_Bergen", a: ["viking olaf", "olaf", "mister olaf", "viking_olaf"], nick: "Mister Olaf", from: "Norway", home: "his kitchen in Bergen", when: "a Norwegian afternoon" },
+  { h: "Bazza_Wollongong", a: ["bazza", "mister bazza", "bazza_wollongong"], nick: "Mister Bazza", from: "Australia", home: "his sofa in Wollongong", when: "an Australian night he can't sleep through" },
 ];
 const STREAM_WHALE = _STREAM_WHALES[0].h;
+// a tipper or a handle named in a sentence (word-bounded, so "tex" is not "text")
+function _whaleIn(t) { t = String(t || "").toLowerCase(); return _STREAM_WHALES.find(w => w.h.toLowerCase() === t || w.a.some(x => new RegExp("(^|[^a-z_])" + x.replace(/[_ ]/g, "[_ ]") + "($|[^a-z_])").test(t))) || null; }
+function _handleIn(t) { t = String(t || "").toLowerCase(); return _STREAM_HANDLES.find(h => new RegExp("(^|[^a-z_])" + h.replace(/_/g, "[_ ]") + "($|[^a-z_])").test(t)) || null; }
 function _whaleOf(room) { room = room || G.room; return _streamPull(room) ? _STREAM_WHALES[0] : _STREAM_WHALES[1 + _hh("whaleOf:" + room, 37) % (_STREAM_WHALES.length - 1)]; }
 // the camera itself: a phone, or a tablet on a stand (Mario, 2026-10-22: "the camera can also be a tablet")
 function _camDev(room) { const r = ROOMS[room || G.room]; return r && r.streamDevice === "tablet" ? "tablet" : "{{phone}}"; }
@@ -10224,24 +10247,31 @@ function _whaleOn(room) {
   const t = G.nightTurn || 0;
   if (t < 20 || t >= 70) return false;
   if (typeof _closedNow === "function" && _closedNow(room)) return false;
-  if (_hh("whaleNight:" + room + ":" + G.vacation + ":" + G.day + ":w", 17) % 100 >= (_streamPull(room) ? 70 : 22)) return false;
-  return _hh("whaleHour:" + room + ":" + G.day + ":" + Math.floor(t / 10) + ":" + G.vacation, 19) % 100 < 65;
+  if (_hm("whaleNight:" + room + ":" + G.vacation + ":" + G.day, 17) % 100 >= (_streamPull(room) ? 70 : 22)) return false;
+  return _hm("whaleHour:" + room + ":" + G.day + ":" + Math.floor(t / 10) + ":" + G.vacation, 19) % 100 < 65;
 }
 // she is at the camera this hour: a hostess of the pull bar, on her floor with you, while he is online — unless she is
 // yours or with you, or you matched him or rang the bell this hour
-function _atCamera(id) {
+function _atCamera(id, remote) {   // remote: seen on the phone, from anywhere — the same corner the room shows (Gareth, round 103)
   if (!id || !NPCS[id] || NPC_ROLES[id] !== "hostess") return false;
   const room = NPCS[id].room;
-  if (!room || G.room !== room || !_whaleOn(room)) return false;
+  if (!room || (!remote && G.room !== room) || !_whaleOn(room)) return false;
+  if (remote && !(typeof _npcWhere === "function" && _npcWhere(id) === room)) return false;
   if (G.party && (G.party.ids || []).includes(id)) return false;
   if (typeof _knownTier === "function" && _knownTier(id) >= 3) return false;
   const s = G.soc;
   if (_streamHeld((s.streamWon || {})[id], 10) || _streamHeld((s.streamBell || {})[room], 10)) return false;
   if (_streamHeld((s.streamAway || {})[id], 6)) return true;
-  return _hh("cam:" + id + ":" + _streamHour(), 23) % 100 < 55;
+  return _hm("cam:" + id + ":" + _streamHour(), 23) % 100 < 55;
 }
 function _cameraGirls(room) { return (typeof _npcsHere === "function" ? _npcsHere() : []).filter(x => NPCS[x].room === (room || G.room) && _atCamera(x)); }
 function _streamHandle(k) { return _STREAM_HANDLES[_hh("handle:" + k, 29) % _STREAM_HANDLES.length]; }
+// a channel's column of handles: its own regulars by the night, and its big tipper on top while he is online
+function _streamCol(room) {
+  const col = [];
+  for (let i = 0; col.length < 3 && i < 12; i++) { const h = _streamHandle(room + ":" + G.day + ":" + i); if (!col.includes(h)) col.push(h); }
+  return _whaleOn(room) && !_streamHeld(((G.soc && G.soc.streamBell) || {})[room], 10) ? [_whaleOf(room).h, ...col.slice(0, 2)] : col;
+}
 function _myHandle() {
   const o = String((G.player && G.player.origin) || "x"), p = String((G.player && G.player.personality) || "y");
   return ["nightbus_", "lastbaht_", "soi_", "farang_"][_hh(o, 5) % 4] + ["wanderer", "lad", "regular", "dreamer", "monger", "punter"][_hh(o + p, 7) % 6] + (40 + _hh(p + o, 11) % 50);
@@ -10249,7 +10279,7 @@ function _myHandle() {
 // the corner, as the room shows it while he is online (the rain's idiom: state, said on every look)
 const _STREAM_PULLED = [
   (g, w, d) => `In the corner the ${d} pings every minute or two: ${w.h} is online. ${g} at the camera, and the stools wait.`,
-  (g, w, d) => `The ${d} on the stand will not stop pinging. ${w.h} again — the girls say his name like a regular's. ${g} in front of the lens, and the rail is a little emptier for it.`,
+  (g, w, d) => `The ${d} in the corner will not stop pinging. ${w.h} again — the girls say his name like a regular's. ${g} in front of the lens, and the rail is a little emptier for it.`,
   (g, w, d) => `A name scrolling up the ${d} in the corner — ${w.h}, tipping by the song — and ${g} singing to it rather than to anybody in the room.`,
   (g, w, d) => `${g} at the camera, glass up, saying ${w.h} to the lens as if he were sitting where you are. The men on the stools have noticed where the girls went.`,
 ];
@@ -10264,9 +10294,9 @@ function _streamDescribe() {
 const _STREAM_TOAST = [
   (n, h, d) => `The ${d} over the till pings. ${n} turns to the camera, raises her glass and says "${h}, thank you na!" to the lens, then turns back to the room with the glass still up.`,
   (n, h, d) => `${n} glances at the ${d} under the camera, finds the name, and lifts her drink to the red light: "Chok dee, ${h}." She does not look at the lens while she says it.`,
-  (n, h, d) => `A ping from the ${d} on the stand. "${h}!" ${n} calls to the camera, blows it a kiss, and is back on her stool before the kiss lands anywhere.`,
+  (n, h, d) => `A ping from the ${d} in the corner. "${h}!" ${n} calls to the camera, blows it a kiss, and is back on her stool before the kiss lands anywhere.`,
   (n, h, d) => `${n} reads a handle off the ${d} — ${h} — and says it to the lens with the smile the camera gets, which is not quite the smile the stools get.`,
-  (n, h, d) => `Somebody on the other side of the world has bought ${n} a drink. She says "${h}" to the camera, drinks a mouthful of something pale, and goes on talking to the man beside her.`,
+  (n, h, d) => `Somebody on the other side of the world has bought ${n} a drink. She says "${h}" to the camera, drinks a mouthful of something pale, and goes back to her evening.`,
   (n, h, d) => `"Who is ${h}?" ${n} asks the girl next to her, reading it off the ${d}. Neither of them knows. ${n} raises the glass to the lens anyway.`,
 ];
 const _STREAM_WHALE_TICK = [
@@ -10295,7 +10325,7 @@ function _streamTick() {
   if (!girls.length) return;
   last[G.room] = G.nightTurn;
   const n = NPCS[girls[_hh("st:" + G.day + ":" + G.nightTurn, 5) % girls.length]].name;
-  const pool = _PLG_ROOMS.includes(G.room) ? _STREAM_TOAST : _STREAM_TOAST.filter(f => !/under the camera|red light|over the till/.test(String(f)));   // a bar's own {{phone}} is the camera
+  const pool = _PLG_ROOMS.includes(G.room) ? _STREAM_TOAST : _STREAM_TOAST.filter(f => !/under the camera|red light/.test(String(f)));   // a bar's own {{phone}} is the camera
   _say(_pickVary(pool, "streamtoast")(n, _streamHandle(G.day + ":" + G.nightTurn), _camDev()), "dim");
 }
 // a bare TALK to a girl at the camera: she waves from the corner — the one finger, the one song
@@ -10308,7 +10338,7 @@ const _STREAM_BUSY_KNOWN = [
 const _STREAM_BUSY_NEW = [
   (n, w, d) => `${n} is in the corner at the camera, singing to a ${d}, and does not see you. Or sees you and does the arithmetic.`,
   (n, w, d) => `${n} gives you a smile across the room — the stool smile — and turns back to the camera. Somebody in another country is paying by the song.`,
-  (n, w, d) => `"Later, na." ${n} does not take her eyes off the ${d} on the stand. The name on it is not yours.`,
+  (n, w, d) => `"Later, na." ${n} does not take her eyes off the ${d} in the corner. The name on it is not yours.`,
   (n, w, d) => `${n} is at the camera with a microphone, singing for ${w.h}. A man on a stool is not, this hour, the business.`,
 ];
 function _streamBusy(id) {
@@ -10320,7 +10350,7 @@ function _streamBusy(id) {
 const _STREAM_GOES_BACK = [
   (n, w, d) => `${n} drinks to you, a real smile, and then the ${d} pings and she is back at the camera with your drink in her hand, saying somebody else's name to the lens.`,
   (n, w, d) => `"Thank you, tilac." ${n} clinks your glass, sits for exactly as long as it takes to say it, and goes back to the camera. ${w.h} has asked for a song.`,
-  (n, w, d) => `${n} takes the drink to the corner. She raises it to the camera, which has paid for nothing, and then to you, which has.`,
+  (n, w, d) => `${n} takes the drink to the corner. She raises it to the camera, which has paid for nothing, and then to you, who has.`,
   (n, w, d) => `${n} sits with you for half a drink and keeps one eye on the ${d}. When it pings she squeezes your arm — "one song" — and is gone to the camera.`,
 ];
 function _streamAfterDrink(id) {
@@ -10378,25 +10408,28 @@ function _doWatchStream(arg) {
   if (_streamBar() && !a) {
     const g = _cameraGirls().map(x => NPCS[x].name);
     if (_whaleOn() && g.length) _say(`You watch the corner. ${g.join(" and ")} at the camera; on the ${_camDev()}, ${_whaleOf().h}'s name scrolls up the screen between hearts and the numbers of his tips. Every girl on the floor knows his handle. Not one of them knows his face.`);
-    else _say(`You watch the camera watch the room. On the ${_PLG_ROOMS.includes(G.room) ? "{{phone}} under it" : _camDev() + " itself"} the bar is a little delayed, a little ${_PLG_ROOMS.includes(G.room) ? "pinker" : "brighter"}, with a column of handles down the side — ${_streamHandle(G.day)}, ${_streamHandle(G.day + 1)}, ${_streamHandle(G.day + 2)} — men in other time zones keeping a stool warm they will never sit on. A drink bought there pays her ฿${_num(LADY_CUT)}, same as one bought here. (${_PLG_ROOMS.includes(G.room) ? "It is the group's channel" : "It is the bar's own channel"}; from your own phone it is STREAM DRINK <name>.)`);
+    else _say(`You watch the camera watch the room. On the ${_PLG_ROOMS.includes(G.room) ? "{{phone}} under it" : _camDev() + " itself"} the bar is a little delayed, a little ${_PLG_ROOMS.includes(G.room) ? "pinker" : "brighter"}, with a column of handles down the side — ${_streamCol(G.room).join(", ")} — men in other time zones keeping a stool warm they will never sit on. A drink bought there pays her ฿${_num(LADY_CUT)}, same as one bought here. (${_PLG_ROOMS.includes(G.room) ? "It is the group's channel" : "It is the bar's own channel"}; from your own phone it is STREAM DRINK <name>.)`);
     return;
   }
   if (G.battery <= 0) { _say("Your phone is dead. The internet will have to watch itself."); return; }
   const known = _streamRoomsKnown();
   if (!known.length) { _say("You don't know a bar with a camera in it yet. A handful in town stream their floor — the group's rooms on Soi 6, and a few beer bars that put a phone on a stand; walk in and look up."); return; }
-  let room = known.find(id => a && String(_barName(id) || "").toLowerCase().includes(a)) || known.find(id => _whaleOn(id)) || known[0];
+  const _last = [G.prevRoom, ...Object.keys(G.visitDay || {}).sort((x, y) => (G.visitDay[y] || 0) - (G.visitDay[x] || 0))].find(id => id && known.includes(id));   // the channel of the bar you just left, not the first in the list (Gareth, round 103)
+  let room = known.find(id => a && String(_barName(id) || "").toLowerCase().includes(a)) || _last || known.find(id => _whaleOn(id)) || known[0];
   if (a && !known.some(id => String(_barName(id) || "").toLowerCase().includes(a))) { _say(`You know the channels of ${known.map(id => _barName(id)).join(", ")}. (WATCH STREAM <bar>)`); return; }
   G.battery = Math.max(0, G.battery - 1);
   if (typeof _closedNow === "function" && _closedNow(room)) { _say(`${_barName(room)}'s stream is a still of an empty rail and a pulled shutter, with the handles still scrolling down the side as if somebody might come back.`); return; }
   const girls = Object.keys(NPCS).filter(x => NPC_ROLES[x] === "hostess" && NPCS[x].room === room && typeof _npcWhere === "function" && _npcWhere(x) === room);
-  _say(`You open ${_barName(room)} on your phone: the room from over the bar, a second behind the room itself, ${girls.length ? girls.map(x => NPCS[x].name).join(", ") + " on the floor" : "nobody on the stools"}, and a column of handles down the side.` +
-    (_whaleOn(room) ? ` ${_whaleOf(room).h} is online; the corner is full.` : "") +
+  const atCam = girls.filter(x => _atCamera(x, true)), floor = girls.filter(x => !atCam.includes(x));
+  const bell = _streamHeld(((G.soc && G.soc.streamBell) || {})[room], 10) && _whaleOn(room);
+  _say(`You open ${_barName(room)} on your phone: the room ${ROOMS[room].streamFrom || "from the camera's corner"}, a second behind the room itself, ${floor.length ? floor.map(x => NPCS[x].name).join(", ") + " on the floor" : atCam.length ? "nobody on the stools" : "nobody on the stools"}, and down the side a column of handles — ${_streamCol(room).join(", ")}.` +
+    (bell ? ` ${_whaleOf(room).h} is online and typing question marks: somebody rang the bell, and the corner is empty.` : _whaleOn(room) ? ` ${_whaleOf(room).h} is online; ${atCam.length ? atCam.map(x => NPCS[x].name).join(" and ") + " at the camera, singing to him" : "the corner waits for a girl"}.` : "") +
     (girls.length ? ` (STREAM DRINK <name> — ฿${_num(_ladyPrice(room))} from the account; she says your handle, ${_myHandle()}, to the lens.)` : ""));
 }
 // STREAM DRINK <her> — a drink bought through the link, from wherever you are. It pays her the stool's cut and buys you
 // your handle said to a camera; it builds nothing — she does not know which handle you are. The appearance of attention.
 const _STREAM_DRINK_LINES = [
-  (n, h, d) => `On your phone, a second late: the ${d} over the bar pings, ${n} reads it, lifts a glass of something pale to the lens and says "${h}, thank you na!" Then she turns back to the man beside her.`,
+  (n, h, d) => `On your phone, a second late: the ${d} at the bar pings, ${n} reads it, lifts a glass of something pale to the lens and says "${h}, thank you na!" Then she turns back to the room.`,
   (n, h, d) => `${n} finds your handle on the screen, says "${h}" to the camera with the camera smile, and drinks. She never once looks into the lens. You watch it twice.`,
   (n, h, d) => `The ping, the glance, the glass: "Chok dee, ${h}!" ${n} is talking to the girl next to her again before the word has reached you.`,
   (n, h, d) => `${n} says your handle — "${h}" — a little wrong, the way you say a word from a list. She blows the lens a kiss. Somebody else's ping is already on the screen.`,

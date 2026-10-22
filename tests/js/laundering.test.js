@@ -82,7 +82,7 @@ test("PRE-SALE: the chat was a bank — the slips go to Eddy's thread, or the tw
   run("accept presale"); assert.equal(G.quests.presale, "active"); assert.match(ask("colin", "the slips"), /It was never a chat. It was a bank/); assert.ok(_flag("presaleSlips"));
   G.room = "white_rabbit"; G.nightTurn = 30; run("talk to eddy"); G.convoQ = null; out = []; run("ask eddy about the slips"); assert.match(said(), /a case.*Tuesday/s);
   out = []; run("1"); assert.ok(_flag("presaleReported")); assert.equal(G.quests.presale, "done");
-  const d0 = G.day; stand("colin"); G.questDoneDay.presale = G.day; assert.match(ask("colin", "the slips"), /Eddy said a week/);
+  const d0 = G.day; stand("colin"); G.questDoneDay.presale = G.day; assert.match(ask("colin", "the slips"), /You said a week/);
   G.questDoneDay.presale = G.day - 7; assert.match(ask("colin", "the slips"), /a case with a number/);
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" }; G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); for (const k in ENCOUNTERS) G.encDone[k] = true; G.season0 = 2; G.money = 7000;
   G.room = "the_terrace"; G.nightTurn = 50; run("talk to colin"); run("accept presale"); G.convoQ = null; run("ask colin about the slips"); assert.ok(_flag("presaleSlips"));
