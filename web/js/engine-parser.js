@@ -4864,6 +4864,16 @@ function _doTalkCore(arg, topic) {
   if (topic && typeof _isLeavingSaid === "function" && _isLeavingSaid(topic) &&
       !(NPCS[npc].dialogue || []).some(x => x.topic && /leav|flight/.test(x.topic) && _topicHits(x.topic, String(topic).toLowerCase()) && !/\bflights\b/.test(x.topic)) &&
       typeof _leavingTalk === "function" && _leavingTalk(npc, topic)) return;
+  // HER PLAN SLIPPED (the farang who never flew in, 2026-10-23): she should have gone this trip; asked about it, she says
+  // her mother needed money, and changes the subject — never the matchmaker, never a sum, never an ask
+  if (topic && typeof _exitSlip === "function" && _exitSlip(npc) && /\b(plan|plans|shop|salon|stall|laundry|future|dream|leaving|open|business|next year|go home)\b/.test(String(topic).toLowerCase())) {
+    const n = NPCS[npc].name, p = _exitSlip(npc);
+    _say(_pickTownLine([`"${p.charAt(0).toUpperCase() + p.slice(1)}?" ${n} smiles too quickly. "Next year. My mama need money this month." She picks up your glass to see if it is empty. It is not. "You want another one?"`,
+      `"Not this year." ${n} says it to the bar top. "Family thing. Money thing." Then, brightly: "You eat already?"`,
+      `${n} is quiet for a second. "I have the money, then I don't have the money. Is family." She taps the counter twice, closing a book. "So — I am here. Lucky you, na?"`,
+      `"Was this month." ${n} turns her phone face down. "My mama trust somebody. Now I trust nobody, and I work one more year." She laughs, which is how the floor ends a subject.`], "exitslipme"));
+    if (typeof _questOffer === "function") _questOffer(npc); return;
+  }
   if (topic && typeof _seenHomeTalk === "function" && _seenHomeTalk(npc, topic)) return;   // the walk to her ride is hers before any locked topic (Tomás, round 103)
   if (topic && typeof _deedTalk === "function" && _deedTalk(npc, topic)) { _questOffer(npc); return; }   // the ask you PAID outranks the text that asked it (Gareth, round 103: "how is the buffalo?" got the ask read back)
   if (topic && !_sourOwn && typeof _textTalk === "function" && _textTalk(npc, topic)) return;   // Lamai's crates, Cake's fan: the text she sent (Lothar, round 67) — not her fond text, after she has seen it (Ossie, round 70)
@@ -5388,6 +5398,16 @@ function _doTalkCore(arg, topic) {
         const gone = Object.keys(NPCS).find(x => NPCS[x].room === G.room && NPC_ROLES[x] === "hostess" && x !== npc &&
           (NPCS[x].name.toLowerCase() === _rt || x === _rt) && _exited(x));
         if (gone) { _say(_goneTalk(npc, gone)); return; }
+        // …and the one who should have gone and is still here: the floor knows what that means and says it the way floors do
+        const slip = typeof _exitSlip === "function" && Object.keys(NPCS).find(x => NPCS[x].room === G.room && NPC_ROLES[x] === "hostess" && x !== npc &&
+          (NPCS[x].name.toLowerCase() === _rt || x === _rt) && _exitSlip(x));
+        if (slip) { const sn = NPCS[slip].name, house = _hoursRegister(npc) !== "floor";
+          _say(_pickTownLine(house ? [`"${sn} was going this month." ${NPCS[npc].name} does not look over. "Her mother needed money. That is the whole of it, and it is not mine to tell you more."`,
+              `"Next year, ${sn} says." A flat look. "Families have accidents with money. Not the kind with a car. Leave it there."`]
+            : [`"${sn}?" ${NPCS[npc].name} glances over and away. "She stay one more year. Mama at home have problem with money — internet problem." She does not explain the internet problem. "Don't ask her, na."`,
+              `"Her shop?" A small shake of the head. "Next year. Her mama trust a man on Facebook who never come." She says it quietly and says nothing else.`,
+              `"${sn} cry in the toilet last month, then come out and work." A shrug. "Family money. Somebody on the phone take it. She pay it back from her shop money. Is how it is."`], "exitslip:" + (house ? "h" : "f")));
+          return; }
         // …and a woman home for the harvest or gone to Bangkok till the rain stops: her
         // colleagues could name the reason while TALK already did (Nadia, round 61: Ploen)
         const away = Object.keys(NPCS).find(x => NPCS[x].room === G.room && NPC_ROLES[x] === "hostess" && x !== npc &&

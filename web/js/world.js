@@ -18013,8 +18013,24 @@ function _exited(id) {
     const leaves = 2 + _hh(id + ":exitvac", 163) % 10;   // the trip she is first found gone on
     const trip = (G.vacation || 1) + (G.stage === "expat" ? Math.floor((G.day || 1) / 90) : 0);
     if (trip < leaves) return false;
+    // THE PLAN THAT SLIPPED (2026-10-23, from the canon essay "the farang who never flew in" — pattern only): a quarter of
+    // the women whose trip has come stay one more. Her mother was worked by a fake matchmaker and the shop money paid it
+    // back; she does not say so, and the floor does not ask. _exitSlip reads the same trip.
+    if (trip === leaves && typeof _hm === "function" && _hm(id + ":exitslip", 17) % 4 === 0) return false;
   } else return false;
   return target;
+}
+// she should have gone this trip and is still on her stool: the money went home instead
+function _exitSlip(id) {
+  const n = NPCS[id];
+  if (!n || !n.filler || !n.storyIdx || typeof G === "undefined" || !G) return false;
+  const target = n.exitPlan !== undefined ? n.exitPlan : (_EXIT_PLANS.includes(n.storyIdx.plan) ? _H_PLAN[n.storyIdx.plan] : null);
+  if (!target || (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] !== "hostess")) return false;
+  if ((G.bar && G.bar.room === n.room) || (G.affair && G.affair.id === id)) return false;
+  if (_hh(id + ":exitever", 167) % 3 !== 0) return false;
+  const leaves = 2 + _hh(id + ":exitvac", 163) % 10;
+  const trip = (G.vacation || 1) + (G.stage === "expat" ? Math.floor((G.day || 1) / 90) : 0);
+  return trip === leaves && typeof _hm === "function" && _hm(id + ":exitslip", 17) % 4 === 0 ? target : false;
 }
 // THE KEPT EXIT (the quiet shift change, 2026-10-19): a third of the kept girls on the town's floors leave the way the
 // essay describes — the sponsor stops paying the bar, she stops coming — on some trip from the second to the sixth.

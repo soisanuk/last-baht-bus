@@ -362,6 +362,39 @@ const STATES = {
     live: () => _pushyBar(G.room),
     inv: {},
   },
+  // THE BENCH (the plane refused, 2026-10-22; round 104 found it half-built — the hotel billed and housed a man sleeping
+  // out). While he is on the bench the desk does not bill him or let him in, nobody pitches him, and no verb but a paid
+  // check-in, a payday or a friend squaring the book takes him off it.
+  bench: {
+    order: 96, env: { room: "hotel_soi" },   // one step from the desk: the door is the thing under test
+    arm() {
+      G.stage = "expat"; _setFlag("expatLife"); G.player.origin = "pension"; G.payDay = G.day; G.hotel = "sabai";
+      G.hotelDebt = _DEBT_CAP; G.money = 0; G.bank = 0;
+      G.street = { since: G.day, nights: 1, swept: 0, offered: G.day };
+    },
+    live: () => !!G.street,
+    inv: {
+      stays: (a, b, r) => r.dayChanged || !a.street || b.street || /^(check in|pay )/.test(r.cmd) ? null : `the bench ended on "${r.cmd}"`,
+      housed: (a, b) => a.street && b.street && b.room === _hotelRoomId() ? "walked into the hotel room while on the bench" : null,
+      billed: (a, b, r) => /folio slides|air-con rattles its lullaby|surface mid-afternoon/.test(r.text) && a.street ? "a hotel's night for a man on a bench" : null,
+      pitched: (a, b) => a.street && b.pendingEnc && ["freelancer", "tonic", "fortune", "peddler", "booking", "flower"].includes(b.pendingEnc) ? `a ${b.pendingEnc} pitch to a man on the bench` : null,
+    },
+  },
+  // THE CAMERA, ONLINE (the digital barstool, 2026-10-22): at the Jade with the big tipper online and a girl at the
+  // camera — she does not sit down to a board, open a barfine, or take a lady drink as a warm sit-down
+  stream: {
+    order: 30, env: { room: "jade_lounge" }, envOnly: false,
+    arm(c) {
+      for (let d = G.day; d < G.day + 80; d++) { G.day = d; if (_whaleOn()) break; }
+      const g = _cameraGirls()[0]; if (g) c.her.stream = g;
+    },
+    live: () => _whaleOn() && _cameraGirls().length > 0,
+    verbs: ["play connect 4 with {n}", "barfine {n}", "{n}, come sit with me", "flirt {n}", "buy {n} a drink", "talk to {n}"],
+    inv: {
+      board: (a, b, r) => { const g = r.c.her.stream; return g && b.gameOpp === g && a.camera.includes(g) ? `${NAME(g)} left the camera for a board game` : null; },
+      upstairs: (a, b, r) => { const g = r.c.her.stream; return g && b.pendingBf === g && a.pendingBf !== g && a.camera.includes(g) ? `a barfine opened on ${NAME(g)} while she was at the camera` : null; },
+    },
+  },
   // Skint: nothing in the pocket or the account. Every till, chit and round must say so rather than
   // go below zero (the universal money invariant is the check; no invariant of its own).
   broke: {
@@ -383,6 +416,18 @@ const IMPOSSIBLE = {
   "affair+ownbar": "the affair state IS standing at your own bar with her on the floor — the pair is the state",
   "maidee+ownbar": "a verdict needs a walk-out, and your own bar cannot walk you out",
   "affair+maidee": "a verdict needs a walk-out, and your own bar cannot walk you out",
+  "act1+bench": "the bench is the expat stage's",
+  "bench+ownbar": "a bar owner with a bar is exempt from destitution",
+  "affair+bench": "the affair is an owner's, and an owner is never on the bench",
+  "bench+companion": "a woman out with you on a barfine needs money the bench does not have",
+  "act1+stream": "the camera bars stream in the sandbox",
+  "ownbar+stream": "your own bar has no camera",
+  "affair+stream": "the affair is at your own bar, which has no camera",
+  "bench+stream": "the bench is a street; the camera is a bar — the pair is a walk, not a state",
+  "lockin+stream": "a lock-in bar streams nothing",
+  "asker+bench": "her question is asked at her bar; the bench is a street",
+  "asker+stream": "the asker's woman works the default bar, not the Jade",
+  "bench+maidee": "a verdict is a bar's walk-out; the bench is a street",
 };
 
 // ── snapshots ────────────────────────────────────────────────────────────────
@@ -411,6 +456,8 @@ function snap(c) {
     charmed: Object.keys(G.soc.charmed || {}).filter(k => G.soc.charmed[k]),
     contacts: Object.keys((G.phone && G.phone.contacts) || {}).filter(k => G.phone.contacts[k]),
     inboxFrom: ((G.phone && G.phone.inbox) || []).map(m => m.from),
+    street: !!G.street, pendingEnc: G.pendingEnc || null, gameOpp: (G.game && G.game.oppId) || null,
+    camera: typeof _cameraGirls === "function" ? _cameraGirls() : [],
   };
 }
 
@@ -466,6 +513,7 @@ function verbsFor(c) {
   const women = Object.values(c.her);
   if (c.floor) women.push(c.floor);
   for (const [st, id] of Object.entries(c.her)) for (const t of STATES[st].verbs || []) vs.add(t.split("{n}").join(NAME(id).toLowerCase()));
+  if (G.street) for (const t of ["in", "travel hotel", "go to my room", "collect bottles", "eat", "hint", "money", "check in", "borrow 1000"]) vs.add(t);   // the bench's own verbs (round 104)
   for (const id of women) {
     const n = NAME(id).toLowerCase();
     for (const t of HER_VERBS) vs.add(t.replace("{n}", n));
@@ -515,6 +563,10 @@ function arm(ids, env) {
 // --mutate <name>: make one consumer FORGET a state, the way the class's real defects do, to prove the
 // instrument sees it (a tool that does no work reports no findings — the test runs these)
 const MUTATIONS = {
+  // the desk forgets the bench: the hotel room lets a man on it in
+  bench: () => { const orig = globalThis._arriveAt; globalThis._arriveAt = function (to) { if (G.street && to === _hotelRoomId()) { G.room = to; return; } return orig.call(this, to); }; },
+  // the board forgets the camera: the named girl takes the frame from the lens
+  stream: () => { const orig = globalThis._gameHostess; globalThis._gameHostess = function (pref) { const p = pref && _npcsHere().find(n => NPC_ROLES[n] && NPCS[n].name.toLowerCase() === pref); return p ? { id: p, name: NPCS[p].name } : orig.call(this, pref); }; },
   // every comp lands on the meter, declared or not
   teetotal: () => { globalThis._compDrink = (n) => { G.soc.drunk += n || 1; }; },
   // the heat book forgets whose bar it is

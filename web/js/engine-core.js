@@ -2314,8 +2314,11 @@ function _topicHits(key, asked) {
   const esc = String(key).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   // a key of two letters takes no slack: "wa" + three letters is water, watch and wai,
   // Preeda's "ex" was answering EXPAT and her "no" NONT and NOTE (Silk Rose floor, 2026-10-08)
-  const slack = key.length <= 2 ? "" : "[a-z]{0,3}";
-  const m = new RegExp("(^|[^a-z0-9])" + esc + slack + "([^a-z0-9]|$)", "i").exec(String(asked));
+  // …and a longer key takes only an INFLECTION, never any three letters: "wat" + "er" was water, so ASK TAN ABOUT WATER
+  // got his temple (Alun, round 104). Plurals, tenses and the possessive still reach it: kids, married, drinking, tan's.
+  const slack = key.length <= 2 ? "" : "(?:s|es|ies|ed|d|ing|'s|ren|n|r|y)?";
+  const stem = key.length > 3 && /y$/i.test(key) ? esc.slice(0, -1) + "(?:y|y's|ys|ies|ied|ying)" : esc + slack;   // marry → married, family → families
+  const m = new RegExp("(^|[^a-z0-9])" + stem + "([^a-z0-9]|$)", "i").exec(String(asked));
   if (!m) return false;
   // "women who don't WORK" is not the job topic (Desmond, round 63)
   return !/\b(don'?t|doesn'?t|do not|not|never|no)\s+$/i.test(String(asked).slice(0, m.index + m[1].length));

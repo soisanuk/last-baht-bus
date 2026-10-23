@@ -11878,6 +11878,8 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  // THE FARANG WHO NEVER FLEW IN (2026-10-23, the canon essay — pattern only): the remittance household is a mark too
+  "THE FARANG WHO NEVER FLEW IN, squire, is the one this column's readers never think about, because he is not you. He is a photograph on a matchmaking page — a widower, a pension, a kind face, a nice kitchen — and he is courting somebody's mother in a village two provinces north of here. The registration fee is small. The 'verification' is less small. The video call loops, and the voice is a second behind the mouth, and she pays the third fee anyway, because the admin said she was the trustworthy kind. Then the page is gone. The money came, as most money up there comes, from a daughter on a stool in this town; the daughter knew the shape of it the moment she heard it, because the floor talks about nothing else, and she paid it back out of the shop she was saving for and told her mother it was a bank error. Nobody in that family will ever say it aloud. If the girl you like says this year was supposed to be the year, and it is not, do not ask her why. Buy her dinner.",
   // THE MEN ON THE BENCHES (2026-10-22, the canon essay "the people who should not be here" — pattern only, no figures)
   "THE MEN ON THE BENCHES, squire, are not a mystery and not a scandal, and I will thank the readers who write in to call them either. They came for the cheap life the videos promised, on a pension that was enough the year they sold the house. Then the rate, or the divorce, or the girlfriend's brother's restaurant. The fare home is not what keeps them here; the consulate will lend it, and does. What keeps them is the arrivals hall, and the faces at the barrier who watched them leave with something. The police wake them, write nothing, and drive on. Buy one a coffee. It confuses them, and it is the only thing in this town that is not for sale.",
   // THE LIST THAT DOES NOT EXIST (the quiet shift change, 2026-10-19 — structure only, no manager named)
@@ -11966,6 +11968,9 @@ const _OWL_AMULET = [
 ];
 
 const _OWL_LETTERS = [
+  // the plan that slipped (2026-10-23, the canon essay — pattern only)
+  ["A reader on Soi 6 writes: 'The girl I see was going to open her shop this year. Now it is next year, and she will not say why. Should I offer to help?'",
+    "No, squire. Something happened at home, and it was the sort of thing that is paid for quietly and never discussed, and she has already paid it. If you offer money you make it a story; if you ask, you make her tell it. Sit with her on the slow nights and let the shop be next year. The kindest thing a farang can do in this town is not need to know."],
   // the friend who stopped answering (2026-10-22, the canon essay — pattern only)
   ["A reader in Esbjerg writes: 'A friend retired to Pattaya six years ago. The photographs stopped two years ago, then the messages. His daughter thinks he is fine. Is he?'",
     "I do not know your friend, madam, and I will not pretend to. I will say that a man who is fine sends photographs, and a man who is not stops, because the photographs were the proof of a life he could not keep up. If you want to find him, do not ask the police; ask the noodle carts on Beach Road at closing. And when you find him, do not bring the fare. Bring a coffee and your own face, and let him decide what the fare is for."],
