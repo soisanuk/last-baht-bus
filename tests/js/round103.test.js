@@ -89,7 +89,7 @@ test("Gareth: her text, quoted back, carries no tap hint — and the ask you pai
 test("Gareth: the phone shows the corner the room shows — the girls at the camera, the bell's empty chair, the tipper on the column", () => {
   jade(); const room = "jade_lounge", cams = _cameraGirls().map(x => NPCS[x].name);
   G.visited[room] = true; G.room = "soi6_mid";
-  const a = t("watch stream jade"); assert.match(a, /SilverFox_Leeds/); assert.ok(cams.some(n => a.includes(n + " at the camera") || a.includes(n)), a);
+  const a = t("watch stream jade"); assert.ok(a.includes(_whaleOf(room).h), a); assert.ok(cams.some(n => a.includes(n + " at the camera") || a.includes(n)), a);
   G.soc.streamBell = { [room]: _streamNow() };
   assert.match(t("watch stream jade"), /rang the bell|corner is empty/);
   assert.ok(_streamCol(room).length === 3);

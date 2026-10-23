@@ -10250,7 +10250,16 @@ const STREAM_WHALE = _STREAM_WHALES[0].h;
 // a tipper or a handle named in a sentence (word-bounded, so "tex" is not "text")
 function _whaleIn(t) { t = String(t || "").toLowerCase(); return _STREAM_WHALES.find(w => w.h.toLowerCase() === t || w.a.some(x => new RegExp("(^|[^a-z_])" + x.replace(/[_ ]/g, "[_ ]") + "($|[^a-z_])").test(t))) || null; }
 function _handleIn(t) { t = String(t || "").toLowerCase(); return _STREAM_HANDLES.find(h => new RegExp("(^|[^a-z_])" + h.replace(/_/g, "[_ ]") + "($|[^a-z_])").test(t)) || null; }
-function _whaleOf(room) { room = room || G.room; return _streamPull(room) ? _STREAM_WHALES[0] : _STREAM_WHALES[1 + _hh("whaleOf:" + room, 37) % (_STREAM_WHALES.length - 1)]; }
+// WHICH BIG TIPPER, TONIGHT (Mario, 2026-10-23: "big tippers should be random"): a draw per camera bar per night — the
+// same man all night and across a reload (a pure hash, never dice), a different man another night, and the men go where
+// the girls are, so a bar has no tipper of its own. The camera bars are dealt in an order the night shuffles, one man
+// each in turn, so two bars only share a man when there are more cameras than men.
+function _whaleOf(room) {
+  room = room || G.room;
+  const bars = Object.keys(ROOMS).filter(id => ROOMS[id].stream).sort((a, b) => (_hm("wseat:" + a + ":" + G.day + ":" + G.vacation, 37) % 1000) - (_hm("wseat:" + b + ":" + G.day + ":" + G.vacation, 37) % 1000));
+  const i = bars.indexOf(room), off = _hm("woff:" + G.day + ":" + G.vacation, 41) % _STREAM_WHALES.length;
+  return _STREAM_WHALES[((i < 0 ? 0 : i) + off) % _STREAM_WHALES.length];
+}
 // the camera itself: a phone, or a tablet on a stand (Mario, 2026-10-22: "the camera can also be a tablet")
 function _camDev(room) { const r = ROOMS[room || G.room]; return r && r.streamDevice === "tablet" ? "tablet" : "{{phone}}"; }
 const _STREAM_HANDLES = ["chang_n_chips", "pattaya_dreamer71", "noodle_king_au", "loverboy_hamburg", "ghost_of_soi6", "lonely_lion_59",

@@ -35,7 +35,7 @@ test("the plan that slipped: she is still here, says only that her mother needed
     for (let v = 2; v <= 12 && !who; v++) { G.vacation = v; if (_exitSlip(id)) { who = id; trip = v; } } if (who) break; }
   assert.ok(who, "some woman's plan slips");
   G.vacation = trip; assert.equal(_exited(who), false, "she has not gone"); G.vacation = trip + 1; assert.ok(_exited(who), "she goes a trip later");
-  G.vacation = trip; G.room = NPCS[who].room; G.nightTurn = 30; for (const k in ENCOUNTERS) G.encDone[k] = true;
+  G.vacation = trip; G.room = NPCS[who].room; G.nightTurn = 30; for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2; G.flowerDay = G.day; G.lastSaleng = 1e9;   // no pitch walks in mid-answer
   const n = NPCS[who].name.toLowerCase(); doCommand("talk to " + n); out = []; doCommand("ask " + n + " about your plan");
   const a = out.join("\n"); assert.match(a, /mama|family|Family|trust/i); assert.doesNotMatch(a, /฿|matchmak|scam/i);
   const mate = _npcsHere().find(x => x !== who && (NPC_ROLES[x] === "hostess" || NPC_ROLES[x] === "mamasan"));

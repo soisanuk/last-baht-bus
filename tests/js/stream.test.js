@@ -63,8 +63,11 @@ test("every camera has its big tipper, by a pure hash — no dice: the Jade's mo
   assert.equal(G.rng, r0, "reading his hours rolls nothing");
   for (const r of streams) if (r !== JADE) { assert.ok(nights[r] > 5, r + " has nights"); assert.ok(nights[r] < nights[JADE] / 2, r + " fewer than the Jade"); }
   assert.ok(!_whaleOn("seabreeze") && !_whaleOn("rainbow_girls"), "no camera, no tipper");
-  assert.equal(_whaleOf(JADE).h, STREAM_WHALE);
-  assert.ok(streams.filter(r => r !== JADE).every(r => _whaleOf(r).h !== STREAM_WHALE), "the others are other men");
+  // the tipper is a nightly draw (Mario, 2026-10-23: "big tippers should be random"): one man all night and across a
+  // reload, the men shared out so no two bars have one man while a man is free, and another night another man
+  G.day = 5; const w0 = _whaleOf(JADE).h; G.nightTurn = 69; assert.equal(_whaleOf(JADE).h, w0, "one man all night");
+  const tonight = streams.map(r => _whaleOf(r).h); assert.ok(new Set(tonight).size === Math.min(streams.length, _STREAM_WHALES.length), "dealt round the men");
+  const seen = new Set(); for (let d = 1; d <= 30; d++) { G.day = d; seen.add(_whaleOf(JADE).h); } assert.ok(seen.size >= 3, "the Jade has more than one man over a month");
 });
 
 test("a tipper night at another camera bar is the Jade's tension in that bar's words — its own man, its own device", () => {
@@ -105,7 +108,7 @@ test("a drink is taken — the cut is the cut — and she goes back to the lens;
   assert.ok(_STREAM_GOES_BACK.some(x => d.includes(x(NPCS[g].name, _whaleOf(JADE), _camDev(JADE)).slice(0, 25))), d);
   assert.ok(!_TOAST_LINES.some(x => d.includes(x(NPCS[g].name).slice(0, 30))), "no warm toast from a girl walking back to the camera");
   const b = t("barfine " + n);
-  assert.match(b, /SilverFox_Leeds|he tip/); assert.equal(G.pendingBf || null, null, "no negotiation opens");
+  assert.ok(b.includes(_whaleOf(JADE).h) || /he tip/.test(b), b); assert.equal(G.pendingBf || null, null, "no negotiation opens");
   assert.equal(_bfDayPeek(g), "stream", "her own talk of the stairs says the same");
 });
 
@@ -186,7 +189,7 @@ test("the real path: the tick puts the camera to work in a streaming room, and t
   for (let i = 0; i < 60; i++) { _tick(); G.soc.streamLast = G.soc.streamLast || {}; }
   assert.ok(_STREAM_TOAST.some(f => said().includes(f("@@", "@@").split("@@")[1] || "~")) || /camera|lens/.test(said()), "a girl raises a glass to the lens");
   onCamera(); out = []; _describeRoom(true);
-  assert.match(said(), /SilverFox_Leeds/);
+  assert.ok(said().includes(_whaleOf(JADE).h), "tonight's man");
 });
 
 // STREAMERS CAN RING THE BELL (Mario, 2026-10-22)

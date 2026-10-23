@@ -8117,16 +8117,16 @@ Object.assign(_TOWN, {
   },
   stream_elsewhere: {
     floor: [
-      "\"{w}? Not here, na. He is {wb} man,\" {n} says. \"Every camera have one. Here we have our own.\"",
-      "\"{nick}?\" {n} laughs. \"{wb}! My friend there say he tip {m} a song. Not my bar.\"",
+      "\"{w}? Not here tonight, na. Tonight he is on {wb} camera,\" {n} says. \"He go where the girl is pretty that night. Tomorrow maybe here.\"",
+      "\"{nick}?\" {n} laughs. \"Tonight {wb}! My friend there say he tip {m} a song. Not my bar tonight.\"",
     ],
     house: [
-      "\"{w} is {wb}'s,\" {n} says. \"Every camera has its big tipper. He is not ours.\"",
-      "\"Not on this channel,\" {n} says. \"{w} tips at {wb}. We have our own nuisance.\"",
+      "\"{w} is on {wb}'s camera tonight,\" {n} says. \"They move about, the big ones — whichever floor they fancy that night.\"",
+      "\"Not on this channel tonight,\" {n} says. \"{w} is tipping at {wb}. Some nights he is ours.\"",
     ],
     punter: [
-      "\"{w}? That's {wb}'s ghost,\" {n} says. \"Every bar with a camera's got one.\"",
-      "\"Wrong bar,\" {n} says. \"{w} haunts {wb}. Ask in there.\"",
+      "\"{w}? He's haunting {wb} tonight,\" {n} says. \"Moves about. Whoever's dancing.\"",
+      "\"Wrong bar tonight,\" {n} says. \"{w}'s on {wb}'s camera. Ask in there.\"",
     ],
   },
 });
@@ -8140,8 +8140,8 @@ Object.assign(_TOWN_THAI, {
     "\"He say he watch from {home},\" {n} says. \"I cannot check. I don't need check.\"",
   ],
   stream_elsewhere: [
-    "\"{w} is {wb} man,\" {n} says. \"Every camera have one. Not ours.\"",
-    "\"Not here,\" {n} says. \"{w} tip at {wb}. Here we have our own.\"",
+    "\"{w} on {wb} camera tonight,\" {n} says. \"He move. Some night here.\"",
+    "\"Not here tonight,\" {n} says. \"{w} tip at {wb}. Tomorrow — who know.\"",
   ],
 });
 ["stream_handle", "stream_home", "stream_elsewhere"].forEach(k => _TOWN_WIDE.add(k));
