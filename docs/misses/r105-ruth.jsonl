@@ -1,0 +1,14 @@
+{"cmd":"when does the 7-eleven stop selling beer","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"condo_room","day":8,"turn":2,"mode":null,"convo":null,"at":"2026-10-23T08:12:16.972Z","src":"persona-edge"}
+{"cmd":"what time does mike's mall close","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"second_rd_diana","day":8,"turn":6,"mode":null,"convo":null,"at":"2026-10-23T08:12:27.364Z","src":"persona-edge"}
+{"cmd":"ask guard why","reply":"That name doesn't land on anyone in the room.","room":"soi6_mid","day":8,"turn":55,"mode":null,"convo":null,"at":"2026-10-23T08:13:18.990Z","src":"persona-edge"}
+{"cmd":"ask guard about opening","reply":"Nobody by that name here.","room":"soi6_mid","day":8,"turn":55,"mode":null,"convo":null,"at":"2026-10-23T08:13:18.990Z","src":"persona-edge"}
+{"cmd":"ask somebody about closing","reply":"Nobody here goes by that — not tonight.","room":"sunset_dreams","day":9,"turn":63,"mode":null,"convo":null,"at":"2026-10-23T08:15:57.710Z","src":"persona-edge"}
+{"cmd":"ask somebody about closing","reply":"That name doesn't land on anyone in the room.","room":"beach_rd_n","day":9,"turn":90,"mode":null,"convo":null,"at":"2026-10-23T08:16:44.783Z","src":"persona-edge"}
+{"cmd":"buy chestnuts","reply":"Not for sale here.","room":"beach_rd_klang","day":9,"turn":105,"mode":null,"convo":null,"at":"2026-10-23T08:17:07.287Z","src":"persona-edge"}
+{"cmd":"ask somebody about closing","reply":"Nobody by that name here.","room":"sunset_rail","day":10,"turn":68,"mode":null,"convo":null,"at":"2026-10-23T08:19:23.735Z","src":"persona-edge"}
+{"cmd":"buy food","reply":"Not for sale here.","room":"condo_room","day":11,"turn":0,"mode":null,"convo":null,"at":"2026-10-23T08:20:10.182Z","src":"persona-edge"}
+{"cmd":"talk to police","reply":"Nobody here goes by that — not tonight.","room":"beach_rd_klang","day":11,"turn":9,"mode":null,"convo":null,"at":"2026-10-23T08:20:22.600Z","src":"persona-edge"}
+{"cmd":"ask somebody about the quiz","reply":"No one here answers to that.","room":"lucky_tiger","day":11,"turn":19,"mode":null,"convo":null,"at":"2026-10-23T08:20:41.779Z","src":"persona-edge"}
+{"cmd":"ask somebody about the band","reply":"That name doesn't land on anyone in the room.","room":"rock_factory","day":11,"turn":98,"mode":null,"convo":null,"at":"2026-10-23T08:22:36.456Z","src":"persona-edge"}
+{"cmd":"ask somebody about closing","reply":"Nobody here goes by that — not tonight.","room":"khao_talo_bar","day":12,"turn":13,"mode":null,"convo":null,"at":"2026-10-23T08:23:27.610Z","src":"persona-edge"}
+{"cmd":"buy basket","reply":"Not for sale here.","room":"mikes_mall","day":15,"turn":34,"mode":null,"convo":null,"at":"2026-10-23T08:27:27.814Z","src":"persona-edge"}

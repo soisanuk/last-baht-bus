@@ -1371,7 +1371,11 @@ function _smallTalk(npc, topic) {
   if (!hit) return false;
   let pool = _SMALL_TALK[hit[0]], key = hit[0];
   const gap = ((G.soc || {}).gapSeen || {})[npc] || 0;
-  if (key === "miss" && gap >= 2) { key = "missAway"; pool = _SMALL_TALK.missAway; }   // two nights away is not "you still here, silly" (Eoin, round 101)
+  if (key === "miss" && gap >= 2) { key = "missAway"; pool = _SMALL_TALK.missAway; }
+  // "why did you come to Pattaya" is the town, "why this bar" is the bar: one pool answered both (Callum, round 105)
+  if (key === "whyhere") { const bar = /\b(this bar|a bar|here)\b/.test(t) && !/pattaya/.test(t);
+    const sub = pool.filter(l => bar ? /this bar|Why this|here/i.test(String(l)) : !/this bar|Why this bar/i.test(String(l)));
+    if (sub.length) { pool = sub; key = bar ? "whyhere:bar" : "whyhere:town"; } }   // two nights away is not "you still here, silly" (Eoin, round 101)
   if (key === "myflat") { const hs = (G.homeSeen || {})[npc]; if (!hs || !hs.nights || G.day - (hs.day || 0) > 3) return false; }   // only a woman who slept there (Margit: "did you sleep well" the morning after)
   // a feeling is answered by how well she knows you: teased as a stranger, something real when you are hers
   if (!Array.isArray(pool)) {
@@ -1432,7 +1436,10 @@ function _doTell(lower, to) {
   // any woman you are talking to, not only a hostess: Nina at Sandy Toes never heard his name (Bernard, round 88) — the
   // reactions are hers ("she"), so a man on the rail still gets the old path
   if (!pid || !NPCS[pid] || !_npcsHere().includes(pid) || !(NPC_ROLES[pid] === "hostess" || (typeof _pronoun === "function" && _pronoun(pid) === "she" && !NPCS[pid].patron))) return false;
-  const l = lower.replace(/[!.,?]+$/, "").trim();
+  let l = lower.replace(/[!.,?]+$/, "").trim();
+  // "tell duan my name is callum": the telling, not the TELL — strip the verb and her name (Callum, round 105: "Not my story")
+  { const nm = String(NPCS[pid].name || "").toLowerCase().split(" ")[0];
+    l = l.replace(new RegExp("^tell (?:" + nm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "|her|him|you) (?:that )?"), ""); }
   if (/\bwallet\b/.test(l) && (_flag("walletLost") || !_flag("hasWallet")) && typeof _townTalk === "function" && _townTalk(pid, /\bback\b|\bgot\b|\bfound\b/.test(l) && _flag("walletBack") ? "my wallet" : "wallet")) return true;   // "i got my wallet back" / "i lost my wallet" are the town's rows (Owain, round 99)
   if (/\b(?:i'?m staying|i stay(?:ed)? here|not going home|cancel+ed (?:my|the) ticket|i live here now|i'?m not leaving|never going home|i'?m here for good|moved here|i (?:might|may|could|think i(?:'ll| will)|want to|am going to|am thinking (?:of|about)|m thinking (?:of|about)) stay(?:ing)?(?: here| in pattaya| on)?)\b/.test(l) && typeof _stayTalk === "function") return _stayTalk(pid);   // "I might stay in pattaya" was a non sequitur (Margit, round 101)   // the ticket in the bin (Dougal, round 97)
   if (/\b(?:i (?:want|need|am looking|m looking) (?:to )?(?:rent|find)|looking for) (?:a |an |somewhere |some )?(?:flat|apartment|condo|room|place)\b/.test(l) && typeof _townTalk === "function" && _townTalk(pid, "condo")) return true;   // "I want to rent an apartment" (Margit, round 101)
@@ -1484,6 +1491,18 @@ function _closingTick() {
   // a man on the back of her bike is not in the bar he left: its two o'clock shut on him mid-ride and took
   // the ride and the long-time night with it (Sunil, round 86 — the 02:00 close made it reachable)
   if (typeof _onRide === "function" && _onRide()) return;
+  // A PLACE THAT IS NOT A BAR SHUTS TOO (Ruth, round 105: Mike's Mall says nine, and at 21:06 she was still inside it,
+  // Wilf gone and the food court open in the paint). A room with its own closesAt and a door out shows you to it.
+  { const r0 = _room();
+    if (r0 && !r0.barType && r0.closesAt != null && G.nightTurn >= r0.closesAt && !G.offstage && r0.exits && r0.exits.out && ROOMS[r0.exits.out] &&
+        !_isHotelRoom(G.room) && (G.soc.shutOut = G.soc.shutOut || {})[G.room] !== G.day) {
+      G.soc.shutOut[G.room] = G.day; const from = r0.bar || r0.name;
+      _say(_pickVary([`${from} shuts on the dot: the lights go off section by section, a guard walks the floor with a torch, and the last few of you are shown to the doors without anybody raising a voice.`,
+        `The shutters come down over ${from} with the noise shutters make. A security guard who has done this every night of his life holds the door for you.`,
+        `Closing at ${from}: the music stops mid-song, the cleaners start, and a guard points politely at the exit you were about to use anyway.`], "shutout"), "alert");
+      _closeOutModals(); G.prevRoom = G.room; G.room = r0.exits.out; _describeRoom(true);
+      return;
+    } }
   if (!_closesMidnight(G.room) || _lockedIn()) return;
   const r = _room();
   // the last-call courtesy in the final half hour
@@ -6344,7 +6363,7 @@ function _endNight(reason) {
     case "sleep":
       if (G.street) break;   // the bench said its own line at SLEEP; no air-con on a bench (Alun, round 104)
       if (!G.keptBy) _say(_inCondo() ? _pickVary(["You call it. Nine floors up the town is a hum and a glow past the balcony rail, the lift sighs once somewhere below, and the bay does nothing all night, beautifully.",
-        "You call it. The fan on two, the hill road's one streetlight, and the bars a long way down and somebody else's problem until tomorrow.",
+        "You call it. The air-con on low, the hill road's one streetlight, and the bars a long way down and somebody else's problem until tomorrow.",
         "You call it. The flat does what a flat does at this hour: the fridge clicks, the tower settles, and you are asleep before you have decided to be."], "sleepcondo")
         : "You call it. The air-con rattles its lullaby, the neon leaks through " +
         "the curtains, and Pattaya carries on politely without you.", "room");   // her mat has its own line (Dougal); the condo has its own (Cormac, round 100)
@@ -7212,7 +7231,8 @@ function _stayTalk(npc) {
   said[npc] = G.day; const t = _knownTier(npc);
   // a man who already lives here — the owner of a bar, a tenant, a month in — is news, not a first-week boast (Benoît, round 104)
   const _owns = typeof _barOwned === "function" && _barOwned(), _rooted = _owns || G.hotel === "condo" || (G.stage === "expat" && G.payDay != null && G.day - G.payDay > 20);
-  if (_rooted && G.stage === "expat") {
+  const _knowsHim = _knownTier(npc) >= 1 || ((G.metDay || {})[npc] != null && G.metDay[npc] < G.day);   // "I see you every week" on night one (Callum, round 105)
+  if (_rooted && G.stage === "expat" && (_owns || _knowsHim)) {
     _say(_pickTownLine(_owns ? [`"I know." ${n} grins. "${_barName(G.bar.room)}. Everybody on the soi know. Farang who own a bar is not leaving — the bar don't let him."`, `"You own ${_barName(G.bar.room)}," ${n} says. "That is not stay. That is stuck. Good stuck, maybe."`]
       : [`"I know you stay," ${n} says. "Farang who only visit, his shoes are new. Yours are not new."`, `${n} nods. "You stay already. I see you every week, same face, more tired. That is how I know."`], "staytalk:rooted"));
     return true;

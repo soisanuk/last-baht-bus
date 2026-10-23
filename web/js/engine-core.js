@@ -905,7 +905,7 @@ const _FIT_TILL = /\b(cashier|the till|on the till)\b/i;
 // there), the wall benches with small tables, and a VIP area or gallery; drinks come from the
 // waitresses. The women dance, sit with customers, work the door, or are on a break. So in a go-go a
 // pooled line that puts anybody on a stool, at the rail or along a bar is skipped.
-const _FIT_GOGO = /\b(bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end) of the bar|bar[- ]?top|belly up|bartenders?|barm[ae]n|football|the telly|the tv|pours|polish(?:es|ing)|wip(?:es|ing) (?:the|a|her) glass|on the mat|the rail is)\b/i;   // …nor the beer bar's texture: the match on, a dancer pouring, the usual on the mat (Henrik, round 69)
+const _FIT_GOGO = /\b(the fan|near the fan|to the fan|bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end) of the bar|bar[- ]?top|belly up|bartenders?|barm[ae]n|football|the telly|the tv|pours|polish(?:es|ing)|wip(?:es|ing) (?:the|a|her) glass|on the mat|the rail is)\b/i;   // …nor the beer bar's texture: the match on, a dancer pouring, the usual on the mat (Henrik, round 69)
 function _isGogo(room) { const r = ROOMS[room || G.room]; return !!(r && r.barType === "gogo"); }
 // the room's furniture in one word, for a line that must print in a bar AND a go-go: a beer bar keeps
 // its stools and its bar top, a go-go has seats and small tables (Mario, 2026-10-07)

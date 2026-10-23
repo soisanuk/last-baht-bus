@@ -705,6 +705,12 @@ function _condoPointer() {   // the tower, with the way from here (Margit and Eo
   return `The condo towers are on Pratumnak Soi 5 — the tower behind the wall with the intercom, past the clubs${pth && pth.length ? `, ${pth.length} ${pth.length === 1 ? "step" : "steps"} from here${dn ? `, ${dn} first (GO ${dir.toUpperCase()})` : ""}` : ""}; the office on its ground floor does the paper.${(G.visited || {}).pratumnak_soi5 ? " (TRAVEL PRATUMNAK SOI 5)" : ""}`;
 }
 function _naturalHelp(lower) {
+  // WHAT TIME DOES <a place> CLOSE / WHEN DOES THE 7-ELEVEN STOP SELLING BEER — asked of nobody (Ruth, round 105: parse failures)
+  if (/\b7-?(?:eleven|11)\b.*\b(?:stop selling beer|beer till|sell beer|beer stop)\b|\bwhen (?:does|do) (?:they|the 7-?(?:eleven|11)) stop selling beer\b/.test(lower)) { _say("Beer at the 7-Eleven is till midnight — the fridges get a chain through the handles on the stroke. The shop itself never shuts."); return true; }
+  { const m = lower.match(/^(?:what time|when) (?:does|do|is) (?:the )?(.+?) (?:close|shut|closing|open|opening)\??$/);
+    if (m && typeof _roomByName === "function") { const id = _roomByName(m[1]);
+      if (id && ROOMS[id]) { const r = ROOMS[id], nm = _barName(id) || r.name;
+        _say(r.closesAt != null && !r.barType ? `${nm} keeps shop hours: it shuts at ${_clockStr(r.closesAt)}, and opens again tomorrow.` : r.barType ? `${nm} pours until ${_closeClock(id)}.` : `${nm} keeps no closing time you could hold it to.`); return true; } } }
   // the bench's own questions (Alun, round 104: "where can i sleep?", "where is the police station" went nowhere)
   if (G.street && /\b(?:where (?:can|do|should|could) i sleep|where (?:do|can) (?:homeless|people) sleep|nowhere to sleep|i need help|help me|where can i get (?:free )?(?:food|water)|free food|free water)\b/.test(lower)) {
     _say("The benches with a light over them and a 7-Eleven in sight — Beach Road by the bus stop, the market on Soi Buakhao. The noodle carts give the end of the pot at closing to a man who asks nothing; Tan feeds you if you FOLLOW TAN. The desk takes you back for the folio and a night (CHECK IN). Nobody in this town hands out help; some of it hands out supper.");
@@ -5015,9 +5021,18 @@ function _doTalkCore(arg, topic) {
     _say(topic ? _pickVary(_MAI_DEE_TALK, "maideetalk")(NPCS[npc].name) : _pickVary(_REL_GREET_MAIDEE, "relmaidee")(NPCS[npc].name), "dim");
     return;
   }
+  // a job partner's first hello of a night knows you by the job, not as "new one" (Ingrid, round 105: Hong, a month after the count)
+  if (!topic && typeof _jobMemoryTalk === "function" && (G.soc.jobMemHello = G.soc.jobMemHello || {})[npc] !== G.day &&
+      Object.entries(_JOB_PARTIES).some(([q, ids]) => ids.includes(npc) && G.quests && G.quests[q] === "done" && G.day - ((G.questDoneDay || {})[q] ?? G.day) >= 3) &&
+      !(NPCS[npc].dialogue || []).some((d, i) => !d.topic && d.when && !((G.talked || {})[npc] || []).includes(i) && (() => { try { return d.when(_npcState(npc), G); } catch (e) { return false; } })())) {   // a news greeting of hers outranks it
+    G.soc.jobMemHello[npc] = G.day; _jobMemoryTalk(npc, "remember me"); _questOffer(npc); return;
+  }
   // AT THE CAMERA: a bare TALK gets the one finger, the one song — a question still reaches her (2026-10-22)
   if (!topic && typeof _atCamera === "function" && _atCamera(npc) && _npcsHere().includes(npc)) { _streamBusy(npc); return; }
   // a tipper's or a handle's name is the stream's subject before it is any word in her own nodes ("where silverfox lives" was her home, Gareth round 103)
+  if (topic && typeof _lockInMemory === "function" && _lockInMemory(npc, topic)) { _questOffer(npc); return; }   // the bolt, remembered (Ruth, round 105)
+  if (topic && typeof _jobMemoryTalk === "function" && _jobMemoryTalk(npc, topic)) { _questOffer(npc); return; }   // the people you did a job with remember it (Ingrid, round 105)
+  if (topic && typeof _ownWordTalk === "function" && _ownWordTalk(npc, topic)) { _questOffer(npc); return; }   // a thing she named in her own story (Callum, round 105)
   const _sbr = (G.streamBells || {})[NPCS[npc].room], _sdr = (G.streamDrinks || {})[npc];
   if (topic && _sdr && G.day - _sdr.day <= 3 && NPC_ROLES[npc] === "hostess" && /^(?:my |the |your )?drinks?$|\bdrinks? i (?:sent|bought)\b|\bmy drinks?\b/.test(String(topic).toLowerCase()) && typeof _townTalk === "function" && _townTalk(npc, "my drink")) { if (typeof _questOffer === "function") _questOffer(npc); return; }   // the drink you bought her through the link (Wes, round 104: "That one I don't know" in every bar)
   if (topic && typeof _whaleIn === "function" && (_whaleIn(topic) || _handleIn(topic) || (_sbr && G.day - _sbr.day <= 3 && _npcsHere().includes(npc) && /\b(bell|round|rang|ring|my handle|hear)\b/.test(String(topic).toLowerCase()))) && typeof _townTalk === "function" && _townTalk(npc, topic)) { if (typeof _questOffer === "function") _questOffer(npc); return; }
@@ -5603,7 +5618,16 @@ function _doTalkCore(arg, topic) {
              `"${NPCS[mate].name} and I have an arrangement. She doesn't tell me how to run the bar and I don't tell her how to run the girls." A shrug. "Works."`]
           : [`"Mama?" ${NPCS[npc].name} glances at the till before answering, which is the answer. "Strict. Fair. Don't tell her I said fair."`,
              `"Mama?" ${NPCS[npc].name} lowers her voice a notch. "She look after us. Also she look AT us, all night. Both true, tilac."`,
-             `${NPCS[npc].name} laughs, short. "Mama know everything. Who you drink with, who you don't. You be nice to me, she know that too."`];
+             `${NPCS[npc].name} laughs, short. "Mama know everything. Who you drink with, who you don't. You be nice to me, she know that too."`,
+             // deeper than three across a dozen bars (Callum, round 105: two mamasans, one sentence)
+             `"Mama?" ${NPCS[npc].name} checks where she is first. "She lend me money one time. Never say when I pay back. That is why I don't leave."`,
+             `"${NPCS[mate].name}?" ${NPCS[npc].name} smiles at her own drink. "She shout at me in front of everybody, then buy me som tam after. Is how she say sorry."`,
+             `${NPCS[npc].name} shrugs. "Mama work this floor before I am born, nearly. She know every trick. I try one trick, she laugh at me."`,
+             `"Mama is okay," ${NPCS[npc].name} says, which on a floor is high praise. "She don't steal from the tips. Some mama do."`,
+             `"${NPCS[mate].name}?" ${NPCS[npc].name} lowers her voice. "She have a son at university. Every girl here help a little. Nobody say, everybody know."`,
+             `"Mama?" ${NPCS[npc].name} looks at the door, then at you. "She choose who come in this bar more than the customer think. You are here, so — she choose you."`,
+             `${NPCS[npc].name} rolls her eyes, fondly. "Mama count the ice. Count the ICE, tilac. Nobody steal ice. She count anyway."`,
+             `"${NPCS[mate].name} was a girl like me, long time ago," ${NPCS[npc].name} says. "Now she is the one who say no for us. Is a good job, saying no."`];
         const _cashRev = [`"${n} holds the money and the gossip — same drawer. Whatever you did, ${n} knows the number."`,
           `"${n}?" A tilt of the head at the till. "Everything go through ${n}. Every drink, every name. Ask her what you spend, she tell you to the baht."`,
           `"${n} never leave that stool." ${NPCS[npc].name} says it fondly. "Never miss a chit either. You want to know the bar, you ask the book."`];
@@ -5647,7 +5671,7 @@ function _doTalkCore(arg, topic) {
             `"${n} is quiet." ${_mamaLabel(NPCS[npc].name)} says it as a compliment. "Loud girl get the first drink. Quiet girl get the man who come back. On my floor, I know which one I want."`,
             `"${n}?" ${_mamaLabel(NPCS[npc].name)} almost smiles. "She argue with me everything, and she is right half. I keep her for the half."`,
             `"${n} never let customer see her tired." ${_mamaLabel(NPCS[npc].name)} folds her arms. "Four in the morning, she still the first girl he see. That is a job — whatever you think."`,
-            `"${n}." ${_mamaLabel(NPCS[npc].name)} glances at the stools. "Every regular — what he drink, what his wife name. She remember. Never mix up. Not one time."`,
+            `"${n}." ${_mamaLabel(NPCS[npc].name)} glances round the room. "Every regular — what he drink, what his wife name. She remember. Never mix up. Not one time."`,
             `"Ask me about ${n} one year later." ${_mamaLabel(NPCS[npc].name)} shrugs. "New girl change. Good girl change slow. So far — slow."`,
           ][_rvStable("mama/girl", 10, i => i !== 3 || _pooledLife(mate))] :
           me === "cashier" ? [
@@ -5973,7 +5997,13 @@ function _doTalkCore(arg, topic) {
       `${n} sees you and lifts her glass an inch. "Hello again, you. Same as last time?"`,
       `"Ah — you." ${n} smiles like a small bet came in. "I tell my friend you come back. She say no. I win."`,
       `${n} moves her bag off the next stool before you ask. "Is yours. I keep it."`,
-      `"Hello, handsome-from-before." ${n} grins at her own English. "You remember my name? Good. I remember yours little bit."`,
+      ((G.toldTo || {})[npc] || {}).name ? `"Hello, ${((G.toldTo || {})[npc] || {}).name}." ${n} grins, pleased she kept it. "You see? I remember."` : `"Hello, handsome-from-before." ${n} grins at her own English. "You remember my name? Good. I remember your face."`,
+      `${n} looks up from her phone and does the small double-take of a woman placing a face. "Ah — you. Okay. Sit."`,
+      `"Again!" ${n} says it to the girl next to her, as if she had won something. Then, to you: "Hello. Sit, sit."`,
+      `${n} waves you over with two fingers, the way you call somebody you already know. "Come. Your face I remember."`,
+      `"You come back," ${n} says, more to herself than to you, and moves over.`,
+      `${n} smiles before you reach the bar — not the door smile; the other one. "Hello again."`,
+      `"I know you," ${n} says, tapping the bar. "Not name. Face. Face is enough for now."`,
       ...(num ? [`"You don't answer my message!" ${n} pretends to be cross for two seconds. "Okay. You come in person — better."`] : []),
       ...(gift ? [`${n} touches what you gave her, so you'll notice. "Hello again. You see? I use."`] : []),
     ];
@@ -7318,9 +7348,9 @@ const _TOWN = {
   },
   me_seen: {
     floor: ["\"I know you.\" {n} points. \"You sit there, you buy one, you look at everything. Now you look at me.\"", "\"You again.\" {n} smiles. \"Same chair, same face. I remember.\"",
-      "\"Of course!\" {n} taps her temple. \"You drink Chang, you laugh slow. I remember the laugh.\"", "\"You come before, na. I remember because you say thank you to the mamasan.\"",
-      "{n} squints, then grins. \"Yes, yes. The man who look at the football and not at the girls. I remember.\"", "\"Remember? You sit at the end, near the fan. Everybody want that stool.\"",
-      "\"I know you.\" {n} says it like a small win. \"Your face and your beer. Is enough.\"", "\"You! Last time you stay late. I see you.\" {n} shakes a finger, pleased.", "{n} nods. \"I see you before. Same order every time.\""],
+      "\"Of course!\" {n} taps her temple. \"Your face, I remember. The rest you tell me again, I don't mind.\"", "\"You come before, na. I remember faces — is my job. Names, not so good.\"",
+      "{n} squints, then grins. \"Yes, yes. You. I don't remember what you drink, but I remember you.\"", "\"Remember? Of course. You sit, you look, you go. Now you come back.\"",
+      "\"I know you.\" {n} says it like a small win. \"Your face and your beer. Is enough.\"", "\"You! I see you before.\" {n} shakes a finger, pleased, at nothing in particular.", "{n} nods. \"I see you before. Not many come back. You come back.\""],
     house: ["\"I know your face,\" {n} says. \"Not much else yet.\"", "\"You've been in,\" {n} says. \"I notice who comes back.\"", "{n} nods once. \"I know you. Your drink, your stool.\""],
     punter: ["\"Seen you about,\" {n} says."],
   },
@@ -7517,7 +7547,7 @@ const _TOWN = {
   },
   my_flat_seen: {
     tan: ["\"Your flat,\" Tan says. \"She told her floor about a balcony and a kitchen. Her floor told the soi. The soi told me. Nobody mentioned the bar.\"", "Tan almost smiles. \"The condo. I hear she liked the lift.\""],
-    floor: ["\"Your flat?\" {n} smiles with one side of her mouth. \"Ninth floor. Lift slow, balcony good, the sea doing nothing.{c} I remember. Not a hotel. A hotel does not have your shirt on the chair.\"", "{n} pretends to think. \"The one with the balcony. The fan on two.{c} Better than hotel — nobody write in a book who come in.\" A beat. \"The office woman write anyway.\"",
+    floor: ["\"Your flat?\" {n} smiles with one side of her mouth. \"Ninth floor. Lift slow, balcony good, the sea doing nothing.{c} I remember. Not a hotel. A hotel does not have your shirt on the chair.\"", "{n} pretends to think. \"The one with the balcony. The air-con on low.{c} Better than hotel — nobody write in a book who come in.\" A beat. \"The office woman write anyway.\"",
       "\"The flat.\" {n} laughs at something private.{c2} \"Your kitchen have one pan and three spoon. Next time I bring a pan.\"",
       "{n} leans in. \"I tell my sister: he have a balcony, and the balcony have a chair, and the chair is only for him.{c2} Now is for me.\"",
       "\"Ninth floor.\" {n} mimes the lift: slow, slower.{c2} \"Long way up. Worth it. Don't tell nobody I say.\"",
@@ -8484,7 +8514,7 @@ const _ARR_LIST_THAI = [
   "{n} nods at the book. \"{L}. ฿{per} every night, rain or no rain. Cheapest insurance on this soi, and the only one that really pay.\"",
   "\"{L}.\" {n} says it like a line of a chant. \"That line. ฿{per} one night. You never see them, and Friday nothing break. Not luck.\"",
 ];
-const _mamaLabel = n => /^mama\b/i.test(n) ? n : "Mama " + n;   // "Mama Mama Yai weighs it" (Marguerite, round 67)
+const _mamaLabel = n => /^(mama|mamasan|madam|auntie)\b/i.test(n) ? n : "Mama " + n;   // "Mama Mamasan Mem" (Callum, round 105)   // "Mama Mama Yai weighs it" (Marguerite, round 67)
 // the words for each shift call the floor remembers (round 73; "the fight" added in round 76)
 const _CALL_K = { merit: /\b(monks?|merit|ceremony|temple|tam ?boon|blessing)\b/, tab: /\b(tab|slate|docket)\b/, early: /\b(early bus|her bus|\w+s? bus|the bus|sent home|go home early|went home|early)\b/, round: /\b(the round|rounds?|round on the house|on the house|flat hour|free round|free drinks)\b/, turning: /\b(the man|that man|the punter|the drunk|turned|thrown out|put out|threw out|security|fight|the fight|trouble|the trouble)\b/ };
 // THE GIFT BOOK (Bernard, round 88): every thing and every baht a man gives a woman, kept on her page for
@@ -8954,6 +8984,89 @@ const _WALLET_POINT_AGAIN = [
 // a person whose own trade is teaching answers "a job" with it, not with the house's manager gate (Waen at Cloze — Dmitri, round 102)
 function _teachesHere(id) {
   return !!(NPCS[id] && (NPCS[id].dialogue || []).some(d => d.topic && /\b(?:online|teach)/.test(String(d.topic)) && (!d.when || d.when(_npcState(id), G)) && (!d.req || d.req.every(f => _flag(f))) && !(d.notFlags || []).some(f => _flag(f))));
+}
+// THE LOCK-IN, REMEMBERED (Ruth, round 105: the bolt went across for her at midnight, and the next evening Daeng gave
+// "you walk out straight" and the lock-in's pitch as if it had never happened). G.lockedInAt keeps the night.
+function _lockInMemory(npc, topic) {
+  const t = String(topic || "").toLowerCase();
+  if (!/\b(lock-?in|locked in|the bolt|last night|the party|after midnight|the door)\b/.test(t)) return false;
+  if (!((G.lockedInAt || {})[G.room] === G.day - 1) || !(NPC_ROLES[npc] || NPCS[npc].manager)) return false;
+  const n = NPCS[npc].name, reg = _hoursRegister(npc);
+  _say(_pickTownLine(reg === "floor" ? [`"Last night?" ${n} laughs behind her hand. "Bolt on the door, you inside, music up. What happen inside stay inside, na. But I remember you was there."`, `"You stay for the bolt!" ${n} points at you. "Not everybody get the bolt. The room choose. Last night the room choose you."`]
+    : [`"You were inside when the bolt went across," ${n} says. "That is the only thing I will say about last night, and it is a compliment."`, `"Last night the door was locked with you on the right side of it," ${n} says. "Don't make me regret it."`], "lockinmem:" + reg));
+  return true;
+}
+// THE PEOPLE YOU DID A JOB WITH REMEMBER YOU (Ingrid, round 105: Nont, Eddy, Colin, Reginald and Nigel shrugged at "do
+// you remember me", and Hong opened with "New one" a month after the count). A done quest's giver, and the people in the
+// four laundering jobs, know you by the job — said in their own register, before any town row's stranger.
+const _JOB_PARTIES = { covers: ["grace", "hong"], fiftyone: ["reginald", "orathai"], verification: ["nont", "nigel", "ging"], presale: ["colin", "fast_eddy"] };
+const _JOB_MEMORY = {
+  covers: { hong: "\"The one who count.\" Hong does not stop writing. \"Three nights on that stool and you never bought the expensive thing. I remember.\"", grace: "\"My counter.\" Grace fills in a square of the sudoku without looking. \"Of course I remember. A number is a face, to me.\"" },
+  fiftyone: { reginald: "\"My courier!\" Reginald raises the glass. \"The folder, the lemon water, the Old Market. One doesn't forget the man who carried one's company across town, dear boy.\"", orathai: "\"Khun Reginald's folder.\" Orathai looks over her glasses. \"You walked it, you did not read it. I remember that kind.\"" },
+  verification: { nont: "\"The sheet.\" Nont doesn't look up from the {{phone}}. \"Third Road, the green neon. I remember everybody I've paid, and everybody who's paid me.\"", nigel: "\"You're the chap who brought the listing round.\" Nigel says it without blame, mostly. \"I remember. I remember everything about that bar.\"", ging: "\"The man with the sheet.\" Ging clicks the lanyard. \"Green neon. I tell you then, I tell you now — six months.\"" },
+  presale: { colin: "\"You took the slips.\" Colin nods slowly. \"I don't forget a favour. Or a man who didn't ask me for anything for it.\"", fast_eddy: "\"The slips.\" Eddy turns his glass, which is as warm as he gets. \"You're in the thread. People in the thread, I remember.\"" },
+};
+function _jobMemoryTalk(npc, topic) {
+  const t = String(topic || "").toLowerCase();
+  if (!/\b(remember me|know me|me|who am i|last time|do you remember|you remember|recognise me|recognize me)\b/.test(t)) return false;
+  for (const [q, ids] of Object.entries(_JOB_PARTIES))
+    if (ids.includes(npc) && G.quests && G.quests[q] === "done" && _JOB_MEMORY[q][npc]) { _say(_JOB_MEMORY[q][npc]); return true; }
+  const q = Object.keys(QUESTS).find(k => G.quests && G.quests[k] === "done" && QUESTS[k].giver === npc);
+  if (q) { _say(_hoursRegister(npc) === "floor" ? `"You!" ${NPCS[npc].name} brightens. "${QUESTS[q].name} — you help me. I remember, of course."` : `"Of course I remember you," ${NPCS[npc].name} says. "${QUESTS[q].name}. People who help, I keep."`); return true; }
+  return false;
+}
+// HER OWN WORDS, FOLLOWED UP (Callum, round 105: "ask about the papa she just mentioned and she has never heard of
+// him"). Anything she named in a story she has told you — kin, the thing she is saving for, the province, the job before,
+// the hospital — is a thing she can be asked about, and she answers it in her register: guarded to a stranger, a little
+// more to a man she knows. Never a new fact that could contradict her own text: the follow-up is how it sits with her now.
+const _OWN_CATS = [
+  ["kin", /^(papa|father|dad|mama|mother|mum|mom|sister|sisters|brother|brothers|son|daughter|baby|babies|husband|grandma|grandmother|granny|auntie|aunt|cousin|uncle|boy|kids?|children|family)$/],
+  ["money", /^(loan|debt|debts|owe|lender|installment|instalment|repay)$/],
+  ["plan", /^(shop|salon|bakery|laundry|coffee|restaurant|stall|truck|accounting|university|school|land|house|business|cafe|farm|motorbike|taxi|noodle|som|tailor|nails|beauty|guesthouse|garden|rice|buffalo|cows?|pigs?|certificate)$/],
+  ["place", /^(udon|khon|kaen|sisaket|surin|buriram|roi|yasothon|ubon|korat|nakhon|phanom|chaiyaphum|kalasin|mukdahan|loei|nong|khai|maha|sarakham|amnat|bangkok|rayong|lampang|isan|isaan|village|province|chiang|lopburi|phetchabun|sakon)$/],
+  ["work", /^(hotel|factory|karaoke|massage|cleaning|waitress|garment|rubber|plantation|market|construction|kitchen|cook|maid|nanny|office|shop)$/],
+  ["health", /^(hospital|medicine|sick|sugar|diabetes|doctor|operation|kidney|heart|clinic|leg|eyes?)$/],
+];
+const _OWN_POOLS = {
+  kin: { cool: ["\"{W}?\" {n} smiles, but only with her mouth. \"Okay. Okay is enough to say to a customer, na.\"", "\"My {w}...\" {n} looks at her {{phone}}, not at you. \"I call every Sunday. Sunday is for that.\"", "{n} shrugs. \"{W} is {w}. You want know more, you come back more.\""],
+    warm: ["\"My {w}?\" {n} turns her {{phone}} so you can see the lock screen, then turns it back. \"Every month I send. Every month they say thank you, then they say also.\" She laughs at that, mostly.", "{n} is quiet a second. \"I don't see my {w} since Songkran. Next Songkran, maybe. You ask, so I tell you — I miss.\"", "\"{W}.\" {n} says it softly, the way you say a word you don't say much here. \"Everything I do here is for that. Don't make me cry in the bar, na.\""] },
+  money: { cool: ["\"The {w}?\" {n} makes a small face. \"Every month. Like rent, but for a thing you already use.\"", "\"{W} is {w},\" {n} says. \"You pay, it stays. You stop, they come.\"", "{n} rubs her thumb and finger together, then stops herself. \"Not your problem, na. My problem.\""],
+    warm: ["\"The {w}...\" {n} counts on her fingers. \"Eight month more. Then the bike is mine, and then I am not a girl with a {w}.\"", "{n} tells you the figure without being asked, which she has never done. Then: \"Don't give me. I want pay it myself. Is important, that.\"", "\"You know what I like about you?\" {n} says. \"You ask about my {w} and you don't offer. Everybody offer.\""] },
+  plan: { cool: ["\"The {w}?\" {n} laughs. \"Plan is plan. Money is money. When the two meet, I tell you.\"", "\"{W}, yes.\" {n} taps her chit cup. \"Little bit every night. Very little bit.\"", "{n} makes a small gesture: far away. \"{W} is for later. Now is for here.\""],
+    warm: ["\"The {w}.\" {n} gets out her {{phone}} and shows you a photo she has saved of somebody else's — the one she wants. \"Like this, but mine. Two year, if nobody get sick.\"", "{n} counts on her fingers, then stops. \"Half, I have. The other half is all of these.\" She waves at the bar, the stools, you.", "\"You ask about my {w}.\" {n} looks pleased and a little caught out. \"Nobody ask that. They ask how much. I like you more now, little bit.\""] },
+  place: { cool: ["\"{W}?\" {n} smiles. \"Far. Rice, dust, my mama shouting. You don't go there, na. Nothing for farang.\"", "\"{W} is home,\" {n} says. \"Here is work. Different.\"", "{n} shrugs at the question. \"{W}. Hot, quiet, everybody know your business. Same Pattaya, but no money.\""],
+    warm: ["\"{W}...\" {n} says it like a long breath out. \"In the rain season the road go to mud and you stay home one week. I miss that, can you believe.\"", "{n} shows you a photo: a wooden house, a dog asleep under it, a woman in a plastic chair. \"{W}. That is all of it. That is everything.\"", "\"One day you see {W} — in photos,\" {n} says. \"Is safer for you. And for {W}.\" She means it kindly."] },
+  work: { cool: ["\"The {w}?\" {n} makes a face. \"Long hour, small money, the boss shout. Here also, but more money.\"", "\"{W} before, bar now.\" {n} shrugs. \"Everybody start somewhere.\"", "{n} laughs. \"You want I go back to {w}? No, thank you.\""],
+    warm: ["\"The {w}...\" {n} rubs her wrist. \"My hand still remember. Bar is easier on the hand, harder on the head.\"", "{n} tells it flat. \"{W} pay me in one month what here pay me in one week. That is the whole story, tilac.\"", "\"At the {w} nobody ever ask my name.\" {n} looks at you. \"Here everybody ask. Is better, I think. I don't know.\""] },
+  health: { cool: ["\"The {w}?\" {n} waves it off. \"Is okay. Is always okay, until is not.\"", "\"{W} cost money.\" {n} says it like the weather. \"That is why I am here, not there.\"", "{n} looks at her {{phone}}. \"I don't talk about the {w} in the bar, na. Bad luck.\""],
+    warm: ["\"The {w}...\" {n} lets out a breath. \"Better this month. Next month, who know. I send what they say, and I don't ask the doctor too much.\"", "\"You remember the {w}?\" {n} is surprised, then touched, then brisk about it. \"Okay. Okay now. Thank you for ask.\"", "{n} goes quiet. \"My mama hide from me how much is the {w}. My sister tell me. So I work two shift.\""] },
+};
+const _OWN_STOP = new Set(["the", "your", "her", "his", "my", "about", "what", "where", "when", "how", "now", "still", "you", "is", "are", "and", "with"]);
+function _ownWordTalk(npc, topic) {
+  const role = NPC_ROLES[npc];
+  if (!NPCS[npc] || !(role === "hostess" || role === "mamasan" || role === "cashier")) return false;
+  if (!NPCS[npc].filler && !(typeof FLOOR_OWN !== "undefined" && FLOOR_OWN[npc])) return false;   // an authored character's own nodes answer her words (Candy's supply)
+  const t = String(topic || "").toLowerCase();
+  if (/\bagain\b/.test(t)) return false;
+  const dl = NPCS[npc].dialogue || [], heard = ((G.talked || {})[npc] || []).map(i => dl[i]).filter(d => d && d.text);
+  if (!heard.length) return false;
+  const seenI = (G.talked || {})[npc] || [];
+  if (dl.some((d, i) => d.topic && !seenI.includes(i) && _topicHits(d.topic, t))) return false;   // an unheard node of hers on it answers first
+  const keys = new Set(heard.flatMap(d => String(d.topic || "").split("|").map(k => k.trim())));
+  const texts = heard.map(d => { const ts = typeof _townStory === "function" ? _townStory(npc, d) : null; return String((ts && ts.text) || d.text).toLowerCase(); }).join(" ");
+  // a subject key (family, home, plan) is her node's, retold as itself; a NAMED THING inside it (Udon, the baby) is a follow-up
+  const words = t.split(/[^a-z]+/).filter(w => w.length >= 3 && !_OWN_STOP.has(w) && !(keys.has(w) && /^(family|home|plan|work|name|money|age|job|price|bar|mama|mamasan|boyfriend|husband)$/.test(w)));
+  for (const w of words) for (const [cat, rx] of _OWN_CATS) {
+    if (!rx.test(w)) continue;
+    const st = w.replace(/(ies|s)$/, "");
+    if (!new RegExp("\\b" + st + "[a-z]{0,3}\\b").test(texts)) continue;
+    const warm = _knownTier(npc) >= 2, pool = _OWN_POOLS[cat][warm ? "warm" : "cool"];
+    const reg = _hoursRegister(npc);
+    const line = reg === "floor" ? _pickTownLine(pool, "ownword:" + cat + (warm ? "w" : "c")) : _pickTownLine(pool, "ownword:h:" + cat);
+    _say(_genderLine(_fmt(line, { n: NPCS[npc].name, w, W: w.charAt(0).toUpperCase() + w.slice(1) }), npc));
+    return true;
+  }
+  return false;
 }
 // SEE HOME, remembered by the woman you walked (Tomás, round 103: "Not yet, na. Maybe later" to the songthaew she took on his arm)
 function _seenHomeTalk(npc, t) {
@@ -11607,7 +11720,7 @@ function _doBuy(arg) {
     const busyId = G.soc.patronBusy[G.room];
     const sniped = (busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId) &&
       _bondTier(id) < 2 && !((G.party && G.party.ids) || []).includes(id) &&
-      !_regularsHere().length;   // the anonymous buyer is not on a rail of named men: Helmut has bought nothing in thirteen years (Aurelio, round 71)
+      !_regularsHere().length && (typeof _bellHeads !== "function" || _bellHeads(G.room).men > 0);   // …and is somebody: an empty rail has no buyer to go still (Ruth, round 105)   // the anonymous buyer is not on a rail of named men: Helmut has bought nothing in thirteen years (Aurelio, round 71)
     // the guv'nor buying his own girl a drink is not sniping a punter's (Rolf, round 54)
     if (sniped && !G.soc.patronMiffed[G.room] && !(typeof _atOwnBar === "function" && _atOwnBar())) {
       G.soc.patronMiffed[G.room] = true;
@@ -13676,7 +13789,9 @@ function _doWait(arg) {
       if (h === 12 && until[2] !== "pm") h = 0;         // "until 12" means midnight
       target = _hourToTurn(h % 24);
       if (target === null) { _say(`The night runs ${_nightSpanStr()}. Daylight is for sleeping.`); _waitRefused = true; return; }
-      target += Math.ceil(_mins / 6);   // the first turn at or after the minute asked: 1:55 at 01:54 was "already" (Dagny, round 91)
+      // the last turn not past the minute asked — 22:55 became 23:00 and put Ruth out of the Vic (round 105) — unless that
+      // turn is now: 1:55 at 01:54 was "already" (Dagny, round 91), and then it is the next one
+      { const fl = target + Math.floor(_mins / 6), ce = target + Math.ceil(_mins / 6); target = fl > G.nightTurn ? fl : ce; }
     } else {
       // WAIT <n>: a small number is turns (six minutes each); fifteen or more is MINUTES, the way a man means
       // it — "wait 30" waited three hours (Steve's fourth run). WAIT <n> TURNS still says turns outright.
@@ -14406,6 +14521,8 @@ function _doWithdrawInner(arg) {
 }
 
 function _doBalance() {
+  // a dead phone and no machine in sight: nothing reads the account (Ruth, round 105)
+  if (G.battery <= 0 && !_room().atm && !(typeof _roomHasAtm === "function" && _roomHasAtm(G.room))) { _say("Your phone is a black mirror and there is no machine here. The balance will have to wait for a socket or an ATM."); return; }
   if (!_flag("hasWallet")) {
     if (_walletHunt()) { _say(`The app knows the balance without the card: ฿${_num(G.bank || 0)} in the account. It just cannot put notes in your hand — the machine wants the card.`, "dim"); return; }   // the app is not the card (Frank, round 99)
     _say("Your card's in your wallet, wherever that's got to. Nothing to check until it's back.");
@@ -15393,7 +15510,7 @@ function _kitchenTalk(npc) {
       ? `“The roast's on. Order it before somebody else does — ${_roastLeft()} left and the cook stops at nine.” (BUY ROAST.)`
       : _roastDay()
       ? "“Roast's a Sunday, and it's gone. Nine o'clock he stops, and he's usually out before that. Next week, and come early.”"
-      : "“Roast's Sundays. Rest of the week it's the basket and chips, which is fine, and the crisps after eleven, which is not.” (READ MENU.)";
+      : "“Roast's Sundays. Rest of the week it's the basket and chips, which is fine, and the crisps at a quarter to eleven, which is not.” (READ MENU.)";
   const n = npc ? NPCS[npc].name : "The one on the floor";
   const card = _qvMenu().filter(d => d.id !== "roast" && d.id !== "curry")
     .map(d => `${d.name} ฿${_num(d.price)}`).join(" · ");
@@ -17284,7 +17401,7 @@ function _toldBack(c) {
     const v = e.v === "yes" ? "" : e.v;
     const pool = _TOLD_BACK[reg][key].filter(l => v || !/\{X\}|\{x\}/.test(l));
     if (!pool.length) continue;
-    return _genderLine(_fmt(_pickVary(pool, "toldback:" + reg + key), { X: v.replace(/\b\w+/g, (m, i) => i > 0 && /^(?:in|of|the|and|de|la|le|du|von|van|on|near|by)$/i.test(m) ? m.toLowerCase() : m.charAt(0).toUpperCase() + m.slice(1)), x: v }), c);
+    return _genderLine(_fmt(_pickVary(pool, "toldback:" + reg + key), { X: v.replace(/\.\s+/g, ", ").replace(/\b\w+/g, (m, i) => i > 0 && /^(?:in|of|the|and|de|la|le|du|von|van|on|near|by)$/i.test(m) ? m.toLowerCase() : m.charAt(0).toUpperCase() + m.slice(1)), x: v.replace(/\.\s+/g, ", ") }), c);
   }
   return null;
 }

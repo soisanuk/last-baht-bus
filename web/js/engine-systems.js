@@ -930,7 +930,8 @@ function _doBarfine(arg) {
     // playtest F5, 2026-08-26). Heat carries its cause now, and the finger
     // points at it.
     const _why = G.soc.heatWhy && G.soc.heatWhy[G.room];
-    _say("The mamasan intercepts the negotiation with one raised finger. After " +
+    const _mr = _mamaRef(true);   // a one-woman bar has no mamasan to intercept (Ruth, round 105: Near owns the Metro Beer Garden)
+    _say((_mr === NPCS[id].name ? `${_mr} holds up one finger before you finish. After ` : `${_mr} intercepts the negotiation with one raised finger. After `) +
       "tonight's behaviour? “Not tonight, tilac.” The finger does not negotiate." +
       (_why ? ` (${_why} — the book closes for the shift. A new night forgets.)` : ""));
     return;
@@ -7016,7 +7017,9 @@ function _sayDrizzle() {
     let pool = _noBus ? pool0.filter(l => !/baht bus/.test(String(l))) : pool0;
     // the hour, too: girls under one umbrella at 02:12 with every grille down (Aisling, round 87). Past the
     // street's own late turn a line with people working in it gives way to the shut street's; before it, the shut one waits
-    const _late = typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room);
+    // …and "shut fronts" only where the fronts ARE shut: Walking Street and Pratumnak Soi 5 at two had open doors (Callum, round 105)
+    const _openHere = (_room().venues || []).some(id => ROOMS[id] && !(typeof _closedNow === "function" && _closedNow(id)));
+    const _late = typeof _lateTurn === "function" && G.nightTurn >= _lateTurn(G.room) && !_openHere;
     const _shut = l => /\b(shutters|grilles?)\b/.test(String(l));   // whole words: "grilled squid" is not a shut front
     const _lp = pool.filter(l => _late ? !/girls|vendors|grilled|bars\b/.test(String(l)) || _shut(l) : !_shut(l));
     if (_lp.length) pool = _lp;
@@ -7471,6 +7474,9 @@ function _doWatchSunrise() {
   const _seaOk = !_isHotelRoom(G.room) && /sea|beach|promenade|shore/i.test(String(_room().desc || "") + " " + (_room().region || ""));   // a window over Soi 6 has no water (Dagny, round 91)
   const _sky = _seaOk ? _SUNRISE : _SUNRISE.filter(l => !/\b(bay|sea)\b/i.test(l));
   _say(_pickVary(_sky.length ? _sky : _SUNRISE, "sunrise"), "win");
+  // the woman who watched it with you is in the scene (Ruth, round 105: May on her arm, and the dawn did not mention her)
+  { const p = ((G.party && G.party.ids) || []).filter(x => NPCS[x]);
+    if (p.length) _say(_fmt(_pickVary(["{n} watches it with her head on your shoulder and says nothing at all, which from her is a lot.", "{n} takes a photo of it on her {{phone}}, then one of you looking at it, then puts the {{phone}} away and just looks.", "\"Every night I work, I sleep through this,\" {n} says. \"Every night.\" She does not say anything else and does not let go of your arm.", "{n} has her shoes in her hand. She laughs at the sky, at the hour, at you. \"Okay. Now I am tired.\""], "sunrisewith"), { n: p.map(x => NPCS[x].name).join(" and ") }), "win"); }
   if (G.sunriseDay === G.day) return;               // one sky a night
   G.sunriseDay = G.day;
   _addHappy(2);                                      // free, and the point of staying up
@@ -7487,7 +7493,8 @@ function _doWatchJunction(arg) {
       _say(_pickVary(_SUNSET_DARK, "sunsetdark"));
       return;
     } else {
-      _say(_pickVary(_SHAKEDOWN_DONE, "shakedowndone"));
+      // "hours ago" at 19:06 (Ruth, round 105): within the hour after it packs up, it is just over
+      _say(G.nightTurn < 20 ? "The checkpoint has only just packed up — the last cones going into the pickup, an officer kick-starting his bike. The road's a road again. The bay is still open." : _pickVary(_SHAKEDOWN_DONE, "shakedowndone"));
       return;
     }
   } else {
@@ -12592,8 +12599,9 @@ function _qvNamesDish(input) {
 // nothing about when to come back.
 function _roastNote() {
   if (!_roastDay()) return "Roast — Sundays only, till nine. \u201cCome Sunday, tilac. Early.\u201d";
+  // gone before nine is gone, not "nine o'clock finish" (Ruth, round 105: sold out at 20:42, refused at 21:00 with the wrong reason)
+  if (_roastLeft() <= 0 && (G.soc.roastGoneSeen === G.day || _roastHour(_nightHour()))) { G.soc.roastGoneSeen = G.day; return "Roast — gone. \u201cAll finish! You see the time? Next Sunday you come SIX o'clock.\u201d"; }
   if (!_roastHour(_nightHour())) return "Roast — off. \u201cNine o'clock, finish. You come early next week, na.\u201d";
-  if (_roastLeft() <= 0) return "Roast — gone. \u201cAll finish! You see the time? Next Sunday you come SIX o'clock.\u201d";
   const n = _roastLeft();
   return "\u0e3f" + _num(QV_ROAST) + " \u2014 the Sunday roast, and Aoy holds up fingers: \u201c" + n +
     " left" + (n <= 3 ? " only" : "") + ", tilac.\u201d";
