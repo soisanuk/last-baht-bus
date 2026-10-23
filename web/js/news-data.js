@@ -3,13 +3,13 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pattaya bike taxis switch back to orange after just five days in blue",
-    "s": "Bangkok Post",
+    "t": "American YouTuber shows CCTV saying he was assaulted and robbed in Pattaya",
+    "s": "Khaosod English",
     "d": "22 Oct 2026"
   },
   {
-    "t": "American YouTuber shows CCTV saying he was assaulted and robbed in Pattaya",
-    "s": "Khaosod English",
+    "t": "Pattaya bike taxis switch back to orange after just five days in blue",
+    "s": "Bangkok Post",
     "d": "22 Oct 2026"
   },
   {
@@ -18,8 +18,8 @@ var NEWS_FEED = [
     "d": "22 Oct 2026"
   },
   {
-    "t": "Fight over seat on Pattaya Beach leaves two women injured",
-    "s": "Thaiger",
+    "t": "Pattaya officials escort unwell foreign man back to accommodation",
+    "s": "Pattaya Mail",
     "d": "22 Oct 2026"
   },
   {
@@ -38,14 +38,14 @@ var NEWS_FEED = [
     "d": "22 Oct 2026"
   },
   {
-    "t": "Thailand reviews anti-corruption practices in push for OECD membership",
+    "t": "Thailand accelerates OECD membership plans with three-year target",
     "s": "Pattaya Mail",
-    "d": "21 Oct 2026"
+    "d": "22 Oct 2026"
   },
   {
-    "t": "How Thailand is capturing next wave of investments in ‘China plus one’ outlook",
-    "s": "South China Morning Post",
-    "d": "20 Oct 2026"
+    "t": "Israeli woman’s visa revoked for ‘improper behaviour’",
+    "s": "Bangkok Post",
+    "d": "23 Oct 2026"
   },
   {
     "t": "Thailand delays proposed 1,000-baht overseas travel tax",
@@ -58,25 +58,25 @@ var NEWS_FEED = [
     "d": "20 Oct 2026"
   },
   {
-    "t": "Thailand races to protect data after PHP alert",
-    "s": "Bangkok Post",
+    "t": "Mexico, Thailand, Kazakhstan and India ready to welcome the stars of tomorrow for 2027 Age Group World Championships",
+    "s": "FIVB",
     "d": "22 Oct 2026"
+  },
+  {
+    "t": "Anwar vows Malaysia’s support for peace and stability in southern Thailand",
+    "s": "Malay Mail",
+    "d": "23 Oct 2026"
   },
   {
     "t": "Thailand warns of heavy rain in East and South as high tides loom",
     "s": "Nation Thailand",
-    "d": "22 Oct 2026"
-  },
-  {
-    "t": "Tourist's casual Facebook post leads to discovery of 120-million-year-old dinosaur footprints in Thailand",
-    "s": "The Times of India",
     "d": "22 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-22","USD":33.75,"AUD":23.66,"GBP":45.15,"EUR":37.81};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-23","temp":31,"humid":66,"code":51,"hi":31,"rain":93};
+var WX_NOW = {"date":"2026-10-23","temp":29,"humid":87,"code":3,"hi":32,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4005,"date":"2026-10-23","baht":63950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81573,"thb":2751231};
+var BTC = {"usd":81622,"thb":2754317};
