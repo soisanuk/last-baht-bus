@@ -44,7 +44,7 @@ test("the agent's line is on the month, and MONEY names the paper", () => {
 
 test("a beer bar's job: the floor has to know your face, the terms are cash on nobody's paper, WORK stands the shift, the envelope is paid for the nights", () => {
   moveIn("monger"); G.room = cashBar; run("talk to bert");
-  assert.match(t("ask bert about a job"), /the floor has to know your face/);
+  assert.match(t("ask bert about a job"), /Knowing a face is not enough/);
   knownAt(cashBar); const offer = t("ask bert about a job");
   assert.match(offer, /฿30,000 a month, in an envelope\. Four nights a week/); assert.match(offer, /No paper/); assert.ok(G.jobOffer && G.jobOffer.room === cashBar && !G.jobOffer.corp);
   assert.ok(_situationTopics("bert").last.includes("a job"), "the offer is a tap: " + JSON.stringify(_situationTopics("bert")));

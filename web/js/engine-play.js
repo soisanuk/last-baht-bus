@@ -369,6 +369,12 @@ function _lastBusWarn() {
   if (_lockedIn()) return;   // …nor from inside a bolted party that runs till dawn
   G.lastBusWarned = true;
   const mins = Math.max(5, (LAST_BUS_TURN - G.nightTurn) * 6);
+  if (G.hotel === "condo") {   // no truck goes up the hill: the warning to a tenant is the bikes (Tomás, round 103)
+    _say(_fmt("The bars are into the small hours. No truck goes up Pratumnak, so for you the night's question is the piwins: " +
+      "they thin after two, the ride up the hill costs more, and the one at your own gate goes to sleep. Call it {mins} before the stands go quiet.",
+      { mins: mins >= 25 ? _L("half an hour") : _fmt(_L("{n} minutes"), { n: mins }) }), "alert");
+    return;
+  }
   _say(_fmt("Somewhere out there the songthaew loops are thinning — the last baht bus of " +
     "the easy hour is making its rounds, and after two the ฿{fare} ride home becomes a " +
     "wait at a kerb that keeps whoever stands on it. Call it {mins}. Get to a main road " +
@@ -1259,7 +1265,7 @@ const _SMALL_TALK = {
     "\"My friend come first. She send money home, buy her mama a fridge.\" A shrug. \"I want fridge also. So.\"",
     "\"Why?\" She counts on her fingers. \"Rice field, hot. Factory, hot and boss shout. Here — aircon, and the boss is me, little bit.\"",
     "\"Everybody from my village come here or go Bangkok. Bangkok is too big. Here I can walk to work.\"",
-    "\"First I come for one month, for my brother school.\" She holds up fingers. \"That was four year ago. Don't ask me how.\"",
+    "\"First I come for one month, for the school fee at home.\" She holds up fingers. \"That was four year ago. Don't ask me how.\"",
     "\"How I end up here? Bus.\" She grins. \"Eleven hour. After that is a long story and you have one beer. Not enough beer.\"",
     "\"Papa sick. Hospital want money. The hospital don't take rice.\" She says it flat, the way the floor says the true things.",
     "\"My cousin work here before. She say, 'Come, is easy money.'\" A dry look. \"She lie about the easy. Not about the money.\"",
@@ -1325,7 +1331,7 @@ const _SMALL_TALK_KEYS = [
   // the hundred questions (2026-10-14) — first, so a specific subject beats a broad one; tolerant of the "to"/"a"
   // the ask path strips ("would you come england", "what do you like eat")
   ["movein", /\b(move in|live with me|living together|live together|come (?:and )?live|move (?:in )?to (?:my|the) (?:condo|flat|place)|stay with me|come stay with me)\b/],   // the question the stay builds to (Margit, round 101) — a design call for the mechanic; her answer meanwhile
-  ["whyhere", /\b(why (?:did|do|d'?you) (?:you )?(?:come|move|end up|choose)|how (?:did|do) you (?:end up|come to be|get|land)|what brought you|why pattaya|why (?:this bar|here|a bar)|why (?:did|do) you come back)\b/],
+  ["whyhere", /\b(why (?:did|do|d'?you) (?:you )?(?:come|move|end up|choose)|how (?:did|do) you (?:end up|come to be|get|land)|how (?:did|do) you come (?:to|here)\b|how come you(?:'re| are)? (?:in pattaya|here)|what brought you|why pattaya|why (?:this bar|here|a bar)|why (?:did|do) you come back)\b/],
   ["myflat", /\b(sleep well|slept well|sleep ok|my (?:flat|condo|place|bed|apartment)|like my (?:flat|place|room)|the ninth floor|my balcony)\b/],
   ["love", /\b(love me|do you love|you love me|in love|love you)\b|^(?:love|us|the two of us|you and me|me and you)$/],   // ASK HER ABOUT US / LOVE at her-farang tier (Brendan, round 102)
   ["likeme", /\b(do you like me|you like me|fancy me|like me)\b/],
@@ -1488,6 +1494,11 @@ function _doTell(lower, to) {
 
 function _closingTick() {
   if (!_flag("act1Done") || G.over) return;
+  { const r = _room();   // the band's last set, said once in the room it plays in (Ruth, round 105)
+    if (G.nightTurn === BAND_END_TURN && r.liveMusic && (r.musicEveryNight || _isBandNight()) && !(typeof _onRide === "function" && _onRide()))
+      _say(_pickVary(["The band plays its last song like it is the first, unplugs, and is drinking at the bar inside five minutes. The speakers take over, louder than they need to be.",
+        "Last set. The singer thanks everybody in three languages, the drummer is already winding cable, and the room goes over to the sound system without anybody quite noticing.",
+        "The band packs up at one, as bands here do — amps on a trolley, guitars in soft cases, the bassist paid in notes at the till. The playlist comes up behind them."], "bandend"), "dim"); }
   // a man on the back of her bike is not in the bar he left: its two o'clock shut on him mid-ride and took
   // the ride and the long-time night with it (Sunil, round 86 — the 02:00 close made it reachable)
   if (typeof _onRide === "function" && _onRide()) return;
@@ -2325,6 +2336,7 @@ function _leagueIn() { return (3 - (G.day % 3)) % 3; }
 function _isBandNight() { return G.day % 7 === 5 || G.day % 7 === 6; } // Fri or Sat
 function _bandHere() {
   const r = _room();
+  if (G.nightTurn >= BAND_END_TURN) return false;   // the band packs up at one: Rock Factory's was still playing at 04:00 (Ruth, round 105)
   return !!(r.liveMusic && (r.musicEveryNight || _isBandNight()));
 }
 function _bandNearby() {
@@ -4616,6 +4628,17 @@ function _affairTalk(id, tt) {
     : chose.rota === "b"   // the rota stood: she remembers THAT (Callum, round 71 — she thanked him for fixing it)
     ? pick("rotab", [`"The rota stand." ${n} shrugs, too lightly. "I work the Friday, I smile at the hand-grabbers. You were right, boss. I hate that you were right."`])
     : pick("rota", [`"The rota." ${n} makes a face. "You fix it, now everybody see you fix it. Next time I ask Mama, not you. Is better for both."`]);
+  // the sunrise and the shoes, from the night out itself (Benoît, round 104: all three were misses the evening after)
+  { const pl = (G.partyLog || {})[id];
+    if (pl && G.day - pl.day <= 2 && !a.soured) {
+      if (/\b(sunrise|the sun|sun come|dawn|the morning|watch the sun)\b/.test(tt) && (pl.sunrise || pl.dawn)) return pick("outsun", [
+        `"The sun?" ${n} looks at the bar top so the floor cannot see her face. "${pl.sunSand ? "On the sand, my shoes in your hand. " : ""}I watch it with a customer before, many time. Not like that. Don't tell Lamai."`,
+        `${n} smiles before she can stop it. "You fall asleep a little bit, before the sun. I let you. Is the first time I am not working at six o'clock."`]);
+      if (/\bshoes?\b/.test(tt)) return pick("outshoes", [
+        `"My shoes?" ${n} laughs. "${pl.sunSand ? "Still sand inside. You carry them like a waiter carry a tray, very serious." : "Fine. I walk home in the flip-flops in my bag, like always. Staff know where the shoes go."}"`]);
+    } }
+  if (/\b(last night|yesterday|the night out|out|our night|the beach|the club)\b/.test(tt) && a.lastOut != null && G.day - a.lastOut === 2 && !a.soured) return pick("outlast2", [
+    `"The other night?" ${n} keeps her voice down. "Is still in my head, boss. Not in here. In here I count the float."`]);
   if (/\b(last night|yesterday|the night out|out|our night|the beach|the club)\b/.test(tt) && a.lastOut === G.day - 1 && !a.soured) return pick("outlast", [
     `"Last night?" ${n} smiles at the bar top, not at you. "Last night I was not staff. Tonight I am staff. Both are true, boss." A beat. "Ask me again tomorrow, maybe I tell you more."`,
     `${n} laughs. "You dance very bad. I tell everybody you dance good." She lowers her voice. "The floor know, na. Mama know. Was worth it."`,
@@ -6147,6 +6170,7 @@ function _endNight(reason) {
       const r = n > 0 && NPCS[id] && (typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room);
       if (r && ROOMS[r] && !_bars[r]) _bars[r] = 2;
     }
+    if ((reason === "accident" || reason === "roadhit") && typeof _streetSaw === "function") _streetSaw("crash", { where: G.room, how: reason });   // the bike came down and nobody the next evening had heard (Tomás, round 103)
     if ((reason === "blackout" || reason === "collapse") && typeof _streetSaw === "function") _streetSaw(reason, { where: G.room });   // the room that watched you go down can say so, and so can your own floor (Kaspar, round 101)
     G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, bars: _bars, leftFrom: G.soc.leftFrom || null,
       shift: (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && (G.job.shiftStood || 0) >= WORK_MIN_STOOD) ? G.job.room : null,
@@ -6659,6 +6683,13 @@ function _endNight(reason) {
   else if (G.stage === "expat" && G.job && G.job.kind === "school" && [1, 2, 3, 4, 5].includes(G.day % 7))   // a man with a gate at eight does not surface mid-afternoon (Victor)
     _say(_fmt("── DAY {d} · PATTAYA, HOME — the alarm at seven, the gate at eight, M3 and M4 and the conversation class; " +
       "the afternoon is yours and by the time you have slept it off the neon is waking up ──", { d: G.day }), "win");
+  else if (!crash && G.lastNightWas && G.lastNightWas.reason === "sleep" && G.lastNightWas.turn < 40)   // bed at 19:24 does not surface mid-afternoon (Ingrid, round 103)
+    _say(_fmt("── DAY {d}{home} — " + _pickVary([
+      "an early night, and you wake to a morning you had forgotten the town has; the long afternoon is yours before the neon",
+      "you are up with the street sweepers, which nobody on this soi is; the day is long and the neon is a long way off",
+      "a whole night's sleep, an actual morning, coffee with the shop shutters going up; by the time it is dark you are the freshest man on the soi",
+      "you wake before the heat does, rested in a way Pattaya does not usually allow; the day stretches out to the neon",
+    ], "wakeearly") + " ──", { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
   else _say(_fmt("── DAY {d}{home} — you " +
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──",
@@ -7172,7 +7203,7 @@ function _nightsAWeek(income) {   // the gauge: what is left after the roof, in 
 }
 function _weeksLeft() {   // a pot's countdown, at last month's rate (or the gauge's unit until there is one)
   const m = G.month || {}, perDay = (m.spent > 0 && m.days > 0) ? m.spent / m.days + (G.hotel === "condo" ? _roofMonth() / INCOME_DAYS : 0) : NIGHT_COST + _roofMonth() / INCOME_DAYS;
-  const wealth = Math.max(0, (G.money || 0) + (G.bank || 0) + _tillMine() - _debtsOwed());   // the till is yours and a debt is not (Kaspar, round 101: a ฿10,000 loan read as nine weeks of runway)
+  const wealth = Math.max(0, (G.money || 0) + (G.bank || 0) + _tillMine() + (G.envelopeDue ? G.envelopeDue.amt : 0) - _debtsOwed());   // the envelope waiting at the bar is yours (Tomás, round 103)   // the till is yours and a debt is not (Kaspar, round 101: a ฿10,000 loan read as nine weeks of runway)
   return perDay > 0 ? Math.floor(wealth / perDay / 7) : 99;
 }
 function _tillMine() { return (typeof _barOwned === "function" && _barOwned() && G.bar) ? Math.max(0, G.bar.cash || 0) : 0; }
@@ -7257,7 +7288,7 @@ function _jobOffer(room, npc) {
   const _held = !!G.job;   // the terms are told to a man who holds a job; taking it needs QUIT JOB first (Dmitri, round 102: he quit blind to hear the next offer)
   const company = _companyBar(room);
   if (!_floorKnowsYou(room) && _held) { _say(G.job.kind === "teach" ? "You have a job; the mornings are spoken for. (QUIT JOB first.)" : G.job.kind === "school" ? "You have a job — the school, eight o'clock Monday to Friday. One at a time. (QUIT JOB first.)" : `You have a rail — ${_jobName()}. One at a time. (QUIT JOB first.)`); return true; }   // a floor that does not know him has no terms to tell
-  if (!_floorKnowsYou(room)) { _say(`"${n}" shrugs: "A job? First the floor has to know your face. Come back when somebody here calls you by name."`.replace(/^"[^"]*" shrugs/, `${n} shrugs`)); return true; }
+  if (!_floorKnowsYou(room)) { _say(`"${n}" shrugs: "A job? Knowing a face is not enough. One of my girls has to call you hers first — a regular, not a man who comes sometimes. Then I ask."`.replace(/^"[^"]*" shrugs/, `${n} shrugs`)); return true; }
   if (company && G.paperFlag != null && G.day - G.paperFlag < PAPER_FLAG_DAYS) { _say(`${n} does not quite look at you. "The company checked. There was a night with the police and a paper that was not right. Not for a while."`); return true; }
   if (!_held) G.jobOffer = { room, corp: company, day: G.day };
   if (company) _say(`"A manager? We could use one." ${n} names it the way a company names things — by the paper. "฿${_num(MGR_PERMIT_PAY)} a month, through the books. Six nights. Stand them and after a month the company puts you on its paper — a work permit, a bank book, the lot. Miss your nights and the company notices, because the company counts." (TAKE THE JOB · or not — the offer keeps till dawn.)`);
@@ -7342,6 +7373,7 @@ function _jobNight() {
   if (j.shiftDay === G.day - 1 && !stood) _say(`(You declared a shift at ${_barName(j.room)} and stood ${j.shiftStood || 0} turn${j.shiftStood === 1 ? "" : "s"} of it; the house counts a night from ${WORK_MIN_STOOD / 10} hours on the rail. It did not count.)`, "dim");
   if (stood) {
     j.stood = (j.stood || 0) + 1; j.weekStood = (j.weekStood || 0) + 1;
+    (G.ledgerNotes = G.ledgerNotes || []).push(`a shift stood at ${_barName(j.room)} — ${j.weekStood} this week${j.corp ? "" : ", for the envelope"}`);   // the manager's night on the ledger (Tomás, round 103)
     if (j.corp && _paper() !== "permit" && j.stood >= MGR_PERMIT_AFTER) {
       G.paper = "permit"; G.paperUntil = null; G.thaiAccount = true;
       _say(`(The company's paper came through: a work permit in your name, and a bank book with it. ${_barName(j.room)} has you six nights a week now, and the police can read it all they like.)`, "win");

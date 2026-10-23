@@ -34,6 +34,8 @@ const RX = new RegExp("\\b((the whole|half the|all the|the entire|every(?:one|bo
 
 const G_ = "general", C_ = "consequence", W_ = "witness";
 const CLASS = {
+  "engine-parser.js:_streetTalk|everybody hears": [W_, "a police stop heard by the district: printed only from the police street event, by staff whose home is in the district it happened in — deferred1024.test asks it"],
+  "engine-parser.js:_streetTalk|the soi hears": [W_, "the same stop, the house and punter registers: printed only from the police street event in the speaker's district — deferred1024.test"],
   "engine-parser.js:_streetTalk|the soi talks": [W_, "your own floor on the boss's blackout across the soi: printed only from the blackout street event, by your own staff — round101.test asks the mamasan (Kaspar, round 101)"],
   "engine-parser.js:_mineTalk|everybody knows": [G_, "Nont on a bar by name: a venue's existence is a fact about the world, not a sighting of you (round 101)"],
   "engine-parser.js:_townTalk|in front of the whole": [W_, "the saw row, a punter's register: printed only from G.lastNightWas at the bar she left from — round96.test pins who can say it"],

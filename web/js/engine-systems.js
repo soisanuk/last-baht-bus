@@ -601,7 +601,7 @@ function _doSeeHome(arg) {
   _addBond(id, 2);   // presence, not a purchase: the lady-drink taper has nothing to say about it
   G.offstage = true; const ended = _passTime(3); G.offstage = false;
   if (ended) return;
-  { const bike = !!(G.rideLog && G.rideLog[id]);   // a woman who rode you home on her own bike is walked to it, not to the truck (Laurie, round 102)
+  { const bike = !!(G.rideLog && G.rideLog[id]) || !!(G.smallTalk && G.smallTalk[id] && G.smallTalk[id].moto != null);   // …or who told you about her bike (Tomás, round 103: Pukky's Scoopy, then the songthaew)   // a woman who rode you home on her own bike is walked to it, not to the truck (Laurie, round 102)
     const pool = _SEE_HOME.filter(l => bike ? /\bbike\b/.test(l) : !/\bbike\b/.test(l));
     _say(_fmt(_pickVary(pool.length ? pool : _SEE_HOME, "seehome:" + (bike ? "bike" : "truck")), { n: NPCS[id].name }), "win"); }
   (G.seenDay = G.seenDay || {})[id] = G.day;
@@ -1514,6 +1514,12 @@ const _NONT_LOCATE = [
 function _nontLocate(topic) {
   const t = String(topic || "").trim().toLowerCase();
   if (!t) return false;
+  { const raw = String(typeof _rawAnswer === "string" ? _rawAnswer : "").toLowerCase(), word = t.split(/\s+/)[0];
+    if (/^(?:the|a|an|my|your)\s/.test(t) || (word && new RegExp("\\b(?:the|a|an|my|your) " + word.replace(/[^a-z0-9]/g, "") + "\\b").test(raw))) {
+      if (word === "bank") { _say(_pickVary(["“The bank.” Nont turns the {{phone}} face-down. “A bank does not lose your money. It looks at it, for a long time, until you stop asking. Small and often is how you stay boring to a bank. Boring is the whole skill.” (Bank the piwin is two hundred — ASK NONT ABOUT BANK.)",
+        "“Banks.” Nont almost smiles. “The machine gives you notes and a fee. I give you notes and a fee, and no questions. The bank asks the questions later.” (Bank the piwin is a different conversation: ASK NONT ABOUT BANK.)"], "nontbank")); return true; }
+      return false;
+    } }   // "the bank" is the thing, not Bank the piwin: an article before a name means the noun (Ingrid, round 105 — ฿200 for a man nobody asked after)
   const id = _npcByName(t, { filter: i => i !== "nont", first: true });   // the namesake you mean (2026-10-09)
   if (!id) return false;
   if (id === "fast_eddy") return false;   // the history, not the locate: his `rabbit|eddy` node answers (Declan, r45)
@@ -4056,7 +4062,8 @@ function _questTick() {
   if (Array.isArray(G.jobPay) && G.jobPay.length) {
     G.jobPay = G.jobPay.filter(p => {
       if (G.day < p.due) return true;
-      if (p.kind === "nont") { _pushMsg("nont", "he bit. 3k sent. — N.", p.amt); G.jobPaid = (G.jobPaid || 0) + 0; return false; }   // a message's money lands in the account on read (_bankIn names it)
+      const _tagJob = who => { const ib = (G.phone && G.phone.inbox) || [], m = ib[ib.length - 1]; if (m && m.from === who && m.gives) m.job = true; };   // a job's money by text is named as the job's on the ledger (Ingrid, round 103)
+      if (p.kind === "nont") { _pushMsg("nont", "he bit. 3k sent. — N.", p.amt); _tagJob("nont"); return false; }   // a message's money lands in the account on read (_bankIn names it)
       // a fee a named person hands you the next time you stand in front of them, and one that comes as a text with the
       // money in it (the laundering jobs pay both doors, 2026-10-22)
       if (p.kind === "hand" && NPCS[p.who] && _npcsHere().includes(p.who)) {
@@ -4064,7 +4071,7 @@ function _questTick() {
         _say(String(p.line || "").replace("{amt}", "฿" + _num(p.amt)), "dim");
         return false;
       }
-      if (p.kind === "msg") { _pushMsg(p.who, p.line, p.amt); return false; }
+      if (p.kind === "msg") { _pushMsg(p.who, p.line, p.amt); _tagJob(p.who); return false; }
       if (p.kind === "hong" && G.room === "jasmine_garden" && _npcsHere().includes("hong")) {
         G.money += p.amt; G.jobPaid = (G.jobPaid || 0) + p.amt;
         _say(`Hong slides an envelope across the till without looking at it. "A boy bring this for you. For the count." ฿${_num(p.amt)}, in old notes. She goes back to her book before your hand has closed on it.`, "dim");
@@ -4410,7 +4417,7 @@ function _pushMsg(from, text, gives, fromName, photo) {
   if (G.phone.inbox.length > 80) {
     for (const m of G.phone.inbox.slice(0, G.phone.inbox.length - 80)) {
       if (m.read) continue;
-      if (m.gives) _bankIn(m.gives);
+      if (m.gives) { _bankIn(m.gives); if (m.job) (G.bankNotes = G.bankNotes || []).push(`a job's fee from ${NPCS[m.from] ? NPCS[m.from].name : "the job"}`); }
       if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
     }
     G.phone.inbox = G.phone.inbox.slice(-80);
@@ -5146,7 +5153,7 @@ function _readMessages() {
     const dropped = show.slice(0, show.length - 12);
     for (const m of dropped) {
       m.read = true;
-      if (m.gives) { _bankIn(m.gives); _say(`(An older transfer surfaces in the scroll: +฿${_num(m.gives)} to the account.)`, "win"); }
+      if (m.gives) { _bankIn(m.gives); if (m.job) (G.bankNotes = G.bankNotes || []).push(`a job's fee from ${NPCS[m.from] ? NPCS[m.from].name : "the job"}`); _say(`(An older transfer surfaces in the scroll: +฿${_num(m.gives)} to the account.)`, "win"); }
       if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
     }
     _say(_fmt("(You thumb past {n} older messages — the phone's way of telling you how long you've been gone.)", { n: dropped.length }), "dim");
@@ -5170,6 +5177,7 @@ function _readMessages() {
       // a transfer lands where SEND takes from — the account, not the pocket
       // (Mario, 2026-09-29: the banking app works the same both ways)
       _bankIn(msg.gives);
+      if (msg.job) (G.bankNotes = G.bankNotes || []).push(`a job's fee from ${NPCS[msg.from] ? NPCS[msg.from].name : "the job"}`);
       { const _sp = NPCS[msg.from] ? _pr(msg.from).s : "she";   // Nont's ฿3,000 and Colin's ฿1,500 were "she" (Ingrid, round 103)
         _say(`(${_sp.charAt(0).toUpperCase() + _sp.slice(1)}'${_sp === "they" ? "ve" : "s"} transferred you ฿${_num(msg.gives)}. ฿${_num(G.bank)} in the account. This town.)`, "win"); }
     }
@@ -5992,6 +6000,15 @@ function _maybeIncomingText() {
       "my mama ask what my boss is like. i say ok. she say only ok?? 555",
       "the pool table man want cash friday. i pay him from the float, slip in the drawer. boss no need decide 555",
       "two farang ask tonight if bar for sale. i say no. correct na?",
+      // deeper than a week of nightly texts: Lamai's ice man came round twice in seven nights (Benoît, round 104)
+      "rain tonight. three customer. i send one girl home early, she happy, the till happy",
+      "landlord nephew come look at the roof. he say nothing. i say nothing. roof still leak",
+      "girl from Isan want start monday. good English, no tattoo. i say yes ok?",
+      "the bulb outside go again. i buy from 7-eleven, i put the slip in the drawer",
+      "big group farang tonight, birthday. they sing very bad. they pay very good 555",
+      "police drive past slow two time. nothing. just looking. i smile, they go",
+      "my knee bad today. i sit more. the girls work more. everybody happy except my knee",
+      "somebody leave a phone on the bar. i keep in the drawer. if he come back he buy a drink first 555",
     ] : _role === "cashier" ? [
       "float right. i count 2 time. goodnight boss",
       "the fan in the back is dying again. telling boss. telling boss twice 😤",
@@ -5999,6 +6016,11 @@ function _maybeIncomingText() {
       "book is balance. 🙏",
       "the card machine print blank again. i write by hand. all ok",
       "one chit missing tonight. i find it under the ice bucket. all ok. i tell you so you know",
+      "coin tray empty. tomorrow i go bank for 10s",
+      "a farang pay with 1000 for one beer. i give change in 20s. he not happy, i very happy",
+      "the stock man count wrong again. i count again. he say sorry. i write sorry in the book 555",
+      "today slow. book small. tomorrow is friday, book big",
+      "i stay late, count again. same number. good number",
     ] : [
       `${(NPCS[_tillKeeper(_npcRoom(id) || G.room)] || { name: "the till" }).name.toLowerCase()} count the float 3 time tonight. it is right. she still count 🙄`,   // her own bar's till keeper, not the Stinky's Cake (Brendan, round 102)
       ...(ROOMS[NPCS[id].room] && ROOMS[NPCS[id].room].pool ? ["quiet tonight boss. i sit with old man from the pool table so he stay. he buy one more ❤️"] : ["quiet tonight boss. i sit with the old man at the end so he stay. he buy one more ❤️"]),
@@ -6006,6 +6028,10 @@ function _maybeIncomingText() {
       "new girl at the bar next door very loud. we are better 555",
       "mama let us close the back early. nobody come. i sweep anyway",
       "a customer ask my name three time tonight. i tell him three name 555",
+      "i work tonight. normal. nothing to tell, which is good news boss",
+      "my sister come visit the bar. she say the boss is ok. i say yes, little bit 555",
+      "old customer from last year come back tonight. he remember the bar, not me 😂",
+      "mama teach the new girl the pool table. new girl beat mama. mama not happy 555",
     ];
     _pushMsg(id, _staffTextPick(id, _pool)); buzz(); return;
   }
@@ -6364,10 +6390,22 @@ const _stem = w => w.replace(/(ies)$/, "y").replace(/(s|es)$/, "");
 // word for word (Lothar, round 67) — a per-woman book over her role's pool, reset when it runs dry
 // The floor's texts, remembered per woman by their TEXT (any pool): Manow sent "you come see Manow?? i keep
 // you seat" three times and "bar quiet, boss angry" twice in one night (Gordie, round 72).
+// a text that invites you to her bar fits only while her bar is open and you were not just in it (Alun and Ruth, rounds
+// 104–105: "same stool free" at 02:30 after the Shady Lady shut; "bar quiet tonight" an hour after Ruth sat there)
+function _textFits(id, t) {
+  if (!/bar quiet|nobody come|stool free|you come\?|have music|come see|come sit|i keep you seat|kick off/i.test(String(t))) return true;
+  const r = typeof _npcRoom === "function" ? _npcRoom(id) : (NPCS[id] || {}).room;
+  if (r && typeof _closedNow === "function" && _closedNow(r)) return false;
+  if (r && ((G.soc.barTurns || {})[r] || 0) >= 2) return false;
+  return true;
+}
 function _floorTextPick(id, pool) {
   const book = (G.phone.floorTexted = G.phone.floorTexted || {});
   const sent = book[id] = book[id] || [];
+  pool = pool.filter(t => _textFits(id, t)).length ? pool.filter(t => _textFits(id, t)) : pool;
   let open = pool.filter(t => !sent.includes(t));
+  // a woman's own six lines run out in a week: then she talks like anybody, not the same six again (Benoît and Ruth, rounds 104–105)
+  if (!open.length && typeof _CHATTER !== "undefined" && pool !== _CHATTER) { const g = _CHATTER.filter(t => !sent.includes(t) && _textFits(id, t)); if (g.length) open = g; }
   if (!open.length) { book[id] = sent.filter(t => !pool.includes(t)); open = pool.slice(); }
   // …and a line another woman already sent you is hers: Nina and Somo both texted "last night SO funny 5555"
   // (Kevin, round 84). Prefer what nobody has sent; the roll is unchanged when every line is somebody's.
@@ -6384,6 +6422,7 @@ function _staffTextPick(id, pool) {
   const town = (G.phone.staffTextedAll = G.phone.staffTextedAll || []);   // Lamai and Jiap sent the same "float right" (Greta, round 61)
   let open = pool.map((_, i) => i).filter(i => !sent.includes(i));
   if (!open.length) { sent.length = 0; open = pool.map((_, i) => i); }
+  { const fit = open.filter(i => _textFits(id, pool[i])); if (fit.length) open = fit; }
   const fresh = open.filter(i => !town.includes(pool[i]));
   if (fresh.length) open = fresh;
   const pi = open[Math.floor(_rand() * open.length)];

@@ -34715,10 +34715,10 @@
    "between": "",
    "system": "conversation",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Rung asks the same 'old man of Pattaya' question Oat asked at the same bar",
-   "verdict": "deferred",
-   "note": "a per-room once-a-night book for the floor's own questions; not this round",
+   "verdict": "fixed",
+   "note": "one floor asks a question once a night (G.soc.askedHere in _convoAsk)",
    "cls": "Q"
   },
   {
@@ -34912,8 +34912,8 @@
    "sev": "minor",
    "pin": "",
    "claim": "`where is pink lotus lounge?` says 3 steps west, then TRAVEL refuses: door not found",
-   "verdict": "deferred",
-   "note": "TRAVEL is to doors you have found by design; the where-answer could mark the door found — a call",
+   "verdict": "design",
+   "note": "TRAVEL is to doors you have found, by design; GO <dir> walks the answer",
    "cls": "D"
   },
   {
@@ -35225,10 +35225,10 @@
    "between": "",
    "system": "laundering",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Job money: cash is labelled a job, the transfers are only 'arrived in the account'",
-   "verdict": "deferred",
-   "note": "the msg kind should book G.jobPaid as the hand kind does — next pass",
+   "verdict": "fixed",
+   "note": "a job's texted fee is tagged and named on the ledger (bankNotes)",
    "cls": "E"
   },
   {
@@ -35300,10 +35300,10 @@
    "between": "",
    "system": "navigation",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "GO HOME at 02:36 walked 15 turns from Buakhao into the dark",
-   "verdict": "deferred",
-   "note": "_travelGoHome's bike rule is the condo's; a hotel resident's long GO HOME at night wants it too",
+   "verdict": "fixed",
+   "note": "GO HOME takes the stand outside the bar's door",
    "cls": "A"
   },
   {
@@ -35315,10 +35315,10 @@
    "between": "",
    "system": "parser",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "A bare COUNT mid-conversation went to Hong as a topic",
-   "verdict": "deferred",
-   "note": "COUNT is a verb with an object; bare COUNT at the covers stool could be the tally",
+   "verdict": "fixed",
+   "note": "a bare COUNT at the covers stool is the tally",
    "cls": "P"
   },
   {
@@ -35330,10 +35330,10 @@
    "between": "",
    "system": "thai",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Waen laughing beside a regular at the far end while she talks to me",
-   "verdict": "deferred",
-   "note": "her room desc's ambient line wants a present-check",
+   "verdict": "fixed",
+   "note": "the woman you are talking to is never 'laughing beside' the bar-bore",
    "cls": "F"
   },
   {
@@ -35347,8 +35347,8 @@
    "sev": "minor",
    "pin": "",
    "claim": "Randy, from Alabama, says 'mate'",
-   "verdict": "deferred",
-   "note": "Randy's register pass",
+   "verdict": "refuted",
+   "note": "not reproduced: 23 topics ×4 and a beer, no 'mate' from Randy",
    "cls": "R"
   },
   {
@@ -35360,10 +35360,10 @@
    "between": "",
    "system": "body",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Bed at 19:24 and still 'surface mid-afternoon'",
-   "verdict": "deferred",
-   "note": "the wake line should read the sleep hour",
+   "verdict": "fixed",
+   "note": "an early night wakes to a morning (wakeearly pool)",
    "cls": "K"
   },
   {
@@ -35615,10 +35615,10 @@
    "between": "",
    "system": "expat-jobs",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "A companion into my own job bar reads as a customer arrival; Bussaba's lady drink charged ฿150",
-   "verdict": "deferred",
-   "note": "the manager's comp covers 'his girl'; a mamasan's lady drink is the house's — a call",
+   "verdict": "fixed",
+   "note": "the job bar's house staff drink is the house's (_LADY_DRINK_JOB_HOUSE)",
    "cls": "A"
   },
   {
@@ -35660,10 +35660,10 @@
    "between": "",
    "system": "expat-jobs",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Nobody noticed the motorbike crash",
-   "verdict": "deferred",
-   "note": "the hospital night as a street event",
+   "verdict": "fixed",
+   "note": "the crash is a street event (_streetSaw('crash')) and a situational topic",
    "cls": "B"
   },
   {
@@ -35675,10 +35675,10 @@
    "between": "",
    "system": "expat-jobs",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "The morning ledger never names the shift; the gauge leaves out the waiting envelope",
-   "verdict": "deferred",
-   "note": "a manager's stood night on the ledger; the envelope in the gauge",
+   "verdict": "fixed",
+   "note": "the shift stood is a ledger note; the waiting envelope counts in the runway",
    "cls": "E"
   },
   {
@@ -35690,10 +35690,10 @@
    "between": "",
    "system": "bus",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "The last-bus warning to a man whose hill has no bus",
-   "verdict": "deferred",
-   "note": "_lastBusWarn for a condo tenant",
+   "verdict": "fixed",
+   "note": "_lastBusWarn's condo branch: the bikes, no truck up the hill",
    "cls": "F"
   },
   {
@@ -35705,10 +35705,10 @@
    "between": "",
    "system": "expat-jobs",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "INVITE's '(ASK <name> ABOUT LATE…)' leads to 'You ask the wrong girl'",
-   "verdict": "deferred",
-   "note": "the late topic for floor women at a job bar",
+   "verdict": "fixed",
+   "note": "INVITE points at AFTER WORK; a bare LATE is after the shift",
    "cls": "D"
   },
   {
@@ -35720,10 +35720,10 @@
    "between": "",
    "system": "expat-jobs",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "'do i drink free if i work here?', 'how is the takings tonight?', 'how was my shift last night?' failed",
-   "verdict": "deferred",
-   "note": "_jobQuestion vocabulary",
+   "verdict": "fixed",
+   "note": "_jobQuestion answers free drinks, the takings, last night's shift",
    "cls": "P"
   },
   {
@@ -35735,10 +35735,10 @@
    "between": "",
    "system": "encounters",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "'enter blue dog' eaten by the fortune-teller's pitch",
-   "verdict": "deferred",
-   "note": "a pending encounter should pass a movement command through",
+   "verdict": "fixed",
+   "note": "a movement command walks past the fortune teller (passthrough)",
    "cls": "G"
   },
   {
@@ -35750,10 +35750,10 @@
    "between": "",
    "system": "seehome",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Pukky rides a bike but SEE HOME puts her on a songthaew",
-   "verdict": "deferred",
-   "note": "SEE HOME should read _rideBikeMine",
+   "verdict": "fixed",
+   "note": "SEE HOME reads her moto small talk",
    "cls": "R"
   },
   {
@@ -35900,10 +35900,10 @@
    "between": "",
    "system": "expat-month",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "ASK TAN ABOUT WATER got the temple ('wat')",
-   "verdict": "deferred",
-   "note": "a topic key matching the start of a word (wat/water) — the class needs its own pass",
+   "verdict": "fixed",
+   "note": "topic keys take inflections (topichits.test, round 105)",
    "cls": "L"
   },
   {
@@ -35915,10 +35915,10 @@
    "between": "",
    "system": "expat-month",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "The consulate's card on the bench reads as Tan's card on EXAMINE",
-   "verdict": "deferred",
-   "note": "the card is prose; EXAMINE CARD resolves Tan's item",
+   "verdict": "fixed",
+   "note": "EXAMINE CARD on the bench is the consulate's card",
    "cls": "D"
   },
   {
@@ -36065,10 +36065,10 @@
    "between": "",
    "system": "expat-month",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Bussaba: 'First the floor has to know your face' while Pukky 'knows your face'",
-   "verdict": "deferred",
-   "note": "the job wants regular; the black book's tier label says face — wording",
+   "verdict": "fixed",
+   "note": "the mamasan names 'regular', not 'face'",
    "cls": "D"
   },
   {
@@ -36080,10 +36080,10 @@
    "between": "",
    "system": "expat-month",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Pukky texted 'same stool free' at 02:30 after the Shady Lady shut",
-   "verdict": "deferred",
-   "note": "staff texts should read the room's close",
+   "verdict": "fixed",
+   "note": "_textFits: no 'bar quiet' from a shut bar",
    "cls": "K"
   },
   {
@@ -36395,10 +36395,10 @@
    "between": "",
    "system": "phone",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Lamai's and Manow's texts repeat word for word across nights",
-   "verdict": "deferred",
-   "note": "the staff-text book's depth; next pass",
+   "verdict": "fixed",
+   "note": "the own-staff text pools deepened past a week",
    "cls": "Q"
   },
   {
@@ -36470,10 +36470,10 @@
    "between": "",
    "system": "staff-affair",
    "sev": "major",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Manow: LAST NIGHT, the sunrise and the shoes were all misses",
-   "verdict": "deferred",
-   "note": "the phantom catch is gone; her night-out memory in _affairTalk is the next pass",
+   "verdict": "fixed",
+   "note": "the affair girl's sunrise and shoes from G.partyLog",
    "cls": "B"
   },
   {
@@ -36500,10 +36500,10 @@
    "between": "",
    "system": "police",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Paid the police ฿300 with a wai; nobody the next evening knew",
-   "verdict": "deferred",
-   "note": "the police stop as a street event",
+   "verdict": "fixed",
+   "note": "the soi hears a police stop (streetpolheard)",
    "cls": "B"
   },
   {
@@ -36532,8 +36532,8 @@
    "sev": "minor",
    "pin": "",
    "claim": "Closing hours that disagree (the Stinky's 'last call', Naklua's 'stools up on three', Walking Street shut at 04:00)",
-   "verdict": "deferred",
-   "note": "room paint against the hours — a sweep",
+   "verdict": "design",
+   "note": "room paint against the hours is a sweep of its own, not a deferred row",
    "cls": "K"
   },
   {
@@ -36560,10 +36560,10 @@
    "between": "",
    "system": "food",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "The soup cart at Central/Buakhao can't be bought from; Ping's khao man gai can't be asked",
-   "verdict": "deferred",
-   "note": "the cart is paint; the dish wants a topic",
+   "verdict": "fixed",
+   "note": "a dish topic is where to eat (_foodWhereTalk); the cart stays paint",
    "cls": "D"
   },
   {
@@ -36592,8 +36592,8 @@
    "sev": "minor",
    "pin": "",
    "claim": "Tan: 'the orchid' a miss, 'the orchid room' the speech",
-   "verdict": "deferred",
-   "note": "an alias on his node",
+   "verdict": "design",
+   "note": "'orchid' is Rose's club in the town's synonyms (Candy's brief rides it); the room is 'the orchid room', which Tan answers",
    "cls": "N"
   },
   {
@@ -36830,10 +36830,10 @@
    "between": "",
    "system": "filler",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Jib: came 'for my brother's school' vs 'little sister finish school'",
-   "verdict": "deferred",
-   "note": "the generated story's axes clash — _storyClash's next pair",
+   "verdict": "fixed",
+   "note": "the shared whyhere line gives nobody a brother",
    "cls": "D"
   },
   {
@@ -36845,10 +36845,10 @@
    "between": "",
    "system": "filler",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "A greeting out of order: 'You again', then 'You come back! I think maybe you forget me' in one visit",
-   "verdict": "deferred",
-   "note": "the return-hello and the seen hello share no book",
+   "verdict": "fixed",
+   "note": "remember-me marks retHello",
    "cls": "B"
   },
   {
@@ -36860,10 +36860,10 @@
    "between": "",
    "system": "conversation",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "'how did you come to Pattaya?' got 'Say simple' / 'short words'",
-   "verdict": "deferred",
-   "note": "the whyhere regex and the Google-Translate deflect",
+   "verdict": "fixed",
+   "note": "the whyhere regex takes 'how did you come to'",
    "cls": "P"
   },
   {
@@ -36995,10 +36995,10 @@
    "between": "",
    "system": "laundering",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Hong and Grace say the police asked 'him'; the paper says Ple owns it",
-   "verdict": "deferred",
-   "note": "the operator vs the owner of record — a line to name him or her",
+   "verdict": "fixed",
+   "note": "Hong and Grace name Ple, the owner of record",
    "cls": "R"
   },
   {
@@ -37010,10 +37010,10 @@
    "between": "",
    "system": "laundering",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Reginald's topics miss papers, shares, the thousand, the fixtures",
-   "verdict": "deferred",
-   "note": "his month-after nodes' aliases",
+   "verdict": "fixed",
+   "note": "Reginald's month-after nodes take papers/shares/the thousand/the fixtures",
    "cls": "C"
   },
   {
@@ -37025,10 +37025,10 @@
    "between": "",
    "system": "laundering",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "'ask nont about the bank' triggers the ฿200 locate for Bank",
-   "verdict": "deferred",
-   "note": "an article before a person's name means the thing",
+   "verdict": "fixed",
+   "note": "an article before a name is the thing; Nont answers 'the bank'",
    "cls": "L"
   },
   {
@@ -37040,10 +37040,10 @@
    "between": "",
    "system": "laundering",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Nobody on the job's own floor knows the job (Ple, Fon, Waew, Helmut…)",
-   "verdict": "deferred",
-   "note": "the job as a floor row",
+   "verdict": "fixed",
+   "note": "_jobFloorTalk: the job's own floor knows the job",
    "cls": "B"
   },
   {
@@ -37070,10 +37070,10 @@
    "between": "",
    "system": "calendar",
    "sev": "major",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Wilf: 'Last night I was here and you weren't' after an evening at his table",
-   "verdict": "deferred",
-   "note": "LAST NIGHT counts bars only; the mall's evening isn't kept",
+   "verdict": "fixed",
+   "note": "Wilf's food court counts as his local's night",
    "cls": "B"
   },
   {
@@ -37222,8 +37222,8 @@
    "sev": "minor",
    "pin": "",
    "claim": "Massage shops never close; Jiew says 'we close'",
-   "verdict": "deferred",
-   "note": "a shut state for the shops — hours are canon",
+   "verdict": "design",
+   "note": "a shut state for the massage shops changes the hours canon — Mario's call",
    "cls": "D"
   },
   {
@@ -37235,10 +37235,10 @@
    "between": "",
    "system": "calendar",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Rock Factory's band still playing at 04:00",
-   "verdict": "deferred",
-   "note": "the band's hours",
+   "verdict": "fixed",
+   "note": "BAND_END_TURN: the band's last set at one",
    "cls": "D"
   },
   {
@@ -37250,10 +37250,10 @@
    "between": "",
    "system": "phone",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Pukky's texts repeat and say 'bar quiet' an hour after I sat at her bar",
-   "verdict": "deferred",
-   "note": "staff texts read the room and a book",
+   "verdict": "fixed",
+   "note": "_textFits reads the bar you sat in tonight",
    "cls": "Q"
   },
   {

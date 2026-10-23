@@ -1814,6 +1814,11 @@ function _convoAsk(id, d, st) {
   // how an honest answer that evolved with time ("first time in" → "third time
   // in", both true) got punished as a lie (grapevine playtest F1, 2026-08-25).
   if (st.heard && st.heard[key] != null) return;
+  // one floor puts a question to you once a night: Rung asked "the old man of Pattaya" question Oat had asked
+  // at the same bar an hour before (Gareth, round 103)
+  { const book = (G.soc.askedHere = G.soc.askedHere || {}), k = G.room + ":" + key;
+    if (book[k] && book[k] !== id && G.room && ROOMS[G.room] && ROOMS[G.room].barType) return;
+    book[k] = id; }
   st.know["asked_" + key] = true;
   if (d.asks.q) _say(d.asks.q);
   // Keep the question itself. _renderResume redraws the answer cue after a
@@ -3397,10 +3402,11 @@ function _describeRoom(full, forceFull) {
       // your arrival — the kept seat" (Howard, round 35). A regular-or-better
       // is not furniture for the anonymous lifer to be draped with.
       const _mine = id => typeof _knownTier === "function" && _knownTier(id) >= 2;
-      const girl = (typeof busyId === "string" && _npcsHere().includes(busyId) && !_descHas(busyId) && !_mine(busyId))
+      const _talking = (typeof _convoActive === "function" && _convoActive()) || G.convo;   // not beside him at the far end while she talks to you (Waen, Ingrid round 103)
+      const girl = (typeof busyId === "string" && _npcsHere().includes(busyId) && !_descHas(busyId) && !_mine(busyId) && busyId !== _talking)
         ? busyId
         : _npcsHere().find(id => NPC_ROLES[id] === "hostess" &&
-            id !== (typeof _convoActive === "function" && _convoActive()) && !_descHas(id) && !_mine(id));
+            id !== _talking && !_descHas(id) && !_mine(id));
       const g = girl ? `, ${NPCS[girl].name} laughing on cue beside him` : "";
       const _gg = typeof _isGogo === "function" && _isGogo();
       if (girl) _say(_pickVary(_gg ? _BAR_REGULAR_GOGO_BUSY : _BAR_REGULAR_BUSY, "barReg")(g), "dim");
@@ -3677,7 +3683,7 @@ function _tick() {
   if (typeof _thaiOverheard === "function" && !_onRide()) _thaiOverheard();
   // her bike is not your stool: six minutes at the Mooring and a night ride read as
   // "three hours on the same stool" (Dieter, round 56)
-  if (_inBar() && !(typeof _onRide === "function" && _onRide())) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // presence, for the regular's bond (Trevor, round 39)
+  if ((_inBar() || (G.room === "mikes_mall" && NPCS.wilf && NPCS.wilf.room === G.room)) && !(typeof _onRide === "function" && _onRide())) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // Wilf's food court is his local: an evening at his table is a night he saw you (Ruth, round 105)   // presence, for the regular's bond (Trevor, round 39)
   // the house's patience clock (_nursed): money spent in this bar since last tick,
   // or a fresh arrival, resets it — one hook, every till (Mario, 2026-09-04)
   if (_inBar() && (G.room !== G.soc.tickRoom || G.money < (G.soc.moneyTick == null ? G.money : G.soc.moneyTick)))

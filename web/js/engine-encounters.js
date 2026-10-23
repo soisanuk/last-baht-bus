@@ -1554,7 +1554,10 @@ const _ENC = {
         [`(PAY the ฿${_num(FORTUNE_RITUAL)} “cleansing”, or refuse and try to LEAVE.)`, "dim"]);
       return;
     }
-    // You wave him off before he even starts.
+    // You wave him off before he even starts — and a man who typed a way to go goes there: "enter blue dog" was
+    // eaten as the wave-off and the door never opened (Tomás, round 103)
+    const _mv = /^(?:go|enter|walk|travel|goto|head|n|s|e|w|north|south|east|west|in|out|up|down)\b/.test(input) || !!(_room().exits && _room().exits[input.split(" ")[0]]);
+    if (_mv) { _say("You keep walking. He calls a soft curse after your back — “bad luck follow you now, friend!” — and is already turning to the next couple.", "dim"); return "passthrough"; }
     _say("You keep walking. He calls a soft curse after your back — “bad luck " +
       "follow you now, friend, you see!” — then turns his grave face on the next " +
       "sunburnt couple drifting along the rail.");
