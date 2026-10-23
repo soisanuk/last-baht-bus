@@ -18,7 +18,7 @@ var NEWS_FEED = [
     "d": "22 Oct 2026"
   },
   {
-    "t": "Pattaya raids target 12 firms in 800m baht nominee land probe",
+    "t": "Fight over seat on Pattaya Beach leaves two women injured",
     "s": "Thaiger",
     "d": "22 Oct 2026"
   },
@@ -28,13 +28,13 @@ var NEWS_FEED = [
     "d": "22 Oct 2026"
   },
   {
-    "t": "Grab food delivery rider injured in collision on Pattaya Third Road",
-    "s": "Pattaya Mail",
-    "d": "21 Oct 2026"
-  },
-  {
     "t": "Two women scuffle over beach seat in Pattaya; one injured",
     "s": "Khaosod English",
+    "d": "22 Oct 2026"
+  },
+  {
+    "t": "Thailand video news | App Fee Crackdown, Pad Kra Pao Lawsuit, Pattaya Thief Escapes Police",
+    "s": "Thaiger",
     "d": "22 Oct 2026"
   },
   {
@@ -43,14 +43,14 @@ var NEWS_FEED = [
     "d": "21 Oct 2026"
   },
   {
-    "t": "Vietjet Thailand affirms no impact from UK court case",
-    "s": "Bangkok Post",
-    "d": "21 Oct 2026"
-  },
-  {
     "t": "How Thailand is capturing next wave of investments in ‘China plus one’ outlook",
     "s": "South China Morning Post",
     "d": "20 Oct 2026"
+  },
+  {
+    "t": "Thailand delays proposed 1,000-baht overseas travel tax",
+    "s": "Khaosod English",
+    "d": "22 Oct 2026"
   },
   {
     "t": "Thailand cabinet approves $313 million flood relief, official says",
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "20 Oct 2026"
   },
   {
+    "t": "Thailand races to protect data after PHP alert",
+    "s": "Bangkok Post",
+    "d": "22 Oct 2026"
+  },
+  {
     "t": "Thailand warns of heavy rain in East and South as high tides loom",
     "s": "Nation Thailand",
     "d": "22 Oct 2026"
   },
   {
-    "t": "Nestlé breaks ground on US$685 million coffee factory in Thailand",
-    "s": "Khaosod English",
-    "d": "21 Oct 2026"
-  },
-  {
-    "t": "Thailand for Rs 50,000? Travel creators reveal how their Chiang Mai getaway from Hyderabad felt cheaper t",
+    "t": "Tourist's casual Facebook post leads to discovery of 120-million-year-old dinosaur footprints in Thailand",
     "s": "The Times of India",
-    "d": "21 Oct 2026"
+    "d": "22 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-22","USD":33.75,"AUD":23.66,"GBP":45.15,"EUR":37.81};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-23","temp":26,"humid":92,"code":0,"hi":31,"rain":100};
+var WX_NOW = {"date":"2026-10-23","temp":31,"humid":66,"code":51,"hi":31,"rain":93};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4025,"date":"2026-10-22","baht":64250};
+var GOLD = {"usd":4005,"date":"2026-10-23","baht":63950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":81389,"thb":2743484};
+var BTC = {"usd":81573,"thb":2751231};
