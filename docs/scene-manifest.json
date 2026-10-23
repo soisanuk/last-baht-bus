@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-22",
+  "generated": "2026-10-23",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 254,
@@ -3413,7 +3413,7 @@
         "Meen",
         "Yok"
       ],
-      "desc": "Yellow-and-black everything, a plywood bee the size of a scooter over the bar, and a sound system punching well above the venue's weight. Smaller and friendlier than the Honey Trap across the way, which the two bars settle nightly by volume."
+      "desc": "Yellow-and-black everything, a plywood bee the size of a scooter over the bar, and a sound system punching well above the venue's weight. Smaller and friendlier than the Honey Trap up the soi, and louder than Buzz Inn across the way, which the two bars settle nightly by volume."
     },
     {
       "id": "soi_honey_e",
