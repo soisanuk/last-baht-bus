@@ -16,7 +16,7 @@ const run = c => doCommand(c);
 const t = c => { out = []; run(c); return said(); };
 const resident = () => {
   newGame(); G.player = { origin: "pension", personality: "straight", orientation: "straight", said: {}, lang: "en" };
-  _setFlag("act1Done"); _setFlag("hasWallet"); _setFlag("expatLife"); G.itemLoc.wallet = "inventory"; for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2;
+  _setFlag("act1Done"); _setFlag("hasWallet"); _setFlag("expatLife"); G.itemLoc.wallet = "inventory"; for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2; G.lastSaleng = 1e9; G.salengCart = null;
   G.stage = "expat"; G.paper = "longstay"; G.thaiAccount = true; G.hotel = "sabai"; G.day = 20; G.money = 8000; G.bank = 60000; G.payDay = 20; G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
   G.room = "hotel_room"; G.nightTurn = 30; out = [];
 };
