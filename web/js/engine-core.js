@@ -974,25 +974,64 @@ const _US_SWAP = [
   [/\breckon\b/gi, "figure"], [/\bcracking\b/gi, "great"], [/\bgutted\b/gi, "crushed"], [/\bon the tools\b/gi, "working with your hands"],
 ];
 const _QUOTED = /[“"][^”"]*[”"]/g;
-function _americanVoice(id) {
+// THE VOICES (Mario, 2026-10-24, after the American pass): the same filter, one table per kind of English. An
+// American or a Canadian gets the lists above; an AUSTRALIAN keeps mate, reckon and arvo but not the Englishman's
+// squire, guv'nor or "half ten"; a man whose English is his SECOND language (a German, a Dane) speaks a plain,
+// correct English — none of the regulars' British slang ("came a cropper", "taking the piss", "bloke") and no "half
+// ten", which a German hears as half past NINE. The British and the Irish keep everything; nobody's narration moves.
+const _AU_SPEECH = /\b(squire|guv'?nor|innit|blimey|bollocks|cheerio|half (?:six|seven|eight|nine|ten|eleven|twelve|one|two|three)|(?:i|he|she|they|we|you|it)'?(?:ll|d) not|you'?ve not|stand us one|of an? (?:evening|night)|whilst|proper job)\b/i;
+const _AU_SWAP = [
+  [/\bsquire\b/gi, "mate"], [/\bguv'?nor\b/gi, "boss"], [/\binnit\b/gi, "eh"], [/\bblimey\b/gi, "strewth"], [/\bbollocks\b/gi, "rubbish"], [/\bcheerio\b/gi, "see ya"],
+  [/\bhalf (six|seven|eight|nine|ten|eleven|twelve|one|two|three)\b/gi, "$1-thirty"],
+  [/\b(i|he|she|they|we|you|it)'?ll not\b/gi, "$1 won't"], [/\b(i|he|she|they|we|you|it)'?d not\b/gi, "$1 wouldn't"], [/\byou'?ve not\b/gi, "you haven't"],
+  [/\bstand us one\b/gi, "shout us one"], [/\bof an evening\b/gi, "of a night"], [/\bwhilst\b/gi, "while"], [/\bproper job\b/gi, "good job"],
+];
+const _ESL_SPEECH = /\b(mate|mates|bloke|blokes|lads?|cropper|fair play|taking the piss|piss-?take|innit|squire|guv'?nor|blimey|bollocks|knackered|chuffed|gutted|skint|dodgy|quid|sorted|cracking|reckon|cheers|telly|bloody|bugger\w*|sod|cheeky|proper|half (?:six|seven|eight|nine|ten|eleven|twelve|one|two|three)|(?:i|he|she|they|we|you|it)'?(?:ll|d) not|you'?ve not|stand us one|punters?|of an? (?:evening|night)|whilst|as such|turns up|cop shop|y'?all|gonna|wanna|ain'?t|dude|buddy)\b/i;
+const _ESL_SWAP = [
+  [/,\s*mate\b/gi, ""], [/\bmate,\s*/gi, ""], [/\bmates\b/gi, "friends"], [/\bmate\b/gi, "friend"], [/\bblokes\b/gi, "men"], [/\bbloke\b/gi, "man"], [/\blads\b/gi, "men"], [/\blad\b/gi, "boy"],
+  [/\bcame a cropper\b/gi, "had a fall"], [/\bfair play\b/gi, "good for you"], [/\btaking the piss\b/gi, "making fun"], [/\binnit\b/gi, "no?"], [/\bsquire\b/gi, "my friend"], [/\bguv'?nor\b/gi, "boss"],
+  [/\bblimey\b/gi, "well"], [/\bbollocks\b/gi, "nonsense"], [/\bknackered\b/gi, "tired"], [/\bchuffed\b/gi, "happy"], [/\bgutted\b/gi, "sorry"], [/\bskint\b/gi, "broke"], [/\bdodgy\b/gi, "not honest"],
+  [/\bquid\b/gi, "money"], [/\bsorted\b/gi, "done"], [/\bcracking\b/gi, "very good"], [/\breckon\b/gi, "think"], [/\bcheers\b/gi, "thank you"], [/\btelly\b/gi, "TV"], [/\bbloody\s+/gi, ""],
+  [/\bcheeky\b/gi, "bold"], [/\bproper\b/gi, "real"], [/\bhalf (six|seven|eight|nine|ten|eleven|twelve|one|two|three)\b/gi, "$1-thirty"],
+  [/\b(i|he|she|they|we|you|it)'?ll not\b/gi, "$1 will not"], [/\b(i|he|she|they|we|you|it)'?d not\b/gi, "$1 would not"], [/\byou'?ve not\b/gi, "you have not"],
+  [/\bstand us one\b/gi, "buy me one"], [/\bpunters\b/gi, "customers"], [/\bpunter\b/gi, "customer"], [/\bof an evening\b/gi, "in the evening"], [/\bof a night\b/gi, "at night"],
+  [/\bwhilst\b/gi, "while"], [/\bas such\b/gi, "really"], [/\bturns up\b/gi, "comes"], [/\bcop shop\b/gi, "police station"],
+  [/\by'?all\b/gi, "you"], [/\bgonna\b/gi, "going to"], [/\bwanna\b/gi, "want to"], [/\bain'?t\b/gi, "is not"], [/\bdude\b/gi, "friend"], [/\bbuddy\b/gi, "friend"],
+];
+const _VOICES = { us: [_BRIT_SPEECH, _US_SWAP], ca: [_BRIT_SPEECH, _US_SWAP], au: [_AU_SPEECH, _AU_SWAP], esl: [_ESL_SPEECH, _ESL_SWAP] };
+const _NAT_VOICE = [[/americ|yank|u\.s\./i, "us"], [/canad/i, "ca"], [/austral|aussie|new zealand|kiwi/i, "au"],
+  [/german|danish|dane|dutch|swed|norw|finn|french|swiss|austrian|belgian|russian|ital|polish|spanish|portug|czech|japanese|korean|chinese|indian|israeli/i, "esl"]];
+function _voiceKind(id) {
   const n = id && typeof NPCS !== "undefined" && NPCS[id];
-  if (!n || id === "tan" || id === "mort") return false;   // Mort keeps his British paper's register, and says why (Mario, 2026-10-24)
-  return /americ/i.test(String(n.nat || "")) || /\bAmerican\b/.test(String(n.desc || "").slice(0, 260)) || /\bAmerican\b/.test(String(n.look || ""));
+  if (!n || id === "tan" || id === "mort") return null;   // Tan's mixed vocabulary, Mort's British paper's register (Mario, 2026-10-24)
+  if (n.voice) return n.voice;   // an explicit voice on the record wins
+  const nat = String(n.nat || "");
+  if (nat) { const v = _NAT_VOICE.find(([re]) => re.test(nat)); return v ? v[1] : null; }
+  if (typeof NPC_ROLES !== "undefined" && NPC_ROLES[id] && !n.manager) return null;   // the floor speaks its own registers
+  const said = String(n.desc || "").slice(0, 260) + " " + String(n.look || "");
+  if (/\bAmerican\b/.test(said)) return "us";
+  if (/\bCanadian\b/.test(said)) return "ca";
+  if (/\bAustralian\b|\bAussie\b/.test(said)) return "au";
+  if (/\b(German|Danish|Dutch|Swedish|Norwegian|French|Swiss|Austrian|Belgian|Russian)\b/.test(said) && !/\bspeaks? (?:German|French)\b/.test(said)) return "esl";
+  return null;
 }
+function _americanVoice(id) { return _voiceKind(id) === "us"; }
 function _speechOf(l) { const s = typeof l === "function" ? String(l) : String(l || ""); const q = s.match(_QUOTED); return q ? q.join(" ") : s; }
-function _usSay(text) {
+function _swapSay(text, swaps) {
   return String(text).replace(_QUOTED, q => {
-    let o = q; for (const [re, to] of _US_SWAP) o = o.replace(re, (m, g1) => { let r = to.replace("$1", g1 || ""); r = r.replace(/^i\b/, "I"); return m[0] === m[0].toUpperCase() && r ? r[0].toUpperCase() + r.slice(1) : r; });
+    let o = q; for (const [re, to] of swaps) o = o.replace(re, (m, g1) => { let r = to.replace("$1", g1 || ""); r = r.replace(/^i\b/, "I"); return m[0] === m[0].toUpperCase() && r ? r[0].toUpperCase() + r.slice(1) : r; });
     return o.replace(/\s+([,.!?])/g, "$1").replace(/([“"])\s+/g, "$1");
   });
 }
+function _usSay(text) { return _swapSay(text, _US_SWAP); }
 // …and a single line a helper RETURNS rather than picks from a pool (the busy hour, the bars still open, the manager's nudge)
-function _usLine(npc, line) { return npc && _americanVoice(npc) && typeof line === "string" ? _usSay(line) : line; }
+function _usLine(npc, line) { const v = npc && _VOICES[_voiceKind(npc)]; return v && typeof line === "string" ? _swapSay(line, v[1]) : line; }
 function _voiceFit(pool) {
-  if (!Array.isArray(pool) || !pool.length || typeof _talkingTo === "undefined" || !_americanVoice(_talkingTo)) return pool;
-  const plain = pool.filter(l => !_BRIT_SPEECH.test(_speechOf(l)));
+  const v = Array.isArray(pool) && pool.length && typeof _talkingTo !== "undefined" && _VOICES[_voiceKind(_talkingTo)];
+  if (!v) return pool;
+  const plain = pool.filter(l => !v[0].test(_speechOf(l)));
   if (plain.length) return plain;
-  return pool.map(l => typeof l === "function" ? (...a) => _usSay(l(...a)) : _usSay(l));
+  return pool.map(l => typeof l === "function" ? (...a) => _swapSay(l(...a), v[1]) : _swapSay(l, v[1]));
 }
 function _pickVary(pool, key) {
   pool = _voiceFit(_roomFit(pool));

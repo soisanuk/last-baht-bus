@@ -49,7 +49,7 @@ test("QUIT JOB at the school gives the paper back; a holiday is told so; one job
   assert.match(t("quit job"), /school's paper was the school's/); assert.equal(G.paperUntil, G.day + PAPER_GRACE);
   G.room = "hotel_room"; run("teach online"); assert.equal(G.job.kind, "teach"); G.room = "stinky_bar"; run("talk to jerry"); run("ask jerry about a job"); assert.ok(!G.jobOffer, "one at a time");
   newGame(); G.player = { origin: "monger", personality: "straight", orientation: "straight", said: {}, lang: "en" }; _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation"; G.day = 3; jerryDay(); G.room = "stinky_bar"; G.nightTurn = 30;
-  run("talk to jerry"); assert.match(t("ask jerry about a job"), /HOLIDAY/); assert.ok(!G.jobOffer);
+  run("talk to jerry"); assert.match(t("ask jerry about a job"), /VACATION/); assert.ok(!G.jobOffer);
 });
 
 test("Mort's stringer: a hundred a paragraph for a fixture you read, five a week, cash when you sit with him, named on the ledger", () => {

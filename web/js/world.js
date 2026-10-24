@@ -21535,7 +21535,7 @@ NPCS.mort.dialogue.push(
     text: "\"Read anything?\" Mort's biro is already waiting. \"A thing, mind. Not a girl.\"",
     short: "\"Read anything? A thing, mind.\"" });
 NPCS.david.dialogue.push({ topic: "a job|job for me|school|your school|hiring|work for you|teaching job|a teaching job",
-  text: "\"The school? Oh, they'd take you tomorrow — natives, right? — but you're on HOLIDAY.\" Jerry says it like the word has a capital letter. \"Ask me again when you've stopped going home.\"",
+  text: "\"The school? Oh, they'd take you tomorrow — natives, right? — but you're on VACATION.\" Jerry says it like the word has a capital letter. \"Ask me again when you've stopped going home.\"",
   short: "\"The school'd take you — when you've stopped going home.\"" });
 NPCS.mort.dialogue.push({ topic: "stringer|a job|job for me|work for you|hiring|leads|the leads|a lead|paragraphs|copy",
   text: "\"A job.\" Mort looks at you over the glasses. \"Last Orders hires residents, squire, and you have a flight. Come back when you don't.\"",
