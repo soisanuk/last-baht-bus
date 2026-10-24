@@ -40,9 +40,8 @@ const PARTY_MULT_FACE     = 1.5;  // tier 1: she knows you; the math still exist
 const PARTY_MAX_GIRLS = 2;   // "or two" is the classic flex; three needs a minivan
 const PARTY_STOP_CAP  = 6;   // stops that pay สนุก/bond — a crawl, not a treadmill
 const PARTY_TAXI      = 200; // what she takes from your pocket to pour you home
-const LAST_BUS_TURN = 80;
-// 05:00 — the hour the sky actually starts, an hour before the night ends at 06:00
-const SUNRISE_TURN = 110;   // 02:00 — the songthaews go SPARSE (they never stop): flagging one after this is a wait at the kerb, and the kerb keeps whoever stands on it
+const LAST_BUS_TURN = 80;   // 02:00 — the songthaews go SPARSE (they never stop): flagging one after this is a wait at the kerb, and the kerb keeps whoever stands on it
+const SUNRISE_TURN = 110;   // 05:00 — the hour the sky actually starts, an hour before the night ends at 06:00
 const LATE_MOTO_MULT = 1.6; // small-hours night rate: piwins price the thin hours, while they'll still have you
 const DOG_MOTOSAI_FARE = 10; // a dog needs his own bike — a buddy's saleng, waved over and paid on top (waived on the free pity-ride)
 const LADY_DRINK = 150;  // canon

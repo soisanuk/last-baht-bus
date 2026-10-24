@@ -6503,6 +6503,7 @@ function _endNight(reason) {
   const _quietHelped = _flag("act1Done") && G.hotel === "sabai" && hangover > 0 && !_wokeOut;
   if (_quietHelped) hangover--;
   if (reason === "allnighter") hangover += 2; // the all-nighter's invoice arrives in the evening meters
+  G.hangover = hangover;   // DIAGNOSE reads it all evening — it was a local, so the readout never said it (found writing docs/architecture.md, 2026-10-24)
   if (G.stage === "expat" && G.month && (hangover >= 2 || ["allnighter", "blackout", "collapse"].includes(reason))) G.month.rough = (G.month.rough || 0) + 1;   // the nomad's client counts these
   G.soc.bellAt = {};
   G.soc.bells = {};    // the bell COUNT resets too, not just the glow timer (bellAt) —

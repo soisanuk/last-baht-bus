@@ -469,6 +469,10 @@ playthrough from the beach to the happy ending — run headless via
 
 ## Structure
 
+**The architecture, system by system, is [`docs/architecture.md`](docs/architecture.md)** — the files, the one state
+object, what happens to a command, a turn and a night, and a section for each of the game's systems. The tree below is
+the short version.
+
 ```
 web/
   index.html       terminal shell + all CSS (Soi Sanuk neon palette)

@@ -90,3 +90,9 @@ test("Mehmet and Benoît: Tan's 'the Orchid' is the good table; Tan answers the 
   assert.match(t("ask tan about the orchid"), /good table|tables you do not ask/i);
   G.bar.calls = [{ id: "merit", day: G.day - 1, yes: true }]; assert.match(t("ask tan about the monks"), /monks|merit/i);
 });
+
+test("DIAGNOSE names last night's hangover (G.hangover was read and never written — found writing docs/architecture.md)", () => {
+  sandbox(); G.room = "hotel_room"; G.soc.drunk = 6; G.nightTurn = 100; _endNight("sleep");
+  assert.ok(G.hangover >= 2, "the wake keeps it");
+  out = []; doCommand("diagnose"); assert.match(out.join("\n"), /hungover|hangover/);
+});

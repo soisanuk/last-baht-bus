@@ -374,6 +374,7 @@ function newGame() {
     paper: null,         // tourist / longstay / permit (the expat stage; null on a holiday) — see PAPER_COST in world.js
     paperUntil: null,    // a lost permit's paper lasts to this day, then falls back to the origin's
     paperFlag: null,     // the day an incident read the wrong paper (a company bar remembers PAPER_FLAG_DAYS)
+    hangover: 0,         // last night's, set at the wake; DIAGNOSE reads it
     jobFired: null,      // { room, day, kind } — the last bar that took the keys back (2026-10-24)
     firedBars: {},       // room → day: bars that will never hire him as manager again
     job: null,           // { kind: "teach" } or { kind: "manager", room, corp, nights, stood, weekStood, weekStart, strikes, shiftDay, shiftStood }
