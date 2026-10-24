@@ -25,7 +25,7 @@ beforeEach(() => { newGame(); });
 
 test("SEVERE (Cormac, deferred from round 100): a resident's LAST TIME is her memory of him — never 'Today is day one' to a man she met before today", () => {
   resident(); G.room = NPCS.sasi.room; G.soc.drinks.sasi = 8; G.talked.sasi = [0]; G.metDay = { sasi: 15 }; G.seenDay = { sasi: 19 };
-  assert.match(t("ask sasi about last time"), /Last night\. You sit here|Last night\. You sit here, you drink|Same stool|too many question/); assert.doesNotMatch(said(), /Today is day one/);
+  assert.match(t("ask sasi about last time"), /Last night/); assert.doesNotMatch(said(), /Today is day one/);   // the memory pool is twelve deep now (round 106)
   G.seenDay = { sasi: 17 }; assert.match(t("ask sasi about last time"), /Three nights ago/);
   G.homeSeen = { sasi: { day: 19, nights: 1, cooked: 18 } }; assert.match(t("ask sasi about last time"), /your place|your flat/); assert.match(said(), /Two nights ago|Last night/);
   // a woman met today has no last time, and her own first-trip line stands

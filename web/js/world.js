@@ -6541,12 +6541,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // the after-hours question nobody would answer (Dex, round 38): where the night goes after two
       // the door is hers to name once you ARE the friend: "you not friend yet" at
       // fourteen drinks and her-farang tier (Tomasz, round 54)
-      { topic: "late", bond: 2,
+      { topic: "late|bike|your bike|her bike|the bike|friend's bar|friend's place|your friend's bar", bond: 2,
         text: "\"After two?\" Lek racks the balls without looking at them, and then does look — at you. \"You, " +
           "I take. Thai place, my friend's bar, no farang, nobody sell you nothing. On the bike.\" The break. \"Not " +
           "tonight, maybe. Some night you take me home properly, and it is late, and I still have the keys.\"",
         short: "\"After two? You I take. Some night — on the bike, my friend's place.\"" },
-      { topic: "late",
+      { topic: "late|bike|your bike|her bike|the bike|friend's bar|friend's place|your friend's bar",
         text: "\"After two?\" Lek racks the balls without looking at them. \"Depends who ask. Customer — go home, " +
           "customer. Friend —\" the smallest shrug \"— maybe friend take you somewhere. On the bike. Thai place. " +
           "No farang.\" She lines up the break. \"You not friend yet. Keep coming.\"",
@@ -10013,7 +10013,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // After the Orchid reveal — you SAW him at the good table. He still never
       // says the words; confirmation stays a thing that happened, not a thing said.
       // (First in the table set — it must outrank the deflection's count<3 match.)
-      { topic: "table", when: (st, G) => _flag("tanRevealed"),
+      { topic: "table|orchid|the orchid", when: (st, G) => _flag("tanRevealed"),
         text: "\"The good table.\" He looks at you the way a man looks at a photograph of himself he " +
           "didn't pose for. Neither of you says the other thing. \"A man sits where there is a chair, my " +
           "friend. Sometimes the chair is at the airport. Sometimes—\" the smallest shrug in Thailand " +
@@ -10039,7 +10039,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "wallet", req: ["act1Done"],
         text: "\"The wallet.\" Tan glances at your pocket as if checking a job was done properly. \"Mostly all there, I think. Most men lose it twice in this town. The first time is the wallet. The second time is the one that teaches.\"",
         short: "\"Mostly all there. The second time is the one that teaches.\"" },
-      { topic: "table", deflect: true,
+      { topic: "table|orchid|the orchid", deflect: true,
         when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length < 3,
         text: "\"The good table.\" The warmth stays on his face while something behind it goes very still and " +
@@ -10052,7 +10052,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // The near-confirmation — once the fragments add up. He never says the words.
       // Hearing it arms the Orchid reveal (tanSuspected): the advice is the setup,
       // the good table is the payoff.
-      { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
+      { topic: "table|orchid|the orchid", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length >= 3,
         sets: ["tanSuspected"],
         text: "For a long moment Tan simply looks at you, and the airport grin takes a rest. \"You " +
@@ -13432,7 +13432,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         choices: _BERT_FLIP_CHOICES },
       // …and the same night you met him, the same greeting without the lie in it
       // (and the same fork, which the returning greeting has always carried)
-      { when: (st, G) => st.dstate !== "stranger",
+      { when: (st, G) => st.dstate !== "stranger" && !!(G.metDay && G.metDay.bert === G.day),   // the same night only: "Back already" six nights on (Desmond, round 106)
         text: "\"Back already.\" Bert tips the Singha at you. \"Table's still true, beer's still cold. " +
           "What's the good word, bud?\"",
         short: "\"Back already.\" He tips the Singha at you. \"What's the good word, bud?\"",

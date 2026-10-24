@@ -10103,7 +10103,7 @@ function _barNight(settleDay) {
   const evt = evtIn - evtCost;
   // the itemised night, for BOOKS — one "in" and one "out" hid a ฿400 gap a
   // twenty-year publican could not name (Keith, round 40)
-  b.lastLines = { day, inside: _insidePrice(), take: take + evtIn, nut, cogs, wages: BAR_WAGES, salary: b.terms === "salary" ? BAR_SALARY_NIGHT : 0, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, garnish, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
+  b.lastLines = { day, railTurn: b.railTurn || 0, inside: _insidePrice(), take: take + evtIn, nut, cogs, wages: BAR_WAGES, salary: b.terms === "salary" ? BAR_SALARY_NIGHT : 0, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, garnish, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
   return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
     worked, away: b.away, nut, cogs, wages, proc, garnish, markup: b.markup || "list", railLost };
 }

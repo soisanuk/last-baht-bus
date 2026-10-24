@@ -460,6 +460,12 @@ function _piwinAbout(who) {
   // exactly wrong here: you ask a piwin about people who are not in front of
   // you. That is the entire service.
   const w = String(who || "").trim().toLowerCase();
+  // your own hotel is a fare he has run a hundred times: "Don't know this one" from a man who knows everybody (Ines, round 106)
+  if (/^(?:the |my |your )?(?:hotel|room|condo|place)$/.test(w) && typeof _hotelRoomId === "function" && ROOMS[_hotelRoomId()]) {
+    const h = _HOTELS[G.hotel] || {}, hr = ROOMS[_hotelRoomId()], nm = h.name || hr.name;
+    _say(`"${nm}? ${hr.region || "There"}." He jerks his chin the right way without looking. "I take you. Everybody know that one." (MOTOSAI TO HOTEL)`);
+    return true;
+  }
   const byName = src => Object.keys(src).find(k =>
     k === w || String(src[k].name || "").toLowerCase() === w ||
     String(src[k].name || "").toLowerCase().split(" ").pop() === w);
@@ -1376,7 +1382,8 @@ function _smallTalk(npc, topic) {
   const hit = _SMALL_TALK_KEYS.find(([, rx]) => rx.test(t));
   if (!hit) return false;
   let pool = _SMALL_TALK[hit[0]], key = hit[0];
-  const gap = ((G.soc || {}).gapSeen || {})[npc] || 0;
+  const _gs = ((G.soc || {}).gapSeen || {})[npc], _home = NPCS[npc].room || (NPCS[npc].bars || [])[0], _bs = (G.barSat || {})[_home];
+  const gap = _gs != null ? _gs : (_bs != null && _bs < G.day ? G.day - _bs : 0);   // measured on arrival; else the last night you sat on her floor (Desmond, round 106)
   if (key === "miss" && gap >= 2) { key = "missAway"; pool = _SMALL_TALK.missAway; }
   // "why did you come to Pattaya" is the town, "why this bar" is the bar: one pool answered both (Callum, round 105)
   if (key === "whyhere") { const bar = /\b(this bar|a bar|here)\b/.test(t) && !/pattaya/.test(t);
@@ -4339,12 +4346,13 @@ function _relGreeting(id) {
     const stepped = G.affairCool && G.affairCoolWho === id && G.day - G.affairCool < 30;
     _say(_pickVary(stepped ? _REL_GREET_STEPPED : _REL_GREET_OWN, stepped ? "relstepped" : "relown")(NPCS[id].name), "dim"); return;
   }
+  // the gap is measured whatever her warmth: it was set only for a warm woman, so a cooled one kept "4 night" all month (Desmond, round 106)
+  const gap = (G.seenDay || {})[id] != null ? G.day - G.seenDay[id] : 0;
+  (G.soc.gapSeen = G.soc.gapSeen || {})[id] = gap;
   const t = _bondTier(id);
   if (t < 1) return;
   if (G.miffed && G.miffed[id] != null && G.day - G.miffed[id] <= 1) return;   // she watched you leave with another: no warm hello on arrival (Dagny, round 91)
-  // four nights in the hotel and nobody said where you'd been (Piet, round 62): a regular notices a gap
-  const gap = (G.seenDay || {})[id] != null ? G.day - G.seenDay[id] : 0;
-  (G.soc.gapSeen = G.soc.gapSeen || {})[id] = gap;   // "did you miss me" reads the gap tonight (Eoin, round 101: the same canned line after two nights away)
+  // four nights in the hotel and nobody said where you'd been (Piet, round 62): a regular notices a gap   // "did you miss me" reads the gap tonight (Eoin, round 101: the same canned line after two nights away)
   if (t >= 2 && gap >= 4 && (G.soc.awaySaid = G.soc.awaySaid || {})[id] !== G.day) {
     G.soc.awaySaid[id] = G.day;
     _say(_pickVary(_REL_GREET_AWAY, "relaway:" + id)(NPCS[id].name, gap - 1), "win");   // last seen on day 10, back on day 13: two nights missed, not three (Laurie, round 102)
@@ -5896,7 +5904,7 @@ function _morningLedger() {
   // on a payday morning last night belongs to the month that just CLOSED — "to last night's close" was a line written
   // before the ledger had added last night (Ingrid's ฿320 and Tomás's ฿180, rounds 103: the payday night fell in the new month)
   const _mb = G.monthClosing || G.month;
-  if (G.stage === "expat" && _mb) { _mb.spent = (_mb.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN + received - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0)) + pdN; G.monthAdj = 0; _mb.days = (_mb.days || 0) + 1; if ((_mb.spent || 0) < (_mb.rent || 0)) _mb.spent = _mb.rent; }   // the room is part of the spending, never more than all of it (Brendan, round 102)   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
+  if (G.stage === "expat" && _mb) { _mb.spent = (_mb.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN + received - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0) - (G.monthClosing ? condoN : 0)) + pdN; G.monthAdj = 0; _mb.days = (_mb.days || 0) + 1; if ((_mb.spent || 0) < (_mb.rent || 0)) _mb.spent = _mb.rent; }   // the room is part of the spending, never more than all of it (Brendan, round 102)   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
@@ -6175,6 +6183,7 @@ function _endNight(reason) {
     }
     if ((reason === "accident" || reason === "roadhit") && typeof _streetSaw === "function") _streetSaw("crash", { where: G.room, how: reason });   // the bike came down and nobody the next evening had heard (Tomás, round 103)
     if ((reason === "blackout" || reason === "collapse") && typeof _streetSaw === "function") _streetSaw(reason, { where: G.room });   // the room that watched you go down can say so, and so can your own floor (Kaspar, round 101)
+    { const bs = (G.barSat = G.barSat || {}); for (const r of Object.keys(_bars)) bs[r] = G.day; }   // the last night you sat in each bar — LAST TIME and "did you miss me" read it (Desmond, round 106)
     G.lastNightWas = { day: G.day, reason, bar: _bt ? _bt[0] : null, barTurns: _bt ? _bt[1] : 0, bars: _bars, leftFrom: G.soc.leftFrom || null,
       shift: (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && (G.job.shiftStood || 0) >= WORK_MIN_STOOD) ? G.job.room : null,
       shiftLeft: (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && (G.job.shiftLast || 0) < (_closeTurn(G.job.room) == null ? NIGHT_TURNS : _closeTurn(G.job.room)) - 3) ? (G.job.shiftLast || 0) : null,   // he left before the shutter: the floor saw him go   // the manager's night (Brendan, round 102)
@@ -7048,6 +7057,20 @@ function _soi6Stay() {
   _setFlag("roomSafeOpened");   // no wallet was ever lost on the Soi 6 week, so no emergency stash waits in any safe (Victor found ฿3,000 in a condo wardrobe)
   _goExpat({ soi6: true });
 }
+// THE DAY COUNT RESTARTS AT A NEW TRIP, AND THE MEMORY BOOKS ARE KEYED BY DAY (Ines, round 106: Lek's long time on the
+// last night of a trip was "You and me, -6 nights ago" a month on). Every social day-book is moved back by the old
+// trip's length and a month, so the next trip reads it as a while ago — never a negative, never "last night".
+function _ageBooks(off) {
+  const shiftMap = m => { if (m && typeof m === "object") for (const k of Object.keys(m)) if (typeof m[k] === "number") m[k] -= off; };
+  const shiftDay = o => { if (o && typeof o === "object" && typeof o.day === "number") o.day -= off; };
+  shiftMap(G.metDay); shiftMap(G.seenDay); shiftMap(G.leaveSaid); shiftMap(G.visitDay); shiftMap(G.barSat);
+  for (const book of [G.wentWith, G.partyLog, G.rideLog, G.homeSeen, G.kissLog, G.giftLog]) if (book && typeof book === "object") for (const k of Object.keys(book)) {
+    const v = book[k]; if (Array.isArray(v)) v.forEach(shiftDay); else shiftDay(v);
+  }
+  if (G.gifts && typeof G.gifts === "object") for (const k of Object.keys(G.gifts)) (Array.isArray(G.gifts[k]) ? G.gifts[k] : []).forEach(shiftDay);
+  shiftDay(G.lastNightWas); shiftDay(G.lastRide); shiftDay(G.chamLast);
+  if (Array.isArray(G.streetLog)) G.streetLog.forEach(shiftDay);
+}
 function _newVacation(opts) {
   const _soi6 = !!(opts && opts.soi6);   // CONTINUE at the Soi 6 week's end (Mario, 2026-10-20): the same street a month on, the people remembering you
   G.lightOn = false;     // a month later the torch is not still on (Bridget, round 76)
@@ -7057,6 +7080,7 @@ function _newVacation(opts) {
   G.stage = "vacation";
   G.vacation++;
   G.pendingChoice = null;
+  _ageBooks(G.day + SEASON_MONTH_DAYS);   // the day count restarts: what a woman remembers is a trip ago, not "-6 nights ago" (Ines, round 106)
   G.day = 1;
   G.nightTurn = 0;
   G.happy = 0;

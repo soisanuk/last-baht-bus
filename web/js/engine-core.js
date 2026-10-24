@@ -328,7 +328,7 @@ function newGame() {
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
-    homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null,   // the resident's integration pass (round 100)
+    homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null, barSat: {},   // the resident's integration pass (round 100)
     loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0, quizWon: 0, giftIn: 0, lastNightBye: null,   // quiz prizes and a note pressed on you (round 93); principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
@@ -2928,7 +2928,7 @@ function _deliver(npcId, d, full, asNew) {
   if ((!repeat || d.fxAlways) && d.fx) d.fx(st, G);
   // first contact (any exchange) IS the meeting: advance the state and grant the
   // baseline trust here, so the meeting bonus never depends on which node fired.
-  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); (G.metDay = G.metDay || {})[npcId] = G.day; (G.metRoom = G.metRoom || {})[npcId] = G.room; }
+  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); { const md = (G.metDay = G.metDay || {}); if (md[npcId] == null) md[npcId] = G.day; } (G.metRoom = G.metRoom || {})[npcId] = G.room; }   // the first meeting stays the first (a drink can meet her before a word does)
   // this node is now the live one — its `choices` (if any) become the action-choices
   G.convoIdx = G.convo === npcId ? idx : G.convoIdx;
   if (d.choices && d.choices.length) (G.convoChoiceMemo = G.convoChoiceMemo || {})[npcId] = idx; // typed labels outlive the next ask (27-night playtest)

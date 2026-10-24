@@ -1,0 +1,5 @@
+{"cmd":"take cream out","reply":"You don't see that here.","room":"metro_garden","day":3,"turn":70,"mode":null,"convo":"cream","at":"2026-10-24T10:07:31.051Z","src":"persona-ride"}
+{"cmd":"ask tan about cream","reply":"Nobody here goes by that — not tonight.","room":"hotel_room","day":4,"turn":2,"mode":null,"convo":null,"at":"2026-10-24T10:07:47.322Z","src":"persona-ride"}
+{"cmd":"ask clerk about last night","reply":"That name doesn't land on anyone in the room.","room":"naklua_rd","day":5,"turn":5,"mode":null,"convo":null,"at":"2026-10-24T10:08:27.190Z","src":"persona-ride"}
+{"cmd":"ask clerk about cream","reply":"No one here answers to that.","room":"naklua_rd","day":5,"turn":5,"mode":null,"convo":null,"at":"2026-10-24T10:08:27.190Z","src":"persona-ride"}
+{"cmd":"talk to clerk","reply":"Nobody by that name here.","room":"naklua_rd","day":5,"turn":5,"mode":null,"convo":null,"at":"2026-10-24T10:08:27.190Z","src":"persona-ride"}

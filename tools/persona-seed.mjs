@@ -151,6 +151,7 @@ function rideSeed() {
   G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3; G.season0 = 1;
   G.money = 18000; G.bank = 30000; G.battery = 100;
   G.soc.drinks.lek = 8; G.phone.contacts.lek = true; G.talked.lek = [0];
+  G.phone.contacts.tan = true; G.known.tan = true;   // every real player has Tan's number from the taxi (Ines, round 106: "not in the phone")
   G.visited[_npcRoom("lek")] = true;   // her regular has found her door (Pete, round 75: TRAVEL said he never had)
   G.room = "buakhao_klang"; G.visited.buakhao_klang = true; G.nightTurn = 4;
   _setFlag("roomSafeOpened"); quiet(); G.encDone = {}; _nightSnapshot();
@@ -187,6 +188,7 @@ function stayedSeed(origin, money, bank) {
   newGame(); startSoi6Mode();
   doCommand("1"); doCommand("3"); doCommand("1");
   G.player.origin = origin; G.season0 = 1;
+  if (G.player.said) delete G.player.said._label_origin;   // the taxi's answer was "1"; WHO AM I read that label, not the origin we set (Desmond, round 106)
   quiet(); G.day = 8; G.pendingChoice = "vacation_end"; out = []; doCommand("continue"); doCommand("cancel the ticket");
   if (G.stage !== "expat" || G.mode) throw new Error(origin + " seed: the ticket was not cancelled");
   G.money = money; G.bank = bank; G.battery = 100;
@@ -226,6 +228,7 @@ function remoteSeed() {
   for (const r of ["jade_lounge", "golden_dragon", "lucky_tiger", "honey_trap"]) { G.visited[r] = true; (G.visitDay = G.visitDay || {})[r] = G.day - 2; }
   G.soc.drinks.jade_lounge_cartoon = 4; G.phone.contacts.jade_lounge_cartoon = true; G.talked.jade_lounge_cartoon = [0]; (G.metDay = G.metDay || {}).jade_lounge_cartoon = 4;
   G.room = "condo_room"; G.nightTurn = 0; G.hunger = 10; G.thirst = 10; quiet(); G.encDone = {}; _nightSnapshot(); G.monthAdj = 0;
+  if (G.month) G.month.spent = Math.max(G.month.spent || 0, G.month.rent || 0);   // the lease was signed outside any ledger: its month is spent, or the clamp eats the next nights (Desmond, round 106)
   return serializeGame();
 }
 function reload(blob) { newGame(); deserializeGame(blob); }
