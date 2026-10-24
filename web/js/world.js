@@ -143,10 +143,11 @@ const MGR_STRIKES = 2;                            // short weeks a company bar f
 // hostess." Alienating the girls of the bar you manage — another bar's woman on your arm on their floor, an insult to one
 // of them — is a trouble the house notes (one a night). MGR_COUNSEL of them inside MGR_TROUBLE_DAYS and the mama takes
 // him aside; one more inside the window after that and the keys go back across the till. Walked out of his own bar by
-// security is the keys at once. A sacked manager is unhirable as one anywhere for MGR_UNHIRABLE days (the soi is one long
-// rail and every mamasan hears by nine), and NEVER again at the bar that let him go (G.firedBars). The town talks about it
+// security is the keys at once. A sacked manager is unhirable as one anywhere for a while — MGR_UNHIRABLE days by his
+// standing on the soi (_repTier −2..+2, read when he asks, so a better name shortens it; Mario, 2026-10-24) — because the
+// soi is one long rail and every mamasan hears by nine, and NEVER again at the bar that let him go (G.firedBars). The town talks about it
 // for MGR_FIRED_NEWS. The school, the platform and Mort's paragraphs still hire: it is the rail that has heard.
-const MGR_COUNSEL = 2, MGR_TROUBLE_DAYS = 30, MGR_UNHIRABLE = 60, MGR_FIRED_NEWS = 30;
+const MGR_COUNSEL = 2, MGR_TROUBLE_DAYS = 30, MGR_UNHIRABLE = [120, 90, 60, 45, 30], MGR_FIRED_NEWS = 30;
 const SCHOOL_PAY = 35000, SCHOOL_LATES = 3;      // the school (Jerry's door): a proper contract, the permit with the first payday, weekday MORNINGS — a rough morning before a school day is a late, and three in a month is the sack
 const OWL_LEAD_PAY = 100, OWL_LEADS_WEEK = 5;
 // ── THE CONDO (Mario, 2026-10-20): a roof by the month — rent and the electric on the payday's clock, two months' deposit

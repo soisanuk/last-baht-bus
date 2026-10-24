@@ -65,7 +65,7 @@ test("sacked: no rail hires him as a manager for a while, the bar that let him g
   resident(); G.job = null; G.jobFired = { room: "sunset_rail", day: 19, kind: "brought" }; G.firedBars = { sunset_rail: 19 };
   assert.match(t("ask bussaba about a job"), /I have manager now/);
   G.room = "stinky_bar"; G.soc.drinks.manow = 10; assert.match(t("ask lamai about a job"), /Manager, no\. Not now/); assert.equal(G.jobOffer, null);
-  G.day = 19 + MGR_UNHIRABLE; assert.match(t("ask lamai about a job"), /remembers The Shady Lady/); assert.ok(G.jobOffer, "after a while, elsewhere");
+  G.day = 19 + _mgrBanDays(); assert.match(t("ask lamai about a job"), /remembers The Shady Lady/); assert.ok(G.jobOffer, "after a while, elsewhere");
   G.jobOffer = null; G.room = "sunset_rail"; G.day = 19 + 400; assert.match(t("ask bussaba about a job"), /I have manager now/, "never at the same bar");
   G.day = 25; G.room = _npcRoom("tan"); assert.match(t("ask tan about my job"), /Shady Lady/);
   G.room = _npcRoom("doyle"); assert.doesNotMatch(t("ask doyle about my job"), /\bsacked|the push|ten a penny\b/, "an American's mouth");
@@ -74,4 +74,14 @@ test("sacked: no rail hires him as a manager for a while, the bar that let him g
 
 test("the firing itself records the bar for good", () => {
   resident(); out = []; _kickOut(); assert.equal(G.firedBars.sunset_rail, 20);
+});
+
+test("how long the rail stays shut depends on the man's name on the soi, read when he asks", () => {
+  resident(); G.job = null; G.jobFired = { room: "sunset_rail", day: 20, kind: "brought" }; G.firedBars = { sunset_rail: 20 };
+  G.room = "stinky_bar"; G.soc.drinks.manow = 10;
+  G.rep = 0; assert.equal(_mgrBanDays(), 60);
+  G.rep = 12; assert.equal(_mgrBanDays(), 30); G.day = 20 + 35; assert.match(t("ask lamai about a job"), /remembers The Shady Lady/); assert.ok(G.jobOffer, "a good name: hired again after a month");
+  G.jobOffer = null; G.rep = -12; assert.equal(_mgrBanDays(), 120); assert.match(t("ask lamai about a job"), /Not for a long time/); assert.equal(G.jobOffer, null);
+  G.rep = 4; G.day = 20 + 10; assert.match(t("ask lamai about a job"), /People say you are okay/);
+  G.room = "sunset_rail"; G.rep = 20; G.day = 20 + 400; G.nightTurn = 50; assert.match(t("ask bussaba about a job"), /I have manager now/, "no name buys back the bar that let him go");
 });

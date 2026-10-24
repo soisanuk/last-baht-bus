@@ -7317,13 +7317,13 @@ function _jobOffer(room, npc) {
   if (_barOwned() && G.bar && G.bar.room === room) { _say("You own it. The job is yours already, and it does not pay what you think."); return true; }
   if (G.job && (G.job.room === room)) { _say(`You have a rail — this one. (QUIT JOB to give it back.)`); return true; }
   if ((G.firedBars || {})[room] != null) { _say(`${n} almost laughs. "You? No. I have manager now. New one. He is not good — he is fine. Fine is enough." She says it without heat, which is worse — and it is not a no for now.`); return true; }   // never again at the bar that let him go (Mario, 2026-10-24)
-  if (G.jobFired && G.day - G.jobFired.day < MGR_UNHIRABLE) { _say(`${n} has heard about ${_barName(G.jobFired.room)}; the soi is one long rail. "Manager, no. Not now." She does not say how long now is. "Drink, okay. Behind my bar, no."`); return true; }   // a sacked manager is unhirable as one for a while (Mario, 2026-10-24)
+  if (_mgrBanned()) { const tier = _repTier(); _say(`${n} has heard about ${_barName(G.jobFired.room)}; the soi is one long rail. ${tier >= 1 ? `"Manager, no. Not yet." A small shrug. "People say you are okay, so — not long. Drink, okay. Behind my bar, not yet."` : tier <= -1 ? `"Manager? No." She does not dress it up. "Not for a long time. People talk about you, and not nice. Drink, okay — you pay first."` : `"Manager, no. Not now." She does not say how long now is. "Drink, okay. Behind my bar, no."`}`); return true; }   // a sacked manager is unhirable as one for a while (Mario, 2026-10-24)
   const _held = !!G.job;   // the terms are told to a man who holds a job; taking it needs QUIT JOB first (Dmitri, round 102: he quit blind to hear the next offer)
   const company = _companyBar(room);
   if (!_floorKnowsYou(room) && _held) { _say(G.job.kind === "teach" ? "You have a job; the mornings are spoken for. (QUIT JOB first.)" : G.job.kind === "school" ? "You have a job — the school, eight o'clock Monday to Friday. One at a time. (QUIT JOB first.)" : `You have a rail — ${_jobName()}. One at a time. (QUIT JOB first.)`); return true; }   // a floor that does not know him has no terms to tell
   if (!_floorKnowsYou(room)) { _say(`"${n}" shrugs: "A job? Knowing a face is not enough. One of my girls has to call you hers first — a regular, not a man who comes sometimes. Then I ask."`.replace(/^"[^"]*" shrugs/, `${n} shrugs`)); return true; }
   if (company && G.paperFlag != null && G.day - G.paperFlag < PAPER_FLAG_DAYS) { _say(`${n} does not quite look at you. "The company checked. There was a night with the police and a paper that was not right. Not for a while."`); return true; }
-  if (G.jobFired && G.day - G.jobFired.day < MGR_UNHIRABLE + MGR_FIRED_NEWS) _say(`${n} remembers ${_barName(G.jobFired.room)}; the soi does not forget a manager it sacked. "My girls first, manager second," she says, before anything else. "You know this now, I think."`, "dim");
+  if (G.jobFired && G.day - G.jobFired.day < _mgrBanDays() + MGR_FIRED_NEWS) _say(`${n} remembers ${_barName(G.jobFired.room)}; the soi does not forget a manager it sacked. "My girls first, manager second," she says, before anything else. "You know this now, I think."`, "dim");
   if (!_held) G.jobOffer = { room, corp: company, day: G.day };
   if (company) _say(`"A manager? We could use one." ${n} names it the way a company names things — by the paper. "฿${_num(MGR_PERMIT_PAY)} a month, through the books. Six nights. Stand them and after a month the company puts you on its paper — a work permit, a bank book, the lot. Miss your nights and the company notices, because the company counts." (TAKE THE JOB · or not — the offer keeps till dawn.)`);
   else _say(`"A manager? Mm." ${n} looks at the till, then at you. "฿${_num(MGR_CASH_PAY)} a month, in an envelope. Four nights a week — you stand them, I pay them; you don't, I don't. No paper: this bar has no company behind it to put you on one, so if the police ever come in on a bad night, that is your bad night." (TAKE THE JOB · or not — the offer keeps till dawn.)`);
@@ -7383,6 +7383,9 @@ function _quitJob() {
 // The girl who sees him walk in with another bar's woman keeps her own reaction (_partyRival); this is the HOUSE's.
 // One trouble a night, counted inside a window; the mama has a word at MGR_COUNSEL, and the next one inside the
 // window after the word is the keys. Never a morality tale: the arithmetic of the trade, said out loud both times.
+// how long a sacked manager is unhirable as one: his name on the soi, read when he asks (Mario, 2026-10-24: "base it on rep")
+function _mgrBanDays() { const t = typeof _repTier === "function" ? _repTier() : 0; return MGR_UNHIRABLE[Math.max(-2, Math.min(2, t)) + 2]; }
+function _mgrBanned() { return !!(G.jobFired && G.day - G.jobFired.day < _mgrBanDays()); }
 function _jobBoss(room) {   // who runs the floor he manages: its mamasan, here or not
   return Object.keys(NPCS).find(i => NPC_ROLES[i] === "mamasan" && (NPCS[i].room === room || (NPCS[i].bars || []).includes(room))) || null;
 }
