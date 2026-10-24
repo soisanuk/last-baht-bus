@@ -106,5 +106,5 @@ test("Ruth: the roast sold out is 'gone', not 'nine o'clock'; the woman beside y
   sandbox(); G.room = "beach_rd_c"; G.nightTurn = SUNRISE_TURN + 2; G.party = { ids: ["nan"], stops: 0, spent: 0, seen: {} };
   out = []; run("watch sunrise"); run("watch sunrise"); assert.match(said(), /Nan/);
   sandbox(); G.room = "night_heron"; G.nightTurn = 30; G.lockedInAt = { night_heron: G.day - 1 }; quiet();
-  const s = _npcsHere().find(x => NPC_ROLES[x]); run("talk to " + NPCS[s].name); assert.match(t("ask " + NPCS[s].name + " about last night"), /bolt/);
+  const s = _npcsHere().find(x => NPC_ROLES[x]); run("talk to " + NPCS[s].name); assert.match(t("ask " + NPCS[s].name + " about last night"), /bolt/i);
 });

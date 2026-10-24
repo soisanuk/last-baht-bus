@@ -34625,10 +34625,10 @@
    "between": "",
    "system": "conversation",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Answers to a pending question go to whoever spoke last (Doyle's option logged as asked of Mort)",
-   "verdict": "deferred",
-   "note": "the convo-lapse routing; needs its own pass across the pending-question book",
+   "verdict": "fixed",
+   "note": "reproduced at the Vic (Doyle's 'here', then Angela's 'home'): _answerOwner routes a line naming words only a lapsed question offered back to its asker, scored question-text 2 / canned reply 1; and a pending question's own canned reply answers before any verb ('Back home' was BACK)",
    "cls": "G"
   },
   {

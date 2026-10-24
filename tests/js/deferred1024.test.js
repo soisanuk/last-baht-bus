@@ -133,3 +133,21 @@ test("Ingrid: a job's fee by text is named as the job's on the ledger", () => {
   sandbox(); G.jobPay = [{ kind: "msg", who: "colin", line: "whip-round", amt: 1500, due: G.day }]; _questTick();
   const m = G.phone.inbox[G.phone.inbox.length - 1]; assert.equal(m.job, true);
 });
+
+// ── the pending answer (Gareth, round 103): an answer belongs to the question it answers ─────────
+const atVic = () => { sandbox(); G.room = "queen_vic"; G.nightTurn = 20; quiet(); run("talk to doyle"); run("talk to angela"); };
+test("Gareth: Doyle's options answered while Angela's question is on the table go to Doyle; hers keeps", () => {
+  atVic(); assert.equal(G.convoQ.id, "angela"); assert.ok(G.convoLapsed.doyle);
+  assert.match(t("the getting-away"), /Doyle's question/);
+  assert.equal(_npcState("doyle").heard.here, "the getting-away"); assert.equal((_npcState("angela").heard || {}).home, undefined);
+  assert.ok(G.convoLapsed.angela && !G.convoLapsed.angela.dodged, "Angela's question lapses, still hers to answer");
+  atVic(); t("the money, mostly"); assert.ok(_npcState("doyle").heard.here, "a word his question offered outweighs one in her canned reply");
+});
+test("Gareth: a free answer, or one of her own replies, stays with the question on the table", () => {
+  atVic(); t("manchester"); assert.equal(_npcState("angela").heard.home, "manchester"); assert.equal((_npcState("doyle").heard || {}).here, undefined);
+  atVic(); t("perth, mostly"); assert.equal(_npcState("angela").heard.home, "perth, mostly");
+});
+test("a pending question's own canned reply is its answer before any verb ('Back home' is not BACK)", () => {
+  sandbox(); G.player.origin = "runner"; G.room = "queen_vic"; G.nightTurn = 20; quiet(); run("talk to angela");
+  const room = G.room; t("Back home. It'll keep."); assert.equal(G.room, room); assert.match(String(G.player.said.home), /Back home/);
+});
