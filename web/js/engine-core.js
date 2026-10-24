@@ -328,7 +328,7 @@ function newGame() {
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
-    homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0,   // the resident's integration pass (round 100)
+    homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null,   // the resident's integration pass (round 100)
     loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0, quizWon: 0, giftIn: 0, lastNightBye: null,   // quiz prizes and a note pressed on you (round 93); principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai

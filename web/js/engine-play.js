@@ -5792,7 +5792,7 @@ function _morningLedger() {
     // hadn't (assertion auditor, 2026-09-14: a flat false negative, on the one
     // morning he was most likely to read it). Say what is true instead.
     G.lastNightSaid = ["(First morning in town — nothing to measure last night against yet. From tomorrow this is the night's ledger.)"];
-    if (G.stage === "expat" && G.month && G.roomNight) G.month.spent = (G.month.spent || 0) + G.roomNight;   // the room is in the month even with nothing to measure the night against (round 101)
+    if (G.stage === "expat" && (G.monthClosing || G.month) && G.roomNight) { const _mb0 = G.monthClosing || G.month; _mb0.spent = (_mb0.spent || 0) + G.roomNight; }   // the room is in the month even with nothing to measure the night against (round 101)
     G.roomNight = 0; G.monthAdj = 0;
     G.bankNotes = [];   // nothing to name them on; they do not leak into tomorrow's line
     G.safeMoneyLedger = false;
@@ -5893,7 +5893,10 @@ function _morningLedger() {
   // the room is in the month's spend whatever the night did: a night that came out "up" used to add nothing while the
   // room was still paid, so the month read "฿1,080 spent, ฿1,350 of it the room" (Kaspar, round 101)
   const roomN = G.roomNight || 0; G.roomNight = 0;
-  if (G.stage === "expat" && G.month) { G.month.spent = (G.month.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0)) + pdN; G.monthAdj = 0; G.month.days = (G.month.days || 0) + 1; if ((G.month.spent || 0) < (G.month.rent || 0)) G.month.spent = G.month.rent; }   // the room is part of the spending, never more than all of it (Brendan, round 102)   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
+  // on a payday morning last night belongs to the month that just CLOSED — "to last night's close" was a line written
+  // before the ledger had added last night (Ingrid's ฿320 and Tomás's ฿180, rounds 103: the payday night fell in the new month)
+  const _mb = G.monthClosing || G.month;
+  if (G.stage === "expat" && _mb) { _mb.spent = (_mb.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN + received - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0)) + pdN; G.monthAdj = 0; _mb.days = (_mb.days || 0) + 1; if ((_mb.spent || 0) < (_mb.rent || 0)) _mb.spent = _mb.rent; }   // the room is part of the spending, never more than all of it (Brendan, round 102)   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
@@ -6741,7 +6744,10 @@ function _endNight(reason) {
   // of his pocket a turn after the ledger printed and appeared a morning late). The bar's settle,
   // Nira's cousins and the care ask all belong to the night just played, so they are on its ledger.
   _morningLedger();
-  if (G.monthLine && G.monthLine.length) { for (const l of G.monthLine) _say(l, "win"); if (Array.isArray(G.lastNightSaid)) G.lastNightSaid.push(...G.monthLine); G.monthLine = null; }   // the month, after the night
+  if (G.monthLine && G.monthLine.length) {
+    const mc = G.monthClosing || {}; G.monthLine = G.monthLine.map(l => String(l).replace("{MSPENT}", _num(mc.spent || 0)).replace("{MRENT}", _num(mc.rent || 0)));
+    G.monthClosing = null;
+    for (const l of G.monthLine) _say(l, "win"); if (Array.isArray(G.lastNightSaid)) G.lastNightSaid.push(...G.monthLine); G.monthLine = null; }   // the month, after the night
   // The NEXT morning's baseline is taken HERE, at wake — not at night end. Taken
   // at _endNight, the deltas only spanned the sleep (i.e. the rent), so every
   // morning read "Last night: spent ฿400" no matter what the evening cost (two
@@ -7609,16 +7615,17 @@ function _incomeTick() {
     else { if (jp > 0) G.envelopeDue = { amt: jp, room: j.room, day: G.day, nights: j.stood }; jobLine = jp > 0 ? ` ${_barName(j.room)}'s envelope — ฿${_num(jp)} for ${j.stood} night${j.stood === 1 ? "" : "s"} — is at the bar; the house hands it over when you are next behind the rail.` : ` ${_barName(j.room)}'s envelope: nothing for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }   // the envelope waits where the work was (Renata, round 100: it landed in his pocket at the condo)
   }
   const lines = [];
-  if (om.kind === "pot" && G.job && _jobPay() > 0) lines.push(`The month, to last night's close: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. No pension — the job is the payday now, and ${om.what} is the cushion under it. After the roof that is ${_nightsSay(_jobPay())}, at ฿${_num(NIGHT_COST)} a night.`);   // "No payday" under "the school paid ฿35,000" (Dmitri, round 102)
-  else if (om.kind === "pot") lines.push(`The month, to last night's close: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. No payday — ${om.what} is what there is: ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account, about ${_weeksLeft()} weeks at this rate.`);
-  else if (amt <= 0) lines.push(`The month, to last night's close: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room. ${om.what.replace(/^./, c => c.toUpperCase())} did not land this time${om.kind === "salary" ? " — somebody at home noticed" : ""}. ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account.`);
+  if (om.kind === "pot" && G.job && _jobPay() > 0) lines.push(`The month, to last night's close: ฿{MSPENT} spent, ฿{MRENT} of it the room. No pension — the job is the payday now, and ${om.what} is the cushion under it. After the roof that is ${_nightsSay(_jobPay())}, at ฿${_num(NIGHT_COST)} a night.`);   // "No payday" under "the school paid ฿35,000" (Dmitri, round 102)
+  else if (om.kind === "pot") lines.push(`The month, to last night's close: ฿{MSPENT} spent, ฿{MRENT} of it the room. No payday — ${om.what} is what there is: ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account, about ${_weeksLeft()} weeks at this rate.`);
+  else if (amt <= 0) lines.push(`The month, to last night's close: ฿{MSPENT} spent, ฿{MRENT} of it the room. ${om.what.replace(/^./, c => c.toUpperCase())} did not land this time${om.kind === "salary" ? " — somebody at home noticed" : ""}. ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account.`);
   else {
     const short = om.kind === "retainer" && amt < om.income ? ` (short — the client counted ${m.rough} rough morning${m.rough === 1 ? "" : "s"})` : "";
-    lines.push(`The month, to last night's close: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room; ${om.what} landed, ฿${_num(amt)}${short}. After the roof that is ${_nightsSay(amt + _jobPay())}, at ฿${_num(NIGHT_COST)} a night.`);
+    lines.push(`The month, to last night's close: ฿{MSPENT} spent, ฿{MRENT} of it the room; ${om.what} landed, ฿${_num(amt)}${short}. After the roof that is ${_nightsSay(amt + _jobPay())}, at ฿${_num(NIGHT_COST)} a night.`);
   }
   const condoLine = _condoMonth();
   if (jobLine || paperLine || condoLine) lines[0] += jobLine + paperLine + condoLine;
   G.monthLine = lines;
+  G.monthClosing = m;   // last night's ledger is still to come, and it is this month's (see _morningLedger)
   G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
   if (G.hotel === "condo" && G.condo && condoLine && !/not there/.test(condoLine)) { G.month.rent = CONDO_RENT + CONDO_UTIL; G.month.spent = CONDO_RENT + CONDO_UTIL; }   // the rent is the coming month's room AND its first spend (Victor: "฿0 of it the room"; Renata: "฿0 spent, ฿11,000 of it the room")
   if (G.job && G.job.roughSeen) G.job.roughSeen = 0;   // the school counts the new month's mornings from zero

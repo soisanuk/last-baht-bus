@@ -151,3 +151,25 @@ test("a pending question's own canned reply is its answer before any verb ('Back
   sandbox(); G.player.origin = "runner"; G.room = "queen_vic"; G.nightTurn = 20; quiet(); run("talk to angela");
   const room = G.room; t("Back home. It'll keep."); assert.equal(G.room, room); assert.match(String(G.player.said.home), /Back home/);
 });
+
+// ── the leftovers (2026-10-24, second pass) ─────────────────────────────────────────────────────
+test("Ruth: a woman who keeps what you told her greets you as somebody she knows — no stranger's pitch, then 'Leeds man!'", () => {
+  sandbox(); G.room = "khao_talo_bar"; G.nightTurn = 20; quiet(); run("talk to ying"); run("tell ying i am from leeds");
+  G.room = "beach_rd_c"; _endNight("sleep"); G.room = "khao_talo_bar"; G.nightTurn = 20; quiet();
+  const s = t("talk to ying"); assert.doesNotMatch(s, /Only cola/); assert.match(s, /Leeds/);
+});
+test("Benoît: the man who stiffed the docket drinks two bars up — no fresh slate from him for a month", () => {
+  G.bar = { room: "stinky_bar", stiffedDay: G.day - 1 }; assert.ok(!_shiftEligible().some(c => c.id === "tab"));
+  G.bar.stiffedDay = G.day - 31; assert.ok(_shiftEligible().some(c => c.id === "tab"));
+});
+test("Ingrid, Tomás, Alun: the payday night is in the month that closes, and the pension is not negative spending", () => {
+  sandbox(); G.player.origin = "pension"; _goExpat(); quiet();
+  G.room = "stinky_bar"; G.nightTurn = 20; run("buy beer"); G.room = _hotelRoomId(); G.nightTurn = 100; _endNight("sleep");
+  G.payDay = G.day + 1 - INCOME_DAYS; const before = G.month.spent;
+  G.room = "stinky_bar"; G.nightTurn = 20; quiet(); const w0 = G.money + G.bank; run("buy beer"); run("buy beer"); const beer = w0 - (G.money + G.bank);
+  G.room = _hotelRoomId(); G.nightTurn = 100; out = []; _endNight("sleep");
+  const line = said().split("\n").find(l => /The month, to last night's close/.test(l)) || "";
+  const n = +((line.match(/฿([\d,]+) spent/) || [])[1] || "0").replace(/,/g, "");
+  assert.ok(n >= before + beer, `the closing month (${n}) holds last night's ฿${beer} beside the ฿${before} before it`);
+  assert.equal(G.month.spent, 0, "and the new month starts clean");
+});

@@ -35210,10 +35210,10 @@
    "between": "",
    "system": "expat-month",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "MONEY's month spent is ฿320 under the sum of the mornings since day 8",
-   "verdict": "deferred",
-   "note": "needs reproducing from her save; the job money and the room are right",
+   "verdict": "fixed",
+   "note": "one bug: on a payday the month line closed before the ledger added last night, and the pension that landed made the night negative so the month's clamp zeroed it — the closing month now takes last night (G.monthClosing) and arrivals are added back as income",
    "cls": "E"
   },
   {
@@ -35585,10 +35585,10 @@
    "between": "",
    "system": "expat-month",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "The day-8 night's ฿180 never reached the month line",
-   "verdict": "deferred",
-   "note": "the month opens at the payday; the seed's first night is before it",
+   "verdict": "fixed",
+   "note": "one bug: on a payday the month line closed before the ledger added last night, and the pension that landed made the night negative so the month's clamp zeroed it — the closing month now takes last night (G.monthClosing) and arrivals are added back as income",
    "cls": "E"
   },
   {
@@ -35870,10 +35870,10 @@
    "between": "",
    "system": "expat-month",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "The month line counts only the room in branch A",
-   "verdict": "deferred",
-   "note": "needs reproducing from his branch-A save",
+   "verdict": "fixed",
+   "note": "one bug: on a payday the month line closed before the ledger added last night, and the pension that landed made the night negative so the month's clamp zeroed it — the closing month now takes last night (G.monthClosing) and arrivals are added back as income",
    "cls": "E"
   },
   {
@@ -36485,10 +36485,10 @@
    "between": "",
    "system": "barbooks",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "The stiffed tab: the regular 'drinks two bars up now', then a docket with his name the next night",
-   "verdict": "deferred",
-   "note": "the tab's memory across nights",
+   "verdict": "fixed",
+   "note": "b.stiffedDay: the tab call is not dealt for 30 days after he walks off the docket",
    "cls": "B"
   },
   {
@@ -37280,10 +37280,10 @@
    "between": "",
    "system": "conversation",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/deferred1024.test.js",
    "claim": "Ying greets me as a stranger and remembers me in the same reply",
-   "verdict": "deferred",
-   "note": "the told-place question asked of a known face",
+   "verdict": "fixed",
+   "note": "what you told her (G.toldTo) counts as knowing you, so the return hello replaces the first-meeting gist",
    "cls": "B"
   },
   {

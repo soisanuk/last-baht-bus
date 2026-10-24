@@ -6023,7 +6023,7 @@ function _doTalkCore(arg, topic) {
   // in a line nobody else in town has said to you; her own first-meeting node is for the first meeting.
   if (!topic && !d.topic && !_retell && NPC_ROLES[npc] === "hostess" && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d)) &&
       G.metDay && G.metDay[npc] != null && G.metDay[npc] < G.day &&
-      (_knownTier(npc) >= 1 || (G.phone.contacts || {})[npc] || (G.soc.drinks[npc] || 0) > 0) &&
+      (_knownTier(npc) >= 1 || (G.phone.contacts || {})[npc] || (G.soc.drinks[npc] || 0) > 0 || Object.keys(((G.toldTo || {})[npc]) || {}).length) &&   // she keeps what you told her: a stranger's pitch, then "Leeds man!" (Ruth, round 105)
       !((G.soc.retHello = G.soc.retHello || {})[npc])) {
     G.soc.retHello[npc] = true;
     const n = NPCS[npc].name, gift = _giftsOf(npc).length > 0, num = !!(G.phone.contacts && G.phone.contacts[npc]) && (G.phone.inbox || []).some(m => m.from === npc);   // she has to have SENT one (Steve, rerun)

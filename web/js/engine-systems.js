@@ -8824,6 +8824,7 @@ function _shiftEligible() {
   return SHIFT_CALLS.filter(c => (c.id !== "early" || (!!her && G.nightTurn < 45 && !(last != null && G.day - last < 14))) &&   // "her bus at eleven" was dealt at half past (László, round 73)
     (c.id !== "merit" || meritOpen) &&
     (c.id !== "tab" || !b.tabDue) &&
+    (c.id !== "tab" || !(b.stiffedDay != null && G.day - b.stiffedDay < 30)) &&   // the man who stiffed you drinks two bars up — not back at your rail with a slate the next night
     !(b.callDay && b.callDay[c.id] != null && G.day - b.callDay[c.id] < 3));   // the turning punter three times in five shifts (Callum, round 71)   // not a fresh slate while his last docket is still under the till (Ossie, round 70)
 }
 
@@ -11117,7 +11118,7 @@ function _tabDueTick() {
     G.bar.tabPaidNight = (G.bar.tabPaidNight || 0) + 1;
     _say(_fmt("(The docket comes back out from under the till: he squared it on pay-day, ฿{a}, exactly as he said, and looked faintly surprised at himself.)", { a: _num(td.amt) }), "dim");
   } else {
-    G.bar.stiffed = (G.bar.stiffed || 0) + 1;
+    G.bar.stiffed = (G.bar.stiffed || 0) + 1; G.bar.stiffedDay = G.day;   // he drinks two bars up now: no slate from him the next night (Benoît, round 104)
     _say("(Pay-day came and went. The docket stays under the till, and he drinks two bars up now. The stock was booked the night he drank it.)", "dim");
   }
 }
