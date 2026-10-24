@@ -1479,6 +1479,7 @@ function _partyArrive(to) {
   const names = { who, a: NPCS[p.ids[0]].name, b: pair ? NPCS[p.ids[1]].name : "" };
   _say(_fmt(_pickVary(pair ? (club ? _PARTY_ARRIVE_CLUB_PAIR : _PARTY_ARRIVE_PAIR) : (club ? _PARTY_ARRIVE_CLUB : _PARTY_ARRIVE), "partyarr"), names));
   _partyRival(to);
+  if (G.job && G.job.kind === "manager" && G.job.room === to && p.ids.some(i => !_myFloorGirl(i))) _jobTrouble("brought");   // another bar's woman on the manager's arm, on his floor (Mario, 2026-10-24)
   const dcost = _ladyPrice() * p.ids.length;
   const _ownTill = typeof _atOwnBar === "function" && _atOwnBar();   // at your own bar her drink rings into your own till (Marta, round 63: ฿150 out of the pocket and into nowhere)
   if (G.money >= dcost) {

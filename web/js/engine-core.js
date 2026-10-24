@@ -374,6 +374,8 @@ function newGame() {
     paper: null,         // tourist / longstay / permit (the expat stage; null on a holiday) — see PAPER_COST in world.js
     paperUntil: null,    // a lost permit's paper lasts to this day, then falls back to the origin's
     paperFlag: null,     // the day an incident read the wrong paper (a company bar remembers PAPER_FLAG_DAYS)
+    jobFired: null,      // { room, day, kind } — the last bar that took the keys back (2026-10-24)
+    firedBars: {},       // room → day: bars that will never hire him as manager again
     job: null,           // { kind: "teach" } or { kind: "manager", room, corp, nights, stood, weekStood, weekStart, strikes, shiftDay, shiftStood }
     jobOffer: null,      // a bar's terms, on the table till dawn ({ room, corp, day })
     payDay: null,        // the expat stage's clock: the day the last payday fell (set by _goExpat), INCOME_DAYS apart
@@ -3814,6 +3816,7 @@ function _tick() {
     }
   }
   if (typeof _workPresenceTick === "function") _workPresenceTick(); // a declared shift has to be stood
+  if (typeof _jobCounselTick === "function") _jobCounselTick();   // the mama's word about the girls, said at his own bar (2026-10-24)
   if (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && G.room === G.job.room) {   // a manager's shift is stood the same way
     G.job.shiftStood = (G.job.shiftStood || 0) + 1; G.job.shiftLast = G.nightTurn;   // when he was last on it: the shutter is the man who was there at close (Tomás, round 103)
     if (G.job.shiftStood === 1 || G.job.shiftStood % 10 === 0) for (const id of (typeof _staffAt === "function" ? _staffAt(G.room) : [])) (G.seenDay = G.seenDay || {})[id] = G.day;   // the floor saw you (Dougal: "10 night you no come" to the man on its rail)

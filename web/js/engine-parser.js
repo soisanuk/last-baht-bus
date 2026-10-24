@@ -708,6 +708,9 @@ function _jobQuestion(l) {   // "is my shift done" / "when do i get paid": the p
     const w = G.lastNightWas, ok = w && w.day === G.day - 1 && w.shift === G.job.room;
     _say(ok ? `(It counted: a shift stood at ${_barName(G.job.room)} last night — ${G.job.weekStood || 0} this week of ${G.job.nights}.)` : `(Last night was not a shift that counted at ${_barName(G.job.room)}: ${WORK_MIN_STOOD} turns behind the rail after declaring WORK is a night.)`, "dim"); return true;
   }
+  if ((G.job && G.job.kind === "manager" || G.jobFired) && /\b(?:am i (?:in trouble|fired|sacked|getting (?:fired|sacked))|is (?:the )?mama (?:angry|upset|mad|happy)(?: with me)?|are the girls (?:angry|upset|happy)(?: with me)?)\b/.test(l)) {   // the gauge, asked (2026-10-24)
+    const j = G.job;
+    _say(!j ? `(${_barName(G.jobFired.room)} has a new manager and will never take you back; you are a customer there now${G.day - G.jobFired.day < MGR_UNHIRABLE ? `, and no rail in town will hire you as a manager for a while yet` : ""}.)` : j.counseled != null && G.day - j.counseled < MGR_TROUBLE_DAYS ? `(The mama has had her word about the girls. One more — another bar's woman on your arm in ${_barName(j.room)}, a hard word to one of them — and the keys go back.)` : (j.trouble || []).some(t => G.day - t.day < MGR_TROUBLE_DAYS) ? `(The house noticed, and has said nothing yet. Bring another bar's woman into ${_barName(j.room)} again and the mama will.)` : `(Nobody at ${_barName(j.room)} has anything against you. Keep the girls happy and it stays that way.)`, "dim"); return true; }
   if (G.job && /\b(when do i start|when can i start|do i start tonight|first shift)\b/.test(l)) { _say(G.job.kind === "manager" ? `(Tonight, if you like: WORK at ${_barName(G.job.room)} declares a shift, and ${WORK_MIN_STOOD} turns behind the rail count it. ${G.job.nights} a week is the deal.)` : G.job.kind === "school" ? "(Monday morning. The nights are yours; the mornings are the school's — a rough one before a school day is a late.)" : "(Whenever you sit down to it in your room: TEACH. The mornings are what the platform counts.)", "dim"); return true; }   // "when do I start" (Margit, round 101)
   if (!(G.job && /\b(is my shift (?:done|over|finished)|when do i get paid|when'?s payday|when is payday|how many nights (?:have i|did i) (?:stood|done|worked)|what do you want me to do tonight|what do i (?:do|actually do)(?: as (?:a )?manager| here| for you)?|what(?:'s| is) (?:the|my) job(?: involve)?)\b/.test(l))) return false;
   const j = G.job, w = j.kind === "manager" ? `${j.nights} nights a week at ${_barName(j.room)}; ${j.stood || 0} stood this month${j.shiftDay === G.day ? `, tonight's ${(j.shiftStood || 0) >= WORK_MIN_STOOD ? "counted" : "not yet counted — " + Math.max(0, WORK_MIN_STOOD - (j.shiftStood || 0)) + " more turns on the rail"}` : ", no shift declared tonight (WORK at the bar to stand one)"}` : j.kind === "teach" ? "the mornings, from your room" : "weekday mornings at the school";
@@ -7167,7 +7170,7 @@ function _venueAnswer(npc, v, reg) {
 // A town-wide book for the rows a man asks in every bar (Vince, round 74: Kanom on Reginald and Ging on Nigel said one
 // sentence in two bars): the owner, a staffer on her own rail's regular, a colleague placed on the floor. Each line is
 // dealt once across the town while one remains; the per-room book stays for the rest.
-const _TOWN_WIDE = new Set(["condo", "my_job_mgr", "my_job_other", "my_job_none", "my_job_quit", "my_loan", "my_loan_paid", "my_loan_none", "my_flat", "my_flat_seen", "my_flat_none", "owner", "regular", "placed", "me_seen", "me_known", "me_tonight", "saw", "saw_not", "saw_dawn", "companion", "companionOwn", "companionWas",
+const _TOWN_WIDE = new Set(["condo", "my_job_mgr", "my_job_other", "my_job_none", "my_job_quit", "my_job_fired", "my_loan", "my_loan_paid", "my_loan_none", "my_flat", "my_flat_seen", "my_flat_none", "owner", "regular", "placed", "me_seen", "me_known", "me_tonight", "saw", "saw_not", "saw_dawn", "companion", "companionOwn", "companionWas",
   "bangkok", "season", "cons", "police", "atm", "clinic", "massage", "show", "gents", "dark", "back", "loan", "charge", "venue", "intro", "intro_none"]);   // …and the town's shared knowledge: Bangkok was one sentence in seven bars (Danny, round 95)   // …and LAST NIGHT and the companion rows (Dagny, round 91)   // "You again. Same chair, same face" from two women in two bars (Kevin, round 84)
 const _TOWN = {
   // a go-go's stage, by its own schedule (_GOGO_SHOW) — Henrik, round 69
@@ -7586,6 +7589,12 @@ const _TOWN = {
     house: ["\"You gave {b} the keys back,\" {n} says. \"I heard by nine. A manager's exit travels faster than his arrival.\"", "{n} notes it. \"{b} is Bert's problem again, then. Or somebody's.\""],
     punter: ["\"Packed in {b}? Can't blame you,\" {n} says. \"Nobody lasts a year on an envelope.\"", "\"Heard you quit {b},\" {n} says. \"Soi's a small place. Drink's on you, since you've the evenings back.\""],
   },
+  my_job_fired: {
+    tan: ["\"{b} took the keys back.\" Tan does not make it a lesson. \"A manager is a thing a mamasan can buy on any Tuesday. A girl who stays is not. You learned the price of the cheaper one.\"", "Tan nods. \"{b}. I heard before you did, probably. Mamasans do not argue with managers — they replace them. Be a customer there a while. Pay full.\""],
+    floor: ["\"{b} mama take your keys?\" {n} winces for you, a little. \"Manager, mama find easy. Girl, not easy. Everybody know this except manager.\"", "{n} knows already. \"You make the girls sad at {b}, mama say bye bye. Is normal. Next time, girls first.\""],
+    house: ["\"{b} let you go,\" {n} says. \"The girls come first in any bar that lasts. Managers are easier to find than good girls, and every mamasan knows it.\"", "{n} has heard. \"{b} has a new manager. That is how it goes when the floor is unhappy — the floor stays, the manager changes.\""],
+    punter: ["\"Lost {b}, I heard,\" {n} says. \"Don't take it hard. Managers come and go on this soi. The girls don't.\"", "\"{b} let you go?\" {n} winces. \"The mamasan always picks the girls. I could have told you that for the price of a beer.\""],
+  },
   my_loan: {
     tan: ["\"Nira.\" Tan looks at the road. \"฿{a}, {d} day{ds}. Pay her the day before. Her cousins are polite, and I have driven men to the airport who met them.\"", "\"฿{a}, {d} day{ds} — the soi knows,\" Tan says. \"She lends to everybody once. The second time is a different woman.\""],
     floor: ["\"Nira.\" {n} says the name like a weather warning. \"฿{a}, {d} day. Pay her. My friend not pay, the cousins come. They are polite. That is the scary part.\"", "{n} counts on her fingers. \"฿{a}. {d} day. Pay early, she like you; pay late, she still like you but the number grow.\""],
@@ -7773,6 +7782,7 @@ const _TOWN = {
 // "bud"); a Thai mamasan or cashier answers the same rows in her own English — confident, economical, never a
 // translate app, fluent only where the trade is concerned. `pick` in _townTalk deals from here when _thaiHouse(npc).
 const _TOWN_THAI = {
+  my_job_fired: { house: ["\"{b} take back the keys.\" {n} nods, not unkind. \"Manager, I can find one week. Good girl, one year. Every mama know. Now you know.\"", "{n} heard already. \"Girls not happy at {b}, so mama change the manager. Girls stay, manager go. Is how bar live.\""] },
   show: [
     "\"Show have a time,\" {n} says. \"{s}. You want tip, sit front. Bench is for look only.\"",
     "{n} doesn't need to think. \"{s}. Same like this long time — longer than most girl on that stage.\"",
@@ -9114,7 +9124,8 @@ function _mineTalk(npc, topic) {
   const pick = (k, slots) => { const _th = reg === "house" && _TOWN_THAI[k] && _thaiHouse(npc); const pool = (npc === "tan" && _TOWN[k].tan) || (_th ? _TOWN_THAI[k] : _TOWN[k])[reg] || _TOWN[k].punter; _say(_fmt(_pickTownLine(pool, "mine:" + k), Object.assign({ n, hp: _pr(npc).p }, slots || {}))); return true; };
   if (/^(job|work|shifts?|wages?|pay)$/.test(what)) {
     if (typeof _jobBarStaff === "function" && _jobBarStaff(npc) && typeof _myJobTalk === "function") return _myJobTalk(npc, "my job");
-    if (!G.job) { if (G.jobQuit && G.day - G.jobQuit.day <= 14) return pick("my_job_quit", { b: _barName(G.jobQuit.room) }); return pick("my_job_none", {}); }
+    if (!G.job) { if (G.jobFired && G.day - G.jobFired.day <= MGR_FIRED_NEWS) return pick("my_job_fired", { b: _barName(G.jobFired.room) });
+      if (G.jobQuit && G.day - G.jobQuit.day <= 14) return pick("my_job_quit", { b: _barName(G.jobQuit.room) }); return pick("my_job_none", {}); }
     const j = G.job, what2 = j.kind === "teach" ? "the online English" : j.kind === "school" ? "the school" : `${_barName(j.room)}'s rail`;
     return pick(j.kind === "manager" ? "my_job_mgr" : "my_job_other", { b: j.kind === "manager" ? _barName(j.room) : what2, k: j.nights || 5 });
   }
@@ -19631,7 +19642,8 @@ function _doCommandInner(input) {
           "kind of quiet that costs money. Pattaya does not do shouting — it does consequences, later, quietly."
         : "You let fly at the night in general. A piwin glances over, unimpressed; a hostess laughs, " +
           "not at the joke. This town has heard better, louder, and from men who tipped more.", "alert");
-      if (at) { _addHeat(1); (G.insulted = G.insulted || {})[at] = G.day; if (typeof _repHit === "function" && _flag("act1Done")) _repHit(1); }   // noted, and kept till dawn (round 75)
+      if (at) { _addHeat(1); (G.insulted = G.insulted || {})[at] = G.day; if (typeof _repHit === "function" && _flag("act1Done")) _repHit(1); }
+      if (at && typeof _jobBarStaff === "function" && _jobBarStaff(at)) _jobTrouble("insult");   // one of the girls he manages (Mario, 2026-10-24)   // noted, and kept till dawn (round 75)
       break;
     }
     case "info": case "readouts": case "status": {
