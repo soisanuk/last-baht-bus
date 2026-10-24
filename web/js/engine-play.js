@@ -7282,7 +7282,7 @@ function _jobName() {   // what the job is called in a sentence (Victor, the pay
 }
 function _jobOffer(room, npc) {
   const n = NPCS[npc] ? NPCS[npc].name : "the house";
-  if (G.stage !== "expat") { _say(`"${n === "the house" ? "" : n + ": "}A job? You are here for a week." ${n === "the house" ? "The house" : n} finds that funnier than you do.`); return true; }
+  if (G.stage !== "expat") { _say(`"A job? You're here for a week." ${n === "the house" ? "The house" : n} finds that funnier than you do.`); return true; }
   if (_barOwned() && G.bar && G.bar.room === room) { _say("You own it. The job is yours already, and it does not pay what you think."); return true; }
   if (G.job && (G.job.room === room)) { _say(`You have a rail — this one. (QUIT JOB to give it back.)`); return true; }
   const _held = !!G.job;   // the terms are told to a man who holds a job; taking it needs QUIT JOB first (Dmitri, round 102: he quit blind to hear the next offer)

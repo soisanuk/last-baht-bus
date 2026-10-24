@@ -17,7 +17,7 @@ const sandbox = () => {
   _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation"; G.money = 20000; G.bank = 20000;
   for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2;
 };
-const CORE = /\b(mate|mates|bloke|blokes|fortnight|holiday|lads?|sorted|car park|biro|on the tools|did the sums|mum|squire|motorway|pavement|you'?ve not|they'?ll not|cropper|fair play)\b/i;
+const CORE = /\b(mate|mates|bloke|blokes|fortnight|holiday|lads?|sorted|car park|biro|on the tools|did the sums|mum|squire|motorway|pavement|you'?ve not|they'?ll not|cropper|fair play|(?:i|he|she|we|you|it)'(?:ll|d) not|stand us one|stand a man a drink|punters?|half (?:two|three|ten|eleven)|mind\.|as such|rather the point|haven'?t the room|turns up|cop shop|pot the black|civili[sz]ed|year and a bit|near enough|old boy|dearest|of an? (?:evening|night)|the bins|lying about|poke about|demob|good on you|private ticket|gussy|a one of you|shift the beer|didn't he\.)\b/i;   // and the American reader's classes (2026-10-24)
 const speech = s => (String(s).match(/[“"][^”"]*[”"]/g) || []).join(" ");
 const AMERICANS = Object.keys(NPCS).filter(id => _americanVoice(id));
 beforeEach(() => sandbox());

@@ -5753,7 +5753,7 @@ function _doTalkCore(arg, topic) {
                `"Here?" ${NPCS[npc].name} shrugs at the room without affection or complaint. "Is a good bar. Clean, honest price, nobody make trouble. I keep it like that — is my job, na."`,
                `"What you want to know?" She doesn't look ${_isGogo() ? "round the room" : "down the rail"}; she has already counted it. "Who work tonight, who is late, who go home early. That is the bar. The rest — owner's headache."`,
               ][_hh(npc + ":thisbar", 19) % 3]) :
-          me === "manager" ? `"The place?" He wipes the same patch of bar twice. "Runs itself on a good night and runs me on a bad one. Ask me anything about it except who owns it."` :
+          me === "manager" ? `"The place?" He wipes the same patch of bar twice. "Runs itself on a good night and runs me on a bad one. Whose it is, the paper by the till will tell you." (EXAMINE LICENCE)` :
           me === "cashier" ? `"${bn || "This bar"}?" She taps the drawer. "Money come in here, go out there. Good night, more come in. That is the whole business — and I see all of it."` :
           NPCS[npc].owner ? `"This bar?" She looks at the stools the way a farmer looks at a field. "Mine. My name on the paper, my key in the door. No mama — I am the mama, the till and the girl. Sit, na."` :   // the one-woman bar praised a mama she does not have (Danny, round 95)
           _pickTownLine([   // one sentence from every girl on the floor (chorus audit, 2026-10-13): her own read of her own bar
@@ -9363,7 +9363,16 @@ function _townTalk(npc, topic) {
       if (lic.owner === npc) line = _pickVary([`"Mine." ${n} says it without looking at the frame. "My name on the paper${(NPCS[npc].bars || []).length > 1 ? `, and on the other ${NPCS[npc].bars.length - 1} too` : ""}. No company, no farang, no partner. Cheaper, and nobody can take it from me except the landlord."`, `"Is me." ${n} taps the counter. "Registration, my name, every year the fee. The sign is for the customers. The paper is for me."`], "licaskowner");
       else if (lic.owner) line = floor ? `"The paper? Is ${NPCS[lic.owner].name}'s name. She own. Everybody know — nobody read."` : (th ? `"${NPCS[lic.owner].name} own it — her name on the paper by the till. No company. Bar this size, never have company."` : `"${NPCS[lic.owner].name} owns it — her name's on the registration by the till. No company. On a bar this size there never is."`);
       else if (/Pattaya Leisure/.test(lic.name)) line = floor ? `"Company paper. The group." ${n} shrugs. "I work for the group. I never meet the group."` : (th ? `"Pattaya Leisure (Holdings)." ${n} says the whole name, carefully. "Same paper every room they have. Question, you ask the office — and the office is not here."` : `"Pattaya Leisure (Holdings)." ${n} says the whole name, carefully. "Same paper in every room they run. Questions go to the office, and the office is not here."`);
-      else if (lic.kind === "company") line = floor ? `"Company paper." ${n} shrugs. "Farang boss on the permit, Thai lady on fifty-one. I never meet her. Nobody meet her."` : (th ? `"Company — two million, one farang permit, and ${lic.nominee || "a Thai name"} on the fifty-one." ${n} says it the way she would read a menu. "I never meet her. Nobody I know ever meet her."` : `"A company — two million, one farang's permit, and ${lic.nominee || "a Thai name"} on the fifty-one." ${n} says it the way she would read a menu. "I've never met her. I don't know anybody who has."`);
+      else if (lic.kind === "company" && lic.nominee && Object.keys(NPCS).some(k => NPCS[k].name === lic.nominee && (NPCS[k].room === G.room || (NPCS[k].bars || []).includes(G.room)))) {
+        // the nominee works here: nobody in the room has "never met her" (the American reader's pass, 2026-10-24 — Eddy's own Nuan)
+        const nid = Object.keys(NPCS).find(k => NPCS[k].name === lic.nominee && (NPCS[k].room === G.room || (NPCS[k].bars || []).includes(G.room)));
+        const P = _pr(npc);
+        line = nid === npc ? `"Company paper, and the fifty-one is me." ${n} taps the frame once. "The farang's permit, my name on the shares. That is how a room like this stands up."`
+          : NPCS[npc].manager ? `"My permit, ${lic.nominee}'s fifty-one." ${n} tips ${P.p} head at the floor. "Two million in a company so one farang can stand behind the bar legally. She signs the papers. I sign the checks."`
+          : floor ? `"Company paper. Farang on the permit, ${lic.nominee} on the fifty-one." ${n} nods at her. "She sign, he work. Everybody know."`
+          : `"Company — two million, one farang permit, and ${lic.nominee} on the fifty-one." ${n} nods toward her. "She signs. She works here. That's all the paper says."`;
+      }
+      else if (lic.kind === "company") line = floor ? `"Company paper." ${n} shrugs. "Farang boss on the permit, Thai lady on fifty-one. I never meet her. Nobody meet her."` : (th ? `"Company — two million, one farang permit, and ${lic.nominee || "a Thai name"} on the fifty-one." ${n} says it the way she would read a menu. "I never meet her. Nobody I know ever meet her."` : `"A company — two million, one farang's permit, and ${lic.nominee || "a Thai name"} on the fifty-one." ${n} says it the way ${_pr(npc).s} would read a menu. "I've never met her. I don't know anybody who has."`);
       else line = floor ? `"Paper? Some name, not ours. The owner never come in."` : (th ? `"Paper in a name — nobody here. The owner never come in. The money go to her, first of the month."` : `"A registration in a name that isn't anybody here. The owner doesn't come in; the money goes to her on the first."`);
       _say(line); return true;
     }
@@ -11064,8 +11073,8 @@ function _managerChatTick(id) {
   if (G.pendingChoice) return;   // a modal is up — a man mid-interview doesn't angle for a drink under his own prompt (Dougie, round 46)
   if (typeof _mgrIced === "function" && _mgrIced(id)) return;   // he refused your drink; he does not ask for one (Declan, round 58)
   if (G.soc.mgrChat[id] === 3) {
-    _say(NPCS[id].nudge || (`${NPCS[id].name} lets a beat hang, then taps the bar with two knuckles: “You're ` +
-      "good company, bud — but a man gets thirsty holding up his end. Stand us one?” (BUY MAN DRINK.)"), "dim");
+    _say(_usLine(id, NPCS[id].nudge || (`${NPCS[id].name} lets a beat hang, then taps the bar with two knuckles: “You're ` +
+      "good company, bud — but a man gets thirsty holding up his end. Stand us one?” (BUY MAN DRINK.)")), "dim");
   }
 }
 
@@ -15033,7 +15042,7 @@ function _stillOpenTalk(npc, topic) {
   const until = dawn ? (reg === "floor" ? "they no close, na — sun come up, still open" : th ? "They pour till the last man go home." : "They pour till the last man goes.")
     : (reg === "floor" ? `open till ${_closeClock(open[0].id)}` : th ? `Open till ${_closeClock(open[0].id)} only.` : `Open till ${_closeClock(open[0].id)}, mind.`);
   return reg === "floor" ? `“${later ? "After " + label + "? " : "Still open? "}${names} — ${near}, ${until}.”`.replace(/\.\.”$/, ".”")
-    : `“${later ? "After " + label + ", " : ""}${names} — ${near}. ${until}”`;
+    : _usLine(npc, `“${later ? "After " + label + ", " : ""}${names} — ${near}. ${until}”`);
 }
 // WHERE SHE GOES AFTER WORK (Callum, round 89: twelve women asked, and every one told him what time the bar shuts).
 // Her own answer, dealt from the town's book and kept: asked twice, she goes to the same noodle stall.
@@ -15308,7 +15317,7 @@ function _openingTalk(npc) {
   return pick({
     floor: ["“Four o'clock, na. Ice come at three, we open at four.”", "“Late afternoon. Four, five. Early is quiet — is nice, actually.”", "“We open four. First man usually come five, same man, every day.”"],
     punter: ["“Four, five. The ice turns up at three and the first pint's poured shortly after.”", "“Late afternoon. There's a handful of us who make a point of the first hour — it's the best of the day.”", "“About four. Ask the fella who's on that stool at one minute past.”"],
-    house: ["“Four. The ice comes at three, the girls come at half three, and we're pouring by four.”", "“Late afternoon — four-ish. Quiet, and the regulars like it that way.”", "“We open at four and I'd rather the four o'clock crowd than the midnight one, frankly.”"],
+    house: ["“Four. The ice comes at three, the girls come at half three, and we're pouring by four.”", "“Late afternoon — four-ish. Quiet, and the regulars like it that way.”", "“We open at four and I'll take the four o'clock crowd over the midnight one, frankly.”"],
     thai: ["“Four. Ice come three o'clock, girls come half past three, four o'clock we pour.”", "“Late afternoon — four, about. Quiet. The regular like it like that.”", "“We open four. Four o'clock customer, I like better than midnight customer. True.”"],
   });
 }
@@ -15335,7 +15344,7 @@ function _busyTalk(npc) {
         punter: "“Ten, half ten. Before that it's the four of us and the fan.”",
         house: "“Ten onwards. The first hours are for the regulars; the room fills after that.”",
         thai: "“From ten. First hours for the regular; after that the room get full.”" };
-  return (reg === "house" && _thaiHouse(npc) && hour.thai) || hour[reg] || hour.house;
+  return _usLine(npc, (reg === "house" && _thaiHouse(npc) && hour.thai) || hour[reg] || hour.house);
 }
 // The league: every third night, every table in town — a count, not a weekday.
 function _leagueTalk(npc) {
