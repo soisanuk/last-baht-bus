@@ -115,7 +115,7 @@ function parseThaiWords(s) {
   let total = 0, cur = 0, saw = false;
   for (const tk of toks) {
     if (tk === "ยี่สิบ") { cur += 20; saw = true; continue; }
-    if (tk === "สิบเอ็ด") { cur += 11; saw = true; continue; }
+    if (tk === "สิบเอ็ด") { cur = (cur === 0 ? 1 : cur) * 10 + 1; saw = true; continue; }   // สามสิบเอ็ด is 31, not 3 + 11 (review 2026-10-25)
     if (tk === "สิบ" || tk === "sip" || tk === "sib") { cur = (cur === 0 ? 1 : cur) * 10; saw = true; continue; }
     if (tk === "ร้อย" || tk === "roi" || tk === "roy") { cur = (cur === 0 ? 1 : cur) * 100; total += cur; cur = 0; saw = true; continue; }
     if (tk === "พัน" || tk === "phan" || tk === "pan") { cur = (cur === 0 ? 1 : cur) * 1000; total += cur; cur = 0; saw = true; continue; }

@@ -375,6 +375,7 @@ function newGame() {
     paperUntil: null,    // a lost permit's paper lasts to this day, then falls back to the origin's
     paperFlag: null,     // the day an incident read the wrong paper (a company bar remembers PAPER_FLAG_DAYS)
     hangover: 0,         // last night's, set at the wake; DIAGNOSE reads it
+    questPaid: {},       // qid → true once its reward is paid; a reopened quest never pays twice
     jobFired: null,      // { room, day, kind } — the last bar that took the keys back (2026-10-24)
     firedBars: {},       // room → day: bars that will never hire him as manager again
     job: null,           // { kind: "teach" } or { kind: "manager", room, corp, nights, stood, weekStood, weekStart, strikes, shiftDay, shiftStood }
@@ -419,7 +420,8 @@ function newGame() {
     motoAsked: 0,        // the turn the piwin last asked "where to?" — a bare place typed next answers him
     travelDark: null,    // {key, turn}: TRAVEL stopped at the edge of the dark; the same TRAVEL again walks it
     lastComp: null,      // {turn, room}: the house just poured you one — a refusal in the next two turns hands it back
-    lastNightSaid: null,   // the morning ledger, kept so LAST NIGHT can reprint it
+    lastNightSaid: null,
+    lastNightNotice: null, // the Soi 6 week's "last night" notice, said once   // the morning ledger, kept so LAST NIGHT can reprint it
     motBoots: 0,         // baht handed to Mot toward the football boots he named at dinner
     kyleVouchDay: 0,     // the day Bert agreed to give Kyle a shift; _kyleTick lands the shift after it
     kidRefusedDay: 0,    // the day you told Nont no; the kid path re-opens the day after
@@ -3109,8 +3111,9 @@ function _dropCompanionLines(text) {
 }
 function _describeRoom(full, forceFull) {
   // THE LAST NIGHT SAYS SO on its first look (Dougie, round 96: nothing told him until he tried to go to bed)
-  if (G && G.mode === "soi6" && typeof _lastNight === "function" && _lastNight() && G.lastNightSaid !== G.day && !G.pendingChoice && G.nightTurn < 20) {
-    G.lastNightSaid = G.day; _say("(The last night of the week. Whatever it is you came for, this is the night for it.)", "alert");
+  if (G && G.mode === "soi6" && typeof _lastNight === "function" && _lastNight() && G.lastNightNotice !== G.day && !G.pendingChoice && G.nightTurn < 20) {
+    // its own marker: it used G.lastNightSaid, the morning ledger, and LAST NIGHT went blank on night 7 (review 2026-10-25)
+    G.lastNightNotice = G.day; _say("(The last night of the week. Whatever it is you came for, this is the night for it.)", "alert");
   }
   // a pay-on-arrival fare has landed you already: a reload redrew the stop you LEFT, bars and
   // exits and all, under a driver waiting at the other end (Helga, round 57)
@@ -3607,10 +3610,10 @@ function _districtPath(a, b) {
   return null;
 }
 function _passTime(n) {
-  const startDay = G.day;
+  const startDay = G.day, g0 = G;
   for (let i = 0; i < n; i++) {
     _tick();
-    if (G.day !== startDay || G.pendingChoice === "vacation_end") return true;
+    if (G !== g0 || G.day !== startDay || G.pendingChoice === "vacation_end") return true;   // _act1Fail swaps in a fresh G on the same day number (review 2026-10-25)
   }
   return false;
 }

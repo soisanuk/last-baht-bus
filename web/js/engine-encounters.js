@@ -7,6 +7,15 @@
 // encounters set G.pendingEnc and the player's next command is their snap
 // reaction — doCommand routes it to the matching _ENC resolver.
 
+// A REFUSAL IS NOT A YES (review 2026-10-25): the answer regexes are unanchored substring tests, so "i won't pay" paid
+// the police, "not sure" and "i'm broke" (its "ok") paid the curse ritual and the tonic shop, and "no thanks, another
+// time" bought the freelancer. Any encounter that takes money or ends a night on a yes asks this first.
+function _isRefusal(input) {
+  const t = String(input || "").toLowerCase();
+  return /^(?:no|nah|nope|not|pass|never|leave|go away)\b/.test(t) ||
+    /\b(?:won.?t|don.?t|do not|will not|not (?:sure|now|tonight|paying|interested|today)|no thanks|no thank you|not for me|i'?m broke|too much|rather not|refuse|another time|maybe later)\b/.test(t);
+}
+
 const ENC_COOLDOWN = 12; // min turns between encounters
 const ENC_CHANCE = 0.2;  // roll per eligible arrival (dialled 0.3->0.2, ~a third fewer, 2026-08-22)
 // A bar-hop stop is an hour of the night, and the prose says so out loud ("her
@@ -298,12 +307,13 @@ function _salengVignette() {
 
 function _maybeEncounter() {
   if (!G || G.over || G.pendingFare || G.pendingEnc) return;
+  const _streetHere = !!(_room().venues || _room().seven || _room().motosai) && !_room().indoors && !(typeof _isHotelRoom === "function" && _isHotelRoom(G.room)) && G.room !== "police_station";
   // nothing off the street walks into a bolted lock-in — the rose seller and
   // her daughter did (Stan, round 35)
   if (typeof _lockedIn === "function" && _lockedIn()) return;
   if (_isDarkHere() || _room().bar) return; // the dark belongs to the soi dogs
   // public drunkenness attracts the boys in brown (repeatable, unlike the rest)
-  if (G.soc.drunk >= 5 && G.turns - G.lastPolice >= 30 && _rand() < 0.2) {
+  if (_streetHere && G.soc.drunk >= 5 && G.turns - G.lastPolice >= 30 && _rand() < 0.2) {   // a street: it fired in a hotel room, the condo and the police station (review 2026-10-25)
     G.lastPolice = G.turns;
     G.policeAt = { room: G.room, day: G.day };   // the pavement that saw it (Bridget, round 76)
     if (typeof _streetSaw === "function") _streetSaw("police");   // …and the woman on your arm who talked them down (Dagny, round 91)
@@ -663,7 +673,9 @@ const _ENC = {
       G.pendingEnc = "police"; return;
     }
     const barRoom = _venuesHere(_room()).find(to => ROOMS[to].barType && G.soc.mamaTreat[to]);
-    if (barRoom && _rand() < 0.7) {
+    // rolled ONCE a stop: re-rolled on every stalling input, typing a direction six times made the rescue certain (review 2026-10-25)
+    if (barRoom && !(G.soc.policeRoll && G.soc.policeRoll.at === G.lastPolice)) G.soc.policeRoll = { at: G.lastPolice, ok: _rand() < 0.7 };
+    if (barRoom && G.soc.policeRoll && G.soc.policeRoll.ok) {
       const mama = Object.keys(NPCS).find(nid =>
         NPC_ROLES[nid] === "mamasan" && _npcRoom(nid) === barRoom);
       const mamaName = mama ? NPCS[mama].name : "The mamasan";
@@ -697,7 +709,7 @@ const _ENC = {
         (f ? `฿${_num(f)} changes hands inside a handshake old as the force itself. ` : "") +
         `“Drink water, my friend. Go home slow.” (฿${_num(G.money)} left.)`, "alert");
       _addHappy(-1);
-    } else if (/\b(?:pay|fine|give|baht|ok|okay|yes|here)\b/.test(input)) {
+    } else if (/\b(?:pay|fine|give|baht|ok|okay|yes|here)\b/.test(input) && !/won.?t pay|\brefuse|not pay|not paying|don.?t pay|never pay|no fine|not giving/.test(input) && !_isRefusal(input)) {   // "I won't pay" paid ฿500 (review 2026-10-25)
       const f = Math.min(POLICE_PAY, G.money);
       G.money -= f; G.policePaid = (G.policePaid || 0) + f;   // named on the morning ledger (Gordie, round 72)
       _say((f ? `฿${_num(f)} disappears into a shirt pocket with a receipt that will never ` +
@@ -864,8 +876,9 @@ const _ENC = {
   },
 
   freelancer(input) {
-    const both = /both|two|friend|ning|threesome|them/.test(input);
-    const yes = both || /yes|ok|sure|company|come|deal|her|why not/.test(input);
+    const _no = _isRefusal(input);
+    const both = !_no && /\b(?:both|two|friend|ning|threesome|them)\b/.test(input);
+    const yes = !_no && (both || /\b(?:yes|ok|okay|sure|company|come|deal|her|why not)\b/.test(input));
     if (!yes) {
       _tradeMark("no");
       // No wai here. This is the PASSTHROUGH — the player typed something
@@ -959,8 +972,9 @@ const _ENC = {
   },
 
   coconutbar(input) {
-    const both = /both|two|friend|muk|threesome|them/.test(input);
-    const yes = both || /yes|yeah|ok|sure|company|come|deal|her|why not|how much|price/.test(input);
+    const _no = _isRefusal(input);
+    const both = !_no && /\b(?:both|two|friend|muk|threesome|them)\b/.test(input);
+    const yes = !_no && (both || /\b(?:yes|yeah|ok|okay|sure|company|come|deal|her|why not|how much|price)\b/.test(input));
     if (!yes) {
       _say("You shake your head and keep to the pavement side. She shrugs — no drama, the " +
         "night's long — and folds back into the shade of the palms, where the little orange " +
@@ -1939,8 +1953,8 @@ function _curseRitual(input) {
       "wrist, the one free blessing of the night.");
     return;
   }
-  const pay = /pay|yes|ok|sure|fine|ritual|cleansing|1900|whatever|just|do it/.test(input) &&
-    !/\bno\b|leave|out|refuse|go|walk|away/.test(input);
+  const pay = /\b(?:pay|yes|ok|okay|sure|fine|ritual|cleansing|1900|whatever|just|do it)\b/.test(input) &&
+    !/\bno\b|leave|out|refuse|go|walk|away/.test(input) && !_isRefusal(input);
   if (pay) {
     const took = Math.min(FORTUNE_RITUAL, G.money);
     if (G.party && G.party.ids && G.party.ids.length) _say(_fmt("({n} says nothing while the notes change hands. That was the no, and you heard it as a maybe.)", { n: NPCS[G.party.ids[0]].name }), "dim");
@@ -1999,8 +2013,8 @@ function _tonicShop(input) {
     G.itemLoc.hair_tonic = "inventory";
     return;
   }
-  const pay = /pay|buy|yes|ok|sure|fine|take|deal|course|vip|whatever|just/.test(input) &&
-    !/\bno\b|leave|out|refuse|go|push/.test(input);
+  const pay = /\b(?:pay|buy|yes|ok|okay|sure|fine|take|deal|course|vip|whatever|just)\b/.test(input) &&
+    !/\bno\b|leave|out|refuse|go|push/.test(input) && !_isRefusal(input);
   if (pay) {
     const took = Math.min(TONIC_FLEECE, G.money);
     if (G.party && G.party.ids && G.party.ids.length) _say(_fmt("({n} looks at the bottles, then at the door, then at nothing. She said up to you. It was up to you.)", { n: NPCS[G.party.ids[0]].name }), "dim");

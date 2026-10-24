@@ -175,11 +175,13 @@ function _startC4(want, vs) {
 function _lockedIn() { return !!(G.soc.lockIn && G.soc.lockIn[G.room]); }
 
 function _barSpendTonight(room) {
+  // tonight's book (drinkCount), never the trip's bond (drinks), and the mama treat bought TONIGHT: one good night bought
+  // a free lock-in on every night after it (review 2026-10-25)
   let drinks = 0;
-  for (const [id, n] of Object.entries(G.soc.drinks)) {
+  for (const [id, n] of Object.entries(G.soc.drinkCount || {})) {
     if (NPCS[id] && _npcRoom(id) === room) drinks += n;
   }
-  return (G.soc.bells[room] || 0) >= 1 || G.soc.mamaTreat[room] || drinks >= 3;
+  return (G.soc.bells[room] || 0) >= 1 || (G.soc.mamaTreatNight || {})[room] === G.day || drinks >= 3;
 }
 
 // THE HOUR A VENUE SHUTS (Mario, 2026-10-11). Gentleman's clubs and the Darkside
@@ -2814,6 +2816,7 @@ function _abandonGame(why, houseClosed) {
   // the house closing on you is not you walking away: the stake comes back across the table
   // (Gary, round 79: midnight killed a Connect 4 mid-move and kept his ฿20)
   if (houseClosed && g.stake) {
+    if (g.type === "kp") g.stake = KP_ENTRY;   // the pot is five entries; yours is one (review 2026-10-25: ฿500 back for ฿100)
     G.money += g.stake; G.offIn = (G.offIn || 0) + g.stake;
     _say(`(${why} — the ${g.type === "c4" ? "Connect 4" : g.type === "jp" ? "Jackpot" : "game"} is folded away unfinished, and the ฿${_num(g.stake)} comes back across the table. ฿${_num(G.money)} in your pocket.)`, "dim");
     return;
@@ -3209,6 +3212,7 @@ function _maiDeeScene(here) {
   if (!_flag("act1Done")) return;
   for (const id of here) {
     if (!NPC_ROLES[id] || _bondTier(id) < 2 || _maiDee(id)) continue;
+    if (G.party && G.party.ids && G.party.ids.includes(id)) continue;   // she was walked out WITH you (review 2026-10-25)
     (G.maiDee = G.maiDee || {})[id] = G.day;
     (G.maiDeeBar = G.maiDeeBar || {})[G.room] = G.day;
     _say(_fmt(_pickVary(_MAI_DEE_SCENE, "maideescene"), { n: NPCS[id].name }), "alert");
@@ -6195,7 +6199,7 @@ function _endNight(reason) {
       quiet: !!G.lastBfHonest };   // the quiet close or the khao man gai one — she remembers which (Ruairi, round 75)
     G.kickedTonight = null;
   }
-  if (!_flag("act1Done") && ["dawn", "collapse", "blackout", "hurt", "accident", "roadhit"].includes(reason)) {
+  if (!_flag("act1Done") && ["dawn", "sunrise", "allnighter", "collapse", "blackout", "hurt", "accident", "roadhit"].includes(reason)) {   // WATCH SUNRISE twice was a way out of the race (review 2026-10-25)
     _act1Fail(reason);
     return;
   }
@@ -6218,6 +6222,7 @@ function _endNight(reason) {
       "and owes you nothing.)", "dim");
   }
   G.pendingEnc = null;
+  G.rideSeq = null; G.bfSeq = null;   // a ride or a bar-hop never outlives its night (review 2026-10-25: _onRide() stuck true)
   // the soapy's laminated menu and a barfine still on the table do not follow you
   // into the morning: SOAPY typed on the last turn of a night left its menu pending
   // in your own hotel bed, swallowing the day's first command (the soak's
@@ -6592,6 +6597,7 @@ function _endNight(reason) {
   G.soc.bondNight = {};      // …and so does how far a night of buying can carry one girl (_boughtBond)
   G.soc.drinkNight = {};     // …and who you actually bought a DRINK for (the butterfly tease)
   G.soc.drinkCount = {};     // …and how many each (the Soi 6 drink tariff)
+  G.soc.tipBond = 0;         // a night's tipping lifts her a couple of notches — a night's, not the trip's (review 2026-10-25)
   G.soc.selfDrinks = {};     // …and the beers you bought yourself, per bar (mama's midnight gate)
   // A new night never inherits last night's breadcrumb (round 34).
   if (typeof _traceCancel === "function") _traceCancel();
@@ -6683,7 +6689,7 @@ function _endNight(reason) {
   // only a night that ENDED in your bed with somebody who is not her: the party is cleared by now, so "anybody on your arm"
   // read as nobody, and a night out that ended at the sunrise (or with HER) caught you with no shoes at the door (Benoît, round 104)
   if (!crash && _bedIds && _bedIds.length && typeof _affairLive === "function" && _affairLive() && !_bedIds.includes(G.affair.id) && typeof _affairCaught === "function") _affairCaught("bed", _bedIds);   // two women in one bed and neither saw the other (Rolf, round 66)
-  else if (!crash && typeof _affairMorning === "function") _affairMorning();   // she came home with you (Rolf, round 55)
+  else if (!crash && !["hurt", "accident", "roadhit", "robbed", "barfine", "bfscam"].includes(reason) && typeof _affairMorning === "function") _affairMorning();   // not after a hospital night (review 2026-10-25)   // she came home with you (Rolf, round 55)
   _chargeRent(!!crash);              // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
   if (_quietHelped) _say("(Naklua quiet: the hangover wakes one size smaller.)", "dim");
@@ -7072,6 +7078,16 @@ function _ageBooks(off) {
   if (G.gifts && typeof G.gifts === "object") for (const k of Object.keys(G.gifts)) (Array.isArray(G.gifts[k]) ? G.gifts[k] : []).forEach(shiftDay);
   shiftDay(G.lastNightWas); shiftDay(G.lastRide); shiftDay(G.chamLast);
   if (Array.isArray(G.streetLog)) G.streetLog.forEach(shiftDay);
+  // …and the absolute-day deadlines: a bank review begun on one trip ran into every later one, and a payout due "in a
+  // week" never came to a man whose next trip started at day 1 (review 2026-10-25)
+  for (const k of ["acctUntil", "paperFlag", "paperUntil"]) if (typeof G[k] === "number") G[k] -= off;
+  // every once-a-day stamp (G.<something>Day: the booking app, the rose seller, Mama Yai's plate, the cats, the pool…)
+  // is a day number on the old trip's count; left as it was, it blocked or doubled a thing on the new trip's same day
+  for (const k of Object.keys(G)) if (/[a-z]Day$/.test(k) && typeof G[k] === "number") G[k] -= off;
+  shiftMap(G.questDoneDay);   // "a month after" a job is a month of days, whichever trip they fell on
+  shiftDay(G.std);   // an infection carried home is days old, not days in the future
+  if (G.massageLog && typeof G.massageLog === "object") for (const r of Object.keys(G.massageLog)) { const e = G.massageLog[r]; if (e && typeof e.last === "number") e.last -= off; }
+  for (const list of [G.jobPay, G.launderRisk]) if (Array.isArray(list)) for (const r of list) if (r && typeof r.due === "number") r.due -= off;
 }
 function _newVacation(opts) {
   const _soi6 = !!(opts && opts.soi6);   // CONTINUE at the Soi 6 week's end (Mario, 2026-10-20): the same street a month on, the people remembering you
@@ -7482,9 +7498,9 @@ function _jobNight() {
   const stood = j.shiftDay === G.day - 1 && (j.shiftStood || 0) >= WORK_MIN_STOOD;
   if (j.shiftDay === G.day - 1 && !stood) _say(`(You declared a shift at ${_barName(j.room)} and stood ${j.shiftStood || 0} turn${j.shiftStood === 1 ? "" : "s"} of it; the house counts a night from ${WORK_MIN_STOOD / 10} hours on the rail. It did not count.)`, "dim");
   if (stood) {
-    j.stood = (j.stood || 0) + 1; j.weekStood = (j.weekStood || 0) + 1;
+    j.stood = (j.stood || 0) + 1; j.stoodTotal = (j.stoodTotal || 0) + 1; j.weekStood = (j.weekStood || 0) + 1;
     (G.ledgerNotes = G.ledgerNotes || []).push(`a shift stood at ${_barName(j.room)} — ${j.weekStood} this week${j.corp ? "" : ", for the envelope"}`);   // the manager's night on the ledger (Tomás, round 103)
-    if (j.corp && _paper() !== "permit" && j.stood >= MGR_PERMIT_AFTER) {
+    if (j.corp && _paper() !== "permit" && (j.stoodTotal || 0) >= MGR_PERMIT_AFTER) {   // a lifetime count: the payday reset j.stood, so the permit never came (review 2026-10-25)
       G.paper = "permit"; G.paperUntil = null; G.thaiAccount = true;
       _say(`(The company's paper came through: a work permit in your name, and a bank book with it. ${_barName(j.room)} has you six nights a week now, and the police can read it all they like.)`, "win");
     } else if (!j.corp && _paper() !== "permit" && (_hh(j.room + ":" + (G.day - 1) + ":paper", 97) % 100) < MGR_INCIDENT_PCT) {
@@ -7557,7 +7573,8 @@ function _condoMonth() {   // on the payday: the rent and the electric; short tw
   const due = CONDO_RENT + CONDO_UTIL; const have = (G.money || 0) + (G.bank || 0);
   if (have >= due) {
     const fb = Math.min(G.bank || 0, due); G.bank = (G.bank || 0) - fb; G.money -= (due - fb); G.condoPaid = (G.condoPaid || 0) + due;
-    if (G.month) { G.month.rent = (G.month.rent || 0) + due; G.month.spent = (G.month.spent || 0) + due; }   // the payday's rent is the new month's room AND its spending — "฿0 spent, ฿11,000 of it the room" (Renata)
+    // (the new month is seeded with this rent after the reset in _incomeTick; writing it here too counted it in both — review 2026-10-25)
+    if (false && G.month) { G.month.rent = (G.month.rent || 0) + due; G.month.spent = (G.month.spent || 0) + due; }   // the payday's rent is the new month's room AND its spending — "฿0 spent, ฿11,000 of it the room" (Renata)
     if (G.condo.short) G.condo.short = 0;
     return ` The condo: ฿${_num(CONDO_RENT)} rent and ฿${_num(CONDO_UTIL)} electric.`;
   }
@@ -7744,7 +7761,7 @@ function _doMoney() {
   if (G.keptBy) _say(`(A mat in ${NPCS[G.keptBy.id] ? NPCS[G.keptBy.id].name : "her"}'s room, ${KEPT_BY_NIGHTS - (G.keptBy.nights || 0)} nights left of it. No folio; her face is the rent.)`, "dim");
   { const p = _paper(); _say(`Paper: ${_paperWord(p)}${p === "permit" && G.job ? ` through ${_jobName()}` : ""}${p === "tourist" ? (typeof _walletHunt === "function" && _walletHunt() ? " — no bank book, and no card either till the replacement comes" : " — no bank book, the foreign card and its fee") : p === "longstay" ? (typeof _walletHunt === "function" && _walletHunt() ? " — a bank book; the card went with the wallet" : " — a bank book") : ""}; the agent's ฿${_num(PAPER_COST[p] || 0)} a month.`, "dim");
     if (G.stringer) _say(`Stringer for Last Orders: ฿${_num(OWL_LEAD_PAY)} a paragraph, ${OWL_LEADS_WEEK} a week, for a thing you read that Mort had not — ${_stringerOwed().length} unpaid.`, "dim");
-    if (G.job) _say(G.job.kind === "teach" ? `Job: online English, ฿${_num(_jobPay())} this month at the mornings you have kept.` : G.job.kind === "school" ? `Job: the school — ฿${_num(SCHOOL_PAY)} a month through the books, eight o'clock Monday to Friday; ${G.job.lates || 0} of ${SCHOOL_LATES} late mornings this month${G.job.paidOnce ? "" : "; the permit with the first payday"}.` : `Job: manager at ${_barName(G.job.room)} — ${G.job.nights} nights a week, ${G.job.stood || 0} stood this month, ${G.job.corp ? `฿${_num(MGR_PERMIT_PAY)} through the books` : `฿${_num(MGR_CASH_PAY)} in an envelope`}${G.job.corp && _paper() !== "permit" ? `; the paper after ${MGR_PERMIT_AFTER} nights (${G.job.stood || 0} so far)` : ""}${G.job.counseled != null && G.day - G.job.counseled < MGR_TROUBLE_DAYS ? ". The mama has had a word about the girls: one more and the keys go back" : (G.job.trouble || []).some(t => G.day - t.day < MGR_TROUBLE_DAYS) ? ". The house has noticed you and the girls" : ""}.`, "dim"); }
+    if (G.job) _say(G.job.kind === "teach" ? `Job: online English, ฿${_num(_jobPay())} this month at the mornings you have kept.` : G.job.kind === "school" ? `Job: the school — ฿${_num(SCHOOL_PAY)} a month through the books, eight o'clock Monday to Friday; ${G.job.lates || 0} of ${SCHOOL_LATES} late mornings this month${G.job.paidOnce ? "" : "; the permit with the first payday"}.` : `Job: manager at ${_barName(G.job.room)} — ${G.job.nights} nights a week, ${G.job.stood || 0} stood this month, ${G.job.corp ? `฿${_num(MGR_PERMIT_PAY)} through the books` : `฿${_num(MGR_CASH_PAY)} in an envelope`}${G.job.corp && _paper() !== "permit" ? `; the paper after ${MGR_PERMIT_AFTER} nights (${G.job.stoodTotal || 0} so far)` : ""}${G.job.counseled != null && G.day - G.job.counseled < MGR_TROUBLE_DAYS ? ". The mama has had a word about the girls: one more and the keys go back" : (G.job.trouble || []).some(t => G.day - t.day < MGR_TROUBLE_DAYS) ? ". The house has noticed you and the girls" : ""}.`, "dim"); }
   if (G.envelopeDue) _say(`An envelope of ฿${_num(G.envelopeDue.amt)} is waiting at ${_barName(G.envelopeDue.room)} — the house hands it over when you are next behind the rail.`);
   const roof = G.hotel === "condo" ? `the condo is ฿${_num(CONDO_RENT + CONDO_UTIL)} a month with the electric` : `the room is ฿${_num(_hotelRate(G.hotel))} a night`;
   const _till = _tillMine() > 0 ? `, ฿${_num(_tillMine())} in your own till` : "";

@@ -198,7 +198,7 @@ function _doDebt() {
     lines.push(_fmt("The hotel: ฿{h} on the book. Nobody checks out of a debt.",
       { h: _num(G.hotelDebt) }));
   }
-  if (_barOwned() && G.bar && G.bar.loan && G.bar.loan.owed > 0)
+  if ((_barOwned() || (G.bar && G.bar.loan && G.bar.loan.personal)) && G.bar && G.bar.loan && G.bar.loan.owed > 0)
     lines.push(_fmt("Nont, for the bar: ฿{o}. He takes a quarter of every night off the top until it's square, and he does not need reminding.", { o: _num(G.bar.loan.owed) }));
   if (_barOwned() && G.bar && (G.bar.owed > 0 || G.bar.arrears > 0)) {
     lines.push(_fmt("The old man: ฿{o} left on the bar" +
@@ -216,7 +216,10 @@ function _doDebt() {
 }
 
 function _doBorrow(arg) {
-  if (_nontHere() && _barOwned()) { _nontLoan(arg); return; }   // the bar's money is Nont's register, not Nira's (phase 4)
+  if (_nontHere() && _barOwned()) { _nontLoan(arg); return; }
+  // she lends to a man with a room key and a card: in Act One the wallet is the whole problem, and a failed run wiped the
+  // loan with the night, so the money was free (review 2026-10-25)
+  if (!_flag("act1Done") && G.room === _npcRoom("nira")) { _say(`Nira looks at you the way a bank looks at a man with no wallet. "No card, no room, no name in my book yet. Find your wallet first. Then we talk about twenty percent."`); return; }   // the bar's money is Nont's register, not Nira's (phase 4)
   if (G.money > 100000 && G.room === _npcRoom("nira")) {
     // she counts money for a living (millionaire playtest 2026-08-22)
     _say("Nira's eyes go to your pocket before they go to your face, and the calculator " +
@@ -1091,10 +1094,11 @@ function _doBarfine(arg) {
     if (G.pendingBf.herMoney) _say(who
       ? `${name} glances at ${who}, who shakes her head: the book is closed at this hour, there is no fine to write. What's left is between you and her, and she says it herself.`
       : `${name} shakes her head at the book herself — closed at this hour, nobody to write a fine and nothing to write. What's left is hers, and she says it herself.`);
-    else _say(`${name} brightens and says nothing at all about money — that is not ` +
+    else _say(who ? `${name} brightens and says nothing at all about money — that is not ` +
       `her department, and the cut she gets from it is nobody's business. ` +
       `${who} materialises at your elbow with the pleasant, final air of ` +
-      "someone who does this arithmetic all night.");
+      "someone who does this arithmetic all night." :
+      `${name} brightens, and since there is nobody on the floor tonight to do the arithmetic for her, she does it herself — the bar's fine and her own money, said plainly, and none of her cut is your business.`);   // "null materialises at your elbow" in fourteen bars (review 2026-10-25)
   }
   _bfPrompt(true);   // the prose above just named her
 }
@@ -2453,7 +2457,9 @@ function _nightRide(input) {
   // a stop is an hour of the night, not a turn of it: six stops used to fit in 36
   // minutes of clock and the close said "morning already" at 00:48 (Kenji, round 47).
   // Offstage, so the bar you rode away from does not narrate its drizzle at you.
-  { G.offstage = true; const ended = _passTime(RIDE_STOP_TURNS); G.offstage = false; if (ended) return; }
+  // a stop stops short of dawn: a stop that ran past it ended the night out from under the ride and left G.rideSeq set,
+  // so _onRide() stayed true for good (review 2026-10-25) — the dawn close below is the ride's own ending
+  { G.offstage = true; const ended = _passTime(Math.max(0, Math.min(RIDE_STOP_TURNS, NIGHT_TURNS - 1 - G.nightTurn))); G.offstage = false; if (ended) return; }
   if (seq.stops >= RIDE_MAX_STOPS || G.nightTurn >= SUNRISE_TURN) return _endRide(seq, "dawn");
   _rideQuestion(seq, id, name);
   G.pendingEnc = "nightride";
@@ -3118,7 +3124,7 @@ const _ACT1_FAIL_LEDE = {
 // cleared so the same people answer the same questions, and the stake is the card, never the bed.
 function _walletLostRoll(reason) {
   G.walletLostNow = false;
-  if (reason !== "blackout" || G.stage !== "expat" || !_flag("hasWallet") || _flag("walletEver") || G.mode === "soi6") return false;
+  if (reason !== "blackout" || G.stage !== "expat" || !_flag("hasWallet") || _flag("walletEver") || G.mode === "soi6" || G.dog) return false;   // a dog at your side keeps your pockets, the wallet included (review 2026-10-25)
   G.blackouts = (G.blackouts || 0) + 1;
   const odds = WALLET_LOST_ODDS[Math.min(G.blackouts, WALLET_LOST_ODDS.length) - 1];
   if (_rand() >= odds) return false;
@@ -3682,8 +3688,11 @@ function _doAbandon(arg) {
       "way home in it. No. This one you finish.");
     return;
   }
-  const qid = _findQuest(arg) ||
-    Object.keys(QUESTS).find(q => G.quests[q] === "active");
+  // a name that matches nothing is not "the first job in the book": ABANDON GLAMXX dropped the first active quest and
+  // took its item (review 2026-10-25). Bare ABANDON still means the only active one.
+  const _act = Object.keys(QUESTS).filter(q => G.quests[q] === "active");
+  const qid = arg ? _findQuest(arg) : (_act.length === 1 ? _act[0] : null);
+  if (!arg && _act.length > 1) { _say(`Which one? (ABANDON <job> — ${_act.map(q => QUESTS[q].name).join(" · ")})`); return; }
   if (!qid || G.quests[qid] !== "active") { _say("You're not on that job."); return; }
   G.quests[qid] = "abandoned";
   const q = QUESTS[qid];
@@ -4107,6 +4116,8 @@ function _questTick() {
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
     G.quests[qid] = "done";
+    // a quest pays once a life: a reopened one (THE KID → NO reopened rabbit_job) completed and paid again each cycle (review 2026-10-25)
+    const _repaid = !!(G.questPaid || {})[qid]; (G.questPaid = G.questPaid || {})[qid] = true;
     (G.questDoneDay = G.questDoneDay || {})[qid] = G.day;   // the follow-ups a month later read it (the laundering quests, 2026-10-08)
     if (qid === "nameonwall") (G.jobPay = G.jobPay || []).push({ due: G.day, kind: "hand", who: "orathai", amt: LAUNDER_HONEST.nameonwall,
       line: "Orathai counts notes out of the folder and lays them by your glass: {amt}. \"For the reading. I will pay her filing — somebody should — and this is what it cost to find the bars.\"" });
@@ -4120,7 +4131,7 @@ function _questTick() {
       if (!giver || !NPCS[giver]) continue;
       _say(`(The next door: “${_L(nq.name)}” —${_questWhere(giver) || ` ${NPCS[giver].name} has it.`})`, "dim");
     }
-    if (q.reward.money) {
+    if (q.reward.money && !_repaid) {
       // money sent through the bank app lands in the ACCOUNT, as every other
       // transfer does (Joanne, round 64 — the line said bank app, the pocket grew)
       const _gv0 = _qGiver(q), _byApp = !!(NPCS[_gv0] && !_npcsHere().includes(_gv0));
@@ -4131,7 +4142,7 @@ function _questTick() {
       const _here = _gv && _npcsHere().includes(_gv);
       _say(`(+฿${_num(q.reward.money)}${_gn ? (_here ? ` from ${_gn}` : ` — ${_gn}'s, sent through the bank app with a sticker on it`) : ""} — ${_byApp ? `฿${_num(G.bank)} in the account` : `฿${_num(G.money)} in pocket`}.)`, "dim");
     }
-    if (q.reward.happy) _addHappy(q.reward.happy);
+    if (q.reward.happy && !_repaid) _addHappy(q.reward.happy);
     _repGain(); // seeing a job through is the sort of thing that earns you a name (throttled)
   }
 }
@@ -4991,6 +5002,7 @@ const _CONTACT_SWAP_LINES = [
 
 function _doSendMoney(arg) {
   if (_phoneDead()) return;
+  arg = String(arg || "").replace(/(\d),(?=\d{3}\b)/g, "$1");   // "1,500" is fifteen hundred, not one baht and a contact called "500" (review 2026-10-25)
   const m = arg.match(/(\d+)/);
   const amt = m ? parseInt(m[1], 10) : null;
   const nameW = arg.replace(/\d+|money|baht|to |฿/g, " ").trim();
@@ -9571,6 +9583,10 @@ function _doSellBar() {
       : "Nothing to sell. Your worldly goods fit in a hotel safe.");
     return;
   }
+  if (_flag("affairOffered") && !(typeof _affairLive === "function" && _affairLive() && !(G.affair && G.affair.soured))) {
+    _say("Sell the Stinky? The reason you had for selling has gone, or gone sour, and the old man's handshake price was only ever for that reason. You run it, or it runs you.");   // the "you got out with the girl" ending printed after the break (review 2026-10-25)
+    return;
+  }
   if (!_flag("affairOffered")) {
     _say("Sell the Stinky? There's exactly one buyer on this soi and everybody knows " +
       "who — and a man who walks in NEEDING to sell gets the needing-to-sell price: " +
@@ -9598,6 +9614,12 @@ function _sellBarYes() {
   if (id) { G.phone.contacts[id] = true; G.soc.drinks[id] = 20; }
   G.lifeStats = { day: G.day, nights: (G.bar && G.bar.nights) || 0, stood: (G.bar && G.bar.worked) || 0,
     her: id, happy: G.happy, best: Math.max(G.bestHappy || 0, G.happy) };
+  // the till is yours and comes with you; Nont's loan to the bar is paid out of the sale (review 2026-10-25: both vanished)
+  { const till = Math.max(0, (G.bar && G.bar.cash) || 0), owe = Math.max(0, (G.bar && G.bar.loan && G.bar.loan.owed) || 0);
+    const net = till - owe;
+    if (net > 0) { _bankIn(net); (G.bankNotes = G.bankNotes || []).push(`the Stinky's till${owe ? `, less Nont's loan` : ""}`); }
+    else if (net < 0) { const take = Math.min(-net, G.bank || 0); G.bank -= take; }
+    if (till || owe) _say(`(The till comes with you: ฿${_num(till)}${owe ? `, less the ฿${_num(owe)} still on Nont's book, which the sale settles` : ""}.)`, "dim"); }
   G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
     best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 };
   _say("");
@@ -10904,8 +10926,10 @@ function _barLost(cause) {
   if (typeof _affairLive === "function" && _affairLive()) _affairEnd("bleed");
   _setFlag("barLost");
   G.flags.barOpen = false;
+  const _nontOwed = Math.max(0, (G.bar && G.bar.loan && G.bar.loan.owed) || 0);   // Nont's loan was forgiven with the bar (review 2026-10-25)
   G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
     best: 0, workedLast: false, rentOwed: 0, rentShort: 0 };
+  if (_nontOwed) { G.bar.loan = { owed: _nontOwed, personal: true }; _say(`(Nont's ฿${_num(_nontOwed)} did not go with the bar. It is in your name now, at his table — REPAY there.)`, "dim"); }
   _addHappy(-8, "the bar is gone, and you built it");   // named beside the figure (happiness audit, H3)
 }
 
@@ -12688,7 +12712,7 @@ function _qvKitchen(arg) {
   }
   G.money -= dish.price;
   G.hunger = Math.max(0, G.hunger - dish.hunger);
-  if (dish.thirst) G.thirst = Math.max(0, G.thirst + dish.thirst);
+  if (dish.thirst) G.thirst = Math.min(100, Math.max(0, G.thirst - dish.thirst));   // the stalls' convention: a negative thirst is a dish that makes you thirsty (the curry quenched it — review 2026-10-25)
   if (dish.id === "roast") {
     G.qvRoast = (G.qvRoast && G.qvRoast.day === G.day) ? G.qvRoast : { day: G.day, mine: 0 };
     G.qvRoast.mine++;
@@ -14121,6 +14145,7 @@ function _kidClear(amount) {
     _say(`\"It's ฿${KID_CLEAR.toLocaleString()}.\" Flat. \"Not a negotiation. I'm not haggling over my own name.\"`);
     return;
   }
+  amount = KID_CLEAR;   // the price is flat: PAY NONT 25000 took twenty-five (review 2026-10-25)
   if (G.money < amount) { _say(`You haven't got ฿${amount.toLocaleString()} on you. (CASH pulls from the account.)`); return; }
   G.money -= amount;
   _setFlag("kidCleared"); _setFlag("kidHandled");

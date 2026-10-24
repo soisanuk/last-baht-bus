@@ -612,10 +612,16 @@ function _dispatch(cmd) {
   // world: _endNight advances the day, _act1Fail rebuilds it back to day 2, and
   // _newVacation resets it to 1 — every one of those is "the night you were in
   // is over", and every one shows up as the day not being the day it was.
-  const _dayBefore = (typeof G !== "undefined" && G) ? G.day : null;
+  // …but _act1Fail's rebuild lands on day 2 again from day 2, so the day alone could not see it and UNDO rewound a
+  // lost Act One (the 2026-10-25 review): the attempt count and the trip count are part of the boundary too.
+  const _mark = () => (typeof G !== "undefined" && G) ? [G.day, G.act1Tries || 0, G.vacation || 0].join(":") : null;
+  const _dayBefore = _mark();
+  // a game that ENDS on this command was live in the snapshot: rewinding it hands back the answer (a quiz's fifth question)
+  const _gameBefore = (typeof G !== "undefined" && G) && !!(G.game || G.pendingBf || G.pendingEnc);
   doCommand(cmd);
-  const _dayAfter = (typeof G !== "undefined" && G) ? G.day : null;
+  const _dayAfter = _mark();
   if (_dayBefore !== null && _dayAfter !== null && _dayAfter !== _dayBefore) _dropUndo();
+  else if (_gameBefore) _dropUndo();
   _saveUndo();
   _autosave();
   _audioForRoom(G.room, G.flags);

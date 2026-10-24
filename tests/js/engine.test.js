@@ -4939,7 +4939,7 @@ test("the night ride: stops cost money, pay non-jading สนุก, deepen the 
 test("lock-in: a spender at a lockIn bar gets the bolt, not the shutters", () => {
   state().flags.act1Done = true; state().flags.hasWallet = true;
   state().room = "night_heron"; state().money = 5000;
-  state().soc.drinks.dokmai = 3;      // freely spending on the ladies
+  state().soc.drinks.dokmai = 3; state().soc.drinkCount = { dokmai: 3 };      // freely spending on the ladies TONIGHT (the lock-in reads tonight's book since the 2026-10-25 review)
   state().nightTurn = 59;
   const favBefore = _favor("dokmai");
   run("wait 2");                       // midnight arrives with you inside

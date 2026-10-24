@@ -72,7 +72,7 @@ test("buffalo: every barfine stays honest (no scam roll)", () => {
 });
 
 test("guard: a guard dog sees the boy-in-brown off — no shakedown", () => {
-  G.dog.egg = "guard";
+  G.dog.egg = "guard"; G.room = "beach_rd_c";   // the boy in brown works the street (the stop is gated to streets since the 2026-10-25 review)
   G.soc.drunk = 8; G.lastPolice = -999; G.turns = 500;
   globalThis._rand = () => 0.01; // would trigger the cop
   out = []; _maybeEncounter();

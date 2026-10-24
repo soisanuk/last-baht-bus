@@ -1247,8 +1247,9 @@ function _doGo(dirWord) {
       "and abort — but Rabbit wanted it left, not carried.)", "alert");
     return false;
   }
-  if (_footCrossing(G.room, to)) return;   // eight lanes of Sukhumvit, on foot — the night may end here
-  // a downpour owns the street: nothing moves except into shelter
+  // a downpour owns the street — checked BEFORE the crossing, which rolled the highway on a move the rain then refused
+  // (review 2026-10-25: the truck ended a night on a step never taken)
+  if (!(G.rain > 0 && !_sheltered(to) && !(G.itemLoc && G.itemLoc.umbrella === "inventory")) && _footCrossing(G.room, to)) return;   // eight lanes of Sukhumvit, on foot — the night may end here
   if (G.rain > 0) {
     // …unless you had the sense to buy an umbrella. The rain still owns the
     // buses, the motosais and the mood; it no longer owns your itinerary.
@@ -5206,6 +5207,7 @@ function _doTalkCore(arg, topic) {
       /^(?:work for you|hiring|vacancy|job for me|a job|the job)$/.test(String(topic).toLowerCase().trim()))) {   // the parser strips the article, so the RAW line is read
     // a man asking "about a job" means hiring: Jerry's career node took the bare word "job" ahead of his school's offer (Dmitri, round 102)
     if (!NPC_ROLES[npc] && (NPCS[npc].dialogue || []).some(d => d.topic && /(?:^|\|)job for me(?:\||$)/.test(String(d.topic)) && (!d.when || d.when(_npcState(npc), G)))) topic = "job for me";
+    else if ((() => { const d = _pickDialogue(npc, "the job"); return d && d.topic && /(?:^|\|)the job(?:\||$)/.test(String(d.topic)); })()) topic = "the job";   // THE JOB that is his (Eddy's heist): the quest's own hint never reached him (review 2026-10-25)
     else if (_teachesHere(npc)) { const od = (NPCS[npc].dialogue || []).find(d => d.topic && /\b(?:online|teach)/.test(String(d.topic))); if (od) topic = String(od.topic).split("|")[0]; }
     else if (_room().barType && (NPC_ROLES[npc] === "mamasan" || NPCS[npc].manager || NPCS[npc].owner || (typeof _tillKeeper === "function" && _tillKeeper(G.room) === npc)) && typeof _jobOffer === "function" && _jobOffer(G.room, npc)) return;
   }
@@ -6639,7 +6641,7 @@ function _convoAnswer(text) {
     } }
   // telling her you are leaving is not an answer to her question (Steve: "i fly home in two days" was filed somewhere)
   if (typeof _isLeavingSaid === "function" && _isLeavingSaid(text) && G.convoQ && NPCS[G.convoQ.id] &&
-      typeof _leavingTalk === "function") { const _id = G.convoQ.id; G.convoQ = null; if (_leavingTalk(_id, text)) return true; }
+      typeof _leavingTalk === "function") { const _q = G.convoQ, _id = _q.id; G.convoQ = null; if (_leavingTalk(_id, text)) return true; G.convoQ = _q; }   // a false return left convoQ null and the read below threw (review 2026-10-25)
   // …nor is a feeling: "i miss you" (พี่คิดถึงน้อง) was kept as the name his mother called him (Anan, the Thai-only
   // week). Her question gives way and the line is said to her, where the sentence reader answers it.
   if (G.convoQ && typeof _heardBucket === "function" && /^(affection|back|return)$/.test(_heardBucket(String(text).toLowerCase()))) {
@@ -11955,7 +11957,7 @@ function _doBuy(arg) {
     }
     // the mamasan's blessing: her bar warms to you, and the house may pour one back
     if (NPC_ROLES[id] === "mamasan" && _npcRoom(id) === G.room && !G.soc.mamaTreat[G.room]) {
-      G.soc.mamaTreat[G.room] = true;
+      G.soc.mamaTreat[G.room] = true; (G.soc.mamaTreatNight = G.soc.mamaTreatNight || {})[G.room] = G.day;
       _say(typeof _atOwnBar === "function" && _atOwnBar()
         ? `${NPCS[id].name} raises the glass a centimetre in your direction — the guv'nor ` +
           "buying his own mama a drink, and the floor notices, and the floor talks. It is " +
@@ -12424,9 +12426,9 @@ function _doRideBus(arg) {
       _say("(Or stay on and RIDE THE LOOP — the whole circuit, just for the breeze.)", "dim");
     return;
   }
-  if (G.money < BUS_FARE) {
+  if (G.money < BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0))) {   // a seat a head: the check read one seat and the fare gate then wedged (review 2026-10-25)
     _say(`You flag a bus and climb on… then remember. ฿${_num(G.money)} in your pocket, ` +
-      `and the fare is ฿${_num(BUS_FARE)}. You climb off to the driver's eternal, silent judgement.` +
+      `and the fare is ฿${_num(BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0)))}. You climb off to the driver's eternal, silent judgement.` +
       ((!_flag("act1Done") && G.phone && G.phone.contacts && G.phone.contacts.tan)
         ? " (Your phone still has one number in it — CALL TAN.)" : ""));
     return;
@@ -14572,6 +14574,7 @@ function _doCall(arg) {
 // CHECKOUT — after Act One, at the start of an evening, from your own room.
 // The desk lists the other two hotels; the one you're leaving is understood.
 function _doCheckout() {
+  if (G.hotel === "condo") { _say("A condo has no desk to check out of. The lease is with the office downstairs: MOVE OUT gives it back (and says what happens to the deposit)."); return; }   // checkout orphaned the lease and its deposit (review 2026-10-25)
   if (G.mode === "soi6") {
     _say("You're booked into the Queen Vic for the whole week — one soi, one room, no " +
       "reception desk to argue with. Sleep it off upstairs.");
@@ -16501,7 +16504,7 @@ function _cNpcsHere() {
 // repay, the till for a draw, the thresholds that actually change behaviour for
 // a tip (฿100 bumps her, ฿300 doubles it: see _doTip).
 function _cAmounts(verb) {
-  const have = G.money || 0;
+  const have = /^(?:send|transfer|wire)$/.test(verb) ? (G.bank || 0) : (G.money || 0);   // SEND draws on the account (review 2026-10-25)
   const pick = xs => [...new Set(xs)]
     .filter(n => Number.isFinite(n) && n > 0 && n <= have)
     .sort((a, b) => a - b).map(String);
@@ -18783,7 +18786,7 @@ function _doCommandInner(input) {
     const pick = /sabai|palm|naklua|412/.test(lower) ? "sabai" :
       /queen|vic|balcony/.test(lower) ? "queenvic" :
       /areca|lodge|diana/.test(lower) ? "areca" :
-      /metro|lk/.test(lower) ? "metropole" : null;
+      /\bmetro(?:pole)?\b|\blk\b/.test(lower) ? "metropole" : null;   // "talk to the clerk" and "walk" moved you to the Metropole (review 2026-10-25)
     if (!pick || pick === G.hotel) {
       _checkoutPrompt();
       return;
@@ -18964,6 +18967,10 @@ function _doCommandInner(input) {
   if (G.pendingFare && G.pendingFare.charter && (/^(haggle|bargain|cheaper|discount|too much|expensive)\b/.test(lower) || /^(แพง|ลด)/.test(lower))) {
     _say(`“${thaiBaht(G.pendingFare.price)}.” He doesn't move on it. “The whole truck, boss — you want cheap, the bench is fifteen, on its own route.”`);
     _farePrompt(); return;
+  }
+  // a fare you cannot pay is a fare you can walk away from: the gate had no way out but RESTART (review 2026-10-25)
+  if (G.pendingFare && G.money < (G.pendingFare.price || 0) && /^(?:walk|get off|off|leave|no|cancel|climb off|jump off)\b/.test(lower)) {
+    G.pendingFare = null; _say("You climb back down. The driver shrugs at the road; somebody else will pay to sit there."); return;
   }
   if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say", "journal", "notes", "diary", "quests", "hint", "time"].includes(v)) {   // the notes are the one thing you want mid-modal (Ines, round 47)
     _farePrompt();

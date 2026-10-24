@@ -64,7 +64,7 @@ test("a company bar: six nights through the books, the permit after thirty stood
   moveIn("monger"); G.room = companyBar; knownAt(companyBar); const mama = _staffAt(companyBar).find(i => NPC_ROLES[i] === "mamasan"); run("talk to " + mama);
   const offer = t("ask " + mama + " about a job"); assert.match(offer, /฿40,000 a month, through the books\. Six nights/); assert.ok(G.jobOffer.corp);
   run("take the job"); assert.equal(G.job.nights, MGR_PERMIT_NIGHTS);
-  G.job.stood = MGR_PERMIT_AFTER - 1; G.job.shiftDay = G.day; G.job.shiftStood = WORK_MIN_STOOD; G.room = "hotel_room"; const s = sleep();
+  G.job.stood = MGR_PERMIT_AFTER - 1; G.job.stoodTotal = MGR_PERMIT_AFTER - 1; G.job.shiftDay = G.day; G.job.shiftStood = WORK_MIN_STOOD; G.room = "hotel_room"; const s = sleep();
   assert.equal(G.paper, "permit"); assert.ok(G.thaiAccount, "the book came with the paper"); assert.match(s, /work permit in your name/);
   assert.match(t("money"), /Paper: a work permit through Pink Lotus/);
   // a short week, twice
