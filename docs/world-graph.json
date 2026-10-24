@@ -530,19 +530,19 @@
   },
   {
    "file": "engine-core.js",
-   "line": 1089,
+   "line": 1127,
    "name": "HOP_CHANCE",
    "value": 10
   },
   {
    "file": "engine-core.js",
-   "line": 1090,
+   "line": 1128,
    "name": "HOP_SETTLE",
    "value": 4
   },
   {
    "file": "engine-core.js",
-   "line": 3533,
+   "line": 3571,
    "name": "HURT_CAP",
    "value": 3
   },
@@ -1203,7 +1203,7 @@
  ],
  "counts": {
   "constants": 200,
-  "dialogue": 4194,
+  "dialogue": 4195,
   "edges": 3716,
   "encounters": 23,
   "flags": 197,
@@ -29614,6 +29614,27 @@
     "a lead",
     "paragraphs",
     "copy"
+   ]
+  },
+  {
+   "hasFx": false,
+   "hasShort": true,
+   "hasWhen": false,
+   "index": 24,
+   "key": "mort#24",
+   "npc": "mort",
+   "topic": "accent|squire|british|the way you talk|you sound british|you sound english|american|america|where are you from|baltimore",
+   "topics": [
+    "accent",
+    "squire",
+    "british",
+    "the way you talk",
+    "you sound british",
+    "you sound english",
+    "american",
+    "america",
+    "where are you from",
+    "baltimore"
    ]
   },
   {
@@ -64924,7 +64945,7 @@
   },
   {
    "from": "BAN_TURNS",
-   "to": "engine-core.js:2263",
+   "to": "engine-core.js:2301",
    "type": "INTERPOLATES"
   },
   {
@@ -65439,7 +65460,7 @@
   },
   {
    "from": "BEER_PRICE",
-   "to": "engine-core.js:3853",
+   "to": "engine-core.js:3891",
    "type": "INTERPOLATES"
   },
   {
@@ -65469,12 +65490,12 @@
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:3861",
+   "to": "engine-core.js:3899",
    "type": "INTERPOLATES"
   },
   {
    "from": "BELL_PRICE",
-   "to": "engine-core.js:3878",
+   "to": "engine-core.js:3916",
    "type": "INTERPOLATES"
   },
   {
@@ -66109,12 +66130,12 @@
   },
   {
    "from": "FULL_AT",
-   "to": "engine-core.js:1329",
+   "to": "engine-core.js:1367",
    "type": "INTERPOLATES"
   },
   {
    "from": "FULL_AT",
-   "to": "engine-core.js:1338",
+   "to": "engine-core.js:1376",
    "type": "INTERPOLATES"
   },
   {
@@ -66169,27 +66190,27 @@
   },
   {
    "from": "HOP_CHANCE",
-   "to": "engine-core.js:1189",
+   "to": "engine-core.js:1227",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_SETTLE",
-   "to": "engine-core.js:1115",
+   "to": "engine-core.js:1153",
    "type": "INTERPOLATES"
   },
   {
    "from": "HOP_SETTLE",
-   "to": "engine-core.js:1270",
+   "to": "engine-core.js:1308",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3535",
+   "to": "engine-core.js:3573",
    "type": "INTERPOLATES"
   },
   {
    "from": "HURT_CAP",
-   "to": "engine-core.js:3536",
+   "to": "engine-core.js:3574",
    "type": "INTERPOLATES"
   },
   {
@@ -66299,7 +66320,7 @@
   },
   {
    "from": "KP_ENTRY",
-   "to": "engine-core.js:3323",
+   "to": "engine-core.js:3361",
    "type": "INTERPOLATES"
   },
   {
@@ -66464,7 +66485,7 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "engine-core.js:3855",
+   "to": "engine-core.js:3893",
    "type": "INTERPOLATES"
   },
   {
@@ -66514,7 +66535,7 @@
   },
   {
    "from": "LAST_BUS_TURN",
-   "to": "engine-core.js:3284",
+   "to": "engine-core.js:3322",
    "type": "INTERPOLATES"
   },
   {
@@ -67024,7 +67045,7 @@
   },
   {
    "from": "NIGHT_TURNS",
-   "to": "engine-core.js:3631",
+   "to": "engine-core.js:3669",
    "type": "INTERPOLATES"
   },
   {
@@ -71324,12 +71345,12 @@
   },
   {
    "from": "diamondTruth",
-   "to": "world.js:16149",
+   "to": "world.js:16150",
    "type": "READ_BY_DATA"
   },
   {
    "from": "diamondTruth",
-   "to": "world.js:16158",
+   "to": "world.js:16159",
    "type": "READ_BY_DATA"
   },
   {
@@ -71349,12 +71370,12 @@
   },
   {
    "from": "gingSawSheet",
-   "to": "world.js:21441",
+   "to": "world.js:21442",
    "type": "READ_BY_DATA"
   },
   {
    "from": "glamHeard",
-   "to": "world.js:16192",
+   "to": "world.js:16193",
    "type": "READ_BY_DATA"
   },
   {
@@ -71419,12 +71440,12 @@
   },
   {
    "from": "jokeWho",
-   "to": "world.js:16167",
+   "to": "world.js:16168",
    "type": "READ_BY_DATA"
   },
   {
    "from": "jokeWho",
-   "to": "world.js:16218",
+   "to": "world.js:16219",
    "type": "READ_BY_DATA"
   },
   {
@@ -71464,12 +71485,12 @@
   },
   {
    "from": "mortGlam",
-   "to": "world.js:16192",
+   "to": "world.js:16193",
    "type": "READ_BY_DATA"
   },
   {
    "from": "mortMet",
-   "to": "world.js:16167",
+   "to": "world.js:16168",
    "type": "READ_BY_DATA"
   },
   {
@@ -71724,7 +71745,7 @@
   },
   {
    "from": "verifDone",
-   "to": "world.js:21441",
+   "to": "world.js:21442",
    "type": "READ_BY_DATA"
   },
   {
@@ -71749,47 +71770,47 @@
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1368",
+   "to": "engine-core.js:1406",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1369",
+   "to": "engine-core.js:1407",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1463",
+   "to": "engine-core.js:1501",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:1563",
+   "to": "engine-core.js:1601",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3254",
+   "to": "engine-core.js:3292",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3562",
+   "to": "engine-core.js:3600",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3569",
+   "to": "engine-core.js:3607",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3657",
+   "to": "engine-core.js:3695",
    "type": "READ_BY_ENGINE"
   },
   {
    "from": "act1Done",
-   "to": "engine-core.js:3659",
+   "to": "engine-core.js:3697",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -72454,7 +72475,7 @@
   },
   {
    "from": "barSold",
-   "to": "engine-core.js:2042",
+   "to": "engine-core.js:2080",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -72919,7 +72940,7 @@
   },
   {
    "from": "hyperUpstairs",
-   "to": "engine-core.js:3314",
+   "to": "engine-core.js:3352",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -73199,7 +73220,7 @@
   },
   {
    "from": "orchidReported",
-   "to": "engine-core.js:2041",
+   "to": "engine-core.js:2079",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -73209,7 +73230,7 @@
   },
   {
    "from": "orchidSent",
-   "to": "engine-core.js:2041",
+   "to": "engine-core.js:2079",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -73219,7 +73240,7 @@
   },
   {
    "from": "orchidVouched",
-   "to": "engine-core.js:2041",
+   "to": "engine-core.js:2079",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -73299,7 +73320,7 @@
   },
   {
    "from": "partnerTan",
-   "to": "engine-core.js:994",
+   "to": "engine-core.js:1032",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -73554,7 +73575,7 @@
   },
   {
    "from": "shamrockVisited",
-   "to": "engine-core.js:2558",
+   "to": "engine-core.js:2596",
    "type": "READ_BY_ENGINE"
   },
   {
@@ -75639,7 +75660,7 @@
   },
   {
    "from": "recceDone",
-   "to": "engine-core.js:3042",
+   "to": "engine-core.js:3080",
    "type": "SET_BY_ENGINE"
   },
   {
@@ -77306,15 +77327,15 @@
     "world.js:9776"
    ],
    "readByEngine": [
-    "engine-core.js:1368",
-    "engine-core.js:1369",
-    "engine-core.js:1463",
-    "engine-core.js:1563",
-    "engine-core.js:3254",
-    "engine-core.js:3562",
-    "engine-core.js:3569",
-    "engine-core.js:3657",
-    "engine-core.js:3659",
+    "engine-core.js:1406",
+    "engine-core.js:1407",
+    "engine-core.js:1501",
+    "engine-core.js:1601",
+    "engine-core.js:3292",
+    "engine-core.js:3600",
+    "engine-core.js:3607",
+    "engine-core.js:3695",
+    "engine-core.js:3697",
     "engine-core.js:660",
     "engine-core.js:747",
     "engine-encounters.js:1028",
@@ -77684,7 +77705,7 @@
     "world.js:13206"
    ],
    "readByEngine": [
-    "engine-core.js:2042",
+    "engine-core.js:2080",
     "engine-parser.js:16574",
     "engine-play.js:4673",
     "engine-systems.js:10969",
@@ -78115,8 +78136,8 @@
    ],
    "name": "diamondTruth",
    "readByData": [
-    "world.js:16149",
-    "world.js:16158"
+    "world.js:16150",
+    "world.js:16159"
    ],
    "requiredBy": [
     "wimon#0"
@@ -78267,7 +78288,7 @@
   {
    "name": "gingSawSheet",
    "readByData": [
-    "world.js:21441"
+    "world.js:21442"
    ],
    "setByDialogue": [
     "ging#2"
@@ -78279,7 +78300,7 @@
    ],
    "name": "glamHeard",
    "readByData": [
-    "world.js:16192"
+    "world.js:16193"
    ],
    "setByDialogue": [
     "glam#2"
@@ -79018,7 +79039,7 @@
   {
    "name": "hyperUpstairs",
    "readByEngine": [
-    "engine-core.js:3314",
+    "engine-core.js:3352",
     "engine-systems.js:2071"
    ],
    "setByDialogue": [
@@ -79080,8 +79101,8 @@
   {
    "name": "jokeWho",
    "readByData": [
-    "world.js:16167",
-    "world.js:16218"
+    "world.js:16168",
+    "world.js:16219"
    ],
    "readByEngine": [
     "engine-systems.js:4621",
@@ -79387,7 +79408,7 @@
   {
    "name": "mortGlam",
    "readByData": [
-    "world.js:16192"
+    "world.js:16193"
    ],
    "readByEngine": [
     "engine-systems.js:3644"
@@ -79399,7 +79420,7 @@
   {
    "name": "mortMet",
    "readByData": [
-    "world.js:16167"
+    "world.js:16168"
    ],
    "setByDialogue": [
     "mort#7"
@@ -79558,7 +79579,7 @@
     "world.js:9544"
    ],
    "readByEngine": [
-    "engine-core.js:2041",
+    "engine-core.js:2079",
     "engine-play.js:3924"
    ],
    "setByDialogue": [
@@ -79568,7 +79589,7 @@
   {
    "name": "orchidSent",
    "readByEngine": [
-    "engine-core.js:2041",
+    "engine-core.js:2079",
     "engine-play.js:3924"
    ],
    "setByDialogue": [
@@ -79584,7 +79605,7 @@
    ],
    "name": "orchidVouched",
    "readByEngine": [
-    "engine-core.js:2041",
+    "engine-core.js:2079",
     "engine-parser.js:14999",
     "engine-play.js:3924"
    ],
@@ -79687,7 +79708,7 @@
     "world.js:13232"
    ],
    "readByEngine": [
-    "engine-core.js:994",
+    "engine-core.js:1032",
     "engine-parser.js:2996",
     "engine-parser.js:9747",
     "engine-systems.js:10841",
@@ -80040,7 +80061,7 @@
    ],
    "name": "recceDone",
    "setByEngine": [
-    "engine-core.js:3042"
+    "engine-core.js:3080"
    ]
   },
   {
@@ -80167,7 +80188,7 @@
    ],
    "name": "shamrockVisited",
    "readByEngine": [
-    "engine-core.js:2558",
+    "engine-core.js:2596",
     "engine-play.js:6916",
     "engine-systems.js:11660"
    ],
@@ -80434,7 +80455,7 @@
    ],
    "name": "verifDone",
    "readByData": [
-    "world.js:21441"
+    "world.js:21442"
    ],
    "setByDialogue": [
     "nigel#10",
@@ -83173,7 +83194,7 @@
    "th": "มุกดา"
   },
   {
-   "dialogueCount": 24,
+   "dialogueCount": 25,
    "fixture": true,
    "id": "mort",
    "name": "Mort",

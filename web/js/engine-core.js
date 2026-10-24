@@ -947,8 +947,46 @@ function _roomFit(pool) {
   const ok = pool.filter(l => { const s = txt(l); return !bad.some(r => r.test(s)); });
   return ok.length ? ok : pool;
 }
+// AN AMERICAN DOES NOT SAY "MATE" (Mario, 2026-10-24). The shared registers — a punter on his stool, a farang on the
+// house side — were written in British idiom, and the rail that speaks them is mostly American (Doyle, Mort, Angela,
+// Randy, Bert, Bob, Eddy). While an American is the one talking, a pool's lines whose SPEECH carries a British marker
+// are skipped when a neutral sibling exists, and swapped word for word when none does. Narration (the narrator is
+// British, by house style) is outside the quotes and never touched. Tan is exempt: Ohio and the pavement both
+// taught him, and his mixed vocabulary is his (Mario). So is Mort: forty-one years of a British paper's subs.
+const _BRIT_SPEECH = /\b(mate|mates|bloke|blokes|fortnight|holidays?|squire|cropper|fair play|motorway|pavement|telly|proper|lads?|quid|rubbish|bloody|knackered|brilliant|sorted|chuffed|skint|dodgy|innit|cheers|you'?ve not|they'?ll not|i'?ll not|half (?:six|seven|eight|nine|ten|eleven|twelve|one|two|three)|petrol|lorry|loo|mum|mums|arse|cuppa|blimey|bollocks|reckon|cracking|gutted|on the tools)\b/i;
+const _US_SWAP = [
+  [/,\s*mate\b/gi, ""], [/\bmate,\s*/gi, ""], [/\bmates\b/gi, "buddies"], [/\bmate\b/gi, "buddy"],
+  [/\bblokes\b/gi, "guys"], [/\bbloke\b/gi, "guy"], [/\bfortnight\b/gi, "two weeks"], [/\bholidays\b/gi, "vacations"], [/\bholiday\b/gi, "vacation"],
+  [/\bsquire\b/gi, "friend"], [/\bcame a cropper\b/gi, "took a spill"], [/\bfair play\b/gi, "good for you"], [/\bmotorway\b/gi, "highway"],
+  [/\bpavement\b/gi, "sidewalk"], [/\btelly\b/gi, "TV"], [/\bproper\b/gi, "real"], [/\blads\b/gi, "guys"], [/\blad\b/gi, "kid"], [/\bquid\b/gi, "bucks"],
+  [/\brubbish\b/gi, "garbage"], [/\bbloody\s+/gi, ""], [/\bknackered\b/gi, "beat"], [/\bbrilliant\b/gi, "great"], [/\bsorted\b/gi, "taken care of"],
+  [/\bchuffed\b/gi, "pleased"], [/\bskint\b/gi, "broke"], [/\bdodgy\b/gi, "shady"], [/\binnit\b/gi, "right"], [/\bcheers\b/gi, "thanks"],
+  [/\byou'?ve not got\b/gi, "you don't have"], [/\byou'?ve not\b/gi, "you haven't"], [/\bthey'?ll not\b/gi, "they won't"], [/\bi'?ll not\b/gi, "I won't"],
+  [/\bhalf (six|seven|eight|nine|ten|eleven|twelve|one|two|three)\b/gi, "$1-thirty"], [/\bpetrol\b/gi, "gas"], [/\blorry\b/gi, "truck"], [/\bloo\b/gi, "bathroom"],
+  [/\bmums\b/gi, "moms"], [/\bmum\b/gi, "mom"], [/\barse\b/gi, "ass"], [/\bcuppa\b/gi, "coffee"], [/\bblimey\b/gi, "man"], [/\bbollocks\b/gi, "nonsense"],
+  [/\breckon\b/gi, "figure"], [/\bcracking\b/gi, "great"], [/\bgutted\b/gi, "crushed"], [/\bon the tools\b/gi, "working with your hands"],
+];
+const _QUOTED = /[“"][^”"]*[”"]/g;
+function _americanVoice(id) {
+  const n = id && typeof NPCS !== "undefined" && NPCS[id];
+  if (!n || id === "tan" || id === "mort") return false;   // Mort keeps his British paper's register, and says why (Mario, 2026-10-24)
+  return /americ/i.test(String(n.nat || "")) || /\bAmerican\b/.test(String(n.desc || "").slice(0, 260)) || /\bAmerican\b/.test(String(n.look || ""));
+}
+function _speechOf(l) { const s = typeof l === "function" ? String(l) : String(l || ""); const q = s.match(_QUOTED); return q ? q.join(" ") : s; }
+function _usSay(text) {
+  return String(text).replace(_QUOTED, q => {
+    let o = q; for (const [re, to] of _US_SWAP) o = o.replace(re, (m, g1) => { const r = to.replace("$1", g1 || ""); return m[0] === m[0].toUpperCase() && r ? r[0].toUpperCase() + r.slice(1) : r; });
+    return o.replace(/\s+([,.!?])/g, "$1").replace(/([“"])\s+/g, "$1");
+  });
+}
+function _voiceFit(pool) {
+  if (!Array.isArray(pool) || !pool.length || typeof _talkingTo === "undefined" || !_americanVoice(_talkingTo)) return pool;
+  const plain = pool.filter(l => !_BRIT_SPEECH.test(_speechOf(l)));
+  if (plain.length) return plain;
+  return pool.map(l => typeof l === "function" ? (...a) => _usSay(l(...a)) : _usSay(l));
+}
 function _pickVary(pool, key) {
-  pool = _roomFit(pool);
+  pool = _voiceFit(_roomFit(pool));
   if (!pool || pool.length < 2) return pool && pool[0];
   G._lastPick = G._lastPick || {};
   // no line again until half the pool has been said (Steve's fifth run: Jiab's lines and the morning-after paragraphs

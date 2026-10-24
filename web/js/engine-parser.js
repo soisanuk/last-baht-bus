@@ -9389,7 +9389,7 @@ function _townTalk(npc, topic) {
     if (npc === "tan" && _TAN_TOWN[k]) line = _tanTown(k, slots);
     else {
       const _th = reg === "house" && _TOWN_THAI[k] && _thaiHouse(npc);
-      let pool = _roomFit(_th ? _TOWN_THAI[k] : _TOWN[k][reg]);
+      let pool = _voiceFit(_roomFit(_th ? _TOWN_THAI[k] : _TOWN[k][reg]));   // an American says no "mate" (2026-10-24)
       // a cashier has no floor and no girls: "half my floor go there" from the till (Danny, round 95)
       if (NPC_ROLES[npc] === "cashier" || NPCS[npc].house) { const nf = pool.filter(l => !/\bmy (?:floor|girls|bar)\b/i.test(String(l))); if (nf.length) pool = nf; }
       const book = (G.soc.townSaid = G.soc.townSaid || {}), bk = (_TOWN_WIDE.has(k) ? "*" : G.room) + ":" + k + ":" + (_th ? "thai" : reg);   // the room's own cast and furniture first, as _pickVary does

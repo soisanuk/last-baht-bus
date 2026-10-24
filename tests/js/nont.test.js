@@ -151,7 +151,7 @@ test("the SIM his greeting promises is for sale; charge/transfer/delay are topic
   G.money = 5000; run("buy sim"); assert.equal(G.itemLoc.thai_sim, "inventory"); assert.equal(G.money, 5000 - NONT_SIM);
   out = []; run("buy sim"); assert.match(text(), /One is plenty/);
   out = []; run("ask nont about transfer"); assert.match(text(), /five\s+percent/);
-  out = []; run("ask nont about delay"); assert.match(text(), /not given me anything to be late/, "no account until you've used him (Jacko, round 42)");
+  out = []; run("ask nont about delay"); assert.match(text(), /haven.t given me anything to be late/, "no account until you've used him (Jacko, round 42)");
   G.nontCashed = true; delete G.talked.nont;
   out = []; run("ask nont about delay"); assert.match(text(), /Nothing's late/);
   G.nontStuck = 475; out = []; run("ask nont about delay"); assert.match(text(), /Tomorrow/); G.nontStuck = 0;

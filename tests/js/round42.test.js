@@ -56,7 +56,7 @@ test("the drunk balk looks one room out for a bench before saying there isn't on
 test("Nont has no running account with a man he has never done business with (Jacko)", () => {
   _setFlag("hasWallet"); G.room = _npcRoom("nont"); G.nightTurn = 30; G.bank = 50000;
   out = []; run("ask nont about delay");
-  assert.match(text(), /not given me anything to be late/);
+  assert.match(text(), /haven.t given me anything to be late/);
   G.nontCashed = true; delete G.talked.nont; out = []; run("ask nont about delay");
   assert.match(text(), /Nothing's late|Tomorrow/);
 });
