@@ -96,3 +96,18 @@ test("Priya: BUY FOOD says where something is cooking; BATTERY opens the phone",
   assert.doesNotMatch(t("buy food"), /Not for sale here/);
   assert.match(t("battery"), /Battery \d+%/);
 });
+test("Mario: a Soi 6 girl lives upstairs at her bar; a beer-bar girl rents across town, most of them in central Pattaya", () => {
+  sandbox(); G.room = "pink_lotus";
+  assert.match(_OTHER_LEDGER[3][3]("Joy"), /upstairs/); assert.doesNotMatch(_OTHER_LEDGER[3][3]("Joy"), /Buakhao/);
+  G.room = Object.keys(ROOMS).find(r => ROOMS[r].barType === "beer" && !_barHouses(r));
+  const places = Object.keys(NPCS).filter(x => NPC_ROLES[x] === "hostess").map(x => _OTHER_LEDGER[3][3](NPCS[x].name));
+  const central = places.filter(l => /Second Road|Central Road|Buakhao/.test(l)).length;
+  assert.ok(central > places.length / 2, central + " of " + places.length);
+  assert.ok(places.some(l => /Sukhumvit/.test(l)) && places.some(l => /Naklua/.test(l)));
+});
+test("Mario: many beer bars house their girls in a shared room, and it varies from bar to bar", () => {
+  const beer = Object.keys(ROOMS).filter(r => ROOMS[r].barType === "beer");
+  const housed = beer.filter(_barHouses).length;
+  assert.ok(housed > 0 && housed < beer.length, housed + " of " + beer.length);
+  sandbox(); const r = beer.find(_barHouses); G.room = r; assert.match(_OTHER_LEDGER[3][3]("Ann"), /No rent/);
+});

@@ -15274,7 +15274,7 @@ function _ladderWeek(n) { let r = 0; for (const [d, b] of GROUP_LADDER) if (n >=
 const BAR_QUOTA    = 30;   // lady drinks a month before the bonus starts
 const BAR_SALARY   = 9000; // the monthly base a Soi 6 bar pays; everything else is commission
 const HOME_SEND    = 7000; // what a month typically sends north — before she has eaten
-const ROOM_RENT    = 4000; // her share of a room off Buakhao — two or three girls to it
+const ROOM_RENT    = 4000; // a beer-bar girl's share of a rented room, two or three girls to it — most in central Pattaya, some past Sukhumvit (a Soi 6 girl lives upstairs at her bar)
 
 // ── The staff affair ─────────────────────────────────────────────────────────
 // You can fall for a girl on your own floor — the classic bar-owner story, and

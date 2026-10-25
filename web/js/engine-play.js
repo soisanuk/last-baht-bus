@@ -4924,13 +4924,36 @@ const _OTHER_LEDGER = {
       `"Depend." Across the room somebody rings the bell and the room cheers, and she cheers too, on ` +
       `time, professionally, and then turns back to you and picks the sentence up exactly where ` +
       `she left it.`,
-    (n) => `You ask where she stays and get a longer answer than the question earned: a room off ` +
-      `Buakhao, ฿${_num(ROOM_RENT)} her share of it, two other girls, a rice cooker, one fan that works. ` +
-      `When the bar is near enough for walking she walks it, at three in the morning, rather than ` +
-      `pay the late fare — and says so without a flicker, because the late fare is the late fare ` +
-      `and she can count. "Is not far." She considers that. "Is far when rain."`,
+    // a Soi 6 girl lives in a room upstairs at the bar and can live out if she wants; a beer-bar girl shares a room off Buakhao
+    (n) => (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6")
+      ? `You ask where she stays and she points at the ceiling. A room upstairs, the bar's, with two ` +
+        `other girls and an air-con the boss pays for, past the rooms that are not for sleeping. ` +
+        `No rent. "I can live outside if I want. Some girl do." She ` +
+        `shrugs. "Outside cost money. Upstairs, I go to bed thirty second after I finish."`
+      : _barHouses(G.room)
+      ? `You ask where she stays and she nods at the soi. The bar has a room a few doors down, the boss's, ` +
+        `four girls to it, a fridge nobody owns and a mattress each. No rent. "Some girl rent her own. Me, I ` +
+        `save." She counts something on her fingers. "When I have boyfriend, maybe I move. When I have ` +
+        `boyfriend, he pay."`
+      : (() => {
+        // the girls live all over town, most of them in central Pattaya, some past Sukhumvit (Mario, 2026-10-26)
+        const pick = [0, 0, 1, 1, 2, 2, 3, 4][_hh("ledroom:" + n, 13) % 8], where = _LEDGER_ROOMS[pick];
+        return `You ask where she stays and get a longer answer than the question earned: a room ${where.at}, ` +
+          `฿${_num(Math.round(ROOM_RENT * (where.rent || 1) / 100) * 100)} her share of it, two other girls, a rice cooker, one fan that works. ${where.home}`;
+      })(),
   ],
 };
+// many beer bars give their girls a shared room, and it varies from bar to bar (Mario, 2026-10-26): a pure hash of the
+// bar, so a whole floor gives one answer
+function _barHouses(room) { const r = ROOMS[room]; return !!(r && r.barType && _hm("barroom:" + room, 19) % 100 < 45); }
+// where a beer-bar girl rents: central Pattaya for most (six picks in eight), past the highway or up in Naklua for the rest
+const _LEDGER_ROOMS = [
+  { at: "in a soi behind Second Road", home: `When the bar is near enough for walking she walks it, at three in the morning, rather than pay the late fare — and says so without a flicker, because the late fare is the late fare and she can count. "Is not far." She considers that. "Is far when rain."` },
+  { at: "off Central Road, above a phone shop", home: `She walks home after work rather than pay the late fare, and says so without a flicker. "Ten minute. Twenty when I am tired."` },
+  { at: "in the sois between Second Road and Buakhao", home: `She walks it at three in the morning with her shoes in her hand. "Everybody walk. Only farang take motorbike for five minute."` },
+  { at: "the other side of Sukhumvit", rent: 0.5, home: `A friend with a bike takes her home after work, or the truck when the friend has a customer. "Half the rent of town. Far, but cheap. Here, cheap is better than near."` },
+  { at: "up in Naklua, near the market", rent: 0.75, home: `A motorbike taxi home at three, which she prices against the room every month and the room still wins. "Naklua quiet. I like quiet when I finish."` },
+];
 // Fires when you sit down with a girl whose bond has crossed into a tier whose
 // ledger you have not been shown. Once per girl per tier, ever — it is a reveal,
 // not a repeatable line. Deliberately on TALK (you sat with her) rather than on
