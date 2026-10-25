@@ -175,11 +175,13 @@ const untagged = fixed.filter(r => !r.system).length;
 const glyph = (sys, k) => { const c = cell[sys.id + "|" + k]; if (c) return String(c.n).padStart(2) + (c.hot ? "*" : " "); if (!applies(sys, k)) return "   "; return instrumented(sys.id, k).length ? " ■ " : " · "; };
 
 if (args.includes("--numbers") || args.includes("--record")) {
-  let dark = 0, inst = 0, lit = 0, hot = 0, cells = 0;
-  for (const s of SYS) for (const k of CLASSES) { if (!applies(s, k)) continue; cells++; const c = cell[s.id + "|" + k]; if (c) { lit++; if (c.hot) hot++; } else if (instrumented(s.id, k).length) inst++; else dark++; }
+  // "instrumented" is an instrument and NO finding yet, so a finding on a covered cell moves it to "lit" and the
+  // figure falls; instrumentCells is every cell an instrument covers, which only moves when the INSTRUMENTS change.
+  let dark = 0, inst = 0, lit = 0, hot = 0, cells = 0, instCells = 0;
+  for (const s of SYS) for (const k of CLASSES) { if (!applies(s, k)) continue; cells++; if (instrumented(s.id, k).length) instCells++; const c = cell[s.id + "|" + k]; if (c) { lit++; if (c.hot) hot++; } else if (instrumented(s.id, k).length) inst++; else dark++; }
   const neverWalked = SYS.filter(s => !walked[s.id]).length;
   const d = new Date(), date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  const out = { date, latestRound: latest, systems: SYS.length, cells, lit, hot, instrumented: inst, dark, systemsNeverWalked: neverWalked,
+  const out = { date, latestRound: latest, systems: SYS.length, cells, lit, hot, instrumented: inst, instrumentCells: instCells, dark, systemsNeverWalked: neverWalked,
     findingsClassified: fixed.length, findingsUntagged: untagged, strays: strays.length, unknownSystems: unknownSystems.length,
     verdicts: Object.fromEntries(["fixed", "refuted", "design", "deferred"].map(v => [v, ledger.filter(r => r.verdict === v).length])) };
   console.log(JSON.stringify(out));
