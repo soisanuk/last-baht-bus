@@ -2028,7 +2028,7 @@ function _bfResolve(kind) {
           "after you sleep \u2014 full night is different thing.\u201d A grin. " +
           "\u201cBut okay. For you, I switch off the {{phone}}.\u201d"
         : "{n} looks at the room \u2014 " + (_lowSeason() && _npcsHere().filter(i => !NPC_ROLES[i]).length < 3   // "half empty" of a room with eleven people in it (Martin, round 85)
-          ? "half empty, and both of you know it \u2014 and names the number without ceremony. \u201cSlow night anyway, tilac. You pay, I party. Good deal for both.\u201d"
+          ? "half empty, and both of you know it \u2014 and names the number without ceremony. " + _pickVary(["\u201cSlow night anyway, tilac. You pay, I party. Good deal for both.\u201d", "\u201cNobody here to make money from, na. You pay, I go. Easy.\u201d", "\u201cThis room, tonight? I sit here for nothing. You take me, at least somebody happy.\u201d", "\u201cQuiet tonight. Better I party with you than look at the door.\u201d"], "slownight")
           : _lowSeason() ? "busy tonight, which in this season is rare, and both of you know it \u2014 and names the number plainly. \u201cGood night for the bar, tilac. You want my whole night, the number is the whole night.\u201d"
           : "FULL, and both of you know it \u2014 and names the number plainly. \u201cHigh season, tilac. Tonight this stool make money all night. You want my whole night, the number is the whole night.\u201d No apology in it. It is just the price of her time, told straight."),
         { n: name }), "dim");
@@ -5237,6 +5237,8 @@ function _doPhoneScreen() {
   }
   const nPhotos = (Array.isArray(G.phone.photos) ? G.phone.photos : []).filter(p => NPCS[p.id]).length;
   if (nPhotos) _say(`📸 ${nPhotos} photo${nPhotos > 1 ? "s" : ""} in your gallery — GALLERY.`, "dim");
+  // the streams are an app on this phone: a thumb that never typed WATCH STREAM finds them here
+  if (_streamRoomsKnown().length) _say(`📺 ${_streamRoomsKnown().length === 1 ? _barName(_streamRoomsKnown()[0]) + " streams its floor" : _streamRoomsKnown().length + " bars you know stream their floor"} — (WATCH STREAM) · (WHO'S ONLINE)`, "dim");
   const wx = _wxLine();
   if (wx) _say(`🌤️  Pattaya — ${wx}`, "dim");
   const feed = _newsFeed();
@@ -10319,7 +10321,7 @@ const _STREAM_WHALES = [
   { h: "SilverFox_Leeds", a: ["silverfox", "silver fox", "mister silver", "silverfox_leeds"], nick: "Mister Silver", from: "England", home: "his front room in Leeds", when: "an English afternoon" },
   { h: "KaiserKlaus_Hamburg", a: ["kaiserklaus", "kaiser klaus", "klaus", "mister klaus"], nick: "Mister Klaus", from: "Germany", home: "his flat in Hamburg", when: "a German afternoon" },
   { h: "Big_Tex_Dallas", a: ["big tex", "big_tex", "mister tex", "tex"], nick: "Mister Tex", from: "Texas", home: "his porch in Dallas", when: "a Texas morning" },
-  { h: "Viking_Olaf_Bergen", a: ["viking olaf", "olaf", "mister olaf", "viking_olaf"], nick: "Mister Olaf", from: "Norway", home: "his kitchen in Bergen", when: "a Norwegian afternoon" },
+  { h: "Viking_Olaf_Bergen", a: ["viking olaf", "olaf", "mister olaf", "viking_olaf", "viking", "the viking", "the norwegian"], nick: "Mister Olaf", from: "Norway", home: "his kitchen in Bergen", when: "a Norwegian afternoon" },
   { h: "Bazza_Wollongong", a: ["bazza", "mister bazza", "bazza_wollongong"], nick: "Mister Bazza", from: "Australia", home: "his sofa in Wollongong", when: "an Australian night he can't sleep through" },
 ];
 const STREAM_WHALE = _STREAM_WHALES[0].h;
@@ -10376,7 +10378,11 @@ function _streamHandle(k) { return _STREAM_HANDLES[_hh("handle:" + k, 29) % _STR
 function _streamCol(room) {
   const col = [];
   for (let i = 0; col.length < 3 && i < 12; i++) { const h = _streamHandle(room + ":" + G.day + ":" + i); if (!col.includes(h)) col.push(h); }
-  return _whaleOn(room) && !_streamHeld(((G.soc && G.soc.streamBell) || {})[room], 10) ? [_whaleOf(room).h, ...col.slice(0, 2)] : col;
+  // the night's regulars turn over by the hour, and your own handle sits on the column for a while after you buy there
+  for (let i = 0; col.length < 4 && i < 12; i++) { const h = _streamHandle(room + ":" + _streamHour() + ":" + i); if (!col.includes(h)) col.push(h); }
+  const regs = [col[0], col[1], col[3] || col[2]];
+  if (_streamHeld(((G.soc && G.soc.streamMine) || {})[room], 10)) regs.splice(1, 1, _myHandle());
+  return _whaleOn(room) && !_streamHeld(((G.soc && G.soc.streamBell) || {})[room], 10) ? [_whaleOf(room).h, ...regs.slice(0, 2)] : regs;
 }
 function _myHandle() {
   const o = String((G.player && G.player.origin) || "x"), p = String((G.player && G.player.personality) || "y");
@@ -10433,7 +10439,8 @@ function _streamTick() {
   last[G.room] = G.nightTurn;
   const n = NPCS[girls[_hh("st:" + G.day + ":" + G.nightTurn, 5) % girls.length]].name;
   const pool = _PLG_ROOMS.includes(G.room) ? _STREAM_TOAST : _STREAM_TOAST.filter(f => !/under the camera|red light/.test(String(f)));   // a bar's own {{phone}} is the camera
-  _say(_pickVary(pool, "streamtoast")(n, _streamHandle(G.day + ":" + G.nightTurn), _camDev()), "dim");
+  const handles = _streamCol(G.room).filter(h => h !== _myHandle() && !_STREAM_WHALES.some(w => w.h === h));   // a handle the room toasts is one on its own column
+  _say(_pickVary(pool, "streamtoast")(n, handles[_hh("sth:" + G.day + ":" + G.nightTurn, 5) % handles.length], _camDev()), "dim");
 }
 // a bare TALK to a girl at the camera: she waves from the corner — the one finger, the one song
 const _STREAM_BUSY_KNOWN = [
@@ -10545,20 +10552,25 @@ function _doStreamDrink(arg) {
   const who = String(arg || "").replace(/^(?:drink|a drink)\s+(?:for|to)?\s*/i, "").replace(/^(?:for|to)\s+/i, "").trim();
   if (G.battery <= 0) { _say("Your phone is dead."); return; }
   const id = who ? (typeof _npcByName === "function" ? _npcByName(who, { filter: x => NPC_ROLES[x] === "hostess" && _streamBar(NPCS[x].room), first: true }) : _findNpc(who)) : null;
+  if (!id) { const _h = _npcByName(who, { filter: x => NPC_ROLES[x] && NPC_ROLES[x] !== "hostess" && _streamBar(NPCS[x].room) });
+    if (_h) { _say(`${NPCS[_h].name} ${NPC_ROLES[_h] === "mamasan" ? "runs the floor" : "keeps the till"} at ${_barName(NPCS[_h].room)}; the link buys drinks for the girls on it, not the house. (STREAM DRINK <one of the girls>)`); return; } }
   if (!id || !NPCS[id] || NPC_ROLES[id] !== "hostess" || !_streamBar(NPCS[id].room)) {   // a name that is nobody on a channel you know (Wes, round 104)
     const _k = _streamRoomsKnown();
     _say(who && _k.length ? `Nobody called "${who}" on a channel you know. (WATCH STREAM <bar> shows who is on the floor.)` : `Only a handful of bars stream their floor. ${_k.length ? "WATCH STREAM shows who is on the floor." : "Walk into one and look up."}`); return; }
   const room = NPCS[id].room, n = NPCS[id].name;
+  if (G.party && (G.party.ids || []).includes(id)) { _say(`${n} is on your arm, reading your screen over it. "You buy me drink from the PHONE? I am here!" (BUY ${n.toUpperCase()} A DRINK)`); return; }
   if (G.room === room) { _say(`${n} is right there. Buy it across the stool and she can drink it with you. (BUY ${n.toUpperCase()} A DRINK)`); return; }
   if (!(_npcWhere(id) === room) || (_closedNow(room))) { _say(`${n} isn't on ${_barName(room)}'s camera tonight — the stream is the rail without her.`); return; }
   const p = _ladyPrice(room);
-  if ((G.bank || 0) < p) { _say(`The link wants ฿${_num(p)} from the account and the account has ฿${_num(G.bank || 0)}.`); return; }
+  if ((G.bank || 0) < p) { _say(`The link wants ฿${_num(p)} from the account and the account has ฿${_num(G.bank || 0)}. ${_STREAM_NOTES}`); return; }
   G.bank -= p; G.streamSpent = (G.streamSpent || 0) + p;
   const book = (G.streamDrinks = G.streamDrinks || {});
-  book[id] = { day: G.day, n: ((book[id] && book[id].n) || 0) + 1, room };
+  book[id] = { day: G.day, n: ((book[id] && book[id].n) || 0) + 1, room, from: G.room, with: ((G.party && G.party.ids) || []).slice() };
   G.battery = Math.max(0, G.battery - 1);
+  (G.soc.streamMine = G.soc.streamMine || {})[room] = _streamNow();
   _say(_pickVary(_STREAM_DRINK_LINES, "streamdrink")(n, _myHandle(), _camDev(room)) + ` (-฿${_num(p)} from the account.)`);
   if ((G.soc.streamJoy || 0) < 1) { G.soc.streamJoy = 1; _addHappy(1, "your handle, said to a camera"); }
+  _streamSeen("drink", room, id);
 }
 
 // THE BELL ON THE STREAM (Mario, 2026-10-22: "Streamers can ring the bell"). A man on the link can ring a streamed bar's
@@ -10595,12 +10607,49 @@ function _doStreamBell(arg) {
   if (room === G.room) { _say(`You're standing in ${_barName(room)}. Ring it with your hand — the room drinks on you either way, and this way they can see who. (RING BELL)`); return; }
   if (_closedNow(room)) { _say(`${_barName(room)}'s stream is a pulled shutter and a still of an empty rail. Nobody there to drink on you.`); return; }
   const p = _bellPrice(room);
-  if ((G.bank || 0) < p) { _say(`The bell on the link at ${_barName(room)} is ฿${_num(p)} — a round for the room as it stands tonight — and the account has ฿${_num(G.bank || 0)}.`); return; }
+  if ((G.bank || 0) < p) { _say(`The bell on the link at ${_barName(room)} is ฿${_num(p)} — a round for the room as it stands tonight — and the account has ฿${_num(G.bank || 0)}. ${_STREAM_NOTES}`); return; }
   G.bank -= p; G.streamSpent = (G.streamSpent || 0) + p; G.battery = Math.max(0, G.battery - 1);
-  (G.streamBells = G.streamBells || {})[room] = { day: G.day, n: (((G.streamBells || {})[room] || {}).n || 0) + 1 };
+  (G.streamBells = G.streamBells || {})[room] = { day: G.day, n: (((G.streamBells || {})[room] || {}).n || 0) + 1, from: G.room, with: ((G.party && G.party.ids) || []).slice() };
+  (G.soc.streamMine = G.soc.streamMine || {})[room] = _streamNow();
   _say(_pickVary(_STREAM_BELL_LINES, "streambellme")(_barName(room), _myHandle(), _camDev(room)) + ` (-฿${_num(p)} from the account.)`, "win");
   if ((G.soc.streamJoy || 0) < 1) { G.soc.streamJoy = 1; _addHappy(1, "a round on your handle"); }
   else _say("(no สนุก — the stream has paid you once tonight; the rest is the room's)", "dim");   // the first bell after a drink is not "a second round" (Wes, round 104)
+  _streamSeen("bell", room, null);
+}
+// the link takes the account and nothing else: say what takes notes
+const _STREAM_NOTES = "(The link only draws on the account. Notes in your pocket buy the same thing in the room: BUY <HER> A DRINK, or RING BELL.)";
+// WHAT THE ROOM YOU ARE IN SEES: the woman on your arm reads the screen over it, and a floor watches a man on its own stool
+// buy for another bar — once a night each, because the phone is in your hand in front of them
+const _STREAM_ARM_DRINK = [
+  (h, t) => `${h} reads your screen over your arm. "You buy ${t} drink? From the PHONE? I am HERE, tilac." She takes the phone off you and puts it back in your shirt pocket herself.`,
+  (h, t) => `"Who is ${t}?" ${h} asks, watching the little screen say your handle. "Pretty?" She does not wait for the answer. "I am prettier. And I am here."`,
+  (h, t) => `${h} watches the camera girl say your name and pulls a face at the screen. "Same price, she don't even look at you. Buy me one, I look at you whole time."`,
+];
+const _STREAM_ARM_BELL = [
+  (h, b, mine) => mine ? `${h} watches her own bar drink on you on a three-inch screen. "You ring MY bar, and I am not there to drink it!" She is laughing, mostly.` : `${h} looks at the screen, then at you. "Whole ${b} drink on you, and me? I get nothing?" She takes your arm a little tighter, which is the bill.`,
+  (h, b, mine) => mine ? `"My bar!" ${h} grabs the phone to see. "Look — Mama dance. Crazy man. Tomorrow everybody ask me who is ${_myHandle()}."` : `"${b}?" ${h} reads it off your screen. "Why you buy them? You don't know them. You know me."`,
+  (h, b, mine) => mine ? `${h} sees the bell go at her own rail and covers her face. "They will ask me tomorrow, and I have to say: he is with me, he ring from the street."` : `${h} says nothing while the strangers on the screen drink your round. Then: "Next time ring bell where I can drink it, na."`,
+];
+const _STREAM_ROOM_SAW = [
+  (n, b) => `${n} has seen your screen. "You buy drink for ${b} girl — sitting on MY stool?" She says it loud enough for the whole floor to enjoy it.`,
+  (n, b) => `"${b}?" ${n} leans over your phone. "Same bell here, you know. And here, we can see your face." The girl beside her laughs.`,
+  (n, b) => `${n} watches you ring another bar's bell from her rail and puts her chin on her hand. "Okay. Next time you are in ${b}, you ring our bell from there. Fair."`,
+  (n, b) => `The floor has noticed the phone. ${n} taps the screen where ${b} is drinking on you. "Them on the internet, us in real life. Who you buy, tilac?"`,
+];
+function _streamSeen(kind, room, target) {
+  const night = (G.soc.streamSeenBy = G.soc.streamSeenBy || {});
+  const arm = ((G.party && G.party.ids) || []).filter(x => NPCS[x] && x !== target);
+  if (arm.length && !night["arm:" + arm[0]]) {
+    night["arm:" + arm[0]] = true;
+    const h = NPCS[arm[0]].name;
+    _say(kind === "drink" ? _pickVary(_STREAM_ARM_DRINK, "streamarmd")(h, NPCS[target].name) : _pickVary(_STREAM_ARM_BELL, "streamarmb")(h, _barName(room), NPCS[arm[0]].room === room), "dim");
+    return;
+  }
+  if (!_inBar() || G.room === room || night["room:" + G.room] || _atOwnBar()) return;
+  const n = _npcsHere().filter(x => NPC_ROLES[x] === "hostess" && !arm.includes(x) && !(G.party && (G.party.ids || []).includes(x)));
+  if (!n.length) return;
+  night["room:" + G.room] = true;
+  _say(_pickVary(_STREAM_ROOM_SAW, "streamroomsaw")(NPCS[n[_hh("srs:" + G.room + G.day, 7) % n.length]].name, _barName(room)), "dim");
 }
 // THE FLOOR LOOKS PAST HIM (the plane refused, 2026-10-22): once a bar a night, a line — never a refusal; his money is
 // still money, and the women who know him still know him

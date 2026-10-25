@@ -1,0 +1,5 @@
+{"cmd":"how much is that?","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"jade_lounge","day":1,"turn":31,"mode":"soi6","convo":null,"at":"2026-10-25T08:03:56.294Z","src":"persona-priya"}
+{"cmd":"how much is that?","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"jade_lounge","day":1,"turn":32,"mode":"soi6","convo":null,"at":"2026-10-25T08:04:05.911Z","src":"persona-priya"}
+{"cmd":"buy food","reply":"Not for sale here.","room":"soi6_deep","day":2,"turn":27,"mode":"soi6","convo":null,"at":"2026-10-25T08:07:30.326Z","src":"persona-priya"}
+{"cmd":"battery","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"soi6_street","day":2,"turn":54,"mode":"soi6","convo":null,"at":"2026-10-25T08:08:39.175Z","src":"persona-priya"}
+{"cmd":"top up account","reply":"The soi blinks at you. Try again — (HELP lists commands.)","room":"soi6_street","day":6,"turn":12,"mode":"soi6","convo":null,"at":"2026-10-25T08:15:06.071Z","src":"persona-priya"}

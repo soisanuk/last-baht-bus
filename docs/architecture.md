@@ -2152,7 +2152,7 @@ online the girls would rather work the camera than the stools, which is the tens
 **Touches.** `barfine` (the camera refusal), `ladydrinks` and `bell` (`_bellPrice`), `phone` (battery), the morning
 ledger. A new hash keyed on the day must use `_hm`, not `_hh`, or consecutive nights collapse to one result.
 
-**Tests.** stream.test.js, round103.test.js, round104.test.js; tools/composition-audit.mjs's stream state (gated by
+**Tests.** stream.test.js, round103.test.js, round104.test.js, round107.test.js; tools/composition-audit.mjs's stream state (gated by
 composition-audit.test.js).
 
 **Design docs.** none.

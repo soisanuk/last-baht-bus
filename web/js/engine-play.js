@@ -6590,7 +6590,8 @@ function _endNight(reason) {
       // rail is not "three hours on the same stool" (Rolf, round 55)
       if (girls.length && !(G.bar && top === G.bar.room && _flag("barOpen")) && !(G.job && G.job.kind === "manager" && top === G.job.room))   // nor to the manager about his own floor (Renata, round 100)
         // the count is the one the room will quote back tomorrow (Ruairi, round 75: "three hours" here, "5 hour" from every mouth)
-        _say(`(${(() => { const h = Math.max(1, Math.round(n / 10)); return h === 1 ? "An hour" : ["", "", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"][h] + " hours"; })()} on the same ${_seat(top)} at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
+        // "the same stool" only for a man who stayed on it; a night that went to other bars and back is time "all told"
+        _say(`(${(() => { const h = Math.max(1, Math.round(n / 10)); return h === 1 ? "An hour" : ["", "", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"][h] + " hours"; })()} ${Object.entries(G.soc.barTurns).filter(([r, v]) => r !== top && v >= 5).length ? "all told" : "on the same " + _seat(top)} at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
       // and the man behind the rail: presence is how a manager decides you're not a tourist
       const mgr = _staffAt(top).find(id => NPCS[id] && NPCS[id].manager);
       // your own manager already knows your face — "(Bert will know it too.)" hung orphaned
@@ -7085,7 +7086,7 @@ function _ageBooks(off) {
   const shiftMap = m => { if (m && typeof m === "object") for (const k of Object.keys(m)) if (typeof m[k] === "number") m[k] -= off; };
   const shiftDay = o => { if (o && typeof o === "object" && typeof o.day === "number") o.day -= off; };
   shiftMap(G.metDay); shiftMap(G.seenDay); shiftMap(G.leaveSaid); shiftMap(G.visitDay); shiftMap(G.barSat);
-  for (const book of [G.wentWith, G.partyLog, G.rideLog, G.homeSeen, G.kissLog, G.giftLog]) if (book && typeof book === "object") for (const k of Object.keys(book)) {
+  for (const book of [G.wentWith, G.partyLog, G.rideLog, G.homeSeen, G.kissLog, G.giftLog, G.streamBells, G.streamDrinks]) if (book && typeof book === "object") for (const k of Object.keys(book)) {
     const v = book[k]; if (Array.isArray(v)) v.forEach(shiftDay); else shiftDay(v);
   }
   if (G.gifts && typeof G.gifts === "object") for (const k of Object.keys(G.gifts)) (Array.isArray(G.gifts[k]) ? G.gifts[k] : []).forEach(shiftDay);

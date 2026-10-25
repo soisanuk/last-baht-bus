@@ -720,7 +720,7 @@ const STATE_SCHEMA = {
     "roomPrepaid roomWaterDay rosesGiven safeMoneyDay safeMoneyLedger saidKha saidKhrap salengRoom salengSaid " +
     "salengSeen salengUntil score seaDay season0 seenDay selfBfHold sentTotal sevenAt shiftAskText shiftCall " +
     "shiftLeadText shiftWho shopMet showDay showerTurn sighting skipRepaid smallTalk socialActs somTamTestDay " +
-    "stayedPast std stickFiles storyOf streamBellOk streamBells streamDrinks streamSpent street streetDone streetLog " +
+    "stayedPast std stickFiles storyOf streamBellOk streamBells streamDrinks streamSpent streamTold street streetDone streetLog " +
     "stringer stuck stuckDay sunriseDay syn synJob talked tamarindDay tanAsked tanFavourDay tanNoteDay taught " +
     "taughtBy thaiAccount thaiHeardTurn thaiSaid thaiScript thaiSeen thaiSpyDone thaiUsed tipExist toldTo townLines " +
     "townTold trade travelDark turns vacation visitDay visitUntil visited waenDay walletBackDay walletHeld " +
@@ -739,7 +739,7 @@ const STATE_SCHEMA = {
     "bra butterflyTeased charmed charmedN contested danceNoted dancePaid dogFavor drinkCount drinkNight drunk fed " +
     "gaveCondom giftLines goWith greeted heat heatWhy helloed hostOut joyRooms lastCall leftEarly leftFrom " +
     "leftLockIn lockIn mgrChat mgrShot patronBusy patronMiffed photoJoy photoNoted salengBar selfBf selfDrinks " +
-    "steered tipBond tries ").trim().split(/\s+/),
+    "steered streamJoy streamLast streamMine streamSeenBy tipBond tries ").trim().split(/\s+/),
   socTrip: (
     "arriveBook arriveMoney askedHere awaySaid beats bondHeard bondSaid byeSaid chamDrinks clinicCompany coconutDone " +
     "comped craneDay declined depositNagDay dogScenesSeen drinks fonPour freeNight gapSeen gifted given glassRooms " +
@@ -748,7 +748,7 @@ const STATE_SCHEMA = {
     "moneyTick motelWith ninaFed niraWater noEnglish nontTold padded policeRoll policeTell policeWarned pubShut " +
     "quitSaid qvCrisped retHello rivalSaw roastGoneSeen roundFor roundTold seenHome shutOut sightedOff sighting " +
     "soapyDone soberNext softDrink special specialAsk spentTurn sponsorPix staySaid stoodFor storyTold streamAway " +
-    "streamBell streamJoy streamLast streamWon streetLook tanFedDay thaiPraised thaiSpy tickRoom torchNoticed " +
+    "streamBell streamWon streetLook tanFedDay thaiPraised thaiSpy tickRoom torchNoticed " +
     "townSaid usualSaid waiBack walletPointed wentHello whaleBell whaleBellAt witnessSaid workSaid ").trim().split(/\s+/),
 };
 
