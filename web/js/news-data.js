@@ -13,49 +13,34 @@ var NEWS_FEED = [
     "d": "24 Oct 2026"
   },
   {
+    "t": "Pattaya raises high-season alert with boat safety inspections",
+    "s": "Pattaya Mail",
+    "d": "24 Oct 2026"
+  },
+  {
     "t": "Chinese Red Notice suspect arrested in Pattaya as DNA probe uncovers paternity case",
     "s": "Nation Thailand",
     "d": "22 Oct 2026"
   },
   {
-    "t": "Thailand’s Q3 economy stalls under flood pressure and rising household costs",
+    "t": "Rayong police inspect karaoke venues ahead of high season",
     "s": "Pattaya Mail",
-    "d": "23 Oct 2026"
+    "d": "24 Oct 2026"
   },
   {
-    "t": "Thailand’s new accommodation law faces questions over safety and oversight",
-    "s": "Pattaya Mail",
-    "d": "23 Oct 2026"
-  },
-  {
-    "t": "Pattaya’s blue taxi vests face U-turn after just six days",
+    "t": "Chinese fugitive held in Pattaya, child may lose Thai nationality",
     "s": "Thaiger",
-    "d": "22 Oct 2026"
+    "d": "25 Oct 2026"
   },
   {
-    "t": "Anutin orders Pattaya motorcycle taxi drivers to return to orange, MP says",
-    "s": "Khaosod English",
-    "d": "22 Oct 2026"
-  },
-  {
-    "t": "Pattaya motorcycle taxi riders may recoup costs after uniform reversal",
+    "t": "Beer-lured theft suspect caught after court escape left owner afraid",
     "s": "Thaiger",
     "d": "23 Oct 2026"
   },
   {
-    "t": "Israeli woman’s visa revoked for ‘improper behaviour’",
-    "s": "Bangkok Post",
-    "d": "23 Oct 2026"
-  },
-  {
-    "t": "Thailand delays proposed 1,000-baht overseas travel tax",
-    "s": "Khaosod English",
-    "d": "22 Oct 2026"
-  },
-  {
-    "t": "Thailand welcomes US-Myanmar engagement, expects ASEAN talks on country's future",
-    "s": "Reuters",
-    "d": "23 Oct 2026"
+    "t": "Thailand targets Italian luxury travellers with year-round tourism strategy",
+    "s": "Pattaya Mail",
+    "d": "24 Oct 2026"
   },
   {
     "t": "Israeli woman visiting Thailand has visa revoked following conduct complaints by locals",
@@ -63,25 +48,40 @@ var NEWS_FEED = [
     "d": "24 Oct 2026"
   },
   {
+    "t": "Israeli woman’s visa revoked for ‘improper behaviour’",
+    "s": "Bangkok Post",
+    "d": "23 Oct 2026"
+  },
+  {
+    "t": "Thailand welcomes US-Myanmar engagement, expects ASEAN talks on country's future",
+    "s": "Reuters",
+    "d": "23 Oct 2026"
+  },
+  {
     "t": "Mae Kaew Is a Mother of Nine, and Thailand’s Tigers Are Rising",
     "s": "A-Z Animals",
     "d": "23 Oct 2026"
   },
   {
-    "t": "A Tourist Spotted Strange Footprints in Thailand. They Were 120 Million Years Old, Made by a Giant Dinosaur",
-    "s": "ZME Science",
-    "d": "23 Oct 2026"
+    "t": "Israeli arrested in Thailand suspected of drugging women he met on dating app",
+    "s": "Ynetnews",
+    "d": "24 Oct 2026"
+  },
+  {
+    "t": "Dutch TV host reported missing in Thailand left country in 2025, police say",
+    "s": "Khaosod English",
+    "d": "24 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-10-23","USD":33.75,"AUD":23.7,"GBP":45.11,"EUR":37.76};
+var FX_RATES = {"date":"2026-10-23","USD":33.75,"AUD":23.7,"GBP":45.11,"EUR":37.77};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-25","temp":27,"humid":85,"code":3,"hi":32,"rain":96};
+var WX_NOW = {"date":"2026-10-25","temp":28,"humid":83,"code":3,"hi":32,"rain":98};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3997,"date":"2026-10-24","baht":63800};
+var GOLD = {"usd":3997,"date":"2026-10-25","baht":63800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":80479,"thb":2706973};
+var BTC = {"usd":80360,"thb":2702967};
