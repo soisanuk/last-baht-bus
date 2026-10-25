@@ -116,8 +116,8 @@ test("Wes: the stream's memory pools are deeper than a week of women", () => {
 // ── Benoît: an owner's small hours ─────────────────────────────────────────────
 test("Benoît: the affair's bed catch needs somebody in the bed — never the party already cleared, never a sunrise, never her", () => {
   const s = src("engine-play");
-  assert.match(s, /if \(!crash && _bedIds && _bedIds\.length && typeof _affairLive === "function" && _affairLive\(\) && !_bedIds\.includes\(G\.affair\.id\)/);
-  assert.doesNotMatch(s, /\(_hadParty \|\| _bedIds\) && typeof _affairLive/);
+  assert.match(s, /if \(!crash && _bedIds && _bedIds\.length && (?:typeof _affairLive === "function" && )?_affairLive\(\) && !_bedIds\.includes\(G\.affair\.id\)/);
+  assert.doesNotMatch(s, /\(_hadParty \|\| _bedIds\) && (?:typeof )?_affairLive/);
 });
 
 test("Benoît: a shift stood to midnight is not lapsed by taking her out after it", () => {

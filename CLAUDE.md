@@ -137,6 +137,9 @@ implicit order, state lifetime, the `typeof` guards, the prompt registry. Follow
 - **A `//` comment added to the end of a line of code swallows what follows on it** — put the comment on its own line. It
   has silently deleted a `_say`, a test's setup and a closing brace.
 - **Duplicate case labels in `doCommand` are dead code** (a test greps for them).
+- **Call an engine function directly** — never through `typeof _x === "function" &&` (it turns a rename into a silently
+  disabled feature; every test loads the whole engine). Guards are for optional globals only (`cli-sim`, frontend hooks,
+  the news bake); `tests/js/guards.test.js` ratchets the old ones down.
 
 ### Prose is a claim
 

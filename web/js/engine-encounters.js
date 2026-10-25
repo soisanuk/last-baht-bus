@@ -188,13 +188,13 @@ function _salengMatchItem(input) {
 // offers a rose to give to whoever you're talking to. Once per night.
 function _flowerTick() {
   if (!G || G.over || G.pendingEnc || G.game || G.pendingChoice) return;
-  if (typeof _onRide === "function" && _onRide()) return;   // "stands the wrapped bloom next to your beer" at the hill viewpoint (Piet, round 62)
+  if (_onRide()) return;   // "stands the wrapped bloom next to your beer" at the hill viewpoint (Piet, round 62)
   if (!_flag("act1Done")) return;                 // sandbox flavour, not the wallet night
   if (!_inBar()) return;
-  if (typeof _atOwnBar === "function" && _atOwnBar()) return;   // the rose family does not pitch the owner his own girl, two nights running (Rolf, round 66)
+  if (_atOwnBar()) return;   // the rose family does not pitch the owner his own girl, two nights running (Rolf, round 66)
   const open = _room().barType === "beer" || G.room === "lake_bar"; // open-front only
   if (!open) return;
-  const partner = typeof _convoActive === "function" && _convoActive();
+  const partner = _convoActive();
   if (!partner || !NPC_ROLES[partner]) return;    // must be sitting with a working girl/ladyboy
   if (NPC_ROLES[partner] === "mamasan" || NPC_ROLES[partner] === "cashier") return;   // the daughter does not pitch a rose for the mamasan (Rolf, round 54)
   if (!(G.soc.drinks && G.soc.drinks[partner] > 0)) return; // and actually courting her
@@ -232,7 +232,7 @@ function _salengTick() {
   // (Gaz playtest, 2026-08-17). Carts hold until the modal clears.
   if (G.pendingChoice || G.pendingBf || G.pendingFare || G.game) return;   // …and a barfine on the table: the cart's "(BUY MOO PING)" printed under the ST/LT line and the gate swallowed it (Darren, round 66)
   // the cart goes when the bar does: lingerie modelled in the same breath as the two o'clock shutters (Callum, round 89)
-  const _cl = G.salengRoom && typeof _closeTurn === "function" ? _closeTurn(G.salengRoom) : null;
+  const _cl = G.salengRoom ? _closeTurn(G.salengRoom) : null;
   if (G.salengCart && _cl != null && G.nightTurn >= _cl - 2) G.salengUntil = Math.min(G.salengUntil, G.turns);
   if (G.salengCart && G.turns >= G.salengUntil) { // its time is up — it moves on
     const here = G.salengRoom === G.room;
@@ -250,7 +250,7 @@ function _salengTick() {
       !(G.rain > 0) &&   // a cart does not park in a downpour (Tomasz, round 54)
       !_room().invite && !_room().indoors &&   // nor outside a windowless members' room (Declan, round 58)
       // …nor in a bar's last half hour, nor at three in the morning anywhere (Callum: a shoe cart at 02:20, som tam at 04:30)
-      G.nightTurn < 90 && !(typeof _closeTurn === "function" && _closeTurn(G.room) != null && G.nightTurn >= _closeTurn(G.room) - 5) &&
+      G.nightTurn < 90 && !(_closeTurn(G.room) != null && G.nightTurn >= _closeTurn(G.room) - 5) &&
       _rand() < 0.10) {
     (G.soc.salengBar = G.soc.salengBar || {})[G.room] = true;
     _salengSpawn();
@@ -307,16 +307,16 @@ function _salengVignette() {
 
 function _maybeEncounter() {
   if (!G || G.over || G.pendingFare || G.pendingEnc) return;
-  const _streetHere = !!(_room().venues || _room().seven || _room().motosai) && !_room().indoors && !(typeof _isHotelRoom === "function" && _isHotelRoom(G.room)) && G.room !== "police_station";
+  const _streetHere = !!(_room().venues || _room().seven || _room().motosai) && !_room().indoors && !(_isHotelRoom(G.room)) && G.room !== "police_station";
   // nothing off the street walks into a bolted lock-in — the rose seller and
   // her daughter did (Stan, round 35)
-  if (typeof _lockedIn === "function" && _lockedIn()) return;
+  if (_lockedIn()) return;
   if (_isDarkHere() || _room().bar) return; // the dark belongs to the soi dogs
   // public drunkenness attracts the boys in brown (repeatable, unlike the rest)
   if (_streetHere && G.soc.drunk >= 5 && G.turns - G.lastPolice >= 30 && _rand() < 0.2) {   // a street: it fired in a hotel room, the condo and the police station (review 2026-10-25)
     G.lastPolice = G.turns;
     G.policeAt = { room: G.room, day: G.day };   // the pavement that saw it (Bridget, round 76)
-    if (typeof _streetSaw === "function") _streetSaw("police");   // …and the woman on your arm who talked them down (Dagny, round 91)
+    _streetSaw("police");   // …and the woman on your arm who talked them down (Dagny, round 91)
     if (_dogEgg() === "guard") { // the hound sees the shakedown off before it starts
       _say(_dogN("A boy in brown peels off a power pole toward your weaving path — then clocks the " +
         "dog at your heel, reconsiders his entire evening, and melts back into the shade. Nobody " +
@@ -410,7 +410,7 @@ function _salengBuy(input) {
     const forM = input.replace(/\bno\b|\bignore\b|\bleave\b|\bgo away\b/, "")
       .match(/\bfor\s+(\w+)\s*$/i);
     let forId = forM ? _findNpc(forM[1]) : null;
-    if (forM && !forId && /^(?:her|she)$/i.test(forM[1]) && typeof _convoActive === "function") forId = _convoActive();
+    if (forM && !forId && /^(?:her|she)$/i.test(forM[1])) forId = _convoActive();
     if (forM && !(forId && NPC_ROLES[forId]) && !/^(?:me|myself)$/i.test(forM[1])) { _say(`For whom? The saleng man waits, holding it up — he sells to the girls on this floor. (BUY <thing> FOR <her name>)`); return; }   // it silently bought it for you (review 2026-10-25)
     const forHer = forId && NPC_ROLES[forId];
     // determine item, price, and nutrition (shared with _doBuy routing)
@@ -430,7 +430,7 @@ function _salengBuy(input) {
       // what she was actually given, so a bond node can thank you for a REAL
       // gift. Lek thanked a man for sandals he had never bought her, because
       // her node is bond-gated and nothing recorded the giving (Geraint, round 48).
-      if (typeof _giftNote === "function") _giftNote(forId, { kind: "item", item: String(item), cart: _salengCartItem() });   // the morning after she can still name it (Aisling, round 87)
+      _giftNote(forId, { kind: "item", item: String(item), cart: _salengCartItem() });   // the morning after she can still name it (Aisling, round 87)
       (G.soc.gifted = G.soc.gifted || {})[forId] = [...new Set([...(Array.isArray(G.soc.gifted[forId]) ? G.soc.gifted[forId] : []), _salengCartItem()])];   // the saleng's book, not the sponsor-flip baht (G.soc.given)
       const name = NPCS[forId].name;
       _addBond(forId, 1);
@@ -609,7 +609,7 @@ const _ENC = {
     // daughter only when it names the rose, or names nothing
     const buysRose = /^buy(?:\s+(?:a\s+|the\s+|one\s+|her\s+a\s+)?(?:rose|flower|one|it))?(?:\s+for\s+.+)?\s*$/.test(input);   // BUY ROSE FOR LEK is the tap the pitch prints (Kenji, round 47)
     // the rose stood in front of the woman beside you, bought or not, is a thing she saw (Thomas, round 92)
-    if (typeof _streetSaw === "function" && !buysRose) _streetSaw("rose", { for: id });
+    if (!buysRose) _streetSaw("rose", { for: id });
     if (!(buysRose || /^(?:yes|rose|flower|sure|ok|okay|please|one|no|nah|wave|leave|later|pass|shake|sorry)\b/.test(input))) {
       _say("The mother reads your attention elsewhere, nods, and steers her daughter on to the next stool.", "dim");
       return "passthrough";
@@ -630,7 +630,7 @@ const _ENC = {
       // BUY ROSE FOR CREAM gave it to the girl the pitch named (Fintan, round 60): a name you
       // typed, of a woman in the room, is who the rose is for
       const _forM = input.match(/\bfor\s+(?:the\s+)?(.+)$/);
-      const _forId = _forM && typeof _findNpc === "function" ? _findNpc(_forM[1].trim()) : null;
+      const _forId = _forM ? _findNpc(_forM[1].trim()) : null;
       const _to = _forId && _npcsHere().includes(_forId) ? _forId : id;
       if (_to && _npcsHere && _npcsHere().includes(_to)) {
         G.itemLoc.rose = "inventory";
@@ -821,7 +821,7 @@ const _ENC = {
 
   brit(input) {
     // the pavement saw him (Aisling, round 87: in front of Tan, the piwin and an open front, and nobody could say so)
-    if (typeof _streetSaw === "function") _streetSaw("drunk", { how: /sorry|apolog|calm|mate|friend|wai|easy|misunderstand|mistake|my bad|buy you/.test(input) ? "calm"
+    _streetSaw("drunk", { how: /sorry|apolog|calm|mate|friend|wai|easy|misunderstand|mistake|my bad|buy you/.test(input) ? "calm"
       : /fight|punch|hit|swing|shove|push|square|come on|idiot|wanker|muppet yourself/.test(input) ? "fight" : "blank" });
     if (/sorry|apolog|calm|mate|friend|wai|easy|misunderstand|mistake|my bad|buy you/.test(input)) {
       G.money += 50;
@@ -850,7 +850,7 @@ const _ENC = {
       // …and what you were doing when he arrived still happens: WITHDRAW 10000 was eaten as the blank stare and no
       // money came out — a man found out at the barfine (Steve's third run). He reels off; the ATM is still there.
       const v = String(input || "").trim().split(/\s+/)[0];
-      if (typeof _isRealCommand === "function" && _isRealCommand(v) && !/^(?:talk|ask|look|l|wait|help|tell|flirt|kiss|spank|fondle|hug|give|tip)$/.test(v)) return "passthrough";
+      if (_isRealCommand(v) && !/^(?:talk|ask|look|l|wait|help|tell|flirt|kiss|spank|fondle|hug|give|tip)$/.test(v)) return "passthrough";
     }
   },
 
@@ -954,17 +954,17 @@ const _ENC = {
     if (/yes|yeah|ok|okay|sure|come|fine|why not|\bgo\b|her|deal/.test(input)) {
       // her bar is one of this street's fronts — name it, or the hint's ENTER
       // lands on "Which one?" (Gordon, round 37). Pure hash, no dice.
-      const fronts = (_room().venues || []).filter(v => ROOMS[v] && ROOMS[v].barType && !(typeof _closedNow === "function" && _closedNow(v)));
+      const fronts = (_room().venues || []).filter(v => ROOMS[v] && ROOMS[v].barType && !(_closedNow(v)));
       const bar = fronts.length ? fronts[_hh(G.room + ":" + G.day, 5) % fronts.length] : null;
       // THE GIRL ON THE END OF THE NOODLE IS SOMEBODY (Hal, round 96: five women on the floor and none was her) — one of her
       // bar's hostesses working tonight, by hash; her bar and her colleagues name her, and she answers for it herself
-      const _hs = bar && typeof _staffAt === "function" ? _staffAt(bar).filter(h => NPC_ROLES[h] === "hostess" && (typeof _npcActive !== "function" || _npcActive(h))) : [];
+      const _hs = bar ? _staffAt(bar).filter(h => NPC_ROLES[h] === "hostess" && (typeof _npcActive !== "function" || _npcActive(h))) : [];
       const by = _hs.length ? _hs[_hh(G.room + ":" + G.day + ":noodleby", 7) % _hs.length] : null;
-      if (bar && typeof _streetSaw === "function") _streetSaw("noodle", { bar, by });   // her own bar knows its noodle girl (round 87)
+      if (bar) _streetSaw("noodle", { bar, by });   // her own bar knows its noodle girl (round 87)
       let line = _pickVary(_NOODLE_YES, "noodleyes");
       if (bar) line = line.replace(/\(ENTER[^)]*\)/, `(ENTER ${_barName(bar).toUpperCase()} to follow it through — or drift off; the soi forgives fast.)`);
       _say(line);
-      if (by && NPCS[by]) { _say(`(The girl on the end of the noodle is ${NPCS[by].name}.)`, "dim"); if (typeof _learnNames === "function") _learnNames(NPCS[by].name); }
+      if (by && NPCS[by]) { _say(`(The girl on the end of the noodle is ${NPCS[by].name}.)`, "dim"); _learnNames(NPCS[by].name); }
       return;
     }
     // walk on — THWACK. The bop itself is the payoff: pure, stupid, capped sanuk.
@@ -1314,13 +1314,13 @@ const _ENC = {
     }
     // BUY SUNGLASSES FOR PLE: the "for" is a person, and the thing is hers (Dagny, round 91 — the RayBens went on his own face)
     const _forM = input.match(/\bfor\s+(?:the\s+)?([a-z' ]+)$/);
-    const _forId = _forM && typeof _findNpc === "function" ? _findNpc(_forM[1].trim()) : null;
+    const _forId = _forM ? _findNpc(_forM[1].trim()) : null;
     const _for = _forId && _npcsHere().includes(_forId) ? _forId : null;
     const _had = { fake_rolex: G.itemLoc.fake_rolex, shades: G.itemLoc.shades, vitamin_v: G.itemLoc.vitamin_v };
     const _giveAfter = () => {
       if (!_for) return;
       const got = Object.keys(_had).find(k => _had[k] !== "inventory" && G.itemLoc[k] === "inventory");
-      if (got && typeof _doGive === "function") _doGive({ fake_rolex: "rolex", shades: "sunglasses", vitamin_v: "vitamins" }[got], NPCS[_for].name.toLowerCase());
+      if (got) _doGive({ fake_rolex: "rolex", shades: "sunglasses", vitamin_v: "vitamins" }[got], NPCS[_for].name.toLowerCase());
     };
     if (/\brolex\b/.test(input) || (/\bwatch\b/.test(input) && !/\bwatch (?:sunrise|the sunrise|dawn|tv|show|the show|soi|the soi|football|the game|police|the police|her|him|them|out|it)\b/.test(input))) {   // WATCH SUNRISE bought the Rolex (Dougie, round 96)
       if (G.money < px.watch) { _say(`฿${_num(px.watch)} for the 'Rolex'. He inspects your ฿` + G.money + " and moves along, unoffended."); return; }

@@ -133,7 +133,7 @@ its tests except by grep. **Recommendation:** list each system's test files in `
 
 ## Suggested order
 
-*Progress: step 1 done 2026-10-25 — CLAUDE.md is 5,613 words (from 72,214); the full text is `docs/claude-history.md`.*
+*Progress (2026-10-25): step 1 done — CLAUDE.md is 5,613 words (from 72,214), the full text in `docs/claude-history.md`. Step 2 done the cheaper way — the shared loader turned out unnecessary (every test already loads all five engine files; only `cli-sim` is optional), so 885 lines of engine-internal guards were removed mechanically and `tests/js/guards.test.js` ratchets the remaining 204 (if/else forms) toward zero.*
 
 1. CLAUDE.md to doctrine + pointers (an hour; pays back on every session).
 2. The shared test loader, then the `typeof` lint (mechanical; unblocks the rest).
