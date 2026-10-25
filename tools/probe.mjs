@@ -17,6 +17,8 @@
 //   show(label?)  — print + clear the buffer (indented, newlines flattened)
 //   lastOut()     — the buffer joined, for matching
 //   sandbox(money=2000) — fresh game past Act One: vacation, funded, street noise off
+//   who()         — which of _doTalkCore's answerers answered the last TALK/ASK (tools/talk-order.mjs's list), for
+//                   triage: "why did X answer that?" (the architecture review, 2026-10-25)
 //
 // A bare newGame() at load leaves you at the Act One opening (saleng suppressed).
 
@@ -32,6 +34,15 @@ for (const f of FILES)
 globalThis.out = [];
 engineInit(t => globalThis.out.push(t), null, () => {});
 
+// the answerer trace: each of _doTalkCore's answerers is wrapped to note when it answered (a truthy return, or the
+// _deliver that prints a node). Top-level function declarations are properties of the global object, so the engine's own
+// calls go through the wrapper. Debugging only — the game never loads this.
+{ const { talkOrder } = await import("./talk-order.mjs");
+  let _answered = null;
+  for (const n of talkOrder()) { const f = globalThis[n]; if (typeof f !== "function") continue;
+    globalThis[n] = function (...a) { const r = f.apply(this, a); if (r || n === "_deliver") _answered = _answered || n; return r; }; }
+  const _dc = globalThis.doCommand; globalThis.doCommand = (c) => { _answered = null; return _dc(c); };
+  globalThis.who = () => { console.log("answered by:", _answered || "(no listed answerer — the miss pools or a verb)"); return _answered; }; }
 globalThis.run = (...cmds) => { for (const c of cmds) doCommand(c); };
 globalThis.lastOut = () => globalThis.out.join("\n");
 globalThis.show = (label) => {
