@@ -144,6 +144,11 @@ implicit order, state lifetime, the `typeof` guards, the prompt registry. Follow
 - **A `//` comment added to the end of a line of code swallows what follows on it** — put the comment on its own line. It
   has silently deleted a `_say`, a test's setup and a closing brace.
 - **Duplicate case labels in `doCommand` are dead code** (a test greps for them).
+- **Comment the rule, not the round.** The why of a line belongs beside it; who found it and when belong in git, the
+  findings ledger and the round test that pins it. New code carries no "(Name, round N)" citations; the ~1,800 already
+  there are history and are thinned as the functions around them are reworked.
+- **A system's tests are listed in its `docs/architecture.md` section** — look there before grepping, and add a new test
+  file to the section of the system it pins (round and review files pin many systems; the section is the index).
 - **Call an engine function directly** — never through `typeof _x === "function" &&` (it turns a rename into a silently
   disabled feature; every test loads the whole engine). Guards are for optional globals only (`cli-sim`, frontend hooks,
   the news bake); `tests/js/guards.test.js` ratchets the old ones down.
