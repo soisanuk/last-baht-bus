@@ -6611,6 +6611,7 @@ function _endNight(reason) {
   G.soc.drinkCount = {};     // …and how many each (the Soi 6 drink tariff)
   G.soc.tipBond = 0;         // a night's tipping lifts her a couple of notches — a night's, not the trip's (review 2026-10-25)
   G.soc.selfDrinks = {};     // …and the beers you bought yourself, per bar (mama's midnight gate)
+  _resetNightSoc();          // …and every other key STATE_SCHEMA calls nightly (engine-core)
   // A new night never inherits last night's breadcrumb (round 34).
   _traceCancel();
   G.soc.bondCapSaid = {};    // …so the "as warm as money gets tonight" line can land again tomorrow
@@ -7092,10 +7093,9 @@ function _ageBooks(off) {
   if (Array.isArray(G.streetLog)) G.streetLog.forEach(shiftDay);
   // …and the absolute-day deadlines: a bank review begun on one trip ran into every later one, and a payout due "in a
   // week" never came to a man whose next trip started at day 1 (review 2026-10-25)
-  for (const k of ["acctUntil", "paperFlag", "paperUntil"]) if (typeof G[k] === "number") G[k] -= off;
-  // every once-a-day stamp (G.<something>Day: the booking app, the rose seller, Mama Yai's plate, the cats, the pool…)
-  // is a day number on the old trip's count; left as it was, it blocked or doubled a thing on the new trip's same day
-  for (const k of Object.keys(G)) if (/[a-z]Day$/.test(k) && typeof G[k] === "number") G[k] -= off;
+  // every absolute day number STATE_SCHEMA lists (the once-a-day stamps G.<x>Day, a bank review, the paper's dates) is on
+  // the old trip's count; left as it was, it blocked or doubled a thing on the new trip's same day
+  for (const k of STATE_SCHEMA.day) if (typeof G[k] === "number") G[k] -= off;
   shiftMap(G.questDoneDay);   // "a month after" a job is a month of days, whichever trip they fell on
   shiftDay(G.std);   // an infection carried home is days old, not days in the future
   if (G.massageLog && typeof G.massageLog === "object") for (const r of Object.keys(G.massageLog)) { const e = G.massageLog[r]; if (e && typeof e.last === "number") e.last -= off; }

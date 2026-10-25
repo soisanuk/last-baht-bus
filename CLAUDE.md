@@ -110,9 +110,11 @@ implicit order, state lifetime, the `typeof` guards, the prompt registry. Follow
   audit). Its prompt goes through one shared helper so the live prompt, the reprompt and the redraw are identical. A
   non-answer ("what?", "what happens if I say yes?") must leave it up, commit nothing and cost no turn. A trigger never arms
   on top of a gate already up. A choice that ends a night asks once (`_endConfirm`).
-- **A new `G` field is one line in `newGame()`** — `deserializeGame` merges a save over a fresh skeleton, so old saves gain
-  it. Know its lifetime: nightly fields are reset in `_endNight`, per-trip ones in `_newVacation`; **a day stamp named
-  `G.<x>Day` is aged by `_ageBooks` across a trip automatically** — a deadline with another name must be added there.
+- **A new `G` field is one line in `newGame()` and one word in `STATE_SCHEMA`** (engine-core, beside it) — `deserializeGame`
+  merges a save over a fresh skeleton, so old saves gain it, and the schema declares how long it lives: `night` (reset at
+  dawn), `trip` (reset by `_newVacation`), `life`, plus `day` for every absolute day number `_ageBooks` moves back across a
+  trip; a `G.soc` key is `socNight` (reset at dawn by type unless `_endNight` resets it by hand) or `socTrip`.
+  `tests/js/state-schema.test.js` fails on an undeclared field, so the lifetime is decided when the field is written.
   Know which side of the shared-world wall it is on (player-local vs world-shared).
 - **Repeatable prose is pooled, never a fixed string**: `_pickVary(pool, key)` (half the pool before a line repeats). A
   pool a floor woman deals from must be deeper than the women a man meets in a week (about ten) — `chorus-audit` gates it.

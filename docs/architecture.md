@@ -85,6 +85,10 @@ hand-listed. The ones every system leans on:
   `G.game`, plus the conversation `G.convo` and the question she is waiting on, `G.convoQ`.
 - **The long game:** `G.quests`, `G.job`, `G.bar`, `G.affair`, `G.syn`, `G.month`, `G.paper`, `G.hotel`, `G.street`.
 
+**Every field's lifetime is declared in `STATE_SCHEMA`** (engine-core, beside `newGame()`): `night`, `trip`, `life`, the
+`day` numbers `_ageBooks` moves back across a trip, and `socNight` / `socTrip` for `G.soc`. `_resetNightSoc` resets the
+nightly keys `_endNight` does not reset by hand, and `tests/js/state-schema.test.js` fails on a field the schema lacks.
+
 ### What happens to a command
 
 `doCommand(input)` is a thin wrapper: it counts parse failures once per thing typed (the third in a row opens the

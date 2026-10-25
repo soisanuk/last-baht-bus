@@ -133,7 +133,7 @@ its tests except by grep. **Recommendation:** list each system's test files in `
 
 ## Suggested order
 
-*Progress (2026-10-25): step 1 done — CLAUDE.md is 5,613 words (from 72,214), the full text in `docs/claude-history.md`. Step 2 done the cheaper way — the shared loader turned out unnecessary (every test already loads all five engine files; only `cli-sim` is optional), so 885 lines of engine-internal guards were removed mechanically and `tests/js/guards.test.js` ratchets the remaining 204 (if/else forms) toward zero.*
+*Progress (2026-10-25): step 1 done — CLAUDE.md is 5,613 words (from 72,214), the full text in `docs/claude-history.md`. Step 2 done the cheaper way — the shared loader turned out unnecessary (every test already loads all five engine files; only `cli-sim` is optional), so 885 lines of engine-internal guards were removed mechanically and `tests/js/guards.test.js` ratchets the remaining 204 (if/else forms) toward zero. Step 3 done — `STATE_SCHEMA` in engine-core declares all ~430 top-level fields and 147 `G.soc` keys (generated from what the code did, then corrected: `salengBar` and `steered` were nightly by their own comments and never reset), `_endNight` resets the nightly keys by type, `_ageBooks` reads its day list, and `tests/js/state-schema.test.js` fails on an undeclared field.*
 
 1. CLAUDE.md to doctrine + pointers (an hour; pays back on every session).
 2. The shared test loader, then the `typeof` lint (mechanical; unblocks the rest).

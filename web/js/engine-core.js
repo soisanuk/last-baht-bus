@@ -674,6 +674,95 @@ function importBaton(b) {
   return { ok: true };
 }
 
+// ── STATE_SCHEMA: how long every field of G lives (the architecture review of 2026-10-25, finding 3) ──
+// A field's lifetime used to be implied by where it was stored, and the code review's two biggest defect classes were
+// lifetime bugs (nightly books never reset, day stamps never aged). Every top-level G field and every G.soc key the source
+// names is declared here, ONCE: tests/js/state-schema.test.js fails on one that is not, so a new field arrives with its
+// lifetime decided. "night" is reset at dawn by _endNight, "trip" by _newVacation, "life" never; "day" lists the
+// absolute day numbers and day-keyed books _ageBooks moves back across a trip. G.soc is rebuilt by _newVacation (keeping
+// its few life-long books), so its keys are "night" (reset at dawn — _endNight resets every one listed, by type) or "trip".
+const STATE_SCHEMA = {
+  night: (
+    "bank battery chamNight checkoutNight crashInjury darkStreak encPrompt enteredVia game hangover hunger hurt " +
+    "jaded kickedTonight kpPlayed lastBfBase lastBfHonest lastBfId lastBfPreTier lastBfWhy lastBusWarned " +
+    "lastNightWas lightOn monthClosing nightTurn nontStuck offstage party partyLog peddlerNight pendingBf pendingEnc " +
+    "pendingFare pendingSoapy quizPlayed rain rideSeq room roomWater roughLost safeTries salengCart selfBfId thirst " +
+    "wakeTurn ").trim().split(/\s+/),
+  trip: (
+    "atmDay atmToday care curseOwed everBond happy hotel lastNight lastNightSaid ledgerSeen loan loanSkipped " +
+    "loanSkippedOwed money nightLog pendingChoice prevBond rep repDay returned stage testedDays tonicOwed ").trim().split(/\s+/),
+  life: (
+    "_lastPick acctBase acctDay acctUntil acctWhy act1Best act1SafeDue act1Tries affair affairCool affairCoolWho " +
+    "affairCrisis affairOutAsk affairWho afterWorkOf amuletWorn askArm askArmPrev askTold atmFees atmTotal bankIn " +
+    "bankNotes bar barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
+    "boardWon bookingDay boxJob bruise buddhaDay busAskStops busAskTurn busCameTurn busWaitTurn catDay ccibLoud " +
+    "ccibLoudNight ccibLowUntil ccibRadar chamContactDay chamDays chamGifts chamLast cherryDay cliLockedDay cliSat " +
+    "clozeFree cmdN codaBook codaSeen condo condoPaid condoTermsRead condoms convo convoChoiceMemo convoHour " +
+    "convoIdx convoLapsed convoPage convoQ coversNights dailyId dailySeed darkDoorDay day destitute destituteDay dog " +
+    "dogNudgeDay dogPhakhama dogRegion dogRoomSeen dogTagged dragDay drizzleTurn dropped drunk eddyBackDay encDone " +
+    "endKind endWarn envelopeDue examined exitSaid exitTried faction firedBars flags flatTold flowerDay flowerFor " +
+    "flowerSeen freeTeaDay fridgeDay fridgeWater frontierSaid giftIn giftLog gifts givenEver glass halfThaiClocked " +
+    "heardOf heardRegion homeSeen hospitalVisits hotelDebt insulted introAfter introStep itNpc itemLoc jadeSaid job " +
+    "jobFired jobOffer jobPaid jobPay jobQuit joinSaid joinerDay joinerPaid keptAskText keptBy keptByLog keptByUsed " +
+    "keptOffer kidJobDay kidRefusedDay kissLog known kpLost kpTitle kyleVouchDay ladyTime lastBfAsk lastBfChaste " +
+    "lastCoda lastComp lastConquest lastDrizzle lastEnc lastGame lastGate lastKp lastNightBye lastNightNotice " +
+    "lastNightWith lastOffer lastPeddler lastPolice lastRain lastRide lastSaleng launderBack launderRisk leaveLine " +
+    "leaveOn leaveSaid ledgerNotes levelsSeen licNominees licencesRead lifeStats lightWarn loanBorrowed loanPrin " +
+    "loanRepaid lockedInAt loopDay maiDee maiDeeBar maiDeeMoney mamaYaiDay massageLog massageSpend metDay metRoom " +
+    "miffed missTarget mode month monthAdj monthLine mortDeclined mortDeclinedDay motBoots motoAsked motoBalkTurn " +
+    "motoHomeDoor motoRides motoRiding namedBy nokLeftDay nontBorrowed nontCashCount nontCashed nontCut nontOut " +
+    "nontPayNow nontPrin nontRepaid npc offIn offShift offTill officeTries over overheardSaid owed owlRead " +
+    "ownRescueDay paper paperFlag paperPaid paperShort paperUntil partnerWho partyLed partyMates partyRescued " +
+    "patronTalk payCount payDay phone pityOwed pityRideDay pityRides player policeAt policePaid poolDay poolHold " +
+    "potDay presaleSlipsDay prevRoom priewDay priewSeen priewTextDay probeAt questDoneDay questHailed questPaid " +
+    "quests quizLast quizSeen quizWon qvDay qvRoast rabbitDataDay rabbitWay rainDay rainOnRide returnGreetUsed " +
+    "returnHello reviewOf revisitSaid rideEverTaken rideLog rivalLog rng rodeVenues rodeWith roofless roomNight " +
+    "roomPrepaid roomWaterDay rosesGiven safeMoneyDay safeMoneyLedger saidKha saidKhrap salengRoom salengSaid " +
+    "salengSeen salengUntil score seaDay season0 seenDay selfBfHold sentTotal sevenAt shiftAskText shiftCall " +
+    "shiftLeadText shiftWho shopMet showDay showerTurn sighting skipRepaid smallTalk socialActs somTamTestDay " +
+    "stayedPast std stickFiles storyOf streamBellOk streamBells streamDrinks streamSpent street streetDone streetLog " +
+    "stringer stuck stuckDay sunriseDay syn synJob talked tamarindDay tanAsked tanFavourDay tanNoteDay taught " +
+    "taughtBy thaiAccount thaiHeardTurn thaiSaid thaiScript thaiSeen thaiSpyDone thaiUsed tipExist toldTo townLines " +
+    "townTold trade travelDark turns vacation visitDay visitUntil visited waenDay walletBackDay walletHeld " +
+    "walletLedger walletLedgerN walletLostAt walletLostDay walletLostNow warned wentSaid wentWith wingmanUntil " +
+    "withHer x ").trim().split(/\s+/),
+  day: (
+    "acctDay acctUntil atmDay blueDogDay bookingDay buddhaDay catDay chamContactDay cherryDay cliLockedDay " +
+    "darkDoorDay destituteDay dogNudgeDay dragDay eddyBackDay flowerDay freeTeaDay fridgeDay jobPay joinerDay " +
+    "kidJobDay kidRefusedDay kyleVouchDay launderRisk loopDay mamaYaiDay massageLog metDay mortDeclinedDay " +
+    "nokLeftDay ownRescueDay paperFlag paperUntil payDay pityRideDay poolDay potDay presaleSlipsDay priewDay " +
+    "priewTextDay questDoneDay qvDay rabbitDataDay rainDay repDay roomWaterDay safeMoneyDay seaDay seenDay showDay " +
+    "somTamTestDay std stuckDay sunriseDay tamarindDay tanFavourDay tanNoteDay visitDay waenDay walletBackDay " +
+    "walletLostDay ").trim().split(/\s+/),
+  socNight: (
+    "apologized backDoorTonight banned barTurns bellAt bells bfBar bfNight bfRefused bondCapSaid bondNight bought " +
+    "bra butterflyTeased charmed charmedN contested danceNoted dancePaid dogFavor drinkCount drinkNight drunk fed " +
+    "gaveCondom giftLines goWith greeted heat heatWhy helloed hostOut joyRooms lastCall leftEarly leftFrom " +
+    "leftLockIn lockIn mgrChat mgrShot patronBusy patronMiffed photoJoy photoNoted salengBar selfBf selfDrinks " +
+    "steered tipBond tries ").trim().split(/\s+/),
+  socTrip: (
+    "arriveBook arriveMoney askedHere awaySaid beats bondHeard bondSaid byeSaid chamDrinks clinicCompany coconutDone " +
+    "comped craneDay declined depositNagDay dogScenesSeen drinks fonPour freeNight gapSeen gifted given glassRooms " +
+    "grease jaTease jobHello jobMemHello khaSaid kpChall leavingSaid ledger ledgerHeard licLook lockInAt lockInCheck " +
+    "lockInCoda lockInDare lockInLast maiDeeSaid mamaTreat mamaTreatNight mamaWarm manDrinks massaged mgrTrustNight " +
+    "moneyTick motelWith ninaFed niraWater noEnglish nontTold padded policeRoll policeTell policeWarned pubShut " +
+    "quitSaid qvCrisped retHello rivalSaw roastGoneSeen roundFor roundTold seenHome shutOut sightedOff sighting " +
+    "soapyDone soberNext softDrink special specialAsk spentTurn sponsorPix staySaid stoodFor storyTold streamAway " +
+    "streamBell streamJoy streamLast streamWon streetLook tanFedDay thaiPraised thaiSpy tickRoom torchNoticed " +
+    "townSaid usualSaid waiBack walletPointed wentHello whaleBell whaleBellAt witnessSaid workSaid ").trim().split(/\s+/),
+};
+
+// the nightly G.soc keys _endNight does not reset by hand, reset by type at dawn (salengBar and steered were never reset:
+// three carts a night became three a trip — the architecture review, 2026-10-25)
+let _SOC_HAND_RESET = null;
+function _resetNightSoc() {
+  if (!_SOC_HAND_RESET) _SOC_HAND_RESET = new Set([..._endNight.toString().matchAll(/G\.soc\.([a-zA-Z_]\w*) = /g)].map(m => m[1]));
+  for (const k of STATE_SCHEMA.socNight) {
+    if (_SOC_HAND_RESET.has(k)) continue;
+    const v = G.soc[k]; if (v === undefined) continue;
+    G.soc[k] = Array.isArray(v) ? [] : v && typeof v === "object" ? {} : typeof v === "number" ? 0 : typeof v === "boolean" ? false : null;
+  }
+}
 function serializeGame() { return JSON.stringify(G); }
 // Restoring a save merges it over a fresh newGame() skeleton, so a field (or a
 // sub-key of soc/phone/itemLoc/…) added AFTER the save was written simply keeps
