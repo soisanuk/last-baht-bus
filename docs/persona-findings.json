@@ -38037,7 +38037,7 @@
    "pin": ""
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R1",
    "model": "opus",
    "lens": "adversarial-code-review:opening-body-stages",
@@ -38052,7 +38052,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R1",
    "model": "opus",
    "lens": "adversarial-code-review:opening-body-stages",
@@ -38067,7 +38067,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R1",
    "model": "opus",
    "lens": "adversarial-code-review:opening-body-stages",
@@ -38082,7 +38082,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R1",
    "model": "opus",
    "lens": "adversarial-code-review:opening-body-stages",
@@ -38097,7 +38097,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R1",
    "model": "opus",
    "lens": "adversarial-code-review:opening-body-stages",
@@ -38112,7 +38112,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R1",
    "model": "opus",
    "lens": "adversarial-code-review:opening-body-stages",
@@ -38127,7 +38127,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R1",
    "model": "opus",
    "lens": "adversarial-code-review:opening-body-stages",
@@ -38142,7 +38142,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R1",
    "model": "opus",
    "lens": "adversarial-code-review:opening-body-stages",
@@ -38157,7 +38157,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38172,7 +38172,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38187,7 +38187,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38202,7 +38202,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38217,7 +38217,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38232,7 +38232,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38247,7 +38247,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38262,7 +38262,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38277,7 +38277,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R2",
    "model": "opus",
    "lens": "adversarial-code-review:save-frame-money-police",
@@ -38292,7 +38292,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38307,7 +38307,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38322,7 +38322,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38337,7 +38337,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38352,7 +38352,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38367,7 +38367,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38382,7 +38382,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38397,7 +38397,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38412,7 +38412,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38427,7 +38427,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38442,7 +38442,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38457,7 +38457,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38472,7 +38472,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R3",
    "model": "opus",
    "lens": "adversarial-code-review:transport-map-hotels",
@@ -38487,7 +38487,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38502,7 +38502,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38517,7 +38517,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38532,7 +38532,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38547,7 +38547,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38562,7 +38562,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38577,7 +38577,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38592,7 +38592,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38607,7 +38607,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38622,7 +38622,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38637,7 +38637,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R4",
    "model": "opus",
    "lens": "adversarial-code-review:street-food-shops",
@@ -38652,7 +38652,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R5",
    "model": "opus",
    "lens": "adversarial-code-review:drinks-barfine-night-out",
@@ -38667,7 +38667,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R5",
    "model": "opus",
    "lens": "adversarial-code-review:drinks-barfine-night-out",
@@ -38682,7 +38682,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R5",
    "model": "opus",
    "lens": "adversarial-code-review:drinks-barfine-night-out",
@@ -38697,7 +38697,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R5",
    "model": "opus",
    "lens": "adversarial-code-review:drinks-barfine-night-out",
@@ -38712,7 +38712,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R5",
    "model": "opus",
    "lens": "adversarial-code-review:drinks-barfine-night-out",
@@ -38727,7 +38727,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R5",
    "model": "opus",
    "lens": "adversarial-code-review:drinks-barfine-night-out",
@@ -38742,7 +38742,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R5",
    "model": "opus",
    "lens": "adversarial-code-review:drinks-barfine-night-out",
@@ -38757,7 +38757,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R5",
    "model": "opus",
    "lens": "adversarial-code-review:drinks-barfine-night-out",
@@ -38772,7 +38772,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38787,7 +38787,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38802,7 +38802,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38817,7 +38817,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38832,7 +38832,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38847,7 +38847,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38862,7 +38862,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38877,7 +38877,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38892,7 +38892,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R6",
    "model": "opus",
    "lens": "adversarial-code-review:games-talk-cast",
@@ -38907,7 +38907,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -38922,7 +38922,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -38937,7 +38937,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -38952,7 +38952,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -38967,7 +38967,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -38982,7 +38982,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -38997,7 +38997,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -39012,7 +39012,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -39027,7 +39027,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -39042,7 +39042,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R7",
    "model": "opus",
    "lens": "adversarial-code-review:phone-side-arcs",
@@ -39057,7 +39057,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39072,7 +39072,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39087,7 +39087,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39102,7 +39102,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39117,7 +39117,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39132,7 +39132,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39147,7 +39147,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39162,7 +39162,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39177,7 +39177,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39192,7 +39192,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39207,7 +39207,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39222,7 +39222,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "R8",
    "model": "opus",
    "lens": "adversarial-code-review:resident-owner",
@@ -39237,7 +39237,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "architecture-review",
    "model": "opus",
    "lens": "architecture-doc",
@@ -39252,7 +39252,7 @@
    "pin": "tests/js/round106.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "architecture-review",
    "model": "opus",
    "lens": "architecture-doc",
@@ -39267,7 +39267,7 @@
    "pin": ""
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "architecture-review",
    "model": "opus",
    "lens": "state-schema",
@@ -39282,7 +39282,7 @@
    "pin": "tests/js/state-schema.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "architecture-review",
    "model": "opus",
    "lens": "state-schema",
@@ -39297,7 +39297,7 @@
    "pin": "tests/js/state-schema.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "architecture-review",
    "model": "opus",
    "lens": "soak",
@@ -39312,7 +39312,7 @@
    "pin": "tests/js/review1025.test.js"
   },
   {
-   "round": "review-1025",
+   "round": "106-review",
    "persona": "architecture-review",
    "model": "opus",
    "lens": "gate-registry",
