@@ -6641,7 +6641,7 @@ function _leaveWhen(d) { return d <= 1 ? "tomorrow" : d === 2 ? "the day after t
 function _isLeavingSaid(t) {
   t = String(t || "").toLowerCase();
   if (/\b(?:not|never|no) (?:going|go|flying|fly|leaving|leave)\b|\bi'?m staying\b|\bi stay(?:ed)? here\b|cancel+ed (?:my|the) ticket|\bnot leaving\b|here for good|live here now|\bmoved here\b/.test(t)) return false;   // the ticket in the bin is the leaving's inverse (Dougal, round 98)
-  if (/\b(?:my|our) last night\b|\blast night (?:here|in pattaya|of (?:the|my) (?:trip|week|holiday))\b/.test(t)) return true;   // "it's my last night" (Dougie, round 96)
+  if (/\b(?:my|our) last night\b|\blast night (?:here|tonight|in pattaya|of (?:the|my) (?:trip|week|holiday))\b|\btonight(?:'?s| is) (?:my )?last night\b/.test(t)) return true;   // "it's my last night" (Dougie, round 96)
   return _LEAVING_RE.test(t) && !/\b(?:you|she|her|he|him|they)\b[^.?!]*\b(?:leav|go home|going home|fl(?:y|ew)|flight)/.test(t) &&
     !/^(?:why|when|where|did|do|does|how|what|who|is|are|was)\b/.test(t.trim());
 }

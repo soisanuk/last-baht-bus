@@ -1424,7 +1424,7 @@ const _TOLD_RX = [
   // the dog at home: named or not (the fallback choices, 2026-10-18 — "she remembers your news")
   ["dog", /^(?:i (?:have|'ve got|got) a dog|i have got a dog|my dog)(?:,? (?:called|named|is called|'s called|is named|is))? ?([a-z']{2,15})?$/, m => m[1] && !/^(at|back|home|in|old|young|big|small|cute|sick|dead|lovely)$/.test(m[1]) ? m[1] : "yes"],
   // "I'm Bernard" — one word that is a name and not a state (Bernard, round 88: "i'm bernard" was not my story)
-  ["name", /^(?:i'?m|i am|it'?s|this is) ([a-z']{2,15})$/, m => _TOLD_NOT_NAME.test(m[1]) ? "" : m[1]],
+  ["name", /^(?:i'?m|i am|it'?s|this is) ([a-z']{2,15})$/, m => _TOLD_NOT_NAME.test(m[1]) || _npcsHere().some(i => NPCS[i] && String(NPCS[i].name).toLowerCase() === m[1]) ? "" : m[1]],   // "this is pukky" introduces her (Steve, baseline 8)
 ];
 const _TOLD_NOT_NAME = /^(tired|fine|ok|okay|good|great|drunk|here|back|sorry|happy|sad|bored|lost|hungry|thirsty|broke|rich|poor|english|british|american|australian|german|irish|scottish|welsh|retired|single|married|divorced|widowed|separated|new|old|young|done|ready|leaving|going|off|home|alone|free|busy|full|sober|cold|hot|sick|ill|well|shy|serious|joking|kidding|curious|confused|listening|waiting|staying|working|interested|sure|right|wrong|late|early|him|her|you|me|it|that|this|what|who|nobody|somebody|everyone)$/;
 const _TOLD_REACT = {

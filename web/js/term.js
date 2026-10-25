@@ -877,7 +877,7 @@ const _term = (() => {
     const talking = !!c && !c.companion;
     if (dock) dock.classList.toggle("talking", talking);
     // the prompt says who is listening (and goes back when nobody is)
-    if (_input) _input.placeholder = talking ? "say something to " + c.name + "…" : "what do you do?";
+    if (_input) _input.placeholder = talking ? "ask " + c.name + " about… · or tap a topic" : "what do you do?";   // it said "say something to her…", which invited free chat the game cannot read (2026-10-25)
     if (!c) { _cardFor = null; card.innerHTML = ""; return; }
     const key = JSON.stringify(c);
     if (key === _cardFor) return;

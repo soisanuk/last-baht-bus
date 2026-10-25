@@ -735,7 +735,7 @@ const STATE_SCHEMA = {
     "somTamTestDay std stuckDay sunriseDay tamarindDay tanFavourDay tanNoteDay visitDay waenDay walletBackDay " +
     "walletLostDay ").trim().split(/\s+/),
   socNight: (
-    "apologized backDoorTonight banned barTurns bellAt bells bfBar bfNight bfRefused bondCapSaid bondNight bought " +
+    "huhHint apologized backDoorTonight banned barTurns bellAt bells bfBar bfNight bfRefused bondCapSaid bondNight bought " +
     "bra butterflyTeased charmed charmedN contested danceNoted dancePaid dogFavor drinkCount drinkNight drunk fed " +
     "gaveCondom giftLines goWith greeted heat heatWhy helloed hostOut joyRooms lastCall leftEarly leftFrom " +
     "leftLockIn lockIn mgrChat mgrShot patronBusy patronMiffed photoJoy photoNoted salengBar selfBf selfDrinks " +

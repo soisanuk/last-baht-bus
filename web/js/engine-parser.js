@@ -896,6 +896,13 @@ function _parseFail(kind, c) {
   if (n === 1) {
     if (kind === "thai") _say(_HUH_THAI_SOFT, "dim");
     else if (kind !== "talk") _say(_HUH_SOFT[0], "dim");
+    else if (c && NPCS[c] && !(G.soc.huhHint = G.soc.huhHint || {})[c]) {
+      // the first time a sentence to her is not read, say plainly what does work — once a night per woman (the expectation
+      // pass, 2026-10-25: the game invited free chat and answered in her voice, so a man kept rephrasing)
+      G.soc.huhHint[c] = true;
+      const tops = _convoTopics(c).slice(0, 2).map(k => _topicLabel(k));
+      _say(`(The game reads short questions and the chips, not free chat.${tops.length ? ` Try ASK ${String(NPCS[c].name).toUpperCase()} ABOUT ${String(tops[0]).toUpperCase()}${tops[1] ? ` · ASK ${String(NPCS[c].name).toUpperCase()} ABOUT ${String(tops[1]).toUpperCase()}` : ""}` : ""} — or tap a topic below.)`, "dim");
+    }
   } else {
     if (kind === "talk") _say(_fmt(_pickVary(_HUH_TALK, "huhtalk"), { n: NPCS[c].name, pos: _pr(c).p }), "warn");
     else _say(kind === "thai" ? _HUH_THAI : _pickVary(_HUH_WARN, "huh"), "warn");
@@ -922,7 +929,7 @@ function _examples(max) {
     return rows.slice(0, max || 8);
   }
   if (c && NPCS[c]) {
-    const tops = (typeof _convoTopics === "function" ? _convoTopics(c) : []).map(k => String(k).split("|")[0]);
+    const tops = _convoTopics(c).map(k => String(k).split("|")[0]);
     if (tops[0]) rows.push({ what: "Ask " + nm(c) + " about something", cmd: "ask " + nm(c).toLowerCase() + " about " + tops[0] });
     if (tops[1]) rows.push({ what: "Another subject", cmd: "ask " + nm(c).toLowerCase() + " about " + tops[1] });
     rows.push({ what: "End the conversation", cmd: "bye" });
@@ -9983,6 +9990,7 @@ const _GAME_MOVE_WORDS = new Set([
 ]);
 
 function _convoResolve(lower) {
+  { const _p = _convoActive(); if (_p && _npcsHere().includes(_p) && _mustDo(String(_rawAnswer || lower), _p, _p)) return true; }
   const bare = lower.replace(/[,.!?]+$/, "").trim();
   if (_GAME_MOVE_WORDS.has(bare) && !G.game) {
     _say("That was a move in a game that's over. (PLAY, if you want another.)", "dim");
@@ -17082,9 +17090,58 @@ function _readRoute(raw) {
   _readDepth++;
   try { return _readRouteBody(raw); } finally { _readDepth--; }
 }
-const _UPSTAIRS_RE = /\b(?:come back (?:to|with me to) (?:my|the) (?:hotel|room|place)|back to (?:my|the) (?:hotel|room|place)|back to mine|come to my (?:hotel|room|place)|my place or|(?:shall|should|can|could|do you want to|want to|wanna|let'?s|lets) (?:we )?go upstairs|go upstairs|come upstairs|upstairs with me|come (?:back |home )?with me|one last night together|spend the night|stay with me tonight)\b/;
-const _DRINK_FOR_HER_RE = /\b(?:(?:one more|another|a) (?:drink|one|beer) for (?:you|her|the lady)|buy (?:her|you|the lady) (?:a |one more |another )?drink|drink for you|get (?:her|you) a drink)\b/;
+const _UPSTAIRS_RE = /\b(?:come back (?:to|with me to) (?:my|the) (?:hotel|room|place)|back to (?:my|the) (?:hotel|room|place)|back to mine|come to my (?:hotel|room|place)|my place or|(?:shall|should|can|could|do you want to|want to|wanna|let'?s|lets) (?:we )?go upstairs|go upstairs|come upstairs|upstairs with me|come (?:back |home )?with me|one last night together|spend the night|stay with me tonight|stay the night|the night with me|stay with me)\b/;
+const _DRINK_FOR_HER_RE = /\b(?:(?:one more|another|a) (?:drink|one|beer) for (?:you|her|the lady)|buy (?:her|you|the lady) (?:a |one more |another )?drink|drink for you|get (?:her|you) a drink|(?:do )?(?:you|u) want (?:a|another) drink|fancy (?:a|another) drink|what (?:do |d'?)?(?:you|u) (?:want|fancy|like) to drink|what(?:'?ll| will) you have|one more each)\b/;
 const _BARMAID_RE = /\b(?:same again|one more|one for the road|the bill|what do i owe|last orders|a pint)\b/;
+// ── PHRASINGS THAT MUST DO SOMETHING (Steve, baseline 8: the chat a player types where a chip would have worked) ──
+// Asked first by the conversation layer AND the sentence router, because both had earlier stages that took these lines
+// as remarks. Small talk stays with the catch-all (Mario, 2026-10-25: no NLP in a standalone app); these change state.
+function _mustDo(raw, partner, who) {
+  const R = { raw };
+  const l = R.raw.toLowerCase().replace(/[“”"?!.]/g, "").trim();
+    const comp = G.party && G.party.ids && G.party.ids.find(i => _npcsHere().includes(i));
+    if (/\b(?:put (?:the |my )?phone away|phone away|pocket the phone|phone down)\b/.test(l)) { _say("You put the phone away.", "dim"); return true; }   // it opened the phone
+    // "let's go home" with her on your arm is going home with her; "one more each" is her drink and yours
+    if (comp && /\b(?:let'?s go home|lets go home|go home now|take me home|home time|time for home)\b/.test(l)) { doCommand("go home with " + String(NPCS[comp].name).toLowerCase()); return true; }
+    if (/\b(?:one more each|a round for us|one each)\b/.test(l) && (comp || partner) && _servesDrinks(G.room)) { doCommand("buy drink for " + String(NPCS[comp || partner].name).toLowerCase()); doCommand("buy beer"); return true; }
+    // the leaving said after a hello ("hiya somo, last night tonight") is the leaving, and on the last night her goodbye
+    if (who && _npcsHere().includes(who) && _isLeavingSaid(l.replace(/^(?:hi|hiya|hello|hey|evening|sawatdee)[a-z ,]*?,\s*/, ""))) {
+      if (_lastByeDue(who)) { _lastNightBye(who); _tick(); return true; }
+      _convoStart(who); if (_leavingTalk(who, l)) { _tick(); return true; } }
+    let m = l.match(/^(?:a |one |another )?lady drinks? (?:for|to) ([a-z]+)$/);
+    if (m) { doCommand("buy drink for " + m[1]); return true; }
+    if (/^(?:how'?s it going|how are you|how you doing|how ya doing|you alright|alright)\b/.test(l) && who && _npcsHere().includes(who)) { doCommand("talk to " + String(NPCS[who].name).toLowerCase()); return true; }
+    // "the other night" is the night she spent with you, three nights back at most (Steve: a stock line, as if nothing happened)
+    if (who && _npcsHere().includes(who) && /\b(?:the other night|that night|our night out|the night out|our night)\b/.test(l) &&
+        (((G.partyLog || {})[who] && G.day - G.partyLog[who].day <= 4) || ((G.wentWith || {})[who] && G.day - G.wentWith[who].day <= 4))) {
+      const pl = (G.partyLog || {})[who], ago = pl ? G.day - pl.day : G.day - G.wentWith[who].day, n = NPCS[who].name;
+      const where = pl && pl.rooms && pl.rooms.length ? pl.rooms.map(r => _barName(r) || (ROOMS[r] && ROOMS[r].name)).filter(Boolean) : [];
+      const when = ago <= 1 ? "Last night" : ago === 2 ? "The other night" : `${ago} night ago`;
+      _say(_fmt(_pickVary([
+        `"${when}?" {n} smiles like it was hers too. "${where.length ? "We go " + where.slice(0, 3).join(", then ") + "." : "We go out, you and me."} Good night, na. You dance not so bad."`,
+        `{n} remembers it before you finish. "${when} — ${where.length ? where[where.length - 1] + ", last one" : "the bars"}. You pay everything, I remember. Is good night."`,
+        `"Yes." {n} says it simply. "${when} is good. ${pl && pl.end === "home" ? "And after, also good." : "You take me home early, gentleman."}"`,
+      ], "othernight:" + who), { n }));
+      _tick(); return true; }
+    if (/\bwho(?:'?s| is) (?:working|on) (?:tonight|here)\b|\bwho works here\b/.test(l)) {
+      const st = _npcsHere().filter(i => NPC_ROLES[i] && !(comp && i === comp));
+      _say(st.length ? `On the floor tonight: ${st.map(i => NPCS[i].name + (NPC_ROLES[i] !== "hostess" ? ` (the ${NPC_ROLES[i]})` : "")).join(", ")}.` : "Nobody is working this floor tonight.", "dim"); return true; }
+    if (comp && /^where (?:next|now|to next|to now)\b/.test(l)) { doCommand("follow " + String(NPCS[comp].name).toLowerCase()); return true; }
+    if (partner && !NPC_ROLES[partner] && /\bwhere (?:are )?(?:you|u) from\b/.test(l)) { const mb = _manBasics(partner, l); if (mb) { _say(mb); _tick(); return true; } }   // a man's town, not the node about going home
+    m = l.match(/^(?:and )?this is ([a-z]+)$/);
+    if (m && comp && partner && partner !== comp && String(NPCS[comp].name).toLowerCase() === m[1]) { _say(_introLine(partner, comp)); _tick(); return true; }
+    if (/\b(?:you two|you both) know each other\b|\bdo you know (?:her|each other)\b/.test(l) && comp && partner && partner !== comp) { _say(_introLine(partner, comp)); _tick(); return true; }
+    if (/\b(?:what(?:'?s| is) this song|what song is this|who sings this|what(?:'?s| is) this music)\b/.test(l)) {
+      _say(_bandHere() ? "The band are doing somebody else's song at their own speed. Nobody in here could name it, and nobody minds." : _pickVary(["Something from a phone behind the bar, through a speaker that has given its best years. Nobody here could tell you its name.", "A Thai pop song the girls sing the chorus of without looking up. Ask any of them its name and they will sing you the chorus.", "Whatever the cashier's playlist thinks you want. It is the same eleven songs every night, and you are already learning them."], "thissong"), "dim"); _tick(); return true; }
+  return false;
+}
+// two women who meet over you: the same floor, the same street, or strangers (Steve, baseline 8: "this is pukky" was his name)
+function _introLine(a, b) {
+  const na = NPCS[a].name, nb = NPCS[b].name, ra = NPCS[a].room, rb = NPCS[b].room;
+  if (ra === rb) return _fmt(_pickVary([`${na} laughs. "{b}? We work together, tilac. I know her before you do."`, `"We know." ${na} and {b} share a look you are not in. "Same bar, same mama."`], "intro:same"), { b: nb });
+  if (ROOMS[ra] && ROOMS[rb] && ROOMS[ra].region === ROOMS[rb].region) return _fmt(_pickVary([`${na} looks at {b} the way the soi looks at everybody. "I know her face. She work {bar}." A nod between them, polite.`, `"Same soi," ${na} says to you, not to her. "{b} from {bar}. Hello, {b}." It is a perfectly friendly hello.`], "intro:soi"), { b: nb, bar: _barName(rb) || "down the soi" });
+  return _fmt(_pickVary([`${na} gives {b} a wai and a quick look up and down. "First time I see her." She is polite about it.`, `"No, I don't know." ${na} smiles at {b} anyway. "Now I know."`], "intro:new"), { b: nb });
+}
 function _readRouteBody(raw) {
   // _norm strips "can you"/"please", which is where the YOU of "can you speak english?" was (Steve's third run)
   { const full = String(_rawAnswer || "").trim(), f = full.toLowerCase().replace(/[“”"']/g, "");
@@ -17104,10 +17161,12 @@ function _readRouteBody(raw) {
   // looked down the side of the building, "come on love, let's go home" was answered by the dog. An endearment or her
   // name ("love", "darling", "kwan") and a leading "come on / go on then / ok" mark a line as said TO her.
   let _cp = _convoActive();
-  { const vm0 = R.raw.toLowerCase().match(/^([a-z]+)[,!]?\s+(.{3,})$/);   // "pukky come home with me": the name in front is who it is said to (Brendan, round 102 — the mamasan answered)
+  { const vm0 = R.raw.toLowerCase().replace(/^(?:(?:ok(?:ay)?|right|alright|come on|go on|hey|hiya|hi|oi|so|well)[,!]*\s+)+/, "").match(/^([a-z]+)[,!]?\s+(.{3,})$/);   // "pukky come home with me": the name in front is who it is said to (Brendan, round 102 — the mamasan answered)
     if (vm0 && !(_isRealCommand(vm0[1])) && !(typeof _COMPLETE_VERBS !== "undefined" && _COMPLETE_VERBS.includes(vm0[1]))) {
       const v0 = _findNpc(vm0[1]), vid = typeof v0 === "string" ? v0 : v0 && v0.id;
-      if (vid && NPCS[vid] && _npcsHere().includes(vid) && vid !== _cp) { _convoStart(vid); _cp = vid; } } }
+      // …and only a word that IS the name: _findNpc matches inside names, so "is" found Alisa (Steve, baseline 8)
+      const _isName = vid && NPCS[vid] && String(NPCS[vid].name).toLowerCase().split(/\s+/).some(w => w === vm0[1] || (vm0[1].length >= 4 && w.startsWith(vm0[1])));
+      if (_isName && _npcsHere().includes(vid) && vid !== _cp) { _convoStart(vid); _cp = vid; } } }
   const partner = _cp && _npcsHere().includes(_cp) ? _cp : null;
   let addressed = false;
   if (partner) {
@@ -17126,6 +17185,7 @@ function _readRouteBody(raw) {
     if (l !== l0 && !/\s/.test(l) && !["greeting", "farewell", "thanks", "yes", "no"].includes(_read(l).kind)) l = l0;
     if (l !== l0 && l) { addressed = new RegExp(`\\b${voc}\\b`).test(l0) || l0 !== l; R = Object.assign(_read(l), { raw: l }); }
   }
+  if (_mustDo(raw, partner, who) || (R.raw !== raw && _mustDo(R.raw, partner, who))) return true;   // the line as typed, then with her name stripped
   // food, asked of anyone (or of nobody): the nearest open food, named from here
   // WHERE CAN I GET A MASSAGE: the nearest shop that is open, by name and the way (Benoît, round 104: "ask around")
   if (/\b(?:where|wheres|anywhere|somewhere|recommend|good place|get|find)\b.*\bmassages?\b|\bmassage near\b/.test(R.raw.toLowerCase()) && !G.mode) {
@@ -17261,7 +17321,7 @@ function _readRouteBody(raw) {
     // the barmaid's words win over a chat with a man on the rail: "same again" to Terry was "Exactly." (Steve, run 7)
     if (_BARMAID_RE.test(l) && _servesDrinks(G.room)) return false;
     // CAN I TAKE YOU OUT / FANCY COMING OUT WITH ME: the take-her-out door, asked as a man asks it
-    if (/\b(?:take you out|come out with me|go out with me|coming out with me|fancy (?:coming|going) out|out with me tonight)\b/.test(l) && NPC_ROLES[partner]) {
+    if (/\b(?:take you out|come out with me|go out with me|coming out with me|fancy (?:coming|going) out|out with me tonight|(?:another|a) night out)\b/.test(l) && NPC_ROLES[partner]) {
       doCommand("take " + String(NPCS[partner].name).toLowerCase() + " out"); return true;
     }
     // COME SIT WITH ME / CAN TAAN COME SIT WITH ME: the woman named, or the one you are talking to (Gareth, round 103)
@@ -17610,7 +17670,7 @@ function _genderLine(line, c) {
 function _unaskedTopic(c) {
   const dl = (NPCS[c] && NPCS[c].dialogue) || [], seen = (G.talked && G.talked[c]) || [];
   const steered = ((G.soc.steered = G.soc.steered || {})[c] = G.soc.steered[c] || []);
-  return (typeof _convoTopics === "function" ? _convoTopics(c) : []).find(k => {
+  return _convoTopics(c).find(k => {
     const key = String(k).split("|")[0];
     if (steered.includes(key) || (!_topicKnown(key))) return false;
     // only a subject with HER words behind it — "Ask about last night" a turn after he asked it, and "your present" (Steve, run 7)
@@ -18014,7 +18074,7 @@ function _manBasics(c, t) {
     "\"Born in {p}. Live on this stool.\"",
     "{n} raises {his} glass an inch. \"{p}. You?\"",
   ], "manfrom"), { n: n.name, p: place.charAt(0).toUpperCase() + place.slice(1), he: _pr(c).s, his: _pr(c).p });
-  if (/\bhow long (?:have )?(?:you )?(?:been )?(?:coming|here|in pattaya|out here|living here|lived here)\b/.test(t)) return _fmt(_pickTownLine([
+  if (/\bhow long (?:have )?(?:you )?(?:been )?(?:coming|here|in pattaya|out here|living here|lived here)\b|\bbeen coming (?:here|out here)(?: long| for long| a while)?\b|\bhow many (?:trips|times have you been)\b/.test(t)) return _fmt(_pickTownLine([
     "\"Long enough to remember when a Chang was forty baht.\"",
     "\"Too long, my doctor says.\"",
     "\"Since before the girls on this soi were born, some of them.\" {n} doesn't look proud of it.",
@@ -19324,6 +19384,8 @@ function _doCommandInner(input) {
       /^(?:(?:get|take|draw|pull) (?:some |a few |a bit of )?(?:money|cash|baht|\d[\d,]*)\b.*\bout\b|(?:the|a|an|one|another) [a-z ']+ please$|[a-z ']+ please$|what payday|what did (?:i|we) do|where was i|what food|who(?:'s| is) the (?:friendliest|nicest|best|prettiest)|how much (?:is|does) (?:this|the|my) room|where (?:is|are) the (?:condo|tower))/.test(lower) && _naturalHelp(lower)) return;
   switch (v) {
     case "go": case "walk": case "head": {
+      // "go in the shady lady" is ENTER: the door was listed, and GO read it as somewhere far (Steve, baseline 8)
+      { const _gin = String(arg || "").match(/^(?:in|into|inside)(?: to)? (?:the )?(.{3,})$/); if (_gin && !_room().exits[_gin[1]]) { doCommand("enter " + _gin[1]); break; } }
       if (/^(?:on|away|past|by|along|ahead)$/.test(arg)) { _say(_pickVary(["You walk on. The soi lets you.", "You keep walking, which on this street is an answer in itself.", "You move on, eyes front, the way the men who live here do."], "walkon")); _tick(); break; }   // WALK ON is not TRAVEL to a bar with "on" in its name (Wes, round 104: six turns to the Honey Trap)
       // SEE/WALK <her> HOME, TAKE <her> TO THE BUS — cheap care's verb (essay ledger theme 2)
       // …and only with a NAME in it: a bare GO HOME is the man going home, never walking the woman he was talking to (Gary, round 79)

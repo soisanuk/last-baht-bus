@@ -60,6 +60,22 @@ const CASES = [
   ["kwan", null, "what you doing tomorrow?", /no hurry tonight|Still have time/],
   ["kwan", null, "I'll be back next year", /Still have time|no hurry/],
   ["kwan", null, "any good bars I should try?", /ask around/],
+  // run 8 (2026-10-25) — the sentences that must DO something, and the wrong person answering; small talk stays with the
+  // catch-all by design (Mario: no NLP in a standalone app; most players use the chips)
+  ["sweet_tamarind_ple", null, "is this your bar?", /You asked Alisa/],
+  ["terry", null, "how's it going terry", /Run that by me|Missed that/],
+  ["pukky", () => onArm("pukky"), "where next pukky?", /Again, na|Short words/, /FOLLOW|outside|Outside/],
+  ["somo", () => onArm("pukky"), "ok pukky, let's go home", /Nakhon Phanom|You asked Somo/, /Pukky/],
+  ["mort", null, "where you from mort", /consulate|fare home/, /States|America|Baltimore/],
+  ["pukky", () => { G.partyLog = { pukky: { day: G.day - 2, rooms: ["sunset_rail"], end: "home" } }; G.soc.drinks.pukky = 9; }, "did you have a good time the other night?", /Friday feeling|Not my story/, /other night|Other night/i],
+  ["pukky", null, "what's this song", /Ask me another time|Not yet, na/],
+  ["wilai", null, "who's working tonight", /Google Translate|Music too loud/, /On the floor tonight/],
+  ["barry", null, "been coming here long?", /Not with you|Run that by me/],
+  ["pukky", null, "ok, phone away", /Battery|No messages/, /phone away/],
+  ["sweet_tamarind_ple", () => onArm("pukky"), "this is pukky", /Now I know\."$|says it back, twice/, /Pukky/],
+  ["sweet_tamarind_ple", () => onArm("pukky"), "you two know each other?", /Google Translate|Too fast/],
+  ["somo", () => { G.day = 7; G.soc.drinks.somo = 4; G.talked.somo = [0]; }, "hiya somo, last night tonight", /Same as last time/],
+
 ];
 for (const [who, setup, line, bad, good] of CASES) {
   test(`Steve to ${who}: "${line}"`, () => {
@@ -177,4 +193,14 @@ test("Steve (run 7): the last night's 'i fly home tomorrow' to the woman he is f
   G.day = 4; out = []; run("talk to " + NPCS[h].name.toLowerCase()); G.convoQ = null;
   const fam = (_convoTopics(h, { all: true }) || []).find(k => /son|kids|children|family/.test(String(k)));
   if (fam) { out = []; run("does he play football"); assert.doesNotMatch(said(), /Buriram United|Liverpool|Manchester/, "her son, not her team: " + said()); }
+});
+
+test("Steve, run 8: the drink offered, the drink named without a verb, and 'one more each' all buy", () => {
+  for (const [who, line] of [["pukky", "you want a drink?"], ["kai", "lady drink for kai"]]) {
+    talkTo(who); const m = G.money; run(line); assert.ok(G.money < m, line + " bought nothing: " + said()); }
+  talkTo("pukky"); onArm("pukky"); G.room = "ruby_kiss"; const m = G.money; run("one more each then home"); assert.ok(G.money < m - 100, "her drink and his beer");
+});
+
+test("Steve, run 8: 'go in the shady lady' at its door goes in", () => {
+  G.room = "soi6_mid"; run("go in the shady lady"); assert.equal(G.room, "sunset_rail");
 });
